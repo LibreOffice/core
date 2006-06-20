@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppControllerDnD.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-03 16:15:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:53:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -317,7 +317,6 @@ void OApplicationController::deleteObjects( const Reference< XNameContainer>& _r
     Reference< XHierarchicalNameContainer > xHierarchyName( _rxNames, UNO_QUERY );
     if ( _rxNames.is() )
     {
-        bool bConfirm = true;
         ByteString sDialogPosition;
         svtools::QueryDeleteResult_Impl eResult = _bConfirm ? svtools::QUERYDELETE_YES : svtools::QUERYDELETE_ALL;
 
@@ -374,8 +373,7 @@ void OApplicationController::deleteObjects( const Reference< XNameContainer>& _r
                     // now that we removed the element, care for all it's child elements
                     // which may also be a part of the list
                     // #i33353# - 2004-09-27 - fs@openoffice.org
-                    sal_Int32 nLastCharPos = aThisRound->getLength() - 1;
-                    OSL_ENSURE( nLastCharPos >= 0, "OApplicationController::deleteObjects: empty name?" );
+                    OSL_ENSURE( aThisRound->getLength() - 1 >= 0, "OApplicationController::deleteObjects: empty name?" );
                     ::rtl::OUStringBuffer sSmallestSiblingName( *aThisRound );
                     sSmallestSiblingName.append( (sal_Unicode)( '/' + 1) );
 
@@ -445,6 +443,8 @@ void OApplicationController::deleteEntries()
             break;
         case E_REPORT:
             deleteObjects( E_REPORT, aList, true );
+            break;
+        case E_NONE:
             break;
         }
     }
@@ -543,6 +543,8 @@ Reference< XNameAccess > OApplicationController::getElements(ElementType _eType)
                     }
                 }
                 break;
+            default:
+                break;
         }
     }
     catch(const Exception&)
@@ -570,6 +572,7 @@ void OApplicationController::getElements(ElementType _eType,::std::vector< ::rtl
 // -----------------------------------------------------------------------------
 void OApplicationController::impl_initialize( const Sequence< Any >& aArguments )
 {
+    (void)aArguments;
 #if OSL_DEBUG_LEVEL > 0
     const Any* pIter = aArguments.getConstArray();
     const Any* pEnd   = pIter + aArguments.getLength();
@@ -639,7 +642,8 @@ void OApplicationController::getSelectionElementNames(::std::vector< ::rtl::OUSt
                 xNameAccess = xSupp->getTables();
             break;
         }
-
+        case E_NONE:
+            break;
     }
 
     SharedConnection xConnection;
@@ -701,6 +705,8 @@ TransferableHelper* OApplicationController::copyObject()
                     pData = new OComponentTransferable(m_sDatabaseName,xContent);
                 }
             }
+            break;
+            default:
                 break;
         }
 
@@ -898,6 +904,8 @@ void OApplicationController::getSupportedFormats(ElementType _eType,::std::vecto
         case E_QUERY:
             _rFormatIds.push_back(SOT_FORMATSTR_ID_DBACCESS_QUERY);
             break;
+        default:
+            break;
     }
 }
 // -----------------------------------------------------------------------------
@@ -918,7 +926,7 @@ sal_Bool OApplicationController::copyTagTable(OTableCopyHelper::DropDescriptor& 
     return m_aTableCopyHelper.copyTagTable( _rDesc, _bCheck, xConnection );
 }
 // -----------------------------------------------------------------------------
-IMPL_LINK( OApplicationController, OnAsyncDrop, void*, NOTINTERESTEDIN )
+IMPL_LINK( OApplicationController, OnAsyncDrop, void*, /*NOTINTERESTEDIN*/ )
 {
     m_nAsyncDrop = 0;
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
