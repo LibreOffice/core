@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppController.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:19:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:53:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,6 +108,9 @@
 
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
@@ -319,14 +322,14 @@ DBG_NAME(OApplicationController)
 //--------------------------------------------------------------------
 OApplicationController::OApplicationController(const Reference< XMultiServiceFactory >& _rxORB)
     :OApplicationController_CBASE( _rxORB )
-    ,m_bSuspended( sal_False )
+    ,m_aTableCopyHelper(this)
     ,m_pClipbordNotifier(NULL)
     ,m_nAsyncDrop(0)
     ,m_ePreviewMode(E_PREVIEWNONE)
-    ,m_bNeedToReconnect(sal_False)
-    ,m_bPreviewEnabled(sal_True)
     ,m_eOldType(E_NONE)
-    ,m_aTableCopyHelper(this)
+    ,m_bPreviewEnabled(sal_True)
+    ,m_bNeedToReconnect(sal_False)
+    ,m_bSuspended( sal_False )
 {
     DBG_CTOR(OApplicationController,NULL);
 
@@ -363,16 +366,9 @@ void OApplicationController::disconnect()
         if ( xFlush.is() && m_xMetaData.is() && !m_xMetaData->isReadOnly() )
             xFlush->flush();
     }
-    catch( const Exception& e )
+    catch( const Exception& )
     {
-    #if OSL_DEBUG_LEVEL > 0
-        ::rtl::OString sMessage( "OApplicationController::disconnect: caught an exception!\n" );
-        sMessage += "message:\n";
-        sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), osl_getThreadTextEncoding() );
-        OSL_ENSURE( false, sMessage );
-    #else
-        e; // make compiler happy
-    #endif
+        DBG_UNHANDLED_EXCEPTION();
     }
 
     m_xDataSourceConnection.clear();
@@ -905,17 +901,9 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 aReturn = OApplicationController_CBASE::GetState(_nId);
         }
     }
-    catch(Exception& e)
+    catch(const Exception& )
     {
-#if DBG_UTIL
-        String sMessage("OApplicationController::GetState(", RTL_TEXTENCODING_ASCII_US);
-        sMessage += String::CreateFromInt32(_nId);
-        sMessage.AppendAscii(") : caught an exception ! message : ");
-        sMessage += (const sal_Unicode*)e.Message;
-        DBG_ERROR(ByteString(sMessage, gsl_getSystemTextEncoding()).GetBuffer());
-#else
-        e;  // make compiler happy
-#endif
+        DBG_UNHANDLED_EXCEPTION();
     }
     return aReturn;
 }
@@ -1001,7 +989,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                         {
                             if ( pIter->Name.equalsAscii("FormatStringId") )
                             {
-                                SotFormatStringId nFormatId = -1;
+                                SotFormatStringId nFormatId = 0;
                                 if ( pIter->Value >>= nFormatId )
                                     pasteFormat(nFormatId);
                                 break;
@@ -1284,17 +1272,9 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                 break;
         }
     }
-    catch(Exception& e)
+    catch( const Exception& )
     {
-#if DBG_UTIL
-        String sMessage("OApplicationController::Execute(", RTL_TEXTENCODING_ASCII_US);
-        sMessage += String::CreateFromInt32(_nId);
-        sMessage.AppendAscii(") : caught an exception ! message : ");
-        sMessage += (const sal_Unicode*)e.Message;
-        DBG_ERROR(ByteString(sMessage, gsl_getSystemTextEncoding()).GetBuffer());
-#else
-        e;  // make compiler happy
-#endif
+        DBG_UNHANDLED_EXCEPTION();
     }
     InvalidateFeature(_nId);
 }
@@ -1440,6 +1420,8 @@ void SAL_CALL OApplicationController::elementInserted( const ContainerEvent& _rE
                             containerFound(xSubContainer);
                     }
                     break;
+                default:
+                    break;
             }
             getContainer()->elementAdded(eType,sName,_rEvent.Element,getConnection());
         }
@@ -1472,6 +1454,8 @@ void SAL_CALL OApplicationController::elementRemoved( const ContainerEvent& _rEv
                         sName = xContent->getIdentifier()->getContentIdentifier() + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + sName;
                     }
                 }
+                break;
+            default:
                 break;
         }
         getContainer()->elementRemoved(eType,sName,getConnection());
@@ -1516,6 +1500,8 @@ void SAL_CALL OApplicationController::elementReplaced( const ContainerEvent& _rE
                             sName = xContent->getIdentifier()->getContentIdentifier() + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + sName;
                         }
                     }
+                    break;
+                default:
                     break;
             }
             //  getContainer()->elementReplaced(getContainer()->getElementType(),sName,sNewName,xConnection);
@@ -1684,6 +1670,8 @@ Reference< XComponent > OApplicationController::openElement(const ::rtl::OUStrin
                 }
             }
             break;
+        default:
+            break;
     }
     return xRet;
 }
@@ -1749,6 +1737,8 @@ void OApplicationController::newElementWithPilot( ElementType _eType )
              }
          }
          break;
+        case E_NONE:
+            break;
     }
 }
 
@@ -1790,6 +1780,8 @@ void OApplicationController::newElement( ElementType _eType, sal_Bool _bSQLView 
                     addDocumentListener(xComponent,NULL);
                 }
             }
+            break;
+        default:
             break;
     }
 }
@@ -1890,6 +1882,8 @@ void OApplicationController::renameEntry()
                             m_xMetaData, getConnection(), *aList.begin(), SAD_TITLE_RENAME) );
                     }
                     break;
+                default:
+                    break;
             }
 
             if ( xRename.is() && aDlg.get() )
@@ -1960,7 +1954,7 @@ void OApplicationController::renameEntry()
     }
 }
 // -----------------------------------------------------------------------------
-void OApplicationController::onEntryDeSelect(SvTreeListBox* _pTree)
+void OApplicationController::onEntryDeSelect(SvTreeListBox* /*_pTree*/)
 {
     InvalidateAll();
 }
@@ -2001,9 +1995,8 @@ void OApplicationController::onEntrySelect(SvLBoxEntry* _pEntry)
                                 if ( xConnection.is() )
                                     pView->showPreview(getDatabaseName(),xConnection,sName,sal_False);
                             }
-                            return;
                         }
-                        break;
+                        return;
                     case E_TABLE:
                         {
                             SharedConnection xConnection( ensureConnection() );
@@ -2014,6 +2007,8 @@ void OApplicationController::onEntrySelect(SvLBoxEntry* _pEntry)
                                 return;
                             }
                         }
+                        break;
+                    default:
                         break;
                 }
             }
@@ -2044,6 +2039,8 @@ void OApplicationController::frameAction(const FrameActionEvent& aEvent) throw( 
             case FrameAction_FRAME_UI_DEACTIVATING:
                 m_bFrameUiActive = sal_False;
                 break;
+            default:
+                break;
         }
 }
 //------------------------------------------------------------------------------
@@ -2061,21 +2058,21 @@ IMPL_LINK(OApplicationController, OnInvalidateClipboard, void*, EMPTYARG)
     return 0L;
 }
 // -----------------------------------------------------------------------------
-void OApplicationController::onCutEntry(SvLBoxEntry* _pEntry)
+void OApplicationController::onCutEntry(SvLBoxEntry* /*_pEntry*/)
 {
 }
 // -----------------------------------------------------------------------------
-void OApplicationController::onCopyEntry(SvLBoxEntry* _pEntry)
+void OApplicationController::onCopyEntry(SvLBoxEntry* /*_pEntry*/)
 {
     Execute(ID_BROWSER_COPY,Sequence<PropertyValue>());
 }
 // -----------------------------------------------------------------------------
-void OApplicationController::onPasteEntry(SvLBoxEntry* _pEntry)
+void OApplicationController::onPasteEntry(SvLBoxEntry* /*_pEntry*/)
 {
     Execute(ID_BROWSER_PASTE,Sequence<PropertyValue>());
 }
 // -----------------------------------------------------------------------------
-void OApplicationController::onDeleteEntry(SvLBoxEntry* _pEntry)
+void OApplicationController::onDeleteEntry(SvLBoxEntry* /*_pEntry*/)
 {
     ElementType eType = getContainer()->getElementType();
     sal_uInt16 nId = 0;
@@ -2100,19 +2097,19 @@ void OApplicationController::onDeleteEntry(SvLBoxEntry* _pEntry)
     executeChecked(nId,Sequence<PropertyValue>());
 }
 // -----------------------------------------------------------------------------
-sal_Bool OApplicationController::requestContextMenu( const CommandEvent& _rEvent )
+sal_Bool OApplicationController::requestContextMenu( const CommandEvent& /*_rEvent*/ )
 {
     return sal_False;
 }
 
 // -----------------------------------------------------------------------------
-sal_Bool OApplicationController::requestQuickHelp( const SvLBoxEntry* _pEntry, String& _rText ) const
+sal_Bool OApplicationController::requestQuickHelp( const SvLBoxEntry* /*_pEntry*/, String& /*_rText*/ ) const
 {
     return sal_False;
 }
 
 // -----------------------------------------------------------------------------
-sal_Bool OApplicationController::requestDrag( sal_Int8 _nAction, const Point& _rPosPixel )
+sal_Bool OApplicationController::requestDrag( sal_Int8 /*_nAction*/, const Point& /*_rPosPixel*/ )
 {
     TransferableHelper* pTransfer = NULL;
     if ( getContainer() && getContainer()->getSelectionCount() )
