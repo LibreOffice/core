@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MCatalog.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:15:18 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:41:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,12 +87,8 @@ void OCatalog::refreshTables()
     {
         Reference< XRow > xRow(xResult,UNO_QUERY);
         ::rtl::OUString aName;
-        const ::rtl::OUString& sDot = OCatalog::getDot();
-
         while(xResult->next())
         {
-            // aName = xRow->getString(2);
-            // aName += sDot;
             aName = xRow->getString(3);
             aVector.push_back(aName);
         }
