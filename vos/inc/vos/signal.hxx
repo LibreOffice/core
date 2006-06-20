@@ -4,9 +4,9 @@
  *
  *  $RCSfile: signal.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2006-06-02 12:39:46 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 11:17:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,14 +47,12 @@
 #   include <osl/signal.h>
 #endif
 
-extern oslSignalAction SAL_CALL _OSignalHandler_Function(void* pthis, oslSignalInfo* pInfo);
-
 namespace vos
 {
 
-#if !defined ( WNT )
-oslSignalAction SAL_CALL _cpp_OSignalHandler_Function(void* pthis, oslSignalInfo* pInfo);
-#endif
+extern "C"
+typedef oslSignalAction SignalHandlerFunction_impl(void *, oslSignalInfo *);
+SignalHandlerFunction_impl signalHandlerFunction_impl;
 
 /** OSignalHandler is an objectoriented interface for signal handlers.
 
@@ -105,13 +103,7 @@ protected:
 protected:
     oslSignalHandler m_hHandler;
 
-#if defined ( WNT )
-    friend oslSignalAction SAL_CALL ::_OSignalHandler_Function(void* pthis, oslSignalInfo* pInfo);
-#else
-    friend oslSignalAction SAL_CALL _cpp_OSignalHandler_Function(void* pthis, oslSignalInfo* pInfo);
-#endif
-
-
+    friend oslSignalAction signalHandlerFunction_impl(void *, oslSignalInfo *);
 };
 
 }
