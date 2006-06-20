@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DAVSession.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:08:17 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:34:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -242,7 +242,7 @@ private:
 #endif // WNT
 };
 
-}; // namespace webdav_ucp
+} // namespace webdav_ucp
 
 #endif // _DAVSESSION_HXX_
 
