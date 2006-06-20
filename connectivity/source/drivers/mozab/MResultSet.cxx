@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MResultSet.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 11:54:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:44:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,26 +139,27 @@ sal_Bool SAL_CALL OResultSet::supportsService( const ::rtl::OUString& _rServiceN
 OResultSet::OResultSet(OStatement_Base* pStmt, connectivity::OSQLParseTreeIterator&   _aSQLIterator )
     : OResultSet_BASE(m_aMutex)
     ,OPropertySetHelper(OResultSet_BASE::rBHelper)
-    ,m_xStatement(*pStmt)
-    ,m_nRowPos(0)
-    ,m_xMetaData(NULL)
-    ,m_bIsAlwaysFalseQuery(sal_False)
-    ,m_nParamIndex(0)
-    ,m_aQuery(pStmt->getOwnConnection()->getColumnAlias().getAliasMap())
-    ,m_pKeySet(NULL)
     ,m_pStatement(pStmt)
-    ,m_pParseTree(_aSQLIterator.getParseTree())
-    ,m_aSQLIterator(_aSQLIterator)
+    ,m_xStatement(*pStmt)
+    ,m_xMetaData(NULL)
+    ,m_nRowPos(0)
+    ,m_nOldRowPos(0)
     ,m_nFetchSize(0)
     ,m_nResultSetType(ResultSetType::SCROLL_INSENSITIVE)
-    ,m_nResultSetConcurrency(ResultSetConcurrency::UPDATABLE)
     ,m_nFetchDirection(FetchDirection::FORWARD)
+    ,m_nResultSetConcurrency(ResultSetConcurrency::UPDATABLE)
+    ,m_aSQLIterator(_aSQLIterator)
+    ,m_pParseTree(_aSQLIterator.getParseTree())
+    ,m_aQuery(pStmt->getOwnConnection()->getColumnAlias().getAliasMap())
+    ,m_pTable(NULL)
+    ,m_CurrentRowCount(0)
+    ,m_nParamIndex(0)
+    ,m_bIsAlwaysFalseQuery(sal_False)
+    ,m_pKeySet(NULL)
     ,m_nNewRow(0)
     ,m_nUpdatedRow(0)
-    ,m_nOldRowPos(0)
-    ,m_CurrentRowCount(0)
-    ,m_bIsReadOnly(-1)
     ,m_RowStates(0)
+    ,m_bIsReadOnly(-1)
 {
 
     m_aQuery.setMaxNrOfReturns(pStmt->getOwnConnection()->getMaxResultRecords());
@@ -231,18 +232,18 @@ sal_Int32 SAL_CALL OResultSet::findColumn( const ::rtl::OUString& columnName ) t
     return i;
 }
 // -------------------------------------------------------------------------
-Reference< XInputStream > SAL_CALL OResultSet::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Reference< XInputStream > SAL_CALL OResultSet::getBinaryStream( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     return NULL;
 }
 // -------------------------------------------------------------------------
-Reference< XInputStream > SAL_CALL OResultSet::getCharacterStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Reference< XInputStream > SAL_CALL OResultSet::getCharacterStream( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     return NULL;
 }
 
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL OResultSet::getBoolean( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OResultSet::getBoolean( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     ResultSetEntryGuard aGuard( *this );
     m_bWasNull = sal_True;
@@ -250,42 +251,42 @@ sal_Bool SAL_CALL OResultSet::getBoolean( sal_Int32 columnIndex ) throw(SQLExcep
 }
 // -------------------------------------------------------------------------
 
-sal_Int8 SAL_CALL OResultSet::getByte( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+sal_Int8 SAL_CALL OResultSet::getByte( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     ResultSetEntryGuard aGuard( *this );
     return 0;
 }
 // -------------------------------------------------------------------------
 
-Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     ResultSetEntryGuard aGuard( *this );
     return Sequence< sal_Int8 >();
 }
 // -------------------------------------------------------------------------
 
-Date SAL_CALL OResultSet::getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Date SAL_CALL OResultSet::getDate( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     ResultSetEntryGuard aGuard( *this );
     return Date();
 }
 // -------------------------------------------------------------------------
 
-double SAL_CALL OResultSet::getDouble( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+double SAL_CALL OResultSet::getDouble( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     ResultSetEntryGuard aGuard( *this );
     return 0.0;
 }
 // -------------------------------------------------------------------------
 
-float SAL_CALL OResultSet::getFloat( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+float SAL_CALL OResultSet::getFloat( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     ResultSetEntryGuard aGuard( *this );
     return 0;
 }
 // -------------------------------------------------------------------------
 
-sal_Int32 SAL_CALL OResultSet::getInt( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL OResultSet::getInt( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     ResultSetEntryGuard aGuard( *this );
     return 0;
@@ -301,7 +302,7 @@ sal_Int32 SAL_CALL OResultSet::getRow(  ) throw(SQLException, RuntimeException)
 }
 // -------------------------------------------------------------------------
 
-sal_Int64 SAL_CALL OResultSet::getLong( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+sal_Int64 SAL_CALL OResultSet::getLong( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     ResultSetEntryGuard aGuard( *this );
     return sal_Int64();
@@ -318,37 +319,37 @@ Reference< XResultSetMetaData > SAL_CALL OResultSet::getMetaData(  ) throw(SQLEx
     return m_xMetaData;
 }
 // -------------------------------------------------------------------------
-Reference< XArray > SAL_CALL OResultSet::getArray( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Reference< XArray > SAL_CALL OResultSet::getArray( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     return NULL;
 }
 
 // -------------------------------------------------------------------------
 
-Reference< XClob > SAL_CALL OResultSet::getClob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Reference< XClob > SAL_CALL OResultSet::getClob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     return NULL;
 }
 // -------------------------------------------------------------------------
-Reference< XBlob > SAL_CALL OResultSet::getBlob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
-{
-    return NULL;
-}
-// -------------------------------------------------------------------------
-
-Reference< XRef > SAL_CALL OResultSet::getRef( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Reference< XBlob > SAL_CALL OResultSet::getBlob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     return NULL;
 }
 // -------------------------------------------------------------------------
 
-Any SAL_CALL OResultSet::getObject( sal_Int32 columnIndex, const Reference< ::com::sun::star::container::XNameAccess >& typeMap ) throw(SQLException, RuntimeException)
+Reference< XRef > SAL_CALL OResultSet::getRef( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
+{
+    return NULL;
+}
+// -------------------------------------------------------------------------
+
+Any SAL_CALL OResultSet::getObject( sal_Int32 /*columnIndex*/, const Reference< ::com::sun::star::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException)
 {
     return Any();
 }
 // -------------------------------------------------------------------------
 
-sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     return 0;
 }
@@ -402,7 +403,7 @@ sal_Bool OResultSet::pushCard(sal_uInt32 cardNumber) throw(SQLException, Runtime
 
 }
 // -------------------------------------------------------------------------
-sal_Bool OResultSet::fetchRow(sal_uInt32 cardNumber,sal_Bool bForceReload) throw(SQLException, RuntimeException)
+sal_Bool OResultSet::fetchRow(sal_Int32 cardNumber,sal_Bool bForceReload) throw(SQLException, RuntimeException)
 {
     OSL_TRACE("fetchRow, cardNumber = %u", cardNumber );
     if (!bForceReload)
@@ -443,7 +444,7 @@ sal_Bool OResultSet::fetchRow(sal_uInt32 cardNumber,sal_Bool bForceReload) throw
 }
 // -------------------------------------------------------------------------
 
-const ORowSetValue& OResultSet::getValue(sal_uInt32 cardNumber, sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+const ORowSetValue& OResultSet::getValue(sal_Int32 cardNumber, sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     if ( fetchRow( cardNumber ) == sal_False )
     {
@@ -473,7 +474,7 @@ const ORowSetValue& OResultSet::getValue(sal_uInt32 cardNumber, sal_Int32 column
 }
 // -------------------------------------------------------------------------
 
-Time SAL_CALL OResultSet::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Time SAL_CALL OResultSet::getTime( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     ResultSetEntryGuard aGuard( *this );
     return Time();
@@ -481,7 +482,7 @@ Time SAL_CALL OResultSet::getTime( sal_Int32 columnIndex ) throw(SQLException, R
 // -------------------------------------------------------------------------
 
 
-DateTime SAL_CALL OResultSet::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+DateTime SAL_CALL OResultSet::getTimestamp( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     ResultSetEntryGuard aGuard( *this );
     return DateTime();
@@ -673,19 +674,19 @@ IPropertyArrayHelper & OResultSet::getInfoHelper()
 }
 // -------------------------------------------------------------------------
 sal_Bool OResultSet::convertFastPropertyValue(
-                            Any & rConvertedValue,
-                            Any & rOldValue,
+                            Any & /*rConvertedValue*/,
+                            Any & /*rOldValue*/,
                             sal_Int32 nHandle,
-                            const Any& rValue )
+                            const Any& /*rValue*/ )
                                 throw (::com::sun::star::lang::IllegalArgumentException)
 {
+    OSL_ENSURE( false, "OResultSet::convertFastPropertyValue: not implemented!" );
     switch(nHandle)
     {
         case PROPERTY_ID_ISBOOKMARKABLE:
         case PROPERTY_ID_RESULTSETCONCURRENCY:
         case PROPERTY_ID_RESULTSETTYPE:
             throw ::com::sun::star::lang::IllegalArgumentException();
-            break;
         case PROPERTY_ID_FETCHDIRECTION:
         case PROPERTY_ID_FETCHSIZE:
         default:
@@ -696,17 +697,17 @@ sal_Bool OResultSet::convertFastPropertyValue(
 // -------------------------------------------------------------------------
 void OResultSet::setFastPropertyValue_NoBroadcast(
                                 sal_Int32 nHandle,
-                                const Any& rValue
+                                const Any& /*rValue*/
                                                  )
                                                  throw (Exception)
 {
+    OSL_ENSURE( false, "OResultSet::setFastPropertyValue_NoBroadcast: not implemented!" );
     switch(nHandle)
     {
         case PROPERTY_ID_ISBOOKMARKABLE:
         case PROPERTY_ID_RESULTSETCONCURRENCY:
         case PROPERTY_ID_RESULTSETTYPE:
             throw Exception();
-            break;
         case PROPERTY_ID_FETCHDIRECTION:
             break;
         case PROPERTY_ID_FETCHSIZE:
@@ -736,6 +737,7 @@ void OResultSet::getFastPropertyValue(
             rValue <<= m_nFetchSize;
             break;
         case PROPERTY_ID_ISBOOKMARKABLE:
+            const_cast< OResultSet* >( this )->determineReadOnly();
             rValue <<= !m_bIsReadOnly;
          break;
     }
@@ -805,7 +807,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
                                      connectivity::OSQLParseTreeIterator& aSQLIterator)
 {
     ::rtl::OUString         columnName;
-    MQueryOp::cond_type     op;
+    MQueryOp::cond_type     op( MQueryOp::Is );
     ::rtl::OUString         matchString;
 
     if ( parseTree == NULL )
@@ -1252,12 +1254,10 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
 
     OSL_ENSURE(m_xColumns.isValid(), "Need the Columns!!");
 
-    sal_Int32 nColumnCount = m_xColumns->size();
-
+    // sal_Int32 nColumnCount = m_xColumns->size();
     // initializeRow(m_aRow,nColumnCount);
     // initializeRow(m_aEvaluateRow,nColumnCount);
 
-    sal_uInt32 nLoopCount = 0;
     switch(m_aSQLIterator.getStatementType())
     {
         case SQL_STATEMENT_SELECT:
@@ -1287,7 +1287,6 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
                 }
 
                 OSortIndex::TKeyTypeVector eKeyType(m_aOrderbyColumnNumber.size());
-                OValueVector::iterator aRowIter = m_aRow->begin()+1;
                 ::std::vector<sal_Int32>::iterator aOrderByIter = m_aOrderbyColumnNumber.begin();
                 for ( ::std::vector<sal_Int16>::size_type i = 0; aOrderByIter != m_aOrderbyColumnNumber.end(); ++aOrderByIter,++i)
                 {
@@ -1410,6 +1409,9 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
         case SQL_STATEMENT_UPDATE:
         case SQL_STATEMENT_DELETE:
         case SQL_STATEMENT_INSERT:
+            break;
+        default:
+            ::dbtools::throwFunctionNotSupportedException(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("statement type not supported by this database driver.")), NULL);
             break;
     }
 }
@@ -1542,12 +1544,12 @@ sal_Bool OResultSet::fillKeySet(sal_Int32 nMaxCardNumber)
     impl_ensureKeySet();
     if (m_CurrentRowCount < nMaxCardNumber)
     {
-        sal_Int32   nKeyValue;
-        sal_Int32   nKeyPos;
-        if ( (sal_Int32)m_pKeySet->capacity() < nMaxCardNumber )
-            m_pKeySet->reserve(nMaxCardNumber + 20 );
+         sal_Int32  nKeyValue;
+         sal_Int32  nKeyPos;
+         if ( (sal_Int32)m_pKeySet->capacity() < nMaxCardNumber )
+             m_pKeySet->reserve(nMaxCardNumber + 20 );
 
-        for (nKeyValue = m_CurrentRowCount+1; nKeyValue  <= nMaxCardNumber; nKeyValue ++)
+         for (nKeyValue = m_CurrentRowCount+1; nKeyValue  <= nMaxCardNumber; nKeyValue ++)
         {
             nKeyPos = m_pKeySet->size();
             m_pKeySet->insert( m_pKeySet->end() );
@@ -1678,7 +1680,7 @@ sal_Bool  OResultSet::moveRelativeToBookmark( const ::com::sun::star::uno::Any& 
     m_nRowPos = getRowForCardNumber(nCardNum);
     return seekRow(RELATIVE_POS,rows );
 }
-sal_Int32 OResultSet::compareBookmarks( const ::com::sun::star::uno::Any& first, const ::com::sun::star::uno::Any& second ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+sal_Int32 OResultSet::compareBookmarks( const ::com::sun::star::uno::Any& lhs, const ::com::sun::star::uno::Any& rhs ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     ResultSetEntryGuard aGuard( *this );
     OSL_TRACE("compareBookmarks, m_nRowPos = %u", m_nRowPos );
@@ -1686,8 +1688,8 @@ sal_Int32 OResultSet::compareBookmarks( const ::com::sun::star::uno::Any& first,
         sal_Int32 nSecond=0;
         sal_Int32 nResult=0;
 
-    if ( !( first >>= nFirst ) || !( second >>= nSecond ) )
-        ::dbtools::throwGenericSQLException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Invalid bookmark passed to compareBookmarks")),NULL);
+    if ( !( lhs >>= nFirst ) || !( rhs >>= nSecond ) )
+        ::dbtools::throwSQLException( "XRowLocate::compareBookmarks: Invalid bookmark value", "HY111", *this );
 
     if(nFirst < nSecond)
          nResult = -1;
@@ -1795,9 +1797,9 @@ void SAL_CALL OResultSet::updateInt( sal_Int32 columnIndex, sal_Int32 x ) throw(
     updateValue(columnIndex,x);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL OResultSet::updateLong( sal_Int32 columnIndex, sal_Int64 x ) throw(SQLException, RuntimeException)
+void SAL_CALL OResultSet::updateLong( sal_Int32 /*columnIndex*/, sal_Int64 /*x*/ ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFunctionSequenceException(*this);
+    ::dbtools::throwFeatureNotImplementedException( "XRowUpdate::updateLong", *this );
 }
 // -----------------------------------------------------------------------
 void SAL_CALL OResultSet::updateFloat( sal_Int32 columnIndex, float x ) throw(SQLException, RuntimeException)
@@ -1863,9 +1865,9 @@ void SAL_CALL OResultSet::updateObject( sal_Int32 columnIndex, const Any& x ) th
  }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OResultSet::updateNumericObject( sal_Int32 columnIndex, const Any& x, sal_Int32 scale ) throw(SQLException, RuntimeException)
+void SAL_CALL OResultSet::updateNumericObject( sal_Int32 /*columnIndex*/, const Any& /*x*/, sal_Int32 /*scale*/ ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwGenericSQLException(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Does not support updateNumericObject")),*this);
+    ::dbtools::throwFeatureNotImplementedException( "XRowUpdate::updateNumericObject", *this );
 }
 
 // XResultSetUpdate
@@ -2012,7 +2014,12 @@ void OResultSet::setOrderByColumns(const ::std::vector<sal_Int32>& _aColumnOrder
     m_aOrderbyColumnNumber = _aColumnOrderBy;
 }
 
-void OResultSet::setOrderByAscending(const ::std::vector<sal_Int16>& _aOrderbyAsc)
+void OResultSet::setOrderByAscending(const ::std::vector<TAscendingOrder>& _aOrderbyAsc)
 {
     m_aOrderbyAscending = _aOrderbyAsc;
 }
+Sequence< sal_Int32 > SAL_CALL OResultSet::deleteRows( const Sequence< Any >& /*rows*/ ) throw(SQLException, RuntimeException)
+{
+    ::dbtools::throwFeatureNotImplementedException( "XDeleteRows::deleteRows", *this );
+    return Sequence< sal_Int32 >();
+};
