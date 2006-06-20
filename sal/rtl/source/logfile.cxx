@@ -4,9 +4,9 @@
  *
  *  $RCSfile: logfile.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:02:22 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:29:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,6 +105,10 @@ LoggerGuard::~LoggerGuard()
     }
 }
 
+// The destructor of this static LoggerGuard is "activated" by the assignment to
+// g_buffer in init():
+LoggerGuard loggerGuard;
+
 Mutex & getLogMutex()
 {
     static Mutex *pMutex = 0;
@@ -123,7 +127,11 @@ Mutex & getLogMutex()
 OUString getFileUrl( const OUString &name )
 {
     OUString aRet;
-    OSL_VERIFY( osl_getFileURLFromSystemPath( name.pData, &aRet.pData ) == osl_File_E_None );
+    if ( osl_getFileURLFromSystemPath( name.pData, &aRet.pData )
+         != osl_File_E_None )
+    {
+        OSL_ASSERT( false );
+    }
 
     OUString aWorkingDirectory;
     osl_getProcessWorkingDir( &(aWorkingDirectory.pData) );
@@ -170,12 +178,8 @@ void init() {
                 if( osl_File_E_None == e )
                 {
                     TimeValue aCurrentTime;
-                    //Allocing a g_buffer implies the need for a LoggerGuard, this
-                    //method is already double-locked, so no need for rtl::Static
-                    static LoggerGuard guard;
                     g_buffer = ( sal_Char * ) rtl_allocateMemory( g_BUFFERSIZE );
                     sal_Int64 nConverted = 0;
-                    sal_Int64 nWritten = 0;
                     if (osl_getSystemTime (&aCurrentTime))
                     {
                         nConverted = (sal_Int64 ) sprintf (
@@ -185,14 +189,19 @@ void init() {
                                 aCurrentTime.Seconds + 1e-9 * aCurrentTime.Nanosec,
                                 osl_getGlobalTimer());
 
-                        sal_Int64 nWritten;
                         if( nConverted > 0 )
+                        {
+                            sal_Int64 nWritten;
                             osl_writeFile( g_aFile, g_buffer, nConverted , (sal_uInt64 *)&nWritten );
+                        }
                     }
 
                     nConverted = sprintf (g_buffer, "Process id is %lu\n", aProcessId);
                     if( nConverted )
+                    {
+                        sal_Int64 nWritten;
                         osl_writeFile( g_aFile, g_buffer, nConverted, (sal_uInt64 *)&nWritten );
+                    }
                 }
                 else
                 {
