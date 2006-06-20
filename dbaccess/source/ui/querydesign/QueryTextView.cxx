@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryTextView.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:27:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:27:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,7 +86,7 @@ using namespace ::com::sun::star::frame;
 
 // end of temp classes
 // -------------------------------------------------------------------------
-DBG_NAME(OQueryTextView);
+DBG_NAME(OQueryTextView)
 OQueryTextView::OQueryTextView(OQueryContainerWindow* _pParent)
     :Window(_pParent)
 {
