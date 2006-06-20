@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ftpresultsetbase.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:38:20 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:25:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -195,7 +195,7 @@ ResultSetBase::next(
            uno::RuntimeException )
 {
     sal_Bool test;
-    if( ++m_nRow < m_aItems.size() )
+    if( ++m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
         test = true;
     else
         test = false;
@@ -219,7 +219,7 @@ ResultSetBase::isAfterLast(
     throw( sdbc::SQLException,
            uno::RuntimeException )
 {
-    return m_nRow >= m_aItems.size();   // Cannot happen, if m_aFolder.isOpen()
+    return m_nRow >= sal::static_int_cast<sal_Int32>(m_aItems.size());   // Cannot happen, if m_aFolder.isOpen()
 }
 
 
@@ -239,7 +239,7 @@ ResultSetBase::isLast(
     throw( sdbc::SQLException,
            uno::RuntimeException)
 {
-    if( m_nRow ==  m_aItems.size() - 1 )
+    if( m_nRow ==  sal::static_int_cast<sal_Int32>(m_aItems.size()) - 1 )
         return true;
     else
         return false;
@@ -295,7 +295,7 @@ ResultSetBase::getRow(
            uno::RuntimeException)
 {
     // Test, whether behind last row
-    if( -1 == m_nRow || m_nRow >= m_aItems.size() )
+    if( -1 == m_nRow || m_nRow >= sal::static_int_cast<sal_Int32>(m_aItems.size()) )
         return 0;
     else
         return m_nRow+1;
@@ -315,7 +315,7 @@ sal_Bool SAL_CALL ResultSetBase::absolute( sal_Int32 row )
             m_nRow = -1;
     }
 
-    return 0<= m_nRow && m_nRow < m_aItems.size();
+    return 0<= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size());
 }
 
 
@@ -337,7 +337,7 @@ ResultSetBase::relative(
         while( row++ && m_nRow > - 1 )
             previous();
 
-    return 0 <= m_nRow && m_nRow < m_aItems.size();
+    return 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size());
 }
 
 
@@ -348,11 +348,11 @@ ResultSetBase::previous(
     throw( sdbc::SQLException,
            uno::RuntimeException)
 {
-    if( m_nRow > m_aItems.size() )
+    if( m_nRow > sal::static_int_cast<sal_Int32>(m_aItems.size()) )
         m_nRow = m_aItems.size();  // Correct Handling of afterLast
     if( 0 <= m_nRow ) -- m_nRow;
 
-    return 0 <= m_nRow && m_nRow < m_aItems.size();
+    return 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size());
 }
 
 
@@ -420,7 +420,7 @@ ResultSetBase::queryContentIdentifierString(
     void )
     throw( uno::RuntimeException )
 {
-    if( 0 <= m_nRow && m_nRow < m_aItems.size() )
+    if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
         return m_aPath[m_nRow];
     else
         return rtl::OUString();
@@ -435,7 +435,7 @@ ResultSetBase::queryContentIdentifier(
         uno::RuntimeException
     )
 {
-    if( 0 <= m_nRow && m_nRow < m_aItems.size() )
+    if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
     {
         if(!m_aIdents[m_nRow].is()) {
             rtl::OUString url = queryContentIdentifierString();
@@ -456,7 +456,7 @@ ResultSetBase::queryContent(
     void )
     throw( uno::RuntimeException )
 {
-    if( 0 <= m_nRow && m_nRow < m_aItems.size() )
+    if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
         return m_xProvider->queryContent(queryContentIdentifier());
     else
         return uno::Reference< XContent >();
@@ -553,7 +553,7 @@ ResultSetBase::getPropertySetInfo()
 
 
 void SAL_CALL ResultSetBase::setPropertyValue(
-    const rtl::OUString& aPropertyName, const uno::Any& aValue )
+    const rtl::OUString& aPropertyName, const uno::Any& /*aValue*/ )
     throw( beans::UnknownPropertyException,
            beans::PropertyVetoException,
            lang::IllegalArgumentException,
@@ -646,8 +646,8 @@ void SAL_CALL ResultSetBase::removePropertyChangeListener(
 
 
 void SAL_CALL ResultSetBase::addVetoableChangeListener(
-    const rtl::OUString& PropertyName,
-    const uno::Reference< beans::XVetoableChangeListener >& aListener )
+    const rtl::OUString& /*PropertyName*/,
+    const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
     throw( beans::UnknownPropertyException,
            lang::WrappedTargetException,
            uno::RuntimeException)
@@ -656,8 +656,8 @@ void SAL_CALL ResultSetBase::addVetoableChangeListener(
 
 
 void SAL_CALL ResultSetBase::removeVetoableChangeListener(
-    const rtl::OUString& PropertyName,
-    const uno::Reference< beans::XVetoableChangeListener >& aListener )
+    const rtl::OUString& /*PropertyName*/,
+    const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
     throw( beans::UnknownPropertyException,
            lang::WrappedTargetException,
            uno::RuntimeException)
