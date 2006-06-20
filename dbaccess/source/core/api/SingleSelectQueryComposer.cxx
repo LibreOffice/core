@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SingleSelectQueryComposer.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:10:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:37:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -233,18 +233,18 @@ DBG_NAME(OSingleSelectQueryComposer)
 OSingleSelectQueryComposer::OSingleSelectQueryComposer(const Reference< XNameAccess>& _xTableSupplier,
                                const Reference< XConnection>& _xConnection,
                                const Reference< XMultiServiceFactory >& _xServiceFactory)
- : OSubComponent(m_aMutex,_xConnection)
- ,OPropertyContainer(m_aBHelper)
- , m_xConnection(_xConnection)
- , m_xMetaData(_xConnection->getMetaData())
- , m_aSqlIterator(_xTableSupplier,_xConnection->getMetaData(),NULL)
- , m_aAdditiveIterator(_xTableSupplier,_xConnection->getMetaData(),NULL)
- , m_xTableSupplier(_xTableSupplier)
- , m_aSqlParser(_xServiceFactory)
- ,m_xServiceFactory(_xServiceFactory)
- ,m_pTables(NULL)
- ,m_nBoolCompareMode(BOOL_COMPARISON_DEFAULT)
- ,m_aElementaryParts( (size_t)SQLPartCount )
+    :OSubComponent(m_aMutex,_xConnection)
+    ,OPropertyContainer(m_aBHelper)
+    ,m_aSqlParser(_xServiceFactory)
+    ,m_aSqlIterator(_xTableSupplier,_xConnection->getMetaData(),NULL)
+    ,m_aAdditiveIterator(_xTableSupplier,_xConnection->getMetaData(),NULL)
+    ,m_aElementaryParts( (size_t)SQLPartCount )
+    ,m_xConnection(_xConnection)
+    ,m_xMetaData(_xConnection->getMetaData())
+    ,m_xTableSupplier(_xTableSupplier)
+    ,m_xServiceFactory(_xServiceFactory)
+    ,m_pTables(NULL)
+    ,m_nBoolCompareMode(BOOL_COMPARISON_DEFAULT)
 {
     DBG_CTOR(OSingleSelectQueryComposer,NULL);
     OSL_ENSURE(_xServiceFactory.is()," ServiceFactory cant be null!");
@@ -593,7 +593,7 @@ void SAL_CALL OSingleSelectQueryComposer::setElementaryQuery( const ::rtl::OUStr
     }
     catch( const Exception& e )
     {
-        e;
+        (void)e;
         DBG_ERROR( "OSingleSelectQueryComposer::setElementaryQuery: there should be no error anymore for the additive statement!" );
         // every part of the additive statement should have passed other tests already, and should not
         // be able to cause any errors ... me thinks
@@ -670,7 +670,7 @@ void OSingleSelectQueryComposer::setSingleAdditiveClause( SQLPart _ePart, const 
     }
     catch( const Exception& e )
     {
-        e;
+        (void)e;
         DBG_ERROR( "OSingleSelectQueryComposer::setSingleAdditiveClause: there should be no error anymore for the additive statement!" );
         // every part of the additive statement should have passed other tests already, and should not
         // be able to cause any errors ... me thinks
@@ -749,24 +749,24 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
                 Reference<XResultSetMetaData> xMeta = xResMetaDataSup->getMetaData();
 
                 sal_Int32 nCount = xMeta.is() ? xMeta->getColumnCount() : sal_Int32(0);
-                ::comphelper::UStringMixEqual bCase(m_xMetaData->storesMixedCaseQuotedIdentifiers());
-                ::comphelper::TStringMixEqualFunctor bCase2(m_xMetaData->storesMixedCaseQuotedIdentifiers());
+                ::comphelper::UStringMixEqual stringComp(m_xMetaData->storesMixedCaseQuotedIdentifiers());
+                ::comphelper::TStringMixEqualFunctor stringFunc(m_xMetaData->storesMixedCaseQuotedIdentifiers());
                 ::std::map<OSQLColumns::const_iterator,int> aColumnMap;
 
                 for(sal_Int32 i=1;i<=nCount;++i)
                 {
                     ::rtl::OUString sName = xMeta->getColumnName(i);
                     sal_Bool bFound = sal_False;
-                    OSQLColumns::const_iterator aFind = ::connectivity::find(aCols->begin(),aCols->end(),sName,bCase);
+                    OSQLColumns::const_iterator aFind = ::connectivity::find(aCols->begin(),aCols->end(),sName,stringComp);
                     if(aFind != aCols->end())
-                        //aNames.end() == ::std::find_if(aNames.begin(),aNames.end(),::std::bind2nd(bCase2,sName)))
+                        //aNames.end() == ::std::find_if(aNames.begin(),aNames.end(),::std::bind2nd(stringFunc,sName)))
                     {
                         if(aColumnMap.find(aFind) != aColumnMap.end())
                         {   // we found a column name which exists twice
                             // so we start after the first found
                             do
                             {
-                                aFind = ::connectivity::findRealName(++aFind,aCols->end(),sName,bCase);
+                                aFind = ::connectivity::findRealName(++aFind,aCols->end(),sName,stringComp);
                             }
                             while(aColumnMap.find(aFind) != aColumnMap.end() && aFind != aCols->end());
                         }
@@ -780,7 +780,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
                     }
                     if ( !bFound )
                     { // we can now only look if we found it under the realname propertery
-                        OSQLColumns::const_iterator aRealFind = ::connectivity::findRealName(aCols->begin(),aCols->end(),sName,bCase);
+                        OSQLColumns::const_iterator aRealFind = ::connectivity::findRealName(aCols->begin(),aCols->end(),sName,stringComp);
 
                         if ( i <= static_cast< sal_Int32>(aCols->size()) )
                         {
@@ -801,12 +801,12 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
                                         xProp->getPropertyValue(PROPERTY_NAME) >>= sName;
 
 
-                                    aFindName = ::std::find_if(aNames.begin(),aNames.end(),::std::bind2nd(bCase2,sName));
+                                    aFindName = ::std::find_if(aNames.begin(),aNames.end(),::std::bind2nd(stringFunc,sName));
                                     sal_Int32 j = 0;
                                     while ( aFindName != aNames.end() )
                                     {
                                         sName += ::rtl::OUString::valueOf(++j);
-                                        aFindName = ::std::find_if(aNames.begin(),aNames.end(),::std::bind2nd(bCase2,sName));
+                                        aFindName = ::std::find_if(aNames.begin(),aNames.end(),::std::bind2nd(stringFunc,sName));
                                     }
 
                                     pColumn->setName(sName);
@@ -1019,7 +1019,7 @@ sal_Bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pCon
         {
             nPos = pCondition->count()-1;
 
-            sal_uInt32 i = pCondition->count() - 2;
+            sal_Int32 i = pCondition->count() - 2;
             switch (pCondition->getChild(i)->getNodeType())
             {
                 case SQL_NODE_EQUAL:
@@ -1054,6 +1054,8 @@ sal_Bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pCon
                     i--;
                     aValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("<"));
                     aItem.Handle = SQLFilterOperator::LESS;
+                    break;
+                default:
                     break;
             }
 
@@ -1519,7 +1521,6 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
                                 aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" TRUE "));
                             else
                                 aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" FALSE "));
-                            break;
                             break;
                         case BOOL_COMPARISON_ACCESS:
                             if ( bValue )
