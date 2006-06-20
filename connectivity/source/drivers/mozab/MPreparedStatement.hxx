@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MPreparedStatement.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:19:23 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:44:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -179,6 +179,13 @@ namespace connectivity
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL getResultSet(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual sal_Int32 SAL_CALL getUpdateCount(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual sal_Bool SAL_CALL getMoreResults(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+        public:
+            using OStatement_Base::executeQuery;
+            using OStatement_Base::executeUpdate;
+            using OStatement_Base::execute;
+        protected:
+            using OPropertySetHelper::getFastPropertyValue;
         };
     }
 }
