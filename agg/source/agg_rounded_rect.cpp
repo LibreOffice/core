@@ -152,7 +152,7 @@ namespace agg
             else return path_cmd_line_to;
 
         case 8:
-            cmd = path_cmd_end_poly | path_flags_close | path_flags_ccw;
+            cmd = (unsigned)path_cmd_end_poly | (unsigned)path_flags_close | (unsigned)path_flags_ccw;
             m_status++;
             break;
         }

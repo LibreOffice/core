@@ -385,27 +385,27 @@ namespace agg
 
 
     //------------------------------------------------------------------------
-    void path_storage::reverse_polygon(unsigned start, unsigned end)
+    void path_storage::reverse_polygon(unsigned _start, unsigned _end)
     {
         unsigned i;
-        unsigned tmp_cmd = command(start);
+        unsigned tmp_cmd = command(_start);
 
         // Shift all commands to one position
-        for(i = start; i < end; i++)
+        for(i = _start; i < _end; i++)
         {
             modify_command(i, command(i + 1));
         }
 
         // Assign starting command to the ending command
-        modify_command(end, tmp_cmd);
+        modify_command(_end, tmp_cmd);
 
         // Reverse the polygon
-        while(end > start)
+        while(_end > _start)
         {
-            unsigned start_nb = start >> block_shift;
-            unsigned end_nb   = end   >> block_shift;
-            double* start_ptr = m_coord_blocks[start_nb] + ((start & block_mask) << 1);
-            double* end_ptr   = m_coord_blocks[end_nb]   + ((end   & block_mask) << 1);
+            unsigned start_nb = _start >> block_shift;
+            unsigned end_nb   = _end   >> block_shift;
+            double* start_ptr = m_coord_blocks[start_nb] + ((_start & block_mask) << 1);
+            double* end_ptr   = m_coord_blocks[end_nb]   + ((_end   & block_mask) << 1);
             double tmp_xy;
 
             tmp_xy       = *start_ptr;
@@ -416,12 +416,12 @@ namespace agg
             *start_ptr   = *end_ptr;
             *end_ptr     = tmp_xy;
 
-            tmp_cmd = m_cmd_blocks[start_nb][start & block_mask];
-            m_cmd_blocks[start_nb][start & block_mask] = m_cmd_blocks[end_nb][end & block_mask];
-            m_cmd_blocks[end_nb][end & block_mask] = (unsigned char)tmp_cmd;
+            tmp_cmd = m_cmd_blocks[start_nb][_start & block_mask];
+            m_cmd_blocks[start_nb][_start & block_mask] = m_cmd_blocks[end_nb][_end & block_mask];
+            m_cmd_blocks[end_nb][_end & block_mask] = (unsigned char)tmp_cmd;
 
-            ++start;
-            --end;
+            ++_start;
+            --_end;
         }
     }
 
@@ -430,7 +430,7 @@ namespace agg
     unsigned path_storage::arrange_orientations(unsigned path_id,
                                                 path_flags_e new_orientation)
     {
-        unsigned end = m_total_vertices;
+        unsigned _end = m_total_vertices;
         if(m_total_vertices && new_orientation != path_flags_none)
         {
             unsigned start = path_id;
@@ -441,35 +441,35 @@ namespace agg
             for(;;)
             {
                 unsigned orientation;
-                end = perceive_polygon_orientation(start + 1, xs, ys,
+                _end = perceive_polygon_orientation(start + 1, xs, ys,
                                                    &orientation);
-                if(end > start + 2 &&
+                if(_end > start + 2 &&
                    orientation &&
                    orientation != unsigned(new_orientation))
                 {
-                    reverse_polygon(start + inc, end - 1);
+                    reverse_polygon(start + inc, _end - 1);
                 }
-                if(end >= m_total_vertices) break;
-                cmd = command(end);
+                if(_end >= m_total_vertices) break;
+                cmd = command(_end);
                 if(is_stop(cmd))
                 {
-                    ++end;
+                    ++_end;
                     break;
                 }
                 if(is_end_poly(cmd))
                 {
                     inc = 1;
-                    modify_command(end, set_orientation(cmd, new_orientation));
+                    modify_command(_end, set_orientation(cmd, new_orientation));
                 }
                 else
                 {
-                    cmd = vertex(++end, &xs, &ys);
+                    cmd = vertex(++_end, &xs, &ys);
                     inc = 0;
                 }
-                start = end;
+                start = _end;
             }
         }
-        return end;
+        return _end;
     }
 
 

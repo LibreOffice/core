@@ -428,7 +428,7 @@ namespace agg
 
 
     //------------------------------------------------------------------------
-    template <class T> static AGG_INLINE void swap_cells(T* a, T* b)
+    template <class T> AGG_INLINE void swap_cells(T* a, T* b)
     {
         T temp = *a;
         *a = *b;
@@ -436,7 +436,7 @@ namespace agg
     }
 
     //------------------------------------------------------------------------
-    template <class T> static AGG_INLINE bool less_than(T* a, T* b)
+    template <class T> AGG_INLINE bool less_than(T* a, T* b)
     {
         return (*a)->packed_coord < (*b)->packed_coord;
     }
