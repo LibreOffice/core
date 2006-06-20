@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BGroups.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:21:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:08:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,7 +96,7 @@ void OGroups::appendObject( const Reference< XPropertySet >& descriptor )
 }
 // -------------------------------------------------------------------------
 // XDrop
-void OGroups::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
+void OGroups::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElementName)
 {
     ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("DROP USERGROUP ");
     ::rtl::OUString aQuote  = m_pConnection->getMetaData()->getIdentifierQuoteString(  );
