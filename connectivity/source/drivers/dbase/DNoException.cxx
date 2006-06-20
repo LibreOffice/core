@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DNoException.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:17:08 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:20:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,9 @@
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef CONNECTIVITY_DIAGNOSE_EX_H
+#include "diagnose_ex.h"
 #endif
 
 #include <sal/types.h>
@@ -487,6 +490,7 @@ SvStream& connectivity::dbase::operator << (SvStream &rStream, const ONDXPage& r
         rStream.Write((BYTE*)aEmptyData,512);
     }
     ULONG nCurrentPos = rStream.Seek(rPage.GetPagePos() * 512);
+    OSL_UNUSED( nCurrentPos );
 
     nValue = rPage.nCount;
     rStream << nValue << rPage.aChild;
