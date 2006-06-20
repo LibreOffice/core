@@ -4,9 +4,9 @@
  *
  *  $RCSfile: singledoccontroller.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:41:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:24:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -479,14 +479,13 @@ namespace dbaui
         return aReturn;
     }
     // -----------------------------------------------------------------------------
-    void OSingleDocumentController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >& aArgs)
+    void OSingleDocumentController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >& /*aArgs*/)
     {
         switch(_nId)
         {
             case ID_BROWSER_CLOSE:
                 closeTask();
                 return;
-                break;
             case ID_BROWSER_UNDO:
                 m_aUndoManager.Undo();
                 InvalidateFeature(ID_BROWSER_REDO);
