@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabletree.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 14:45:38 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:00:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,14 +105,14 @@ using namespace ::comphelper;
 //========================================================================
 //= OTableTreeListBox
 //========================================================================
-OTableTreeListBox::OTableTreeListBox( Window* pParent, const Reference< XMultiServiceFactory >& _rxORB, sal_Bool _bHiContrast,WinBits nWinStyle,sal_Bool _bVirtualRoot )
+OTableTreeListBox::OTableTreeListBox( Window* pParent, const Reference< XMultiServiceFactory >& _rxORB, WinBits nWinStyle,sal_Bool _bVirtualRoot )
     :OMarkableTreeListBox(pParent,_rxORB,nWinStyle)
     ,m_bVirtualRoot(_bVirtualRoot)
 {
     notifyHiContrastChanged();
 }
 //------------------------------------------------------------------------
-OTableTreeListBox::OTableTreeListBox( Window* pParent, const Reference< XMultiServiceFactory >& _rxORB, const ResId& rResId ,sal_Bool _bHiContrast,sal_Bool _bVirtualRoot)
+OTableTreeListBox::OTableTreeListBox( Window* pParent, const Reference< XMultiServiceFactory >& _rxORB, const ResId& rResId ,sal_Bool _bVirtualRoot)
     :OMarkableTreeListBox(pParent,_rxORB,rResId)
     ,m_bVirtualRoot(_bVirtualRoot)
 {
@@ -147,8 +147,8 @@ void OTableTreeListBox::notifyHiContrastChanged()
                         case VIEW_TYPE:     aImage = m_aViewImage;  break;
                         default:            aImage = Image(ModuleRes(bHiContrast ? TABLEFOLDER_TREE_ICON_SCH : TABLEFOLDER_TREE_ICON));
                     }
-                    static_cast<SvLBoxContextBmp*>(pItem)->SetBitmap1(pEntryLoop,aImage);
-                    static_cast<SvLBoxContextBmp*>(pItem)->SetBitmap2(pEntryLoop,aImage);
+                    static_cast<SvLBoxContextBmp*>(pItem)->SetBitmap1(aImage);
+                    static_cast<SvLBoxContextBmp*>(pItem)->SetBitmap2(aImage);
                     break;
                 }
             }
