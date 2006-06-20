@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filtask.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:28:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:21:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,8 +84,7 @@ TaskManager::startTask(
 
 
 void SAL_CALL
-TaskManager::endTask( shell * pShell,
-                      sal_Int32 CommandId,
+TaskManager::endTask( sal_Int32 CommandId,
                       const rtl::OUString& aUncPath,
                       BaseContent* pContent)
 {
@@ -104,7 +103,6 @@ TaskManager::endTask( shell * pShell,
 
     if( ErrorCode != TASKHANDLER_NO_ERROR )
         throw_handler(
-            pShell,
             ErrorCode,
             MinorCode,
             xComEnv,
