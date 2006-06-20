@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ed_ipersiststr.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-08 15:01:04 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:40:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -231,7 +231,7 @@ EmbedDocument_Impl::~EmbedDocument_Impl()
     m_pDocHolder->release();
 }
 
-uno::Sequence< beans::PropertyValue > EmbedDocument_Impl::fillArgsForLoading_Impl( uno::Reference< io::XInputStream > xStream, DWORD nStreamMode, LPCOLESTR pFilePath )
+uno::Sequence< beans::PropertyValue > EmbedDocument_Impl::fillArgsForLoading_Impl( uno::Reference< io::XInputStream > xStream, DWORD /*nStreamMode*/, LPCOLESTR pFilePath )
 {
     uno::Sequence< beans::PropertyValue > aArgs( 4 );
 
@@ -455,7 +455,7 @@ STDMETHODIMP EmbedDocument_Impl::InitNew( IStorage *pStg )
                 if ( hr == S_OK )
                 {
                     ::rtl::OUString aCurType = getStorageTypeFromGUID_Impl( &m_guid ); // ???
-                    CLIPFORMAT cf = RegisterClipboardFormatA( "Embedded Object" );
+                    CLIPFORMAT cf = (CLIPFORMAT)RegisterClipboardFormatA( "Embedded Object" );
                     hr = WriteFmtUserTypeStg( pStg,
                                             cf,                         // ???
                                             ( sal_Unicode* )aCurType.getStr() );
@@ -768,7 +768,7 @@ STDMETHODIMP EmbedDocument_Impl::HandsOffStorage()
 //-------------------------------------------------------------------------------
 // IPersistFile
 
-STDMETHODIMP EmbedDocument_Impl::Load( LPCOLESTR pszFileName, DWORD dwMode )
+STDMETHODIMP EmbedDocument_Impl::Load( LPCOLESTR pszFileName, DWORD /*dwMode*/ )
 {
     if ( m_pDocHolder->GetDocument().is() )
         return CO_E_ALREADYINITIALIZED;
@@ -785,7 +785,7 @@ STDMETHODIMP EmbedDocument_Impl::Load( LPCOLESTR pszFileName, DWORD dwMode )
     if ( FAILED( hr ) || !m_pMasterStorage ) return E_FAIL;
 
     ::rtl::OUString aCurType = getServiceNameFromGUID_Impl( &m_guid ); // ???
-    CLIPFORMAT cf = RegisterClipboardFormatA( "Embedded Object" );
+    CLIPFORMAT cf = (CLIPFORMAT)RegisterClipboardFormatA( "Embedded Object" );
     hr = WriteFmtUserTypeStg( m_pMasterStorage,
                             cf,                         // ???
                             ( sal_Unicode* )aCurType.getStr() );
@@ -837,7 +837,7 @@ STDMETHODIMP EmbedDocument_Impl::Load( LPCOLESTR pszFileName, DWORD dwMode )
         if ( hr == S_OK )
         {
             ::rtl::OUString aCurType = getServiceNameFromGUID_Impl( &m_guid ); // ???
-            CLIPFORMAT cf = RegisterClipboardFormatA( "Embedded Object" );
+            CLIPFORMAT cf = (CLIPFORMAT)RegisterClipboardFormatA( "Embedded Object" );
             hr = WriteFmtUserTypeStg( m_pMasterStorage,
                                     cf,                         // ???
                                     ( sal_Unicode* )aCurType.getStr() );
@@ -940,7 +940,6 @@ STDMETHODIMP EmbedDocument_Impl::GetCurFile( LPOLESTR *ppszFileName )
     return m_aFileName.getLength() ? S_OK : S_FALSE;
 }
 
-
 // ===============================================
 
 LockedEmbedDocument_Impl EmbeddedDocumentInstanceAccess_Impl::GetEmbedDocument()
@@ -960,3 +959,9 @@ void EmbeddedDocumentInstanceAccess_Impl::ClearEmbedDocument()
     m_pEmbedDocument = NULL;
 }
 
+// Fix strange warnings about some
+// ATL::CAxHostWindow::QueryInterface|AddRef|Releae functions.
+// warning C4505: 'xxx' : unreferenced local function has been removed
+#if defined(_MSC_VER)
+#pragma warning(disable: 4505)
+#endif
