@@ -4,9 +4,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:09:38 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:21:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,9 @@
 
 #define UNICODE
 #include "system.h"
+#pragma warning(push,1) /* disable warnings within system headers */
 #include <shellapi.h>
+#pragma warning(pop)
 
 #include <osl/diagnose.h>
 #include <osl/security.h>
