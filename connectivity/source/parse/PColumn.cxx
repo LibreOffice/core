@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PColumn.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:39:30 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:07:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,17 +114,15 @@ void OParseColumn::construct()
 
 }
 // -----------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper* OParseColumn::createArrayHelper( sal_Int32 _nId) const
+::cppu::IPropertyArrayHelper* OParseColumn::createArrayHelper() const
 {
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > aProps;
-    describeProperties(aProps);
-    changePropertyAttributte(aProps);
-    return new ::cppu::OPropertyArrayHelper(aProps);
+    return doCreateArrayHelper();
 }
 // -----------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper & SAL_CALL OParseColumn::getInfoHelper()
 {
-    return *OParseColumn_PROP::getArrayHelper(isNew() ? 1 : 0);
+    OSL_ENSURE( !isNew(), "OParseColumn::OOrderColumn: a *new* OrderColumn?" );
+    return *OParseColumn_PROP::getArrayHelper();
 }
 // -----------------------------------------------------------------------------
 OOrderColumn::OOrderColumn( const Reference<XPropertySet>& _xColumn
@@ -183,17 +181,15 @@ void OOrderColumn::construct()
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISASCENDING),PROPERTY_ID_ISASCENDING,0,&m_bAscending,     ::getCppuType(reinterpret_cast< sal_Bool*>(NULL)));
 }
 // -----------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper* OOrderColumn::createArrayHelper( sal_Int32 _nId) const
+::cppu::IPropertyArrayHelper* OOrderColumn::createArrayHelper() const
 {
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > aProps;
-    describeProperties(aProps);
-    changePropertyAttributte(aProps);
-    return new ::cppu::OPropertyArrayHelper(aProps);
+    return doCreateArrayHelper();
 }
 // -----------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper & SAL_CALL OOrderColumn::getInfoHelper()
 {
-    return *OOrderColumn_PROP::getArrayHelper(isNew() ? 1 : 0);
+    OSL_ENSURE( !isNew(), "OOrderColumn::OOrderColumn: a *new* OrderColumn?" );
+    return *OOrderColumn_PROP::getArrayHelper();
 }
 // -----------------------------------------------------------------------------
 ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL OOrderColumn::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
