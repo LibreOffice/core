@@ -4,9 +4,9 @@
  *
  *  $RCSfile: marktree.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:24:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:00:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,14 +110,14 @@ void OMarkableTreeListBox::KeyInput( const KeyEvent& rKEvt )
     // nur wenn space
     if (rKEvt.GetKeyCode().GetCode() == KEY_SPACE && !rKEvt.GetKeyCode().IsShift() && !rKEvt.GetKeyCode().IsMod1())
     {
-        SvLBoxEntry* pHdlEntry = GetHdlEntry();
-        if(pHdlEntry)
+        SvLBoxEntry* pCurrentHandlerEntry = GetHdlEntry();
+        if(pCurrentHandlerEntry)
         {
-            SvButtonState eState = GetCheckButtonState( pHdlEntry);
+            SvButtonState eState = GetCheckButtonState( pCurrentHandlerEntry);
             if(eState == SV_BUTTON_CHECKED)
-                SetCheckButtonState( pHdlEntry,SV_BUTTON_UNCHECKED);
+                SetCheckButtonState( pCurrentHandlerEntry, SV_BUTTON_UNCHECKED);
             else
-                SetCheckButtonState( pHdlEntry,SV_BUTTON_CHECKED);
+                SetCheckButtonState( pCurrentHandlerEntry, SV_BUTTON_CHECKED);
 
             CheckButtonHdl();
         }
