@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JoinExchange.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:20:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:25:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,9 +62,9 @@ namespace dbaui
     DBG_NAME(OJoinExchObj)
     //------------------------------------------------------------------------
     OJoinExchObj::OJoinExchObj(const OJoinExchangeData& jxdSource,sal_Bool _bFirstEntry)
-        :m_jxdSourceDescription(jxdSource)
+        :m_bFirstEntry(_bFirstEntry)
+        ,m_jxdSourceDescription(jxdSource)
         ,m_pDragListener(NULL)
-        ,m_bFirstEntry(_bFirstEntry)
     {
         DBG_CTOR(OJoinExchObj,NULL);
         // Verfuegbare Typen in Liste einfuegen
@@ -84,7 +84,7 @@ namespace dbaui
     }
 
     //------------------------------------------------------------------------
-    void OJoinExchObj::DragFinished( sal_Int8 nDropAction )
+    void OJoinExchObj::DragFinished( sal_Int8 /*nDropAction*/ )
     {
         if (m_pDragListener)
             m_pDragListener->dragFinished();
