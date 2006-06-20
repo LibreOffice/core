@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pipe.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:30:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:12:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,13 +65,13 @@ namespace osl
     }
 
     //______________________________________________________________________________
-    inline Pipe::Pipe( oslPipe pipe, __sal_NoAcquire noacquire )
+    inline Pipe::Pipe( oslPipe pipe, __sal_NoAcquire )
         : m_handle ( pipe )
     {}
 
     //______________________________________________________________________________
-    inline Pipe::Pipe(oslPipe Pipe)
-        : m_handle( Pipe )
+    inline Pipe::Pipe(oslPipe pipe)
+        : m_handle( pipe )
     {
         if( m_handle )
             osl_acquirePipe( m_handle );
