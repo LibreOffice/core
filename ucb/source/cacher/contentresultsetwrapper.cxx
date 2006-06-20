@@ -4,9 +4,9 @@
  *
  *  $RCSfile: contentresultsetwrapper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:12:54 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:15:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,16 +85,13 @@ ContentResultSetWrapper::ContentResultSetWrapper(
                 , m_xContentAccessOrigin( NULL )
                 , m_xPropertySetOrigin( NULL )
                 , m_xPropertySetInfo( NULL )
+                , m_nForwardOnly( 2 )
                 , m_xMetaDataFromOrigin( NULL )
-
+                , m_bDisposed( sal_False )
+                , m_bInDispose( sal_False )
                 , m_pDisposeEventListeners( NULL )
                 , m_pPropertyChangeListeners( NULL )
                 , m_pVetoableChangeListeners( NULL )
-
-                , m_bDisposed( sal_False )
-                , m_bInDispose( sal_False )
-
-                , m_nForwardOnly( 2 )
 {
     m_pMyListenerImpl = new ContentResultSetWrapperListener( this );
     m_xMyListenerImpl = Reference< XPropertyChangeListener >( m_pMyListenerImpl );
@@ -332,7 +329,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper
     //@todo replace this with lines in comment
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
     m_nForwardOnly = 0;
-    return m_nForwardOnly;
+    return false;
 
 
     /*
@@ -823,7 +820,7 @@ void SAL_CALL ContentResultSetWrapper
 
 //virtual
 void SAL_CALL ContentResultSetWrapper
-    ::impl_disposing( const EventObject& rEventObject )
+    ::impl_disposing( const EventObject& )
     throw( RuntimeException )
 {
     impl_EnsureNotDisposed();
