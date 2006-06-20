@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transliterationImpl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:35:03 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:50:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 static struct TMlist {
   TransliterationModules        tm;
   TransliterationModulesNew     tmn;
-  sal_Char                      *implName;
+  const sal_Char               *implName;
 } TMlist[] = {                                  //      Modules      ModulesNew
   TmItem1 (IGNORE_CASE),                        // 0. (1<<8        256) (7)
   TmItem1 (IGNORE_WIDTH),                       // 1. (1<<9        512) (8)
@@ -372,7 +372,7 @@ TransliterationImpl::folding( const OUString& inStr, sal_Int32 startPos, sal_Int
                 sal_Int32 * pArr = offset.getArray();
                 nCount = offset.getLength();
                 for (sal_Int32 j = 0; j < nCount; j++)
-                    offset[j] += startPos;
+                    pArr[j] += startPos;
             }
             return tmpStr;
         }
@@ -626,8 +626,8 @@ sal_Bool SAL_CALL
 TransliterationImpl::loadModuleByName( const OUString& implName,
         Reference<XExtendedTransliteration>& body, const Locale& rLocale) throw(RuntimeException)
 {
-    OUString bname = OUString::createFromAscii(TRLT_IMPLNAME_PREFIX) + implName;
-    loadBody(xSMgr, bname, body);
+    OUString cname = OUString::createFromAscii(TRLT_IMPLNAME_PREFIX) + implName;
+    loadBody(xSMgr, cname, body);
     if (body.is()) {
         body->loadModule((TransliterationModules)0, rLocale); // toUpper/toLoad need rLocale
 
