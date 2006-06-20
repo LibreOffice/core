@@ -4,9 +4,9 @@
  *
  *  $RCSfile: astscope.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:08:30 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:47:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -194,19 +194,19 @@ AstDeclaration* AstScope::lookupByName(const OString& scopedName)
 
     if ( bFindFirstScope && (firstScope != scopedName) )
     {
-        sal_Int32 nIndex = 0;
+        sal_Int32 i = 0;
         sal_Int32 nOffset = 2;
         do
         {
             pScope = declAsScope(pDecl);
             if( pScope )
             {
-                pDecl = pScope->lookupByNameLocal(scopedName.getToken(nOffset, ':', nIndex ));
+                pDecl = pScope->lookupByNameLocal(scopedName.getToken(nOffset, ':', i ));
                 nOffset = 1;
             }
             if( !pDecl )
                 break;
-        } while( nIndex != -1 );
+        } while( i != -1 );
 
         if ( !pDecl )
         {
@@ -246,7 +246,6 @@ AstDeclaration* AstScope::lookupByNameLocal(const OString& name) const
 
 AstDeclaration* AstScope::lookupInInherited(const OString& scopedName) const
 {
-    AstDeclaration* pDecl = NULL;
     AstInterface* pInterface = (AstInterface*)this;
 
     if ( !pInterface )
@@ -266,9 +265,11 @@ AstDeclaration* AstScope::lookupInInherited(const OString& scopedName) const
     while ( iter != end )
     {
         AstInterface const * resolved = iter->getResolved();
-        if ( pDecl = resolved->lookupByNameLocal(scopedName) )
+        AstDeclaration* pDecl = resolved->lookupByNameLocal(scopedName);
+        if ( pDecl )
             return pDecl;
-        if ( pDecl = resolved->lookupInInherited(scopedName) )
+        pDecl = resolved->lookupInInherited(scopedName);
+        if ( pDecl )
             return pDecl;
         ++iter;
     }
@@ -291,6 +292,9 @@ AstDeclaration* AstScope::lookupPrimitiveType(ExprType type)
 
     switch (type)
     {
+        case ET_none:
+            OSL_ASSERT(false);
+            break;
         case ET_short:
             typeName = OString("short");
             break;
