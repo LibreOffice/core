@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Class.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:08:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:33:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,13 +91,13 @@ java_lang_Class * java_lang_Class::forName( const ::rtl::OUString& _par0 )
 
 sal_Bool java_lang_Class::isAssignableFrom( java_lang_Class * _par0 )
 {
-    jboolean out;
+    jboolean out(0);
     SDBThreadAttach t;
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "(Ljava/lang/Class;)Z";
-        static char * cMethodName = "isAssignableFrom";
+        static const char * cSignature = "(Ljava/lang/Class;)Z";
+        static const char * cMethodName = "isAssignableFrom";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -120,8 +120,8 @@ java_lang_Object * java_lang_Class::newInstance()
     SDBThreadAttach t;
     if( t.pEnv ){
         // temporaere Variable initialisieren
-        static char * cSignature = "()Ljava/lang/Object;";
-        static char * cMethodName = "newInstance";
+        static const char * cSignature = "()Ljava/lang/Object;";
+        static const char * cMethodName = "newInstance";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -142,8 +142,8 @@ jobject java_lang_Class::newInstanceObject()
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
-        static char * cSignature = "()Ljava/lang/Object;";
-        static char * cMethodName = "newInstance";
+        static const char * cSignature = "()Ljava/lang/Object;";
+        static const char * cMethodName = "newInstance";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -163,8 +163,8 @@ jobject java_lang_Class::newInstanceObject()
     ::rtl::OUString aStr;
     if( t.pEnv ){
         // temporaere Variable initialisieren
-        static char * cSignature = "()Ljava/lang/String;";
-        static char * cMethodName = "getName";
+        static const char * cSignature = "()Ljava/lang/String;";
+        static const char * cMethodName = "getName";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
