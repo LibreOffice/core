@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HUsers.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:05:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:31:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,7 +128,7 @@ void OUsers::appendObject( const Reference< XPropertySet >& descriptor )
 }
 // -------------------------------------------------------------------------
 // XDrop
-void OUsers::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
+void OUsers::dropObject(sal_Int32 /*nPos*/,const ::rtl::OUString _sElementName)
 {
     {
         ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("REVOKE ALL ON * FROM ");

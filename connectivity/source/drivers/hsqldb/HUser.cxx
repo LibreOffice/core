@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HUser.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:05:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:31:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -250,6 +250,9 @@ sal_Int32 SAL_CALL OHSQLUser::getGrantablePrivileges( const ::rtl::OUString& obj
 // -------------------------------------------------------------------------
 void SAL_CALL OHSQLUser::grantPrivileges( const ::rtl::OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw(SQLException, RuntimeException)
 {
+    if ( objType != PrivilegeObject::TABLE )
+        ::dbtools::throwSQLException( "Privilege not granted: Only table privileges can be granted", "01007", *this );
+
     ::osl::MutexGuard aGuard(m_aMutex);
 
     ::rtl::OUString sPrivs = getPrivilegeString(objPrivileges);
@@ -273,6 +276,9 @@ void SAL_CALL OHSQLUser::grantPrivileges( const ::rtl::OUString& objName, sal_In
 // -------------------------------------------------------------------------
 void SAL_CALL OHSQLUser::revokePrivileges( const ::rtl::OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw(SQLException, RuntimeException)
 {
+    if ( objType != PrivilegeObject::TABLE )
+        ::dbtools::throwSQLException( "Privilege not revoked: Only table privileges can be revoked", "01006", *this );
+
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OUser_BASE_RBHELPER::rBHelper.bDisposed);
     ::rtl::OUString sPrivs = getPrivilegeString(objPrivileges);
@@ -295,7 +301,7 @@ void SAL_CALL OHSQLUser::revokePrivileges( const ::rtl::OUString& objName, sal_I
 }
 // -----------------------------------------------------------------------------
 // XUser
-void SAL_CALL OHSQLUser::changePassword( const ::rtl::OUString& oldPassword, const ::rtl::OUString& newPassword ) throw(SQLException, RuntimeException)
+void SAL_CALL OHSQLUser::changePassword( const ::rtl::OUString& /*oldPassword*/, const ::rtl::OUString& newPassword ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OUser_BASE_RBHELPER::rBHelper.bDisposed);
