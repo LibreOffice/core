@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CacheSet.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:01:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:34:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -412,9 +412,6 @@ void SAL_CALL OCacheSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connecti
     ::rtl::OUString aQuote  = getIdentifierQuoteString();
     static ::rtl::OUString aAnd     = ::rtl::OUString::createFromAscii(" AND ");
 
-    sal_Int32 i = 1;
-    ORowVector< ORowSetValue >::const_iterator aIter = _rDeleteRow->begin()+1;
-
     // use keys and indexes for excat postioning
     // first the keys
     Reference<XKeysSupplier> xKeySup(_xTable,UNO_QUERY);
@@ -475,7 +472,7 @@ void SAL_CALL OCacheSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connecti
     // now create end execute the prepared statement
     Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(aSql));
     Reference< XParameters > xParameter(xPrep,UNO_QUERY);
-    i = 1;
+    sal_Int32 i = 1;
     for(::std::list< sal_Int32>::const_iterator j = aOrgValues.begin(); j != aOrgValues.end();++j,++i)
     {
         setParameter(i,xParameter,(*_rDeleteRow)[*j]);
@@ -575,10 +572,11 @@ void OCacheSet::setParameter(sal_Int32 nPos
 // -------------------------------------------------------------------------
 void OCacheSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
 {
-    connectivity::ORowVector< ORowSetValue >::iterator aIter = _rRow->begin();
-    Any aBookmark = getBookmark(_rRow);
+    Any aBookmark = getBookmark();
     if(!aBookmark.hasValue())
         aBookmark = makeAny(_nPosition);
+
+    connectivity::ORowVector< ORowSetValue >::iterator aIter = _rRow->begin();
     (*aIter) = aBookmark;
     ++aIter;
     for(sal_Int32 i=1;aIter != _rRow->end();++aIter,++i)
