@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpputype.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:42:26 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:24:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,8 @@ public:
     virtual sal_Bool dumpHFile(FileStream& o, codemaker::cppumaker::Includes & includes) throw( CannotDumpException ) = 0;
     virtual sal_Bool dumpHxxFile(FileStream& o, codemaker::cppumaker::Includes & includes) throw( CannotDumpException ) = 0;
 
-    virtual ::rtl::OString dumpHeaderDefine(FileStream& o, sal_Char* prefix, sal_Bool bExtended=sal_False);
+    ::rtl::OString dumpHeaderDefine(
+        FileStream& o, char const * prefix, sal_Bool bExtended=sal_False);
 
     void dumpGetCppuType(FileStream & out);
     virtual void dumpLightGetCppuType(FileStream& o);
@@ -115,10 +116,9 @@ public:
     virtual sal_uInt32  getMemberCount();
     virtual sal_uInt32  getInheritedMemberCount();
 
-    void            inc(sal_uInt32 num=4);
-    void            dec(sal_uInt32 num=4);
+    void            inc(sal_Int32 num=4);
+    void            dec(sal_Int32 num=4);
     ::rtl::OString  indent() const;
-    ::rtl::OString  indent(sal_uInt32 num) const;
 protected:
     virtual sal_uInt32 checkInheritedMemberCount(
         const typereg::Reader* pReader);
@@ -165,7 +165,7 @@ protected:
 
     sal_Bool            m_cppuTypeLeak;
     sal_Bool            m_cppuTypeDynamic;
-    sal_uInt32          m_indentLength;
+    sal_Int32           m_indentLength;
     ::rtl::OString      m_typeName;
     ::rtl::OString      m_name;
     typereg::Reader     m_reader;
@@ -419,8 +419,7 @@ bool produceType(RegistryKey& typeName, bool bIsExtraType,
 
 /**
  * This function returns a C++ scoped name, represents the namespace
- * scoping of this type, e.g. com:.sun::star::uno::XInterface. If the scope of
- * the type is equal scope, the relativ name will be used.
+ * scoping of this type, e.g. com:.sun::star::uno::XInterface.
  */
 // ::rtl::OString scopedName(const ::rtl::OString& scope, const ::rtl::OString& type,
 //                 sal_Bool bNoNameSpace=sal_False);
