@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableDesignControl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:46:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:32:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,15 +72,15 @@ using namespace ::com::sun::star::util;
 DBG_NAME(OTableRowView)
 //------------------------------------------------------------------------
 OTableRowView::OTableRowView(Window* pParent)
-                   :EditBrowseBox(pParent, ModuleRes(RID_DB_TAB_EDITOR),EBBF_NONE,
-                                  BROWSER_COLUMNSELECTION | BROWSER_MULTISELECTION | BROWSER_AUTOSIZE_LASTCOL |
-                                  BROWSER_KEEPSELECTION | BROWSER_HLINESFULL | BROWSER_VLINESFULL)
-                   ,m_nDataPos(-1)
-                   ,m_nCurrentPos(-1)
-                   ,m_bUpdatable(FALSE)
-                   ,m_bCurrentModified(FALSE)
-                   ,m_bClipboardFilled(FALSE)
-                   ,m_nCurUndoActId(0)
+    :EditBrowseBox(pParent, ModuleRes(RID_DB_TAB_EDITOR),EBBF_NONE,
+                    BROWSER_COLUMNSELECTION | BROWSER_MULTISELECTION | BROWSER_AUTOSIZE_LASTCOL |
+                    BROWSER_KEEPSELECTION | BROWSER_HLINESFULL | BROWSER_VLINESFULL)
+    ,m_nDataPos(-1)
+    ,m_nCurrentPos(-1)
+    ,m_nCurUndoActId(0)
+    ,m_bCurrentModified(FALSE)
+    ,m_bUpdatable(FALSE)
+    ,m_bClipboardFilled(FALSE)
 {
     DBG_CTOR(OTableRowView,NULL);
 
@@ -166,7 +166,6 @@ void OTableRowView::Command(const CommandEvent& rEvt)
 
             USHORT nColId = GetColumnAtXPosPixel(rEvt.GetMousePosPixel().X());
             long   nRow = GetRowAtYPosPixel(rEvt.GetMousePosPixel().Y());
-            long   nOldRow = GetCurRow();
 
             if ( nColId == HANDLE_ID )
             {
@@ -240,7 +239,7 @@ void OTableRowView::Paste( long nRow )
 //------------------------------------------------------------------------------
 EditBrowseBox::RowStatus OTableRowView::GetRowStatus(long nRow) const
 {
-    if (m_nCurrentPos >= 0 && m_nDataPos == m_nCurrentPos)
+    if (nRow >= 0 && m_nDataPos == nRow)
         return CURRENT;
     else
         return CLEAN;
