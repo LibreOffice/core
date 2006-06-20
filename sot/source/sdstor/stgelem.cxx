@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stgelem.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:41:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:54:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,8 +43,6 @@
 #include "stgstrms.hxx"
 #include "stgdir.hxx"
 #include "stgio.hxx"
-
-#pragma hdrstop
 
 static BYTE cStgSignature[ 8 ] = { 0xD0,0xCF,0x11,0xE0,0xA1,0xB1,0x1A,0xE1 };
 
@@ -287,7 +285,7 @@ BOOL StgEntry::SetName( const String& rName )
 
     int i;
     for( i = 0; i < aName.Len() && i < 32; i++ )
-        nName[ i ] = rName.GetChar( i );
+        nName[ i ] = rName.GetChar( sal_uInt16( i ));
     while( i < 32 )
         nName[ i++ ] = 0;
     nNameLen = ( aName.Len() + 1 ) << 1;
