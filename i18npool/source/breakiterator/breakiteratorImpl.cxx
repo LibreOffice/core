@@ -4,9 +4,9 @@
  *
  *  $RCSfile: breakiteratorImpl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:00:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:41:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@ BreakIteratorImpl::BreakIteratorImpl()
 BreakIteratorImpl::~BreakIteratorImpl()
 {
         // Clear lookuptable
-        for (sal_Int32 l = 0; l < lookupTable.size(); l++)
+        for (size_t l = 0; l < lookupTable.size(); l++)
             delete lookupTable[l];
         lookupTable.clear();
 }
@@ -332,7 +332,7 @@ sal_Int32 SAL_CALL BreakIteratorImpl::nextScript( const OUString& Text, sal_Int3
 
 
 sal_Int32 SAL_CALL BreakIteratorImpl::beginOfCharBlock( const OUString& Text, sal_Int32 nStartPos,
-        const Locale& rLocale, sal_Int16 CharType ) throw(RuntimeException)
+        const Locale& /*rLocale*/, sal_Int16 CharType ) throw(RuntimeException)
 {
         if (CharType == CharType::ANY_CHAR) return 0;
         if (nStartPos < 0 || nStartPos >= Text.getLength()) return -1;
@@ -343,7 +343,7 @@ sal_Int32 SAL_CALL BreakIteratorImpl::beginOfCharBlock( const OUString& Text, sa
 }
 
 sal_Int32 SAL_CALL BreakIteratorImpl::endOfCharBlock( const OUString& Text, sal_Int32 nStartPos,
-        const Locale& rLocale, sal_Int16 CharType ) throw(RuntimeException)
+        const Locale& /*rLocale*/, sal_Int16 CharType ) throw(RuntimeException)
 {
         sal_Int32 strLen = Text.getLength();
 
@@ -356,7 +356,7 @@ sal_Int32 SAL_CALL BreakIteratorImpl::endOfCharBlock( const OUString& Text, sal_
 }
 
 sal_Int32 SAL_CALL BreakIteratorImpl::nextCharBlock( const OUString& Text, sal_Int32 nStartPos,
-        const Locale& rLocale, sal_Int16 CharType ) throw(RuntimeException)
+        const Locale& /*rLocale*/, sal_Int16 CharType ) throw(RuntimeException)
 {
         if (CharType == CharType::ANY_CHAR) return -1;
         if (nStartPos < 0 || nStartPos >= Text.getLength()) return -1;
@@ -372,7 +372,7 @@ sal_Int32 SAL_CALL BreakIteratorImpl::nextCharBlock( const OUString& Text, sal_I
 }
 
 sal_Int32 SAL_CALL BreakIteratorImpl::previousCharBlock( const OUString& Text, sal_Int32 nStartPos,
-        const Locale& rLocale, sal_Int16 CharType ) throw(RuntimeException)
+        const Locale& /*rLocale*/, sal_Int16 CharType ) throw(RuntimeException)
 {
         if(CharType == CharType::ANY_CHAR) return -1;
         if (nStartPos < 0 || nStartPos >= Text.getLength()) return -1;
@@ -391,8 +391,8 @@ sal_Int32 SAL_CALL BreakIteratorImpl::previousCharBlock( const OUString& Text, s
 }
 
 
-sal_Int16 SAL_CALL BreakIteratorImpl::getWordType( const OUString& Text,
-        sal_Int32 nPos, const Locale& rLocale ) throw(RuntimeException)
+sal_Int16 SAL_CALL BreakIteratorImpl::getWordType( const OUString& /*Text*/,
+        sal_Int32 /*nPos*/, const Locale& /*rLocale*/ ) throw(RuntimeException)
 {
         return 0;
 }
@@ -449,7 +449,7 @@ static inline sal_Bool operator == (const Locale& l1, const Locale& l2) {
 sal_Bool SAL_CALL BreakIteratorImpl::createLocaleSpecificBreakIterator(const OUString& aLocaleName) throw( RuntimeException )
 {
         // to share service between same Language but different Country code, like zh_CN and zh_TW
-        for (sal_Int32 l = 0; l < lookupTable.size(); l++) {
+        for (size_t l = 0; l < lookupTable.size(); l++) {
             lookupTableItem *listItem = lookupTable[l];
             if (aLocaleName == listItem->aLocale.Language) {
                 xBI = listItem->xBI;
@@ -478,7 +478,7 @@ BreakIteratorImpl::getLocaleSpecificBreakIterator(const Locale& rLocale) throw (
         else if (xMSF.is()) {
             aLocale = rLocale;
 
-            for (sal_Int32 i = 0; i < lookupTable.size(); i++) {
+            for (size_t i = 0; i < lookupTable.size(); i++) {
                 lookupTableItem *listItem = lookupTable[i];
                 if (rLocale == listItem->aLocale)
                     return xBI = listItem->xBI;
