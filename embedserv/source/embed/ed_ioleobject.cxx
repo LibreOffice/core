@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ed_ioleobject.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 13:37:01 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:40:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,22 +102,22 @@ STDMETHODIMP EmbedDocument_Impl::Close( DWORD dwSaveOption )
     return hr;
 }
 
-STDMETHODIMP EmbedDocument_Impl::SetMoniker( DWORD dwWhichMoniker, IMoniker *pmk )
+STDMETHODIMP EmbedDocument_Impl::SetMoniker( DWORD /*dwWhichMoniker*/, IMoniker * /*pmk*/ )
 {
     return E_NOTIMPL;
 }
 
-STDMETHODIMP EmbedDocument_Impl::GetMoniker( DWORD dwAssign, DWORD dwWhichMoniker, IMoniker **ppmk )
+STDMETHODIMP EmbedDocument_Impl::GetMoniker( DWORD /*dwAssign*/, DWORD /*dwWhichMoniker*/, IMoniker ** /*ppmk*/ )
 {
     return E_NOTIMPL;
 }
 
-STDMETHODIMP EmbedDocument_Impl::InitFromData( IDataObject *pDataObject, BOOL fCreation, DWORD dwReserved )
+STDMETHODIMP EmbedDocument_Impl::InitFromData( IDataObject * /*pDataObject*/, BOOL /*fCreation*/, DWORD /*dwReserved*/ )
 {
     return E_NOTIMPL;
 }
 
-STDMETHODIMP EmbedDocument_Impl::GetClipboardData( DWORD dwReserved, IDataObject **ppDataObject )
+STDMETHODIMP EmbedDocument_Impl::GetClipboardData( DWORD /*dwReserved*/, IDataObject ** /*ppDataObject*/ )
 {
     return E_NOTIMPL;
 }
@@ -130,11 +130,11 @@ STDMETHODIMP EmbedDocument_Impl::GetClipboardData( DWORD dwReserved, IDataObject
 
 STDMETHODIMP EmbedDocument_Impl::DoVerb(
     LONG iVerb,
-    LPMSG lpmsg,
+    LPMSG,
     IOleClientSite *pActiveSite,
-    LONG lindex,
-    HWND hwndParent,
-    LPCRECT lprcPosRect )
+    LONG,
+    HWND,
+    LPCRECT )
 {
     switch(iVerb) {
         case OLEIVERB_DISCARDUNDOSTATE:
@@ -210,7 +210,7 @@ STDMETHODIMP EmbedDocument_Impl::DoVerb(
 
 
 
-STDMETHODIMP EmbedDocument_Impl::EnumVerbs( IEnumOLEVERB **ppEnumOleVerb )
+STDMETHODIMP EmbedDocument_Impl::EnumVerbs( IEnumOLEVERB ** /*ppEnumOleVerb*/ )
 {
     return OLE_S_USEREG;
 }
@@ -230,14 +230,12 @@ STDMETHODIMP EmbedDocument_Impl::GetUserClassID( CLSID *pClsid )
     return GetClassID( pClsid );
 }
 
-
-
-STDMETHODIMP EmbedDocument_Impl::GetUserType( DWORD dwFormOfType, LPOLESTR *pszUserType )
+STDMETHODIMP EmbedDocument_Impl::GetUserType( DWORD /*dwFormOfTypeUe*/, LPOLESTR * /*pszUserType*/ )
 {
     return OLE_S_USEREG;
 }
 
-STDMETHODIMP EmbedDocument_Impl::SetExtent( DWORD dwDrawAspect, SIZEL *psizel )
+STDMETHODIMP EmbedDocument_Impl::SetExtent( DWORD /*dwDrawAspect*/, SIZEL *psizel )
 {
     if ( !psizel )
         return E_FAIL;
@@ -247,7 +245,7 @@ STDMETHODIMP EmbedDocument_Impl::SetExtent( DWORD dwDrawAspect, SIZEL *psizel )
     return S_OK;
 }
 
-STDMETHODIMP EmbedDocument_Impl::GetExtent( DWORD dwDrawAspect, SIZEL *psizel )
+STDMETHODIMP EmbedDocument_Impl::GetExtent( DWORD /*dwDrawAspect*/, SIZEL * psizel )
 {
     if ( !psizel )
         return E_INVALIDARG;
@@ -288,17 +286,17 @@ STDMETHODIMP EmbedDocument_Impl::Unadvise( DWORD dwConnection )
     return S_OK;
 }
 
-STDMETHODIMP EmbedDocument_Impl::EnumAdvise( IEnumSTATDATA **ppenumAdvise )
+STDMETHODIMP EmbedDocument_Impl::EnumAdvise( IEnumSTATDATA ** /*ppenumAdvise*/ )
 {
     return E_NOTIMPL;
 }
 
-STDMETHODIMP EmbedDocument_Impl::GetMiscStatus( DWORD dwAspect, DWORD *pdwStatus )
+STDMETHODIMP EmbedDocument_Impl::GetMiscStatus( DWORD /*dwAspect*/, DWORD * /*pdwStatus*/ )
 {
     return OLE_S_USEREG;
 }
 
-STDMETHODIMP EmbedDocument_Impl::SetColorScheme( LOGPALETTE *pLogpal )
+STDMETHODIMP EmbedDocument_Impl::SetColorScheme( LOGPALETTE * /*pLogpal*/ )
 {
     return E_NOTIMPL;
 }
@@ -407,4 +405,9 @@ void EmbedDocument_Impl::notify( bool bDataChanged )
         m_pDAdviseHolder->SendOnDataChange( (IDataObject*)this, 0, 0 );
 }
 
-
+// Fix strange warnings about some
+// ATL::CAxHostWindow::QueryInterface|AddRef|Releae functions.
+// warning C4505: 'xxx' : unreferenced local function has been removed
+#if defined(_MSC_VER)
+#pragma warning(disable: 4505)
+#endif
