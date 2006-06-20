@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MNSINIParser.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:23:46 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:47:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 #ifndef __MNSINIPARSER_HXX__
 #define __MNSINIPARSER_HXX__
 
-#include <rtl/ustring>
+#include <rtl/ustring.hxx>
 #include <com/sun/star/io/IOException.hpp>
 #ifndef _OSL_PROCESS_H_
 #include <osl/process.h>
