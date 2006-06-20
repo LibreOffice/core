@@ -4,9 +4,9 @@
  *
  *  $RCSfile: options.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-15 09:10:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:22:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,7 @@ class Options
 {
 public:
     Options();
-    ~Options();
+    virtual ~Options();
 
     virtual sal_Bool initOptions(int ac, char* av[], sal_Bool bCmdFile=sal_False)
         throw( IllegalArgument ) = 0;
@@ -82,13 +82,11 @@ public:
     virtual ::rtl::OString  prepareHelp() = 0;
 
     const ::rtl::OString&   getProgramName() const;
-    sal_uInt16              getNumberOfOptions() const;
     sal_Bool                isValid(const ::rtl::OString& option);
     const ::rtl::OString    getOption(const ::rtl::OString& option)
         throw( IllegalArgument );
     const OptionMap&        getOptions();
 
-    sal_uInt16              getNumberOfInputFiles() const;
     const ::rtl::OString    getInputFile(sal_uInt16 index)
         throw( IllegalArgument );
 
