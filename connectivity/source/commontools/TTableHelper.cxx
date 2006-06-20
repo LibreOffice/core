@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TTableHelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:13:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:05:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,10 +142,12 @@ void OTableHelper::refreshColumns()
         Any aCatalog;
         if ( m_CatalogName.getLength() )
             aCatalog <<= m_CatalogName;
-        Reference< XResultSet > xResult = getMetaData()->getColumns(    aCatalog,
-                                                                        m_SchemaName,
-                                                                        m_Name,
-                                                                        ::rtl::OUString::createFromAscii("%"));
+OSL_TRACE( "meta data: %p", getMetaData().get() );
+        Reference< XResultSet > xResult = getMetaData()->getColumns(
+            aCatalog,
+            m_SchemaName,
+            m_Name,
+            ::rtl::OUString::createFromAscii("%"));
 
         if ( xResult.is() )
         {
