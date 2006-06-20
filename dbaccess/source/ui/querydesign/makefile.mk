@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 16:32:38 $
+#   last change: $Author: hr $ $Date: 2006-06-20 03:29:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -71,15 +71,15 @@ EXCEPTIONSFILES =\
             $(SLO)$/QTableConnection.obj		\
             $(SLO)$/querycontroller.obj			\
             $(SLO)$/querycontainerwindow.obj    \
-            $(SLO)$/queryview.obj
+            $(SLO)$/queryview.obj               \
+            $(SLO)$/TableConnection.obj			\
+            $(SLO)$/TableConnectionData.obj
 
 SLOFILES =\
             $(EXCEPTIONSFILES)					\
             $(SLO)$/TableFieldInfo.obj			\
             $(SLO)$/QTableConnectionData.obj	\
             $(SLO)$/QTableWindowData.obj		\
-            $(SLO)$/TableConnection.obj			\
-            $(SLO)$/TableConnectionData.obj		\
             $(SLO)$/ConnectionLine.obj			\
             $(SLO)$/ConnectionLineData.obj
 

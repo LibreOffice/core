@@ -4,9 +4,9 @@
  *
  *  $RCSfile: querycontainerwindow.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:33:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:29:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,8 +81,8 @@ namespace dbaui
     DBG_NAME(OQueryContainerWindow)
     OQueryContainerWindow::OQueryContainerWindow(Window* pParent, OQueryController* _pController,const Reference< XMultiServiceFactory >& _rFactory)
         :ODataView(pParent,_pController, _rFactory)
-        ,m_pBeamer(NULL)
         ,m_pViewSwitch(NULL)
+        ,m_pBeamer(NULL)
     {
         DBG_CTOR(OQueryContainerWindow,NULL);
         m_pViewSwitch = new OQueryViewSwitch(this,_pController,_rFactory);
@@ -171,9 +171,8 @@ namespace dbaui
             m_pViewSwitch->GrabFocus();
     }
     // -----------------------------------------------------------------------------
-    IMPL_LINK( OQueryContainerWindow, SplitHdl, void*, p )
+    IMPL_LINK( OQueryContainerWindow, SplitHdl, void*, /*p*/ )
     {
-        long nTest = m_pSplitter->GetPosPixel().Y();
         m_pSplitter->SetPosPixel( Point( m_pSplitter->GetPosPixel().X(),m_pSplitter->GetSplitPosPixel() ) );
         Resize();
 
