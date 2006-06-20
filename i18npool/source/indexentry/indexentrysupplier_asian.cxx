@@ -4,9 +4,9 @@
  *
  *  $RCSfile: indexentrysupplier_asian.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:37:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:45:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,9 +69,9 @@ IndexEntrySupplier_asian::getIndexCharacter( const OUString& rIndexEntry,
         OUString get=OUString::createFromAscii("get_indexdata_");
         int (*func)()=NULL;
         if (rLocale.Language.equalsAscii("zh") && OUString::createFromAscii("TW HK MO").indexOf(rLocale.Country) >= 0)
-            func=(int (*)())osl_getSymbol(hModule, (get+rLocale.Language+OUString::createFromAscii("_TW_")+rAlgorithm).pData);
+            func=(int (*)())osl_getFunctionSymbol(hModule, (get+rLocale.Language+OUString::createFromAscii("_TW_")+rAlgorithm).pData);
         if (!func)
-            func=(int (*)())osl_getSymbol(hModule, (get+rLocale.Language+OUString('_')+rAlgorithm).pData);
+            func=(int (*)())osl_getFunctionSymbol(hModule, (get+rLocale.Language+OUString('_')+rAlgorithm).pData);
         if (func) {
             sal_uInt16** idx=(sal_uInt16**)func();
             sal_uInt16 address=idx[0][ch >> 8];
@@ -98,7 +98,7 @@ IndexEntrySupplier_asian::compareIndexEntry(
     const OUString& rIndexEntry2, const OUString& rPhoneticEntry2, const Locale& rLocale2 )
     throw (RuntimeException)
 {
-    sal_Int16 result = collator->compareString(getEntry(rIndexEntry1, rPhoneticEntry1, rLocale1),
+    sal_Int32 result = collator->compareString(getEntry(rIndexEntry1, rPhoneticEntry1, rLocale1),
                                     getEntry(rIndexEntry2, rPhoneticEntry2, rLocale2));
 
     // equivalent of phonetic entries does not mean equivalent of index entries.
@@ -107,7 +107,7 @@ IndexEntrySupplier_asian::compareIndexEntry(
             rLocale1.Language == rLocale2.Language && rLocale1.Country == rLocale2.Country &&
             rLocale1.Variant == rLocale2.Variant)
         result = collator->compareString(rIndexEntry1, rIndexEntry2);
-    return result;
+    return sal::static_int_cast< sal_Int16 >(result); // result in { -1, 0, 1 }
 }
 
 OUString SAL_CALL
@@ -122,7 +122,7 @@ IndexEntrySupplier_asian::getPhoneticCandidate( const OUString& rIndexEntry,
         else if (rLocale.Language.equalsAscii("ko"))
             func_name="get_ko_phonetic";
         if (func_name)
-            func=(int (*)())osl_getSymbol(hModule, OUString::createFromAscii(func_name).pData);
+            func=(int (*)())osl_getFunctionSymbol(hModule, OUString::createFromAscii(func_name).pData);
         if (func) {
             OUStringBuffer candidate;
             sal_uInt16** idx=(sal_uInt16**)func();
