@@ -128,7 +128,7 @@ public:
 
             memset(pBuffer, 0, nBufLen);
 
-            rtlRandomError aError = rtl_random_addBytes(aPool, pBuffer, nBufLen);
+            rtl_random_addBytes(aPool, pBuffer, nBufLen);
 
             t_print("%2x %2x %2x %2x\n", pBuffer[0], pBuffer[1], pBuffer[2], pBuffer[3]);
 
@@ -338,7 +338,7 @@ public:
             /* rtlRandomError aError = */ rtl_random_getBytes(aPool, pBuffer, nBufLen);
             // CPPUNIT_ASSERT_MESSAGE("wrong parameter", aError == rtl_Random_E_None);
 
-            for (int i=0;i<nBufLen;i++)
+            for (sal_uInt32 i=0;i<nBufLen;i++)
             {
                 aStat.addValue(pBuffer[i], 1);
             }
