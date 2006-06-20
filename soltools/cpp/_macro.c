@@ -151,7 +151,7 @@ void
 {
     Nlist *np;
     static uchar onestr[2] = "1";
-    static Token onetoken[1] = {{NUMBER, 0, 0, 1, onestr}};
+    static Token onetoken[1] = {{NUMBER, 0, 0, 1, onestr, 0}};
     static Tokenrow onetr = {onetoken, onetoken, onetoken + 1, 1};
 
     trp->tp = trp->bp;
@@ -649,7 +649,7 @@ int
 Tokenrow *
     stringify(Tokenrow * vp)
 {
-    static Token t = {STRING};
+    static Token t = {STRING, 0, 0, 0, NULL, 0};
     static Tokenrow tr = {&t, &t, &t + 1, 1};
     Token *tp;
     uchar s[STRLEN];
