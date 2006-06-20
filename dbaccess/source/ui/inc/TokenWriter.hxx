@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TokenWriter.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:20:57 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:14:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -263,15 +263,17 @@ namespace dbaui
 
         // import data
         ORowSetImportExport(const SharedConnection& _rxConnection,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
-                            const String& rExchange = String())
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM)
                         : ODatabaseImportExport(_rxConnection,NULL,_rM)
         {
-}
+        }
 
 
         virtual BOOL Write();
         virtual BOOL Read();
+
+    private:
+        using ODatabaseImportExport::initialize;
     };
 
 }
