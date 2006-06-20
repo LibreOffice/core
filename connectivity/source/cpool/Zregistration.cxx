@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Zregistration.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:18:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:07:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,13 +54,13 @@ extern "C"
 {
 
 //---------------------------------------------------------------------------------------
-    void SAL_CALL component_getImplementationEnvironment(const sal_Char** _ppEnvTypeName, uno_Environment** _ppEnv)
+    void SAL_CALL component_getImplementationEnvironment(const sal_Char** _ppEnvTypeName, uno_Environment** /*_ppEnv*/)
 {
     *_ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
 //---------------------------------------------------------------------------------------
-sal_Bool SAL_CALL component_writeInfo(void* _pServiceManager, com::sun::star::registry::XRegistryKey* _pRegistryKey)
+sal_Bool SAL_CALL component_writeInfo(void* /*_pServiceManager*/, com::sun::star::registry::XRegistryKey* _pRegistryKey)
 {
     ::rtl::OUString sMainKeyName = ::rtl::OUString::createFromAscii("/");
     sMainKeyName += OPoolCollection::getImplementationName_Static();
