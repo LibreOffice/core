@@ -4,9 +4,9 @@
  *
  *  $RCSfile: YDriver.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:32:54 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:04:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,14 +41,11 @@
 #ifndef _COM_SUN_STAR_SDBCX_XDATADEFINITIONSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XDataDefinitionSupplier.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SDBCX_XCREATECATALOG_HPP_
-#include <com/sun/star/sdbcx/XCreateCatalog.hpp>
-#endif
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
-#ifndef _CPPUHELPER_COMPBASE4_HXX_
-#include <cppuhelper/compbase4.hxx>
+#ifndef _CPPUHELPER_COMPBASE3_HXX_
+#include <cppuhelper/compbase3.hxx>
 #endif
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
@@ -74,11 +71,10 @@ namespace connectivity
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL ODriverDelegator_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception );
 
-        typedef ::cppu::WeakComponentImplHelper4<   ::com::sun::star::sdbc::XDriver
-                                        ,::com::sun::star::sdbcx::XDataDefinitionSupplier
-                                        , ::com::sun::star::lang::XServiceInfo
-                                        ,::com::sun::star::sdbcx::XCreateCatalog
-                                        >   ODriverDelegator_BASE;
+        typedef ::cppu::WeakComponentImplHelper3<   ::com::sun::star::sdbc::XDriver
+                                                ,   ::com::sun::star::sdbcx::XDataDefinitionSupplier
+                                                ,   ::com::sun::star::lang::XServiceInfo
+                                                >   ODriverDelegator_BASE;
 
         typedef ::std::pair< ::com::sun::star::uno::WeakReferenceHelper,OMetaConnection*> TWeakConnectionPair;
         typedef ::std::pair< ::com::sun::star::uno::WeakReferenceHelper,TWeakConnectionPair> TWeakPair;
@@ -132,9 +128,6 @@ namespace connectivity
             // XDataDefinitionSupplier
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier > SAL_CALL getDataDefinitionByConnection( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& connection ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier > SAL_CALL getDataDefinitionByURL( const ::rtl::OUString& url, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-
-            // XCreateCatalog
-            virtual void SAL_CALL createCatalog( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
         protected:
             /// dtor
             virtual ~ODriverDelegator();
