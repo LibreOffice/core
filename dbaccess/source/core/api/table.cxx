@@ -4,9 +4,9 @@
  *
  *  $RCSfile: table.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 10:12:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:41:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,9 +94,6 @@
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
-#ifndef _CONNECTIVITY_SDBCX_COLUMN_HXX_
-#include <connectivity/sdbcx/VColumn.hxx>
-#endif
 #ifndef DBACORE_SDBCORETOOLS_HXX
 #include "sdbcoretools.hxx"
 #endif
@@ -139,8 +136,8 @@ ODBTable::ODBTable(connectivity::sdbcx::OCollection* _pTables
         ,const ::rtl::OUString& _rDesc
         ,const Reference< XNameAccess >& _xColumnDefinitions) throw(SQLException)
     :OTable_Base(_pTables,_rxConn,_rxConn->getMetaData().is() && _rxConn->getMetaData()->storesMixedCaseQuotedIdentifiers(), _rName, _rType, _rDesc, _rSchema, _rCatalog )
-    ,m_nPrivileges(0)
     ,m_xColumnDefinitions(_xColumnDefinitions)
+    ,m_nPrivileges(0)
 {
     DBG_CTOR(ODBTable, NULL);
     DBG_ASSERT(getMetaData().is(), "ODBTable::ODBTable : invalid conn !");
@@ -197,6 +194,10 @@ void ODBTable::columnDropped(const ::rtl::OUString& _sName)
     {
         xDrop->dropByName(_sName);
     }
+}
+//--------------------------------------------------------------------------
+void ODBTable::columnCloned(const Reference< XPropertySet >& /*_xClone*/)
+{
 }
 //--------------------------------------------------------------------------
 Sequence< sal_Int8 > ODBTable::getImplementationId() throw (RuntimeException)
@@ -362,7 +363,7 @@ Sequence< Type > SAL_CALL ODBTable::getTypes(  ) throw(RuntimeException)
 }
 // XRename,
 //------------------------------------------------------------------------------
-void SAL_CALL ODBTable::rename( const ::rtl::OUString& _rNewName ) throw(SQLException, ElementExistException, RuntimeException)
+void SAL_CALL ODBTable::rename( const ::rtl::OUString& /*_rNewName*/ ) throw(SQLException, ElementExistException, RuntimeException)
 {
     throw SQLException(DBACORE_RESSTRING(RID_STR_NO_TABLE_RENAME),*this,SQLSTATE_GENERAL,1000,Any() );
 }
@@ -372,7 +373,8 @@ void SAL_CALL ODBTable::rename( const ::rtl::OUString& _rNewName ) throw(SQLExce
 void SAL_CALL ODBTable::alterColumnByName( const ::rtl::OUString& _rName, const Reference< XPropertySet >& _rxDescriptor ) throw(SQLException, NoSuchElementException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    checkDisposed(OTable_Linux::rBHelper.bDisposed);
+    checkDisposed(
+        connectivity::sdbcx::OTableDescriptor_BASE::rBHelper.bDisposed);
     if(m_pColumns->hasByName(_rName))
     {
         ::rtl::OUString sSql = ::rtl::OUString::createFromAscii("ALTER TABLE ");
