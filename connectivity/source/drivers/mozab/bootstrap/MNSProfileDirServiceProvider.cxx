@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MNSProfileDirServiceProvider.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:25:04 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:48:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,11 @@
  *
  ************************************************************************/
 
+#if defined _MSC_VER
+    #pragma warning(disable:4710)
+#endif
+
+#include "pre_include_mozilla.h"
 #include "MNSProfileDirServiceProvider.hxx"
 #include "nsIAtom.h"
 #include "nsStaticAtom.h"
@@ -40,6 +45,7 @@
 #include "nsDirectoryServiceDefs.h"
 #include "nsAppDirectoryServiceDefs.h"
 #include "nsISupportsUtils.h"
+#include "post_include_mozilla.h"
 
 
 
