@@ -4,9 +4,9 @@
  *
  *  $RCSfile: query.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 10:07:30 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:39:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,19 +119,19 @@ DBG_NAME(OQuery)
 OQuery::OQuery( const Reference< XPropertySet >& _rxCommandDefinition
                ,const Reference< XConnection >& _rxConn
                ,const Reference< XMultiServiceFactory >& _xORB)
-    :OQueryDescriptor_Base(m_aMutex,*this)
+    :OContentHelper(_xORB,NULL,TContentPtr(new OContentHelper_Impl))
+    ,OQueryDescriptor_Base(m_aMutex,*this)
     ,ODataSettings(m_aBHelper,sal_True)
-    ,OContentHelper(_xORB,NULL,TContentPtr(new OContentHelper_Impl))
-    ,m_bCaseSensitiv(sal_True)
     ,m_xCommandDefinition(_rxCommandDefinition)
-    ,m_eDoingCurrently(NONE)
     ,m_xConnection(_rxConn)
-    ,m_pWarnings( NULL )
     ,m_pMediator(NULL)
+    ,m_pWarnings( NULL )
+    ,m_bCaseSensitiv(sal_True)
+    ,m_eDoingCurrently(NONE)
 {
     DBG_CTOR(OQuery, NULL);
     registerProperties();
-    ODataSettings::registerProperties(this);
+    ODataSettings::registerPropertiesFor(this);
 
     osl_incrementInterlockedCount(&m_refCount);
     DBG_ASSERT(m_xCommandDefinition.is(), "OQuery::OQuery : invalid CommandDefinition object !");
@@ -297,6 +297,7 @@ void SAL_CALL OQuery::disposing( const EventObject& _rSource ) throw (RuntimeExc
 {
     MutexGuard aGuard(m_aMutex);
 
+    (void)_rSource;
     DBG_ASSERT(_rSource.Source.get() == Reference< XInterface >(m_xCommandDefinition, UNO_QUERY).get(),
         "OQuery::disposing : where did this call come from ?");
 
@@ -370,7 +371,7 @@ Reference< XPropertySetInfo > SAL_CALL OQuery::getPropertySetInfo(  ) throw(Runt
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
 // -----------------------------------------------------------------------------
-OColumn* OQuery::createColumn(const ::rtl::OUString& _rName) const
+OColumn* OQuery::createColumn(const ::rtl::OUString& /*_rName*/) const
 {
     return NULL;
 }
