@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fcomp.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:58:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:27:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,13 +87,13 @@ using namespace com::sun::star::sdb;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::util;
 
-DBG_NAME(OPredicateCompiler);
+DBG_NAME(OPredicateCompiler)
 //------------------------------------------------------------------
 OPredicateCompiler::OPredicateCompiler(OSQLAnalyzer* pAnalyzer)//,OCursor& rCurs)
                      // : m_rCursor(rCurs)
                      : m_pAnalyzer(pAnalyzer)
-                     , m_bORCondition(FALSE)
                      , m_nParamCounter(0)
+                     , m_bORCondition(FALSE)
 {
     DBG_CTOR(OPredicateCompiler,NULL);
 }
@@ -288,7 +288,7 @@ OOperand* OPredicateCompiler::execute_COMPARE(OSQLParseNode* pPredicateNode)  th
         return NULL;
     }
 
-    sal_Int32 ePredicateType;
+    sal_Int32 ePredicateType( SQLFilterOperator::EQUAL );
     OSQLParseNode *pPrec = pPredicateNode->getChild(1);
 
     if (pPrec->getNodeType() == SQL_NODE_EQUAL)
@@ -303,14 +303,12 @@ OOperand* OPredicateCompiler::execute_COMPARE(OSQLParseNode* pPredicateNode)  th
         ePredicateType = SQLFilterOperator::GREATER_EQUAL;
     else if (pPrec->getNodeType() == SQL_NODE_GREAT)
         ePredicateType = SQLFilterOperator::GREATER;
+    else
+        OSL_ENSURE( false, "OPredicateCompiler::execute_COMPARE: unexpected node type!" );
 
-    OOperand* pOb = execute(pPredicateNode->getChild(0));
-    OOperand* pOperand  = execute(pPredicateNode->getChild(2));
-
-    OBoolOperator* pOperator = new OOp_COMPARE(ePredicateType);
-    //pOb->PreProcess(pOperator, pOperand);
-
-    m_aCodeList.push_back(pOperator);
+    execute(pPredicateNode->getChild(0));
+    execute(pPredicateNode->getChild(2));
+    m_aCodeList.push_back( new OOp_COMPARE(ePredicateType) );
 
     // wenn es sich um eine Vergleichsoperation auf datum/Zeit handelt, dann
     // erfolgt jetzt bereits eine Umwandlung fuer die Konstante
@@ -399,12 +397,14 @@ OOperand* OPredicateCompiler::execute_LIKE(OSQLParseNode* pPredicateNode) throw(
             cEscape = pEscNode->getTokenValue().toChar();
     }
 
-    OOperand* pOb = execute(pPredicateNode->getChild(0));
-    OOperand* pOperand  = execute(pAtom);
+    execute(pPredicateNode->getChild(0));
+    execute(pAtom);
+
     OBoolOperator* pOperator = (ePredicateType == SQLFilterOperator::LIKE)
                                                     ? new OOp_LIKE(cEscape)
                                                     : new OOp_NOTLIKE(cEscape);
     m_aCodeList.push_back(pOperator);
+
     return NULL;
 }
 //------------------------------------------------------------------
@@ -511,14 +511,11 @@ OOperand* OPredicateCompiler::execute_ISNULL(OSQLParseNode* pPredicateNode) thro
     else
         ePredicateType = SQLFilterOperator::SQLNULL;
 
-    OOperand* pOb = execute(pPredicateNode->getChild(0));
+    execute(pPredicateNode->getChild(0));
     OBoolOperator* pOperator = (ePredicateType == SQLFilterOperator::SQLNULL) ?
                                 new OOp_ISNULL() : new OOp_ISNOTNULL();
-
-    //pOb->PreProcess(pOperator);
-
-
     m_aCodeList.push_back(pOperator);
+
     return NULL;
 }
 //------------------------------------------------------------------
@@ -709,15 +706,12 @@ OOperand* OPredicateCompiler::execute_Fold(OSQLParseNode* pPredicateNode)   thro
 
     sal_Bool bUpper = SQL_ISTOKEN(pPredicateNode->getChild(0),UPPER);
 
-    OOperand* pOb = execute(pPredicateNode->getChild(2));
+    execute(pPredicateNode->getChild(2));
     OOperator* pOperator = NULL;
     if ( bUpper )
         pOperator = new OOp_Upper();
     else
         pOperator = new OOp_Lower();
-
-    //pOb->PreProcess(pOperator);
-
 
     m_aCodeList.push_back(pOperator);
     return NULL;
