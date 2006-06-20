@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pipe.c,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:09:23 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:21:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -481,7 +481,7 @@ sal_Int32 SAL_CALL osl_receivePipe(oslPipe pPipe,
                         void* pBuffer,
                         sal_Int32 BytesToRead)
 {
-    sal_Int32    nBytes;
+    DWORD nBytes;
 
     OSL_ASSERT(pPipe);
 
@@ -507,7 +507,7 @@ sal_Int32 SAL_CALL osl_receivePipe(oslPipe pPipe,
                   if (lastError == ERROR_PIPE_NOT_CONNECTED)
                     nBytes = 0;
                 else
-                    nBytes = -1;
+                    nBytes = (DWORD) -1;
 
                  pPipe->m_Error = osl_Pipe_E_ConnectionAbort;
             }
@@ -535,7 +535,7 @@ sal_Int32 SAL_CALL osl_sendPipe(oslPipe pPipe,
                        const void* pBuffer,
                        sal_Int32 BytesToSend)
 {
-    sal_Int32        nBytes = -1;
+    DWORD nBytes;
     OSL_ASSERT(pPipe);
 
     if (IS_NT/*pPipe->m_File != INVALID_HANDLE_VALUE*/)
@@ -552,7 +552,7 @@ sal_Int32 SAL_CALL osl_sendPipe(oslPipe pPipe,
               if (GetLastError() == ERROR_PIPE_NOT_CONNECTED)
                 nBytes = 0;
             else
-                nBytes = -1;
+                nBytes = (DWORD) -1;
 
              pPipe->m_Error = osl_Pipe_E_ConnectionAbort;
         }
