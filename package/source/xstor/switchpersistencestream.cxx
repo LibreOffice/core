@@ -2,9 +2,9 @@
  *
  *  $RCSfile: switchpersistencestream.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 19:14:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 06:11:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,10 +73,10 @@ struct SPStreamData_Impl
     : m_xFactory( xFactory )
     , m_bInStreamBased( bInStreamBased )
     , m_xOrigStream( xOrigStream )
-    , m_xOrigInStream( xOrigInStream )
-    , m_xOrigOutStream( xOrigOutStream )
     , m_xOrigTruncate( xOrigTruncate )
     , m_xOrigSeekable( xOrigSeekable )
+    , m_xOrigInStream( xOrigInStream )
+    , m_xOrigOutStream( xOrigOutStream )
     , m_bInOpen( bInOpen )
     , m_bOutOpen( bOutOpen )
     {
@@ -88,8 +88,8 @@ struct SPStreamData_Impl
 SwitchablePersistenceStream::SwitchablePersistenceStream(
         const uno::Reference< lang::XMultiServiceFactory >& xFactory,
         const uno::Reference< io::XStream >& xStream )
-: m_pStreamData( NULL )
-, m_xFactory( xFactory )
+: m_xFactory( xFactory )
+, m_pStreamData( NULL )
 {
     SwitchPersistenceTo( xStream );
 }
@@ -98,8 +98,8 @@ SwitchablePersistenceStream::SwitchablePersistenceStream(
 SwitchablePersistenceStream::SwitchablePersistenceStream(
         const uno::Reference< lang::XMultiServiceFactory >& xFactory,
         const uno::Reference< io::XInputStream >& xInputStream )
-: m_pStreamData( NULL )
-, m_xFactory( xFactory )
+: m_xFactory( xFactory )
+, m_pStreamData( NULL )
 {
     SwitchPersistenceTo( xInputStream );
 }
