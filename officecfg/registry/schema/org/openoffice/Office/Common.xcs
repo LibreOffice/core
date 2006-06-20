@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.115 $
+ *  $Revision: 1.116 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-04 09:08:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 12:31:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3192,7 +3192,7 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 						<desc>Enables/disables Java applets in Office documents.</desc>
 						<label>Enable Applets</label>
 					</info>
-					<value>true</value>
+					<value>false</value>
 				</prop>
 			</group>
 		</group>
