@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Array.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:07:38 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:32:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,8 +79,8 @@ void java_sql_Array::saveClassRef( jclass pClass )
     ::rtl::OUString aStr;
     if( t.pEnv ){
         // temporaere Variable initialisieren
-        static char * cSignature = "(I)Ljava/lang/String;";
-        static char * cMethodName = "getBaseTypeName";
+        static const char * cSignature = "(I)Ljava/lang/String;";
+        static const char * cMethodName = "getBaseTypeName";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -103,8 +103,8 @@ sal_Int32 SAL_CALL java_sql_Array::getBaseType(  ) throw(::com::sun::star::sdbc:
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
-        static char * cSignature = "()I";
-        static char * cMethodName = "getBaseType";
+        static const char * cSignature = "()I";
+        static const char * cMethodName = "getBaseType";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -124,9 +124,9 @@ sal_Int32 SAL_CALL java_sql_Array::getBaseType(  ) throw(::com::sun::star::sdbc:
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
     {
-        jobject obj = XNameAccess2Map(t.pEnv,typeMap);
-        static char * cSignature = "(Ljava/util/Map;)[Ljava/lang/Object;";
-        static char * cMethodName = "getArray";
+        jobject obj = convertTypeMapToJavaMap(t.pEnv,typeMap);
+        static const char * cSignature = "(Ljava/util/Map;)[Ljava/lang/Object;";
+        static const char * cMethodName = "getArray";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -147,9 +147,9 @@ sal_Int32 SAL_CALL java_sql_Array::getBaseType(  ) throw(::com::sun::star::sdbc:
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
     {
-        jobject obj = XNameAccess2Map(t.pEnv,typeMap);
-        static char * cSignature = "(IILjava/util/Map;)[Ljava/lang/Object;";
-        static char * cMethodName = "getArray";
+        jobject obj = convertTypeMapToJavaMap(t.pEnv,typeMap);
+        static const char * cSignature = "(IILjava/util/Map;)[Ljava/lang/Object;";
+        static const char * cMethodName = "getArray";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -170,10 +170,10 @@ sal_Int32 SAL_CALL java_sql_Array::getBaseType(  ) throw(::com::sun::star::sdbc:
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
         // Parameter konvertieren
-        jobject obj = XNameAccess2Map(t.pEnv,typeMap);
+        jobject obj = convertTypeMapToJavaMap(t.pEnv,typeMap);
         // temporaere Variable initialisieren
-        static char * cSignature = "(Ljava/util/Map;)Ljava/sql/ResultSet;";
-        static char * cMethodName = "getResultSet";
+        static const char * cSignature = "(Ljava/util/Map;)Ljava/sql/ResultSet;";
+        static const char * cMethodName = "getResultSet";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -196,10 +196,10 @@ sal_Int32 SAL_CALL java_sql_Array::getBaseType(  ) throw(::com::sun::star::sdbc:
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
         // Parameter konvertieren
-        jobject obj = XNameAccess2Map(t.pEnv,typeMap);
+        jobject obj = convertTypeMapToJavaMap(t.pEnv,typeMap);
         // temporaere Variable initialisieren
-        static char * cSignature = "(Ljava/util/Map;)Ljava/sql/ResultSet;";
-        static char * cMethodName = "getResultSetAtIndex";
+        static const char * cSignature = "(Ljava/util/Map;)Ljava/sql/ResultSet;";
+        static const char * cMethodName = "getResultSetAtIndex";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
