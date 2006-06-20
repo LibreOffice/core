@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hierarchyuri.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:49:03 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:29:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -582,7 +582,7 @@ sal_uInt32 getUTF32(sal_Unicode const *& rBegin, sal_Unicode const * pEnd,
         {
             int nWeight1;
             int nWeight2;
-            if (nUTF32 == cEscapePrefix && rBegin + 1 < pEnd
+            if (nUTF32 == sal::static_int_cast<sal_uInt32>(cEscapePrefix) && rBegin + 1 < pEnd
                 && (nWeight1 = getHexWeight(rBegin[0])) >= 0
                 && (nWeight2 = getHexWeight(rBegin[1])) >= 0)
             {
@@ -674,7 +674,7 @@ sal_uInt32 getUTF32(sal_Unicode const *& rBegin, sal_Unicode const * pEnd,
         {
             int nWeight1;
             int nWeight2;
-            if (nUTF32 == cEscapePrefix && rBegin + 1 < pEnd
+            if (nUTF32 == sal::static_int_cast<sal_uInt32>(cEscapePrefix) && rBegin + 1 < pEnd
                 && ((nWeight1 = getHexWeight(rBegin[0])) >= 0)
                 && ((nWeight2 = getHexWeight(rBegin[1])) >= 0))
             {
