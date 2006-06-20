@@ -4,9 +4,9 @@
  *
  *  $RCSfile: YUsers.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:32:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:53:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,18 +128,16 @@ void OUsers::appendObject( const Reference< XPropertySet >& descriptor )
 }
 // -------------------------------------------------------------------------
 // XDrop
-void OUsers::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
+void OUsers::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElementName)
 {
-    {
-        ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("REVOKE ALL ON * FROM ");
-        ::rtl::OUString aQuote  = m_xConnection->getMetaData()->getIdentifierQuoteString(  );
-        aSql += ::dbtools::quoteName(aQuote,_sElementName);
+    ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("REVOKE ALL ON * FROM ");
+    ::rtl::OUString aQuote  = m_xConnection->getMetaData()->getIdentifierQuoteString(  );
+    aSql += ::dbtools::quoteName(aQuote,_sElementName);
 
-        Reference< XStatement > xStmt = m_xConnection->createStatement(  );
-        if(xStmt.is())
-            xStmt->execute(aSql);
-        ::comphelper::disposeComponent(xStmt);
-    }
+    Reference< XStatement > xStmt = m_xConnection->createStatement(  );
+    if(xStmt.is())
+        xStmt->execute(aSql);
+    ::comphelper::disposeComponent(xStmt);
 }
 
 // -------------------------------------------------------------------------
