@@ -4,9 +4,9 @@
  *
  *  $RCSfile: regexp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:19:17 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:17:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -483,7 +483,5 @@ Regexp Regexp::parse(rtl::OUString const & rRegexp)
         return Regexp(Regexp::KIND_DOMAIN, aPrefix, bEmptyDomain, aInfix,
                       bOpen, aReversePrefix);
     }
-
-    throw lang::IllegalArgumentException();
 }
 
