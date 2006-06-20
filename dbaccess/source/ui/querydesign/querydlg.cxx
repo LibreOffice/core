@@ -4,9 +4,9 @@
  *
  *  $RCSfile: querydlg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:33:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:30:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,26 +73,26 @@ using namespace dbaui;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdbc;
 
-DBG_NAME(DlgQryJoin);
+DBG_NAME(DlgQryJoin)
 DlgQryJoin::DlgQryJoin( Window * pParent,
                        OQueryTableConnectionData* _pData,
                        OJoinTableView::OTableWindowMap* _pTableMap,
                        const Reference< XConnection >& _xConnection,
                        BOOL _bAllowTableSelect)
-    : ModalDialog( pParent, ModuleRes(DLG_QRY_JOIN) ),
-    aFL_Join( this, ResId( FL_JOIN ) ),
-    aML_HelpText( this, ResId(ML_HELPTEXT) ),
-    aFT_Title( this, ResId(FT_LISTBOXTITLE) ),
-    aLB_JoinType( this, ResId(LB_JOINTYPE) ),
-    aPB_OK( this, ResId( PB_OK ) ),
-    aPB_CANCEL( this, ResId( PB_CANCEL ) ),
-    aPB_HELP( this, ResId( PB_HELP ) ),
-    eJoinType(_pData->GetJoinType()),
-    m_pConnData(NULL),
-    m_xConnection(_xConnection),
-    m_pTableMap(_pTableMap),
-    m_pOrigConnData(_pData)
-
+    :ModalDialog( pParent, ModuleRes(DLG_QRY_JOIN) )
+    ,aFL_Join( this, ResId( FL_JOIN ) )
+    ,aFT_Title( this, ResId(FT_LISTBOXTITLE) )
+    ,aLB_JoinType( this, ResId(LB_JOINTYPE) )
+    ,aML_HelpText( this, ResId(ML_HELPTEXT) )
+    ,aPB_OK( this, ResId( PB_OK ) )
+    ,aPB_CANCEL( this, ResId( PB_CANCEL ) )
+    ,aPB_HELP( this, ResId( PB_HELP ) )
+    ,m_pTableControl( NULL )
+    ,m_pTableMap(_pTableMap)
+    ,eJoinType(_pData->GetJoinType())
+    ,m_pConnData(NULL)
+    ,m_pOrigConnData(_pData)
+    ,m_xConnection(_xConnection)
 {
     DBG_CTOR(DlgQryJoin,NULL);
 
@@ -177,7 +177,7 @@ DlgQryJoin::~DlgQryJoin()
     delete m_pConnData;
 }
 // -----------------------------------------------------------------------------
-IMPL_LINK( DlgQryJoin, LBChangeHdl, ListBox*, pListBox )
+IMPL_LINK( DlgQryJoin, LBChangeHdl, ListBox*, /*pListBox*/ )
 {
     DBG_CHKTHIS(DlgQryJoin,NULL);
     aML_HelpText.SetText(String());
@@ -224,7 +224,7 @@ IMPL_LINK( DlgQryJoin, LBChangeHdl, ListBox*, pListBox )
 }
 // -----------------------------------------------------------------------------
 
-IMPL_LINK( DlgQryJoin, OKClickHdl, Button*, pButton )
+IMPL_LINK( DlgQryJoin, OKClickHdl, Button*, /*pButton*/ )
 {
     DBG_CHKTHIS(DlgQryJoin,NULL);
     USHORT nPos = aLB_JoinType.GetSelectEntryPos();
@@ -263,9 +263,9 @@ void DlgQryJoin::setValid(sal_Bool _bValid)
     aPB_OK.Enable(_bValid);
 }
 // -----------------------------------------------------------------------------
-void DlgQryJoin::notifyConnectionChange(OTableConnectionData* _pConnectionData)
+void DlgQryJoin::notifyConnectionChange( )
 {
-    setJoinType(m_pConnData->GetJoinType());
+    setJoinType( m_pConnData->GetJoinType() );
 }
 // -----------------------------------------------------------------------------
 void DlgQryJoin::setJoinType(EJoinType _eNewJoinType)
@@ -284,6 +284,8 @@ void DlgQryJoin::setJoinType(EJoinType _eNewJoinType)
             break;
         case FULL_JOIN:
             nPos = 3;
+            break;
+        default:
             break;
     }
     aLB_JoinType.SelectEntryPos(nPos);
