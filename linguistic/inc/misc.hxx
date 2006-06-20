@@ -4,9 +4,9 @@
  *
  *  $RCSfile: misc.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 13:45:20 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:31:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,11 +93,11 @@
 namespace com { namespace sun { namespace star { namespace beans {
     class XPropertySet;
     class XFastPropertySet;
-}}}};
+}}}}
 
 namespace com { namespace sun { namespace star { namespace frame {
     class XDesktop;
-}}}};
+}}}}
 
 class LocaleDataWrapper;
 
