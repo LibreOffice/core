@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ToolBoxHelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-05 18:02:18 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:20:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,8 +60,8 @@ namespace dbaui
     DBG_NAME(OToolBoxHelper)
     OToolBoxHelper::OToolBoxHelper()
         : m_bIsHiContrast(sal_False)
-        ,m_pToolBox(NULL)
         ,m_nSymbolsSize(-1 )
+        ,m_pToolBox(NULL)
     {
         DBG_CTOR(OToolBoxHelper,NULL);
 
@@ -101,7 +101,7 @@ namespace dbaui
         }
     }
     // -----------------------------------------------------------------------------
-    IMPL_LINK(OToolBoxHelper, ConfigOptionsChanged, SvtMiscOptions*, _pOptions)
+    IMPL_LINK(OToolBoxHelper, ConfigOptionsChanged, SvtMiscOptions*, /*_pOptions*/)
     {
         if ( m_pToolBox )
         {
