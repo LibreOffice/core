@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmllib_export.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:16:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:13:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -177,5 +177,5 @@ SAL_CALL exportLibrary(
     xOut->endDocument();
 }
 
-};
+}
 
