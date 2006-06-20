@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VTable.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:44:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:11:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,11 +60,14 @@
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include "connectivity/dbtools.hxx"
 #endif
-
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include <connectivity/dbexception.hxx>
+#endif
 
 // -------------------------------------------------------------------------
-using namespace connectivity;
-using namespace connectivity::sdbcx;
+using namespace ::connectivity;
+using namespace ::connectivity::sdbcx;
+using namespace ::dbtools;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdbc;
@@ -120,13 +123,13 @@ OTable::OTable( OCollection*    _pTables,
                 const ::rtl::OUString& _Description,const ::rtl::OUString& _SchemaName,
                 const ::rtl::OUString& _CatalogName) :  OTableDescriptor_BASE(m_aMutex)
                 ,ODescriptor(OTableDescriptor_BASE::rBHelper,_bCase)
-                ,m_pKeys(NULL)
-                ,m_pColumns(NULL)
-                ,m_pIndexes(NULL)
                 ,m_CatalogName(_CatalogName)
                 ,m_SchemaName(_SchemaName)
                 ,m_Description(_Description)
                 ,m_Type(_Type)
+                ,m_pKeys(NULL)
+                ,m_pColumns(NULL)
+                ,m_pIndexes(NULL)
                 ,m_pTables(_pTables)
 {
     m_Name = _Name;
@@ -249,12 +252,9 @@ Reference< XIndexAccess > SAL_CALL OTable::getKeys(  ) throw(RuntimeException)
     return m_pKeys;
 }
 // -----------------------------------------------------------------------------
-cppu::IPropertyArrayHelper* OTable::createArrayHelper( sal_Int32 _nId) const
+cppu::IPropertyArrayHelper* OTable::createArrayHelper( sal_Int32 /*_nId*/ ) const
 {
-    Sequence< Property > aProps;
-    describeProperties(aProps);
-    changePropertyAttributte(aProps);
-    return new cppu::OPropertyArrayHelper(aProps);
+    return doCreateArrayHelper();
 }
 // -------------------------------------------------------------------------
 cppu::IPropertyArrayHelper & OTable::getInfoHelper()
@@ -318,12 +318,14 @@ Reference< XDatabaseMetaData> OTable::getMetaData() const
 }
 // -------------------------------------------------------------------------
 // XAlterTable
-void SAL_CALL OTable::alterColumnByName( const ::rtl::OUString& colName, const Reference< XPropertySet >& descriptor ) throw(SQLException, NoSuchElementException, RuntimeException)
+void SAL_CALL OTable::alterColumnByName( const ::rtl::OUString& /*colName*/, const Reference< XPropertySet >& /*descriptor*/ ) throw(SQLException, NoSuchElementException, RuntimeException)
 {
+    throwFeatureNotImplementedException( "XAlterTable::alterColumnByName", *this );
 }
 // -------------------------------------------------------------------------
-void SAL_CALL OTable::alterColumnByIndex( sal_Int32 index, const Reference< XPropertySet >& descriptor ) throw(SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, RuntimeException)
+void SAL_CALL OTable::alterColumnByIndex( sal_Int32 /*index*/, const Reference< XPropertySet >& /*descriptor*/ ) throw(SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, RuntimeException)
 {
+    throwFeatureNotImplementedException( "XAlterTable::alterColumnByIndex", *this );
 }
 // -------------------------------------------------------------------------
 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OTable::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
@@ -339,7 +341,7 @@ void SAL_CALL OTable::alterColumnByIndex( sal_Int32 index, const Reference< XPro
     return m_Name;
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OTable::setName( const ::rtl::OUString& aName ) throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OTable::setName( const ::rtl::OUString& /*aName*/ ) throw(::com::sun::star::uno::RuntimeException)
 {
 }
 // -----------------------------------------------------------------------------
