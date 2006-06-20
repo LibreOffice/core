@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MNameMapper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:29:03 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:51:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,13 +102,13 @@ MNameMapper::add( ::rtl::OUString& str, nsIAbDirectory* abook )
 
     if ( abook == NULL ) {
         OSL_TRACE( "\tOUT MNameMapper::add() called with null abook\n" );
-        return -1;
+        return NS_ERROR_NULL_POINTER;
     }
 
     ::rtl::OUString ouUri=::rtl::OUString::createFromAscii(getURI(abook));
     if ( mUriMap->find (ouUri) != mUriMap->end() ) //There's already an entry with same uri
     {
-        return -1;
+        return NS_ERROR_FILE_NOT_FOUND;
     }
     mUriMap->insert( MNameMapper::uriMap::value_type( ouUri, abook ) );
 
@@ -124,14 +124,6 @@ MNameMapper::add( ::rtl::OUString& str, nsIAbDirectory* abook )
     mDirMap->insert( MNameMapper::dirMap::value_type( str, abook ) );
     OSL_TRACE( "\tOUT MNameMapper::add()\n" );
     return 0;
-}
-
-// Will replace the given dir
-void
-MNameMapper::replace( const ::rtl::OUString& str, nsIAbDirectory* abook )
-{
-    // TODO - needs to be implemented...
-    OSL_TRACE( "IN/OUT MNameMapper::add()\n" );
 }
 
 bool
