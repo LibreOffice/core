@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LockEntrySequence.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:25:20 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:35:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,11 +70,11 @@ struct LockEntrySequenceParseContext
 
 //////////////////////////////////////////////////////////////////////////
 extern "C" int LockEntrySequence_startelement_callback(
-    void *userdata,
+    void *,
     int parent,
     const char *nspace,
     const char *name,
-    const char **atts )
+    const char ** )
 {
     if ( ( name != 0 ) &&
          ( ( nspace == 0 ) || ( strcmp( nspace, "" ) == 0 ) ) )
@@ -111,10 +111,10 @@ extern "C" int LockEntrySequence_startelement_callback(
 
 //////////////////////////////////////////////////////////////////////////
 extern "C" int LockEntrySequence_chardata_callback(
-    void *userdata,
-    int state,
-    const char *buf,
-    size_t len )
+    void *,
+    int,
+    const char *,
+    size_t )
 {
     return 0; // zero to continue, non-zero to abort parsing
 }
@@ -123,8 +123,8 @@ extern "C" int LockEntrySequence_chardata_callback(
 extern "C" int LockEntrySequence_endelement_callback(
     void *userdata,
     int state,
-    const char *nspace,
-    const char *name )
+    const char *,
+    const char * )
 {
     LockEntrySequenceParseContext * pCtx
                 = static_cast< LockEntrySequenceParseContext * >( userdata );
