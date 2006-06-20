@@ -4,9 +4,9 @@
  *
  *  $RCSfile: intercept.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:56:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:41:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@ using namespace ::com::sun::star;
 
 
 
-uno::Sequence<::rtl::OUString> Interceptor::m_aInterceptedURL(IUL);
+uno::Sequence< ::rtl::OUString > Interceptor::m_aInterceptedURL(IUL);
 
 
 
@@ -189,7 +189,7 @@ void SAL_CALL
 Interceptor::dispatch(
     const util::URL& URL,
     const uno::Sequence<
-    beans::PropertyValue >& Arguments )
+    beans::PropertyValue >& /*Arguments*/ )
     throw (uno::RuntimeException)
 {
     ::rtl::Reference< EmbeddedDocumentInstanceAccess_Impl > xOleAccess;
@@ -513,3 +513,10 @@ Interceptor::setMasterDispatchProvider(
     osl::MutexGuard aGuard(m_aMutex);
     m_xMasterDispatchProvider = NewSupplier;
 }
+
+// Fix strange warnings about some
+// ATL::CAxHostWindow::QueryInterface|AddRef|Releae functions.
+// warning C4505: 'xxx' : unreferenced local function has been removed
+#if defined(_MSC_VER)
+#pragma warning(disable: 4505)
+#endif
