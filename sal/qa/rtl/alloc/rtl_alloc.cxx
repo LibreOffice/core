@@ -12,8 +12,8 @@ namespace rtl_alloc
     {
         bool bOk = true;
 
-        for (int i=0;i<_nSize;i++)
-{
+        for (sal_uInt32 i=0;i<_nSize;i++)
+        {
             if (_pMemory[i] != _n)
             {
                 bOk = false;
