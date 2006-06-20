@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VKeyColumn.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:44:30 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:11:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,12 +112,9 @@ OKeyColumn::~OKeyColumn()
 {
 }
 // -----------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper* OKeyColumn::createArrayHelper( sal_Int32 _nId) const
+::cppu::IPropertyArrayHelper* OKeyColumn::createArrayHelper( sal_Int32 /*_nId*/ ) const
 {
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > aProps;
-    describeProperties(aProps);
-    changePropertyAttributte(aProps);
-    return new ::cppu::OPropertyArrayHelper(aProps);
+    return doCreateArrayHelper();
 }
 // -----------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper& SAL_CALL OKeyColumn::getInfoHelper()
