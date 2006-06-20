@@ -4,9 +4,9 @@
  *
  *  $RCSfile: jfregca.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:31:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:35:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,9 +34,16 @@
  ************************************************************************/
 //#include <stdio.h>
 
+#pragma warning(push, 1) /* disable warnings within system headers */
 #include <windows.h>
 #include <msi.h>
 #include <msiquery.h>
+#pragma warning(pop)
+
+#if defined UNICODE
+#define _UNICODE
+#endif
+#include <tchar.h>
 
 //Simple function prototypes
 bool update_activesync_regvalues(bool, bool, char** );
@@ -82,9 +89,9 @@ TCHAR *pswData[8] = {
 const int MAX_KEY_LENGTH=255;
 const int MAX_VALUE_NAME=16383;
 
-BOOL APIENTRY DllMain( HANDLE hModule,
+BOOL APIENTRY DllMain( HANDLE,
                        DWORD  ul_reason,
-                       LPVOID lpReserved
+                       LPVOID
                      )
 {
     switch (ul_reason)
@@ -147,7 +154,7 @@ bool isMulti( MSIHANDLE hModule ) {
     {
         return false;
     }
-    bRet = (szValueBuf == TEXT("1"));
+    bRet = _tcscmp(szValueBuf, TEXT("1")) == 0;
     delete [] szValueBuf;
 
     return bRet;
@@ -302,7 +309,6 @@ void deleteKeys(HKEY hKey, TCHAR **data) {
     LPCSTR soPath     = data[SO_PATH];
     LPCSTR defImport  = data[DEFIMPORT_KEY];
     LPCSTR defExport  = data[DEFEXPORT_KEY];
-    LPCSTR binaryCopy = data[BC_VALUE];
     LPCSTR IFPath     = data[IF_PATH];
 
     HKEY deviceKey, deviceIFKey, soKey, soIFKey;
