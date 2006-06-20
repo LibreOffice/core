@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xml_element.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:11:38 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:11:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,7 +88,7 @@ void XMLElement::dump( Reference< xml::sax::XDocumentHandler > const & xOut )
 sal_Int16 XMLElement::getLength()
     throw (RuntimeException)
 {
-    return _attrNames.size();
+    return static_cast<sal_Int16>(_attrNames.size());
 }
 //__________________________________________________________________________________________________
 OUString XMLElement::getNameByIndex( sal_Int16 nPos )
@@ -102,11 +102,12 @@ OUString XMLElement::getTypeByIndex( sal_Int16 nPos )
     throw (RuntimeException)
 {
     OSL_ASSERT( (size_t)nPos < _attrNames.size() );
+    static_cast<void>(nPos);
     // xxx todo
     return OUString();
 }
 //__________________________________________________________________________________________________
-OUString XMLElement::getTypeByName( OUString const & rName )
+OUString XMLElement::getTypeByName( OUString const & /*rName*/ )
     throw (RuntimeException)
 {
     // xxx todo
@@ -133,4 +134,4 @@ OUString XMLElement::getValueByName( OUString const & rName )
     return OUString();
 }
 
-};
+}
