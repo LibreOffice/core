@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textToPronounce_zh.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:49:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:49:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,6 @@ TextToPronounce_zh::folding(const OUString & inStr, sal_Int32 startPos,
     OUStringBuffer sb;
     const sal_Unicode * chArr = inStr.getStr() + startPos;
 
-    sal_Int32 j;
     if (startPos < 0)
         throw RuntimeException();
 
@@ -159,7 +158,7 @@ TextToPronounce_zh::TextToPronounce_zh(const sal_Char* func_name)
     hModule = osl_loadModule( lib.pData, SAL_LOADMODULE_DEFAULT );
     idx=NULL;
     if (hModule) {
-        sal_uInt16** (*function)() = (sal_uInt16** (*)()) osl_getSymbol(hModule, OUString::createFromAscii(func_name).pData);
+        sal_uInt16** (*function)() = (sal_uInt16** (*)()) osl_getFunctionSymbol(hModule, OUString::createFromAscii(func_name).pData);
         if (function)
             idx=function();
     }
