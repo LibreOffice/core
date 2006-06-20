@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transliteration_Numeric.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:35:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:50:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,21 +48,21 @@ sal_Int16 SAL_CALL transliteration_Numeric::getType() throw(RuntimeException)
 }
 
 OUString SAL_CALL
-transliteration_Numeric::folding( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset )
+transliteration_Numeric::folding( const OUString& /*inStr*/, sal_Int32 /*startPos*/, sal_Int32 /*nCount*/, Sequence< sal_Int32 >& /*offset*/ )
         throw(RuntimeException)
 {
         throw (new RuntimeException());
 }
 
 sal_Bool SAL_CALL
-transliteration_Numeric::equals( const OUString& str1, sal_Int32 pos1, sal_Int32 nCount1, sal_Int32& nMatch1, const OUString& str2, sal_Int32 pos2, sal_Int32 nCount2, sal_Int32& nMatch2 )
+transliteration_Numeric::equals( const OUString& /*str1*/, sal_Int32 /*pos1*/, sal_Int32 /*nCount1*/, sal_Int32& /*nMatch1*/, const OUString& /*str2*/, sal_Int32 /*pos2*/, sal_Int32 /*nCount2*/, sal_Int32& /*nMatch2*/ )
         throw(RuntimeException)
 {
         throw (new RuntimeException());
 }
 
 Sequence< OUString > SAL_CALL
-transliteration_Numeric::transliterateRange( const OUString& str1, const OUString& str2 )
+transliteration_Numeric::transliterateRange( const OUString& /*str1*/, const OUString& /*str2*/ )
         throw(RuntimeException)
 {
         throw (new RuntimeException());
