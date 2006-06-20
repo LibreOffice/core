@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dataview.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:26:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:56:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,8 +105,8 @@ namespace dbaui
                             WinBits nStyle)
         :Window(pParent,nStyle)
         ,m_xServiceFactory(_rFactory)
-        ,m_pSeparator( NULL )
         ,m_pController( _pController )
+        ,m_pSeparator( NULL )
     {
         DBG_CTOR(ODataView,NULL);
         OSL_ENSURE(m_pController,"Controller must be not NULL!");
@@ -148,7 +148,7 @@ namespace dbaui
         Resize();
     }
     // -------------------------------------------------------------------------
-    void ODataView::resizeDocumentView( Rectangle& _rPlayground )
+    void ODataView::resizeDocumentView( Rectangle& /*_rPlayground*/ )
     {
     }
 
