@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableFieldDescription.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:29:24 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:28:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,54 +52,54 @@ using namespace ::com::sun::star::beans;
 using namespace comphelper;
 using namespace dbaui;
 
-DBG_NAME(OTableFieldDesc);
+DBG_NAME(OTableFieldDesc)
 //==============================================================================
 OTableFieldDesc::OTableFieldDesc()
-             :m_bVisible(sal_False)
-             ,m_pTabWindow(0)
-             ,m_eOrderDir( ORDER_NONE )
-             ,m_eFunctionType( FKT_NONE )
-             ,m_bGroupBy(sal_False)
-             ,m_nColWidth(0)
-             ,m_eFieldType(TAB_NORMAL_FIELD)
-             ,m_nIndex(0)
-             ,m_eDataType(1000)
-             ,m_nColumnId(-1)
+    :m_pTabWindow(0)
+    ,m_eDataType(1000)
+    ,m_eFunctionType( FKT_NONE )
+    ,m_eFieldType(TAB_NORMAL_FIELD)
+    ,m_eOrderDir( ORDER_NONE )
+    ,m_nIndex(0)
+    ,m_nColWidth(0)
+    ,m_nColumnId((sal_uInt16)-1)
+    ,m_bGroupBy(sal_False)
+    ,m_bVisible(sal_False)
 {
     DBG_CTOR(OTableFieldDesc,NULL);
 }
 //------------------------------------------------------------------------------
 OTableFieldDesc::OTableFieldDesc(const OTableFieldDesc& rRS)
-        :m_aTableName(rRS.GetTable()),
-        m_aAliasName(rRS.GetAlias()),       // table range
-        m_aFieldName(rRS.GetField()),       // column
-        m_aFieldAlias(rRS.GetFieldAlias()), // column alias
-        m_aDatabaseName(rRS.GetDatabase()), // qualifier or catalog
-        m_aFunctionName(rRS.GetFunction()), // Funktionsname
-        m_bVisible(rRS.IsVisible()),
-        m_pTabWindow(rRS.GetTabWindow()),
-        m_eDataType(rRS.GetDataType()),
-        m_eOrderDir(rRS.GetOrderDir()),
-        m_nColWidth(rRS.GetColWidth()),
-        m_eFieldType(rRS.GetFieldType()),
-        m_nIndex(rRS.GetFieldIndex()),
-        m_eFunctionType( rRS.GetFunctionType() ),
-        m_bGroupBy(rRS.IsGroupBy()),
-        m_vecCriteria( rRS.m_vecCriteria),
-        m_nColumnId( rRS.m_nColumnId)
-
+    : ::vos::OReference()
+    ,m_vecCriteria( rRS.m_vecCriteria)
+    ,m_aTableName(rRS.GetTable())
+    ,m_aAliasName(rRS.GetAlias())       // table range
+    ,m_aFieldName(rRS.GetField())       // column
+    ,m_aFieldAlias(rRS.GetFieldAlias()) // column alias
+    ,m_aDatabaseName(rRS.GetDatabase()) // qualifier or catalog
+    ,m_aFunctionName(rRS.GetFunction()) // Funktionsname
+    ,m_pTabWindow(rRS.GetTabWindow())
+    ,m_eDataType(rRS.GetDataType())
+    ,m_eFunctionType( rRS.GetFunctionType() )
+    ,m_eFieldType(rRS.GetFieldType())
+    ,m_eOrderDir(rRS.GetOrderDir())
+    ,m_nIndex(rRS.GetFieldIndex())
+    ,m_nColWidth(rRS.GetColWidth())
+    ,m_nColumnId( rRS.m_nColumnId)
+    ,m_bGroupBy(rRS.IsGroupBy())
+    ,m_bVisible(rRS.IsVisible())
 {
     DBG_CTOR(OTableFieldDesc,NULL);
 }
 
 //------------------------------------------------------------------------------
 OTableFieldDesc::OTableFieldDesc(const ::rtl::OUString& rT, const ::rtl::OUString& rF )
-             :m_bVisible(sal_False)
-             ,m_pTabWindow(0)
-             ,m_eOrderDir( ORDER_NONE )
-             ,m_eFunctionType( FKT_NONE )
-             ,m_bGroupBy(sal_False)
-             ,m_nColumnId(-1)
+    :m_pTabWindow(0)
+    ,m_eFunctionType( FKT_NONE )
+    ,m_eOrderDir( ORDER_NONE )
+    ,m_nColumnId((sal_uInt16)-1)
+    ,m_bGroupBy(sal_False)
+    ,m_bVisible(sal_False)
 {
     DBG_CTOR(OTableFieldDesc,NULL);
     SetField( rF ); SetTable( rT );
