@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BViews.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:25:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:11:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -171,14 +171,8 @@ void OViews::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
     if(m_bInDrop)
         return;
 
-    Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(getObject(_nPos),UNO_QUERY);
-    sal_Bool bIsNew = sal_False;
-    if(xTunnel.is())
-    {
-        connectivity::sdbcx::ODescriptor* pTable = (connectivity::sdbcx::ODescriptor*)xTunnel->getSomething(connectivity::sdbcx::ODescriptor::getUnoTunnelImplementationId());
-        if(pTable)
-            bIsNew = pTable->isNew();
-    }
+    Reference< XInterface > xObject( getObject( _nPos ) );
+    sal_Bool bIsNew = connectivity::sdbcx::ODescriptor::isNew( xObject );
     if (!bIsNew)
     {
         OAdabasConnection* pConnection = static_cast<OAdabasCatalog&>(m_rParent).getConnection();
