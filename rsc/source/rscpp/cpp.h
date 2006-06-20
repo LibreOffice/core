@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpp.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:57:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:49:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -213,8 +213,8 @@ typedef struct fileinfo {
 
 typedef struct sizes {
     short       bits;                   /* If this bit is set,          */
-    short       size;                   /* this is the datum size value */
-    short       psize;                  /* this is the pointer size     */
+    int         size;                   /* this is the datum size value */
+    int         psize;                  /* this is the pointer size     */
 } SIZES;
 /*
  * nomacarg is a built-in #define on Decus C.
