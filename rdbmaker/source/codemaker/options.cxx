@@ -4,9 +4,9 @@
  *
  *  $RCSfile: options.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:04:26 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:09:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,11 +53,6 @@ const OString& Options::getProgramName() const
     return m_program;
 }
 
-sal_uInt16 Options::getNumberOfOptions() const
-{
-    return m_options.size();
-}
-
 sal_Bool Options::isValid(const OString& option)
 {
     return (m_options.count(option) > 0);
@@ -66,8 +61,6 @@ sal_Bool Options::isValid(const OString& option)
 const OString Options::getOption(const OString& option)
     throw( IllegalArgument )
 {
-    const OString ret;
-
     if (m_options.count(option) > 0)
     {
         return m_options[option];
@@ -75,8 +68,6 @@ const OString Options::getOption(const OString& option)
     {
         throw IllegalArgument("Option is not valid or currently not set.");
     }
-
-    return ret;
 }
 
 const OptionMap& Options::getOptions()
@@ -84,16 +75,9 @@ const OptionMap& Options::getOptions()
     return m_options;
 }
 
-sal_uInt16 Options::getNumberOfInputFiles() const
-{
-    return m_inputFiles.size();
-}
-
 const OString Options::getInputFile(sal_uInt16 index)
     throw( IllegalArgument )
 {
-    const OString ret;
-
     if (index < m_inputFiles.size())
     {
         return m_inputFiles[index];
@@ -101,8 +85,6 @@ const OString Options::getInputFile(sal_uInt16 index)
     {
         throw IllegalArgument("index is out of bound.");
     }
-
-    return ret;
 }
 
 const StringVector& Options::getInputFiles()
