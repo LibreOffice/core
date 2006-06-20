@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ignoreIandEfollowedByYa_ja_JP.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:27:42 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:49:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,7 +109,7 @@ ignoreIandEfollowedByYa_ja_JP::folding( const OUString& inStr, sal_Int32 startPo
     sal_Unicode currentChar;
 
     // One to one mapping
-    oneToOneMapping table(IandE, sizeof(IandE));
+    oneToOneMapping aTable(IandE, sizeof(IandE));
 
     // Translation
     while (-- nCount > 0) {
@@ -118,7 +118,7 @@ ignoreIandEfollowedByYa_ja_JP::folding( const OUString& inStr, sal_Int32 startPo
         // the character listed in above table + YA --> the character + A
         if (currentChar == 0x30E3 ||   // KATAKANA LETTER SMALL YA
                 currentChar == 0x30E4) {   // KATAKANA LETTER YA
-            if (table[ previousChar ] != previousChar) {
+            if (aTable[ previousChar ] != previousChar) {
                 if (useOffset) {
                     *p ++ = position++;
                     *p ++ = position++;
