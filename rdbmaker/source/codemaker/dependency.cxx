@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dependency.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:03:42 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:09:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -242,6 +242,8 @@ static sal_Bool checkMethodDependencies(TypeManager& typeMgr, TypeDependency& de
                     break;
                 case RT_PARAM_INOUT:
                     dependencies.insert(type, paramType, TYPEUSE_INOUTPARAM);
+                    break;
+                default:
                     break;
             }
 
