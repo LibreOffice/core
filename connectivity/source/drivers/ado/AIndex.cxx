@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AIndex.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:28:57 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:13:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,10 +127,8 @@ Sequence< sal_Int8 > OAdoIndex::getUnoTunnelImplementationId()
 sal_Int64 OAdoIndex::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
     return (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
-                ?
-            (sal_Int64)this
-                :
-            OIndex_ADO::getSomething(rId);
+                ? reinterpret_cast< sal_Int64 >( this )
+                : OIndex_ADO::getSomething(rId);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OAdoIndex::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue)throw (Exception)
