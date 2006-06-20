@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TEditControl.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:47:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:32:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,7 +132,7 @@ namespace dbaui
 //==============================================================================
 
 //  TYPEINIT1(OTableEditorCtrl, DBView);
-DBG_NAME(OTableEditorCtrl);
+DBG_NAME(OTableEditorCtrl)
 
 //==============================================================================
 
@@ -231,23 +231,23 @@ void OTableEditorCtrl::UpdateAll()
 }
 //==================================================================
 OTableEditorCtrl::OTableEditorCtrl(Window* pWindow)
-                   :OTableRowView(pWindow)
-                   ,m_aInvalidate(500,this)
-                   ,pNameCell(NULL)
-                   ,pTypeCell(NULL)
-                   ,pDescrCell(NULL)
-                   ,nIndexEvent(0)
-                   ,nOldDataPos(-1)
-                   ,bSaveOnMove(sal_True)
-                   ,nCutEvent(0)
-                   ,nPasteEvent(0)
-                   ,nDeleteEvent(0)
-                   ,nInsNewRowsEvent(0)
-                   ,nInvalidateTypeEvent(0)
-                   ,nEntryNotFoundEvent(0)
-                   ,bReadOnly(sal_True)
-                   ,pDescrWin(NULL)
-                   ,m_eChildFocus(NONE)
+    :OTableRowView(pWindow)
+    ,pNameCell(NULL)
+    ,pTypeCell(NULL)
+    ,pDescrCell(NULL)
+    ,pDescrWin(NULL)
+    ,nIndexEvent(0)
+    ,nCutEvent(0)
+    ,nPasteEvent(0)
+    ,nDeleteEvent(0)
+    ,nInsNewRowsEvent(0)
+    ,nInvalidateTypeEvent(0)
+    ,nEntryNotFoundEvent(0)
+    ,m_eChildFocus(NONE)
+    ,nOldDataPos(-1)
+    ,bSaveOnMove(sal_True)
+    ,bReadOnly(sal_True)
+    ,m_aInvalidate(500,this)
 {
     DBG_CTOR(OTableEditorCtrl,NULL);
 
@@ -753,7 +753,7 @@ sal_Bool OTableEditorCtrl::CursorMoving(long nNewRow, sal_uInt16 nNewCol)
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK( OTableEditorCtrl, InvalidateFieldType, void*, EMPTYTAG )
+IMPL_LINK( OTableEditorCtrl, InvalidateFieldType, void*, /*EMPTYTAG*/ )
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
     nInvalidateTypeEvent = 0;
@@ -763,7 +763,7 @@ IMPL_LINK( OTableEditorCtrl, InvalidateFieldType, void*, EMPTYTAG )
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK( OTableEditorCtrl, EntryNotFound, void*, EMPTYTAG )
+IMPL_LINK( OTableEditorCtrl, EntryNotFound, void*, /*EMPTYTAG*/ )
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
     nEntryNotFoundEvent = 0;
@@ -1102,7 +1102,7 @@ void OTableEditorCtrl::SetControlText( long nRow, sal_uInt16 nColId, const Strin
     }
 }
 //------------------------------------------------------------------------------
-void OTableEditorCtrl::SetData( long nRow, sal_uInt16 nColId, const TOTypeInfoSP& _pTypeInfo )
+void OTableEditorCtrl::SetCellData( long nRow, sal_uInt16 nColId, const TOTypeInfoSP& _pTypeInfo )
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
     //////////////////////////////////////////////////////////////////////
@@ -1121,12 +1121,12 @@ void OTableEditorCtrl::SetData( long nRow, sal_uInt16 nColId, const TOTypeInfoSP
             SwitchType( _pTypeInfo );
             break;
         default:
-            OSL_ENSURE(sal_False, "OTableEditorCtrl::SetData: invalid column!");
+            OSL_ENSURE(sal_False, "OTableEditorCtrl::SetCellData: invalid column!");
     }
     SetControlText(nRow,nColId,_pTypeInfo.get() ? _pTypeInfo->aUIName : ::rtl::OUString());
 }
 //------------------------------------------------------------------------------
-void OTableEditorCtrl::SetData( long nRow, sal_uInt16 nColId, const ::com::sun::star::uno::Any& _rNewData )
+void OTableEditorCtrl::SetCellData( long nRow, sal_uInt16 nColId, const ::com::sun::star::uno::Any& _rNewData )
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
     //////////////////////////////////////////////////////////////////////
@@ -1148,7 +1148,7 @@ void OTableEditorCtrl::SetData( long nRow, sal_uInt16 nColId, const ::com::sun::
             break;
 
         case FIELD_TYPE:
-            OSL_ENSURE(sal_False, "OTableEditorCtrl::SetData: invalid column!");
+            OSL_ENSURE(sal_False, "OTableEditorCtrl::SetCellData: invalid column!");
             break;
 
         case FIELD_DESCR:
@@ -1177,7 +1177,7 @@ void OTableEditorCtrl::SetData( long nRow, sal_uInt16 nColId, const ::com::sun::
 
         case FIELD_PROPERTY_NUMTYPE:
             //  pFieldDescr->SetNumType( _rNewData );
-            OSL_ENSURE(sal_False, "OTableEditorCtrl::SetData: invalid column!");
+            OSL_ENSURE(sal_False, "OTableEditorCtrl::SetCellData: invalid column!");
             break;
 
         case FIELD_PROPERTY_AUTOINC:
@@ -1211,7 +1211,7 @@ void OTableEditorCtrl::SetData( long nRow, sal_uInt16 nColId, const ::com::sun::
 }
 
 //------------------------------------------------------------------------------
-Any OTableEditorCtrl::GetData( long nRow, sal_uInt16 nColId )
+Any OTableEditorCtrl::GetCellData( long nRow, sal_uInt16 nColId )
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
     OFieldDescription* pFieldDescr = GetFieldDescr( nRow );
@@ -1256,7 +1256,7 @@ Any OTableEditorCtrl::GetData( long nRow, sal_uInt16 nColId )
             break;
 
         case FIELD_PROPERTY_NUMTYPE:
-            OSL_ENSURE(sal_False, "OTableEditorCtrl::GetData: invalid column!");
+            OSL_ENSURE(sal_False, "OTableEditorCtrl::GetCellData: invalid column!");
             //  return pFieldDescr->GetNumType();
 
         case FIELD_PROPERTY_AUTOINC:
@@ -1285,7 +1285,7 @@ String OTableEditorCtrl::GetCellText( long nRow, sal_uInt16 nColId ) const
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
     //////////////////////////////////////////////////////////////////////
     // Text aus Dokumentdaten holen
-    return ::comphelper::getString(const_cast<OTableEditorCtrl*>(this)->GetData( nRow, nColId ));
+    return ::comphelper::getString(const_cast<OTableEditorCtrl*>(this)->GetCellData( nRow, nColId ));
 }
 
 //------------------------------------------------------------------------------
@@ -1341,7 +1341,7 @@ sal_Bool OTableEditorCtrl::IsCutAllowed( long nRow )
 }
 
 //------------------------------------------------------------------------------
-sal_Bool OTableEditorCtrl::IsCopyAllowed( long nRow )
+sal_Bool OTableEditorCtrl::IsCopyAllowed( long /*nRow*/ )
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
     sal_Bool bIsCopyAllowed = sal_False;
@@ -1375,7 +1375,7 @@ sal_Bool OTableEditorCtrl::IsCopyAllowed( long nRow )
 }
 
 //------------------------------------------------------------------------------
-sal_Bool OTableEditorCtrl::IsPasteAllowed( long nRow )
+sal_Bool OTableEditorCtrl::IsPasteAllowed( long /*nRow*/ )
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
     sal_Bool bAllowed = GetView()->getController()->isAddAllowed();
@@ -1461,7 +1461,7 @@ void OTableEditorCtrl::paste()
 }
 
 //------------------------------------------------------------------------------
-sal_Bool OTableEditorCtrl::IsDeleteAllowed( long nRow )
+sal_Bool OTableEditorCtrl::IsDeleteAllowed( long /*nRow*/ )
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
 
@@ -1497,7 +1497,7 @@ sal_Bool OTableEditorCtrl::IsInsertNewAllowed( long nRow )
 }
 
 //------------------------------------------------------------------------------
-sal_Bool OTableEditorCtrl::IsPrimaryKeyAllowed( long nRow )
+sal_Bool OTableEditorCtrl::IsPrimaryKeyAllowed( long /*nRow*/ )
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
     if( !GetSelectRowCount() )
@@ -1620,8 +1620,6 @@ void OTableEditorCtrl::Command(const CommandEvent& rEvt)
                 else
                 {
                     PopupMenu aContextMenu(ModuleRes(RID_TABLEDESIGNROWPOPUPMENU));
-                    long nSelectRowCount = GetSelectRowCount();
-                    sal_Bool bRowsSelected(nSelectRowCount ? sal_True : sal_False);
 
                     aContextMenu.EnableItem( SID_CUT, IsCutAllowed(nRow) );
                     aContextMenu.EnableItem( SID_COPY, IsCopyAllowed(nRow) );
@@ -1679,7 +1677,7 @@ void OTableEditorCtrl::Command(const CommandEvent& rEvt)
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK( OTableEditorCtrl, DelayedCut, void*, EMPTYTAG )
+IMPL_LINK( OTableEditorCtrl, DelayedCut, void*, /*EMPTYTAG*/ )
 {
     nCutEvent = 0;
     OTableRowView::cut();
@@ -1687,7 +1685,7 @@ IMPL_LINK( OTableEditorCtrl, DelayedCut, void*, EMPTYTAG )
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK( OTableEditorCtrl, DelayedPaste, void*, EMPTYTAG )
+IMPL_LINK( OTableEditorCtrl, DelayedPaste, void*, /*EMPTYTAG*/ )
 {
     nPasteEvent = 0;
 
@@ -1717,7 +1715,7 @@ IMPL_LINK( OTableEditorCtrl, DelayedPaste, void*, EMPTYTAG )
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK( OTableEditorCtrl, DelayedDelete, void*, EMPTYTAG )
+IMPL_LINK( OTableEditorCtrl, DelayedDelete, void*, /*EMPTYTAG*/ )
 {
     nDeleteEvent = 0;
     DeleteRows();
@@ -1725,7 +1723,7 @@ IMPL_LINK( OTableEditorCtrl, DelayedDelete, void*, EMPTYTAG )
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK( OTableEditorCtrl, DelayedInsNewRows, void*, EMPTYTAG )
+IMPL_LINK( OTableEditorCtrl, DelayedInsNewRows, void*, /*EMPTYTAG*/ )
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
     nInsNewRowsEvent = 0;
@@ -1898,7 +1896,6 @@ void OTableEditorCtrl::DeactivateCell(sal_Bool bUpdate)
     OTableRowView::DeactivateCell(bUpdate);
     // now we have to deactivate the field description
     long nRow(GetCurRow());
-    sal_uInt16 nCol(GetCurColumnId());
     if (pDescrWin)
         pDescrWin->SetReadOnly(bReadOnly || !SetDataPtr(nRow) || GetActRow()->IsReadOnly());
 }
