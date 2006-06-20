@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ucpexpand.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:21:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:18:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -249,6 +249,7 @@ sal_Int32 ExpandContentProviderImpl::compareContentIds(
     }
     catch (IllegalIdentifierException & exc)
     {
+        (void) exc; // unused
         OSL_ENSURE(
             0, ::rtl::OUStringToOString(
                 exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
@@ -274,7 +275,7 @@ extern "C"
 {
 
 void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+    const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
