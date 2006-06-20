@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cipher.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:00:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:29:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-#define _RTL_CIPHER_C_ "$Revision: 1.3 $"
+#define _RTL_CIPHER_C_ "$Revision: 1.4 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -290,8 +290,7 @@ static void __rtl_cipherBF_updateCFB (
     CipherContextBF    *ctx,
     rtlCipherDirection  direction,
     const sal_uInt8    *pData,
-    sal_uInt8          *pBuffer,
-    sal_Size            nLength);
+    sal_uInt8          *pBuffer);
 
 /** __rtl_cipher_encode.
  */
@@ -791,7 +790,7 @@ static rtlCipherError __rtl_cipherBF_update (
         /* Stream mode. */
         while (nDatLen > 0)
         {
-            __rtl_cipherBF_updateCFB (ctx, eDirection, pData, pBuffer, 1);
+            __rtl_cipherBF_updateCFB (ctx, eDirection, pData, pBuffer);
             nDatLen -= 1;
             pData   += 1;
             pBuffer += 1;
@@ -895,8 +894,7 @@ static void __rtl_cipherBF_updateCFB (
     CipherContextBF    *ctx,
     rtlCipherDirection  direction,
     const sal_uInt8    *pData,
-    sal_uInt8          *pBuffer,
-    sal_Size            nLength)
+    sal_uInt8          *pBuffer)
 {
     sal_uInt8  *iv;
     sal_uInt32  k;
@@ -1172,13 +1170,6 @@ typedef struct cipherARCFOUR_impl_st
     ContextARCFOUR_Impl m_context;
 } CipherARCFOUR_Impl;
 
-/** rtl_cipherARCFOUR_init_Impl.
- */
-static rtlCipherError rtl_cipherARCFOUR_init_Impl (
-    ContextARCFOUR_Impl *ctx,
-    const sal_uInt8     *pKeyData, sal_Size nKeyLen,
-    const sal_uInt8     *pArgData, sal_Size nArgLen);
-
 /** rtl_cipherARCFOUR_update_Impl.
  */
 static rtlCipherError rtl_cipherARCFOUR_update_Impl (
@@ -1191,8 +1182,7 @@ static rtlCipherError rtl_cipherARCFOUR_update_Impl (
  */
 static rtlCipherError rtl_cipherARCFOUR_init_Impl (
     ContextARCFOUR_Impl *ctx,
-    const sal_uInt8     *pKeyData, sal_Size nKeyLen,
-    const sal_uInt8     *pArgData, sal_Size nArgLen)
+    const sal_uInt8     *pKeyData, sal_Size nKeyLen)
 {
     unsigned int  K[CIPHER_CBLOCK_ARCFOUR];
     unsigned int *L, *S;
@@ -1312,6 +1302,8 @@ rtlCipherError SAL_CALL rtl_cipher_initARCFOUR (
     const sal_uInt8 *pArgData, sal_Size nArgLen)
 {
     CipherARCFOUR_Impl *pImpl = (CipherARCFOUR_Impl*)Cipher;
+    (void) pArgData; // avoid warning
+    (void) nArgLen; // avoid warning
 
     if ((pImpl == NULL) || (pKeyData == NULL))
         return rtl_Cipher_E_Argument;
@@ -1324,9 +1316,7 @@ rtlCipherError SAL_CALL rtl_cipher_initARCFOUR (
     else
         return rtl_Cipher_E_Direction;
 
-    return rtl_cipherARCFOUR_init_Impl (
-        &(pImpl->m_context),
-        pKeyData, nKeyLen, pArgData, nArgLen);
+    return rtl_cipherARCFOUR_init_Impl (&(pImpl->m_context), pKeyData, nKeyLen);
 }
 
 /*
