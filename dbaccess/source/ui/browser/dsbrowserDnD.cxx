@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 08:31:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:57:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -223,7 +223,7 @@ namespace dbaui
     }
 
     // -----------------------------------------------------------------------------
-    sal_Bool SbaTableQueryBrowser::requestDrag( sal_Int8 _nAction, const Point& _rPosPixel )
+    sal_Bool SbaTableQueryBrowser::requestDrag( sal_Int8 /*_nAction*/, const Point& _rPosPixel )
     {
         // get the affected list entry
         // ensure that the entry which the user clicked at is selected
@@ -253,7 +253,7 @@ namespace dbaui
         return 0;
     }
     // -----------------------------------------------------------------------------
-    sal_Bool SbaTableQueryBrowser::isEntryCutAllowed(SvLBoxEntry* _pEntry) const
+    sal_Bool SbaTableQueryBrowser::isEntryCutAllowed(SvLBoxEntry* /*_pEntry*/) const
     {
         // at the momoent this isn't allowed
         return sal_False;
@@ -265,7 +265,7 @@ namespace dbaui
         return  (eType == etTable || eType == etQuery || eType == etView);
     }
     // -----------------------------------------------------------------------------
-    sal_Bool SbaTableQueryBrowser::isEntryPasteAllowed(SvLBoxEntry* _pEntry) const
+    sal_Bool SbaTableQueryBrowser::isEntryPasteAllowed(SvLBoxEntry* /*_pEntry*/) const
     {
         return sal_False;
     }
@@ -293,7 +293,7 @@ namespace dbaui
         return m_aTableCopyHelper.copyTagTable( _rDesc, _bCheck, xDestConnection );
     }
     // -----------------------------------------------------------------------------
-    IMPL_LINK( SbaTableQueryBrowser, OnAsyncDrop, void*, NOTINTERESTEDIN )
+    IMPL_LINK( SbaTableQueryBrowser, OnAsyncDrop, void*, /*NOTINTERESTEDIN*/ )
     {
         m_nAsyncDrop = 0;
         ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
