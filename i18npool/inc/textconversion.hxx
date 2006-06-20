@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textconversion.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:35:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:40:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,7 @@ public:
 protected :
     const sal_Char* implementationName;
     oslModule hModule;
-    void* SAL_CALL getFunctionBySymbol(const sal_Char* func);
+    oslGenericFunction SAL_CALL getFunctionBySymbol(const sal_Char* func);
 };
 
 // for Hangul2Hanja conversion
