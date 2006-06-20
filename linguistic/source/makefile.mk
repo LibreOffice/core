@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 14:07:40 $
+#   last change: $Author: hr $ $Date: 2006-06-20 11:10:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@ PRJ=..
 PRJNAME=linguistic
 TARGET=lng
 ENABLE_EXCEPTIONS=TRUE
+EXTERNAL_WARNINGS_NOT_ERRORS=TRUE
 
 #----- Settings ---------------------------------------------------------
 
