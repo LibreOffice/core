@@ -4,9 +4,9 @@
  *
  *  $RCSfile: main.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:47:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:15:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,6 +96,7 @@ int __cdecl main(int argc, char ** argv) \
 int WINAPI WinMain( HINSTANCE _hinst, HINSTANCE _dummy, char* _cmdline, int _nshow ) \
 { \
     int argc = __argc; char ** argv = __argv; \
+    (void) _hinst; (void) _dummy; (void) _cmdline; (void) _nshow; /* unused */ \
     osl_setCommandArgs(argc, argv); \
     return sal_main(argc, argv); \
 }
