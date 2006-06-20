@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FTable.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:57:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:26:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,14 +71,14 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 
-DBG_NAME( file_OFileTable );
+DBG_NAME( file_OFileTable )
 OFileTable::OFileTable(sdbcx::OCollection* _pTables,OConnection* _pConnection)
 : OTable_TYPEDEF(_pTables,_pConnection->getMetaData()->storesMixedCaseQuotedIdentifiers())
                 ,m_pConnection(_pConnection)
-                ,m_nFilePos(0)
-                ,m_nBufferSize(0)
-                ,m_pBuffer(NULL)
                 ,m_pFileStream(NULL)
+                ,m_nFilePos(0)
+                ,m_pBuffer(NULL)
+                ,m_nBufferSize(0)
                 ,m_bWriteable(sal_False)
 {
     DBG_CTOR( file_OFileTable, NULL );
@@ -101,10 +101,10 @@ OFileTable::OFileTable( sdbcx::OCollection* _pTables,OConnection* _pConnection,
                                   _SchemaName,
                                   _CatalogName)
                 ,m_pConnection(_pConnection)
-                ,m_nFilePos(0)
-                ,m_nBufferSize(0)
-                ,m_pBuffer(NULL)
                 ,m_pFileStream(NULL)
+                ,m_nFilePos(0)
+                ,m_pBuffer(NULL)
+                ,m_nBufferSize(0)
                 ,m_bWriteable(sal_False)
 {
     DBG_CTOR( file_OFileTable, NULL );
@@ -187,10 +187,8 @@ Sequence< sal_Int8 > OFileTable::getUnoTunnelImplementationId()
 sal_Int64 OFileTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
     return (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
-                ?
-            (sal_Int64)this
-                :
-            OTable_TYPEDEF::getSomething(rId);
+                ? reinterpret_cast< sal_Int64 >( this )
+                : OTable_TYPEDEF::getSomething(rId);
 }
 // -----------------------------------------------------------------------------
 void OFileTable::FileClose()
@@ -221,27 +219,29 @@ void SAL_CALL OFileTable::release() throw()
     OTable_TYPEDEF::release();
 }
 // -----------------------------------------------------------------------------
-BOOL OFileTable::InsertRow(OValueRefVector& rRow, BOOL bFlush,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols)
+BOOL OFileTable::InsertRow(OValueRefVector& /*rRow*/, BOOL /*bFlush*/,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& /*_xCols*/)
 {
     return sal_False;
 }
 // -----------------------------------------------------------------------------
-BOOL OFileTable::DeleteRow(const OSQLColumns& _rCols)
+BOOL OFileTable::DeleteRow(const OSQLColumns& /*_rCols*/)
 {
     return sal_False;
 }
 // -----------------------------------------------------------------------------
-BOOL OFileTable::UpdateRow(OValueRefVector& rRow, OValueRefRow& pOrgRow,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols)
+BOOL OFileTable::UpdateRow(OValueRefVector& /*rRow*/, OValueRefRow& /*pOrgRow*/,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& /*_xCols*/)
 {
     return sal_False;
 }
 // -----------------------------------------------------------------------------
-void OFileTable::addColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& descriptor)
+void OFileTable::addColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& /*descriptor*/)
 {
+    OSL_ENSURE( false, "OFileTable::addColumn: not implemented!" );
 }
 // -----------------------------------------------------------------------------
-void OFileTable::dropColumn(sal_Int32 _nPos)
+void OFileTable::dropColumn(sal_Int32 /*_nPos*/)
 {
+    OSL_ENSURE( false, "OFileTable::addColumn: not implemented!" );
 }
 
 // -----------------------------------------------------------------------------
