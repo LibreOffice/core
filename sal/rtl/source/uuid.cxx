@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uuid.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:07:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:31:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,11 +178,15 @@ struct PoolHolder: public rtl::Static< Pool, PoolHolder > {};
 
 static sal_uInt16 getInt16RandomValue( sal_uInt64 nSystemTime )
 {
-    sal_uInt16 n;
+    sal_uInt16 n = 0;
 
     Pool & pool = PoolHolder::get();
-    OSL_VERIFY( rtl_Random_E_None == pool.addBytes( &nSystemTime, sizeof( nSystemTime ) ) );
-    OSL_VERIFY( rtl_Random_E_None == pool.getBytes( &n, 2 ) );
+    if ( ( pool.addBytes( &nSystemTime, sizeof( nSystemTime ) )
+           != rtl_Random_E_None )
+         || pool.getBytes( &n, 2 ) != rtl_Random_E_None )
+    {
+        OSL_ASSERT( false );
+    }
     return n;
 }
 
@@ -297,8 +301,8 @@ extern "C" void SAL_CALL rtl_createUuid( sal_uInt8 *pTargetUUID ,
 {
     sal_uInt8 puNode[6];
     sal_uInt64 nTimeStamp;
-    sal_uInt64 nLastTime;
-    sal_uInt16 nClockSeq;
+    sal_uInt64 nLastTime = 0;
+    sal_uInt16 nClockSeq = 0;
 
     /* at least guarantee that we are alone in the process */
     osl_acquireMutex( * osl_getGlobalMutex() );
