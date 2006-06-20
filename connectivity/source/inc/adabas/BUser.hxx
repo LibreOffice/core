@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BUser.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:47:04 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:59:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@ namespace connectivity
 
             ::rtl::OUString getPrivilegeString(sal_Int32 nRights) const;
             // return the privileges and additional the grant rights
-            void findPrivilegesAndGrantPrivileges(const ::rtl::OUString& objName, sal_Int32 objType,sal_Int32& nRights,sal_Int32& nRightsWithGrant) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            void getAnyTablePrivileges(const ::rtl::OUString& objName, sal_Int32& nRights,sal_Int32& nRightsWithGrant) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         public:
             virtual void refreshGroups();
         public:
