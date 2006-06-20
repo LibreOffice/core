@@ -119,8 +119,8 @@ void NotifyListener( HWND hWnd )
 
 
 int APIENTRY WinMain(HINSTANCE hInstance,
-                     HINSTANCE hPrevInstance,
-                     LPSTR     lpCmdLine,
+                     HINSTANCE /*hPrevInstance*/,
+                     LPSTR     /*lpCmdLine*/,
                      int       nCmdShow)
 {
     // Look for -killtray argument
@@ -404,7 +404,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 }
 
 // Mesage handler for about box.
-LRESULT CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM)
 {
     switch (message)
     {
