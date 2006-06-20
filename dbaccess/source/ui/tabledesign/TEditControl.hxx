@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TEditControl.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:49:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:32:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,7 +94,6 @@ namespace dbaui
         long nOldDataPos;
 
         BOOL bSaveOnMove;
-        BOOL bSaveFormatter;
         BOOL bReadOnly;
         //------------------------------------------------------------------
         // Hilfsklasse
@@ -166,9 +165,9 @@ namespace dbaui
         void            DisplayData( long nRow, BOOL bGrabFocus = TRUE );
             // erzwingt das Anzeigen der genannten Zeile (selbst wenn es eigentlich schon die aktuelle ist)
 
-        virtual void    SetData( long nRow, sal_uInt16 nColId, const TOTypeInfoSP& _pTypeInfo );
-        virtual void    SetData( long nRow, sal_uInt16 nColId, const ::com::sun::star::uno::Any& _rSaveData );
-        virtual ::com::sun::star::uno::Any  GetData( long nRow, sal_uInt16 nColId );
+        virtual void    SetCellData( long nRow, sal_uInt16 nColId, const TOTypeInfoSP& _pTypeInfo );
+        virtual void    SetCellData( long nRow, sal_uInt16 nColId, const ::com::sun::star::uno::Any& _rSaveData );
+        virtual ::com::sun::star::uno::Any  GetCellData( long nRow, sal_uInt16 nColId );
         virtual void    SetControlText( long nRow, sal_uInt16 nColId, const String& rText );
         virtual String  GetControlText( long nRow, sal_uInt16 nColId );
 
@@ -176,7 +175,7 @@ namespace dbaui
 
         ::std::vector< ::boost::shared_ptr<OTableRow> >* GetRowList(){ return m_pRowList; }
 
-         ::boost::shared_ptr<OTableRow>         GetActRow(){ return pActRow; }
+        ::boost::shared_ptr<OTableRow>         GetActRow(){ return pActRow; }
         void            CellModified( long nRow, sal_uInt16 nColId );
         void            SetReadOnly( BOOL bRead=TRUE );
 
