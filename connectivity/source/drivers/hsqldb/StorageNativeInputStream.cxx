@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StorageNativeInputStream.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 11:40:27 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:32:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-#if HAVE_CONFIG_H
+#if defined(HAVE_CONFIG_H) && HAVE_CONFIG_H
 #include <config.h>
 #endif
 
@@ -96,7 +96,7 @@ using namespace ::connectivity::hsqldb;
  * Signature: (Ljava/lang/String;Ljava/lang/String;I)V
  */
 JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStream_openStream
-  (JNIEnv * env, jobject obj_this,jstring key, jstring name, jint mode)
+  (JNIEnv * env, jobject /*obj_this*/,jstring key, jstring name, jint mode)
 {
 #ifdef HSQLDB_DBG
     {
@@ -152,7 +152,7 @@ JNIEXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStr
  * Signature: (Ljava/lang/String;Ljava/lang/String;)V
  */
 JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStream_close
-  (JNIEnv * env, jobject obj_this,jstring key, jstring name)
+  (JNIEnv * env, jobject /*obj_this*/,jstring key, jstring name)
 {
 #ifdef HSQLDB_DBG
     OperationLogFile aOpLog( env, name, "input" );
@@ -172,7 +172,7 @@ JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStr
  * Signature: (Ljava/lang/String;Ljava/lang/String;J)J
  */
 JNIEXPORT jlong JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStream_skip
-  (JNIEnv * env, jobject obj_this,jstring key, jstring name, jlong n)
+  (JNIEnv * env, jobject /*obj_this*/,jstring key, jstring name, jlong n)
 {
 #ifdef HSQLDB_DBG
     OperationLogFile( env, name, "input" ).logOperation( "skip()" );
@@ -192,7 +192,6 @@ JNIEXPORT jlong JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputSt
         {
             try
             {
-                sal_Int64 nBytesSkipped = 0;
                 sal_Int64 tmpLongVal = n;
                 sal_Int32 tmpIntVal;
 
@@ -239,7 +238,7 @@ JNIEXPORT jlong JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputSt
  * Signature: (Ljava/lang/String;Ljava/lang/String;)I
  */
 JNIEXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStream_available
-  (JNIEnv * env, jobject obj_this,jstring key, jstring name)
+  (JNIEnv * env, jobject /*obj_this*/,jstring key, jstring name)
 {
 #ifdef HSQLDB_DBG
     OperationLogFile aOpLog( env, name, "input" );
@@ -281,7 +280,7 @@ JNIEXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStr
  * Signature: (Ljava/lang/String;Ljava/lang/String;[B)I
  */
 JNIEXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStream_read__Ljava_lang_String_2Ljava_lang_String_2_3B
-  (JNIEnv * env, jobject obj_this,jstring key, jstring name, jbyteArray buffer)
+  (JNIEnv * env, jobject /*obj_this*/,jstring key, jstring name, jbyteArray buffer)
 {
 #ifdef HSQLDB_DBG
     OperationLogFile aOpLog( env, name, "input" );
