@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.42 $
+#   $Revision: 1.43 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 13:29:58 $
+#   last change: $Author: hr $ $Date: 2006-06-20 11:58:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,11 @@ TARGET=cppuhelper
 ENABLE_EXCEPTIONS=TRUE
 USE_DEFFILE=TRUE
 
+# not strictly a bootstrap service but containing
+# bootstrap code that may require generated files
+# without "-L" (light) switch
+BOOTSTRAP_SERVICE=TRUE
+
 .IF "$(OS)" != "WNT"
 UNIXVERSIONNAMES=UDK
 .ENDIF # WNT
@@ -50,7 +55,69 @@ UNIXVERSIONNAMES=UDK
 
 # --- Files --------------------------------------------------------
 
-INCPRE+=$(OUT)$/inc$/private
+UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb
+UNOUCRDEP=$(UNOUCRRDB)
+UNOUCROUT=$(OUT)$/inc$/$(TARGET)
+INCPRE+=$(OUT)$/inc$/$(TARGET) $(OUT)$/inc$/private
+
+UNOTYPES= \
+        com.sun.star.beans.PropertyAttribute \
+        com.sun.star.beans.PropertyValue \
+        com.sun.star.beans.XFastPropertySet \
+        com.sun.star.beans.XMultiPropertySet \
+        com.sun.star.beans.XPropertyAccess \
+        com.sun.star.beans.XPropertySet \
+        com.sun.star.bridge.UnoUrlResolver \
+        com.sun.star.bridge.XUnoUrlResolver \
+        com.sun.star.connection.SocketPermission \
+        com.sun.star.container.XHierarchicalNameAccess \
+        com.sun.star.container.XNameAccess \
+        com.sun.star.container.XNameContainer \
+        com.sun.star.container.XSet \
+        com.sun.star.io.FilePermission \
+        com.sun.star.io.IOException \
+        com.sun.star.lang.DisposedException \
+        com.sun.star.lang.WrappedTargetRuntimeException \
+        com.sun.star.lang.XComponent \
+        com.sun.star.lang.XEventListener \
+        com.sun.star.lang.XInitialization \
+        com.sun.star.lang.XMultiComponentFactory \
+        com.sun.star.lang.XMultiServiceFactory \
+        com.sun.star.lang.XServiceInfo \
+        com.sun.star.lang.XSingleComponentFactory \
+        com.sun.star.lang.XSingleServiceFactory \
+        com.sun.star.lang.XTypeProvider \
+        com.sun.star.loader.XImplementationLoader \
+        com.sun.star.reflection.XArrayTypeDescription \
+        com.sun.star.reflection.XCompoundTypeDescription \
+        com.sun.star.reflection.XEnumTypeDescription \
+        com.sun.star.reflection.XIdlClass \
+        com.sun.star.reflection.XIdlClassProvider \
+        com.sun.star.reflection.XIdlField2 \
+        com.sun.star.reflection.XIdlReflection \
+        com.sun.star.reflection.XIndirectTypeDescription \
+        com.sun.star.reflection.XInterfaceAttributeTypeDescription \
+        com.sun.star.reflection.XInterfaceAttributeTypeDescription2 \
+        com.sun.star.reflection.XInterfaceMemberTypeDescription \
+        com.sun.star.reflection.XInterfaceMethodTypeDescription \
+        com.sun.star.reflection.XInterfaceTypeDescription2 \
+        com.sun.star.reflection.XMethodParameter \
+        com.sun.star.reflection.XStructTypeDescription \
+        com.sun.star.reflection.XTypeDescription \
+        com.sun.star.reflection.XUnionTypeDescription \
+        com.sun.star.registry.XImplementationRegistration \
+        com.sun.star.registry.XRegistryKey \
+        com.sun.star.registry.XSimpleRegistry \
+        com.sun.star.security.RuntimePermission \
+        com.sun.star.security.XAccessController \
+        com.sun.star.uno.DeploymentException \
+        com.sun.star.uno.RuntimeException \
+        com.sun.star.uno.XAggregation \
+        com.sun.star.uno.XComponentContext \
+        com.sun.star.uno.XCurrentContext \
+        com.sun.star.uno.XUnloadingPreference \
+        com.sun.star.uno.XWeak \
+        com.sun.star.util.XMacroExpander
 
 .IF "$(debug)" != ""
 # msvc++: no inlining for debugging
