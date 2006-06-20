@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pkgcontentcaps.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:55:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:30:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,7 +108,7 @@ using namespace package_ucp;
 
 // virtual
 uno::Sequence< beans::Property > Content::getProperties(
-            const uno::Reference< star::ucb::XCommandEnvironment > & xEnv )
+            const uno::Reference< star::ucb::XCommandEnvironment > & /*xEnv*/ )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
@@ -319,7 +319,7 @@ uno::Sequence< beans::Property > Content::getProperties(
 //=========================================================================
 // virtual
 uno::Sequence< star::ucb::CommandInfo > Content::getCommands(
-            const uno::Reference< star::ucb::XCommandEnvironment > & xEnv )
+            const uno::Reference< star::ucb::XCommandEnvironment > & /*xEnv*/ )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
