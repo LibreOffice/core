@@ -4,9 +4,9 @@
  *
  *  $RCSfile: curledit.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:33:39 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:59:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,7 +101,7 @@ void OConnectionURLEdit::SetText(const String& _rStr)
 }
 
 //-------------------------------------------------------------------------
-void OConnectionURLEdit::SetText(const String& _rStr, const Selection& _rNewSelection)
+void OConnectionURLEdit::SetText(const String& _rStr, const Selection& /*_rNewSelection*/)
 {
     // create new sub controls, if necessary
     if (!GetSubEdit())
