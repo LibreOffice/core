@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UserAdminDlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:27:51 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:05:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,8 +161,9 @@ DBG_NAME(OUserAdminDlg)
                 if ( !bError )
                 {
                     m_xConnection = createConnection().first;
+                    bError = !m_xConnection.is();
 
-                    if ( !(bError = !m_xConnection.is()) )
+                    if ( !bError )
                     {
                         // now set the tables supplier at the table control
                         xUsersSup.set(xDriver->getDataDefinitionByConnection(m_xConnection),UNO_QUERY);
