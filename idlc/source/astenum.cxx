@@ -4,9 +4,9 @@
  *
  *  $RCSfile: astenum.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:06:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:47:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,10 +128,5 @@ sal_Bool AstEnum::dump(RegistryKey& rKey)
 
 AstDeclaration* AstEnum::addDeclaration(AstDeclaration* pDecl)
 {
-    AstScope* pScope = getScope();
-    // add enum value to enclosing scope of the enum
-//  pDecl->setName(scopeAsDecl(pScope)->getScopedName() + "::" + pDecl->getLocalName());
-//  pScope->addDeclaration(pDecl);
-
     return AstScope::addDeclaration(pDecl);
 }
