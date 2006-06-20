@@ -4,9 +4,9 @@
  *
  *  $RCSfile: collatorImpl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:35:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:44:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@ CollatorImpl::CollatorImpl( const Reference < XMultiServiceFactory >& rxMSF ) : 
 CollatorImpl::~CollatorImpl()
 {
     // Clear lookuptable
-    for (sal_Int32 l = 0; l < lookupTable.size(); l++)
+    for (size_t l = 0; l < lookupTable.size(); l++)
         delete lookupTable[l];
     lookupTable.clear();
 }
@@ -97,7 +97,7 @@ CollatorImpl::loadDefaultCollator(const lang::Locale& rLocale, sal_Int32 collato
             return loadCollatorAlgorithm(imp[i].unoID, rLocale, collatorOptions);
 
     throw RuntimeException(); // not default is defined
-    return 0;
+    //return 0;
 }
 
 sal_Int32 SAL_CALL
@@ -145,7 +145,7 @@ CollatorImpl::listCollatorAlgorithms( const lang::Locale& rLocale ) throw(Runtim
 }
 
 Sequence< sal_Int32 > SAL_CALL
-CollatorImpl::listCollatorOptions( const OUString& collatorAlgorithmName ) throw(RuntimeException)
+CollatorImpl::listCollatorOptions( const OUString& /*collatorAlgorithmName*/ ) throw(RuntimeException)
 {
     Sequence< OUString > option_str = localedata->getCollationOptions(nLocale);
     Sequence< sal_Int32 > option_int(option_str.getLength());
@@ -163,7 +163,7 @@ sal_Bool SAL_CALL
 CollatorImpl::createCollator(const lang::Locale& rLocale, const OUString& serviceName, const OUString& rSortAlgorithm)
     throw(RuntimeException)
 {
-    for (sal_Int32 l = 0; l < lookupTable.size(); l++) {
+    for (size_t l = 0; l < lookupTable.size(); l++) {
         cachedItem = lookupTable[l];
         if (cachedItem->service.equals(serviceName)) {// cross locale sharing
             lookupTable.push_back(cachedItem = new lookupTableItem(rLocale, rSortAlgorithm, serviceName, cachedItem->xC));
@@ -191,7 +191,7 @@ void SAL_CALL
 CollatorImpl::loadCachedCollator(const lang::Locale& rLocale, const OUString& rSortAlgorithm)
     throw(RuntimeException)
 {
-    for (sal_Int32 i = 0; i < lookupTable.size(); i++) {
+    for (size_t i = 0; i < lookupTable.size(); i++) {
         cachedItem = lookupTable[i];
         if (cachedItem->equals(rLocale, rSortAlgorithm)) {
             return;
