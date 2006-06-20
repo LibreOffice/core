@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LFolderList.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:16:17 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:23:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,7 @@ namespace connectivity
             ::std::vector<sal_Int32>        m_aTypes;       // holds all type for columns just to avoid to ask the propertyset
             ::std::vector<sal_Int32>        m_aPrecisions;  // same as aboth
             ::std::vector<sal_Int32>        m_aScales;
-            OEvoabString                    m_aCurrentLine;
+            QuotedTokenizedString           m_aCurrentLine;
             ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > m_xNumberFormatter;
             sal_Int32                       m_nFilePos;                 // aktuelle IResultSetHelper::Movement
             SvStream*                       m_pFileStream;
@@ -89,10 +89,6 @@ namespace connectivity
         public:
 
             OEvoabFolderList( OEvoabConnection* _pConnection);
-            OEvoabFolderList( OEvoabConnection* _pConnection,
-                    const ::rtl::OUString& _Name,
-                    const ::rtl::OUString& _Type
-                );
 
             OEvoabConnection* getConnection() const { return m_pConnection;}
             ::vos::ORef<OSQLColumns> getTableColumns() const {return m_aColumns;}
