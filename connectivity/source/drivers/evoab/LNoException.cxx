@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LNoException.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:45:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:23:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,7 +187,6 @@ sal_Bool OEvoabTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_In
     // Positionierung vorbereiten:
     //OSL_TRACE("OEvoabTable::(before SeekRow,m_pFileStriam Exist)m_aCurrentLine = %d\n", ((OUtoCStr(::rtl::OUString(m_aCurrentLine))) ? (OUtoCStr(::rtl::OUString(m_aCurrentLine))):("NULL")) );
 
-    sal_uInt32 nTempPos = m_nFilePos;
     m_nFilePos = nCurPos;
 
     switch(eCursorPosition)
