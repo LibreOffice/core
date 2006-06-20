@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dindexnode.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:41:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:21:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,9 @@
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef CONNECTIVITY_DIAGNOSE_EX_H
+#include "diagnose_ex.h"
 #endif
 
 #include <algorithm>
@@ -93,12 +96,12 @@ ONDXKey::ONDXKey(double aVal, UINT32 nRec)
 // Index Seite
 //==================================================================
 ONDXPage::ONDXPage(ODbaseIndex& rInd, sal_uInt32 nPos, ONDXPage* pParent)
-           :rIndex(rInd)
-           ,nPagePos(nPos)
-           ,nCount(0)
+           :nPagePos(nPos)
            ,bModified(FALSE)
-           ,ppNodes(NULL)
+           ,nCount(0)
            ,aParent(pParent)
+           ,rIndex(rInd)
+           ,ppNodes(NULL)
 {
     sal_uInt16 nT = rIndex.getHeader().db_maxkeys;
     ppNodes = new ONDXNode[nT];
@@ -330,7 +333,7 @@ BOOL ONDXPage::Insert(USHORT nPos, ONDXNode& rNode)
     {
         ++nCount;
         // nach rechts verschieben
-        for (USHORT i = std::min(nMaxCount-1, nCount-1); nPos < i; i--)
+        for (USHORT i = std::min((USHORT)(nMaxCount-1), (USHORT)(nCount-1)); nPos < i; --i)
             (*this)[i] = (*this)[i-1];
     }
     else
@@ -712,17 +715,361 @@ void ONDXPage::Merge(USHORT nParentNodePos, ONDXPagePtr xPage)
         }
     }
 }
-// -------------------------------------------------------------------------
+//==================================================================
+// ONDXNode
+//==================================================================
+
+//------------------------------------------------------------------
+void ONDXNode::Read(SvStream &rStream, ODbaseIndex& rIndex)
+{
+    rStream >> aKey.nRecord; // schluessel
+
+    if (rIndex.getHeader().db_keytype)
+    {
+        double aDbl;
+        rStream >> aDbl;
+        aKey = ONDXKey(aDbl,aKey.nRecord);
+    }
+    else
+    {
+        ByteString aBuf;
+        USHORT nLen = rIndex.getHeader().db_keylen;
+        char* pStr = aBuf.AllocBuffer(nLen+1);
+
+        rStream.Read(pStr,nLen);
+        pStr[nLen] = 0;
+        aBuf.ReleaseBufferAccess();
+        aBuf.EraseTrailingChars();
+
+        //  aKey = ONDXKey((aBuf,rIndex.GetDBFConnection()->GetCharacterSet()) ,aKey.nRecord);
+        aKey = ONDXKey(::rtl::OUString(aBuf.GetBuffer(),aBuf.Len(),rIndex.m_pTable->getConnection()->getTextEncoding()) ,aKey.nRecord);
+    }
+    rStream >> aChild;
+}
+
+union
+{
+    double aDbl;
+    char   aData[128];
+} aNodeData;
+//------------------------------------------------------------------
+void ONDXNode::Write(SvStream &rStream, const ONDXPage& rPage) const
+{
+    const ODbaseIndex& rIndex = rPage.GetIndex();
+    if (!rIndex.isUnique() || rPage.IsLeaf())
+        rStream << (sal_uInt32)aKey.nRecord; // schluessel
+    else
+        rStream << (sal_uInt32)0;   // schluessel
+
+    if (rIndex.getHeader().db_keytype) // double
+    {
+        if (aKey.getValue().isNull())
+        {
+            memset(aNodeData.aData,0,rIndex.getHeader().db_keylen);
+            rStream.Write((BYTE*)aNodeData.aData,rIndex.getHeader().db_keylen);
+        }
+        else
+            rStream << (double) aKey.getValue();
+    }
+    else
+    {
+        memset(aNodeData.aData,0x20,rIndex.getHeader().db_keylen);
+        if (!aKey.getValue().isNull())
+        {
+            ::rtl::OUString sValue = aKey.getValue();
+            ByteString aText(sValue.getStr(), rIndex.m_pTable->getConnection()->getTextEncoding());
+            strncpy(aNodeData.aData,aText.GetBuffer(),std::min(rIndex.getHeader().db_keylen, aText.Len()));
+        }
+        rStream.Write((BYTE*)aNodeData.aData,rIndex.getHeader().db_keylen);
+    }
+    rStream << aChild;
+}
 
 
+//------------------------------------------------------------------
+ONDXPagePtr& ONDXNode::GetChild(ODbaseIndex* pIndex, ONDXPage* pParent)
+{
+    if (!aChild.Is() && pIndex)
+    {
+        aChild = pIndex->CreatePage(aChild.GetPagePos(),pParent,aChild.HasPage());
+    }
+    return aChild;
+}
 
+//==================================================================
+// ONDXKey
+//==================================================================
+//------------------------------------------------------------------
+BOOL ONDXKey::IsText(sal_Int32 eType)
+{
+    return eType == DataType::VARCHAR || eType == DataType::CHAR;
+}
+
+//------------------------------------------------------------------
+StringCompare ONDXKey::Compare(const ONDXKey& rKey) const
+{
+    //  DBG_ASSERT(is(), "Falscher Indexzugriff");
+    StringCompare eResult;
+
+    if (getValue().isNull())
+    {
+        if (rKey.getValue().isNull() || (rKey.IsText(getDBType()) && !rKey.getValue().getString().getLength()))
+            eResult = COMPARE_EQUAL;
+        else
+            eResult = COMPARE_LESS;
+    }
+    else if (rKey.getValue().isNull())
+    {
+        if (getValue().isNull() || (IsText(getDBType()) && !getValue().getString().getLength()))
+            eResult = COMPARE_EQUAL;
+        else
+            eResult = COMPARE_GREATER;
+    }
+    else if (IsText(getDBType()))
+    {
+        INT32 nRes = getValue().getString().compareTo(rKey.getValue());
+        eResult = (nRes > 0) ? COMPARE_GREATER : (nRes == 0) ? COMPARE_EQUAL : COMPARE_LESS;
+    }
+    else
+    {
+        double m = getValue(),n = rKey.getValue();
+        eResult = (m > n) ? COMPARE_GREATER : (n == m) ? COMPARE_EQUAL : COMPARE_LESS;
+    }
+
+    // Record vergleich, wenn Index !Unique
+    if (eResult == COMPARE_EQUAL && nRecord && rKey.nRecord)
+        eResult = (nRecord > rKey.nRecord) ? COMPARE_GREATER :
+                  (nRecord == rKey.nRecord) ? COMPARE_EQUAL : COMPARE_LESS;
+
+    return eResult;
+}
 // -----------------------------------------------------------------------------
-//namespace connectivity
-//{
-//  namespace dbase
-//  {
-//  SV_IMPL_REF(ONDXPage);
-//  }
-//}
+void ONDXKey::setValue(const ORowSetValue& _rVal)
+{
+    xValue = _rVal;
+}
+// -----------------------------------------------------------------------------
+const ORowSetValue& ONDXKey::getValue() const
+{
+    return xValue;
+}
+// -----------------------------------------------------------------------------
+SvStream& connectivity::dbase::operator >> (SvStream &rStream, ONDXPagePtr& rPage)
+{
+    rStream >> rPage.nPagePos;
+    return rStream;
+}
+// -----------------------------------------------------------------------------
+SvStream& connectivity::dbase::operator << (SvStream &rStream, const ONDXPagePtr& rPage)
+{
+    rStream << rPage.nPagePos;
+    return rStream;
+}
+// -----------------------------------------------------------------------------
+//==================================================================
+// ONDXPagePtr
+//==================================================================
+//------------------------------------------------------------------
+ONDXPagePtr::ONDXPagePtr(const ONDXPagePtr& rRef)
+              :ONDXPageRef(rRef)
+              ,nPagePos(rRef.nPagePos)
+{
+}
+
+//------------------------------------------------------------------
+ONDXPagePtr::ONDXPagePtr(ONDXPage* pRefPage)
+              :ONDXPageRef(pRefPage)
+              ,nPagePos(0)
+{
+    if (pRefPage)
+        nPagePos = pRefPage->GetPagePos();
+}
+//------------------------------------------------------------------
+ONDXPagePtr& ONDXPagePtr::operator=(const ONDXPagePtr& rRef)
+{
+    ONDXPageRef::operator=(rRef);
+    nPagePos = rRef.nPagePos;
+    return *this;
+}
+
+//------------------------------------------------------------------
+ONDXPagePtr& ONDXPagePtr::operator= (ONDXPage* pRef)
+{
+    ONDXPageRef::operator=(pRef);
+    nPagePos = (pRef) ? pRef->GetPagePos() : 0;
+    return *this;
+}
+// -----------------------------------------------------------------------------
+static UINT32 nValue;
+//------------------------------------------------------------------
+SvStream& connectivity::dbase::operator >> (SvStream &rStream, ONDXPage& rPage)
+{
+    rStream.Seek(rPage.GetPagePos() * 512);
+    rStream >> nValue >> rPage.aChild;
+    rPage.nCount = USHORT(nValue);
+
+//  DBG_ASSERT(rPage.nCount && rPage.nCount < rPage.GetIndex().GetMaxNodes(), "Falscher Count");
+    for (USHORT i = 0; i < rPage.nCount; i++)
+        rPage[i].Read(rStream, rPage.GetIndex());
+    return rStream;
+}
+
+//------------------------------------------------------------------
+SvStream& connectivity::dbase::operator << (SvStream &rStream, const ONDXPage& rPage)
+{
+    // Seite existiert noch nicht
+    ULONG nSize = (rPage.GetPagePos() + 1) * 512;
+    if (nSize > rStream.Seek(STREAM_SEEK_TO_END))
+    {
+        rStream.SetStreamSize(nSize);
+        rStream.Seek(rPage.GetPagePos() * 512);
+
+        char aEmptyData[512];
+        memset(aEmptyData,0x00,512);
+        rStream.Write((BYTE*)aEmptyData,512);
+    }
+    ULONG nCurrentPos = rStream.Seek(rPage.GetPagePos() * 512);
+    OSL_UNUSED( nCurrentPos );
+
+    nValue = rPage.nCount;
+    rStream << nValue << rPage.aChild;
+
+    USHORT i = 0;
+    for (; i < rPage.nCount; i++)
+        rPage[i].Write(rStream, rPage);
+
+    // check if we have to fill the stream with '\0'
+    if(i < rPage.rIndex.getHeader().db_maxkeys)
+    {
+        ULONG nTell = rStream.Tell() % 512;
+        USHORT nBufferSize = rStream.GetBufferSize();
+        ULONG nRemainSize = nBufferSize - nTell;
+        char* pEmptyData = new char[nRemainSize];
+        memset(pEmptyData,0x00,nRemainSize);
+        rStream.Write((BYTE*)pEmptyData,nRemainSize);
+        rStream.Seek(nTell);
+        delete [] pEmptyData;
+    }
+    return rStream;
+}
+// -----------------------------------------------------------------------------
+#if OSL_DEBUG_LEVEL > 1
+//------------------------------------------------------------------
+void ONDXPage::PrintPage()
+{
+    DBG_TRACE4("\nSDB: -----------Page: %d  Parent: %d  Count: %d  Child: %d-----",
+        nPagePos, HasParent() ? aParent->GetPagePos() : 0 ,nCount, aChild.GetPagePos());
+
+    for (USHORT i = 0; i < nCount; i++)
+    {
+        ONDXNode rNode = (*this)[i];
+        ONDXKey&  rKey = rNode.GetKey();
+        if (!IsLeaf())
+            rNode.GetChild(&rIndex, this);
+
+        if (rKey.getValue().isNull())
+        {
+            DBG_TRACE2("SDB: [%d,NULL,%d]",rKey.GetRecord(), rNode.GetChild().GetPagePos());
+        }
+        else if (rIndex.getHeader().db_keytype)
+        {
+            DBG_TRACE3("SDB: [%d,%f,%d]",rKey.GetRecord(), rKey.getValue().getDouble(),rNode.GetChild().GetPagePos());
+        }
+        else
+        {
+            DBG_TRACE3("SDB: [%d,%s,%d]",rKey.GetRecord(), (const char* )ByteString(rKey.getValue().getString().getStr(), rIndex.m_pTable->getConnection()->getTextEncoding()).GetBuffer(),rNode.GetChild().GetPagePos());
+        }
+    }
+    DBG_TRACE("SDB: -----------------------------------------------\n");
+    if (!IsLeaf())
+    {
+#if OSL_DEBUG_LEVEL > 1
+        GetChild(&rIndex)->PrintPage();
+        for (USHORT i = 0; i < nCount; i++)
+        {
+            ONDXNode rNode = (*this)[i];
+            rNode.GetChild(&rIndex,this)->PrintPage();
+        }
+#endif
+    }
+    DBG_TRACE("SDB: ===============================================\n");
+}
+#endif
+// -----------------------------------------------------------------------------
+BOOL ONDXPage::IsFull() const
+{
+    return Count() == rIndex.getHeader().db_maxkeys;
+}
+// -----------------------------------------------------------------------------
+//------------------------------------------------------------------
+USHORT ONDXPage::Search(const ONDXKey& rSearch)
+{
+    // binare Suche spaeter
+    USHORT i = 0xFFFF;
+    while (++i < Count())
+        if ((*this)[i].GetKey() == rSearch)
+            break;
+
+    return (i < Count()) ? i : NODE_NOTFOUND;
+}
+
+//------------------------------------------------------------------
+USHORT ONDXPage::Search(const ONDXPage* pPage)
+{
+    USHORT i = 0xFFFF;
+    while (++i < Count())
+        if (((*this)[i]).GetChild() == pPage)
+            break;
+
+    // wenn nicht gefunden, dann wird davon ausgegangen, dass die Seite selbst
+    // auf die Page zeigt
+    return (i < Count()) ? i : NODE_NOTFOUND;
+}
+// -----------------------------------------------------------------------------
+// laeuft rekursiv
+void ONDXPage::SearchAndReplace(const ONDXKey& rSearch,
+                                  ONDXKey& rReplace)
+{
+    OSL_ENSURE(rSearch != rReplace,"Invalid here:rSearch == rReplace");
+    if (rSearch != rReplace)
+    {
+        USHORT nPos = NODE_NOTFOUND;
+        ONDXPage* pPage = this;
+
+        while (pPage && (nPos = pPage->Search(rSearch)) == NODE_NOTFOUND)
+            pPage = pPage->aParent;
+
+        if (pPage)
+        {
+            (*pPage)[nPos].GetKey() = rReplace;
+            pPage->SetModified(TRUE);
+        }
+    }
+}
+// -----------------------------------------------------------------------------
+ONDXNode& ONDXPage::operator[] (USHORT nPos)
+{
+    DBG_ASSERT(nCount > nPos, "falscher Indexzugriff");
+    return ppNodes[nPos];
+}
+
+//------------------------------------------------------------------
+const ONDXNode& ONDXPage::operator[] (USHORT nPos) const
+{
+    DBG_ASSERT(nCount > nPos, "falscher Indexzugriff");
+    return ppNodes[nPos];
+}
+// -----------------------------------------------------------------------------
+void ONDXPage::Remove(USHORT nPos)
+{
+    DBG_ASSERT(nCount > nPos, "falscher Indexzugriff");
+
+    for (USHORT i = nPos; i < (nCount-1); i++)
+        (*this)[i] = (*this)[i+1];
+
+    nCount--;
+    bModified = TRUE;
+}
+// -----------------------------------------------------------------------------
 
 
