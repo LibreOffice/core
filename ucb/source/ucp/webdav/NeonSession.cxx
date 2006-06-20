@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NeonSession.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:26:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:37:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -378,18 +378,18 @@ extern "C" int NeonSession_NeonAuth( void *       inUserData,
 }
 
 // -------------------------------------------------------------------
-extern "C" void NeonSession_ProgressNotify( void * userdata,
-                                            off_t progress,
-                                            off_t total )
+extern "C" void NeonSession_ProgressNotify( void *,
+                                            off_t,
+                                            off_t )
 {
     // progress: bytes read so far
     // total:    total bytes to read, -1 -> total count not known
 }
 
 // -------------------------------------------------------------------
-extern "C" void NeonSession_StatusNotify( void * userdata,
-                                          ne_conn_status status,
-                                          const char *info )
+extern "C" void NeonSession_StatusNotify( void *,
+                                          ne_conn_status,
+                                          const char * )
 {
 #if 0
     typedef enum {
@@ -549,7 +549,7 @@ NeonSession::~NeonSession( )
         */
     }
 
-    delete m_pRequestData;
+    delete static_cast<RequestDataMap*>(m_pRequestData);
 }
 
 // -------------------------------------------------------------------
@@ -928,9 +928,13 @@ void NeonSession::PROPPATCH( const rtl::OUString &                   inPath,
     for ( n = 0; n < nPropCount; ++n )
     {
         free( (void *)pItems[ n ].name->name );
-        delete (void *)pItems[ n ].name;
+        delete pItems[ n ].name;
         free( (void *)pItems[ n ].value );
     }
+    #if 0
+    // FIXME: shouldn't we delete the list ?
+    delete [] pItems;
+    #endif
 
     HandleError( theRetVal );
 }
@@ -1678,7 +1682,7 @@ bool NeonSession::getDataFromInputStream(
         {
             try
             {
-                sal_Int32 nSize = xSeekable->getLength();
+                sal_Int32 nSize = sal::static_int_cast<sal_Int32>(xSeekable->getLength());
                 sal_Int32 nRead = xStream->readBytes( rData, nSize );
 
                 if ( nRead == nSize )
