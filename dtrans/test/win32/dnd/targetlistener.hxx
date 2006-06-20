@@ -4,9 +4,9 @@
  *
  *  $RCSfile: targetlistener.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:32:57 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 06:09:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,13 @@
 #ifndef _TARGETLISTENER_HXX_
 #define _TARGETLISTENER_HXX_
 
+#if defined _MSC_VER
+#pragma warning(push,1)
+#endif
 #include <windows.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
 #include <com/sun/star/datatransfer/dnd/DropTargetDropEvent.hpp>
