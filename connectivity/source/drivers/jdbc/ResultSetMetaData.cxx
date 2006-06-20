@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ResultSetMetaData.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:12:17 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:36:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,8 +92,8 @@ sal_Int32 SAL_CALL java_sql_ResultSetMetaData::getColumnDisplaySize( sal_Int32 c
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "(I)I";
-        static char * cMethodName = "getColumnDisplaySize";
+        static const char * cSignature = "(I)I";
+        static const char * cMethodName = "getColumnDisplaySize";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -114,8 +114,8 @@ sal_Int32 SAL_CALL java_sql_ResultSetMetaData::getColumnType( sal_Int32 column )
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "(I)I";
-        static char * cMethodName = "getColumnType";
+        static const char * cSignature = "(I)I";
+        static const char * cMethodName = "getColumnType";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -136,8 +136,8 @@ sal_Int32 SAL_CALL java_sql_ResultSetMetaData::getColumnCount(  ) throw(SQLExcep
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()I";
-        static char * cMethodName = "getColumnCount";
+        static const char * cSignature = "()I";
+        static const char * cMethodName = "getColumnCount";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -157,8 +157,8 @@ sal_Bool SAL_CALL java_sql_ResultSetMetaData::isCaseSensitive( sal_Int32 column 
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
         // temporaere Variable initialisieren
-        static char * cSignature = "(I)Z";
-        static char * cMethodName = "isCaseSensitive";
+        static const char * cSignature = "(I)Z";
+        static const char * cMethodName = "isCaseSensitive";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -177,8 +177,8 @@ sal_Bool SAL_CALL java_sql_ResultSetMetaData::isCaseSensitive( sal_Int32 column 
     ::rtl::OUString aStr;
     if( t.pEnv ){
         // temporaere Variable initialisieren
-        static char * cSignature = "(I)Ljava/lang/String;";
-        static char * cMethodName = "getSchemaName";
+        static const char * cSignature = "(I)Ljava/lang/String;";
+        static const char * cMethodName = "getSchemaName";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -202,8 +202,8 @@ sal_Bool SAL_CALL java_sql_ResultSetMetaData::isCaseSensitive( sal_Int32 column 
     ::rtl::OUString aStr;
     if( t.pEnv ){
         // temporaere Variable initialisieren
-        static char * cSignature = "(I)Ljava/lang/String;";
-        static char * cMethodName = "getColumnName";
+        static const char * cSignature = "(I)Ljava/lang/String;";
+        static const char * cMethodName = "getColumnName";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -226,8 +226,8 @@ sal_Bool SAL_CALL java_sql_ResultSetMetaData::isCaseSensitive( sal_Int32 column 
     ::rtl::OUString aStr;
     if( t.pEnv ){
         // temporaere Variable initialisieren
-        static char * cSignature = "(I)Ljava/lang/String;";
-        static char * cMethodName = "getTableName";
+        static const char * cSignature = "(I)Ljava/lang/String;";
+        static const char * cMethodName = "getTableName";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -250,8 +250,8 @@ sal_Bool SAL_CALL java_sql_ResultSetMetaData::isCaseSensitive( sal_Int32 column 
     ::rtl::OUString aStr;
     if( t.pEnv ){
         // temporaere Variable initialisieren
-        static char * cSignature = "(I)Ljava/lang/String;";
-        static char * cMethodName = "getCatalogName";
+        static const char * cSignature = "(I)Ljava/lang/String;";
+        static const char * cMethodName = "getCatalogName";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -274,8 +274,8 @@ sal_Bool SAL_CALL java_sql_ResultSetMetaData::isCaseSensitive( sal_Int32 column 
     ::rtl::OUString aStr;
     if( t.pEnv ){
         // temporaere Variable initialisieren
-        static char * cSignature = "(I)Ljava/lang/String;";
-        static char * cMethodName = "getColumnTypeName";
+        static const char * cSignature = "(I)Ljava/lang/String;";
+        static const char * cMethodName = "getColumnTypeName";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -298,8 +298,8 @@ sal_Bool SAL_CALL java_sql_ResultSetMetaData::isCaseSensitive( sal_Int32 column 
     ::rtl::OUString aStr;
     if( t.pEnv ){
         // temporaere Variable initialisieren
-        static char * cSignature = "(I)Ljava/lang/String;";
-        static char * cMethodName = "getColumnLabel";
+        static const char * cSignature = "(I)Ljava/lang/String;";
+        static const char * cMethodName = "getColumnLabel";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -322,8 +322,8 @@ sal_Bool SAL_CALL java_sql_ResultSetMetaData::isCaseSensitive( sal_Int32 column 
     ::rtl::OUString aStr;
     if( t.pEnv ){
         // temporaere Variable initialisieren
-        static char * cSignature = "(I)Ljava/lang/String;";
-        static char * cMethodName = "getColumnClassName";
+        static const char * cSignature = "(I)Ljava/lang/String;";
+        static const char * cMethodName = "getColumnClassName";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -347,8 +347,8 @@ sal_Bool SAL_CALL java_sql_ResultSetMetaData::isCurrency( sal_Int32 column ) thr
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
         // temporaere Variable initialisieren
-        static char * cSignature = "(I)Z";
-        static char * cMethodName = "isCurrency";
+        static const char * cSignature = "(I)Z";
+        static const char * cMethodName = "isCurrency";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -368,8 +368,8 @@ sal_Bool SAL_CALL java_sql_ResultSetMetaData::isAutoIncrement( sal_Int32 column 
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
         // temporaere Variable initialisieren
-        static char * cSignature = "(I)Z";
-        static char * cMethodName = "isAutoIncrement";
+        static const char * cSignature = "(I)Z";
+        static const char * cMethodName = "isAutoIncrement";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -390,8 +390,8 @@ sal_Bool SAL_CALL java_sql_ResultSetMetaData::isSigned( sal_Int32 column ) throw
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
         // temporaere Variable initialisieren
-        static char * cSignature = "(I)Z";
-        static char * cMethodName = "isSigned";
+        static const char * cSignature = "(I)Z";
+        static const char * cMethodName = "isSigned";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -410,8 +410,8 @@ sal_Int32 SAL_CALL java_sql_ResultSetMetaData::getPrecision( sal_Int32 column ) 
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
         // temporaere Variable initialisieren
-        static char * cSignature = "(I)I";
-        static char * cMethodName = "getPrecision";
+        static const char * cSignature = "(I)I";
+        static const char * cMethodName = "getPrecision";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -431,8 +431,8 @@ sal_Int32 SAL_CALL java_sql_ResultSetMetaData::getScale( sal_Int32 column ) thro
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
         // temporaere Variable initialisieren
-        static char * cSignature = "(I)I";
-        static char * cMethodName = "getScale";
+        static const char * cSignature = "(I)I";
+        static const char * cMethodName = "getScale";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -452,8 +452,8 @@ sal_Int32 SAL_CALL java_sql_ResultSetMetaData::isNullable( sal_Int32 column ) th
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
         // temporaere Variable initialisieren
-        static char * cSignature = "(I)I";
-        static char * cMethodName = "isNullable";
+        static const char * cSignature = "(I)I";
+        static const char * cMethodName = "isNullable";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -474,8 +474,8 @@ sal_Bool SAL_CALL java_sql_ResultSetMetaData::isSearchable( sal_Int32 column ) t
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
         // temporaere Variable initialisieren
-        static char * cSignature = "(I)Z";
-        static char * cMethodName = "isSearchable";
+        static const char * cSignature = "(I)Z";
+        static const char * cMethodName = "isSearchable";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -496,8 +496,8 @@ sal_Bool SAL_CALL java_sql_ResultSetMetaData::isReadOnly( sal_Int32 column ) thr
     SDBThreadAttach t;
     if( t.pEnv ){
         // temporaere Variable initialisieren
-        static char * cSignature = "(I)Z";
-        static char * cMethodName = "isReadOnly";
+        static const char * cSignature = "(I)Z";
+        static const char * cMethodName = "isReadOnly";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -518,8 +518,8 @@ sal_Bool SAL_CALL java_sql_ResultSetMetaData::isDefinitelyWritable( sal_Int32 co
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
         // temporaere Variable initialisieren
-        static char * cSignature = "(I)Z";
-        static char * cMethodName = "isDefinitelyWritable";
+        static const char * cSignature = "(I)Z";
+        static const char * cMethodName = "isDefinitelyWritable";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -539,8 +539,8 @@ sal_Bool SAL_CALL java_sql_ResultSetMetaData::isWritable( sal_Int32 column ) thr
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
         // temporaere Variable initialisieren
-        static char * cSignature = "(I)Z";
-        static char * cMethodName = "isWritable";
+        static const char * cSignature = "(I)Z";
+        static const char * cMethodName = "isWritable";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
