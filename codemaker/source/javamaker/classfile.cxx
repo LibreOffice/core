@@ -4,9 +4,9 @@
  *
  *  $RCSfile: classfile.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:17:03 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:24:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@
 #include "codemaker/options.hxx"
 #include "codemaker/unotype.hxx"
 
+#include "boost/static_assert.hpp"
 #include "osl/diagnose.h"
 #include "rtl/string.h"
 #include "rtl/string.hxx"
@@ -117,7 +118,12 @@ void writeU4(FileStream & file, sal_uInt32 data) {
 void writeStream(FileStream & file, std::vector< unsigned char > const & stream)
 {
     std::vector< unsigned char >::size_type n = stream.size();
-    OSL_ASSERT(n <= SAL_MAX_UINT64);
+    BOOST_STATIC_ASSERT(
+        sizeof (std::vector< unsigned char >::size_type)
+        <= sizeof (sal_uInt64));
+        // both unsigned integral, so sizeof is a practically sufficient
+        // approximation of std::numeric_limits<T1>::max() <=
+        // std::numeric_limits<T2>::max()
     if (n != 0) {
         write(file, &stream[0], static_cast< sal_uInt64 >(n));
     }
@@ -519,9 +525,11 @@ sal_uInt16 ClassFile::addIntegerInfo(sal_Int32 value) {
     sal_uInt16 index = nextConstantPoolIndex(1);
     appendU1(m_constantPool, 3);
     appendU4(m_constantPool, static_cast< sal_uInt32 >(value));
-    bool ok = m_integerInfos.insert(
-        std::map< sal_Int32, sal_uInt16 >::value_type(value, index)).second;
-    OSL_ASSERT(ok);
+    if (!m_integerInfos.insert(
+            std::map< sal_Int32, sal_uInt16 >::value_type(value, index)).second)
+    {
+        OSL_ASSERT(false);
+    }
     return index;
 }
 
@@ -535,9 +543,11 @@ sal_uInt16 ClassFile::addFloatInfo(float value) {
     union { float floatBytes; sal_uInt32 uint32Bytes; } bytes;
     bytes.floatBytes = value;
     appendU4(m_constantPool, bytes.uint32Bytes);
-    bool ok = m_floatInfos.insert(
-        std::map< float, sal_uInt16 >::value_type(value, index)).second;
-    OSL_ASSERT(ok);
+    if (!m_floatInfos.insert(
+            std::map< float, sal_uInt16 >::value_type(value, index)).second)
+    {
+        OSL_ASSERT(false);
+    }
     return index;
 }
 
@@ -549,9 +559,11 @@ sal_uInt16 ClassFile::addLongInfo(sal_Int64 value) {
     sal_uInt16 index = nextConstantPoolIndex(2);
     appendU1(m_constantPool, 5);
     appendU8(m_constantPool, static_cast< sal_uInt64 >(value));
-    bool ok = m_longInfos.insert(
-        std::map< sal_Int64, sal_uInt16 >::value_type(value, index)).second;
-    OSL_ASSERT(ok);
+    if (!m_longInfos.insert(
+            std::map< sal_Int64, sal_uInt16 >::value_type(value, index)).second)
+    {
+        OSL_ASSERT(false);
+    }
     return index;
 }
 
@@ -565,9 +577,11 @@ sal_uInt16 ClassFile::addDoubleInfo(double value) {
     union { double doubleBytes; sal_uInt64 uint64Bytes; } bytes;
     bytes.doubleBytes = value;
     appendU8(m_constantPool, bytes.uint64Bytes);
-    bool ok = m_doubleInfos.insert(
-        std::map< double, sal_uInt16 >::value_type(value, index)).second;
-    OSL_ASSERT(ok);
+    if (!m_doubleInfos.insert(
+            std::map< double, sal_uInt16 >::value_type(value, index)).second)
+    {
+        OSL_ASSERT(false);
+    }
     return index;
 }
 
@@ -716,7 +730,7 @@ sal_uInt16 ClassFile::nextConstantPoolIndex(sal_uInt16 width) {
                     " format")));
     }
     sal_uInt16 index = m_constantPoolCount;
-    m_constantPoolCount += width;
+    m_constantPoolCount = m_constantPoolCount + width;
     return index;
 }
 
@@ -737,9 +751,12 @@ sal_uInt16 ClassFile::addUtf8Info(rtl::OString const & value) {
     for (sal_Int32 j = 0; j < value.getLength(); ++j) {
         appendU1(m_constantPool, static_cast< sal_uInt8 >(value[j]));
     }
-    bool ok = m_utf8Infos.insert(
-        std::map< rtl::OString, sal_uInt16 >::value_type(value, index)).second;
-    OSL_ASSERT(ok);
+    if (!m_utf8Infos.insert(
+            std::map< rtl::OString, sal_uInt16 >::value_type(value, index)).
+        second)
+    {
+        OSL_ASSERT(false);
+    }
     return index;
 }
 
@@ -753,10 +770,12 @@ sal_uInt16 ClassFile::addClassInfo(rtl::OString const & type) {
     sal_uInt16 index = nextConstantPoolIndex(1);
     appendU1(m_constantPool, 7);
     appendU2(m_constantPool, nameIndex);
-    bool ok = m_classInfos.insert(
-        std::map< sal_uInt16, sal_uInt16 >::value_type(nameIndex, index)).
-        second;
-    OSL_ASSERT(ok);
+    if (!m_classInfos.insert(
+            std::map< sal_uInt16, sal_uInt16 >::value_type(nameIndex, index)).
+        second)
+    {
+        OSL_ASSERT(false);
+    }
     return index;
 }
 
@@ -770,10 +789,12 @@ sal_uInt16 ClassFile::addStringInfo(rtl::OString const & value) {
     sal_uInt16 index = nextConstantPoolIndex(1);
     appendU1(m_constantPool, 8);
     appendU2(m_constantPool, stringIndex);
-    bool ok = m_stringInfos.insert(
-        std::map< sal_uInt16, sal_uInt16 >::value_type(stringIndex, index)).
-        second;
-    OSL_ASSERT(ok);
+    if (!m_stringInfos.insert(
+            std::map< sal_uInt16, sal_uInt16 >::value_type(stringIndex, index)).
+        second)
+    {
+        OSL_ASSERT(false);
+    }
     return index;
 }
 
@@ -793,9 +814,11 @@ sal_uInt16 ClassFile::addFieldrefInfo(
     appendU1(m_constantPool, 9);
     appendU2(m_constantPool, classIndex);
     appendU2(m_constantPool, nameAndTypeIndex);
-    bool ok = m_fieldrefInfos.insert(
-        std::map< sal_uInt32, sal_uInt16 >::value_type(key, index)).second;
-    OSL_ASSERT(ok);
+    if (!m_fieldrefInfos.insert(
+            std::map< sal_uInt32, sal_uInt16 >::value_type(key, index)).second)
+    {
+        OSL_ASSERT(false);
+    }
     return index;
 }
 
@@ -815,9 +838,11 @@ sal_uInt16 ClassFile::addMethodrefInfo(
     appendU1(m_constantPool, 10);
     appendU2(m_constantPool, classIndex);
     appendU2(m_constantPool, nameAndTypeIndex);
-    bool ok = m_methodrefInfos.insert(
-        std::map< sal_uInt32, sal_uInt16 >::value_type(key, index)).second;
-    OSL_ASSERT(ok);
+    if (!m_methodrefInfos.insert(
+            std::map< sal_uInt32, sal_uInt16 >::value_type(key, index)).second)
+    {
+        OSL_ASSERT(false);
+    }
     return index;
 }
 
@@ -838,9 +863,11 @@ sal_uInt16 ClassFile::addInterfaceMethodrefInfo(
     appendU1(m_constantPool, 11);
     appendU2(m_constantPool, classIndex);
     appendU2(m_constantPool, nameAndTypeIndex);
-    bool ok = m_interfaceMethodrefInfos.insert(
-        std::map< sal_uInt32, sal_uInt16 >::value_type(key, index)).second;
-    OSL_ASSERT(ok);
+    if (!m_interfaceMethodrefInfos.insert(
+            std::map< sal_uInt32, sal_uInt16 >::value_type(key, index)).second)
+    {
+        OSL_ASSERT(false);
+    }
     return index;
 }
 
@@ -860,9 +887,11 @@ sal_uInt16 ClassFile::addNameAndTypeInfo(
     appendU1(m_constantPool, 12);
     appendU2(m_constantPool, nameIndex);
     appendU2(m_constantPool, descriptorIndex);
-    bool ok = m_nameAndTypeInfos.insert(
-        std::map< sal_uInt32, sal_uInt16 >::value_type(key, index)).second;
-    OSL_ASSERT(ok);
+    if (!m_nameAndTypeInfos.insert(
+            std::map< sal_uInt32, sal_uInt16 >::value_type(key, index)).second)
+    {
+        OSL_ASSERT(false);
+    }
     return index;
 }
 
