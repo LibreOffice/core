@@ -4,9 +4,9 @@
  *
  *  $RCSfile: astdeclaration.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:06:17 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:46:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,11 +63,11 @@ static OString convertName(const OString& name)
 }
 
 AstDeclaration::AstDeclaration(NodeType type, const OString& name, AstScope* pScope)
-    : m_nodeType(type)
-    , m_localName(name)
+    : m_localName(name)
     , m_pScope(pScope)
-    , m_bIsAdded(sal_False)
+    , m_nodeType(type)
     , m_bImported(sal_False)
+    , m_bIsAdded(sal_False)
     , m_bInMainFile(sal_False)
 {
     if ( m_pScope )
@@ -197,6 +197,9 @@ sal_Bool AstDeclaration::dump(RegistryKey& rKey)
                     case NT_service:
                     case NT_singleton:
                         bRet = pDecl->dump(rKey);
+                        break;
+                    default:
+                        break;
                 }
             }
             ++iter;
