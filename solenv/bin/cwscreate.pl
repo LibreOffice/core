@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwscreate.pl,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: rt $ $Date: 2006-02-09 14:20:59 $
+#   last change: $Author: hr $ $Date: 2006-06-20 12:38:21 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,7 @@ $SIG{'INT'} = 'INT_handler' if defined($log);
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.19 $ ';
+my $id_str = ' $Revision: 1.20 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -508,6 +508,12 @@ sub copy_workspace
             $result = sync_dir::finish_minor_unzip( $unzip_dest, ".".$milestone );
             unlink "$unzip_dest/prepared.$milestone" if -e "$unzip_dest/prepared.$milestone";
 
+            # cleanup: remove zip files
+            print "remove zip.$milestone\n";
+            $result = system("rm -rf $copy_dest");
+            if ( $result ) {
+                print_warning ("Could not clean up zip file directory 'copy_dest'");
+            }
         }
         foreach my $oneextra ( @xtra_files )
         {
