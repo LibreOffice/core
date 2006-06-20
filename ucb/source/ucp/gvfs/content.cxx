@@ -4,9 +4,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-30 10:10:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:26:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -214,7 +214,7 @@ Content::Content( const ::com::sun::star::uno::Reference<
           ContentProvider                                *pProvider,
           const ::com::sun::star::uno::Reference<
           ::com::sun::star::ucb::XContentIdentifier >&    Identifier,
-          sal_Bool                                        isFolder)
+          sal_Bool                                        IsFolder)
     throw ( ::com::sun::star::ucb::ContentCreationException )
     : ContentImplHelper( rxSMgr, pProvider, Identifier ),
       m_pProvider( pProvider ),
@@ -227,7 +227,7 @@ Content::Content( const ::com::sun::star::uno::Reference<
 #endif
 //  m_info.name = FIXME: set name ?
     m_info.valid_fields = GNOME_VFS_FILE_INFO_FIELDS_TYPE;
-    m_info.type = isFolder ? GNOME_VFS_FILE_TYPE_DIRECTORY :
+    m_info.type = IsFolder ? GNOME_VFS_FILE_TYPE_DIRECTORY :
                          GNOME_VFS_FILE_TYPE_REGULAR;
 }
 
@@ -365,7 +365,7 @@ uno::Any Content::getBadArgExcept()
 
 uno::Any SAL_CALL Content::execute(
         const star::ucb::Command& aCommand,
-        sal_Int32 CommandId,
+        sal_Int32 /*CommandId*/,
         const uno::Reference< star::ucb::XCommandEnvironment >& xEnv )
     throw( uno::Exception,
            star::ucb::CommandAbortedException,
@@ -508,7 +508,7 @@ uno::Any SAL_CALL Content::execute(
     return aRet;
 }
 
-void SAL_CALL Content::abort( sal_Int32 CommandId )
+void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ )
     throw( uno::RuntimeException )
 {
     // FIXME: we should use the GnomeVFSCancellation APIs here ...
@@ -760,7 +760,7 @@ getReadOnlyException( Content *ctnt )
 }
 
 rtl::OUString
-Content::makeNewURL( const char *newName )
+Content::makeNewURL( const char */*newName*/ )
 {
     rtl::OUString aNewURL = getParentURL();
     if ( aNewURL.lastIndexOf( '/' ) != ( aNewURL.getLength() - 1 ) )
@@ -777,7 +777,7 @@ Content::makeNewURL( const char *newName )
 GnomeVFSResult
 Content::doSetFileInfo( const GnomeVFSFileInfo *newInfo,
             GnomeVFSSetFileInfoMask setMask,
-            const uno::Reference< star::ucb::XCommandEnvironment >& xEnv )
+            const uno::Reference< star::ucb::XCommandEnvironment >& /*xEnv*/ )
 {
     GnomeVFSResult result = GNOME_VFS_OK;
 
@@ -943,9 +943,9 @@ void Content::queryChildren( ContentRefList& rChildren )
     m_xProvider->queryExistingContents( aAllContents );
 
     rtl::OUString aURL = getOUURI();
-    sal_Int32 nPos = aURL.lastIndexOf( '/' );
+    sal_Int32 nURLPos = aURL.lastIndexOf( '/' );
 
-    if ( nPos != ( aURL.getLength() - 1 ) )
+    if ( nURLPos != ( aURL.getLength() - 1 ) )
         aURL += rtl::OUString::createFromAscii( "/" );
 
     sal_Int32 nLen = aURL.getLength();
@@ -1072,7 +1072,7 @@ void Content::insert(
     }
 }
 
-void Content::transfer(const star::ucb::TransferInfo & rArgs,
+void Content::transfer(const star::ucb::TransferInfo & /*rArgs*/,
                const uno::Reference< star::ucb::XCommandEnvironment >& xEnv )
     throw( uno::Exception )
 {
@@ -1358,7 +1358,7 @@ void Content::cancelCommandExecution(
 }
 
 uno::Sequence< beans::Property > Content::getProperties(
-    const uno::Reference< com::sun::star::ucb::XCommandEnvironment > & xEnv )
+    const uno::Reference< com::sun::star::ucb::XCommandEnvironment > & /*xEnv*/ )
 {
     static const beans::Property aGenericProperties[] = {
                 beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ContentType" ) ),
@@ -1743,8 +1743,8 @@ extern "C" {
                 (GNOME_VFS_MODULE_CALLBACK_FULL_AUTHENTICATION_NEED_PASSWORD |
                  GNOME_VFS_MODULE_CALLBACK_FULL_AUTHENTICATION_NEED_USERNAME |
                  GNOME_VFS_MODULE_CALLBACK_FULL_AUTHENTICATION_NEED_DOMAIN),
-                0, };
-        GnomeVFSModuleCallbackFullAuthenticationOut mapped_out = { 0, };
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        GnomeVFSModuleCallbackFullAuthenticationOut mapped_out = { 0, 0, 0, 0, 0, 0, 0, 0 };
 
         // Map the old style input auth. data to the new style structure.
         if (in->previous_attempt_failed)
@@ -1805,7 +1805,7 @@ extern "C" {
             auth_destroy (l->data);
         g_queue_free (vq);
     }
-};
+}
 
 static void
 refresh_auth( GQueue *vq )
