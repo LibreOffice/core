@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pkguri.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:57:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:31:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -593,7 +593,7 @@ sal_uInt32 getUTF32(sal_Unicode const *& rBegin, sal_Unicode const * pEnd,
         {
             int nWeight1;
             int nWeight2;
-            if (nUTF32 == cEscapePrefix && rBegin + 1 < pEnd
+            if (nUTF32 == sal::static_int_cast<sal_uInt32>(cEscapePrefix) && rBegin + 1 < pEnd
                 && (nWeight1 = getHexWeight(rBegin[0])) >= 0
                 && (nWeight2 = getHexWeight(rBegin[1])) >= 0)
             {
@@ -685,7 +685,7 @@ sal_uInt32 getUTF32(sal_Unicode const *& rBegin, sal_Unicode const * pEnd,
         {
             int nWeight1;
             int nWeight2;
-            if (nUTF32 == cEscapePrefix && rBegin + 1 < pEnd
+            if (nUTF32 == sal::static_int_cast<sal_uInt32>(cEscapePrefix) && rBegin + 1 < pEnd
                 && ((nWeight1 = getHexWeight(rBegin[0])) >= 0)
                 && ((nWeight2 = getHexWeight(rBegin[1])) >= 0))
             {
@@ -732,6 +732,9 @@ static rtl::OUString decode(sal_Unicode const * pBegin,
 
         case DECODE_TO_IURI:
             eCharset = RTL_TEXTENCODING_UTF8;
+            break;
+        case DECODE_WITH_CHARSET:
+            // do nothing ?
             break;
     }
     rtl::OUStringBuffer aResult;
