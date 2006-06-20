@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filehelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:06:46 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:28:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,7 @@ std::string getTempPath()
 {
     std::string sTempDir;
 
-    char* pTmp = getenv( "TEMP" );
+    char const * pTmp = getenv( "TEMP" );
     if (pTmp == NULL) pTmp = getenv("temp");
     if (pTmp == NULL) pTmp = getenv("TMP");
     if (pTmp == NULL) pTmp = getenv("tmp");
