@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dndTest.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:31:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 06:08:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,9 @@
  *
  ************************************************************************/
 
+#if defined _MSC_VER
+#pragma warning(push,1)
+#endif
 #include <windows.h>
 #include <comdef.h>
 #include <tchar.h>
@@ -40,6 +43,9 @@
 CComModule _Module;
 #include<atlcom.h>
 #include<atlimpl.cpp>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
