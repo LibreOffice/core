@@ -4,9 +4,9 @@
  *
  *  $RCSfile: exsrcbrw.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:20:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:57:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,8 +100,8 @@ DBG_NAME(SbaExternalSourceBrowser)
 //------------------------------------------------------------------------------
 SbaExternalSourceBrowser::SbaExternalSourceBrowser(const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM)
     :SbaXDataBrowserController(_rM)
-    ,m_pDataSourceImpl(NULL)
     ,m_aModifyListeners(getMutex())
+    ,m_pDataSourceImpl(NULL)
     ,m_bInQueryDispatch( sal_False )
 {
     DBG_CTOR(SbaExternalSourceBrowser,NULL);
@@ -150,7 +150,7 @@ Reference< XRowSet >  SbaExternalSourceBrowser::CreateForm()
 }
 
 //------------------------------------------------------------------------------
-sal_Bool SbaExternalSourceBrowser::InitializeForm(const Reference< XRowSet > & xForm)
+sal_Bool SbaExternalSourceBrowser::InitializeForm(const Reference< XRowSet > & /*xForm*/)
 {
     return sal_True;
 }
@@ -504,18 +504,6 @@ void SbaExternalSourceBrowser::stopListening()
         xLoadable->removeLoadListener((::com::sun::star::form::XLoadListener*)this);
     }
 }
-
-//------------------------------------------------------------------
-//sal_uInt16 SbaExternalSourceBrowser::SaveData(sal_Bool bUI, sal_Bool bForBrowsing)
-//{
-//  if (m_bSuspending)
-//      // don't ask the user if we're beeing suspended currently
-//      // this is the responsibility of our owner, as we are only an external view to an existing form
-//      // 73384 - 22.02.00 - FS
-//      return (sal_uInt16)sal_True;
-//
-//  return SbaXDataBrowserController::SaveData(bUI, bForBrowsing);
-//}
 
 //==================================================================
 //==================================================================
