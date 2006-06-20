@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FieldDescControl.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:22:54 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:59:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,12 +150,11 @@
 
 using namespace dbaui;
 using namespace dbtools;
-//  using namespace comphelper;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
-//  using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::util;
 
 //==================================================================
 
@@ -197,49 +196,53 @@ namespace
 // class OFieldDescControl
 //==================================================================
 
-DBG_NAME(OFieldDescControl);
+DBG_NAME(OFieldDescControl)
 
 //==================================================================
 OFieldDescControl::OFieldDescControl( Window* pParent, const ResId& rResId, OTableDesignHelpBar* pHelpBar)
     :TabPage( pParent, rResId )
-    ,m_pPreviousType()
     ,pHelp( pHelpBar )
-    ,nCurChildId(1)
-    ,pDefault(NULL)
-    ,pDefaultText(NULL)
-    ,pRequired(NULL)
-    ,pRequiredText(NULL)
-    ,pAutoIncrement(NULL)
-    ,pAutoIncrementText(NULL)
-    ,pTextLen(NULL)
-    ,pTextLenText(NULL)
-    ,pNumType(NULL)
-    ,pNumTypeText(NULL)
     ,pLastFocusWindow(NULL)
-    ,pFormatSample(NULL)
-    ,pFormatText(NULL)
-    ,pFormat(NULL)
-    ,pLength(NULL)
+    ,m_pActFocusWindow(NULL)
+    ,pDefaultText(NULL)
+    ,pRequiredText(NULL)
+    ,pAutoIncrementText(NULL)
+    ,pTextLenText(NULL)
+    ,pNumTypeText(NULL)
     ,pLengthText(NULL)
-    ,pScale(NULL)
     ,pScaleText(NULL)
-    ,pBoolDefault(NULL)
+    ,pFormatText(NULL)
     ,pBoolDefaultText(NULL)
-    ,m_pColumnName(NULL)
     ,m_pColumnNameText(NULL)
-    ,m_pType(NULL)
     ,m_pTypeText(NULL)
     ,m_pAutoIncrementValueText(NULL)
+    ,pRequired(NULL)
+    ,pNumType(NULL)
+    ,pAutoIncrement(NULL)
+    ,pDefault(NULL)
+    ,pTextLen(NULL)
+    ,pLength(NULL)
+    ,pScale(NULL)
+    ,pFormatSample(NULL)
+    ,pBoolDefault(NULL)
+    ,m_pColumnName(NULL)
+    ,m_pType(NULL)
     ,m_pAutoIncrementValue(NULL)
+    ,pFormat(NULL)
+    ,m_pVertScroll( NULL )
+    ,m_pHorzScroll( NULL )
+    ,m_pPreviousType()
+    ,nCurChildId(1)
     ,m_nPos(-1)
     ,aYes(ModuleRes(STR_VALUE_YES))
     ,aNo(ModuleRes(STR_VALUE_NO))
-    ,nDelayedGrabFocusEvent(0)
-    ,pActFieldDescr(NULL)
-    ,m_pActFocusWindow(NULL)
-    ,m_bRight(sal_False)
+    ,m_nOldVThumb( 0 )
+    ,m_nOldHThumb( 0 )
     ,m_nWidth(50)
+    ,nDelayedGrabFocusEvent(0)
     ,m_bAdded(sal_False)
+    ,m_bRightAligned(false)
+    ,pActFieldDescr(NULL)
 {
     DBG_CTOR(OFieldDescControl,NULL);
 
@@ -263,44 +266,48 @@ OFieldDescControl::OFieldDescControl( Window* pParent, const ResId& rResId, OTab
 //------------------------------------------------------------------------------
 OFieldDescControl::OFieldDescControl( Window* pParent, OTableDesignHelpBar* pHelpBar )
     :TabPage( pParent, WB_3DLOOK | WB_DIALOGCONTROL )
-    ,m_pPreviousType()
     ,pHelp( pHelpBar )
-    ,nCurChildId(1)
-    ,pDefault(NULL)
-    ,pDefaultText(NULL)
-    ,pRequired(NULL)
-    ,pRequiredText(NULL)
-    ,pAutoIncrement(NULL)
-    ,pAutoIncrementText(NULL)
-    ,pTextLen(NULL)
-    ,pTextLenText(NULL)
-    ,pNumType(NULL)
-    ,pNumTypeText(NULL)
     ,pLastFocusWindow(NULL)
-    ,pFormatSample(NULL)
-    ,pFormatText(NULL)
-    ,pFormat(NULL)
-    ,pLength(NULL)
+    ,m_pActFocusWindow(NULL)
+    ,pDefaultText(NULL)
+    ,pRequiredText(NULL)
+    ,pAutoIncrementText(NULL)
+    ,pTextLenText(NULL)
+    ,pNumTypeText(NULL)
     ,pLengthText(NULL)
-    ,pScale(NULL)
     ,pScaleText(NULL)
-    ,pBoolDefault(NULL)
+    ,pFormatText(NULL)
     ,pBoolDefaultText(NULL)
-    ,m_pColumnName(NULL)
     ,m_pColumnNameText(NULL)
-    ,m_pType(NULL)
     ,m_pTypeText(NULL)
     ,m_pAutoIncrementValueText(NULL)
+    ,pRequired(NULL)
+    ,pNumType(NULL)
+    ,pAutoIncrement(NULL)
+    ,pDefault(NULL)
+    ,pTextLen(NULL)
+    ,pLength(NULL)
+    ,pScale(NULL)
+    ,pFormatSample(NULL)
+    ,pBoolDefault(NULL)
+    ,m_pColumnName(NULL)
+    ,m_pType(NULL)
     ,m_pAutoIncrementValue(NULL)
+    ,pFormat(NULL)
+    ,m_pVertScroll( NULL )
+    ,m_pHorzScroll( NULL )
+    ,m_pPreviousType()
+    ,nCurChildId(1)
     ,m_nPos(-1)
     ,aYes(ModuleRes(STR_VALUE_YES))
     ,aNo(ModuleRes(STR_VALUE_NO))
-    ,nDelayedGrabFocusEvent(0)
-    ,pActFieldDescr(0)
-    ,m_pActFocusWindow(NULL)
-    ,m_bRight(sal_False)
+    ,m_nOldVThumb( 0 )
+    ,m_nOldHThumb( 0 )
     ,m_nWidth(50)
+    ,nDelayedGrabFocusEvent(0)
     ,m_bAdded(sal_False)
+    ,m_bRightAligned(false)
+    ,pActFieldDescr(NULL)
 {
     DBG_CTOR(OFieldDescControl,NULL);
 
@@ -364,8 +371,6 @@ String OFieldDescControl::BoolStringPersistent(const String& rUIString) const
 {
     static String aZero('0');
     static String aOne('1');
-    static String aNo(ModuleRes(STR_VALUE_NO));
-    static String aYes(ModuleRes(STR_VALUE_YES));
 
     if (rUIString == aNo)
         return aZero;
@@ -379,8 +384,6 @@ String OFieldDescControl::BoolStringUI(const String& rPersistentString) const
 {
     static String aZero('0');
     static String aOne('1');
-    static String aYes(ModuleRes(STR_VALUE_YES));
-    static String aNo(ModuleRes(STR_VALUE_NO));
     static String aNone(ModuleRes(STR_VALUE_NONE));
 
     // FS - 66161 - 14.05.1999 - aeltere Versionen haben eventuell einen sprachabhaengigen String als Default gespeichert
@@ -403,7 +406,7 @@ void OFieldDescControl::Init()
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK(OFieldDescControl, OnScroll, ScrollBar*, pBar)
+IMPL_LINK(OFieldDescControl, OnScroll, ScrollBar*, /*pBar*/)
 {
     ScrollAllAggregates();
     return 0;
@@ -741,7 +744,7 @@ void OFieldDescControl::SetControlText( sal_uInt16 nControlId, const String& rTe
 }
 
 //------------------------------------------------------------------------
-IMPL_LINK( OFieldDescControl, FormatClickHdl, Button *, pButton )
+IMPL_LINK( OFieldDescControl, FormatClickHdl, Button *, /*pButton*/ )
 {
     DBG_CHKTHIS(OFieldDescControl,NULL);
     //////////////////////////////////////////////////////////////////////
@@ -751,10 +754,8 @@ IMPL_LINK( OFieldDescControl, FormatClickHdl, Button *, pButton )
 
     sal_Int32 nOldFormatKey(pActFieldDescr->GetFormatKey());
     SvxCellHorJustify rOldJustify = pActFieldDescr->GetHorJustify();
-    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier = GetFormatter()->getNumberFormatsSupplier();
-
-    Reference< XUnoTunnel > xTunnel(xSupplier,UNO_QUERY);
-    SvNumberFormatsSupplierObj* pSupplierImpl = (SvNumberFormatsSupplierObj*)xTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId());
+    Reference< XNumberFormatsSupplier >  xSupplier = GetFormatter()->getNumberFormatsSupplier();
+    SvNumberFormatsSupplierObj* pSupplierImpl = SvNumberFormatsSupplierObj::getImplementation( xSupplier );
 
     SvNumberFormatter* pFormatter = pSupplierImpl->GetNumberFormatter();
     sal_uInt16 nFlags;
@@ -781,6 +782,10 @@ IMPL_LINK( OFieldDescControl, FormatClickHdl, Button *, pButton )
     return 0;
 }
 
+// -----------------------------------------------------------------------
+void OFieldDescControl::SetModified(sal_Bool /*bModified*/)
+{
+}
 //------------------------------------------------------------------------
 IMPL_LINK( OFieldDescControl, ChangeHdl, ListBox *, pListBox )
 {
@@ -883,7 +888,7 @@ void OFieldDescControl::ArrangeAggregates()
     };
 
     long nMaxWidth = 0;
-    for (int i=0; i<sizeof(adAggregates)/sizeof(adAggregates[0]); i++)
+    for (size_t i=0; i<sizeof(adAggregates)/sizeof(adAggregates[0]); i++)
     {
         if (adAggregates[i].pctrlTextControl)
         {
@@ -896,7 +901,7 @@ void OFieldDescControl::ArrangeAggregates()
     // und los ...
     int nCurrentControlPos = 0;
     Control* pZOrderPredecessor = NULL;
-    for (int i=0; i<sizeof(adAggregates)/sizeof(adAggregates[0]); i++)
+    for (size_t i=0; i<sizeof(adAggregates)/sizeof(adAggregates[0]); i++)
     {
         if (adAggregates[i].pctrlInputControl)
         {
@@ -1413,35 +1418,35 @@ void OFieldDescControl::SetPosSize( Control** ppControl, long nRow, sal_uInt16 n
         aSize.Height() = CONTROL_HEIGHT;
         break;
     case 1:
-        if ( m_bRight )
+        if ( isRightAligned() )
             aSize.Width() = LogicToPixel(Size(m_nWidth, 0),MAP_APPFONT).Width();
         else
             aSize.Width()  = CONTROL_WIDTH_2;
         aSize.Height() = CONTROL_HEIGHT;
         break;
     case 2:
-        if ( m_bRight )
+        if ( isRightAligned() )
             aSize.Width() = LogicToPixel(Size(m_nWidth, 0),MAP_APPFONT).Width();
         else
             aSize.Width()  = CONTROL_WIDTH_2;
         aSize.Height() = long(1.5*CONTROL_HEIGHT);
         break;
     case 3:
-        if ( m_bRight )
+        if ( isRightAligned() )
             aSize.Width() = LogicToPixel(Size(m_nWidth, 0),MAP_APPFONT).Width();
         else
             aSize.Width()  = CONTROL_WIDTH_3;
         aSize.Height() = CONTROL_HEIGHT;
         break;
     case 4:
-        if ( m_bRight )
+        if ( isRightAligned() )
             aSize.Width() = LogicToPixel(Size(m_nWidth, 0),MAP_APPFONT).Width();
         else
             aSize.Width()  = CONTROL_WIDTH_4;
         aSize.Height() = CONTROL_HEIGHT;
         break;
     default:
-        if ( m_bRight )
+        if ( isRightAligned() )
             aSize.Width() = LogicToPixel(Size(m_nWidth, 0),MAP_APPFONT).Width();
         else
             aSize.Width()  = CONTROL_WIDTH_1;
@@ -1462,7 +1467,7 @@ void OFieldDescControl::SetPosSize( Control** ppControl, long nRow, sal_uInt16 n
     case 2:
     case 3:
     case 4:
-        if ( m_bRight )
+        if ( isRightAligned() )
         {
             Size aOwnSize = GetSizePixel();
             aPosition.X() = aOwnSize.Width() - aSize.Width();
