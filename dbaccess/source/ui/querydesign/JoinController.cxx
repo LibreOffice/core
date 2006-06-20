@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JoinController.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:24:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:25:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,11 +159,12 @@ using namespace ::dbtools;
 using namespace ::dbaui;
 using namespace ::comphelper;
 
-DBG_NAME(OJoinController);
+DBG_NAME(OJoinController)
 // -----------------------------------------------------------------------------
-OJoinController::OJoinController(const Reference< XMultiServiceFactory >& _rM) : OJoinController_BASE(_rM)
-    ,m_bViewsAllowed(sal_True)
+OJoinController::OJoinController(const Reference< XMultiServiceFactory >& _rM)
+    :OJoinController_BASE(_rM)
     ,m_pAddTabDlg(NULL)
+    ,m_bViewsAllowed(sal_True)
 {
     DBG_CTOR(OJoinController,NULL);
 }
@@ -266,7 +267,6 @@ void OJoinController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >& 
                     case RET_CANCEL:
                         // don't change anything here so return
                         return;
-                        break;
                     case RET_NO:
                         reset();
                         setModified(sal_False);     // and we are not modified yet
@@ -279,7 +279,6 @@ void OJoinController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >& 
             getJoinView()->setReadOnly(!isEditable());
             InvalidateAll();
             return;
-            break;
         case ID_BROWSER_ADDTABLE:
             if(!m_pAddTabDlg)
                 m_pAddTabDlg = getJoinView()->getAddTableDialog();
