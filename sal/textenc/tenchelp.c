@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tenchelp.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:45:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:38:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,12 +108,13 @@ sal_Bool ImplGetInvalidAsciiMultiByte(sal_uInt32 nFlags,
 
 int ImplIsUnicodeIgnoreChar( sal_Unicode c, sal_uInt32 nFlags )
 {
-    return (nFlags & RTL_UNICODETOTEXT_FLAGS_NONSPACING_IGNORE) != 0
-               && ImplIsZeroWidth(c)
-           || (nFlags & RTL_UNICODETOTEXT_FLAGS_CONTROL_IGNORE) != 0
-                  && ImplIsControlOrFormat(c)
-           || (nFlags & RTL_UNICODETOTEXT_FLAGS_PRIVATE_IGNORE) != 0
-                  && ImplIsPrivateUse(c);
+    return
+        ((nFlags & RTL_UNICODETOTEXT_FLAGS_NONSPACING_IGNORE) != 0
+         && ImplIsZeroWidth(c))
+        || ((nFlags & RTL_UNICODETOTEXT_FLAGS_CONTROL_IGNORE) != 0
+            && ImplIsControlOrFormat(c))
+        || ((nFlags & RTL_UNICODETOTEXT_FLAGS_PRIVATE_IGNORE) != 0
+            && ImplIsPrivateUse(c));
 }
 
 /* ======================================================================= */
@@ -138,6 +139,8 @@ ImplHandleUndefinedUnicodeToTextChar(ImplTextConverterData const * pData,
                                      sal_uInt32 * pInfo)
 {
     sal_Unicode c = **ppSrcBuf;
+
+    (void) pData; /* unused */
 
     /* Should the private character map to one byte */
     if ( (c >= RTL_TEXTCVT_BYTE_PRIVATE_START) && (c <= RTL_TEXTCVT_BYTE_PRIVATE_END) )
