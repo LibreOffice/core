@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dindexnode.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:06:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:01:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -251,7 +251,7 @@ namespace connectivity
             ONDXNode(){}
             ONDXNode(const ONDXKey& rKey,
                        ONDXPagePtr aPagePtr = ONDXPagePtr())
-                       :aKey(rKey), aChild(aPagePtr) {}
+                       :aChild(aPagePtr),aKey(rKey) {}
 
             // verweist der Knoten auf eine Seite
             BOOL            HasChild() const {return aChild.HasPage();}
