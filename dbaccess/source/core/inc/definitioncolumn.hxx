@@ -4,9 +4,9 @@
  *
  *  $RCSfile: definitioncolumn.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:36:39 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:47:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,6 +133,9 @@ namespace dbaccess
     protected:
         // XUnoTunnel
         virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
+
+    protected:
+        using OColumn::getFastPropertyValue;
     };
 
     /**
@@ -199,6 +202,9 @@ namespace dbaccess
         virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
     //  Helper
 //      sal_Int32   getColumnTypeID() const {return m_nColTypeID;}
+
+    protected:
+        using OColumn::getFastPropertyValue;
     };
 
     /**
@@ -244,6 +250,9 @@ namespace dbaccess
     protected:
         // XUnoTunnel
         virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
+
+    protected:
+        using OColumnWrapper::getFastPropertyValue;
     };
 
     /**
@@ -274,7 +283,7 @@ namespace dbaccess
      *  describes all properties for a columns of an index.
      */
     class OIndexColumnWrapper : public OColumnWrapper,
-                                public ::comphelper::OIdPropertyArrayUsageHelper < OIndexColumnWrapper >
+                                public ::comphelper::OPropertyArrayUsageHelper < OIndexColumnWrapper >
     {
     protected:
     //  <properties>
@@ -292,21 +301,24 @@ namespace dbaccess
         virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
-    // OIdPropertyArrayUsageHelper
+    // OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
-        virtual ::cppu::IPropertyArrayHelper* createArrayHelper(sal_Int32 nId) const;
+        virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const;
 
         virtual void SAL_CALL getFastPropertyValue(
                                     ::com::sun::star::uno::Any& rValue,
                                     sal_Int32 nHandle
                                          ) const;
+
+    protected:
+        using OColumnWrapper::getFastPropertyValue;
     };
 
     /**
      *  describes all properties for a columns of an key column.
      */
     class OKeyColumnWrapper : public OColumnWrapper,
-                              public ::comphelper::OIdPropertyArrayUsageHelper < OKeyColumnWrapper >
+                              public ::comphelper::OPropertyArrayUsageHelper < OKeyColumnWrapper >
     {
     protected:
     //  <properties>
@@ -324,14 +336,17 @@ namespace dbaccess
         virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
-    // OIdPropertyArrayUsageHelper
+    // OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
-        virtual ::cppu::IPropertyArrayHelper* createArrayHelper(sal_Int32 nId) const;
+        virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const;
 
         virtual void SAL_CALL getFastPropertyValue(
                                     ::com::sun::star::uno::Any& rValue,
                                     sal_Int32 nHandle
                                          ) const;
+
+    protected:
+        using OColumnWrapper::getFastPropertyValue;
     };
 }
 #endif // _DBACORE_DEFINITIONCOLUMN_HXX_
