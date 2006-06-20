@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableCopyHelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:33:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:13:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,11 +84,9 @@ namespace dbaui
                 case SOT_FORMATSTR_ID_HTML_SIMPLE:      // HTML data descriptions
                 case SOT_FORMATSTR_ID_DBACCESS_TABLE:   // table descriptor
                     return (E_TABLE == eEntryType);
-                    break;
                 case SOT_FORMATSTR_ID_DBACCESS_QUERY:   // query descriptor
                 case SOT_FORMATSTR_ID_DBACCESS_COMMAND: // SQL command
                     return ((E_QUERY == eEntryType) || ( !bQueryDrop && E_TABLE == eEntryType));
-                    break;
             }
             return false;
         }
@@ -110,7 +108,7 @@ namespace dbaui
             sal_Bool                        bHtml;
             sal_Bool                        bError;
 
-            DropDescriptor() : nType(E_TABLE),nAction(DND_ACTION_NONE),pDroppedAt(NULL) { }
+            DropDescriptor() : nType(E_TABLE),pDroppedAt(NULL),nAction(DND_ACTION_NONE) { }
         };
 
         OTableCopyHelper(OGenericUnoController* _pControler);
