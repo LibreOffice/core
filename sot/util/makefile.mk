@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: rt $ $Date: 2006-03-08 14:04:46 $
+#   last change: $Author: hr $ $Date: 2006-06-20 05:56:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -34,8 +34,6 @@
 #*************************************************************************
 
 PRJ=..
-
-PRJPCH=
 
 PRJNAME=sot
 TARGET=sot
