@@ -4,9 +4,9 @@
  *
  *  $RCSfile: breakiterator_unicode.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2005-11-17 20:30:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:40:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,17 @@
 #define _I18N_BREAKITERATOR_UNICODE_HXX_
 
 #include <breakiteratorImpl.hxx>
+
+// External unicode includes (from icu) cause warning C4668 on Windows.
+// We want to minimize the patches to external headers, so the warnings are
+// disabled here instead of in the header file itself.
+#ifdef _MSC_VER
+#pragma warning(push, 1)
+#endif
 #include <unicode/brkiter.h>
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
