@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xdictionary.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 14:52:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:42:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,15 +68,15 @@ xdictionary::xdictionary(const sal_Char *lang)
         hModule = osl_loadModule( aBuf.makeStringAndClear().pData, SAL_LOADMODULE_DEFAULT );
         if( hModule ) {
             int (*func)();
-            func = (int(*)()) osl_getSymbol( hModule, OUString::createFromAscii("getExistMark").pData );
+            func = (int(*)()) osl_getFunctionSymbol( hModule, OUString::createFromAscii("getExistMark").pData );
             existMark = (sal_uInt8*) (*func)();
-            func = (int(*)()) osl_getSymbol( hModule, OUString::createFromAscii("getIndex1").pData );
+            func = (int(*)()) osl_getFunctionSymbol( hModule, OUString::createFromAscii("getIndex1").pData );
             index1 = (sal_Int16*) (*func)();
-            func = (int(*)()) osl_getSymbol( hModule, OUString::createFromAscii("getIndex2").pData );
+            func = (int(*)()) osl_getFunctionSymbol( hModule, OUString::createFromAscii("getIndex2").pData );
             index2 = (sal_Int32*) (*func)();
-            func = (int(*)()) osl_getSymbol( hModule, OUString::createFromAscii("getLenArray").pData );
+            func = (int(*)()) osl_getFunctionSymbol( hModule, OUString::createFromAscii("getLenArray").pData );
             lenArray = (sal_Int32*) (*func)();
-            func = (int(*)()) osl_getSymbol( hModule, OUString::createFromAscii("getDataArea").pData );
+            func = (int(*)()) osl_getFunctionSymbol( hModule, OUString::createFromAscii("getDataArea").pData );
             dataArea = (sal_Unicode*) (*func)();
         }
         else
@@ -105,7 +105,7 @@ void SAL_CALL xdictionary::setJapaneseWordBreak()
 }
 
 sal_Bool xdictionary::exists(const sal_Unicode c) {
-        sal_Bool exist = existMark ? ((existMark[c>>3] & (1<<(c&0x07))) != 0) : sal_False;
+        sal_Bool exist = existMark ? sal::static_int_cast<sal_Bool>((existMark[c>>3] & (1<<(c&0x07))) != 0) : sal_False;
         if (!exist && japaneseWordBreak)
             return BreakIteratorImpl::getScriptClass(c) == ScriptType::ASIAN;
         else
