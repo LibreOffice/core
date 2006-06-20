@@ -4,9 +4,9 @@
  *
  *  $RCSfile: string.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:47:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:14:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -878,15 +878,15 @@ public:
 
       This function can't be used for language specific conversion.
 
-      @param    l           a int64.
+      @param    ll          a int64.
       @param    radix       the radix (between 2 and 36)
       @return   a string with the string representation of the argument.
     */
-    static OString valueOf( sal_Int64 l, sal_Int16 radix = 10 ) SAL_THROW(())
+    static OString valueOf( sal_Int64 ll, sal_Int16 radix = 10 ) SAL_THROW(())
     {
         sal_Char aBuf[RTL_STR_MAX_VALUEOFINT64];
         rtl_String* pNewData = 0;
-        rtl_string_newFromStr_WithLength( &pNewData, aBuf, rtl_str_valueOfInt64( aBuf, l, radix ) );
+        rtl_string_newFromStr_WithLength( &pNewData, aBuf, rtl_str_valueOfInt64( aBuf, ll, radix ) );
         return OString( pNewData, (DO_NOT_ACQUIRE*)0 );
     }
 
