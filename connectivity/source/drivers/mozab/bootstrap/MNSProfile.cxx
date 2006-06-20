@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MNSProfile.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:17:50 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:47:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,45 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-#include "nscore.h"
-#include "nsIPrefService.h"
-#include "nsIPrefBranch.h"
-
-#include "pratom.h"
-#include "prmem.h"
-#include "plstr.h"
-#include "prenv.h"
-
-#include "nsIFactory.h"
-#include "nsIComponentManager.h"
-#include "nsIEnumerator.h"
-#include "nsXPIDLString.h"
-#include "nsEscape.h"
-#include "nsIURL.h"
-
-#include "prprf.h"
-
-#include "nsIIOService.h"
-#include "nsNetUtil.h"
-#include "nsFileStream.h"
-#include "nsIStreamListener.h"
-#include "nsIServiceManager.h"
-#include "nsCOMPtr.h"
-#include "nsIModule.h"
-#include "nsIGenericFactory.h"
-#include "nsICategoryManager.h"
-#include "nsXPCOM.h"
-#include "nsISupportsPrimitives.h"
-#include "nsIDirectoryService.h"
-#include "nsDirectoryServiceDefs.h"
-#include "nsAppDirectoryServiceDefs.h"
-#include "nsIChromeRegistry.h" // chromeReg
-#include "nsIStringBundle.h"
-#include "nsIObserverService.h"
-#include "nsHashtable.h"
-#include "nsIAtom.h"
-#include "nsCRT.h"
 
 #include "MNSProfile.hxx"
 #include "MNSProfileDirServiceProvider.hxx"
@@ -407,25 +368,25 @@ NS_IMETHODIMP nsProfile::ShutDownCurrentProfile(PRUint32 shutDownType)
     return NS_OK;
 }
 /* void createNewProfile (in wstring profileName, in wstring nativeProfileDir, in wstring langcode, in boolean useExistingDir); */
-NS_IMETHODIMP nsProfile::CreateNewProfile(const PRUnichar *profileName, const PRUnichar *nativeProfileDir, const PRUnichar *langcode, PRBool useExistingDir)
+NS_IMETHODIMP nsProfile::CreateNewProfile(const PRUnichar* /*profileName*/, const PRUnichar* /*nativeProfileDir*/, const PRUnichar* /*langcode*/, PRBool /*useExistingDir*/)
 {
     return NS_ERROR_NOT_IMPLEMENTED;
 }
 
 /* void renameProfile (in wstring oldName, in wstring newName); */
-NS_IMETHODIMP nsProfile::RenameProfile(const PRUnichar *oldName, const PRUnichar *newName)
+NS_IMETHODIMP nsProfile::RenameProfile(const PRUnichar* /*oldName*/, const PRUnichar* /*newName*/)
 {
     return NS_ERROR_NOT_IMPLEMENTED;
 }
 
 /* void deleteProfile (in wstring name, in boolean canDeleteFiles); */
-NS_IMETHODIMP nsProfile::DeleteProfile(const PRUnichar *name, PRBool canDeleteFiles)
+NS_IMETHODIMP nsProfile::DeleteProfile(const PRUnichar* /*name*/, PRBool /*canDeleteFiles*/)
 {
     return NS_ERROR_NOT_IMPLEMENTED;
 }
 
 /* void cloneProfile (in wstring profileName); */
-NS_IMETHODIMP nsProfile::CloneProfile(const PRUnichar *profileName)
+NS_IMETHODIMP nsProfile::CloneProfile(const PRUnichar* /*profileName*/)
 {
     return NS_ERROR_NOT_IMPLEMENTED;
 }
@@ -434,7 +395,7 @@ NS_IMETHODIMP nsProfile::CloneProfile(const PRUnichar *profileName)
 /* [noscript] void startupWithArgs (in nsICmdLineService cmdLine, in boolean canInteract); */
 class nsICmdLineService;
 
-NS_IMETHODIMP nsProfile::StartupWithArgs(nsICmdLineService *cmdLineArgs, PRBool canInteract)
+NS_IMETHODIMP nsProfile::StartupWithArgs(nsICmdLineService* /*cmdLineArgs*/, PRBool /*canInteract*/)
 {
     Init();
     return NS_OK;
@@ -449,13 +410,13 @@ NS_IMETHODIMP nsProfile::GetIsStartingUp(PRBool *aIsStartingUp)
 }
 
 /* long get4xProfileCount (); */
-NS_IMETHODIMP nsProfile::Get4xProfileCount(PRInt32 *_retval)
+NS_IMETHODIMP nsProfile::Get4xProfileCount(PRInt32* /*_retval*/)
 {
     return NS_ERROR_NOT_IMPLEMENTED;
 }
 
 /* void getProfileListX (in unsigned long which, out unsigned long length, [array, size_is (length), retval] out wstring profileNames); */
-NS_IMETHODIMP nsProfile::GetProfileListX(PRUint32 whichKind, PRUint32 *length, PRUnichar ***profileNames)
+NS_IMETHODIMP nsProfile::GetProfileListX(PRUint32 /*whichKind*/, PRUint32* /*length*/, PRUnichar*** /*profileNames*/)
 {
     return NS_ERROR_NOT_IMPLEMENTED;
 }
@@ -473,13 +434,13 @@ NS_IMETHODIMP nsProfile::MigrateAllProfiles()
 }
 
 /* void migrateProfile (in wstring profileName); */
-NS_IMETHODIMP nsProfile::MigrateProfile(const PRUnichar *profileName)
+NS_IMETHODIMP nsProfile::MigrateProfile(const PRUnichar* /*profileName*/)
 {
     return NS_ERROR_NOT_IMPLEMENTED;
 }
 
 /* void remigrateProfile (in wstring profileName); */
-NS_IMETHODIMP nsProfile::RemigrateProfile(const PRUnichar *profileName)
+NS_IMETHODIMP nsProfile::RemigrateProfile(const PRUnichar* /*profileName*/)
 {
     return NS_ERROR_NOT_IMPLEMENTED;
 }
@@ -517,38 +478,39 @@ NS_IMETHODIMP nsProfile::GetProfileDir(const PRUnichar *profileName, nsIFile **p
                                    getter_AddRefs(localFile));
     if (localFile && NS_SUCCEEDED(rv))
         return localFile->QueryInterface(NS_GET_IID(nsIFile), (void**)profileDir);
+    return rv;
 }
 
 /* wstring getProfilePath (in wstring profileName); */
-NS_IMETHODIMP nsProfile::GetProfilePath(const PRUnichar *profileName, PRUnichar **_retval)
+NS_IMETHODIMP nsProfile::GetProfilePath(const PRUnichar* /*profileName*/, PRUnichar** /*_retval*/)
 {
     return NS_ERROR_NOT_IMPLEMENTED;
 }
 
 /* nsILocalFile getOriginalProfileDir (in wstring profileName); */
-NS_IMETHODIMP nsProfile::GetOriginalProfileDir(const PRUnichar *profileName, nsILocalFile **originalDir)
+NS_IMETHODIMP nsProfile::GetOriginalProfileDir(const PRUnichar* /*profileName*/, nsILocalFile** /*originalDir*/)
 {
     return NS_ERROR_NOT_IMPLEMENTED;
 }
 
 /* PRInt64 getProfileLastModTime (in wstring profileName); */
-NS_IMETHODIMP nsProfile::GetProfileLastModTime(const PRUnichar *profileName, PRInt64 *_retval)
+NS_IMETHODIMP nsProfile::GetProfileLastModTime(const PRUnichar* /*profileName*/, PRInt64* /*_retval*/)
 {
     return NS_ERROR_NOT_IMPLEMENTED;
 }
 
 /* attribute boolean automigrate; */
-NS_IMETHODIMP nsProfile::GetAutomigrate(PRBool *aAutomigrate)
+NS_IMETHODIMP nsProfile::GetAutomigrate(PRBool* /*aAutomigrate*/)
 {
     return NS_ERROR_NOT_IMPLEMENTED;
 }
-NS_IMETHODIMP nsProfile::SetAutomigrate(PRBool aAutomigrate)
+NS_IMETHODIMP nsProfile::SetAutomigrate(PRBool /*aAutomigrate*/)
 {
     return NS_ERROR_NOT_IMPLEMENTED;
 }
 
 /* readonly attribute nsIFile defaultProfileParentDir; */
-NS_IMETHODIMP nsProfile::GetDefaultProfileParentDir(nsIFile **aDefaultProfileParentDir)
+NS_IMETHODIMP nsProfile::GetDefaultProfileParentDir(nsIFile** /*aDefaultProfileParentDir*/)
 {
     return NS_ERROR_NOT_IMPLEMENTED;
 }
@@ -562,41 +524,41 @@ NS_IMETHODIMP nsProfile::GetFirstProfile(PRUnichar **profileName)
 }
 
 /* attribute boolean startWithLastUsedProfile; */
-NS_IMETHODIMP nsProfile::GetStartWithLastUsedProfile(PRBool *aStartWithLastUsedProfile)
+NS_IMETHODIMP nsProfile::GetStartWithLastUsedProfile(PRBool* /*aStartWithLastUsedProfile*/)
 {
     return NS_ERROR_NOT_IMPLEMENTED;
 }
-NS_IMETHODIMP nsProfile::SetStartWithLastUsedProfile(PRBool aStartWithLastUsedProfile)
+NS_IMETHODIMP nsProfile::SetStartWithLastUsedProfile(PRBool /*aStartWithLastUsedProfile*/)
 {
     return NS_ERROR_NOT_IMPLEMENTED;
 }
 
 /* [noscript] void updateRegistry (in nsIFile regName); */
-NS_IMETHODIMP nsProfile::UpdateRegistry(nsIFile *regName)
+NS_IMETHODIMP nsProfile::UpdateRegistry(nsIFile* /*regName*/)
 {
     return NS_ERROR_NOT_IMPLEMENTED;
 }
 
 /* [noscript] void getRegStrings (in wstring profileName, out wstring regString, out wstring regName, out wstring regEmail, out wstring regOption); */
-NS_IMETHODIMP nsProfile::GetRegStrings(const PRUnichar *profileName, PRUnichar **regString, PRUnichar **regName, PRUnichar **regEmail, PRUnichar **regOption)
+NS_IMETHODIMP nsProfile::GetRegStrings(const PRUnichar* /*profileName*/, PRUnichar** /*regString*/, PRUnichar** /*regName*/, PRUnichar** /*regEmail*/, PRUnichar** /*regOption*/)
 {
     return NS_ERROR_NOT_IMPLEMENTED;
 }
 
 /* [noscript] void setRegStrings (in wstring profileName, in wstring regString, in wstring regName, in wstring regEmail, in wstring regOption); */
-NS_IMETHODIMP nsProfile::SetRegStrings(const PRUnichar *profileName, const PRUnichar *regString, const PRUnichar *regName, const PRUnichar *regEmail, const PRUnichar *regOption)
+NS_IMETHODIMP nsProfile::SetRegStrings(const PRUnichar* /*profileName*/, const PRUnichar* /*regString*/, const PRUnichar* /*regName*/, const PRUnichar* /*regEmail*/, const PRUnichar* /*regOption*/)
 {
     return NS_ERROR_NOT_IMPLEMENTED;
 }
 
 /* [noscript] string isRegStringSet (in wstring profileName); */
-NS_IMETHODIMP nsProfile::IsRegStringSet(const PRUnichar *profileName, char **_retval)
+NS_IMETHODIMP nsProfile::IsRegStringSet(const PRUnichar* /*profileName*/, char** /*_retval*/)
 {
     return NS_ERROR_NOT_IMPLEMENTED;
 }
 
 /* void createNewProfileWithLocales (in wstring profileName, in wstring nativeProfileDir, in wstring UILocale, in wstring contentLocale, in boolean useExistingDir); */
-NS_IMETHODIMP nsProfile::CreateNewProfileWithLocales(const PRUnichar *profileName, const PRUnichar *nativeProfileDir, const PRUnichar *UILocale, const PRUnichar *contentLocale, PRBool useExistingDir)
+NS_IMETHODIMP nsProfile::CreateNewProfileWithLocales(const PRUnichar* /*profileName*/, const PRUnichar* /*nativeProfileDir*/, const PRUnichar* /*UILocale*/, const PRUnichar* /*contentLocale*/, PRBool /*useExistingDir*/)
 {
     return NS_ERROR_NOT_IMPLEMENTED;
 }
@@ -629,7 +591,7 @@ NS_IMETHODIMP nsProfile::GetCurrentProfileDir(nsIFile **profileDir)
 
 //Implementation nsIFactory
 NS_IMETHODIMP
-nsProfile::LockFactory(PRBool aVal)
+nsProfile::LockFactory(PRBool /*aVal*/)
 {
     return NS_ERROR_NOT_IMPLEMENTED;
 }
