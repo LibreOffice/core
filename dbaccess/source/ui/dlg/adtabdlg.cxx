@@ -4,9 +4,9 @@
  *
  *  $RCSfile: adtabdlg.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 15:28:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:05:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,7 +98,7 @@ DBG_NAME(OAddTableDlg)
 OAddTableDlg::OAddTableDlg( Window* pParent,OJoinTableView* _pTableView)
              :ModelessDialog( pParent, ModuleRes(DLG_JOIN_TABADD) )
              ,aFTTable( this, ResId( FT_TABLE ) )
-             ,aTableList( this,NULL, ResId( LB_TABLE ),sal_False,sal_False )
+             ,aTableList( this, NULL, ResId( LB_TABLE ), sal_False )
              ,aAddButton( this, ResId( PB_ADDTABLE ) )
              ,aCloseButton( this, ResId( PB_CLOSE ) )
              ,aHelpButton( this, ResId( PB_HELP ) )
@@ -203,14 +203,14 @@ void OAddTableDlg::AddTable()
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK( OAddTableDlg, AddClickHdl, Button*, pButton )
+IMPL_LINK( OAddTableDlg, AddClickHdl, Button*, /*pButton*/ )
 {
     TableListDoubleClickHdl(NULL);
     return 0;
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK( OAddTableDlg, TableListDoubleClickHdl, ListBox *, EMPTY_ARG )
+IMPL_LINK( OAddTableDlg, TableListDoubleClickHdl, ListBox *, /*EMPTY_ARG*/ )
 {
     if (IsAddAllowed())
         AddTable();
@@ -221,14 +221,14 @@ IMPL_LINK( OAddTableDlg, TableListDoubleClickHdl, ListBox *, EMPTY_ARG )
     return 0;
 }
 //------------------------------------------------------------------------------
-IMPL_LINK( OAddTableDlg, TableListSelectHdl, ListBox *, EMPTY_ARG )
+IMPL_LINK( OAddTableDlg, TableListSelectHdl, ListBox *, /*EMPTY_ARG*/ )
 {
     SvLBoxEntry* pEntry = aTableList.FirstSelected();
     aAddButton.Enable( pEntry && !aTableList.GetModel()->HasChilds(pEntry) );
     return 0;
 }
 //------------------------------------------------------------------------------
-IMPL_LINK( OAddTableDlg, CloseClickHdl, Button*, pButton )
+IMPL_LINK( OAddTableDlg, CloseClickHdl, Button*, /*pButton*/ )
 {
     return Close();
 }
