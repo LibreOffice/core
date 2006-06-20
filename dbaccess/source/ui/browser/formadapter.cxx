@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formadapter.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:21:23 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:57:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@ using namespace ::com::sun::star::container;
 //==================================================================
 
 //------------------------------------------------------------------
-Reference< XInterface >  SbaXFormAdapter_CreateInstance(const Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory)
+Reference< XInterface >  SbaXFormAdapter_CreateInstance(const Reference< ::com::sun::star::lang::XMultiServiceFactory>& /*_rxFactory*/)
 {
     return *(new SbaXFormAdapter());
 }
@@ -92,10 +92,10 @@ SbaXFormAdapter::SbaXFormAdapter()
             ,m_aErrorListeners(*this, m_aMutex)
             ,m_aParameterListeners(*this, m_aMutex)
             ,m_aSubmitListeners(*this, m_aMutex)
-            ,m_aPropertiesChangeListeners(*this, m_aMutex)
+            ,m_aResetListeners(*this, m_aMutex)
             ,m_aPropertyChangeListeners(*this, m_aMutex)
             ,m_aVetoablePropertyChangeListeners(*this, m_aMutex)
-            ,m_aResetListeners(*this, m_aMutex)
+            ,m_aPropertiesChangeListeners(*this, m_aMutex)
             ,m_aDisposeListeners(m_aMutex)
             ,m_aContainerListeners(m_aMutex)
             ,m_nNamePropHandle(-1)
@@ -489,11 +489,11 @@ sal_Bool SAL_CALL SbaXFormAdapter::moveRelativeToBookmark(const Any& bookmark, s
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Int32 SAL_CALL SbaXFormAdapter::compareBookmarks(const Any& first, const Any& second) throw( ::com::sun::star::sdbc::SQLException, RuntimeException )
+sal_Int32 SAL_CALL SbaXFormAdapter::compareBookmarks(const Any& _first, const Any& _second) throw( ::com::sun::star::sdbc::SQLException, RuntimeException )
 {
     Reference< ::com::sun::star::sdbcx::XRowLocate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
-        return xIface->compareBookmarks(first, second);
+        return xIface->compareBookmarks(_first, _second);
     return 0;
 }
 
@@ -1115,13 +1115,13 @@ sal_Bool SAL_CALL SbaXFormAdapter::getGroupControl() throw( RuntimeException )
 }
 
 // -------------------------------------------------------------------------
-void SAL_CALL SbaXFormAdapter::setGroupControl(sal_Bool GroupControl) throw( RuntimeException )
+void SAL_CALL SbaXFormAdapter::setGroupControl(sal_Bool /*GroupControl*/) throw( RuntimeException )
 {
     DBG_ERROR("SAL_CALL SbaXFormAdapter::setGroupControl : not supported !");
 }
 
 // -------------------------------------------------------------------------
-void SAL_CALL SbaXFormAdapter::setControlModels(const Sequence< Reference< ::com::sun::star::awt::XControlModel >  >& Controls) throw( RuntimeException )
+void SAL_CALL SbaXFormAdapter::setControlModels(const Sequence< Reference< ::com::sun::star::awt::XControlModel >  >& /*Controls*/) throw( RuntimeException )
 {
     DBG_ERROR("SAL_CALL SbaXFormAdapter::setControlModels : not supported !");
 }
@@ -1134,7 +1134,7 @@ Sequence< Reference< ::com::sun::star::awt::XControlModel > > SAL_CALL SbaXFormA
 }
 
 // -------------------------------------------------------------------------
-void SAL_CALL SbaXFormAdapter::setGroup(const Sequence< Reference< ::com::sun::star::awt::XControlModel >  >& _rGroup, const ::rtl::OUString& GroupName) throw( RuntimeException )
+void SAL_CALL SbaXFormAdapter::setGroup(const Sequence< Reference< ::com::sun::star::awt::XControlModel >  >& /*_rGroup*/, const ::rtl::OUString& /*GroupName*/) throw( RuntimeException )
 {
     DBG_ERROR("SAL_CALL SbaXFormAdapter::setGroup : not supported !");
 }
@@ -1147,13 +1147,13 @@ sal_Int32 SAL_CALL SbaXFormAdapter::getGroupCount() throw( RuntimeException )
 }
 
 // -------------------------------------------------------------------------
-void SAL_CALL SbaXFormAdapter::getGroup(sal_Int32 nGroup, Sequence< Reference< ::com::sun::star::awt::XControlModel >  >& _rGroup, ::rtl::OUString& Name) throw( RuntimeException )
+void SAL_CALL SbaXFormAdapter::getGroup(sal_Int32 /*nGroup*/, Sequence< Reference< ::com::sun::star::awt::XControlModel >  >& /*_rGroup*/, ::rtl::OUString& /*Name*/) throw( RuntimeException )
 {
     DBG_ERROR("SAL_CALL SbaXFormAdapter::getGroup : not supported !");
 }
 
 // -------------------------------------------------------------------------
-void SAL_CALL SbaXFormAdapter::getGroupByName(const ::rtl::OUString& Name, Sequence< Reference< ::com::sun::star::awt::XControlModel >  >& _rGroup) throw( RuntimeException )
+void SAL_CALL SbaXFormAdapter::getGroupByName(const ::rtl::OUString& /*Name*/, Sequence< Reference< ::com::sun::star::awt::XControlModel >  >& /*_rGroup*/) throw( RuntimeException )
 {
     DBG_ERROR("SAL_CALL SbaXFormAdapter::getGroupByName : not supported !");
 }
@@ -1359,7 +1359,7 @@ Sequence< Any > SAL_CALL SbaXFormAdapter::getPropertyValues(const Sequence< ::rt
 }
 
 // -------------------------------------------------------------------------
-void SAL_CALL SbaXFormAdapter::addPropertiesChangeListener(const Sequence< ::rtl::OUString>& aPropertyNames, const Reference< ::com::sun::star::beans::XPropertiesChangeListener >& xListener) throw( RuntimeException )
+void SAL_CALL SbaXFormAdapter::addPropertiesChangeListener(const Sequence< ::rtl::OUString>& /*aPropertyNames*/, const Reference< ::com::sun::star::beans::XPropertiesChangeListener >& xListener) throw( RuntimeException )
 {
     // we completely ignore the property names, _all_ changes of _all_ properties will be forwarded to _all_ listeners
     m_aPropertiesChangeListeners.addInterface(xListener);
@@ -1665,20 +1665,16 @@ sal_Bool SAL_CALL SbaXFormAdapter::hasElements() throw(RuntimeException)
 // -------------------------------------------------------------------------
 void SAL_CALL SbaXFormAdapter::insertByIndex(sal_Int32 _rIndex, const Any& Element) throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, RuntimeException )
 {
-    if ((_rIndex < 0) || (_rIndex >= m_aChildren.size()))
-    {
+    if ( ( _rIndex < 0 ) || ( (size_t)_rIndex >= m_aChildren.size() ) )
         throw ::com::sun::star::lang::IndexOutOfBoundsException();
-    }
     implInsert(Element, _rIndex);
 }
 
 // -------------------------------------------------------------------------
 void SAL_CALL SbaXFormAdapter::removeByIndex(sal_Int32 _rIndex) throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, RuntimeException )
 {
-    if ((_rIndex < 0) || (_rIndex >= m_aChildren.size()))
-    {
+    if ( ( _rIndex < 0 ) || ( (size_t)_rIndex >= m_aChildren.size() ) )
         throw ::com::sun::star::lang::IndexOutOfBoundsException();
-    }
 
     Reference< ::com::sun::star::form::XFormComponent >  xAffected = *(m_aChildren.begin() + _rIndex);
 
@@ -1707,10 +1703,8 @@ void SAL_CALL SbaXFormAdapter::removeByIndex(sal_Int32 _rIndex) throw( ::com::su
 // -------------------------------------------------------------------------
 void SAL_CALL SbaXFormAdapter::replaceByIndex(sal_Int32 _rIndex, const Any& Element) throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, RuntimeException )
 {
-    if ((_rIndex < 0) || (_rIndex >= m_aChildren.size()))
-    {
+    if ( ( _rIndex < 0 ) || ( (size_t)_rIndex >= m_aChildren.size() ) )
         throw ::com::sun::star::lang::IndexOutOfBoundsException();
-    }
 
     // extract the form component
     if (Element.getValueType().getTypeClass() != TypeClass_INTERFACE)
@@ -1778,10 +1772,9 @@ sal_Int32 SAL_CALL SbaXFormAdapter::getCount() throw( RuntimeException )
 // -------------------------------------------------------------------------
 Any SAL_CALL SbaXFormAdapter::getByIndex(sal_Int32 _rIndex) throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, RuntimeException )
 {
-    if ((_rIndex < 0) || (_rIndex >= m_aChildren.size()))
-    {
+    if ( ( _rIndex < 0 ) || ( (size_t)_rIndex >= m_aChildren.size() ) )
         throw ::com::sun::star::lang::IndexOutOfBoundsException();
-    }
+
     Reference< ::com::sun::star::form::XFormComponent >  xElement = *(m_aChildren.begin() + _rIndex);
     return makeAny(xElement);
 }
