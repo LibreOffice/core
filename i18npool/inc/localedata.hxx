@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localedata.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-20 13:28:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:40:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,8 +152,8 @@ private :
     std::vector<lookupTableItem*> lookupTable;
     lookupTableItem *cachedItem;
 
-    void* SAL_CALL getFunctionSymbol( const com::sun::star::lang::Locale& rLocale, const sal_Char* pFunction ) throw( com::sun::star::uno::RuntimeException );
-    void* SAL_CALL getFunctionSymbolByName( const rtl::OUString& localeName, const sal_Char* pFunction );
+    oslGenericFunction SAL_CALL getFunctionSymbol( const com::sun::star::lang::Locale& rLocale, const sal_Char* pFunction ) throw( com::sun::star::uno::RuntimeException );
+    oslGenericFunction SAL_CALL getFunctionSymbolByName( const rtl::OUString& localeName, const sal_Char* pFunction );
     sal_Unicode ** SAL_CALL getIndexArray(const com::sun::star::lang::Locale& rLocale, sal_Int16& indexCount);
     sal_Unicode ** SAL_CALL getIndexArrayForAlgorithm(const com::sun::star::lang::Locale& rLocale, const rtl::OUString& rAlgorithm);
     com::sun::star::i18n::Calendar ref_cal;
