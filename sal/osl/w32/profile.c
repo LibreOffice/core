@@ -4,9 +4,9 @@
  *
  *  $RCSfile: profile.c,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:10:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:22:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -174,7 +174,7 @@ static void                 removeSection(osl_TProfileImpl* pProfile, osl_TProfi
 static osl_TProfileSection* findEntry(osl_TProfileImpl* pProfile, const sal_Char* Section,
                                       const sal_Char* Entry, sal_uInt32 *pNoEntry);
 static sal_Bool             loadProfile(osl_TFile* pFile, osl_TProfileImpl* pProfile);
-static sal_Bool             storeProfile(osl_TFile* pFile, osl_TProfileImpl* pProfile, sal_Bool bCleanup);
+static sal_Bool             storeProfile(osl_TProfileImpl* pProfile, sal_Bool bCleanup);
 static osl_TProfileImpl*    acquireProfile(oslProfile Profile, sal_Bool bWriteable);
 static sal_Bool             releaseProfile(osl_TProfileImpl* pProfile);
 static sal_Bool             lookupProfile(const sal_Unicode *strPath, const sal_Unicode *strFile, sal_Unicode *strProfile);
@@ -192,7 +192,7 @@ static sal_Bool SAL_CALL osl_getProfileName(rtl_uString* strPath, rtl_uString* s
 
 oslProfile SAL_CALL osl_openProfile(rtl_uString *strProfileName, sal_uInt32 Flags)
 {
-    osl_TFile*        pFile;
+    osl_TFile*        pFile = NULL;
     osl_TProfileImpl* pProfile;
     rtl_uString       *FileName=NULL;
 
@@ -309,7 +309,7 @@ sal_Bool SAL_CALL osl_closeProfile(oslProfile Profile)
 /*                  if (pProfile->m_pFile == NULL) */
 /*                      pProfile->m_pFile = openFileImpl(pProfile->m_Filename, sal_True); */
 
-                storeProfile(pProfile->m_pFile, pProfile, sal_False);
+                storeProfile(pProfile, sal_False);
             }
         }
         else
@@ -403,7 +403,7 @@ sal_Bool SAL_CALL osl_flushProfile(oslProfile Profile)
 #ifdef DEBUG_OSL_PROFILE
         OSL_TRACE("swapping to storeprofile\n");
 #endif
-        bRet = storeProfile(pFile,pProfile,sal_False);
+        bRet = storeProfile(pProfile,sal_False);
     }
 
 #ifdef TRACE_OSL_PROFILE
@@ -438,8 +438,6 @@ static sal_Bool writeProfileImpl(osl_TFile* pFile)
 
     if ( bRet == 0 || BytesWritten <= 0 )
     {
-        DWORD nError = GetLastError();
-
         OSL_ENSURE(bRet,"WriteFile failed!!!");
 
         OSL_TRACE("write failed '%s'\n",strerror(errno));
@@ -1103,7 +1101,7 @@ sal_Bool SAL_CALL osl_getProfileName(rtl_uString* strPath, rtl_uString* strName,
     nError = osl_getFileURLFromSystemPath(strTmp, strProfileName);
     rtl_uString_release(strTmp);
 
-    return nError == osl_File_E_None;
+    return (sal_Bool) (nError == osl_File_E_None);
 }
 
 
@@ -1220,15 +1218,19 @@ static sal_Bool lockFile(const osl_TFile* pFile, osl_TLockMode eMode)
     switch (eMode)
     {
         case un_lock:
-            status = UnlockFileEx(pFile->m_Handle, 0, 0xFFFFFFFF, 0, &Overlapped);
+            status = (sal_Bool) UnlockFileEx(
+                pFile->m_Handle, 0, 0xFFFFFFFF, 0, &Overlapped);
             break;
 
         case read_lock:
-            status = LockFileEx(pFile->m_Handle, 0, 0, 0xFFFFFFFF, 0, &Overlapped);
+            status = (sal_Bool) LockFileEx(
+                pFile->m_Handle, 0, 0, 0xFFFFFFFF, 0, &Overlapped);
             break;
 
         case write_lock:
-            status = LockFileEx(pFile->m_Handle, LOCKFILE_EXCLUSIVE_LOCK, 0, 0xFFFFFFFF, 0, &Overlapped);
+            status = (sal_Bool) LockFileEx(
+                pFile->m_Handle, LOCKFILE_EXCLUSIVE_LOCK, 0, 0xFFFFFFFF, 0,
+                &Overlapped);
             break;
     }
 
@@ -1446,7 +1448,8 @@ static sal_Bool rewindFile(osl_TFile* pFile, sal_Bool bTruncate)
 
 static sal_Bool getLine(osl_TFile* pFile, const sal_Char *pszLine, int MaxLen)
 {
-    int   Max, Free, Bytes;
+    DWORD Max;
+    size_t Free, Bytes;
     sal_Char* pChr;
     sal_Char* pLine = (sal_Char *)pszLine;
 
@@ -1913,7 +1916,7 @@ static  sal_uInt32    Sect = 0;
         sal_uInt32    i, n;
         sal_uInt32    Len;
         const sal_Char* pStr;
-        osl_TProfileSection* pSec;
+        osl_TProfileSection* pSec = NULL;
 
     Len = strlen(Section);
     Section = (sal_Char *)stripBlanks(Section, &Len);
@@ -2015,7 +2018,7 @@ static sal_Bool loadProfile(osl_TFile* pFile, osl_TProfileImpl* pProfile)
 
 
 
-static sal_Bool storeProfile(osl_TFile* pFile, osl_TProfileImpl* pProfile, sal_Bool bCleanup)
+static sal_Bool storeProfile(osl_TProfileImpl* pProfile, sal_Bool bCleanup)
 {
 #ifdef TRACE_OSL_PROFILE
     OSL_TRACE("In  storeProfile\n");
@@ -2250,7 +2253,9 @@ static osl_TProfileImpl* acquireProfile(oslProfile Profile, sal_Bool bWriteable)
 #ifdef DEBUG_OSL_PROFILE
                 OSL_TRACE("DEFAULT MODE\n");
 #endif
-                if (! (pProfile->m_pFile = openFileImpl(pProfile->m_strFileName, pProfile->m_Flags | PFlags)))
+                pProfile->m_pFile = openFileImpl(
+                    pProfile->m_strFileName, pProfile->m_Flags | PFlags);
+                if (!pProfile->m_pFile)
                     return NULL;
 
                 Stamp = getFileStamp(pProfile->m_pFile);
@@ -2313,7 +2318,7 @@ static sal_Bool releaseProfile(osl_TProfileImpl* pProfile)
                                     osl_Profile_WRITELOCK | osl_Profile_FLUSHWRITE)))
             {
                 if (pProfile->m_Flags & FLG_MODIFIED)
-                    storeProfile(pProfile->m_pFile, pProfile, sal_False);
+                    storeProfile(pProfile, sal_False);
 
                 closeFileImpl(pProfile->m_pFile);
                 pProfile->m_pFile = NULL;
@@ -2376,27 +2381,34 @@ static sal_Bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *str
 
             /* open sversion.ini in the system directory, and try to locate the entry
                with the highest version for StarOffice */
-            if ((osl_getProfileName( strSVFallback, strSVName, &strSVProfile)) &&
-                (hProfile = osl_openProfile(strSVProfile, osl_Profile_READLOCK)))
+            if (osl_getProfileName( strSVFallback, strSVName, &strSVProfile))
             {
-                  osl_getProfileSectionEntries(hProfile, SVERSION_SECTION,
-                                                Buffer, sizeof(Buffer));
-
-                for (pChr = Buffer; *pChr != '\0'; pChr += strlen(pChr) + 1)
+                hProfile = osl_openProfile(strSVProfile, osl_Profile_READLOCK);
+                if (hProfile)
                 {
-                    if ((strnicmp(pChr, SVERSION_SOFFICE, sizeof(SVERSION_SOFFICE) - 1) == 0) &&
-                        (stricmp(Product, pChr) < 0))
+                    osl_getProfileSectionEntries(
+                        hProfile, SVERSION_SECTION, Buffer, sizeof(Buffer));
+
+                    for (pChr = Buffer; *pChr != '\0'; pChr += strlen(pChr) + 1)
                     {
-                        osl_readProfileString(hProfile, SVERSION_SECTION, pChr,
-                                              Dir, sizeof(Dir), "");
+                        if ((strnicmp(
+                                 pChr, SVERSION_SOFFICE,
+                                 sizeof(SVERSION_SOFFICE) - 1)
+                             == 0)
+                            && (stricmp(Product, pChr) < 0))
+                        {
+                            osl_readProfileString(
+                                hProfile, SVERSION_SECTION, pChr, Dir,
+                                sizeof(Dir), "");
 
-                        /* check for existence of path */
-                        if (access(Dir, 0) >= 0)
-                            strcpy(Product, pChr);
+                            /* check for existence of path */
+                            if (access(Dir, 0) >= 0)
+                                strcpy(Product, pChr);
+                        }
                     }
-                }
 
-                osl_closeProfile(hProfile);
+                    osl_closeProfile(hProfile);
+                }
                 rtl_uString_release(strSVProfile);
                 strSVProfile = NULL;
             }
@@ -2404,27 +2416,34 @@ static sal_Bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *str
             /* open sversion.ini in the users directory, and try to locate the entry
                with the highest version for StarOffice */
             if ((strcmp(SVERSION_LOCATION, SVERSION_FALLBACK) != 0) &&
-                (osl_getProfileName(strSVLocation, strSVName, &strSVProfile)) &&
-                (hProfile = osl_openProfile(strSVProfile, osl_Profile_READLOCK)))
+                (osl_getProfileName(strSVLocation, strSVName, &strSVProfile)))
             {
-                  osl_getProfileSectionEntries(hProfile, SVERSION_SECTION,
-                                                Buffer, sizeof(Buffer));
-
-                for (pChr = Buffer; *pChr != '\0'; pChr += strlen(pChr) + 1)
+                hProfile = osl_openProfile(strSVProfile, osl_Profile_READLOCK);
+                if (hProfile)
                 {
-                    if ((strnicmp(pChr, SVERSION_SOFFICE, sizeof(SVERSION_SOFFICE) - 1) == 0) &&
-                        (stricmp(Product, pChr) < 0))
+                    osl_getProfileSectionEntries(
+                        hProfile, SVERSION_SECTION, Buffer, sizeof(Buffer));
+
+                    for (pChr = Buffer; *pChr != '\0'; pChr += strlen(pChr) + 1)
                     {
-                        osl_readProfileString(hProfile, SVERSION_SECTION, pChr,
-                                              Dir, sizeof(Dir), "");
+                        if ((strnicmp(
+                                 pChr, SVERSION_SOFFICE,
+                                 sizeof(SVERSION_SOFFICE) - 1)
+                             == 0)
+                            && (stricmp(Product, pChr) < 0))
+                        {
+                            osl_readProfileString(
+                                hProfile, SVERSION_SECTION, pChr, Dir,
+                                sizeof(Dir), "");
 
-                        /* check for existence of path */
-                        if (access(Dir, 0) >= 0)
-                            strcpy(Product, pChr);
+                            /* check for existence of path */
+                            if (access(Dir, 0) >= 0)
+                                strcpy(Product, pChr);
+                        }
                     }
-                }
 
-                osl_closeProfile(hProfile);
+                    osl_closeProfile(hProfile);
+                }
                 rtl_uString_release(strSVProfile);
             }
 
@@ -2625,51 +2644,74 @@ static sal_Bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *str
 
                 /* open sversion.ini in the system directory, and try to locate the entry
                    with the highest version for StarOffice */
-                if ((osl_getProfileName(strSVLocation, strSVName, &strSVProfile)) &&
-                    (hProfile = osl_openProfile(strSVProfile, osl_Profile_READLOCK)))
+                if (osl_getProfileName(strSVLocation, strSVName, &strSVProfile))
                 {
-                    osl_readProfileString(hProfile, SVERSION_SECTION, Product, Buffer, sizeof(Buffer), "");
-                    osl_closeProfile(hProfile);
-
-                    /* if not found, try the fallback */
-                    if ((strlen(Buffer) <= 0) && (strcmp(SVERSION_LOCATION, SVERSION_FALLBACK) != 0))
+                    hProfile = osl_openProfile(
+                        strSVProfile, osl_Profile_READLOCK);
+                    if (hProfile)
                     {
-                        if ((osl_getProfileName(strSVFallback, strSVName, &strSVProfile)) &&
-                            (hProfile = osl_openProfile(strSVProfile, osl_Profile_READLOCK)))
-                        {
-                            osl_readProfileString(hProfile, SVERSION_SECTION, Product, Buffer, sizeof(Buffer), "");
-                        }
-
+                        osl_readProfileString(
+                            hProfile, SVERSION_SECTION, Product, Buffer,
+                            sizeof(Buffer), "");
                         osl_closeProfile(hProfile);
-                    }
 
-                    if (strlen(Buffer) > 0)
-                    {
-                        dwPathLen = MultiByteToWideChar( CP_ACP, 0, Buffer, -1, wcsPath, MAX_PATH );
-                        dwPathLen -=1;
-
-                        /* build full path */
-                        if ((wcsPath[dwPathLen - 1] != L'/') && (wcsPath[dwPathLen - 1] != L'\\'))
+                        /* if not found, try the fallback */
+                        if ((strlen(Buffer) <= 0)
+                            && (strcmp(SVERSION_LOCATION, SVERSION_FALLBACK)
+                                != 0))
                         {
-                            wcscpy(wcsPath + dwPathLen++, L"\\");
-                        }
-
-                        if (*strPath)
-                        {
-                            wcscpy(wcsPath + dwPathLen, strPath);
-                            dwPathLen += wcslen(strPath);
-                        }
-                        else
-                        {
-                            CHAR szPath[MAX_PATH];
-                            int n;
-
-                            if ((n = WideCharToMultiByte(CP_ACP,0, wcsPath, -1, szPath, MAX_PATH, NULL, NULL)) > 0)
+                            if (osl_getProfileName(
+                                    strSVFallback, strSVName, &strSVProfile))
                             {
-                                strcpy(szPath + n, SVERSION_USER);
-                                if (access(szPath, 0) >= 0)
+                                hProfile = osl_openProfile(
+                                    strSVProfile, osl_Profile_READLOCK);
+                                if (hProfile)
                                 {
-                                    dwPathLen += MultiByteToWideChar( CP_ACP, 0, SVERSION_USER, -1, wcsPath + dwPathLen, MAX_PATH - dwPathLen );
+                                    osl_readProfileString(
+                                        hProfile, SVERSION_SECTION, Product,
+                                        Buffer, sizeof(Buffer), "");
+                                }
+                            }
+
+                            osl_closeProfile(hProfile);
+                        }
+
+                        if (strlen(Buffer) > 0)
+                        {
+                            dwPathLen = MultiByteToWideChar(
+                                CP_ACP, 0, Buffer, -1, wcsPath, MAX_PATH );
+                            dwPathLen -=1;
+
+                            /* build full path */
+                            if ((wcsPath[dwPathLen - 1] != L'/')
+                                && (wcsPath[dwPathLen - 1] != L'\\'))
+                            {
+                                wcscpy(wcsPath + dwPathLen++, L"\\");
+                            }
+
+                            if (*strPath)
+                            {
+                                wcscpy(wcsPath + dwPathLen, strPath);
+                                dwPathLen += wcslen(strPath);
+                            }
+                            else
+                            {
+                                CHAR szPath[MAX_PATH];
+                                int n;
+
+                                if ((n = WideCharToMultiByte(
+                                         CP_ACP,0, wcsPath, -1, szPath,
+                                         MAX_PATH, NULL, NULL))
+                                    > 0)
+                                {
+                                    strcpy(szPath + n, SVERSION_USER);
+                                    if (access(szPath, 0) >= 0)
+                                    {
+                                        dwPathLen += MultiByteToWideChar(
+                                            CP_ACP, 0, SVERSION_USER, -1,
+                                            wcsPath + dwPathLen,
+                                            MAX_PATH - dwPathLen );
+                                    }
                                 }
                             }
                         }
