@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fcomp.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:10:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:02:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,11 +70,11 @@ namespace connectivity
 
             inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
                 { return ::rtl_allocateMemory( nSize ); }
-            inline static void * SAL_CALL operator new( size_t nSize,void* _pHint ) SAL_THROW( () )
+            inline static void * SAL_CALL operator new( size_t /*nSize*/,void* _pHint ) SAL_THROW( () )
                 { return _pHint; }
             inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
                 { ::rtl_freeMemory( pMem ); }
-            inline static void SAL_CALL operator delete( void * pMem,void* _pHint ) SAL_THROW( () )
+            inline static void SAL_CALL operator delete( void * /*pMem*/,void* /*_pHint*/ ) SAL_THROW( () )
                 {  }
             void dispose();
 
