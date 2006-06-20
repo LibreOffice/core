@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uiservices.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:17:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:24:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,7 +118,7 @@ extern "C" void SAL_CALL createRegistryInfo_DBU()
 
 extern "C" void SAL_CALL component_getImplementationEnvironment(
                 const sal_Char  **ppEnvTypeName,
-                uno_Environment **ppEnv
+                uno_Environment **/*ppEnv*/
             )
 {
     createRegistryInfo_DBU();
@@ -151,7 +151,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
 extern "C" void* SAL_CALL component_getFactory(
                     const sal_Char* pImplementationName,
                     void* pServiceManager,
-                    void* pRegistryKey)
+                    void* /*pRegistryKey*/)
 {
     Reference< XInterface > xRet;
     if (pServiceManager && pImplementationName)
