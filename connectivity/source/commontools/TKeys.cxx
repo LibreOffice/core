@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TKeys.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:12:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:04:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -181,7 +181,7 @@ Reference< XPropertySet > OKeysHelper::createEmptyObject()
 // XAppend
 void OKeysHelper::appendObject( const Reference< XPropertySet >& descriptor )
 {
-    ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
+    const ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
     ::rtl::OUString aName = getString(descriptor->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME)));
     if ( !m_pTable->isNew() )
     {
@@ -243,7 +243,6 @@ void OKeysHelper::appendObject( const Reference< XPropertySet >& descriptor )
         try
         {
             ::rtl::OUString aSchema,aTable;
-            ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
             m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME)) >>= aSchema;
             m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))       >>= aTable;
             Reference< XResultSet > xResult;
