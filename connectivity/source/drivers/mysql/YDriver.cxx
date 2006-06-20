@@ -4,9 +4,9 @@
  *
  *  $RCSfile: YDriver.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 12:20:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:53:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,7 +139,7 @@ namespace connectivity
             return sRet;
         }
         //--------------------------------------------------------------------
-        ::rtl::OUString transformUrl(const ::rtl::OUString& _sUrl,const Sequence< PropertyValue >& info)
+        ::rtl::OUString transformUrl(const ::rtl::OUString& _sUrl)
         {
             ::rtl::OUString sNewUrl = _sUrl.copy(11);
             if ( isOdbcUrl( _sUrl ) )
@@ -222,7 +222,7 @@ namespace connectivity
     Reference< XDriver > ODriverDelegator::loadDriver( const ::rtl::OUString& url, const Sequence< PropertyValue >& info )
     {
         Reference< XDriver > xDriver;
-        ::rtl::OUString sCuttedUrl = transformUrl(url,info);
+        ::rtl::OUString sCuttedUrl = transformUrl(url);
         sal_Bool bIsODBC = isOdbcUrl( url );
         if ( bIsODBC )
         {
@@ -254,7 +254,7 @@ namespace connectivity
             xDriver = loadDriver(url,info);
             if ( xDriver.is() )
             {
-                ::rtl::OUString sCuttedUrl = transformUrl(url,info);
+                ::rtl::OUString sCuttedUrl = transformUrl(url);
                 sal_Bool bIsODBC = isOdbcUrl( url );
                 Sequence< PropertyValue > aConvertedProperties = lcl_convertProperties(bIsODBC,info);
 
@@ -292,7 +292,7 @@ namespace connectivity
     }
 
     //--------------------------------------------------------------------
-    Sequence< DriverPropertyInfo > SAL_CALL ODriverDelegator::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw (SQLException, RuntimeException)
+    Sequence< DriverPropertyInfo > SAL_CALL ODriverDelegator::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& /*info*/ ) throw (SQLException, RuntimeException)
     {
         ::std::vector< DriverPropertyInfo > aDriverInfo;
         if ( !acceptsURL(url) )
@@ -422,10 +422,6 @@ namespace connectivity
     Sequence< ::rtl::OUString > SAL_CALL ODriverDelegator::getSupportedServiceNames(  ) throw(RuntimeException)
     {
         return getSupportedServiceNames_Static();
-    }
-    //------------------------------------------------------------------
-    void SAL_CALL ODriverDelegator::createCatalog( const Sequence< PropertyValue >& info ) throw (SQLException, ::com::sun::star::container::ElementExistException, RuntimeException)
-    {
     }
     //------------------------------------------------------------------
 //........................................................................
