@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ADatabaseMetaDataResultSet.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:27:46 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:13:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -218,8 +218,9 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL ODatabaseMetaDataResult
     return new SequenceInputStream(m_aValue);
 }
 // -------------------------------------------------------------------------
-Reference< ::com::sun::star::io::XInputStream > SAL_CALL ODatabaseMetaDataResultSet::getCharacterStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Reference< ::com::sun::star::io::XInputStream > SAL_CALL ODatabaseMetaDataResultSet::getCharacterStream( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
+    ::dbtools::throwFeatureNotImplementedException( "XRow::getCharacterStream", *this );
     return NULL;
 }
 
@@ -303,12 +304,14 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::getInt( sal_Int32 columnIndex ) t
 
 sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::getRow(  ) throw(SQLException, RuntimeException)
 {
+    ::dbtools::throwFeatureNotImplementedException( "XResultSet::getRow", *this );
     return 0;
 }
 // -------------------------------------------------------------------------
 
-sal_Int64 SAL_CALL ODatabaseMetaDataResultSet::getLong( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+sal_Int64 SAL_CALL ODatabaseMetaDataResultSet::getLong( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
+    ::dbtools::throwFeatureNotImplementedException( "XRow::getLong", *this );
     return sal_Int64(0);
 }
 // -------------------------------------------------------------------------
@@ -327,31 +330,35 @@ Reference< XResultSetMetaData > SAL_CALL ODatabaseMetaDataResultSet::getMetaData
     return m_xMetaData;
 }
 // -------------------------------------------------------------------------
-Reference< XArray > SAL_CALL ODatabaseMetaDataResultSet::getArray( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Reference< XArray > SAL_CALL ODatabaseMetaDataResultSet::getArray( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
+    ::dbtools::throwFeatureNotImplementedException( "XRow::getRow", *this );
     return NULL;
 }
 
 // -------------------------------------------------------------------------
 
-Reference< XClob > SAL_CALL ODatabaseMetaDataResultSet::getClob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Reference< XClob > SAL_CALL ODatabaseMetaDataResultSet::getClob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
+    ::dbtools::throwFeatureNotImplementedException( "XRow::getRow", *this );
     return NULL;
 }
 // -------------------------------------------------------------------------
-Reference< XBlob > SAL_CALL ODatabaseMetaDataResultSet::getBlob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Reference< XBlob > SAL_CALL ODatabaseMetaDataResultSet::getBlob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
-    return NULL;
-}
-// -------------------------------------------------------------------------
-
-Reference< XRef > SAL_CALL ODatabaseMetaDataResultSet::getRef( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
-{
+    ::dbtools::throwFeatureNotImplementedException( "XRow::getRow", *this );
     return NULL;
 }
 // -------------------------------------------------------------------------
 
-Any SAL_CALL ODatabaseMetaDataResultSet::getObject( sal_Int32 columnIndex, const Reference< ::com::sun::star::container::XNameAccess >& typeMap ) throw(SQLException, RuntimeException)
+Reference< XRef > SAL_CALL ODatabaseMetaDataResultSet::getRef( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
+{
+    ::dbtools::throwFeatureNotImplementedException( "XRow::getRow", *this );
+    return NULL;
+}
+// -------------------------------------------------------------------------
+
+Any SAL_CALL ODatabaseMetaDataResultSet::getObject( sal_Int32 columnIndex, const Reference< ::com::sun::star::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
@@ -496,8 +503,8 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::first(  ) throw(SQLException, Runt
     if(!m_pRecordSet)
         return sal_False;
 
-    sal_Bool bRet;
-    if(bRet = SUCCEEDED(m_pRecordSet->MoveFirst()))
+    sal_Bool bRet = SUCCEEDED(m_pRecordSet->MoveFirst());
+    if ( bRet )
         m_nRowPos = 1;
     return bRet;
 }
@@ -509,7 +516,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::last(  ) throw(SQLException, Runti
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed );
 
 
-    return m_pRecordSet ? SUCCEEDED(m_pRecordSet->MoveLast()) : sal_False;
+    return m_pRecordSet && SUCCEEDED(m_pRecordSet->MoveLast()) ? sal_True : sal_False;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::absolute( sal_Int32 row ) throw(SQLException, RuntimeException)
@@ -713,8 +720,9 @@ sal_Int32 ODatabaseMetaDataResultSet::getFetchSize() const
 }
 
 //------------------------------------------------------------------------------
-void ODatabaseMetaDataResultSet::setFetchDirection(sal_Int32 _par0)
+void ODatabaseMetaDataResultSet::setFetchDirection(sal_Int32 /*_par0*/)
 {
+    ::dbtools::throwFeatureNotImplementedException( "ResultSet::FetchDirection", *this );
 }
 //------------------------------------------------------------------------------
 void ODatabaseMetaDataResultSet::setFetchSize(sal_Int32 _par0)
@@ -769,7 +777,7 @@ sal_Bool ODatabaseMetaDataResultSet::convertFastPropertyValue(
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSet::setFastPropertyValue_NoBroadcast(
                                 sal_Int32 nHandle,
-                                const Any& rValue
+                                const Any& /*rValue*/
                                                  )
                                                  throw (Exception)
 {
