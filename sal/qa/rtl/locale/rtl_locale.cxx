@@ -304,7 +304,7 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_locale::equals, "rtl_locale");
 // to let the user the possibility to also register some functions by hand.
 // NOADDITIONAL;
 
-void RegisterAdditionalFunctions(FktRegFuncPtr _pFunc)
+void RegisterAdditionalFunctions(FktRegFuncPtr)
 {
     // start message
     t_print("Initializing ...\n" );
