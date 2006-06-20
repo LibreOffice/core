@@ -4,9 +4,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 10:05:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:38:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,9 +87,6 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
-#ifndef _CONNECTIVITY_SDBCX_COLUMN_HXX_
-#include <connectivity/sdbcx/VColumn.hxx>
-#endif
 #ifndef CONNECTIVITY_TABLEHELPER_HXX
 #include <connectivity/TTableHelper.hxx>
 #endif
@@ -123,7 +120,7 @@ using namespace ::osl;
 using namespace ::comphelper;
 using namespace ::cppu;
 
-DBG_NAME(OColumn);
+DBG_NAME(OColumn)
 
 //============================================================
 //= OColumn
@@ -295,8 +292,9 @@ void SAL_CALL OColumn::setName( const ::rtl::OUString& _rName ) throw(::com::sun
     m_sName = _rName;
 }
 // -----------------------------------------------------------------------------
-void OColumn::fireValueChange(const ::connectivity::ORowSetValue& _rOldValue)
+void OColumn::fireValueChange(const ::connectivity::ORowSetValue& /*_rOldValue*/)
 {
+    DBG_ERROR( "OColumn::fireValueChange: not implemented!" );
 }
 // -----------------------------------------------------------------------------
 //============================================================
@@ -391,7 +389,8 @@ sal_Bool OColumnSettings::convertFastPropertyValue(
             bModified = !uno_type_equalData(
                                 const_cast< void* >( m_aAlignment.getValue() ), m_aAlignment.getValueType().getTypeLibType(),
                                 const_cast< void* >( rValue.getValue() ), rValue.getValueType().getTypeLibType(),
-                                cpp_queryInterface, cpp_release
+                                reinterpret_cast< uno_QueryInterfaceFunc >( cpp_queryInterface ),
+                                reinterpret_cast< uno_ReleaseFunc >( cpp_release )
                             );
             if ( bModified )
             {
@@ -461,8 +460,9 @@ void OColumnSettings::setFastPropertyValue_NoBroadcast(
                     uno_type_assignData(
                         static_cast< void* >( &nAlign ),    ::getCppuType(static_cast< sal_Int32* >(NULL)).getTypeLibType(),
                         const_cast< void* >( rValue.getValue() ),   rValue.getValueType().getTypeLibType(),
-                        cpp_queryInterface,
-                        cpp_acquire, cpp_release );
+                        reinterpret_cast< uno_QueryInterfaceFunc >( cpp_queryInterface ),
+                        reinterpret_cast< uno_AcquireFunc >( cpp_acquire ),
+                        reinterpret_cast< uno_ReleaseFunc >( cpp_release ) );
 
                     OSL_ENSURE( bSuccess,
                         "OPropertyStateContainer::setFastPropertyValue_NoBroadcast : ooops .... the value could not be assigned!");
@@ -534,13 +534,13 @@ OColumns::OColumns(::cppu::OWeakObject& _rParent,
                    sal_Bool _bDropColumn,
                    sal_Bool _bUseHardRef)
                    : OColumns_BASE(_rParent,_bCaseSensitive,_rMutex,_rVector,_bUseHardRef)
-    ,m_bInitialized(sal_False)
-    ,m_bAddColumn(_bAddColumn)
-    ,m_bDropColumn(_bDropColumn)
+    ,m_pMediator(NULL)
     ,m_xDrvColumns(NULL)
     ,m_pColFactoryImpl(_pColFactory)
     ,m_pRefreshColumns(_pRefresh)
-    ,m_pMediator(NULL)
+    ,m_bInitialized(sal_False)
+    ,m_bAddColumn(_bAddColumn)
+    ,m_bDropColumn(_bDropColumn)
 {
     DBG_CTOR(OColumns, NULL);
 }
@@ -554,13 +554,13 @@ OColumns::OColumns(::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
         sal_Bool _bDropColumn,
         sal_Bool _bUseHardRef)
        : OColumns_BASE(_rParent,_bCaseSensitive,_rMutex,_rVector,_bUseHardRef)
-    ,m_bInitialized(sal_False)
-    ,m_bAddColumn(_bAddColumn)
-    ,m_bDropColumn(_bDropColumn)
+    ,m_pMediator(NULL)
     ,m_xDrvColumns(_rxDrvColumns)
     ,m_pColFactoryImpl(_pColFactory)
     ,m_pRefreshColumns(_pRefresh)
-    ,m_pMediator(NULL)
+    ,m_bInitialized(sal_False)
+    ,m_bAddColumn(_bAddColumn)
+    ,m_bDropColumn(_bDropColumn)
 {
     DBG_CTOR(OColumns, NULL);
 }
