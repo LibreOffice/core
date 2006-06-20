@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CTable.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:16:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:18:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -759,10 +759,8 @@ Sequence< sal_Int8 > OCalcTable::getUnoTunnelImplementationId()
 sal_Int64 OCalcTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
     return (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
-                ?
-            (sal_Int64)this
-                :
-            OCalcTable_BASE::getSomething(rId);
+                ? reinterpret_cast< sal_Int64 >( this )
+                : OCalcTable_BASE::getSomething(rId);
 }
 //------------------------------------------------------------------
 sal_Int32 OCalcTable::getCurrentLastPos() const
@@ -858,7 +856,8 @@ sal_Bool OCalcTable::fetchRow( OValueRefRow& _rRow, const OSQLColumns & _rCols,
 
     OSQLColumns::const_iterator aIter = _rCols.begin();
     OSQLColumns::const_iterator aEnd = _rCols.end();
-    for (sal_Int32 i = 1; aIter != aEnd && i < _rRow->size();++aIter, i++)
+    for (OValueRefVector::size_type i = 1; aIter != aEnd && i < _rRow->size();
+         ++aIter, i++)
     {
         if ( (*_rRow)[i]->isBound() )
         {
