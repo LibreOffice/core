@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AViews.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:32:30 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:16:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,7 +115,7 @@ void OViews::appendObject( const Reference< XPropertySet >& descriptor )
 }
 // -------------------------------------------------------------------------
 // XDrop
-void OViews::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
+void OViews::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElementName)
 {
     if(!m_aCollection.Delete(_sElementName))
         ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),static_cast<XTypeProvider*>(this));
