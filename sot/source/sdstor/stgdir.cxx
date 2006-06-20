@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stgdir.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:41:08 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:54:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,6 @@
 #include "stgstrms.hxx"
 #include "stgdir.hxx"
 #include "stgio.hxx"
-#pragma hdrstop
 
 //////////////////////////// class StgDirEntry /////////////////////////////
 
@@ -356,7 +355,7 @@ BOOL StgDirEntry::SetSize( INT32 nNewSize )
                     if( pOld->Read( pBuf, nOldSize )
                      && pStgStrm->Write( pBuf, nOldSize ) )
                         bRes = TRUE;
-                    delete[] pBuf;
+                    delete[] static_cast<BYTE*>(pBuf);
                 }
                 else
                     bRes = TRUE;
@@ -498,7 +497,7 @@ void StgDirEntry::Copy( BaseStorageStream& rDest )
     INT32 n = GetSize();
     if( rDest.SetSize( n ) && n )
     {
-        ULONG nPos = rDest.Tell();
+        ULONG Pos = rDest.Tell();
         BYTE aTempBytes[ 4096 ];
         void* p = static_cast<void*>( aTempBytes );
         Seek( 0L );
@@ -510,11 +509,11 @@ void StgDirEntry::Copy( BaseStorageStream& rDest )
                 nn = 4096;
             if( Read( p, nn ) != nn )
                 break;
-            if( rDest.Write( p, nn ) != nn )
+            if( sal::static_int_cast<INT32>(rDest.Write( p, nn )) != nn )
                 break;
             n -= nn;
         }
-        rDest.Seek( nPos );             // ?! Seems to be undocumented !
+        rDest.Seek( Pos );             // ?! Seems to be undocumented !
     }
 }
 
@@ -556,24 +555,24 @@ BOOL StgDirEntry::Revert()
         case STG_STORAGE:
         {
             BOOL bSomeRenamed = FALSE;
-            StgIterator aIter( *this );
-            StgDirEntry* p = aIter.First();
-            while( p )
+            StgIterator aOIter( *this );
+            StgDirEntry* op = aOIter.First();
+            while( op )
             {
-                p->aEntry = p->aSave;
-                p->bDirty = FALSE;
-                bSomeRenamed = BOOL( bSomeRenamed | p->bRenamed );
+                op->aEntry = op->aSave;
+                op->bDirty = FALSE;
+                bSomeRenamed = BOOL( bSomeRenamed | op->bRenamed );
                 // Remove any new entries
-                if( p->bCreated )
+                if( op->bCreated )
                 {
-                    p->bCreated = FALSE;
-                    p->Close();
-                    p->bInvalid = TRUE;
+                    op->bCreated = FALSE;
+                    op->Close();
+                    op->bInvalid = TRUE;
                 }
                 // Reactivate any removed entries
-                else if( p->bRemoved )
-                    p->bRemoved = p->bInvalid = p->bTemp = FALSE;
-                p = aIter.Next();
+                else if( op->bRemoved )
+                    op->bRemoved = op->bInvalid = op->bTemp = FALSE;
+                op = aOIter.Next();
             }
             // Resort all renamed entries
             if( bSomeRenamed )
@@ -595,6 +594,11 @@ BOOL StgDirEntry::Revert()
             DelTemp( FALSE );
             break;
         }
+        case STG_EMPTY:
+        case STG_LOCKBYTES:
+        case STG_PROPERTY:
+        case STG_ROOT:
+         break;
     }
     return TRUE;
 }
@@ -750,6 +754,8 @@ void StgDirEntry::Invalidate( BOOL bDel )
                 p->Invalidate( bDel );
             break;
         }
+        default:
+            break;
     }
 }
 
@@ -797,7 +803,7 @@ void StgDirStrm::SetupEntry( INT32 n, StgDirEntry* pUpper )
     void* p = ( n == STG_FREE ) ? NULL : GetEntry( n );
     if( p )
     {
-        BOOL bOk;
+        BOOL bOk(FALSE);
         StgDirEntry* pCur = new StgDirEntry( p, &bOk );
         if( !bOk )
         {
@@ -816,7 +822,7 @@ void StgDirStrm::SetupEntry( INT32 n, StgDirEntry* pUpper )
         // substorage?
         INT32 nLeaf = STG_FREE;
         if( pCur->aEntry.GetType() == STG_STORAGE
-         || pCur->aEntry.GetType() == STG_ROOT )
+            || pCur->aEntry.GetType() == STG_ROOT )
             nLeaf = pCur->aEntry.GetLeaf( STG_CHILD );
         if( nLeaf != 0 && nLeft != 0 && nRight != 0 )
         {
