@@ -4,9 +4,9 @@
  *
  *  $RCSfile: options.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-27 14:20:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:49:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@ sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
     throw( IllegalArgument )
 {
     sal_Bool    ret = sal_True;
-    sal_uInt16  i=0;
+    sal_uInt16  j=0;
 
     if (!bCmdFile)
     {
@@ -68,64 +68,64 @@ sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
             ret = sal_False;
         }
 
-        i = 1;
+        j = 1;
     } else
     {
-        i = 0;
+        j = 0;
     }
 
     char    *s=NULL;
-    for (i; i < ac; i++)
+    for (; j < ac; j++)
     {
-        if (av[i][0] == '-')
+        if (av[j][0] == '-')
         {
-            switch (av[i][1])
+            switch (av[j][1])
             {
             case 'O':
-                if (av[i][2] == '\0')
+                if (av[j][2] == '\0')
                 {
-                    if (i < ac - 1 && av[i+1][0] != '-')
+                    if (j < ac - 1 && av[j+1][0] != '-')
                     {
-                        i++;
-                        s = av[i];
+                        j++;
+                        s = av[j];
                     } else
                     {
                         OString tmp("'-O', please check");
-                        if (i <= ac - 1)
+                        if (j <= ac - 1)
                         {
-                            tmp += " your input '" + OString(av[i+1]) + "'";
+                            tmp += " your input '" + OString(av[j+1]) + "'";
                         }
 
                         throw IllegalArgument(tmp);
                     }
                 } else
                 {
-                    s = av[i] + 2;
+                    s = av[j] + 2;
                 }
 
                 m_options["-O"] = OString(s);
                 break;
             case 'I':
             {
-                if (av[i][2] == '\0')
+                if (av[j][2] == '\0')
                 {
-                    if (i < ac - 1 && av[i+1][0] != '-')
+                    if (j < ac - 1 && av[j+1][0] != '-')
                     {
-                        i++;
-                        s = av[i];
+                        j++;
+                        s = av[j];
                     } else
                     {
                         OString tmp("'-I', please check");
-                        if (i <= ac - 1)
+                        if (j <= ac - 1)
                         {
-                            tmp += " your input '" + OString(av[i+1]) + "'";
+                            tmp += " your input '" + OString(av[j+1]) + "'";
                         }
 
                         throw IllegalArgument(tmp);
                     }
                 } else
                 {
-                    s = av[i] + 2;
+                    s = av[j] + 2;
                 }
 
                 OString inc(s);
@@ -150,25 +150,25 @@ sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
             }
             break;
             case 'D':
-                if (av[i][2] == '\0')
+                if (av[j][2] == '\0')
                 {
-                    if (i < ac - 1 && av[i+1][0] != '-')
+                    if (j < ac - 1 && av[j+1][0] != '-')
                     {
-                        i++;
-                        s = av[i];
+                        j++;
+                        s = av[j];
                     } else
                     {
                         OString tmp("'-D', please check");
-                        if (i <= ac - 1)
+                        if (j <= ac - 1)
                         {
-                            tmp += " your input '" + OString(av[i+1]) + "'";
+                            tmp += " your input '" + OString(av[j+1]) + "'";
                         }
 
                         throw IllegalArgument(tmp);
                     }
                 } else
                 {
-                    s = av[i];
+                    s = av[j];
                 }
 
                 if (m_options.count("-D") > 0)
@@ -180,60 +180,58 @@ sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                     m_options["-D"] = OString(s);
                 break;
             case 'C':
-                if (av[i][2] != '\0')
+                if (av[j][2] != '\0')
                 {
-                    throw IllegalArgument(OString(av[i]) + ", please check your input");
+                    throw IllegalArgument(OString(av[j]) + ", please check your input");
                 }
                 if (m_options.count("-C") == 0)
-                    m_options["-C"] = OString(av[i]);
+                    m_options["-C"] = OString(av[j]);
                 break;
             case 'c':
-                if (av[i][2] == 'i' && av[i][3] == 'd' && av[i][4] == '\0')
+                if (av[j][2] == 'i' && av[j][3] == 'd' && av[j][4] == '\0')
                 {
                     if (m_options.count("-cid") == 0)
-                        m_options["-cid"] = OString(av[i]);
+                        m_options["-cid"] = OString(av[j]);
                 } else
-                    throw IllegalArgument(OString(av[i]) + ", please check your input");
+                    throw IllegalArgument(OString(av[j]) + ", please check your input");
                 break;
             case 'w':
-                if (av[i][2] == 'e' && av[i][3] == '\0') {
+                if (av[j][2] == 'e' && av[j][3] == '\0') {
                     if (m_options.count("-we") == 0)
-                        m_options["-we"] = OString(av[i]);
+                        m_options["-we"] = OString(av[j]);
                 } else {
-                    if (av[i][2] == '\0') {
+                    if (av[j][2] == '\0') {
                         if (m_options.count("-w") == 0)
-                            m_options["-w"] = OString(av[i]);
+                            m_options["-w"] = OString(av[j]);
                     } else
-                        throw IllegalArgument(OString(av[i]) + ", please check your input");
+                        throw IllegalArgument(OString(av[j]) + ", please check your input");
                 }
                 break;
             case 'h':
             case '?':
-                if (av[i][2] != '\0')
+                if (av[j][2] != '\0')
                 {
-                    throw IllegalArgument(OString(av[i]) + ", please check your input");
+                    throw IllegalArgument(OString(av[j]) + ", please check your input");
                 } else
                 {
                     fprintf(stdout, "%s", prepareHelp().getStr());
                     exit(0);
                 }
-                break;
             case 's':
-                if (/*MSVC trouble: std::*/strcmp(&av[i][2], "tdin") == 0)
+                if (/*MSVC trouble: std::*/strcmp(&av[j][2], "tdin") == 0)
                 {
                     m_stdin = true;
                     break;
                 }
                 // fall through
             default:
-                throw IllegalArgument("the option is unknown" + OString(av[i]));
-                break;
+                throw IllegalArgument("the option is unknown" + OString(av[j]));
             }
         } else
         {
-            if (av[i][0] == '@')
+            if (av[j][0] == '@')
             {
-                FILE* cmdFile = fopen(av[i]+1, "r");
+                FILE* cmdFile = fopen(av[j]+1, "r");
                   if( cmdFile == NULL )
                   {
                     fprintf(stderr, "%s", prepareHelp().getStr());
@@ -290,14 +288,14 @@ sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                 }
             } else
             {
-                OString name(av[i]);
+                OString name(av[j]);
                 name = name.toAsciiLowerCase();
                 if ( name.lastIndexOf(".idl") != (name.getLength() - 4) )
                 {
-                    throw IllegalArgument("'" + OString(av[i]) +
+                    throw IllegalArgument("'" + OString(av[j]) +
                         "' is not a valid input file, only '*.idl' files will be accepted");
                 }
-                m_inputFiles.push_back(av[i]);
+                m_inputFiles.push_back(av[j]);
             }
         }
     }
@@ -360,8 +358,6 @@ sal_Bool Options::isValid(const OString& option)
 const OString Options::getOption(const OString& option)
     throw( IllegalArgument )
 {
-    const OString ret;
-
     if (m_options.count(option) > 0)
     {
         return m_options[option];
@@ -369,8 +365,6 @@ const OString Options::getOption(const OString& option)
     {
         throw IllegalArgument("Option is not valid or currently not set.");
     }
-
-    return ret;
 }
 
 const OptionMap& Options::getOptions()
