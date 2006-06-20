@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtl_OStringBuffer.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:16:20 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:23:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1669,9 +1669,7 @@ namespace rtl_OStringBuffer
 
         void charAt_007()
         {
-            sal_Unicode            expVal = 0;
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
-            sal_Int32              input = 0;
 
             CPPUNIT_ASSERT_MESSAGE
             (
@@ -1683,9 +1681,7 @@ namespace rtl_OStringBuffer
 
         void charAt_008()
         {
-            sal_Unicode            expVal = 0;
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
-            sal_Int32              input = -2;
 
             CPPUNIT_ASSERT_MESSAGE
             (
