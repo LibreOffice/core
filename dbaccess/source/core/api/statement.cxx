@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statement.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 10:11:08 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:41:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,7 @@ using namespace ::osl;
 using namespace dbaccess;
 using namespace dbtools;
 
-DBG_NAME(OStatementBase);
+DBG_NAME(OStatementBase)
 
 //--------------------------------------------------------------------------
 OStatementBase::OStatementBase(const Reference< XConnection > & _xConn,
@@ -176,7 +176,7 @@ void OStatementBase::disposing()
 
     // free the original statement
     {
-        MutexGuard aGuard(m_aCancelMutex);
+        MutexGuard aCancelGuard(m_aCancelMutex);
         m_xAggregateAsCancellable = NULL;
     }
 
@@ -332,7 +332,7 @@ void OStatementBase::clearWarnings(void) throw( SQLException, RuntimeException )
 void OStatementBase::cancel(void) throw( RuntimeException )
 {
     // no blocking as cancel is typically called from a different thread
-    ClearableMutexGuard aGuard(m_aCancelMutex);
+    ClearableMutexGuard aCancelGuard(m_aCancelMutex);
     if (m_xAggregateAsCancellable.is())
         m_xAggregateAsCancellable->cancel();
     // else do nothing
