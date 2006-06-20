@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:43:57 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:22:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,6 +101,9 @@
 
 #ifndef CONNECTIVITY_EVOAB_DEBUG_HELPER_HXX
 #include "LDebug.hxx"
+#endif
+#ifndef CONNECTIVITY_DIAGNOSE_EX_H
+#include "diagnose_ex.h"
 #endif
 
 using namespace ::comphelper;
@@ -233,8 +236,8 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTypeInfo(  ) throw(S
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getColumnPrivileges(
-    const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table,
-        const ::rtl::OUString& columnNamePattern ) throw(SQLException, RuntimeException)
+    const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/,
+        const ::rtl::OUString& /*columnNamePattern*/ ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -246,7 +249,7 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getColumnPrivileges(
 
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getColumns(
-    const Any& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& tableNamePattern,
+    const Any& /*catalog*/, const ::rtl::OUString& /*schemaPattern*/, const ::rtl::OUString& tableNamePattern,
         const ::rtl::OUString& columnNamePattern ) throw(SQLException, RuntimeException)
 {
     OSL_TRACE("OEvoabDatabaseMetaData::getColumns()::Entered\n");
@@ -341,7 +344,7 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getColumns(
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getVersionColumns(
-        const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
+        const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/ ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -352,7 +355,7 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getVersionColumns(
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getExportedKeys(
-        const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
+        const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/ ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -363,7 +366,7 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getExportedKeys(
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getImportedKeys(
-        const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
+        const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/ ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -374,7 +377,7 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getImportedKeys(
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getPrimaryKeys(
-        const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
+        const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/ ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -385,8 +388,8 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getPrimaryKeys(
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getIndexInfo(
-    const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table,
-        sal_Bool unique, sal_Bool approximate ) throw(SQLException, RuntimeException)
+    const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/,
+        sal_Bool /*unique*/, sal_Bool /*approximate*/ ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -397,8 +400,8 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getIndexInfo(
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getBestRowIdentifier(
-    const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table, sal_Int32 scope,
-        sal_Bool nullable ) throw(SQLException, RuntimeException)
+    const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/, sal_Int32 /*scope*/,
+        sal_Bool /*nullable*/ ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -409,9 +412,9 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getBestRowIdentifier(
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getCrossReference(
-    const Any& primaryCatalog, const ::rtl::OUString& primarySchema,
-    const ::rtl::OUString& primaryTable, const Any& foreignCatalog,
-        const ::rtl::OUString& foreignSchema, const ::rtl::OUString& foreignTable ) throw(SQLException, RuntimeException)
+    const Any& /*primaryCatalog*/, const ::rtl::OUString& /*primarySchema*/,
+    const ::rtl::OUString& /*primaryTable*/, const Any& /*foreignCatalog*/,
+        const ::rtl::OUString& /*foreignSchema*/, const ::rtl::OUString& /*foreignTable*/ ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -428,8 +431,8 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getCrossReference(
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
-        const Any& catalog, const ::rtl::OUString& schemaPattern,
-        const ::rtl::OUString& tableNamePattern, const Sequence< ::rtl::OUString >& types ) throw(SQLException, RuntimeException)
+        const Any& /*catalog*/, const ::rtl::OUString& /*schemaPattern*/,
+        const ::rtl::OUString& /*tableNamePattern*/, const Sequence< ::rtl::OUString >& types ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -464,9 +467,7 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
         return xRef;
 
     OEvoabConnection* pOEvoabConnection = (OEvoabConnection*)m_pConnection;
-    OEvoabFolderList*   pFolderList = new OEvoabFolderList(pOEvoabConnection,
-                                                pOEvoabConnection->getDriver()->getEvoFolderListFileName(),
-                                                ::rtl::OUString::createFromAscii("TABLE"));
+    OEvoabFolderList*   pFolderList = new OEvoabFolderList( pOEvoabConnection );
 
 
     ODatabaseMetaDataResultSet::ORows aRows;
@@ -516,9 +517,10 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
             EVO_TRACE_STRING( "OEvoabDatabaseMetaData::getTables()::aArg3 = %s\n", aArg3 );
 
             OProcess aApp( aCLICommand,aWorkingDir);
-            OProcess::TProcessError eError = aApp.execute( (OProcess::TProcessOption)(OProcess::TOption_Hidden | OProcess::TOption_Wait | OProcess::TOption_SearchPath),aArgs);
-
-            DBG_ASSERT(eError == OProcess::E_None,"Error at execute evolution-addressbook-exporter to get VCards");
+            OSL_VERIFY_EQUALS(
+                aApp.execute( (OProcess::TProcessOption)(OProcess::TOption_Hidden | OProcess::TOption_Wait | OProcess::TOption_SearchPath),aArgs),
+                OProcess::E_None,
+                "Error at execute evolution-addressbook-exporter to get VCards" );
 
             bMoreData = pFolderList->next();
         }
