@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StorageFileAccess.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 11:40:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:32:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-#if HAVE_CONFIG_H
+#if defined(HAVE_CONFIG_H) && HAVE_CONFIG_H
 #include <config.h>
 #endif
 
@@ -68,7 +68,7 @@ using namespace ::connectivity::hsqldb;
  * Signature: (Ljava/lang/String;Ljava/lang/String;)Z
  */
 JNIEXPORT jboolean JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_isStreamElement
-  (JNIEnv * env, jobject obj_this,jstring key, jstring name)
+  (JNIEnv * env, jobject /*obj_this*/,jstring key, jstring name)
 {
     TStorages::mapped_type aStoragePair = StorageContainer::getRegisteredStorage(StorageContainer::jstring2ustring(env,key));
     if ( aStoragePair.first.first.is() )
@@ -117,7 +117,7 @@ JNIEXPORT jboolean JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess
  * Signature: (Ljava/lang/String;Ljava/lang/String;)V
  */
 JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_removeElement
-  (JNIEnv * env, jobject obj_this,jstring key, jstring name)
+  (JNIEnv * env, jobject /*obj_this*/,jstring key, jstring name)
 {
 #ifdef HSQLDB_DBG
     {
@@ -152,7 +152,7 @@ JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_rem
  * Signature: (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
  */
 JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_renameElement
-  (JNIEnv * env, jobject obj_this,jstring key, jstring oldname, jstring newname)
+  (JNIEnv * env, jobject /*obj_this*/,jstring key, jstring oldname, jstring newname)
 {
 #ifdef HSQLDB_DBG
     {
