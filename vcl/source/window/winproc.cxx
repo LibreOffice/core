@@ -329,7 +329,7 @@ static void ImplHandleMouseHelpRequest( Window* pChild, const Point& rMousePos )
             // #104172# do not kill keyboard activated tooltips
             else if ( pSVData->maHelpData.mpHelpWin && !pSVData->maHelpData.mbKeyboardHelp)
             {
-                ImplDestroyHelpWindow( FALSE );
+                ImplDestroyHelpWindow();
             }
         }
     }
@@ -402,7 +402,7 @@ struct ContextMenuEvent
     Point           aChildPos;
 };
 
-static long ContextMenuEventLink( void* pCEvent, void* pDummy )
+static long ContextMenuEventLink( void* pCEvent, void* )
 {
     ContextMenuEvent* pEv = (ContextMenuEvent*)pCEvent;
 
@@ -1024,7 +1024,7 @@ static long ImplHandleKey( Window* pWindow, USHORT nSVEvent,
 {
     ImplSVData* pSVData = ImplGetSVData();
     KeyCode     aKeyCode( nKeyCode, nKeyCode );
-    USHORT      nCode = aKeyCode.GetCode();
+    USHORT      nEvCode = aKeyCode.GetCode();
 
     // allow application key listeners to remove the key event
     // but make sure we're not forwarding external KeyEvents, (ie where bForward is FALSE)
@@ -1050,7 +1050,7 @@ static long ImplHandleKey( Window* pWindow, USHORT nSVEvent,
     }
 
     // #i1820# use locale specific decimal separator
-    if( nCode == KEY_DECIMAL )
+    if( nEvCode == KEY_DECIMAL )
     {
         if( Application::GetSettings().GetMiscSettings().GetEnableLocalizedDecimalSep() )
         {
@@ -1079,7 +1079,7 @@ static long ImplHandleKey( Window* pWindow, USHORT nSVEvent,
         if ( pSVData->maHelpData.mbExtHelpMode )
         {
             Help::EndExtHelp();
-            if ( nCode == KEY_ESCAPE )
+            if ( nEvCode == KEY_ESCAPE )
                 return 1;
         }
         if ( pSVData->maHelpData.mpHelpWin )
@@ -1089,15 +1089,15 @@ static long ImplHandleKey( Window* pWindow, USHORT nSVEvent,
         if ( pSVData->maWinData.mpAutoScrollWin )
         {
             pSVData->maWinData.mpAutoScrollWin->EndAutoScroll();
-            if ( nCode == KEY_ESCAPE )
+            if ( nEvCode == KEY_ESCAPE )
                 return 1;
         }
 
         if ( pSVData->maWinData.mpTrackWin )
         {
-            USHORT nCode = aKeyCode.GetCode();
+            USHORT nOrigCode = aKeyCode.GetCode();
 
-            if ( (nCode == KEY_ESCAPE) && !(pSVData->maWinData.mnTrackFlags & STARTTRACK_NOKEYCANCEL) )
+            if ( (nOrigCode == KEY_ESCAPE) && !(pSVData->maWinData.mnTrackFlags & STARTTRACK_NOKEYCANCEL) )
             {
                 pSVData->maWinData.mpTrackWin->EndTracking( ENDTRACK_CANCEL | ENDTRACK_KEY );
                 if ( pSVData->maWinData.mpFirstFloat )
@@ -1105,15 +1105,15 @@ static long ImplHandleKey( Window* pWindow, USHORT nSVEvent,
                     FloatingWindow* pLastLevelFloat = pSVData->maWinData.mpFirstFloat->ImplFindLastLevelFloat();
                     if ( !(pLastLevelFloat->GetPopupModeFlags() & FLOATWIN_POPUPMODE_NOKEYCLOSE) )
                     {
-                        USHORT nCode = aKeyCode.GetCode();
+                        USHORT nEscCode = aKeyCode.GetCode();
 
-                        if ( nCode == KEY_ESCAPE )
+                        if ( nEscCode == KEY_ESCAPE )
                             pLastLevelFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL );
                     }
                 }
                 return 1;
             }
-            else if ( nCode == KEY_RETURN )
+            else if ( nOrigCode == KEY_RETURN )
             {
                 pSVData->maWinData.mpTrackWin->EndTracking( ENDTRACK_KEY );
                 return 1;
@@ -1172,27 +1172,27 @@ static long ImplHandleKey( Window* pWindow, USHORT nSVEvent,
 
     // call handler
     ImplDelData aDelData;
-    KeyEvent    aKEvt( (xub_Unicode)nCharCode, aKeyCode, nRepeat );
-    NotifyEvent aNEvt( nSVEvent, pChild, &aKEvt );
-    BOOL        bPreNotify = (ImplCallPreNotify( aNEvt ) != 0);
+    KeyEvent    aKeyEvt( (xub_Unicode)nCharCode, aKeyCode, nRepeat );
+    NotifyEvent aNotifyEvt( nSVEvent, pChild, &aKeyEvt );
+    BOOL        bKeyPreNotify = (ImplCallPreNotify( aNotifyEvt ) != 0);
     long        nRet = 1;
 
     pChild->ImplAddDel( &aDelData );
-    if ( !bPreNotify && !aDelData.IsDelete() )
+    if ( !bKeyPreNotify && !aDelData.IsDelete() )
     {
         if ( nSVEvent == EVENT_KEYINPUT )
         {
             pChild->ImplGetWindowImpl()->mbKeyInput = FALSE;
-            pChild->KeyInput( aKEvt );
+            pChild->KeyInput( aKeyEvt );
         }
         else
         {
             pChild->ImplGetWindowImpl()->mbKeyUp = FALSE;
-            pChild->KeyUp( aKEvt );
+            pChild->KeyUp( aKeyEvt );
         }
         // #82968#
         if( !aDelData.IsDelete() )
-            aNEvt.GetWindow()->ImplNotifyKeyMouseCommandEventListeners( aNEvt );
+            aNotifyEvt.GetWindow()->ImplNotifyKeyMouseCommandEventListeners( aNotifyEvt );
     }
 
     if ( aDelData.IsDelete() )
@@ -1202,7 +1202,7 @@ static long ImplHandleKey( Window* pWindow, USHORT nSVEvent,
 
     if ( nSVEvent == EVENT_KEYINPUT )
     {
-        if ( !bPreNotify && pChild->ImplGetWindowImpl()->mbKeyInput )
+        if ( !bKeyPreNotify && pChild->ImplGetWindowImpl()->mbKeyInput )
         {
             USHORT nCode = aKeyCode.GetCode();
 
@@ -1275,7 +1275,7 @@ static long ImplHandleKey( Window* pWindow, USHORT nSVEvent,
     }
     else
     {
-        if ( !bPreNotify && pChild->ImplGetWindowImpl()->mbKeyUp )
+        if ( !bKeyPreNotify && pChild->ImplGetWindowImpl()->mbKeyUp )
             nRet = 0;
     }
 
@@ -1285,11 +1285,11 @@ static long ImplHandleKey( Window* pWindow, USHORT nSVEvent,
         pChild = pWindow->GetParent();
 
         // call handler
-        ImplDelData aDelData( pChild );
+        ImplDelData aChildDelData( pChild );
         KeyEvent    aKEvt( (xub_Unicode)nCharCode, aKeyCode, nRepeat );
         NotifyEvent aNEvt( nSVEvent, pChild, &aKEvt );
         BOOL        bPreNotify = (ImplCallPreNotify( aNEvt ) != 0);
-        if ( aDelData.IsDelete() )
+        if ( aChildDelData.IsDelete() )
             return 1;
 
         if ( !bPreNotify )
@@ -1305,9 +1305,9 @@ static long ImplHandleKey( Window* pWindow, USHORT nSVEvent,
                 pChild->KeyUp( aKEvt );
             }
             // #82968#
-            if( !aDelData.IsDelete() )
+            if( !aChildDelData.IsDelete() )
                 aNEvt.GetWindow()->ImplNotifyKeyMouseCommandEventListeners( aNEvt );
-            if ( aDelData.IsDelete() )
+            if ( aChildDelData.IsDelete() )
                 return 1;
         }
 
@@ -1320,13 +1320,13 @@ static long ImplHandleKey( Window* pWindow, USHORT nSVEvent,
 
 // -----------------------------------------------------------------------
 
-static long ImplHandleExtTextInput( Window* pWindow, ULONG nTime,
+static long ImplHandleExtTextInput( Window* pWindow,
                                     const XubString& rText,
                                     const USHORT* pTextAttr,
                                     ULONG nCursorPos, USHORT nCursorFlags )
 {
     ImplSVData* pSVData = ImplGetSVData();
-    Window*     pChild;
+    Window*     pChild = NULL;
 
     int nTries = 200;
     while( nTries-- )
@@ -1708,7 +1708,7 @@ void ImplHandleResize( Window* pWindow, long nNewWidth, long nNewHeight )
 
 // -----------------------------------------------------------------------
 
-void ImplHandleMove( Window* pWindow, long nNewX, long nNewY )
+static void ImplHandleMove( Window* pWindow )
 {
     if( pWindow->ImplGetWindowImpl()->mbFrame && pWindow->ImplIsFloatingWindow() && pWindow->IsReallyVisible() )
     {
@@ -1735,9 +1735,9 @@ void ImplHandleMove( Window* pWindow, long nNewX, long nNewY )
 
 // -----------------------------------------------------------------------
 
-void ImplHandleMoveResize( Window* pWindow, long nNewX, long nNewY, long nNewWidth, long nNewHeight )
+static void ImplHandleMoveResize( Window* pWindow, long nNewWidth, long nNewHeight )
 {
-    ImplHandleMove( pWindow, nNewX, nNewY );
+    ImplHandleMove( pWindow );
     ImplHandleResize( pWindow, nNewWidth, nNewHeight );
 }
 
@@ -1937,7 +1937,7 @@ struct DelayedCloseEvent
     ImplDelData     aDelData;
 };
 
-static long DelayedCloseEventLink( void* pCEvent, void* pDummy )
+static long DelayedCloseEventLink( void* pCEvent, void* )
 {
     DelayedCloseEvent* pEv = (DelayedCloseEvent*)pCEvent;
 
@@ -2106,7 +2106,7 @@ inline long ImplHandleSalMouseButtonUp( Window* pWindow, SalMouseEvent* pEvent )
 
 // -----------------------------------------------------------------------
 
-long ImplHandleSalMouseActivate( Window* pWindow, SalMouseActivateEvent* pEvent )
+static long ImplHandleSalMouseActivate( Window* /*pWindow*/, SalMouseActivateEvent* /*pEvent*/ )
 {
     return FALSE;
 }
@@ -2287,7 +2287,7 @@ static void ImplHandleSalExtTextInputPos( Window* pWindow, SalExtTextInputPosEve
 
 // -----------------------------------------------------------------------
 
-long ImplWindowFrameProc( void* pInst, SalFrame* pFrame,
+long ImplWindowFrameProc( void* pInst, SalFrame* /*pFrame*/,
                           USHORT nEvent, const void* pEvent )
 {
     DBG_TESTSOLARMUTEX();
@@ -2416,7 +2416,7 @@ long ImplWindowFrameProc( void* pInst, SalFrame* pFrame,
                 // --- RTL --- (mirror paint rect)
                 Window* pWin = (Window*)pInst;
                 SalFrame* pSalFrame = pWin->ImplGetWindowImpl()->mpFrame;
-                pPaintEvt->mnBoundX = pFrame->maGeometry.nWidth-pPaintEvt->mnBoundWidth-pPaintEvt->mnBoundX;
+                pPaintEvt->mnBoundX = pSalFrame->maGeometry.nWidth-pPaintEvt->mnBoundWidth-pPaintEvt->mnBoundX;
             }
 
             Rectangle aBoundRect( Point( pPaintEvt->mnBoundX, pPaintEvt->mnBoundY ),
@@ -2426,10 +2426,7 @@ long ImplWindowFrameProc( void* pInst, SalFrame* pFrame,
             break;
 
         case SALEVENT_MOVE:
-            {
-            SalFrameGeometry g = pWindow->ImplGetWindowImpl()->mpFrame->GetGeometry();
-            ImplHandleMove( pWindow, g.nX, g.nY );
-            }
+            ImplHandleMove( pWindow );
             break;
 
         case SALEVENT_RESIZE:
@@ -2444,7 +2441,7 @@ long ImplWindowFrameProc( void* pInst, SalFrame* pFrame,
         case SALEVENT_MOVERESIZE:
             {
             SalFrameGeometry g = pWindow->ImplGetWindowImpl()->mpFrame->GetGeometry();
-            ImplHandleMoveResize( pWindow, g.nX, g.nY, g.nWidth, g.nHeight );
+            ImplHandleMoveResize( pWindow, g.nWidth, g.nHeight );
             }
             break;
 
@@ -2483,10 +2480,8 @@ long ImplWindowFrameProc( void* pInst, SalFrame* pFrame,
                         return TRUE;
                     }
                 }
-                else
-                    return FALSE;
+                return FALSE;
             }
-            break;
 
         case SALEVENT_SETTINGSCHANGED:
         case SALEVENT_VOLUMECHANGED:
@@ -2505,7 +2500,7 @@ long ImplWindowFrameProc( void* pInst, SalFrame* pFrame,
         case SALEVENT_EXTTEXTINPUT:
             {
             SalExtTextInputEvent* pEvt = (SalExtTextInputEvent*)pEvent;
-            nRet = ImplHandleExtTextInput( pWindow, pEvt->mnTime,
+            nRet = ImplHandleExtTextInput( pWindow,
                                            pEvt->maText, pEvt->mpTextAttr,
                                            pEvt->mnCursorPos, pEvt->mnCursorFlags );
             }
