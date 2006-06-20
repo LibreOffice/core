@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:50:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:32:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -237,9 +237,9 @@ DBG_NAME(OTableController)
 // -----------------------------------------------------------------------------
 OTableController::OTableController(const Reference< XMultiServiceFactory >& _rM) : OTableController_BASE(_rM)
     ,m_sTypeNames(ModuleRes(STR_TABLEDESIGN_DBFIELDTYPES))
-    ,m_bNew(sal_True)
     ,m_pTypeInfo()
     ,m_bAllowAutoIncrementValue(sal_False)
+    ,m_bNew(sal_True)
 {
     DBG_CTOR(OTableController,NULL);
 
@@ -695,7 +695,7 @@ sal_Bool OTableController::Construct(Window* pParent)
     return sal_True;
 }
 // -----------------------------------------------------------------------------
-sal_Bool SAL_CALL OTableController::suspend(sal_Bool _bSuspend) throw( RuntimeException )
+sal_Bool SAL_CALL OTableController::suspend(sal_Bool /*_bSuspend*/) throw( RuntimeException )
 {
     if ( getBroadcastHelper().bInDispose || getBroadcastHelper().bDisposed )
         return sal_True;
@@ -1029,12 +1029,12 @@ void OTableController::loadData()
 
             for(;pKeyBegin != pKeyEnd;++pKeyBegin)
             {
-                ::std::vector< ::boost::shared_ptr<OTableRow> >::iterator aIter = m_vRowList.begin();
-                for(;aIter != m_vRowList.end();++aIter)
+                ::std::vector< ::boost::shared_ptr<OTableRow> >::iterator rowIter = m_vRowList.begin();
+                for(;rowIter != m_vRowList.end();++rowIter)
                 {
-                    if((*aIter)->GetActFieldDescr()->GetName() == *pKeyBegin)
+                    if((*rowIter)->GetActFieldDescr()->GetName() == *pKeyBegin)
                     {
-                        (*aIter)->SetPrimaryKey(sal_True);
+                        (*rowIter)->SetPrimaryKey(sal_True);
                         break;
                     }
                 }
@@ -1111,8 +1111,6 @@ sal_Bool OTableController::checkColumns(sal_Bool _bNew) throw(::com::sun::star::
         if (pFieldDesc && pFieldDesc->GetName().getLength())
         {
             bFoundPKey |=  (*aIter)->IsPrimaryKey();
-            sal_uInt16 nErrorRes = sal_uInt16(-1);
-            sal_uInt16 nFieldPos = sal_uInt16(-1);
             // first check for duplicate names
             ::std::vector< ::boost::shared_ptr<OTableRow> >::const_iterator aIter2 = aIter+1;
             for(;aIter2 != m_vRowList.end();++aIter2)
@@ -1393,7 +1391,6 @@ void OTableController::alterColumns()
                         continue;
                     }
                 }
-                Reference<XDrop> xDrop(xColumns,UNO_QUERY);
                 xDrop->dropByName(*pIter);
             }
         }
