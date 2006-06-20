@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gendict.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 14:52:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:42:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
         if (*u != current) {
         if (*u < current)
-        printf("u %x, current %x, count %d, lenArrayCount %d\n", *u, current, count, lenArrayCount);
+        printf("u %x, current %x, count %d, lenArrayCount %d\n", *u, current,
+                    sal::static_int_cast<int>(count), sal::static_int_cast<int>(lenArrayCount));
         current = *u;
         charArray[current] = lenArrayCount;
         }
@@ -141,7 +142,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         if (charArray[(i*0x100) + j] != 0)
             break;
 
-        fprintf(cfp, "0x%02x, ", set[i] = (j < 0x100 ? count++ : 0xff));
+        fprintf(cfp, "0x%02x, ", set[i] = (j < 0x100 ? sal::static_int_cast<sal_Int16>(count++) : 0xff));
         if ((i+1) % 0x10 == 0)
         fprintf (cfp, "\n\t");
     }
@@ -149,7 +150,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
     // generate index2 array
     fprintf (cfp, "static const sal_Int32 index2[] = {\n\t");
-    sal_Int32 prev = 0, curr = 0;;
+    sal_Int32 prev = 0;
     for (i = 0; i < 0x100; i++) {
         if (set[i] != 0xff) {
         for (j = 0; j < 0x100; j++) {
