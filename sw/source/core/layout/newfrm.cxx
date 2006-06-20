@@ -4,9 +4,9 @@
  *
  *  $RCSfile: newfrm.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2006-06-02 12:12:26 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 12:02:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,6 +97,7 @@
 #ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx>
 #endif
+#include "viewimp.hxx"
 
 #ifndef VERTICAL_LAYOUT
 PtPtr pX = &Point::nA;
@@ -562,6 +563,15 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
     RemoveMasterObjs( pDrawPage );
     if( pDoc->IsGlobalDoc() )
         pDoc->UpdateRefFlds( NULL );
+    //b6433357: Update page fields after loading
+    // --->
+    if ( !pCurrShell || !pCurrShell->Imp()->IsUpdateExpFlds() )
+    {
+        SwDocPosUpdate aMsgHnt( pPage->Frm().Top() );
+        pDoc->UpdatePageFlds( &aMsgHnt );
+    }
+    // <---
+
     if ( bOldIdle )
         pDoc->StartIdleTimer();
     bCallbackActionEnabled = TRUE;
