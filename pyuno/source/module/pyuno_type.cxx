@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pyuno_type.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:53:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:04:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,9 +152,9 @@ PyRef getAnyClass( const Runtime & r )
 }
 
 
-sal_Unicode PyChar2Unicode( PyObject *obj, const Runtime & r ) throw ( RuntimeException )
+sal_Unicode PyChar2Unicode( PyObject *obj ) throw ( RuntimeException )
 {
-    PyRef value( PyObject_GetAttrString( obj, "value" ), SAL_NO_ACQUIRE );
+    PyRef value( PyObject_GetAttrString( obj, const_cast< char * >("value") ), SAL_NO_ACQUIRE );
     if( ! PyUnicode_Check( value.get() ) )
     {
         throw RuntimeException(
@@ -173,11 +173,11 @@ sal_Unicode PyChar2Unicode( PyObject *obj, const Runtime & r ) throw ( RuntimeEx
     return c;
 }
 
-Any PyEnum2Enum( PyObject *obj, const Runtime & r ) throw ( RuntimeException )
+Any PyEnum2Enum( PyObject *obj ) throw ( RuntimeException )
 {
     Any ret;
-    PyRef typeName( PyObject_GetAttrString( obj,"typeName" ), SAL_NO_ACQUIRE);
-    PyRef value( PyObject_GetAttrString( obj, "value" ), SAL_NO_ACQUIRE);
+    PyRef typeName( PyObject_GetAttrString( obj,const_cast< char * >("typeName") ), SAL_NO_ACQUIRE);
+    PyRef value( PyObject_GetAttrString( obj, const_cast< char * >("value") ), SAL_NO_ACQUIRE);
     if( !PyString_Check( typeName.get() ) || ! PyString_Check( value.get() ) )
     {
         throw RuntimeException(
@@ -231,9 +231,9 @@ Any PyEnum2Enum( PyObject *obj, const Runtime & r ) throw ( RuntimeException )
 }
 
 
-Type PyType2Type( PyObject * o, const Runtime & r ) throw(RuntimeException )
+Type PyType2Type( PyObject * o ) throw(RuntimeException )
 {
-    PyRef pyName( PyObject_GetAttrString( o, "typeName" ), SAL_NO_ACQUIRE);
+    PyRef pyName( PyObject_GetAttrString( o, const_cast< char * >("typeName") ), SAL_NO_ACQUIRE);
     if( !PyString_Check( pyName.get() ) )
     {
         throw RuntimeException(
@@ -241,8 +241,8 @@ Type PyType2Type( PyObject * o, const Runtime & r ) throw(RuntimeException )
             Reference< XInterface > () );
     }
 
-    PyRef pyTC( PyObject_GetAttrString( o, "typeClass" ), SAL_NO_ACQUIRE );
-    Any enumValue = PyEnum2Enum( pyTC.get(), r );
+    PyRef pyTC( PyObject_GetAttrString( o, const_cast< char * >("typeClass") ), SAL_NO_ACQUIRE );
+    Any enumValue = PyEnum2Enum( pyTC.get() );
 
     OUString name( OUString::createFromAscii( PyString_AsString( pyName.get() ) ) );
     TypeDescription desc( name );
@@ -284,7 +284,7 @@ PyObject *importToGlobal(PyObject *str, PyObject *dict, PyObject *target)
             PyRef typesModule( PyDict_GetItemString( dict, "unotypes" ) );
             if( ! typesModule.is() || ! PyModule_Check( typesModule.get() ))
             {
-                typesModule = PyRef( PyModule_New( "unotypes" ), SAL_NO_ACQUIRE );
+                typesModule = PyRef( PyModule_New( const_cast< char * >("unotypes") ), SAL_NO_ACQUIRE );
                 Py_INCREF( typesModule.get() );
                 PyDict_SetItemString( dict, "unotypes" , typesModule.get() );
             }
@@ -346,7 +346,7 @@ PyObject *importToGlobal(PyObject *str, PyObject *dict, PyObject *target)
             }
         }
     }
-    catch( com::sun::star::container::NoSuchElementException &e )
+    catch( com::sun::star::container::NoSuchElementException & )
     {
         OUStringBuffer buf;
         buf.appendAscii( "pyuno.imp unknown type " );
