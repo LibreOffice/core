@@ -4,9 +4,9 @@
  *
  *  $RCSfile: convertiso2022kr.c,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:33:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:37:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -257,22 +257,24 @@ sal_Size ImplConvertIso2022KrToUnicode(ImplTextConverterData const * pData,
         && (nInfo & (RTL_TEXTTOUNICODE_INFO_ERROR
                          | RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL))
                == 0)
+    {
         if ((nFlags & RTL_TEXTTOUNICODE_FLAGS_FLUSH) == 0)
             nInfo |= RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL;
-    else
-        switch (ImplHandleBadInputTextToUnicodeConversion(
-                    sal_False, sal_True, 0, nFlags, &pDestBufPtr, pDestBufEnd,
-                    &nInfo))
-        {
-        case IMPL_BAD_INPUT_STOP:
-        case IMPL_BAD_INPUT_CONTINUE:
-            eState = IMPL_ISO_2022_KR_TO_UNICODE_STATE_ASCII;
-            break;
+        else
+            switch (ImplHandleBadInputTextToUnicodeConversion(
+                        sal_False, sal_True, 0, nFlags, &pDestBufPtr, pDestBufEnd,
+                        &nInfo))
+            {
+            case IMPL_BAD_INPUT_STOP:
+            case IMPL_BAD_INPUT_CONTINUE:
+                eState = IMPL_ISO_2022_KR_TO_UNICODE_STATE_ASCII;
+                break;
 
-        case IMPL_BAD_INPUT_NO_OUTPUT:
-            nInfo |= RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL;
-            break;
-        }
+            case IMPL_BAD_INPUT_NO_OUTPUT:
+                nInfo |= RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL;
+                break;
+            }
+    }
 
     if (pContext)
     {
@@ -336,6 +338,7 @@ sal_Size ImplConvertUnicodeToIso2022Kr(ImplTextConverterData const * pData,
     }
 
     if (eSet == IMPL_UNICODE_TO_ISO_2022_KR_SET_NONE)
+    {
         if (pDestBufEnd - pDestBufPtr >= 4)
         {
             *pDestBufPtr++ = 0x1B; /* ESC */
@@ -346,6 +349,7 @@ sal_Size ImplConvertUnicodeToIso2022Kr(ImplTextConverterData const * pData,
         }
         else
             nInfo |= RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
+    }
 
     if ((nInfo & RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL) == 0)
         for (; nConverted < nSrcChars; ++nConverted)
@@ -377,6 +381,7 @@ sal_Size ImplConvertUnicodeToIso2022Kr(ImplTextConverterData const * pData,
             if (nChar == 0x0A || nChar == 0x0D) /* LF, CR */
             {
                 if (eSet == IMPL_UNICODE_TO_ISO_2022_KR_SET_1001)
+                {
                     if (pDestBufPtr != pDestBufEnd)
                     {
                         *pDestBufPtr++ = 0x0F; /* SI */
@@ -384,6 +389,7 @@ sal_Size ImplConvertUnicodeToIso2022Kr(ImplTextConverterData const * pData,
                     }
                     else
                         goto no_output;
+                }
                 if (pDestBufPtr != pDestBufEnd)
                     *pDestBufPtr++ = (sal_Char) nChar;
                 else
@@ -394,6 +400,7 @@ sal_Size ImplConvertUnicodeToIso2022Kr(ImplTextConverterData const * pData,
             else if (nChar < 0x80)
             {
                 if (eSet == IMPL_UNICODE_TO_ISO_2022_KR_SET_1001)
+                {
                     if (pDestBufPtr != pDestBufEnd)
                     {
                         *pDestBufPtr++ = 0x0F; /* SI */
@@ -401,6 +408,7 @@ sal_Size ImplConvertUnicodeToIso2022Kr(ImplTextConverterData const * pData,
                     }
                     else
                         goto no_output;
+                }
                 if (pDestBufPtr != pDestBufEnd)
                     *pDestBufPtr++ = (sal_Char) nChar;
                 else
@@ -422,6 +430,7 @@ sal_Size ImplConvertUnicodeToIso2022Kr(ImplTextConverterData const * pData,
                 if (nBytes != 0)
                 {
                     if (eSet == IMPL_UNICODE_TO_ISO_2022_KR_SET_ASCII)
+                    {
                         if (pDestBufPtr != pDestBufEnd)
                         {
                             *pDestBufPtr++ = 0x0E; /* SO */
@@ -429,6 +438,7 @@ sal_Size ImplConvertUnicodeToIso2022Kr(ImplTextConverterData const * pData,
                         }
                         else
                             goto no_output;
+                    }
                     if (pDestBufEnd - pDestBufPtr >= 2)
                     {
                         *pDestBufPtr++ = (sal_Char) ((nBytes >> 8) & 0x7F);
@@ -482,6 +492,7 @@ sal_Size ImplConvertUnicodeToIso2022Kr(ImplTextConverterData const * pData,
     {
         sal_Bool bFlush = sal_True;
         if (nHighSurrogate != 0)
+        {
             if ((nFlags & RTL_UNICODETOTEXT_FLAGS_FLUSH) != 0)
                 nInfo |= RTL_UNICODETOTEXT_INFO_SRCBUFFERTOSMALL;
             else
@@ -512,6 +523,7 @@ sal_Size ImplConvertUnicodeToIso2022Kr(ImplTextConverterData const * pData,
                     nInfo |= RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
                     break;
                 }
+        }
         if (bFlush
             && eSet == IMPL_UNICODE_TO_ISO_2022_KR_SET_1001
             && (nFlags & RTL_UNICODETOTEXT_FLAGS_FLUSH) != 0)
