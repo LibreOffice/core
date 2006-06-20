@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AConnection.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:49:04 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:00:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,8 +108,7 @@ namespace connectivity
             void buildTypeInfo() throw( ::com::sun::star::sdbc::SQLException);
         public:
 
-            OConnection(const ::rtl::OUString& url, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info,
-                    ODriver*        _pDriver) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            OConnection(ODriver*        _pDriver) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             //  OConnection(const SQLHANDLE _pConnectionHandle);
             ~OConnection();
             void construct(const ::rtl::OUString& url,const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info);
