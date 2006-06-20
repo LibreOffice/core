@@ -4,9 +4,9 @@
  *
  *  $RCSfile: alloc.c,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:59:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:28:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,8 @@
 #include <string.h>
 #define INCLUDED_STRING_H
 #endif
+
+#ifndef FORCE_SYSALLOC
 
 /*===========================================================================
  *
@@ -150,7 +152,9 @@ static void* __rtl_memory_vmalloc (sal_Size n)
 #ifdef SAL_W32
 
 #define WIN32_LEAN_AND_MEAN
+#pragma warning(push,1) /* disable warnings within system headers */
 #include <windows.h>
+#include <wchar.h>
 
 typedef CRITICAL_SECTION mutex_type;
 
@@ -259,7 +263,11 @@ struct __rtl_memory_global_st
 
 static struct __rtl_memory_global_st g_memory =
 {
-    0, 0, { RTL_MUTEX_INITIALIZER }
+    0, 0, { RTL_MUTEX_INITIALIZER },
+    { 0, 0, NULL, NULL }, { 0, 0, NULL, NULL }, { { 0, 0, NULL, NULL } },
+#if OSL_DEBUG_LEVEL > 0
+    { { 0, 0, 0, 0, 0, 0 } }
+#endif /* OSL_DEBUG_LEVEL */
 };
 
 void SAL_CALL ___rtl_memory_init (void);
@@ -536,6 +544,7 @@ static int __dbg_memory_verify (memory_type * x, int debug)
     return (1);
 }
 
+#if OSL_DEBUG_LEVEL > 1
 /*
  * __dbg_memory_usage_update.
  */
@@ -606,6 +615,7 @@ static void __dbg_memory_usage (memory_stat * total)
         }
     }
 }
+#endif /* OSL_DEBUG_LEVEL */
 
 #endif /* OSL_DEBUG_LEVEL */
 #if OSL_DEBUG_LEVEL > 0
@@ -1131,6 +1141,8 @@ static void __rtl_memory_enqueue (memory_type **ppMemory)
 
 #define RTL_MEMORY_ENQUEUE(m) __rtl_memory_enqueue((m))
 
+#endif /* FORCE_SYSALLOC */
+
 /*===========================================================================
  *
  * rtl_memory (manager) implementation.
@@ -1408,6 +1420,7 @@ void* SAL_CALL rtl_allocateZeroMemory (sal_Size n) SAL_THROW_EXTERN_C()
 #ifndef FORCE_SYSALLOC
 void SAL_CALL rtl_freeZeroMemory (void * p, sal_Size n) SAL_THROW_EXTERN_C()
 {
+    (void) n; /* unused */
     if (p)
     {
         memory_type * memory = queue_cast(p, -(__C__));
