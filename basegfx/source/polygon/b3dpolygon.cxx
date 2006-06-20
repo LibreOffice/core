@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3dpolygon.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:48:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:45:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -232,7 +232,7 @@ class ImplB3DPolygon
 
     // bitfield
     // flag which decides if this polygon is opened or closed
-    unsigned                                        mbIsClosed : 1;
+    bool                                            mbIsClosed;
 
 public:
     // This constructor is only used from the static identity polygon, thus
