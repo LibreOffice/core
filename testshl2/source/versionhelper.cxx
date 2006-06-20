@@ -4,9 +4,9 @@
  *
  *  $RCSfile: versionhelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:08:39 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:28:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,9 @@ VersionHelper::VersionHelper(rtl::OUString const& _sDLLName, GetOpt & _aOptions)
          m_pInfo(NULL)
 {
     // try to get the entry pointer
-    FktGetVersionInfoPtr pFunc = (FktGetVersionInfoPtr) m_pModule->getSymbol( rtl::OUString::createFromAscii( "GetVersionInfo" ) );
+    FktGetVersionInfoPtr pFunc = (FktGetVersionInfoPtr)
+        m_pModule->getFunctionSymbol(
+            rtl::OUString::createFromAscii( "GetVersionInfo" ) );
 
     if (pFunc)
     {
