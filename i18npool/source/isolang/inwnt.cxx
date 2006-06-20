@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inwnt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:38:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:46:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,9 +37,11 @@
 #include <sal/config.h>
 #endif
 
+#pragma warning(push,1) // disable warnings within system headers
 #include <windef.h>     // needed by winnls.h
 #include <winbase.h>    // needed by winnls.h
 #include <winnls.h>
+#pragma warning(pop)
 
 #ifndef INCLUDED_RTL_INSTANCE_HXX
 #include <rtl/instance.hxx>
