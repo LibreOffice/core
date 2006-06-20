@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pyuno_loader.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:50:38 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:02:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+#include <pyuno/pyuno.hxx>
+
 #include <osl/module.hxx>
 #include <osl/process.h>
 #include <osl/file.h>
@@ -43,8 +46,6 @@
 
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/factory.hxx>
-
-#include <pyuno/pyuno.hxx>
 
 using rtl::OUString;
 using rtl::OUStringBuffer;
@@ -82,7 +83,9 @@ static void raiseRuntimeExceptionWhenNeeded() throw ( RuntimeException )
 
 static PyRef getLoaderModule() throw( RuntimeException )
 {
-    PyRef module( PyImport_ImportModule( "pythonloader" ), SAL_NO_ACQUIRE );
+    PyRef module(
+        PyImport_ImportModule( const_cast< char * >("pythonloader") ),
+        SAL_NO_ACQUIRE );
     raiseRuntimeExceptionWhenNeeded();
     if( !module.is() )
     {
@@ -128,9 +131,8 @@ static OUString getLibDir()
         {
             static OUString libDir;
 
-            // changed from reinterpret_cast<void*> this is not allowed
-            // in gcc 3.3 without permissive.  Us simple C cast.
-            if( osl::Module::getUrlFromAddress( (void*)(getLibDir) , libDir ) )
+            if( osl::Module::getUrlFromAddress(
+                    reinterpret_cast< oslGenericFunction >(getLibDir) , libDir ) )
             {
                 libDir = OUString( libDir.getStr(), libDir.lastIndexOf('/' ) );
             }
@@ -263,7 +265,7 @@ extern "C"
 
 //==================================================================================================
 void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+    const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
