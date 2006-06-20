@@ -4,9 +4,9 @@
  *
  *  $RCSfile: restartindexingservice.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:31:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:35:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,9 +42,11 @@
     the service we do nothing.
 */
 
+#pragma warning(push, 1) /* disable warnings within system headers */
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <msiquery.h>
+#pragma warning(pop)
 
 /*
     Advapi.dll needs to be loaded dynamically because the service
@@ -112,12 +114,12 @@ bool StopIndexingService(SC_HANDLE hService)
     return (status.dwCurrentState == SERVICE_STOPPED);
 }
 
-bool StartIndexingService(SC_HANDLE hService)
+void StartIndexingService(SC_HANDLE hService)
 {
-    SERVICE_STATUS status;
-
     if (StartService_(hService, 0, NULL))
     {
+        SERVICE_STATUS status;
+
         // Check the status until the service is no longer stop pending.
         if (QueryServiceStatus_(hService, &status))
         {
@@ -156,10 +158,9 @@ bool StartIndexingService(SC_HANDLE hService)
             }
         }
     }
-    return (status.dwCurrentState == SERVICE_RUNNING);
 }
 
-extern "C" UINT __stdcall RestartIndexingService(MSIHANDLE handle)
+extern "C" UINT __stdcall RestartIndexingService(MSIHANDLE)
 {
     //MessageBox(NULL, TEXT("Restarting Indexing Service"), TEXT("Message"), MB_OK | MB_ICONINFORMATION);
 
