@@ -4,9 +4,9 @@
  *
  *  $RCSfile: libutil.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:06:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:20:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,9 @@
  *
  ************************************************************************/
 
+#pragma warning(push,1) /* disable warnings within system headers */
 #include <windows.h>
+#pragma warning(pop)
 
 static BOOL  g_bInit = FALSE;
 static DWORD g_dwPlatformId = VER_PLATFORM_WIN32_WINDOWS;
