@@ -4,9 +4,9 @@
  *
  *  $RCSfile: servprov.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:54:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:41:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,7 @@
  *
  ************************************************************************/
 
+#include "stdafx.h"
 #include "servprov.hxx"
 #include "embeddoc.hxx"
 
@@ -112,7 +113,7 @@ void o2u_attachCurrentThread()
 {
     static CurThreadData oleThreadData;
 
-    if ((sal_Bool)oleThreadData.getData() != sal_True)
+    if ( oleThreadData.getData() != 0 )
     {
         HINSTANCE inst= LoadLibrary( _T("ole32.dll"));
         if( inst )
@@ -297,8 +298,8 @@ STDMETHODIMP_(ULONG) EmbedProviderFactory_Impl::Release()
 }
 
 STDMETHODIMP EmbedProviderFactory_Impl::CreateInstance(IUnknown FAR* punkOuter,
-                                                     REFIID riid,
-                                                     void FAR* FAR* ppv)
+                                                       REFIID riid,
+                                                       void FAR* FAR* ppv)
 {
     punkOuter = NULL;
 
@@ -307,8 +308,14 @@ STDMETHODIMP EmbedProviderFactory_Impl::CreateInstance(IUnknown FAR* punkOuter,
     return pEmbedDocument->QueryInterface( riid, ppv );
 }
 
-STDMETHODIMP EmbedProviderFactory_Impl::LockServer( int fLock )
+STDMETHODIMP EmbedProviderFactory_Impl::LockServer( int /*fLock*/ )
 {
     return NOERROR;
 }
 
+// Fix strange warnings about some
+// ATL::CAxHostWindow::QueryInterface|AddRef|Releae functions.
+// warning C4505: 'xxx' : unreferenced local function has been removed
+#if defined(_MSC_VER)
+#pragma warning(disable: 4505)
+#endif
