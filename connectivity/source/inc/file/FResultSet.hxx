@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FResultSet.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:08:46 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:01:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,7 +132,7 @@ namespace connectivity
             ::std::vector<sal_Int32>                m_aColMapping; // pos 0 is unused so we don't have to decrement 1 everytime
 
             ::std::vector<sal_Int32>                m_aOrderbyColumnNumber;
-            ::std::vector<sal_Int16>                m_aOrderbyAscending;
+            ::std::vector<TAscendingOrder>          m_aOrderbyAscending;
 
             OValueRefRow                            m_aSelectRow;
             OValueRefRow                            m_aRow;
@@ -185,7 +185,6 @@ namespace connectivity
             sal_Bool                                m_bWasNull;
             sal_Bool                                m_bEOF;                 // after last record
             sal_Bool                                m_bLastRecord;
-            sal_Bool                                m_bFileSetFrozen;
             sal_Bool                                m_bInserted;            // true when moveToInsertRow was called
                                                                             // set to false when cursor moved or cancel
             sal_Bool                                m_bRowUpdated;
@@ -199,7 +198,6 @@ namespace connectivity
 
             BOOL ExecuteRow(IResultSetHelper::Movement eFirstCursorPosition,
                                 INT32 nOffset = 1,
-                                BOOL bRebind = TRUE,
                                 BOOL bEvaluate = TRUE,
                                 BOOL bRetrieveData = TRUE);
 
@@ -345,7 +343,7 @@ namespace connectivity
             void setSqlAnalyzer(OSQLAnalyzer* _pSQLAnalyzer)                        { m_pSQLAnalyzer = _pSQLAnalyzer; }
 
             void setOrderByColumns(const ::std::vector<sal_Int32>& _aColumnOrderBy) { m_aOrderbyColumnNumber = _aColumnOrderBy; }
-            void setOrderByAscending(const ::std::vector<sal_Int16>& _aOrderbyAsc)  { m_aOrderbyAscending = _aOrderbyAsc; }
+            void setOrderByAscending(const ::std::vector<TAscendingOrder>& _aOrderbyAsc)    { m_aOrderbyAscending = _aOrderbyAsc; }
             void setEvaluationKeySet(TIntVector* _pEvaluationKeySet)                { m_pEvaluationKeySet = _pEvaluationKeySet; }
 
             // clears the resultset so it can be reused by a preparedstatement
