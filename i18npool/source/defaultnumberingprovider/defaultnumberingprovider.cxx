@@ -4,9 +4,9 @@
  *
  *  $RCSfile: defaultnumberingprovider.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-20 11:58:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:44:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@
 #include <nativenumbersupplier.hxx>
 #include <stdio.h>
 
-#if OSL_DEBUG_LEVEL == 0
+#if OSL_DEBUG_LEVEL == 0 && !defined(NDEBUG)
 #define NDEBUG
 #endif
 #include <assert.h>
@@ -61,6 +61,8 @@
 #include <com/sun/star/i18n/TransliterationType.hpp>
 #include <com/sun/star/i18n/TransliterationModulesNew.hpp>
 #include <com/sun/star/i18n/XLocaleData.hpp>
+
+#define I18N_NEED_ALPHABET_TABLES
 #include <bullet.h>
 
 using namespace com::sun::star;
@@ -135,6 +137,9 @@ OUString toRoman( sal_Int32 n )
         return sTmp.makeStringAndClear();
 }
 
+// not used:
+#if 0
+
 static
 const char* expected_name( int i, int last )
 {
@@ -160,6 +165,8 @@ void failedToConvert( int i, int last )
 {
      throw IllegalArgumentException();
 }
+
+#endif
 
 static
 void lcl_formatChars( sal_Unicode table[], int tableSize, int n, OUString& s )
@@ -230,7 +237,7 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
 
      sal_Int16 natNum = 0;
      sal_Int16 tableSize = 0;
-     sal_Unicode *table;
+     sal_Unicode *table = NULL;     // initialize to avoid compiler warning
      sal_Bool recycleSymbol = sal_False;
      Locale locale;
 
@@ -239,8 +246,8 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
      OUString  suffix;
      sal_Int32        number = -12345; // the number that needs to be formatted.
 
-     int nProperties = aProperties.getLength();
-     int last        = nProperties-1;
+//     int nProperties = aProperties.getLength();
+//     int last        = nProperties-1;
 
      try {
         getPropertyByName(aProperties, "Prefix", sal_False)      >>=prefix;
@@ -300,16 +307,13 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
                break;
           case NUMBER_NONE:
                return OUString::createFromAscii(""); // ignore prefix and suffix
-               break;
           case CHAR_SPECIAL:
                // apparently, we're supposed to return an empty string in this case...
                return OUString::createFromAscii(""); // ignore prefix and suffix
-               break;
           case PAGE_DESCRIPTOR:
           case BITMAP:
                assert(0);
                throw IllegalArgumentException();
-               break;
           case CHARS_UPPER_LETTER_N:
                lcl_formatChars1( upperLetter, 26, number-1, result ); // 1=>A, 2=>B, ..., 26=>Z, 27=>AA, 28=>BB, ...
                break;
@@ -345,9 +349,6 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
           case NUMBER_UPPER_ZH_TW:
                 locale.Country = OUString::createFromAscii("TW");
           case NUMBER_UPPER_ZH:
-                natNum = NativeNumberMode::NATNUM8;
-                locale.Language = OUString::createFromAscii("zh");
-                break;
                 natNum = NativeNumberMode::NATNUM8;
                 locale.Language = OUString::createFromAscii("zh");
                 break;
@@ -441,7 +442,6 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
           default:
                assert(0);
                throw IllegalArgumentException();
-               break;
       }
 
         if (natNum) {
@@ -604,7 +604,6 @@ sal_Int16 DefaultNumberingProvider::getNumberingType( const OUString& rNumbering
                 if(rNumberingIdentifier.equals(makeNumberingIdentifier(i)))
                         return aSupportedTypes[i].nType;
         throw RuntimeException();
-        return -1;
 }
 /* -----------------------------21.02.01 15:57--------------------------------
 
