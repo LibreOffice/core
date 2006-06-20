@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbamultiplex.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:02:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:18:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,9 +167,9 @@ namespace dbaui
     #define IMPLEMENT_LISTENER_MULTIPLEXER_CORE(classname, listenerclass)                   \
                                                                                             \
     /*................................................................*/                    \
-    classname::classname(::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex)                \
+    classname::classname(::cppu::OWeakObject& rSource, ::osl::Mutex& _rMutex)               \
             :OSbaWeakSubObject(rSource)                                                     \
-            ,OInterfaceContainerHelper(rMutex)                                              \
+            ,OInterfaceContainerHelper(_rMutex)                                             \
     {                                                                                       \
     }                                                                                       \
                                                                                             \

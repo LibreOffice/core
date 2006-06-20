@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paramdialog.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:59:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:18:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,10 @@
 
 #ifndef _DBAUI_PARAMDIALOG_HXX_
 #define _DBAUI_PARAMDIALOG_HXX_
+
+#ifndef _DBAUI_COMMON_TYPES_HXX_
+#include "commontypes.hxx"
+#endif
 
 #ifndef _DIALOG_HXX
 #include <vcl/dialog.hxx>
@@ -115,9 +119,7 @@ namespace dbaui
         ::dbtools::OPredicateInputController
                         m_aPredicateInput;
 
-        void*       m_pVisitedParams;
-            // this is a vector of BOOLs, but as this file is exported we don't want to include the stl here ...
-            // TODO: now that we migrated the dialog and do not export the file anymore, give it a better implementation ...
+        ByteVector      m_aVisitedParams;
         Timer       m_aResetVisitFlag;
             // we reset the "visited flag" 1 second after and entry has been selected
 
