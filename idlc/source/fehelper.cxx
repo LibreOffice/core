@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fehelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:10:51 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:48:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,14 +94,13 @@ AstType const * FeDeclarator::compose(AstDeclaration const * pDecl)
 
         // insert array type in global scope
         AstScope* pScope = idlc()->scopes()->bottom();
-        AstDeclaration* pDecl = NULL;
         if ( pScope )
         {
-            pDecl = pScope->addDeclaration(pArray);
-            if ( (AstDeclaration*)pArray != pDecl )
+            AstDeclaration* pDecl2 = pScope->addDeclaration(pArray);
+            if ( (AstDeclaration*)pArray != pDecl2 )
             {
                 delete m_pComplexPart;
-                m_pComplexPart = pDecl;
+                m_pComplexPart = pDecl2;
             }
         }
         return pArray;
