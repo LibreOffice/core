@@ -4,9 +4,9 @@
  *
  *  $RCSfile: source.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:18:03 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 06:02:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,8 +117,8 @@ DragSource::~DragSource()
 void DragSource::StartDragImpl(
     const DragGestureEvent& trigger,
     sal_Int8 sourceActions,
-    sal_Int32 cursor,
-    sal_Int32 image,
+    sal_Int32 /*cursor*/,
+    sal_Int32 /*image*/,
     const Reference<XTransferable >& trans,
     const Reference<XDragSourceListener >& listener )
 {
@@ -195,7 +195,7 @@ sal_Bool SAL_CALL DragSource::isDragImageSupported(  )
 //----------------------------------------------------
 /**
 */
-sal_Int32 SAL_CALL DragSource::getDefaultCursor( sal_Int8 dragAction )
+sal_Int32 SAL_CALL DragSource::getDefaultCursor( sal_Int8 /*dragAction*/ )
           throw( IllegalArgumentException, RuntimeException)
 {
     return 0;
@@ -308,7 +308,7 @@ HRESULT STDMETHODCALLTYPE DragSource::QueryContinueDrag(
 /* [in] */ BOOL fEscapePressed,
 /* [in] */ DWORD grfKeyState)
 {
-#if DBG_CONSOLE_OUT
+#if defined DBG_CONSOLE_OUT
     printf("\nDragSource::QueryContinueDrag");
 #endif
 
@@ -348,9 +348,13 @@ HRESULT STDMETHODCALLTYPE DragSource::QueryContinueDrag(
 /**
 */
 HRESULT STDMETHODCALLTYPE DragSource::GiveFeedback(
-/* [in] */ DWORD dwEffect)
+/* [in] */ DWORD
+#if defined DBG_CONSOLE_OUT
+dwEffect
+#endif
+)
 {
-#if DBG_CONSOLE_OUT
+#if defined DBG_CONSOLE_OUT
     printf("\nDragSource::GiveFeedback %d", dwEffect);
 #endif
 
@@ -439,7 +443,7 @@ unsigned __stdcall DndOleSTAFunc(LPVOID pParams)
         OleUninitialize();
     }
 
-    long cnt = InterlockedDecrement(&pSource->m_RunningDndOperationCount);
+    InterlockedDecrement(&pSource->m_RunningDndOperationCount);
 
     // the DragSource was manually acquired by
     // thread starting method DelayedStartDrag
