@@ -4,9 +4,9 @@
  *
  *  $RCSfile: null_spritehelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 12:50:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:16:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,9 @@ namespace nullcanvas
         /** Create sprite helper
          */
         SpriteHelper();
+
+        // make CanvasCustomSpriteHelper::init visible for name lookup
+        using ::canvas::CanvasCustomSpriteHelper::init;
 
         /** Late-init the sprite helper
 

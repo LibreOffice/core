@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmap.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 12:51:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:16:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,7 +90,7 @@ namespace canvas
                                          mpImage->getHeight() );
         }
 
-        ::com::sun::star::uno::Sequence< sal_Int8 > getData( ::com::sun::star::rendering::IntegerBitmapLayout&     bitmapLayout,
+        ::com::sun::star::uno::Sequence< sal_Int8 > getData( ::com::sun::star::rendering::IntegerBitmapLayout&     /*bitmapLayout*/,
                                                              const ::com::sun::star::geometry::IntegerRectangle2D& rect )
         {
             const IColorBuffer::Format format = mpImage->getFormat();
@@ -120,7 +120,7 @@ namespace canvas
         }
 
         void setData( const ::com::sun::star::uno::Sequence< sal_Int8 >&        data,
-                      const ::com::sun::star::rendering::IntegerBitmapLayout&   bitmapLayout,
+                      const ::com::sun::star::rendering::IntegerBitmapLayout&   /*bitmapLayout*/,
                       const ::com::sun::star::geometry::IntegerRectangle2D&     rect )
         {
             const IColorBuffer::Format format = mpImage->getFormat();
@@ -146,7 +146,7 @@ namespace canvas
         }
 
         void setPixel( const ::com::sun::star::uno::Sequence< sal_Int8 >&       color,
-                       const ::com::sun::star::rendering::IntegerBitmapLayout&  bitmapLayout,
+                       const ::com::sun::star::rendering::IntegerBitmapLayout&  /*bitmapLayout*/,
                        const ::com::sun::star::geometry::IntegerPoint2D&        pos )
         {
             struct ARGBColor
@@ -204,7 +204,7 @@ namespace canvas
             mpImage->unlock();
         }
 
-        uno::Sequence< sal_Int8 > getPixel( ::com::sun::star::rendering::IntegerBitmapLayout& bitmapLayout,
+        uno::Sequence< sal_Int8 > getPixel( ::com::sun::star::rendering::IntegerBitmapLayout& /*bitmapLayout*/,
                                             const ::com::sun::star::geometry::IntegerPoint2D& pos )
         {
             const IColorBuffer::Format format = mpImage->getFormat();
