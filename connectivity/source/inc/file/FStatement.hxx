@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FStatement.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:09:18 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:01:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,9 @@
 #ifndef _COMPHELPER_BROADCASTHELPER_HXX_
 #include <comphelper/broadcasthelper.hxx>
 #endif
+#ifndef CONNECTIVITY_TSORTINDEX_HXX
+#include "TSortIndex.hxx"
+#endif
 
 #define SQL_COLUMN_NOTFOUND STRING_NOTFOUND
 
@@ -116,7 +119,7 @@ namespace connectivity
             ::std::vector<sal_Int32>                    m_aColMapping; // pos 0 is unused so we don't have to decrement 1 everytime
             ::std::vector<sal_Int32>                    m_aParameterIndexes; // maps the parameter index to column index
             ::std::vector<sal_Int32>                    m_aOrderbyColumnNumber;
-            ::std::vector<sal_Int16>                    m_aOrderbyAscending;
+            ::std::vector<TAscendingOrder>              m_aOrderbyAscending;
 
             ::com::sun::star::sdbc::SQLWarning                                           m_aLastWarning;
             ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XResultSet>    m_xResultSet;   // The last ResultSet created
@@ -149,6 +152,8 @@ namespace connectivity
             sal_Int32                                   m_nFetchDirection;
             sal_Int32                                   m_nResultSetConcurrency;
             sal_Bool                                    m_bEscapeProcessing;
+
+            ::cppu::OBroadcastHelper&                   rBHelper;
 
         protected:
             // initialize the column index map (mapping select columns to table columns)
@@ -187,7 +192,6 @@ namespace connectivity
         public:
             connectivity::OSQLParseNode* getParseTree() const { return m_pParseTree;}
 
-            ::cppu::OBroadcastHelper& rBHelper;
             OStatement_Base(OConnection* _pConnection );
 
             OConnection* getOwnConnection() const { return m_pConnection;}
