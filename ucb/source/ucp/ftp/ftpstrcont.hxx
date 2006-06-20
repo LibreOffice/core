@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ftpstrcont.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:39:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:26:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,7 @@ namespace ftp {
 
         FTPOutputStreamContainer(const com::sun::star::uno::Reference<
                                  com::sun::star::io::XOutputStream>& out);
+                                 virtual ~FTPOutputStreamContainer() {}
 
         virtual size_t write(void *buffer,size_t size,size_t nmemb);
 
