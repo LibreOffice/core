@@ -4,9 +4,9 @@
  *
  *  $RCSfile: string.h,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:41:42 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:14:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -947,7 +947,7 @@ void SAL_CALL rtl_string_newConcat( rtl_String ** newStr, rtl_String * left, rtl
     @param subStr
     either null or a valid string to be inserted.
  */
-void SAL_CALL rtl_string_newReplaceStrAt( rtl_String ** newStr, rtl_String * str, sal_Int32 index, sal_Int32 count, rtl_String * subStr ) SAL_THROW_EXTERN_C();
+void SAL_CALL rtl_string_newReplaceStrAt( rtl_String ** newStr, rtl_String * str, sal_Int32 idx, sal_Int32 count, rtl_String * subStr ) SAL_THROW_EXTERN_C();
 
 /** Create a new string by replacing all occurrences of a single character
     within another string.
@@ -1082,7 +1082,7 @@ void SAL_CALL rtl_string_newTrim( rtl_String ** newStr, rtl_String * str ) SAL_T
     @return
     the index of the next token, or -1 if no more tokens follow.
  */
-sal_Int32 SAL_CALL rtl_string_getToken( rtl_String ** newStr , rtl_String * str, sal_Int32 token, sal_Char cTok, sal_Int32 index ) SAL_THROW_EXTERN_C();
+sal_Int32 SAL_CALL rtl_string_getToken( rtl_String ** newStr , rtl_String * str, sal_Int32 token, sal_Char cTok, sal_Int32 idx ) SAL_THROW_EXTERN_C();
 
 /* ======================================================================= */
 
