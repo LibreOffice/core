@@ -1,7 +1,7 @@
 %{
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.51 2005-02-17 10:15:54 vg Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.52 2006-06-20 02:08:26 hr Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -9,7 +9,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: vg $ $Date: 2005-02-17 10:15:54 $ $Revision: 1.51 $
+//	$Author: hr $ $Date: 2006-06-20 02:08:26 $ $Revision: 1.52 $
 //
 // Description:
 //
@@ -74,6 +74,15 @@
 #endif
 #ifndef _DBHELPER_DBCONVERSION_HXX_
 #include "connectivity/dbconversion.hxx"
+#endif
+
+#if defined __GNUC__
+    #pragma GCC system_header
+#elif defined __SUNPRO_CC
+#pragma disable_warn
+#elif defined _MSC_VER
+#pragma warning(push, 1)
+#pragma warning(disable:4701)
 #endif
 
 static ::rtl::OUString aEmptyString;
@@ -3182,6 +3191,9 @@ OParseContext::~OParseContext()
 		case ERROR_INVALID_REAL_COMPARE:	aMsg = ERROR_STR_INVALID_REAL_COMPARE; break;
 		case ERROR_INVALID_TABLE:			aMsg = ERROR_STR_INVALID_TABLE; break;
 		case ERROR_INVALID_COLUMN:			aMsg = ERROR_STR_INVALID_COLUMN; break;
+        default:
+            OSL_ENSURE( false, "OParseContext::getErrorMessage: unknown error code!" );
+            break;
 	}
 	return aMsg;
 }
@@ -3206,6 +3218,10 @@ OParseContext::~OParseContext()
 		case KEY_MAX:		aKeyword = KEY_STR_MAX; break;
 		case KEY_MIN:		aKeyword = KEY_STR_MIN; break;
 		case KEY_SUM:		aKeyword = KEY_STR_SUM; break;
+        case KEY_NONE:      break;
+        default:
+            OSL_ENSURE( false, "OParseContext::getIntlKeywordAscii: unknown key!" );
+            break;
 	}
 	return aKeyword;
 }
@@ -3850,4 +3866,8 @@ int OSQLParser::SQLlex()
 	return s_pScanner->SQLlex();
 }
 
-
+#if defined __SUNPRO_CC
+#pragma enable_warn
+#elif defined _MSC_VER
+#pragma warning(pop)
+#endif
