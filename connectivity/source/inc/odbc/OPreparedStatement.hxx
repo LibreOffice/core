@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OPreparedStatement.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:37:03 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:06:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,6 +180,11 @@ namespace connectivity
             virtual void SAL_CALL close(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             // XResultSetMetaDataSupplier
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData > SAL_CALL getMetaData(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+        public:
+            using OStatement_Base::executeQuery;
+            using OStatement_Base::executeUpdate;
+            using OStatement_Base::execute;
         };
     }
 }
