@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwsresync.pl,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: rt $ $Date: 2006-02-20 11:59:06 $
+#   last change: $Author: hr $ $Date: 2006-06-20 12:38:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,7 @@ use CwsConfig;
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.24 $ ';
+my $id_str = ' $Revision: 1.25 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -1054,6 +1054,13 @@ sub relink_cws_action
             open( COMPLETE, ">$sourceroot/$cws_master/$platform/inc.$milestone/$platform_resynced_flag");
             close( COMPLETE );
 
+            # cleanup: remove zip files
+            print "remove zip.$milestone\n";
+            $result = system("rm -rf $copy_dest");
+            if ( $result ) {
+                print_warning ("Could not clean up zip file directory 'copy_dest'");
+            }
+
         }
         foreach my $oneextra ( @xtra_files )
         {
@@ -1172,15 +1179,15 @@ sub relink_cws_action
         # push new master if different
         my $push_return = $cws->master( $new_master );
         if ( $push_return ne $new_master ) {
-            print_error("Couldn't push new milestone to database");
+            print_error("Couldn't push new master to database");
+        } else {
+            print_message("Successfully pushed new master to database");
         }
 
         # rename WORKSPACE directory if different
         chdir ($sourceroot) if ( cwd() eq "$sourceroot/cws_master" );
         rename "$sourceroot/$cws_master", "$sourceroot/$new_master";
         chdir ("$sourceroot/$new_master") if ( cwd() eq "$sourceroot" );
-    } else {
-        print_message("Successfully pushed new master to database");
     }
 
     # resync done. now remove all $platform_resynced_flag
