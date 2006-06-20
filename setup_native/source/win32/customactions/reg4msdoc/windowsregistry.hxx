@@ -5,7 +5,10 @@
 #ifndef _WINDOWSREGISTRY_HXX_
 #define _WINDOWSREGISTRY_HXX_
 
+#pragma warning(push, 1) /* disable warnings within system headers */
 #include <windows.h>
+#pragma warning(pop)
+
 #include "Registry.hxx"
 
 /** Basically a factory class
