@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.100 $
+#   $Revision: 1.101 $
 #
-#   last change: $Author: kz $ $Date: 2006-04-26 20:43:22 $
+#   last change: $Author: hr $ $Date: 2006-06-20 12:38:52 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.100 $ ';
+$id_str = ' $Revision: 1.101 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -121,8 +121,8 @@ $upd           = $ENV{'UPD'};
 ($gui       = lc($ENV{GUI}))        || die "can't determine GUI";
 $tempcounter        = 0;
 
-# zip is default for RE
-$opt_zip = 1 if ( defined($ENV{UPDATER}) && $ENV{UPDATER} eq 'YES' && defined($ENV{DELIVER_TO_ZIP}) );
+# zip is default for RE master builds
+$opt_zip = 1 if ( defined($ENV{DELIVER_TO_ZIP}) && uc($ENV{DELIVER_TO_ZIP}) eq 'TRUE' && ! defined($ENV{CWS_WORK_STAMP}));
 
 $has_symlinks       = 0;            # system supports symlinks
 
@@ -868,11 +868,11 @@ sub is_newer
 
         $from_stat[9]-- if $from_stat[9] % 2;
 
-        if ( $to =~ /^$dest/ ) {
+        if ( $to =~ /^\Q$dest\E/ ) {
             if ( $from_stat[9] > $logfiledate ) {
                 $logfiledate = $from_stat[9];
             }
-        } elsif ( $common_build && ( $to =~ /^$common_dest/ ) ) {
+        } elsif ( $common_build && ( $to =~ /^\Q$common_dest\E/ ) ) {
             if ( $from_stat[9] > $commonlogfiledate ) {
                 $commonlogfiledate = $from_stat[9];
             }
@@ -1092,7 +1092,7 @@ sub push_on_ziplist
     my $file = shift;
     return if ( $opt_check );
     # strip $dest from path since we don't want to record it in zip file
-    if ( $file =~ s#^$dest/##o ) {
+    if ( $file =~ s#^\Q$dest\E/##o ) {
         if ( $opt_minor ){
             # strip minor from path
             my $ext = "%_EXT%";
@@ -1100,7 +1100,7 @@ sub push_on_ziplist
             $file =~ s#^$ext##o;
         }
         push(@zip_list, $file);
-    } elsif ( $file =~ s#^$common_dest/##o ) {
+    } elsif ( $file =~ s#^\Q$common_dest\E/##o ) {
         if ( $opt_minor ){
             # strip minor from path
             my $ext = "%_EXT%";
@@ -1124,9 +1124,9 @@ sub push_on_loglist
     }
     # platform or common tree?
     my $common;
-    if ( $entry[2] =~ /^$dest/ ) {
+    if ( $entry[2] =~ /^\Q$dest\E/ ) {
         $common = 0;
-    } elsif ( $common_build && ( $entry[2] =~ /^$common_dest/ )) {
+    } elsif ( $common_build && ( $entry[2] =~ /^\Q$common_dest\E/ )) {
         $common = 1;
     } else {
         warn "Neither common nor platform tree?";
