@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VGroup.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:43:26 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:10:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,11 +51,14 @@
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
 #endif
-
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include <connectivity/dbexception.hxx>
+#endif
 
 // -------------------------------------------------------------------------
-using namespace connectivity::sdbcx;
-using namespace connectivity;
+using namespace ::connectivity::sdbcx;
+using namespace ::connectivity;
+using namespace ::dbtools;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
@@ -139,36 +142,34 @@ Reference< XNameAccess > SAL_CALL OGroup::getUsers(  ) throw(RuntimeException)
 }
 // -------------------------------------------------------------------------
 
-sal_Int32 SAL_CALL OGroup::getPrivileges( const ::rtl::OUString& objName, sal_Int32 objType ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
+sal_Int32 SAL_CALL OGroup::getPrivileges( const ::rtl::OUString& /*objName*/, sal_Int32 /*objType*/ ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OGroup_BASE::rBHelper.bDisposed);
-
 
     return 0;
 }
 // -------------------------------------------------------------------------
-sal_Int32 SAL_CALL OGroup::getGrantablePrivileges( const ::rtl::OUString& objName, sal_Int32 objType ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
+sal_Int32 SAL_CALL OGroup::getGrantablePrivileges( const ::rtl::OUString& /*objName*/, sal_Int32 /*objType*/ ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OGroup_BASE::rBHelper.bDisposed);
-
 
     return 0;
 }
 // -------------------------------------------------------------------------
-void SAL_CALL OGroup::grantPrivileges( const ::rtl::OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
+void SAL_CALL OGroup::grantPrivileges( const ::rtl::OUString& /*objName*/, sal_Int32 /*objType*/, sal_Int32 /*objPrivileges*/ ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OGroup_BASE::rBHelper.bDisposed);
-
+    throwFeatureNotImplementedException( "XAuthorizable::grantPrivileges", *this );
 }
 // -------------------------------------------------------------------------
-void SAL_CALL OGroup::revokePrivileges( const ::rtl::OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
+void SAL_CALL OGroup::revokePrivileges( const ::rtl::OUString& /*objName*/, sal_Int32 /*objType*/, sal_Int32 /*objPrivileges*/ ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OGroup_BASE::rBHelper.bDisposed);
-
+    throwFeatureNotImplementedException( "XAuthorizable::revokePrivileges", *this );
 }
 // -----------------------------------------------------------------------------
 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OGroup::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
@@ -181,8 +182,9 @@ void SAL_CALL OGroup::revokePrivileges( const ::rtl::OUString& objName, sal_Int3
     return m_Name;
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OGroup::setName( const ::rtl::OUString& aName ) throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OGroup::setName( const ::rtl::OUString& /*aName*/ ) throw(::com::sun::star::uno::RuntimeException)
 {
+    throwFeatureNotImplementedException( "XNamed::setName", *this );
 }
 // -----------------------------------------------------------------------------
 // XInterface
