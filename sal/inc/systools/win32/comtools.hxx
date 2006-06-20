@@ -4,9 +4,9 @@
  *
  *  $RCSfile: comtools.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:49:53 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:16:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,13 @@
 
 #include <string>
 #include <stdexcept>
+#if defined _MSC_VER
+#pragma warning(push,1)
+#endif
 #include <objbase.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 
 namespace sal
 {
@@ -112,7 +118,7 @@ namespace systools
 
         ~COMReference()
         {
-            LONG cnt = release();
+            release();
         }
 
         template<typename InterfaceType>
