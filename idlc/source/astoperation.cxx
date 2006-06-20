@@ -4,9 +4,9 @@
  *
  *  $RCSfile: astoperation.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:08:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:47:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,7 +104,6 @@ sal_Bool AstOperation::dumpBlob(typereg::Writer & rBlob, sal_uInt16 index)
         DeclList::const_iterator iter = getIteratorBegin();
         DeclList::const_iterator end = getIteratorEnd();
         AstDeclaration* pDecl = NULL;
-        AstParameter* pParam = NULL;
         RTParamMode paramMode;
         sal_uInt16 paramIndex = 0;
         while ( iter != end )
