@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Awrapado.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:15:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:17:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,9 @@
 #include <rtl/ustrbuf.hxx>
 #endif
 
+#ifndef CONNECTIVITY_DIAGNOSE_EX_H
+#include "diagnose_ex.h"
+#endif
 
 namespace connectivity
 {
@@ -58,8 +61,6 @@ using namespace connectivity::ado;
 
 void WpADOCatalog::Create()
 {
-    IClassFactory2* pIUnknown   = NULL;
-    IUnknown        *pOuter     = NULL;
     HRESULT         hr = -1;
     _ADOCatalog* pCommand;
     hr = CoCreateInstance(ADOS::CLSID_ADOCATALOG_25,
@@ -549,6 +550,7 @@ sal_Int32 WpADOField::GetDefinedSize() const
     OSL_ENSURE(pInterface,"Interface is null!");
     aValVar.setEmpty();
     sal_Bool bOk = SUCCEEDED(pInterface->get_Value(&aValVar));
+    (void)bOk;
 }
 
  OLEVariant WpADOField::get_Value() const
@@ -1075,12 +1077,14 @@ void WpADOColumn::put_Name(const ::rtl::OUString& _rName)
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString bstr(_rName);
     sal_Bool bErg = SUCCEEDED(pInterface->put_Name(bstr));
+    (void)bErg;
 }
 void WpADOColumn::put_RelatedColumn(const ::rtl::OUString& _rName)
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString bstr(_rName);
     sal_Bool bErg = SUCCEEDED(pInterface->put_RelatedColumn(bstr));
+    (void)bErg;
 }
 
 DataTypeEnum WpADOColumn::get_Type() const
@@ -1184,7 +1188,7 @@ void WpADOKey::put_Name(const ::rtl::OUString& _rName)
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString bstr(_rName);
     sal_Bool bErg = SUCCEEDED(pInterface->put_Name(bstr));
-
+    (void)bErg;
 }
 
 KeyTypeEnum WpADOKey::get_Type() const
@@ -1214,7 +1218,7 @@ void WpADOKey::put_RelatedTable(const ::rtl::OUString& _rName)
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString bstr(_rName);
     sal_Bool bErg = SUCCEEDED(pInterface->put_RelatedTable(bstr));
-
+    (void)bErg;
 }
 
 RuleEnum WpADOKey::get_DeleteRule() const
@@ -1268,7 +1272,7 @@ void WpADOIndex::put_Name(const ::rtl::OUString& _rName)
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString bstr(_rName);
     sal_Bool bErg = SUCCEEDED(pInterface->put_Name(bstr));
-
+    (void)bErg;
 }
 
 sal_Bool WpADOIndex::get_Clustered() const
@@ -1390,7 +1394,7 @@ void WpADOTable::put_Name(const ::rtl::OUString& _rName)
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString bstr(_rName);
     sal_Bool bErg = SUCCEEDED(pInterface->put_Name(bstr));
-
+    (void)bErg;
 }
 
 ::rtl::OUString WpADOTable::get_Type() const
@@ -1481,7 +1485,7 @@ void WpADOGroup::put_Name(const ::rtl::OUString& _rName)
 {
     OLEString bstr(_rName);
     sal_Bool bErg = SUCCEEDED(pInterface->put_Name(bstr));
-
+    (void)bErg;
 }
 
 RightsEnum WpADOGroup::GetPermissions(
@@ -1526,7 +1530,7 @@ void WpADOUser::put_Name(const ::rtl::OUString& _rName)
 {
     OLEString bstr(_rName);
     sal_Bool bErg = SUCCEEDED(pInterface->put_Name(bstr));
-
+    (void)bErg;
 }
 
 sal_Bool WpADOUser::ChangePassword(const ::rtl::OUString& _rPwd,const ::rtl::OUString& _rNewPwd)
@@ -1577,6 +1581,7 @@ WpBase::WpBase(IDispatch* pInt)
     if (pIUnknown)
     {
         ULONG nCount = pIUnknown->AddRef();
+        (void)nCount;
         //  OSL_ENSURE(nCount == 1,"Count is greater than 1");
     }
 }
@@ -1766,7 +1771,7 @@ ADORecordset* WpADOConnection::getPrimaryKeys( const ::com::sun::star::uno::Any&
 // -----------------------------------------------------------------------------
 ADORecordset* WpADOConnection::getIndexInfo(
     const ::com::sun::star::uno::Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table,
-    sal_Bool unique, sal_Bool approximate )
+    sal_Bool /*unique*/, sal_Bool /*approximate*/ )
 {
     // Create elements used in the array
     HRESULT hr = S_OK;
@@ -2144,9 +2149,8 @@ ADORecordset* WpADOConnection::getColumnPrivileges( const ::com::sun::star::uno:
     return pRecordset;
 }
 // -----------------------------------------------------------------------------
-ADORecordset* WpADOConnection::getTypeInfo(DataTypeEnum _eType)
+ADORecordset* WpADOConnection::getTypeInfo(DataTypeEnum /*_eType*/)
 {
-    HRESULT hr = S_OK;
     // Create elements used in the array
     OLEVariant varCriteria[2];
     const int nCrit = sizeof varCriteria / sizeof varCriteria[0];
@@ -2178,6 +2182,7 @@ void WpADOColumn::put_ParentCatalog(/* [in] */ _ADOCatalog __RPC_FAR *ppvObject)
     OSL_ENSURE(pInterface,"Interface is null!");
     sal_Bool bRet = SUCCEEDED(pInterface->put_ParentCatalog(ppvObject));
     OSL_ENSURE(bRet,"Could not set ParentCatalog!");
+    OSL_UNUSED(bRet);
 }
 // -----------------------------------------------------------------------------
 void WpADOTable::putref_ParentCatalog(/* [in] */ _ADOCatalog __RPC_FAR *ppvObject)
@@ -2185,6 +2190,7 @@ void WpADOTable::putref_ParentCatalog(/* [in] */ _ADOCatalog __RPC_FAR *ppvObjec
     OSL_ENSURE(pInterface,"Interface is null!");
     sal_Bool bRet = SUCCEEDED(pInterface->putref_ParentCatalog(ppvObject));
     OSL_ENSURE(bRet,"Could not set ParentCatalog!");
+    OSL_UNUSED(bRet);
 }
 // -----------------------------------------------------------------------------
 void WpBase::setIDispatch(IDispatch* _pIUnknown)
@@ -2200,6 +2206,7 @@ void OTools::putValue(const WpADOProperties& _rProps,const OLEVariant &_aPositio
     {
         sal_Bool bRet = aProp.PutValue(_aValVar);
         OSL_ENSURE(bRet,"Could not put value!");
+        OSL_UNUSED(bRet);
     }
 }
 // -----------------------------------------------------------------------------
