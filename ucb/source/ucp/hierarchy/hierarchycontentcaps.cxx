@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hierarchycontentcaps.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:46:23 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:28:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,7 +106,7 @@ using namespace hierarchy_ucp;
 
 // virtual
 uno::Sequence< beans::Property > HierarchyContent::getProperties(
-            const uno::Reference< star::ucb::XCommandEnvironment > & xEnv )
+            const uno::Reference< star::ucb::XCommandEnvironment > & /*xEnv*/ )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
@@ -383,11 +383,9 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
 //=========================================================================
 // virtual
 uno::Sequence< star::ucb::CommandInfo > HierarchyContent::getCommands(
-            const uno::Reference< star::ucb::XCommandEnvironment > & xEnv )
+            const uno::Reference< star::ucb::XCommandEnvironment > & /*xEnv*/ )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
-
-    bool bReadOnly = isReadOnly();
 
     if ( m_eKind == LINK )
     {
