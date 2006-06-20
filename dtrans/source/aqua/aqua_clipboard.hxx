@@ -4,9 +4,9 @@
  *
  *  $RCSfile: aqua_clipboard.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:08:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:58:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,8 @@
 #ifndef _AQUA_CLIPBOARD_HXX_
 #define _AQUA_CLIPBOARD_HXX_
 
-#ifndef _RTL_USTRING_
-#include <rtl/ustring>
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
 #endif
 
 #ifndef _SAL_TYPES_H_
