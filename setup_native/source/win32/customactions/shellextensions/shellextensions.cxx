@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shellextensions.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:40:46 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:42:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,9 +79,12 @@
     prviliges have no negative effect because the shell extensions will work anyhow.
 */
 
+#pragma warning(push, 1) /* disable warnings within system headers */
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <msiquery.h>
+#pragma warning(pop)
+
 #include <malloc.h>
 
 #ifdef UNICODE
@@ -104,7 +107,7 @@ RegistryEntry ThumbViewer = { TEXT("{3B092F0C-7696-40E3-A80F-68D74DA84210}"), TE
     Called during installation when the module "Windows Explorer Extensions" is
     selected.
 */
-extern "C" UINT __stdcall InstallExecSequenceEntry(MSIHANDLE handle)
+extern "C" UINT __stdcall InstallExecSequenceEntry(MSIHANDLE)
 {
     //MessageBox(NULL, TEXT("InstallExecSequenceEntry"), TEXT("Pythonmsi"), MB_OK | MB_ICONINFORMATION);
     HKEY hKey;
@@ -124,7 +127,7 @@ extern "C" UINT __stdcall InstallExecSequenceEntry(MSIHANDLE handle)
     Called during deinstallation when the module "Windows Explorer Extensions" has
     been installed.
 */
-extern "C" UINT __stdcall DeinstallExecSequenceEntry(MSIHANDLE handle)
+extern "C" UINT __stdcall DeinstallExecSequenceEntry(MSIHANDLE)
 {
     //MessageBox(NULL, TEXT("DeinstallExecSequenceEntry"), TEXT("Pythonmsi"), MB_OK | MB_ICONINFORMATION);
     HKEY hKey;
