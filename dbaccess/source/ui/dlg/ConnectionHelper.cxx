@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConnectionHelper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:40:18 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:01:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,6 +148,9 @@
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
+#endif
 #ifndef _SFX_DOCFILT_HACK_HXX
 #include <sfx2/docfilt.hxx>
 #endif
@@ -251,7 +254,7 @@ DBG_NAME(OConnectionHelper)
 
 
     // -----------------------------------------------------------------------
-    IMPL_LINK(OConnectionHelper, OnBrowseConnections, PushButton*, _pButton)
+    IMPL_LINK(OConnectionHelper, OnBrowseConnections, PushButton*, /*_pButton*/)
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
         switch ( m_eType )
@@ -336,36 +339,36 @@ DBG_NAME(OConnectionHelper)
                 // collect the names of the installed databases
                 StringBag aInstalledDBs;
                 ::rtl::OUString sAdabasConfigDir,sAdabasWorkDir,sRootDir;
-                ::rtl::OUString sTemp(RTL_CONSTASCII_USTRINGPARAM("DBWORK"));
+                ::rtl::OUString sEnvVarName(RTL_CONSTASCII_USTRINGPARAM("DBWORK"));
                 rtl_uString* pDbVar = NULL;
-                if(osl_getEnvironment(sTemp.pData,&pDbVar) == osl_Process_E_None && pDbVar)
+                if(osl_getEnvironment(sEnvVarName.pData,&pDbVar) == osl_Process_E_None && pDbVar)
                 {
                     sAdabasWorkDir = pDbVar;
-                    String sTemp;
-                    sal_Bool bOk = utl::LocalFileHelper::ConvertPhysicalNameToURL(sAdabasWorkDir,sTemp);
-                    sAdabasWorkDir = sTemp;
+                    String sURL;
+                    utl::LocalFileHelper::ConvertPhysicalNameToURL(sAdabasWorkDir,sURL);
+                    sAdabasWorkDir = sURL;
                     rtl_uString_release(pDbVar);
                     pDbVar = NULL;
                 }
 
-                sTemp = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DBCONFIG"));
-                if(osl_getEnvironment(sTemp.pData,&pDbVar) == osl_Process_E_None && pDbVar)
+                sEnvVarName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DBCONFIG"));
+                if(osl_getEnvironment(sEnvVarName.pData,&pDbVar) == osl_Process_E_None && pDbVar)
                 {
                     sAdabasConfigDir = pDbVar;
-                    String sTemp;
-                    sal_Bool bOk = utl::LocalFileHelper::ConvertPhysicalNameToURL(sAdabasConfigDir,sTemp);
-                    sAdabasConfigDir = sTemp;
+                    String sURL;
+                    utl::LocalFileHelper::ConvertPhysicalNameToURL(sAdabasConfigDir,sURL);
+                    sAdabasConfigDir = sURL;
                     rtl_uString_release(pDbVar);
                     pDbVar = NULL;
                 }
 
-                sTemp = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DBROOT"));
-                if(osl_getEnvironment(sTemp.pData,&pDbVar) == osl_Process_E_None && pDbVar)
+                sEnvVarName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DBROOT"));
+                if(osl_getEnvironment(sEnvVarName.pData,&pDbVar) == osl_Process_E_None && pDbVar)
                 {
                     sRootDir = pDbVar;
-                    String sTemp;
-                    sal_Bool bOk = utl::LocalFileHelper::ConvertPhysicalNameToURL(sRootDir,sTemp);
-                    sRootDir = sTemp;
+                    String sURL;
+                    utl::LocalFileHelper::ConvertPhysicalNameToURL(sRootDir,sURL);
+                    sRootDir = sURL;
                     rtl_uString_release(pDbVar);
                     pDbVar = NULL;
                 }
@@ -462,7 +465,7 @@ DBG_NAME(OConnectionHelper)
                     // collect all Mozilla Profiles
                     ::com::sun::star::uno::Sequence< ::rtl::OUString > list;
 
-                    sal_Int32 length = xMozillaBootstrap->getProfileList(profileType,list);
+                    xMozillaBootstrap->getProfileList( profileType, list );
                     const ::rtl::OUString * pArray = list.getConstArray();
 
                     sal_Int32 count = list.getLength();
@@ -486,6 +489,8 @@ DBG_NAME(OConnectionHelper)
                     break;
                 }
             }
+            default:
+                break;
         }
 
         checkTestConnection();
@@ -891,10 +896,9 @@ DBG_NAME(OConnectionHelper)
                     return sal_False;
             }
         }
-        catch (const Exception& e)
+        catch ( const Exception& )
         {
-            OSL_ENSURE( sal_False, "" );
-            e; // make compiler happy
+            DBG_UNHANDLED_EXCEPTION();
             return sal_False;
         }
 
