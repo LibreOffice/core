@@ -4,9 +4,9 @@
  *
  *  $RCSfile: strtmpl.c,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 15:14:57 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:30:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -980,8 +980,9 @@ sal_Int64 SAL_CALL IMPL_RTL_STRNAME( toInt64 )( const IMPL_RTL_STRCODE* pStr,
 static IMPL_RTL_STRINGDATA* IMPL_RTL_STRINGNAME( ImplAlloc )( sal_Int32 nLen )
 {
     IMPL_RTL_STRINGDATA * pData
-        = (nLen <= (SAL_MAX_UINT32 - sizeof (IMPL_RTL_STRINGDATA))
-                       / sizeof (IMPL_RTL_STRCODE))
+        = (SAL_INT_CAST(sal_uInt32, nLen)
+           <= ((SAL_MAX_UINT32 - sizeof (IMPL_RTL_STRINGDATA))
+               / sizeof (IMPL_RTL_STRCODE)))
         ? (IMPL_RTL_STRINGDATA *) rtl_allocateMemory(
             sizeof (IMPL_RTL_STRINGDATA) + nLen * sizeof (IMPL_RTL_STRCODE))
         : NULL;
@@ -1204,7 +1205,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRINGNAME( getLength )( const IMPL_RTL_STRINGDATA* 
 
 /* ----------------------------------------------------------------------- */
 
-IMPL_RTL_STRCODE* SAL_CALL IMPL_RTL_STRINGNAME( getStr )( IMPL_RTL_STRINGDATA* pThis )
+IMPL_RTL_STRCODE* SAL_CALL IMPL_RTL_STRINGNAME( getStr )( IMPL_RTL_STRINGDATA * pThis )
 {
     return pThis->buffer;
 }
