@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlDatabase.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:04:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:50:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,8 +48,7 @@ namespace dbaxml
     public:
 
         OXMLDatabase( ODBFilter& rImport, sal_uInt16 nPrfx,
-                    const ::rtl::OUString& rLName,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+                    const ::rtl::OUString& rLName );
         virtual ~OXMLDatabase();
 
         virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
