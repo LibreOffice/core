@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ftpcontent.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:31:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:23:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,7 @@
 #include <memory>
 #include <vector>
 #include <rtl/memory.h>
-#include <curl/curl.h>
+#include "curl.hxx"
 #include <curl/easy.h>
 #include <ucbhelper/cancelcommandexecution.hxx>
 #include <ucbhelper/contentidentifier.hxx>
@@ -229,7 +229,7 @@ rtl::OUString SAL_CALL FTPContent::getContentType()
 
 
 //virtual
-void SAL_CALL FTPContent::abort( sal_Int32 CommandId )
+void SAL_CALL FTPContent::abort( sal_Int32 /*CommandId*/ )
     throw( RuntimeException )
 {
 }
@@ -306,7 +306,7 @@ enum ACTION { NOACTION,
 // virtual
 Any SAL_CALL FTPContent::execute(
     const Command& aCommand,
-    sal_Int32 CommandId,
+    sal_Int32 /*CommandId*/,
     const Reference<
     XCommandEnvironment >& Environment
 )
@@ -514,13 +514,17 @@ Any SAL_CALL FTPContent::execute(
                     else if(xOutputStream.is()) {
                         Reference<XInputStream> xStream(
                             new FTPInputStream(m_aFTPURL.open()));
-                        Sequence<sal_Int8> seq(4096);
+                        Sequence<sal_Int8> byte_seq(4096);
                         sal_Int32 n = 1000; // value does not matter here
-                        while(n = xStream->readBytes(seq,4096))
+                        for (;;) {
+                            n = xStream->readBytes(byte_seq,4096);
+                            if (n == 0) {
+                                break;
+                            }
                             try {
-                                if(seq.getLength() != n)
-                                    seq.realloc(n);
-                                xOutputStream->writeBytes(seq);
+                                if(byte_seq.getLength() != n)
+                                    byte_seq.realloc(n);
+                                xOutputStream->writeBytes(byte_seq);
                             } catch(const NotConnectedException&) {
 
                             } catch(const BufferSizeExceededException&) {
@@ -528,6 +532,7 @@ Any SAL_CALL FTPContent::execute(
                             } catch(const IOException&) {
 
                             }
+                        }
                         if(n) {
                             Sequence<Any> seq(1);
                             PropertyValue value;
@@ -606,8 +611,6 @@ Any SAL_CALL FTPContent::execute(
                 // nothing known about the course of the error
                 action = THROWGENERAL;
         }
-
-    return aRet;
 }
 
 #define FTP_FILE rtl::OUString::createFromAscii(     \
@@ -675,7 +678,7 @@ FTPContent::getParent(  )
 
 
 void SAL_CALL
-FTPContent::setParent(const Reference<XInterface >& Parent )
+FTPContent::setParent(const Reference<XInterface >& /*Parent*/ )
     throw (NoSupportException,
            RuntimeException)
 {
@@ -697,6 +700,7 @@ public:
 
     InsertData(const Reference<XInputStream>& xInputStream)
         : m_xInputStream(xInputStream) { }
+    virtual ~InsertData() {}
 
     // returns the number of bytes actually read
     virtual sal_Int32 read(sal_Int8 *dest,sal_Int32 nBytesRequested);
@@ -802,7 +806,7 @@ void FTPContent::insert(const InsertCommandArgument& aInsertCommand,
 
 Reference< XRow > FTPContent::getPropertyValues(
     const Sequence< Property >& seqProp,
-    const Reference<XCommandEnvironment>& environment
+    const Reference<XCommandEnvironment>& /*environment*/
 )
 {
     vos::ORef<ucb::PropertyValueSet> xRow =
