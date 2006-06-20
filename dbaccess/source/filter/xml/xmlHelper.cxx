@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlHelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:11:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:51:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,7 +111,7 @@ const XMLPropertyHandler* OPropertyHandlerFactory::GetPropertyHandler(sal_Int32 
 // -----------------------------------------------------------------------------
 #define MAP_CONST( name, prefix, token, type, context )  { name.ascii, name.length, prefix, token, type, context }
 #define MAP_CONST_ASCII( name, prefix, token, type, context )  { name, sizeof(name)-1,  prefix, token, type, context }
-#define MAP_END()   { NULL, 0, 0, XML_TOKEN_INVALID, 0 }
+#define MAP_END()   { NULL, 0, 0, XML_TOKEN_INVALID, 0, 0 }
 // -----------------------------------------------------------------------------
 UniReference < XMLPropertySetMapper > OXMLHelper::GetTableStylesPropertySetMapper()
 {

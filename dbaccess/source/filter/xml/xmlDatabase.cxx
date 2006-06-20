@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlDatabase.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:10:21 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:50:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,8 +82,7 @@ namespace dbaxml
 DBG_NAME(OXMLDatabase)
 
 OXMLDatabase::OXMLDatabase( ODBFilter& rImport,
-                sal_uInt16 nPrfx, const OUString& rLName,
-                const Reference< XAttributeList > & xAttrList ) :
+                sal_uInt16 nPrfx, const OUString& rLName ) :
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
     DBG_CTOR(OXMLDatabase,NULL);
