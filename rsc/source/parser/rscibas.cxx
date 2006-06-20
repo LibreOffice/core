@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rscibas.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 16:32:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:46:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,8 +34,6 @@
  ************************************************************************/
 
 /****************** I N C L U D E S **************************************/
-#pragma hdrstop
-
 // C and C++ Includes.
 #include <stdlib.h>
 #include <stdio.h>
@@ -70,7 +68,7 @@
 #include <hash_map>
 
 /****************** M A C R O S ******************************************/
-void RscTypCont::SETCONST( RscConst * pClass, char * szString, UINT32 nVal )
+void RscTypCont::SETCONST( RscConst * pClass, const char * szString, UINT32 nVal )
 {
 #if OSL_DEBUG_LEVEL > 2
     fprintf( stderr, "setconst : %s\n", szString );
@@ -117,7 +115,7 @@ void RscLangEnum::Init( RscNameTable& rNames )
     const MsLangId::IsoLangEntry* pLangEntry;
     ByteString aCountry, aLang;
 
-    while (( pLangEntry = MsLangId::getIsoLangEntry( nIndex )) && ( pLangEntry->mnLang != LANGUAGE_DONTKNOW ))
+    while ( NULL != ( pLangEntry = MsLangId::getIsoLangEntry( nIndex )) && ( pLangEntry->mnLang != LANGUAGE_DONTKNOW ))
     {
 #if OSL_DEBUG_LEVEL > 2
         fprintf( stderr, "ISO Language in : %d %d %s\n",
@@ -171,7 +169,7 @@ void RscLangEnum::Init( RscNameTable& rNames )
     if ( aEnvIsoTokens.Len() )
     {
         ByteString aIsoToken;
-        sal_Int32 nTokenCounter = 0;
+        sal_uInt16 nTokenCounter = 0;
         sal_Bool bOneMore = 1;
         while ( bOneMore )
         {
@@ -482,12 +480,12 @@ RscEnum * RscTypCont::InitMessButtons()
 {
     RscEnum * pMessButtons;
     pMessButtons = new RscEnum( pHS->getID( "EnumMessButtons" ), RSC_NOTYPE );
-    SETCONST( pMessButtons, "WB_OK",                      WB_OK );
-    SETCONST( pMessButtons, "WB_OK_CANCEL",               WB_OK_CANCEL );
-    SETCONST( pMessButtons, "WB_YES_NO",                  WB_YES_NO );
-    SETCONST( pMessButtons, "WB_YES_NO_CANCEL",           WB_YES_NO_CANCEL );
-    SETCONST( pMessButtons, "WB_RETRY_CANCEL",            WB_RETRY_CANCEL );
-    SETCONST( pMessButtons, "WB_ABORT_RETRY_IGNORE",      WB_ABORT_RETRY_IGNORE );
+    SETCONST( pMessButtons, "WB_OK",                      sal::static_int_cast<UINT32>(WB_OK) );
+    SETCONST( pMessButtons, "WB_OK_CANCEL",               sal::static_int_cast<UINT32>(WB_OK_CANCEL) );
+    SETCONST( pMessButtons, "WB_YES_NO",                  sal::static_int_cast<UINT32>(WB_YES_NO) );
+    SETCONST( pMessButtons, "WB_YES_NO_CANCEL",           sal::static_int_cast<UINT32>(WB_YES_NO_CANCEL) );
+    SETCONST( pMessButtons, "WB_RETRY_CANCEL",            sal::static_int_cast<UINT32>(WB_RETRY_CANCEL) );
+    SETCONST( pMessButtons, "WB_ABORT_RETRY_IGNORE",      sal::static_int_cast<UINT32>(WB_ABORT_RETRY_IGNORE) );
     return( pMessButtons );
 }
 
@@ -505,12 +503,12 @@ RscEnum * RscTypCont::InitMessDefButton(){
     pMessDefButton = new RscEnum( pHS->getID( "EnumMessDefButton" ),
                                   RSC_NOTYPE );
 
-    SETCONST( pMessDefButton, "WB_DEF_OK",                  WB_DEF_OK );
-    SETCONST( pMessDefButton, "WB_DEF_CANCEL",              WB_DEF_CANCEL );
-    SETCONST( pMessDefButton, "WB_DEF_RETRY",               WB_DEF_RETRY );
-    SETCONST( pMessDefButton, "WB_DEF_YES",                 WB_DEF_YES );
-    SETCONST( pMessDefButton, "WB_DEF_NO",                  WB_DEF_NO );
-    SETCONST( pMessDefButton, "WB_DEF_IGNORE",              WB_DEF_IGNORE );
+    SETCONST( pMessDefButton, "WB_DEF_OK",                  sal::static_int_cast<UINT32>(WB_DEF_OK) );
+    SETCONST( pMessDefButton, "WB_DEF_CANCEL",              sal::static_int_cast<UINT32>(WB_DEF_CANCEL) );
+    SETCONST( pMessDefButton, "WB_DEF_RETRY",               sal::static_int_cast<UINT32>(WB_DEF_RETRY) );
+    SETCONST( pMessDefButton, "WB_DEF_YES",                 sal::static_int_cast<UINT32>(WB_DEF_YES) );
+    SETCONST( pMessDefButton, "WB_DEF_NO",                  sal::static_int_cast<UINT32>(WB_DEF_NO) );
+    SETCONST( pMessDefButton, "WB_DEF_IGNORE",              sal::static_int_cast<UINT32>(WB_DEF_IGNORE) );
     return( pMessDefButton );
 }
 
