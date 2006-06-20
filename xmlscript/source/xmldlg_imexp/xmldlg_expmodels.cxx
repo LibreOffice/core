@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmldlg_expmodels.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:13:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:12:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -909,6 +909,8 @@ void ElementDescriptor::readFormattedFieldModel( StyleBag * all_styles )
         addAttribute(
             OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value-default") ),
             *(OUString const *)a.getValue() );
+        break;
+    default:
         break;
     }
     readDoubleAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("EffectiveMin") ),
