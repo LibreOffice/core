@@ -4,9 +4,9 @@
  *
  *  $RCSfile: target.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:19:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 06:03:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,13 @@
 #include <osl/mutex.hxx>
 #endif
 
+#if defined _MSC_VER
+#pragma warning(push,1)
+#endif
 #include <oleidl.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 #include "globals.hxx"
 #include "../../inc/DtObjFactory.hxx"
 
