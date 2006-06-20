@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableConnection.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 08:32:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:27:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,9 +68,9 @@ namespace dbaui
     //------------------------------------------------------------------------
     OTableConnection::OTableConnection( OJoinTableView* _pContainer, OTableConnectionData* _pTabConnData )
         :Window(_pContainer)
-        ,m_bSelected( FALSE )
-        ,m_pParent( _pContainer )
         ,m_pData( _pTabConnData )
+        ,m_pParent( _pContainer )
+        ,m_bSelected( FALSE )
     {
         DBG_CTOR(OTableConnection,NULL);
         Init();
@@ -159,12 +159,12 @@ namespace dbaui
     //------------------------------------------------------------------------
     OTableWindow* OTableConnection::GetSourceWin() const
     {
-        return m_pParent->GetWindow( GetData()->GetSourceWinName() );
+        return m_pParent->GetTabWindow( GetData()->GetSourceWinName() );
     }
     //------------------------------------------------------------------------
     OTableWindow* OTableConnection::GetDestWin() const
     {
-        return m_pParent->GetWindow( GetData()->GetDestWinName() );
+        return m_pParent->GetTabWindow( GetData()->GetDestWinName() );
     }
 
     //------------------------------------------------------------------------
@@ -178,7 +178,7 @@ namespace dbaui
     void OTableConnection::Deselect()
     {
         m_bSelected = FALSE;
-        Invalidate();
+        InvalidateConnection();
     }
 
     //------------------------------------------------------------------------
@@ -193,7 +193,7 @@ namespace dbaui
     }
 
     //------------------------------------------------------------------------
-    bool OTableConnection::Invalidate()
+    bool OTableConnection::InvalidateConnection()
     {
         Rectangle rcBounding = GetBoundingRect();
         rcBounding.Bottom() += 1;
@@ -233,7 +233,7 @@ namespace dbaui
     }
 
     //------------------------------------------------------------------------
-    void OTableConnection::Draw( const Rectangle& rRect )
+    void OTableConnection::Draw( const Rectangle& /*rRect*/ )
     {
         //////////////////////////////////////////////////////////////////////
         // Linien zeichnen
