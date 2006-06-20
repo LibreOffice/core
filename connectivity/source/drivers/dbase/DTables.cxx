@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DTables.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:40:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:21:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,7 +110,7 @@ void ODbaseTables::appendObject( const Reference< XPropertySet >& descriptor )
     Reference<XUnoTunnel> xTunnel(descriptor,UNO_QUERY);
     if(xTunnel.is())
     {
-        ODbaseTable* pTable = (ODbaseTable*)xTunnel->getSomething(ODbaseTable::getUnoTunnelImplementationId());
+        ODbaseTable* pTable = reinterpret_cast< ODbaseTable* >( xTunnel->getSomething(ODbaseTable::getUnoTunnelImplementationId()) );
         if(pTable)
         {
             pTable->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)));
@@ -147,7 +147,7 @@ void ODbaseTables::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementNam
 
     if ( xTunnel.is() )
     {
-        ODbaseTable* pTable = (ODbaseTable*)xTunnel->getSomething(ODbaseTable::getUnoTunnelImplementationId());
+        ODbaseTable* pTable = reinterpret_cast< ODbaseTable* >( xTunnel->getSomething(ODbaseTable::getUnoTunnelImplementationId()) );
         if(pTable)
             pTable->DropImpl();
     }
