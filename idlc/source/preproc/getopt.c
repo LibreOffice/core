@@ -4,9 +4,9 @@
  *
  *  $RCSfile: getopt.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:14:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:51:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,10 +47,11 @@ int
     getopt(int argc, char *const argv[], const char *opts)
 {
     static int sp = 1;
-    register c;
+    register int c;
     register char *cp;
 
     if (sp == 1)
+    {
         if (optind >= argc ||
             argv[optind][0] != '-' || argv[optind][1] == '\0')
             return -1;
@@ -60,6 +61,7 @@ int
                 optind++;
                 return -1;
             }
+    }
     optopt = c = argv[optind][sp];
     if (c == ':' || (cp = strchr(opts, c)) == 0)
     {
