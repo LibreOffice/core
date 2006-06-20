@@ -4,9 +4,9 @@
  *
  *  $RCSfile: calendar_hijri.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:03:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:43:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,8 @@ using namespace ::rtl;
 
 #define GREGORIAN_CROSSOVER 2299161
 
-static UErrorCode status; // status is shared in all calls to Calendar, it has to be reset for each call.
+// not used
+//static UErrorCode status; // status is shared in all calls to Calendar, it has to be reset for each call.
 
 // radians per degree (pi/180)
 const double Calendar_hijri::RadPerDeg      = 0.01745329251994329577;
@@ -92,7 +93,7 @@ void SAL_CALL Calendar_hijri::mapToGregorian() throw(RuntimeException)
         ToGregorian(&day, &month, &year);
 
         fieldSetValue[CalendarFieldIndex::ERA] = year <= 0 ? 0 : 1;
-        fieldSetValue[CalendarFieldIndex::MONTH] = (sal_Int32) (month - 1);
+        fieldSetValue[CalendarFieldIndex::MONTH] = sal::static_int_cast<sal_Int16>(month - 1);
         fieldSetValue[CalendarFieldIndex::DAY_OF_MONTH] = (sal_Int16) day;
         fieldSetValue[CalendarFieldIndex::YEAR] = (sal_Int16) abs(year);
         fieldSet |= FIELDS;
@@ -114,7 +115,7 @@ void SAL_CALL Calendar_hijri::mapFromGregorian() throw(RuntimeException)
     getHijri(&day, &month, &year);
 
     fieldValue[CalendarFieldIndex::DAY_OF_MONTH] = (sal_Int16)day;
-    fieldValue[CalendarFieldIndex::MONTH] = month - 1;
+    fieldValue[CalendarFieldIndex::MONTH] = sal::static_int_cast<sal_Int16>(month - 1);
     fieldValue[CalendarFieldIndex::YEAR] = (sal_Int16) abs(year);
     fieldValue[CalendarFieldIndex::ERA] = (sal_Int16) year < 1 ? 0 : 1;
 }
@@ -187,7 +188,7 @@ void
 Calendar_hijri::getHijri(sal_Int32 *day, sal_Int32 *month, sal_Int32 *year)
 {
     double prevday;
-    double dayfraction;
+//  double dayfraction;
     sal_Int32 syndiff;
     sal_Int32 newsyn;
     double newjd;
@@ -236,9 +237,9 @@ void
 Calendar_hijri::ToGregorian(sal_Int32 *day, sal_Int32 *month, sal_Int32 *year)
 {
     sal_Int32 nmonth;
-    double dayfraction;
+//    double dayfraction;
     double jday;
-    sal_Int32 dayint;
+//    sal_Int32 dayint;
 
     if ( *year < 0 ) (*year)++;
 
@@ -338,7 +339,7 @@ Calendar_hijri::getJulianDay(sal_Int32 day, sal_Int32 month, sal_Int32 year)
     if( day + 31 * (month + 12 * year) >= gregcal ) {
     double ja;
     ja = (sal_Int32)(0.01 * jy);
-    intgr += 2 - ja + (sal_Int32)(0.25 * ja);
+    intgr += (sal_Int32)(2 - ja + (sal_Int32)(0.25 * ja));
     }
 
     return (double) intgr;
