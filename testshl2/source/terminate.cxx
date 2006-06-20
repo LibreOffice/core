@@ -4,9 +4,9 @@
  *
  *  $RCSfile: terminate.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:07:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:28:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,10 +48,14 @@
 #define UNDER_WINDOWS_DEBUGGING
 // Nice feature, to debug under windows, install msdev locally and use DebugBreak() to stop a new process at a point you want.
 #ifdef UNDER_WINDOWS_DEBUGGING
-#include <tools/presys.h>
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#endif
 #include <windows.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 #include <MAPIWin.h>
-#include <tools/postsys.h>
 
 #define VCL_NEED_BASETSD
 
@@ -313,12 +317,12 @@ void ProcessHandler::write(int _nPID)
 
 // ----------------------------------- Main -----------------------------------
 #if (defined UNX) || (defined OS2)
-int main( int argc, char* argv[] )
+int main( int, char* argv[] )
 #else
-int _cdecl main( int argc, char* argv[] )
+int _cdecl main( int, char* argv[] )
 #endif
 {
-    static char* optionSet[] = {
+    static char const * optionSet[] = {
         "-version,  shows current program version and exit.",
         "-pid=s,    write current process id to file",
         "-time=s,   timeout [default is 10 sec]",
@@ -348,7 +352,7 @@ int _cdecl main( int argc, char* argv[] )
 
     if ( opt.hasOpt("-version") )
     {
-        fprintf(stderr, "testshl2_timeout $Revision: 1.3 $\n");
+        fprintf(stderr, "testshl2_timeout $Revision: 1.4 $\n");
         exit(0);
     }
 
