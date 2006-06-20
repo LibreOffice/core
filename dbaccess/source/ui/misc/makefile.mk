@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: hr $ $Date: 2005-09-23 12:40:55 $
+#   last change: $Author: hr $ $Date: 2006-06-20 03:24:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,8 @@ PRJINC=$(PRJ)$/source
 PRJNAME=dbaccess
 TARGET=uimisc
 
+ENABLE_EXCEPTIONS=TRUE
+
 # --- Settings ----------------------------------
 
 .INCLUDE : settings.mk
@@ -53,7 +55,7 @@ SRC1FILES =	\
 
 # ... object files ............................
 
-EXCEPTIONSFILES=	\
+SLOFILES=	\
         $(SLO)$/componentclientmonitor.obj		\
         $(SLO)$/singledoccontroller.obj		\
         $(SLO)$/datasourceconnector.obj		\
@@ -74,19 +76,15 @@ EXCEPTIONSFILES=	\
         $(SLO)$/RowSetDrop.obj				\
         $(SLO)$/TableCopyHelper.obj			\
         $(SLO)$/moduledbu.obj               \
-        $(SLO)$/documentcontroller.obj
-
-
-SLOFILES=	\
-        $(EXCEPTIONSFILES)					\
-        $(SLO)$/ToolBoxHelper.obj			\
+        $(SLO)$/WColumnSelect.obj			\
         $(SLO)$/WExtendPages.obj			\
         $(SLO)$/WNameMatch.obj				\
-        $(SLO)$/WColumnSelect.obj			\
+        $(SLO)$/documentcontroller.obj      \
+        $(SLO)$/dialogcontrolling.obj       \
+        $(SLO)$/ToolBoxHelper.obj			\
         $(SLO)$/stringlistitem.obj			\
         $(SLO)$/charsets.obj				\
-        $(SLO)$/dsntypes.obj                \
-        $(SLO)$/dialogcontrolling.obj
+        $(SLO)$/dsntypes.obj
 
 # --- Targets ----------------------------------
 
