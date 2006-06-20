@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WinClipbImpl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:14:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 06:01:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,9 +67,15 @@
 #include "..\dtobj\XNotifyingDataObject.hxx"
 #endif
 
+#if defined _MSC_VER
+#pragma warning(push,1)
+#endif
 #include <windows.h>
 #include <ole2.h>
 #include <objidl.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 
 //------------------------------------------------------------------------
 // namespace directives
