@@ -4,9 +4,9 @@
  *
  *  $RCSfile: verifyinput.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 12:56:39 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:19:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,8 @@ namespace canvas
                           const uno::Reference< uno::XInterface >&  xIf,
                           ::sal_Int16                               nArgPos )
         {
+            (void)pStr; (void)xIf; (void)nArgPos;
+
 #if OSL_DEBUG_LEVEL > 0
             if( !::rtl::math::isFinite( rPoint.X ) )
             {
@@ -111,6 +113,8 @@ namespace canvas
                           const uno::Reference< uno::XInterface >&  xIf,
                           ::sal_Int16                               nArgPos )
         {
+            (void)pStr; (void)xIf; (void)nArgPos;
+
 #if OSL_DEBUG_LEVEL > 0
             if( !::rtl::math::isFinite( rSize.Width ) )
             {
@@ -143,6 +147,8 @@ namespace canvas
                           const uno::Reference< uno::XInterface >&  xIf,
                           ::sal_Int16                               nArgPos )
         {
+            (void)pStr; (void)xIf; (void)nArgPos;
+
 #if OSL_DEBUG_LEVEL > 0
             if( !::rtl::math::isFinite( rSegment.Px ) )
             {
@@ -215,6 +221,8 @@ namespace canvas
                           const uno::Reference< uno::XInterface >&  xIf,
                           ::sal_Int16                               nArgPos )
         {
+            (void)pStr; (void)xIf; (void)nArgPos;
+
 #if OSL_DEBUG_LEVEL > 0
             if( !::rtl::math::isFinite( rRect.X1 ) )
             {
@@ -267,6 +275,8 @@ namespace canvas
                           const uno::Reference< uno::XInterface >&  xIf,
                           ::sal_Int16                               nArgPos )
         {
+            (void)pStr; (void)xIf; (void)nArgPos;
+
 #if OSL_DEBUG_LEVEL > 0
             const sal_Int32 nBinaryState(
                 100000 * !::rtl::math::isFinite( matrix.m00 ) +
@@ -303,6 +313,8 @@ namespace canvas
                           const uno::Reference< uno::XInterface >&  xIf,
                           ::sal_Int16                               nArgPos )
         {
+            (void)pStr; (void)xIf; (void)nArgPos;
+
 #if OSL_DEBUG_LEVEL > 0
             const sal_Int32 nBinaryState(
                 1000 * !::rtl::math::isFinite( matrix.m00 ) +
@@ -589,6 +601,8 @@ namespace canvas
                           const uno::Reference< uno::XInterface >&  xIf,
                           ::sal_Int16                               nArgPos )
         {
+            (void)pStr; (void)xIf; (void)nArgPos;
+
             if( bitmapLayout.ScanLines < 0 )
             {
 #if OSL_DEBUG_LEVEL > 0
@@ -696,6 +710,8 @@ namespace canvas
                           const uno::Reference< uno::XInterface >&      xIf,
                           ::sal_Int16                                   nArgPos )
         {
+            (void)pStr; (void)xIf; (void)nArgPos;
+
             if( bitmapLayout.ScanLines < 0 )
             {
 #if OSL_DEBUG_LEVEL > 0
@@ -781,10 +797,10 @@ namespace canvas
             }
         }
 
-        void verifyInput( const rendering::FontInfo&                fontInfo,
-                          const char*                               pStr,
-                          const uno::Reference< uno::XInterface >&  xIf,
-                          ::sal_Int16                               nArgPos )
+        void verifyInput( const rendering::FontInfo&                /*fontInfo*/,
+                          const char*                               /*pStr*/,
+                          const uno::Reference< uno::XInterface >&  /*xIf*/,
+                          ::sal_Int16                               /*nArgPos*/ )
         {
             // TODO(E3): Implement FontDescription checks, once the
             // Panose stuff is ready.
@@ -871,6 +887,8 @@ namespace canvas
                                const char*                              pStr,
                                const uno::Reference< uno::XInterface >& xIf )
         {
+            (void)pStr; (void)xIf;
+
             if( size.Width <= 0 )
             {
 #if OSL_DEBUG_LEVEL > 0
@@ -906,6 +924,8 @@ namespace canvas
                                const char*                              pStr,
                                const uno::Reference< uno::XInterface >& xIf )
         {
+            (void)pStr; (void)xIf;
+
             if( size.Width <= 0.0 )
             {
 #if OSL_DEBUG_LEVEL > 0
