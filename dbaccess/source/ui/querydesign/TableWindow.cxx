@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableWindow.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:30:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:28:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,16 +132,15 @@ DBG_NAME(OTableWindow);
 OTableWindow::OTableWindow( Window* pParent, OTableWindowData* pTabWinData )
           :Window( pParent, WB_3DLOOK|WB_MOVEABLE )
           ,m_aTitle( this )
-          ,m_nSizingFlags( SIZING_NONE )
-          ,m_bActive( FALSE )
           ,m_pListBox(NULL)
+          ,m_pAccessible(NULL)
+          ,m_pData( pTabWinData )
           ,m_nMoveCount(0)
           ,m_nMoveIncrement(1)
-          ,m_pAccessible(NULL)
+          ,m_nSizingFlags( SIZING_NONE )
+          ,m_bActive( FALSE )
 {
     DBG_CTOR(OTableWindow,NULL);
-    // ich uebernehme nicht die Verantwortung fuer die Daten, ich merke mir nur den Zeiger darauf
-    m_pData = pTabWinData;
 
     // Position und Groesse bestimmen
     if( GetData()->HasPosition() )
@@ -222,7 +221,7 @@ void OTableWindow::SetPosSizePixel( const Point& rNewPos, const Size& rNewSize )
 //------------------------------------------------------------------------------
 OTableWindowListBox* OTableWindow::CreateListBox()
 {
-    return new OTableWindowListBox(this, GetComposedName(), GetTableName());
+    return new OTableWindowListBox(this);
 }
 
 //------------------------------------------------------------------------------
@@ -310,7 +309,7 @@ BOOL OTableWindow::FillListBox()
     return TRUE;
 }
 // -----------------------------------------------------------------------------
-void* OTableWindow::createUserData(const Reference< XPropertySet>& _xColumn,bool _bPrimaryKey)
+void* OTableWindow::createUserData(const Reference< XPropertySet>& /*_xColumn*/,bool /*_bPrimaryKey*/)
 {
     return NULL;
 }
@@ -723,7 +722,7 @@ void OTableWindow::StateChanged( StateChangedType nType )
     }
 }
 // -----------------------------------------------------------------------------
-void OTableWindow::_disposing( const ::com::sun::star::lang::EventObject& _rSource )
+void OTableWindow::_disposing( const ::com::sun::star::lang::EventObject& /*_rSource*/ )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     m_xTable    = NULL;
@@ -753,7 +752,7 @@ void OTableWindow::Command(const CommandEvent& rEvt)
                 {
                     SvLBoxEntry* pCurrent = m_pListBox->GetCurEntry();
                     if ( pCurrent )
-                        ptWhere = m_pListBox->GetEntryPos(pCurrent);
+                        ptWhere = m_pListBox->GetEntryPosition(pCurrent);
                     else
                         ptWhere = m_aTitle.GetPosPixel();
                 }
