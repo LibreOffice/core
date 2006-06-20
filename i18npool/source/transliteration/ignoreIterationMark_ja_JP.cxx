@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ignoreIterationMark_ja_JP.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:28:01 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:49:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,7 +102,7 @@ OUString SAL_CALL
 ignoreIterationMark_ja_JP::folding( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset )
   throw(RuntimeException)
 {
-    oneToOneMapping table(ignoreIterationMark_ja_JP_mappingTable, sizeof(ignoreIterationMark_ja_JP_mappingTable));
+    oneToOneMapping aTable(ignoreIterationMark_ja_JP_mappingTable, sizeof(ignoreIterationMark_ja_JP_mappingTable));
 
     // Create a string buffer which can hold nCount + 1 characters.
     // The reference count is 0 now.
@@ -135,7 +135,7 @@ ignoreIterationMark_ja_JP::folding( const OUString& inStr, sal_Int32 startPos, s
                 break;
             case 0x30fe: // KATAKANA VOICED ITERATION MARK
             case 0x309e: // HIRAGANA VOICED ITERATION MARK
-                currentChar = table[ previousChar ];
+                currentChar = aTable[ previousChar ];
                 break;
         }
         if (useOffset)
