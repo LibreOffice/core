@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableWindowData.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:49:01 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:28:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,9 +68,9 @@ OTableWindowData::OTableWindowData()
 
 //------------------------------------------------------------------------------
 OTableWindowData::OTableWindowData( const ::rtl::OUString& _rComposedName, const ::rtl::OUString& rTableName, const ::rtl::OUString& rWinName )
-    :m_sComposedName(_rComposedName)
-    ,m_aTableName( rTableName )
+    :m_aTableName( rTableName )
     ,m_aWinName( rWinName )
+    ,m_sComposedName(_rComposedName)
     ,m_aPosition( Point(-1,-1) )
     ,m_aSize( Size(-1,-1) )
     ,m_bShowAll( TRUE )
