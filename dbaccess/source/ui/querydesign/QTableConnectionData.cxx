@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QTableConnectionData.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:21:39 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:26:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,13 +77,13 @@ OQueryTableConnectionData::OQueryTableConnectionData( const OQueryTableConnectio
 OQueryTableConnectionData::OQueryTableConnectionData(const ::rtl::OUString& strSourceTable, const ::rtl::OUString& strDestTable,
         const ::rtl::OUString& strSourceAlias, const ::rtl::OUString& strDestAlias, const ::rtl::OUString& rConnName)
     :OTableConnectionData( strSourceAlias, strDestAlias, rConnName )
-    ,m_strSourceTableName(strSourceTable)
-    ,m_strDestTableName(strDestTable)
     ,m_nFromEntryIndex(0)
     ,m_nDestEntryIndex(0)
+    ,m_eJoinType (INNER_JOIN)
     ,m_eFromType(TAB_NORMAL_FIELD)
     ,m_eDestType(TAB_NORMAL_FIELD)
-    ,m_eJoinType (INNER_JOIN)
+    ,m_strSourceTableName(strSourceTable)
+    ,m_strDestTableName(strDestTable)
 {
     DBG_CTOR(OQueryTableConnectionData,NULL);
 }
