@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolboxcontroller.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:20:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:01:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -236,9 +236,7 @@ namespace dbaui
         if ( m_aStates.size() > 2 )
         {
             pMenu.reset( new PopupMenu( ModuleRes( RID_MENU_APP_NEW ) ) );
-            sal_Bool bIsWriterInstalled = SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SWRITER);
 
-            ToolBox* pToolBox = static_cast<ToolBox*>(VCLUnoHelper::GetWindow(getParent()));
             sal_Bool bHighContrast = isHighContrast();
 
             try
