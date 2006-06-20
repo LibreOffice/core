@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TypeInfo.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:21:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:15:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,8 @@
 #define DBAUI_TYPEINFO_HXX
 
 
-#ifndef _RTL_USTRING_
-#include <rtl/ustring>
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
 #endif
 #ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -100,7 +100,6 @@ const sal_uInt16 TYPE_OTHER     = 30;
         ::rtl::OUString aLocalTypeName;
 
         sal_Int32       nPrecision;     // Laenge des Types
-        sal_Int32       nNumPrecRadix;  // indicating the radix, which is usually 2 or 10
         sal_Int32       nType;          // Datenbanktyp
 
         sal_Int16       nMaximumScale;  // Nachkommastellen
@@ -113,21 +112,19 @@ const sal_uInt16 TYPE_OTHER     = 30;
                         bAutoIncrement  : 1,    // Ist es ein automatisch incrementierendes Feld
                         bNullable       : 1,    // Kann das Feld NULL annehmen
                         bCaseSensitive  : 1,    // Ist der Type Casesensitive
-                        bUnsigned       : 1,    // Ist der Type Unsigned
-                        bEmpty_1        : 1,    // for later use
-                        bEmpty_2        : 1;
+                        bUnsigned       : 1;    // Ist der Type Unsigned
 
         OTypeInfo()
-                :bCurrency(sal_False)
+                :nPrecision(0)
+                ,nType(::com::sun::star::sdbc::DataType::OTHER)
+                ,nMaximumScale(0)
+                ,nMinimumScale(0)
+                ,nSearchType(::com::sun::star::sdbc::ColumnSearch::FULL)
+                ,bCurrency(sal_False)
                 ,bAutoIncrement(sal_False)
                 ,bNullable(sal_True)
                 ,bCaseSensitive(sal_False)
                 ,bUnsigned(sal_False)
-                ,nMaximumScale(0)
-                ,nMinimumScale(0)
-                ,nType(::com::sun::star::sdbc::DataType::OTHER)
-                ,nPrecision(0)
-                ,nSearchType(::com::sun::star::sdbc::ColumnSearch::FULL)
         {}
         sal_Bool operator == (const OTypeInfo& lh) const { return lh.nType == nType; }
         sal_Bool operator != (const OTypeInfo& lh) const { return lh.nType != nType; }
