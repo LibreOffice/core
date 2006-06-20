@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DriverManager.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:10:01 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:34:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,8 +82,8 @@ jobject java_sql_DriverManager::getDriver(const ::rtl::OUString &url)
         // Parameter konvertieren
         args[0].l = convertwchar_tToJavaString(t.pEnv,url);
         // temporaere Variable initialisieren
-        static char * cSignature = "(Ljava/lang/String;)Ljava/sql/Driver;";
-        static char * cMethodName = "getDriver";
+        static const char * cSignature = "(Ljava/lang/String;)Ljava/sql/Driver;";
+        static const char * cMethodName = "getDriver";
         // Java-Call absetzen
         static jmethodID mID = t.pEnv->GetStaticMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID )
@@ -103,12 +103,11 @@ jobject java_sql_DriverManager::getDriver(const ::rtl::OUString &url)
 void java_sql_DriverManager::setLoginTimeout(sal_Int32 _par0)
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-    jobject out(0);
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
-        static char * cSignature = "(I)V";
-        static char * cMethodName = "setLoginTimeout";
+        static const char * cSignature = "(I)V";
+        static const char * cMethodName = "setLoginTimeout";
         // Java-Call absetzen
         static jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID )
