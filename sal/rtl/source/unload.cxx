@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unload.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:06:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:31:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -232,7 +232,7 @@ extern "C" sal_Bool SAL_CALL rtl_registerModuleForUnloading( oslModule module)
         // Test if the module supports unloading (exports component_canUnload)
         rtl::OUString name(RTL_CONSTASCII_USTRINGPARAM( COMPONENT_CANUNLOAD));
         component_canUnloadFunc pFunc=
-            (component_canUnloadFunc)osl_getSymbol( module, name.pData);
+            (component_canUnloadFunc)osl_getFunctionSymbol( module, name.pData);
         if (pFunc)
         {
             //register module for the first time, set ref count to 1
