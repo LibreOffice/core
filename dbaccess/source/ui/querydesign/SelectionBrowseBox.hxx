@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:44:23 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:27:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,7 +133,7 @@ namespace dbaui
         void                        AddGroupBy( const OTableFieldDescRef& rInfo,sal_uInt32 _nCurrentPos);
         void                        AddCondition( const OTableFieldDescRef& rInfo,
                                                   const String& rValue,
-                                                  const sal_uInt16 nLevel, const char* pOp=0 );
+                                                  const sal_uInt16 nLevel );
         void                        AddOrder(const OTableFieldDescRef& rInfo, const EOrderDir eDir, sal_uInt32 _nCurrentPos);
         void                        ClearAll();
         OTableFieldDescRef          AppendNewCol( sal_uInt16 nCnt=1 );
@@ -207,7 +207,7 @@ namespace dbaui
             @return
                 The name of the specified object.
         */
-        virtual ::rtl::OUString     GetAccessibleName( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition = -1) const;
+        virtual ::rtl::OUString     GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition = -1) const;
 
         // IAccessibleTableProvider
         /** Creates the accessible object of a data table cell.
@@ -257,7 +257,7 @@ namespace dbaui
             // testet, ob es noch freie Spalten gibt, wenn nicht, wird ein neuer Packen angefuegt
             // rCol enthaelt die Nummer der ersten freien Spalte (in pOTableFieldDescList)
 
-        void            RemoveField( sal_uInt16 nId, sal_Bool bActivate = sal_True);
+        void            RemoveField( sal_uInt16 nId );
         Rectangle       GetInvalidRect( sal_uInt16 nColId );
         long            GetRealRow(long nRow) const;
         long            GetBrowseRow(long nRowId) const;
@@ -353,6 +353,12 @@ namespace dbaui
                 The currently edited entry.
         */
         void            setFunctionCell(OTableFieldDescRef& _pEntry);
+
+    private:
+        using ::svt::EditBrowseBox::AcceptDrop;
+        using ::svt::EditBrowseBox::ExecuteDrop;
+        using ::svt::EditBrowseBox::MouseButtonDown;
+        using ::svt::EditBrowseBox::MouseButtonUp;
     };
 }
 #endif // DBAUI_QUERYDESIGN_OSELECTIONBROWSEBOX_HXX
