@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filtask.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:28:57 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:21:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,6 @@
 
 namespace fileaccess
 {
-    class shell;
     class BaseContent;
 
     /*
@@ -99,13 +98,13 @@ namespace fileaccess
             TaskHandling(
                 const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >&  xCommandEnv
                 = com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >( 0 ) )
-                : m_xInteractionHandler( 0 ),
-                  m_xProgressHandler( 0 ),
-                  m_xCommandEnvironment( xCommandEnv ),
-                  m_bAbort( false ),
+                : m_bAbort( false ),
                   m_bHandled( false ),
                   m_nErrorCode( TASKHANDLER_NO_ERROR ),
-                  m_nMinorCode( TASKHANDLER_NO_ERROR )
+                  m_nMinorCode( TASKHANDLER_NO_ERROR ),
+                  m_xInteractionHandler( 0 ),
+                  m_xProgressHandler( 0 ),
+                  m_xCommandEnvironment( xCommandEnv )
             {
             }
 
@@ -234,8 +233,7 @@ namespace fileaccess
          *  "endTask" throws in case an error code is set the corresponding exception.
          */
 
-        void SAL_CALL endTask( shell * pShell, // must not be null
-                               sal_Int32 CommandId,
+        void SAL_CALL endTask( sal_Int32 CommandId,
                                // the physical URL of the object
                                const rtl::OUString& aUnqPath,
                                BaseContent* pContent);
