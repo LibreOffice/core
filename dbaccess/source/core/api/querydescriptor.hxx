@@ -4,9 +4,9 @@
  *
  *  $RCSfile: querydescriptor.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 10:09:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:40:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,7 +135,8 @@ protected:
 // IColumnFactory
     virtual OColumn*    createColumn(const ::rtl::OUString& _rName) const;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createEmptyObject();
-    virtual void columnDropped(const ::rtl::OUString& _sName) {}
+    virtual void columnDropped(const ::rtl::OUString& _sName);
+    virtual void columnCloned(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xClone);
 
     // called (after some preparations) from inside refreshColumns. Never overload refreshColumns directly!
     virtual void rebuildColumns( );
