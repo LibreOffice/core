@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-17 14:52:24 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:20:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,7 +103,10 @@ void* SAL_CALL osl_getSymbol(oslModule Module, rtl_uString *strSymbolName)
        be in this case unavoidable because the API has to stay
        compitable we need to keep this function which returns a
        void* by definition */
+#pragma warning(push)
+#pragma warning(disable:4054)
     return (void*)(osl_getFunctionSymbol(Module, strSymbolName));
+#pragma warning(pop)
 }
 
 /*****************************************************************************/
@@ -220,7 +223,9 @@ static sal_Bool SAL_CALL _osl_addressGetModuleURL_Windows( void *pv, rtl_uString
 /* Implementation for Windows NT, 2K and XP (2K and XP could use the above method too) */
 /***************************************************************************************/
 
+#pragma warning(push,1) /* disable warnings within system headers */
 #include <imagehlp.h>
+#pragma warning(pop)
 
 typedef BOOL (WINAPI *SymInitialize_PROC)(
     HANDLE   hProcess,
@@ -272,7 +277,7 @@ static sal_Bool SAL_CALL _osl_addressGetModuleURL_NT4( void *pv, rtl_uString **p
         {
             IMAGEHLP_MODULE ModuleInfo;
             CHAR    szModuleFileName[MAX_PATH];
-            LPCSTR  lpSearchPath = NULL;
+            LPSTR   lpSearchPath = NULL;
 
             if ( GetModuleFileNameA( NULL, szModuleFileName, sizeof(szModuleFileName) ) )
             {
@@ -424,7 +429,10 @@ sal_Bool SAL_CALL osl_getModuleURLFromFunctionAddress( oslGenericFunction addr, 
        not allowed according to the C/C++ standards. In this case
        it is unavoidable because we have to stay compatible we
        cannot remove any function. */
+#pragma warning(push)
+#pragma warning(disable:4054)
     return osl_getModuleURLFromAddress((void*)addr, ppLibraryUrl);
+#pragma warning(pop)
 }
 
 
