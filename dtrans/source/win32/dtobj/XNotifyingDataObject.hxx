@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XNotifyingDataObject.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:26:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 06:06:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,8 +50,14 @@
 #include <com/sun/star/datatransfer/clipboard/XClipboardOwner.hpp>
 #endif
 
+#if defined _MSC_VER
+#pragma warning(push,1)
+#endif
 #include <objidl.h>
 #include <windows.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 
 #include <systools/win32/comtools.hxx>
 
@@ -71,6 +77,8 @@ public:
         const com::sun::star::uno::Reference< com::sun::star::datatransfer::XTransferable >& aXTransferable,
         const com::sun::star::uno::Reference< com::sun::star::datatransfer::clipboard::XClipboardOwner >& aXClipOwner,
         CWinClipbImpl* theWinClipImpl );
+
+    virtual ~CXNotifyingDataObject() {}
 
     //-----------------------------------------------------------------
     // ole interface implementation
