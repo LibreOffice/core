@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filrset.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:27:46 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:21:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,7 +125,7 @@ namespace fileaccess {
             return 0;
         }
 
-        virtual ContentEventNotifier*        cEXC( const rtl::OUString aNewName )
+        virtual ContentEventNotifier*        cEXC( const rtl::OUString )
         {
             return 0;
         }
@@ -204,7 +204,7 @@ namespace fileaccess {
             throw( com::sun::star::sdbc::SQLException,
                    com::sun::star::uno::RuntimeException )
         {
-            if( 0<= m_nRow && m_nRow < m_aItems.size() )
+            if( 0<= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 m_nWasNull = m_aItems[m_nRow]->wasNull();
             else
                 m_nWasNull = true;
@@ -217,7 +217,7 @@ namespace fileaccess {
             throw( com::sun::star::sdbc::SQLException,
                    com::sun::star::uno::RuntimeException)
         {
-            if( 0 <= m_nRow && m_nRow < m_aItems.size() )
+            if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getString( columnIndex );
             else
                 return rtl::OUString();
@@ -229,7 +229,7 @@ namespace fileaccess {
             throw( com::sun::star::sdbc::SQLException,
                    com::sun::star::uno::RuntimeException)
         {
-            if( 0 <= m_nRow && m_nRow < m_aItems.size() )
+            if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getBoolean( columnIndex );
             else
                 return false;
@@ -241,7 +241,7 @@ namespace fileaccess {
             throw( com::sun::star::sdbc::SQLException,
                    com::sun::star::uno::RuntimeException)
         {
-            if( 0 <= m_nRow && m_nRow < m_aItems.size() )
+            if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getByte( columnIndex );
             else
                 return sal_Int8( 0 );
@@ -254,7 +254,7 @@ namespace fileaccess {
                 com::sun::star::sdbc::SQLException,
                 com::sun::star::uno::RuntimeException)
         {
-            if( 0 <= m_nRow && m_nRow < m_aItems.size() )
+            if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getShort( columnIndex );
             else
                 return sal_Int16( 0 );
@@ -266,7 +266,7 @@ namespace fileaccess {
             throw( com::sun::star::sdbc::SQLException,
                    com::sun::star::uno::RuntimeException )
         {
-            if( 0 <= m_nRow && m_nRow < m_aItems.size() )
+            if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getInt( columnIndex );
             else
                 return sal_Int32( 0 );
@@ -278,7 +278,7 @@ namespace fileaccess {
             throw( com::sun::star::sdbc::SQLException,
                    com::sun::star::uno::RuntimeException)
         {
-            if( 0 <= m_nRow && m_nRow < m_aItems.size() )
+            if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getLong( columnIndex );
             else
                 return sal_Int64( 0 );
@@ -290,7 +290,7 @@ namespace fileaccess {
             throw( com::sun::star::sdbc::SQLException,
                    com::sun::star::uno::RuntimeException )
         {
-            if( 0 <= m_nRow && m_nRow < m_aItems.size() )
+            if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getFloat( columnIndex );
             else
                 return float( 0 );
@@ -302,7 +302,7 @@ namespace fileaccess {
             throw( com::sun::star::sdbc::SQLException,
                    com::sun::star::uno::RuntimeException )
         {
-            if( 0 <= m_nRow && m_nRow < m_aItems.size() )
+            if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getDouble( columnIndex );
             else
                 return double( 0 );
@@ -314,7 +314,7 @@ namespace fileaccess {
             throw( com::sun::star::sdbc::SQLException,
                    com::sun::star::uno::RuntimeException )
         {
-            if( 0 <= m_nRow && m_nRow < m_aItems.size() )
+            if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getBytes( columnIndex );
             else
                 return com::sun::star::uno::Sequence< sal_Int8 >();
@@ -326,7 +326,7 @@ namespace fileaccess {
             throw( com::sun::star::sdbc::SQLException,
                    com::sun::star::uno::RuntimeException)
         {
-            if( 0 <= m_nRow && m_nRow < m_aItems.size() )
+            if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getDate( columnIndex );
             else
                 return com::sun::star::util::Date();
@@ -338,7 +338,7 @@ namespace fileaccess {
             throw( com::sun::star::sdbc::SQLException,
                    com::sun::star::uno::RuntimeException)
         {
-            if( 0 <= m_nRow && m_nRow < m_aItems.size() )
+            if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getTime( columnIndex );
             else
                 return com::sun::star::util::Time();
@@ -350,7 +350,7 @@ namespace fileaccess {
             throw( com::sun::star::sdbc::SQLException,
                    com::sun::star::uno::RuntimeException)
         {
-            if( 0 <= m_nRow && m_nRow < m_aItems.size() )
+            if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getTimestamp( columnIndex );
             else
                 return com::sun::star::util::DateTime();
@@ -362,7 +362,7 @@ namespace fileaccess {
             throw( com::sun::star::sdbc::SQLException,
                    com::sun::star::uno::RuntimeException)
         {
-            if( 0 <= m_nRow && m_nRow < m_aItems.size() )
+            if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getBinaryStream( columnIndex );
             else
                 return com::sun::star::uno::Reference< com::sun::star::io::XInputStream >();
@@ -374,7 +374,7 @@ namespace fileaccess {
             throw( com::sun::star::sdbc::SQLException,
                    com::sun::star::uno::RuntimeException)
         {
-            if( 0 <= m_nRow && m_nRow < m_aItems.size() )
+            if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getCharacterStream( columnIndex );
             else
                 return com::sun::star::uno::Reference< com::sun::star::io::XInputStream >();
@@ -387,7 +387,7 @@ namespace fileaccess {
             throw( com::sun::star::sdbc::SQLException,
                    com::sun::star::uno::RuntimeException)
         {
-            if( 0 <= m_nRow && m_nRow < m_aItems.size() )
+            if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getObject( columnIndex,typeMap );
             else
                 return com::sun::star::uno::Any();
@@ -399,7 +399,7 @@ namespace fileaccess {
             throw( com::sun::star::sdbc::SQLException,
                    com::sun::star::uno::RuntimeException)
         {
-            if( 0 <= m_nRow && m_nRow < m_aItems.size() )
+            if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getRef( columnIndex );
             else
                 return com::sun::star::uno::Reference< com::sun::star::sdbc::XRef >();
@@ -411,7 +411,7 @@ namespace fileaccess {
             throw( com::sun::star::sdbc::SQLException,
                    com::sun::star::uno::RuntimeException)
         {
-            if( 0 <= m_nRow && m_nRow < m_aItems.size() )
+            if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getBlob( columnIndex );
             else
                 return com::sun::star::uno::Reference< com::sun::star::sdbc::XBlob >();
@@ -423,7 +423,7 @@ namespace fileaccess {
             throw( com::sun::star::sdbc::SQLException,
                    com::sun::star::uno::RuntimeException)
         {
-            if( 0 <= m_nRow && m_nRow < m_aItems.size() )
+            if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getClob( columnIndex );
             else
                 return com::sun::star::uno::Reference< com::sun::star::sdbc::XClob >();
@@ -435,7 +435,7 @@ namespace fileaccess {
             throw( com::sun::star::sdbc::SQLException,
                    com::sun::star::uno::RuntimeException)
         {
-            if( 0 <= m_nRow && m_nRow < m_aItems.size() )
+            if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getArray( columnIndex );
             else
                 return com::sun::star::uno::Reference< com::sun::star::sdbc::XArray >();
@@ -675,7 +675,7 @@ namespace fileaccess {
         shell*                              m_pMyShell;
         com::sun::star::uno::Reference< com::sun::star::ucb::XContentProvider >  m_xProvider;
         sal_Bool                            m_nIsOpen;
-        sal_uInt32                           m_nRow;
+        sal_Int32                           m_nRow;
         sal_Bool                            m_nWasNull;
         sal_Int32                           m_nOpenMode;
         sal_Bool                            m_bRowCountFinal;
