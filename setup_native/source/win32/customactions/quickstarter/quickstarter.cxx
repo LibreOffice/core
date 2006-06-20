@@ -1,5 +1,7 @@
 #include "quickstarter.hxx"
+#pragma warning(push, 1) /* disable warnings within system headers */
 #include <psapi.h>
+#pragma warning(pop)
 #include <tlhelp32.h>
 #include <malloc.h>
 
