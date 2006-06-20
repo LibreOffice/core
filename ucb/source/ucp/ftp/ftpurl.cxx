@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ftpurl.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:40:01 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:26:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,13 +126,14 @@ extern "C" {
 
 
 FTPURL::FTPURL(const FTPURL& r)
-    : m_pFCP(r.m_pFCP),
+    : m_mutex(),
+      m_pFCP(r.m_pFCP),
       m_aUsername(r.m_aUsername),
       m_bShowPassword(r.m_bShowPassword),
       m_aHost(r.m_aHost),
       m_aPort(r.m_aPort),
-      m_aPathSegmentVec(r.m_aPathSegmentVec),
-      m_mutex()
+      m_aPathSegmentVec(r.m_aPathSegmentVec)
+
 {
 }
 
@@ -142,10 +143,10 @@ FTPURL::FTPURL(const rtl::OUString& url,
     throw(
         malformed_exception
     )
-    : m_aUsername(rtl::OUString::createFromAscii("anonymous")),
-      m_aPort(rtl::OUString::createFromAscii("21")),
-      m_pFCP(pFCP),
-      m_bShowPassword(false)
+    : m_pFCP(pFCP),
+      m_aUsername(rtl::OUString::createFromAscii("anonymous")),
+      m_bShowPassword(false),
+      m_aPort(rtl::OUString::createFromAscii("21"))
 {
     parse(url);  // can reset m_bShowPassword
 }
@@ -554,7 +555,7 @@ rtl::OUString FTPURL::net_title() const
 
     bool try_more(true);
     CURLcode err;
-    rtl::OUString net_title;
+    rtl::OUString aNetTitle;
 
     while(true) {
         rtl::OUString url(ident(false,true));
@@ -573,19 +574,19 @@ rtl::OUString FTPURL::net_title() const
             char* fwd = (char*) control.m_pBuffer;
             sal_uInt32 len = (sal_uInt32) control.m_nWritePos;
 
-            net_title = rtl::OUString(fwd,len,RTL_TEXTENCODING_UTF8);
+            aNetTitle = rtl::OUString(fwd,len,RTL_TEXTENCODING_UTF8);
             // the buffer now contains the name of the file;
             // analyze the output:
             // Format of current working directory:
             // 257 "/bla/bla" is current directory
-            sal_Int32 index1 = net_title.lastIndexOf(
+            sal_Int32 index1 = aNetTitle.lastIndexOf(
                 rtl::OUString::createFromAscii("257"));
-            index1 = 1+net_title.indexOf(sal_Unicode('"'),index1);
-            sal_Int32 index2 = net_title.indexOf(sal_Unicode('"'),index1);
-            net_title = net_title.copy(index1,index2-index1);
-            if(!net_title.equalsAscii("/")) {
-                index1 = net_title.lastIndexOf(sal_Unicode('/'));
-                net_title = net_title.copy(1+index1);
+            index1 = 1+aNetTitle.indexOf(sal_Unicode('"'),index1);
+            sal_Int32 index2 = aNetTitle.indexOf(sal_Unicode('"'),index1);
+            aNetTitle = aNetTitle.copy(index1,index2-index1);
+            if(!aNetTitle.equalsAscii("/")) {
+                index1 = aNetTitle.lastIndexOf(sal_Unicode('/'));
+                aNetTitle = aNetTitle.copy(1+index1);
             }
             try_more = false;
         } else if(err == CURLE_BAD_PASSWORD_ENTERED)
@@ -598,10 +599,10 @@ rtl::OUString FTPURL::net_title() const
             //  to the one given in the URL.
             if(m_aPathSegmentVec.size())
                 // determine title form url
-                net_title = decodePathSegment(m_aPathSegmentVec.back());
+                aNetTitle = decodePathSegment(m_aPathSegmentVec.back());
             else
                 // must be root
-                net_title = rtl::OUString::createFromAscii("/");
+                aNetTitle = rtl::OUString::createFromAscii("/");
             try_more = false;
         }
 
@@ -612,7 +613,7 @@ rtl::OUString FTPURL::net_title() const
     }
 
     curl_slist_free_all(slist);
-    return net_title;
+    return aNetTitle;
 }
 
 
@@ -635,11 +636,11 @@ FTPDirentry FTPURL::direntry() const
         // try to open the parent directory
         FTPURL aURL(parent(),m_pFCP);
 
-        std::vector<FTPDirentry> list = aURL.list(OpenMode::ALL);
+        std::vector<FTPDirentry> aList = aURL.list(OpenMode::ALL);
 
-        for(unsigned i = 0; i < list.size(); ++i) {
-            if(list[i].m_aName == nettitle) { // the relevant file is found
-                aDirentry = list[i];
+        for(unsigned i = 0; i < aList.size(); ++i) {
+            if(aList[i].m_aName == nettitle) { // the relevant file is found
+                aDirentry = aList[i];
                 break;
             }
         }
@@ -711,7 +712,7 @@ void FTPURL::mkdir(bool ReplaceExisting) const
         // will give an error
         title = rtl::OString("/");
 
-    rtl::OString del("del "); del += title;
+    rtl::OString aDel("del "); aDel += title;
     rtl::OString mkd("mkd "); mkd += title;
 
     struct curl_slist *slist = 0;
@@ -722,7 +723,7 @@ void FTPURL::mkdir(bool ReplaceExisting) const
 //          throw curl_exception(FOLDER_EXIST_DURING_INSERT);
         throw curl_exception(FOLDER_MIGHT_EXIST_DURING_INSERT);
     } else if(aDirentry.m_nMode != INETCOREFTP_FILEMODE_UNKNOWN)
-        slist = curl_slist_append(slist,del.getStr());
+        slist = curl_slist_append(slist,aDel.getStr());
 
     slist = curl_slist_append(slist,mkd.getStr());
 
