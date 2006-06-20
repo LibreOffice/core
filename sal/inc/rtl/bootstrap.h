@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bootstrap.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:35:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:13:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,7 +129,8 @@ extern "C" {
     @param pName Name of the inifile with path but WITHOUT
     suffix (.ini or rc)
 */
-void SAL_CALL rtl_bootstrap_setIniFileName( rtl_uString *pName );
+void SAL_CALL rtl_bootstrap_setIniFileName( rtl_uString *pName )
+    SAL_THROW_EXTERN_C();
 
 /**
    @param ppValue
@@ -148,7 +149,8 @@ void SAL_CALL rtl_bootstrap_setIniFileName( rtl_uString *pName );
            When a pDefault value is given, the function returns always
            <code>sal_True</code>.
 */
-sal_Bool SAL_CALL rtl_bootstrap_get( rtl_uString *pName, rtl_uString **ppValue, rtl_uString *pDefault );
+sal_Bool SAL_CALL rtl_bootstrap_get( rtl_uString *pName, rtl_uString **ppValue, rtl_uString *pDefault )
+    SAL_THROW_EXTERN_C();
 
 /** Sets a bootstrap parameter.
 
@@ -169,13 +171,15 @@ typedef void * rtlBootstrapHandle;
                           to the excutables name
    @return                Handle for a boostrap argument container
 */
-rtlBootstrapHandle SAL_CALL rtl_bootstrap_args_open(rtl_uString * pIniName);
+rtlBootstrapHandle SAL_CALL rtl_bootstrap_args_open(rtl_uString * pIniName)
+    SAL_THROW_EXTERN_C();
 
 /**
    Closes a boostrap agument container.
    @param handle [in]     The handle got by <code>rtl_bootstrap_args_open()</code>
 */
-void SAL_CALL rtl_bootstrap_args_close(rtlBootstrapHandle handle);
+void SAL_CALL rtl_bootstrap_args_close(rtlBootstrapHandle handle)
+    SAL_THROW_EXTERN_C();
 
 /**
    @param handle   [in]     The handle got by <code>rtl_bootstrap_args_open()</code>
@@ -185,14 +189,16 @@ void SAL_CALL rtl_bootstrap_args_close(rtlBootstrapHandle handle);
 
    @return                  The status of the retrieval, <code>sal_True</code> on success.
 */
-sal_Bool SAL_CALL rtl_bootstrap_get_from_handle(rtlBootstrapHandle handle, rtl_uString *pName, rtl_uString **ppValue, rtl_uString *pDefault);
+sal_Bool SAL_CALL rtl_bootstrap_get_from_handle(rtlBootstrapHandle handle, rtl_uString *pName, rtl_uString **ppValue, rtl_uString *pDefault)
+    SAL_THROW_EXTERN_C();
 
 
 /** Returns the name of the inifile associated with this handle.
 
    @param ppIniName contains after the call the name of the ini-filename.
 */
-void SAL_CALL rtl_bootstrap_get_iniName_from_handle(rtlBootstrapHandle handle, rtl_uString ** ppIniName);
+void SAL_CALL rtl_bootstrap_get_iniName_from_handle(rtlBootstrapHandle handle, rtl_uString ** ppIniName)
+    SAL_THROW_EXTERN_C();
 
 /** Expands a macro using bootstrap variables.
 
