@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dynamicresultsetwrapper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:13:26 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:16:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,12 @@ DynamicResultSetWrapper::DynamicResultSetWrapper(
                     Reference< XDynamicResultSet > xOrigin
                     , const Reference< XMultiServiceFactory > & xSMgr )
 
-                : m_xSMgr( xSMgr )
+                : m_bDisposed( sal_False )
+                , m_bInDispose( sal_False )
+                , m_pDisposeEventListeners( NULL )
+                , m_xSMgr( xSMgr )
+                , m_bStatic( sal_False )
+                , m_bGotWelcome( sal_False )
                 , m_xSource( xOrigin )
                 , m_xSourceResultOne( NULL )
                 , m_xSourceResultTwo( NULL )
@@ -85,11 +90,6 @@ DynamicResultSetWrapper::DynamicResultSetWrapper(
                 , m_xMyResultOne( NULL )
                 , m_xMyResultTwo( NULL )
                 , m_xListener( NULL )
-                , m_pDisposeEventListeners( NULL )
-                , m_bDisposed( sal_False )
-                , m_bInDispose( sal_False )
-                , m_bStatic( sal_False )
-                , m_bGotWelcome( sal_False )
 {
     m_pMyListenerImpl = new DynamicResultSetWrapperListener( this );
     m_xMyListenerImpl = Reference< XDynamicResultSetListener >( m_pMyListenerImpl );
@@ -237,7 +237,7 @@ void SAL_CALL DynamicResultSetWrapper
 
 //virtual
 void SAL_CALL DynamicResultSetWrapper
-    ::impl_disposing( const EventObject& rEventObject )
+    ::impl_disposing( const EventObject& )
     throw( RuntimeException )
 {
     impl_EnsureNotDisposed();
