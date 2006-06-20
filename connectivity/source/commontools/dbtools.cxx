@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 10:47:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:06:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,9 @@
 #endif
 #ifndef _DBHELPER_DBCONVERSION_HXX_
 #include <connectivity/dbconversion.hxx>
+#endif
+#ifndef CONNECTIVITY_DIAGNOSE_EX_H
+#include "diagnose_ex.h"
 #endif
 
 #ifndef _COMPHELPER_PROPERTY_HXX_
@@ -175,6 +178,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XPARAMETERS_HPP_
 #include <com/sun/star/sdbc/XParameters.hpp>
+#endif
+#ifndef CONNECTIVITY_DIAGNOSE_EX_H
+#include "diagnose_ex.h"
 #endif
 #include <algorithm>
 
@@ -864,6 +870,8 @@ SQLContext prependContextInfo(const SQLException& _rException, const Reference< 
 void qualifiedNameComponents(const Reference< XDatabaseMetaData >& _rxConnMetaData, const ::rtl::OUString& _rQualifiedName, ::rtl::OUString& _rCatalog, ::rtl::OUString& _rSchema, ::rtl::OUString& _rName,EComposeRule _eComposeRule)
 {
     OSL_ENSURE(_rxConnMetaData.is(), "QualifiedNameComponents : invalid meta data!");
+    OSL_ENSURE( _eComposeRule == eInDataManipulation, "qualifiedNameComponents: un-implemented case!" );
+    OSL_UNUSED( _eComposeRule );
     ::rtl::OUString sSeparator = _rxConnMetaData->getCatalogSeparator();
 
     ::rtl::OUString sName(_rQualifiedName);
@@ -991,7 +999,7 @@ try
                 }
                 catch(IllegalArgumentException& e)
                 {
-                    e;
+                    OSL_UNUSED( e );
 #ifdef DBG_UTIL
                     ::rtl::OUString sMessage = ::rtl::OUString::createFromAscii("TransferFormComponentProperties : could not transfer the value for property \"");
                     sMessage += pResult->Name;
@@ -1413,56 +1421,6 @@ Reference< XSingleSelectQueryComposer > getCurrentSettingsComposer(
 
     return xReturn;
 }
-namespace
-{
-    class OMetaDataWrapper
-    {
-        const Reference< XDatabaseMetaData > m_xMetaData;
-    public:
-        OMetaDataWrapper(const Reference< XDatabaseMetaData >& _xMetaData) : m_xMetaData(_xMetaData){}
-
-        bool  supportsSchemasInDataManipulation(  )
-        {
-            return m_xMetaData->supportsSchemasInDataManipulation() ? true : false;
-        }
-        bool  supportsSchemasInProcedureCalls(  )
-        {
-            return m_xMetaData->supportsSchemasInProcedureCalls() ? true : false;
-        }
-        bool  supportsSchemasInTableDefinitions(  )
-        {
-            return m_xMetaData->supportsSchemasInTableDefinitions() ? true : false;
-        }
-        bool  supportsSchemasInIndexDefinitions(  )
-        {
-            return m_xMetaData->supportsSchemasInIndexDefinitions() ? true : false;
-        }
-        bool  supportsSchemasInPrivilegeDefinitions(  )
-        {
-            return m_xMetaData->supportsSchemasInPrivilegeDefinitions() ? true : false;
-        }
-        bool  supportsCatalogsInDataManipulation(  )
-        {
-            return m_xMetaData->supportsCatalogsInDataManipulation() ? true : false;
-        }
-        bool  supportsCatalogsInProcedureCalls(  )
-        {
-            return m_xMetaData->supportsCatalogsInProcedureCalls() ? true : false;
-        }
-        bool  supportsCatalogsInTableDefinitions(  )
-        {
-            return m_xMetaData->supportsCatalogsInTableDefinitions() ? true : false;
-        }
-        bool  supportsCatalogsInIndexDefinitions(  )
-        {
-            return m_xMetaData->supportsCatalogsInIndexDefinitions() ? true : false;
-        }
-        bool  supportsCatalogsInPrivilegeDefinitions(  )
-        {
-            return m_xMetaData->supportsCatalogsInPrivilegeDefinitions() ? true : false;
-        }
-    };
-}
 //--------------------------------------------------------------------------
 void composeTableName(  const Reference< XDatabaseMetaData >& _rxMetaData,
                         const ::rtl::OUString& _rCatalog,
@@ -1479,26 +1437,31 @@ void composeTableName(  const Reference< XDatabaseMetaData >& _rxMetaData,
         return; // just to be save here
     OSL_ENSURE(_rName.getLength(), "composeTableName : at least the name should be non-empty !");
 
-    ::std::mem_fun_t<bool,OMetaDataWrapper> aCatalogCall = ::std::mem_fun(&OMetaDataWrapper::supportsCatalogsInDataManipulation);
-    ::std::mem_fun_t<bool,OMetaDataWrapper> aSchemaCall = ::std::mem_fun(&OMetaDataWrapper::supportsSchemasInDataManipulation);
+    typedef sal_Bool (SAL_CALL XDatabaseMetaData::*GetBooleanMetaData)();
+    GetBooleanMetaData catalogUsage = &XDatabaseMetaData::supportsCatalogsInDataManipulation;
+    GetBooleanMetaData schemaUsage = &XDatabaseMetaData::supportsSchemasInDataManipulation;
 
     switch ( _eComposeRule )
     {
         case eInTableDefinitions:
-            aCatalogCall = ::std::mem_fun(&OMetaDataWrapper::supportsCatalogsInTableDefinitions);
-            aSchemaCall = ::std::mem_fun(&OMetaDataWrapper::supportsSchemasInTableDefinitions);
+            catalogUsage = &XDatabaseMetaData::supportsCatalogsInTableDefinitions;
+            schemaUsage = &XDatabaseMetaData::supportsSchemasInTableDefinitions;
             break;
         case eInIndexDefinitions:
-            aCatalogCall = ::std::mem_fun(&OMetaDataWrapper::supportsCatalogsInIndexDefinitions);
-            aSchemaCall = ::std::mem_fun(&OMetaDataWrapper::supportsSchemasInIndexDefinitions);
+            catalogUsage = &XDatabaseMetaData::supportsCatalogsInIndexDefinitions;
+            schemaUsage = &XDatabaseMetaData::supportsSchemasInIndexDefinitions;
             break;
         case eInProcedureCalls:
-            aCatalogCall = ::std::mem_fun(&OMetaDataWrapper::supportsCatalogsInProcedureCalls);
-            aSchemaCall = ::std::mem_fun(&OMetaDataWrapper::supportsSchemasInProcedureCalls);
+            catalogUsage = &XDatabaseMetaData::supportsCatalogsInProcedureCalls;
+            schemaUsage = &XDatabaseMetaData::supportsSchemasInProcedureCalls;
             break;
         case eInPrivilegeDefinitions:
-            aCatalogCall = ::std::mem_fun(&OMetaDataWrapper::supportsCatalogsInPrivilegeDefinitions);
-            aSchemaCall = ::std::mem_fun(&OMetaDataWrapper::supportsSchemasInPrivilegeDefinitions);
+            catalogUsage = &XDatabaseMetaData::supportsCatalogsInPrivilegeDefinitions;
+            schemaUsage = &XDatabaseMetaData::supportsSchemasInPrivilegeDefinitions;
+            break;
+        case eInDataManipulation:
+            catalogUsage = &XDatabaseMetaData::supportsCatalogsInDataManipulation;
+            schemaUsage = &XDatabaseMetaData::supportsSchemasInDataManipulation;
             break;
     }
 
@@ -1509,11 +1472,10 @@ void composeTableName(  const Reference< XDatabaseMetaData >& _rxMetaData,
     static ::rtl::OUString sEmpty;
     static ::rtl::OUString sSeparator = ::rtl::OUString::createFromAscii(".");
 
-    OMetaDataWrapper aWrapper(_rxMetaData);
     _rComposedName = sEmpty;
     ::rtl::OUString sCatalogSep;
     sal_Bool bCatlogAtStart = sal_True;
-    if ( _bUseCatalogInSelect && _rCatalog.getLength() && aCatalogCall(&aWrapper) )
+    if ( _bUseCatalogInSelect && _rCatalog.getLength() && (_rxMetaData.get()->*catalogUsage)() )
     {
         sCatalogSep     = _rxMetaData->getCatalogSeparator();
         bCatlogAtStart  = _rxMetaData->isCatalogAtStart();
@@ -1525,7 +1487,7 @@ void composeTableName(  const Reference< XDatabaseMetaData >& _rxMetaData,
         }
     }
 
-    if ( _bUseSchemaInSelect && _rSchema.getLength() && aSchemaCall(&aWrapper) )
+    if ( _bUseSchemaInSelect && _rSchema.getLength() && (_rxMetaData.get()->*schemaUsage)() )
     {
         QUOTE(_rComposedName,_rSchema);
         _rComposedName += sSeparator;
@@ -1533,7 +1495,7 @@ void composeTableName(  const Reference< XDatabaseMetaData >& _rxMetaData,
 
     QUOTE(_rComposedName,_rName);
 
-    if ( _bUseCatalogInSelect && _rCatalog.getLength() && !bCatlogAtStart && sCatalogSep.getLength() && aCatalogCall(&aWrapper) )
+    if ( _bUseCatalogInSelect && _rCatalog.getLength() && !bCatlogAtStart && sCatalogSep.getLength() && (_rxMetaData.get()->*catalogUsage)() )
     {
         _rComposedName += sCatalogSep;
         QUOTE(_rComposedName,_rCatalog);
@@ -1891,7 +1853,7 @@ void setObjectWithInfo(const Reference<XParameters>& _xParams,
                        sal_Int32 parameterIndex,
                        const Any& x,
                        sal_Int32 sqlType,
-                       sal_Int32 scale)  throw(SQLException, RuntimeException)
+                       sal_Int32 /*scale*/)  throw(SQLException, RuntimeException)
 {
     if(!x.hasValue())
         _xParams->setNull(parameterIndex,sqlType);
