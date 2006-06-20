@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zipfileaccess.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 19:15:18 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 06:15:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -406,9 +406,6 @@ uno::Reference< io::XInputStream > SAL_CALL OZipFileAccess::getStreamByPattern( 
     }
 
     throw container::NoSuchElementException();
-
-    // not reachable
-    return uno::Reference< io::XInputStream >();
 }
 
 // XComponent
