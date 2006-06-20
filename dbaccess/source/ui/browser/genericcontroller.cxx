@@ -4,9 +4,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:19:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:58:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,9 @@
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 #ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
@@ -154,17 +157,17 @@ DBG_NAME(OGenericUnoController)
 // -------------------------------------------------------------------------
 OGenericUnoController::OGenericUnoController(const Reference< XMultiServiceFactory >& _rM)
     :OGenericUnoController_COMPBASE(m_aMutex)
-    ,m_aAsyncInvalidateAll(LINK(this, OGenericUnoController, OnAsyncInvalidateAll))
-    ,m_aAsyncCloseTask(LINK(this, OGenericUnoController, OnAsyncCloseTask))
-    ,m_xMultiServiceFacatory(_rM)
-    ,m_bCurrentlyModified(sal_False)
-    ,m_bFrameUiActive(sal_False)
-    ,m_pView(NULL)
-    ,m_bPreview(sal_False)
-    ,m_bReadOnly(sal_False)
 #ifdef DBG_UTIL
     ,m_bDescribingSupportedFeatures( false )
 #endif
+    ,m_aAsyncInvalidateAll(LINK(this, OGenericUnoController, OnAsyncInvalidateAll))
+    ,m_aAsyncCloseTask(LINK(this, OGenericUnoController, OnAsyncCloseTask))
+    ,m_xMultiServiceFacatory(_rM)
+    ,m_pView(NULL)
+    ,m_bPreview(sal_False)
+    ,m_bReadOnly(sal_False)
+    ,m_bFrameUiActive(sal_False)
+    ,m_bCurrentlyModified(sal_False)
 {
     DBG_CTOR(OGenericUnoController,NULL);
 
@@ -185,7 +188,7 @@ OGenericUnoController::~OGenericUnoController()
 }
 
 // -----------------------------------------------------------------------------
-sal_Bool OGenericUnoController::Construct(Window* pParent)
+sal_Bool OGenericUnoController::Construct(Window* /*pParent*/)
 {
     OSL_ENSURE( getView(), "the view is NULL!" );
 
@@ -234,7 +237,7 @@ Reference< XWindow > OGenericUnoController::getComponentWindow() const
     return VCLUnoHelper::GetInterface( getView() );
 }
 // -----------------------------------------------------------------------------
-void OGenericUnoController::impl_initialize(const Sequence< Any >& aArguments)
+void OGenericUnoController::impl_initialize(const Sequence< Any >& /*aArguments*/)
 {
 }
 // -------------------------------------------------------------------------
@@ -876,17 +879,9 @@ FeatureState OGenericUnoController::GetState(sal_uInt16 nId) const
                 break;
         }
     }
-    catch(Exception& e)
+    catch( const Exception& )
     {
-#if DBG_UTIL
-        String sMessage("OGenericUnoController::GetState(", RTL_TEXTENCODING_ASCII_US);
-        sMessage += String::CreateFromInt32(nId);
-        sMessage.AppendAscii("): caught an exception ! message : ");
-        sMessage += (const sal_Unicode*)e.Message;
-        DBG_ERROR(ByteString(sMessage, gsl_getSystemTextEncoding()).GetBuffer());
-#else
-        e;  // make compiler happy
-#endif
+        DBG_UNHANDLED_EXCEPTION();
     }
 
     return aReturn;
@@ -1026,7 +1021,7 @@ void OGenericUnoController::loadMenu(const Reference< XFrame >& _xFrame)
 }
 
 // -----------------------------------------------------------------------------
-void OGenericUnoController::onLoadedMenu(const Reference< ::com::sun::star::frame::XLayoutManager >& _xLayoutManager)
+void OGenericUnoController::onLoadedMenu(const Reference< ::com::sun::star::frame::XLayoutManager >& /*_xLayoutManager*/)
 {
     // not interested in
 }
@@ -1074,11 +1069,11 @@ Any SAL_CALL OGenericUnoController::getViewData(void) throw( RuntimeException )
     return Any();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OGenericUnoController::restoreViewData(const Any& Data) throw( RuntimeException )
+void SAL_CALL OGenericUnoController::restoreViewData(const Any& /*Data*/) throw( RuntimeException )
 {
 }
 // -----------------------------------------------------------------------------
-sal_Bool SAL_CALL OGenericUnoController::attachModel(const Reference< XModel > & xModel) throw( RuntimeException )
+sal_Bool SAL_CALL OGenericUnoController::attachModel(const Reference< XModel > & /*xModel*/) throw( RuntimeException )
 {
     return sal_False;
 }
@@ -1138,6 +1133,7 @@ namespace
                 for ( sal_Int32 i=0; i<sServiceNames.getLength(); ++i, ++pLoop )
                 {
                     sal_Int32 nDummy = 0;
+                    (void)nDummy;
                 }
 #endif
 
