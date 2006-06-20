@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ldump.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:28:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:08:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,28 @@ int bFilter = 0;
 int bLdump3 = 0;
 int bUseDirectives = 0;
 
-DECLARE_HASHTABLE( ExportSet, char *, LibExport*)
+class ExportSet : public HashTable
+{
+public:
+    ExportSet
+    (
+        unsigned long lSize,
+        double  dMaxLoadFactor = HashTable::m_defMaxLoadFactor,
+        double  dGrowFactor = HashTable::m_defDefGrowFactor
+    )
+        : HashTable(lSize,false,dMaxLoadFactor,dGrowFactor) {}
+
+    virtual ~ExportSet() {}
+
+    LibExport *  Find (char * const& Key) const
+    { return (LibExport *) HashTable::Find((char *) Key); }
+
+    bool Insert (char * const& Key, LibExport * Object)
+    { return HashTable::Insert((char *) Key, (void*) Object); }
+
+    LibExport *  Delete (char * const&Key)
+    { return (LibExport *) HashTable::Delete ((char *) Key); }
+};
 
 LibDump::LibDump( char *cFileName )
                 : cBName( NULL ),
@@ -100,7 +121,6 @@ bool LibDump::Dump()
         fseek( pList, nOffSet, 0);
     }
 
-    char c;
     char aTmpBuf[4096];
     // reading file containing symbols
     while( !feof( pList ) )
@@ -109,10 +129,15 @@ bool LibDump::Dump()
         if ( !bUseDirectives )
         {
             // symbol komplett einlesen
-            while ( (c = fgetc( pList )) != '\0' )
+            for (;;)
             {
+                int c = fgetc( pList );
+                if ( c == '\0' )
+                {
+                    break;
+                }
                 if ( ((c >= 33) && (c <= 126)) && ( c!=40 && c!=41) )
-                    aBuf[i] = c;
+                    aBuf[i] = static_cast< char >(c);
                 else
                 {
                     aBuf[0] = '\0';
@@ -151,8 +176,7 @@ bool LibDump::Dump()
             }
         }
 
-        int n_is_ct;
-        if ((aBuf[0] =='?') || ( n_is_ct = !strncmp(aBuf, "__CT",4)))
+        if ((aBuf[0] =='?') || !strncmp(aBuf, "__CT",4))
         {
             nLen = strlen(aBuf);
             memset( aName, 0, sizeof( aName ) );
@@ -290,7 +314,6 @@ bool LibDump::ReadFilter( char * cFilterName )
     {
         ::bFilter = 0;
         DumpError( 500 );
-        return true;
     }
 
     while( fgets( aBuf, MAX_MAN, pfFilter ) != 0 )
@@ -314,8 +337,6 @@ bool LibDump::ReadFilter( char * cFilterName )
 
 bool LibDump::PrintSym(char *pName, bool bName )
 {
-    int nTreffer = 0;
-    int bTreffer = false;
     LibExport *pData;
 
 
@@ -434,7 +455,6 @@ bool LibDump::ReadDataBase()
     {
         bBase = 0;
         DumpError( 600 );
-        return false;
     }
 
     bool bRet = true;
@@ -465,7 +485,24 @@ bool LibDump::ReadDataBase()
     return bRet;
 }
 
-DECLARE_HASHTABLE_ITERATOR( ExportSetIter, LibExport* )
+class ExportSetIter : public HashTableIterator
+{
+public:
+    ExportSetIter(HashTable const& aTable)
+        : HashTableIterator(aTable) {}
+
+    LibExport * GetFirst()
+    { return (LibExport *)HashTableIterator::GetFirst(); }
+    LibExport * GetNext()
+    { return (LibExport *)HashTableIterator::GetNext();  }
+    LibExport * GetLast()
+    { return (LibExport *)HashTableIterator::GetLast();  }
+    LibExport * GetPrev()
+    { return (LibExport *)HashTableIterator::GetPrev();  }
+
+private:
+    void operator =(ExportSetIter &); // not defined
+};
 
 bool LibDump::PrintDataBase()
 {
@@ -592,7 +629,7 @@ void LibDump::SetCExport( char* pName )
 //* Error() - Gibt Fehlermeldumg aus
 //******************************************************************
 
-bool LibDump::DumpError( unsigned long n )
+void LibDump::DumpError( unsigned long n )
 {
     char *p;
 
@@ -623,7 +660,6 @@ bool LibDump::DumpError( unsigned long n )
     }
     fprintf( stdout, "%s\n", p );
     exit (1);
-    return false;
 }
 
 /*********************************************************************
@@ -631,11 +667,9 @@ bool LibDump::DumpError( unsigned long n )
 *********************************************************************/
 
 
-usage()
+void usage()
 {
     LibDump::DumpError(99);
-    exit(0);
-    return 0;
 }
 
 #define STATE_NON       0x0000
@@ -648,14 +682,13 @@ int __cdecl
 #endif
 main( int argc, char **argv )
 {
-    char *pLibName = NULL, *pFilterName, *pCExport= NULL;
-    int nBegin=1;
+    char *pLibName = NULL, *pFilterName = NULL, *pCExport= NULL;
+    unsigned short nBegin=1;
 
     unsigned short nState = STATE_NON;
 
     if ( argc == 1 ) {
         usage();
-        return 0;
     }
 
     for ( int i = 1; i < argc; i++ ) {
@@ -664,7 +697,6 @@ main( int argc, char **argv )
             ( !strcmp( argv[ i ], "-?" )))
         {
             usage();
-            return 0;
         }
         else if (( !strcmp( argv[ i ], "-LD3" )) ||
             ( !strcmp( argv[ i ], "-Ld3" )) ||
@@ -673,28 +705,24 @@ main( int argc, char **argv )
         {
             if ( nState != STATE_NON ) {
                 usage();
-                return 0;
             }
             bLdump3 = 1;
         }
         else if (( !strcmp( argv[ i ], "-E" )) || ( !strcmp( argv[ i ], "-e" ))) {
             if ( nState != STATE_NON ) {
                 usage();
-                return 0;
             }
             nState = STATE_BEGIN;
         }
         else if (( !strcmp( argv[ i ], "-F" )) || ( !strcmp( argv[ i ], "-f" ))) {
             if ( nState != STATE_NON ) {
                 usage();
-                return 0;
             }
             nState = STATE_FILTER;
         }
         else if (( !strcmp( argv[ i ], "-A" )) || ( !strcmp( argv[ i ], "-a" ))) {
             if ( nState != STATE_NON ) {
                 usage();
-                return 0;
             }
             nState = STATE_CEXPORT;
             pCExport = new char[ 1 ];
@@ -703,14 +731,13 @@ main( int argc, char **argv )
         else if (( !strcmp( argv[ i ], "-D" )) || ( !strcmp( argv[ i ], "-d" ))) {
             if ( nState != STATE_NON ) {
                 usage();
-                return 0;
             }
             bUseDirectives = 1;
         }
         else {
             switch ( nState ) {
                 case STATE_BEGIN:
-                    nBegin = atoi( argv[ i ] );
+                    nBegin = static_cast< unsigned short >(atoi( argv[ i ] ));
                     nState = STATE_NON;
                 break;
                 case STATE_FILTER:
@@ -735,7 +762,6 @@ main( int argc, char **argv )
 
     if ( !pLibName ) {
         usage();
-        return 0;
     }
 
     LibDump *pDump = new LibDump( pLibName );
