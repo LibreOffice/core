@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pipe.c,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:58:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:18:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -308,12 +308,6 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
         __osl_destroyPipeImpl(pPipe);
         return NULL;
     }
-
-    /* if we reach here something went wrong */
-    /* should never come here */
-    close (pPipe->m_Socket);
-    __osl_destroyPipeImpl(pPipe);
-    return NULL;
 }
 
 void SAL_CALL osl_acquirePipe( oslPipe pPipe )
@@ -546,6 +540,7 @@ sal_Int32 SAL_CALL osl_sendPipe(oslPipe pPipe,
 /*****************************************************************************/
 oslPipeError SAL_CALL osl_getLastPipeError(oslPipe pPipe)
 {
+    (void) pPipe; /* unused */
     return ERROR_FROM_NATIVE(errno);
 }
 
