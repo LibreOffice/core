@@ -4,9 +4,9 @@
  *
  *  $RCSfile: clipboardmanager.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:11:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:59:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,6 @@ using ::rtl::OUString;
 // ------------------------------------------------------------------------
 
 ClipboardManager::ClipboardManager():
-    m_aMutex(),
     WeakComponentImplHelper3< XClipboardManager, XEventListener, XServiceInfo > (m_aMutex),
     m_aDefaultName(OUString::createFromAscii("default"))
 {
@@ -254,7 +253,7 @@ void SAL_CALL  ClipboardManager::disposing( const EventObject& event )
 // ------------------------------------------------------------------------
 
 Reference< XInterface > SAL_CALL ClipboardManager_createInstance(
-    const Reference< XMultiServiceFactory > & xMultiServiceFactory)
+    const Reference< XMultiServiceFactory > & /*xMultiServiceFactory*/)
 {
     return Reference < XInterface >( ( OWeakObject * ) new ClipboardManager());
 }
