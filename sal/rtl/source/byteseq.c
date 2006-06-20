@@ -4,9 +4,9 @@
  *
  *  $RCSfile: byteseq.c,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:00:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:29:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -242,7 +242,10 @@ sal_Bool SAL_CALL rtl_byte_sequence_equals( sal_Sequence *pSequence1 , sal_Seque
     {
         return sal_False;
     }
-    return (0 == rtl_compareMemory( pSequence1->elements, pSequence2->elements, pSequence1->nElements ));
+    return (sal_Bool)
+        (rtl_compareMemory(
+            pSequence1->elements, pSequence2->elements, pSequence1->nElements )
+         == 0);
 }
 
 
