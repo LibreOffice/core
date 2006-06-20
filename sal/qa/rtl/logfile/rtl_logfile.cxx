@@ -102,7 +102,7 @@ namespace rtl_logfile
         void logfile_001()
         {
 #ifdef SOLARIS
-                putenv("RTL_LOGFILE=/tmp/logfile1");
+                putenv(const_cast< char * >("RTL_LOGFILE=/tmp/logfile1"));
 #endif
 #ifdef WNT
                 putenv("RTL_LOGFILE=c:\\temp\\logfile1");
@@ -144,7 +144,7 @@ namespace rtl_logfile
         void logfile_002()
             {
 #ifdef SOLARIS
-                putenv("RTL_LOGFILE=/tmp/logfile2");
+                putenv(const_cast< char * >("RTL_LOGFILE=/tmp/logfile2"));
 #endif
 #ifdef WNT
                 putenv("RTL_LOGFILE=c:\\temp\\logfile2");
@@ -162,7 +162,7 @@ namespace rtl_logfile
         void logfile_003()
             {
 #ifdef SOLARIS
-                putenv("RTL_LOGFILE=/tmp/logfile2");
+                putenv(const_cast< char * >("RTL_LOGFILE=/tmp/logfile2"));
 #endif
 #ifdef WNT
                 putenv("RTL_LOGFILE=c:\\temp\\logfile2");
