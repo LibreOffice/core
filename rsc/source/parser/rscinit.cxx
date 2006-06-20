@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rscinit.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 16:33:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:46:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,8 +34,6 @@
  ************************************************************************/
 
 /****************** I N C L U D E S **************************************/
-#pragma hdrstop
-
 // C and C++ Includes.
 #include <stdlib.h>
 #include <stdio.h>
@@ -261,8 +259,8 @@ void RscTypCont::Init()
     aUShort.SetRange( 0, 0xFFFF );
 
     /********** L O N G **************************************************/
-    aLong.SetRange( -0x80000000, 0x7FFFFFFF );
-    aEnumLong.SetRange( -0x80000000, 0x7FFFFFFF );
+    aLong.SetRange( SAL_MIN_INT32, SAL_MAX_INT32 );
+    aEnumLong.SetRange( SAL_MIN_INT32, SAL_MAX_INT32 );
 
     /********** I D U S H O R T ******************************************/
     aIdUShort.SetRange( 0, 0xFFFF );
@@ -283,7 +281,7 @@ void RscTypCont::Init()
         a0to9999Short.SetRange( 0, 9999 );
 
     /********** I D R A N G E ********************************************/
-    aIdLong.SetRange( -0x80000000, 0x7FFFFFFF );
+    aIdLong.SetRange( SAL_MIN_INT32, SAL_MAX_INT32 );
 }
 {
     /********** W I N B I T S F L A G ************************************/
@@ -292,113 +290,113 @@ void RscTypCont::Init()
 
     // Windows
     nBorderId       = pHS->getID( "WB_BORDER" );
-    aWinBits.SetConstant( nBorderId, WB_BORDER );
+    aWinBits.SetConstant( nBorderId, sal::static_int_cast<INT32>(WB_BORDER) );
     nHideId         = pHS->getID( "WB_HIDE" );
-    aWinBits.SetConstant( nHideId, WB_HIDE );
+    aWinBits.SetConstant( nHideId, sal::static_int_cast<INT32>(WB_HIDE) );
     nClipChildrenId = pHS->getID( "WB_CLIPCHILDREN" );
-    aWinBits.SetConstant( nClipChildrenId, WB_CLIPCHILDREN );
+    aWinBits.SetConstant( nClipChildrenId, sal::static_int_cast<INT32>(WB_CLIPCHILDREN) );
     nSizeableId     = pHS->getID( "WB_SIZEABLE" );
-    aWinBits.SetConstant( nSizeableId, WB_SIZEABLE );
+    aWinBits.SetConstant( nSizeableId, sal::static_int_cast<INT32>(WB_SIZEABLE) );
     nMoveableId     = pHS->getID( "WB_MOVEABLE" );
-    aWinBits.SetConstant( nMoveableId, WB_MOVEABLE );
+    aWinBits.SetConstant( nMoveableId, sal::static_int_cast<INT32>(WB_MOVEABLE) );
     nMinimizeId     = pHS->getID( "WB_MINABLE" );
     aWinBits.SetConstant( nMinimizeId, 0 /*WB_MINABLE*/ );
     nMaximizeId     = pHS->getID( "WB_MAXABLE" );
     aWinBits.SetConstant( nMaximizeId, 0 /*WB_MAXABLE*/ );
     nCloseableId    = pHS->getID( "WB_CLOSEABLE" );
-    aWinBits.SetConstant( nCloseableId, WB_CLOSEABLE );
+    aWinBits.SetConstant( nCloseableId, sal::static_int_cast<INT32>(WB_CLOSEABLE) );
     nAppId          = pHS->getID( "WB_APP" );
-    aWinBits.SetConstant( nAppId, WB_APP );
+    aWinBits.SetConstant( nAppId, sal::static_int_cast<INT32>(WB_APP) );
     nTabstopId      = pHS->getID( "WB_TABSTOP" );
-    aWinBits.SetConstant( nTabstopId, WB_TABSTOP );
+    aWinBits.SetConstant( nTabstopId, sal::static_int_cast<INT32>(WB_TABSTOP) );
     nGroupId        = pHS->getID( "WB_GROUP" );
-    aWinBits.SetConstant( nGroupId, WB_GROUP );
+    aWinBits.SetConstant( nGroupId, sal::static_int_cast<INT32>(WB_GROUP) );
     nSysmodalId     = pHS->getID( "WB_SYSMODAL" );
     aWinBits.SetConstant( nSysmodalId, 0 /*WB_SYSMODAL*/ );
 }
 {
     nLeftId         = pHS->getID( "WB_LEFT" );
-    aWinBits.SetConstant( nLeftId, WB_LEFT );
+    aWinBits.SetConstant( nLeftId, sal::static_int_cast<INT32>(WB_LEFT) );
     nCenterId       = pHS->getID( "WB_CENTER" );
-    aWinBits.SetConstant( nCenterId, WB_CENTER );
+    aWinBits.SetConstant( nCenterId, sal::static_int_cast<INT32>(WB_CENTER) );
     nRightId        = pHS->getID( "WB_RIGHT" );
-    aWinBits.SetConstant( nRightId, WB_RIGHT );
+    aWinBits.SetConstant( nRightId, sal::static_int_cast<INT32>(WB_RIGHT) );
     nHscrollId      = pHS->getID( "WB_HSCROLL" );
-    aWinBits.SetConstant( nHscrollId, WB_HSCROLL );
+    aWinBits.SetConstant( nHscrollId, sal::static_int_cast<INT32>(WB_HSCROLL) );
     nVscrollId      = pHS->getID( "WB_VSCROLL" );
-    aWinBits.SetConstant( nVscrollId, WB_VSCROLL );
+    aWinBits.SetConstant( nVscrollId, sal::static_int_cast<INT32>(WB_VSCROLL) );
     nSortId         = pHS->getID( "WB_SORT" );
-    aWinBits.SetConstant( nSortId, WB_SORT );
+    aWinBits.SetConstant( nSortId, sal::static_int_cast<INT32>(WB_SORT) );
     nDefaultId          = pHS->getID( "WB_DEFBUTTON" );
-    aWinBits.SetConstant( nDefaultId, WB_DEFBUTTON );
+    aWinBits.SetConstant( nDefaultId, sal::static_int_cast<INT32>(WB_DEFBUTTON) );
     nRepeatId           = pHS->getID( "WB_REPEAT" );
-    aWinBits.SetConstant( nRepeatId, WB_REPEAT );
+    aWinBits.SetConstant( nRepeatId, sal::static_int_cast<INT32>(WB_REPEAT) );
     nSVLookId           = pHS->getID( "WB_SVLOOK" );
-    aWinBits.SetConstant( nSVLookId, WB_3DLOOK );
+    aWinBits.SetConstant( nSVLookId, sal::static_int_cast<INT32>(WB_3DLOOK) );
     nDropDownId         = pHS->getID( "WB_DROPDOWN" );
-    aWinBits.SetConstant( nDropDownId, WB_DROPDOWN );
+    aWinBits.SetConstant( nDropDownId, sal::static_int_cast<INT32>(WB_DROPDOWN) );
     nPassWordId         = pHS->getID( "WB_PASSWORD" );
-    aWinBits.SetConstant( nPassWordId, WB_PASSWORD );
+    aWinBits.SetConstant( nPassWordId, sal::static_int_cast<INT32>(WB_PASSWORD) );
     nReadOnlyId         = pHS->getID( "WB_READONLY" );
-    aWinBits.SetConstant( nReadOnlyId, WB_READONLY );
+    aWinBits.SetConstant( nReadOnlyId, sal::static_int_cast<INT32>(WB_READONLY) );
     nAutoSizeId         = pHS->getID( "WB_AUTOSIZE" );
-    aWinBits.SetConstant( nAutoSizeId, WB_AUTOSIZE );
+    aWinBits.SetConstant( nAutoSizeId, sal::static_int_cast<INT32>(WB_AUTOSIZE) );
     nSpinId             = pHS->getID( "WB_SPIN" );
-    aWinBits.SetConstant( nSpinId, WB_SPIN );
+    aWinBits.SetConstant( nSpinId, sal::static_int_cast<INT32>(WB_SPIN) );
     nTabControlId       = pHS->getID( "WB_DIALOGCONTROL" );
-    aWinBits.SetConstant( nTabControlId, WB_DIALOGCONTROL );
+    aWinBits.SetConstant( nTabControlId, sal::static_int_cast<INT32>(WB_DIALOGCONTROL) );
     nSimpleModeId       = pHS->getID( "WB_SIMPLEMODE" );
-    aWinBits.SetConstant( nSimpleModeId, WB_SIMPLEMODE );
+    aWinBits.SetConstant( nSimpleModeId, sal::static_int_cast<INT32>(WB_SIMPLEMODE) );
     nDragId             = pHS->getID( "WB_DRAG" );
-    aWinBits.SetConstant( nDragId, WB_DRAG );
+    aWinBits.SetConstant( nDragId, sal::static_int_cast<INT32>(WB_DRAG) );
     nSaveAsId           = pHS->getID( "WB_SAVEAS" );
-    aWinBits.SetConstant( nSaveAsId, WB_SAVEAS );
+    aWinBits.SetConstant( nSaveAsId, sal::static_int_cast<INT32>(WB_SAVEAS) );
     nOpenId             = pHS->getID( "WB_OPEN" );
-    aWinBits.SetConstant( nOpenId, WB_OPEN );
+    aWinBits.SetConstant( nOpenId, sal::static_int_cast<INT32>(WB_OPEN) );
     nScrollId           = pHS->getID( "WB_SCROLL" );
-    aWinBits.SetConstant( nScrollId, WB_SCROLL );
+    aWinBits.SetConstant( nScrollId, sal::static_int_cast<INT32>(WB_SCROLL) );
     nZoomableId         = pHS->getID( "WB_ZOOMABLE" );
-    aWinBits.SetConstant( nZoomableId, WB_ROLLABLE );
+    aWinBits.SetConstant( nZoomableId, sal::static_int_cast<INT32>(WB_ROLLABLE) );
     nHideWhenDeactivateId = pHS->getID( "WB_HIDEWHENDEACTIVATE" );
     aWinBits.SetConstant( nHideWhenDeactivateId, 0 /*WB_HIDEWHENDEACTIVATE*/ );
     nAutoHScrollId      = pHS->getID( "WB_AUTOHSCROLL" );
-    aWinBits.SetConstant( nAutoHScrollId, WB_AUTOHSCROLL );
+    aWinBits.SetConstant( nAutoHScrollId, sal::static_int_cast<INT32>(WB_AUTOHSCROLL) );
     nDDExtraWidthId     = pHS->getID( "WB_DDEXTRAWIDTH" );
     aWinBits.SetConstant( nDDExtraWidthId, 0 /*WB_DDEXTRAWIDTH*/ );
     nWordBreakId        = pHS->getID( "WB_WORDBREAK" );
-    aWinBits.SetConstant( nWordBreakId, WB_WORDBREAK );
+    aWinBits.SetConstant( nWordBreakId, sal::static_int_cast<INT32>(WB_WORDBREAK) );
     nLeftLabelId        = pHS->getID( "WB_LEFTLABEL" );
     aWinBits.SetConstant( nLeftLabelId, 0 /*WB_LEFTLABEL*/ );
     nHasLinesId         = pHS->getID( "WB_HASLINES" );
-    aWinBits.SetConstant( nHasLinesId, WB_HASLINES );
+    aWinBits.SetConstant( nHasLinesId, sal::static_int_cast<INT32>(WB_HASLINES) );
     nHasButtonsId       = pHS->getID( "WB_HASBUTTONS" );
-    aWinBits.SetConstant( nHasButtonsId, WB_HASBUTTONS );
+    aWinBits.SetConstant( nHasButtonsId, sal::static_int_cast<INT32>(WB_HASBUTTONS) );
     nRectStyleId        = pHS->getID( "WB_RECTSTYLE" );
-    aWinBits.SetConstant( nRectStyleId, WB_RECTSTYLE );
+    aWinBits.SetConstant( nRectStyleId, sal::static_int_cast<INT32>(WB_RECTSTYLE) );
     nLineSpacingId      = pHS->getID( "WB_LINESPACING" );
-    aWinBits.SetConstant( nLineSpacingId, WB_LINESPACING );
+    aWinBits.SetConstant( nLineSpacingId, sal::static_int_cast<INT32>(WB_LINESPACING) );
     nSmallStyleId       = pHS->getID( "WB_SMALLSTYLE" );
-    aWinBits.SetConstant( nSmallStyleId, WB_SMALLSTYLE );
+    aWinBits.SetConstant( nSmallStyleId, sal::static_int_cast<INT32>(WB_SMALLSTYLE) );
     nEnableResizingId   = pHS->getID( "WB_ENABLERESIZING" );
     aWinBits.SetConstant( nEnableResizingId, 0 /*WB_ENABLERESIZING*/ );
     nDockableId         = pHS->getID( "WB_DOCKABLE" );
-    aWinBits.SetConstant( nDockableId, WB_DOCKABLE );
+    aWinBits.SetConstant( nDockableId, sal::static_int_cast<INT32>(WB_DOCKABLE) );
     nScaleId            = pHS->getID( "WB_SCALE" );
-    aWinBits.SetConstant( nScaleId, WB_SCALE );
+    aWinBits.SetConstant( nScaleId, sal::static_int_cast<INT32>(WB_SCALE) );
     nIgnoreTabId        = pHS->getID( "WB_IGNORETAB" );
-    aWinBits.SetConstant( nIgnoreTabId, WB_IGNORETAB );
+    aWinBits.SetConstant( nIgnoreTabId, sal::static_int_cast<INT32>(WB_IGNORETAB) );
     nNoSplitDrawId      = pHS->getID( "WB_NOSPLITDRAW" );
-    aWinBits.SetConstant( nNoSplitDrawId, WB_NOSPLITDRAW );
+    aWinBits.SetConstant( nNoSplitDrawId, sal::static_int_cast<INT32>(WB_NOSPLITDRAW) );
     nTopImageId         = pHS->getID( "WB_TOPIMAGE" );
-    aWinBits.SetConstant( nTopImageId, WB_TOPIMAGE );
+    aWinBits.SetConstant( nTopImageId, sal::static_int_cast<INT32>(WB_TOPIMAGE) );
     nNoLabelId          = pHS->getID( "WB_NOLABEL" );
-    aWinBits.SetConstant( nNoLabelId, WB_NOLABEL );
+    aWinBits.SetConstant( nNoLabelId, sal::static_int_cast<INT32>(WB_NOLABEL) );
     nVertId             = pHS->getID( "WB_VERT" );
-    aWinBits.SetConstant( nVertId, WB_VERT );
+    aWinBits.SetConstant( nVertId, sal::static_int_cast<INT32>(WB_VERT) );
     nSingleLineId       = pHS->getID( "WB_SINGLELINE" );
-    aWinBits.SetConstant( nSingleLineId, WB_SINGLELINE );
+    aWinBits.SetConstant( nSingleLineId, sal::static_int_cast<INT32>(WB_SINGLELINE) );
     nSysWinId           = pHS->getID( "WB_SYSTEMWINDOW" );
-    aWinBits.SetConstant( nSysWinId, WB_SYSTEMWINDOW );
+    aWinBits.SetConstant( nSysWinId, sal::static_int_cast<INT32>(WB_SYSTEMWINDOW) );
 }
 {
     /********** I n i t   B a s i c   T y p e s **************************/
