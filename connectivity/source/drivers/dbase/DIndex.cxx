@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DIndex.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:38:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:19:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,6 +93,9 @@
 #ifndef _CONNECTIVITY_DBASE_DRESULTSET_HXX_
 #include "dbase/DResultSet.hxx"
 #endif
+#ifndef CONNECTIVITY_DIAGNOSE_EX_H
+#include "diagnose_ex.h"
+#endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
@@ -116,9 +119,9 @@ using namespace com::sun::star::ucb;
 IMPLEMENT_SERVICE_INFO(ODbaseIndex,"com.sun.star.sdbcx.driver.dbase.Index","com.sun.star.sdbcx.Index");
 // -------------------------------------------------------------------------
 ODbaseIndex::ODbaseIndex(ODbaseTable* _pTable) : OIndex(_pTable->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers())
-    , m_pTable(_pTable)
     ,m_pFileStream(NULL)
     ,m_nCurNode(NODE_NOTFOUND)
+    ,m_pTable(_pTable)
 {
     m_aHeader.db_pagecount = m_aHeader.db_rootpage = m_aHeader.db_keytype = m_aHeader.db_maxkeys = m_aHeader.db_keylen = 0;
     m_aHeader.db_name[0] = '\0';
@@ -128,11 +131,11 @@ ODbaseIndex::ODbaseIndex(ODbaseTable* _pTable) : OIndex(_pTable->getConnection()
 ODbaseIndex::ODbaseIndex(   ODbaseTable* _pTable,
                             const NDXHeader& _rHeader,
                             const ::rtl::OUString& _rName)
-    : OIndex(_rName,::rtl::OUString(),_rHeader.db_unique,sal_False,sal_False,_pTable->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers())
-    , m_aHeader(_rHeader)
-    , m_pTable(_pTable)
+    :OIndex(_rName,::rtl::OUString(),_rHeader.db_unique,sal_False,sal_False,_pTable->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers())
     ,m_pFileStream(NULL)
+    ,m_aHeader(_rHeader)
     ,m_nCurNode(NODE_NOTFOUND)
+    ,m_pTable(_pTable)
 {
     construct();
 }
@@ -180,10 +183,8 @@ Sequence< sal_Int8 > ODbaseIndex::getUnoTunnelImplementationId()
 sal_Int64 ODbaseIndex::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
     return (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
-                ?
-            (sal_Int64)this
-                :
-            ODbaseIndex_BASE::getSomething(rId);
+                ? reinterpret_cast< sal_Int64 >( this )
+                : ODbaseIndex_BASE::getSomething(rId);
 }
 //------------------------------------------------------------------
 ONDXPagePtr ODbaseIndex::getRoot()
@@ -430,8 +431,7 @@ SvStream& connectivity::dbase::operator << (SvStream &rStream, ODbaseIndex& rInd
     //  aText.Convert(m_pTable->getConnection()->getTextEncoding(), rIndex.m_pTable->getConnection()->GetCharacterSet());
     strcpy(rIndex.m_aHeader.db_name,aText.GetBuffer());
 */
-    sal_Int32 nWrites = rStream.Write(&rIndex.m_aHeader,512);
-    OSL_ENSURE(nWrites == 512,"Write not successful: Wrong header size for dbase index!");
+    OSL_VERIFY_EQUALS( rStream.Write(&rIndex.m_aHeader,512), 512, "Write not successful: Wrong header size for dbase index!");
     return rStream;
 }
 // -------------------------------------------------------------------------
@@ -507,8 +507,7 @@ BOOL ODbaseIndex::DropImpl()
 
     String sPhysicalPath;
     String sNDX(sCfgFile);
-    sal_Bool bOk = LocalFileHelper::ConvertURLToPhysicalName(sNDX,sPhysicalPath);
-    OSL_ENSURE(bOk,"Can not convert Config Filename into Physical Name!");
+    OSL_VERIFY_RES( LocalFileHelper::ConvertURLToPhysicalName(sNDX,sPhysicalPath),"Can not convert Config Filename into Physical Name!");
 
     Config aInfFile(sPhysicalPath);
     aInfFile.SetGroup(dBASE_III_GROUP);
@@ -671,7 +670,7 @@ BOOL ODbaseIndex::CreateImpl()
         Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(xSet,UNO_QUERY);
         ODbaseResultSet* pDbaseRes = NULL;
         if(xTunnel.is())
-            pDbaseRes = (ODbaseResultSet*)xTunnel->getSomething(ODbaseResultSet::getUnoTunnelImplementationId());
+            pDbaseRes = reinterpret_cast< ODbaseResultSet* >( xTunnel->getSomething(ODbaseResultSet::getUnoTunnelImplementationId()) );
         OSL_ENSURE(pDbaseRes,"No dbase resultset found? What's going on here!");
         Reference<XRowLocate> xRowLocate(xSet,UNO_QUERY);
         nRowsLeft = xSet->getRow();
