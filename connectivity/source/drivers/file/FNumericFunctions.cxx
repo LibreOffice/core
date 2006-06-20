@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FNumericFunctions.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:56:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:25:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,7 +173,7 @@ ORowSetValue OOp_Sqrt::operate(const ORowSetValue& lhs) const
     return nVal;
 }
 // -----------------------------------------------------------------------------
-ORowSetValue OOp_Pi::operate(const ::std::vector<ORowSetValue>& lhs) const
+ORowSetValue OOp_Pi::operate(const ::std::vector<ORowSetValue>& /*lhs*/) const
 {
     return 3.141592653589793116;
 }
