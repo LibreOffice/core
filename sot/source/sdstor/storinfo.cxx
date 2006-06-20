@@ -4,9 +4,9 @@
  *
  *  $RCSfile: storinfo.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 13:12:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:55:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,6 @@
 #include <stg.hxx>
 #include <storinfo.hxx>
 #include <exchange.hxx>
-#pragma hdrstop
 
 
 /************** class SvStorageInfoList **********************************
@@ -69,7 +68,7 @@ ULONG ReadClipboardFormat( SvStream & rStm )
         sal_Char * p = new sal_Char[ nLen ];
         if( rStm.Read( p, nLen ) == (ULONG) nLen )
         {
-            nFormat = SotExchange::RegisterFormatName( String::CreateFromAscii( p, nLen -1 ) );
+            nFormat = SotExchange::RegisterFormatName( String::CreateFromAscii( p, short(nLen-1) ) );
         }
         else
             rStm.SetError( SVSTREAM_GENERALERROR );
