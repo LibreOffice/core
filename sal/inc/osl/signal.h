@@ -4,9 +4,9 @@
  *
  *  $RCSfile: signal.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 12:25:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:13:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,10 @@
 
 #ifndef _OSL_SIGNAL_H_
 #define _OSL_SIGNAL_H_
+
+#ifndef _SAL_TYPES_H_
+#include "sal/types.h"
+#endif
 
 #ifdef __cplusplus
 extern "C" {
