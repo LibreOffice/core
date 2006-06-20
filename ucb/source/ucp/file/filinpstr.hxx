@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filinpstr.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:25:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:20:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,9 +53,6 @@
 #ifndef _COM_SUN_STAR_LANG_XTYPEPROVIDER_HPP_
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
 #ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
 #include <com/sun/star/io/XSeekable.hpp>
 #endif
@@ -77,7 +74,6 @@ namespace fileaccess {
     class XInputStream_impl
         : public cppu::OWeakObject,
           public com::sun::star::lang::XTypeProvider,
-          public com::sun::star::lang::XServiceInfo,
           public com::sun::star::io::XInputStream,
           public com::sun::star::io::XSeekable
     {
@@ -98,20 +94,6 @@ namespace fileaccess {
         // XTypeProvider
 
         XTYPEPROVIDER_DECL()
-
-        // XServiceInfo
-        virtual rtl::OUString SAL_CALL
-        getImplementationName()
-            throw( com::sun::star::uno::RuntimeException);
-
-        virtual sal_Bool SAL_CALL
-        supportsService( const rtl::OUString& ServiceName )
-            throw( com::sun::star::uno::RuntimeException);
-
-        virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL
-        getSupportedServiceNames()
-            throw( com::sun::star::uno::RuntimeException );
-
 
         virtual com::sun::star::uno::Any SAL_CALL
         queryInterface(
