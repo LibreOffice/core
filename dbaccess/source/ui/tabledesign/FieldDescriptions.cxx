@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FieldDescriptions.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2005-12-28 17:37:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:31:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,32 +74,32 @@ using namespace ::com::sun::star::beans;
 //========================================================================
 // class OFieldDescription
 //========================================================================
-DBG_NAME(OFieldDescription);
+DBG_NAME(OFieldDescription)
 //------------------------------------------------------------------------------
-OFieldDescription::OFieldDescription() :
-    m_bIsPrimaryKey(sal_False)
-    ,m_nFormatKey(0)
-    ,m_bIsAutoIncrement(sal_False)
-    ,m_eHorJustify(SVX_HOR_JUSTIFY_STANDARD)
-    ,m_nScale(0)
-    ,m_nPrecision(0)
-    ,m_pType()
-    ,m_nIsNullable(ColumnValue::NULLABLE)
+OFieldDescription::OFieldDescription()
+    :m_pType()
     ,m_nType(DataType::VARCHAR)
+    ,m_nPrecision(0)
+    ,m_nScale(0)
+    ,m_nIsNullable(ColumnValue::NULLABLE)
+    ,m_nFormatKey(0)
+    ,m_eHorJustify(SVX_HOR_JUSTIFY_STANDARD)
+    ,m_bIsAutoIncrement(sal_False)
+    ,m_bIsPrimaryKey(sal_False)
     ,m_bIsCurrency(sal_False)
 {
     DBG_CTOR(OFieldDescription,NULL);
 }
-
 //------------------------------------------------------------------------------
-OFieldDescription::OFieldDescription( const OFieldDescription& rDescr ) :
-     m_sName(rDescr.m_sName)
+OFieldDescription::OFieldDescription( const OFieldDescription& rDescr )
+    :m_aDefaultValue(rDescr.m_aDefaultValue)
+    ,m_aControlDefault(rDescr.m_aControlDefault)
+    ,m_pType(rDescr.m_pType)
+    ,m_sName(rDescr.m_sName)
     ,m_sTypeName(rDescr.m_sTypeName)
     ,m_sDescription(rDescr.m_sDescription)
-    ,m_aDefaultValue(rDescr.m_aDefaultValue)
-    ,m_aControlDefault(rDescr.m_aControlDefault)
     ,m_sAutoIncrementValue(rDescr.m_sAutoIncrementValue)
-    ,m_pType(rDescr.m_pType)
+    ,m_nType(DataType::VARCHAR)
     ,m_nPrecision(rDescr.m_nPrecision)
     ,m_nScale(rDescr.m_nScale)
     ,m_nIsNullable(rDescr.m_nIsNullable)
@@ -107,7 +107,6 @@ OFieldDescription::OFieldDescription( const OFieldDescription& rDescr ) :
     ,m_eHorJustify(rDescr.m_eHorJustify)
     ,m_bIsAutoIncrement(rDescr.m_bIsAutoIncrement)
     ,m_bIsPrimaryKey(rDescr.m_bIsPrimaryKey)
-    ,m_nType(DataType::VARCHAR)
 {
     DBG_CTOR(OFieldDescription,NULL);
 }
@@ -126,22 +125,22 @@ OFieldDescription::OFieldDescription(   const ::rtl::OUString&  _sName,
                     SvxCellHorJustify       _eHorJustify,
                     sal_Bool                _bIsAutoIncrement,
                     sal_Bool                _bIsPrimaryKey,
-                    sal_Bool                _bIsCurrency)    :
- m_sName(_sName)
-,m_sTypeName(_sTypeName)
-,m_sDescription(_sDescription)
-,m_aDefaultValue(_aDefaultValue)
-,m_aControlDefault(_aControlDefault)
-,m_sAutoIncrementValue(_sAutoIncrementValue)
-,m_pType(_pType)
-,m_nPrecision(_nPrecision)
-,m_nScale(_nScale)
-,m_nIsNullable(_nIsNullable)
-,m_nFormatKey(_nFormatKey)
-,m_eHorJustify(_eHorJustify)
-,m_bIsAutoIncrement(_bIsAutoIncrement)
-,m_bIsPrimaryKey(_bIsPrimaryKey)
-,m_bIsCurrency(_bIsCurrency)
+                    sal_Bool                _bIsCurrency)
+    :m_aDefaultValue(_aDefaultValue)
+    ,m_aControlDefault(_aControlDefault)
+    ,m_pType(_pType)
+    ,m_sName(_sName)
+    ,m_sTypeName(_sTypeName)
+    ,m_sDescription(_sDescription)
+    ,m_sAutoIncrementValue(_sAutoIncrementValue)
+    ,m_nPrecision(_nPrecision)
+    ,m_nScale(_nScale)
+    ,m_nIsNullable(_nIsNullable)
+    ,m_nFormatKey(_nFormatKey)
+    ,m_eHorJustify(_eHorJustify)
+    ,m_bIsAutoIncrement(_bIsAutoIncrement)
+    ,m_bIsPrimaryKey(_bIsPrimaryKey)
+    ,m_bIsCurrency(_bIsCurrency)
 {
      DBG_DTOR(OFieldDescription,NULL);
 }
@@ -153,15 +152,15 @@ OFieldDescription::~OFieldDescription()
 }
 //------------------------------------------------------------------------------
 OFieldDescription::OFieldDescription(const Reference< XPropertySet >& xAffectedCol,sal_Bool _bUseAsDest)
-    :m_bIsPrimaryKey(sal_False)
-    ,m_nFormatKey(0)
-    ,m_bIsAutoIncrement(sal_False)
-    ,m_eHorJustify(SVX_HOR_JUSTIFY_STANDARD)
-    ,m_nScale(0)
-    ,m_nPrecision(0)
-    ,m_pType()
-    ,m_nIsNullable(ColumnValue::NULLABLE)
+    :m_pType()
     ,m_nType(DataType::VARCHAR)
+    ,m_nPrecision(0)
+    ,m_nScale(0)
+    ,m_nIsNullable(ColumnValue::NULLABLE)
+    ,m_nFormatKey(0)
+    ,m_eHorJustify(SVX_HOR_JUSTIFY_STANDARD)
+    ,m_bIsAutoIncrement(sal_False)
+    ,m_bIsPrimaryKey(sal_False)
     ,m_bIsCurrency(sal_False)
 {
     DBG_CTOR(OFieldDescription,NULL);
