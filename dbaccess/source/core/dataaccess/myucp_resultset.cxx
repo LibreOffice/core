@@ -4,9 +4,9 @@
  *
  *  $RCSfile: myucp_resultset.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:31:53 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:46:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,9 +73,9 @@ DynamicResultSet::DynamicResultSet(
                       const rtl::Reference< ODocumentContainer >& rxContent,
                       const OpenCommandArgument2& rCommand,
                       const Reference< XCommandEnvironment >& rxEnv )
-: ResultSetImplHelper( rxSMgr, rCommand )
-  ,m_xEnv( rxEnv )
-  ,m_xContent(rxContent)
+    :ResultSetImplHelper( rxSMgr, rCommand )
+    ,m_xContent(rxContent)
+    ,m_xEnv( rxEnv )
 {
 }
 
