@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cachedbitmap.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 12:57:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:19:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,6 +77,9 @@ namespace vclcanvas
                                        const uno::Reference< rendering::XCanvas >&  rTargetCanvas,
                                        bool                                         bSameViewTransform )
     {
+        (void)rNewState;
+        (void)rOldState;
+
         ENSURE_AND_THROW( bSameViewTransform,
                           "CachedBitmap::doRedraw(): base called with changed view transform "
                           "(told otherwise during construction)" );
