@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Ref.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:11:51 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:35:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,8 +83,8 @@ void java_sql_Ref::saveClassRef( jclass pClass )
     ::rtl::OUString aStr;
     if( t.pEnv ){
         // temporaere Variable initialisieren
-        static char * cSignature = "()Ljava/lang/String;";
-        static char * cMethodName = "getBaseTypeName";
+        static const char * cSignature = "()Ljava/lang/String;";
+        static const char * cMethodName = "getBaseTypeName";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
