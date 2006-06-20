@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MConnection.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 12:17:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:41:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,9 @@
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
 #endif
+#ifndef CONNECTIVITY_DIAGNOSE_EX_H
+#include "diagnose_ex.h"
+#endif
 
 #ifndef COMPHELPER_OFFICE_RESOURCE_BUNDLE_HXX
 #include <comphelper/officeresourcebundle.hxx>
@@ -77,8 +80,6 @@ extern "C" void*  SAL_CALL OMozabConnection_CreateInstance(void* _pDriver)
     return (new connectivity::mozab::OConnection( reinterpret_cast<connectivity::mozab::MozabDriver*>(_pDriver) ));
 }
 
-
-using namespace connectivity::mozab;
 using namespace dbtools;
 
 //------------------------------------------------------------------------------
@@ -89,56 +90,49 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 // --------------------------------------------------------------------------------
 
-namespace connectivity
+namespace connectivity { namespace mozab {
+
+// =====================================================================
+// = ConnectionImplData
+// =====================================================================
+struct ConnectionImplData
 {
-    namespace mozab
+    ::boost::shared_ptr< ::comphelper::OfficeResourceBundle >   pResourceBundle;
+};
+
+// -----------------------------------------------------------------------------
+const sal_Char* getSdbcScheme( SdbcScheme _eScheme )
+{
+    switch ( _eScheme )
     {
-        // =====================================================================
-        // = ConnectionImplData
-        // =====================================================================
-        struct ConnectionImplData
-        {
-            ::boost::shared_ptr< ::comphelper::OfficeResourceBundle >   pResourceBundle;
-        };
+        case SDBC_MOZILLA:          return "mozilla";
+        case SDBC_THUNDERBIRD:      return "thunderbird";
+        case SDBC_LDAP:             return "ldap";
+        case SDBC_OUTLOOK_MAPI:     return "outlook";
+        case SDBC_OUTLOOK_EXPRESS:  return "outlookexp";
     }
-}
-
-
-// -----------------------------------------------------------------------------
-const sal_Char* OConnection::getSDBC_SCHEME_MOZILLA()
-{
-    static sal_Char*    SDBC_SCHEME_MOZILLA         = MOZAB_MOZILLA_SCHEMA;
-    return SDBC_SCHEME_MOZILLA;
-}
-// -----------------------------------------------------------------------------
-const sal_Char* OConnection::getSDBC_SCHEME_THUNDERBIRD()
-{
-    static sal_Char*    SDBC_SCHEME_THUNDERBIRD         = MOZAB_THUNDERBIRD_SCHEMA;
-    return SDBC_SCHEME_THUNDERBIRD;
-}
-// -----------------------------------------------------------------------------
-const sal_Char* OConnection::getSDBC_SCHEME_LDAP()
-{
-    static sal_Char*    SDBC_SCHEME_LDAP            = MOZAB_LDAP_SCHEMA;
-    return SDBC_SCHEME_LDAP;
-}
-// -----------------------------------------------------------------------------
-const sal_Char* OConnection::getSDBC_SCHEME_OUTLOOK_MAPI()
-{
-    static sal_Char*    SDBC_SCHEME_OUTLOOK_MAPI    = MOZAB_OUTLOOK_SCHEMA;
-    return SDBC_SCHEME_OUTLOOK_MAPI;
-}
-// -----------------------------------------------------------------------------
-const sal_Char* OConnection::getSDBC_SCHEME_OUTLOOK_EXPRESS()
-{
-    static sal_Char*    SDBC_SCHEME_OUTLOOK_EXPRESS = MOZAB_OUTLOOKEXP_SCHEMA;
-    return SDBC_SCHEME_OUTLOOK_EXPRESS;
+    return NULL;
 }
 // -----------------------------------------------------------------------------
 ::rtl::OUString OConnection::getDriverImplementationName()
 {
     return rtl::OUString::createFromAscii(MOZAB_DRIVER_IMPL_NAME);
 }
+
+// -----------------------------------------------------------------------------
+const sal_Char* getSchemeURI( MozillaScheme _eScheme )
+{
+    switch ( _eScheme )
+    {
+    case SCHEME_MOZILLA          : return "moz-abdirectory://";
+    case SCHEME_MOZILLA_MDB      : return "moz-abmdbdirectory://";
+    case SCHEME_LDAP             : return "moz-abldapdirectory://";
+    case SCHEME_OUTLOOK_MAPI     : return "moz-aboutlookdirectory://op/";
+    case SCHEME_OUTLOOK_EXPRESS  : return "moz-aboutlookdirectory://oe/";
+    }
+    return NULL;
+}
+
 // -----------------------------------------------------------------------------
 
 OConnection::OConnection(MozabDriver*   _pDriver)
@@ -242,25 +236,25 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
         m_sPassword = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(""));
         m_bUseSSL   = sal_False;
 
-    if ( aAddrbookScheme.compareToAscii( getSDBC_SCHEME_MOZILLA() ) == 0 ) {
-        m_sMozillaURI = rtl::OUString::createFromAscii( MOZ_SCHEME_MOZILLA );
+    if ( aAddrbookScheme.compareToAscii( getSdbcScheme( SDBC_MOZILLA ) ) == 0 ) {
+        m_sMozillaURI = rtl::OUString::createFromAscii( getSchemeURI( SCHEME_MOZILLA ) );
         m_eSDBCAddressType = SDBCAddress::Mozilla;
         if(sAdditionalInfo.getLength())
             m_sMozillaProfile = sAdditionalInfo;
     }
     else
-    if ( aAddrbookScheme.compareToAscii( getSDBC_SCHEME_THUNDERBIRD() ) == 0 ) {
-        //Yes. I am sure it is MOZ_SCHEME_MOZILLA
-        m_sMozillaURI = rtl::OUString::createFromAscii( MOZ_SCHEME_MOZILLA );
+    if ( aAddrbookScheme.compareToAscii( getSdbcScheme( SDBC_THUNDERBIRD ) ) == 0 ) {
+        //Yes. I am sure it is SCHEME_MOZILLA
+        m_sMozillaURI = rtl::OUString::createFromAscii( getSchemeURI( SCHEME_MOZILLA ) );
         m_eSDBCAddressType = SDBCAddress::ThunderBird;
         if(sAdditionalInfo.getLength())
             m_sMozillaProfile = sAdditionalInfo;
     }
-    else if ( aAddrbookScheme.compareToAscii( getSDBC_SCHEME_LDAP() ) == 0 ) {
+    else if ( aAddrbookScheme.compareToAscii( getSdbcScheme( SDBC_LDAP ) ) == 0 ) {
         rtl::OUString sBaseDN;
         sal_Int32     nPortNumber = -1;
 
-        m_sMozillaURI = rtl::OUString::createFromAscii( MOZ_SCHEME_LDAP );
+        m_sMozillaURI = rtl::OUString::createFromAscii( getSchemeURI( SCHEME_LDAP ) );
         m_eSDBCAddressType = SDBCAddress::LDAP;
 
         if ( !m_sHostName.getLength() )
@@ -344,12 +338,12 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
         m_sMozillaURI += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("?(or(DisplayName,=,DontDoThisAtHome)))"));
 
     }
-    else if ( aAddrbookScheme.compareToAscii( getSDBC_SCHEME_OUTLOOK_MAPI() ) == 0 ) {
-        m_sMozillaURI       = ::rtl::OUString::createFromAscii( MOZ_SCHEME_OUTLOOK_MAPI );
+    else if ( aAddrbookScheme.compareToAscii( getSdbcScheme( SDBC_OUTLOOK_MAPI ) ) == 0 ) {
+        m_sMozillaURI       = ::rtl::OUString::createFromAscii( getSchemeURI( SCHEME_OUTLOOK_MAPI ) );
         m_eSDBCAddressType = SDBCAddress::Outlook;
     }
-    else if ( aAddrbookScheme.compareToAscii( getSDBC_SCHEME_OUTLOOK_EXPRESS() ) == 0 ) {
-        m_sMozillaURI       = rtl::OUString::createFromAscii( MOZ_SCHEME_OUTLOOK_EXPRESS );
+    else if ( aAddrbookScheme.compareToAscii( getSdbcScheme( SDBC_OUTLOOK_EXPRESS ) ) == 0 ) {
+        m_sMozillaURI       = rtl::OUString::createFromAscii( getSchemeURI( SCHEME_OUTLOOK_EXPRESS ) );
         m_eSDBCAddressType = SDBCAddress::OutlookExp;
     }
     else
@@ -418,8 +412,9 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const ::
 // --------------------------------------------------------------------------------
 Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const ::rtl::OUString& _sSql ) throw(SQLException, RuntimeException)
 {
+    OSL_UNUSED( _sSql );
+    ::dbtools::throwFeatureNotImplementedException( "XConnection::prepareCall", *this );
     OSL_TRACE("OConnection::prepareCall( %s )", OUtoCStr( _sSql ) );
-    // not implemented yet :-) a task to do
     return NULL;
 }
 // --------------------------------------------------------------------------------
@@ -432,9 +427,9 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const ::rtl::
     return _sSql;
 }
 // --------------------------------------------------------------------------------
-void SAL_CALL OConnection::setAutoCommit( sal_Bool autoCommit ) throw(SQLException, RuntimeException)
+void SAL_CALL OConnection::setAutoCommit( sal_Bool /*autoCommit*/ ) throw(SQLException, RuntimeException)
 {
-    // here you  have to set your commit mode please have a look at the jdbc documentation to get a clear explanation
+    ::dbtools::throwFeatureNotImplementedException( "XConnection::setAutoCommit", *this );
 }
 // --------------------------------------------------------------------------------
 sal_Bool SAL_CALL OConnection::getAutoCommit(  ) throw(SQLException, RuntimeException)
@@ -480,9 +475,9 @@ Reference< XDatabaseMetaData > SAL_CALL OConnection::getMetaData(  ) throw(SQLEx
     return xMetaData;
 }
 // --------------------------------------------------------------------------------
-void SAL_CALL OConnection::setReadOnly( sal_Bool readOnly ) throw(SQLException, RuntimeException)
+void SAL_CALL OConnection::setReadOnly( sal_Bool /*readOnly*/ ) throw(SQLException, RuntimeException)
 {
-    // set you connection to readonly
+    ::dbtools::throwFeatureNotImplementedException( "XConnection::setReadOnly", *this );
 }
 // --------------------------------------------------------------------------------
 sal_Bool SAL_CALL OConnection::isReadOnly(  ) throw(SQLException, RuntimeException)
@@ -491,9 +486,9 @@ sal_Bool SAL_CALL OConnection::isReadOnly(  ) throw(SQLException, RuntimeExcepti
     return sal_False;
 }
 // --------------------------------------------------------------------------------
-void SAL_CALL OConnection::setCatalog( const ::rtl::OUString& catalog ) throw(SQLException, RuntimeException)
+void SAL_CALL OConnection::setCatalog( const ::rtl::OUString& /*catalog*/ ) throw(SQLException, RuntimeException)
 {
-    // if your database doesn't work with catalogs you go to next method otherwise you kjnow what to do
+    ::dbtools::throwFeatureNotImplementedException( "XConnection::setCatalog", *this );
 }
 // --------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OConnection::getCatalog(  ) throw(SQLException, RuntimeException)
@@ -502,10 +497,9 @@ void SAL_CALL OConnection::setCatalog( const ::rtl::OUString& catalog ) throw(SQ
     return ::rtl::OUString();
 }
 // --------------------------------------------------------------------------------
-void SAL_CALL OConnection::setTransactionIsolation( sal_Int32 level ) throw(SQLException, RuntimeException)
+void SAL_CALL OConnection::setTransactionIsolation( sal_Int32 /*level*/ ) throw(SQLException, RuntimeException)
 {
-    // set your isolation level
-    // please have a look at @see com.sun.star.sdbc.TransactionIsolation
+    ::dbtools::throwFeatureNotImplementedException( "XConnection::setTransactionIsolation", *this );
 }
 // --------------------------------------------------------------------------------
 sal_Int32 SAL_CALL OConnection::getTransactionIsolation(  ) throw(SQLException, RuntimeException)
@@ -520,9 +514,9 @@ Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OConnection::getT
     return NULL;
 }
 // --------------------------------------------------------------------------------
-void SAL_CALL OConnection::setTypeMap( const Reference< ::com::sun::star::container::XNameAccess >& typeMap ) throw(SQLException, RuntimeException)
+void SAL_CALL OConnection::setTypeMap( const Reference< ::com::sun::star::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException)
 {
-    // the other way around
+    ::dbtools::throwFeatureNotImplementedException( "XConnection::setTypeMap", *this );
 }
 // --------------------------------------------------------------------------------
 // XCloseable
@@ -613,7 +607,9 @@ void OConnection::throwGenericSQLException( sal_Int32 _nErrorResourceId )
         // this means that we're disposed, and how could anybody request us to throw an exception then?
 
     ::rtl::OUString sErrorMessage;
-    if ( pResourceBundle.get() )
+    if ( pResourceBundle.get() && _nErrorResourceId )
         sErrorMessage = pResourceBundle->loadString( _nErrorResourceId );
     ::dbtools::throwGenericSQLException( sErrorMessage, *this );
 }
+
+} } // namespace connectivity::mozab
