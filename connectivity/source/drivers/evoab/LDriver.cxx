@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LDriver.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:44:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:22:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,10 +86,10 @@ using namespace ::com::sun::star::ucb;
 // --------------------------------------------------------------------------------
 OEvoabDriver::OEvoabDriver(const Reference< XMultiServiceFactory >& _rxFactory) : OFileDriver(_rxFactory)
     ,m_aTempDir(NULL, sal_True)
-    ,m_bWorkingDirCreated(sal_False)
     ,m_aFolderListName(::rtl::OUString::createFromAscii(getEVOAB_FOLDERLIST_FILE_NAME()))
     ,m_aVersionName(::rtl::OUString::createFromAscii(getEVOAB_VERSION_FILE_NAME()))
     ,m_aFileExt(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(getEVOAB_META_FILE_EXT())))
+    ,m_bWorkingDirCreated(sal_False)
     ,m_eSupportedEvoVersion( eUnknown )
 {
     m_aEvoab_CLI_FullPathCommand = getFullPathExportingCommand(_rxFactory);
@@ -270,8 +270,8 @@ sal_Bool SAL_CALL OEvoabDriver::acceptsURL( const ::rtl::OUString& url )
             {
                 OSL_TRACE("OEvoabDriver::acceptsURL()::osl_readFile(),nBytesRead = %u",nBytesRead);
                 aVersionInfo =
-                        ::rtl::OUString( ( sal_Char * )pBuffer,
-                        nBytesRead,
+                        ::rtl::OUString( ( const sal_Char * )pBuffer,
+                        (sal_Int32)nBytesRead,
                         RTL_TEXTENCODING_UTF8 );
                 EVO_TRACE_STRING("OEvoabDriver::acceptsURL()::aVersionInfo = %s", aVersionInfo );
                 sal_Int32 nIndex = 0;
@@ -438,52 +438,52 @@ sal_Bool OEvoabDriver::fileExists(const ::rtl::OUString& _rURL, sal_Bool _bIsDir
 // -----------------------------------------------------------------------------
 const sal_Char* OEvoabDriver::getSDBC_SCHEME_EVOLUTION()
 {
-    static sal_Char*    SDBC_SCHEME_EVOLUTION = EVOAB_EVOLUTION_SCHEMA;
+    static const sal_Char*    SDBC_SCHEME_EVOLUTION = EVOAB_EVOLUTION_SCHEMA;
     return SDBC_SCHEME_EVOLUTION;
 }
 const sal_Char* OEvoabDriver::getEVOAB_FOLDERLIST_FILE_NAME()
 {
-    static sal_Char*    EVOAB_FOLDERLIST_FILE_NAME = "FolderList";
+    static const sal_Char*  EVOAB_FOLDERLIST_FILE_NAME = "FolderList";
     return EVOAB_FOLDERLIST_FILE_NAME;
 }
 const sal_Char* OEvoabDriver::getEVOAB_VERSION_FILE_NAME()
 {
-    static sal_Char*    EVOAB_VERSION_FILE_NAME = "EvoVersion";
+    static const sal_Char*  EVOAB_VERSION_FILE_NAME = "EvoVersion";
     return EVOAB_VERSION_FILE_NAME;
 }
 const sal_Char* OEvoabDriver::getEVOAB_META_FILE_EXT()
 {
-    static sal_Char*    EVOAB_META_FILE_EXT = "csv";
+    static const sal_Char*  EVOAB_META_FILE_EXT = "csv";
     return EVOAB_META_FILE_EXT;
 }
 const sal_Char* OEvoabDriver::getEVOAB_CLI_FULLPATHCOMMAND()
 {
-    static sal_Char*    EVOAB_CLI_FULLPATHCOMMAND = "file:///home/evoab/extra/share/evolution/*/tools/evolution-addressbook-export";
+    static const sal_Char*  EVOAB_CLI_FULLPATHCOMMAND = "file:///home/evoab/extra/share/evolution/*/tools/evolution-addressbook-export";
     return EVOAB_CLI_FULLPATHCOMMAND;
 }
 const sal_Char* OEvoabDriver::getEVOAB_CLI_ARG_LIST_FOLDERS()
 {
-    static sal_Char*    EVOAB_CLI_ARG_LIST_FOLDERS = "-l";
+    static const sal_Char*  EVOAB_CLI_ARG_LIST_FOLDERS = "-l";
     return EVOAB_CLI_ARG_LIST_FOLDERS;
 }
 const sal_Char* OEvoabDriver::getEVOAB_CLI_ARG_OUTPUT_FILE_PREFIX()
 {
-    static sal_Char*    EVOAB_CLI_ARG_OUTPUT_FILE_PREFIX = "--output=";
+    static const sal_Char*  EVOAB_CLI_ARG_OUTPUT_FILE_PREFIX = "--output=";
     return EVOAB_CLI_ARG_OUTPUT_FILE_PREFIX;
 }
 const sal_Char* OEvoabDriver::getEVOAB_CLI_ARG_OUTPUT_FORMAT()
 {
-    static sal_Char*    EVOAB_CLI_ARG_OUTPUT_FORMAT = "--format=csv";
+    static const sal_Char*  EVOAB_CLI_ARG_OUTPUT_FORMAT = "--format=csv";
     return EVOAB_CLI_ARG_OUTPUT_FORMAT;
 }
 const sal_Char* OEvoabDriver::getEVOAB_CLI_ARG_VERSION()
 {
-    static sal_Char*    EVOAB_CLI_ARG_VERSION = "--version";
+    static const sal_Char*  EVOAB_CLI_ARG_VERSION = "--version";
     return EVOAB_CLI_ARG_VERSION;
 }
 const sal_Char* OEvoabDriver::getEVOAB_CLI_ARG_OUTPUT_REDIRECT()
 {
-    static sal_Char*    EVOAB_CLI_ARG_OUTPUT_REDIRECT = ">";
+    static const sal_Char*  EVOAB_CLI_ARG_OUTPUT_REDIRECT = ">";
     return EVOAB_CLI_ARG_OUTPUT_REDIRECT;
 }
 rtl::OUString OEvoabDriver::translateFileErrorMessage( oslFileError nFileErr)
@@ -524,7 +524,7 @@ rtl::OUString OEvoabDriver::translateFileErrorMessage( oslFileError nFileErr)
     return sFileErr;
 }
 // -----------------------------------------------------------------------------
-Sequence< DriverPropertyInfo > SAL_CALL OEvoabDriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
+Sequence< DriverPropertyInfo > SAL_CALL OEvoabDriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& /*info*/ ) throw(SQLException, RuntimeException)
 {
     if ( !acceptsURL(url) )
         ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid URL!")) ,*this);
