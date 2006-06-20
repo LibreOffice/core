@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ftpresultsetI.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:37:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:25:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,9 +60,7 @@ ResultSetI::ResultSetI(const Reference<XMultiServiceFactory>&  xMSF,
                        const std::vector<FTPDirentry>&  dirvec)
     : ResultSetBase(xMSF,xProvider,nOpenMode,seqProp,seqSort)
 {
-    unsigned i;
-
-    for( i = 0; i < dirvec.size(); ++i)
+    for( unsigned int i = 0; i < dirvec.size(); ++i)
         m_aPath.push_back(dirvec[i].m_aURL);
 
     // m_aIdents holds the contentidentifiers
@@ -74,7 +72,7 @@ ResultSetI::ResultSetI(const Reference<XMultiServiceFactory>&  xMSF,
         vos::ORef<ucb::PropertyValueSet> xRow =
             new ucb::PropertyValueSet(xMSF);
 
-        for(i = 0; i < seqProp.getLength(); ++i) {
+        for( int i = 0; i < seqProp.getLength(); ++i) {
             const rtl::OUString& Name = seqProp[i].Name;
             if(Name.compareToAscii("ContentType") == 0 )
                 xRow->appendString(seqProp[i],
