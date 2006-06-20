@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OStatement.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:37:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:06:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,8 +120,8 @@ namespace connectivity
             OConnection*                    m_pConnection;// The owning Connection object
             SQLHANDLE                       m_aStatementHandle;
             SQLUSMALLINT*                   m_pRowStatusArray;
+            ::cppu::OBroadcastHelper&       rBHelper;
 
-            //using OStatement_BASE::rBHelper;
         protected:
 
             sal_Int32 getQueryTimeOut()         const;
@@ -190,11 +190,10 @@ namespace connectivity
             virtual ~OStatement_Base();
 
         public:
-            ::cppu::OBroadcastHelper& rBHelper;
             OStatement_Base(OConnection* _pConnection );
             using OStatement_BASE::operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >;
 
-            inline void* getOdbcFunction(sal_Int32 _nIndex)  const
+            inline oslGenericFunction getOdbcFunction(sal_Int32 _nIndex)  const
             {
                 return m_pConnection->getOdbcFunction(_nIndex);
             }
@@ -239,6 +238,9 @@ namespace connectivity
                 @return the cursor properties
             */
             SQLUINTEGER getCursorProperties(SQLINTEGER _nCursorType,sal_Bool bFirst);
+
+        protected:
+            using OPropertySetHelper::getFastPropertyValue;
         };
 
         class OStatement_BASE2  :public OStatement_Base
