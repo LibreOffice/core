@@ -26,13 +26,14 @@ int Cflag = 0;                          /* do not remove any comments */
 int Dflag = 0;                          /* add parameter check to delete op */
 int Cplusplus = 0;
 
+extern void setup_kwtab(void);
+
 void
     setup(int argc, char **argv)
 {
     int c, fd, i, n;
     char *fp, *dp;
     Tokenrow tr;
-    extern void setup_kwtab(void);
 
     setup_kwtab();
     while ((c = getopt(argc, argv, "NOPV:I:D:U:F:A:X:u:l:+")) != -1)
