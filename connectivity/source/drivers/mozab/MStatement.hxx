@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MStatement.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:21:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:45:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,8 +81,13 @@
 #ifndef _CONNECTIVITY_FILE_VALUE_HXX_
 #include <connectivity/FValue.hxx>
 #endif
+#ifndef CONNECTIVITY_TSORTINDEX_HXX
+#include "TSortIndex.hxx"
+#endif
 #include "MConnection.hxx"
 #include "MTable.hxx"
+
+#include <memory>
 
 namespace connectivity
 {
@@ -120,13 +125,16 @@ namespace connectivity
             OValueRow                                   m_aRow;
 
             connectivity::OSQLParser                    m_aParser;
-            connectivity::OSQLParseTreeIterator         m_aSQLIterator;
+            ::std::auto_ptr< connectivity::OSQLParseTreeIterator >
+                                                        m_pSQLIterator;
 
             connectivity::OSQLParseNode*                m_pParseTree;
 
             ::std::vector<sal_Int32>                    m_aColMapping;
             ::std::vector<sal_Int32>                    m_aOrderbyColumnNumber;
-            ::std::vector<sal_Int16>                    m_aOrderbyAscending;
+            ::std::vector<TAscendingOrder>              m_aOrderbyAscending;
+
+            ::cppu::OBroadcastHelper&                   rBHelper;
 
         protected:
 
@@ -172,7 +180,6 @@ namespace connectivity
             // other methods
             OConnection* getOwnConnection() const { return m_pConnection;}
 
-            ::cppu::OBroadcastHelper& rBHelper;
             OStatement_Base(OConnection* _pConnection );
             using OStatement_BASE::operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >;
 
@@ -198,6 +205,9 @@ namespace connectivity
             virtual void SAL_CALL clearWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             // XCloseable
             virtual void SAL_CALL close(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+        protected:
+            using OPropertySetHelper::getFastPropertyValue;
         };
 
         class OStatement_BASE2  :public OStatement_Base
