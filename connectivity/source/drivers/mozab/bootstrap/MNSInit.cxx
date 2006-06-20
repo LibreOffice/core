@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MNSInit.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:24:01 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:47:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,20 +36,9 @@
 #ifndef _CONNECTIVITY_MAB_NS_INCLUDE_HXX_
 #include <MNSInclude.hxx>
 #endif
-#include "nsIServiceManager.h"
-#include "nsIEventQueueService.h"
-#include "nsIChromeRegistry.h"
 
-#include "nsIStringBundle.h"
+#include "mozilla_nsinit.h"
 
-#include "nsIDirectoryService.h"
-#include "nsIProfile.h"
-#include "nsIProfileInternal.h"
-#include "nsIPref.h"
-#include "nsXPIDLString.h"
-
-#include "nsString.h"
-#include "nsEmbedAPI.h"
 #include <sal/types.h>
 #include <osl/diagnose.h>
 #ifndef _OSL_CONDITN_HXX_
@@ -75,8 +64,6 @@
 #ifndef _MNSTERMINATELISTENER_HXX
 #include <MNSTerminateListener.hxx>
 #endif
-
-#include "nsDirectoryService.h"
 
 static nsIServiceManager*   sServiceManager = nsnull;
 static sal_Int32            sInitCounter = 0;
@@ -137,7 +124,7 @@ extern "C" void NS_SetupRegistry();
 }
 
 
-sal_Bool MNS_InitXPCOM(sal_Bool* aProfileExists,sal_Int32 nProduct)
+sal_Bool MNS_InitXPCOM(sal_Bool* aProfileExists)
 {
     nsresult rv;
     OSL_TRACE( "IN : MNS_InitXPCOM() \n" );
@@ -189,7 +176,7 @@ sal_Bool MNS_InitXPCOM(sal_Bool* aProfileExists,sal_Int32 nProduct)
     nsCOMPtr<nsIEventQueueService> eventQService(
                 do_GetService(NS_EVENTQUEUESERVICE_CONTRACTID, &rv));
     if (NS_FAILED(rv))
-      return rv;
+      return NS_SUCCEEDED( rv );
 
     eventQService->CreateThreadEventQueue();
 
@@ -205,7 +192,7 @@ sal_Bool MNS_InitXPCOM(sal_Bool* aProfileExists,sal_Int32 nProduct)
     if (NS_SUCCEEDED(rv))
     {
         nsCOMPtr<nsIStringBundle> stringBundle;
-        char*  propertyURL = "chrome://necko/locale/necko.properties";
+        const char* propertyURL = "chrome://necko/locale/necko.properties";
         rv = sBundleService->CreateBundle(propertyURL,
                                           getter_AddRefs(stringBundle));
     }
@@ -265,18 +252,17 @@ void MNS_XPCOM_EventLoop()
     OSL_TRACE( "OUT : MNS_XPCOM_EventLoop() \n" );
 }
 
-static void MNS_Mozilla_UI_Thread( void *arg )
+extern "C" void MNS_Mozilla_UI_Thread( void *arg )
 {
     aLive=1;
     OSL_TRACE( "IN : MNS_Mozilla_UI_Thread() \n" );
     UI_Thread_ARGS * args = (UI_Thread_ARGS*) arg;
     sal_Bool* aProfileExists=args->bProfileExists;
-    sal_Int32 nProduct = args->nProduct;
     delete args;
     args=NULL;
 
     //Init xpcom
-    if (!MNS_InitXPCOM(aProfileExists,nProduct))
+    if (!MNS_InitXPCOM(aProfileExists))
     {
         m_aUI_Thread_Condition.set(); // error happened
         return;
@@ -303,7 +289,7 @@ static void MNS_Mozilla_UI_Thread( void *arg )
 }
 
 
-sal_Bool MNS_Init(sal_Bool& aProfileExists,sal_Int32 nProduct)
+sal_Bool MNS_Init(sal_Bool& aProfileExists)
 {
     aProfileExists = sal_False ;
 
@@ -322,7 +308,6 @@ sal_Bool MNS_Init(sal_Bool& aProfileExists,sal_Int32 nProduct)
 
     UI_Thread_ARGS * args = new UI_Thread_ARGS;
     args->bProfileExists = &aProfileExists;
-    args->nProduct = nProduct;
 
     m_aUI_Thread_Condition.reset();
     m_Mozilla_UI_Thread=osl_createThread(MNS_Mozilla_UI_Thread,
