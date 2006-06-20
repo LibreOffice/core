@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iipaobj.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:57:03 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:42:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ class CIIAObj
 public:
 
     CIIAObj( DocumentHolder * );
-    ~CIIAObj();
+    virtual ~CIIAObj();
 
     /* IUnknown methods */
     STDMETHODIMP QueryInterface(REFIID, LPVOID FAR * ppvObj);
