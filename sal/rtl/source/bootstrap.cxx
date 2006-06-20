@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:00:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:29:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -320,8 +320,8 @@ struct Bootstrap_Impl
 
 Bootstrap_Impl::Bootstrap_Impl( OUString const & rIniName )
     : _nRefCount( 0 ),
-      _iniName (rIniName),
-      _base_ini( 0 )
+      _base_ini( 0 ),
+      _iniName (rIniName)
 {
     OUString base_ini( getIniFileName_Impl() );
     // normalize path
@@ -624,7 +624,9 @@ void SAL_CALL rtl_bootstrap_args_close (
         if (r_bootstrap_map.size() > nLeaking)
         {
             ::std::size_t erased = r_bootstrap_map.erase( that->_iniName );
-            OSL_ASSERT( erased == 1 );
+            if (erased != 1) {
+                OSL_ASSERT( false );
+            }
             delete that;
         }
     }
