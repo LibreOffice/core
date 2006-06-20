@@ -4,9 +4,9 @@
  *
  *  $RCSfile: provprox.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-30 10:09:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:16:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -175,7 +175,7 @@ UcbContentProviderProxy::queryInterface( const Type & rType )
     {
         // Get original provider an forward the call...
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
-        Reference< XInterface > xProvider = getContentProvider();
+        Reference< XContentProvider > xProvider = getContentProvider();
         if ( xProvider.is() )
             aRet = xProvider->queryInterface( rType );
     }
@@ -205,22 +205,13 @@ Sequence< Type > SAL_CALL UcbContentProviderProxy::getTypes()                   
     }
     else
     {
-        static cppu::OTypeCollection * pCollection = 0;
-        if ( !pCollection )
-        {
-            osl::Guard< osl::Mutex > aGuard( m_aMutex );
-            if ( !pCollection )
-            {
-                static cppu::OTypeCollection collection(
-                        CPPU_TYPE_REF( XTypeProvider ),
-                        CPPU_TYPE_REF( XServiceInfo ),
-                        CPPU_TYPE_REF( XContentProvider ),
-                        CPPU_TYPE_REF( XParameterizedContentProvider ),
-                        CPPU_TYPE_REF( XContentProviderSupplier ) );
-                pCollection = &collection;
-            }
-        }
-        return (*pCollection).getTypes();
+        static cppu::OTypeCollection collection(
+            CPPU_TYPE_REF( XTypeProvider ),
+            CPPU_TYPE_REF( XServiceInfo ),
+            CPPU_TYPE_REF( XContentProvider ),
+            CPPU_TYPE_REF( XParameterizedContentProvider ),
+            CPPU_TYPE_REF( XContentProviderSupplier ) );
+        return collection.getTypes();
     }
 }
 
