@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableGrantCtrl.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:37:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:14:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,6 +77,7 @@ class OTableGrantControl : public ::svt::EditBrowseBox
     Edit*                       m_pEdit;
     long                        m_nDataPos;
     BOOL                        m_bEnable;
+    ULONG                       m_nDeactivateEvent;
 
 public:
     OTableGrantControl( Window* pParent,const ResId& _RsId);
@@ -115,7 +116,6 @@ protected:
     virtual void CellModified();
 
 private:
-    ULONG       m_nDeActivateEvent;
     DECL_LINK( AsynchActivate, void* );
     DECL_LINK( AsynchDeactivate, void* );
 
