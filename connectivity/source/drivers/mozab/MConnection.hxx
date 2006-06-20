@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MConnection.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 12:17:27 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:42:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,16 +96,30 @@ namespace connectivity
         // For the moment, we will connect the Mozilla address book to the Mozilla
         // top-level address book which will display whatever is in the preferences
         // file of Mozilla.
-        // This one is a base uri which will be completed with the connection data.
-        static sal_Char*    MOZ_SCHEME_MOZILLA          = "moz-abdirectory://";
-        // This one is for mozilla native address book
-        static sal_Char*    MOZ_SCHEME_MOZILLA_MDB      = "moz-abmdbdirectory://";
-        // This one is for LDAP address book
-        static sal_Char*    MOZ_SCHEME_LDAP             = "moz-abldapdirectory://";
-        // These two uris will be used to obtain directory factories to access all
-        // address books of the given type.
-        static sal_Char*    MOZ_SCHEME_OUTLOOK_MAPI     = "moz-aboutlookdirectory://op/";
-        static sal_Char*    MOZ_SCHEME_OUTLOOK_EXPRESS  = "moz-aboutlookdirectory://oe/";
+        enum MozillaScheme
+        {
+            // This one is a base uri which will be completed with the connection data.
+            SCHEME_MOZILLA,
+            // This one is for mozilla native address book
+            SCHEME_MOZILLA_MDB,
+            // This one is for LDAP address book
+            SCHEME_LDAP,
+            // These two uris will be used to obtain directory factories to access all
+            // address books of the given type.
+            SCHEME_OUTLOOK_MAPI,
+            SCHEME_OUTLOOK_EXPRESS
+        };
+        const sal_Char* getSchemeURI( MozillaScheme _eScheme );
+
+        enum SdbcScheme
+        {
+            SDBC_MOZILLA,
+            SDBC_THUNDERBIRD,
+            SDBC_LDAP,
+            SDBC_OUTLOOK_MAPI,
+            SDBC_OUTLOOK_EXPRESS
+        };
+        const sal_Char* getSdbcScheme( SdbcScheme _eScheme );
 
         typedef connectivity::OMetaConnection               OConnection_BASE; // implements basics and text encoding
 
@@ -147,8 +161,6 @@ namespace connectivity
             rtl::OUString   m_sBindDN;
             rtl::OUString   m_sUser;        // the user name
             rtl::OUString   m_sPassword;
-
-
 
             SDBCAddress::sdbc_address_type  m_eSDBCAddressType;
 
@@ -234,11 +246,6 @@ namespace connectivity
 
             const OColumnAlias & getColumnAlias() const   { return (m_aColumnAlias); }
 
-            static const sal_Char*    getSDBC_SCHEME_MOZILLA();
-            static const sal_Char*    getSDBC_SCHEME_THUNDERBIRD();
-            static const sal_Char*    getSDBC_SCHEME_LDAP();
-            static const sal_Char*    getSDBC_SCHEME_OUTLOOK_MAPI();
-            static const sal_Char*    getSDBC_SCHEME_OUTLOOK_EXPRESS();
             static ::rtl::OUString    getDriverImplementationName();
 
             MNameMapper* getNameMapper();
