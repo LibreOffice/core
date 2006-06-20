@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hierarchycontent.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:45:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:28:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -436,7 +436,7 @@ HierarchyContent::getIdentifier()
 // virtual
 uno::Any SAL_CALL HierarchyContent::execute(
         const star::ucb::Command& aCommand,
-        sal_Int32 CommandId,
+        sal_Int32 /*CommandId*/,
         const uno::Reference< star::ucb::XCommandEnvironment >& Environment )
     throw( uno::Exception,
            star::ucb::CommandAbortedException,
@@ -651,7 +651,7 @@ uno::Any SAL_CALL HierarchyContent::execute(
 
 //=========================================================================
 // virtual
-void SAL_CALL HierarchyContent::abort( sal_Int32 CommandId )
+void SAL_CALL HierarchyContent::abort( sal_Int32 /*CommandId*/ )
     throw( uno::RuntimeException )
 {
     // @@@ Generally, no action takes much time...
@@ -934,9 +934,9 @@ void HierarchyContent::queryChildren( HierarchyContentRefList& rChildren )
     m_xProvider->queryExistingContents( aAllContents );
 
     rtl::OUString aURL = m_xIdentifier->getContentIdentifier();
-    sal_Int32 nPos = aURL.lastIndexOf( '/' );
+    sal_Int32 nURLPos = aURL.lastIndexOf( '/' );
 
-    if ( nPos != ( aURL.getLength() - 1 ) )
+    if ( nURLPos != ( aURL.getLength() - 1 ) )
     {
         // No trailing slash found. Append.
         aURL += rtl::OUString::createFromAscii( "/" );
@@ -1845,15 +1845,15 @@ void HierarchyContent::transfer(
     rtl::OUString aType = xSource->isFolder()
         ? rtl::OUString::createFromAscii( HIERARCHY_FOLDER_CONTENT_TYPE )
         : rtl::OUString::createFromAscii( HIERARCHY_LINK_CONTENT_TYPE );
-    star::ucb::ContentInfo aInfo;
-    aInfo.Type = aType;
-    aInfo.Attributes = 0;
+    star::ucb::ContentInfo aContentInfo;
+    aContentInfo.Type = aType;
+    aContentInfo.Attributes = 0;
 
     // Note: The static cast is okay here, because its sure that
     //       createNewContent always creates a HierarchyContent.
     rtl::Reference< HierarchyContent > xTarget
         = static_cast< HierarchyContent * >(
-            createNewContent( aInfo ).get() );
+            createNewContent( aContentInfo ).get() );
     if ( !xTarget.is() )
     {
         uno::Any aProps
@@ -1877,9 +1877,9 @@ void HierarchyContent::transfer(
     // 2) Copy data from source content to child content.
     //////////////////////////////////////////////////////////////////////
 
-    uno::Sequence< beans::Property > aProps
+    uno::Sequence< beans::Property > aSourceProps
                     = xSource->getPropertySetInfo( xEnv )->getProperties();
-    sal_Int32 nCount = aProps.getLength();
+    sal_Int32 nCount = aSourceProps.getLength();
 
     if ( nCount )
     {
@@ -1887,12 +1887,12 @@ void HierarchyContent::transfer(
 
         // Get all source values.
         uno::Reference< sdbc::XRow > xRow
-            = xSource->getPropertyValues( aProps );
+            = xSource->getPropertyValues( aSourceProps );
 
         uno::Sequence< beans::PropertyValue > aValues( nCount );
         beans::PropertyValue* pValues = aValues.getArray();
 
-        const beans::Property* pProps = aProps.getConstArray();
+        const beans::Property* pProps = aSourceProps.getConstArray();
         for ( sal_Int32 n = 0; n < nCount; ++n )
         {
             const beans::Property& rProp  = pProps[ n ];

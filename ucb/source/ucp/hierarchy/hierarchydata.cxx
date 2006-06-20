@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hierarchydata.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:46:38 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:28:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,7 +100,7 @@ struct HierarchyEntry::iterator_Impl
     Sequence< OUString>                         names;
     sal_Int32                                   pos;
     iterator_Impl()
-    : pos( -1 /* before first */ ), officeDirs( 0 ) {};
+    : officeDirs( 0 ), pos( -1 /* before first */ ) {};
 };
 
 //=========================================================================
@@ -565,9 +565,9 @@ sal_Bool HierarchyEntry::move(
     Reference< XChangesBatch > xOldParentBatch;
 
     OUString aNewKey;
-    sal_Int32 nPos = rNewURL.lastIndexOf( '/' );
-    if ( nPos > HIERARCHY_URL_SCHEME_LENGTH )
-        aNewKey = rNewURL.copy( nPos + 1 );
+    sal_Int32 nURLPos = rNewURL.lastIndexOf( '/' );
+    if ( nURLPos > HIERARCHY_URL_SCHEME_LENGTH )
+        aNewKey = rNewURL.copy( nURLPos + 1 );
     else
     {
         OSL_ENSURE( sal_False, "HierarchyEntry::move - Invalid URL!" );
