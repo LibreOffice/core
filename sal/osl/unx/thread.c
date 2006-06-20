@@ -4,9 +4,9 @@
  *
  *  $RCSfile: thread.c,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:02:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:19:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -819,7 +819,9 @@ void SAL_CALL osl_setThreadPriority (
     if (!pImpl)
         return; /* EINVAL */
 
-#ifndef NO_PTHREAD_PRIORITY
+#ifdef NO_PTHREAD_PRIORITY
+    (void) Priority; /* unused */
+#else /* NO_PTHREAD_PRIORITY */
 
     if (pthread_getschedparam(pImpl->m_hThread, &policy, &Param) != 0)
         return; /* ESRCH */
@@ -1012,8 +1014,9 @@ rtl_TextEncoding SAL_CALL osl_getThreadTextEncoding()
     pthread_once (&(g_thread.m_once), osl_thread_init_Impl);
 
     /* check for thread specific encoding, use default if not set */
-    threadEncoding =
-        (rtl_TextEncoding)pthread_getspecific(g_thread.m_textencoding.m_key);
+    threadEncoding = SAL_INT_CAST(
+        rtl_TextEncoding,
+        (sal_uIntPtr) pthread_getspecific(g_thread.m_textencoding.m_key));
     if (0 == threadEncoding)
         threadEncoding = g_thread.m_textencoding.m_default;
 
@@ -1028,7 +1031,9 @@ rtl_TextEncoding osl_setThreadTextEncoding(rtl_TextEncoding Encoding)
     rtl_TextEncoding oldThreadEncoding = osl_getThreadTextEncoding();
 
     /* save encoding in thread local storage */
-    pthread_setspecific (g_thread.m_textencoding.m_key, (void*)Encoding);
+    pthread_setspecific (
+        g_thread.m_textencoding.m_key,
+        (void*) SAL_INT_CAST(sal_uIntPtr, Encoding));
 
     return oldThreadEncoding;
 }
