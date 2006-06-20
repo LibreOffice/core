@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fanalyzer.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:10:26 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:01:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,11 +64,11 @@ namespace connectivity
             virtual ~OSQLAnalyzer();
             inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
                 { return ::rtl_allocateMemory( nSize ); }
-            inline static void * SAL_CALL operator new( size_t nSize,void* _pHint ) SAL_THROW( () )
+            inline static void * SAL_CALL operator new( size_t /*nSize*/,void* _pHint ) SAL_THROW( () )
                 { return _pHint; }
             inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
                 { ::rtl_freeMemory( pMem ); }
-            inline static void SAL_CALL operator delete( void * pMem,void* _pHint ) SAL_THROW( () )
+            inline static void SAL_CALL operator delete( void * /*pMem*/,void* /*_pHint*/ ) SAL_THROW( () )
                 {  }
 
             void describeParam(::vos::ORef<OSQLColumns> rParameterColumns); // genauere Beschreibung der Parameter
