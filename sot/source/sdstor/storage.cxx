@@ -4,9 +4,9 @@
  *
  *  $RCSfile: storage.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:43:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:55:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,8 +74,6 @@
 
 #include "unostorageholder.hxx"
 
-#pragma hdrstop
-
 using namespace ::com::sun::star;
 
 /************** class SotStorageStream ***********************************/
@@ -130,7 +128,11 @@ SvLockBytesRef MakeLockBytes_Impl( const String & rName, StreamMode nMode )
 }
 
 SotStorageStream::SotStorageStream( const String & rName, StreamMode nMode,
-                                  StorageMode nStorageMode)
+                                  StorageMode
+                                  #ifdef DBG_UTIL
+                                  nStorageMode
+                                  #endif
+                                  )
     : SvStream( MakeLockBytes_Impl( rName, nMode ) )
     , pOwnStm( NULL )
 {
@@ -349,7 +351,7 @@ BOOL SotStorageStream::CopyTo( SotStorageStream * pDestStm )
                 break;
             }
         }
-        delete pMem;
+        delete [] static_cast<BYTE*>(pMem);
         // Position setzen
         pDestStm->Seek( nPos );
         Seek( nPos );
@@ -478,7 +480,7 @@ void SotStorage::TestMemberObjRef( BOOL /*bFree*/ )
 }
 
 #ifdef TEST_INVARIANT
-void SotStorage::TestMemberInvariant( BOOL bPrint )
+void SotStorage::TestMemberInvariant( BOOL /*bPrint*/ )
 {
 }
 #endif
@@ -507,12 +509,12 @@ void SotStorage::TestMemberInvariant( BOOL bPrint )
 |*
 *************************************************************************/
 #define INIT_SotStorage()                   \
-    : nError( SVSTREAM_OK )                 \
-    , bIsRoot( FALSE )                      \
-    , bDelStm( FALSE )                      \
-    , nVersion( SOFFICE_FILEFORMAT_CURRENT )    \
-    , pOwnStg( NULL )   \
-    , pStorStm( NULL )
+    : m_pOwnStg( NULL )                       \
+    , m_pStorStm( NULL )                      \
+    , m_nError( SVSTREAM_OK )               \
+    , m_bIsRoot( FALSE )                    \
+    , m_bDelStm( FALSE )                        \
+    , m_nVersion( SOFFICE_FILEFORMAT_CURRENT )
 
 SotStorage::SotStorage()
     INIT_SotStorage()
@@ -534,110 +536,109 @@ SotStorage::SotStorage()
 SotStorage::SotStorage( const ::ucb::Content& rContent, const String & rName, StreamMode nMode, StorageMode nStorageMode )
     INIT_SotStorage()
 {
-    aName = rName; // Namen merken
-    pOwnStg = new UCBStorage( rContent, aName, nMode, (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
+    m_aName = rName; // Namen merken
+    m_pOwnStg = new UCBStorage( rContent, m_aName, nMode, (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
 
-    SetError( pOwnStg->GetError() );
+    SetError( m_pOwnStg->GetError() );
 
     if ( IsOLEStorage() )
-        nVersion = SOFFICE_FILEFORMAT_50;
+        m_nVersion = SOFFICE_FILEFORMAT_50;
 
-    SignAsRoot( pOwnStg->IsRoot() );
+    SignAsRoot( m_pOwnStg->IsRoot() );
 }
 
 SotStorage::SotStorage( const String & rName, StreamMode nMode, StorageMode nStorageMode )
     INIT_SotStorage()
 {
-    aName = rName; // Namen merken
+    m_aName = rName; // Namen merken
     CreateStorage( TRUE, nMode, nStorageMode );
     if ( IsOLEStorage() )
-        nVersion = SOFFICE_FILEFORMAT_50;
+        m_nVersion = SOFFICE_FILEFORMAT_50;
 }
 
 void SotStorage::CreateStorage( BOOL bForceUCBStorage, StreamMode nMode, StorageMode nStorageMode  )
 {
-    DBG_ASSERT( !pStorStm && !pOwnStg, "Use only in ctor!" );
-    if( aName.Len() )
+    DBG_ASSERT( !m_pStorStm && !m_pOwnStg, "Use only in ctor!" );
+    if( m_aName.Len() )
     {
         // named storage
         if( ( ( nMode & ERASEMASK ) == ERASEMASK ) )
-            ::utl::UCBContentHelper::Kill( aName );
+            ::utl::UCBContentHelper::Kill( m_aName );
 
-        String aURL;
-        INetURLObject aObj( aName );
+        INetURLObject aObj( m_aName );
         if ( aObj.GetProtocol() == INET_PROT_NOT_VALID )
         {
             String aURL;
-            ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aURL );
+            ::utl::LocalFileHelper::ConvertPhysicalNameToURL( m_aName, aURL );
             aObj.SetURL( aURL );
-            aName = aObj.GetMainURL( INetURLObject::NO_DECODE );
+            m_aName = aObj.GetMainURL( INetURLObject::NO_DECODE );
         }
 
         // a new unpacked storage should be created
         if ( nStorageMode == STORAGE_CREATE_UNPACKED )
         {
             // don't open stream readwrite, content provider may not support this !
-            String aURL = UCBStorage::CreateLinkFile( aName );
+            String aURL = UCBStorage::CreateLinkFile( m_aName );
             if ( aURL.Len() )
             {
                 ::ucb::Content aContent( aURL, ::com::sun::star::uno::Reference < ::com::sun::star::ucb::XCommandEnvironment >() );
-                pOwnStg = new UCBStorage( aContent, aURL, nMode, FALSE );
+                m_pOwnStg = new UCBStorage( aContent, aURL, nMode, FALSE );
             }
             else
             {
-                pOwnStg = new Storage( aName, nMode, (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
+                m_pOwnStg = new Storage( m_aName, nMode, (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
                 SetError( ERRCODE_IO_NOTSUPPORTED );
             }
         }
         else
         {
             // check the stream
-            pStorStm = ::utl::UcbStreamHelper::CreateStream( aName, nMode );
-            if ( pStorStm && pStorStm->GetError() )
-                DELETEZ( pStorStm );
+            m_pStorStm = ::utl::UcbStreamHelper::CreateStream( m_aName, nMode );
+            if ( m_pStorStm && m_pStorStm->GetError() )
+                DELETEZ( m_pStorStm );
 
-            if ( pStorStm )
+            if ( m_pStorStm )
             {
                 // try as UCBStorage, next try as OLEStorage
-                BOOL bIsUCBStorage = UCBStorage::IsStorageFile( pStorStm );
+                BOOL bIsUCBStorage = UCBStorage::IsStorageFile( m_pStorStm );
                 if ( !bIsUCBStorage && bForceUCBStorage )
                     // if UCBStorage has priority, it should not be used only if it is really an OLEStorage
-                    bIsUCBStorage = !Storage::IsStorageFile( pStorStm );
+                    bIsUCBStorage = !Storage::IsStorageFile( m_pStorStm );
 
                 if ( bIsUCBStorage )
                 {
-                    if ( UCBStorage::GetLinkedFile( *pStorStm ).Len() )
+                    if ( UCBStorage::GetLinkedFile( *m_pStorStm ).Len() )
                     {
                         // detect special unpacked storages
-                        pOwnStg = new UCBStorage( *pStorStm, (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
-                        bDelStm = TRUE;
+                        m_pOwnStg = new UCBStorage( *m_pStorStm, (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
+                        m_bDelStm = TRUE;
                     }
                     else
                     {
                         // detect special disk spanned storages
-                        if ( UCBStorage::IsDiskSpannedFile( pStorStm ) )
+                        if ( UCBStorage::IsDiskSpannedFile( m_pStorStm ) )
                             nMode |= STORAGE_DISKSPANNED_MODE;
 
                         // UCBStorage always works directly on the UCB content, so discard the stream first
-                        DELETEZ( pStorStm );
-                        pOwnStg = new UCBStorage( aName, nMode, (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
+                        DELETEZ( m_pStorStm );
+                        m_pOwnStg = new UCBStorage( m_aName, nMode, (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
                     }
                 }
                 else
                 {
                     // OLEStorage can be opened with a stream
-                    pOwnStg = new Storage( *pStorStm, (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
-                    bDelStm = TRUE;
+                    m_pOwnStg = new Storage( *m_pStorStm, (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
+                    m_bDelStm = TRUE;
                 }
             }
             else if ( bForceUCBStorage )
             {
-                pOwnStg = new UCBStorage( aName, nMode, (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
+                m_pOwnStg = new UCBStorage( m_aName, nMode, (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
                 SetError( ERRCODE_IO_NOTSUPPORTED );
             }
             else
             {
-                pOwnStg = new Storage( aName, nMode, (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
+                m_pOwnStg = new Storage( m_aName, nMode, (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
                 SetError( ERRCODE_IO_NOTSUPPORTED );
             }
         }
@@ -646,24 +647,24 @@ void SotStorage::CreateStorage( BOOL bForceUCBStorage, StreamMode nMode, Storage
     {
         // temporary storage
         if ( bForceUCBStorage )
-            pOwnStg = new UCBStorage( aName, nMode, (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
+            m_pOwnStg = new UCBStorage( m_aName, nMode, (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
         else
-            pOwnStg = new Storage( aName, nMode, (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
-        aName = pOwnStg->GetName();
+            m_pOwnStg = new Storage( m_aName, nMode, (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
+        m_aName = m_pOwnStg->GetName();
     }
 
-    SetError( pOwnStg->GetError() );
+    SetError( m_pOwnStg->GetError() );
 
-    SignAsRoot( pOwnStg->IsRoot() );
+    SignAsRoot( m_pOwnStg->IsRoot() );
 }
 
 SotStorage::SotStorage( BOOL bUCBStorage, const String & rName, StreamMode nMode, StorageMode nStorageMode )
     INIT_SotStorage()
 {
-    aName = rName;
+    m_aName = rName;
     CreateStorage( bUCBStorage, nMode, nStorageMode );
     if ( IsOLEStorage() )
-        nVersion = SOFFICE_FILEFORMAT_50;
+        m_nVersion = SOFFICE_FILEFORMAT_50;
 }
 
 SotStorage::SotStorage( BaseStorage * pStor )
@@ -671,16 +672,16 @@ SotStorage::SotStorage( BaseStorage * pStor )
 {
     if ( pStor )
     {
-        aName = pStor->GetName(); // Namen merken
+        m_aName = pStor->GetName(); // Namen merken
         SignAsRoot( pStor->IsRoot() );
         SetError( pStor->GetError() );
     }
 
-    pOwnStg = pStor;
-    ULONG nErr = pOwnStg ? pOwnStg->GetError() : SVSTREAM_CANNOT_MAKE;
+    m_pOwnStg = pStor;
+    ULONG nErr = m_pOwnStg ? m_pOwnStg->GetError() : SVSTREAM_CANNOT_MAKE;
     SetError( nErr );
     if ( IsOLEStorage() )
-        nVersion = SOFFICE_FILEFORMAT_50;
+        m_nVersion = SOFFICE_FILEFORMAT_50;
 }
 
 SotStorage::SotStorage( BOOL bUCBStorage, SvStream & rStm )
@@ -690,16 +691,16 @@ SotStorage::SotStorage( BOOL bUCBStorage, SvStream & rStm )
 
     // try as UCBStorage, next try as OLEStorage
     if ( UCBStorage::IsStorageFile( &rStm ) || bUCBStorage )
-        pOwnStg = new UCBStorage( rStm, FALSE );
+        m_pOwnStg = new UCBStorage( rStm, FALSE );
     else
-        pOwnStg = new Storage( rStm, FALSE );
+        m_pOwnStg = new Storage( rStm, FALSE );
 
-    SetError( pOwnStg->GetError() );
+    SetError( m_pOwnStg->GetError() );
 
     if ( IsOLEStorage() )
-        nVersion = SOFFICE_FILEFORMAT_50;
+        m_nVersion = SOFFICE_FILEFORMAT_50;
 
-    SignAsRoot( pOwnStg->IsRoot() );
+    SignAsRoot( m_pOwnStg->IsRoot() );
 }
 
 SotStorage::SotStorage( SvStream & rStm )
@@ -709,16 +710,16 @@ SotStorage::SotStorage( SvStream & rStm )
 
     // try as UCBStorage, next try as OLEStorage
     if ( UCBStorage::IsStorageFile( &rStm ) )
-        pOwnStg = new UCBStorage( rStm, FALSE );
+        m_pOwnStg = new UCBStorage( rStm, FALSE );
     else
-        pOwnStg = new Storage( rStm, FALSE );
+        m_pOwnStg = new Storage( rStm, FALSE );
 
-    SetError( pOwnStg->GetError() );
+    SetError( m_pOwnStg->GetError() );
 
     if ( IsOLEStorage() )
-        nVersion = SOFFICE_FILEFORMAT_50;
+        m_nVersion = SOFFICE_FILEFORMAT_50;
 
-    SignAsRoot( pOwnStg->IsRoot() );
+    SignAsRoot( m_pOwnStg->IsRoot() );
 }
 
 SotStorage::SotStorage( SvStream * pStm, BOOL bDelete )
@@ -728,18 +729,18 @@ SotStorage::SotStorage( SvStream * pStm, BOOL bDelete )
 
     // try as UCBStorage, next try as OLEStorage
     if ( UCBStorage::IsStorageFile( pStm ) )
-        pOwnStg = new UCBStorage( *pStm, FALSE );
+        m_pOwnStg = new UCBStorage( *pStm, FALSE );
     else
-        pOwnStg = new Storage( *pStm, FALSE );
+        m_pOwnStg = new Storage( *pStm, FALSE );
 
-    SetError( pOwnStg->GetError() );
+    SetError( m_pOwnStg->GetError() );
 
-    pStorStm = pStm;
-    bDelStm = bDelete;
+    m_pStorStm = pStm;
+    m_bDelStm = bDelete;
     if ( IsOLEStorage() )
-        nVersion = SOFFICE_FILEFORMAT_50;
+        m_nVersion = SOFFICE_FILEFORMAT_50;
 
-    SignAsRoot( pOwnStg->IsRoot() );
+    SignAsRoot( m_pOwnStg->IsRoot() );
 }
 
 /*************************************************************************
@@ -749,9 +750,9 @@ SotStorage::SotStorage( SvStream * pStm, BOOL bDelete )
 *************************************************************************/
 SotStorage::~SotStorage()
 {
-    delete pOwnStg;
-    if( bDelStm )
-        delete pStorStm;
+    delete m_pOwnStg;
+    if( m_bDelStm )
+        delete m_pStorStm;
 }
 
 /*************************************************************************
@@ -761,7 +762,7 @@ SotStorage::~SotStorage()
 *************************************************************************/
 void SotStorage::RemoveUNOStorageHolder( UNOStorageHolder* pHolder )
 {
-    UCBStorage* pStg = PTR_CAST( UCBStorage, pOwnStg );
+    UCBStorage* pStg = PTR_CAST( UCBStorage, m_pOwnStg );
     if ( pStg )
     {
         pStg->GetUNOStorageHolderList()->remove( pHolder );
@@ -786,7 +787,7 @@ uno::Reference< embed::XStorage > SotStorage::GetUNOAPIDuplicate( const String& 
 
     uno::Reference< embed::XStorage > xResult;
 
-    UCBStorage* pStg = PTR_CAST( UCBStorage, pOwnStg );
+    UCBStorage* pStg = PTR_CAST( UCBStorage, m_pOwnStg );
     if ( !pStg )
         return xResult;
 
@@ -814,14 +815,14 @@ uno::Reference< embed::XStorage > SotStorage::GetUNOAPIDuplicate( const String& 
 
         sal_Bool bStorageReady = !IsStorage( rEleName );
         SotStorageRef pChildStorage = OpenUCBStorage( rEleName, nMode, STORAGE_TRANSACTED );
-        if ( pChildStorage->GetError() == ERRCODE_NONE && pChildStorage->pOwnStg )
+        if ( pChildStorage->GetError() == ERRCODE_NONE && pChildStorage->m_pOwnStg )
         {
             ::utl::TempFile* pTempFile = new ::utl::TempFile();
             if ( pTempFile->GetURL().Len() )
             {
                     if ( !bStorageReady )
                     {
-                           UCBStorage* pChildUCBStg = PTR_CAST( UCBStorage, pChildStorage->pOwnStg );
+                           UCBStorage* pChildUCBStg = PTR_CAST( UCBStorage, pChildStorage->m_pOwnStg );
                         if ( pChildUCBStg )
                         {
                             UCBStorage* pTempStorage = new UCBStorage( pTempFile->GetURL(), STREAM_WRITE, FALSE, TRUE );
@@ -879,7 +880,8 @@ uno::Reference< embed::XStorage > SotStorage::GetUNOAPIDuplicate( const String& 
                         }
                         catch( uno::Exception& e )
                         {
-                            OSL_ENSURE( sal_False, ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ) );
+                                                    (void)e;
+                                                    OSL_ENSURE( sal_False, ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ) );
                         }
                     }
             }
@@ -956,13 +958,13 @@ BOOL SotStorage::IsStorageFile( SvStream* pStream )
 *************************************************************************/
 const String & SotStorage::GetName() const
 {
-    if( !aName.Len() )
+    if( !m_aName.Len() )
     {
         DBG_ASSERT( Owner(), "must be owner" )
-        if( pOwnStg )
-            ((SotStorage *)this)->aName = pOwnStg->GetName();
+        if( m_pOwnStg )
+            ((SotStorage *)this)->m_aName = m_pOwnStg->GetName();
     }
-    return aName;
+    return m_aName;
 }
 
 void SotStorage::SetName( const String& rName )
@@ -971,7 +973,7 @@ void SotStorage::SetName( const String& rName )
     // This stream is a stream opened by a UCP and so aName is only used as a transport for all client code of the SotStorage
     // class that depends on the fact that a root storage has a name
     DBG_ASSERT( !GetName().Len(), "SetName() must not be called when the storage already has a name!" );
-    aName = rName;
+    m_aName = rName;
 }
 
 /*************************************************************************
@@ -981,9 +983,9 @@ void SotStorage::SetName( const String& rName )
 *************************************************************************/
 void SotStorage::ResetError()
 {
-    nError = SVSTREAM_OK;
-    if( pOwnStg )
-        pOwnStg->ResetError();
+    m_nError = SVSTREAM_OK;
+    if( m_pOwnStg )
+        m_pOwnStg->ResetError();
 }
 
 /*************************************************************************
@@ -997,8 +999,8 @@ void SotStorage::SetClass( const SvGlobalName & rName,
                           const String & rUserTypeName )
 {
     DBG_ASSERT( Owner(), "must be owner" )
-    if( pOwnStg )
-        pOwnStg->SetClass( rName, nOriginalClipFormat, rUserTypeName );
+    if( m_pOwnStg )
+        m_pOwnStg->SetClass( rName, nOriginalClipFormat, rUserTypeName );
     else
         SetError( SVSTREAM_GENERALERROR );
 }
@@ -1008,8 +1010,8 @@ void SotStorage::SetConvertClass( const SvGlobalName & rName,
                                  const String & rUserTypeName )
 {
     DBG_ASSERT( Owner(), "must be owner" )
-    if( pOwnStg )
-        pOwnStg->SetConvertClass( rName, nOriginalClipFormat, rUserTypeName );
+    if( m_pOwnStg )
+        m_pOwnStg->SetConvertClass( rName, nOriginalClipFormat, rUserTypeName );
     else
         SetError( SVSTREAM_GENERALERROR );
 }
@@ -1026,8 +1028,8 @@ SvGlobalName SotStorage::GetClassName()
 {
     SvGlobalName aGN;
     DBG_ASSERT( Owner(), "must be owner" )
-    if( pOwnStg )
-        aGN = pOwnStg->GetClassName();
+    if( m_pOwnStg )
+        aGN = m_pOwnStg->GetClassName();
     else
         SetError( SVSTREAM_GENERALERROR );
     return aGN;
@@ -1037,8 +1039,8 @@ ULONG SotStorage::GetFormat()
 {
     ULONG nFormat = 0;
     DBG_ASSERT( Owner(), "must be owner" )
-    if( pOwnStg )
-        nFormat = pOwnStg->GetFormat();
+    if( m_pOwnStg )
+        nFormat = m_pOwnStg->GetFormat();
     else
         SetError( SVSTREAM_GENERALERROR );
     return nFormat;
@@ -1048,8 +1050,8 @@ String SotStorage::GetUserName()
 {
     String aName;
     DBG_ASSERT( Owner(), "must be owner" )
-    if( pOwnStg )
-        aName = pOwnStg->GetUserName();
+    if( m_pOwnStg )
+        aName = m_pOwnStg->GetUserName();
     else
         SetError( SVSTREAM_GENERALERROR );
     return aName;
@@ -1058,8 +1060,8 @@ String SotStorage::GetUserName()
 BOOL SotStorage::ShouldConvert()
 {
     DBG_ASSERT( Owner(), "must be owner" )
-    if( pOwnStg )
-        return pOwnStg->ShouldConvert();
+    if( m_pOwnStg )
+        return m_pOwnStg->ShouldConvert();
     else
         SetError( SVSTREAM_GENERALERROR );
     return FALSE;
@@ -1073,8 +1075,8 @@ BOOL SotStorage::ShouldConvert()
 void SotStorage::FillInfoList( SvStorageInfoList * pFillList ) const
 {
     DBG_ASSERT( Owner(), "must be owner" )
-    if( pOwnStg )
-        pOwnStg->FillInfoList( pFillList );
+    if( m_pOwnStg )
+        m_pOwnStg->FillInfoList( pFillList );
 }
 
 /*************************************************************************
@@ -1086,12 +1088,12 @@ BOOL SotStorage::CopyTo( SotStorage * pDestStg )
 {
     DBG_ASSERT( Owner(), "must be owner" )
     DBG_ASSERT( pDestStg->Owner(), "must be owner" )
-    if( pOwnStg && pDestStg->pOwnStg )
+    if( m_pOwnStg && pDestStg->m_pOwnStg )
     {
-        pOwnStg->CopyTo( pDestStg->pOwnStg );
-        SetError( pOwnStg->GetError() );
-        pDestStg->aKey = aKey;
-        pDestStg->nVersion = nVersion;
+        m_pOwnStg->CopyTo( pDestStg->m_pOwnStg );
+        SetError( m_pOwnStg->GetError() );
+        pDestStg->m_aKey = m_aKey;
+        pDestStg->m_nVersion = m_nVersion;
     }
     else
         SetError( SVSTREAM_GENERALERROR );
@@ -1106,10 +1108,10 @@ BOOL SotStorage::CopyTo( SotStorage * pDestStg )
 BOOL SotStorage::Commit()
 {
     DBG_ASSERT( Owner(), "must be owner" )
-    if( pOwnStg )
+    if( m_pOwnStg )
     {
-        if( !pOwnStg->Commit() )
-            SetError( pOwnStg->GetError() );
+        if( !m_pOwnStg->Commit() )
+            SetError( m_pOwnStg->GetError() );
     }
     else
         SetError( SVSTREAM_GENERALERROR );
@@ -1124,10 +1126,10 @@ BOOL SotStorage::Commit()
 BOOL SotStorage::Revert()
 {
     DBG_ASSERT( Owner(), "must be owner" )
-    if( pOwnStg )
+    if( m_pOwnStg )
     {
-        if( !pOwnStg->Revert() )
-            SetError( pOwnStg->GetError() );
+        if( !m_pOwnStg->Revert() )
+            SetError( m_pOwnStg->GetError() );
     }
     else
         SetError( SVSTREAM_GENERALERROR );
@@ -1146,18 +1148,18 @@ SotStorageStream * SotStorage::OpenEncryptedSotStream( const String & rEleName, 
     DBG_ASSERT( !nStorageMode, "StorageModes ignored" )
     SotStorageStream * pStm = NULL;
     DBG_ASSERT( Owner(), "must be owner" )
-    if( pOwnStg )
+    if( m_pOwnStg )
     {
         // volle Ole-Patches einschalten
         // egal was kommt, nur exclusiv gestattet
         nMode |= STREAM_SHARE_DENYALL;
-        ErrCode nE = pOwnStg->GetError();
-        BaseStorageStream* p = pOwnStg->OpenStream( rEleName, nMode,
+        ErrCode nE = m_pOwnStg->GetError();
+        BaseStorageStream* p = m_pOwnStg->OpenStream( rEleName, nMode,
                             (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE, &rKey );
         pStm = new SotStorageStream( p );
 
         if( !nE )
-            pOwnStg->ResetError(); // kein Fehler setzen
+            m_pOwnStg->ResetError(); // kein Fehler setzen
         if( nMode & STREAM_TRUNC )
             pStm->SetSize( 0 );
     }
@@ -1173,18 +1175,18 @@ SotStorageStream * SotStorage::OpenSotStream( const String & rEleName,
     DBG_ASSERT( !nStorageMode, "StorageModes ignored" )
     SotStorageStream * pStm = NULL;
     DBG_ASSERT( Owner(), "must be owner" )
-    if( pOwnStg )
+    if( m_pOwnStg )
     {
         // volle Ole-Patches einschalten
         // egal was kommt, nur exclusiv gestattet
         nMode |= STREAM_SHARE_DENYALL;
-        ErrCode nE = pOwnStg->GetError();
-        BaseStorageStream * p = pOwnStg->OpenStream( rEleName, nMode,
+        ErrCode nE = m_pOwnStg->GetError();
+        BaseStorageStream * p = m_pOwnStg->OpenStream( rEleName, nMode,
                             (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
         pStm = new SotStorageStream( p );
 
         if( !nE )
-            pOwnStg->ResetError(); // kein Fehler setzen
+            m_pOwnStg->ResetError(); // kein Fehler setzen
         if( nMode & STREAM_TRUNC )
             pStm->SetSize( 0 );
     }
@@ -1204,17 +1206,17 @@ SotStorage * SotStorage::OpenSotStorage( const String & rEleName,
 {
     SotStorage * pStor = NULL;
     DBG_ASSERT( Owner(), "must be owner" )
-    if( pOwnStg )
+    if( m_pOwnStg )
     {
         nMode |= STREAM_SHARE_DENYALL;
-        ErrCode nE = pOwnStg->GetError();
-        BaseStorage * p = pOwnStg->OpenStorage( rEleName, nMode,
+        ErrCode nE = m_pOwnStg->GetError();
+        BaseStorage * p = m_pOwnStg->OpenStorage( rEleName, nMode,
                         (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
         if( p )
         {
             pStor = new SotStorage( p );
             if( !nE )
-                pOwnStg->ResetError(); // kein Fehler setzen
+                m_pOwnStg->ResetError(); // kein Fehler setzen
 
             return pStor;
         }
@@ -1231,15 +1233,15 @@ SotStorage * SotStorage::OpenUCBStorage( const String & rEleName,
 {
     SotStorage * pStor = NULL;
     DBG_ASSERT( Owner(), "must be owner" )
-    if( pOwnStg )
+    if( m_pOwnStg )
     {
         nMode |= STREAM_SHARE_DENYALL;
-        ErrCode nE = pOwnStg->GetError();
-        BaseStorage * p = pOwnStg->OpenUCBStorage( rEleName, nMode,
+        ErrCode nE = m_pOwnStg->GetError();
+        BaseStorage * p = m_pOwnStg->OpenUCBStorage( rEleName, nMode,
                         (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
         pStor = new SotStorage( p );
         if( !nE )
-            pOwnStg->ResetError(); // kein Fehler setzen
+            m_pOwnStg->ResetError(); // kein Fehler setzen
     }
     else
         SetError( SVSTREAM_GENERALERROR );
@@ -1252,15 +1254,15 @@ SotStorage * SotStorage::OpenOLEStorage( const String & rEleName,
 {
     SotStorage * pStor = NULL;
     DBG_ASSERT( Owner(), "must be owner" )
-    if( pOwnStg )
+    if( m_pOwnStg )
     {
         nMode |= STREAM_SHARE_DENYALL;
-        ErrCode nE = pOwnStg->GetError();
-        BaseStorage * p = pOwnStg->OpenOLEStorage( rEleName, nMode,
+        ErrCode nE = m_pOwnStg->GetError();
+        BaseStorage * p = m_pOwnStg->OpenOLEStorage( rEleName, nMode,
                         (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
         pStor = new SotStorage( p );
         if( !nE )
-            pOwnStg->ResetError(); // kein Fehler setzen
+            m_pOwnStg->ResetError(); // kein Fehler setzen
     }
     else
         SetError( SVSTREAM_GENERALERROR );
@@ -1278,8 +1280,8 @@ BOOL SotStorage::IsStorage( const String & rEleName ) const
 {
     DBG_ASSERT( Owner(), "must be owner" )
     // ein bisschen schneller
-    if( pOwnStg )
-        return pOwnStg->IsStorage( rEleName );
+    if( m_pOwnStg )
+        return m_pOwnStg->IsStorage( rEleName );
     return FALSE;
 }
 
@@ -1287,8 +1289,8 @@ BOOL SotStorage::IsStream( const String & rEleName ) const
 {
     DBG_ASSERT( Owner(), "must be owner" )
     // ein bisschen schneller
-    if( pOwnStg )
-        return pOwnStg->IsStream( rEleName );
+    if( m_pOwnStg )
+        return m_pOwnStg->IsStream( rEleName );
     return FALSE;
 }
 
@@ -1296,8 +1298,8 @@ BOOL SotStorage::IsContained( const String & rEleName ) const
 {
     DBG_ASSERT( Owner(), "must be owner" )
     // ein bisschen schneller
-    if( pOwnStg )
-        return pOwnStg->IsContained( rEleName );
+    if( m_pOwnStg )
+        return m_pOwnStg->IsContained( rEleName );
     return FALSE;
 }
 
@@ -1309,10 +1311,10 @@ BOOL SotStorage::IsContained( const String & rEleName ) const
 BOOL SotStorage::Remove( const String & rEleName )
 {
     DBG_ASSERT( Owner(), "must be owner" )
-    if( pOwnStg )
+    if( m_pOwnStg )
     {
-        pOwnStg->Remove( rEleName );
-        SetError( pOwnStg->GetError() );
+        m_pOwnStg->Remove( rEleName );
+        SetError( m_pOwnStg->GetError() );
     }
     else
         SetError( SVSTREAM_GENERALERROR );
@@ -1327,10 +1329,10 @@ BOOL SotStorage::Remove( const String & rEleName )
 BOOL SotStorage::Rename( const String & rEleName, const String & rNewName )
 {
     DBG_ASSERT( Owner(), "must be owner" )
-    if( pOwnStg )
+    if( m_pOwnStg )
     {
-        pOwnStg->Rename( rEleName, rNewName );
-        SetError( pOwnStg->GetError() );
+        m_pOwnStg->Rename( rEleName, rNewName );
+        SetError( m_pOwnStg->GetError() );
     }
     else
         SetError( SVSTREAM_GENERALERROR );
@@ -1347,10 +1349,10 @@ BOOL SotStorage::CopyTo( const String & rEleName,
 {
     DBG_ASSERT( Owner(), "must be owner" )
     DBG_ASSERT( pNewSt->Owner(), "must be owner" )
-    if( pOwnStg )
+    if( m_pOwnStg )
     {
-        pOwnStg->CopyTo( rEleName, pNewSt->pOwnStg, rNewName );
-        SetError( pOwnStg->GetError() );
+        m_pOwnStg->CopyTo( rEleName, pNewSt->m_pOwnStg, rNewName );
+        SetError( m_pOwnStg->GetError() );
         SetError( pNewSt->GetError() );
     }
     else
@@ -1368,10 +1370,10 @@ BOOL SotStorage::MoveTo( const String & rEleName,
 {
     DBG_ASSERT( Owner(), "must be owner" )
     DBG_ASSERT( pNewSt->Owner(), "must be owner" )
-    if( pOwnStg )
+    if( m_pOwnStg )
     {
-        pOwnStg->MoveTo( rEleName, pNewSt->pOwnStg, rNewName );
-        SetError( pOwnStg->GetError() );
+        m_pOwnStg->MoveTo( rEleName, pNewSt->m_pOwnStg, rNewName );
+        SetError( m_pOwnStg->GetError() );
         SetError( pNewSt->GetError() );
     }
     else
@@ -1383,8 +1385,8 @@ const SvStream* SotStorage::GetSvStream()
 {
     const SvStream* pResult = 0;
     DBG_ASSERT( Owner(), "must be owner" )
-    if( pOwnStg )
-        pResult = pOwnStg->GetSvStream();
+    if( m_pOwnStg )
+        pResult = m_pOwnStg->GetSvStream();
     return pResult;
 }
 
@@ -1392,24 +1394,24 @@ SvStream* SotStorage::GetTargetSvStream() const
 {
     SvStream* pResult = 0;
     DBG_ASSERT( Owner(), "must be owner" )
-    if( pOwnStg )
-        pResult = (SvStream*)(pOwnStg->GetSvStream());
+    if( m_pOwnStg )
+        pResult = (SvStream*)(m_pOwnStg->GetSvStream());
     return pResult;
 }
 
 
 BOOL SotStorage::Validate()
 {
-    DBG_ASSERT( bIsRoot, "Validate nur an Rootstorage" );
-    if( pOwnStg )
-        return pOwnStg->ValidateFAT();
+    DBG_ASSERT( m_bIsRoot, "Validate nur an Rootstorage" );
+    if( m_pOwnStg )
+        return m_pOwnStg->ValidateFAT();
     else
         return TRUE;
 }
 
 BOOL SotStorage::SetProperty( const String& rName, const ::com::sun::star::uno::Any& rValue )
 {
-    UCBStorage* pStg = PTR_CAST( UCBStorage, pOwnStg );
+    UCBStorage* pStg = PTR_CAST( UCBStorage, m_pOwnStg );
     if ( pStg )
     {
         return pStg->SetProperty( rName, rValue );
@@ -1423,7 +1425,7 @@ BOOL SotStorage::SetProperty( const String& rName, const ::com::sun::star::uno::
 
 BOOL SotStorage::GetProperty( const String& rName, ::com::sun::star::uno::Any& rValue )
 {
-    UCBStorage* pStg = PTR_CAST( UCBStorage, pOwnStg );
+    UCBStorage* pStg = PTR_CAST( UCBStorage, m_pOwnStg );
     if ( pStg )
     {
         return pStg->GetProperty( rName, rValue );
@@ -1446,7 +1448,7 @@ BOOL SotStorage::GetProperty( const String& rName, ::com::sun::star::uno::Any& r
 
 BOOL SotStorage::GetProperty( const String& rEleName, const String& rName, ::com::sun::star::uno::Any& rValue )
 {
-    UCBStorage* pStg = PTR_CAST( UCBStorage, pOwnStg );
+    UCBStorage* pStg = PTR_CAST( UCBStorage, m_pOwnStg );
     if ( pStg )
     {
         return pStg->GetProperty( rEleName, rName, rValue );
@@ -1460,7 +1462,7 @@ BOOL SotStorage::GetProperty( const String& rEleName, const String& rName, ::com
 
 BOOL SotStorage::IsOLEStorage() const
 {
-    UCBStorage* pStg = PTR_CAST( UCBStorage, pOwnStg );
+    UCBStorage* pStg = PTR_CAST( UCBStorage, m_pOwnStg );
     return !pStg;
 }
 
@@ -1476,11 +1478,11 @@ BOOL SotStorage::IsOLEStorage( SvStream* pStream )
 
 void SotStorage::SetKey( const ByteString& rKey )
 {
-    aKey = rKey;
+    m_aKey = rKey;
     if ( !IsOLEStorage() )
     {
         sal_uInt8 aBuffer[RTL_DIGEST_LENGTH_SHA1];
-        rtlDigestError nError = rtl_digest_SHA1( aKey.GetBuffer(), aKey.Len(), aBuffer, RTL_DIGEST_LENGTH_SHA1 );
+        rtlDigestError nError = rtl_digest_SHA1( m_aKey.GetBuffer(), m_aKey.Len(), aBuffer, RTL_DIGEST_LENGTH_SHA1 );
         if ( nError == rtl_Digest_E_None )
         {
             sal_uInt8* pBuffer = aBuffer;
