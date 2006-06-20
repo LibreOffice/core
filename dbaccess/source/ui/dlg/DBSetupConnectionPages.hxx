@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DBSetupConnectionPages.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:26:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:03:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,10 +157,10 @@ namespace dbaui
                                         , const SfxItemSet& _rCoreAttrs
                                         , USHORT _nPortId
                                         , USHORT _nDefaultPortResId
-                                        , char* _pDriverName
+                                        , const sal_Char* _pDriverName
                                         , USHORT _nHelpTextResId
                                         , USHORT _nHeaderTextResId
-                                        , USHORT _nDriverClassId = -1);
+                                        , USHORT _nDriverClassId );
     static  OGenericAdministrationPage* CreateMySQLJDBCTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
     static  OGenericAdministrationPage* CreateOracleJDBCTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
     virtual Link getControlModifiedLink() { return LINK(this, OGeneralSpecialJDBCConnectionPageSetup, OnEditModified); }
@@ -201,10 +201,8 @@ namespace dbaui
     class OJDBCConnectionPageSetup : public OConnectionTabPageSetup
     {
     public:
-        OJDBCConnectionPageSetup(   Window* pParent
-                                        , USHORT _nResId
-                                        , const SfxItemSet& _rCoreAttrs);
-    static  OGenericAdministrationPage* CreateJDBCTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
+                OJDBCConnectionPageSetup( Window* pParent, const SfxItemSet& _rCoreAttrs );
+        static  OGenericAdministrationPage* CreateJDBCTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
 
     protected:
         virtual bool checkTestConnection();
