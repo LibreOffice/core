@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stream.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:44:38 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:27:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,9 +148,9 @@ sal_Int32 SAL_CALL Stream::readBytes(
     if (result == GNOME_VFS_ERROR_EOF)
         m_eof = sal_True;
 
-    aData.realloc( nBytesRead );
+    aData.realloc( sal::static_int_cast<sal_uInt32>(nBytesRead) );
 
-    return nBytesRead;
+    return sal::static_int_cast<sal_Int32>(nBytesRead);
 }
 
 sal_Int32 SAL_CALL Stream::readSomeBytes(
