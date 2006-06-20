@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Boolean.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:08:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:33:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,7 @@ java_lang_Boolean::java_lang_Boolean( sal_Bool _par0 ): java_lang_Object( NULL, 
         args[0].z = _par0;
     // Java-Call fuer den Konstruktor absetzen
     // temporaere Variable initialisieren
-    static char * cSignature = "(Z)V";
+    static const char * cSignature = "(Z)V";
     jobject tempObj;
     static jmethodID mID = NULL;
     if ( !mID  )
