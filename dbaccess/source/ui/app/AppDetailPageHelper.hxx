@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppDetailPageHelper.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-03 16:15:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:54:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,9 +72,9 @@
 #endif
 #include <memory>
 
-namespace com{ namespace sun { namespace star { namespace awt   { class XWindow; } } } };
-namespace com{ namespace sun { namespace star { namespace frame { class XFrame; } } } };
-namespace com{ namespace sun { namespace star { namespace io    { class XPersist; } } } };
+namespace com{ namespace sun { namespace star { namespace awt   { class XWindow; } } } }
+namespace com{ namespace sun { namespace star { namespace frame { class XFrame; } } } }
+namespace com{ namespace sun { namespace star { namespace io    { class XPersist; } } } }
 
 #define CONTROL_COUNT   4
 
@@ -210,7 +210,7 @@ namespace dbaui
         DECL_LINK(OnDropdownClickHdl, ToolBox*);
 
         inline OAppBorderWindow* getBorderWin() const { return m_pBorderWin; }
-        void ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
+        void ImplInitSettings();
     public:
         OAppDetailPageHelper(Window* _pParent,OAppBorderWindow* _pBorderWin,PreviewMode _ePreviewMode);
         virtual ~OAppDetailPageHelper();
