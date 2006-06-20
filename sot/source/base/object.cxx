@@ -4,9 +4,9 @@
  *
  *  $RCSfile: object.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:39:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:53:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,6 @@
 #include <object.hxx>
 #include <factory.hxx>
 #include <agg.hxx>
-#pragma hdrstop
 
 /************** class SvAggregateMemberList *****************************/
 /************************************************************************/
@@ -90,9 +89,9 @@ void SotObject::TestMemberInvariant( BOOL /*bPrint*/ )
 |*    Beschreibung
 *************************************************************************/
 SotObject::SotObject()
-    : nStrongLockCount( 0 )
+    : pAggList    ( NULL )
+    , nStrongLockCount( 0 )
     , nOwnerLockCount( 0 )
-    , pAggList    ( NULL )
     , bOwner      ( TRUE )
     , bSVObject   ( FALSE )
     , bInClose    ( FALSE )
@@ -139,7 +138,7 @@ BOOL SotObject::IsSvObject() const
 |*
 |*    Beschreibung: Bei allen aggregierten Objekte muss der RefCount auf
 |*                  0 gehen, damit das Gesammt-Objekt zerstoert wird. Das
-|*                  zerst”ren von Teilen ist verboten. Da der Aggregator
+|*                  zerstï¿½ren von Teilen ist verboten. Da der Aggregator
 |*                  (oder Cast-Verwalter) den Zaehler der aggregierten
 |*                  Objekte um 1 erhoeht, muss dies bei der Berechnung
 |*                  des 0-RefCounts beruecksichtigt werden.
@@ -175,8 +174,7 @@ BOOL SotObject::ShouldDelete()
     for( i = pAggList->Count() -1; i > 0; i-- )
     {
         // Referenzen aufloesen
-        SvAggregate & rEle = pAggList->GetObject( i );
-        DBG_ASSERT( !rEle.bMainObj, "main object reference is opened" )
+        DBG_ASSERT( !pAggList->GetObject( i ).bMainObj, "main object reference is opened" )
         RemoveInterface( i );
     }
     delete pAggList;
@@ -391,10 +389,10 @@ SotObject * SotObject::GetMainObj() const
 //=========================================================================
 USHORT SotObject::FuzzyLock
 (
-    BOOL bLock,     /* TRUE, lock. FALSE, unlock. */
-    BOOL bIntern,   /* TRUE, es handelt sich um einen internen Lock.
-                       FALSE, der Lock kam von aussen (Ole2, Ipc2) */
-    BOOL bClose     /* TRUE, Close aufrufen wenn letzte Lock */
+    BOOL bLock,         /* TRUE, lock. FALSE, unlock. */
+    BOOL /*bIntern*/,   /* TRUE, es handelt sich um einen internen Lock.
+                           FALSE, der Lock kam von aussen (Ole2, Ipc2) */
+    BOOL bClose         /* TRUE, Close aufrufen wenn letzte Lock */
 )
 /*  [Beschreibung]
 
