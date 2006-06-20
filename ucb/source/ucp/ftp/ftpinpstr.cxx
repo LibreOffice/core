@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ftpinpstr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:36:01 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:24:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,7 +161,7 @@ sal_Int32 SAL_CALL FTPInputStream::available(void)
           IOException,
           RuntimeException)
 {
-    return m_nLength - getPosition();
+    return sal::static_int_cast<sal_Int32>(m_nLength - getPosition());
 }
 
 
