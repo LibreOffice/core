@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OStatement.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:35:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:56:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,6 +84,9 @@
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
+#ifndef CONNECTIVITY_DIAGNOSE_EX_H
+#include "diagnose_ex.h"
+#endif
 #include <algorithm>
 
 using namespace ::comphelper;
@@ -119,10 +122,10 @@ using namespace com::sun::star::util;
 OStatement_Base::OStatement_Base(OConnection* _pConnection )
     :OStatement_BASE(m_aMutex)
     ,OPropertySetHelper(OStatement_BASE::rBHelper)
-    ,rBHelper(OStatement_BASE::rBHelper)
     ,m_pConnection(_pConnection)
-    ,m_pRowStatusArray(0)
     ,m_aStatementHandle(SQL_NULL_HANDLE)
+    ,m_pRowStatusArray(0)
+    ,rBHelper(OStatement_BASE::rBHelper)
 {
     osl_incrementInterlockedCount( &m_refCount );
     m_pConnection->acquire();
@@ -193,7 +196,7 @@ Sequence< Type > SAL_CALL OStatement_Base::getTypes(  ) throw(RuntimeException)
     Sequence< Type > aOldTypes = OStatement_BASE::getTypes();
     if ( m_pConnection && !m_pConnection->isAutoRetrievingEnabled() )
     {
-        const Type* pRemoveFrom = ::std::remove(aOldTypes.getArray(),aOldTypes.getArray() + aOldTypes.getLength(),
+        ::std::remove(aOldTypes.getArray(),aOldTypes.getArray() + aOldTypes.getLength(),
                         ::getCppuType( (const Reference< XGeneratedResultSet > *)0 ));
         aOldTypes.realloc(aOldTypes.getLength() - 1);
     }
@@ -624,7 +627,6 @@ sal_Bool SAL_CALL OStatement_Base::getMoreResults(  ) throw(SQLException, Runtim
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
 
-    OResultSet* pRS = NULL;
     SQLWarning  warning;
     sal_Bool hasResultSet = sal_False;
 
@@ -707,6 +709,7 @@ sal_Int32 OStatement_Base::getResultSetConcurrency() const
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     sal_uInt32 nValue;
     SQLRETURN nRetCode = N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_CONCURRENCY,&nValue,SQL_IS_UINTEGER,0);
+    OSL_UNUSED( nRetCode );
     if(nValue == SQL_CONCUR_READ_ONLY)
         nValue = ResultSetConcurrency::READ_ONLY;
     else
@@ -742,6 +745,7 @@ sal_Int32 OStatement_Base::getFetchDirection() const
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     sal_uInt32 nValue = 0;
     SQLRETURN nRetCode = N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_CURSOR_SCROLLABLE,&nValue,SQL_IS_UINTEGER,0);
+    OSL_UNUSED( nRetCode );
 
     switch(nValue)
     {
@@ -761,7 +765,7 @@ sal_Int32 OStatement_Base::getFetchSize() const
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     sal_uInt32 nValue;
     SQLRETURN nRetCode = N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_ROW_ARRAY_SIZE,&nValue,SQL_IS_UINTEGER,0);
-
+    OSL_UNUSED( nRetCode );
     return nValue;
 }
 //------------------------------------------------------------------------------
@@ -776,7 +780,7 @@ sal_Int32 OStatement_Base::getMaxFieldSize() const
     SQLCHAR pName[258];
     SQLSMALLINT nRealLen = 0;
     SQLRETURN nRetCode = N3SQLGetCursorName(m_aStatementHandle,(SQLCHAR*)pName,256,&nRealLen);
-
+    OSL_UNUSED( nRetCode );
     return ::rtl::OUString::createFromAscii((const char*)pName);
 }
 //------------------------------------------------------------------------------
@@ -784,12 +788,14 @@ void OStatement_Base::setQueryTimeOut(sal_Int32 seconds)
 {
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     SQLRETURN nRetCode = N3SQLSetStmtAttr(m_aStatementHandle, SQL_ATTR_QUERY_TIMEOUT,(SQLPOINTER)seconds,SQL_IS_UINTEGER);
+    OSL_UNUSED( nRetCode );
 }
 //------------------------------------------------------------------------------
 void OStatement_Base::setMaxRows(sal_Int32 _par0)
 {
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     SQLRETURN nRetCode = N3SQLSetStmtAttr(m_aStatementHandle, SQL_ATTR_MAX_ROWS, (SQLPOINTER)_par0,SQL_IS_UINTEGER);
+    OSL_UNUSED( nRetCode );
 }
 //------------------------------------------------------------------------------
 void OStatement_Base::setResultSetConcurrency(sal_Int32 _par0)
@@ -810,9 +816,10 @@ void OStatement_Base::setResultSetType(sal_Int32 _par0)
 
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     SQLRETURN nRetCode = N3SQLSetStmtAttr(m_aStatementHandle, SQL_ATTR_ROW_BIND_TYPE,(SQLPOINTER)SQL_BIND_BY_COLUMN,SQL_IS_UINTEGER);
+    OSL_UNUSED( nRetCode );
 
     sal_Bool bUseBookmark = isUsingBookmarks();
-    SQLUINTEGER nSet;
+    SQLUINTEGER nSet( SQL_UNSPECIFIED );
     switch(_par0)
     {
         case ResultSetType::FORWARD_ONLY:
@@ -853,6 +860,9 @@ void OStatement_Base::setResultSetType(sal_Int32 _par0)
             }
             nSet =  SQL_SENSITIVE;
             break;
+        default:
+            OSL_ENSURE( false, "OStatement_Base::setResultSetType: invalid result set type!" );
+            break;
     }
 
 
@@ -874,6 +884,7 @@ void OStatement_Base::setFetchDirection(sal_Int32 _par0)
         nCursType = SQL_SCROLLABLE;
         nRetCode = N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_CURSOR_SCROLLABLE,(SQLPOINTER)nCursType,SQL_IS_UINTEGER);
     }
+    OSL_UNUSED( nRetCode );
 }
 //------------------------------------------------------------------------------
 void OStatement_Base::setFetchSize(sal_Int32 _par0)
@@ -904,7 +915,8 @@ sal_Bool OStatement_Base::isUsingBookmarks() const
 {
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     sal_uInt32 nValue = SQL_UB_OFF;
-    SQLRETURN nRet = N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_USE_BOOKMARKS,&nValue,SQL_IS_UINTEGER,NULL);
+    SQLRETURN nRetCode = N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_USE_BOOKMARKS,&nValue,SQL_IS_UINTEGER,NULL);
+    OSL_UNUSED( nRetCode );
     return nValue != SQL_UB_OFF;
 }
 // -------------------------------------------------------------------------
@@ -912,7 +924,8 @@ void OStatement_Base::setUsingBookmarks(sal_Bool _bUseBookmark)
 {
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     sal_uInt32 nValue = _bUseBookmark ? SQL_UB_VARIABLE : SQL_UB_OFF;
-    SQLRETURN nRet = N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_USE_BOOKMARKS,(SQLPOINTER)nValue,SQL_IS_UINTEGER);
+    SQLRETURN nRetCode = N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_USE_BOOKMARKS,(SQLPOINTER)nValue,SQL_IS_UINTEGER);
+    OSL_UNUSED( nRetCode );
 }
 // -------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* OStatement_Base::createArrayHelper( ) const
