@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NeonUri.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:13:50 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:37:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,9 +54,17 @@
 
 using namespace webdav_ucp;
 
-ne_uri NeonUri::sUriDefaultsHTTP  = { "http",  NULL, DEFAULT_HTTP_PORT,  NULL };
-ne_uri NeonUri::sUriDefaultsHTTPS = { "https", NULL, DEFAULT_HTTPS_PORT, NULL };
-ne_uri NeonUri::sUriDefaultsFTP   = { "ftp",   NULL, DEFAULT_FTP_PORT,   NULL };
+# if defined __SUNPRO_CC
+// FIXME: not sure whether initializing a ne_uri statically is supposed to work
+// the string fields of ne_uri are char*, not const char*
+# pragma disable_warn
+# endif
+ne_uri NeonUri::sUriDefaultsHTTP  = { "http",  NULL, DEFAULT_HTTP_PORT,  NULL, NULL };
+ne_uri NeonUri::sUriDefaultsHTTPS = { "https", NULL, DEFAULT_HTTPS_PORT, NULL, NULL };
+ne_uri NeonUri::sUriDefaultsFTP   = { "ftp",   NULL, DEFAULT_FTP_PORT,   NULL, NULL };
+# if defined __SUNPRO_CC
+# pragma enable_warn
+#endif
 
 // -------------------------------------------------------------------
 // Constructor
