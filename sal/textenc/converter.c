@@ -4,9 +4,9 @@
  *
  *  $RCSfile: converter.c,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:29:30 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:36:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,6 +118,7 @@ ImplHandleBadInputUnicodeToTextConversion(sal_Bool bUndefined,
     sal_Char cReplace;
 
     if (bUndefined)
+    {
         if (ImplIsControlOrFormat(nUtf32))
         {
             if ((nFlags & RTL_UNICODETOTEXT_FLAGS_CONTROL_IGNORE) != 0)
@@ -135,6 +136,7 @@ ImplHandleBadInputUnicodeToTextConversion(sal_Bool bUndefined,
             if ((nFlags & RTL_UNICODETOTEXT_FLAGS_NONSPACING_IGNORE) != 0)
                 nFlags = RTL_UNICODETOTEXT_FLAGS_UNDEFINED_IGNORE;
         }
+    }
     *pInfo |= bUndefined ? RTL_UNICODETOTEXT_INFO_UNDEFINED :
                            RTL_UNICODETOTEXT_INFO_INVALID;
     switch (nFlags & (bUndefined ? RTL_UNICODETOTEXT_FLAGS_UNDEFINED_MASK :
