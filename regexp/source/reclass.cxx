@@ -647,10 +647,10 @@ Regexpr::insert_op2(re_opcode_t op, sal_Unicode *loc, sal_Int32 arg1, sal_Int32 
    least one character before the ^.  */
 
 sal_Bool
-Regexpr::at_begline_loc_p(const sal_Unicode *pattern, const sal_Unicode *p)
+Regexpr::at_begline_loc_p(const sal_Unicode *local_pattern, const sal_Unicode *p)
 {
   const sal_Unicode *prev = p - 2;
-  sal_Bool prev_prev_backslash = prev > pattern && prev[-1] == '\\';
+  sal_Bool prev_prev_backslash = prev > local_pattern && prev[-1] == '\\';
 
   return(
      /* After a subexpression?  */
@@ -663,11 +663,11 @@ Regexpr::at_begline_loc_p(const sal_Unicode *pattern, const sal_Unicode *p)
    at least one character after the $, i.e., `P < PEND'.  */
 
 sal_Bool
-Regexpr::at_endline_loc_p(const sal_Unicode *p, const sal_Unicode *pend)
+Regexpr::at_endline_loc_p(const sal_Unicode *p, const sal_Unicode * /* pend */ )
 {
   const sal_Unicode *next = p;
-  sal_Bool next_backslash = *next == (sal_Unicode)'\\';
-  const sal_Unicode *next_next = p + 1 < pend ? p + 1 : 0;
+  //sal_Bool next_backslash = *next == (sal_Unicode)'\\';
+  //const sal_Unicode *next_next = p + 1 < pend ? p + 1 : 0;
 
   return(
      /* Before a subexpression?  */
@@ -702,7 +702,7 @@ Regexpr::compile_range(sal_Unicode range_start, sal_Unicode range_end, sal_Unico
    false if it's not.  */
 
 sal_Bool
-Regexpr::group_in_compile_stack(compile_stack_type compile_stack, sal_Int32 regnum)
+Regexpr::group_in_compile_stack(compile_stack_type compile_stack, sal_uInt32 regnum)
 {
   sal_Int32 this_element;
 
@@ -1332,9 +1332,12 @@ Regexpr::regex_compile()
       case (sal_Unicode)')':
     goto normal_backslash;
 
+    // unreachable (after goto):
+#if 0
     if (COMPILE_STACK_EMPTY) {
       FREE_STACK_RETURN(REG_ERPAREN);
     }
+#endif
 
       handle_close:
     if (fixup_alt_jump) {
@@ -1383,7 +1386,7 @@ Regexpr::regex_compile()
         sal_Unicode *inner_group_loc
           = bufp->buffer + COMPILE_STACK_TOP.inner_group_offset;
 
-        *inner_group_loc = regnum - this_group_regnum;
+        *inner_group_loc = sal::static_int_cast<sal_Unicode>( regnum - this_group_regnum );
         BUF_PUSH_3 (stop_memory, this_group_regnum,
             regnum - this_group_regnum);
       }
@@ -1582,7 +1585,7 @@ Regexpr::regex_compile()
       FREE_STACK_RETURN(REG_ESUBREG);
 
     /* Can't back reference to a subexpression if inside of it.  */
-    if (group_in_compile_stack(compile_stack, (sal_Int32) c1)) {
+    if (group_in_compile_stack(compile_stack, (sal_uInt32) c1)) {
       goto normal_char;
     }
 
@@ -1604,7 +1607,7 @@ Regexpr::regex_compile()
       c = (sal_Unicode) UniChar;
       goto normal_char;
     }
-    break;
+    // break;   // unreachable - see goto above
 
       case (sal_Unicode)'<':        // begin Word boundary
     BUF_PUSH(wordbeg);
@@ -2031,7 +2034,7 @@ Regexpr::re_match2(struct re_registers *regs, sal_Int32 pos, sal_Int32 range)
      variables when we find a match better than any we've seen before.
      This happens as we backtrack through the failure points, which in
      turn happens only if we have not yet matched the entire string. */
-  unsigned best_regs_set = false;
+  //unsigned best_regs_set = false;
 #ifdef MATCH_MAY_ALLOCATE /* otherwise, these are global.  */
   const sal_Unicode **best_regstart, **best_regend;
 #endif
@@ -2044,7 +2047,7 @@ Regexpr::re_match2(struct re_registers *regs, sal_Int32 pos, sal_Int32 range)
      the end of the best match so far in a separate variable.  We
      initialize this to NULL so that when we backtrack the first time
      and need to test it, it's not garbage.  */
-  const sal_Unicode *match_end = NULL;
+  //const sal_Unicode *match_end = NULL;
 
   /* This helps SET_REGS_MATCHED avoid doing redundant work.  */
   sal_Int32 set_regs_matched_done = 0;
