@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HStorageAccess.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 11:39:38 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:30:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,10 @@
 #include "accesslog.hxx"
 #endif
 
+#ifndef CONNECTIVITY_DIAGNOSE_EX_H
+#include "diagnose_ex.h"
+#endif
+
 
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::uno;
@@ -71,7 +75,7 @@ using namespace ::connectivity::hsqldb;
  * Signature: (Ljava/lang/String;Ljava/lang/String;I)V
  */
 JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_openStream
-  (JNIEnv * env, jobject obj_this,jstring name, jstring key, jint mode)
+  (JNIEnv * env, jobject /*obj_this*/,jstring name, jstring key, jint mode)
 {
 #ifdef HSQLDB_DBG
     {
@@ -89,7 +93,7 @@ JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_o
  * Signature: (Ljava/lang/String;Ljava/lang/String;)V
  */
 JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_close
-  (JNIEnv * env, jobject obj_this,jstring name, jstring key)
+  (JNIEnv * env, jobject /*obj_this*/,jstring name, jstring key)
 {
 #ifdef HSQLDB_DBG
     {
@@ -128,7 +132,7 @@ JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_c
  * Signature: (Ljava/lang/String;Ljava/lang/String;)J
  */
 JNIEXPORT jlong JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_getFilePointer
-  (JNIEnv * env, jobject obj_this,jstring name, jstring key)
+  (JNIEnv * env, jobject /*obj_this*/,jstring name, jstring key)
 {
 #ifdef HSQLDB_DBG
     OperationLogFile aOpLog( env, name, "data" );
@@ -152,7 +156,7 @@ JNIEXPORT jlong JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_
  * Signature: (Ljava/lang/String;Ljava/lang/String;)J
  */
 JNIEXPORT jlong JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_length
-  (JNIEnv * env, jobject obj_this,jstring name, jstring key)
+  (JNIEnv * env, jobject /*obj_this*/,jstring name, jstring key)
 {
 #ifdef HSQLDB_DBG
     OperationLogFile aOpLog( env, name, "data" );
@@ -171,8 +175,9 @@ JNIEXPORT jlong JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_
 
 // -----------------------------------------------------------------------------
 
-jint read_from_storage_stream( JNIEnv * env, jobject obj_this, jstring name, jstring key, DataLogFile* logger )
+jint read_from_storage_stream( JNIEnv * env, jobject /*obj_this*/, jstring name, jstring key, DataLogFile* logger )
 {
+    OSL_UNUSED( logger );
     ::boost::shared_ptr<StreamHelper> pHelper = StorageContainer::getRegisteredStream(env,name,key);
     Reference< XInputStream> xIn = pHelper.get() ? pHelper->getInputStream() : Reference< XInputStream>();
     OSL_ENSURE(xIn.is(),"Input stream is NULL!");
@@ -233,8 +238,9 @@ JNIEXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_r
 
 // -----------------------------------------------------------------------------
 
-jint read_from_storage_stream_into_buffer( JNIEnv * env, jobject obj_this,jstring name, jstring key, jbyteArray buffer, jint off, jint len, DataLogFile* logger )
+jint read_from_storage_stream_into_buffer( JNIEnv * env, jobject /*obj_this*/,jstring name, jstring key, jbyteArray buffer, jint off, jint len, DataLogFile* logger )
 {
+    OSL_UNUSED( logger );
 #ifdef HSQLDB_DBG
     {
         ::rtl::OUString sKey = StorageContainer::jstring2ustring(env,key);
@@ -311,7 +317,7 @@ JNIEXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_r
  * Signature: (Ljava/lang/String;Ljava/lang/String;)I
  */
 JNIEXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_readInt
-  (JNIEnv * env, jobject obj_this,jstring name, jstring key)
+  (JNIEnv * env, jobject /*obj_this*/,jstring name, jstring key)
 {
 #ifdef HSQLDB_DBG
     OperationLogFile aOpLog( env, name, "data" );
@@ -379,7 +385,7 @@ JNIEXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_r
  * Signature: (Ljava/lang/String;Ljava/lang/String;J)V
  */
 JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_seek
-  (JNIEnv * env, jobject obj_this,jstring name, jstring key, jlong position)
+  (JNIEnv * env, jobject /*obj_this*/,jstring name, jstring key, jlong position)
 {
 #ifdef HSQLDB_DBG
     OperationLogFile aOpLog( env, name, "data" );
@@ -440,8 +446,9 @@ JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_s
 }
 // -----------------------------------------------------------------------------
 
-void write_to_storage_stream_from_buffer( JNIEnv* env, jobject obj_this, jstring name, jstring key, jbyteArray buffer, jint off, jint len, DataLogFile* logger )
+void write_to_storage_stream_from_buffer( JNIEnv* env, jobject /*obj_this*/, jstring name, jstring key, jbyteArray buffer, jint off, jint len, DataLogFile* logger )
 {
+    OSL_UNUSED( logger );
     ::boost::shared_ptr<StreamHelper> pHelper = StorageContainer::getRegisteredStream(env,name,key);
     Reference< XOutputStream> xOut = pHelper.get() ? pHelper->getOutputStream() : Reference< XOutputStream>();
     OSL_ENSURE(xOut.is(),"Stream is NULL");
@@ -508,8 +515,10 @@ JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_w
 }
 // -----------------------------------------------------------------------------
 
-void write_to_storage_stream( JNIEnv* env, jobject obj_this, jstring name, jstring key, jint v, DataLogFile* logger )
+void write_to_storage_stream( JNIEnv* env, jobject /*obj_this*/, jstring name, jstring key, jint v, DataLogFile* logger )
 {
+    OSL_UNUSED( logger );
+
     ::boost::shared_ptr<StreamHelper> pHelper = StorageContainer::getRegisteredStream(env,name,key);
     Reference< XOutputStream> xOut = pHelper.get() ? pHelper->getOutputStream() : Reference< XOutputStream>();
     OSL_ENSURE(xOut.is(),"Stream is NULL");
