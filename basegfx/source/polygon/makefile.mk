@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: kz $ $Date: 2005-11-02 13:59:30 $
+#   last change: $Author: hr $ $Date: 2006-06-20 03:45:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@ PRJNAME=basegfx
 TARGET=polygon
 
 #UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb
-#ENABLE_EXCEPTIONS=FALSE
+ENABLE_EXCEPTIONS=TRUE
 #USE_DEFFILE=TRUE
 
 # --- Settings ----------------------------------
