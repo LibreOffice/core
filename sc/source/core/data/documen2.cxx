@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 15:01:03 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 11:54:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1921,6 +1921,14 @@ ScFieldEditEngine* ScDocument::CreateFieldEditEngine()
     }
     else
     {
+        if ( !bImportingXML )
+        {
+            // #i66209# previous use might not have restored update mode,
+            // ensure same state as for a new EditEngine (UpdateMode = TRUE)
+            if ( !pCacheFieldEditEngine->GetUpdateMode() )
+                pCacheFieldEditEngine->SetUpdateMode(TRUE);
+        }
+
         pEditEngine = pCacheFieldEditEngine;
         pCacheFieldEditEngine = NULL;
     }
