@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LTable.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:16:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:24:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,26 +48,15 @@
 #ifndef _URLOBJ_HXX //autogen wg. INetURLObject
 #include <tools/urlobj.hxx>
 #endif
+#ifndef CONNECTIVITY_QUOTED_STRING_HXX
+#include "file/quotedstring.hxx"
+#endif
 #include <vector>
 
 namespace connectivity
 {
     namespace evoab
     {
-        //==================================================================
-        // Ableitung von String mit ueberladenen GetToken/GetTokenCount-Methoden
-        // Speziell fuer FLAT FILE-Format: Strings koennen gequotet sein
-        //==================================================================
-        class OEvoabString : public String
-        {
-        public:
-            OEvoabString(){}
-
-            xub_StrLen  GetTokenCount( sal_Unicode cTok = ';', sal_Unicode cStrDel = '\0' ) const;
-            void        GetTokenSpecial( String& _rStr,xub_StrLen& nStartPos, sal_Unicode cTok = ';', sal_Unicode cStrDel = '\0' ) const;
-        };
-
-
         typedef file::OFileTable OEvoabTable_BASE;
         class OEvoabConnection;
 
@@ -82,7 +71,7 @@ namespace connectivity
             ::std::vector<sal_Int32>        m_aTypes;       // holds all type for columns just to avoid to ask the propertyset
             ::std::vector<sal_Int32>        m_aPrecisions;  // same as aboth
             ::std::vector<sal_Int32>        m_aScales;
-            OEvoabString                    m_aCurrentLine;
+            QuotedTokenizedString           m_aCurrentLine;
             ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > m_xNumberFormatter;
             sal_Int32                       m_nRowPos;
             sal_Int32                       m_nMaxRowCount; // will be set if stream is once eof
