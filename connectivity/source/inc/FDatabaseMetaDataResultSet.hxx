@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FDatabaseMetaDataResultSet.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:37:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:57:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,10 +138,51 @@ namespace connectivity
 
         virtual ~ODatabaseMetaDataResultSet();
     public:
+
         virtual void    SAL_CALL acquire() throw();
         virtual void    SAL_CALL release() throw();
-        // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+
+        enum MetaDataResultSetType
+        {
+            /// describes a result set as expected by XDatabaseMetaData::getCatalogs
+            eCatalogs,
+            /// describes a result set as expected by XDatabaseMetaData::getSchemas
+            eSchemas,
+            /// describes a result set as expected by XDatabaseMetaData::getColumnPrivileges
+            eColumnPrivileges,
+            /// describes a result set as expected by XDatabaseMetaData::getColumns
+            eColumns,
+            /// describes a result set as expected by XDatabaseMetaData::getTables
+            eTables,
+            /// describes a result set as expected by XDatabaseMetaData::getTableTypes
+            eTableTypes,
+            /// describes a result set as expected by XDatabaseMetaData::getProcedureColumns
+            eProcedureColumns,
+            /// describes a result set as expected by XDatabaseMetaData::getProcedures
+            eProcedures,
+            /// describes a result set as expected by XDatabaseMetaData::getExportedKeys
+            eExportedKeys,
+            /// describes a result set as expected by XDatabaseMetaData::getImportedKeys
+            eImportedKeys,
+            /// describes a result set as expected by XDatabaseMetaData::getPrimaryKeys
+            ePrimaryKeys,
+            /// describes a result set as expected by XDatabaseMetaData::getIndexInfo
+            eIndexInfo,
+            /// describes a result set as expected by XDatabaseMetaData::getTablePrivileges
+            eTablePrivileges,
+            /// describes a result set as expected by XDatabaseMetaData::getCrossReference
+            eCrossReference,
+            /// describes a result set as expected by XDatabaseMetaData::getCatalogs
+            eTypeInfo,
+            /// describes a result set as expected by XDatabaseMetaData::getBestRowIdentifier
+            eBestRowIdentifier,
+            /// describes a result set as expected by XDatabaseMetaData::getVersionColumns
+            eVersionColumns
+        };
+        /// default construction
         ODatabaseMetaDataResultSet();
+        /// construction of a pre-defined result set type
+        ODatabaseMetaDataResultSet( MetaDataResultSetType _eType );
 
         void setRows(const ORows& _rRows);
 
