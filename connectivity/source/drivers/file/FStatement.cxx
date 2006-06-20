@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FStatement.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 11:39:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:26:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,11 +105,14 @@ DBG_NAME( file_OStatement_Base )
 //------------------------------------------------------------------------------
 OStatement_Base::OStatement_Base(OConnection* _pConnection ) :  OStatement_BASE(m_aMutex)
     ,::comphelper::OPropertyContainer(OStatement_BASE::rBHelper)
-    ,rBHelper(OStatement_BASE::rBHelper)
-    ,m_pConnection(_pConnection)
-    ,m_pParseTree(NULL)
+    ,m_xDBMetaData(_pConnection->getMetaData())
     ,m_aParser(_pConnection->getDriver()->getFactory())
     ,m_aSQLIterator(_pConnection->createCatalog()->getTables(),_pConnection->getMetaData(),NULL,&m_aParser)
+    ,m_pConnection(_pConnection)
+    ,m_pParseTree(NULL)
+    ,m_pSQLAnalyzer(NULL)
+    ,m_pEvaluationKeySet(NULL)
+    ,m_pTable(NULL)
     ,m_nMaxFieldSize(0)
     ,m_nMaxRows(0)
     ,m_nQueryTimeOut(0)
@@ -117,10 +120,8 @@ OStatement_Base::OStatement_Base(OConnection* _pConnection ) :  OStatement_BASE(
     ,m_nResultSetType(ResultSetType::FORWARD_ONLY)
     ,m_nFetchDirection(FetchDirection::FORWARD)
     ,m_nResultSetConcurrency(ResultSetConcurrency::UPDATABLE)
-    ,m_pSQLAnalyzer(NULL)
-    ,m_xDBMetaData(_pConnection->getMetaData())
-    ,m_pTable(NULL)
-    ,m_pEvaluationKeySet(NULL)
+    ,m_bEscapeProcessing(sal_True)
+    ,rBHelper(OStatement_BASE::rBHelper)
 {
     DBG_CTOR( file_OStatement_Base, NULL );
 
@@ -879,7 +880,7 @@ void OStatement_Base::SetAssignValue(const String& aColumnName,
         m_aParameterIndexes[nParameter] = nId;
 }
 // -----------------------------------------------------------------------------
-void OStatement_Base::parseParamterElem(const String& _sColumnName,OSQLParseNode* pRow_Value_Constructor_Elem)
+void OStatement_Base::parseParamterElem(const String& /*_sColumnName*/,OSQLParseNode* /*pRow_Value_Constructor_Elem*/)
 {
     // do nothing here
 }
