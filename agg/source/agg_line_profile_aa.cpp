@@ -54,25 +54,25 @@ namespace agg
 
 
     //---------------------------------------------------------------------
-    void line_profile_aa::set(double center_width, double smoother_width)
+    void line_profile_aa::set(double center_width, double _smoother_width)
     {
         double base_val = 1.0;
         if(center_width == 0.0)   center_width = 1.0 / subpixel_size;
-        if(smoother_width == 0.0) smoother_width = 1.0 / subpixel_size;
+        if(_smoother_width == 0.0) _smoother_width = 1.0 / subpixel_size;
 
-        double width = center_width + smoother_width;
-        if(width < m_min_width)
+        double _width = center_width + _smoother_width;
+        if(_width < m_min_width)
         {
-            double k = width / m_min_width;
+            double k = _width / m_min_width;
             base_val *= k;
             center_width /= k;
-            smoother_width /= k;
+            _smoother_width /= k;
         }
 
-        value_type* ch = profile(center_width + smoother_width);
+        value_type* ch = profile(center_width + _smoother_width);
 
         unsigned subpixel_center_width = unsigned(center_width * subpixel_size);
-        unsigned subpixel_smoother_width = unsigned(smoother_width * subpixel_size);
+        unsigned subpixel_smoother_width = unsigned(_smoother_width * subpixel_size);
 
         value_type* ch_center   = ch + subpixel_size*2;
         value_type* ch_smoother = ch_center + subpixel_center_width;

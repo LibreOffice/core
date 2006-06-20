@@ -518,9 +518,9 @@ namespace agg
 
 
     //-------------------------------------------------------------------------
-    void gsv_text::font(const void* font)
+    void gsv_text::font(const void* _font)
     {
-        m_font = font;
+        m_font = _font;
         if(m_font == 0) m_font = m_loaded_font;
     }
 
@@ -532,15 +532,15 @@ namespace agg
     }
 
     //-------------------------------------------------------------------------
-    void gsv_text::space(double space)
+    void gsv_text::space(double _space)
     {
-        m_space = space;
+        m_space = _space;
     }
 
     //-------------------------------------------------------------------------
-    void gsv_text::line_space(double line_space)
+    void gsv_text::line_space(double _line_space)
     {
-        m_line_space = line_space;
+        m_line_space = _line_space;
     }
 
     //-------------------------------------------------------------------------
@@ -578,21 +578,21 @@ namespace agg
 
 
     //-------------------------------------------------------------------------
-    void gsv_text::text(const char* text)
+    void gsv_text::text(const char* _text)
     {
-        if(text == 0)
+        if(_text == 0)
         {
             m_chr[0] = 0;
             m_text = m_chr;
             return;
         }
-        unsigned new_size = strlen(text) + 1;
+        unsigned new_size = strlen(_text) + 1;
         if(new_size > m_buf_size)
         {
             if(m_text_buf) delete [] m_text_buf;
             m_text_buf = new char [m_buf_size = new_size];
         }
-        memcpy(m_text_buf, text, new_size);
+        memcpy(m_text_buf, _text, new_size);
         m_text = m_text_buf;
     }
 

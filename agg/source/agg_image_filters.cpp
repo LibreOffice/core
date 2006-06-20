@@ -38,10 +38,10 @@ namespace agg
     {}
 
     //--------------------------------------------------------------------
-    void image_filter_lut::realloc(double radius)
+    void image_filter_lut::realloc(double _radius)
     {
-        m_radius = radius;
-        m_diameter = unsigned(ceil(radius)) * 2;
+        m_radius = _radius;
+        m_diameter = unsigned(ceil(_radius)) * 2;
         m_start = -int(m_diameter / 2 - 1);
         unsigned size = m_diameter << image_subpixel_shift;
         if(size > m_max_size)
@@ -84,11 +84,11 @@ namespace agg
                 for(j = 0; j < m_diameter; j++)
                 {
                     sum += m_weight_array[j * image_subpixel_size + i] =
-                        int(m_weight_array[j * image_subpixel_size + i] * k);
+                        int16(m_weight_array[j * image_subpixel_size + i] * k);
                 }
 
                 sum -= image_filter_size;
-                int inc = (sum > 0) ? -1 : 1;
+                int16 inc = (sum > 0) ? -1 : 1;
 
                 for(j = 0; j < m_diameter && sum; j++)
                 {
@@ -97,7 +97,8 @@ namespace agg
                     int v = m_weight_array[idx * image_subpixel_size + i];
                     if(v < image_filter_size)
                     {
-                        m_weight_array[idx * image_subpixel_size + i] += inc;
+                        m_weight_array[idx * image_subpixel_size + i] =
+                            m_weight_array[idx * image_subpixel_size + i] + inc;
                         sum += inc;
                     }
                 }
