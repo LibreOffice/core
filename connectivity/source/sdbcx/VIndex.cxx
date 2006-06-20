@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VIndex.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:43:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:10:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,9 @@
 #ifndef _CONNECTIVITY_SDBCX_COLUMN_HXX_
 #include "connectivity/sdbcx/VColumn.hxx"
 #endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include <connectivity/dbexception.hxx>
+#endif
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
 #endif
@@ -52,10 +55,11 @@
 #include "TConnection.hxx"
 #endif
 // -------------------------------------------------------------------------
-using namespace connectivity;
-using namespace connectivity;
-using namespace connectivity::sdbcx;
-using namespace cppu;
+using namespace ::connectivity;
+using namespace ::connectivity;
+using namespace ::dbtools;
+using namespace ::connectivity::sdbcx;
+using namespace ::cppu;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdbc;
@@ -95,10 +99,10 @@ sal_Bool SAL_CALL OIndex::supportsService( const ::rtl::OUString& _rServiceName 
 // -------------------------------------------------------------------------
 OIndex::OIndex(sal_Bool _bCase) :   ODescriptor_BASE(m_aMutex)
                 ,   ODescriptor(ODescriptor_BASE::rBHelper,_bCase,sal_True)
-                ,   m_pColumns(NULL)
                 ,m_IsUnique(sal_False)
-                ,m_IsClustered(sal_False)
                 ,m_IsPrimaryKeyIndex(sal_False)
+                ,m_IsClustered(sal_False)
+                ,m_pColumns(NULL)
 {
 }
 // -------------------------------------------------------------------------
@@ -109,11 +113,11 @@ OIndex::OIndex( const ::rtl::OUString& _Name,
                 sal_Bool _isClustered,
                 sal_Bool _bCase) :  ODescriptor_BASE(m_aMutex)
                         ,ODescriptor(ODescriptor_BASE::rBHelper,_bCase)
-                        ,m_pColumns(NULL)
                         ,m_Catalog(_Catalog)
                         ,m_IsUnique(_isUnique)
                         ,m_IsPrimaryKeyIndex(_isPrimaryKeyIndex)
                         ,m_IsClustered(_isClustered)
+                        ,m_pColumns(NULL)
 {
     m_Name = _Name;
 }
@@ -123,12 +127,9 @@ OIndex::~OIndex( )
     delete m_pColumns;
 }
 // -----------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper* OIndex::createArrayHelper( sal_Int32 _nId) const
+::cppu::IPropertyArrayHelper* OIndex::createArrayHelper( sal_Int32 /*_nId*/ ) const
 {
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > aProps;
-    describeProperties(aProps);
-    changePropertyAttributte(aProps);
-    return new ::cppu::OPropertyArrayHelper(aProps);
+    return doCreateArrayHelper();
 }
 // -----------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper& SAL_CALL OIndex::getInfoHelper()
@@ -195,7 +196,7 @@ Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OIndex::getColumn
     }
     catch( const Exception& )
     {
-        // allowed
+        OSL_ENSURE( false, "OIndex::getColumns: caught an exception!" );
     }
 
     return const_cast<OIndex*>(this)->m_pColumns;
@@ -220,7 +221,7 @@ Reference< XPropertySet > SAL_CALL OIndex::createDataDescriptor(  ) throw(Runtim
     return m_Name;
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OIndex::setName( const ::rtl::OUString& aName ) throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OIndex::setName( const ::rtl::OUString& /*aName*/ ) throw(::com::sun::star::uno::RuntimeException)
 {
 }
 // -----------------------------------------------------------------------------
