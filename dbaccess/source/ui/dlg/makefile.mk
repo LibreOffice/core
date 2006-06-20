@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: vg $ $Date: 2006-06-02 12:50:47 $
+#   last change: $Author: hr $ $Date: 2006-06-20 03:08:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -111,14 +111,14 @@ EXCEPTIONSFILES=						\
         $(SLO)$/TablesSingleDlg.obj		\
         $(SLO)$/CollectionView.obj		\
         $(SLO)$/dsselect.obj			\
-        $(SLO)$/dbfindex.obj
+        $(SLO)$/dbfindex.obj            \
+        $(SLO)$/DriverSettings.obj      \
+        $(SLO)$/odbcconfig.obj
 
 SLOFILES=								\
         $(EXCEPTIONSFILES)				\
-        $(SLO)$/DriverSettings.obj		\
         $(SLO)$/dlgsize.obj				\
-        $(SLO)$/dlgattr.obj				\
-        $(SLO)$/odbcconfig.obj
+        $(SLO)$/dlgattr.obj
 
 .IF "$(GUI)"=="WNT"
 SLOFILES+=		$(SLO)$/adodatalinks.obj
