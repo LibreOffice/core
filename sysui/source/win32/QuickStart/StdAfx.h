@@ -14,8 +14,14 @@
 
 
 // Windows Header Files:
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#endif
 #include <windows.h>
 #include <shellapi.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 
 // C RunTime Header Files
 #include <stdlib.h>
