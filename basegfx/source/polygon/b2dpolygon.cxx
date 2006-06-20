@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dpolygon.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:57:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:43:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -163,14 +163,14 @@ public:
         }
     }
 
-    void flip(bool mbIsClosed)
+    void flip(bool bIsClosed)
     {
         if(maVector.size() > 1)
         {
             // to keep the same point at index 0, just flip all points except the
             // first one when closed
-            const sal_uInt32 nHalfSize(mbIsClosed ? (maVector.size() - 1L) >> 1L : maVector.size() >> 1L);
-            CoordinateData2DVector::iterator aStart(mbIsClosed ? maVector.begin() + 1L : maVector.begin());
+            const sal_uInt32 nHalfSize(bIsClosed ? (maVector.size() - 1L) >> 1L : maVector.size() >> 1L);
+            CoordinateData2DVector::iterator aStart(bIsClosed ? maVector.begin() + 1L : maVector.begin());
             CoordinateData2DVector::iterator aEnd(maVector.end() - 1L);
 
             for(sal_uInt32 a(0); a < nHalfSize; a++)
@@ -452,9 +452,8 @@ class ImplB2DPolygon
     // and may be zero.
     ControlVectorArray2D*                           mpControlVector;
 
-    // bitfield
     // flag which decides if this polygon is opened or closed
-    unsigned                                        mbIsClosed : 1;
+    bool                                            mbIsClosed;
 
 public:
     // This constructor is only used from the static identity polygon, thus
