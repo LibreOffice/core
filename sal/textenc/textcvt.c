@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textcvt.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:46:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:39:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,6 +135,7 @@ rtl_TextToUnicodeConverter SAL_CALL rtl_createTextToUnicodeConverter( rtl_TextEn
 
 void SAL_CALL rtl_destroyTextToUnicodeConverter( rtl_TextToUnicodeConverter hContext )
 {
+    (void) hContext; /* unused */
 }
 
 /* ----------------------------------------------------------------------- */
@@ -213,6 +214,7 @@ rtl_UnicodeToTextConverter SAL_CALL rtl_createUnicodeToTextConverter( rtl_TextEn
 
 void SAL_CALL rtl_destroyUnicodeToTextConverter( rtl_UnicodeToTextConverter hConverter )
 {
+    (void) hConverter; /* unused */
 }
 
 /* ----------------------------------------------------------------------- */
