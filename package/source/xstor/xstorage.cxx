@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xstorage.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-24 13:21:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 06:12:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -209,9 +209,9 @@ StorInternalData_Impl::~StorInternalData_Impl()
 SotElement_Impl::SotElement_Impl( const ::rtl::OUString& rName, sal_Bool bStor, sal_Bool bNew )
 : m_aName( rName )
 , m_aOriginalName( rName )
-, m_bIsStorage( bStor )
 , m_bIsRemoved( sal_False )
 , m_bIsInserted( bNew )
+, m_bIsStorage( bStor )
 , m_pStorage( NULL )
 , m_pStream( NULL )
 {
@@ -566,7 +566,6 @@ void OStorage_Impl::ReadContents()
             ::rtl::OUString aName = xNamed->getName();
             OSL_ENSURE( aName.getLength(), "Empty name!\n" );
 
-            sal_Bool bIsStorage = sal_False;
             uno::Reference< container::XNameContainer > xNameContainer( xNamed, uno::UNO_QUERY );
 
             SotElement_Impl* pNewElement = new SotElement_Impl( aName, xNameContainer.is(), sal_False );
@@ -3851,16 +3850,13 @@ uno::Any SAL_CALL OStorage::getPropertyValue( const ::rtl::OUString& aPropertyNa
     }
 
     throw beans::UnknownPropertyException(); // TODO
-
-    // not reachable
-    return uno::Any();
 }
 
 
 //-----------------------------------------------
 void SAL_CALL OStorage::addPropertyChangeListener(
-            const ::rtl::OUString& aPropertyName,
-            const uno::Reference< beans::XPropertyChangeListener >& xListener )
+    const ::rtl::OUString& /*aPropertyName*/,
+    const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ )
         throw ( beans::UnknownPropertyException,
                 lang::WrappedTargetException,
                 uno::RuntimeException )
@@ -3876,8 +3872,8 @@ void SAL_CALL OStorage::addPropertyChangeListener(
 
 //-----------------------------------------------
 void SAL_CALL OStorage::removePropertyChangeListener(
-            const ::rtl::OUString& aPropertyName,
-            const uno::Reference< beans::XPropertyChangeListener >& aListener )
+    const ::rtl::OUString& /*aPropertyName*/,
+    const uno::Reference< beans::XPropertyChangeListener >& /*aListener*/ )
         throw ( beans::UnknownPropertyException,
                 lang::WrappedTargetException,
                 uno::RuntimeException )
@@ -3893,8 +3889,8 @@ void SAL_CALL OStorage::removePropertyChangeListener(
 
 //-----------------------------------------------
 void SAL_CALL OStorage::addVetoableChangeListener(
-            const ::rtl::OUString& PropertyName,
-            const uno::Reference< beans::XVetoableChangeListener >& aListener )
+    const ::rtl::OUString& /*PropertyName*/,
+    const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
         throw ( beans::UnknownPropertyException,
                 lang::WrappedTargetException,
                 uno::RuntimeException )
@@ -3910,8 +3906,8 @@ void SAL_CALL OStorage::addVetoableChangeListener(
 
 //-----------------------------------------------
 void SAL_CALL OStorage::removeVetoableChangeListener(
-            const ::rtl::OUString& PropertyName,
-            const uno::Reference< beans::XVetoableChangeListener >& aListener )
+    const ::rtl::OUString& /*PropertyName*/,
+    const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
         throw ( beans::UnknownPropertyException,
                 lang::WrappedTargetException,
                 uno::RuntimeException )
@@ -3929,8 +3925,8 @@ void SAL_CALL OStorage::removeVetoableChangeListener(
 //____________________________________________________________________________________________________
 //-----------------------------------------------
 void SAL_CALL OStorage::insertRawNonEncrStreamElementDirect(
-            const ::rtl::OUString& sStreamName,
-            const uno::Reference< io::XInputStream >& xInStream )
+            const ::rtl::OUString& /*sStreamName*/,
+            const uno::Reference< io::XInputStream >& /*xInStream*/ )
         throw ( embed::InvalidStorageException,
                 lang::IllegalArgumentException,
                 packages::NoRawFormatException,
