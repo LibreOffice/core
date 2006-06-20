@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nativenumbersupplier.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-17 15:44:23 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:47:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,7 +152,7 @@ sal_Bool SAL_CALL AsciiToNative_numberMaker(const sal_Unicode *str, sal_Int32 be
             return str[begin] != NUMBER_ZERO;
         } else {
             sal_Bool printPower = sal_False;
-            sal_Int16 last = 0;
+            // sal_Int16 last = 0;
             for (sal_Int16 i = 1; i <= number->exponentCount; i++) {
                 sal_Int32 tmp = len - (i == number->exponentCount ? 0 : number->multiplierExponent[i]);
                 if (tmp > 0) {
@@ -238,7 +238,7 @@ OUString SAL_CALL AsciiToNative( const OUString& inStr, sal_Int32 startPos, sal_
                         len = 0;
                     }
                     if (i < nCount) {
-                        if (doDecimal = (!doDecimal && isDecimal(str[i]) && i < nCount-1 && isNumber(str[i+1])))
+                        if ((doDecimal = (!doDecimal && isDecimal(str[i]) && i < nCount-1 && isNumber(str[i+1]))) != sal_False)
                             newStr->buffer[count] = (DecimalChar[number->number] ? DecimalChar[number->number] : str[i]);
                         else if (isMinus(str[i]) && i < nCount-1 && isNumber(str[i+1]))
                             newStr->buffer[count] = (MinusChar[number->number] ? MinusChar[number->number] : str[i]);
@@ -265,11 +265,11 @@ static void SAL_CALL NativeToAscii_numberMaker(sal_Int16 max, sal_Int16 prev, co
 {
         sal_Int16 curr = 0, num = 0, end = 0, shift = 0;
         while (++i < nCount) {
-            if ((curr = numberChar.indexOf(str[i])) >= 0) {
+            if ((curr = sal::static_int_cast<sal_Int16>( numberChar.indexOf(str[i]) )) >= 0) {
                 if (num > 0)
                     break;
                 num = curr % 10;
-            } else if ((curr = multiplierChar.indexOf(str[i])) >= 0) {
+            } else if ((curr = sal::static_int_cast<sal_Int16>( multiplierChar.indexOf(str[i]) )) >= 0) {
                 curr = MultiplierExponent_7_CJK[curr % ExponentCount_7_CJK];
                 if (prev > curr && num == 0) num = 1; // One may be omitted in informal format
                 shift = end = 0;
@@ -340,11 +340,13 @@ static OUString SAL_CALL NativeToAscii(const OUString& inStr,
                         count++;
                     }
                     index = MultiplierExponent_7_CJK[index % ExponentCount_7_CJK];
-                    NativeToAscii_numberMaker(index, index, str, i, nCount, newStr->buffer, count, offset, useOffset,
+                    NativeToAscii_numberMaker(
+                                sal::static_int_cast<sal_Int16>( index ), sal::static_int_cast<sal_Int16>( index ),
+                                str, i, nCount, newStr->buffer, count, offset, useOffset,
                                 numberChar, multiplierChar);
                 } else {
                     if ((index = numberChar.indexOf(str[i])) >= 0)
-                        newStr->buffer[count] = (index % 10) + NUMBER_ZERO;
+                        newStr->buffer[count] = sal::static_int_cast<sal_Unicode>( (index % 10) + NUMBER_ZERO );
                     else if ((index = separatorChar.indexOf(str[i])) >= 0 &&
                             (i < nCount-1 && (numberChar.indexOf(str[i+1]) >= 0 ||
                                             multiplierChar.indexOf(str[i+1]) >= 0)))
@@ -478,7 +480,6 @@ OUString SAL_CALL NativeNumberSupplier::getNativeNumberString(const OUString& aN
             switch (nNativeNumberMode) {
                 case NativeNumberMode::NATNUM0: // Ascii
                     return NativeToAscii(aNumberString,  0, aNumberString.getLength(), offset, useOffset);
-                break;
                 case NativeNumberMode::NATNUM1: // Char, Lower
                     num = natnum1[langnum];
                 break;
@@ -576,7 +577,6 @@ sal_Unicode SAL_CALL NativeNumberSupplier::getNativeNumberChar( const sal_Unicod
                 case NativeNumberMode::NATNUM3: // Char, FullWidth
                 case NativeNumberMode::NATNUM6: // Text, FullWidth
                     return NumberChar[NumberChar_FullWidth][inChar - NUMBER_ZERO];
-                break;
                 case NativeNumberMode::NATNUM9: // Char, Hangul
                 case NativeNumberMode::NATNUM10:        // Text, Hangul, Long
                 case NativeNumberMode::NATNUM11:        // Text, Hangul, Short
@@ -596,10 +596,8 @@ sal_Bool SAL_CALL NativeNumberSupplier::isValidNatNum( const Locale& rLocale, sa
             case NativeNumberMode::NATNUM0:     // Ascii
             case NativeNumberMode::NATNUM3:     // Char, FullWidth
                 return sal_True;
-            break;
             case NativeNumberMode::NATNUM1:     // Char, Lower
                 return (langnum >= 0);
-            break;
             case NativeNumberMode::NATNUM2:     // Char, Upper
                 if (langnum == 4) // Hebrew numbering
                     return sal_True;
@@ -609,12 +607,10 @@ sal_Bool SAL_CALL NativeNumberSupplier::isValidNatNum( const Locale& rLocale, sa
             case NativeNumberMode::NATNUM7:     // Text. Lower, Short
             case NativeNumberMode::NATNUM8:     // Text, Upper, Short
                 return (langnum >= 0 && langnum < 4); // CJK numbering
-            break;
             case NativeNumberMode::NATNUM9:     // Char, Hangul
             case NativeNumberMode::NATNUM10:    // Text, Hangul, Long
             case NativeNumberMode::NATNUM11:    // Text, Hangul, Short
                 return (langnum == 3); // Korean numbering
-            break;
         }
         return sal_False;
 }
@@ -703,7 +699,7 @@ sal_Int16 SAL_CALL NativeNumberSupplier::convertFromXmlAttributes( const NativeN
             numberChar[i] = NumberChar[i][1];
         OUString number(numberChar, NumberChar_Count);
 
-        sal_Int16 num = number.indexOf(aAttr.Format);
+        sal_Int16 num = sal::static_int_cast<sal_Int16>( number.indexOf(aAttr.Format) );
 
         if (aAttr.Style.equalsAscii("short")) {
             if (num == NumberChar_FullWidth)
@@ -782,7 +778,7 @@ static sal_Unicode gershayim = 0x05f4;
 
 void makeHebrewNumber(sal_Int64 value, OUStringBuffer& output, sal_Bool isLast, sal_Bool useGeresh)
 {
-    sal_Int16 num = value % 1000;
+    sal_Int16 num = sal::static_int_cast<sal_Int16>(value % 1000);
 
     if (value > 1000) {
         makeHebrewNumber(value / 1000, output, num != 0, useGeresh);
@@ -797,7 +793,7 @@ void makeHebrewNumber(sal_Int64 value, OUStringBuffer& output, sal_Bool isLast, 
                 nbOfChar++;
                 if (num == 15 || num == 16) // substitution for 15 and 16
                     j++;
-                num-= HebrewNumberCharArray[j].value;
+                num = sal::static_int_cast<sal_Int16>( num - HebrewNumberCharArray[j].value );
                 output.append(HebrewNumberCharArray[j].code);
             }
         }
