@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UCBDeadPropertyValue.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:26:50 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:37:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,11 +100,11 @@ const rtl::OUString UCBDeadPropertyValue::aXMLEnd
 
 //////////////////////////////////////////////////////////////////////////
 extern "C" int UCBDeadPropertyValue_startelement_callback(
-    void *userdata,
+    void *,
     int parent,
     const char *nspace,
     const char *name,
-    const char **atts )
+    const char ** )
 {
     if ( ( name != 0 ) &&
          ( ( nspace == 0 ) || ( strcmp( nspace, "" ) == 0 ) ) )
@@ -162,8 +162,8 @@ extern "C" int UCBDeadPropertyValue_chardata_callback(
 extern "C" int UCBDeadPropertyValue_endelement_callback(
     void *userdata,
     int state,
-    const char *nspace,
-    const char *name )
+    const char *,
+    const char * )
 {
     UCBDeadPropertyValueParseContext * pCtx
             = static_cast< UCBDeadPropertyValueParseContext * >( userdata );
