@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WrapColumn.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:56:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:00:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,9 @@
 #include "ado/Aolewrap.hxx"
 #endif
 
+#include "ado_pre_sys_include.h"
 #include <adoint.h>
+#include "ado_post_sys_include.h"
 
 namespace connectivity
 {
