@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OConnection.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-07 12:06:24 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:05:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,9 @@
 #endif
 #ifndef _CONNECTIVITY_AUTOKEYRETRIEVINGBASE_HXX_
 #include "AutoRetrievingBase.hxx"
+#endif
+#ifndef _OSL_MODULE_H_
+#include <osl/module.h>
 #endif
 
 
@@ -123,7 +126,7 @@ namespace connectivity
             virtual OConnection*    cloneConnection(); // creates a new connection
 
         public:
-            void* getOdbcFunction(sal_Int32 _nIndex)  const;
+            oslGenericFunction  getOdbcFunction(sal_Int32 _nIndex)  const;
             virtual SQLRETURN       Construct( const ::rtl::OUString& url,const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info) throw(::com::sun::star::sdbc::SQLException);
 
             OConnection(const SQLHANDLE _pDriverHandle,ODBCDriver*  _pDriver);
