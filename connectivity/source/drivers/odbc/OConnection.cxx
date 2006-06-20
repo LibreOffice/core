@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OConnection.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 12:20:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:54:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,12 @@
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
+#ifndef CONNECTIVITY_DIAGNOSE_EX_H
+#include "diagnose_ex.h"
+#endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include <connectivity/dbexception.hxx>
+#endif
 
 using namespace connectivity::odbc;
 using namespace connectivity;
@@ -87,13 +93,13 @@ using namespace com::sun::star::sdbc;
 // --------------------------------------------------------------------------------
 OConnection::OConnection(const SQLHANDLE _pDriverHandle,ODBCDriver* _pDriver)
                          : OSubComponent<OConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this)
-                         ,m_pDriverHandleCopy(_pDriverHandle)
-                         ,m_pDriver(_pDriver)
-                         ,m_bClosed(sal_True)
                          ,m_xMetaData(NULL)
+                         ,m_pDriver(_pDriver)
+                         ,m_pDriverHandleCopy(_pDriverHandle)
+                         ,m_nStatementCount(0)
+                         ,m_bClosed(sal_True)
                          ,m_bUseCatalog(sal_False)
                          ,m_bUseOldDateFormat(sal_False)
-                         ,m_nStatementCount(0)
                          ,m_bParameterSubstitution(sal_False)
                          ,m_bIgnoreDriverPrivileges(sal_False)
                          ,m_bPreventGetVersionColumns(sal_False)
@@ -119,7 +125,7 @@ void SAL_CALL OConnection::release() throw()
     relase_ChildImpl();
 }
 // -----------------------------------------------------------------------------
-void* OConnection::getOdbcFunction(sal_Int32 _nIndex)  const
+oslGenericFunction OConnection::getOdbcFunction(sal_Int32 _nIndex)  const
 {
     OSL_ENSURE(m_pDriver,"OConnection::getOdbcFunction: m_pDriver is null!");
     return m_pDriver->getOdbcFunction(_nIndex);
@@ -147,7 +153,7 @@ SQLRETURN OConnection::OpenConnection(const ::rtl::OUString& aConnectStr,sal_Int
     // Verbindung aufbauen
 
 #ifdef LINUX
-
+    OSL_UNUSED( bSilent );
     nSQLRETURN = N3SQLDriverConnect(m_aConnectionHandle,
                       NULL,
                       szConnStrIn,
@@ -336,11 +342,9 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const ::
     return xReturn;
 }
 // --------------------------------------------------------------------------------
-Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const ::rtl::OUString& /*sql*/ ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
-
+    ::dbtools::throwFeatureNotImplementedException( "XConnection::prepareCall", *this );
     return NULL;
 }
 // --------------------------------------------------------------------------------
@@ -427,7 +431,7 @@ void SAL_CALL OConnection::setReadOnly( sal_Bool readOnly ) throw(SQLException, 
 
 
     OTools::ThrowException(this,
-        N3SQLSetConnectAttr(m_aConnectionHandle,SQL_ATTR_ACCESS_MODE,(SQLPOINTER)readOnly,SQL_IS_INTEGER),
+        N3SQLSetConnectAttr(m_aConnectionHandle,SQL_ATTR_ACCESS_MODE,reinterpret_cast< SQLPOINTER >( readOnly ),SQL_IS_INTEGER),
         m_aConnectionHandle,SQL_HANDLE_DBC,*this);
 }
 // --------------------------------------------------------------------------------
@@ -504,8 +508,9 @@ Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OConnection::getT
     return NULL;
 }
 // --------------------------------------------------------------------------------
-void SAL_CALL OConnection::setTypeMap( const Reference< ::com::sun::star::container::XNameAccess >& typeMap ) throw(SQLException, RuntimeException)
+void SAL_CALL OConnection::setTypeMap( const Reference< ::com::sun::star::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException)
 {
+    ::dbtools::throwFeatureNotImplementedException( "XConnection::setTypeMap", *this );
 }
 // --------------------------------------------------------------------------------
 // XCloseable
@@ -686,6 +691,7 @@ SQLHANDLE OConnection::createStatementHandle()
 
     SQLHANDLE aStatementHandle = SQL_NULL_HANDLE;
     SQLRETURN nRetcode = N3SQLAllocHandle(SQL_HANDLE_STMT,pConnectionTemp->getConnection(),&aStatementHandle);
+    OSL_UNUSED( nRetcode );
     ++m_nStatementCount;
     if(bNew)
         m_aConnections.insert(::std::map< SQLHANDLE,OConnection*>::value_type(aStatementHandle,pConnectionTemp));
