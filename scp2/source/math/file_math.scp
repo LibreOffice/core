@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_math.scp,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 17:11:24 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:52:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,7 @@ STD_RES_FILE_PATCH( gid_File_Res_Sm, sm )
 //
 
 #ifndef WITHOUT_BINFILTER
-STD_LIB_FILE( gid_File_Lib_Bf_Sm, bf_sm)
+STD_LIB_FILE_PATCH( gid_File_Lib_Bf_Sm, bf_sm)
 STD_RES_FILE_PATCH( gid_File_Res_Bf_Sm, bf_sm)
 #endif
 
