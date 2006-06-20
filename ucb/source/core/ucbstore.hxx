@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ucbstore.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:18:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:17:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,7 +134,7 @@ public:
                ::com::sun::star::uno::RuntimeException );
 
     // New
-    void removeRegistry( const rtl::OUString& URL );
+    void removeRegistry();
 
     const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >&
     getInitArgs() const;
@@ -381,9 +381,7 @@ public:
 
     // Non-interface methods.
     PropertySetRegistry& getPropertySetRegistry();
-    const rtl::OUString&
-    getFullKey( const com::sun::star::uno::Reference<
-                            com::sun::star::uno::XInterface >& xEscaper );
+    const rtl::OUString& getFullKey();
 };
 
 #endif /* !_UCBSTORE_HXX */
