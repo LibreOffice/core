@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UserAdmin.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:49:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:04:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -339,7 +339,7 @@ IMPL_LINK( OUserAdmin, UserHdl, PushButton *, pButton )
     return 0;
 }
 // -----------------------------------------------------------------------
-IMPL_LINK( OUserAdmin, ListDblClickHdl, ListBox *, pListBox )
+IMPL_LINK( OUserAdmin, ListDblClickHdl, ListBox *, /*pListBox*/ )
 {
     m_TableCtrl.setUserName(GetUser());
     m_TableCtrl.UpdateTables();
@@ -358,11 +358,11 @@ String OUserAdmin::GetUser()
     return m_LB_USER.GetSelectEntry();
 }
 // -----------------------------------------------------------------------------
-void OUserAdmin::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
+void OUserAdmin::fillControls(::std::vector< ISaveValueWrapper* >& /*_rControlList*/)
 {
 }
 // -----------------------------------------------------------------------
-void OUserAdmin::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
+void OUserAdmin::fillWindows(::std::vector< ISaveValueWrapper* >& /*_rControlList*/)
 {
 }
 // -----------------------------------------------------------------------------
