@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mcnttype.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:10:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:59:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,8 +45,8 @@
 #include <cppuhelper/compbase1.hxx>
 #endif
 
-#ifndef _RTL_USTRING_
-#include <rtl/ustring>
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
 #endif
 
 #ifndef _SAL_TYPES_H_
