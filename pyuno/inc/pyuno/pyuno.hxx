@@ -2,7 +2,9 @@
 #define _PYUNO_PYUNO_HXX_
 
 #ifndef Py_PYTHON_H
-
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#endif
 #ifdef _DEBUG
 #undef _DEBUG
 #include <Python.h>
@@ -10,6 +12,9 @@
 #else
 #include <Python.h>
 #endif // #ifdef _DEBUG
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 #endif // #ifdef Py_PYTHON_H
 
 #ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
