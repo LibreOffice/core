@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UnoRegister.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:05:08 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 06:11:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,7 +102,7 @@ static sal_Bool writeInfo( void * pRegistryKey,
 // C functions to implement this as a component
 
 extern "C" void SAL_CALL component_getImplementationEnvironment(
-                const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+    const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
@@ -113,7 +113,7 @@ extern "C" void SAL_CALL component_getImplementationEnvironment(
  * @param pServiceManager generic uno interface providing a service manager
  * @param pRegistryKey generic uno interface providing registry key to write
  */
-extern "C" sal_Bool SAL_CALL component_writeInfo( void* pServiceManager, void* pRegistryKey )
+extern "C" sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, void* pRegistryKey )
 {
     return pRegistryKey &&
     writeInfo (pRegistryKey,
@@ -141,7 +141,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo( void* pServiceManager, void* p
  * @return a component factory (generic uno interface)
  */
 extern "C" void * SAL_CALL component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
+    const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void * pRet = 0;
     Reference< XMultiServiceFactory > xSMgr(
