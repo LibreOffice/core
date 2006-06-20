@@ -4,9 +4,9 @@
  *
  *  $RCSfile: osl_SocketAddr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:39:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:24:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -506,7 +506,7 @@ namespace osl_SocketAddr
         void setAddr_001()
         {
             ::osl::SocketAddr saSocketAddr( rtl::OUString::createFromAscii("129.158.217.202"), IP_PORT_FTP );
-            sal_Bool bOK1 = saSocketAddr.setAddr( UStringIPToByteSequence( rtl::OUString::createFromAscii("127.0.0.1") ) );
+            saSocketAddr.setAddr( UStringIPToByteSequence( rtl::OUString::createFromAscii("127.0.0.1") ) );
             ::rtl::ByteSequence bsSocketAddr = saSocketAddr.getAddr( 0 );
             sal_Bool bOK = sal_False;
 
@@ -860,7 +860,9 @@ namespace osl_SocketAddr
         {
                    ::osl::SocketAddr saSocketAddr( rtl::OUString::createFromAscii("localhost"), IP_PORT_HTTP1 );
                    oslSocketAddr psaOSLSocketAddr = saSocketAddr.getHandle( );
-                   osl_getFamilyOfSocketAddr( psaOSLSocketAddr ) == osl_Socket_FamilyInet ;
+                   CPPUNIT_ASSERT_EQUAL(
+                    osl_Socket_FamilyInet,
+                    osl_getFamilyOfSocketAddr( psaOSLSocketAddr ) );
 
             CPPUNIT_ASSERT_MESSAGE( "test for osl_getFamilyOfSocketAddr.",
                                       osl_getFamilyOfSocketAddr( psaOSLSocketAddr ) == osl_Socket_FamilyInet );
