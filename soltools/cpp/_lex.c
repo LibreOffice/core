@@ -29,7 +29,7 @@
 #define MAXSTATE        32
 #define ACT(tok,act)    ((tok<<7)+act)
 #define QBSBIT          0100
-#define GETACT(st)      (st>>7)&0x1ff
+#define GETACT(st)      ((st>>7)&0x1ff)
 
 /* character classes */
 #define C_WS    1
@@ -154,7 +154,7 @@ struct fsm
          {COM1, {'*'}, COM2},
          {COM1, {'/'}, COM4},
 
-    /* saw "/*", start of comment */
+    /* saw / followed by *, start of comment */
          {COM2, {C_XX}, COM2},
          {COM2, {'\n'}, S_COMNL},
          {COM2, {'*'}, COM3},
@@ -234,7 +234,7 @@ struct fsm
          {CIRC1, {C_XX}, ACT(CIRC, S_SELFB)},
          {CIRC1, {'='}, ACT(ASCIRC, S_SELF)},
 
-         {-1}
+         {-1, "", 0}
 };
 
 /* first index is char, second is state */
@@ -259,7 +259,7 @@ void
 
                 case C_XX:              /* random characters */
                     for (j = 0; j < 256; j++)
-                        bigfsm[j][fp->state] = nstate;
+                        bigfsm[j][fp->state] = (short) nstate;
                     continue;
                 case C_ALPH:
                     for (j = 0; j <= 256; j++)
@@ -269,14 +269,14 @@ void
                         if (('a' <= j && j <= 'z') || ('A' <= j && j <= 'Z')
                             || j == '_')
 #endif
-                            bigfsm[j][fp->state] = nstate;
+                            bigfsm[j][fp->state] = (short) nstate;
                     continue;
                 case C_NUM:
                     for (j = '0'; j <= '9'; j++)
-                        bigfsm[j][fp->state] = nstate;
+                        bigfsm[j][fp->state] = (short) nstate;
                     continue;
                 default:
-                    bigfsm[fp->ch[i]][fp->state] = nstate;
+                    bigfsm[fp->ch[i]][fp->state] = (short) nstate;
             }
         }
     }
@@ -380,7 +380,7 @@ continue2:
                     ip += runelen;
                     runelen = 1;
                 case S_SELFB:
-                    tp->type = GETACT(state);
+                    tp->type = (unsigned char) GETACT(state);
                     tp->len = ip - tp->t;
                     tp++;
                     goto continue2;
@@ -532,7 +532,7 @@ continue2:
 int
     trigraph(Source * s)
 {
-    int c;
+    uchar c;
 
     while (s->inp + 2 >= s->inl && fillbuf(s) != EOF);
     ;
