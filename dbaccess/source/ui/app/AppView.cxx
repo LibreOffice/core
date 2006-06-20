@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppView.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:12:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:55:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,8 +133,9 @@ using namespace ::com::sun::star::container;
 DBG_NAME(OAppBorderWindow)
 //==================================================================
 OAppBorderWindow::OAppBorderWindow(OApplicationView* _pParent,PreviewMode _ePreviewMode) : Window(_pParent,WB_DIALOGCONTROL)
-    ,m_pView(_pParent)
     ,m_pPanel(NULL)
+    ,m_pDetailView(NULL)
+    ,m_pView(_pParent)
 {
     DBG_CTOR(OAppBorderWindow,NULL);
 
@@ -264,12 +265,12 @@ OApplicationView::OApplicationView( Window* pParent
                                     ,PreviewMode _ePreviewMode
                                    ) :
     ODataView( pParent ,_pIController,_rxOrb,WB_DIALOGCONTROL )
+    ,m_xController(_xController)
     ,m_pElementNotification( _pController )
     ,m_pActonListener(_pActonListener)
     ,m_pContainerListener(_pContainerListener)
     ,m_pViewChangeListener(_pViewChangeListener)
     ,m_eChildFocus(NONE)
-    ,m_xController(_xController)
 {
     DBG_CTOR(OApplicationView,NULL);
 
@@ -366,12 +367,8 @@ long OApplicationView::PreNotify( NotifyEvent& rNEvt )
 IClipboardTest* OApplicationView::getActiveChild() const
 {
     IClipboardTest* pTest = NULL;
-    switch(m_eChildFocus)
-    {
-        case DETAIL:
-            pTest = getDetailView();
-            break;
-    }
+    if ( DETAIL == m_eChildFocus )
+        pTest = getDetailView();
     return pTest;
 }
 // -----------------------------------------------------------------------------
@@ -617,7 +614,7 @@ void OApplicationView::disableControls(sal_Bool _bDisable)
     getDetailView()->disableControls(_bDisable);
 }
 // -----------------------------------------------------------------------------
-void OApplicationView::_disposing( const ::com::sun::star::lang::EventObject& _rSource )
+void OApplicationView::_disposing( const ::com::sun::star::lang::EventObject& /*_rSource*/ )
 {
     if ( m_pWin && getDetailView() )
         showPreview(NULL);
