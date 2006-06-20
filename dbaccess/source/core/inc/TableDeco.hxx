@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableDeco.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:34:22 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:46:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,6 +132,7 @@ namespace dbaccess
         virtual OColumn*    createColumn(const ::rtl::OUString& _rName) const;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createEmptyObject();
         virtual void columnDropped(const ::rtl::OUString& _sName);
+        virtual void columnCloned(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xClone);
         virtual void refreshColumns();
 
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper(sal_Int32 _nId) const;
@@ -211,6 +212,9 @@ namespace dbaccess
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getIndexes(  ) throw (::com::sun::star::uno::RuntimeException);
         // XDataDescriptorFactory
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL createDataDescriptor(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    protected:
+        using ODataSettings::getFastPropertyValue;
     };
 }
 #endif // _DBA_CORE_TABLEDECORATOR_HXX_
