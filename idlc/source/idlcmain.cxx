@@ -4,9 +4,9 @@
  *
  *  $RCSfile: idlcmain.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:11:51 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:49:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,6 +139,5 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             options.getProgramName().getStr(),
             options.prepareVersion().getStr());
     }
-    exit(nErrors);
-    return 0;
+    return nErrors;
 }
