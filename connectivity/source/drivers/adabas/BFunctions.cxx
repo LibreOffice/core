@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BFunctions.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:20:57 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:08:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,16 +136,19 @@ sal_Bool LoadLibrary_ADABAS(::rtl::OUString &_rPath)
         _rPath = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("The variable DBROOT is not set."));
         return sal_False;
     }
-#if defined(WIN) || defined(WNT)
-    _rPath += ::rtl::OUString::createFromAscii("SQLOD32.DLL");
-#elif ( defined(SOLARIS) && defined(SPARC)) || defined(LINUX)
-    _rPath += ::rtl::OUString::createFromAscii("odbclib.so");
-#elif defined(MACOSX)
-    _rPath += ::rtl::OUString::createFromAscii("odbclib.dylib");
-#else
-    return sal_False;
-#endif
+    const sal_Char* pLibraryAsciiName = NULL;
 
+#if defined(WIN) || defined(WNT)
+    pLibraryAsciiName = "SQLOD32.DLL";
+#elif ( defined(SOLARIS) && defined(SPARC)) || defined(LINUX)
+    pLibraryAsciiName = "odbclib.so";
+#elif defined(MACOSX)
+    pLibraryAsciiName = "odbclib.dylib";
+#endif
+    if ( !pLibraryAsciiName )
+        return sal_False;
+
+    _rPath += ::rtl::OUString::createFromAscii( pLibraryAsciiName );
     pODBCso = osl_loadModule( _rPath.pData,SAL_LOADMODULE_NOW );
     if( !pODBCso)
         return sal_False;
@@ -158,119 +161,119 @@ sal_Bool LoadLibrary_ADABAS(::rtl::OUString &_rPath)
 sal_Bool LoadFunctions(oslModule pODBCso)
 {
 
-    if( ( pODBC3SQLAllocHandle  =   (T3SQLAllocHandle)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLAllocHandle").pData )) == NULL )
+    if( ( pODBC3SQLAllocHandle  =   (T3SQLAllocHandle)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLAllocHandle").pData )) == NULL )
         return sal_False;
-    if( ( pODBC3SQLConnect      =   (T3SQLConnect)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLConnect").pData )) == NULL )
+    if( ( pODBC3SQLConnect      =   (T3SQLConnect)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLConnect").pData )) == NULL )
         return sal_False;
-    if( ( pODBC3SQLDriverConnect =  (T3SQLDriverConnect)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLDriverConnect").pData )) == NULL )
+    if( ( pODBC3SQLDriverConnect =  (T3SQLDriverConnect)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLDriverConnect").pData )) == NULL )
         return sal_False;
-    if( ( pODBC3SQLBrowseConnect =   (T3SQLBrowseConnect)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLBrowseConnect").pData )) == NULL )
+    if( ( pODBC3SQLBrowseConnect =   (T3SQLBrowseConnect)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLBrowseConnect").pData )) == NULL )
         return sal_False;
-    if( ( pODBC3SQLGetInfo      =   (T3SQLGetInfo)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLGetInfo").pData )) == NULL )
+    if( ( pODBC3SQLGetInfo      =   (T3SQLGetInfo)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLGetInfo").pData )) == NULL )
         return sal_False;
-    if( ( pODBC3SQLGetTypeInfo  =   (T3SQLGetTypeInfo)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLGetTypeInfo").pData )) == NULL )
+    if( ( pODBC3SQLGetTypeInfo  =   (T3SQLGetTypeInfo)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLGetTypeInfo").pData )) == NULL )
         return sal_False;
-    if( ( pODBC3SQLSetConnectAttr   =   (T3SQLSetConnectAttr)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLSetConnectAttr").pData )) == NULL )
+    if( ( pODBC3SQLSetConnectAttr   =   (T3SQLSetConnectAttr)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLSetConnectAttr").pData )) == NULL )
         return sal_False;
-    if( ( pODBC3SQLGetConnectAttr   =   (T3SQLGetConnectAttr)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLGetConnectAttr").pData )) == NULL )
+    if( ( pODBC3SQLGetConnectAttr   =   (T3SQLGetConnectAttr)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLGetConnectAttr").pData )) == NULL )
         return sal_False;
-    if( ( pODBC3SQLSetEnvAttr   =   (T3SQLSetEnvAttr)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLSetEnvAttr").pData )) == NULL )
+    if( ( pODBC3SQLSetEnvAttr   =   (T3SQLSetEnvAttr)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLSetEnvAttr").pData )) == NULL )
         return sal_False;
-    if( ( pODBC3SQLGetEnvAttr   =   (T3SQLGetEnvAttr)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLGetEnvAttr").pData )) == NULL )
+    if( ( pODBC3SQLGetEnvAttr   =   (T3SQLGetEnvAttr)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLGetEnvAttr").pData )) == NULL )
         return sal_False;
-    if( ( pODBC3SQLSetStmtAttr  =   (T3SQLSetStmtAttr)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLSetStmtAttr").pData )) == NULL )
+    if( ( pODBC3SQLSetStmtAttr  =   (T3SQLSetStmtAttr)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLSetStmtAttr").pData )) == NULL )
         return sal_False;
-    if( ( pODBC3SQLGetStmtAttr  =   (T3SQLGetStmtAttr)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLGetStmtAttr").pData )) == NULL )
+    if( ( pODBC3SQLGetStmtAttr  =   (T3SQLGetStmtAttr)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLGetStmtAttr").pData )) == NULL )
         return sal_False;
-    /*if( ( pODBC3SQLSetDescField   =   (T3SQLSetDescField)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLSetDescField").pData )) == NULL )
+    /*if( ( pODBC3SQLSetDescField   =   (T3SQLSetDescField)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLSetDescField").pData )) == NULL )
         return sal_False;
-    if( ( pODBC3SQLGetDescField =   (T3SQLGetDescField)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLGetDescField").pData )) == NULL )
+    if( ( pODBC3SQLGetDescField =   (T3SQLGetDescField)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLGetDescField").pData )) == NULL )
         return sal_False;*/
-    /*if( ( pODBC3SQLGetDescRec =   (T3SQLGetDescRec)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLGetDescRec").pData )) == NULL )
+    /*if( ( pODBC3SQLGetDescRec =   (T3SQLGetDescRec)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLGetDescRec").pData )) == NULL )
         return sal_False;
-    if( ( pODBC3SQLSetDescRec   =   (T3SQLSetDescRec)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLSetDescRec").pData )) == NULL )
+    if( ( pODBC3SQLSetDescRec   =   (T3SQLSetDescRec)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLSetDescRec").pData )) == NULL )
         return sal_False;*/
-    if( ( pODBC3SQLPrepare      =   (T3SQLPrepare)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLPrepare").pData )) == NULL )
+    if( ( pODBC3SQLPrepare      =   (T3SQLPrepare)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLPrepare").pData )) == NULL )
         return sal_False;
-    if( ( pODBC3SQLBindParameter =  (T3SQLBindParameter)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLBindParameter").pData )) == NULL )
+    if( ( pODBC3SQLBindParameter =  (T3SQLBindParameter)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLBindParameter").pData )) == NULL )
         return sal_False;
-//  if( ( pODBC3SQLGetCursorName =  (T3SQLGetCursorName)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLGetCursorName").pData )) == NULL )
+//  if( ( pODBC3SQLGetCursorName =  (T3SQLGetCursorName)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLGetCursorName").pData )) == NULL )
 //      return sal_False;
-    if( ( pODBC3SQLSetCursorName =  (T3SQLSetCursorName)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLSetCursorName").pData )) == NULL )
+    if( ( pODBC3SQLSetCursorName =  (T3SQLSetCursorName)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLSetCursorName").pData )) == NULL )
         return sal_False;
-    if( ( pODBC3SQLExecute      =   (T3SQLExecute)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLExecute").pData )) == NULL )
+    if( ( pODBC3SQLExecute      =   (T3SQLExecute)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLExecute").pData )) == NULL )
         return sal_False;
-    if( ( pODBC3SQLExecDirect   =   (T3SQLExecDirect)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLExecDirect").pData )) == NULL )
+    if( ( pODBC3SQLExecDirect   =   (T3SQLExecDirect)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLExecDirect").pData )) == NULL )
         return sal_False;
-    /*if( ( pODBC3SQLNativeSql      =   (T3SQLNativeSql)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLNativeSql").pData )) == NULL )
+    /*if( ( pODBC3SQLNativeSql      =   (T3SQLNativeSql)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLNativeSql").pData )) == NULL )
         return sal_False;*/
-    if( ( pODBC3SQLDescribeParam =   (T3SQLDescribeParam)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLDescribeParam").pData )) == NULL )
+    if( ( pODBC3SQLDescribeParam =   (T3SQLDescribeParam)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLDescribeParam").pData )) == NULL )
         return sal_False;
-    if( ( pODBC3SQLNumParams        =   (T3SQLNumParams)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLNumParams").pData )) == NULL )
+    if( ( pODBC3SQLNumParams        =   (T3SQLNumParams)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLNumParams").pData )) == NULL )
         return sal_False;
-    if( ( pODBC3SQLParamData        =   (T3SQLParamData)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLParamData").pData )) == NULL )
+    if( ( pODBC3SQLParamData        =   (T3SQLParamData)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLParamData").pData )) == NULL )
         return sal_False;
-    if( ( pODBC3SQLPutData      =   (T3SQLPutData)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLPutData").pData )) == NULL )
+    if( ( pODBC3SQLPutData      =   (T3SQLPutData)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLPutData").pData )) == NULL )
         return sal_False;
-    if( ( pODBC3SQLRowCount     =   (T3SQLRowCount)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLRowCount").pData )) == NULL )
+    if( ( pODBC3SQLRowCount     =   (T3SQLRowCount)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLRowCount").pData )) == NULL )
         return sal_False;
-    if( ( pODBC3SQLNumResultCols =  (T3SQLNumResultCols)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLNumResultCols").pData )) == NULL )
+    if( ( pODBC3SQLNumResultCols =  (T3SQLNumResultCols)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLNumResultCols").pData )) == NULL )
         return sal_False;
-    if( ( pODBC3SQLDescribeCol  =   (T3SQLDescribeCol)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLDescribeCol").pData )) == NULL )
+    if( ( pODBC3SQLDescribeCol  =   (T3SQLDescribeCol)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLDescribeCol").pData )) == NULL )
         return sal_False;
-    if( ( pODBC3SQLColAttribute =   (T3SQLColAttribute)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLColAttribute").pData )) == NULL )
+    if( ( pODBC3SQLColAttribute =   (T3SQLColAttribute)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLColAttribute").pData )) == NULL )
         return sal_False;
-    if( ( pODBC3SQLBindCol      =   (T3SQLBindCol)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLBindCol").pData )) == NULL )
+    if( ( pODBC3SQLBindCol      =   (T3SQLBindCol)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLBindCol").pData )) == NULL )
         return sal_False;
-    if( ( pODBC3SQLFetch            =   (T3SQLFetch)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLFetch").pData )) == NULL )
+    if( ( pODBC3SQLFetch            =   (T3SQLFetch)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLFetch").pData )) == NULL )
         return sal_False;
-    if( ( pODBC3SQLFetchScroll  =   (T3SQLFetchScroll)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLFetchScroll").pData )) == NULL )
+    if( ( pODBC3SQLFetchScroll  =   (T3SQLFetchScroll)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLFetchScroll").pData )) == NULL )
         return sal_False;
-    if( ( pODBC3SQLGetData      =   (T3SQLGetData)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLGetData").pData )) == NULL )
+    if( ( pODBC3SQLGetData      =   (T3SQLGetData)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLGetData").pData )) == NULL )
         return sal_False;
-    if( ( pODBC3SQLSetPos       =   (T3SQLSetPos)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLSetPos").pData )) == NULL )
+    if( ( pODBC3SQLSetPos       =   (T3SQLSetPos)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLSetPos").pData )) == NULL )
         return sal_False;
-    if( ( pODBC3SQLMoreResults  =   (T3SQLMoreResults)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLMoreResults").pData )) == NULL )
+    if( ( pODBC3SQLMoreResults  =   (T3SQLMoreResults)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLMoreResults").pData )) == NULL )
         return sal_False;
-    /*if( ( pODBC3SQLGetDiagField   =   (T3SQLGetDiagField)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLGetDiagField").pData )) == NULL )
+    /*if( ( pODBC3SQLGetDiagField   =   (T3SQLGetDiagField)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLGetDiagField").pData )) == NULL )
         return sal_False;*/
-    if( ( pODBC3SQLGetDiagRec   =   (T3SQLGetDiagRec)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLGetDiagRec").pData )) == NULL )
+    if( ( pODBC3SQLGetDiagRec   =   (T3SQLGetDiagRec)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLGetDiagRec").pData )) == NULL )
         return sal_False;
-    if( ( pODBC3SQLColumnPrivileges = (T3SQLColumnPrivileges)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLColumnPrivileges").pData )) == NULL )
+    if( ( pODBC3SQLColumnPrivileges = (T3SQLColumnPrivileges)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLColumnPrivileges").pData )) == NULL )
         return sal_False;
-    if( ( pODBC3SQLColumns      =   (T3SQLColumns)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLColumns").pData )) == NULL )
+    if( ( pODBC3SQLColumns      =   (T3SQLColumns)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLColumns").pData )) == NULL )
         return sal_False;
-    if( ( pODBC3SQLForeignKeys  =   (T3SQLForeignKeys)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLForeignKeys").pData )) == NULL )
+    if( ( pODBC3SQLForeignKeys  =   (T3SQLForeignKeys)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLForeignKeys").pData )) == NULL )
         return sal_False;
-    if( ( pODBC3SQLPrimaryKeys  =   (T3SQLPrimaryKeys)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLPrimaryKeys").pData )) == NULL )
+    if( ( pODBC3SQLPrimaryKeys  =   (T3SQLPrimaryKeys)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLPrimaryKeys").pData )) == NULL )
         return sal_False;
-    if( ( pODBC3SQLProcedureColumns =  (T3SQLProcedureColumns)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLProcedureColumns").pData )) == NULL )
+    if( ( pODBC3SQLProcedureColumns =  (T3SQLProcedureColumns)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLProcedureColumns").pData )) == NULL )
         return sal_False;
-    if( ( pODBC3SQLProcedures   =   (T3SQLProcedures)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLProcedures").pData )) == NULL )
+    if( ( pODBC3SQLProcedures   =   (T3SQLProcedures)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLProcedures").pData )) == NULL )
         return sal_False;
-    if( ( pODBC3SQLSpecialColumns =  (T3SQLSpecialColumns)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLSpecialColumns").pData )) == NULL )
+    if( ( pODBC3SQLSpecialColumns =  (T3SQLSpecialColumns)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLSpecialColumns").pData )) == NULL )
         return sal_False;
-    if( ( pODBC3SQLStatistics   =   (T3SQLStatistics)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLStatistics").pData )) == NULL )
+    if( ( pODBC3SQLStatistics   =   (T3SQLStatistics)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLStatistics").pData )) == NULL )
         return sal_False;
-    if( ( pODBC3SQLTablePrivileges =    (T3SQLTablePrivileges)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLTablePrivileges").pData )) == NULL )
+    if( ( pODBC3SQLTablePrivileges =    (T3SQLTablePrivileges)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLTablePrivileges").pData )) == NULL )
         return sal_False;
-    if( ( pODBC3SQLTables       =   (T3SQLTables)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLTables").pData )) == NULL )
+    if( ( pODBC3SQLTables       =   (T3SQLTables)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLTables").pData )) == NULL )
         return sal_False;
-    if( ( pODBC3SQLFreeStmt     =   (T3SQLFreeStmt)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLFreeStmt").pData )) == NULL )
+    if( ( pODBC3SQLFreeStmt     =   (T3SQLFreeStmt)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLFreeStmt").pData )) == NULL )
         return sal_False;
-    if( ( pODBC3SQLCloseCursor  =   (T3SQLCloseCursor)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLCloseCursor").pData )) == NULL )
+    if( ( pODBC3SQLCloseCursor  =   (T3SQLCloseCursor)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLCloseCursor").pData )) == NULL )
         return sal_False;
-    if( ( pODBC3SQLCancel       =   (T3SQLCancel)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLCancel").pData )) == NULL )
+    if( ( pODBC3SQLCancel       =   (T3SQLCancel)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLCancel").pData )) == NULL )
         return sal_False;
-    if( ( pODBC3SQLEndTran      =   (T3SQLEndTran)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLEndTran").pData )) == NULL )
+    if( ( pODBC3SQLEndTran      =   (T3SQLEndTran)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLEndTran").pData )) == NULL )
         return sal_False;
-    if( ( pODBC3SQLDisconnect   =   (T3SQLDisconnect)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLDisconnect").pData )) == NULL )
+    if( ( pODBC3SQLDisconnect   =   (T3SQLDisconnect)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLDisconnect").pData )) == NULL )
         return sal_False;
-    if( ( pODBC3SQLFreeHandle   =   (T3SQLFreeHandle)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLFreeHandle").pData )) == NULL )
+    if( ( pODBC3SQLFreeHandle   =   (T3SQLFreeHandle)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLFreeHandle").pData )) == NULL )
         return sal_False;
-    if( ( pODBC3SQLGetCursorName    =   (T3SQLGetCursorName)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLGetCursorName").pData )) == NULL )
+    if( ( pODBC3SQLGetCursorName    =   (T3SQLGetCursorName)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLGetCursorName").pData )) == NULL )
         return sal_False;
-    if( ( pODBC3SQLNativeSql    =   (T3SQLNativeSql)osl_getSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLNativeSql").pData )) == NULL )
+    if( ( pODBC3SQLNativeSql    =   (T3SQLNativeSql)osl_getFunctionSymbol(pODBCso, ::rtl::OUString::createFromAscii("SQLNativeSql").pData )) == NULL )
         return sal_False;
 
     return sal_True;
