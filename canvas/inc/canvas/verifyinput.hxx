@@ -4,9 +4,9 @@
  *
  *  $RCSfile: verifyinput.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 12:41:22 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:13:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -461,6 +461,8 @@ namespace canvas
                 ::com::sun::star::uno::XInterface >&                xIf,
             ::sal_Int16                                             nArgPos )
         {
+            (void)pStr; (void)xIf; (void)nArgPos;
+
             if( !rRef.is() )
             {
 #if OSL_DEBUG_LEVEL > 0
@@ -505,11 +507,11 @@ namespace canvas
         }
 
         /// Catch-all, to handle cases that DON'T need input checking (i.e. the Integer geometry ones)
-        template< typename T > void verifyInput( const T&                                   rDummy,
-                                                 const char*                                pStr,
+        template< typename T > void verifyInput( const T&                                   /*rDummy*/,
+                                                 const char*                                /*pStr*/,
                                                  const ::com::sun::star::uno::Reference<
-                                                     ::com::sun::star::uno::XInterface >&   xIf,
-                                                 ::sal_Int16                                nArgPos )
+                                                       ::com::sun::star::uno::XInterface >& /*xIf*/,
+                                                 ::sal_Int16                                /*nArgPos*/ )
         {
         }
 
