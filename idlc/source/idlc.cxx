@@ -4,9 +4,9 @@
  *
  *  $RCSfile: idlc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:46:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:48:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -194,12 +194,12 @@ static void SAL_CALL initializePredefinedTypes(AstModule* pRoot)
 
 Idlc::Idlc(Options* pOptions)
     : m_pOptions(pOptions)
+    , m_bIsDocValid(sal_False)
     , m_bIsInMainfile(sal_True)
     , m_errorCount(0)
     , m_warningCount(0)
     , m_lineNumber(0)
     , m_parseState(PS_NoState)
-    , m_bIsDocValid(sal_False)
 {
     m_pScopes = new AstStack();
     // init root object after construction
