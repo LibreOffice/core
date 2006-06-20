@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BTable.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:46:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:59:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,8 +91,6 @@ namespace connectivity
                     const ::rtl::OUString& _CatalogName = ::rtl::OUString()
                 );
 
-            OAdabasConnection* getConnection() { return m_pConnection;}
-
             ::rtl::OUString getTableName() const { return m_Name; }
             ::rtl::OUString getSchema() const { return m_SchemaName; }
 
@@ -116,7 +114,7 @@ namespace connectivity
             // ends a sql transaaction
             void endTransAction();
             // some methods to alter table structures
-            void alterColumnType(sal_Int32 nNewType,const ::rtl::OUString& _rColName,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xDescriptor);
+            void alterColumnType(const ::rtl::OUString& _rColName,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xDescriptor);
             void alterNotNullValue(sal_Int32 _nNewNullable,const ::rtl::OUString& _rColName);
             void alterDefaultValue(const ::rtl::OUString& _sNewDefault,const ::rtl::OUString& _rColName);
             void dropDefaultValue(const ::rtl::OUString& _sNewDefault);
