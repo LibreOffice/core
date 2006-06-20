@@ -4,9 +4,9 @@
  *
  *  $RCSfile: include.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:14:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:51:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,7 @@ void
     if (trp->tp->type == STRING)
     {
         len = trp->tp->len - 2;
-        if (len > sizeof(fname) - 1)
+        if (len > (int)sizeof(fname) - 1)
             len = sizeof(fname) - 1;
         strncpy(fname, (char *) trp->tp->t + 1, len);
         angled = 0;
@@ -165,7 +165,7 @@ syntax:
 void
     genline(void)
 {
-    static Token ta = {UNCLASS};
+    static Token ta = {UNCLASS, 0, 0, 0, NULL };
     static Tokenrow tr = {&ta, &ta, &ta + 1, 1};
     uchar *p;
 
@@ -197,7 +197,7 @@ void
 void
     genimport(char *fname, int angled, char *iname, int import)
 {
-    static Token ta = {UNCLASS};
+    static Token ta = {UNCLASS, 0, 0, 0, NULL };
     static Tokenrow tr = {&ta, &ta, &ta + 1, 1};
     uchar *p;
 
@@ -239,7 +239,7 @@ void
 void
     genwrap(int end)
 {
-    static Token ta = {UNCLASS};
+    static Token ta = {UNCLASS, 0, 0, 0, NULL};
     static Tokenrow tr = {&ta, &ta, &ta + 1, 1};
     uchar *p;
 
