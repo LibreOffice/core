@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OResultSetMetaData.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:35:42 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:56:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,6 @@ sal_Int32 OResultSetMetaData::getNumColAttrib(sal_Int32 _column,sal_Int32 ident)
         column = m_vMapping[_column];
 
     sal_Int32 nValue=0;
-    sal_Int16 nLen = sizeof(nValue);
     OTools::ThrowException(m_pConnection,N3SQLColAttribute(m_aStatementHandle,
                                          (SQLUSMALLINT)column,
                                          (SQLUSMALLINT)ident,
@@ -189,7 +188,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive( sal_Int32 column ) throw(
     return getCharColAttrib(column,SQL_DESC_LABEL);
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OResultSetMetaData::getColumnServiceName( sal_Int32 column ) throw(SQLException, RuntimeException)
+::rtl::OUString SAL_CALL OResultSetMetaData::getColumnServiceName( sal_Int32 /*column*/ ) throw(SQLException, RuntimeException)
 {
     return ::rtl::OUString();
 }
