@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hierarchyservices.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:48:46 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:29:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,14 +94,14 @@ static sal_Bool writeInfo( void * pRegistryKey,
 
 //=========================================================================
 extern "C" void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+    const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
 //=========================================================================
 extern "C" sal_Bool SAL_CALL component_writeInfo(
-    void * pServiceManager, void * pRegistryKey )
+    void * /*pServiceManager*/, void * pRegistryKey )
 {
     return pRegistryKey &&
 
@@ -124,7 +124,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
 
 //=========================================================================
 extern "C" void * SAL_CALL component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
+    const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void * pRet = 0;
 
