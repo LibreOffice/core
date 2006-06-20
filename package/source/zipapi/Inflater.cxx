@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Inflater.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:12:30 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 06:13:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,9 +42,6 @@
 #include <external/zlib/zlib.h>
 #endif
 #endif
-#ifndef _VOS_DIAGNOSE_H_
-#include <vos/diagnose.hxx>
-#endif
 #include <string.h> // for memset
 
 using namespace com::sun::star::uno;
@@ -70,15 +67,12 @@ Inflater::Inflater(sal_Bool bNoWrap)
         case Z_OK:
             break;
         case Z_MEM_ERROR:
-            VOS_DEBUG_ONLY ( pStream->msg);
             delete pStream;
             break;
         case Z_STREAM_ERROR:
-            VOS_DEBUG_ONLY ( pStream->msg);
             delete pStream;
             break;
         default:
-            VOS_DEBUG_ONLY ( pStream->msg);
             break;
     }
 }
@@ -242,7 +236,6 @@ sal_Int32 Inflater::doInflateBytes (Sequence < sal_Int8 >  &rBuffer, sal_Int32 n
         case Z_BUF_ERROR:
             return 0;
         case Z_DATA_ERROR:
-            VOS_DEBUG_ONLY(pStream->msg);
             return 0;
     }
     return 0;
