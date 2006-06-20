@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MQueryHelper.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 12:19:50 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:52:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,7 +124,7 @@ namespace connectivity
 
                                             MQueryHelper();
 
-                                            ~MQueryHelper();
+            virtual                         ~MQueryHelper();
 
             void                            reset();
 
@@ -132,7 +132,7 @@ namespace connectivity
 
             MQueryHelperResultEntry*   next( );
 
-            MQueryHelperResultEntry*   getByIndex( sal_Int32 nRow );
+            MQueryHelperResultEntry*   getByIndex( sal_uInt32 nRow );
 
             sal_Bool                   isError() const;
 
