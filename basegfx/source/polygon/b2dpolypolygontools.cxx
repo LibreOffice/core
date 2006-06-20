@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dpolypolygontools.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:58:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:44:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -282,9 +282,9 @@ namespace basegfx
                             if(aNewCandidate.getB2DPoint(0L) == aMergePolygon.getB2DPoint(aMergePolygon.count() - 1L))
                             {
                                 // copy remaining points to aMergePolygon
-                                for(sal_uInt32 a(1L); a < aNewCandidate.count(); a++)
+                                for(sal_uInt32 b(1L); b < aNewCandidate.count(); b++)
                                 {
-                                    aMergePolygon.append(aNewCandidate.getB2DPoint(a));
+                                    aMergePolygon.append(aNewCandidate.getB2DPoint(b));
                                 }
                             }
                             else
