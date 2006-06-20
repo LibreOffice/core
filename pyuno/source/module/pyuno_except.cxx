@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pyuno_except.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:52:20 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:03:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,7 +180,9 @@ static PyRef createClass( const OUString & name, const Runtime &runtime )
     // now overwrite ctor and attrib functions
     if( isInterface )
     {
-        PyObject_SetAttrString( ret.get(), "__pyunointerface__" , ustring2PyString(name).get() );
+        PyObject_SetAttrString(
+            ret.get(), const_cast< char * >("__pyunointerface__"),
+            ustring2PyString(name).get() );
     }
     else
     {
@@ -190,22 +192,35 @@ static PyRef createClass( const OUString & name, const Runtime &runtime )
         PyRef repr = getObjectFromUnoModule( runtime,"_uno_struct__repr__" );
         PyRef eq = getObjectFromUnoModule( runtime,"_uno_struct__eq__" );
 
-        PyObject_SetAttrString( ret.get(), "__pyunostruct__" , ustring2PyString(name).get() );
-        PyObject_SetAttrString( ret.get(), "typeName", ustring2PyString(name).get() );
-        PyObject_SetAttrString( ret.get(), "__init__" , ctor.get() );
-        PyObject_SetAttrString( ret.get(), "__getattr__", getter.get() );
-        PyObject_SetAttrString( ret.get(), "__setattr__", setter.get() );
-        PyObject_SetAttrString( ret.get(), "__repr__", repr.get() );
-        PyObject_SetAttrString( ret.get(), "__str__", repr.get() );
-        PyObject_SetAttrString( ret.get(), "__eq__", eq.get() );
+        PyObject_SetAttrString(
+            ret.get(), const_cast< char * >("__pyunostruct__"),
+            ustring2PyString(name).get() );
+        PyObject_SetAttrString(
+            ret.get(), const_cast< char * >("typeName"),
+            ustring2PyString(name).get() );
+        PyObject_SetAttrString(
+            ret.get(), const_cast< char * >("__init__"), ctor.get() );
+        PyObject_SetAttrString(
+            ret.get(), const_cast< char * >("__getattr__"), getter.get() );
+        PyObject_SetAttrString(
+            ret.get(), const_cast< char * >("__setattr__"), setter.get() );
+        PyObject_SetAttrString(
+            ret.get(), const_cast< char * >("__repr__"), repr.get() );
+        PyObject_SetAttrString(
+            ret.get(), const_cast< char * >("__str__"), repr.get() );
+        PyObject_SetAttrString(
+            ret.get(), const_cast< char * >("__eq__"), eq.get() );
     }
     return ret;
 }
 
-sal_Bool isInstanceOfStructOrException( const Runtime & runtime, PyObject *obj)
+bool isInstanceOfStructOrException( PyObject *obj)
 {
-    PyRef attr(PyObject_GetAttrString(obj,"__class__"), SAL_NO_ACQUIRE );
-    return PyObject_HasAttrString(attr.get(),"__pyunostruct__");
+    PyRef attr(
+        PyObject_GetAttrString(obj, const_cast< char * >("__class__")),
+        SAL_NO_ACQUIRE );
+    return PyObject_HasAttrString(
+        attr.get(), const_cast< char * >("__pyunostruct__"));
 }
 
 sal_Bool isInterfaceClass( const Runtime &runtime, PyObject * obj )
@@ -224,10 +239,13 @@ PyRef getClass( const OUString & name , const Runtime &runtime)
     {
         ret = createClass( name, runtime );
         cargo->exceptionMap[name] = ret;
-        if( PyObject_HasAttrString( ret.get() , "__pyunointerface__" ) )
+        if( PyObject_HasAttrString(
+                ret.get(), const_cast< char * >("__pyunointerface__") ) )
             cargo->interfaceSet.insert( ret );
 
-        PyObject_SetAttrString( ret.get(), "__pyunointerface__" , ustring2PyString(name).get() );
+        PyObject_SetAttrString(
+            ret.get(), const_cast< char * >("__pyunointerface__"),
+            ustring2PyString(name).get() );
     }
     else
     {
