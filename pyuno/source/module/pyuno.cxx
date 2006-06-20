@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pyuno.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 10:48:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:03:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,7 @@ OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef
     case typelib_TypeClass_INTERFACE:
     {
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("0x") );
-        buf.append( (sal_Int64)*(void **)pVal, 16 );
+        buf.append( reinterpret_cast< sal_IntPtr >(*(void **)pVal), 16 );
         if( VAL2STR_MODE_DEEP == mode )
         {
             buf.appendAscii( "{" );        Reference< XInterface > r = *( Reference< XInterface > * ) pVal;
@@ -324,7 +324,8 @@ PyObject *PyUNO_repr( PyObject  * self )
     PyUNO *me = (PyUNO * ) self;
     PyObject * ret = 0;
 
-    if( me->members->wrappedObject.getValueType().getTypeClass() == typelib_TypeClass_EXCEPTION )
+    if( me->members->wrappedObject.getValueType().getTypeClass()
+        == com::sun::star::uno::TypeClass_EXCEPTION )
     {
         Reference< XMaterialHolder > rHolder(me->members->xInvocation,UNO_QUERY);
         if( rHolder.is() )
@@ -382,7 +383,8 @@ PyObject *PyUNO_invoke( PyObject *object, const char *name , PyObject *args )
                 PyObject * element = PyTuple_GetItem( args , i );
                 if( PyObject_IsInstance( element , getAnyClass( runtime ).get() ) )
                 {
-                    element = PyObject_GetAttrString( element, "value" );
+                    element = PyObject_GetAttrString(
+                        element, const_cast< char * >("value") );
                 }
                 else
                 {
@@ -423,8 +425,10 @@ PyObject *PyUNO_str( PyObject * self )
     OStringBuffer buf;
 
 
-    if( me->members->wrappedObject.getValueType().getTypeClass() == typelib_TypeClass_STRUCT ||
-        me->members->wrappedObject.getValueType().getTypeClass() == typelib_TypeClass_EXCEPTION)
+    if( me->members->wrappedObject.getValueType().getTypeClass()
+        == com::sun::star::uno::TypeClass_STRUCT ||
+        me->members->wrappedObject.getValueType().getTypeClass()
+        == com::sun::star::uno::TypeClass_EXCEPTION)
     {
         Reference< XMaterialHolder > rHolder(me->members->xInvocation,UNO_QUERY);
         if( rHolder.is() )
@@ -646,7 +650,7 @@ static PyTypeObject PyUNOType =
 {
     PyObject_HEAD_INIT (&PyType_Type)
     0,
-    "pyuno",
+    const_cast< char * >("pyuno"),
     sizeof (PyUNO),
     0,
     (destructor) PyUNO_del,
@@ -661,6 +665,36 @@ static PyTypeObject PyUNOType =
     (hashfunc) 0,
     (ternaryfunc) 0,
     (reprfunc) PyUNO_str,
+    (getattrofunc)0,
+    (setattrofunc)0,
+    NULL,
+    0,
+    NULL,
+    (traverseproc)0,
+    (inquiry)0,
+    (richcmpfunc)0,
+    0,
+    (getiterfunc)0,
+    (iternextfunc)0,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    (descrgetfunc)0,
+    (descrsetfunc)0,
+    0,
+    (initproc)0,
+    (allocfunc)0,
+    (newfunc)0,
+    (freefunc)0,
+    (inquiry)0,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    (destructor)0
 };
 
 PyRef getPyUnoClass( const Runtime &)
