@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OTools.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:38:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:06:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -274,7 +274,6 @@ namespace connectivity
                                     sal_Int32 columnIndex,
                                     SQLSMALLINT _nType,
                                     SQLSMALLINT _nMaxLen,
-                                    SQLSMALLINT _nScale,
                                     const void* _pValue,
                                     void*       _pData,
                                     SQLINTEGER *pLen,
