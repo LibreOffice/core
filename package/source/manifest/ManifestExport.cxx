@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ManifestExport.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 19:13:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 06:10:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -226,51 +226,51 @@ ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const S
         xHandler->startElement( sFileEntryElement , xAttrList);
         if ( pVector && pSalt && pIterationCount )
         {
-            AttributeList * pAttrList = new AttributeList;
-            Reference < XAttributeList > xAttrList (pAttrList);
+            AttributeList * pNewAttrList = new AttributeList;
+            Reference < XAttributeList > xNewAttrList (pNewAttrList);
             OUStringBuffer aBuffer;
             Sequence < sal_uInt8 > aSequence;
 
             xHandler->ignorableWhitespace ( sWhiteSpace );
             if ( pDigest )
             {
-                pAttrList->AddAttribute ( sChecksumTypeAttribute, sCdataAttribute, sChecksumType );
+                pNewAttrList->AddAttribute ( sChecksumTypeAttribute, sCdataAttribute, sChecksumType );
                 pDigest->Value >>= aSequence;
                 Base64Codec::encodeBase64 ( aBuffer, aSequence );
-                pAttrList->AddAttribute ( sChecksumAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
+                pNewAttrList->AddAttribute ( sChecksumAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
             }
-            xHandler->startElement( sEncryptionDataElement , xAttrList);
+            xHandler->startElement( sEncryptionDataElement , xNewAttrList);
 
-            pAttrList = new AttributeList;
-            xAttrList = pAttrList;
+            pNewAttrList = new AttributeList;
+            xNewAttrList = pNewAttrList;
 
-            pAttrList->AddAttribute ( sAlgorithmNameAttribute, sCdataAttribute, sBlowfish );
+            pNewAttrList->AddAttribute ( sAlgorithmNameAttribute, sCdataAttribute, sBlowfish );
 
             pVector->Value >>= aSequence;
             Base64Codec::encodeBase64 ( aBuffer, aSequence );
-            pAttrList->AddAttribute ( sInitialisationVectorAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
+            pNewAttrList->AddAttribute ( sInitialisationVectorAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
 
             xHandler->ignorableWhitespace ( sWhiteSpace );
-            xHandler->startElement( sAlgorithmElement , xAttrList);
+            xHandler->startElement( sAlgorithmElement , xNewAttrList);
             xHandler->ignorableWhitespace ( sWhiteSpace );
             xHandler->endElement( sAlgorithmElement );
 
-            pAttrList = new AttributeList;
-            xAttrList = pAttrList;
+            pNewAttrList = new AttributeList;
+            xNewAttrList = pNewAttrList;
 
-            pAttrList->AddAttribute ( sKeyDerivationNameAttribute, sCdataAttribute, sPBKDF2 );
+            pNewAttrList->AddAttribute ( sKeyDerivationNameAttribute, sCdataAttribute, sPBKDF2 );
 
             sal_Int32 nCount;
             pIterationCount->Value >>= nCount;
             aBuffer.append (nCount);
-            pAttrList->AddAttribute ( sIterationCountAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
+            pNewAttrList->AddAttribute ( sIterationCountAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
 
             pSalt->Value >>= aSequence;
             Base64Codec::encodeBase64 ( aBuffer, aSequence );
-            pAttrList->AddAttribute ( sSaltAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
+            pNewAttrList->AddAttribute ( sSaltAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
 
             xHandler->ignorableWhitespace ( sWhiteSpace );
-            xHandler->startElement( sKeyDerivationElement , xAttrList);
+            xHandler->startElement( sKeyDerivationElement , xNewAttrList);
             xHandler->ignorableWhitespace ( sWhiteSpace );
             xHandler->endElement( sKeyDerivationElement );
             xHandler->ignorableWhitespace ( sWhiteSpace );
