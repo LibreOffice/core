@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ODriver.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:36:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:05:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,9 @@
 #ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 #include "connectivity/CommonTools.hxx"
 #endif
-
+#ifndef _OSL_MODULE_H_
+#include <osl/module.h>
+#endif
 
 namespace connectivity
 {
@@ -80,7 +82,7 @@ namespace connectivity
             ODBCDriver(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory);
 
             // only possibility to get the odbc functions
-            virtual void* getOdbcFunction(sal_Int32 _nIndex)  const = 0;
+            virtual oslGenericFunction getOdbcFunction(sal_Int32 _nIndex)  const = 0;
             // OComponentHelper
             virtual void SAL_CALL disposing(void);
             // XInterface
