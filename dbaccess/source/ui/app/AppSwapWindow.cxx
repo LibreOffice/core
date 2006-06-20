@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppSwapWindow.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:41:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:54:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,8 +80,8 @@ DBG_NAME(OApplicationSwapWindow)
 //==================================================================
 OApplicationSwapWindow::OApplicationSwapWindow(Window* _pParent,OAppBorderWindow* _pBorderWindow) : Window(_pParent,WB_DIALOGCONTROL )
     ,m_aIconControl(this)
-    ,m_pBorderWin(_pBorderWindow)
     ,m_eLastType(E_NONE)
+    ,m_pBorderWin(_pBorderWindow)
 {
     DBG_CTOR(OApplicationSwapWindow,NULL);
 //  SetCompoundControl( TRUE );
