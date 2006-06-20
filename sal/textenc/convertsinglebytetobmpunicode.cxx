@@ -4,9 +4,9 @@
  *
  *  $RCSfile: convertsinglebytetobmpunicode.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:34:38 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:37:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@
 #include <cstddef>
 
 sal_Size rtl_textenc_convertSingleByteToBmpUnicode(
-    ImplTextConverterData const * data, void * context, sal_Char const * srcBuf,
+    ImplTextConverterData const * data, void *, sal_Char const * srcBuf,
     sal_Size srcBytes, sal_Unicode * destBuf, sal_Size destChars,
     sal_uInt32 flags, sal_uInt32 * info, sal_Size * srcCvtBytes)
 {
@@ -141,7 +141,9 @@ sal_Size rtl_textenc_convertBmpUnicodeToSingleByte(
         for (std::size_t i = 0; i < entries; ++i) {
             if (c < ranges[i].unicode) {
                 break;
-            } else if (c <= ranges[i].unicode + ranges[i].range) {
+            } else if (c <= sal::static_int_cast< sal_uInt32 >(
+                           ranges[i].unicode + ranges[i].range))
+            {
                 if (destBufEnd - destBufPtr < 1) {
                     goto no_output;
                 }
