@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resultset.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:36:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:41:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,9 @@
 #ifndef _TOOLS_DEBUG_HXX //autogen
 #include <tools/debug.hxx>
 #endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
+#endif
 #ifndef _DBA_COREAPI_DATACOLUMN_HXX_
 #include <datacolumn.hxx>
 #endif
@@ -90,7 +93,7 @@ using namespace ::osl;
 using namespace dbaccess;
 using namespace dbtools;
 
-DBG_NAME(OResultSet);
+DBG_NAME(OResultSet)
 
 //--------------------------------------------------------------------------
 OResultSet::OResultSet(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& _xResultSet,
@@ -279,6 +282,15 @@ Reference< XPropertySetInfo > OResultSet::getPropertySetInfo() throw (RuntimeExc
 //------------------------------------------------------------------------------
 sal_Bool OResultSet::convertFastPropertyValue(Any & rConvertedValue, Any & rOldValue, sal_Int32 nHandle, const Any& rValue ) throw( IllegalArgumentException  )
 {
+    // be lazy ...
+    rConvertedValue = rValue;
+    getFastPropertyValue( rOldValue, nHandle );
+    return sal_True;
+}
+
+//------------------------------------------------------------------------------
+void OResultSet::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw (Exception)
+{
     // set it for the driver result set
     Reference< XPropertySet > xSet(m_xDelegatorResultSet, UNO_QUERY);
     switch (nHandle)
@@ -292,13 +304,6 @@ sal_Bool OResultSet::convertFastPropertyValue(Any & rConvertedValue, Any & rOldV
         default:
             DBG_ERROR("unknown Property");
     }
-    return sal_False;
-}
-
-//------------------------------------------------------------------------------
-void OResultSet::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw (Exception)
-{
-    // done in convert...
 }
 
 //------------------------------------------------------------------------------
@@ -381,19 +386,9 @@ namespace
             if ( xConn.is() )
                 xDBMetaData = xConn->getMetaData();
         }
-        catch( const Exception& e )
+        catch( const Exception& )
         {
-        #if OSL_DEBUG_LEVEL > 0
-            Any caught( ::cppu::getCaughtException() );
-            ::rtl::OString sMessage( "lcl_getDBMetaDataFromStatement_nothrow: caught an exception!" );
-            sMessage += "\ntype: ";
-            sMessage += ::rtl::OString( caught.getValueTypeName().getStr(), caught.getValueTypeName().getLength(), osl_getThreadTextEncoding() );
-            sMessage += "\nmessage: ";
-            sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), osl_getThreadTextEncoding() );
-            OSL_ENSURE( false, sMessage );
-        #else
-            e; // make compiler happy
-        #endif
+            DBG_UNHANDLED_EXCEPTION();
         }
         return xDBMetaData;
     }
@@ -965,14 +960,14 @@ sal_Bool OResultSet::moveRelativeToBookmark(const Any& bookmark, sal_Int32 rows)
 }
 
 //------------------------------------------------------------------------------
-sal_Int32 OResultSet::compareBookmarks(const Any& first, const Any& second) throw( SQLException, RuntimeException )
+sal_Int32 OResultSet::compareBookmarks(const Any& _first, const Any& _second) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
 
     checkBookmarkable();
 
-    return Reference< XRowLocate >(m_xDelegatorResultSet, UNO_QUERY)->compareBookmarks(first, second);
+    return Reference< XRowLocate >(m_xDelegatorResultSet, UNO_QUERY)->compareBookmarks(_first, _second);
 }
 
 //------------------------------------------------------------------------------
