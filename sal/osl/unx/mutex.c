@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mutex.c,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:58:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:18:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,10 @@
 
 /*#if defined(PTHREAD_MUTEX_RECURSIVE) && defined(USE_RECURSIVE_MUTEX)*/
 #ifdef LINUX
+
+// The obsolete pthread_mutex_setkind_np (used below in osl_createMutex) seems
+// to be missing from pthread.h on LINUX:
+int pthread_mutexattr_setkind_np(pthread_mutexattr_t *, int);
 
 /*
  *  Linux fully supports recursive mutexes, but only with
@@ -288,8 +292,6 @@ void SAL_CALL osl_destroyMutex(oslMutex Mutex)
     {
         int nRet=0;
 
-        OSL_ASSERT( pthread_equal(pMutex->owner, PTHREAD_NONE) );
-
         nRet = pthread_mutex_destroy(&(pMutex->mutex));
         if ( nRet != 0 )
         {
@@ -372,8 +374,6 @@ sal_Bool SAL_CALL osl_tryToAcquireMutex(oslMutex Mutex)
                           nRet, strerror(nRet));
                 return sal_False;
             }
-
-            OSL_ASSERT( pthread_equal(pMutex->owner, PTHREAD_NONE) );
 
             OSL_ASSERT( pMutex->locks ==  0 );
 
