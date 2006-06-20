@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XUnbufferedStream.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:14:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 06:13:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,20 +79,20 @@ XUnbufferedStream::XUnbufferedStream( ZipEntry & rEntry,
                            sal_Bool bIsEncrypted,
                           const ::rtl::OUString& aMediaType,
                           sal_Bool bRecoveryMode )
-: maEntry ( rEntry )
+: mxZipStream ( xNewZipStream )
+, mxZipSeek ( xNewZipStream, UNO_QUERY )
+, maEntry ( rEntry )
 , mxData ( rData )
+, maCipher ( NULL )
+, maInflater ( sal_True )
 , mbRawStream ( nStreamMode == UNBUFF_STREAM_RAW || nStreamMode == UNBUFF_STREAM_WRAPPEDRAW )
 , mbWrappedRaw ( nStreamMode == UNBUFF_STREAM_WRAPPEDRAW )
 , mbFinished ( sal_False )
-, mxZipStream ( xNewZipStream )
-, mxZipSeek ( xNewZipStream, UNO_QUERY )
-, maInflater ( sal_True )
-, maCipher ( NULL )
-, mnMyCurrent ( 0 )
+, mnHeaderToRead ( 0 )
+, mnZipCurrent ( 0 )
 , mnZipEnd ( 0 )
 , mnZipSize ( 0 )
-, mnZipCurrent ( 0 )
-, mnHeaderToRead ( 0 )
+, mnMyCurrent ( 0 )
 , mbCheckCRC( !bRecoveryMode )
 {
     mnZipCurrent = maEntry.nOffset;
@@ -132,19 +132,19 @@ XUnbufferedStream::XUnbufferedStream( ZipEntry & rEntry,
 // allows to read package raw stream
 XUnbufferedStream::XUnbufferedStream( const Reference < XInputStream >& xRawStream,
                     const vos::ORef < EncryptionData > &rData )
-: mxData ( rData )
+: mxZipStream ( xRawStream )
+, mxZipSeek ( xRawStream, UNO_QUERY )
+, mxData ( rData )
+, maCipher ( NULL )
+, maInflater ( sal_True )
 , mbRawStream ( sal_False )
 , mbWrappedRaw ( sal_False )
 , mbFinished ( sal_False )
-, mxZipStream ( xRawStream )
-, mxZipSeek ( xRawStream, UNO_QUERY )
-, maInflater ( sal_True )
-, maCipher ( NULL )
-, mnMyCurrent ( 0 )
+, mnHeaderToRead ( 0 )
+, mnZipCurrent ( 0 )
 , mnZipEnd ( 0 )
 , mnZipSize ( 0 )
-, mnZipCurrent ( 0 )
-, mnHeaderToRead ( 0 )
+, mnMyCurrent ( 0 )
 , mbCheckCRC( sal_False )
 {
     // for this scenario maEntry is not set !!!
@@ -191,15 +191,15 @@ sal_Int32 SAL_CALL XUnbufferedStream::readBytes( Sequence< sal_Int8 >& aData, sa
 
             if ( mbWrappedRaw && mnHeaderToRead )
             {
-                sal_Int16 nHeadRead = static_cast < sal_Int16 > ( nRequestedBytes > mnHeaderToRead ?
-                                                                    mnHeaderToRead : nRequestedBytes );
+                sal_Int16 nHeadRead = static_cast< sal_Int16 >(( nRequestedBytes > mnHeaderToRead ?
+                                                                                 mnHeaderToRead : nRequestedBytes ));
                 memcpy ( aData.getArray(), maHeader.getConstArray() + maHeader.getLength() - mnHeaderToRead, nHeadRead );
-                mnHeaderToRead -= nHeadRead;
+                mnHeaderToRead = mnHeaderToRead - nHeadRead;
 
                 if ( nHeadRead < nRequestedBytes )
                 {
                     sal_Int32 nToRead = nRequestedBytes - nHeadRead;
-                    nToRead = ( nDiff < nToRead ) ? nDiff : nToRead;
+                    nToRead = ( nDiff < nToRead ) ? sal::static_int_cast< sal_Int32 >( nDiff ) : nToRead;
 
                     Sequence< sal_Int8 > aPureData( nToRead );
                     mxZipSeek->seek ( mnZipCurrent );
@@ -270,12 +270,15 @@ sal_Int32 SAL_CALL XUnbufferedStream::readBytes( Sequence< sal_Int8 >& aData, sa
                             maCRC.update( maCompBuffer );
 
                         Sequence < sal_Int8 > aCryptBuffer ( nZipRead );
-                        rtlCipherError aResult = rtl_cipher_decode ( maCipher,
+                         rtlCipherError aResult =
+                            rtl_cipher_decode ( maCipher,
                                       maCompBuffer.getConstArray(),
                                       nZipRead,
                                       reinterpret_cast < sal_uInt8 * > (aCryptBuffer.getArray()),
                                       nZipRead);
-                        OSL_ASSERT (aResult == rtl_Cipher_E_None);
+                        if( aResult != rtl_Cipher_E_None ) {
+                            OSL_ASSERT (aResult == rtl_Cipher_E_None);
+                        }
                         maCompBuffer = aCryptBuffer; // Now it holds the decrypted data
 
                     }
