@@ -4,9 +4,9 @@
  *
  *  $RCSfile: null_textlayout.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 12:50:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:16:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@ namespace nullcanvas
 {
     TextLayout::TextLayout( const rendering::StringContext&     aText,
                             sal_Int8                            nDirection,
-                            sal_Int64                           nRandomSeed,
+                            sal_Int64                           /*nRandomSeed*/,
                             const CanvasFont::ImplRef&          rFont ) :
         TextLayout_Base( m_aMutex ),
         maText( aText ),
@@ -139,7 +139,7 @@ namespace nullcanvas
         }
     }
 
-    double SAL_CALL TextLayout::justify( double nSize ) throw (lang::IllegalArgumentException, uno::RuntimeException)
+    double SAL_CALL TextLayout::justify( double /*nSize*/ ) throw (lang::IllegalArgumentException, uno::RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -147,7 +147,8 @@ namespace nullcanvas
         return 0.0;
     }
 
-    double SAL_CALL TextLayout::combinedJustify( const uno::Sequence< uno::Reference< rendering::XTextLayout > >& aNextLayouts, double nSize ) throw (lang::IllegalArgumentException, uno::RuntimeException)
+    double SAL_CALL TextLayout::combinedJustify( const uno::Sequence< uno::Reference< rendering::XTextLayout > >& /*aNextLayouts*/,
+                                                 double /*nSize*/ ) throw (lang::IllegalArgumentException, uno::RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -155,7 +156,7 @@ namespace nullcanvas
         return 0.0;
     }
 
-    rendering::TextHit SAL_CALL TextLayout::getTextHit( const geometry::RealPoint2D& aHitPoint ) throw (uno::RuntimeException)
+    rendering::TextHit SAL_CALL TextLayout::getTextHit( const geometry::RealPoint2D& /*aHitPoint*/ ) throw (uno::RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -163,7 +164,8 @@ namespace nullcanvas
         return rendering::TextHit();
     }
 
-    rendering::Caret SAL_CALL TextLayout::getCaret( sal_Int32 nInsertionIndex, sal_Bool bExcludeLigatures ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+    rendering::Caret SAL_CALL TextLayout::getCaret( sal_Int32 /*nInsertionIndex*/,
+                                                    sal_Bool  /*bExcludeLigatures*/ ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -171,7 +173,9 @@ namespace nullcanvas
         return rendering::Caret();
     }
 
-    sal_Int32 SAL_CALL TextLayout::getNextInsertionIndex( sal_Int32 nStartIndex, sal_Int32 nCaretAdvancement, sal_Bool bExcludeLigatures ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+    sal_Int32 SAL_CALL TextLayout::getNextInsertionIndex( sal_Int32 /*nStartIndex*/,
+                                                          sal_Int32 /*nCaretAdvancement*/,
+                                                          sal_Bool  /*bExcludeLigatures*/ ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -179,7 +183,8 @@ namespace nullcanvas
         return 0;
     }
 
-    uno::Reference< rendering::XPolyPolygon2D > SAL_CALL TextLayout::queryVisualHighlighting( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+    uno::Reference< rendering::XPolyPolygon2D > SAL_CALL TextLayout::queryVisualHighlighting( sal_Int32 /*nStartIndex*/,
+                                                                                              sal_Int32 /*nEndIndex*/ ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -187,7 +192,8 @@ namespace nullcanvas
         return uno::Reference< rendering::XPolyPolygon2D >();
     }
 
-    uno::Reference< rendering::XPolyPolygon2D > SAL_CALL TextLayout::queryLogicalHighlighting( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+    uno::Reference< rendering::XPolyPolygon2D > SAL_CALL TextLayout::queryLogicalHighlighting( sal_Int32 /*nStartIndex*/,
+                                                                                               sal_Int32 /*nEndIndex*/ ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -224,9 +230,9 @@ namespace nullcanvas
         return maText;
     }
 
-    bool TextLayout::draw( const rendering::ViewState&                          rViewState,
-                           const rendering::RenderState&                        rRenderState,
-                           const uno::Reference< rendering::XGraphicDevice >&   xGraphicDevice ) const
+    bool TextLayout::draw( const rendering::ViewState&                          /*rViewState*/,
+                           const rendering::RenderState&                        /*rRenderState*/,
+                           const uno::Reference< rendering::XGraphicDevice >&   /*xGraphicDevice*/ ) const
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
