@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pkgcontent.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:55:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:30:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -308,10 +308,10 @@ Content::Content(
         const PackageUri& rUri,
         const ContentProperties& rProps )
 : ContentImplHelper( rxSMgr, pProvider, Identifier ),
-  m_xPackage( Package ),
   m_aUri( rUri ),
   m_aProps( rProps ),
   m_eState( PERSISTENT ),
+  m_xPackage( Package ),
   m_pProvider( pProvider ),
   m_nModifiedProps( NONE_MODIFIED )
 {
@@ -326,10 +326,10 @@ Content::Content(
         const PackageUri& rUri,
         const star::ucb::ContentInfo& Info )
 : ContentImplHelper( rxSMgr, pProvider, Identifier, sal_False ),
-  m_xPackage( Package ),
   m_aUri( rUri ),
   m_aProps( Info.Type ),
   m_eState( TRANSIENT ),
+  m_xPackage( Package ),
   m_pProvider( pProvider ),
   m_nModifiedProps( NONE_MODIFIED )
 {
@@ -512,7 +512,7 @@ rtl::OUString SAL_CALL Content::getContentType()
 // virtual
 uno::Any SAL_CALL Content::execute(
         const star::ucb::Command& aCommand,
-        sal_Int32 CommandId,
+        sal_Int32 /*CommandId*/,
         const uno::Reference< star::ucb::XCommandEnvironment >& Environment )
     throw( uno::Exception,
            star::ucb::CommandAbortedException,
@@ -752,7 +752,7 @@ uno::Any SAL_CALL Content::execute(
 
 //=========================================================================
 // virtual
-void SAL_CALL Content::abort( sal_Int32 CommandId )
+void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ )
     throw( uno::RuntimeException )
 {
     // @@@ Implement logic to abort running commands, if this makes
@@ -2009,14 +2009,14 @@ void Content::transfer(
     rtl::OUString aType = xSource->isFolder()
             ? GetContentType( m_aUri.getScheme(), sal_True )
             : GetContentType( m_aUri.getScheme(), sal_False );
-    star::ucb::ContentInfo aInfo;
-    aInfo.Type = aType;
-    aInfo.Attributes = 0;
+    star::ucb::ContentInfo aContentInfo;
+    aContentInfo.Type = aType;
+    aContentInfo.Attributes = 0;
 
     // Note: The static cast is okay here, because its sure that
     //       createNewContent always creates a Content.
     rtl::Reference< Content > xTarget
-        = static_cast< Content * >( createNewContent( aInfo ).get() );
+        = static_cast< Content * >( createNewContent( aContentInfo ).get() );
     if ( !xTarget.is() )
     {
         uno::Any aProps
@@ -2040,9 +2040,9 @@ void Content::transfer(
     // 2) Copy data from source content to child content.
     //////////////////////////////////////////////////////////////////////
 
-    uno::Sequence< beans::Property > aProps
+    uno::Sequence< beans::Property > aSourceProps
                     = xSource->getPropertySetInfo( xEnv )->getProperties();
-    sal_Int32 nCount = aProps.getLength();
+    sal_Int32 nCount = aSourceProps.getLength();
 
     if ( nCount )
     {
@@ -2050,12 +2050,12 @@ void Content::transfer(
 
         // Get all source values.
         uno::Reference< sdbc::XRow > xRow
-            = xSource->getPropertyValues( aProps );
+            = xSource->getPropertyValues( aSourceProps );
 
         uno::Sequence< beans::PropertyValue > aValues( nCount );
         beans::PropertyValue* pValues = aValues.getArray();
 
-        const beans::Property* pProps = aProps.getConstArray();
+        const beans::Property* pProps = aSourceProps.getConstArray();
         for ( sal_Int32 n = 0; n < nCount; ++n )
         {
             const beans::Property& rProp  = pProps[ n ];
