@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VDescriptor.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:04:04 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:01:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,17 +71,15 @@ namespace connectivity
         protected:
             ::rtl::OUString         m_Name;
 
-            // set the attributes of the properties corresponding to the isnew() flag
-            // must be called from createArrayHelper
-            void changePropertyAttributte(::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property>& _rProps) const
-            {
-                ::com::sun::star::beans::Property* pBegin   = _rProps.getArray();
-                ::com::sun::star::beans::Property* pEnd     = pBegin + _rProps.getLength();
-                for(;pBegin != pEnd;++pBegin)
-                {
-                    pBegin->Attributes = isNew() ? 0 : ::com::sun::star::beans::PropertyAttribute::READONLY;
-                }
-            }
+            /** helper for derived classes to implement OPropertyArrayUsageHelper::createArrayHelper
+
+                This method just calls describeProperties, and flags all properties as READONLY if and
+                only if we do *not* act as descriptor, but as final object.
+
+                @seealso    isNew
+            */
+            ::cppu::IPropertyArrayHelper*   doCreateArrayHelper() const;
+
         private:
             comphelper::UStringMixEqual m_aCase;
             sal_Bool                    m_bNew;
@@ -112,6 +110,10 @@ namespace connectivity
             // com::sun::star::lang::XUnoTunnel
             virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
             static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
+
+            static ODescriptor* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxSomeComp );
+            // retrieves the ODescriptor implementation of a given UNO component, and returns its ->isNew flag
+            static sal_Bool isNew( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxDescriptor );
         };
     }
 
