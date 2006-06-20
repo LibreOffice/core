@@ -4,9 +4,9 @@
  *
  *  $RCSfile: YTable.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:33:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:04:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,10 +118,9 @@ namespace connectivity
 
             // XAlterTable
             virtual void SAL_CALL alterColumnByName( const ::rtl::OUString& colName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
-            /**
-                returns the ALTER TABLE XXX COLUMN statement
+            /** returns the ALTER TABLE XXX statement
             */
-            ::rtl::OUString getAlterTableColumnPart(const ::rtl::OUString& _rsColumnName );
+            ::rtl::OUString getAlterTableColumnPart();
 
             // some methods to alter table structures
             void alterColumnType(sal_Int32 nNewType,const ::rtl::OUString& _rColName,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xDescriptor);
