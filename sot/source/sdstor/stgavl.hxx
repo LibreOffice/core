@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stgavl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:40:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:54:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@ private:
     StgAvlNode* RotLR();
     StgAvlNode* RotRR();
     StgAvlNode* RotRL();
-    void   Enum( short& );
+    void   StgEnum( short& );
     static StgAvlNode* Rem( StgAvlNode**, StgAvlNode*, BOOL );
 protected:
     short nId;                          // iterator ID
