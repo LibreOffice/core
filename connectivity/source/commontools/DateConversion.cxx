@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DateConversion.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 08:20:24 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:02:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,9 @@
 #endif
 #ifndef CONNECTIVITY_CONNECTION_HXX
 #include "TConnection.hxx"
+#endif
+#ifndef CONNECTIVITY_DIAGNOSE_EX_H
+#include "diagnose_ex.h"
 #endif
 #ifndef _COMPHELPER_NUMBERS_HXX_
 #include <comphelper/numbers.hxx>
@@ -158,8 +161,7 @@ using namespace ::com::sun::star::beans;
                 case DataType::DATE:
                 {
                     Date aDate;
-                    sal_Bool bRet = _rVal >>= aDate;
-                    OSL_ENSURE(bRet,"DBTypeConversion::toSQLString: _rVal is not date!");
+                    OSL_VERIFY_RES( _rVal >>= aDate, "DBTypeConversion::toSQLString: _rVal is not date!");
                     if (bQuote) aRet += ::rtl::OUString::createFromAscii("{D '");
                     aRet += DBTypeConversion::toDateString(aDate);;
                     if (bQuote) aRet += ::rtl::OUString::createFromAscii("'}");
@@ -167,8 +169,7 @@ using namespace ::com::sun::star::beans;
                 case DataType::TIME:
                 {
                     Time aTime;
-                    sal_Bool bRet = _rVal >>= aTime;
-                    OSL_ENSURE(bRet,"DBTypeConversion::toSQLString: _rVal is not time!");
+                    OSL_VERIFY_RES( _rVal >>= aTime,"DBTypeConversion::toSQLString: _rVal is not time!");
                     if (bQuote) aRet += ::rtl::OUString::createFromAscii("{T '");
                     aRet += DBTypeConversion::toTimeString(aTime);
                     if (bQuote) aRet += ::rtl::OUString::createFromAscii("'}");
@@ -382,13 +383,14 @@ double DBTypeConversion::getValue(const Reference<XColumn>& xVariant,
     if (!_xColumn.is() || !_xFormatter.is())
         return ::rtl::OUString();
 
-    sal_Int32 nKey;
+    sal_Int32 nKey(0);
     try
     {
         _xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FORMATKEY)) >>= nKey;
     }
     catch (const Exception& )
     {
+        OSL_ENSURE(false, "DBTypeConversion::getValue: caught an exception while asking for the format key!");
     }
 
     if (!nKey)
