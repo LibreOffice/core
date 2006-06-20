@@ -4,9 +4,9 @@
  *
  *  $RCSfile: migrateinstallpath.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 12:35:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:41:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,9 +33,12 @@
  *
  ************************************************************************/
 
+#pragma warning(push, 1) /* disable warnings within system headers */
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <msiquery.h>
+#pragma warning(pop)
+
 #include <malloc.h>
 
 #ifdef UNICODE
