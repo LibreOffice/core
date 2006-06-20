@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DAVResourceAccess.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:07:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:34:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -684,9 +684,9 @@ void DAVResourceAccess::DESTROY( const uno::Reference<
 }
 
 //=========================================================================
-void DAVResourceAccess::LOCK ( const ucb::Lock & rLock,
+void DAVResourceAccess::LOCK ( const ucb::Lock & /*rLock*/,
                                  const uno::Reference<
-                                      ucb::XCommandEnvironment > & xEnv )
+                                      ucb::XCommandEnvironment > & /*xEnv*/ )
     throw( DAVException )
 {
 //    initialize();
@@ -694,9 +694,9 @@ void DAVResourceAccess::LOCK ( const ucb::Lock & rLock,
 }
 
 //=========================================================================
-void DAVResourceAccess::UNLOCK ( const ucb::Lock & rLock,
+void DAVResourceAccess::UNLOCK ( const ucb::Lock & /*rLock*/,
                                    const uno::Reference<
-                                       ucb::XCommandEnvironment > & xEnv )
+                                       ucb::XCommandEnvironment > & /*xEnv*/ )
     throw( DAVException )
 {
 //    initialize();
