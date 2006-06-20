@@ -4,9 +4,9 @@
  *
  *  $RCSfile: signal.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2006-06-02 12:44:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 11:21:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,27 +38,15 @@
 #include <vos/object.hxx>
 #include <vos/signal.hxx>
 
-#if !defined ( WNT )
+using namespace vos;
 
-oslSignalAction SAL_CALL _OSignalHandler_Function(void* pthis, oslSignalInfo* pInfo)
-{
-    return NAMESPACE_VOS(_cpp_OSignalHandler_Function)(pthis, pInfo);
-}
-
-oslSignalAction NAMESPACE_VOS(_cpp_OSignalHandler_Function)(void* pthis, oslSignalInfo* pInfo)
-
-#else
-
-static oslSignalAction SAL_CALL _OSignalHandler_Function(void* pthis, oslSignalInfo* pInfo)
-
-#endif
+oslSignalAction vos::signalHandlerFunction_impl(
+    void * pthis, oslSignalInfo * pInfo)
 {
     NAMESPACE_VOS(OSignalHandler)* pThis= (NAMESPACE_VOS(OSignalHandler)*)pthis;
 
     return ((oslSignalAction)pThis->signal(pInfo));
 }
-
-using namespace vos;
 
 /////////////////////////////////////////////////////////////////////////////
 // Thread class
@@ -69,7 +57,7 @@ VOS_IMPLEMENT_CLASSINFO(VOS_CLASSNAME(OSignalHandler, vos),
 
 OSignalHandler::OSignalHandler()
 {
-    m_hHandler = osl_addSignalHandler(_OSignalHandler_Function, this);
+    m_hHandler = osl_addSignalHandler(signalHandlerFunction_impl, this);
 }
 
 OSignalHandler::~OSignalHandler()
