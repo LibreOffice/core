@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fcode.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 13:11:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:27:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,7 +112,7 @@ OCode::~OCode()
 }
 
 //------------------------------------------------------------------
-OEvaluateSet* OOperand::preProcess(OBoolOperator* pOp, OOperand* pRight)
+OEvaluateSet* OOperand::preProcess(OBoolOperator* /*pOp*/, OOperand* /*pRight*/)
 {
     return NULL;
 }
@@ -208,6 +208,8 @@ OOperandConst::OOperandConst(const OSQLParseNode& rColumnRef, const rtl::OUStrin
             m_aValue.setBound(sal_True);
             return;
         }
+        default:
+            break;
     }
 
     if (SQL_ISTOKEN(&rColumnRef,TRUE))
@@ -433,7 +435,7 @@ double OOp_DIV::operate(const double& fLeft,const double& fRight) const
     return fLeft / fRight;
 }
 // -----------------------------------------------------------------------------
-OEvaluateSet* OOperandAttr::preProcess(OBoolOperator* pOp, OOperand* pRight)
+OEvaluateSet* OOperandAttr::preProcess(OBoolOperator* /*pOp*/, OOperand* /*pRight*/)
 {
     return NULL;
 }
