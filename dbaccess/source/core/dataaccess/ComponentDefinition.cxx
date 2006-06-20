@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ComponentDefinition.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:04:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:42:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,7 @@ void OComponentDefinition::registerProperties()
 {
     OComponentDefinition_Impl* pItem = static_cast<OComponentDefinition_Impl*>(m_pImpl.get());
     OSL_ENSURE(pItem,"Illegal impl struct!");
-    ODataSettings::registerProperties(pItem);
+    ODataSettings::registerPropertiesFor(pItem);
 
     registerProperty(PROPERTY_NAME, PROPERTY_ID_NAME, PropertyAttribute::BOUND | PropertyAttribute::READONLY|PropertyAttribute::CONSTRAINED,
                     &pItem->m_aProps.aTitle, ::getCppuType(&pItem->m_aProps.aTitle));
@@ -115,8 +115,8 @@ OComponentDefinition::OComponentDefinition(const Reference< XMultiServiceFactory
                                            ,const Reference< XInterface >&  _xParentContainer
                                            ,const TContentPtr& _pImpl
                                            ,sal_Bool _bTable)
-    :ODataSettings(m_aBHelper,!_bTable)
-    ,OContentHelper(_xORB,_xParentContainer,_pImpl)
+    :OContentHelper(_xORB,_xParentContainer,_pImpl)
+    ,ODataSettings(m_aBHelper,!_bTable)
     ,m_bTable(_bTable)
 {
     DBG_CTOR(OComponentDefinition, NULL);
@@ -134,8 +134,8 @@ OComponentDefinition::OComponentDefinition( const Reference< XInterface >& _rxCo
                                        ,const Reference< XMultiServiceFactory >& _xORB
                                        ,const TContentPtr& _pImpl
                                        ,sal_Bool _bTable)
-    :ODataSettings(m_aBHelper)
-    ,OContentHelper(_xORB,_rxContainer,_pImpl)
+    :OContentHelper(_xORB,_rxContainer,_pImpl)
+    ,ODataSettings(m_aBHelper)
     ,m_bTable(_bTable)
 {
     DBG_CTOR(OComponentDefinition, NULL);
