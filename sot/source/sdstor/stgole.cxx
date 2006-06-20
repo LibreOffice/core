@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stgole.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 14:25:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:55:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,6 @@
 #include "storinfo.hxx"     // Read/WriteClipboardFormat()
 
 #include <tools/debug.hxx>
-#pragma hdrstop
 
 ///////////////////////// class StgInternalStream ////////////////////////
 
@@ -171,14 +170,14 @@ BOOL StgCompObjStream::Store()
         return FALSE;
     Seek( 0L );
     ByteString aAsciiUserName( aUserName, RTL_TEXTENCODING_ASCII_US );
-    *this << (INT16) 1              // Version?
-          << (INT16) 0xFFFE         // Byte Order Indicator
-          << (INT32) 0x0A03         // Windows 3.10
-          << (INT32) -1L
-          << aClsId                 // Class ID
-          << (INT32) (aAsciiUserName.Len() + 1)
-          << (const char *)aAsciiUserName.GetBuffer()
-          << (UINT8) 0;             // string terminator
+    *this << (INT16) 1          // Version?
+              << (INT16) -2                     // 0xFFFE = Byte Order Indicator
+              << (INT32) 0x0A03         // Windows 3.10
+              << (INT32) -1L
+              << aClsId             // Class ID
+              << (INT32) (aAsciiUserName.Len() + 1)
+              << (const char *)aAsciiUserName.GetBuffer()
+              << (UINT8) 0;             // string terminator
 /*  // determine the clipboard format string
     String aCbFmt;
     if( nCbFormat > FORMAT_GDIMETAFILE )
@@ -212,9 +211,9 @@ BOOL StgOleStream::Load()
     nFlags = 0;
     if( GetError() != SVSTREAM_OK )
         return FALSE;
-    INT32 nVersion = 0;
+    INT32 version = 0;
     Seek( 0L );
-    *this >> nVersion >> nFlags;
+    *this >> version >> nFlags;
     return BOOL( GetError() == SVSTREAM_OK );
 }
 
