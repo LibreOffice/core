@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppControllerGen.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 12:36:08 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:53:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -448,11 +448,11 @@ sal_Bool OApplicationController::suspendDocuments(sal_Bool bSuspend)
 {
     sal_Bool bSubSuspended = sal_True;
     Reference<XModel> xModel;
-    TDocuments::iterator aIter = m_aDocuments.begin();
-    TDocuments::iterator aEnd = m_aDocuments.end();
     sal_Int32 nSuspendPos = 1;
     try
     {
+        TDocuments::iterator aIter = m_aDocuments.begin();
+        TDocuments::iterator aEnd = m_aDocuments.end();
         for (; aIter != aEnd && bSubSuspended; ++aIter,++nSuspendPos)
             bSubSuspended = suspendDocument(aIter->first,bSuspend);
     }
@@ -463,37 +463,37 @@ sal_Bool OApplicationController::suspendDocuments(sal_Bool bSuspend)
     {
         try
         {
-            TDocuments::iterator aIter = m_aDocuments.begin();
-            TDocuments::iterator aEnd = m_aDocuments.end();
-            for (; aIter != aEnd ;  ++aIter)
+            TDocuments::iterator document = m_aDocuments.begin();
+            TDocuments::iterator documentEnd = m_aDocuments.end();
+            for (; document != documentEnd ;  ++document)
             {
-                Reference< XComponent > xDocument = aIter->first;
+                Reference< XComponent > xDocument = document->first;
                 if ( xDocument.is() )
                     xDocument->removeEventListener(static_cast<XFrameActionListener*>(this));
             }
-            aIter = m_aDocuments.begin();
+            document = m_aDocuments.begin();
             // first of all we have to set the second to NULL
-            for (; aIter != aEnd ;  )
+            for (; document != documentEnd ;  )
             {
-                TDocuments::iterator aPos = aIter++;
+                TDocuments::iterator aPos = document++;
                 aPos->second = NULL; // this may also dispose the document
             }
             // work on copy
             TDocuments  aDocuments = m_aDocuments;
-            aIter = aDocuments.begin();
-            aEnd = aDocuments.end();
-            for (; aIter != aEnd ; ++aIter )
+            document = aDocuments.begin();
+            documentEnd = aDocuments.end();
+            for (; document != documentEnd ; ++document )
             {
                 Reference<XController> xController;
-                xModel.set(aIter->first,UNO_QUERY);
+                xModel.set(document->first,UNO_QUERY);
                 if ( xModel.is() )
                     xController = xModel->getCurrentController();
                 else
                 {
-                    xController.set(aIter->first,UNO_QUERY);
+                    xController.set(document->first,UNO_QUERY);
                     if ( !xController.is() )
                     {
-                        Reference<XFrame> xFrame(aIter->first,UNO_QUERY);
+                        Reference<XFrame> xFrame(document->first,UNO_QUERY);
                         if ( xFrame.is() )
                             xController = xFrame->getController();
                     }
@@ -514,8 +514,8 @@ sal_Bool OApplicationController::suspendDocuments(sal_Bool bSuspend)
     }
     else // resuspend the documents again
     {
-        aIter = m_aDocuments.begin();
-        aEnd = m_aDocuments.end();
+        TDocuments::iterator aIter = m_aDocuments.begin();
+        TDocuments::iterator aEnd = m_aDocuments.end();
         try
         {
             for (; aIter != aEnd && nSuspendPos ; ++aIter,--nSuspendPos)
@@ -630,17 +630,17 @@ void OApplicationController::doAction(sal_uInt16 _nId ,OLinkedDocumentsAccess::E
     // special handling for mail, if more than one document is selected attach them all
     if ( _eOpenMode == OLinkedDocumentsAccess::OPEN_FORMAIL )
     {
-        ::std::vector< ::std::pair< ::rtl::OUString ,Reference< XModel > > >::iterator aIter = aCompoments.begin();
-        ::std::vector< ::std::pair< ::rtl::OUString ,Reference< XModel > > >::iterator aEnd = aCompoments.end();
+        ::std::vector< ::std::pair< ::rtl::OUString ,Reference< XModel > > >::iterator componentIter = aCompoments.begin();
+        ::std::vector< ::std::pair< ::rtl::OUString ,Reference< XModel > > >::iterator componentEnd = aCompoments.end();
         ::rtl::OUString aDocTypeString;
         SfxMailModel aSendMail;
         SfxMailModel::SendMailResult eResult = SfxMailModel::SEND_MAIL_OK;
-        for (; aIter != aEnd && SfxMailModel::SEND_MAIL_OK == eResult; ++aIter)
+        for (; componentIter != componentEnd && SfxMailModel::SEND_MAIL_OK == eResult; ++componentIter)
         {
-            Reference< XModel > xModel(aIter->second,UNO_QUERY);
+            Reference< XModel > xModel(componentIter->second,UNO_QUERY);
 
             // Send document as e-Mail using stored/default type
-            eResult = aSendMail.AttachDocument(aDocTypeString,xModel,aIter->first);
+            eResult = aSendMail.AttachDocument(aDocTypeString,xModel,componentIter->first);
         }
         if ( !aSendMail.IsEmpty() )
             aSendMail.Send( m_xCurrentFrame );
