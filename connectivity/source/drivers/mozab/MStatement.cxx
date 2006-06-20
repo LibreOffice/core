@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MStatement.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 12:18:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:45:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,6 +82,9 @@
 #include <algorithm>
 
 
+#ifndef CONNECTIVITY_DIAGNOSE_EX_H
+#include "diagnose_ex.h"
+#endif
 #ifndef CONNECTIVITY_SDRIVER_HXX
 #include "MDriver.hxx"
 #endif
@@ -117,15 +120,15 @@ using namespace com::sun::star::io;
 using namespace com::sun::star::util;
 //------------------------------------------------------------------------------
 OStatement_Base::OStatement_Base(OConnection* _pConnection )
-    : OStatement_BASE(m_aMutex),
-    OPropertySetHelper(OStatement_BASE::rBHelper),
-    rBHelper(OStatement_BASE::rBHelper),
-    m_pConnection(_pConnection),
-    m_pTable(NULL),
-    m_pParseTree(NULL),
-    m_aSQLIterator(_pConnection->createCatalog()->getTables(), _pConnection->getMetaData(), NULL),
-    m_xDBMetaData(_pConnection->getMetaData()),
-    m_aParser(_pConnection->getDriver()->getMSFactory())
+    :OStatement_BASE(m_aMutex)
+    ,OPropertySetHelper(OStatement_BASE::rBHelper)
+    ,m_xDBMetaData(_pConnection->getMetaData())
+    ,m_pTable(NULL)
+    ,m_pConnection(_pConnection)
+    ,m_aParser(_pConnection->getDriver()->getMSFactory())
+    ,m_pSQLIterator( new connectivity::OSQLParseTreeIterator( _pConnection->createCatalog()->getTables(), _pConnection->getMetaData(), NULL ) )
+    ,m_pParseTree(NULL)
+    ,rBHelper(OStatement_BASE::rBHelper)
 {
     m_pConnection->acquire();
     OSL_TRACE("In/Out: OStatement_Base::OStatement_Base" );
@@ -154,7 +157,7 @@ void OStatement_BASE2::disposing()
         m_pConnection->release();
     m_pConnection = NULL;
 
-    m_aSQLIterator.dispose();
+    m_pSQLIterator->dispose();
 
     dispose_ChildImpl();
     OStatement_Base::disposing();
@@ -227,12 +230,12 @@ void OStatement_Base::createTable( )
     if(m_pParseTree)
     {
         ::vos::ORef<connectivity::OSQLColumns> xCreateColumn;
-        if (m_aSQLIterator.getStatementType() == SQL_STATEMENT_CREATE_TABLE)
+        if (m_pSQLIterator->getStatementType() == SQL_STATEMENT_CREATE_TABLE)
         {
-            const OSQLTables& xTabs = m_aSQLIterator.getTables();
+            const OSQLTables& xTabs = m_pSQLIterator->getTables();
             OSL_ENSURE( !xTabs.empty(), "Need a Table");
             ::rtl::OUString ouTableName=xTabs.begin()->first;
-            xCreateColumn     = m_aSQLIterator.getCreateColumns();
+            xCreateColumn     = m_pSQLIterator->getCreateColumns();
             OSL_ENSURE(xCreateColumn.isValid(), "Need the Columns!!");
 
             const OColumnAlias & xColumnAlias = m_pConnection->getColumnAlias();
@@ -257,7 +260,7 @@ void OStatement_Base::createTable( )
             {
                 getOwnConnection()->throwGenericSQLException( _aDbHelper.getErrorResourceId() );
             }
-            m_aSQLIterator = connectivity::OSQLParseTreeIterator(m_pConnection->createCatalog()->getTables(), m_pConnection->getMetaData(), NULL);
+            m_pSQLIterator.reset( new connectivity::OSQLParseTreeIterator(m_pConnection->createCatalog()->getTables(), m_pConnection->getMetaData(), NULL) );
         }
 
     }
@@ -277,15 +280,16 @@ sal_Bool OStatement_Base::parseSql( const ::rtl::OUString& sql , sal_Bool bAdjus
 #if OSL_DEBUG_LEVEL > 0
     {
         const char* str = OUtoCStr(sql);
+        OSL_UNUSED( str );
         OSL_TRACE("ParseSQL: %s\n", OUtoCStr( sql ) );
     }
 #endif // OSL_DEBUG_LEVEL
 
     if(m_pParseTree)
     {
-        m_aSQLIterator.setParseTree(m_pParseTree);
-        m_aSQLIterator.traverseAll();
-        const OSQLTables& xTabs = m_aSQLIterator.getTables();
+        m_pSQLIterator->setParseTree(m_pParseTree);
+        m_pSQLIterator->traverseAll();
+        const OSQLTables& xTabs = m_pSQLIterator->getTables();
         if(xTabs.empty())
             ::dbtools::throwGenericSQLException(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Driver requires a single table to be specified in query")),NULL);
 #if OSL_DEBUG_LEVEL > 0
@@ -296,7 +300,7 @@ sal_Bool OStatement_Base::parseSql( const ::rtl::OUString& sql , sal_Bool bAdjus
 #endif
 
         Reference<XIndexAccess> xNames;
-        switch(m_aSQLIterator.getStatementType())
+        switch(m_pSQLIterator->getStatementType())
         {
         case SQL_STATEMENT_SELECT:
 
@@ -319,7 +323,6 @@ sal_Bool OStatement_Base::parseSql( const ::rtl::OUString& sql , sal_Bool bAdjus
         case SQL_STATEMENT_CREATE_TABLE:
             createTable();
             return sal_False;
-            break;
         default:
             ::dbtools::throwGenericSQLException(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Problem parsing SQL!")),NULL);
         }
@@ -338,7 +341,7 @@ sal_Bool OStatement_Base::parseSql( const ::rtl::OUString& sql , sal_Bool bAdjus
 
 OResultSet* OStatement_Base::createResultSet()
 {
-    return new OResultSet(this,m_aSQLIterator);
+    return new OResultSet(this,*m_pSQLIterator);
 }
 // -------------------------------------------------------------------------
 
@@ -405,8 +408,9 @@ Any SAL_CALL OStatement::queryInterface( const Type & rType ) throw(RuntimeExcep
     return aRet;
 }
 // -------------------------------------------------------------------------
-sal_Int32 SAL_CALL OStatement_Base::executeUpdate( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL OStatement_Base::executeUpdate( const ::rtl::OUString& /*sql*/ ) throw(SQLException, RuntimeException)
 {
+    ::dbtools::throwFeatureNotImplementedException( "XPreparedStatement::executeUpdate", *this );
     return 0;
 
 }
@@ -415,7 +419,6 @@ Any SAL_CALL OStatement_Base::getWarnings(  ) throw(SQLException, RuntimeExcepti
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
 
     return makeAny(m_aLastWarning);
 }
@@ -458,10 +461,10 @@ void SAL_CALL OStatement_Base::clearWarnings(  ) throw(SQLException, RuntimeExce
 }
 // -------------------------------------------------------------------------
 sal_Bool OStatement_Base::convertFastPropertyValue(
-                            Any & rConvertedValue,
-                            Any & rOldValue,
-                            sal_Int32 nHandle,
-                            const Any& rValue )
+                            Any & /*rConvertedValue*/,
+                            Any & /*rOldValue*/,
+                            sal_Int32 /*nHandle*/,
+                            const Any& /*rValue*/ )
                                 throw (::com::sun::star::lang::IllegalArgumentException)
 {
     sal_Bool bConverted = sal_False;
@@ -469,7 +472,7 @@ sal_Bool OStatement_Base::convertFastPropertyValue(
     return bConverted;
 }
 // -------------------------------------------------------------------------
-void OStatement_Base::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue) throw (Exception)
+void OStatement_Base::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& /*rValue*/) throw (Exception)
 {
     // set the value to what ever is nescessary
     switch(nHandle)
@@ -487,7 +490,7 @@ void OStatement_Base::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const A
     }
 }
 // -------------------------------------------------------------------------
-void OStatement_Base::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
+void OStatement_Base::getFastPropertyValue(Any& /*rValue*/,sal_Int32 nHandle) const
 {
     switch(nHandle)
     {
@@ -533,12 +536,12 @@ Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OStatement_Base:
 // -----------------------------------------------------------------------------
 void OStatement_Base::createColumnMapping()
 {
-    sal_Int32 i;
+    size_t i;
 
     // initialize the column index map (mapping select columns to table columns)
-    ::vos::ORef<connectivity::OSQLColumns>  xColumns = m_aSQLIterator.getSelectColumns();
+    ::vos::ORef<connectivity::OSQLColumns>  xColumns = m_pSQLIterator->getSelectColumns();
     m_aColMapping.resize(xColumns->size() + 1);
-    for (i=0; i<(sal_Int32)m_aColMapping.size(); ++i)
+    for (i=0; i<m_aColMapping.size(); ++i)
         m_aColMapping[i] = i;
 
     Reference<XIndexAccess> xNames(m_xColNames,UNO_QUERY);
@@ -557,7 +560,7 @@ void OStatement_Base::createColumnMapping()
 
 void OStatement_Base::analyseSQL()
 {
-    const OSQLParseNode* pOrderbyClause = m_aSQLIterator.getOrderTree();
+    const OSQLParseNode* pOrderbyClause = m_pSQLIterator->getOrderTree();
     if(pOrderbyClause)
     {
         OSQLParseNode * pOrderingSpecCommalist = pOrderbyClause->getChild(2);
