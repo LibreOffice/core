@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:47:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:48:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -554,12 +554,12 @@ static const struct InstancesArray {
 extern "C"
 {
 
-void SAL_CALL component_getImplementationEnvironment( const sal_Char** ppEnvTypeName, uno_Environment** ppEnv )
+void SAL_CALL component_getImplementationEnvironment( const sal_Char** ppEnvTypeName, uno_Environment** /*ppEnv*/ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-sal_Bool SAL_CALL component_writeInfo( void* _pServiceManager, void* _pRegistryKey )
+sal_Bool SAL_CALL component_writeInfo( void* /*_pServiceManager*/, void* _pRegistryKey )
 {
     if (_pRegistryKey)
     {
@@ -582,7 +582,7 @@ sal_Bool SAL_CALL component_writeInfo( void* _pServiceManager, void* _pRegistryK
     return sal_True;
 }
 
-void* SAL_CALL component_getFactory( const sal_Char* sImplementationName, void* _pServiceManager, void* _pRegistryKey )
+void* SAL_CALL component_getFactory( const sal_Char* sImplementationName, void* _pServiceManager, void* /*_pRegistryKey*/ )
 {
     void* pRet = NULL;
 
