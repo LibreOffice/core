@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableDesignHelpBar.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:37:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:32:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@ using namespace dbaui;
 //==================================================================
 // class OTableDesignHelpBar
 //==================================================================
-DBG_NAME(OTableDesignHelpBar);
+DBG_NAME(OTableDesignHelpBar)
 //------------------------------------------------------------------------------
 OTableDesignHelpBar::OTableDesignHelpBar( Window* pParent ) :
      TabPage( pParent, WB_3DLOOK )
