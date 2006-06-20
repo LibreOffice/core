@@ -15,7 +15,7 @@ char wd[128];
     der Verkettung gibt, irgendwann irgendwo wird mal ein nlist->next
     ueberschrieben, was in eineme SIGSEGV resultiert.
     Den GDB mit watchpoint hab ich aber nach 2 Tagen abgebrochen..
-    so loeppt´s jedenfalls erstmal..
+    so loeppt's jedenfalls erstmal..
  */
 #define NLSIZE 15000
 
@@ -52,11 +52,10 @@ struct kwtab
         {"__DATE__", KDATE, ISMAC + ISUNCHANGE},
         {"__TIME__", KTIME, ISMAC + ISUNCHANGE},
         {"__STDC__", KSTDC, ISUNCHANGE},
-        {NULL}
+        {NULL, 0, 0}
 };
 
 unsigned long namebit[077 + 1];
-Nlist *np;
 
 void
     setup_kwtab(void)
@@ -64,7 +63,7 @@ void
     struct kwtab *kp;
     Nlist *np;
     Token t;
-    static Token deftoken[1] = {{NAME, 0, 0, 7, (uchar *) "defined"}};
+    static Token deftoken[1] = {{NAME, 0, 0, 7, (uchar *) "defined", 0}};
     static Tokenrow deftr = {deftoken, deftoken, deftoken + 1, 1};
 
     for (kp = kwtab; kp->kw; kp++)
@@ -72,8 +71,8 @@ void
         t.t = (uchar *) kp->kw;
         t.len = strlen(kp->kw);
         np = lookup(&t, 1);
-        np->flag = kp->flag;
-        np->val = kp->val;
+        np->flag = (char) kp->flag;
+        np->val = (char) kp->val;
         if (np->val == KDEFINED)
         {
             kwdefined = np;
