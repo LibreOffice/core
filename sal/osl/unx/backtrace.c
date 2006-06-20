@@ -4,9 +4,9 @@
  *
  *  $RCSfile: backtrace.c,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 17:05:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:16:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,7 @@ int backtrace( void **buffer, int max_frames )
     setjmp(ctx);
     fp = (struct frame*)(((size_t*)(ctx))[FRAME_PTR_OFFSET]);
     for ( i=0; (i<FRAME_OFFSET) && (fp!=0); i++)
-        fp = fp->fr_savfp;
+        fp = (struct frame *) fp->fr_savfp;
 
     /* iterate through backtrace */
     for (i=0; fp && fp->fr_savpc && i<max_frames; i++)
@@ -82,7 +82,7 @@ int backtrace( void **buffer, int max_frames )
         /* store frame */
         *(buffer++) = (void *)fp->fr_savpc;
         /* next frame */
-        fp=fp->fr_savfp;
+        fp = (struct frame *) fp->fr_savfp;
     }
     return i;
 }
