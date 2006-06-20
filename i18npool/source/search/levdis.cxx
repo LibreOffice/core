@@ -4,9 +4,9 @@
  *
  *  $RCSfile: levdis.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:22:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:48:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,8 +90,6 @@
 #ifdef SOLARIS
 #undef min
 #endif
-
-#pragma hdrstop
 
 #define LEVDISBIG   (nLimit + 1)    // Returnwert wenn Distanz > nLimit
 #define LEVDISDOUBLEBUF 2048        // dadrueber wird nicht mehr gedoppelt
@@ -569,8 +567,8 @@ WLevDistance::WLevDistance( const WLevDistance& rWLD ) :
     nRepP0( rWLD.nRepP0 ),
     nInsQ0( rWLD.nInsQ0 ),
     nDelR0( rWLD.nDelR0 ),
-    bSplitCount( rWLD.bSplitCount ),
-    nStars( rWLD.nStars )
+    nStars( rWLD.nStars ),
+    bSplitCount( rWLD.bSplitCount )
 {
     cpPattern = aPatMem.GetcPtr();
     bpPatIsWild = aPatMem.GetbPtr();
