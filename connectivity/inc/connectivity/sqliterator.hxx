@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqliterator.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:13:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:00:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,10 +156,10 @@ namespace connectivity
 
 
       private:
-        OSQLParseTreeIterator();        // never implemented
+        OSQLParseTreeIterator();                                    // never implemented
+        OSQLParseTreeIterator(const OSQLParseTreeIterator & rIter); // never implemented
 
       public:
-        OSQLParseTreeIterator(const OSQLParseTreeIterator & rIter);
         OSQLParseTreeIterator(  const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xTableSupplier ,
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _xDatabaseMetaData,
                                 const OSQLParseNode* pRoot,
@@ -168,11 +168,11 @@ namespace connectivity
 
         inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
             { return ::rtl_allocateMemory( nSize ); }
-        inline static void * SAL_CALL operator new( size_t nSize,void* _pHint ) SAL_THROW( () )
+        inline static void * SAL_CALL operator new( size_t,void* _pHint ) SAL_THROW( () )
             { return _pHint; }
         inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
             { ::rtl_freeMemory( pMem ); }
-        inline static void SAL_CALL operator delete( void * pMem,void* _pHint ) SAL_THROW( () )
+        inline static void SAL_CALL operator delete( void *,void* ) SAL_THROW( () )
             {  }
 
         void dispose();
@@ -248,7 +248,7 @@ namespace connectivity
         // des Parse Tree abgebrochen. Ansonsten liefert "Status().IsSuccessful() == TRUE".
 
         void traverseTableNames(OSQLTables& _rTables);
-        virtual void setTableName(const ::rtl::OUString & rTableName, const ::rtl::OUString & rCatalogName, const ::rtl::OUString& rSchemaName,
+        void setTableName(const ::rtl::OUString & rTableName, const ::rtl::OUString & rCatalogName, const ::rtl::OUString& rSchemaName,
                               const ::rtl::OUString & rTableRange);
         // [TableName enthaelt immer einen Namen, TableRange ist, falls angegeben, die "Range"-
         // Variable (eine Art Alias-Name fuer den TableName), falls nicht angegeben, identisch
@@ -260,10 +260,10 @@ namespace connectivity
         void traverseCreateColumns(const OSQLParseNode* pSelectNode); //traverse columns for "create table" statement
 
         void traverseOrderByColumnNames(const OSQLParseNode* pSelectNode);
-        virtual void setOrderByColumnName(const ::rtl::OUString & rColumnName, const ::rtl::OUString & rTableRange, sal_Bool bAscending);
+        void setOrderByColumnName(const ::rtl::OUString & rColumnName, const ::rtl::OUString & rTableRange, sal_Bool bAscending);
 
         void traverseGroupByColumnNames(const OSQLParseNode* pSelectNode);
-        virtual void setGroupByColumnName(const ::rtl::OUString & rColumnName, const ::rtl::OUString & rTableRange);
+        void setGroupByColumnName(const ::rtl::OUString & rColumnName, const ::rtl::OUString & rTableRange);
         // [TableRange kann leer sein, wenn nicht angegeben]
 
         // Bei Selektionskriterien werden (selbst bei einem einfachen Praedikat)
@@ -286,11 +286,11 @@ namespace connectivity
         // traverse-Aufruf erledigen kann)!
         //
         void traverseSelectionCriteria(const OSQLParseNode* pSelectNode);
-        virtual void setORCriteriaPre();
-        virtual void setORCriteriaPost();
-        virtual void setANDCriteriaPre();
-        virtual void setANDCriteriaPost();
-        virtual void setPredicate(const ::rtl::OUString & rColumnName,
+        void setORCriteriaPre();
+        void setORCriteriaPost();
+        void setANDCriteriaPre();
+        void setANDCriteriaPost();
+        void setPredicate(const ::rtl::OUString & rColumnName,
                                   const ::rtl::OUString & rTableRange,
                                   sal_Int32 ePredicateType,
                                   const ::rtl::OUString & rValue,
@@ -299,7 +299,7 @@ namespace connectivity
 
         // Erweiterung auf UPDATE- und INSERT-Statement ... (nyi):
         void traverseAssignments();
-        virtual void setAssign(const ::rtl::OUString & rColumnName,
+        void setAssign(const ::rtl::OUString & rColumnName,
                                const ::rtl::OUString & rValue, sal_Bool bsetNull,
                                const ::rtl::OUString & rParameterName);
 
