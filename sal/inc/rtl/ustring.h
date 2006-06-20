@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ustring.h,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:45:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:14:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1184,7 +1184,7 @@ sal_Int32 SAL_CALL rtl_uString_getLength( const rtl_uString * str ) SAL_THROW_EX
     @return
     a pointer to the null-terminated character array.
  */
-sal_Unicode * SAL_CALL rtl_uString_getStr( rtl_uString * const str ) SAL_THROW_EXTERN_C();
+sal_Unicode * SAL_CALL rtl_uString_getStr( rtl_uString * str ) SAL_THROW_EXTERN_C();
 
 /** Create a new string that is the concatenation of two other strings.
 
@@ -1234,7 +1234,7 @@ void SAL_CALL rtl_uString_newConcat( rtl_uString ** newStr, rtl_uString * left, 
     @param subStr
     either null or a valid string to be inserted.
  */
-void SAL_CALL rtl_uString_newReplaceStrAt( rtl_uString ** newStr, rtl_uString * str, sal_Int32 index, sal_Int32 count, rtl_uString * subStr ) SAL_THROW_EXTERN_C();
+void SAL_CALL rtl_uString_newReplaceStrAt( rtl_uString ** newStr, rtl_uString * str, sal_Int32 idx, sal_Int32 count, rtl_uString * subStr ) SAL_THROW_EXTERN_C();
 
 /** Create a new string by replacing all occurrences of a single character
     within another string.
@@ -1369,7 +1369,7 @@ void SAL_CALL rtl_uString_newTrim( rtl_uString ** newStr, rtl_uString * str ) SA
     @return
     the index of the next token, or -1 if no more tokens follow.
  */
-sal_Int32 SAL_CALL rtl_uString_getToken( rtl_uString ** newStr , rtl_uString * str, sal_Int32 token, sal_Unicode cTok, sal_Int32 index ) SAL_THROW_EXTERN_C();
+sal_Int32 SAL_CALL rtl_uString_getToken( rtl_uString ** newStr , rtl_uString * str, sal_Int32 token, sal_Unicode cTok, sal_Int32 idx ) SAL_THROW_EXTERN_C();
 
 /* ======================================================================= */
 
