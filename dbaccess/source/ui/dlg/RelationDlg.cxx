@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RelationDlg.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:27:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:03:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,7 +100,9 @@ DBG_NAME(ORelationDialog)
 ORelationDialog::ORelationDialog( OJoinTableView* pParent,
                                  ORelationTableConnectionData* pConnectionData,
                                  BOOL bAllowTableSelect )
-    : ModalDialog( pParent, ModuleRes(DLG_REL_PROPERTIES) )
+    :ModalDialog( pParent, ModuleRes(DLG_REL_PROPERTIES) )
+    ,m_pTableMap(pParent->GetTabWinMap())
+
     ,aFL_CascUpd(           this, ModuleRes(FL_CASC_UPD) )
     ,aRB_NoCascUpd(         this, ModuleRes(RB_NO_CASC_UPD) )
     ,aRB_CascUpd(           this, ModuleRes(RB_CASC_UPD) )
@@ -111,14 +113,14 @@ ORelationDialog::ORelationDialog( OJoinTableView* pParent,
     ,aRB_CascDel(           this, ModuleRes(RB_CASC_DEL) )
     ,aRB_CascDelNull(       this, ModuleRes(RB_CASC_DEL_NULL) )
     ,aRB_CascDelDefault(    this, ModuleRes(RB_CASC_DEL_DEFAULT) )
-    ,m_pOrigConnData( pConnectionData )
 
     ,aPB_OK( this, ResId( PB_OK ) )
     ,aPB_CANCEL( this, ResId( PB_CANCEL ) )
     ,aPB_HELP( this, ResId( PB_HELP ) )
-    ,m_bTriedOneUpdate(FALSE)
-    ,m_pTableMap(pParent->GetTabWinMap())
+
     ,m_pConnData(NULL)
+    ,m_pOrigConnData( pConnectionData )
+    ,m_bTriedOneUpdate(FALSE)
 {
     DBG_CTOR(ORelationDialog,NULL);
 
@@ -204,7 +206,7 @@ ORelationDialog::~ORelationDialog()
 
 
 //------------------------------------------------------------------------
-IMPL_LINK( ORelationDialog, OKClickHdl, Button*, pButton )
+IMPL_LINK( ORelationDialog, OKClickHdl, Button*, /*pButton*/ )
 {
     //////////////////////////////////////////////////////////////////////
     // RadioButtons auslesen
@@ -296,7 +298,7 @@ void ORelationDialog::setValid(sal_Bool _bValid)
     aPB_OK.Enable(_bValid);
 }
 // -----------------------------------------------------------------------------
-void ORelationDialog::notifyConnectionChange(OTableConnectionData* _pConnectionData)
+void ORelationDialog::notifyConnectionChange()
 {
     Init(m_pConnData);
 }
