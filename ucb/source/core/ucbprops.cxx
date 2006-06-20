@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ucbprops.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:17:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:17:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -352,9 +352,8 @@ static PropertyTableEntry __aPropertyTable[] =
 //=========================================================================
 
 UcbPropertiesManager::UcbPropertiesManager(
-                        const Reference< XMultiServiceFactory >& rxSMgr )
-: /*m_xSMgr( rxSMgr ),*/
-  m_pProps( 0 )
+                        const Reference< XMultiServiceFactory >& )
+: m_pProps( 0 )
 {
 }
 
