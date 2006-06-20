@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableCopyHelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:23:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:20:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,11 +152,11 @@ using namespace ::com::sun::star::ucb;
     // -----------------------------------------------------------------------------
 #define FILL_PARAM(type,method)                         \
 {                                                   \
-    type nValue = xRow->g##method(i);               \
+    type nValue = xRow->g##method(column);          \
     if ( !xRow->wasNull() )                         \
         xParameter->s##method(nPos,nValue);         \
     else                                            \
-        xParameter->setNull(nPos,aColumnTypes[i]);  \
+        xParameter->setNull(nPos,aColumnTypes[column]); \
 }
 // -----------------------------------------------------------------------------
 namespace
@@ -251,12 +251,12 @@ void insertRows(const Reference<XResultSet>& xSrcRs,
             SQLExceptionInfo aInfo;
             try
             {
-                for(sal_Int32 i = 1;aPosIter != _rvColumns.end();++aPosIter)
+                for( sal_Int32 column = 1; aPosIter != _rvColumns.end(); ++aPosIter)
                 {
                     sal_Int32 nPos = aPosIter->first;
-                    if ( nPos == CONTAINER_ENTRY_NOTFOUND )
+                    if ( nPos == COLUMN_POSITION_NOT_FOUND )
                     {
-                        ++i; // otherwise we don't get the correct value when only the 2nd source column was selected
+                        ++column; // otherwise we don't get the correct value when only the 2nd source column was selected
                         continue;
                     }
                     if ( bIsAutoIncrement && bInsertAutoIncrement )
@@ -266,8 +266,8 @@ void insertRows(const Reference<XResultSet>& xSrcRs,
                         continue;
                     }
                     // we have to check here against 1 because the parameters are 1 based
-                    OSL_ENSURE( i >= 1 && i < (sal_Int32)aColumnTypes.size(),"Index out of range for column types!");
-                    switch(aColumnTypes[i])
+                    OSL_ENSURE( column >= 1 && column < (sal_Int32)aColumnTypes.size(),"Index out of range for column types!");
+                    switch(aColumnTypes[column])
                     {
                         case DataType::CHAR:
                         case DataType::VARCHAR:
@@ -316,7 +316,7 @@ void insertRows(const Reference<XResultSet>& xSrcRs,
                         default:
                             OSL_ENSURE(0,"Unknown type");
                     }
-                    ++i;
+                    ++column;
                 }
                 xPrep->executeUpdate();
             }
@@ -338,12 +338,11 @@ void insertRows(const Reference<XResultSet>& xSrcRs,
                     {
                         case SQLExceptionInfo::SQL_EXCEPTION:
                             throw *(const SQLException*)aInfo;
-                            break;
                         case SQLExceptionInfo::SQL_WARNING:
                             throw *(const SQLWarning*)aInfo;
-                            break;
                         case SQLExceptionInfo::SQL_CONTEXT:
                             throw *(const SQLContext*)aInfo;
+                        default:
                             break;
                     }
                 }
@@ -667,13 +666,13 @@ void OTableCopyHelper::insertTable(sal_Int32 _nCommandType
                                     Reference< XColumnLocate> xLocate(xSrcRs,UNO_QUERY);
                                     Reference<XColumnsSupplier> xSrcColsSup(xSourceObject,UNO_QUERY);
                                     OSL_ENSURE(xSrcColsSup.is(),"No source columns!");
-                                    Reference<XNameAccess> xNameAccess = xSrcColsSup->getColumns();
-                                    Sequence< ::rtl::OUString> aSeq = xNameAccess->getElementNames();
+                                    Reference<XNameAccess> xSourceColumns = xSrcColsSup->getColumns();
+                                    Sequence< ::rtl::OUString> aSeq = xSourceColumns->getElementNames();
                                     const ::rtl::OUString* pBegin = aSeq.getConstArray();
                                     const ::rtl::OUString* pEnd   = pBegin + aSeq.getLength();
 
                                     ODatabaseExport::TPositions aNewColMapping;
-                                    aNewColMapping.resize( aColumnMapping.size() ,ODatabaseExport::TPositions::value_type(CONTAINER_ENTRY_NOTFOUND,CONTAINER_ENTRY_NOTFOUND) );
+                                    aNewColMapping.resize( aColumnMapping.size() ,ODatabaseExport::TPositions::value_type( COLUMN_POSITION_NOT_FOUND, COLUMN_POSITION_NOT_FOUND ) );
 
                                     for(sal_Int32 k = 0;pBegin != pEnd;++pBegin,++k)
                                     {
