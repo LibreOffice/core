@@ -4,9 +4,9 @@
  *
  *  $RCSfile: byteseq.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:36:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:14:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,7 @@ inline ByteSequence::ByteSequence( const sal_Int8 * pElements, sal_Int32 len )
 #endif
 }
 //__________________________________________________________________________________________________
-inline ByteSequence::ByteSequence( sal_Int32 len, enum __ByteSequence_NoDefault value )
+inline ByteSequence::ByteSequence( sal_Int32 len, enum __ByteSequence_NoDefault )
     : _pSequence( 0 )
 {
     ::rtl_byte_sequence_constructNoDefault( &_pSequence, len );
@@ -95,7 +95,7 @@ inline ByteSequence::ByteSequence( sal_Int32 len, enum __ByteSequence_NoDefault 
 #endif
 }
 //__________________________________________________________________________________________________
-inline ByteSequence::ByteSequence( sal_Sequence *pSequence, enum __ByteSequence_NoAcquire value ) SAL_THROW( () )
+inline ByteSequence::ByteSequence( sal_Sequence *pSequence, enum __ByteSequence_NoAcquire ) SAL_THROW( () )
     : _pSequence( pSequence )
 {
 }
