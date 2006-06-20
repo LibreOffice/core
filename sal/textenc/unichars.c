@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unichars.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:46:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:39:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,22 +44,22 @@
 #include "sal/types.h"
 #endif
 
-sal_Bool ImplIsNoncharacter(sal_uInt32 nUtf32)
+int ImplIsNoncharacter(sal_uInt32 nUtf32)
 {
     /* All code points that are noncharacters, as of Unicode 3.1.1. */
-    return nUtf32 >= 0xFDD0 && nUtf32 <= 0xFDEF
+    return (nUtf32 >= 0xFDD0 && nUtf32 <= 0xFDEF)
            || (nUtf32 & 0xFFFF) >= 0xFFFE
            || nUtf32 > 0x10FFFF;
 }
 
-sal_Bool ImplIsControlOrFormat(sal_uInt32 nUtf32)
+int ImplIsControlOrFormat(sal_uInt32 nUtf32)
 {
     /* All code points of <http://www.unicode.org/Public/UNIDATA/
        UnicodeData.txt>, Version 3.1.1, that have a General Category of Cc
        (Other, Control) or Cf (Other, Format).
      */
     return nUtf32 <= 0x001F
-           || nUtf32 >= 0x007F && nUtf32 <= 0x009F
+           || (nUtf32 >= 0x007F && nUtf32 <= 0x009F)
            || nUtf32 == 0x070F /* SYRIAC ABBREVIATION MARK */
            || nUtf32 == 0x180B /* MONGOLIAN FREE VARIATION SELECTOR ONE */
            || nUtf32 == 0x180C /* MONGOLIAN FREE VARIATION SELECTOR TWO */
@@ -93,33 +93,33 @@ sal_Bool ImplIsControlOrFormat(sal_uInt32 nUtf32)
            || nUtf32 == 0x1D179 /* MUSICAL SYMBOL BEGIN PHRASE */
            || nUtf32 == 0x1D17A /* MUSICAL SYMBOL END PHRASE */
            || nUtf32 == 0xE0001 /* LANGUAGE TAG */
-           || nUtf32 >= 0xE0020 && nUtf32 <= 0xE007F;
+           || (nUtf32 >= 0xE0020 && nUtf32 <= 0xE007F);
 }
 
-sal_Bool ImplIsHighSurrogate(sal_uInt32 nUtf32)
+int ImplIsHighSurrogate(sal_uInt32 nUtf32)
 {
     /* All code points that are high-surrogates, as of Unicode 3.1.1. */
     return nUtf32 >= 0xD800 && nUtf32 <= 0xDBFF;
 }
 
-sal_Bool ImplIsLowSurrogate(sal_uInt32 nUtf32)
+int ImplIsLowSurrogate(sal_uInt32 nUtf32)
 {
     /* All code points that are low-surrogates, as of Unicode 3.1.1. */
     return nUtf32 >= 0xDC00 && nUtf32 <= 0xDFFF;
 }
 
-sal_Bool ImplIsPrivateUse(sal_uInt32 nUtf32)
+int ImplIsPrivateUse(sal_uInt32 nUtf32)
 {
     /* All code points of <http://www.unicode.org/Public/UNIDATA/
        UnicodeData.txt>, Version 3.1.1, that have a General Category of Co
        (Other, Private Use).
      */
-    return nUtf32 >= 0xE000 && nUtf32 <= 0xF8FF
-           || nUtf32 >= 0xF0000 && nUtf32 <= 0xFFFFD
-           || nUtf32 >= 0x100000 && nUtf32 <= 0x10FFFD;
+    return (nUtf32 >= 0xE000 && nUtf32 <= 0xF8FF)
+           || (nUtf32 >= 0xF0000 && nUtf32 <= 0xFFFFD)
+           || (nUtf32 >= 0x100000 && nUtf32 <= 0x10FFFD);
 }
 
-sal_Bool ImplIsZeroWidth(sal_uInt32 nUtf32)
+int ImplIsZeroWidth(sal_uInt32 nUtf32)
 {
     /* All code points of <http://www.unicode.org/Public/UNIDATA/
        UnicodeData.txt>, Version 3.1.1, that have "ZERO WIDTH" in their
