@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpp6.c,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:59:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:50:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -235,8 +235,7 @@ skipws()
         return (c);
 }
 
-void scanid(c)
-register int    c;                              /* First char of id     */
+void scanid(int c)
 /*
  * Get the next token (an id) into the token buffer.
  * Note: this code is duplicated in lookid().
@@ -250,7 +249,7 @@ register int    c;                              /* First char of id     */
         bp = token;
         do {
             if (bp < &token[IDMAX])             /* token dim is IDMAX+1 */
-                *bp++ = c;
+                *bp++ = (char)c;
             c = get();
         } while (type[c] == LET || type[c] == DIG);
         unget();
@@ -258,8 +257,7 @@ register int    c;                              /* First char of id     */
 }
 
 int
-macroid(c)
-register int            c;
+macroid(int c)
 /*
  * If c is a letter, scan the id.  if it's #defined, expand it and scan
  * the next character and try again.
@@ -345,14 +343,13 @@ catenate()
 }
 
 int
-scanstring(delim, outfun)
-register int    delim;                  /* ' or "                       */
+scanstring(int delim,
 #ifndef _NO_PROTO
-void             (*outfun)( int ); /* BP */    /* Output function              */
+void             (*outfun)( int ) /* BP */    /* Output function              */
 #else
-void         (*outfun)(); /* BP */
+void         (*outfun)() /* BP */
 #endif
-
+)
 /*
  * Scan off a string.  Warning if terminated by newline or EOF.
  * outfun() outputs the character -- to a buffer if in a macro.
@@ -384,14 +381,13 @@ void         (*outfun)(); /* BP */
         }
 }
 
-void scannumber(c, outfun)
-register int    c;                              /* First char of number */
+void scannumber(int c,
 #ifndef _NO_PROTO
-register void    (*outfun)( int );  /* BP */    /* Output/store func    */
+register void    (*outfun)( int )  /* BP */    /* Output/store func    */
 #else
-register void    (*outfun)(); /* BP */
+register void    (*outfun)() /* BP */
 #endif
-
+)
 /*
  * Process a number.  We know that c is from 0 to 9 or dot.
  * Algorithm from Dave Conroy's Decus C.
@@ -515,19 +511,17 @@ nomore: unget();                                /* Not part of a number */
             cwarn("Illegal digit in octal number", NULLST);
 }
 
-void save(c)
-register int    c;
+void save(int c)
 {
         if (workp >= &work[NWORK]) {
             work[NWORK-1] = '\0';
             cfatal("Work buffer overflow:  %s", work);
         }
-        else *workp++ = c;
+        else *workp++ = (char)c;
 }
 
 char *
-savestring(text)
-char            *text;
+savestring(char* text)
 /*
  * Store a string into free memory.
  */
@@ -540,9 +534,7 @@ char            *text;
 }
 
 FILEINFO        *
-getfile(bufsize, name)
-int             bufsize;                /* Line or define buffer size   */
-char            *name;                  /* File or macro name string    */
+getfile(int bufsize, char* name)
 /*
  * Common FILEINFO buffer initialization for a new file or macro.
  */
@@ -568,8 +560,7 @@ char            *name;                  /* File or macro name string    */
 }
 
 char *
-getmem(size)
-int             size;
+getmem(int size)
 /*
  * Get a block of free memory.
  */
@@ -583,8 +574,7 @@ int             size;
 
 
 DEFBUF *
-lookid(c)
-int     c;                              /* First character of token     */
+lookid(int c)
 /*
  * Look for the next token in the symbol table.  Returns token in "token".
  * If found, returns the table pointer;  Else returns NULL.
@@ -598,11 +588,11 @@ int     c;                              /* First character of token     */
 
         np = token;
         nhash = 0;
-        if ((isrecurse = (c == DEF_MAGIC)))     /* If recursive macro   */
+        if (0 != (isrecurse = (c == DEF_MAGIC)))     /* If recursive macro   */
             c = get();                          /* hack, skip DEF_MAGIC */
         do {
             if (np < &token[IDMAX]) {           /* token dim is IDMAX+1 */
-                *np++ = c;                      /* Store token byte     */
+                *np++ = (char)c;                /* Store token byte     */
                 nhash += c;                     /* Update hash value    */
             }
             c = get();                          /* And get another byte */
@@ -623,9 +613,7 @@ int     c;                              /* First character of token     */
 }
 
 DEFBUF *
-defendel(name, delete)
-char            *name;
-int             delete;                 /* TRUE to delete a symbol      */
+defendel(char* name, int delete)
 /*
  * Enter this name in the lookup table (delete = FALSE)
  * or delete this name (delete = TRUE).
@@ -1049,8 +1037,7 @@ void unget()
             --line;                     /* Unget the line number, too   */
 }
 
-void ungetstring(text)
-char            *text;
+void ungetstring(char* text)
 /*
  * Push a string back on the input stream.  This is done by treating
  * the text as if it were a macro.
@@ -1090,10 +1077,7 @@ cget()
  * are shorter than  char *'s.
  */
 
-static void domsg(severity, format, arg)
-char            *severity;              /* "Error", "Warning", "Fatal"  */
-char            *format;                /* Format for the error message */
-void            *arg;                   /* Something for the message    */
+static void domsg(char* severity, char* format, void* arg)
 /*
  * Print filenames, macro names, and line numbers for error messages.
  */
@@ -1130,9 +1114,7 @@ void            *arg;                   /* Something for the message    */
         }
 }
 
-void cerror(format, sarg)
-char            *format;
-char            *sarg;          /* Single string argument               */
+void cerror(char* format, char* sarg)
 /*
  * Print a normal error message, string argument.
  */
@@ -1141,9 +1123,7 @@ char            *sarg;          /* Single string argument               */
         errors++;
 }
 
-void cierror(format, narg)
-char            *format;
-int             narg;           /* Single numeric argument              */
+void cierror(char* format, int narg)
 /*
  * Print a normal error message, numeric argument.
  */
@@ -1152,9 +1132,7 @@ int             narg;           /* Single numeric argument              */
         errors++;
 }
 
-void cfatal(format, sarg)
-char            *format;
-char            *sarg;                  /* Single string argument       */
+void cfatal(char* format, char* sarg)
 /*
  * A real disaster
  */
@@ -1163,9 +1141,7 @@ char            *sarg;                  /* Single string argument       */
         exit(IO_ERROR);
 }
 
-void cwarn(format, sarg)
-char            *format;
-char            *sarg;                  /* Single string argument       */
+void cwarn(char* format, char* sarg)
 /*
  * A non-fatal error, string argument.
  */
@@ -1173,9 +1149,7 @@ char            *sarg;                  /* Single string argument       */
         domsg("SWarning", format, sarg);
 }
 
-void ciwarn(format, narg)
-char            *format;
-int             narg;                   /* Single numeric argument      */
+void ciwarn(char* format, int narg)
 /*
  * A non-fatal error, numeric argument.
  */
