@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tdoc_storage.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:03:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:32:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -261,8 +261,6 @@ StorageElementFactory::createStorage( const rtl::OUString & rUri,
             return xStorage;
         }
 
-        bool bWritable = ( ( eMode == READ_WRITE_NOCREATE )
-                            || ( eMode == READ_WRITE_CREATE ) );
         aIt->second
             = new Storage( m_xSMgr, this, aUriKey, xParentStorage, xStorage );
         aIt->second->m_aContainerIt = aIt;
