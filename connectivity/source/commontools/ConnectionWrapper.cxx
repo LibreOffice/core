@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConnectionWrapper.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:08:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:02:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -189,7 +189,7 @@ Sequence< Type > SAL_CALL OConnectionWrapper::getTypes(  ) throw (::com::sun::st
 sal_Int64 SAL_CALL OConnectionWrapper::getSomething( const Sequence< sal_Int8 >& rId ) throw(RuntimeException)
 {
     if (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
-        return (sal_Int64)this;
+        return reinterpret_cast< sal_Int64 >( this );
 
     if(m_xUnoTunnel.is())
         return m_xUnoTunnel->getSomething(rId);
