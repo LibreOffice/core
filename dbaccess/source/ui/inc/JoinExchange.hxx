@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JoinExchange.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:29:18 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:11:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,6 +95,9 @@ namespace dbaui
         virtual void                DragFinished( sal_Int8 nDropAction );
 
         static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
+
+    private:
+        using TransferableHelper::StartDrag;
     };
 }
 #endif // DBAUI_JOINEXCHANGE_HXX
