@@ -69,11 +69,11 @@ mvl_add( MacroValidatorList *   inout_pValidators,
     inout_pValidators->pFirst = pNew;
 }
 
+/*
 void
 mvl_move( MacroValidatorList * inout_pValidators,
           int                  in_nSpace )
 {
-/*
     MacroValidator * pV;
     for ( pV = inout_pValidators->pFirst;
           pV != 0;
@@ -81,8 +81,8 @@ mvl_move( MacroValidatorList * inout_pValidators,
     {
         pV->pTokenWhereMacroBecomesValid += in_nSpace;
     }
-*/
 }
+*/
 
 void
 mvl_check(  MacroValidatorList * inout_pValidators,
