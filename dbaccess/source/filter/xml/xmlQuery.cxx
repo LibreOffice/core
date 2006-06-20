@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlQuery.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:12:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:51:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,6 @@ OXMLQuery::OXMLQuery( ODBFilter& rImport
     const SvXMLTokenMap& rTokenMap = rImport.GetQueryElemTokenMap();
 
     sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
-    sal_Bool bAutoEnabled = sal_False;
     for(sal_Int16 i = 0; i < nLength; ++i)
     {
         OUString sLocalName;
