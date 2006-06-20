@@ -133,10 +133,10 @@ bool XInteractionDisapproveImpl::isSelected() const
 // XInteractionRequestImpl
 
 XInteractionRequestImpl::XInteractionRequestImpl(const rtl::OUString& aName)
-    : m_aSeq( 2 ),
-      p1( new XInteractionApproveImpl ),
+    : p1( new XInteractionApproveImpl ),
       p2( new XInteractionDisapproveImpl ),
-      m_aName(aName)
+      m_aName(aName),
+      m_aSeq( 2 )
 {
     m_aSeq[0] = Reference<XInteractionContinuation>(p1);
     m_aSeq[1] = Reference<XInteractionContinuation>(p2);
