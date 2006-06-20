@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RelationControl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:23:20 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:59:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,7 +155,7 @@ namespace dbaui
         virtual void PaintCell( OutputDevice& rDev, const Rectangle& rRect, USHORT nColId ) const;
         virtual BOOL SeekRow( long nRow );
         virtual BOOL SaveModified();
-        virtual String GetCellText( long nRow, USHORT nColId );
+        virtual String GetCellText( long nRow, USHORT nColId ) const;
 
         virtual void CellModified();
 
@@ -164,6 +164,7 @@ namespace dbaui
         DECL_LINK( AsynchActivate, void* );
         DECL_LINK( AsynchDeactivate, void* );
     };
+
     //========================================================================
     // class ORelationControl
     //========================================================================
@@ -173,10 +174,10 @@ namespace dbaui
         :EditBrowseBox( pParent, EBBF_SMART_TAB_TRAVEL | EBBF_NOROWPICTURE, WB_TABSTOP | WB_3DLOOK | WB_BORDER )
         ,m_pListCell( NULL )
         ,m_pConnData( NULL )
-        ,m_xSourceDef( NULL )
-        ,m_xDestDef( NULL )
         ,m_pTableMap(_pTableMap)
         ,m_pBoxControl(pParent)
+        ,m_xSourceDef( NULL )
+        ,m_xDestDef( NULL )
     {
         DBG_CTOR(ORelationControl,NULL);
     }
@@ -317,7 +318,7 @@ namespace dbaui
     }
 
     //------------------------------------------------------------------------------
-    String ORelationControl::GetCellText( long nRow, USHORT nColId )
+    String ORelationControl::GetCellText( long nRow, USHORT nColId ) const
     {
         DBG_CHKTHIS(ORelationControl,NULL);
         String sText;
@@ -341,7 +342,7 @@ namespace dbaui
     }
 
     //------------------------------------------------------------------------------
-    void ORelationControl::InitController( CellControllerRef& rController, long nRow, USHORT nColumnId )
+    void ORelationControl::InitController( CellControllerRef& /*rController*/, long nRow, USHORT nColumnId )
     {
         DBG_CHKTHIS(ORelationControl,NULL);
 
@@ -375,7 +376,7 @@ namespace dbaui
     }
 
     //------------------------------------------------------------------------------
-    CellController* ORelationControl::GetController( long nRow, USHORT nColumnId )
+    CellController* ORelationControl::GetController( long /*nRow*/, USHORT /*nColumnId*/ )
     {
         DBG_CHKTHIS(ORelationControl,NULL);
         return new ListBoxCellController( m_pListCell );
@@ -461,7 +462,7 @@ namespace dbaui
             if ( pConn )
             {
                 m_pConnData->CopyFrom(*pConn->GetData());
-                m_pBoxControl->getContainer()->notifyConnectionChange(m_pConnData);
+                m_pBoxControl->getContainer()->notifyConnectionChange();
             }
             else
             {
@@ -506,9 +507,9 @@ OTableListBoxControl::OTableListBoxControl(Window* _pParent,
                                                const OJoinTableView::OTableWindowMap* _pTableMap,
                                                IRelationControlInterface* _pParentDialog)
      : Window(_pParent,_rResId)
+     , m_aFL_InvolvedTables(    this, ResId(FL_INVOLVED_TABLES))
      , m_lmbLeftTable(          this, ResId(LB_LEFT_TABLE))
      , m_lmbRightTable(         this, ResId(LB_RIGHT_TABLE))
-     , m_aFL_InvolvedTables(    this, ResId(FL_INVOLVED_TABLES))
      , m_aFL_InvolvedFields(    this, ResId(FL_INVOLVED_FIELDS))
      , m_pTableMap(_pTableMap)
      , m_pParentDialog(_pParentDialog)
