@@ -11,7 +11,6 @@ mkdir: %_DEST%\inc%_EXT%\cppunit\extensions
 ..\inc\cppunit\autoregister\treswrapper.h %_DEST%\inc%_EXT%\cppunit\autoregister\treswrapper.h
 ..\inc\cppunit\autoregister\testfunc.h %_DEST%\inc%_EXT%\cppunit\autoregister\testfunc.h
 ..\inc\cppunit\autoregister\registertestfunction.h %_DEST%\inc%_EXT%\cppunit\autoregister\registertestfunction.h
-..\inc\cppunit\autoregister\callbackstructure.h %_DEST%\inc%_EXT%\cppunit\autoregister\callbackstructure.h
 ..\inc\cppunit\autoregister\callbackfunc_fktptr.h %_DEST%\inc%_EXT%\cppunit\autoregister\callbackfunc_fktptr.h
 
 # ..\src\result\inc\cppunit\*.h %_DEST%\inc%_EXT%\cppunit\*.h
