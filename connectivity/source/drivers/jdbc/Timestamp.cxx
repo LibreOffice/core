@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Timestamp.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 11:41:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:37:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,7 @@ java_sql_Date::java_sql_Date( const ::com::sun::star::util::Date& _rOut ) : java
 
     // Java-Call fuer den Konstruktor absetzen
     // temporaere Variable initialisieren
-    static char * cSignature = "(Ljava/lang/String;)Ljava/sql/Date;";
+    static const char * cSignature = "(Ljava/lang/String;)Ljava/sql/Date;";
     jobject tempObj;
     static jmethodID mID = NULL;
     if ( !mID  )
@@ -152,7 +152,7 @@ java_sql_Time::java_sql_Time( const ::com::sun::star::util::Time& _rOut ): java_
 
     // Java-Call fuer den Konstruktor absetzen
     // temporaere Variable initialisieren
-    static char * cSignature = "(Ljava/lang/String;)Ljava/sql/Time;";
+    static const char * cSignature = "(Ljava/lang/String;)Ljava/sql/Time;";
     jobject tempObj;
     static jmethodID mID = NULL;
     if ( !mID  )
@@ -219,7 +219,7 @@ java_sql_Timestamp::java_sql_Timestamp(const ::com::sun::star::util::DateTime& _
 
     // Java-Call fuer den Konstruktor absetzen
     // temporaere Variable initialisieren
-    static char * cSignature = "(Ljava/lang/String;)Ljava/sql/Timestamp;";
+    static const char * cSignature = "(Ljava/lang/String;)Ljava/sql/Timestamp;";
     jobject tempObj;
     static jmethodID mID = NULL;
     if ( !mID  )
@@ -238,8 +238,8 @@ sal_Int32 java_sql_Timestamp::getNanos()
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static char * cSignature = "()I";
-        static char * cMethodName = "getNanos";
+        static const char * cSignature = "()I";
+        static const char * cMethodName = "getNanos";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -256,8 +256,8 @@ void java_sql_Timestamp::setNanos( sal_Int32 _par0 )
     SDBThreadAttach t;
     if( t.pEnv ){
         // temporaere Variable initialisieren
-        static char * cSignature = "(I)V";
-        static char * cMethodName = "setNanos";
+        static const char * cSignature = "(I)V";
+        static const char * cMethodName = "setNanos";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
