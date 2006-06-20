@@ -4,9 +4,9 @@
  *
  *  $RCSfile: KPreparedStatement.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-19 16:50:08 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:38:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@ using namespace com::sun::star::util;
 
 IMPLEMENT_SERVICE_INFO(KabPreparedStatement, "com.sun.star.sdbc.drivers.KabPreparedStatement", "com.sun.star.sdbc.PreparedStatement");
 // -------------------------------------------------------------------------
-void KabPreparedStatement::checkParameterIndex(sal_Int32 _parameterIndex)
+void KabPreparedStatement::checkParameterIndex(sal_Int32)
 {
     // no parameters allowed in this implementation
     throw SQLException();
@@ -59,7 +59,6 @@ void KabPreparedStatement::checkParameterIndex(sal_Int32 _parameterIndex)
 void KabPreparedStatement::setKabFields() const throw(SQLException)
 {
     ::vos::ORef<connectivity::OSQLColumns> xColumns;    // selected columns
-    KabResultSetMetaData *pMeta;                // meta information - holds the list of KAddressBook fields
 
     xColumns = m_aSQLIterator.getSelectColumns();
     if (!xColumns.isValid())
@@ -75,8 +74,8 @@ KabPreparedStatement::KabPreparedStatement(
     KabConnection* _pConnection,
     const ::rtl::OUString& sql)
     : KabPreparedStatement_BASE(_pConnection),
-      m_bPrepared(sal_False),
-      m_sSqlStatement(sql)
+      m_sSqlStatement(sql),
+      m_bPrepared(sal_False)
 {
 }
 // -------------------------------------------------------------------------
@@ -153,7 +152,7 @@ Reference< XResultSet > SAL_CALL KabPreparedStatement::executeQuery() throw(SQLE
     return rs;
 }
 // -------------------------------------------------------------------------
-void SAL_CALL KabPreparedStatement::setNull(sal_Int32 parameterIndex, sal_Int32 sqlType) throw(SQLException, RuntimeException)
+void SAL_CALL KabPreparedStatement::setNull(sal_Int32, sal_Int32) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabCommonStatement_BASE::rBHelper.bDisposed);
@@ -161,7 +160,7 @@ void SAL_CALL KabPreparedStatement::setNull(sal_Int32 parameterIndex, sal_Int32 
 ::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("Not Implemented"), NULL);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL KabPreparedStatement::setObjectNull(sal_Int32 parameterIndex, sal_Int32 sqlType, const ::rtl::OUString& typeName) throw(SQLException, RuntimeException)
+void SAL_CALL KabPreparedStatement::setObjectNull(sal_Int32, sal_Int32, const ::rtl::OUString&) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabCommonStatement_BASE::rBHelper.bDisposed);
@@ -169,7 +168,7 @@ void SAL_CALL KabPreparedStatement::setObjectNull(sal_Int32 parameterIndex, sal_
 ::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("Not Implemented"), NULL);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL KabPreparedStatement::setBoolean(sal_Int32 parameterIndex, sal_Bool x) throw(SQLException, RuntimeException)
+void SAL_CALL KabPreparedStatement::setBoolean(sal_Int32, sal_Bool) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabCommonStatement_BASE::rBHelper.bDisposed);
@@ -177,7 +176,7 @@ void SAL_CALL KabPreparedStatement::setBoolean(sal_Int32 parameterIndex, sal_Boo
 ::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("Not Implemented"), NULL);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL KabPreparedStatement::setByte(sal_Int32 parameterIndex, sal_Int8 x) throw(SQLException, RuntimeException)
+void SAL_CALL KabPreparedStatement::setByte(sal_Int32, sal_Int8) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabCommonStatement_BASE::rBHelper.bDisposed);
@@ -185,7 +184,7 @@ void SAL_CALL KabPreparedStatement::setByte(sal_Int32 parameterIndex, sal_Int8 x
 ::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("Not Implemented"), NULL);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL KabPreparedStatement::setShort(sal_Int32 parameterIndex, sal_Int16 x) throw(SQLException, RuntimeException)
+void SAL_CALL KabPreparedStatement::setShort(sal_Int32, sal_Int16) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabCommonStatement_BASE::rBHelper.bDisposed);
@@ -193,7 +192,7 @@ void SAL_CALL KabPreparedStatement::setShort(sal_Int32 parameterIndex, sal_Int16
 ::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("Not Implemented"), NULL);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL KabPreparedStatement::setInt(sal_Int32 parameterIndex, sal_Int32 x) throw(SQLException, RuntimeException)
+void SAL_CALL KabPreparedStatement::setInt(sal_Int32, sal_Int32) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabCommonStatement_BASE::rBHelper.bDisposed);
@@ -201,7 +200,7 @@ void SAL_CALL KabPreparedStatement::setInt(sal_Int32 parameterIndex, sal_Int32 x
 ::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("Not Implemented"), NULL);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL KabPreparedStatement::setLong(sal_Int32 parameterIndex, sal_Int64 aVal) throw(SQLException, RuntimeException)
+void SAL_CALL KabPreparedStatement::setLong(sal_Int32, sal_Int64) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabCommonStatement_BASE::rBHelper.bDisposed);
@@ -209,7 +208,7 @@ void SAL_CALL KabPreparedStatement::setLong(sal_Int32 parameterIndex, sal_Int64 
 ::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("Not Implemented"), NULL);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL KabPreparedStatement::setFloat(sal_Int32 parameterIndex, float x) throw(SQLException, RuntimeException)
+void SAL_CALL KabPreparedStatement::setFloat(sal_Int32, float) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabCommonStatement_BASE::rBHelper.bDisposed);
@@ -217,7 +216,7 @@ void SAL_CALL KabPreparedStatement::setFloat(sal_Int32 parameterIndex, float x) 
 ::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("Not Implemented"), NULL);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL KabPreparedStatement::setDouble(sal_Int32 parameterIndex, double x) throw(SQLException, RuntimeException)
+void SAL_CALL KabPreparedStatement::setDouble(sal_Int32, double) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabCommonStatement_BASE::rBHelper.bDisposed);
@@ -225,7 +224,7 @@ void SAL_CALL KabPreparedStatement::setDouble(sal_Int32 parameterIndex, double x
 ::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("Not Implemented"), NULL);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL KabPreparedStatement::setString(sal_Int32 parameterIndex, const ::rtl::OUString& x) throw(SQLException, RuntimeException)
+void SAL_CALL KabPreparedStatement::setString(sal_Int32, const ::rtl::OUString&) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabCommonStatement_BASE::rBHelper.bDisposed);
@@ -233,7 +232,7 @@ void SAL_CALL KabPreparedStatement::setString(sal_Int32 parameterIndex, const ::
 ::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("Not Implemented"), NULL);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL KabPreparedStatement::setBytes(sal_Int32 parameterIndex, const Sequence< sal_Int8 >& x) throw(SQLException, RuntimeException)
+void SAL_CALL KabPreparedStatement::setBytes(sal_Int32, const Sequence< sal_Int8 >&) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabCommonStatement_BASE::rBHelper.bDisposed);
@@ -241,7 +240,7 @@ void SAL_CALL KabPreparedStatement::setBytes(sal_Int32 parameterIndex, const Seq
 ::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("Not Implemented"), NULL);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL KabPreparedStatement::setDate(sal_Int32 parameterIndex, const Date& aData) throw(SQLException, RuntimeException)
+void SAL_CALL KabPreparedStatement::setDate(sal_Int32, const Date&) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabCommonStatement_BASE::rBHelper.bDisposed);
@@ -249,7 +248,7 @@ void SAL_CALL KabPreparedStatement::setDate(sal_Int32 parameterIndex, const Date
 ::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("Not Implemented"), NULL);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL KabPreparedStatement::setTime(sal_Int32 parameterIndex, const Time& aVal) throw(SQLException, RuntimeException)
+void SAL_CALL KabPreparedStatement::setTime(sal_Int32, const Time&) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabCommonStatement_BASE::rBHelper.bDisposed);
@@ -257,7 +256,7 @@ void SAL_CALL KabPreparedStatement::setTime(sal_Int32 parameterIndex, const Time
 ::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("Not Implemented"), NULL);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL KabPreparedStatement::setTimestamp(sal_Int32 parameterIndex, const DateTime& aVal) throw(SQLException, RuntimeException)
+void SAL_CALL KabPreparedStatement::setTimestamp(sal_Int32, const DateTime&) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabCommonStatement_BASE::rBHelper.bDisposed);
@@ -265,7 +264,7 @@ void SAL_CALL KabPreparedStatement::setTimestamp(sal_Int32 parameterIndex, const
 ::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("Not Implemented"), NULL);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL KabPreparedStatement::setBinaryStream(sal_Int32 parameterIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length) throw(SQLException, RuntimeException)
+void SAL_CALL KabPreparedStatement::setBinaryStream(sal_Int32, const Reference< ::com::sun::star::io::XInputStream >&, sal_Int32) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabCommonStatement_BASE::rBHelper.bDisposed);
@@ -273,7 +272,7 @@ void SAL_CALL KabPreparedStatement::setBinaryStream(sal_Int32 parameterIndex, co
 ::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("Not Implemented"), NULL);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL KabPreparedStatement::setCharacterStream(sal_Int32 parameterIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length) throw(SQLException, RuntimeException)
+void SAL_CALL KabPreparedStatement::setCharacterStream(sal_Int32, const Reference< ::com::sun::star::io::XInputStream >&, sal_Int32) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabCommonStatement_BASE::rBHelper.bDisposed);
@@ -281,7 +280,7 @@ void SAL_CALL KabPreparedStatement::setCharacterStream(sal_Int32 parameterIndex,
 ::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("Not Implemented"), NULL);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL KabPreparedStatement::setObject(sal_Int32 parameterIndex, const Any& x) throw(SQLException, RuntimeException)
+void SAL_CALL KabPreparedStatement::setObject(sal_Int32, const Any&) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabCommonStatement_BASE::rBHelper.bDisposed);
@@ -289,7 +288,7 @@ void SAL_CALL KabPreparedStatement::setObject(sal_Int32 parameterIndex, const An
 ::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("Not Implemented"), NULL);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL KabPreparedStatement::setObjectWithInfo(sal_Int32 parameterIndex, const Any& x, sal_Int32 sqlType, sal_Int32 scale) throw(SQLException, RuntimeException)
+void SAL_CALL KabPreparedStatement::setObjectWithInfo(sal_Int32, const Any&, sal_Int32, sal_Int32) throw(SQLException, RuntimeException)
 {
     checkDisposed(KabCommonStatement_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -297,7 +296,7 @@ void SAL_CALL KabPreparedStatement::setObjectWithInfo(sal_Int32 parameterIndex, 
 ::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("Not Implemented"), NULL);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL KabPreparedStatement::setRef(sal_Int32 parameterIndex, const Reference< XRef >& x) throw(SQLException, RuntimeException)
+void SAL_CALL KabPreparedStatement::setRef(sal_Int32, const Reference< XRef >&) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabCommonStatement_BASE::rBHelper.bDisposed);
@@ -305,7 +304,7 @@ void SAL_CALL KabPreparedStatement::setRef(sal_Int32 parameterIndex, const Refer
 ::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("Not Implemented"), NULL);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL KabPreparedStatement::setBlob(sal_Int32 parameterIndex, const Reference< XBlob >& x) throw(SQLException, RuntimeException)
+void SAL_CALL KabPreparedStatement::setBlob(sal_Int32, const Reference< XBlob >&) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabCommonStatement_BASE::rBHelper.bDisposed);
@@ -313,7 +312,7 @@ void SAL_CALL KabPreparedStatement::setBlob(sal_Int32 parameterIndex, const Refe
 ::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("Not Implemented"), NULL);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL KabPreparedStatement::setClob(sal_Int32 parameterIndex, const Reference< XClob >& x) throw(SQLException, RuntimeException)
+void SAL_CALL KabPreparedStatement::setClob(sal_Int32, const Reference< XClob >&) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabCommonStatement_BASE::rBHelper.bDisposed);
@@ -321,7 +320,7 @@ void SAL_CALL KabPreparedStatement::setClob(sal_Int32 parameterIndex, const Refe
 ::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("Not Implemented"), NULL);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL KabPreparedStatement::setArray(sal_Int32 parameterIndex, const Reference< XArray >& x) throw(SQLException, RuntimeException)
+void SAL_CALL KabPreparedStatement::setArray(sal_Int32, const Reference< XArray >&) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabCommonStatement_BASE::rBHelper.bDisposed);
