@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BCatalog.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:19:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:07:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,7 +161,7 @@ const ::rtl::OUString& OAdabasCatalog::getDot()
     return sDot;
 }
 // -----------------------------------------------------------------------------
-void OAdabasCatalog::correctColumnProperties(sal_Int32 _nPrec, sal_Int32& _rnType,::rtl::OUString& _rsTypeName)
+void OAdabasCatalog::correctColumnProperties(sal_Int32 /*_nPrec*/, sal_Int32& _rnType,::rtl::OUString& _rsTypeName)
 {
     switch(_rnType)
     {
