@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dsvgpolypolygon.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:47:54 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:45:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,7 @@ namespace basegfx
             bool lcl_getDoubleChar(double&                  o_fRetval,
                                    sal_Int32&               io_rPos,
                                    const ::rtl::OUString&   rStr,
-                                   const sal_Int32          nLen)
+                                   const sal_Int32          /*nLen*/)
             {
                 sal_Unicode aChar( rStr[io_rPos] );
                 ::rtl::OUStringBuffer sNumberString;
@@ -163,7 +163,7 @@ namespace basegfx
 
             void lcl_skipDouble(sal_Int32&              io_rPos,
                                 const ::rtl::OUString&  rStr,
-                                const sal_Int32         nLen)
+                                const sal_Int32         /*nLen*/)
             {
                 sal_Unicode aChar( rStr[io_rPos] );
 
