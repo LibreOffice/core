@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rscclass.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:53:16 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:47:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -296,10 +296,10 @@ RSCINST RscClass::Create
         {
             if( VAR_EXTENDABLE & pVarTypeList[ i ].nVarType )
             {
-                RSCINST * pInst = (RSCINST *)
+                RSCINST * pInstance = (RSCINST *)
                         (aInst.pData + pVarTypeList[ i ].nOffset );
-                pInst->pClass = pVarTypeList[ i ].pClass;
-                ppData = &pInst->pData;
+                pInstance->pClass = pVarTypeList[ i ].pClass;
+                ppData = &pInstance->pData;
             }
             else
                 ppData = (CLASS_DATA* )
@@ -470,21 +470,21 @@ RSCINST RscClass::GetVariable
         else
         {
             // Default Instanz generieren
-            RSCINST aDfltInst = rInitInst;
-            if( !aDfltInst.IsInst() && bInitDflt )
+            RSCINST aDefInst = rInitInst;
+            if( !aDefInst.IsInst() && bInitDflt )
             {
                 // mit dem Variablen-Default besetzen
-                aDfltInst.pData  = pVarTypeList[ i ].pDefault;
-                aDfltInst.pClass = pVarTypeList[ i ].pClass;
+                aDefInst.pData  = pVarTypeList[ i ].pDefault;
+                aDefInst.pClass = pVarTypeList[ i ].pClass;
             }
 
             aTmpI = GetInstData( rInst.pData, i );
             if( aTmpI.IsInst() )
             {
-                if( aDfltInst.IsInst() )
+                if( aDefInst.IsInst() )
                 {
                     aTmpI.pClass->Destroy( aTmpI );
-                    aTmpI.pClass->Create( &aTmpI, aDfltInst );
+                    aTmpI.pClass->Create( &aTmpI, aDefInst );
                 }
             }
             else
@@ -494,16 +494,16 @@ RSCINST RscClass::GetVariable
                     RSCINST * pInst = (RSCINST *)
                             (rInst.pData + pVarTypeList[ i ].nOffset );
                     if( pCreateClass && pCreateClass->InHierarchy( aTmpI.pClass ) )
-                        *pInst = pCreateClass->Create( NULL, aDfltInst );
+                        *pInst = pCreateClass->Create( NULL, aDefInst );
                     else
-                        *pInst = aTmpI.pClass->Create( NULL, aDfltInst );
+                        *pInst = aTmpI.pClass->Create( NULL, aDefInst );
                     aTmpI = *pInst;
                 }
                 else
                 {
                     CLASS_DATA  * ppData
                         = (CLASS_DATA *)(rInst.pData + pVarTypeList[ i ].nOffset);
-                    aTmpI = aTmpI.pClass->Create( NULL, aDfltInst );
+                    aTmpI = aTmpI.pClass->Create( NULL, aDefInst );
                     *ppData = aTmpI.pData;
                 }
             }
@@ -1044,7 +1044,7 @@ void RscClass::WriteSyntax( FILE * fOutput, RscTypCont * pTC )
 void RscClass::WriteRcAccess
 (
     FILE * fOutput,
-    RscTypCont * pTC,
+    RscTypCont * /*pTC*/,
     const char * pName
 )
 {

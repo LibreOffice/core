@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rscconst.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:53:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:47:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -233,7 +233,7 @@ void RscConst::WriteSyntax( FILE * fOutput, RscTypCont * pTC )
 void RscConst::WriteRcAccess
 (
     FILE * fOutput,
-    RscTypCont * pTC,
+    RscTypCont * /*pTC*/,
     const char * pName
 )
 {
@@ -267,7 +267,7 @@ RscEnum::RscEnum( Atom nId, sal_uInt32 nTypeId )
 |*    Letzte Aenderung  MM 03.04.91
 |*
 *************************************************************************/
-ERRTYPE RscEnum::SetConst( const RSCINST & rInst, Atom nConst, INT32 nVal )
+ERRTYPE RscEnum::SetConst( const RSCINST & rInst, Atom nConst, INT32 /*nVal*/ )
 {
     sal_uInt32 i = 0;
 
