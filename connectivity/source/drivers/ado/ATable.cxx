@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ATable.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:31:23 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:15:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -195,10 +195,8 @@ Sequence< sal_Int8 > OAdoTable::getUnoTunnelImplementationId()
 sal_Int64 OAdoTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
     return (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
-                ?
-            (sal_Int64)this
-                :
-            OTable_TYPEDEF::getSomething(rId);
+                ? reinterpret_cast< sal_Int64 >( this )
+                : OTable_TYPEDEF::getSomething(rId);
 }
 // -------------------------------------------------------------------------
 // XRename
@@ -226,7 +224,7 @@ void SAL_CALL OAdoTable::alterColumnByName( const ::rtl::OUString& colName, cons
 
     sal_Bool bError = sal_True;
     OAdoColumn* pColumn = NULL;
-    if(getImplementation(pColumn,descriptor) && pColumn != NULL)
+    if(::getImplementation(pColumn,descriptor) && pColumn != NULL)
     {
         WpADOColumns aColumns = m_aTable.get_Columns();
         bError = !aColumns.Delete(colName);
