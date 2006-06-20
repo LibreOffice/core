@@ -4,9 +4,9 @@
  *
  *  $RCSfile: oservices.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:36:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:57:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,7 @@ void REGISTER_PROVIDER(
     Reference< ::com::sun::star::registry::XRegistryKey >  xNewKey( xKey->createKey(aMainKeyName) );
     OSL_ENSURE(xNewKey.is(), "ODBC::component_writeInfo : could not create a registry key !");
 
-    for (sal_uInt32 i=0; i<Services.getLength(); ++i)
+    for (sal_Int32 i=0; i<Services.getLength(); ++i)
         xNewKey->createKey(Services[i]);
 }
 
@@ -127,7 +127,7 @@ struct ProviderRequest
 
 extern "C" void SAL_CALL component_getImplementationEnvironment(
                 const sal_Char  **ppEnvTypeName,
-                uno_Environment **ppEnv
+                uno_Environment ** /*ppEnv*/
             )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
@@ -135,7 +135,7 @@ extern "C" void SAL_CALL component_getImplementationEnvironment(
 
 //---------------------------------------------------------------------------------------
 extern "C" sal_Bool SAL_CALL component_writeInfo(
-                void* pServiceManager,
+                void* /*pServiceManager*/,
                 void* pRegistryKey
             )
 {
@@ -162,7 +162,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
 extern "C" void* SAL_CALL component_getFactory(
                     const sal_Char* pImplementationName,
                     void* pServiceManager,
-                    void* pRegistryKey)
+                    void* /*pRegistryKey*/)
 {
     void* pRet = 0;
     if (pServiceManager)
