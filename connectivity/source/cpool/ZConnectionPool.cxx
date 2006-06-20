@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ZConnectionPool.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:16:04 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:06:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,7 +120,7 @@ OConnectionPool::OConnectionPool(const Reference< XDriver >& _xDriver,
         xProp->addPropertyChangeListener(getTimeoutNodeName(),this);
 
     OPoolCollection::getNodeValue(getTimeoutNodeName(),m_xDriverNode) >>= m_nALiveCount;
-    calculateTimeOuts(m_nALiveCount);
+    calculateTimeOuts();
 
     m_xInvalidator = new OPoolTimer(this,::vos::TTimeValue(m_nTimeOut,0));
     m_xInvalidator->start();
@@ -344,11 +344,11 @@ void SAL_CALL OConnectionPool::propertyChange( const PropertyChangeEvent& evt ) 
     if(getTimeoutNodeName() == evt.PropertyName)
     {
         evt.NewValue >>= m_nALiveCount;
-        calculateTimeOuts(m_nALiveCount);
+        calculateTimeOuts();
     }
 }
 // -----------------------------------------------------------------------------
-void OConnectionPool::calculateTimeOuts(sal_Int32 _nTimeOut)
+void OConnectionPool::calculateTimeOuts()
 {
     sal_Int32 nTimeOutCorrection = 10;
     if(m_nALiveCount < 100)
