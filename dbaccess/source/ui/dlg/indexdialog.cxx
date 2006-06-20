@@ -4,9 +4,9 @@
  *
  *  $RCSfile: indexdialog.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-05 18:01:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:08:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -444,8 +444,7 @@ DBG_NAME(DbaIndexDialog)
         }
 
         SvLBoxEntry* pNewEntry = m_aIndexes.InsertEntry(sNewIndexName);
-        Indexes::iterator aIndexDescriptor = m_pIndexes->insert(sNewIndexName);
-//      pNewEntry->SetUserData(aIndexDescriptor);
+        m_pIndexes->insert(sNewIndexName);
 
         // update the user data on the entries in the list box:
         // they're iterators of the index collection, and thus they have changed when removing the index
@@ -497,7 +496,6 @@ DBG_NAME(DbaIndexDialog)
         DBG_ASSERT(aDropPos != m_pIndexes->end(), "DbaIndexDialog::OnDropIndex: did not find the index in my collection!");
 
         SQLExceptionInfo aExceptionInfo;
-        sal_Bool bNewIndex = aDropPos->isNew();
         sal_Bool bSuccess = sal_False;
         try
         {
@@ -561,8 +559,10 @@ DBG_NAME(DbaIndexDialog)
     void DbaIndexDialog::OnSaveIndex()
     {
         // the selected index
+#if OSL_DEBUG_LEVEL > 0
         SvLBoxEntry* pSelected = m_aIndexes.FirstSelected();
-        DBG_ASSERT(pSelected, "DbaIndexDialog::OnSaveIndex: invalid call!");
+        OSL_ENSURE( pSelected, "DbaIndexDialog::OnSaveIndex: invalid call!" );
+#endif
 
         implCommitPreviouslySelected();
         updateToolbox();
@@ -602,7 +602,7 @@ DBG_NAME(DbaIndexDialog)
     }
 
     //------------------------------------------------------------------
-    IMPL_LINK( DbaIndexDialog, OnIndexAction, ToolBox*, NOTINTERESTEDIN )
+    IMPL_LINK( DbaIndexDialog, OnIndexAction, ToolBox*, /*NOTINTERESTEDIN*/ )
     {
         sal_uInt16 nClicked = m_aActions.GetCurItemId();
         switch (nClicked)
@@ -627,7 +627,7 @@ DBG_NAME(DbaIndexDialog)
     }
 
     //------------------------------------------------------------------
-    IMPL_LINK( DbaIndexDialog, OnCloseDialog, void*, NOTINTERESTEDIN )
+    IMPL_LINK( DbaIndexDialog, OnCloseDialog, void*, /*NOTINTERESTEDIN*/ )
     {
         if (m_aIndexes.IsEditingActive())
         {
@@ -809,7 +809,7 @@ DBG_NAME(DbaIndexDialog)
     }
 
     //------------------------------------------------------------------
-    IMPL_LINK( DbaIndexDialog, OnModified, void*, NOTINTERESTEDIN )
+    IMPL_LINK( DbaIndexDialog, OnModified, void*, /*NOTINTERESTEDIN*/ )
     {
         DBG_ASSERT(m_pPreviousSelection, "DbaIndexDialog, OnModified: invalid call!");
         Indexes::iterator aPosition = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(m_pPreviousSelection->GetUserData());
@@ -851,7 +851,7 @@ DBG_NAME(DbaIndexDialog)
     }
 
     //------------------------------------------------------------------
-    IMPL_LINK( DbaIndexDialog, OnIndexSelected, DbaIndexList*, NOTINTERESTEDIN )
+    IMPL_LINK( DbaIndexDialog, OnIndexSelected, DbaIndexList*, /*NOTINTERESTEDIN*/ )
     {
         m_aIndexes.EndSelection();
 
