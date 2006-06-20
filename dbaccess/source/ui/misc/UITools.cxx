@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 15:29:39 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:21:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -539,10 +539,10 @@ TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
         {
             // search the best matching type
     #ifdef DBG_UTIL
-            ::rtl::OUString sDBTypeName         = aIter->second->aTypeName;
-            sal_Int32       nDBTypePrecision    = aIter->second->nPrecision;
-            sal_Int32       nDBTypeScale        = aIter->second->nMaximumScale;
-            sal_Bool        bDBAutoIncrement    = aIter->second->bAutoIncrement;
+            ::rtl::OUString sDBTypeName         = aIter->second->aTypeName;         (void)sDBTypeName;
+            sal_Int32       nDBTypePrecision    = aIter->second->nPrecision;        (void)nDBTypePrecision;
+            sal_Int32       nDBTypeScale        = aIter->second->nMaximumScale;     (void)nDBTypeScale;
+            sal_Bool        bDBAutoIncrement    = aIter->second->bAutoIncrement;    (void)bDBAutoIncrement;
     #endif
             if  (   (
                         !_sTypeName.getLength()
@@ -576,15 +576,12 @@ TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
                     &&  (aIter->second->bAutoIncrement  == _bAutoIncrement)
                     )
                 {
-// we can not assert here because we could be in d&d
-/*
                     OSL_ENSURE(sal_False,
                         (   ::rtl::OString("getTypeInfoFromType: assuming column type ")
                         +=  ::rtl::OString(aIter->second->aTypeName.getStr(), aIter->second->aTypeName.getLength(), gsl_getSystemTextEncoding())
                         +=  ::rtl::OString("\" (expected type name ")
                         +=  ::rtl::OString(_sTypeName.getStr(), _sTypeName.getLength(), gsl_getSystemTextEncoding())
                         +=  ::rtl::OString(" matches the type's local name).")).getStr());
-*/
                     break;
                 }
             }
@@ -595,14 +592,11 @@ TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
             // -> drop the precision and the scale restriction, accept any type with the property
             // type id (nType)
 
-            // we can not assert here because we could be in d&d
-/*
             OSL_ENSURE(sal_False,
                 (   ::rtl::OString("getTypeInfoFromType: did not find a matching type")
                 +=  ::rtl::OString(" (expected type name: ")
                 +=  ::rtl::OString(_sTypeName.getStr(), _sTypeName.getLength(), gsl_getSystemTextEncoding())
                 +=  ::rtl::OString(")! Defaulting to the first matching type.")).getStr());
-*/
             for(aIter = aPair.first; aIter != aPair.second; ++aIter)
             {
                 // search the best matching type (now comparing the local names)
@@ -662,20 +656,19 @@ TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
     {
         ::comphelper::TStringMixEqualFunctor aCase(sal_False);
         // search for typeinfo where the typename is equal _sTypeName
-        OTypeInfoMap::const_iterator aIter = _rTypeInfo.begin();
-        OTypeInfoMap::const_iterator aEnd  = _rTypeInfo.end();
-        for (; aIter != aEnd ; ++aIter)
+        OTypeInfoMap::const_iterator typeInfoLoop = _rTypeInfo.begin();
+        OTypeInfoMap::const_iterator typeInfoEnd  = _rTypeInfo.end();
+        for (; typeInfoLoop != typeInfoEnd; ++typeInfoLoop)
         {
-            if ( aCase(aIter->second->getDBName() , _sTypeName) )
+            if ( aCase( typeInfoLoop->second->getDBName() , _sTypeName ) )
+            {
+                pTypeInfo = typeInfoLoop->second;
                 break;
+            }
         }
-
-        if ( aIter != aEnd )
-            pTypeInfo = aIter->second;
     }
 
-// we can not assert here because we could be in d&d
-//  OSL_ENSURE(pTypeInfo, "getTypeInfoFromType: no type info found for this type!");
+    OSL_ENSURE(pTypeInfo, "getTypeInfoFromType: no type info found for this type!");
     return pTypeInfo;
 }
 // -----------------------------------------------------------------------------
@@ -758,7 +751,6 @@ void fillTypeInfo(  const Reference< ::com::sun::star::sdbc::XConnection>& _rxCo
             pInfo->nMaximumScale    = aValue;
             nPos = 18;
             aValue.fill(nPos,aTypes[nPos],xRow);
-            pInfo->nNumPrecRadix    = aValue;
 
             // check if values are less than zero like it happens in a oracle jdbc driver
             if( pInfo->nPrecision < 0)
@@ -767,8 +759,6 @@ void fillTypeInfo(  const Reference< ::com::sun::star::sdbc::XConnection>& _rxCo
                 pInfo->nMinimumScale = 0;
             if( pInfo->nMaximumScale < 0)
                 pInfo->nMaximumScale = 0;
-            if( pInfo->nNumPrecRadix < 0)
-                pInfo->nNumPrecRadix = 10;
 
             String aName;
             switch(pInfo->nType)
@@ -1173,7 +1163,7 @@ sal_Bool callColumnFormatDialog(Window* _pParent,
         // if the col is bound to a text field we have to disallow all non-text formats
         if ((DataType::CHAR == _nDataType) || (DataType::VARCHAR == _nDataType) || (DataType::LONGVARCHAR == _nDataType))
         {
-            sal_Bool bText = sal_True;
+            bText = sal_True;
             pFormatDescriptor->Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_ONE_AREA, sal_True));
             if (!_pFormatter->IsTextFormat(_nFormatKey))
                 // text fields can only have text formats
