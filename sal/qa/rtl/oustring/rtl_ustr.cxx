@@ -22,16 +22,14 @@ namespace rtl_ustr
 
         void compare_000()
             {
-                sal_Int32 nValue = rtl_ustr_compare( NULL, NULL);
-                volatile int dummy = 0;
+                rtl_ustr_compare( NULL, NULL);
                 // should not GPF
             }
 
         void compare_000_1()
             {
                 rtl::OUString aStr1 = rtl::OUString::createFromAscii("Line must be equal.");
-                sal_Int32 nValue = rtl_ustr_compare( aStr1.getStr(), NULL);
-                volatile int dummy = 0;
+                rtl_ustr_compare( aStr1.getStr(), NULL);
                 // should not GPF
             }
         void compare_001()
@@ -81,15 +79,13 @@ namespace rtl_ustr
 
         void compare_000()
             {
-                sal_Int32 nValue = rtl_ustr_compareIgnoreAsciiCase( NULL, NULL);
-                volatile int dummy = 0;
+                rtl_ustr_compareIgnoreAsciiCase( NULL, NULL);
             }
 
         void compare_000_1()
             {
                 rtl::OUString aStr1 = rtl::OUString::createFromAscii("Line must be equal.");
-                sal_Int32 nValue = rtl_ustr_compareIgnoreAsciiCase( aStr1.getStr(), NULL);
-                volatile int dummy = 0;
+                rtl_ustr_compareIgnoreAsciiCase( aStr1.getStr(), NULL);
             }
         void compare_001()
             {
@@ -149,15 +145,13 @@ namespace rtl_ustr
 
         void compare_000()
             {
-                sal_Int32 nValue = rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength( NULL, 0, NULL, 0, 0);
-                volatile int dummy = 0;
+                rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength( NULL, 0, NULL, 0, 0);
             }
 
         void compare_000_1()
             {
                 rtl::OUString aStr1 = rtl::OUString::createFromAscii("Line must be equal.");
-                sal_Int32 nValue = rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength( aStr1.getStr(), aStr1.getLength(), NULL, 0, 1);
-                volatile int dummy = 0;
+                rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength( aStr1.getStr(), aStr1.getLength(), NULL, 0, 1);
             }
         void compare_001()
             {
@@ -291,8 +285,7 @@ namespace rtl_ustr
 
         void indexOfChar_000()
             {
-                sal_Int32 nIndex = rtl_ustr_indexOfChar( NULL, 0 );
-                volatile int dummy = 0;
+                rtl_ustr_indexOfChar( NULL, 0 );
             }
 
         void indexOfChar_001()
@@ -338,8 +331,7 @@ namespace rtl_ustr
 
         void lastIndexOfChar_000()
             {
-                sal_Int32 nIndex = rtl_ustr_lastIndexOfChar( NULL, 0 );
-                volatile int dummy = 0;
+                rtl_ustr_lastIndexOfChar( NULL, 0 );
             }
 
         void lastIndexOfChar_001()
@@ -387,15 +379,13 @@ namespace rtl_ustr
 
         void indexOfStr_000()
             {
-                sal_Int32 nIndex = rtl_ustr_indexOfStr( NULL, 0 );
-                volatile int dummy = 0;
+                rtl_ustr_indexOfStr( NULL, 0 );
             }
 
         void indexOfStr_000_1()
             {
                 rtl::OUString aStr1 = rtl::OUString::createFromAscii("Line for a indexOfStr.");
-                sal_Int32 nIndex = rtl_ustr_indexOfStr( aStr1.getStr(), 0 );
-                volatile int dummy = 0;
+                rtl_ustr_indexOfStr( aStr1.getStr(), 0 );
             }
 
         void indexOfStr_001()
@@ -447,15 +437,13 @@ namespace rtl_ustr
 
         void lastIndexOfStr_000()
             {
-                sal_Int32 nIndex = rtl_ustr_lastIndexOfStr( NULL, NULL );
-                volatile int dummy = 0;
+                rtl_ustr_lastIndexOfStr( NULL, NULL );
             }
 
         void lastIndexOfStr_000_1()
             {
                 rtl::OUString aStr1 = rtl::OUString::createFromAscii("Line for a lastIndexOfStr.");
-                sal_Int32 nIndex = rtl_ustr_lastIndexOfStr( aStr1.getStr(), NULL );
-                volatile int dummy = 0;
+                rtl_ustr_lastIndexOfStr( aStr1.getStr(), NULL );
             }
 
         void lastIndexOfStr_001()
@@ -514,7 +502,6 @@ namespace rtl_ustr
         void replaceChar_000()
             {
                 rtl_ustr_replaceChar( NULL, 0, 0 );
-                volatile int dummy = 0;
             }
 
         void replaceChar_001()
@@ -554,13 +541,11 @@ namespace rtl_ustr
         void replaceChar_WithLength_000()
             {
                 rtl_ustr_replaceChar_WithLength( NULL, 0, 0, 0 );
-                volatile int dummy = 0;
             }
 
         void replaceChar_WithLength_000_1()
             {
                 rtl_ustr_replaceChar_WithLength( NULL, 1, 0, 0 );
-                volatile int dummy = 0;
             }
         void replaceChar_WithLength_001()
             {
@@ -618,7 +603,6 @@ namespace rtl_ustr
         void toAsciiLowerCase_000()
             {
                 rtl_ustr_toAsciiLowerCase( NULL );
-                volatile int dummy = 0;
             }
 
         void toAsciiLowerCase_001()
@@ -657,7 +641,6 @@ namespace rtl_ustr
         void toAsciiLowerCase_WithLength_000()
             {
                 rtl_ustr_toAsciiLowerCase_WithLength( NULL, 0 );
-                volatile int dummy = 0;
             }
 
         void toAsciiLowerCase_WithLength_001()
@@ -702,7 +685,6 @@ namespace rtl_ustr
         void toAsciiUpperCase_000()
             {
                 rtl_ustr_toAsciiUpperCase( NULL );
-                volatile int dummy = 0;
             }
 
         void toAsciiUpperCase_001()
@@ -741,7 +723,6 @@ namespace rtl_ustr
         void toAsciiUpperCase_WithLength_000()
             {
                 rtl_ustr_toAsciiUpperCase_WithLength( NULL, 0 );
-                volatile int dummy = 0;
             }
 
         void toAsciiUpperCase_WithLength_001()
@@ -780,7 +761,7 @@ namespace rtl_ustr
       public:
         void trim_WithLength_000()
         {
-            sal_Int32 nValue = rtl_ustr_trim_WithLength(NULL, 0);
+            rtl_ustr_trim_WithLength(NULL, 0);
             // should not GPF
         }
 
@@ -792,7 +773,7 @@ namespace rtl_ustr
             sal_Unicode *pStr = (sal_Unicode*)malloc(nLength);
             memcpy(pStr, suStr.getStr(), nLength);
 
-            sal_Int32 nValue = rtl_ustr_trim_WithLength( pStr, 0 );
+            rtl_ustr_trim_WithLength( pStr, 0 );
             free(pStr);
         }
 
@@ -803,7 +784,7 @@ namespace rtl_ustr
             sal_Unicode *pStr = (sal_Unicode*)malloc(nLength);
             memcpy(pStr, suStr.getStr(), nLength);
 
-            sal_Int32 nValue = rtl_ustr_trim_WithLength( pStr, 2 );
+            rtl_ustr_trim_WithLength( pStr, 2 );
 
             CPPUNIT_ASSERT_MESSAGE("string should be empty", rtl::OUString(pStr).getLength() == 0);
             free(pStr);
@@ -818,7 +799,7 @@ namespace rtl_ustr
             sal_Unicode *pStr = (sal_Unicode*)malloc(nLength);
             memcpy(pStr, suStr.getStr(), nLength);
 
-            sal_Int32 nValue = rtl_ustr_trim_WithLength( pStr, 5 );
+            rtl_ustr_trim_WithLength( pStr, 5 );
 
             CPPUNIT_ASSERT_MESSAGE("string should contain 'trim'", rtl::OUString(pStr).getLength() == 4);
             free(pStr);
@@ -833,7 +814,7 @@ namespace rtl_ustr
             sal_Unicode *pStr = (sal_Unicode*)malloc(nLength);
             memcpy(pStr, suStr.getStr(), nLength);
 
-            sal_Int32 nValue = rtl_ustr_trim_WithLength( pStr, 11 );
+            rtl_ustr_trim_WithLength( pStr, 11 );
 
             CPPUNIT_ASSERT_MESSAGE("string should contain 'trim'", rtl::OUString(pStr).getLength() == 4);
             free(pStr);
@@ -847,7 +828,7 @@ namespace rtl_ustr
             sal_Unicode *pStr = (sal_Unicode*)malloc(nLength);
             memcpy(pStr, suStr.getStr(), nLength);
 
-            sal_Int32 nValue = rtl_ustr_trim_WithLength( pStr, 17 );
+            rtl_ustr_trim_WithLength( pStr, 17 );
 
             CPPUNIT_ASSERT_MESSAGE("string should contain 'trim'", rtl::OUString(pStr).getLength() == 4);
             free(pStr);
@@ -861,7 +842,7 @@ namespace rtl_ustr
             sal_Unicode *pStr = (sal_Unicode*)malloc(nLength);
             memcpy(pStr, suStr.getStr(), nLength);
 
-            sal_Int32 nValue = rtl_ustr_trim_WithLength( pStr, suStr.getLength() );
+            rtl_ustr_trim_WithLength( pStr, suStr.getLength() );
 
             CPPUNIT_ASSERT_MESSAGE("string should contain 'trim \\t this'", rtl::OUString(pStr).getLength() == 11);
             free(pStr);
@@ -889,7 +870,7 @@ namespace rtl_ustr
       public:
         void valueOfChar_000()
             {
-                sal_Int32 nValue = rtl_ustr_valueOfChar(NULL, 0);
+                rtl_ustr_valueOfChar(NULL, 0);
                 // should not GPF
             }
         void valueOfChar_001()
@@ -897,7 +878,7 @@ namespace rtl_ustr
                 sal_Unicode *pStr = (sal_Unicode*)malloc(RTL_USTR_MAX_VALUEOFCHAR);
                 if (pStr)
                 {
-                    sal_Int32 nValue = rtl_ustr_valueOfChar(pStr, 'A');
+                    rtl_ustr_valueOfChar(pStr, 'A');
 
                     CPPUNIT_ASSERT_MESSAGE("string should contain 'A'", pStr[0] == L'A');
                     free(pStr);
@@ -920,24 +901,21 @@ namespace rtl_ustr
 
         void ascii_shortenedCompareIgnoreAsciiCase_WithLength_000()
             {
-                sal_Int32 nValue = rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( NULL, 0, NULL, 0);
-                volatile int dummy = 0;
+                rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( NULL, 0, NULL, 0);
                 // should not GPF
             }
 
         void ascii_shortenedCompareIgnoreAsciiCase_WithLength_000_1()
             {
                 rtl::OUString aStr1 = rtl::OUString::createFromAscii("Line must be equal.");
-                sal_Int32 nValue = rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( aStr1.getStr(), aStr1.getLength(), NULL, 0);
-                volatile int dummy = 0;
+                rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( aStr1.getStr(), aStr1.getLength(), NULL, 0);
                 // should not GPF
             }
         void ascii_shortenedCompareIgnoreAsciiCase_WithLength_000_2()
             {
                 rtl::OUString aStr1 = rtl::OUString::createFromAscii("Line must be equal.");
                 rtl::OString sStr2 =                                 "Line is shorter.";
-                sal_Int32 nValue = rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( aStr1.getStr(), sStr2.getLength(), sStr2.getStr(), 0);
-                volatile int dummy = 0;
+                rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( aStr1.getStr(), sStr2.getLength(), sStr2.getStr(), 0);
                 // should not GPF
             }
         void ascii_shortenedCompareIgnoreAsciiCase_WithLength_001()
@@ -989,24 +967,21 @@ namespace rtl_ustr
 
         void ascii_compareIgnoreAsciiCase_WithLength_000()
             {
-                sal_Int32 nValue = rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( NULL, 0, NULL);
-                volatile int dummy = 0;
+                rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( NULL, 0, NULL);
                 // should not GPF
             }
 
         void ascii_compareIgnoreAsciiCase_WithLength_000_1()
             {
                 rtl::OUString aStr1 = rtl::OUString::createFromAscii("Line must be equal.");
-                sal_Int32 nValue = rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( aStr1.getStr(), 0, NULL);
-                volatile int dummy = 0;
+                rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( aStr1.getStr(), 0, NULL);
                 // should not GPF
             }
         void ascii_compareIgnoreAsciiCase_WithLength_000_2()
             {
                 rtl::OUString aStr1 = rtl::OUString::createFromAscii("Line must be equal.");
                 rtl::OString sStr2 =                                 "Line is shorter.";
-                sal_Int32 nValue = rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( aStr1.getStr(), sStr2.getLength(), sStr2.getStr());
-                volatile int dummy = 0;
+                rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( aStr1.getStr(), sStr2.getLength(), sStr2.getStr());
                 // should not GPF
             }
         void ascii_compareIgnoreAsciiCase_WithLength_001()
@@ -1058,16 +1033,14 @@ namespace rtl_ustr
 
         void ascii_compare_000()
             {
-                sal_Int32 nValue = rtl_ustr_ascii_compare( NULL, NULL);
-                volatile int dummy = 0;
+                rtl_ustr_ascii_compare( NULL, NULL);
                 // should not GPF
             }
 
         void ascii_compare_000_1()
             {
                 rtl::OUString aStr1 = rtl::OUString::createFromAscii("Line must be equal.");
-                sal_Int32 nValue = rtl_ustr_ascii_compare( aStr1.getStr(), NULL);
-                volatile int dummy = 0;
+                rtl_ustr_ascii_compare( aStr1.getStr(), NULL);
                 // should not GPF
             }
         void ascii_compare_001()
@@ -1118,16 +1091,14 @@ namespace rtl_ustr
 
         void ascii_compareIgnoreAsciiCase_000()
             {
-                sal_Int32 nValue = rtl_ustr_ascii_compareIgnoreAsciiCase( NULL, NULL);
-                volatile int dummy = 0;
+                rtl_ustr_ascii_compareIgnoreAsciiCase( NULL, NULL);
                 // should not GPF
             }
 
         void ascii_compareIgnoreAsciiCase_000_1()
             {
                 rtl::OUString aStr1 = rtl::OUString::createFromAscii("Line must be equal.");
-                sal_Int32 nValue = rtl_ustr_ascii_compareIgnoreAsciiCase( aStr1.getStr(), NULL);
-                volatile int dummy = 0;
+                rtl_ustr_ascii_compareIgnoreAsciiCase( aStr1.getStr(), NULL);
                 // should not GPF
             }
         void ascii_compareIgnoreAsciiCase_001()
@@ -1218,16 +1189,14 @@ namespace rtl_ustr
 
         void getToken_000()
             {
-                sal_Int32 nValue = rtl_ustr_ascii_compareIgnoreAsciiCase( NULL, NULL);
-                volatile int dummy = 0;
+                rtl_ustr_ascii_compareIgnoreAsciiCase( NULL, NULL);
                 // should not GPF
             }
 
         void ascii_compareIgnoreAsciiCase_000_1()
             {
                 rtl::OUString aStr1 = rtl::OUString::createFromAscii("Line must be equal.");
-                sal_Int32 nValue = rtl_ustr_ascii_compareIgnoreAsciiCase( aStr1.getStr(), NULL);
-                volatile int dummy = 0;
+                rtl_ustr_ascii_compareIgnoreAsciiCase( aStr1.getStr(), NULL);
                 // should not GPF
             }
         void ascii_compareIgnoreAsciiCase_001()
