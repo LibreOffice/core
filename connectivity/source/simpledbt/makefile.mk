@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2006-05-04 08:22:22 $
+#   last change: $Author: hr $ $Date: 2006-06-20 02:11:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -42,13 +42,13 @@ TARGET=simpledbt
 # --- Files --------------------------------------------------------
 
 EXCEPTIONSFILES=\
+        $(SLO)$/charset_s.obj   \
         $(SLO)$/staticdbtools_s.obj \
         $(SLO)$/parsenode_s.obj     \
         $(SLO)$/parser_s.obj
 
 SLOFILES=\
         $(EXCEPTIONSFILES)       \
-        $(SLO)$/charset_s.obj	\
         $(SLO)$/refbase.obj		\
         $(SLO)$/dbtfactory.obj	\
 
