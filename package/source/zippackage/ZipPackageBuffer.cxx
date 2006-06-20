@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ZipPackageBuffer.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:17:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 06:14:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,16 +44,16 @@ using com::sun::star::lang::IllegalArgumentException;
 
 ZipPackageBuffer::ZipPackageBuffer(sal_Int64 nNewBufferSize )
 : m_nBufferSize (nNewBufferSize)
-, m_bMustInitBuffer ( sal_True )
-, m_nCurrent(0)
 , m_nEnd(0)
+, m_nCurrent(0)
+, m_bMustInitBuffer ( sal_True )
 {
 }
 ZipPackageBuffer::ZipPackageBuffer(Sequence < sal_Int8 > &nNewBuffer )
 : m_aBuffer ( nNewBuffer )
-, m_bMustInitBuffer ( sal_False )
-, m_nCurrent( 0 )
 , m_nEnd ( nNewBuffer.getLength() )
+, m_nCurrent( 0 )
+, m_bMustInitBuffer ( sal_False )
 {
 }
 ZipPackageBuffer::~ZipPackageBuffer(void)
@@ -104,7 +104,6 @@ void SAL_CALL ZipPackageBuffer::writeBytes( const Sequence< sal_Int8 >& aData )
         throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
 {
     sal_Int64 nDataLen = aData.getLength(), nCombined = m_nEnd + nDataLen;
-    const sal_Int8 *pData   = aData.getConstArray();
 
     if ( nCombined > m_nBufferSize)
     {
