@@ -23,8 +23,8 @@ sal_Bool compareUString( const ::rtl::OUString & ustr1, const ::rtl::OUString & 
 */
 sal_Bool compareUString( const ::rtl::OUString & ustr, const sal_Char *astr )
 {
-    ::rtl::OUString ustr1 = rtl::OUString::createFromAscii( astr );
-    sal_Bool bOk = ustr1.equalsIgnoreAsciiCase( ustr1 );
+    ::rtl::OUString ustr2 = rtl::OUString::createFromAscii( astr );
+    sal_Bool bOk = ustr.equalsIgnoreAsciiCase( ustr2 );
 
     return bOk;
 }
@@ -84,8 +84,9 @@ void printUString( const ::rtl::OUString & str, const char* msg)
     aUString = ::rtl::OStringToOUString(sHostname, RTL_TEXTENCODING_ASCII_US);
 #else
     char hostname[255];
-    int nRes = gethostname(hostname, 255);
-    OSL_ENSURE( nRes == 0, "#Error: gethostname failed."  );
+    if (gethostname(hostname, 255) != 0) {
+        OSL_ENSURE( false, "#Error: gethostname failed."  );
+    }
 
     struct hostent *hptr;
     //first search /ets/hosts, then search from dns
@@ -98,7 +99,7 @@ void printUString( const ::rtl::OUString & str, const char* msg)
     t_print("hostname is %s \n", hostname );
     rtl::OString sHostname( hostname );
     aUString = ::rtl::OStringToOUString( sHostname, RTL_TEXTENCODING_ASCII_US );
-    volatile sal_Int32 nLen = aUString.getLength();
+    aUString.getLength();
 #endif
     return aUString;
 }
