@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ed_idataobj.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:51:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:39:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,8 +158,8 @@ STDMETHODIMP EmbedDocument_Impl::GetData( FORMATETC * pFormatetc, STGMEDIUM * pM
     }
     else
     {
-        CLIPFORMAT cf_embSource = RegisterClipboardFormatA( "Embed Source" );
-        CLIPFORMAT cf_embObj = RegisterClipboardFormatA( "Embedded Object" );
+        CLIPFORMAT cf_embSource = (CLIPFORMAT)RegisterClipboardFormatA( "Embed Source" );
+        CLIPFORMAT cf_embObj = (CLIPFORMAT)RegisterClipboardFormatA( "Embedded Object" );
         if ( pFormatetc->cfFormat == cf_embSource || pFormatetc->cfFormat == cf_embObj )
         {
             if ( !( pFormatetc->tymed & TYMED_ISTORAGE ) )
@@ -197,8 +197,8 @@ STDMETHODIMP EmbedDocument_Impl::GetDataHere( FORMATETC * pFormatetc, STGMEDIUM 
       || pFormatetc->dwAspect == DVASPECT_DOCPRINT )
         return DV_E_DVASPECT;
 
-    CLIPFORMAT cf_embSource = RegisterClipboardFormatA( "Embed Source" );
-    CLIPFORMAT cf_embObj = RegisterClipboardFormatA( "Embedded Object" );
+    CLIPFORMAT cf_embSource = (CLIPFORMAT)RegisterClipboardFormatA( "Embed Source" );
+    CLIPFORMAT cf_embObj = (CLIPFORMAT)RegisterClipboardFormatA( "Embedded Object" );
 
     if ( pFormatetc->cfFormat == cf_embSource || pFormatetc->cfFormat == cf_embObj )
     {
@@ -244,8 +244,8 @@ STDMETHODIMP EmbedDocument_Impl::QueryGetData( FORMATETC * pFormatetc )
         }
         else
         {
-            CLIPFORMAT cf_embSource = RegisterClipboardFormatA( "Embed Source" );
-            CLIPFORMAT cf_embObj = RegisterClipboardFormatA( "Embedded Object" );
+            CLIPFORMAT cf_embSource = (CLIPFORMAT)RegisterClipboardFormatA( "Embed Source" );
+            CLIPFORMAT cf_embObj = (CLIPFORMAT)RegisterClipboardFormatA( "Embedded Object" );
             if ( pFormatetc->cfFormat == cf_embSource || pFormatetc->cfFormat == cf_embObj )
             {
                 if ( !( pFormatetc->tymed & TYMED_ISTORAGE ) )
@@ -281,8 +281,8 @@ STDMETHODIMP EmbedDocument_Impl::GetCanonicalFormatEtc( FORMATETC * pFormatetcIn
     }
     else
     {
-        CLIPFORMAT cf_embSource = RegisterClipboardFormatA( "Embed Source" );
-        CLIPFORMAT cf_embObj = RegisterClipboardFormatA( "Embedded Object" );
+        CLIPFORMAT cf_embSource = (CLIPFORMAT)RegisterClipboardFormatA( "Embed Source" );
+        CLIPFORMAT cf_embObj = (CLIPFORMAT)RegisterClipboardFormatA( "Embedded Object" );
         if ( pFormatetcIn->cfFormat == cf_embSource || pFormatetcIn->cfFormat == cf_embObj )
         {
             pFormatetcOut->tymed = TYMED_ISTORAGE;
@@ -293,12 +293,12 @@ STDMETHODIMP EmbedDocument_Impl::GetCanonicalFormatEtc( FORMATETC * pFormatetcIn
     return DV_E_FORMATETC;
 }
 
-STDMETHODIMP EmbedDocument_Impl::SetData( FORMATETC * pFormatetc, STGMEDIUM * pMedium, BOOL fRelease )
+STDMETHODIMP EmbedDocument_Impl::SetData( FORMATETC * /*pFormatetc*/, STGMEDIUM * /*pMedium*/, BOOL /*fRelease*/ )
 {
     return E_NOTIMPL;
 }
 
-STDMETHODIMP EmbedDocument_Impl::EnumFormatEtc( DWORD dwDirection, IEnumFORMATETC ** ppFormatetc )
+STDMETHODIMP EmbedDocument_Impl::EnumFormatEtc( DWORD dwDirection, IEnumFORMATETC ** /*ppFormatetc*/ )
 {
     if ( dwDirection == DATADIR_GET )
         return OLE_S_USEREG;
@@ -333,3 +333,9 @@ STDMETHODIMP EmbedDocument_Impl::EnumDAdvise( IEnumSTATDATA ** ppenumAdvise )
     return m_pDAdviseHolder->EnumAdvise( ppenumAdvise );
 }
 
+// Fix strange warnings about some
+// ATL::CAxHostWindow::QueryInterface|AddRef|Releae functions.
+// warning C4505: 'xxx' : unreferenced local function has been removed
+#if defined(_MSC_VER)
+#pragma warning(disable: 4505)
+#endif
