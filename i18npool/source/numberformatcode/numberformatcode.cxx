@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numberformatcode.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:21:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:47:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -196,13 +196,10 @@ NumberFormatCodeMapper::mapElementTypeShortToString(sal_Int16 formatType)
     {
         case com::sun::star::i18n::KNumberFormatType::SHORT :
             return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "short" ) );
-        break;
         case com::sun::star::i18n::KNumberFormatType::MEDIUM :
             return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "medium" ) );
-        break;
         case com::sun::star::i18n::KNumberFormatType::LONG :
             return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "long" ) );
-        break;
     }
     return ::rtl::OUString();
 }
@@ -227,28 +224,20 @@ NumberFormatCodeMapper::mapElementUsageShortToString(sal_Int16 formatUsage)
     {
         case com::sun::star::i18n::KNumberFormatUsage::DATE :
             return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DATE" ) );
-        break;
         case com::sun::star::i18n::KNumberFormatUsage::TIME :
             return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TIME" ) );
-        break;
         case com::sun::star::i18n::KNumberFormatUsage::DATE_TIME :
             return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DATE_TIME" ) );
-        break;
         case com::sun::star::i18n::KNumberFormatUsage::FIXED_NUMBER :
             return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FIXED_NUMBER" ) );
-        break;
         case com::sun::star::i18n::KNumberFormatUsage::FRACTION_NUMBER :
             return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FRACTION_NUMBER" ) );
-        break;
         case com::sun::star::i18n::KNumberFormatUsage::PERCENT_NUMBER :
             return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PERCENT_NUMBER" ) );
-        break;
         case com::sun::star::i18n::KNumberFormatUsage::CURRENCY :
             return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CURRENCY" ) );
-        break;
         case com::sun::star::i18n::KNumberFormatUsage::SCIENTIFIC_NUMBER :
             return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SCIENTIFIC_NUMBER" ) );
-        break;
     }
     return ::rtl::OUString();
 }
