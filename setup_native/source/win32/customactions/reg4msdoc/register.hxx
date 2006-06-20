@@ -4,9 +4,9 @@
  *
  *  $RCSfile: register.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:36:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:38:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,9 +40,11 @@
 #include "constants.hxx"
 #endif
 
+#pragma warning(push, 1) /* disable warnings within system headers */
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <msi.h>
+#pragma warning(pop)
 
 #include <string>
 
