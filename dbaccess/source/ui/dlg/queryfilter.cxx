@@ -4,9 +4,9 @@
  *
  *  $RCSfile: queryfilter.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:09:03 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:09:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,9 @@
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 #ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
@@ -150,10 +153,10 @@ DlgFilterCrit::DlgFilterCrit(Window * pParent,
     ,aBT_HELP           ( this, ResId( BT_HELP ) )
     ,aSTR_NOENTRY       ( ResId( STR_NOENTRY ) )
     ,aSTR_COMPARE_OPERATORS( ResId( STR_COMPARE_OPERATORS ) )
+    ,m_xQueryComposer(_rxComposer)
     ,m_xColumns( _rxCols )
     ,m_xConnection( _rxConnection )
     ,m_xMetaData( _rxConnection->getMetaData() )
-    ,m_xQueryComposer(_rxComposer)
     ,m_aPredicateInput( _rxORB, _rxConnection, getParseContext() )
 {
     DBG_CTOR(DlgFilterCrit,NULL);
@@ -264,7 +267,7 @@ DlgFilterCrit::~DlgFilterCrit()
 //------------------------------------------------------------------------------
 sal_Int32 DlgFilterCrit::GetOSQLPredicateType(sal_uInt16 nPos,sal_uInt16 nCount) const
 {
-    sal_Int32 ePreType;
+    sal_Int32 ePreType( SQLFilterOperator::EQUAL );
 
     if(nCount == 10)
     {
@@ -460,10 +463,9 @@ Reference< XPropertySet > DlgFilterCrit::getColumn( const ::rtl::OUString& _rFie
             }
         }
     }
-    catch( const Exception& e )
+    catch( const Exception& )
     {
-        e;  // make compiler happy
-        DBG_ERROR( "DlgFilterCrit::getMatchingColumn: caught an exception!" );
+        DBG_UNHANDLED_EXCEPTION();
     }
 
     return xColumn;
@@ -478,10 +480,9 @@ Reference< XPropertySet > DlgFilterCrit::getQueryColumn( const ::rtl::OUString& 
         if ( xColumns.is() && xColumns->hasByName( _rFieldName ) )
             xColumns->getByName( _rFieldName ) >>= xColumn;
     }
-    catch( const Exception& e )
+    catch( const Exception& )
     {
-        e;  // make compiler happy
-        DBG_ERROR( "DlgFilterCrit::getMatchingColumn: caught an exception!" );
+        DBG_UNHANDLED_EXCEPTION();
     }
 
     return xColumn;
@@ -817,7 +818,7 @@ IMPL_LINK( DlgFilterCrit, ListSelectHdl, ListBox *, pListBox )
 
 
 //------------------------------------------------------------------------------
-IMPL_LINK_INLINE_START( DlgFilterCrit, ListSelectCompHdl, ListBox *, pListBox )
+IMPL_LINK_INLINE_START( DlgFilterCrit, ListSelectCompHdl, ListBox *, /*pListBox*/ )
 {
     EnableLines();
     return 0;
