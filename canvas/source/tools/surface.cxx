@@ -4,9 +4,9 @@
  *
  *  $RCSfile: surface.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 12:55:26 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:19:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -198,7 +198,7 @@ namespace canvas
             pRenderModule->beginPrimitive( canvas::IRenderModule::PRIMITIVE_TYPE_QUAD );
 
             // issue an endPrimitive() when leaving the scope
-            const ::comphelper::ScopeGuard aGuard(
+            const ::comphelper::ScopeGuard aScopeGuard(
                 boost::bind( &::canvas::IRenderModule::endPrimitive,
                              ::boost::ref(pRenderModule) ) );
 
@@ -323,7 +323,7 @@ namespace canvas
             pRenderModule->beginPrimitive( canvas::IRenderModule::PRIMITIVE_TYPE_QUAD );
 
             // issue an endPrimitive() when leaving the scope
-            const ::comphelper::ScopeGuard aGuard(
+            const ::comphelper::ScopeGuard aScopeGuard(
                 boost::bind( &::canvas::IRenderModule::endPrimitive,
                              ::boost::ref(pRenderModule) ) );
 
@@ -434,7 +434,7 @@ namespace canvas
             pRenderModule->beginPrimitive( canvas::IRenderModule::PRIMITIVE_TYPE_TRIANGLE );
 
             // issue an endPrimitive() when leaving the scope
-            const ::comphelper::ScopeGuard aGuard(
+            const ::comphelper::ScopeGuard aScopeGuard(
                 boost::bind( &::canvas::IRenderModule::endPrimitive,
                                 ::boost::ref(pRenderModule) ) );
 

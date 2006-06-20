@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertysethelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 12:55:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:18:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,7 +161,7 @@ namespace canvas
     }
 
     void PropertySetHelper::addPropertyChangeListener( const ::rtl::OUString&                                  aPropertyName,
-                                                       const uno::Reference< beans::XPropertyChangeListener >& xListener )
+                                                       const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ )
     {
         // check validity of property, but otherwise ignore the
         // request
@@ -169,14 +169,14 @@ namespace canvas
             throwUnknown( aPropertyName );
     }
 
-    void PropertySetHelper::removePropertyChangeListener( const ::rtl::OUString&                                  aPropertyName,
-                                                          const uno::Reference< beans::XPropertyChangeListener >& xListener )
+    void PropertySetHelper::removePropertyChangeListener( const ::rtl::OUString&                                  /*aPropertyName*/,
+                                                          const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ )
     {
         // ignore request, no listener added in the first place
     }
 
     void PropertySetHelper::addVetoableChangeListener( const ::rtl::OUString&                                  aPropertyName,
-                                                       const uno::Reference< beans::XVetoableChangeListener >& xListener )
+                                                       const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/ )
     {
         // check validity of property, but otherwise ignore the
         // request
@@ -184,8 +184,8 @@ namespace canvas
             throwUnknown( aPropertyName );
     }
 
-    void PropertySetHelper::removeVetoableChangeListener( const ::rtl::OUString&                                  aPropertyName,
-                                                          const uno::Reference< beans::XVetoableChangeListener >& xListener )
+    void PropertySetHelper::removeVetoableChangeListener( const ::rtl::OUString&                                  /*aPropertyName*/,
+                                                          const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/ )
     {
         // ignore request, no listener added in the first place
     }
