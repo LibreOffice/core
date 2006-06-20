@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testshl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:08:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:28:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,10 +45,14 @@
 #define UNDER_WINDOWS_DEBUGGING
 // Nice feature, to debug under windows, install msdev locally and use DebugBreak() to stop a new process at a point you want.
 #ifdef UNDER_WINDOWS_DEBUGGING
-#include <tools/presys.h>
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#endif
 #include <windows.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 #include <MAPIWin.h>
-#include <tools/postsys.h>
 
 #define VCL_NEED_BASETSD
 
@@ -176,12 +180,12 @@ std::auto_ptr<CppUnit::TestResult> initResult(GetOpt & _aOptions)
     {
         if (_aOptions.getOpt("-mode").equals("emacs") == sal_True)
         {
-            pResult = std::auto_ptr<CppUnit::TestResult>(new CppUnit::emacsTestResult(_aOptions));
+            pResult.reset(new CppUnit::emacsTestResult(_aOptions));
         }
     }
     else
     {
-        pResult = std::auto_ptr<CppUnit::TestResult>(new CppUnit::testshlTestResult(_aOptions));
+        pResult.reset(new CppUnit::testshlTestResult(_aOptions));
     }
     return pResult;
 }
@@ -203,11 +207,11 @@ std::auto_ptr<Outputter> initOutputter(GetOpt & _aOptions)
             fprintf(stderr, "could not open LogFile: %s\n", pLog->getName().getStr());
             exit(1);
         }
-        pOutputter = std::auto_ptr<Outputter>(new Outputter(pLog));
+        pOutputter.reset(new Outputter(pLog));
     }
     else
     {
-        pOutputter = std::auto_ptr<Outputter>(new Outputter(std::cout));
+        pOutputter.reset(new Outputter(std::cout));
     }
 
     return pOutputter;
@@ -225,9 +229,9 @@ void endless()
 
 // ----------------------------------- Main -----------------------------------
 
-SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
+SAL_IMPLEMENT_MAIN_WITH_ARGS(, argv)
 {
-    static char* optionSet[] = {
+    static char const * optionSet[] = {
         "-boom,         stop near error position, exception only",
         "-mode=s,       the output mode, emacs, xml, old. Default is -mode old",
         "-log=s,        destination file for logging",
@@ -269,7 +273,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
     if ( opt.hasOpt("-verbose") )
     {
-        fprintf(stderr, "testshl2 $Revision: 1.18 $\n");
+        fprintf(stderr, "testshl2 $Revision: 1.19 $\n");
     }
 
     if ( opt.hasOpt("-endless"))                 // this exists only for self test issues
