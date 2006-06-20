@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 09:07:21 $
+#   last change: $Author: hr $ $Date: 2006-06-20 04:06:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@ PRJ=..
 
 PRJNAME=vos
 TARGET=cppvos
+ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -44,9 +45,7 @@ TARGET=cppvos
 
 # --- Files --------------------------------------------------------
 
-SLOFILES=       $(SLO)$/bytarray.obj    \
-                $(SLO)$/bytestrm.obj    \
-                $(SLO)$/conditn.obj     \
+SLOFILES=       $(SLO)$/conditn.obj     \
                 $(SLO)$/mutex.obj       \
                 $(SLO)$/object.obj      \
                 $(SLO)$/refernce.obj    \
@@ -63,9 +62,7 @@ SLOFILES=       $(SLO)$/bytarray.obj    \
 
 
 .IF "$(UPDATER)"=="YES"
-OBJFILES=       $(OBJ)$/bytarray.obj    \
-                $(OBJ)$/bytestrm.obj    \
-                $(OBJ)$/conditn.obj     \
+OBJFILES=       $(OBJ)$/conditn.obj     \
                 $(OBJ)$/mutex.obj       \
                 $(OBJ)$/object.obj      \
                 $(OBJ)$/refernce.obj    \
