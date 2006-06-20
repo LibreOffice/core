@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ZipPackageStream.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 19:15:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 06:14:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,16 +97,16 @@ Sequence < sal_Int8 > ZipPackageStream::aImplementationId = Sequence < sal_Int8 
 ZipPackageStream::ZipPackageStream ( ZipPackage & rNewPackage,
                                     const Reference< XMultiServiceFactory >& xFactory,
                                     sal_Bool bAllowRemoveOnInsert )
-: rZipPackage(rNewPackage)
-, m_xFactory( xFactory )
+: m_xFactory( xFactory )
+, rZipPackage(rNewPackage)
 , bToBeCompressed ( sal_True )
 , bToBeEncrypted ( sal_False )
-, bIsEncrypted ( sal_False )
 , bHaveOwnKey ( sal_False )
+, bIsEncrypted ( sal_False )
 , xEncryptionData ( )
 , m_nStreamMode( PACKAGE_STREAM_NOTSET )
-, m_nMagicalHackSize( 0 )
 , m_nMagicalHackPos( 0 )
+, m_nMagicalHackSize( 0 )
 , m_bHasSeekable( sal_False )
 {
     OSL_ENSURE( m_xFactory.is(), "No factory is provided to ZipPackageStream!\n" );
@@ -331,8 +331,6 @@ Reference< io::XInputStream > ZipPackageStream::TryToGetRawFromDataStream( sal_B
     }
 
     throw io::IOException(); // TODO
-
-    return Reference< io::XInputStream >();
 }
 
 //--------------------------------------------------------------------------
