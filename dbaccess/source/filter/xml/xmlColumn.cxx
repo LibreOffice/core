@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlColumn.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:08:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:49:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,7 +102,6 @@ OXMLColumn::OXMLColumn( ODBFilter& rImport
     const SvXMLTokenMap& rTokenMap = rImport.GetColumnElemTokenMap();
 
     sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
-    sal_Bool bAutoEnabled = sal_False;
     ::rtl::OUString sType;
     for(sal_Int16 i = 0; i < nLength; ++i)
     {
