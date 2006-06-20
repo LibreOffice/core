@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: hr $ $Date: 2006-04-19 13:46:16 $
+#   last change: $Author: hr $ $Date: 2006-06-20 03:49:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -41,18 +41,18 @@ TARGETTYPE=CUI
 LIBTARGET=NO
 
 ENABLE_EXCEPTIONS=TRUE
+INCPRE=$(MISC)
 
 # --- Settings -----------------------------------------------------
 
 
 .INCLUDE :  settings.mk
 
-
 # --- Files --------------------------------------------------------
 
 CXXFILES=   \
-            $(MISC)$/scanner.cxx \
-            $(MISC)$/parser.cxx	\
+            wrap_scanner.cxx \
+            wrap_parser.cxx	\
             idlcmain.cxx	\
             idlc.cxx	\
             idlccompile.cxx	\
@@ -79,8 +79,8 @@ YACCTARGET=$(MISC)$/parser.cxx
 YACCFILES=parser.y
 
 OBJFILES=   \
-            $(OBJ)$/scanner.obj	\
-            $(OBJ)$/parser.obj	\
+            $(OBJ)$/wrap_scanner.obj	\
+            $(OBJ)$/wrap_parser.obj	\
             $(OBJ)$/idlcmain.obj	\
             $(OBJ)$/idlc.obj	\
             $(OBJ)$/idlccompile.obj	\
@@ -131,4 +131,5 @@ $(MISC)$/stripped_scanner.ll : scanner.ll
 $(MISC)$/scanner.cxx:	$(MISC)$/stripped_scanner.ll
     +flex -o$(MISC)$/scanner.cxx $(MISC)$/stripped_scanner.ll
 
-
+$(OBJ)$/wrap_parser.obj: $(MISC)$/parser.cxx
+$(OBJ)$/wrap_scanner.obj: $(MISC)$/scanner.cxx
