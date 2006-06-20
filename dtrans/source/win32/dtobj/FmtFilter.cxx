@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FmtFilter.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:24:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 06:05:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,10 +45,17 @@
 #include <comphelper/sequence.hxx>
 #endif
 
+#if defined _MSC_VER
+#pragma warning(push,1)
+#pragma warning(disable:4917)
+#endif
 #include <Shobjidl.h>
 #include <shlguid.h>
 #include <ObjIdl.h>
 #include <shellapi.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 
 #include <string>
 #include <sstream>
@@ -534,7 +541,7 @@ ByteSequence_t CF_HDROPToFileList(HGLOBAL hGlobal)
     for (UINT i = 0; i < nFiles; i++)
     {
         wchar_t buff[MAX_PATH];
-        UINT size = DragQueryFileW((HDROP)hGlobal, i, buff, MAX_PATH);
+        /*UINT size =*/ DragQueryFileW((HDROP)hGlobal, i, buff, MAX_PATH);
         std::wstring filename = buff;
         if (isShellLink(filename))
             filename = getShellLinkTarget(filename);
