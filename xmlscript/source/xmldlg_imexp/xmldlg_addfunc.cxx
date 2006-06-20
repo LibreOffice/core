@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmldlg_addfunc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:13:21 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:11:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,4 +140,4 @@ void SAL_CALL importDialogModel(
     xParser->parseStream( source );
 }
 
-};
+}
