@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CIndexes.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:01:27 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:33:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,9 +34,6 @@
  ************************************************************************/
 #ifndef DBACCESS_INDEXES_HXX_
 #include "CIndexes.hxx"
-#endif
-#ifndef _CONNECTIVITY_SDBCX_INDEX_HXX_
-#include "connectivity/sdbcx/VIndex.hxx"
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
