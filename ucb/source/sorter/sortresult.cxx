@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sortresult.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:20:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:18:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -928,7 +928,7 @@ SortedResultSet::getPropertySetInfo() throw( RuntimeException )
 //--------------------------------------------------------------------------
 void SAL_CALL SortedResultSet::setPropertyValue(
                         const OUString& PropertyName,
-                        const Any& Value )
+                        const Any& )
     throw( UnknownPropertyException,
            PropertyVetoException,
            IllegalArgumentException,
@@ -1355,7 +1355,7 @@ long SortedResultSet::FindPos( SortListData *pEntry,
 
     long nStart = _nStart;
     long nEnd   = _nEnd;
-    long nMid, nCompare;
+    long nMid = 0, nCompare = 0;
 
     SortListData    *pMid;
 
