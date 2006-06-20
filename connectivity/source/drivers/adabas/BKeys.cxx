@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BKeys.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:22:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:09:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,7 +83,7 @@ sdbcx::ObjectType OKeys::createObject(const ::rtl::OUString& _rName)
 
     if(_rName.getLength())
     {
-        Reference< XResultSet > xResult = m_pTable->getConnection()->getMetaData()->getImportedKeys(Any(),
+        Reference< XResultSet > xResult = m_pTable->getMetaData()->getImportedKeys(Any(),
             m_pTable->getSchema(),m_pTable->getTableName());
 
         if(xResult.is())
@@ -138,7 +138,7 @@ void OKeys::appendObject( const Reference< XPropertySet >& descriptor )
         sal_Int32 nKeyType      = getINT32(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)));
 
         ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("ALTER TABLE ");
-        ::rtl::OUString aQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString(  );
+        ::rtl::OUString aQuote  = m_pTable->getMetaData()->getIdentifierQuoteString(  );
         const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
 
         aSql = aSql + aQuote + m_pTable->getSchema() + aQuote + sDot + aQuote + m_pTable->getTableName() + aQuote;
@@ -211,7 +211,7 @@ void OKeys::appendObject( const Reference< XPropertySet >& descriptor )
         // we need a name for the insertion
         if(nKeyType == KeyType::FOREIGN)
         {
-            Reference< XResultSet > xResult = m_pTable->getConnection()->getMetaData()->getImportedKeys(Any(),m_pTable->getSchema(),m_pTable->getTableName());
+            Reference< XResultSet > xResult = m_pTable->getMetaData()->getImportedKeys(Any(),m_pTable->getSchema(),m_pTable->getTableName());
             if(xResult.is())
             {
                 Reference< XRow > xRow(xResult,UNO_QUERY);
@@ -236,7 +236,7 @@ void OKeys::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
     if(!m_pTable->isNew())
     {
         ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("ALTER TABLE ");
-        ::rtl::OUString aQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString(  );
+        ::rtl::OUString aQuote  = m_pTable->getMetaData()->getIdentifierQuoteString(  );
         const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
 
         Reference<XPropertySet> xKey(getObject(_nPos),UNO_QUERY);
