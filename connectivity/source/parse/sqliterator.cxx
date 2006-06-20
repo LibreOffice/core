@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqliterator.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:18:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:08:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,9 @@
 #ifndef _COM_SUN_STAR_SDB_SQLFILTEROPERATOR_HPP_
 #include <com/sun/star/sdb/SQLFilterOperator.hpp>
 #endif
+#ifndef CONNECTIVITY_DIAGNOSE_EX_H
+#include "diagnose_ex.h"
+#endif
 
 using namespace ::comphelper;
 using namespace ::connectivity;
@@ -109,24 +112,15 @@ OSQLParseTreeIterator::OSQLParseTreeIterator(const Reference< XNameAccess>& _xTa
                                              const Reference< XDatabaseMetaData>& _xDatabaseMetaData,
                                              const OSQLParseNode* pRoot,
                                              const OSQLParser* _pParser)
-    : m_xDatabaseMetaData(_xDatabaseMetaData)
-    , m_aTables(_xDatabaseMetaData.is() && _xDatabaseMetaData->storesMixedCaseQuotedIdentifiers())
+    :m_pParser(_pParser)
+    ,m_aTables(_xDatabaseMetaData.is() && _xDatabaseMetaData->storesMixedCaseQuotedIdentifiers())
+    ,m_aCaseEqual(_xDatabaseMetaData.is() && _xDatabaseMetaData->storesMixedCaseQuotedIdentifiers())
     ,m_pImpl(new OSQLParseTreeIteratorImpl(_xTables ,_xDatabaseMetaData))
-    , m_aCaseEqual(_xDatabaseMetaData.is() && _xDatabaseMetaData->storesMixedCaseQuotedIdentifiers())
-    ,m_pParser(_pParser)
+    ,m_xDatabaseMetaData(_xDatabaseMetaData)
 {
 //  m_aSelectColumns = new OSQLColumns();// must be done because we need an empty column at zero
 //  m_aParameters    = new OSQLColumns();
     setParseTree(pRoot);
-}
-//-----------------------------------------------------------------------------
-OSQLParseTreeIterator::OSQLParseTreeIterator(const OSQLParseTreeIterator & rIter)
-    :m_pImpl(NULL)
-    ,m_pParseTree(NULL)
-    ,m_xDatabaseMetaData(NULL)
-    ,m_pParser(NULL)
-{
-    OSL_ASSERT("OSQLParseTreeIterator: Copy-Konstruktor nicht implementiert!");
 }
 
 //-----------------------------------------------------------------------------
@@ -1059,20 +1053,32 @@ void OSQLParseTreeIterator::traverseANDCriteria(OSQLParseNode * pSearchCondition
      // Sonst einzelne Suchkriterien wie =, !=, ..., LIKE, IS NULL usw. behandeln:
     else if (SQL_ISRULE(pSearchCondition,comparison_predicate) )
     {
-        sal_Int32 ePredicateType;
+        sal_Int32 ePredicateType( SQLFilterOperator::EQUAL );
         OSQLParseNode *pPrec = pSearchCondition->getChild(1);
-        if (pPrec->getNodeType() == SQL_NODE_EQUAL)
+        switch ( pPrec->getNodeType() )
+        {
+        case SQL_NODE_EQUAL:
             ePredicateType = SQLFilterOperator::EQUAL;
-        else if (pPrec->getNodeType() == SQL_NODE_NOTEQUAL)
+            break;
+        case SQL_NODE_NOTEQUAL:
             ePredicateType = SQLFilterOperator::NOT_EQUAL;
-        else if (pPrec->getNodeType() == SQL_NODE_LESS)
+            break;
+        case SQL_NODE_LESS:
             ePredicateType = SQLFilterOperator::LESS;
-        else if (pPrec->getNodeType() == SQL_NODE_LESSEQ)
+            break;
+        case SQL_NODE_LESSEQ:
             ePredicateType = SQLFilterOperator::LESS_EQUAL;
-        else if (pPrec->getNodeType() == SQL_NODE_GREATEQ)
+            break;
+        case SQL_NODE_GREATEQ:
             ePredicateType = SQLFilterOperator::GREATER_EQUAL;
-        else if (pPrec->getNodeType() == SQL_NODE_GREAT)
+            break;
+        case SQL_NODE_GREAT:
             ePredicateType = SQLFilterOperator::GREATER;
+            break;
+        default:
+            OSL_ENSURE( false, "OSQLParseTreeIterator::traverseANDCriteria: unexpected comparison predicate type!" );
+            break;
+        }
 
         ::rtl::OUString aValue;
         pSearchCondition->getChild(2)->parseNodeToStr(aValue,m_xDatabaseMetaData,NULL,sal_False,sal_False);
@@ -1697,6 +1703,11 @@ void OSQLParseTreeIterator::setPredicate(const ::rtl::OUString & rColumnName,
          << (const char *) rParameterName
          << "\n";
 #endif
+    OSL_UNUSED( rColumnName );
+    OSL_UNUSED( rTableRange );
+    OSL_UNUSED( ePredicateType );
+    OSL_UNUSED( rValue );
+    OSL_UNUSED( rParameterName );
 }
 
 
@@ -1716,6 +1727,10 @@ void OSQLParseTreeIterator::setAssign(const ::rtl::OUString & rColumnName,
          << (const char *) rParameterName
          << "\n";
 #endif
+    OSL_UNUSED( rColumnName );
+    OSL_UNUSED( rValue );
+    OSL_UNUSED( bsetNull );
+    OSL_UNUSED( rParameterName );
 }
 
 //-----------------------------------------------------------------------------
