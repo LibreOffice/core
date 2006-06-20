@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConnectionLineAccess.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:18:27 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:25:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,7 +116,7 @@ namespace dbaui
         return 0;
     }
     // -----------------------------------------------------------------------------
-    Reference< XAccessible > SAL_CALL OConnectionLineAccess::getAccessibleChild( sal_Int32 i ) throw (RuntimeException)
+    Reference< XAccessible > SAL_CALL OConnectionLineAccess::getAccessibleChild( sal_Int32 /*i*/ ) throw (RuntimeException)
     {
         return Reference< XAccessible >();
     }
@@ -163,7 +163,7 @@ namespace dbaui
         return m_pLine ? m_pLine->CheckHit(aPoint) : sal_False;
     }
     // -----------------------------------------------------------------------------
-    Reference< XAccessible > SAL_CALL OConnectionLineAccess::getAccessibleAtPoint( const awt::Point& _aPoint ) throw (RuntimeException)
+    Reference< XAccessible > SAL_CALL OConnectionLineAccess::getAccessibleAtPoint( const awt::Point& /*_aPoint*/ ) throw (RuntimeException)
     {
         return Reference< XAccessible >();
     }
