@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shell.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:30:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:22:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -175,7 +175,7 @@ namespace fileaccess {
 
             ~MyProperty();
             inline const sal_Bool& SAL_CALL IsNative() const;
-            inline const rtl::OUString& SAL_CALL getPropertyName() const;
+            inline const rtl::OUString& SAL_CALL getPropertyName() const { return PropertyName; }
             inline const sal_Int32& SAL_CALL getHandle() const;
             inline const com::sun::star::uno::Type& SAL_CALL getType() const;
             inline const com::sun::star::uno::Any& SAL_CALL getValue() const;
@@ -331,14 +331,12 @@ namespace fileaccess {
 
         // Info for commands
         com::sun::star::uno::Reference< com::sun::star::ucb::XCommandInfo > SAL_CALL
-        info_c( sal_Int32 CommandId,
-                const rtl::OUString& aUnqPath )
+        info_c()
             throw();
 
         // Info for the properties
         com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo > SAL_CALL
-        info_p( sal_Int32 CommandId,
-                const rtl::OUString& aUnqPath )
+        info_p( const rtl::OUString& aUnqPath )
             throw();
 
 
@@ -347,8 +345,7 @@ namespace fileaccess {
          */
 
         com::sun::star::uno::Sequence< com::sun::star::uno::Any > SAL_CALL
-        setv( sal_Int32 CommandId,
-              const rtl::OUString& aUnqPath,
+        setv( const rtl::OUString& aUnqPath,
               const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& values )
             throw();
 
@@ -550,8 +547,7 @@ namespace fileaccess {
         // is returned by osl::DirectoryItem::getNextItem()
 
         com::sun::star::uno::Reference< com::sun::star::sdbc::XRow > SAL_CALL
-        getv( sal_Int32 CommandId,
-              Notifier* pNotifier,
+        getv( Notifier* pNotifier,
               const com::sun::star::uno::Sequence< com::sun::star::beans::Property >& properties,
               osl::DirectoryItem& DirItem,
               rtl::OUString& aUnqPath,
