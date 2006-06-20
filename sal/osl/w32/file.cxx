@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:20:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:20:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3048,7 +3048,7 @@ oslFileError SAL_CALL osl_openDirectory(rtl_uString *strDirectoryPath, oslDirect
     else
     {
         rtl_uString *strSysDirectoryPath = NULL;
-        WCHAR       szCorrectedPathName[MAX_PATH];
+//      WCHAR       szCorrectedPathName[MAX_PATH];
         DWORD       dwPathType;
 
         error = _osl_getSystemPathFromFileURL( strDirectoryPath, &strSysDirectoryPath, sal_False );
@@ -3145,7 +3145,7 @@ oslFileError SAL_CALL osl_getDirectoryItem(rtl_uString *strFilePath, oslDirector
     rtl_uString*    strSysFilePath = NULL;
     PATHTYPE        type = PATHTYPE_FILE;
     DWORD           dwPathType;
-    TCHAR           szCorrectedPathName[MAX_PATH];
+//  TCHAR           szCorrectedPathName[MAX_PATH];
 
     /* Assume failure */
 
@@ -3235,7 +3235,8 @@ oslFileError SAL_CALL osl_getDirectoryItem(rtl_uString *strFilePath, oslDirector
             }
         }
         break;
-    default:
+    case PATHTYPE_SYNTAXERROR:
+    case PATHTYPE_NETROOT:
     case PATHTYPE_FILE:
         {
             HANDLE              hFind;
