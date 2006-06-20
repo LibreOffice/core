@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docinf.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:26:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 12:36:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -350,7 +350,7 @@ public:
     inline ErrCode      GetError() const { return mnErrCode; }
 
     /** Loads this object from the passed stream. Calls virtual ImplLoad(). */
-    ErrCode             Load( SvStream& rStrm );
+    ErrCode             Load( SvStream& rStrm, BOOL bStandard );
     /** Saves this object to the passed stream. Calls virtual ImplSave(). */
     ErrCode             Save( SvStream& rStrm );
 
@@ -359,13 +359,13 @@ protected:
         Always the first error code is stored. Multiple calls have no effect. */
     inline void         SetError( ErrCode nErrCode ) { if( !HasError() ) mnErrCode = nErrCode; }
     /** Loads the passed object from the stream. Sets returned error code as own error. */
-    void                LoadObject( SvStream& rStrm, SfxOleObjectBase& rObj );
+    void                LoadObject( SvStream& rStrm, SfxOleObjectBase& rObj, BOOL bStandard );
     /** Saves the passed object to the stream. Sets returned error code as own error. */
     void                SaveObject( SvStream& rStrm, SfxOleObjectBase& rObj );
 
 private:
     /** Derived classes implement loading the object from the passed steam. */
-    virtual void        ImplLoad( SvStream& rStrm ) = 0;
+    virtual void        ImplLoad( SvStream& rStrm, BOOL bStandard ) = 0;
     /** Derived classes implement saving the object to the passed steam. */
     virtual void        ImplSave( SvStream& rStrm ) = 0;
 
@@ -379,10 +379,10 @@ SfxOleObjectBase::~SfxOleObjectBase()
 {
 }
 
-ErrCode SfxOleObjectBase::Load( SvStream& rStrm )
+ErrCode SfxOleObjectBase::Load( SvStream& rStrm, BOOL bStandard )
 {
     mnErrCode = ERRCODE_NONE;
-    ImplLoad( rStrm );
+    ImplLoad( rStrm, bStandard );
     SetError( rStrm.GetErrorCode() );
     return GetError();
 }
@@ -395,9 +395,9 @@ ErrCode SfxOleObjectBase::Save( SvStream& rStrm )
     return GetError();
 }
 
-void SfxOleObjectBase::LoadObject( SvStream& rStrm, SfxOleObjectBase& rObj )
+void SfxOleObjectBase::LoadObject( SvStream& rStrm, SfxOleObjectBase& rObj, BOOL bStandard )
 {
-    SetError( rObj.Load( rStrm ) );
+    SetError( rObj.Load( rStrm, bStandard ) );
 }
 
 void SfxOleObjectBase::SaveObject( SvStream& rStrm, SfxOleObjectBase& rObj )
@@ -438,7 +438,7 @@ public:
     explicit            SfxOleCodePageProperty();
 
 private:
-    virtual void        ImplLoad( SvStream& rStrm );
+    virtual void        ImplLoad( SvStream& rStrm, BOOL bStandard );
     virtual void        ImplSave( SvStream& rStrm );
 };
 
@@ -449,7 +449,7 @@ SfxOleCodePageProperty::SfxOleCodePageProperty() :
 {
 }
 
-void SfxOleCodePageProperty::ImplLoad( SvStream& rStrm )
+void SfxOleCodePageProperty::ImplLoad( SvStream& rStrm, BOOL )
 {
     // property type is signed int16, but we use always unsigned int16 for codepages
     sal_uInt16 nCodePage;
@@ -475,7 +475,7 @@ public:
     inline void         SetValue( sal_Int32 nValue ) { mnValue = nValue; }
 
 private:
-    virtual void        ImplLoad( SvStream& rStrm );
+    virtual void        ImplLoad( SvStream& rStrm, BOOL bStandard );
     virtual void        ImplSave( SvStream& rStrm );
 
 private:
@@ -490,7 +490,7 @@ SfxOleInt32Property::SfxOleInt32Property( sal_Int32 nPropId, sal_Int32 nValue ) 
 {
 }
 
-void SfxOleInt32Property::ImplLoad( SvStream& rStrm )
+void SfxOleInt32Property::ImplLoad( SvStream& rStrm, BOOL )
 {
     rStrm >> mnValue;
 }
@@ -512,7 +512,7 @@ public:
     inline void         SetValue( bool bValue ) { mbValue = bValue; }
 
 private:
-    virtual void        ImplLoad( SvStream& rStrm );
+    virtual void        ImplLoad( SvStream& rStrm, BOOL bStandard );
     virtual void        ImplSave( SvStream& rStrm );
 
 private:
@@ -527,7 +527,7 @@ SfxOleBoolProperty::SfxOleBoolProperty( sal_Int32 nPropId, bool bValue ) :
 {
 }
 
-void SfxOleBoolProperty::ImplLoad( SvStream& rStrm )
+void SfxOleBoolProperty::ImplLoad( SvStream& rStrm, BOOL )
 {
     sal_Int16 nValue;
     rStrm >> nValue;
@@ -610,7 +610,7 @@ public:
                             const String& rValue );
 
 private:
-    virtual void        ImplLoad( SvStream& rStrm );
+    virtual void        ImplLoad( SvStream& rStrm, BOOL bStandard );
     virtual void        ImplSave( SvStream& rStrm );
 };
 
@@ -628,7 +628,7 @@ SfxOleString8Property::SfxOleString8Property(
 {
 }
 
-void SfxOleString8Property::ImplLoad( SvStream& rStrm )
+void SfxOleString8Property::ImplLoad( SvStream& rStrm, BOOL )
 {
     SetValue( LoadString8( rStrm ) );
 }
@@ -648,7 +648,7 @@ public:
     explicit            SfxOleString16Property( sal_Int32 nPropId, const String& rValue );
 
 private:
-    virtual void        ImplLoad( SvStream& rStrm );
+    virtual void        ImplLoad( SvStream& rStrm, BOOL bStandard );
     virtual void        ImplSave( SvStream& rStrm );
 };
 
@@ -664,7 +664,7 @@ SfxOleString16Property::SfxOleString16Property( sal_Int32 nPropId, const String&
 {
 }
 
-void SfxOleString16Property::ImplLoad( SvStream& rStrm )
+void SfxOleString16Property::ImplLoad( SvStream& rStrm, BOOL )
 {
     SetValue( LoadString16( rStrm ) );
 }
@@ -690,7 +690,7 @@ public:
     inline void         SetValue( const DateTime& rDateTime ) { maDateTime = rDateTime; }
 
 private:
-    virtual void        ImplLoad( SvStream& rStrm );
+    virtual void        ImplLoad( SvStream& rStrm, BOOL bStandard );
     virtual void        ImplSave( SvStream& rStrm );
 
 private:
@@ -710,7 +710,7 @@ SfxOleFileTimeProperty::SfxOleFileTimeProperty( sal_Int32 nPropId, const DateTim
 {
 }
 
-void SfxOleFileTimeProperty::ImplLoad( SvStream& rStrm )
+void SfxOleFileTimeProperty::ImplLoad( SvStream& rStrm, BOOL )
 {
     sal_uInt32 nLower, nUpper;
     rStrm >> nLower >> nUpper;
@@ -743,7 +743,7 @@ public:
     inline bool         IsValid() const { return maBitmapData.GetSize() > 0; }
 
 private:
-    virtual void        ImplLoad( SvStream& rStrm );
+    virtual void        ImplLoad( SvStream& rStrm, BOOL bStandard );
     virtual void        ImplSave( SvStream& rStrm );
 
 private:
@@ -762,7 +762,7 @@ SfxOleThumbnailProperty::SfxOleThumbnailProperty(
         aBitmap.GetBitmap().Write( maBitmapData, FALSE, FALSE );
 }
 
-void SfxOleThumbnailProperty::ImplLoad( SvStream& )
+void SfxOleThumbnailProperty::ImplLoad( SvStream&, BOOL )
 {
     DBG_ERRORFILE( "SfxOleThumbnailProperty::ImplLoad - not implemented" );
     SetError( SVSTREAM_INVALID_ACCESS );
@@ -823,7 +823,7 @@ public:
     void                SetPropertyName( sal_Int32 nPropId, const String& rPropName );
 
 private:
-    virtual void        ImplLoad( SvStream& rStrm );
+    virtual void        ImplLoad( SvStream& rStrm, BOOL bStandard );
     virtual void        ImplSave( SvStream& rStrm );
 
 private:
@@ -852,7 +852,7 @@ void SfxOleDictionaryProperty::SetPropertyName( sal_Int32 nPropId, const String&
     SetPropType( static_cast< sal_Int32 >( maPropNameMap.size() ) );
 }
 
-void SfxOleDictionaryProperty::ImplLoad( SvStream& rStrm )
+void SfxOleDictionaryProperty::ImplLoad( SvStream& rStrm, BOOL )
 {
     // dictionary property contains number of pairs in property type field
     sal_Int32 nNameCount = GetPropType();
@@ -937,11 +937,11 @@ public:
     sal_Int32           GetFreePropertyId() const;
 
 private:
-    virtual void        ImplLoad( SvStream& rStrm );
+    virtual void        ImplLoad( SvStream& rStrm, BOOL bStandard );
     virtual void        ImplSave( SvStream& rStrm );
 
     bool                SeekToPropertyPos( SvStream& rStrm, sal_uInt32 nPropPos ) const;
-    void                LoadProperty( SvStream& rStrm, sal_Int32 nPropId );
+    void                LoadProperty( SvStream& rStrm, sal_Int32 nPropId, BOOL bStandard );
     void                SaveProperty( SvStream& rStrm, SfxOlePropertyBase& rProp, sal_Size& rnPropPosPos );
 
 private:
@@ -1130,7 +1130,7 @@ sal_Int32 SfxOleSection::GetFreePropertyId() const
     return maPropMap.empty() ? PROPID_FIRSTCUSTOM : (maPropMap.rbegin()->first + 1);
 }
 
-void SfxOleSection::ImplLoad( SvStream& rStrm )
+void SfxOleSection::ImplLoad( SvStream& rStrm, BOOL bStandard )
 {
     // read section header
     mnStartPos = rStrm.Tell();
@@ -1157,7 +1157,7 @@ void SfxOleSection::ImplLoad( SvStream& rStrm )
         sal_Int32 nPropType;
         rStrm >> nPropType;
         if( nPropType == PROPTYPE_INT16 )
-            LoadObject( rStrm, maCodePageProp );
+            LoadObject( rStrm, maCodePageProp, bStandard );
         // remove property position
         aPropPosMap.erase( aCodePageIt );
     }
@@ -1166,10 +1166,14 @@ void SfxOleSection::ImplLoad( SvStream& rStrm )
     if( (aDictIt != aPropPosMap.end()) && SeekToPropertyPos( rStrm, aDictIt->second ) )
     {
         // dictionary property contains number of pairs in property type field
-        sal_Int32 nNameCount;
-        rStrm >> nNameCount;
-        maDictProp.SetNameCount( nNameCount );
-        LoadObject( rStrm, maDictProp );
+        if ( !bStandard )
+        {
+            sal_Int32 nNameCount;
+            rStrm >> nNameCount;
+            maDictProp.SetNameCount( nNameCount );
+            LoadObject( rStrm, maDictProp, bStandard );
+        }
+
         // remove property position
         aPropPosMap.erase( aDictIt );
     }
@@ -1177,7 +1181,7 @@ void SfxOleSection::ImplLoad( SvStream& rStrm )
     maPropMap.clear();
     for( SfxOlePropPosMap::const_iterator aIt = aPropPosMap.begin(), aEnd = aPropPosMap.end(); aIt != aEnd; ++aIt )
         if( SeekToPropertyPos( rStrm, aIt->second ) )
-            LoadProperty( rStrm, aIt->first );
+            LoadProperty( rStrm, aIt->first, bStandard );
 }
 
 void SfxOleSection::ImplSave( SvStream& rStrm )
@@ -1218,7 +1222,7 @@ bool SfxOleSection::SeekToPropertyPos( SvStream& rStrm, sal_uInt32 nPropPos ) co
     return rStrm.GetErrorCode() == SVSTREAM_OK;
 }
 
-void SfxOleSection::LoadProperty( SvStream& rStrm, sal_Int32 nPropId )
+void SfxOleSection::LoadProperty( SvStream& rStrm, sal_Int32 nPropId, BOOL bStandard )
 {
     // property data type
     sal_Int32 nPropType;
@@ -1246,7 +1250,7 @@ void SfxOleSection::LoadProperty( SvStream& rStrm, sal_Int32 nPropId )
     // load property contents
     if( xProp.get() )
     {
-        SetError( xProp->Load( rStrm ) );
+        SetError( xProp->Load( rStrm , bStandard ) );
         maPropMap[ nPropId ] = xProp;
     }
 }
@@ -1288,7 +1292,7 @@ public:
     inline explicit     SfxOlePropertySet() {}
 
     /** Loads this object from the passed storage. */
-    ErrCode             LoadPropertySet( SotStorage* pStrg, const String& rStrmName );
+    ErrCode             LoadPropertySet( SotStorage* pStrg, const String& rStrmName, BOOL bStandard );
     /** Saves this object to the passed storage. */
     ErrCode             SavePropertySet( SotStorage* pStrg, const String& rStrmName );
 
@@ -1303,7 +1307,7 @@ public:
     SfxOleSection&      AddSection( const SvGlobalName& rSectionGuid );
 
 private:
-    virtual void        ImplLoad( SvStream& rStrm );
+    virtual void        ImplLoad( SvStream& rStrm, BOOL bStandard );
     virtual void        ImplSave( SvStream& rStrm );
 
     /** Returns the GUID for the specified section. */
@@ -1316,7 +1320,7 @@ private:
 
 // ----------------------------------------------------------------------------
 
-ErrCode SfxOlePropertySet::LoadPropertySet( SotStorage* pStrg, const String& rStrmName )
+ErrCode SfxOlePropertySet::LoadPropertySet( SotStorage* pStrg, const String& rStrmName, BOOL bStandard )
 {
     if( pStrg )
     {
@@ -1324,7 +1328,7 @@ ErrCode SfxOlePropertySet::LoadPropertySet( SotStorage* pStrg, const String& rSt
         if( xStrm.Is() && (xStrm->GetError() == SVSTREAM_OK) )
         {
             xStrm->SetBufferSize( STREAM_BUFFER_SIZE );
-            Load( *xStrm );
+            Load( *xStrm, bStandard );
         }
         else
             SetError( ERRCODE_IO_ACCESSDENIED );
@@ -1379,7 +1383,7 @@ SfxOleSection& SfxOlePropertySet::AddSection( const SvGlobalName& rSectionGuid )
     return *xSection;
 }
 
-void SfxOlePropertySet::ImplLoad( SvStream& rStrm )
+void SfxOlePropertySet::ImplLoad( SvStream& rStrm, BOOL bStandard )
 {
     // read property set header
     sal_uInt16 nByteOrder;
@@ -1403,7 +1407,7 @@ void SfxOlePropertySet::ImplLoad( SvStream& rStrm )
         // read section
         rStrm.Seek( static_cast< sal_Size >( nSectPos ) );
         if( rStrm.GetErrorCode() == SVSTREAM_OK )
-            LoadObject( rStrm, AddSection( aSectGuid ) );
+            LoadObject( rStrm, AddSection( aSectGuid ), bStandard );
     }
 }
 
@@ -1624,7 +1628,7 @@ sal_uInt32 SfxDocumentInfo::LoadPropertySet( SotStorage* pStorage )
     // load the property set
     SfxOlePropertySet aGlobSet;
     ErrCode nGlobError = aGlobSet.LoadPropertySet(
-        pStorage, String( RTL_CONSTASCII_USTRINGPARAM( STREAM_SUMMARYINFO ) ) );
+        pStorage, String( RTL_CONSTASCII_USTRINGPARAM( STREAM_SUMMARYINFO ) ), TRUE );
 
     // global section
     SfxOleSectionRef xGlobSect = aGlobSet.GetSection( SECTION_GLOBAL );
@@ -1683,7 +1687,7 @@ sal_uInt32 SfxDocumentInfo::LoadPropertySet( SotStorage* pStorage )
     // load the property set
     SfxOlePropertySet aDocSet;
     ErrCode nDocError = aDocSet.LoadPropertySet(
-        pStorage, String( RTL_CONSTASCII_USTRINGPARAM( STREAM_DOCSUMMARYINFO ) ) );
+        pStorage, String( RTL_CONSTASCII_USTRINGPARAM( STREAM_DOCSUMMARYINFO ) ), FALSE );
 
     // custom properties
     SfxOleSectionRef xCustomSect = aDocSet.GetSection( SECTION_CUSTOM );
