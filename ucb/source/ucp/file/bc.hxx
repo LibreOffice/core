@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bc.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:22:17 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:19:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,8 +39,8 @@
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
 #endif
-#ifndef _RTL_USTRING_
-#include <rtl/ustring>
+#ifndef _RTL_USTRING_HXX_
+#include "rtl/ustring.hxx"
 #endif
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
@@ -365,8 +365,7 @@ namespace fileaccess {
 
         // Private Methods
         com::sun::star::uno::Reference< com::sun::star::ucb::XCommandInfo > SAL_CALL
-        getCommandInfo(
-            sal_Int32 nMyCommandIdentifier )
+        getCommandInfo()
             throw( com::sun::star::uno::RuntimeException );
 
         virtual com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo > SAL_CALL
@@ -393,8 +392,7 @@ namespace fileaccess {
             throw();
 
         void SAL_CALL
-        deleteContent( sal_Int32 nMyCommandIdentifier,
-                       sal_Bool bDeleteArgument )
+        deleteContent( sal_Int32 nMyCommandIdentifier )
             throw();
 
 
