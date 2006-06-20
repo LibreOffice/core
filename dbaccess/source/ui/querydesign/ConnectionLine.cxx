@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConnectionLine.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 15:29:53 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:24:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,7 +117,7 @@ namespace
 
         _rNewConPos.Y() = _pWin->GetPosPixel().Y();
         _rNewConPos.Y() += pListBox->GetPosPixel().Y();
-        long nEntryPos = pListBox->GetEntryPos( _pEntry ).Y();
+        long nEntryPos = pListBox->GetEntryPosition( _pEntry ).Y();
 
         if( nEntryPos >= 0 )
         {
@@ -141,7 +141,7 @@ namespace
 //========================================================================
 // class OConnectionLine
 //========================================================================
-DBG_NAME(OConnectionLine);
+DBG_NAME(OConnectionLine)
 //------------------------------------------------------------------------
 OConnectionLine::OConnectionLine( OTableConnection* _pConn, OConnectionLineDataRef _pLineData )
     : m_pTabConn( _pConn )
@@ -155,10 +155,10 @@ OConnectionLine::OConnectionLine( OTableConnection* _pConn, OConnectionLineDataR
 //------------------------------------------------------------------------
 OConnectionLine::OConnectionLine( OTableConnection* _pConn, const String& _rSourceFieldName,
                                   const String& _rDestFieldName )
-    : m_pTabConn( _pConn )
-     ,m_pSourceEntry( NULL )
-     ,m_pDestEntry( NULL )
-     ,m_pData(NULL)
+    :m_pTabConn( _pConn )
+    ,m_pData(NULL)
+    ,m_pSourceEntry( NULL )
+    ,m_pDestEntry( NULL )
 {
     DBG_CTOR(OConnectionLine,NULL);
     m_pData = new OConnectionLineData( _rSourceFieldName,_rDestFieldName);
@@ -403,8 +403,6 @@ BOOL OConnectionLine::IsValid() const
 //------------------------------------------------------------------------
 double dist_Euklid(const Point &p1, const Point& p2,const Point& pM, Point& q)
 {
-    int vx = p2.X() - p1.X();
-    int vy = p2.Y() - p1.Y();
     Point v(p2 - p1);
     Point w(pM - p1);
     double a = sqrt((double)(v.X()*v.X() + v.Y()*v.Y()));
