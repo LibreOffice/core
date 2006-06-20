@@ -4,9 +4,9 @@
  *
  *  $RCSfile: config.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:04:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:58:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,7 +149,7 @@ void DtransX11ConfigItem::Commit()
  *  DtransX11ConfigItem::Notify
  */
 
-void DtransX11ConfigItem::Notify( const Sequence< OUString >& rPropertyNames )
+void DtransX11ConfigItem::Notify( const Sequence< OUString >& /*rPropertyNames*/ )
 {
 }
 
