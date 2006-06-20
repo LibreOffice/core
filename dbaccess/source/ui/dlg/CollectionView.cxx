@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CollectionView.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:43:03 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:01:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,16 +126,16 @@ OCollectionView::OCollectionView( Window * pParent
                                  ,const ::rtl::OUString& _sDefaultName
                                  ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB)
     : ModalDialog( pParent, ModuleRes(DLG_COLLECTION_VIEW))
+    , m_aFTCurrentPath( this, ResId( FT_EXPLORERFILE_CURRENTPATH ) )
+    , m_aNewFolder(     this, ResId( BTN_EXPLORERFILE_NEWFOLDER ) )
+    , m_aUp(            this, ResId( BTN_EXPLORERFILE_UP ) )
     , m_aView(          this, ResId( CTRL_VIEW ) ,FILEVIEW_SHOW_TITLE )
+    , m_aFTName(        this, ResId( FT_EXPLORERFILE_FILENAME ) )
+    , m_aName(          this, ResId( ED_EXPLORERFILE_FILENAME ) )
+    , m_aFL(            this, ResId( FL_1 ) )
     , m_aPB_OK(         this, ResId( BTN_EXPLORERFILE_SAVE ) )
     , m_aPB_CANCEL(     this, ResId( PB_CANCEL ) )
     , m_aPB_HELP(       this, ResId( PB_HELP ) )
-    , m_aName(          this, ResId( ED_EXPLORERFILE_FILENAME ) )
-    , m_aFTCurrentPath( this, ResId( FT_EXPLORERFILE_CURRENTPATH ) )
-    , m_aFTName(        this, ResId( FT_EXPLORERFILE_FILENAME ) )
-    , m_aNewFolder(     this, ResId( BTN_EXPLORERFILE_NEWFOLDER ) )
-    , m_aFL(            this, ResId( FL_1 ) )
-    , m_aUp(            this, ResId( BTN_EXPLORERFILE_UP ) )
     , m_sPath(          ResId( STR_PATHNAME ) )
     , m_xContent(_xContent)
     , m_xORB(_xORB)

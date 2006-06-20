@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConnectionPageSetup.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:46:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:03:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,7 +119,7 @@ namespace dbaui
 
 
     protected:
-        OConnectionTabPageSetup(Window* pParent, USHORT _rId, const SfxItemSet& _rCoreAttrs, USHORT _nHelpTextResId, USHORT _nHeaderResId, USHORT _nUrlResId, sal_Bool _bgetConnection = sal_True);
+        OConnectionTabPageSetup(Window* pParent, USHORT _rId, const SfxItemSet& _rCoreAttrs, USHORT _nHelpTextResId, USHORT _nHeaderResId, USHORT _nUrlResId);
         virtual bool checkTestConnection();
         void toggleURLControlGroup(BOOL _bEnable);
             // nControlFlags ist eine Kombination der CBTP_xxx-Konstanten
