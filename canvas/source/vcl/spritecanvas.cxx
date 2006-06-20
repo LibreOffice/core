@@ -4,9 +4,9 @@
  *
  *  $RCSfile: spritecanvas.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:04:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:20:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,8 +165,9 @@ namespace vclcanvas
         if( aArguments.getLength() >= 1 &&
             aArguments[0].getValueTypeClass() == uno::TypeClass_HYPER )
         {
-            // TODO(Q2): This now works for Solaris, but still warns for gcc
-            Window* pOutputWindow = (Window*) *reinterpret_cast<const sal_Int64*>(aArguments[0].getValue());
+            sal_Int64 nWindowPtr = 0;
+            aArguments[0] >>= nWindowPtr;
+            Window* pOutputWindow = reinterpret_cast<Window*>(nWindowPtr);
 
             CHECK_AND_THROW( pOutputWindow != NULL,
                              "SpriteCanvas::initialize: invalid Window pointer" );
@@ -318,7 +319,7 @@ namespace
 extern "C"
 {
     void SAL_CALL component_getImplementationEnvironment( const sal_Char**  ppEnvTypeName,
-                                                          uno_Environment** ppEnv )
+                                                          uno_Environment**  )
     {
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
     }
