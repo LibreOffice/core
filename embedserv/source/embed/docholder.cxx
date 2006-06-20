@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docholder.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-08 14:44:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:39:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,9 +43,6 @@
 #include "common.h"
 #include <Windows.h>
 
-#ifndef _RTL_PROCESS_H_
-#include <rtl/process.h>
-#endif
 #ifndef _COM_SUN_STAR_LANG_SYSTEMDEPENDENT_HPP_
 #include <com/sun/star/lang/SystemDependent.hpp>
 #endif
@@ -205,73 +202,6 @@ BOOL DocumentHolder::isActive() const
     return m_pIOleIPSite != 0;
 }
 
-
-#define MENUBARVISIBLE     6661
-#define TOOLBARVISIBLE     5909
-#define OBJECTBARVISIBLE   5905
-#define STATUSBARVISIBLE   5920
-#define FUNCTIONBARVISIBLE 5910
-#define RULERVISIBLE      20211
-
-static void disable_slot(
-    uno::Reference<frame::XDispatchProvider>&
-    xDispatchProvider,
-    sal_Int32 id)
-{
-    util::URL aURL;
-    aURL.Path = ::rtl::OUString::valueOf(id);
-    aURL.Complete =
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("slot:")) +
-        aURL.Path;
-    aURL.Main = aURL.Complete;
-    aURL.Protocol = ::rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("slot:"));
-
-    uno::Reference<frame::XDispatch> xDispatch(
-        xDispatchProvider->queryDispatch(
-            aURL,
-            ::rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("_self")),
-            0));
-
-    if(xDispatch.is()) {
-        uno::Sequence<beans::PropertyValue> aSeq(1);
-
-        switch(id) {
-            case MENUBARVISIBLE:
-                aSeq[0].Name = ::rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("MenuBarVisible"));
-                break;
-            case TOOLBARVISIBLE:
-                aSeq[0].Name = ::rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("ToolBarVisible"));
-                break;
-            case OBJECTBARVISIBLE:
-                aSeq[0].Name = ::rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("ObjectBarVisible"));
-                break;
-            case STATUSBARVISIBLE:
-                aSeq[0].Name = ::rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("StatusBarVisible"));
-                break;
-            case FUNCTIONBARVISIBLE:
-                aSeq[0].Name = ::rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("FunctionBarVisible"));
-                break;
-            case RULERVISIBLE:
-                aSeq.realloc(0);
-            default:
-                break;
-        }
-
-        sal_Bool val(false);
-        aSeq[0].Value <<= val;
-        xDispatch->dispatch(aURL,aSeq);
-    }
-}
-
-
-
 HRESULT DocumentHolder::InPlaceActivate(
     LPOLECLIENTSITE pActiveSite,
     BOOL fIncludeUI)
@@ -333,7 +263,7 @@ HRESULT DocumentHolder::InPlaceActivate(
 
     if(!m_xEditWindow.is())
     {   // determine XWindow and window handle of parent
-        HWND                          hWndxWinParent;
+        HWND                          hWndxWinParent(0);
         uno::Reference<awt::XWindow>  xWin;
 
         static const ::rtl::OUString aToolkitServiceName(
@@ -502,7 +432,7 @@ HRESULT DocumentHolder::InPlaceActivate(
 
         // determine the menuhandle to get menutitems.
         if(m_xLayoutManager.is()) {
-            uno::Reference<::com::sun::star::ui::XUIElement> xUIEl(
+            uno::Reference< ::com::sun::star::ui::XUIElement > xUIEl(
                 m_xLayoutManager->getElement(
                     rtl::OUString::createFromAscii(
                         "private:resource/menubar/menubar")));
@@ -662,7 +592,6 @@ void CopyToOLEMenu(HMENU hOrig,WORD origPos,HMENU hDest,WORD destPos)
 BOOL DocumentHolder::InPlaceMenuCreate(void)
 {
     HMENU               hMenu;
-    UINT                uTemp = MF_BYPOSITION | MF_POPUP;
     UINT                i;
     OLEMENUGROUPWIDTHS  mgw;
 
@@ -685,14 +614,14 @@ BOOL DocumentHolder::InPlaceMenuCreate(void)
 
     // insert object menu here
     pos = ((WORD)(mgw.width[0] + mgw.width[1] + mgw.width[2]));
-    for(int i = 2; i < help-1; ++i,++pos)
+    for(WORD i = 2; i < help-1; ++i,++pos)
         CopyToOLEMenu(m_nMenuHandle,i,hMenu,pos);
     mgw.width[3] = help - 3;
 
     // insert help menu
     pos = (WORD)(mgw.width[0] + mgw.width[1] + mgw.width[2] +
                  mgw.width[3] + mgw.width[4]);
-    CopyToOLEMenu(m_nMenuHandle,help,hMenu,pos);
+    CopyToOLEMenu(m_nMenuHandle,WORD(help),hMenu,pos);
     mgw.width[5] = 1;
 
     m_nMenuShared = hMenu;
@@ -1506,7 +1435,7 @@ DocumentHolder::disposing(
 void SAL_CALL
 DocumentHolder::queryClosing(
     const lang::EventObject& aSource,
-    sal_Bool bGetsOwnership
+    sal_Bool /*bGetsOwnership*/
 )
     throw(
         util::CloseVetoException
@@ -1538,7 +1467,7 @@ DocumentHolder::notifyClosing(
 
 void SAL_CALL
 DocumentHolder::queryTermination(
-    const lang::EventObject& aSource
+    const lang::EventObject& /*aSource*/
 )
     throw(
         frame::TerminationVetoException
@@ -1563,7 +1492,7 @@ DocumentHolder::notifyTermination(
 
 
 
-void SAL_CALL DocumentHolder::modified( const lang::EventObject& aEvent )
+void SAL_CALL DocumentHolder::modified( const lang::EventObject& /*aEvent*/ )
     throw (uno::RuntimeException)
 {
     if ( m_xOleAccess.is() )
@@ -1619,3 +1548,10 @@ void SAL_CALL DocumentHolder::modified( const lang::EventObject& aEvent )
 //             hMenu,6+(WORD)mgw.width[0]+(WORD)mgw.width[2]+(WORD)mgw.width[4]);
 //         mgw.width[5]=1;
 //     }
+
+// Fix strange warnings about some
+// ATL::CAxHostWindow::QueryInterface|AddRef|Releae functions.
+// warning C4505: 'xxx' : unreferenced local function has been removed
+#if defined(_MSC_VER)
+#pragma warning(disable: 4505)
+#endif
