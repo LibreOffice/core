@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FilteredContainer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:57:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:34:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,20 +65,6 @@ namespace dbaccess
     using namespace ::connectivity::sdbcx;
 
     //------------------------------------------------------------------------------
-    /** compare two strings
-    */
-    extern int
-    #if defined( WNT )
-     __cdecl
-    #endif
-    #if defined( ICC ) && defined( OS2 )
-    _Optlink
-    #endif
-    NameCompare( const void* pFirst, const void* pSecond)
-    {
-        return reinterpret_cast< const ::rtl::OUString* >(pFirst)->compareTo(*reinterpret_cast< const ::rtl::OUString* >(pSecond));
-    }
-    //------------------------------------------------------------------------------
     /** creates a vector of WildCards and reduce the _rTableFilter of the length of WildsCards
     */
     sal_Int32 createWildCardVector(Sequence< ::rtl::OUString >& _rTableFilter, ::std::vector< WildCard >& _rOut)
@@ -118,11 +104,11 @@ namespace dbaccess
                                  sal_Bool _bCase,
                                  IRefreshListener*  _pRefreshListener,
                                  IWarningsContainer* _pWarningsContainer)
-    :OCollection(_rParent,_bCase,_rMutex,::std::vector< ::rtl::OUString>())
-    ,m_bConstructed(sal_False)
-    ,m_xConnection(_xCon)
-    ,m_pWarningsContainer(_pWarningsContainer)
-    ,m_pRefreshListener(_pRefreshListener)
+        :OCollection(_rParent,_bCase,_rMutex,::std::vector< ::rtl::OUString>())
+        ,m_pWarningsContainer(_pWarningsContainer)
+        ,m_pRefreshListener(_pRefreshListener)
+        ,m_xConnection(_xCon)
+        ,m_bConstructed(sal_False)
     {
 
     }
@@ -154,8 +140,9 @@ namespace dbaccess
             {
                 Sequence< ::rtl::OUString > aTableFilter        = _rTableFilter;
                 Sequence< ::rtl::OUString > aTableTypeFilter    = _rTableTypeFilter;
+
                 // build sorted versions of the filter sequences, so the visibility decision is faster
-                qsort(aTableFilter.getArray(), nTableFilterLen, sizeof(::rtl::OUString), NameCompare);
+                ::std::sort( aTableFilter.getArray(), aTableFilter.getArray() + nTableFilterLen );
 
                 // as we want to modify nTableFilterLen, remember this
 
@@ -208,7 +195,7 @@ namespace dbaccess
         sal_Int32   nTableFilterLen = aTableFilter.getLength();
 
         if (nTableFilterLen)
-            qsort(aTableFilter.getArray(), nTableFilterLen, sizeof(::rtl::OUString), NameCompare);
+            ::std::sort( aTableFilter.getArray(), aTableFilter.getArray() + nTableFilterLen );
 
         sal_Bool bNoTableFilters = ((nTableFilterLen == 1) && _rTableFilter[0].equalsAsciiL("%", 1));
             // as we want to modify nTableFilterLen, remember this
@@ -253,8 +240,16 @@ namespace dbaccess
                         // that case, which is sufficient here
 
                         composeTableName(m_xMetaData, sCatalog, sSchema, sName, sComposedName, sal_False,::dbtools::eInDataManipulation);
+
+                        const ::rtl::OUString* tableFilter = aTableFilter.getConstArray();
+                        const ::rtl::OUString* tableFilterEnd = aTableFilter.getConstArray() + nTableFilterLen;
+                        bool composedNameInFilter = ::std::find( tableFilter, tableFilterEnd, sComposedName ) != tableFilterEnd;
+
                         bFilterMatch =  bNoTableFilters
-                                    ||  ((nTableFilterLen != 0) && (NULL != bsearch(&sComposedName, aTableFilter.getConstArray(), nTableFilterLen, sizeof(::rtl::OUString), NameCompare)));
+                                    ||  (   ( nTableFilterLen != 0 )
+                                        &&  composedNameInFilter
+                                        );
+
                         // the table is allowed to "pass" if we had no filters at all or any of the non-wildcard filters matches
 
                         if (!bFilterMatch && aWCSearch.size())
@@ -318,12 +313,14 @@ namespace dbaccess
     // -------------------------------------------------------------------------
     sal_Bool OFilteredContainer::isNameValid(   const ::rtl::OUString& _rName,
                                             const Sequence< ::rtl::OUString >& _rTableFilter,
-                                            const Sequence< ::rtl::OUString >& _rTableTypeFilter,
+                                            const Sequence< ::rtl::OUString >& /*_rTableTypeFilter*/,
                                             const ::std::vector< WildCard >& _rWCSearch) const
     {
         sal_Int32 nTableFilterLen = _rTableFilter.getLength();
 
-        sal_Bool bFilterMatch = (NULL != bsearch(&_rName, _rTableFilter.getConstArray(), nTableFilterLen, sizeof(::rtl::OUString), NameCompare));
+        const ::rtl::OUString* tableFilter = _rTableFilter.getConstArray();
+        const ::rtl::OUString* tableFilterEnd = _rTableFilter.getConstArray() + nTableFilterLen;
+        bool bFilterMatch = ::std::find( tableFilter, tableFilterEnd, _rName ) != tableFilterEnd;
         // the table is allowed to "pass" if we had no filters at all or any of the non-wildcard filters matches
         if (!bFilterMatch && !_rWCSearch.empty())
         {   // or if one of the wildcrad expression matches
