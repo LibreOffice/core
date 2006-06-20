@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TextConnectionHelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:49:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:04:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,7 @@ namespace dbaui
     {
     OTextConnectionHelper();
     public:
-        OTextConnectionHelper( Window* pParent, USHORT nResId, sal_Bool _bWizardMode = sal_False);
+        OTextConnectionHelper( Window* pParent, sal_Bool _bWizardMode = sal_False);
         Link        m_aModifiedHandler;     /// to be called if something on the page has been modified
           CheckBox  m_aHeader;
         FixedLine   m_aLineFormat;
