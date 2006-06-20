@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ZConnectionPool.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:16:20 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:07:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -163,7 +163,7 @@ namespace connectivity
                                 const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rInfo);
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getPooledConnection(TConnectionMap::iterator& _rIter);
         // calculate the timeout and the corresponding ALiveCount
-        void calculateTimeOuts(sal_Int32 _nTimeOut);
+        void calculateTimeOuts();
 
     protected:
         // the dtor will be called from the last instance  (last release call)
