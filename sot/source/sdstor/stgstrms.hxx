@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stgstrms.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:43:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:55:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,7 @@ protected:
     BOOL  Copy( INT32 nFrom, INT32 nBytes );
     StgStrm( StgIo& );
 public:
-    ~StgStrm();
+    virtual ~StgStrm();
     StgIo&  GetIo()     { return rIo;    }
     INT32   GetPos()    { return nPos;   }
     INT32   GetStart()  { return nStart; }
@@ -116,6 +116,8 @@ class StgFATStrm : public StgStrm {     // the master FAT stream
     BOOL  SetPage( short, INT32 );
 public:
     StgFATStrm( StgIo& );
+    virtual ~StgFATStrm() {}
+    using StgStrm::GetPage;
     INT32 GetPage( short, BOOL, USHORT *pnMasterAlloc = 0);
     virtual BOOL SetSize( INT32 );
     virtual StgPage* GetPhysPage( INT32 nBytePos, BOOL bForce = FALSE );
@@ -159,6 +161,7 @@ class StgTmpStrm : public SvMemoryStream
 {
     String aName;
     SvFileStream* pStrm;
+    using SvMemoryStream::GetData;
     virtual ULONG GetData( void* pData, ULONG nSize );
     virtual ULONG PutData( const void* pData, ULONG nSize );
     virtual ULONG SeekPos( ULONG nPos );
@@ -169,6 +172,7 @@ public:
    ~StgTmpStrm();
     BOOL Copy( StgTmpStrm& );
     void SetSize( ULONG );
+    using SvMemoryStream::GetSize;
     ULONG GetSize();
 };
 
