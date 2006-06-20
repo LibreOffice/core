@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqlnode.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:02:22 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:00:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -290,8 +290,10 @@ namespace connectivity
 
         OSQLParseNode* getByRule(OSQLParseNode::Rule eRule) const;
 
+#if OSL_DEBUG_LEVEL > 0
             // zeigt den ParseTree mit tabs und linefeeds
         void showParseTree(::rtl::OUString& rString, sal_uInt32 nLevel=0);
+#endif
 
             // GetNodeType gibt den Knotentyp zurueck
         SQLNodeType getNodeType() const {return m_eNodeType;};
