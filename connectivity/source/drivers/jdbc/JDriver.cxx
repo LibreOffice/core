@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JDriver.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:10:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:34:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,9 @@
 #endif
 #ifndef INCLUDED_JVMFWK_FRAMEWORK_H
 #include <jvmfwk/framework.h>
+#endif
+#ifndef CONNECTIVITY_DIAGNOSE_EX_H
+#include "diagnose_ex.h"
 #endif
 
 using namespace connectivity;
@@ -140,14 +143,13 @@ sal_Bool SAL_CALL java_sql_Driver::acceptsURL( const ::rtl::OUString& url ) thro
     // don't ask the real driver for the url
     // I feel responsible for all jdbc url's
     sal_Bool bEnabled = sal_False;
-    javaFrameworkError eErr = jfw_getEnabled( &bEnabled );
-    OSL_ENSURE( JFW_E_NONE == eErr,"error in jfw_getEnabled" );
+    OSL_VERIFY_EQUALS( jfw_getEnabled( &bEnabled ), JFW_E_NONE, "error in jfw_getEnabled" );
     static const ::rtl::OUString s_sJdbcPrefix = ::rtl::OUString::createFromAscii("jdbc:");
     return bEnabled && 0 == url.compareTo(s_sJdbcPrefix, 5);
 }
 // -------------------------------------------------------------------------
 Sequence< DriverPropertyInfo > SAL_CALL java_sql_Driver::getPropertyInfo( const ::rtl::OUString& url,
-                                                                         const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
+                                                                         const Sequence< PropertyValue >& /*info*/ ) throw(SQLException, RuntimeException)
 {
     if ( acceptsURL(url) )
     {
