@@ -55,7 +55,7 @@ namespace agg
 
     //-------------------------------------------------------clip_liang_barsky
     template<class T>
-    inline unsigned clip_liang_barsky(T x1, T y1, T x2, T y2,
+    /*inline*/ unsigned clip_liang_barsky(T x1, T y1, T x2, T y2,
                                       const rect_base<T>& clip_box,
                                       T* x, T* y)
     {

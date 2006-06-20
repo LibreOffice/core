@@ -29,8 +29,8 @@ namespace agg
     {
     public:
         typedef T value_type;
-        pod_array_adaptor(T* array, unsigned size) :
-            m_array(array), m_size(size) {}
+        pod_array_adaptor(T* array, unsigned _size) :
+            m_array(array), m_size(_size) {}
 
         unsigned size() const { return m_size; }
         const T& operator [] (unsigned idx) const { return m_array[idx]; }
@@ -95,7 +95,7 @@ namespace agg
         void resize(unsigned new_size);
 
         void add(const T& v)  { m_array[m_size++] = v; }
-        void inc_size(unsigned size) { m_size += size; }
+        void inc_size(unsigned _size) { m_size += _size; }
         unsigned size()      const { return m_size; }
         unsigned byte_size() const { return m_size * sizeof(T); }
         void serialize(int8u* ptr) const;
@@ -175,11 +175,11 @@ namespace agg
 
     //------------------------------------------------------------------------
     template<class T>
-    void pod_array<T>::deserialize(const int8u* data, unsigned byte_size)
+    void pod_array<T>::deserialize(const int8u* data, unsigned _byte_size)
     {
-        byte_size /= sizeof(T);
-        capacity(byte_size);
-        if(byte_size) memcpy(m_array, data, byte_size * sizeof(T));
+        _byte_size /= sizeof(T);
+        capacity(_byte_size);
+        if(_byte_size) memcpy(m_array, data, _byte_size * sizeof(T));
     }
 
 
@@ -243,9 +243,9 @@ namespace agg
             }
         }
 
-        void cut_at(unsigned size)
+        void cut_at(unsigned _size)
         {
-            if(size < m_size) m_size = size;
+            if(_size < m_size) m_size = _size;
         }
 
         unsigned size() const { return m_size; }
@@ -385,16 +385,16 @@ namespace agg
 
     //------------------------------------------------------------------------
     template<class T, unsigned S>
-    void pod_deque<T, S>::free_tail(unsigned size)
+    void pod_deque<T, S>::free_tail(unsigned _size)
     {
-        if(size < m_size)
+        if(_size < m_size)
         {
-            unsigned nb = (size + block_mask) >> block_shift;
+            unsigned nb = (_size + block_mask) >> block_shift;
             while(m_num_blocks > nb)
             {
                 delete [] m_blocks[--m_num_blocks];
             }
-            m_size = size;
+            m_size = _size;
         }
     }
 
@@ -575,11 +575,11 @@ namespace agg
 
     //------------------------------------------------------------------------
     template<class T, unsigned S>
-    void pod_deque<T, S>::deserialize(const int8u* data, unsigned byte_size)
+    void pod_deque<T, S>::deserialize(const int8u* data, unsigned _byte_size)
     {
         remove_all();
-        byte_size /= sizeof(T);
-        for(unsigned i = 0; i < byte_size; ++i)
+        _byte_size /= sizeof(T);
+        for(unsigned i = 0; i < _byte_size; ++i)
         {
             T* ptr = data_ptr();
             memcpy(ptr, data, sizeof(T));
@@ -593,15 +593,15 @@ namespace agg
     //------------------------------------------------------------------------
     template<class T, unsigned S>
     void pod_deque<T, S>::deserialize(unsigned start, const T& empty_val,
-                                      const int8u* data, unsigned byte_size)
+                                      const int8u* data, unsigned _byte_size)
     {
         while(m_size < start)
         {
             add(empty_val);
         }
 
-        byte_size /= sizeof(T);
-        for(unsigned i = 0; i < byte_size; ++i)
+        _byte_size /= sizeof(T);
+        for(unsigned i = 0; i < _byte_size; ++i)
         {
             if(start + i < m_size)
             {
