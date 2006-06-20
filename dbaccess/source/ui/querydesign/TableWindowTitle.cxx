@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableWindowTitle.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:31:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:29:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,7 +86,7 @@ using namespace ::com::sun::star::uno;
 //==================================================================
 // class OTableWindowTitle
 //==================================================================
-DBG_NAME(OTableWindowTitle);
+DBG_NAME(OTableWindowTitle)
 //------------------------------------------------------------------------------
 OTableWindowTitle::OTableWindowTitle( OTableWindow* pParent ) :
      FixedText( pParent, WB_3DLOOK|WB_CENTER|WB_NOLABEL )
