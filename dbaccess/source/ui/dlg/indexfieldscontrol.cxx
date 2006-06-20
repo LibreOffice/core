@@ -4,9 +4,9 @@
  *
  *  $RCSfile: indexfieldscontrol.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:31:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:08:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -420,7 +420,7 @@ DBG_NAME(IndexFieldsControl)
     }
 
     //------------------------------------------------------------------
-    void IndexFieldsControl::InitController(CellControllerRef& _rController, long _nRow, sal_uInt16 _nColumnId)
+    void IndexFieldsControl::InitController(CellControllerRef& /*_rController*/, long _nRow, sal_uInt16 _nColumnId)
     {
         ConstIndexFieldsIterator aFieldDescription;
         sal_Bool bNewField = !implGetFieldDesc(_nRow, aFieldDescription);
@@ -454,18 +454,18 @@ DBG_NAME(IndexFieldsControl)
             {   // and we're in one of the last two rows
                 String sSelectedEntry = m_pFieldNameCell->GetSelectEntry();
                 sal_Int32 nCurrentRow = GetCurRow();
-                sal_Int32 nRowCount = GetRowCount();
+                sal_Int32 rowCount = GetRowCount();
 
-                OSL_ENSURE(((sal_Int32)(m_aFields.size() + 1)) == nRowCount, "IndexFieldsControl::OnListEntrySelected: inconsistence!");
+                OSL_ENSURE(((sal_Int32)(m_aFields.size() + 1)) == rowCount, "IndexFieldsControl::OnListEntrySelected: inconsistence!");
 
-                if (sSelectedEntry.Len() && (nCurrentRow == nRowCount - 1) /*&& (!m_nMaxColumnsInIndex || nRowCount < m_nMaxColumnsInIndex )*/ )
+                if (sSelectedEntry.Len() && (nCurrentRow == rowCount - 1) /*&& (!m_nMaxColumnsInIndex || rowCount < m_nMaxColumnsInIndex )*/ )
                 {   // in the last row, an non-empty string has been selected
                     // -> insert a new row
                     m_aFields.push_back(OIndexField());
                     RowInserted(GetRowCount(), 1);
                     Invalidate(GetRowRectPixel(nCurrentRow));
                 }
-                else if (!sSelectedEntry.Len() && (nCurrentRow == nRowCount - 2))
+                else if (!sSelectedEntry.Len() && (nCurrentRow == rowCount - 2))
                 {   // in the (last-1)th row, an empty entry has been selected
                     // -> remove the last row
                     m_aFields.erase(m_aFields.end() - 1);
@@ -510,7 +510,7 @@ DBG_NAME(IndexFieldsControl)
         return String();
     }
     //------------------------------------------------------------------
-    sal_Bool IndexFieldsControl::IsTabAllowed(sal_Bool bForward) const
+    sal_Bool IndexFieldsControl::IsTabAllowed(sal_Bool /*bForward*/) const
     {
         return sal_False;
     }
