@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LTable.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 13:10:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:23:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,7 +127,7 @@ void OEvoabTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
 {
     BOOL bRead = TRUE;
 
-    OEvoabString aHeaderLine;
+    QuotedTokenizedString aHeaderLine;
     OEvoabConnection* pConnection = (OEvoabConnection*)m_pConnection;
     if (pConnection->isHeaderLine())
     {
@@ -138,8 +138,7 @@ void OEvoabTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
     }
 
     // read first row
-    OEvoabString aFirstLine;
-
+    QuotedTokenizedString aFirstLine;
     bRead = m_pFileStream->ReadByteStringLine(aFirstLine,pConnection->getTextEncoding());
 
     if (!pConnection->isHeaderLine() || !aHeaderLine.Len())
@@ -199,7 +198,6 @@ void OEvoabTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
         UINT16 nScale = 0;
 
         BOOL bNumeric = FALSE;
-        double nRes=0.0;
         ULONG  nIndex = 0;
 
         // first without fielddelimiter
@@ -560,10 +558,8 @@ Sequence< sal_Int8 > OEvoabTable::getUnoTunnelImplementationId()
 sal_Int64 OEvoabTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
     return (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
-                ?
-            (sal_Int64)this
-                :
-            OEvoabTable_BASE::getSomething(rId);
+                ? reinterpret_cast< sal_Int64 >( this )
+                : OEvoabTable_BASE::getSomething(rId);
 }
 //------------------------------------------------------------------
 sal_Bool OEvoabTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sal_Bool bIsTable,sal_Bool bRetrieveData)
@@ -574,7 +570,6 @@ sal_Bool OEvoabTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sa
         return TRUE;
 
     OEvoabConnection* pConnection = (OEvoabConnection*)m_pConnection;
-    sal_Int32 nByteOffset = 1;
     // Felder:
     xub_StrLen nStartPos = 0;
     String aStr;
@@ -684,7 +679,7 @@ sal_Bool OEvoabTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sa
 sal_Bool OEvoabTable::setColumnAliases()
 {
 
-    sal_Int32 nSize = m_aColumnRawNames.size();
+    size_t nSize = m_aColumnRawNames.size();
     if(nSize == 0 || m_aPrecisions.size() != nSize || m_aScales.size() != nSize || m_aTypes.size() != nSize)
         return sal_False;
     m_aColumns->clear();
@@ -699,14 +694,14 @@ sal_Bool OEvoabTable::setColumnAliases()
     const ::std::map< ::rtl::OUString, ::rtl::OUString > & colMap = ((OEvoabConnection*)m_pConnection)->getColumnAlias().getAliasMap();
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    for(sal_Int32 i = 0;i < nSize; ++i)
+    for(size_t i = 0;i < nSize; ++i)
     {
         aColumnReadName = m_aColumnRawNames[i];
         //OSL_TRACE("OEvoabTable::getColumnRows()::aColumnReadName = %s\n", ((OUtoCStr(aColumnReadName)) ? (OUtoCStr(aColumnReadName)):("NULL")) );
         sal_Bool bFound = sal_False;
-        for ( sal_Int32 i = 0; i < colAliasNames.size(); i++ )
+        for ( size_t j = 0; j < colAliasNames.size(); ++j )
         {
-            aColumnDisplayName = colAliasNames[i];
+            aColumnDisplayName = colAliasNames[j];
 
             ::std::map< ::rtl::OUString, ::rtl::OUString >::const_iterator aPos = colMap.find( aColumnDisplayName );
             if ( colMap.end() != aPos )
@@ -720,7 +715,7 @@ sal_Bool OEvoabTable::setColumnAliases()
                     //OSL_TRACE("OEvoabTable::getColumnRows()::aColumnDisplayName = %s\n", ((OUtoCStr(aColumnDisplayName)) ? (OUtoCStr(aColumnDisplayName)):("NULL")) );
                     aColumnFinalName = aColumnDisplayName;
                     bFound = sal_True;
-                    //OSL_TRACE("OEvoabTable::getColumnRows()::i = %d\n", i );
+                    //OSL_TRACE("OEvoabTable::getColumnRows()::j = %d\n", j );
 
                     break;
                 }
@@ -749,3 +744,180 @@ sal_Bool OEvoabTable::setColumnAliases()
     }
     return sal_True;
 }
+// -----------------------------------------------------------------------------
+void OEvoabTable::refreshIndexes()
+{
+}
+// -----------------------------------------------------------------------------
+sal_Bool OEvoabTable::checkHeaderLine()
+{
+    if (m_nFilePos == 0 && ((OEvoabConnection*)m_pConnection)->isHeaderLine())
+    {
+        BOOL bRead2;
+        do
+        {
+            bRead2 = m_pFileStream->ReadByteStringLine(m_aCurrentLine,m_pConnection->getTextEncoding());
+        }
+        while(bRead2 && !m_aCurrentLine.Len());
+
+        m_nFilePos = m_pFileStream->Tell();
+        if (m_pFileStream->IsEof())
+            return sal_False;
+    }
+    return sal_True;
+}
+//------------------------------------------------------------------
+sal_Bool OEvoabTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos)
+{
+    //OSL_TRACE("OEvoabTable::(before SeekRow)m_aCurrentLine = %d\n", ((OUtoCStr(::rtl::OUString(m_aCurrentLine))) ? (OUtoCStr(::rtl::OUString(m_aCurrentLine))):("NULL")) );
+
+    if ( !m_pFileStream )
+        return sal_False;
+    OEvoabConnection* pConnection = (OEvoabConnection*)m_pConnection;
+    // ----------------------------------------------------------
+    // Positionierung vorbereiten:
+    //OSL_TRACE("OEvoabTable::(before SeekRow,m_pFileStriam Exist)m_aCurrentLine = %d\n", ((OUtoCStr(::rtl::OUString(m_aCurrentLine))) ? (OUtoCStr(::rtl::OUString(m_aCurrentLine))):("NULL")) );
+
+    m_nFilePos = nCurPos;
+
+    switch(eCursorPosition)
+    {
+        case IResultSetHelper::FIRST:
+            m_nFilePos = 0;
+            m_nRowPos = 1;
+            // run through
+        case IResultSetHelper::NEXT:
+            if(eCursorPosition != IResultSetHelper::FIRST)
+                ++m_nRowPos;
+            m_pFileStream->Seek(m_nFilePos);
+            if (m_pFileStream->IsEof() || !checkHeaderLine())
+            {
+                m_nMaxRowCount = m_nRowPos;
+                return sal_False;
+            }
+
+            m_aRowToFilePos.insert(::std::map<sal_Int32,sal_Int32>::value_type(m_nRowPos,m_nFilePos));
+
+            m_pFileStream->ReadByteStringLine(m_aCurrentLine,pConnection->getTextEncoding());
+            if (m_pFileStream->IsEof())
+            {
+                m_nMaxRowCount = m_nRowPos;
+                return sal_False;
+            }
+            nCurPos = m_pFileStream->Tell();
+            break;
+        case IResultSetHelper::PRIOR:
+            --m_nRowPos;
+            if(m_nRowPos > 0)
+            {
+                m_nFilePos = m_aRowToFilePos.find(m_nRowPos)->second;
+                m_pFileStream->Seek(m_nFilePos);
+                if (m_pFileStream->IsEof() || !checkHeaderLine())
+                    return sal_False;
+                m_pFileStream->ReadByteStringLine(m_aCurrentLine,pConnection->getTextEncoding());
+                if (m_pFileStream->IsEof())
+                    return sal_False;
+                nCurPos = m_pFileStream->Tell();
+            }
+            else
+                m_nRowPos = 0;
+
+            break;
+        case IResultSetHelper::LAST:
+            if(m_nMaxRowCount)
+            {
+                m_nFilePos = m_aRowToFilePos.rbegin()->second;
+                m_nRowPos  = m_aRowToFilePos.rbegin()->first;
+                m_pFileStream->Seek(m_nFilePos);
+                if (m_pFileStream->IsEof() || !checkHeaderLine())
+                    return sal_False;
+                m_pFileStream->ReadByteStringLine(m_aCurrentLine,pConnection->getTextEncoding());
+                if (m_pFileStream->IsEof())
+                    return sal_False;
+                nCurPos = m_pFileStream->Tell();
+            }
+            else
+            {
+                while(seekRow(IResultSetHelper::NEXT,1,nCurPos)) ; // run through after last row
+                // now I know all
+                seekRow(IResultSetHelper::PRIOR,1,nCurPos);
+            }
+            break;
+        case IResultSetHelper::RELATIVE:
+            if(nOffset > 0)
+            {
+                for(sal_Int32 i = 0;i<nOffset;++i)
+                    seekRow(IResultSetHelper::NEXT,1,nCurPos);
+            }
+            else if(nOffset < 0)
+            {
+                for(sal_Int32 i = nOffset;i;++i)
+                    seekRow(IResultSetHelper::PRIOR,1,nCurPos);
+            }
+            break;
+        case IResultSetHelper::ABSOLUTE:
+            {
+                if(nOffset < 0)
+                    nOffset = m_nRowPos + nOffset;
+                ::std::map<sal_Int32,sal_Int32>::const_iterator aIter = m_aRowToFilePos.find(nOffset);
+                if(aIter != m_aRowToFilePos.end())
+                {
+                    m_nFilePos = aIter->second;
+                    m_pFileStream->Seek(m_nFilePos);
+                    if (m_pFileStream->IsEof() || !checkHeaderLine())
+                        return sal_False;
+                    m_pFileStream->ReadByteStringLine(m_aCurrentLine,pConnection->getTextEncoding());
+                    if (m_pFileStream->IsEof())
+                        return sal_False;
+                    nCurPos = m_pFileStream->Tell();
+                }
+                else if(m_nMaxRowCount && nOffset > m_nMaxRowCount) // offset is outside the table
+                {
+                    m_nRowPos = m_nMaxRowCount;
+                    return sal_False;
+                }
+                else
+                {
+                    aIter = m_aRowToFilePos.upper_bound(nOffset);
+                    if(aIter == m_aRowToFilePos.end())
+                    {
+                        m_nRowPos   = m_aRowToFilePos.rbegin()->first;
+                        nCurPos = m_nFilePos = m_aRowToFilePos.rbegin()->second;
+                        while(m_nRowPos != nOffset)
+                            seekRow(IResultSetHelper::NEXT,1,nCurPos);
+                    }
+                    else
+                    {
+                        --aIter;
+                        m_nRowPos   = aIter->first;
+                        m_nFilePos  = aIter->second;
+                        m_pFileStream->Seek(m_nFilePos);
+                        if (m_pFileStream->IsEof() || !checkHeaderLine())
+                            return sal_False;
+                        m_pFileStream->ReadByteStringLine(m_aCurrentLine,pConnection->getTextEncoding());
+                        if (m_pFileStream->IsEof())
+                            return sal_False;
+                        nCurPos = m_pFileStream->Tell();
+                    }
+                }
+            }
+
+            break;
+        case IResultSetHelper::BOOKMARK:
+            m_pFileStream->Seek(nOffset);
+            if (m_pFileStream->IsEof())
+                return sal_False;
+
+            m_nFilePos = m_pFileStream->Tell(); // Byte-Position in der Datei merken (am ZeilenANFANG)
+            m_pFileStream->ReadByteStringLine(m_aCurrentLine,pConnection->getTextEncoding());
+            if (m_pFileStream->IsEof())
+                return sal_False;
+            nCurPos  = m_pFileStream->Tell();
+            break;
+    }
+
+    //OSL_TRACE("OEvoabTable::(after SeekRow)m_aCurrentLine = %d\n", ((OUtoCStr(::rtl::OUString(m_aCurrentLine))) ? (OUtoCStr(::rtl::OUString(m_aCurrentLine))):("NULL")) );
+
+    return sal_True;
+}
+// -----------------------------------------------------------------------------
