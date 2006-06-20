@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_calc.scp,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 20:46:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:51:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,9 +37,9 @@
 
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Analysis, analysis)
 
-STD_UNO_LIB_FILE( gid_File_Lib_Calc, calc)
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Calc, calc)
 
-STD_UNO_LIB_FILE( gid_File_Lib_Date, date)
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Date, date)
 
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Sc, sc)
 
@@ -47,7 +47,7 @@ STD_LIB_FILE_PATCH( gid_File_Lib_Scui, scui)
 
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Scd, scd)
 
-STD_LIB_FILE( gid_File_Lib_Tfu, tfu)
+STD_LIB_FILE_PATCH( gid_File_Lib_Tfu, tfu)
 
 //
 // start binfilter #110743#
