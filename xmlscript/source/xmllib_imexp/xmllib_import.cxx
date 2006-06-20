@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmllib_import.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:16:54 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:13:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,12 +73,12 @@ Reference< xml::input::XAttributes > LibElementBase::getAttributes()
 }
 //__________________________________________________________________________________________________
 void LibElementBase::ignorableWhitespace(
-    OUString const & rWhitespaces )
+    OUString const & /*rWhitespaces*/ )
     throw (xml::sax::SAXException, RuntimeException)
 {
 }
 //__________________________________________________________________________________________________
-void LibElementBase::characters( OUString const & rChars )
+void LibElementBase::characters( OUString const & /*rChars*/ )
     throw (xml::sax::SAXException, RuntimeException)
 {
     // not used, all characters ignored
@@ -86,7 +86,7 @@ void LibElementBase::characters( OUString const & rChars )
 
 //__________________________________________________________________________________________________
 void LibElementBase::processingInstruction(
-    OUString const & rTarget, OUString const & rData )
+    OUString const & /*rTarget*/, OUString const & /*rData*/ )
     throw (xml::sax::SAXException, RuntimeException)
 {
 }
@@ -98,8 +98,8 @@ void LibElementBase::endElement()
 }
 //__________________________________________________________________________________________________
 Reference< xml::input::XElement > LibElementBase::startChildElement(
-    sal_Int32 nUid, OUString const & rLocalName,
-    Reference< xml::input::XAttributes > const & xAttributes )
+    sal_Int32 /*nUid*/, OUString const & /*rLocalName*/,
+    Reference< xml::input::XAttributes > const & /*xAttributes*/ )
     throw (xml::sax::SAXException, RuntimeException)
 {
     throw xml::sax::SAXException(
@@ -163,13 +163,13 @@ void LibraryImport::endDocument()
 }
 //__________________________________________________________________________________________________
 void LibraryImport::processingInstruction(
-    OUString const & rTarget, OUString const & rData )
+    OUString const & /*rTarget*/, OUString const & /*rData*/ )
     throw (xml::sax::SAXException, RuntimeException)
 {
 }
 //__________________________________________________________________________________________________
 void LibraryImport::setDocumentLocator(
-    Reference< xml::sax::XLocator > const & xLocator )
+    Reference< xml::sax::XLocator > const & /*xLocator*/ )
     throw (xml::sax::SAXException, RuntimeException)
 {
 }
@@ -374,6 +374,4 @@ LibDescriptorArray::~LibDescriptorArray()
     delete[] mpLibs;
 }
 
-
-
-};
+}
