@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rscpar.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:51:12 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:47:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,6 @@
  *
  ************************************************************************/
 /****************** I N C L U D E S **************************************/
-#pragma hdrstop
-
 // C and C++ Includes.
 #include <string.h>
 
@@ -206,9 +204,9 @@ void RscFileInst::GetNewLine()
                 pLine[ nLen++ ] = pInput[ nInputPos++ ];
                 if( nLen > 2 )
                 {
-                    if( pLine[nLen-3] == (char)0xef &&
-                        pLine[nLen-2] == (char)0xbb &&
-                        pLine[nLen-1] == (char)0xbf )
+                    if( (unsigned char)pLine[nLen-3] == 0xef &&
+                        (unsigned char)pLine[nLen-2] == 0xbb &&
+                        (unsigned char)pLine[nLen-1] == 0xbf )
                     {
                         nLen -= 3;
                     }
