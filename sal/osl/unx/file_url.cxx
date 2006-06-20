@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_url.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:56:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:17:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -606,7 +606,6 @@ namespace /* private */
     oslFileError _osl_resolvepath(
         /*inout*/ sal_Unicode* path,
         /*inout*/ sal_Unicode* current_pos,
-        /*in   */ sal_Unicode* sentinel,
         /*inout*/ bool* failed)
     {
         oslFileError ferr = osl_File_E_None;
@@ -706,7 +705,6 @@ namespace /* private */
                         ferr = _osl_resolvepath(
                             path_resolved_so_far,
                             presolvedsf,
-                            sentinel,
                             &realpath_failed);
 
                         if (osl_File_E_None != ferr)
@@ -726,7 +724,6 @@ namespace /* private */
                     ferr = _osl_resolvepath(
                         path_resolved_so_far,
                         presolvedsf,
-                        sentinel,
                         &realpath_failed);
 
                     if (osl_File_E_None != ferr)
@@ -753,7 +750,6 @@ namespace /* private */
                     ferr = _osl_resolvepath(
                         path_resolved_so_far,
                         presolvedsf,
-                        sentinel,
                         &realpath_failed);
 
                     if (osl_File_E_None != ferr)
