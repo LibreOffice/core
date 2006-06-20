@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AColumns.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:26:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:12:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,16 +96,18 @@ void OColumns::appendObject( const Reference< XPropertySet >& descriptor )
     if(getImplementation(pColumn,descriptor) && pColumn != NULL)
     {
         WpADOColumn aColumn = pColumn->getColumnImpl();
-        DataTypeEnum eType = aColumn.get_Type();
 
-        sal_Int32 nPrecision    = aColumn.get_Precision();
-        sal_Int32 nScale        = aColumn.get_NumericScale();
-        sal_Int32 nType         = ADOS::MapADOType2Jdbc(eType);
+    #if OSL_DEBUG_LEVEL > 0
+        DataTypeEnum eType      = aColumn.get_Type();
+
+        sal_Int32 nPrecision    = aColumn.get_Precision();      (void)nPrecision;
+        sal_Int32 nScale        = aColumn.get_NumericScale();   (void)nScale;
+        sal_Int32 nType         = ADOS::MapADOType2Jdbc(eType); (void)nType;
+    #endif
 
         ::rtl::OUString sTypeName;
         pColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME)) >>= sTypeName;
 
-        sal_Bool bForceTo = sal_True;
         const OTypeInfoMap* pTypeInfoMap = m_pConnection->getTypeInfo();
         ::comphelper::TStringMixEqualFunctor aCase(sal_False);
         // search for typeinfo where the typename is equal sTypeName
@@ -149,7 +151,7 @@ void OColumns::appendObject( const Reference< XPropertySet >& descriptor )
 }
 // -------------------------------------------------------------------------
 // XDrop
-void OColumns::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
+void OColumns::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElementName)
 {
     if(!m_aCollection.Delete(_sElementName))
         ADOS::ThrowException(*m_pConnection->getConnection(),static_cast<XTypeProvider*>(this));
