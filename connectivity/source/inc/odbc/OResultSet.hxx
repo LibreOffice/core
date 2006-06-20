@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OResultSet.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-03 16:04:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:06:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,7 +128,6 @@ namespace connectivity
                     sal_Int32 nCount = _rLH.getLength();
                     if(nCount != 4)
                     {
-                        const sal_Int8* pLH     = _rLH.getConstArray();
                         const sal_Int8* pLHBack = _rLH.getConstArray() + nCount - 1;
                         const sal_Int8* pRHBack = _rRH.getConstArray() + nCount - 1;
 
@@ -186,7 +185,6 @@ namespace connectivity
             sal_Int32                                   m_nLastColumnPos;       // used for m_aRow just to know where we are
             SQLRETURN                                   m_nCurrentFetchState;
             sal_Bool                                    m_bWasNull;
-            sal_Bool                                    m_bBOF;                 // before first record
             sal_Bool                                    m_bEOF;                 // after last record
             sal_Bool                                    m_bLastRecord;
             sal_Bool                                    m_bFreeHandle;
@@ -246,7 +244,7 @@ namespace connectivity
 
             void construct();
 
-            inline void* getOdbcFunction(sal_Int32 _nIndex)  const
+            inline oslGenericFunction getOdbcFunction(sal_Int32 _nIndex)  const
             {
                 return m_pStatement->getOdbcFunction(_nIndex);
             }
@@ -360,6 +358,9 @@ namespace connectivity
             virtual sal_Int32 getDriverPos() const;
             virtual sal_Bool deletedVisible() const;
             virtual sal_Bool isRowDeleted() const;
+
+        protected:
+            using OPropertySetHelper::getFastPropertyValue;
         };
     }
 }
