@@ -4,9 +4,9 @@
  *
  *  $RCSfile: convertbig5hkscs.c,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:28:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:36:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,8 +128,8 @@ sal_Size ImplConvertBig5HkscsToUnicode(ImplTextConverterData const * pData,
                 goto bad_input;
             }
         else
-            if (nChar >= 0x40 && nChar <= 0x7E
-                || nChar >= 0xA1 && nChar <= 0xFE)
+            if ((nChar >= 0x40 && nChar <= 0x7E)
+                || (nChar >= 0xA1 && nChar <= 0xFE))
             {
                 sal_uInt32 nUnicode = 0xFFFF;
                 sal_Int32 nOffset = pBig5Hkscs2001RowOffsets[nRow];
@@ -273,6 +273,7 @@ sal_Size ImplConvertBig5HkscsToUnicode(ImplTextConverterData const * pData,
         && (nInfo & (RTL_TEXTTOUNICODE_INFO_ERROR
                          | RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL))
                == 0)
+    {
         if ((nFlags & RTL_TEXTTOUNICODE_FLAGS_FLUSH) == 0)
             nInfo |= RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL;
         else
@@ -289,6 +290,7 @@ sal_Size ImplConvertBig5HkscsToUnicode(ImplTextConverterData const * pData,
                 nInfo |= RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL;
                 break;
             }
+    }
 
     if (pContext)
         ((ImplBig5HkscsToUnicodeContext *) pContext)->m_nRow = nRow;
@@ -482,6 +484,7 @@ sal_Size ImplConvertUnicodeToBig5Hkscs(ImplTextConverterData const * pData,
         && (nInfo & (RTL_UNICODETOTEXT_INFO_ERROR
                          | RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL))
                == 0)
+    {
         if ((nFlags & RTL_UNICODETOTEXT_FLAGS_FLUSH) != 0)
             nInfo |= RTL_UNICODETOTEXT_INFO_SRCBUFFERTOSMALL;
         else
@@ -504,6 +507,7 @@ sal_Size ImplConvertUnicodeToBig5Hkscs(ImplTextConverterData const * pData,
                 nInfo |= RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
                 break;
             }
+    }
 
     if (pContext)
         ((ImplUnicodeToTextContext *) pContext)->m_nHighSurrogate
