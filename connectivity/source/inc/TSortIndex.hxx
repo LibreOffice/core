@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TSortIndex.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:40:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:58:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,25 +68,25 @@ namespace connectivity
         typedef ::std::vector<OKeyType>                             TKeyTypeVector;
 
     private:
-        TIntValuePairVector         m_aKeyValues;
-        TKeyTypeVector              m_aKeyType;
-        ::std::vector<sal_Int16>    m_aAscending;
-        sal_Bool                    m_bFrozen;
+        TIntValuePairVector             m_aKeyValues;
+        TKeyTypeVector                  m_aKeyType;
+        ::std::vector<TAscendingOrder>  m_aAscending;
+        sal_Bool                        m_bFrozen;
 
     public:
 
         OSortIndex( const ::std::vector<OKeyType>& _aKeyType,
-                    const ::std::vector<sal_Int16>& _aAscending);
+                    const ::std::vector<TAscendingOrder>& _aAscending);
 
         ~OSortIndex();
 
         inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
             { return ::rtl_allocateMemory( nSize ); }
-        inline static void * SAL_CALL operator new( size_t nSize,void* _pHint ) SAL_THROW( () )
+        inline static void * SAL_CALL operator new( size_t,void* _pHint ) SAL_THROW( () )
             { return _pHint; }
         inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
             { ::rtl_freeMemory( pMem ); }
-        inline static void SAL_CALL operator delete( void * pMem,void* _pHint ) SAL_THROW( () )
+        inline static void SAL_CALL operator delete( void *,void* ) SAL_THROW( () )
             {  }
 
 
@@ -122,7 +122,7 @@ namespace connectivity
         sal_Int32 GetValue(sal_Int32 nPos) const;
 
         inline const ::std::vector<OKeyType>& getKeyType() const { return m_aKeyType; }
-        inline sal_Int16 getAscending(::std::vector<sal_Int16>::size_type _nPos) const { return m_aAscending[_nPos]; }
+        inline TAscendingOrder getAscending(::std::vector<TAscendingOrder>::size_type _nPos) const { return m_aAscending[_nPos]; }
 
     };
 
