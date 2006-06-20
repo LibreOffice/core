@@ -4,9 +4,9 @@
  *
  *  $RCSfile: commoncpp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-15 09:12:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:23:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@ rtl::OString typeToPrefix(TypeManager const & manager, rtl::OString const & type
         typeclass == RT_TYPE_PUBLISHED)
         return rtl::OString("_");
 
-    static char* const typeclassPrefix[RT_TYPE_UNION + 1] = {
+    static char const * const typeclassPrefix[RT_TYPE_UNION + 1] = {
         "invalid",    /* RT_TYPE_INVALID, is here only as placeholder */
         "interface",  /* RT_TYPE_INTERFACE */
         "module",     /* RT_TYPE_MODULE */
@@ -77,8 +77,7 @@ rtl::OString typeToPrefix(TypeManager const & manager, rtl::OString const & type
     return rtl::OString(typeclassPrefix[typeclass]);
 }
 
-rtl::OString scopedCppName(TypeManager const & manager,
-                           rtl::OString const & type, bool bNoNameSpace,
+rtl::OString scopedCppName(rtl::OString const & type, bool bNoNameSpace,
                            bool shortname)
 {
     char c('/');
@@ -98,16 +97,6 @@ rtl::OString scopedCppName(TypeManager const & manager,
     do
     {
         tmpBuf.append("::");
-//         rtl::OString token(type.getToken(0, c, nPos));
-//         rtl::OString prefix;
-//         if (nPos != -1)
-//             prefix = typeToPrefix(manager, type.copy(0, nPos-1));
-//         else
-//             prefix = typeToPrefix(manager, type);
-
-//         tmpBuf.append(translateUnoToCppIdentifier(
-//                           token, prefix, ITM_KEYWORDSONLY));
-
         tmpBuf.append(type.getToken(0, c, nPos));
     } while( nPos != -1 );
 
@@ -138,7 +127,7 @@ rtl::OString translateUnoToCppType(
             buf.append(nucleus);
         }
     } else {
-        static char* const cppTypes[codemaker::UnoType::SORT_ANY + 1] = {
+        static char const * const cppTypes[codemaker::UnoType::SORT_ANY + 1] = {
             "void", "::sal_Bool", "::sal_Int8", "::sal_Int16", "::sal_uInt16",
             "::sal_Int32", "::sal_uInt32", "::sal_Int64", "::sal_uInt64",
             "float", "double", "::sal_Unicode", "::rtl::OUString",
