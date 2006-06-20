@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bc.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:22:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:18:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,13 +142,13 @@ BaseContent::BaseContent( shell* pMyShell,
                           sal_Bool bFolder )
     : m_pMyShell( pMyShell ),
       m_xContentIdentifier( 0 ),
+      m_aUncPath( parentName ),
+      m_bFolder( bFolder ),
+      m_nState( JustInserted ),
       m_pDisposeEventListeners( 0 ),
       m_pContentEventListeners( 0 ),
       m_pPropertySetInfoChangeListeners( 0 ),
-      m_pPropertyListener( 0 ),
-      m_aUncPath( parentName ),
-      m_nState( JustInserted ),
-      m_bFolder( bFolder )
+      m_pPropertyListener( 0 )
 {
     m_pMyShell->m_pProvider->acquire();
     // No registering, since we have no name
@@ -163,13 +163,13 @@ BaseContent::BaseContent( shell* pMyShell,
                           const rtl::OUString& aUncPath )
     : m_pMyShell( pMyShell ),
       m_xContentIdentifier( xContentIdentifier ),
+      m_aUncPath( aUncPath ),
+      m_bFolder( false ),
+      m_nState( FullFeatured ),
       m_pDisposeEventListeners( 0 ),
       m_pContentEventListeners( 0 ),
       m_pPropertySetInfoChangeListeners( 0 ),
-      m_pPropertyListener( 0 ),
-      m_aUncPath( aUncPath ),
-      m_nState( FullFeatured ),
-      m_bFolder( false )
+      m_pPropertyListener( 0 )
 {
     m_pMyShell->m_pProvider->acquire();
     m_pMyShell->registerNotifier( m_aUncPath,this );
@@ -407,7 +407,7 @@ BaseContent::execute( const Command& aCommand,
     }
     else if( ! aCommand.Name.compareToAscii( "getCommandInfo" ) )  // no exceptions
     {
-        aAny <<= getCommandInfo( CommandId );
+        aAny <<= getCommandInfo();
     }
     else if( ! aCommand.Name.compareToAscii( "setPropertyValues" ) )
     {
@@ -445,13 +445,11 @@ BaseContent::execute( const Command& aCommand,
     }
     else if( ! aCommand.Name.compareToAscii( "delete" ) )
     {
-        sal_Bool aDeleteArgument;
-        if( ! ( aCommand.Argument >>= aDeleteArgument ) )
+        if( ! aCommand.Argument.has< sal_Bool >() )
             m_pMyShell->installError( CommandId,
                                       TASKHANDLING_WRONG_DELETE_ARGUMENT );
         else
-            deleteContent( CommandId,
-                           aDeleteArgument );
+            deleteContent( CommandId );
     }
     else if( ! aCommand.Name.compareToAscii( "transfer" ) )
     {
@@ -516,7 +514,7 @@ BaseContent::addPropertiesChangeListener(
         m_pPropertyListener->addInterface( rtl::OUString(),Listener );
     else
     {
-        Reference< beans::XPropertySetInfo > xProp = m_pMyShell->info_p( -1,m_aUncPath );
+        Reference< beans::XPropertySetInfo > xProp = m_pMyShell->info_p( m_aUncPath );
         for( sal_Int32 i = 0; i < PropertyNames.getLength(); ++i )
             if( xProp->hasPropertyByName( PropertyNames[i] ) )
                 m_pPropertyListener->addInterface( PropertyNames[i],Listener );
@@ -835,7 +833,7 @@ BaseContent::getParent(
 
 void SAL_CALL
 BaseContent::setParent(
-    const Reference< XInterface >& Parent )
+    const Reference< XInterface >& )
     throw( lang::NoSupportException,
            RuntimeException)
 {
@@ -849,26 +847,25 @@ BaseContent::setParent(
 
 
 Reference< XCommandInfo > SAL_CALL
-BaseContent::getCommandInfo(
-    sal_Int32 nMyCommandIdentifier )
+BaseContent::getCommandInfo()
     throw( RuntimeException )
 {
     if( m_nState & Deleted )
         return Reference< XCommandInfo >();
 
-    return m_pMyShell->info_c( nMyCommandIdentifier,m_aUncPath );
+    return m_pMyShell->info_c();
 }
 
 
 Reference< beans::XPropertySetInfo > SAL_CALL
 BaseContent::getPropertySetInfo(
-    sal_Int32 nMyCommandIdentifier )
+    sal_Int32 )
     throw( RuntimeException )
 {
     if( m_nState & Deleted )
         return Reference< beans::XPropertySetInfo >();
 
-    return m_pMyShell->info_p( nMyCommandIdentifier,m_aUncPath );
+    return m_pMyShell->info_p( m_aUncPath );
 }
 
 
@@ -1009,8 +1006,7 @@ BaseContent::setPropertyValues(
     }
     else
     {
-        Sequence< Any > ret = m_pMyShell->setv( nMyCommandIdentifier,  // Does not handle Title
-                                                m_aUncPath,
+        Sequence< Any > ret = m_pMyShell->setv( m_aUncPath,  // Does not handle Title
                                                 Values );
 
         // Special handling Title: Setting Title is equivalent to a renaming of the underlying file
@@ -1138,8 +1134,7 @@ BaseContent::open(
 
 
 void SAL_CALL
-BaseContent::deleteContent( sal_Int32 nMyCommandIdentifier,
-                            sal_Bool bDeleteArgument )
+BaseContent::deleteContent( sal_Int32 nMyCommandIdentifier )
     throw()
 {
     if( m_nState & Deleted )
@@ -1353,7 +1348,7 @@ void SAL_CALL BaseContent::insert( sal_Int32 nMyCommandIdentifier,
 void SAL_CALL BaseContent::endTask( sal_Int32 CommandId )
 {
     // This is the only function allowed to throw an exception
-    m_pMyShell->endTask( m_pMyShell,CommandId,m_aUncPath,this );
+    m_pMyShell->endTask( CommandId,m_aUncPath,this );
 }
 
 
