@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqlmessage.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:32:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:10:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -179,7 +179,6 @@ OExceptionChainDialog::OExceptionChainDialog(Window* pParent, const Any& _rStart
                 case SQLExceptionInfo::SQL_EXCEPTION:
                 {
                     pListEntry = m_aExceptionList.InsertEntry(sErrorLabel, aErrorImage, aErrorImage);
-                    const SQLException* pException = (const SQLException*)aCurrent;
                 }
                 break;
 
@@ -292,8 +291,7 @@ void OSQLMessageBox::Construct(const UniString& rTitle,
                           MessageType eImage)
 {
     // Changed as per BugID 79541 Branding/Configuration
-    ::utl::ConfigManager* pMgr = ::utl::ConfigManager::GetConfigManager();
-    Any aProductName = pMgr->GetDirectConfigProperty(::utl::ConfigManager::PRODUCTNAME);
+    Any aProductName = ::utl::ConfigManager::GetConfigManager()->GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
     ::rtl::OUString sProductName;
     aProductName >>= sProductName;
 
@@ -360,9 +358,6 @@ void OSQLMessageBox::Construct(const UniString& rTitle,
     m_aMessage.SetText(rMessage);
 
     // Buttons anlegen
-    long   nBtnCount = 0;
-    sal_Bool   bHelp = sal_False; //aHelpBtn.IsVisible();
-
     sal_uInt16 nDefId = 0;
 
     if (nStyle & WB_DEF_YES)
@@ -514,8 +509,8 @@ OSQLMessageBox::OSQLMessageBox(Window* _pParent, const UniString& _rTitle, const
     ,m_aInfoImage(this)
     ,m_aTitle(this,WB_WORDBREAK | WB_LEFT)
     ,m_aMessage(this,WB_WORDBREAK | WB_LEFT)
-    ,m_pInfoButton(NULL)
     ,m_aNextChainElement(SQLExceptionInfo(_rError).get())
+    ,m_pInfoButton(NULL)
 {
     DBG_CTOR(OSQLMessageBox,NULL);
 
@@ -528,8 +523,8 @@ OSQLMessageBox::OSQLMessageBox(Window* _pParent, const SQLException& _rError, Wi
     ,m_aInfoImage(this)
     ,m_aTitle(this,WB_WORDBREAK | WB_LEFT)
     ,m_aMessage(this,WB_WORDBREAK | WB_LEFT)
-    ,m_pInfoButton(NULL)
     ,m_aNextChainElement(SQLExceptionInfo(_rError).get())
+    ,m_pInfoButton(NULL)
 {
     DBG_CTOR(OSQLMessageBox,NULL);
 
@@ -542,8 +537,8 @@ OSQLMessageBox::OSQLMessageBox(Window* _pParent, const SQLExceptionInfo& _rExcep
       ,m_aInfoImage(this)
       ,m_aTitle(this,WB_WORDBREAK | WB_LEFT)
       ,m_aMessage(this,WB_WORDBREAK | WB_LEFT)
-      ,m_pInfoButton(NULL)
       ,m_aNextChainElement(_rException.get())
+      ,m_pInfoButton(NULL)
 {
     DBG_CTOR(OSQLMessageBox,NULL);
 
@@ -572,7 +567,7 @@ OSQLMessageBox::~OSQLMessageBox()
 }
 
 //--------------------------------------------------------------------------
-IMPL_LINK( OSQLMessageBox, ButtonClickHdl, Button *, pButton )
+IMPL_LINK( OSQLMessageBox, ButtonClickHdl, Button *, /*pButton*/ )
 {
     OExceptionChainDialog aDlg( this, m_aNextChainElement );
     aDlg.Execute();
