@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tcvtbyte.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:36:17 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:37:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -489,6 +489,10 @@ sal_Size ImplSymbolToUnicode( const ImplTextConverterData* pData,
     sal_Unicode*            pEndDestBuf;
     const sal_Char*         pEndSrcBuf;
 
+    (void) pData; /* unused */
+    (void) pContext; /* unused */
+    (void) nFlags; /* unused */
+
     *pInfo = 0;
     pEndDestBuf = pDestBuf+nDestChars;
     pEndSrcBuf  = pSrcBuf+nSrcBytes;
@@ -526,6 +530,8 @@ sal_Size ImplUnicodeToSymbol( const ImplTextConverterData* pData,
     sal_Unicode             c;
     sal_Char*               pEndDestBuf;
     const sal_Unicode*      pEndSrcBuf;
+
+    (void) pContext; /* unused */
 
     *pInfo = 0;
     pEndDestBuf = pDestBuf+nDestBytes;
@@ -593,6 +599,8 @@ sal_Size ImplCharToUnicode( const ImplTextConverterData* pData,
     const ImplByteConvertData*  pConvertData = (const ImplByteConvertData*)pData;
     sal_Unicode*                pEndDestBuf;
     const sal_Char*             pEndSrcBuf;
+
+    (void) pContext; /* unused */
 
     *pInfo = 0;
     pEndDestBuf = pDestBuf+nDestChars;
@@ -723,6 +731,8 @@ sal_Size ImplUnicodeToChar( const ImplTextConverterData* pData,
     sal_uInt16                  cTemp;
     sal_Char                    aTempBuf[IMPL_MAX_REPLACECHAR+1];
     const sal_uInt16*           pReplace;
+
+    (void) pContext; /* unused */
 
     *pInfo = 0;
     pEndDestBuf = pDestBuf+nDestBytes;
