@@ -4,9 +4,9 @@
  *
  *  $RCSfile: adminpages.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:52:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:05:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,9 +41,6 @@
 #endif
 #ifndef _DBAUI_DSNTYPES_HXX_
 #include "dsntypes.hxx"
-#endif
-#ifndef _DBAUI_CHARSETS_HXX_
-#include "charsets.hxx"
 #endif
 #ifndef _DBAUI_COMMON_TYPES_HXX_
 #include "commontypes.hxx"
@@ -224,6 +221,7 @@ namespace dbaui
     protected:
         /// default implementation: call FillItemSet, call checkItems,
         virtual int DeactivatePage(SfxItemSet* pSet);
+        using SfxTabPage::DeactivatePage;
         /// default implementation: call implInitControls with the given item set and _bSaveValue = sal_False
         virtual void Reset(const SfxItemSet& _rCoreAttrs);
         /// default implementation: call implInitControls with the given item set and _bSaveValue = sal_True
@@ -300,7 +298,7 @@ namespace dbaui
         void SetControlFontWeight(Window* _pWindow, FontWeight _eWeight = WEIGHT_BOLD);
         void SetHeaderText( Window* _parent, USHORT _nFTResId, USHORT _StringResId);
 
-        Point MovePoint(Point _aPixelBasePoint, sal_uInt32 _XShift, sal_uInt32 _YShift);
+        Point MovePoint(Point _aPixelBasePoint, sal_Int32 _XShift, sal_Int32 _YShift);
 
 
     protected:
@@ -315,7 +313,6 @@ namespace dbaui
 
     private:
         void postInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
-
     };
 
 //.........................................................................
