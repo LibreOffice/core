@@ -1,4 +1,4 @@
-/* $Id: cpp.h,v 1.3 2003-03-18 12:47:34 hr Exp $ */
+/* $Id: cpp.h,v 1.4 2006-06-20 05:07:28 hr Exp $ */
 
 #define INS         32768   /* input buffer                             */
 #define OBS         8092    /* outbut buffer                            */
@@ -150,11 +150,12 @@ void        mvl_add(
     moved, by
         pTokenWhereMacroBecomesValid += in_nNrofTokens;
     .
-*/
+
 void        mvl_move(
                 MacroValidatorList *
                                 inout_pValidators,
                 int             in_nSpace); // in pointer units.
+*/
 /*  Checks if one of the validators within the list points to
     the token in_pTokenToCheck. If so, the macro is set valid and
     the validator is removed.
