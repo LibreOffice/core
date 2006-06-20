@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppDetailPageHelper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 12:12:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:54:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -302,7 +302,7 @@ OAppDetailPageHelper::OAppDetailPageHelper(Window* _pParent,OAppBorderWindow* _p
     SetUniqueId(UID_APP_DETAILPAGE_HELPER);
     for (int i=0; i < CONTROL_COUNT; ++i)
         m_pLists[i] = NULL;
-    ImplInitSettings( sal_True, sal_True, sal_True );
+    ImplInitSettings();
 }
 // -----------------------------------------------------------------------------
 OAppDetailPageHelper::~OAppDetailPageHelper()
@@ -554,7 +554,6 @@ sal_Bool OAppDetailPageHelper::isLeaf(SvLBoxEntry* _pEntry) const
     sal_Bool bLeafSelected = sal_False;
     if ( nPos < CONTROL_COUNT && _pEntry )
     {
-        DBTreeListBox& rTree = *m_pLists[nPos];
         bLeafSelected = reinterpret_cast<sal_IntPtr>(_pEntry->GetUserData()) != FOLDER_TYPE;
     }
     return bLeafSelected;
@@ -581,7 +580,6 @@ SvLBoxEntry* OAppDetailPageHelper::getEntry( const Point& _aPosPixel) const
 {
     SvLBoxEntry* pReturn = NULL;
     int nPos = getVisibleControlIndex();
-    sal_Bool bLeafSelected = sal_False;
     if ( nPos < CONTROL_COUNT )
         pReturn = m_pLists[nPos]->GetEntry( _aPosPixel,TRUE );
     return pReturn;
@@ -593,8 +591,8 @@ void OAppDetailPageHelper::createTablesPage(const Reference< XConnection>& _xCon
 
     if ( !m_pLists[E_TABLE] )
     {
-        OTableTreeListBox* pTreeView = new OTableTreeListBox(this,getBorderWin()->getView()->getORB()
-                                                            ,sal_False
+        OTableTreeListBox* pTreeView = new OTableTreeListBox(this
+                                                            ,getBorderWin()->getView()->getORB()
                                                             ,WB_HASLINES | WB_SORT | WB_HASBUTTONS | WB_HSCROLL |WB_HASBUTTONSATROOT | WB_TABSTOP
                                                             ,sal_False);
         pTreeView->SetHelpId(HID_APP_TABLE_TREE);
@@ -1154,7 +1152,7 @@ void OAppDetailPageHelper::showPreview( const ::rtl::OUString& _sDataSourceName,
     }
 }
 // -----------------------------------------------------------------------------
-IMPL_LINK(OAppDetailPageHelper, OnDropdownClickHdl, ToolBox*, pToolBox)
+IMPL_LINK(OAppDetailPageHelper, OnDropdownClickHdl, ToolBox*, /*pToolBox*/)
 {
     m_aTBPreview.EndSelection();
 
@@ -1177,7 +1175,7 @@ IMPL_LINK(OAppDetailPageHelper, OnDropdownClickHdl, ToolBox*, pToolBox)
                             , SID_DB_APP_VIEW_DOCINFO_PREVIEW
     };
 
-    for(sal_Int32 i=0; i < sizeof(pActions)/sizeof(pActions[0]);++i)
+    for(size_t i=0; i < sizeof(pActions)/sizeof(pActions[0]);++i)
     {
         aMenu->CheckItem(pActions[i],m_aMenu->IsItemChecked(pActions[i]));
     }
@@ -1207,9 +1205,8 @@ void OAppDetailPageHelper::disableControls(sal_Bool _bDisable)
 // -----------------------------------------------------------------------------
 void OAppDetailPageHelper::KeyInput( const KeyEvent& rKEvt )
 {
-    KeyFuncType eFunc = rKEvt.GetKeyCode().GetFunction();
+    KeyFuncType eFunc = rKEvt.GetKeyCode().GetFunction(); (void)eFunc;
     USHORT      nCode = rKEvt.GetKeyCode().GetCode();
-    sal_Bool bHandled = sal_False;
 
     if ( KEY_RETURN == nCode )
     {
@@ -1230,7 +1227,7 @@ void OAppDetailPageHelper::DataChanged( const DataChangedEvent& rDCEvt )
        && ( rDCEvt.GetFlags() & SETTINGS_STYLE )
        )
     {
-        ImplInitSettings( sal_True, sal_True, sal_True );
+        ImplInitSettings();
         if ( m_pLists[ E_TABLE ] )
         {
             OTableTreeListBox* pTableTree = dynamic_cast< OTableTreeListBox* >( m_pLists[ E_TABLE ] );
@@ -1241,7 +1238,7 @@ void OAppDetailPageHelper::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 // -----------------------------------------------------------------------------
-void OAppDetailPageHelper::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground )
+void OAppDetailPageHelper::ImplInitSettings()
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     if( true )
