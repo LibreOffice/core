@@ -4,9 +4,9 @@
  *
  *  $RCSfile: st_list.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:26:46 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:08:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,14 +69,14 @@ class ST_List            /// Soltools-List.
                                                 { alloc(i_nSize,true); }
     void                insert(
                             iterator            i_aPos,
-                            const XX &          elem )
-                                                { Insert(i_aPos-begin(), elem); }
+                            const XX &          elem_ )
+                                                { Insert(i_aPos-begin(), elem_); }
     virtual void        Insert(
                             unsigned            pos,
                             const XX &          elem );
     void                push_back(
-                            const XX &          elem)
-                                                { Insert(size(),elem); }
+                            const XX &          elem_)
+                                                { Insert(size(),elem_); }
     void                remove(
                             iterator            i_aPos )
                                                 { Remove(i_aPos-begin()); }
@@ -188,7 +188,7 @@ ST_List<XX>::operator=( const ST_List<XX> & i_rList )
 
 template <class XX>
 void
-ST_List<XX>::Insert(unsigned pos, const XX & elem)
+ST_List<XX>::Insert(unsigned pos, const XX & elem_)
 {
     if ( pos > len )
       return;
@@ -198,7 +198,7 @@ ST_List<XX>::Insert(unsigned pos, const XX & elem)
     {
         inhalt[p] = inhalt[p-1];
     }
-    inhalt[pos] = elem;
+    inhalt[pos] = elem_;
     len++;
 }
 
@@ -310,14 +310,14 @@ DynamicList<XY>::operator=( const DynamicList<XY> & i_rList )
 
 template <class XY>
 void
-DynamicList<XY>::Insert(unsigned pos, XY * const & elem)
+DynamicList<XY>::Insert(unsigned pos, XY * const & elem_)
 {
     if ( pos > this->len )
       return;
 
     checkSize(DynamicList<XY>::len+2);
     memmove( DynamicList<XY>::inhalt+pos+1, DynamicList<XY>::inhalt+pos, (DynamicList<XY>::len-pos) * sizeof(XY*) );
-    this->inhalt[pos] = elem;
+    this->inhalt[pos] = elem_;
     this->len++;
 }
 
