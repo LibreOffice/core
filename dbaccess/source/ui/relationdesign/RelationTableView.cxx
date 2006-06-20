@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RelationTableView.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:24:26 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:31:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -404,7 +404,7 @@ void ORelationTableView::AddNewRelation()
 }
 
 //------------------------------------------------------------------------------
-::std::vector<OTableConnection*>::const_iterator ORelationTableView::RemoveConnection( OTableConnection* pConn ,sal_Bool _bDelete)
+::std::vector<OTableConnection*>::const_iterator ORelationTableView::RemoveConnection( OTableConnection* pConn ,sal_Bool /*_bDelete*/)
 {
     DBG_CHKTHIS(ORelationTableView,NULL);
     ::std::vector<OTableConnection*>::const_iterator aNextPos = getTableConnections()->end();
@@ -426,7 +426,7 @@ void ORelationTableView::AddNewRelation()
 }
 
 //------------------------------------------------------------------------------
-void ORelationTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::rtl::OUString& rWinName, BOOL bNewTable)
+void ORelationTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::rtl::OUString& rWinName, BOOL /*bNewTable*/)
 {
     DBG_CHKTHIS(ORelationTableView,NULL);
     OSL_ENSURE(_rComposedName.getLength(),"There must be a table name supplied!");
