@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BUser.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:24:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:11:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,15 +143,18 @@ typedef connectivity::sdbcx::OUser_BASE OUser_BASE_RBHELPER;
 // -----------------------------------------------------------------------------
 sal_Int32 SAL_CALL OAdabasUser::getPrivileges( const ::rtl::OUString& objName, sal_Int32 objType ) throw(SQLException, RuntimeException)
 {
+    if ( objType != PrivilegeObject::TABLE )
+        return 0;
+
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OUser_BASE_RBHELPER::rBHelper.bDisposed);
 
     sal_Int32 nRights,nRightsWithGrant;
-    findPrivilegesAndGrantPrivileges(objName,objType,nRights,nRightsWithGrant);
+    getAnyTablePrivileges(objName,nRights,nRightsWithGrant);
     return nRights;
 }
 // -----------------------------------------------------------------------------
-void OAdabasUser::findPrivilegesAndGrantPrivileges(const ::rtl::OUString& objName, sal_Int32 objType,sal_Int32& nRights,sal_Int32& nRightsWithGrant) throw(SQLException, RuntimeException)
+void OAdabasUser::getAnyTablePrivileges(const ::rtl::OUString& objName, sal_Int32& nRights,sal_Int32& nRightsWithGrant) throw(SQLException, RuntimeException)
 {
     nRightsWithGrant = nRights = 0;
     // first we need to create the sql stmt to select the privs
@@ -173,50 +176,29 @@ void OAdabasUser::findPrivilegesAndGrantPrivileges(const ::rtl::OUString& objNam
             if(xRow.is() && xRes->next())
             {
                 ::rtl::OUString sPrivs = xRow->getString(2);
-                static const ::rtl::OUString sInsert    = ::rtl::OUString::createFromAscii("INS");
-                static const ::rtl::OUString sDelete    = ::rtl::OUString::createFromAscii("DEL");
-                static const ::rtl::OUString sUpdate    = ::rtl::OUString::createFromAscii("UPD");
-                static const ::rtl::OUString sAlter     = ::rtl::OUString::createFromAscii("ALT");
-                static const ::rtl::OUString sSelect    = ::rtl::OUString::createFromAscii("SEL");
-                static const ::rtl::OUString sReference = ::rtl::OUString::createFromAscii("REF");
-                static const ::rtl::OUString sGrant     = ::rtl::OUString::createFromAscii("+");
 
-                sal_Int32 nIndex = -1;
-                if(nIndex = sPrivs.indexOf(sInsert) != -1)
+                struct _priv_nam
                 {
-                    nRights |= Privilege::INSERT;
-                    if(sGrant == sPrivs.copy(nIndex+2,1))
-                        nRightsWithGrant |= Privilege::INSERT;
-                }
-                if(nIndex = sPrivs.indexOf(sDelete) != -1)
+                    const sal_Char* pAsciiName;
+                    sal_Int32       nNumericValue;
+                } privileges[] =
                 {
-                    nRights |= Privilege::DELETE;
-                    if(sGrant == sPrivs.copy(nIndex+2,1))
-                        nRightsWithGrant |= Privilege::DELETE;
-                }
-                if(nIndex = sPrivs.indexOf(sUpdate) != -1)
+                    { "INS", Privilege::INSERT },
+                    { "DEL", Privilege::DELETE },
+                    { "UPD", Privilege::UPDATE },
+                    { "ALT", Privilege::ALTER },
+                    { "SEL", Privilege::SELECT },
+                    { "REF", Privilege::REFERENCE }
+                };
+                for ( size_t i = 0; i < sizeof( privileges ) / sizeof( privileges[0] ); ++i )
                 {
-                    nRights |= Privilege::UPDATE;
-                    if(sGrant == sPrivs.copy(nIndex+2,1))
-                        nRightsWithGrant |= Privilege::UPDATE;
-                }
-                if(nIndex = sPrivs.indexOf(sAlter) != -1)
-                {
-                    nRights |= Privilege::ALTER;
-                    if(sGrant == sPrivs.copy(nIndex+2,1))
-                        nRightsWithGrant |= Privilege::ALTER;
-                }
-                if(nIndex = sPrivs.indexOf(sSelect) != -1)
-                {
-                    nRights |= Privilege::SELECT;
-                    if(sGrant == sPrivs.copy(nIndex+2,1))
-                        nRightsWithGrant |= Privilege::SELECT;
-                }
-                if(nIndex = sPrivs.indexOf(sReference) != -1)
-                {
-                    nRights |= Privilege::REFERENCE;
-                    if(sGrant == sPrivs.copy(nIndex+2,1))
-                        nRightsWithGrant |= Privilege::REFERENCE;
+                    sal_Int32 nIndex = sPrivs.indexOf( ::rtl::OUString::createFromAscii( privileges[i].pAsciiName ) );
+                    if ( nIndex == -1 )
+                        continue;
+
+                    nRights |= privileges[i].nNumericValue;
+                    if ( sPrivs.copy( nIndex + 2, 1 ).equalsAscii( "+" ) )
+                        nRightsWithGrant |= privileges[i].nNumericValue;
                 }
             }
             ::comphelper::disposeComponent(xRes);
@@ -227,18 +209,23 @@ void OAdabasUser::findPrivilegesAndGrantPrivileges(const ::rtl::OUString& objNam
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OAdabasUser::getGrantablePrivileges( const ::rtl::OUString& objName, sal_Int32 objType ) throw(SQLException, RuntimeException)
 {
+    if ( objType != PrivilegeObject::TABLE )
+        return 0;
+
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OUser_BASE_RBHELPER::rBHelper.bDisposed);
 
     sal_Int32 nRights,nRightsWithGrant;
-    findPrivilegesAndGrantPrivileges(objName,objType,nRights,nRightsWithGrant);
+    getAnyTablePrivileges(objName,nRights,nRightsWithGrant);
     return nRightsWithGrant;
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OAdabasUser::grantPrivileges( const ::rtl::OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
+    if ( objType != PrivilegeObject::TABLE )
+        ::dbtools::throwSQLException( "Privilege not granted: Only table privileges can be granted", "01007", *this );
 
+    ::osl::MutexGuard aGuard(m_aMutex);
     ::rtl::OUString sPrivs = getPrivilegeString(objPrivileges);
     if(sPrivs.getLength())
     {
@@ -260,6 +247,9 @@ void SAL_CALL OAdabasUser::grantPrivileges( const ::rtl::OUString& objName, sal_
 // -------------------------------------------------------------------------
 void SAL_CALL OAdabasUser::revokePrivileges( const ::rtl::OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw(SQLException, RuntimeException)
 {
+    if ( objType != PrivilegeObject::TABLE )
+        ::dbtools::throwSQLException( "Privilege not revoked: Only table privileges can be revoked", "01006", *this );
+
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OUser_BASE_RBHELPER::rBHelper.bDisposed);
     ::rtl::OUString sPrivs = getPrivilegeString(objPrivileges);
