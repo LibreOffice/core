@@ -4,9 +4,9 @@
  *
  *  $RCSfile: idroptarget.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:17:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 06:02:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,6 @@
 #define _IDROPTARGET_HXX_
 
 #include "target.hxx"
-#include <oleidl.h>
-
 
 class IDropTargetImpl: public IDropTarget
 {
@@ -45,7 +43,7 @@ class IDropTargetImpl: public IDropTarget
     // Calls to IDropTarget functions are delegated to a DropTarget.
     DropTarget& m_rDropTarget;
 
-    ~IDropTargetImpl(); // delete is only called by IUnknown::Release
+    virtual ~IDropTargetImpl(); // delete is only called by IUnknown::Release
     IDropTargetImpl( const IDropTargetImpl& );
     IDropTargetImpl& operator=( const IDropTargetImpl& );
 public:
