@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resultset.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:36:54 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:41:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -277,6 +277,9 @@ namespace dbaccess
     protected:
         void checkReadOnly() const;
         void checkBookmarkable() const;
+
+    private:
+        using ::cppu::OPropertySetHelper::getFastPropertyValue;
     };
 }
 #endif // _DBA_COREAPI_RESULTSET_HXX_
