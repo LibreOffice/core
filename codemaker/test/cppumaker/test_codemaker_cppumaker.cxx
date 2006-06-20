@@ -4,9 +4,9 @@
  *
  *  $RCSfile: test_codemaker_cppumaker.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:19:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:25:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -344,6 +344,13 @@ void Test::testExceptions() {
 }
 
 void Test::testConstants() {
+    CPPUNIT_ASSERT_EQUAL(
+        SAL_MIN_INT8, test::codemaker::cppumaker::Constants::byteMin);
+    CPPUNIT_ASSERT_EQUAL(
+        SAL_MAX_INT8, test::codemaker::cppumaker::Constants::byteMax);
+    CPPUNIT_ASSERT_EQUAL(
+        static_cast< sal_Int8 >(-1),
+        test::codemaker::cppumaker::Constants::byteNeg);
     CPPUNIT_ASSERT_EQUAL(
         SAL_MIN_INT16, test::codemaker::cppumaker::Constants::shortMin);
     CPPUNIT_ASSERT_EQUAL(
