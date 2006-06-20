@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentdefinition.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-07 10:19:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:45:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -295,7 +295,7 @@ namespace dbaccess
         m_pDefinition = NULL;
     }
     //------------------------------------------------------------------
-    void SAL_CALL OEmbedObjectHolder::changingState( const ::com::sun::star::lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (::com::sun::star::embed::WrongStateException, ::com::sun::star::uno::RuntimeException)
+    void SAL_CALL OEmbedObjectHolder::changingState( const ::com::sun::star::lang::EventObject& /*aEvent*/, ::sal_Int32 /*nOldState*/, ::sal_Int32 /*nNewState*/ ) throw (::com::sun::star::embed::WrongStateException, ::com::sun::star::uno::RuntimeException)
     {
     }
     //------------------------------------------------------------------
@@ -314,7 +314,7 @@ namespace dbaccess
         }
     }
     //------------------------------------------------------------------
-    void SAL_CALL OEmbedObjectHolder::disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException)
+    void SAL_CALL OEmbedObjectHolder::disposing( const ::com::sun::star::lang::EventObject& /*Source*/ ) throw (::com::sun::star::uno::RuntimeException)
     {
         m_xBroadCaster = NULL;
     }
@@ -333,7 +333,7 @@ namespace dbaccess
         virtual void SAL_CALL saveObject(  ) throw (ObjectSaveVetoException, Exception, RuntimeException)
         {
         }
-        virtual void SAL_CALL onShowWindow( sal_Bool bVisible ) throw (RuntimeException)
+        virtual void SAL_CALL onShowWindow( sal_Bool /*bVisible*/ ) throw (RuntimeException)
         {
         }
         // XComponentSupplier
@@ -343,7 +343,7 @@ namespace dbaccess
         }
 
         // XEmbeddedClient
-        virtual void SAL_CALL visibilityChanged( ::sal_Bool bVisible ) throw (WrongStateException, RuntimeException)
+        virtual void SAL_CALL visibilityChanged( ::sal_Bool /*bVisible*/ ) throw (WrongStateException, RuntimeException)
         {
         }
         inline void resetClient(ODocumentDefinition* _pClient) { m_pClient = _pClient; }
@@ -394,7 +394,7 @@ namespace dbaccess
     };
 
     //------------------------------------------------------------------
-    void SAL_CALL LifetimeCoupler::disposing( const css::lang::EventObject& Source ) throw (RuntimeException)
+    void SAL_CALL LifetimeCoupler::disposing( const css::lang::EventObject& /*Source*/ ) throw (RuntimeException)
     {
         m_xClient.clear();
     }
@@ -517,10 +517,10 @@ ODocumentDefinition::ODocumentDefinition(const Reference< XInterface >& _rxConta
                                          :OContentHelper(_xORB,_rxContainer,_pImpl)
     ,OPropertyStateContainer(m_aBHelper)
     ,m_pInterceptor(NULL)
-    ,m_pClientHelper(NULL)
     ,m_bForm(_bForm)
     ,m_bOpenInDesign(sal_False)
     ,m_bInExecute(sal_False)
+    ,m_pClientHelper(NULL)
 {
     DBG_CTOR(ODocumentDefinition, NULL);
     registerProperties();
@@ -632,9 +632,9 @@ namespace
             _rMode = aOpenCommand.Mode;
         else
         {
-            OpenCommandArgument2 aOpenCommand;
-            if ( _rValue >>= aOpenCommand )
-                _rMode = aOpenCommand.Mode;
+            OpenCommandArgument2 aOpenCommand2;
+            if ( _rValue >>= aOpenCommand2 )
+                _rMode = aOpenCommand2.Mode;
             else
                 return false;
         }
@@ -818,16 +818,9 @@ void ODocumentDefinition::impl_initObjectEditView( const Reference< XController 
         Reference< XModifiable > xModifiable( _rxController->getModel(), UNO_QUERY_THROW );
         xModifiable->setModified( sal_False );
     }
-    catch( const Exception& e )
+    catch( const Exception& )
     {
-    #if OSL_DEBUG_LEVEL > 0
-        ::rtl::OString sMessage( "ODocumentDefinition::impl_initObjectEditView: caught an exception!\n" );
-        sMessage += "message:\n";
-        sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), osl_getThreadTextEncoding() );
-        OSL_ENSURE( false, sMessage );
-    #else
-        e; // make compiler happy
-    #endif
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 
@@ -1381,7 +1374,7 @@ void ODocumentDefinition::generateNewImage(Any& _rImage)
     }
 }
 // -----------------------------------------------------------------------------
-Any ODocumentDefinition::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
+Any ODocumentDefinition::getPropertyDefaultByHandle( sal_Int32 /*_nHandle*/ ) const
 {
     return Any();
 }
