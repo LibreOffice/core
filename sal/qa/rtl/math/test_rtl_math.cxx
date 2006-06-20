@@ -4,9 +4,9 @@
  *
  *  $RCSfile: test_rtl_math.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:47:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:26:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,7 +172,7 @@ bool testNumberToString(hTestResult pTestResult,
     // call to the real test checker
     // pTestResult->pFuncs->state_(pTestResult, bSuccess, "test_rtl_math",
     //                             aBuffer.getStr(), false);
-    c_rtl_tres_state(pTestResult, bSuccess, (sal_Char*)aBuffer.getStr(), "testNumberToString");
+    c_rtl_tres_state(pTestResult, bSuccess, aBuffer.getStr(), "testNumberToString");
     return bSuccess;
 }
 
@@ -234,7 +234,7 @@ bool testStringToNumberToString(hTestResult pTestResult,
     // call to the real test checker
     // pTestResult->pFuncs->state_(pTestResult, bSuccess, "test_rtl_math",
     //                             aBuffer.getStr(), false);
-    c_rtl_tres_state(pTestResult, bSuccess, (sal_Char*)aBuffer.getStr(), "testStringToNumberToString");
+    c_rtl_tres_state(pTestResult, bSuccess, aBuffer.getStr(), "testStringToNumberToString");
 
     return bSuccess;
 }
