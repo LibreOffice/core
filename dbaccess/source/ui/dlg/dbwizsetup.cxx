@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbwizsetup.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:41:46 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:06:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -264,15 +264,17 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
                                ,const Reference< XMultiServiceFactory >& _rxORB
                                ,const ::com::sun::star::uno::Any& _aDataSourceName
                                )
-    :svt::RoadmapWizard(_pParent, ModuleRes(DLG_DATABASE_WIZARD),
-    WZB_NEXT | WZB_PREVIOUS | WZB_FINISH | WZB_CANCEL | WZB_HELP
-    , ResId( STR_ROADMAPHEADER), sal_True)
+    :svt::RoadmapWizard( _pParent, ModuleRes(DLG_DATABASE_WIZARD),
+                        WZB_NEXT | WZB_PREVIOUS | WZB_FINISH | WZB_CANCEL | WZB_HELP,
+                        ResId( STR_ROADMAPHEADER ), sal_True)
+
+    , m_pOutSet(NULL)
+    , m_eType( DST_UNKNOWN )
+    , m_eOldType( DST_UNKNOWN )
     , m_bResetting(sal_False)
     , m_bApplied(sal_False)
     , m_bUIEnabled( sal_True )
     , m_bIsConnectable( sal_False)
-    , m_pOutSet(NULL)
-    , m_pMySQLIntroPage(NULL)
     , m_sRM_IntroText(ResId(STR_PAGETITLE_INTROPAGE))
     , m_sRM_dBaseText(ResId(STR_PAGETITLE_DBASE))
     , m_sRM_TextText(ResId(STR_PAGETITLE_TEXT))
@@ -281,6 +283,9 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
     , m_sRM_ADABASText(ResId(STR_PAGETITLE_ADABAS))
     , m_sRM_ADOText(ResId(STR_PAGETITLE_ADO))
     , m_sRM_JDBCText(ResId(STR_PAGETITLE_JDBC))
+    , m_pGeneralPage( NULL )
+    , m_pMySQLIntroPage(NULL)
+    , m_pCollection( NULL )
 {
     DBG_CTOR(ODbTypeWizDialogSetup,NULL);
     // no local resources needed anymore
@@ -506,7 +511,7 @@ ODbTypeWizDialogSetup::~ODbTypeWizDialogSetup()
 }
 
 //-------------------------------------------------------------------------
-IMPL_LINK(ODbTypeWizDialogSetup, OnTypeSelected, OGeneralPage*, _pTabPage)
+IMPL_LINK(ODbTypeWizDialogSetup, OnTypeSelected, OGeneralPage*, /*_pTabPage*/)
 {
     activateDatabasePath();
     return 1L;
@@ -567,7 +572,7 @@ void ODbTypeWizDialogSetup::activateDatabasePath()
             { DST_USERDEFINE10, USERDEFINED_PATH    }
         };
 
-        sal_Int32 i = 0;
+        size_t i = 0;
         for ( ; i < sizeof( aKnownTypesAndPaths ) / sizeof( aKnownTypesAndPaths[0] ); ++i )
         {
             if ( aKnownTypesAndPaths[i].eType == m_eType )
@@ -622,7 +627,6 @@ void ODbTypeWizDialogSetup::updateTypeDependentStates()
 //-------------------------------------------------------------------------
 sal_Bool ODbTypeWizDialogSetup::IsConnectionUrlRequired()
 {
-    DATASOURCE_TYPE eType = getDatasourceType(*m_pOutSet);
     switch ( m_eType )
     {
         case DST_KAB:
@@ -634,7 +638,6 @@ sal_Bool ODbTypeWizDialogSetup::IsConnectionUrlRequired()
         case DST_MOZILLA:
         case DST_THUNDERBIRD:
             return sal_False;
-            break;
         default:
             return sal_True;
     }
@@ -729,7 +732,6 @@ void ODbTypeWizDialogSetup::clearPassword()
 TabPage* ODbTypeWizDialogSetup::createPage(WizardState _nState)
 {
     SfxTabPage* pFirstPage;
-    sal_Bool bResetPasswordRequired = sal_False;
     OGenericAdministrationPage* pPage = NULL;
     switch(_nState)
     {
@@ -846,7 +848,7 @@ IMPL_LINK(ODbTypeWizDialogSetup, ImplModifiedHdl, OGenericAdministrationPage*, _
 
 
 // -----------------------------------------------------------------------------
-IMPL_LINK(ODbTypeWizDialogSetup, ImplClickHdl, OMySQLIntroPageSetup*, _pMySQLIntroPageSetup)
+IMPL_LINK(ODbTypeWizDialogSetup, ImplClickHdl, OMySQLIntroPageSetup*, /*_pMySQLIntroPageSetup*/)
 {
     if (getDatasourceType(*m_pOutSet) == DST_MYSQL_ODBC)
         activatePath( MYSQL_ODBC_PATH, sal_True);
@@ -856,21 +858,21 @@ IMPL_LINK(ODbTypeWizDialogSetup, ImplClickHdl, OMySQLIntroPageSetup*, _pMySQLInt
 }
 
 // -----------------------------------------------------------------------------
-IMPL_LINK(ODbTypeWizDialogSetup, OnChangeCreationMode, OGeneralPage*, _pGeneralPage)
+IMPL_LINK(ODbTypeWizDialogSetup, OnChangeCreationMode, OGeneralPage*, /*_pGeneralPage*/)
 {
     activateDatabasePath();
     return sal_True;
 }
 
 // -----------------------------------------------------------------------------
-IMPL_LINK(ODbTypeWizDialogSetup, OnRecentDocumentSelected, OGeneralPage*, _pGeneralPage)
+IMPL_LINK(ODbTypeWizDialogSetup, OnRecentDocumentSelected, OGeneralPage*, /*_pGeneralPage*/)
 {
     enableButtons( WZB_FINISH, m_pGeneralPage->GetSelectedDocument().sURL.Len() != 0 );
     return 0L;
 }
 
 // -----------------------------------------------------------------------------
-IMPL_LINK(ODbTypeWizDialogSetup, OnSingleDocumentChosen, OGeneralPage*, _pGeneralPage)
+IMPL_LINK(ODbTypeWizDialogSetup, OnSingleDocumentChosen, OGeneralPage*, /*_pGeneralPage*/)
 {
     if ( prepareLeaveCurrentState( eFinish ) )
         onFinish( RET_OK );
@@ -909,22 +911,24 @@ sal_Bool ODbTypeWizDialogSetup::leaveState(WizardState _nState)
 {
     if (_nState == PAGE_DBSETUPWIZARD_MYSQL_INTRO)
         return sal_True;
-    if ( _nState == PAGE_DBSETUPWIZARD_INTRO ){
-        OGeneralPage* pPage = static_cast<OGeneralPage*>(WizardDialog::GetPage(getCurrentState()));
+    if ( _nState == PAGE_DBSETUPWIZARD_INTRO )
+    {
         OSL_ENSURE(m_eType != DST_UNKNOWN && m_eOldType != DST_UNKNOWN,"Type unknown");
         if ( m_eType != m_eOldType )
             resetPages(m_pImpl->getCurrentDataSource());
     }
     SfxTabPage* pPage = static_cast<SfxTabPage*>(WizardDialog::GetPage(_nState));
     if ( pPage )
-        return pPage->DeactivatePage(m_pOutSet);
+        return pPage->DeactivatePage(m_pOutSet) != 0;
     else
         return sal_False;
 }
 
 // -----------------------------------------------------------------------------
-void ODbTypeWizDialogSetup::setTitle(const ::rtl::OUString& _sTitle)
+void ODbTypeWizDialogSetup::setTitle(const ::rtl::OUString& /*_sTitle*/)
 {
+    DBG_ERROR( "ODbTypeWizDialogSetup::setTitle: not implemented!" );
+        // why?
 }
 
 //-------------------------------------------------------------------------
@@ -937,7 +941,10 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
         {
             m_pImpl->saveChanges(*m_pOutSet);
             Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
+#if OSL_DEBUG_LEVEL > 0
             SFX_ITEMSET_GET(*m_pOutSet, pDocUrl, SfxStringItem, DSID_DOCUMENT_URL, sal_True);
+            (void)pDocUrl;
+#endif
             Reference<XStorable> xStore(getDataSourceOrModel(xDatasource),UNO_QUERY);
             Reference<XComponent> xComponent(xStore,UNO_QUERY);
             ::rtl::OUString sPath = m_pImpl->getDocumentUrl(*m_pOutSet);
@@ -1007,7 +1014,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
         pRequest ->addContinuation (pAbort );
         if ( xHandler.is() )
             xHandler->handle( xRequest );
-        e;  // make compiler happy
+        (void)e;    // make compiler happy
     }
     return sal_False;
 }
