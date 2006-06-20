@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ftpdirp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:34:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:23:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -537,6 +537,8 @@ sal_Bool FTPDirectoryParser::parseDOS (
                     return sal_True;
                 }
                 break;
+            case STATE_ERROR:
+                break;
         }
     }
 
@@ -743,39 +745,49 @@ sal_Bool FTPDirectoryParser::parseVMS (
             return sal_False;
 
         // Parse <month "-"> part and set entry date's month:
-        sal_Char aMonth[4];
-        {for (int i = 0; i < 3; ++i)
-            if (*p >= 'A' && *p <= 'Z')
-                aMonth[i] = *p++;
-            else if (*p >= 'a' && *p <= 'z')
-                aMonth[i] = (sal_Char)(*p++ - 'A');
-            else
+        sal_Char const * pMonth = p;
+        sal_Int32 const monthLen = 3;
+        for (int i = 0; i < monthLen; ++i) {
+            if (!(*p >= 'A' && *p <= 'Z' || *p >= 'a' && *p <= 'z')) {
                 return sal_False;
+            }
+            ++p;
         }
-
-        if (aMonth == "JAN")
+        if (rtl_str_compareIgnoreAsciiCase_WithLength(
+                pMonth, monthLen, RTL_CONSTASCII_STRINGPARAM("JAN")) == 0)
             rEntry.m_aDate.SetMonth(1);
-        else if (aMonth == "FEB")
+        else if (rtl_str_compareIgnoreAsciiCase_WithLength(
+                     pMonth, monthLen, RTL_CONSTASCII_STRINGPARAM("FEB")) == 0)
             rEntry.m_aDate.SetMonth(2);
-        else if (aMonth == "MAR")
+        else if (rtl_str_compareIgnoreAsciiCase_WithLength(
+                     pMonth, monthLen, RTL_CONSTASCII_STRINGPARAM("MAR")) == 0)
             rEntry.m_aDate.SetMonth(3);
-        else if (aMonth == "APR")
+        else if (rtl_str_compareIgnoreAsciiCase_WithLength(
+                     pMonth, monthLen, RTL_CONSTASCII_STRINGPARAM("APR")) == 0)
             rEntry.m_aDate.SetMonth(4);
-        else if (aMonth == "MAY")
+        else if (rtl_str_compareIgnoreAsciiCase_WithLength(
+                     pMonth, monthLen, RTL_CONSTASCII_STRINGPARAM("MAY")) == 0)
             rEntry.m_aDate.SetMonth(5);
-        else if (aMonth == "JUN")
+        else if (rtl_str_compareIgnoreAsciiCase_WithLength(
+                     pMonth, monthLen, RTL_CONSTASCII_STRINGPARAM("JUN")) == 0)
             rEntry.m_aDate.SetMonth(6);
-        else if (aMonth == "JUL")
+        else if (rtl_str_compareIgnoreAsciiCase_WithLength(
+                     pMonth, monthLen, RTL_CONSTASCII_STRINGPARAM("JUL")) == 0)
             rEntry.m_aDate.SetMonth(7);
-        else if (aMonth == "AUG")
+        else if (rtl_str_compareIgnoreAsciiCase_WithLength(
+                     pMonth, monthLen, RTL_CONSTASCII_STRINGPARAM("AUG")) == 0)
             rEntry.m_aDate.SetMonth(8);
-        else if (aMonth == "SEP")
+        else if (rtl_str_compareIgnoreAsciiCase_WithLength(
+                     pMonth, monthLen, RTL_CONSTASCII_STRINGPARAM("SEP")) == 0)
             rEntry.m_aDate.SetMonth(9);
-        else if (aMonth == "OCT")
+        else if (rtl_str_compareIgnoreAsciiCase_WithLength(
+                     pMonth, monthLen, RTL_CONSTASCII_STRINGPARAM("OCT")) == 0)
             rEntry.m_aDate.SetMonth(10);
-        else if (aMonth == "NOV")
+        else if (rtl_str_compareIgnoreAsciiCase_WithLength(
+                     pMonth, monthLen, RTL_CONSTASCII_STRINGPARAM("NOV")) == 0)
             rEntry.m_aDate.SetMonth(11);
-        else if (aMonth == "DEC")
+        else if (rtl_str_compareIgnoreAsciiCase_WithLength(
+                     pMonth, monthLen, RTL_CONSTASCII_STRINGPARAM("DEC")) == 0)
             rEntry.m_aDate.SetMonth(12);
         else
             return sal_False;
@@ -943,6 +955,8 @@ sal_Bool FTPDirectoryParser::parseUNIX (
                 else
                     eMode = FOUND_NONE;
                 break;
+            case FOUND_YEAR_TIME:
+                break;
         }
     }
 
@@ -1011,7 +1025,7 @@ sal_Bool FTPDirectoryParser::parseUNIX_isSizeField (
                 ++nDigits;
                 rSize *= 10;
             }
-            else if ((*pStart > ' ') && (*pStart <= '\x7F'))
+            else if ((*pStart > ' ') && (sal::static_int_cast<sal_uInt8>(*pStart) <= '\x7F'))
             {
                 nNonDigits += nDigits + 1;
                 nDigits = 0;
