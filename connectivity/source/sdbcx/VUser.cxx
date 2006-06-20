@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VUser.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:45:04 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:11:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,9 @@
 #endif
 #ifndef _CONNECTIVITY_SDBCX_COLLECTION_HXX_
 #include "connectivity/sdbcx/VCollection.hxx"
+#endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include <connectivity/dbexception.hxx>
 #endif
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
@@ -119,10 +122,11 @@ Sequence< Type > SAL_CALL OUser::getTypes(  ) throw(RuntimeException)
 }
 // -------------------------------------------------------------------------
 // XUser
-void SAL_CALL OUser::changePassword( const ::rtl::OUString& objPassword, const ::rtl::OUString& newPassword ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
+void SAL_CALL OUser::changePassword( const ::rtl::OUString& /*objPassword*/, const ::rtl::OUString& /*newPassword*/ ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OUser_BASE::rBHelper.bDisposed);
+    ::dbtools::throwFeatureNotImplementedException( "XUser::changePassword", *this );
 }
 // -------------------------------------------------------------------------
 // XGroupsSupplier
@@ -151,36 +155,34 @@ Reference< XNameAccess > SAL_CALL OUser::getGroups(  ) throw(RuntimeException)
 // -------------------------------------------------------------------------
 // -------------------------------------------------------------------------
 
-sal_Int32 SAL_CALL OUser::getPrivileges( const ::rtl::OUString& objName, sal_Int32 objType ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+sal_Int32 SAL_CALL OUser::getPrivileges( const ::rtl::OUString& /*objName*/, sal_Int32 /*objType*/ ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OUser_BASE::rBHelper.bDisposed);
-
-
+    ::dbtools::throwFeatureNotImplementedException( "XAuthorizable::changePassword", *this );
     return 0;
 }
 // -------------------------------------------------------------------------
-sal_Int32 SAL_CALL OUser::getGrantablePrivileges( const ::rtl::OUString& objName, sal_Int32 objType ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+sal_Int32 SAL_CALL OUser::getGrantablePrivileges( const ::rtl::OUString& /*objName*/, sal_Int32 /*objType*/ ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OUser_BASE::rBHelper.bDisposed);
-
-
+    ::dbtools::throwFeatureNotImplementedException( "XAuthorizable::getGrantablePrivileges", *this );
     return 0;
 }
 // -------------------------------------------------------------------------
-void SAL_CALL OUser::grantPrivileges( const ::rtl::OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+void SAL_CALL OUser::grantPrivileges( const ::rtl::OUString& /*objName*/, sal_Int32 /*objType*/, sal_Int32 /*objPrivileges*/ ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OUser_BASE::rBHelper.bDisposed);
-
+    ::dbtools::throwFeatureNotImplementedException( "XAuthorizable::grantPrivileges", *this );
 }
 // -------------------------------------------------------------------------
-void SAL_CALL OUser::revokePrivileges( const ::rtl::OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+void SAL_CALL OUser::revokePrivileges( const ::rtl::OUString& /*objName*/, sal_Int32 /*objType*/, sal_Int32 /*objPrivileges*/ ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OUser_BASE::rBHelper.bDisposed);
-
+    ::dbtools::throwFeatureNotImplementedException( "XAuthorizable::revokePrivileges", *this );
 }
 // -----------------------------------------------------------------------------
 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OUser::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
@@ -193,8 +195,10 @@ void SAL_CALL OUser::revokePrivileges( const ::rtl::OUString& objName, sal_Int32
     return m_Name;
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OUser::setName( const ::rtl::OUString& aName ) throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OUser::setName( const ::rtl::OUString& /*aName*/ ) throw(::com::sun::star::uno::RuntimeException)
 {
+    OSL_ENSURE( false, "OUser::setName: not implemented!" );
+        // not allowed to throw an SQLException here ...
 }
 // -----------------------------------------------------------------------------
 // XInterface
