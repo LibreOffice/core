@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stgcache.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 12:11:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:54:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,6 @@
 #include "stgstrms.hxx"
 #include "stgdir.hxx"
 #include "stgio.hxx"
-#pragma hdrstop
 
 /*************************************************************************/
 //-----------------------------------------------------------------------------
@@ -449,11 +448,11 @@ BOOL StgCache::Read( INT32 nPage, void* pBuf, INT32 nPg )
             }
             if( pStrm->Tell() != nPos )
             {
-                ULONG nPhysPos = pStrm->Seek( nPos );
+                if( pStrm->Seek( nPos ) != nPos ) {
     #ifdef CHECK_DIRTY
-                if( nPhysPos != nPos )
                     ErrorBox( NULL, WB_OK, String("SO2: Seek failed") ).Execute();
     #endif
+                }
             }
             pStrm->Read( pBuf, nBytes );
             if ( nPg != nPg2 )
@@ -476,11 +475,11 @@ BOOL StgCache::Write( INT32 nPage, void* pBuf, INT32 nPg )
             nPos = 0L, nBytes = 512;
         if( pStrm->Tell() != nPos )
         {
-            ULONG nPhysPos = pStrm->Seek( nPos );
+            if( pStrm->Seek( nPos ) != nPos ) {
 #ifdef CHECK_DIRTY
-            if( nPhysPos != nPos )
                 ErrorBox( NULL, WB_OK, String("SO2: Seek failed") ).Execute();
 #endif
+            }
         }
         ULONG nRes = pStrm->Write( pBuf, nBytes );
         if( nRes != nBytes )
