@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paramdialog.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:42:30 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:09:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,9 +41,6 @@
 #endif
 #ifndef _DBU_DLG_HRC_
 #include "dbu_dlg.hrc"
-#endif
-#ifndef _DBAUI_COMMON_TYPES_HXX_
-#include "commontypes.hxx"
 #endif
 #ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
@@ -107,9 +104,9 @@ namespace dbaui
         ,m_aOKBtn       (this, ResId(BT_OK))                        \
         ,m_aCancelBtn   (this, ResId(BT_CANCEL))                    \
         ,m_nCurrentlySelected(LISTBOX_ENTRY_NOTFOUND)               \
-        ,m_bNeedErrorOnCurrent(sal_True)                            \
         ,m_xConnection(_rxConnection)                               \
         ,m_aPredicateInput( _rxORB, _rxConnection, getParseContext() )  \
+        ,m_bNeedErrorOnCurrent(sal_True)                            \
 
 
     //------------------------------------------------------------------------------
@@ -127,8 +124,6 @@ DBG_NAME(OParameterDialog)
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.NumberFormatter"))), UNO_QUERY);
         else
             DBG_ERROR("OParameterDialog::OParameterDialog: need a service factory!");
-
-        m_pVisitedParams = (void*)new ByteVector;
 
         Reference< XNumberFormatsSupplier >  xNumberFormats = ::dbtools::getNumberFormats(m_xConnection, sal_True);
         if (!xNumberFormats.is())
@@ -158,7 +153,7 @@ DBG_NAME(OParameterDialog)
                     pValues->Value = makeAny(::rtl::OUString());
                     // default the values to an empty string
 
-                ((ByteVector*)m_pVisitedParams)->push_back(0);
+                m_aVisitedParams.push_back(0);
                     // not visited, not dirty
             }
 
@@ -182,8 +177,6 @@ DBG_NAME(OParameterDialog)
     {
         if (m_aResetVisitFlag.IsActive())
             m_aResetVisitFlag.Stop();
-
-        delete (ByteVector*)m_pVisitedParams;
 
         DBG_DTOR(OParameterDialog,NULL);
     }
@@ -219,16 +212,14 @@ DBG_NAME(OParameterDialog)
     }
 
     //------------------------------------------------------------------------------
-    IMPL_LINK(OParameterDialog, OnValueLoseFocus, Control*, pSource)
+    IMPL_LINK(OParameterDialog, OnValueLoseFocus, Control*, /*pSource*/)
     {
         if (m_nCurrentlySelected != LISTBOX_ENTRY_NOTFOUND)
         {
-            if (((*(ByteVector*)m_pVisitedParams)[m_nCurrentlySelected] & EF_DIRTY) == 0)
+            if ( ( m_aVisitedParams[ m_nCurrentlySelected ] & EF_DIRTY ) == 0 )
                 // nothing to do, the value isn't dirty
                 return 0L;
         }
-
-        DBG_ASSERT(pSource == &m_aParam, "OParameterDialog::OnValueLoseFocus : invalid source !");
 
         // transform the current string according to the param field type
         ::rtl::OUString sTransformedText(m_aParam.GetText());
@@ -245,7 +236,7 @@ DBG_NAME(OParameterDialog)
                 {
                     // with this the value isn't dirty anymore
                     if (m_nCurrentlySelected != LISTBOX_ENTRY_NOTFOUND)
-                        (*(ByteVector*)m_pVisitedParams)[m_nCurrentlySelected] &= ~EF_DIRTY;
+                        m_aVisitedParams[m_nCurrentlySelected] &= ~EF_DIRTY;
                 }
                 else
                 {
@@ -307,7 +298,6 @@ DBG_NAME(OParameterDialog)
                 // write the parameters
                 try
                 {
-                    String sValue;
                     ::rtl::OUString sError;
                     PropertyValue* pValues = m_aFinalValues.getArray();
                     for (sal_Int32 i = 0, nCount = m_xParams->getCount(); i<nCount; ++i, ++pValues)
@@ -333,14 +323,14 @@ DBG_NAME(OParameterDialog)
         {
             sal_uInt16 nCurrent = m_aAllParams.GetSelectEntryPos();
             sal_uInt16 nCount = m_aAllParams.GetEntryCount();
-            DBG_ASSERT(nCount == ((ByteVector*)m_pVisitedParams)->size(), "OParameterDialog::OnButtonClicked : inconsistent lists !");
+            DBG_ASSERT(nCount == m_aVisitedParams.size(), "OParameterDialog::OnButtonClicked : inconsistent lists !");
 
             // search the next entry in list we haven't visited yet
             sal_uInt16 nNext = (nCurrent + 1) % nCount;
-            while ((nNext != nCurrent) && ( (*((ByteVector*)m_pVisitedParams))[nNext] & EF_VISITED ))
+            while ((nNext != nCurrent) && ( m_aVisitedParams[nNext] & EF_VISITED ))
                 nNext = (nNext + 1) % nCount;
 
-            if ( (*((ByteVector*)m_pVisitedParams))[nNext] & EF_VISITED )
+            if ( m_aVisitedParams[nNext] & EF_VISITED )
                 // there is no such "not visited yet" entry -> simpy take the next one
                 nNext = (nCurrent + 1) % nCount;
 
@@ -356,7 +346,7 @@ DBG_NAME(OParameterDialog)
     }
 
     //------------------------------------------------------------------------------
-    IMPL_LINK(OParameterDialog, OnEntrySelected, ListBox*, pList)
+    IMPL_LINK(OParameterDialog, OnEntrySelected, ListBox*, /*pList*/)
     {
         if (m_aResetVisitFlag.IsActive())
         {
@@ -384,8 +374,8 @@ DBG_NAME(OParameterDialog)
         m_nCurrentlySelected = nSelected;
 
         // with this the value isn't dirty
-        DBG_ASSERT(m_nCurrentlySelected < ((ByteVector*)m_pVisitedParams)->size(), "OParameterDialog::OnEntrySelected : invalid current entry !");
-        (*(ByteVector*)m_pVisitedParams)[m_nCurrentlySelected] &= ~EF_DIRTY;
+        DBG_ASSERT(m_nCurrentlySelected < m_aVisitedParams.size(), "OParameterDialog::OnEntrySelected : invalid current entry !");
+        m_aVisitedParams[m_nCurrentlySelected] &= ~EF_DIRTY;
 
         m_aResetVisitFlag.SetTimeout(1000);
         m_aResetVisitFlag.Start();
@@ -394,25 +384,25 @@ DBG_NAME(OParameterDialog)
     }
 
     //------------------------------------------------------------------------------
-    IMPL_LINK(OParameterDialog, OnVisitedTimeout, Timer*, pTimer)
+    IMPL_LINK(OParameterDialog, OnVisitedTimeout, Timer*, /*pTimer*/)
     {
         DBG_ASSERT(m_nCurrentlySelected != LISTBOX_ENTRY_NOTFOUND, "OParameterDialog::OnVisitedTimeout : invalid call !");
 
         // mark the currently selected entry as visited
-        DBG_ASSERT(m_nCurrentlySelected < ((ByteVector*)m_pVisitedParams)->size(), "OParameterDialog::OnVisitedTimeout : invalid entry !");
-        (*(ByteVector*)m_pVisitedParams)[m_nCurrentlySelected] |= EF_VISITED;
+        DBG_ASSERT(m_nCurrentlySelected < m_aVisitedParams.size(), "OParameterDialog::OnVisitedTimeout : invalid entry !");
+        m_aVisitedParams[m_nCurrentlySelected] |= EF_VISITED;
 
         // was it the last "not visited yet" entry ?
         ConstByteVectorIterator aIter;
-        for (   aIter = ((ByteVector*)m_pVisitedParams)->begin();
-                aIter < ((ByteVector*)m_pVisitedParams)->end();
+        for (   aIter = m_aVisitedParams.begin();
+                aIter < m_aVisitedParams.end();
                 ++aIter
             )
         {
             if (((*aIter) & EF_VISITED) == 0)
                 break;
         }
-        if (aIter == ((ByteVector*)m_pVisitedParams)->end())
+        if (aIter == m_aVisitedParams.end())
         {   // yes, there isn't another one -> change the "default button"
             m_aTravelNext.SetStyle(m_aTravelNext.GetStyle() & ~WB_DEFBUTTON);
             m_aOKBtn.SetStyle(m_aOKBtn.GetStyle() | WB_DEFBUTTON);
@@ -443,11 +433,11 @@ DBG_NAME(OParameterDialog)
     }
 
     //------------------------------------------------------------------------------
-    IMPL_LINK(OParameterDialog, OnValueModified, Control*, pBox)
+    IMPL_LINK(OParameterDialog, OnValueModified, Control*, /*pBox*/)
     {
         // mark the currently selected entry as dirty
-        DBG_ASSERT(m_nCurrentlySelected < ((ByteVector*)m_pVisitedParams)->size(), "OParameterDialog::OnValueModified : invalid entry !");
-        (*(ByteVector*)m_pVisitedParams)[m_nCurrentlySelected] |= EF_DIRTY;
+        DBG_ASSERT(m_nCurrentlySelected < m_aVisitedParams.size(), "OParameterDialog::OnValueModified : invalid entry !");
+        m_aVisitedParams[m_nCurrentlySelected] |= EF_DIRTY;
 
         m_bNeedErrorOnCurrent = sal_True;
 
