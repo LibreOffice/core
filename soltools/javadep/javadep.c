@@ -4,9 +4,9 @@
  *
  *  $RCSfile: javadep.c,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:27:24 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:08:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,7 +145,7 @@ void    err_quit(const char *, ...);
 void    silent_quit(void);
 
 /* poor man's getopt() */
-int     simple_getopt(int argc, char *pargv[], const char *poptstring);
+int     simple_getopt(char *pargv[], const char *poptstring);
 char    *optarg = NULL;
 int     optind  = 1;
 int     optopt  = 0;
@@ -471,7 +471,8 @@ process_class_file(const char *pfilename, const struct growable *pfilt)
 
     file.pname = (char*)pfilename;
 
-    if ( !(file.pfs = fopen(file.pname,"rb")) )
+    file.pfs = fopen(file.pname,"rb");
+    if ( !file.pfs )
         silent_quit();
 
     nmagic = read_uint32(&file);
@@ -777,7 +778,7 @@ usage()
  * it's to sad that getopt() is not available everywhere
  * note: this is not a full POSIX conforming getopt()
  */
-int simple_getopt(int nargc, char *pargv[], const char *poptstring)
+int simple_getopt(char *pargv[], const char *poptstring)
 {
     char *parg = pargv[optind];
 
@@ -829,8 +830,8 @@ main(int argc, char *argv[])
         char buffer[RES_FILE_BUF];
 
         if ( *parg == '@' ) {
-            FILE *pfile;
-            if ( !(pfile = fopen(++parg, "r")) )
+            FILE *pfile = fopen(++parg, "r");
+            if ( !pfile )
                 err_quit("%s: %s", parg, strerror(errno));
             while ( !feof(pfile) ) {
                 char *p, *token;
@@ -859,7 +860,7 @@ main(int argc, char *argv[])
     opterr = 0;
     pincs = allocate_growable();
 
-    while( (c = simple_getopt(nall_argc, pall_argv, ":i:I:s:S:o:OhHvV")) != -1 ) {
+    while( (c = simple_getopt(pall_argv, ":i:I:s:S:o:OhHvV")) != -1 ) {
         switch(c) {
             case 'i':
             case 'I':
@@ -911,7 +912,8 @@ main(int argc, char *argv[])
     pincs = NULL;
 
     if ( pout_file ) {
-        if ( !(pfsout = fopen(pout_file, "w")) )
+        pfsout = fopen(pout_file, "w");
+        if ( !pfsout )
             err_quit("%s: %s", pout_file, strerror(errno));
     } else {
         pfsout = stdout;
