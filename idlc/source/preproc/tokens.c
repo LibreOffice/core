@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tokens.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:16:16 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:51:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,7 +84,6 @@ unsigned char toLatin1[256] =
 int
     memcpy_EBCDIC( char * pwbuf, uchar *p, int len )
 {
-    int newlen = 0;
     int currpos = 0;
     int processedchars = 0;
 
@@ -408,7 +407,7 @@ void
 
             tp->t[tp->len] = 0;
             fprintf(stderr, "%s", tp->t);
-            tp->t[tp->len] = c;
+            tp->t[tp->len] = (uchar) c;
         }
         fprintf(stderr, tp == trp->tp ? "{%x*} " : "{%x} ", tp->type);
     }
@@ -523,7 +522,7 @@ char *
 {
     if (n >= 10)
         p = outnum(p, n / 10);
-    *p++ = n % 10 + '0';
+    *p++ = (char) (n % 10 + '0');
     return p;
 }
 
