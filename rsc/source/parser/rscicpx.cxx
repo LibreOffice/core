@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rscicpx.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 16:32:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:46:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,8 +34,6 @@
  ************************************************************************/
 
 /****************** I N C L U D E S **************************************/
-#pragma hdrstop
-
 // C and C++ Includes.
 #include <stdlib.h>
 #include <stdio.h>
@@ -217,7 +215,7 @@ RscTop * RscTypCont::InitClassImage( RscTop * pSuper, RscTop * pClassBitmap,
 /*************************************************************************
 |*    RscTypCont::InitClassImageList()
 *************************************************************************/
-RscTop * RscTypCont::InitClassImageList( RscTop * pSuper, RscTop * pClassBitmap,
+RscTop * RscTypCont::InitClassImageList( RscTop * pSuper, RscTop * /*pClassBitmap*/,
                                          RscTop * pClassColor, RscCont * pStrLst )
 {
     Atom        nId;
@@ -1894,68 +1892,68 @@ RscTop * RscTypCont::InitClassToolBoxItem( RscTop * pSuper,
     {
         RscFlag *   pFlag;
         RscClient * pClient;
-        Atom        nVarId, nAutoCheckId, nRadioCheckId, nCheckableId, nLeftId, nAutoSizeId, nDropDownId;
+        Atom        l_nVarId, l_nAutoCheckId, l_nRadioCheckId, l_nCheckableId, l_nLeftId, l_nAutoSizeId, l_nDropDownId;
 
         aBaseLst.Insert( pFlag = new RscFlag( pHS->getID( "FlagToolBoxState" ),
                                               RSC_NOTYPE ),
                          LIST_APPEND );
 
         // Konstanten in Tabelle stellen
-        nCheckableId = pHS->getID( "TIB_CHECKABLE" );
-        SETCONST( pFlag, nCheckableId, TIB_CHECKABLE );
-        nAutoCheckId = pHS->getID( "TIB_AUTOCHECK" );
-        SETCONST( pFlag, nAutoCheckId, TIB_AUTOCHECK );
-        nRadioCheckId = pHS->getID( "TIB_RADIOCHECK" );
-        SETCONST( pFlag, nRadioCheckId, TIB_RADIOCHECK );
-        nLeftId = pHS->getID( "TIB_LEFT" );
-        SETCONST( pFlag, nLeftId, TIB_LEFT );
-        nAutoSizeId = pHS->getID( "TIB_AUTOSIZE" );
-        SETCONST( pFlag, nAutoSizeId, TIB_AUTOSIZE );
-        nDropDownId = pHS->getID( "TIB_DROPDOWN" );
-        SETCONST( pFlag, nDropDownId, TIB_DROPDOWN );
+        l_nCheckableId = pHS->getID( "TIB_CHECKABLE" );
+        SETCONST( pFlag, l_nCheckableId, TIB_CHECKABLE );
+        l_nAutoCheckId = pHS->getID( "TIB_AUTOCHECK" );
+        SETCONST( pFlag, l_nAutoCheckId, TIB_AUTOCHECK );
+        l_nRadioCheckId = pHS->getID( "TIB_RADIOCHECK" );
+        SETCONST( pFlag, l_nRadioCheckId, TIB_RADIOCHECK );
+        l_nLeftId = pHS->getID( "TIB_LEFT" );
+        SETCONST( pFlag, l_nLeftId, TIB_LEFT );
+        l_nAutoSizeId = pHS->getID( "TIB_AUTOSIZE" );
+        SETCONST( pFlag, l_nAutoSizeId, TIB_AUTOSIZE );
+        l_nDropDownId = pHS->getID( "TIB_DROPDOWN" );
+        SETCONST( pFlag, l_nDropDownId, TIB_DROPDOWN );
 
         // Variable einfuegen
-        nVarId = aNmTb.Put( "_ToolBoxItemFlags", VARNAME );
-        pClassToolBoxItem->SetVariable( nVarId, pFlag, NULL,
+        l_nVarId = aNmTb.Put( "_ToolBoxItemFlags", VARNAME );
+        pClassToolBoxItem->SetVariable( l_nVarId, pFlag, NULL,
                                      VAR_HIDDEN | VAR_NOENUM,
                                      RSC_TOOLBOXITEM_STATUS );
 
         // Clientvariablen einfuegen
         aBaseLst.Insert(
             pClient = new RscClient( pHS->getID( "BOOL" ), RSC_NOTYPE,
-                                     pFlag, nCheckableId ), LIST_APPEND );
+                                     pFlag, l_nCheckableId ), LIST_APPEND );
         nId = aNmTb.Put( "Checkable", VARNAME );
-        pClassToolBoxItem->SetVariable( nId, pClient, NULL, VAR_NODATAINST, 0, nVarId );
+        pClassToolBoxItem->SetVariable( nId, pClient, NULL, VAR_NODATAINST, 0, l_nVarId );
 
         aBaseLst.Insert(
             pClient = new RscClient( pHS->getID( "BOOL" ), RSC_NOTYPE,
-                                     pFlag, nAutoCheckId ), LIST_APPEND );
+                                     pFlag, l_nAutoCheckId ), LIST_APPEND );
         nId = aNmTb.Put( "AutoCheck", VARNAME );
-        pClassToolBoxItem->SetVariable( nId, pClient, NULL, VAR_NODATAINST, 0, nVarId );
+        pClassToolBoxItem->SetVariable( nId, pClient, NULL, VAR_NODATAINST, 0, l_nVarId );
 
         aBaseLst.Insert(
             pClient = new RscClient( pHS->getID( "BOOL" ), RSC_NOTYPE,
-                                     pFlag, nRadioCheckId ), LIST_APPEND );
+                                     pFlag, l_nRadioCheckId ), LIST_APPEND );
         nId = aNmTb.Put( "RadioCheck", VARNAME );
-        pClassToolBoxItem->SetVariable( nId, pClient, NULL, VAR_NODATAINST, 0, nVarId );
+        pClassToolBoxItem->SetVariable( nId, pClient, NULL, VAR_NODATAINST, 0, l_nVarId );
 
         aBaseLst.Insert(
             pClient = new RscClient( pHS->getID( "BOOL" ), RSC_NOTYPE,
-                                     pFlag, nLeftId ), LIST_APPEND );
+                                     pFlag, l_nLeftId ), LIST_APPEND );
         nId = aNmTb.Put( "Left", VARNAME );
-        pClassToolBoxItem->SetVariable( nId, pClient, NULL, VAR_NODATAINST, 0, nVarId );
+        pClassToolBoxItem->SetVariable( nId, pClient, NULL, VAR_NODATAINST, 0, l_nVarId );
 
         aBaseLst.Insert(
             pClient = new RscClient( pHS->getID( "BOOL" ), RSC_NOTYPE,
-                                     pFlag, nAutoSizeId ), LIST_APPEND );
+                                     pFlag, l_nAutoSizeId ), LIST_APPEND );
         nId = aNmTb.Put( "AutoSize", VARNAME );
-        pClassToolBoxItem->SetVariable( nId, pClient, NULL, VAR_NODATAINST, 0, nVarId );
+        pClassToolBoxItem->SetVariable( nId, pClient, NULL, VAR_NODATAINST, 0, l_nVarId );
 
         aBaseLst.Insert(
             pClient = new RscClient( pHS->getID( "BOOL" ), RSC_NOTYPE,
-                                     pFlag, nDropDownId ), LIST_APPEND );
+                                     pFlag, l_nDropDownId ), LIST_APPEND );
         nId = aNmTb.Put( "DropDown", VARNAME );
-        pClassToolBoxItem->SetVariable( nId, pClient, NULL, VAR_NODATAINST, 0, nVarId );
+        pClassToolBoxItem->SetVariable( nId, pClient, NULL, VAR_NODATAINST, 0, l_nVarId );
     }
     nId = aNmTb.Put( "HelpID", VARNAME );
     pClassToolBoxItem->SetVariable( nId, &aIdLong, NULL, 0,
@@ -2169,7 +2167,7 @@ RscTop * RscTypCont::InitClassFloatingWindow( RscTop * pSuper,
 |*    RscTypCont::InitClassTabControlItem()
 *************************************************************************/
 RscTop * RscTypCont::InitClassTabControlItem( RscTop * pSuper,
-                                              RscTop * pClassTabPage )
+                                              RscTop * /*pClassTabPage*/ )
 {
     Atom        nId;
     RscTop *    pClassTabControlItem;
