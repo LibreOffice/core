@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_path_helper.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:55:23 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:17:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,34 +164,6 @@
      const rtl_uString* pustrBasePath,
     const rtl_uString* pustrRelPath,
     rtl_uString**      ppustrAbsolutePath);
-
- /*****************************************
-    osl_systemPathGetParent
-    Replaces the last occurrance of a path
-    separator with '\0' and returns the
-    position where the '/' was replaced
-
-    @param  pustrPath [inout] a system
-            path, the last separator of
-            this path will be replaced by
-            a '\0'
-            if the path is the root path
-            '/' or the path is considered
-            as to have no parent, e.g.
-            '/NoParent' or 'NoParent' or
-            the path is empty no
-            replacement will be made
-            pustrPath must not be NULL
-
-    @returns the position of the last path
-             separator that was replaced
-             or 0 if no replacement took
-             place
-
-  ****************************************/
-
- sal_Int32 SAL_CALL osl_systemPathGetParent(
-    /*inout*/ rtl_uString* pustrPath);
 
  /*****************************************
      osl_systemPathGetFileOrLastDirectoryPart
