@@ -4,9 +4,9 @@
  *
  *  $RCSfile: odbcconfig.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:07:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:09:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,7 @@ protected:
     OOdbcLibWrapper();
     ~OOdbcLibWrapper();
 
-    void*   loadSymbol(const sal_Char* _pFunctionName);
+    oslGenericFunction  loadSymbol(const sal_Char* _pFunctionName);
 
     /// load the lib
     sal_Bool    load(const sal_Char* _pLibPath);
@@ -96,10 +96,10 @@ class OOdbcEnumeration : public OOdbcLibWrapper
 {
 #ifdef HAVE_ODBC_SUPPORT
     // entry points for ODBC administration
-    void*       m_pAllocHandle;
-    void*       m_pFreeHandle;
-    void*       m_pSetEnvAttr;
-    void*       m_pDataSources;
+    oslGenericFunction  m_pAllocHandle;
+    oslGenericFunction  m_pFreeHandle;
+    oslGenericFunction  m_pSetEnvAttr;
+    oslGenericFunction  m_pDataSources;
 
 #endif
     OdbcTypesImpl*  m_pImpl;
@@ -126,8 +126,8 @@ class OOdbcManagement : public OOdbcLibWrapper
 {
 #ifdef HAVE_ODBC_SUPPORT
     // entry points for ODBC administration
-    void*       m_pSQLManageDataSource;
-    oslModule   m_pOdbcLib;
+    oslGenericFunction  m_pSQLManageDataSource;
+    oslModule           m_pOdbcLib;
 
     OdbcTypesImpl*  m_pImpl;
         // needed because we can't have a member of type SQLHANDLE: this would require us to include the respective
