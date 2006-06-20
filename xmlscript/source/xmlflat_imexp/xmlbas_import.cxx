@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlbas_import.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:15:30 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:12:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,8 +167,8 @@ namespace xmlscript
     // -----------------------------------------------------------------------------
 
     Reference< xml::input::XElement > BasicElementBase::startChildElement(
-            sal_Int32 nUid, const ::rtl::OUString& rLocalName,
-            const Reference< xml::input::XAttributes >& xAttributes )
+        sal_Int32 /*nUid*/, const ::rtl::OUString& /*rLocalName*/,
+        const Reference< xml::input::XAttributes >& /*xAttributes*/ )
         throw (xml::sax::SAXException, RuntimeException)
     {
         throw xml::sax::SAXException(
@@ -178,7 +178,7 @@ namespace xmlscript
 
     // -----------------------------------------------------------------------------
 
-    void BasicElementBase::characters( const ::rtl::OUString& rChars )
+void BasicElementBase::characters( const ::rtl::OUString& /*rChars*/ )
         throw (xml::sax::SAXException, RuntimeException)
     {
         // not used, all characters ignored
@@ -186,14 +186,14 @@ namespace xmlscript
 
     // -----------------------------------------------------------------------------
 
-    void BasicElementBase::ignorableWhitespace( const ::rtl::OUString& rWhitespaces )
+void BasicElementBase::ignorableWhitespace( const ::rtl::OUString& /*rWhitespaces*/ )
         throw (xml::sax::SAXException, RuntimeException)
     {
     }
 
     // -----------------------------------------------------------------------------
 
-    void BasicElementBase::processingInstruction( const ::rtl::OUString& rTarget, const ::rtl::OUString& rData )
+void BasicElementBase::processingInstruction( const ::rtl::OUString& /*rTarget*/, const ::rtl::OUString& /*rData*/ )
         throw (xml::sax::SAXException, RuntimeException)
     {
     }
@@ -570,14 +570,14 @@ namespace xmlscript
 
     // -----------------------------------------------------------------------------
 
-    void BasicImport::processingInstruction( const ::rtl::OUString& rTarget, const ::rtl::OUString& rData )
+void BasicImport::processingInstruction( const ::rtl::OUString& /*rTarget*/, const ::rtl::OUString& /*rData*/ )
         throw (xml::sax::SAXException, RuntimeException)
     {
     }
 
     // -----------------------------------------------------------------------------
 
-    void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& xLocator )
+void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*xLocator*/ )
         throw (xml::sax::SAXException, RuntimeException)
     {
     }

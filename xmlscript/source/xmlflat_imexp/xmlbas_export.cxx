@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlbas_export.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:14:53 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:12:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -224,7 +224,7 @@ namespace xmlscript
     // XFilter
     // -----------------------------------------------------------------------------
 
-    sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& aDescriptor )
+sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /*aDescriptor*/ )
         throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
