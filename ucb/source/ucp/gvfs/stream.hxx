@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stream.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:44:53 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:28:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,5 +186,5 @@ public:
                com::sun::star::uno::RuntimeException );
 };
 
-}; // namespace gvfs
+} // namespace gvfs
 #endif // _GVFSSTREAM_HXX_
