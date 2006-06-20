@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XTDataObject.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:26:38 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 06:06:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,9 +58,15 @@
 #include "FEtcList.hxx"
 #endif
 
+#if defined _MSC_VER
+#pragma warning(push,1)
+#endif
 #include <windows.h>
 #include <ole2.h>
 #include <objidl.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 
 /*--------------------------------------------------------------------------
     - the function principle of the windows clipboard:
@@ -89,6 +95,7 @@ class CXTDataObject : public IDataObject
 public:
     CXTDataObject( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aServiceManager,
                    const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& aXTransferable );
+    virtual ~CXTDataObject() {}
 
     //-----------------------------------------------------------------
     // ole interface implementation
@@ -159,6 +166,7 @@ class CEnumFormatEtc : public IEnumFORMATETC
 {
 public:
     CEnumFormatEtc( LPUNKNOWN lpUnkOuter, const CFormatEtcContainer& aFormatEtcContainer );
+    virtual ~CEnumFormatEtc() {}
 
     // IUnknown
     STDMETHODIMP           QueryInterface( REFIID iid, LPVOID* ppvObject );
