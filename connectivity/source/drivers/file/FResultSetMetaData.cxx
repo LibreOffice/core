@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FResultSetMetaData.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:56:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:26:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,9 +62,9 @@ using namespace ::com::sun::star::lang;
 
 // -------------------------------------------------------------------------
 OResultSetMetaData::OResultSetMetaData(const ::vos::ORef<connectivity::OSQLColumns>& _rxColumns,const ::rtl::OUString& _aTableName,OFileTable*  _pTable)
-    : m_xColumns(_rxColumns)
-    , m_aTableName(_aTableName)
-    , m_pTable(_pTable)
+    :m_aTableName(_aTableName)
+    ,m_xColumns(_rxColumns)
+    ,m_pTable(_pTable)
 {
 }
 
@@ -99,13 +99,13 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnCount(  ) throw(SQLException, Ru
 }
 // -------------------------------------------------------------------------
 
-sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive( sal_Int32 column ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive( sal_Int32 /*column*/ ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
 // -------------------------------------------------------------------------
 
-::rtl::OUString SAL_CALL OResultSetMetaData::getSchemaName( sal_Int32 column ) throw(SQLException, RuntimeException)
+::rtl::OUString SAL_CALL OResultSetMetaData::getSchemaName( sal_Int32 /*column*/ ) throw(SQLException, RuntimeException)
 {
     return ::rtl::OUString();
 }
@@ -119,12 +119,12 @@ sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive( sal_Int32 column ) throw(
     return aName.hasValue() ? getString(aName) : getString((*m_xColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)));
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OResultSetMetaData::getTableName( sal_Int32 column ) throw(SQLException, RuntimeException)
+::rtl::OUString SAL_CALL OResultSetMetaData::getTableName( sal_Int32 /*column*/ ) throw(SQLException, RuntimeException)
 {
     return m_aTableName;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OResultSetMetaData::getCatalogName( sal_Int32 column ) throw(SQLException, RuntimeException)
+::rtl::OUString SAL_CALL OResultSetMetaData::getCatalogName( sal_Int32 /*column*/ ) throw(SQLException, RuntimeException)
 {
     return ::rtl::OUString();
 }
@@ -140,7 +140,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive( sal_Int32 column ) throw(
     return getColumnName(column);
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OResultSetMetaData::getColumnServiceName( sal_Int32 column ) throw(SQLException, RuntimeException)
+::rtl::OUString SAL_CALL OResultSetMetaData::getColumnServiceName( sal_Int32 /*column*/ ) throw(SQLException, RuntimeException)
 {
     return ::rtl::OUString();
 }
@@ -153,12 +153,12 @@ sal_Bool SAL_CALL OResultSetMetaData::isCurrency( sal_Int32 column ) throw(SQLEx
 }
 // -------------------------------------------------------------------------
 
-sal_Bool SAL_CALL OResultSetMetaData::isAutoIncrement( sal_Int32 column ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OResultSetMetaData::isAutoIncrement( sal_Int32 /*setCatalogcolumn*/ ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL OResultSetMetaData::isSigned( sal_Int32 column ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OResultSetMetaData::isSigned( sal_Int32 /*column*/ ) throw(SQLException, RuntimeException)
 {
     return sal_True;
 }
@@ -183,7 +183,7 @@ sal_Int32 SAL_CALL OResultSetMetaData::isNullable( sal_Int32 column ) throw(SQLE
 }
 // -------------------------------------------------------------------------
 
-sal_Bool SAL_CALL OResultSetMetaData::isSearchable( sal_Int32 column ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OResultSetMetaData::isSearchable( sal_Int32 /*column*/ ) throw(SQLException, RuntimeException)
 {
     return sal_True;
 }
