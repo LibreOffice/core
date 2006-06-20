@@ -4,9 +4,9 @@
  *
  *  $RCSfile: indexdialog.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:55:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:17:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,6 +115,9 @@ namespace dbaui
 
     protected:
         virtual sal_Bool EditedEntry( SvLBoxEntry* pEntry, const XubString& rNewText );
+
+    private:
+        using SvTreeListBox::Select;
     };
 
     //==================================================================
