@@ -4,9 +4,9 @@
  *
  *  $RCSfile: spritesurface.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 12:44:21 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:14:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ namespace canvas
         methods provided here are used from the individual sprites to
         notify the canvas about necessary screen updates.
      */
-    class SpriteSurface : public virtual ::com::sun::star::uno::XInterface
+    class SpriteSurface : public ::com::sun::star::uno::XInterface
     {
     public:
         typedef ::rtl::Reference< SpriteSurface > Reference;

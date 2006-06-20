@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sprite.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 12:43:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:14:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@ namespace canvas
         functionality (which, of course, is impossible here in a
         generic way)
     */
-    class Sprite : public virtual ::com::sun::star::lang::XComponent
+    class Sprite : public ::com::sun::star::lang::XComponent
     {
     public:
         typedef ::rtl::Reference< Sprite > Reference;
