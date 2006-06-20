@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transferable.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:33:30 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 06:09:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,8 +74,8 @@
 #include <cppuhelper/implbase2.hxx>
 #endif
 
-#ifndef _RTL_USTRING_
-#include <rtl/ustring>
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
 #endif
 
 #ifndef _SAL_TYPES_H_
@@ -87,8 +87,14 @@
 #endif
 
 #include <stdio.h>
+#if defined _MSC_VER
+#pragma warning(push,1)
+#endif
 #include <windows.h>
 #include <objbase.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 
 #include <memory>
 
