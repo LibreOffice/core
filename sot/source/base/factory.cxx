@@ -4,9 +4,9 @@
  *
  *  $RCSfile: factory.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:38:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:52:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,10 +161,10 @@ SotFactory::SotFactory( const SvGlobalName & rName,
                       const String & rClassName,
                       CreateInstanceType pCreateFuncP )
     : SvGlobalName  ( rName )
-    , pCreateFunc   ( pCreateFuncP )
-    , aClassName    ( rClassName )
     , nSuperCount   ( 0 )
     , pSuperClasses ( NULL )
+    , pCreateFunc   ( pCreateFuncP )
+    , aClassName    ( rClassName )
 {
 #ifdef DBG_UTIL
     SvGlobalName aEmptyName;
