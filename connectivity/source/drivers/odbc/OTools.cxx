@@ -1,12 +1,12 @@
-/*************************************************************************
+/************************************************************************
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
  *  $RCSfile: OTools.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-03 16:04:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:56:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,10 +33,6 @@
  *
  ************************************************************************/
 
-#include <cstring>
-#include <string>
-#include <algorithm>
-
 #ifndef _CONNECTIVITY_OTOOLS_HXX_
 #include "odbc/OTools.hxx"
 #endif
@@ -53,6 +49,13 @@
 #ifndef _CONNECTIVITY_ODBC_OCONNECTION_HXX_
 #include "odbc/OConnection.hxx"
 #endif
+#ifndef CONNECTIVITY_DIAGNOSE_EX_H
+#include "diagnose_ex.h"
+#endif
+
+#include <cstring>
+#include <string>
+#include <algorithm>
 
 using namespace connectivity::odbc;
 using namespace com::sun::star::uno;
@@ -101,7 +104,6 @@ void OTools::bindParameter( OConnection* _pConnection,
     SQLINTEGER* pLen    = (SQLINTEGER*)pLenBuffer;
     SQLUINTEGER nColumnSize=0;
     SQLSMALLINT nDecimalDigits=0;
-    SQLSMALLINT nNullable=0;
 
     OTools::getBindTypes(_bUseWChar,_bUseOldTimeDate,_nODBCtype,fCType,fSqlType);
 
@@ -268,7 +270,6 @@ void OTools::bindValue( OConnection* _pConnection,
                         sal_Int32 columnIndex,
                         SQLSMALLINT _nType,
                         SQLSMALLINT _nMaxLen,
-                        SQLSMALLINT _nScale,
                         const void* _pValue,
                         void* _pData,
                         SQLINTEGER *pLen,
@@ -291,7 +292,7 @@ void OTools::bindValue( OConnection* _pConnection,
     {
         *pLen = SQL_NULL_DATA;
         nRetcode = (*(T3SQLBindCol)_pConnection->getOdbcFunction(ODBC3SQLBindCol))(_aStatementHandle,
-                                columnIndex,
+                                (SQLUSMALLINT)columnIndex,
                                 fCType,
                                 _pData,
                                 nMaxLen,
@@ -320,7 +321,7 @@ void OTools::bindValue( OConnection* _pConnection,
                     ::rtl::OString aString(::rtl::OUStringToOString(*(::rtl::OUString*)_pValue,_nTextEncoding));
                     *pLen = SQL_NTS;
                     *((::rtl::OString*)_pData) = aString;
-                    _nMaxLen = aString.getLength();
+                    _nMaxLen = (SQLSMALLINT)aString.getLength();
 
                     // Zeiger auf Char*
                     _pData = (void*)aString.getStr();
@@ -342,7 +343,7 @@ void OTools::bindValue( OConnection* _pConnection,
 //              else
                 {
                     ::rtl::OString aString = ::rtl::OString::valueOf(*(double*)_pValue);
-                    _nMaxLen = aString.getLength();
+                    _nMaxLen = (SQLSMALLINT)aString.getLength();
                     *pLen = _nMaxLen;
                     *((::rtl::OString*)_pData) = aString;
                     // Zeiger auf Char*
@@ -411,7 +412,7 @@ void OTools::bindValue( OConnection* _pConnection,
         }
 
         nRetcode = (*(T3SQLBindCol)_pConnection->getOdbcFunction(ODBC3SQLBindCol))(_aStatementHandle,
-                                columnIndex,
+                                (SQLUSMALLINT)columnIndex,
                                 fCType,
                                 _pData,
                                 nMaxLen,
@@ -446,7 +447,6 @@ void OTools::ThrowException(OConnection* _pConnection,
 
         case SQL_INVALID_HANDLE:    OSL_ENSURE(0,"SdbODBC3_SetStatus: SQL_INVALID_HANDLE");
                                     throw SQLException();
-                                    break;
     }
 
 
@@ -469,6 +469,7 @@ void OTools::ThrowException(OConnection* _pConnection,
                          szSqlState,
                          &pfNativeError,
                          szErrorMessage,sizeof szErrorMessage - 1,&pcbErrorMsg);
+    OSL_UNUSED( n );
     OSL_ENSURE(n != SQL_INVALID_HANDLE,"SdbODBC3_SetStatus: SQLError returned SQL_INVALID_HANDLE");
     OSL_ENSURE(n == SQL_SUCCESS || n == SQL_SUCCESS_WITH_INFO || n == SQL_NO_DATA_FOUND || n == SQL_ERROR,"SdbODBC3_SetStatus: SQLError failed");
 
