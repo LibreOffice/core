@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.123 $
+ *  $Revision: 1.124 $
  *
- *  last change: $Author: vg $ $Date: 2006-05-22 10:51:39 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 11:39:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include "unointerfacetouniqueidentifiermapper.hxx"
 #endif
 
-#pragma hdrstop
+
 
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
@@ -286,7 +286,7 @@ SvXMLExportEventListener::~SvXMLExportEventListener()
 }
 
 // XEventListener
-void SAL_CALL SvXMLExportEventListener::disposing( const lang::EventObject& rEventObject )
+void SAL_CALL SvXMLExportEventListener::disposing( const lang::EventObject& )
     throw(uno::RuntimeException)
 {
     if (pExport)
@@ -318,82 +318,82 @@ SvXMLExport_Impl::SvXMLExport_Impl()
 
 void SvXMLExport::SetDocHandler( const uno::Reference< xml::sax::XDocumentHandler > &rHandler )
 {
-    xHandler = rHandler;
-    xExtHandler = uno::Reference<xml::sax::XExtendedDocumentHandler>( xHandler, UNO_QUERY );
+    mxHandler = rHandler;
+    mxExtHandler = uno::Reference<xml::sax::XExtendedDocumentHandler>( mxHandler, UNO_QUERY );
 }
 
 void SvXMLExport::_InitCtor()
 {
     if( (getExportFlags() & ~EXPORT_OASIS) != 0 )
     {
-        pNamespaceMap->Add( GetXMLToken(XML_NP_OFFICE), GetXMLToken(XML_N_OFFICE), XML_NAMESPACE_OFFICE );
-        pNamespaceMap->Add( GetXMLToken(XML_NP_OOO), GetXMLToken(XML_N_OOO), XML_NAMESPACE_OOO );
+        mpNamespaceMap->Add( GetXMLToken(XML_NP_OFFICE), GetXMLToken(XML_N_OFFICE), XML_NAMESPACE_OFFICE );
+        mpNamespaceMap->Add( GetXMLToken(XML_NP_OOO), GetXMLToken(XML_N_OOO), XML_NAMESPACE_OOO );
     }
     if( (getExportFlags() & (EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_FONTDECLS) ) != 0 )
     {
-        pNamespaceMap->Add( GetXMLToken(XML_NP_FO), GetXMLToken(XML_N_FO_COMPAT), XML_NAMESPACE_FO );
+        mpNamespaceMap->Add( GetXMLToken(XML_NP_FO), GetXMLToken(XML_N_FO_COMPAT), XML_NAMESPACE_FO );
     }
     if( (getExportFlags() & (EXPORT_META|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_SETTINGS) ) != 0 )
     {
-        pNamespaceMap->Add( GetXMLToken(XML_NP_XLINK), GetXMLToken(XML_N_XLINK), XML_NAMESPACE_XLINK );
+        mpNamespaceMap->Add( GetXMLToken(XML_NP_XLINK), GetXMLToken(XML_N_XLINK), XML_NAMESPACE_XLINK );
     }
     if( (getExportFlags() & EXPORT_SETTINGS) != 0 )
     {
-        pNamespaceMap->Add( GetXMLToken(XML_NP_CONFIG), GetXMLToken(XML_N_CONFIG), XML_NAMESPACE_CONFIG );
+        mpNamespaceMap->Add( GetXMLToken(XML_NP_CONFIG), GetXMLToken(XML_N_CONFIG), XML_NAMESPACE_CONFIG );
     }
 
     if( (getExportFlags() & (EXPORT_META|EXPORT_MASTERSTYLES|EXPORT_CONTENT) ) != 0 )
     {
-        pNamespaceMap->Add( GetXMLToken(XML_NP_DC), GetXMLToken(XML_N_DC), XML_NAMESPACE_DC );
-        pNamespaceMap->Add( GetXMLToken(XML_NP_META), GetXMLToken(XML_N_META), XML_NAMESPACE_META );
+        mpNamespaceMap->Add( GetXMLToken(XML_NP_DC), GetXMLToken(XML_N_DC), XML_NAMESPACE_DC );
+        mpNamespaceMap->Add( GetXMLToken(XML_NP_META), GetXMLToken(XML_N_META), XML_NAMESPACE_META );
     }
     if( (getExportFlags() & (EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_FONTDECLS) ) != 0 )
     {
-        pNamespaceMap->Add( GetXMLToken(XML_NP_STYLE), GetXMLToken(XML_N_STYLE), XML_NAMESPACE_STYLE );
+        mpNamespaceMap->Add( GetXMLToken(XML_NP_STYLE), GetXMLToken(XML_N_STYLE), XML_NAMESPACE_STYLE );
     }
 
     // namespaces for documents
     if( (getExportFlags() & (EXPORT_STYLES|EXPORT_AUTOSTYLES|EXPORT_MASTERSTYLES|EXPORT_CONTENT) ) != 0 )
     {
-        pNamespaceMap->Add( GetXMLToken(XML_NP_DC), GetXMLToken(XML_N_DC), XML_NAMESPACE_DC );
-        pNamespaceMap->Add( GetXMLToken(XML_NP_TEXT), GetXMLToken(XML_N_TEXT), XML_NAMESPACE_TEXT );
-        pNamespaceMap->Add( GetXMLToken(XML_NP_DRAW), GetXMLToken(XML_N_DRAW), XML_NAMESPACE_DRAW );
-        pNamespaceMap->Add( GetXMLToken(XML_NP_DR3D), GetXMLToken(XML_N_DR3D), XML_NAMESPACE_DR3D );
-        pNamespaceMap->Add( GetXMLToken(XML_NP_SVG), GetXMLToken(XML_N_SVG_COMPAT),  XML_NAMESPACE_SVG );
-        pNamespaceMap->Add( GetXMLToken(XML_NP_CHART), GetXMLToken(XML_N_CHART), XML_NAMESPACE_CHART );
-        pNamespaceMap->Add( GetXMLToken(XML_NP_TABLE), GetXMLToken(XML_N_TABLE), XML_NAMESPACE_TABLE );
-        pNamespaceMap->Add( GetXMLToken(XML_NP_NUMBER), GetXMLToken(XML_N_NUMBER), XML_NAMESPACE_NUMBER );
-        pNamespaceMap->Add( GetXMLToken(XML_NP_OOOW), GetXMLToken(XML_N_OOOW), XML_NAMESPACE_OOOW );
-        pNamespaceMap->Add( GetXMLToken(XML_NP_OOOC), GetXMLToken(XML_N_OOOC), XML_NAMESPACE_OOOC );
+        mpNamespaceMap->Add( GetXMLToken(XML_NP_DC), GetXMLToken(XML_N_DC), XML_NAMESPACE_DC );
+        mpNamespaceMap->Add( GetXMLToken(XML_NP_TEXT), GetXMLToken(XML_N_TEXT), XML_NAMESPACE_TEXT );
+        mpNamespaceMap->Add( GetXMLToken(XML_NP_DRAW), GetXMLToken(XML_N_DRAW), XML_NAMESPACE_DRAW );
+        mpNamespaceMap->Add( GetXMLToken(XML_NP_DR3D), GetXMLToken(XML_N_DR3D), XML_NAMESPACE_DR3D );
+        mpNamespaceMap->Add( GetXMLToken(XML_NP_SVG), GetXMLToken(XML_N_SVG_COMPAT),  XML_NAMESPACE_SVG );
+        mpNamespaceMap->Add( GetXMLToken(XML_NP_CHART), GetXMLToken(XML_N_CHART), XML_NAMESPACE_CHART );
+        mpNamespaceMap->Add( GetXMLToken(XML_NP_TABLE), GetXMLToken(XML_N_TABLE), XML_NAMESPACE_TABLE );
+        mpNamespaceMap->Add( GetXMLToken(XML_NP_NUMBER), GetXMLToken(XML_N_NUMBER), XML_NAMESPACE_NUMBER );
+        mpNamespaceMap->Add( GetXMLToken(XML_NP_OOOW), GetXMLToken(XML_N_OOOW), XML_NAMESPACE_OOOW );
+        mpNamespaceMap->Add( GetXMLToken(XML_NP_OOOC), GetXMLToken(XML_N_OOOC), XML_NAMESPACE_OOOC );
     }
     if( (getExportFlags() & (EXPORT_MASTERSTYLES|EXPORT_CONTENT) ) != 0 )
     {
-        pNamespaceMap->Add( GetXMLToken(XML_NP_MATH), GetXMLToken(XML_N_MATH), XML_NAMESPACE_MATH );
-        pNamespaceMap->Add( GetXMLToken(XML_NP_FORM), GetXMLToken(XML_N_FORM), XML_NAMESPACE_FORM );
+        mpNamespaceMap->Add( GetXMLToken(XML_NP_MATH), GetXMLToken(XML_N_MATH), XML_NAMESPACE_MATH );
+        mpNamespaceMap->Add( GetXMLToken(XML_NP_FORM), GetXMLToken(XML_N_FORM), XML_NAMESPACE_FORM );
     }
     if( (getExportFlags() & (EXPORT_STYLES|EXPORT_AUTOSTYLES|EXPORT_MASTERSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS) ) != 0 )
     {
-        pNamespaceMap->Add( GetXMLToken(XML_NP_SCRIPT), GetXMLToken(XML_N_SCRIPT), XML_NAMESPACE_SCRIPT );
-        pNamespaceMap->Add( GetXMLToken(XML_NP_DOM), GetXMLToken(XML_N_DOM), XML_NAMESPACE_DOM );
+        mpNamespaceMap->Add( GetXMLToken(XML_NP_SCRIPT), GetXMLToken(XML_N_SCRIPT), XML_NAMESPACE_SCRIPT );
+        mpNamespaceMap->Add( GetXMLToken(XML_NP_DOM), GetXMLToken(XML_N_DOM), XML_NAMESPACE_DOM );
     }
     if( (getExportFlags() & EXPORT_CONTENT ) != 0 )
     {
-        pNamespaceMap->Add( GetXMLToken(XML_NP_XFORMS_1_0), GetXMLToken(XML_N_XFORMS_1_0), XML_NAMESPACE_XFORMS );
-        pNamespaceMap->Add( GetXMLToken(XML_NP_XSD), GetXMLToken(XML_N_XSD), XML_NAMESPACE_XSD );
-        pNamespaceMap->Add( GetXMLToken(XML_NP_XSI), GetXMLToken(XML_N_XSI), XML_NAMESPACE_XSI );
+        mpNamespaceMap->Add( GetXMLToken(XML_NP_XFORMS_1_0), GetXMLToken(XML_N_XFORMS_1_0), XML_NAMESPACE_XFORMS );
+        mpNamespaceMap->Add( GetXMLToken(XML_NP_XSD), GetXMLToken(XML_N_XSD), XML_NAMESPACE_XSD );
+        mpNamespaceMap->Add( GetXMLToken(XML_NP_XSI), GetXMLToken(XML_N_XSI), XML_NAMESPACE_XSI );
     }
 
-    xAttrList = (xml::sax::XAttributeList*)pAttrList;
+    mxAttrList = (xml::sax::XAttributeList*)mpAttrList;
 
-    sPicturesPath = OUString( RTL_CONSTASCII_USTRINGPARAM( "#Pictures/" ) );
-    sObjectsPath = OUString( RTL_CONSTASCII_USTRINGPARAM( "#./" ) );
-    sGraphicObjectProtocol = OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.GraphicObject:" ) );
-    sEmbeddedObjectProtocol = OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.EmbeddedObject:" ) );
+    msPicturesPath = OUString( RTL_CONSTASCII_USTRINGPARAM( "#Pictures/" ) );
+    msObjectsPath = OUString( RTL_CONSTASCII_USTRINGPARAM( "#./" ) );
+    msGraphicObjectProtocol = OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.GraphicObject:" ) );
+    msEmbeddedObjectProtocol = OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.EmbeddedObject:" ) );
 
-    if (xModel.is() && !mxEventListener.is())
+    if (mxModel.is() && !mxEventListener.is())
     {
         mxEventListener.set( new SvXMLExportEventListener(this));
-        xModel->addEventListener(mxEventListener);
+        mxModel->addEventListener(mxEventListener);
     }
 
     // --> OD 2006-03-10 #i51726# - determine model type
@@ -406,9 +406,9 @@ void SvXMLExport::_DetermineModelType()
 {
     meModelType = SvtModuleOptions::E_UNKNOWN_FACTORY;
 
-    if ( xModel.is() )
+    if ( mxModel.is() )
     {
-        meModelType = SvtModuleOptions::ClassifyFactoryByModel( xModel );
+        meModelType = SvtModuleOptions::ClassifyFactoryByModel( mxModel );
     }
 }
 // <--
@@ -417,27 +417,24 @@ void SvXMLExport::_DetermineModelType()
 SvXMLExport::SvXMLExport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
     MapUnit eDfltUnit, const enum XMLTokenEnum eClass, sal_uInt16 nExportFlags )
-:   pImpl( new SvXMLExport_Impl ),
+:   mpImpl( new SvXMLExport_Impl ),
     // #110680#
     mxServiceFactory(xServiceFactory),
-    meClass( eClass ),
-    sWS( GetXMLToken(XML_WS) ),
-    pNamespaceMap( new SvXMLNamespaceMap ),
-
+    mpAttrList( new SvXMLAttributeList ),
+    mpNamespaceMap( new SvXMLNamespaceMap ),
     // #110680#
-    // pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, eDfltUnit ) ),
-    pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, eDfltUnit, getServiceFactory() ) ),
-
-    pAttrList( new SvXMLAttributeList ),
-    bExtended( sal_False ),
-    pNumExport(0L),
-    pProgressBarHelper( NULL ),
-    pEventExport( NULL ),
-    pImageMapExport( NULL ),
-    pXMLErrors( NULL ),
-    bSaveLinkedSections(sal_True),
+    mpUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, eDfltUnit, getServiceFactory() ) ),
+    mpNumExport(0L),
+    mpProgressBarHelper( NULL ),
+    mpEventExport( NULL ),
+    mpImageMapExport( NULL ),
+    mpXMLErrors( NULL ),
+    mbExtended( sal_False ),
+    meClass( eClass ),
     mnExportFlags( nExportFlags ),
-    mnErrorFlags( ERROR_NO )
+    mnErrorFlags( ERROR_NO ),
+    msWS( GetXMLToken(XML_WS) ),
+    mbSaveLinkedSections(sal_True)
 {
     DBG_ASSERT( mxServiceFactory.is(), "got no service manager" );
     _InitCtor();
@@ -449,36 +446,33 @@ SvXMLExport::SvXMLExport(
     const OUString &rFileName,
     const uno::Reference< xml::sax::XDocumentHandler > & rHandler,
     MapUnit eDfltUnit   )
-:   pImpl( new SvXMLExport_Impl ),
+:   mpImpl( new SvXMLExport_Impl ),
     // #110680#
     mxServiceFactory(xServiceFactory),
-    meClass( XML_TOKEN_INVALID ),
-    sWS( GetXMLToken(XML_WS) ),
-    sOrigFileName( rFileName ),
-    pNamespaceMap( new SvXMLNamespaceMap ),
-
+    mxHandler( rHandler ),
+    mxExtHandler( rHandler, uno::UNO_QUERY ),
+    mpAttrList( new SvXMLAttributeList ),
+    msOrigFileName( rFileName ),
+    mpNamespaceMap( new SvXMLNamespaceMap ),
     // #110680#
-    // pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, eDfltUnit ) ),
-    pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, eDfltUnit, getServiceFactory() ) ),
-
-    pAttrList( new SvXMLAttributeList ),
-    bExtended( sal_False ),
-    xHandler( rHandler ),
-    xExtHandler( rHandler, uno::UNO_QUERY ),
-    pNumExport(0L),
-    pProgressBarHelper( NULL ),
-    pEventExport( NULL ),
-    pImageMapExport( NULL ),
-    pXMLErrors( NULL ),
-    bSaveLinkedSections(sal_True),
+    mpUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, eDfltUnit, getServiceFactory() ) ),
+    mpNumExport(0L),
+    mpProgressBarHelper( NULL ),
+    mpEventExport( NULL ),
+    mpImageMapExport( NULL ),
+    mpXMLErrors( NULL ),
+    mbExtended( sal_False ),
+    meClass( XML_TOKEN_INVALID ),
     mnExportFlags( 0 ),
-    mnErrorFlags( ERROR_NO )
+    mnErrorFlags( ERROR_NO ),
+    msWS( GetXMLToken(XML_WS) ),
+    mbSaveLinkedSections(sal_True)
 {
     DBG_ASSERT( mxServiceFactory.is(), "got no service manager" );
     _InitCtor();
 
-    if (xNumberFormatsSupplier.is())
-        pNumExport = new SvXMLNumFmtExport(*this, xNumberFormatsSupplier);
+    if (mxNumberFormatsSupplier.is())
+        mpNumExport = new SvXMLNumFmtExport(*this, mxNumberFormatsSupplier);
 }
 
 // #110680#
@@ -488,38 +482,36 @@ SvXMLExport::SvXMLExport(
     const uno::Reference< xml::sax::XDocumentHandler > & rHandler,
     const Reference< XModel >& rModel,
     sal_Int16 eDfltUnit )
-:   pImpl( new SvXMLExport_Impl ),
+:   mpImpl( new SvXMLExport_Impl ),
     // #110680#
     mxServiceFactory(xServiceFactory),
-    meClass( XML_TOKEN_INVALID ),
-    sWS( GetXMLToken(XML_WS) ),
-    sOrigFileName( rFileName ),
-    pNamespaceMap( new SvXMLNamespaceMap ),
-
+    mxModel( rModel ),
+    mxHandler( rHandler ),
+    mxExtHandler( rHandler, uno::UNO_QUERY ),
+    mxNumberFormatsSupplier (rModel, uno::UNO_QUERY),
+    mpAttrList( new SvXMLAttributeList ),
+    msOrigFileName( rFileName ),
+    mpNamespaceMap( new SvXMLNamespaceMap ),
     // #110680#
     // pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, SvXMLUnitConverter::GetMapUnit(eDfltUnit) ) ),
-    pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, SvXMLUnitConverter::GetMapUnit(eDfltUnit), getServiceFactory() ) ),
-
-    pAttrList( new SvXMLAttributeList ),
-    bExtended( sal_False ),
-    xHandler( rHandler ),
-    xExtHandler( rHandler, uno::UNO_QUERY ),
-    xModel( rModel ),
-    pNumExport(0L),
-    xNumberFormatsSupplier (rModel, uno::UNO_QUERY),
-    pProgressBarHelper( NULL ),
-    pEventExport( NULL ),
-    pImageMapExport( NULL ),
-    pXMLErrors( NULL ),
-    bSaveLinkedSections(sal_True),
+    mpUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, SvXMLUnitConverter::GetMapUnit(eDfltUnit), getServiceFactory() ) ),
+    mpNumExport(0L),
+    mpProgressBarHelper( NULL ),
+    mpEventExport( NULL ),
+    mpImageMapExport( NULL ),
+    mpXMLErrors( NULL ),
+    mbExtended( sal_False ),
+    meClass( XML_TOKEN_INVALID ),
     mnExportFlags( 0 ),
-    mnErrorFlags( ERROR_NO )
+    mnErrorFlags( ERROR_NO ),
+    msWS( GetXMLToken(XML_WS) ),
+    mbSaveLinkedSections(sal_True)
 {
     DBG_ASSERT( mxServiceFactory.is(), "got no service manager" );
     _InitCtor();
 
-    if (xNumberFormatsSupplier.is())
-        pNumExport = new SvXMLNumFmtExport(*this, xNumberFormatsSupplier);
+    if (mxNumberFormatsSupplier.is())
+        mpNumExport = new SvXMLNumFmtExport(*this, mxNumberFormatsSupplier);
 }
 
 // #110680#
@@ -530,56 +522,53 @@ SvXMLExport::SvXMLExport(
     const Reference< XModel >& rModel,
     const Reference< document::XGraphicObjectResolver >& rEmbeddedGraphicObjects,
     sal_Int16 eDfltUnit )
-:   pImpl( new SvXMLExport_Impl ),
+:   mpImpl( new SvXMLExport_Impl ),
     // #110680#
     mxServiceFactory(xServiceFactory),
-    meClass( XML_TOKEN_INVALID ),
-    sWS( GetXMLToken(XML_WS) ),
-    sOrigFileName( rFileName ),
-    pNamespaceMap( new SvXMLNamespaceMap ),
-
+    mxModel( rModel ),
+    mxHandler( rHandler ),
+    mxExtHandler( rHandler, uno::UNO_QUERY ),
+    mxNumberFormatsSupplier (rModel, uno::UNO_QUERY),
+    mxGraphicResolver( rEmbeddedGraphicObjects ),
+    mpAttrList( new SvXMLAttributeList ),
+    msOrigFileName( rFileName ),
+    mpNamespaceMap( new SvXMLNamespaceMap ),
     // #110680#
-    // pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, SvXMLUnitConverter::GetMapUnit(eDfltUnit) ) ),
-    pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, SvXMLUnitConverter::GetMapUnit(eDfltUnit), getServiceFactory() ) ),
-
-    pAttrList( new SvXMLAttributeList ),
-    bExtended( sal_False ),
-    xHandler( rHandler ),
-    xExtHandler( rHandler, uno::UNO_QUERY ),
-    xGraphicResolver( rEmbeddedGraphicObjects ),
-    xModel( rModel ),
-    pNumExport(0L),
-    xNumberFormatsSupplier (rModel, uno::UNO_QUERY),
-    pProgressBarHelper( NULL ),
-    pEventExport( NULL ),
-    pImageMapExport( NULL ),
-    pXMLErrors( NULL ),
-    bSaveLinkedSections(sal_True),
+    mpUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, SvXMLUnitConverter::GetMapUnit(eDfltUnit), getServiceFactory() ) ),
+    mpNumExport(0L),
+    mpProgressBarHelper( NULL ),
+    mpEventExport( NULL ),
+    mpImageMapExport( NULL ),
+    mpXMLErrors( NULL ),
+    mbExtended( sal_False ),
+    meClass( XML_TOKEN_INVALID ),
     mnExportFlags( 0 ),
-    mnErrorFlags( ERROR_NO )
+    mnErrorFlags( ERROR_NO ),
+    msWS( GetXMLToken(XML_WS) ),
+    mbSaveLinkedSections(sal_True)
 {
     DBG_ASSERT( mxServiceFactory.is(), "got no service manager" );
     _InitCtor();
 
-    if (xNumberFormatsSupplier.is())
-        pNumExport = new SvXMLNumFmtExport(*this, xNumberFormatsSupplier);
+    if (mxNumberFormatsSupplier.is())
+        mpNumExport = new SvXMLNumFmtExport(*this, mxNumberFormatsSupplier);
 }
 
 SvXMLExport::~SvXMLExport()
 {
-    delete pXMLErrors;
-    delete pImageMapExport;
-    delete pEventExport;
-    delete pNamespaceMap;
-    delete pUnitConv;
-    if (pProgressBarHelper || pNumExport)
+    delete mpXMLErrors;
+    delete mpImageMapExport;
+    delete mpEventExport;
+    delete mpNamespaceMap;
+    delete mpUnitConv;
+    if (mpProgressBarHelper || mpNumExport)
     {
-        if (xExportInfo.is())
+        if (mxExportInfo.is())
         {
-            uno::Reference< beans::XPropertySetInfo > xPropertySetInfo = xExportInfo->getPropertySetInfo();
+            uno::Reference< beans::XPropertySetInfo > xPropertySetInfo = mxExportInfo->getPropertySetInfo();
             if (xPropertySetInfo.is())
             {
-                if (pProgressBarHelper)
+                if (mpProgressBarHelper)
                 {
                     OUString sProgressMax(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSMAX));
                     OUString sProgressCurrent(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSCURRENT));
@@ -587,41 +576,41 @@ SvXMLExport::~SvXMLExport()
                     if (xPropertySetInfo->hasPropertyByName(sProgressMax) &&
                         xPropertySetInfo->hasPropertyByName(sProgressCurrent))
                     {
-                        sal_Int32 nProgressMax(pProgressBarHelper->GetReference());
-                        sal_Int32 nProgressCurrent(pProgressBarHelper->GetValue());
+                        sal_Int32 nProgressMax(mpProgressBarHelper->GetReference());
+                        sal_Int32 nProgressCurrent(mpProgressBarHelper->GetValue());
                         uno::Any aAny;
                         aAny <<= nProgressMax;
-                        xExportInfo->setPropertyValue(sProgressMax, aAny);
+                        mxExportInfo->setPropertyValue(sProgressMax, aAny);
                         aAny <<= nProgressCurrent;
-                        xExportInfo->setPropertyValue(sProgressCurrent, aAny);
+                        mxExportInfo->setPropertyValue(sProgressCurrent, aAny);
                     }
                     if (xPropertySetInfo->hasPropertyByName(sRepeat))
-                        xExportInfo->setPropertyValue(sRepeat, cppu::bool2any(pProgressBarHelper->GetRepeat()));
+                        mxExportInfo->setPropertyValue(sRepeat, cppu::bool2any(mpProgressBarHelper->GetRepeat()));
                 }
-                if (pNumExport && (mnExportFlags & (EXPORT_AUTOSTYLES | EXPORT_STYLES)))
+                if (mpNumExport && (mnExportFlags & (EXPORT_AUTOSTYLES | EXPORT_STYLES)))
                 {
                     OUString sWrittenNumberFormats(RTL_CONSTASCII_USTRINGPARAM(XML_WRITTENNUMBERSTYLES));
                     if (xPropertySetInfo->hasPropertyByName(sWrittenNumberFormats))
                     {
                         uno::Sequence<sal_Int32> aWasUsed;
-                        pNumExport->GetWasUsed(aWasUsed);
+                        mpNumExport->GetWasUsed(aWasUsed);
                         uno::Any aAny;
                         aAny <<= aWasUsed;
-                        xExportInfo->setPropertyValue(sWrittenNumberFormats, aAny);
+                        mxExportInfo->setPropertyValue(sWrittenNumberFormats, aAny);
                     }
                 }
             }
         }
-        delete pProgressBarHelper;
-        delete pNumExport;
+        delete mpProgressBarHelper;
+        delete mpNumExport;
     }
 
     xmloff::token::ResetTokens();
 
-    if (mxEventListener.is() && xModel.is())
-        xModel->removeEventListener(mxEventListener);
+    if (mxEventListener.is() && mxModel.is())
+        mxModel->removeEventListener(mxEventListener);
 
-    delete pImpl;
+    delete mpImpl;
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -630,51 +619,51 @@ SvXMLExport::~SvXMLExport()
 void SAL_CALL SvXMLExport::setSourceDocument( const uno::Reference< lang::XComponent >& xDoc )
     throw(lang::IllegalArgumentException, uno::RuntimeException)
 {
-    xModel = uno::Reference< frame::XModel >::query( xDoc );
-    if( !xModel.is() )
+    mxModel = uno::Reference< frame::XModel >::query( xDoc );
+    if( !mxModel.is() )
         throw lang::IllegalArgumentException();
-    if (xModel.is() && ! mxEventListener.is())
+    if (mxModel.is() && ! mxEventListener.is())
     {
         mxEventListener.set( new SvXMLExportEventListener(this));
-        xModel->addEventListener(mxEventListener);
+        mxModel->addEventListener(mxEventListener);
     }
 
-    if(!xNumberFormatsSupplier.is() )
+    if(!mxNumberFormatsSupplier.is() )
     {
-        xNumberFormatsSupplier = xNumberFormatsSupplier.query( xModel );
-        if(xNumberFormatsSupplier.is() && xHandler.is())
-            pNumExport = new SvXMLNumFmtExport(*this, xNumberFormatsSupplier);
+        mxNumberFormatsSupplier = mxNumberFormatsSupplier.query( mxModel );
+        if(mxNumberFormatsSupplier.is() && mxHandler.is())
+            mpNumExport = new SvXMLNumFmtExport(*this, mxNumberFormatsSupplier);
     }
-    if (xExportInfo.is())
+    if (mxExportInfo.is())
     {
-        uno::Reference< beans::XPropertySetInfo > xPropertySetInfo = xExportInfo->getPropertySetInfo();
+        uno::Reference< beans::XPropertySetInfo > xPropertySetInfo = mxExportInfo->getPropertySetInfo();
         if (xPropertySetInfo.is())
         {
             OUString sUsePrettyPrinting(RTL_CONSTASCII_USTRINGPARAM(XML_USEPRETTYPRINTING));
             if (xPropertySetInfo->hasPropertyByName(sUsePrettyPrinting))
             {
-                uno::Any aAny = xExportInfo->getPropertyValue(sUsePrettyPrinting);
+                uno::Any aAny = mxExportInfo->getPropertyValue(sUsePrettyPrinting);
                 if (::cppu::any2bool(aAny))
                     mnExportFlags |= EXPORT_PRETTY;
                 else
                     mnExportFlags &= ~EXPORT_PRETTY;
             }
-            if (pNumExport && (mnExportFlags & (EXPORT_AUTOSTYLES | EXPORT_STYLES)))
+            if (mpNumExport && (mnExportFlags & (EXPORT_AUTOSTYLES | EXPORT_STYLES)))
             {
                 OUString sWrittenNumberFormats(RTL_CONSTASCII_USTRINGPARAM(XML_WRITTENNUMBERSTYLES));
                 if (xPropertySetInfo->hasPropertyByName(sWrittenNumberFormats))
                 {
-                    uno::Any aAny = xExportInfo->getPropertyValue(sWrittenNumberFormats);
+                    uno::Any aAny = mxExportInfo->getPropertyValue(sWrittenNumberFormats);
                     uno::Sequence<sal_Int32> aWasUsed;
                     if(aAny >>= aWasUsed)
-                        pNumExport->SetWasUsed(aWasUsed);
+                        mpNumExport->SetWasUsed(aWasUsed);
                 }
             }
         }
     }
 
     // namespaces for user defined attributes
-    Reference< XMultiServiceFactory > xFactory( xModel, UNO_QUERY );
+    Reference< XMultiServiceFactory > xFactory( mxModel,    UNO_QUERY );
     if( xFactory.is() )
     {
         try
@@ -729,73 +718,73 @@ void SAL_CALL SvXMLExport::initialize( const uno::Sequence< uno::Any >& aArgumen
         // status indicator
         uno::Reference<task::XStatusIndicator> xTmpStatus( xValue, UNO_QUERY );
         if ( xTmpStatus.is() )
-            xStatusIndicator = xTmpStatus;
+            mxStatusIndicator = xTmpStatus;
 
         // graphic resolver
         uno::Reference<document::XGraphicObjectResolver> xTmpGraphic(
             xValue, UNO_QUERY );
         if ( xTmpGraphic.is() )
-            xGraphicResolver = xTmpGraphic;
+            mxGraphicResolver = xTmpGraphic;
 
         // object resolver
         uno::Reference<document::XEmbeddedObjectResolver> xTmpObjectResolver(
             xValue, UNO_QUERY );
         if ( xTmpObjectResolver.is() )
-            xEmbeddedResolver = xTmpObjectResolver;
+            mxEmbeddedResolver = xTmpObjectResolver;
 
         // document handler
         uno::Reference<xml::sax::XDocumentHandler> xTmpDocHandler(
             xValue, UNO_QUERY );
         if( xTmpDocHandler.is() )
         {
-            xHandler = xTmpDocHandler;
-            *pAny >>= xExtHandler;
+            mxHandler = xTmpDocHandler;
+            *pAny >>= mxExtHandler;
 
-            if (xNumberFormatsSupplier.is() && pNumExport == NULL)
-                pNumExport = new SvXMLNumFmtExport(*this, xNumberFormatsSupplier);
+            if (mxNumberFormatsSupplier.is() && mpNumExport == NULL)
+                mpNumExport = new SvXMLNumFmtExport(*this, mxNumberFormatsSupplier);
         }
 
         // property set to transport data across
         uno::Reference<beans::XPropertySet> xTmpPropertySet(
             xValue, UNO_QUERY );
         if( xTmpPropertySet.is() )
-            xExportInfo = xTmpPropertySet;
+            mxExportInfo = xTmpPropertySet;
 
     }
 
-    if( xExportInfo.is() )
+    if( mxExportInfo.is() )
     {
         uno::Reference< beans::XPropertySetInfo > xPropertySetInfo =
-            xExportInfo->getPropertySetInfo();
+            mxExportInfo->getPropertySetInfo();
         OUString sPropName(
                 RTL_CONSTASCII_USTRINGPARAM("BaseURI" ) );
         if( xPropertySetInfo->hasPropertyByName(sPropName) )
         {
-            uno::Any aAny = xExportInfo->getPropertyValue(sPropName);
-            aAny >>= sOrigFileName;
-            pImpl->msPackageURI = sOrigFileName;
+            uno::Any aAny = mxExportInfo->getPropertyValue(sPropName);
+            aAny >>= msOrigFileName;
+            mpImpl->msPackageURI = msOrigFileName;
         }
         OUString sRelPath;
         sPropName = OUString( RTL_CONSTASCII_USTRINGPARAM("StreamRelPath" ) );
         if( xPropertySetInfo->hasPropertyByName(sPropName) )
         {
-            uno::Any aAny = xExportInfo->getPropertyValue(sPropName);
+            uno::Any aAny = mxExportInfo->getPropertyValue(sPropName);
             aAny >>= sRelPath;
         }
         OUString sName;
         sPropName = OUString( RTL_CONSTASCII_USTRINGPARAM("StreamName" ) );
         if( xPropertySetInfo->hasPropertyByName(sPropName) )
         {
-            uno::Any aAny = xExportInfo->getPropertyValue(sPropName);
+            uno::Any aAny = mxExportInfo->getPropertyValue(sPropName);
             aAny >>= sName;
         }
-        if( sOrigFileName.getLength() && sName.getLength() )
+        if( msOrigFileName.getLength() && sName.getLength() )
         {
-            INetURLObject aBaseURL( sOrigFileName );
+            INetURLObject aBaseURL( msOrigFileName );
             if( sRelPath.getLength() )
                 aBaseURL.insertName( sRelPath );
             aBaseURL.insertName( sName );
-            sOrigFileName = aBaseURL.GetMainURL(INetURLObject::DECODE_TO_IURI);
+            msOrigFileName = aBaseURL.GetMainURL(INetURLObject::DECODE_TO_IURI);
         }
     }
 
@@ -808,14 +797,14 @@ sal_Bool SAL_CALL SvXMLExport::filter( const uno::Sequence< beans::PropertyValue
                                 "SvXMLExport::filter" );
 
     // check for xHandler first... should have been supplied in initialize
-    if( !xHandler.is() )
+    if( !mxHandler.is() )
         return sal_False;
 
     try
     {
         const sal_uInt32 nTest =
             EXPORT_META|EXPORT_STYLES|EXPORT_CONTENT|EXPORT_SETTINGS;
-        if( (mnExportFlags & nTest) == nTest && !sOrigFileName.getLength() )
+        if( (mnExportFlags & nTest) == nTest && !msOrigFileName.getLength() )
         {
             // evaluate descriptor only for flat files and if a base URI
             // has not been provided already
@@ -829,12 +818,12 @@ sal_Bool SAL_CALL SvXMLExport::filter( const uno::Sequence< beans::PropertyValue
 
                 if( rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FileName" ) ) )
                 {
-                    if( !(rValue >>= sOrigFileName ) )
+                    if( !(rValue >>= msOrigFileName ) )
                         return sal_False;
                 }
                 else if (rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FilterName" ) ) )
                 {
-                    if( !(rValue >>= sFilterName ) )
+                    if( !(rValue >>= msFilterName ) )
                         return sal_False;
                 }
             }
@@ -881,10 +870,10 @@ void SAL_CALL SvXMLExport::cancel() throw(uno::RuntimeException)
 ::rtl::OUString SAL_CALL SvXMLExport::getName(  )
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return sFilterName;
+    return msFilterName;
 }
 
-void SAL_CALL SvXMLExport::setName( const ::rtl::OUString& aName )
+void SAL_CALL SvXMLExport::setName( const ::rtl::OUString& )
     throw (::com::sun::star::uno::RuntimeException)
 {
     // do nothing, because it is not possible to set the FilterName
@@ -913,7 +902,6 @@ uno::Sequence< OUString > SAL_CALL SvXMLExport::getSupportedServiceNames(  )
     throw(uno::RuntimeException)
 {
     uno::Sequence<OUString> aSeq(2);
-    OUString* pSeq = aSeq.getArray();
     aSeq[0] = OUString(
         RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ExportFilter"));
     aSeq[1] = OUString(
@@ -930,7 +918,7 @@ void SvXMLExport::AddAttributeASCII( sal_uInt16 nPrefixKey,
     OUString sName( OUString::createFromAscii( pName ) );
     OUString sValue( OUString::createFromAscii( pValue ) );
 
-    pAttrList->AddAttribute( pNamespaceMap->GetQNameByKey( nPrefixKey,
+    mpAttrList->AddAttribute( mpNamespaceMap->GetQNameByKey( nPrefixKey,
                                                            sName ),
                              sValue );
 }
@@ -940,7 +928,7 @@ void SvXMLExport::AddAttribute( sal_uInt16 nPrefixKey, const sal_Char *pName,
 {
     OUString sName( OUString::createFromAscii( pName ) );
 
-    pAttrList->AddAttribute( pNamespaceMap->GetQNameByKey( nPrefixKey,
+    mpAttrList->AddAttribute( mpNamespaceMap->GetQNameByKey( nPrefixKey,
                                                            sName ),
                              rValue );
 }
@@ -948,7 +936,7 @@ void SvXMLExport::AddAttribute( sal_uInt16 nPrefixKey, const sal_Char *pName,
 void SvXMLExport::AddAttribute( sal_uInt16 nPrefixKey, const OUString& rName,
                               const OUString& rValue )
 {
-    pAttrList->AddAttribute( pNamespaceMap->GetQNameByKey( nPrefixKey, rName ),
+    mpAttrList->AddAttribute( mpNamespaceMap->GetQNameByKey( nPrefixKey, rName ),
                              rValue );
 }
 
@@ -956,8 +944,8 @@ void SvXMLExport::AddAttribute( sal_uInt16 nPrefixKey,
                                 enum XMLTokenEnum eName,
                                 const OUString& rValue )
 {
-    pAttrList->AddAttribute(
-        pNamespaceMap->GetQNameByKey( nPrefixKey, GetXMLToken(eName) ),
+    mpAttrList->AddAttribute(
+        mpNamespaceMap->GetQNameByKey( nPrefixKey, GetXMLToken(eName) ),
         rValue );
 }
 
@@ -965,15 +953,15 @@ void SvXMLExport::AddAttribute( sal_uInt16 nPrefixKey,
                                 enum XMLTokenEnum eName,
                                 enum XMLTokenEnum eValue)
 {
-    pAttrList->AddAttribute(
-        pNamespaceMap->GetQNameByKey( nPrefixKey, GetXMLToken(eName) ),
+    mpAttrList->AddAttribute(
+        mpNamespaceMap->GetQNameByKey( nPrefixKey, GetXMLToken(eName) ),
         GetXMLToken(eValue) );
 }
 
 void SvXMLExport::AddAttribute( const ::rtl::OUString& rQName,
                                 const ::rtl::OUString& rValue )
 {
-      pAttrList->AddAttribute(
+      mpAttrList->AddAttribute(
         rQName,
         rValue );
 }
@@ -981,7 +969,7 @@ void SvXMLExport::AddAttribute( const ::rtl::OUString& rQName,
 void SvXMLExport::AddAttribute( const ::rtl::OUString& rQName,
                                 enum ::xmloff::token::XMLTokenEnum eValue )
 {
-      pAttrList->AddAttribute(
+      mpAttrList->AddAttribute(
         rQName,
         GetXMLToken(eValue) );
 }
@@ -989,18 +977,18 @@ void SvXMLExport::AddAttribute( const ::rtl::OUString& rQName,
 void SvXMLExport::AddAttributeList( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
     if( xAttrList.is())
-        pAttrList->AppendAttributeList( xAttrList );
+        mpAttrList->AppendAttributeList( xAttrList );
 }
 
 void SvXMLExport::ClearAttrList()
 {
-    pAttrList->Clear();
+    mpAttrList->Clear();
 }
 
 #ifndef PRODUCT
 void SvXMLExport::CheckAttrList()
 {
-    DBG_ASSERT( !pAttrList->getLength(),
+    DBG_ASSERT( !mpAttrList->getLength(),
                 "XMLExport::CheckAttrList: list is not empty" );
 }
 #endif
@@ -1031,7 +1019,7 @@ void SvXMLExport::ImplExportSettings()
     }
 }
 
-void SvXMLExport::ImplExportStyles( sal_Bool bUsed )
+void SvXMLExport::ImplExportStyles( sal_Bool )
 {
     CheckAttrList();
 
@@ -1048,33 +1036,33 @@ void SvXMLExport::ImplExportStyles( sal_Bool bUsed )
     OUString sStyleNames( RTL_CONSTASCII_USTRINGPARAM("StyleNames") );
     OUString sStyleFamilies( RTL_CONSTASCII_USTRINGPARAM("StyleFamilies") );
     if( ( ( mnExportFlags & EXPORT_CONTENT ) == 0 )
-        && xExportInfo.is()
-        && xExportInfo->getPropertySetInfo()->hasPropertyByName( sStyleNames )
-        && xExportInfo->getPropertySetInfo()->hasPropertyByName( sStyleFamilies ) )
+        && mxExportInfo.is()
+        && mxExportInfo->getPropertySetInfo()->hasPropertyByName( sStyleNames )
+        && mxExportInfo->getPropertySetInfo()->hasPropertyByName( sStyleFamilies ) )
     {
         Sequence<sal_Int32> aStyleFamilies;
         Sequence<OUString> aStyleNames;
         mxAutoStylePool->GetRegisteredNames( aStyleFamilies, aStyleNames );
-        xExportInfo->setPropertyValue( sStyleNames, makeAny( aStyleNames ) );
-        xExportInfo->setPropertyValue( sStyleFamilies,
+        mxExportInfo->setPropertyValue( sStyleNames, makeAny( aStyleNames ) );
+        mxExportInfo->setPropertyValue( sStyleFamilies,
                                        makeAny( aStyleFamilies ) );
     }
 }
 
-void SvXMLExport::ImplExportAutoStyles( sal_Bool bUsed )
+void SvXMLExport::ImplExportAutoStyles( sal_Bool )
 {
     // transfer style names (+ families) FROM other components (if appropriate)
     OUString sStyleNames( RTL_CONSTASCII_USTRINGPARAM("StyleNames") );
     OUString sStyleFamilies( RTL_CONSTASCII_USTRINGPARAM("StyleFamilies") );
     if( ( ( mnExportFlags & EXPORT_STYLES ) == 0 )
-        && xExportInfo.is()
-        && xExportInfo->getPropertySetInfo()->hasPropertyByName( sStyleNames )
-        && xExportInfo->getPropertySetInfo()->hasPropertyByName( sStyleFamilies ) )
+        && mxExportInfo.is()
+        && mxExportInfo->getPropertySetInfo()->hasPropertyByName( sStyleNames )
+        && mxExportInfo->getPropertySetInfo()->hasPropertyByName( sStyleFamilies ) )
     {
         Sequence<sal_Int32> aStyleFamilies;
-        xExportInfo->getPropertyValue( sStyleFamilies ) >>= aStyleFamilies;
+        mxExportInfo->getPropertyValue( sStyleFamilies ) >>= aStyleFamilies;
         Sequence<OUString> aStyleNames;
-        xExportInfo->getPropertyValue( sStyleNames ) >>= aStyleNames;
+        mxExportInfo->getPropertyValue( sStyleNames ) >>= aStyleNames;
         mxAutoStylePool->RegisterNames( aStyleFamilies, aStyleNames );
     }
 
@@ -1101,7 +1089,7 @@ void SvXMLExport::ImplExportAutoStyles( sal_Bool bUsed )
     }
 }
 
-void SvXMLExport::ImplExportMasterStyles( sal_Bool bUsed )
+void SvXMLExport::ImplExportMasterStyles( sal_Bool )
 {
     {
         // <style:master-styles>
@@ -1133,7 +1121,7 @@ void SvXMLExport::ImplExportContent()
     CheckAttrList();
 
     {
-        SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, XML_BODY,
+        SvXMLElementExport aElemrnt( *this, XML_NAMESPACE_OFFICE, XML_BODY,
                                   sal_True, sal_True );
         {
             XMLTokenEnum eClass = meClass;
@@ -1163,29 +1151,29 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
     bool bOwnGraphicResolver = false;
     bool bOwnEmbeddedResolver = false;
 
-    if( !xGraphicResolver.is() || !xEmbeddedResolver.is() )
+    if( !mxGraphicResolver.is() || !mxEmbeddedResolver.is() )
     {
-        Reference< XMultiServiceFactory > xFactory( xModel, UNO_QUERY );
+        Reference< XMultiServiceFactory > xFactory( mxModel,    UNO_QUERY );
         if( xFactory.is() )
         {
             try
             {
-                if( !xGraphicResolver.is() )
+                if( !mxGraphicResolver.is() )
                 {
-                    xGraphicResolver = Reference< XGraphicObjectResolver >::query(
+                    mxGraphicResolver = Reference< XGraphicObjectResolver >::query(
                         xFactory->createInstance(
                             OUString(RTL_CONSTASCII_USTRINGPARAM(
                                 "com.sun.star.document.ExportGraphicObjectResolver"))));
-                    bOwnGraphicResolver = xGraphicResolver.is();
+                    bOwnGraphicResolver = mxGraphicResolver.is();
                 }
 
-                if( !xEmbeddedResolver.is() )
+                if( !mxEmbeddedResolver.is() )
                 {
-                    xEmbeddedResolver = Reference< XEmbeddedObjectResolver >::query(
+                    mxEmbeddedResolver = Reference< XEmbeddedObjectResolver >::query(
                         xFactory->createInstance(
                             OUString(RTL_CONSTASCII_USTRINGPARAM(
                                 "com.sun.star.document.ExportEmbeddedObjectResolver"))));
-                    bOwnEmbeddedResolver = xEmbeddedResolver.is();
+                    bOwnEmbeddedResolver = mxEmbeddedResolver.is();
                 }
             }
             catch( com::sun::star::uno::Exception& )
@@ -1217,15 +1205,15 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
                         OUString(RTL_CONSTASCII_USTRINGPARAM("Class")), aAny );
 
                 Reference< XPropertySet > xPropSet =
-                    xExportInfo.is()
-                        ?  PropertySetMerger_CreateInstance( xExportInfo,
+                    mxExportInfo.is()
+                        ?  PropertySetMerger_CreateInstance( mxExportInfo,
                                                           xConvPropSet )
-                        : xExportInfo;
+                        : mxExportInfo;
 
                 Sequence<Any> aArgs( 3 );
-                aArgs[0] <<= xHandler;
+                aArgs[0] <<= mxHandler;
                 aArgs[1] <<= xPropSet;
-                aArgs[2] <<= xModel;
+                aArgs[2] <<= mxModel;
 
                 // get filter component
                 Reference< xml::sax::XDocumentHandler > xTmpDocHandler(
@@ -1236,8 +1224,8 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
                     "can't instantiate OASIS transformer component" );
                 if( xTmpDocHandler.is() )
                 {
-                    xHandler = xTmpDocHandler;
-                    xExtHandler = uno::Reference<xml::sax::XExtendedDocumentHandler>( xHandler, UNO_QUERY );
+                    mxHandler = xTmpDocHandler;
+                    mxExtHandler = uno::Reference<xml::sax::XExtendedDocumentHandler>( mxHandler, UNO_QUERY );
                 }
             }
             catch( com::sun::star::uno::Exception& )
@@ -1247,7 +1235,7 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
     }
 
 
-    xHandler->startDocument();
+    mxHandler->startDocument();
 
     // <?xml version="1.0" encoding="UTF-8"?>
 //  xHandler->processingInstruction( S2U( sXML_xml ), S2U( sXML_xml_pi ) );
@@ -1259,18 +1247,18 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
     // ( The namespace decls should be first attributes in the element;
     //   some faulty XML parsers (JAXP1.1) have a problem with this,
     //   also it's more elegant )
-    sal_uInt16 nPos = pNamespaceMap->GetFirstKey();
+    sal_uInt16 nPos = mpNamespaceMap->GetFirstKey();
     while( USHRT_MAX != nPos )
     {
-        pAttrList->AddAttribute( pNamespaceMap->GetAttrNameByKey( nPos ),
-                                 pNamespaceMap->GetNameByKey( nPos ) );
-        nPos = pNamespaceMap->GetNextKey( nPos );
+        mpAttrList->AddAttribute( mpNamespaceMap->GetAttrNameByKey( nPos ),
+                                  mpNamespaceMap->GetNameByKey( nPos ) );
+        nPos = mpNamespaceMap->GetNextKey( nPos );
     }
 
 
 
     // office:version = ...
-    if( !bExtended )
+    if( !mbExtended )
         AddAttribute( XML_NAMESPACE_OFFICE, XML_VERSION,
                       OUString::createFromAscii(sXML_1_0) );
 
@@ -1360,17 +1348,17 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
     }
 
 
-    xHandler->endDocument();
+    mxHandler->endDocument();
 
     if( bOwnGraphicResolver )
     {
-        Reference< XComponent > xComp( xGraphicResolver, UNO_QUERY );
+        Reference< XComponent > xComp( mxGraphicResolver, UNO_QUERY );
         xComp->dispose();
     }
 
     if( bOwnEmbeddedResolver )
     {
-        Reference< XComponent > xComp( xEmbeddedResolver, UNO_QUERY );
+        Reference< XComponent > xComp( mxEmbeddedResolver, UNO_QUERY );
         xComp->dispose();
     }
 
@@ -1379,7 +1367,7 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
 
 void SvXMLExport::_ExportMeta()
 {
-    SfxXMLMetaExport aMeta( *this, xModel );
+    SfxXMLMetaExport aMeta( *this, mxModel );
     aMeta.Export();
 }
 
@@ -1417,7 +1405,7 @@ void SvXMLExport::_ExportConfigurationSettings(const XMLSettingsExportHelper& rS
 
 void SvXMLExport::_ExportScripts()
 {
-    SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, XML_SCRIPTS, sal_True, sal_True );
+    SvXMLElementExport aElement( *this, XML_NAMESPACE_OFFICE, XML_SCRIPTS, sal_True, sal_True );
 
     // export Basic macros (only for FlatXML)
     if ( mnExportFlags & EXPORT_EMBEDDED )
@@ -1429,9 +1417,9 @@ void SvXMLExport::_ExportScripts()
         SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, XML_SCRIPT, sal_True, sal_True );
 
         // initialize Basic
-        if ( xModel.is() )
+        if ( mxModel.is() )
         {
-            Reference< beans::XPropertySet > xPSet( xModel, UNO_QUERY );
+            Reference< beans::XPropertySet > xPSet( mxModel, UNO_QUERY );
             if ( xPSet.is() )
                 xPSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BasicLibraries" ) ) );
         }
@@ -1440,7 +1428,7 @@ void SvXMLExport::_ExportScripts()
         Reference< lang::XMultiServiceFactory > xMSF( getServiceFactory() );
         if ( xMSF.is() )
         {
-            Reference < XDocumentHandler > xHdl( new XMLBasicExportFilter( xHandler ) );
+            Reference < XDocumentHandler > xHdl( new XMLBasicExportFilter( mxHandler ) );
             Sequence < Any > aArgs( 1 );
             aArgs[0] <<= xHdl;
             xExporter.set( xMSF->createInstanceWithArguments(
@@ -1453,7 +1441,7 @@ void SvXMLExport::_ExportScripts()
 
         if ( xExporter.is() )
         {
-            Reference< XComponent > xComp( xModel, UNO_QUERY );
+            Reference< XComponent > xComp( mxModel, UNO_QUERY );
             xExporter->setSourceDocument( xComp );
             Reference< XFilter > xFilter( xExporter, UNO_QUERY );
             if ( xFilter.is() )
@@ -1475,7 +1463,7 @@ void SvXMLExport::_ExportFontDecls()
         mxFontAutoStylePool->exportXML();
 }
 
-void SvXMLExport::_ExportStyles( sal_Bool bUsed )
+void SvXMLExport::_ExportStyles( sal_Bool )
 {
     uno::Reference< lang::XMultiServiceFactory > xFact( GetModel(), uno::UNO_QUERY );
     if( xFact.is())
@@ -1703,63 +1691,63 @@ xmloff::OFormLayerXMLExport* SvXMLExport::CreateFormExport()
     return new xmloff::OFormLayerXMLExport(*this);
 }
 
-void SvXMLExport::GetViewSettings(uno::Sequence<beans::PropertyValue>& aProps)
+void SvXMLExport::GetViewSettings(uno::Sequence<beans::PropertyValue>&)
 {
 }
 
-void SvXMLExport::GetConfigurationSettings(uno::Sequence<beans::PropertyValue>& aProps)
+void SvXMLExport::GetConfigurationSettings(uno::Sequence<beans::PropertyValue>&)
 {
 }
 
-void SvXMLExport::addDataStyle(const sal_Int32 nNumberFormat, sal_Bool bTimeFormat )
+void SvXMLExport::addDataStyle(const sal_Int32 nNumberFormat, sal_Bool /*bTimeFormat*/ )
 {
-    if(pNumExport)
-        pNumExport->SetUsed(nNumberFormat);
+    if(mpNumExport)
+        mpNumExport->SetUsed(nNumberFormat);
 }
 
 void SvXMLExport::exportDataStyles()
 {
-    if(pNumExport)
-        pNumExport->Export(sal_False);
+    if(mpNumExport)
+        mpNumExport->Export(sal_False);
 }
 
 void SvXMLExport::exportAutoDataStyles()
 {
-    if(pNumExport)
-        pNumExport->Export(sal_True);
+    if(mpNumExport)
+        mpNumExport->Export(sal_True);
 
     if (mxFormExport.is())
         mxFormExport->exportAutoControlNumberStyles();
 }
 
-OUString SvXMLExport::getDataStyleName(const sal_Int32 nNumberFormat, sal_Bool bTimeFormat ) const
+OUString SvXMLExport::getDataStyleName(const sal_Int32 nNumberFormat, sal_Bool /*bTimeFormat*/ ) const
 {
     OUString sTemp;
-    if(pNumExport)
-        sTemp = pNumExport->GetStyleName(nNumberFormat);
+    if(mpNumExport)
+        sTemp = mpNumExport->GetStyleName(nNumberFormat);
     return sTemp;
 }
 
-void SvXMLExport::exportAnnotationMeta(const uno::Reference<drawing::XShape>& xShape)
+void SvXMLExport::exportAnnotationMeta(const uno::Reference<drawing::XShape>&)
 {
 }
 
 sal_Int32 SvXMLExport::dataStyleForceSystemLanguage(sal_Int32 nFormat) const
 {
-    return ( pNumExport != NULL )
-                 ? pNumExport->ForceSystemLanguage( nFormat ) : nFormat;
+    return ( mpNumExport != NULL )
+                 ? mpNumExport->ForceSystemLanguage( nFormat ) : nFormat;
 }
 
 
 OUString SvXMLExport::AddEmbeddedGraphicObject( const OUString& rGraphicObjectURL )
 {
     OUString sRet( rGraphicObjectURL );
-    if( 0 == rGraphicObjectURL.compareTo( sGraphicObjectProtocol,
-                                          sGraphicObjectProtocol.getLength() ) &&
-        xGraphicResolver.is() )
+    if( 0 == rGraphicObjectURL.compareTo( msGraphicObjectProtocol,
+                                          msGraphicObjectProtocol.getLength() ) &&
+        mxGraphicResolver.is() )
     {
         if( (getExportFlags() & EXPORT_EMBEDDED) == 0 )
-            sRet = xGraphicResolver->resolveGraphicObjectURL( rGraphicObjectURL );
+            sRet = mxGraphicResolver->resolveGraphicObjectURL( rGraphicObjectURL );
         else
             sRet = OUString();
     }
@@ -1774,11 +1762,11 @@ sal_Bool SvXMLExport::AddEmbeddedGraphicObjectAsBase64( const OUString& rGraphic
     sal_Bool bRet = sal_False;
 
     if( (getExportFlags() & EXPORT_EMBEDDED) != 0 &&
-        0 == rGraphicObjectURL.compareTo( sGraphicObjectProtocol,
-                                          sGraphicObjectProtocol.getLength() ) &&
-        xGraphicResolver.is() )
+        0 == rGraphicObjectURL.compareTo( msGraphicObjectProtocol,
+                                          msGraphicObjectProtocol.getLength() ) &&
+        mxGraphicResolver.is() )
     {
-        Reference< XBinaryStreamResolver > xStmResolver( xGraphicResolver, UNO_QUERY );
+        Reference< XBinaryStreamResolver > xStmResolver( mxGraphicResolver, UNO_QUERY );
 
         if( xStmResolver.is() )
         {
@@ -1798,14 +1786,14 @@ sal_Bool SvXMLExport::AddEmbeddedGraphicObjectAsBase64( const OUString& rGraphic
 OUString SvXMLExport::AddEmbeddedObject( const OUString& rEmbeddedObjectURL )
 {
     OUString sRet;
-    if( (0 == rEmbeddedObjectURL.compareTo( sEmbeddedObjectProtocol,
-                sEmbeddedObjectProtocol.getLength() ) ||
-         0 == rEmbeddedObjectURL.compareTo( sGraphicObjectProtocol,
-                sGraphicObjectProtocol.getLength() ) ) &&
-        xEmbeddedResolver.is() )
+    if( (0 == rEmbeddedObjectURL.compareTo( msEmbeddedObjectProtocol,
+                msEmbeddedObjectProtocol.getLength() ) ||
+         0 == rEmbeddedObjectURL.compareTo( msGraphicObjectProtocol,
+                msGraphicObjectProtocol.getLength() ) ) &&
+        mxEmbeddedResolver.is() )
     {
         sRet =
-            xEmbeddedResolver->resolveEmbeddedObjectURL( rEmbeddedObjectURL );
+            mxEmbeddedResolver->resolveEmbeddedObjectURL( rEmbeddedObjectURL );
     }
     else
         sRet = GetRelativeReference( rEmbeddedObjectURL );
@@ -1816,13 +1804,13 @@ OUString SvXMLExport::AddEmbeddedObject( const OUString& rEmbeddedObjectURL )
 sal_Bool SvXMLExport::AddEmbeddedObjectAsBase64( const OUString& rEmbeddedObjectURL )
 {
     sal_Bool bRet = sal_False;
-    if( (0 == rEmbeddedObjectURL.compareTo( sEmbeddedObjectProtocol,
-                sEmbeddedObjectProtocol.getLength() ) ||
-         0 == rEmbeddedObjectURL.compareTo( sGraphicObjectProtocol,
-                sGraphicObjectProtocol.getLength() ) ) &&
-        xEmbeddedResolver.is() )
+    if( (0 == rEmbeddedObjectURL.compareTo( msEmbeddedObjectProtocol,
+                msEmbeddedObjectProtocol.getLength() ) ||
+         0 == rEmbeddedObjectURL.compareTo( msGraphicObjectProtocol,
+                msGraphicObjectProtocol.getLength() ) ) &&
+        mxEmbeddedResolver.is() )
     {
-        Reference < XNameAccess > xNA( xEmbeddedResolver, UNO_QUERY );
+        Reference < XNameAccess > xNA( mxEmbeddedResolver, UNO_QUERY );
         if( xNA.is() )
         {
             Any aAny = xNA->getByName( rEmbeddedObjectURL );
@@ -1848,13 +1836,13 @@ OUString SvXMLExport::EncodeStyleName(
 
 ProgressBarHelper*  SvXMLExport::GetProgressBarHelper()
 {
-    if (!pProgressBarHelper)
+    if (!mpProgressBarHelper)
     {
-        pProgressBarHelper = new ProgressBarHelper(xStatusIndicator, sal_True);
+        mpProgressBarHelper = new ProgressBarHelper(mxStatusIndicator, sal_True);
 
-        if (pProgressBarHelper && xExportInfo.is())
+        if (mxExportInfo.is())
         {
-            uno::Reference< beans::XPropertySetInfo > xPropertySetInfo = xExportInfo->getPropertySetInfo();
+            uno::Reference< beans::XPropertySetInfo > xPropertySetInfo = mxExportInfo->getPropertySetInfo();
             if (xPropertySetInfo.is())
             {
                 OUString sProgressRange(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSRANGE));
@@ -1869,57 +1857,57 @@ ProgressBarHelper*  SvXMLExport::GetProgressBarHelper()
                     sal_Int32 nProgressMax(0);
                     sal_Int32 nProgressCurrent(0);
                     sal_Int32 nProgressRange(0);
-                    aAny = xExportInfo->getPropertyValue(sProgressRange);
+                    aAny = mxExportInfo->getPropertyValue(sProgressRange);
                     if (aAny >>= nProgressRange)
-                        pProgressBarHelper->SetRange(nProgressRange);
-                    aAny = xExportInfo->getPropertyValue(sProgressMax);
+                        mpProgressBarHelper->SetRange(nProgressRange);
+                    aAny = mxExportInfo->getPropertyValue(sProgressMax);
                     if (aAny >>= nProgressMax)
-                        pProgressBarHelper->SetReference(nProgressMax);
-                    aAny = xExportInfo->getPropertyValue(sProgressCurrent);
+                        mpProgressBarHelper->SetReference(nProgressMax);
+                    aAny = mxExportInfo->getPropertyValue(sProgressCurrent);
                     if (aAny >>= nProgressCurrent)
-                        pProgressBarHelper->SetValue(nProgressCurrent);
+                        mpProgressBarHelper->SetValue(nProgressCurrent);
                 }
                 if (xPropertySetInfo->hasPropertyByName(sRepeat))
                 {
-                    uno::Any aAny = xExportInfo->getPropertyValue(sRepeat);
+                    uno::Any aAny = mxExportInfo->getPropertyValue(sRepeat);
                     if (aAny.getValueType() == getBooleanCppuType())
-                        pProgressBarHelper->SetRepeat(::cppu::any2bool(aAny));
+                        mpProgressBarHelper->SetRepeat(::cppu::any2bool(aAny));
                     else
                         DBG_ERRORFILE("why is it no boolean?");
                 }
             }
         }
     }
-    return pProgressBarHelper;
+    return mpProgressBarHelper;
 }
 
 XMLEventExport& SvXMLExport::GetEventExport()
 {
-    if( NULL == pEventExport)
+    if( NULL == mpEventExport)
     {
         // create EventExport on demand
-        pEventExport = new XMLEventExport(*this, NULL);
+        mpEventExport = new XMLEventExport(*this, NULL);
 
         // and register standard handlers + names
         OUString sStarBasic(RTL_CONSTASCII_USTRINGPARAM("StarBasic"));
-        pEventExport->AddHandler(sStarBasic, new XMLStarBasicExportHandler());
+        mpEventExport->AddHandler(sStarBasic, new XMLStarBasicExportHandler());
         OUString sScript(RTL_CONSTASCII_USTRINGPARAM("Script"));
-        pEventExport->AddHandler(sScript, new XMLScriptExportHandler());
-        pEventExport->AddTranslationTable(aStandardEventTable);
+        mpEventExport->AddHandler(sScript, new XMLScriptExportHandler());
+        mpEventExport->AddTranslationTable(aStandardEventTable);
     }
 
-    return *pEventExport;
+    return *mpEventExport;
 }
 
 XMLImageMapExport& SvXMLExport::GetImageMapExport()
 {
     // image map export, create on-demand
-    if( NULL == pImageMapExport )
+    if( NULL == mpImageMapExport )
     {
-        pImageMapExport = new XMLImageMapExport(*this);
+        mpImageMapExport = new XMLImageMapExport(*this);
     }
 
-    return *pImageMapExport;
+    return *mpImageMapExport;
 }
 
 // XUnoTunnel & co
@@ -1943,7 +1931,12 @@ SvXMLExport* SvXMLExport::getImplementation( uno::Reference< uno::XInterface > x
 {
     uno::Reference< lang::XUnoTunnel > xUT( xInt, uno::UNO_QUERY );
     if( xUT.is() )
-        return (SvXMLExport*)xUT->getSomething( SvXMLExport::getUnoTunnelId() );
+    {
+        return
+            reinterpret_cast<SvXMLExport*>(
+                sal::static_int_cast<sal_IntPtr>(
+                    xUT->getSomething( SvXMLExport::getUnoTunnelId())));
+    }
     else
         return NULL;
 }
@@ -1955,7 +1948,7 @@ sal_Int64 SAL_CALL SvXMLExport::getSomething( const uno::Sequence< sal_Int8 >& r
     if( rId.getLength() == 16 && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
                                                          rId.getConstArray(), 16 ) )
     {
-        return (sal_Int64)this;
+        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uIntPtr>(this));
     }
     return 0;
 }
@@ -1990,7 +1983,7 @@ sal_Bool SvXMLExport::ExportEmbeddedOwnObject( Reference< XComponent >& rComp )
         return sal_False;
 
     Reference < XDocumentHandler > xHdl =
-        new XMLEmbeddedObjectExportFilter( xHandler );
+        new XMLEmbeddedObjectExportFilter( mxHandler );
 
     Sequence < Any > aArgs( 1 );
     aArgs[0] <<= xHdl;
@@ -2024,11 +2017,11 @@ OUString SvXMLExport::GetRelativeReference(const OUString& rValue)
     {
         try
         {
-            uno::Reference< uri::XUriReference > xUriRef = pImpl->mxUriReferenceFactory->parse( rValue );
+            uno::Reference< uri::XUriReference > xUriRef = mpImpl->mxUriReferenceFactory->parse( rValue );
             if( xUriRef.is() && !xUriRef->isAbsolute() )
             {
                 //#i61943# relative URLs need special handling
-                INetURLObject aTemp( pImpl->msPackageURI );
+                INetURLObject aTemp( mpImpl->msPackageURI );
                 bool bWasAbsolute = false;
                 sValue = aTemp.smartRel2Abs(sValue, bWasAbsolute ).GetMainURL(INetURLObject::DECODE_TO_IURI);
             }
@@ -2037,14 +2030,14 @@ OUString SvXMLExport::GetRelativeReference(const OUString& rValue)
         {
         }
     }
-    return URIHelper::simpleNormalizedMakeRelative(sOrigFileName, sValue);
+    return URIHelper::simpleNormalizedMakeRelative(msOrigFileName, sValue);
 }
 
 void SvXMLExport::StartElement(sal_uInt16 nPrefix,
                         enum ::xmloff::token::XMLTokenEnum eName,
                         sal_Bool bIgnWSOutside )
 {
-    StartElement(pNamespaceMap->GetQNameByKey( nPrefix, GetXMLToken(eName) ), bIgnWSOutside);
+    StartElement(mpNamespaceMap->GetQNameByKey( nPrefix, GetXMLToken(eName) ), bIgnWSOutside);
 }
 
 void SvXMLExport::StartElement(const OUString& rName,
@@ -2055,8 +2048,8 @@ void SvXMLExport::StartElement(const OUString& rName,
         try
         {
             if( bIgnWSOutside && ((mnExportFlags & EXPORT_PRETTY) == EXPORT_PRETTY))
-                xHandler->ignorableWhitespace( sWS );
-            xHandler->startElement( rName, GetXAttrList() );
+                mxHandler->ignorableWhitespace( msWS );
+            mxHandler->startElement( rName, GetXAttrList() );
         }
         catch ( SAXInvalidCharacterException& e )
         {
@@ -2081,7 +2074,7 @@ void SvXMLExport::Characters(const ::rtl::OUString& rChars)
     {
         try
         {
-            xHandler->characters(rChars);
+            mxHandler->characters(rChars);
         }
         catch ( SAXInvalidCharacterException& e )
         {
@@ -2103,7 +2096,7 @@ void SvXMLExport::EndElement(sal_uInt16 nPrefix,
                         enum ::xmloff::token::XMLTokenEnum eName,
                         sal_Bool bIgnWSInside )
 {
-    EndElement(pNamespaceMap->GetQNameByKey( nPrefix, GetXMLToken(eName) ), bIgnWSInside);
+    EndElement(mpNamespaceMap->GetQNameByKey( nPrefix, GetXMLToken(eName) ), bIgnWSInside);
 }
 
 void SvXMLExport::EndElement(const OUString& rName,
@@ -2114,8 +2107,8 @@ void SvXMLExport::EndElement(const OUString& rName,
         try
         {
             if( bIgnWSInside && ((mnExportFlags & EXPORT_PRETTY) == EXPORT_PRETTY))
-                xHandler->ignorableWhitespace( sWS );
-            xHandler->endElement( rName );
+                mxHandler->ignorableWhitespace( msWS );
+            mxHandler->endElement( rName );
         }
         catch ( SAXException& e )
         {
@@ -2136,7 +2129,7 @@ void SvXMLExport::IgnorableWhitespace()
     {
         try
         {
-            xHandler->ignorableWhitespace( sWS );
+            mxHandler->ignorableWhitespace( msWS );
         }
         catch ( SAXException& e )
         {
@@ -2167,11 +2160,11 @@ void SvXMLExport::SetError(
         mnErrorFlags |= ERROR_DO_NOTHING;
 
     // create error lsit on demand
-    if ( pXMLErrors == NULL )
-        pXMLErrors = new XMLErrors();
+    if ( mpXMLErrors == NULL )
+        mpXMLErrors = new XMLErrors();
 
     // save error information
-    pXMLErrors->AddRecord( nId, rMsgParams, rExceptionMessage, rLocator );
+    mpXMLErrors->AddRecord( nId, rMsgParams, rExceptionMessage, rLocator );
 }
 
 void SvXMLExport::SetError(
@@ -2185,12 +2178,12 @@ void SvXMLExport::SetError(
 
 XMLErrors* SvXMLExport::GetErrors()
 {
-    return pXMLErrors;
+    return mpXMLErrors;
 }
 
 void SvXMLExport::DisposingModel()
 {
-    xModel.clear();
+    mxModel.clear();
     // --> OD 2006-03-13 #i51726#
     meModelType = SvtModuleOptions::E_UNKNOWN_FACTORY;;
     // <--
@@ -2206,7 +2199,7 @@ void SvXMLExport::DisposingModel()
 
 ::comphelper::UnoInterfaceToUniqueIdentifierMapper& SvXMLExport::getInterfaceToIdentifierMapper()
 {
-    return pImpl->maInterfaceToIdentifierMapper;
+    return mpImpl->maInterfaceToIdentifierMapper;
 }
 
 //=============================================================================
