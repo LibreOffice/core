@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pyuno_adapter.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 10:48:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:03:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,7 @@ using com::sun::star::reflection::XIdlClass;
 namespace pyuno
 {
 
-Adapter::Adapter( const PyRef & ref, const Runtime & runtime, const Sequence< Type > &types )
+Adapter::Adapter( const PyRef & ref, const Sequence< Type > &types )
     : mWrappedObject( ref ),
       mInterpreter( (PyThreadState_Get()->interp) ),
       mTypes( types )
@@ -153,8 +153,10 @@ Sequence< sal_Int16 > Adapter::getOutIndexes( const OUString & functionName )
             if( ! method.is( ) )
             {
                 throw RuntimeException(
-                    OUStringBuffer().appendAscii("pyuno bridge: Couldn't get reflection for method "
-                        ).append( functionName ).makeStringAndClear(),
+                    (OUString(
+                        RTL_CONSTASCII_USTRINGPARAM(
+                            "pyuno bridge: Couldn't get reflection for method "))
+                     + functionName),
                     Reference< XInterface > () );
             }
 
@@ -226,7 +228,7 @@ Any Adapter::invoke( const OUString &aFunctionName,
         if( isLog( cargo, LogLevel::CALL ) )
         {
             logCall( cargo, "try     uno->py[0x",
-                     (sal_Int64) mWrappedObject.get(), aFunctionName, aParams );
+                     mWrappedObject.get(), aFunctionName, aParams );
         }
 
         sal_Int32 size = aParams.getLength();
@@ -285,9 +287,11 @@ Any Adapter::invoke( const OUString &aFunctionName,
                     if( ! ( ret >>= seq ) )
                     {
                         throw RuntimeException(
-                            OUStringBuffer().appendAscii(
-                                "pyuno bridge: Couldn't extract out parameters for method "
-                                ).append( aFunctionName ).makeStringAndClear(),
+                            (OUString(
+                                RTL_CONSTASCII_USTRINGPARAM(
+                                    "pyuno bridge: Couldn't extract out"
+                                    " parameters for method "))
+                             + aFunctionName),
                             Reference< XInterface > () );
                     }
 
@@ -319,7 +323,7 @@ Any Adapter::invoke( const OUString &aFunctionName,
         if( isLog( cargo, LogLevel::CALL ) )
         {
             logReply( cargo, "success uno->py[0x" ,
-                     (sal_Int64) mWrappedObject.get(), aFunctionName, ret, aOutParam );
+                      mWrappedObject.get(), aFunctionName, ret, aOutParam );
         }
     }
 
@@ -330,7 +334,7 @@ Any Adapter::invoke( const OUString &aFunctionName,
         {
             logException(
                 cargo, "except  uno->py[0x" ,
-                (sal_Int64) mWrappedObject.get(), aFunctionName,
+                mWrappedObject.get(), aFunctionName,
                 e.TargetException.getValue(),e.TargetException.getValueType() );
         }
         throw;
@@ -341,7 +345,7 @@ Any Adapter::invoke( const OUString &aFunctionName,
         {
             logException(
                 cargo, "except  uno->py[0x" ,
-                (sal_Int64) mWrappedObject.get(), aFunctionName, &e,getCppuType(&e) );
+                mWrappedObject.get(), aFunctionName, &e,getCppuType(&e) );
         }
         throw;
     }
@@ -351,7 +355,7 @@ Any Adapter::invoke( const OUString &aFunctionName,
         {
             logException(
                 cargo, "except  uno->py[0x" ,
-                (sal_Int64) mWrappedObject.get(), aFunctionName, &e,getCppuType(&e) );
+                mWrappedObject.get(), aFunctionName, &e,getCppuType(&e) );
         }
         throw;
     }
@@ -361,7 +365,7 @@ Any Adapter::invoke( const OUString &aFunctionName,
         {
             logException(
                 cargo,  "except  uno->py[0x" ,
-                (sal_Int64) mWrappedObject.get(), aFunctionName, &e,getCppuType(&e) );
+                mWrappedObject.get(), aFunctionName, &e,getCppuType(&e) );
         }
         throw;
     }
@@ -429,7 +433,7 @@ sal_Bool Adapter::hasMethod( const OUString & aMethodName )
 sal_Bool Adapter::hasProperty( const OUString & aPropertyName )
     throw ( RuntimeException )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     PyThreadAttach guard( mInterpreter );
     {
         bRet = PyObject_HasAttrString(
