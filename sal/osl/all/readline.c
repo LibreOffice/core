@@ -4,9 +4,9 @@
  *
  *  $RCSfile: readline.c,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:52:12 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:16:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,8 @@ static sal_Bool AllocateBuffer(Buffer* pBuffer, sal_uInt64 Capacity)
 
     OSL_ASSERT(pBuffer);
 
-    if ((pBuffer->m_pMem = (sal_Char*)rtl_allocateZeroMemory((sal_uInt32)Capacity)))
+    pBuffer->m_pMem = (sal_Char*)rtl_allocateZeroMemory((sal_uInt32)Capacity);
+    if (pBuffer->m_pMem)
     {
         pBuffer->m_Capacity = Capacity;
         pBuffer->m_Size = 0;
@@ -114,12 +115,13 @@ static void FreeBuffer(Buffer* pBuffer)
 static sal_Bool GrowBuffer(Buffer* pBuffer, size_t factor)
 {
     sal_Bool rc = sal_False;
-    void*    p  = 0;
+    void*    p;
 
     OSL_ASSERT(pBuffer);
 
-    if ((p = rtl_reallocateMemory(
-        pBuffer->m_pMem, (sal_uInt32)(pBuffer->m_Capacity * factor))))
+    p = rtl_reallocateMemory(
+        pBuffer->m_pMem, (sal_uInt32)(pBuffer->m_Capacity * factor));
+    if (p)
     {
         pBuffer->m_pMem      = (sal_Char*)p;
         pBuffer->m_Capacity *= factor;
@@ -311,8 +313,4 @@ oslFileError SAL_CALL osl_readLine(oslFileHandle Handle, sal_Sequence** ppSeq)
             }
         }
     } /* end for */
-
-    OSL_POSTCOND(sal_False, "Should not be here");
-
-    return osl_File_E_None;
 }
