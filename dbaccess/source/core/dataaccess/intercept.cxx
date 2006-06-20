@@ -4,9 +4,9 @@
  *
  *  $RCSfile: intercept.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 08:29:26 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:45:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,11 +103,11 @@ void SAL_CALL OInterceptor::dispose()
 DBG_NAME(OInterceptor)
 
 OInterceptor::OInterceptor( ODocumentDefinition* _pContentHolder,sal_Bool _bAllowEditDoc )
-    : m_pContentHolder( _pContentHolder )
-      ,m_pStatCL(0)
-      ,m_pDisposeEventListeners(0)
-      ,m_aInterceptedURL(7)
-      ,m_bAllowEditDoc(_bAllowEditDoc)
+    :m_pContentHolder( _pContentHolder )
+    ,m_aInterceptedURL(7)
+    ,m_pDisposeEventListeners(0)
+    ,m_pStatCL(0)
+    ,m_bAllowEditDoc(_bAllowEditDoc)
 {
     DBG_CTOR(OInterceptor,NULL);
 
@@ -440,7 +440,7 @@ void SAL_CALL OInterceptor::notifyEvent( const ::com::sun::star::document::Event
     }
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OInterceptor::disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL OInterceptor::disposing( const ::com::sun::star::lang::EventObject& /*Source*/ ) throw (::com::sun::star::uno::RuntimeException)
 {
 }
 
