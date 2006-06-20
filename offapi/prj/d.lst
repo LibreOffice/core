@@ -48,6 +48,7 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\gallery
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\graphic
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\i18n
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\image
+mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\inspection
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\installation
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\ldap
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\linguistic2
@@ -147,6 +148,7 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\wrapper
 ..\com\sun\star\graphic\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\graphic
 ..\com\sun\star\i18n\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\i18n
 ..\com\sun\star\image\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\image
+..\com\sun\star\inspection\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\inspection
 ..\com\sun\star\installation\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\installation
 ..\com\sun\star\ldap\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\ldap
 ..\com\sun\star\linguistic2\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\linguistic2
