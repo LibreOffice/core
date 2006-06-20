@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 10:12:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:41:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -183,9 +183,9 @@ OTableContainer::OTableContainer(::cppu::OWeakObject& _rParent,
                                  IWarningsContainer* _pWarningsContainer)
     :OFilteredContainer(_rParent,_rMutex,_xCon,_bCase,_pRefreshListener,_pWarningsContainer)
     ,m_xTableDefinitions(_xTableDefinitions)
+    ,m_pMediator(NULL)
     ,m_bInAppend(sal_False)
     ,m_bInDrop(sal_False)
-    ,m_pMediator(NULL)
 {
     DBG_CTOR(OTableContainer, NULL);
     m_pMediator = new OContainerMediator(this,Reference<XNameAccess>(_xTableDefinitions,UNO_QUERY));
@@ -541,7 +541,7 @@ void SAL_CALL OTableContainer::elementInserted( const ContainerEvent& Event ) th
     }
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OTableContainer::elementRemoved( const ContainerEvent& Event ) throw (RuntimeException)
+void SAL_CALL OTableContainer::elementRemoved( const ContainerEvent& /*Event*/ ) throw (RuntimeException)
 {
 }
 // -----------------------------------------------------------------------------
@@ -566,7 +566,7 @@ void SAL_CALL OTableContainer::disposing()
     m_xTableMediator = NULL;
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OTableContainer::disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL OTableContainer::disposing( const ::com::sun::star::lang::EventObject& /*Source*/ ) throw (::com::sun::star::uno::RuntimeException)
 {
 }
 // -----------------------------------------------------------------------------
