@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transliteration_Ignore.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:57:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:41:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -171,6 +171,7 @@ public:\
         };\
         rtl::OUString SAL_CALL folding( const rtl::OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, \
                 com::sun::star::uno::Sequence< sal_Int32 >& offset) throw(com::sun::star::uno::RuntimeException); \
+        using transliteration_Ignore::transliterateRange;\
         com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL transliterateRange( const rtl::OUString& str1, \
                 const rtl::OUString& str2 ) throw(com::sun::star::uno::RuntimeException); \
         sal_Unicode SAL_CALL \
