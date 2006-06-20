@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pipe.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-06-02 12:42:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:07:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,7 +90,8 @@ OPipe::OPipe( const rtl::OUString& strName,
 /*****************************************************************************/
 // OPipe()
 /*****************************************************************************/
-OPipe::OPipe(const OPipe& pipe)
+OPipe::OPipe(const OPipe& pipe) :
+OReference(), OObject()
 {
 
     VOS_ASSERT(pipe.m_pPipeRef != 0);
@@ -302,7 +303,8 @@ OStreamPipe::OStreamPipe(oslPipe Pipe) :
 // OStreamPipe
 // copy constructor
 /*****************************************************************************/
-OStreamPipe::OStreamPipe(const OStreamPipe& pipe)
+OStreamPipe::OStreamPipe(const OStreamPipe& pipe) :
+OPipe(), IStream()
 {
     VOS_ASSERT(pipe.m_pPipeRef != 0);
 
