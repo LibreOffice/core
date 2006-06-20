@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MNSMozabProxy.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 12:18:58 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:51:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,14 +47,15 @@
 #include "MQuery.hxx"
 #endif
 
-#include <nsIProxyObjectManager.h>
-
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
 #ifndef _OSL_CONDITN_HXX_
 #include <osl/conditn.hxx>
 #endif
+
+#include "pre_include_mozilla.h"
+#include <nsIProxyObjectManager.h>
 // More Mozilla includes for LDAP Connection Test
 #include "prprf.h"
 #include "nsILDAPURL.h"
@@ -63,6 +64,7 @@
 #include "nsILDAPErrors.h"
 #include "nsILDAPConnection.h"
 #include "nsILDAPOperation.h"
+#include "post_include_mozilla.h"
 
 #ifndef _CONNECTIVITY_MAB_QUERY_HXX_
 #include "MQuery.hxx"
@@ -239,7 +241,7 @@ namespace connectivity {
             NS_DECL_NSILDAPMESSAGELISTENER
 
             MLDAPMessageListener();
-            ~MLDAPMessageListener();
+            virtual ~MLDAPMessageListener();
 
             sal_Bool    connected();
         protected:
@@ -284,9 +286,8 @@ void MLDAPMessageListener::setConnectionStatus( sal_Bool _good )
     m_aCondition.set();
 }
 
-NS_IMETHODIMP MLDAPMessageListener::OnLDAPInit(nsILDAPConnection *aConn, nsresult aStatus )
+NS_IMETHODIMP MLDAPMessageListener::OnLDAPInit(nsILDAPConnection* /*aConn*/, nsresult aStatus )
 {
-
     // Make sure that the Init() worked properly
     if ( NS_FAILED(aStatus ) ) {
         setConnectionStatus( sal_False );
@@ -361,7 +362,7 @@ MNSMozabProxy::testLDAPConnection( )
     return rv;
 }
 nsresult
-MNSMozabProxy::InitLDAP(sal_Char* sUri, sal_Unicode* sBindDN, sal_Unicode* sPasswd,sal_Bool * nUseSSL)
+MNSMozabProxy::InitLDAP(sal_Char* sUri, sal_Unicode* sBindDN, sal_Unicode* pPasswd,sal_Bool * nUseSSL)
 {
     sal_Bool      useSSL    = *nUseSSL;
     nsresult       rv;
@@ -414,10 +415,13 @@ MNSMozabProxy::InitLDAP(sal_Char* sUri, sal_Unicode* sBindDN, sal_Unicode* sPass
     if (NS_FAILED(rv))
     return NS_ERROR_UNEXPECTED; // this should never happen
 
-    nsCAutoString nsPassword;
-    nsPassword.AssignWithConversion(sPasswd);
+    if ( pPasswd && *pPasswd )
+    {
+        nsCAutoString nsPassword;
+        nsPassword.AssignWithConversion(pPasswd);
+        rv = ldapOperation->SimpleBind(nsPassword);
+    }
 
-    rv = ldapOperation->SimpleBind(nsPassword);
     if (NS_SUCCEEDED(rv))
         m_Args->arg5 = messageListener;
     return rv;
