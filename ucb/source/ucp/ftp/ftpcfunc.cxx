@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ftpcfunc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:31:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:23:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,7 @@ extern "C" {
     }
 
 
-    int ftp_passwd(void *client,char*prompt,char*buffer,int bufferlength)
+    int ftp_passwd(void *, char*, char*, int)
     {
         return 0;
     }
