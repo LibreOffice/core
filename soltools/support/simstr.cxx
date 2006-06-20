@@ -4,9 +4,9 @@
  *
  *  $RCSfile: simstr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:29:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:09:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,9 +44,9 @@ const char NULCH = '\0';
 const int  NO_POS = -1;
 
 
-Simstr::Simstr(const char * str)
+Simstr::Simstr(const char * s_)
 {
-   if (str == 0)
+   if (s_ == 0)
       {
          len = 0;
          sz = new char[1];
@@ -54,9 +54,9 @@ Simstr::Simstr(const char * str)
       }
    else
       {
-         len = strlen(str);
+         len = strlen(s_);
          sz = new char[len+1];
-         memcpy(sz,str,len+1);
+         memcpy(sz,s_,len+1);
       }
 }
 
@@ -182,9 +182,9 @@ Simstr::operator+=(const Simstr & S)
 }
 
 Simstr &
-Simstr::operator+=(const char * s)
+Simstr::operator+=(const char * s_)
 {
-    Simstr a(s);
+    Simstr a(s_);
     push_back(a);
     return *this;
 }
