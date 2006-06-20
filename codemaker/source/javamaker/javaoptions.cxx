@@ -4,9 +4,9 @@
  *
  *  $RCSfile: javaoptions.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:17:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:25:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -220,7 +220,6 @@ sal_Bool JavaOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
 
                 default:
                     throw IllegalArgument("the option is unknown" + OString(av[i]));
-                    break;
             }
         } else
         {
@@ -246,9 +245,9 @@ sal_Bool JavaOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
 
                     ret = initOptions(rargc, rargv, bCmdFile);
 
-                    for (long i=0; i < rargc; i++)
+                    for (long j=0; j < rargc; j++)
                     {
-                        free(rargv[i]);
+                        free(rargv[j]);
                     }
                 }
             } else
@@ -259,7 +258,11 @@ sal_Bool JavaOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                 } else
                 {
                     OUString system_filepath;
-                    OSL_VERIFY( osl_Process_E_None == osl_getCommandArg( i-1, &system_filepath.pData ) );
+                    if (osl_getCommandArg( i-1, &system_filepath.pData )
+                        != osl_Process_E_None)
+                    {
+                        OSL_ASSERT(false);
+                    }
                     m_inputFiles.push_back(OUStringToOString(system_filepath, osl_getThreadTextEncoding()));
                 }
             }
