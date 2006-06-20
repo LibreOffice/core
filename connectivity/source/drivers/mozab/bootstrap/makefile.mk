@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 06:27:00 $
+#   last change: $Author: hr $ $Date: 2006-06-20 01:49:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -134,7 +134,7 @@ CDEFS+=     -DOSTYPE=\"Linux2.2.14-5\" -DOJI
 
 CFLAGSCXX += \
             -fno-rtti -Wall -Wconversion -Wpointer-arith \
-            -Wbad-function-cast -Wcast-align -Woverloaded-virtual -Wsynth \
+            -Wcast-align -Woverloaded-virtual -Wsynth \
             -Wno-long-long -pthread
 CDEFS     += -DTRACING
 .ELIF "$(OS)" == "NETBSD" || "$(OS)" == "MACOSX"
