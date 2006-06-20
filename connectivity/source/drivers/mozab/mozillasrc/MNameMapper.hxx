@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MNameMapper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:29:16 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:51:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,9 +79,6 @@ namespace connectivity
 
                 //reset dirs
                 void reset();
-
-                // Will replace the given dir
-                void replace( const ::rtl::OUString& str, nsIAbDirectory* abook );
 
                 // Get the directory corresponding to str
                 bool getDir( const ::rtl::OUString& str, nsIAbDirectory* *abook );
