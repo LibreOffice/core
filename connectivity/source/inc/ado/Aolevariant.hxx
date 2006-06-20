@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Aolevariant.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:55:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:00:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,14 +38,17 @@
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
-#include <oaidl.h>
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
-
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
+
+#include "ado_pre_sys_include.h"
+#include <oaidl.h>
+#include "ado_post_sys_include.h"
+
 namespace com
 {
     namespace sun
