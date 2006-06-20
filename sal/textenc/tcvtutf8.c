@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tcvtutf8.c,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:45:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:38:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,7 @@ sal_Size ImplConvertUtf8ToUnicode(ImplTextConverterData const * pData,
        RTL_TEXTENCODING_UTF8 and RTL_TEXTENCODING_JAVA_UTF8.
       */
 
-    sal_Bool bJavaUtf8 = pData != NULL;
+    int bJavaUtf8 = pData != NULL;
     sal_uInt32 nUtf32 = 0;
     int nShift = -1;
     sal_Bool bCheckBom = sal_True;
@@ -105,7 +105,7 @@ sal_Size ImplConvertUtf8ToUnicode(ImplTextConverterData const * pData,
     while (pSrcBufPtr < pSrcBufEnd)
     {
         sal_Bool bUndefined = sal_False;
-        sal_Bool bConsume = sal_True;
+        int bConsume = sal_True;
         sal_uInt32 nChar = *pSrcBufPtr++;
         if (nShift < 0)
             if (nChar <= 0x7F)
@@ -277,7 +277,7 @@ sal_Size ImplConvertUnicodeToUtf8(ImplTextConverterData const * pData,
                                   sal_Size nDestBytes, sal_uInt32 nFlags,
                                   sal_uInt32 * pInfo, sal_Size* pSrcCvtChars)
 {
-    sal_Bool bJavaUtf8 = pData != NULL;
+    int bJavaUtf8 = pData != NULL;
     sal_Unicode nHighSurrogate = 0xFFFF;
     sal_uInt32 nInfo = 0;
     sal_Unicode const * pSrcBufPtr = pSrcBuf;
@@ -297,9 +297,9 @@ sal_Size ImplConvertUnicodeToUtf8(ImplTextConverterData const * pData,
             if (pDestBufEnd - pDestBufPtr >= 3)
             {
                 /* Write BOM (U+FEFF) as UTF-8: */
-                *pDestBufPtr++ = (sal_Char) 0xEF;
-                *pDestBufPtr++ = (sal_Char) 0xBB;
-                *pDestBufPtr++ = (sal_Char) 0xBF;
+                *pDestBufPtr++ = (sal_Char) (unsigned char) 0xEF;
+                *pDestBufPtr++ = (sal_Char) (unsigned char) 0xBB;
+                *pDestBufPtr++ = (sal_Char) (unsigned char) 0xBF;
             }
             else
             {
