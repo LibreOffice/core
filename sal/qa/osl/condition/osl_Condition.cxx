@@ -4,9 +4,9 @@
  *
  *  $RCSfile: osl_Condition.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:21:12 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:23:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -290,6 +290,10 @@ namespace osl_Condition
             cond1.set();
             cond2.set();
 
+osl::Condition::Result r1=cond1.wait(tv1);
+osl::Condition::Result r2=cond2.wait();
+osl::Condition::Result r3=cond3.wait(tv1);
+fprintf(stderr,"%d %d %d\n",r1,r2,r3);
             CPPUNIT_ASSERT_MESSAGE( "#test comment#: test three types of wait.",
                                     (cond1.wait(tv1) == ::osl::Condition::result_ok) &&
                                     (cond2.wait() == ::osl::Condition::result_ok) &&
