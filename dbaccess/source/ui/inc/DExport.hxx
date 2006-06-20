@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DExport.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:42:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:11:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,6 +86,8 @@ namespace com { namespace sun { namespace star {
     }
 }}}
 
+#define COLUMN_POSITION_NOT_FOUND   ((sal_Int32)-1)
+
 class Window;
 class SvNumberFormatter;
 namespace dbaui
@@ -104,12 +106,11 @@ namespace dbaui
         ::std::vector<sal_Int32>        m_vColumnTypes; // FeldTypen f"ur schnelleren Zugriff
         ::std::vector<sal_Int32>        m_vColumnSize;
         ::std::vector<sal_Int32>        m_vFormatKey;
-        ::com::sun::star::lang::Locale  m_nLocale;
+        ::com::sun::star::lang::Locale  m_aLocale;
 
+        TColumns                        m_aDestColumns; // container for new created columns
+        TColumnVector                   m_vDestVector;
 
-        TColumns        m_aDestColumns; // container for new created columns
-        TColumnVector   m_vDestVector;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>     m_xColumns;     // container
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xTable;       // dest table
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>     m_xTables;      // container
         SharedConnection                                                                m_xConnection;  // dest conn
