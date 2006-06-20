@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tres.c,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:06:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:30:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,9 +125,6 @@ static sal_Bool SAL_CALL rtl_tres_state(
 
 static void SAL_CALL rtl_tres_end( rtl_TestResult* pThis_,
                                                         const sal_Char* msg );
-
-static void SAL_CALL rtl_tres_sub( rtl_TestResult* pThis_,
-                                                    const sal_Char* name );
 
 static rtl_funcstate SAL_CALL rtl_tres_funcstate( rtl_TestResult* pThis_ );
 
@@ -577,9 +574,8 @@ static rtl_funcstate SAL_CALL rtl_tres_funcstate( rtl_TestResult* pThis_ )
 static sal_Bool SAL_CALL rtl_tres_isbit( rtl_TestResult* pThis_,
                                                           sal_uInt32 flag  )
 {
-
-    return ( ( ((rtl_TestResult_Data*)pThis_)->m_state->m_flags & flag )
-                                                                    == flag );
+    return (sal_Bool)
+        ((((rtl_TestResult_Data *) pThis_)->m_state->m_flags & flag) == flag);
 }
  /**
   * set one single bit
