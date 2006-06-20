@@ -4,9 +4,9 @@
  *
  *  $RCSfile: system.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:12:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:22:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,16 +71,21 @@
     // at the same time without patching
     // windows.h
     #include <windows.h>
+    #include <shlobj.h>
+    #ifndef NO_DEBUG_CRT
+        #include <crtdbg.h>
+    #endif
 #else
     // winsock2.h includes windows.h
+    #pragma warning(push,1) /* disable warnings within system headers */
+    #pragma warning(disable:4917)
     #include <winsock2.h>
     #include <wsipx.h>
-#endif
-
-#include <shlobj.h>
-
-#ifndef NO_DEBUG_CRT
-#   include <crtdbg.h>
+    #include <shlobj.h>
+    #ifndef NO_DEBUG_CRT
+        #include <crtdbg.h>
+    #endif
+    #pragma warning(pop)
 #endif
 
 #define _MAX_CMD    4096    /* maximum length of commandline     */
