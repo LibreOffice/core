@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 18:57:44 $
+#   last change: $Author: hr $ $Date: 2006-06-20 05:43:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -67,16 +67,17 @@ SHL1OBJS= \
         $(SLO)$/tracker.obj
 
 SHL1STDLIBS=\
-    $(SALLIB) 	        \
-    $(CPPULIB)	        \
-    $(CPPUHELPERLIB)	\
-    ole32.lib 	        \
-    gdi32.lib 	        \
-    uuid.lib 	        \
-    oleaut32.lib
+        $(SALLIB)			\
+        $(CPPULIB)			\
+        $(CPPUHELPERLIB)	\
+        ole32.lib			\
+        gdi32.lib			\
+        uuid.lib				\
+        oleaut32.lib
 
 .IF "$(COMEX)"=="8" || "$(COMEX)"=="10"
-SHL1STDLIBS+=  advapi32.lib	\
+SHL1STDLIBS+=\
+        advapi32.lib	\
         $(ATL_LIB)$/atls.lib
 .ENDIF
 
