@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impltools.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:01:27 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:20:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,7 +100,7 @@ namespace vclcanvas
                 {
                     sal_Int64 nPtr = xTunnel->getSomething( vcl::unotools::getTunnelIdentifier( vcl::unotools::Id_BitmapEx ) );
                     if( nPtr )
-                        return BitmapEx( *(BitmapEx*)nPtr );
+                        return BitmapEx( *reinterpret_cast<BitmapEx*>(sal::static_int_cast<sal_uIntPtr>(nPtr)) );
                 }
                 // TODO(F1): extract pixel from XBitmap interface
                 ENSURE_AND_THROW( false,
