@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfilter.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:13:46 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:52:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,10 +144,8 @@ namespace dbaxml
 sal_Int32 ReadThroughComponent(
     const Reference<XInputStream>& xInputStream,
     const Reference<XComponent>& xModelComponent,
-    const sal_Char* pStreamName,
     const Reference<XMultiServiceFactory> & rFactory,
-    const Reference< XDocumentHandler >& _xFilter,
-    sal_Bool bEncrypted )
+    const Reference< XDocumentHandler >& _xFilter )
 {
     DBG_ASSERT(xInputStream.is(), "input stream missing");
     DBG_ASSERT(xModelComponent.is(), "document missing");
@@ -283,10 +281,8 @@ sal_Int32 ReadThroughComponent(
         // read from the stream
         return ReadThroughComponent( xInputStream
                                     ,xModelComponent
-                                    ,pStreamName
                                     ,rFactory
-                                    ,_xFilter
-                                    ,bEncrypted );
+                                    ,_xFilter );
     }
 
     // TODO/LATER: better error handling
@@ -463,7 +459,7 @@ SvXMLImportContext* ODBFilter::CreateContext( sal_uInt16 nPrefix,
             break;
         case XML_TOK_DOC_DATABASE:
             GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            pContext = new OXMLDatabase( *this, nPrefix, rLocalName,xAttrList );
+            pContext = new OXMLDatabase( *this, nPrefix, rLocalName );
             break;
         case XML_TOK_DOC_STYLES:
             GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
