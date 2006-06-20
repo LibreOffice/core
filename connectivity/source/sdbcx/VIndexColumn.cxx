@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VIndexColumn.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:43:57 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:10:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,12 +107,9 @@ OIndexColumn::OIndexColumn( sal_Bool _IsAscending,
     construct();
 }
 // -----------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper* OIndexColumn::createArrayHelper( sal_Int32 _nId) const
+::cppu::IPropertyArrayHelper* OIndexColumn::createArrayHelper( sal_Int32 /*_nId*/ ) const
 {
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > aProps;
-    describeProperties(aProps);
-    changePropertyAttributte(aProps);
-    return new ::cppu::OPropertyArrayHelper(aProps);
+    return doCreateArrayHelper();
 }
 // -----------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper& SAL_CALL OIndexColumn::getInfoHelper()
