@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 07:46:28 $
+#   last change: $Author: hr $ $Date: 2006-06-20 05:57:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -49,8 +49,5 @@ CDEFS += -DSOT_DLLIMPLEMENTATION
 .ENDIF # 5.5
 .ENDIF # sunpro5
 
-PROJECTPCH4DLL=TRUE
-PROJECTPCH=sotpch
-PROJECTPCHSOURCE=$(PRJ)$/util$/sotpch
 PDBTARGET=sot
 
