@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DAVAuthListener.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:05:26 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:33:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,6 @@ class DAVAuthListener : public salhelper::SimpleReferenceObject
             ::rtl::OUString & outPassWord ) = 0;
 };
 
-}; // namespace webdav_ucp
+} // namespace webdav_ucp
 
 #endif // _DAVAUTHLISTENER_HXX_
