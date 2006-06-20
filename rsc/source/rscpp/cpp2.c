@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpp2.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:58:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:49:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -326,8 +326,7 @@ nest_err:       cerror("#%s must be in an #if", token);
 }
 
 FILE_LOCAL
-void doif(hash)
-int             hash;
+void doif(int hash)
 /*
  * Process an #if, #ifdef, or #ifndef.  The latter two are straightforward,
  * while #if needs a subroutine of its own to evaluate the expression.
@@ -442,9 +441,7 @@ incerr: cerror("#include syntax error", NULLST);
 }
 
 FILE_LOCAL int
-openinclude(filename, searchlocal)
-char            *filename;              /* Input file name              */
-int             searchlocal;            /* TRUE if #include "file"      */
+openinclude(char* filename, int searchlocal)
 /*
  * Actually open an include file.  This routine is only called from
  * doinclude() above, but was written as a separate subroutine for
@@ -520,9 +517,7 @@ int             searchlocal;            /* TRUE if #include "file"      */
 }
 
 FILE_LOCAL int
-hasdirectory(source, result)
-char            *source;        /* Directory to examine                 */
-char            *result;        /* Put directory stuff here             */
+hasdirectory(char* source, char* result)
 /*
  * If a device or directory is found in the source filename string, the
  * node/device/directory part of the string is copied to result and
