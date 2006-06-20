@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MtaOleClipb.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:29:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 06:07:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -528,7 +528,7 @@ sal_Bool CMtaOleClipboard::onRegisterClipViewer( LPFNC_CLIPVIEWER_CALLBACK_t pfn
 
         // if there is no other cb-viewer the
         // return value is NULL!!!
-        bRet = IsWindow( m_hwndNextClipViewer );
+        bRet = IsWindow( m_hwndNextClipViewer ) ? sal_True : sal_False;
 
         // save the new callback function
         m_pfncClipViewerCallback = pfncClipViewerCallback;
@@ -661,7 +661,7 @@ LRESULT CMtaOleClipboard::sendMessage( UINT msg, WPARAM wParam, LPARAM lParam )
 
 sal_Bool CMtaOleClipboard::postMessage( UINT msg, WPARAM wParam, LPARAM lParam )
 {
-    return PostMessageA( m_hwndMtaOleReqWnd, msg, wParam, lParam );
+    return PostMessageA( m_hwndMtaOleReqWnd, msg, wParam, lParam ) ? sal_True : sal_False;
 }
 
 
@@ -791,7 +791,10 @@ void CMtaOleClipboard::createMtaOleReqWnd( )
 
 unsigned int CMtaOleClipboard::run( )
 {
-    HRESULT hr = OleInitialize( NULL );
+    #if OSL_DEBUG_LEVEL > 0
+    HRESULT hr =
+    #endif
+        OleInitialize( NULL );
     OSL_ASSERT( SUCCEEDED( hr ) );
 
     createMtaOleReqWnd( );
@@ -811,7 +814,7 @@ unsigned int CMtaOleClipboard::run( )
         nRet = 0;
     }
     else
-        nRet = -1;
+        nRet = ~0U;
 
     OleUninitialize( );
 
