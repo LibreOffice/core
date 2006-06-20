@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WTypeSelect.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 15:44:51 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:22:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,16 +138,20 @@ void OWizTypeSelectControl::DeactivateAggregate( EControlType eType )
 void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
 {
     DBG_ASSERT(nRow == -1,"nRow muss -1 sein!");
+    (void)nRow;
 
     MultiListBox &aListBox = ((OWizTypeSelect*)GetParent())->m_lbColumnNames;
 
-    sal_uInt16 nPos = aListBox.GetEntryPos(String(pActFieldDescr->GetName()));
-    OSL_ENSURE(nPos != LISTBOX_ENTRY_NOTFOUND,"Columnname could not be found in the listbox");
-    pActFieldDescr = static_cast<OFieldDescription*>(aListBox.GetEntryData(nPos));
-    if ( !pActFieldDescr )
-        return;
+    OFieldDescription* pCurFieldDescr = getCurrentFieldDescData();
 
-    ::rtl::OUString sName = pActFieldDescr->GetName();
+    sal_uInt16 nPos = aListBox.GetEntryPos( String( pCurFieldDescr->GetName() ) );
+    pCurFieldDescr = static_cast< OFieldDescription* >( aListBox.GetEntryData( nPos ) );
+    OSL_ENSURE( pCurFieldDescr, "OWizTypeSelectControl::CellModified: Columnname/type not found in the listbox!" );
+    if ( !pCurFieldDescr )
+        return;
+    setCurrentFieldDescData( pCurFieldDescr );
+
+    ::rtl::OUString sName = pCurFieldDescr->GetName();
     ::rtl::OUString sNewName;
     const OPropColumnEditCtrl* pColumnName = getColumnCtrl();
     if ( pColumnName )
@@ -186,14 +190,14 @@ void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
                     String sTitle(ModuleRes(STR_STAT_WARNING));
                     OSQLMessageBox aMsg(this,sTitle,strMessage,WB_OK | WB_DEF_OK,OSQLMessageBox::Error);
                     aMsg.Execute();
-                    pActFieldDescr->SetName(sName);
-                    DisplayData(pActFieldDescr);
+                    pCurFieldDescr->SetName(sName);
+                    DisplayData(pCurFieldDescr);
                     static_cast<OWizTypeSelect*>(GetParent())->setDuplicateName(sal_True);
                     return;
                 }
 
-                ::rtl::OUString sOldName = pActFieldDescr->GetName();
-                pActFieldDescr->SetName(sNewName);
+                ::rtl::OUString sOldName = pCurFieldDescr->GetName();
+                pCurFieldDescr->SetName(sNewName);
                 static_cast<OWizTypeSelect*>(GetParent())->setDuplicateName(sal_False);
 
                 // now we change the name
@@ -211,17 +215,15 @@ void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
                 }
 
                 aListBox.RemoveEntry(nPos);
-                aListBox.InsertEntry(pActFieldDescr->GetName(),nPos);
-                aListBox.SetEntryData(nPos,pActFieldDescr);
+                aListBox.InsertEntry(pCurFieldDescr->GetName(),nPos);
+                aListBox.SetEntryData(nPos,pCurFieldDescr);
 
-                pWiz->replaceColumn(nPos,pActFieldDescr,sOldName);
+                pWiz->replaceColumn(nPos,pCurFieldDescr,sOldName);
             }
             break;
     }
-    SaveData(pActFieldDescr);
+    saveCurrentFieldDescData();
 }
-// -----------------------------------------------------------------------
-void OWizTypeSelectControl::SetModified(sal_Bool bModified) {}
 // -----------------------------------------------------------------------------
 ::com::sun::star::lang::Locale  OWizTypeSelectControl::GetLocale() const
 {
@@ -278,8 +280,8 @@ OWizTypeSelect::OWizTypeSelect( Window* pParent,SvStream*   _pStream)
                ,m_etAuto( this, ModuleRes( ET_AUTO ) )
                ,m_pbAuto( this, ModuleRes( PB_AUTO ) )
                ,m_pParserStream(_pStream)
-               ,m_bAutoIncrementEnabled(sal_False)
                ,m_nDisplayRow(0)
+               ,m_bAutoIncrementEnabled(sal_False)
                ,m_bDuplicateName(sal_False)
 {
     DBG_CTOR(OWizTypeSelect,NULL);
@@ -329,7 +331,7 @@ void OWizTypeSelect::Resize()
     DBG_CHKTHIS(OWizTypeSelect,NULL);
 }
 // -----------------------------------------------------------------------
-IMPL_LINK( OWizTypeSelect, ColumnSelectHdl, MultiListBox *, pListBox )
+IMPL_LINK( OWizTypeSelect, ColumnSelectHdl, MultiListBox *, /*pListBox*/ )
 {
     String aColumnName( m_lbColumnNames.GetSelectEntry() );
 
@@ -401,7 +403,7 @@ void OWizTypeSelect::EnableAuto(sal_Bool bEnable)
     m_flAutoType.Show(bEnable);
 }
 //------------------------------------------------------------------------------
-IMPL_LINK( OWizTypeSelect, ButtonClickHdl, Button *, pButton )
+IMPL_LINK( OWizTypeSelect, ButtonClickHdl, Button *, /*pButton*/ )
 {
     DBG_CHKTHIS(OWizTypeSelect,NULL);
     sal_Int32 nBreakPos;
