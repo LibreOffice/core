@@ -4,9 +4,9 @@
  *
  *  $RCSfile: typeblop.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:07:16 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:10:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,6 +172,9 @@ void writeConstantData( RegistryTypeWriter& rWriter, sal_uInt16 fieldIndex,
                 constValue.m_type = RT_TYPE_STRING;
                 constValue.m_value.aString = ((OUString*)aConstantAny.getValue())->getStr();
             }
+            break;
+        default:
+            OSL_ASSERT(false);
             break;
     }
 
@@ -457,7 +460,7 @@ sal_uInt32 SAL_CALL getTypeBlop(const sal_Char* pTypeName, sal_uInt8** pBlop)
                             {
                                 attrAccess = RT_ACCESS_READWRITE;
                             }
-                            writer.setFieldData(memberTypes[i]->getPosition() - inheritedMemberCount,
+                            writer.setFieldData(sal::static_int_cast< sal_uInt16 >(memberTypes[i]->getPosition() - inheritedMemberCount),
                                                 memberTypes[i]->getMemberName(),
                                                 xAttr->getType()->getName().replace('.', '/'),
                                                 OUString(), OUString(), attrAccess);
@@ -561,6 +564,9 @@ sal_uInt32 SAL_CALL getTypeBlop(const sal_Char* pTypeName, sal_uInt8** pBlop)
                     *pBlop = (sal_uInt8*)rtl_allocateMemory( length );
                     rtl_copyMemory(*pBlop, writer.getBlop(), length);
                 }
+                break;
+            default:
+                OSL_ASSERT(false);
                 break;
         }
 
