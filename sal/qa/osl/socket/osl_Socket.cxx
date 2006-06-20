@@ -4,9 +4,9 @@
  *
  *  $RCSfile: osl_Socket.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:39:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:24:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,8 +90,8 @@ inline sal_Bool compareUString( const ::rtl::OUString & ustr1, const ::rtl::OUSt
 */
 inline sal_Bool compareUString( const ::rtl::OUString & ustr, const sal_Char *astr )
 {
-    ::rtl::OUString ustr1 = rtl::OUString::createFromAscii( astr );
-    sal_Bool bOk = ustr1.equalsIgnoreAsciiCase( ustr1 );
+    ::rtl::OUString ustr2 = rtl::OUString::createFromAscii( astr );
+    sal_Bool bOk = ustr.equalsIgnoreAsciiCase( ustr2 );
 
     return bOk;
 }
@@ -520,14 +520,14 @@ protected:
     }
 
 public:
-    sal_uInt32 getCount() {return m_aValues.getBufferSize();}
+    sal_Int32 getCount() {return m_aValues.getBufferSize();}
     bool       isOk() {return m_aValues.isFailure() == true ? false : true;}
 
     ReadSocketThread(sal_Int32 _nBufferSize, int _nValue )
             :
+        m_nValue( _nValue ),
         saTargetSocketAddr( aHostIp1, IP_PORT_MYPORT10 ),
-        csConnectorSocket( ),
-        m_nValue( _nValue )
+        csConnectorSocket( )
     {
         m_id = getIdentifier( );
         //t_print("# successfully creat this client thread %d!\n",  m_id );
@@ -586,7 +586,7 @@ protected:
                 break;
             }
 
-            sal_Int32 nReadNumber1 = ssStreamConnection.write( m_aValues.getBuffer(), m_aValues.getBufferSize() );
+            ssStreamConnection.write( m_aValues.getBuffer(), m_aValues.getBufferSize() );
             break;
         }
         ssStreamConnection.close();
@@ -1116,7 +1116,7 @@ namespace osl_SocketAddr
         void setAddr_001()
         {
             ::osl::SocketAddr saSocketAddr( aHostIp2, IP_PORT_FTP );
-            sal_Bool bOK1 = saSocketAddr.setAddr( UStringIPToByteSequence( aHostIp1 ) );
+            saSocketAddr.setAddr( UStringIPToByteSequence( aHostIp1 ) );
             ::rtl::ByteSequence bsSocketAddr = saSocketAddr.getAddr( 0 );
             sal_Bool bOK = sal_False;
 
@@ -1843,7 +1843,6 @@ namespace osl_Socket
     */
         void getLocalPort_002()
         {
-            sal_Bool bOK;
             ::osl::SocketAddr saBindSocketAddr( aHostIpInval, IP_PORT_TELNET);
 #ifdef WNT
             ::osl::Socket sSocket(sHandle);
@@ -1948,7 +1947,7 @@ namespace osl_Socket
             ::osl::SocketAddr saLocalSocketAddr;
 
             sSocket.setOption( osl_Socket_OptionReuseAddr, 1 ); //sal_True);
-            sal_Bool bOK1 = sSocket.bind( saBindSocketAddr );
+            sSocket.bind( saBindSocketAddr );
             //Invalid IP, so bind should fail
             sal_Bool bOK = compareUString( sSocket.getLocalHost( ), aNullURL ) ;
             ::rtl::OUString suError = outputError(sSocket.getLocalHost( ), aNullURL, "test for getLocalHost function: getLocalHost with invalid SocketAddr");
@@ -2010,7 +2009,7 @@ namespace osl_Socket
             CPPUNIT_ASSERT_MESSAGE( "AcceptorSocket listen failed.",  sal_True == bOK2 );
 
             asAcceptorSocket.enableNonBlockingMode( sal_True );
-            oslSocketResult eResult = asAcceptorSocket.acceptConnection(ssConnection); /// waiting for incoming connection...
+            asAcceptorSocket.acceptConnection(ssConnection); /// waiting for incoming connection...
 
             /// launch client socket
             csConnectorSocket.connect( saTargetSocketAddr, pTimeout );   /// connecting to server...
@@ -2137,7 +2136,7 @@ namespace osl_Socket
             sal_Bool bOK2 = asAcceptorSocket.listen( 1 );
             CPPUNIT_ASSERT_MESSAGE( "AcceptorSocket listen failed.",  sal_True == bOK2 );
             asAcceptorSocket.enableNonBlockingMode( sal_True );
-            oslSocketResult eResult = asAcceptorSocket.acceptConnection(ssConnection); /// waiting for incoming connection...
+            asAcceptorSocket.acceptConnection(ssConnection); /// waiting for incoming connection...
 
             /// launch client socket
             csConnectorSocket.connect( saTargetSocketAddr, pTimeout );   /// connecting to server...
@@ -2201,7 +2200,7 @@ namespace osl_Socket
             sal_Bool bOK2 = asAcceptorSocket.listen( 1 );
             CPPUNIT_ASSERT_MESSAGE( "AcceptorSocket listen failed.",  sal_True == bOK2 );
             asAcceptorSocket.enableNonBlockingMode( sal_True );
-            oslSocketResult eResult = asAcceptorSocket.acceptConnection(ssConnection); /// waiting for incoming connection...
+            asAcceptorSocket.acceptConnection(ssConnection); /// waiting for incoming connection...
 
             /// launch client socket
             csConnectorSocket.connect( saTargetSocketAddr, pTimeout );   /// connecting to server...
@@ -2338,36 +2337,6 @@ namespace osl_Socket
                                     sal_True == bOK );
         }
 
-        void getOption_002()
-        {
-            sHandle = osl_createSocket( osl_Socket_FamilyInet, osl_Socket_TypeDgram, osl_Socket_ProtocolIp );
-            ::osl::Socket sSocket(sHandle);
-
-            sal_Bool * pbDebug = ( sal_Bool * )malloc( sizeof ( sal_Bool ) );
-            sSocket.getOption( osl_Socket_OptionDebug,  pbDebug, sizeof ( sal_Bool ) );
-            sal_Bool bOK = ( sal_False  ==  *pbDebug );
-            free( pbDebug );
-
-
-            CPPUNIT_ASSERT_MESSAGE( "test for getOption function: get debug option of socket.",
-                                    sal_True == bOK );
-        }
-
-        void getOption_003()
-        {
-            sHandle = osl_createSocket( osl_Socket_FamilyInet, osl_Socket_TypeDgram, osl_Socket_ProtocolIp );
-            ::osl::Socket sSocket(sHandle);
-
-            sal_Bool * pbDontRoute = ( sal_Bool * )malloc( sizeof ( sal_Bool ) );
-            sSocket.getOption( osl_Socket_OptionDontRoute,  pbDontRoute, sizeof ( sal_Bool ) );
-            sal_Bool bOK = ( sal_False  ==  *pbDontRoute );
-            free( pbDontRoute );
-
-
-            CPPUNIT_ASSERT_MESSAGE( "test for getOption function: get debug option of socket.",
-                                    sal_True == bOK );
-        }
-
         // getsockopt error
         void getOption_004()
         {
@@ -2406,8 +2375,6 @@ namespace osl_Socket
 
         CPPUNIT_TEST_SUITE( getOption );
         CPPUNIT_TEST( getOption_001 );
-        CPPUNIT_TEST( getOption_002 );
-        CPPUNIT_TEST( getOption_003 );
         CPPUNIT_TEST( getOption_004 );
         CPPUNIT_TEST( getOption_simple_001 );
         CPPUNIT_TEST( getOption_simple_002 );
@@ -2520,7 +2487,7 @@ namespace osl_Socket
 
                    linger aLingerGet;
 
-            sal_Bool b1 = asAcceptorSocket.setOption( osl_Socket_OptionLinger,  &aLingerSet, nBufferLen );
+            asAcceptorSocket.setOption( osl_Socket_OptionLinger,  &aLingerSet, nBufferLen );
 
             sal_Int32 n1 = asAcceptorSocket.getOption( osl_Socket_OptionLinger,  &aLingerGet, nBufferLen );
                     CPPUNIT_ASSERT_MESSAGE( "getOption (SO_LINGER) function failed.", ( n1 == nBufferLen ) );
@@ -2535,7 +2502,6 @@ namespace osl_Socket
         void setOption_003()
         {
             linger aLingerSet;
-                    sal_Int32 nBufferLen = sizeof( struct linger );
                 aLingerSet.l_onoff = 1;
                     aLingerSet.l_linger = 7;
 
@@ -2599,7 +2565,7 @@ namespace osl_Socket
             sal_Bool bOK2 = asAcceptorSocket.listen( 1 );
             CPPUNIT_ASSERT_MESSAGE( "AcceptorSocket listen failed.",  sal_True == bOK2 );
             asAcceptorSocket.enableNonBlockingMode( sal_True );
-            oslSocketResult eResult = asAcceptorSocket.acceptConnection(ssConnection); /// waiting for incoming connection...
+            asAcceptorSocket.acceptConnection(ssConnection); /// waiting for incoming connection...
 
             /// if reach this statement, it is non-blocking mode, since acceptConnection will blocked by default.
             sal_Bool bOK  = sal_True;
@@ -2639,7 +2605,7 @@ namespace osl_Socket
 
             sal_Bool bOK3 = asAcceptorSocket.isNonBlockingMode( );
             asAcceptorSocket.enableNonBlockingMode( sal_True );
-             oslSocketResult eResult = asAcceptorSocket.acceptConnection(ssConnection); /// waiting for incoming connection...
+             asAcceptorSocket.acceptConnection(ssConnection); /// waiting for incoming connection...
 
             /// if reach this statement, it is non-blocking mode, since acceptConnection will blocked by default.
             sal_Bool bOK4 = asAcceptorSocket.isNonBlockingMode( );
@@ -2681,7 +2647,7 @@ namespace osl_Socket
             ::osl::SocketAddr saBindSocketAddr( aHostIpInval, IP_PORT_HTTP2 );
             ::osl::SocketAddr saLocalSocketAddr;
             sSocket.setOption( osl_Socket_OptionReuseAddr, 1 ); //sal_True);
-            sal_Bool bOK1 = sSocket.bind( saBindSocketAddr );//build an error "osl_Socket_E_AddrNotAvail"
+            sSocket.bind( saBindSocketAddr );//build an error "osl_Socket_E_AddrNotAvail"
             oslSocketError seBind = sSocket.getError( );
             sSocket.clearError( );
 
@@ -2746,34 +2712,9 @@ namespace osl_Socket
 #endif
         }
 
-        void getErrorAsString_001()
-        {
-            ::osl::Socket sSocket(sHandle);
-            ::osl::SocketAddr saBindSocketAddr( aHostIpInval, IP_PORT_FTP );
-            ::osl::SocketAddr saLocalSocketAddr;
-            sSocket.setOption( osl_Socket_OptionReuseAddr, 1 );
-            sSocket.bind( saBindSocketAddr );//build an error "osl_Socket_E_AddrNotAvail"
-
-            CPPUNIT_ASSERT_MESSAGE( "test for getErrorAsString function: trick an error called sSocket.getError( ), check the getError result.",
-                                    sal_True == compareUString( sSocket.getErrorAsString( ) , "osl_Socket_E_AddrNotAvail"  ) );
-        }
-
-        void getErrorAsString_002()
-        {
-            ::osl::Socket sSocket(sHandle);
-            ::osl::SocketAddr saBindSocketAddr( aHostIp1, IP_PORT_FTP );
-            ::osl::SocketAddr saLocalSocketAddr;
-
-            CPPUNIT_ASSERT_MESSAGE( "test for getErrorAsString function: trick an error called sSocket.getError( ), check the getError result.",
-                                    sal_True == compareUString( sSocket.getErrorAsString( ) , "osl_Socket_E_None"  ) );
-        }
-
-
         CPPUNIT_TEST_SUITE( getError );
         CPPUNIT_TEST( getError_001 );
         CPPUNIT_TEST( getError_002 );
-        CPPUNIT_TEST( getErrorAsString_001 );
-        CPPUNIT_TEST( getErrorAsString_002 );
         CPPUNIT_TEST_SUITE_END();
 
     }; // class getError
@@ -2974,10 +2915,10 @@ namespace osl_StreamSocket
 
             asAcceptorSocket.setOption( osl_Socket_OptionReuseAddr, 1 );
 
-            sal_Bool bOK1 = asAcceptorSocket.bind( saLocalSocketAddr );
-            sal_Bool bOK2 = asAcceptorSocket.listen( 1 );
+            asAcceptorSocket.bind( saLocalSocketAddr );
+            asAcceptorSocket.listen( 1 );
             asAcceptorSocket.enableNonBlockingMode( sal_True );
-            oslSocketResult eResult = asAcceptorSocket.acceptConnection( ssStreamConnection );
+            asAcceptorSocket.acceptConnection( ssStreamConnection );
             sal_Int32 nReadNumber = ssStreamConnection.recv( pReadBuffer, 11 );
 
             myClientThread.join( ) ;
@@ -3001,7 +2942,7 @@ namespace osl_StreamSocket
 
             //Maximum Packet Size is ( ARPANET, MILNET = 1007 Ethernet (10Mb) = 1500
             // Proteon PRONET  = 2046), so here test read 4000 bytes
-            sal_uInt32 nLength = myClientThread.getCount();
+            sal_Int32 nLength = myClientThread.getCount();
             bool       bIsOk   = myClientThread.isOk(); // check if the values are right.
 
             t_print("Length:=%d\n", nLength);
@@ -3056,7 +2997,7 @@ protected:
 
               sal_Int32 nWrite2 = csConnectorSocket.write( pTestString2, strlen( pTestString2 ) + 1 );
             thread_sleep( 2 );
-              sal_Int32 nWrite3 = csConnectorSocket.write( pTestString2, strlen( pTestString2 ) + 1 );
+              csConnectorSocket.write( pTestString2, strlen( pTestString2 ) + 1 );
               t_print("nWrite1 is %d, nWrite2 is %d\n", nWrite1, nWrite2 );
               //thread_sleep( 1 );
           }
@@ -3123,7 +3064,7 @@ protected:
                     aLingerSet.l_onoff = 0;
                     aLingerSet.l_linger = 0;
 
-            sal_Bool b1 = ssConnectionSocket.setOption( osl_Socket_OptionLinger,  &aLingerSet, nBufferLen );
+            ssConnectionSocket.setOption( osl_Socket_OptionLinger,  &aLingerSet, nBufferLen );
             thread_sleep( 1 );
             //sal_uInt32 nRecv1 = 0;
             sal_Int32 nRead1 = ssConnectionSocket.read( pReadBuffer, 11 );
