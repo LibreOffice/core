@@ -4,9 +4,9 @@
  *
  *  $RCSfile: services.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:57:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:48:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,7 +86,7 @@ extern "C" void SAL_CALL createRegistryInfo_DBA()
 
 extern "C" void SAL_CALL component_getImplementationEnvironment(
                 const sal_Char  **ppEnvTypeName,
-                uno_Environment **ppEnv
+                uno_Environment **/*ppEnv*/
             )
 {
     createRegistryInfo_DBA();
@@ -118,7 +118,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
 extern "C" void* SAL_CALL component_getFactory(
                     const sal_Char* pImplementationName,
                     void* pServiceManager,
-                    void* pRegistryKey)
+                    void* /*pRegistryKey*/)
 {
     Reference< XInterface > xRet;
     if (pServiceManager && pImplementationName)
