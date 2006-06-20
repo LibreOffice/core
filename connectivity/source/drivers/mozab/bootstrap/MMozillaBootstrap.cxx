@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MMozillaBootstrap.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:22:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:46:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,9 +81,8 @@ MozillaBootstrap::~MozillaBootstrap()
 void MozillaBootstrap::Init()
 {
     sal_Bool aProfileExists=sal_False;
-    sal_Int32 nProduct = 0;
     //This must be call before any mozilla code
-    MNS_Init(aProfileExists,nProduct);
+    MNS_Init(aProfileExists);
 
     m_ProfileManager = new ProfileManager();
     m_ProfileAccess = new ProfileAccess();
