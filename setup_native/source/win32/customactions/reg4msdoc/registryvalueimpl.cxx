@@ -6,8 +6,11 @@
 #include "registryvalueimpl.hxx"
 #endif
 
-#include <malloc.h>
+#pragma warning(push, 1) /* disable warnings within system headers */
 #include <windows.h>
+#pragma warning(pop)
+
+#include <malloc.h>
 #include <assert.h>
 
 #include "stringconverter.hxx"

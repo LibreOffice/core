@@ -6,7 +6,9 @@
 #include "registryexception.hxx"
 #endif
 
+#pragma warning(push, 1) /* disable warnings within system headers */
 #include <windows.h>
+#pragma warning(pop)
 
 //////////////////////////////////////////////////////////////////////
 // Konstruktion/Destruktion
