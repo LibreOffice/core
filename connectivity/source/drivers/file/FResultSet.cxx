@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 11:38:50 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:26:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,35 +136,36 @@ DBG_NAME( file_OResultSet )
 // -------------------------------------------------------------------------
 OResultSet::OResultSet(OStatement_Base* pStmt,OSQLParseTreeIterator&    _aSQLIterator) :    OResultSet_BASE(m_aMutex)
                         ,::comphelper::OPropertyContainer(OResultSet_BASE::rBHelper)
-                        ,m_xStatement(*pStmt)
-                        ,m_nRowPos(-1)
-                        ,m_bLastRecord(sal_False)
-                        ,m_bEOF(sal_False)
-                        ,m_xDBMetaData(pStmt->getOwnConnection()->getMetaData())
-                        ,m_xMetaData(NULL)
-                        ,m_aSQLIterator(_aSQLIterator)
+                        ,m_aAssignValues(NULL)
+                        ,m_pEvaluationKeySet(NULL)
+                        ,m_aSkipDeletedSet(this)
+                        ,m_pFileSet(NULL)
+                        ,m_pSortIndex(NULL)
                         ,m_pTable(NULL)
-                        ,m_nRowCountResult(-1)
+                        ,m_pParseTree(pStmt->getParseTree())
+                        ,m_pSQLAnalyzer(NULL)
+                        ,m_aSQLIterator(_aSQLIterator)
+                        ,m_nFetchSize(0)
+                        ,m_nResultSetType(ResultSetType::SCROLL_INSENSITIVE)
+                        ,m_nFetchDirection(FetchDirection::FORWARD)
+                        ,m_nResultSetConcurrency(ResultSetConcurrency::UPDATABLE)
+                        ,m_xStatement(*pStmt)
+                        ,m_xMetaData(NULL)
+                        ,m_xDBMetaData(pStmt->getOwnConnection()->getMetaData())
+                        ,m_nTextEncoding(pStmt->getOwnConnection()->getTextEncoding())
+                        ,m_nRowPos(-1)
                         ,m_nFilePos(0)
                         ,m_nLastVisitedPos(-1)
-                        ,m_pParseTree(pStmt->getParseTree())
-                        ,m_pFileSet(NULL)
-                        ,m_pEvaluationKeySet(NULL)
-                        ,m_pSortIndex(NULL)
-                        ,m_aAssignValues(NULL)
+                        ,m_nRowCountResult(-1)
+                        ,m_nCurrentPosition(0)
+                        ,m_bWasNull(sal_False)
+                        ,m_bEOF(sal_False)
+                        ,m_bLastRecord(sal_False)
                         ,m_bInserted(sal_False)
                         ,m_bRowUpdated(sal_False)
                         ,m_bRowInserted(sal_False)
                         ,m_bRowDeleted(sal_False)
-                        ,m_nFetchSize(0)
-                        ,m_nResultSetType(ResultSetType::SCROLL_INSENSITIVE)
-                        ,m_nResultSetConcurrency(ResultSetConcurrency::UPDATABLE)
-                        ,m_nFetchDirection(FetchDirection::FORWARD)
-                        ,m_nTextEncoding(pStmt->getOwnConnection()->getTextEncoding())
-                        ,m_nCurrentPosition(0)
                         ,m_bShowDeleted(pStmt->getOwnConnection()->showDeleted())
-                        ,m_pSQLAnalyzer(NULL)
-                        ,m_aSkipDeletedSet(this)
 {
     DBG_CTOR( file_OResultSet, NULL );
     osl_incrementInterlockedCount( &m_refCount );
@@ -280,12 +281,12 @@ void OResultSet::checkIndex(sal_Int32 columnIndex ) throw(::com::sun::star::sdbc
         ::dbtools::throwInvalidIndexException(*this);
 }
 // -------------------------------------------------------------------------
-Reference< ::com::sun::star::io::XInputStream > SAL_CALL OResultSet::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Reference< ::com::sun::star::io::XInputStream > SAL_CALL OResultSet::getBinaryStream( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     return NULL;
 }
 // -------------------------------------------------------------------------
-Reference< ::com::sun::star::io::XInputStream > SAL_CALL OResultSet::getCharacterStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Reference< ::com::sun::star::io::XInputStream > SAL_CALL OResultSet::getCharacterStream( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     return NULL;
 }
@@ -361,31 +362,31 @@ Reference< XResultSetMetaData > SAL_CALL OResultSet::getMetaData(  ) throw(SQLEx
     return m_xMetaData;
 }
 // -------------------------------------------------------------------------
-Reference< XArray > SAL_CALL OResultSet::getArray( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Reference< XArray > SAL_CALL OResultSet::getArray( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     return NULL;
 }
 
 // -------------------------------------------------------------------------
 
-Reference< XClob > SAL_CALL OResultSet::getClob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Reference< XClob > SAL_CALL OResultSet::getClob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     return NULL;
 }
 // -------------------------------------------------------------------------
-Reference< XBlob > SAL_CALL OResultSet::getBlob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
-{
-    return NULL;
-}
-// -------------------------------------------------------------------------
-
-Reference< XRef > SAL_CALL OResultSet::getRef( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Reference< XBlob > SAL_CALL OResultSet::getBlob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     return NULL;
 }
 // -------------------------------------------------------------------------
 
-Any SAL_CALL OResultSet::getObject( sal_Int32 columnIndex, const Reference< ::com::sun::star::container::XNameAccess >& typeMap ) throw(SQLException, RuntimeException)
+Reference< XRef > SAL_CALL OResultSet::getRef( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
+{
+    return NULL;
+}
+// -------------------------------------------------------------------------
+
+Any SAL_CALL OResultSet::getObject( sal_Int32 columnIndex, const Reference< ::com::sun::star::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException)
 {
     return getValue(columnIndex).makeAny();
 }
@@ -766,9 +767,9 @@ void SAL_CALL OResultSet::updateInt( sal_Int32 columnIndex, sal_Int32 x ) throw(
     updateValue(columnIndex,x);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL OResultSet::updateLong( sal_Int32 columnIndex, sal_Int64 x ) throw(SQLException, RuntimeException)
+void SAL_CALL OResultSet::updateLong( sal_Int32 /*columnIndex*/, sal_Int64 /*x*/ ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFunctionSequenceException(*this);
+    ::dbtools::throwFeatureNotImplementedException( "XRowUpdate::updateLong", *this );
 }
 // -----------------------------------------------------------------------
 void SAL_CALL OResultSet::updateFloat( sal_Int32 columnIndex, float x ) throw(SQLException, RuntimeException)
@@ -841,7 +842,7 @@ void SAL_CALL OResultSet::updateObject( sal_Int32 columnIndex, const Any& x ) th
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OResultSet::updateNumericObject( sal_Int32 columnIndex, const Any& x, sal_Int32 scale ) throw(SQLException, RuntimeException)
+void SAL_CALL OResultSet::updateNumericObject( sal_Int32 columnIndex, const Any& x, sal_Int32 /*scale*/ ) throw(SQLException, RuntimeException)
 {
     if (!::dbtools::implUpdateObject(this, columnIndex, x))
         throw SQLException();
@@ -862,7 +863,6 @@ IPropertyArrayHelper & OResultSet::getInfoHelper()
 //------------------------------------------------------------------
 BOOL OResultSet::ExecuteRow(IResultSetHelper::Movement eFirstCursorPosition,
                                INT32 nFirstOffset,
-                               BOOL bRebind,
                                BOOL bEvaluate,
                                BOOL bRetrieveData)
 {
@@ -871,7 +871,6 @@ BOOL OResultSet::ExecuteRow(IResultSetHelper::Movement eFirstCursorPosition,
     // Fuer weitere Fetch-Operationen werden diese Angaben ggf. veraendert ...
     IResultSetHelper::Movement eCursorPosition = eFirstCursorPosition;
     INT32  nOffset = nFirstOffset;
-    UINT32 nLoopCount = 0;
 
 again:
 
@@ -1013,7 +1012,7 @@ BOOL OResultSet::Move(IResultSetHelper::Movement eCursorPosition, INT32 nOffset,
         if (!m_pFileSet.isValid()) // kein Index verfuegbar
         {
             // Normales FETCH
-            ExecuteRow(eCursorPosition,nOffset,TRUE,FALSE,bRetrieveData);
+            ExecuteRow(eCursorPosition,nOffset,FALSE,bRetrieveData);
 
             // now set the bookmark for outside this is the logical pos  and not the file pos
             *(*m_aRow->begin()) = sal_Int32(m_nRowPos + 1);
@@ -1059,7 +1058,7 @@ BOOL OResultSet::Move(IResultSetHelper::Movement eCursorPosition, INT32 nOffset,
                 if (m_nRowPos < (INT32)m_pFileSet->size())
                 {
                     // Fetch ueber Index
-                    ExecuteRow(IResultSetHelper::BOOKMARK,(*m_pFileSet)[m_nRowPos],TRUE,FALSE,bRetrieveData);
+                    ExecuteRow(IResultSetHelper::BOOKMARK,(*m_pFileSet)[m_nRowPos],FALSE,bRetrieveData);
 
                     // now set the bookmark for outside
                     *(*m_aRow->begin()) = sal_Int32(m_nRowPos + 1);
@@ -1085,16 +1084,16 @@ BOOL OResultSet::Move(IResultSetHelper::Movement eCursorPosition, INT32 nOffset,
                             else if (m_nRowPos == 0)
                             {
                                 m_aEvaluateIter = m_pEvaluationKeySet->begin();
-                                bOK = ExecuteRow(IResultSetHelper::BOOKMARK,*m_aEvaluateIter,FALSE,TRUE, bRetrieveData);
+                                bOK = ExecuteRow(IResultSetHelper::BOOKMARK,*m_aEvaluateIter,TRUE, bRetrieveData);
                             }
                             else
                             {
                                 ++m_aEvaluateIter;
-                                bOK = ExecuteRow(IResultSetHelper::BOOKMARK,*m_aEvaluateIter,FALSE,TRUE, bRetrieveData);
+                                bOK = ExecuteRow(IResultSetHelper::BOOKMARK,*m_aEvaluateIter,TRUE, bRetrieveData);
                             }
                         }
                         else
-                            bOK = ExecuteRow(IResultSetHelper::NEXT,1,FALSE,TRUE, FALSE);//bRetrieveData);
+                            bOK = ExecuteRow(IResultSetHelper::NEXT,1,TRUE, FALSE);//bRetrieveData);
                     }
 
                     if (bOK)
@@ -1188,7 +1187,7 @@ Error:
             case IResultSetHelper::ABSOLUTE:
             case IResultSetHelper::RELATIVE:
                 if (nOffset > 0)
-                    m_nRowPos = (m_pFileSet.isValid()) ? m_pFileSet->size() : -1;
+                    m_nRowPos = m_pFileSet.isValid() ? (sal_Int32)m_pFileSet->size() : -1;
                 else if (nOffset < 0)
                     m_nRowPos = -1;
                 break;
@@ -1253,7 +1252,6 @@ BOOL OResultSet::OpenImpl()
     //  NAMESPACE_VOS(OGuard)* pGuard = pTable->Lock();
     m_nLastVisitedPos = m_pTable->getCurrentLastPos();
 
-    UINT32 nLoopCount = 0;
     switch(m_aSQLIterator.getStatementType())
     {
         case SQL_STATEMENT_SELECT:
@@ -1276,9 +1274,9 @@ BOOL OResultSet::OpenImpl()
                     while (bOK)
                     {
                         if (m_pEvaluationKeySet)
-                            ExecuteRow(IResultSetHelper::BOOKMARK,(*m_aEvaluateIter),FALSE,TRUE);
+                            ExecuteRow(IResultSetHelper::BOOKMARK,(*m_aEvaluateIter),TRUE);
                         else
-                            bOK = ExecuteRow(IResultSetHelper::NEXT,1,FALSE,TRUE);
+                            bOK = ExecuteRow(IResultSetHelper::NEXT,1,TRUE);
 
                         if (bOK)
                         {
@@ -1300,8 +1298,6 @@ BOOL OResultSet::OpenImpl()
             }
             else
             {
-                INT32 nMaxRowCount = m_pTable->getCurrentLastPos();
-
                 BOOL bDistinct = FALSE;
                 BOOL bWasSorted = FALSE;
                 OSQLParseNode *pDistinct = m_pParseTree->getChild(1);
@@ -1318,7 +1314,6 @@ BOOL OResultSet::OpenImpl()
                 }
 
                 OSortIndex::TKeyTypeVector eKeyType(m_aOrderbyColumnNumber.size());
-                OValueRefVector::iterator aRowIter = m_aRow->begin()+1;
                 ::std::vector<sal_Int32>::iterator aOrderByIter = m_aOrderbyColumnNumber.begin();
                 for (::std::vector<sal_Int16>::size_type i=0;aOrderByIter != m_aOrderbyColumnNumber.end(); ++aOrderByIter,++i)
                 {
@@ -1404,12 +1399,12 @@ BOOL OResultSet::OpenImpl()
                     {
                         if (m_pEvaluationKeySet)
                         {
-                            ExecuteRow(IResultSetHelper::BOOKMARK,(*m_aEvaluateIter),FALSE,TRUE);
+                            ExecuteRow(IResultSetHelper::BOOKMARK,(*m_aEvaluateIter),TRUE);
                             ++m_aEvaluateIter;
                             bOK = m_aEvaluateIter == m_pEvaluationKeySet->end();
                         }
                         else
-                            bOK = ExecuteRow(IResultSetHelper::NEXT,1,FALSE,TRUE);
+                            bOK = ExecuteRow(IResultSetHelper::NEXT,1,TRUE);
                     }
 
                     // Sortiertes Keyset erzeugen
@@ -1450,7 +1445,7 @@ BOOL OResultSet::OpenImpl()
                                 aSearchIter->setBound((*aRowIter)->isBound());
 
                     INT32 nPos;
-                    UINT16 nMaxRow = m_pFileSet->size();
+                    size_t nMaxRow = m_pFileSet->size();
                     if (nMaxRow)
                     {
     #if OSL_DEBUG_LEVEL > 1
@@ -1458,19 +1453,21 @@ BOOL OResultSet::OpenImpl()
     #endif
                         ::std::vector<sal_Int16> nWasAllwaysFound(nMaxRow,0);
                         INT32 nPrev_i;
-                        for(INT32 j= nMaxRow-1;j >= 0;j--)
+                        for( size_t j = nMaxRow; j > 0; )
                         {
+                            --j;
+
                             nPos = (*m_pFileSet)[j]; // aktuell zu loeschender Key
                             if(!nWasAllwaysFound[j] && nPos) // nur falls noch nicht nach dieser Row gesucht wurde
                             {
-                                ExecuteRow(IResultSetHelper::BOOKMARK,nPos,TRUE,FALSE);
+                                ExecuteRow(IResultSetHelper::BOOKMARK,nPos,FALSE);
                                 { // copy row values
-                                    OValueRefVector::iterator aRowIter = m_aRow->begin();
-                                    OValueVector::iterator aSearchIter = aSearchRow->begin();
-                                    for (   ++aRowIter,++aSearchIter;   // the first column is the bookmark column
-                                            aRowIter != m_aRow->end();
-                                            ++aRowIter,++aSearchIter)
-                                                *aSearchIter = *(*aRowIter);
+                                    OValueRefVector::iterator copyFrom = m_aRow->begin();
+                                    OValueVector::iterator copyTo = aSearchRow->begin();
+                                    for (   ++copyFrom,++copyTo;    // the first column is the bookmark column
+                                            copyFrom != m_aRow->end();
+                                            ++copyFrom,++copyTo)
+                                                *copyTo = *(*copyFrom);
                                     // *aSearchRow = *m_aRow;
                                 }
 
@@ -1480,19 +1477,19 @@ BOOL OResultSet::OpenImpl()
                                 for(INT32 i = j-1; i >= 0 ;i--)
                                 {
                                     nKey = (*m_pFileSet)[i];
-                                    ExecuteRow(IResultSetHelper::BOOKMARK,nKey ,TRUE,FALSE);
+                                    ExecuteRow(IResultSetHelper::BOOKMARK,nKey,FALSE);
                                     if(!nWasAllwaysFound[i])
                                     {
-                                        OValueRefVector::iterator aRowIter = m_aRow->begin();
-                                        OValueVector::iterator aSearchIter = aSearchRow->begin();
-                                        for (   ++aRowIter,++aSearchIter;   // the first column is the bookmark column
-                                                aRowIter != m_aRow->end();
-                                                ++aRowIter,++aSearchIter)
+                                        OValueRefVector::iterator loopInRow = m_aRow->begin();
+                                        OValueVector::iterator existentInSearchRow = aSearchRow->begin();
+                                        for (   ++loopInRow,++existentInSearchRow;  // the first column is the bookmark column
+                                                loopInRow != m_aRow->end();
+                                                ++loopInRow,++existentInSearchRow)
                                         {
-                                            if ( (*aRowIter)->isBound() && !( *(*aRowIter) == *aSearchIter) )
+                                            if ( (*loopInRow)->isBound() && !( *(*loopInRow) == *existentInSearchRow) )
                                                 break;
                                         }
-                                        if(aRowIter == m_aRow->end())
+                                        if(loopInRow == m_aRow->end())
                                         {
                                             // gefunden
                                             // Key an der Stelle 0 setzen.
@@ -1546,9 +1543,9 @@ BOOL OResultSet::OpenImpl()
                 while (bOK)
                 {
                     if (m_pEvaluationKeySet)
-                        ExecuteRow(IResultSetHelper::BOOKMARK,(*m_aEvaluateIter),FALSE,TRUE);
+                        ExecuteRow(IResultSetHelper::BOOKMARK,(*m_aEvaluateIter),TRUE);
                     else
-                        bOK = ExecuteRow(IResultSetHelper::NEXT,1,FALSE,TRUE);
+                        bOK = ExecuteRow(IResultSetHelper::NEXT,1,TRUE);
 
                     if (bOK)
                     {
@@ -1581,6 +1578,9 @@ BOOL OResultSet::OpenImpl()
 
             m_nRowCountResult = 1;
             break;
+        default:
+            OSL_ENSURE( false, "OResultSet::OpenImpl: unsupported statement type!" );
+            break;
     }
 
     // FilePos zuruecksetzen
@@ -1609,10 +1609,8 @@ Sequence< sal_Int8 > OResultSet::getUnoTunnelImplementationId()
 sal_Int64 OResultSet::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
     return (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
-                ?
-            (sal_Int64)this
-                :
-            0;
+                ? reinterpret_cast< sal_Int64 >( this )
+                : 0;
 }
 // -----------------------------------------------------------------------------
 void OResultSet::setBoundedColumns(const OValueRefRow& _rRow,
@@ -1754,7 +1752,7 @@ void OResultSet::doTableSpecials(const OSQLTable& _xTable)
     Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(_xTable,UNO_QUERY);
     if(xTunnel.is())
     {
-        m_pTable = (OFileTable*)xTunnel->getSomething(OFileTable::getUnoTunnelImplementationId());
+        m_pTable = reinterpret_cast< OFileTable* >( xTunnel->getSomething(OFileTable::getUnoTunnelImplementationId()) );
         if(m_pTable)
             m_pTable->acquire();
     }
@@ -1786,7 +1784,7 @@ void OResultSet::initializeRow(OValueRefRow& _rRow,sal_Int32 _nColumnCount)
     }
 }
 // -----------------------------------------------------------------------------
-sal_Bool OResultSet::fillIndexValues(const Reference< XColumnsSupplier> &_xIndex)
+sal_Bool OResultSet::fillIndexValues(const Reference< XColumnsSupplier> &/*_xIndex*/)
 {
     return sal_False;
 }
