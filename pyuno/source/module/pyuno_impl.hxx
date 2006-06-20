@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pyuno_impl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 10:49:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:03:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,10 +35,10 @@
 #ifndef _PYUNO_IMPL_
 #define _PYUNO_IMPL_
 
+#include <pyuno/pyuno.hxx>
+
 #include <hash_map>
 #include <hash_set>
-
-#include <pyuno/pyuno.hxx>
 
 #include <com/sun/star/beans/XIntrospection.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
@@ -74,14 +74,14 @@ bool isLog( RuntimeCargo *cargo, sal_Int32 loglevel );
 void log( RuntimeCargo *cargo, sal_Int32 level, const rtl::OUString &logString );
 void log( RuntimeCargo *cargo, sal_Int32 level, const char *str );
 void logCall( RuntimeCargo *cargo, const char *intro,
-              sal_Int64 ptr, const rtl::OUString & aFunctionName,
+              void * ptr, const rtl::OUString & aFunctionName,
               const com::sun::star::uno::Sequence< com::sun::star::uno::Any > & args );
 void logReply( RuntimeCargo *cargo, const char *intro,
-              sal_Int64 ptr, const rtl::OUString & aFunctionName,
+              void * ptr, const rtl::OUString & aFunctionName,
               const com::sun::star::uno::Any &returnValue,
               const com::sun::star::uno::Sequence< com::sun::star::uno::Any > & args );
 void logException( RuntimeCargo *cargo, const char *intro,
-                   sal_Int64 ptr, const rtl::OUString &aFunctionName,
+                   void * ptr, const rtl::OUString &aFunctionName,
                    const void * data, const com::sun::star::uno::Type & type );
 static const sal_Int32 VAL2STR_MODE_DEEP = 0;
 static const sal_Int32 VAL2STR_MODE_SHALLOW = 1;
@@ -178,13 +178,13 @@ PyRef getClass( const rtl::OUString & name , const Runtime & runtime );
 PyRef getAnyClass( const Runtime &);
 PyObject *PyUNO_invoke( PyObject *object, const char *name , PyObject *args );
 
-com::sun::star::uno::Any PyEnum2Enum( PyObject *obj, const Runtime & r )
+com::sun::star::uno::Any PyEnum2Enum( PyObject *obj )
     throw ( com::sun::star::uno::RuntimeException );
 sal_Bool PyBool2Bool( PyObject *o, const Runtime & r )
     throw ( com::sun::star::uno::RuntimeException );
-sal_Unicode PyChar2Unicode( PyObject *o, const Runtime & r )
+sal_Unicode PyChar2Unicode( PyObject *o )
     throw ( com::sun::star::uno::RuntimeException );
-com::sun::star::uno::Type PyType2Type( PyObject * o, const Runtime & r )
+com::sun::star::uno::Type PyType2Type( PyObject * o )
     throw( com::sun::star::uno::RuntimeException );
 
 void raisePyExceptionWithAny( const com::sun::star::uno::Any &a );
@@ -194,7 +194,7 @@ PyRef getObjectFromUnoModule( const Runtime &runtime, const char * object )
     throw ( com::sun::star::uno::RuntimeException );
 
 sal_Bool isInterfaceClass( const Runtime &, PyObject *obj );
-sal_Bool isInstanceOfStructOrException( const Runtime & runtime, PyObject *obj);
+bool isInstanceOfStructOrException( PyObject *obj);
 com::sun::star::uno::Sequence<com::sun::star::uno::Type> implementsInterfaces(
     const Runtime & runtime, PyObject *obj );
 
@@ -244,7 +244,7 @@ private:
 
 public:
 public:
-    Adapter( const PyRef &obj, const Runtime &,
+    Adapter( const PyRef &obj,
              const com::sun::star::uno::Sequence< com::sun::star::uno::Type > & types );
 
     static com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
