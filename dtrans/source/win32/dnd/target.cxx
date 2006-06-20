@@ -4,9 +4,9 @@
  *
  *  $RCSfile: target.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:19:16 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 06:03:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -244,7 +244,7 @@ DWORD WINAPI DndTargetOleSTAFunc(LPVOID pParams)
                 // This thread is attached to the thread that created the window. Hence
                 // this thread also receives all mouse and keyboard messages which are
                 // needed
-                BOOL bSuccess= AttachThreadInput( threadId , pTarget->m_threadIdWindow, TRUE );
+                AttachThreadInput( threadId , pTarget->m_threadIdWindow, TRUE );
 
                 if( SUCCEEDED( CoLockObjectExternal(pTarget-> m_pDropTarget, TRUE, FALSE)))
                 {
@@ -262,7 +262,7 @@ DWORD WINAPI DndTargetOleSTAFunc(LPVOID pParams)
                 DropTarget *pTarget= (DropTarget*)msg.wParam;
                 RevokeDragDrop( pTarget-> m_hWnd);
                 // Detach this thread from the window thread
-                BOOL bSuccess= AttachThreadInput( threadId, pTarget->m_threadIdWindow, FALSE);
+                AttachThreadInput( threadId, pTarget->m_threadIdWindow, FALSE);
                 pTarget->m_hWnd= 0;
                 break;
             }
@@ -340,7 +340,7 @@ HRESULT DropTarget::DragEnter( IDataObject *pDataObj,
                                     POINTL pt,
                                     DWORD  *pdwEffect)
 {
-#if DBG_CONSOLE_OUT
+#if defined DBG_CONSOLE_OUT
     printf("\nDropTarget::DragEnter state: %x effect %d", grfKeyState, *pdwEffect);
 #endif
     if( m_bActive )
@@ -447,7 +447,7 @@ HRESULT DropTarget::DragOver( DWORD grfKeyState,
             *pdwEffect= DROPEFFECT_NONE;
         }
     }
-#if DBG_CONSOLE_OUT
+#if defined DBG_CONSOLE_OUT
     printf("\nDropTarget::DragOver %d", *pdwEffect );
 #endif
     return S_OK;
@@ -455,7 +455,7 @@ HRESULT DropTarget::DragOver( DWORD grfKeyState,
 
 HRESULT DropTarget::DragLeave( void)
 {
-#if DBG_CONSOLE_OUT
+#if defined DBG_CONSOLE_OUT
     printf("\nDropTarget::DragLeave");
 #endif
     if( m_bActive)
@@ -477,12 +477,12 @@ HRESULT DropTarget::DragLeave( void)
     return S_OK;
 }
 
-HRESULT DropTarget::Drop( IDataObject  *pDataObj,
+HRESULT DropTarget::Drop( IDataObject  * /*pDataObj*/,
                    DWORD grfKeyState,
                    POINTL pt,
                    DWORD *pdwEffect)
 {
-#if DBG_CONSOLE_OUT
+#if defined DBG_CONSOLE_OUT
     printf("\nDropTarget::Drop");
 #endif
     if( m_bActive)
