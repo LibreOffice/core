@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsearch.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 14:57:03 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:48:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,11 +106,11 @@ static const sal_Int32 COMPLEX_TRANS_MASK =
     // complex transliteration
 
 TextSearch::TextSearch(const Reference < XMultiServiceFactory > & rxMSF)
-        : pRegExp( 0 )
-        , pWLD( 0 )
+        : xMSF( rxMSF )
         , pJumpTable( 0 )
         , pJumpTable2( 0 )
-        , xMSF( rxMSF )
+        , pRegExp( 0 )
+        , pWLD( 0 )
 {
     SearchOptions aOpt;
     aOpt.algorithmType = SearchAlgorithms_ABSOLUTE;
@@ -997,13 +997,13 @@ extern "C"
 {
 
 void SAL_CALL component_getImplementationEnvironment(
-        const sal_Char** ppEnvTypeName, uno_Environment** ppEnv )
+        const sal_Char** ppEnvTypeName, uno_Environment** /*ppEnv*/ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
 sal_Bool SAL_CALL component_writeInfo(
-        void* _pServiceManager, void* _pRegistryKey )
+        void* /*_pServiceManager*/, void* _pRegistryKey )
 {
     if (_pRegistryKey)
     {
@@ -1022,7 +1022,7 @@ sal_Bool SAL_CALL component_writeInfo(
 }
 
 void* SAL_CALL component_getFactory( const sal_Char* sImplementationName,
-        void* _pServiceManager, void* _pRegistryKey )
+        void* _pServiceManager, void* /*_pRegistryKey*/ )
 {
     void* pRet = NULL;
 
