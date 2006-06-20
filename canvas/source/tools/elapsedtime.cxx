@@ -4,9 +4,9 @@
  *
  *  $RCSfile: elapsedtime.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 23:14:53 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:17:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,7 +152,7 @@ void ElapsedTime::reset()
     m_bInHoldMode = false;
 }
 
-void ElapsedTime::adjustTimer( double fOffset, bool bLimitToLastQueriedTime )
+void ElapsedTime::adjustTimer( double fOffset, bool /*bLimitToLastQueriedTime*/ )
 {
 #if 0
     if (bLimitToLastQueriedTime) {
