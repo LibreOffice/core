@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:41:16 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:05:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,6 @@
 namespace dbaui
 {
 //.........................................................................
-using namespace dbtools;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::lang;
@@ -250,6 +249,8 @@ void ODbAdminDialog::implSelectDatasource(const ::com::sun::star::uno::Any& _aDa
                 AddTabPage(PAGE_USERDRIVER, aTitle, ODriversSettings::CreateUser, 0, sal_False, 1);
                 m_aCurrentDetailPages.push(PAGE_USERDRIVER);
             }
+            break;
+        default:
             break;
     }
 }
