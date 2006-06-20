@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FDatabaseMetaDataResultSet.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:09:22 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:03:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,6 +108,38 @@ ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet()
 }
 
 // -------------------------------------------------------------------------
+ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet( MetaDataResultSetType _eType )
+    :ODatabaseMetaDataResultSet_BASE(m_aMutex)
+    ,::comphelper::OPropertyContainer(ODatabaseMetaDataResultSet_BASE::rBHelper)
+    ,m_aStatement(NULL)
+    ,m_xMetaData(NULL)
+    ,m_bBOF(sal_True)
+{
+    construct();
+
+    switch( _eType )
+    {
+    case eCatalogs:             setCatalogsMap(); break;
+    case eSchemas:              setSchemasMap(); break;
+    case eColumnPrivileges:     setColumnPrivilegesMap(); break;
+    case eColumns:              setColumnsMap(); break;
+    case eTables:               setTablesMap(); break;
+    case eTableTypes:           setTableTypes(); break;
+    case eProcedureColumns:     setProcedureColumnsMap(); break;
+    case eProcedures:           setProceduresMap(); break;
+    case eExportedKeys:         setExportedKeysMap(); break;
+    case eImportedKeys:         setImportedKeysMap(); break;
+    case ePrimaryKeys:          setPrimaryKeysMap(); break;
+    case eIndexInfo:            setIndexInfoMap(); break;
+    case eTablePrivileges:      setTablePrivilegesMap(); break;
+    case eCrossReference:       setCrossReferenceMap(); break;
+    case eTypeInfo:             setTypeInfoMap(); break;
+    case eBestRowIdentifier:    setBestRowIdentifierMap(); break;
+    case eVersionColumns:       setVersionColumnsMap(); break;
+    }
+}
+
+// -------------------------------------------------------------------------
 ODatabaseMetaDataResultSet::~ODatabaseMetaDataResultSet()
 {
 }
@@ -185,12 +217,12 @@ void ODatabaseMetaDataResultSet::checkIndex(sal_Int32 columnIndex ) throw(::com:
         ::dbtools::throwInvalidIndexException(*this);
 }
 // -------------------------------------------------------------------------
-Reference< ::com::sun::star::io::XInputStream > SAL_CALL ODatabaseMetaDataResultSet::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Reference< ::com::sun::star::io::XInputStream > SAL_CALL ODatabaseMetaDataResultSet::getBinaryStream( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     return NULL;
 }
 // -------------------------------------------------------------------------
-Reference< ::com::sun::star::io::XInputStream > SAL_CALL ODatabaseMetaDataResultSet::getCharacterStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Reference< ::com::sun::star::io::XInputStream > SAL_CALL ODatabaseMetaDataResultSet::getCharacterStream( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     return NULL;
 }
@@ -263,31 +295,31 @@ Reference< XResultSetMetaData > SAL_CALL ODatabaseMetaDataResultSet::getMetaData
     return m_xMetaData;
 }
 // -------------------------------------------------------------------------
-Reference< XArray > SAL_CALL ODatabaseMetaDataResultSet::getArray( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Reference< XArray > SAL_CALL ODatabaseMetaDataResultSet::getArray( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     return NULL;
 }
 
 // -------------------------------------------------------------------------
 
-Reference< XClob > SAL_CALL ODatabaseMetaDataResultSet::getClob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Reference< XClob > SAL_CALL ODatabaseMetaDataResultSet::getClob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     return NULL;
 }
 // -------------------------------------------------------------------------
-Reference< XBlob > SAL_CALL ODatabaseMetaDataResultSet::getBlob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
-{
-    return NULL;
-}
-// -------------------------------------------------------------------------
-
-Reference< XRef > SAL_CALL ODatabaseMetaDataResultSet::getRef( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Reference< XBlob > SAL_CALL ODatabaseMetaDataResultSet::getBlob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     return NULL;
 }
 // -------------------------------------------------------------------------
 
-Any SAL_CALL ODatabaseMetaDataResultSet::getObject( sal_Int32 columnIndex, const Reference< ::com::sun::star::container::XNameAccess >& typeMap ) throw(SQLException, RuntimeException)
+Reference< XRef > SAL_CALL ODatabaseMetaDataResultSet::getRef( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
+{
+    return NULL;
+}
+// -------------------------------------------------------------------------
+
+Any SAL_CALL ODatabaseMetaDataResultSet::getObject( sal_Int32 columnIndex, const Reference< ::com::sun::star::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException)
 {
     return getValue(columnIndex).makeAny();
 }
@@ -373,13 +405,13 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::last(  ) throw(SQLException, Runti
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaDataResultSet::absolute( sal_Int32 row ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL ODatabaseMetaDataResultSet::absolute( sal_Int32 /*row*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionSequenceException(*this);
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaDataResultSet::relative( sal_Int32 row ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL ODatabaseMetaDataResultSet::relative( sal_Int32 /*row*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionSequenceException(*this);
     return sal_False;
