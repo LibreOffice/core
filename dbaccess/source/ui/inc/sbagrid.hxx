@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbagrid.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:02:21 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:18:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -231,6 +231,9 @@ namespace dbaui
         virtual void MouseButtonDown( const MouseEvent& rMEvt );
 
         sal_Bool ImplStartColumnDrag(sal_Int8 _nAction, const Point& _rMousePos);
+
+    private:
+        using FmGridHeader::StartDrag;
     };
 
     // =========================================================================
@@ -260,17 +263,17 @@ namespace dbaui
 
     // Attributes
     protected:
-        ::svx::ODataAccessDescriptor                                                    m_aDataDescriptor;
-        SbaGridListener*    m_pMasterListener;
-        sal_Int32           m_nAsyncDropEvent;
-        sal_uInt16          m_nLastColId;
-        sal_uInt16          m_nLastRowId;
+        ::svx::ODataAccessDescriptor    m_aDataDescriptor;
+        SbaGridListener*                m_pMasterListener;
+        sal_Int32                       m_nAsyncDropEvent;
+        USHORT                          m_nLastColId;
+        long                            m_nLastRowId;
 
-        sal_uInt16          m_nCurrentActionColId;
+        USHORT                          m_nCurrentActionColId;
             // ui actions (e.g. a context menu) may be performed on columns which aren't the current one
             // and aren't selected, so we have to track this column id
 
-        sal_Bool    m_bActivatingForDrop;
+        sal_Bool                        m_bActivatingForDrop;
     // Attribute Access
     public:
         sal_uInt16  GetCurrentActionColumn() const  { return m_nCurrentActionColId; }
@@ -300,7 +303,7 @@ namespace dbaui
             @return
                 The description of the specified object.
         */
-        virtual ::rtl::OUString GetAccessibleDescription( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition = -1) const;
+        virtual ::rtl::OUString GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition = -1) const;
 
     protected:
         // DragSourceHelper overridables
@@ -350,6 +353,11 @@ namespace dbaui
 
     private:
         sal_Bool    IsReadOnlyDB() const;
+
+    private:
+        using FmGridControl::AcceptDrop;
+        using FmGridControl::ExecuteDrop;
+        using FmGridControl::MouseButtonDown;
     };
 }
 #endif // _SBA_GRID_HXX
