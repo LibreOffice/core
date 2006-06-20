@@ -4,9 +4,9 @@
  *
  *  $RCSfile: breakiterator_ctl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 10:18:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:41:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,7 +122,7 @@ sal_Int32 SAL_CALL BreakIterator_CTL::nextCharacters(const OUString& Text,
 }
 
 // This method should be overwritten by derived language specific class.
-void SAL_CALL BreakIterator_CTL::makeIndex(const OUString& text, sal_Int32 pos)
+void SAL_CALL BreakIterator_CTL::makeIndex(const OUString& /*text*/, sal_Int32 /*pos*/)
     throw(RuntimeException)
 {
     throw RuntimeException();
