@@ -2,7 +2,7 @@
 
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlflex.l,v 1.28 2005-09-23 11:42:24 hr Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlflex.l,v 1.29 2006-06-20 02:08:40 hr Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -10,7 +10,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: hr $ $Date: 2005-09-23 11:42:24 $ $Revision: 1.28 $
+//	$Author: hr $ $Date: 2006-06-20 02:08:40 $ $Revision: 1.29 $
 //
 // Description:
 //
@@ -49,6 +49,15 @@
 #ifndef _CONNECTIVITY_SQLPARSE_HXX
 #include <connectivity/sqlparse.hxx>
 #endif
+
+#if defined __GNUC__
+    #pragma GCC system_header
+#elif defined __SUNPRO_CC
+#pragma disable_warn
+#elif defined _MSC_VER
+#pragma warning(push, 1)
+#endif
+
 using namespace connectivity;
 
 //=============================================================================
@@ -519,6 +528,8 @@ sal_Int32 mapEnumToToken(IParseContext::InternationalKeyCode _eKeyCode )
 		case IParseContext::KEY_MAX:		nTokenID = SQL_TOKEN_MAX;		break;
 		case IParseContext::KEY_MIN:		nTokenID = SQL_TOKEN_MIN;		break;
 		case IParseContext::KEY_SUM:		nTokenID = SQL_TOKEN_SUM;		break;
+        default:
+            OSL_ENSURE( false, "mapEnumToToken: unsupported key!" );
 	}
 	return nTokenID;
 }
@@ -733,3 +744,8 @@ sal_Int32 OSQLScanner::SQLlex()
 	return SQLyylex();
 }
 
+#if defined __SUNPRO_CC
+#pragma enable_warn
+#elif defined _MSC_VER
+#pragma warning(pop)
+#endif
