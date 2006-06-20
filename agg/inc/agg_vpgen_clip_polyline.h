@@ -41,12 +41,12 @@ namespace agg
         {
         }
 
-        void clip_box(double x1, double y1, double x2, double y2)
+        void clip_box(double _x1, double _y1, double _x2, double _y2)
         {
-            m_clip_box.x1 = x1;
-            m_clip_box.y1 = y1;
-            m_clip_box.x2 = x2;
-            m_clip_box.y2 = y2;
+            m_clip_box.x1 = _x1;
+            m_clip_box.y1 = _y1;
+            m_clip_box.x2 = _x2;
+            m_clip_box.y2 = _y2;
             m_clip_box.normalize();
         }
 
