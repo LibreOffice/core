@@ -4,9 +4,9 @@
  *
  *  $RCSfile: preparedstatement.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-19 17:14:39 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:39:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,7 @@ using namespace ::cppu;
 using namespace ::osl;
 using namespace dbaccess;
 
-DBG_NAME(OPreparedStatement);
+DBG_NAME(OPreparedStatement)
 
 //--------------------------------------------------------------------------
 OPreparedStatement::OPreparedStatement(const Reference< XConnection > & _xConn,
