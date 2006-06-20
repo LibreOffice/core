@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mslangid.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 09:12:42 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:46:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -185,7 +185,6 @@ bool MsLangId::isRightToLeft( LanguageType nLang )
         case LANGUAGE_URDU   & LANGUAGE_MASK_PRIMARY :
         case LANGUAGE_FARSI  & LANGUAGE_MASK_PRIMARY :
             return true;
-            break;
 
         default:
             break;
@@ -203,7 +202,6 @@ bool MsLangId::hasForbiddenCharacters( LanguageType nLang )
         case LANGUAGE_JAPANESE & LANGUAGE_MASK_PRIMARY:
         case LANGUAGE_KOREAN   & LANGUAGE_MASK_PRIMARY:
             return true;
-            break;
         default:
             break;
     }

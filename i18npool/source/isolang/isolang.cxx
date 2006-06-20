@@ -4,9 +4,9 @@
  *
  *  $RCSfile: isolang.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 09:12:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:46:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -694,14 +694,14 @@ LanguageType MsLangId::convertIsoNamesToLanguage( const rtl::OUString& rLang,
     //  (to allow reading country and language in separate steps, in any order)
     if ( rCountry.getLength() && !rLang.getLength() )
     {
-        const IsoLangEntry* pEntry = aImplIsoLangEntries;
+        const IsoLangEntry* pEntry2 = aImplIsoLangEntries;
         do
         {
-            if ( aUpperCountry.equalsAscii( pEntry->maCountry ) )
-                return pEntry->mnLang;
-            ++pEntry;
+            if ( aUpperCountry.equalsAscii( pEntry2->maCountry ) )
+                return pEntry2->mnLang;
+            ++pEntry2;
         }
-        while ( pEntry->mnLang != LANGUAGE_DONTKNOW );
+        while ( pEntry2->mnLang != LANGUAGE_DONTKNOW );
 
         aLowerLang = aUpperCountry.toAsciiLowerCase();
     }
