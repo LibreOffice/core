@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ImplValidCharacters.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:56:27 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 06:09:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,6 @@ static sal_Bool Impl_IsValidChar ( const sal_Unicode *pChar, sal_Int16 nLength, 
             case '|':
             case ':':
                 return sal_False;
-            break;
             case '/':
                 if ( !bSlashAllowed )
                     return sal_False;
