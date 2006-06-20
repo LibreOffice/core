@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MDatabaseMetaDataHelper.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 12:18:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:50:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,7 +87,6 @@ namespace connectivity
                                 const ::rtl::OUString& tableNamePattern,
                                 const ::com::sun::star::uno::Sequence< ::rtl::OUString >& types,
                                 ODatabaseMetaDataResultSet::ORows& _rRows);
-
             sal_Bool   testLDAPConnection( OConnection* _pCon );
             sal_Bool   NewAddressBook( OConnection* _pCon,const ::rtl::OUString & aTableName);
 
