@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DAVResource.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:06:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:33:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,6 @@ struct DAVResourceInfo
     DAVResourceInfo( const ::rtl::OUString & inUri ) : uri( inUri ) {}
 };
 
-}; // namespace webdav_ucp
+} // namespace webdav_ucp
 
 #endif // _DAVRESOURCE_HXX_
