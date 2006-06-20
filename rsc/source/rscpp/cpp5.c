@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpp5.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:59:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:50:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -316,8 +316,8 @@ again:  ;
             opname[op]);
             return (1);
         }
-        opp->op = op;
-        opp->prec = prec;
+        opp->op = (char)op;
+        opp->prec = (char)prec;
         skip = (valp[-1] != 0);     /* Short-circuit tester */
         /*
          * Do the short-circuit stuff here.  Short-circuiting
@@ -327,13 +327,13 @@ again:  ;
          || (op == OP_ORO && skip))
             opp->skip = S_ANDOR;    /* And/or skip starts   */
         else if (op == OP_QUE)      /* Start of ?: operator */
-            opp->skip = (op1 & S_ANDOR) | ((!skip) ? S_QUEST : 0);
+            opp->skip = (char)((op1 & S_ANDOR) | ((!skip) ? S_QUEST : 0));
         else if (op == OP_COL) {    /* : inverts S_QUEST    */
-            opp->skip = (op1 & S_ANDOR)
-                  | (((op1 & S_QUEST) != 0) ? 0 : S_QUEST);
+            opp->skip = (char)((op1 & S_ANDOR)
+                  | (((op1 & S_QUEST) != 0) ? 0 : S_QUEST));
         }
         else {              /* Other ops leave  */
-            opp->skip = op1;        /*  skipping unchanged. */
+            opp->skip = (char)op1;      /*  skipping unchanged. */
         }
 #ifdef  DEBUG_EVAL
         fprintf( pCppOut, "stacking %s, valp[-1] == %d at %s",
@@ -390,8 +390,7 @@ again:  ;
 }
 
 FILE_LOCAL int
-evallex(skip)
-int     skip;       /* TRUE if short-circuit evaluation */
+evallex(int skip)
 /*
  * Return next eval operator or value.  Called from eval().  It
  * calls a special-purpose routines for 'char' strings and
@@ -529,7 +528,7 @@ dosizeof()
      * Scan off the tokens.
      */
     typecode = 0;
-    while ((c = skipws())) {
+    while (0 != (c = skipws())) {
         if ((c = macroid(c)) == EOF_CHAR || c == '\n')
         goto nogood;            /* End of line is a bug */
         else if (c == '(') {        /* thing (*)() func ptr */
@@ -616,7 +615,7 @@ nogood: unget();
 }
 
 FILE_LOCAL int
-bittest(value)
+bittest(int value)
 /*
  * TRUE if value is zero or exactly one bit is set in value.
  */
@@ -630,10 +629,9 @@ bittest(value)
     return (value == 0 || value ^ (value - 1) == (value * 2 - 1));
 #endif
 }
-
+
 FILE_LOCAL int
-evalnum(c)
-register int    c;
+evalnum(int c)
 /*
  * Expand number for #if lexical analysis.  Note: evalnum recognizes
  * the unsigned suffix, but only returns a signed int value.
@@ -675,8 +673,7 @@ register int    c;
 }
 
 FILE_LOCAL int
-evalchar(skip)
-int     skip;       /* TRUE if short-circuit evaluation */
+evalchar(int skip)
 /*
  * Get a character constant
  */
@@ -782,10 +779,7 @@ int     skip;       /* TRUE if short-circuit evaluation */
 }
 
 FILE_LOCAL int *
-evaleval(valp, op, skip)
-register int    *valp;
-int     op;
-int     skip;       /* TRUE if short-circuit evaluation */
+evaleval(int* valp, int op, int skip)
 /*
  * Apply the argument operator to the data on the value stack.
  * One or two values are popped from the value stack and the result
