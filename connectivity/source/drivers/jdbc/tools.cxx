@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tools.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:15:04 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:37:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,9 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include <connectivity/dbexception.hxx>
+#endif
 
 using namespace connectivity;
 using namespace ::com::sun::star::uno;
@@ -73,8 +76,8 @@ void java_util_Properties::setProperty(const ::rtl::OUString key, const ::rtl::O
         args[0].l = convertwchar_tToJavaString(t.pEnv,key);
         args[1].l = convertwchar_tToJavaString(t.pEnv,value);
         // temporaere Variable initialisieren
-        static char * cSignature = "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/Object;";
-        static char * cMethodName = "setProperty";
+        static const char * cSignature = "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/Object;";
+        static const char * cMethodName = "setProperty";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -126,7 +129,7 @@ java_util_Properties::java_util_Properties( ): java_lang_Object( NULL, (jobject)
         return;
     // Java-Call fuer den Konstruktor absetzen
     // temporaere Variable initialisieren
-    static char * cSignature = "()V";
+    static const char * cSignature = "()V";
     jobject tempObj;
     static jmethodID mID = NULL;
     if ( !mID  )
@@ -147,7 +150,7 @@ jstring connectivity::convertwchar_tToJavaString(JNIEnv *pEnv,const ::rtl::OUStr
 }
 
 // --------------------------------------------------------------------------------
-java_util_Properties* connectivity::createStringPropertyArray(JNIEnv *pEnv,const Sequence< PropertyValue >& info )  throw(SQLException, RuntimeException)
+java_util_Properties* connectivity::createStringPropertyArray(const Sequence< PropertyValue >& info )  throw(SQLException, RuntimeException)
 {
     java_util_Properties* pProps = new java_util_Properties();
     const PropertyValue* pBegin = info.getConstArray();
@@ -197,14 +200,11 @@ java_util_Properties* connectivity::createStringPropertyArray(JNIEnv *pEnv,const
     return aStr;
 }
 // --------------------------------------------------------------------------------
-jobject connectivity::XNameAccess2Map(JNIEnv *pEnv,const Reference< ::com::sun::star::container::XNameAccess > & _rMap)
+jobject connectivity::convertTypeMapToJavaMap(JNIEnv* /*pEnv*/,const Reference< ::com::sun::star::container::XNameAccess > & _rMap)
 {
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > aSeq = _rMap->getElementNames();
-    const ::rtl::OUString *pBegin   = aSeq.getConstArray();
-    const ::rtl::OUString *pEnd     = pBegin + aSeq.getLength();
-    for(;pBegin != pEnd;++pBegin)
-    {
-    }
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > aNames = _rMap->getElementNames();
+    if ( aNames.getLength() > 0 )
+        ::dbtools::throwFeatureNotImplementedException( "Type maps", NULL );
     return 0;
 }
 // -----------------------------------------------------------------------------
