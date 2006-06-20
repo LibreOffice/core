@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ustrbuf.c,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:07:18 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:31:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,12 +164,12 @@ void rtl_uStringbuffer_insertUtf32(
     sal_Int32 len;
     OSL_ASSERT(c <= 0x10FFFF && !(c >= 0xD800 && c <= 0xDFFF));
     if (c <= 0xFFFF) {
-        buf[0] = c;
+        buf[0] = (sal_Unicode) c;
         len = 1;
     } else {
         c -= 0x10000;
-        buf[0] = (c >> 10) | 0xD800;
-        buf[1] = (c & 0x3FF) | 0xDC00;
+        buf[0] = (sal_Unicode) ((c >> 10) | 0xD800);
+        buf[1] = (sal_Unicode) ((c & 0x3FF) | 0xDC00);
         len = 2;
     }
     rtl_uStringbuffer_insert(pThis, capacity, offset, buf, len);
