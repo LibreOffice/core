@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 08:32:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:19:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -242,14 +242,6 @@ namespace dbaui
         virtual sal_Bool preReloadForm();
         virtual void     postReloadForm();
 
-#if defined(_MSC_VER) && (_MSC_VER >= 1310 )
-        typedef ::com::sun::star::frame::XStatusListener xstlist_type;
-        typedef ::com::sun::star::uno::Reference< xstlist_type > xlister_type;
-        virtual void InvalidateFeature(sal_uInt16 nId, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xListener = xlistener_type() );
-#else
-        virtual void InvalidateFeature(sal_uInt16 nId, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xListener = ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > ());
-#endif //_MSC_VER >= 1310
-
         virtual void addModelListeners(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > & _xGridControlModel);
         virtual void removeModelListeners(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > & _xGridControlModel);
 
@@ -329,7 +321,7 @@ namespace dbaui
             @param _bFlushData
                 <TRUE/> if the currently displayed object (if any) should be flushed
         */
-        void unloadAndCleanup(sal_Bool _bDisposeConnection = sal_True, sal_Bool _bFlushData = sal_True);
+        void unloadAndCleanup( sal_Bool _bDisposeConnection = sal_True );
 
         // disposes the connection associated with the given entry (which must represent a data source)
         void        disposeConnection( SvLBoxEntry* _pDSEntry );
