@@ -4,9 +4,9 @@
  *
  *  $RCSfile: provider.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:44:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:27:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -196,13 +196,13 @@ writeInfo( void                                 *pRegistryKey,
 
 extern "C" void SAL_CALL
 component_getImplementationEnvironment( const sal_Char  **ppEnvTypeName,
-                    uno_Environment **ppEnv )
+                    uno_Environment **/*ppEnv*/ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
 extern "C" sal_Bool SAL_CALL
-component_writeInfo( void *pServiceManager,
+component_writeInfo( void */*pServiceManager*/,
              void *pRegistryKey )
 {
     return pRegistryKey &&
@@ -213,7 +213,7 @@ component_writeInfo( void *pServiceManager,
 extern "C" void * SAL_CALL
 component_getFactory( const sal_Char *pImplName,
               void           *pServiceManager,
-              void           *pRegistryKey )
+              void           */*pRegistryKey*/ )
 {
     void * pRet = 0;
 
