@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryViewSwitch.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:27:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:27:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,7 @@ using namespace dbaui;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
-DBG_NAME(OQueryViewSwitch);
+DBG_NAME(OQueryViewSwitch)
 OQueryViewSwitch::OQueryViewSwitch(OQueryContainerWindow* _pParent, OQueryController* _pController,const Reference< XMultiServiceFactory >& _rFactory)
 : m_bAddTableDialogWasVisible(sal_False)
 {
@@ -101,7 +101,6 @@ void OQueryViewSwitch::Construct()
 void OQueryViewSwitch::initialize()
 {
     // initially be in SQL mode
-    OQueryContainerWindow* pContainer = getContainer();
     m_pTextView->Show();
     m_pDesignView->initialize();
 }
