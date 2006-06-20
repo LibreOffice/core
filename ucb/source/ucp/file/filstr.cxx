@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filstr.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:28:01 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:21:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,6 @@ XStream_impl::queryInterface(
 {
     uno::Any aRet = cppu::queryInterface( rType,
                                           SAL_STATIC_CAST( lang::XTypeProvider*,this ),
-                                          SAL_STATIC_CAST( lang::XServiceInfo*,this ),
                                           SAL_STATIC_CAST( io::XStream*,this ),
                                           SAL_STATIC_CAST( io::XInputStream*,this ),
                                           SAL_STATIC_CAST( io::XOutputStream*,this ),
@@ -103,44 +102,12 @@ XStream_impl::release(
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
-//  XServiceInfo
-//////////////////////////////////////////////////////////////////////////////////////////
-
-rtl::OUString SAL_CALL
-XStream_impl::getImplementationName()
-    throw( uno::RuntimeException)
-{
-    return rtl::OUString::createFromAscii("com.sun.star.io.comp.XStream");
-}
-
-
-
-sal_Bool SAL_CALL
-XStream_impl::supportsService( const rtl::OUString& ServiceName )
-    throw( uno::RuntimeException)
-{
-    return false;
-}
-
-
-
-uno::Sequence< rtl::OUString > SAL_CALL
-XStream_impl::getSupportedServiceNames()
-    throw( uno::RuntimeException )
-{
-    uno::Sequence< rtl::OUString > ret( 0 );
-    return ret;
-}
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
 //  XTypeProvider
 //////////////////////////////////////////////////////////////////////////////////////////
 
 
-XTYPEPROVIDER_IMPL_8( XStream_impl,
+XTYPEPROVIDER_IMPL_7( XStream_impl,
                       lang::XTypeProvider,
-                      lang::XServiceInfo,
                       io::XStream,
                       io::XSeekable,
                       io::XInputStream,
@@ -151,13 +118,13 @@ XTYPEPROVIDER_IMPL_8( XStream_impl,
 
 
 XStream_impl::XStream_impl( shell* pMyShell,const rtl::OUString& aUncPath )
-    : m_pMyShell( pMyShell ),
-      m_aFile( aUncPath ),
+    : m_bInputStreamCalled( false ),
+      m_bOutputStreamCalled( false ),
+      m_pMyShell( pMyShell ),
       m_xProvider( m_pMyShell->m_pProvider ),
+      m_aFile( aUncPath ),
       m_nErrorCode( TASKHANDLER_NO_ERROR ),
-      m_nMinorErrorCode( TASKHANDLER_NO_ERROR ),
-      m_bInputStreamCalled( false ),
-      m_bOutputStreamCalled( false )
+      m_nMinorErrorCode( TASKHANDLER_NO_ERROR )
 {
     osl::FileBase::RC err = m_aFile.open( OpenFlag_Read | OpenFlag_Write );
     if(  err != osl::FileBase::E_None )
@@ -323,7 +290,7 @@ XStream_impl::writeBytes( const uno::Sequence< sal_Int8 >& aData )
            io::IOException,
            uno::RuntimeException)
 {
-    sal_Int32 length = aData.getLength();
+    sal_uInt32 length = aData.getLength();
     if(length)
     {
         sal_uInt64 nWrittenBytes(0);
