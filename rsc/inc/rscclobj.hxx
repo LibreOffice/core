@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rscclobj.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:30:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:44:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,12 @@ class ObjNode : public IdNode{
     RscId       aRscId; // Id der Resource
     CLASS_DATA  pRscObj;// pointer to a resourceobject
     ULONG       lFileKey;// Dateischluessel
+protected:
+    using NameNode::Search;
+
 public:
+    using NameNode::Insert;
+
                 ObjNode( const RscId & rId, CLASS_DATA pData, ULONG lKey );
     ObjNode *   DelObjNode( RscTop * pClass, ULONG lFileKey );
     sal_uInt32      GetId() const;
@@ -90,7 +95,12 @@ public:
 /******************* R e f N o d e ***************************************/
 class RefNode : public IdNode{
     Atom        nTypNameId; // index of a Name in a hashtabel
+protected:
+    using NameNode::Search;
+
 public:
+    using NameNode::Insert;
+
     ObjNode*    pObjBiTree; // Zeiger auf Objektbaum
                 RefNode( Atom nTyp );
     sal_uInt32      GetId() const;
