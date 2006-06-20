@@ -4,9 +4,9 @@
  *
  *  $RCSfile: YViews.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:32:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:54:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,24 +144,18 @@ void OViews::appendObject( const Reference< XPropertySet >& descriptor )
 }
 // -------------------------------------------------------------------------
 // XDrop
-void OViews::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
+void OViews::dropObject(sal_Int32 _nPos,const ::rtl::OUString /*_sElementName*/)
 {
     if ( m_bInDrop )
         return;
 
-    Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(getObject(_nPos),UNO_QUERY);
-    sal_Bool bIsNew = sal_False;
-    if(xTunnel.is())
-    {
-        connectivity::sdbcx::ODescriptor* pTable = (connectivity::sdbcx::ODescriptor*)xTunnel->getSomething(connectivity::sdbcx::ODescriptor::getUnoTunnelImplementationId());
-        if(pTable)
-            bIsNew = pTable->isNew();
-    }
+    Reference< XInterface > xObject( getObject( _nPos ) );
+    sal_Bool bIsNew = connectivity::sdbcx::ODescriptor::isNew( xObject );
     if (!bIsNew)
     {
         ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("DROP VIEW");
 
-        Reference<XPropertySet> xProp(xTunnel,UNO_QUERY);
+        Reference<XPropertySet> xProp(xObject,UNO_QUERY);
         aSql += ::dbtools::composeTableName(m_xMetaData,xProp,sal_True,::dbtools::eInTableDefinitions);
 
         Reference<XConnection> xConnection = static_cast<OMySQLCatalog&>(m_rParent).getConnection();
