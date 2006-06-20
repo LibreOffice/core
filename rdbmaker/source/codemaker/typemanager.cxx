@@ -4,9 +4,9 @@
  *
  *  $RCSfile: typemanager.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-17 13:31:01 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:10:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,7 +137,6 @@ sal_Bool RegistryTypeManager::init(sal_Bool bMerged, const StringVector& regFile
     if (m_pImpl->m_isMerged)
     {
         Registry *pTmpReg = new Registry(loader);
-
         OUString tmpName;
         osl::FileBase::createTempFile(0, 0, &tmpName);
         if (!pTmpReg->create(tmpName))
