@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryDesignView.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:30:26 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:12:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,6 +172,9 @@ namespace dbaui
         // return the Rectangle where I can paint myself
         virtual void resizeDocumentView(Rectangle& rRect);
         DECL_LINK( SplitHdl, void* );
+
+    private:
+        using OQueryView::SaveTabWinUIConfig;
     };
 }
 #endif // DBAUI_QUERYDESIGNVIEW_HXX
