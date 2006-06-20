@@ -4,9 +4,9 @@
  *
  *  $RCSfile: types.h,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-28 10:34:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:15:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -331,6 +331,44 @@ enum __sal_NoAcquire
 }
 #endif /* __cplusplus */
 
+#ifdef __cplusplus
+
+namespace sal {
+
+/**
+   A static_cast between integral types, to avoid C++ compiler warnings.
+
+   In C++ source code, use sal::static_int_cast<T>(n) instead of
+   static_cast<T>(n) whenever a compiler warning about integral type problems
+   shall be silenced.  That way, source code that needs to be modified when the
+   type of any of the expressions involved in the compiler warning is changed
+   can be found more easily.
+
+   Both template arguments T1 and T2 must be integral types.
+*/
+template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
+    return static_cast< T1 >(n);
+}
+
+}
+
+#else /* __cplusplus */
+
+/**
+   A cast between integer types, to avoid C compiler warnings.
+
+   In C source code, use SAL_INT_CAST(type, expr) instead of ((type) (expr))
+   whenever a compiler warning about integer type problems shall be silenced.
+   That way, source code that needs to be modified when the type of any of the
+   expressions involved in the compiler warning is changed can be found more
+   easily.
+
+   The argument 'type' must be an integer type and the argument 'expr' must be
+   an integer expression.  Both arguments are evaluated exactly once.
+*/
+#define SAL_INT_CAST(type, expr) ((type) (expr))
+
+#endif /* __cplusplus */
 
 #endif /*_SAL_TYPES_H_ */
 
