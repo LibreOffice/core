@@ -4,9 +4,9 @@
  *
  *  $RCSfile: kill.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:09:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:31:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,10 +35,12 @@
 
 #include <tchar.h>
 
+#pragma warning(push,1) // disable warnings within system headers
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <tlhelp32.h>
 #include <psapi.h>
+#pragma warning(pop)
 
 #include <signal.h>
 #include <stdarg.h>
@@ -54,37 +56,6 @@
 #endif
 
 #include <signal.h>
-
-/////////////////////////////////////////////////////////////////////////////
-// Converts a signal to an exception and raises it
-/////////////////////////////////////////////////////////////////////////////
-
-static DWORD GetExceptionCodeForSignal( int sig )
-{
-    DWORD   dwExceptionCode = 0;
-
-    switch ( sig )
-    {
-    case SIGSEGV:
-        dwExceptionCode = EXCEPTION_ACCESS_VIOLATION;
-        break;
-    case SIGFPE:
-        dwExceptionCode = EXCEPTION_FLT_DIVIDE_BY_ZERO;
-        break;
-    case SIGILL:
-        dwExceptionCode = EXCEPTION_ILLEGAL_INSTRUCTION;
-        break;
-    case SIGBREAK:
-        dwExceptionCode = EXCEPTION_BREAKPOINT;
-        break;
-    case SIGINT:
-        dwExceptionCode = CONTROL_C_EXIT;
-        break;
-    }
-
-    return dwExceptionCode;
-}
-
 
 #define MAX_MODULES 1024
 
@@ -313,7 +284,7 @@ static void ParseCommandArgs( LPDWORD lpProcesses, LPDWORD lpdwNumProcesses, int
                 _TCHAR *endptr = NULL;
 
                 if ( 0 == lstrcmpi( SupportedSignals[n].lpSignalName, argsig ) ||
-                     _tcstoul( argsig, &endptr, 0 ) == SupportedSignals[n].iSignalValue && (!endptr || !*endptr) )
+                     _tcstoul( argsig, &endptr, 0 ) == static_cast< unsigned >(SupportedSignals[n].iSignalValue) && (!endptr || !*endptr) )
                 {
                     *pSig = SupportedSignals[n].iSignalValue;
                     break;
