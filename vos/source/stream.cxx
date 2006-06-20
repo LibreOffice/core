@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stream.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2006-06-02 12:44:56 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:07:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,7 @@
  *
  ************************************************************************/
 
+#include <limits>
 
 #include <osl/diagnose.h>
 #include <vos/object.hxx>
@@ -69,7 +70,9 @@ sal_Int32 OStream::read(IPositionableStream::Offset offset,
 
 sal_Int32 OStream::write(const void* pbuffer, sal_uInt32 n)
 {
-    return (m_rStream.write(pbuffer, n) == n);
+    return
+        n <= static_cast< sal_uInt32 >(std::numeric_limits< sal_Int32 >::max())
+        && (m_rStream.write(pbuffer, n) == static_cast< sal_Int32 >(n));
 }
 
 sal_Int32 OStream::write(IPositionableStream::Offset offset,
@@ -115,6 +118,6 @@ sal_Bool OStream::isEof() const
 
 IPositionableStream::Offset OStream::getOffset() const
 {
-    return (OStream::getOffset());
+    return (m_rStream.getOffset());
 }
 
