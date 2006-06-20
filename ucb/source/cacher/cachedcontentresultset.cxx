@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cachedcontentresultset.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:10:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:15:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -302,7 +302,7 @@ Sequence< sal_Bool >* SAL_CALL CachedContentResultSet::CCRS_Cache
     {
         sal_Int32 nCount = m_pResult->Rows.getLength();
         m_pMappedReminder = new Sequence< sal_Bool >( nCount );
-        for( nCount; nCount--; )
+        for( ;nCount; nCount-- )
             (*m_pMappedReminder)[nCount] = sal_False;
     }
     return m_pMappedReminder;
@@ -332,7 +332,6 @@ const Any& SAL_CALL CachedContentResultSet::CCRS_Cache
         (* reinterpret_cast< const Sequence< Any > * >
         (getRowAny( nRow ).getValue() ));
 
-    sal_Int32 nTest = rRow.getLength();
     if( nColumnIndex > rRow.getLength() )
         throw SQLException();
     return rRow[nColumnIndex-1];
@@ -694,14 +693,14 @@ CachedContentResultSet::CachedContentResultSet(
                 , m_xSMgr( xSMgr )
                 , m_xFetchProvider( NULL )
                 , m_xFetchProviderForContentAccess( NULL )
-                , m_xContentIdentifierMapping( xContentIdentifierMapping )
 
-                , m_pMyPropSetInfo( NULL )
                 , m_xMyPropertySetInfo( NULL )
+                , m_pMyPropSetInfo( NULL )
 
+                , m_xContentIdentifierMapping( xContentIdentifierMapping )
                 , m_nRow( 0 ) // Position is one-based. Zero means: before first element.
-                , m_nLastAppliedPos( 0 )
                 , m_bAfterLast( sal_False )
+                , m_nLastAppliedPos( 0 )
                 , m_bAfterLastApplied( sal_False )
                 , m_nKnownCount( 0 )
                 , m_bFinalCount( sal_False )
@@ -716,8 +715,8 @@ CachedContentResultSet::CachedContentResultSet(
                 , m_aCacheContentIdentifierString( m_xContentIdentifierMapping )
                 , m_aCacheContentIdentifier( m_xContentIdentifierMapping )
                 , m_aCacheContent( m_xContentIdentifierMapping )
-                , m_xTypeConverter( NULL )
                 , m_bTriedToGetTypeConverter( sal_False )
+                , m_xTypeConverter( NULL )
 {
     m_xFetchProvider = Reference< XFetchProvider >( m_xResultSetOrigin, UNO_QUERY );
     OSL_ENSURE( m_xFetchProvider.is(), "interface XFetchProvider is required" );
@@ -875,13 +874,13 @@ sal_Bool bDirection = !!(                                           \
     nFetchDirection != FetchDirection::REVERSE );                   \
 FetchResult aResult =                                               \
     fetchInterface->fetchMethod( nRow, nFetchSize, bDirection );    \
-osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );               \
+osl::ClearableGuard< osl::Mutex > aGuard2( m_aMutex );              \
 aCache.loadData( aResult );                                         \
 sal_Int32 nMax = aCache.getMaxRow();                                \
 sal_Int32 nCurCount = m_nKnownCount;                                \
 sal_Bool bIsFinalCount = aCache.hasKnownLast();                     \
 sal_Bool bCurIsFinalCount = m_bFinalCount;                          \
-aGuard.clear();                                                     \
+aGuard2.clear();                                                    \
 if( nMax > nCurCount )                                              \
     impl_changeRowCount( nCurCount, nMax );                         \
 if( bIsFinalCount && !bCurIsFinalCount )                            \
@@ -1523,7 +1522,7 @@ sal_Bool SAL_CALL CachedContentResultSet
         m_nLastAppliedPos = nCurRow;
         m_nRow = nCurRow;
         m_bAfterLast = sal_False;
-        return nCurRow;
+        return nCurRow != 0;
     }
     //row > 0:
     if( m_bFinalCount )
@@ -1677,7 +1676,7 @@ sal_Bool SAL_CALL CachedContentResultSet
     {
         m_nRow = m_nKnownCount;
         m_bAfterLast = sal_False;
-        return m_nKnownCount;
+        return m_nKnownCount != 0;
     }
     //unknown position
     if( !m_xResultSetOrigin.is() )
@@ -1707,7 +1706,7 @@ sal_Bool SAL_CALL CachedContentResultSet
     OSL_ENSURE( nCurRow >= m_nKnownCount, "position of last row < known Count, that could not be" );
     m_nKnownCount = nCurRow;
     m_bFinalCount = sal_True;
-    return nCurRow;
+    return nCurRow != 0;
 }
 
 //virtual
