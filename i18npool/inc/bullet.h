@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bullet.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 09:09:57 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:40:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -336,6 +336,11 @@ static sal_Unicode table_DiZi_zh[] = {
     0x5b50,0x4e11,0x5bc5,0x536f,0x8fb0,0x5df3,0x5348,0x672a,0x7533,0x9149,0x620c,0x4ea5
 };
 
+// To avoid warnings, include table_Alphabet_... only where needed.
+// Later, the tables should be moved to a single cxx file anyway.
+
+#ifdef I18N_NEED_ALPHABET_TABLES
+
 static sal_Unicode table_Alphabet_ar[] = {
     0x0623, 0x0628, 0x062A, 0x062B, 0x062C, 0x062D, 0x062E,
     0x062F, 0x0630, 0x0631, 0x0632, 0x0633, 0x0634, 0x0635,
@@ -387,5 +392,7 @@ static sal_Unicode table_Alphabet_dz[] = {
     0x0F59, 0x0F5A, 0x0F5B, 0x0F5D, 0x0F5E, 0x0F5F, 0x0F60, 0x0F61,
     0x0F62, 0x0F63, 0x0F64, 0x0F66, 0x0F67, 0x0F68
 };
+
+#endif
 
 } } } }
