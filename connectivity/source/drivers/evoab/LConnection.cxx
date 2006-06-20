@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LConnection.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 12:15:23 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:22:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,8 +78,14 @@
 #ifndef CONNECTIVITY_EVOAB_DEBUG_HELPER_HXX
 #include "LDebug.hxx"
 #endif
+#ifndef CONNECTIVITY_DIAGNOSE_EX_H
+#include "diagnose_ex.h"
+#endif
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
+#endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include <connectivity/dbexception.hxx>
 #endif
 
 using namespace connectivity::evoab;
@@ -159,8 +165,10 @@ void OEvoabConnection::construct(const ::rtl::OUString& url,const Sequence< Prop
     EVO_TRACE_STRING("OEvoabConnection::construct()::aArg1 = %s\n", aArg1 );
     EVO_TRACE_STRING("OEvoabConnection::construct()::aArg2 = %s\n", aArg2 );
     OProcess aApp( aCLICommand,aWorkingDirPath);
-    OProcess::TProcessError eError = aApp.execute( (OProcess::TProcessOption)(OProcess::TOption_Hidden | OProcess::TOption_Wait | OProcess::TOption_SearchPath),aArgs);
-    DBG_ASSERT(eError == OProcess::E_None,"Error at execute evolution-addressbook-export to get VCards");
+    OSL_VERIFY_EQUALS(
+        aApp.execute( (OProcess::TProcessOption)(OProcess::TOption_Hidden | OProcess::TOption_Wait | OProcess::TOption_SearchPath),aArgs),
+        OProcess::E_None,
+        "Error at execute evolution-addressbook-export to get VCards");
 
 
     Sequence<PropertyValue> aDriverParam;
@@ -294,11 +302,9 @@ Reference< XPreparedStatement > SAL_CALL OEvoabConnection::prepareStatement( con
     return xStmt;
 }
 // --------------------------------------------------------------------------------
-Reference< XPreparedStatement > SAL_CALL OEvoabConnection::prepareCall( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+Reference< XPreparedStatement > SAL_CALL OEvoabConnection::prepareCall( const ::rtl::OUString& /*sql*/ ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OConnection_B::rBHelper.bDisposed);
-
+    ::dbtools::throwFeatureNotImplementedException( "XConnection::prepareCall", *this );
     return NULL;
 }
 // -------------------------------------------------------------------------
