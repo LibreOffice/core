@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VView.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:45:21 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:11:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,12 +125,9 @@ Any SAL_CALL OView::queryInterface( const Type & rType ) throw(RuntimeException)
     return aRet.hasValue() ? aRet : ODescriptor::queryInterface( rType);
 }
 // -------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper* OView::createArrayHelper(sal_Int32 _nId) const
+::cppu::IPropertyArrayHelper* OView::createArrayHelper( sal_Int32 /*_nId*/ ) const
 {
-        Sequence< Property > aProps;
-    describeProperties(aProps);
-    changePropertyAttributte(aProps);
-    return new ::cppu::OPropertyArrayHelper(aProps);
+    return doCreateArrayHelper();
 }
 // -------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper & OView::getInfoHelper()
