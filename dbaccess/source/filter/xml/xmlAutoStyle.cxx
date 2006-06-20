@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlAutoStyle.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:08:21 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:49:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@ void OXMLAutoStylePoolP::exportStyleAttributes(
         UniReference< XMLPropertySetMapper > aPropMapper = rODBExport.GetColumnStylesPropertySetMapper();
         ::std::vector< XMLPropertyState >::const_iterator i = rProperties.begin();
         ::std::vector< XMLPropertyState >::const_iterator aEnd = rProperties.end();
-        for (i; i != aEnd ; ++i)
+        for ( ; i != aEnd ; ++i )
         {
             sal_Int16 nContextID = aPropMapper->GetEntryContextId(i->mnIndex);
             switch (nContextID)
