@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AGroups.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:28:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:13:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,7 @@ void OGroups::appendObject( const Reference< XPropertySet >& descriptor )
 }
 // -------------------------------------------------------------------------
 // XDrop
-void OGroups::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
+void OGroups::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElementName)
 {
     m_aCollection.Delete(_sElementName);
 }
