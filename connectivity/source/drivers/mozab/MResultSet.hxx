@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MResultSet.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 11:54:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:44:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -269,7 +269,7 @@ namespace connectivity
             virtual sal_Bool SAL_CALL hasOrderedBookmarks(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual sal_Int32 SAL_CALL hashBookmark( const ::com::sun::star::uno::Any& bookmark ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             // XDeleteRows
-            virtual ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL deleteRows( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rows ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException){return 0;};
+            virtual ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL deleteRows( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rows ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
 protected:
             MQuery                   m_aQuery;
@@ -280,7 +280,7 @@ protected:
 
             ::std::vector<sal_Int32> m_aColMapping; // pos 0 is unused so we don't have to decrement 1 everytime
             ::std::vector<sal_Int32> m_aOrderbyColumnNumber;
-            ::std::vector<sal_Int16> m_aOrderbyAscending;
+            ::std::vector<TAscendingOrder>  m_aOrderbyAscending;
             ::com::sun::star::uno::Sequence< ::rtl::OUString> m_aColumnNames;
             OValueRow                m_aRow;
             OValueRow                m_aParameterRow;
@@ -289,8 +289,8 @@ protected:
             sal_Bool                 m_bIsAlwaysFalseQuery;
             ::vos::ORef<OKeySet>     m_pKeySet;
             OSortIndex*              m_pSortIndex;
-            sal_Int32                 m_nNewRow;        //inserted row
-            sal_Int32                     m_nUpdatedRow;    //updated row
+            sal_Int32                m_nNewRow;     //inserted row
+            sal_Int32                m_nUpdatedRow; //updated row
             sal_Int32                 m_RowStates;
             sal_Int32                     m_bIsReadOnly;
             inline void resetParameters() { m_nParamIndex = 0; }
@@ -316,7 +316,7 @@ protected:
 
             sal_uInt32  currentRowCount();
 
-            sal_Bool fetchRow(sal_uInt32 rowIndex,sal_Bool bForceReload=sal_False) throw( ::com::sun::star::sdbc::SQLException,
+            sal_Bool fetchRow(sal_Int32 rowIndex,sal_Bool bForceReload=sal_False) throw( ::com::sun::star::sdbc::SQLException,
                                                           ::com::sun::star::uno::RuntimeException);
             sal_Bool fetchCurrentRow() throw( ::com::sun::star::sdbc::SQLException,
                                                           ::com::sun::star::uno::RuntimeException);
@@ -327,7 +327,7 @@ protected:
             sal_Int32 deletedCount();
             sal_Bool fillKeySet(sal_Int32 nMaxCardNumber);  //When we get new rows, fill the m_pKeySet items for them
             sal_Int32 getRowForCardNumber(sal_Int32 nCardNum);
-            const ORowSetValue& getValue(sal_uInt32 rowIndex, sal_Int32 columnIndex)
+            const ORowSetValue& getValue(sal_Int32 rowIndex, sal_Int32 columnIndex)
                 throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
             void updateValue(sal_Int32 columnIndex,const ORowSetValue& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -355,7 +355,7 @@ public:
 
             void setOrderByColumns(const ::std::vector<sal_Int32>& _aColumnOrderBy);
 
-            void setOrderByAscending(const ::std::vector<sal_Int16>& _aOrderbyAsc);
+            void setOrderByAscending(const ::std::vector<TAscendingOrder>& _aOrderbyAsc);
 
             inline sal_Int32 mapColumn(sal_Int32 column);
 
@@ -378,6 +378,9 @@ public:
                     if ( !m_pKeySet.isValid() )
                         m_pKeySet = new OKeySet();
                 }
+
+        protected:
+            using OPropertySetHelper::getFastPropertyValue;
         };
 
         inline sal_Int32 OResultSet::mapColumn(sal_Int32 column)
