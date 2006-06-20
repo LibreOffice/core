@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:18:30 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:36:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,9 +77,6 @@
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
 #endif
-#ifndef _CONNECTIVITY_EMPTYMETADATA_HXX_
-#include <connectivity/emptymetadata.hxx>
-#endif
 #ifndef _OSL_THREAD_H_
 #include <osl/thread.h>
 #endif
@@ -123,7 +120,7 @@ void OEmptyCollection::impl_refresh() throw(RuntimeException)
 {
 }
 // -----------------------------------------------------------------------------
-connectivity::sdbcx::ObjectType OEmptyCollection::createObject(const ::rtl::OUString& _rName)
+connectivity::sdbcx::ObjectType OEmptyCollection::createObject(const ::rtl::OUString& /*_rName*/)
 {
     return connectivity::sdbcx::ObjectType();
 }
@@ -137,16 +134,18 @@ DBG_NAME(ORowSetBase)
 ORowSetBase::ORowSetBase(::cppu::OBroadcastHelper   &_rBHelper,::osl::Mutex* _pMutex)
             : OPropertyStateContainer(_rBHelper)
             , m_pMutex(_pMutex)
-            , m_rBHelper(_rBHelper)
             , m_pCache(NULL)
             , m_pColumns(NULL)
+            , m_rBHelper(_rBHelper)
+            , m_pEmptyCollection( NULL )
+            , m_nLastColumnIndex(-1)
+            , m_nDeletedPosition(-1)
+            , m_nResultSetType( ResultSetType::FORWARD_ONLY )
+            , m_nResultSetConcurrency( ResultSetConcurrency::READ_ONLY )
+            , m_bClone(sal_False)
+            , m_bIgnoreResult(sal_False)
             , m_bBeforeFirst(sal_True) // changed from sal_False
             , m_bAfterLast(sal_False)
-            , m_bClone(sal_False)
-            , m_nDeletedPosition(-1)
-            , m_bIgnoreResult(sal_False)
-            , m_nLastColumnIndex(-1)
-            , m_pEmptyCollection( NULL )
 {
     DBG_CTOR(ORowSetBase,NULL);
 
@@ -401,7 +400,7 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL ORowSetBase::getCharact
     return getBinaryStream(columnIndex);
 }
 // -------------------------------------------------------------------------
-Any SAL_CALL ORowSetBase::getObject( sal_Int32 columnIndex, const Reference< XNameAccess >& typeMap ) throw(SQLException, RuntimeException)
+Any SAL_CALL ORowSetBase::getObject( sal_Int32 columnIndex, const Reference< XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
@@ -409,36 +408,28 @@ Any SAL_CALL ORowSetBase::getObject( sal_Int32 columnIndex, const Reference< XNa
     return getValue(columnIndex).makeAny();
 }
 // -------------------------------------------------------------------------
-Reference< XRef > SAL_CALL ORowSetBase::getRef( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Reference< XRef > SAL_CALL ORowSetBase::getRef( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( *m_pMutex );
-    checkCache();
-
-    return Reference< XRef >();
+    ::dbtools::throwFeatureNotImplementedException( "XRow::getRef", *m_pMySelf );
+    return NULL;
 }
 // -------------------------------------------------------------------------
-Reference< XBlob > SAL_CALL ORowSetBase::getBlob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Reference< XBlob > SAL_CALL ORowSetBase::getBlob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( *m_pMutex );
-    checkCache();
-
-    return Reference< XBlob >();
+    ::dbtools::throwFeatureNotImplementedException( "XRow::getBlob", *m_pMySelf );
+    return NULL;
 }
 // -------------------------------------------------------------------------
-Reference< XClob > SAL_CALL ORowSetBase::getClob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Reference< XClob > SAL_CALL ORowSetBase::getClob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( *m_pMutex );
-    checkCache();
-
-    return Reference< XClob >();
+    ::dbtools::throwFeatureNotImplementedException( "XRow::getClob", *m_pMySelf );
+    return NULL;
 }
 // -------------------------------------------------------------------------
-Reference< XArray > SAL_CALL ORowSetBase::getArray( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Reference< XArray > SAL_CALL ORowSetBase::getArray( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( *m_pMutex );
-    checkCache();
-
-    return Reference< XArray >();
+    ::dbtools::throwFeatureNotImplementedException( "XRow::getArray", *m_pMySelf );
+    return NULL;
 }
 // -------------------------------------------------------------------------
 // ::com::sun::star::sdbcx::XRowLocate
@@ -553,11 +544,11 @@ sal_Bool SAL_CALL ORowSetBase::moveRelativeToBookmark( const Any& bookmark, sal_
     return bRet;
 }
 // -------------------------------------------------------------------------
-sal_Int32 SAL_CALL ORowSetBase::compareBookmarks( const Any& first, const Any& second ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL ORowSetBase::compareBookmarks( const Any& _first, const Any& _second ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
-    return m_pCache->compareBookmarks(first,second);
+    return m_pCache->compareBookmarks(_first,_second);
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ORowSetBase::hasOrderedBookmarks(  ) throw(SQLException, RuntimeException)
@@ -583,8 +574,6 @@ Reference< XResultSetMetaData > SAL_CALL ORowSetBase::getMetaData(  ) throw(SQLE
     Reference< XResultSetMetaData > xMeta;
     if(m_pCache)
         xMeta = m_pCache->getMetaData();
-    else
-        xMeta = new OEmptyMetaData();
 
     return xMeta;
 }
@@ -1082,9 +1071,13 @@ void ORowSetBase::setCurrentRow( sal_Bool _bMoved, sal_Bool _bDoNotify, const OR
         OSL_ENSURE(m_aCurrentRow->isValid(),"Currentrow isn't valid");
         OSL_ENSURE(m_aBookmark.hasValue(),"Bookmark has no value!");
 
+#if OSL_DEBUG_LEVEL > 0
         sal_Int32 nOldRow = m_pCache->getRow();
+#endif
         positionCache( MOVE_NONE_REFRESH_ONLY );
+#if OSL_DEBUG_LEVEL > 0
         sal_Int32 nNewRow = m_pCache->getRow();
+#endif
         OSL_ENSURE(nOldRow == nNewRow,"Old position is not equal to new postion");
         m_aCurrentRow   = m_pCache->m_aMatrixIter;
         OSL_ENSURE(!m_aCurrentRow.isNull(),"CurrentRow is nul after positionCache!");
@@ -1233,6 +1226,27 @@ void ORowSetBase::firePropertyChange(const ORowSetRow& _rOldRow)
 }
 
 // -----------------------------------------------------------------------------
+void ORowSetBase::fireRowcount()
+{
+}
+
+// -----------------------------------------------------------------------------
+sal_Bool ORowSetBase::notifyAllListenersCursorBeforeMove(::osl::ResettableMutexGuard& /*_rGuard*/)
+{
+    return sal_True;
+}
+
+// -----------------------------------------------------------------------------
+void ORowSetBase::notifyAllListenersCursorMoved(::osl::ResettableMutexGuard& /*_rGuard*/)
+{
+}
+
+// -----------------------------------------------------------------------------
+void ORowSetBase::notifyAllListeners(::osl::ResettableMutexGuard& /*_rGuard*/)
+{
+}
+
+// -----------------------------------------------------------------------------
 sal_Bool ORowSetBase::isModification( )
 {
     return m_pCache && m_pCache->m_bNew;
@@ -1331,7 +1345,7 @@ ORowSetRow ORowSetBase::getOldRow(sal_Bool _bWasNew)
     return aOldValues;
 }
 // -----------------------------------------------------------------------------
-Any ORowSetBase::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
+Any ORowSetBase::getPropertyDefaultByHandle( sal_Int32 /*_nHandle*/ ) const
 {
     return Any();
 }
