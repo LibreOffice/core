@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TSkipDeletedSet.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:12:57 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:04:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,9 +73,10 @@ sal_Bool OSkipDeletedSet::skipDeleted(IResultSetHelper::Movement _eCursorPositio
         case IResultSetHelper::RELATIVE:
             eDelPosition = (_nOffset >= 0) ? IResultSetHelper::NEXT : IResultSetHelper::PRIOR;
             break;
+        default:
+            break;
     }
 
-    sal_Int32 nNewOffset    = _nOffset;
     sal_Bool bDone          = sal_True;
     sal_Bool bDataFound     = sal_False;
 
@@ -178,7 +179,6 @@ sal_Bool OSkipDeletedSet::moveAbsolute(sal_Int32 _nOffset,sal_Bool _bRetrieveDat
             // bookmark isn't known yet
             // start at the last position
             sal_Int32 nCurPos = 0,nLastBookmark = 1;
-            IResultSetHelper::Movement eFilePos = IResultSetHelper::FIRST;
             if(!m_aBookmarks.empty())
             {
                 nLastBookmark   = (*m_aBookmarksPositions.rbegin())->first;
