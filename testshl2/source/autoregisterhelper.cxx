@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autoregisterhelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:05:55 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:27:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,9 +49,8 @@
 FunctionList m_Functions;
 // osl::Mutex   m_Mutex;
 
-void SAL_CALL registerFunc(FktPtr _pFunc, const char* _sFuncName)
+extern "C" void SAL_CALL registerFunc(FktPtr _pFunc, const char*)
 {
-    // printf("Function register call for func(%s) successful.\n", _sFuncName);
     m_Functions.push_back(_pFunc);
 }
 
@@ -61,7 +60,8 @@ AutomaticRegisterHelper::AutomaticRegisterHelper(rtl::OUString const& _sDLLName,
          m_bLoadLibraryOK(false)
 {
     // try to get the entry pointer
-    FktRegAllPtr pFunc = (FktRegAllPtr) m_pModule->getSymbol( rtl::OUString::createFromAscii( "registerAllTestFunction" ) );
+    FktRegAllPtr pFunc = (FktRegAllPtr) m_pModule->getFunctionSymbol(
+        rtl::OUString::createFromAscii( "registerAllTestFunction" ) );
 
     if (pFunc)
     {
