@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HtmlReader.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:44:26 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:20:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -280,11 +280,11 @@ void OHTMLReader::NextToken( int nToken )
             case HTML_TABLE_ON:
                 ++m_nTableCount;
                 {   // es kann auch TD oder TH sein, wenn es vorher kein TABLE gab
-                    const HTMLOptions* pOptions = GetOptions();
-                    sal_Int16 nArrLen = pOptions->Count();
+                    const HTMLOptions* pHtmlOptions = GetOptions();
+                    sal_Int16 nArrLen = pHtmlOptions->Count();
                     for ( sal_Int16 i = 0; i < nArrLen; i++ )
                     {
-                        const HTMLOption* pOption = (*pOptions)[i];
+                        const HTMLOption* pOption = (*pHtmlOptions)[i];
                         switch( pOption->GetToken() )
                         {
                             case HTML_O_WIDTH:
@@ -410,11 +410,11 @@ void OHTMLReader::NextToken( int nToken )
 void OHTMLReader::fetchOptions()
 {
     m_bInTbl = TRUE;
-    const HTMLOptions* pOptions = GetOptions();
-    sal_Int16 nArrLen = pOptions->Count();
+    const HTMLOptions* options = GetOptions();
+    sal_Int16 nArrLen = options->Count();
     for ( sal_Int16 i = 0; i < nArrLen; i++ )
     {
-        const HTMLOption* pOption = (*pOptions)[i];
+        const HTMLOption* pOption = (*options)[i];
         switch( pOption->GetToken() )
         {
             case HTML_O_SDVAL:
@@ -431,15 +431,15 @@ void OHTMLReader::fetchOptions()
     }
 }
 //---------------------------------------------------------------------------------
-void OHTMLReader::TableDataOn(SvxCellHorJustify& eVal,String *pValue,int nToken)
+void OHTMLReader::TableDataOn(SvxCellHorJustify& eVal,int nToken)
 {
     DBG_CHKTHIS(OHTMLReader,NULL);
     sal_Bool bHorJustifyCenterTH = (nToken == HTML_TABLEHEADER_ON);
-    const HTMLOptions* pOptions = GetOptions();
-    sal_Int16 nArrLen = pOptions->Count();
+    const HTMLOptions* pHtmlOptions = GetOptions();
+    sal_Int16 nArrLen = pHtmlOptions->Count();
     for ( sal_Int16 i = 0; i < nArrLen; i++ )
     {
-        const HTMLOption* pOption = (*pOptions)[i];
+        const HTMLOption* pOption = (*pHtmlOptions)[i];
         switch( pOption->GetToken() )
         {
             case HTML_O_ALIGN:
@@ -482,11 +482,11 @@ void OHTMLReader::TableDataOn(SvxCellHorJustify& eVal,String *pValue,int nToken)
 void OHTMLReader::TableFontOn(FontDescriptor& _rFont,sal_Int32 &_rTextColor)
 {
     DBG_CHKTHIS(OHTMLReader,NULL);
-    const HTMLOptions* pOptions = GetOptions();
-    sal_Int16 nArrLen = pOptions->Count();
+    const HTMLOptions* pHtmlOptions = GetOptions();
+    sal_Int16 nArrLen = pHtmlOptions->Count();
     for ( sal_Int16 i = 0; i < nArrLen; i++ )
     {
-        const HTMLOption* pOption = (*pOptions)[i];
+        const HTMLOption* pOption = (*pHtmlOptions)[i];
         switch( pOption->GetToken() )
         {
         case HTML_O_COLOR:
@@ -562,8 +562,6 @@ sal_Bool OHTMLReader::CreateTable(int nToken)
     String aColumnName;
     SvxCellHorJustify eVal;
     String *pValue=NULL;
-    sal_Int16 nWidth = 0;
-    sal_Int16 nHeight = 0;
 
     String aTableName;
     FontDescriptor aFont = ::dbaui::CreateFontDescriptor(Application::GetSettings().GetStyleSettings().GetAppFont());
@@ -594,7 +592,7 @@ sal_Bool OHTMLReader::CreateTable(int nToken)
                     DELETEZ(pValue);
                     eVal = SVX_HOR_JUSTIFY_STANDARD;
                 }
-                TableDataOn(eVal,pValue,nTmpToken2);
+                TableDataOn(eVal,nTmpToken2);
                 bTableHeader = TRUE;
                 break;
             case HTML_TABLEDATA_OFF:
@@ -670,14 +668,13 @@ void OHTMLReader::setTextEncoding()
     DBG_CHKTHIS(OHTMLReader,NULL);
     m_bMetaOptions = sal_True;
     USHORT nContentOption = HTML_O_CONTENT;
-    rtl_TextEncoding eEnc = RTL_TEXTENCODING_DONTKNOW;
     String aName, aContent;
     USHORT nAction = HTML_META_NONE;
-    BOOL bHTTPEquiv = FALSE, bChanged = FALSE;
-    const HTMLOptions *pOptions = GetOptions(&nContentOption);
-    for( USHORT i = pOptions->Count(); i; )
+    BOOL bHTTPEquiv = FALSE;
+    const HTMLOptions *pHtmlOptions = GetOptions(&nContentOption);
+    for( USHORT i = pHtmlOptions->Count(); i; )
     {
-        const HTMLOption *pOption = (*pOptions)[ --i ];
+        const HTMLOption *pOption = (*pHtmlOptions)[ --i ];
         switch( pOption->GetToken() )
         {
         case HTML_O_HTTPEQUIV:
