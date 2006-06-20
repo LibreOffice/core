@@ -4,9 +4,9 @@
  *
  *  $RCSfile: diagnose.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 08:59:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:05:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@
 #define VOS_DEBUG_ONLY(s)   _OSL_DEBUG_ONLY(s)
 #define VOS_TRACE           _OSL_TRACE
 #define VOS_ASSERT(c)       _OSL_ASSERT(c, VOS_THIS_FILE, __LINE__)
-#define VOS_VERIFY(c)       _OSL_VERIFY(c, VOS_THIS_FILE, __LINE__)
+#define VOS_VERIFY(c)       OSL_VERIFY(c)
 #define VOS_ENSHURE(c, m)   _OSL_ENSURE(c, VOS_THIS_FILE, __LINE__, m)
 #define VOS_ENSURE(c, m)    _OSL_ENSURE(c, VOS_THIS_FILE, __LINE__, m)
 
