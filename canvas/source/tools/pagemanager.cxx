@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pagemanager.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 12:54:17 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:18:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,8 +142,8 @@ namespace canvas
             {
                 if(!((*it)->isNaked()))
                 {
-                    const ::basegfx::B2ISize& rSize((*it)->getSize());
-                    const sal_uInt32 nArea(rSize.getX()*rSize.getY());
+                    const ::basegfx::B2ISize& rCandidateSize((*it)->getSize());
+                    const sal_uInt32 nArea(rCandidateSize.getX()*rCandidateSize.getY());
                     if(nArea > nMaxArea)
                     {
                         candidate=it;
