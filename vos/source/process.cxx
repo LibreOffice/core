@@ -4,9 +4,9 @@
  *
  *  $RCSfile: process.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2006-06-02 12:43:04 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:07:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,12 +147,12 @@ OEnvironment::OEnvironment() :
 {
 }
 
-OEnvironment::OEnvironment( sal_uInt32 nVars, const ::rtl::OUString* aArgument1, ... ) :
+OEnvironment::OEnvironment( sal_Int32 nVars, const ::rtl::OUString* aArgument1, ... ) :
     n_Vars( nVars )
 {
     m_aVec = new rtl_uString* [nVars];
     std::va_list pArgs;
-    sal_uInt32 i = 0;
+    sal_Int32 i = 0;
     const rtl::OUString* aArgument;
 
     va_start ( pArgs, aArgument1 );
@@ -170,11 +170,11 @@ OEnvironment::OEnvironment( sal_uInt32 nVars, const ::rtl::OUString* aArgument1,
 }
 
 
-OEnvironment::OEnvironment( const ::rtl::OUString aVariableList[], sal_uInt32 nVars ) :
+OEnvironment::OEnvironment( const ::rtl::OUString aVariableList[], sal_Int32 nVars ) :
     n_Vars( nVars )
 {
     m_aVec = new rtl_uString* [n_Vars];
-    for( sal_uInt32 i = 0; i < n_Vars; ++ i )  {
+    for( sal_Int32 i = 0; i < n_Vars; ++ i )  {
         m_aVec[i] = aVariableList[i].pData;
         rtl_uString_acquire( m_aVec[i] );
     }
@@ -184,7 +184,7 @@ OEnvironment::OEnvironment( const OEnvironment& rOther ) : n_Vars( rOther.n_Vars
 {
     m_aVec = new rtl_uString* [n_Vars];
 
-    sal_uInt32 i;
+    sal_Int32 i;
     for ( i = 0; i < n_Vars; ++i )
     {
         m_aVec[i] = rOther.m_aVec[i];
@@ -196,7 +196,7 @@ OEnvironment& OEnvironment::operator=( const OEnvironment& rOther )
 {
     if ( this != &rOther )
     {
-        sal_uInt32 i;
+        sal_Int32 i;
         for ( i = 0; i < n_Vars; ++i )
             rtl_uString_release( m_aVec[i] );
 
@@ -216,7 +216,7 @@ OEnvironment& OEnvironment::operator=( const OEnvironment& rOther )
 
 OEnvironment::~OEnvironment()
 {
-    for( sal_uInt32 i = 0; i < n_Vars; ++i ) rtl_uString_release( m_aVec[i] );
+    for( sal_Int32 i = 0; i < n_Vars; ++i ) rtl_uString_release( m_aVec[i] );
     delete[] m_aVec;
 }
 
@@ -356,7 +356,8 @@ OStartupInfo::~OStartupInfo()
 {
 }
 
-OStartupInfo::TStartupError OStartupInfo::getExecutableFile( rtl::OUString& strImageName )
+OStartupInfo::TStartupError OStartupInfo::getExecutableFile(
+    rtl::OUString& strImageName ) const
 {
     return (TStartupError) osl_getExecutableFile( &strImageName.pData );
 }
@@ -447,7 +448,7 @@ void OExtCommandLineImpl::init()
     for ( nIndex = 0 ; nIndex < nArgs ; ++nIndex )
     {
         ::rtl::OUString aString;
-        sal_Bool bRet = aStartInfo.getCommandArg(nIndex,aString);
+        aStartInfo.getCommandArg(nIndex,aString);
 
         if ( aString[0] == (sal_Unicode) '@' )
         {
