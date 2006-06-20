@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tdoc_contentcaps.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:59:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:31:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,7 +100,7 @@ using namespace tdoc_ucp;
 
 // virtual
 uno::Sequence< beans::Property > Content::getProperties(
-            const uno::Reference< star::ucb::XCommandEnvironment > & xEnv )
+            const uno::Reference< star::ucb::XCommandEnvironment > & /*xEnv*/ )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
@@ -331,7 +331,7 @@ uno::Sequence< beans::Property > Content::getProperties(
 //=========================================================================
 // virtual
 uno::Sequence< star::ucb::CommandInfo > Content::getCommands(
-            const uno::Reference< star::ucb::XCommandEnvironment > & xEnv )
+            const uno::Reference< star::ucb::XCommandEnvironment > & /*xEnv*/ )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
