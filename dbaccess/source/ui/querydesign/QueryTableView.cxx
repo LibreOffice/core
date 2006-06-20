@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryTableView.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:24:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:26:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -234,7 +234,7 @@ namespace
         // redraw
         _pConnection->RecalcLines();
         // force an invalidation of the bounding rectangle
-        _pConnection->Invalidate();
+        _pConnection->InvalidateConnection();
 
         _pView->Invalidate(INVALIDATE_NOCHILDREN);
     }
@@ -327,8 +327,6 @@ sal_Int32 OQueryTableView::CountTableAlias(const String& rName, sal_Int32& rMax)
     OTableWindowMapIterator aIter = GetTabWinMap()->find(rName);
     while(aIter != GetTabWinMap()->end())
     {
-        OTableWindow* pWin = aIter->second;
-
         String aNewName;
         aNewName = rName;
         aNewName += '_';
@@ -789,7 +787,7 @@ void OQueryTableView::createNewConnection()
         delete pData;
 }
 //------------------------------------------------------------------------------
-::std::vector<OTableConnection*>::const_iterator OQueryTableView::RemoveConnection( OTableConnection* _pConnection,sal_Bool _bDelete )
+::std::vector<OTableConnection*>::const_iterator OQueryTableView::RemoveConnection( OTableConnection* _pConnection,sal_Bool /*_bDelete*/ )
 {
     DBG_CHKTHIS(OQueryTableView,NULL);
     DBG_ASSERT(_pConnection->ISA(OQueryTableConnection), "OQueryTableView::RemoveConnection : Connection ist vom falschen Typ !");
@@ -829,7 +827,6 @@ OQueryTableWindow* OQueryTableView::FindTable(const String& rAliasName)
 sal_Bool OQueryTableView::FindTableFromField(const String& rFieldName, OTableFieldDescRef& rInfo, sal_uInt16& rCnt)
 {
     DBG_CHKTHIS(OQueryTableView,NULL);
-    sal_Bool bRet = sal_False;
     rCnt = 0;
     OTableWindowMap::const_iterator aIter = GetTabWinMap()->begin();
     for(;aIter != GetTabWinMap()->end();++aIter)
@@ -954,8 +951,6 @@ void OQueryTableView::HideTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUndoAc
             m_pLastFocusTabWin = NULL;
 
         // Verbindungen, die zum Fenster gehoeren, einsammeln und der UndoAction uebergeben
-        ::std::vector< OTableConnectionData*>* pTabConnDataList = m_pView->getController()->getTableConnectionData();
-
         sal_Int16 nCnt = 0;
         const ::std::vector<OTableConnection*>* pTabConList = getTableConnections();
         ::std::vector<OTableConnection*>::const_iterator aIter2 = pTabConList->begin();
@@ -1032,7 +1027,6 @@ sal_Bool OQueryTableView::ShowTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUn
             ::std::vector<OTableConnection*>* pTableCon = pUndoAction->GetTabConnList();
             ::std::vector<OTableConnection*>::iterator aIter = pTableCon->begin();
 
-            const ::std::vector<OTableConnection*>* pOwnList = getTableConnections();
             for(;aIter != pTableCon->end();++aIter)
                 addConnection(*aIter); // add all connections from the undo action
 
