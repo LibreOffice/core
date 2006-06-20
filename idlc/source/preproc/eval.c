@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eval.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:14:12 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:50:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -381,14 +381,17 @@ long
                 continue;
 
             case SHARP:
-                if (((tp + 1) < trp->lp) &&
-                    (np = lookup(tp + 1, 0)) && (np->val == KMACHINE))
+                if ((tp + 1) < trp->lp)
                 {
-                    tp++;
-                    if (rand)
-                        goto syntax;
-                    *op++ = ARCHITECTURE;
-                    continue;
+                    np = lookup(tp + 1, 0);
+                    if (np && (np->val == KMACHINE))
+                    {
+                        tp++;
+                        if (rand)
+                            goto syntax;
+                        *op++ = ARCHITECTURE;
+                        continue;
+                    }
                 }
                 /* fall through */
 
@@ -417,7 +420,7 @@ syntax:
 int
     evalop(struct pri pri)
 {
-    struct value v1, v2;
+    struct value v1, v2 = { 0, 0 };
     long rv1, rv2;
     int rtype, oper;
 
@@ -744,7 +747,7 @@ struct value
                         static char cvcon[]
                         = "b\bf\fn\nr\rt\tv\v''\"\"??\\\\";
 
-                        for (i = 0; i < sizeof(cvcon); i += 2)
+                        for (i = 0; i < (int)sizeof(cvcon); i += 2)
                         {
                             if (*p == cvcon[i])
                             {
@@ -753,7 +756,7 @@ struct value
                             }
                         }
                         p += 1;
-                        if (i >= sizeof(cvcon))
+                        if (i >= (int)sizeof(cvcon))
                             error(WARNING,
                                "Undefined escape in character constant");
                     }
