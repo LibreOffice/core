@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VertSplitView.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:33:16 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:59:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@ using namespace ::dbaui;
 //==================================================================
 // class OSplitterView
 //==================================================================
-DBG_NAME(OSplitterView);
+DBG_NAME(OSplitterView)
 OSplitterView::OSplitterView(Window* _pParent,sal_Bool _bVertical) : Window(_pParent,WB_DIALOGCONTROL) // ,WB_BORDER
     ,m_pSplitter( NULL )
     ,m_pLeft(NULL)
@@ -64,13 +64,13 @@ OSplitterView::~OSplitterView()
     m_pRight = m_pLeft = NULL;
 }
 //------------------------------------------------------------------------------
-IMPL_LINK( OSplitterView, SplitHdl, Splitter*, pSplit )
+IMPL_LINK( OSplitterView, SplitHdl, Splitter*, /*pSplit*/ )
 {
     OSL_ENSURE(m_pSplitter, "Splitter is NULL!");
     if ( m_bVertical )
     {
-        long nTest = m_pSplitter->GetPosPixel().Y();
-        m_pSplitter->SetPosPixel( Point( m_pSplitter->GetSplitPosPixel(), m_pSplitter->GetPosPixel().Y() ) );
+        long nPosY = m_pSplitter->GetPosPixel().Y();
+        m_pSplitter->SetPosPixel( Point( m_pSplitter->GetSplitPosPixel(), nPosY ) );
     }
     else
         m_pSplitter->SetPosPixel( Point( m_pSplitter->GetPosPixel().X(),m_pSplitter->GetSplitPosPixel() ) );
