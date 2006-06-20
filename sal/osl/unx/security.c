@@ -4,9 +4,9 @@
  *
  *  $RCSfile: security.c,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-09 12:32:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:19:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -338,6 +338,7 @@ osl_PamAuthentification( const sal_Char* name, const sal_Char* password )
 static const sal_Char* SAL_CALL
 osl_noCrypt ( const sal_Char *key, const sal_Char *salt )
 {
+    (void) salt; /* unused */
     return key;
 }
 
@@ -371,7 +372,7 @@ osl_getCrypt()
 static sal_Char* SAL_CALL
 osl_dynamicCrypt ( const sal_Char *key, const sal_Char *salt )
 {
-    char* (*dynamic_crypt)(char *key, char *salt);
+    char* (*dynamic_crypt)(char *, char *);
 
     dynamic_crypt = (char * (*)(char *, char *)) osl_getCrypt();
 
@@ -600,8 +601,11 @@ oslSecurityError SAL_CALL osl_loginUserOnFileServer(
     oslSecurity *pSecurity
     )
 {
-    oslSecurityError erg;
-    return erg = osl_Security_E_UserUnknown;
+    (void) strUserName; /* unused */
+    (void) strPasswd; /* unused */
+    (void) strFileServer; /* unused */
+    (void) pSecurity; /* unused */
+    return osl_Security_E_UserUnknown;
 }
 
 
@@ -632,7 +636,8 @@ sal_Bool SAL_CALL osl_psz_getUserIdent(oslSecurity Security, sal_Char *pszIdent,
         return sal_False;
 
     nChr = snprintf(buffer, sizeof(buffer), "%u", pSecImpl->m_pPasswd.pw_uid);
-    if ( nChr < 0 || nChr >= sizeof(buffer) || nChr >= nMax )
+    if ( nChr < 0 || SAL_INT_CAST(sal_uInt32, nChr) >= sizeof(buffer)
+         || SAL_INT_CAST(sal_uInt32, nChr) >= nMax )
         return sal_False; /* leave *pszIdent unmodified in case of failure */
 
     memcpy(pszIdent, buffer, nChr+1);
@@ -800,8 +805,11 @@ void SAL_CALL osl_freeSecurityHandle(oslSecurity Security)
 
 sal_Bool SAL_CALL osl_loadUserProfile(oslSecurity Security)
 {
+    (void) Security; /* unused */
     return sal_False;
 }
 
 void SAL_CALL osl_unloadUserProfile(oslSecurity Security)
-{}
+{
+    (void) Security; /* unused */
+}
