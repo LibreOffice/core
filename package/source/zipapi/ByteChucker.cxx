@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ByteChucker.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:10:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 06:12:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,7 @@ ByteChucker::~ByteChucker()
 }
 
 // XOutputStream chained...
-void SAL_CALL ByteChucker::writeBytes( const Sequence< sal_Int8 >& aData, sal_Int32 nLength, const sal_Int8 * const pData )
+void SAL_CALL ByteChucker::writeBytes( const Sequence< sal_Int8 >& aData, sal_Int32 /*nLength*/, const sal_Int8 * const /*pData*/ )
     throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
 {
     xStream->writeBytes(aData);
@@ -114,17 +114,17 @@ ByteChucker& ByteChucker::operator << (sal_Int8 nInt8)
 
 ByteChucker& ByteChucker::operator << (sal_Int16 nInt16)
 {
-    p2Sequence[0] = (nInt16 >>  0 ) & 0xFF;
-    p2Sequence[1] = (nInt16 >>  8 ) & 0xFF;
+    p2Sequence[0] = static_cast< sal_Int8 >((nInt16 >>  0 ) & 0xFF);
+    p2Sequence[1] = static_cast< sal_Int8 >((nInt16 >>  8 ) & 0xFF);
     writeBytes( a2Sequence, 2, p2Sequence );
     return *this;
 }
 ByteChucker& ByteChucker::operator << (sal_Int32 nInt32)
 {
-    p4Sequence[0] = (nInt32 >>  0 ) & 0xFF;
-    p4Sequence[1] = (nInt32 >>  8 ) & 0xFF;
-    p4Sequence[2] = (nInt32 >> 16 ) & 0xFF;
-    p4Sequence[3] = (nInt32 >> 24 ) & 0xFF;
+    p4Sequence[0] = static_cast< sal_Int8 >((nInt32 >>  0 ) & 0xFF);
+    p4Sequence[1] = static_cast< sal_Int8 >((nInt32 >>  8 ) & 0xFF);
+    p4Sequence[2] = static_cast< sal_Int8 >((nInt32 >> 16 ) & 0xFF);
+    p4Sequence[3] = static_cast< sal_Int8 >((nInt32 >> 24 ) & 0xFF);
     writeBytes( a4Sequence, 4, p4Sequence );
     return *this;
 }
@@ -137,8 +137,8 @@ ByteChucker& ByteChucker::operator << (sal_uInt8 nuInt8)
 }
 ByteChucker& ByteChucker::operator << (sal_uInt16 nuInt16)
 {
-    p2Sequence[0] = (nuInt16 >>  0 ) & 0xFF;
-    p2Sequence[1] = (nuInt16 >>  8 ) & 0xFF;
+    p2Sequence[0] = static_cast< sal_Int8 >((nuInt16 >>  0 ) & 0xFF);
+    p2Sequence[1] = static_cast< sal_Int8 >((nuInt16 >>  8 ) & 0xFF);
     writeBytes( a2Sequence, 2, p2Sequence );
     return *this;
 }
