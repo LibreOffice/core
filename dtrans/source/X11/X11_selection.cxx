@@ -4,9 +4,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-06 15:31:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:58:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,6 +97,21 @@ using namespace osl;
 using namespace rtl;
 
 using namespace x11;
+
+// stubs to satisfy solaris compiler's rather rigid linking warning
+extern "C"
+{
+    static void call_SelectionManager_run( void * pMgr )
+    {
+        SelectionManager::run( pMgr );
+    }
+
+    static void call_SelectionManager_runDragExecute( void * pMgr )
+    {
+        SelectionManager::runDragExecute( pMgr );
+    }
+}
+
 
 static const int nXdndProtocolRevision = 5;
 
@@ -433,7 +448,7 @@ void SelectionManager::initialize( const Sequence< Any >& arguments ) throw (::c
                 m_xDropTransferable = new X11Transferable( *this, static_cast< OWeakObject* >(this), m_nXdndSelection );
                 registerHandler( m_nXdndSelection, *this );
 
-                m_aThread = osl_createSuspendedThread( run, this );
+                m_aThread = osl_createSuspendedThread( call_SelectionManager_run, this );
                 if( m_aThread )
                     osl_resumeThread( m_aThread );
 #if OSL_DEBUG_LEVEL > 1
@@ -2269,7 +2284,7 @@ bool SelectionManager::handleDropEvent( XClientMessageEvent& rMessage )
  *  methods for XDropTargetDropContext
  */
 
-void SelectionManager::dropComplete( sal_Bool bSuccess, Window aDropWindow, Time aTimestamp )
+void SelectionManager::dropComplete( sal_Bool bSuccess, Window aDropWindow, Time )
 {
     ClearableMutexGuard aGuard(m_aMutex);
 
@@ -2848,7 +2863,7 @@ bool SelectionManager::handleDragEvent( XEvent& rMessage )
 
 // ------------------------------------------------------------------------
 
-void SelectionManager::accept( sal_Int8 dragOperation, Window aDropWindow, Time aTimestamp )
+void SelectionManager::accept( sal_Int8 dragOperation, Window aDropWindow, Time )
 {
     if( aDropWindow == m_aCurrentDropWindow )
     {
@@ -2870,7 +2885,7 @@ void SelectionManager::accept( sal_Int8 dragOperation, Window aDropWindow, Time 
 
 // ------------------------------------------------------------------------
 
-void SelectionManager::reject( Window aDropWindow, Time aTimestamp )
+void SelectionManager::reject( Window aDropWindow, Time )
 {
     if( aDropWindow == m_aCurrentDropWindow )
     {
@@ -3148,8 +3163,8 @@ void SelectionManager::updateDragWindow( int nX, int nY, Window aRoot )
 void SelectionManager::startDrag(
                                  const DragGestureEvent& trigger,
                                  sal_Int8 sourceActions,
-                                 sal_Int32 cursor,
-                                 sal_Int32 image,
+                                 sal_Int32,
+                                 sal_Int32,
                                  const Reference< XTransferable >& transferable,
                                  const Reference< XDragSourceListener >& listener
                                  ) throw()
@@ -3323,7 +3338,7 @@ void SelectionManager::startDrag(
     }
 
     m_aDragRunning.set();
-    m_aDragExecuteThread = osl_createSuspendedThread( runDragExecute, this );
+    m_aDragExecuteThread = osl_createSuspendedThread( call_SelectionManager_runDragExecute, this );
     if( m_aDragExecuteThread )
         osl_resumeThread( m_aDragExecuteThread );
     else
@@ -3443,7 +3458,7 @@ sal_Int32 SelectionManager::getCurrentCursor()
 
 // ------------------------------------------------------------------------
 
-void SelectionManager::setCursor( sal_Int32 cursor, Window aDropWindow, Time aTimestamp )
+void SelectionManager::setCursor( sal_Int32 cursor, Window aDropWindow, Time )
 {
     MutexGuard aGuard( m_aMutex );
     if( aDropWindow == m_aDropWindow && Cursor(cursor) != m_aCurrentCursor )
@@ -3459,7 +3474,7 @@ void SelectionManager::setCursor( sal_Int32 cursor, Window aDropWindow, Time aTi
 
 // ------------------------------------------------------------------------
 
-void SelectionManager::setImage( sal_Int32 image, Window aDropWindow, Time aTimestamp )
+void SelectionManager::setImage( sal_Int32, Window, Time )
 {
 }
 
@@ -3505,8 +3520,8 @@ void SelectionManager::transferablesFlavorsChanged()
         // fill in data types
         if( nTypes > 3 )
             aEvent.xclient.data.l[1] |= 1;
-        for( int i = 0; i < nTypes && i < 3; i++ )
-            aEvent.xclient.data.l[i+2] = pTypes[i];
+        for( int j = 0; j < nTypes && j < 3; j++ )
+            aEvent.xclient.data.l[j+2] = pTypes[j];
 
         XSendEvent( m_pDisplay, m_aDropProxy, False, NoEventMask, &aEvent );
     }
