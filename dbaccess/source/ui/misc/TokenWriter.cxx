@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TokenWriter.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-03 16:17:57 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:20:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,17 +155,17 @@ const static char __FAR_DATA sFontSize[]        = "font-size: ";
 
 #define SBA_FORMAT_SELECTION_COUNT  4
 
-DBG_NAME(ODatabaseImportExport);
+DBG_NAME(ODatabaseImportExport)
 //======================================================================
 ODatabaseImportExport::ODatabaseImportExport(const ::svx::ODataAccessDescriptor& _aDataDescriptor,
                                              const Reference< XMultiServiceFactory >& _rM,
                                              const Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
                                              const String& rExchange)
-    :m_pReader(NULL)
-    ,m_pRowMarker(NULL)
-    ,m_xFormatter(_rxNumberF)
+                                             :m_xFormatter(_rxNumberF)
     ,m_xFactory(_rM)
     ,m_nCommandType(CommandType::TABLE)
+    ,m_pReader(NULL)
+    ,m_pRowMarker(NULL)
     ,m_bInInitialize(sal_False)
     ,m_bCheckOnly(sal_False)
 {
@@ -187,12 +187,12 @@ ODatabaseImportExport::ODatabaseImportExport(const ::svx::ODataAccessDescriptor&
 // import data
 ODatabaseImportExport::ODatabaseImportExport( const ::dbtools::SharedConnection& _rxConnection,
         const Reference< XNumberFormatter >& _rxNumberF, const Reference< XMultiServiceFactory >& _rM )
-    : m_xConnection(_rxConnection)
-    ,m_pReader(NULL)
-    ,m_pRowMarker(NULL)
+    :m_xConnection(_rxConnection)
     ,m_xFormatter(_rxNumberF)
     ,m_xFactory(_rM)
     ,m_nCommandType(::com::sun::star::sdb::CommandType::TABLE)
+    ,m_pReader(NULL)
+    ,m_pRowMarker(NULL)
     ,m_bInInitialize(sal_False)
     ,m_bCheckOnly(sal_False)
 {
@@ -515,7 +515,6 @@ BOOL ORTFImportExport::Write()
         Reference<XNameAccess> xColumns = xColSup->getColumns();
         Sequence< ::rtl::OUString> aNames(xColumns->getElementNames());
         const ::rtl::OUString* pIter = aNames.getConstArray();
-        const ::rtl::OUString* pEnd = pIter + aNames.getLength();
 
         sal_Int32 nCount = aNames.getLength();
         sal_Bool bUseResultMetaData = sal_False;
@@ -525,8 +524,7 @@ BOOL ORTFImportExport::Write()
             bUseResultMetaData = sal_True;
         }
 
-        sal_Int32 i;
-        for(i=1;i<=nCount;++i)
+        for( sal_Int32 i=1; i<=nCount; ++i )
         {
             (*m_pStream) << aCell1;
             m_pStream->WriteNumber(i*nCellx);
@@ -540,7 +538,7 @@ BOOL ORTFImportExport::Write()
 
         ::rtl::OString* pHorzChar = new ::rtl::OString[nCount];
 
-        for(i=1;i <= nCount;++i)
+        for ( sal_Int32 i=1; i <= nCount; ++i )
         {
             sal_Int32 nAlign = 0;
             ::rtl::OUString sColumnName;
@@ -601,7 +599,7 @@ BOOL ORTFImportExport::Write()
                 m_pStream->WriteNumber(40);
                 (*m_pStream) << ODatabaseImportExport::sNewLine;
 
-                for(i=1;i<=nCount;++i)
+                for ( sal_Int32 i=1; i<=nCount; ++i )
                 {
                     (*m_pStream) << aCell2;
                     m_pStream->WriteNumber(i*nCellx);
@@ -610,7 +608,7 @@ BOOL ORTFImportExport::Write()
 
                 (*m_pStream) << '{';
                 (*m_pStream) << aTRRH;
-                for(sal_Int32 i=1;i<=nCount;++i)
+                for ( sal_Int32 i=1; i<=nCount; ++i )
                 {
                     (*m_pStream) << ODatabaseImportExport::sNewLine;
                     (*m_pStream) << '{';
@@ -814,7 +812,6 @@ void OHTMLImportExport::WriteTables()
         Reference<XColumnsSupplier> xColSup(m_xObject,UNO_QUERY);
         xColumns = xColSup->getColumns();
         aNames = xColumns->getElementNames();
-        sal_Bool bUseResultMetaData = sal_False;
         if ( !aNames.getLength() )
         {
             sal_Int32 nCount = m_xResultSetMetaData->getColumnCount();
@@ -879,7 +876,7 @@ void OHTMLImportExport::WriteTables()
         const ::rtl::OUString* pIter = aNames.getConstArray();
         const ::rtl::OUString* pEnd = pIter + aNames.getLength();
 
-        for(sal_Int32 i=0;pIter != pEnd;++pIter,++i)
+        for( sal_Int32 i=0;pIter != pEnd; ++pIter,++i )
         {
             sal_Int32 nAlign = 0;
             pFormat[i] = 0;
@@ -1000,9 +997,7 @@ void OHTMLImportExport::WriteCell( sal_Int32 nFormat,sal_Int32 nWidthPixel,sal_I
     double fVal = 0.0;
 
     Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier = m_xFormatter->getNumberFormatsSupplier();
-
-    Reference< XUnoTunnel > xTunnel(xSupplier,UNO_QUERY);
-    SvNumberFormatsSupplierObj* pSupplierImpl = (SvNumberFormatsSupplierObj*)xTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId());
+    SvNumberFormatsSupplierObj* pSupplierImpl = SvNumberFormatsSupplierObj::getImplementation( xSupplier );
     SvNumberFormatter* pFormatter = pSupplierImpl ? pSupplierImpl->GetNumberFormatter() : NULL;
     if(pFormatter)
     {
