@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgsave.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:00:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:07:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,26 +83,26 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
                         const Reference< XConnection>& _xConnection,
                         const String& rDefault,
                         sal_Int32 _nFlags)
-             :ModalDialog( pParent, ModuleRes(DLG_SAVE_AS))
-             ,m_aDescription(this, ResId (FT_DESCRIPTION))
-             ,m_aCatalogLbl(this, ResId (FT_CATALOG))
-             ,m_aCatalog(this, ResId (ET_CATALOG),_rxMetaData.is() ? _rxMetaData->getExtraNameCharacters() : ::rtl::OUString())
-             ,m_aSchemaLbl(this, ResId (FT_SCHEMA))
-             ,m_aSchema(this, ResId (ET_SCHEMA),_rxMetaData.is() ? _rxMetaData->getExtraNameCharacters() : ::rtl::OUString())
-             ,m_aLabel(this, ResId (FT_TITLE))
-             ,m_aTitle(this, ResId (ET_TITLE), _rxMetaData.is() ? _rxMetaData->getExtraNameCharacters() : ::rtl::OUString())
-             ,m_aPB_OK(this, ResId( PB_OK ) )
-             ,m_aPB_CANCEL(this, ResId( PB_CANCEL ))
-             ,m_aPB_HELP(this, ResId( PB_HELP))
-             ,m_aQryLabel(ResId(STR_QRY_LABEL))
-             ,m_sTblLabel(ResId(STR_TBL_LABEL))
-             ,m_aExists(ResId(STR_OBJECT_EXISTS_ALREADY))
-             ,m_aExistsOverwrite(ResId(STR_OBJECT_EXISTS_ALREADY_OVERWRITE))
-             ,m_aName(rDefault)
-             ,m_xNames(_rxNames)
-             ,m_xMetaData(_rxMetaData)
-             ,m_nType(_rType)
-             ,m_nFlags(_nFlags)
+    :ModalDialog( pParent, ModuleRes(DLG_SAVE_AS))
+    ,m_aDescription(this, ResId (FT_DESCRIPTION))
+    ,m_aCatalogLbl(this, ResId (FT_CATALOG))
+    ,m_aCatalog(this, ResId (ET_CATALOG),_rxMetaData.is() ? _rxMetaData->getExtraNameCharacters() : ::rtl::OUString())
+    ,m_aSchemaLbl(this, ResId (FT_SCHEMA))
+    ,m_aSchema(this, ResId (ET_SCHEMA),_rxMetaData.is() ? _rxMetaData->getExtraNameCharacters() : ::rtl::OUString())
+    ,m_aLabel(this, ResId (FT_TITLE))
+    ,m_aTitle(this, ResId (ET_TITLE), _rxMetaData.is() ? _rxMetaData->getExtraNameCharacters() : ::rtl::OUString())
+    ,m_aPB_OK(this, ResId( PB_OK ) )
+    ,m_aPB_CANCEL(this, ResId( PB_CANCEL ))
+    ,m_aPB_HELP(this, ResId( PB_HELP))
+    ,m_aQryLabel(ResId(STR_QRY_LABEL))
+    ,m_sTblLabel(ResId(STR_TBL_LABEL))
+    ,m_aName(rDefault)
+    ,m_aExists(ResId(STR_OBJECT_EXISTS_ALREADY))
+    ,m_aExistsOverwrite(ResId(STR_OBJECT_EXISTS_ALREADY_OVERWRITE))
+    ,m_xNames(_rxNames)
+    ,m_xMetaData(_rxMetaData)
+    ,m_nType(_rType)
+    ,m_nFlags(_nFlags)
 {
     switch (_rType)
     {
@@ -142,10 +142,10 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
                         }
                         if ( _xConnection.is() )
                         {
-                            String sCatalog = _xConnection->getCatalog();
-                            USHORT nPos = m_aCatalog.GetEntryPos(sCatalog);
+                            String sCurrentCatalog = _xConnection->getCatalog();
+                            USHORT nPos = m_aCatalog.GetEntryPos( sCurrentCatalog );
                             if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
-                                m_aCatalog.SelectEntryPos(nPos);
+                                m_aCatalog.SelectEntryPos( nPos );
                         }
                         else
                             m_aCatalog.SetText(String());
@@ -264,12 +264,12 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
              ,m_aPB_HELP(this, ResId( PB_HELP))
              ,m_aQryLabel(ResId(STR_QRY_LABEL))
              ,m_sTblLabel(ResId(STR_TBL_LABEL))
+             ,m_aName(rDefault)
              ,m_aExists(ResId(STR_OBJECT_EXISTS_ALREADY))
              ,m_aExistsOverwrite(ResId(STR_OBJECT_EXISTS_ALREADY_OVERWRITE))
-             ,m_aName(rDefault)
              ,m_xNames(_rxNames)
-             ,m_nFlags(_nFlags)
              ,m_nType(CommandType::COMMAND)
+             ,m_nFlags(_nFlags)
 {
     implInitOnlyTitle(_sLabel);
     implInit();
@@ -294,13 +294,13 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
              ,m_aPB_HELP(this, ResId( PB_HELP))
              ,m_aQryLabel(ResId(STR_QRY_LABEL))
              ,m_sTblLabel(ResId(STR_TBL_LABEL))
+             ,m_aName(rDefault)
              ,m_aExists(ResId(STR_OBJECT_EXISTS_ALREADY))
              ,m_aExistsOverwrite(ResId(STR_OBJECT_EXISTS_ALREADY_OVERWRITE))
-             ,m_aName(rDefault)
-             ,m_xHierarchyNames(_rxNames)
-             ,m_nFlags(_nFlags)
-             ,m_nType(CommandType::COMMAND)
              ,m_sParentURL(_sParentURL)
+             ,m_xHierarchyNames(_rxNames)
+             ,m_nType(CommandType::COMMAND)
+             ,m_nFlags(_nFlags)
 {
     implInitOnlyTitle(_sLabel);
     implInit();
