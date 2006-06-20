@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbconversion.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 10:47:30 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:05:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -256,7 +256,7 @@ namespace dbtools
         do
         {
             nTempDays = nDays;
-            rYear = ((nTempDays / 365) - i);
+            rYear = (sal_uInt16)((nTempDays / 365) - i);
             nTempDays -= (rYear-1) * 365;
             nTempDays -= ((rYear-1) / 4) - ((rYear-1) / 100) + ((rYear-1) / 400);
             bCalc = sal_False;
@@ -285,7 +285,7 @@ namespace dbtools
             nTempDays -= implDaysInMonth( rMonth, rYear );
             rMonth++;
         }
-        rDay = nTempDays;
+        rDay = (sal_uInt16)nTempDays;
     }
     //------------------------------------------------------------------------------
     sal_Int32 DBTypeConversion::toDays(const Date& _rVal, const Date& _rNullDate)
@@ -395,10 +395,10 @@ namespace dbtools
         sal_Int32 nSeconds          = nHundredthSeconds / 100;
         sal_Int32 nMinutes          = nSeconds / 60;
 
-        xRet.HundredthSeconds       = nHundredthSeconds % 100;
-        xRet.Seconds                = nSeconds % 60;
-        xRet.Hours                  = nMinutes / 60;
-        xRet.Minutes                = nMinutes % 60;
+        xRet.HundredthSeconds       = (sal_uInt16)(nHundredthSeconds % 100);
+        xRet.Seconds                = (sal_uInt16)(nSeconds % 60);
+        xRet.Hours                  = (sal_uInt16)(nMinutes / 60);
+        xRet.Minutes                = (sal_uInt16)(nMinutes % 60);
 
         // Zeit zusammenbauen
         sal_Int32 nTime = (sal_Int32)(xRet.HundredthSeconds + (xRet.Seconds*100) + (xRet.Minutes*10000) + (xRet.Hours*1000000)) * nSign;
