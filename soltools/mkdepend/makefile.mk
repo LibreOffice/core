@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 07:29:19 $
+#   last change: $Author: hr $ $Date: 2006-06-20 05:09:01 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,11 @@ LIBTARGET=NO
 NO_DEFAULT_STL=TRUE
 nodep=true
 
+# "mkdepend" is written in K&R style C. Modern compilers will generate
+# lots of warning. There is no point in cleaning this up, so we just
+# ignore warnings
+EXTERNAL_WARNINGS_NOT_ERRORS=TRUE
+
 .INCLUDE : $(PRJ)$/util$/makefile.pmk
 .INCLUDE : settings.mk
 
@@ -50,13 +55,6 @@ LIBSALCPPRT=$(0)
 UWINAPILIB=$(0)
 
 CDEFS+=-DNO_X11 -DXP_PC -DHW_THREADS -DINCLUDEDIR=\".\"
-
-# "mkdepend" is written in K&R style C. Modern compilers will generate
-# lots of warning. There is no point in cleaning this up, so we just
-# switch off warnings
-.IF "$(COM)"=="C52" || "$(COM)"=="GCC"
-CFLAGS+=-w
-.ENDIF
 
 OBJFILES=  \
         $(OBJ)$/cppsetup.obj \
