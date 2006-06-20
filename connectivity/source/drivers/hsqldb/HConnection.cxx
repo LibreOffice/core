@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HConnection.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 08:21:12 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:29:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,14 +63,14 @@ namespace connectivity
             FlushListeners( ::osl::Mutex& _rMutex ) :FlushListeners_Base( _rMutex ) { }
 
         protected:
-            virtual bool    implNotify(
+            virtual bool    implTypedNotify(
                                 const Reference< XFlushListener >& _rxListener,
                                 const EventObject& _rEvent
                             )   SAL_THROW( ( Exception ) );
         };
 
         // -----------------------------------------------------------------------------
-        bool FlushListeners::implNotify( const Reference< XFlushListener >& _rxListener, const EventObject& _rEvent ) SAL_THROW( ( Exception ) )
+        bool FlushListeners::implTypedNotify( const Reference< XFlushListener >& _rxListener, const EventObject& _rEvent ) SAL_THROW( ( Exception ) )
         {
             _rxListener->flushed( _rEvent );
             return true;    // continue notifying the other listeners, if any
@@ -144,13 +144,13 @@ void SAL_CALL OConnectionWeakWrapper::flush(  ) throw (RuntimeException)
 //--------------------------------------------------------------------
 void SAL_CALL OConnectionWeakWrapper::addFlushListener( const Reference< XFlushListener >& l ) throw (RuntimeException)
 {
-    m_pFlushListeners->addListener( l );
+    m_pFlushListeners->addTypedListener( l );
 }
 
 //--------------------------------------------------------------------
 void SAL_CALL OConnectionWeakWrapper::removeFlushListener( const Reference< XFlushListener >& l ) throw (RuntimeException)
 {
-    m_pFlushListeners->removeListener( l );
+    m_pFlushListeners->removeTypedListener( l );
 }
 
 // -----------------------------------------------------------------------------
