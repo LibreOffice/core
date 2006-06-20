@@ -1,5 +1,7 @@
 #include "macros.h"
+#pragma warning(push,1) // disable warnings within system headers
 #include <psapi.h>
+#pragma warning(pop)
 
 IMPLEMENT_THUNK( psapi, WINDOWS, DWORD, WINAPI, GetModuleFileNameExW, (HANDLE hProcess, HMODULE hModule, LPWSTR lpFileNameW, DWORD nSize ) )
 {
