@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WColumnSelect.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:44:54 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:21:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,14 +100,14 @@ OWizardPage::OWizardPage( Window* pParent, const ResId& rResId )
 DBG_NAME(OWizColumnSelect);
 //========================================================================
 OWizColumnSelect::OWizColumnSelect( Window* pParent)
-               :OWizardPage( pParent, ModuleRes( TAB_WIZ_COLUMN_SELECT )),
-               m_flColumns( this, ModuleRes( FL_COLUMN_SELECT ) ),
-               m_lbOrgColumnNames( this, ModuleRes( LB_ORG_COLUMN_NAMES ) ),
-               m_ibColumn_RH( this, ModuleRes( IB_COLUMN_RH ) ),
-               m_ibColumn_LH( this, ModuleRes( IB_COLUMN_LH ) ),
-               m_ibColumns_RH( this, ModuleRes( IB_COLUMNS_RH ) ),
-               m_ibColumns_LH( this, ModuleRes( IB_COLUMNS_LH ) ),
-               m_lbNewColumnNames( this, ModuleRes( LB_NEW_COLUMN_NAMES ) )
+    :OWizardPage( pParent, ModuleRes( TAB_WIZ_COLUMN_SELECT ))
+    ,m_flColumns( this, ModuleRes( FL_COLUMN_SELECT ) )
+    ,m_lbOrgColumnNames( this, ModuleRes( LB_ORG_COLUMN_NAMES ) )
+    ,m_ibColumn_RH( this, ModuleRes( IB_COLUMN_RH ) )
+    ,m_ibColumns_RH( this, ModuleRes( IB_COLUMNS_RH ) )
+    ,m_ibColumn_LH( this, ModuleRes( IB_COLUMN_LH ) )
+    ,m_ibColumns_LH( this, ModuleRes( IB_COLUMNS_LH ) )
+    ,m_lbNewColumnNames( this, ModuleRes( LB_NEW_COLUMN_NAMES ) )
 {
     DBG_CTOR(OWizColumnSelect,NULL);
     m_ibColumn_RH.SetClickHdl(LINK(this,OWizColumnSelect,ButtonClickHdl));
@@ -207,7 +207,9 @@ sal_Bool OWizColumnSelect::LeavePage()
     clearListBox(m_lbNewColumnNames);
 
 
-    if(m_pParent->WasButtonPressed() == OCopyTableWizard::WIZARD_NEXT || m_pParent->WasButtonPressed() == OCopyTableWizard::WIZARD_FINISH)
+    if  (   m_pParent->GetPressedButton() == OCopyTableWizard::WIZARD_NEXT
+        ||  m_pParent->GetPressedButton() == OCopyTableWizard::WIZARD_FINISH
+        )
         return m_pParent->getDestColumns()->size();
     else
         return sal_True;
@@ -332,8 +334,7 @@ void OWizColumnSelect::createNewColumn( ListBox* _pListbox,
                                         const ::rtl::OUString&  _sColumnName,
                                         const ::rtl::OUString&  _sExtraChars,
                                         sal_Int32               _nMaxNameLen,
-                                        const ::comphelper::TStringMixEqualFunctor& _aCase,
-                                        USHORT nPos)
+                                        const ::comphelper::TStringMixEqualFunctor& _aCase)
 {
     ::rtl::OUString sConvertedName = m_pParent->convertColumnName(TMultiListBoxEntryFindFunctor(&_rRightColumns,_aCase),
                                                                 _sColumnName,
