@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pyuno_gc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:52:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:03:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,8 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#include <osl/thread.hxx>
 #include <pyuno_impl.hxx>
+#include <osl/thread.hxx>
 namespace pyuno
 {
 
@@ -63,7 +63,7 @@ public:
 
 
 GCThread::GCThread( PyInterpreterState *interpreter, PyObject * object ) :
-    mPyInterpreter( interpreter ), mPyObject( object )
+    mPyObject( object ), mPyInterpreter( interpreter )
 {}
 
 void GCThread::run()
@@ -73,7 +73,7 @@ void GCThread::run()
         return;
     try
     {
-        PyThreadAttach guard( (PyInterpreterState*)mPyInterpreter );
+        PyThreadAttach g( (PyInterpreterState*)mPyInterpreter );
         {
             Runtime runtime;
 
