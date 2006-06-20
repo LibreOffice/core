@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WTypeSelect.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:43:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:15:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,6 @@ namespace dbaui
         virtual void        DeactivateAggregate( EControlType eType );
 
         virtual void        CellModified(long nRow, sal_uInt16 nColId );
-        virtual void        SetModified(sal_Bool bModified);
 
         virtual ::com::sun::star::lang::Locale  GetLocale() const;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > GetFormatter() const;
