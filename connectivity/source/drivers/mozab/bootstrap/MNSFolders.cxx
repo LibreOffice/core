@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MNSFolders.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 13:28:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:46:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,13 +42,15 @@
 #endif // End UNIX
 
 #ifdef WNT
+#include "pre_include_windows.h"
 #include <windows.h>
 #include <stdlib.h>
 #include <shlobj.h>
 #include <objidl.h>
+#include "post_include_windows.h"
 #endif // End WNT
 
-static char * DefaultProductDir[] =
+static const char * DefaultProductDir[] =
 {
 #if defined(XP_WIN)
     "Mozilla\\",
