@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cclass_unicode_parser.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 14:52:42 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:43:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -390,32 +390,24 @@ sal_Int32 cclass_Unicode::getParseTokensType( const sal_Unicode* aStr, sal_Int32
         {
             case UnicodeType::UPPERCASE_LETTER :
                 return KParseTokens::UNI_UPALPHA;
-            break;
             case UnicodeType::LOWERCASE_LETTER :
                 return KParseTokens::UNI_LOALPHA;
-            break;
             case UnicodeType::TITLECASE_LETTER :
                 return KParseTokens::UNI_TITLE_ALPHA;
-            break;
             case UnicodeType::MODIFIER_LETTER :
                 return KParseTokens::UNI_MODIFIER_LETTER;
-            break;
             case UnicodeType::OTHER_LETTER :
                 // Non_Spacing_Mark could not be as leading character
                 if (nPos == 0) break;
                 // fall through, treat it as Other_Letter.
             case UnicodeType::NON_SPACING_MARK :
                 return KParseTokens::UNI_OTHER_LETTER;
-            break;
             case UnicodeType::DECIMAL_DIGIT_NUMBER :
                 return KParseTokens::UNI_DIGIT;
-            break;
             case UnicodeType::LETTER_NUMBER :
                 return KParseTokens::UNI_LETTER_NUMBER;
-            break;
             case UnicodeType::OTHER_NUMBER :
                 return KParseTokens::UNI_OTHER_NUMBER;
-            break;
         }
 
         return KParseTokens::UNI_OTHER;
@@ -669,22 +661,18 @@ UPT_FLAG_TYPE cclass_Unicode::getFlagsExtended( const sal_Unicode* aStr, sal_Int
             return (nTypes & KParseTokens::UNI_UPALPHA) ?
                 (bStart ? TOKEN_CHAR_WORD : TOKEN_WORD) :
                 TOKEN_ILLEGAL;
-        break;
         case UnicodeType::LOWERCASE_LETTER :
             return (nTypes & KParseTokens::UNI_LOALPHA) ?
                 (bStart ? TOKEN_CHAR_WORD : TOKEN_WORD) :
                 TOKEN_ILLEGAL;
-        break;
         case UnicodeType::TITLECASE_LETTER :
             return (nTypes & KParseTokens::UNI_TITLE_ALPHA) ?
                 (bStart ? TOKEN_CHAR_WORD : TOKEN_WORD) :
                 TOKEN_ILLEGAL;
-        break;
         case UnicodeType::MODIFIER_LETTER :
             return (nTypes & KParseTokens::UNI_MODIFIER_LETTER) ?
                 (bStart ? TOKEN_CHAR_WORD : TOKEN_WORD) :
                 TOKEN_ILLEGAL;
-        break;
         case UnicodeType::NON_SPACING_MARK :
         case UnicodeType::COMBINING_SPACING_MARK :
             // Non_Spacing_Mark can't be a leading character,
@@ -696,26 +684,21 @@ UPT_FLAG_TYPE cclass_Unicode::getFlagsExtended( const sal_Unicode* aStr, sal_Int
             return (nTypes & KParseTokens::UNI_OTHER_LETTER) ?
                 (bStart ? TOKEN_CHAR_WORD : TOKEN_WORD) :
                 TOKEN_ILLEGAL;
-        break;
         case UnicodeType::DECIMAL_DIGIT_NUMBER :
             return ((nTypes & KParseTokens::UNI_DIGIT) ?
                 (bStart ? TOKEN_CHAR_WORD : TOKEN_WORD) :
                 TOKEN_ILLEGAL) | TOKEN_DIGIT_FLAGS;
-        break;
         case UnicodeType::LETTER_NUMBER :
             return ((nTypes & KParseTokens::UNI_LETTER_NUMBER) ?
                 (bStart ? TOKEN_CHAR_WORD : TOKEN_WORD) :
                 TOKEN_ILLEGAL) | TOKEN_DIGIT_FLAGS;
-        break;
         case UnicodeType::OTHER_NUMBER :
             return ((nTypes & KParseTokens::UNI_OTHER_NUMBER) ?
                 (bStart ? TOKEN_CHAR_WORD : TOKEN_WORD) :
                 TOKEN_ILLEGAL) | TOKEN_DIGIT_FLAGS;
-        break;
         case UnicodeType::SPACE_SEPARATOR :
             return ((nTypes & KParseTokens::IGNORE_LEADING_WS) ?
                 TOKEN_CHAR_DONTCARE : (bStart ? TOKEN_CHAR_WORD : (TOKEN_CHAR_DONTCARE | TOKEN_WORD_SEP | TOKEN_VALUE_SEP) ));
-        break;
     }
 
     return TOKEN_ILLEGAL;
@@ -751,11 +734,11 @@ UPT_FLAG_TYPE cclass_Unicode::getContCharsFlags( sal_Unicode c )
 void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32 nPos, sal_Int32 nTokenType )
 {
     using namespace i18n;
-    const sal_Unicode* const pStart = rText.getStr() + nPos;
+    const sal_Unicode* const pTextStart = rText.getStr() + nPos;
     eState = ssGetChar;
 
     //! All the variables below (plus ParseResult) have to be resetted on ssRewindFromValue!
-    const sal_Unicode* pSym = pStart;
+    const sal_Unicode* pSym = pTextStart;
     const sal_Unicode* pSrc = pSym;
     OUString aSymbol;
     sal_Unicode c = *pSrc;
@@ -768,7 +751,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
 
     while ( (c != 0) && (eState != ssStop) )
     {
-        UPT_FLAG_TYPE nMask = getFlags( pStart, pSrc - pStart );
+        UPT_FLAG_TYPE nMask = getFlags( pTextStart, pSrc - pTextStart );
         if ( nMask & TOKEN_EXCLUDED )
             eState = ssBounce;
         if ( bMightBeWord )
@@ -779,7 +762,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
             else
                 bMightBeWord = ((nMask & TOKEN_WORD) != 0);
         }
-        sal_Int32 nParseTokensType = getParseTokensType( pStart, pSrc - pStart );
+        sal_Int32 nParseTokensType = getParseTokensType( pTextStart, pSrc - pTextStart );
         pSrc++;
         switch (eState)
         {
@@ -868,7 +851,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
                 {
                     if ( c == cDecimalSep && ++nDecSeps > 1 )
                     {
-                        if ( pSrc - pStart == 2 )
+                        if ( pSrc - pTextStart == 2 )
                             eState = ssRewindFromValue;
                             // consecutive separators
                         else
@@ -878,7 +861,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
                 }
                 else if ( c == 'E' || c == 'e' )
                 {
-                    UPT_FLAG_TYPE nNext = getFlags( pStart, pSrc - pStart );
+                    UPT_FLAG_TYPE nNext = getFlags( pTextStart, pSrc - pTextStart );
                     if ( nNext & TOKEN_VALUE_EXP )
                         ;   // keep it going
                     else if ( bMightBeWord && ((nNext & TOKEN_WORD) || !*pSrc) )
@@ -893,7 +876,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
                 {
                     if ( (cLast == 'E') || (cLast == 'e') )
                     {
-                        UPT_FLAG_TYPE nNext = getFlags( pStart, pSrc - pStart );
+                        UPT_FLAG_TYPE nNext = getFlags( pTextStart, pSrc - pTextStart );
                         if ( nNext & TOKEN_VALUE_EXP_VALUE )
                             ;   // keep it going
                         else if ( bMightBeWord && ((nNext & TOKEN_WORD) || !*pSrc) )
@@ -994,7 +977,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
         if ( eState == ssRewindFromValue )
         {
             r = ParseResult();
-            pSym = pStart;
+            pSym = pTextStart;
             pSrc = pSym;
             aSymbol = OUString();
             c = *pSrc;
@@ -1011,7 +994,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
                 if ( (r.TokenType & (KParseType::ASC_NUMBER | KParseType::UNI_NUMBER))
                         && (nTokenType & KParseType::IDENTNAME) && bMightBeWord )
                     ;   // keep a number that might be a word
-                else if ( r.LeadingWhiteSpace == (pSrc - pStart) )
+                else if ( r.LeadingWhiteSpace == (pSrc - pTextStart) )
                     ;   // keep ignored white space
                 else if ( !r.TokenType && eState == ssGetValue && (nMask & TOKEN_VALUE_SEP) )
                     ;   // keep uncertain value
@@ -1044,12 +1027,12 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
     // r.CharLen is the length in characters (not code points) of the parsed
     // token not including any leading white space, change this calculation if
     // multi-code-point Unicode characters are to be supported.
-    r.CharLen = pSrc - pStart - r.LeadingWhiteSpace;
-    r.EndPos = nPos + (pSrc - pStart);
+    r.CharLen = pSrc - pTextStart - r.LeadingWhiteSpace;
+    r.EndPos = nPos + (pSrc - pTextStart);
     if ( r.TokenType & KParseType::ASC_NUMBER )
     {
-        r.Value = rtl_math_uStringToDouble( pStart + r.LeadingWhiteSpace,
-                pStart + r.EndPos, cDecimalSep, cGroupSep, NULL, NULL );
+        r.Value = rtl_math_uStringToDouble( pTextStart + r.LeadingWhiteSpace,
+                pTextStart + r.EndPos, cDecimalSep, cGroupSep, NULL, NULL );
         if ( bMightBeWord )
             r.TokenType |= KParseType::IDENTNAME;
     }
@@ -1078,7 +1061,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
             }
 #undef NATIVENUMBERSUPPLIER_SERVICENAME
         }
-        OUString aTmp( pStart + r.LeadingWhiteSpace, r.EndPos - nPos +
+        OUString aTmp( pTextStart + r.LeadingWhiteSpace, r.EndPos - nPos +
                 r.LeadingWhiteSpace );
         // transliterate to ASCII
         aTmp = xNatNumSup->getNativeNumberString( aTmp, aParserLocale,
