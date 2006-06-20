@@ -4,9 +4,9 @@
  *
  *  $RCSfile: getopt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:07:04 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:28:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,7 +146,7 @@ GetOpt::~GetOpt() {
  * @return void
  */
 //> initialize
-void GetOpt::initialize( char* cmdLine[], char* optSet[] ) {
+void GetOpt::initialize( char* cmdLine[], char const * optSet[] ) {
 
     while ( *cmdLine ) {
         m_cmdline.push_back( rtl::OString( *cmdLine ) );
@@ -213,8 +213,6 @@ void GetOpt::createCmdLineOptions() {
 
     // get iterator of comandline vector
     vector< rtl::OString >::iterator iter = m_cmdline.begin();
-
-    int nSize = m_cmdline.size();
 
     // extract first comandlineparameter as program name
     m_prgname = (*iter);
@@ -496,7 +494,7 @@ void GetOpt::replVars() {
     // process vector of lines containing variables
     vector< rtl::OString >::iterator iter = m_varvec.begin();
     while ( iter != m_varvec.end() ) {
-        sal_uInt32 index = 0;
+        sal_Int32 index = 0;
         while ( ( index = (*iter).indexOf( m_vardelim ) ) != -1 ) {
             vector< rtl::OString > varLineTok;
             rtl::OString varKey( "-" );
@@ -920,7 +918,7 @@ ValueNotFoundException::ValueNotFoundException()
 //---------------------------------------------------------------------
 
 ValueNotFoundException::ValueNotFoundException(char const* sException)
-        : Exception( rtl::OString(RTL_CONSTASCII_STRINGPARAM(c_sValueNotFoundException)) += sException)
+        : Exception( rtl::OString(RTL_CONSTASCII_STRINGPARAM(c_sValueNotFoundException)) + sException)
 {
 }
 
