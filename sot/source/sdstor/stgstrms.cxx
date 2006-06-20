@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stgstrms.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 14:25:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:55:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,6 @@
 #include "stgstrms.hxx"
 #include "stgdir.hxx"
 #include "stgio.hxx"
-#pragma hdrstop
 
 #if defined(W31)
         #include <tools/svwin.h>
@@ -525,7 +524,7 @@ INT32 StgFATStrm::GetPage( short nOff, BOOL bMake, USHORT *pnMasterAlloc )
     if( nOff < rIo.aHdr.GetFAT1Size() )
         return rIo.aHdr.GetFATPage( nOff );
     INT32 nMaxPage = nSize >> 2;
-    nOff -= rIo.aHdr.GetFAT1Size();
+    nOff = nOff - rIo.aHdr.GetFAT1Size();
     // Anzahl der Masterpages, durch die wir iterieren muessen
     USHORT nMasterCount =  ( nPageSize >> 2 ) - 1;
     USHORT nBlocks = nOff / nMasterCount;
@@ -600,7 +599,7 @@ BOOL StgFATStrm::SetPage( short nOff, INT32 nNewPage )
         rIo.aHdr.SetFATPage( nOff, nNewPage );
     else
     {
-        nOff -= rIo.aHdr.GetFAT1Size();
+        nOff = nOff - rIo.aHdr.GetFAT1Size();
         // Anzahl der Masterpages, durch die wir iterieren muessen
         USHORT nMasterCount =  ( nPageSize >> 2 ) - 1;
         USHORT nBlocks = nOff / nMasterCount;
@@ -708,10 +707,10 @@ BOOL StgFATStrm::SetSize( INT32 nBytes )
                         return FALSE;
                     if( nMax - nCount <= nMasterAlloc )
                     {
-                        StgPage* pPg = rIo.Get( nPage, TRUE );
-                        if( !pPg )
+                        StgPage* piPg = rIo.Get( nPage, TRUE );
+                        if( !piPg )
                             return FALSE;
-                        pPg->SetPage( nOffset >> 2, STG_MASTER );
+                        piPg->SetPage( nOffset >> 2, STG_MASTER );
                     }
                     StgPage* pPage = rIo.Get( nFAT, TRUE );
                     if( !pPage ) return FALSE;
@@ -804,9 +803,9 @@ BOOL StgDataStrm::SetSize( INT32 nBytes )
 // If bForce = TRUE, a read of non-existent data causes
 // a read fault.
 
-void* StgDataStrm::GetPtr( INT32 nPos, BOOL bForce, BOOL bDirty )
+void* StgDataStrm::GetPtr( INT32 Pos, BOOL bForce, BOOL bDirty )
 {
-    if( Pos2Page( nPos ) )
+    if( Pos2Page( Pos ) )
     {
         StgPage* pPg = rIo.Get( nPage, bForce );
         if( pPg )
@@ -866,7 +865,7 @@ INT32 StgDataStrm::Read( void* pBuf, INT32 n )
             nDone += nRes;
             nPos += nRes;
             n -= nRes;
-            nOffset += nRes;
+            nOffset = nOffset + nRes;
             if( nRes != nBytes )
                 break;  // read error or EOF
         }
@@ -926,7 +925,7 @@ INT32 StgDataStrm::Write( const void* pBuf, INT32 n )
             nDone += nRes;
             nPos += nRes;
             n -= nRes;
-            nOffset += nRes;
+            nOffset = nOffset + nRes;
             if( nRes != nBytes )
                 break;  // read error
         }
@@ -988,10 +987,10 @@ INT32 StgSmallStrm::Read( void* pBuf, INT32 n )
                 break;
             // all reading thru the stream
             short nRes = (short) pData->Read( (BYTE*)pBuf + nDone, nBytes );
-            nDone += nRes;
+            nDone = nDone + nRes;
             nPos += nRes;
             n -= nRes;
-            nOffset += nRes;
+            nOffset = nOffset + nRes;
             // read problem?
             if( nRes != nBytes )
                 break;
@@ -1030,10 +1029,10 @@ INT32 StgSmallStrm::Write( const void* pBuf, INT32 n )
             if( !pData->Pos2Page( nDataPos ) )
                 break;
             short nRes = (short) pData->Write( (BYTE*)pBuf + nDone, nBytes );
-            nDone += nRes;
+            nDone = nDone + nRes;
             nPos += nRes;
             n -= nRes;
-            nOffset += nRes;
+            nOffset = nOffset + nRes;
             // write problem?
             if( nRes != nBytes )
                 break;
