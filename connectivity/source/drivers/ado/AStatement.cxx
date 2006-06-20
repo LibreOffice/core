@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AStatement.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:15:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:15:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -656,11 +656,11 @@ void OStatement_Base::setResultSetType(sal_Int32 _par0) throw(SQLException, Runt
     }
 }
 //------------------------------------------------------------------------------
-void OStatement_Base::setFetchDirection(sal_Int32 _par0) throw(SQLException, RuntimeException)
+void OStatement_Base::setFetchDirection(sal_Int32 /*_par0*/) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
+    ::dbtools::throwFeatureNotImplementedException( "Statement::FetchDirection", *this );
 }
 //------------------------------------------------------------------------------
 void OStatement_Base::setFetchSize(sal_Int32 _par0) throw(SQLException, RuntimeException)
@@ -673,12 +673,11 @@ void OStatement_Base::setFetchSize(sal_Int32 _par0) throw(SQLException, RuntimeE
     //  m_RecordSet.put_CacheSize(_par0);
 }
 //------------------------------------------------------------------------------
-void OStatement_Base::setMaxFieldSize(sal_Int32 _par0) throw(SQLException, RuntimeException)
+void OStatement_Base::setMaxFieldSize(sal_Int32 /*_par0*/) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
-
+    ::dbtools::throwFeatureNotImplementedException( "Statement::MaxFieldSize", *this );
 }
 //------------------------------------------------------------------------------
 void OStatement_Base::setCursorName(const ::rtl::OUString &_par0) throw(SQLException, RuntimeException)
@@ -765,6 +764,7 @@ sal_Bool OStatement_Base::convertFastPropertyValue(
     {
         bModified = sal_True;   // will ensure that the property is set
         OSL_ENSURE( sal_False, "OStatement_Base::convertFastPropertyValue: caught something strange!" );
+        (void)e;
     }
     return bModified;
 }
