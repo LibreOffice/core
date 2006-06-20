@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 07:40:37 $
+#   last change: $Author: hr $ $Date: 2006-06-20 02:08:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -55,13 +55,12 @@ EXCEPTIONSFILES =  \
         $(SLO)$/PColumn.obj			\
         $(SLO)$/sqliterator.obj		\
         $(SLO)$/sqlnode.obj         \
-        $(SLO)$/sqlNoException.obj
+        $(SLO)$/internalnode.obj
 
 SLOFILES =  \
         $(EXCEPTIONSFILES)			\
         $(SLO)$/wrap_sqlbison.obj		\
-        $(SLO)$/sqlflex.obj			\
-        $(SLO)$/internalnode.obj
+        $(SLO)$/wrap_sqlflex.obj
 
 
 # --- Targets -------------------------------------------------------
@@ -74,4 +73,4 @@ $(MISC)$/%.cxx:	%.l
 $(INCCOM)$/sqlbison.hxx : $(YACCTARGET)
 $(EXCEPTIONSFILES) : $(INCCOM)$/sqlbison.hxx
 $(SLO)$/wrap_sqlbison.obj : $(YACCTARGET)
-
+$(SLO)$/wrap_sqlflex.obj : $(MISC)$/sqlflex.cxx
