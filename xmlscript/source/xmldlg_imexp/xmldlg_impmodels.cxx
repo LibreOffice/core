@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmldlg_impmodels.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:14:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:12:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1424,7 +1424,8 @@ Reference< xml::input::XElement > MenuPopupElement::startChildElement(
                     OUString( RTL_CONSTASCII_USTRINGPARAM("selected") ) ) );
             if (aSel.getLength() && aSel.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("true") ))
             {
-                _itemSelected.push_back( _itemValues.size() -1 );
+                _itemSelected.push_back(
+                    static_cast<sal_Int16>(_itemValues.size()) -1 );
             }
         }
         return new ElementBase(
@@ -1994,8 +1995,8 @@ BulletinBoardElement::BulletinBoardElement(
 // style
 //__________________________________________________________________________________________________
 Reference< xml::input::XElement > StyleElement::startChildElement(
-    sal_Int32 nUid, OUString const & rLocalName,
-    Reference< xml::input::XAttributes > const & xAttributes )
+    sal_Int32 /*nUid*/, OUString const & /*rLocalName*/,
+    Reference< xml::input::XAttributes > const & /*xAttributes*/ )
     throw (xml::sax::SAXException, RuntimeException)
 {
     throw xml::sax::SAXException(
