@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dbeziertools.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:40:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:43:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -554,10 +554,10 @@ namespace basegfx
         return nPoints;
     }
 
-    sal_Int32 adaptiveSubdivideByDistance( B2DPolygon&                  rPoly,
-                                           const B2DQuadraticBezier&    rCurve,
-                                           double                       distanceBounds,
-                                           bool                         bAddEndPoint )
+    sal_Int32 adaptiveSubdivideByDistance( B2DPolygon&                  /*rPoly*/,
+                                           const B2DQuadraticBezier&    /*rCurve*/,
+                                           double                       /*distanceBounds*/,
+                                           bool                         /*bAddEndPoint*/ )
     {
         // TODO
         return 0;
