@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DCode.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:37:00 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:18:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,7 +119,7 @@ OEvaluateSet* OFILEOperandAttr::preProcess(OBoolOperator* pOp, OOperand* pRight)
         Reference<XUnoTunnel> xTunnel(m_xIndex,UNO_QUERY);
         if(xTunnel.is())
         {
-            ODbaseIndex* pIndex = (ODbaseIndex*)xTunnel->getSomething(ODbaseIndex::getUnoTunnelImplementationId());
+            ODbaseIndex* pIndex = reinterpret_cast< ODbaseIndex* >( xTunnel->getSomething(ODbaseIndex::getUnoTunnelImplementationId()) );
             if(pIndex)
             {
                 OIndexIterator* pIter = pIndex->createIterator(pOp,pRight);
