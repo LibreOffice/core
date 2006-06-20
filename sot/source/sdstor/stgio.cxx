@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stgio.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:42:12 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:54:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,7 +180,7 @@ EasyFat::EasyFat( StgIo& rIo, StgStrm* pFatStream, INT32 nPSize )
     pFree = new BOOL[ nPages ];
 
     StgPage *pPage = NULL;
-    INT32 nFatPageSize = 1 << rIo.aHdr.GetPageSize() - 2;
+    INT32 nFatPageSize = (1 << rIo.aHdr.GetPageSize()) - 2;
 
     for( INT32 nPage = 0; nPage < nPages; nPage++ )
     {
@@ -191,7 +191,7 @@ EasyFat::EasyFat( StgIo& rIo, StgStrm* pFatStream, INT32 nPSize )
             pPage = rIo.Get( nPhysPage, TRUE );
         }
 
-        pFat[ nPage ] = pPage->GetPage( ( nPage % nFatPageSize ) );
+        pFat[ nPage ] = pPage->GetPage( short( nPage % nFatPageSize ) );
         pFree[ nPage ] = TRUE;
     }
 }
@@ -275,14 +275,11 @@ ULONG Validator::ValidateMasterFATs()
     ULONG nErr;
     for( INT32 i = 0; i < nCount; i++ )
     {
-        if( ( nErr = aFat.Mark(
-            rIo.pFAT->GetPage( i, FALSE ), aFat.GetPageSize(), -3 ))
-            != FAT_OK )
+        if( ( nErr = aFat.Mark(rIo.pFAT->GetPage( short(i), FALSE ), aFat.GetPageSize(), -3 )) != FAT_OK )
             return nErr;
     }
     if( rIo.aHdr.GetMasters() )
-        if( ( nErr = aFat.Mark(
-            rIo.aHdr.GetFATChain( ), aFat.GetPageSize(), -4 )) != FAT_OK )
+        if( ( nErr = aFat.Mark(rIo.aHdr.GetFATChain( ), aFat.GetPageSize(), -4 )) != FAT_OK )
             return nErr;
     return FAT_OK;
 }
