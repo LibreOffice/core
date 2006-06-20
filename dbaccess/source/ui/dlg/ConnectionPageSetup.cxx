@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConnectionPageSetup.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:45:42 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:02:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -219,10 +219,10 @@ namespace dbaui
     //= OConnectionTabPageSetup
     //========================================================================
     DBG_NAME(OConnectionTabPageSetup)
-    OConnectionTabPageSetup::OConnectionTabPageSetup(Window* pParent, USHORT _rId, const SfxItemSet& _rCoreAttrs, USHORT _nHelpTextResId, USHORT _nHeaderResId, USHORT _nUrlResId, sal_Bool _bgetConnection)
+    OConnectionTabPageSetup::OConnectionTabPageSetup(Window* pParent, USHORT _rId, const SfxItemSet& _rCoreAttrs, USHORT _nHelpTextResId, USHORT _nHeaderResId, USHORT _nUrlResId)
         :OConnectionHelper(pParent, ModuleRes(_rId), _rCoreAttrs)
-        , m_aFT_HelpText(this, ResId(FT_AUTOWIZARDHELPTEXT))
         ,m_bUserGrabFocus(sal_True)
+        ,m_aFT_HelpText(this, ResId(FT_AUTOWIZARDHELPTEXT))
     {
         DBG_CTOR(OConnectionTabPageSetup, NULL);
 
@@ -286,7 +286,7 @@ namespace dbaui
         {
             String sDisplayName = m_pCollection->getTypeDisplayName(m_eType);
             FixedText* ppTextControls[] ={&m_aFT_Connection};
-            for (int i = 0; i < sizeof(ppTextControls)/sizeof(ppTextControls[0]); ++i)
+            for (size_t i = 0; i < sizeof(ppTextControls)/sizeof(ppTextControls[0]); ++i)
             {
                 ppTextControls[i]->SetText(sDisplayName);
             }
@@ -295,7 +295,7 @@ namespace dbaui
         callModifiedHdl();
     }
     // -----------------------------------------------------------------------
-       sal_Bool OConnectionTabPageSetup::commitPage(COMMIT_REASON _eReason)
+       sal_Bool OConnectionTabPageSetup::commitPage(COMMIT_REASON /*_eReason*/)
     {
         return commitURL();
     }
@@ -314,7 +314,7 @@ namespace dbaui
     }
 
     // -----------------------------------------------------------------------
-    IMPL_LINK(OConnectionTabPageSetup, OnEditModified, Edit*, _pEdit)
+    IMPL_LINK(OConnectionTabPageSetup, OnEditModified, Edit*, /*_pEdit*/)
     {
         SetRoadmapStateValue(checkTestConnection());
         callModifiedHdl();
