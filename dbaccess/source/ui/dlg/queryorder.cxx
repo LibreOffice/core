@@ -4,9 +4,9 @@
  *
  *  $RCSfile: queryorder.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 12:14:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:09:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,7 +88,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 
-DBG_NAME(DlgOrderCrit);
+DBG_NAME(DlgOrderCrit)
 //------------------------------------------------------------------------------
 DlgOrderCrit::DlgOrderCrit( Window * pParent,
                             const Reference< XConnection>& _rxConnection,
@@ -196,7 +196,7 @@ DlgOrderCrit::~DlgOrderCrit()
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK_INLINE_START( DlgOrderCrit, FieldListSelectHdl, ListBox *, pListBox )
+IMPL_LINK_INLINE_START( DlgOrderCrit, FieldListSelectHdl, ListBox *, /*pListBox*/ )
 {
     DBG_CHKTHIS(DlgOrderCrit,NULL);
     EnableLines();
