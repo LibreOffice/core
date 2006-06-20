@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CRowSetColumn.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-25 13:42:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:33:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,6 +86,9 @@ namespace dbaccess
                                                             const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::lang::IllegalArgumentException);
         virtual void SAL_CALL getFastPropertyValue( ::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const;
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const ::com::sun::star::uno::Any& rValue )throw (::com::sun::star::uno::Exception);
+
+    protected:
+        using ORowSetDataColumn::getFastPropertyValue;
     };
 
 }
