@@ -4,9 +4,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:35:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:35:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,12 +150,12 @@ DBG_NAME(OKeySet)
 OKeySet::OKeySet(const connectivity::OSQLTable& _xTable,
                  const ::rtl::OUString& _rUpdateTableName,    // this can be the alias or the full qualified name
                  const Reference< XSingleSelectQueryAnalyzer >& _xComposer)
-            :m_xTable(_xTable)
-            ,m_bRowCountFinal(sal_False)
+            :m_pKeyColumnNames(NULL)
+            ,m_pColumnNames(NULL)
+            ,m_xTable(_xTable)
             ,m_xComposer(_xComposer)
             ,m_sUpdateTableName(_rUpdateTableName)
-            ,m_pKeyColumnNames(NULL)
-            ,m_pColumnNames(NULL)
+            ,m_bRowCountFinal(sal_False)
 {
     DBG_CTOR(OKeySet,NULL);
 
@@ -255,7 +255,7 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet)
     ::comphelper::disposeComponent(xAnalyzer);
 }
 // -------------------------------------------------------------------------
-Any SAL_CALL OKeySet::getBookmark( const ORowSetRow& _rRow ) throw(SQLException, RuntimeException)
+Any SAL_CALL OKeySet::getBookmark() throw(SQLException, RuntimeException)
 {
     OSL_ENSURE(m_aKeyIter != m_aKeyMap.end() && m_aKeyIter != m_aKeyMap.begin(),
         "getBookmark is only possible when we stand on a valid row!");
@@ -282,11 +282,11 @@ sal_Bool SAL_CALL OKeySet::moveRelativeToBookmark( const Any& bookmark, sal_Int3
     return !isBeforeFirst() && !isAfterLast();
 }
 // -------------------------------------------------------------------------
-sal_Int32 SAL_CALL OKeySet::compareBookmarks( const Any& first, const Any& second ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL OKeySet::compareBookmarks( const Any& _first, const Any& _second ) throw(SQLException, RuntimeException)
 {
     sal_Int32 nFirst,nSecond;
-    first >>= nFirst;
-    second >>= nSecond;
+    _first >>= nFirst;
+    _second >>= nSecond;
 
     return (nFirst != nSecond) ? CompareBookmark::NOT_EQUAL : CompareBookmark::EQUAL;
 }
@@ -369,8 +369,8 @@ Sequence< sal_Int32 > SAL_CALL OKeySet::deleteRows( const Sequence< Any >& rows 
     memset(aRet.getArray(),bOk,sizeof(sal_Int32)*aRet.getLength());
     if(bOk)
     {
-        const Any* pBegin   = rows.getConstArray();
-        const Any* pEnd     = pBegin + rows.getLength();
+        pBegin  = rows.getConstArray();
+        pEnd    = pBegin + rows.getLength();
 
         for(;pBegin != pEnd;++pBegin)
         {
@@ -421,7 +421,6 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
     OColumnNamePos::const_iterator aIter = m_pColumnNames->begin();
     for(;aIter != m_pColumnNames->end();++aIter,++i)
     {
-        sal_Bool bSigned = m_xSetMetaData->isSigned(i);
         if(xKeyColumns.is() && xKeyColumns->hasByName(aIter->first))
         {
             sKeyCondition += ::dbtools::quoteName( aQuote,aIter->first);
@@ -533,7 +532,6 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
         m_aKeyIter = m_aKeyMap.find(::comphelper::getINT32((*_rInsertRow)[0].getAny()));
         OSL_ENSURE(m_aKeyIter != m_aKeyMap.end(),"New inserted row not found!");
         m_aKeyIter->second.second = 2;
-
         copyRowValue(_rInsertRow,m_aKeyIter->second.first);
     }
 }
@@ -577,7 +575,6 @@ void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
     Reference< XParameters > xParameter(xPrep,UNO_QUERY);
 
     OColumnNamePos::const_iterator aPosIter = m_pColumnNames->begin();
-    sal_uInt16 k = 0;
     for(sal_Int32 i = 1;aPosIter != m_pColumnNames->end();++aPosIter)
     {
         sal_Int32 nPos = aPosIter->second.first;
@@ -598,11 +595,11 @@ void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
     if ( m_bInserted )
     {
         // first insert the default values into the insertrow
-        OColumnNamePos::const_iterator aIter = m_pColumnNames->begin();
-        for(;aIter != m_pColumnNames->end();++aIter)
+        OColumnNamePos::const_iterator defaultIter = m_pColumnNames->begin();
+        for(;defaultIter != m_pColumnNames->end();++defaultIter)
         {
-            if ( !(*_rInsertRow)[aIter->second.first].isModified() )
-                (*_rInsertRow)[aIter->second.first] = aIter->second.second.second;
+            if ( !(*_rInsertRow)[defaultIter->second.first].isModified() )
+                (*_rInsertRow)[defaultIter->second.first] = defaultIter->second.second.second;
         }
         try
         {
@@ -692,7 +689,6 @@ void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
     if ( m_bInserted )
     {
         ORowSetRow aKeyRow = new connectivity::ORowVector< ORowSetValue >((*m_pKeyColumnNames).size());
-
         copyRowValue(_rInsertRow,aKeyRow);
 
         OKeySetMatrix::iterator aKeyIter = m_aKeyMap.end();
@@ -1034,7 +1030,7 @@ void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException)
 
     m_xSet = m_xStatement->executeQuery();
     OSL_ENSURE(m_xSet.is(),"No resultset form statement!");
-    sal_Bool bOK = m_xSet->next();
+    sal_Bool bOK = m_xSet->next(); (void)bOK;
     OSL_ENSURE(bOK,"No rows!");
     m_xRow.set(m_xSet,UNO_QUERY);
     OSL_ENSURE(m_xRow.is(),"No row form statement!");
