@@ -4,9 +4,9 @@
  *
  *  $RCSfile: connection.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:37:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:44:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -331,9 +331,9 @@ OConnection::OConnection(ODatabaseSource& _rDB
             ,m_aTableTypeFilter(_rDB.m_pImpl->m_aTableTypeFilter)
             ,m_xORB(_rxORB)
             ,m_xMasterConnection(_rxMaster)
-            ,m_aWarnings( Reference< XWarningsSupplier >( _rxMaster, UNO_QUERY ) )
             ,m_pTables(NULL)
             ,m_pViews(NULL)
+            ,m_aWarnings( Reference< XWarningsSupplier >( _rxMaster, UNO_QUERY ) )
             ,m_bSupportsViews(sal_False)
             ,m_bSupportsUsers(sal_False)
             ,m_bSupportsGroups(sal_False)
@@ -573,7 +573,7 @@ Reference< XInterface >  OConnection::getParent(void) throw( RuntimeException )
 }
 
 //------------------------------------------------------------------------------
-void OConnection::setParent(const Reference< XInterface > & Parent) throw( NoSupportException, RuntimeException )
+void OConnection::setParent(const Reference< XInterface > & /*Parent*/) throw( NoSupportException, RuntimeException )
 {
     throw NoSupportException();
 }
@@ -701,7 +701,7 @@ Reference< XInterface > SAL_CALL OConnection::createInstance( const ::rtl::OUStr
     return Reference< XInterface >(xRet,UNO_QUERY);
 }
 // -----------------------------------------------------------------------------
-Reference< XInterface > SAL_CALL OConnection::createInstanceWithArguments( const ::rtl::OUString& _sServiceSpecifier, const Sequence< Any >& Arguments ) throw (Exception, RuntimeException)
+Reference< XInterface > SAL_CALL OConnection::createInstanceWithArguments( const ::rtl::OUString& _sServiceSpecifier, const Sequence< Any >& /*Arguments*/ ) throw (Exception, RuntimeException)
 {
     return createInstance(_sServiceSpecifier);
 }
