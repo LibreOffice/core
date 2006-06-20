@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmldlg_export.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:13:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:12:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -563,7 +563,7 @@ Reference< xml::sax::XAttributeList > Style::createElement()
 //__________________________________________________________________________________________________
 void ElementDescriptor::addNumberFormatAttr(
     Reference< beans::XPropertySet > const & xFormatProperties,
-    OUString const & rAttrName )
+    OUString const & /*rAttrName*/ )
 {
     Reference< beans::XPropertyState > xState( xFormatProperties, UNO_QUERY );
     OUString sFormat;
@@ -1523,9 +1523,9 @@ void SAL_CALL exportDialogModel(
         xOut->startElement( aBBoardName, Reference< xml::sax::XAttributeList >() );
 
         // export control elements
-        for ( size_t nPos = 0; nPos < all_elements.size(); ++nPos )
+        for ( std::size_t n = 0; n < all_elements.size(); ++n )
         {
-            ElementDescriptor * pElem = static_cast< ElementDescriptor * >( all_elements[ nPos ].get() );
+            ElementDescriptor * pElem = static_cast< ElementDescriptor * >( all_elements[ n ].get() );
             pElem->dump( xOut.get() );
         }
 
