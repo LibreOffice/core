@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unix.c,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:16:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:52:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,13 +59,14 @@ int Vflag = 0;                          /* verbose flag */
 int Cflag = 0;                          /* do not remove any comments */
 int Cplusplus = 0;
 
+extern void setup_kwtab(void);
+
 void
     setup(int argc, char **argv)
 {
     int c, fd, i, n;
     char *fp, *dp;
     Tokenrow tr;
-    extern void setup_kwtab(void);
 
     setup_kwtab();
     while ((c = getopt(argc, argv, "NOPV:I:D:U:F:A:X:u:l:+")) != -1)
