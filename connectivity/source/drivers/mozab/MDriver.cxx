@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MDriver.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 12:17:51 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:43:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,8 +62,8 @@ namespace connectivity
 MozabDriver::MozabDriver(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory)
     : ODriver_BASE(m_aMutex), m_xMSFactory( _rxFactory )
-    ,s_hModule(NULL)
-    ,s_pCreationFunc(NULL)
+    ,m_hModule(NULL)
+    ,m_pCreationFunc(NULL)
 {
 }
 // -----------------------------------------------------------------------------
@@ -86,11 +86,11 @@ void MozabDriver::disposing()
     connectivity::OWeakRefArray().swap(m_xConnections); // this really clears
 
     ODriver_BASE::disposing();
-    if(s_hModule)
+    if(m_hModule)
     {
-        s_pCreationFunc = NULL;
-        osl_unloadModule(s_hModule);
-        s_hModule = NULL;
+        m_pCreationFunc = NULL;
+        osl_unloadModule(m_hModule);
+        m_hModule = NULL;
     }
 }
 
@@ -139,19 +139,21 @@ Sequence< ::rtl::OUString > SAL_CALL MozabDriver::getSupportedServiceNames(  ) t
 // --------------------------------------------------------------------------------
 Reference< XConnection > SAL_CALL MozabDriver::connect( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
-    if ( ! acceptsURL(url) )
+    if ( !ensureInit() )
+        return NULL;
+
+    if ( ! acceptsURL( url ) )
         return NULL;
     // create a new connection with the given properties and append it to our vector
-    registerClient();
     Reference< XConnection > xCon;
-    if (s_pCreationFunc)
+    if (m_pCreationFunc)
     {
         ::osl::MutexGuard aGuard(m_aMutex);
         //We must make sure we create an com.sun.star.mozilla.MozillaBootstrap brfore call any mozilla codes
         Reference<XInterface> xInstance = m_xMSFactory->createInstance(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.mozilla.MozillaBootstrap")) );
         OSL_ENSURE( xInstance.is(), "failed to create instance" );
 
-        OConnection* pCon = reinterpret_cast<OConnection*>((*s_pCreationFunc)(this));
+        OConnection* pCon = reinterpret_cast<OConnection*>((*m_pCreationFunc)(this));
         xCon = pCon;    // important here because otherwise the connection could be deleted inside (refcount goes -> 0)
         pCon->construct(url,info);              // late constructor call which can throw exception and allows a correct dtor call when so
         m_xConnections.push_back(WeakReferenceHelper(*pCon));
@@ -170,15 +172,21 @@ Reference< XConnection > SAL_CALL MozabDriver::connect( const ::rtl::OUString& u
 sal_Bool SAL_CALL MozabDriver::acceptsURL( const ::rtl::OUString& url )
         throw(SQLException, RuntimeException)
 {
+    if ( !ensureInit() )
+        return sal_False;
+
     // here we have to look if we support this url format
-    return acceptsURL_Stat(url) != Unknown;
+    return impl_classifyURL(url) != Unknown;
 }
 // --------------------------------------------------------------------------------
-Sequence< DriverPropertyInfo > SAL_CALL MozabDriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
+Sequence< DriverPropertyInfo > SAL_CALL MozabDriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& /*info*/ ) throw(SQLException, RuntimeException)
 {
+    if ( !ensureInit() )
+        return Sequence< DriverPropertyInfo >();
+
     if ( acceptsURL(url) )
     {
-        if ( acceptsURL_Stat(url) != LDAP )
+        if ( impl_classifyURL(url) != LDAP )
             return Sequence< DriverPropertyInfo >();
 
         ::std::vector< DriverPropertyInfo > aDriverInfo;
@@ -213,7 +221,7 @@ sal_Int32 SAL_CALL MozabDriver::getMinorVersion(  ) throw(RuntimeException)
     return 0; // depends on you
 }
 // --------------------------------------------------------------------------------
-EDriverType MozabDriver::acceptsURL_Stat( const ::rtl::OUString& url )
+EDriverType MozabDriver::impl_classifyURL( const ::rtl::OUString& url )
 {
     // Skip 'sdbc:mozab: part of URL
     //
@@ -236,97 +244,85 @@ EDriverType MozabDriver::acceptsURL_Stat( const ::rtl::OUString& url )
     else
         aAddrbookScheme = aAddrbookURI.copy(0, nLen);
 
-    if ( aAddrbookScheme.compareToAscii( MozabDriver::getSDBC_SCHEME_MOZILLA() ) == 0 )
-        return Mozilla;
-    if ( aAddrbookScheme.compareToAscii( MozabDriver::getSDBC_SCHEME_THUNDERBIRD() ) == 0 )
-        return ThunderBird;
-    if ( aAddrbookScheme.compareToAscii( MozabDriver::getSDBC_SCHEME_LDAP() ) == 0 )
-        return LDAP;
-
+    struct __scheme_map
+    {
+        EDriverType eType;
+        const sal_Char* pScheme;
+    } aSchemeMap[] =
+    {
 #if defined(WNT) || defined(WIN)
-    if ( aAddrbookScheme.compareToAscii( MozabDriver::getSDBC_SCHEME_OUTLOOK_MAPI() ) == 0 )
-        return Outlook;
-    if ( aAddrbookScheme.compareToAscii( MozabDriver::getSDBC_SCHEME_OUTLOOK_EXPRESS() ) == 0 )
-        return OutlookExpress;
-
+        { Outlook,          "outlook" },
+        { OutlookExpress,   "outlookexp" },
 #endif
+        { Mozilla,          "mozilla" },
+        { ThunderBird,      "thunderbird" },
+        { LDAP,             "ldap" }
+    };
+
+    for ( size_t i=0; i < sizeof( aSchemeMap ) / sizeof( aSchemeMap[0] ); ++i )
+    {
+        if ( aAddrbookScheme.compareToAscii( aSchemeMap[i].pScheme ) == 0 )
+            return aSchemeMap[i].eType;
+    }
 
     return Unknown;
 }
-// -----------------------------------------------------------------------------
-const sal_Char* MozabDriver::getSDBC_SCHEME_MOZILLA()
+
+// --------------------------------------------------------------------------------
+namespace
 {
-    static sal_Char*    SDBC_SCHEME_MOZILLA         = MOZAB_MOZILLA_SCHEMA;
-    return SDBC_SCHEME_MOZILLA;
-}
-// -----------------------------------------------------------------------------
-const sal_Char* MozabDriver::getSDBC_SCHEME_THUNDERBIRD()
-{
-    static sal_Char*    SDBC_SCHEME_THUNDERBIRD         = MOZAB_THUNDERBIRD_SCHEMA;
-    return SDBC_SCHEME_THUNDERBIRD;
-}
-// -----------------------------------------------------------------------------
-const sal_Char* MozabDriver::getSDBC_SCHEME_LDAP()
-{
-    static sal_Char*    SDBC_SCHEME_LDAP            = MOZAB_LDAP_SCHEMA;
-    return SDBC_SCHEME_LDAP;
-}
-// -----------------------------------------------------------------------------
-const sal_Char* MozabDriver::getSDBC_SCHEME_OUTLOOK_MAPI()
-{
-    static sal_Char*    SDBC_SCHEME_OUTLOOK_MAPI    = MOZAB_OUTLOOK_SCHEMA;
-    return SDBC_SCHEME_OUTLOOK_MAPI;
-}
-// -----------------------------------------------------------------------------
-const sal_Char* MozabDriver::getSDBC_SCHEME_OUTLOOK_EXPRESS()
-{
-    static sal_Char*    SDBC_SCHEME_OUTLOOK_EXPRESS = MOZAB_OUTLOOKEXP_SCHEMA;
-    return SDBC_SCHEME_OUTLOOK_EXPRESS;
-}// -----------------------------------------------------------------------------
-void MozabDriver::registerClient()
-{
-    if (!s_hModule)
+    template< typename FUNCTION >
+    void lcl_getFunctionFromModuleOrUnload( oslModule& _rModule, const sal_Char* _pAsciiSymbolName, FUNCTION& _rFunction )
     {
-        OSL_ENSURE(NULL == s_pCreationFunc, "MozabDriver::registerClient: inconsistence: already have a factory function!");
-
-        const ::rtl::OUString sModuleName = ::rtl::OUString::createFromAscii(SAL_MODULENAME( "mozabdrv2" ));
-
-        // load the dbtools library
-        s_hModule = osl_loadModule(sModuleName.pData, 0);
-        OSL_ENSURE(NULL != s_hModule, "MozabDriver::registerClient: could not load the dbtools library!");
-        if (NULL != s_hModule)
+        _rFunction = NULL;
+        if ( _rModule )
         {
-            // first, we need to announce our service factory to the lib
-            // see the documentation of setMozabServiceFactory for more details
-            const ::rtl::OUString sSetFactoryFuncName( RTL_CONSTASCII_USTRINGPARAM( "setMozabServiceFactory" ) );
-            //  reinterpret_cast< OSetMozabServiceFactory >>> removed GNU C
-            OSetMozabServiceFactory pSetFactoryFunc =
-                ( OSetMozabServiceFactory )( osl_getSymbol( s_hModule, sSetFactoryFuncName.pData ) );
+            const ::rtl::OUString sSymbolName = ::rtl::OUString::createFromAscii( _pAsciiSymbolName );
+            _rFunction = (FUNCTION)( osl_getFunctionSymbol( _rModule, sSymbolName.pData ) );
 
-            OSL_ENSURE( pSetFactoryFunc, "MozabDriver::registerClient: missing an entry point!" );
-            if ( pSetFactoryFunc && m_xMSFactory.is() )
-            {
-                // for purpose of transfer safety, the interface needs to be acuired once
-                // (will be release by the callee)
-                m_xMSFactory->acquire();
-                ( *pSetFactoryFunc )( m_xMSFactory.get() );
-            }
-
-            // get the symbol for the method creating the factory
-            const ::rtl::OUString sFactoryCreationFunc = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("OMozabConnection_CreateInstance"));
-            // reinterpret_cast<OMozabConnection_CreateInstanceFunction> removed GNU C
-            s_pCreationFunc = (OMozabConnection_CreateInstanceFunction)(osl_getSymbol(s_hModule, sFactoryCreationFunc.pData));
-
-            if (NULL == s_pCreationFunc)
+            if ( !_rFunction )
             {   // did not find the symbol
-                OSL_ENSURE(sal_False, "MozabDriver::registerClient: could not find the symbol for creating the factory!");
-                osl_unloadModule(s_hModule);
-                s_hModule = NULL;
+                OSL_ENSURE( false, ::rtl::OString( "lcl_getFunctionFromModuleOrUnload: could not find the symbol " ) + ::rtl::OString( _pAsciiSymbolName ) );
+                osl_unloadModule( _rModule );
+                _rModule = NULL;
             }
         }
     }
 }
+
 // -----------------------------------------------------------------------------
+bool MozabDriver::ensureInit()
+{
+    if ( m_hModule )
+        return true;
 
+    OSL_ENSURE(NULL == m_pCreationFunc, "MozabDriver::ensureInit: inconsistence: already have a factory function!");
 
+    const ::rtl::OUString sModuleName = ::rtl::OUString::createFromAscii(SAL_MODULENAME( "mozabdrv2" ));
 
+    // load the dbtools library
+    m_hModule = osl_loadModule(sModuleName.pData, 0);
+    OSL_ENSURE(NULL != m_hModule, "MozabDriver::ensureInit: could not load the dbtools library!");
+    if ( !m_hModule )
+        return false;
+
+    OSetMozabServiceFactory pSetFactoryFunc( NULL );
+
+    lcl_getFunctionFromModuleOrUnload( m_hModule, "setMozabServiceFactory",          pSetFactoryFunc   );
+    lcl_getFunctionFromModuleOrUnload( m_hModule, "OMozabConnection_CreateInstance", m_pCreationFunc   );
+
+    if ( !m_hModule )
+        // one of the symbols did not exist
+        return false;
+
+    if ( m_xMSFactory.is() )
+    {
+        // for purpose of transfer safety, the interface needs to be acuired once
+        // (will be release by the callee)
+        m_xMSFactory->acquire();
+        ( *pSetFactoryFunc )( m_xMSFactory.get() );
+    }
+
+    return true;
+}
+// -----------------------------------------------------------------------------
