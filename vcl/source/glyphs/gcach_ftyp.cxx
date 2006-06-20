@@ -112,7 +112,7 @@ static void InitGammaTable()
     static const int M_X   = 128;
     static const int M_Y   = 208;
 
-    unsigned int x, a;
+    int x, a;
     for( x = 0; x < 256; x++)
     {
         if ( x <= M_X )
@@ -160,8 +160,8 @@ FtFontFile::FtFontFile( const ::rtl::OString& rNativeFileName )
 :   maNativeFileName( rNativeFileName ),
     mpFileMap( NULL ),
     mnFileSize( 0 ),
-    mnLangBoost( 0 ),
-    mnRefCount( 0 )
+    mnRefCount( 0 ),
+    mnLangBoost( 0 )
 {
     // boost font preference if UI language is mentioned in filename
     int nPos = maNativeFileName.lastIndexOf( '_' );
@@ -295,14 +295,14 @@ FtFontInfo::FtFontInfo( const ImplDevFontAttributes& rDevFontAttributes,
     const ::rtl::OString& rNativeFileName, int nFaceNum, sal_IntPtr nFontId, int nSynthetic,
     const ExtraKernInfo* pExtraKernInfo )
 :
+    maFaceFT( NULL ),
     mpFontFile( FtFontFile::FindFontFile( rNativeFileName ) ),
     mnFaceNum( nFaceNum ),
+    mnRefCount( 0 ),
     mnSynthetic( nSynthetic ),
-    maDevFontAttributes( rDevFontAttributes ),
     mnFontId( nFontId ),
-    mpExtraKernInfo( pExtraKernInfo ),
-    maFaceFT( NULL ),
-    mnRefCount( 0 )
+    maDevFontAttributes( rDevFontAttributes ),
+    mpExtraKernInfo( pExtraKernInfo )
 {
     // prefer font with low ID
     maDevFontAttributes.mnQuality += 10000 - nFontId;
@@ -388,7 +388,7 @@ int FtFontInfo::GetExtraGlyphKernValue( int nLeftGlyph, int nRightGlyph ) const
 
 static unsigned GetUInt( const unsigned char* p ) { return((p[0]<<24)+(p[1]<<16)+(p[2]<<8)+p[3]);}
 static unsigned GetUShort( const unsigned char* p ){ return((p[0]<<8)+p[1]);}
-static signed GetSShort( const unsigned char* p ){ return((short)((p[0]<<8)+p[1]));}
+//static signed GetSShort( const unsigned char* p ){ return((short)((p[0]<<8)+p[1]));}
 
 // -----------------------------------------------------------------------
 
@@ -440,7 +440,7 @@ void FtFontInfo::AnnounceFont( ImplDevFontList* pFontList )
 FreetypeManager::FreetypeManager()
 :   mnMaxFontId( 0 ), mnNextFontId( 0x1000 )
 {
-    FT_Error rcFT = FT_Init_FreeType( &aLibFT );
+    /*FT_Error rcFT =*/ FT_Init_FreeType( &aLibFT );
 
 #ifdef RTLD_DEFAULT // true if a good dlfcn.h header was included
     // Get version of freetype library to enable workarounds.
@@ -450,11 +450,11 @@ FreetypeManager::FreetypeManager()
     void (*pFTLibraryVersion)(FT_Library library,
         FT_Int *amajor, FT_Int *aminor, FT_Int *apatch);
     pFTLibraryVersion = (void (*)(FT_Library library,
-        FT_Int *amajor, FT_Int *aminor, FT_Int *apatch)) dlsym( RTLD_DEFAULT, "FT_Library_Version" );
+        FT_Int *amajor, FT_Int *aminor, FT_Int *apatch))(sal_IntPtr)dlsym( RTLD_DEFAULT, "FT_Library_Version" );
 
-    pFTNewSize      = (FT_Error(*)(FT_Face,FT_Size*)) dlsym( RTLD_DEFAULT, "FT_New_Size" );
-    pFTActivateSize = (FT_Error(*)(FT_Size)) dlsym( RTLD_DEFAULT, "FT_Activate_Size" );
-    pFTDoneSize     = (FT_Error(*)(FT_Size)) dlsym( RTLD_DEFAULT, "FT_Done_Size" );
+    pFTNewSize      = (FT_Error(*)(FT_Face,FT_Size*))(sal_IntPtr)dlsym( RTLD_DEFAULT, "FT_New_Size" );
+    pFTActivateSize = (FT_Error(*)(FT_Size))(sal_IntPtr)dlsym( RTLD_DEFAULT, "FT_Activate_Size" );
+    pFTDoneSize     = (FT_Error(*)(FT_Size))(sal_IntPtr)dlsym( RTLD_DEFAULT, "FT_Done_Size" );
 
     bEnableSizeFT = (pFTNewSize!=NULL) && (pFTActivateSize!=NULL) && (pFTDoneSize!=NULL);
 
@@ -658,16 +658,6 @@ ImplFTSFontData::ImplFTSFontData( FtFontInfo* pFI, const ImplDevFontAttributes& 
 
 // -----------------------------------------------------------------------
 
-ImplFTSFontData::~ImplFTSFontData()
-{
-    // tell lower layers about the imminent death
-    // TODO: better integration with GlyphCache
-    sal_IntPtr nFontId = GetFontId();
-    GlyphCache::GetInstance().RemoveFont( nFontId );
-}
-
-// -----------------------------------------------------------------------
-
 ImplFontEntry* ImplFTSFontData::CreateFontInstance( ImplFontSelectData& rFSD ) const
 {
     ImplServerFontEntry* pEntry = new ImplServerFontEntry( rFSD );
@@ -804,12 +794,12 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
     mbArtItalic = (rFSD.meItalic != ITALIC_NONE && pFI->GetFontAttributes().GetSlant() == ITALIC_NONE);
     mbArtBold = (rFSD.meWeight > WEIGHT_MEDIUM && pFI->GetFontAttributes().GetWeight() <= WEIGHT_MEDIUM);
 
-    static const int TT_CODEPAGE_RANGE_874  = (1L << 16); // Thai
-    static const int TT_CODEPAGE_RANGE_932  = (1L << 17); // JIS/Japan
-    static const int TT_CODEPAGE_RANGE_936  = (1L << 18); // Chinese: Simplified
-    static const int TT_CODEPAGE_RANGE_949  = (1L << 19); // Korean Wansung
-    static const int TT_CODEPAGE_RANGE_950  = (1L << 20); // Chinese: Traditional
-    static const int TT_CODEPAGE_RANGE_1361 = (1L << 21); // Korean Johab
+    //static const int TT_CODEPAGE_RANGE_874  = (1L << 16); // Thai
+    //static const int TT_CODEPAGE_RANGE_932  = (1L << 17); // JIS/Japan
+    //static const int TT_CODEPAGE_RANGE_936  = (1L << 18); // Chinese: Simplified
+    //static const int TT_CODEPAGE_RANGE_949  = (1L << 19); // Korean Wansung
+    //static const int TT_CODEPAGE_RANGE_950  = (1L << 20); // Chinese: Traditional
+    //static const int TT_CODEPAGE_RANGE_1361 = (1L << 21); // Korean Johab
     static const int TT_CODEPAGE_RANGES1_CJKT = 0x3F0000; // all of the above
     const TT_OS2* pOs2 = (const TT_OS2*)FT_Get_Sfnt_Table( maFaceFT, ft_sfnt_os2 );
     if ((pOs2) && (pOs2->ulCodePageRange1 & TT_CODEPAGE_RANGES1_CJKT )
@@ -962,8 +952,6 @@ void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor
         // #107888# workaround for Asian...
         // TODO: remove when ExtLeading fully implemented
         BOOL bCJKCapable = ((( pOS2->ulUnicodeRange2 & 0x2fff0000 ) | ( pOS2->ulUnicodeRange3 & 0x00000001 )) != 0 );
-        BOOL bHasKoreanRange = ((( pOS2->ulUnicodeRange1 & 0x10000000 ) | ( pOS2->ulUnicodeRange2 & 0x00100000 ) |
-                                 ( pOS2->ulUnicodeRange2 & 0x01000000 )) != 0 );
 
         if ( bCJKCapable )
         {
@@ -1252,7 +1240,7 @@ void FreetypeServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
     FT_Glyph pGlyphFT;
     rc = FT_Get_Glyph( maFaceFT->glyph, &pGlyphFT );
 
-    int nAngle = ApplyGlyphTransform( nGlyphFlags, pGlyphFT, false );
+    /*int nAngle =*/ ApplyGlyphTransform( nGlyphFlags, pGlyphFT, false );
     rGD.SetDelta( (pGlyphFT->advance.x + 0x8000) >> 16, -((pGlyphFT->advance.y + 0x8000) >> 16) );
 
     FT_BBox aBbox;
@@ -1400,10 +1388,10 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
     }
 
     unsigned char* p = rRawBitmap.mpBits;
-    for( int y=0; y < rRawBitmap.mnHeight; y++ )
+    for( ULONG y=0; y < rRawBitmap.mnHeight; y++ )
     {
         unsigned char nLastByte = 0;
-        for( int x=0; x < rRawBitmap.mnScanlineSize; x++ )
+        for( ULONG x=0; x < rRawBitmap.mnScanlineSize; x++ )
         {
         unsigned char nTmp = p[x] << 7;
         p[x] |= (p[x] >> 1) | nLastByte;
@@ -1535,7 +1523,7 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
         {
             for( x = 0; x < rBitmapFT.width; ++x )
                 *(pDest++) = *(pSrc++);
-            for(; x < rRawBitmap.mnScanlineSize; ++x )
+            for(; x < int(rRawBitmap.mnScanlineSize); ++x )
                 *(pDest++) = 0;
         }
     }
@@ -1550,7 +1538,7 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
                     nSrc = *(pSrc++);
                 *(pDest++) = (0x7F - nSrc) >> 8;
             }
-            for(; x < rRawBitmap.mnScanlineSize; ++x )
+            for(; x < int(rRawBitmap.mnScanlineSize); ++x )
                 *(pDest++) = 0;
         }
     }
@@ -1559,10 +1547,10 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
     {
     // overlay with glyph image shifted by one left pixel
     unsigned char* p = rRawBitmap.mpBits;
-    for( int y=0; y < rRawBitmap.mnHeight; y++ )
+    for( ULONG y=0; y < rRawBitmap.mnHeight; y++ )
     {
         unsigned char nLastByte = 0;
-        for( int x=0; x < rRawBitmap.mnWidth; x++ )
+        for( ULONG x=0; x < rRawBitmap.mnWidth; x++ )
         {
             unsigned char nTmp = p[x];
             p[x] |= p[x] | nLastByte;
@@ -1575,9 +1563,9 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
     if( !bEmbedded && mbUseGamma )
     {
     unsigned char* p = rRawBitmap.mpBits;
-    for( int y=0; y < rRawBitmap.mnHeight; y++ )
+    for( ULONG y=0; y < rRawBitmap.mnHeight; y++ )
     {
-        for( int x=0; x < rRawBitmap.mnWidth; x++ )
+        for( ULONG x=0; x < rRawBitmap.mnWidth; x++ )
         {
             p[x] = aGammaTable[ p[x] ];
         }
@@ -1747,8 +1735,8 @@ ULONG FreetypeServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
 
         for( USHORT nTableIdx = 0; nTableIdx < nTableCnt; ++nTableIdx )
         {
-            USHORT nSubVersion  = GetUShort( pBuffer+0 );
-            USHORT nSubLength   = GetUShort( pBuffer+2 );
+            // USHORT nSubVersion  = GetUShort( pBuffer+0 );
+            // USHORT nSubLength   = GetUShort( pBuffer+2 );
             USHORT nSubCoverage = GetUShort( pBuffer+4 );
             pBuffer += 6;
             if( (nSubCoverage&0x03) != 0x01 )   // no interest in minimum info here
@@ -1819,9 +1807,9 @@ ULONG FreetypeServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
     {
         for( USHORT nTableIdx = 0; nTableIdx < nTableCnt; ++nTableIdx )
         {
-            ULONG  nLength  = NEXT_U32( pBuffer );
+            /*ULONG  nLength  =*/ NEXT_U32( pBuffer );
             USHORT nCoverage   = NEXT_U16( pBuffer );
-            USHORT nTupleIndex = NEXT_U16( pBuffer );
+            /*USHORT nTupleIndex =*/ NEXT_U16( pBuffer );
 
             // Get kerning type
             sal_Bool bKernVertical     = nCoverage & 0x8000;
@@ -2113,7 +2101,7 @@ static int FT_cubic_to( FT_Vector_CPtr p1, FT_Vector_CPtr p2, FT_Vector_CPtr p3,
     return 0;
 }
 
-}; // extern "C"
+} // extern "C"
 
 // -----------------------------------------------------------------------
 
@@ -2156,7 +2144,7 @@ bool FreetypeServerFont::GetGlyphOutline( int nGlyphIndex,
     PolyPolygon aToolPolyPolygon;
     PolyArgs aPolyArg( aToolPolyPolygon, nMaxPoints );
 
-    int nAngle = ApplyGlyphTransform( nGlyphFlags, pGlyphFT, false );
+    /*int nAngle =*/ ApplyGlyphTransform( nGlyphFlags, pGlyphFT, false );
 
     FT_Outline_Funcs aFuncs;
     aFuncs.move_to  = &FT_move_to;
@@ -2204,7 +2192,6 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
 
     // parse GSUB header
     const FT_Byte* pGsubHeader = pGsubBase;
-    const ULONG nVersion            = GetUInt( pGsubHeader+0 );
     const USHORT nOfsScriptList     = GetUShort( pGsubHeader+4 );
     const USHORT nOfsFeatureTable   = GetUShort( pGsubHeader+6 );
     const USHORT nOfsLookupList     = GetUShort( pGsubHeader+8 );
@@ -2220,10 +2207,10 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
     pScriptHeader += 2;
     for( USHORT nScriptIndex = 0; nScriptIndex < nCntScript; ++nScriptIndex )
     {
-        const ULONG nTag            = GetUInt( pScriptHeader+0 ); // e.g. hani/arab/kana/hang
+        const ULONG nScriptTag      = GetUInt( pScriptHeader+0 ); // e.g. hani/arab/kana/hang
         const USHORT nOfsScriptTable= GetUShort( pScriptHeader+4 );
         pScriptHeader += 6; //###
-        if( (nTag != nRequestedScript) && (nRequestedScript != 0) )
+        if( (nScriptTag != nRequestedScript) && (nRequestedScript != 0) )
             continue;
 
         const FT_Byte* pScriptTable     = pGsubBase + nOfsScriptList + nOfsScriptTable;
@@ -2246,7 +2233,6 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
         if( (nDefaultLangsysOfs != 0) && (nDefaultLangsysOfs != nLangsysOffset) )
         {
             const FT_Byte* pLangSys = pGsubBase + nOfsScriptList + nOfsScriptTable + nDefaultLangsysOfs;
-            const USHORT nLookupOrder   = GetUShort( pLangSys+0 );
             const USHORT nReqFeatureIdx = GetUShort( pLangSys+2 );
             const USHORT nCntFeature    = GetUShort( pLangSys+4 );
             pLangSys += 6;
@@ -2262,7 +2248,6 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
         if( nLangsysOffset != 0 )
         {
             const FT_Byte* pLangSys = pGsubBase + nOfsScriptList + nOfsScriptTable + nLangsysOffset;
-            const USHORT nLookupOrder   = GetUShort( pLangSys+0 );
             const USHORT nReqFeatureIdx = GetUShort( pLangSys+2 );
             const USHORT nCntFeature    = GetUShort( pLangSys+4 );
             pLangSys += 6;
@@ -2323,13 +2308,12 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
             aLookupOffsetList.push_back( nOffset );
     }
 
-    UshortList::const_iterator it = aLookupOffsetList.begin();
-    for(; it != aLookupOffsetList.end(); ++it )
+    UshortList::const_iterator lookup_it = aLookupOffsetList.begin();
+    for(; lookup_it != aLookupOffsetList.end(); ++lookup_it )
     {
-        const USHORT nOfsLookupTable = *it;
+        const USHORT nOfsLookupTable = *lookup_it;
         const FT_Byte* pLookupTable = pGsubBase + nOfsLookupList + nOfsLookupTable;
         const USHORT eLookupType        = GetUShort( pLookupTable+0 );
-        const USHORT eLookupFlag        = GetUShort( pLookupTable+2 );
         const USHORT nCntLookupSubtable = GetUShort( pLookupTable+4 );
         pLookupTable += 6;
 
