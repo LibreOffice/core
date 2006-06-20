@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtreelistbox.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:23:53 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:00:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,12 +92,12 @@ DBG_NAME(DBTreeListBox)
 DBTreeListBox::DBTreeListBox( Window* pParent, const Reference< XMultiServiceFactory >& _rxORB, WinBits nWinStyle ,sal_Bool _bHandleEnterKey)
     :SvTreeListBox(pParent,nWinStyle)
     ,m_pSelectedEntry(NULL)
-    ,m_xORB(_rxORB)
-    ,m_nSelectLock(0)
     ,m_pDragedEntry(NULL)
     ,m_pActionListener(NULL)
     ,m_pContextMenuActionListener(NULL)
+    ,m_nSelectLock(0)
     ,m_bHandleEnterKey(_bHandleEnterKey)
+    ,m_xORB(_rxORB)
 {
     DBG_CTOR(DBTreeListBox,NULL);
     init();
@@ -107,11 +107,11 @@ DBTreeListBox::DBTreeListBox( Window* pParent, const Reference< XMultiServiceFac
     :SvTreeListBox(pParent,rResId)
     ,m_pSelectedEntry(NULL)
     ,m_pDragedEntry(NULL)
-    ,m_xORB(_rxORB)
-    ,m_nSelectLock(0)
     ,m_pActionListener(NULL)
     ,m_pContextMenuActionListener(NULL)
+    ,m_nSelectLock(0)
     ,m_bHandleEnterKey(_bHandleEnterKey)
+    ,m_xORB(_rxORB)
 {
     DBG_CTOR(DBTreeListBox,NULL);
     init();
@@ -142,8 +142,8 @@ DBTreeListBox::~DBTreeListBox()
 //------------------------------------------------------------------------
 SvLBoxEntry* DBTreeListBox::GetEntryPosByName( const String& aName, SvLBoxEntry* pStart, const IEntryFilter* _pFilter ) const
 {
-    SvLBoxTreeList* pModel = GetModel();
-    SvTreeEntryList* pChilds = pModel->GetChildList(pStart);
+    SvLBoxTreeList* myModel = GetModel();
+    SvTreeEntryList* pChilds = myModel->GetChildList(pStart);
     SvLBoxEntry* pEntry = NULL;
     if ( pChilds )
     {
@@ -381,7 +381,7 @@ void DBTreeListBox::RequestHelp( const HelpEvent& rHEvt )
             if ( m_pActionListener->requestQuickHelp( pEntry, sQuickHelpText ) )
             {
                 Size aSize( GetOutputSizePixel().Width(), GetEntryHeight() );
-                Rectangle aScreenRect( OutputToScreenPixel( GetEntryPos( pEntry ) ), aSize );
+                Rectangle aScreenRect( OutputToScreenPixel( GetEntryPosition( pEntry ) ), aSize );
 
                 Help::ShowQuickHelp( this, aScreenRect,
                                      sQuickHelpText, QUICKHELP_LEFT | QUICKHELP_VCENTER );
@@ -438,6 +438,8 @@ void DBTreeListBox::KeyInput( const KeyEvent& rKEvt )
                 if ( bHandled = (m_aDeleteHandler.IsSet() && m_pSelectedEntry) )
                     m_aDeleteHandler.Call(m_pSelectedEntry);
                 break;
+            default:
+                break;
         }
     }
 
@@ -471,7 +473,7 @@ void DBTreeListBox::KeyInput( const KeyEvent& rKEvt )
         SvTreeListBox::KeyInput(rKEvt);
 }
 // -----------------------------------------------------------------------------
-BOOL DBTreeListBox::EditingEntry( SvLBoxEntry* pEntry, Selection& _aSelection)
+BOOL DBTreeListBox::EditingEntry( SvLBoxEntry* pEntry, Selection& /*_aSelection*/)
 {
     return m_aEditingHandler.Call(pEntry) != 0;
 }
@@ -501,14 +503,14 @@ void scrollWindow(DBTreeListBox* _pListBox, const Point& _rPos,sal_Bool _bUp)
     }
 }
 // -----------------------------------------------------------------------------
-IMPL_LINK( DBTreeListBox, ScrollUpHdl, SvTreeListBox*, pBox )
+IMPL_LINK( DBTreeListBox, ScrollUpHdl, SvTreeListBox*, /*pBox*/ )
 {
     scrollWindow(this,m_aMousePos,sal_True);
     return 0;
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK( DBTreeListBox, ScrollDownHdl, SvTreeListBox*, pBox )
+IMPL_LINK( DBTreeListBox, ScrollDownHdl, SvTreeListBox*, /*pBox*/ )
 {
     scrollWindow(this,m_aMousePos,sal_False);
     return 0;
@@ -564,7 +566,7 @@ void DBTreeListBox::ExcecuteContextMenuAction( USHORT _nSelectedPopupEntry )
         m_pContextMenuActionListener->executeChecked(_nSelectedPopupEntry,Sequence<PropertyValue>());
 }
 // -----------------------------------------------------------------------------
-IMPL_LINK(DBTreeListBox, OnTimeOut, void*, EMPTY_ARG)
+IMPL_LINK(DBTreeListBox, OnTimeOut, void*, /*EMPTY_ARG*/)
 {
     if(m_aTimer.IsActive())
         m_aTimer.Stop();
