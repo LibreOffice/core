@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FetcList.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:24:21 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 06:05:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,13 @@
 #include "Fetc.hxx"
 #endif
 
+#if defined _MSC_VER
+#pragma warning(push,1)
+#endif
 #include <windows.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 #include <vector>
 
 /*****************************************************************
