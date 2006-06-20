@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MtaOleClipb.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:13:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 06:00:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,13 @@
 #include <osl/mutex.hxx>
 #endif
 
+#if defined _MSC_VER
+#pragma warning(push,1)
+#endif
 #include <objidl.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 
 //--------------------------------------------------------
 // the Mta-Ole clipboard class is for internal use only!
