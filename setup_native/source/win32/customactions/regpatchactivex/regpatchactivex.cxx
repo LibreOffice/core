@@ -4,9 +4,9 @@
  *
  *  $RCSfile: regpatchactivex.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 14:16:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:41:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,8 +35,11 @@
 
 #define UNICODE
 
+#pragma warning(push,1) // disable warnings within system headers
 #include <windows.h>
 #include <msiquery.h>
+#pragma warning(pop)
+
 #include <string.h>
 #include <malloc.h>
 #include <stdio.h>
@@ -105,7 +108,6 @@ extern "C" UINT __stdcall PatchActiveXControl( MSIHANDLE hMSI )
         {
             HKEY hkey = NULL;
             char* aSubKey = "Software\\Classes\\MIME\\DataBase\\Content Type\\application/vnd.sun.xml.base";
-            DWORD nSubKeys = 0, nValues = 0;
                if ( ERROR_SUCCESS == RegCreateKeyA(bInstallForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, &hkey) )
             {
                    RegDeleteValueA( hkey, "CLSID" );
