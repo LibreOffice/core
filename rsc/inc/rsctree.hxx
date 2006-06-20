@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rsctree.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:35:04 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:45:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,6 +100,8 @@ class IdNode : public NameNode
 {
     virtual COMPARE Compare( const NameNode * ) const;
     virtual COMPARE Compare( const void * ) const;
+protected:
+    using NameNode::Search;
 
 public:
 
@@ -114,6 +116,8 @@ class StringNode : public NameNode
     virtual COMPARE Compare( const void * ) const;
 
 protected:
+    using NameNode::Search;
+
     ByteString      aName;
 
 public:
