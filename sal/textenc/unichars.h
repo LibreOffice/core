@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unichars.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:47:03 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:39:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,17 +46,17 @@ extern "C" {
 
 #define RTL_TEXTENC_UNICODE_REPLACEMENT_CHARACTER 0xFFFD
 
-sal_Bool ImplIsNoncharacter(sal_uInt32 nUtf32) SAL_THROW_EXTERN_C();
+int ImplIsNoncharacter(sal_uInt32 nUtf32) SAL_THROW_EXTERN_C();
 
-sal_Bool ImplIsControlOrFormat(sal_uInt32 nUtf32) SAL_THROW_EXTERN_C();
+int ImplIsControlOrFormat(sal_uInt32 nUtf32) SAL_THROW_EXTERN_C();
 
-sal_Bool ImplIsHighSurrogate(sal_uInt32 nUtf32) SAL_THROW_EXTERN_C();
+int ImplIsHighSurrogate(sal_uInt32 nUtf32) SAL_THROW_EXTERN_C();
 
-sal_Bool ImplIsLowSurrogate(sal_uInt32 nUtf32) SAL_THROW_EXTERN_C();
+int ImplIsLowSurrogate(sal_uInt32 nUtf32) SAL_THROW_EXTERN_C();
 
-sal_Bool ImplIsPrivateUse(sal_uInt32 nUtf32) SAL_THROW_EXTERN_C();
+int ImplIsPrivateUse(sal_uInt32 nUtf32) SAL_THROW_EXTERN_C();
 
-sal_Bool ImplIsZeroWidth(sal_uInt32 nUtf32) SAL_THROW_EXTERN_C();
+int ImplIsZeroWidth(sal_uInt32 nUtf32) SAL_THROW_EXTERN_C();
 
 sal_uInt32 ImplGetHighSurrogate(sal_uInt32 nUtf32) SAL_THROW_EXTERN_C();
 
