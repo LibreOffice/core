@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentcontainer.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:40:22 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:45:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,7 +148,7 @@ Reference< XContent > ODocumentContainer::createObject( const ::rtl::OUString& _
 // -----------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL ODocumentContainer::createInstance( const ::rtl::OUString& aServiceSpecifier ) throw (Exception, RuntimeException)
 {
-    return Reference< XInterface >();
+    return createInstanceWithArguments( aServiceSpecifier, Sequence< Any >() );
 }
 // -----------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments( const ::rtl::OUString& ServiceSpecifier, const Sequence< Any >& _aArguments ) throw (Exception, RuntimeException)
@@ -306,31 +306,31 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
         if ( xCopyFrom.is() )
         {
             Sequence< ::rtl::OUString> aSeq = xCopyFrom->getElementNames();
-            const ::rtl::OUString* pIter = aSeq.getConstArray();
-            const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
+            const ::rtl::OUString* elements = aSeq.getConstArray();
+            const ::rtl::OUString* elementsEnd = elements + aSeq.getLength();
             Reference<XContent> xObjectToCopy;
 
             Reference<XMultiServiceFactory> xORB(xContent,UNO_QUERY);
             OSL_ENSURE(xORB.is(),"No service factory given");
             if ( xORB.is() )
             {
-                for(;pIter != pEnd;++pIter)
+                for(;elements != elementsEnd;++elements)
                 {
-                    xCopyFrom->getByName(*pIter) >>= xObjectToCopy;
+                    xCopyFrom->getByName(*elements) >>= xObjectToCopy;
                     Sequence< Any > aArguments(3);
-                    PropertyValue aValue;
+                    PropertyValue aArgument;
                     // set as folder
-                    aValue.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"));
-                    aValue.Value <<= *pIter;
-                    aArguments[0] <<= aValue;
+                    aArgument.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"));
+                    aArgument.Value <<= *elements;
+                    aArguments[0] <<= aArgument;
                     //parent
-                    aValue.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Parent"));
-                    aValue.Value <<= xContent;
-                    aArguments[1] <<= aValue;
+                    aArgument.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Parent"));
+                    aArgument.Value <<= xContent;
+                    aArguments[1] <<= aArgument;
 
-                    aValue.Name = PROPERTY_EMBEDDEDOBJECT;
-                    aValue.Value <<= xObjectToCopy;
-                    aArguments[2] <<= aValue;
+                    aArgument.Name = PROPERTY_EMBEDDEDOBJECT;
+                    aArgument.Value <<= xObjectToCopy;
+                    aArguments[2] <<= aArgument;
 
                     ::rtl::OUString sServiceName =
                         (Reference<XNameAccess>(xObjectToCopy,UNO_QUERY).is() ? (m_bFormsContainer ? SERVICE_NAME_FORM_COLLECTION : SERVICE_NAME_REPORT_COLLECTION) : SERVICE_SDB_DOCUMENTDEFINITION);
@@ -338,7 +338,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
                     Reference<XContent > xNew(xORB->createInstanceWithArguments(sServiceName,aArguments),UNO_QUERY);
                     Reference<XNameContainer> xNameContainer(xContent,UNO_QUERY);
                     if ( xNameContainer.is() )
-                        xNameContainer->insertByName(*pIter,makeAny(xNew));
+                        xNameContainer->insertByName(*elements,makeAny(xNew));
                 }
             }
         }
@@ -465,8 +465,8 @@ namespace
 }
 // -----------------------------------------------------------------------------
 Reference< XComponent > SAL_CALL ODocumentContainer::loadComponentFromURL( const ::rtl::OUString& _sURL
-                                                                       , const ::rtl::OUString& TargetFrameName
-                                                                       , sal_Int32 SearchFlags
+                                                                       , const ::rtl::OUString& /*TargetFrameName*/
+                                                                       , sal_Int32 /*SearchFlags*/
                                                                        , const Sequence< PropertyValue >& Arguments ) throw (IOException, IllegalArgumentException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
@@ -531,7 +531,6 @@ Any SAL_CALL ODocumentContainer::getByHierarchicalName( const ::rtl::OUString& _
     if ( lcl_queryContent(_sName,xNameContainer,aContent,sName) )
         return aContent;
     throw NoSuchElementException(_sName,*this);
-    return Any();
 }
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL ODocumentContainer::hasByHierarchicalName( const ::rtl::OUString& _sName ) throw (RuntimeException)
@@ -606,7 +605,7 @@ void SAL_CALL ODocumentContainer::replaceByHierarchicalName( const ::rtl::OUStri
     return pContent;
 }
 // -----------------------------------------------------------------------------
-Any ODocumentContainer::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
+Any ODocumentContainer::getPropertyDefaultByHandle( sal_Int32 /*_nHandle*/ ) const
 {
     return Any();
 }
