@@ -300,7 +300,7 @@ bool RegistrationContextInformation::IsConvertableToAnsi(const std::wstring& Str
 
     if (String.length() > 0)
     {
-        int rc = WideCharToMultiByte(
+        WideCharToMultiByte(
             CP_ACP,
             WC_COMPOSITECHECK | WC_DEFAULTCHAR,
             String.c_str(),

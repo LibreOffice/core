@@ -5,9 +5,11 @@
 #ifndef _REGISTRATIONCONTEXTINFORMATION_HXX_
 #define _REGISTRATIONCONTEXTINFORMATION_HXX_
 
+#pragma warning(push, 1) /* disable warnings within system headers */
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <msi.h>
+#pragma warning(pop)
 
 #include <string>
 
