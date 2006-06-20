@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ulfconv.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-16 12:58:38 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:35:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,16 +47,16 @@
 #include <map>
 #include <string>
 
-/*****************************************************************************/
-/* typedefs
-/*****************************************************************************/
+/*****************************************************************************
+ * typedefs
+ *****************************************************************************/
 
 typedef std::map< const std::string, rtl_TextEncoding > EncodingMap;
 
-typedef struct {
-    const char  *key;
-    const rtl_TextEncoding value;
-} _pair;
+struct _pair {
+    const char *key;
+    rtl_TextEncoding value;
+};
 
 static int _pair_compare (const char *key, const _pair *pair);
 static const _pair* _pair_search (const char *key, const _pair *base, unsigned int member );
@@ -81,9 +81,9 @@ const _pair _ms_encoding_list[] = {
 };
 
 
-/*****************************************************************************/
-/* fgets that work with unix line ends on Windows
-/*****************************************************************************/
+/*****************************************************************************
+ * fgets that work with unix line ends on Windows
+ *****************************************************************************/
 
 char * my_fgets(char *s, int n, FILE *fp)
 {
@@ -115,9 +115,9 @@ char * my_fgets(char *s, int n, FILE *fp)
     }
 }
 
-/*****************************************************************************/
-/* compare function for binary search
-/*****************************************************************************/
+/*****************************************************************************
+ * compare function for binary search
+ *****************************************************************************/
 
 static int
 _pair_compare (const char *key, const _pair *pair)
@@ -126,9 +126,9 @@ _pair_compare (const char *key, const _pair *pair)
     return result;
 }
 
-/*****************************************************************************/
-/* binary search on encoding tables
-/*****************************************************************************/
+/*****************************************************************************
+ * binary search on encoding tables
+ *****************************************************************************/
 
 static const _pair*
 _pair_search (const char *key, const _pair *base, unsigned int member )
@@ -166,8 +166,6 @@ _pair_search (const char *key, const _pair *base, unsigned int member )
 
 void read_encoding_table(char * file, EncodingMap& aEncodingMap)
 {
-    int nlang = 0;
-
     FILE * fp = fopen(file, "r");
     if ( ! fp  ) {
         fprintf(stderr, "ulfconv: %s %s\n", file, strerror(errno));
