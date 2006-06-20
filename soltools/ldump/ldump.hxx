@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ldump.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:28:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:08:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,6 @@ public:
     bool            Filter(char *pName);
     bool            PrintDefFile();
     bool            PrintDataBase();
-    static bool     DumpError(unsigned long nError);
+    static void     DumpError(unsigned long nError);
 };
 
