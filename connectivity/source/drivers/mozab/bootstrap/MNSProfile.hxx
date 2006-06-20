@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MNSProfile.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:24:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:47:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,20 +33,7 @@
  *
  ************************************************************************/
 
-#include "nsIProfile.h"
-#include "nsIProfileInternal.h"
-#include "nsIProfileStartupListener.h"
-#include "nsIProfileChangeStatus.h"
-#include "nsCOMPtr.h"
-#include "nsISupports.h"
-#include "nsIRegistry.h"
-#include "nsString.h"
-
-// Interfaces Needed
-#include "nsIInterfaceRequestor.h"
-#include "nsIInterfaceRequestorUtils.h"
-#include "nsIDirectoryService.h"
-#include "nsIFactory.h"
+#include "mozilla_nsprofile.h"
 
 #define _MAX_LENGTH   256
 
