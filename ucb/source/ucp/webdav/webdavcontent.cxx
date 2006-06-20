@@ -4,9 +4,9 @@
  *
  *  $RCSfile: webdavcontent.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:27:20 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:38:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -320,8 +320,8 @@ private:
 
   void
   handleAuthenticationRequest(
-                              star::ucb::AuthenticationRequest const& rRequest,
-                              uno::Sequence<uno::Reference<star::task::XInteractionContinuation > > const& rContinuations)
+                              star::ucb::AuthenticationRequest const&,
+                              uno::Sequence<uno::Reference<star::task::XInteractionContinuation > > const&)
     SAL_THROW((uno::RuntimeException)) { }
 
   uno::Reference<star::lang::XMultiServiceFactory> m_xSMgr;
@@ -704,7 +704,7 @@ rtl::OUString SAL_CALL Content::getContentType()
 // virtual
 uno::Any SAL_CALL Content::execute(
         const star::ucb::Command& aCommand,
-        sal_Int32 CommandId,
+        sal_Int32 /*CommandId*/,
         const uno::Reference< star::ucb::XCommandEnvironment >& Environment )
     throw( uno::Exception,
            star::ucb::CommandAbortedException,
@@ -930,7 +930,7 @@ uno::Any SAL_CALL Content::execute(
 
 //=========================================================================
 // virtual
-void SAL_CALL Content::abort( sal_Int32 CommandId )
+void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ )
     throw( uno::RuntimeException )
 {
     // @@@ Implement logic to abort running commands, if this makes
@@ -2269,9 +2269,9 @@ void Content::queryChildren( ContentRefList& rChildren )
     m_xProvider->queryExistingContents( aAllContents );
 
     rtl::OUString aURL = m_xIdentifier->getContentIdentifier();
-    sal_Int32 nPos = aURL.lastIndexOf( '/' );
+    sal_Int32 nURLPos = aURL.lastIndexOf( '/' );
 
-    if ( nPos != ( aURL.getLength() - 1 ) )
+    if ( nURLPos != ( aURL.getLength() - 1 ) )
     {
         // No trailing slash found. Append.
         aURL += rtl::OUString::createFromAscii( "/" );
@@ -2445,11 +2445,11 @@ void Content::insert(
             else
                 xResAccess->PUT( xInputStream, Environment );
           }
-        catch ( DAVException const & e )
+        catch ( DAVException const & except )
         {
             if ( bCollection )
             {
-                if ( e.getStatus() == SC_METHOD_NOT_ALLOWED )
+                if ( except.getStatus() == SC_METHOD_NOT_ALLOWED )
                 {
                     // [RFC 2518] - WebDAV
                     // 405 (Method Not Allowed) - MKCOL can only be
@@ -2493,7 +2493,7 @@ void Content::insert(
                 }
             }
 
-            cancelCommandExecution( e, Environment, sal_True );
+            cancelCommandExecution( except, Environment, sal_True );
             // Unreachable
           }
 
@@ -3094,9 +3094,9 @@ const Content::ResourceType & Content::getResourceType(
                     eResourceType = NON_DAV;
                 }
             }
-            catch ( DAVException const & e )
+            catch ( DAVException const & exc )
             {
-                if ( shouldAccessNetworkAfterException( e ) )
+                if ( shouldAccessNetworkAfterException( exc ) )
                 {
                     // OPTIONS is an optional HTTP method. Server can reply
                     // with an error message. Last chance: try a PROPFIND
@@ -3115,9 +3115,9 @@ const Content::ResourceType & Content::getResourceType(
 
                         eResourceType = DAV;
                     }
-                    catch ( DAVException const & e )
+                    catch ( DAVException const & ex )
                     {
-                        if ( shouldAccessNetworkAfterException( e ) )
+                        if ( shouldAccessNetworkAfterException( ex ) )
                         {
                             try
                             {
@@ -3136,14 +3136,14 @@ const Content::ResourceType & Content::getResourceType(
                         }
                         else
                         {
-                            cancelCommandExecution( e, xEnv );
+                            cancelCommandExecution( ex, xEnv );
                             // Unreachable
                         }
                     }
                 }
                 else
                 {
-                    cancelCommandExecution( e, xEnv );
+                    cancelCommandExecution( exc, xEnv );
                     // Unreachable
                 }
             }
