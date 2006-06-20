@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RelationController.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:45:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:31:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -290,7 +290,6 @@ void ORelationController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue
         default:
             OJoinController::Execute(_nId,aArgs);
             return;
-            break;
     }
     InvalidateFeature(_nId);
 }
