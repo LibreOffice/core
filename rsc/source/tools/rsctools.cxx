@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rsctools.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:01:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:50:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -210,7 +210,7 @@ BOOL Append( ByteString aOutputSrs, ByteString aTmpFile )
 |*    Letzte Aenderung  MM 28.06.91
 |*
 *************************************************************************/
-ByteString InputFile ( char * pInput, char * pExt )
+ByteString InputFile ( const char * pInput, const char * pExt )
 {
     UniString aUniInput( pInput, RTL_TEXTENCODING_ASCII_US );
     DirEntry aFileName( aUniInput );
@@ -235,7 +235,7 @@ ByteString InputFile ( char * pInput, char * pExt )
 |*    Letzte Aenderung  MM 28.06.91
 |*
 *************************************************************************/
-ByteString OutputFile ( ByteString aInput, char * pExt )
+ByteString OutputFile ( ByteString aInput, const char * pExt )
 {
     UniString   aUniInput( aInput, RTL_TEXTENCODING_ASCII_US );
     DirEntry    aFileName( aUniInput );
