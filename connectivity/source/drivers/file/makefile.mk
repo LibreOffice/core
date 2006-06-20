@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: obo $ $Date: 2006-03-29 12:16:19 $
+#   last change: $Author: hr $ $Date: 2006-06-20 01:27:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -65,15 +65,15 @@ EXCEPTIONSFILES=\
     $(SLO)$/FDatabaseMetaData.obj	\
     $(SLO)$/FDriver.obj				\
     $(SLO)$/fanalyzer.obj			\
-    $(SLO)$/fcomp.obj
+    $(SLO)$/fcomp.obj               \
+    $(SLO)$/fcode.obj
 
 SLOFILES=\
     $(EXCEPTIONSFILES)				\
-    $(SLO)$/fcode.obj				\
     $(SLO)$/FStringFunctions.obj	\
     $(SLO)$/FDateFunctions.obj	\
-    $(SLO)$/FNumericFunctions.obj
-
+    $(SLO)$/FNumericFunctions.obj \
+    $(SLO)$/quotedstring.obj
 
 
 # --- Library -----------------------------------
