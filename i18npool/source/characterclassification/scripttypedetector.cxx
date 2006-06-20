@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scripttypedetector.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:06:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:44:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,13 +84,13 @@ ScriptTypeDetector::getScriptDirection( const ::rtl::OUString& Text, sal_Int32 n
 
 // return value '-1' means either the direction on nPos is not same as scriptDirection or nPos is out of range.
 sal_Int32 SAL_CALL
-ScriptTypeDetector::beginOfScriptDirection( const ::rtl::OUString& Text, sal_Int32 nPos, sal_Int16 scriptDirection ) throw (::com::sun::star::uno::RuntimeException)
+ScriptTypeDetector::beginOfScriptDirection( const ::rtl::OUString& Text, sal_Int32 nPos, sal_Int16 direction ) throw (::com::sun::star::uno::RuntimeException)
 {
         sal_Int32 cPos = nPos;
 
         if (cPos < Text.getLength()) {
             for (; cPos >= 0; cPos--) {
-                if (scriptDirection != getScriptDirection(Text, cPos, scriptDirection))
+                if (direction != getScriptDirection(Text, cPos, direction))
                     break;
             }
         }
@@ -98,14 +98,14 @@ ScriptTypeDetector::beginOfScriptDirection( const ::rtl::OUString& Text, sal_Int
 }
 
 sal_Int32 SAL_CALL
-ScriptTypeDetector::endOfScriptDirection( const ::rtl::OUString& Text, sal_Int32 nPos, sal_Int16 scriptDirection ) throw (::com::sun::star::uno::RuntimeException)
+ScriptTypeDetector::endOfScriptDirection( const ::rtl::OUString& Text, sal_Int32 nPos, sal_Int16 direction ) throw (::com::sun::star::uno::RuntimeException)
 {
         sal_Int32 cPos = nPos;
         sal_Int32 len = Text.getLength();
 
         if (cPos >=0) {
             for (; cPos < len; cPos++) {
-                if (scriptDirection != getScriptDirection(Text, cPos, scriptDirection))
+                if (direction != getScriptDirection(Text, cPos, direction))
                     break;
             }
         }
