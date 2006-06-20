@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BConnection.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:20:12 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:08:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,12 +142,12 @@ SQLRETURN OAdabasConnection::Construct( const ::rtl::OUString& url,const Sequenc
 
     if ( sHostName.getLength() )
         aDSN = sHostName + ':' + aDSN;
-    SQLRETURN nSQLRETURN = OpenConnection(aDSN,nTimeout, aUID,aPWD);
+    SQLRETURN nSQLRETURN = openConnectionWithAuth(aDSN,nTimeout, aUID,aPWD);
 
     return nSQLRETURN;
 }
 //-----------------------------------------------------------------------------
-SQLRETURN OAdabasConnection::OpenConnection(const ::rtl::OUString& aConnectStr,sal_Int32 nTimeOut, const ::rtl::OUString& _uid,const ::rtl::OUString& _pwd)
+SQLRETURN OAdabasConnection::openConnectionWithAuth(const ::rtl::OUString& aConnectStr,sal_Int32 nTimeOut, const ::rtl::OUString& _uid,const ::rtl::OUString& _pwd)
 {
     if (m_aConnectionHandle == SQL_NULL_HANDLE)
         return -1;
@@ -266,10 +266,8 @@ Reference< XPreparedStatement > SAL_CALL OAdabasConnection::prepareStatement( co
 sal_Int64 SAL_CALL OAdabasConnection::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw (::com::sun::star::uno::RuntimeException)
 {
     return (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
-                ?
-            (sal_Int64)this
-                :
-            OConnection_BASE2::getSomething(rId);
+                ? reinterpret_cast< sal_Int64 >( this )
+                : OConnection_BASE2::getSomething(rId);
 }
 // -----------------------------------------------------------------------------
 Sequence< sal_Int8 > OAdabasConnection::getUnoTunnelImplementationId()
