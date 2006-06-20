@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:13:23 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:26:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -670,7 +670,7 @@ namespace
                 pConn->RecalcLines();
                     // fuer das unten folgende Invalidate muss ich dieser neuen Connection erst mal die Moeglichkeit geben,
                     // ihr BoundingRect zu ermitteln
-                pConn->Invalidate();
+                pConn->InvalidateConnection();
             }
 
         }
@@ -740,11 +740,11 @@ namespace
                         // we have to look if we have alias.* here but before we have to check if the column doesn't already exist
                         String sTemp = rFieldName;
                         OTableFieldDescRef  aInfo = new OTableFieldDesc();
-                        OJoinTableView::OTableWindowMap::iterator aIter = pTabList->begin();
+                        OJoinTableView::OTableWindowMap::iterator tableIter = pTabList->begin();
                         sal_Bool bFound = sal_False;
-                        for(;!bFound && aIter != pTabList->end() ;++aIter)
+                        for(;!bFound && tableIter != pTabList->end() ;++tableIter)
                         {
-                            OQueryTableWindow* pTabWin = static_cast<OQueryTableWindow*>(aIter->second);
+                            OQueryTableWindow* pTabWin = static_cast<OQueryTableWindow*>(tableIter->second);
 
                             if ( bFound = pTabWin->ExistsField( rFieldName, aInfo ) )
                             {
@@ -882,8 +882,8 @@ namespace
                                 ::rtl::OUString sHavingStr = aHavingStr;
 
                                 sal_uInt32 nCount = pParseNode->count();
-                                for( sal_uInt32 i = 1 ; i < nCount ; ++i)
-                                    pParseNode->getChild(i)->parseNodeToStr(    sHavingStr,
+                                for( sal_uInt32 node = 1 ; node < nCount ; ++node)
+                                    pParseNode->getChild(node)->parseNodeToStr( sHavingStr,
                                                                 xMetaData,
                                                                 &rContext,
                                                                 sal_False,
@@ -1067,49 +1067,6 @@ namespace
     }
 
     //------------------------------------------------------------------------------
-
-    ::rtl::OUString BuildACriteria( const OQueryDesignView* _pView,const ::rtl::OUString& _rVal, sal_Int32 aType )
-    {
-
-        ::rtl::OUString aRetStr;
-        String  aVal,rVal;
-        String aOpList;aOpList.AssignAscii("<>;>=;<=;<;>;=;LIKE");
-        xub_StrLen  nOpListCnt = aOpList.GetTokenCount();
-
-        String aToken;
-        for( xub_StrLen nIdx=0 ; nIdx < nOpListCnt ; nIdx++ )
-        {
-            aToken = aOpList.GetToken(nIdx);
-            if (rVal.Search( aToken ) == 0)
-            {
-                aRetStr = ::rtl::OUString(' ');
-                aRetStr += aToken;
-                aRetStr += ::rtl::OUString(' ');
-                aVal = rVal.Copy( aToken.Len() );
-                aVal.EraseLeadingChars( ' ' );
-                if( aVal.Search( '\'' ) == STRING_NOTFOUND )//XXX O'Brien???
-                {
-                    aVal = QuoteField(_pView, aVal, aType );
-                }
-                aRetStr += aVal;
-                break;
-            }
-        }
-
-        if( !aRetStr.getLength()) //  == 0
-        {
-            aRetStr = rVal.Search( '%' ) == STRING_NOTFOUND ? ::rtl::OUString::createFromAscii(" = ") : ::rtl::OUString::createFromAscii(" LIKE ");
-            aVal = rVal;
-            if( aVal.Search( '\'' ) == STRING_NOTFOUND )//XXX O'Brien???
-            {
-                aVal = QuoteField( _pView,aVal, aType );
-            }
-            aRetStr += aVal;
-        }
-
-        return aRetStr;//XXX
-    }
-    //------------------------------------------------------------------------------
     void GenerateInnerJoinCriterias(const Reference< XConnection>& _xConnection,
                                     ::rtl::OUString& _rJoinCrit,
                                     const ::std::vector<OTableConnection*>* _pConnList)
@@ -1287,8 +1244,7 @@ namespace
     SqlParseError GetSelectionCriteria( OQueryDesignView* _pView,
                                         OSelectionBrowseBox* _pSelectionBrw,
                                         const ::connectivity::OSQLParseNode* pNode,
-                                        int& rLevel,
-                                        sal_Bool bJoinWhere = sal_False)
+                                        int& rLevel )
     {
         if (!SQL_ISRULE(pNode, select_statement))
             return eNoSelectStatement;
@@ -1654,6 +1610,8 @@ namespace
                         i--;
                         aCondition = aCondition + ::rtl::OUString::createFromAscii("<=");
                         break;
+                    default:
+                        break;
                 }
 
                 // go backward
@@ -1862,7 +1820,6 @@ namespace
 
         ::connectivity::OSQLParseTreeIterator& aIterator = pController->getParseIterator();
         const ::connectivity::OSQLParseNode* pParseTree = aIterator.getParseTree();
-        const ::connectivity::OSQLParseNode* pTableRefCommaList = 0;
 
         if (pParseTree)
         {
@@ -1870,8 +1827,6 @@ namespace
                 eErrorCode = eNativeMode;
             else if (SQL_ISRULE(pParseTree,select_statement))
             {
-                ::connectivity::OSQLParseNode* pTree = pParseTree->getChild(1);
-
                 const OSQLTables& aMap = aIterator.getTables();
                 ::comphelper::UStringMixLess aTmp(aMap.key_comp());
                 ::comphelper::UStringMixEqual aKeyComp(static_cast< ::comphelper::UStringMixLess*>(&aTmp)->isCaseSensitive());
@@ -1943,7 +1898,7 @@ namespace
                                     // GetSelectionCriteria mu"s vor GetHavingCriteria aufgerufen werden
                                     int nLevel=0;
 
-                                    if ( eOk == (eErrorCode = GetSelectionCriteria(_pView,_pSelectionBrw,pParseTree,nLevel,sal_True)) )
+                                    if ( eOk == (eErrorCode = GetSelectionCriteria(_pView,_pSelectionBrw,pParseTree,nLevel)) )
                                     {
                                         if ( eOk == (eErrorCode = GetGroupCriteria(_pView,_pSelectionBrw,pParseTree)) )
                                         {
@@ -2377,12 +2332,11 @@ OQueryDesignView::~OQueryDesignView()
     DBG_DTOR(OQueryDesignView,NULL);
 }
 //------------------------------------------------------------------------------
-IMPL_LINK( OQueryDesignView, SplitHdl, void*, p )
+IMPL_LINK( OQueryDesignView, SplitHdl, void*, /*p*/ )
 {
     if (!getController()->isReadOnly())
     {
         m_bInSplitHandler = sal_True;
-        long nTest = m_aSplitter.GetPosPixel().Y();
         m_aSplitter.SetPosPixel( Point( m_aSplitter.GetPosPixel().X(),m_aSplitter.GetSplitPosPixel() ) );
         static_cast<OQueryController*>(getController())->setSplitPos(m_aSplitter.GetSplitPosPixel());
         static_cast<OQueryController*>(getController())->setModified();
@@ -2492,7 +2446,7 @@ void OQueryDesignView::clear()
     m_pTableView->ClearAll();
 }
 // -----------------------------------------------------------------------------
-void OQueryDesignView::setStatement(const ::rtl::OUString& _rsStatement)
+void OQueryDesignView::setStatement(const ::rtl::OUString& /*_rsStatement*/)
 {
 }
 // -----------------------------------------------------------------------------
@@ -2510,42 +2464,24 @@ BOOL OQueryDesignView::IsAddAllowed()
 sal_Bool OQueryDesignView::isCutAllowed()
 {
     sal_Bool bAllowed = sal_False;
-    switch(m_eChildFocus)
-    {
-        case SELECTION:
-            bAllowed = m_pSelectionBox->isCutAllowed();
-            break;
-        case TABLEVIEW:
-            break;
-    }
+    if ( SELECTION == m_eChildFocus )
+        bAllowed = m_pSelectionBox->isCutAllowed();
     return bAllowed;
 }
 // -----------------------------------------------------------------------------
 sal_Bool OQueryDesignView::isPasteAllowed()
 {
     sal_Bool bAllowed = sal_False;
-    switch(m_eChildFocus)
-    {
-        case SELECTION:
-            bAllowed = m_pSelectionBox->isPasteAllowed();
-            break;
-        case TABLEVIEW:
-            break;
-    }
+    if ( SELECTION == m_eChildFocus )
+        bAllowed = m_pSelectionBox->isPasteAllowed();
     return bAllowed;
 }
 // -----------------------------------------------------------------------------
 sal_Bool OQueryDesignView::isCopyAllowed()
 {
     sal_Bool bAllowed = sal_False;
-    switch(m_eChildFocus)
-    {
-        case SELECTION:
-            bAllowed = m_pSelectionBox->isCopyAllowed();
-            break;
-        case TABLEVIEW:
-            break;
-    }
+    if ( SELECTION == m_eChildFocus )
+        bAllowed = m_pSelectionBox->isCopyAllowed();
     return bAllowed;
 }
 // -----------------------------------------------------------------------------
@@ -2661,6 +2597,7 @@ long OQueryDesignView::PreNotify(NotifyEvent& rNEvt)
 #if OSL_DEBUG_LEVEL > 0
             {
                 Window* pFocus = Application::GetFocusWindow();
+                (void)pFocus;
             }
 #endif
 
