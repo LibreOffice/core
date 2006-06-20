@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WNameMatch.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:10:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:22:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,7 @@
 using namespace ::dbaui;
 //========================================================================
 // OWizColumnSelect
-DBG_NAME(OWizNameMatching);
+DBG_NAME(OWizNameMatching)
 //========================================================================
 OWizNameMatching::OWizNameMatching( Window* pParent)
         :OWizardPage( pParent, ModuleRes( TAB_WIZ_NAME_MATCHING     ) )
@@ -179,8 +179,8 @@ sal_Bool OWizNameMatching::LeavePage()
 
     m_pParent->m_vColumnPos.clear();
     m_pParent->m_vColumnTypes.clear();
-    m_pParent->m_vColumnPos.resize(pSrcColumns->size(),ODatabaseExport::TPositions::value_type(CONTAINER_ENTRY_NOTFOUND,CONTAINER_ENTRY_NOTFOUND));
-    m_pParent->m_vColumnTypes.resize(pSrcColumns->size(),CONTAINER_ENTRY_NOTFOUND);
+    m_pParent->m_vColumnPos.resize( pSrcColumns->size() ,ODatabaseExport::TPositions::value_type( COLUMN_POSITION_NOT_FOUND, COLUMN_POSITION_NOT_FOUND ) );
+    m_pParent->m_vColumnTypes.resize( pSrcColumns->size(), COLUMN_POSITION_NOT_FOUND );
 
 
     sal_Int32 nParamPos = 0;
@@ -218,8 +218,8 @@ sal_Bool OWizNameMatching::LeavePage()
         }
         else
         {
-            m_pParent->m_vColumnPos[nPos].first = CONTAINER_ENTRY_NOTFOUND;
-            m_pParent->m_vColumnPos[nPos].second = CONTAINER_ENTRY_NOTFOUND;
+            m_pParent->m_vColumnPos[nPos].first = COLUMN_POSITION_NOT_FOUND;
+            m_pParent->m_vColumnPos[nPos].second = COLUMN_POSITION_NOT_FOUND;
         }
 
         pLeftEntry = m_CTRL_LEFT.GetModel()->Next(pLeftEntry);
@@ -286,24 +286,23 @@ IMPL_LINK( OWizNameMatching, RightButtonClickHdl, Button *, pButton )
     return 0;
 }
 //------------------------------------------------------------------------------
-IMPL_LINK( OWizNameMatching, TableListClickHdl, SvTreeListBox *, pListBox )
+IMPL_LINK( OWizNameMatching, TableListClickHdl, SvTreeListBox *, /*pListBox*/ )
 {
     SvLBoxEntry* pEntry = m_CTRL_LEFT.FirstSelected();
     if(pEntry)
     {
-        sal_uInt32 nPos         = m_CTRL_LEFT.GetModel()->GetAbsPos(pEntry);
+        ULONG nPos          = m_CTRL_LEFT.GetModel()->GetAbsPos(pEntry);
         SvLBoxEntry* pOldEntry = m_CTRL_RIGHT.FirstSelected();
         if(pOldEntry && nPos != m_CTRL_RIGHT.GetModel()->GetAbsPos(pOldEntry))
         {
             if(pOldEntry)
                 m_CTRL_RIGHT.Select(pOldEntry,sal_False);
-            sal_uInt32 nOldPos = m_CTRL_RIGHT.GetModel()->GetAbsPos(pOldEntry);
             pOldEntry = m_CTRL_RIGHT.GetEntry(nPos);
             if(pOldEntry)
             {
-                sal_uInt32 nNewPos = m_CTRL_LEFT.GetModel()->GetAbsPos(m_CTRL_LEFT.GetFirstEntryInView());
-                if(nPos - nNewPos == -1)
-                    nNewPos--;
+                ULONG nNewPos = m_CTRL_LEFT.GetModel()->GetAbsPos(m_CTRL_LEFT.GetFirstEntryInView());
+                if ( nNewPos - nPos == 1 )
+                    --nNewPos;
                 m_CTRL_RIGHT.MakeVisible(m_CTRL_RIGHT.GetEntry(nNewPos),sal_True);
                 m_CTRL_RIGHT.Select(pOldEntry,sal_True);
             }
@@ -321,23 +320,22 @@ IMPL_LINK( OWizNameMatching, TableListClickHdl, SvTreeListBox *, pListBox )
     return 0;
 }
 //------------------------------------------------------------------------------
-IMPL_LINK( OWizNameMatching, TableListRightSelectHdl, SvTreeListBox *, pListBox )
+IMPL_LINK( OWizNameMatching, TableListRightSelectHdl, SvTreeListBox *, /*pListBox*/ )
 {
     SvLBoxEntry* pEntry = m_CTRL_RIGHT.FirstSelected();
     if(pEntry)
     {
-        sal_uInt32 nPos         = m_CTRL_RIGHT.GetModel()->GetAbsPos(pEntry);
+        ULONG nPos          = m_CTRL_RIGHT.GetModel()->GetAbsPos(pEntry);
         SvLBoxEntry* pOldEntry = m_CTRL_LEFT.FirstSelected();
         if(pOldEntry && nPos != m_CTRL_LEFT.GetModel()->GetAbsPos(pOldEntry))
         {
             if(pOldEntry)
                 m_CTRL_LEFT.Select(pOldEntry,sal_False);
-            sal_uInt32 nOldPos = m_CTRL_RIGHT.GetModel()->GetAbsPos(pOldEntry);
             pOldEntry = m_CTRL_LEFT.GetEntry(nPos);
             if(pOldEntry)
             {
-                sal_uInt32 nNewPos = m_CTRL_RIGHT.GetModel()->GetAbsPos(m_CTRL_RIGHT.GetFirstEntryInView());
-                if(nPos - nNewPos == -1)
+                ULONG nNewPos = m_CTRL_RIGHT.GetModel()->GetAbsPos(m_CTRL_RIGHT.GetFirstEntryInView());
+                if ( nNewPos - nPos == 1 )
                     nNewPos--;
                 m_CTRL_LEFT.MakeVisible(m_CTRL_LEFT.GetEntry(nNewPos),sal_True);
                 m_CTRL_LEFT.Select(pOldEntry,sal_True);
@@ -396,7 +394,7 @@ void OColumnString::InitViewData( SvLBox* pView,SvLBoxEntry* pEntry, SvViewDataI
 }
 */
 //------------------------------------------------------------------------
-void OColumnString::Paint(const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry )
+void OColumnString::Paint(const Point& rPos, SvLBox& rDev, sal_uInt16 /*nFlags*/, SvLBoxEntry* /*pEntry*/ )
 {
     if(m_bReadOnly)
     {
@@ -454,7 +452,7 @@ void OColumnTreeBox::FillListBox( const ODatabaseExport::TColumnVector& _rList)
     {
         SvLBoxEntry* pEntry = InsertEntry((*aIter)->first,0,sal_False,LIST_APPEND,(*aIter)->second);
         SvButtonState eState = !(m_bReadOnly && (*aIter)->second->IsAutoIncrement()) ? SV_BUTTON_CHECKED : SV_BUTTON_UNCHECKED;
-        SetCheckButtonState( pEntry, SV_BUTTON_CHECKED);
+        SetCheckButtonState( pEntry, eState );
     }
 }
 // -----------------------------------------------------------------------------
