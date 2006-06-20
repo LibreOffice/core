@@ -4,9 +4,9 @@
  *
  *  $RCSfile: simplereferenceobject.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:01:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:11:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,14 +60,14 @@ void * SimpleReferenceObject::operator new(std::size_t nSize)
 }
 
 void * SimpleReferenceObject::operator new(std::size_t nSize,
-                                           std::nothrow_t const & rNothrow)
+                                           std::nothrow_t const &)
     SAL_THROW(())
 {
 #if defined WNT
     return ::operator new(nSize);
         // WNT lacks a global nothrow operator new...
 #else // WNT
-    return ::operator new(nSize, rNothrow);
+    return ::operator new(nSize, std::nothrow);
 #endif // WNT
 }
 
@@ -76,13 +76,12 @@ void SimpleReferenceObject::operator delete(void * pPtr) SAL_THROW(())
     ::operator delete(pPtr);
 }
 
-void SimpleReferenceObject::operator delete(void * pPtr,
-                                            std::nothrow_t const & rNothrow)
+void SimpleReferenceObject::operator delete(void * pPtr, std::nothrow_t const &)
     SAL_THROW(())
 {
 #if defined WNT || (defined IRIX && !defined GCC)
     ::operator delete(pPtr); // WNT lacks a global nothrow operator delete...
 #else // WNT
-    ::operator delete(pPtr, rNothrow);
+    ::operator delete(pPtr, std::nothrow);
 #endif // WNT
 }
