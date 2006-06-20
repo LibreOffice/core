@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RelationDesignView.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:36:44 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:31:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,7 +104,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 
-DBG_NAME(ORelationDesignView);
+DBG_NAME(ORelationDesignView)
 ORelationDesignView::ORelationDesignView(Window* _pParent, ORelationController* _pController,const Reference< XMultiServiceFactory >& _rFactory)
     :OJoinDesignView(_pParent,_pController,_rFactory)
 {
