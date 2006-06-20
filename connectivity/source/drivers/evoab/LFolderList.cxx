@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LFolderList.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 13:09:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:22:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,12 +136,11 @@ void OEvoabFolderList::fillColumns(const ::com::sun::star::lang::Locale& _aLocal
 {
     BOOL bRead = TRUE;
 
-    OEvoabString aHeaderLine;
+    QuotedTokenizedString aHeaderLine;
     OEvoabConnection* pConnection = (OEvoabConnection*)m_pConnection;
 
     // read first row
-    OEvoabString aFirstLine;
-
+    QuotedTokenizedString aFirstLine;
     bRead = m_pFileStream->ReadByteStringLine(aFirstLine,pConnection->getTextEncoding());
 
     while(bRead && !aFirstLine.Len())
@@ -176,7 +175,6 @@ void OEvoabFolderList::fillColumns(const ::com::sun::star::lang::Locale& _aLocal
     String aColumnName;
     ::rtl::OUString aTypeName;
     ::comphelper::UStringMixEqual aCase(bCase);
-    xub_StrLen nStartPosHeaderLine = 0; // use for eficient way to get the tokens
     xub_StrLen nStartPosFirstLine = 0; // use for eficient way to get the tokens
     xub_StrLen nStartPosFirstLine2 = 0;
     for (xub_StrLen i = 0; i < nFieldCount; i++)
@@ -191,7 +189,6 @@ void OEvoabFolderList::fillColumns(const ::com::sun::star::lang::Locale& _aLocal
         UINT16 nScale = 0;
 
         BOOL bNumeric = FALSE;
-        double nRes=0.0;
         ULONG  nIndex = 0;
 
         // first without fielddelimiter
@@ -345,26 +342,16 @@ void OEvoabFolderList::fillColumns(const ::com::sun::star::lang::Locale& _aLocal
     m_pFileStream->Seek(STREAM_SEEK_TO_BEGIN);
 }
 // -------------------------------------------------------------------------
-OEvoabFolderList::OEvoabFolderList(OEvoabConnection* _pConnection)
-{
-
-}
-// -------------------------------------------------------------------------
 DBG_NAME( OEvoabFolderList );
-OEvoabFolderList::OEvoabFolderList( OEvoabConnection* _pConnection,
-                    const ::rtl::OUString& _Name,
-                    const ::rtl::OUString& _Type
-                )
-    :m_pConnection(_pConnection)
-    ,m_nFilePos(0)
+OEvoabFolderList::OEvoabFolderList(OEvoabConnection* _pConnection)
+    :m_nFilePos(0)
     ,m_pFileStream(NULL)
+    ,m_pConnection(_pConnection)
     ,m_bIsNull(sal_False)
 {
     DBG_CTOR( OEvoabFolderList, NULL );
     m_aColumns = new OSQLColumns();
 
-    EVO_TRACE_STRING("OEvoabFolderList::constructor::_Name = %s\n", _Name );
-    EVO_TRACE_STRING("OEvoabFolderList::constructor::_Type = %s\n", _Type );
     construct();
 }
 // -----------------------------------------------------------------------------
@@ -412,13 +399,9 @@ void OEvoabFolderList::construct()
 //------------------------------------------------------------------
 sal_Bool OEvoabFolderList::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols)
 {
-    //OSL_TRACE("OEvoabFolderList::fetchRow()::entered in" );
-
     (*_rRow)[0] = m_nFilePos;   // the "bookmark"
-    //OSL_TRACE("OEvoabFolderList::fetchRow()::after *_rRow" );
 
     OEvoabConnection* pConnection = (OEvoabConnection*)m_pConnection;
-    sal_Int32 nByteOffset = 1;
     // Felder:
     xub_StrLen nStartPos = 0;
     String aStr;
@@ -433,7 +416,6 @@ sal_Bool OEvoabFolderList::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols)
         else
         {
             // length depending on the data type
-            sal_Int32   nLen    = m_aPrecisions[i];
             sal_Int32   nType   = m_aTypes[i];
             switch(nType)
             {
