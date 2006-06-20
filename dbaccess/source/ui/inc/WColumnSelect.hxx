@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WColumnSelect.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:42:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:15:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,6 @@ namespace dbaui
         ImageButton             m_ibColumn_LH;
         ImageButton             m_ibColumns_LH;
         MultiListBox            m_lbNewColumnNames; // right side
-        sal_Bool                m_bAttrsChanged;
 
 
         DECL_LINK( ButtonClickHdl, Button * );
@@ -81,8 +80,7 @@ namespace dbaui
                                 const ::rtl::OUString&  _sColumnName,
                                 const ::rtl::OUString&  _sExtraChars,
                                 sal_Int32               _nMaxNameLen,
-                                const ::comphelper::TStringMixEqualFunctor& _aCase,
-                                USHORT nPos = LISTBOX_APPEND);
+                                const ::comphelper::TStringMixEqualFunctor& _aCase);
 
         void moveColumn(        ListBox* _pRight,
                                 ListBox* _pLeft,
