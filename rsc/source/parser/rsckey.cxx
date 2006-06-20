@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rsckey.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:47:23 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:46:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,6 @@
  *
  ************************************************************************/
 /****************** I N C L U D E S **************************************/
-#pragma hdrstop
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <ctype.h>
