@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ftploaderthread.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:36:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:24:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,10 +41,7 @@
 #ifndef _FTP_FTPLOADERTHREAD_HXX_
 #include "ftploaderthread.hxx"
 #endif
-#ifndef __CURL_CURL_H
-#include <curl/curl.h>
-#endif
-
+#include "curl.hxx"
 
 using namespace ftp;
 
@@ -60,7 +57,7 @@ using namespace ftp;
 extern "C" {
 #endif
 
-    int memory_write_dummy(void *buffer,size_t size,size_t nmemb,void *stream)
+    int memory_write_dummy(void *,size_t,size_t,void *)
     {
         return 0;
     }
@@ -100,8 +97,8 @@ FTPLoaderThread::~FTPLoaderThread() {
 
 
 CURL* FTPLoaderThread::handle() {
-    CURL* ret;
-    if(!(ret = osl_getThreadKeyData(m_threadKey))) {
+    CURL* ret = osl_getThreadKeyData(m_threadKey);
+    if(!ret) {
         ret = curl_easy_init();
         if (ret != 0) {
             // Make sure curl is not internally using environment variables like
