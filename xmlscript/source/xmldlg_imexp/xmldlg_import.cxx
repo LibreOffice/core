@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmldlg_import.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:14:21 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:12:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1640,13 +1640,13 @@ Reference< xml::input::XAttributes > ElementBase::getAttributes()
 }
 //__________________________________________________________________________________________________
 void ElementBase::ignorableWhitespace(
-    OUString const & rWhitespaces )
+    OUString const & /*rWhitespaces*/ )
     throw (xml::sax::SAXException, RuntimeException)
 {
     // not used
 }
 //__________________________________________________________________________________________________
-void ElementBase::characters( OUString const & rChars )
+void ElementBase::characters( OUString const & /*rChars*/ )
     throw (xml::sax::SAXException, RuntimeException)
 {
     // not used, all characters ignored
@@ -1658,14 +1658,14 @@ void ElementBase::endElement()
 }
 //______________________________________________________________________________
 void ElementBase::processingInstruction(
-    OUString const & Target, OUString const & Data )
+    OUString const & /*Target*/, OUString const & /*Data*/ )
     throw (xml::sax::SAXException, RuntimeException)
 {
 }
 //__________________________________________________________________________________________________
 Reference< xml::input::XElement > ElementBase::startChildElement(
-    sal_Int32 nUid, OUString const & rLocalName,
-    Reference< xml::input::XAttributes > const & xAttributes )
+    sal_Int32 /*nUid*/, OUString const & /*rLocalName*/,
+    Reference< xml::input::XAttributes > const & /*xAttributes*/ )
     throw (xml::sax::SAXException, RuntimeException)
 {
     throw xml::sax::SAXException(
@@ -1733,14 +1733,14 @@ void DialogImport::endDocument()
 }
 //__________________________________________________________________________________________________
 void DialogImport::processingInstruction(
-    OUString const & rTarget, OUString const & rData )
+    OUString const & /*rTarget*/, OUString const & /*rData*/ )
     throw (xml::sax::SAXException, RuntimeException)
 {
     // ignored for now: xxx todo
 }
 //__________________________________________________________________________________________________
 void DialogImport::setDocumentLocator(
-    Reference< xml::sax::XLocator > const & xLocator )
+    Reference< xml::sax::XLocator > const & /*xLocator*/ )
     throw (xml::sax::SAXException, RuntimeException)
 {
     // ignored for now: xxx todo
