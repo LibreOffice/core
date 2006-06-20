@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NeonInputStream.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:12:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:36:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,5 +139,5 @@ class NeonInputStream : public ::com::sun::star::io::XInputStream,
                ::com::sun::star::uno::RuntimeException );
 };
 
-}; // namespace webdav_ucp
+} // namespace webdav_ucp
 #endif // _NEONINPUTSTREAM_HXX_
