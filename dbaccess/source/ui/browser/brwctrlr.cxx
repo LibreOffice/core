@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 12:12:38 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:55:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -311,10 +311,10 @@ protected:
 
 DBG_NAME(FormControllerImpl)
 //------------------------------------------------------------------
-SbaXDataBrowserController::FormControllerImpl::FormControllerImpl(SbaXDataBrowserController* m_pOwner)
-    :m_pOwner(m_pOwner)
+SbaXDataBrowserController::FormControllerImpl::FormControllerImpl(SbaXDataBrowserController* _pOwner)
+    :m_aActivateListeners(_pOwner->getMutex())
+    ,m_pOwner(_pOwner)
     ,m_bActive(sal_False)
-    ,m_aActivateListeners(m_pOwner->getMutex())
 {
     DBG_CTOR(FormControllerImpl,NULL);
 
@@ -347,7 +347,7 @@ void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeActivateListe
 }
 
 //------------------------------------------------------------------
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setModel(const Reference< ::com::sun::star::awt::XTabControllerModel > & Model) throw( RuntimeException )
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setModel(const Reference< ::com::sun::star::awt::XTabControllerModel > & /*Model*/) throw( RuntimeException )
 {
     OSL_ENSURE(sal_False, "SbaXDataBrowserController::FormControllerImpl::setModel : invalid call, can't change my model !");
 }
@@ -359,7 +359,7 @@ Reference< ::com::sun::star::awt::XTabControllerModel >  SAL_CALL SbaXDataBrowse
 }
 
 //------------------------------------------------------------------
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setContainer(const Reference< ::com::sun::star::awt::XControlContainer > & _Container) throw( RuntimeException )
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setContainer(const Reference< ::com::sun::star::awt::XControlContainer > & /*_Container*/) throw( RuntimeException )
 {
     OSL_ENSURE(sal_False, "SbaXDataBrowserController::FormControllerImpl::setContainer : invalid call, can't change my container !");
 }
@@ -435,11 +435,13 @@ void SAL_CALL SbaXDataBrowserController::FormControllerImpl::frameAction(const :
 //              ((::com::sun::star::form::XFormControllerListener*)aIter.next())->formDeactivated(aEvt);
 //          m_bActive = sal_False;
             break;
+        default:
+            break;
     }
 }
 
 //------------------------------------------------------------------
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::disposing(const ::com::sun::star::lang::EventObject& Source) throw( RuntimeException )
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::disposing(const ::com::sun::star::lang::EventObject& /*Source*/) throw( RuntimeException )
 {
     // nothing to do
     // we don't add ourself as listener to any broadcasters, so we are not resposible for removing us
@@ -515,16 +517,16 @@ DBG_NAME(SbaXDataBrowserController)
 //------------------------------------------------------------------------------
 SbaXDataBrowserController::SbaXDataBrowserController(const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM)
     :OGenericUnoController(_rM)
-    ,m_pLoadThread(NULL)
-    ,m_bClosingKillOpen( sal_False )
-    ,m_bLoadCanceled( sal_False )
-    ,m_nPendingLoadFinished(0)
-    ,m_nFormActionNestingLevel(0)
-    ,m_bErrorOccured( sal_False )
+    ,m_aAsyncGetCellFocus(LINK(this, SbaXDataBrowserController, OnAsyncGetCellFocus))
     ,m_sStateSaveRecord(ModuleRes(RID_STR_SAVE_CURRENT_RECORD))
     ,m_sStateUndoRecord(ModuleRes(RID_STR_UNDO_MODIFY_RECORD))
-    ,m_aAsyncGetCellFocus(LINK(this, SbaXDataBrowserController, OnAsyncGetCellFocus))
+    ,m_pLoadThread(NULL)
     ,m_pFormControllerImpl(NULL)
+    ,m_nPendingLoadFinished(0)
+    ,m_nFormActionNestingLevel(0)
+    ,m_bLoadCanceled( sal_False )
+    ,m_bClosingKillOpen( sal_False )
+    ,m_bErrorOccured( sal_False )
 {
     DBG_CTOR(SbaXDataBrowserController,NULL);
 
@@ -752,13 +754,13 @@ sal_Bool SbaXDataBrowserController::LoadForm()
     return sal_True;
 }
 //------------------------------------------------------------------------------
-void SbaXDataBrowserController::AddColumnListener(const Reference< XPropertySet > & xCol)
+void SbaXDataBrowserController::AddColumnListener(const Reference< XPropertySet > & /*xCol*/)
 {
     // we're not interested in any column properties ...
 }
 
 //------------------------------------------------------------------------------
-void SbaXDataBrowserController::RemoveColumnListener(const Reference< XPropertySet > & xCol)
+void SbaXDataBrowserController::RemoveColumnListener(const Reference< XPropertySet > & /*xCol*/)
 {
 }
 //------------------------------------------------------------------------------
@@ -790,10 +792,10 @@ void SbaXDataBrowserController::addModelListeners(const Reference< ::com::sun::s
 }
 
 // -------------------------------------------------------------------------
-void SbaXDataBrowserController::removeModelListeners(const Reference< ::com::sun::star::awt::XControlModel > & _xGridControlModel)
+void SbaXDataBrowserController::removeModelListeners(const Reference< XControlModel > & _xGridControlModel)
 {
     // every single column model
-    Reference< ::com::sun::star::container::XIndexContainer >  xColumns(getControlModel(), UNO_QUERY);
+    Reference< XIndexContainer >  xColumns(_xGridControlModel, UNO_QUERY);
     if (xColumns.is())
     {
         sal_Int32 nCount = xColumns->getCount();
@@ -804,13 +806,13 @@ void SbaXDataBrowserController::removeModelListeners(const Reference< ::com::sun
         }
     }
 
-    Reference< ::com::sun::star::container::XContainer >  xColContainer(getControlModel(), UNO_QUERY);
+    Reference< XContainer >  xColContainer(_xGridControlModel, UNO_QUERY);
     if (xColContainer.is())
-        xColContainer->removeContainerListener((::com::sun::star::container::XContainerListener*)this);
+        xColContainer->removeContainerListener( this );
 
-    Reference< ::com::sun::star::form::XReset >  xReset(getControlModel(), UNO_QUERY);
+    Reference< XReset >  xReset(_xGridControlModel, UNO_QUERY);
     if (xReset.is())
-        xReset->removeResetListener((::com::sun::star::form::XResetListener*)this);
+        xReset->removeResetListener( this );
 }
 
 // -------------------------------------------------------------------------
@@ -849,7 +851,7 @@ void SbaXDataBrowserController::removeControlListeners(const Reference< ::com::s
 }
 
 //------------------------------------------------------------------
-void SAL_CALL SbaXDataBrowserController::focusGained(const FocusEvent& e) throw( RuntimeException )
+void SAL_CALL SbaXDataBrowserController::focusGained(const FocusEvent& /*e*/) throw( RuntimeException )
 {
     // notify our activate listeners (registered on the form controller aggregate)
     EventObject aEvt(*this);
@@ -893,13 +895,13 @@ void SAL_CALL SbaXDataBrowserController::focusLost(const FocusEvent& e) throw( R
 }
 
 // -------------------------------------------------------------------------
-void SbaXDataBrowserController::disposingGridControl(const ::com::sun::star::lang::EventObject& Source)
+void SbaXDataBrowserController::disposingGridControl(const ::com::sun::star::lang::EventObject& /*Source*/)
 {
     removeControlListeners(getBrowserView()->getGridControl());
 }
 
 // -------------------------------------------------------------------------
-void SbaXDataBrowserController::disposingGridModel(const ::com::sun::star::lang::EventObject& Source)
+void SbaXDataBrowserController::disposingGridModel(const ::com::sun::star::lang::EventObject& /*Source*/)
 {
     removeModelListeners(getControlModel());
 }
@@ -1062,7 +1064,7 @@ void SbaXDataBrowserController::propertyChange(const PropertyChangeEvent& evt) t
 }
 
 //------------------------------------------------------------------------
-void SbaXDataBrowserController::modified(const ::com::sun::star::lang::EventObject& aEvent) throw( RuntimeException )
+void SbaXDataBrowserController::modified(const ::com::sun::star::lang::EventObject& /*aEvent*/) throw( RuntimeException )
 {
     setCurrentModified( sal_True );
 }
@@ -1102,10 +1104,8 @@ void SbaXDataBrowserController::elementReplaced(const ::com::sun::star::containe
 }
 
 // -----------------------------------------------------------------------
-sal_Bool SbaXDataBrowserController::suspend(sal_Bool bSuspend) throw( RuntimeException )
+sal_Bool SbaXDataBrowserController::suspend(sal_Bool /*bSuspend*/) throw( RuntimeException )
 {
-//  m_bSuspending = sal_True;
-//
     // have a pending open operation ?
     if (PendingLoad())
     {
@@ -1151,7 +1151,6 @@ sal_Bool SbaXDataBrowserController::suspend(sal_Bool bSuspend) throw( RuntimeExc
     m_aAsyncInvalidateAll.CancelCall();
 
     sal_Bool bSuccess = SaveModified();
-//  m_bSuspending = sal_False;
     return bSuccess;
 }
 // -----------------------------------------------------------------------
@@ -1292,6 +1291,8 @@ void SbaXDataBrowserController::frameAction(const ::com::sun::star::frame::Frame
                 // remove the "get cell focus"-event
                 m_aAsyncGetCellFocus.CancelCall();
                 break;
+            default:
+                break;
         }
 }
 
@@ -1320,7 +1321,7 @@ sal_Bool SbaXDataBrowserController::approveParameter(const ::com::sun::star::for
     }
 
     Reference< ::com::sun::star::container::XIndexAccess >  xParameters = aEvent.Parameters;
-    ::vos::OClearableGuard aGuard(Application::GetSolarMutex());
+    ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
         // this may be executed in a non-main thread and we want to use vcl ...
     Window* pParent = Application::GetDefDialogParent();
         // don't use the content as parent if it isn't visible
@@ -1348,10 +1349,7 @@ sal_Bool SbaXDataBrowserController::approveParameter(const ::com::sun::star::for
         // create the handler, let it handle the request
         Reference< XInteractionHandler > xHandler(getORB()->createInstance(SERVICE_SDB_INTERACTION_HANDLER), UNO_QUERY);
         if (xHandler.is())
-        {
-            ::vos::OGuard aGuard(Application::GetSolarMutex());
             xHandler->handle(xParamRequest);
-        }
 
         if (!pParamValues->wasSelected())
         {   // canceled
@@ -1398,7 +1396,7 @@ sal_Bool SbaXDataBrowserController::approveParameter(const ::com::sun::star::for
 
 
 //------------------------------------------------------------------------------
-sal_Bool SbaXDataBrowserController::approveReset(const ::com::sun::star::lang::EventObject& rEvent) throw( RuntimeException )
+sal_Bool SbaXDataBrowserController::approveReset(const ::com::sun::star::lang::EventObject& /*rEvent*/) throw( RuntimeException )
 {
     return sal_True;
 }
@@ -1407,11 +1405,12 @@ sal_Bool SbaXDataBrowserController::approveReset(const ::com::sun::star::lang::E
 void SbaXDataBrowserController::resetted(const ::com::sun::star::lang::EventObject& rEvent) throw( RuntimeException )
 {
     DBG_ASSERT(rEvent.Source == getControlModel(), "SbaXDataBrowserController::resetted : where did this come from ?");
+    (void)rEvent;
     setCurrentModified( sal_False );
 }
 
 //------------------------------------------------------------------------------
-sal_Bool SbaXDataBrowserController::confirmDelete(const ::com::sun::star::sdb::RowChangeEvent& aEvent) throw( RuntimeException )
+sal_Bool SbaXDataBrowserController::confirmDelete(const ::com::sun::star::sdb::RowChangeEvent& /*aEvent*/) throw( RuntimeException )
 {
     if (QueryBox(getBrowserView(), ModuleRes(QUERY_BRW_DELETE_ROWS)).Execute() != RET_YES)
         return sal_False;
@@ -1438,7 +1437,6 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                 // any filter or sort order set ?
                 aReturn.bEnabled = m_xParser->getFilter().getLength() || m_xParser->getHavingClause().getLength() || m_xParser->getOrder().getLength();
                 return aReturn;
-                break;
         }
         // no chance while loading the form
         if (PendingLoad())
@@ -1592,17 +1590,9 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                 return OGenericUnoController::GetState(nId);
         }
     }
-    catch(Exception& e)
+    catch(const Exception& )
     {
-#if DBG_UTIL
-        String sMessage("SbaXDataBrowserController::GetState(", RTL_TEXTENCODING_ASCII_US);
-        sMessage += String::CreateFromInt32(nId);
-        sMessage.AppendAscii(") : caught an exception ! message : ");
-        sMessage += (const sal_Unicode*)e.Message;
-        DBG_ERROR(ByteString(sMessage, gsl_getSystemTextEncoding()).GetBuffer());
-#else
-        e;  // make compiler happy
-#endif
+        DBG_UNHANDLED_EXCEPTION();
     }
 
     return aReturn;
@@ -1821,7 +1811,7 @@ void SbaXDataBrowserController::ExecuteSearch()
 }
 
 //------------------------------------------------------------------------------
-void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< PropertyValue >& aArgs)
+void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< PropertyValue >& /*aArgs*/)
 {
     sal_Bool bSortUp = sal_True;
 
@@ -1916,18 +1906,8 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
                 "SbaXDataBrowserController::Execute : caught an exception while composing the new filter !"
             )
 
-            Reference< ::com::sun::star::form::XGrid >  xGrid(getBrowserView()->getGridControl(), UNO_QUERY);
-            sal_uInt16 nViewPos = -1;
-            try
-            {
-                if ( xGrid.is() )
-                    nViewPos = xGrid->getCurrentColumnPosition();
-            }
-            catch(Exception&) {}
-
             if (bParserSuccess)
                 applyParserOrder(sOldSort);
-
         }
         break;
 
@@ -2144,7 +2124,6 @@ sal_Bool SbaXDataBrowserController::CommitCurrent()
     Reference< ::com::sun::star::awt::XControl >  xActiveControl(getBrowserView()->getGridControl());
     Reference< ::com::sun::star::form::XBoundControl >  xLockingTest(xActiveControl, UNO_QUERY);
     sal_Bool bControlIsLocked = xLockingTest.is() && xLockingTest->getLock();
-    sal_Bool bResult = sal_True;
     if (xActiveControl.is() && !bControlIsLocked)
     {
         // zunaechst das Control fragen ob es das IFace unterstuetzt
@@ -2508,20 +2487,20 @@ void SbaXDataBrowserController::LoadFinished(sal_Bool /*bWasSynch*/)
     }
 }
 //------------------------------------------------------------------------------
-void SbaXDataBrowserController::loaded(const EventObject& aEvent) throw( RuntimeException )
+void SbaXDataBrowserController::loaded(const EventObject& /*aEvent*/) throw( RuntimeException )
 {
     // not interested in
     // we're loading within an separate thread and have a handling  for it's "finished event"
 }
 
 //------------------------------------------------------------------------------
-void SbaXDataBrowserController::unloading(const EventObject& aEvent) throw( RuntimeException )
+void SbaXDataBrowserController::unloading(const EventObject& /*aEvent*/) throw( RuntimeException )
 {
     // not interested in
 }
 
 //------------------------------------------------------------------------------
-void SbaXDataBrowserController::unloaded(const EventObject& aEvent) throw( RuntimeException )
+void SbaXDataBrowserController::unloaded(const EventObject& /*aEvent*/) throw( RuntimeException )
 {
     InvalidateAll();
         // do this asynchron, there are other listeners reacting on this message ...
@@ -2540,16 +2519,16 @@ void SbaXDataBrowserController::unloaded(const EventObject& aEvent) throw( Runti
 }
 
 //------------------------------------------------------------------------------
-void SbaXDataBrowserController::reloading(const EventObject& aEvent) throw( RuntimeException )
+void SbaXDataBrowserController::reloading(const EventObject& /*aEvent*/) throw( RuntimeException )
 {
     // not interested in
 }
 
 //------------------------------------------------------------------------------
-void SbaXDataBrowserController::reloaded(const EventObject& aEvent) throw( RuntimeException )
+void SbaXDataBrowserController::reloaded(const EventObject& /*aEvent*/) throw( RuntimeException )
 {
     InvalidateAll();
-        // do this asynchron, there are other listeners reacting on this message ...
+        // do this asynchronously, there are other listeners reacting on this message ...
         // (it's a little hack : the grid columns are listening to this event, too, and their bound field may
         // change as a reaction on that event. as we have no chance to be notified of this change (which is
         // the one we're interested in) we give them time to do what they want to before invalidating our
@@ -2618,8 +2597,8 @@ public:
 
     // XRowSetListener
     virtual void SAL_CALL cursorMoved(const ::com::sun::star::lang::EventObject& event) throw( RuntimeException );
-    virtual void SAL_CALL rowChanged(const ::com::sun::star::lang::EventObject& event) throw( RuntimeException ){};
-    virtual void SAL_CALL rowSetChanged(const ::com::sun::star::lang::EventObject& event) throw( RuntimeException ){};
+    virtual void SAL_CALL rowChanged(const ::com::sun::star::lang::EventObject& event) throw( RuntimeException );
+    virtual void SAL_CALL rowSetChanged(const ::com::sun::star::lang::EventObject& event) throw( RuntimeException );
 
     // ::com::sun::star::lang::XEventListener
     virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( RuntimeException );
@@ -2642,8 +2621,8 @@ protected:
 DBG_NAME(LoadFormHelper)
 //------------------------------------------------------------------------------
 LoadFormHelper::LoadFormHelper(const Reference< XRowSet > & _rxForm)
-    :m_xForm(_rxForm)
-    ,m_eState(STARTED)
+    :m_eState(STARTED)
+    ,m_xForm(_rxForm)
 {
     DBG_CTOR(LoadFormHelper,NULL);
 
@@ -2674,7 +2653,7 @@ void LoadFormHelper::implDispose()
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL LoadFormHelper::loaded(const ::com::sun::star::lang::EventObject& aEvent) throw( RuntimeException )
+void SAL_CALL LoadFormHelper::loaded(const ::com::sun::star::lang::EventObject& /*aEvent*/) throw( RuntimeException )
 {
     ::osl::MutexGuard aGuard(m_aAccessSafety);
     DBG_ASSERT(m_eState == STARTED || m_eState == DISPOSED, "LoadFormHelper::loaded : wrong call !");
@@ -2683,7 +2662,7 @@ void SAL_CALL LoadFormHelper::loaded(const ::com::sun::star::lang::EventObject& 
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL LoadFormHelper::unloaded(const ::com::sun::star::lang::EventObject& aEvent) throw( RuntimeException )
+void SAL_CALL LoadFormHelper::unloaded(const ::com::sun::star::lang::EventObject& /*aEvent*/) throw( RuntimeException )
 {
     ::osl::MutexGuard aGuard(m_aAccessSafety);
     DBG_ERROR("LoadFormHelper::unloaded : shouldn't be called !");
@@ -2691,22 +2670,22 @@ void SAL_CALL LoadFormHelper::unloaded(const ::com::sun::star::lang::EventObject
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL LoadFormHelper::unloading(const ::com::sun::star::lang::EventObject& aEvent) throw( RuntimeException )
+void SAL_CALL LoadFormHelper::unloading(const ::com::sun::star::lang::EventObject& /*aEvent*/) throw( RuntimeException )
 {
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL LoadFormHelper::reloading(const ::com::sun::star::lang::EventObject& aEvent) throw( RuntimeException )
+void SAL_CALL LoadFormHelper::reloading(const ::com::sun::star::lang::EventObject& /*aEvent*/) throw( RuntimeException )
 {
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL LoadFormHelper::reloaded(const ::com::sun::star::lang::EventObject& aEvent) throw( RuntimeException )
+void SAL_CALL LoadFormHelper::reloaded(const ::com::sun::star::lang::EventObject& /*aEvent*/) throw( RuntimeException )
 {
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL LoadFormHelper::cursorMoved(const ::com::sun::star::lang::EventObject& event) throw( RuntimeException )
+void SAL_CALL LoadFormHelper::cursorMoved(const ::com::sun::star::lang::EventObject& /*event*/) throw( RuntimeException )
 {
     ::osl::MutexGuard aGuard(m_aAccessSafety);
     if (m_eState == LOADED)
@@ -2714,7 +2693,17 @@ void SAL_CALL LoadFormHelper::cursorMoved(const ::com::sun::star::lang::EventObj
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL LoadFormHelper::disposing(const ::com::sun::star::lang::EventObject& Source) throw( RuntimeException )
+void SAL_CALL LoadFormHelper::rowChanged(const ::com::sun::star::lang::EventObject& /*event*/) throw( RuntimeException )
+{
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL LoadFormHelper::rowSetChanged(const ::com::sun::star::lang::EventObject& /*event*/) throw( RuntimeException )
+{
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL LoadFormHelper::disposing(const ::com::sun::star::lang::EventObject& /*Source*/) throw( RuntimeException )
 {
     ::osl::MutexGuard aGuard(m_aAccessSafety);
     implDispose();
@@ -2729,7 +2718,7 @@ void LoadFormHelper::cancel()
 //------------------------------------------------------------------------------
 bool LoadFormHelper::WaitUntilReallyLoaded(bool _bOnlyIfLoaded)
 {
-    ::osl::ClearableMutexGuard aGuard(m_aAccessSafety);
+    ::osl::ResettableMutexGuard aGuard( m_aAccessSafety );
     if (DISPOSED == m_eState)
         return false;
 
@@ -2742,11 +2731,12 @@ bool LoadFormHelper::WaitUntilReallyLoaded(bool _bOnlyIfLoaded)
 
     while (!bDone)
     {
-        ::osl::MutexGuard aGuard(m_aAccessSafety);
+        aGuard.reset();
         bDone = (POSITIONED == m_eState);
+        aGuard.clear();
     }
 
-    ::osl::MutexGuard aGuard2(m_aAccessSafety);
+    aGuard.reset();
     implDispose();
 
     return true;
@@ -2918,10 +2908,10 @@ IMPL_LINK(LoadFormThread::ThreadStopper, OnDeleteInMainThread, LoadFormThread::T
     return 0L;
 }
 // -----------------------------------------------------------------------------
-sal_uInt16 SbaXDataBrowserController::getCurrentColumnPosition()
+sal_Int16 SbaXDataBrowserController::getCurrentColumnPosition()
 {
     Reference< ::com::sun::star::form::XGrid >  xGrid(getBrowserView()->getGridControl(), UNO_QUERY);
-    sal_uInt16 nViewPos = -1;
+    sal_Int16 nViewPos = -1;
     try
     {
         if ( xGrid.is() )
@@ -2931,7 +2921,7 @@ sal_uInt16 SbaXDataBrowserController::getCurrentColumnPosition()
     return nViewPos;
 }
 // -----------------------------------------------------------------------------
-void SbaXDataBrowserController::setCurrentColumnPosition(sal_uInt16 _nPos)
+void SbaXDataBrowserController::setCurrentColumnPosition( sal_Int16 _nPos )
 {
     Reference< ::com::sun::star::form::XGrid >  xGrid(getBrowserView()->getGridControl(), UNO_QUERY);
     try
@@ -2989,7 +2979,7 @@ void SbaXDataBrowserController::addColumnListeners(const Reference< ::com::sun::
     }
 }
 // -----------------------------------------------------------------------------
-sal_Bool SbaXDataBrowserController::InitializeGridModel(const Reference< ::com::sun::star::form::XFormComponent > & xGrid)
+sal_Bool SbaXDataBrowserController::InitializeGridModel(const Reference< ::com::sun::star::form::XFormComponent > & /*xGrid*/)
 {
     return sal_True;
 }
