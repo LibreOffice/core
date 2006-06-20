@@ -4,9 +4,9 @@
  *
  *  $RCSfile: aststack.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:08:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:47:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,9 +45,9 @@
 #define STACKSIZE_INCREMENT 64
 
 AstStack::AstStack()
-    : m_size(STACKSIZE_INCREMENT)
+    : m_stack((AstScope**)rtl_allocateZeroMemory(sizeof(AstScope*) * STACKSIZE_INCREMENT))
+    , m_size(STACKSIZE_INCREMENT)
     , m_top(0)
-    , m_stack((AstScope**)rtl_allocateZeroMemory(sizeof(AstScope*) * STACKSIZE_INCREMENT))
 {
 }
 
@@ -97,10 +97,10 @@ AstScope* AstStack::nextToTop()
 
 AstScope* AstStack::topNonNull()
 {
-    for (sal_uInt32 i = m_top - 1; i >= 0; i--)
+    for (sal_uInt32 i = m_top; i > 0; i--)
     {
-        if ( m_stack[i] )
-            return m_stack[i];
+        if ( m_stack[i - 1] )
+            return m_stack[i - 1];
       }
     return NULL;
 }
