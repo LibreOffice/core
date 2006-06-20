@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inputsequencechecker.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 10:18:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:45:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@ InputSequenceCheckerImpl::InputSequenceCheckerImpl()
 InputSequenceCheckerImpl::~InputSequenceCheckerImpl()
 {
         // Clear lookuptable
-        for (sal_Int32 l = 0; l < lookupTable.size(); l++)
+        for (size_t l = 0; l < lookupTable.size(); l++)
             delete lookupTable[l];
 
         lookupTable.clear();
@@ -126,7 +126,7 @@ InputSequenceCheckerImpl::getInputSequenceChecker(sal_Char* rLanguage) throw (Ru
             return cachedItem->xISC;
         }
         else if (xMSF.is()) {
-            for (sal_Int32 l = 0; l < lookupTable.size(); l++) {
+            for (size_t l = 0; l < lookupTable.size(); l++) {
                 cachedItem = lookupTable[l];
                 if (cachedItem->aLanguage == rLanguage)
                     return cachedItem->xISC;
