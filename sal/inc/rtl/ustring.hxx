@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ustring.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:47:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:15:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1166,15 +1166,15 @@ public:
 
       This function can't be used for language specific conversion.
 
-      @param    l           a int64.
+      @param    ll          a int64.
       @param    radix       the radix (between 2 and 36)
       @return   a string with the string representation of the argument.
     */
-    static OUString valueOf( sal_Int64 l, sal_Int16 radix = 10 ) SAL_THROW(())
+    static OUString valueOf( sal_Int64 ll, sal_Int16 radix = 10 ) SAL_THROW(())
     {
         sal_Unicode aBuf[RTL_USTR_MAX_VALUEOFINT64];
         rtl_uString* pNewData = 0;
-        rtl_uString_newFromStr_WithLength( &pNewData, aBuf, rtl_ustr_valueOfInt64( aBuf, l, radix ) );
+        rtl_uString_newFromStr_WithLength( &pNewData, aBuf, rtl_ustr_valueOfInt64( aBuf, ll, radix ) );
         return OUString( pNewData, (DO_NOT_ACQUIRE*)0 );
     }
 
