@@ -4,9 +4,9 @@
  *
  *  $RCSfile: null_spritecanvashelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 12:50:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:15:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,14 +76,14 @@ namespace nullcanvas
     }
 
     uno::Reference< rendering::XAnimatedSprite > SpriteCanvasHelper::createSpriteFromAnimation(
-        const uno::Reference< rendering::XAnimation >& animation )
+        const uno::Reference< rendering::XAnimation >& /*animation*/ )
     {
         return uno::Reference< rendering::XAnimatedSprite >();
     }
 
     uno::Reference< rendering::XAnimatedSprite > SpriteCanvasHelper::createSpriteFromBitmaps(
-        const uno::Sequence< uno::Reference< rendering::XBitmap > >& animationBitmaps,
-        sal_Int8                                                     interpolationMode )
+        const uno::Sequence< uno::Reference< rendering::XBitmap > >& /*animationBitmaps*/,
+        sal_Int8                                                     /*interpolationMode*/ )
     {
         return uno::Reference< rendering::XAnimatedSprite >();
     }
@@ -98,37 +98,37 @@ namespace nullcanvas
                                     mpDevice ) );
     }
 
-    uno::Reference< rendering::XSprite > SpriteCanvasHelper::createClonedSprite( const uno::Reference< rendering::XSprite >& original )
+    uno::Reference< rendering::XSprite > SpriteCanvasHelper::createClonedSprite( const uno::Reference< rendering::XSprite >& /*original*/ )
     {
         return uno::Reference< rendering::XSprite >();
     }
 
-    sal_Bool SpriteCanvasHelper::updateScreen( const ::basegfx::B2IRange& rCurrArea,
-                                               sal_Bool                   bUpdateAll,
-                                               bool&                      io_bSurfaceDirty )
+    sal_Bool SpriteCanvasHelper::updateScreen( const ::basegfx::B2IRange& /*rCurrArea*/,
+                                               sal_Bool                   /*bUpdateAll*/,
+                                               bool&                      /*io_bSurfaceDirty*/ )
     {
         // TODO
         return sal_True;
     }
 
-    void SpriteCanvasHelper::backgroundPaint( const ::basegfx::B2DRange& rUpdateRect )
+    void SpriteCanvasHelper::backgroundPaint( const ::basegfx::B2DRange& /*rUpdateRect*/ )
     {
         // TODO
     }
 
-    void SpriteCanvasHelper::scrollUpdate( const ::basegfx::B2DRange&                       rMoveStart,
-                                           const ::basegfx::B2DRange&                       rMoveEnd,
-                                           const ::canvas::SpriteRedrawManager::UpdateArea& rUpdateArea )
+    void SpriteCanvasHelper::scrollUpdate( const ::basegfx::B2DRange&                       /*rMoveStart*/,
+                                           const ::basegfx::B2DRange&                       /*rMoveEnd*/,
+                                           const ::canvas::SpriteRedrawManager::UpdateArea& /*rUpdateArea*/ )
     {
         // TODO
     }
 
-    void SpriteCanvasHelper::opaqueUpdate( const ::canvas::SpriteRedrawManager::UpdateArea& rUpdateArea )
+    void SpriteCanvasHelper::opaqueUpdate( const ::canvas::SpriteRedrawManager::UpdateArea& /*rUpdateArea*/ )
     {
         // TODO
     }
 
-    void SpriteCanvasHelper::genericUpdate( const ::canvas::SpriteRedrawManager::UpdateArea& rUpdateArea )
+    void SpriteCanvasHelper::genericUpdate( const ::canvas::SpriteRedrawManager::UpdateArea& /*rUpdateArea*/ )
     {
         // TODO
     }

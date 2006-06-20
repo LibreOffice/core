@@ -4,9 +4,9 @@
  *
  *  $RCSfile: null_spritehelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 12:50:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:16:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,7 @@ namespace nullcanvas
         CanvasCustomSpriteHelper::disposing();
     }
 
-    void SpriteHelper::redraw( bool& io_bSurfaceDirty ) const
+    void SpriteHelper::redraw( bool& /*io_bSurfaceDirty*/ ) const
     {
         // TODO
     }
