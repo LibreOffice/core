@@ -4,9 +4,9 @@
  *
  *  $RCSfile: indexentrysupplier_common.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:37:38 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:45:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,18 +60,18 @@ Sequence < lang::Locale > SAL_CALL IndexEntrySupplier_Common::getLocaleList() th
     throw RuntimeException();
 }
 
-Sequence < OUString > SAL_CALL IndexEntrySupplier_Common::getAlgorithmList( const lang::Locale& rLocale ) throw (RuntimeException)
+Sequence < OUString > SAL_CALL IndexEntrySupplier_Common::getAlgorithmList( const lang::Locale& ) throw (RuntimeException)
 {
     throw RuntimeException();
 }
 
-OUString SAL_CALL IndexEntrySupplier_Common::getPhoneticCandidate( const OUString& rIndexEntry,
-    const lang::Locale& rLocale ) throw (RuntimeException)
+OUString SAL_CALL IndexEntrySupplier_Common::getPhoneticCandidate( const OUString&,
+    const lang::Locale& ) throw (RuntimeException)
 {
     return OUString();
 }
 
-sal_Bool SAL_CALL IndexEntrySupplier_Common::usePhoneticEntry( const lang::Locale& rLocale ) throw (RuntimeException)
+sal_Bool SAL_CALL IndexEntrySupplier_Common::usePhoneticEntry( const lang::Locale& ) throw (RuntimeException)
 {
     throw RuntimeException();
 }
@@ -87,27 +87,29 @@ sal_Bool SAL_CALL IndexEntrySupplier_Common::loadAlgorithm( const lang::Locale& 
 }
 
 OUString SAL_CALL IndexEntrySupplier_Common::getIndexKey( const OUString& rIndexEntry,
-    const OUString& rPhoneticEntry, const lang::Locale& rLocale ) throw (RuntimeException)
+    const OUString&, const lang::Locale& ) throw (RuntimeException)
 {
     return rIndexEntry.copy(0, 1);
 }
 
 sal_Int16 SAL_CALL IndexEntrySupplier_Common::compareIndexEntry(
-    const OUString& rIndexEntry1, const OUString& rPhoneticEntry1, const lang::Locale& rLocale1,
-    const OUString& rIndexEntry2, const OUString& rPhoneticEntry2, const lang::Locale& rLocale2 )
+    const OUString& rIndexEntry1, const OUString&, const lang::Locale&,
+    const OUString& rIndexEntry2, const OUString&, const lang::Locale& )
     throw (RuntimeException)
 {
-    return collator->compareString(rIndexEntry1, rIndexEntry2);
+    return sal::static_int_cast< sal_Int16 >(
+        collator->compareString(rIndexEntry1, rIndexEntry2));
+        // return value of compareString in { -1, 0, 1 }
 }
 
 OUString SAL_CALL IndexEntrySupplier_Common::getIndexCharacter( const OUString& rIndexEntry,
-    const lang::Locale& rLocale, const OUString& rAlgorithm ) throw (RuntimeException)
+    const lang::Locale&, const OUString& ) throw (RuntimeException)
 {
     return rIndexEntry.copy(0, 1);
 }
 
-OUString SAL_CALL IndexEntrySupplier_Common::getIndexFollowPageWord( sal_Bool bMorePages,
-    const lang::Locale& rLocale ) throw (RuntimeException)
+OUString SAL_CALL IndexEntrySupplier_Common::getIndexFollowPageWord( sal_Bool,
+    const lang::Locale& ) throw (RuntimeException)
 {
     throw RuntimeException();
 }
