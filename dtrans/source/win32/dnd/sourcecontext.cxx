@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sourcecontext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:18:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 06:02:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,13 +67,13 @@ SourceContext::~SourceContext()
 }
 
 void SAL_CALL SourceContext::addDragSourceListener(
-    const Reference<XDragSourceListener >& dsl )
+    const Reference<XDragSourceListener >& )
     throw( RuntimeException)
 {
 }
 
 void SAL_CALL SourceContext::removeDragSourceListener(
-     const Reference<XDragSourceListener >& dsl )
+     const Reference<XDragSourceListener >& )
     throw( RuntimeException)
 {
 }
@@ -84,12 +84,12 @@ sal_Int32 SAL_CALL SourceContext::getCurrentCursor(  )
     return 0;
 }
 
-void SAL_CALL SourceContext::setCursor( sal_Int32 cursorId )
+void SAL_CALL SourceContext::setCursor( sal_Int32 /*cursorId*/ )
     throw( IllegalArgumentException, RuntimeException)
 {
 }
 
-void SAL_CALL SourceContext::setImage( sal_Int32 imageId )
+void SAL_CALL SourceContext::setImage( sal_Int32 /*imageId*/ )
     throw( IllegalArgumentException, RuntimeException)
 {
 }
