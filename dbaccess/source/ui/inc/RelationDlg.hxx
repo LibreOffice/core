@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RelationDlg.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:33:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:13:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,12 +72,12 @@ namespace dbaui
         OTableListBoxControl*               m_pTableControl;
         OJoinTableView::OTableWindowMap*    m_pTableMap;
 
-        FixedLine    aFL_CascUpd;
+        FixedLine   aFL_CascUpd;
         RadioButton aRB_NoCascUpd,
                     aRB_CascUpd,
                     aRB_CascUpdNull,
                     aRB_CascUpdDefault;
-        FixedLine    aFL_CascDel;
+        FixedLine   aFL_CascDel;
         RadioButton aRB_NoCascDel,
                     aRB_CascDel,
                     aRB_CascDelNull,
@@ -122,7 +122,7 @@ namespace dbaui
         /** notifyConnectionChange is callback which is called when the table selection has changed and a new connection exists
             @param  _pConnectionData    the connection which exists between the new tables
         */
-        virtual void notifyConnectionChange(OTableConnectionData* _pConnectionData);
+        virtual void notifyConnectionChange();
     protected:
         void Init(ORelationTableConnectionData* _pConnData);
 
