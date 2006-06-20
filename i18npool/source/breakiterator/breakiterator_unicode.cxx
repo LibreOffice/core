@@ -4,9 +4,9 @@
  *
  *  $RCSfile: breakiterator_unicode.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2005-11-17 20:30:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:42:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -310,7 +310,7 @@ LineBreakResults SAL_CALL BreakIterator_Unicode::getLineBreak(
         const OUString& Text, sal_Int32 nStartPos,
         const lang::Locale& rLocale, sal_Int32 nMinBreakPos,
         const LineBreakHyphenationOptions& hOptions,
-        const LineBreakUserOptions& bOptions ) throw(RuntimeException)
+        const LineBreakUserOptions& /*rOptions*/ ) throw(RuntimeException)
 {
         LineBreakResults lbr;
 
