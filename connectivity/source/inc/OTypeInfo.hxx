@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OTypeInfo.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:38:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:57:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,25 +71,25 @@ namespace connectivity
                         bEmpty_2        : 1;
 
         OTypeInfo()
-                :bCurrency(sal_False)
+                :nPrecision(0)
+                ,nMaximumScale(0)
+                ,nMinimumScale(0)
+                ,nType( ::com::sun::star::sdbc::DataType::OTHER)
+                ,nSearchType( ::com::sun::star::sdbc::ColumnSearch::FULL)
+                ,bCurrency(sal_False)
                 ,bAutoIncrement(sal_False)
                 ,bNullable(sal_True)
                 ,bCaseSensitive(sal_False)
                 ,bUnsigned(sal_False)
-                ,nMaximumScale(0)
-                ,nMinimumScale(0)
-                ,nType( ::com::sun::star::sdbc::DataType::OTHER)
-                ,nPrecision(0)
-                ,nSearchType( ::com::sun::star::sdbc::ColumnSearch::FULL)
         {}
 
         inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
             { return ::rtl_allocateMemory( nSize ); }
-        inline static void * SAL_CALL operator new( size_t nSize,void* _pHint ) SAL_THROW( () )
+        inline static void * SAL_CALL operator new( size_t /*nSize*/,void* _pHint ) SAL_THROW( () )
             { return _pHint; }
         inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
             { ::rtl_freeMemory( pMem ); }
-        inline static void SAL_CALL operator delete( void * pMem,void* _pHint ) SAL_THROW( () )
+        inline static void SAL_CALL operator delete( void * /*pMem*/,void* /*_pHint*/ ) SAL_THROW( () )
             {  }
 
         sal_Bool operator == (const OTypeInfo& lh) const { return lh.nType == nType; }
