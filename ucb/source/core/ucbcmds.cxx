@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ucbcmds.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:16:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:16:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1133,7 +1133,7 @@ static void handleNameClashRename(
 
     if ( !xRow.is() )
     {
-        uno::Any aProps
+        uno::Any aProps2
             = uno::makeAny(
                      beans::PropertyValue(
                          rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Uri" ) ),
@@ -1143,7 +1143,7 @@ static void handleNameClashRename(
                          beans::PropertyState_DIRECT_VALUE ) );
         ucbhelper::cancelCommandExecution(
             star::ucb::IOErrorCode_CANT_READ,
-            uno::Sequence< uno::Any >( &aProps, 1 ),
+            uno::Sequence< uno::Any >( &aProps2, 1 ),
             rContext.xOrigEnv,
             rtl::OUString::createFromAscii(
                 "Unable to get properties from new object!" ),
@@ -1224,7 +1224,7 @@ static void handleNameClashRename(
                         = getInputStream( rContext, xCommandProcessorS );
                     if ( !xInputStream.is() )
                     {
-                        uno::Any aProps
+                        uno::Any aProps2
                             = uno::makeAny(
                                 beans::PropertyValue(
                                     rtl::OUString(
@@ -1236,7 +1236,7 @@ static void handleNameClashRename(
                                     beans::PropertyState_DIRECT_VALUE ) );
                         ucbhelper::cancelCommandExecution(
                             star::ucb::IOErrorCode_CANT_READ,
-                            uno::Sequence< uno::Any >( &aProps, 1 ),
+                            uno::Sequence< uno::Any >( &aProps2, 1 ),
                             rContext.xOrigEnv,
                             rtl::OUString::createFromAscii(
                                 "Got no data stream from source!" ),
@@ -1481,8 +1481,9 @@ static void globalTransfer(
             OSL_ENSURE( !aArg.ReplaceExisting,
                         "BUG: UnsupportedNameClashException not allowed here!" );
 
-            OSL_ENSURE( exc.NameClash == star::ucb::NameClash::ERROR,
-                        "BUG: NameClash::ERROR expected!" );
+            if (exc.NameClash != star::ucb::NameClash::ERROR) {
+                OSL_ENSURE( false, "BUG: NameClash::ERROR expected!" );
+            }
 
             // No chance to solve name clashes, because I'm not able to detect
             // whether there is one.
@@ -1992,10 +1993,10 @@ void UniversalContentBroker::globalTransfer(
     uno::Reference< star::ucb::XContent > xSource;
     try
     {
-        uno::Reference< star::ucb::XContentIdentifier > xId
+        uno::Reference< star::ucb::XContentIdentifier > xId2
             = createContentIdentifier( rArg.SourceURL );
-        if ( xId.is() )
-            xSource = queryContent( xId );
+        if ( xId2.is() )
+            xSource = queryContent( xId2 );
     }
     catch ( star::ucb::IllegalIdentifierException const & )
     {
@@ -2063,7 +2064,7 @@ void UniversalContentBroker::globalTransfer(
 
     if ( !xRow.is() )
     {
-        uno::Any aProps
+        uno::Any aProps2
             = uno::makeAny(beans::PropertyValue(
                                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                                     "Uri")),
@@ -2072,7 +2073,7 @@ void UniversalContentBroker::globalTransfer(
                                   beans::PropertyState_DIRECT_VALUE));
         ucbhelper::cancelCommandExecution(
             star::ucb::IOErrorCode_CANT_READ,
-            uno::Sequence< uno::Any >(&aProps, 1),
+            uno::Sequence< uno::Any >(&aProps2, 1),
             xEnv,
             rtl::OUString::createFromAscii(
                 "Unable to get properties from source object!" ),
