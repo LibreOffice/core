@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MNSRunnable.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:26:28 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:48:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,14 +44,15 @@
 #include "MQuery.hxx"
 #endif
 
-#include <nsIProxyObjectManager.h>
-
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
 #ifndef _OSL_CONDITN_HXX_
 #include <osl/conditn.hxx>
 #endif
+
+#include "pre_include_mozilla.h"
+#include <nsIProxyObjectManager.h>
 // More Mozilla includes for LDAP Connection Test
 #include "prprf.h"
 #include "nsILDAPURL.h"
@@ -60,6 +61,7 @@
 #include "nsILDAPErrors.h"
 #include "nsILDAPConnection.h"
 #include "nsILDAPOperation.h"
+#include "post_include_mozilla.h"
 
 using namespace connectivity::mozab;
 
@@ -78,6 +80,7 @@ nsIRunnable * MNSRunnable::ProxiedObject()
                 this,
                 PROXY_SYNC,
                 (void**)&_ProxiedObject);
+        (void)rv;
 
         _ProxiedObject->AddRef();
     }

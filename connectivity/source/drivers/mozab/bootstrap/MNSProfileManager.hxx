@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MNSProfileManager.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:26:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:48:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,14 +36,7 @@
 #ifndef __MNSProfileManager_h___
 #define __MNSProfileManager_h___
 
-#include "nsCOMPtr.h"
-#include "nsISupports.h"
-#include "nsString.h"
-#include "nsIRegistry.h"
-#include "nsXPIDLString.h"
-#include "nsVoidArray.h"
-#include "nsIFile.h"
-#include "nsILocalFile.h"
+#include "mozilla_profilemanager.h"
 
 #include <sal/types.h>
 #include <osl/diagnose.h>
@@ -62,10 +55,6 @@
 #include <rtl/ustring.hxx>
 #include <vector>
 #include <map>
-
-#ifdef XP_WIN
-#include <windows.h>
-#endif
 
 #ifdef XP_OS2
 #define INCL_DOSERRORS
