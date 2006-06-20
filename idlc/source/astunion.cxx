@@ -4,9 +4,9 @@
  *
  *  $RCSfile: astunion.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:09:46 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:48:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -182,8 +182,9 @@ AstUnionBranch* AstUnion::lookupLabel(AstUnionBranch* pBranch)
     if ( !pLabel->getLabelValue() )
         return pBranch;
 //  pLabel->getLabelValue()->setExprValue(pLabel->getLabelValue()->coerce(m_discExprType, sal_False));
-    AstExprValue* pLabelValue = NULL;
-    if ( !(pLabelValue = pLabel->getLabelValue()->coerce(m_discExprType, sal_False)) )
+    AstExprValue* pLabelValue = pLabel->getLabelValue()->coerce(
+        m_discExprType, sal_False);
+    if ( !pLabelValue )
     {
         idlc()->error()->evalError(pLabel->getLabelValue());
         return pBranch;
@@ -237,7 +238,7 @@ AstUnionBranch* AstUnion::lookupEnum(AstUnionBranch* pBranch)
      */
     if ( pExpr->getCombOperator() != EC_symbol)
     {
-        idlc()->error()->enumValExpected(this, pLabel);
+        idlc()->error()->enumValExpected(this);
         return pBranch;
     }
 
