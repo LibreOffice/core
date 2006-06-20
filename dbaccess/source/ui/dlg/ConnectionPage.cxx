@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConnectionPage.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:40:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:02:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -196,18 +196,18 @@ namespace dbaui
     DBG_NAME(OConnectionTabPage)
     OConnectionTabPage::OConnectionTabPage(Window* pParent, const SfxItemSet& _rCoreAttrs)
         :OConnectionHelper(pParent, ModuleRes(PAGE_CONNECTION), _rCoreAttrs)
+        ,m_pCollection(NULL)
+        ,m_bUserGrabFocus(sal_True)
+        ,m_aFL1(this, ResId(FL_SEPARATOR1))
+        ,m_aFL2(this, ResId(FL_SEPARATOR2))
         ,m_aUserNameLabel(this, ResId(FT_USERNAME))
         ,m_aUserName(this, ResId(ET_USERNAME))
         ,m_aPasswordRequired(this, ResId(CB_PASSWORD_REQUIRED))
+        ,m_aFL3(this, ResId(FL_SEPARATOR3))
         ,m_aJavaDriverLabel(this, ResId(FT_JDBCDRIVERCLASS))
         ,m_aJavaDriver(this, ResId(ET_JDBCDRIVERCLASS))
         ,m_aTestJavaDriver(this, ResId(PB_TESTDRIVERCLASS))
         ,m_aTestConnection(this, ResId(PB_TESTCONNECTION))
-        ,m_aFL1(this, ResId(FL_SEPARATOR1))
-        ,m_aFL2(this, ResId(FL_SEPARATOR2))
-        ,m_aFL3(this, ResId(FL_SEPARATOR3))
-        ,m_pCollection(NULL)
-        ,m_bUserGrabFocus(sal_True)
     {
         DBG_CTOR(OConnectionTabPage,NULL);
         m_aET_Connection.SetModifyHdl(LINK(this, OConnectionTabPage, OnEditModified));
@@ -330,11 +330,9 @@ namespace dbaui
         // collect the items
         SFX_ITEMSET_GET(_rSet, pUidItem, SfxStringItem, DSID_USER, sal_True);
 
-        SFX_ITEMSET_GET(_rSet, pPwdItem, SfxStringItem, DSID_PASSWORD, sal_True);
         SFX_ITEMSET_GET(_rSet, pJdbcDrvItem, SfxStringItem, DSID_JDBCDRIVERCLASS, sal_True);
         SFX_ITEMSET_GET(_rSet, pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
         SFX_ITEMSET_GET(_rSet, pAllowEmptyPwd, SfxBoolItem, DSID_PASSWORDREQUIRED, sal_True);
-        SFX_ITEMSET_GET(_rSet, pHostName, SfxStringItem, DSID_CONN_HOSTNAME, sal_True);
 
         // forward the values to the controls
         if ( bValid )
@@ -409,7 +407,7 @@ namespace dbaui
         return bChangedSomething;
     }
     // -----------------------------------------------------------------------
-    IMPL_LINK(OConnectionTabPage, OnTestJavaClickHdl, PushButton*, _pButton)
+    IMPL_LINK(OConnectionTabPage, OnTestJavaClickHdl, PushButton*, /*_pButton*/)
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
         sal_Bool bSuccess = sal_False;
