@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BConnection.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:42:22 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:59:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,7 @@ namespace connectivity
             sal_Bool isStarted();
 
         protected:
-            virtual SQLRETURN                           OpenConnection(const ::rtl::OUString& aConnectStr,sal_Int32 nTimeOut, const ::rtl::OUString& _uid,const ::rtl::OUString& _pwd);
+            virtual SQLRETURN                           openConnectionWithAuth(const ::rtl::OUString& aConnectStr,sal_Int32 nTimeOut, const ::rtl::OUString& _uid,const ::rtl::OUString& _pwd);
             virtual connectivity::odbc::OConnection*    cloneConnection(); // creates a new connection
         public:
             virtual SQLRETURN   Construct( const ::rtl::OUString& url,const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info) throw(::com::sun::star::sdbc::SQLException);
