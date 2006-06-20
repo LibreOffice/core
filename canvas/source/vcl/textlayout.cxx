@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textlayout.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:05:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:21:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,6 +98,7 @@ namespace vclcanvas
         mpRefDevice( rRefDevice ),
         mnTextDirection( nDirection )
     {
+        (void)nRandomSeed;
     }
 
     void SAL_CALL TextLayout::disposing()
@@ -191,13 +192,19 @@ namespace vclcanvas
     {
         tools::LocalGuard aGuard;
 
+        (void)nSize;
+
         // TODO(F1)
         return 0.0;
     }
 
-    double SAL_CALL TextLayout::combinedJustify( const uno::Sequence< uno::Reference< rendering::XTextLayout > >& aNextLayouts, double nSize ) throw (lang::IllegalArgumentException, uno::RuntimeException)
+    double SAL_CALL TextLayout::combinedJustify( const uno::Sequence< uno::Reference< rendering::XTextLayout > >& aNextLayouts,
+                                                 double                                                           nSize ) throw (lang::IllegalArgumentException, uno::RuntimeException)
     {
         tools::LocalGuard aGuard;
+
+        (void)aNextLayouts;
+        (void)nSize;
 
         // TODO(F1)
         return 0.0;
@@ -207,6 +214,8 @@ namespace vclcanvas
     {
         tools::LocalGuard aGuard;
 
+        (void)aHitPoint;
+
         // TODO(F1)
         return rendering::TextHit();
     }
@@ -214,6 +223,9 @@ namespace vclcanvas
     rendering::Caret SAL_CALL TextLayout::getCaret( sal_Int32 nInsertionIndex, sal_Bool bExcludeLigatures ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
         tools::LocalGuard aGuard;
+
+        (void)nInsertionIndex;
+        (void)bExcludeLigatures;
 
         // TODO(F1)
         return rendering::Caret();
@@ -223,6 +235,10 @@ namespace vclcanvas
     {
         tools::LocalGuard aGuard;
 
+        (void)nStartIndex;
+        (void)nCaretAdvancement;
+        (void)bExcludeLigatures;
+
         // TODO(F1)
         return 0;
     }
@@ -231,6 +247,9 @@ namespace vclcanvas
     {
         tools::LocalGuard aGuard;
 
+        (void)nStartIndex;
+        (void)nEndIndex;
+
         // TODO(F1)
         return uno::Reference< rendering::XPolyPolygon2D >();
     }
@@ -238,6 +257,9 @@ namespace vclcanvas
     uno::Reference< rendering::XPolyPolygon2D > SAL_CALL TextLayout::queryLogicalHighlighting( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
         tools::LocalGuard aGuard;
+
+        (void)nStartIndex;
+        (void)nEndIndex;
 
         // TODO(F1)
         return uno::Reference< rendering::XPolyPolygon2D >();
