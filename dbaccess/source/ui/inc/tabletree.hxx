@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabletree.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:04:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:19:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,12 +73,17 @@ protected:
     sal_Bool        m_bVirtualRoot; // should the first entry be visible
 
 public:
-    OTableTreeListBox( Window* pParent
-                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
-                        ,sal_Bool _bHiContrast,WinBits nWinStyle = NULL,sal_Bool _bVirtualRoot=sal_True );
-    OTableTreeListBox( Window* pParent
-                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
-                        , const ResId& rResId,sal_Bool _bHiContrast,sal_Bool _bVirtualRoot=sal_True );
+    OTableTreeListBox(
+        Window* pParent,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
+        WinBits nWinStyle,
+        sal_Bool _bVirtualRoot );
+
+    OTableTreeListBox(
+        Window* pParent,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
+        const ResId& rResId,
+        sal_Bool _bVirtualRoot );
 
     typedef ::std::pair< ::rtl::OUString,sal_Bool>  TTableViewName;
     typedef ::std::vector< TTableViewName >         TNames;
