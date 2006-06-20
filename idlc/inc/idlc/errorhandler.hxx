@@ -4,9 +4,9 @@
  *
  *  $RCSfile: errorhandler.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:45:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:46:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,9 +137,6 @@ public:
     // Report a syntax error in IDL input
     void    syntaxError(ParseState state, sal_Int32 lineNumber, const sal_Char* errmsg);
 
-    // Report a name being used with different spellings
-    void    nameCaseError(sal_Char *n, sal_Char *t);
-
     // Report an unsuccesful coercion attempt
     void    coercionError(AstExpression *pExpr, ExprType et);
 
@@ -166,7 +163,7 @@ public:
     // something else instead. This occurs when a union with an enum
     // discriminator is being parsed and one of the branch labels is
     // not an enumerator in that enum
-    void    enumValExpected(AstUnion* pUnion, AstUnionLabel *pLabel);
+    void    enumValExpected(AstUnion* pUnion);
 
     // Report a failed enumerator lookup in an enum
     void    enumValLookupFailure(AstUnion* pUnion, AstEnum* pEnum, const ::rtl::OString& name);
