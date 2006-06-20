@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AColumn.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:26:27 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:12:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,8 +71,6 @@ using namespace com::sun::star::sdbc;
 
 void WpADOColumn::Create()
 {
-    IClassFactory2* pIUnknown   = NULL;
-    IUnknown        *pOuter     = NULL;
     HRESULT         hr = -1;
 
     _ADOColumn* pColumn = NULL;
@@ -133,10 +131,8 @@ Sequence< sal_Int8 > OAdoColumn::getUnoTunnelImplementationId()
 sal_Int64 OAdoColumn::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
     return (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
-                ?
-            (sal_Int64)this
-                :
-            OColumn_ADO::getSomething(rId);
+                ? reinterpret_cast< sal_Int64 >( this )
+                : OColumn_ADO::getSomething(rId);
 }
 // -------------------------------------------------------------------------
 void OAdoColumn::construct()
