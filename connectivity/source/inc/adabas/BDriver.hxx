@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BDriver.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:42:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:59:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,7 @@ namespace connectivity
 
             ODriver(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory);
 
-            virtual void* getOdbcFunction(sal_Int32 _nIndex)  const;
+            virtual oslGenericFunction getOdbcFunction(sal_Int32 _nIndex)  const;
             // OComponentHelper
             virtual void SAL_CALL disposing(void);
             // XInterface

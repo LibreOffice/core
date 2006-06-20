@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Object.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:18:53 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:03:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,7 +130,7 @@ namespace connectivity
 
         java_lang_Class *   getClass();
 
-        ::rtl::OUString     toString();
+        virtual ::rtl::OUString toString() const;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() { return m_xFactory; }
         static void ThrowSQLException(JNIEnv * pEnv,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> & _rContext) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
