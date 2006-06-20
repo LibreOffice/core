@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rscflag.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:56:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:48:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,7 +105,7 @@ ERRTYPE RscFlag::SetNotConst( const RSCINST & rInst, Atom nConst )
 |*    Letzte Aenderung  MM 03.04.91
 |*
 *************************************************************************/
-ERRTYPE RscFlag::SetConst( const RSCINST & rInst, Atom nConst, INT32 nVal )
+ERRTYPE RscFlag::SetConst( const RSCINST & rInst, Atom nConst, INT32 /*nVal*/ )
 {
     sal_uInt32 i = 0, nFlag = 0;
 
