@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 07:22:04 $
+#   last change: $Author: hr $ $Date: 2006-06-20 05:05:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,8 @@ TARGET=hidc
 TARGETTYPE=CUI
 LIBTARGET=no
 NO_DEFAULT_STL=TRUE
+INCPRE=$(MISC)
+
 # --- Settings -----------------------------------------------------
 
 .INCLUDE : $(PRJ)$/util$/makefile.pmk
@@ -53,8 +55,8 @@ UWINAPILIB=$(0)
 
 # HID compiler
 APP1TARGET=     $(TARGET)
-APP1OBJS=   $(OBJ)$/hidc_yy.obj
-APP1DEPN=   $(OBJ)$/hidc_yy.obj
+APP1OBJS=   $(OBJ)$/wrap_hidclex.obj
+APP1DEPN=   $(OBJ)$/wrap_hidclex.obj
 APP1LIBSALCPPRT=
 
 DEPOBJFILES=$(APP1OBJS)
@@ -66,3 +68,4 @@ DEPOBJFILES=$(APP1OBJS)
 $(MISC)$/%_yy.cxx : %lex.l
     +flex -l -8 -o$@ $<
 
+$(OBJ)$/wrap_hidclex.obj: $(MISC)$/hidc_yy.cxx
