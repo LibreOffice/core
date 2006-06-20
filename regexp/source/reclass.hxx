@@ -365,12 +365,12 @@ class Regexpr
             sal_Unicode *end);
     void insert_op2(re_opcode_t op, sal_Unicode *loc, sal_Int32 arg1,
             sal_Int32 arg2, sal_Unicode *end);
-    sal_Bool at_begline_loc_p(const sal_Unicode *pattern,
+    sal_Bool at_begline_loc_p(const sal_Unicode *local_pattern,
                   const sal_Unicode *p);
     sal_Bool at_endline_loc_p(const sal_Unicode *p, const sal_Unicode *pend);
     reg_errcode_t compile_range(sal_Unicode range_begin, sal_Unicode range_end, sal_Unicode *b);
     sal_Bool group_in_compile_stack(compile_stack_type compile_stack,
-                    sal_Int32 regnum);
+                    sal_uInt32 regnum);
     sal_Int32 re_match2(struct re_registers *regs, sal_Int32 pos, sal_Int32 range);
 
     sal_Bool iswordbegin(const sal_Unicode *d, sal_Unicode *string, sal_Int32 ssize);
