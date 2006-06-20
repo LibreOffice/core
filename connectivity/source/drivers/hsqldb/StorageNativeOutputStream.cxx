@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StorageNativeOutputStream.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 11:40:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:32:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,7 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#if HAVE_CONFIG_H
+#if defined(HAVE_CONFIG_H) && HAVE_CONFIG_H
 #include <config.h>
 #endif
 
@@ -80,6 +80,10 @@
 #include "jvmaccess/virtualmachine.hxx"
 #include "com/sun/star/lang/XSingleComponentFactory.hpp"
 
+#ifndef CONNECTIVITY_DIAGNOSE_EX_H
+#include "diagnose_ex.h"
+#endif
+
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::document;
@@ -102,7 +106,7 @@ using namespace ::connectivity::hsqldb;
  * Signature: (Ljava/lang/String;Ljava/lang/String;I)V
  */
 JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream_openStream
-  (JNIEnv * env, jobject obj_this, jstring name, jstring key, jint mode)
+  (JNIEnv * env, jobject /*obj_this*/, jstring name, jstring key, jint mode)
 {
 #ifdef HSQLDB_DBG
     {
@@ -154,7 +158,7 @@ JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputSt
  * Signature: (Ljava/lang/String;Ljava/lang/String;)V
  */
 JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream_close
-  (JNIEnv * env, jobject obj_this, jstring key, jstring name)
+  (JNIEnv * env, jobject /*obj_this*/, jstring key, jstring name)
 {
 #ifdef HSQLDB_DBG
     OperationLogFile aOpLog( env, name, "output" );
@@ -204,8 +208,11 @@ JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputSt
  * Signature: (Ljava/lang/String;Ljava/lang/String;)V
  */
 JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream_flush
-  (JNIEnv * env, jobject obj_this, jstring key, jstring name)
+  (JNIEnv * env, jobject /*obj_this*/, jstring key, jstring name)
 {
+    OSL_UNUSED( env );
+    OSL_UNUSED( key );
+    OSL_UNUSED( name );
 #ifdef HSQLDB_DBG
     OperationLogFile( env, name, "output" ).logOperation( "flush" );
 
@@ -220,7 +227,7 @@ JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputSt
  * Signature: (Ljava/lang/String;Ljava/lang/String;)V
  */
 JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream_sync
-  (JNIEnv * env, jobject obj_this, jstring key, jstring name)
+  (JNIEnv * env, jobject /*obj_this*/, jstring key, jstring name)
 {
 #ifdef HSQLDB_DBG
     OperationLogFile( env, name, "output" ).logOperation( "sync" );
