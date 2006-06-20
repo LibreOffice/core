@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uwinapi.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:51:16 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:16:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,9 @@
 #endif
 
 #ifndef _WINDOWS_
+#   pragma warning(push,1) /* disable warnings within system headers */
 #   include <windows.h>
+#   pragma warning(pop)
 #endif
 
 /** GetUserDomain
