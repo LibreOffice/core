@@ -4,9 +4,9 @@
  *
  *  $RCSfile: astattribute.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:54:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:46:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,8 +50,8 @@ public:
     AstAttribute(
         sal_uInt32 flags, AstType const * type, rtl::OString const & name,
         AstScope * scope):
-        AstDeclaration(NT_attribute, name, scope), m_flags(flags),
-        AstScope(NT_attribute), m_pType(type)
+        AstDeclaration(NT_attribute, name, scope),
+        AstScope(NT_attribute), m_flags(flags), m_pType(type)
     {}
 
     AstAttribute(NodeType nodeType, sal_uInt32 flags, AstType const * pType, const ::rtl::OString& name, AstScope* pScope)
@@ -62,20 +62,20 @@ public:
     virtual ~AstAttribute() {}
 
     void setExceptions(
-        rtl::OUString const * getDocumentation, DeclList const * getExceptions,
-        rtl::OUString const * setDocumentation, DeclList const * setExceptions)
+        rtl::OUString const * getDoc, DeclList const * getExc,
+        rtl::OUString const * setDoc, DeclList const * setExc)
     {
-        if (getDocumentation != 0) {
-            m_getDocumentation = *getDocumentation;
+        if (getDoc != 0) {
+            m_getDocumentation = *getDoc;
         }
-        if (getExceptions != 0) {
-            m_getExceptions = *getExceptions;
+        if (getExc != 0) {
+            m_getExceptions = *getExc;
         }
-        if (setDocumentation != 0) {
-            m_setDocumentation = *setDocumentation;
+        if (setDoc != 0) {
+            m_setDocumentation = *setDoc;
         }
-        if (setExceptions != 0) {
-            m_setExceptions = *setExceptions;
+        if (setExc != 0) {
+            m_setExceptions = *setExc;
         }
     }
 
