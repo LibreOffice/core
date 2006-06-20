@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ODatabaseMetaData.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:35:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:05:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,7 @@ namespace connectivity
         public:
 
             inline OConnection* getOwnConnection() const { return m_pConnection; }
-            inline void* getOdbcFunction(sal_Int32 _nIndex)  const
+            inline oslGenericFunction getOdbcFunction(sal_Int32 _nIndex)  const
             {
                 return m_pConnection->getOdbcFunction(_nIndex);
             }
