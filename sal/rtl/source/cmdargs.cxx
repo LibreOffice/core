@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cmdargs.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-27 17:27:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:29:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,15 +37,17 @@
 #include <rtl/process.h>
 #include <rtl/ustring.hxx>
 
+namespace {
+
 rtl_uString ** g_ppCommandArgs = 0;
 sal_uInt32     g_nCommandArgCount = 0;
 
-struct rtl_CmdArgs_ArgHolder
+struct ArgHolder
 {
-    ~rtl_CmdArgs_ArgHolder();
+    ~ArgHolder();
 };
 
-rtl_CmdArgs_ArgHolder::~rtl_CmdArgs_ArgHolder()
+ArgHolder::~ArgHolder()
 {
     while (g_nCommandArgCount > 0)
         rtl_uString_release (g_ppCommandArgs[--g_nCommandArgCount]);
@@ -54,10 +56,13 @@ rtl_CmdArgs_ArgHolder::~rtl_CmdArgs_ArgHolder()
     g_ppCommandArgs = 0;
 }
 
-static void impl_rtl_initCommandArgs()
+// The destructor of this static ArgHolder is "activated" by the assignments to
+// g_ppCommandArgs and g_nCommandArgCount in init():
+ArgHolder argHolder;
+
+void init()
 {
     osl::MutexGuard guard( osl::Mutex::getGlobalMutex() );
-    static rtl_CmdArgs_ArgHolder MyHolder;
     if (!g_ppCommandArgs)
     {
         sal_Int32 i, n = osl_getCommandArgCount();
@@ -87,12 +92,12 @@ static void impl_rtl_initCommandArgs()
     }
 }
 
+}
+
 oslProcessError SAL_CALL rtl_getAppCommandArg (
     sal_uInt32 nArg, rtl_uString **ppCommandArg)
 {
-    if (!g_ppCommandArgs)
-        impl_rtl_initCommandArgs();
-
+    init();
     oslProcessError result = osl_Process_E_NotFound;
     if( nArg < g_nCommandArgCount )
     {
@@ -104,7 +109,6 @@ oslProcessError SAL_CALL rtl_getAppCommandArg (
 
 sal_uInt32 SAL_CALL rtl_getAppCommandArgCount (void)
 {
-    if (!g_ppCommandArgs)
-        impl_rtl_initCommandArgs();
+    init();
     return g_nCommandArgCount;
 }
