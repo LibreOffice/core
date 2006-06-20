@@ -4,9 +4,9 @@
  *
  *  $RCSfile: commoncpp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-15 09:09:30 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:22:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,8 +44,7 @@ namespace codemaker { namespace cpp {
 
 rtl::OString typeToPrefix(TypeManager const & manager, rtl::OString const & type);
 
-rtl::OString scopedCppName(TypeManager const & manager,
-                           rtl::OString const & type, bool bNoNameSpace=false,
+rtl::OString scopedCppName(rtl::OString const & type, bool bNoNameSpace=false,
                            bool shortname=false);
 
 rtl::OString translateUnoToCppType(
