@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlTableFilterList.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:13:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:52:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,11 +78,8 @@ namespace dbaxml
     using namespace ::com::sun::star::xml::sax;
 DBG_NAME(OXMLTableFilterList)
 
-OXMLTableFilterList::OXMLTableFilterList( SvXMLImport& rImport,
-                sal_uInt16 nPrfx
-                , const OUString& _sLocalName
-                ,sal_Bool _bNameFilter) :
-    SvXMLImportContext( rImport, nPrfx, _sLocalName )
+OXMLTableFilterList::OXMLTableFilterList( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& _sLocalName )
+    :SvXMLImportContext( rImport, nPrfx, _sLocalName )
 {
     DBG_CTOR(OXMLTableFilterList,NULL);
 
@@ -98,7 +95,7 @@ OXMLTableFilterList::~OXMLTableFilterList()
 SvXMLImportContext* OXMLTableFilterList::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const Reference< XAttributeList > & xAttrList )
+        const Reference< XAttributeList > & /*xAttrList*/ )
 {
     SvXMLImportContext *pContext = 0;
 
