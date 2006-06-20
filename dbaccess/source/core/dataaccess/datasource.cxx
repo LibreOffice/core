@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:19:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:44:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -307,7 +307,7 @@ namespace dbaccess
     }
 
     //--------------------------------------------------------------------------
-    void SAL_CALL OAuthenticationContinuation::setRealm( const ::rtl::OUString& Realm ) throw(RuntimeException)
+    void SAL_CALL OAuthenticationContinuation::setRealm( const ::rtl::OUString& /*Realm*/ ) throw(RuntimeException)
     {
         DBG_ERROR("OAuthenticationContinuation::setRealm: not supported!");
     }
@@ -372,7 +372,7 @@ namespace dbaccess
     }
 
     //--------------------------------------------------------------------------
-    void SAL_CALL OAuthenticationContinuation::setRememberAccount( RememberAuthentication Remember ) throw(RuntimeException)
+    void SAL_CALL OAuthenticationContinuation::setRememberAccount( RememberAuthentication /*Remember*/ ) throw(RuntimeException)
     {
         DBG_ERROR("OAuthenticationContinuation::setRememberAccount: not supported!");
     }
@@ -849,7 +849,9 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const ::rtl::O
         ::rtl::OUString sMessage = DBACORE_RESSTRING( nExceptionMessageId );
 
         SQLContext aContext;
-        aContext.Message = m_pImpl->m_sConnectURL;
+        aContext.Message = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "A connection for the following URL was requested: " ) );
+            // TODO: resource
+        aContext.Message += m_pImpl->m_sConnectURL;
 
         throwGenericSQLException( sMessage, static_cast< XDataSource* >( this ), makeAny( aContext ) );
     }
@@ -933,11 +935,11 @@ sal_Bool ODatabaseSource::convertFastPropertyValue(Any & rConvertedValue, Any & 
                 if (!(rValue >>= aValues))
                     throw IllegalArgumentException();
 
-                const PropertyValue* pBegin = aValues.getConstArray();
-                const PropertyValue* pEnd   = pBegin + aValues.getLength();
-                for (;pBegin != pEnd ; ++pBegin)
+                const PropertyValue* valueEnd = aValues.getConstArray() + aValues.getLength();
+                const PropertyValue* checkName = aValues.getConstArray();
+                for ( ;checkName != valueEnd; ++checkName )
                 {
-                    if ( !pBegin->Name.getLength() )
+                    if ( !checkName->Name.getLength() )
                         throw IllegalArgumentException();
                 }
 
@@ -946,14 +948,13 @@ sal_Bool ODatabaseSource::convertFastPropertyValue(Any & rConvertedValue, Any & 
                 if ( !bModified )
                 {
                     const PropertyValue* pInfoIter = m_pImpl->m_aInfo.getConstArray();
-                    const PropertyValue* pBegin = aValues.getConstArray();
-                    const PropertyValue* pEnd   = pBegin + aValues.getLength();
-                    for (;!bModified && pBegin != pEnd ; ++pBegin,++pInfoIter)
+                    const PropertyValue* checkValue = aValues.getConstArray();
+                    for ( ;!bModified && checkValue != valueEnd ; ++checkValue,++pInfoIter)
                     {
-                        bModified = pBegin->Name != pInfoIter->Name;
+                        bModified = checkValue->Name != pInfoIter->Name;
                         if ( !bModified )
                         {
-                            bModified = !::comphelper::compare(pBegin->Value,pInfoIter->Value);
+                            bModified = !::comphelper::compare(checkValue->Value,pInfoIter->Value);
                         }
                     }
                 }
@@ -1164,15 +1165,12 @@ Reference< XConnection > SAL_CALL ODatabaseSource::connectWithCompletion( const 
     catch(Exception&)
     {
         if (bNewPasswordGiven)
-            // assume that we had an authentication problem. Without this we may, after an unsucessfull connect, while
+            // assume that we had an authentication problem. Without this we may, after an unsucessful connect, while
             // the user gave us a password an the order to remember it, never allow an password input again (at least
             // not without restarting the session)
             m_pImpl->m_aPassword = ::rtl::OUString();
         throw;
     }
-
-    DBG_ERROR("ODatabaseSource::connectWithCompletion: reached the unreacable!");
-    return Reference< XConnection >();
 }
 // -----------------------------------------------------------------------------
 Reference< XConnection > ODatabaseSource::buildIsolatedConnection(const rtl::OUString& user, const rtl::OUString& password)
@@ -1290,7 +1288,7 @@ void SAL_CALL ODatabaseSource::flush(  ) throw (RuntimeException)
 }
 
 // -----------------------------------------------------------------------------
-void SAL_CALL ODatabaseSource::flushed( const EventObject& rEvent ) throw (RuntimeException)
+void SAL_CALL ODatabaseSource::flushed( const EventObject& /*rEvent*/ ) throw (RuntimeException)
 {
     ModelMethodGuard aGuard( *this );
 
@@ -1333,21 +1331,21 @@ void SAL_CALL ODatabaseSource::removeFlushListener( const Reference< ::com::sun:
     m_aFlushListeners.removeInterface(_xListener);
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL ODatabaseSource::elementInserted( const ContainerEvent& Event ) throw (RuntimeException)
+void SAL_CALL ODatabaseSource::elementInserted( const ContainerEvent& /*Event*/ ) throw (RuntimeException)
 {
     ModelMethodGuard aGuard( *this );
     if ( m_pImpl.is() )
         m_pImpl->setModified(sal_True);
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL ODatabaseSource::elementRemoved( const ContainerEvent& Event ) throw (RuntimeException)
+void SAL_CALL ODatabaseSource::elementRemoved( const ContainerEvent& /*Event*/ ) throw (RuntimeException)
 {
     ModelMethodGuard aGuard( *this );
     if ( m_pImpl.is() )
         m_pImpl->setModified(sal_True);
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL ODatabaseSource::elementReplaced( const ContainerEvent& Event ) throw (RuntimeException)
+void SAL_CALL ODatabaseSource::elementReplaced( const ContainerEvent& /*Event*/ ) throw (RuntimeException)
 {
     ModelMethodGuard aGuard( *this );
     if ( m_pImpl.is() )
