@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fanalyzer.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:58:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:27:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,8 +65,8 @@ using namespace ::com::sun::star::container;
 DBG_NAME( file_OSQLAnalyzer )
 //------------------------------------------------------------------
 OSQLAnalyzer::OSQLAnalyzer()
-               : m_bSelectionFirstTime(sal_True)
-               , m_bHasSelectionCode(sal_False)
+               :m_bHasSelectionCode(sal_False)
+               ,m_bSelectionFirstTime(sal_True)
 {
     DBG_CTOR( file_OSQLAnalyzer, NULL );
     m_aCompiler = new OPredicateCompiler(this);
@@ -274,7 +274,7 @@ void OSQLAnalyzer::describeParam(::vos::ORef<OSQLColumns> rParameterColumns)
 // -----------------------------------------------------------------------------
 OOperandAttr* OSQLAnalyzer::createOperandAttr(sal_Int32 _nPos,
                                               const Reference< XPropertySet>& _xCol,
-                                              const Reference< XNameAccess>& _xIndexes)
+                                              const Reference< XNameAccess>& /*_xIndexes*/)
 {
     return new OOperandAttr(static_cast<sal_uInt16>(_nPos),_xCol);
 }
