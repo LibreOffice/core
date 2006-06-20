@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FmtFilter.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:24:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 06:05:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,13 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
 
+#if defined _MSC_VER
+#pragma warning(push,1)
+#endif
 #include <windows.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 
 /*------------------------------------------------------------------------
     input:
