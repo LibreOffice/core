@@ -373,7 +373,7 @@ void
 
             tp->t[tp->len] = 0;
             fprintf(stderr, "%s", tp->t);
-            tp->t[tp->len] = c;
+            tp->t[tp->len] = (uchar) c;
         }
         fprintf(stderr, tp == trp->tp ? "{%x*} " : "{%x} ", tp->type);
     }
@@ -513,7 +513,7 @@ char *
 {
     if (n >= 10)
         p = outnum(p, n / 10);
-    *p++ = n % 10 + '0';
+    *p++ = (char) (n % 10 + '0');
     return p;
 }
 
