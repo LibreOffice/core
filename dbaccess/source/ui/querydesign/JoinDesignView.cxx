@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JoinDesignView.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:42:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:25:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,9 +109,9 @@ DBG_NAME(OJoinDesignView)
 
 OJoinDesignView::OJoinDesignView(Window* _pParent, OJoinController* _pController,const Reference< XMultiServiceFactory >& _rFactory)
     :ODataView(_pParent,_pController,_rFactory)
-    ,m_pController(_pController)
     ,m_pTableView(NULL)
     ,m_pAddTabDlg(NULL)
+    ,m_pController(_pController)
 {
     DBG_CTOR(OJoinDesignView,NULL);
 
@@ -158,11 +158,11 @@ void OJoinDesignView::resizeDocumentView(Rectangle& _rPlayground)
     _rPlayground.SetSize( Size( 0, 0 ) );
 }
 // -----------------------------------------------------------------------------
-void OJoinDesignView::setReadOnly(sal_Bool _bReadOnly)
+void OJoinDesignView::setReadOnly(sal_Bool /*_bReadOnly*/)
 {
 }
 // -----------------------------------------------------------------------------
-void OJoinDesignView::TableDeleted(const ::rtl::OUString& rAliasName)
+void OJoinDesignView::TableDeleted(const ::rtl::OUString& /*rAliasName*/)
 {
 }
 // -----------------------------------------------------------------------------
