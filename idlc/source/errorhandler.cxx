@@ -4,9 +4,9 @@
  *
  *  $RCSfile: errorhandler.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:45:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:48:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -461,8 +461,9 @@ static const sal_Char* parseStateToMessage(ParseState state)
         return "Illegal syntax after ',' in declarators list";
     case PS_DeclsDeclSeen:
         return "Illegal syntax after declarator in declarators list";
+    default:
+        return "no wider described syntax error";
     }
-    return "no wider described syntax error";
 }
 
 static OString flagToString(sal_uInt32 flag)
@@ -603,11 +604,6 @@ void ErrorHandler::syntaxError(ParseState ps, sal_Int32 lineNumber, const sal_Ch
     idlc()->incErrorCount();
 }
 
-void ErrorHandler::nameCaseError(sal_Char *n, sal_Char *t)
-{
-    idlc()->incErrorCount();
-}
-
 void ErrorHandler::coercionError(AstExpression *pExpr, ExprType et)
 {
     errorHeader(EIDL_COERCION_FAILURE);
@@ -707,12 +703,10 @@ void ErrorHandler::evalError(AstExpression* pExpr)
     idlc()->incErrorCount();
 }
 
-void ErrorHandler::enumValExpected(AstUnion* pUnion, AstUnionLabel *pLabel)
+void ErrorHandler::enumValExpected(AstUnion* pUnion)
 {
     errorHeader(EIDL_ENUM_VAL_EXPECTED);
-    fprintf(stderr, " union %s, ", pUnion->getLocalName().getStr());
-//  pLabel->dump();
-    fprintf(stderr, "\n");
+    fprintf(stderr, " union %s\n", pUnion->getLocalName().getStr());
     idlc()->incErrorCount();
 }
 
