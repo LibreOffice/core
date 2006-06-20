@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AGroup.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:28:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:13:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,8 +69,6 @@ using namespace com::sun::star::sdbcx;
 // -------------------------------------------------------------------------
 void WpADOGroup::Create()
 {
-    IClassFactory2* pIUnknown   = NULL;
-    IUnknown        *pOuter     = NULL;
     HRESULT         hr = -1;
     ADOGroup* pGroup = NULL;
     hr = CoCreateInstance(ADOS::CLSID_ADOGROUP_25,
@@ -137,10 +135,8 @@ Sequence< sal_Int8 > OAdoGroup::getUnoTunnelImplementationId()
 sal_Int64 OAdoGroup::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
     return (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
-                ?
-            (sal_Int64)this
-                :
-            OGroup_ADO::getSomething(rId);
+                ? reinterpret_cast< sal_Int64 >( this )
+                : OGroup_ADO::getSomething(rId);
 }
 
 // -------------------------------------------------------------------------
