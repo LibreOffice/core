@@ -4,9 +4,9 @@
  *
  *  $RCSfile: regactivex.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 15:06:04 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:40:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,8 +35,11 @@
 
 #define UNICODE
 
+#pragma warning(push, 1) /* disable warnings within system headers */
 #include <windows.h>
 #include <msiquery.h>
+#pragma warning(pop)
+
 #include <string.h>
 #include <malloc.h>
 
@@ -360,7 +363,7 @@ extern "C" UINT __stdcall InstallActiveXControl( MSIHANDLE hMSI )
 }
 
 //----------------------------------------------------------
-extern "C" __stdcall UINT DeinstallActiveXControl( MSIHANDLE hMSI )
+extern "C" UINT __stdcall DeinstallActiveXControl( MSIHANDLE hMSI )
 {
     INSTALLSTATE current_state;
     INSTALLSTATE future_state;
