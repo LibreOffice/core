@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableWindow.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:38:04 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:14:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,7 +113,7 @@ namespace dbaui
         BOOL FillListBox();
             // wird in JEDEM Init aufgerufen
 
-        virtual void OnEntryDoubleClicked(SvLBoxEntry* pEntry) { }
+        virtual void OnEntryDoubleClicked(SvLBoxEntry* /*pEntry*/) { }
             // wird aus dem DoubleClickHdl der ListBox heraus aufgerufen
 
         /** HandleKeyInput triues to handle the KeyEvent. Movement or deletion
@@ -165,7 +165,7 @@ namespace dbaui
         void                        setActive(sal_Bool _bActive = sal_True);
 
         void                        Remove();
-        BOOL                        IsActive(){ return m_bActive; }
+        BOOL                        IsActiveWindow(){ return m_bActive; }
 
         ::rtl::OUString             GetTableName() const { return m_pData->GetTableName(); }
         ::rtl::OUString             GetWinName() const { return m_pData->GetWinName(); }
@@ -218,6 +218,9 @@ namespace dbaui
         /** clears the listbox inside. Must be called be the dtor is called.
         */
         void clearListBox();
+
+    protected:
+        using Window::SetPosSizePixel;
     };
 }
 #endif //DBAUI_TABLEWINDOW_HXX
