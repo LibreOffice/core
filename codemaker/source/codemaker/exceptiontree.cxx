@@ -4,9 +4,9 @@
  *
  *  $RCSfile: exceptiontree.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:09:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:23:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,8 +49,8 @@
 using codemaker::ExceptionTree;
 using codemaker::ExceptionTreeNode;
 
-ExceptionTreeNode * ExceptionTreeNode::add(rtl::OString const & name) {
-    std::auto_ptr< ExceptionTreeNode > node(new ExceptionTreeNode(name));
+ExceptionTreeNode * ExceptionTreeNode::add(rtl::OString const & theName) {
+    std::auto_ptr< ExceptionTreeNode > node(new ExceptionTreeNode(theName));
     children.push_back(node.get());
     return node.release();
 }
