@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mutex.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:29:23 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:12:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -218,14 +218,18 @@ namespace osl
     template< class T >
     class ResettableGuard : public ClearableGuard< T >
     {
+    private:
+        ResettableGuard(ResettableGuard &); // not defined
+        void operator =(ResettableGuard &); // not defined
+
     protected:
         T* pResetT;
     public:
         /** Acquires the object specified as parameter.
         */
-        ResettableGuard( T* pT ) :
-                ClearableGuard<T>( pT ),
-                pResetT( pT )
+        ResettableGuard( T* pT_ ) :
+                ClearableGuard<T>( pT_ ),
+                pResetT( pT_ )
         {}
 
         /** Acquires the object specified as parameter.
