@@ -4,9 +4,9 @@
  *
  *  $RCSfile: exceptiontree.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-15 09:10:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:22:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,7 @@ struct ExceptionTreeNode {
     void setPresent() { present = true; clearChildren(); }
 
     // Internally used by ExceptionTree:
-    ExceptionTreeNode * add(rtl::OString const & name);
+    ExceptionTreeNode * add(rtl::OString const & theName);
 
     rtl::OString name;
     bool present;
