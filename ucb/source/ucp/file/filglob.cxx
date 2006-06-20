@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filglob.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:24:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:19:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,11 +127,8 @@ using namespace com::sun::star::ucb;
 namespace {
 
     Sequence< Any > generateErrorArguments(
-        fileaccess::shell * pShell,
         rtl::OUString const & rPhysicalUrl)
     {
-        OSL_ENSURE(pShell,"specification violation");
-
         rtl::OUString aResourceName;
         rtl::OUString aResourceType;
         sal_Bool      bRemovable;
@@ -164,6 +161,7 @@ namespace {
                         break;
 
                     case osl::FileStatus::Volume:
+                    {
                         aResourceType
                             = rtl::OUString(
                                 RTL_CONSTASCII_USTRINGPARAM("volume"));
@@ -177,6 +175,15 @@ namespace {
                             bRemovable = aVolumeInfo.getRemoveableFlag();
                             bRemoveProperty = true;
                         }
+                    }
+                    break;
+                    case osl::FileStatus::Regular:
+                    case osl::FileStatus::Fifo:
+                    case osl::FileStatus::Socket:
+                    case osl::FileStatus::Link:
+                    case osl::FileStatus::Special:
+                    case osl::FileStatus::Unknown:
+                        // do nothing for now
                         break;
                 }
         }
@@ -383,7 +390,6 @@ namespace fileaccess {
 
 
     void throw_handler(
-        shell * pShell,
         sal_Int32 errorCode,
         sal_Int32 minorCode,
         const Reference< XCommandEnvironment >& xEnv,
@@ -416,7 +422,7 @@ namespace fileaccess {
         else if( errorCode == TASKHANDLING_UNSUPPORTED_OPEN_MODE )
         {
             UnsupportedOpenModeException excep;
-            excep.Mode = minorCode;
+            excep.Mode = sal::static_int_cast< sal_Int16 >(minorCode);
             aAny <<= excep;
                 cancelCommandExecution( aAny,xEnv );
         }
@@ -507,7 +513,7 @@ namespace fileaccess {
 
             cancelCommandExecution(
                 ioErrorCode,
-                generateErrorArguments(pShell,aUncPath),
+                generateErrorArguments(aUncPath),
                 xEnv,
                 rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
@@ -562,7 +568,7 @@ namespace fileaccess {
 
             cancelCommandExecution(
                 ioErrorCode,
-                generateErrorArguments(pShell, aUncPath),
+                generateErrorArguments(aUncPath),
                 xEnv,
                 rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
@@ -579,7 +585,7 @@ namespace fileaccess {
             ioErrorCode = IOErrorCode_UNKNOWN;
             cancelCommandExecution(
                 ioErrorCode,
-                generateErrorArguments(pShell, aUncPath),
+                generateErrorArguments(aUncPath),
                 xEnv,
                 rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
@@ -591,7 +597,7 @@ namespace fileaccess {
             ioErrorCode = IOErrorCode_OUT_OF_DISK_SPACE;
             cancelCommandExecution(
                 ioErrorCode,
-                generateErrorArguments(pShell,aUncPath),
+                generateErrorArguments(aUncPath),
                 xEnv,
                 rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
@@ -645,7 +651,7 @@ namespace fileaccess {
             }
             cancelCommandExecution(
                 ioErrorCode,
-                generateErrorArguments(pShell, aUncPath),
+                generateErrorArguments(aUncPath),
                 xEnv,
                 rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
@@ -687,7 +693,7 @@ namespace fileaccess {
             }
             cancelCommandExecution(
                 ioErrorCode,
-                generateErrorArguments(pShell, aUncPath),
+                generateErrorArguments(aUncPath),
                 xEnv,
                 rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
@@ -751,7 +757,7 @@ namespace fileaccess {
 //              ioErrorCode = IOErrorCode_INVALID_CHARACTER;
 //              cancelCommandExecution(
 //                  ioErrorCode,
-//                  generateErrorArguments(pShell,aUncPath),
+//                  generateErrorArguments(aUncPath),
 //                  xEnv,
 //                  rtl::OUString(
 //                      RTL_CONSTASCII_USTRINGPARAM(
@@ -777,7 +783,7 @@ namespace fileaccess {
 //          ioErrorCode = IOErrorCode_ALREADY_EXISTING;
 //          cancelCommandExecution(
 //              ioErrorCode,
-//              generateErrorArguments(pShell,aUncPath),
+//              generateErrorArguments(aUncPath),
 //              xEnv,
 //              rtl::OUString(
 //                  RTL_CONSTASCII_USTRINGPARAM(
@@ -804,7 +810,7 @@ namespace fileaccess {
             }
             cancelCommandExecution(
                 ioErrorCode,
-                generateErrorArguments(pShell,getParentName(aUncPath)),
+                generateErrorArguments(getParentName(aUncPath)),
                 //TODO! ok to supply physical URL to getParentName()?
                 xEnv,
                 rtl::OUString(
@@ -858,7 +864,7 @@ namespace fileaccess {
             }
             cancelCommandExecution(
                 ioErrorCode,
-                generateErrorArguments(pShell, aUncPath),
+                generateErrorArguments(aUncPath),
                 xEnv,
                 rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
@@ -907,7 +913,7 @@ namespace fileaccess {
             }
             cancelCommandExecution(
                 ioErrorCode,
-                generateErrorArguments(pShell, aUncPath),
+                generateErrorArguments(aUncPath),
                 xEnv,
                 rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
@@ -926,7 +932,7 @@ namespace fileaccess {
             ioErrorCode = IOErrorCode_GENERAL;
             cancelCommandExecution(
                 ioErrorCode,
-                generateErrorArguments(pShell, aUncPath),
+                generateErrorArguments(aUncPath),
                 xEnv,
                 rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
@@ -938,7 +944,7 @@ namespace fileaccess {
             ioErrorCode = IOErrorCode_WRITE_PROTECTED;
             cancelCommandExecution(
                 ioErrorCode,
-                generateErrorArguments(pShell,aUncPath),
+                generateErrorArguments(aUncPath),
                 xEnv,
                 rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
@@ -1000,7 +1006,7 @@ namespace fileaccess {
             }
             cancelCommandExecution(
                 ioErrorCode,
-                generateErrorArguments(pShell, aUncPath),
+                generateErrorArguments(aUncPath),
                 xEnv,
                 rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
