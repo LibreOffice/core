@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ADatabaseMetaDataImpl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:15:01 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:12:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,7 +105,6 @@ void ODatabaseMetaData::fillLiterals()
 
         aRecordset.MoveFirst();
         OLEVariant  aValue;
-        sal_Int32 nRet = 0;
         LiteralInfo aInfo;
         while(!aRecordset.IsAtEOF())
         {
@@ -439,8 +438,6 @@ RightsEnum OAdoGroup::Map2Right(sal_Int32 _eNum)
 // -------------------------------------------------------------------------
 void WpADOIndex::Create()
 {
-    IClassFactory2* pIUnknown   = NULL;
-    IUnknown        *pOuter     = NULL;
     HRESULT         hr = -1;
 
     _ADOIndex* pIndex = NULL;
@@ -471,8 +468,6 @@ void OAdoIndex::fillPropertyValues()
 // -----------------------------------------------------------------------------
 void WpADOKey::Create()
 {
-    IClassFactory2* pIUnknown   = NULL;
-    IUnknown        *pOuter     = NULL;
     HRESULT         hr = -1;
     _ADOKey* pKey = NULL;
     hr = CoCreateInstance(ADOS::CLSID_ADOKEY_25,
@@ -563,7 +558,7 @@ sal_Int32 OAdoKey::MapKeyRule(const KeyTypeEnum& _eNum)
 // -------------------------------------------------------------------------
 KeyTypeEnum OAdoKey::Map2KeyRule(const sal_Int32& _eNum)
 {
-    KeyTypeEnum eNum;
+    KeyTypeEnum eNum( adKeyPrimary );
     switch(_eNum)
     {
         case KeyType::PRIMARY:
@@ -575,14 +570,14 @@ KeyTypeEnum OAdoKey::Map2KeyRule(const sal_Int32& _eNum)
         case KeyType::UNIQUE:
             eNum = adKeyUnique;
             break;
+        default:
+            OSL_ENSURE( false, "OAdoKey::Map2KeyRule: invalid key type!" );
     }
     return eNum;
 }
 // -----------------------------------------------------------------------------
 void WpADOTable::Create()
 {
-    IClassFactory2* pIUnknown   = NULL;
-    IUnknown        *pOuter     = NULL;
     HRESULT         hr = -1;
     _ADOTable* pTable = NULL;
     hr = CoCreateInstance(ADOS::CLSID_ADOTABLE_25,
@@ -630,8 +625,6 @@ void OAdoTable::fillPropertyValues()
 // -----------------------------------------------------------------------------
 void WpADOUser::Create()
 {
-    IClassFactory2* pIUnknown   = NULL;
-    IUnknown        *pOuter     = NULL;
     HRESULT         hr = -1;
     _ADOUser* pUser = NULL;
     hr = CoCreateInstance(ADOS::CLSID_ADOUSER_25,
