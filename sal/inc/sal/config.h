@@ -4,9 +4,9 @@
  *
  *  $RCSfile: config.h,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:46:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:15:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,10 +142,12 @@ extern "C" {
  * compilers.  This will create a dummy variable specifically for gcc 3.3 that
  * allows it to compile and not break the others.  Other compilers may follow
  * with this eror later. */
+#if defined __GNUC__
 #if ((__GNUC__ == 3) && (__GNUC_MINOR__ > 2))
 #  define SAL_ISO_CONST const
 #else
 #  define SAL_ISO_CONST
+#endif
 #endif
 
 #endif /*_SAL_CONFIG_H_ */
