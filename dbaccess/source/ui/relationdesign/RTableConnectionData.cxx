@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RTableConnectionData.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:35:46 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:30:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-DBG_NAME(ORelationTableConnectionData);
+DBG_NAME(ORelationTableConnectionData)
 //========================================================================
 // class ORelationTableConnectionData
 //========================================================================
@@ -94,10 +94,10 @@ ORelationTableConnectionData::ORelationTableConnectionData()
 //------------------------------------------------------------------------
 ORelationTableConnectionData::ORelationTableConnectionData( const Reference< XNameAccess>& _xTables)
     :OTableConnectionData()
+    ,m_xTables(_xTables)
     ,m_nUpdateRules(KeyRule::NO_ACTION)
     ,m_nDeleteRules(KeyRule::NO_ACTION)
     ,m_nCardinality(CARDINAL_UNDEFINED)
-    ,m_xTables(_xTables)
 {
     DBG_CTOR(ORelationTableConnectionData,NULL);
     Reference<XComponent> xComponent(m_xTables,UNO_QUERY);
@@ -111,11 +111,10 @@ ORelationTableConnectionData::ORelationTableConnectionData( const Reference< XNa
                                                             const ::rtl::OUString& rDestWinName,
                                                             const ::rtl::OUString& rConnName )
     :OTableConnectionData( rSourceWinName, rDestWinName, rConnName )
-
+    ,m_xTables(_xTables)
     ,m_nUpdateRules(KeyRule::NO_ACTION)
     ,m_nDeleteRules(KeyRule::NO_ACTION)
     ,m_nCardinality(CARDINAL_UNDEFINED)
-    ,m_xTables(_xTables)
 {
     DBG_CTOR(ORelationTableConnectionData,NULL);
 
@@ -137,6 +136,7 @@ ORelationTableConnectionData::ORelationTableConnectionData( const Reference< XNa
 //------------------------------------------------------------------------
 ORelationTableConnectionData::ORelationTableConnectionData( const ORelationTableConnectionData& rConnData )
     :OTableConnectionData( rConnData )
+    , ::utl::OEventListenerAdapter()
 {
     DBG_CTOR(ORelationTableConnectionData,NULL);
     *this = rConnData;
@@ -543,7 +543,7 @@ void ORelationTableConnectionData::removeListening(const Reference<XInterface>& 
         stopComponentListening(xComponent);
 }
 // -----------------------------------------------------------------------------
-void ORelationTableConnectionData::_disposing( const ::com::sun::star::lang::EventObject& _rSource )
+void ORelationTableConnectionData::_disposing( const ::com::sun::star::lang::EventObject& /*_rSource*/ )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     // it doesn't matter which one was disposed
