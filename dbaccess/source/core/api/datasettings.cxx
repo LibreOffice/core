@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datasettings.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 10:06:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:39:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,7 +166,7 @@ float ConvertFontWidth( ::FontWidth eWidth )
 //= ODataSettings
 //==========================================================================
 //--------------------------------------------------------------------------
-void ODataSettings::registerProperties(ODataSettings_Base* _pItem)
+void ODataSettings::registerPropertiesFor(ODataSettings_Base* _pItem)
 {
     if ( m_bQuery )
     {
@@ -238,8 +238,8 @@ ODataSettings::ODataSettings(const ODataSettings& _rSource, ::cppu::OBroadcastHe
 
 //--------------------------------------------------------------------------
 ODataSettings_Base::ODataSettings_Base()
-    :m_aFont(::comphelper::getDefaultFont())
-    ,m_bApplyFilter(sal_False)
+    :m_bApplyFilter(sal_False)
+    ,m_aFont(::comphelper::getDefaultFont())
     ,m_nFontEmphasis(::com::sun::star::awt::FontEmphasisMark::NONE)
     ,m_nFontRelief(::com::sun::star::awt::FontRelief::NONE)
 {
