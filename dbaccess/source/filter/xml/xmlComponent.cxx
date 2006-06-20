@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlComponent.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:08:47 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:49:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,6 @@ OXMLComponent::OXMLComponent( ODBFilter& rImport
 
     sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
     static const ::rtl::OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
-    sal_Bool bAutoEnabled = sal_False;
     for(sal_Int16 i = 0; i < nLength; ++i)
     {
         OUString sLocalName;
