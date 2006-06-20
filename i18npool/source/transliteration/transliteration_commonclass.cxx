@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transliteration_commonclass.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:36:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:50:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@ OUString SAL_CALL transliteration_commonclass::getName() throw(RuntimeException)
         return OUString::createFromAscii(transliterationName);
 }
 
-void SAL_CALL transliteration_commonclass::loadModule( TransliterationModules modName, const Locale& rLocale )
+void SAL_CALL transliteration_commonclass::loadModule( TransliterationModules /*modName*/, const Locale& rLocale )
         throw(RuntimeException)
 {
         aLocale = rLocale;
@@ -62,7 +62,7 @@ void SAL_CALL transliteration_commonclass::loadModule( TransliterationModules mo
 
 
 void SAL_CALL
-transliteration_commonclass::loadModuleNew( const Sequence < TransliterationModulesNew >& modName, const Locale& rLocale )
+transliteration_commonclass::loadModuleNew( const Sequence < TransliterationModulesNew >& /*modName*/, const Locale& /*rLocale*/ )
         throw(RuntimeException)
 {
         throw RuntimeException();
@@ -70,21 +70,21 @@ transliteration_commonclass::loadModuleNew( const Sequence < TransliterationModu
 
 
 void SAL_CALL
-transliteration_commonclass::loadModuleByImplName( const OUString& implName, const Locale& rLocale )
+transliteration_commonclass::loadModuleByImplName( const OUString& /*implName*/, const Locale& /*rLocale*/ )
         throw(RuntimeException)
 {
         throw RuntimeException();
 }
 
 void SAL_CALL
-transliteration_commonclass::loadModulesByImplNames(const Sequence< OUString >& modNamelist, const Locale& rLocale)
+transliteration_commonclass::loadModulesByImplNames(const Sequence< OUString >& /*modNamelist*/, const Locale& /*rLocale*/)
         throw(RuntimeException)
 {
         throw RuntimeException();
 }
 
 Sequence< OUString > SAL_CALL
-transliteration_commonclass::getAvailableModules( const Locale& rLocale, sal_Int16 sType )
+transliteration_commonclass::getAvailableModules( const Locale& /*rLocale*/, sal_Int16 /*sType*/ )
         throw(RuntimeException)
 {
         throw RuntimeException();

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transliteration_body.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:36:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:50:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,8 +56,8 @@ sal_Int16 SAL_CALL Transliteration_body::getType() throw(RuntimeException)
 }
 
 sal_Bool SAL_CALL Transliteration_body::equals(
-    const OUString& str1, sal_Int32 pos1, sal_Int32 nCount1, sal_Int32& nMatch1,
-    const OUString& str2, sal_Int32 pos2, sal_Int32 nCount2, sal_Int32& nMatch2)
+    const OUString& /*str1*/, sal_Int32 /*pos1*/, sal_Int32 /*nCount1*/, sal_Int32& /*nMatch1*/,
+    const OUString& /*str2*/, sal_Int32 /*pos2*/, sal_Int32 /*nCount2*/, sal_Int32& /*nMatch2*/)
     throw(RuntimeException)
 {
     throw RuntimeException();
