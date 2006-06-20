@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VCollection.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:17:12 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:09:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,9 @@ namespace
     public:
         OHardRefMap(sal_Bool _bCase)
             : m_aNameMap(_bCase ? true : false)
+        {
+        }
+        virtual ~OHardRefMap()
         {
         }
 
@@ -251,10 +254,10 @@ OCollection::OCollection(::cppu::OWeakObject& _rParent
                          , const TStringVector &_rVector
                          , sal_Bool _bUseIndexOnly
                          , sal_Bool _bUseHardRef)
-                     : m_rParent(_rParent)
-                     ,m_rMutex(_rMutex)
-                     ,m_aContainerListeners(_rMutex)
+                     :m_aContainerListeners(_rMutex)
                      ,m_aRefreshListeners(_rMutex)
+                     ,m_rParent(_rParent)
+                     ,m_rMutex(_rMutex)
                      ,m_bUseIndexOnly(_bUseIndexOnly)
 {
     if ( _bUseHardRef )
@@ -292,7 +295,6 @@ Sequence< Type > SAL_CALL OCollection::getTypes() throw (RuntimeException)
         ::std::vector<Type> aOwnTypes;
         aOwnTypes.reserve(aTypes.getLength());
         Type aType = ::getCppuType(static_cast< Reference<XNameAccess> *>(NULL));
-        sal_Int32 i=0;
         for(;pBegin != pEnd; ++pBegin)
         {
             if ( *pBegin != aType )
@@ -358,7 +360,7 @@ void SAL_CALL OCollection::refresh(  ) throw(RuntimeException)
 
     impl_refresh();
     EventObject aEvt(static_cast<XTypeProvider*>(this));
-    NOTIFY_LISTENERS(m_aRefreshListeners, XRefreshListener, refreshed, aEvt);
+    m_aRefreshListeners.notifyEach( &XRefreshListener::refreshed, aEvt );
 }
 // -----------------------------------------------------------------------------
 void OCollection::reFill(const TStringVector &_rVector)
@@ -398,13 +400,10 @@ void SAL_CALL OCollection::appendByDescriptor( const Reference< XPropertySet >& 
 
         appendObject(descriptor);
         ObjectType xNewName = cloneObject(descriptor);
-        Reference<XUnoTunnel> xTunnel(xNewName,UNO_QUERY);
-        if(xTunnel.is())
-        {
-            ODescriptor* pDescriptor = (ODescriptor*)xTunnel->getSomething(ODescriptor::getUnoTunnelImplementationId());
-            if(pDescriptor)
-                pDescriptor->setNew(sal_False);
-        }
+
+        ODescriptor* pDescriptor = ODescriptor::getImplementation( xNewName );
+        if ( pDescriptor )
+            pDescriptor->setNew( sal_False );
 
         if(xNewName.is())
         {
@@ -592,7 +591,7 @@ Reference< XPropertySet > OCollection::createEmptyObject()
     throw SQLException();
 }
 // -----------------------------------------------------------------------------
-void OCollection::appendObject( const Reference< XPropertySet >& descriptor )
+void OCollection::appendObject( const Reference< XPropertySet >& /*descriptor*/ )
 {
 }
 // -----------------------------------------------------------------------------
@@ -601,7 +600,7 @@ ObjectType OCollection::cloneObject(const Reference< XPropertySet >& _xDescripto
     return _xDescriptor.is() ? createObject(getNameForObject(_xDescriptor)) : sdbcx::ObjectType();
 }
 // -----------------------------------------------------------------------------
-void OCollection::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
+void OCollection::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString /*_sElementName*/)
 {
 }
 // -----------------------------------------------------------------------------
