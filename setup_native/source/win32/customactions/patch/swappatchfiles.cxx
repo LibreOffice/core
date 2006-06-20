@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swappatchfiles.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-06 14:03:30 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:36:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,9 +33,12 @@
  *
  ************************************************************************/
 
+#pragma warning(push, 1) /* disable warnings within system headers */
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <msiquery.h>
+#pragma warning(pop)
+
 #include <malloc.h>
 #include <assert.h>
 
@@ -160,30 +163,6 @@ static inline void UnsetMsiProperty(MSIHANDLE handle, const std::_tstring& sProp
 static inline void SetMsiProperty(MSIHANDLE handle, const std::_tstring& sProperty)
 {
     MsiSetProperty(handle, sProperty.c_str(), TEXT("1"));
-}
-
-static bool RegistryKeyHasUpgradeSubKey(HKEY hRootKey, const std::_tstring& regKey, const std::_tstring& upgradeKey)
-{
-    HKEY hKey;
-    if (RegOpenKey(hRootKey, regKey.c_str(), &hKey) == ERROR_SUCCESS)
-    {
-        DWORD nSubKeys;
-        DWORD lLongestSubKey;
-
-        if (RegQueryInfoKey(
-            hKey, NULL, NULL, NULL, &nSubKeys, &lLongestSubKey, NULL, NULL, NULL, NULL, NULL, NULL) == ERROR_SUCCESS)
-        {
-            LPTSTR buffer = reinterpret_cast<LPTSTR>(_alloca(lLongestSubKey + 1));
-
-            for (DWORD i = 0; i < nSubKeys; i++)
-            {
-                LONG ret = RegEnumKey(hKey, i, buffer, lLongestSubKey + 1);
-                if ((ret == ERROR_SUCCESS) && (buffer == upgradeKey))
-                    return true;
-            }
-        }
-    }
-    return false;
 }
 
 static BOOL MoveFileEx9x( LPCSTR lpExistingFileNameA, LPCSTR lpNewFileNameA, DWORD dwFlags )
@@ -490,7 +469,7 @@ extern "C" UINT __stdcall IsOfficeRunning( MSIHANDLE handle )
 
     if ( IsValidHandle(hFind) )
     {
-        BOOL    fSuccess;
+        BOOL    fSuccess = false;
         bool    fRenameSucceeded;
 
         do
