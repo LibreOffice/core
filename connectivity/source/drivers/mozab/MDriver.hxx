@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MDriver.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:18:42 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:43:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,11 +52,6 @@
 #endif
 
 
-#define MOZAB_MOZILLA_SCHEMA    "mozilla"
-#define MOZAB_THUNDERBIRD_SCHEMA "thunderbird"
-#define MOZAB_LDAP_SCHEMA       "ldap"
-#define MOZAB_OUTLOOK_SCHEMA    "outlook"
-#define MOZAB_OUTLOOKEXP_SCHEMA "outlookexp"
 #define MOZAB_DRIVER_IMPL_NAME "com.sun.star.comp.sdbc.MozabDriver"
 
 namespace connectivity
@@ -65,8 +60,9 @@ namespace connectivity
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL MozabDriver_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception );
 
-        typedef void* (SAL_CALL * OMozabConnection_CreateInstanceFunction)(void* _pDriver );
-        typedef void  (SAL_CALL * OSetMozabServiceFactory)( void* _pFactory );
+        typedef       void* (SAL_CALL * OMozabConnection_CreateInstanceFunction)(void* _pDriver );
+        typedef       void  (SAL_CALL * OSetMozabServiceFactory)( void* _pFactory );
+        typedef const void* (SAL_CALL * OGetSdbcScheme_Function)( short );
 
 
         typedef ::cppu::WeakComponentImplHelper2<   ::com::sun::star::sdbc::XDriver,
@@ -87,13 +83,15 @@ namespace connectivity
         protected:
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xMSFactory;
 
-            ::osl::Mutex                m_aMutex;       // mutex is need to control member access
-            connectivity::OWeakRefArray m_xConnections; //  vector containing a list
-                                                        //  of all the Connection objects
-                                                        //  for this Driver
-            oslModule                   s_hModule;
-            OMozabConnection_CreateInstanceFunction s_pCreationFunc;
-            void registerClient();
+            ::osl::Mutex                            m_aMutex;       // mutex is need to control member access
+            connectivity::OWeakRefArray             m_xConnections; //  vector containing a list
+                                                                    //  of all the Connection objects
+                                                                    //  for this Driver
+            oslModule                               m_hModule;
+            OMozabConnection_CreateInstanceFunction m_pCreationFunc;
+            OGetSdbcScheme_Function                 m_pSchemeFunction;
+
+            bool ensureInit();
             virtual ~MozabDriver();
         public:
 
@@ -120,13 +118,8 @@ namespace connectivity
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                         & getMSFactory(void) const { return m_xMSFactory; }
 
-            static EDriverType acceptsURL_Stat( const ::rtl::OUString& url );
-            // static methods to return the names of the uri
-            static const sal_Char*    getSDBC_SCHEME_MOZILLA();
-            static const sal_Char*    getSDBC_SCHEME_THUNDERBIRD();
-            static const sal_Char*    getSDBC_SCHEME_LDAP();
-            static const sal_Char*    getSDBC_SCHEME_OUTLOOK_MAPI();
-            static const sal_Char*    getSDBC_SCHEME_OUTLOOK_EXPRESS();
+        private:
+            EDriverType impl_classifyURL( const ::rtl::OUString& url );
         };
     }
 
