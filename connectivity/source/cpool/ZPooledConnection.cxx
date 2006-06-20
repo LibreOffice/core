@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ZPooledConnection.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:18:16 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:07:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,7 @@ void SAL_CALL OPooledConnection::disposing(void)
 }
 // -----------------------------------------------------------------------------
 // XEventListener
-void SAL_CALL OPooledConnection::disposing( const EventObject& Source ) throw (RuntimeException)
+void SAL_CALL OPooledConnection::disposing( const EventObject& /*Source*/ ) throw (RuntimeException)
 {
     m_xComponent = NULL;
 }
