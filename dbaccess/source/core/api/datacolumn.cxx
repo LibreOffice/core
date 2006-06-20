@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datacolumn.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-03 16:14:10 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:38:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,7 @@ using namespace ::osl;
 using namespace ::comphelper;
 using namespace ::cppu;
 
-DBG_NAME(ODataColumn);
+DBG_NAME(ODataColumn)
 //--------------------------------------------------------------------------
 ODataColumn::ODataColumn(
                          const Reference < XResultSetMetaData >& _xMetaData,
