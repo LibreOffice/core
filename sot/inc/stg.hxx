@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stg.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:36:46 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:52:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,9 +90,9 @@ struct ClsId
 class SOT_DLLPUBLIC StorageBase : public SvRefBase
 {
 protected:
-    ULONG           nError;                   // error code
-    StreamMode      nMode;                    // open mode
-    BOOL            bAutoCommit;
+    ULONG           m_nError;                   // error code
+    StreamMode      m_nMode;                    // open mode
+    BOOL            m_bAutoCommit;
                     StorageBase();
     virtual         ~StorageBase();
 public:
@@ -103,10 +103,10 @@ public:
     void            ResetError() const;
     void            SetError( ULONG ) const;
     ULONG           GetError() const;
-    BOOL            Good() const          { return BOOL( nError == SVSTREAM_OK ); }
-    StreamMode      GetMode() const  { return nMode;  }
+    BOOL            Good() const          { return BOOL( m_nError == SVSTREAM_OK ); }
+    StreamMode      GetMode() const  { return m_nMode;  }
     void            SetAutoCommit( BOOL bSet )
-                    { bAutoCommit = bSet; }
+                    { m_bAutoCommit = bSet; }
 };
 
 class BaseStorageStream : public StorageBase
@@ -315,7 +315,7 @@ public:
 namespace ucb
 {
     class Content;
-};
+}
 
 class UCBStorage_Impl;
 struct UCBStorageElement_Impl;
