@@ -9,15 +9,13 @@ namespace rtl_str
 
         void compare_000()
             {
-                sal_Int32 nValue = rtl_str_compare( NULL, NULL);
-                volatile int dummy = 0;
+                rtl_str_compare( NULL, NULL);
             }
 
         void compare_000_1()
             {
                 rtl::OString aStr1 = "Line must be equal.";
-                sal_Int32 nValue = rtl_str_compare( aStr1.getStr(), NULL);
-                volatile int dummy = 0;
+                rtl_str_compare( aStr1.getStr(), NULL);
             }
         void compare_001()
             {
@@ -66,15 +64,13 @@ namespace rtl_str
 
         void compare_000()
             {
-                sal_Int32 nValue = rtl_str_compareIgnoreAsciiCase( NULL, NULL);
-                volatile int dummy = 0;
+                rtl_str_compareIgnoreAsciiCase( NULL, NULL);
             }
 
         void compare_000_1()
             {
                 rtl::OString aStr1 = "Line must be equal.";
-                sal_Int32 nValue = rtl_str_compareIgnoreAsciiCase( aStr1.getStr(), NULL);
-                volatile int dummy = 0;
+                rtl_str_compareIgnoreAsciiCase( aStr1.getStr(), NULL);
             }
         void compare_001()
             {
@@ -134,15 +130,13 @@ namespace rtl_str
 
         void compare_000()
             {
-                sal_Int32 nValue = rtl_str_shortenedCompareIgnoreAsciiCase_WithLength( NULL, 0, NULL, 0, 0);
-                volatile int dummy = 0;
+                rtl_str_shortenedCompareIgnoreAsciiCase_WithLength( NULL, 0, NULL, 0, 0);
             }
 
         void compare_000_1()
             {
                 rtl::OString aStr1 = "Line must be equal.";
-                sal_Int32 nValue = rtl_str_shortenedCompareIgnoreAsciiCase_WithLength( aStr1.getStr(), aStr1.getLength(), NULL, 0, 1);
-                volatile int dummy = 0;
+                rtl_str_shortenedCompareIgnoreAsciiCase_WithLength( aStr1.getStr(), aStr1.getLength(), NULL, 0, 1);
             }
         void compare_001()
             {
@@ -221,8 +215,7 @@ namespace rtl_str
 
         void hashCode_000()
             {
-                sal_Int32 nHashCode = rtl_str_hashCode( NULL );
-                volatile int dummy = 0;
+                rtl_str_hashCode( NULL );
             }
 
         void hashCode_001()
@@ -276,8 +269,7 @@ namespace rtl_str
 
         void indexOfChar_000()
             {
-                sal_Int32 nIndex = rtl_str_indexOfChar( NULL, 0 );
-                volatile int dummy = 0;
+                rtl_str_indexOfChar( NULL, 0 );
             }
 
         void indexOfChar_001()
@@ -323,8 +315,7 @@ namespace rtl_str
 
         void lastIndexOfChar_000()
             {
-                sal_Int32 nIndex = rtl_str_lastIndexOfChar( NULL, 0 );
-                volatile int dummy = 0;
+                rtl_str_lastIndexOfChar( NULL, 0 );
             }
 
         void lastIndexOfChar_001()
@@ -372,15 +363,13 @@ namespace rtl_str
 
         void indexOfStr_000()
             {
-                sal_Int32 nIndex = rtl_str_indexOfStr( NULL, 0 );
-                volatile int dummy = 0;
+                rtl_str_indexOfStr( NULL, 0 );
             }
 
         void indexOfStr_000_1()
             {
                 rtl::OString aStr1 = "Line for a indexOfStr.";
-                sal_Int32 nIndex = rtl_str_indexOfStr( aStr1.getStr(), 0 );
-                volatile int dummy = 0;
+                rtl_str_indexOfStr( aStr1.getStr(), 0 );
             }
 
         void indexOfStr_001()
@@ -427,15 +416,13 @@ namespace rtl_str
 
         void lastIndexOfStr_000()
             {
-                sal_Int32 nIndex = rtl_str_lastIndexOfStr( NULL, NULL );
-                volatile int dummy = 0;
+                rtl_str_lastIndexOfStr( NULL, NULL );
             }
 
         void lastIndexOfStr_000_1()
             {
                 rtl::OString aStr1 = "Line for a lastIndexOfStr.";
-                sal_Int32 nIndex = rtl_str_lastIndexOfStr( aStr1.getStr(), NULL );
-                volatile int dummy = 0;
+                rtl_str_lastIndexOfStr( aStr1.getStr(), NULL );
             }
 
         void lastIndexOfStr_001()
@@ -494,7 +481,6 @@ namespace rtl_str
         void replaceChar_000()
             {
                 rtl_str_replaceChar( NULL, 0, 0 );
-                volatile int dummy = 0;
             }
 
         void replaceChar_001()
@@ -531,13 +517,11 @@ namespace rtl_str
         void replaceChar_WithLength_000()
             {
                 rtl_str_replaceChar_WithLength( NULL, 0, 0, 0 );
-                volatile int dummy = 0;
             }
 
         void replaceChar_WithLength_000_1()
             {
                 rtl_str_replaceChar_WithLength( NULL, 1, 0, 0 );
-                volatile int dummy = 0;
             }
         void replaceChar_WithLength_001()
             {
@@ -575,7 +559,6 @@ namespace rtl_str
         void toAsciiLowerCase_000()
             {
                 rtl_str_toAsciiLowerCase( NULL );
-                volatile int dummy = 0;
             }
 
         void toAsciiLowerCase_001()
@@ -611,7 +594,6 @@ namespace rtl_str
         void toAsciiLowerCase_WithLength_000()
             {
                 rtl_str_toAsciiLowerCase_WithLength( NULL, 0 );
-                volatile int dummy = 0;
             }
 
         void toAsciiLowerCase_WithLength_001()
@@ -649,7 +631,6 @@ namespace rtl_str
         void toAsciiUpperCase_000()
             {
                 rtl_str_toAsciiUpperCase( NULL );
-                volatile int dummy = 0;
             }
 
         void toAsciiUpperCase_001()
@@ -685,7 +666,6 @@ namespace rtl_str
         void toAsciiUpperCase_WithLength_000()
             {
                 rtl_str_toAsciiUpperCase_WithLength( NULL, 0 );
-                volatile int dummy = 0;
             }
 
         void toAsciiUpperCase_WithLength_001()
@@ -722,24 +702,24 @@ namespace rtl_str
       public:
         void trim_WithLength_000()
         {
-            sal_Int32 nValue = rtl_str_trim_WithLength(NULL, 0);
+            rtl_str_trim_WithLength(NULL, 0);
             // should not GPF
         }
 
         void trim_WithLength_000_1()
         {
-            sal_Char *pStr = "  trim this";
-            sal_Int32 nValue = rtl_str_trim_WithLength( pStr, 0 );
+            char pStr[] = { "  trim this" };
+            rtl_str_trim_WithLength( pStr, 0 );
         }
 
         void trim_WithLength_001()
         {
-            sal_Char *pStr = "  trim this";
+            char const *pStr = "  trim this";
             sal_Char *pStr2 = (sal_Char*)malloc(strlen(pStr) + 1);
             if (pStr2)
             {
                 strcpy(pStr2, pStr);
-                sal_Int32 nValue = rtl_str_trim_WithLength( pStr2, 2 );
+                rtl_str_trim_WithLength( pStr2, 2 );
 
                 CPPUNIT_ASSERT_MESSAGE("string should be empty", strlen(pStr2) == 0);
                 free(pStr2);
@@ -748,12 +728,12 @@ namespace rtl_str
 
         void trim_WithLength_002()
         {
-            sal_Char *pStr = "trim this";
+            char const *pStr = "trim this";
             sal_Char *pStr2 = (sal_Char*)malloc(strlen(pStr) + 1);
             if (pStr2)
             {
                 strcpy(pStr2, pStr);
-                sal_Int32 nValue = rtl_str_trim_WithLength( pStr2, 5 );
+                rtl_str_trim_WithLength( pStr2, 5 );
 
                 CPPUNIT_ASSERT_MESSAGE("string should contain 'trim'", strlen(pStr2) == 4);
                 free(pStr2);
@@ -762,12 +742,12 @@ namespace rtl_str
 
         void trim_WithLength_003()
         {
-            sal_Char *pStr = "     trim   this";
+            char const *pStr = "     trim   this";
             sal_Char *pStr2 = (sal_Char*)malloc(strlen(pStr) + 1);
             if (pStr2)
             {
                 strcpy(pStr2, pStr);
-                sal_Int32 nValue = rtl_str_trim_WithLength( pStr2, 11 );
+                rtl_str_trim_WithLength( pStr2, 11 );
 
                 CPPUNIT_ASSERT_MESSAGE("string should contain 'trim'", strlen(pStr2) == 4);
                 free(pStr2);
@@ -776,12 +756,12 @@ namespace rtl_str
 
         void trim_WithLength_004()
         {
-            sal_Char *pStr = "\r\n\t \n\r    trim  \n this";
+            char const *pStr = "\r\n\t \n\r    trim  \n this";
             sal_Char *pStr2 = (sal_Char*)malloc(strlen(pStr) + 1);
             if (pStr2)
             {
                 strcpy(pStr2, pStr);
-                sal_Int32 nValue = rtl_str_trim_WithLength( pStr2, 17 );
+                rtl_str_trim_WithLength( pStr2, 17 );
 
                 CPPUNIT_ASSERT_MESSAGE("string should contain 'trim'", strlen(pStr2) == 4);
                 free(pStr2);
@@ -790,12 +770,12 @@ namespace rtl_str
 
         void trim_WithLength_005()
         {
-            sal_Char *pStr = "\r\n\t \n\r    trim \t this \n\r\t\t     ";
+            char const *pStr = "\r\n\t \n\r    trim \t this \n\r\t\t     ";
             sal_Char *pStr2 = (sal_Char*)malloc(strlen(pStr) + 1);
             if (pStr2)
             {
                 strcpy(pStr2, pStr);
-                sal_Int32 nValue = rtl_str_trim_WithLength( pStr2, strlen(pStr2) );
+                rtl_str_trim_WithLength( pStr2, strlen(pStr2) );
 
                 CPPUNIT_ASSERT_MESSAGE("string should contain 'trim'", strlen(pStr2) == 11);
                 free(pStr2);
@@ -824,7 +804,7 @@ namespace rtl_str
       public:
         void valueOfChar_000()
             {
-                sal_Int32 nValue = rtl_str_valueOfChar(NULL, 0);
+                rtl_str_valueOfChar(NULL, 0);
                 // should not GPF
             }
         void valueOfChar_001()
@@ -832,7 +812,7 @@ namespace rtl_str
                 sal_Char *pStr = (sal_Char*)malloc(RTL_STR_MAX_VALUEOFCHAR);
                 if (pStr)
                 {
-                    sal_Int32 nValue = rtl_str_valueOfChar(pStr, 'A');
+                    rtl_str_valueOfChar(pStr, 'A');
 
                     CPPUNIT_ASSERT_MESSAGE("string should contain 'A'", pStr[0] == 'A');
                     free(pStr);
