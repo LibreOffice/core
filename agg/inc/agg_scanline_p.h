@@ -66,7 +66,7 @@ namespace agg
         void add_cell(int x, unsigned cover);
         void add_cells(int x, unsigned len, const T* covers);
         void add_span(int x, unsigned len, unsigned cover);
-        void finalize(int y) { m_y = y; }
+        void finalize(int y_) { m_y = y_; }
         void reset_spans();
 
         int            y()         const { return m_y; }

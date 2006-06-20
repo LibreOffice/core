@@ -47,13 +47,13 @@ namespace agg
         span_image_filter(alloc_type& alloc,
                           const rendering_buffer& src,
                           const color_type& back_color,
-                          interpolator_type& interpolator,
-                          const image_filter_lut* filter) :
+                          interpolator_type& interpolator_,
+                          const image_filter_lut* filter_) :
             span_generator<color_type, alloc_type>(alloc),
             m_src(&src),
             m_back_color(back_color),
-            m_interpolator(&interpolator),
-            m_filter(filter),
+            m_interpolator(&interpolator_),
+            m_filter(filter_),
             m_dx_dbl(0.5),
             m_dy_dbl(0.5),
             m_dx_int(image_subpixel_size / 2),

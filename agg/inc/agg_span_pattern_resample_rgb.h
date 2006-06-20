@@ -57,8 +57,8 @@ namespace agg
         span_pattern_resample_rgb_affine(alloc_type& alloc,
                                          const rendering_buffer& src,
                                          interpolator_type& inter,
-                                         const image_filter_lut& filter) :
-            base_type(alloc, src, color_type(0,0,0,0), inter, filter),
+                                         const image_filter_lut& filter_) :
+            base_type(alloc, src, color_type(0,0,0,0), inter, filter_),
             m_wrap_mode_x(src.width()),
             m_wrap_mode_y(src.height())
         {}

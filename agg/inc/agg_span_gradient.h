@@ -63,15 +63,15 @@ namespace agg
         //--------------------------------------------------------------------
         span_gradient(alloc_type& alloc,
                       interpolator_type& inter,
-                      const GradientF& gradient_function,
-                      const ColorF& color_function,
-                      double d1, double d2) :
+                      const GradientF& gradient_function_,
+                      const ColorF& color_function_,
+                      double d1_, double d2_) :
             base_type(alloc),
             m_interpolator(&inter),
-            m_gradient_function(&gradient_function),
-            m_color_function(&color_function),
-            m_d1(int(d1 * gradient_subpixel_size)),
-            m_d2(int(d2 * gradient_subpixel_size))
+            m_gradient_function(&gradient_function_),
+            m_color_function(&color_function_),
+            m_d1(int(d1_ * gradient_subpixel_size)),
+            m_d2(int(d2_ * gradient_subpixel_size))
         {}
 
         //--------------------------------------------------------------------

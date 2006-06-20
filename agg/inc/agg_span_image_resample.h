@@ -104,8 +104,8 @@ namespace agg
                                    const rendering_buffer& src,
                                    const color_type& back_color,
                                    interpolator_type& inter,
-                                   const image_filter_lut& filter) :
-            base_type(alloc, src, back_color, inter, &filter),
+                                   const image_filter_lut& filter_) :
+            base_type(alloc, src, back_color, inter, &filter_),
             m_scale_limit(200.0),
             m_blur_x(1.0),
             m_blur_y(1.0)
