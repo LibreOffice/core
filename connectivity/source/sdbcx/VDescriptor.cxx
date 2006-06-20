@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VDescriptor.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:43:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:10:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,9 @@
 #include <cppuhelper/queryinterface.hxx>
 #endif
 
+#include <functional>
+#include <algorithm>
+
 namespace connectivity
 {
     namespace sdbcx
@@ -54,8 +57,8 @@ namespace connectivity
         // -------------------------------------------------------------------------
         ODescriptor::ODescriptor(::cppu::OBroadcastHelper& _rBHelper,sal_Bool _bCase, sal_Bool _bNew)
             :ODescriptor_PBASE(_rBHelper)
-            ,m_bNew(_bNew)
             ,m_aCase(_bCase)
+            ,m_bNew(_bNew)
         {
         }
 
@@ -64,10 +67,57 @@ namespace connectivity
         sal_Int64 SAL_CALL ODescriptor::getSomething( const Sequence< sal_Int8 >& rId ) throw(RuntimeException)
         {
             return (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
-                ?
-            (sal_Int64)this
-                :
-                0;
+                ? reinterpret_cast< sal_Int64 >( this )
+                : 0;
+        }
+
+        // -----------------------------------------------------------------------------
+        ODescriptor* ODescriptor::getImplementation( const Reference< XInterface >& _rxSomeComp )
+        {
+            Reference< XUnoTunnel > xTunnel( _rxSomeComp, UNO_QUERY );
+            if ( xTunnel.is() )
+                return reinterpret_cast< ODescriptor* >( xTunnel->getSomething( getUnoTunnelImplementationId() ) );
+            return NULL;
+        }
+
+        // -----------------------------------------------------------------------------
+        namespace
+        {
+            struct ResetROAttribute : public ::std::unary_function< Property, void >
+            {
+                void operator ()( Property& _rProperty ) const
+                {
+                    _rProperty.Attributes &= ~PropertyAttribute::READONLY;
+                }
+            };
+            struct SetROAttribute : public ::std::unary_function< Property, void >
+            {
+                void operator ()( Property& _rProperty ) const
+                {
+                    _rProperty.Attributes |= PropertyAttribute::READONLY;
+                }
+            };
+        }
+
+        // -----------------------------------------------------------------------------
+        ::cppu::IPropertyArrayHelper* ODescriptor::doCreateArrayHelper() const
+        {
+            Sequence< Property > aProperties;
+            describeProperties( aProperties );
+
+            if ( isNew() )
+                ::std::for_each( aProperties.getArray(), aProperties.getArray() + aProperties.getLength(), ResetROAttribute() );
+            else
+                ::std::for_each( aProperties.getArray(), aProperties.getArray() + aProperties.getLength(), SetROAttribute() );
+
+            return new ::cppu::OPropertyArrayHelper( aProperties );
+        }
+
+        // -----------------------------------------------------------------------------
+        sal_Bool ODescriptor::isNew( const Reference< XInterface >& _rxDescriptor )
+        {
+            ODescriptor* pImplementation = getImplementation( _rxDescriptor );
+            return pImplementation != NULL ? pImplementation->isNew() : sal_False;
         }
 
         // -----------------------------------------------------------------------------
