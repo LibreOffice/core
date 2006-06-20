@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ftpdirp.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:34:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:24:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,7 @@ namespace ftp {
         void SetMonth(sal_uInt16 month) { Month = month; }
         void SetDay(sal_uInt16 day) { Day = day; }
         // Only zero allowed and used for time-argument
-        void SetTime(sal_uInt16 time) { Hours = Minutes = Seconds = HundredthSeconds = 0; }
+        void SetTime(sal_uInt16) { Hours = Minutes = Seconds = HundredthSeconds = 0; }
         void SetHour(sal_uInt16 hours) { Hours = hours; }
         void SetMin(sal_uInt16 minutes) { Minutes = minutes; }
         void SetSec(sal_uInt16 seconds) { Seconds = seconds; }
