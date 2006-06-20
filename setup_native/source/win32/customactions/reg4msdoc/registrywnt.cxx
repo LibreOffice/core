@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registrywnt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:37:39 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:40:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,10 @@
 //
 //---------------------------------------
 
+#pragma warning(push, 1) /* disable warnings within system headers */
 #include <windows.h>
+#pragma warning(pop)
+
 #include <malloc.h>
 
 #ifndef _REGISTRYWNT_HXX_
