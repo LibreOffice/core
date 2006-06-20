@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TKeyValue.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:39:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:57:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,11 +56,11 @@ namespace connectivity
 
         inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
             { return ::rtl_allocateMemory( nSize ); }
-        inline static void * SAL_CALL operator new( size_t nSize,void* _pHint ) SAL_THROW( () )
+        inline static void * SAL_CALL operator new( size_t,void* _pHint ) SAL_THROW( () )
             { return _pHint; }
         inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
             { ::rtl_freeMemory( pMem ); }
-        inline static void SAL_CALL operator delete( void * pMem,void* _pHint ) SAL_THROW( () )
+        inline static void SAL_CALL operator delete( void *,void* ) SAL_THROW( () )
             {  }
 
         static OKeyValue* createKeyValue(sal_Int32 nVal);
