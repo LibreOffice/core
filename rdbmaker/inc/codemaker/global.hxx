@@ -4,9 +4,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:02:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:09:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,7 @@ typedef ::std::list< ::rtl::OString >               StringList;
 typedef ::std::vector< ::rtl::OString >             StringVector;
 typedef ::std::set< ::rtl::OString, LessString >    StringSet;
 
-::rtl::OString makeTempName(sal_Char* prefix);
+::rtl::OString makeTempName();
 
 ::rtl::OString createFileNameFromType(const ::rtl::OString& destination,
                                       const ::rtl::OString type,
@@ -134,7 +134,7 @@ public:
         {   fprintf(o.m_pFile, "%d", i);
             return o;
         }
-    friend FileStream &operator<<(FileStream& o, sal_Char* s)
+    friend FileStream &operator<<(FileStream& o, char const * s)
         {   fprintf(o.m_pFile, "%s", s);
             return o;
         }
