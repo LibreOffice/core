@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BResultSetMetaData.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:23:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:10:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,7 @@ sal_Int32 SAL_CALL OAdabasResultSetMetaData::isNullable( sal_Int32 column ) thro
 {
     sal_Int32 nValue = 0;
     sal_Bool bFound = sal_False;
-    if ( m_aSelectColumns.isValid() && column > 0 && column <= m_aSelectColumns->size() )
+    if ( m_aSelectColumns.isValid() && column > 0 && column <= (sal_Int32)m_aSelectColumns->size() )
         bFound = (*m_aSelectColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE)) >>= nValue;
 
     if ( !bFound )
