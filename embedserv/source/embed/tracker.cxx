@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tracker.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:54:46 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:42:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,7 @@
  *
  ************************************************************************/
 
+#include "stdafx.h"
 #include <stddef.h>
 #include "syswinwrapper.hxx"
 
@@ -88,7 +89,8 @@ const AFX_RECTINFO _afxRectInfo[] =
 };
 
 
-HBRUSH HalftoneBrush() {
+HBRUSH HalftoneBrush()
+{
     if (_afxHalftoneBrush == NULL)
     {
         WORD grayPattern[8];
@@ -123,58 +125,59 @@ void DrawDragRect(
     CombineRgn(rgnNew,rgnOutside,rgnInside,RGN_XOR);
 
     HBRUSH hBrushOld = NULL;
-     if (hBrush == NULL)
-         hBrush = HalftoneBrush();
-     if (hBrushLast == NULL)
-         hBrushLast = hBrush;
+    if (hBrush == NULL)
+        hBrush = HalftoneBrush();
+    if (hBrushLast == NULL)
+        hBrushLast = hBrush;
 
-    HRGN rgnLast,rgnUpdate;
-     if (lpRectLast != NULL)
-     {
-         // find difference between new region and old region
-         rgnLast = CreateRectRgn(0, 0, 0, 0);
+    HRGN rgnLast(NULL);
+    HRGN rgnUpdate(NULL);
+    if (lpRectLast != NULL)
+    {
+        // find difference between new region and old region
+        rgnLast = CreateRectRgn(0, 0, 0, 0);
         SetRectRgn(
             rgnOutside,
             lpRectLast->left,
             lpRectLast->top,
             lpRectLast->right,
             lpRectLast->bottom);
-         rect = *lpRectLast;
-         InflateRect(&rect,-sizeLast.cx, -sizeLast.cy);
-         IntersectRect(&rect,&rect, lpRectLast);
-         SetRectRgn(rgnInside,rect.left,rect.top,rect.right,rect.bottom);
-         CombineRgn(rgnLast,rgnOutside,rgnInside, RGN_XOR);
+        rect = *lpRectLast;
+        InflateRect(&rect,-sizeLast.cx, -sizeLast.cy);
+        IntersectRect(&rect,&rect, lpRectLast);
+        SetRectRgn(rgnInside,rect.left,rect.top,rect.right,rect.bottom);
+        CombineRgn(rgnLast,rgnOutside,rgnInside, RGN_XOR);
 
 //      // only diff them if brushes are the same
-         if (hBrush == hBrushLast)
-         {
-             rgnUpdate = CreateRectRgn(0, 0, 0, 0);
-             CombineRgn(rgnUpdate,rgnLast,rgnNew, RGN_XOR);
-         }
-     }
-     if (hBrush != hBrushLast && lpRectLast != NULL)
-     {
-         // brushes are different -- erase old region first
+        if (hBrush == hBrushLast)
+        {
+            rgnUpdate = CreateRectRgn(0, 0, 0, 0);
+            CombineRgn(rgnUpdate,rgnLast,rgnNew, RGN_XOR);
+        }
+    }
+    if (hBrush != hBrushLast && lpRectLast != NULL)
+    {
+        // brushes are different -- erase old region first
         SelectClipRgn(hDC,rgnLast);
-         GetClipBox(hDC,&rect);
-         hBrushOld = (HBRUSH)SelectObject(hDC,(HGDIOBJ)hBrushLast);
-         PatBlt(hDC,rect.left,rect.top,(rect.right-rect.left),(rect.bottom-rect.top),PATINVERT);
+        GetClipBox(hDC,&rect);
+        hBrushOld = (HBRUSH)SelectObject(hDC,(HGDIOBJ)hBrushLast);
+        PatBlt(hDC,rect.left,rect.top,(rect.right-rect.left),(rect.bottom-rect.top),PATINVERT);
 
         SelectObject(hDC,(HGDIOBJ)hBrushOld);
-         hBrushOld = NULL;
-     }
+        hBrushOld = NULL;
+    }
 
-     // draw into the update/new region
-     SelectClipRgn(hDC,rgnUpdate);
+    // draw into the update/new region
+    SelectClipRgn(hDC,rgnUpdate);
 
-     GetClipBox(hDC,&rect);
-     hBrushOld = (HBRUSH) SelectObject(hDC,(HGDIOBJ) hBrush);
-     PatBlt(hDC,rect.left, rect.top,(rect.right-rect.left),(rect.bottom-rect.top), PATINVERT);
+    GetClipBox(hDC,&rect);
+    hBrushOld = (HBRUSH) SelectObject(hDC,(HGDIOBJ) hBrush);
+    PatBlt(hDC,rect.left, rect.top,(rect.right-rect.left),(rect.bottom-rect.top), PATINVERT);
 
     // cleanup DC
-     if (hBrushOld != NULL)
-         SelectObject(hDC,(HGDIOBJ)hBrushOld);
-     SelectClipRgn(hDC,NULL);
+    if (hBrushOld != NULL)
+        SelectObject(hDC,(HGDIOBJ)hBrushOld);
+    SelectClipRgn(hDC,NULL);
 }
 
 
@@ -214,7 +217,6 @@ using namespace winwrap;
 
 Tracker::Tracker()
 {
-
 }
 
 
@@ -410,68 +412,68 @@ BOOL Tracker::TrackHandle(int nHandle,HWND hWnd,POINT point,HWND hWndClipTo)
         switch (msg.message)
         {
             // handle movement/accept messages
-            case WM_LBUTTONUP:
-            case WM_MOUSEMOVE:
-                rectOld = m_rect;
-                // handle resize cases (and part of move)
-                if (px != NULL)
-                    *px = (int)(short)LOWORD(msg.lParam) - xDiff;
-                if (py != NULL)
-                    *py = (int)(short)HIWORD(msg.lParam) - yDiff;
+        case WM_LBUTTONUP:
+        case WM_MOUSEMOVE:
+            rectOld = m_rect;
+            // handle resize cases (and part of move)
+            if (px != NULL)
+                *px = (int)(short)LOWORD(msg.lParam) - xDiff;
+            if (py != NULL)
+                *py = (int)(short)HIWORD(msg.lParam) - yDiff;
 
-                // handle move case
-                if (nHandle == hitMiddle)
-                {
-                    m_rect.right = m_rect.left + nWidth;
-                    m_rect.bottom = m_rect.top + nHeight;
-                }
-                // allow caller to adjust the rectangle if necessary
-                AdjustRect(nHandle,&m_rect);
+            // handle move case
+            if (nHandle == hitMiddle)
+            {
+                m_rect.right = m_rect.left + nWidth;
+                m_rect.bottom = m_rect.top + nHeight;
+            }
+            // allow caller to adjust the rectangle if necessary
+            AdjustRect(nHandle,&m_rect);
 
-                // only redraw and callback if the rect actually changed!
-                m_bFinalErase = (msg.message == WM_LBUTTONUP);
-                if (!EqualRect(&rectOld,&m_rect) || m_bFinalErase)
-                {
-                    if (bMoved)
-                    {
-                        m_bErase = TRUE;
-                        DrawTrackerRect(&rectOld,hWndClipTo,hDrawDC,hWnd);
-                    }
-                    OnChangedRect(rectOld);
-                    if (msg.message != WM_LBUTTONUP)
-                        bMoved = TRUE;
-                }
-                if (m_bFinalErase)
-                    goto ExitLoop;
-
-                if (!EqualRect(&rectOld,&m_rect))
-                {
-                    m_bErase = FALSE;
-                    DrawTrackerRect(&m_rect,hWndClipTo,hDrawDC,hWnd);
-                }
-                break;
-
-                // handle cancel messages
-            case WM_KEYDOWN:
-                if (msg.wParam != VK_ESCAPE)
-                    break;
-            case WM_RBUTTONDOWN:
+            // only redraw and callback if the rect actually changed!
+            m_bFinalErase = (msg.message == WM_LBUTTONUP);
+            if (!EqualRect(&rectOld,&m_rect) || m_bFinalErase)
+            {
                 if (bMoved)
                 {
-                    m_bErase = m_bFinalErase = TRUE;
-                    DrawTrackerRect(&m_rect, hWndClipTo, hDrawDC, hWnd);
+                    m_bErase = TRUE;
+                    DrawTrackerRect(&rectOld,hWndClipTo,hDrawDC,hWnd);
                 }
-                m_rect = rectSave;
+                OnChangedRect(rectOld);
+                if (msg.message != WM_LBUTTONUP)
+                    bMoved = TRUE;
+            }
+            if (m_bFinalErase)
                 goto ExitLoop;
 
-                // just dispatch rest of the messages
-            default:
-                DispatchMessage(&msg);
+            if (!EqualRect(&rectOld,&m_rect))
+            {
+                m_bErase = FALSE;
+                DrawTrackerRect(&m_rect,hWndClipTo,hDrawDC,hWnd);
+            }
+            break;
+
+            // handle cancel messages
+        case WM_KEYDOWN:
+            if (msg.wParam != VK_ESCAPE)
                 break;
+        case WM_RBUTTONDOWN:
+            if (bMoved)
+            {
+                m_bErase = m_bFinalErase = TRUE;
+                DrawTrackerRect(&m_rect, hWndClipTo, hDrawDC, hWnd);
+            }
+            m_rect = rectSave;
+            goto ExitLoop;
+
+            // just dispatch rest of the messages
+        default:
+            DispatchMessage(&msg);
+            break;
         }
     }
 
- ExitLoop:
+  ExitLoop:
     if (hWndClipTo != NULL)
         ReleaseDC(hWndClipTo,hDrawDC);
     else
@@ -489,9 +491,8 @@ BOOL Tracker::TrackHandle(int nHandle,HWND hWnd,POINT point,HWND hWndClipTo)
 }
 
 
-void Tracker::OnChangedRect(const RECT& rectOld)
+void Tracker::OnChangedRect(const RECT& /*rectOld*/)
 {
-
 }
 
 
@@ -834,3 +835,9 @@ void Tracker::GetModifyPointers(
     }
 }
 
+// Fix strange warnings about some
+// ATL::CAxHostWindow::QueryInterface|AddRef|Releae functions.
+// warning C4505: 'xxx' : unreferenced local function has been removed
+#if defined(_MSC_VER)
+#pragma warning(disable: 4505)
+#endif

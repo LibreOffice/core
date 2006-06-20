@@ -4,9 +4,9 @@
  *
  *  $RCSfile: syswinwrapper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:54:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:41:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -473,3 +473,10 @@ LRESULT APIENTRY winwrap::HatchWndProc(
 
     return 0L;
 }
+
+// Fix strange warnings about some
+// ATL::CAxHostWindow::QueryInterface|AddRef|Releae functions.
+// warning C4505: 'xxx' : unreferenced local function has been removed
+#if defined(_MSC_VER)
+#pragma warning(disable: 4505)
+#endif
