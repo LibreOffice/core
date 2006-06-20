@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DExport.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:44:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:19:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,8 +155,6 @@
 #endif
 
 
-#define CONTAINER_ENTRY_NOTFOUND    ((ULONG)0xFFFFFFFF)
-
 using namespace dbaui;
 using namespace utl;
 using namespace ::com::sun::star::uno;
@@ -173,7 +171,7 @@ using namespace ::com::sun::star::awt;
 // ==========================================================================
 // ODatabaseExport
 // ==========================================================================
-DBG_NAME(ODatabaseExport);
+DBG_NAME(ODatabaseExport)
 ODatabaseExport::ODatabaseExport(sal_Int32 nRows,
                                  const TPositions &_rColumnPositions,
                                  const Reference< XNumberFormatter >& _rxNumberF,
@@ -181,35 +179,32 @@ ODatabaseExport::ODatabaseExport(sal_Int32 nRows,
                                  const TColumnVector* pList,
                                  const OTypeInfoMap* _pInfoMap,
                                  sal_Bool _bAutoIncrementEnabled)
-    :m_pFormatter(NULL)
+    :m_vColumns(_rColumnPositions)
+    ,m_aDestColumns(sal_True)
+    ,m_xFormatter(_rxNumberF)
+    ,m_xFactory(_rM)
+    ,m_pFormatter(NULL)
+    ,m_pTypeInfo()
     ,m_pColumnList(pList)
     ,m_pInfoMap(_pInfoMap)
     ,m_nColumnPos(0)
     ,m_nRows(1)
     ,m_nRowCount(0)
+    ,m_nDefToken( gsl_getSystemTextEncoding() )
     ,m_bError(FALSE)
     ,m_bInTbl(FALSE)
-    ,m_xFormatter(_rxNumberF)
     ,m_bHead(TRUE)
     ,m_bDontAskAgain(FALSE)
     ,m_bIsAutoIncrement(_bAutoIncrementEnabled)
-    ,m_aDestColumns(sal_True)
-    ,m_xFactory(_rM)
-    ,m_pTypeInfo()
-    ,m_vColumnSize(0)
-    ,m_vFormatKey(0)
-    ,m_vColumns(_rColumnPositions)
     ,m_bFoundTable(sal_False)
     ,m_bCheckOnly(sal_False)
 {
     DBG_CTOR(ODatabaseExport,NULL);
 
-    m_nDefToken = gsl_getSystemTextEncoding();
-
     m_nRows += nRows;
     sal_Int32 nCount = 0;
     for(sal_Int32 j=0;j < (sal_Int32)m_vColumns.size();++j)
-        if(m_vColumns[j].first != CONTAINER_ENTRY_NOTFOUND)
+        if ( m_vColumns[j].first != COLUMN_POSITION_NOT_FOUND )
             ++nCount;
 
     m_vColumnSize.resize(nCount);
@@ -223,7 +218,7 @@ ODatabaseExport::ODatabaseExport(sal_Int32 nRows,
     try
     {
         SvtSysLocale aSysLocale;
-        m_nLocale = aSysLocale.GetLocaleData().getLocale();
+        m_aLocale = aSysLocale.GetLocaleData().getLocale();
     }
     catch(Exception&)
     {
@@ -237,22 +232,23 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
                                  const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
                                  const TColumnVector* pList,
                                  const OTypeInfoMap* _pInfoMap)
-    :m_xConnection(_rxConnection)
+    :m_aDestColumns(_rxConnection->getMetaData().is() && _rxConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers() == sal_True)
+    ,m_xConnection(_rxConnection)
+    ,m_xFormatter(_rxNumberF)
+    ,m_xFactory(_rM)
     ,m_pFormatter(NULL)
+    ,m_pTypeInfo()
     ,m_pColumnList(NULL)
     ,m_pInfoMap(NULL)
     ,m_nColumnPos(0)
     ,m_nRows(1)
     ,m_nRowCount(0)
+    ,m_nDefToken( gsl_getSystemTextEncoding() )
     ,m_bError(sal_False)
     ,m_bInTbl(sal_False)
-    ,m_xFormatter(_rxNumberF)
     ,m_bHead(TRUE)
     ,m_bDontAskAgain(sal_False)
     ,m_bIsAutoIncrement(sal_False)
-    ,m_aDestColumns(_rxConnection->getMetaData().is() && _rxConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers() == sal_True)
-    ,m_xFactory(_rM)
-    ,m_pTypeInfo()
     ,m_bFoundTable(sal_False)
     ,m_bCheckOnly(sal_False)
 {
@@ -260,13 +256,12 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
     try
     {
         SvtSysLocale aSysLocale;
-        m_nLocale = aSysLocale.GetLocaleData().getLocale();
+        m_aLocale = aSysLocale.GetLocaleData().getLocale();
     }
     catch(Exception&)
     {
     }
 
-    m_nDefToken = gsl_getSystemTextEncoding();
     Reference<XTablesSupplier> xTablesSup(m_xConnection,UNO_QUERY);
     if(xTablesSup.is())
         m_xTables = xTablesSup->getTables();
@@ -345,9 +340,6 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
                 ++nPos;
                 aValue.fill(nPos,aTypes[nPos],xRow);
                 m_pTypeInfo->nMaximumScale  = aValue;
-                nPos = 18;
-                aValue.fill(nPos,aTypes[nPos],xRow);
-                m_pTypeInfo->nNumPrecRadix  = aValue;
 
                 // check if values are less than zero like it happens in a oracle jdbc driver
                 if( m_pTypeInfo->nPrecision < 0)
@@ -356,8 +348,6 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
                     m_pTypeInfo->nMinimumScale = 0;
                 if( m_pTypeInfo->nMaximumScale < 0)
                     m_pTypeInfo->nMaximumScale = 0;
-                if( m_pTypeInfo->nNumPrecRadix < 0)
-                    m_pTypeInfo->nNumPrecRadix = 10;
                 break;
             }
         }
@@ -390,7 +380,7 @@ void ODatabaseExport::insertValueIntoColumn()
             OSL_ENSURE((nNewPos) < static_cast<sal_Int32>(m_vColumns.size()),"Illegal index for vector");
 
             sal_Int32 nPos = m_vColumns[nNewPos].first;
-            if(nPos != CONTAINER_ENTRY_NOTFOUND)
+            if ( nPos != COLUMN_POSITION_NOT_FOUND )
             {
 //                  if(m_nDefToken != LANGUAGE_DONTKNOW) // falls Sprache anders als Systemsprache
 //                      m_pNF->ChangeIntl((LanguageType)m_nDefToken);
@@ -423,25 +413,25 @@ void ODatabaseExport::insertValueIntoColumn()
 
                             try
                             {
-                                nNumberFormat = m_xFormatter->detectNumberFormat(xNumType->getStandardFormat(NumberFormat::DATETIME,m_nLocale),m_sTextToken);
+                                nNumberFormat = m_xFormatter->detectNumberFormat(xNumType->getStandardFormat(NumberFormat::DATETIME,m_aLocale),m_sTextToken);
                             }
                             catch(Exception&)
                             {
                                 try
                                 {
-                                    nNumberFormat = m_xFormatter->detectNumberFormat(xNumType->getStandardFormat(NumberFormat::DATE,m_nLocale),m_sTextToken);
+                                    nNumberFormat = m_xFormatter->detectNumberFormat(xNumType->getStandardFormat(NumberFormat::DATE,m_aLocale),m_sTextToken);
                                 }
                                 catch(Exception&)
                                 {
                                     try
                                     {
-                                        nNumberFormat = m_xFormatter->detectNumberFormat(xNumType->getStandardFormat(NumberFormat::TIME,m_nLocale),m_sTextToken);
+                                        nNumberFormat = m_xFormatter->detectNumberFormat(xNumType->getStandardFormat(NumberFormat::TIME,m_aLocale),m_sTextToken);
                                     }
                                     catch(Exception&)
                                     {
                                         try
                                         {
-                                            nNumberFormat = m_xFormatter->detectNumberFormat(xNumType->getStandardFormat(NumberFormat::NUMBER,m_nLocale),m_sTextToken);
+                                            nNumberFormat = m_xFormatter->detectNumberFormat(xNumType->getStandardFormat(NumberFormat::NUMBER,m_aLocale),m_sTextToken);
                                         }
                                         catch(Exception&)
                                         {
@@ -453,7 +443,6 @@ void ODatabaseExport::insertValueIntoColumn()
                         }
                         try
                         {
-                            Reference< XNumberFormatsSupplier > xSupplier = m_xFormatter->getNumberFormatsSupplier();
                             Reference< XNumberFormats >         xFormats = xSupplier->getNumberFormats();
                             Reference<XPropertySet> xProp = xFormats->getByKey(nNumberFormat);
                             sal_Int16 nType = 0;
@@ -487,7 +476,6 @@ void ODatabaseExport::insertValueIntoColumn()
 sal_Int32 ODatabaseExport::CheckString(const String& aCheckToken, sal_Int32 _nOldFormat)
 {
     DBG_CHKTHIS(ODatabaseExport,NULL);
-    sal_Int32 F_Index = 0;
     double fOutNumber = 0.0;
     sal_Int32 nFormat = 0;
 
@@ -508,7 +496,7 @@ sal_Int32 ODatabaseExport::CheckString(const String& aCheckToken, sal_Int32 _nOl
         else
         {
             Reference<XNumberFormatTypes> xNumType(xFormats,UNO_QUERY);
-            nFormat = m_xFormatter->detectNumberFormat(xNumType->getStandardFormat(NumberFormat::ALL,m_nLocale),aCheckToken);
+            nFormat = m_xFormatter->detectNumberFormat(xNumType->getStandardFormat(NumberFormat::ALL,m_aLocale),aCheckToken);
             fOutNumber = m_xFormatter->convertStringToNumber(nFormat,aCheckToken);
 
             Reference<XPropertySet> xProp = xFormats->getByKey(nFormat);
@@ -762,8 +750,8 @@ sal_Bool ODatabaseExport::createRowSet()
         if ( ::dbtools::canInsert(xProp) )
         {
             m_pUpdateHelper.reset(new ORowUpdateHelper(xRowSet));
-            OSL_ENSURE(m_xResultSetMetaData.is(),"No ResultSetMetaData!");
-        }
+        OSL_ENSURE(m_xResultSetMetaData.is(),"No ResultSetMetaData!");
+    }
         else
             m_pUpdateHelper.reset(new OParameterUpdateHelper(createPreparedStatment(m_xConnection->getMetaData(),m_xTable,m_vColumns)));
     }
@@ -871,7 +859,7 @@ void ODatabaseExport::adjustFormat()
     if ( m_sTextToken.Len() )
     {
         sal_Int32 nColPos = m_vColumns[m_bIsAutoIncrement ? m_nColumnPos+1 : m_nColumnPos].first;
-        if( nColPos != CONTAINER_ENTRY_NOTFOUND)
+        if( nColPos != sal::static_int_cast< long >(CONTAINER_ENTRY_NOTFOUND))
         {
             --nColPos;
             m_vFormatKey[nColPos] = CheckString(m_sTextToken,m_vFormatKey[nColPos]);
@@ -894,7 +882,7 @@ void ODatabaseExport::ensureFormatter()
     {
         Reference< XNumberFormatsSupplier >  xSupplier = m_xFormatter->getNumberFormatsSupplier();
         Reference< XUnoTunnel > xTunnel(xSupplier,UNO_QUERY);
-        SvNumberFormatsSupplierObj* pSupplierImpl = (SvNumberFormatsSupplierObj*)xTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId());
+        SvNumberFormatsSupplierObj* pSupplierImpl = (SvNumberFormatsSupplierObj*)sal::static_int_cast< sal_IntPtr >(xTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId()));
         m_pFormatter = pSupplierImpl ? pSupplierImpl->GetNumberFormatter() : NULL;
     }
 }
@@ -926,7 +914,6 @@ Reference< XPreparedStatement > ODatabaseExport::createPreparedStatment( const R
         return Reference< XPreparedStatement > ();
     }
     const ::rtl::OUString* pIter = aDestColumnNames.getConstArray();
-    const ::rtl::OUString* pEnd   = pIter + aDestColumnNames.getLength();
     ::std::vector< ::rtl::OUString> aInsertList;
     aInsertList.resize(aDestColumnNames.getLength()+1);
     sal_Int32 i = 0;
@@ -934,7 +921,7 @@ Reference< XPreparedStatement > ODatabaseExport::createPreparedStatment( const R
     {
         ODatabaseExport::TPositions::const_iterator aFind = ::std::find_if(_rvColumns.begin(),_rvColumns.end(),
             ::std::compose1(::std::bind2nd(::std::equal_to<sal_Int32>(),i+1),::std::select2nd<ODatabaseExport::TPositions::value_type>()));
-        if ( _rvColumns.end() != aFind && aFind->second != CONTAINER_ENTRY_NOTFOUND && aFind->first != CONTAINER_ENTRY_NOTFOUND )
+        if ( _rvColumns.end() != aFind && aFind->second != sal::static_int_cast< long >(CONTAINER_ENTRY_NOTFOUND) && aFind->first != sal::static_int_cast< long >(CONTAINER_ENTRY_NOTFOUND) )
         {
             aInsertList[aFind->first] = ::dbtools::quoteName( aQuote,*(pIter+i));
         }
