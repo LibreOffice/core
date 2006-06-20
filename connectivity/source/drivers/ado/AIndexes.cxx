@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AIndexes.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:29:12 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:14:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,7 +96,7 @@ void OIndexes::appendObject( const Reference< XPropertySet >& descriptor )
 }
 // -------------------------------------------------------------------------
 // XDrop
-void OIndexes::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
+void OIndexes::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElementName)
 {
     m_aCollection.Delete(_sElementName);
 }
