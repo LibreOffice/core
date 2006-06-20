@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GetUserDomain_WINDOWS.cpp,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:19:32 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:33:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@
     {
         DWORD   dwLogon = 0;
         DWORD   dwLogonSize = sizeof(dwLogon);
-        LONG    lResult = RegQueryValueEx( hkeyLogon, TEXT("LMLogon"), 0, NULL, (LPBYTE)&dwLogon, &dwLogonSize );
+        RegQueryValueEx( hkeyLogon, TEXT("LMLogon"), 0, NULL, (LPBYTE)&dwLogon, &dwLogonSize );
         RegCloseKey( hkeyLogon );
 
         if ( dwLogon )
