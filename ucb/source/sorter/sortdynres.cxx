@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sortdynres.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:20:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:18:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -457,7 +457,7 @@ SortedDynamicResultSet::impl_notify( const ListEvent& Changes )
 // XEventListener
 //-----------------------------------------------------------------
 void SAL_CALL
-SortedDynamicResultSet::impl_disposing( const EventObject& Source )
+SortedDynamicResultSet::impl_disposing( const EventObject& )
     throw( RuntimeException )
 {
     mxListener.clear();
