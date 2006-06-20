@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VKey.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:44:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:10:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,11 +108,11 @@ OKey::OKey( const ::rtl::OUString& _Name,
             sal_Int32       _DeleteRule,
             sal_Bool _bCase) :  ODescriptor_BASE(m_aMutex)
                         ,ODescriptor(ODescriptor_BASE::rBHelper,_bCase)
-                        ,m_pColumns(NULL)
                         ,m_ReferencedTable(_ReferencedTable)
                         ,m_Type(_Type)
                         ,m_UpdateRule(_UpdateRule)
                         ,m_DeleteRule(_DeleteRule)
+                        ,m_pColumns(NULL)
 {
     m_Name = _Name;
 }
@@ -168,12 +168,9 @@ void SAL_CALL OKey::disposing()
     ODescriptor_BASE::disposing();
 }
 // -------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper* OKey::createArrayHelper(sal_Int32 _nId ) const
+::cppu::IPropertyArrayHelper* OKey::createArrayHelper( sal_Int32 /*_nId*/ ) const
 {
-    Sequence< Property > aProps;
-    describeProperties(aProps);
-    changePropertyAttributte(aProps);
-    return new ::cppu::OPropertyArrayHelper(aProps);
+    return doCreateArrayHelper();
 }
 // -------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper & OKey::getInfoHelper()
@@ -223,7 +220,7 @@ Reference< XPropertySet > SAL_CALL OKey::createDataDescriptor(  ) throw(RuntimeE
     return m_Name;
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OKey::setName( const ::rtl::OUString& aName ) throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OKey::setName( const ::rtl::OUString& /*aName*/ ) throw(::com::sun::star::uno::RuntimeException)
 {
 }
 // -----------------------------------------------------------------------------
