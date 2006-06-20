@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ContentInfo.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:16:29 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 06:14:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,15 +60,15 @@ public:
         ZipPackageStream *pStream;
     };
     ContentInfo ( ZipPackageStream * pNewStream )
-    : bFolder ( false )
+    : xTunnel ( pNewStream )
+    , bFolder ( false )
     , pStream ( pNewStream )
-    , xTunnel ( pNewStream )
     {
     }
     ContentInfo ( ZipPackageFolder * pNewFolder )
-    : bFolder ( true )
+    : xTunnel ( pNewFolder )
+    , bFolder ( true )
     , pFolder ( pNewFolder )
-    , xTunnel ( pNewFolder )
     {
     }
     virtual ~ContentInfo ()
@@ -79,5 +79,5 @@ public:
             pStream->clearParent();
     }
 };
-} } } };
+} } } }
 #endif
