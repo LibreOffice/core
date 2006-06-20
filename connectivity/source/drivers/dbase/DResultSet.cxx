@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DResultSet.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:39:46 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:20:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,9 @@
 #endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
+#endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include <connectivity/dbexception.hxx>
 #endif
 
 using namespace ::comphelper;
@@ -148,11 +151,11 @@ sal_Bool SAL_CALL ODbaseResultSet::moveRelativeToBookmark( const  Any& bookmark,
 }
 
 // -------------------------------------------------------------------------
-sal_Int32 SAL_CALL ODbaseResultSet::compareBookmarks( const  Any& first, const  Any& second ) throw( SQLException,  RuntimeException)
+sal_Int32 SAL_CALL ODbaseResultSet::compareBookmarks( const Any& lhs, const Any& rhs ) throw( SQLException,  RuntimeException)
 {
-    sal_Int32 nFirst,nSecond,nResult;
-    first  >>= nFirst;
-    second >>= nSecond;
+    sal_Int32 nFirst(0),nSecond(0),nResult(0);
+    if ( !( lhs  >>= nFirst ) || !( rhs >>= nSecond ) )
+        ::dbtools::throwSQLException( "XRowLocate::compareBookmarks: Invalid bookmark value", "HY111", *this );
 
     // have a look at CompareBookmark
     // we can't use the names there because we already have defines with the same name from the parser
@@ -181,12 +184,12 @@ sal_Int32 SAL_CALL ODbaseResultSet::hashBookmark( const  Any& bookmark ) throw( 
 }
 // -------------------------------------------------------------------------
 // XDeleteRows
-Sequence< sal_Int32 > SAL_CALL ODbaseResultSet::deleteRows( const  Sequence<  Any >& rows ) throw( SQLException,  RuntimeException)
+Sequence< sal_Int32 > SAL_CALL ODbaseResultSet::deleteRows( const  Sequence<  Any >& /*rows*/ ) throw( SQLException,  RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-
+    ::dbtools::throwFeatureNotImplementedException( "XDeleteRows::deleteRows", *this );
     return Sequence< sal_Int32 >();
 }
 // -------------------------------------------------------------------------
@@ -195,7 +198,7 @@ sal_Bool ODbaseResultSet::fillIndexValues(const Reference< XColumnsSupplier> &_x
     Reference<XUnoTunnel> xTunnel(_xIndex,UNO_QUERY);
     if(xTunnel.is())
     {
-        dbase::ODbaseIndex* pIndex = (dbase::ODbaseIndex*)xTunnel->getSomething(dbase::ODbaseIndex::getUnoTunnelImplementationId());
+        dbase::ODbaseIndex* pIndex = reinterpret_cast< dbase::ODbaseIndex* >( xTunnel->getSomething(dbase::ODbaseIndex::getUnoTunnelImplementationId()) );
         if(pIndex)
         {
             dbase::OIndexIterator* pIter = pIndex->createIterator(NULL,NULL);
@@ -212,7 +215,6 @@ sal_Bool ODbaseResultSet::fillIndexValues(const Reference< XColumnsSupplier> &_x
                     nRec = pIter->Next();
                 }
                 m_pFileSet->setFrozen();
-                //  m_bFileSetFrozen = sal_True;
                 //  if(!bDistinct)
                     //  SetRowCount(pFileSet->count());
                 delete pIter;
