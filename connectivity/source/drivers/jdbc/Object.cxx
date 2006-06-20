@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Object.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:11:09 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:34:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,7 +138,7 @@ jclass java_lang_Object::getMyClass()
 }
 // der eigentliche Konstruktor
 java_lang_Object::java_lang_Object(const Reference<XMultiServiceFactory >& _rxFactory)
-            : object( 0 ),m_xFactory(_rxFactory)
+            : m_xFactory(_rxFactory),object( 0 )
 {
     SDBThreadAttach::addRef();
 }
@@ -198,8 +198,8 @@ java_lang_Class * java_lang_Object::getClass()
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
-        static char * cSignature = "()Ljava/lang/Class;";
-        static char * cMethodName = "getClass";
+        static const char * cSignature = "()Ljava/lang/Class;";
+        static const char * cMethodName = "getClass";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -214,7 +214,7 @@ java_lang_Class * java_lang_Object::getClass()
     return NULL;
 }
 
-::rtl::OUString java_lang_Object::toString()
+::rtl::OUString java_lang_Object::toString() const
 {
 
     SDBThreadAttach t;
@@ -222,8 +222,8 @@ java_lang_Class * java_lang_Object::getClass()
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
-        static char * cSignature = "()Ljava/lang/String;";
-        static char * cMethodName = "toString";
+        static const char * cSignature = "()Ljava/lang/String;";
+        static const char * cMethodName = "toString";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -240,8 +240,8 @@ java_lang_Class * java_lang_Object::getClass()
 // --------------------------------------------------------------------------------
 void java_lang_Object::ThrowSQLException(JNIEnv * pEnv,const Reference< XInterface> & _rContext) throw(SQLException, RuntimeException)
 {
-    jthrowable jThrow = NULL;
-    if(pEnv && (jThrow = pEnv->ExceptionOccurred()))
+    jthrowable jThrow = pEnv ? pEnv->ExceptionOccurred() : NULL;
+    if ( jThrow )
     {
         pEnv->ExceptionClear();// we have to clear the exception here because we want to handle it itself
         if(pEnv->IsInstanceOf(jThrow,java_sql_SQLException_BASE::getMyClass()))
