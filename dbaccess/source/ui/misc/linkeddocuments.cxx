@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linkeddocuments.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:40:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:23:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -194,8 +194,8 @@ namespace dbaui
                                                     )
         :m_xORB(_rxORB)
         ,m_xDocumentContainer(_rxContainer)
-        ,m_pDialogParent(_pDialogParent)
         ,m_xConnection(_xConnection)
+        ,m_pDialogParent(_pDialogParent)
         ,m_sDataSourceName(_sDataSourceName)
     {
         DBG_CTOR(OLinkedDocumentsAccess,NULL);
