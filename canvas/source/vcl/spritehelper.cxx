@@ -4,9 +4,9 @@
  *
  *  $RCSfile: spritehelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-17 16:08:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:21:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,7 +87,7 @@ namespace vclcanvas
         mpSpriteCanvas      = rSpriteCanvas;
         mbShowSpriteBounds  = bShowSpriteBounds;
 
-        CanvasCustomSpriteHelper::init( rSpriteSize, rSpriteCanvas.get() );
+        init( rSpriteSize, rSpriteCanvas.get() );
     }
 
     void SpriteHelper::disposing()
