@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RtfReader.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:44:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:20:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,7 +125,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::awt;
 
-DBG_NAME(ORTFReader);
+DBG_NAME(ORTFReader)
 // ==========================================================================
 // ORTFReader
 // ==========================================================================
@@ -321,11 +321,6 @@ sal_Bool ORTFReader::CreateTable(int nToken)
 
     int nTmpToken2 = nToken;
     String aColumnName;
-    sal_Bool bColorSet=sal_False;
-    sal_Bool bBoldSet=sal_False;
-    sal_Bool bUnderlineSet=sal_False;
-    sal_Bool bStrikeoutSet=sal_False;
-    sal_Bool bItalicSet=sal_False;
 
     FontDescriptor aFont = ::dbaui::CreateFontDescriptor(Application::GetSettings().GetStyleSettings().GetAppFont());
     do
