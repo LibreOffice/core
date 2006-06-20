@@ -4,9 +4,9 @@
  *
  *  $RCSfile: astservicemember.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:01:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:46:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,8 +45,8 @@ public:
     AstServiceMember(const sal_uInt32 flags, AstService* pRealService,
                      const ::rtl::OString& name, AstScope* pScope)
         : AstDeclaration(NT_service_member, name, pScope)
-        , m_pRealService(pRealService)
         , m_flags(flags)
+        , m_pRealService(pRealService)
         {}
     virtual ~AstServiceMember() {}
 
