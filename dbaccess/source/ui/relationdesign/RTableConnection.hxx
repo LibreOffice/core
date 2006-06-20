@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RTableConnection.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:35:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:30:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,7 @@ namespace dbaui
         ORelationTableConnection& operator=( const ORelationTableConnection& rConn );
 
         virtual void    Draw( const Rectangle& rRect );
+        using OTableConnection::Draw;
     };
 }
 #endif // DBAUI_RTABLECONNECTION_HXX
