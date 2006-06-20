@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TSortIndex.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:13:14 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:04:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,6 +81,8 @@ struct TKeyValueFunc : ::std::binary_function<OSortIndex::TIntValuePairVector::v
                         return nGreater;
                 }
                 break;
+                case SQL_ORDERBYKEY_NONE:
+                    break;
             }
         }
 
@@ -105,10 +107,10 @@ struct TKeyValueFunc : ::std::binary_function<OSortIndex::TIntValuePairVector::v
 }
 // -----------------------------------------------------------------------------
 OSortIndex::OSortIndex( const ::std::vector<OKeyType>& _aKeyType,
-                        const ::std::vector<sal_Int16>& _aAscending)
-    : m_bFrozen(sal_False)
-     ,m_aAscending(_aAscending)
-     ,m_aKeyType(_aKeyType)
+                        const ::std::vector<TAscendingOrder>& _aAscending)
+    :m_aKeyType(_aKeyType)
+    ,m_aAscending(_aAscending)
+    ,m_bFrozen(sal_False)
 {
 }
 //------------------------------------------------------------------
@@ -152,7 +154,7 @@ void OSortIndex::Freeze()
 sal_Int32 OSortIndex::GetValue(sal_Int32 nPos) const
 {
     OSL_ENSURE(nPos > 0,"OSortIndex::GetValue: nPos == 0");
-    OSL_ENSURE(nPos <= m_aKeyValues.size(),"OSortIndex::GetValue: Zugriff ausserhalb der Array-Grenzen");
+    OSL_ENSURE((size_t)nPos <= m_aKeyValues.size(),"OSortIndex::GetValue: Zugriff ausserhalb der Array-Grenzen");
 
     if (!m_bFrozen && m_aKeyType[0] != SQL_ORDERBYKEY_NONE)
     {
