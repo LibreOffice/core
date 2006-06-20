@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MNSInclude.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:27:53 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:51:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,28 +39,9 @@
 // Only include Mozilla include files once and using this file...
 //
 
-#ifndef BOOL
-# define MOZ_BOOL
-
-# define BOOL mozBOOL
-# define Bool mozBooL
-#endif
-
-// Turn off DEBUG Assertions
-#ifdef _DEBUG
-    #define _DEBUG_WAS_DEFINED _DEBUG
-    #undef _DEBUG
-#else
-    #undef _DEBUG_WAS_DEFINED
-#endif
-
-// and turn off the additional virtual methods which are part of some interfaces when compiled
-// with debug
-#ifdef DEBUG
-    #define DEBUG_WAS_DEFINED DEBUG
-    #undef DEBUG
-#else
-    #undef DEBUG_WAS_DEFINED
+#include "pre_include_mozilla.h"
+#if defined __GNUC__
+    #pragma GCC system_header
 #endif
 
 #include <nsDebug.h>
@@ -68,6 +49,10 @@
 #include <nsCOMPtr.h>
 #include <nsISupportsArray.h>
 #include <nsString.h>
+#if defined __SUNPRO_CC
+#pragma disable_warn
+    // somewhere in the files included directly or indirectly in nsString.h, warnings are enabled, again
+#endif
 #include <nsMemory.h>
 #include <prtypes.h>
 #include <nsRDFCID.h>
@@ -91,17 +76,6 @@
 #include <nsIAbDirFactory.h>
 #include <nsIRunnable.h>
 
-#ifdef MOZ_BOOL
-# undef BOOL
-# undef Bool
-#endif
-
-#ifdef DEBUG_WAS_DEFINED
-    #define DEBUG DEBUG_WAS_DEFINED
-#endif
-
-#ifdef _DEBUG_WAS_DEFINED
-    #define _DEBUG _DEBUG_WAS_DEFINED
-#endif
+#include "post_include_mozilla.h"
 
 #endif // _CONNECTIVITY_MAB_NS_INCLUDE_HXX_
