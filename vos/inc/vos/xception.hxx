@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xception.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2006-06-02 12:41:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:06:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,9 +77,9 @@ class OException : public OObject
 public:
     virtual ~OException();
     OException() {}
-    OException( const OException &aPattern ) {}
+    OException( const OException & ) : OObject() {}
 
-    OException& SAL_CALL operator=(const OException& excp)
+    OException& SAL_CALL operator=(const OException&)
         { return *this; }
 };
 
