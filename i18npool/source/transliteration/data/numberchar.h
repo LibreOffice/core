@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numberchar.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:36:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:51:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,8 @@ static const sal_Unicode NumberChar[][10] = {
     { 0x0E50, 0x0E51, 0x0E52, 0x0E53, 0x0E54, 0x0E55, 0x0E56, 0x0E57, 0x0E58, 0x0E59 }  // Thai
 };
 
+// not used
+#if 0
 static sal_Unicode DecimalChar[] = {
     0x002E, // Half Width (Ascii)
     0xFF0E, // Full Width
@@ -87,7 +89,10 @@ static sal_Unicode DecimalChar[] = {
     0x002E, // Indic
     0x002E  // Thai
 };
+#endif
 
+// not used
+#if 0
 static sal_Unicode MinusChar[] = {
     0x002D, // Half Width (Ascii)
     0xFF0D, // Full Width
@@ -104,6 +109,7 @@ static sal_Unicode MinusChar[] = {
     0x002D, // Indic
     0x002D, // Thai
 };
+#endif
 
 #define NUMBER_ZERO     NumberChar[NumberChar_HalfWidth][0] // 0x0030
 #define NUMBER_ONE      NumberChar[NumberChar_HalfWidth][1]     // 0x0031
@@ -125,6 +131,8 @@ const sal_Int16 Multiplier_Count    = 7;
 
 const sal_Int16 ExponentCount_CJK   = 6;
 
+// not used
+#if 0
 static sal_Int16 MultiplierExponent_CJK[ExponentCount_CJK] = {
         12,     8,  4,  3,  2,  1
 };
@@ -137,9 +145,12 @@ static sal_Unicode MultiplierChar_CJK[][ExponentCount_CJK] = {
     0x5146, 0x5104, 0x4E07, 0x5343, 0x767E, 0x5341, // Japanese Modern
     0x5146, 0x5104, 0x842C, 0x9621, 0x767E, 0x62FE, // Japanese Traditional
 };
+#endif
 
 const sal_Int16 ExponentCount_short_CJK     = 2;
 
+// not used
+#if 0
 static sal_Int16 MultiplierExponent_short_CJK[ExponentCount_short_CJK] = {
         8,  4,
 };
@@ -153,6 +164,7 @@ static sal_Unicode MultiplierChar_short_CJK[][ExponentCount_short_CJK] = {
     0x5104, 0x4E07, // Japanese Modern
     0x5104, 0x842C, // Japanese Traditional
 };
+#endif
 
 } } } }
 
