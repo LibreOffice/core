@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_gnome.scp,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:26:42 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:52:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 
 File gid_File_Lib_Gnomevfs
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = gid_Dir_Program;
     Name = STRING(CONCAT2(ucpgvfs1.uno,UNXSUFFIX));
     RegistryID = gid_Starregistry_Services_Rdb;
@@ -45,7 +45,7 @@ End
 
 File gid_File_Lib_Gconfbe
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = gid_Dir_Program;
     Name = STRING(CONCAT2(gconfbe1.uno,UNXSUFFIX));
     RegistryID = gid_Starregistry_Services_Rdb;
@@ -56,6 +56,6 @@ File gid_File_Bin_Gnome_Set_Default_Application
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
     Name = "gnome-set-default-application";
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
 End
 
