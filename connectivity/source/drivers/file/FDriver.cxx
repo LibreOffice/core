@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FDriver.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:55:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:25:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,7 +140,7 @@ sal_Bool SAL_CALL OFileDriver::acceptsURL( const ::rtl::OUString& url )
     return (!url.compareTo(::rtl::OUString::createFromAscii("sdbc:file:"),10));
 }
 // --------------------------------------------------------------------------------
-Sequence< DriverPropertyInfo > SAL_CALL OFileDriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
+Sequence< DriverPropertyInfo > SAL_CALL OFileDriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& /*info*/ ) throw(SQLException, RuntimeException)
 {
     if ( acceptsURL(url) )
     {
@@ -205,7 +205,7 @@ Reference< XTablesSupplier > SAL_CALL OFileDriver::getDataDefinitionByConnection
     Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(connection,UNO_QUERY);
     if(xTunnel.is())
     {
-        OConnection* pSearchConnection = (OConnection*)xTunnel->getSomething(OConnection::getUnoTunnelImplementationId());
+        OConnection* pSearchConnection = reinterpret_cast< OConnection* >( xTunnel->getSomething(OConnection::getUnoTunnelImplementationId()) );
         OConnection* pConnection = NULL;
         for (OWeakRefArray::iterator i = m_xConnections.begin(); m_xConnections.end() != i; ++i)
         {
@@ -234,7 +234,7 @@ void OOperandParam::describe(const Reference< XPropertySet>& rColumn, ::vos::ORe
 {
     // den alten namen beibehalten
 
-    OSL_ENSURE((getRowPos() >= 0) && (getRowPos() < rParameterColumns->size()),"Invalid index for orderkey values!");
+    OSL_ENSURE(getRowPos() < rParameterColumns->size(),"Invalid index for orderkey values!");
 
     Reference< XPropertySet> xColumn = (*rParameterColumns)[getRowPos()];
 
