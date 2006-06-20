@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSet.hxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-25 15:10:07 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:35:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -383,6 +383,14 @@ namespace dbaccess
             sal_Int32 _nDesiredResultSetType,
             sal_Int32 _nDesiredResultSetConcurrency
         );
+
+    protected:
+        using ORowSetBase::getFastPropertyValue;
+        using ORowSetBase::firePropertyChange;
+        using ORowSetBase::doCancelModification;
+        using ORowSetBase::isModification;
+        using ORowSetBase::isModified;
+        using ORowSetBase::isNew;
     };
 
 
@@ -455,6 +463,13 @@ namespace dbaccess
 
     // cppu::OPropertySetHelper
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
+
+    protected:
+        using ORowSetBase::doCancelModification;
+        using ORowSetBase::isModification;
+        using ORowSetBase::isModified;
+        using ORowSetBase::isNew;
+        using ORowSetBase::rowDeleted;
     };
 
 }
