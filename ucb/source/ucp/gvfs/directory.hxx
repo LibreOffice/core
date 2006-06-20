@@ -4,9 +4,9 @@
  *
  *  $RCSfile: directory.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 18:31:37 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:27:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,22 +86,22 @@ public:
 
     virtual ~DataSupplier();
 
-    virtual rtl::OUString queryContentIdentifierString( sal_uInt32 nIndex );
+    virtual rtl::OUString queryContentIdentifierString( sal_Int32 nIndex );
     virtual com::sun::star::uno::Reference<
                 com::sun::star::ucb::XContentIdentifier >
-                          queryContentIdentifier( sal_uInt32 nIndex );
+                          queryContentIdentifier( sal_Int32 nIndex );
     virtual com::sun::star::uno::Reference< com::sun::star::ucb::XContent >
-                          queryContent( sal_uInt32 nIndex );
+                          queryContent( sal_Int32 nIndex );
 
-    virtual sal_Bool      getResult( sal_uInt32 nIndex );
+    virtual sal_Bool      getResult( sal_Int32 nIndex );
 
-    virtual sal_uInt32    totalCount();
-    virtual sal_uInt32    currentCount();
+    virtual sal_Int32     totalCount();
+    virtual sal_Int32     currentCount();
     virtual sal_Bool      isCountFinal();
 
     virtual com::sun::star::uno::Reference< com::sun::star::sdbc::XRow >
-                          queryPropertyValues( sal_uInt32 nIndex  );
-    virtual void          releasePropertyValues( sal_uInt32 nIndex );
+                          queryPropertyValues( sal_Int32 nIndex  );
+    virtual void          releasePropertyValues( sal_Int32 nIndex );
     virtual void          close();
     virtual void          validate()
         throw( com::sun::star::ucb::ResultSetException );
