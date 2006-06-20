@@ -4,9 +4,9 @@
  *
  *  $RCSfile: child_process.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:48:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:27:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,15 +50,16 @@
 using namespace ::rtl;
 
 // ----------------------------------- Main -----------------------------------
-SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
+SAL_IMPLEMENT_MAIN_WITH_ARGS(, argv)
 {
     printf("# %s is called.\n", argv[0]);
 
-    sal_Bool bRes = sal_True;
     sal_Int32 nCount = rtl_getAppCommandArgCount();
     if ( nCount != 4 )
     {
-        printf("# not enough arguments found, need 4 found %d.\n", nCount);
+        printf(
+            "# not enough arguments found, need 4 found %ld.\n",
+            sal::static_int_cast< long >(nCount));
         return 0;
     }
 
@@ -68,7 +69,9 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         rtl_getAppCommandArg( i , &(suArg[i].pData) );
         rtl::OString aString;
         aString = ::rtl::OUStringToOString( suArg[i], RTL_TEXTENCODING_ASCII_US );
-        printf("# Parameter[%d] is %s\n", i, aString.getStr());
+        printf(
+            "# Parameter[%ld] is %s\n", sal::static_int_cast< long >(i),
+            aString.getStr());
     }
 
     if ( suArg[0].compareTo( suParam0) != 0 ||
