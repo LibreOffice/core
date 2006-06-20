@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BIndexColumns.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:21:59 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:09:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,7 +145,7 @@ void OIndexColumns::impl_refresh() throw(::com::sun::star::uno::RuntimeException
     m_pIndex->refreshColumns();
 }
 // -----------------------------------------------------------------------------
-void OIndexColumns::appendObject( const Reference< XPropertySet >& descriptor )
+void OIndexColumns::appendObject( const Reference< XPropertySet >& /*descriptor*/ )
 {
     // nothing to do here
 }
