@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dsntypes.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-28 10:37:15 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:23:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -338,6 +338,8 @@ void ODsnTypeCollection::extractHostNamePort(const String& _rDsn,String& _sDatab
                 }
             }
             break;
+        default:
+            break;
     }
 }
 //-------------------------------------------------------------------------
@@ -473,7 +475,6 @@ sal_Bool ODsnTypeCollection::hasAuthentication(DATASOURCE_TYPE _eType) const
         case DST_LDAP:
         case DST_CALC:
             return sal_True;
-            break;
         case DST_MSACCESS:
         case DST_MOZILLA:
         case DST_THUNDERBIRD:
@@ -805,7 +806,7 @@ int DbuTypeCollectionItem::operator==(const SfxPoolItem& _rItem) const
 }
 
 //-------------------------------------------------------------------------
-SfxPoolItem* DbuTypeCollectionItem::Clone(SfxItemPool* _pPool) const
+SfxPoolItem* DbuTypeCollectionItem::Clone(SfxItemPool* /*_pPool*/) const
 {
     return new DbuTypeCollectionItem(*this);
 }
