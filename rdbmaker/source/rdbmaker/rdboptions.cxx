@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rdboptions.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:05:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:10:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,7 @@ sal_Bool RdbOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
     }
 
     char    *s=NULL;
-    for (i; i < ac; i++)
+    for (; i < ac; i++)
     {
         if (av[i][0] == '-')
         {
@@ -297,7 +297,6 @@ sal_Bool RdbOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                     break;
                 default:
                     throw IllegalArgument("the option is unknown" + OString(av[i]));
-                    break;
             }
         } else
         {
@@ -323,9 +322,9 @@ sal_Bool RdbOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
 
                     ret = initOptions(rargc, rargv, bCmdFile);
 
-                    for (long i=0; i < rargc; i++)
+                    for (long j=0; j < rargc; j++)
                     {
-                        free(rargv[i]);
+                        free(rargv[j]);
                     }
                 }
             } else
@@ -345,8 +344,8 @@ OString RdbOptions::prepareHelp()
     help += "The rdbmaker supports 2 modes:\n";
     help += " 1. using the internal UNO type description manager -> use -R<regname>\n"
             "    where regname specifies the type library used by the UNO type description manager\n"
-            "    after UNO is bootstrapped. This option disables the use of any other type libraries.\n";
-            "    The tpye library must be a valid product type library which means that all types are\n";
+            "    after UNO is bootstrapped. This option disables the use of any other type libraries.\n"
+            "    The tpye library must be a valid product type library which means that all types are\n"
             "    stored under the global base node UCR (Uno Core Reflection data).\n";
     help += " 2. using one or more type library files -> use file_1 ... file_n\n"
             "    file_1 .. file_n specifies one or more valid type library files which are used to\n"
