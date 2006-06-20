@@ -4,9 +4,9 @@
  *
  *  $RCSfile: characterclassificationImpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:05:27 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:43:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@ CharacterClassificationImpl::CharacterClassificationImpl(
 
 CharacterClassificationImpl::~CharacterClassificationImpl() {
         // Clear lookuptable
-        for (sal_Int32 l = 0; l < lookupTable.size(); l++)
+        for (size_t l = 0; l < lookupTable.size(); l++)
             delete lookupTable[l];
         lookupTable.clear();
 }
@@ -147,7 +147,7 @@ ParseResult SAL_CALL CharacterClassificationImpl::parsePredefinedToken(
 sal_Bool SAL_CALL CharacterClassificationImpl::createLocaleSpecificCharacterClassification(const OUString& serviceName, const Locale& rLocale)
 {
         // to share service between same Language but different Country code, like zh_CN and zh_SG
-        for (sal_Int32 l = 0; l < lookupTable.size(); l++) {
+        for (size_t l = 0; l < lookupTable.size(); l++) {
             cachedItem = lookupTable[l];
             if (serviceName == cachedItem->aName) {
                 lookupTable.push_back( cachedItem = new lookupTableItem(rLocale, serviceName, cachedItem->xCI) );
@@ -177,7 +177,7 @@ CharacterClassificationImpl::getLocaleSpecificCharacterClassification(const Loca
         if (cachedItem && cachedItem->equals(rLocale))
             return cachedItem->xCI;
         else if (xMSF.is()) {
-            for (sal_Int32 i = 0; i < lookupTable.size(); i++) {
+            for (size_t i = 0; i < lookupTable.size(); i++) {
                 cachedItem = lookupTable[i];
                 if (cachedItem->equals(rLocale))
                     return cachedItem->xCI;
