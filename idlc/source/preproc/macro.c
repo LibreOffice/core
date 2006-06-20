@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macro.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:15:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:51:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,7 +136,7 @@ void
     {
         if (comparetokens(def, np->vp)
             || (np->ap == NULL) != (args == NULL)
-            || np->ap && comparetokens(args, np->ap))
+            || (np->ap && comparetokens(args, np->ap)))
             error(ERROR, "Macro redefinition of %t (already defined at %s)", trp->bp + 2, np->loc);
     }
     if (args)
@@ -448,7 +448,8 @@ int
             parens--;
         if (lp->type == DSHARP)
             lp->type = DSHARP1;         /* ## not special in arg */
-        if (lp->type == COMMA && parens == 0 || parens < 0 && (lp - 1)->type != LP)
+        if ((lp->type == COMMA && parens == 0)
+            || (parens < 0 && (lp - 1)->type != LP))
         {
             if (*narg >= NARG - 1)
                 error(FATAL, "Sorry, too many macro arguments");
@@ -607,7 +608,7 @@ int
 Tokenrow *
     stringify(Tokenrow * vp)
 {
-    static Token t = {STRING};
+    static Token t = {STRING, 0, 0, 0, NULL};
     static Tokenrow tr = {&t, &t, &t + 1, 1};
     Token *tp;
     uchar s[STRLEN];
