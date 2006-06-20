@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FieldControls.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:16:49 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:11:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,29 +54,26 @@
 
 namespace dbaui
 {
-    class OSpecialReadOnly
+    namespace
     {
-    protected:
-        void SetSpecialReadOnly(BOOL _bReadOnly,Window *pWin)
+        void lcl_setSpecialReadOnly( BOOL _bReadOnly, Window* _pWin )
         {
             StyleSettings aSystemStyle = Application::GetSettings().GetStyleSettings();
             const Color& rNewColor = _bReadOnly ? aSystemStyle.GetDialogColor() : aSystemStyle.GetFieldColor();
-            pWin->SetBackground(Wallpaper(rNewColor));
-            pWin->SetControlBackground(rNewColor);
+            _pWin->SetBackground(Wallpaper(rNewColor));
+            _pWin->SetControlBackground(rNewColor);
         }
-    public:
-        virtual void SetSpecialReadOnly(BOOL _bReadOnly) = 0;
-    };
+    }
+
     //==================================================================
     class OPropColumnEditCtrl : public OSQLNameEdit
-                                ,public OSpecialReadOnly
     {
         short   m_nPos;
         String  m_strHelpText;
     public:
         inline OPropColumnEditCtrl(Window* pParent, ::rtl::OUString& _rAllowedChars, USHORT nHelpId, short nPosition = -1, WinBits nWinStyle = 0);
 
-        inline BOOL IsModified() { return GetText() != GetSavedValue(); }
+        inline BOOL IsModified() const { return GetText() != GetSavedValue(); }
 
         short GetPos() const { return m_nPos; }
         String GetHelp() const { return m_strHelpText; }
@@ -84,7 +81,7 @@ namespace dbaui
         virtual void SetSpecialReadOnly(BOOL _bReadOnly)
         {
             SetReadOnly(_bReadOnly);
-            OSpecialReadOnly::SetSpecialReadOnly(_bReadOnly,this);
+            lcl_setSpecialReadOnly(_bReadOnly,this);
         }
     };
     inline OPropColumnEditCtrl::OPropColumnEditCtrl(Window* pParent,
@@ -99,7 +96,6 @@ namespace dbaui
     }
     //==================================================================
     class OPropEditCtrl :   public Edit
-                            ,public OSpecialReadOnly
     {
         short   m_nPos;
         String  m_strHelpText;
@@ -108,7 +104,7 @@ namespace dbaui
         inline OPropEditCtrl(Window* pParent, USHORT nHelpId, short nPosition = -1, WinBits nWinStyle = 0);
         inline OPropEditCtrl(Window* pParent, USHORT nHelpId, const ResId& _rRes,short nPosition = -1);
 
-        inline BOOL IsModified() { return GetText() != GetSavedValue(); }
+        inline BOOL IsModified() const { return GetText() != GetSavedValue(); }
 
         short GetPos() const { return m_nPos; }
         String GetHelp() const { return m_strHelpText; }
@@ -116,7 +112,7 @@ namespace dbaui
         virtual void SetSpecialReadOnly(BOOL _bReadOnly)
         {
             SetReadOnly(_bReadOnly);
-            OSpecialReadOnly::SetSpecialReadOnly(_bReadOnly,this);
+            lcl_setSpecialReadOnly(_bReadOnly,this);
         }
     };
 
@@ -135,7 +131,6 @@ namespace dbaui
 
     //==================================================================
     class OPropNumericEditCtrl : public NumericField
-                                ,public OSpecialReadOnly
     {
         short   m_nPos;
         String  m_strHelpText;
@@ -144,7 +139,7 @@ namespace dbaui
         inline OPropNumericEditCtrl(Window* pParent, USHORT nHelpId, short nPosition = -1, WinBits nWinStyle = 0);
         inline OPropNumericEditCtrl(Window* pParent, USHORT nHelpId, const ResId& _rRes,short nPosition = -1);
 
-        inline BOOL IsModified() { return GetText() != GetSavedValue(); }
+        inline BOOL IsModified() const { return GetText() != GetSavedValue(); }
 
         short GetPos() const { return m_nPos; }
         String GetHelp() const { return m_strHelpText; }
@@ -152,7 +147,7 @@ namespace dbaui
         virtual void SetSpecialReadOnly(BOOL _bReadOnly)
         {
             SetReadOnly(_bReadOnly);
-            OSpecialReadOnly::SetSpecialReadOnly(_bReadOnly,this);
+            lcl_setSpecialReadOnly(_bReadOnly,this);
         }
     };
 
@@ -171,7 +166,6 @@ namespace dbaui
 
     //==================================================================
     class OPropListBoxCtrl : public ListBox
-                            ,public OSpecialReadOnly
     {
         short   m_nPos;
         String  m_strHelpText;
@@ -180,7 +174,7 @@ namespace dbaui
         inline OPropListBoxCtrl(Window* pParent, USHORT nHelpId, short nPosition = -1, WinBits nWinStyle = 0);
         inline OPropListBoxCtrl(Window* pParent, USHORT nHelpId, const ResId& _rRes,short nPosition = -1);
 
-        inline BOOL IsModified() { return GetSelectEntryPos() != GetSavedValue(); }
+        inline BOOL IsModified() const { return GetSelectEntryPos() != GetSavedValue(); }
 
         short GetPos() const { return m_nPos; }
         String GetHelp() const { return m_strHelpText; }
@@ -188,7 +182,7 @@ namespace dbaui
         virtual void SetSpecialReadOnly(BOOL _bReadOnly)
         {
             SetReadOnly(_bReadOnly);
-            OSpecialReadOnly::SetSpecialReadOnly(_bReadOnly,this);
+            lcl_setSpecialReadOnly(_bReadOnly,this);
         }
     };
 
