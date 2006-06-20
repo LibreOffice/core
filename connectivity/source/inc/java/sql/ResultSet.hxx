@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ResultSet.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:22:51 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:04:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -234,6 +234,9 @@ namespace connectivity
         virtual void SAL_CALL updateNumericObject( sal_Int32 columnIndex, const ::com::sun::star::uno::Any& x, sal_Int32 scale ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         // XColumnLocate
         virtual sal_Int32 SAL_CALL findColumn( const ::rtl::OUString& columnName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+    public:
+        using ::cppu::OPropertySetHelper::getFastPropertyValue;
     };
 }
 #endif // _CONNECTIVITY_JAVA_SQL_RESULTSET_HXX_

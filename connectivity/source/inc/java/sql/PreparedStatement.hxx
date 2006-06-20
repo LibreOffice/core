@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PreparedStatement.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:22:18 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:03:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,6 +124,11 @@ namespace connectivity
         virtual ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL executeBatch(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         // XResultSetMetaDataSupplier
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData > SAL_CALL getMetaData(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+    public:
+        using java_sql_Statement_Base::executeQuery;
+        using java_sql_Statement_Base::executeUpdate;
+        using java_sql_Statement_Base::execute;
     };
 }
 #endif // _CONNECTIVITY_JAVA_SQL_PREPAREDSTATEMENT_HXX_
