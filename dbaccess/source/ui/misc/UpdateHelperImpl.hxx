@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UpdateHelperImpl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:23:24 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:21:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,7 @@ namespace dbaui
         {
             m_xRowUpdate->updateInt(_nPos, _nValue);
         }
-        virtual void updateNull(sal_Int32 _nPos, ::sal_Int32 sqlType)
+        virtual void updateNull(sal_Int32 _nPos, ::sal_Int32)
         {
             m_xRowUpdate->updateNull(_nPos);
         }
