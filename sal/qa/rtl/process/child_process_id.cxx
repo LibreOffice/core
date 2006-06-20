@@ -4,9 +4,9 @@
  *
  *  $RCSfile: child_process_id.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:48:45 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:27:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,9 +68,8 @@ void printUuid( sal_uInt8 *pNode )
 
 // ----------------------------------- Main -----------------------------------
 
-SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
+SAL_IMPLEMENT_MAIN_WITH_ARGS(,)
 {
-    //printf("# %s is called.\n", argv[0]);
     sal_uInt8 pTargetUUID[16];
     rtl_getGlobalProcessId( pTargetUUID );
     printUuid( pTargetUUID );
