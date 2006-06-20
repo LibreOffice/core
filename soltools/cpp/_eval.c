@@ -233,7 +233,7 @@ long
 {
     Token *tp;
     Nlist *np;
-    int ntok, rand;
+    int ntok, rnd;
 
     trp->tp++;
     if (kw == KIFDEF || kw == KIFNDEF)
@@ -254,7 +254,7 @@ long
     vp = vals;
     op = ops;
     *op++ = END;
-    for (rand = 0, tp = trp->bp + ntok; tp < trp->lp; tp++)
+    for (rnd = 0, tp = trp->bp + ntok; tp < trp->lp; tp++)
     {
         switch (tp->type)
         {
@@ -269,17 +269,17 @@ long
             case NUMBER:
             case CCON:
             case STRING:
-                if (rand)
+                if (rnd)
                     goto syntax;
                 *vp++ = tokval(tp);
-                rand = 1;
+                rnd = 1;
                 continue;
 
                 /* unary */
             case DEFINED:
             case TILDE:
             case NOT:
-                if (rand)
+                if (rnd)
                     goto syntax;
                 *op++ = tp->type;
                 continue;
@@ -289,7 +289,7 @@ long
             case MINUS:
             case STAR:
             case AND:
-                if (rand == 0)
+                if (rnd == 0)
                 {
                     if (tp->type == MINUS)
                         *op++ = UMINUS;
@@ -320,22 +320,22 @@ long
             case QUEST:
             case COLON:
             case COMMA:
-                if (rand == 0)
+                if (rnd == 0)
                     goto syntax;
                 if (evalop(priority[tp->type]) != 0)
                     return 0;
                 *op++ = tp->type;
-                rand = 0;
+                rnd = 0;
                 continue;
 
             case LP:
-                if (rand)
+                if (rnd)
                     goto syntax;
                 *op++ = LP;
                 continue;
 
             case RP:
-                if (!rand)
+                if (!rnd)
                     goto syntax;
                 if (evalop(priority[RP]) != 0)
                     return 0;
@@ -347,14 +347,17 @@ long
                 continue;
 
             case SHARP:
-                if (((tp + 1) < trp->lp) &&
-                    (np = lookup(tp + 1, 0)) && (np->val == KMACHINE))
+                if ((tp + 1) < trp->lp)
                 {
-                    tp++;
-                    if (rand)
-                        goto syntax;
-                    *op++ = ARCHITECTURE;
-                    continue;
+                    np = lookup(tp + 1, 0);
+                    if (np && (np->val == KMACHINE))
+                    {
+                        tp++;
+                        if (rnd)
+                            goto syntax;
+                        *op++ = ARCHITECTURE;
+                        continue;
+                    }
                 }
                 /* fall through */
 
@@ -363,7 +366,7 @@ long
                 return 0;
         }
     }
-    if (rand == 0)
+    if (rnd == 0)
         goto syntax;
     if (evalop(priority[END]) != 0)
         return 0;
@@ -383,7 +386,8 @@ syntax:
 int
     evalop(struct pri pri)
 {
-    struct value v1, v2;
+    struct value v1;
+    struct value v2 = { 0, UND };
     long rv1, rv2;
     int rtype, oper;
 
@@ -709,17 +713,18 @@ struct value
                     {
                         static char cvcon[]
                         = "b\bf\fn\nr\rt\tv\v''\"\"??\\\\";
+                        size_t j;
 
-                        for (i = 0; i < sizeof(cvcon); i += 2)
+                        for (j = 0; j < sizeof(cvcon); j += 2)
                         {
-                            if (*p == cvcon[i])
+                            if (*p == cvcon[j])
                             {
-                                n = cvcon[i + 1];
+                                n = cvcon[j + 1];
                                 break;
                             }
                         }
                         p += 1;
-                        if (i >= sizeof(cvcon))
+                        if (j >= sizeof(cvcon))
                             error(WARNING,
                                "Undefined escape in character constant");
                     }
