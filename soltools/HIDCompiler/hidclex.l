@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hidclex.l,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:21:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:05:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,16 @@
  *
  ************************************************************************/
 %{
+// Suppress any warnings from generated code:
+#if defined __GNUC__
+#pragma GCC system_header
+#elif defined __SUNPRO_CC
+#pragma disable_warn
+#elif defined _MSC_VER
+#pragma warning(push, 1)
+#endif
 
-static char *Revision     = "$Revision: 1.5 $" ;
+static char const Revision[]     = "$Revision: 1.6 $" ;
 
 /*
 
@@ -81,14 +89,14 @@ char* lower(char* str)
 	size_t s= strlen(str);
 	size_t i=0;
 	while( i < s ){
-		str[i] = tolower( str[i] );
+		str[i] = (char) tolower( str[i] );
 		i++;
 	}
 	return str;
 }
 
 int alloc_cnt = 0;
-void freestring( char* ); //forward
+void freestring( char const * ); //forward
 
 char* dot2underline( char* str )
 {
@@ -98,7 +106,7 @@ char* dot2underline( char* str )
 	return str;
 }
 
-void dotappend( char*& base, char* suffix )
+void dotappend( char*& base, char const * suffix )
 {
 	// append like "str.suffix" if suffix else "str"
 
@@ -133,7 +141,7 @@ void dotappend( char*& base, char* suffix )
 	base = newstr;
 }
 
-void dotsubtract( char*& base, char* suffix )
+void dotsubtract( char*& base, char const * suffix )
 {
 	// remove dotted suffix from base.suffix --> base
 
@@ -143,7 +151,7 @@ void dotsubtract( char*& base, char* suffix )
 		return;
 	if( (strlen(suffix)+1) > strlen(base) )
 		return;
-	char* pos=strstr( base, suffix);
+	char * pos=strstr( base, suffix);
 	if( pos && (pos-1 >= base) && ( *(pos-1) == '.') )
 		if( *(pos+strlen(suffix)) == '\0' ) //only if at end of base
 			*(pos-1)= '\0';
@@ -162,12 +170,12 @@ void adjust_levelbuffer()
 	levelbuffer[i] = '\0';
 }
 
-void freestring( char* ptr )
+void freestring( char const * ptr )
 {
 	 alloc_cnt--;
 	 adjust_levelbuffer();
 	 //fprintf(stderr,"%sinfo: freestring line %d\n",levelbuffer, __LINE__);
-	 free(ptr), ptr = NULL;
+	 free(const_cast< char * >(ptr)), ptr = NULL;
 }
 
 void makestring(char** newstr, char* oldstr)
@@ -191,8 +199,8 @@ int strncmpi(char* stra, char* strb, size_t cnt)
 	size_t i;
 	char a,b;
 	for(i=0;i<cnt;i++){
-		a = tolower(stra[i]);
-		b = tolower(strb[i]);
+		a = (char) tolower(stra[i]);
+		b = (char) tolower(strb[i]);
 		if( a < b )
 			return -1;
 		if( a > b )
@@ -204,14 +212,14 @@ int strncmpi(char* stra, char* strb, size_t cnt)
 }
 
 #ifndef WNT
-int strcmpi(char* stra, char* strb)
+int strcmpi(char const * stra, char const * strb)
 {
 	// like strcmp() but case insensitive
 	size_t i;
 	char a,b;
 	for(i=0; ;i++){
-		a = tolower(stra[i]);
-		b = tolower(strb[i]);
+		a = (char) tolower(stra[i]);
+		b = (char) tolower(strb[i]);
 		if( a < b )
 			return -1;
 		if( a > b )
@@ -232,31 +240,14 @@ int tab_entries = 0;
 
 /* globale variablen */
 FILE* outfile;
-char *filename = ""; //incl. path
+char const *filename = ""; //incl. path
 //char *basename = "";
-char *project = "";
-char *subpath = "";	//from project name downwards like source\ui\xxx.src
+char const *project = "";
+char const *subpath = "";	//from project name downwards like source\ui\xxx.src
 
 int firstprint = 1;
 
 int in_define = 0;
-
-/*char* get_basename(char* dospath)
-{
-
-	char* pos = strrchr( dospath, '\\' );
-	return pos==NULL ? dospath : (pos+1); // drive letter remains(sorry)
-} */
-
-char* get_subpath(char* project, char* dospath)
-{
-	char* start;
-	if( (start=strstr(dospath,project)) == NULL )
-		return dospath;
-	else
-		return start+strlen(project)+1;
-		//in ausnahmefalle zu ungenau, rechts weiter suchen
-}
 
 class ident_ring
 {
@@ -385,14 +376,14 @@ token  lasttoken = TOK_INVALID;
 
 #define UNDEF (-1)
 
-char *globalID = "";
-char *globalKLASSE = NULL;
+char *globalID = const_cast< char * >("");
+char const *globalKLASSE = NULL;
 
 void reset_globalID() {
 	//
 	if( globalID && (strlen(globalID) > 0 ) ) {
 		freestring( globalID );
-		globalID = "";
+		globalID = const_cast< char * >("");
 	}
 }
 
@@ -409,7 +400,7 @@ public:
 public:
 	int	 lineno;
 	token  lasttoken; //before opening {
-	char *klasse ;
+	char const *klasse ;
 	char *localID;
 	char *helpID;
 	int  residfound;
@@ -471,8 +462,6 @@ void delete_stack()
 /* forward */
 int eat_comment();
 int eat_cpp_comment();
-int eat_preprocessor_lines();
-int readlistfile();
 
 /*===================================================*/
 //
@@ -705,11 +694,15 @@ num4tag		(([Pp][Oo][Ss][Ss][Ii][Zz][Ee]))
 				// ares ausgeben
 				if( ares != NULL ) {
 
-					#define LEER (char*)"leer"
-					char* globklasse  = globalKLASSE==NULL ? LEER:globalKLASSE;
-					char* local = ares->localID==NULL ? LEER:ares->localID;
-					char* klasse= ares->klasse==NULL  ? LEER:ares->klasse;
-					char* glob  = globalID==NULL      ? LEER:globalID;
+					#define LEER "leer"
+					char const * globklasse =
+                      globalKLASSE==NULL ? LEER:globalKLASSE;
+					char const * local =
+                      ares->localID==NULL ? LEER:ares->localID;
+					char const * klasse =
+                      ares->klasse==NULL ? LEER:ares->klasse;
+					char const * glob =
+                      globalID==NULL ? LEER:globalID;
 
 
 					//wg. Starview-Klasse String in ehdl.c und doc.c
@@ -734,7 +727,7 @@ num4tag		(([Pp][Oo][Ss][Ss][Ii][Zz][Ee]))
 					char globunder[256];
 				    strcpy(globunder,glob);
 					dot2underline( globunder );
-					char* globsuffix = strrchr(glob,'.');
+					char const * globsuffix = strrchr(glob,'.');
 					globsuffix = globsuffix==NULL ? glob:globsuffix+1;
 
 					if( ares->helpID ) {
@@ -865,7 +858,7 @@ num4tag		(([Pp][Oo][Ss][Ss][Ii][Zz][Ee]))
 
 void makeversion( char* version )
 {
-	char *pos = strpbrk( Revision, "0123456789." );
+	char const *pos = strpbrk( Revision, "0123456789." );
 	size_t siz = strspn( pos,      "0123456789." );
 	if( pos && siz ) {
 		strncpy(version, pos, siz);
@@ -877,8 +870,8 @@ void makeversion( char* version )
 
 int main( int argc, char* argv[] )
 {
-	static char *Compiler = "HID-Compiler ";
-	static char *Author   = "OG ";
+	static char const *Compiler = "HID-Compiler ";
+	static char const *Author   = "OG ";
 	static char HIDCompiler[100];
 	static char Version[100];
 
@@ -976,66 +969,4 @@ int eat_cpp_comment()
 	if( c != EOF )
 		unput(c); /* because next #.... line was not found */
 	return 0;
-}
-
-int eat_preprocessor_lines()
-{
-	int c;
-	int lastc = ' ';
-	while( (c=yyinput()) != EOF ) {
-		if( c=='\n') {
-			if( lastc == '\\')
-				; /* ok, next line is preproc line again */
-			else
-				break;
-		}
-		lastc=c;
-	}
-	if( c != EOF )
-		unput(c); /* because second #.... line was not found */
-	return 0;
-}
-
-int readlistfile()
-{
-	char buffer[1024];
-	char* tmp;
-	char* project;
-	char* path;
-	int pos;
-
-	tab_entries = 0;
-	while( fgets(buffer, 1024-1, stdin) != NULL ) {
-		pos = strcspn(buffer,"\n");
-		buffer[pos] = '\0';
-
-		makestring( &tmp, buffer );
-
-		/* isolate project */
-		pos = strcspn(tmp," \t");
-		tmp[pos] = '\0';
-		project = tmp;
-
-		/* isolate pathname */
-		path = &tmp[pos+1];
-
-		/* eintragen in filename_tab & project_tab */
-		if( tab_entries >= MAXSRCFILES ) {
-			fprintf( stderr, "error: more than %d entries in '%s' \n", tab_entries, listfilename );
-			exit(1);
-		}
-		filename_tab[tab_entries] = path;
-		project_tab[tab_entries]  = project;
-		tab_entries++;
-	}
-	if( tab_entries == 0) {
-		fprintf( stderr, "info: no work to be done \n");
-		exit(1);
-	}
-	return 0;
-}
-
-int even( int x )
-{
-	return ! (x & (!0));// !0 for portability 16bit AND 32bit
 }
