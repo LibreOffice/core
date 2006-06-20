@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 16:54:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:36:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,27 +132,28 @@ DBG_NAME(ORowSetCache)
 ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                            const Reference< XSingleSelectQueryAnalyzer >& _xAnalyzer,
                            const Reference< XMultiServiceFactory >& _xServiceFactory,
-                           const ORowSetValueVector&    _rParameterRow,
                            const ::rtl::OUString& _rUpdateTableName,
                            sal_Bool&    _bModified,
                            sal_Bool&    _bNew)
-    : m_xSet(_xRs)
-    ,m_nStartPos(0)
-    ,m_nEndPos(0)
-    ,m_nPosition(0)
-    ,m_nRowCount(0)
-    ,m_bBeforeFirst(sal_True)
-    ,m_bAfterLast( sal_False )
-    ,m_bRowCountFinal(sal_False)
-    ,m_bUpdated(sal_False)
+    :m_xSet(_xRs)
     ,m_xMetaData(Reference< XResultSetMetaDataSupplier >(_xRs,UNO_QUERY)->getMetaData())
     ,m_xServiceFactory(_xServiceFactory)
-    ,m_nFetchSize(0)
-    ,m_bNew(_bNew)
-    ,m_bModified(_bModified)
+    ,m_pCacheSet(NULL)
     ,m_pMatrix(NULL)
     ,m_pInsertMatrix(NULL)
-    ,m_pCacheSet(NULL)
+    ,m_nLastColumnIndex(0)
+    ,m_nFetchSize(0)
+    ,m_nRowCount(0)
+    ,m_nPrivileges( Privilege::SELECT )
+    ,m_nPosition(0)
+    ,m_nStartPos(0)
+    ,m_nEndPos(0)
+    ,m_bRowCountFinal(sal_False)
+    ,m_bBeforeFirst(sal_True)
+    ,m_bAfterLast( sal_False )
+    ,m_bUpdated(sal_False)
+    ,m_bModified(_bModified)
+    ,m_bNew(_bNew)
 {
     DBG_CTOR(ORowSetCache,NULL);
 
@@ -472,10 +473,9 @@ Any ORowSetCache::getBookmark(  )
         case DataType::SMALLINT:
         case DataType::INTEGER:
             return makeAny((sal_Int32)(*(*m_aMatrixIter))[0]);
-            break;
         default:
             if((*(*m_aMatrixIter))[0].isNull())
-                (*(*m_aMatrixIter))[0] = m_pCacheSet->getBookmark(*m_aMatrixIter);
+                (*(*m_aMatrixIter))[0] = m_pCacheSet->getBookmark();
             return (*(*m_aMatrixIter))[0].getAny();
     }
 }
@@ -526,9 +526,9 @@ sal_Bool ORowSetCache::moveRelativeToBookmark( const Any& bookmark, sal_Int32 ro
     return bRet;
 }
 // -------------------------------------------------------------------------
-sal_Int32 ORowSetCache::compareBookmarks( const Any& first, const Any& second )
+sal_Int32 ORowSetCache::compareBookmarks( const Any& _first, const Any& _second )
 {
-    return (!first.hasValue() || !second.hasValue()) ? CompareBookmark::NOT_COMPARABLE : m_pCacheSet->compareBookmarks(first,second);
+    return (!_first.hasValue() || !_second.hasValue()) ? CompareBookmark::NOT_COMPARABLE : m_pCacheSet->compareBookmarks(_first,_second);
 }
 // -------------------------------------------------------------------------
 sal_Bool ORowSetCache::hasOrderedBookmarks(  )
@@ -588,7 +588,7 @@ void ORowSetCache::updateObject( sal_Int32 columnIndex, const Any& x )
     (*(*m_aInsertRow))[columnIndex].setModified();
 }
 // -------------------------------------------------------------------------
-void ORowSetCache::updateNumericObject( sal_Int32 columnIndex, const Any& x, sal_Int32 scale )
+void ORowSetCache::updateNumericObject( sal_Int32 columnIndex, const Any& x, sal_Int32 /*scale*/ )
 {
     checkUpdateConditions(columnIndex);
 
