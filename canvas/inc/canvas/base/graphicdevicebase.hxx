@@ -4,9 +4,9 @@
  *
  *  $RCSfile: graphicdevicebase.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-09 13:27:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:14:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -394,32 +394,36 @@ namespace canvas
                                                                   boundRect ) );
         }
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XParametricPolyPolygon2D > SAL_CALL createVerticalLinesHatch( const ::com::sun::star::uno::Sequence< double >& leftColor, const ::com::sun::star::uno::Sequence< double >& rightColor ) throw (::com::sun::star::lang::IllegalArgumentException,
-                                                                                                                                                                                                                                                                              ::com::sun::star::uno::RuntimeException)
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XParametricPolyPolygon2D > SAL_CALL createVerticalLinesHatch( const ::com::sun::star::uno::Sequence< double >& /*leftColor*/,
+                                                                                                                                             const ::com::sun::star::uno::Sequence< double >& /*rightColor*/ ) throw (::com::sun::star::lang::IllegalArgumentException,
+                                                                                                                                                                                                                      ::com::sun::star::uno::RuntimeException)
         {
             // TODO(F1): hatch factory NYI
             return ::com::sun::star::uno::Reference<
                         ::com::sun::star::rendering::XParametricPolyPolygon2D >();
         }
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XParametricPolyPolygon2D > SAL_CALL createOrthogonalLinesHatch( const ::com::sun::star::uno::Sequence< double >& leftTopColor, const ::com::sun::star::uno::Sequence< double >& rightBottomColor ) throw (::com::sun::star::lang::IllegalArgumentException,
-                                                                                                                                                                                                                                                                                         ::com::sun::star::uno::RuntimeException)
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XParametricPolyPolygon2D > SAL_CALL createOrthogonalLinesHatch( const ::com::sun::star::uno::Sequence< double >& /*leftTopColor*/,
+                                                                                                                                               const ::com::sun::star::uno::Sequence< double >& /*rightBottomColor*/ ) throw (::com::sun::star::lang::IllegalArgumentException,
+                                                                                                                                                                                                                              ::com::sun::star::uno::RuntimeException)
         {
             // TODO(F1): hatch factory NYI
             return ::com::sun::star::uno::Reference<
                         ::com::sun::star::rendering::XParametricPolyPolygon2D >();
         }
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XParametricPolyPolygon2D > SAL_CALL createThreeCrossingLinesHatch( const ::com::sun::star::uno::Sequence< double >& startColor, const ::com::sun::star::uno::Sequence< double >& endColor ) throw (::com::sun::star::lang::IllegalArgumentException,
-                                                                                                                                                                                                                                                                                  ::com::sun::star::uno::RuntimeException)
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XParametricPolyPolygon2D > SAL_CALL createThreeCrossingLinesHatch( const ::com::sun::star::uno::Sequence< double >& /*startColor*/,
+                                                                                                                                                  const ::com::sun::star::uno::Sequence< double >& /*endColor*/ ) throw (::com::sun::star::lang::IllegalArgumentException,
+                                                                                                                                                                                                                         ::com::sun::star::uno::RuntimeException)
         {
             // TODO(F1): hatch factory NYI
             return ::com::sun::star::uno::Reference<
                         ::com::sun::star::rendering::XParametricPolyPolygon2D >();
         }
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XParametricPolyPolygon2D > SAL_CALL createFourCrossingLinesHatch( const ::com::sun::star::uno::Sequence< double >& startColor, const ::com::sun::star::uno::Sequence< double >& endColor ) throw (::com::sun::star::lang::IllegalArgumentException,
-                                                                                                                                                                                                                                                                                 ::com::sun::star::uno::RuntimeException)
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XParametricPolyPolygon2D > SAL_CALL createFourCrossingLinesHatch( const ::com::sun::star::uno::Sequence< double >& /*startColor*/,
+                                                                                                                                                 const ::com::sun::star::uno::Sequence< double >& /*endColor*/ ) throw (::com::sun::star::lang::IllegalArgumentException,
+                                                                                                                                                                                                                        ::com::sun::star::uno::RuntimeException)
         {
             // TODO(F1): hatch factory NYI
             return ::com::sun::star::uno::Reference<
