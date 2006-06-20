@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CRowSetDataColumn.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 16:53:31 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:34:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,7 @@ using namespace ::com::sun::star::util;
 using namespace cppu;
 using namespace osl;
 
-DBG_NAME(ORowSetDataColumn);
+DBG_NAME(ORowSetDataColumn)
 // -------------------------------------------------------------------------
 ORowSetDataColumn::ORowSetDataColumn(   const Reference < XResultSetMetaData >& _xMetaData,
                                       const Reference < XRow >& _xRow,
@@ -78,8 +78,8 @@ ORowSetDataColumn::ORowSetDataColumn(   const Reference < XResultSetMetaData >& 
                                       const ::rtl::OUString& _rDescription,
                                       const ORowSetCacheIterator& _rColumnValue)
     : ODataColumn(_xMetaData,_xRow,_xRowUpdate,_nPos,_rxDBMeta)
-    ,m_aDescription(_rDescription)
     ,m_aColumnValue(_rColumnValue)
+    ,m_aDescription(_rDescription)
 {
     DBG_CTOR(ORowSetDataColumn,NULL);
 }
