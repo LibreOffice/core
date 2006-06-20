@@ -4,9 +4,9 @@
  *
  *  $RCSfile: opendoccontrols.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:35:26 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:00:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -304,14 +304,14 @@ namespace dbaui
                     if ( !sTitle.Len() )
                         sTitle = aURL.getName();
 
-                    String sURL = aURL.GetMainURL( INetURLObject::NO_DECODE );
+                    String sDecodedURL = aURL.GetMainURL( INetURLObject::NO_DECODE );
 
 //                    sTitle.AppendAscii( " (" );
-//                    sTitle += String( ::svt::OFileNotation( sURL ).get( ::svt::OFileNotation::N_SYSTEM ) );
+//                    sTitle += String( ::svt::OFileNotation( sDecodedURL ).get( ::svt::OFileNotation::N_SYSTEM ) );
 //                    sTitle.AppendAscii( ")" );
 
                     USHORT nPos = InsertEntry( sTitle );
-                    m_aURLs.insert( MapIndexToStringPair::value_type( nPos, StringPair( sURL, sFilter ) ) );
+                    m_aURLs.insert( MapIndexToStringPair::value_type( nPos, StringPair( sDecodedURL, sFilter ) ) );
                 }
             }
             catch( Exception& rException )
@@ -369,7 +369,7 @@ namespace dbaui
             return;
 
         Point aRequestPos( ScreenToOutputPixel( _rHEvt.GetMousePosPixel() ) );
-        USHORT nItemIndex = -1;
+        USHORT nItemIndex = LISTBOX_ENTRY_NOTFOUND;
         if ( GetIndexForPoint( aRequestPos, nItemIndex ) != -1 )
         {
             Rectangle aItemRect( GetBoundingRectangle( nItemIndex ) );
