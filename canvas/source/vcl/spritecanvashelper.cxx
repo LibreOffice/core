@@ -4,9 +4,9 @@
  *
  *  $RCSfile: spritecanvashelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 07:48:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:21:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -215,14 +215,14 @@ namespace vclcanvas
     }
 
     uno::Reference< rendering::XAnimatedSprite > SpriteCanvasHelper::createSpriteFromAnimation(
-        const uno::Reference< rendering::XAnimation >& animation )
+        const uno::Reference< rendering::XAnimation >&  )
     {
         return uno::Reference< rendering::XAnimatedSprite >();
     }
 
     uno::Reference< rendering::XAnimatedSprite > SpriteCanvasHelper::createSpriteFromBitmaps(
-        const uno::Sequence< uno::Reference< rendering::XBitmap > >& animationBitmaps,
-        sal_Int8                                                     interpolationMode )
+        const uno::Sequence< uno::Reference< rendering::XBitmap > >& ,
+        sal_Int8                                                      )
     {
         return uno::Reference< rendering::XAnimatedSprite >();
     }
@@ -238,7 +238,7 @@ namespace vclcanvas
                                     mbShowSpriteBounds ) );
     }
 
-    uno::Reference< rendering::XSprite > SpriteCanvasHelper::createClonedSprite( const uno::Reference< rendering::XSprite >& original )
+    uno::Reference< rendering::XSprite > SpriteCanvasHelper::createClonedSprite( const uno::Reference< rendering::XSprite >&  )
     {
         return uno::Reference< rendering::XSprite >();
     }
@@ -470,6 +470,8 @@ namespace vclcanvas
     void SpriteCanvasHelper::opaqueUpdate( const ::basegfx::B2DRange&                          rTotalArea,
                                            const ::std::vector< ::canvas::Sprite::Reference >& rSortedUpdateSprites )
     {
+        (void)rTotalArea;
+
         ENSURE_AND_THROW( mpDevice &&
                           mpDevice->getOutDev() &&
                           mpDevice->getBackBuffer(),
