@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvashelper_texturefill.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 14:57:53 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:20:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,6 +128,8 @@ namespace vclcanvas
                                         bool                            bFillNonOverlapping,
                                         bool                            bAxialGradient )
         {
+            (void)bFillNonOverlapping;
+
             // determine general position of gradient in relation to
             // the bound rect
             // =====================================================
@@ -247,17 +249,17 @@ namespace vclcanvas
                 // increased by one, to account for the fact that we
                 // calculate the right border here (whereas the fill
                 // color is governed by the left edge)
-                const ::basegfx::B2DPoint& rPoint1(
+                const ::basegfx::B2DPoint& rPoint3(
                     (nStepCount - i-1)/(double)nStepCount*aLeftTop +
                     (i+1)/(double)nStepCount*aRightTop );
-                aTempPoly[1] = ::Point( ::basegfx::fround( rPoint1.getX() ),
-                                        ::basegfx::fround( rPoint1.getY() ) );
+                aTempPoly[1] = ::Point( ::basegfx::fround( rPoint3.getX() ),
+                                        ::basegfx::fround( rPoint3.getY() ) );
 
-                const ::basegfx::B2DPoint& rPoint2(
+                const ::basegfx::B2DPoint& rPoint4(
                     (nStepCount - i-1)/(double)nStepCount*aLeftBottom +
                     (i+1)/(double)nStepCount*aRightBottom );
-                aTempPoly[2] = ::Point( ::basegfx::fround( rPoint2.getX() ),
-                                        ::basegfx::fround( rPoint2.getY() ) );
+                aTempPoly[2] = ::Point( ::basegfx::fround( rPoint4.getX() ),
+                                        ::basegfx::fround( rPoint4.getY() ) );
 
                 rOutDev.DrawPolygon( aTempPoly );
             }
@@ -607,6 +609,8 @@ namespace vclcanvas
                            const rendering::Texture&                       texture,
                            int                                             nTransparency )
         {
+            (void)nTransparency;
+
             // TODO(T2): It is maybe necessary to lock here, should
             // maGradientPoly someday cease to be const. But then, beware of
             // deadlocks, canvashelper calls this method with locked own
@@ -939,7 +943,6 @@ namespace vclcanvas
                     // scale down bitmap to [0,1]x[0,1] rect, as required
                     // from the XCanvas interface.
                     ::basegfx::B2DHomMatrix aScaling;
-                    ::basegfx::B2DHomMatrix aTotalTransform; // with extra bitmap down-scaling
                     ::basegfx::B2DHomMatrix aPureTotalTransform; // pure view*render*texture transform
                     aScaling.scale( 1.0/aBmpSize.Width,
                                     1.0/aBmpSize.Height );
