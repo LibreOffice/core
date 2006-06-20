@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtl_textcvt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:53:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:27:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,185 +33,126 @@
  *
  ************************************************************************/
 
-// LLA:
-// this file is converted to use with testshl2
-// original was placed in sal/test/textenc.cxx
+#include "sal/config.h"
 
+#include <cstddef>
+#include <cstring>
 
-// -----------------------------------------------------------------------------
-
-#include <stddef.h>
-#include <stdio.h>
-#include <string.h>
-
-// #ifndef _OSL_DIAGNOSE_H_
-// #include "osl/diagnose.h"
-// #endif
-#ifndef _RTL_STRING_H_
-#include "rtl/string.h"
-#endif
-#ifndef _RTL_TENCINFO_H
+#include "cppunit/simpleheader.hxx"
+#include "rtl/string.hxx"
 #include "rtl/tencinfo.h"
-#endif
-#ifndef _RTL_TEXTENC_H
-#include "rtl/textenc.h"
-#endif
-#ifndef _RTL_TEXTCVT_H
 #include "rtl/textcvt.h"
-#endif
-#ifndef _SAL_TYPES_H_
+#include "rtl/textenc.h"
 #include "sal/types.h"
-#endif
 
-#include <cppunit/simpleheader.hxx>
+namespace {
 
-#define TEST_ENSURE(c, m) CPPUNIT_ASSERT_MESSAGE((m), (c))
+struct SingleByteCharSet {
+    rtl_TextEncoding m_nEncoding;
+    sal_Unicode m_aMap[256];
+};
 
-// #if OSL_DEBUG_LEVEL > 0
-// #define TEST_ENSURE(c, m) OSL_ENSURE((c), (m))
-// #else // OSL_DEBUG_LEVEL
-// #define TEST_ENSURE(c, m) if(!(c)) printf("Failed: %s\n", (m))
-// #endif // OSL_DEBUG_LEVEL
-
-// -----------------------------------------------------------------------------
-
-namespace rtl_textenc
-{
-
-    struct SingleByteCharSet
-    {
-        rtl_TextEncoding m_nEncoding;
-        sal_Unicode m_aMap[256];
-    };
-
-void testSingleByteCharSet(SingleByteCharSet const & rSet)
-{
+void testSingleByteCharSet(SingleByteCharSet const & rSet) {
     sal_Char aText[256];
     sal_Unicode aUnicode[256];
-
     sal_Size nNumber = 0;
-    {for (int i = 0; i < 256; ++i)
-        if (rSet.m_aMap[i] != 0xFFFF)
+    for (int i = 0; i < 256; ++i) {
+        if (rSet.m_aMap[i] != 0xFFFF) {
             aText[nNumber++] = static_cast< sal_Char >(i);
+        }
     }
-
     {
         rtl_TextToUnicodeConverter aConverter
             = rtl_createTextToUnicodeConverter(rSet.m_nEncoding);
         rtl_TextToUnicodeContext aContext
             = rtl_createTextToUnicodeContext(aConverter);
-        TEST_ENSURE(aConverter && aContext, "failure #1");
-
+        CPPUNIT_ASSERT_MESSAGE("failure #1", aConverter && aContext);
         sal_Size nSize;
         sal_uInt32 nInfo;
         sal_Size nConverted;
         nSize = rtl_convertTextToUnicode(
-                    aConverter,
-                    aContext,
-                    aText,
-                    nNumber,
-                    aUnicode,
-                    nNumber,
-                    RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
-                        | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
-                        | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR,
-                    &nInfo,
-                    &nConverted);
-        TEST_ENSURE(nSize == nNumber && nInfo == 0 && nConverted == nNumber,
-                    "failure #2");
-
+            aConverter, aContext, aText, nNumber, aUnicode, nNumber,
+            (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
+             | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
+             | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR),
+            &nInfo, &nConverted);
+        CPPUNIT_ASSERT_MESSAGE(
+            "failure #2",
+            nSize == nNumber && nInfo == 0 && nConverted == nNumber);
         rtl_destroyTextToUnicodeContext(aConverter, aContext);
         rtl_destroyTextToUnicodeConverter(aConverter);
     }
-
     {
         bool bSuccess = true;
         int j = 0;
-        for (int i = 0; i < 256; ++i)
-            if (rSet.m_aMap[i] != 0xFFFF && aUnicode[j++] != rSet.m_aMap[i])
-            {
+        for (int i = 0; i < 256; ++i) {
+            if (rSet.m_aMap[i] != 0xFFFF && aUnicode[j++] != rSet.m_aMap[i]) {
                 bSuccess = false;
                 break;
             }
-        TEST_ENSURE(bSuccess, "failure #3");
+        }
+        CPPUNIT_ASSERT_MESSAGE("failure #3", bSuccess);
     }
-
-    if (rSet.m_nEncoding == RTL_TEXTENCODING_ASCII_US)
+    if (rSet.m_nEncoding == RTL_TEXTENCODING_ASCII_US) {
         nNumber = 128;
-
+    }
     {
         rtl_UnicodeToTextConverter aConverter
             = rtl_createUnicodeToTextConverter(rSet.m_nEncoding);
         rtl_UnicodeToTextContext aContext
             = rtl_createUnicodeToTextContext(aConverter);
-        TEST_ENSURE(aConverter && aContext, "failure #4");
-
+        CPPUNIT_ASSERT_MESSAGE("failure #4", aConverter && aContext);
         sal_Size nSize;
         sal_uInt32 nInfo;
         sal_Size nConverted;
         nSize = rtl_convertUnicodeToText(
-                    aConverter,
-                    aContext,
-                    aUnicode,
-                    nNumber,
-                    aText,
-                    nNumber,
-                    RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
-                        | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR,
-                    &nInfo,
-                    &nConverted);
-        TEST_ENSURE(nSize == nNumber && nInfo == 0 && nConverted == nNumber,
-                    "failure #5");
-
+            aConverter, aContext, aUnicode, nNumber, aText, nNumber,
+            (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
+             | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR),
+            &nInfo, &nConverted);
+        CPPUNIT_ASSERT_MESSAGE(
+            "failure #5",
+            nSize == nNumber && nInfo == 0 && nConverted == nNumber);
         rtl_destroyUnicodeToTextContext(aConverter, aContext);
         rtl_destroyUnicodeToTextConverter(aConverter);
     }
-
     {
         bool bSuccess = true;
         int j = 0;
-        for (int i = 0; i < 256; ++i)
+        for (int i = 0; i < 256; ++i) {
             if (rSet.m_aMap[i] != 0xFFFF
                 && aText[j++] != static_cast< sal_Char >(i))
             {
                 bSuccess = false;
                 break;
             }
-        TEST_ENSURE(bSuccess, "failure #6");
+        }
+        CPPUNIT_ASSERT_MESSAGE("failure #6", bSuccess);
     }
-
-    {for (int i = 0; i < 256; ++i)
-        if (rSet.m_aMap[i] == 0xFFFF)
-        {
+    for (int i = 0; i < 256; ++i) {
+        if (rSet.m_aMap[i] == 0xFFFF) {
             aText[0] = static_cast< sal_Char >(i);
-
             rtl_TextToUnicodeConverter aConverter
                 = rtl_createTextToUnicodeConverter(rSet.m_nEncoding);
             rtl_TextToUnicodeContext aContext
                 = rtl_createTextToUnicodeContext(aConverter);
-            TEST_ENSURE(aConverter && aContext, "failure #7");
-
+            CPPUNIT_ASSERT_MESSAGE("failure #7", aConverter && aContext);
             sal_Size nSize;
             sal_uInt32 nInfo;
             sal_Size nConverted;
             nSize = rtl_convertTextToUnicode(
-                        aConverter,
-                        aContext,
-                        aText,
-                        1,
-                        aUnicode,
-                        1,
-                        RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
-                            | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
-                            | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR,
-                        &nInfo,
-                        &nConverted);
-            TEST_ENSURE(nSize == 0
-                        && nInfo == (RTL_TEXTTOUNICODE_INFO_ERROR
-                                         | RTL_TEXTTOUNICODE_INFO_UNDEFINED)
-                        && nConverted == 0,
-                        "failure #9");
-
+                aConverter, aContext, aText, 1, aUnicode, 1,
+                (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
+                 | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
+                 | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR),
+                &nInfo, &nConverted);
+            CPPUNIT_ASSERT_MESSAGE(
+                "failure #9",
+                (nSize == 0
+                 && (nInfo
+                     == (RTL_TEXTTOUNICODE_INFO_ERROR
+                         | RTL_TEXTTOUNICODE_INFO_UNDEFINED))
+                 && nConverted == 0));
             rtl_destroyTextToUnicodeContext(aConverter, aContext);
             rtl_destroyTextToUnicodeConverter(aConverter);
         }
@@ -220,8 +161,7 @@ void testSingleByteCharSet(SingleByteCharSet const & rSet)
 
 int const TEST_STRING_SIZE = 1000;
 
-struct ComplexCharSetTest
-{
+struct ComplexCharSetTest {
     rtl_TextEncoding m_nEncoding;
     char const * m_pText;
     sal_Size m_nTextSize;
@@ -234,79 +174,62 @@ struct ComplexCharSetTest
     sal_uInt32 m_nReverseUndefined;
 };
 
-void doComplexCharSetTest(ComplexCharSetTest const & rTest)
-{
-    if (rTest.m_bForward)
-    {
+void doComplexCharSetTest(ComplexCharSetTest const & rTest) {
+    if (rTest.m_bForward) {
         sal_Unicode aUnicode[TEST_STRING_SIZE];
-
         rtl_TextToUnicodeConverter aConverter
             = rtl_createTextToUnicodeConverter(rTest.m_nEncoding);
         rtl_TextToUnicodeContext aContext
             = rtl_createTextToUnicodeContext(aConverter);
-        TEST_ENSURE(aConverter && aContext, "failure #10");
-
+        CPPUNIT_ASSERT_MESSAGE("failure #10", aConverter && aContext);
         sal_Size nSize;
         sal_uInt32 nInfo;
         sal_Size nConverted;
         nSize = rtl_convertTextToUnicode(
-                    aConverter,
-                    aContext,
-                    reinterpret_cast< sal_Char const * >(rTest.m_pText),
-                    rTest.m_nTextSize,
-                    aUnicode,
-                    TEST_STRING_SIZE,
-                    RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
-                        | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
-                        | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR
-                        | RTL_TEXTTOUNICODE_FLAGS_FLUSH
-                        | (rTest.m_bGlobalSignature ?
-                               RTL_TEXTTOUNICODE_FLAGS_GLOBAL_SIGNATURE : 0),
-                    &nInfo,
-                    &nConverted);
-        TEST_ENSURE(nSize == rTest.m_nUnicodeSize
-                    && nInfo == 0
-                    && nConverted == rTest.m_nTextSize,
-                    "failure #11");
-
+            aConverter, aContext,
+            reinterpret_cast< sal_Char const * >(rTest.m_pText),
+            rTest.m_nTextSize, aUnicode, TEST_STRING_SIZE,
+            (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
+             | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
+             | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR
+             | RTL_TEXTTOUNICODE_FLAGS_FLUSH
+             | (rTest.m_bGlobalSignature ?
+                RTL_TEXTTOUNICODE_FLAGS_GLOBAL_SIGNATURE : 0)),
+            &nInfo, &nConverted);
+        CPPUNIT_ASSERT_MESSAGE(
+            "failure #11",
+            (nSize == rTest.m_nUnicodeSize && nInfo == 0
+             && nConverted == rTest.m_nTextSize));
         rtl_destroyTextToUnicodeContext(aConverter, aContext);
         rtl_destroyTextToUnicodeConverter(aConverter);
-
         bool bSuccess = true;
-        for (sal_Size i = 0; i < rTest.m_nUnicodeSize; ++i)
-            if (aUnicode[i] != rTest.m_aUnicode[i])
-            {
+        for (sal_Size i = 0; i < rTest.m_nUnicodeSize; ++i) {
+            if (aUnicode[i] != rTest.m_aUnicode[i]) {
                 bSuccess = false;
                 break;
             }
-        TEST_ENSURE(bSuccess, "failure #12");
+        }
+        CPPUNIT_ASSERT_MESSAGE("failure #12", bSuccess);
     }
-
-    if (rTest.m_bForward)
-    {
+    if (rTest.m_bForward) {
         sal_Unicode aUnicode[TEST_STRING_SIZE];
-
         rtl_TextToUnicodeConverter aConverter
             = rtl_createTextToUnicodeConverter(rTest.m_nEncoding);
         rtl_TextToUnicodeContext aContext
             = rtl_createTextToUnicodeContext(aConverter);
-        TEST_ENSURE(aConverter && aContext, "failure #13");
-
-        if (aContext != (rtl_TextToUnicodeContext) 1)
-        {
+        CPPUNIT_ASSERT_MESSAGE("failure #13", aConverter && aContext);
+        if (aContext != (rtl_TextToUnicodeContext) 1) {
             sal_Size nInput = 0;
             sal_Size nOutput = 0;
-            for (bool bFlush = true; nInput < rTest.m_nTextSize || bFlush;)
-            {
+            for (bool bFlush = true; nInput < rTest.m_nTextSize || bFlush;) {
                 sal_Size nSrcBytes = 1;
                 sal_uInt32 nFlags
-                    = RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
-                          | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
-                          | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR
-                          | (rTest.m_bGlobalSignature ?
-                                 RTL_TEXTTOUNICODE_FLAGS_GLOBAL_SIGNATURE : 0);
-                if (nInput >= rTest.m_nTextSize)
-                {
+                    = (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
+                       | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
+                       | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR
+                       | (rTest.m_bGlobalSignature ?
+                          RTL_TEXTTOUNICODE_FLAGS_GLOBAL_SIGNATURE : 0));
+                if (nInput >= rTest.m_nTextSize) {
                     nSrcBytes = 0;
                     nFlags |= RTL_TEXTTOUNICODE_FLAGS_FLUSH;
                     bFlush = false;
@@ -314,272 +237,212 @@ void doComplexCharSetTest(ComplexCharSetTest const & rTest)
                 sal_uInt32 nInfo;
                 sal_Size nConverted;
                 sal_Size nSize = rtl_convertTextToUnicode(
-                                     aConverter,
-                                     aContext,
-                                     reinterpret_cast< sal_Char const * >(
-                                         rTest.m_pText + nInput),
-                                     nSrcBytes,
-                                     aUnicode + nOutput,
-                                     TEST_STRING_SIZE - nOutput,
-                                     nFlags,
-                                     &nInfo,
-                                     &nConverted);
+                    aConverter, aContext,
+                    reinterpret_cast< sal_Char const * >(rTest.m_pText + nInput),
+                    nSrcBytes, aUnicode + nOutput, TEST_STRING_SIZE - nOutput,
+                    nFlags, &nInfo, &nConverted);
                 nOutput += nSize;
                 nInput += nConverted;
-                TEST_ENSURE((nInfo & ~RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL)
-                                == 0,
-                            "failure #14");
+                CPPUNIT_ASSERT_MESSAGE(
+                    "failure #14",
+                    (nInfo & ~RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL) == 0);
             }
-            TEST_ENSURE(nOutput == rTest.m_nUnicodeSize
-                        && nInput == rTest.m_nTextSize,
-                        "failure #15");
-
+            CPPUNIT_ASSERT_MESSAGE(
+                "failure #15",
+                nOutput == rTest.m_nUnicodeSize && nInput == rTest.m_nTextSize);
             bool bSuccess = true;
-            for (sal_Size i = 0; i < rTest.m_nUnicodeSize; ++i)
-                if (aUnicode[i] != rTest.m_aUnicode[i])
-                {
+            for (sal_Size i = 0; i < rTest.m_nUnicodeSize; ++i) {
+                if (aUnicode[i] != rTest.m_aUnicode[i]) {
                     bSuccess = false;
                     break;
                 }
-            TEST_ENSURE(bSuccess, "failure #16");
+            }
+            CPPUNIT_ASSERT_MESSAGE("failure #16", bSuccess);
         }
-
         rtl_destroyTextToUnicodeContext(aConverter, aContext);
         rtl_destroyTextToUnicodeConverter(aConverter);
     }
-
-    if (rTest.m_bNoContext && rTest.m_bForward)
-    {
+    if (rTest.m_bNoContext && rTest.m_bForward) {
         sal_Unicode aUnicode[TEST_STRING_SIZE];
         int nSize = 0;
-
         rtl_TextToUnicodeConverter aConverter
             = rtl_createTextToUnicodeConverter(rTest.m_nEncoding);
-        TEST_ENSURE(aConverter, "failure #17");
-
-        for (sal_Size i = 0;;)
-        {
-            if (i == rTest.m_nTextSize)
+        CPPUNIT_ASSERT_MESSAGE("failure #17", aConverter);
+        for (sal_Size i = 0;;) {
+            if (i == rTest.m_nTextSize) {
                 goto done;
+            }
             sal_Char c1 = rTest.m_pText[i++];
-
             sal_Unicode aUC[2];
             sal_uInt32 nInfo = 0;
             sal_Size nCvtBytes;
-            sal_Size nChars
-                = rtl_convertTextToUnicode(
-                      aConverter,
-                      0,
-                      &c1,
-                      1,
-                      aUC,
-                      2,
-                      RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
-                          | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
-                          | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR
-                        /*| RTL_TEXTTOUNICODE_FLAGS_FLUSH*/
-                          | (rTest.m_bGlobalSignature ?
-                                 RTL_TEXTTOUNICODE_FLAGS_GLOBAL_SIGNATURE : 0),
-                      &nInfo,
-                      &nCvtBytes);
-            if ((nInfo & RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL) != 0)
-            {
+            sal_Size nChars = rtl_convertTextToUnicode(
+                aConverter, 0, &c1, 1, aUC, 2,
+                (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
+                 | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
+                 | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR
+                 | (rTest.m_bGlobalSignature ?
+                    RTL_TEXTTOUNICODE_FLAGS_GLOBAL_SIGNATURE : 0)),
+                &nInfo, &nCvtBytes);
+            if ((nInfo & RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL) != 0) {
                 sal_Char sBuffer[10];
                 sBuffer[0] = c1;
                 sal_uInt16 nLen = 1;
                 while ((nInfo & RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL) != 0
                        && nLen < 10)
                 {
-                    if (i == rTest.m_nTextSize)
+                    if (i == rTest.m_nTextSize) {
                         goto done;
+                    }
                     c1 = rTest.m_pText[i++];
-
                     sBuffer[nLen++] = c1;
-                    nChars
-                        = rtl_convertTextToUnicode(
-                              aConverter,
-                              0,
-                              sBuffer,
-                              nLen,
-                              aUC,
-                              2,
-                              RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
-                                  | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
-                                  | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR
-                                /*| RTL_TEXTTOUNICODE_FLAGS_FLUSH*/
-                                  | (rTest.m_bGlobalSignature ?
-                                      RTL_TEXTTOUNICODE_FLAGS_GLOBAL_SIGNATURE :
-                                         0),
-                              &nInfo,
-                              &nCvtBytes);
+                    nChars = rtl_convertTextToUnicode(
+                        aConverter, 0, sBuffer, nLen, aUC, 2,
+                        (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
+                         | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
+                         | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR
+                         | (rTest.m_bGlobalSignature ?
+                            RTL_TEXTTOUNICODE_FLAGS_GLOBAL_SIGNATURE : 0)),
+                        &nInfo, &nCvtBytes);
                 }
-                if (nChars == 1 && nInfo == 0)
-                {
+                if (nChars == 1 && nInfo == 0) {
                     OSL_ASSERT(nCvtBytes == nLen);
                     aUnicode[nSize++] = aUC[0];
-                }
-                else if (nChars == 2 && nInfo == 0)
-                {
+                } else if (nChars == 2 && nInfo == 0) {
                     OSL_ASSERT(nCvtBytes == nLen);
                     aUnicode[nSize++] = aUC[0];
                     aUnicode[nSize++] = aUC[1];
-                }
-                else
-                {
+                } else {
                     OSL_ASSERT(
                         (nInfo & RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL) == 0
-                        && nChars == 0
-                        && nInfo != 0);
+                        && nChars == 0 && nInfo != 0);
                     aUnicode[nSize++] = sBuffer[0];
                     i -= nLen - 1;
                 }
-            }
-            else if (nChars == 1 && nInfo == 0)
-            {
+            } else if (nChars == 1 && nInfo == 0) {
                 OSL_ASSERT(nCvtBytes == 1);
                 aUnicode[nSize++] = aUC[0];
-            }
-            else if (nChars == 2 && nInfo == 0)
-            {
+            } else if (nChars == 2 && nInfo == 0) {
                 OSL_ASSERT(nCvtBytes == 1);
                 aUnicode[nSize++] = aUC[0];
                 aUnicode[nSize++] = aUC[1];
-            }
-            else
-            {
+            } else {
                 OSL_ASSERT(nChars == 0 && nInfo != 0);
                 aUnicode[nSize++] = c1;
             }
         }
     done:
-
         rtl_destroyTextToUnicodeConverter(aConverter);
-
         bool bSuccess = true;
-        {for (sal_Size i = 0; i < rTest.m_nUnicodeSize; ++i)
-            if (aUnicode[i] != rTest.m_aUnicode[i])
-            {
+        for (sal_Size i = 0; i < rTest.m_nUnicodeSize; ++i) {
+            if (aUnicode[i] != rTest.m_aUnicode[i]) {
                 bSuccess = false;
                 break;
             }
         }
-        TEST_ENSURE(bSuccess, "failure #18");
+        CPPUNIT_ASSERT_MESSAGE("failure #18", bSuccess);
     }
-
-    if (rTest.m_bReverse)
-    {
+    if (rTest.m_bReverse) {
         sal_Char aText[TEST_STRING_SIZE];
-
         rtl_UnicodeToTextConverter aConverter
             = rtl_createUnicodeToTextConverter(rTest.m_nEncoding);
         rtl_UnicodeToTextContext aContext
             = rtl_createUnicodeToTextContext(aConverter);
-        TEST_ENSURE(aConverter && aContext, "failure #19");
-
+        CPPUNIT_ASSERT_MESSAGE("failure #19", aConverter && aContext);
         sal_Size nSize;
         sal_uInt32 nInfo;
         sal_Size nConverted;
         nSize = rtl_convertUnicodeToText(
-                    aConverter,
-                    aContext,
-                    rTest.m_aUnicode,
-                    rTest.m_nUnicodeSize,
-                    aText,
-                    TEST_STRING_SIZE,
-                    rTest.m_nReverseUndefined
-                        | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR
-                        | RTL_UNICODETOTEXT_FLAGS_FLUSH
-                        | (rTest.m_bGlobalSignature ?
-                               RTL_UNICODETOTEXT_FLAGS_GLOBAL_SIGNATURE : 0),
-                    &nInfo,
-                    &nConverted);
-        TEST_ENSURE(nSize == rTest.m_nTextSize
-                    && (nInfo == 0
-                        || (nInfo == RTL_UNICODETOTEXT_INFO_UNDEFINED
-                            && (rTest.m_nReverseUndefined
-                                != RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR)))
-                    && nConverted == rTest.m_nUnicodeSize,
-                    "failure #20");
-
+            aConverter, aContext, rTest.m_aUnicode, rTest.m_nUnicodeSize, aText,
+            TEST_STRING_SIZE,
+            (rTest.m_nReverseUndefined | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR
+             | RTL_UNICODETOTEXT_FLAGS_FLUSH
+             | (rTest.m_bGlobalSignature ?
+                RTL_UNICODETOTEXT_FLAGS_GLOBAL_SIGNATURE : 0)),
+            &nInfo, &nConverted);
+        CPPUNIT_ASSERT_MESSAGE(
+            "failure #20",
+            (nSize == rTest.m_nTextSize
+             && (nInfo == 0
+                 || (nInfo == RTL_UNICODETOTEXT_INFO_UNDEFINED
+                     && (rTest.m_nReverseUndefined
+                         != RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR)))
+             && nConverted == rTest.m_nUnicodeSize));
         rtl_destroyUnicodeToTextContext(aConverter, aContext);
         rtl_destroyUnicodeToTextConverter(aConverter);
-
         bool bSuccess = true;
-        for (sal_Size i = 0; i < rTest.m_nTextSize; ++i)
-            if (aText[i] != rTest.m_pText[i])
-            {
+        for (sal_Size i = 0; i < rTest.m_nTextSize; ++i) {
+            if (aText[i] != rTest.m_pText[i]) {
                 bSuccess = false;
                 break;
             }
-        TEST_ENSURE(bSuccess, "failure #21");
+        }
+        CPPUNIT_ASSERT_MESSAGE("failure #21", bSuccess);
     }
 }
 
-void doComplexCharSetCutTest(ComplexCharSetTest const & rTest)
-{
-    if (rTest.m_bNoContext)
-    {
+void doComplexCharSetCutTest(ComplexCharSetTest const & rTest) {
+    if (rTest.m_bNoContext) {
         sal_Unicode aUnicode[TEST_STRING_SIZE];
-
         rtl_TextToUnicodeConverter aConverter
             = rtl_createTextToUnicodeConverter(rTest.m_nEncoding);
-        TEST_ENSURE(aConverter, "failure #22");
-
+        CPPUNIT_ASSERT_MESSAGE("failure #22", aConverter);
         sal_Size nSize;
         sal_uInt32 nInfo;
         sal_Size nConverted;
         nSize = rtl_convertTextToUnicode(
-                    aConverter,
-                    0,
-                    reinterpret_cast< sal_Char const * >(rTest.m_pText),
-                    rTest.m_nTextSize,
-                    aUnicode,
-                    TEST_STRING_SIZE,
-                    RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
-                        | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
-                        | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR,
-                    &nInfo,
-                    &nConverted);
-        TEST_ENSURE(nSize <= rTest.m_nUnicodeSize
-                    && (nInfo == RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL
-                        || nInfo
-                               == (RTL_TEXTTOUNICODE_INFO_ERROR
-                                   | RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL))
-                    && nConverted < rTest.m_nTextSize,
-                    "failure #23");
-
+            aConverter, 0, reinterpret_cast< sal_Char const * >(rTest.m_pText),
+            rTest.m_nTextSize, aUnicode, TEST_STRING_SIZE,
+            (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
+             | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
+             | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR),
+            &nInfo, &nConverted);
+        CPPUNIT_ASSERT_MESSAGE(
+            "failure #23",
+            (nSize <= rTest.m_nUnicodeSize
+             && (nInfo == RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL
+                 || (nInfo
+                     == (RTL_TEXTTOUNICODE_INFO_ERROR
+                         | RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL)))
+             && nConverted < rTest.m_nTextSize));
         rtl_destroyTextToUnicodeConverter(aConverter);
-
         bool bSuccess = true;
-        for (sal_Size i = 0; i < nSize; ++i)
-            if (aUnicode[i] != rTest.m_aUnicode[i])
-            {
+        for (sal_Size i = 0; i < nSize; ++i) {
+            if (aUnicode[i] != rTest.m_aUnicode[i]) {
                 bSuccess = false;
                 break;
             }
-        TEST_ENSURE(bSuccess, "failure #24");
+        }
+        CPPUNIT_ASSERT_MESSAGE("failure #24", bSuccess);
     }
 }
 
-// -----------------------------------------------------------------------------
-
-class enc : public CppUnit::TestFixture
-{
+class Test: public CppUnit::TestFixture {
 public:
-    void test_textenc();
+    void testSingleByte();
 
-    CPPUNIT_TEST_SUITE( enc );
-    CPPUNIT_TEST( test_textenc );
-    CPPUNIT_TEST_SUITE_END( );
+    void testComplex();
+
+    void testComplexCut();
+
+    void testMime();
+
+    void testWindows();
+
+    void testInfo();
+
+    CPPUNIT_TEST_SUITE(Test);
+    CPPUNIT_TEST(testSingleByte);
+    CPPUNIT_TEST(testComplex);
+    CPPUNIT_TEST(testComplexCut);
+    CPPUNIT_TEST(testMime);
+    CPPUNIT_TEST(testWindows);
+    CPPUNIT_TEST(testInfo);
+    CPPUNIT_TEST_SUITE_END();
 };
 
-// -----------------------------------------------------------------------------
-
-void enc::test_textenc()
-{
-    // printf("textenc test:\n");
-
-    SingleByteCharSet aSingleByteCharSet[]
+void Test::testSingleByte() {
+    static SingleByteCharSet const data[]
         = { { RTL_TEXTENCODING_MS_1250,
               { 0x0000,0x0001,0x0002,0x0003,0x0004,0x0005,0x0006,0x0007,
                 0x0008,0x0009,0x000A,0x000B,0x000C,0x000D,0x000E,0x000F,
@@ -1376,13 +1239,13 @@ void enc::test_textenc()
                 0x0438,0x0439,0x043A,0x043B,0x043C,0x043D,0x043E,0x043F,
                 0x0440,0x0441,0x0442,0x0443,0x0444,0x0445,0x0446,0x0447,
                 0x0448,0x0449,0x044A,0x044B,0x044C,0x044D,0x044E,0x044F } } };
-    {
-        int nCount = sizeof aSingleByteCharSet / sizeof aSingleByteCharSet[0];
-        for (int i = 0; i < nCount; ++i)
-            testSingleByteCharSet(aSingleByteCharSet[i]);
+    for (std::size_t i = 0; i < sizeof data / sizeof data[0]; ++i) {
+        testSingleByteCharSet(data[i]);
     }
+}
 
-    ComplexCharSetTest aComplexCharSetTest[]
+void Test::testComplex() {
+    static ComplexCharSetTest const data[]
         = { { RTL_TEXTENCODING_ASCII_US,
               RTL_CONSTASCII_STRINGPARAM("\x01\"3De$~"),
               { 0x0001,0x0022,0x0033,0x0044,0x0065,0x0024,0x007E },
@@ -2569,14 +2432,13 @@ void enc::test_textenc()
               false,
               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR }
         };
-    {
-        int nCount = sizeof aComplexCharSetTest
-                         / sizeof aComplexCharSetTest[0];
-        for (int i = 0; i < nCount; ++i)
-            doComplexCharSetTest(aComplexCharSetTest[i]);
+    for (std::size_t i = 0; i < sizeof data / sizeof data[0]; ++i) {
+        doComplexCharSetTest(data[i]);
     }
+}
 
-    ComplexCharSetTest aComplexCharSetCutTest[]
+void Test::testComplexCut() {
+    static ComplexCharSetTest const data[]
         = { { RTL_TEXTENCODING_EUC_JP,
               RTL_CONSTASCII_STRINGPARAM("\xA1"),
               { 0 },
@@ -2658,860 +2520,285 @@ void enc::test_textenc()
               false,
               false,
               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR } */ };
-    {
-        int nCount = sizeof aComplexCharSetCutTest
-                         / sizeof aComplexCharSetCutTest[0];
-        for (int i = 0; i < nCount; ++i)
-            doComplexCharSetCutTest(aComplexCharSetCutTest[i]);
+    for (std::size_t i = 0; i < sizeof data / sizeof data[0]; ++i) {
+        doComplexCharSetCutTest(data[i]);
     }
-
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("GBK")
-                    == RTL_TEXTENCODING_GBK,
-                "Detecting MIME charset name GBK");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("CP936")
-                    == RTL_TEXTENCODING_GBK,
-                "Detecting MIME charset name CP936");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("MS936")
-                    == RTL_TEXTENCODING_GBK,
-                "Detecting MIME charset name MS936");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("windows-936")
-                    == RTL_TEXTENCODING_GBK,
-                "Detecting MIME charset name windows-936");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("GB18030")
-                    == RTL_TEXTENCODING_GB_18030,
-                "Detecting MIME charset name GB18030");
-
-    TEST_ENSURE(strcmp(rtl_getMimeCharsetFromTextEncoding(
-                           RTL_TEXTENCODING_TIS_620),
-                       "TIS-620") == 0,
-                "Returning MIME charset name TIS-620");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("TIS-620")
-                    == RTL_TEXTENCODING_TIS_620,
-                "Detecting MIME charset name TIS-620");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("ISO-8859-11")
-                    == RTL_TEXTENCODING_TIS_620,
-                "Detecting MIME charset name ISO-8859-11"); // not registered
-
-    TEST_ENSURE(strcmp(rtl_getMimeCharsetFromTextEncoding(
-                           RTL_TEXTENCODING_MS_874),
-                       "windows-874") == 0,
-                "Returning MIME charset name windows-874"); // not registered
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("CP874")
-                    == RTL_TEXTENCODING_MS_874,
-                "Detecting MIME charset name CP874"); // not registered
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("MS874")
-                    == RTL_TEXTENCODING_MS_874,
-                "Detecting MIME charset name MS874"); // not registered
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("windows-874")
-                    == RTL_TEXTENCODING_MS_874,
-                "Detecting MIME charset name windows-874"); // not registered
-
-    TEST_ENSURE(strcmp(rtl_getMimeCharsetFromTextEncoding(
-                           RTL_TEXTENCODING_ISO_8859_8),
-                       "ISO-8859-8") == 0,
-                "Returning MIME charset name ISO-8859-8");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("ISO_8859-8:1988")
-                    == RTL_TEXTENCODING_ISO_8859_8,
-                "Detecting MIME charset name ISO_8859-8:1988");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("iso-ir-138")
-                    == RTL_TEXTENCODING_ISO_8859_8,
-                "Detecting MIME charset name iso-ir-138");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("ISO_8859-8")
-                    == RTL_TEXTENCODING_ISO_8859_8,
-                "Detecting MIME charset name ISO_8859-8");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("ISO-8859-8")
-                    == RTL_TEXTENCODING_ISO_8859_8,
-                "Detecting MIME charset name ISO-8859-8");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("hebrew")
-                    == RTL_TEXTENCODING_ISO_8859_8,
-                "Detecting MIME charset name hebrew");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("csISOLatinHebrew")
-                    == RTL_TEXTENCODING_ISO_8859_8,
-                "Detecting MIME charset name csISOLatinHebrew");
-
-    TEST_ENSURE(strcmp(rtl_getMimeCharsetFromTextEncoding(
-                           RTL_TEXTENCODING_MS_1255),
-                       "windows-1255") == 0,
-                "Returning MIME charset name windows-1255");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("windows-1255")
-                    == RTL_TEXTENCODING_MS_1255,
-                "Detecting MIME charset name windows-1255");
-
-    TEST_ENSURE(strcmp(rtl_getMimeCharsetFromTextEncoding(
-                           RTL_TEXTENCODING_IBM_862),
-                       "IBM862") == 0,
-                "Returning MIME charset name IBM862");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("IBM862")
-                    == RTL_TEXTENCODING_IBM_862,
-                "Detecting MIME charset name IBM862");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("cp862")
-                    == RTL_TEXTENCODING_IBM_862,
-                "Detecting MIME charset name cp862");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("862")
-                    == RTL_TEXTENCODING_IBM_862,
-                "Detecting MIME charset name 862");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("csPC862LatinHebrew")
-                    == RTL_TEXTENCODING_IBM_862,
-                "Detecting MIME charset name csPC862LatinHebrew");
-
-    TEST_ENSURE(strcmp(rtl_getMimeCharsetFromTextEncoding(
-                           RTL_TEXTENCODING_ISO_8859_6),
-                       "ISO-8859-6") == 0,
-                "Returning MIME charset name ISO_8859_6");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("ISO_8859-6:1987")
-                    == RTL_TEXTENCODING_ISO_8859_6,
-                "Detecting MIME charset name ISO_8859-6:1987");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("iso-ir-127")
-                    == RTL_TEXTENCODING_ISO_8859_6,
-                "Detecting MIME charset name iso-ir-127");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("ISO_8859-6")
-                    == RTL_TEXTENCODING_ISO_8859_6,
-                "Detecting MIME charset name ISO_8859-6");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("ISO-8859-6")
-                    == RTL_TEXTENCODING_ISO_8859_6,
-                "Detecting MIME charset name ISO-8859-6");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("ECMA-114")
-                    == RTL_TEXTENCODING_ISO_8859_6,
-                "Detecting MIME charset name ECMA-114");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("ASMO-708")
-                    == RTL_TEXTENCODING_ISO_8859_6,
-                "Detecting MIME charset name ASMO-708");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("arabic")
-                    == RTL_TEXTENCODING_ISO_8859_6,
-                "Detecting MIME charset name arabic");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("csISOLatinArabic")
-                    == RTL_TEXTENCODING_ISO_8859_6,
-                "Detecting MIME charset name csISOLatinArabic");
-
-    TEST_ENSURE(strcmp(rtl_getMimeCharsetFromTextEncoding(
-                           RTL_TEXTENCODING_MS_1256),
-                       "windows-1256") == 0,
-                "Returning MIME charset name windows-1256");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("windows-1256")
-                    == RTL_TEXTENCODING_MS_1256,
-                "Detecting MIME charset name windows-1256");
-
-    TEST_ENSURE(strcmp(rtl_getMimeCharsetFromTextEncoding(
-                           RTL_TEXTENCODING_IBM_864),
-                       "IBM864") == 0,
-                "Returning MIME charset name IBM864");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("IBM864")
-                    == RTL_TEXTENCODING_IBM_864,
-                "Detecting MIME charset name IBM864");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("cp864")
-                    == RTL_TEXTENCODING_IBM_864,
-                "Detecting MIME charset name cp864");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("csIBM864")
-                    == RTL_TEXTENCODING_IBM_864,
-                "Detecting MIME charset name csIBM864");
-
-    TEST_ENSURE(strcmp(rtl_getMimeCharsetFromTextEncoding(
-                           RTL_TEXTENCODING_KOI8_R),
-                       "koi8-r") == 0,
-                "Returning MIME charset name koi8-r");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("KOI8-R")
-                    == RTL_TEXTENCODING_KOI8_R,
-                "Detecting MIME charset name KOI8-R");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("csKOI8R")
-                    == RTL_TEXTENCODING_KOI8_R,
-                "Detecting MIME charset name csKOI8R");
-
-    TEST_ENSURE(strcmp(rtl_getMimeCharsetFromTextEncoding(
-                           RTL_TEXTENCODING_KOI8_U),
-                       "KOI8-U") == 0,
-                "Returning MIME charset name KOI8-U");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("KOI8-U")
-                    == RTL_TEXTENCODING_KOI8_U,
-                "Detecting MIME charset name KOI8-U");
-    TEST_ENSURE(strcmp(rtl_getMimeCharsetFromTextEncoding(
-                           RTL_TEXTENCODING_IBM_860),
-                       "IBM860") == 0,
-                "Returning MIME charset name IBM860");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("IBM860")
-                    == RTL_TEXTENCODING_IBM_860,
-                "Detecting MIME charset name IBM860");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("cp860")
-                    == RTL_TEXTENCODING_IBM_860,
-                "Detecting MIME charset name cp860");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("860")
-                    == RTL_TEXTENCODING_IBM_860,
-                "Detecting MIME charset name 860");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("csIBM860")
-                    == RTL_TEXTENCODING_IBM_860,
-                "Detecting MIME charset name csIBM860");
-
-    TEST_ENSURE(strcmp(rtl_getMimeCharsetFromTextEncoding(
-                           RTL_TEXTENCODING_IBM_861),
-                       "IBM861") == 0,
-                "Returning MIME charset name IBM861");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("IBM861")
-                    == RTL_TEXTENCODING_IBM_861,
-                "Detecting MIME charset name IBM861");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("cp861")
-                    == RTL_TEXTENCODING_IBM_861,
-                "Detecting MIME charset name cp861");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("861")
-                    == RTL_TEXTENCODING_IBM_861,
-                "Detecting MIME charset name 861");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("cp-is")
-                    == RTL_TEXTENCODING_IBM_861,
-                "Detecting MIME charset name cp-is");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("csIBM861")
-                    == RTL_TEXTENCODING_IBM_861,
-                "Detecting MIME charset name csIBM861");
-
-    TEST_ENSURE(strcmp(rtl_getMimeCharsetFromTextEncoding(
-                           RTL_TEXTENCODING_IBM_863),
-                       "IBM863") == 0,
-                "Returning MIME charset name IBM863");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("IBM863")
-                    == RTL_TEXTENCODING_IBM_863,
-                "Detecting MIME charset name IBM863");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("cp863")
-                    == RTL_TEXTENCODING_IBM_863,
-                "Detecting MIME charset name cp863");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("863")
-                    == RTL_TEXTENCODING_IBM_863,
-                "Detecting MIME charset name 863");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("csIBM863")
-                    == RTL_TEXTENCODING_IBM_863,
-                "Detecting MIME charset name csIBM863");
-
-    TEST_ENSURE(strcmp(rtl_getMimeCharsetFromTextEncoding(
-                           RTL_TEXTENCODING_IBM_865),
-                       "IBM865") == 0,
-                "Returning MIME charset name IBM865");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("IBM865")
-                    == RTL_TEXTENCODING_IBM_865,
-                "Detecting MIME charset name IBM865");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("cp865")
-                    == RTL_TEXTENCODING_IBM_865,
-                "Detecting MIME charset name cp865");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("865")
-                    == RTL_TEXTENCODING_IBM_865,
-                "Detecting MIME charset name 865");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("csIBM865")
-                    == RTL_TEXTENCODING_IBM_865,
-                "Detecting MIME charset name csIBM865");
-
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("Latin-9")
-                    == RTL_TEXTENCODING_ISO_8859_15,
-                "Detecting MIME charset name Latin-9");
-
-    TEST_ENSURE(rtl_getMimeCharsetFromTextEncoding(RTL_TEXTENCODING_MS_949)
-                    == 0,
-                "Returning MIME charset name for MS 949");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("KS_C_5601-1987")
-                    == RTL_TEXTENCODING_MS_949,
-                "Detecting MIME charset name KS_C_5601-1987");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("iso-ir-149")
-                    == RTL_TEXTENCODING_MS_949,
-                "Detecting MIME charset name iso-ir-149");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("KS_C_5601-1989")
-                    == RTL_TEXTENCODING_MS_949,
-                "Detecting MIME charset name KS_C_5601-1989");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("KSC_5601")
-                    == RTL_TEXTENCODING_MS_949,
-                "Detecting MIME charset name KSC_5601");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("korean")
-                    == RTL_TEXTENCODING_MS_949,
-                "Detecting MIME charset name korean");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("csKSC56011987")
-                    == RTL_TEXTENCODING_MS_949,
-                "Detecting MIME charset name csKSC56011987");
-
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("Adobe-Standard-Encoding")
-                    == RTL_TEXTENCODING_ADOBE_STANDARD,
-                "Detecting MIME charset name Adobe-Standard-Encoding");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("csAdobeStandardEncoding")
-                    == RTL_TEXTENCODING_ADOBE_STANDARD,
-                "Detecting MIME charset name csAdobeStandardEncoding");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("Adobe-Symbol-Encoding")
-                    == RTL_TEXTENCODING_ADOBE_SYMBOL,
-                "Detecting MIME charset name Adobe-Symbol-Encoding");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("csHPPSMath")
-                    == RTL_TEXTENCODING_ADOBE_SYMBOL,
-                "Detecting MIME charset name csHPPSMath");
-
-    TEST_ENSURE(strcmp(rtl_getMimeCharsetFromTextEncoding(
-                           RTL_TEXTENCODING_PT154),
-                       "PTCP154") == 0,
-                "Returning MIME charset name PTCP154");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("PTCP154")
-                    == RTL_TEXTENCODING_PT154,
-                "Detecting MIME charset name PTCP154");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("csPTCP154")
-                    == RTL_TEXTENCODING_PT154,
-                "Detecting MIME charset name csPTCP154");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("PT154")
-                    == RTL_TEXTENCODING_PT154,
-                "Detecting MIME charset name PT154");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("CP154")
-                    == RTL_TEXTENCODING_PT154,
-                "Detecting MIME charset name CP154");
-    TEST_ENSURE(rtl_getTextEncodingFromMimeCharset("Cyrillic-Asian")
-                    == RTL_TEXTENCODING_PT154,
-                "Detecting MIME charset name Cyrillic-Asian");
-
-    {
-        struct Test
-        {
-            rtl_TextEncoding eEncoding;
-            sal_uInt32 nFlag;
-            bool bOn;
-        };
-        static Test const aTests[]
-            = { { RTL_TEXTENCODING_APPLE_CHINTRAD,
-                  RTL_TEXTENCODING_INFO_ASCII, false },
-                { RTL_TEXTENCODING_APPLE_JAPANESE,
-                  RTL_TEXTENCODING_INFO_ASCII, false },
-                { RTL_TEXTENCODING_APPLE_KOREAN,
-                  RTL_TEXTENCODING_INFO_ASCII, false },
-                { RTL_TEXTENCODING_BIG5,
-                  RTL_TEXTENCODING_INFO_ASCII, false },
-                { RTL_TEXTENCODING_BIG5_HKSCS,
-                  RTL_TEXTENCODING_INFO_ASCII, false },
-                { RTL_TEXTENCODING_EUC_CN,
-                  RTL_TEXTENCODING_INFO_ASCII, true },
-                { RTL_TEXTENCODING_EUC_JP,
-                  RTL_TEXTENCODING_INFO_ASCII, true },
-                { RTL_TEXTENCODING_EUC_KR,
-                  RTL_TEXTENCODING_INFO_ASCII, true },
-                { RTL_TEXTENCODING_EUC_TW,
-                  RTL_TEXTENCODING_INFO_ASCII, true },
-                { RTL_TEXTENCODING_GBK,
-                  RTL_TEXTENCODING_INFO_ASCII, false },
-                { RTL_TEXTENCODING_GB_18030,
-                  RTL_TEXTENCODING_INFO_ASCII, false },
-                { RTL_TEXTENCODING_GB_18030,
-                  RTL_TEXTENCODING_INFO_UNICODE, true },
-                { RTL_TEXTENCODING_ISO_2022_CN,
-                  RTL_TEXTENCODING_INFO_CONTEXT, true },
-                { RTL_TEXTENCODING_ISO_2022_CN,
-                  RTL_TEXTENCODING_INFO_ASCII, false },
-                { RTL_TEXTENCODING_ISO_2022_JP,
-                  RTL_TEXTENCODING_INFO_CONTEXT, true },
-                { RTL_TEXTENCODING_ISO_2022_JP,
-                  RTL_TEXTENCODING_INFO_ASCII, false },
-                { RTL_TEXTENCODING_ISO_2022_KR,
-                  RTL_TEXTENCODING_INFO_CONTEXT, true },
-                { RTL_TEXTENCODING_ISO_2022_KR,
-                  RTL_TEXTENCODING_INFO_ASCII, false },
-                { RTL_TEXTENCODING_MS_1361,
-                  RTL_TEXTENCODING_INFO_ASCII, false },
-                { RTL_TEXTENCODING_MS_874,
-                  RTL_TEXTENCODING_INFO_ASCII, true },
-                { RTL_TEXTENCODING_MS_932,
-                  RTL_TEXTENCODING_INFO_ASCII, false },
-                { RTL_TEXTENCODING_MS_936,
-                  RTL_TEXTENCODING_INFO_ASCII, false },
-                { RTL_TEXTENCODING_MS_949,
-                  RTL_TEXTENCODING_INFO_ASCII, false },
-                { RTL_TEXTENCODING_MS_950,
-                  RTL_TEXTENCODING_INFO_ASCII, false },
-                { RTL_TEXTENCODING_SHIFT_JIS,
-                  RTL_TEXTENCODING_INFO_ASCII, false },
-                { RTL_TEXTENCODING_KOI8_R,
-                  RTL_TEXTENCODING_INFO_ASCII, true },
-                { RTL_TEXTENCODING_KOI8_R,
-                  RTL_TEXTENCODING_INFO_MIME, true },
-                { RTL_TEXTENCODING_KOI8_U,
-                  RTL_TEXTENCODING_INFO_ASCII, true },
-                { RTL_TEXTENCODING_KOI8_U,
-                  RTL_TEXTENCODING_INFO_MIME, true },
-                { RTL_TEXTENCODING_IBM_860, RTL_TEXTENCODING_INFO_MIME, true },
-                { RTL_TEXTENCODING_IBM_861, RTL_TEXTENCODING_INFO_MIME, true },
-                { RTL_TEXTENCODING_IBM_863, RTL_TEXTENCODING_INFO_MIME, true },
-                { RTL_TEXTENCODING_IBM_865, RTL_TEXTENCODING_INFO_MIME, true },
-                { RTL_TEXTENCODING_ISCII_DEVANAGARI,
-                  RTL_TEXTENCODING_INFO_ASCII, true },
-                { RTL_TEXTENCODING_ISCII_DEVANAGARI,
-                  RTL_TEXTENCODING_INFO_MIME, false },
-                { RTL_TEXTENCODING_ADOBE_STANDARD,
-                  RTL_TEXTENCODING_INFO_ASCII, false },
-                { RTL_TEXTENCODING_ADOBE_STANDARD,
-                  RTL_TEXTENCODING_INFO_MIME, true },
-                { RTL_TEXTENCODING_ADOBE_STANDARD,
-                  RTL_TEXTENCODING_INFO_SYMBOL, false },
-                { RTL_TEXTENCODING_ADOBE_SYMBOL,
-                  RTL_TEXTENCODING_INFO_ASCII, false },
-                { RTL_TEXTENCODING_ADOBE_SYMBOL,
-                  RTL_TEXTENCODING_INFO_MIME, true },
-                { RTL_TEXTENCODING_ADOBE_SYMBOL,
-                  RTL_TEXTENCODING_INFO_SYMBOL, true },
-                { RTL_TEXTENCODING_PT154, RTL_TEXTENCODING_INFO_ASCII, true },
-                { RTL_TEXTENCODING_PT154, RTL_TEXTENCODING_INFO_MIME, true } };
-        for (size_t i = 0; i < sizeof aTests / sizeof aTests[0]; ++i)
-        {
-            rtl_TextEncodingInfo aInfo;
-            aInfo.StructSize = sizeof aInfo;
-            if (!rtl_getTextEncodingInfo(aTests[i].eEncoding, &aInfo))
-            {
-                printf("rtl_getTextEncodingInfo(%d) FAILED\n",
-                       static_cast< int >(aTests[i].eEncoding));
-                continue;
-            }
-            if (((aInfo.Flags & aTests[i].nFlag) != 0) != aTests[i].bOn)
-                printf("rtl_getTextEncodingInfo(%d): flag %d != %d\n",
-                       static_cast< int >(aTests[i].eEncoding),
-                       static_cast< int >(aTests[i].nFlag),
-                       static_cast< int >(aTests[i].bOn));
-        }
-    }
-
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(437)
-                    == RTL_TEXTENCODING_IBM_437,
-                "Code Page 437 -> IBM_437");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(RTL_TEXTENCODING_IBM_437)
-                    == 437,
-                "IBM_437 -> Code Page 437");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(708)
-                    == RTL_TEXTENCODING_ISO_8859_6,
-                "Code Page 708 -> ISO_8859_6");
-//   TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(
-//                       RTL_TEXTENCODING_ISO_8859_6)
-//                   == 708,
-//               "ISO_8859_6 -> Code Page 708");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(737)
-                    == RTL_TEXTENCODING_IBM_737,
-                "Code Page 737 -> IBM_737");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(RTL_TEXTENCODING_IBM_737)
-                    == 737,
-                "IBM_737 -> Code Page 737");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(775)
-                    == RTL_TEXTENCODING_IBM_775,
-                "Code Page 775 -> IBM_775");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(RTL_TEXTENCODING_IBM_775)
-                    == 775,
-                "IBM_775 -> Code Page 775");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(850)
-                    == RTL_TEXTENCODING_IBM_850,
-                "Code Page 850 -> IBM_850");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(RTL_TEXTENCODING_IBM_850)
-                    == 850,
-                "IBM_850 -> Code Page 850");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(852)
-                    == RTL_TEXTENCODING_IBM_852,
-                "Code Page 852 -> IBM_852");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(RTL_TEXTENCODING_IBM_852)
-                    == 852,
-                "IBM_852 -> Code Page 852");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(855)
-                    == RTL_TEXTENCODING_IBM_855,
-                "Code Page 855 -> IBM_855");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(RTL_TEXTENCODING_IBM_855)
-                    == 855,
-                "IBM_855 -> Code Page 855");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(857)
-                    == RTL_TEXTENCODING_IBM_857,
-                "Code Page 857 -> IBM_857");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(RTL_TEXTENCODING_IBM_857)
-                    == 857,
-                "IBM_857 -> Code Page 857");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(860)
-                    == RTL_TEXTENCODING_IBM_860,
-                "Code Page 860 -> IBM_860");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(RTL_TEXTENCODING_IBM_860)
-                    == 860,
-                "IBM_860 -> Code Page 860");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(861)
-                    == RTL_TEXTENCODING_IBM_861,
-                "Code Page 861 -> IBM_861");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(RTL_TEXTENCODING_IBM_861)
-                    == 861,
-                "IBM_861 -> Code Page 861");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(862)
-                    == RTL_TEXTENCODING_IBM_862,
-                "Code Page 862 -> IBM_862");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(RTL_TEXTENCODING_IBM_862)
-                    == 862,
-                "IBM_862 -> Code Page 862");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(863)
-                    == RTL_TEXTENCODING_IBM_863,
-                "Code Page 863 -> IBM_863");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(RTL_TEXTENCODING_IBM_863)
-                    == 863,
-                "IBM_863 -> Code Page 863");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(864)
-                    == RTL_TEXTENCODING_IBM_864,
-                "Code Page 864 -> IBM_864");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(RTL_TEXTENCODING_IBM_864)
-                    == 864,
-                "IBM_864 -> Code Page 864");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(865)
-                    == RTL_TEXTENCODING_IBM_865,
-                "Code Page 865 -> IBM_865");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(RTL_TEXTENCODING_IBM_865)
-                    == 865,
-                "IBM_865 -> Code Page 865");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(866)
-                    == RTL_TEXTENCODING_IBM_866,
-                "Code Page 866 -> IBM_866");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(RTL_TEXTENCODING_IBM_866)
-                    == 866,
-                "IBM_866 -> Code Page 866");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(869)
-                    == RTL_TEXTENCODING_IBM_869,
-                "Code Page 869 -> IBM_869");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(RTL_TEXTENCODING_IBM_869)
-                    == 869,
-                "IBM_869 -> Code Page 869");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(874)
-                    == RTL_TEXTENCODING_MS_874,
-                "Code Page 874 -> MS_874");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(RTL_TEXTENCODING_MS_874)
-                    == 874,
-                "MS_874 -> Code Page 874");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(932)
-                    == RTL_TEXTENCODING_MS_932,
-                "Code Page 932 -> MS_932");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(RTL_TEXTENCODING_MS_932)
-                    == 932,
-                "MS_932 -> Code Page 932");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(936)
-                    == RTL_TEXTENCODING_MS_936,
-                "Code Page 936 -> MS_936");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(RTL_TEXTENCODING_MS_936)
-                    == 936,
-                "MS_936 -> Code Page 936");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(949)
-                    == RTL_TEXTENCODING_MS_949,
-                "Code Page 949 -> MS_949");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(RTL_TEXTENCODING_MS_949)
-                    == 949,
-                "MS_949 -> Code Page 949");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(950)
-                    == RTL_TEXTENCODING_MS_950,
-                "Code Page 950 -> MS_950");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(RTL_TEXTENCODING_MS_950)
-                    == 950,
-                "MS_950 -> Code Page 950");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(1250)
-                    == RTL_TEXTENCODING_MS_1250,
-                "Code Page 1250 -> MS_1250");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(RTL_TEXTENCODING_MS_1250)
-                    == 1250,
-                "MS_1250 -> Code Page 1250");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(1251)
-                    == RTL_TEXTENCODING_MS_1251,
-                "Code Page 1251 -> MS_1251");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(RTL_TEXTENCODING_MS_1251)
-                    == 1251,
-                "MS_1251 -> Code Page 1251");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(1252)
-                    == RTL_TEXTENCODING_MS_1252,
-                "Code Page 1252 -> MS_1252");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(RTL_TEXTENCODING_MS_1252)
-                    == 1252,
-                "MS_1252 -> Code Page 1252");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(1253)
-                    == RTL_TEXTENCODING_MS_1253,
-                "Code Page 1253 -> MS_1253");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(RTL_TEXTENCODING_MS_1253)
-                    == 1253,
-                "MS_1253 -> Code Page 1253");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(1254)
-                    == RTL_TEXTENCODING_MS_1254,
-                "Code Page 1254 -> MS_1254");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(RTL_TEXTENCODING_MS_1254)
-                    == 1254,
-                "MS_1254 -> Code Page 1254");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(1255)
-                    == RTL_TEXTENCODING_MS_1255,
-                "Code Page 1255 -> MS_1255");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(RTL_TEXTENCODING_MS_1255)
-                    == 1255,
-                "MS_1255 -> Code Page 1255");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(1256)
-                    == RTL_TEXTENCODING_MS_1256,
-                "Code Page 1256 -> MS_1256");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(RTL_TEXTENCODING_MS_1256)
-                    == 1256,
-                "MS_1256 -> Code Page 1256");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(1257)
-                    == RTL_TEXTENCODING_MS_1257,
-                "Code Page 1257 -> MS_1257");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(RTL_TEXTENCODING_MS_1257)
-                    == 1257,
-                "MS_1257 -> Code Page 1257");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(1258)
-                    == RTL_TEXTENCODING_MS_1258,
-                "Code Page 1258 -> MS_1258");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(RTL_TEXTENCODING_MS_1258)
-                    == 1258,
-                "MS_1258 -> Code Page 1258");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(1361)
-                    == RTL_TEXTENCODING_MS_1361,
-                "Code Page 1361 -> MS_1361");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(RTL_TEXTENCODING_MS_1361)
-                    == 1361,
-                "MS_1361 -> Code Page 1361");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(10000)
-                    == RTL_TEXTENCODING_APPLE_ROMAN,
-                "Code Page 10000 -> APPLE_ROMAN");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(
-                        RTL_TEXTENCODING_APPLE_ROMAN)
-                    == 10000,
-                "APPLE_ROMAN -> Code Page 10000");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(10001)
-                    == RTL_TEXTENCODING_APPLE_JAPANESE,
-                "Code Page 10001 -> APPLE_JAPANESE");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(
-                        RTL_TEXTENCODING_APPLE_JAPANESE)
-                    == 10001,
-                "APPLE_JAPANESE -> Code Page 10001");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(10002)
-                    == RTL_TEXTENCODING_APPLE_CHINTRAD,
-                "Code Page 10002 -> APPLE_CHINTRAD");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(
-                        RTL_TEXTENCODING_APPLE_CHINTRAD)
-                    == 10002,
-                "APPLE_CHINTRAD -> Code Page 10002");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(10003)
-                    == RTL_TEXTENCODING_APPLE_KOREAN,
-                "Code Page 10003 -> APPLE_KOREAN");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(
-                        RTL_TEXTENCODING_APPLE_KOREAN)
-                    == 10003,
-                "APPLE_KOREAN -> Code Page 10003");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(10004)
-                    == RTL_TEXTENCODING_APPLE_ARABIC,
-                "Code Page 10004 -> APPLE_ARABIC");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(
-                        RTL_TEXTENCODING_APPLE_ARABIC)
-                    == 10004,
-                "APPLE_ARABIC -> Code Page 10004");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(10005)
-                    == RTL_TEXTENCODING_APPLE_HEBREW,
-                "Code Page 10005 -> APPLE_HEBREW");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(
-                        RTL_TEXTENCODING_APPLE_HEBREW)
-                    == 10005,
-                "APPLE_HEBREW -> Code Page 10005");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(10006)
-                    == RTL_TEXTENCODING_APPLE_GREEK,
-                "Code Page 10006 -> APPLE_GREEK");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(
-                        RTL_TEXTENCODING_APPLE_GREEK)
-                    == 10006,
-                "APPLE_GREEK -> Code Page 10006");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(10007)
-                    == RTL_TEXTENCODING_APPLE_CYRILLIC,
-                "Code Page 10007 -> APPLE_CYRILLIC");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(
-                        RTL_TEXTENCODING_APPLE_CYRILLIC)
-                    == 10007,
-                "APPLE_CYRILLIC -> Code Page 10007");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(10008)
-                    == RTL_TEXTENCODING_APPLE_CHINSIMP,
-                "Code Page 10008 -> APPLE_CHINSIMP");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(
-                        RTL_TEXTENCODING_APPLE_CHINSIMP)
-                    == 10008,
-                "APPLE_CHINSIMP -> Code Page 10008");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(10010)
-                    == RTL_TEXTENCODING_APPLE_ROMANIAN,
-                "Code Page 10010 -> APPLE_ROMANIAN");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(
-                        RTL_TEXTENCODING_APPLE_ROMANIAN)
-                    == 10010,
-                "APPLE_ROMANIAN -> Code Page 10010");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(10017)
-                    == RTL_TEXTENCODING_APPLE_UKRAINIAN,
-                "Code Page 10017 -> APPLE_UKRAINIAN");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(
-                        RTL_TEXTENCODING_APPLE_UKRAINIAN)
-                    == 10017,
-                "APPLE_UKRAINIAN -> Code Page 10017");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(10029)
-                    == RTL_TEXTENCODING_APPLE_CENTEURO,
-                "Code Page 10029 -> APPLE_CENTEURO");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(
-                        RTL_TEXTENCODING_APPLE_CENTEURO)
-                    == 10029,
-                "APPLE_CENTEURO -> Code Page 10029");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(10079)
-                    == RTL_TEXTENCODING_APPLE_ICELAND,
-                "Code Page 10079 -> APPLE_ICELAND");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(
-                        RTL_TEXTENCODING_APPLE_ICELAND)
-                    == 10079,
-                "APPLE_ICELAND -> Code Page 10079");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(10081)
-                    == RTL_TEXTENCODING_APPLE_TURKISH,
-                "Code Page 10081 -> APPLE_TURKISH");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(
-                        RTL_TEXTENCODING_APPLE_TURKISH)
-                    == 10081,
-                "APPLE_TURKISH -> Code Page 10081");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(10082)
-                    == RTL_TEXTENCODING_APPLE_CROATIAN,
-                "Code Page 10082 -> APPLE_CROATIAN");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(
-                        RTL_TEXTENCODING_APPLE_CROATIAN)
-                    == 10082,
-                "APPLE_CROATIAN -> Code Page 10082");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(20127)
-                    == RTL_TEXTENCODING_ASCII_US,
-                "Code Page 20127 -> ASCII_US");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(
-                        RTL_TEXTENCODING_ASCII_US)
-                    == 20127,
-                "ASCII_US -> Code Page 20127");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(20866)
-                    == RTL_TEXTENCODING_KOI8_R,
-                "Code Page 20866 -> KOI8_R");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(RTL_TEXTENCODING_KOI8_R)
-                    == 20866,
-                "KOI8_R -> Code Page 20866");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(21866)
-                    == RTL_TEXTENCODING_KOI8_U,
-                "Code Page 21866 -> KOI8_U");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(RTL_TEXTENCODING_KOI8_U)
-                    == 21866,
-                "KOI8_U -> Code Page 21866");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(28591)
-                    == RTL_TEXTENCODING_ISO_8859_1,
-                "Code Page 28591 -> ISO_8859_1");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(
-                        RTL_TEXTENCODING_ISO_8859_1)
-                    == 28591,
-                "ISO_8859_1 -> Code Page 28591");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(28592)
-                    == RTL_TEXTENCODING_ISO_8859_2,
-                "Code Page 28592 -> ISO_8859_2");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(
-                        RTL_TEXTENCODING_ISO_8859_2)
-                    == 28592,
-                "ISO_8859_2 -> Code Page 28592");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(28593)
-                    == RTL_TEXTENCODING_ISO_8859_3,
-                "Code Page 28593 -> ISO_8859_3");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(
-                        RTL_TEXTENCODING_ISO_8859_3)
-                    == 28593,
-                "ISO_8859_3 -> Code Page 28593");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(28594)
-                    == RTL_TEXTENCODING_ISO_8859_4,
-                "Code Page 28594 -> ISO_8859_4");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(
-                        RTL_TEXTENCODING_ISO_8859_4)
-                    == 28594,
-                "ISO_8859_4 -> Code Page 28594");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(28595)
-                    == RTL_TEXTENCODING_ISO_8859_5,
-                "Code Page 28595 -> ISO_8859_5");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(
-                        RTL_TEXTENCODING_ISO_8859_5)
-                    == 28595,
-                "ISO_8859_5 -> Code Page 28595");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(28596)
-                    == RTL_TEXTENCODING_ISO_8859_6,
-                "Code Page 28596 -> ISO_8859_6");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(
-                        RTL_TEXTENCODING_ISO_8859_6)
-                    == 28596,
-                "ISO_8859_6 -> Code Page 28596");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(28597)
-                    == RTL_TEXTENCODING_ISO_8859_7,
-                "Code Page 28597 -> ISO_8859_7");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(
-                        RTL_TEXTENCODING_ISO_8859_7)
-                    == 28597,
-                "ISO_8859_7 -> Code Page 28597");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(28598)
-                    == RTL_TEXTENCODING_ISO_8859_8,
-                "Code Page 28598 -> ISO_8859_8");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(
-                        RTL_TEXTENCODING_ISO_8859_8)
-                    == 28598,
-                "ISO_8859_8 -> Code Page 28598");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(28599)
-                    == RTL_TEXTENCODING_ISO_8859_9,
-                "Code Page 28599 -> ISO_8859_9");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(
-                        RTL_TEXTENCODING_ISO_8859_9)
-                    == 28599,
-                "ISO_8859_9 -> Code Page 28599");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(28605)
-                    == RTL_TEXTENCODING_ISO_8859_15,
-                "Code Page 28605 -> ISO_8859_15");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(
-                        RTL_TEXTENCODING_ISO_8859_15)
-                    == 28605,
-                "ISO_8859_15 -> Code Page 28605");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(50220)
-                    == RTL_TEXTENCODING_ISO_2022_JP,
-                "Code Page 50220 -> ISO_2022_JP");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(
-                        RTL_TEXTENCODING_ISO_2022_JP)
-                    == 50220,
-                "ISO_2022_JP -> Code Page 50220");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(50225)
-                    == RTL_TEXTENCODING_ISO_2022_KR,
-                "Code Page 50225 -> ISO_2022_KR");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(
-                        RTL_TEXTENCODING_ISO_2022_KR)
-                    == 50225,
-                "ISO_2022_KR -> Code Page 50225");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(51932)
-                    == RTL_TEXTENCODING_EUC_JP,
-                "Code Page 51932 -> EUC_JP");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(RTL_TEXTENCODING_EUC_JP)
-                    == 51932,
-                "EUC_JP -> Code Page 51932");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(51936)
-                    == RTL_TEXTENCODING_EUC_CN,
-                "Code Page 51936 -> EUC_CN");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(RTL_TEXTENCODING_EUC_CN)
-                    == 51936,
-                "EUC_CN -> Code Page 51936");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(51949)
-                    == RTL_TEXTENCODING_EUC_KR,
-                "Code Page 51949 -> EUC_KR");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(RTL_TEXTENCODING_EUC_KR)
-                    == 51949,
-                "EUC_KR -> Code Page 51949");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(65000)
-                    == RTL_TEXTENCODING_UTF7,
-                "Code Page 65000 -> UTF7");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(RTL_TEXTENCODING_UTF7)
-                    == 65000,
-                "UTF7 -> Code Page 65000");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(65001)
-                    == RTL_TEXTENCODING_UTF8,
-                "Code Page 65001 -> UTF8");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(RTL_TEXTENCODING_UTF8)
-                    == 65001,
-                "UTF8 -> Code Page 65001");
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(1200)
-                    == RTL_TEXTENCODING_DONTKNOW,
-                "Code Page 1200 -> DONTKNOW"); // UTF-16LE
-    TEST_ENSURE(rtl_getTextEncodingFromWindowsCodePage(1201)
-                    == RTL_TEXTENCODING_DONTKNOW,
-                "Code Page 1201 -> DONTKNOW"); // UTF-16BE
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(
-                        RTL_TEXTENCODING_DONTKNOW)
-                    == 0,
-                "DONTKNOW -> Code Page 0");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(RTL_TEXTENCODING_UCS4)
-                    == 0,
-                "UCS4 -> Code Page 0");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(RTL_TEXTENCODING_UCS2)
-                    == 0,
-                "UCS2 -> Code Page 0");
-    TEST_ENSURE(rtl_getWindowsCodePageFromTextEncoding(
-                    RTL_TEXTENCODING_ISCII_DEVANAGARI) == 0,
-                "ISCII Devanagari -> Code Page 0");
-
-        // printf("textenc test done\n");
 }
 
+void Test::testMime() {
+    struct Data {
+        char const * mime;
+        rtl_TextEncoding encoding;
+        bool reverse;
+    };
+    static Data const data[] = {
+        { "GBK", RTL_TEXTENCODING_GBK, false },
+        { "CP936", RTL_TEXTENCODING_GBK, false },
+        { "MS936", RTL_TEXTENCODING_GBK, false },
+        { "windows-936", RTL_TEXTENCODING_GBK, false },
 
-} // namespace rtl_text
+        { "GB18030", RTL_TEXTENCODING_GB_18030, false },
 
-// -----------------------------------------------------------------------------
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( rtl_textenc::enc, "rtl_textenc" );
+        { "TIS-620", RTL_TEXTENCODING_TIS_620, true },
+        { "ISO-8859-11", RTL_TEXTENCODING_TIS_620, false }, // not registered
 
-// -----------------------------------------------------------------------------
+        { "CP874", RTL_TEXTENCODING_MS_874, false }, // not registered
+        { "MS874", RTL_TEXTENCODING_MS_874, false }, // not registered
+        { "windows-874", RTL_TEXTENCODING_MS_874, true }, // not registered
+
+        { "ISO_8859-8:1988", RTL_TEXTENCODING_ISO_8859_8, false },
+        { "iso-ir-138", RTL_TEXTENCODING_ISO_8859_8, false },
+        { "ISO_8859-8", RTL_TEXTENCODING_ISO_8859_8, false },
+        { "ISO-8859-8", RTL_TEXTENCODING_ISO_8859_8, true },
+        { "hebrew", RTL_TEXTENCODING_ISO_8859_8, false },
+        { "csISOLatinHebrew", RTL_TEXTENCODING_ISO_8859_8, false },
+
+        { "windows-1255", RTL_TEXTENCODING_MS_1255, true },
+
+        { "IBM862", RTL_TEXTENCODING_IBM_862, true },
+        { "cp862", RTL_TEXTENCODING_IBM_862, false },
+        { "862", RTL_TEXTENCODING_IBM_862, false },
+        { "csPC862LatinHebrew", RTL_TEXTENCODING_IBM_862, false },
+
+        { "ISO_8859-6:1987", RTL_TEXTENCODING_ISO_8859_6, false },
+        { "iso-ir-127", RTL_TEXTENCODING_ISO_8859_6, false },
+        { "ISO_8859-6", RTL_TEXTENCODING_ISO_8859_6, false },
+        { "ISO-8859-6", RTL_TEXTENCODING_ISO_8859_6, true },
+        { "ECMA-114", RTL_TEXTENCODING_ISO_8859_6, false },
+        { "ASMO-708", RTL_TEXTENCODING_ISO_8859_6, false },
+        { "arabic", RTL_TEXTENCODING_ISO_8859_6, false },
+        { "csISOLatinArabic", RTL_TEXTENCODING_ISO_8859_6, false },
+
+        { "windows-1256", RTL_TEXTENCODING_MS_1256, true },
+
+        { "IBM864", RTL_TEXTENCODING_IBM_864, true },
+        { "cp864", RTL_TEXTENCODING_IBM_864, false },
+        { "csIBM864", RTL_TEXTENCODING_IBM_864, false },
+
+        { "KOI8-R", RTL_TEXTENCODING_KOI8_R, false },
+        { "csKOI8R", RTL_TEXTENCODING_KOI8_R, false },
+        { "koi8-r", RTL_TEXTENCODING_KOI8_R, true },
+
+        { "KOI8-U", RTL_TEXTENCODING_KOI8_U, true },
+
+        { "IBM860", RTL_TEXTENCODING_IBM_860, true },
+        { "cp860", RTL_TEXTENCODING_IBM_860, false },
+        { "860", RTL_TEXTENCODING_IBM_860, false },
+        { "csIBM860", RTL_TEXTENCODING_IBM_860, false },
+
+        { "IBM861", RTL_TEXTENCODING_IBM_861, true },
+        { "cp861", RTL_TEXTENCODING_IBM_861, false },
+        { "861", RTL_TEXTENCODING_IBM_861, false },
+        { "cp-is", RTL_TEXTENCODING_IBM_861, false },
+        { "csIBM861", RTL_TEXTENCODING_IBM_861, false },
+
+        { "IBM863", RTL_TEXTENCODING_IBM_863, true },
+        { "cp863", RTL_TEXTENCODING_IBM_863, false },
+        { "863", RTL_TEXTENCODING_IBM_863, false },
+        { "csIBM863", RTL_TEXTENCODING_IBM_863, false },
+
+        { "IBM865", RTL_TEXTENCODING_IBM_865, true },
+        { "cp865", RTL_TEXTENCODING_IBM_865, false },
+        { "865", RTL_TEXTENCODING_IBM_865, false },
+        { "csIBM865", RTL_TEXTENCODING_IBM_865, false },
+
+        { "Latin-9", RTL_TEXTENCODING_ISO_8859_15, false },
+
+        { "KS_C_5601-1987", RTL_TEXTENCODING_MS_949, false },
+        { "iso-ir-149", RTL_TEXTENCODING_MS_949, false },
+        { "KS_C_5601-1989", RTL_TEXTENCODING_MS_949, false },
+        { "KSC_5601", RTL_TEXTENCODING_MS_949, false },
+        { "korean", RTL_TEXTENCODING_MS_949, false },
+        { "csKSC56011987", RTL_TEXTENCODING_MS_949, false },
+        { 0, RTL_TEXTENCODING_MS_949, true },
+
+        { "Adobe-Standard-Encoding", RTL_TEXTENCODING_ADOBE_STANDARD, false },
+        { "csAdobeStandardEncoding", RTL_TEXTENCODING_ADOBE_STANDARD, false },
+        { "Adobe-Symbol-Encoding", RTL_TEXTENCODING_ADOBE_SYMBOL, false },
+        { "csHPPSMath", RTL_TEXTENCODING_ADOBE_SYMBOL, false },
+
+        { "PTCP154", RTL_TEXTENCODING_PT154, true },
+        { "csPTCP154", RTL_TEXTENCODING_PT154, false },
+        { "PT154", RTL_TEXTENCODING_PT154, false },
+        { "CP154", RTL_TEXTENCODING_PT154, false },
+        { "Cyrillic-Asian", RTL_TEXTENCODING_PT154, false }
+    };
+    for (std::size_t i = 0; i < sizeof data / sizeof data[0]; ++i) {
+        if (data[i].mime == 0) {
+            OSL_ASSERT(data[i].reverse);
+            CPPUNIT_ASSERT_EQUAL(
+                static_cast< char const * >(0),
+                rtl_getMimeCharsetFromTextEncoding(data[i].encoding));
+        } else {
+            CPPUNIT_ASSERT_EQUAL(
+                data[i].encoding,
+                rtl_getTextEncodingFromMimeCharset(data[i].mime));
+            if (data[i].reverse) {
+                CPPUNIT_ASSERT_EQUAL(
+                    rtl::OString(data[i].mime),
+                    rtl::OString(
+                        rtl_getMimeCharsetFromTextEncoding(data[i].encoding)));
+            }
+        }
+    }
+}
+
+void Test::testWindows() {
+    struct Data {
+        sal_uInt32 codePage;
+        rtl_TextEncoding encoding;
+        bool reverse;
+    };
+    static Data const data[] = {
+        { 437, RTL_TEXTENCODING_IBM_437, true },
+        { 708, RTL_TEXTENCODING_ISO_8859_6, false },
+        { 737, RTL_TEXTENCODING_IBM_737, true },
+        { 775, RTL_TEXTENCODING_IBM_775, true },
+        { 850, RTL_TEXTENCODING_IBM_850, true },
+        { 852, RTL_TEXTENCODING_IBM_852, true },
+        { 855, RTL_TEXTENCODING_IBM_855, true },
+        { 857, RTL_TEXTENCODING_IBM_857, true },
+        { 860, RTL_TEXTENCODING_IBM_860, true },
+        { 861, RTL_TEXTENCODING_IBM_861, true },
+        { 862, RTL_TEXTENCODING_IBM_862, true },
+        { 863, RTL_TEXTENCODING_IBM_863, true },
+        { 864, RTL_TEXTENCODING_IBM_864, true },
+        { 865, RTL_TEXTENCODING_IBM_865, true },
+        { 866, RTL_TEXTENCODING_IBM_866, true },
+        { 869, RTL_TEXTENCODING_IBM_869, true },
+        { 874, RTL_TEXTENCODING_MS_874, true },
+        { 932, RTL_TEXTENCODING_MS_932, true },
+        { 936, RTL_TEXTENCODING_MS_936, true },
+        { 949, RTL_TEXTENCODING_MS_949, true },
+        { 950, RTL_TEXTENCODING_MS_950, true },
+        { 1250, RTL_TEXTENCODING_MS_1250, true },
+        { 1251, RTL_TEXTENCODING_MS_1251, true },
+        { 1252, RTL_TEXTENCODING_MS_1252, true },
+        { 1253, RTL_TEXTENCODING_MS_1253, true },
+        { 1254, RTL_TEXTENCODING_MS_1254, true },
+        { 1255, RTL_TEXTENCODING_MS_1255, true },
+        { 1256, RTL_TEXTENCODING_MS_1256, true },
+        { 1257, RTL_TEXTENCODING_MS_1257, true },
+        { 1258, RTL_TEXTENCODING_MS_1258, true },
+        { 1361, RTL_TEXTENCODING_MS_1361, true },
+        { 10000, RTL_TEXTENCODING_APPLE_ROMAN, true },
+        { 10001, RTL_TEXTENCODING_APPLE_JAPANESE, true },
+        { 10002, RTL_TEXTENCODING_APPLE_CHINTRAD, true },
+        { 10003, RTL_TEXTENCODING_APPLE_KOREAN, true },
+        { 10004, RTL_TEXTENCODING_APPLE_ARABIC, true },
+        { 10005, RTL_TEXTENCODING_APPLE_HEBREW, true },
+        { 10006, RTL_TEXTENCODING_APPLE_GREEK, true },
+        { 10007, RTL_TEXTENCODING_APPLE_CYRILLIC, true },
+        { 10008, RTL_TEXTENCODING_APPLE_CHINSIMP, true },
+        { 10010, RTL_TEXTENCODING_APPLE_ROMANIAN, true },
+        { 10017, RTL_TEXTENCODING_APPLE_UKRAINIAN, true },
+        { 10029, RTL_TEXTENCODING_APPLE_CENTEURO, true },
+        { 10079, RTL_TEXTENCODING_APPLE_ICELAND, true },
+        { 10081, RTL_TEXTENCODING_APPLE_TURKISH, true },
+        { 10082, RTL_TEXTENCODING_APPLE_CROATIAN, true },
+        { 20127, RTL_TEXTENCODING_ASCII_US, true },
+        { 20866, RTL_TEXTENCODING_KOI8_R, true },
+        { 21866, RTL_TEXTENCODING_KOI8_U, true },
+        { 28591, RTL_TEXTENCODING_ISO_8859_1, true },
+        { 28592, RTL_TEXTENCODING_ISO_8859_2, true },
+        { 28593, RTL_TEXTENCODING_ISO_8859_3, true },
+        { 28594, RTL_TEXTENCODING_ISO_8859_4, true },
+        { 28595, RTL_TEXTENCODING_ISO_8859_5, true },
+        { 28596, RTL_TEXTENCODING_ISO_8859_6, true },
+        { 28597, RTL_TEXTENCODING_ISO_8859_7, true },
+        { 28598, RTL_TEXTENCODING_ISO_8859_8, true },
+        { 28599, RTL_TEXTENCODING_ISO_8859_9, true },
+        { 28605, RTL_TEXTENCODING_ISO_8859_15, true },
+        { 50220, RTL_TEXTENCODING_ISO_2022_JP, true },
+        { 50225, RTL_TEXTENCODING_ISO_2022_KR, true },
+        { 51932, RTL_TEXTENCODING_EUC_JP, true },
+        { 51936, RTL_TEXTENCODING_EUC_CN, true },
+        { 51949, RTL_TEXTENCODING_EUC_KR, true },
+        { 65000, RTL_TEXTENCODING_UTF7, true },
+        { 65001, RTL_TEXTENCODING_UTF8, true },
+        { 1200, RTL_TEXTENCODING_DONTKNOW, false }, // UTF_16LE
+        { 1201, RTL_TEXTENCODING_DONTKNOW, false }, // UTF_16LE
+        { 0, RTL_TEXTENCODING_DONTKNOW, true },
+        { 0, RTL_TEXTENCODING_UCS4, true },
+        { 0, RTL_TEXTENCODING_UCS2, true },
+        { 0, RTL_TEXTENCODING_ISCII_DEVANAGARI, true }
+    };
+    for (std::size_t i = 0; i < sizeof data / sizeof data[0]; ++i) {
+        OSL_ASSERT(data[i].codePage != 0 || data[i].reverse);
+        if (data[i].codePage != 0) {
+            CPPUNIT_ASSERT_EQUAL(
+                data[i].encoding,
+                rtl_getTextEncodingFromWindowsCodePage(data[i].codePage));
+        }
+        if (data[i].reverse) {
+            CPPUNIT_ASSERT_EQUAL(
+                data[i].codePage,
+                rtl_getWindowsCodePageFromTextEncoding(data[i].encoding));
+        }
+    }
+}
+
+void Test::testInfo() {
+    struct Data {
+        rtl_TextEncoding encoding;
+        sal_uInt32 flag;
+        bool value;
+    };
+    static Data const data[] = {
+        { RTL_TEXTENCODING_APPLE_CHINTRAD, RTL_TEXTENCODING_INFO_ASCII, false },
+        { RTL_TEXTENCODING_APPLE_JAPANESE, RTL_TEXTENCODING_INFO_ASCII, false },
+        { RTL_TEXTENCODING_APPLE_KOREAN, RTL_TEXTENCODING_INFO_ASCII, false },
+        { RTL_TEXTENCODING_BIG5, RTL_TEXTENCODING_INFO_ASCII, false },
+        { RTL_TEXTENCODING_BIG5_HKSCS, RTL_TEXTENCODING_INFO_ASCII, false },
+        { RTL_TEXTENCODING_EUC_CN, RTL_TEXTENCODING_INFO_ASCII, true },
+        { RTL_TEXTENCODING_EUC_JP, RTL_TEXTENCODING_INFO_ASCII, true },
+        { RTL_TEXTENCODING_EUC_KR, RTL_TEXTENCODING_INFO_ASCII, true },
+        { RTL_TEXTENCODING_EUC_TW, RTL_TEXTENCODING_INFO_ASCII, true },
+        { RTL_TEXTENCODING_GBK, RTL_TEXTENCODING_INFO_ASCII, false },
+        { RTL_TEXTENCODING_GB_18030, RTL_TEXTENCODING_INFO_ASCII, false },
+        { RTL_TEXTENCODING_GB_18030, RTL_TEXTENCODING_INFO_UNICODE, true },
+        { RTL_TEXTENCODING_ISO_2022_CN, RTL_TEXTENCODING_INFO_CONTEXT, true },
+        { RTL_TEXTENCODING_ISO_2022_CN, RTL_TEXTENCODING_INFO_ASCII, false },
+        { RTL_TEXTENCODING_ISO_2022_JP, RTL_TEXTENCODING_INFO_CONTEXT, true },
+        { RTL_TEXTENCODING_ISO_2022_JP, RTL_TEXTENCODING_INFO_ASCII, false },
+        { RTL_TEXTENCODING_ISO_2022_KR, RTL_TEXTENCODING_INFO_CONTEXT, true },
+        { RTL_TEXTENCODING_ISO_2022_KR, RTL_TEXTENCODING_INFO_ASCII, false },
+        { RTL_TEXTENCODING_MS_1361, RTL_TEXTENCODING_INFO_ASCII, false },
+        { RTL_TEXTENCODING_MS_874, RTL_TEXTENCODING_INFO_ASCII, true },
+        { RTL_TEXTENCODING_MS_932, RTL_TEXTENCODING_INFO_ASCII, false },
+        { RTL_TEXTENCODING_MS_936, RTL_TEXTENCODING_INFO_ASCII, false },
+        { RTL_TEXTENCODING_MS_949, RTL_TEXTENCODING_INFO_ASCII, false },
+        { RTL_TEXTENCODING_MS_950, RTL_TEXTENCODING_INFO_ASCII, false },
+        { RTL_TEXTENCODING_SHIFT_JIS, RTL_TEXTENCODING_INFO_ASCII, false },
+        { RTL_TEXTENCODING_KOI8_R, RTL_TEXTENCODING_INFO_ASCII, true },
+        { RTL_TEXTENCODING_KOI8_R, RTL_TEXTENCODING_INFO_MIME, true },
+        { RTL_TEXTENCODING_KOI8_U, RTL_TEXTENCODING_INFO_ASCII, true },
+        { RTL_TEXTENCODING_KOI8_U, RTL_TEXTENCODING_INFO_MIME, true },
+        { RTL_TEXTENCODING_IBM_860, RTL_TEXTENCODING_INFO_MIME, true },
+        { RTL_TEXTENCODING_IBM_861, RTL_TEXTENCODING_INFO_MIME, true },
+        { RTL_TEXTENCODING_IBM_863, RTL_TEXTENCODING_INFO_MIME, true },
+        { RTL_TEXTENCODING_IBM_865, RTL_TEXTENCODING_INFO_MIME, true },
+        { RTL_TEXTENCODING_ISCII_DEVANAGARI, RTL_TEXTENCODING_INFO_ASCII, true },
+        { RTL_TEXTENCODING_ISCII_DEVANAGARI, RTL_TEXTENCODING_INFO_MIME, false },
+        { RTL_TEXTENCODING_ADOBE_STANDARD, RTL_TEXTENCODING_INFO_ASCII, false },
+        { RTL_TEXTENCODING_ADOBE_STANDARD, RTL_TEXTENCODING_INFO_MIME, true },
+        { RTL_TEXTENCODING_ADOBE_STANDARD, RTL_TEXTENCODING_INFO_SYMBOL, false },
+        { RTL_TEXTENCODING_ADOBE_SYMBOL, RTL_TEXTENCODING_INFO_ASCII, false },
+        { RTL_TEXTENCODING_ADOBE_SYMBOL, RTL_TEXTENCODING_INFO_MIME, true },
+        { RTL_TEXTENCODING_ADOBE_SYMBOL, RTL_TEXTENCODING_INFO_SYMBOL, true },
+        { RTL_TEXTENCODING_PT154, RTL_TEXTENCODING_INFO_ASCII, true },
+        { RTL_TEXTENCODING_PT154, RTL_TEXTENCODING_INFO_MIME, true }
+    };
+    for (std::size_t i = 0; i < sizeof data / sizeof data[0]; ++i) {
+        rtl_TextEncodingInfo info;
+        info.StructSize = sizeof info;
+        CPPUNIT_ASSERT(rtl_getTextEncodingInfo(data[i].encoding, &info));
+        CPPUNIT_ASSERT_EQUAL(data[i].value, ((info.Flags & data[i].flag) != 0));
+    }
+}
+
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Test, "rtl_textcvt");
+
+}
+
 NOADDITIONAL;
