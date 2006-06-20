@@ -979,22 +979,19 @@
 *** misc/Python-2.3.4/Include/pyport.h	Tue Sep 30 16:56:50 2003
 --- misc/build/Python-2.3.4/Include/pyport.h	Thu Sep  1 19:40:57 2005
 ***************
-*** 346,352 ****
+*** 346,356 ****
   in platform-specific #ifdefs.
   **************************************************************************/
   
-! #ifdef SOLARIS
+- #ifdef SOLARIS
+- /* Unchecked */
+- extern int gethostname(char *, int);
+- #endif
+- 
+  #ifdef __BEOS__
   /* Unchecked */
-  extern int gethostname(char *, int);
-  #endif
---- 346,352 ----
-  in platform-specific #ifdefs.
-  **************************************************************************/
-  
-! #if defined(SOLARIS) && !defined(__GNUC__)
-  /* Unchecked */
-  extern int gethostname(char *, int);
-  #endif
+  /* It's in the libs, but not the headers... - [cjh] */
+--- 346,351 ----
 *** misc/Python-2.3.4/Mac/OSX/Makefile	Tue Nov  4 23:45:16 2003
 --- misc/build/Python-2.3.4/Mac/OSX/Makefile	Thu Sep  1 19:40:57 2005
 ***************
