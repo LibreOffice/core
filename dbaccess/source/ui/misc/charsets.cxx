@@ -4,9 +4,9 @@
  *
  *  $RCSfile: charsets.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:45:40 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:22:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,21 +100,21 @@ namespace dbaui
     }
 
     //-------------------------------------------------------------------------
-    OCharsetDisplay::const_iterator OCharsetDisplay::find(const rtl_TextEncoding _eEncoding) const
+    OCharsetDisplay::const_iterator OCharsetDisplay::findEncoding(const rtl_TextEncoding _eEncoding) const
     {
         OCharsetMap::const_iterator aBaseIter = OCharsetMap::find(_eEncoding);
         return const_iterator( this, aBaseIter );
     }
 
     //-------------------------------------------------------------------------
-    OCharsetDisplay::const_iterator OCharsetDisplay::find(const ::rtl::OUString& _rIanaName, const IANA&) const
+    OCharsetDisplay::const_iterator OCharsetDisplay::findIanaName(const ::rtl::OUString& _rIanaName) const
     {
         OCharsetMap::const_iterator aBaseIter = OCharsetMap::find(_rIanaName, OCharsetMap::IANA());
         return const_iterator( this, aBaseIter );
     }
 
     //-------------------------------------------------------------------------
-    OCharsetDisplay::const_iterator OCharsetDisplay::find(const ::rtl::OUString& _rDisplayName, const Display&) const
+    OCharsetDisplay::const_iterator OCharsetDisplay::findDisplayName(const ::rtl::OUString& _rDisplayName) const
     {
         rtl_TextEncoding eEncoding = RTL_TEXTENCODING_DONTKNOW;
         if ( _rDisplayName != m_aSystemDisplayName )
