@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontainer.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:54:43 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:47:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,6 +132,9 @@ namespace dbaccess
         virtual void SAL_CALL elementInserted( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
+
+    protected:
+        using OFilteredContainer::disposing;
     };
 }
 #endif // _DBA_CORE_VIEWCONTAINER_HXX_
