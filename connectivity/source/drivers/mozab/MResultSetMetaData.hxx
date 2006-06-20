@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MResultSetMetaData.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:20:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:44:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,9 @@ namespace connectivity
             OResultSetMetaData(const ::vos::ORef<connectivity::OSQLColumns>& _rxColumns,
                                const ::rtl::OUString& _aTableName,OTable* _pTable,sal_Bool aReadOnly
                                )
-                 : m_xColumns(_rxColumns), m_aTableName(_aTableName), m_pTable(_pTable)
+                 :m_aTableName(_aTableName)
+                 ,m_xColumns(_rxColumns)
+                 ,m_pTable(_pTable)
                  ,m_bReadOnly(aReadOnly)
                  {}
 
