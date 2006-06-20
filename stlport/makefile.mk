@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.33 $
+#   $Revision: 1.34 $
 #
-#   last change: $Author: obo $ $Date: 2005-12-21 16:51:24 $
+#   last change: $Author: hr $ $Date: 2006-06-20 04:08:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,28 @@ $(INCCOM)$/stlport$/hash_map : systemstl/hash_map
         PATCH_FILE_NAME=STLport-4.0.macosx.patch
     .ELSE
         TARFILE_NAME=STLport-4.0
+        # To disable warnings from within STLport headers on unxsoli4 and
+        # unxsols4, STLport-4.0.patch had to be extended mechanically by
+        #
+        #   cd unxsol.../misc/build/STLport-4.0/stlport && \
+        #   find . -type f -exec sed -i \
+        #     -e 's/^\([ \t]*__STL_BEGIN_NAMESPACE[ \t]*\)$/#if defined \
+        #       __SUNPRO_CC\n#pragma disable_warn\n#endif\n&/' \
+        #     -e 's/^\([ \t]*__STL_END_NAMESPACE[ \t]*\)$/&\n#if defined \
+        #       __SUNPRO_CC\n#pragma enable_warn\n#endif/' {} \;
+        #
+        # (causing lots of files to become modified) and by additionally
+        # changing unxsol.../misc/build/STLport-4.0/stlport/math.h,
+        # unxsol.../misc/build/STLport-4.0/stlport/stl/_config.h,
+        # unxsol.../misc/build/STLport-4.0/stlport/stl/_list.h, and
+        # unxsol.../misc/build/STLport-4.0/stlport/stl/type_traits.h manually.
+        # (Obviously due to the way the C++ compiler generates code for
+        # instantiations of inline function templates from STLport headers, it
+        # does not work to simply add "#pragma disable_warn" to stl/_prolog.h
+        # and "#pragma enable_warn" to stl/_epilog.h, as seemingly some internal
+        # STLport headers are read in by the compiler only at the end of a
+        # compilation unit, outside the scope of stl/_prolog.h and
+        # stl/_epilog.h.)
         PATCH_FILE_NAME=STLport-4.0.patch
     .ENDIF			# "$(OS)"=="MACOSX"
 .ENDIF			# "$(COMID)"=="gcc3"
