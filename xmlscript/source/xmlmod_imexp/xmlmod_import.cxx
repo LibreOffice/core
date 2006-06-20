@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlmod_import.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:18:06 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:14:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,7 @@ Reference< xml::input::XAttributes > ModuleElement::getAttributes()
 }
 //__________________________________________________________________________________________________
 void ModuleElement::ignorableWhitespace(
-    OUString const & rWhitespaces )
+    OUString const & /*rWhitespaces*/ )
     throw (xml::sax::SAXException, RuntimeException)
 {
     // not used
@@ -86,7 +86,7 @@ void ModuleElement::characters( OUString const & rChars )
 }
 //__________________________________________________________________________________________________
 void ModuleElement::processingInstruction(
-    OUString const & rTarget, OUString const & rData )
+    OUString const & /*rTarget*/, OUString const & /*rData*/ )
     throw (xml::sax::SAXException, RuntimeException)
 {
 }
@@ -98,8 +98,8 @@ void ModuleElement::endElement()
 }
 //__________________________________________________________________________________________________
 Reference< xml::input::XElement > ModuleElement::startChildElement(
-    sal_Int32 nUid, OUString const & rLocalName,
-    Reference< xml::input::XAttributes > const & xAttributes )
+    sal_Int32 /*nUid*/, OUString const & /*rLocalName*/,
+    Reference< xml::input::XAttributes > const & /*xAttributes*/ )
     throw (xml::sax::SAXException, RuntimeException)
 {
     throw xml::sax::SAXException(
@@ -167,13 +167,13 @@ void ModuleImport::endDocument()
 }
 //__________________________________________________________________________________________________
 void ModuleImport::processingInstruction(
-    OUString const & rTarget, OUString const & rData )
+    OUString const & /*rTarget*/, OUString const & /*rData*/ )
     throw (xml::sax::SAXException, RuntimeException)
 {
 }
 //__________________________________________________________________________________________________
 void ModuleImport::setDocumentLocator(
-    Reference< xml::sax::XLocator > const & xLocator )
+    Reference< xml::sax::XLocator > const & /*xLocator*/ )
     throw (xml::sax::SAXException, RuntimeException)
 {
 }
@@ -228,6 +228,5 @@ SAL_CALL importScriptModule( ModuleDescriptor& rMod )
         static_cast< xml::input::XRoot * >( new ModuleImport( rMod ) ) );
 }
 
-};
-
+}
 
