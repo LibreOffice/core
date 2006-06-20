@@ -4,9 +4,9 @@
  *
  *  $RCSfile: calendar_gregorian.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:03:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:43:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,7 @@ Calendar_hanja::getDisplayName( sal_Int16 displayIndex, sal_Int16 idx, sal_Int16
 }
 
 void SAL_CALL
-Calendar_hanja::loadCalendar( const OUString& uniqueID, const com::sun::star::lang::Locale& rLocale ) throw(RuntimeException)
+Calendar_hanja::loadCalendar( const OUString& /*uniqueID*/, const com::sun::star::lang::Locale& rLocale ) throw(RuntimeException)
 {
         // Since this class could be called by service name 'hanja_yoil', we have to
         // rename uniqueID to get right calendar defined in locale data.
@@ -145,7 +145,8 @@ Calendar_gregorian::loadCalendar( const OUString& uniqueID, const com::sun::star
             if (uniqueID == xC[i].Name) {
                 aCalendar = xC[i];
                 // setup first day of week
-                for (aStartOfWeek = aCalendar.Days.getLength()-1; aStartOfWeek>=0; aStartOfWeek-- )
+                for (aStartOfWeek = sal::static_int_cast<sal_Int16>(aCalendar.Days.getLength()-1);
+                                aStartOfWeek>=0; aStartOfWeek-- )
                     if (aCalendar.StartOfWeek == aCalendar.Days[aStartOfWeek].ID)
                         return;
             }
@@ -213,7 +214,7 @@ Calendar_gregorian::mapFromGregorian() throw(RuntimeException)
 
             fieldValue[CalendarFieldIndex::ERA] = e;
             fieldValue[CalendarFieldIndex::YEAR] =
-                (e == 0) ? (eraArray[0].year - y) : (y - eraArray[e-1].year + 1);
+                sal::static_int_cast<sal_Int16>( (e == 0) ? (eraArray[0].year - y) : (y - eraArray[e-1].year + 1) );
         }
 }
 
@@ -225,9 +226,9 @@ void SAL_CALL Calendar_gregorian::mapToGregorian() throw(RuntimeException)
         if (eraArray && (fieldSet & FIELDS)) {
             sal_Int16 y, e = fieldValue[CalendarFieldIndex::ERA];
             if (e == 0)
-                y = eraArray[0].year - fieldValue[CalendarFieldIndex::YEAR];
+                y = sal::static_int_cast<sal_Int16>( eraArray[0].year - fieldValue[CalendarFieldIndex::YEAR] );
             else
-                y = eraArray[e-1].year + fieldValue[CalendarFieldIndex::YEAR] - 1;
+                y = sal::static_int_cast<sal_Int16>( eraArray[e-1].year + fieldValue[CalendarFieldIndex::YEAR] - 1 );
 
             fieldSetValue[CalendarFieldIndex::ERA] = y <= 0 ? 0 : 1;
             fieldSetValue[CalendarFieldIndex::YEAR] = (y <= 0 ? 1 - y : y);
@@ -325,7 +326,7 @@ Calendar_gregorian::setValue() throw(RuntimeException)
             if ( U_SUCCESS(status) )
             {
                 fieldSet |= (1 << CalendarFieldIndex::ZONE_OFFSET);
-                fieldValue[CalendarFieldIndex::ZONE_OFFSET] = value / 60000;
+                fieldValue[CalendarFieldIndex::ZONE_OFFSET] = sal::static_int_cast<sal_Int16>( value / 60000 );
             }
         }
         bool bNeedDST = !(fieldSet & (1 << CalendarFieldIndex::DST_OFFSET));
@@ -406,7 +407,7 @@ Calendar_gregorian::setValue() throw(RuntimeException)
                 // Resubmit all values, this time including DST => date 01:00
                 fieldSet |= (1 << CalendarFieldIndex::DST_OFFSET);
                 fieldSetValue[CalendarFieldIndex::DST_OFFSET] =
-                    fieldValue[CalendarFieldIndex::DST_OFFSET] = nDST2 / 60000;
+                    fieldValue[CalendarFieldIndex::DST_OFFSET] = sal::static_int_cast<sal_Int16>( nDST2 / 60000 );
                 submitValues( nYear, nMonth, nDay, nHour, nMinute, nSecond, nMilliSecond);
 
                 // If the DST onset rule says to switch from 00:00 to 01:00 and
@@ -653,7 +654,7 @@ OUString SAL_CALL
 Calendar_gregorian::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode )
         throw (RuntimeException)
 {
-    sal_Int16 value = getValue(DisplayCode2FieldIndex(nCalendarDisplayCode));
+    sal_Int16 value = getValue(sal::static_int_cast<sal_Int16>( DisplayCode2FieldIndex(nCalendarDisplayCode) ));
     OUString aOUStr;
 
     if (nCalendarDisplayCode == CalendarDisplayCode::SHORT_QUARTER ||
@@ -668,8 +669,9 @@ Calendar_gregorian::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 
         // actual month value.
         if ( quarter > 3 )
             quarter = 3;
-        quarter += (nCalendarDisplayCode == CalendarDisplayCode::SHORT_QUARTER) ?
-            reservedWords::QUARTER1_ABBREVIATION : reservedWords::QUARTER1_WORD;
+        quarter = sal::static_int_cast<sal_Int16>( quarter +
+            ((nCalendarDisplayCode == CalendarDisplayCode::SHORT_QUARTER) ?
+            reservedWords::QUARTER1_ABBREVIATION : reservedWords::QUARTER1_WORD) );
         aOUStr = xR[quarter];
     } else {
         // The "#100211# - checked" comments serve for detection of "use of
