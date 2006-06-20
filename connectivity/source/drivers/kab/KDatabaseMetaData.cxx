@@ -4,9 +4,9 @@
  *
  *  $RCSfile: KDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-03 17:32:41 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:38:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -312,7 +312,7 @@ sal_Bool SAL_CALL KabDatabaseMetaData::supportsOpenCursorsAcrossRollback(  ) thr
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL KabDatabaseMetaData::supportsTransactionIsolationLevel( sal_Int32 level ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL KabDatabaseMetaData::supportsTransactionIsolationLevel( sal_Int32 ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
@@ -446,7 +446,7 @@ sal_Bool SAL_CALL KabDatabaseMetaData::supportsTableCorrelationNames(  ) throw(S
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL KabDatabaseMetaData::supportsConvert( sal_Int32 fromType, sal_Int32 toType ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL KabDatabaseMetaData::supportsConvert( sal_Int32, sal_Int32 ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
@@ -739,7 +739,7 @@ sal_Bool SAL_CALL KabDatabaseMetaData::supportsResultSetType( sal_Int32 setType 
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL KabDatabaseMetaData::supportsResultSetConcurrency( sal_Int32 setType, sal_Int32 concurrency ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL KabDatabaseMetaData::supportsResultSetConcurrency( sal_Int32 setType, sal_Int32 ) throw(SQLException, RuntimeException)
 {
     switch (setType)
     {
@@ -750,47 +750,47 @@ sal_Bool SAL_CALL KabDatabaseMetaData::supportsResultSetConcurrency( sal_Int32 s
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL KabDatabaseMetaData::ownUpdatesAreVisible( sal_Int32 setType ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL KabDatabaseMetaData::ownUpdatesAreVisible( sal_Int32 ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL KabDatabaseMetaData::ownDeletesAreVisible( sal_Int32 setType ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL KabDatabaseMetaData::ownDeletesAreVisible( sal_Int32 ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL KabDatabaseMetaData::ownInsertsAreVisible( sal_Int32 setType ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL KabDatabaseMetaData::ownInsertsAreVisible( sal_Int32 ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL KabDatabaseMetaData::othersUpdatesAreVisible( sal_Int32 setType ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL KabDatabaseMetaData::othersUpdatesAreVisible( sal_Int32 ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL KabDatabaseMetaData::othersDeletesAreVisible( sal_Int32 setType ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL KabDatabaseMetaData::othersDeletesAreVisible( sal_Int32 ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL KabDatabaseMetaData::othersInsertsAreVisible( sal_Int32 setType ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL KabDatabaseMetaData::othersInsertsAreVisible( sal_Int32 ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL KabDatabaseMetaData::updatesAreDetected( sal_Int32 setType ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL KabDatabaseMetaData::updatesAreDetected( sal_Int32 ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL KabDatabaseMetaData::deletesAreDetected( sal_Int32 setType ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL KabDatabaseMetaData::deletesAreDetected( sal_Int32 ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL KabDatabaseMetaData::insertsAreDetected( sal_Int32 setType ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL KabDatabaseMetaData::insertsAreDetected( sal_Int32 ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
@@ -867,24 +867,24 @@ Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getTypeInfo(  ) throw(SQLE
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getCatalogs(  ) throw(SQLException, RuntimeException)
 {
-    return NULL;
+    return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eCatalogs );
 }
 // -----------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getSchemas(  ) throw(SQLException, RuntimeException)
 {
-    return NULL;
+    return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eSchemas );
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getColumnPrivileges(
-    const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table,
-    const ::rtl::OUString& columnNamePattern ) throw(SQLException, RuntimeException)
+    const Any&, const ::rtl::OUString&, const ::rtl::OUString&,
+    const ::rtl::OUString& ) throw(SQLException, RuntimeException)
 {
-    return NULL;
+    return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eColumnPrivileges );
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getColumns(
-    const Any& catalog,
-    const ::rtl::OUString& schemaPattern,
+    const Any&,
+    const ::rtl::OUString&,
     const ::rtl::OUString& tableNamePattern,
     const ::rtl::OUString& columnNamePattern) throw(SQLException, RuntimeException)
 {
@@ -955,9 +955,9 @@ Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getColumns(
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getTables(
-    const Any& catalog,
-    const ::rtl::OUString& schemaPattern,
-    const ::rtl::OUString& tableNamePattern,
+    const Any&,
+    const ::rtl::OUString&,
+    const ::rtl::OUString&,
     const Sequence< ::rtl::OUString >& types) throw(SQLException, RuntimeException)
 {
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet();
@@ -1008,21 +1008,21 @@ Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getTables(
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getProcedureColumns(
-    const Any& catalog, const ::rtl::OUString& schemaPattern,
-    const ::rtl::OUString& procedureNamePattern, const ::rtl::OUString& columnNamePattern ) throw(SQLException, RuntimeException)
+    const Any&, const ::rtl::OUString&,
+    const ::rtl::OUString&, const ::rtl::OUString& ) throw(SQLException, RuntimeException)
 {
-    return NULL;
+    return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eProcedureColumns );
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getProcedures(
-    const Any& catalog, const ::rtl::OUString& schemaPattern,
-    const ::rtl::OUString& procedureNamePattern ) throw(SQLException, RuntimeException)
+    const Any&, const ::rtl::OUString&,
+    const ::rtl::OUString& ) throw(SQLException, RuntimeException)
 {
-    return NULL;
+    return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eProcedures );
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getVersionColumns(
-    const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
+    const Any&, const ::rtl::OUString&, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
 {
     ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
     Reference< XResultSet > xRef = pResult;
@@ -1056,55 +1056,54 @@ Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getVersionColumns(
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getExportedKeys(
-    const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
+    const Any&, const ::rtl::OUString&, const ::rtl::OUString& ) throw(SQLException, RuntimeException)
 {
-    return NULL;
+    return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eExportedKeys );
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getImportedKeys(
-    const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
+    const Any&, const ::rtl::OUString&, const ::rtl::OUString& ) throw(SQLException, RuntimeException)
 {
-    return NULL;
+    return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eImportedKeys );
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getPrimaryKeys(
-    const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
+    const Any&, const ::rtl::OUString&, const ::rtl::OUString& ) throw(SQLException, RuntimeException)
 {
-    return NULL;
+    return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::ePrimaryKeys );
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getIndexInfo(
-    const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table,
-    sal_Bool unique, sal_Bool approximate ) throw(SQLException, RuntimeException)
+    const Any&, const ::rtl::OUString&, const ::rtl::OUString&,
+    sal_Bool, sal_Bool ) throw(SQLException, RuntimeException)
 {
-    return NULL;
+    return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eIndexInfo );
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getBestRowIdentifier(
-    const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table, sal_Int32 scope,
-    sal_Bool nullable ) throw(SQLException, RuntimeException)
+    const Any&, const ::rtl::OUString&, const ::rtl::OUString&, sal_Int32,
+    sal_Bool ) throw(SQLException, RuntimeException)
 {
-    return NULL;
+    return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eBestRowIdentifier );
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getTablePrivileges(
-    const Any& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& tableNamePattern ) throw(SQLException, RuntimeException)
+    const Any&, const ::rtl::OUString&, const ::rtl::OUString& ) throw(SQLException, RuntimeException)
 {
-    return NULL;
+    return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eTablePrivileges );
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getCrossReference(
-    const Any& primaryCatalog, const ::rtl::OUString& primarySchema,
-    const ::rtl::OUString& primaryTable, const Any& foreignCatalog,
-    const ::rtl::OUString& foreignSchema, const ::rtl::OUString& foreignTable ) throw(SQLException, RuntimeException)
+    const Any&, const ::rtl::OUString&,
+    const ::rtl::OUString&, const Any&,
+    const ::rtl::OUString&, const ::rtl::OUString& ) throw(SQLException, RuntimeException)
 {
-    return NULL;
+    return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eCrossReference );
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getUDTs( const Any& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& typeNamePattern, const Sequence< sal_Int32 >& types ) throw(SQLException, RuntimeException)
+Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getUDTs( const Any&, const ::rtl::OUString&, const ::rtl::OUString&, const Sequence< sal_Int32 >& ) throw(SQLException, RuntimeException)
 {
     OSL_ENSURE(0,"Not implemented yet!");
     throw SQLException();
-    return NULL;
 }
 // -----------------------------------------------------------------------------
