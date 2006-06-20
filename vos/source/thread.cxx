@@ -4,9 +4,9 @@
  *
  *  $RCSfile: thread.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-06-02 12:45:11 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 11:23:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,22 +40,9 @@
 #include <vos/object.hxx>
 #include <vos/thread.hxx>
 
+using namespace vos;
 
-
-#if !defined ( WNT )
-
-void _OThread_WorkerFunction(void* pthis)
-{
-    NAMESPACE_VOS(_cpp_OThread_WorkerFunction)(pthis);
-}
-
-void NAMESPACE_VOS(_cpp_OThread_WorkerFunction)(void* pthis)
-
-#else
-
-void SAL_CALL _OThread_WorkerFunction(void* pthis)
-
-#endif
+void vos::threadWorkerFunction_impl(void * pthis)
 {
     NAMESPACE_VOS(OThread)* pThis= (NAMESPACE_VOS(OThread)*)pthis;
 
@@ -70,8 +57,6 @@ void SAL_CALL _OThread_WorkerFunction(void* pthis)
         pThis->onTerminated();      // could e.g. delete this
     }
 }
-
-using namespace vos;
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -103,8 +88,9 @@ sal_Bool OThread::create()
 {
     VOS_ASSERT(m_hThread == 0); // only one running thread per instance
 
-    if (m_hThread= osl_createSuspendedThread(_OThread_WorkerFunction,
-                                             (void*)this))
+    m_hThread = osl_createSuspendedThread(
+        threadWorkerFunction_impl, (void*)this);
+    if (m_hThread)
         osl_resumeThread(m_hThread);
 
     return m_hThread != 0;
@@ -114,8 +100,7 @@ sal_Bool OThread::createSuspended()
 {
     VOS_ASSERT(m_hThread == 0); // only one running thread per instance
 
-    m_hThread= osl_createSuspendedThread(_OThread_WorkerFunction,
-                                         (void*)this);
+    m_hThread= osl_createSuspendedThread(threadWorkerFunction_impl, (void*)this);
     return m_hThread != 0;
 }
 
@@ -240,7 +225,8 @@ VOS_IMPLEMENT_CLASSINFO(VOS_CLASSNAME(OThreadData, vos),
 
 OThreadData::OThreadData( oslThreadKeyCallbackFunction pCallback )
 {
-    VOS_VERIFY(m_hKey = osl_createThreadKey( pCallback ));
+    m_hKey = osl_createThreadKey( pCallback );
+    VOS_VERIFY(m_hKey);
 }
 
 OThreadData::~OThreadData()
