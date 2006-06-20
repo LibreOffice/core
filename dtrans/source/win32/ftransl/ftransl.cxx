@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ftransl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:27:13 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 06:06:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,14 @@
 #include "..\misc\ImplHelper.hxx"
 #endif
 
+#if defined _MSC_VER
+#pragma warning(push,1)
+#pragma warning(disable:4917)
+#endif
 #include <shlobj.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 
 //------------------------------------------------------------------------
 // defines
