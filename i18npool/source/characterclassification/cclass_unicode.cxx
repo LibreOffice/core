@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cclass_unicode.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:04:48 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:43:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,13 +139,13 @@ cclass_Unicode::getScript( const OUString& Text, sal_Int32 nPos ) throw(RuntimeE
 
 
 sal_Int32 SAL_CALL
-cclass_Unicode::getCharacterType( const OUString& Text, sal_Int32 nPos, const Locale& rLocale ) throw(RuntimeException) {
+cclass_Unicode::getCharacterType( const OUString& Text, sal_Int32 nPos, const Locale& /*rLocale*/ ) throw(RuntimeException) {
     if ( Text.getLength() <= nPos ) return 0;
     return unicode::getCharType(Text[nPos]);
 }
 
 sal_Int32 SAL_CALL
-cclass_Unicode::getStringType( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount, const Locale& rLocale ) throw(RuntimeException) {
+cclass_Unicode::getStringType( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount, const Locale& /*rLocale*/ ) throw(RuntimeException) {
     if ( Text.getLength() <= nPos ) return 0;
 
     if ( Text.getLength() < nPos + nCount )
