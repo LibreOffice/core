@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FConnection.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 12:15:34 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:25:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,9 @@
 #ifndef _DBHELPER_DBCHARSET_HXX_
 #include <connectivity/dbcharset.hxx>
 #endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include <connectivity/dbexception.hxx>
+#endif
 #ifndef _OSL_THREAD_H_
 #include <osl/thread.h>
 #endif
@@ -110,9 +113,9 @@ typedef connectivity::OMetaConnection OConnection_BASE;
 // --------------------------------------------------------------------------------
 OConnection::OConnection(OFileDriver*   _pDriver)
                          : OSubComponent<OConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this)
+                         ,m_xMetaData(NULL)
                          ,m_pDriver(_pDriver)
                          ,m_bClosed(sal_False)
-                         ,m_xMetaData(NULL)
                          ,m_bShowDeleted(sal_False)
                          ,m_bCaseSensitiveExtension( sal_True )
                          ,m_bCheckSQL92(sal_False)
@@ -291,8 +294,9 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const ::
     return pStmt;
 }
 // --------------------------------------------------------------------------------
-Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const ::rtl::OUString& /*sql*/ ) throw(SQLException, RuntimeException)
 {
+    throwFeatureNotImplementedException( "XConnection::prepareCall", *this );
     return NULL;
 }
 // --------------------------------------------------------------------------------
@@ -366,8 +370,9 @@ sal_Bool SAL_CALL OConnection::isReadOnly(  ) throw(SQLException, RuntimeExcepti
     return m_bReadOnly;
 }
 // --------------------------------------------------------------------------------
-void SAL_CALL OConnection::setCatalog( const ::rtl::OUString& catalog ) throw(SQLException, RuntimeException)
+void SAL_CALL OConnection::setCatalog( const ::rtl::OUString& /*catalog*/ ) throw(SQLException, RuntimeException)
 {
+    throwFeatureNotImplementedException( "XConnection::setCatalog", *this );
 }
 // --------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OConnection::getCatalog(  ) throw(SQLException, RuntimeException)
@@ -375,8 +380,9 @@ void SAL_CALL OConnection::setCatalog( const ::rtl::OUString& catalog ) throw(SQ
     return ::rtl::OUString();
 }
 // --------------------------------------------------------------------------------
-void SAL_CALL OConnection::setTransactionIsolation( sal_Int32 level ) throw(SQLException, RuntimeException)
+void SAL_CALL OConnection::setTransactionIsolation( sal_Int32 /*level*/ ) throw(SQLException, RuntimeException)
 {
+    throwFeatureNotImplementedException( "XConnection::setTransactionIsolation", *this );
 }
 // --------------------------------------------------------------------------------
 sal_Int32 SAL_CALL OConnection::getTransactionIsolation(  ) throw(SQLException, RuntimeException)
@@ -389,7 +395,7 @@ Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OConnection::getT
     return NULL;
 }
 // --------------------------------------------------------------------------------
-void SAL_CALL OConnection::setTypeMap( const Reference< ::com::sun::star::container::XNameAccess >& typeMap ) throw(SQLException, RuntimeException)
+void SAL_CALL OConnection::setTypeMap( const Reference< ::com::sun::star::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException)
 {
 }
 // --------------------------------------------------------------------------------
@@ -472,9 +478,8 @@ void OConnection::disposing()
 sal_Int64 SAL_CALL OConnection::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw (::com::sun::star::uno::RuntimeException)
 {
     return (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
-        ?
-        (sal_Int64)this
-        : sal_Int64(0);
+        ? reinterpret_cast< sal_Int64 >( this )
+        : (sal_Int64)0;
 }
 // -----------------------------------------------------------------------------
 Sequence< sal_Int8 > OConnection::getUnoTunnelImplementationId()
