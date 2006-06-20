@@ -184,7 +184,8 @@ namespace agg
                     m_status = ctrl1;
                     return path_cmd_curve4;
                 }
-                break;
+                // statement unreachable
+                //break;
 
             case ctrl_b:
                 *x = m_ctrl2_x;

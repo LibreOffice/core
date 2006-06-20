@@ -179,7 +179,7 @@ namespace agg
             case end_poly:
                 if(!m_closed) return path_cmd_stop;
                 m_status = stop;
-                return path_cmd_end_poly | path_flags_close | path_flags_ccw;
+                return (unsigned)path_cmd_end_poly | (unsigned)path_flags_close | (unsigned)path_flags_ccw;
 
             case stop:
                 return path_cmd_stop;
