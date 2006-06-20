@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AResultSet.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:15:25 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 01:14:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -254,8 +254,9 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL OResultSet::getBinarySt
     return m_aValue.isNull() ? NULL : new ::comphelper::SequenceInputStream(m_aValue);
 }
 // -------------------------------------------------------------------------
-Reference< ::com::sun::star::io::XInputStream > SAL_CALL OResultSet::getCharacterStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Reference< ::com::sun::star::io::XInputStream > SAL_CALL OResultSet::getCharacterStream( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
+    ::dbtools::throwFeatureNotImplementedException( "XRow::getCharacterStream", *this );
     return NULL;
 }
 // -----------------------------------------------------------------------------
@@ -324,8 +325,9 @@ sal_Int32 SAL_CALL OResultSet::getRow(  ) throw(SQLException, RuntimeException)
 }
 // -------------------------------------------------------------------------
 
-sal_Int64 SAL_CALL OResultSet::getLong( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+sal_Int64 SAL_CALL OResultSet::getLong( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
+    ::dbtools::throwFeatureNotImplementedException( "XRow::getLong", *this );
     return sal_Int64(0);
 }
 // -------------------------------------------------------------------------
@@ -341,33 +343,38 @@ Reference< XResultSetMetaData > SAL_CALL OResultSet::getMetaData(  ) throw(SQLEx
     return m_xMetaData;
 }
 // -------------------------------------------------------------------------
-Reference< XArray > SAL_CALL OResultSet::getArray( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Reference< XArray > SAL_CALL OResultSet::getArray( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
+    ::dbtools::throwFeatureNotImplementedException( "XRow::getArray", *this );
     return NULL;
 }
 
 // -------------------------------------------------------------------------
 
-Reference< XClob > SAL_CALL OResultSet::getClob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Reference< XClob > SAL_CALL OResultSet::getClob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
+    ::dbtools::throwFeatureNotImplementedException( "XRow::getClob", *this );
     return NULL;
 }
 // -------------------------------------------------------------------------
-Reference< XBlob > SAL_CALL OResultSet::getBlob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Reference< XBlob > SAL_CALL OResultSet::getBlob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
-    return NULL;
-}
-// -------------------------------------------------------------------------
-
-Reference< XRef > SAL_CALL OResultSet::getRef( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
-{
+    ::dbtools::throwFeatureNotImplementedException( "XRow::getBlob", *this );
     return NULL;
 }
 // -------------------------------------------------------------------------
 
-Any SAL_CALL OResultSet::getObject( sal_Int32 columnIndex, const Reference< ::com::sun::star::container::XNameAccess >& typeMap ) throw(SQLException, RuntimeException)
+Reference< XRef > SAL_CALL OResultSet::getRef( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
+{
+    ::dbtools::throwFeatureNotImplementedException( "XRow::getRef", *this );
+    return NULL;
+}
+// -------------------------------------------------------------------------
+
+Any SAL_CALL OResultSet::getObject( sal_Int32 /*columnIndex*/, const Reference< ::com::sun::star::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException)
 {
 
+    ::dbtools::throwFeatureNotImplementedException( "XRow::getObject", *this );
     return Any();
 }
 // -------------------------------------------------------------------------
@@ -504,7 +511,8 @@ sal_Bool SAL_CALL OResultSet::absolute( sal_Int32 row ) throw(SQLException, Runt
     sal_Bool bCheck = sal_True;
     if(row < 0)
     {
-        if(bCheck = SUCCEEDED(m_pRecordSet->MoveLast()))
+        bCheck = SUCCEEDED(m_pRecordSet->MoveLast());
+        if ( bCheck )
         {
             while(++row < 0 && bCheck)
                 bCheck = SUCCEEDED(m_pRecordSet->MovePrevious());
@@ -815,14 +823,14 @@ void SAL_CALL OResultSet::updateTimestamp( sal_Int32 columnIndex, const ::com::s
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OResultSet::updateBinaryStream( sal_Int32 columnIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
+void SAL_CALL OResultSet::updateBinaryStream( sal_Int32 /*columnIndex*/, const Reference< ::com::sun::star::io::XInputStream >& /*x*/, sal_Int32 /*length*/ ) throw(SQLException, RuntimeException)
 {
-
+    ::dbtools::throwFeatureNotImplementedException( "XRowUpdate::updateBinaryStream", *this );
 }
 // -------------------------------------------------------------------------
-void SAL_CALL OResultSet::updateCharacterStream( sal_Int32 columnIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
+void SAL_CALL OResultSet::updateCharacterStream( sal_Int32 /*columnIndex*/, const Reference< ::com::sun::star::io::XInputStream >& /*x*/, sal_Int32 /*length*/ ) throw(SQLException, RuntimeException)
 {
-
+    ::dbtools::throwFeatureNotImplementedException( "XRowUpdate::updateCharacterStream", *this );
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::refreshRow(  ) throw(SQLException, RuntimeException)
@@ -841,7 +849,7 @@ void SAL_CALL OResultSet::updateObject( sal_Int32 columnIndex, const Any& x ) th
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OResultSet::updateNumericObject( sal_Int32 columnIndex, const Any& x, sal_Int32 scale ) throw(SQLException, RuntimeException)
+void SAL_CALL OResultSet::updateNumericObject( sal_Int32 columnIndex, const Any& x, sal_Int32 /*scale*/ ) throw(SQLException, RuntimeException)
 {
     if (!::dbtools::implUpdateObject(this, columnIndex, x))
         throw SQLException();
@@ -897,7 +905,6 @@ sal_Int32 SAL_CALL OResultSet::compareBookmarks( const Any& first, const Any& se
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
 
     sal_Int32 nPos1;
     first >>= nPos1;
@@ -1060,8 +1067,9 @@ sal_Int32 OResultSet::getFetchSize() const
 }
 
 //------------------------------------------------------------------------------
-void OResultSet::setFetchDirection(sal_Int32 _par0)
+void OResultSet::setFetchDirection(sal_Int32 /*_par0*/)
 {
+    ::dbtools::throwFeatureNotImplementedException( "ResultSet::FetchDirection", *this );
 }
 //------------------------------------------------------------------------------
 void OResultSet::setFetchSize(sal_Int32 _par0)
