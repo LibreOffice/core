@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tdoc_content.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:58:36 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 05:31:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -399,7 +399,7 @@ Content::getIdentifier()
 // virtual
 uno::Any SAL_CALL Content::execute(
         const star::ucb::Command& aCommand,
-        sal_Int32 CommandId,
+        sal_Int32 /*CommandId*/,
         const uno::Reference< star::ucb::XCommandEnvironment >& Environment )
     throw( uno::Exception,
            star::ucb::CommandAbortedException,
@@ -679,7 +679,7 @@ uno::Any SAL_CALL Content::execute(
 
 //=========================================================================
 // virtual
-void SAL_CALL Content::abort( sal_Int32 CommandId )
+void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ )
     throw( uno::RuntimeException )
 {
 }
@@ -861,9 +861,9 @@ void Content::queryChildren( ContentRefList& rChildren )
     m_xProvider->queryExistingContents( aAllContents );
 
     rtl::OUString aURL = m_xIdentifier->getContentIdentifier();
-    sal_Int32 nPos = aURL.lastIndexOf( '/' );
+    sal_Int32 nURLPos = aURL.lastIndexOf( '/' );
 
-    if ( nPos != ( aURL.getLength() - 1 ) )
+    if ( nURLPos != ( aURL.getLength() - 1 ) )
     {
         // No trailing slash found. Append.
         aURL += rtl::OUString::createFromAscii( "/" );
