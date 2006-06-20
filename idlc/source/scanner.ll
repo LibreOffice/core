@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scanner.ll,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:13:18 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:50:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,9 @@
 /*
  * scanner.ll - Lexical scanner for IDLC 1.0
  */
+
 #include <ctype.h>
+#include <stdlib.h>
 #include <string.h>
 
 #ifndef _IDLC_IDLC_HXX_
@@ -61,41 +63,94 @@ class AstMember;
 sal_Int32		beginLine = 0;
 ::rtl::OString	docu;
 
-static sal_Int64 asciiToInteger( sal_Int8 base, const sal_Char *s )
-{
-	sal_Int64    r = 0;
-	sal_Int64    negative = 0;
-
-	if (*s == '-')
-   	{
-    	negative = 1;
-      	s++;
-   	}
-   	if (base == 8 && *s == '0')
-		s++;
-   	else if (base == 16 && *s == '0' && (*(s + 1) == 'x' || *(s + 1) == 'X'))
-    	s += 2;
-
-   	for (; *s; s++)
-   	{
-   		if (*s <= '9' && *s >= '0')
-        	r = (r * base) + (*s - '0');
-      	else if (base > 10 && *s <= 'f' && *s >= 'a')
-        	r = (r * base) + (*s - 'a' + 10);
-      	else if (base > 10 && *s <= 'F' && *s >= 'A')
-        	r = (r * base) + (*s - 'A' + 10);
-       	else
-        	break;
-	}
-   	if (negative) r *= -1;
-	return r;
+static int asciiToInteger(char const * s, sal_Int64  * sval, sal_uInt64 * uval) {
+    bool neg = false;
+    if (*s == '-') {
+        neg = true;
+        ++s;
+    }
+    unsigned int base = 10;
+    if (*s == '0') {
+        base = 8;
+        ++s;
+        if (*s == 'X' || *s == 'x') {
+            base = 16;
+            ++s;
+        }
+    }
+    sal_uInt64 val = 0;
+    for (; *s != 0; ++s) {
+        unsigned int n;
+        if (*s >= '0' && *s <= '9') {
+            n = *s - '0';
+        } else {
+            switch (*s) {
+            case 'A':
+            case 'a':
+                n = 10;
+                break;
+            case 'B':
+            case 'b':
+                n = 11;
+                break;
+            case 'C':
+            case 'c':
+                n = 12;
+                break;
+            case 'D':
+            case 'd':
+                n = 13;
+                break;
+            case 'E':
+            case 'e':
+                n = 14;
+                break;
+            case 'F':
+            case 'f':
+                n = 15;
+                break;
+            default:
+                goto done;
+            }
+        }
+        // The following guarantees the invariant val <= SAL_MAX_UINT64 (because
+        // base and n are sufficiently small), *if*
+        // std::numeric_limits<sal_uInt64>::max() == SAL_MAX_UINT64:
+        sal_uInt64 nval = val * base + n;
+        if (nval < val) {
+            idlc()->error()->syntaxError(
+                PS_NoState, idlc()->getLineNumber(),
+                "integral constant too large");
+            val = 0;
+            break;
+        }
+        val = nval;
+    }
+ done:
+    if (neg) {
+        if (val < SAL_CONST_UINT64(0x8000000000000000)) {
+            *sval = -static_cast< sal_Int64 >(val);
+        } else if (val == SAL_CONST_UINT64(0x8000000000000000)) {
+            *sval = SAL_MIN_INT64;
+        } else {
+            idlc()->error()->syntaxError(
+                PS_NoState, idlc()->getLineNumber(),
+                "negative integral constant too large");
+            *sval = 0;
+        }
+        return IDL_INTEGER_LITERAL;
+    } else if (val <= static_cast< sal_uInt64 >(SAL_MAX_INT64)) {
+        *sval = static_cast< sal_Int64 >(val);
+        return IDL_INTEGER_LITERAL;
+    } else {
+        *uval = val;
+        return IDL_INTEGER_ULITERAL;
+    }
 }
 
 static double asciiToFloat(const sal_Char *s)
 {
-	sal_Char    *h = (sal_Char*)s;
    	double  	d = 0.0;
-   	double  	f = 0.0;
    	double  	e, k;
    	sal_Int32  	neg = 0, negexp = 0;
 
@@ -177,7 +232,7 @@ static void parseLineAndFile(sal_Char* pBuf)
 	h = r;
 	for (; *r != '\0' && *r != ' ' && *r != '\t'; r++);
 	*r++ = 0;
-	idlc()->setLineNumber((sal_uInt32)asciiToInteger(10, h));
+	idlc()->setLineNumber((sal_uInt32)atol(h));
 
 	/* Find file name, if present */
 	for (; *r != '"'; r++)
@@ -197,6 +252,14 @@ static void parseLineAndFile(sal_Char* pBuf)
 	idlc()->setInMainfile(bIsInMain);		
 }	
 
+// Suppress any warnings from generated code:
+#if defined __GNUC__
+#pragma GCC system_header
+#elif defined __SUNPRO_CC
+#pragma disable_warn
+#elif defined _MSC_VER
+#pragma warning(push, 1)
+#endif
 %}
 
 %option noyywrap
@@ -286,18 +349,15 @@ published       return IDL_PUBLISHED;
 "..."           return IDL_ELLIPSIS;
 
 ("-")?{INT_LITERAL}+(l|L|u|U)?    {
-            	yylval.ival = asciiToInteger( 10, yytext );
-				return IDL_INTEGER_LITERAL;
+            	return asciiToInteger(yytext, &yylval.ival, &yylval.uval);
             }
 
 ("-")?{OCT_LITERAL}+(l|L|u|U)?    {
-            	yylval.ival = asciiToInteger( 8, yytext+1 );
-				return IDL_INTEGER_LITERAL;
+            	return asciiToInteger(yytext, &yylval.ival, &yylval.uval);
             }
 
 ("-")?{HEX_LITERAL}+(l|L|u|U)?    {
-            	yylval.ival = asciiToInteger( 16, yytext+2 );
-				return IDL_INTEGER_LITERAL;
+            	return asciiToInteger(yytext, &yylval.ival, &yylval.uval);
             }
 
 ("-")?{DIGIT}+(e|E){1}(("+"|"-")?{DIGIT}+)+(f|F)?	|
