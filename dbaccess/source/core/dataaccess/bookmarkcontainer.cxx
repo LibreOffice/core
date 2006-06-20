@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bookmarkcontainer.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 10:36:33 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 02:43:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,8 +87,8 @@ namespace dbaccess
 DBG_NAME(OBookmarkContainer)
 //--------------------------------------------------------------------------
 OBookmarkContainer::OBookmarkContainer(OWeakObject& _rParent, Mutex& _rMutex)
-    :m_aContainerListeners(_rMutex)
-    ,m_rParent(_rParent)
+    :m_rParent(_rParent)
+    ,m_aContainerListeners(_rMutex)
     ,m_rMutex(_rMutex)
 {
     DBG_CTOR(OBookmarkContainer, NULL);
@@ -411,7 +411,7 @@ void OBookmarkContainer::implReplace(const ::rtl::OUString& _rName, const ::rtl:
 }
 
 //--------------------------------------------------------------------------
-void OBookmarkContainer::checkValid(sal_Bool _bIntendWriteAccess) const throw (RuntimeException, DisposedException)
+void OBookmarkContainer::checkValid(sal_Bool /*_bIntendWriteAccess*/) const throw (RuntimeException, DisposedException)
 {
 }
 
@@ -422,7 +422,7 @@ Reference< XInterface > SAL_CALL OBookmarkContainer::getParent(  ) throw (Runtim
 }
 
 //--------------------------------------------------------------------------
-void SAL_CALL OBookmarkContainer::setParent( const Reference< XInterface >& Parent ) throw (NoSupportException, RuntimeException)
+void SAL_CALL OBookmarkContainer::setParent( const Reference< XInterface >& /*Parent*/ ) throw (NoSupportException, RuntimeException)
 {
     throw NoSupportException();
 }
