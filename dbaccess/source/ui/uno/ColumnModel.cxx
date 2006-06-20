@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ColumnModel.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:46:54 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:34:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,9 @@
 #ifndef _COM_SUN_STAR_AWT_FONTEMPHASISMARK_HPP_
 #include <com/sun/star/awt/FontEmphasisMark.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
 
 #ifndef _CPPUHELPER_QUERYINTERFACE_HXX_
 #include <cppuhelper/queryinterface.hxx>
@@ -60,9 +63,6 @@
 #endif
 #ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
-#endif
-#ifndef _CONNECTIVITY_SDBCX_COLUMN_HXX_
-#include <connectivity/sdbcx/VColumn.hxx>
 #endif
 
 extern "C" void SAL_CALL createRegistryInfo_OColumnControlModel()
@@ -87,27 +87,27 @@ using namespace ::com::sun::star::util;
 DBG_NAME(OColumnControlModel)
 //------------------------------------------------------------------
 OColumnControlModel::OColumnControlModel(const Reference<XMultiServiceFactory>& _rxFactory)
-                    :OColumnControlModel_BASE(m_aMutex)
-                    ,OPropertyContainer(m_aBHelper)
-                    ,m_sDefaultControl(SERVICE_CONTROLDEFAULT)
-                    ,m_nBorder(0)
-                    ,m_nWidth(50)
-                    ,m_bEnable(sal_True)
-                    ,m_xORB(_rxFactory)
+    :OPropertyContainer(m_aBHelper)
+    ,OColumnControlModel_BASE(m_aMutex)
+    ,m_xORB(_rxFactory)
+    ,m_sDefaultControl(SERVICE_CONTROLDEFAULT)
+    ,m_bEnable(sal_True)
+    ,m_nBorder(0)
+    ,m_nWidth(50)
 {
     DBG_CTOR(OColumnControlModel,NULL);
     registerProperties();
 }
 // -----------------------------------------------------------------------------
 OColumnControlModel::OColumnControlModel(const OColumnControlModel* _pSource,const Reference<XMultiServiceFactory>& _rxFactory)
-                    :OColumnControlModel_BASE(m_aMutex)
-                    ,OPropertyContainer(m_aBHelper)
-                    ,m_sDefaultControl(_pSource->m_sDefaultControl)
-                    ,m_nBorder(_pSource->m_nBorder)
-                    ,m_bEnable(_pSource->m_bEnable)
-                    ,m_aTabStop(_pSource->m_aTabStop)
-                    ,m_xORB(_rxFactory)
-                    ,m_nWidth(50)
+    :OPropertyContainer(m_aBHelper)
+    ,OColumnControlModel_BASE(m_aMutex)
+    ,m_xORB(_rxFactory)
+    ,m_sDefaultControl(_pSource->m_sDefaultControl)
+    ,m_aTabStop(_pSource->m_aTabStop)
+    ,m_bEnable(_pSource->m_bEnable)
+    ,m_nBorder(_pSource->m_nBorder)
+    ,m_nWidth(50)
 {
     DBG_CTOR(OColumnControlModel,NULL);
     registerProperties();
@@ -176,13 +176,13 @@ Any SAL_CALL OColumnControlModel::queryAggregation( const Type& rType ) throw(Ru
     return ::rtl::OUString();
 }
 //------------------------------------------------------------------------------
-void OColumnControlModel::write(const Reference<XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, RuntimeException)
+void OColumnControlModel::write(const Reference<XObjectOutputStream>& /*_rxOutStream*/) throw ( ::com::sun::star::io::IOException, RuntimeException)
 {
     // TODO
 }
 
 //------------------------------------------------------------------------------
-void OColumnControlModel::read(const Reference<XObjectInputStream>& _rxInStream) throw ( ::com::sun::star::io::IOException, RuntimeException)
+void OColumnControlModel::read(const Reference<XObjectInputStream>& /*_rxInStream*/) throw ( ::com::sun::star::io::IOException, RuntimeException)
 {
     // TODO
 }
