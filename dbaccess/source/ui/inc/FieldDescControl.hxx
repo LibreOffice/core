@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FieldDescControl.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:33:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:11:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,10 +130,9 @@ namespace dbaui
         ScrollBar*              m_pVertScroll;
         ScrollBar*              m_pHorzScroll;
 
-        TOTypeInfoSP        m_pPreviousType;
+        TOTypeInfoSP            m_pPreviousType;
         USHORT                  nCurChildId;
         short                   m_nPos;
-        short                   nOldDefaultPos;
         XubString               aYes;
         XubString               aNo;
 
@@ -143,6 +142,9 @@ namespace dbaui
 
         ULONG                   nDelayedGrabFocusEvent;
         sal_Bool                m_bAdded;
+        bool                    m_bRightAligned;
+
+        OFieldDescription*      pActFieldDescr;
 
         DECL_LINK( OnScroll, ScrollBar*);
 
@@ -163,9 +165,14 @@ namespace dbaui
         void                ScrollAllAggregates();
 
         sal_Bool            isTextFormat(const OFieldDescription* _pFieldDescr,sal_uInt32& _nFormatKey) const;
+
     protected:
-        OFieldDescription*      pActFieldDescr; // falls geloescht werden soll
-        sal_Bool                m_bRight;
+        inline  void    setRightAligned()       { m_bRightAligned = true; }
+        inline  bool    isRightAligned() const  { return m_bRightAligned; }
+
+        inline  void                saveCurrentFieldDescData() { SaveData( pActFieldDescr ); }
+        inline  OFieldDescription*  getCurrentFieldDescData() { return pActFieldDescr; }
+        inline  void                setCurrentFieldDescData( OFieldDescription* _pDesc ) { pActFieldDescr = _pDesc; }
 
         USHORT              CountActiveAggregates() const;
 
@@ -179,7 +186,7 @@ namespace dbaui
         virtual ::com::sun::star::lang::Locale  GetLocale() const = 0;
 
         virtual void                            CellModified(long nRow, USHORT nColId ) = 0;
-        virtual void                            SetModified(BOOL bModified)             = 0;
+        virtual void                            SetModified(BOOL bModified);    // base implementation is empty
 
         virtual TOTypeInfoSP                    getTypeInfo(sal_Int32 _nPos)        = 0;
         virtual const OTypeInfoMap*             getTypeInfo() const  = 0;
