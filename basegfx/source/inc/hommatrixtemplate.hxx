@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hommatrixtemplate.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:41:51 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:43:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@ namespace basegfx
             return 0.0;
         }
 
-        template < int _RowSize > class ImplMatLine
+        template < unsigned int _RowSize > class ImplMatLine
         {
             enum { RowSize = _RowSize };
 
@@ -92,7 +92,7 @@ namespace basegfx
             }
         };
 
-        template < int _RowSize > class ImplHomMatrixTemplate
+        template < unsigned int _RowSize > class ImplHomMatrixTemplate
         {
             enum { RowSize = _RowSize };
 
@@ -390,7 +390,8 @@ namespace basegfx
             bool isIdentity() const
             {
                 // last line needs no testing if not existing
-                const sal_uInt16 nMaxLine = (mpLine) ? RowSize : (RowSize - 1);
+                const sal_uInt16 nMaxLine(
+                    sal::static_int_cast<sal_uInt16>(mpLine ? RowSize : (RowSize - 1)) );
 
                 for(sal_uInt16 a(0); a < nMaxLine; a++)
                 {
@@ -498,7 +499,8 @@ namespace basegfx
                     fRetval = (double)nParity;
 
                     // last line needs no multiply if not existing; default value would be 1.
-                    const sal_uInt16 nMaxLine = (aWork.mpLine) ? RowSize : (RowSize - 1);
+                    const sal_uInt16 nMaxLine(
+                        sal::static_int_cast<sal_uInt16>(aWork.mpLine ? RowSize : (RowSize - 1)) );
 
                     for(sal_uInt16 a(0); a < nMaxLine; a++)
                     {
@@ -512,7 +514,8 @@ namespace basegfx
             double doTrace() const
             {
                 double fTrace = (mpLine) ? 0.0 : 1.0;
-                const sal_uInt16 nMaxLine = (mpLine) ? RowSize : (RowSize - 1);
+                const sal_uInt16 nMaxLine(
+                    sal::static_int_cast<sal_uInt16>(mpLine ? RowSize : (RowSize - 1)) );
 
                 for(sal_uInt16 a(0); a < nMaxLine; a++)
                 {
@@ -603,7 +606,8 @@ namespace basegfx
 
             bool isEqual(const ImplHomMatrixTemplate& rMat)
             {
-                const sal_uInt16 nMaxLine = (mpLine || rMat.mpLine) ? RowSize : (RowSize - 1);
+                const sal_uInt16 nMaxLine(
+                    sal::static_int_cast<sal_uInt16>((mpLine || rMat.mpLine) ? RowSize : (RowSize - 1)) );
 
                 for(sal_uInt16 a(0); a < nMaxLine; a++)
                 {
