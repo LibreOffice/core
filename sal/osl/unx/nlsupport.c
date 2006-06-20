@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nlsupport.c,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-06 11:54:02 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:18:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,7 +126,7 @@ static char * _compose_locale( rtl_Locale * pLocale, char * buffer, size_t n )
                 pLocale->Language->buffer, pLocale->Language->length,
                 RTL_TEXTENCODING_ASCII_US, OUSTRING_TO_OSTRING_CVTFLAGS );
 
-            if( pLanguage->length < n )
+            if( SAL_INT_CAST(sal_uInt32, pLanguage->length) < n )
             {
                 strcpy( buffer, pLanguage->buffer );
                 offset = pLanguage->length;
@@ -156,7 +156,7 @@ static char * _compose_locale( rtl_Locale * pLocale, char * buffer, size_t n )
 
         /* convert variant to ascii - check if there is enough space for the variant string */
         if( pLocale->Variant && pLocale->Variant->length &&
-            ( pLocale->Variant->length < n - 6 ) )
+            ( SAL_INT_CAST(sal_uInt32, pLocale->Variant->length) < n - 6 ) )
         {
             rtl_String *pVariant = NULL;
 
@@ -200,6 +200,8 @@ static rtl_Locale * _parse_locale( const char * locale )
 
             size_t offset = 2;
 
+            rtl_Locale * ret;
+
             /* convert language code to unicode */
             rtl_string2UString( &pLanguage, locale, 2, RTL_TEXTENCODING_ASCII_US, OSTRING_TO_OUSTRING_CVTFLAGS );
             OSL_ASSERT(pLanguage != NULL);
@@ -218,7 +220,7 @@ static rtl_Locale * _parse_locale( const char * locale )
                 OSL_ASSERT(pVariant != NULL);
             }
 
-            rtl_Locale * ret =  rtl_locale_register( pLanguage->buffer, pCountry ? pCountry->buffer : c_locale + 1, pVariant ? pVariant->buffer : c_locale + 1 );
+            ret =  rtl_locale_register( pLanguage->buffer, pCountry ? pCountry->buffer : c_locale + 1, pVariant ? pVariant->buffer : c_locale + 1 );
 
             if (pVariant) rtl_uString_release(pVariant);
             if (pCountry) rtl_uString_release(pCountry);
