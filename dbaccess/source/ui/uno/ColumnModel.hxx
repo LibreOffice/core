@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ColumnModel.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:47:08 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:34:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ColumnControl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:46:19 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 03:34:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,7 @@ IMPLEMENT_SERVICE_INFO2_STATIC(OColumnControl,SERVICE_CONTROLDEFAULT,"com.sun.st
     return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.ColumnDescriptorControl"));
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OColumnControl::createPeer(const Reference< XToolkit >& rToolkit, const Reference< XWindowPeer >& rParentPeer) throw( RuntimeException )
+void SAL_CALL OColumnControl::createPeer(const Reference< XToolkit >& /*rToolkit*/, const Reference< XWindowPeer >& rParentPeer) throw( RuntimeException )
 {
     ::osl::ClearableMutexGuard aGuard( GetMutex() );
     if ( !getPeer().is() )
@@ -97,7 +97,6 @@ void SAL_CALL OColumnControl::createPeer(const Reference< XToolkit >& rToolkit, 
         setPeer( pPeer );
 
         UnoControlComponentInfos aComponentInfos(maComponentInfos);
-        sal_Bool bDesignMode(mbDesignMode);
         Reference< XGraphics > xGraphics( mxGraphics );
         Reference< XView >  xV(getPeer(), UNO_QUERY);
         Reference< XWindow >    xW(getPeer(), UNO_QUERY);
