@@ -4,9 +4,9 @@
  *
  *  $RCSfile: object.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2006-06-02 12:42:35 $
+ *  last change: $Author: hr $ $Date: 2006-06-20 04:06:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,11 +33,6 @@
  *
  ************************************************************************/
 
-
-#if defined(WIN32) || defined(WIN16)
-#include <windows.h>
-#endif
-
 #include <string.h>
 
 #include <rtl/alloc.h>
@@ -58,7 +53,7 @@ OObject::OObject()
 {
 }
 
-OObject::OObject(const OCreateParam& rParam)
+OObject::OObject(const OCreateParam&)
 {
 }
 
@@ -75,7 +70,7 @@ void* OObject::operator new(size_t size)
    return (p);
 }
 
-void* OObject::operator new(size_t size, void* p)
+void* OObject::operator new(size_t, void* p)
 {
    return (p);
 }
