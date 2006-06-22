@@ -4,9 +4,9 @@
  *
  *  $RCSfile: kdeinetlayer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2006-06-02 12:25:52 $
+ *  last change: $Author: hr $ $Date: 2006-06-22 10:14:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,8 +91,6 @@ void SAL_CALL KDEInetLayer::readData( const uno::Reference<backend::XLayerHandle
 
     uno::Sequence<backend::PropertyInfo> aPropInfoList(6);
     sal_Int32 nProperties = 0;
-
-    KProtocolManager::ProxyType aProxyType = KProtocolManager::proxyType();
 
     switch ( KProtocolManager::proxyType() )
     {

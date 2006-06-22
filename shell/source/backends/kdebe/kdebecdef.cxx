@@ -4,9 +4,9 @@
  *
  *  $RCSfile: kdebecdef.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2006-06-02 12:25:05 $
+ *  last change: $Author: hr $ $Date: 2006-06-22 10:13:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,19 +93,19 @@ static const cppu::ImplementationEntry kImplementations_entries[] =
         NULL,
         0
     },
-    { NULL }
+    { NULL, NULL, NULL, NULL, NULL, 0 }
 } ;
 //------------------------------------------------------------------------------
 
 extern "C" void SAL_CALL component_getImplementationEnvironment(
                                             const sal_Char **aEnvTypeName,
-                                            uno_Environment **aEnvironment) {
+                                            uno_Environment **) {
     *aEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;
 }
 
 //------------------------------------------------------------------------------
 
-extern "C" sal_Bool SAL_CALL component_writeInfo(void *pServiceManager,
+extern "C" sal_Bool SAL_CALL component_writeInfo(void *,
                                                  void *pRegistryKey) {
 
     using namespace ::com::sun::star::registry;

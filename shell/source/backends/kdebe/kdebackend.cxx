@@ -4,9 +4,9 @@
  *
  *  $RCSfile: kdebackend.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2006-06-02 12:24:08 $
+ *  last change: $Author: hr $ $Date: 2006-06-22 10:14:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,7 @@ KDEBackend::~KDEBackend(void)
 //------------------------------------------------------------------------------
 
 uno::Reference<backend::XLayer> SAL_CALL KDEBackend::getLayer(
-    const rtl::OUString& aComponent, const rtl::OUString& aTimestamp)
+    const rtl::OUString& aComponent, const rtl::OUString& /* aTimestamp */)
     throw (backend::BackendAccessException, lang::IllegalArgumentException)
 {
     uno::Reference<backend::XLayer> xLayer;
@@ -100,7 +100,7 @@ uno::Reference<backend::XLayer> SAL_CALL KDEBackend::getLayer(
 //------------------------------------------------------------------------------
 
 uno::Reference<backend::XUpdatableLayer> SAL_CALL
-KDEBackend::getUpdatableLayer(const rtl::OUString& aComponent)
+KDEBackend::getUpdatableLayer(const rtl::OUString& /* aComponent */)
     throw (backend::BackendAccessException,lang::NoSupportException,
            lang::IllegalArgumentException)
 {
