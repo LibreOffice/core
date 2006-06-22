@@ -1811,11 +1811,6 @@ ULONG FreetypeServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
             USHORT nCoverage   = NEXT_U16( pBuffer );
             /*USHORT nTupleIndex =*/ NEXT_U16( pBuffer );
 
-            // Get kerning type
-            sal_Bool bKernVertical     = nCoverage & 0x8000;
-            sal_Bool bKernCrossStream  = nCoverage & 0x4000;
-            sal_Bool bKernVariation    = nCoverage & 0x2000;
-
             // Kerning sub-table format, 0 through 3
             sal_uInt8 nSubTableFormat  = nCoverage & 0x00FF;
 
