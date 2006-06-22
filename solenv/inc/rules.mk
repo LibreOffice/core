@@ -4,9 +4,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.66 $
+#   $Revision: 1.67 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-19 17:12:28 $
+#   last change: $Author: hr $ $Date: 2006-06-22 13:45:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -89,8 +89,7 @@ $(SLO)$/%.obj : %.cxx
 .ELSE
     @$(RM) $@ $(@:s/.obj/.o/)
     $(CAPTURE_COMMAND) $(CXX) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSCXXSLO) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(SLO)$/$*.o $(CFLAGSINCXX)$(PWD)$/$*.cxx $(CAPTURE_OUTPUT)
-.IF "$(OS)"=="SOLARIS" && "$(product)"=="full" && "$(debug)"=="" && \
-        "$(CAPTURE_COMMAND)"==""
+.IF "$(OS)"=="SOLARIS" && "$(product)"=="full" && "$(debug)"=="" && "$(CAPTURE_COMMAND)"==""
     $(ADJUSTVISIBILITY) -p $(@:s/.obj/.o/)
 .ENDIF          # "$(OS)"=="SOLARIS" && "$(product)"=="full" && "$(debug)"==""    
     +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
