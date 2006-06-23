@@ -4,9 +4,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 20:01:05 $
+ *  last change: $Author: obo $ $Date: 2006-06-23 11:35:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1367,8 +1367,8 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
     mpVisualAttrs   = new SCRIPT_VISATTR[ mnGlyphCapacity ];
 
     long nXOffset = 0;
-    for( int i = mnSubStringMin; i < nSubStringEnd; ++i )
-        mpCharWidths[i] = 0;
+    for( int j = mnSubStringMin; j < nSubStringEnd; ++j )
+        mpCharWidths[j] = 0;
 
     // layout script items
     SCRIPT_CACHE& rScriptCache = GetScriptCache();
