@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xml2utf.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 12:05:22 $
+ *  last change: $Author: rt $ $Date: 2006-06-26 09:42:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,24 +78,26 @@ sal_Int32 XMLFile2UTFConverter::readAndConvert( Sequence<sal_Int8> &seq , sal_In
                 // ensure that enough data is available to parse encoding
                 if( seqStart.getLength() )
                 {
-                    seq.realloc( seqStart.getLength() + seq.getLength() );
-                    memcpy( (sal_Int8*)seq.getConstArray() + seqStart.getLength() ,
-                            seq.getConstArray() ,
-                            seq.getLength() );
-                    memcpy( (sal_Int8*)seq.getConstArray() ,
-                            seqStart.getConstArray(),
-                            seqStart.getLength() );
+                  // prefix with what we had so far.
+                  sal_Int32 nLength = seq.getLength();
+                  seq.realloc( seqStart.getLength() + nLength );
+
+                  memmove (seq.getArray() + seqStart.getLength(),
+                       seq.getConstArray(),
+                       nLength);
+                  memcpy  (seq.getArray(),
+                       seqStart.getConstArray(),
+                       seqStart.getLength());
                 }
 
                 // autodetection with the first bytes
                 if( ! isEncodingRecognizable( seq ) )
                 {
-                    seqStart.realloc( seqStart.getLength() + seq.getLength() );
-                    memcpy( (sal_Int8*)seqStart.getConstArray() + seqStart.getLength(),
-                            seq.getConstArray(),
-                            seq.getLength());
-                    // read more !
-                    continue;
+                  // remember what we have so far.
+                  seqStart = seq;
+
+                  // read more !
+                  continue;
                 }
                 if( scanForEncoding( seq ) || m_sEncoding.getLength() ) {
                     // initialize decoding
@@ -291,7 +293,7 @@ sal_Bool XMLFile2UTFConverter::scanForEncoding( Sequence< sal_Int8 > &seq )
 
         // simply add the byte order mark !
         seq.realloc( seq.getLength() + 2 );
-        memmove( &( seq.getArray()[2] ) , seq.getArray() , seq.getLength() );
+        memmove( &( seq.getArray()[2] ) , seq.getArray() , seq.getLength() - 2 );
         ((sal_uInt8*)seq.getArray())[0] = 0xFE;
         ((sal_uInt8*)seq.getArray())[1] = 0xFF;
 
@@ -302,7 +304,7 @@ sal_Bool XMLFile2UTFConverter::scanForEncoding( Sequence< sal_Int8 > &seq )
         // The byte order mark is simply added
 
         seq.realloc( seq.getLength() + 2 );
-        memmove( &( seq.getArray()[2] ) , seq.getArray() , seq.getLength() );
+        memmove( &( seq.getArray()[2] ) , seq.getArray() , seq.getLength() - 2 );
         ((sal_uInt8*)seq.getArray())[0] = 0xFF;
         ((sal_uInt8*)seq.getArray())[1] = 0xFE;
 
@@ -511,9 +513,7 @@ Sequence<sal_Int8> Unicode2TextConverter::convert(const sal_Unicode *puSource , 
         // In general when surrogates are used, they should be rarely
         // cut off between two convert()-calls. So this code is used
         // rarely and the extra copy is acceptable.
-        nSourceSize += m_seqSource.getLength();
-
-        puTempMem = new sal_Unicode[ nSourceSize ];
+        puTempMem = new sal_Unicode[ nSourceSize + m_seqSource.getLength()];
         memcpy( puTempMem ,
                 m_seqSource.getConstArray() ,
                 m_seqSource.getLength() * sizeof( sal_Unicode ) );
@@ -522,6 +522,7 @@ Sequence<sal_Int8> Unicode2TextConverter::convert(const sal_Unicode *puSource , 
             puSource ,
             nSourceSize*sizeof( sal_Unicode ) );
         puSource = puTempMem;
+        nSourceSize += m_seqSource.getLength();
 
         m_seqSource = Sequence< sal_Unicode > ();
     }
