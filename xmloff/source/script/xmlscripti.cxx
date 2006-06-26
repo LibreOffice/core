@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlscripti.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:21:30 $
+ *  last change: $Author: rt $ $Date: 2006-06-26 09:55:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,7 +156,18 @@ SvXMLImportContext* XMLScriptContext::CreateChildContext(
             if ( xAttrList.is() )
             {
                 ::rtl::OUString aLanguage = xAttrList->getValueByName( aAttrName );
-                pContext = new XMLScriptChildContext( GetImport(), nPrefix, rLName, m_xModel, aLanguage );
+
+                if ( m_xModel.is() )
+                {
+                    uno::Sequence< beans::PropertyValue > aMedDescr = m_xModel->getArgs();
+                    sal_Int32 nNewLen = aMedDescr.getLength() + 1;
+                    aMedDescr.realloc( nNewLen );
+                    aMedDescr[nNewLen-1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BreakMacroSignature" ) );
+                    aMedDescr[nNewLen-1].Value <<= (sal_Bool)sal_True;
+                    m_xModel->attachResource( m_xModel->getURL(), aMedDescr );
+
+                    pContext = new XMLScriptChildContext( GetImport(), nPrefix, rLName, m_xModel, aLanguage );
+                }
             }
         }
     }

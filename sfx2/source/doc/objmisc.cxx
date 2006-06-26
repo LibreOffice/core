@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:29:37 $
+ *  last change: $Author: rt $ $Date: 2006-06-26 09:52:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1040,6 +1040,12 @@ sal_Bool SfxObjectShell::IsAutoLoadLocked() const
 }
 
 //-------------------------------------------------------------------------
+void SfxObjectShell::BreakMacroSign_Impl( sal_Bool bBreakMacroSign )
+{
+    pImp->m_bMacroSignBroken = bBreakMacroSign;
+}
+
+//-------------------------------------------------------------------------
 void SfxObjectShell::CheckMacrosOnLoading_Impl()
 {
     const SfxFilter* pFilter = pMedium->GetFilter();
@@ -1054,40 +1060,27 @@ void SfxObjectShell::CheckMacrosOnLoading_Impl()
         pImp->bMacroDisabled = sal_True;
         pImp->nMacroMode = MacroExecMode::NEVER_EXECUTE;
     }
-    else if ( bHasStorage && ( !pFilter || !( pFilter->GetFilterFlags() & SFX_FILTER_STARONEFILTER ) ) )
-    {
-        uno::Reference< embed::XStorage > xStorage = pMedium->GetStorage();
-        if ( xStorage.is() )
-        {
-            BOOL bHasMacros = StorageHasMacros( xStorage );
-
-            if ( bHasMacros )
-            {
-                AdjustMacroMode( String() ); // if macros are disabled the message will be shown here
-                if ( SvtSecurityOptions().GetMacroSecurityLevel() > 2
-                    && MacroExecMode::NEVER_EXECUTE == pImp->nMacroMode )
-                {
-                    WarningBox aBox( NULL, SfxResId( MSG_WARNING_MACRO_ISDISABLED ) );
-                    aBox.Execute();
-                }
-            }
-            else if ( !pImp->bMacroDisabled )
-            {
-                // if macros will be added by the user later, the security check is obsolete
-                pImp->nMacroMode = MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
-            }
-        }
-        else
-            SetError( ERRCODE_IO_GENERAL );
-    }
     else
     {
-        if ( HasMacrosLib_Impl() )
+        sal_Bool bHasMacros = sal_False;
+
+        if ( bHasStorage && ( !pFilter || !( pFilter->GetFilterFlags() & SFX_FILTER_STARONEFILTER ) ) )
         {
-            // no signing in alien formats!
+            uno::Reference< embed::XStorage > xStorage = pMedium->GetStorage();
+            if ( xStorage.is() )
+                bHasMacros = StorageHasMacros( xStorage );
+            else
+                SetError( ERRCODE_IO_GENERAL );
+        }
+
+        if ( !bHasMacros )
+            bHasMacros = HasMacrosLib_Impl();
+
+        if ( bHasMacros )
+        {
             AdjustMacroMode( String() ); // if macros are disabled the message will be shown here
             if ( SvtSecurityOptions().GetMacroSecurityLevel() > 2
-              && MacroExecMode::NEVER_EXECUTE == pImp->nMacroMode )
+                && MacroExecMode::NEVER_EXECUTE == pImp->nMacroMode )
             {
                 WarningBox aBox( NULL, SfxResId( MSG_WARNING_MACRO_ISDISABLED ) );
                 aBox.Execute();
@@ -1974,6 +1967,13 @@ void SfxObjectShell::AdjustMacroMode( const String& /*rScriptType*/ )
             ::com::sun::star::uno::Sequence< security::DocumentSignatureInformation > aScriptingSignatureInformations;
             uno::Reference < embed::XStorage > xStore = GetMedium()->GetLastCommitReadStorage_Impl();
             sal_uInt16 nSignatureState = GetScriptingSignatureState();
+
+            if ( nSignatureState != SIGNATURESTATE_NOSIGNATURES && pImp->m_bMacroSignBroken )
+            {
+                // if there is a macro signature it must be handled as broken
+                nSignatureState = SIGNATURESTATE_SIGNATURES_BROKEN;
+            }
+
             if ( nSignatureState == SIGNATURESTATE_SIGNATURES_BROKEN )
             {
                 if ( pImp->nMacroMode != MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN )
@@ -2249,21 +2249,28 @@ BOOL SfxObjectShell::HasMacrosLib_Impl() const
         if ( bHasMacros )
         {
             // a library container exists; check if it's empty
-            try
+
+            // if there are libraries except "Standard" library
+            // we assume that they are not empty (because they have been created by the user)
+            if ( pImp->pBasicLibContainer->hasElements() )
             {
-                // usually a "Standard" library is always present (design)
-                // for this reason we must check if it's empty
-                uno::Reference < container::XNameAccess > xLib;
-                uno::Any aAny = pImp->pBasicLibContainer->getByName(::rtl::OUString::createFromAscii("Standard"));
-                aAny >>= xLib;
-                if ( xLib.is() )
-                    bHasMacros = xLib->hasElements();
-            }
-            catch ( uno::Exception& )
-            {
-                // if no "Standard" library is present we check for others
-                // here we assume that they are not empty (because they have been created by the user)
-                bHasMacros = pImp->pBasicLibContainer->hasElements();
+                ::rtl::OUString aStdLibName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
+                uno::Sequence< ::rtl::OUString > aElements = pImp->pBasicLibContainer->getElementNames();
+                if ( aElements.getLength() )
+                {
+                    if ( aElements.getLength() > 1 || !aElements[0].equals( aStdLibName ) )
+                        bHasMacros = sal_True;
+                    else
+                    {
+                        // usually a "Standard" library is always present (design)
+                        // for this reason we must check if it's empty
+                        uno::Reference < container::XNameAccess > xLib;
+                        uno::Any aAny = pImp->pBasicLibContainer->getByName( aStdLibName );
+                        aAny >>= xLib;
+                        if ( xLib.is() )
+                            bHasMacros = xLib->hasElements();
+                    }
+                }
             }
         }
     }

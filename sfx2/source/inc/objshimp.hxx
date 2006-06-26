@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objshimp.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:33:23 $
+ *  last change: $Author: rt $ $Date: 2006-06-26 09:52:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,7 +112,8 @@ struct SfxObjectShell_Impl
                         bInitialized:1,
                         bSignatureErrorIsShown:1,
                         bModelInitialized:1, // whether the related model is initialized
-                        bPreserveVersions:1;
+                        bPreserveVersions:1,
+                        m_bMacroSignBroken:1; // whether the macro signature was explicitly broken
 
     String              aNewName;  // Der Name, unter dem das Doc gespeichert
                                    // werden soll

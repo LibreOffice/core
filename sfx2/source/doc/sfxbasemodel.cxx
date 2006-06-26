@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.111 $
+ *  $Revision: 1.112 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:31:31 $
+ *  last change: $Author: rt $ $Date: 2006-06-26 09:52:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1181,6 +1181,12 @@ sal_Bool SAL_CALL SfxBaseModel::attachResource( const   OUSTRING&               
                     aTmpRect = OutputDevice::LogicToLogic( aTmpRect, MAP_100TH_MM, m_pData->m_pObjectShell->GetMapUnit() );
                     m_pData->m_pObjectShell->SetVisArea( aTmpRect );
                 }
+            }
+            else if ( rArgs[nInd].Name.equalsAscii( "BreakMacroSignature" ) )
+            {
+                sal_Bool bBreakMacroSign = sal_False;
+                rArgs[nInd].Value >>= bBreakMacroSign;
+                m_pData->m_pObjectShell->BreakMacroSign_Impl( bBreakMacroSign );
             }
             else if ( !rArgs[nInd].Name.equalsAscii( "Stream" ) && !rArgs[nInd].Name.equalsAscii( "InputStream" ) )
             {
