@@ -4,9 +4,9 @@
  *
  *  $RCSfile: kdebecdef.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-22 10:13:58 $
+ *  last change: $Author: ihi $ $Date: 2006-06-27 11:51:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,8 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #endif
 
+#include <kapplication.h>
+
 #include "uno/current_context.hxx"
 
 namespace css = com::sun::star ;
@@ -69,7 +71,7 @@ static uno::Reference<uno::XInterface> SAL_CALL createKDEBackend(const uno::Refe
                 rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "system.desktop-environment" ) ) );
 
             rtl::OUString aDesktopEnvironment;
-            if ( (aValue >>= aDesktopEnvironment) && (aDesktopEnvironment.equalsAscii("KDE")) )
+            if ( (aValue >>= aDesktopEnvironment) && (aDesktopEnvironment.equalsAscii("KDE")) && (KApplication::kApplication() != NULL) )
                 return * KDEBackend::createInstance(xContext);
         }
 
