@@ -4,9 +4,9 @@
  *
  *  $RCSfile: clippedlinerenderer.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-02 08:36:14 $
+ *  last change: $Author: thb $ $Date: 2006-06-28 16:50:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,12 @@
 
 #ifndef _BGFX_TOOLS_RECTCLIPTOOLS_HXX
 #include <basegfx/tools/rectcliptools.hxx>
+#endif
+#ifndef _BGFX_POINT_B2IPOINT_HXX
+#include <basegfx/point/b2ipoint.hxx>
+#endif
+#ifndef _BGFX_RANGE_B2IRANGE_HXX
+#include <basegfx/range/b2irange.hxx>
 #endif
 
 namespace basebmp
@@ -107,13 +113,13 @@ inline bool prepareClip( sal_Int32  a1,
             {
                 o_bs = b1 + cb;
                 if( o_bs > bMax )
-                    return;
+                    return false;
             }
             else
             {
                 o_bs = b1 - cb;
                 if( o_bs < bMin )
-                    return;
+                    return false;
             }
 
             io_rem += ca - 2*da*cb;
@@ -125,13 +131,13 @@ inline bool prepareClip( sal_Int32  a1,
             {
                 o_as = a1 + ca;
                 if( o_as > aMax )
-                    return;
+                    return false;
             }
             else
             {
                 o_as = a1 - ca;
                 if( o_as < aMin )
-                    return;
+                    return false;
             }
 
             io_rem += 2*db*ca - cb;
@@ -207,7 +213,6 @@ void renderClippedLine( basegfx::B2IPoint             aPt1,
                         const basegfx::B2IRange&      rClipRect,
                         typename Accessor::value_type color,
                         Iterator                      begin,
-                        Iterator                      end,
                         Accessor                      acc,
                         bool                          bRoundTowardsPt2=false )
 {
@@ -272,43 +277,65 @@ void renderClippedLine( basegfx::B2IPoint             aPt1,
                         rClipRect.getMinY(), basegfx::tools::RectClipFlags::TOP,
                         rClipRect.getMaxY(), basegfx::tools::RectClipFlags::BOTTOM,
                         bRoundTowardsPt2 ));
-        const sal_Int32 diff = 2*(ady - adx);
+
+        Iterator                        currIter( begin + vigra::Diff2D(0,ys) );
+        typename Iterator::row_iterator rowIter( currIter.rowIterator() + xs );
+
+        adx *= 2;
+        ady *= 2;
+
         if( bUseAlternateBresenham )
         {
             while(true)
             {
-                plot(xs,ys);
+                acc.set(color, rowIter);
 
                 if( rem >= 0 )
                 {
                     if( --n < 0 )
                         break;
-                    rem += diff;
+
                     ys += sy;
+                    xs += sx;
+                    rem -= adx;
+
+                    currIter.y += sy;
+                    rowIter = currIter.rowIterator() + xs;
                 }
                 else
-                    rem += 2*ady;
+                {
+                    xs += sx;
+                    rowIter += sx;
+                }
 
-                xs += sx;
+                rem += ady;
             }
         }
         else
         {
             while(true)
             {
-                plot(xs,ys);
+                acc.set(color, rowIter);
 
                 if( --n < 0 )
                     break;
+
                 if( rem >= 0 )
                 {
-                    rem += diff;
                     ys += sy;
+                    xs += sx;
+                    rem -= adx;
+
+                    currIter.y += sy;
+                    rowIter = currIter.rowIterator() + xs;
                 }
                 else
-                    rem += 2*ady;
+                {
+                    xs += sx;
+                    rowIter += sx;
+                }
 
-                xs += sx;
+                rem += ady;
             }
         }
     }
@@ -319,49 +346,71 @@ void renderClippedLine( basegfx::B2IPoint             aPt1,
 
         const bool bUseAlternateBresenham(
             prepareClip(y1, y2, x1, ady, adx, ys, xs, sy, sx,
-                        rem, clipCode1, clipCount1, clipCode1, clipCount2,
+                        rem, n, clipCode1, clipCount1, clipCode1, clipCount2,
                         rClipRect.getMinY(), basegfx::tools::RectClipFlags::TOP,
                         rClipRect.getMaxY(), basegfx::tools::RectClipFlags::BOTTOM,
                         rClipRect.getMinX(), basegfx::tools::RectClipFlags::LEFT,
                         rClipRect.getMaxX(), basegfx::tools::RectClipFlags::RIGHT,
                         bRoundTowardsPt2 ));
-        const sal_Int32 diff = 2*(ady - adx);
+
+        Iterator                           currIter( begin + vigra::Diff2D(xs,0) );
+        typename Iterator::column_iterator colIter( currIter.columnIterator() + ys );
+
+        adx *= 2;
+        ady *= 2;
+
         if( bUseAlternateBresenham )
         {
             while(true)
             {
-                plot(xy,ys);
+                acc.set(color, colIter);
 
                 if( rem >= 0 )
                 {
                     if( --n < 0 )
                         break;
-                    rem += diff;
+
                     xs += sx;
+                    ys += sy;
+                    rem -= ady;
+
+                    currIter.x += sx;
+                    colIter = currIter.columnIterator() + ys;
                 }
                 else
-                    rem += 2*adx;
+                {
+                    ys += sy;
+                    colIter += sy;
+                }
 
-                ys += sy;
+                rem += adx;
             }
         }
         else
         {
             while(true)
             {
-                plot(xs,ys);
+                acc.set(color, colIter);
 
                 if( --n < 0 )
                     break;
+
                 if( rem >= 0 )
                 {
-                    rem += diff;
                     xs += sx;
+                    ys += sy;
+                    rem -= ady;
+
+                    currIter.x += sx;
+                    colIter = currIter.columnIterator() + ys;
                 }
                 else
-                    rem += 2*adx;
+                {
+                    ys += sy;
+                    colIter += sy;
+                }
 
-                ys += sy;
+                rem += adx;
             }
         }
     }

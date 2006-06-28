@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basictest.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-07 14:27:36 $
+ *  last change: $Author: thb $ $Date: 2006-06-28 16:50:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,44 @@ namespace
 class BasicTest : public CppUnit::TestFixture
 {
 public:
+    void colorTest()
+    {
+        Color aTestColor;
+
+        aTestColor = Color(0xDEADBEEF);
+        CPPUNIT_ASSERT_MESSAGE("unary constructor",
+                               aTestColor.toInt32() == 0xDEADBEEF );
+
+        aTestColor = Color( 0x10, 0x20, 0xFF );
+        CPPUNIT_ASSERT_MESSAGE("ternary constructor",
+                               aTestColor.toInt32() == 0x001020FF );
+
+        aTestColor.setRed( 0x0F );
+        CPPUNIT_ASSERT_MESSAGE("setRed()",
+                               aTestColor.toInt32() == 0x00F20FF );
+
+        aTestColor.setGreen( 0x0F );
+        CPPUNIT_ASSERT_MESSAGE("setGreen()",
+                               aTestColor.toInt32() == 0x00F0FFF );
+
+        aTestColor.setBlue( 0x10 );
+        CPPUNIT_ASSERT_MESSAGE("setBlue()",
+                               aTestColor.toInt32() == 0x00F0F10 );
+
+        aTestColor.setGray( 0x13 );
+        CPPUNIT_ASSERT_MESSAGE("setGray()",
+                               aTestColor.toInt32() == 0x00131313 );
+
+        aTestColor = Color( 0x10, 0x20, 0xFF );
+        CPPUNIT_ASSERT_MESSAGE("getRed()",
+                               aTestColor.getRed() == 0x10 );
+        CPPUNIT_ASSERT_MESSAGE("getGreen()",
+                               aTestColor.getGreen() == 0x20 );
+        CPPUNIT_ASSERT_MESSAGE("getBlue()",
+                               aTestColor.getBlue() == 0xFF );
+
+    }
+
     void testConstruction()
     {
         const basegfx::B2ISize aSize(101,101);
@@ -117,10 +155,6 @@ public:
 
             const Color aCol4(0x010101);
             pDevice->setPixel( aPt, aCol4, DrawMode_PAINT );
-
-            std::ofstream output("32bpp_test.dump");
-            debugDump( pDevice, output );
-
             CPPUNIT_ASSERT_MESSAGE("get/setPixel roundtrip #4",
                                    pDevice->getPixel(aPt) == aCol4);
 
@@ -163,6 +197,7 @@ public:
     // because these macros are need by auto register mechanism.
 
     CPPUNIT_TEST_SUITE(BasicTest);
+    CPPUNIT_TEST(colorTest);
     CPPUNIT_TEST(testConstruction);
     CPPUNIT_TEST(testPixelFuncs);
     CPPUNIT_TEST_SUITE_END();

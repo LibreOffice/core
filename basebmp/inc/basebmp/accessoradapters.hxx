@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessoradapters.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-09 04:21:00 $
+ *  last change: $Author: thb $ $Date: 2006-06-28 16:50:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -263,54 +263,78 @@ template< typename ValueType, typename AlphaType > struct blendFunctorSelector :
 
     Used to blend an alpha mask 'through' a fixed color value into the
     destination.
+
+    The getter functors return a constant value (usually the zero of
+    the value type, this preserves the original destination content
+    when blitting through a mask) - there really isn't no sensible
+    default behaviour for these methods.
  */
 template< class WrappedAccessor,
-          typename AlphaType > class ConstantColorBlendAccessorAdapter
+          typename AlphaType > class ConstantColorBlendSetterAccessorAdapter
 {
 public:
     typedef AlphaType                            alpha_type;
-    typedef typename WrappedAccessor::value_type value_type;
+    typedef AlphaType                            value_type;
+    typedef typename WrappedAccessor::value_type color_type;
 
 private:
-    typename blendFunctorSelector< value_type, alpha_type >::type maFunctor;
+    typename blendFunctorSelector< color_type, alpha_type >::type maFunctor;
     WrappedAccessor                                               maWrappee;
-    value_type                                                    maBlendColor;
+    color_type                                                    maBlendColor;
+    value_type                                                    maGetterValue;
 
-    // TODO(Q3): Merge with
+    // TODO(Q2): Merge with
     // BinarySetterFunctionAccessorAdapter. Problem there: how to
     // generate the functor, needs construction with accessor and
     // fixed color
 
 public:
-    ConstantColorBlendAccessorAdapter() :
+    ConstantColorBlendSetterAccessorAdapter() :
         maFunctor(),
         maWrappee(),
-        maBlendColor()
+        maBlendColor(),
+        maGetterValue()
     {}
 
-    explicit ConstantColorBlendAccessorAdapter( WrappedAccessor acc ) :
+    explicit ConstantColorBlendSetterAccessorAdapter( WrappedAccessor acc ) :
         maFunctor(),
         maWrappee(acc),
-        maBlendColor()
+        maBlendColor(),
+        maGetterValue()
     {}
 
-    ConstantColorBlendAccessorAdapter( WrappedAccessor acc,
-                                       value_type      col ) :
+    ConstantColorBlendSetterAccessorAdapter( WrappedAccessor acc,
+                                             color_type      col ) :
         maFunctor(),
         maWrappee(acc),
-        maBlendColor(col)
+        maBlendColor(col),
+        maGetterValue()
     {}
 
-    void setColor( value_type col ) { maBlendColor=col; }
+    ConstantColorBlendSetterAccessorAdapter( WrappedAccessor acc,
+                                             color_type      col,
+                                             value_type      val ) :
+        maFunctor(),
+        maWrappee(acc),
+        maBlendColor(col),
+        maGetterValue(val)
+    {}
 
-    template< typename IteratorType > value_type operator()(IteratorType const& i) const
+    void        setColor( color_type col ) { maBlendColor=col; }
+    color_type  getColor() { return maBlendColor; }
+    void        setGetterValue( value_type val ) { maGetterValue=val; }
+    value_type  getGetterValue() { return maGetterValue; }
+
+    /// @return constant value, regardless of iterator content
+    template< typename IteratorType > value_type operator()(IteratorType const& ) const
     {
-        return maWrappee(i);
+        return maGetterValue;
     }
+    /// @return constant value, regardless of iterator content
     template< typename IteratorType, class Difference >
-    value_type operator()(IteratorType const& i, Difference const& diff) const
+    value_type operator()(IteratorType const& , Difference const& ) const
     {
-        return maWrappee(i,diff);
+        return maGetterValue;
     }
 
     template< typename V, typename IteratorType >
@@ -379,11 +403,11 @@ template< typename T, typename M > struct IntegerInputMaskFunctor
      */
     T operator()( T v, M m ) const
     {
-        // TODO(Q3): use traits to get unsigned type for T (if
-        // not already)
+        typedef typename make_unsigned<T>::type unsigned_T;
 
         // mask will be 0, iff m == 0, and 1 otherwise
-        const T mask( static_cast<unsigned int>(m | -m) >> (sizeof(unsigned int)*8 - 1) );
+        const unsigned_T mask(
+            unsigned_cast<T>(m | -m) >> (sizeof(unsigned_T)*8 - 1) );
         return v*mask;
     }
 };
@@ -417,8 +441,10 @@ template< typename T, typename M > struct IntegerOutputMaskFunctor
      */
     T operator()( T v1, M m, T v2 ) const
     {
+        typedef typename make_unsigned<T>::type unsigned_T;
+
         // mask will be 0, iff m == 0, and 1 otherwise
-        const T mask( static_cast<unsigned int>(m | -m) >> (sizeof(unsigned int)*8 - 1) );
+        const T mask( unsigned_cast<T>(m | -m) >> (sizeof(unsigned_T)*8 - 1) );
         return v1*(M)(1-mask) + v2*mask;
     }
 };

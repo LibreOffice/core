@@ -4,9 +4,9 @@
  *
  *  $RCSfile: color.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hdu $ $Date: 2006-06-13 13:06:26 $
+ *  last change: $Author: thb $ $Date: 2006-06-28 16:50:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,9 +58,9 @@ public:
         mnColor( ((sal_uInt32)nRed << 16) | ((sal_uInt32)nGreen << 8) | nBlue )
     {}
 
-    void setRed( sal_uInt8 nRed ) { mnColor |= (sal_uInt32)nRed << 16; mnColor &= ~((sal_uInt32)nRed << 16); }
-    void setGreen( sal_uInt8 nGreen ) { mnColor |= (sal_uInt32)nGreen << 8; mnColor &= ~((sal_uInt32)nGreen << 8); }
-    void setBlue( sal_uInt8 nBlue ) { mnColor |= nBlue; mnColor &= ~(sal_uInt32)nBlue; }
+    void setRed( sal_uInt8 nRed ) { mnColor &= ~0x00FF0000UL; mnColor |= (sal_uInt32)nRed << 16; }
+    void setGreen( sal_uInt8 nGreen ) { mnColor &= ~0x0000FF00UL; mnColor |= (sal_uInt32)nGreen << 8; }
+    void setBlue( sal_uInt8 nBlue ) { mnColor &= ~0x000000FFUL; mnColor |= nBlue; }
 
     void setGray( sal_uInt8 nGrayVal ) { mnColor = (sal_uInt32)nGrayVal << 16 | (sal_uInt32)nGrayVal << 8 | nGrayVal; }
 

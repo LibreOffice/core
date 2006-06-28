@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmapdevice.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-08 00:01:47 $
+ *  last change: $Author: thb $ $Date: 2006-06-28 16:50:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -51,20 +51,6 @@
 #include <boost/noncopyable.hpp>
 #include <vector>
 
-/* What to do first:
-
-   1,8,24 bpp, with blt, fill/drawPolygon, drawLine & get/setPixel
-
-   Then:
-
-   all other formats, top down vs. bottom up
-
-   Last:
-
-   Modulation, clip
-
- */
-
 namespace basegfx
 {
     class B2IPoint;
@@ -88,13 +74,15 @@ struct ImplBitmapDevice;
 
 /** Definition of BitmapDevice interface
 
-    Use the createBitmapDevice() factory method to create one instance.
+    Use the createBitmapDevice() factory method to create instances.
 
     Implementation note: the clip mask and bitmap parameter instances
     of BitmapDevice that are passed to individual BitmapDevice
-    instances work best with 1 bit TC MSB masks for the clip and a
+    instances work best with 1 bit gray masks for the clip and a
     format matching that of the target BitmapDevice for the other
-    parameters. Everything else is accepted, but potentially slow.
+    parameters. The alpha mask passed to the drawMaskedColor() methods
+    works best when given as an eight bit gray bitmap. Everything else
+    is accepted, but potentially slow.
  */
 class BitmapDevice : private boost::noncopyable
 {
@@ -106,7 +94,9 @@ public:
     /** Query whether buffer starts with 0th scanline
 
         @return true, if the buffer memory starts with the 0th
-        scanline, and false if it starts with the last
+        scanline, and false if it starts with the last one. The latter
+        is e.g. the typical scan line ordering for the Windows BMP
+        format.
      */
     bool isTopDown() const;
 
@@ -117,18 +107,24 @@ public:
     /** Query byte offset to get from scanline n to scanline n+1
 
         @return the scanline stride in bytes. In the case of
-        bottom-first formats, this offset will be negative.
+        isTopDown()==false, this offset will be negative.
      */
     sal_Int32 getScanlineStride() const;
 
     /** Get pointer to frame buffer
+
+        @return a shared ptr to the bitmap buffer memory. As this is a
+        shared ptr, you can freely store and use the pointer, even
+        after this object has been deleted.
      */
     RawMemorySharedArray getBuffer() const;
 
     /** Get pointer to palette
 
         The returned pointer is const on purpose, since the
-        BitmapDevice might internally cache lookup information.
+        BitmapDevice might internally cache lookup information. Don't
+        modify the returned data, unless you want to enter the realm
+        of completely undefined behaviour.
 
         @return shared pointer to vector of Color entries.
      */
@@ -141,6 +137,9 @@ public:
     const sal_Int32 getPaletteEntryCount() const;
 
     /** Clear whole device with given color
+
+        This method works like a fill with the given color value,
+        resulting in a bitmap uniformly colored in fillColor.
      */
     void clear( Color fillColor );
 
@@ -172,7 +171,7 @@ public:
 
         @param rClip
         Clip mask to use. If the clip mask is 0 at the given pixel
-        position, no change will happen.
+        position, no change will take place.
      */
     void setPixel( const basegfx::B2IPoint&     rPt,
                    Color                        pixelColor,
@@ -198,8 +197,8 @@ public:
 
         @param rPt2
         End point of the line. If the analytical line from rP1 to rPt2
-        (with the actual pixel positions are assumed to be the center
-        of the pixel) is exactly in the middle between two pixel, this
+        (with the actual pixel positions assumed to be the center of
+        the pixel) is exactly in the middle between two pixel, this
         method always selects the pixel closer to rPt1.
 
         @param lineColor
@@ -220,8 +219,8 @@ public:
 
         @param rPt2
         End point of the line. If the analytical line from rP1 to rPt2
-        (with the actual pixel positions are assumed to be the center
-        of the pixel) is exactly in the middle between two pixel, this
+        (with the actual pixel positions assumed to be the center of
+        the pixel) is exactly in the middle between two pixel, this
         method always selects the pixel closer to rPt1.
 
         @param lineColor
@@ -232,55 +231,314 @@ public:
 
         @param rClip
         Clip mask to use. Pixel where the corresponding clip mask
-        pixel is 0 will not be touched.
+        pixel is 0 will not be modified.
      */
-    void drawLine( const basegfx::B2IPoint& rPt1,
+    void drawLine( const basegfx::B2IPoint&     rPt1,
                    const basegfx::B2IPoint&     rPt2,
                    Color                        lineColor,
                    DrawMode                     drawMode,
                    const BitmapDeviceSharedPtr& rClip );
 
+    /** Draw a polygon
+
+        @param rPoly
+        Polygon to draw. Depending on the value returned by rPoly's
+        isClosed() method, the resulting line polygon will be drawn
+        closed or not.
+
+        @param lineColor
+        Color value to draw the polygon with
+
+        @param drawMode
+        Draw mode to use when changing pixel values
+     */
     void drawPolygon( const basegfx::B2DPolygon& rPoly,
                       Color                      lineColor,
                       DrawMode                   drawMode );
+
+    /** Draw a polygon
+
+        @param rPoly
+        Polygon to draw. Depending on the value returned by rPoly's
+        isClosed() method, the resulting line polygon will be drawn
+        closed or not.
+
+        @param lineColor
+        Color value to draw the polygon with
+
+        @param drawMode
+        Draw mode to use when changing pixel values
+
+        @param rClip
+        Clip mask to use. Pixel where the corresponding clip mask
+        pixel is 0 will not be modified.
+     */
     void drawPolygon( const basegfx::B2DPolygon&   rPoly,
                       Color                        lineColor,
                       DrawMode                     drawMode,
                       const BitmapDeviceSharedPtr& rClip );
 
+    /** Fill a poly-polygon
+
+        @param rPoly
+        Poly-polygon to fill. Regardless of the value returned by
+        rPoly's isClosed() method, the resulting filled poly-polygon
+        is always considered closed. As usual, when filling a shape,
+        the rightmost and bottommost pixel are not filled, compared to
+        the drawPolygon() method. For example, the rectangle
+        (0,0),(1,1) will have four pixel set, when drawn via
+        drawPolygon(), and only one pixel, when filled via
+        fillPolyPolygon().
+
+        @param fillColor
+        Color value to fill the poly-polygon with
+
+        @param drawMode
+        Draw mode to use when changing pixel values
+     */
     void fillPolyPolygon( const basegfx::B2DPolyPolygon& rPoly,
                           Color                          fillColor,
                           DrawMode                       drawMode );
+
+    /** Fill a poly-polygon
+
+        @param rPoly
+        Poly-polygon to fill. Regardless of the value returned by
+        rPoly's isClosed() method, the resulting filled poly-polygon
+        is always considered closed. As usual, when filling a shape,
+        the rightmost and bottommost pixel are not filled, compared to
+        the drawPolygon() method. For example, the rectangle
+        (0,0),(1,1) will have four pixel set, when drawn via
+        drawPolygon(), and only one pixel, when filled via
+        fillPolyPolygon().
+
+        @param fillColor
+        Color value to fill the poly-polygon with
+
+        @param drawMode
+        Draw mode to use when changing pixel values
+
+        @param rClip
+        Clip mask to use. Pixel where the corresponding clip mask
+        pixel is 0 will not be modified.
+     */
     void fillPolyPolygon( const basegfx::B2DPolyPolygon& rPoly,
                           Color                          fillColor,
                           DrawMode                       drawMode,
                           const BitmapDeviceSharedPtr&   rClip );
 
+    /** Draw another bitmap into this device
+
+        @param rSrcBitmap
+        Bitmap to render into this one. It is permitted that source
+        and destination bitmap are the same.
+
+        @param rSrcRect
+        Rectangle within the source bitmap to take the pixel from.
+
+        @param rDstRect
+        Rectangle in the destination bitmap to put the pixel
+        into. Source and destination rectangle are permitted to have
+        differing sizes; this method will scale the source pixel
+        accordingly. Please note that both source and destination
+        rectangle are interpreted excluding the rightmost pixel column
+        and the bottommost pixel row, this is much like polygon
+        filling. As a result, filling a given rectangle with
+        fillPolyPolygon(), and using the same rectangle as the
+        destination rectangle of this method, will affect exactly the
+        same set of pixel.
+
+        @param drawMode
+        Draw mode to use when changing pixel values
+     */
     void drawBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
                      const basegfx::B2IRange&     rSrcRect,
                      const basegfx::B2IRange&     rDstRect,
                      DrawMode                     drawMode );
+
+    /** Draw another bitmap into this device
+
+        @param rSrcBitmap
+        Bitmap to render into this one. It is permitted that source
+        and destination bitmap are the same.
+
+        @param rSrcRect
+        Rectangle within the source bitmap to take the pixel from.
+
+        @param rDstRect
+        Rectangle in the destination bitmap to put the pixel
+        into. Source and destination rectangle are permitted to have
+        differing sizes; this method will scale the source pixel
+        accordingly. Please note that both source and destination
+        rectangle are interpreted excluding the rightmost pixel column
+        and the bottommost pixel row, this is much like polygon
+        filling. As a result, filling a given rectangle with
+        fillPolyPolygon(), and using the same rectangle as the
+        destination rectangle of this method, will affect exactly the
+        same set of pixel.
+
+        @param drawMode
+        Draw mode to use when changing pixel values
+
+        @param rClip
+        Clip mask to use. Pixel where the corresponding clip mask
+        pixel is 0 will not be modified.
+     */
     void drawBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
                      const basegfx::B2IRange&     rSrcRect,
                      const basegfx::B2IRange&     rDstRect,
                      DrawMode                     drawMode,
                      const BitmapDeviceSharedPtr& rClip );
 
-    void drawMaskedColor( Color                        rSrcColor,
+    /** Draw a color with an alpha-modulation bitmap into this device
+
+        This method takes a fixed color value, and an alpha mask. For
+        each pixel in the alpha mask, the given color value is blended
+        with the corresponding alpha value against the content of this
+        object.
+
+        @param aSrcColor
+        Color value to use for blending
+
+        @param rAlphaMask
+        Alpha mask to use for blending. It is permitted that alpha
+        mask and this bitmap are the same object.
+
+        @param rSrcRect
+        Rectangle within the alpha mask to take the pixel from.
+        Please note that the destination rectangle is interpreted
+        excluding the rightmost pixel column and the bottommost pixel
+        row, this is much like polygon filling. As a result, filling a
+        given rectangle with fillPolyPolygon(), and using the same
+        rectangle as the source rectangle of this method, will affect
+        exactly the same set of pixel.
+
+        @param rDstPoint
+        Destination point, where to start placing the pixel from the
+        source rectangle
+     */
+    void drawMaskedColor( Color                        aSrcColor,
                           const BitmapDeviceSharedPtr& rAlphaMask,
                           const basegfx::B2IRange&     rSrcRect,
                           const basegfx::B2IPoint&     rDstPoint );
-    void drawMaskedColor( Color                        rSrcColor,
+
+    /** Draw a color with an alpha-modulation bitmap into this device
+
+        This method takes a fixed color value, and an alpha mask. For
+        each pixel in the alpha mask, the given color value is blended
+        with the corresponding alpha value against the content of this
+        object.
+
+        @param aSrcColor
+        Color value to use for blending
+
+        @param rAlphaMask
+        Alpha mask to use for blending. It is permitted that alpha
+        mask and this bitmap are the same object.
+
+        @param rSrcRect
+        Rectangle within the alpha mask to take the pixel from.
+        Please note that the destination rectangle is interpreted
+        excluding the rightmost pixel column and the bottommost pixel
+        row, this is much like polygon filling. As a result, filling a
+        given rectangle with fillPolyPolygon(), and using the same
+        rectangle as the source rectangle of this method, will affect
+        exactly the same set of pixel.
+
+        @param rDstPoint
+        Destination point, where to start placing the pixel from the
+        source rectangle
+
+        @param rClip
+        Clip mask to use. Pixel where the corresponding clip mask
+        pixel is 0 will not be modified.
+     */
+    void drawMaskedColor( Color                        aSrcColor,
                           const BitmapDeviceSharedPtr& rAlphaMask,
                           const basegfx::B2IRange&     rSrcRect,
                           const basegfx::B2IPoint&     rDstPoint,
                           const BitmapDeviceSharedPtr& rClip );
 
+    /** Draw another bitmap through a mask into this device
+
+        This method renders a source bitmap into this device, much
+        like the drawBitmap() method. The only difference is the
+        additional mask parameter, which operates much like an
+        additional clip mask: pixel with value zero in this mask
+        result in destination pixel not being modified.
+
+        @param rSrcBitmap
+        Bitmap to render into this one. It is permitted that source
+        and destination bitmap are the same.
+
+        @param rMask
+        Bitmap to use as a mask. Pixel with value zero in this mask
+        will result in destination pixel not being affected by the
+        blit operation.
+
+        @param rSrcRect
+        Rectangle within the source bitmap to take the pixel from.
+
+        @param rDstRect
+        Rectangle in the destination bitmap to put the pixel
+        into. Source and destination rectangle are permitted to have
+        differing sizes; this method will scale the source pixel
+        accordingly. Please note that both source and destination
+        rectangle are interpreted excluding the rightmost pixel column
+        and the bottommost pixel row, this is much like polygon
+        filling. As a result, filling a given rectangle with
+        fillPolyPolygon(), and using the same rectangle as the
+        destination rectangle of this method, will affect exactly the
+        same set of pixel.
+
+        @param drawMode
+        Draw mode to use when changing pixel values
+     */
     void drawMaskedBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
                            const BitmapDeviceSharedPtr& rMask,
                            const basegfx::B2IRange&     rSrcRect,
                            const basegfx::B2IRange&     rDstRect,
                            DrawMode                     drawMode );
+
+    /** Draw another bitmap through a mask into this device
+
+        This method renders a source bitmap into this device, much
+        like the drawBitmap() method. The only difference is the
+        additional mask parameter, which operates much like an
+        additional clip mask: pixel with value zero in this mask
+        result in destination pixel not being modified.
+
+        @param rSrcBitmap
+        Bitmap to render into this one. It is permitted that source
+        and destination bitmap are the same.
+
+        @param rMask
+        Bitmap to use as a mask. Pixel with value zero in this mask
+        will result in destination pixel not being affected by the
+        blit operation.
+
+        @param rSrcRect
+        Rectangle within the source bitmap to take the pixel from.
+
+        @param rDstRect
+        Rectangle in the destination bitmap to put the pixel
+        into. Source and destination rectangle are permitted to have
+        differing sizes; this method will scale the source pixel
+        accordingly. Please note that both source and destination
+        rectangle are interpreted excluding the rightmost pixel column
+        and the bottommost pixel row, this is much like polygon
+        filling. As a result, filling a given rectangle with
+        fillPolyPolygon(), and using the same rectangle as the
+        destination rectangle of this method, will affect exactly the
+        same set of pixel.
+
+        @param drawMode
+        Draw mode to use when changing pixel values
+
+        @param rClip
+        Clip mask to use. Pixel where the corresponding clip mask
+        pixel is 0 will not be modified.
+     */
     void drawMaskedBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
                            const BitmapDeviceSharedPtr& rMask,
                            const basegfx::B2IRange&     rSrcRect,
@@ -317,20 +575,24 @@ private:
 
     virtual sal_uInt32 getPixelData_i( const basegfx::B2IPoint& rPt ) = 0;
 
-    virtual void drawLine_i( const basegfx::B2DPoint& rPt1,
-                             const basegfx::B2DPoint& rPt2,
+    virtual void drawLine_i( const basegfx::B2IPoint& rPt1,
+                             const basegfx::B2IPoint& rPt2,
+                             const basegfx::B2IRange& rBounds,
                              Color                    lineColor,
                              DrawMode                 drawMode ) = 0;
-    virtual void drawLine_i( const basegfx::B2DPoint& rPt1,
-                             const basegfx::B2DPoint&     rPt2,
+    virtual void drawLine_i( const basegfx::B2IPoint&     rPt1,
+                             const basegfx::B2IPoint&     rPt2,
+                             const basegfx::B2IRange&     rBounds,
                              Color                        lineColor,
                              DrawMode                     drawMode,
                              const BitmapDeviceSharedPtr& rClip ) = 0;
 
     virtual void drawPolygon_i( const basegfx::B2DPolygon& rPoly,
+                                const basegfx::B2IRange&   rBounds,
                                 Color                      lineColor,
                                 DrawMode                   drawMode ) = 0;
     virtual void drawPolygon_i( const basegfx::B2DPolygon&   rPoly,
+                                const basegfx::B2IRange&     rBounds,
                                 Color                        lineColor,
                                 DrawMode                     drawMode,
                                 const BitmapDeviceSharedPtr& rClip ) = 0;

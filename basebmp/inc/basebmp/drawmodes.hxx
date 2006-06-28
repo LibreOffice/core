@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawmodes.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2006-05-31 10:12:11 $
+ *  last change: $Author: thb $ $Date: 2006-06-28 16:50:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,20 @@ namespace basebmp
 {
     enum DrawMode
     {
+        /** Default draw mode, which simply renders pixel in the
+            requested color
+         */
         DrawMode_PAINT,
+
+        /** XOR draw mode, which XORs each existing pixel value with
+            the new color.
+
+            The result of this XOR operation strongly depends on the
+            underlying pixel format, as it is defined by the bitwise
+            XOR of the (potentially palette-looked-up) color value and
+            the existing pixel content (being it true color or a
+            palette index).
+         */
         DrawMode_XOR
     };
 }

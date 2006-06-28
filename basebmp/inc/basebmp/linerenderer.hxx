@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linerenderer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2006-05-31 10:12:11 $
+ *  last change: $Author: thb $ $Date: 2006-06-28 16:50:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,6 @@ void renderLine( const basegfx::B2IPoint&      rPt1,
                  const basegfx::B2IPoint&      rPt2,
                  typename Accessor::value_type color,
                  Iterator                      begin,
-                 Iterator                      end,
                  Accessor                      acc,
                  bool                          bRoundTowardsPt2=false )
 {

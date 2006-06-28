@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmapdevice.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-09 04:21:01 $
+ *  last change: $Author: thb $ $Date: 2006-06-28 16:50:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #include "basebmp/accessor.hxx"
 #include "basebmp/accessoradapters.hxx"
 #include "basebmp/scanlineformats.hxx"
-#include "basebmp/linerenderer.hxx"
+#include "basebmp/clippedlinerenderer.hxx"
 #include "basebmp/compositeiterator.hxx"
 
 #include <rtl/alloc.h>
@@ -105,6 +105,12 @@ namespace
         Color operator()( DataType c ) { return Color(c,c,c); }
     };
 
+    /// type-safe conversion from Color to packed int32
+    struct UInt32FromColor
+    {
+        sal_uInt32 operator()( const Color& c ) { return c.toInt32(); }
+    };
+
     /// Get converter from color to given data type
     template< typename DataType > struct fromColorConverter;
     template<> struct fromColorConverter< sal_uInt8 >
@@ -127,6 +133,16 @@ namespace
         typedef std::identity<Color> type;
     };
 
+    /// Get converter from given data type to sal_uInt32
+    template< typename DataType > struct toUInt32Converter
+    {
+        typedef std::identity<DataType> type;
+    };
+    template<> struct toUInt32Converter< Color >
+    {
+        typedef UInt32FromColor type;
+    };
+
 
     // Polygon scanline conversion
     //------------------------------------------------------------------------
@@ -146,7 +162,6 @@ namespace
                  typename DestAccessor::value_type  fillColor,
                  const basegfx::B2IRange&           bounds,
                  DestIterator                       begin,
-                 DestIterator                       end,
                  DestAccessor                       accessor ) :
             B2DPolyPolygonRasterConverter(rPolyPolyRaster,
                                           basegfx::B2DRange(bounds) ),
@@ -207,7 +222,6 @@ namespace
                                                        fillColor,
                                                        aBmpRange,
                                                        dest.first,
-                                                       dest.second,
                                                        dest.third));
     }
 
@@ -229,6 +243,8 @@ namespace
         typedef typename toColorConverter<
             typename DestAccessor::value_type>::type        ToColorFunctor;
         typedef typename rawAccessor<DestAccessor>::type    RawAccessor;
+        typedef typename toUInt32Converter<
+            typename RawAccessor::value_type>::type         ToUInt32Functor;
         typedef typename xorAccessor<DestAccessor>::type    XorAccessor;
         typedef typename xorAccessor<RawAccessor>::type     RawXorAccessor;
         typedef typename maskedAccessor<DestAccessor,
@@ -243,7 +259,7 @@ namespace
                                         MaskAccessor,
                                         DestIterator,
                                         MaskIterator>::type MaskedXorAccessor;
-        typedef ConstantColorBlendAccessorAdapter<
+        typedef ConstantColorBlendSetterAccessorAdapter<
             DestAccessor,
             typename AlphaMaskAccessor::value_type>         ColorBlendAccessor;
         typedef typename maskedAccessor<ColorBlendAccessor,
@@ -265,6 +281,7 @@ namespace
         ColorLookupFunctor    maColorLookup;
         FromColorFunctor      maFromColorConverter;
         ToColorFunctor        maToColorConverter;
+        ToUInt32Functor       maToUInt32Converter;
         DestAccessor          maAccessor;
         RawAccessor           maRawAccessor;
         XorAccessor           maXorAccessor;
@@ -292,6 +309,7 @@ namespace
             maColorLookup(),
             maFromColorConverter(),
             maToColorConverter(),
+            maToUInt32Converter(),
             maAccessor( accessor ),
             maRawAccessor( accessor ),
             maXorAccessor( accessor ),
@@ -319,16 +337,24 @@ namespace
             return getCompatibleBitmap(bmp).get() != NULL;
         }
 
-        boost::shared_ptr<MaskBitmap> getCompatibleMask( const BitmapDeviceSharedPtr& bmp ) const
+        boost::shared_ptr<MaskBitmap> getCompatibleClipMask( const BitmapDeviceSharedPtr& bmp ) const
         {
-            return boost::dynamic_pointer_cast<MaskBitmap>( bmp );
+            boost::shared_ptr<MaskBitmap> pMask( boost::dynamic_pointer_cast<MaskBitmap>( bmp ));
+
+            if( !pMask )
+                return pMask;
+
+            if( pMask->getSize() != getSize() )
+                pMask.reset();
+
+            return pMask;
         }
 
         virtual bool isCompatibleClipMask( const BitmapDeviceSharedPtr& bmp ) const
         {
             // TODO(P1): dynamic_cast usually called twice for
             // compatible formats
-            return getCompatibleMask( bmp ).get() != NULL;
+            return boost::dynamic_pointer_cast<MaskBitmap>( bmp ).get() != NULL;
         }
 
         boost::shared_ptr<AlphaMaskBitmap> getCompatibleAlphaMask( const BitmapDeviceSharedPtr& bmp ) const
@@ -387,7 +413,7 @@ namespace
                                  DrawMode                     drawMode,
                                  const BitmapDeviceSharedPtr& rClip )
         {
-            boost::shared_ptr<MaskBitmap> pMask( getCompatibleMask(rClip) );
+            boost::shared_ptr<MaskBitmap> pMask( getCompatibleClipMask(rClip) );
             OSL_ASSERT( pMask );
 
             const vigra::Diff2D offset(rPt.getX(),
@@ -420,34 +446,35 @@ namespace
             const DestIterator pixel( maBegin +
                                       vigra::Diff2D(rPt.getX(),
                                                     rPt.getY()) );
-            // xxx TODO
-            return 0; // return maRawAccessor(pixel);
+            return maToUInt32Converter(maRawAccessor(pixel));
         }
 
         template< typename Range, typename Col, typename RawAccessor >
-        void implRenderLine2( const basegfx::B2DPoint& rPt1,
-                              const basegfx::B2DPoint& rPt2,
+        void implRenderLine2( const basegfx::B2IPoint& rPt1,
+                              const basegfx::B2IPoint& rPt2,
+                              const basegfx::B2IRange& rBounds,
                               Col                      col,
                               const Range&             range,
                               const RawAccessor&       rawAcc )
         {
-            renderLine( basegfx::fround(rPt1),
-                        basegfx::fround(rPt2),
-                        col,
-                        range.first,
-                        range.second,
-                        rawAcc );
+            renderClippedLine( rPt1,
+                               rPt2,
+                               rBounds,
+                               col,
+                               range.first,
+                               rawAcc );
         }
 
         template< typename Range, typename Accessor, typename RawAccessor >
-        void implRenderLine( const basegfx::B2DPoint& rPt1,
-                             const basegfx::B2DPoint& rPt2,
+        void implRenderLine( const basegfx::B2IPoint& rPt1,
+                             const basegfx::B2IPoint& rPt2,
+                             const basegfx::B2IRange& rBounds,
                              Color                    col,
                              const Range&             range,
                              const Accessor&          acc,
                              const RawAccessor&       rawAcc )
         {
-            implRenderLine2( rPt1,rPt2,
+            implRenderLine2( rPt1,rPt2,rBounds,
                              maColorLookup( acc,
                                             maFromColorConverter(
                                                 col)),
@@ -456,8 +483,9 @@ namespace
         }
 
         template< typename Range, typename RawAccessor, typename XorAccessor >
-        void implDrawLine( const basegfx::B2DPoint& rPt1,
-                           const basegfx::B2DPoint& rPt2,
+        void implDrawLine( const basegfx::B2IPoint& rPt1,
+                           const basegfx::B2IPoint& rPt2,
+                           const basegfx::B2IRange& rBounds,
                            Color                    col,
                            const Range&             range,
                            const RawAccessor&       rawAcc,
@@ -465,19 +493,20 @@ namespace
                            DrawMode                 drawMode )
         {
             if( drawMode == DrawMode_XOR )
-                implRenderLine( rPt1, rPt2, col,
+                implRenderLine( rPt1, rPt2, rBounds, col,
                                 range, maAccessor, xorAcc );
             else
-                implRenderLine( rPt1, rPt2, col,
+                implRenderLine( rPt1, rPt2, rBounds, col,
                                 range, maAccessor, rawAcc );
         }
 
-        virtual void drawLine_i(const basegfx::B2DPoint& rPt1,
-                                const basegfx::B2DPoint& rPt2,
+        virtual void drawLine_i(const basegfx::B2IPoint& rPt1,
+                                const basegfx::B2IPoint& rPt2,
+                                const basegfx::B2IRange& rBounds,
                                 Color                    lineColor,
                                 DrawMode                 drawMode )
         {
-            implDrawLine(rPt1,rPt2,lineColor,
+            implDrawLine(rPt1,rPt2,rBounds,lineColor,
                          std::make_pair(maBegin,maEnd),
                          maRawAccessor,maRawXorAccessor,drawMode);
         }
@@ -485,7 +514,7 @@ namespace
         vigra::pair<composite_iterator_type,composite_iterator_type>
           getMaskedRange( const BitmapDeviceSharedPtr& rClip ) const
         {
-            boost::shared_ptr<MaskBitmap> pMask( getCompatibleMask(rClip) );
+            boost::shared_ptr<MaskBitmap> pMask( getCompatibleClipMask(rClip) );
             OSL_ASSERT( pMask );
 
             return std::make_pair(
@@ -497,19 +526,21 @@ namespace
                     pMask->maEnd ));
         }
 
-        virtual void drawLine_i(const basegfx::B2DPoint&     rPt1,
-                                const basegfx::B2DPoint&     rPt2,
+        virtual void drawLine_i(const basegfx::B2IPoint&     rPt1,
+                                const basegfx::B2IPoint&     rPt2,
+                                const basegfx::B2IRange&     rBounds,
                                 Color                        lineColor,
                                 DrawMode                     drawMode,
                                 const BitmapDeviceSharedPtr& rClip )
         {
-            implDrawLine(rPt1,rPt2,lineColor,
+            implDrawLine(rPt1,rPt2,rBounds,lineColor,
                          getMaskedRange(rClip),
                          maRawMaskedAccessor,maRawMaskedXorAccessor,drawMode);
         }
 
         template< typename Range, typename RawAccessor >
         void implDrawPolygon( const basegfx::B2DPolygon& rPoly,
+                              const basegfx::B2IRange&   rBounds,
                               Color                      col,
                               const Range&               range,
                               const RawAccessor&         acc )
@@ -524,47 +555,51 @@ namespace
                                                                          col)));
             const sal_uInt32                         nVertices( aPoly.count() );
             for( sal_uInt32 i=1; i<nVertices; ++i )
-                implRenderLine2( aPoly.getB2DPoint(i-1),
-                                 aPoly.getB2DPoint(i),
+                implRenderLine2( basegfx::fround(aPoly.getB2DPoint(i-1)),
+                                 basegfx::fround(aPoly.getB2DPoint(i)),
+                                 rBounds,
                                  colorIndex,
                                  range,
                                  acc );
 
             if( nVertices > 1 && aPoly.isClosed() )
-                implRenderLine2( aPoly.getB2DPoint(nVertices-1),
-                                 aPoly.getB2DPoint(0),
+                implRenderLine2( basegfx::fround(aPoly.getB2DPoint(nVertices-1)),
+                                 basegfx::fround(aPoly.getB2DPoint(0)),
+                                 rBounds,
                                  colorIndex,
                                  range,
                                  acc );
         }
 
         virtual void drawPolygon_i(const basegfx::B2DPolygon& rPoly,
+                                   const basegfx::B2IRange&   rBounds,
                                    Color                      lineColor,
                                    DrawMode                   drawMode )
         {
             if( drawMode == DrawMode_XOR )
-                implDrawPolygon( rPoly, lineColor,
+                implDrawPolygon( rPoly, rBounds, lineColor,
                                  std::make_pair(maBegin,
                                                 maEnd),
                                  maRawXorAccessor );
             else
-                implDrawPolygon( rPoly, lineColor,
+                implDrawPolygon( rPoly, rBounds, lineColor,
                                  std::make_pair(maBegin,
                                                 maEnd),
                                  maRawAccessor );
         }
 
         virtual void drawPolygon_i(const basegfx::B2DPolygon&   rPoly,
+                                   const basegfx::B2IRange&     rBounds,
                                    Color                        lineColor,
                                    DrawMode                     drawMode,
                                    const BitmapDeviceSharedPtr& rClip )
         {
             if( drawMode == DrawMode_XOR )
-                implDrawPolygon( rPoly, lineColor,
+                implDrawPolygon( rPoly, rBounds, lineColor,
                                  getMaskedRange(rClip),
                                  maRawMaskedXorAccessor );
             else
-                implDrawPolygon( rPoly, lineColor,
+                implDrawPolygon( rPoly, rBounds, lineColor,
                                  getMaskedRange(rClip),
                                  maRawMaskedAccessor );
         }
@@ -700,11 +735,8 @@ namespace
                               pAlpha->maAccessor,
                               maBegin + vigra::Diff2D(rDstPoint.getX(),
                                                       rDstPoint.getY()),
-                              ConstantColorBlendAccessorAdapter<
-                                DestAccessor,
-                                typename AlphaMaskAccessor::value_type>(
-                                  maAccessor,
-                                  maFromColorConverter(aSrcColor)) );
+                              ColorBlendAccessor( maAccessor,
+                                                  maFromColorConverter(aSrcColor)) );
         }
 
         virtual void drawMaskedColor_i(Color                        aSrcColor,
@@ -713,7 +745,6 @@ namespace
                                        const basegfx::B2IPoint&     rDstPoint,
                                        const BitmapDeviceSharedPtr& rClip )
         {
-#if 0
             boost::shared_ptr<AlphaMaskBitmap> pAlpha( getCompatibleAlphaMask(rAlphaMask) );
             OSL_ASSERT( pAlpha );
 
@@ -729,22 +760,25 @@ namespace
                               aRange.first + vigra::Diff2D(rDstPoint.getX(),
                                                            rDstPoint.getY()),
                               maMaskedColorBlendAccessor );
-#else
-        drawMaskedColor_i(aSrcColor,
-                          rAlphaMask,
-                          rSrcRect,
-                          rDstPoint );
-#endif
         }
 
-        // must work with *this == rSrcBitmap!
         virtual void drawMaskedBitmap_i(const BitmapDeviceSharedPtr& rSrcBitmap,
                                         const BitmapDeviceSharedPtr& rMask,
                                         const basegfx::B2IRange&     rSrcRect,
                                         const basegfx::B2IRange&     rDstRect,
                                         DrawMode                     drawMode )
         {
-            OSL_ENSURE( false, "Method not yet implemented!" );
+            // TODO(F3): This is a hack, at best. The mask must be the
+            // size of the source bitmap, and accordingly
+            // translated. Let alone interpolated.
+            if( drawMode == DrawMode_XOR )
+                implDrawBitmap(rSrcBitmap, rSrcRect, rDstRect,
+                               getMaskedRange(rMask),
+                               maRawMaskedXorAccessor);
+            else
+                implDrawBitmap(rSrcBitmap, rSrcRect, rDstRect,
+                               getMaskedRange(rMask),
+                               maRawMaskedAccessor);
         }
 
         virtual void drawMaskedBitmap_i(const BitmapDeviceSharedPtr& rSrcBitmap,
@@ -752,9 +786,16 @@ namespace
                                         const basegfx::B2IRange&     rSrcRect,
                                         const basegfx::B2IRange&     rDstRect,
                                         DrawMode                     drawMode,
-                                        const                        BitmapDeviceSharedPtr& rClip )
+                                        const BitmapDeviceSharedPtr& rClip )
         {
-            OSL_ENSURE( false, "Method not yet implemented!" );
+            // TODO(F3): Clipped drawMaskedBitmap_i() not yet implemented
+            (void)rClip;
+            drawMaskedBitmap_i( rSrcBitmap,
+                                rMask,
+                                rSrcRect,
+                                rDstRect,
+                                drawMode );
+            OSL_ENSURE( false, "Method not yet implemented, falling back to unclipped version!" );
         }
     };
 } // namespace
@@ -884,15 +925,11 @@ void BitmapDevice::drawLine( const basegfx::B2IPoint& rPt1,
                              Color                    lineColor,
                              DrawMode                 drawMode )
 {
-    basegfx::B2DPoint aPt1( rPt1 );
-    basegfx::B2DPoint aPt2( rPt2 );
-
-    if( basegfx::tools::liangBarskyClip2D(aPt1,aPt2,mpImpl->maFloatBounds) )
-    {
-        drawLine_i( aPt1, aPt2,
-                    lineColor,
-                    drawMode );
-    }
+    drawLine_i( rPt1,
+                rPt2,
+                mpImpl->maBounds,
+                lineColor,
+                drawMode );
 }
 
 void BitmapDevice::drawLine( const basegfx::B2IPoint&     rPt1,
@@ -907,34 +944,26 @@ void BitmapDevice::drawLine( const basegfx::B2IPoint&     rPt1,
         return;
     }
 
-    basegfx::B2DPoint aPt1( rPt1 );
-    basegfx::B2DPoint aPt2( rPt2 );
-
-    if( basegfx::tools::liangBarskyClip2D(aPt1,aPt2,mpImpl->maFloatBounds) )
-    {
-        if( isCompatibleClipMask( rClip ) )
-            drawLine_i( aPt1, aPt2,
-                        lineColor,
-                        drawMode,
-                        rClip );
-        else
-            OSL_ENSURE( false, "Generic output not yet implemented!" );
-    }
+    if( isCompatibleClipMask( rClip ) )
+        drawLine_i( rPt1,
+                    rPt2,
+                    mpImpl->maBounds,
+                    lineColor,
+                    drawMode,
+                    rClip );
+    else
+        OSL_ENSURE( false, "Generic output not yet implemented!" );
 }
 
 void BitmapDevice::drawPolygon( const basegfx::B2DPolygon& rPoly,
                                 Color                      lineColor,
                                 DrawMode                   drawMode )
 {
-    basegfx::B2DPolyPolygon aPoly(
-        basegfx::tools::clipPolygonOnRange( rPoly,
-                                            mpImpl->maFloatBounds,
-                                            true,
-                                            true ));
-    const sal_uInt32 numPolies( aPoly.count() );
-    for( sal_uInt32 i=0; i<numPolies; ++i )
-        if( aPoly.getB2DPolygon(i).count() )
-            drawPolygon_i( aPoly.getB2DPolygon(i), lineColor, drawMode );
+    const sal_uInt32 numVertices( rPoly.count() );
+    if( numVertices )
+        drawPolygon_i( rPoly,
+                       mpImpl->maBounds,
+                       lineColor, drawMode );
 }
 
 void BitmapDevice::drawPolygon( const basegfx::B2DPolygon&   rPoly,
@@ -948,18 +977,14 @@ void BitmapDevice::drawPolygon( const basegfx::B2DPolygon&   rPoly,
         return;
     }
 
-    basegfx::B2DPolyPolygon aPoly(
-        basegfx::tools::clipPolygonOnRange( rPoly,
-                                            mpImpl->maFloatBounds,
-                                            true,
-                                            true ));
-    const sal_uInt32 numPolies( aPoly.count() );
-    for( sal_uInt32 i=0; i<numPolies; ++i )
-        if( aPoly.getB2DPolygon(i).count() )
-            if( isCompatibleClipMask( rClip ) )
-                drawPolygon_i( aPoly.getB2DPolygon(i), lineColor, drawMode, rClip );
-            else
-                OSL_ENSURE( false, "Generic output not yet implemented!" );
+    const sal_uInt32 numVertices( rPoly.count() );
+    if( numVertices )
+        if( isCompatibleClipMask( rClip ) )
+            drawPolygon_i( rPoly,
+                           mpImpl->maBounds,
+                           lineColor, drawMode, rClip );
+        else
+            OSL_ENSURE( false, "Generic output not yet implemented!" );
 }
 
 void BitmapDevice::fillPolyPolygon( const basegfx::B2DPolyPolygon& rPoly,

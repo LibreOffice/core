@@ -4,9 +4,9 @@
  *
  *  $RCSfile: metafunctions.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-09 04:21:01 $
+ *  last change: $Author: thb $ $Date: 2006-06-28 16:50:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,35 @@ template <typename T> struct remove_const<const T>
 {
     typedef T type;
 };
+
+/** template meta function: ensure that given integer type is unsigned
+
+    If given integer type is already unsigned, return as-is -
+    otherwise, convert to unsigned type of same or greater range.
+ */
+template< typename T > struct make_unsigned;
+
+#define BASEBMP_MAKE_UNSIGNED(T,U)        \
+    template<> struct make_unsigned<T> { \
+        typedef U type; \
+    };
+
+BASEBMP_MAKE_UNSIGNED(signed char,unsigned char)
+BASEBMP_MAKE_UNSIGNED(unsigned char,unsigned char)
+BASEBMP_MAKE_UNSIGNED(short,unsigned short)
+BASEBMP_MAKE_UNSIGNED(unsigned short,unsigned short)
+BASEBMP_MAKE_UNSIGNED(int,unsigned int)
+BASEBMP_MAKE_UNSIGNED(unsigned int,unsigned int)
+BASEBMP_MAKE_UNSIGNED(long,unsigned long)
+BASEBMP_MAKE_UNSIGNED(unsigned long,unsigned long)
+
+#undef BASEBMP_MAKE_UNSIGNED
+
+/// cast integer to unsigned type of similar size
+template< typename T > inline typename make_unsigned<T>::type unsigned_cast( T value )
+{
+    return static_cast< typename make_unsigned<T>::type >(value);
+}
 
 /// returns true, if given number is strictly less than 0
 template< typename T > inline bool is_negative( T x )

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paletteimageaccessor.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-07 14:27:35 $
+ *  last change: $Author: thb $ $Date: 2006-06-28 16:50:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,8 +152,9 @@ template< class Accessor > struct rawAccessor
 template< typename DataType > struct RawAccessor : public StandardAccessor< DataType >
 {
     RawAccessor() {}
+    // converting constructor, which in fact discards argument
     template< typename ValueType > explicit RawAccessor(
-        const PaletteImageAccessor< ValueType, DataType >& a ) {}
+        const PaletteImageAccessor< ValueType, DataType >& ) {}
 };
 
 // specialization for PaletteImageAccessor, to provide the

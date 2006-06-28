@@ -4,9 +4,9 @@
  *
  *  $RCSfile: packedpixeliterator.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-07 14:27:35 $
+ *  last change: $Author: thb $ $Date: 2006-06-28 16:50:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -220,16 +220,12 @@ public:
 
     value_type get() const
     {
-        // TODO(Q3): use traits to get unsigned type for value_type (if
-        // not already)
-        return static_cast<unsigned int>(*y() & mask_) >> shift_;
+        return unsigned_cast<value_type>(*y() & mask_) >> shift_;
     }
 
     value_type get(difference_type d) const
     {
-        // TODO(Q3): use traits to get unsigned type for value_type (if
-        // not already)
-        return static_cast<unsigned int>(*y(d) & mask_) >> shift_;
+        return unsigned_cast<value_type>(*y(d) & mask_) >> shift_;
     }
 
     void set( value_type v ) const
@@ -287,9 +283,7 @@ private:
 
         const mask_type shifted_mask(
             MsbFirst ?
-            // TODO(Q3): use traits to get unsigned type for value_type
-            // (if not already)
-            static_cast<unsigned int>(mask_) >> bits_per_pixel :
+            unsigned_cast<mask_type>(mask_) >> bits_per_pixel :
             mask_ << bits_per_pixel );
 
         // data_offset is 0 for shifted mask, and 1 for wrapped-around mask
@@ -318,9 +312,7 @@ private:
         const mask_type shifted_mask(
             MsbFirst ?
             mask_ << bits_per_pixel :
-            // TODO(Q3): use traits to get unsigned type for value_type
-            // (if not already)
-            static_cast<unsigned int>(mask_) >> bits_per_pixel );
+            unsigned_cast<mask_type>(mask_) >> bits_per_pixel );
 
         // data_offset is 0 for shifted mask, and 1 for wrapped-around mask
         mask_ = (1-data_offset)*shifted_mask + data_offset*(MsbFirst ?
@@ -463,10 +455,10 @@ public:
 
     value_type get() const
     {
-        // TODO(Q3): use traits to get unsigned type for value_type (if
-        // not already)
-        return static_cast<unsigned int>(*data_ & mask_) >>
-            get_shift<num_intraword_positions, bits_per_pixel, MsbFirst>(remainder_);
+        return unsigned_cast<value_type>(*data_ & mask_) >>
+            get_shift<num_intraword_positions,
+                      bits_per_pixel,
+                      MsbFirst>(remainder_);
     }
 
     value_type get(difference_type d) const
@@ -620,16 +612,7 @@ public:
     {
         const int remainder( x % num_intraword_positions );
 
-        // TODO(Q3): use traits to get unsigned type for value_type (if
-        // not already)
-        value_type nTmp0( *current() );
-        unsigned int nTmp1(static_cast<unsigned int>(*current() &
-                                                     get_mask<value_type, bits_per_pixel, MsbFirst>(remainder)));
-        unsigned int nTmp2( (static_cast<unsigned int>(*current() &
-                                                       get_mask<value_type, bits_per_pixel, MsbFirst>(remainder))
-                             >> get_shift<num_intraword_positions, bits_per_pixel, MsbFirst>(remainder)));
-
-        return (static_cast<unsigned int>(*current() &
+        return (unsigned_cast<value_type>(*current() &
                                           get_mask<value_type, bits_per_pixel, MsbFirst>(remainder))
                 >> get_shift<num_intraword_positions, bits_per_pixel, MsbFirst>(remainder));
     }
@@ -638,9 +621,7 @@ public:
     {
         const int remainder( x(d.x) % num_intraword_positions );
 
-        // TODO(Q3): use traits to get unsigned type for value_type (if
-        // not already)
-        return (static_cast<unsigned int>(*current(d.x,d.y) &
+        return (unsigned_cast<value_type>(*current(d.x,d.y) &
                                           get_mask<value_type, bits_per_pixel, MsbFirst>(remainder))
                 >> get_shift<num_intraword_positions, bits_per_pixel, MsbFirst>(remainder));
     }

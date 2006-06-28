@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bmpdemo.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-09 04:21:01 $
+ *  last change: $Author: thb $ $Date: 2006-06-28 16:50:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -983,7 +983,7 @@ class TestWindow : public Dialog
         TestWindow() : Dialog( (Window *) NULL )
         {
             SetText( rtl::OUString::createFromAscii( "VIGRA test" ) );
-            SetSizePixel( Size( 1024, 500 ) );
+            SetSizePixel( Size( 1024, 1024 ) );
             EnablePaint( true );
             Show();
         }
@@ -1017,7 +1017,8 @@ static basegfx::B2IPoint project( const basegfx::B2IPoint& rPoint )
     //double y2 = y1 * cos( angle_z ) - x1 * sin( angle_z );
     double z2 = z1;
 
-    return basegfx::B2IPoint( (sal_Int32)x2, (sal_Int32)z2 );
+    //return basegfx::B2IPoint( (sal_Int32)3*x2, (sal_Int32)3*z2 );
+    return basegfx::B2IPoint( (sal_Int32)6*x2, (sal_Int32)6*z2 );
 }
 
 static basebmp::Color approachColor( const basebmp::Color& rFrom, const basebmp::Color& rTo )
@@ -1075,16 +1076,27 @@ static basebmp::Color approachColor( const basebmp::Color& rFrom, const basebmp:
 
 void TestWindow::Paint( const Rectangle& rRect )
 {
+    basegfx::B2ISize aTestSize(1000,1000);
+    basebmp::BitmapDeviceSharedPtr pDevice( basebmp::createBitmapDevice( aTestSize,
+                                                                         true,
+                                                                         basebmp::Format::THIRTYTWO_BIT_TC_MASK ));
+
     {
-        basegfx::B2ISize aTestSize(500,500);
-        basebmp::BitmapDeviceSharedPtr pDevice2( basebmp::createBitmapDevice( aTestSize,
-                                                                              true,
-                                                                              basebmp::Format::THIRTYTWO_BIT_TC_MASK ));
-        pDevice2->clear(basebmp::Color(0));
+        const basegfx::B2IPoint aPt1(0,0);
+        const basegfx::B2IPoint aPt2(1,9);
+        const basebmp::Color aCol(0xFFFFFFFF);
+        pDevice->drawLine( aPt1, aPt2, aCol, basebmp::DrawMode_PAINT );
+    }
+
+    {
+        pDevice->clear(basebmp::Color(0));
 
         basegfx::B2IPoint aCenter( aTestSize.getX()/2,
                                    aTestSize.getY()/2 );
-        basegfx::B2IPoint aP1( aTestSize.getX()/48, 0), aP2( aTestSize.getX()/40, 0 ), aPoint;
+        //basegfx::B2IPoint aP1( aTestSize.getX()/48, 0), aP2( aTestSize.getX()/40, 0 ), aPoint;
+        //basegfx::B2IPoint aP1( aTestSize.getX()/7, 0), aP2( aTestSize.getX()/6, 0 ), aPoint;
+        //basegfx::B2IPoint aP1( aTestSize.getX()/5, 0), aP2( aTestSize.getX()/4, 0 ), aPoint;
+        basegfx::B2IPoint aP1( aTestSize.getX()/12, 0), aP2( aTestSize.getX()/11, 0 ), aPoint;
 
         double sind = sin( DELTA*M_PI/180.0 );
         double cosd = cos( DELTA*M_PI/180.0 );
@@ -1110,14 +1122,12 @@ void TestWindow::Paint( const Rectangle& rRect )
             basegfx::B2DPolygon aPoly;
             aPoly.append( basegfx::B2DPoint(project( aP1 ) + aCenter) );
             aPoly.append( basegfx::B2DPoint(project( aP2 ) + aCenter) );
-            pDevice2->drawPolygon(
-                aPoly,
-                basebmp::Color(0xFFFFFFFF),
-                basebmp::DrawMode_PAINT);
-            pDevice2->fillPolyPolygon(
+            pDevice->fillPolyPolygon(
                 basegfx::tools::createAreaGeometryForPolygon(
                     aPoly,
-                    n/3,
+//                    std::max(1,n/30),
+//                    std::max(1,n/60),
+                    std::max(1,n/30),
                     basegfx::tools::B2DLINEJOIN_NONE),
                 aLineColor,
                 basebmp::DrawMode_PAINT);
@@ -1131,271 +1141,23 @@ void TestWindow::Paint( const Rectangle& rRect )
         }
 
         std::ofstream output4("svptest.dump");
-        debugDump( pDevice2, output4 );
-
-        const basegfx::B2ISize aSize(10,10);
-        basebmp::BitmapDeviceSharedPtr pDevice( basebmp::createBitmapDevice( aSize,
-                                                                             true,
-                                                                             basebmp::Format::THIRTYTWO_BIT_TC_MASK ));
-        basebmp::BitmapDeviceSharedPtr pMask( basebmp::createBitmapDevice( aSize,
-                                                                           true,
-                                                                           basebmp::Format::ONE_BIT_MSB_GRAY ));
-        ::rtl::OUString aSvg = ::rtl::OUString::createFromAscii(
-            "m 0 0 h5 l5 5 v5 h-5 l-5-5 z" );
-        basegfx::B2DPolyPolygon aPoly;
-        basegfx::tools::importFromSvgD( aPoly, aSvg );
-        pMask->clear(basebmp::Color(0xFFFFFFFF));
-        pMask->drawPolygon(
-            aPoly.getB2DPolygon(0),
-            basebmp::Color(0),
-            basebmp::DrawMode_PAINT );
-
-        basebmp::BitmapDeviceSharedPtr pBmp( basebmp::cloneBitmapDevice(
-                                                 basegfx::B2IVector(3,3),
-                                                 pDevice ));
-        basebmp::Color aCol1(0);
-        basebmp::Color aCol2(0xFFFFFFFF);
-        pBmp->clear(aCol1);
-        pBmp->setPixel(basegfx::B2IPoint(0,0),aCol2,basebmp::DrawMode_PAINT);
-        pBmp->setPixel(basegfx::B2IPoint(1,1),aCol2,basebmp::DrawMode_PAINT);
-        pBmp->setPixel(basegfx::B2IPoint(2,2),aCol2,basebmp::DrawMode_PAINT);
-
-        pDevice->clear(aCol1);
-        pDevice->drawBitmap(pBmp,
-                            basegfx::B2IRange(0,0,3,3),
-                            basegfx::B2IRange(2,2,7,7),
-//                            basegfx::B2IRange(-1,-1,5,5),
-                            basebmp::DrawMode_PAINT,
-                            pMask);
-
-        std::ofstream output("32bpp_test.dump");
-        debugDump( pDevice, output );
-        std::ofstream output2("32bpp_bmp.dump");
-        debugDump( pBmp, output2 );
-        std::ofstream output3("clipmask.dump");
-        debugDump( pMask, output3 );
+        debugDump( pDevice, output4 );
     }
 
-    enum{ srcBitDepth=1, dstBitDepth=4 };
-    typedef vigra::RGBValue< sal_uInt8 > RGBVal;
+    Bitmap aBitmap( Size(aTestSize.getX(),
+                         aTestSize.getY()), 24 );
 
-    Bitmap aSourceBitmap( Size(100,100),
-                          srcBitDepth );
-    DrawBitmap( Point(0,350), aSourceBitmap );
-
-    // Fill bitmap with rhombus
+    // Fill bitmap with generated content
     {
-        ScopedBitmapWriteAccess pWriteAccess( aSourceBitmap.AcquireWriteAccess(),
-                                              aSourceBitmap );
-        pWriteAccess->SetFillColor(0xFF0000);
-        Polygon aPoly(5);
-        aPoly[0] = Point(50,0);
-        aPoly[1] = Point(100,50);
-        aPoly[2] = Point(50,100);
-        aPoly[3] = Point(0,50);
-        aPoly[4] = Point(50,0);
-        pWriteAccess->FillPolygon(aPoly);
+        ScopedBitmapWriteAccess pWriteAccess( aBitmap.AcquireWriteAccess(),
+                                              aBitmap );
+        for( int y=0; y<aTestSize.getY(); ++y )
+            for( int x=0; x<aTestSize.getX(); ++x )
+                pWriteAccess->SetPixel(y,x,
+                                       Color(pDevice->getPixelData(basegfx::B2IPoint(x,y))) );
     }
 
-    Bitmap aDestBitmap( Size(300,300),
-                        dstBitDepth );
-
-    {
-        ScopedBitmapReadAccess  pReadAccess( aSourceBitmap.AcquireReadAccess(),
-                                             aSourceBitmap );
-        ScopedBitmapWriteAccess pWriteAccess( aDestBitmap.AcquireWriteAccess(),
-                                              aDestBitmap );
-
-        const sal_Int32     nSrcWidth( pReadAccess->Width() );
-        const sal_Int32     nSrcHeight( pReadAccess->Height() );
-        const bool          bSrcTopDown( pReadAccess->IsTopDown() );
-        const sal_uInt32    nSrcScanlineFormat( pReadAccess->GetScanlineFormat() );
-        const sal_uInt32    nSrcScanlineStride( pReadAccess->GetScanlineSize() );
-        const sal_uInt16    nSrcBitCount( pReadAccess->GetBitCount() );
-        const sal_uInt16    nSrcPaletteEntries( pReadAccess->GetPaletteEntryCount() );
-        const BitmapColor*  pSrcPalette( &pReadAccess->GetPalette()[0] );
-        const BYTE*         pSrcBuffer = pReadAccess->GetBuffer();
-
-        const sal_Int32     nDstWidth( pWriteAccess->Width() );
-        const sal_Int32     nDstHeight( pWriteAccess->Height() );
-        const bool          bDstTopDown( pWriteAccess->IsTopDown() );
-        const sal_uInt32    nDstScanlineFormat( pWriteAccess->GetScanlineFormat() );
-        const sal_uInt32    nDstScanlineStride( pWriteAccess->GetScanlineSize() );
-        const sal_uInt16    nDstBitCount( pWriteAccess->GetBitCount() );
-        const sal_uInt16    nDstPaletteEntries( pWriteAccess->GetPaletteEntryCount() );
-        const BitmapColor*  pDstPalette( &pWriteAccess->GetPalette()[0] );
-        BYTE*               pDstBuffer = pWriteAccess->GetBuffer();
-
-        typedef PackedPixelIterator< const BYTE,
-            BYTE,
-            srcBitDepth,
-            true > SrcPixelIterator;
-        typedef PaletteImageAccessor< RGBVal, BYTE > SrcImageAccessor;
-
-        typedef PackedPixelIterator< BYTE,
-            BYTE,
-            dstBitDepth,
-            true > DstPixelIterator;
-        typedef PaletteImageAccessor< RGBVal, BYTE > DstImageAccessor;
-
-        const SrcPixelIterator aStartImage( pSrcBuffer,nSrcScanlineStride );
-        const SrcPixelIterator aEndImage( aStartImage + vigra::Diff2D(nSrcWidth,nSrcHeight) );
-
-        const DstPixelIterator aStartDstImage( pDstBuffer,nDstScanlineStride );
-        const DstPixelIterator aEndDstImage( aStartDstImage + vigra::Diff2D(nDstWidth,nDstHeight) );
-
-        vigra::resizeImageNoInterpolation(
-            //vigra::resizeImageLinearInterpolation(
-            vigra::make_triple(
-                aStartImage,
-                aEndImage,
-                SrcImageAccessor(
-                    pSrcPalette,
-                    nSrcPaletteEntries)),
-            vigra::make_triple(
-                aStartDstImage,
-                aEndDstImage,
-                DstImageAccessor(
-                    pDstPalette,
-                    nDstPaletteEntries)));
-    }
-
-    DrawBitmap( Point(), aDestBitmap );
-
-
-    Bitmap aDestBitmap2( Size(300,300),
-                        dstBitDepth );
-
-    {
-        ScopedBitmapReadAccess  pReadAccess( aSourceBitmap.AcquireReadAccess(),
-                                             aSourceBitmap );
-        ScopedBitmapWriteAccess pWriteAccess( aDestBitmap2.AcquireWriteAccess(),
-                                              aDestBitmap2 );
-
-        const sal_Int32     nSrcWidth( pReadAccess->Width() );
-        const sal_Int32     nSrcHeight( pReadAccess->Height() );
-        const bool          bSrcTopDown( pReadAccess->IsTopDown() );
-        const sal_uInt32    nSrcScanlineFormat( pReadAccess->GetScanlineFormat() );
-        const sal_uInt32    nSrcScanlineStride( pReadAccess->GetScanlineSize() );
-        const sal_uInt16    nSrcBitCount( pReadAccess->GetBitCount() );
-        const sal_uInt16    nSrcPaletteEntries( pReadAccess->GetPaletteEntryCount() );
-        const BitmapColor*  pSrcPalette( &pReadAccess->GetPalette()[0] );
-        const BYTE*         pSrcBuffer = pReadAccess->GetBuffer();
-
-        const sal_Int32     nDstWidth( pWriteAccess->Width() );
-        const sal_Int32     nDstHeight( pWriteAccess->Height() );
-        const bool          bDstTopDown( pWriteAccess->IsTopDown() );
-        const sal_uInt32    nDstScanlineFormat( pWriteAccess->GetScanlineFormat() );
-        const sal_uInt32    nDstScanlineStride( pWriteAccess->GetScanlineSize() );
-        const sal_uInt16    nDstBitCount( pWriteAccess->GetBitCount() );
-        const sal_uInt16    nDstPaletteEntries( pWriteAccess->GetPaletteEntryCount() );
-        const BitmapColor*  pDstPalette( &pWriteAccess->GetPalette()[0] );
-        BYTE*               pDstBuffer = pWriteAccess->GetBuffer();
-
-        typedef vigra::RGBValue< sal_uInt8 > RGBVal;
-        typedef PackedPixelIterator< const BYTE,
-            BYTE,
-            srcBitDepth,
-            true > SrcPixelIterator;
-        typedef PaletteImageAccessor< RGBVal,BYTE > SrcImageAccessor;
-
-        typedef PackedPixelIterator< BYTE,
-            BYTE,
-            dstBitDepth,
-            true > DstPixelIterator;
-        typedef PaletteImageAccessor< RGBVal,BYTE > DstImageAccessor;
-
-        const SrcPixelIterator aStartImage( pSrcBuffer,nSrcScanlineStride );
-        const SrcPixelIterator aEndImage( aStartImage + vigra::Diff2D(nSrcWidth,nSrcHeight) );
-
-        const DstPixelIterator aStartDstImage( pDstBuffer,nDstScanlineStride );
-        const DstPixelIterator aEndDstImage( aStartDstImage + vigra::Diff2D(nDstWidth,nDstHeight) );
-
-        vigra::resizeImageLinearInterpolation(
-            vigra::make_triple(
-                aStartImage,
-                aEndImage,
-                SrcImageAccessor(
-                    pSrcPalette,
-                    nSrcPaletteEntries)),
-            vigra::make_triple(
-                aStartDstImage,
-                aEndDstImage,
-                DstImageAccessor(
-                    pDstPalette,
-                    nDstPaletteEntries)));
-    }
-
-    DrawBitmap( Point(310,0), aDestBitmap2 );
-
-
-    Bitmap aDestBitmap3( Size(300,300),
-                         24 );
-
-    {
-        ScopedBitmapReadAccess  pReadAccess( aSourceBitmap.AcquireReadAccess(),
-                                             aSourceBitmap );
-        ScopedBitmapWriteAccess pWriteAccess( aDestBitmap3.AcquireWriteAccess(),
-                                              aDestBitmap3 );
-
-        const sal_Int32     nSrcWidth( pReadAccess->Width() );
-        const sal_Int32     nSrcHeight( pReadAccess->Height() );
-        const bool          bSrcTopDown( pReadAccess->IsTopDown() );
-        const sal_uInt32    nSrcScanlineFormat( pReadAccess->GetScanlineFormat() );
-        const sal_uInt32    nSrcScanlineStride( pReadAccess->GetScanlineSize() );
-        const sal_uInt16    nSrcBitCount( pReadAccess->GetBitCount() );
-        const sal_uInt16    nSrcPaletteEntries( pReadAccess->GetPaletteEntryCount() );
-        const BitmapColor*  pSrcPalette( &pReadAccess->GetPalette()[0] );
-        const BYTE*         pSrcBuffer = pReadAccess->GetBuffer();
-
-        const sal_Int32     nDstWidth( pWriteAccess->Width() );
-        const sal_Int32     nDstHeight( pWriteAccess->Height() );
-        const bool          bDstTopDown( pWriteAccess->IsTopDown() );
-        const sal_uInt32    nDstScanlineFormat( pWriteAccess->GetScanlineFormat() );
-        const sal_uInt32    nDstScanlineStride( pWriteAccess->GetScanlineSize() );
-        const sal_uInt16    nDstBitCount( pWriteAccess->GetBitCount() );
-        BYTE*               pDstBuffer = pWriteAccess->GetBuffer();
-
-        vigra::BasicImageView< RGBVal > aDestImage(
-            reinterpret_cast<RGBVal*>(pDstBuffer),
-            nDstWidth,
-            nDstHeight,
-            0 /*nDstScanlineStride should be an integer multiple of 4*/ );
-
-        typedef PackedPixelIterator< const BYTE,
-            BYTE,
-            srcBitDepth,
-            true > SrcPixelIterator;
-        typedef PaletteImageAccessor< RGBVal,BYTE > SrcImageAccessor;
-
-        const SrcPixelIterator aStartImage( pSrcBuffer,nSrcScanlineStride );
-        const SrcPixelIterator aEndImage( aStartImage + vigra::Diff2D(nSrcWidth,nSrcHeight) );
-
-        // resize bitmap
-        vigra::resizeImageSplineInterpolation(
-            vigra::make_triple(
-                aStartImage,
-                aEndImage,
-                SrcImageAccessor(
-                    pSrcPalette,
-                    nSrcPaletteEntries)),
-            vigra::destImageRange(aDestImage));
-
-        // add ellipse to bitmap
-        basegfx::B2DPolygon aPoly(
-            basegfx::tools::createPolygonFromEllipse(
-                basegfx::B2DPoint(150,150),
-                50, 80 ));
-        aPoly = basegfx::tools::adaptiveSubdivideByCount(aPoly);
-        makeRenderer( basegfx::B2DPolyPolygon( aPoly ),
-                      RGBVal(0,0xFF,0),
-                      RGBVal(0xFF,0xFF,0xFF),
-                      vigra::destImageRange(aDestImage) )->rasterConvert(
-                          basegfx::FillRule_NONZERO_WINDING_NUMBER );
-    }
-
-    DrawBitmap( Point(620,0), aDestBitmap3 );
-    DrawBitmap( Point(310,350), aSourceBitmap );
+    DrawBitmap( Point(), aBitmap );
 }
 
 USHORT TestApp::Exception( USHORT nError )
