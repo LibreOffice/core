@@ -4,9 +4,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.192 $
+#   $Revision: 1.193 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-19 17:12:44 $
+#   last change: $Author: ihi $ $Date: 2006-06-29 11:20:22 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -540,10 +540,6 @@ OPTIMIZE=
 
 .INCLUDE : postset.mk
 
-# --- add L10N_framework codes -------------------------------------
-
-alllangiso+=$(L10N_framework:s/,/ /)
-completelangiso+=$(L10N_framework:s/,/ /)
 RSC_LANG_ISO+:=$(completelangiso)
 .EXPORT : RSC_LANG_ISO
 
