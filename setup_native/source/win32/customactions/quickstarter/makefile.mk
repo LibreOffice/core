@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 16:33:47 $
+#   last change: $Author: ihi $ $Date: 2006-06-29 11:17:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,8 +39,6 @@ TARGET=quickstarter
 TARGET1=sdqsmsi
 TARGET2=qslnkmsi
 
-.IF "$(GUI)"=="WNT"
-
 # --- Settings -----------------------------------------------------
 
 LIBTARGET=NO
@@ -56,16 +54,17 @@ UWINAPILIB=
 
 # --- Files --------------------------------------------------------
 
+.IF "$(GUI)"=="WNT"
+
+STDSHL += \
+    advapi32.lib\
+    shell32.lib\
+    msi.lib\
+    $(LIBSTLPORTST)								
+
 
 SHL1OBJS =	$(SLO)$/shutdown_quickstart.obj \
             $(SLO)$/quickstarter.obj
-
-SHL1STDLIBS=	kernel32.lib\
-                user32.lib\
-                advapi32.lib\
-                shell32.lib\
-                msi.lib\
-                $(LIBSTLPORTST)								
 
 SHL1TARGET = $(TARGET1)
 SHL1IMPLIB = i$(TARGET1)
@@ -81,13 +80,6 @@ DEF1EXPORTFILE=$(TARGET1).dxp
 SHL2OBJS =	$(SLO)$/remove_quickstart_link.obj \
             $(SLO)$/quickstarter.obj
 
-SHL2STDLIBS=	kernel32.lib\
-                user32.lib\
-                advapi32.lib\
-                shell32.lib\
-                msi.lib\
-                $(LIBSTLPORTST)								
-
 SHL2TARGET = $(TARGET2)
 SHL2IMPLIB = i$(TARGET2)
 
@@ -97,12 +89,11 @@ DEF2NAME=$(SHL2TARGET)
 SHL2DEPN=$(SHL1OBJS)
 DEF2EXPORTFILE=$(TARGET2).dxp
 
+.ENDIF
+
 # --- Targets --------------------------------------------------------------
 
 .INCLUDE : target.mk
 
 # -------------------------------------------------------------------------
-
-
-.ENDIF
 
