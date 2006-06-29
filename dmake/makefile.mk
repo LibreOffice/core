@@ -116,7 +116,7 @@ dmake.uue : dmake.p
     uuencode dmake.Z dmake.Z >dmake.uue
     /bin/rm -f dmake.Z
 
-template.mk ".SETDIR=$(ENVDIR)" .USESHELL .MKDIR : $$(TMD)/startup/template.mk
+template.mk ".SETDIR=$(ENVDIR)" .USESHELL : $$(TMD)/startup/template.mk
     cat $< |\
     sed -e 's/xxOSxx/$(OS)/' |\
     sed -e 's/xxOSRELEASExx/$(OSRELEASE)/' |\
