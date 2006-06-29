@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_def.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:43:00 $
+#   last change: $Author: ihi $ $Date: 2006-06-29 11:20:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -144,9 +144,7 @@ $(DEF$(TNR)TARGETN) .PHONY :
     @+-$(RM) $@.tmpfile
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
-    @echo LIBRARY	  $(SHL$(TNR)TARGET) 								 >$@.tmpfile
-    @echo DESCRIPTION	'StarView 3.00 $(DEF$(TNR)DES) $(UPD) $(UPDMINOR)' >>$@.tmpfile
-    @echo DATA		  READ WRITE SHARED  							>>$@.tmpfile
+    @echo LIBRARY	  $(SHL$(TNR)TARGETN:f) 								 >$@.tmpfile
     @echo HEAPSIZE	  0 											>>$@.tmpfile
     @echo EXPORTS													>>$@.tmpfile
 #	getversioninfo fuer alle!!
