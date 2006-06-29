@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.95 $
+#   $Revision: 1.96 $
 #
-#   last change: $Author: hr $ $Date: 2006-04-20 14:14:24 $
+#   last change: $Author: ihi $ $Date: 2006-06-29 11:21:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -142,11 +142,11 @@ $(MISC)$/$(SHL$(TNR)VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/$(S
 .IF "$(GUI)" != "UNX"
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)" == "MSC"
-.IF "$(SHL$(TNR)IMPLIB)" != ""
+.IF "$(SHL$(TNR)IMPLIB)" == ""
+SHL$(TNR)IMPLIB=i$(TARGET)_t$(TNR)
+.ENDIF			# "$(SHL$(TNR)IMPLIB)" == ""
 USE_$(TNR)IMPLIB=-implib:$(LB)$/$(SHL$(TNR)IMPLIB).lib
-.ELSE			# "$(SHL$(TNR)IMPLIB)" != ""
-USE_$(TNR)IMPLIB=-implib:$(LB)$/i$(TARGET)$(TNR).lib
-.ENDIF			# "$(SHL$(TNR)IMPLIB)" != ""
+SHL$(TNR)IMPLIBN=$(LB)$/$(SHL$(TNR)IMPLIB).lib
 .ENDIF			# "$(COM)" == "MSC"
 
 .IF "$(USE_DEFFILE)"==""
