@@ -6,7 +6,7 @@ dnl Set the package version
 dnl Don't forget to update the PACKAGE, VERSION and BUILDINFO macros in
 dnl dmake/win95/microsft/config.h to keep the native Microsoft C++
 dnl compiler build happy. 
-AC_INIT(dmake, 4.4)
+AC_INIT(dmake, 4.5)
 AC_CANONICAL_BUILD
 BUILDINFO="$build"
 
@@ -126,7 +126,7 @@ AC_DEFINE_UNQUOTED(BUILDINFO, "$BUILDINFO", [Build info string])
 AC_SUBST(OS_SUBDIRS)
 AC_SUBST(OS_LIBRARY)
 
-if test xOS_TYPE != xwinnt; then
+if test x$OS_TYPE != xwinnt; then
 dnl See iz53148. Only *nix like builds enable parallel makefile processing
 dnl and use stdout redirection in the child for _exec_shell()
 AC_DEFINE(USE_SANE_EXEC_SHELL_REDIR, 1, [Use sane redirection mechanism for systems that support parallel building, see iz53148.])
