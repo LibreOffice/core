@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 03:03:37 $
+#   last change: $Author: ihi $ $Date: 2006-06-29 11:34:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,6 @@ SLOFILES =  $(SLO)$/itiff.obj    \
 SHL1TARGET=     iti$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB=     itiff
 SHL1STDLIBS=    $(VCLLIB) $(TOOLSLIB) $(SALLIB)
-SHL1DEPN=       $(LB)$/itiff.lib
 SHL1LIBS=       $(SLB)$/itiff.lib # $(LB)$/rtftoken.lib
 
 .IF "$(GUI)" != "UNX"
