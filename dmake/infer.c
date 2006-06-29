@@ -1,6 +1,6 @@
 /* $RCSfile: infer.c,v $
--- $Revision: 1.5 $
--- last change: $Author: hr $ $Date: 2006-04-20 12:00:49 $
+-- $Revision: 1.6 $
+-- last change: $Author: ihi $ $Date: 2006-06-29 11:24:00 $
 --
 -- SYNOPSIS
 --      Infer how to make a target.
@@ -51,6 +51,11 @@ static ICELLPTR   add_iset    ANSI((ICELLPTR,ICELLPTR,CELLPTR,DFALINKPTR,
                      CELLPTR,int,int,char *,char *, int));
 static ICELLPTR   derive_prerequisites ANSI((ICELLPTR, ICELLPTR *));
 static char *     dump_inf_chain ANSI((ICELLPTR, int, int));
+
+#ifdef DBUG
+static void   _dump_dfa_stack ANSI((DFALINKPTR, DFASETPTR));
+static void   _dump_iset ANSI(( char *, ICELLPTR ));
+#endif
 
 
 PUBLIC void
@@ -239,19 +244,29 @@ CELLPTR setdirroot;
 
         pmatch->ic_dfa->dl_per = NIL(char);
 
-        /* If infcell already had a directory set then modify it based on
-         * whether it was the original cell or some intermediary. */
+        /* If infcell already had a .SETDIR directory set then modify it
+         * based on whether it was the original cell or some intermediary. */
         if( imeta->ce_dir ) {
            if( infcell->ce_dir && infcell == cp ) {
           /* cp->ce_dir was set and we have pushed the directory prior
-           * to calling this routine.  We should therefore pop it and
-           * push the new concatenated directory required by the
-           * inference. */
-          infcell->ce_dir=DmStrDup(Build_path(infcell->ce_dir,
-                             imeta->ce_dir));
+           * to calling this routine.
+           * We build a new path by appending imeta->ce_dir to the
+           * current directory of the original cell.
+           * We should therefore pop it and push the new concatenated
+           * directory required by the inference.
+           * This leaks memory as cp->ce_dir is not freed before
+           * setting the new the new infcell->ce_dir value but as
+           * the pointer could be a `A_POOL` member we accept this. */
+          infcell->ce_dir = DmStrDup(Build_path(infcell->ce_dir,
+                            imeta->ce_dir));
            }
-           else
-          infcell->ce_dir = imeta->ce_dir;
+           else {
+          /* Inherit a copy of the .SETDIR value. Use a copy because
+           * the original could have been freed in the meantime
+           * in Make() by the FREE() before _pool_lookup(). This can
+           * also leak if infcell->ce_dir was set before. */
+          infcell->ce_dir = DmStrDup(imeta->ce_dir);
+           }
         }
 
         for( lp=imeta->ce_indprq; lp != NIL(LINK); lp=lp->cl_next ) {
@@ -505,7 +520,9 @@ ICELLPTR *nnmp;
 
 
 static char *
-buildname( tg, meta, per )
+buildname( tg, meta, per )/*
+============================
+   Replace '%' with per in meta. Expand the result and return it. */
 char *tg;
 char *meta;
 char *per;
@@ -787,6 +804,7 @@ int  print;
 
 
 #ifdef DBUG
+static void
 _dump_dfa_stack(dfas, dfa_stack)
 DFALINKPTR dfas;
 DFASETPTR  dfa_stack;
@@ -812,6 +830,7 @@ DFASETPTR  dfa_stack;
 }
 
 
+static void
 _dump_iset( name, iset )
 char     *name;
 ICELLPTR iset;
@@ -834,7 +853,7 @@ ICELLPTR iset;
       else
      printf( "dfa: (nil)\n" );
 
-      printf( "sdr: %04x\n", iset->ic_setdirroot );
+      printf( "sdr: %p\n", iset->ic_setdirroot );
       _dump_dfa_stack(iset->ic_dfastack.df_set, &iset->ic_dfastack);
 
       printf( "dmax: %d\n", iset->ic_dmax );
