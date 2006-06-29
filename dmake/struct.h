@@ -1,4 +1,4 @@
-/* RCS  $Id: struct.h,v 1.1.1.1 2000-09-22 15:33:25 hr Exp $
+/* RCS  $Id: struct.h,v 1.2 2006-06-29 11:24:50 ihi Exp $
 --
 -- SYNOPSIS
 --      Structure definitions
@@ -99,7 +99,8 @@ typedef struct flst {
 } FILELIST, *FILELISTPTR;
 
 
-/* The next struct is used to link together prerequisite lists */
+/* The next struct is used to link together prerequisite lists. It
+ * is also used to link multiple targets together. */
 typedef struct lcell {
     struct tcell    *cl_prq;    /* link to a prerequisite   */
     struct lcell    *cl_next;   /* next cell on dependency list */
@@ -117,8 +118,12 @@ typedef struct tcell {
     struct hcell    *ce_name;   /* name of this cell                */
         struct hcell    *ce_pushed;     /* local pushed macro definitions   */
 
-        struct lcell    ce_all;         /* link for grouping UPDATEALL cells*/
-        struct tcell    *ce_set;        /* set rep. valid if ce_all != NULL */
+    /* Def_cell sets ce_all.cl_prq to point back to itself. .UPDATEALL
+     * uses ce_all.cl_next to link the cells together. */
+    struct lcell    ce_all;
+
+    /* If set it points to first element of the list linked by ce_all. */
+        struct tcell    *ce_set;
     struct tcell    *ce_setdir; /* SETDIR ROOT pointer for this cell*/
     struct tcell    *ce_link;   /* link for temporary list making   */
         struct tcell    *ce_parent;     /* used by inner loop, not a static */
