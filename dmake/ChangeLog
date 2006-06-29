@@ -1,3 +1,259 @@
+2006-06-22 16:48  vq
+
+	* NEWS:
+
+	#i66522# Release dmake 4.5
+	(Two more issues were added and fixed in CWS dmake45.)
+
+2006-06-22 16:45  vq
+
+	* tests/: infra-0, macros-1, macros-2, macros-3, misc-1, misc-10,
+	  misc-11, misc-2, misc-3, misc-4, misc-5, misc-7, misc-8, misc-9,
+	  recipes-1, targets-1, targets-10, targets-2, targets-3,
+	  targets-4, targets-5, targets-6, targets-7, targets-8, targets-9:
+
+	#i66650# Make dmake testsuite more portable. (Usable with Solaris.)
+	Patch by hjs.
+
+2006-06-22 16:14  vq
+
+	* getinp.c, rulparse.c, tests/Makefile.am, tests/Makefile.in,
+	  tests/misc-1, tests/misc-12:
+
+	#i66659# Fix evaluation of line continuations in conditional expressions
+	and add testcase.
+
+2006-06-20 10:20  vq
+
+	* Makefile.in, configure, configure.in, win95/microsft/config.h,
+	  winnt/microsft/config.h:
+
+	#i66522# Release dmake 4.5.
+
+2006-06-17 13:08  vq
+
+	* Makefile.in, configure, configure.in, readme/intro.txt,
+	  readme/read1st.txt, win95/microsft/config.h,
+	  winnt/microsft/config.h:
+
+	#i66522# Increase version number in documentation files and set preliminary
+	dmake version to 4.5-cvs.
+
+2006-06-16 20:41  vq
+
+	* NEWS:
+
+	#i66522# Update NEWS file.
+
+2006-06-16 16:38  vq
+
+	* makefile.mk:
+
+	#i66509# Fix bug in makefile.
+
+2006-06-16 16:24  vq
+
+	* man/: dmake.nc, dmake.tf:
+
+	#i66522# Update manpage.
+
+2006-06-16 14:46  vq
+
+	* tests/: Makefile.am, Makefile.in, misc-11:
+
+	#i65281# Add testcase.
+
+2006-06-16 14:31  vq
+
+	* getinp.c, man/dmake.nc, man/dmake.tf:
+
+	#i65281# Fix comparison with empty string.
+
+2006-06-14 22:42  vq
+
+	* unix/ruletab.c, win95/borland/ruletab.c,
+	  win95/microsft/ruletab.c, winnt/borland/ruletab.c,
+	  winnt/microsft/ruletab.c:
+
+	#i64889# Increase the default MAXLINELENGTH for all "modern" target OSs.
+
+	This patch was submitted by shay@openoffice.org.
+
+2006-06-14 18:43  vq
+
+	* man/dmake.nc, man/dmake.tf, tests/Makefile.am, tests/Makefile.in,
+	  tests/targets-10, tests/targets-7, tests/targets-9:
+
+	#i48087# Add testcases and change man page.
+
+2006-06-13 19:52  vq
+
+	* tests/: Makefile.am, Makefile.in, targets-8:
+
+	#i64331# Add testcase.
+
+2006-06-13 19:31  vq
+
+	* infer.c:
+
+	#i64431# Fix .SETDIR problem with percent targets.
+
+2006-06-13 15:06  vq
+
+	* Makefile.in, configure, configure.in:
+
+	#i64795# Fix typo in configure.in.
+
+2006-06-13 14:33  vq
+
+	* tests/: Makefile.am, Makefile.in, targets-7:
+
+	#i65122# Add testcase.
+
+2006-06-13 13:14  vq
+
+	* tests/: Makefile.am, Makefile.in, targets-6:
+
+	#i66385# Add testcase.
+
+2006-06-13 12:58  vq
+
+	* rulparse.c, man/dmake.nc, man/dmake.tf:
+
+	#i66385# Handle .<suffix> targets regardless of the AUGMAKE (-A) status.
+	Document this and regenerate man page.
+
+2006-06-13 11:03  vq
+
+	* tests/: Makefile.am, Makefile.in, targets-5:
+
+	#i66083# Add testcase.
+
+2006-06-13 01:28  vq
+
+	* rulparse.c:
+
+	#i66083# Check that AUGMAKE meta targets are not mixed with normal targets.
+
+2006-06-03 23:30  vq
+
+	* rulparse.c:
+
+	#i48087# Only warn once about multiple prerequisites for %-targets.
+
+2006-06-03 21:55  vq
+
+	* tests/: Makefile.am, Makefile.in, targets-4:
+
+	#i65360# Add testcase to check for message about empty recipe for
+	special or meta targets.
+
+2006-06-03 21:37  vq
+
+	* rulparse.c:
+
+	#i65360# Improve output of warning for special or meta targets without
+	recipe.
+
+2006-06-03 21:17  vq
+
+	* tests/: Makefile.am, Makefile.in, targets-3:
+
+	#i65360# Add testcase that checks that a warning is issued when .<suffix>
+	targets are ignored.
+
+2006-06-03 20:34  vq
+
+	* tests/: Makefile.am, Makefile.in, targets-1, targets-2:
+
+	#i64869# Add testcases and regenerate autotools files.
+
+2006-05-17 17:44  vq
+
+	* Makefile.in, tests/Makefile.am, tests/Makefile.in,
+	  tests/macros-3:
+
+	#i65333# Add testcase and regenerate autotools files.
+
+2006-05-17 00:04  vq
+
+	* man/dmake.tf:
+
+	#i65333# Elaborate on .<suffix> vs. special targets and .INIT and .DONE
+	that also begin with a dot.
+
+2006-05-15 23:43  vq
+
+	* man/dmake.tf:
+
+	#i65333# Collect .<suffix> description at one place in the man page.
+
+2006-05-15 18:50  vq
+
+	* man/dmake.tf:
+
+	#i48087# Document the current %-target handling.
+
+2006-05-14 13:06  vq
+
+	* rulparse.c:
+
+	#i65360# Fix typo.
+
+2006-05-14 12:58  vq
+
+	* rulparse.c:
+
+	#i65360# Warn if dmake ignores an illegal .<suffix> target but keep the
+	behavior of dmake 4.4 and earlier.
+
+2006-05-12 13:36  vq
+
+	* rulparse.c:
+
+	#i48087# Fix typo.
+
+2006-05-12 12:59  vq
+
+	* rulparse.c:
+
+	#i65333# Prevent .ROOT, .TARGETS, .INIT and .DONE from being treates as
+	special .<suffix> targets.
+
+2006-05-10 23:38  vq
+
+	* Makefile.in, man/dmake.nc, tests/Makefile.in:
+
+	#i65281# Regenerate autotools files and plain text version of manpage.
+
+2006-05-10 23:31  vq
+
+	* getinp.c, man/dmake.tf, tests/Makefile.am, tests/misc-10:
+
+	#i65281# Fix crash on numeric comparison and add testcase.
+
+2006-05-10 13:46  vq
+
+	* dmdump.c, rulparse.c, struct.h:
+
+	#i48087# Correct parsing of target definitions with multiple % targets and
+	prerequisites. Also add some comments.
+
+2006-05-05 17:33  vq
+
+	* dmake.h, infer.c, rulparse.c, struct.h, man/dmake.tf:
+
+	#i65122# Fix problem with "non-documented" handling of multiple %-targets
+	plus several improved comments and a man page correction.
+
+2006-05-03 17:47  vq
+
+	* dag.c, dmake.c, getinp.c, imacs.c, parse.c, rulparse.c,
+	  vextern.h:
+
+	#i64869# Fix various parsing problems of target definitions and
+	add code comments.
+
 2006-03-31 11:04  vq
 
 	* Makefile.in, NEWS, configure, configure.in, readme/intro.txt,
