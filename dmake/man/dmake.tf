@@ -19,7 +19,7 @@
 .IP "\\$1" \\n[dmake-indent]u
 .it 1 PD
 ..
-.TH DMAKE 1  "UW" "Version 4.4"
+.TH DMAKE 1  "2006-06-16" "Dmake Version 4.5"
 .SH NAME
 \fBdmake\fR \- maintain program groups, or interdependent files
 .SH SYNOPSIS
@@ -84,7 +84,8 @@ occurred.
 .SH OPTIONS
 .IP "\fB\-A\fR"
 Enable AUGMAKE special inference rule transformations
-(see the "PERCENT(%) RULES" section), these are set to off by default.
+(see the "PERCENT(%) RULES" and "AUGMAKE META RULES" sections), these are
+set to off by default.
 .IP "\fB\-B\fR"
 Enable the use of spaces instead of <tabs> to begin recipe lines.
 This flag equivalent to the .NOTABS special macro and is further described
@@ -282,6 +283,8 @@ The rules that \fBdmake\fP uses to bind
 a target to an existing file in the file system.
 .IP "\fBPERCENT(%) RULES\fP" 1.9i
 Specification of recipes to be used by the inference algorithm.
+.IP "\fBAUGMAKE META RULES\fP" 1.9i
+A subclass of the \fBPERCENT(%) RULES\fP.
 .IP "\fBMAKING INFERENCES\fP" 1.9i
 The rules that \fBdmake\fP uses when inferring how to make a target which
 has no explicit recipe.  This and the previous section are really a single
@@ -417,6 +420,13 @@ definition is trivially chaned by supplying the definition:
 .RE
 .sp
 which skips the preamble and postamble phases of building .TARGETS.
+.PP
+.B Please note
+that even though .INIT and .DONE are special exceptions, see section SPECIAL
+TARGETS, the use of self defined targets starting with `.' should be avoided
+as they would be handled as .<suffix> meta targets. The target names _INIT
+and _DONE for example would work equally well without the .<suffix>
+drawback.
 .SH SYNTAX
 This section is a summary of the syntax of makefile statements.
 The description is given in a style similar to BNF, where { } enclose
@@ -447,10 +457,11 @@ are text or names representing text supplied by the user.
    Makefile ]
 \fB\&.END\fR
 .Ip "expression" "\(-> \fBLINE\fR"
-\(-> \fBSTRING == LINE\fR
-\(-> \fBSTRING != LINE\fR
-\(-> \fBSTRING <= LINE\fR
-\(-> \fBSTRING >= LINE\fR
+\(-> \fBSTRING\fR
+\(-> expression \fB==\fR expression
+\(-> expression \fB!=\fR expression
+\(-> expression \fB<=\fR expression
+\(-> expression \fB>=\fR expression
 \(-> \fB(\fR expression \fB)\fR
 \(-> expression \fB||\fR expression
 \(-> expression \fB&&\fR expression
@@ -509,8 +520,13 @@ target-definition \(-> targets [attrs] op { \fBPREREQUISITE\fP } [\fB;\fR rcp-li
 \(-> \fB.INCLUDEDIRS\fR
 \(-> \fB.MAKEFILES\fR
 \(-> \fB.REMOVE\fR
+\(-> \fB.ROOT\fR
 \(-> \fB.SOURCE\fR
 \(-> \fB.SOURCE.\fIsuffix\fR
+\(-> \fB.TARGETS\fR
+\(-> \fB.INIT\fR
+\(-> \fB.DONE\fR
+\(-> .\fIsuffix\fR
 \(-> .\fIsuffix1\fR.\fIsuffix2\fR
 .fi
 .RE
@@ -1218,7 +1234,7 @@ by a semicolon and have no following recipe lines, for targets listed on the
 command line, for the first target found in the makefile, and for any target
 having no recipe but containing a list of prerequisites (see the COMPATIBILITY
 section for an exception to this rule if the AUGMAKE (\fB\-A\fP) flag
-was specified.
+was specified).
 .SH "RECIPES"
 The traditional format used by most versions of Make defines the recipe
 lines as arbitrary strings that may contain macro expansions.  They
@@ -1534,6 +1550,13 @@ makefile.  By default this target is defined as:
 .sp
 \t\&.MAKEFILES : makefile.mk Makefile makefile
 .sp
+.IP \fB.REMOVE\fP 1.4i
+The recipe of this target is used whenever \fBdmake\fP needs to remove
+intermediate targets that were made but do not need to be kept around.
+Such targets result from the application of transitive closure on the
+dependency graph.
+.IP \fB.ROOT\fP 1.4i
+The internal root of the dependency graph, see section STARTUP for details.
 .IP \fB.SOURCE\fP 1.4i
 The prerequisite list of this target defines a set of directories to check
 when trying to locate a target file name.  See the section on BINDING of
@@ -1542,11 +1565,29 @@ targets for more information.
 The same as .SOURCE, except that the .SOURCE.suff list is searched first when
 trying to locate a file matching the a target whose name ends in the suffix
 \&.suff.
-.IP \fB.REMOVE\fP 1.4i
-The recipe of this target is used whenever \fBdmake\fP needs to remove
-intermediate targets that were made but do not need to be kept around.
-Such targets result from the application of transitive closure on the
-dependency graph.
+.IP \fB.TARGETS\fP 1.4i
+The internal targets that all user defined targets are prerequisites of,
+see section STARTUP for details.
+.PP
+There are a few targets that are "slightly" special:
+.RS
+.nf
+
+\&\fB.INIT\fP
+\&\fB.DONE\fP
+
+.fi
+.RE
+These targets exist because of historical reasons, see the usage of .INIT
+and .DONE in section "STARTUP", they can be used and defined as ordinary
+targets but are special in the sense that even though they start with a `.'
+they are not treated as a .<suffix> meta target (See the AUGMAKE META RULES
+section for details).
+.PP
+.B Please note
+that self defined targets shouldn't use the prefix `.' as they would be
+handled as .<suffix> meta targets and dmake most propably would complain
+about this.
 .PP
 In addition to the special targets above,
 several other forms of targets are recognized and are considered special,
@@ -1667,8 +1708,8 @@ non\-group recipe with a line that contains only white\-space.
 This mode does not effect the parsing of group recipes bracketed by [].
 .IP \fBAUGMAKE\fP 1.6i
 If set to "yes" value will enable the transformation of special
-meta targets to support special AUGMAKE inferences (See the COMPATIBILITY
-section).
+meta targets to support special AUGMAKE inferences (See the "AUGMAKE
+META RULES" and "COMPATIBILITY" sections).
 .IP \fBDIRBRKSTR\fP 1.6i
 Contains the string of chars used to terminate
 the name of a directory in a pathname.
@@ -2273,20 +2314,31 @@ follows:
 .sp
 .nf
 .RS
-\fI<%-target>\fP [\fI<attributes>\fP] \fI<ruleop>\fP [\fI<%-prerequisites>\fP] [;\fI<recipe>\fP]
+\fI<%-targets>\fP [\fI<attributes>\fP] \fI<ruleop>\fP [\fI<%-prereqs>\fP] [;\fI<recipe>\fP]
 .RE
 .fi
 .sp
-where \fI%-target\fP is a target containing exactly a single `%' sign,
+where \fI%-targets\fP are one or more targets containing exactly a single `%'
+sign,
 .I attributes
 is a list (possibly empty) of attributes,
 .I ruleop
 is the standard set of rule operators,
-.I "%-prerequisites"
+.I "%-prereqs"
 \&, if present, is a list of prerequisites containing zero or more `%' signs,
 and
 .I recipe,
 if present, is the first line of the recipe.
+.PP
+If more than one %-target is present this line is equivalent to a repetition
+of the whole [<attributes>] <ruleop> [<%-prereqs>] [;<recipe>] sequence
+for each %-target, i.e. it is possible to specify the same rule for multiple
+%-targets. Because of this following only speaks about \fI<%-target>\fP as
+\fI%-targets\fP are divided into multiple definitions with a single %-target.
+.PP
+\fBNOTE:\fP  As multiple %-targets didn't work reliably with dmake versions prior
+to 4.5 unless the rule operator `|:' was used we currently issue a warning
+stating that it \fBnow\fP works.
 .PP
 The
 .I %-target
@@ -2317,6 +2369,11 @@ and is substituted for any % signs in the prerequisite list of the %-meta rule
 when the rule is selected during inference and
 .B dmake
 constructs the new dependency.
+.PP
+.B Please note,
+that currently only the first, non-indirect, prerequisite of the
+list is used and all other non-indirect prerequisites are ignored.
+.PP
 As an example the following %-meta rules describe the following:
 .RS
 .sp
@@ -2343,17 +2400,9 @@ prerequisites.
 %.c : %.y yaccsrc/%.y ; recipe...
 .sp
 .RE
-is a short form for the construct:
-.RS
-.sp
-%.c : %.y ; recipe...
-.br
-%.c : yaccsrc/%.y ; recipe...
-.sp
-.RE
-ie. It is possible to specify the same recipe for two %-rules by giving
-more than one prerequisite in the prerequisite list.
-A more interesting example is:
+should match the corresponding .y file and another .y file in the yaccsrc
+subdirectory. (Currently only the first prerequisite is used.)
+Another interesting example is:
 .RS
 .sp
 % : RCS/%,v ; co $<
@@ -2458,15 +2507,15 @@ The construct:
 %.o : %.c %.f 'local.h'; recipe
 .sp
 .RE
-is equivalent to:
+is (currently) equivalent to:
 .RS
 .sp
 .nf
-%.o : %.c 'local.h' : recipe
+%.o : %.c 'local.h' ; recipe
 .fi
 .sp
 .RE
-while:
+because the second prerequisite is ignored, while:
 .RS
 .sp
 %.o :| %.c %.f 'local.h'; recipe
@@ -2476,8 +2525,8 @@ is equivalent to:
 .RS
 .sp
 .nf
-%.o : %.c 'local.h' : recipe
-%.o : %.f 'local.h' : recipe
+%.o : %.c 'local.h' ; recipe
+%.o : %.f 'local.h' ; recipe
 .fi
 .sp
 .RE
@@ -2497,59 +2546,6 @@ are honored.
 The directories must exist for a %-meta rule to be selected as a possible
 inference path.  If the directories do not exist no error message is issued,
 instead the corresponding path in the inference graph is rejected.
-.PP
-.B dmake
-also supports the old format special target .<suffix>.<suffix>
-by identifying any rules
-of this form and mapping them to the appropriate %-rule.  So for example if
-an old makefile contains the construct:
-.RS
-.sp
-\&.c.o :; cc \-c $< \-o $@
-.sp
-.RE
-.B dmake
-maps this into the following %-rule:
-.RS
-.sp
-%.o : %.c; cc \-c $< \-o $@
-.sp
-.RE
-Furthermore,
-.B dmake
-understands several SYSV AUGMAKE special targets and maps them into
-corresponding %-meta rules.  These transformation must be enabled by providing
-the \-A flag on the command line or by setting the value of AUGMAKE to
-non\-NULL.
-The construct
-.RS
-.sp
-\&.suff :; recipe
-.sp
-.RE
-gets mapped into:
-.RS
-.sp
-% : %.suff; recipe
-.sp
-.RE
-and the construct
-.RS
-.sp
-\&.c~.o :; recipe
-.sp
-.RE
-gets mapped into:
-.RS
-.sp
-%.o : s.%.c ; recipe
-.sp
-.RE
-In general, a special target of the form .<str>~ is replaced by the %-rule
-construct s.%.<str>, thereby providing support for the syntax used by SYSV
-AUGMAKE for providing SCCS support.
-When enabled, these mappings allow processing of existing SYSV
-makefiles without modifications.
 .PP
 .B dmake
 bases all of its inferences on the inference graph constructed from the
@@ -2590,9 +2586,9 @@ The set of rules:
 .RS
 .nf
 .sp
-%.o : %.c :; rule for making .o from .c
-%.c : %.y :; rule for making .c from .y
-% : RCS/%,v :; check out of RCS file
+%.o : %.c ; rule for making .o from .c
+%.c : %.y ; rule for making .c from .y
+% : RCS/%,v ; check out of RCS file
 .fi
 .sp
 .RE
@@ -2637,6 +2633,61 @@ in the startup file as:
 .RS
 .sp
 \&.REMOVE :; $(RM) $<
+.RE
+.SH "AUGMAKE META RULES"
+As a subclass of the meta targets that is actually mapped to %-meta rules
+.B dmake
+understands several SYSV AUGMAKE targets transformations. This .<suffix>
+special target construct transforms into the following %-meta rules:
+.RS
+.sp
+\&.suff :; recipe
+.sp
+.RE
+gets mapped into:
+.RS
+.sp
+% : %.suff; recipe
+.sp
+.RE
+.PP
+.B dmake
+also supports the old format special target .<suffix>.<suffix>
+by identifying any rules
+of this form and mapping them to the appropriate %-rule.  So for example if
+an old makefile contains the construct:
+.RS
+.sp
+\&.c.o :; cc \-c $< \-o $@
+.sp
+.RE
+.B dmake
+maps this into the following %-rule:
+.RS
+.sp
+%.o : %.c; cc \-c $< \-o $@
+.sp
+.RE
+The following SYSV AUGMAKE special targets transformation must be
+enabled by providing the \-A flag
+on the command line or by setting the value of AUGMAKE to non\-NULL.
+The construct
+.RS
+.sp
+\&.c~.o :; recipe
+.sp
+.RE
+gets mapped into:
+.RS
+.sp
+%.o : s.%.c ; recipe
+.sp
+.RE
+In general, a special target of the form .<str>~ is replaced by the %-rule
+construct s.%.<str>, thereby providing support for the syntax used by SYSV
+AUGMAKE for providing SCCS support.
+When enabled, these mappings allow processing of existing SYSV
+makefiles without modifications.
 .RE
 .SH "MAKING TARGETS"
 In order to update a target \fBdmake\fP must execute a recipe.
@@ -2974,7 +3025,10 @@ Boolean evaluation
 where \fItext\fR is either text or a macro expression.  In any case,
 before the comparison is made, the expression is expanded.  The text
 portions are then selected and compared.  In the case of the numeric
-comparisons the expanded expressions are converted to an integer number.
+comparisons enclosing quotes are removed after expanding the expressions
+and the leading numerical parts are converted to an integer number. If no
+numerical part is found this results to 0 (zero). The
+string "12ab" for example evaluates to the number 12.
 Expressions can be nested with () and the use of || or &&.
 White space at the start and
 end of the text portion is discarded before the comparison.  This means
@@ -3149,13 +3203,9 @@ The macro % is defined to be $@ (ie. $% expands to the same value as $@).
 .IP 4.
 The AUGMAKE notion of libraries is handled correctly.
 .IP 5.
-When defining special targets for the inference rules and the AUGMAKE special
-target handling is enabled then the special target
-\&.X is equivalent to the %-rule "% : %.X".
-.IP 6.
 Directories are always made if you specify \fB\-A\fP.  This is consistent
 with other UNIX versions of Make.
-.IP 7.
+.IP 6.
 Makefiles that utilize virtual targets to force making of other targets work
 as expected if AUGMAKE special target handling is enabled.  For example:
 .sp
