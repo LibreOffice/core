@@ -1,4 +1,4 @@
-/* RCS  $Id: dmdump.c,v 1.2 2006-04-20 11:59:37 hr Exp $
+/* RCS  $Id: dmdump.c,v 1.3 2006-06-29 11:23:21 ihi Exp $
 --
 -- SYNOPSIS
 --      Dump the internal dag to stdout.
@@ -137,10 +137,23 @@ int     flag;
    }
 
    if( cp->ce_flag & F_MULTI ) {
+      /* recursively print multi or %-targets. */
       int tflag = cp->ce_prq->cl_prq->ce_flag;
       if( !(cp->ce_flag & F_PERCENT) ) tflag |= F_MULTI;
       dump_conditionals(cp, cp->ce_cond, TRUE, TRUE);
       putchar('\n');
+
+#ifdef DBUG
+      /* Output also master targtet. (Only in debug builds) */
+      printf("Master name(s) (DBUG build): ");
+      dump_name(cp, FALSE, TRUE );
+      putchar('\n');
+#endif
+
+      /* %-targets set namecp (3rd parameter) to NULL so that the next
+       * recursive dump_normal_target() prints the name of cp->ce_prq->cl_prq
+       * instead of cp.  This should be the same unless CeMeToo(cp) points
+       * to a cell that is the head of an .UPDATEALL list. */
       dump_prerequisites(cp->ce_prq,(cp->ce_flag&F_PERCENT)?NIL(CELL):cp,
              FALSE, TRUE, tflag);
    }
@@ -220,8 +233,8 @@ int     flag;
 static void
 dump_prerequisites( lp, namecp, quote, recurse, flag )/*
 ========================================================
-    Dump as prerequisites if recurse is FALSE or as targets
-    if recurse is TRUE. (For F_MULTI targets.) */
+   Dump as prerequisites if recurse is FALSE or as targets
+   if recurse is TRUE. (For F_MULTI/F_PERCENT targets.) */
 LINKPTR lp;
 CELLPTR namecp;
 int     quote;
@@ -239,7 +252,9 @@ int     flag;
 static void
 dump_name( cp, quote, all )/*
 =============================
-    print out a name */
+   Prints out the first or all (if all is TRUE) names of an lcell list.
+   If quote is true enclose in ' quotes, if quote
+   is FALSE and the name includes a space enclose in " quotes. */
 CELLPTR cp;
 int     quote;
 int     all;
