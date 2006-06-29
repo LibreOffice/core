@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 02:58:11 $
+#   last change: $Author: ihi $ $Date: 2006-06-29 11:32:01 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,6 @@ SLOFILES =  $(SLO)$/ieps.obj
 SHL1TARGET=     ips$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB=     ieps
 SHL1STDLIBS=    $(VCLLIB) $(TOOLSLIB) $(SALLIB)
-SHL1DEPN=       $(LB)$/ieps.lib
 SHL1LIBS=       $(SLB)$/ieps.lib
 
 .IF "$(GUI)" != "UNX"
