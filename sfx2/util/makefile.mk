@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.42 $
+#   $Revision: 1.43 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-19 22:40:31 $
+#   last change: $Author: ihi $ $Date: 2006-06-29 11:35:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -114,11 +114,6 @@ SHL1STDLIBS+=\
 
 .IF "$(GUI)"!="MAC"
 SHL1DEPN += $(shell $(FIND) $(SLO) -type f -name "*.OBJ" -print)
-.ENDIF
-
-.IF "$(SOLAR_JAVA)" != ""
-SHL1DEPN+= \
-            $(L)$/sj.lib
 .ENDIF
 
 SHL1LIBS=   $(LIB1TARGET)
