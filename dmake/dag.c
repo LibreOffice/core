@@ -1,6 +1,6 @@
 /* $RCSfile: dag.c,v $
--- $Revision: 1.5 $
--- last change: $Author: hr $ $Date: 2006-04-20 11:58:53 $
+-- $Revision: 1.6 $
+-- last change: $Author: ihi $ $Date: 2006-06-29 11:22:42 $
 --
 -- SYNOPSIS
 --      Routines to construct the internal dag.
@@ -522,12 +522,12 @@ int     fail;
 PUBLIC STRINGPTR
 Def_recipe( rcp, sp, white_too, no_check )/*
 =============================================
-    Take the recipe and add it to the list of recipes
-    pointed to by sp.  sp points to the last element.
-    return a pointer to the new recipe.  If white_too == TRUE add the
-    recipe even if it contains only white space.
-    If no_check is true then don't look for -@ at the start of the
-    recipe line. */
+   Take the recipe (rcp) and add it to the list of recipes pointed to by
+   sp (sp points to the last element).  If white_too == TRUE add the recipe
+   even if it contains only white space or an empty string.
+   Return a pointer to the new recipe (or sp if it was discarded).
+   If no_check is true then don't look for -@ at the start of the recipe
+   line. */
 char      *rcp;
 STRINGPTR sp;
 int       white_too;

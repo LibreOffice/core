@@ -1,6 +1,6 @@
 /* $RCSfile: parse.c,v $
--- $Revision: 1.5 $
--- last change: $Author: hr $ $Date: 2006-04-20 12:01:27 $
+-- $Revision: 1.6 $
+-- last change: $Author: ihi $ $Date: 2006-06-29 11:24:25 $
 --
 -- SYNOPSIS
 --      Parse the input, and perform semantic analysis
@@ -48,8 +48,11 @@ FILE *fil;
      if( fil != NIL( FILE ) )               /* end of parsable input */
         Closefile();
 
-     Bind_rules_to_targets( F_DEFAULT );
          if( Group )  Fatal( "Incomplete rule recipe group detected" );
+
+     /* If we are still in RULE_SCAN mode there might be unbound recipes.  */
+     if( State == RULE_SCAN )
+        Bind_rules_to_targets( F_DEFAULT );
 
      DB_VOID_RETURN;
       }
@@ -75,7 +78,7 @@ FILE *fil;
      switch( State ) {
         case RULE_SCAN:
 
-           /* Check for the `[' that starts off a group rule definition.
+           /* Check for the `[' that starts off a group recipe definition.
             * It must appear as the first non-white space
         * character in the line. */
 
