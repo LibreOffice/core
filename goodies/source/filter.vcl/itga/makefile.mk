@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 03:02:08 $
+#   last change: $Author: ihi $ $Date: 2006-06-29 11:33:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,6 @@ SLOFILES =	$(SLO)$/itga.obj
 SHL1TARGET= 	itg$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB= 	itga
 SHL1STDLIBS=	$(VCLLIB) $(TOOLSLIB) $(SALLIB)
-SHL1DEPN=		$(LB)$/itga.lib
 SHL1LIBS=		$(SLB)$/itga.lib
 
 .IF "$(GUI)" != "UNX"
