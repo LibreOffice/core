@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-19 10:43:47 $
+#   last change: $Author: ihi $ $Date: 2006-06-29 11:18:52 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -35,11 +35,7 @@
 
 PRJ=..$/..
 
-PROJECTPCH4DLL=TRUE
-PROJECTPCH=idlpch
-PROJECTPCHSOURCE=$(PRJ)$/util$/idlpch
-
-PRJNAME=SVIDL
+PRJNAME=idl
 TARGET=prj
 ENABLE_EXCEPTIONS=TRUE
 
