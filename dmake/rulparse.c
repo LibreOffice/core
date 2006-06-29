@@ -1,6 +1,6 @@
 /* $RCSfile: rulparse.c,v $
--- $Revision: 1.7 $
--- last change: $Author: hr $ $Date: 2006-04-20 12:02:04 $
+-- $Revision: 1.8 $
+-- last change: $Author: ihi $ $Date: 2006-06-29 11:24:37 $
 --
 -- SYNOPSIS
 --      Perform semantic analysis on input
@@ -30,7 +30,7 @@
 #include "extern.h"
 
 /* prototypes for local functions */
-static  void    _add_global_prereq ANSI((CELLPTR));
+static  void    _add_indirect_prereq ANSI((CELLPTR));
 static  int     _add_root ANSI((CELLPTR));
 static  CELLPTR _build_graph ANSI((int, CELLPTR, CELLPTR));
 static  char*   _build_meta ANSI((char*));
@@ -50,10 +50,10 @@ static  void    _set_global_attr ANSI((t_attr));
 
 /* static variables that must persist across invocation of Parse_rule_def */
 static CELLPTR    _sv_targets = NIL(CELL);
-static STRINGPTR  _sv_rules   = NIL(STRING);
-static STRINGPTR  _sv_crule   = NIL(STRING);
+static STRINGPTR  _sv_rules   = NIL(STRING); /* first recipe element. */
+static STRINGPTR  _sv_crule   = NIL(STRING); /* current/last recipe element. */
 static CELLPTR    _sv_edgel   = NIL(CELL);
-static LINKPTR    _sv_glb_prq = NIL(LINK);
+static LINKPTR    _sv_ind_prq = NIL(LINK);   /* indirect prerequisites for % cell */
 static int    _sp_target  = FALSE;
 static t_attr     _sv_attr;
 static int        _sv_flag;
@@ -89,20 +89,22 @@ int *state;
    t_attr   at;     /* temp place to keep an attribute code   */
    int      op;     /* rule operator              */
    int      special;    /* indicate special targets in rule   */
+   int      augmeta;    /* indicate .<suffix> like target     */
    int      percent;    /* indicate percent rule target       */
-   int      mixed_glob_prq; /* indicate mixed %-rule prereq possible  */
+   int      percent_prq;    /* indicate mixed %-rule prereq possible  */
 
    DB_ENTER( "Parse_rule_def" );
 
    op         = 0;
    attr       = 0;
    special    = 0;
+   augmeta    = 0;
    percent    = 0;
    set_dir    = NIL( char );
    targets    = NIL(CELL);
    prereq     = NIL(CELL);
    prereqtail = NIL(CELL);
-   mixed_glob_prq = 0;
+   percent_prq = 0;
 
    /* Check to see if the line is of the form:
     *    targets : prerequisites; first recipe line
@@ -115,7 +117,8 @@ int *state;
    }
 
    result = Expand( Buffer );
-   for( brk=strchr(result,'\\'); brk != NIL(char); brk=strchr(brk,'\\') )
+   /* Remove CONTINUATION_CHAR, keep the <nl> */
+   for( brk=strchr(result,CONTINUATION_CHAR); brk != NIL(char); brk=strchr(brk,CONTINUATION_CHAR) )
       if( brk[1] == '\n' )
      *brk = ' ';
       else
@@ -139,6 +142,8 @@ int *state;
 
      if( !op ) {
         /* Define a new cell, or get pointer to pre-existing cell.  */
+        /* Do we need cells for attributes? If not move the definition
+         * to the target part.  */
         cp = Def_cell( tok );
         DB_PRINT( "par", ("tg_cell [%s]", tok) );
 
@@ -156,16 +161,44 @@ int *state;
            attr |= at;
         }
         else {
+           /* Not an attribute, this must be a target. */
            int tmp;
 
            tmp = _is_special( tok );
-           if( _is_percent( tok ) ) percent++;
 
-           if( percent )
+           if( _is_percent( tok ) ) {
+          /* First %-target checks if there were non-%-targets before. */
+          if( !percent && targets != NIL(CELL) )
+             Fatal( "A %%-target must not be mixed with non-%%-targets, offending target [%s]", tok );
+
+          percent++;
           cp->ce_flag |= F_PERCENT;
+           } else {
+          if( percent )
+             Fatal( "A non-%%-target must not be mixed with %%-targets, offending target [%s]", tok );
+           }
+
+           if( _is_magic( tok ) ) {
+          /* Check that AUGMAKE targets are not mixed with other
+           * targets. The return value of _is_magic() is discarded and
+           * calculated again in _do_targets() if this rule definition
+           * really is a .<suffix> like target.
+           * If we would allow only one target per line we could easily
+           * store the result for later, but for multiple .<suffix>
+           * targets this creates too much overhead.
+           * These targets should be rare (obsolete?) anyway. */
+          if( !augmeta && targets != NIL(CELL) )
+             Fatal( "An AUGMAKE meta target must not be mixed with non AUGMAKE meta targets, offending target [%s]", tok );
+
+          augmeta++;
+          cp->ce_flag |= F_MAGIC; /* do_magic will also add F_PERCENT later. */
+           } else {
+          if( augmeta )
+             Fatal( "A non AUGMAKE meta target must not be mixed with AUGMAKE meta targets, offending target [%s]", tok );
+           }
 
            if( special )
-              Fatal( "Special target must appear alone", tok );
+              Fatal( "Special target must appear alone, found [%s]", tok );
            else if( !(cp->ce_flag & F_MARK) ) {
           /* Targets are kept in this list in lexically sorted order.
            * This allows for easy equality comparison of target
@@ -185,6 +218,8 @@ int *state;
           cp->ce_flag |= F_MARK | F_EXPLICIT;
           special = tmp;
            }
+           else
+              Warning( "Duplicate target [%s]", cp->CE_NAME );
         }
      }
      else {
@@ -207,10 +242,13 @@ int *state;
 
      cp = Def_cell( tok );
 
+     /* %-prerequisits require eiter a %-target or this might be a rule of
+      * the "ATTRIBUTE_LIST : targets" form. */
      if( _is_percent( tok ) ) {
-        if( !percent && !attr )
+        if( percent || ((targets == NIL(CELL)) && attr) )
+           percent_prq = 1;
+        else
            Fatal( "Syntax error in %% rule, missing %% target");
-        mixed_glob_prq = 1;
      }
 
      if( cp->ce_flag & F_USED ) {
@@ -237,10 +275,11 @@ int *state;
       }
 
    /* Check to see if we have a percent rule that has only global
-    * prerequisites.  If so then set the flag so that later on, we don't issue
+    * prerequisites, i.e. they are of the form: "%.a : foo".
+    * If so then set the flag so that later on, we don't issue
     * an error if such targets supply an empty set of rules. */
 
-   if( percent && !mixed_glob_prq && (prereq != NIL(CELL)) )
+   if( percent && !percent_prq && (prereq != NIL(CELL)) )
       _sv_globprq_only = 1;
 
    /* It's ok to have targets with attributes, and no prerequisites, but it's
@@ -251,6 +290,11 @@ int *state;
       DB_PRINT( "par", ("Not a rule [%s]", Buffer) );
       DB_RETURN( 0 );
    }
+
+   /* More than one percent target didn't work with prior versions. */
+   if( (percent > 1) && !(op & R_OP_OR) )
+      Warning( "Prior to dmake 4.5 only one\n"
+      "%%-target per target-definition worked reliably. Check your makefiles.\n" );
 
    if( !attr && targets == NIL(CELL) ) {
       Fatal( "Missing targets or attributes in rule" );
@@ -272,10 +316,17 @@ int *state;
    for( cp=prereq;  cp != NIL(CELL); cp=cp->ce_link ) cp->ce_flag &= ~F_MARK;
    for( cp=targets; cp != NIL(CELL); cp=cp->ce_link ) cp->ce_flag &= ~F_USED;
 
-   /* Check to see if the previous rule line was bound if, not the call
-    * Bind_rules_to_targets to go and bind the line */
-
-   if( _sv_rules != NIL(STRING) ) Bind_rules_to_targets( F_DEFAULT );
+   /* Check to see if the previous recipe was bound, if not the call
+    * Bind_rules_to_targets() to bind the recipe (_sv_rules) to the
+    * target(s) (_sv_targets). */
+   /* was:  if( _sv_rules != NIL(STRING) ) Bind_rules_to_targets( F_DEFAULT );*/
+   /* Only Add_recipe_to_list() sets _sv_rules and Bind_rules_to_targets()
+    * clears the (static) variables again.  Bind_rules_to_targets() is
+    * (should be) called after State is leaving RULE_SCAN in Parse().
+    * Abort if there are unbound recipes. FIXME: Remove this paragraph
+    * if this never occurs.  */
+   if( _sv_rules != NIL(STRING) )
+      Fatal( "Internal Error: _sv_rules not empty." );
 
    /* The target can be already build, e.g. as infered makefile for
     * the .INCLUDE directive. Clean F_MADE and F_STAT when recipes
@@ -296,9 +347,13 @@ int *state;
    _sv_setdir = set_dir;
 
    if( special )
+      /* _do_special() can alter *state */
       _do_special( special, op, attr, set_dir, targets, prereq, state );
    else
       *state = _do_targets( op, attr, set_dir, targets, prereq );
+
+   if( (*state != RULE_SCAN) && (_sv_rules != NIL(STRING)) )
+      Fatal( "Unexpected recipe found." );
 
    DB_RETURN( 1 );
 }
@@ -347,7 +402,7 @@ Add_recipe_to_list( rule, white_too, no_check )/*
         Take the provided string and add it to the list of recipe lines
     we are saving to be added to the list of targets we have built
     previously.  If white_too == TRUE add the rule EVEN IF it contains only
-        whitespace. */
+        an empty string (whitespace is handled by Def_recipe()). */
 char *rule;
 int  white_too;
 int  no_check;
@@ -358,6 +413,8 @@ int  no_check;
       DB_PRINT( "par", ("Adding recipe [%s]", rule) );
       _sv_crule = Def_recipe( rule, _sv_crule, white_too, no_check );
 
+      /* If _sv_rules is not yet set this must be the first recipe line,
+       * remember it. */
       if( _sv_rules == NIL(STRING) )
          _sv_rules = _sv_crule;
    }
@@ -369,7 +426,7 @@ int  no_check;
 PUBLIC void
 Bind_rules_to_targets( flag )/*
 ===============================
-        Take the rules we have defined and bind them with proper attributes
+        Take the recipe lines we have defined and bind them with proper attributes
         to the targets that were previously defined in the parse.  The
         attributes that get passed here are merged with those that are were
         previously defined.  (namely F_SINGLE) */
@@ -377,7 +434,7 @@ int flag;
 {
    CELLPTR tg;             /* pointer to current target in list */
    LINKPTR lp;         /* pointer to link cell      */
-   int     magic;          /* TRUE if target is .xxx.yyy form   */
+   int     magic;          /* TRUE if target of % or .xxx.yyy form */
    int     tflag;          /* TRUE if we assigned targets here  */
 
    DB_ENTER( "Bind_rules_to_targets" );
@@ -403,26 +460,30 @@ int flag;
      _build_graph( _sv_op, tg, NIL(CELL) );
 #endif
 
-      /* NOTE:  For targets that are magic we ignore any previously defined
-       *        rules.  ie. We throw away the old definition and use the new.*/
+      /* NOTE:  For targets that are magic or special we ignore any
+       * previously defined rules, ie. We throw away the old definition
+       * and use the new, otherwise we complain. */
       if( !(tg->ce_flag & F_MULTI) && !magic && (tg->CE_RECIPE != NIL(STRING))
       && !_sp_target && (_sv_rules != NIL(STRING)) )
          Fatal( "Multiply defined recipe for target %s", tg->CE_NAME );
 
       if( (magic || _sp_target) && (_sv_rules == NIL(STRING)) &&
       !(tg->ce_flag & F_SPECIAL) && !_sv_globprq_only )
-         Warning( "Empty recipe for special target %s", tg->CE_NAME );
+         Warning( "Empty recipe for special or meta target %s", tg->CE_NAME );
 
       if( magic ) {
      CELLPTR ep;
 
      for( ep=_sv_edgel; ep != NIL(CELL); ep=ep->ce_link ) {
+        DB_PRINT( "par", ("ep address: %#x", ep) );
+        /* %.xx :| '%.yy' abc xx '%.tt' ; touch $@
+         * loops here ... */
         _set_attributes( _sv_attr, _sv_setdir, ep );
         ep->ce_flag |= (F_TARGET|flag);
 
         if( _sv_rules != NIL(STRING) ) {
            ep->ce_recipe  = _sv_rules;
-           ep->ce_indprq  = _sv_glb_prq;
+           ep->ce_indprq  = _sv_ind_prq;
         }
      }
       }
@@ -451,7 +512,7 @@ int flag;
    _sv_rules   = NIL(STRING);
    _sv_crule   = NIL(STRING);
    _sv_targets = NIL(CELL);
-   _sv_glb_prq = NIL(LINK);
+   _sv_ind_prq = NIL(LINK);
    _sv_edgel   = NIL(CELL);
    _sp_target  = FALSE;
    _sv_globprq_only = 0;
@@ -466,7 +527,8 @@ Set_group_attributes( list )/*
 ==============================
     Scan list looking for the standard @ and - (as in recipe line defs)
     and set the flags accordingly so that they apply when we bind the
-    rules to the appropriate targets. */
+    rules to the appropriate targets.
+    Return TRUE if group recipe start '[' was found, otherwise FALSE.  */
 char *list;
 {
    int res = FALSE;
@@ -483,8 +545,11 @@ char *list;
 static void
 _do_special( special, op, attr, set_dir, target, prereq, state )/*
 ==================================================================
-   Process a special target.  So far the only special targets we have
-   are those recognized by the _is_special function.
+   Process a special target (always only a single target).  So far the only
+   special targets we have are those recognized by the _is_special function.
+   Some of the special targets can take recipes, they call _do_targets()
+   and (implicitly) set *state to to RULE_SCAN. Otherwise *state remains
+   unaffected, i.e. NORMAL_SCAN.
 
    target is always only a single special target.
 
@@ -699,7 +764,7 @@ int     *state;
      break;
 
       case ST_REST:
-         /* The rest of the special targets can all take rules, as such they
+         /* The rest of the special targets can all take recipes, as such they
       * must be able to affect the state of the parser. */
 
      {
@@ -732,7 +797,12 @@ static int
 _do_targets( op, attr, set_dir, targets, prereq )/*
 ===================================================
    Evaluate the values derived from the current target definition
-   line.  */
+   line. Helper functions _build_graph(), _do_magic(), _make_multi(),
+   _add_root(), _replace_cell(), _set_attributes(), Clear_prerequisites()
+   _stick_at_head(), Add_prerequisite() and _set_global_attr() are used.
+   If successfull "_sv_targets" is set to "targets".
+   Return RULE_SCAN if a recipe is expected to follow, otherwise
+   NORMAL_SCAN. */
 int op;     /* rule operator                           */
 t_attr  attr;       /* attribute flags for current targets     */
 char    *set_dir;   /* value of setdir attribute               */
@@ -746,9 +816,14 @@ CELLPTR prereq;     /* list of prerequisites                   */
    LINKPTR      prev_cell;  /* pointer for .UPDATEALL processing    */
    char     *p;     /* temporary char pointer       */
    int          tflag = FALSE;  /* set to TRUE if we add target to root */
+   int          ret_state = RULE_SCAN;  /* Return state */
 
    DB_ENTER( "_do_targets" );
 
+   /* If .UPDATEALL is set sort the target list that was temporary linked
+    * with ce_link into a list using ce_link with ce_set pointing to the first
+    * element. */
+   /* FIXME: Check that .UPDATEALL and %-targets on one line work together. */
    if( attr & A_UPDATEALL ) {
       if( targets == NIL(CELL) )
      Fatal( ".UPDATEALL attribute requires non-empty list of targets" );
@@ -787,6 +862,10 @@ CELLPTR prereq;     /* list of prerequisites                   */
    }
 
    for( tg1 = targets; tg1 != NIL(CELL); tg1 = tg1->ce_link ) {
+      /* Check if tg1 is already marked as a %-target, but not a magic
+       * (.xxx.yyy) target.  */
+      int purepercent = (tg1->ce_flag & F_PERCENT) && !(tg1->ce_flag & F_MAGIC);
+
       /* Check each target.  Check for inconsistencies between :: and : rule
        * sets.  :: may follow either : or :: but not the reverse.
        *
@@ -794,35 +873,100 @@ CELLPTR prereq;     /* list of prerequisites                   */
        * list hanging off the main target cell where each of the prerequisites
        * is a copy of the target cell but is not entered into the hash table.
        */
-      int magic = (tg1->ce_flag & F_PERCENT) && !(tg1->ce_flag & F_MAGIC);
-
-      if( !(op & R_OP_DCL ) && (tg1->ce_flag & F_MULTI) && !magic )
+      if( !(op & R_OP_DCL ) && (tg1->ce_flag & F_MULTI) && !purepercent )
      Fatal( "':' vs '::' inconsistency in rules for %s", tg1->CE_NAME );
 
-      if( magic ) {
-     if (op & R_OP_OR)
-        for(tp1=prereq; tp1; tp1=tp1->ce_link) {
+      if( purepercent ) {
+     /* Handle %-targets. */
+     CELLPTR cur;
+     CELLPTR tpq = NIL(CELL);
+     CELLPTR nprq;
+
+#ifdef DBUG
+     DB_PRINT( "%", ("Handling %%-target [%s : : <prerequisites follow, maybe empty>]",
+             tg1->CE_NAME) );
+     for(cur=prereq;cur;cur=cur->ce_link) {
+        DB_PRINT( "%", ("         %%-prerequisites : %s ",
+                cur->CE_NAME ? cur->CE_NAME : "<empty>") );
+     }
+#endif
+
+     /* Handle indirect (global) prerequisites first. */
+     for(cur=prereq;cur;cur=cur->ce_link) {
+        char *name = cur->CE_NAME;
+        int   len  = strlen(name);
+
+        if( *name == '\'' && name[len-1]=='\'' ){
+           name[len-1] = '\0';
+           strcpy(name,name+1);
+           /* add indirect prerequisite */
+           _add_indirect_prereq( cur );
+        }
+        else {
+           /* Sort all "other" prerequisits into tpq, with nprq
+        * pointing to the first element. */
+           if (tpq)
+          tpq->ce_link = cur;
+           else
+          nprq = cur;
+           tpq = cur;
+        }
+     }
+     /* Mark the last element of nprq. */
+     if(tpq)
+        tpq->ce_link=NIL(CELL);
+     else
+        nprq = NIL(CELL);
+
+     /* Handle "normal" prerequisites now. */
+
+     if ( op & R_OP_OR ) {
+        /* for op == ':|' transform:
+         * <%-target> :| <prereq_1> ... <prereq_n> ; <recipe>
+         * into:
+         * <%-target> : <prereq_1> ; <recipe>
+         * ..
+         * <%-target> : <prereq_n> ; <recipe>
+         */
+        for(tp1=nprq; tp1; tp1=tp1->ce_link) {
            CELLPTR tmpcell = tp1->ce_link;
            tp1->ce_link = NIL(CELL);
            _build_graph(op,tg1,tp1);
            tp1->ce_link = tmpcell;
         }
-     else
-        prereq = _build_graph(op,tg1,prereq);
+     }
+     else {
+        /* Multiple prerequisits require all of them match for this
+         * %-target to be chosen. */
+        /* FIXME: There seem to be problems in the target inference
+         * if multiple prerequisites are provided. */
+        if ( nprq && nprq->ce_link && !(op & R_OP_OR))
+           Warning("More than one prerequisite\n"
+           "for %%-target without :| as ruleop. Only the first is currently used.\n"
+           "Check your makefiles!.\n");
+
+        _build_graph(op,tg1,nprq);
+     }
       }
-      else if( !(tg1->ce_flag & F_SPECIAL) &&
-        (prereq == NIL(CELL)) &&
-        (p = _is_magic( tg1->CE_NAME )) != NIL(char))
-         _do_magic( op, p, tg1, prereq, attr, set_dir );
-      else if( op & R_OP_DCL ) {
+      else if( tg1->ce_flag & F_MAGIC &&
+           (p = _is_magic( tg1->CE_NAME )) != NIL(char) &&
+           _do_magic( op, p, tg1, prereq, attr, set_dir ) )
+    ; /* _do_magic() does all that is needed (if return value is TRUE). */
+      else if( op & R_OP_DCL ) {  /* op == :: */
      CELLPTR tmp_cell = _make_multi(tg1);
+
+     /* Add the F_MULTI master to .TARGETS (If not set already).
+      * Do this here so that the member cell is not added instead
+      * when the recipies are bound in Bind_rules_to_targets(). */
      tflag |= _add_root(tg1);
+
+     /* Replace the F_MULTI master with the member cell. */
      targets = _replace_cell( targets, tg1, tmp_cell );
 
-    /* We have to set (add) the attributes also for the F_MULTI
+    /* We have to set (add) the attributes also for the F_MULTI master
      * target cell. As there is no recipe the setdir value is not
      * needed. _set_attributes() that follows in approx. 8 lines
-     * will set the attributes for the current target cell.  */
+     * will set the attributes for the F_MULTI member cell.  */
      tg1->ce_attr |= (attr & ~A_SETDIR);
 
      /* Now switch tg1 to the current (F_MULTI prereq.) target.
@@ -831,7 +975,7 @@ CELLPTR prereq;     /* list of prerequisites                   */
      tg1 = tmp_cell;
       }
 
-      if( !magic ) _set_attributes( attr, set_dir, tg1 );
+      if( !purepercent ) _set_attributes( attr, set_dir, tg1 );
 
       /* Build the proper prerequisite list of the target.  If the `-',
        * modifier was used clear the prerequisite list before adding any
@@ -840,25 +984,27 @@ CELLPTR prereq;     /* list of prerequisites                   */
        * If the target has F_PERCENT set then no prerequisites are used. */
 
       if( !(tg1->ce_flag & F_PERCENT) ) {
-     if( op & R_OP_MI ) Clear_prerequisites( tg1 );
+     if( op & R_OP_MI ) Clear_prerequisites( tg1 ); /* op == :- */
 
-     if( (op & R_OP_UP) && (tg1->ce_prq != NIL(LINK)) )
+     if( (op & R_OP_UP) && (tg1->ce_prq != NIL(LINK)) ) /* op == :^ */
         _stick_at_head( tg1, prereq );
      else for( tp1=prereq; tp1 != NIL(CELL); tp1 = tp1->ce_link )
         Add_prerequisite( tg1, tp1, FALSE, FALSE );
       }
       else if( op & (R_OP_MI | R_OP_UP) )
-     Warning( "Modifier(s) `^!' for %-meta target ignored" );
+     Warning( "Modifier(s) `^-' for %-meta target ignored" );
    }
 
+   /* In case a F_MULTI member that was the first prerequisite of .TARGETS */
    if(tflag)
       Target = TRUE;
 
-   /* Check to see if we have NO targets but some attributes.  IF so then
-    * apply all of the attributes to the complete list of prerequisites.
-    */
+   /* Check to see if we have NO targets but some attributes, i.e. an
+    * Attribute-Definition.  If so then apply all of the attributes to the
+    * complete list of prerequisites.  No recipes are allowed to follow. */
 
    if( (targets == NIL(CELL)) && attr ) {
+      ret_state = NORMAL_SCAN;
       if( prereq != NIL(CELL) )
      for( tp1=prereq; tp1 != NIL(CELL); tp1 = tp1->ce_link )
         _set_attributes( attr, set_dir, tp1 );
@@ -867,24 +1013,29 @@ CELLPTR prereq;     /* list of prerequisites                   */
    }
 
    /* Now that we have built the lists of targets, the parser must parse the
-    * rules if there are any.  However we must start the rule list with the
-    * rule specified as via the ; kludge, if there is one */
+    * recipes if there are any.  However we must start the recipe list with the
+    * recipe specified as via the ; kludge, if there is one */
    _sv_targets = targets;
    _sv_attr    = attr;
    _sv_flag    = ((op & R_OP_BG) ? F_SINGLE : F_DEFAULT);
 
-   DB_RETURN( RULE_SCAN );
+   DB_RETURN( ret_state );
 }
 
 
 static int
 _do_magic( op, dot, target, prereq, attr, set_dir )/*
 =====================================================
-   This function takes a magic target of the form .<chars>.<chars> or
-   .<chars> and builds the appropriate % rules for that target.
+   This function investigates dot for being a magic target of the form
+   .<chars>.<chars> or .<chars> and creates the appropriate % rules for
+   that target.
+   If the target is given with an undefined syntax, i.e. with prerequisites,
+   then this function terminates early without creating % rules and
+   returns 0.
+   If successful the function returns 1.
 
    The function builds the % rule, `%.o : %.c'  from .c.o, and
-   `%.a :' from .a */
+   `% : %.a' from .a */
 
 int op;
 char    *dot;
@@ -899,11 +1050,15 @@ char    *set_dir;
 
    DB_ENTER( "_do_magic" );
 
-   if( prereq != NIL(CELL) )
-      Warning( "Ignoring prerequisites of old style meta-target" );
+   DB_PRINT("%", ("Analysing magic target [%s]", target->CE_NAME));
 
-   if( dot == target->CE_NAME ) {       /* its of the form .a   */
-      tg  = Def_cell( "%" );            /* ==> no prerequisite  */
+   if( prereq != NIL(CELL) ) {
+      Warning( "Ignoring AUGMAKE meta-target [%s] because prerequisites are present.", target->CE_NAME );
+      DB_RETURN(0);
+   }
+
+   if( dot == target->CE_NAME ) {    /* its of the form .a */
+      tg  = Def_cell( "%" );
       tmp = _build_meta( target->CE_NAME );
       prq = Def_cell( tmp );
       FREE( tmp );
@@ -948,7 +1103,9 @@ CELLPTR rep;
       lst = rep;
    }
    else {
-      for( tp=lst; tp->ce_link != cell; tp=tp->ce_link );
+      for( tp=lst; tp->ce_link != cell && tp ; tp=tp->ce_link );
+      if( !tp )
+     Fatal( "Internal Error: cell not part of lst." );
       rep->ce_link = tp->ce_link->ce_link;
       tp->ce_link = rep;
    }
@@ -980,15 +1137,15 @@ _build_graph( op, target, prereq )/*
 ====================================
    This function is called to build the graph for the % rule given by
    target : prereq cell combination.  This function assumes that target
-   is a % target and that prereq is a single % prerequisite.  R_OP_CL
-   rules replace existing rules if any, only R_OP_CL works for meta-rules.
-   %.o :: %.c is meaningless.   If target has ce_all set then all the cells
-   on the list must match in order for the match to work.  If prereq->ce_link
-   is not nil then all prerequisites listed by the link set must match also.
-   This latter match is more difficult because in general the prerequisite
-   sets may not be listed in the same order.
+   is a % target and that prereq is one or multiple non-indirect prerequisite.
+   It also assumes that target cell has F_PERCENT set already.
 
-   It also assumes that target cell has F_PERCENT set already. */
+   NOTE: If more than one prerequisite is present this function handles them
+   correctly but the lookup still only uses the first (BUG!).
+
+   R_OP_CL (:) rules replace existing rules if any, %.o :: %.c is meaningless.
+
+   The function always returns NIL(CELL). */
 int op;
 CELLPTR target;
 CELLPTR prereq;
@@ -998,36 +1155,37 @@ CELLPTR prereq;
    CELLPTR tpq,cur;
    int match;
 
+#ifdef DBUG
    DB_ENTER( "_build_graph" );
-   DB_PRINT( "%", ("Building graph for [%s : %s]", target->CE_NAME,
-            (prereq == NIL(CELL)) ? "" : prereq->CE_NAME) );
-
-   tpq = NIL(CELL);
-   for(cur=prereq;cur;cur=cur->ce_link) {
-      char *name = cur->CE_NAME;
-      int   len  = strlen(name);
-
-      if( *name == '\'' && name[len-1]=='\'' ){
-     _add_global_prereq( cur );
-     name[len-1] = '\0';
-     strcpy(name,name+1);
-      }
-      else {
-     if (tpq)
-        tpq->ce_link = cur;
-     else
-        prereq = cur;
-     tpq = cur;
-      }
+   DB_PRINT( "%", ("Building graph for [%s : <prerequisites follow, maybe empty>]",
+           target->CE_NAME) );
+   for(tpq=prereq;tpq;tpq=tpq->ce_link) {
+      DB_PRINT( "%", ("         %%-prerequisites : %s ",
+              tpq->CE_NAME ? tpq->CE_NAME : "<empty>") );
    }
-   if(tpq)
-      tpq->ce_link=NIL(CELL);
-   else
-      prereq = NIL(CELL);
+#endif
+
+   /* Currently multiple prerequisites are not (yet) handled correctly.
+    * We already issue a warning in _do_targets(), don't issue it here
+    * again.
+   if ( prereq && prereq->ce_link )
+      Warning( "Internal Error: more than one prerequisite in _build_graph." );
+    */
+
+   /* There cannot be more than one target name ( linked with
+    * (CeMeToo(target))->cl_next ) per %-target master.
+    * FIXME: remove this check after verifying that it never triggers. */
+   if ( (CeMeToo(target))->cl_next )
+      Fatal( "Internal Error: more than one target name in _build_graph." );
 
    /* Search the list of prerequisites for the current target and see if
     * any of them match the current %-meta's : prereq's pair.  NOTE that
-    * %-metas are built as if they were F_MULTI targets. */
+    * %-metas are built as if they were F_MULTI targets, i.e. the target
+    * definitions for the %-target members are stored in the prerequisites
+    * list of the master target. */
+   /* This relies on target->ce_prq being NULL if this is the first
+    * occurence of this %-target and therefore not yet having a %-target
+    * master. */
    match = FALSE;
    for(edl=target->ce_prq; !match && edl != NIL(LINK); edl=edl->cl_next) {
       LINKPTR l1,l2;
@@ -1038,20 +1196,23 @@ CELLPTR prereq;
       /* First we match the target sets, if this fails then we don't have to
        * bother with the prerequisite sets.  The targets sets are sorted.
        * this makes life very simple. */
+      /* ce_dir is handled per member target, no check needed for the
+       * master target. */
 
-      l1 = CeMeToo(target);
+      /* FIXME: We already checked above that there is only one target
+       * name. Remove the comparisons for following names. */
+      l1 = CeMeToo(target); /* Used by .UPDATEALL !!! */
       l2 = CeMeToo(edge);
       while(l1 && l2 && l1->cl_prq == l2->cl_prq) {
      l1=l1->cl_next;
      l2=l2->cl_next;
       }
-
+      /* If both l1 and l2 are NULL we had a match. */
       if (l1 || l2)
      continue;
 
       /* target sets match, so check prerequisites. */
-
-      if(    (!edge->ce_prq && !prereq)
+      if(    (!edge->ce_prq && !prereq) /* matches both empty - separate this. */
       || (   edge->ce_prq
           && (   edge->ce_dir == _sv_setdir
           || (   edge->ce_dir
@@ -1105,6 +1266,7 @@ CELLPTR prereq;
 
       edge = _make_multi(target);
 
+      /* FIXME: There can be only one %-target. */
       for(edl=CeMeToo(target);edl;edl=edl->cl_next) {
      if( !((tpq=edl->cl_prq)->ce_flag & F_DFA) ) {
         Add_nfa( tpq->CE_NAME );
@@ -1118,6 +1280,7 @@ CELLPTR prereq;
       target->ce_all.cl_next = NIL(LINK);
       target->ce_set = NIL(CELL);
 
+      /* Add all prerequisites to edge. */
       for(tpq=prereq; tpq; tpq=tpq->ce_link)
          Add_prerequisite(edge, tpq, FALSE, TRUE);
    }
@@ -1125,6 +1288,13 @@ CELLPTR prereq;
    if( op & R_OP_DCL )
    Warning("'::' operator for meta-target '%s' ignored, ':' operator assumed.",
        target->CE_NAME );
+
+   /* If edge was already added we're in BIG trouble. */
+   /* Re-use cur as temporary variable. */
+   for( cur=_sv_edgel; cur != NIL(CELL); cur=cur->ce_link ) {
+      if( cur == edge )
+     Fatal( "Internal Error: edge already in _sv_edgel." );
+   }
 
    edge->ce_link = _sv_edgel;
    _sv_edgel = edge;
@@ -1138,6 +1308,7 @@ static CELLPTR
 _make_multi( tg )/*
 ===================
    This function is called to convert tg into an F_MULTI target.
+   Return a pointer to the new member cell.
    I don't know what the author intended but the ce_index entry is only
    used in this function (set to 0 for added targets) and undefined otherwise!
    The undefined value is hopefully set to 0 by the C compiler as each added
@@ -1146,17 +1317,21 @@ CELLPTR tg;
 {
    CELLPTR cp;
 
-   /* This first handles the case when a : foo ; exists prior to seeing
-    * a :: fee; */
+   /* This creates a new master F_MULTI target if tg existed before as a normal
+    * target with prerequisites or recipes. */
    if( !(tg->ce_flag & F_MULTI) && (tg->ce_prq || tg->ce_recipe) ) {
+      /* Allocate a new master cell. */
       TALLOC(cp, 1, CELL);
       *cp = *tg;
 
+      /* F_MULTI master */
       tg->ce_prq    = NIL(LINK);
       tg->ce_flag  |= F_RULES|F_MULTI|F_TARGET;
       tg->ce_attr  |= A_SEQ;
       tg->ce_recipe = NIL(STRING);
       tg->ce_dir    = NIL(char);
+
+      /* F_MULTI member for preexisting elements */
       cp->ce_count  = ++tg->ce_index;
       cp->ce_cond   = NIL(STRING);
       cp->ce_set    = NIL(CELL);
@@ -1166,11 +1341,12 @@ CELLPTR tg;
       Add_prerequisite(tg, cp, FALSE, TRUE);
    }
 
+   /* Alocate memory for new member of F_MULTI target */
    TALLOC(cp, 1, CELL);
    *cp = *tg;
 
    /* This is reached if the target already exists, but without having
-    * prerequisites or recepies. */
+    * prerequisites or recepies. Morph it into a F_MULTI master cell. */
    if( !(tg->ce_flag & F_MULTI) ) {
       tg->ce_prq    = NIL(LINK);
       tg->ce_flag  |= F_RULES|F_MULTI|F_TARGET;
@@ -1200,22 +1376,24 @@ CELLPTR tg;
 
 
 static void
-_add_global_prereq( pq )/*
+_add_indirect_prereq( pq )/*
 ==========================
-    Prerequisite is a non-% prerequisite for a %-rule target, add it to
-    the target's list of global prerequsites to add on match */
+   Prerequisite is an indirect prerequisite for a %-target, add it to
+   the target's list of indirect prerequsites to add on match. */
 CELLPTR pq;
 {
    register LINKPTR ln;
 
-   for(ln=_sv_glb_prq; ln; ln=ln->cl_next)
+   /* Only add to list of indirect prerequsites if it is not in already. */
+   for(ln=_sv_ind_prq; ln; ln=ln->cl_next)
       if(strcmp(ln->cl_prq->CE_NAME,pq->CE_NAME) == 0)
      return;
 
+   /* Not in, add it. */
    TALLOC( ln, 1, LINK );
-   ln->cl_next = _sv_glb_prq;
+   ln->cl_next = _sv_ind_prq;
    ln->cl_prq  = pq;
-   _sv_glb_prq = ln;
+   _sv_ind_prq = ln;
 }
 
 
@@ -1399,6 +1577,7 @@ _is_special( tg )/*
     .GROUPPROLOG    .GROUPEPILOG    .INCLUDE    .IMPORT
     .EXPORT     .SOURCE     .SUFFIXES   .ERROR        .EXIT
     .INCLUDEDIRS    .MAKEFILES  .REMOVE     .KEEP_STATE
+    .TARGETS    .ROOT
 */
 char *tg;
 {
@@ -1435,11 +1614,16 @@ char *tg;
 
       case 'R':
          if( !strcmp( tg, "REMOVE" ) )      DB_RETURN( ST_REST     );
+         else if( !strcmp( tg, "ROOT" ) )   DB_RETURN( ST_REST     );
      break;
 
       case 'S':
          if( !strncmp( tg, "SOURCE", 6 ) )  DB_RETURN( ST_SOURCE   );
          else if( !strncmp(tg, "SUFFIXES", 8 )) DB_RETURN( ST_SOURCE   );
+     break;
+
+      case 'T':
+         if( !strcmp( tg, "TARGETS" ) )     DB_RETURN( ST_REST     );
      break;
    }
 
@@ -1462,11 +1646,15 @@ char *np;
 static char *
 _is_magic( np )/*
 =================
-    return TRUE if np points at a string of the form
-          .<chars>.<chars>  or  .<chars>
-    where chars are only alpha characters.
+   return NULL if np does not points at a string of the form
+      .<chars>.<chars>  or  .<chars>
+   where chars are "visible characters" for the current locale. If np is of the
+   first form we return a pointer to the second '.' and for the second form we
+   return a pointer to the '.'.
 
-        NOTE:  reject target if it begins with ./ or ../ */
+   NOTE:  reject target if it contains / or begins with ..
+          reject also .INIT and .DONE because they are mentioned in the
+          man page. */
 char *np;
 {
    register char *n;
@@ -1474,6 +1662,8 @@ char *np;
    n = np;
    if( *n != '.' ) return( NIL(char) );
    if (strchr(DirBrkStr, *(n+1))!=NULL || *(n+1) == '.' )
+      return (NIL(char));
+   if( !strcmp( n+1, "INIT" ) || !strcmp( n+1, "DONE" ) )
       return (NIL(char));
 
    for( n++; isgraph(*n) && (*n != '.'); n++ );
@@ -1483,8 +1673,10 @@ char *np;
       for( np = n++; isgraph( *n ) && (*n != '.'); n++ );
       if( *n != '\0' ) return( NIL(char) );
    }
-   else if( STOBOOL(Augmake) )
-      return( NIL(char) );
+   /* Until dmake 4.5 a .<suffix> target was ignored when AUGMAKE was
+    * set and evaluated as a meta target if unset (also for -A).
+    * To keep maximum compatibility accept this regardles of the AUGMAKE
+    * status. */
 
    /* np points at the second . of .<chars>.<chars> string.
     * if the special target is of the form .<chars> then np points at the
@@ -1495,7 +1687,14 @@ char *np;
 
 
 static int
-_add_root(tg)
+_add_root(tg)/*
+===============
+   Adds "tg" to the prerequisits list of "Targets" if "Target" is not TRUE,
+   i.e. to the list of targets that are to be build.
+   Instead io setting "Target" to TRUE, TRUE is returned as more targets
+   might be defined in the current makefile line and they all have to be
+   add to "Targets" in this case.  */
+
 CELLPTR tg;
 {
    int res = FALSE;
