@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-19 21:43:33 $
+#   last change: $Author: ihi $ $Date: 2006-06-29 11:30:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,6 @@ SHL1TARGET= 	eps$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB= 	eps
 SHL1STDLIBS=	$(TOOLSLIB) $(SVLIB) $(SVLIB) $(SVTOOLLIB) $(CPPULIB) $(SALLIB)
 
-SHL1DEPN=		$(LB)$/eps.lib
 SHL1LIBS=		$(SLB)$/eps.lib
 
 .IF "$(GUI)" != "UNX"
