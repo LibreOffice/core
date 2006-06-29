@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 17:53:49 $
+#   last change: $Author: ihi $ $Date: 2006-06-29 11:19:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -35,19 +35,14 @@
 
 PRJ=..
 
-PRJPCH=
-
-PRJNAME=SVIDL
+PRJNAME=idl
 TARGET=idl
-VERSION=$(UPD)
 
 TARGETTYPE=CUI
 
 # --- Settings -----------------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------------
 
@@ -56,32 +51,16 @@ LIB1FILES = $(LB)$/prj.lib		 \
             $(LB)$/objects.lib	 \
             $(LB)$/cmptools.lib
 
-.IF "$(GUI)" != "WIN"
 APP1TARGET= svidl
-
-.IF "$(GUI)" != "MAC"
-APP1DEPN=       $(L)$/itools.lib
-.ENDIF
 
 APP1STDLIBS=	\
     $(TOOLSLIB)	\
     $(SALLIB)
 
-APP1LIBS=	$(LIBPRE) $(LB)$/$(TARGET).lib
+APP1LIBS= $(LB)$/$(TARGET).lib
 .IF "$(GUI)" != "UNX"
-.IF "$(COM)"=="WTC"
-APP1OBJS=	$(OBJ)$/svidl.obj
-.ELSE
 APP1OBJS=	$(OBJ)$/svidl.obj	\
             $(OBJ)$/command.obj
-.ENDIF
-.ENDIF
-.IF "$(COM)" == "WTC"
-APP1STACK=32768
-.ENDIF
-.IF "$(GUI)" != "OS2"
-APP1STACK=32768
-.ENDIF
 .ENDIF
 
 .IF "$(OS)"=="LINUX" || "$(OS)"=="FREEBSD"
@@ -91,35 +70,4 @@ APP1STDLIBS+=-lcrypt
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-
-# -------------------------------------------------------------------
-# PM2
-# -------------------------------------------------------------------
-
-.IF "$(GUI)" == "OS2"
-
-$(MISC)$/$(APP1TARGET).def : makefile
-    echo  NAME			SV-IDL WINDOWCOMPAT 				>$@
-    echo  DESCRIPTION	'SV-IDL-Compiler'                  >>$@
-.IF "$(COM)" != "BLC"
-    echo  STUB			'os2STUB.EXE'                      >>$@
-.ENDIF
-    echo  DATA			MULTIPLE						   >>$@
-    echo  EXETYPE		OS2 							   >>$@
-    echo  PROTMODE										   >>$@
-    echo  HEAPSIZE		16000							   >>$@
-    echo  STACKSIZE 	48000							   >>$@
-.ENDIF
-
-# --- Filter-Datei ---
-
-.IF "$(GUI)" != "DOS"
-$(MISC)$/$(SHL1TARGET).flt: makefile
-    @echo ------------------------------
-    @echo Making: $@
-    @echo WEP>$@
-    @echo LIBMAIN>>$@
-    @echo LibMain>>$@
-    @echo Stg>>$@
-.ENDIF
 
