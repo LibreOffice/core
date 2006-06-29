@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.43 $
+#   $Revision: 1.44 $
 #
-#   last change: $Author: vg $ $Date: 2006-04-07 15:03:26 $
+#   last change: $Author: ihi $ $Date: 2006-06-29 11:24:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -103,7 +103,6 @@ SHL1STDLIBS+= \
 SHL1STDLIBS+= $(SCHLIB)
 .ENDIF # MACOSX
 
-SHL1DEPN=   $(L)$/itools.lib
 SHL1LIBS=   $(LIB3TARGET)
 SHL1DEPN+=	makefile.mk
 
