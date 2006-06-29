@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 14:09:34 $
+#   last change: $Author: ihi $ $Date: 2006-06-29 11:25:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -64,9 +64,6 @@ APP1STDLIBS=	$(CPPULIB)			\
                 $(VOSLIB)			\
                 $(SOTLIB)			\
                 $(SVLIB)
-
-APP1DEPN=		$(L)$/itools.lib	\
-                $(L)$/sot.lib
 
 .IF "$(GUI)"=="WIN" || "$(GUI)"=="OS2"
 APP1DEF=		$(MISC)$/$(TARGET).def
