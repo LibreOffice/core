@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2006-03-06 09:03:43 $
+#   last change: $Author: ihi $ $Date: 2006-06-29 11:24:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,6 @@ SLOFILES =	$(SLO)$/eppt.obj				\
 
 SHL1TARGET	=	emp$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB	=	eppt
-SHL1DEPN	=	$(LB)$/eppt.lib
 SHL1VERSIONMAP=exports.map
 SHL1DEF 	=	$(MISC)$/$(SHL1TARGET).def
 SHL1LIBS	=	$(SLB)$/eppt.lib
