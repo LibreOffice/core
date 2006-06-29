@@ -28,7 +28,7 @@ EOT
 
 mkdir -p "$file2"
 
-output1=$(${DMAKEPROG} -r -f $file1)
+output1=`eval ${DMAKEPROG} -r -f $file1`
 result1=$?
 
 if test "$output1" != ":$file2:"; then

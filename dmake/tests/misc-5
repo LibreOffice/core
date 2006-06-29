@@ -34,7 +34,7 @@ all :
 	+@echo aa:\$(AA):bb 
 EOT
 
-output=$(${DMAKEPROG} -r -P2 -f $file1 all)
+output=`eval ${DMAKEPROG} -r -P2 -f $file1 all`
 result=$?
 
 # The space between aaa and bbb comes from the +=

@@ -31,7 +31,7 @@ ALL : mytarget.dpcc
 
 EOT
 
-output=$(${DMAKEPROG} -r -f $file1)
+output=`eval ${DMAKEPROG} -r -f $file1`
 result=$?
 
 test $result -eq 0 && echo "Success - Cleaning up" && rm -f ${tmpfiles}

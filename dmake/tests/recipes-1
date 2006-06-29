@@ -24,7 +24,7 @@ line2
 
 EOT
 
-output=$(${DMAKEPROG} -r -f $file1)
+output=`eval ${DMAKEPROG} -r -f $file1`
 result=$?
 if test "$output" != "line1line2"; then
   echo "Wrong result"
@@ -35,3 +35,4 @@ fi
 test $result -eq 0 && echo "Success - Cleaning up" && rm -f ${tmpfiles}
 test $result -ne 0 && echo "Failure!"
 exit $result
+

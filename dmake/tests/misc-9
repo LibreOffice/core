@@ -40,7 +40,7 @@ mytarget.dpcc :
 
 EOT
 
-output=$(${DMAKEPROG} -r -P2 -f $file1)
+output=`eval ${DMAKEPROG} -r -P2 -f $file1`
 result=$?
 
 if test "$output" != "making: mytarget.obj"; then
