@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 02:58:41 $
+#   last change: $Author: ihi $ $Date: 2006-06-29 11:32:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,6 @@ SHL1TARGET=     ime$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB=     ios2met
 SHL1STDLIBS=    $(VCLLIB) $(TOOLSLIB) $(SALLIB)
 
-SHL1DEPN=       $(LB)$/ios2met.lib
 SHL1LIBS=       $(SLB)$/ios2met.lib # $(LB)$/rtftoken.lib
 
 .IF "$(GUI)" != "UNX"
