@@ -1,4 +1,4 @@
-/* RCS  $Id: dmake.h,v 1.3 2006-04-20 11:59:16 hr Exp $
+/* RCS  $Id: dmake.h,v 1.4 2006-06-29 11:23:09 ihi Exp $
 --
 -- SYNOPSIS
 --      Global defines for dmake.
@@ -108,11 +108,12 @@
 #define F_DEFAULT        0x0000         /* default flag value           */
 #define F_MARK           0x0001         /* circularity check mark       */
 #define F_MULTI          0x0002         /* multiple rules for target    */
-#define F_SINGLE         0x0004         /* exec rules one/prerequisite  */
+#define F_SINGLE         0x0004         /* exec recipes for each out of
+                     * date prerequisite            */
 #define F_TARGET         0x0008         /* marks a target               */
 #define F_RULES          0x0010         /* indicates target has rules   */
 #define F_GROUP          0x0020         /* indicates that rules are to  */
-                                       /* fed to the shell as a group  */
+                                        /* fed to the shell as a group  */
 
 #define F_TRANS          0x0040         /* same as F_STAT not used tgthr*/
 #define F_STAT           0x0040         /* target already stated        */
