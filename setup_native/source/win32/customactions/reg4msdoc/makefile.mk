@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2006-01-06 11:20:07 $
+#   last change: $Author: ihi $ $Date: 2006-06-29 11:17:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,8 +37,6 @@ PRJ=..$/..$/..$/..
 PRJNAME=setup_native
 TARGET=reg4msdocmsi
 
-.IF "$(GUI)"=="WNT"
-
 # --- Settings -----------------------------------------------------
 
 ENABLE_EXCEPTIONS=TRUE
@@ -48,12 +46,11 @@ USE_DEFFILE=TRUE
 
 .INCLUDE : settings.mk
 
-#STDSHL=
-# SOLARINC!:=$(SOLARINC:s/stl//)
-
 CFLAGS+=-DUNICODE -D_UNICODE -D_STLP_USE_STATIC_LIB
 
 # --- Files --------------------------------------------------------
+
+.IF "$(GUI)"=="WNT"
 
 UWINAPILIB=
 
@@ -90,12 +87,11 @@ SHL1BASE = 0x1c000000
 DEF1NAME=$(SHL1TARGET)
 DEF1EXPORTFILE=exports.dxp
 
+.ENDIF
+
 # --- Targets --------------------------------------------------------------
 
 .INCLUDE : target.mk
 
 # -------------------------------------------------------------------------
-
-
-.ENDIF
 
