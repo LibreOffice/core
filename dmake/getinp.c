@@ -1,4 +1,4 @@
-/* RCS  $Id: getinp.c,v 1.6 2006-04-20 12:00:25 hr Exp $
+/* RCS  $Id: getinp.c,v 1.7 2006-06-29 11:23:35 ihi Exp $
 --
 -- SYNOPSIS
 --      Handle reading of input.
@@ -13,7 +13,8 @@
 --  The line continuation is always  <\><nl>.
 --
 --  If the file to read is NIL(FILE) then the Get_line routine returns the
---  next rule from the builtin rule table if there is one.
+--  next rule from the builtin rule table (Rule_tab from ruletab.c) if
+--  there is one.
 --
 -- AUTHOR
 --      Dennis Vadura, dvadura@dmake.wticorp.com
@@ -51,8 +52,12 @@ int parse_complex_expression( char *expr, char **expr_end, int opcode );
 PUBLIC int
 Get_line( buf, fil )/*
 ======================
-        Read a line of input from the file stripping
-        off comments.  The routine returns TRUE if EOF */
+   Read a line of input from the file stripping off comments.  The routine
+   returns TRUE if EOF. If fil equals NIL(FILE) then the next line from
+   *Rule_tab[] is used.  Rule_tab is either the buildin rule table or points
+   to the current environment (used by ReadEnvironment()).
+   The function returns TRUE if the input file/buffer was read to the end
+   and FALSE otherwise. */
 char *buf;
 FILE *fil;
 {
@@ -80,8 +85,8 @@ FILE *fil;
    }
 
    if( fil == NIL(FILE) ) {
-      /* Reading the internal rule table.  Set the rule_index to zero.
-       * This way ReadEnvironment works as expected every time. */
+      /* Reading the internal rule table.  Set rule_ind to zero after the
+       * last entry so that ReadEnvironment() works as expected every time. */
 
       while( (p = Rule_tab[ rule_ind++ ]) != NIL(char) )
      /* The last test in this if *p != '~', handles the environment
@@ -496,6 +501,7 @@ _handle_conditional( opcode, tg )
 {
    static short action[MAX_COND_DEPTH];
    static char      ifcntl[MAX_COND_DEPTH];
+   char         *cst;
    char         *lhs, *expr, *expr_end;
    char         *lop;
    int          result;
@@ -517,6 +523,17 @@ _handle_conditional( opcode, tg )
      If_expand = TRUE;
      expr = Expand( Get_token( tg, NIL(char), FALSE ));
      If_expand = FALSE;
+
+     /* Remove CONTINUATION_CHAR<nl> and replace with "  " so that line
+      * continuations are recognized as whitespace. */
+     for( cst=strchr(expr,CONTINUATION_CHAR); cst != NIL(char); cst=strchr(cst,CONTINUATION_CHAR) )
+        if( cst[1] == '\n' ) {
+           *cst = ' ';
+           cst[1] = ' ';
+        }
+        else
+           cst++;
+
      lhs = DmStrSpn( expr, " \t" );
      if( !*lhs ) lhs = NIL(char);
 
@@ -600,7 +617,7 @@ int parse_complex_expression( char *expr, char **expr_end, int opcode )
     unsigned int   last_op = OP_NONE;
 
     #ifdef PARSE_DEBUG
-        printf( "%d: parse_complex_expression( %s ): %d\n", n, expr, match_paren );
+        printf( "%d: parse_complex_expression( %s ): Opcode: %d\n", n, expr, opcode );
     #endif
 
     while ( 1 )
@@ -766,7 +783,7 @@ int partcomp( char* lhs, int opcode )
             tok[1] = '\0';
         }
         else
-            lhs = NIL(char);
+            lhs = NIL(char); /* Left hand side is empty. */
 
         /* Jump over the operation so we can grab the right half of the expression */
         if( opcode == ST_IFEQ || opcode == ST_IFNEQ )
@@ -790,10 +807,12 @@ int partcomp( char* lhs, int opcode )
                 case LESS_EQUAL:
                 case GREATER_EQUAL:
                     /* Ignore quotes around the arguments */
-                    if ( lhs[0] == '"' ) lhs++;
-                    if ( rhs[0] == '"' ) rhs++;
-                    lint = atoi( lhs );
-                    rint = atoi( rhs );
+                    if ( lhs && lhs[0] == '"' ) lhs++;
+                    if ( rhs && rhs[0] == '"' ) rhs++;
+
+                    /* Empty strings evaluate to zero. */
+                    lint = lhs ? atoi( lhs ) : 0;
+                    rint = rhs ? atoi( rhs ) : 0;
                     result = ( lint >= rint ) ? TRUE : FALSE;
                     if ( opsind == LESS_EQUAL && lint != rint )
                         result = !result;
