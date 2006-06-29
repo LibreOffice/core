@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.79 $
+#   $Revision: 1.80 $
 #
-#   last change: $Author: rt $ $Date: 2006-05-05 11:01:49 $
+#   last change: $Author: ihi $ $Date: 2006-06-29 11:25:18 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -182,11 +182,6 @@ SHL1USE_EXPORTS=ordinal
     LIB1FILES +=    $(SLB)$/glyphs.lib
     SHL1STDLIBS+=   $(FREETYPELIB)
 .ENDIF # USE_BUILTIN_RASTERIZER
-
-
-.IF "$(GUI)"!="MAC"
-SHL1DEPN=   $(L)$/itools.lib $(L)$/sot.lib
-.ENDIF
 
 SHL1LIBS=   $(LIB1TARGET)
 .IF "$(GUI)"!="UNX"
