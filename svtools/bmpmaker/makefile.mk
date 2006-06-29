@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-19 20:08:04 $
+#   last change: $Author: ihi $ $Date: 2006-06-29 11:27:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -68,8 +68,6 @@ APP1STDLIBS =		\
     $(VOSLIB) 		\
     $(SALLIB)
 
-APP1DEPN=   $(L)$/itools.lib  $(SVLIBDEPEND)
-
 APP1OBJS=   $(OBJ)$/bmp.obj			\
             $(OBJ)$/bmpcore.obj		
             
@@ -79,7 +77,6 @@ APP1BASE=0x10000000
 
 APP2TARGET	=	bmpsum
 APP2BASE	=	0x10000000
-APP2DEPN	=   $(L)$/itools.lib  $(SVLIBDEPEND)
 APP2OBJS	=   $(OBJ)$/bmpsum.obj
 
 APP2STDLIBS	=	$(SVLIB)		\
