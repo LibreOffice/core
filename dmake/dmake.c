@@ -1,6 +1,6 @@
 /* $RCSfile: dmake.c,v $
--- $Revision: 1.6 $
--- last change: $Author: hr $ $Date: 2006-04-20 11:59:05 $
+-- $Revision: 1.7 $
+-- last change: $Author: ihi $ $Date: 2006-06-29 11:22:57 $
 --
 -- SYNOPSIS
 --      The main program.
@@ -324,6 +324,7 @@ char **argv;
      Parse_macro( p, (q[-1]!='+')?M_PRECIOUS:M_DEFAULT );
       }
       else {
+     /* Register the following parameter as the to be build target. */
      register CELLPTR cp;
      targets = DmStrAdd( targets, DmStrDup(p), TRUE );
      Add_prerequisite(Targets, cp = Def_cell(p), FALSE, FALSE);
