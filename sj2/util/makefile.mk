@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2006-02-09 15:12:14 $
+#   last change: $Author: ihi $ $Date: 2006-06-29 11:15:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@ LIB1TARGET= $(SLB)$/$(TARGET).lib
 LIB1FILES=  \
     $(SLB)$/jscpp.lib
 
-SHL1DEPN=   $(L)$/itools.lib $(SVLIBDEPEND) $(LIB1TARGET)
+SHL1DEPN= $(LIB1TARGET)
 
 SHL1TARGET= j$(UPD)$(DLLPOSTFIX)_g
 SHL1IMPLIB= $(TARGET)
