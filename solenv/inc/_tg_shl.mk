@@ -69,11 +69,11 @@ $(MISC)$/$(SHL1VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/$(SHL1VE
 .IF "$(GUI)" != "UNX"
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)" == "MSC"
-.IF "$(SHL1IMPLIB)" != ""
+.IF "$(SHL1IMPLIB)" == ""
+SHL1IMPLIB=i$(TARGET)_t1
+.ENDIF			# "$(SHL1IMPLIB)" == ""
 USE_1IMPLIB=-implib:$(LB)$/$(SHL1IMPLIB).lib
-.ELSE			# "$(SHL1IMPLIB)" != ""
-USE_1IMPLIB=-implib:$(LB)$/i$(TARGET)1.lib
-.ENDIF			# "$(SHL1IMPLIB)" != ""
+SHL1IMPLIBN=$(LB)$/$(SHL1IMPLIB).lib
 .ENDIF			# "$(COM)" == "MSC"
 
 .IF "$(USE_DEFFILE)"==""
@@ -467,11 +467,11 @@ $(MISC)$/$(SHL2VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/$(SHL2VE
 .IF "$(GUI)" != "UNX"
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)" == "MSC"
-.IF "$(SHL2IMPLIB)" != ""
+.IF "$(SHL2IMPLIB)" == ""
+SHL2IMPLIB=i$(TARGET)_t2
+.ENDIF			# "$(SHL2IMPLIB)" == ""
 USE_2IMPLIB=-implib:$(LB)$/$(SHL2IMPLIB).lib
-.ELSE			# "$(SHL2IMPLIB)" != ""
-USE_2IMPLIB=-implib:$(LB)$/i$(TARGET)2.lib
-.ENDIF			# "$(SHL2IMPLIB)" != ""
+SHL2IMPLIBN=$(LB)$/$(SHL2IMPLIB).lib
 .ENDIF			# "$(COM)" == "MSC"
 
 .IF "$(USE_DEFFILE)"==""
@@ -865,11 +865,11 @@ $(MISC)$/$(SHL3VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/$(SHL3VE
 .IF "$(GUI)" != "UNX"
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)" == "MSC"
-.IF "$(SHL3IMPLIB)" != ""
+.IF "$(SHL3IMPLIB)" == ""
+SHL3IMPLIB=i$(TARGET)_t3
+.ENDIF			# "$(SHL3IMPLIB)" == ""
 USE_3IMPLIB=-implib:$(LB)$/$(SHL3IMPLIB).lib
-.ELSE			# "$(SHL3IMPLIB)" != ""
-USE_3IMPLIB=-implib:$(LB)$/i$(TARGET)3.lib
-.ENDIF			# "$(SHL3IMPLIB)" != ""
+SHL3IMPLIBN=$(LB)$/$(SHL3IMPLIB).lib
 .ENDIF			# "$(COM)" == "MSC"
 
 .IF "$(USE_DEFFILE)"==""
@@ -1263,11 +1263,11 @@ $(MISC)$/$(SHL4VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/$(SHL4VE
 .IF "$(GUI)" != "UNX"
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)" == "MSC"
-.IF "$(SHL4IMPLIB)" != ""
+.IF "$(SHL4IMPLIB)" == ""
+SHL4IMPLIB=i$(TARGET)_t4
+.ENDIF			# "$(SHL4IMPLIB)" == ""
 USE_4IMPLIB=-implib:$(LB)$/$(SHL4IMPLIB).lib
-.ELSE			# "$(SHL4IMPLIB)" != ""
-USE_4IMPLIB=-implib:$(LB)$/i$(TARGET)4.lib
-.ENDIF			# "$(SHL4IMPLIB)" != ""
+SHL4IMPLIBN=$(LB)$/$(SHL4IMPLIB).lib
 .ENDIF			# "$(COM)" == "MSC"
 
 .IF "$(USE_DEFFILE)"==""
@@ -1661,11 +1661,11 @@ $(MISC)$/$(SHL5VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/$(SHL5VE
 .IF "$(GUI)" != "UNX"
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)" == "MSC"
-.IF "$(SHL5IMPLIB)" != ""
+.IF "$(SHL5IMPLIB)" == ""
+SHL5IMPLIB=i$(TARGET)_t5
+.ENDIF			# "$(SHL5IMPLIB)" == ""
 USE_5IMPLIB=-implib:$(LB)$/$(SHL5IMPLIB).lib
-.ELSE			# "$(SHL5IMPLIB)" != ""
-USE_5IMPLIB=-implib:$(LB)$/i$(TARGET)5.lib
-.ENDIF			# "$(SHL5IMPLIB)" != ""
+SHL5IMPLIBN=$(LB)$/$(SHL5IMPLIB).lib
 .ENDIF			# "$(COM)" == "MSC"
 
 .IF "$(USE_DEFFILE)"==""
@@ -2059,11 +2059,11 @@ $(MISC)$/$(SHL6VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/$(SHL6VE
 .IF "$(GUI)" != "UNX"
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)" == "MSC"
-.IF "$(SHL6IMPLIB)" != ""
+.IF "$(SHL6IMPLIB)" == ""
+SHL6IMPLIB=i$(TARGET)_t6
+.ENDIF			# "$(SHL6IMPLIB)" == ""
 USE_6IMPLIB=-implib:$(LB)$/$(SHL6IMPLIB).lib
-.ELSE			# "$(SHL6IMPLIB)" != ""
-USE_6IMPLIB=-implib:$(LB)$/i$(TARGET)6.lib
-.ENDIF			# "$(SHL6IMPLIB)" != ""
+SHL6IMPLIBN=$(LB)$/$(SHL6IMPLIB).lib
 .ENDIF			# "$(COM)" == "MSC"
 
 .IF "$(USE_DEFFILE)"==""
@@ -2457,11 +2457,11 @@ $(MISC)$/$(SHL7VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/$(SHL7VE
 .IF "$(GUI)" != "UNX"
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)" == "MSC"
-.IF "$(SHL7IMPLIB)" != ""
+.IF "$(SHL7IMPLIB)" == ""
+SHL7IMPLIB=i$(TARGET)_t7
+.ENDIF			# "$(SHL7IMPLIB)" == ""
 USE_7IMPLIB=-implib:$(LB)$/$(SHL7IMPLIB).lib
-.ELSE			# "$(SHL7IMPLIB)" != ""
-USE_7IMPLIB=-implib:$(LB)$/i$(TARGET)7.lib
-.ENDIF			# "$(SHL7IMPLIB)" != ""
+SHL7IMPLIBN=$(LB)$/$(SHL7IMPLIB).lib
 .ENDIF			# "$(COM)" == "MSC"
 
 .IF "$(USE_DEFFILE)"==""
@@ -2855,11 +2855,11 @@ $(MISC)$/$(SHL8VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/$(SHL8VE
 .IF "$(GUI)" != "UNX"
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)" == "MSC"
-.IF "$(SHL8IMPLIB)" != ""
+.IF "$(SHL8IMPLIB)" == ""
+SHL8IMPLIB=i$(TARGET)_t8
+.ENDIF			# "$(SHL8IMPLIB)" == ""
 USE_8IMPLIB=-implib:$(LB)$/$(SHL8IMPLIB).lib
-.ELSE			# "$(SHL8IMPLIB)" != ""
-USE_8IMPLIB=-implib:$(LB)$/i$(TARGET)8.lib
-.ENDIF			# "$(SHL8IMPLIB)" != ""
+SHL8IMPLIBN=$(LB)$/$(SHL8IMPLIB).lib
 .ENDIF			# "$(COM)" == "MSC"
 
 .IF "$(USE_DEFFILE)"==""
@@ -3253,11 +3253,11 @@ $(MISC)$/$(SHL9VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/$(SHL9VE
 .IF "$(GUI)" != "UNX"
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)" == "MSC"
-.IF "$(SHL9IMPLIB)" != ""
+.IF "$(SHL9IMPLIB)" == ""
+SHL9IMPLIB=i$(TARGET)_t9
+.ENDIF			# "$(SHL9IMPLIB)" == ""
 USE_9IMPLIB=-implib:$(LB)$/$(SHL9IMPLIB).lib
-.ELSE			# "$(SHL9IMPLIB)" != ""
-USE_9IMPLIB=-implib:$(LB)$/i$(TARGET)9.lib
-.ENDIF			# "$(SHL9IMPLIB)" != ""
+SHL9IMPLIBN=$(LB)$/$(SHL9IMPLIB).lib
 .ENDIF			# "$(COM)" == "MSC"
 
 .IF "$(USE_DEFFILE)"==""
@@ -3651,11 +3651,11 @@ $(MISC)$/$(SHL10VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/$(SHL10
 .IF "$(GUI)" != "UNX"
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)" == "MSC"
-.IF "$(SHL10IMPLIB)" != ""
+.IF "$(SHL10IMPLIB)" == ""
+SHL10IMPLIB=i$(TARGET)_t10
+.ENDIF			# "$(SHL10IMPLIB)" == ""
 USE_10IMPLIB=-implib:$(LB)$/$(SHL10IMPLIB).lib
-.ELSE			# "$(SHL10IMPLIB)" != ""
-USE_10IMPLIB=-implib:$(LB)$/i$(TARGET)10.lib
-.ENDIF			# "$(SHL10IMPLIB)" != ""
+SHL10IMPLIBN=$(LB)$/$(SHL10IMPLIB).lib
 .ENDIF			# "$(COM)" == "MSC"
 
 .IF "$(USE_DEFFILE)"==""
