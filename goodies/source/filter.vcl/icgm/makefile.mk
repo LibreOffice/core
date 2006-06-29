@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 14:28:59 $
+#   last change: $Author: ihi $ $Date: 2006-06-29 11:31:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,6 @@ SLOFILES =	$(SLO)$/cgm.obj		\
 
 SHL1TARGET	=	icg$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB	=	icgm
-SHL1DEPN	=	$(LB)$/icgm.lib
 SHL1VERSIONMAP=exports.map
 SHL1DEF		=	$(MISC)$/$(SHL1TARGET).def
 SHL1LIBS	=	$(SLB)$/icgm.lib
