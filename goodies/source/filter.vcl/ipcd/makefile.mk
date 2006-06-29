@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 02:59:40 $
+#   last change: $Author: ihi $ $Date: 2006-06-29 11:32:46 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,6 @@ SLOFILES =  $(SLO)$/ipcd.obj
 SHL1TARGET=     icd$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB=     ipcd
 SHL1STDLIBS=    $(SVTOOLLIB) $(VCLLIB) $(TOOLSLIB) $(SALLIB)
-SHL1DEPN=       $(LB)$/ipcd.lib
 SHL1LIBS=       $(SLB)$/ipcd.lib # $(LB)$/rtftoken.lib
 
 .IF "$(GUI)" != "UNX"
