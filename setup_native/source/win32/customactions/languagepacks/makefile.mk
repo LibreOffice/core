@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 16:32:31 $
+#   last change: $Author: ihi $ $Date: 2006-06-29 11:16:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,6 @@ PRJ=..$/..$/..$/..
 PRJNAME=setup_native
 TARGET=lngpckinsthlp
 
-.IF "$(GUI)"=="WNT"
 
 # --- Settings -----------------------------------------------------
 
@@ -52,17 +51,17 @@ CFLAGS+=-D_STLP_USE_STATIC_LIB
 
 # --- Files --------------------------------------------------------
 
+.IF "$(GUI)"=="WNT"
+
 UWINAPILIB=
 
 SLOFILES =	$(SLO)$/lngpckinsthelper.obj \
             $(SLO)$/respintest.obj
 
-SHL1STDLIBS=	kernel32.lib\
-                user32.lib\
-                advapi32.lib\
-                shell32.lib\
-                msi.lib\
-                $(LIBSTLPORTST)								
+STDSHL+=	\
+    advapi32.lib\
+    msi.lib\
+    $(LIBSTLPORTST)								
 
 SHL1LIBS = $(SLB)$/$(TARGET).lib 
 
@@ -75,12 +74,12 @@ SHL1BASE = 0x1c000000
 DEF1NAME=$(SHL1TARGET)
 DEF1EXPORTFILE=exports.dxp
 
+.ENDIF
+
 # --- Targets --------------------------------------------------------------
 
 .INCLUDE : target.mk
 
 # -------------------------------------------------------------------------
 
-
-.ENDIF
 
