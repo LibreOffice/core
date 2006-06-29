@@ -4,9 +4,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.99 $
+#   $Revision: 1.100 $
 #
-#   last change: $Author: vg $ $Date: 2006-06-02 12:32:21 $
+#   last change: $Author: ihi $ $Date: 2006-06-29 11:20:08 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,7 @@
 #     MA  02111-1307  USA
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.99 $$"
+LIBSMKREV!:="$$Revision: 1.100 $$"
 
 .IF "$(COM)"=="WTC"
 LIBPRE=libr
@@ -108,7 +108,6 @@ LDAPSDKLIB=-lldap50
 .ENDIF
 ONELIB=
 UNOLIB=
-SVLIBDEPEND=$(L)$/libvcl$(OFFICEUPD)$(DLLPOSTFIX)$(DLLPOST)
 SVLIB=-lvcl$(OFFICEUPD)$(DLLPOSTFIX)
 ICOLIB=-lico$(OFFICEUPD)$(DLLPOSTFIX)
 VCLLIBST=-lvcl
@@ -342,7 +341,6 @@ SCHEDLIB=$(LIBPRE) ss.lib
 SSCLIB=$(LIBPRE) ssc.lib
 SSLLIB=$(LIBPRE) ssl.lib
 SSWLIB=$(LIBPRE) ssw.lib
-SVLIBDEPEND=$(L)$/sv.lib
 SFX2LIB=$(LIBPRE) sfx.lib
 SFXLIB=$(SFX2LIB)
 FWELIB=$(LIBPRE) ifwe.lib
@@ -421,7 +419,6 @@ CANVASTOOLSLIB=$(LIBPRE) icanvastools.lib
 CPPCANVASLIB=$(LIBPRE) icppcanvas.lib
 AGGLIB=$(LIBPRE) iagg.lib
 TKLIB=$(LIBPRE) itk.lib
-SVLIBDEPEND=$(L)$/ivcl.lib
 SVXLLIB=$(LIBPRE) svxl.lib
 FREETYPELIB=freetype.lib
 FREETYPELIBST=freetype.lib
