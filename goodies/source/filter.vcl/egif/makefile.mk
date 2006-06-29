@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-19 21:40:57 $
+#   last change: $Author: ihi $ $Date: 2006-06-29 11:29:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,6 @@ SHL1TARGET=     egi$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB=     egif
 SHL1STDLIBS=	$(TOOLSLIB) $(SVLIB) $(CPPULIB) $(SVTOOLLIB) $(SALLIB)
 
-SHL1DEPN=       $(LB)$/egif.lib
 SHL1LIBS=       $(SLB)$/egif.lib
 
 .IF "$(GUI)" != "UNX"
