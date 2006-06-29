@@ -29,7 +29,8 @@ EOT
 
 #more compatible version of: unix2dos $file1
 : ${AWK:=awk}
-$AWK 'sub("$", "\r")' $file1 > $file2
+#$AWK 'sub("$", "\r")' $file1 > $file2
+$AWK '{print $0"\r"}' $file1 > $file2
 
 ${DMAKEPROG} -r -f $file2
 result=$?

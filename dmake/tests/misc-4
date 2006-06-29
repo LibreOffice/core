@@ -29,24 +29,24 @@ testfile : testfile2 testfile3 testfile1
 testfile1 :
 	+@echo making \$@ 1>&2
 	+@sleep 1
-	+@echo -n t1
+	+@printf t1
 	+@echo 1 > \$@
 
 testfile2 :
 	+@echo making \$@ 1>&2
 	+@sleep 2
-	+@echo -n t2
+	+@printf t2
 	+@echo 2 > \$@
 
 testfile3 :
 	+@echo making \$@ 1>&2
 	+@sleep 3
-	+@echo -n t3
+	+@printf t3
 	+@echo 3 > \$@
 
 EOT
 
-output=$(${DMAKEPROG} -r -P3 -f $file1)
+output=`eval ${DMAKEPROG} -r -P3 -f $file1`
 result=$?
 
 # In parallel operation the targets with the smaller sleep value

@@ -36,9 +36,9 @@ all ".SETDIR=dirwith space" :
 	+@echo \$(TMD)
 EOT
 
-output1=$(${DMAKEPROG} -r -f $file1)
+output1=`eval ${DMAKEPROG} -r -f $file1`
 result1=$?
-output2=$(${DMAKEPROG} -r -f $file2)
+output2=`eval ${DMAKEPROG} -r -f $file2`
 result2=$?
 
 if test "$output1" = ""; then

@@ -29,7 +29,7 @@ all:
 
 EOT
 
-output=$(${DMAKEPROG} -r -f $file1)
+output=`eval ${DMAKEPROG} -r -f $file1`
 result=$?
 
 # The space between aaa and bbb comes from the +=
