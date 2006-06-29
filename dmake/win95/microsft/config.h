@@ -1,6 +1,6 @@
 /* $RCSfile: config.h,v $
--- $Revision: 1.7 $
--- last change: $Author: hr $ $Date: 2006-04-20 12:24:12 $
+-- $Revision: 1.8 $
+-- last change: $Author: ihi $ $Date: 2006-06-29 11:32:14 $
 --
 -- SYNOPSIS
 --      Configurarion include file.
@@ -38,7 +38,7 @@
 
 /* Name and version number of this package */
 #define PACKAGE "dmake"
-#define VERSION "4.4"
+#define VERSION "4.5"
 #define BUILDINFO "Windows / MS Visual C++"
 
 #if defined (_MSC_VER)
