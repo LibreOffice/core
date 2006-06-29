@@ -4,9 +4,9 @@
  *
  *  $RCSfile: adoimp.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:00:59 $
+ *  last change: $Author: ihi $ $Date: 2006-06-29 12:51:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #endif
 
 #include "ado_pre_sys_include.h"
-#include <ado/ADOCTINT.H>
+#include <adoctint.h>
 #include "ado_post_sys_include.h"
 
 struct ADOConnection;
