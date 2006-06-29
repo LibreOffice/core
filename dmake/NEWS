@@ -2,6 +2,38 @@ News file for the dmake version that is hosted on the OpenOffice.org
 cvs. #i<number># denote issues tracked by the OpenOffice.org issue tracking
 system, see <http://qa.openoffice.org/issue_handling/project_issues.html>.
 
+Version 4.5
+===========
+
+Volker Quetschke (vq@openoffice.org)
+#i66385# Fix the handling of .<suffix> targets. Always treat these targets
+as meta targets regardless of the AUGMAKE (-A) status. Previously this was
+enabled when the AUGMAKE was *not* set to 'yes' or the -A switch was given.
+
+#i66083# We now stop with an error if AUGMAKE meta targets and regular
+targets are used in one rule definition. As the syntax of these target
+definitions is slightly different this hints to an error in the makefile,
+most probably a misspelled attribute or special target.
+
+#i48087#, #i64869# The parsing of %-target definitions was fixed and
+enhanced. Prior to dmake 4.5 only one %-target per target-definition worked
+reliably, now this works well, but to help projects that still use older
+versions a warning was added.
+
+It's not very nice to issue a warning for something that works now but
+didn't before. This was only done to aid development and will probably
+be removed in future versions.
+
+There was, and still is, that for a bug in dmake for %-targets with more
+than one (not indirect) prerequisite only the first prerequisite is used.
+This will be fixed in future versions but until this happens we issue a
+warning that prerequisites are ignored.
+
+#i65122# The :| rule operator was handled differently from what the man
+page said. The man page was adapted to reflect reality. Changing dmakes
+behavior to match the man page would have introduced a lot of compatibility
+issues.
+
 Version 4.4
 ===========
 
@@ -119,7 +151,7 @@ add MinGW and MSVC to the configure buildable targets.
 Fix the "lost a child" problem. (Part II)
 
 2002/10/04 Ken Foskey (waratah@openoffice.org)
-Reworke the configure process.
+Rework the configure process.
 
 2002/04/10 Hans-Joachim Lankenau (hjs@openoffice.org)
 Don't search INCLUDEDIRS if the filename to be included starts at fs-root.
@@ -131,7 +163,7 @@ there is a fatal error. Lost a child problem. (Part I)
 Version 4.2
 ===========
 (Note, the dmake -V output was not changed and still said
-"Version 4.10, PL 0". This propably should have been 4.1)
+"Version 4.10, PL 0". This probably should have been 4.1)
 
 2001/04/20 Martin Hollmichel (mh@openoffice.org)
 First autoconfiscation of dmake.
