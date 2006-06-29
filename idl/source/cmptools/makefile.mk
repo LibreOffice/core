@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 17:49:11 $
+#   last change: $Author: ihi $ $Date: 2006-06-29 11:18:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -35,24 +35,12 @@
 
 PRJ=..$/..
 
-PRJPCH=
-
-PROJECTPCH4DLL=TRUE
-PROJECTPCH=idlpch
-PROJECTPCHSOURCE=$(PRJ)$/util$/idlpch
-
-PRJNAME=SVIDL
+PRJNAME=idl
 TARGET=cmptools
 
 # --- Settings -----------------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
-
-.IF "$(COM)"=="WTC"
-CFLAGS+=-od
-.ENDIF
 
 CDEFS+=-DIDL_COMPILER
 # --- Files --------------------------------------------------------------
