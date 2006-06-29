@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 16:38:53 $
+#   last change: $Author: ihi $ $Date: 2006-06-29 11:17:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -34,44 +34,31 @@
 #*************************************************************************
 
 PRJ=..$/..$/..$/..
-PRJNAME=setup2
+PRJNAME=setup_native
 TARGET=regactivex
-USE_DEFFILE=TRUE
-
-.IF "$(GUI)"=="WNT"
 
 # --- Settings -----------------------------------------------------
 
-# NO_DEFAULT_STL=TRUE
 ENABLE_EXCEPTIONS=TRUE
+NO_DEFAULT_STL=TRUE
+DYNAMIC_CRT=
+USE_DEFFILE=TRUE
 
-#.INCLUDE : svpre.mk
 .INCLUDE : settings.mk
-#.INCLUDE : sv.mk
-
-STDSHL=
-# SOLARINC!:=$(SOLARINC:s/stl//)
 
 # --- Files --------------------------------------------------------
 
-INCPRE+=.\Include
-.DIRCACHE=NO
-# CFLAGS+=-E
+.IF "$(GUI)"=="WNT"
+
+UWINAPILIB=
 
 SLOFILES =	$(SLO)$/regactivex.obj
 
-SHL1STDLIBS=	kernel32.lib\
-                user32.lib\
-                advapi32.lib\
-                shell32.lib\
-                msi.lib\
-                libcmt.lib
-# msvcrt.lib
-
+STDSHL += \
+    msi.lib
 
 SHL1LIBS = $(SLB)$/$(TARGET).lib 
 
-#SHL1TARGET = $(TARGET)$(UPD)$(DLLPOSTFIX)
 SHL1TARGET = $(TARGET)
 SHL1IMPLIB = i$(TARGET)
 
@@ -81,12 +68,11 @@ SHL1BASE = 0x1c000000
 DEF1NAME=$(SHL1TARGET)
 DEF1EXPORTFILE=exports.dxp
 
+.ENDIF
+
 # --- Targets --------------------------------------------------------------
 
 .INCLUDE : target.mk
 
 # -------------------------------------------------------------------------
-
-
-.ENDIF
 
