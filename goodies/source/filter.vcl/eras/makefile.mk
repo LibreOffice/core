@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 02:46:14 $
+#   last change: $Author: ihi $ $Date: 2006-06-29 11:30:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,6 @@ SLOFILES =	$(SLO)$/eras.obj
 SHL1TARGET= 	era$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB= 	eras
 SHL1STDLIBS=	$(VCLLIB) $(TOOLSLIB) $(SALLIB)
-SHL1DEPN=		$(LB)$/eras.lib
 SHL1LIBS=		$(SLB)$/eras.lib
 
 .IF "$(GUI)" != "UNX"
