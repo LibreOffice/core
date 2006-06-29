@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 02:36:32 $
+#   last change: $Author: ihi $ $Date: 2006-06-29 11:29:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,6 @@ SHL1TARGET= 	epb$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB= 	epbm
 SHL1STDLIBS=	$(TOOLSLIB) $(SVLIB) $(CPPULIB)	$(SVTOOLLIB) $(SALLIB)
 
-SHL1DEPN=		$(LB)$/epbm.lib
 SHL1LIBS=		$(SLB)$/epbm.lib
 
 .IF "$(GUI)" != "UNX"
