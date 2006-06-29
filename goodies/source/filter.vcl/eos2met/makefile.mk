@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 02:34:15 $
+#   last change: $Author: ihi $ $Date: 2006-06-29 11:29:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,6 @@ SHL1TARGET=     eme$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB=     eos2met
 SHL1STDLIBS=    $(TOOLSLIB) $(SVLIB) $(SVTOOLLIB) $(CPPULIB) $(SALLIB)
 
-SHL1DEPN=       $(LB)$/eos2met.lib
 SHL1LIBS=       $(SLB)$/eos2met.lib
 .IF "$(GUI)" != "UNX"
 SHL1OBJS=       $(SLO)$/eos2met.obj
