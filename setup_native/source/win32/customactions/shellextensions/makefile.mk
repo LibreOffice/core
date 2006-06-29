@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-12-14 12:34:54 $
+#   last change: $Author: ihi $ $Date: 2006-06-29 11:18:08 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,8 +37,6 @@ PRJ=..$/..$/..$/..
 PRJNAME=setup_native
 TARGET=shlxtmsi
 
-.IF "$(GUI)"=="WNT"
-
 # --- Settings -----------------------------------------------------
 
 ENABLE_EXCEPTIONS=TRUE
@@ -52,6 +50,8 @@ CFLAGS+=-D_STLP_USE_STATIC_LIB
 
 # --- Files --------------------------------------------------------
 
+.IF "$(GUI)"=="WNT"
+
 UWINAPILIB=
 
 SLOFILES = \
@@ -63,12 +63,10 @@ SLOFILES = \
     $(SLO)$/migrateinstallpath.obj
 
 
-SHL1STDLIBS=	kernel32.lib\
-                user32.lib\
-                advapi32.lib\
-                shell32.lib\
-                msi.lib\
-                $(LIBSTLPORTST)								
+STDSHL += \
+    advapi32.lib\
+    msi.lib\
+    $(LIBSTLPORTST)								
 
 SHL1LIBS = $(SLB)$/$(TARGET).lib 
 
@@ -81,12 +79,12 @@ SHL1BASE = 0x1c000000
 DEF1NAME=$(SHL1TARGET)
 DEF1EXPORTFILE=exports.dxp
 
+.ENDIF
+
 # --- Targets --------------------------------------------------------------
 
 .INCLUDE : target.mk
 
 # -------------------------------------------------------------------------
 
-
-.ENDIF
 
