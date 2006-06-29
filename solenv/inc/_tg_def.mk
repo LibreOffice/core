@@ -70,9 +70,7 @@ $(DEF1TARGETN) .PHONY :
     @+-$(RM) $@.tmpfile
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
-    @echo LIBRARY	  $(SHL1TARGET) 								 >$@.tmpfile
-    @echo DESCRIPTION	'StarView 3.00 $(DEF1DES) $(UPD) $(UPDMINOR)' >>$@.tmpfile
-    @echo DATA		  READ WRITE SHARED  							>>$@.tmpfile
+    @echo LIBRARY	  $(SHL1TARGETN:f) 								 >$@.tmpfile
     @echo HEAPSIZE	  0 											>>$@.tmpfile
     @echo EXPORTS													>>$@.tmpfile
 #	getversioninfo fuer alle!!
@@ -263,9 +261,7 @@ $(DEF2TARGETN) .PHONY :
     @+-$(RM) $@.tmpfile
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
-    @echo LIBRARY	  $(SHL2TARGET) 								 >$@.tmpfile
-    @echo DESCRIPTION	'StarView 3.00 $(DEF2DES) $(UPD) $(UPDMINOR)' >>$@.tmpfile
-    @echo DATA		  READ WRITE SHARED  							>>$@.tmpfile
+    @echo LIBRARY	  $(SHL2TARGETN:f) 								 >$@.tmpfile
     @echo HEAPSIZE	  0 											>>$@.tmpfile
     @echo EXPORTS													>>$@.tmpfile
 #	getversioninfo fuer alle!!
@@ -456,9 +452,7 @@ $(DEF3TARGETN) .PHONY :
     @+-$(RM) $@.tmpfile
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
-    @echo LIBRARY	  $(SHL3TARGET) 								 >$@.tmpfile
-    @echo DESCRIPTION	'StarView 3.00 $(DEF3DES) $(UPD) $(UPDMINOR)' >>$@.tmpfile
-    @echo DATA		  READ WRITE SHARED  							>>$@.tmpfile
+    @echo LIBRARY	  $(SHL3TARGETN:f) 								 >$@.tmpfile
     @echo HEAPSIZE	  0 											>>$@.tmpfile
     @echo EXPORTS													>>$@.tmpfile
 #	getversioninfo fuer alle!!
@@ -649,9 +643,7 @@ $(DEF4TARGETN) .PHONY :
     @+-$(RM) $@.tmpfile
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
-    @echo LIBRARY	  $(SHL4TARGET) 								 >$@.tmpfile
-    @echo DESCRIPTION	'StarView 3.00 $(DEF4DES) $(UPD) $(UPDMINOR)' >>$@.tmpfile
-    @echo DATA		  READ WRITE SHARED  							>>$@.tmpfile
+    @echo LIBRARY	  $(SHL4TARGETN:f) 								 >$@.tmpfile
     @echo HEAPSIZE	  0 											>>$@.tmpfile
     @echo EXPORTS													>>$@.tmpfile
 #	getversioninfo fuer alle!!
@@ -842,9 +834,7 @@ $(DEF5TARGETN) .PHONY :
     @+-$(RM) $@.tmpfile
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
-    @echo LIBRARY	  $(SHL5TARGET) 								 >$@.tmpfile
-    @echo DESCRIPTION	'StarView 3.00 $(DEF5DES) $(UPD) $(UPDMINOR)' >>$@.tmpfile
-    @echo DATA		  READ WRITE SHARED  							>>$@.tmpfile
+    @echo LIBRARY	  $(SHL5TARGETN:f) 								 >$@.tmpfile
     @echo HEAPSIZE	  0 											>>$@.tmpfile
     @echo EXPORTS													>>$@.tmpfile
 #	getversioninfo fuer alle!!
@@ -1035,9 +1025,7 @@ $(DEF6TARGETN) .PHONY :
     @+-$(RM) $@.tmpfile
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
-    @echo LIBRARY	  $(SHL6TARGET) 								 >$@.tmpfile
-    @echo DESCRIPTION	'StarView 3.00 $(DEF6DES) $(UPD) $(UPDMINOR)' >>$@.tmpfile
-    @echo DATA		  READ WRITE SHARED  							>>$@.tmpfile
+    @echo LIBRARY	  $(SHL6TARGETN:f) 								 >$@.tmpfile
     @echo HEAPSIZE	  0 											>>$@.tmpfile
     @echo EXPORTS													>>$@.tmpfile
 #	getversioninfo fuer alle!!
@@ -1228,9 +1216,7 @@ $(DEF7TARGETN) .PHONY :
     @+-$(RM) $@.tmpfile
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
-    @echo LIBRARY	  $(SHL7TARGET) 								 >$@.tmpfile
-    @echo DESCRIPTION	'StarView 3.00 $(DEF7DES) $(UPD) $(UPDMINOR)' >>$@.tmpfile
-    @echo DATA		  READ WRITE SHARED  							>>$@.tmpfile
+    @echo LIBRARY	  $(SHL7TARGETN:f) 								 >$@.tmpfile
     @echo HEAPSIZE	  0 											>>$@.tmpfile
     @echo EXPORTS													>>$@.tmpfile
 #	getversioninfo fuer alle!!
@@ -1421,9 +1407,7 @@ $(DEF8TARGETN) .PHONY :
     @+-$(RM) $@.tmpfile
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
-    @echo LIBRARY	  $(SHL8TARGET) 								 >$@.tmpfile
-    @echo DESCRIPTION	'StarView 3.00 $(DEF8DES) $(UPD) $(UPDMINOR)' >>$@.tmpfile
-    @echo DATA		  READ WRITE SHARED  							>>$@.tmpfile
+    @echo LIBRARY	  $(SHL8TARGETN:f) 								 >$@.tmpfile
     @echo HEAPSIZE	  0 											>>$@.tmpfile
     @echo EXPORTS													>>$@.tmpfile
 #	getversioninfo fuer alle!!
@@ -1614,9 +1598,7 @@ $(DEF9TARGETN) .PHONY :
     @+-$(RM) $@.tmpfile
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
-    @echo LIBRARY	  $(SHL9TARGET) 								 >$@.tmpfile
-    @echo DESCRIPTION	'StarView 3.00 $(DEF9DES) $(UPD) $(UPDMINOR)' >>$@.tmpfile
-    @echo DATA		  READ WRITE SHARED  							>>$@.tmpfile
+    @echo LIBRARY	  $(SHL9TARGETN:f) 								 >$@.tmpfile
     @echo HEAPSIZE	  0 											>>$@.tmpfile
     @echo EXPORTS													>>$@.tmpfile
 #	getversioninfo fuer alle!!
@@ -1807,9 +1789,7 @@ $(DEF10TARGETN) .PHONY :
     @+-$(RM) $@.tmpfile
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
-    @echo LIBRARY	  $(SHL10TARGET) 								 >$@.tmpfile
-    @echo DESCRIPTION	'StarView 3.00 $(DEF10DES) $(UPD) $(UPDMINOR)' >>$@.tmpfile
-    @echo DATA		  READ WRITE SHARED  							>>$@.tmpfile
+    @echo LIBRARY	  $(SHL10TARGETN:f) 								 >$@.tmpfile
     @echo HEAPSIZE	  0 											>>$@.tmpfile
     @echo EXPORTS													>>$@.tmpfile
 #	getversioninfo fuer alle!!
