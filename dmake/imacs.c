@@ -1,4 +1,4 @@
-/* RCS  $Id: imacs.c,v 1.3 2006-04-20 12:00:37 hr Exp $
+/* RCS  $Id: imacs.c,v 1.4 2006-06-29 11:23:47 ihi Exp $
 --
 -- SYNOPSIS
 --      Define default internal macros.
@@ -32,11 +32,11 @@ static  void    _set_int_var ANSI((char *, char *, int, int *));
 static  void    _set_string_var ANSI((char *, char *, int, char **));
 static  void    _set_bit_var ANSI((char *, char *, int));
 
-/*
-** Arrange to parse the strings stored in Rules[]
-*/
+
 PUBLIC void
-Make_rules()
+Make_rules()/*
+==============
+   Parse the strings stored in Rule_tab (from ruletab.c). */
 {
    Parse(NIL(FILE));
 }
