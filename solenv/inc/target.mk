@@ -4,9 +4,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.174 $
+#   $Revision: 1.175 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-09 12:27:50 $
+#   last change: $Author: ihi $ $Date: 2006-06-29 12:52:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -804,7 +804,6 @@ SHL1BASEX=/BASE:$(SHL1BASE)
 .ENDIF
 
 .IF "$(SHL1IMPLIB)"!=""
-SHL1IMPLIBN=$(LB)$/$(SHL1IMPLIB).lib
 SHL1IMP ?= TNR!:=1
 .ENDIF
 
@@ -825,7 +824,6 @@ SHL2BASEX=/BASE:$(SHL2BASE)
 .ENDIF
 
 .IF "$(SHL2IMPLIB)"!=""
-SHL2IMPLIBN=$(LB)$/$(SHL2IMPLIB).lib
 SHL2IMP ?= TNR!:=2
 .ENDIF
 
@@ -846,7 +844,6 @@ SHL3BASEX=/BASE:$(SHL3BASE)
 .ENDIF
 
 .IF "$(SHL3IMPLIB)"!=""
-SHL3IMPLIBN=$(LB)$/$(SHL3IMPLIB).lib
 SHL3IMP ?= TNR!:=3
 .ENDIF
 
@@ -867,7 +864,6 @@ SHL4BASEX=/BASE:$(SHL4BASE)
 .ENDIF
 
 .IF "$(SHL4IMPLIB)"!=""
-SHL4IMPLIBN=$(LB)$/$(SHL4IMPLIB).lib
 SHL4IMP ?= TNR!:=4
 .ENDIF
 
@@ -888,7 +884,6 @@ SHL5BASEX=/BASE:$(SHL5BASE)
 .ENDIF
 
 .IF "$(SHL5IMPLIB)"!=""
-SHL5IMPLIBN=$(LB)$/$(SHL5IMPLIB).lib
 SHL5IMP ?= TNR!:=5
 .ENDIF
 
@@ -909,7 +904,6 @@ SHL6BASEX=/BASE:$(SHL6BASE)
 .ENDIF
 
 .IF "$(SHL6IMPLIB)"!=""
-SHL6IMPLIBN=$(LB)$/$(SHL6IMPLIB).lib
 SHL6IMP ?= TNR!:=6
 .ENDIF
 
@@ -930,7 +924,6 @@ SHL7BASEX=/BASE:$(SHL7BASE)
 .ENDIF
 
 .IF "$(SHL7IMPLIB)"!=""
-SHL7IMPLIBN=$(LB)$/$(SHL7IMPLIB).lib
 SHL7IMP ?= TNR!:=7
 .ENDIF
 
@@ -951,7 +944,6 @@ SHL8BASEX=/BASE:$(SHL8BASE)
 .ENDIF
 
 .IF "$(SHL8IMPLIB)"!=""
-SHL8IMPLIBN=$(LB)$/$(SHL8IMPLIB).lib
 SHL8IMP ?= TNR!:=8
 .ENDIF
 
@@ -972,7 +964,6 @@ SHL9BASEX=/BASE:$(SHL9BASE)
 .ENDIF
 
 .IF "$(SHL9IMPLIB)"!=""
-SHL9IMPLIBN=$(LB)$/$(SHL9IMPLIB).lib
 SHL9IMP ?= TNR!:=9
 .ENDIF
 
@@ -1585,10 +1576,6 @@ SDI5 ?= TNR!:=5
 XMLPROPERTIESN:=$(foreach,i,$(XMLPROPERTIES) $(MISC)$/$(TARGET)_$(i:s/.xrb/.done/))
 .ENDIF			# "$(XMLPROPERTIES)"!=""
 
-.IF "$(XMLXULRES)"!=""
-XMLXULRESN:=$(foreach,i,$(XMLXULRES) $(MISC)$/$(TARGET)_xxl_$(i:s/.xxl/.done/))
-.ENDIF			# "$(XMLXULRES)"!=""
-
 .IF "$(UNIXTEXT)"!=""
 .IF "$(GUI)"=="UNX"
 CONVERTUNIXTEXT:=$(UNIXTEXT)
@@ -1651,7 +1638,6 @@ ALLTAR:	\
         $(SDITARGET)	$(SDI1TARGET)	$(SDI2TARGET)		\
         $(SDI3TARGET)	$(SDI4TARGET)	$(SDI5TARGET)		\
         $(XMLPROPERTIESN) \
-        $(XMLXULRESN)	\
         $(RCTARGET) \
         $(SCP_PRODUCT_TYPE) \
         $(ALLPARFILES) \
@@ -1741,7 +1727,6 @@ ALLTAR: $(MAKEDEMODIR)	$(MAKECOMPDIR) $(MAKEXLDIR)	\
         $(NOLIBSLOTARGET) \
         $(OTHERTARRGET) \
         $(XMLPROPERTIESN) \
-        $(XMLXULRESN)	\
         $(ALL_JAVA_TARGETS) \
         $(OBJTARGET)	$(SLOTARGET)	$(SMRSLOTARGET)		\
         $(SVXLIGHTSLOTARGET) \
@@ -2063,14 +2048,6 @@ $(MISC)$/$(TARGET)_%.done : $(COMMONMISC)$/$(TARGET)$/%.xrb
     +$(WRAPCMD) native2ascii -encoding UTF8 $< $(MISC)$/$(<:b).interm$(TARGET) && xmlex -i $(MISC)$/$(<:b).interm$(TARGET) -o $(CLASSDIR) $(XML_ISO_CODE) -g -d $@
     @+$(RM)  $(MISC)$/$(<:b).interm$(TARGET) >& $(NULLDEV)
 .ENDIF			# "$(XMLPROPERTIES)"!=""
-
-.IF "$(XMLXULRES)"!=""
-.IF "$(L10N_framework)"!=""
-XML_ISO_CODE*=-ISO99 $(L10N_framework)
-.ENDIF
-$(MISC)$/$(TARGET)_xxl_%.done : %.xxl
-    xmlex -i $(<:b).xxl -o $(OUT)$/xul$/locale $(XML_ISO_CODE) -g:dtd -d $@
-.ENDIF			# "$(XMLXULRES)"!=""
 
 .IF "$(MK_UNROLL)"!=""
 .INCLUDE : _tg_sdi.mk
