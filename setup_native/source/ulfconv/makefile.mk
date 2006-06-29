@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 16:30:11 $
+#   last change: $Author: ihi $ $Date: 2006-06-29 11:16:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,8 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  settings.mk
 
 # --- Files --------------------------------------------------------
+
+SLOFILES =	$(SLO)$/$(TARGET).obj
 
 APP1TARGET=$(TARGET)
 APP1OBJS=$(OBJ)$/$(TARGET).obj
