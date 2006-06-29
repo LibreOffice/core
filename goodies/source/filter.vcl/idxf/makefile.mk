@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-19 21:47:18 $
+#   last change: $Author: ihi $ $Date: 2006-06-29 11:31:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,6 @@ SHL1TARGET=     idx$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB=     idxf
 SHL1STDLIBS=    $(VCLLIB) $(TOOLSLIB) $(SALLIB)
 
-SHL1DEPN=       $(LB)$/idxf.lib
 SHL1LIBS=       $(SLB)$/idxf.lib # $(LB)$/rtftoken.lib
 
 .IF "$(GUI)" != "UNX"
