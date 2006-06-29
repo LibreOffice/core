@@ -1,4 +1,4 @@
-/* RCS  $Id: ruletab.c,v 1.2 2006-04-20 12:26:16 hr Exp $
+/* RCS  $Id: ruletab.c,v 1.3 2006-06-29 11:33:07 ihi Exp $
 --
 -- SYNOPSIS
 --      Default initial configuration of dmake.
@@ -32,7 +32,7 @@
 #include <stdio.h>
 
 static char *_rules[] = {
-    "MAXLINELENGTH := 8190",
+    "MAXLINELENGTH := 32766",
     "MAXPROCESSLIMIT := 4",
     "MAXPROCESS := 1",
     ".IMPORT .IGNORE: DMAKEROOT"
