@@ -1,4 +1,4 @@
-/* RCS  $Id: vextern.h,v 1.2 2006-04-20 12:03:05 hr Exp $
+/* RCS  $Id: vextern.h,v 1.3 2006-06-29 11:25:02 ihi Exp $
 --
 -- SYNOPSIS
 --      Global variable declarations.
@@ -57,21 +57,23 @@ EXTERN  char*   Escape_char;    /* Current escape character               */
 EXTERN  char*   LastMacName;    /* Last macro successfully parsed     */
 EXTERN  char*   UseDirCache;    /* The value of .DIRCACHE                 */
 EXTERN  char*   DcacheRespCase; /* TRUE if we are to respect dcache case  */
-EXTERN  int Target;     /* TRUE if target found in makefile       */
+EXTERN  int Target;     /* TRUE if a default target was found in  *
+                 * a makefile or on the commandline       */
 EXTERN  int If_expand;  /* TRUE if calling Expand from getinp.c   */
 EXTERN  int Suppress_temp_file;/* TRUE if doing a test in _exec_recipe*/
 EXTERN  int Readenv;    /* TRUE if defining macro from environment*/
 EXTERN  int Makemkf;    /* TRUE if making makefile(s)         */
 EXTERN  int Nest_level; /* Nesting level for .IF .ELSE .END ...   */
 EXTERN  int     Prep;       /* Value of macro PREP            */
-EXTERN  int Def_targets;    /* TRUE if defining targets       */
+EXTERN  int Def_targets;    /* TRUE if defining targets - Only used   *
+                 * in Def_cell().             */
 EXTERN  int Skip_to_eof;    /* TRUE if asked to skip to eof on input  */
 EXTERN  int     DynamicNestLevel;/* Value of DYNAMICNESTINGLEVEL macro    */
 EXTERN  int     NameMax;        /* The value of NAMEMAX                   */
 
 
-EXTERN  CELLPTR Root;       /* Root of the make graph         */
-EXTERN  CELLPTR Targets;    /* Targets in makefile            */
+EXTERN  CELLPTR Root;       /* Root of the make graph (.ROOT)     */
+EXTERN  CELLPTR Targets;    /* Targets in makefile (.TARGETS)     */
 
 EXTERN  CELLPTR Current_target; /* cell of current target being made      */
 EXTERN  int Wait_for_completion; /* Wait for subprocess to finish     */
