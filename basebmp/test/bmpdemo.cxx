@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bmpdemo.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-28 16:50:19 $
+ *  last change: $Author: thb $ $Date: 2006-06-30 11:05:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1078,14 +1078,23 @@ void TestWindow::Paint( const Rectangle& rRect )
 {
     basegfx::B2ISize aTestSize(1000,1000);
     basebmp::BitmapDeviceSharedPtr pDevice( basebmp::createBitmapDevice( aTestSize,
-                                                                         true,
+                                                                         false,
                                                                          basebmp::Format::THIRTYTWO_BIT_TC_MASK ));
 
     {
-        const basegfx::B2IPoint aPt1(0,0);
-        const basegfx::B2IPoint aPt2(1,9);
         const basebmp::Color aCol(0xFFFFFFFF);
+#if 0
+        basegfx::B2DPolygon aRect = basegfx::tools::createPolygonFromRect(
+            basegfx::B2DRange( 0,0,1001,1001 ));
+        pDevice->drawPolygon( aRect, aCol, basebmp::DrawMode_PAINT );
+#endif
+
+        const basegfx::B2IPoint aPt1(0,0);
+        const basegfx::B2IPoint aPt2(0,800);
         pDevice->drawLine( aPt1, aPt2, aCol, basebmp::DrawMode_PAINT );
+
+        const basegfx::B2IPoint aPt3(0,1001);
+        pDevice->drawLine( aPt1, aPt3, aCol, basebmp::DrawMode_PAINT );
     }
 
     {

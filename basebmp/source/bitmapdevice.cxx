@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmapdevice.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-28 16:50:19 $
+ *  last change: $Author: thb $ $Date: 2006-06-30 11:05:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -802,14 +802,39 @@ namespace
 
 struct ImplBitmapDevice
 {
-    /// Bitmap memory plus deleter
+    /** Bitmap memory plus deleter.
+
+        Always points to the start of the mem
+     */
     RawMemorySharedArray      mpMem;
+
     /// Palette memory plus deleter (might be NULL)
     PaletteMemorySharedVector mpPalette;
 
+    /** Bounds of the device.
+
+        maBounds.getWidth()/getHeight() yield the true size of the
+        device (i.e. the rectangle given by maBounds covers the device
+        area under the excluding-bottommost-and-rightmost-pixels fill rule)
+     */
     basegfx::B2IRange         maBounds;
-    basegfx::B2DRange         maFloatBounds;
+
+    /** Bounds of the device.
+
+        maBounds.getWidth()/getHeight() yield the true size of the
+        device minus 1 (i.e. the rectangle given by maBounds covers
+        the device area under the
+        including-the-bottommost-and-rightmost-pixels fill rule).
+
+        The member is used to clip line stroking against the device
+        bounds.
+     */
+    basegfx::B2IRange         maLineClipRect;
+
+    /// Scanline format, as provided at the constructor
     sal_Int32                 mnScanlineFormat;
+
+    /// Scanline stride. Negative for bottom-to-top formats
     sal_Int32                 mnScanlineStride;
 };
 
@@ -825,7 +850,7 @@ BitmapDevice::BitmapDevice( const basegfx::B2IVector&        rSize,
     mpImpl->mpMem = rMem;
     mpImpl->mpPalette = rPalette;
     mpImpl->maBounds = basegfx::B2IRange( 0,0,rSize.getX(),rSize.getY() );
-    mpImpl->maFloatBounds = basegfx::B2DRange( 0,0,rSize.getX(),rSize.getY() );
+    mpImpl->maLineClipRect = basegfx::B2IRange( 0,0,rSize.getX()-1,rSize.getY()-1 );
     mpImpl->mnScanlineFormat = nScanlineFormat;
     mpImpl->mnScanlineStride = bTopDown ? nScanlineStride : -nScanlineStride;
 }
@@ -880,7 +905,7 @@ void BitmapDevice::setPixel( const basegfx::B2IPoint& rPt,
                              Color                    lineColor,
                              DrawMode                 drawMode )
 {
-    if( mpImpl->maBounds.isInside(rPt) )
+    if( mpImpl->maLineClipRect.isInside(rPt) )
         setPixel_i(rPt,lineColor,drawMode);
 }
 
@@ -895,7 +920,7 @@ void BitmapDevice::setPixel( const basegfx::B2IPoint&     rPt,
         return;
     }
 
-    if( mpImpl->maBounds.isInside(rPt) )
+    if( mpImpl->maLineClipRect.isInside(rPt) )
     {
         if( isCompatibleClipMask( rClip ) )
             setPixel_i(rPt,lineColor,drawMode,rClip);
@@ -906,7 +931,7 @@ void BitmapDevice::setPixel( const basegfx::B2IPoint&     rPt,
 
 Color BitmapDevice::getPixel( const basegfx::B2IPoint& rPt )
 {
-    if( mpImpl->maBounds.isInside(rPt) )
+    if( mpImpl->maLineClipRect.isInside(rPt) )
         return getPixel_i(rPt);
 
     return Color();
@@ -914,7 +939,7 @@ Color BitmapDevice::getPixel( const basegfx::B2IPoint& rPt )
 
 sal_uInt32 BitmapDevice::getPixelData( const basegfx::B2IPoint& rPt )
 {
-    if( mpImpl->maBounds.isInside(rPt) )
+    if( mpImpl->maLineClipRect.isInside(rPt) )
         return getPixelData_i(rPt);
 
     return 0;
@@ -927,7 +952,7 @@ void BitmapDevice::drawLine( const basegfx::B2IPoint& rPt1,
 {
     drawLine_i( rPt1,
                 rPt2,
-                mpImpl->maBounds,
+                mpImpl->maLineClipRect,
                 lineColor,
                 drawMode );
 }
@@ -947,7 +972,7 @@ void BitmapDevice::drawLine( const basegfx::B2IPoint&     rPt1,
     if( isCompatibleClipMask( rClip ) )
         drawLine_i( rPt1,
                     rPt2,
-                    mpImpl->maBounds,
+                    mpImpl->maLineClipRect,
                     lineColor,
                     drawMode,
                     rClip );
@@ -962,7 +987,7 @@ void BitmapDevice::drawPolygon( const basegfx::B2DPolygon& rPoly,
     const sal_uInt32 numVertices( rPoly.count() );
     if( numVertices )
         drawPolygon_i( rPoly,
-                       mpImpl->maBounds,
+                       mpImpl->maLineClipRect,
                        lineColor, drawMode );
 }
 
@@ -981,7 +1006,7 @@ void BitmapDevice::drawPolygon( const basegfx::B2DPolygon&   rPoly,
     if( numVertices )
         if( isCompatibleClipMask( rClip ) )
             drawPolygon_i( rPoly,
-                           mpImpl->maBounds,
+                           mpImpl->maLineClipRect,
                            lineColor, drawMode, rClip );
         else
             OSL_ENSURE( false, "Generic output not yet implemented!" );
@@ -1388,7 +1413,7 @@ BitmapDeviceSharedPtr createBitmapDeviceImpl( const basegfx::B2IVector&         
     }
 
     sal_uInt8* pFirstScanline = nScanlineStride < 0 ?
-        pMem.get() + nMemSize : pMem.get();
+        pMem.get() + nMemSize + nScanlineStride : pMem.get();
 
     switch( nScanlineFormat )
     {

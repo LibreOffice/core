@@ -4,9 +4,9 @@
  *
  *  $RCSfile: clippedlinerenderer.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-28 16:50:19 $
+ *  last change: $Author: thb $ $Date: 2006-06-30 11:05:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,9 +103,9 @@ inline bool prepareClip( sal_Int32  a1,
         }
 
         if( clipCount1 == 2 )
-            clipCode1 &= (ca + da < cb + !bRoundTowardsPt2) ? ~(aMin|aMax) : ~(bMin|bMax);
+            clipCode1 &= (ca + da < cb + !bRoundTowardsPt2) ? ~(aMinFlag|aMaxFlag) : ~(bMinFlag|bMaxFlag);
 
-        if( clipCode1 & (aMin|aMax) )
+        if( clipCode1 & (aMinFlag|aMaxFlag) )
         {
             cb = (ca + da - !bRoundTowardsPt2) / (2*da);
 
@@ -153,16 +153,16 @@ inline bool prepareClip( sal_Int32  a1,
     {
         if( clipCount2 == 2 )
         {
-            ca = 2*db*((clipCode2 & aMin) ? a1 - aMin : aMax - a1);
-            cb = 2*da*((clipCode2 & bMin) ? b1 - bMin : bMax - b1);
-            clipCode2 &= (cb + da < ca + bRoundTowardsPt2) ? ~(aMin|aMax) : ~(bMin|bMax);
+            ca = 2*db*((clipCode2 & aMinFlag) ? a1 - aMin : aMax - a1);
+            cb = 2*da*((clipCode2 & bMinFlag) ? b1 - bMin : bMax - b1);
+            clipCode2 &= (cb + da < ca + bRoundTowardsPt2) ? ~(aMinFlag|aMaxFlag) : ~(bMinFlag|bMaxFlag);
         }
 
-        if( clipCode2 & (aMin|aMax) )
-            o_n = (clipCode2 & aMin) ? o_as - aMin : aMax - o_as;
+        if( clipCode2 & (aMinFlag|aMaxFlag) )
+            o_n = (clipCode2 & aMinFlag) ? o_as - aMin : aMax - o_as;
         else
         {
-            o_n = (clipCode2 & bMin) ? o_bs - bMin : bMax - o_bs;
+            o_n = (clipCode2 & bMinFlag) ? o_bs - bMin : bMax - o_bs;
             bRetVal = true;
         }
     }
@@ -271,7 +271,7 @@ void renderClippedLine( basegfx::B2IPoint             aPt1,
 
         const bool bUseAlternateBresenham(
             prepareClip(x1, x2, y1, adx, ady, xs, ys, sx, sy,
-                        rem, n, clipCode1, clipCount1, clipCode1, clipCount2,
+                        rem, n, clipCode1, clipCount1, clipCode2, clipCount2,
                         rClipRect.getMinX(), basegfx::tools::RectClipFlags::LEFT,
                         rClipRect.getMaxX(), basegfx::tools::RectClipFlags::RIGHT,
                         rClipRect.getMinY(), basegfx::tools::RectClipFlags::TOP,
@@ -346,7 +346,7 @@ void renderClippedLine( basegfx::B2IPoint             aPt1,
 
         const bool bUseAlternateBresenham(
             prepareClip(y1, y2, x1, ady, adx, ys, xs, sy, sx,
-                        rem, n, clipCode1, clipCount1, clipCode1, clipCount2,
+                        rem, n, clipCode1, clipCount1, clipCode2, clipCount2,
                         rClipRect.getMinY(), basegfx::tools::RectClipFlags::TOP,
                         rClipRect.getMaxY(), basegfx::tools::RectClipFlags::BOTTOM,
                         rClipRect.getMinX(), basegfx::tools::RectClipFlags::LEFT,

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basictest.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-28 16:50:19 $
+ *  last change: $Author: thb $ $Date: 2006-06-30 11:05:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,7 +119,7 @@ public:
     void testPixelFuncs()
     {
         // 1bpp
-        const basegfx::B2ISize aSize(101,101);
+        const basegfx::B2ISize aSize(64,64);
         BitmapDeviceSharedPtr pDevice( createBitmapDevice( aSize,
                                                            true,
                                                            Format::ONE_BIT_MSB_PAL ));
@@ -142,10 +142,20 @@ public:
         CPPUNIT_ASSERT_MESSAGE("get/setPixel roundtrip #3",
                                pDevice->getPixel(aPt3) == aCol3);
 
+        pDevice->setPixel( aPt3, aCol2, DrawMode_PAINT );
+        CPPUNIT_ASSERT_MESSAGE("get/setPixel roundtrip #3.5",
+                               pDevice->getPixel(aPt3) == aCol2);
+
         const basegfx::B2IPoint aPt4(-100000,-100000);
         pDevice->setPixel( aPt4, aCol3, DrawMode_PAINT );
         const basegfx::B2IPoint aPt5(100000,100000);
         pDevice->setPixel( aPt5, aCol3, DrawMode_PAINT );
+
+        sal_Int32 nPixel(countPixel(pDevice, aCol2));
+        const basegfx::B2IPoint aPt6(aSize.getX(),aSize.getY());
+        pDevice->setPixel( aPt6, aCol2, DrawMode_PAINT );
+        CPPUNIT_ASSERT_MESSAGE("setPixel clipping",
+                               countPixel(pDevice, aCol2) == nPixel);
 
         // 8bit alpha
         {
