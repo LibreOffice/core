@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmapdevice.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-30 11:05:21 $
+ *  last change: $Author: thb $ $Date: 2006-06-30 13:36:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@
 #include "basebmp/pixeliterator.hxx"
 #include "basebmp/paletteimageaccessor.hxx"
 #include "basebmp/color.hxx"
+#include "basebmp/colormisc.hxx"
 #include "basebmp/accessor.hxx"
 #include "basebmp/accessoradapters.hxx"
 #include "basebmp/scanlineformats.hxx"

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: color.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-28 16:50:19 $
+ *  last change: $Author: thb $ $Date: 2006-06-30 13:36:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,8 +39,6 @@
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
-#include <basebmp/accessoradapters.hxx>
-#include <vigra/mathutil.hxx>
 #include <math.h>
 
 namespace basebmp
@@ -78,9 +76,9 @@ public:
     Color operator^( Color col ) const { return Color(col.getRed()^getRed(),
                                                       col.getGreen()^getGreen(),
                                                       col.getBlue()^getBlue()); }
-    Color operator-( Color col ) const { return Color(vigra::abs((int)getRed()-col.getRed()),
-                                                      vigra::abs((int)getGreen()-col.getGreen()),
-                                                      vigra::abs((int)getBlue()-col.getBlue())); }
+    Color operator-( Color col ) const { return Color(abs((int)getRed()-col.getRed()),
+                                                      abs((int)getGreen()-col.getGreen()),
+                                                      abs((int)getBlue()-col.getBlue())); }
     Color operator+( Color col ) const { return Color(getRed()+col.getRed(),
                                                       getGreen()+col.getGreen(),
                                                       getBlue()+col.getBlue()); }
@@ -100,86 +98,6 @@ public:
     double magnitude() const { return sqrt(getRed()*getRed()
                                            + getGreen()*getGreen()
                                            + getBlue()*getBlue()); }
-};
-
-struct ColorBitmaskOutputMaskFunctor
-{
-    Color operator()( Color v1, sal_uInt8 m, Color v2 ) const
-    {
-#if 0 //#####
-        return Color(v1.toInt32()*(sal_uInt8)(1-m) + v2.toInt32()*m);
-#else //#####
-        static const int nAlphaDiv = 255; // 256 would be much faster and good enough...
-        int nR = v1.getRed();
-        int nS = v2.getRed();
-        nR = nS + (((nR - nS) * m) / nAlphaDiv);
-
-        int nG = v1.getGreen();
-        nS = v2.getGreen();
-        nG = nS + (((nG - nS) * m) / nAlphaDiv);
-
-        int nB = v1.getBlue();
-        nS = v2.getBlue();
-        nB = nS + (((nB - nS) * m) / nAlphaDiv);
-
-        return Color( nR, nG, nB );
-#endif //#####
-    }
-};
-
-/// Specialized output mask functor for Color value type
-template<> struct outputMaskFunctorSelector< Color, sal_uInt8, FastMask >
-{
-    typedef ColorBitmaskOutputMaskFunctor type;
-};
-
-struct ColorBlendFunctor
-{
-    Color operator()( sal_uInt8 alpha,
-                      Color     v1,
-                      Color     v2 ) const
-    {
-        const sal_uInt8 invAlpha(0xFF-alpha);
-        return Color(((sal_uInt32)invAlpha*v1.getRed() + alpha*v2.getRed())/0xFF,
-                     ((sal_uInt32)invAlpha*v1.getGreen() + alpha*v2.getGreen())/0xFF,
-                     ((sal_uInt32)invAlpha*v1.getBlue() + alpha*v2.getBlue())/0xFF);
-    }
-};
-
-/// Specialized metafunction to select blend functor for Color value types
-template<> struct blendFunctorSelector<Color, sal_uInt8>
-{
-    typedef ColorBlendFunctor type;
-};
-
-} // namespace basebmp
-
-namespace vigra
-{
-
-template<>
-struct NumericTraits<basebmp::Color>
-{
-    typedef basebmp::Color Type;
-    typedef basebmp::Color Promote;
-    typedef basebmp::Color RealPromote;
-    typedef std::complex<basebmp::Color> ComplexPromote;
-    typedef sal_uInt8 ValueType;
-
-    typedef VigraTrueType  isIntegral;
-    typedef VigraFalseType isScalar;
-    typedef VigraTrueType  isSigned;
-    typedef VigraTrueType  isOrdered;
-    typedef VigraFalseType isComplex;
-
-    static Type zero() { return Type(); }
-    static Type one() { return Type(0x01010101); }
-    static Type nonZero() { return Type(0x01010101); }
-
-    static Promote toPromote(const Type& v) { return v; }
-    static RealPromote toRealPromote(const Type& v) { return v; }
-    static Type fromPromote(const Promote& v) { return v; }
-    static Type fromRealPromote(const RealPromote& v) { return v; }
 };
 
 } // namespace vigra
