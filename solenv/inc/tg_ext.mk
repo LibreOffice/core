@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.68 $
+#   $Revision: 1.69 $
 #
-#   last change: $Author: rt $ $Date: 2006-02-06 16:19:27 $
+#   last change: $Author: kz $ $Date: 2006-07-05 21:58:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
 #     MA  02111-1307  USA
 #
 #*************************************************************************
-.IF "$(L10N_framework)"==""
 
 .EXPORT : CC CXX
 
@@ -55,6 +54,7 @@ PATCHFLAGS=-b
 
 #override
 PACKAGE_DIR=$(MISC)$/build
+ABS_PACKAGE_DIR:=$(MAKEDIR)$/$(MISC)$/build
 #MUST match with PACKAGE_DIR
 BACK_PATH=..$/..$/..$/
 
@@ -93,6 +93,7 @@ P_ADDITIONAL_FILES=$(foreach,i,$(ADDITIONAL_FILES) $(MISC)$/$(TARFILE_ROOTDIR)$/
 T_ADDITIONAL_FILES=$(foreach,i,$(ADDITIONAL_FILES) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i)
 .ENDIF			# "$(ADDITIONAL_FILES)"!=""
 
+.IF "$(L10N_framework)"==""
 
 ALLTAR : \
     $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE) \
@@ -114,7 +115,8 @@ $(MISC)$/%.unpack : $(PRJ)$/download$/%.tar.Z
 .ELSE			# "$(GUI)"=="UNX"
     @+echo $(assign UNPACKCMD := uncompress -c $(BACK_PATH)download$/$(TARFILE_NAME).tar.Z | tar $(TAR_EXCLUDE_SWITCH) -xvf - ) > $(NULLDEV)
 .ENDIF			# "$(GUI)"=="UNX"
-    @+$(COPY) $(mktmp $(UNPACKCMD)) $@
+    @+$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
+    @+$(RENAME) $@.$(INPATH) $@
 
 $(MISC)$/%.unpack : $(PRJ)$/download$/%.tar.gz
     @+-$(RM) $@
@@ -123,7 +125,8 @@ $(MISC)$/%.unpack : $(PRJ)$/download$/%.tar.gz
 .ELSE			# "$(GUI)"=="UNX"
     @+echo $(assign UNPACKCMD := gunzip -c $(BACK_PATH)download$/$(TARFILE_NAME).tar.gz $(TARFILE_FILTER) | tar $(TAR_EXCLUDE_SWITCH) -xvf - ) > $(NULLDEV)
 .ENDIF			# "$(GUI)"=="UNX"
-    @+$(COPY) $(mktmp $(UNPACKCMD)) $@
+    @+$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
+    @+$(RENAME) $@.$(INPATH) $@
     
 $(MISC)$/%.unpack : $(PRJ)$/download$/%.tgz
     @+-$(RM) $@
@@ -132,21 +135,24 @@ $(MISC)$/%.unpack : $(PRJ)$/download$/%.tgz
 .ELSE			# "$(GUI)"=="UNX"
     @+echo $(assign UNPACKCMD := gunzip -c $(BACK_PATH)download$/$(TARFILE_NAME).tgz $(TARFILE_FILTER) | tar $(TAR_EXCLUDE_SWITCH) -xvf - ) > $(NULLDEV)
 .ENDIF			# "$(GUI)"=="UNX"
-    @+$(COPY) $(mktmp $(UNPACKCMD)) $@
+    @+$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
+    @+$(RENAME) $@.$(INPATH) $@
 
 $(MISC)$/%.unpack : $(PRJ)$/download$/%.tar
     @+-$(RM) $@
     +echo $(assign UNPACKCMD := tar $(TAR_EXCLUDE_SWITCH) -xvf $(BACK_PATH)download$/$(TARFILE_NAME).tar) > $(NULLDEV)
-    @+$(COPY) $(mktmp $(UNPACKCMD)) $@
+    @+$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
+    @+$(RENAME) $@.$(INPATH) $@
 
 $(MISC)$/%.unpack : $(PRJ)$/download$/%.zip
     @+-$(RM) $@
     +echo $(assign UNPACKCMD := unzip $(BACK_PATH)download$/$(TARFILE_NAME).zip) > $(NULLDEV)
-    @+$(COPY) $(mktmp $(UNPACKCMD)) $@
+    @+$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
+    @+$(RENAME) $@.$(INPATH) $@
 
-#untar
+#do unpack
 $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE) : $(PRJ)$/$(ROUT)$/misc$/$(TARFILE_NAME).unpack $(PATCH_FILE_DEP)
-    +$(IFEXIST) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR) $(THEN) $(RENAME) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)_removeme
+    +$(IFEXIST) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR) $(THEN) $(RENAME) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)_removeme $(FI)
     +-rm -rf $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)_removeme
     @+-$(MKDIR) $(PACKAGE_DIR:d)
     @+-$(MKDIR) $(PACKAGE_DIR)
@@ -231,8 +237,7 @@ $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE) : $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE)
     +$(TOUCH) $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE)
 .ELSE			# "$(eq,x$(BUILD_ACTION:s/none//)x,xx true false)"=="true"
     +-$(MKDIR) $(P_BUILD_DIR)
-    +cd $(P_BUILD_DIR) && $(BUILD_ACTION) $(BUILD_FLAGS) && $(TOUCH) $(BUILD_FLAG_FILE)
-    +mv $(P_BUILD_DIR)$/$(BUILD_FLAG_FILE) $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE)
+    +cd $(P_BUILD_DIR) && $(BUILD_ACTION) $(BUILD_FLAGS) && $(TOUCH) $(ABS_PACKAGE_DIR)$/$(BUILD_FLAG_FILE)
 .ENDIF			# "$(eq,x$(BUILD_ACTION:s/none//)x,xx true false)"=="true"
 
 $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE) : $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE)
