@@ -4,9 +4,9 @@
  *
  *  $RCSfile: windowscustomaction_ooo.scp,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 14:27:42 $
+ *  last change: $Author: kz $ $Date: 2006-07-05 21:15:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -235,8 +235,8 @@ WindowsCustomAction gid_Customaction_Patch_SetProductInstallModeAction
 	Source = "patchmsi.dll";
 	Target = "SetProductInstallMode";
 	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\"", "FindRelatedProducts");
-	Assignment2 = ("InstallUISequence", "Not REMOVE=\"ALL\"", "FindRelatedProducts");
+	Assignment1 = ("InstallExecuteSequence", "REMOVE=\"\"", "FindRelatedProducts");
+	Assignment2 = ("InstallUISequence", "REMOVE=\"\"", "FindRelatedProducts");
 End
 
 WindowsCustomAction gid_Customaction_Patch_InstallExchangeFiles
@@ -245,7 +245,7 @@ WindowsCustomAction gid_Customaction_Patch_InstallExchangeFiles
 	Source = "patchmsi.dll";
 	Target = "InstallPatchedFiles";
 	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\"", "behind_InstallFinalize");
+	Assignment1 = ("InstallExecuteSequence", "REMOVE=\"\"", "behind_InstallFinalize");
 	Assignment2 = ("AdminExecuteSequence", "", "behind_InstallFinalize");
 End
 
@@ -255,7 +255,7 @@ WindowsCustomAction gid_Customaction_Patch_SetFeatureState
 	Source = "patchmsi.dll";
 	Target = "SetFeatureState";
 	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\"", "InstallValidate");
+	Assignment1 = ("InstallExecuteSequence", "REMOVE=\"\"", "InstallValidate");
 End
 
 WindowsCustomAction gid_Customaction_Patch_DeinstallExchangeFiles
@@ -264,7 +264,7 @@ WindowsCustomAction gid_Customaction_Patch_DeinstallExchangeFiles
 	Source = "patchmsi.dll";
 	Target = "UninstallPatchedFiles";
 	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "REMOVE=\"ALL\"", "RemoveIniValues");
+	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"\"", "RemoveIniValues");
 End
 
 WindowsCustomAction gid_Customaction_Patch_Shutdownquickstarter
@@ -274,7 +274,7 @@ WindowsCustomAction gid_Customaction_Patch_Shutdownquickstarter
 	Target = "ShutDownQuickstarter";
 	Inbinarytable = 1;
 	Assignment1 = ("ControlEvent", "DestinationFolder", "Next", "DoAction", "ShutDownQuickstarter", "1", "0");
-	Assignment2 = ("InstallExecuteSequence", "REMOVE=\"ALL\"", "IsolateComponents");
+	Assignment2 = ("InstallExecuteSequence", "Not REMOVE=\"\"", "IsolateComponents");
 End
 
 WindowsCustomAction gid_Customaction_Patch_Isofficerunning
@@ -284,7 +284,7 @@ WindowsCustomAction gid_Customaction_Patch_Isofficerunning
 	Target = "IsOfficeRunning";
 	Inbinarytable = 1;
 	Assignment1 = ("ControlEvent", "ReadyToInstall", "InstallNow", "DoAction", "IsOfficeRunning", "1", "1");
-	Assignment2 = ("InstallExecuteSequence", "REMOVE=\"ALL\"", "RunningOffice");
+	Assignment2 = ("InstallExecuteSequence", "Not REMOVE=\"\"", "RunningOffice");
 End
 
 WindowsCustomAction gid_Customaction_Patch_SetUserInstallMode
