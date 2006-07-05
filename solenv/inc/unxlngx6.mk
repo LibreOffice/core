@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxlngx6.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2006-04-20 13:33:28 $
+#   last change: $Author: kz $ $Date: 2006-07-05 22:04:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -75,8 +75,7 @@ CFLAGS_SYSBASE:=-isystem $(SYSBASE)$/usr$/include
 CXX+:=$(CFLAGS_SYSBASE)
 CC+:=$(CFLAGS_SYSBASE)
 .ENDIF          # "$(SYSBASE)"!=""
-CFLAGS+=-Wreturn-type -fmessage-length=0 -c $(INCLUDE)
-
+CFLAGS+=-Wreturn-type -fmessage-length=0 -c
 # flags to enable build with symbols; required for crashdump feature
 .IF "$(ENABLE_SYMBOLS)"=="SMALL"
 CFLAGSENABLESYMBOLS=-g1
