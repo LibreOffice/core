@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 20:16:13 $
+#   last change: $Author: kz $ $Date: 2006-07-05 21:53:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,6 @@ all : $(ODKCHECKFILE)
 $(ODKCHECKFILE) : $(SDK_CONTENT_CHECK_FILES)
     +@echo "" > $(ODKCHECKFILE)
 # THE PERL SCRIPT DELETES THE CHECK FILE, WHEN AN ERROR OCCURS
-    -diff -br $(DESTDIRIDL) $(SOLARIDLDIR) |& $(PERL) $(PRJ)$/util$/checkdiff.pl $(ODKCHECKFILE)
+    -diff -br $(DESTDIRIDL) $(SOLARIDLDIR) $(PIPEERROR) $(PERL) $(PRJ)$/util$/checkdiff.pl $(ODKCHECKFILE)
 # RAISE AN ERROR WHEN TAG FILE IS NOT THERE ANYMORE
     cat $(ODKCHECKFILE)
