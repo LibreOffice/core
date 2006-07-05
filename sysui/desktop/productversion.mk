@@ -4,9 +4,9 @@
 #
 #   $RCSfile: productversion.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-18 10:14:17 $
+#   last change: $Author: kz $ $Date: 2006-07-05 20:47:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@ PRODUCTNAME = OpenOffice.org
 PRODUCTVERSION = 2.0
 LONGPRODUCTNAME = OpenOffice.org 2.0
 UNIXFILENAME = openoffice.org-2.0
-PKGVERSION = 2.0.3
+PKGVERSION = 2.0.4
 PKGREV = $(LAST_MINOR:s/m//:s/s/./)
 
 ABSLOCALOUT:=$(shell +cd $(PRJ) && pwd)$/$(ROUT)
