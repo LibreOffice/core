@@ -4,6 +4,7 @@ mkdir: %_DEST%\inc%_EXT%\tools
 ..\%__SRC%\misc\_ooo_st_btstrp.pdb %_DEST%\lib%_EXT%\_ooo_st_btstrp.pdb
 ..\%__SRC%\bin\testshl.exe %_DEST%\bin%_EXT%\testshl.exe
 ..\%__SRC%\bin\soagent.dll %_DEST%\bin%_EXT%\soagent.dll
+..\%__SRC%\bin\mkunroll* %_DEST%\bin%_EXT%
 ..\%__SRC%\bin\tl?????.dll %_DEST%\bin%_EXT%\tl?????.dll
 ..\%__SRC%\bin\tl?????.sym %_DEST%\bin%_EXT%\tl?????.sym
 ..\%__SRC%\bin\wps?????.dll %_DEST%\bin%_EXT%\wps?????.dll
