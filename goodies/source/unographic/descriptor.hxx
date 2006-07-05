@@ -4,9 +4,9 @@
  *
  *  $RCSfile: descriptor.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:10:15 $
+ *  last change: $Author: kz $ $Date: 2006-07-05 21:54:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@
 #include <comphelper/propertysetinfo.hxx>
 #include <vcl/graph.hxx>
 
-#define MIMETYPE_BMP        "image/bmp"
+#define MIMETYPE_BMP        "image/x-MS-bmp"
 #define MIMETYPE_GIF        "image/gif"
 #define MIMETYPE_JPG        "image/jpeg"
 #define MIMETYPE_PCD        "image/x-photo-cd"
@@ -60,9 +60,9 @@
 #define MIMETYPE_PPM        "image/x-portable-pixmap"
 #define MIMETYPE_RAS        "image/x-cmu-raster"
 #define MIMETYPE_TGA        "image/x-targa"
-#define MIMETYPE_PSD        "image/x-photoshop"
+#define MIMETYPE_PSD        "image/vnd.adobe.photoshop"
 #define MIMETYPE_EPS        "image/x-eps"
-#define MIMETYPE_DXF        "image/x-dxf"
+#define MIMETYPE_DXF        "image/vnd.dxf"
 #define MIMETYPE_MET        "image/x-met"
 #define MIMETYPE_PCT        "image/x-pict"
 #define MIMETYPE_SGF        "image/x-sgf"
@@ -98,7 +98,7 @@ public:
 
      void init( const ::Graphic& rGraphic ) throw();
     void init( const ::rtl::OUString& rURL ) throw();
-    void init( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxIStm ) throw();
+    void init( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxIStm, const ::rtl::OUString& rURL ) throw();
 
     bool isValid() const;
 
@@ -144,7 +144,7 @@ private:
 
     GraphicDescriptor& operator=( const GraphicDescriptor& );
 
-    void implCreate( SvStream& rIStm, const String* pPath );
+    void implCreate( SvStream& rIStm, const ::rtl::OUString* pPath );
 };
 
 }
