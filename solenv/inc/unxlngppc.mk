@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxlngppc.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-19 17:15:27 $
+#   last change: $Author: kz $ $Date: 2006-07-05 22:03:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,7 @@ CXX*=g++
 CC*=gcc
 
 # source code is still not signed versus unsigned char clean 
-CFLAGS=-fsigned-char -nostdinc -c $(INCLUDE) -I$(SOLARENV)/unxlngppc/usr/include 
+CFLAGS=-fsigned-char -nostdinc -c
 CFLAGSCC=-fsigned-char $(ARCH_FLAGS)
 
 # Flags for enabling exception handling
