@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewsj.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:13:33 $
+ *  last change: $Author: kz $ $Date: 2006-07-05 21:53:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,7 +167,8 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_BEFORE_OBJ ) ||
             SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_BEHIND_OBJ ) ||
             SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_REVERSE_ORDER ) ||
-            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_ORIGINAL_SIZE ) )
+            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_ORIGINAL_SIZE ) ||
+             SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_SAVEGRAPHIC ) )
         {
             const SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
             UINT32 nInv = pObj->GetObjInventor();
@@ -183,6 +184,11 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
                 if (pOleObj->GetObjRef().is() &&
                     ((pOleObj->GetObjRef()->getStatus( pOleObj->GetAspect() ) & embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE) ) )
                     rSet.DisableItem(SID_ORIGINAL_SIZE);
+            }
+
+            if ( !( pObj->ISA( SdrGrafObj ) ) )
+            {
+                rSet.DisableItem(SID_SAVEGRAPHIC);
             }
 
             // Wenn es sich um kein Gruppenobjekt oder 3D-Objekt handelt
