@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwsresync.pl,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-20 12:38:38 $
+#   last change: $Author: kz $ $Date: 2006-07-05 21:55:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,7 @@ use CwsConfig;
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.25 $ ';
+my $id_str = ' $Revision: 1.26 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -89,7 +89,7 @@ print "$script_name -- version: $script_rev\n";
 
 #### hardcoded globals #####
 
-my @xtra_files = ( "*.mk", "*.flg", "libCrun*", "libCstd*", "libgcc*", "libstdc*", "OOoRunner.jar" );
+my @xtra_files = ( "*.mk", "*.flg", "libCrun*", "libCstd*", "libgcc*", "libstdc*" );
 my $platform_resynced_flag = ".cwsresync_complete";
 
 # modules to be obligatory copied to each cws
