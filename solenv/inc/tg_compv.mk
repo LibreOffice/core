@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_compv.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:42:24 $
+#   last change: $Author: kz $ $Date: 2006-07-05 21:57:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,19 +45,20 @@ COMNAME:=
 .IF "$(COM)"=="GCC"
 CFLAGSVERSION=-dumpversion
 CFLAGSVERSION_CMD=-dumpversion
-CFLAGSNUMVERSION_CMD=-dumpversion |& $(AWK) -v num=true -f $(SOLARENV)$/bin$/getcompver.awk
+CFLAGSNUMVERSION_CMD=-dumpversion $(PIPEERROR) $(AWK) -v num=true -f $(SOLARENV)$/bin$/getcompver.awk
+#CFLAGSNUMVERSION_CMD=-dumpversion | 2>&1  $(AWK) -v num=true -f $(SOLARENV)$/bin$/getcompver.awk
 .ENDIF
 
 .IF "$(COM)"=="MSC"
 CFLAGSVERSION=
-CFLAGSVERSION_CMD= |& $(AWK) -f $(SOLARENV)$/bin$/getcompver.awk
-CFLAGSNUMVERSION_CMD= |& $(AWK) -v num=true -f $(SOLARENV)$/bin$/getcompver.awk
+CFLAGSVERSION_CMD=  $(PIPEERROR) $(AWK) -f $(SOLARENV)$/bin$/getcompver.awk
+CFLAGSNUMVERSION_CMD=  $(PIPEERROR) $(AWK) -v num=true -f $(SOLARENV)$/bin$/getcompver.awk
 .ENDIF
 
 .IF "$(COM)"=="C55" || "$(COM)"=="C54" || "$(COM)"=="C52" || "$(COM)"=="C40" || "$(COM)"=="sunpro"
 CFLAGSVERSION= -V
-CFLAGSVERSION_CMD= -V |& $(AWK) -f $(SOLARENV)$/bin$/getcompver.awk
-CFLAGSNUMVERSION_CMD= -V |& $(AWK) -v num=true -f $(SOLARENV)$/bin$/getcompver.awk
+CFLAGSVERSION_CMD= -V  $(PIPEERROR) $(AWK) -f $(SOLARENV)$/bin$/getcompver.awk
+CFLAGSNUMVERSION_CMD= -V  $(PIPEERROR) $(AWK) -v num=true -f $(SOLARENV)$/bin$/getcompver.awk
 .ENDIF
 
 .IF "$(COM)"=="C730"
