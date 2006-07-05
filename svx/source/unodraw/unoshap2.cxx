@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:56:30 $
+ *  last change: $Author: kz $ $Date: 2006-07-05 22:18:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1837,6 +1837,10 @@ uno::Any SAL_CALL SvxGraphicObject::getPropertyValue( const OUString& aPropertyN
     {
         Reference< graphic::XGraphic > xGraphic( static_cast< SdrGrafObj* >( mpObj.get() )->GetGraphic().GetXGraphic() );
         return uno::Any( xGraphic );
+    }
+    else if( mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("GraphicStream" ) ) )
+    {
+        return Any( static_cast< SdrGrafObj* >( mpObj.get() )->getInputStream() );
     }
     else
     {
