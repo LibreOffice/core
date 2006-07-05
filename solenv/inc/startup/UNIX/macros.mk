@@ -2,10 +2,14 @@
 #
 
 SHELL *:= /usr/bin/csh
-SHELLFLAGS	 *:=
 GROUPSHELL *:= $(SHELL)
 
-   SHELLFLAGS       := -fc
+.IF $(USE_SHELL) == bash
+   SHELLFLAGS       *:= -c
+.ELSE
+   SHELLFLAGS       *:= -fc
+.ENDIF # $(USE_SHELL) == bash
+
    GROUPFLAGS       *:= $(SHELLFLAGS)
    SHELLMETAS       *:= "<>|/
    RM               *=  rm
