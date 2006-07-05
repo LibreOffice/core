@@ -23,6 +23,7 @@ SHELL *:= $(COMSPEC)
    SHELLFLAGS       *:= $(SWITCHAR)c
    GROUPFLAGS       *:= $(SHELLFLAGS)
    SHELLMETAS       *:= "<>|
+# Fix syntax highlighting: "
    GROUPSUFFIX      *:= .bat
    DIVFILE          *=  $(TMPFILE:s,/,\,)
    RM               *=  del
@@ -36,10 +37,17 @@ SHELL *:= $(COMSPEC)
 .EXPORT : PWD
    
 .ELSE	# Non 4nt case
-# See iz50689 why -f is needed.
+
+.IF $(USE_SHELL) == bash
+   SHELLFLAGS       *:= -c
+.ELSE
+   # See iz50689 why -f is needed.
    SHELLFLAGS       *:= -fc
+.ENDIF # $(USE_SHELL) == bash
+
    GROUPFLAGS       *:=
    SHELLMETAS       *:= *";?<>|()&][$$\#`'
+# Fix syntax highlighting: "
    GROUPSUFFIX      *:= .csh
 # This is hopefully not used. Only in: dmake/msdos/spawn.c  
 #  .MKSARGS         *:= yes
