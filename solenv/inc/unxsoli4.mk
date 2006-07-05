@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxsoli4.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-19 17:17:12 $
+#   last change: $Author: kz $ $Date: 2006-07-05 22:05:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@ ARCH_FLAGS*=
 CXX=CC
 CC=cc
 
-CFLAGS=$(PREENVCFLAGS) -c -temp=/tmp $(INCLUDE)
+CFLAGS=$(PREENVCFLAGS) -c -temp=/tmp
 CFLAGSCC=-xCC $(ARCH_FLAGS)
 CFLAGSCXX=-features=no%altspell -library=no%Cstd $(ARCH_FLAGS)
 
