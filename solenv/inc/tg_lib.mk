@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_lib.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:46:06 $
+#   last change: $Author: kz $ $Date: 2006-07-05 21:58:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -32,38 +32,6 @@
 #     MA  02111-1307  USA
 #
 #*************************************************************************
-
-MKFILENAME:=tg_lib.mk
-
-#######################################################
-# lines needed for rekursion
-
-.IF "$(MULTI_LIB_FLAG)" == ""
-$(LIB1TARGETN) .NULL : LIB1
-
-$(LIB2TARGETN) .NULL : LIB2
-
-$(LIB3TARGETN) .NULL : LIB3
-
-$(LIB4TARGETN) .NULL : LIB4
-
-$(LIB5TARGETN) .NULL : LIB5
-
-$(LIB6TARGETN) .NULL : LIB6
-
-$(LIB7TARGETN) .NULL : LIB7
-
-$(LIB8TARGETN) .NULL : LIB8
-
-$(LIB9TARGETN) .NULL : LIB9
-.ENDIF
-
-
-
-.IF "$(MULTI_LIB_FLAG)"==""
-LIB1 LIB2 LIB3 LIB4 LIB5 LIB6 LIB7 LIB8 LIB9:
-    @dmake $(LIB$(TNR)TARGETN) MULTI_LIB_FLAG=true TNR:=$(TNR) $(MFLAGS) $(CALLMACROS)
-.ELSE
 
 #######################################################
 # Anweisungen fuer das Linken
@@ -138,4 +106,3 @@ $(LIB$(TNR)TARGET) :	$(LIB$(TNR)FILES) \
 # unroll end
 #######################################################
 
-.ENDIF			# "$(MULTI_LIB_FLAG)" == ""
