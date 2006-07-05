@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: hr $ $Date: 2006-04-19 15:10:29 $
+#   last change: $Author: kz $ $Date: 2006-07-05 21:13:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -120,8 +120,12 @@ JARTARGET		= $(PRJNAME).jar
 JARCOMPRESS 	= TRUE
 CUSTOMMANIFESTFILE = manifest
 
-
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
 
+.IF "$(JAVAAOTCOMPILER)" != ""
+AOTTARGET = com.sun.star.help.HelpLinker
+.INCLUDE :  aottarget.mk
+ALLTAR : $(AOTTARGETN)
+.ENDIF
