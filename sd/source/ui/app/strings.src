@@ -4,9 +4,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.115 $
+ *  $Revision: 1.116 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:05:23 $
+ *  last change: $Author: kz $ $Date: 2006-07-05 21:53:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2855,6 +2855,11 @@ String STR_TITLE_RENAMESLIDE
 {
     Text [ de ] = "Seite umbenennen" ;
     Text [ en-US ] = "Rename Slide";
+};
+String STR_TITLE_SAVE_AS_PICTURE
+{
+    Text [ de ] = "Als Grafik Speichern" ;
+    Text [ en-US ] = "Save as Picture";
 };
 String STR_DESC_RENAMESLIDE
 {
