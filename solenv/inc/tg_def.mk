@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_def.mk,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: ihi $ $Date: 2006-06-29 11:20:50 $
+#   last change: $Author: kz $ $Date: 2006-07-05 21:57:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -32,43 +32,6 @@
 #     MA  02111-1307  USA
 #
 #*************************************************************************
-
-# -------
-# - DEF -
-# -------
-.IF "$(MULTI_DEF_FLAG)" == ""
-$(DEF1TARGETN) .NULL : DEF1
-
-$(DEF2TARGETN) .NULL : DEF2
-
-$(DEF3TARGETN) .NULL : DEF3
-
-$(DEF4TARGETN) .NULL : DEF4
-
-$(DEF5TARGETN) .NULL : DEF5
-
-$(DEF6TARGETN) .NULL : DEF6
-
-$(DEF7TARGETN) .NULL : DEF7
-
-$(DEF8TARGETN) .NULL : DEF8
-
-$(DEF9TARGETN) .NULL : DEF9
-.ENDIF
-
-
-
-.IF "$(MULTI_DEF_FLAG)"==""
-DEF1 DEF2 DEF3 DEF4 DEF5 DEF6 DEF7 DEF8 DEF9:  \
-                $($@:+"DEPN")
-#				$(SLB)$/$($(@:s/DEF/DEFLIB/:+"NAME")).lib
-.IF "$(GUI)"=="MAC"
-    @dmake "$(DEF$(TNR)TARGETN)" MULTI_DEF_FLAG=true TNR:=$(TNR) $(MFLAGS) $(CALLMACROS)
-.ELSE
-    @dmake $(DEF$(TNR)TARGETN) MULTI_DEF_FLAG=true TNR:=$(TNR) $(MFLAGS) $(CALLMACROS)
-.ENDIF
-.ELSE			# "$(MULTI_DEF_FLAG)"==""
-
 
 #######################################################
 # Anweisungen fuer das Linken
@@ -265,6 +228,4 @@ $(DEF$(TNR)TARGETN): \
 # Anweisungen fuer das Linken
 # unroll end
 #######################################################
-
-.ENDIF			# "$(MULTI_DEF_FLAG)"==""
 
