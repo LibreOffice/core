@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.101 $
+#   $Revision: 1.102 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-20 12:38:52 $
+#   last change: $Author: kz $ $Date: 2006-07-05 20:59:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.101 $ ';
+$id_str = ' $Revision: 1.102 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -749,19 +749,6 @@ sub strip_target {
     return $rc;
 };
 
-sub cachejar {
-    if (defined($ENV{JAVACACHE}) && $ENV{JAVACACHE} ne '') {
-        my $file = shift;
-        my $to = $file.".so";
-        my $JAVALINKER = "$ENV{JAVACOMPILER} -shared -fPIC -Wl,-Bsymbolic -O2 -findirect-dispatch -fjni -o";
-        print "CACHEJAR: $file -> $to with $ENV{GCJ_DATABASE}\n";
-        print "Caching 1/2: $JAVALINKER $to $file\n";
-        system("$JAVALINKER $to $file");
-        print "Caching 2/2: $ENV{JAVACACHE} -a $ENV{GCJ_DATABASE} $file $to\n";
-        system("$ENV{JAVACACHE} -a $ENV{GCJ_DATABASE} $file $to");
-    }
-};
-
 sub copy_if_newer
 {
     # return 0 if file is unchanged ( for whatever reason )
@@ -788,9 +775,6 @@ sub copy_if_newer
         # hard link if possible
         if( link($from, $to) ){
             print "LINK: $from -> $to\n";
-            if ($ENV{JDK} eq 'gcj' && is_jar($from)) {
-                cachejar($to);
-            }
             return 1;
         }
     }
@@ -824,9 +808,6 @@ sub copy_if_newer
         fix_file_permissions($$from_stat_ref[2], $temp_file);
         $rc = rename($temp_file, $to);
         if ( $rc ) {
-            if (defined($ENV{JDK}) && $ENV{JDK} eq 'gcj' && is_jar($from)) {
-                cachejar($to);
-            }
             # handle special packaging of *.dylib files for Mac OS X
             if ( $^O eq 'darwin' )
             {
