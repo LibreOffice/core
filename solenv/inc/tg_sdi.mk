@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_sdi.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 13:13:09 $
+#   last change: $Author: kz $ $Date: 2006-07-05 21:59:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -33,40 +33,9 @@
 #
 #*************************************************************************
 
-
-
-# ------------------
-# - SDITARGETS     -
-# ------------------
-
-.IF "$(MULTI_SDI_FLAG)" == ""
-
-$(SDITARGET) .NULL	: SDI0
-
-$(SDI1TARGET) .NULL : SDI1
-
-$(SDI2TARGET) .NULL : SDI2
-
-$(SDI3TARGET) .NULL : SDI3
-
-$(SDI4TARGET) .NULL : SDI4
-
-$(SDI5TARGET) .NULL : SDI5
-
-.ENDIF
-
-
-.IF "$(MULTI_SDI_FLAG)" == ""
-SDI0 SDI1 SDI2 SDI3 SDI4 SDI5 :
-    @+dmake $(SDI$(TNR)TARGET) $(HIDSID$(TNR)PARTICLE) MULTI_SDI_FLAG=true TNR:=$(TNR) $(MFLAGS) $(CALLMACROS)
-.ELSE			# "$(MULTI_SDI_FLAG)" == ""
-
-
 #######################################################
 # instructions for ???
 # unroll begin
-
-.IF "$(make_srs_deps)"==""
 
 .IF "$(HIDSID$(TNR)PARTICLE)"!=""
 $(HIDSID$(TNR)PARTICLE): $(SDI$(TNR)TARGET) $(MISC)$/$(SDI$(TNR)NAME).sid
@@ -95,25 +64,10 @@ $(SDI$(TNR)TARGET): $(SVSDI$(TNR)DEPEND) $(SDI$(TNR)NAME).sdi
     -fx$(SDI$(TNR)EXPORT).sdi		\
     -fy$(MISC)$/xx$(PRJNAME).csv		\
     -fz$(MISC)$/$(SDI$(TNR)NAME).sid	\
-    $(SDI$(TNR)NAME).sdi -I$(MISC) -I$(SVSDIINC) -I$(INC) -I$(INCLUDE) -I$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc )
+    $(SDI$(TNR)NAME).sdi -I$(MISC) -I$(SVSDIINC) -I$(INC) $(INCLUDE) -I$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc )
 .ENDIF # "$(SDI$(TNR)TARGET)"!=""
-
-.ELSE			# "$(make_srs_deps)"==""
-.IF "$(SDI$(TNR)TARGET)"!=""
-$(SDI$(TNR)TARGET): $(SVSDI$(TNR)DEPEND)
-    @+echo jetzt nicht...
-.ENDIF # "$(SDI$(TNR)TARGET)"!=""
-
-.IF "$(HIDSID$(TNR)PARTICLE)"!=""
-$(HIDSID$(TNR)PARTICLE):
-    @+echo jetzt nicht...
-.ENDIF # "$(HIDSID$(TNR)PARTICLE)"!=""
-.ENDIF			# "$(make_srs_deps)"==""
-
 
 # Instruction for ???
 # unroll end
 #######################################################
-
-.ENDIF			# "$(MULTI_SDI_FLAG)" == ""
 
