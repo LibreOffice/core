@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_srs.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:49:36 $
+#   last change: $Author: kz $ $Date: 2006-07-05 21:59:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -32,75 +32,6 @@
 #     MA  02111-1307  USA
 #
 #*************************************************************************
-
-
-.IF "$(MULTI_SRC_FLAG)"==""
-
-SRC1 ?= TNR!:=1
-$(SRC1TARGET) .NULL : SRC1
-
-SRC2 ?= TNR!:=2
-$(SRC2TARGET) .NULL : SRC2
-
-SRC3 ?= TNR!:=3
-$(SRC3TARGET) .NULL : SRC3
-
-SRC4 ?= TNR!:=4
-$(SRC4TARGET) .NULL : SRC4
-
-SRC5 ?= TNR!:=5
-$(SRC5TARGET) .NULL : SRC5
-
-SRC6 ?= TNR!:=6
-$(SRC6TARGET) .NULL : SRC6
-
-SRC7 ?= TNR!:=7
-$(SRC7TARGET) .NULL : SRC7
-
-SRC8 ?= TNR!:=8
-$(SRC8TARGET) .NULL : SRC8
-
-SRC9 ?= TNR!:=9
-$(SRC9TARGET) .NULL : SRC9
-
-# -----------------
-
-DEPSRS1 ?= TNR!:=1
-$(DEPSRS1FILE) .NULL : DEPSRS1
-
-DEPSRS2 ?= TNR!:=2
-$(DEPSRS2FILE) .NULL : DEPSRS2
-
-DEPSRS3 ?= TNR!:=3
-$(DEPSRS3FILE) .NULL : DEPSRS3
-
-DEPSRS4 ?= TNR!:=4
-$(DEPSRS4FILE) .NULL : DEPSRS4
-
-DEPSRS5 ?= TNR!:=5
-$(DEPSRS5FILE) .NULL : DEPSRS5
-
-DEPSRS6 ?= TNR!:=6
-$(DEPSRS6FILE) .NULL : DEPSRS6
-
-DEPSRS7 ?= TNR!:=7
-$(DEPSRS7FILE) .NULL : DEPSRS7
-
-DEPSRS8 ?= TNR!:=8
-$(DEPSRS8FILE) .NULL : DEPSRS8
-
-DEPSRS9 ?= TNR!:=9
-$(DEPSRS9FILE) .NULL : DEPSRS9
-
-.ENDIF
-
-.IF "$(MULTI_SRC_FLAG)" == ""
-SRC1 SRC2 SRC3 SRC4 SRC5 SRC6 SRC7 SRC8 SRC9:
-    @+dmake $(SRS)$/$(SRS$(TNR)NAME).srs MULTI_SRC_FLAG=true TNR:=$(TNR) $(MFLAGS) $(CALLMACROS)
-
-DEPSRS1 DEPSRS2 DEPSRS3 DEPSRS4 DEPSRS5 DEPSRS6 DEPSRS7 DEPSRS8 DEPSRS9:
-    @+dmake $(DEPSRS$(TNR)FILE) MULTI_SRC_FLAG=true TNR:=$(TNR) $(MFLAGS) $(CALLMACROS)
-.ELSE
 
 #######################################################
 # unroll begin
@@ -150,7 +81,5 @@ $(SRS)$/$(SRS$(TNR)NAME).srs: $(foreach,i,$(SRC$(TNR)FILES) $(COMMONMISC)$/$(TAR
 
 # unroll end
 #######################################################
-
-.ENDIF          # "$(MULTI_SRC_FLAG)"==""
 
 
