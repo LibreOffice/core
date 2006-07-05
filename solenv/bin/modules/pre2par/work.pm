@@ -4,9 +4,9 @@
 #
 #   $RCSfile: work.pm,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2006-02-09 14:00:55 $
+#   last change: $Author: kz $ $Date: 2006-07-05 21:13:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -296,6 +296,29 @@ sub check_existence_of_langfiles
     if (( fileexists($ulffilename) ) && ( fileexists($langfilename) )) { $do_localize = 1; }
 
     return $do_localize;
+}
+
+############################################
+# Checking that the pre file has content
+############################################
+
+sub check_content
+{
+    my ($filecontent, $filename) = @_;
+
+    if ( $#{$filecontent} < 0 ) { pre2par::exiter::exit_program("Error: $filename has no content!", "check_content"); }
+}
+
+############################################
+# Checking content of par files.
+# Currently only size.
+############################################
+
+sub diff_content
+{
+    my ($content1, $content2, $filename) = @_;
+
+    if ( $#{$content1} != $#{$content2} ) { pre2par::exiter::exit_program("Error: $filename was not saved correctly!", "diff_content"); }
 }
 
 1;
