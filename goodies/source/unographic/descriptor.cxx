@@ -4,9 +4,9 @@
  *
  *  $RCSfile: descriptor.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 21:52:39 $
+ *  last change: $Author: kz $ $Date: 2006-07-05 21:54:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,22 +113,21 @@ void GraphicDescriptor::init( const ::rtl::OUString& rURL )
 
     if( pIStm )
     {
-        const String aURL( rURL );
-        implCreate( *pIStm, &aURL );
+        implCreate( *pIStm, &rURL );
         delete pIStm;
     }
 }
 
 // ------------------------------------------------------------------------------
 
-void GraphicDescriptor::init( const uno::Reference< io::XInputStream >& rxIStm )
+void GraphicDescriptor::init( const uno::Reference< io::XInputStream >& rxIStm, const ::rtl::OUString& rURL )
     throw()
 {
     SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( rxIStm );
 
     if( pIStm )
     {
-        implCreate( *pIStm, NULL );
+        implCreate( *pIStm, &rURL );
         delete pIStm;
     }
 }
@@ -142,9 +141,12 @@ bool GraphicDescriptor::isValid() const
 
 // ------------------------------------------------------------------------------
 
-void GraphicDescriptor::implCreate( SvStream& rIStm, const String* pURL )
+void GraphicDescriptor::implCreate( SvStream& rIStm, const ::rtl::OUString* pURL )
 {
-    ::GraphicDescriptor aDescriptor( rIStm, pURL );
+    String aURL;
+    if( pURL )
+        aURL = *pURL;
+    ::GraphicDescriptor aDescriptor( rIStm, &aURL );
 
     mpGraphic = NULL;
     maMimeType = ::rtl::OUString();
@@ -344,7 +346,7 @@ uno::Sequence< sal_Int8 > SAL_CALL GraphicDescriptor::getImplementationId()
 
     static ::comphelper::PropertyMapEntry aEntries[] =
     {
-        { MAP_CHAR_LEN( "GraphicType" ), UNOGRAPHIC_GRAPHICTYPE, &::getCppuType( (const sal_uInt8*)(0)), beans::PropertyAttribute::READONLY, 0 },
+        { MAP_CHAR_LEN( "GraphicType" ), UNOGRAPHIC_GRAPHICTYPE, &::getCppuType( (const sal_Int8*)(0)), beans::PropertyAttribute::READONLY, 0 },
         { MAP_CHAR_LEN( "MimeType" ), UNOGRAPHIC_MIMETYPE, &::getCppuType( (const ::rtl::OUString*)(0)), beans::PropertyAttribute::READONLY, 0 },
         { MAP_CHAR_LEN( "SizePixel" ), UNOGRAPHIC_SIZEPIXEL, &::getCppuType( (const awt::Size*)(0)), beans::PropertyAttribute::READONLY, 0 },
         { MAP_CHAR_LEN( "Size100thMM" ), UNOGRAPHIC_SIZE100THMM,    &::getCppuType( (const awt::Size*)(0)), beans::PropertyAttribute::READONLY, 0 },
