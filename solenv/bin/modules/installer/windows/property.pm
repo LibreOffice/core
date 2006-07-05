@@ -4,9 +4,9 @@
 #
 #   $RCSfile: property.pm,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: rt $ $Date: 2006-03-06 14:02:11 $
+#   last change: $Author: kz $ $Date: 2006-07-05 21:13:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -119,9 +119,9 @@ sub get_language_string
 {
     my $langstring = "";
 
-    for ( my $i = 0; $i <= $#{$installer::globals::languagenames}; $i++ )
+    for ( my $i = 0; $i <= $#installer::globals::languagenames; $i++ )
     {
-        $langstring = $langstring . ${$installer::globals::languagenames}[$i] . ", ";
+        $langstring = $langstring . $installer::globals::languagenames[$i] . ", ";
     }
 
     $langstring =~ s/\,\s*$//;
