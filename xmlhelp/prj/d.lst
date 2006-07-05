@@ -1,4 +1,5 @@
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.*
+..\%__SRC%\bin\com.sun.star.help.HelpLinker %_DEST%\bin%_EXT%\com.sun.star.help.HelpLinker
 ..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.*
 ..\%__SRC%\class\*.jar %_DEST%\bin%_EXT%\*.*
