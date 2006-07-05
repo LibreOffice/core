@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menuids_tmpl.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:23:49 $
+ *  last change: $Author: kz $ $Date: 2006-07-05 21:52:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -336,10 +336,8 @@
     {\
         Identifier = SID_ATTRIBUTES_AREA ; \
         HelpID = SID_ATTRIBUTES_AREA ; \
-        /* ### ACHTUNG: Neuer Text in Resource? ~Fläche... : ~Flõche... */\
         Text [ de ] = "~FlÃ¤che..." ; \
-        Text [ en-US ] = "A~rea..." ; \
-        /* ### ACHTUNG: Neuer Text in Resource? Flächen bearbeiten und definieren : Flõchen bearbeiten und definieren */\
+        Text [ en-US ] = "~Area..." ; \
         Text [ x-comment ] = " ";\
     };
 
@@ -349,7 +347,6 @@
         Identifier = SID_TEXTATTR_DLG ; \
         HelpID = SID_TEXTATTR_DLG ; \
         Text [ de ] = "Te~xt..." ; \
-        /* ### ACHTUNG: Neuer Text in Resource? Textattribute für die selektierten Textobjekte festlegen : Textattribute f³r die selektierten Textobjekte festlegen */\
         Text [ en-US ] = "~Text..." ; \
         Text [ x-comment ] = " ";\
     };
@@ -391,10 +388,8 @@
     {\
         Identifier = SID_ATTR_TRANSFORM ; \
         HelpID = SID_ATTR_TRANSFORM ; \
-        /* ### ACHTUNG: Neuer Text in Resource? P~osition und Größe... : P~osition und Gr÷˜e... */\
         Text [ de ] = "P~osition und GrÃ¶ÃŸe..." ; \
         Text [ en-US ] = "Position and Si~ze..." ; \
-        /* ### ACHTUNG: Neuer Text in Resource? Position, Größe und Winkel der selektierten Objekte ändern : Position, Gr÷˜e und Winkel der selektierten Objekte õndern */\
         Text [ x-comment ] = " ";\
     };
 
@@ -416,7 +411,7 @@
         HelpID = SID_POSITION ; \
         Command = ".uno:ObjectPosition"; \
         Text [ de ] = "~Anordnung" ; \
-        Text [ en-US ] = "~Arrange" ; \
+        Text [ en-US ] = "Arra~nge" ; \
         SubMenu = Menu\
         {\
             ItemList = \
@@ -707,7 +702,7 @@
         Command = ".uno:AlignObjetMenu" ; \
         HelpID = SID_OBJECT_ALIGN ; \
         Text [ de ] = "Aus~richtung" ; \
-        Text [ en-US ] = "A~lignment" ; \
+        Text [ en-US ] = "Al~ignment" ; \
         SubMenu = Menu\
         {\
             ItemList = \
@@ -946,7 +941,7 @@
         Identifier = SID_NAME_GROUP ; \
         HelpID = SID_NAME_GROUP ; \
         Text [ de ] = "Obje~kt benennen..." ; \
-        Text [ en-US ] = "~Name Object..." ; \
+        Text [ en-US ] = "Na~me Object..." ; \
         Text [ x-comment ] = " ";\
     };
 
@@ -963,8 +958,8 @@
 #define MN_EFFECT \
     MenuItem\
     {\
-        Identifier = SID_EFFECT_WIN ; \
-        HelpID = SID_EFFECT_WIN ; \
+        Identifier = SID_CUSTOM_ANIMATION_PANEL ; \
+        HelpID = SID_CUSTOM_ANIMATION_PANEL ; \
         Text [ de ] = "Benutzerdefinierte Animation..." ; \
         Text [ en-us ] = "Custom Animation..." ; \
         Text [ x-comment ] = " ";\
@@ -976,7 +971,7 @@
         Identifier = SID_ANIMATION_EFFECTS ; \
         HelpID = SID_ANIMATION_EFFECTS ; \
         Text [ de ] = "I~nteraktion..." ; \
-        Text [ en-US ] = "Interaction..." ; \
+        Text [ en-US ] = "Int~eraction..." ; \
         Text [ x-comment ] = " ";\
     };
 
@@ -1041,18 +1036,17 @@
         Identifier = SID_ORIGINAL_SIZE ; \
         HelpID = SID_ORIGINAL_SIZE ; \
         Text [ de ] = "Origi~nalgrÃ¶ÃŸe" ; \
-        Text [ en-US ] = "Original ~Size" ; \
+        Text [ en-US ] = "~Original Size" ; \
         Text [ x-comment ] = " ";\
     };
 
-#define MN_STARIMAGE\
+#define MN_SAVEGRAPHIC\
     MenuItem\
     {\
-        Identifier = SID_OBJECT ; \
-        HelpID = SID_OBJECT ; \
-        Text [ de ] = "Bi~ld" ; \
-        Text [ en-US ] = "~Image" ; \
-        Text [ x-comment ] = " ";\
+        Identifier = SID_SAVEGRAPHIC ; \
+        HelpID = SID_SAVEGRAPHIC ; \
+        Text [ de ] = "Als Grafik speichern..." ; \
+        Text [ en-US ] = "Save as Picture..." ; \
     };
 
 #define MN_NAVIGATOR\
@@ -1401,7 +1395,7 @@
         Command = ".uno:ConvertMenu" ; \
         HelpID = SID_CONVERT ; \
         Text [ de ] = "~Umwandeln" ; \
-        Text [ en-US ] = "~Convert" ; \
+        Text [ en-US ] = "Con~vert" ; \
         SubMenu = Menu\
         {\
             ItemList = \
