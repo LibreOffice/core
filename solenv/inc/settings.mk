@@ -4,9 +4,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.193 $
+#   $Revision: 1.194 $
 #
-#   last change: $Author: ihi $ $Date: 2006-06-29 11:20:22 $
+#   last change: $Author: kz $ $Date: 2006-07-05 21:01:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -167,6 +167,7 @@ JAVACOMPILER=$(DEVROOT)$/cafepro$/bin$/sj.exe
 .ELSE
 .IF "$(JDK)" == "gcj"
 JAVACOMPILER=gcj
+JAVACISGCJ*="yes"
 .ELSE
 JAVACOMPILER=javac
 .ENDIF
@@ -182,9 +183,8 @@ JAVADOC=javadoc -J-Xmx120m
 #required arguments
 JAVAC=$(JAVACOMPILER)
 JAVAI=$(JAVAINTERPRETER)
-.IF "$(JAVACACHE)" != ""
+.IF "$(JAVACISGCJ)" == "yes"
 JAVAC+=--encoding=UTF-8 -O2 -fno-assert -Wno-deprecated -C
-JAVAI+=-Dgnu.gcj.precompiled.db.path=$(GCJ_DATABASE)
 .ENDIF
 
 #classpath and response
