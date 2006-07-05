@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxbsda.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:51:38 $
+#   last change: $Author: kz $ $Date: 2006-07-05 22:00:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,6 @@ CXX=			g++ -c
 CDEFS+=			-D_STD_NO_NAMESPACE -D_VOS_NO_NAMESPACE -D_UNO_NO_NAMESPACE
 CDEFS+=			-D_REENTRANT 		# -D_PTHREADS -DPOSIX_PTHREAD_SEMANTICS
 CDEFS+= 		-DNO_AUDIO -DPRINTER_DUMMY
-CFLAGS+=		$(INCLUDE)
 CFLAGSCC=		-fsigned-char $(ARCH_FLAGS)
 CFLAGSCXX=		-fsigned-char $(ARCH_FLAGS)
 PICSWITCH:=-fPIC
