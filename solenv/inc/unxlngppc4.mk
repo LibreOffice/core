@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxlngppc4.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-19 17:15:40 $
+#   last change: $Author: kz $ $Date: 2006-07-05 22:03:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,7 @@ CXX*=g++
 # name of C Compiler
 CC*=gcc
 
-CFLAGS+=-fsigned-char -fmessage-length=0 -c $(INCLUDE)
+CFLAGS+=-fsigned-char -fmessage-length=0 -c
 
 # flags for the C++ Compiler
 CFLAGSCC= -fsigned-char -pipe $(ARCH_FLAGS)
