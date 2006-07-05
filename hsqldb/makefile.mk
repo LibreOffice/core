@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: kz $ $Date: 2006-01-31 18:42:02 $
+#   last change: $Author: kz $ $Date: 2006-07-05 21:13:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@ PATCH_FILE_NAME=hsqldb_1_8_0
 # override buildfile
 ANT_BUILDFILE=build$/build.xml
 
-.IF "$(JDK)"=="gcj"
+.IF "$(JAVACISGCJ)"=="yes"
 JAVA_HOME=
 .EXPORT : JAVA_HOME
 BUILD_ACTION=$(ANT) -Dbuild.label="build-$(RSCREVISION)" -Dbuild.compiler=gcj -f $(ANT_BUILDFILE) jar
