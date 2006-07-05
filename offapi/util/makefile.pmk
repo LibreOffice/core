@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 14:27:39 $
+#   last change: $Author: kz $ $Date: 2006-07-05 21:51:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -33,34 +33,10 @@
 #
 #*************************************************************************
 
-#PROJECTPCH4DLL=TRUE
-#PROJECTPCH=sjpch
-#PROJECTPCHSOURCE=$(PRJ)$/util\sjpch
-#PDBTARGET=sj
-PRJPCH=
-ENABLE_EXCEPTIONS=TRUE
-
-JAVAPREPRO=
-.IF "$(JDK_VERSION)" == "110"
-JAVAPREPRO=-jdk11
-.ENDIF
-.IF "$(PRODUCT)" != ""
-JAVAPREPRO=$(JAVAPREPRO) + " -product"
-.ENDIF
-
 # --- Settings -----------------------------------------------------
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
-NOUNODOC=
-BUILD_URD_ONLY=TRUE
 LOCALIDLFILES=TRUE
 
 URDDOC=TRUE
-
-.IF "$(OS)"=="SOLARIS" || "$(OS)"=="FREEBSD"
-.IF "$(CPU)"=="I"
-UNOIDL=unoidl
-.ENDIF
-.ENDIF
 
