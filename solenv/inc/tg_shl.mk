@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.96 $
+#   $Revision: 1.97 $
 #
-#   last change: $Author: ihi $ $Date: 2006-06-29 11:21:03 $
+#   last change: $Author: kz $ $Date: 2006-07-05 21:59:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -33,44 +33,8 @@
 #
 #*************************************************************************
 
-MKFILENAME:=tg_shl.mk
-
 #######################################################
-# Anweisungen fuer Rekursion
-
-.IF "$(MULTI_SHL_FLAG)" == ""
-$(SHL1TARGETN) .NULL : SHL1
-
-$(SHL2TARGETN) .NULL : SHL2
-
-$(SHL3TARGETN) .NULL : SHL3
-
-$(SHL4TARGETN) .NULL : SHL4
-
-$(SHL5TARGETN) .NULL : SHL5
-
-$(SHL6TARGETN) .NULL : SHL6
-
-$(SHL7TARGETN) .NULL : SHL7
-
-$(SHL8TARGETN) .NULL : SHL8
-
-$(SHL9TARGETN) .NULL : SHL9
-.ENDIF
-
-
-
-.IF "$(MULTI_SHL_FLAG)"==""
-SHL1 SHL2 SHL3 SHL4 SHL5 SHL6 SHL7 SHL8 SHL9:
-.IF "$(GUI)"=="UNX"
-    @dmake $(SHL$(TNR)TARGETN) MULTI_SHL_FLAG=true TNR:=$(TNR) $(MFLAGS) $(CALLMACROS)
-.ELSE
-    @dmake $(SHL$(TNR)TARGETN) MULTI_SHL_FLAG=true TNR:=$(TNR) $(MFLAGS) $(CALLMACROS)
-.ENDIF
-.ELSE
-
-#######################################################
-# Anweisungen fuer das Linken
+# targets for linking
 # unroll begin
 
 .IF "$(SHL$(TNR)TARGETN)"!=""
@@ -468,47 +432,10 @@ runtest_$(SHL$(TNR)TARGET) : $(SHL$(TNR)TARGETN)
 .ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL$(TNR)TARGETN)"!=""
 
-# Anweisungen fuer das Linken
 # unroll end
 #######################################################
 
-.ENDIF	# MULTI_SHL_FLAG
-
 #-------------------------------------------------------------------------
-
-
-.IF "$(MULTI_SHLIMP_FLAG)"==""
-# MULTITARGET: SHLNIMP --- hier einfuegen
-
-$(SHL1IMPLIBN) .NULL : SHL1IMP
-
-$(SHL2IMPLIBN) .NULL : SHL2IMP
-
-$(SHL3IMPLIBN) .NULL : SHL3IMP
-
-$(SHL4IMPLIBN) .NULL : SHL4IMP
-
-$(SHL5IMPLIBN) .NULL : SHL5IMP
-
-$(SHL6IMPLIBN) .NULL : SHL6IMP
-
-$(SHL7IMPLIBN) .NULL : SHL7IMP
-
-$(SHL8IMPLIBN) .NULL : SHL8IMP
-
-$(SHL9IMPLIBN) .NULL : SHL9IMP
-.ENDIF
-
-
-
-.IF "$(MULTI_SHLIMP_FLAG)"==""
-
-# MULTITARGET: SHLNIMP --- hier einfuegen
-
-SHL1IMP SHL2IMP SHL3IMP SHL4IMP SHL5IMP SHL6IMP SHL7IMP SHL8IMP SHL9IMP:
-    @dmake $(SHL$(TNR)IMPLIBN) MULTI_SHLIMP_FLAG=true TNR:=$(TNR) $(MFLAGS) $(CALLMACROS)
-.ELSE
-
 
 #######################################################
 # Anweisungen fuer das Linken
@@ -553,12 +480,6 @@ $(SHL$(TNR)IMPLIBN):	\
 .ENDIF
 .ENDIF
 
-# Anweisungen fuer das Linken
 # unroll end
 #######################################################
-
-.ENDIF	# MULTI_SHLIMP_FLAG
-
-#------------------------------------------------------------------------
-
 
