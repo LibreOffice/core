@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_scp.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:48:10 $
+#   last change: $Author: kz $ $Date: 2006-07-05 21:59:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -33,40 +33,6 @@
 #
 #*************************************************************************
 
-
-.IF "$(MULTI_SCP_FLAG)" == ""
-$(SCP1TARGETN) .NULL : SCP1
-
-$(SCP2TARGETN) .NULL : SCP2
-
-$(SCP3TARGETN) .NULL : SCP3
-
-$(SCP4TARGETN) .NULL : SCP4
-
-$(SCP5TARGETN) .NULL : SCP5
-
-$(SCP6TARGETN) .NULL : SCP6
-
-$(SCP7TARGETN) .NULL : SCP7
-
-$(SCP8TARGETN) .NULL : SCP8
-
-$(SCP9TARGETN) .NULL : SCP9
-.ENDIF
-
-.IF "$(MULTI_SCP_FLAG)"==""
-SCP1 SCP2 SCP3 SCP4 SCP5 SCP6 SCP7 SCP8 SCP9:
-.IF "$(GUI)" != "MAC"
-.IF "$(GUI)" == "UNX"
-    @echo $(SHELL) AUSE $(COMSPEC) MARTIN $(SHELLFLAGS)
-.ENDIF
-    +@dmake $(SCP$(TNR)TARGETN) MULTI_SCP_FLAG=true TNR:=$(TNR) $(MFLAGS) $(CALLMACROS)
-.ELSE
-    @dmake "$(SCP$(TNR)TARGETN)" MULTI_SCP_FLAG=true TNR:=$(TNR) $(MFLAGS) $(CALLMACROS)
-.ENDIF
-.ELSE
-
-
 #######################################################
 # Anweisungen fuer das Linken
 # unroll begin
@@ -91,4 +57,3 @@ $(SCP$(TNR)TARGETN): $(LOCALSCP$(TNR)FILES)
 # unroll end
 #######################################################
 
-.ENDIF		# "$(MULTI_SCP_FLAG)"==""
