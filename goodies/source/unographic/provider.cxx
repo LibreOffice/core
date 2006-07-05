@@ -4,9 +4,9 @@
  *
  *  $RCSfile: provider.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:11:17 $
+ *  last change: $Author: kz $ $Date: 2006-07-05 21:54:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -271,6 +271,9 @@ uno::Reference< beans::XPropertySet > SAL_CALL GraphicProvider::queryGraphicDesc
 {
     uno::Reference< beans::XPropertySet > xRet;
 
+    ::rtl::OUString aURL;
+    uno::Reference< io::XInputStream > xIStm;
+
     for( sal_Int32 i = 0; ( i < rMediaProperties.getLength() ) && !xRet.is(); ++i )
     {
         const ::rtl::OUString   aName( rMediaProperties[ i ].Name );
@@ -278,35 +281,36 @@ uno::Reference< beans::XPropertySet > SAL_CALL GraphicProvider::queryGraphicDesc
 
         if( COMPARE_EQUAL == aName.compareToAscii( "URL" ) )
         {
-            ::rtl::OUString aURL;
-
-            if( ( aValue >>= aURL ) && aURL.getLength() )
-            {
-                uno::Reference< ::graphic::XGraphic > xGraphic( implLoadMemory( aURL ) );
-
-                if( !xGraphic.is() )
-                    xGraphic = implLoadResource( aURL );
-
-                if( xGraphic.is() )
-                    xRet = uno::Reference< beans::XPropertySet >( xGraphic, uno::UNO_QUERY );
-                else
-                {
-                    GraphicDescriptor* pDescriptor = new GraphicDescriptor;
-                    pDescriptor->init( aURL );
-                    xRet = pDescriptor;
-                }
-            }
+            aValue >>= aURL;
         }
         else if( COMPARE_EQUAL == aName.compareToAscii( "InputStream" ) )
         {
-            uno::Reference< io::XInputStream > xIStm;
+            aValue >>= xIStm;
+        }
+    }
 
-            if( ( aValue >>= xIStm ) && xIStm.is() )
-            {
-                GraphicDescriptor* pDescriptor = new GraphicDescriptor;
-                pDescriptor->init( xIStm );
-                xRet = pDescriptor;
-            }
+    if( xIStm.is() )
+    {
+        GraphicDescriptor* pDescriptor = new GraphicDescriptor;
+        pDescriptor->init( xIStm, aURL );
+        xRet = pDescriptor;
+    }
+    else if( aURL.getLength() )
+    {
+        uno::Reference< ::graphic::XGraphic > xGraphic( implLoadMemory( aURL ) );
+
+        if( !xGraphic.is() )
+            xGraphic = implLoadResource( aURL );
+
+        if( xGraphic.is() )
+        {
+            xRet = uno::Reference< beans::XPropertySet >( xGraphic, uno::UNO_QUERY );
+        }
+        else
+        {
+            GraphicDescriptor* pDescriptor = new GraphicDescriptor;
+            pDescriptor->init( aURL );
+            xRet = pDescriptor;
         }
     }
 
@@ -322,6 +326,8 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
     String                                  aPath;
     SvStream*                               pIStm = NULL;
 
+    uno::Reference< io::XInputStream > xIStm;
+
     for( sal_Int32 i = 0; ( i < rMediaProperties.getLength() ) && !pIStm && !xRet.is(); ++i )
     {
         const ::rtl::OUString   aName( rMediaProperties[ i ].Name );
@@ -330,30 +336,28 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
         if( COMPARE_EQUAL == aName.compareToAscii( "URL" ) )
         {
             ::rtl::OUString aURL;
-
-            if( ( aValue >>= aURL ) && aURL.getLength() )
-            {
-                xRet = implLoadMemory( aURL );
-
-                if( !xRet.is() )
-                    xRet = implLoadResource( aURL );
-
-                if( !xRet.is() )
-                {
-                    pIStm = ::utl::UcbStreamHelper::CreateStream( aURL, STREAM_READ );
-
-                    if( pIStm )
-                        aPath = aURL;
-                }
-            }
+            aValue >>= aURL;
+            aPath = aURL;
         }
         else if( COMPARE_EQUAL == aName.compareToAscii( "InputStream" ) )
         {
-            uno::Reference< io::XInputStream > xIStm;
-
-            if( ( aValue >>= xIStm ) && xIStm.is() )
-                pIStm = ::utl::UcbStreamHelper::CreateStream( xIStm );
+            aValue >>= xIStm;
         }
+    }
+
+    if( xIStm.is() )
+    {
+        pIStm = ::utl::UcbStreamHelper::CreateStream( xIStm );
+    }
+    else if( aPath.Len() )
+    {
+        xRet = implLoadMemory( aPath );
+
+        if( !xRet.is() )
+            xRet = implLoadResource( aPath );
+
+        if( !xRet.is() )
+            pIStm = ::utl::UcbStreamHelper::CreateStream( aPath, STREAM_READ );
     }
 
     if( pIStm )
