@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdgrffilter.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:46:53 $
+ *  last change: $Author: kz $ $Date: 2006-07-05 21:52:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,9 +33,20 @@
  *
  ************************************************************************/
 
+#pragma warning (disable:4190)
+
+#ifndef _COM_SUN_STAR_GRAPHIC_XGRAPHICPROVIDER_HPP_
+#include <com/sun/star/graphic/XGraphicProvider.hpp>
+#endif
+#ifndef _COM_SUN_STAR_GRAPHIC_GRAPHICTYPE_HPP_
+#include <com/sun/star/graphic/GraphicType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_XSIMPLEFILEACCESS2_HPP_
+#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
+#endif
+
 #include <unotools/localfilehelper.hxx>
 #include <tools/errinf.hxx>
-#include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
@@ -43,13 +54,10 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/frame.hxx>
-#include <svx/impgrf.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdpagv.hxx>
-#include <svx/xoutbmp.hxx>
 
 #ifndef MAC
-#ifndef SVX_LIGHT
 #include "../../ui/inc/strings.hrc"
 #include "../../ui/inc/graphpro.hxx"
 #ifndef SD_DRAW_VIEW_SHELL_HXX
@@ -64,9 +72,7 @@
 #ifndef SD_FRAME_VIEW_HXX
 #include "../../ui/inc/FrameView.hxx"
 #endif
-#endif //!SVX_LIGHT
 #else  //MAC
-#ifndef SVX_LIGHT
 #include "strings.hrc"
 #include "graphpro.hxx"
 #ifndef SD_DRAW_VIEW_SHELL_HXX
@@ -81,9 +87,45 @@
 #ifndef SD_FRAME_VIEW_HXX
 #include "FrameView.hxx"
 #endif
-#endif //!SVX_LIGHT
 #endif //!MAC
 
+#include "comphelper/anytostring.hxx"
+#include "cppuhelper/exc_hlp.hxx"
+
+// --
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILTERMANAGER_HPP_
+#include <com/sun/star/ui/dialogs/XFilterManager.hpp>
+#endif
+#ifndef  _COM_SUN_STAR_UI_DIALOGS_TEMPLATEDESCRIPTION_HPP_
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#endif
+#ifndef _FILEDLGHELPER_HXX
+#include <sfx2/filedlghelper.hxx>
+#endif
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
+#endif
+#ifndef _FILTER_HXX
+#include <svtools/filter.hxx>
+#endif
+#ifndef _SVX_IMPGRF_HXX
+#include <svx/impgrf.hxx>
+#endif
+#ifndef _XOUTBMP_HXX
+#include <svx/xoutbmp.hxx>
+#endif
+
+// --
 
 #include "sdpage.hxx"
 #include "drawdoc.hxx"
@@ -98,6 +140,15 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
 
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::graphic;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::ucb;
+using namespace com::sun::star::ui::dialogs;
+using rtl::OUString;
+using namespace ::sfx2;
 
 // ---------------
 // - SdPPTFilter -
@@ -488,4 +539,173 @@ sal_Bool SdGRFFilter::Export()
     }
 
     return bRet;
+}
+
+void SdGRFFilter::SaveGraphic( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape )
+{
+    try
+    {
+        Reference< XMultiServiceFactory > xSM( ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
+
+        Reference< XGraphicProvider > xProvider( xSM->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.graphic.GraphicProvider" ) ) ), UNO_QUERY_THROW );
+        Reference< XPropertySet > xShapeSet( xShape, UNO_QUERY_THROW );
+
+        // detect mime type of graphic
+        OUString aMimeType;
+
+        // first try to detect from graphic object
+        Reference< XPropertySet > xGraphicSet( xShapeSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Graphic" ) ) ), UNO_QUERY_THROW );
+        xGraphicSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "MimeType" ) ) ) >>= aMimeType;
+
+        if( aMimeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "image/x-vclgraphic" ) ) || !aMimeType.getLength() )
+        {
+            // this failed, try to detect it from graphic stream and URL
+            OUString aURL;
+            xShapeSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "GraphicURL" ) ) ) >>= aURL;
+
+            if( aURL.getLength() == 0 )
+                xShapeSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "GraphicStreamURL" ) ) ) >>= aURL;
+
+            {
+                Reference< XInputStream > xGraphStream( xShapeSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "GraphicStream" ) ) ), UNO_QUERY );
+                PropertyValues aDesc(2);
+                aDesc[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
+                aDesc[0].Value <<= aURL;
+                aDesc[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "InputStream" ) );
+                aDesc[1].Value <<= xGraphStream;
+
+                Reference< XPropertySet > xDescSet( xProvider->queryGraphicDescriptor( aDesc ), UNO_QUERY_THROW );
+
+                xDescSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "MimeType" ) ) ) >>= aMimeType;
+            }
+        }
+
+        if( aMimeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "image/x-vclgraphic" ) ) || !aMimeType.getLength() )
+        {
+            // this also failed, now set a mimetype that fits graphic best
+
+            // gif for animated pixel
+            // png for non animated pixel
+            // svm for vector format
+            sal_Int8 nGraphicType;
+            xGraphicSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "GraphicType" ) ) ) >>= nGraphicType;
+            switch( nGraphicType )
+            {
+            case ::com::sun::star::graphic::GraphicType::VECTOR:
+                aMimeType = OUString::createFromAscii( "image/x-svm" );
+                break;
+
+            case ::com::sun::star::graphic::GraphicType::PIXEL:
+                {
+                    sal_Bool bAnimated;
+                    xGraphicSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Animated" ) ) ) >>= bAnimated;
+
+                    if( bAnimated )
+                    {
+                        aMimeType = OUString::createFromAscii( "image/gif" );
+                        break;
+                    }
+                }
+                // Fallthrough!
+//          case ::com::sun::star::graphic::GraphicType::EMPTY:
+            default:
+                aMimeType = OUString::createFromAscii( "image/png" );
+                break;
+            }
+        }
+
+        // init dialog
+        SvtPathOptions aPathOpt;
+        String sGrfPath( aPathOpt.GetGraphicPath() );
+
+        FileDialogHelper aDlgHelper( TemplateDescription::FILESAVE_AUTOEXTENSION, 0 );
+        Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
+
+        String aTitle( SdResId( STR_TITLE_SAVE_AS_PICTURE ) );
+        aDlgHelper.SetTitle( aTitle );
+
+        INetURLObject aPath;
+        aPath.SetSmartURL( sGrfPath);
+        xFP->setDisplayDirectory( aPath.GetMainURL(INetURLObject::DECODE_TO_IURI) );
+
+        // populate filter dialog filter list and select default filter to match graphic mime type
+
+        GraphicFilter& rGF = *GetGrfFilter();
+        Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
+        OUString aDefaultFormatName;
+        USHORT nCount = rGF.GetExportFormatCount();
+
+        std::map< OUString, OUString > aMimeTypeMap;
+
+        for ( int i = 0; i < nCount; i++ )
+        {
+            const OUString aExportFormatName( rGF.GetExportFormatName( i ) );
+            const OUString aFilterMimeType( rGF.GetExportFormatMediaType( i ) );
+            xFltMgr->appendFilter( aExportFormatName, rGF.GetExportWildcard( i ) );
+            aMimeTypeMap[ aExportFormatName ] = aFilterMimeType;
+            if( aMimeType == aFilterMimeType )
+                aDefaultFormatName = aExportFormatName;
+        }
+
+        if( aDefaultFormatName.getLength() == 0 )
+        {
+            nCount = rGF.GetImportFormatCount();
+            for( int i = 0; i < nCount; i++ )
+            {
+                const OUString aFilterMimeType( rGF.GetImportFormatMediaType( i ) );
+                if( aMimeType == aFilterMimeType )
+                {
+                    aDefaultFormatName = rGF.GetImportFormatName( i );
+                    xFltMgr->appendFilter( aDefaultFormatName,  rGF.GetImportWildcard( i ) );
+                    aMimeTypeMap[ aDefaultFormatName ] = aFilterMimeType;
+                    break;
+                }
+            }
+        }
+
+        if( aDefaultFormatName.getLength() == 0 )
+            aDefaultFormatName = OUString( RTL_CONSTASCII_USTRINGPARAM( "PNG - Portable Network Graphic" ) );
+
+        xFltMgr->setCurrentFilter( aDefaultFormatName );
+
+        // execute dialog
+
+        if( aDlgHelper.Execute() == ERRCODE_NONE )
+        {
+            OUString sPath( xFP->getFiles().getConstArray()[0] );
+            aPath.SetSmartURL( sPath);
+            sGrfPath = aPath.GetPath();
+
+            OUString aExportMimeType( aMimeTypeMap[xFltMgr->getCurrentFilter()] );
+
+            Reference< XInputStream > xGraphStream;
+            if( aMimeType == aExportMimeType )
+                xShapeSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "GraphicStream" ) ) ) >>= xGraphStream;
+
+            if( xGraphStream.is() )
+            {
+                Reference< XSimpleFileAccess2 > xFileAccess( xSM->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.SimpleFileAccess" ) ) ), UNO_QUERY_THROW );
+                xFileAccess->writeFile( sPath, xGraphStream );
+            }
+            else
+            {
+                PropertyValues aDesc(2);
+                aDesc[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
+                aDesc[0].Value <<= sPath;
+                aDesc[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "MimeType" ) );
+                aDesc[1].Value <<= aExportMimeType;
+                Reference< XGraphic > xGraphic( xShapeSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Graphic" ) ) ), UNO_QUERY_THROW );
+                xProvider->storeGraphic( xGraphic, aDesc );
+            }
+        }
+    }
+    catch( Exception& )
+    {
+        DBG_ERROR(
+            (rtl::OString("SdGRFFilter::SaveGraphic(), "
+                    "exception caught: ") +
+            rtl::OUStringToOString(
+                comphelper::anyToString( cppu::getCaughtException() ),
+                RTL_TEXTENCODING_UTF8 )).getStr() );
+    }
 }
