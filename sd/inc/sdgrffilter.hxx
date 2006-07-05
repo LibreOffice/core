@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdgrffilter.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:59:56 $
+ *  last change: $Author: kz $ $Date: 2006-07-05 21:49:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,14 @@
 #ifndef _SD_SDGRFFILTER_HXX
 #define _SD_SDGRFFILTER_HXX
 
+#ifndef _COM_SUN_STAR_DRAWING_XSHAPE_HPP_
+#include <com/sun/star/drawing/XShape.hpp>
+#endif
+
 #include <tools/errinf.hxx>
 #include "sdfilter.hxx"
+
+class Graphic;
 
 // ---------------
 // - SdCGMFilter -
@@ -55,6 +61,7 @@ public:
     sal_Bool        Import();
     sal_Bool        Export();
 
+    static void             SaveGraphic( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape );
     static void             HandleGraphicFilterError( USHORT nFilterError, ULONG nStreamError = ERRCODE_NONE );
 
 private:
