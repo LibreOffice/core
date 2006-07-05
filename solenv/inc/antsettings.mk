@@ -4,9 +4,9 @@
 #
 #   $RCSfile: antsettings.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2006-01-31 18:48:27 $
+#   last change: $Author: kz $ $Date: 2006-07-05 20:59:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -72,6 +72,9 @@ ANT_OPT=on
 .IF "$(JDK)"=="gcj"
 JAVA_HOME=
 .EXPORT : JAVA_HOME
+.ENDIF
+
+.IF "$(JAVACISGCJ)" == "yes"
 ANT_FLAGS!:=-Dbuild.compiler=gcj -Dprj=$(PRJ) -Dprjname=$(PRJNAME) -Ddebug=$(ANT_DEBUG) \
  -Doptimize=$(ANT_OPT) -Dtarget=$(TARGET) -Dsolar.update=on -Dout=$(OUT) -Dinpath=$(INPATH) \
  -Dproext="$(PROEXT)" -Dsolar.bin=$(SOLARBINDIR) -Dsolar.jar=$(SOLARBINDIR) \
