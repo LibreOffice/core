@@ -1,7 +1,5 @@
 # unroll begin
 
-.IF "$(make_srs_deps)"==""
-
 .IF "$(HIDSID1PARTICLE)"!=""
 $(HIDSID1PARTICLE): $(SDI1TARGET) $(MISC)$/$(SDI1NAME).sid
     @echo ------------------------------
@@ -29,26 +27,11 @@ $(SDI1TARGET): $(SVSDI1DEPEND) $(SDI1NAME).sdi
     -fx$(SDI1EXPORT).sdi		\
     -fy$(MISC)$/xx$(PRJNAME).csv		\
     -fz$(MISC)$/$(SDI1NAME).sid	\
-    $(SDI1NAME).sdi -I$(MISC) -I$(SVSDIINC) -I$(INC) -I$(INCLUDE) -I$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc )
+    $(SDI1NAME).sdi -I$(MISC) -I$(SVSDIINC) -I$(INC) $(INCLUDE) -I$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc )
 .ENDIF # "$(SDI1TARGET)"!=""
-
-.ELSE			# "$(make_srs_deps)"==""
-.IF "$(SDI1TARGET)"!=""
-$(SDI1TARGET): $(SVSDI1DEPEND)
-    @+echo jetzt nicht...
-.ENDIF # "$(SDI1TARGET)"!=""
-
-.IF "$(HIDSID1PARTICLE)"!=""
-$(HIDSID1PARTICLE):
-    @+echo jetzt nicht...
-.ENDIF # "$(HIDSID1PARTICLE)"!=""
-.ENDIF			# "$(make_srs_deps)"==""
-
 
 # Instruction for ???
 # unroll begin
-
-.IF "$(make_srs_deps)"==""
 
 .IF "$(HIDSID2PARTICLE)"!=""
 $(HIDSID2PARTICLE): $(SDI2TARGET) $(MISC)$/$(SDI2NAME).sid
@@ -77,26 +60,11 @@ $(SDI2TARGET): $(SVSDI2DEPEND) $(SDI2NAME).sdi
     -fx$(SDI2EXPORT).sdi		\
     -fy$(MISC)$/xx$(PRJNAME).csv		\
     -fz$(MISC)$/$(SDI2NAME).sid	\
-    $(SDI2NAME).sdi -I$(MISC) -I$(SVSDIINC) -I$(INC) -I$(INCLUDE) -I$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc )
+    $(SDI2NAME).sdi -I$(MISC) -I$(SVSDIINC) -I$(INC) $(INCLUDE) -I$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc )
 .ENDIF # "$(SDI2TARGET)"!=""
-
-.ELSE			# "$(make_srs_deps)"==""
-.IF "$(SDI2TARGET)"!=""
-$(SDI2TARGET): $(SVSDI2DEPEND)
-    @+echo jetzt nicht...
-.ENDIF # "$(SDI2TARGET)"!=""
-
-.IF "$(HIDSID2PARTICLE)"!=""
-$(HIDSID2PARTICLE):
-    @+echo jetzt nicht...
-.ENDIF # "$(HIDSID2PARTICLE)"!=""
-.ENDIF			# "$(make_srs_deps)"==""
-
 
 # Instruction for ???
 # unroll begin
-
-.IF "$(make_srs_deps)"==""
 
 .IF "$(HIDSID3PARTICLE)"!=""
 $(HIDSID3PARTICLE): $(SDI3TARGET) $(MISC)$/$(SDI3NAME).sid
@@ -125,26 +93,11 @@ $(SDI3TARGET): $(SVSDI3DEPEND) $(SDI3NAME).sdi
     -fx$(SDI3EXPORT).sdi		\
     -fy$(MISC)$/xx$(PRJNAME).csv		\
     -fz$(MISC)$/$(SDI3NAME).sid	\
-    $(SDI3NAME).sdi -I$(MISC) -I$(SVSDIINC) -I$(INC) -I$(INCLUDE) -I$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc )
+    $(SDI3NAME).sdi -I$(MISC) -I$(SVSDIINC) -I$(INC) $(INCLUDE) -I$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc )
 .ENDIF # "$(SDI3TARGET)"!=""
-
-.ELSE			# "$(make_srs_deps)"==""
-.IF "$(SDI3TARGET)"!=""
-$(SDI3TARGET): $(SVSDI3DEPEND)
-    @+echo jetzt nicht...
-.ENDIF # "$(SDI3TARGET)"!=""
-
-.IF "$(HIDSID3PARTICLE)"!=""
-$(HIDSID3PARTICLE):
-    @+echo jetzt nicht...
-.ENDIF # "$(HIDSID3PARTICLE)"!=""
-.ENDIF			# "$(make_srs_deps)"==""
-
 
 # Instruction for ???
 # unroll begin
-
-.IF "$(make_srs_deps)"==""
 
 .IF "$(HIDSID4PARTICLE)"!=""
 $(HIDSID4PARTICLE): $(SDI4TARGET) $(MISC)$/$(SDI4NAME).sid
@@ -173,26 +126,11 @@ $(SDI4TARGET): $(SVSDI4DEPEND) $(SDI4NAME).sdi
     -fx$(SDI4EXPORT).sdi		\
     -fy$(MISC)$/xx$(PRJNAME).csv		\
     -fz$(MISC)$/$(SDI4NAME).sid	\
-    $(SDI4NAME).sdi -I$(MISC) -I$(SVSDIINC) -I$(INC) -I$(INCLUDE) -I$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc )
+    $(SDI4NAME).sdi -I$(MISC) -I$(SVSDIINC) -I$(INC) $(INCLUDE) -I$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc )
 .ENDIF # "$(SDI4TARGET)"!=""
-
-.ELSE			# "$(make_srs_deps)"==""
-.IF "$(SDI4TARGET)"!=""
-$(SDI4TARGET): $(SVSDI4DEPEND)
-    @+echo jetzt nicht...
-.ENDIF # "$(SDI4TARGET)"!=""
-
-.IF "$(HIDSID4PARTICLE)"!=""
-$(HIDSID4PARTICLE):
-    @+echo jetzt nicht...
-.ENDIF # "$(HIDSID4PARTICLE)"!=""
-.ENDIF			# "$(make_srs_deps)"==""
-
 
 # Instruction for ???
 # unroll begin
-
-.IF "$(make_srs_deps)"==""
 
 .IF "$(HIDSID5PARTICLE)"!=""
 $(HIDSID5PARTICLE): $(SDI5TARGET) $(MISC)$/$(SDI5NAME).sid
@@ -221,26 +159,11 @@ $(SDI5TARGET): $(SVSDI5DEPEND) $(SDI5NAME).sdi
     -fx$(SDI5EXPORT).sdi		\
     -fy$(MISC)$/xx$(PRJNAME).csv		\
     -fz$(MISC)$/$(SDI5NAME).sid	\
-    $(SDI5NAME).sdi -I$(MISC) -I$(SVSDIINC) -I$(INC) -I$(INCLUDE) -I$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc )
+    $(SDI5NAME).sdi -I$(MISC) -I$(SVSDIINC) -I$(INC) $(INCLUDE) -I$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc )
 .ENDIF # "$(SDI5TARGET)"!=""
-
-.ELSE			# "$(make_srs_deps)"==""
-.IF "$(SDI5TARGET)"!=""
-$(SDI5TARGET): $(SVSDI5DEPEND)
-    @+echo jetzt nicht...
-.ENDIF # "$(SDI5TARGET)"!=""
-
-.IF "$(HIDSID5PARTICLE)"!=""
-$(HIDSID5PARTICLE):
-    @+echo jetzt nicht...
-.ENDIF # "$(HIDSID5PARTICLE)"!=""
-.ENDIF			# "$(make_srs_deps)"==""
-
 
 # Instruction for ???
 # unroll begin
-
-.IF "$(make_srs_deps)"==""
 
 .IF "$(HIDSID6PARTICLE)"!=""
 $(HIDSID6PARTICLE): $(SDI6TARGET) $(MISC)$/$(SDI6NAME).sid
@@ -269,26 +192,11 @@ $(SDI6TARGET): $(SVSDI6DEPEND) $(SDI6NAME).sdi
     -fx$(SDI6EXPORT).sdi		\
     -fy$(MISC)$/xx$(PRJNAME).csv		\
     -fz$(MISC)$/$(SDI6NAME).sid	\
-    $(SDI6NAME).sdi -I$(MISC) -I$(SVSDIINC) -I$(INC) -I$(INCLUDE) -I$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc )
+    $(SDI6NAME).sdi -I$(MISC) -I$(SVSDIINC) -I$(INC) $(INCLUDE) -I$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc )
 .ENDIF # "$(SDI6TARGET)"!=""
-
-.ELSE			# "$(make_srs_deps)"==""
-.IF "$(SDI6TARGET)"!=""
-$(SDI6TARGET): $(SVSDI6DEPEND)
-    @+echo jetzt nicht...
-.ENDIF # "$(SDI6TARGET)"!=""
-
-.IF "$(HIDSID6PARTICLE)"!=""
-$(HIDSID6PARTICLE):
-    @+echo jetzt nicht...
-.ENDIF # "$(HIDSID6PARTICLE)"!=""
-.ENDIF			# "$(make_srs_deps)"==""
-
 
 # Instruction for ???
 # unroll begin
-
-.IF "$(make_srs_deps)"==""
 
 .IF "$(HIDSID7PARTICLE)"!=""
 $(HIDSID7PARTICLE): $(SDI7TARGET) $(MISC)$/$(SDI7NAME).sid
@@ -317,26 +225,11 @@ $(SDI7TARGET): $(SVSDI7DEPEND) $(SDI7NAME).sdi
     -fx$(SDI7EXPORT).sdi		\
     -fy$(MISC)$/xx$(PRJNAME).csv		\
     -fz$(MISC)$/$(SDI7NAME).sid	\
-    $(SDI7NAME).sdi -I$(MISC) -I$(SVSDIINC) -I$(INC) -I$(INCLUDE) -I$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc )
+    $(SDI7NAME).sdi -I$(MISC) -I$(SVSDIINC) -I$(INC) $(INCLUDE) -I$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc )
 .ENDIF # "$(SDI7TARGET)"!=""
-
-.ELSE			# "$(make_srs_deps)"==""
-.IF "$(SDI7TARGET)"!=""
-$(SDI7TARGET): $(SVSDI7DEPEND)
-    @+echo jetzt nicht...
-.ENDIF # "$(SDI7TARGET)"!=""
-
-.IF "$(HIDSID7PARTICLE)"!=""
-$(HIDSID7PARTICLE):
-    @+echo jetzt nicht...
-.ENDIF # "$(HIDSID7PARTICLE)"!=""
-.ENDIF			# "$(make_srs_deps)"==""
-
 
 # Instruction for ???
 # unroll begin
-
-.IF "$(make_srs_deps)"==""
 
 .IF "$(HIDSID8PARTICLE)"!=""
 $(HIDSID8PARTICLE): $(SDI8TARGET) $(MISC)$/$(SDI8NAME).sid
@@ -365,26 +258,11 @@ $(SDI8TARGET): $(SVSDI8DEPEND) $(SDI8NAME).sdi
     -fx$(SDI8EXPORT).sdi		\
     -fy$(MISC)$/xx$(PRJNAME).csv		\
     -fz$(MISC)$/$(SDI8NAME).sid	\
-    $(SDI8NAME).sdi -I$(MISC) -I$(SVSDIINC) -I$(INC) -I$(INCLUDE) -I$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc )
+    $(SDI8NAME).sdi -I$(MISC) -I$(SVSDIINC) -I$(INC) $(INCLUDE) -I$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc )
 .ENDIF # "$(SDI8TARGET)"!=""
-
-.ELSE			# "$(make_srs_deps)"==""
-.IF "$(SDI8TARGET)"!=""
-$(SDI8TARGET): $(SVSDI8DEPEND)
-    @+echo jetzt nicht...
-.ENDIF # "$(SDI8TARGET)"!=""
-
-.IF "$(HIDSID8PARTICLE)"!=""
-$(HIDSID8PARTICLE):
-    @+echo jetzt nicht...
-.ENDIF # "$(HIDSID8PARTICLE)"!=""
-.ENDIF			# "$(make_srs_deps)"==""
-
 
 # Instruction for ???
 # unroll begin
-
-.IF "$(make_srs_deps)"==""
 
 .IF "$(HIDSID9PARTICLE)"!=""
 $(HIDSID9PARTICLE): $(SDI9TARGET) $(MISC)$/$(SDI9NAME).sid
@@ -413,26 +291,11 @@ $(SDI9TARGET): $(SVSDI9DEPEND) $(SDI9NAME).sdi
     -fx$(SDI9EXPORT).sdi		\
     -fy$(MISC)$/xx$(PRJNAME).csv		\
     -fz$(MISC)$/$(SDI9NAME).sid	\
-    $(SDI9NAME).sdi -I$(MISC) -I$(SVSDIINC) -I$(INC) -I$(INCLUDE) -I$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc )
+    $(SDI9NAME).sdi -I$(MISC) -I$(SVSDIINC) -I$(INC) $(INCLUDE) -I$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc )
 .ENDIF # "$(SDI9TARGET)"!=""
-
-.ELSE			# "$(make_srs_deps)"==""
-.IF "$(SDI9TARGET)"!=""
-$(SDI9TARGET): $(SVSDI9DEPEND)
-    @+echo jetzt nicht...
-.ENDIF # "$(SDI9TARGET)"!=""
-
-.IF "$(HIDSID9PARTICLE)"!=""
-$(HIDSID9PARTICLE):
-    @+echo jetzt nicht...
-.ENDIF # "$(HIDSID9PARTICLE)"!=""
-.ENDIF			# "$(make_srs_deps)"==""
-
 
 # Instruction for ???
 # unroll begin
-
-.IF "$(make_srs_deps)"==""
 
 .IF "$(HIDSID10PARTICLE)"!=""
 $(HIDSID10PARTICLE): $(SDI10TARGET) $(MISC)$/$(SDI10NAME).sid
@@ -461,20 +324,7 @@ $(SDI10TARGET): $(SVSDI10DEPEND) $(SDI10NAME).sdi
     -fx$(SDI10EXPORT).sdi		\
     -fy$(MISC)$/xx$(PRJNAME).csv		\
     -fz$(MISC)$/$(SDI10NAME).sid	\
-    $(SDI10NAME).sdi -I$(MISC) -I$(SVSDIINC) -I$(INC) -I$(INCLUDE) -I$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc )
+    $(SDI10NAME).sdi -I$(MISC) -I$(SVSDIINC) -I$(INC) $(INCLUDE) -I$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc )
 .ENDIF # "$(SDI10TARGET)"!=""
-
-.ELSE			# "$(make_srs_deps)"==""
-.IF "$(SDI10TARGET)"!=""
-$(SDI10TARGET): $(SVSDI10DEPEND)
-    @+echo jetzt nicht...
-.ENDIF # "$(SDI10TARGET)"!=""
-
-.IF "$(HIDSID10PARTICLE)"!=""
-$(HIDSID10PARTICLE):
-    @+echo jetzt nicht...
-.ENDIF # "$(HIDSID10PARTICLE)"!=""
-.ENDIF			# "$(make_srs_deps)"==""
-
 
 # Instruction for ???
