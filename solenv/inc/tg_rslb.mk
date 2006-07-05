@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_rslb.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:47:43 $
+#   last change: $Author: kz $ $Date: 2006-07-05 21:58:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -33,34 +33,6 @@
 #
 #*************************************************************************
 
-
-.IF "$(MULTI_RESLIB_FLAG)" == ""
-$(RESLIB1TARGETN) .NULL : RESLIB1
-
-$(RESLIB2TARGETN) .NULL : RESLIB2
-
-$(RESLIB3TARGETN) .NULL : RESLIB3
-
-$(RESLIB4TARGETN) .NULL : RESLIB4
-
-$(RESLIB5TARGETN) .NULL : RESLIB5
-
-$(RESLIB6TARGETN) .NULL : RESLIB6
-
-$(RESLIB7TARGETN) .NULL : RESLIB7
-
-$(RESLIB8TARGETN) .NULL : RESLIB8
-
-$(RESLIB9TARGETN) .NULL : RESLIB9
-.ENDIF
-
-
-.IF "$(MULTI_RESLIB_FLAG)"==""
-RESLIB1 RESLIB2 RESLIB3 RESLIB4 RESLIB5 RESLIB6 RESLIB7 RESLIB8 RESLIB9:
-    @dmake $(RESLIB$(TNR)TARGETN) $(HIDRES$(TNR)PARTICLE) MULTI_RESLIB_FLAG=true TNR:=$(TNR) $(MFLAGS) $(CALLMACROS)
-.ELSE
-
-
 #######################################################
 # unroll begin
 
@@ -75,7 +47,7 @@ RESLIB$(TNR)HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid 
 $(HIDRES$(TNR)PARTICLE): $(RESLIB$(TNR)HIDFILES)
     @echo ------------------------------
     @echo Making: $@
-    @+$(IFEXIST) $@ $(THEN) $(RM) $@
+    @+$(IFEXIST) $@ $(THEN) $(RM) $@ $(FI)
 # need to strip since solaris cannot handle tab-only whitespace here
     +$(TYPE) $(mktmp  $(strip, $(subst,$/,/ $(RESLIB$(TNR)HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
     @+$(RENAME) $@.$(ROUT).tmp $@
@@ -144,4 +116,3 @@ $(RESLIB$(TNR)TARGETN): \
 # unroll end
 #######################################################
 
-.ENDIF				# "$(MULTI_RESLIB_FLAG)"==""
