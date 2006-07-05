@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: hr $ $Date: 2005-12-28 18:06:29 $
+#   last change: $Author: kz $ $Date: 2006-07-05 21:53:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -96,6 +96,7 @@ MY_AUTODOC=$(WRAPCMD) $(SOLARBINDIR)$/autodoc
 all: \
     $(CPP_DOCU_INDEX_FILE) \
     $(JAVA_DOCU_INDEX_FILE)
+
 .ELSE
 all: $(CPP_DOCU_INDEX_FILE)
 .ENDIF
@@ -108,21 +109,21 @@ $(CPP_DOCU_CLEANUP_FLAG) : $(INCLUDELIST) $(PRJ)$/docs$/cpp$/ref$/cpp.css
 $(CPP_DOCU_INDEX_FILE) : $(CPP_DOCU_CLEANUP_FLAG)
     +-$(MKDIRHIER) $(@:d)        
     +$(MY_AUTODOC) -html $(DESTDIRGENCPPREF) -name $(CPPDOCREFNAME) $(AUTODOCPARAMS)
-    +-rm $(@:d)$/cpp.css
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(PRJ)$/docs$/cpp$/ref$/cpp.css $(MY_TEXTCOPY_TARGETPRE) $(@:d)$/cpp.css
+    +-rm $(@:d:d)$/cpp.css
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(PRJ)$/docs$/cpp$/ref$/cpp.css $(MY_TEXTCOPY_TARGETPRE) $(@:d:d)$/cpp.css
 
-$(JAVA_SRC_DIR)$/%.zip : $(SOLARCOMMONBINDIR)$/%.zip
+$(JAVA_SRC_FILES) : $(SOLARCOMMONBINDIR)$/$$(@:f)
     +-$(MKDIRHIER) $(@:d)        
     +$(MY_COPY) $< $@
-    +cd $(JAVA_SRC_DIR) && unzip -quod . $(@:f)
+    +cd $(JAVA_SRC_DIR) && unzip -quo $(@:f)
 
 #$(JAVA_SRC_DIR)$/com$/sun$/star$/beans$/%.java : $(PRJ)$/source$/bean$/com$/sun$/star$/beans$/%.java 
 #	+-$(MKDIRHIER) $(@:d)        
 #	+$(MY_COPY) $< $@
 
-#$(JAVA_DOCU_INDEX_FILE) : $(JAVA_SRC_FILES) $(JAVA_BEAN_SRC_FILES)
+#$(JAVA_DOCU_INDEX_FILE) .SEQUENTIAL : $(JAVA_SRC_FILES) $(JAVA_BEAN_SRC_FILES)
 .IF "$(SOLAR_JAVA)"!=""
-$(JAVA_DOCU_INDEX_FILE) : $(JAVA_SRC_FILES)
+$(JAVA_DOCU_INDEX_FILE) .SEQUENTIAL : $(JAVA_SRC_FILES)
     +-$(MKDIRHIER) $(@:d)        
     $(WRAPCMD) $(JAVADOC) -J-Xmx120m $(JAVADOCPARAMS) > $(JAVADOCLOG)
 .ENDIF
