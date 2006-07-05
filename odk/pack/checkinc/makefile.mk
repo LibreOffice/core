@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 20:16:30 $
+#   last change: $Author: kz $ $Date: 2006-07-05 21:53:35 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,11 +47,11 @@ all : $(ODKCHECKFILE)
 $(ODKCHECKFILE) : $(SDK_CONTENT_CHECK_FILES)
     +@echo "" > $(ODKCHECKFILE)
 # THE PERL SCRIPT DELETES THE CHECK FILE, WHEN AN ERROR OCCURS
-    -diff -br $(DESTDIRINC)$/osl   $(SOLARINCDIR)$/osl |& $(PERL) $(PRJ)$/util$/checkdiff.pl $(ODKCHECKFILE)
-    -diff -br $(DESTDIRINC)$/rtl   $(SOLARINCDIR)$/rtl |& $(PERL) $(PRJ)$/util$/checkdiff.pl $(ODKCHECKFILE)
-    -diff -br $(DESTDIRINC)$/sal   $(SOLARINCDIR)$/sal |& $(PERL) $(PRJ)$/util$/checkdiff.pl $(ODKCHECKFILE)
-    -diff -br $(DESTDIRINC)$/stl   $(SOLARINCDIR)$/stl |& $(PERL) $(PRJ)$/util$/checkdiff.pl $(ODKCHECKFILE)
-    -diff -br $(DESTDIRINC)$/store $(SOLARINCDIR)$/store |& $(PERL) $(PRJ)$/util$/checkdiff.pl $(ODKCHECKFILE)
-    -diff -br $(DESTDIRINC)$/vos   $(SOLARINCDIR)$/vos |& $(PERL) $(PRJ)$/util$/checkdiff.pl $(ODKCHECKFILE)
+    -diff -br $(DESTDIRINC)$/osl   $(SOLARINCDIR)$/osl $(PIPEERROR) $(PERL) $(PRJ)$/util$/checkdiff.pl $(ODKCHECKFILE)
+    -diff -br $(DESTDIRINC)$/rtl   $(SOLARINCDIR)$/rtl $(PIPEERROR) $(PERL) $(PRJ)$/util$/checkdiff.pl $(ODKCHECKFILE)
+    -diff -br $(DESTDIRINC)$/sal   $(SOLARINCDIR)$/sal $(PIPEERROR) $(PERL) $(PRJ)$/util$/checkdiff.pl $(ODKCHECKFILE)
+    -diff -br $(DESTDIRINC)$/stl   $(SOLARINCDIR)$/stl $(PIPEERROR) $(PERL) $(PRJ)$/util$/checkdiff.pl $(ODKCHECKFILE)
+    -diff -br $(DESTDIRINC)$/store $(SOLARINCDIR)$/store $(PIPEERROR) $(PERL) $(PRJ)$/util$/checkdiff.pl $(ODKCHECKFILE)
+    -diff -br $(DESTDIRINC)$/vos   $(SOLARINCDIR)$/vos $(PIPEERROR) $(PERL) $(PRJ)$/util$/checkdiff.pl $(ODKCHECKFILE)
 # RAISE AN ERROR WHEN TAG FILE IS NOT THERE ANYMORE
     cat $(ODKCHECKFILE)
