@@ -309,7 +309,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS AWK SED LOCAL_SOLENV UPD SOURCEVERSION build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os OSVERSION PTHREAD_CFLAGS PTHREAD_LIBS ENABLE_CRASHDUMP ENABLE_VCTK VC_STANDARD ENABLE_DEBUG PRODUCT PROFULLSWITCH PROEXT ENABLE_SYMBOLS ENABLE_CUPS ENABLE_FONTCONFIG WITH_BINFILTER ENABLE_DIRECTX NETTOOLKIT ENABLE_RPATH WITH_MYSPELL_DICTS USE_SHELL WITH_MINGWIN TCSH GCC_HOME CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT COMPATH GCCVER HAVE_GCC_VISIBILITY_FEATURE GNUMAKE _cc PERL MSPDB_PATH COMEX MIDL_PATH CSC_PATH NMAKE_PATH FRAME_HOME CPP EGREP PAM_LINK CRYPT_LINK CXX CXXFLAGS ac_ct_CXX GXX_INCLUDE_PATH EXCEPTIONS CXXCPP STLPORT4 USE_SYSTEM_STL ALLOC BUILD_VER_STRING SOLAR_JAVA LANG JAVAINTERPRETER JAVACOMPILER JAVADOC AWTLIB JAVACACHE JAVA_HOME JDK XSLTPROC DMAKE BUILD_DMAKE EPM DPKG PKGMK BUILD_EPM PKGFORMAT RPM SYSTEM_STDLIBS SYSTEM_ZLIB SYSTEM_JPEG SYSTEM_EXPAT PKG_CONFIG FREETYPE_CFLAGS FREETYPE_LIBS SYSTEM_FREETYPE LIBWPD_CFLAGS LIBWPD_LIBS SYSTEM_LIBWPD LIBXML_CFLAGS LIBXML_LIBS SYSTEM_LIBXML PYTHON PYTHON_VERSION PYTHON_PREFIX PYTHON_EXEC_PREFIX PYTHON_PLATFORM pythondir pkgpythondir pyexecdir pkgpyexecdir SYSTEM_PYTHON PYTHON_CFLAGS PYTHON_LIBS SYSTEM_DB DB_VERSION DB_INCLUDES DB_JAR SYSTEM_HSQLDB HSQLDB_JAR SYSTEM_BSH BSH_JAR SYSTEM_XML_APIS XML_APIS_JAR SYSTEM_XERCES XERCES_JAR SYSTEM_XALAN XALAN_JAR SABLOTCONFIG SYSTEM_SABLOT SABLOT_LIBS CURLCONFIG SYSTEM_CURL CURL_CFLAGS CURL_LIBS SYSTEM_BOOST SYSTEM_ODBC_HEADERS WITH_MOZILLA WITH_LDAP WITH_OPENLDAP MOZILLAXPCOM_CFLAGS MOZILLAXPCOM_LIBS MOZ_NSPR_CFLAGS MOZ_NSPR_LIBS MOZ_NSS_CFLAGS MOZ_NSS_LIBS MOZILLA_VERSION MOZILLA_TOOLKIT MOZLIBREQ_CFLAGS MOZLIBREQ_LIBS BUILD_MOZAB SYSTEM_MOZILLA MOZ_INC MOZ_LIB MOZ_LIB_XPCOM MOZ_LDAP_CFLAGS SYSTEM_SANE_HEADER X_CFLAGS X_PRE_LIBS X_LIBS X_EXTRA_LIBS XINC XLIB SYSTEM_XRENDER_HEADERS XRENDER_LINK XMKMF SYSTEM_NAS NAS_INCLUDES ENABLE_NAS ENABLE_PASF SYSTEM_PORTAUDIO SYSTEM_SNDFILE BUILD_TYPE DISABLE_NEON NEON_CFLAGS NEON_LIBS SYSTEM_NEON AGG_CFLAGS AGG_LIBS SYSTEM_AGG MYSPELL_CFLAGS MYSPELL_LIBS SYSTEM_MYSPELL SYSTEM_HUNSPELL HUNSPELL_CFLAGS SYSTEM_HYPH SYSTEM_MYTHES PSDK_HOME DIRECTXSDK_HOME DIRECTXSDK_LIB NSIS_PATH EXTRA_DOTNET_FILES BISON FLEX PATCH GNUPATCH GNUCP CYGWIN_PATH ML_EXE ASM_HOME ZIP UNZIP ZIP_HOME LIBART_CFLAGS LIBART_LIBS WITH_LIBART WITH_GPC ENABLE_GTK ENABLE_KDE GNOMEVFS_CFLAGS GNOMEVFS_LIBS GCONF_CFLAGS GCONF_LIBS ENABLE_GNOMEVFS GTK_CFLAGS GTK_LIBS GDKPIXBUF_CFLAGS GDKPIXBUF_LIBS CAIRO_CFLAGS CAIRO_LIBS ENABLE_CAIRO SYSTEM_CAIRO MOC KDE_CFLAGS KDE_LIBS ENABLE_LOCKDOWN LIBSN_CFLAGS LIBSN_LIBS WITH_LIBSN GOBJECT_CFLAGS GOBJECT_LIBS ENABLE_EVOAB2 ENABLE_KAB WITH_FONTOOO SYSTEM_MSPACK WITH_FONTS SCPDEFS WITHOUT_PPDS WITHOUT_AFMS USE_XINERAMA XINERAMA_LINK ANT ANT_HOME ANT_LIB WITH_LANG WITH_DICT ENABLE_STATIC_GTK LOCAL_SOLVER LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS AWK SED LOCAL_SOLENV UPD SOURCEVERSION build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os OSVERSION PTHREAD_CFLAGS PTHREAD_LIBS ENABLE_CRASHDUMP ENABLE_VCTK VC_STANDARD ENABLE_DEBUG PRODUCT PROFULLSWITCH PROEXT ENABLE_SYMBOLS ENABLE_CUPS ENABLE_FONTCONFIG WITH_BINFILTER ENABLE_DIRECTX NETTOOLKIT ENABLE_RPATH WITH_MYSPELL_DICTS USE_SHELL WITH_MINGWIN SHELLPATH GCC_HOME CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT COMPATH GCCVER HAVE_GCC_VISIBILITY_FEATURE GNUMAKE _cc PERL MSPDB_PATH COMEX MIDL_PATH CSC_PATH NMAKE_PATH FRAME_HOME CPP EGREP PAM_LINK CRYPT_LINK CXX CXXFLAGS ac_ct_CXX GXX_INCLUDE_PATH EXCEPTIONS CXXCPP STLPORT4 USE_SYSTEM_STL ALLOC BUILD_VER_STRING SOLAR_JAVA LANG JAVAINTERPRETER JAVACOMPILER JAVADOC AWTLIB JAVACACHE JAVA_HOME JDK XSLTPROC DMAKE BUILD_DMAKE EPM DPKG PKGMK BUILD_EPM PKGFORMAT RPM SYSTEM_STDLIBS SYSTEM_ZLIB SYSTEM_JPEG SYSTEM_EXPAT PKG_CONFIG FREETYPE_CFLAGS FREETYPE_LIBS SYSTEM_FREETYPE LIBWPD_CFLAGS LIBWPD_LIBS SYSTEM_LIBWPD LIBXML_CFLAGS LIBXML_LIBS SYSTEM_LIBXML PYTHON PYTHON_VERSION PYTHON_PREFIX PYTHON_EXEC_PREFIX PYTHON_PLATFORM pythondir pkgpythondir pyexecdir pkgpyexecdir SYSTEM_PYTHON PYTHON_CFLAGS PYTHON_LIBS SYSTEM_DB DB_VERSION DB_INCLUDES DB_JAR SYSTEM_HSQLDB HSQLDB_JAR SYSTEM_BSH BSH_JAR SYSTEM_XML_APIS XML_APIS_JAR SYSTEM_XERCES XERCES_JAR SYSTEM_XALAN XALAN_JAR SABLOTCONFIG SYSTEM_SABLOT SABLOT_LIBS CURLCONFIG SYSTEM_CURL CURL_CFLAGS CURL_LIBS SYSTEM_BOOST SYSTEM_ODBC_HEADERS WITH_MOZILLA WITH_LDAP WITH_OPENLDAP MOZILLAXPCOM_CFLAGS MOZILLAXPCOM_LIBS MOZ_NSPR_CFLAGS MOZ_NSPR_LIBS MOZ_NSS_CFLAGS MOZ_NSS_LIBS MOZILLA_VERSION MOZILLA_TOOLKIT MOZLIBREQ_CFLAGS MOZLIBREQ_LIBS BUILD_MOZAB SYSTEM_MOZILLA MOZ_INC MOZ_LIB MOZ_LIB_XPCOM MOZ_LDAP_CFLAGS SYSTEM_SANE_HEADER X_CFLAGS X_PRE_LIBS X_LIBS X_EXTRA_LIBS XINC XLIB SYSTEM_XRENDER_HEADERS XRENDER_LINK XMKMF SYSTEM_NAS NAS_INCLUDES ENABLE_NAS ENABLE_PASF SYSTEM_PORTAUDIO SYSTEM_SNDFILE BUILD_TYPE DISABLE_NEON NEON_CFLAGS NEON_LIBS SYSTEM_NEON AGG_CFLAGS AGG_LIBS SYSTEM_AGG MYSPELL_CFLAGS MYSPELL_LIBS SYSTEM_MYSPELL SYSTEM_HUNSPELL HUNSPELL_CFLAGS SYSTEM_HYPH SYSTEM_MYTHES PSDK_HOME DIRECTXSDK_HOME DIRECTXSDK_LIB NSIS_PATH EXTRA_DOTNET_FILES BISON FLEX PATCH GNUPATCH GNUCP CYGWIN_PATH ML_EXE ASM_HOME ZIP UNZIP ZIP_HOME LIBART_CFLAGS LIBART_LIBS WITH_LIBART WITH_GPC ENABLE_GTK ENABLE_KDE GNOMEVFS_CFLAGS GNOMEVFS_LIBS GCONF_CFLAGS GCONF_LIBS ENABLE_GNOMEVFS GTK_CFLAGS GTK_LIBS GDKPIXBUF_CFLAGS GDKPIXBUF_LIBS CAIRO_CFLAGS CAIRO_LIBS ENABLE_CAIRO SYSTEM_CAIRO MOC KDE_CFLAGS KDE_LIBS ENABLE_LOCKDOWN LIBSN_CFLAGS LIBSN_LIBS WITH_LIBSN GOBJECT_CFLAGS GOBJECT_LIBS ENABLE_EVOAB2 ENABLE_KAB WITH_FONTOOO SYSTEM_MSPACK WITH_FONTS SCPDEFS WITHOUT_PPDS WITHOUT_AFMS USE_XINERAMA XINERAMA_LINK ANT ANT_HOME ANT_LIB WITH_LANG WITH_DICT ENABLE_STATIC_GTK LOCAL_SOLVER LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -1262,11 +1262,14 @@ Optional Packages:
 
                           Usage: --with-mingwin=yes
 
-  --with-use-shell        For Windows users, use this option to override the
-                          default shell to be used for the build environment.
-                          Supported options: tcsh (default) and 4nt.
+  --with-use-shell        Use this option to override the default shell to be
+                          used for the build environment.
+                          Supported options:
+                            tcsh (default)
+                            bash
+                            4nt (windows only)
 
-                          Usage: --with-use-shell=tcsh|4nt
+                          Usage: --with-use-shell=tcsh|bash|4nt
 
   --with-build-version    Allows the builder to add a custom version tag
                           that will appear in the Help/About box for QA
@@ -3124,9 +3127,9 @@ fi
 echo "$as_me:$LINENO: checking which shell to use" >&5
 echo $ECHO_N "checking which shell to use... $ECHO_C" >&6
 if test $_os = "WINNT"; then
-   if test "$with_use_shell" != "tcsh" -a "$with_use_shell" != "4nt"; then
-      { { echo "$as_me:$LINENO: error: only \"tcsh\" or \"4nt\" are supported options" >&5
-echo "$as_me: error: only \"tcsh\" or \"4nt\" are supported options" >&2;}
+   if test "$with_use_shell" != "tcsh" -a "$with_use_shell" != "bash" -a "$with_use_shell" != "4nt"; then
+      { { echo "$as_me:$LINENO: error: only \"tcsh\",\"bash\" or \"4nt\" are supported options" >&5
+echo "$as_me: error: only \"tcsh\",\"bash\" or \"4nt\" are supported options" >&2;}
    { (exit 1); exit 1; }; }
    fi
                      if test -L $AWK -o -L `which awk` -o -L `which tar` -o -L `which gunzip` ; then
@@ -3145,15 +3148,21 @@ link, and copy the program to the name of the link." >&2;}
             WITH_MINGWIN="yes"
          fi
       fi
-            if test "$WITH_MINGWIN" = "yes"; then
-      with_use_shell="tcsh"
+            if test "$WITH_MINGWIN" = "yes" ; then
+      if test "$with_use_shell" = "4nt" -o "x$with_use_shell" = "x"; then
+         with_use_shell="tcsh"
+      fi
       if test -z "$CC"; then
          CC="gcc -mno-cygwin"
          CXX="g++ -mno-cygwin"
       fi
    fi
 else
-            with_use_shell="tcsh"
+            if test "$with_use_shell" != "tcsh" -a "$with_use_shell" != "bash"; then
+      { { echo "$as_me:$LINENO: error: only \"tcsh\" or \"bash\" are supported options" >&5
+echo "$as_me: error: only \"tcsh\" or \"bash\" are supported options" >&2;}
+   { (exit 1); exit 1; }; }
+   fi
 fi
 USE_SHELL="$with_use_shell"
 echo "$as_me:$LINENO: result: $USE_SHELL" >&5
@@ -3161,17 +3170,17 @@ echo "${ECHO_T}$USE_SHELL" >&6
 
 
 
-if test "$_os" != "WINNT" -o "$with_use_shell" != "4nt"; then
+if test "$with_use_shell" == "tcsh"; then
    # Extract the first word of "tcsh", so it can be a program name with args.
 set dummy tcsh; ac_word=$2
 echo "$as_me:$LINENO: checking for $ac_word" >&5
 echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
-if test "${ac_cv_path_TCSH+set}" = set; then
+if test "${ac_cv_path_SHELLPATH+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
-  case $TCSH in
+  case $SHELLPATH in
   [\\/]* | ?:[\\/]*)
-  ac_cv_path_TCSH="$TCSH" # Let the user override the test with a path.
+  ac_cv_path_SHELLPATH="$SHELLPATH" # Let the user override the test with a path.
   ;;
   *)
   as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
@@ -3181,7 +3190,7 @@ do
   test -z "$as_dir" && as_dir=.
   for ac_exec_ext in '' $ac_executable_extensions; do
   if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_path_TCSH="$as_dir/$ac_word$ac_exec_ext"
+    ac_cv_path_SHELLPATH="$as_dir/$ac_word$ac_exec_ext"
     echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
     break 2
   fi
@@ -3191,27 +3200,74 @@ done
   ;;
 esac
 fi
-TCSH=$ac_cv_path_TCSH
+SHELLPATH=$ac_cv_path_SHELLPATH
 
-if test -n "$TCSH"; then
-  echo "$as_me:$LINENO: result: $TCSH" >&5
-echo "${ECHO_T}$TCSH" >&6
+if test -n "$SHELLPATH"; then
+  echo "$as_me:$LINENO: result: $SHELLPATH" >&5
+echo "${ECHO_T}$SHELLPATH" >&6
 else
   echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
 fi
 
-   if test -z "$TCSH"; then
+   if test -z "$SHELLPATH"; then
       { { echo "$as_me:$LINENO: error: tcsh not found in \$PATH" >&5
 echo "$as_me: error: tcsh not found in \$PATH" >&2;}
    { (exit 1); exit 1; }; }
    else
-      TCSH=`echo $TCSH | $SED -n "s/\/tcsh//p"`
+      SHELLPATH=`echo $SHELLPATH | $SED -n "s/\/tcsh//p"`
+   fi
+elif test "$with_use_shell" == "bash"; then
+   # Extract the first word of "bash", so it can be a program name with args.
+set dummy bash; ac_word=$2
+echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
+if test "${ac_cv_path_SHELLPATH+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  case $SHELLPATH in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_SHELLPATH="$SHELLPATH" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_path_SHELLPATH="$as_dir/$ac_word$ac_exec_ext"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+
+  ;;
+esac
+fi
+SHELLPATH=$ac_cv_path_SHELLPATH
+
+if test -n "$SHELLPATH"; then
+  echo "$as_me:$LINENO: result: $SHELLPATH" >&5
+echo "${ECHO_T}$SHELLPATH" >&6
+else
+  echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+
+   if test -z "$SHELLPATH"; then
+      { { echo "$as_me:$LINENO: error: bash not found in \$PATH" >&5
+echo "$as_me: error: bash not found in \$PATH" >&2;}
+   { (exit 1); exit 1; }; }
+   else
+      SHELLPATH=`echo $SHELLPATH | $SED -n "s/\/bash//p"`
    fi
 else
-   { echo "$as_me:$LINENO: WARNING: Windows 4NT builds don't need tcsh" >&5
-echo "$as_me: WARNING: Windows 4NT builds don't need tcsh" >&2;}
-   TCSH="NO_TCSH_NEEDED"
+   { echo "$as_me:$LINENO: WARNING: Windows 4NT builds don't test for the shell" >&5
+echo "$as_me: WARNING: Windows 4NT builds don't test for the shell" >&2;}
+   SHELLPATH="NO_SHELLPATH_NEEDED"
 fi
 
 
@@ -13967,7 +14023,7 @@ else
 
   # It would also be nice to do this for all -L options, not just this one.
   if test -n "$x_libraries"; then
-    X_LIBS="$X_LIBS -L$x_libraries"
+    X_LIBS="$X_LIBS -L$x_libraries -ldl"
     # For Solaris; some versions of Sun CC require a space after -R and
     # others require no space.  Words are not sufficient . . . .
     case `(uname -sr) 2>/dev/null` in
@@ -21382,9 +21438,10 @@ for ac_i in : $LIBOBJS; do test "x$ac_i" = x: && continue
   # 1. Remove the extension, and $U if already installed.
   ac_i=`echo "$ac_i" |
 	 sed 's/\$U\././;s/\.o$//;s/\.obj$//'`
-  # 2. Add them.
-  ac_libobjs="$ac_libobjs $ac_i\$U.$ac_objext"
-  ac_ltlibobjs="$ac_ltlibobjs $ac_i"'$U.lo'
+  # 2. Prepend LIBOBJDIR.  When used with automake>=1.10 LIBOBJDIR
+  #    will be set to the directory where LIBOBJS objects are built.
+  ac_libobjs="$ac_libobjs \${LIBOBJDIR}$ac_i\$U.$ac_objext"
+  ac_ltlibobjs="$ac_ltlibobjs \${LIBOBJDIR}$ac_i"'$U.lo'
 done
 LIBOBJS=$ac_libobjs
 
@@ -21940,7 +21997,7 @@ s,@ENABLE_RPATH@,$ENABLE_RPATH,;t t
 s,@WITH_MYSPELL_DICTS@,$WITH_MYSPELL_DICTS,;t t
 s,@USE_SHELL@,$USE_SHELL,;t t
 s,@WITH_MINGWIN@,$WITH_MINGWIN,;t t
-s,@TCSH@,$TCSH,;t t
+s,@SHELLPATH@,$SHELLPATH,;t t
 s,@GCC_HOME@,$GCC_HOME,;t t
 s,@CC@,$CC,;t t
 s,@CFLAGS@,$CFLAGS,;t t
