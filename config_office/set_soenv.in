@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.106 $
-# Date:        $Date: 2006-07-05 21:12:45 $
+# Version:     $Revision: 1.107 $
+# Date:        $Date: 2006-07-05 22:32:39 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -50,7 +50,7 @@ my ( $outfile, $outfile_sh, $outfile_bat, $bootfile, $newline, $comment, $commen
 # Platform independent constant values.
 my @DICTIONARIES = ("DADK", "DEDE", "ENGB", "ENUS", "HUHU", "ITIT", "RURU", "THTH", "SWTZ" );
 my ( $CALL_CDECL, $COMMON_OUTDIR, $BMP_WRITES_FLAG, 
-     $common_build, $MK_UNROLL, $NO_REC_RES, $SO3, $SOLAR_JAVA, 
+     $common_build, $NO_REC_RES, $SO3, $SOLAR_JAVA, 
      $SOLAR_PLUGIN, $TF_PACKAGES, $TF_SDBAPI, $TF_FILEURL, $UPDATER, $BUILD_DELIVER, $VCL, 
      $TF_CFGDATA, $TF_SVDATA, $CC, $CXX,
      $BUILD_SOSL, $ENABLEUNICODE, $NEW_JAR_PACK, $NO_BSYMBOLIC, 
@@ -69,7 +69,7 @@ my ( $BIG_SVX, $COM, $CPU, $CPUNAME, $CVER, $GLIBC, $GUI, $GUIBASE, $GUIENV,
 # Help variables.
 my ( $USR, $ETC, $BIN, $LIB, $LIB64, $INC, $INCLUDE, $DEV, $OPT, $LOCAL, $SOLENV, $SOLVER, $CONFIG, 
      $USR_BIN, $USR_LIB, $USR_LOCAL, $USR_CCS, $JAVA_BIN, $JAVA_LIB, $JAVA_INCLUDE,
-     $SOLARENVINC, $USR_DT, $USR_OPENWIN, $TCSH_PATH, $XLIB, $XINC,
+     $SOLARENVINC, $USR_DT, $USR_OPENWIN, $SHELL_PATH, $XLIB, $XINC,
      $CYGWIN_PATH, $language, $dict, $ASM_PATH, $ps_STLPORT_LIB, $L_STLPORT_LIB,
      $STLPORT_stlport, $STLPORT_inc_stlport, $PERL_PATH );
 
@@ -179,7 +179,6 @@ $RSC_ONCE             = "TRUE";
 $CALL_CDECL           = "TRUE";
 $COMMON_OUTDIR        = "";
 $common_build         = "";
-$MK_UNROLL            = "TRUE";
 $MULTITHREAD_OBJ      = "";
 $NO_REC_RES           = "TRUE";
 $NO_HIDS              = "TRUE";
@@ -681,13 +680,26 @@ $JAVA_HOME = PosixFormat('@JAVA_HOME@') ;
 if ( $platform =~ m/cygwin/ ) {
    $JAVA_HOME =~ s/[\s\/]+$//;	# remove trailing \n or \/ if there is any.
 }
-# 3. Tcsh path.
-# Check whether autoconf found the Tcsh path.
-if ("@USE_SHELL@" eq "tcsh") 
+# 3. shell path.
+# Check whether autoconf found a valid shell path.
+if ("@USE_SHELL@" eq "tcsh")
 {  # SHELL as argument from autoconf.
-   $SHELL = '@TCSH@'."\/tcsh";
-   $TCSH_PATH = '@TCSH@';
+   $SHELL_PATH = '@SHELLPATH@';
+   $SHELL = '@SHELLPATH@'."\/tcsh";
 }
+elsif ("@USE_SHELL@" eq "bash")
+{
+   $SHELL_PATH = '@SHELLPATH@';
+   $SHELL = '@SHELLPATH@'."\/bash";
+}
+elsif ("@USE_SHELL@" eq "4nt")
+{  # @SHELLPATH@ is NO_SHELLPATH_NEEDED for 4nt - 
+   $SHELL_PATH = '';
+}
+else {
+   die "Not a recognized shell: @USE_SHELL@ !";
+}
+
 
 if ( '@STLPORT4@' eq $no_stl )
 {
@@ -1040,9 +1052,10 @@ if ($platform =~ m/linux-gnu|netbsd|odf1|irix|freebsd|aix|solaris/)
    } else {
       @javaBits = (); 
    }
-   $PATH              = GetCorrectPath ($PATH, $COMPATH, $CC,
+   $PATH              = GetCorrectPath ($PATH,
+                                        $COMPATH, $CC,
                                         $PERL_PATH, 'perl',
-					$TCSH_PATH, 'tcsh',
+                                        $SHELL_PATH, '@USE_SHELL@',
                                         @javaBits);
 }
 
@@ -1123,9 +1136,9 @@ elsif ($platform =~ m/cygwin/)
    {
       $PATH          .= $ps.$PERL_PATH;
    }
-   # Check if $TCSH_PATH is already set in PATH
-   if ( ( "'@USE_SHELL@'" eq "tcsh" ) && ( $PATH !~ /(?:[:]|\A)(?:$TCSH_PATH)(?:[:]|\Z)/ ) )
-   {   $PATH          .= $ps.$TCSH_PATH;
+   # Check if $SHELL_PATH is already set in PATH
+   if ( ( "@USE_SHELL@" ne "4nt" ) && ( $PATH !~ /(?:[:]|\A)(?:$SHELL_PATH)(?:[:]|\Z)/ ) )
+   {   $PATH          .= $ps.$SHELL_PATH;
    }
    # Check if $CYGWIN_PATH is already set in PATH
    if ( $PATH !~ /(?:[:]|\A)(?:$CYGWIN_PATH)(?:[:]|\Z)/ ) {
@@ -1433,7 +1446,6 @@ ToFile( "COMMON_OUTDIR",     $COMMON_OUTDIR,     "e" );
 ToFile( "common_build",      $common_build,      "e" );
 ToFile( "BMP_WRITES_FLAG",   $BMP_WRITES_FLAG,   "e" );
 ToFile( "BUILD_SOSL_RELEASE", $BUILD_SOSL_RELEASE, "e" );
-ToFile( "MK_UNROLL",         $MK_UNROLL,         "e" );
 ToFile( "MULTITHREAD_OBJ",   $MULTITHREAD_OBJ,   "e" );
 ToFile( "NO_REC_RES",        $NO_REC_RES,        "e" );
 ToFile( "NO_HIDS",           $NO_HIDS,           "e" );
@@ -1952,17 +1964,10 @@ print "*********************************************************".
 $bootfile = "bootstrap";
 open( OUT, ">$bootfile" ) ||
 die "Cannot open $bootfile: $!\n";
-if ( "@USE_SHELL@" eq "4nt" )
-{  $SHELL="tcsh";
-}
-print OUT "#!$SHELL -f\n";
-close( OUT ) || print "Can't close $bootfile: $!";
-open( OUT, ">>$bootfile" ) ||
-   die "Cannot open $bootfile: $!\n";
-print OUT "setenv _ISBOOTSTRAP_ TRUE ; source $SRC_ROOT/$outfile\n"; 
+print OUT "#!/bin/sh\n";
+print OUT "export _ISBOOTSTRAP_=TRUE ; source $SRC_ROOT/$outfile.sh\n"; 
 close( OUT ) || print "Can't close $bootfile: $!";
 system(`cat bootstrap.1 >> bootstrap`);
-system(`cat bootstrap.2 >> bootstrap`);
 system(`chmod +x bootstrap`);
 #
 #--------------------------------------------------------
@@ -1975,8 +1980,8 @@ if (rename( $bootfile, $tmp ) ne 1)
 }
 
 print "Configure completed\n";
-if ($platform !~ m/cygwin/ ) {
-	print "You may now run $tmp in $SRC_ROOT\n";
+if ( "@USE_SHELL@" ne "4nt" ) {
+	print "You may now run ./bootstrap in $SRC_ROOT\n";
 }
 if ( $Warning ne "" ) {
 	print "***** WARNINGS ISSUED *****";
