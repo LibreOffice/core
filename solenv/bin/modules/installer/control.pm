@@ -4,9 +4,9 @@
 #
 #   $RCSfile: control.pm,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: hr $ $Date: 2006-05-08 15:28:51 $
+#   last change: $Author: kz $ $Date: 2006-07-05 21:04:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -139,6 +139,106 @@ sub check_system_path
         }
     }
 
+}
+
+######################################################################
+# Determining the version of file makecab.exe
+######################################################################
+
+sub get_makecab_version
+{
+    my $makecabversion = -1;
+
+    my $systemcall = "makecab.exe |";
+    my @makecaboutput = ();
+
+    open (CAB, $systemcall);
+    while (<CAB>) { push(@makecaboutput, $_); }
+    close (CAB);
+
+    my $returnvalue = $?;   # $? contains the return value of the systemcall
+
+    if ($returnvalue)
+    {
+        $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
+        push( @installer::globals::globallogfileinfo, $infoline);
+    }
+    else
+    {
+        $infoline = "Success: Executed \"$systemcall\" successfully!\n";
+        push( @installer::globals::globallogfileinfo, $infoline);
+
+        my $versionline = "";
+
+        for ( my $i = 0; $i <= $#makecaboutput; $i++ )
+        {
+            if ( $makecaboutput[$i] =~ /\bVersion\b/i )
+            {
+                $versionline = $makecaboutput[$i];
+                last;
+            }
+        }
+
+        $infoline = $versionline;
+        push( @installer::globals::globallogfileinfo, $infoline);
+
+        if ( $versionline =~ /\bVersion\b\s+(\d+[\d\.]+\d+)\s+/ )
+        {
+            $makecabversion = $1;
+        }
+
+        # Only using the first number
+
+        if ( $makecabversion =~ /^\s*(\d+?)\D*/ )
+        {
+            $makecabversion = $1;
+        }
+
+        $infoline = "Using version: " . $makecabversion . "\n";
+        push( @installer::globals::globallogfileinfo, $infoline);
+    }
+
+    return $makecabversion;
+}
+
+######################################################################
+# Checking the version of file makecab.exe
+######################################################################
+
+sub check_makecab_version
+{
+    # checking version of makecab.exe
+    # Now it is guaranteed, that makecab.exe is in the path
+
+    my $do_check = 1;
+
+    my $makecabversion = get_makecab_version();
+
+    my $infoline = "Tested version: " . $installer::globals::controlledmakecabversion . "\n";
+    push( @installer::globals::globallogfileinfo, $infoline);
+
+    if ( $makecabversion < 0 ) { $do_check = 0; } # version could not be determined
+
+    if ( $do_check )
+    {
+        if ( $makecabversion < $installer::globals::controlledmakecabversion )
+        {
+            # warning for OOo, error for inhouse products
+            if ( $installer::globals::isopensourceproduct )
+            {
+                installer::logger::print_warning("Old version of makecab.exe. Found version: \"$makecabversion\", tested version: \"$installer::globals::controlledmakecabversion\"!\n");
+            }
+            else
+            {
+                installer::exiter::exit_program("makecab.exe too old. Found version: \"$makecabversion\", required version: \"$installer::globals::controlledmakecabversion\"!", "check_makecab_version");
+            }
+        }
+    }
+    else
+    {
+        $infoline = "Warning: No version check of makecab.exe\n";
+        push( @installer::globals::globallogfileinfo, $infoline);
+    }
 }
 
 ######################################################################
