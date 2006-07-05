@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_javav.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:45:45 $
+#   last change: $Author: kz $ $Date: 2006-07-05 21:58:32 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -42,8 +42,8 @@ JAVAVERMK:=$(INCCOM)$/java_ver.mk
 
 .IF "$(SOLAR_JAVA)"!=""
 JFLAGSVERSION=-version
-JFLAGSVERSION_CMD=-version |& $(AWK) -f $(SOLARENV)$/bin$/getcompver.awk
-JFLAGSNUMVERSION_CMD=-version |& $(AWK) -v num=true -f $(SOLARENV)$/bin$/getcompver.awk
+JFLAGSVERSION_CMD=-version $(PIPEERROR) $(AWK) -f $(SOLARENV)$/bin$/getcompver.awk
+JFLAGSNUMVERSION_CMD=-version $(PIPEERROR) $(AWK) -v num=true -f $(SOLARENV)$/bin$/getcompver.awk
 
 # that's the version known by the specific
 # java version
