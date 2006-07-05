@@ -4,9 +4,9 @@
 #
 #   $RCSfile: wntmsci10.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-19 17:18:03 $
+#   last change: $Author: kz $ $Date: 2006-07-05 22:06:01 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,7 @@ CXX+= /NMttNoLines
 # Flags for COMEX == 10
 
 CFLAGS+=-Zm500 -Zc:forScope -GR
-CFLAGS+=-c -nologo -Gs $(NOLOGO) $(MINUS_I)$(INCLUDE)
+CFLAGS+=-c -nologo -Gs $(NOLOGO)
 
 CDEFS+= -D_X86_=1
 
@@ -267,7 +267,7 @@ CDEFS+=-D_MT
 COMMENTFLAG=/COMMENT:"$(PRJNAME)_$(UPD)_$(VCSID)_"
 
 LINK=$(WRAPCMD) link $(COMMENTFLAG) $(NOLOGO) /MACHINE:IX86
-LINKOUTPUTFILTER= |& $(GREP) -v "LNK4197:"
+LINKOUTPUTFILTER= $(PIPEERROR) $(GREP) -v "LNK4197:"
 .IF "$(PRODUCT)"!="full"
 .ELSE
 LINKFLAGS=/MAP /OPT:NOREF
