@@ -4,9 +4,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.64 $
+#   $Revision: 1.65 $
 #
-#   last change: $Author: rt $ $Date: 2006-05-04 09:27:31 $
+#   last change: $Author: kz $ $Date: 2006-07-05 21:03:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -225,6 +225,12 @@ if ( $installer::globals::globallogging ) { installer::files::save_hash($logging
 # checking, whether this is an opensource product
 
 if (!($installer::globals::is_copy_only_project)) { installer::ziplist::set_manufacturer($allvariableshashref); }
+
+##############################################
+# Checking version of makecab.exe
+##############################################
+
+if ( $installer::globals::iswindowsbuild ) { installer::control::check_makecab_version(); }
 
 ##########################################################
 # Getting the include path from the settings in zip list
@@ -538,13 +544,30 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
     else { $logminor = $installer::globals::minor; }
 
     my $loglanguagestring = $$languagestringref;
-    if ( $installer::globals::is_unix_multi ) { $loglanguagestring = $installer::globals::unixmultipath; }
+    if ( $installer::globals::is_unix_multi ) { $loglanguagestring = $installer::globals::unixmultipath_orig; }
+
+    my $loglanguagestring_orig = $loglanguagestring;
+    if (length($loglanguagestring) > 120)
+    {
+        chomp(my $shorter = `echo $loglanguagestring | md5sum | sed -e "s/  -//g"`);
+        $loglanguagestring = $shorter;
+    }
 
     $installer::globals::logfilename = "log_" . $installer::globals::build . "_" . $logminor . "_" . $loglanguagestring . ".log";
 
     if (( ! $installer::globals::is_unix_multi ) || ( $isfirstrun )) { $loggingdir = $loggingdir . $loglanguagestring . $installer::globals::separator; }
 
     installer::systemactions::create_directory($loggingdir);
+
+    if ($loglanguagestring ne $loglanguagestring_orig) {
+        (my $dir = $loggingdir) =~ s!/$!!;
+        open(my $F1, "> $dir.dir");
+        open(my $F2, "> " . $loggingdir . $installer::globals::logfilename . '.file');
+        my @s = map { "$_\n" } split('_', $loglanguagestring_orig);
+        print $F1 @s;
+        print $F2 @s;
+    }
+
     $installer::globals::exitlog = $loggingdir;
 
     ##############################################################
