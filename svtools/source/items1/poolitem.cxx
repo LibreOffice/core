@@ -4,9 +4,9 @@
  *
  *  $RCSfile: poolitem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 21:17:36 $
+ *  last change: $Author: kz $ $Date: 2006-07-05 21:39:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,11 +78,15 @@ TYPEINIT1(SfxSetItem, SfxPoolItem);
 // @@@ TYPEINIT1(SfxItemChangedHint, SfxHint);
 
 // ------------------------------------------------------------------------
+#if OSL_DEBUG_LEVEL > 1
+static ULONG nItemCount = 0;
+
 const char* pw1 = "Wow! 10.000 items!";
 const char* pw2 = "Wow! 100.000 items!";
 const char* pw3 = "Wow! 1.000.000 items!";
 const char* pw4 = "Wow! 50.000.000 items!";
 const char* pw5 = "Wow! 10.000.000 items!";
+#endif
 
 IMPL_PTRHINT(SfxPoolItemHint,SfxPoolItem)
 
