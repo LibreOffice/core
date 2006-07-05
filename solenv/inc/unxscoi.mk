@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxscoi.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-19 17:16:48 $
+#   last change: $Author: kz $ $Date: 2006-07-05 22:04:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@ ARCH_FLAGS*=-mpentium
 
 CXX*=/nw386/dev/s/solenv/unxscoi/bin/g++
 CC*=/nw386/dev/s/solenv/unxscoi/bin/gcc
-CFLAGS=-c $(INCLUDE)
+CFLAGS=-c
 CFLAGSCC=$(ARCH_FLAGS)
 CFLAGSEXCEPTIONS=-fexceptions
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
