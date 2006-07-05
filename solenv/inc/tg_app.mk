@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_app.mk,v $
 #
-#   $Revision: 1.54 $
+#   $Revision: 1.55 $
 #
-#   last change: $Author: hr $ $Date: 2006-04-20 14:14:11 $
+#   last change: $Author: kz $ $Date: 2006-07-05 21:57:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -32,37 +32,6 @@
 #     MA  02111-1307  USA
 #
 #*************************************************************************
-
-
-.IF "$(MULTI_APP_FLAG)" == ""
-$(APP1TARGETN) .NULL : APP1
-
-$(APP2TARGETN) .NULL : APP2
-
-$(APP3TARGETN) .NULL : APP3
-
-$(APP4TARGETN) .NULL : APP4
-
-$(APP5TARGETN) .NULL : APP5
-
-$(APP6TARGETN) .NULL : APP6
-
-$(APP7TARGETN) .NULL : APP7
-
-$(APP8TARGETN) .NULL : APP8
-
-$(APP9TARGETN) .NULL : APP9
-
-.ENDIF
-
-.IF "$(MULTI_APP_FLAG)"==""
-APP1 APP2 APP3 APP4 APP5 APP6 APP7 APP8 APP9 :
-.IF "$(GUI)" == "UNX"
-    @echo $(SHELL) AUSE $(COMSPEC) MARTIN $(SHELLFLAGS)
-.ENDIF
-    +@dmake $(APP$(TNR)TARGETN) MULTI_APP_FLAG=true TNR:=$(TNR) $(MFLAGS) $(CALLMACROS)
-.ELSE
-
 
 #######################################################
 # instructions for linking
@@ -154,7 +123,7 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(APP$(TNR)LINKER) $(APP$(TNR)LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    $(APP$(TNR)OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
+    $(APP$(TNR)OBJS:s/.obj/.o/) '\' >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP$(TNR)LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
     @+echo $(APP$(TNR)LINKTYPEFLAG) $(APP$(TNR)LIBSALCPPRT) $(APP$(TNR)STDLIBS) $(APP$(TNR)STDLIB) $(STDLIB$(TNR)) -o $@ >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
@@ -212,7 +181,7 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
         $(APP$(TNR)STDLIBS) \
         $(APP$(TNR)STDLIB) $(STDLIB$(TNR)))
         $(SED) -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP$(TNR)TARGETN:b)_linkobj.lst >> $(MISC)\$(APP$(TNR)TARGET).lst
-        +$(IFEXIST) $(MISC)\$(APP$(TNR)TARGET).lst $(THEN) type $(MISC)\$(APP$(TNR)TARGET).lst  >> $(MISC)\$(APP$(TNR)TARGET).lnk
+        +$(IFEXIST) $(MISC)$/$(APP$(TNR)TARGET).lst $(THEN) type $(MISC)$/$(APP$(TNR)TARGET).lst  >> $(MISC)$/$(APP$(TNR)TARGET).lnk $(FI)
         $(APP$(TNR)LINKER) @$(MISC)\$(APP$(TNR)TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
 .IF "$(APP$(TNR)TARGET)" == "loader"
@@ -235,4 +204,3 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
 # unroll end
 #######################################################
 
-.ENDIF		# "$(MULTI_APP_FLAG)"==""
