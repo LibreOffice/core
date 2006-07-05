@@ -4,9 +4,9 @@
 #
 #   $RCSfile: scriptitems.pm,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: hr $ $Date: 2005-11-17 17:59:47 $
+#   last change: $Author: kz $ $Date: 2006-07-05 21:13:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1004,8 +1004,11 @@ sub add_License_Files_into_Installdir
     {
         my $onefile = ${$filesarrayref}[$i];
         my $destination = $onefile->{'destination'};
+        my $styles = "";
+        if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'}; }
 
-        if ( $destination =~ /^\s*share\Q$installer::globals::separator\Ereadme\Q$installer::globals::separator\E(\w+?)_?$defaultlanguage\.?(\w*)\s*/ )
+        if ( ( $destination =~ /^\s*share\Q$installer::globals::separator\Ereadme\Q$installer::globals::separator\E(\w+?)_?$defaultlanguage\.?(\w*)\s*/ )
+            || (( $styles =~ /\bROOTLICENSEFILE\b/ ) && ( $destination =~ /\Q$installer::globals::separator\E?(\w+?)_?$defaultlanguage\.?(\w*?)\s*$/ )) )
         {
             my $filename = $1;
             my $extension = $2;
