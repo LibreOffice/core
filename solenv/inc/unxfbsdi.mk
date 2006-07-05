@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxfbsdi.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-19 17:13:50 $
+#   last change: $Author: kz $ $Date: 2006-07-05 22:01:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,7 @@ CFLAGS_SYSBASE:=-isystem $(SYSBASE)$/usr$/include
 CXX+:=$(CFLAGS_SYSBASE)
 CC+:=$(CFLAGS_SYSBASE)
 .ENDIF          # "$(SYSBASE)"!=""
-CFLAGS+=-fmessage-length=0 -c $(INCLUDE)
+CFLAGS+=-fmessage-length=0 -c
 
 # flags to enable build with symbols; required for crashdump feature
 .IF "$(ENABLE_SYMBOLS)"=="SMALL"
