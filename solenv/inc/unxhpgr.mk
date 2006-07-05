@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxhpgr.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:53:14 $
+#   last change: $Author: kz $ $Date: 2006-07-05 22:01:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,7 @@ ARCH_FLAGS*=
 CXX=g++
 CC=gcc
 CFLAGSWALL=-Wall
-CFLAGS=-nostdinc -c $(INCLUDE) -I/nw386/dev/s/solenv/unxhpgr/lib/gcc-lib/hppa1.1-hp-hpux10.20/egcs-2.91.57/include
+CFLAGS=-nostdinc -c
 CFLAGSCC=-pipe -fguiding-decls $(ARCH_FLAGS)
 CFLAGSCXX=-pipe -fguiding-decls $(ARCH_FLAGS)
 PICSWITCH:=-fPIC
