@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_zip.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: rt $ $Date: 2005-12-14 15:38:00 $
+#   last change: $Author: kz $ $Date: 2006-07-05 21:59:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -33,75 +33,7 @@
 #
 #*************************************************************************
 
-
-.IF "$(MULTI_ZIP_FLAG)" == ""
-$(ZIP1TARGETN) .NULL : ZIP1
-ZIP1 ?= TNR!:=1
-
-$(ZIP2TARGETN) .NULL : ZIP2
-ZIP2 ?= TNR!:=2
-
-$(ZIP3TARGETN) .NULL : ZIP3
-ZIP3 ?= TNR!:=3
-
-$(ZIP4TARGETN) .NULL : ZIP4
-ZIP4 ?= TNR!:=4
-
-$(ZIP5TARGETN) .NULL : ZIP5
-ZIP5 ?= TNR!:=5
-
-$(ZIP6TARGETN) .NULL : ZIP6
-ZIP6 ?= TNR!:=6
-
-$(ZIP7TARGETN) .NULL : ZIP7
-ZIP7 ?= TNR!:=7
-
-$(ZIP8TARGETN) .NULL : ZIP8
-ZIP8 ?= TNR!:=8
-
-$(ZIP9TARGETN) .NULL : ZIP9
-ZIP9 ?= TNR!:=9
-
-
-$(ZIP1DEPFILE) .NULL : ZIPDEP1
-ZIPDEP1 ?= TNR!:=1
-
-$(ZIP2DEPFILE) .NULL : ZIPDEP2
-ZIPDEP2 ?= TNR!:=2
-
-$(ZIP3DEPFILE) .NULL : ZIPDEP3
-ZIPDEP3 ?= TNR!:=3
-
-$(ZIP4DEPFILE) .NULL : ZIPDEP4
-ZIPDEP4 ?= TNR!:=4
-
-$(ZIP5DEPFILE) .NULL : ZIPDEP5
-ZIPDEP5 ?= TNR!:=5
-
-$(ZIP6DEPFILE) .NULL : ZIPDEP6
-ZIPDEP6 ?= TNR!:=6
-
-$(ZIP7DEPFILE) .NULL : ZIPDEP7
-ZIPDEP7 ?= TNR!:=7
-
-$(ZIP8DEPFILE) .NULL : ZIPDEP8
-ZIPDEP8 ?= TNR!:=8
-
-$(ZIP9DEPFILE) .NULL : ZIPDEP9
-ZIPDEP9 ?= TNR!:=9
-.ENDIF
-
-.IF "$(MULTI_ZIP_FLAG)"==""
-ZIP1 ZIP2 ZIP3 ZIP4 ZIP5 ZIP6 ZIP7 ZIP8 ZIP9:
-    +@dmake $(ZIP$(TNR)TARGETN) MULTI_ZIP_FLAG=true TNR:=$(TNR) $(MFLAGS) $(CALLMACROS)
-
-ZIPDEP1 ZIPDEP2 ZIPDEP3 ZIPDEP4 ZIPDEP5 ZIPDEP6 ZIPDEP7 ZIPDEP8 ZIPDEP9:
-    +@dmake $(ZIPDEP$(TNR)FILE) MULTI_ZIP_FLAG=true TNR:=$(TNR) $(MFLAGS) $(CALLMACROS)
-.ELSE
-
-
 #######################################################
-# Anweisungen fuer das Linken
 # unroll begin
 
 .IF "$(GUI)"=="WNT"
@@ -185,8 +117,8 @@ $(ZIP$(TNR)TARGETN) : delzip
     @+-$(GNUCOPY) -p $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $@.$(INPATH) >& $(NULLDEV)
     @+-$(RM) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)
     @+-$(RM) $@ >& $(NULLDEV)
-    @+$(IFEXIST) $@.$(INPATH) $(THEN) $(RENAME) $@.$(INPATH) $@
-#	@+$(IFEXIST) $@ $(THEN) $(TOUCH) $@
+    @+$(IFEXIST) $@.$(INPATH) $(THEN) $(RENAME) $@.$(INPATH) $@ $(FI)
+#	@+$(IFEXIST) $@ $(THEN) $(TOUCH) $@ $(FI)  # even if it's not used...
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIP$(TNR)DIR)" != ""
     @+-$(GNUCOPY) -p $@ $(ZIP$(TNR)TMP).$(ZIP$(TNR)TARGET){$(subst,$(ZIP$(TNR)HELPVAR),_ $(@:db))}.zip >& $(NULLDEV)
@@ -202,4 +134,3 @@ $(ZIP$(TNR)TARGETN) : delzip
 # unroll end
 #######################################################
 
-.ENDIF		# "$(MULTI_ZIP_FLAG)"==""
