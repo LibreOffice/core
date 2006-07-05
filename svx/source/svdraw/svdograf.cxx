@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:41:56 $
+ *  last change: $Author: kz $ $Date: 2006-07-05 22:10:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,10 @@
 
 #define _ANIMATION
 #define ITEMID_GRF_CROP 0
+
+#ifndef _UTL_STREAM_WRAPPER_HXX_
+#include <unotools/streamwrap.hxx>
+#endif
 
 #include <sfx2/lnkbase.hxx>
 #include <math.h>
@@ -81,6 +85,9 @@
 #ifndef _SDR_CONTACT_VIEWCONTACTOFGRAPHIC_HXX
 #include <svx/sdr/contact/viewcontactofgraphic.hxx>
 #endif
+
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::io;
 
 // -----------
 // - Defines -
@@ -1817,6 +1824,59 @@ sal_Bool SdrGrafObj::IsObjectTransparent() const
     }
 
     return sal_False;
+}
+
+Reference< XInputStream > SdrGrafObj::getInputStream()
+{
+    Reference< XInputStream > xStream;
+
+    if( pModel )
+    {
+//      if( !pGraphic->HasUserData() )
+//          pGraphic->SwapOut();
+
+        // kann aus dem original Doc-Stream nachgeladen werden...
+        if( pGraphic->HasUserData() )
+        {
+            SdrDocumentStreamInfo aStreamInfo;
+
+            aStreamInfo.mbDeleteAfterUse = FALSE;
+            aStreamInfo.maUserData = pGraphic->GetUserData();
+
+            SvStream* pStream = pModel->GetDocumentStream( aStreamInfo );
+
+            if( pStream )
+                xStream.set( new utl::OInputStreamWrapper( pStream, sal_True ) );
+        }
+        else if( pGraphic && GetGraphic().IsLink() )
+        {
+            Graphic aGraphic( GetGraphic() );
+            GfxLink aLink( aGraphic.GetLink() );
+            sal_uInt32 nSize = aLink.GetDataSize();
+            const void* pSourceData = (const void*)aLink.GetData();
+            if( nSize && pSourceData )
+            {
+                sal_uInt8 * pBuffer = new sal_uInt8[ nSize ];
+                if( pBuffer )
+                {
+                    memcpy( pBuffer, pSourceData, nSize );
+
+                    SvMemoryStream* pStream = new SvMemoryStream( (void*)pBuffer, (sal_Size)nSize, STREAM_READ );
+                    pStream->ObjectOwnsMemory( sal_True );
+                    xStream.set( new utl::OInputStreamWrapper( pStream, sal_True ) );
+                }
+            }
+        }
+
+        if( !xStream.is() && aFileName.Len() )
+        {
+            SvFileStream* pStream = new SvFileStream( aFileName, STREAM_READ );
+            if( pStream )
+                xStream.set( new utl::OInputStreamWrapper( pStream ) );
+        }
+    }
+
+    return xStream;
 }
 
 // eof
