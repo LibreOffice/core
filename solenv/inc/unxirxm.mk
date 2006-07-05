@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxirxm.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:54:25 $
+#   last change: $Author: kz $ $Date: 2006-07-05 22:01:52 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,6 @@ ARCH_FLAGS*=
 #
 CC=			cc -KPIC -c -n32
 CXX=		CC -KPIC -c -n32 -ptused -OPT:Olimit=20523 
-CFLAGS=		$(INCLUDE)
 CDEFS+=-D_PTHREADS
 CDEFS+=	-D_STD_NO_NAMESPACE -D_VOS_NO_NAMESPACE -D_UNO_NO_NAMESPACE
 # 1009    ...nested comment is not allowed...
