@@ -4,9 +4,9 @@
 #
 #   $RCSfile: languages.pm,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:04:40 $
+#   last change: $Author: kz $ $Date: 2006-07-05 21:12:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,12 @@ sub analyze_languagelist
         $installer::globals::unixmultipath = $installer::globals::languagelist;
         $installer::globals::unixmultipath =~ s/\,/\_/g;    # hashes not allowed, comma to underline
         $installer::globals::alllanguagesinproductarrayref = installer::converter::convert_stringlist_into_array(\$installer::globals::unixmultipath, "_");
+
+        $installer::globals::unixmultipath_orig = $installer::globals::unixmultipath;
+        if (length($installer::globals::unixmultipath) > 120) {
+            chomp(my $shorter = `echo $installer::globals::unixmultipath | md5sum | sed -e "s/  -//g"` );
+            $installer::globals::unixmultipath = $shorter;
+        }
     }
 
     while ($first =~ /^(\S+)\#(\S+?)$/) # Minimal matching, to keep the order of languages
