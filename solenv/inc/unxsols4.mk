@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxsols4.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-19 17:17:40 $
+#   last change: $Author: kz $ $Date: 2006-07-05 22:05:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@ ARCH_FLAGS*=
 CXX*=CC
 CC*=cc
 
-CFLAGS=$(PREENVCFLAGS) -c -temp=/tmp $(INCLUDE)
+CFLAGS=$(PREENVCFLAGS) -c -temp=/tmp
 # CC defines __sparcv8plus with -xarch=v8plus, cc does not (sigh)
 CFLAGSCC=-xCC -D__sparcv8plus $(ARCH_FLAGS)
 CFLAGSCXX=-features=no%altspell -library=no%Cstd $(ARCH_FLAGS)
