@@ -4,9 +4,9 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.53 $
+#   $Revision: 1.54 $
 #
-#   last change: $Author: hr $ $Date: 2006-05-10 20:25:24 $
+#   last change: $Author: kz $ $Date: 2006-07-05 21:12:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -112,6 +112,7 @@ BEGIN
     $rpmquerycommand = "";
     $debian = "";
     $installertypedir = "";
+    $controlledmakecabversion = "5";
 
     $is_special_epm = 0;
     $epm_in_path = 0;
@@ -125,6 +126,7 @@ BEGIN
     $addpackagelist = "";
     $is_unix_multi = 0;
     $unixmultipath = "";
+    $unixmultipath_orig = "";
     $alllanguagesinproductarrayref = "";
     $shiptestdirectory = "";
     $makelinuxlinkrpm = 0;
@@ -243,7 +245,7 @@ BEGIN
     $nsisfilename = "Nsis.mlf";
     $langpackfilename = "Langpack.mlf";
     $linuxlinkrpms = "gid_Module_Root_Files_3,gid_Module_Root_Files_4,gid_Module_Root_Files_5";
-    $languagenames = "";
+    @languagenames = ();
     @requiredpackages = ();
 
     @removedirs = ();
