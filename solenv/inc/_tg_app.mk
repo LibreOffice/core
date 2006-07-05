@@ -86,7 +86,7 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(APP1LINKER) $(APP1LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    $(APP1OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
+    $(APP1OBJS:s/.obj/.o/) '\' >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP1LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
     @+echo $(APP1LINKTYPEFLAG) $(APP1LIBSALCPPRT) $(APP1STDLIBS) $(APP1STDLIB) $(STDLIB1) -o $@ >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
@@ -144,7 +144,7 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
         $(APP1STDLIBS) \
         $(APP1STDLIB) $(STDLIB1))
         $(SED) -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP1TARGETN:b)_linkobj.lst >> $(MISC)\$(APP1TARGET).lst
-        +$(IFEXIST) $(MISC)\$(APP1TARGET).lst $(THEN) type $(MISC)\$(APP1TARGET).lst  >> $(MISC)\$(APP1TARGET).lnk
+        +$(IFEXIST) $(MISC)$/$(APP1TARGET).lst $(THEN) type $(MISC)$/$(APP1TARGET).lst  >> $(MISC)$/$(APP1TARGET).lnk $(FI)
         $(APP1LINKER) @$(MISC)\$(APP1TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
 .IF "$(APP1TARGET)" == "loader"
@@ -252,7 +252,7 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(APP2LINKER) $(APP2LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    $(APP2OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
+    $(APP2OBJS:s/.obj/.o/) '\' >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP2LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
     @+echo $(APP2LINKTYPEFLAG) $(APP2LIBSALCPPRT) $(APP2STDLIBS) $(APP2STDLIB) $(STDLIB2) -o $@ >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
@@ -310,7 +310,7 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
         $(APP2STDLIBS) \
         $(APP2STDLIB) $(STDLIB2))
         $(SED) -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP2TARGETN:b)_linkobj.lst >> $(MISC)\$(APP2TARGET).lst
-        +$(IFEXIST) $(MISC)\$(APP2TARGET).lst $(THEN) type $(MISC)\$(APP2TARGET).lst  >> $(MISC)\$(APP2TARGET).lnk
+        +$(IFEXIST) $(MISC)$/$(APP2TARGET).lst $(THEN) type $(MISC)$/$(APP2TARGET).lst  >> $(MISC)$/$(APP2TARGET).lnk $(FI)
         $(APP2LINKER) @$(MISC)\$(APP2TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
 .IF "$(APP2TARGET)" == "loader"
@@ -418,7 +418,7 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(APP3LINKER) $(APP3LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    $(APP3OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
+    $(APP3OBJS:s/.obj/.o/) '\' >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP3LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
     @+echo $(APP3LINKTYPEFLAG) $(APP3LIBSALCPPRT) $(APP3STDLIBS) $(APP3STDLIB) $(STDLIB3) -o $@ >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
@@ -476,7 +476,7 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
         $(APP3STDLIBS) \
         $(APP3STDLIB) $(STDLIB3))
         $(SED) -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP3TARGETN:b)_linkobj.lst >> $(MISC)\$(APP3TARGET).lst
-        +$(IFEXIST) $(MISC)\$(APP3TARGET).lst $(THEN) type $(MISC)\$(APP3TARGET).lst  >> $(MISC)\$(APP3TARGET).lnk
+        +$(IFEXIST) $(MISC)$/$(APP3TARGET).lst $(THEN) type $(MISC)$/$(APP3TARGET).lst  >> $(MISC)$/$(APP3TARGET).lnk $(FI)
         $(APP3LINKER) @$(MISC)\$(APP3TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
 .IF "$(APP3TARGET)" == "loader"
@@ -584,7 +584,7 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(APP4LINKER) $(APP4LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    $(APP4OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
+    $(APP4OBJS:s/.obj/.o/) '\' >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP4LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
     @+echo $(APP4LINKTYPEFLAG) $(APP4LIBSALCPPRT) $(APP4STDLIBS) $(APP4STDLIB) $(STDLIB4) -o $@ >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
@@ -642,7 +642,7 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
         $(APP4STDLIBS) \
         $(APP4STDLIB) $(STDLIB4))
         $(SED) -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP4TARGETN:b)_linkobj.lst >> $(MISC)\$(APP4TARGET).lst
-        +$(IFEXIST) $(MISC)\$(APP4TARGET).lst $(THEN) type $(MISC)\$(APP4TARGET).lst  >> $(MISC)\$(APP4TARGET).lnk
+        +$(IFEXIST) $(MISC)$/$(APP4TARGET).lst $(THEN) type $(MISC)$/$(APP4TARGET).lst  >> $(MISC)$/$(APP4TARGET).lnk $(FI)
         $(APP4LINKER) @$(MISC)\$(APP4TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
 .IF "$(APP4TARGET)" == "loader"
@@ -750,7 +750,7 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(APP5LINKER) $(APP5LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    $(APP5OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
+    $(APP5OBJS:s/.obj/.o/) '\' >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP5LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
     @+echo $(APP5LINKTYPEFLAG) $(APP5LIBSALCPPRT) $(APP5STDLIBS) $(APP5STDLIB) $(STDLIB5) -o $@ >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
@@ -808,7 +808,7 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
         $(APP5STDLIBS) \
         $(APP5STDLIB) $(STDLIB5))
         $(SED) -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP5TARGETN:b)_linkobj.lst >> $(MISC)\$(APP5TARGET).lst
-        +$(IFEXIST) $(MISC)\$(APP5TARGET).lst $(THEN) type $(MISC)\$(APP5TARGET).lst  >> $(MISC)\$(APP5TARGET).lnk
+        +$(IFEXIST) $(MISC)$/$(APP5TARGET).lst $(THEN) type $(MISC)$/$(APP5TARGET).lst  >> $(MISC)$/$(APP5TARGET).lnk $(FI)
         $(APP5LINKER) @$(MISC)\$(APP5TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
 .IF "$(APP5TARGET)" == "loader"
@@ -916,7 +916,7 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(APP6LINKER) $(APP6LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    $(APP6OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
+    $(APP6OBJS:s/.obj/.o/) '\' >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP6LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
     @+echo $(APP6LINKTYPEFLAG) $(APP6LIBSALCPPRT) $(APP6STDLIBS) $(APP6STDLIB) $(STDLIB6) -o $@ >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
@@ -974,7 +974,7 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
         $(APP6STDLIBS) \
         $(APP6STDLIB) $(STDLIB6))
         $(SED) -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP6TARGETN:b)_linkobj.lst >> $(MISC)\$(APP6TARGET).lst
-        +$(IFEXIST) $(MISC)\$(APP6TARGET).lst $(THEN) type $(MISC)\$(APP6TARGET).lst  >> $(MISC)\$(APP6TARGET).lnk
+        +$(IFEXIST) $(MISC)$/$(APP6TARGET).lst $(THEN) type $(MISC)$/$(APP6TARGET).lst  >> $(MISC)$/$(APP6TARGET).lnk $(FI)
         $(APP6LINKER) @$(MISC)\$(APP6TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
 .IF "$(APP6TARGET)" == "loader"
@@ -1082,7 +1082,7 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(APP7LINKER) $(APP7LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    $(APP7OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
+    $(APP7OBJS:s/.obj/.o/) '\' >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP7LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
     @+echo $(APP7LINKTYPEFLAG) $(APP7LIBSALCPPRT) $(APP7STDLIBS) $(APP7STDLIB) $(STDLIB7) -o $@ >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
@@ -1140,7 +1140,7 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
         $(APP7STDLIBS) \
         $(APP7STDLIB) $(STDLIB7))
         $(SED) -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP7TARGETN:b)_linkobj.lst >> $(MISC)\$(APP7TARGET).lst
-        +$(IFEXIST) $(MISC)\$(APP7TARGET).lst $(THEN) type $(MISC)\$(APP7TARGET).lst  >> $(MISC)\$(APP7TARGET).lnk
+        +$(IFEXIST) $(MISC)$/$(APP7TARGET).lst $(THEN) type $(MISC)$/$(APP7TARGET).lst  >> $(MISC)$/$(APP7TARGET).lnk $(FI)
         $(APP7LINKER) @$(MISC)\$(APP7TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
 .IF "$(APP7TARGET)" == "loader"
@@ -1248,7 +1248,7 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(APP8LINKER) $(APP8LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    $(APP8OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
+    $(APP8OBJS:s/.obj/.o/) '\' >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP8LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
     @+echo $(APP8LINKTYPEFLAG) $(APP8LIBSALCPPRT) $(APP8STDLIBS) $(APP8STDLIB) $(STDLIB8) -o $@ >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
@@ -1306,7 +1306,7 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
         $(APP8STDLIBS) \
         $(APP8STDLIB) $(STDLIB8))
         $(SED) -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP8TARGETN:b)_linkobj.lst >> $(MISC)\$(APP8TARGET).lst
-        +$(IFEXIST) $(MISC)\$(APP8TARGET).lst $(THEN) type $(MISC)\$(APP8TARGET).lst  >> $(MISC)\$(APP8TARGET).lnk
+        +$(IFEXIST) $(MISC)$/$(APP8TARGET).lst $(THEN) type $(MISC)$/$(APP8TARGET).lst  >> $(MISC)$/$(APP8TARGET).lnk $(FI)
         $(APP8LINKER) @$(MISC)\$(APP8TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
 .IF "$(APP8TARGET)" == "loader"
@@ -1414,7 +1414,7 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(APP9LINKER) $(APP9LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    $(APP9OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
+    $(APP9OBJS:s/.obj/.o/) '\' >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP9LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
     @+echo $(APP9LINKTYPEFLAG) $(APP9LIBSALCPPRT) $(APP9STDLIBS) $(APP9STDLIB) $(STDLIB9) -o $@ >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
@@ -1472,7 +1472,7 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
         $(APP9STDLIBS) \
         $(APP9STDLIB) $(STDLIB9))
         $(SED) -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP9TARGETN:b)_linkobj.lst >> $(MISC)\$(APP9TARGET).lst
-        +$(IFEXIST) $(MISC)\$(APP9TARGET).lst $(THEN) type $(MISC)\$(APP9TARGET).lst  >> $(MISC)\$(APP9TARGET).lnk
+        +$(IFEXIST) $(MISC)$/$(APP9TARGET).lst $(THEN) type $(MISC)$/$(APP9TARGET).lst  >> $(MISC)$/$(APP9TARGET).lnk $(FI)
         $(APP9LINKER) @$(MISC)\$(APP9TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
 .IF "$(APP9TARGET)" == "loader"
@@ -1580,7 +1580,7 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(APP10LINKER) $(APP10LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    $(APP10OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
+    $(APP10OBJS:s/.obj/.o/) '\' >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP10LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
     @+echo $(APP10LINKTYPEFLAG) $(APP10LIBSALCPPRT) $(APP10STDLIBS) $(APP10STDLIB) $(STDLIB10) -o $@ >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
@@ -1638,7 +1638,7 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
         $(APP10STDLIBS) \
         $(APP10STDLIB) $(STDLIB10))
         $(SED) -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP10TARGETN:b)_linkobj.lst >> $(MISC)\$(APP10TARGET).lst
-        +$(IFEXIST) $(MISC)\$(APP10TARGET).lst $(THEN) type $(MISC)\$(APP10TARGET).lst  >> $(MISC)\$(APP10TARGET).lnk
+        +$(IFEXIST) $(MISC)$/$(APP10TARGET).lst $(THEN) type $(MISC)$/$(APP10TARGET).lst  >> $(MISC)$/$(APP10TARGET).lnk $(FI)
         $(APP10LINKER) @$(MISC)\$(APP10TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
 .IF "$(APP10TARGET)" == "loader"
