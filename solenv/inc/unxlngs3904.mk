@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxlngs3904.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-19 17:16:09 $
+#   last change: $Author: kz $ $Date: 2006-07-05 22:03:52 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,7 @@ CXX*=g++-3.2
 # name of C Compiler
 CC*=gcc-3.2
 
-CFLAGS+=-fsigned-char -fmessage-length=0 -c $(INCLUDE)
+CFLAGS+=-fsigned-char -fmessage-length=0 -c
 
 # flags for the C++ Compiler
 CFLAGSCC= -fsigned-char -pipe $(ARCH_FLAGS)
