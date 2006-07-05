@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews2.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:34:16 $
+ *  last change: $Author: kz $ $Date: 2006-07-05 21:53:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,14 +123,14 @@
 #include <svx/fontworkbar.hxx>
 #endif
 
-//CHINA001 #ifndef _SVX_DLG_NAME_HXX
-//CHINA001 #include <svx/dlgname.hxx>
-//CHINA001 #endif
-#include <svx/svxdlg.hxx> //CHINA001
-#include <svx/dialogs.hrc> //CHINA001
-#pragma hdrstop
+#include <svx/svxdlg.hxx>
+#include <svx/dialogs.hrc>
 
 #include <sfx2/viewfrm.hxx>
+
+#ifndef _SD_SDGRFFILTER_HXX
+#include "sdgrffilter.hxx"
+#endif
 
 #include "app.hrc"
 #include "glob.hrc"
@@ -150,7 +150,6 @@
 #include "fuscale.hxx"
 #endif
 #include "sdresid.hxx"
-//CHINA001 #include "new_foil.hxx"
 #ifndef SD_GRAPHIC_VIEW_SHELL_HXX
 #include "GraphicViewShell.hxx"
 #endif
@@ -167,8 +166,8 @@
 #ifndef _SD_OPTSITEM_HXX
 #include "optsitem.hxx"
 #endif
-#include "sdabstdlg.hxx" //CHINA001
-#include "new_foil.hrc" //CHINA001
+#include "sdabstdlg.hxx"
+#include "new_foil.hrc"
 
 #ifndef _COM_SUN_STAR_DRAWING_XMASTERPAGESSUPPLIER_HPP_
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
@@ -532,29 +531,25 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 String aDescr( SdResId( STR_DESC_RENAMESLIDE ) );
                 String aPageName = pCurrentPage->GetName();
 
-                //CHINA001 SvxNameDialog aNameDlg( GetActiveWindow(), aPageName, aDescr );
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+                DBG_ASSERT(pFact, "Dialogdiet fail!");
                 AbstractSvxNameDialog* aNameDlg = pFact->CreateSvxNameDialog( GetActiveWindow(), aPageName, aDescr, ResId(RID_SVXDLG_NAME) );
-                DBG_ASSERT(aNameDlg, "Dialogdiet fail!");//CHINA001
-                //CHINA001 aNameDlg.SetText( aTitle );
-                //CHINA001 aNameDlg.SetCheckNameHdl( LINK( this, SdDrawViewShell, RenameSlideHdl ), true );
-                //CHINA001 aNameDlg.SetEditHelpId( HID_SD_NAMEDIALOG_PAGE );
+                DBG_ASSERT(aNameDlg, "Dialogdiet fail!");
                 aNameDlg->SetText( aTitle );
                 aNameDlg->SetCheckNameHdl( LINK( this, DrawViewShell, RenameSlideHdl ), true );
                 aNameDlg->SetEditHelpId( HID_SD_NAMEDIALOG_PAGE );
 
-                if( aNameDlg->Execute() == RET_OK ) //CHINA001 if( aNameDlg.Execute() == RET_OK )
+                if( aNameDlg->Execute() == RET_OK )
                 {
                     String aNewName;
-                    aNameDlg->GetName( aNewName ); //CHINA001 aNameDlg.GetName( aNewName );
+                    aNameDlg->GetName( aNewName );
                     if( ! aNewName.Equals( aPageName ) )
                     {
                         bool bResult = RenameSlide( nPageId, aNewName );
                         DBG_ASSERT( bResult, "Couldn't rename slide" );
                     }
                 }
-                delete aNameDlg; //add by CHINA001
+                delete aNameDlg;
             }
 
             Cancel();
@@ -989,6 +984,23 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             svx::FontworkBar::execute( mpView, rReq, GetViewFrame()->GetBindings() );       // SJ: can be removed  (I think)
             Cancel();
             rReq.Done();
+        }
+        break;
+
+        case SID_SAVEGRAPHIC:
+        {
+            const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
+            if( rMarkList.GetMarkCount() == 1 )
+            {
+                SdrGrafObj *pGrafObj = dynamic_cast< SdrGrafObj* >( rMarkList.GetMark( 0 )->GetObj() );
+                if(pGrafObj )
+                {
+                    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape( pGrafObj->getUnoShape(), com::sun::star::uno::UNO_QUERY );
+                    SdGRFFilter::SaveGraphic( xShape );
+                }
+            }
+            Cancel();
+            rReq.Ignore();
         }
         break;
 
