@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2006-07-05 21:12:33 $
+dnl * Date: $Date: 2006-07-05 22:32:27 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.167 $ )
+AC_REVISION( $Revision: 1.168 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -547,11 +547,14 @@ AC_ARG_WITH(mingwin,
                           Usage: --with-mingwin=yes
 ],WITH_MINGWIN=$withval,WITH_MINGWIN=0)
 AC_ARG_WITH(use-shell,
-[  --with-use-shell        For Windows users, use this option to override the
-                          default shell to be used for the build environment.
-                          Supported options: tcsh (default) and 4nt.
+[  --with-use-shell        Use this option to override the default shell to be
+                          used for the build environment.
+                          Supported options:
+                            tcsh (default)
+                            bash
+                            4nt (windows only)
 
-                          Usage: --with-use-shell=tcsh|4nt
+                          Usage: --with-use-shell=tcsh|bash|4nt
 ],with_use_shell=$withval,with_use_shell="tcsh")
 AC_ARG_WITH(build-version,
 [  --with-build-version    Allows the builder to add a custom version tag
@@ -994,13 +997,13 @@ fi
 AC_SUBST(WITH_MYSPELL_DICTS)
 
 dnl ===================================================================
-dnl WINNT uses either 4nt or tcsh, all other O/S use tcsh.
+dnl WINNT uses tcsh, bash or 4nt all other O/S use tcsh or bash.
 dnl The following sets the with_use_shell variable.
 dnl ===================================================================
 AC_MSG_CHECKING([which shell to use])
 if test $_os = "WINNT"; then
-   if test "$with_use_shell" != "tcsh" -a "$with_use_shell" != "4nt"; then
-      AC_MSG_ERROR([only "tcsh" or "4nt" are supported options])
+   if test "$with_use_shell" != "tcsh" -a "$with_use_shell" != "bash" -a "$with_use_shell" != "4nt"; then
+      AC_MSG_ERROR([only "tcsh","bash" or "4nt" are supported options])
    fi
    dnl ===================================================================
    dnl Sanity check! Native windows programs cannot use cygwin symlinks!
@@ -1031,8 +1034,10 @@ link, and copy the program to the name of the link.])
    dnl ===================================================================
    dnl If using Mingwin32 then don't use 4NT
    dnl ===================================================================
-   if test "$WITH_MINGWIN" = "yes"; then
-      with_use_shell="tcsh"
+   if test "$WITH_MINGWIN" = "yes" ; then
+      if test "$with_use_shell" = "4nt" -o "x$with_use_shell" = "x"; then
+         with_use_shell="tcsh"
+      fi
       if test -z "$CC"; then
          CC="gcc -mno-cygwin"
          CXX="g++ -mno-cygwin"
@@ -1042,7 +1047,9 @@ else
    dnl ===================================================================
    dnl All other operating systems use tcsh.
    dnl ===================================================================
-   with_use_shell="tcsh"
+   if test "$with_use_shell" != "tcsh" -a "$with_use_shell" != "bash"; then
+      AC_MSG_ERROR([only "tcsh" or "bash" are supported options])
+   fi
 fi
 USE_SHELL="$with_use_shell"
 AC_MSG_RESULT([$USE_SHELL])
@@ -1050,20 +1057,27 @@ AC_SUBST(USE_SHELL)
 AC_SUBST(WITH_MINGWIN)
 
 dnl ===================================================================
-dnl Check whether the tcsh can be used.
+dnl Check whether the chosen shell can be used.
 dnl ===================================================================
-if test "$_os" != "WINNT" -o "$with_use_shell" != "4nt"; then
-   AC_PATH_PROG(TCSH, tcsh)
-   if test -z "$TCSH"; then
+if test "$with_use_shell" == "tcsh"; then
+   AC_PATH_PROG(SHELLPATH, tcsh)
+   if test -z "$SHELLPATH"; then
       AC_MSG_ERROR([tcsh not found in \$PATH])
    else
-      TCSH=`echo $TCSH | $SED -n "s/\/tcsh//p"`
+      SHELLPATH=`echo $SHELLPATH | $SED -n "s/\/tcsh//p"`
+   fi
+elif test "$with_use_shell" == "bash"; then
+   AC_PATH_PROG(SHELLPATH, bash)
+   if test -z "$SHELLPATH"; then
+      AC_MSG_ERROR([bash not found in \$PATH])
+   else
+      SHELLPATH=`echo $SHELLPATH | $SED -n "s/\/bash//p"`
    fi
 else
-   AC_MSG_WARN([Windows 4NT builds don't need tcsh])
-   TCSH="NO_TCSH_NEEDED"
+   AC_MSG_WARN([Windows 4NT builds don't test for the shell])
+   SHELLPATH="NO_SHELLPATH_NEEDED"
 fi
-AC_SUBST(TCSH)
+AC_SUBST(SHELLPATH)
 
 dnl ===================================================================
 dnl  Checks for c compiler,
