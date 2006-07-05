@@ -4,9 +4,9 @@
 #
 #   $RCSfile: epmfile.pm,v $
 #
-#   $Revision: 1.49 $
+#   $Revision: 1.50 $
 #
-#   last change: $Author: hr $ $Date: 2006-04-19 15:04:49 $
+#   last change: $Author: kz $ $Date: 2006-07-05 21:12:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -582,6 +582,10 @@ sub find_epm_on_system
         if (($ENV{'EPM'} ne "") && (-x "$ENV{'EPM'}"))
         {
             $epmname = $ENV{'EPM'};
+        }
+        else
+        {
+            installer::exiter::exit_program("Environment variable EPM set (\"$ENV{'EPM'}\"), but file does not exist or is not executable!", "find_epm_on_system");
         }
     }
     else
