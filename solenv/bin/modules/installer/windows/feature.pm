@@ -4,9 +4,9 @@
 #
 #   $RCSfile: feature.pm,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: rt $ $Date: 2006-03-06 14:01:44 $
+#   last change: $Author: kz $ $Date: 2006-07-05 21:13:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -309,7 +309,7 @@ sub add_language_pack_feature
         # $onelanguage = "de"
         # $gid = "gm_Langpack_de"
         # -> only include if this is the language specific language name
-        if ( $gid =~ /\_$onelanguage\s*$/) { push(@{$installer::globals::languagenames}, $feature{'Title'}); }  # saving all titles in the global variable!
+        if ( $gid =~ /\_$onelanguage\s*$/) { push(@installer::globals::languagenames, $feature{'Title'}); } # saving all titles in the global variable!
     }
 
 }
