@@ -395,7 +395,6 @@ runtest_$(SHL1TARGET) : $(SHL1TARGETN)
 .ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL1TARGETN)"!=""
 
-# Anweisungen fuer das Linken
 # unroll begin
 
 .IF "$(SHL2TARGETN)"!=""
@@ -793,7 +792,6 @@ runtest_$(SHL2TARGET) : $(SHL2TARGETN)
 .ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL2TARGETN)"!=""
 
-# Anweisungen fuer das Linken
 # unroll begin
 
 .IF "$(SHL3TARGETN)"!=""
@@ -1191,7 +1189,6 @@ runtest_$(SHL3TARGET) : $(SHL3TARGETN)
 .ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL3TARGETN)"!=""
 
-# Anweisungen fuer das Linken
 # unroll begin
 
 .IF "$(SHL4TARGETN)"!=""
@@ -1589,7 +1586,6 @@ runtest_$(SHL4TARGET) : $(SHL4TARGETN)
 .ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL4TARGETN)"!=""
 
-# Anweisungen fuer das Linken
 # unroll begin
 
 .IF "$(SHL5TARGETN)"!=""
@@ -1987,7 +1983,6 @@ runtest_$(SHL5TARGET) : $(SHL5TARGETN)
 .ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL5TARGETN)"!=""
 
-# Anweisungen fuer das Linken
 # unroll begin
 
 .IF "$(SHL6TARGETN)"!=""
@@ -2385,7 +2380,6 @@ runtest_$(SHL6TARGET) : $(SHL6TARGETN)
 .ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL6TARGETN)"!=""
 
-# Anweisungen fuer das Linken
 # unroll begin
 
 .IF "$(SHL7TARGETN)"!=""
@@ -2783,7 +2777,6 @@ runtest_$(SHL7TARGET) : $(SHL7TARGETN)
 .ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL7TARGETN)"!=""
 
-# Anweisungen fuer das Linken
 # unroll begin
 
 .IF "$(SHL8TARGETN)"!=""
@@ -3181,7 +3174,6 @@ runtest_$(SHL8TARGET) : $(SHL8TARGETN)
 .ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL8TARGETN)"!=""
 
-# Anweisungen fuer das Linken
 # unroll begin
 
 .IF "$(SHL9TARGETN)"!=""
@@ -3579,7 +3571,6 @@ runtest_$(SHL9TARGET) : $(SHL9TARGETN)
 .ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL9TARGETN)"!=""
 
-# Anweisungen fuer das Linken
 # unroll begin
 
 .IF "$(SHL10TARGETN)"!=""
@@ -3977,7 +3968,6 @@ runtest_$(SHL10TARGET) : $(SHL10TARGETN)
 .ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL10TARGETN)"!=""
 
-# Anweisungen fuer das Linken
 # unroll begin
 
 .IF "$(SHL1IMPLIBN)" != ""
@@ -4019,7 +4009,6 @@ $(SHL1IMPLIBN):	\
 .ENDIF
 .ENDIF
 
-# Anweisungen fuer das Linken
 # unroll begin
 
 .IF "$(SHL2IMPLIBN)" != ""
@@ -4061,7 +4050,6 @@ $(SHL2IMPLIBN):	\
 .ENDIF
 .ENDIF
 
-# Anweisungen fuer das Linken
 # unroll begin
 
 .IF "$(SHL3IMPLIBN)" != ""
@@ -4103,7 +4091,6 @@ $(SHL3IMPLIBN):	\
 .ENDIF
 .ENDIF
 
-# Anweisungen fuer das Linken
 # unroll begin
 
 .IF "$(SHL4IMPLIBN)" != ""
@@ -4145,7 +4132,6 @@ $(SHL4IMPLIBN):	\
 .ENDIF
 .ENDIF
 
-# Anweisungen fuer das Linken
 # unroll begin
 
 .IF "$(SHL5IMPLIBN)" != ""
@@ -4187,7 +4173,6 @@ $(SHL5IMPLIBN):	\
 .ENDIF
 .ENDIF
 
-# Anweisungen fuer das Linken
 # unroll begin
 
 .IF "$(SHL6IMPLIBN)" != ""
@@ -4229,7 +4214,6 @@ $(SHL6IMPLIBN):	\
 .ENDIF
 .ENDIF
 
-# Anweisungen fuer das Linken
 # unroll begin
 
 .IF "$(SHL7IMPLIBN)" != ""
@@ -4271,7 +4255,6 @@ $(SHL7IMPLIBN):	\
 .ENDIF
 .ENDIF
 
-# Anweisungen fuer das Linken
 # unroll begin
 
 .IF "$(SHL8IMPLIBN)" != ""
@@ -4313,7 +4296,6 @@ $(SHL8IMPLIBN):	\
 .ENDIF
 .ENDIF
 
-# Anweisungen fuer das Linken
 # unroll begin
 
 .IF "$(SHL9IMPLIBN)" != ""
@@ -4355,7 +4337,6 @@ $(SHL9IMPLIBN):	\
 .ENDIF
 .ENDIF
 
-# Anweisungen fuer das Linken
 # unroll begin
 
 .IF "$(SHL10IMPLIBN)" != ""
@@ -4397,4 +4378,3 @@ $(SHL10IMPLIBN):	\
 .ENDIF
 .ENDIF
 
-# Anweisungen fuer das Linken
