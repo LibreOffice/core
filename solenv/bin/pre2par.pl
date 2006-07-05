@@ -4,9 +4,9 @@
 #
 #   $RCSfile: pre2par.pl,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 22:13:18 $
+#   last change: $Author: kz $ $Date: 2006-07-05 21:03:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,8 @@ pre2par::directory::check_directory($pre2par::globals::parfilename);
 
 my $prefile = pre2par::files::read_file($pre2par::globals::prefilename);
 
+pre2par::work::check_content($prefile, $pre2par::globals::prefilename);
+
 my $parfile = pre2par::work::convert($prefile);
 
 pre2par::work::formatter($parfile);
@@ -71,6 +73,10 @@ if ( $dolocalization )
 }
 
 pre2par::files::save_file($pre2par::globals::parfilename, $parfile);
+
+# checking of par file was written correctly
+my $parfilecomp = pre2par::files::read_file($pre2par::globals::parfilename);
+pre2par::work::diff_content($parfile, $parfilecomp, $pre2par::globals::parfilename);
 
 ####################################
 # End main program
