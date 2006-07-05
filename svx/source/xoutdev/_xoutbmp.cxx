@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _xoutbmp.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 17:05:27 $
+ *  last change: $Author: kz $ $Date: 2006-07-05 22:19:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -327,7 +327,6 @@ USHORT XOutBitmap::WriteGraphic( const Graphic& rGraphic, String& rFileName,
                                  const String& rFilterName, const ULONG nFlags,
                                  const Size* pMtfSize_100TH_MM )
 {
-#ifndef SVX_LIGHT
     if( rGraphic.GetType() != GRAPHIC_NONE )
     {
         INetURLObject   aURL( rFileName );
@@ -488,8 +487,9 @@ USHORT XOutBitmap::WriteGraphic( const Graphic& rGraphic, String& rFileName,
         return nErr;
     }
     else
-#endif
+    {
         return GRFILTER_OK;
+    }
 }
 
 // ------------------------------------------------------------------------
@@ -505,12 +505,11 @@ USHORT XOutBitmap::ExportGraphic( const Graphic& rGraphic, const INetURLObject& 
                                   BOOL /*bIgnoreOptions*/,
                                   const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >* pFilterData )
 {
-#ifndef SVX_LIGHT
     DBG_ASSERT( rURL.GetProtocol() != INET_PROT_NOT_VALID, "XOutBitmap::ExportGraphic(...): invalid URL" );
 
     SfxMedium   aMedium( rURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_SHARE_DENYNONE | STREAM_TRUNC, TRUE );
     SvStream*   pOStm = aMedium.GetOutStream();
-    USHORT      nRet = 1;
+    USHORT      nRet = GRFILTER_IOERROR;
 
     if( pOStm )
     {
@@ -523,13 +522,10 @@ USHORT XOutBitmap::ExportGraphic( const Graphic& rGraphic, const INetURLObject& 
         aMedium.Commit();
 
         if( aMedium.GetError() && ( GRFILTER_OK == nRet  ) )
-            nRet = 1;
+            nRet = GRFILTER_IOERROR;
     }
 
     return nRet;
-#else
-    return 1;
-#endif
 }
 
 #ifdef WNT
