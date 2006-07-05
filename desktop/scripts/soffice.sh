@@ -5,9 +5,9 @@
 #
 #   $RCSfile: soffice.sh,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: hr $ $Date: 2006-05-08 15:35:41 $
+#   last change: $Author: kz $ $Date: 2006-07-05 22:33:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -222,7 +222,7 @@ sd_pagein_args="${sd_pagein_args:+${sd_pagein_args} }@pagein-common"
 "${sd_prog}"/pagein -L"${sd_prog}" ${sd_pagein_args}
 
 # set path so that other apps can be started from soffice just by name
-if [ $PATH ]; then
+if [ "$PATH" ]; then
   PATH="$sd_prog":$PATH
 else
   PATH="$sd_prog"
