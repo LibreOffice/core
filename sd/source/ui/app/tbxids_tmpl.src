@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbxids_tmpl.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:47:06 $
+ *  last change: $Author: kz $ $Date: 2006-07-05 21:53:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -246,8 +246,8 @@
 #define TBI_EFFECT_WIN \
     ToolBoxItem\
     {\
-        Identifier = SID_EFFECT_WIN ; \
-        HelpID = SID_EFFECT_WIN ; \
+        Identifier = SID_CUSTOM_ANIMATION_PANEL ; \
+        HelpID = SID_CUSTOM_ANIMATION_PANEL ; \
         AutoCheck = TRUE ; \
     };
 
@@ -411,14 +411,6 @@
         AutoCheck = TRUE ; \
         Identifier = SID_GLUE_EDITMODE ; \
         HelpID = SID_GLUE_EDITMODE ; \
-    };
-
-#define TBI_ANIMATIONMODE \
-    ToolBoxItem\
-    {\
-        Identifier = SID_ANIMATIONMODE ; \
-        HelpID = SID_ANIMATIONMODE ; \
-        AutoCheck = TRUE ; \
     };
 
 #define TBI_ACTIONMODE \
