@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unitools.mk,v $
 #
-#   $Revision: 1.45 $
+#   $Revision: 1.46 $
 #
-#   last change: $Author: vg $ $Date: 2006-03-31 10:58:13 $
+#   last change: $Author: kz $ $Date: 2006-07-05 21:59:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -61,12 +61,25 @@ USQ:="
 
 NULLDEV:=/dev/null
 
-# iz29609 helpmacro to check if file exists tcsh style
+# iz29609 helpmacro to check if file exists
+.IF "$(USE_SHELL)"=="bash"
+IFEXIST:=if test -f 
+THEN:= ; then
+FI:= ; fi
+PIPEERROR=2>&1 |
+.ELSE
 IFEXIST:=if ( -e
 THEN:= )
+FI:=
+PIPEERROR=|&
+.ENDIF
 
 # iz31658
+.IF "$(USE_SHELL)"=="bash"
+CHECKZIPRESULT:=|| if test "$$?" != "12" && "$$?" != "1" ; then exit $$? ; fi && echo "Nothing to update for zip"
+.ELSE
 CHECKZIPRESULT:=|| if ("$$status" != "12" && "$$status" != "1") exit $$status && echo "Nothing to update for zip"
+.ENDIF
 
 .ELSE # "$(USE_SHELL)"!="4nt"
 # (\\ at line end is \)
@@ -80,6 +93,8 @@ NULLDEV:=nul
 # iz29609 helpmacro to check if file exists 4nt style
 IFEXIST:=if exist
 THEN:=
+FI:=
+PIPEERROR=|&
 
 # iz31658
 CHECKZIPRESULT:=^ iff errorlevel == 12 .and. errorlevel == 12 then ( echo Nothing to update for zip ^ set somedummyvar=%somedummyvar)
