@@ -4,9 +4,9 @@
  *
  *  $RCSfile: popup2_tmpl.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:43:27 $
+ *  last change: $Author: kz $ $Date: 2006-07-05 21:52:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,9 +71,9 @@
         MNSUB_CONVERT
         SEPARATOR
         MN_NAME_GROUP
-#if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
-        /*MN_EFFECT*/
+#if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
+        MN_EFFECT
         MN_ACTION
 #endif
         SEPARATOR
@@ -112,7 +112,7 @@
         MN_NAME_GROUP
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
-        /*MN_EFFECT*/
+        MN_EFFECT
         MN_ACTION
 #endif
         SEPARATOR
@@ -151,11 +151,13 @@
         MN_NAME_GROUP
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
-        /*MN_EFFECT*/
+        MN_EFFECT
         MN_ACTION
 #endif
         SEPARATOR
         MN_STYLEDT
+        SEPARATOR
+
     };
 };
 
@@ -185,7 +187,7 @@
         MN_NAME_GROUP
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
-        /*MN_EFFECT*/
+        MN_EFFECT
         MN_ACTION
 #endif
 //      SEPARATOR
@@ -220,7 +222,7 @@
         MN_NAME_GROUP
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
-        /*MN_EFFECT*/
+        MN_EFFECT
         MN_ACTION
 #endif
 //      SEPARATOR
@@ -254,7 +256,7 @@
         MN_NAME_GROUP
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
-        /*MN_EFFECT*/
+        MN_EFFECT
         MN_ACTION
 #endif
         SEPARATOR
@@ -292,7 +294,7 @@
         MN_ENTER_GROUP
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
-        /*MN_EFFECT*/
+        MN_EFFECT
         MN_ACTION
 #endif
     };
@@ -327,7 +329,7 @@
         MN_NAME_GROUP
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
-        /*MN_EFFECT*/
+        MN_EFFECT
         MN_ACTION
 #endif
         SEPARATOR
@@ -366,7 +368,7 @@
         MN_NAME_GROUP
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
-        /*MN_EFFECT*/
+        MN_EFFECT
         MN_ACTION
 #endif
         SEPARATOR
@@ -405,7 +407,7 @@
         MN_NAME_GROUP
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
-        /*MN_EFFECT*/
+        MN_EFFECT
         MN_ACTION
 #endif
         SEPARATOR
@@ -445,7 +447,7 @@
         MN_NAME_GROUP
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
-        /*MN_EFFECT*/
+        MN_EFFECT
         MN_ACTION
 #endif
         SEPARATOR
@@ -523,7 +525,7 @@
         MN_BREAK
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
-        /*MN_EFFECT*/
+        MN_EFFECT
         MN_ACTION
 #endif
     };
@@ -540,20 +542,16 @@
 {
     ItemList =
     {
-        // #i25616#
-        MN_LINE
-        MN_AREA
-
-        MN_TEXTATTR
         MN_TRANSFORM
         MN_ORIGINAL_SIZE
-        MN_STARIMAGE
-        MN_COLORRESOLUTION
+        MN_LINE
+        MN_AREA
+        MN_TEXTATTR
         SEPARATOR
         MN_CHAR_PARAGRAPH
         SEPARATOR
-        MN_POSITION
         MN_OBJECT_ALIGN
+        MN_POSITION
         MN_DISTRIBUTE
         MNSUB_MIRROR
         MNSUB_CONVERT
@@ -561,12 +559,13 @@
         SEPARATOR
         MN_NAME_GROUP
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
-        SEPARATOR
-        /*MN_EFFECT*/
+        MN_EFFECT
         MN_ACTION
 #endif
         SEPARATOR
         MN_STYLEDT
+        SEPARATOR
+        MN_SAVEGRAPHIC
     };
 };
 
@@ -593,7 +592,7 @@
         MN_NAME_GROUP
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
-        /*MN_EFFECT*/
+        MN_EFFECT
         MN_ACTION
 #endif
     };
@@ -644,7 +643,7 @@
         MN_NAME_GROUP
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
-        /*MN_EFFECT*/
+        MN_EFFECT
         MN_ACTION
 #endif
     };
