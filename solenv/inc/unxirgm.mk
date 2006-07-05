@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxirgm.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-19 17:14:03 $
+#   last change: $Author: kz $ $Date: 2006-07-05 22:01:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@ ARCH_FLAGS*=
 
 CC= gcc
 CXX= g++
-CFLAGS=-c $(INCLUDE)
+CFLAGS=-c
 CDEFS+= -D_PTHREADS -DSTLPORT_VERSION=0x450 -D_USE_NAMESPACE=1 -DNEW_SOLAR
 CFLAGSCC=$(ARCH_FLAGS)
 CFLAGSCXX=$(ARCH_FLAGS)
