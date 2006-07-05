@@ -4,9 +4,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.194 $
+#   $Revision: 1.195 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 21:01:38 $
+#   last change: $Author: kz $ $Date: 2006-07-05 21:57:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -34,12 +34,12 @@
 #*************************************************************************
 MKFILENAME:=SETTINGS.MK
 
-# check for new dmake features
-
-.IF 400<=200
-dmake_test_version:
-    @+echo dmake version too old!
-    force_dmake_to_error
+# smaller/greater arithmetic's like ".IF 400<=200" are an OOo extention to
+# the initial dmake 4.1PL0 (unfortunately called 4.10) version and are
+# tested implicitly by the construction below.
+.IF $(MAKEVERSION:s/-cvs//:s/.//:s/410/41/)<=42
+.ERROR : ; @echo Forced error: dmake version 4.3 or newer is needed!
+force_dmake_to_error
 .ENDIF
 
 .IF "$(USE_COMMENT)"!=""
@@ -772,7 +772,6 @@ INCGUI=$(PRJ)$/$(GUIBASE)$/inc
 INCCOM=$(OUT)$/inc
 INCCOMX=$(OUT)$/inc
 INCUNOIDL=$(INCCOM)$/$(PRJNAME)
-I={$(INCLUDE)}
 INCDEPN=. $(INCGUI) $(INCLOCAL) $(INC)
 .IF "$(PRJINC)"!=""
 INCLOCPRJ=$(foreach,i,$(PRJINC) $i$/inc)
@@ -1004,8 +1003,6 @@ RSCDEFS+= -DDEBUG
 
 # additional image sets
 CUSTOM_IMAGE_SETS=hicontrast industrial crystal
-
-UNOIDL=unoidl
 
 # settings for mozilla idl compiler
 XPIDL=xpidl
