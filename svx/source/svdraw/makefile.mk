@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-19 16:33:24 $
+#   last change: $Author: kz $ $Date: 2006-07-05 22:07:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -127,14 +127,14 @@ EXCEPTIONSFILES= \
          $(SLO)$/svdouno.obj         \
          $(SLO)$/svdfppt.obj         \
          $(SLO)$/svdpagv.obj		 \
+         $(SLO)$/svdograf.obj		\
          $(SLO)$/svdcrtv.obj         \
          $(SLO)$/svdedtv1.obj        \
          $(SLO)$/svdobj.obj          \
          $(SLO)$/svdoimp.obj         \
          $(SLO)$/svdpage.obj         \
          $(SLO)$/svdxcgv.obj		 \
-         $(SLO)$/svdoashp.obj
-         
+         $(SLO)$/svdoashp.obj        
 
 SRS1NAME=svdstr
 SRC1FILES= svdstr.src
