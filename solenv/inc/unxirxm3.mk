@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxirxm3.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-19 17:14:17 $
+#   last change: $Author: kz $ $Date: 2006-07-05 22:02:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@ ARCH_FLAGS*=
 
 CC= cc
 CXX= CC
-CFLAGS= -c $(INCLUDE)
+CFLAGS= -c
 CDEFS+= -DSTLPORT_VERSION=0x450 -D_USE_NAMESPACE=1 -DNEW_SOLAR
 CFLAGSCC=$(ARCH_FLAGS)
 CFLAGSCXX=      -LANG:ansi-for-init-scope=OFF -LANG:std=ON -LANG:libc_in_namespace_std=ON $(ARCH_FLAGS)
