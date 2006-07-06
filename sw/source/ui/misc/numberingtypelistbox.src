@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numberingtypelistbox.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:37:13 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 09:13:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,15 @@ Resource STRRES_NUMTYPES
             < "Bullet" ;                    6/*SVX_NUM_CHAR_SPECIAL        */; > ;
             < "Grafik" ;                    8/*SVX_NUM_BITMAP              */; > ;
             < "Keine" ;                     5/*SVX_NUM_NUMBER_NONE         */; > ;
+            < "Landesspezifische Zahlzeichen" ;         12 /*NATIVE_NUMBERING                   */; > ;
+            < "А, Б, .., Аа, Аб, ... (Bulgarisch)" ;    38 /*CHARS_CYRILLIC_UPPER_LETTER_BG     */; > ;
+            < "а, б, .., аа, аб, ... (Bulgarisch)" ;    39 /*CHARS_CYRILLIC_LOWER_LETTER_BG     */; > ;
+            < "А, Б, .., Аа, Бб, ... (Bulgarisch)" ;    40 /*CHARS_CYRILLIC_UPPER_LETTER_N_BG   */; > ;
+            < "а, б, .., аа, бб, ... (Bulgarisch)" ;    41 /*CHARS_CYRILLIC_LOWER_LETTER_N_BG   */; > ;
+            < "А, Б, .., Аа, Аб, ... (Russisch)" ;      42 /*CHARS_CYRILLIC_UPPER_LETTER_RU     */; > ;
+            < "а, б, .., аа, аб, ... (Russisch)" ;      43 /*CHARS_CYRILLIC_LOWER_LETTER_RU     */; > ;
+            < "А, Б, .., Аа, Бб, ... (Russisch)" ;      44 /*CHARS_CYRILLIC_UPPER_LETTER_N_RU   */; > ;
+            < "а, б, .., аа, бб, ... (Russisch)" ;      45 /*CHARS_CYRILLIC_LOWER_LETTER_N_RU   */; > ;
         };
         ItemList [ en-US ] =
         {
@@ -65,6 +74,15 @@ Resource STRRES_NUMTYPES
             < "Bullet" ;                    6/*SVX_NUM_CHAR_SPECIAL        */; > ;
             < "Graphics" ;                  8/*SVX_NUM_BITMAP              */; > ;
             < "None" ;                      5/*SVX_NUM_NUMBER_NONE         */; > ;
+            < "Native Numbering" ;                      12 /*NATIVE_NUMBERING                   */; > ;
+            < "А, Б, .., Аа, Аб, ... (Bulgarian)" ;     38 /*CHARS_CYRILLIC_UPPER_LETTER_BG     */; > ;
+            < "а, б, .., аа, аб, ... (Bulgarian)" ;     39 /*CHARS_CYRILLIC_LOWER_LETTER_BG     */; > ;
+            < "А, Б, .., Аа, Бб, ... (Bulgarian)" ;     40 /*CHARS_CYRILLIC_UPPER_LETTER_N_BG   */; > ;
+            < "а, б, .., аа, бб, ... (Bulgarian)" ;     41 /*CHARS_CYRILLIC_LOWER_LETTER_N_BG   */; > ;
+            < "А, Б, .., Аа, Аб, ... (Russian)" ;       42 /*CHARS_CYRILLIC_UPPER_LETTER_RU     */; > ;
+            < "а, б, .., аа, аб, ... (Russian)" ;       43 /*CHARS_CYRILLIC_LOWER_LETTER_RU     */; > ;
+            < "А, Б, .., Аа, Бб, ... (Russian)" ;       44 /*CHARS_CYRILLIC_UPPER_LETTER_N_RU   */; > ;
+            < "а, б, .., аа, бб, ... (Russian)" ;       45 /*CHARS_CYRILLIC_LOWER_LETTER_N_RU   */; > ;
         };
     ItemList [ x-comment ] =
     {
