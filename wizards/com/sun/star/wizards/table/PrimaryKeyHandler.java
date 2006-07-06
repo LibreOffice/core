@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PrimaryKeyHandler.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 12:54:24 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 14:28:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,7 +98,7 @@ public class PrimaryKeyHandler implements XFieldSelectionListener {
         String slblSelPrimaryFields = CurUnoDialog.oResource.getResText(UIConsts.RID_TABLE + 32);
         CurUnoDialog.insertLabel("lblExplanation",
             new String[] {"Height", "Label", "MultiLine", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-            new Object[] { new Integer(40), sExplanations,  Boolean.TRUE, new Integer(91), new Integer(27),IPRIMEKEYSTEP, new Short(curtabindex++), new Integer(213)}
+            new Object[] { new Integer(40), sExplanations,  Boolean.TRUE, new Integer(91), new Integer(27),IPRIMEKEYSTEP, new Short(curtabindex++), new Integer(233)}
         );
 
         chkcreatePrimaryKey = CurUnoDialog.insertCheckBox("chkcreatePrimaryKey", SPRIMEKEYMODE, this,
@@ -131,12 +131,12 @@ public class PrimaryKeyHandler implements XFieldSelectionListener {
 
         lstSinglePrimeKey = CurUnoDialog.insertListBox("lstSinglePrimeKey", "onPrimeKeySelected", null, this,
             new String[] {"Dropdown", "Enabled", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-            new Object[] {Boolean.TRUE, Boolean.FALSE, new Integer(12), "HID:41231", new Integer(162), new Integer(115), IPRIMEKEYSTEP, new Short(curtabindex++), new Integer(70)});
+            new Object[] {Boolean.TRUE, Boolean.FALSE, new Integer(12), "HID:41231", new Integer(162), new Integer(115), IPRIMEKEYSTEP, new Short(curtabindex++), new Integer(80)});
 
         chkApplyAutoValueExisting = CurUnoDialog.insertCheckBox("chkApplyAutoValueExisting", SPRIMEKEYMODE, this,
                 new String[] {"Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"}, //107
-                new Object[] {UIConsts.INTEGERS[8], "HID:41232", sApplyAutoValue, new Integer(238), new Integer(117), IPRIMEKEYSTEP, new Short(curtabindex++), new Integer(66)});
-        curPrimaryKeySelection = new FieldSelection(CurUnoDialog, IPRIMEKEYSTEP.intValue(), 116, 142, 188, 39, slblAvailableFields, slblSelPrimaryFields, 41234, false);
+                new Object[] {UIConsts.INTEGERS[8], "HID:41232", sApplyAutoValue, new Integer(248), new Integer(117), IPRIMEKEYSTEP, new Short(curtabindex++), new Integer(66)});
+        curPrimaryKeySelection = new FieldSelection(CurUnoDialog, IPRIMEKEYSTEP.intValue(), 116, 142, 208, 47, slblAvailableFields, slblSelPrimaryFields, 41234, false);
         curPrimaryKeySelection.addFieldSelectionListener(this);
 
     }
