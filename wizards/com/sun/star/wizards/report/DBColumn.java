@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DBColumn.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 12:50:23 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 14:22:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,9 +107,9 @@ public class DBColumn {
         this.CurRecordTable = _CurRecordTable;
         bIsGroupColumn = false;
         if (CurDBMetaData.RecordFieldColumns != null)
-            setDBField(CurDBMetaData.RecordFieldColumns[i].DisplayFieldName);
+            CurDBField = CurDBMetaData.getFieldColumnByFieldName(CurDBMetaData.RecordFieldColumns[i].FieldName);
         else
-            setDBField(CurDBMetaData.RecordFieldNames[i]);
+            CurDBField = CurDBMetaData.getFieldColumnByFieldName(CurDBMetaData.RecordFieldNames[i]);
         if (_bForce)
             assignCells(i, true);
         else{
@@ -123,15 +123,15 @@ public class DBColumn {
     try {
         XCell xCell = CurRecordTable.xCellRange.getCellByPosition(_nColumn,0);
         XTextRange xTextCell = (XTextRange) UnoRuntime.queryInterface(XTextRange.class, xCell);
-        String CellString = xTextCell.getString();
         String CompString = "Column";
         XTextCursor xLocCellCursor = TextDocument.createTextCursor(xCell);
-        if (isNameCell(xLocCellCursor, CurDBField.AliasName, CompString) || (_bforce)){
+        if (isNameCell(xLocCellCursor, CurDBField.FieldName, CompString) || (_bforce)){
             xNameCell = xCell;
             xNameTextCell = xTextCell;
             xValCell = CurRecordTable.xCellRange.getCellByPosition(_nColumn,1);
             xValTextCell = (XTextRange) UnoRuntime.queryInterface(XTextRange.class, xValCell);
             xValCellCursor = TextDocument.createTextCursor(xValCell);
+            ValColumn = _nColumn;
             return true;
         }
     } catch (Exception e) {
@@ -144,9 +144,8 @@ public class DBColumn {
     public DBColumn(TextTableHandler _oTextTableHandler, RecordParser _CurDBMetaData, String _FieldName, int GroupIndex, String TableName, DBColumn OldDBColumn) throws Exception{
         this.oTextTableHandler = _oTextTableHandler;
         this.CurDBMetaData = _CurDBMetaData;
-        setDBField( _FieldName);
+        CurDBField = CurDBMetaData.getFieldColumnByDisplayName(_FieldName);
         bIsGroupColumn = true;
-        String CurFieldString = "G" + String.valueOf(GroupIndex+1) + "xxx";
         getTableColumns(TableName);
         xNameCell = OldDBColumn.xNameCell;
         xNameTextCell = OldDBColumn.xNameTextCell;
@@ -162,19 +161,16 @@ public class DBColumn {
     public DBColumn(TextTableHandler _oTextTableHandler, RecordParser _CurDBMetaData, String _FieldName, int GroupIndex, String TableName) throws Exception{
         this.oTextTableHandler = _oTextTableHandler;
         this.CurDBMetaData = _CurDBMetaData;
-        setDBField(_FieldName);
+        CurDBField = CurDBMetaData.getFieldColumnByFieldName(_FieldName);
         bIsGroupColumn = true;
         XTextRange xTextCell;
         XCell xCell;
-        String CellString;
-        String CurFieldString = "G" + String.valueOf(GroupIndex + 1) + "xxx";
         getTableColumns(TableName);
         XTableRows xRows = xTextTable.getRows();
         for (int n = 0; n < xTableColumns.getCount(); n++){
             for (int m = 0; m < xRows.getCount(); m++){
                 xCell = xCellRange.getCellByPosition(n,m);
                 xTextCell = (XTextRange) UnoRuntime.queryInterface(XTextRange.class, xCell);
-                CellString = xTextCell.getString();
                 String CompString = TableName.substring(4);
                 XTextCursor xLocCellCursor = TextDocument.createTextCursor(xCell);
                 if (isNameCell(xLocCellCursor, CurDBField.FieldName, CompString)){
@@ -191,14 +187,6 @@ public class DBColumn {
                 }
             }
         }
-    }
-
-
-
-    public void setDBField(String _FieldName){
-        CurDBField = CurDBMetaData.getFieldColumnByDisplayName(_FieldName);
-        CurDBField.DisplayFieldName = _FieldName;
-        CurDBField.AliasName = CurDBMetaData.getFieldTitle(_FieldName);
     }
 
 
@@ -235,7 +223,7 @@ public class DBColumn {
         xTextCursor.gotoStart(false);
         xTextCursor.gotoEnd(true);
         xTextCursor.setString("");
-        oTextFieldHandler.insertUserField(xTextCursor, CurDBField.DisplayFieldName, CurDBField.AliasName);
+        oTextFieldHandler.insertUserField(xTextCursor, CurDBField.FieldName, CurDBField.FieldTitle);
     }
 
 
@@ -244,7 +232,7 @@ public class DBColumn {
         xTextCursor.gotoStart(false);
         xTextCursor.gotoEnd(true);
         xTextCursor.setString("");
-        oTextFieldHandler.insertUserField(xTextCursor, CurDBField.DisplayFieldName, CurDBField.AliasName);
+        oTextFieldHandler.insertUserField(xTextCursor, CurDBField.FieldName, CurDBField.FieldTitle);
     }
 
 
@@ -277,7 +265,6 @@ public class DBColumn {
 
     public void modifyCellContent(Object CurGroupValue){
     double dblValue = 0;
-    String sString;
     try{
         if (xValCell != null){
             if (AnyConverter.isString(CurGroupValue)){
@@ -285,7 +272,6 @@ public class DBColumn {
                 xValTextCell.setString(sValue);
             }
             else{
-                boolean bbla = AnyConverter.isVoid(CurGroupValue);
                 if (AnyConverter.isBoolean(CurGroupValue))
                     dblValue = (double) AnyConverter.toInt(CurGroupValue);
                 if (AnyConverter.isByte(CurGroupValue))
@@ -384,8 +370,7 @@ public class DBColumn {
     }
     // Todo: Insert a  resource; Exception should be thrown to the calling routine
     catch( Exception exception){
-// TODO
-// Resource wieder rein!!       sMsgInvalidTextField = oResource.getResText(UIConsts.RID_REPORT + 73);
+//      sMsgInvalidTextField = oResource.getResText(UIConsts.RID_REPORT + 73);
 //      SystemDialog.showMessageBox(oTextTableHandler.xMSFDoc, "ErrorBox", VclWindowPeerAttribute.OK, sMsgInvalidTextField);
         exception.printStackTrace(System.out);
         return true;    //most probably this is really the Namecell!!!!
