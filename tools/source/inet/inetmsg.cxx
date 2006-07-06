@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inetmsg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 13:46:21 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 14:33:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1390,9 +1390,11 @@ BOOL INetMIMEMessage::EnableAttachChild (INetMessageContainerType eType)
         // Generate a unique boundary from current time.
         sal_Char sTail[16 + 1];
         Time aCurTime;
+        sal_uInt64 nThis = reinterpret_cast< sal_uIntPtr >( this ); // we can be on a 64bit architecture
+        nThis = ( ( nThis >> 32 ) ^ nThis ) & SAL_MAX_UINT32;
         sprintf (sTail, "%08X%08X",
                  static_cast< unsigned int >(aCurTime.GetTime()),
-                 reinterpret_cast< unsigned int >(this));
+                 static_cast< unsigned int >(nThis));
         m_aBoundary = "------------_4D48";
         m_aBoundary += sTail;
 
