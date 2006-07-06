@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScenarioSelector.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 12:54:38 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 14:28:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,7 +90,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
     XMultiServiceFactory xMSF;
 
     public ScenarioSelector(TableWizard _CurUnoDialog, TableDescriptor _curtabledescriptor, String _reslblFields, String _reslblSelFields) {
-        super(_CurUnoDialog, TableWizard.SOMAINPAGE, 91, 108, 210, 72, _reslblFields, _reslblSelFields, 41209, true );
+        super(_CurUnoDialog, TableWizard.SOMAINPAGE, 91, 108, 230, 80, _reslblFields, _reslblSelFields, 41209, true );
         CurUnoDialog = (TableWizard) _CurUnoDialog;
         xMSF = CurUnoDialog.xMSF;
         aLocale = Configuration.getOfficeLocale(xMSF);
@@ -110,7 +110,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
         oCGTable = new CGTable(CurUnoDialog.xMSF);
         lblExplanation = CurUnoDialog.insertLabel("lblScenarioExplanation",
           new String[] {"Height", "Label", "MultiLine", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-          new Object[] {new Integer(32), sExplanation, Boolean.TRUE, new Integer(91), new Integer(27), IMAINSTEP, new Short(pretabindex++), new Integer(213)}
+          new Object[] {new Integer(32), sExplanation, Boolean.TRUE, new Integer(91), new Integer(27), IMAINSTEP, new Short(pretabindex++), new Integer(233)}
         );
 
         lblCategories = CurUnoDialog.insertLabel("lblCategories",
