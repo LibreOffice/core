@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SalGtkFolderPicker.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:13:58 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 10:32:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,7 +125,7 @@ SalGtkFolderPicker::SalGtkFolderPicker( const uno::Reference<lang::XMultiService
     m_pDialog = gtk_file_chooser_dialog_new(
         OUStringToOString( aResProvider.getResString( FOLDERPICKER_TITLE ), RTL_TEXTENCODING_UTF8 ).getStr(),
         NULL, GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-        GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL );
+        GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, (char *)NULL );
 
     gtk_dialog_set_default_response( GTK_DIALOG (m_pDialog), GTK_RESPONSE_ACCEPT );
     gtk_file_chooser_set_local_only( GTK_FILE_CHOOSER( m_pDialog ), FALSE );
