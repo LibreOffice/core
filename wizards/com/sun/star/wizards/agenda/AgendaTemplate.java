@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AgendaTemplate.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 12:28:14 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 14:13:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -781,7 +781,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
 
                     // after the last section we do not insert a new one.
                     if ( i < topicsData.size() - 2 )
-                        textSectionHandler.insertTextSection( SECTION_MINUTES , template);
+                        textSectionHandler.insertTextSection( SECTION_MINUTES , template, false);
 
                 }
             }
