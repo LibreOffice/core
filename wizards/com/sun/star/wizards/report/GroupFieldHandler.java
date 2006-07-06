@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GroupFieldHandler.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 12:51:07 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 14:24:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,12 +68,12 @@ WizardDialog oWizardDialog;
 
     public void initialize(){
     try{
-        CurDBMetaData.setfieldtitles();
         Vector NormalFieldsVector = new Vector();
         Vector SelFieldsVector = new Vector();
-        for (int i = 0; i < CurDBMetaData.FieldNames.length; i++){
-            String sfieldtitle = CurDBMetaData.getFieldTitle(CurDBMetaData.FieldNames[i]);
-            if (CurReportDocument.isGroupField(CurDBMetaData.FieldNames[i]))
+        String[] sFieldNames = CurDBMetaData.getFieldNames();
+        for (int i = 0; i < sFieldNames.length; i++){
+            String sfieldtitle = CurDBMetaData.getFieldTitle(sFieldNames[i]);
+            if (CurReportDocument.isGroupField(sFieldNames[i]))
                 SelFieldsVector.add(sfieldtitle);
             else
                 NormalFieldsVector.add(sfieldtitle);
