@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ucbstorage.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:56:00 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 14:35:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -554,7 +554,7 @@ public:
                                                                         // this class is close to be unusable
                                                                         // since it can not read and write
     using SvStream::SetError;
-    void                        SetError( long nError );
+    void                        SetError( sal_uInt32 nError );
     void                        PrepareCachedForReopen( StreamMode nMode );
 };
 
@@ -1216,7 +1216,7 @@ void  UCBStorageStream_Impl::FlushData()
     m_bCommited = TRUE;
 }
 
-void UCBStorageStream_Impl::SetError( long nErr )
+void UCBStorageStream_Impl::SetError( sal_uInt32 nErr )
 {
     if ( !m_nError )
     {
