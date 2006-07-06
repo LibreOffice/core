@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FieldColumn.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 12:36:02 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 14:15:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,9 +47,8 @@ public class FieldColumn {
     public String FieldName;
     public String DisplayFieldName;
     public String FieldTitle;
-    public String AliasName;
     public int ColIndex;
-    private String CommandName;
+    public String CommandName;
     public int FieldWidth;
     public int DBFormatKey;
     public int FieldType;
@@ -65,36 +64,47 @@ public class FieldColumn {
     protected int iLogicalFormatKey;
 
     public FieldColumn(CommandMetaData oCommandMetaData, String _DisplayFieldName) {
-        // TODO: xColumns has to be retrieved from the respective table
-        setFieldNameAndCommandName(_DisplayFieldName);
-        if (CommandName == null){
-            DisplayFieldName = FieldName;
-            CommandName = oCommandMetaData.getCommandName();
-        }
-        else
-            DisplayFieldName = CommandName + "." + FieldName;
-        FieldTitle = FieldName; // oCommandMetaData.getFieldTitle(FieldName);
-        //TODO check if the aliasname doesn't occur twice in query
-        AliasName = FieldName;
-        DBMetaData.CommandObject oTable = oCommandMetaData.getTableByName(CommandName);
-        setFormatKeys(oCommandMetaData, oTable.xColumns);
-    }
-
-    public FieldColumn(CommandMetaData oCommandMetaData, String _FieldName, String _CommandName) {
-        CommandName = _CommandName;
-        FieldName = _FieldName;
-        DisplayFieldName = FieldName;
-        AliasName = FieldName;
+        DisplayFieldName = _DisplayFieldName;
+        CommandName = oCommandMetaData.getCommandName();
+        FieldName = getFieldName(DisplayFieldName, CommandName);
+        FieldTitle = _DisplayFieldName; // oCommandMetaData.getFieldTitle(FieldName);
         FieldTitle = FieldName;
-        //TODO check if the aliasname doesn't occur twice in query
-        AliasName = FieldName;
+        DBMetaData.CommandObject oTable = oCommandMetaData.getTableByName(CommandName);
+        setFormatKeys(oCommandMetaData, oTable.xColumns);
+    }
+
+    private String getFieldName(String _DisplayFieldName, String _CommandName){
+        return _DisplayFieldName.substring(_CommandName.length()+1, _DisplayFieldName.length());
+    }
+
+
+    public FieldColumn(CommandMetaData oCommandMetaData, String _FieldName, String _CommandName, boolean _bInstantiateByDisplayName) {
+        CommandName = _CommandName;
+        if (_bInstantiateByDisplayName){
+            DisplayFieldName = _FieldName;
+            FieldName = getFieldName(_FieldName, _CommandName);
+        }
+        else{
+            FieldName = _FieldName;
+            DisplayFieldName = composeDisplayFieldName(FieldName, _CommandName);
+        }
+        FieldTitle = FieldName;
         DBMetaData.CommandObject oTable = oCommandMetaData.getTableByName(CommandName);
         setFormatKeys(oCommandMetaData, oTable.xColumns);
     }
 
 
+    public FieldColumn(CommandMetaData oCommandMetaData, XNameAccess _xColumns, String _FieldName) {
+        FieldName = _FieldName;
+        FieldTitle = FieldName;
+        DisplayFieldName = FieldName;
+        ColIndex = JavaTools.FieldInList(_xColumns.getElementNames(), FieldName) + 1;
+        setFormatKeys(oCommandMetaData, _xColumns);
+    }
 
-
+    public static String composeDisplayFieldName(String _sFieldName, String _sCommandName){
+        return _sCommandName + "." + _sFieldName;
+    }
 
     private void setFormatKeys(CommandMetaData oCommandMetaData, XNameAccess _xColumns){
         try {
@@ -113,13 +123,6 @@ public class FieldColumn {
         }
     }
 
-    public FieldColumn(CommandMetaData oCommandMetaData, XNameAccess _xColumns, String _DisplayFieldName) {
-        FieldName = _DisplayFieldName;
-        DisplayFieldName = FieldName;
-        ColIndex = JavaTools.FieldInList(_xColumns.getElementNames(), FieldName) + 1;
-        setFormatKeys(oCommandMetaData, _xColumns);
-    }
-
     public void setCommandName(String _CommandName) {
         CommandName = _CommandName;
     }
@@ -128,28 +131,8 @@ public class FieldColumn {
         return CommandName;
     }
 
-    public void setFieldNameAndCommandName(String _DisplayName) {
-        String[] sFieldMetaData = JavaTools.ArrayoutofString(_DisplayName, ".");
-        if (sFieldMetaData.length >= 2) {
-            FieldName = sFieldMetaData[sFieldMetaData.length - 1];
-            CommandName = "";
-            for (int i = 0; i < sFieldMetaData.length - 1; i++) {
-                CommandName += sFieldMetaData[i];
-                if (i < sFieldMetaData.length - 2)
-                    CommandName += ".";
-            }
-        } else
-            FieldName = _DisplayName;
-    }
-
-    public static String getFieldName(String _DisplayName) {
-        String LocFieldName;
-        String[] sFieldMetaData = JavaTools.ArrayoutofString(_DisplayName, ".");
-        if (sFieldMetaData.length >= 2)
-            LocFieldName = sFieldMetaData[sFieldMetaData.length - 1];
-        else
-            LocFieldName = _DisplayName;
-        return LocFieldName;
+    public String getFieldName(){
+        return FieldName;
     }
 
     public static String getCommandName(String _DisplayName) {
