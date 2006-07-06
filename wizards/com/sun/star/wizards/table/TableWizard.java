@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableWizard.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 12:54:55 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 14:29:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,7 +84,7 @@ public class TableWizard extends WizardDialog implements XTextListener, XComplet
         String sTitle = oResource.getResText(UIConsts.RID_TABLE + 1);
         Helper.setUnoPropertyValues(xDialogModel,
             new String[] { "Height","Moveable","Name","PositionX","PositionY","Step","TabIndex","Title","Width"},
-            new Object[] { new Integer(210),Boolean.TRUE, "DialogTable", new Integer(102),new Integer(41),new Integer(1), new Short((short)0), sTitle, new Integer(310)}  );
+            new Object[] { new Integer(218),Boolean.TRUE, "DialogTable", new Integer(102),new Integer(41),new Integer(1), new Short((short)0), sTitle, new Integer(330)}  );
         drawNaviBar();
         fielditems = new Hashtable();
         //TODO if reportResouces cannot be gotten dispose officedocument
@@ -206,8 +206,8 @@ public class TableWizard extends WizardDialog implements XTextListener, XComplet
             curproperties = new PropertyValue[1];
 //          curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/MySQL-JDBC-Database.odb"); //MyDBase; Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb ; Mydbwizard2DocAssign.odb; NewAccessDatabase, MyDocAssign baseLocation ); "DataSourceName", "db1");
             curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/MyHSQL Database.odb"); //MyDBase; Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb ; Mydbwizard2DocAssign.odb; NewAccessDatabase, MyDocAssign baseLocation ); "DataSourceName", "db1");*//           /--/curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///x:/bc/MyHSQL Database.odb"); //MyDBase; Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb ; Mydbwizard2DocAssign.odb; NewAccessDatabase,  baseLocation ); "DataSourceName", "db1");*//          curproperties[0] = Properties.createProperty("DataSourceName", "Bibliography");*                        //          curproperties[0] = Properties.createProperty("DataSourceName", "Bibliography"); //Bibliography*         CurTableWizard.startTableWizard(xLocMSF, curproperties);
-            curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///x:/bc/MyNewHSQLDatabase.odb"); //Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb MyDBase.odb; Mydbwizard2DocAssign.odb; NewAccessDatabase, MyDocAssign baseLocation ); "DataSourceName", "db1");
-            curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///x:/bc/Mydbwizardpp3TestDatabase.odb"); //Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb MyDBase.odb; Mydbwizard2DocAssign.odb; NewAccessDatabase, MyDocAssign baseLocation ); "DataSourceName", "db1");
+//            curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///x:/bc/MyNewHSQLDatabase.odb"); //Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb MyDBase.odb; Mydbwizard2DocAssign.odb; NewAccessDatabase, MyDocAssign baseLocation ); "DataSourceName", "db1");
+//            curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///x:/bc/Mydbwizardpp3TestDatabase.odb"); //Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb MyDBase.odb; Mydbwizard2DocAssign.odb; NewAccessDatabase, MyDocAssign baseLocation ); "DataSourceName", "db1");
 
 //          curproperties[0] = Properties.createProperty("DataSourceName", "Bibliography");  //file:///C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/myjapanesehsqldatasourceMyDocAssign.odb"); //MyDBase; Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb ; Mydbwizard2DocAssign.odb; NewAccessDatabase, MyDocAssign baseLocation ); "DataSourceName", "db1");*//          /--/curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///x:/bc/MyHSQL Database.odb"); //MyDBase; Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb ; Mydbwizard2DocAssign.odb; NewAccessDatabase,  baseLocation ); "DataSourceName", "db1");*//          curproperties[0] = Properties.createProperty("DataSourceName", "Bibliography");*                        //          curproperties[0] = Properties.createProperty("DataSourceName", "Bibliography"); //Bibliography*         CurTableWizard.startTableWizard(xLocMSF, curproperties);
             CurTableWizard.startTableWizard(xLocMSF, curproperties);
