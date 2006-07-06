@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SQLQueryComposer.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 12:37:00 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 14:16:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,11 +86,11 @@ public class SQLQueryComposer {
         }
     }
 
-    private boolean addtoSelectClause(String FieldName) throws SQLException {
+    private boolean addtoSelectClause(String DisplayFieldName) throws SQLException {
         if (bincludeGrouping){
             if (CurDBMetaData.xDBMetaData.supportsGroupByUnrelated()) {
                 if (CurDBMetaData.GroupFieldNames != null) {
-                    if (JavaTools.FieldInList(CurDBMetaData.GroupFieldNames, FieldName) > -1)
+                    if (JavaTools.FieldInList(CurDBMetaData.GroupFieldNames, DisplayFieldName) > -1)
                         return false;
                 }
             }
@@ -99,23 +99,29 @@ public class SQLQueryComposer {
     }
 
     public void appendSelectClause(boolean _baddAliasFieldNames) throws SQLException {
-        selectclause = "SELECT ";
-        for (int i = 0; i < CurDBMetaData.FieldNames.length; i++) {
-            if (addtoSelectClause(CurDBMetaData.FieldNames[i])) {
-                int iAggregate = CurDBMetaData.getAggregateIndex(CurDBMetaData.FieldNames[i]);
+        String sSelectBaseClause = "SELECT ";
+        selectclause = sSelectBaseClause;
+        for (int i = 0; i < CurDBMetaData.FieldColumns.length; i++) {
+            if (addtoSelectClause(CurDBMetaData.FieldColumns[i].DisplayFieldName)) {
+                int iAggregate = CurDBMetaData.getAggregateIndex(CurDBMetaData.FieldColumns[i].DisplayFieldName);
                 if (iAggregate > -1) {
                     selectclause += CurDBMetaData.AggregateFieldNames[iAggregate][1] + "(" + getComposedAliasFieldName(CurDBMetaData.AggregateFieldNames[iAggregate][0]) + ")";
                     if (_baddAliasFieldNames)
                         selectclause += getAliasFieldNameClause(CurDBMetaData.AggregateFieldNames[iAggregate][0]);
                 } else {
-                    selectclause += getComposedAliasFieldName(CurDBMetaData.FieldNames[i]);
+                    selectclause += getComposedAliasFieldName(CurDBMetaData.FieldColumns[i].DisplayFieldName);
                     if (_baddAliasFieldNames)
-                        selectclause += getAliasFieldNameClause(CurDBMetaData.FieldNames[i]);
+                        selectclause += getAliasFieldNameClause(CurDBMetaData.FieldColumns[i].DisplayFieldName);
                 }
                 selectclause += ", ";
             }
         }
-        selectclause = selectclause.substring(0, selectclause.length() - 2);
+        if (selectclause.equals(sSelectBaseClause)){
+            selectclause = selectclause.substring(0, selectclause.length() - 1);
+        }
+        else{
+            selectclause = selectclause.substring(0, selectclause.length() - 2);
+        }
     }
 
 
@@ -144,7 +150,7 @@ public class SQLQueryComposer {
         XIndexAccess xColumnIndexAccess = xQueryAnalyzer.getOrderColumns();
         xQueryComposer.setOrder("");
         for (int i = 0; i < CurDBMetaData.SortFieldNames.length; i++)
-            appendSortingCriterion(i);
+            appendSortingCriterion(i, false);
         for (int i = 0; i < xColumnIndexAccess.getCount(); i++){
             try {
                 XPropertySet xColumnPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xColumnIndexAccess.getByIndex(i));
@@ -159,14 +165,14 @@ public class SQLQueryComposer {
         }
     }
 
-    private void appendSortingCriterion(int _SortIndex ) throws SQLException{
-        XPropertySet xColumn = CurDBMetaData.getColumnObjectByFieldName(CurDBMetaData.SortFieldNames[_SortIndex][0]);
+    private void appendSortingCriterion(int _SortIndex, boolean _baddAliasFieldNames ) throws SQLException{
+          XPropertySet xColumn = CurDBMetaData.getColumnObjectByFieldName(CurDBMetaData.SortFieldNames[_SortIndex][0], _baddAliasFieldNames);
         boolean bascend = (CurDBMetaData.SortFieldNames[_SortIndex][1] == "ASC");
         xQueryComposer.appendOrderByColumn(xColumn, bascend);
     }
 
 
-    public void appendSortingcriteria() throws SQLException {
+    public void appendSortingcriteria(boolean _baddAliasFieldNames) throws SQLException {
         String sOrder = "";
         xQueryComposer.setOrder("");
         for (int i = 0; i < CurDBMetaData.SortFieldNames.length; i++) {
@@ -180,14 +186,14 @@ public class SQLQueryComposer {
                 xQueryComposer.setOrder(sOrder);
             }
             else
-                appendSortingCriterion(i);
+                appendSortingCriterion(i, _baddAliasFieldNames);
             sOrder = xQueryAnalyzer.getOrder();
         }
     }
 
-    public void appendGroupByColumns() throws SQLException {
+    public void appendGroupByColumns(boolean _baddAliasFieldNames) throws SQLException {
         for (int i = 0; i < CurDBMetaData.GroupFieldNames.length; i++) {
-            XPropertySet xColumn = CurDBMetaData.getColumnObjectByFieldName(CurDBMetaData.GroupFieldNames[i]);
+            XPropertySet xColumn = CurDBMetaData.getColumnObjectByFieldName(CurDBMetaData.GroupFieldNames[i], _baddAliasFieldNames);
             xQueryComposer.appendGroupByColumn(xColumn);
         }
         String s = xQueryAnalyzer.getQuery();
@@ -215,7 +221,6 @@ public class SQLQueryComposer {
         try {
             String s;
             bincludeGrouping = _bincludeGrouping;
-            CurDBMetaData.setfieldtitles();
             fromclause = "FROM";
             String[] sCommandNames = CurDBMetaData.getIncludedCommandNames();
             for (int i = 0; i < sCommandNames.length; i++){
@@ -237,11 +242,11 @@ public class SQLQueryComposer {
             }
             s = xQueryAnalyzer.getQuery();
             if (_bincludeGrouping){
-                appendGroupByColumns();
+                appendGroupByColumns(_baddAliasFieldNames);
                 if (CurDBMetaData.GroupByFilterConditions.length > 0)
                     xQueryComposer.setStructuredHavingClause(CurDBMetaData.GroupByFilterConditions);
             }
-            appendSortingcriteria();
+            appendSortingcriteria(_baddAliasFieldNames);
             return true;
         } catch (Exception exception) {
             exception.printStackTrace(System.out);
