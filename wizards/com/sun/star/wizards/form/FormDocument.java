@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormDocument.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 12:43:21 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 14:18:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,10 +39,12 @@ import com.sun.star.wizards.text.TextDocument;
 import com.sun.star.awt.Point;
 import com.sun.star.awt.Size;
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.PropertyVetoException;
 import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameContainer;
 import com.sun.star.frame.XModel;
+import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.Exception;
@@ -64,7 +66,7 @@ public class FormDocument extends TextDocument {
     public TextStyleHandler oTextStyleHandler;
     public XPropertySet xPropPageStyle;
     public final int SOSYMBOLMARGIN = 2000;
-    private final int SOFORMGAP = 1000;
+    private final int SOFORMGAP = 2000;
     public Vector oControlForms = new Vector();
     public CommandMetaData oMainFormDBMetaData;
     public CommandMetaData oSubFormDBMetaData;
@@ -88,7 +90,7 @@ public class FormDocument extends TextDocument {
 
 
     public FormDocument(XMultiServiceFactory xMSF, boolean bshowStatusIndicator, boolean bgetCurrentFrame, Resource oResource) {
-    super(xMSF, bshowStatusIndicator, bgetCurrentFrame, null);
+    super(xMSF, bshowStatusIndicator, bgetCurrentFrame, null, "private:factory/swriter", false);
     try {
         oFormHandler = new FormHandler(xMSF, xTextDocument);
         oFormHandler.setDrawObjectsCaptureMode(false);
@@ -145,7 +147,7 @@ public class FormDocument extends TextDocument {
     }}
 
 
-    public void initialize(boolean _baddParentForm, boolean _bhasSubForm, boolean _bModifySubForm){
+    public void initialize(boolean _baddParentForm, boolean _bhasSubForm, boolean _bModifySubForm, Short _NBorderType){
         bhasSubForm = _bhasSubForm;
         adjustPageStyle();
         if (_baddParentForm ){
@@ -155,19 +157,19 @@ public class FormDocument extends TextDocument {
                 oFormHandler.removeControlsofForm(SOMAINFORM);
                 ((ControlForm) oControlForms.get(0)).oFormController = null;
             }
-            ((ControlForm) oControlForms.get(0)).initialize(curUIControlArranger.getSelectedArrangement(0));
+            ((ControlForm) oControlForms.get(0)).initialize(curUIControlArranger.getSelectedArrangement(0), _NBorderType );
         }
         if(_bhasSubForm){
             if (oControlForms.size() == 1){
-                adjustMainFormSize();
+                adjustMainFormSize(_NBorderType);
                 oControlForms.addElement(new ControlForm(this, SOSUBFORM, getSubFormPoint(), getSubFormSize()));
-                ((ControlForm) oControlForms.get(1)).initialize(curUIControlArranger.getSelectedArrangement(1));
+                ((ControlForm) oControlForms.get(1)).initialize(curUIControlArranger.getSelectedArrangement(1), _NBorderType);
             }
             else if (_bModifySubForm){
                 if (oControlForms.size() > 1){
                     oFormHandler.removeControlsofForm(SOSUBFORM);
                     ((ControlForm) oControlForms.get(1)).oFormController = null;
-                    ((ControlForm) oControlForms.get(1)).initialize(curUIControlArranger.getSelectedArrangement(1));
+                    ((ControlForm) oControlForms.get(1)).initialize(curUIControlArranger.getSelectedArrangement(1), _NBorderType);
                 }
             }
         }
@@ -175,15 +177,15 @@ public class FormDocument extends TextDocument {
             if (oFormHandler.hasFormByName(SOSUBFORM)){
                 oFormHandler.removeFormByName(SOSUBFORM);
                 oControlForms.remove(1);
-                adjustMainFormSize();
+                adjustMainFormSize(_NBorderType);
             }
         }
     }
 
 
     private int getTotFieldCount(){
-        nMainFormFieldCount = oMainFormDBMetaData.FieldNames.length;
-        totfieldcount = nMainFormFieldCount + oSubFormDBMetaData.FieldNames.length;
+        nMainFormFieldCount = oMainFormDBMetaData.getFieldNames().length;
+        totfieldcount = nMainFormFieldCount + oSubFormDBMetaData.getFieldNames().length;
         return totfieldcount;
     }
 
@@ -220,7 +222,7 @@ public class FormDocument extends TextDocument {
     }
 
 
-    private void adjustMainFormSize(){
+    private void adjustMainFormSize(Short _NBorderType){
         ControlForm oMainControlForm = (ControlForm) oControlForms.get(0);
         oMainControlForm.setFormSize(getMainFormSize(oMainControlForm.curArrangement));
         if (oMainControlForm.curArrangement == FormWizard.SOGRID)
@@ -229,11 +231,11 @@ public class FormDocument extends TextDocument {
             oMainControlForm.oFormController.positionControls(oMainControlForm.curArrangement,
                                                                 oMainControlForm.aStartPoint,
                                                                 oMainControlForm.getFormSize(),
-                                                                curUIControlArranger.getAlignValue());
+                                                                curUIControlArranger.getAlignValue(), _NBorderType);
     }
 
 
-    private void adjustSubFormPosSize(){
+    private void adjustSubFormPosSize(Short _NBorderType){
         ControlForm oMainControlForm = (ControlForm) oControlForms.get(0);
         ControlForm oSubControlForm = (ControlForm) oControlForms.get(1);
         oSubControlForm.setFormSize(new Size(nFormWidth, (int)nFormHeight - oMainControlForm.getFormSize().Height));
@@ -247,7 +249,7 @@ public class FormDocument extends TextDocument {
         else{
 //          oSubControlForm.oFormController.adjustYPositions(_idiffheight);
             oSubControlForm.setStartPoint( new Point(oSubControlForm.aStartPoint.X, oMainControlForm.getActualFormHeight() + oMainControlForm.aStartPoint.Y + SOFORMGAP));
-            oSubControlForm.oFormController.positionControls(oSubControlForm.curArrangement, oSubControlForm.aStartPoint, oSubControlForm.getAvailableFormSize(), curUIControlArranger.getAlignValue());
+            oSubControlForm.oFormController.positionControls(oSubControlForm.curArrangement, oSubControlForm.aStartPoint, oSubControlForm.getAvailableFormSize(), curUIControlArranger.getAlignValue(), _NBorderType);
         }
     }
 
@@ -334,7 +336,7 @@ public class FormDocument extends TextDocument {
         }
 
 
-        public void initialize(int _curArrangement){
+        public void initialize(int _curArrangement, Short _NBorderType){
             boolean badaptControlStyles = false;
             xTextDocument.lockControllers();
             curArrangement = _curArrangement;
@@ -352,19 +354,19 @@ public class FormDocument extends TextDocument {
                 }
             }
             if (curArrangement == FormWizard.SOGRID){
-                insertGridControl();
+                insertGridControl(_NBorderType);
                 badaptControlStyles = true;
             }
             else{
                 badaptControlStyles = !oFormController.areControlsexisting();
-                oFormController.positionControls(_curArrangement, aStartPoint, getAvailableFormSize(), curUIControlArranger.getAlignValue());
+                oFormController.positionControls(_curArrangement, aStartPoint, getAvailableFormSize(), curUIControlArranger.getAlignValue(), _NBorderType);
             }
             if (badaptControlStyles)
                 curStyleApplier.applyStyle(false, true);
             if ((Name.equals(SOMAINFORM)) && (oControlForms.size() > 1)){
                 ControlForm curSubControlForm = ((ControlForm) oControlForms.get(1));
                 if (curSubControlForm != null){
-                    adjustSubFormPosSize();
+                    adjustSubFormPosSize(_NBorderType);
                 }
             }
             setFormSize(new Size(aFormSize.Width, getActualFormHeight()));
@@ -446,13 +448,17 @@ public class FormDocument extends TextDocument {
             return curArrangement;
         }
 
-        private void insertGridControl(){
+        private void insertGridControl(Short _NBorderType){
+        try {
             curArrangement = FormWizard.SOGRID;
             if (Name.equals(SOMAINFORM))
-                oGridControl = new GridControl(xMSF,Name + "_Grid", oFormHandler, xFormContainer, oDBMetaData.DBFieldColumns, aStartPoint, getMainFormSize(FormWizard.SOGRID));
+                oGridControl = new GridControl(xMSF,Name + "_Grid", oFormHandler, xFormContainer, oDBMetaData.FieldColumns, aStartPoint, getMainFormSize(FormWizard.SOGRID));
             else
-                oGridControl = new GridControl(xMSF, Name + "_Grid", oFormHandler, xFormContainer, oDBMetaData.DBFieldColumns, aStartPoint, getSubFormSize());
-        }
+                oGridControl = new GridControl(xMSF, Name + "_Grid", oFormHandler, xFormContainer, oDBMetaData.FieldColumns, aStartPoint, getSubFormSize());
+            oGridControl.xPropertySet.setPropertyValue("Border", _NBorderType);
+        } catch (Exception e) {
+            e.printStackTrace(System.out);
+        }}
 
 
         public void finalizeControls(){
