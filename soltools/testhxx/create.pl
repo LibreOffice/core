@@ -4,9 +4,9 @@
 #
 #   $RCSfile: create.pl,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-20 05:09:44 $
+#   last change: $Author: kz $ $Date: 2006-07-06 14:24:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,7 @@ if ($ENV{OS} eq 'LINUX') {
     print STDOUT 'unlink ${my_tmp} || exit 1', "\n";
     print STDOUT 'unlink ${my_tmp}.out || exit 1', "\n";
     print STDOUT 'exit ${my_ret}', "\n";
-} elsif ($ENV{OS} eq 'WNT') {
+} elsif ($ENV{OS} eq 'WNT' and $ENV{USE_SHELL} eq '4nt') {
     1 while $in =~ s!\s+-I\s*\.\S*\s*! !g; # discard relative includes
     $in =~ s!(\s+-I\s*)(?i:$solarversion)(\S*)!$1%SOLARVERSION%$2!og;
         # macrofy includes to solver
@@ -94,6 +94,10 @@ if ($ENV{OS} eq 'LINUX') {
     print STDOUT 'DEL /EQ %my_tmp% %my_tmp%.obj %my_tmp%.pdb %my_tmp%.out',
         "\n";
     print STDOUT 'QUIT %my_ret%', "\n";
+} elsif ($ENV{OS} eq 'WNT' and $ENV{USE_SHELL} ne '4nt') {
+    print STDOUT '#!/bin/bash', "\n";
+    print STDOUT 'echo testhxx not yet available on this platform 1>&2', "\n";
+    print STDOUT 'exit 1', "\n";
 } else {
     print STDOUT 'echo \'no testhxx on this platform\'', "\n";
 }
