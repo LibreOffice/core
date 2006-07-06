@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-20 05:09:53 $
+#   last change: $Author: kz $ $Date: 2006-07-06 14:24:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,15 +38,15 @@ TARGET := testhxx
 LIBTARGET := NO
 ENABLE_EXCEPTIONS := TRUE
 
-.INCLUDE: $(PRJ)$/util$/makefile.pmk
-.INCLUDE: settings.mk
-
 CAPTURE_COMMAND = echo
 CAPTURE_OUTPUT = > $(MISC)$/testhxx.output
 
+.INCLUDE: $(PRJ)$/util$/makefile.pmk
+.INCLUDE: settings.mk
+
 SLOFILES = $(SLO)$/testhxx.obj
 
-.IF "$(OS)" == "WNT"
+.IF "$(USE_SHELL)" == "4nt"
 MY_SCRIPT_EXT := .btm
 MY_EXECUTABLE := @ echo
 .ELSE
