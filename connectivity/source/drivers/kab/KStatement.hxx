@@ -4,9 +4,9 @@
  *
  *  $RCSfile: KStatement.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-19 16:51:31 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 14:21:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,6 +117,9 @@ namespace connectivity
             virtual void SAL_CALL getFastPropertyValue(
                     ::com::sun::star::uno::Any& rValue,
                     sal_Int32 nHandle) const;
+
+            virtual void resetParameters() const throw(::com::sun::star::sdbc::SQLException);
+            virtual void getNextParameter(::rtl::OUString &rParameter) const throw(::com::sun::star::sdbc::SQLException);
             virtual ~KabCommonStatement();
 
         public:
@@ -126,7 +129,7 @@ namespace connectivity
             using KabCommonStatement_BASE::operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >;
 
             // OComponentHelper
-            virtual void SAL_CALL disposing(void){KabCommonStatement_BASE::disposing();}
+            virtual void SAL_CALL disposing();
 
             // XInterface
             virtual void SAL_CALL release() throw();
