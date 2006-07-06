@@ -4,9 +4,9 @@
  *
  *  $RCSfile: KStatement.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:40:03 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 14:21:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,6 +94,25 @@ KabCommonStatement::~KabCommonStatement()
 {
 }
 // -----------------------------------------------------------------------------
+void KabCommonStatement::disposing()
+{
+    KabCommonStatement_BASE::disposing();
+}
+// -----------------------------------------------------------------------------
+void KabCommonStatement::resetParameters() const throw(::com::sun::star::sdbc::SQLException)
+{
+    ::dbtools::throwGenericSQLException(
+        ::rtl::OUString::createFromAscii("Parameters can appear only in prepared statements."),
+        NULL);
+}
+// -----------------------------------------------------------------------------
+void KabCommonStatement::getNextParameter(::rtl::OUString &) const throw(::com::sun::star::sdbc::SQLException)
+{
+    ::dbtools::throwGenericSQLException(
+        ::rtl::OUString::createFromAscii("Parameters can appear only in prepared statements."),
+        NULL);
+}
+// -----------------------------------------------------------------------------
 KabCondition *KabCommonStatement::analyseWhereClause(const OSQLParseNode *pParseNode) const throw(SQLException)
 {
     if (pParseNode->count() == 3)
@@ -126,27 +145,35 @@ KabCondition *KabCommonStatement::analyseWhereClause(const OSQLParseNode *pParse
                         break;
                 }
             }
-            else if (SQL_ISRULE(pLeft, column_ref) && pRight->isToken())
+            else if (SQL_ISRULE(pLeft, column_ref))
             {
                 ::rtl::OUString sColumnName,
-                                sTableRange,
-                                sMatchString;
+                                sTableRange;
 
                 m_aSQLIterator.getColumnRange(pLeft, sColumnName, sTableRange);
-                sMatchString = pRight->getTokenValue();
 
-                switch (pMiddle->getNodeType())
+                if (pRight->isToken() || SQL_ISRULE(pRight, parameter))
                 {
-                    case SQL_NODE_EQUAL:
-                        // WHERE Name = 'Smith'
-                        return new KabConditionEqual(sColumnName, sMatchString);
+                    ::rtl::OUString sMatchString;
 
-                     case SQL_NODE_NOTEQUAL:
-                        // WHERE Name <> 'Jones'
-                        return new KabConditionDifferent(sColumnName, sMatchString);
+                    if (pRight->isToken())                      // WHERE Name = 'Doe'
+                        sMatchString = pRight->getTokenValue();
+                    else if (SQL_ISRULE(pRight, parameter))     // WHERE Name = ?
+                        getNextParameter(sMatchString);
 
-                    default:
-                        break;
+                    switch (pMiddle->getNodeType())
+                    {
+                        case SQL_NODE_EQUAL:
+                            // WHERE Name = 'Smith'
+                            return new KabConditionEqual(sColumnName, sMatchString);
+
+                         case SQL_NODE_NOTEQUAL:
+                            // WHERE Name <> 'Jones'
+                            return new KabConditionDifferent(sColumnName, sMatchString);
+
+                        default:
+                            break;
+                    }
                 }
             }
         }
@@ -203,17 +230,24 @@ KabCondition *KabCommonStatement::analyseWhereClause(const OSQLParseNode *pParse
         }
         else if (SQL_ISRULE(pParseNode, like_predicate))
         {
-            if (SQL_ISRULE(pLeft, column_ref) && pMiddleRight->getNodeType() == SQL_NODE_STRING)
+            if (SQL_ISRULE(pLeft, column_ref))
             {
                 ::rtl::OUString sColumnName,
-                                sTableRange,
-                                sMatchString;
+                                sTableRange;
 
                 m_aSQLIterator.getColumnRange(pLeft, sColumnName, sTableRange);
-                sMatchString = pMiddleRight->getTokenValue();
 
-                // WHERE Name LIKE 'Sm%'
-                return new KabConditionSimilar(sColumnName, sMatchString);
+                if (pMiddleRight->isToken() || SQL_ISRULE(pMiddleRight, parameter))
+                {
+                    ::rtl::OUString sMatchString;
+
+                    if (pMiddleRight->isToken())                    // WHERE Name LIKE 'Sm%'
+                        sMatchString = pMiddleRight->getTokenValue();
+                    else if (SQL_ISRULE(pMiddleRight, parameter))   // WHERE Name LIKE ?
+                        getNextParameter(sMatchString);
+
+                    return new KabConditionSimilar(sColumnName, sMatchString);
+                }
             }
         }
     }
@@ -314,6 +348,7 @@ void KabCommonStatement::selectAddressees(KabResultSet *pResult) const throw(SQL
     {
         if (SQL_ISRULE(pParseNode, where_clause))
         {
+            resetParameters();
             pParseNode = pParseNode->getChild(1);
             pCondition = analyseWhereClause(pParseNode);
             if (pCondition->isAlwaysTrue())
