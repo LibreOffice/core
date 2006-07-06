@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets-gtk.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:45:12 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 10:33:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -550,7 +550,7 @@ BOOL GtkSalGraphics::hitTestNativeControl( ControlType      nType,
         gtk_widget_style_get( gScrollHorizWidget, "has-forward-stepper", &has_forward,
                                         "has-secondary-forward-stepper", &has_forward2,
                                         "has-backward-stepper", &has_backward,
-                                           "has-secondary-backward-stepper", &has_backward2, NULL );
+                                           "has-secondary-backward-stepper", &has_backward2, (char *)NULL );
         Rectangle aForward;
         Rectangle aBackward;
 
@@ -910,7 +910,7 @@ BOOL GtkSalGraphics::getNativeControlRegion(  ControlType nType,
                                  gMenuItemCheckMenuWidget : gMenuItemRadioMenuWidget;
             gtk_widget_style_get( pWidget,
                                   "indicator_size", &indicator_size,
-                                  NULL );
+                                  (char *)NULL );
             rNativeBoundingRegion = rControlRegion;
             Rectangle aIndicatorRect( Point( 0,
                                              (rControlRegion.GetBoundRect().GetHeight()-indicator_size)/2),
@@ -928,7 +928,7 @@ BOOL GtkSalGraphics::getNativeControlRegion(  ControlType nType,
         gtk_widget_style_get( widget,
                               "indicator_size", &indicator_size,
                               "indicator_spacing", &indicator_spacing,
-                              NULL);
+                              (char *)NULL);
         indicator_size += 2*indicator_spacing; // guess overpaint of theme
         rNativeBoundingRegion = rControlRegion;
         Rectangle aIndicatorRect( Point( 0,
@@ -977,7 +977,7 @@ BOOL GtkSalGraphics::NWPaintGTKButton(
                                 "focus-padding",    &focusPad,
                                  "interior_focus",  &interiorFocus,
                                 "default_border",   &pBorder,
-                                NULL );
+                                (char *)NULL );
 
     // Make sure the border values exist, otherwise use some defaults
     if ( pBorder )
@@ -1079,7 +1079,7 @@ static Rectangle NWGetButtonArea( ControlType, ControlPart, Rectangle aAreaRect,
                                 "focus-padding",    &focusPad,
                                  "interior_focus",  &interiorFocus,
                                 "default_border",   &pBorder,
-                                NULL );
+                                (char *)NULL );
 
     // Make sure the border values exist, otherwise use some defaults
     if ( pBorder )
@@ -1132,7 +1132,7 @@ BOOL GtkSalGraphics::NWPaintGTKRadio( GdkDrawable* gdkDrawable,
     NWConvertVCLStateToGTKState( nState, &stateType, &shadowType );
 
     gint indicator_size;
-    gtk_widget_style_get( gRadioWidget, "indicator_size", &indicator_size, NULL);
+    gtk_widget_style_get( gRadioWidget, "indicator_size", &indicator_size, (char *)NULL);
 
     x = rControlRectangle.Left() + (rControlRectangle.GetWidth()-indicator_size)/2;
     y = rControlRectangle.Top() + (rControlRectangle.GetHeight()-indicator_size)/2;
@@ -1190,7 +1190,7 @@ BOOL GtkSalGraphics::NWPaintGTKCheck( GdkDrawable* gdkDrawable,
     NWConvertVCLStateToGTKState( nState, &stateType, &shadowType );
 
     gint indicator_size;
-    gtk_widget_style_get( gCheckWidget, "indicator_size", &indicator_size, NULL);
+    gtk_widget_style_get( gCheckWidget, "indicator_size", &indicator_size, (char *)NULL);
 
     x = rControlRectangle.Left() + (rControlRectangle.GetWidth()-indicator_size)/2;
     y = rControlRectangle.Top() + (rControlRectangle.GetHeight()-indicator_size)/2;
@@ -1289,7 +1289,7 @@ BOOL GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
                                       "stepper_size", &stepper_size,
                                       "trough_border", &trough_border,
                                       "stepper_spacing", &stepper_spacing,
-                                      "min_slider_length", &min_slider_length, NULL );
+                                      "min_slider_length", &min_slider_length, (char *)NULL );
     gboolean has_forward;
     gboolean has_forward2;
     gboolean has_backward;
@@ -1298,7 +1298,7 @@ BOOL GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
     gtk_widget_style_get( gScrollHorizWidget, "has-forward-stepper", &has_forward,
                                       "has-secondary-forward-stepper", &has_forward2,
                                       "has-backward-stepper", &has_backward,
-                                         "has-secondary-backward-stepper", &has_backward2, NULL );
+                                         "has-secondary-backward-stepper", &has_backward2, (char *)NULL );
     gint magic = trough_border ? 1 : 0;
     gint nFirst = 0;
 
@@ -1568,7 +1568,7 @@ static Rectangle NWGetScrollButtonRect( ControlPart nPart, Rectangle aAreaRect )
     gtk_widget_style_get( gScrollHorizWidget, "slider-width", &slider_width,
                                       "stepper-size", &stepper_size,
                                       "trough-border", &trough_border,
-                                         "stepper-spacing", &stepper_spacing, NULL );
+                                         "stepper-spacing", &stepper_spacing, (char *)NULL );
 
     gboolean has_forward;
     gboolean has_forward2;
@@ -1578,7 +1578,7 @@ static Rectangle NWGetScrollButtonRect( ControlPart nPart, Rectangle aAreaRect )
     gtk_widget_style_get( gScrollHorizWidget, "has-forward-stepper", &has_forward,
                                       "has-secondary-forward-stepper", &has_forward2,
                                       "has-backward-stepper", &has_backward,
-                                         "has-secondary-backward-stepper", &has_backward2, NULL );
+                                         "has-secondary-backward-stepper", &has_backward2, (char *)NULL );
     gint       buttonWidth;
     gint       buttonHeight;
     Rectangle  buttonRect;
@@ -1685,7 +1685,7 @@ static Rectangle NWGetEditBoxPixmapRect(ControlType,
 
     // Grab some entry style attributes
     gtk_widget_style_get( gEditBoxWidget,   "focus-line-width", &focusWidth,
-                                     "interior-focus",  &interiorFocus, NULL );
+                                     "interior-focus",  &interiorFocus, (char *)NULL );
 
     if ( !interiorFocus )
     {
@@ -1836,7 +1836,7 @@ BOOL GtkSalGraphics::NWPaintGTKSpinBox( ControlType nType, ControlPart nPart,
     }
 
     NWSetWidgetState( gSpinButtonWidget, nState, stateType );
-    gtk_widget_style_get( gSpinButtonWidget, "shadow_type", &shadowType, NULL );
+    gtk_widget_style_get( gSpinButtonWidget, "shadow_type", &shadowType, (char *)NULL );
 
     if ( shadowType != GTK_SHADOW_NONE )
     {
@@ -2046,7 +2046,7 @@ static Rectangle NWGetComboBoxButtonRect( ControlType,
 
     // Grab some button style attributes
     gtk_widget_style_get( gDropdownWidget,  "focus-line-width", &nFocusWidth,
-                                    "focus-padding",    &nFocusPad, NULL );
+                                    "focus-padding",    &nFocusPad, (char *)NULL );
 
     nArrowWidth = MIN_ARROW_SIZE + (GTK_MISC(gArrowWidget)->xpad * 2);
     nButtonWidth = nArrowWidth +
@@ -2270,7 +2270,7 @@ BOOL GtkSalGraphics::NWPaintGTKListBox( GdkDrawable* gdkDrawable,
             "interior_focus",   &bInteriorFocus,
             "focus_line_width", &nFocusLineWidth,
             "focus_padding",    &nFocusPadding,
-            NULL);
+            (char *)NULL);
     }
 
     for( clipList::const_iterator it = rClipList.begin(); it != rClipList.end(); ++it )
@@ -2480,7 +2480,7 @@ BOOL GtkSalGraphics::NWPaintGTKMenubar(
         {
             gtk_widget_style_get( gMenuItemMenubarWidget,
                                   "selected_shadow_type", &selected_shadow_type,
-                                  NULL);
+                                  (char *)NULL);
         }
     }
 
@@ -2569,7 +2569,7 @@ BOOL GtkSalGraphics::NWPaintGTKPopupMenu(
     {
         gtk_widget_style_get( gMenuItemMenuWidget,
                               "selected_shadow_type", &selected_shadow_type,
-                              NULL);
+                              (char *)NULL);
     }
 
     NWSetWidgetState( gMenuWidget, nState, stateType );
@@ -2727,7 +2727,7 @@ static Rectangle NWGetListBoxButtonRect( ControlType,
 
     gtk_widget_style_get( gOptionMenuWidget,
             "indicator_size",   &pIndicatorSize,
-            "indicator_spacing",&pIndicatorSpacing, NULL);
+            "indicator_spacing",&pIndicatorSpacing, (char *)NULL);
 
     if ( pIndicatorSize )
         width = pIndicatorSize->width;
@@ -2788,7 +2788,7 @@ static Rectangle NWGetListBoxIndicatorRect( ControlType,
 
     gtk_widget_style_get( gOptionMenuWidget,
             "indicator_size",   &pIndicatorSize,
-            "indicator_spacing",&pIndicatorSpacing, NULL);
+            "indicator_spacing",&pIndicatorSpacing, (char *)NULL);
 
     if ( pIndicatorSize )
     {
@@ -3071,11 +3071,11 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     GtkSettings *pSettings = gtk_widget_get_settings( gEditBoxWidget );
     gboolean blink = false;
 
-    g_object_get( pSettings, "gtk-cursor-blink", &blink, NULL );
+    g_object_get( pSettings, "gtk-cursor-blink", &blink, (char *)NULL );
     if( blink )
     {
         gint blink_time = STYLE_CURSOR_NOBLINKTIME;
-        g_object_get( pSettings, "gtk-cursor-blink-time", &blink_time, NULL );
+        g_object_get( pSettings, "gtk-cursor-blink-time", &blink_time, (char *)NULL );
         // set the blink_time if there is a setting and it is reasonable
         // else leave the default value
         if( blink_time > 100 && blink_time != gint(STYLE_CURSOR_NOBLINKTIME) )
@@ -3094,7 +3094,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
                           "slider-width", &slider_width,
                           "trough-border", &trough_border,
                           "min-slider-length", &min_slider_length,
-                          NULL );
+                          (char *)NULL );
     gint magic = trough_border ? 1 : 0;
     aStyleSet.SetScrollBarSize( slider_width + 2*trough_border );
     aStyleSet.SetMinThumbSize( min_slider_length - magic );
@@ -3436,7 +3436,7 @@ static void NWEnsureGTKToolbar(void)
         gtk_widget_ensure_style( gToolbarWidget );
         gtk_widget_style_get( gToolbarWidget,
                               "button_relief", &aRelief,
-                              NULL);
+                              (char *)NULL);
 
         gtk_button_set_relief( GTK_BUTTON(gToolbarButtonWidget), aRelief );
         GTK_WIDGET_UNSET_FLAGS( gToolbarButtonWidget, GTK_CAN_FOCUS );
