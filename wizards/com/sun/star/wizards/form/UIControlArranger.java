@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UIControlArranger.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 12:44:35 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 14:20:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,7 @@ import javax.swing.event.ListDataListener;
 
 
 public class UIControlArranger {
-    WizardDialog CurUnoDialog;
+    FormWizard CurUnoDialog;
     FormDocument curFormDocument;
     short curtabindex;
     XRadioButton optAlignLeft;
@@ -73,7 +73,7 @@ public class UIControlArranger {
     final String SOALIGNMETHOD = "alignLabelControls";
 
 
-    public UIControlArranger(WizardDialog _CurUnoDialog, FormDocument _curFormDocument) throws NoValidPathException {
+    public UIControlArranger(FormWizard _CurUnoDialog, FormDocument _curFormDocument) throws NoValidPathException {
         this.CurUnoDialog = _CurUnoDialog;
         this.curFormDocument = _curFormDocument;
         curtabindex = (short) (FormWizard.SOCONTROLPAGE * 100);
@@ -233,7 +233,7 @@ public class UIControlArranger {
                 else
                     bEnableAlignControlGroup = ((oImageList[0].ilLayouts.getSelected()+1) == FormWizard.SOCOLUMNARLEFT);
                 enableAlignControlGroup(bEnableAlignControlGroup);
-                ((FormDocument.ControlForm) curFormDocument.oControlForms.get(formindex)).initialize(ilLayouts.getSelected() + 1);
+                ((FormDocument.ControlForm) curFormDocument.oControlForms.get(formindex)).initialize(ilLayouts.getSelected() + 1, CurUnoDialog.getBorderType());
             }
         } catch (RuntimeException e) {
             e.printStackTrace();
