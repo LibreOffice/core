@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uno2cpp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-03 17:35:54 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 14:34:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -342,9 +342,11 @@ static void cpp_call(
 }
 
 //==================================================================================================
-void bridges::cpp_uno::shared::UnoInterfaceProxy::dispatch(
+
+namespace bridges { namespace cpp_uno { namespace shared {
+void unoInterfaceProxyDispatch(
     uno_Interface * pUnoI, const typelib_TypeDescription * pMemberDescr,
-    void * pReturn, void * pArgs[], uno_Any ** ppException ) SAL_THROW(())
+    void * pReturn, void * pArgs[], uno_Any ** ppException )
 {
     // is my surrogate
     bridges::cpp_uno::shared::UnoInterfaceProxy * pThis
@@ -461,3 +463,5 @@ void bridges::cpp_uno::shared::UnoInterfaceProxy::dispatch(
     }
     }
 }
+
+} } }
