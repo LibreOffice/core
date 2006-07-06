@@ -4,9 +4,9 @@
  *
  *  $RCSfile: export.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 17:21:29 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 14:34:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -561,7 +561,7 @@ int Export::Execute( int nToken, const char * pToken )
 /*  printf("+---------------\n");
     printf("sToken = %s\n",sToken.GetBuffer());
     printf("nToken = %d\n",nToken);
-    printf("+---------------\n");*/
+    printf("+---------------\n"); */
     BOOL bWriteToMerged = bMergeMode;
 
     if ( nToken == CONDITION ) {
@@ -2350,7 +2350,9 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
                             nMaxIndex = pList->GetGermanEntryCount();
                         //if( pMergeDataFile ) pMergeDataFile->Dump();
                         pEntrys = pMergeDataFile->GetPFormEntrys( pResData );
-                        while( pEntrys && ( nLIndex < nMaxIndex )) {
+                        while( pEntrys  && ( nLIndex < nMaxIndex )) {
+
+                            //while( pEntrys && ( nLIndex < nMaxIndex )) {
                             //if( pEntrys ) pEntrys->Dump();
                             ByteString sText;
                             BOOL bText;
@@ -2451,6 +2453,7 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
                                     sText1 += " ;\n";
                                 sText1 += sSpace;
                                 sText1 += "\t";
+                                //printf("Writing '%s'\n",sText1.GetBuffer());
                                 WriteToMerged( sText1 ,true );
 
                                 // Set matching pairedlist identifier
@@ -2468,6 +2471,7 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
                             else
                                 break;
                             nLIndex ++;
+                            pEntrys = pMergeDataFile->GetPFormEntrys( pResData );
                         }
                         if ( nIdx > 1 ) {
                             ByteString sFooter( sSpace.Copy( 1 ));
@@ -2520,6 +2524,7 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
                     sLine.SearchAndReplace( "\"", "< \"" );
                 }
             }
+
             while( PrepareTextToMerge( sLine, nList, nListLang, pResData ) && ( nListIndex <= nMaxIndex )) {
                 ByteString sText( "\t" );
                 sText += sLine;
