@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Dataimport.java,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 12:50:35 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 14:23:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,11 +38,14 @@ import java.util.Vector;
 
 import com.sun.star.awt.VclWindowPeerAttribute;
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNameContainer;
 import com.sun.star.container.XNamed;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdb.CommandType;
+import com.sun.star.style.BreakType;
+import com.sun.star.style.CaseMap;
 import com.sun.star.table.XCellRange;
 import com.sun.star.text.XTextContent;
 import com.sun.star.text.XTextCursor;
@@ -55,7 +58,6 @@ import com.sun.star.uno.XInterface;
 import com.sun.star.wizards.db.*;
 import com.sun.star.wizards.ui.*;
 import com.sun.star.wizards.common.*;
-import com.sun.star.wizards.common.JavaTools;
 import com.sun.star.wizards.document.*;
 import com.sun.star.wizards.text.*;
 import com.sun.star.wizards.common.InvalidQueryException;
@@ -120,8 +122,9 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
             if (xMSF != null)
                 System.out.println("Connected to " + ConnectStr);
             PropertyValue[] curproperties = new PropertyValue[3];
-            curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/MyDocAssign.odb"); //baseLocation ); "DataSourceName", "db1");
-            curproperties[0] = Properties.createProperty("DataSourceName", "Bibliography");
+            curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/MyHSQL.odb");
+//            curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/MyDocAssign.odb"); //baseLocation ); "DataSourceName", "db1");
+//            curproperties[0] = Properties.createProperty("DataSourceName", "Bibliography");
             curproperties[1] = Properties.createProperty("CommandType", new Integer(CommandType.TABLE));
             curproperties[2] = Properties.createProperty("Command", "Table2");
 
@@ -138,7 +141,6 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
 
     public void showProgressDisplay(XMultiServiceFactory xMSF, boolean bgetConnection) {
         try {
-            int iHeight;
             Helper.setUnoPropertyValues(xDialogModel,
                         new String[] { "Height", "Step", "Title", "Width" },
                         new Object[] { new Integer(84), new Integer(0), sProgressTitle, new Integer(180)});
@@ -167,6 +169,7 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
             createWindowPeer(CurReportDocument.xWindowPeer);
             calculateDialogPosition(CurReportDocument.xFrame.getComponentWindow().getPosSize());
             xWindow.setVisible(true);
+            super.xReschedule.reschedule();
             return;
         } catch (Exception exception) {
             exception.printStackTrace(System.out);
@@ -217,7 +220,6 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
     public void createReport(final XMultiServiceFactory xMSF,XTextDocument _textDocument, PropertyValue[] properties) {
         CurReportDocument = new ReportDocument(xMSF, _textDocument,false, oResource);
         CurProperties = properties;
-        int iWidth = CurReportDocument.xFrame.getComponentWindow().getPosSize().Width;
         showProgressDisplay(xMSF, true);
         importReportData(xMSF, this, CurReportDocument);
     }
@@ -238,7 +240,7 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
                 String sRecordFieldNames = CurReportDocument.oFormHandler.getValueofHiddenControl(xNamedForm, "RecordFieldNames", sMsg);
                 if (xNamedForm.hasByName("QueryName"))
                     sQueryName = CurReportDocument.oFormHandler.getValueofHiddenControl(xNamedForm, "QueryName", sMsg);
-                CurReportDocument.CurDBMetaData.FieldNames = JavaTools.ArrayoutofString(sFieldNames, ";");
+                String[] sFieldNameList =  JavaTools.ArrayoutofString(sFieldNames, ";");
                 CurReportDocument.CurDBMetaData.RecordFieldNames = JavaTools.ArrayoutofString(sRecordFieldNames, ";");
                 CurReportDocument.CurDBMetaData.GroupFieldNames = JavaTools.ArrayoutofString(sGroupFieldNames, ";");
                 CurReportDocument.CurDBMetaData.setCommandType(Integer.valueOf(sCommandType).intValue());
@@ -251,10 +253,9 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
                         CurReportDocument.CurDBMetaData.Command = (String) oCommand.xPropertySet.getPropertyValue("Command");
                         CurReportDocument.CurDBMetaData.oSQLQueryComposer.xQueryAnalyzer.setQuery(CurReportDocument.CurDBMetaData.Command);
                         CurReportDocument.CurDBMetaData.oSQLQueryComposer.prependSortingCriteria();
-
                     }
-                    boolean bexecute = CurReportDocument.CurDBMetaData.executeCommand(sMsgQueryCreationImpossible + (char) 13 + sMsgEndAutopilot, true);
-                    return bexecute;
+        boolean bexecute = CurReportDocument.CurDBMetaData.executeCommand(sMsgQueryCreationImpossible + (char) 13 + sMsgEndAutopilot, sFieldNameList, true);
+                return bexecute;
                 } else
                     return false;
             } else {
@@ -289,11 +290,10 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
             addTextSectionCopies();
             CurReportDocument.getallDBColumns();
             int GroupFieldCount = CurDBMetaData.GroupFieldNames.length;
-            int FieldCount = CurDBMetaData.FieldNames.length;
+            int FieldCount = CurDBMetaData.FieldColumns.length;
             Object[] OldGroupFieldValues = new Object[GroupFieldCount];
             XTextTable[] xGroupBaseTables = new XTextTable[GroupFieldCount];
             int RecordFieldCount = FieldCount - GroupFieldCount;
-            XNameAccess xTextTables = CurReportDocument.oTextTableHandler.xTextTablesSupplier.getTextTables();
             XTextDocument xTextDocument = CurReportDocument.xTextDocument;
             XTextCursor xTextCursor = ReportDocument.createTextCursor(CurReportDocument.xTextDocument.getText());
             xTextDocument.lockControllers();
@@ -304,18 +304,18 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
                     CurGroupTableName = TBLGROUPSECTION + Integer.toString(ColIndex + 1);
                     oTable = CurReportDocument.oTextTableHandler.xTextTablesSupplier.getTextTables().getByName(CurGroupTableName);
                     xGroupBaseTables[ColIndex] = (XTextTable) UnoRuntime.queryInterface(XTextTable.class, oTable);
-                    if (ColIndex == 0) {
-                        CorrBreakValue = TextTableHandler.resetBreakTypeofTextTable(xGroupBaseTables[ColIndex]);
-                        String PageDescName = com.sun.star.uno.AnyConverter.toString(Helper.getUnoPropertyValue(xGroupBaseTables[ColIndex], "PageDescName"));
-                        if (PageDescName.equals("") == false) {
-                            CorrPageDescName = PageDescName;
-                            Helper.setUnoPropertyValue(xGroupBaseTables[ColIndex], "PageDescName", "");
-                        }
-                    }
+//                    if (ColIndex == 0) {
+//                        CorrBreakValue = TextTableHandler.resetBreakTypeofTextTable(xGroupBaseTables[ColIndex]);
+//                        String PageDescName = com.sun.star.uno.AnyConverter.toString(Helper.getUnoPropertyValue(xGroupBaseTables[ColIndex], "PageDescName"));
+//                        if (PageDescName.equals("") == false) {
+//                            CorrPageDescName = PageDescName;
+//                            Helper.setUnoPropertyValue(xGroupBaseTables[ColIndex], "PageDescName", "");
+//                        }
+//                    }
                     CurGroupValue = CurDBMetaData.getGroupColumnValue(ColIndex);
                     OldGroupFieldValues[ColIndex] = CurGroupValue;
                     CurDBColumn = (DBColumn) CurReportDocument.DBColumnsVector.elementAt(ColIndex);
-                    addLinkedTextSection(xTextCursor, COPYOFGROUPSECTION + Integer.toString(ColIndex + 1), CurDBColumn, CurGroupValue);
+                    addLinkedTextSection(xTextCursor, GROUPSECTION + Integer.toString(ColIndex + 1), CurDBColumn, CurGroupValue); //COPYOF!!!!
                 }
                 if (CurDBMetaData.getcurrentRecordData(DataVector) == true) {
                     int RowIndex = 1;
@@ -358,25 +358,26 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
                 OfficeDocument.ArraytoCellRange(RecordArray, xTextTable, 0, 1);
             }
             CurReportDocument.oTextSectionHandler.breakLinkofTextSections();
-            Object oTextTable = null;
-            if (CurReportDocument.oTextTableHandler.xTextTablesSupplier.getTextTables().hasByName(COPYOFTBLGROUPSECTION + 1))
-                oTextTable = CurReportDocument.oTextTableHandler.xTextTablesSupplier.getTextTables().getByName(COPYOFTBLGROUPSECTION + 1);
-            else if (CurReportDocument.oTextTableHandler.xTextTablesSupplier.getTextTables().hasByName(COPYOFTBLRECORDSECTION))
-                oTextTable = CurReportDocument.oTextTableHandler.xTextTablesSupplier.getTextTables().getByName(COPYOFTBLRECORDSECTION);
-            if ((CorrBreakValue != null) && (oTextTable != null)){
-                Helper.setUnoPropertyValue(oTextTable, "BreakType", CorrBreakValue);
-                if (!CorrPageDescName.equals(""))
-                    Helper.setUnoPropertyValue(oTextTable, "PageDescName", CorrPageDescName);
-            }
+//            Object oTextTable = null;
+//            if (CurReportDocument.oTextTableHandler.xTextTablesSupplier.getTextTables().hasByName(TBLGROUPSECTION + 1))
+//                oTextTable = CurReportDocument.oTextTableHandler.xTextTablesSupplier.getTextTables().getByName(TBLGROUPSECTION + 1);
+//            else if (CurReportDocument.oTextTableHandler.xTextTablesSupplier.getTextTables().hasByName(TBLRECORDSECTION))
+//                oTextTable = CurReportDocument.oTextTableHandler.xTextTablesSupplier.getTextTables().getByName(TBLRECORDSECTION);
+//            if ((CorrBreakValue != null) && (oTextTable != null)){
+//              String sName = ((XNamed) UnoRuntime.queryInterface(XNamed.class, oTextTable)).getName();
+//              String[] sNames = CurReportDocument.oTextTableHandler.xTextTablesSupplier.getTextTables().getElementNames();
+//              String sSecName = ((XNamed) UnoRuntime.queryInterface(XNamed.class, CurReportDocument.oTextTableHandler.xTextTablesSupplier.getTextTables().getByName(sNames[0]))).getName();
+//              Helper.setUnoPropertyValue(oTextTable, "BreakType", BreakType.PAGE_BEFORE);
+//                if (!CorrPageDescName.equals(""))
+//                    Helper.setUnoPropertyValue(oTextTable, "PageDescName", CorrPageDescName);
+//            }
         } catch (Exception exception) {
-            exception.printStackTrace(System.out);
         } catch (java.lang.Exception javaexception) {
             javaexception.printStackTrace(System.out);
         }
         CurReportDocument.unlockallControllers();
         CurReportDocument.setLayoutSectionsVisible(false);
         CurReportDocument.removeCopiedTextSections();
-
     }
 
 
@@ -401,6 +402,7 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
             if (iCounter % 10 == 0) {
                 sProgressCurRecord = JavaTools.replaceSubString(sProgressBaseCurRecord, String.valueOf(iCounter), "<COUNT>");
                 setControlProperty("lblCurProgress", "Label", sProgressCurRecord);
+                super.xReschedule.reschedule();
             }
         } catch (java.lang.Exception jexception) {
             jexception.printStackTrace(System.out);
