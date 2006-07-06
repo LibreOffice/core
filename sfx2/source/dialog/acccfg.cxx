@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acccfg.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:19:38 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 14:36:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -670,7 +670,7 @@ void SfxAcceleratorConfigPage::Init(const css::uno::Reference< css::ui::XAcceler
         if (!sKey.Len())
             continue;
         TAccInfo*    pEntry   = new TAccInfo(i1, nListPos, aKey);
-        SvLBoxEntry* pLBEntry = aEntriesBox.InsertEntry(sKey, 0L, LIST_APPEND, 0xFFFF);
+        SvLBoxEntry* pLBEntry = aEntriesBox.InsertEntryToColumn(sKey, 0L, LIST_APPEND, 0xFFFF);
         pLBEntry->SetUserData(pEntry);
     }
 
@@ -768,7 +768,7 @@ void SfxAcceleratorConfigPage::ResetConfig()
 String FileDialog_Impl( Window* /*pParent*/, WinBits nBits, const String& rTitle )
 {
     BOOL bSave = ( ( nBits & WB_SAVEAS ) == WB_SAVEAS );
-    short nDialogType = bSave? ::sfx2::FILESAVE_SIMPLE : ::sfx2::FILEOPEN_SIMPLE;
+    short nDialogType = bSave? short(::sfx2::FILESAVE_SIMPLE) : short(::sfx2::FILEOPEN_SIMPLE);
 
     sfx2::FileDialogHelper aFileDlg( nDialogType, 0 );
     aFileDlg.SetTitle( rTitle );
@@ -1073,7 +1073,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
                 )
                 {
                     TAccInfo*    pU1 = new TAccInfo(-1, -1, pUserData->m_aKey);
-                    SvLBoxEntry* pE1 = aKeyBox.InsertEntry( pUserData->m_aKey.GetName(), 0, LIST_APPEND, 0xFFFF);
+                    SvLBoxEntry* pE1 = aKeyBox.InsertEntry( pUserData->m_aKey.GetName(), 0L, TRUE, LIST_APPEND );
                     pE1->SetUserData(pU1);
                     pE1->EnableChildsOnDemand( FALSE );
                 }
