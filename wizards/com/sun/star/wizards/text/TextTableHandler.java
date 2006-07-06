@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TextTableHandler.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 12:57:15 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 14:31:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -174,7 +174,7 @@ public class TextTableHandler {
 
     public static BreakType resetBreakTypeofTextTable(Object oTextTable) {
         BreakType CorrBreakValue = null;
-        //  BreakType BreakValue = (BreakType) com.sun.star.wizards.common.Helper.getUnoStructValue(oTextTable, "BreakType");
+        BreakType BreakValue = (BreakType) com.sun.star.wizards.common.Helper.getUnoStructValue(oTextTable, "BreakType");
         //  if (BreakValue.equals(BreakType.NONE) == false){
         //      CorrBreakValue = BreakValue;
         Helper.setUnoPropertyValue(oTextTable, "BreakType", BreakType.NONE);

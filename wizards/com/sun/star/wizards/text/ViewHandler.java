@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewHandler.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 12:57:29 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 14:31:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,8 +71,6 @@ public class ViewHandler {
 
     public void selectFirstPage(TextTableHandler oTextTableHandler) {
         try {
-            XTextRange xRange;
-            XTextContent xTextTable;
             XPageCursor xPageCursor = (XPageCursor) UnoRuntime.queryInterface(XPageCursor.class, xTextViewCursorSupplier.getViewCursor());
             XTextCursor xViewTextCursor = (XTextCursor) UnoRuntime.queryInterface(XTextCursor.class, xPageCursor);
             xPageCursor.jumpToFirstPage();
@@ -82,18 +80,16 @@ public class ViewHandler {
             XNameAccess xName = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, oPageStyles);
             Object oPageStyle = xName.getByName("First Page");
             XIndexAccess xAllTextTables = (XIndexAccess) UnoRuntime.queryInterface(XIndexAccess.class, oTextTableHandler.xTextTablesSupplier.getTextTables());
-            int TextTablesCount = xAllTextTables.getCount();
-            //      for (int i = 0; i<TextTablesCount; i++){
-            xTextTable = (XTextContent) UnoRuntime.queryInterface(XTextContent.class, xAllTextTables.getByIndex(0));
-            xRange = (XTextRange) UnoRuntime.queryInterface(XTextRange.class, xTextTable.getAnchor().getText());
+            XTextContent xTextTable = (XTextContent) UnoRuntime.queryInterface(XTextContent.class, xAllTextTables.getByIndex(0));
+            XTextRange xRange = (XTextRange) UnoRuntime.queryInterface(XTextRange.class, xTextTable.getAnchor().getText());
             xViewTextCursor.gotoRange(xRange, false);
-            if (xPageCursor.getPage() == (short) 1) {
-                Helper.setUnoPropertyValue(xTextTable, "PageDescName", "First Page");
-                TextTableHandler.resetBreakTypeofTextTable(xTextTable);
-            }
+//            if (xPageCursor.getPage() == (short) 1) {
+//                Helper.setUnoPropertyValue(xTextTable, "PageDescName", "First Page");
+//                TextTableHandler.resetBreakTypeofTextTable(xTextTable);
+//            }
             //      }
             XTextRange xHeaderRange = (XTextRange) Helper.getUnoPropertyValue(oPageStyle, "HeaderText", XTextRange.class);
-            if (com.sun.star.uno.AnyConverter.isVoid(xHeaderRange) == false) {
+            if (!com.sun.star.uno.AnyConverter.isVoid(xHeaderRange)) {
                 xViewTextCursor.gotoRange(xHeaderRange, false);
                 xViewTextCursor.collapseToStart();
             } else
