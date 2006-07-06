@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReportLayouter.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 12:52:02 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 14:25:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,6 @@ public class ReportLayouter {
             XSimpleFileAccess xSimpleFileAccess = (XSimpleFileAccess) com.sun.star.uno.UnoRuntime.queryInterface(XSimpleFileAccess.class, xUcbInterface);
             boolean bcntexists = xSimpleFileAccess.exists(ReportWizard.ReportPath + "/cnt-default.ott");
             boolean bstlexists = xSimpleFileAccess.exists(ReportWizard.ReportPath + "/stl-default.ott");
-            //TODO Die exception wieder rein; ggfs mit rp absprechen
             //      if ((bcntexists == false) || (bstlexists == false))
             //          throw  new NoValidPathException(CurReportDocument.xMSF);
 
@@ -142,14 +141,15 @@ public class ReportLayouter {
     }
 
     public void initialize(String _defaultTemplatePath) {
-//      CurReportDocument.xTextDocument.lockControllers();
+      CurReportDocument.xTextDocument.lockControllers();
         CurReportDocument.setupRecordSection(_defaultTemplatePath);
-
         if (CurUnoDialog.getControlProperty("txtTitle", "Text").equals("")) {
             String[] sCommandNames = CurReportDocument.CurDBMetaData.getIncludedCommandNames();
             CurUnoDialog.setControlProperty("txtTitle", "Text", sCommandNames[0]);
         }
+        CurReportDocument.oViewHandler.selectFirstPage(CurReportDocument.oTextTableHandler);
         CurUnoDialog.setFocus("lblContent");
+        CurReportDocument.unlockallControllers();
     }
 
     class ItemListenerImpl implements com.sun.star.awt.XItemListener {
