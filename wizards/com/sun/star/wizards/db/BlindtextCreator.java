@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BlindtextCreator.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 12:34:54 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 14:14:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,13 +55,13 @@ public class BlindtextCreator {
             + "luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis "
             + "eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum.";
 
-    public static String adjustBlindTextlength(String FieldTitle, int FieldWidth, boolean bIsCurLandscape, boolean bIsGroupTable, String[] RecordFieldNames) {
+    public static String adjustBlindTextlength(String FieldTitle, int FieldWidth, boolean bIsCurLandscape, boolean bIsGroupTable, String[] _RecordFieldNames) {
         String BlindTextString = "";
         if (bIsGroupTable)
             return getBlindTextString(FieldTitle, FieldWidth, FieldWidth);
         int MaxFieldCount = getMaxFieldCount(bIsCurLandscape);
-        if (RecordFieldNames.length <= 2 * MaxFieldCount) {
-            if (RecordFieldNames.length <= MaxFieldCount)
+        if (_RecordFieldNames.length <= 2 * MaxFieldCount) {
+            if (_RecordFieldNames.length <= MaxFieldCount)
                 BlindTextString = getBlindTextString(FieldTitle, FieldWidth, FieldWidth);
             else
                 BlindTextString = getBlindTextString(FieldTitle, FieldWidth, (int) (0.5 * FieldWidth));
