@@ -4,9 +4,9 @@
  *
  *  $RCSfile: KDEInit.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 08:37:32 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 14:10:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,11 +44,12 @@
 #include <osl/process.h>
 #endif
 
-#include <kapplication.h>
-#include <kcmdlineargs.h>
-#include <kglobal.h>
-#include <klocale.h>
-#include <kdeversion.h>
+#define KDE_HEADERS_WANT_KAPPLICATION
+#define KDE_HEADERS_WANT_KCMDLINEARGS
+#define KDE_HEADERS_WANT_KGLOBAL
+#define KDE_HEADERS_WANT_KLOCALE
+#define KDE_HEADERS_WANT_KDEVERSION
+#include "kde_headers.hxx"
 
 namespace connectivity
 {
@@ -83,9 +84,8 @@ namespace connectivity
             {
                 OSL_ENSURE(s_pKApplication == NULL, "KDEInit::Init: inconsistency in the application pointers!");
 
-                // version 0.1
                 char *kabargs[1] = {"libkab1"};
-                KCmdLineArgs::init(1, kabargs, "KAddressBook", *kabargs, "Address Book driver", "0.1");
+                KCmdLineArgs::init(1, kabargs, "KAddressBook", *kabargs, "Address Book driver", KAB_DRIVER_VERSION);
 
                 s_pKApplication = new KApplication(false, false);
             }
