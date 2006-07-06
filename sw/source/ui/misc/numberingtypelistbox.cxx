@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numberingtypelistbox.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:36:53 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 09:13:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,6 +104,16 @@ SwNumberingTypeListBox::~SwNumberingTypeListBox()
 void SwNumberingTypeListBox::Reload(USHORT nTypeFlags)
 {
     Clear();
+    Sequence<sal_Int16> aTypes;
+    const sal_Int16* pTypes = NULL;
+    if(0 != (nTypeFlags&INSERT_NUM_EXTENDED_TYPES) )
+    {
+        if(pImpl->xInfo.is())
+        {
+            aTypes = pImpl->xInfo->getSupportedNumberingTypes();
+            pTypes = aTypes.getConstArray();
+        }
+    }
     SwOLENames aNames(SW_RES(STRRES_NUMTYPES));
     ResStringArray& rNames = aNames.GetNames();
     for(sal_uInt16 i = 0; i < rNames.Count(); i++)
@@ -120,6 +130,23 @@ void SwNumberingTypeListBox::Reload(USHORT nTypeFlags)
             case  NumberingType::CHAR_SPECIAL:  bInsert = 0 != (nTypeFlags&INSERT_NUM_TYPE_BULLET); break;
             case  NumberingType::PAGE_DESCRIPTOR:bInsert = 0 != (nTypeFlags&INSERT_NUM_TYPE_PAGE_STYLE_NUMBERING); break;
             case  NumberingType::BITMAP:bInsert = 0 != (nTypeFlags&INSERT_NUM_TYPE_BITMAP ); break;
+            default:
+                if (nValue >  NumberingType::CHARS_LOWER_LETTER_N)
+                {
+                    // Insert only if offered by i18n framework per configuration.
+                    bInsert = sal_False;
+                    if (pTypes)
+                    {
+                        for(sal_Int32 nType = 0; nType < aTypes.getLength(); nType++)
+                        {
+                            if (pTypes[nType] == nValue)
+                            {
+                                bInsert = sal_True;
+                                break;  // for
+                            }
+                        }
+                    }
+                }
         }
         if(bInsert)
         {
@@ -129,10 +156,8 @@ void SwNumberingTypeListBox::Reload(USHORT nTypeFlags)
     }
     if(0 != (nTypeFlags&INSERT_NUM_EXTENDED_TYPES) )
     {
-        if(pImpl->xInfo.is())
+        if(pTypes)
         {
-            Sequence<sal_Int16> aTypes = pImpl->xInfo->getSupportedNumberingTypes(  );
-            const sal_Int16* pTypes = aTypes.getConstArray();
             for(sal_Int32 nType = 0; nType < aTypes.getLength(); nType++)
             {
                 sal_Int16 nCurrent = pTypes[nType];
