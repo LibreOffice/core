@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lang.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 09:10:45 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 09:34:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -466,5 +466,10 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_OBSOLETE_USER_LUXEMBOURGISH 0x0630
 #define LANGUAGE_USER_LUXEMBOURGISH         LANGUAGE_LUXEMBOURGISH_LUXEMBOURG
 #define LANGUAGE_USER_FRIULIAN              0x0631
+#define LANGUAGE_USER_FIJIAN                0x0632
+#define LANGUAGE_USER_AFRIKAANS_NAMIBIA     0x8036  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_AFRIKAANS)) */
+#define LANGUAGE_USER_ENGLISH_NAMIBIA       0x8009  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_ENGLISH_US)) */
+#define LANGUAGE_USER_WALLOON               0x0633
+#define LANGUAGE_USER_COPTIC                0x0634
 
 #endif /* INCLUDED_I18NPOOL_LANG_H */
