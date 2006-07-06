@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:21:12 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 14:17:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2408,7 +2408,7 @@ BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable)
                 return sal_False;
             }
 
-            ULONG nLength;
+            sal_uInt32 nLength(0);
             (*m_pMemoStream) >> nLength;
 
             if (m_aMemoHeader.db_typ == MemodBaseIV)
