@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryWizard.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 12:49:44 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 14:21:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,7 +101,7 @@ public class QueryWizard extends WizardDialog {
                 PropertyValue[] curproperties = new PropertyValue[1];
                 curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/Mydbwizard2DocAssign.odb"); //Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb MyDBase.odb; Mydbwizard2DocAssign.odb; NewAccessDatabase, MyDocAssign baseLocation ); "DataSourceName", "db1");
                 curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///x:/bc/nyt1.odb"); //Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb MyDBase.odb; Mydbwizard2DocAssign.odb; NewAccessDatabase, MyDocAssign baseLocation ); "DataSourceName", "db1");
-                curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/MyveryveryNewHSQLDatabase.odb"); //baseLocation ); "DataSourceName", "db1");
+                curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/MyHSQL.odb");
 
 //              curproperties[0] = Properties.createProperty("DataSourceName", "TESTDB");
                 QueryWizard CurQueryWizard = new QueryWizard(xLocMSF);
@@ -159,7 +159,7 @@ public class QueryWizard extends WizardDialog {
                 switch (CurItemID) {
                     case SOAGGREGATEPAGE :
                         if (_bEnabled == true)
-                            bEnabled = ((CurDBMetaData.hasNumericalFields(_FieldNames)) && (CurDBMetaData.xDBMetaData.supportsCoreSQLGrammar()));
+                            bEnabled = ((CurDBMetaData.hasNumericalFields()) && (CurDBMetaData.xDBMetaData.supportsCoreSQLGrammar()));
                         break;
                     case SOGROUPSELECTIONPAGE :
                         bEnabled = CurDBMetaData.Type == QueryMetaData.QueryType.SOSUMMARYQUERY;
@@ -255,10 +255,10 @@ public class QueryWizard extends WizardDialog {
             case SOFIELDSELECTIONPAGE :
                 break;
             case SOSORTINGPAGE :
-                CurSortingComponent.initialize(CurDBMetaData.FieldNames, CurDBMetaData.SortFieldNames);
+                CurSortingComponent.initialize(CurDBMetaData.getDisplayFieldNames(), CurDBMetaData.SortFieldNames);
                 break;
             case SOFILTERPAGE :
-                CurFilterComponent.initialize(CurDBMetaData.FilterConditions, CurDBMetaData.FieldNames);
+                CurFilterComponent.initialize(CurDBMetaData.FilterConditions, CurDBMetaData.getDisplayFieldNames());
                 break;
             case SOAGGREGATEPAGE :
                 CurAggregateComponent.initialize();
@@ -269,7 +269,7 @@ public class QueryWizard extends WizardDialog {
                 CurGroupFilterComponent.initialize(CurDBMetaData.GroupByFilterConditions, CurDBMetaData.getGroupFieldNames());
                 break;
             case SOTITLESPAGE :
-                CurTitlesComponent.initialize(CurDBMetaData.FieldNames, CurDBMetaData.FieldTitleSet);
+                CurTitlesComponent.initialize(CurDBMetaData.getDisplayFieldNames(), CurDBMetaData.FieldTitleSet);
                 break;
             case SOSUMMARYPAGE :
                 CurFinalizer.initialize();
@@ -285,9 +285,8 @@ public class QueryWizard extends WizardDialog {
     protected void leaveStep(int nOldStep, int nNewStep) {
         switch (nOldStep) {
             case SOFIELDSELECTIONPAGE :
-                CurDBMetaData.setFieldNames(CurDBCommandFieldSelection.getSelectedFieldNames());
-                CurDBMetaData.setAllIncludedFieldNames(true);
-                CurDBMetaData.setFieldColumns(false);
+                CurDBMetaData.reorderFieldColumns(CurDBCommandFieldSelection.getSelectedFieldNames());
+                CurDBMetaData.initializeFieldTitleSet(true);
                 CurDBMetaData.setNumericFields();
                 searchForOutdatedFields();
                 break;
@@ -306,8 +305,7 @@ public class QueryWizard extends WizardDialog {
                 CurDBMetaData.setGroupByFilterConditions(this.CurGroupFilterComponent.getFilterConditions());
                 break;
             case SOTITLESPAGE :
-                CurDBMetaData.FieldTitleSet = CurTitlesComponent.getFieldTitles();
-                CurDBMetaData.setfieldtitles();
+                CurDBMetaData.setFieldTitles(CurTitlesComponent.getFieldTitles());
                 break;
             case SOSUMMARYPAGE :
                 break;
@@ -333,9 +331,10 @@ public class QueryWizard extends WizardDialog {
 
     private void searchForOutdatedFields() {
         String[] GroupCompNames;
-        CurDBMetaData.SortFieldNames = JavaTools.removeOutdatedFields(CurDBMetaData.SortFieldNames, CurDBMetaData.FieldNames);
-        CurDBMetaData.FilterConditions = JavaTools.removeOutdatedFields(CurDBMetaData.FilterConditions, CurDBMetaData.FieldNames);
-        CurDBMetaData.AggregateFieldNames = JavaTools.removeOutdatedFields(CurDBMetaData.AggregateFieldNames, CurDBMetaData.FieldNames);
+        String[] sFieldNames = CurDBMetaData.getFieldNames();
+        CurDBMetaData.SortFieldNames = JavaTools.removeOutdatedFields(CurDBMetaData.SortFieldNames, sFieldNames);
+        CurDBMetaData.FilterConditions = JavaTools.removeOutdatedFields(CurDBMetaData.FilterConditions, sFieldNames);
+        CurDBMetaData.AggregateFieldNames = JavaTools.removeOutdatedFields(CurDBMetaData.AggregateFieldNames, sFieldNames);
     }
 
     private void enableWizardSteps(String[] NewItems) {
@@ -366,7 +365,9 @@ public class QueryWizard extends WizardDialog {
 
         public void shiftFromLeftToRight(String[] SelItems, String[] NewItems) {
             if (ID == 1) {
+                CurDBMetaData.addSeveralFieldColumns(SelItems, CurDBCommandFieldSelection.getSelectedCommandName());
                 enableWizardSteps(NewItems);
+                CurDBCommandFieldSelection.changeSelectedFieldNames(CurDBMetaData.getDisplayFieldNames());
                 CurDBCommandFieldSelection.toggleCommandListBox(NewItems);
             } else {
                 boolean bEnabled = (CurGroupFieldSelection.getSelectedFieldNames().length > 0);
@@ -378,15 +379,19 @@ public class QueryWizard extends WizardDialog {
             // TODO When the ListFieldbox is refilled only fields of the current Command may be merged into the Listbox
             if (ID == 1) {
                 enableWizardSteps(NewItems);
+                CurDBMetaData.removeSeveralFieldColumnsByDisplayFieldName(SelItems);
+//              String[] sSelfieldNames = CurDBMetaData.getFieldNames(SelItems);
+                CurDBCommandFieldSelection.fillUpFieldsListbox();
                 CurDBCommandFieldSelection.toggleCommandListBox(NewItems);
+
             } else {
                 boolean bEnabled = (CurGroupFieldSelection.getSelectedFieldNames().length > 0);
-                String CurFieldName = SelItems[0];
-                if (JavaTools.FieldInList(CurDBMetaData.NonAggregateFieldNames, CurFieldName) > -1) {
+                String CurDisplayFieldName = SelItems[0];
+                if (JavaTools.FieldInList(CurDBMetaData.NonAggregateFieldNames, CurDisplayFieldName) > -1) {
                     showMessageBox( "ErrorBox", VclWindowPeerAttribute.OK, resmsgNonNumericAsGroupBy);
                     CurGroupFieldSelection.xSelFieldsListBox.addItems(SelItems, CurGroupFieldSelection.xSelFieldsListBox.getItemCount());
                     String FieldList[] = CurGroupFieldSelection.xFieldsListBox.getItems();
-                    int index = JavaTools.FieldInList(FieldList, CurFieldName);
+                    int index = JavaTools.FieldInList(FieldList, CurDisplayFieldName);
                     if (index > -1)
                         CurGroupFieldSelection.xFieldsListBox.removeItems((short) index, (short) 1);
                 } else
