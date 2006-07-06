@@ -4,9 +4,9 @@
  *
  *  $RCSfile: KPreparedStatement.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:38:53 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 14:17:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,10 +50,19 @@ using namespace com::sun::star::util;
 
 IMPLEMENT_SERVICE_INFO(KabPreparedStatement, "com.sun.star.sdbc.drivers.KabPreparedStatement", "com.sun.star.sdbc.PreparedStatement");
 // -------------------------------------------------------------------------
-void KabPreparedStatement::checkParameterIndex(sal_Int32)
+void KabPreparedStatement::checkAndResizeParameters(sal_Int32 nParams) throw(SQLException)
 {
-    // no parameters allowed in this implementation
-    throw SQLException();
+    if ( !m_aParameterRow.isValid() )
+        m_aParameterRow = new OValueVector();
+
+    if (nParams < 1)
+        ::dbtools::throwSQLException(
+            "SQL statement parameters are numbered starting at 1.",
+            ::dbtools::SQL_INVALID_DESCRIPTOR_INDEX,
+            *(KabPreparedStatement *) this);
+
+    if (nParams >= (sal_Int32) (*m_aParameterRow).size())
+        (*m_aParameterRow).resize(nParams);
 }
 // -------------------------------------------------------------------------
 void KabPreparedStatement::setKabFields() const throw(SQLException)
@@ -70,17 +79,48 @@ void KabPreparedStatement::setKabFields() const throw(SQLException)
     m_xMetaData->setKabFields(xColumns);
 }
 // -------------------------------------------------------------------------
+void KabPreparedStatement::resetParameters() const throw(SQLException)
+{
+    m_nParameterIndex = 0;
+}
+// -------------------------------------------------------------------------
+void KabPreparedStatement::getNextParameter(::rtl::OUString &rParameter) const throw(SQLException)
+{
+    if (m_nParameterIndex >= (sal_Int32) (*m_aParameterRow).size())
+        ::dbtools::throwSQLException(
+            "More parameters in SQL statement than set.",
+            ::dbtools::SQL_INVALID_DESCRIPTOR_INDEX,
+            *(KabPreparedStatement *) this);
+
+    rParameter = (*m_aParameterRow)[m_nParameterIndex];
+
+    m_nParameterIndex++;
+}
+// -------------------------------------------------------------------------
 KabPreparedStatement::KabPreparedStatement(
     KabConnection* _pConnection,
     const ::rtl::OUString& sql)
     : KabPreparedStatement_BASE(_pConnection),
       m_sSqlStatement(sql),
-      m_bPrepared(sal_False)
+      m_bPrepared(sal_False),
+      m_nParameterIndex(0),
+      m_aParameterRow()
 {
 }
 // -------------------------------------------------------------------------
 KabPreparedStatement::~KabPreparedStatement()
 {
+}
+// -------------------------------------------------------------------------
+void KabPreparedStatement::disposing()
+{
+    KabPreparedStatement_BASE::disposing();
+
+    if (m_aParameterRow.isValid())
+    {
+        m_aParameterRow->clear();
+        m_aParameterRow = NULL;
+    }
 }
 // -------------------------------------------------------------------------
 Reference< XResultSetMetaData > SAL_CALL KabPreparedStatement::getMetaData() throw(SQLException, RuntimeException)
@@ -152,12 +192,14 @@ Reference< XResultSet > SAL_CALL KabPreparedStatement::executeQuery() throw(SQLE
     return rs;
 }
 // -------------------------------------------------------------------------
-void SAL_CALL KabPreparedStatement::setNull(sal_Int32, sal_Int32) throw(SQLException, RuntimeException)
+void SAL_CALL KabPreparedStatement::setNull(sal_Int32 parameterIndex, sal_Int32) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabCommonStatement_BASE::rBHelper.bDisposed);
 
-::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("Not Implemented"), NULL);
+    checkAndResizeParameters(parameterIndex);
+
+    (*m_aParameterRow)[parameterIndex - 1].setNull();
 }
 // -------------------------------------------------------------------------
 void SAL_CALL KabPreparedStatement::setObjectNull(sal_Int32, sal_Int32, const ::rtl::OUString&) throw(SQLException, RuntimeException)
@@ -224,12 +266,14 @@ void SAL_CALL KabPreparedStatement::setDouble(sal_Int32, double) throw(SQLExcept
 ::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("Not Implemented"), NULL);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL KabPreparedStatement::setString(sal_Int32, const ::rtl::OUString&) throw(SQLException, RuntimeException)
+void SAL_CALL KabPreparedStatement::setString(sal_Int32 parameterIndex, const ::rtl::OUString &x) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabCommonStatement_BASE::rBHelper.bDisposed);
 
-::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("Not Implemented"), NULL);
+    checkAndResizeParameters(parameterIndex);
+
+    (*m_aParameterRow)[parameterIndex - 1] = x;
 }
 // -------------------------------------------------------------------------
 void SAL_CALL KabPreparedStatement::setBytes(sal_Int32, const Sequence< sal_Int8 >&) throw(SQLException, RuntimeException)

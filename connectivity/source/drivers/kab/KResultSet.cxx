@@ -4,9 +4,9 @@
  *
  *  $RCSfile: KResultSet.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:39:09 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 14:19:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,10 @@
 #ifndef _CONNECTIVITY_KAB_FIELDS_HXX_
 #include "kfields.hxx"
 #endif
-#include "kabc_addressbook.hxx"
+
+#define KDE_HEADERS_WANT_KABC_ADDRESSBOOK
+#include "kde_headers.hxx"
+
 #include <qdatetime.h>
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: KResultSet.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:39:24 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 14:19:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,9 @@
 #ifndef _CONNECTIVITY_KAB_RESULTSETMETADATA_HXX_
 #include "KResultSetMetaData.hxx"
 #endif
-#include <kabc/addressee.h>
+
+#define KDE_HEADERS_WANT_KABC_ADDRESSEE
+#include "kde_headers.hxx"
 
 #ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
