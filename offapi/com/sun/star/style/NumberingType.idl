@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NumberingType.idl,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-20 11:57:33 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 09:15:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -254,6 +254,70 @@ published constants NumberingType
         @since OOo 2.0.3
       */
     const short CHARS_TIBETAN = 37;
+
+    //-------------------------------------------------------------------------
+    /** Numbering in Cyrillic alphabet upper case letters as
+        "А, Б, В, Г, ..., Ю, Я, Аа, Аб, Ав, ... Ааа, Ааб".
+
+        @since OOo 2.0.4
+     */
+    const short CHARS_CYRILLIC_UPPER_LETTER_BG = 38;
+
+    //-------------------------------------------------------------------------
+    /** Numbering in Cyrillic alphabet lower case letters as
+        "а, б, в, г, ..., ю, я, аа, аб, ав, ... ааа, ааб".
+
+        @since OOo 2.0.4
+     */
+    const short CHARS_CYRILLIC_LOWER_LETTER_BG = 39;
+
+    //-------------------------------------------------------------------------
+    /** Numbering in Cyrillic alphabet upper case letters as
+        "А, Б, ..., Ю, Я, Аа, Бб, Вв, ... Ааа, ...".
+
+        @since OOo 2.0.4
+     */
+    const short CHARS_CYRILLIC_UPPER_LETTER_N_BG = 40;
+
+     //-------------------------------------------------------------------------
+    /** Numbering in Cyrillic alphabet upper case letters as
+        "а, б, ..., ю, я, аа, бб, вв, ... ааа, ...".
+
+        @since OOo 2.0.4
+     */
+    const short CHARS_CYRILLIC_LOWER_LETTER_N_BG = 41;
+
+    //-------------------------------------------------------------------------
+    /** Numbering in Russian Cyrillic alphabet upper case letters as
+        "А, Б, В, Г, ..., Ю, Я, Аа, Аб, Ав, ... Ааа, Ааб".
+
+        @since OOo 2.0.4
+     */
+    const short CHARS_CYRILLIC_UPPER_LETTER_RU = 42;
+
+    //-------------------------------------------------------------------------
+    /** Numbering in Russian Cyrillic alphabet lower case letters as
+        "а, б, в, г, ..., ю, я, аа, аб, ав, ... ааа, ааб".
+
+        @since OOo 2.0.4
+     */
+    const short CHARS_CYRILLIC_LOWER_LETTER_RU = 43;
+
+    //-------------------------------------------------------------------------
+    /** Numbering in Russian Cyrillic alphabet upper case letters as
+        "А, Б, ..., Ю, Я, Аа, Бб, Вв, ... Ааа, ...".
+
+        @since OOo 2.0.4
+     */
+    const short CHARS_CYRILLIC_UPPER_LETTER_N_RU = 44;
+
+    //-------------------------------------------------------------------------
+    /** Numbering in Russian Cyrillic alphabet upper case letters as
+        "а, б, ..., ю, я, аа, бб, вв, ... ааа, ...".
+
+        @since OOo 2.0.4
+     */
+    const short CHARS_CYRILLIC_LOWER_LETTER_N_RU = 45;
 };
 
 //=============================================================================
