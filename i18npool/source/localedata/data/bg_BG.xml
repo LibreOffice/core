@@ -337,12 +337,16 @@
     </ReservedWords>
   </LC_MISC>
   <LC_NumberingLevel>
-    <NumberingLevel NumType="4" Prefix=" " Suffix=")"/>
     <NumberingLevel NumType="4" Prefix=" " Suffix="."/>
+    <NumberingLevel NumType="4" Prefix=" " Suffix=")"/>
     <NumberingLevel NumType="2" Prefix=" " Suffix="."/>
     <NumberingLevel NumType="0" Prefix=" " Suffix="."/>
     <NumberingLevel NumType="1" Prefix=" " Suffix=")"/>
     <NumberingLevel NumType="1" Prefix=" " Suffix="."/>
+    <NumberingLevel NumType="39" Prefix=" " Suffix="." />
+    <NumberingLevel NumType="39" Prefix=" " Suffix=")" />
+    <NumberingLevel NumType="40" Prefix=" " Suffix=")" />
+    <NumberingLevel NumType="40" Prefix="(" Suffix=")" />
   </LC_NumberingLevel>
   <LC_OutLineNumberingLevel>
     <OutlineStyle>
