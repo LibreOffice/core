@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbwizres.src,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 13:54:31 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 14:33:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1731,7 +1731,7 @@ String RID_DB_TABLE_WIZARD_START + 11
 
 String RID_DB_TABLE_WIZARD_START + 14
 {
-    Text [ de ] = "Dieser Assistent hilft Ihnen eine Datenbanktabelle zu erstellen. Nachdem Sie eine Tabellenkategorie ausgewählt haben, wählen Sie die Beispieltabelle und Beispielfelder aus, die Sie in Ihre neue Tabelle einbeziehen möchten. Ihre Tabelle kann Felder aus mehr als einer Tabelle enthalten.";
+    Text [ de ] = "Dieser Assistent hilft Ihnen, eine Datenbanktabelle zu erstellen. Nachdem Sie eine Tabellenkategorie ausgewählt haben, wählen Sie die Beispieltabelle und Beispielfelder aus, die Sie in Ihre neue Tabelle einbeziehen möchten. Ihre Tabelle kann Felder aus mehr als einer Tabelle enthalten.";
     Text [ en-US] = "This wizard helps you to create a table for your database. After selecting a table category and a sample table, choose the fields you want to include in your table. You can include fields from more than one sample table.";
 };
 
