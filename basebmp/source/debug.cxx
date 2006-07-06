@@ -2,9 +2,9 @@
  *
  *  $RCSfile: debug.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-07 14:27:36 $
+ *  last change: $Author: thb $ $Date: 2006-07-06 10:00:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,10 +87,10 @@ namespace basebmp
                     return "ONE_BIT_MSB_PAL";
                 case Format::ONE_BIT_LSB_PAL:
                     return "ONE_BIT_LSB_PAL";
-                case Format::TWO_BIT_MSB_PAL:
-                    return "TWO_BIT_MSB_PAL";
-                case Format::TWO_BIT_LSB_PAL:
-                    return "TWO_BIT_LSB_PAL";
+                case Format::FOUR_BIT_MSB_GRAY:
+                    return "FOUR_BIT_MSB_GRAY";
+                case Format::FOUR_BIT_LSB_GRAY:
+                    return "FOUR_BIT_LSB_GRAY";
                 case Format::FOUR_BIT_MSB_PAL:
                     return "FOUR_BIT_MSB_PAL";
                 case Format::FOUR_BIT_LSB_PAL:
@@ -99,8 +99,10 @@ namespace basebmp
                     return "EIGHT_BIT_PAL";
                 case Format::EIGHT_BIT_GRAY:
                     return "EIGHT_BIT_GRAY";
-                case Format::SIXTEEN_BIT_TC_MASK:
-                    return "SIXTEEN_BIT_TC_MASK";
+                case Format::SIXTEEN_BIT_LSB_TC_MASK:
+                    return "SIXTEEN_BIT_LSB_TC_MASK";
+                case Format::SIXTEEN_BIT_MSB_TC_MASK:
+                    return "SIXTEEN_BIT_MSB_TC_MASK";
                 case Format::TWENTYFOUR_BIT_TC_MASK:
                     return "TWENTYFOUR_BIT_TC_MASK";
                 case Format::THIRTYTWO_BIT_TC_MASK:

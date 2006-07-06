@@ -4,9 +4,9 @@
  *
  *  $RCSfile: color.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-30 13:36:14 $
+ *  last change: $Author: thb $ $Date: 2006-07-06 10:00:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,9 @@ private:
     sal_uInt32          mnColor;
 
 public:
+    typedef sal_uInt32  value_type;
+    typedef sal_uInt8   component_type;
+
     Color() : mnColor(0) {}
     explicit Color( sal_uInt32 nVal ) : mnColor(nVal) {}
     Color( sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue ) :

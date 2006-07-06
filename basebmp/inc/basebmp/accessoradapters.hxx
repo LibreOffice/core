@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessoradapters.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-28 16:50:18 $
+ *  last change: $Author: thb $ $Date: 2006-07-06 10:00:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,78 +36,194 @@
 #ifndef INCLUDED_BASEBMP_ACCESSORADAPTERS_HXX
 #define INCLUDED_BASEBMP_ACCESSORADAPTERS_HXX
 
-#include <basebmp/metafunctions.hxx>
-#include <basebmp/packedpixeliterator.hxx>
-#include <basebmp/paletteimageaccessor.hxx>
-
 #include <vigra/numerictraits.hxx>
 
 namespace basebmp
 {
 
-/** Interpose given accessor's set methods with a binary function,
-    taking both old and new value.
+/** Interpose given accessor's set and get methods with two unary
+    functors.
 
-    All other wrappee methods are inherited as-is.
+    @tpl WrappedAccessor
+    Wrapped type must provide the usual get and set accessor methods,
+    with the usual signatures (see StandardAccessor for a conforming
+    example). Furthermore, the type must provide a wrapped typedef
+    value_type
  */
-template< class WrappedAccessor, typename Functor > class BinarySetterFunctionAccessorAdapter :
-        public WrappedAccessor
+template< class WrappedAccessor,
+          typename GetterFunctor,
+          typename SetterFunctor > class UnaryFunctionAccessorAdapter
 {
 private:
-    Functor maFunctor;
+    // we don't derive from wrapped type, to avoid ambiguities
+    // regarding templatized getter/setter methods.
+    WrappedAccessor maAccessor;
+    GetterFunctor   maGetterFunctor;
+    SetterFunctor   maSetterFunctor;
 
 public:
-    BinarySetterFunctionAccessorAdapter() :
-        WrappedAccessor(),
-        maFunctor()
+    typedef typename WrappedAccessor::value_type value_type;
+
+    UnaryFunctionAccessorAdapter() :
+        maAccessor(),
+        maGetterFunctor(),
+        maSetterFunctor()
     {}
 
-    explicit BinarySetterFunctionAccessorAdapter( WrappedAccessor accessor ) :
-        WrappedAccessor( accessor ),
-        maFunctor()
+    template< class T > explicit UnaryFunctionAccessorAdapter( T accessor ) :
+        maAccessor( accessor ),
+        maGetterFunctor(),
+        maSetterFunctor()
     {}
 
-    BinarySetterFunctionAccessorAdapter( WrappedAccessor accessor,
-                                         Functor         functor ) :
-        WrappedAccessor( accessor ),
-        maFunctor( functor )
+    template< class T > UnaryFunctionAccessorAdapter( T             accessor,
+                                                      GetterFunctor getterFunctor,
+                                                      SetterFunctor setterFunctor) :
+        maAccessor( accessor ),
+        maGetterFunctor( getterFunctor ),
+        maSetterFunctor( setterFunctor )
     {}
+
+    // -------------------------------------------------------
+
+    WrappedAccessor const& getWrappedAccessor() const { return maAccessor; }
+    WrappedAccessor&       getWrappedAccessor() { return maAccessor; }
+
+    // -------------------------------------------------------
+
+    template< class Iterator >
+    value_type operator()(Iterator const& i) const
+    {
+        return maGetterFunctor( maAccessor(i) );
+    }
+
+    template< class Iterator, class Difference >
+    value_type operator()(Iterator const& i, Difference const& diff) const
+    {
+        return maGetterFunctor( maAccessor(i,diff) );
+    }
+
+    // -------------------------------------------------------
 
     template< typename V, class Iterator >
     void set(V const& value, Iterator const& i) const
     {
-        WrappedAccessor::set(
-            maFunctor(WrappedAccessor::operator()(i),
-                      vigra::detail::RequiresExplicitCast<typename WrappedAccessor::value_type>::cast(value)),
+        maAccessor.set(
+            maSetterFunctor(
+                vigra::detail::RequiresExplicitCast<value_type>::cast(value) ));
+    }
+
+    template< typename V, class Iterator, class Difference >
+    void set(V const& value, Iterator const& i, Difference const& diff) const
+    {
+        maAccessor.set(
+            maSetterFunctor(
+                vigra::detail::RequiresExplicitCast<value_type>::cast(value) ));
+    }
+
+};
+
+//-----------------------------------------------------------------------------
+
+/** Interpose given accessor's set methods with a binary function,
+    taking both old and new value.
+
+    The wrappee's getter methods kept as-is.
+
+    @tpl WrappedAccessor
+    Wrapped type must provide the usual get and set accessor methods,
+    with the usual signatures (see StandardAccessor for a conforming
+    example). Furthermore, the type must provide a wrapped typedef
+    value_type
+ */
+template< class WrappedAccessor,
+          typename SetterFunctor > class BinarySetterFunctionAccessorAdapter
+{
+private:
+    WrappedAccessor    maAccessor;
+    SetterFunctor      maFunctor;
+
+public:
+    typedef typename WrappedAccessor::value_type value_type;
+
+    BinarySetterFunctionAccessorAdapter() :
+        maAccessor(),
+        maFunctor()
+    {}
+
+    template< class T > explicit BinarySetterFunctionAccessorAdapter( T accessor ) :
+        maAccessor( accessor ),
+        maFunctor()
+    {}
+
+    template< class T > BinarySetterFunctionAccessorAdapter( T             accessor,
+                                                             SetterFunctor functor ) :
+        maAccessor( accessor ),
+        maFunctor( functor )
+    {}
+
+    // -------------------------------------------------------
+
+    WrappedAccessor const& getWrappedAccessor() const { return maAccessor; }
+    WrappedAccessor&       getWrappedAccessor() { return maAccessor; }
+
+    // -------------------------------------------------------
+
+    template< class Iterator >
+    value_type operator()(Iterator const& i) const
+    {
+        return maAccessor(i);
+    }
+
+    template< class Iterator, class Difference >
+    value_type operator()(Iterator const& i, Difference const& diff) const
+    {
+        return maAccessor(i,diff);
+    }
+
+    // -------------------------------------------------------
+
+    template< typename V, class Iterator >
+    void set(V const& value, Iterator const& i) const
+    {
+        maAccessor.set(
+            maFunctor(maAccessor(i),
+                      vigra::detail::RequiresExplicitCast<value_type>::cast(value)),
             i );
     }
 
     template< typename V, class Iterator, class Difference >
     void set(V const& value, Iterator const& i, Difference const& diff) const
     {
-        WrappedAccessor::set(
-            maFunctor(WrappedAccessor::operator()(i,diff),
-                      vigra::detail::RequiresExplicitCast<typename WrappedAccessor::value_type>::cast(value)),
+        maAccessor.set(
+            maFunctor(maAccessor(i,diff),
+                      vigra::detail::RequiresExplicitCast<value_type>::cast(value)),
             i,
             diff );
     }
+
 };
 
-/** Read from a CompositeIterator via two given accessors, pipe that
-    through given functor, and write result to the first iterator
+//-----------------------------------------------------------------------------
 
-    Note: iterator type is fixed, to facilitate type-safe mask
-    optimizations (see below).
+/** Write through a CompositeIterator's first wrapped iterator, by
+    piping the first wrapped iterator value, the second iterator
+    value, and the specified new value through a ternary function.
 
-    Passed iterator must fulfill the CompositeIterator concept
+    Passed iterator must fulfill the CompositeIterator concept. Note
+    that the getter/setter methods are not templatized regarding the
+    iterator type, to make the mask calculation optimization below
+    safe (see the maskedAccessor template metafunction below)
 
-    Set functionality is unimplemented
+    @tpl WrappedAccessor1
+    Wrapped type must provide the usual get and set accessor methods,
+    with the usual signatures (see StandardAccessor for a conforming
+    example). Furthermore, the type must provide a wrapped typedef
+    value_type
  */
 template< class WrappedAccessor1,
           class WrappedAccessor2,
-          typename Iterator1,
-          typename Iterator2,
-          typename Functor > class BinaryInputAccessorAdapter
+          typename Functor > class TernarySetterFunctionAccessorAdapter
 {
 private:
     WrappedAccessor1 ma1stAccessor;
@@ -115,431 +231,82 @@ private:
     Functor          maFunctor;
 
 public:
-    typedef typename WrappedAccessor1::value_type     value_type;
+    typedef typename WrappedAccessor1::value_type value_type;
 
-    BinaryInputAccessorAdapter() :
+    TernarySetterFunctionAccessorAdapter() :
         ma1stAccessor(),
         ma2ndAccessor(),
         maFunctor()
     {}
 
-    explicit BinaryInputAccessorAdapter( WrappedAccessor1 accessor1 ) :
-        ma1stAccessor( accessor1 ),
+    template< class T > explicit TernarySetterFunctionAccessorAdapter( T accessor ) :
+        ma1stAccessor( accessor ),
         ma2ndAccessor(),
         maFunctor()
     {}
 
-    BinaryInputAccessorAdapter( WrappedAccessor1 accessor1,
-                                WrappedAccessor2 accessor2 ) :
+    template< class T1, class T2 >
+    TernarySetterFunctionAccessorAdapter( T1 accessor1,
+                                          T2 accessor2 ) :
         ma1stAccessor( accessor1 ),
         ma2ndAccessor( accessor2 ),
         maFunctor()
     {}
 
-    BinaryInputAccessorAdapter( WrappedAccessor1 accessor1,
-                                WrappedAccessor2 accessor2,
-                                Functor          func ) :
+    template< class T1, class T2 >
+    TernarySetterFunctionAccessorAdapter( T1      accessor1,
+                                          T2      accessor2,
+                                          Functor func ) :
         ma1stAccessor( accessor1 ),
         ma2ndAccessor( accessor2 ),
         maFunctor( func )
     {}
 
-    template< typename Iterator > value_type operator()(Iterator const& i) const
+    // -------------------------------------------------------
+
+    WrappedAccessor1 const& get1stWrappedAccessor() const { return ma1stAccessor; }
+    WrappedAccessor1&       get1stWrappedAccessor() { return ma1stAccessor; }
+
+    WrappedAccessor2 const& get2ndWrappedAccessor() const { return ma2ndAccessor; }
+    WrappedAccessor2&       get2ndWrappedAccessor() { return ma2ndAccessor; }
+
+    // -------------------------------------------------------
+
+    template< class Iterator >
+    value_type operator()(Iterator const& i) const
     {
-        return maFunctor(ma1stAccessor(i.first()),
-                         ma2ndAccessor(i.second()));
+        return ma1stAccessor(i);
     }
-    template< typename Iterator, typename Difference >
+
+    template< class Iterator, class Difference >
     value_type operator()(Iterator const& i, Difference const& diff) const
     {
-        return maFunctor(ma1stAccessor(i.first(),diff),
-                         ma2ndAccessor(i.second(),diff));
+        return ma1stAccessor(i,diff);
     }
-};
 
-/** Write through a CompositeIterator's first wrapped iterator, by
-    piping the first wrapped iterator value, the second iterator
-    value, and the specified new value through a ternary function.
+    // -------------------------------------------------------
 
-    Passed iterator must fulfill the CompositeIterator concept
-
-    All other wrappee methods are inherited as-is.
- */
-template< class WrappedAccessor1,
-          class WrappedAccessor2,
-          typename Iterator1,
-          typename Iterator2,
-          typename Functor > class TernarySetterFunctionAccessorAdapter : public WrappedAccessor1
-{
-private:
-    WrappedAccessor2 ma2ndAccessor;
-    Functor          maFunctor;
-
-public:
-    TernarySetterFunctionAccessorAdapter() :
-        WrappedAccessor1(),
-        ma2ndAccessor(),
-        maFunctor()
-    {}
-
-    explicit TernarySetterFunctionAccessorAdapter( WrappedAccessor1 accessor1 ) :
-        WrappedAccessor1( accessor1 ),
-        ma2ndAccessor(),
-        maFunctor()
-    {}
-
-    TernarySetterFunctionAccessorAdapter( WrappedAccessor1 accessor1,
-                                          WrappedAccessor2 accessor2 ) :
-        WrappedAccessor1( accessor1 ),
-        ma2ndAccessor( accessor2 ),
-        maFunctor()
-    {}
-
-    TernarySetterFunctionAccessorAdapter( WrappedAccessor1 accessor1,
-                                          WrappedAccessor2 accessor2,
-                                          Functor          func ) :
-        WrappedAccessor1( accessor1 ),
-        ma2ndAccessor( accessor2 ),
-        maFunctor( func )
-    {}
-
-    template< typename V, typename Iterator >
+    template< typename V, class Iterator >
     void set(V const& value, Iterator const& i) const
     {
-        WrappedAccessor1::set(
-            maFunctor(WrappedAccessor1::operator()(i.first()),
+        ma1stAccessor.set(
+            maFunctor(ma1stAccessor(i.first()),
                       ma2ndAccessor(i.second()),
-                      vigra::detail::RequiresExplicitCast<typename WrappedAccessor1::value_type>::cast(value)),
+                      vigra::detail::RequiresExplicitCast<value_type>::cast(value)),
             i.first() );
     }
 
-    template< typename V, typename Iterator, typename Difference >
+    template< typename V, class Iterator, class Difference >
     void set(V const& value, Iterator const& i, Difference const& diff) const
     {
-        WrappedAccessor1::set(
-            maFunctor(WrappedAccessor1::operator()(i.first(),diff),
+        ma1stAccessor.set(
+            maFunctor(ma1stAccessor(i.first(), diff),
                       ma2ndAccessor(i.second(),diff),
-                      vigra::detail::RequiresExplicitCast<typename WrappedAccessor1::value_type>::cast(value)),
+                      vigra::detail::RequiresExplicitCast<value_type>::cast(value)),
             i.first(),
             diff );
     }
-};
 
-
-/// Traits template, to determine alpha blending between two values
-template< typename ValueType, typename AlphaType > struct BlendFunctor
-{
-    ValueType operator()( AlphaType alpha,
-                          ValueType v1,
-                          ValueType v2 ) const
-    {
-        const typename vigra::NumericTraits<AlphaType>::RealPromote fAlpha(
-            vigra::NumericTraits<AlphaType>::toRealPromote(alpha));
-        return (vigra::NumericTraits<AlphaType>::one()-fAlpha)*v1 + fAlpha*v2;
-    }
-};
-
-template< typename ValueType, typename AlphaType > struct IntegerBlendFunctor
-{
-    ValueType operator()( AlphaType alpha,
-                          ValueType v1,
-                          ValueType v2 ) const
-    {
-        return (vigra::NumericTraits<AlphaType>::toPromote(
-                    vigra::NumericTraits<AlphaType>::max()-alpha)*v1 + alpha*v2) /
-            vigra::NumericTraits<AlphaType>::max();
-    }
-};
-
-/// Metafunction to select blend functor from value and alpha type
-template< typename ValueType, typename AlphaType > struct blendFunctorSelector : public
-    ifScalarIntegral< AlphaType,
-                      IntegerBlendFunctor< ValueType, AlphaType >,
-                      BlendFunctor< ValueType, AlphaType > >
-{
-};
-
-/** Accessor adapter that blends input value against fixed color value
-
-    Used to blend an alpha mask 'through' a fixed color value into the
-    destination.
-
-    The getter functors return a constant value (usually the zero of
-    the value type, this preserves the original destination content
-    when blitting through a mask) - there really isn't no sensible
-    default behaviour for these methods.
- */
-template< class WrappedAccessor,
-          typename AlphaType > class ConstantColorBlendSetterAccessorAdapter
-{
-public:
-    typedef AlphaType                            alpha_type;
-    typedef AlphaType                            value_type;
-    typedef typename WrappedAccessor::value_type color_type;
-
-private:
-    typename blendFunctorSelector< color_type, alpha_type >::type maFunctor;
-    WrappedAccessor                                               maWrappee;
-    color_type                                                    maBlendColor;
-    value_type                                                    maGetterValue;
-
-    // TODO(Q2): Merge with
-    // BinarySetterFunctionAccessorAdapter. Problem there: how to
-    // generate the functor, needs construction with accessor and
-    // fixed color
-
-public:
-    ConstantColorBlendSetterAccessorAdapter() :
-        maFunctor(),
-        maWrappee(),
-        maBlendColor(),
-        maGetterValue()
-    {}
-
-    explicit ConstantColorBlendSetterAccessorAdapter( WrappedAccessor acc ) :
-        maFunctor(),
-        maWrappee(acc),
-        maBlendColor(),
-        maGetterValue()
-    {}
-
-    ConstantColorBlendSetterAccessorAdapter( WrappedAccessor acc,
-                                             color_type      col ) :
-        maFunctor(),
-        maWrappee(acc),
-        maBlendColor(col),
-        maGetterValue()
-    {}
-
-    ConstantColorBlendSetterAccessorAdapter( WrappedAccessor acc,
-                                             color_type      col,
-                                             value_type      val ) :
-        maFunctor(),
-        maWrappee(acc),
-        maBlendColor(col),
-        maGetterValue(val)
-    {}
-
-    void        setColor( color_type col ) { maBlendColor=col; }
-    color_type  getColor() { return maBlendColor; }
-    void        setGetterValue( value_type val ) { maGetterValue=val; }
-    value_type  getGetterValue() { return maGetterValue; }
-
-    /// @return constant value, regardless of iterator content
-    template< typename IteratorType > value_type operator()(IteratorType const& ) const
-    {
-        return maGetterValue;
-    }
-    /// @return constant value, regardless of iterator content
-    template< typename IteratorType, class Difference >
-    value_type operator()(IteratorType const& , Difference const& ) const
-    {
-        return maGetterValue;
-    }
-
-    template< typename V, typename IteratorType >
-    void set(V const& value, IteratorType const& i) const
-    {
-        maWrappee.set(
-            maFunctor(
-                vigra::detail::RequiresExplicitCast<alpha_type>::cast(value),
-                maWrappee(i),
-                maBlendColor),
-            i );
-    }
-
-    template< typename V, typename IteratorType, class Difference >
-    void set(V const& value, IteratorType const& i, Difference const& diff) const
-    {
-        maWrappee.set(
-            maFunctor(
-                vigra::detail::RequiresExplicitCast<alpha_type>::cast(value),
-                maWrappee(i,diff),
-                maBlendColor),
-            i,
-            diff );
-    }
-};
-
-
-// Some common accessor wrappers
-// ------------------------------------------------------------
-
-// XOR
-template< typename T > struct XorFunctor
-{
-    T operator()( T v1, T v2 ) const { return v1 ^ v2; }
-};
-template< class WrappedAccessor > struct xorAccessor
-{
-    typedef BinarySetterFunctionAccessorAdapter< WrappedAccessor,
-                                                 XorFunctor< typename WrappedAccessor::value_type > >
-        type;
-};
-
-
-// Masking functors for binary input
-//--------------------------------------------------------
-
-template< typename T, typename M > struct GenericInputMaskFunctor
-{
-    /** Mask v with state of m
-
-        @return v, if m != 0, and vigra::NumericTraits<T>::zero
-        otherwise.
-     */
-    T operator()( T v, M m ) const
-    {
-        return m == 0 ? vigra::NumericTraits<T>::zero : v;
-    }
-};
-
-template< typename T, typename M > struct IntegerInputMaskFunctor
-{
-    /** Mask v with state of m
-
-        @return v, if m != 0, and vigra::NumericTraits<T>::zero
-        otherwise.
-     */
-    T operator()( T v, M m ) const
-    {
-        typedef typename make_unsigned<T>::type unsigned_T;
-
-        // mask will be 0, iff m == 0, and 1 otherwise
-        const unsigned_T mask(
-            unsigned_cast<T>(m | -m) >> (sizeof(unsigned_T)*8 - 1) );
-        return v*mask;
-    }
-};
-
-template< typename T, typename M > struct FastIntegerInputMaskFunctor
-{
-    T operator()( T v, M m ) const
-    {
-        return v*m;
-    }
-};
-
-
-// Masking functors for TernarySetterFunctionAccessorAdapter
-//-----------------------------------------------------------
-
-template< typename T, typename M > struct GenericOutputMaskFunctor
-{
-    /// Ternary mask operation - selects v1 for m == 0, v2 otherwise
-    T operator()( T v1, M m, T v2 ) const
-    {
-        return m == 0 ? v1 : v2;
-    }
-};
-
-template< typename T, typename M > struct IntegerOutputMaskFunctor
-{
-    /** Mask v with state of m
-
-        @return v2, if m != 0, v1 otherwise.
-     */
-    T operator()( T v1, M m, T v2 ) const
-    {
-        typedef typename make_unsigned<T>::type unsigned_T;
-
-        // mask will be 0, iff m == 0, and 1 otherwise
-        const T mask( unsigned_cast<T>(m | -m) >> (sizeof(unsigned_T)*8 - 1) );
-        return v1*(M)(1-mask) + v2*mask;
-    }
-};
-
-template< typename T, typename M > struct FastIntegerOutputMaskFunctor
-{
-    T operator()( T v1, M m, T v2 ) const
-    {
-        return v1*(M)(1-m) + v2*m;
-    }
-};
-
-struct FastMask;
-struct NoFastMask;
-
-/// Metafunction to select output mask functor from iterator and mask value type
-template< typename T, typename M, typename DUMMY > struct outputMaskFunctorSelector : public
-    ifBothScalarIntegral< T, M,
-                          IntegerOutputMaskFunctor< T, M >,
-                          GenericOutputMaskFunctor< T, M > >
-{
-};
-template< typename T, typename M > struct outputMaskFunctorSelector< T, M, FastMask > : public
-    ifBothScalarIntegral< T, M,
-                          FastIntegerOutputMaskFunctor< T, M >,
-                          GenericOutputMaskFunctor< T, M > >
-{
-};
-
-// Chosen function crucially depends on iterator - we can choose the
-// faster direkt masking for 1bpp packed pixel iterators
-template< class WrappedAccessor,
-          class MaskAccessor,
-          class Iterator,
-          class MaskIterator > struct maskedAccessor
-{
-    typedef TernarySetterFunctionAccessorAdapter<
-        WrappedAccessor,
-        MaskAccessor,
-        Iterator,
-        MaskIterator,
-        typename outputMaskFunctorSelector<
-            typename WrappedAccessor::value_type,
-            typename MaskAccessor::value_type,
-            NoFastMask>::type >
-        type;
-};
-// partial specialization, to use fast 1bpp mask function for
-// corresponding iterator type
-template< class WrappedAccessor,
-          class MaskAccessor,
-          class Iterator > struct maskedAccessor< WrappedAccessor,
-                                                  MaskAccessor,
-                                                  Iterator,
-                                                  PackedPixelIterator< typename MaskAccessor::value_type,
-                                                                       1,
-                                                                       true > >
-{
-    typedef TernarySetterFunctionAccessorAdapter<
-        WrappedAccessor,
-        MaskAccessor,
-        Iterator,
-        PackedPixelIterator<
-            typename MaskAccessor::value_type,
-            1,
-            true >,
-        typename outputMaskFunctorSelector<
-            typename WrappedAccessor::value_type,
-            typename MaskAccessor::value_type,
-            FastMask>::type >
-        type;
-};
-
-template< class WrappedAccessor,
-          class MaskAccessor,
-          class Iterator > struct maskedAccessor< WrappedAccessor,
-                                                  MaskAccessor,
-                                                  Iterator,
-                                                  PackedPixelIterator< typename MaskAccessor::value_type,
-                                                                       1,
-                                                                       false > >
-{
-    typedef TernarySetterFunctionAccessorAdapter<
-        WrappedAccessor,
-        MaskAccessor,
-        Iterator,
-        PackedPixelIterator<
-            typename MaskAccessor::value_type,
-            1,
-            false >,
-        typename outputMaskFunctorSelector<
-            typename WrappedAccessor::value_type,
-            typename MaskAccessor::value_type,
-            FastMask>::type >
-        type;
 };
 
 } // namespace basebmp

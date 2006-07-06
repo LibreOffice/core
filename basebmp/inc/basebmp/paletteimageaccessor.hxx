@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paletteimageaccessor.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-28 16:50:19 $
+ *  last change: $Author: thb $ $Date: 2006-07-06 10:00:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,11 +36,11 @@
 #ifndef INCLUDED_BASEBMP_PALETTEIMAGEACCESSOR_HXX
 #define INCLUDED_BASEBMP_PALETTEIMAGEACCESSOR_HXX
 
-#include <basebmp/metafunctions.hxx>
-#include <basebmp/accessor.hxx>
+#include <basebmp/colortraits.hxx>
+#include <basebmp/accessortraits.hxx>
 
 #include <vigra/numerictraits.hxx>
-#include <vigra/mathutil.hxx>
+#include <vigra/metaprogramming.hxx>
 
 #include <algorithm>
 #include <functional>
@@ -48,132 +48,130 @@
 namespace basebmp
 {
 
-/** Access (possibly packed-pixel) data via palette indirection
+/** Access pixel data via palette indirection
+
+    @tpl Accessor
+    Raw accessor, to be used to actually access the pixel values
+
+    @tpl ColorType
+    The color value type to use - e.g. the palette is an array of that
+    type
  */
-template< typename Valuetype, typename Datatype > class PaletteImageAccessor
+template< class Accessor, typename ColorType > class PaletteImageAccessor
 {
 public:
-    typedef Valuetype                                   value_type;
-    typedef Datatype                                    data_type;
-    typedef typename remove_const<data_type>::type      count_type;
+    typedef typename Accessor::value_type  data_type;
+    typedef ColorType                      value_type;
 
-
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+// making all members public, if no member template friends
 private:
-    const value_type* palette;
-    count_type        num_entries;
+    template<class A, typename C> friend class PaletteImageAccessor;
+#endif
 
-    double norm( value_type const& rLHS,
-                 value_type const& rRHS ) const
-    {
-        return (rRHS - rLHS).magnitude();
-    }
+    Accessor          maAccessor;
+    const value_type* mpPalette;
+    std::size_t       mnNumEntries;
 
-    data_type find_best_match(value_type const& v) const
+public:
+    PaletteImageAccessor() :
+        maAccessor(),
+        mpPalette(0),
+        mnNumEntries(0)
+    {}
+
+    template< class A > explicit
+    PaletteImageAccessor( PaletteImageAccessor<A,ColorType> const& rSrc ) :
+        maAccessor( rSrc.maAccessor ),
+        mpPalette( rSrc.mpPalette ),
+        mnNumEntries( rSrc.mnNumEntries )
+    {}
+
+    PaletteImageAccessor( const value_type* pPalette,
+                          std::size_t       numEntries ) :
+        maAccessor(),
+        mpPalette(pPalette),
+        mnNumEntries(numEntries)
+    {}
+
+    template< class T > PaletteImageAccessor( T                 accessor,
+                                              const value_type* pPalette,
+                                              std::size_t       numEntries ) :
+        maAccessor(accessor),
+        mpPalette(pPalette),
+        mnNumEntries(numEntries)
+    {}
+
+    // -------------------------------------------------------
+
+    Accessor const& getWrappedAccessor() const { return maAccessor; }
+    Accessor&       getWrappedAccessor() { return maAccessor; }
+
+    // -------------------------------------------------------
+
+    data_type lookup(value_type const& v) const
     {
         // TODO(P3): use table-based/octree approach here!
         const value_type* best_entry;
-        const value_type* palette_end( palette+num_entries );
-        if( (best_entry=std::find( palette, palette_end, v)) != palette_end )
-            return best_entry-palette;
+        const value_type* palette_end( mpPalette+mnNumEntries );
+        if( (best_entry=std::find( mpPalette, palette_end, v)) != palette_end )
+            return best_entry-mpPalette;
 
-        // TODO(F3): HACK. Need palette traits, and an error function
-        // here. We blatantly assume value_type is a normed linear
-        // space.
-        const value_type* curr_entry( palette );
+        const value_type* curr_entry( mpPalette );
         best_entry = curr_entry;
         while( curr_entry != palette_end )
         {
-            if( norm(*curr_entry,*best_entry) > norm(*curr_entry,v) )
+            if( ColorTraits<value_type>::distance(*curr_entry,
+                                                  *best_entry)
+                > ColorTraits<value_type>::distance(*curr_entry,
+                                                    v) )
+            {
                 best_entry = curr_entry;
+            }
 
             ++curr_entry;
         }
 
-        return best_entry-palette;
+        return best_entry-mpPalette;
     }
 
-    value_type toCol( value_type const& rCol ) const
-    {
-        return rCol;
-    }
-
-public:
-    PaletteImageAccessor() :
-        palette(0),
-        num_entries(0)
-    {}
-
-    PaletteImageAccessor( const value_type* pPalette,
-                          data_type         numEntries ) :
-        palette(pPalette),
-        num_entries(numEntries)
-    {}
-
-    data_type lookup(value_type const& v) const { return find_best_match(v); }
+    // -------------------------------------------------------
 
     template< class Iterator >
-    value_type operator()(Iterator const& i) const { return toCol(palette[i.get()]); }
-    value_type operator()(data_type const* i) const { return toCol(palette[*i]); }
+    value_type operator()(Iterator const& i) const
+    {
+        return mpPalette[ maAccessor(i) ];
+    }
 
     template< class Iterator, class Difference >
     value_type operator()(Iterator const& i, Difference const& diff) const
     {
-        return toCol(palette[i.get(diff)]);
+        return mpPalette[ maAccessor(i,diff) ];
     }
+
+    // -------------------------------------------------------
 
     template< typename V, class Iterator >
     void set(V const& value, Iterator const& i) const
     {
-        i.set(
-            find_best_match(
-                vigra::detail::RequiresExplicitCast<value_type>::cast(value) ));
+        maAccessor.set(
+            lookup(
+                vigra::detail::RequiresExplicitCast<value_type>::cast(value) ),
+            i );
     }
 
     template< typename V, class Iterator, class Difference >
     void set(V const& value, Iterator const& i, Difference const& diff) const
     {
-        i.set(
-            find_best_match(
-                vigra::detail::RequiresExplicitCast<value_type>::cast(value)),
+        maAccessor.set(
+            lookup(
+                vigra::detail::RequiresExplicitCast<value_type>::cast(value) ),
+            i,
             diff );
     }
 };
 
-
 //-----------------------------------------------------------------------------
-
-/// Retrieve raw pixel data accessor for given Accessor type
-template< class Accessor > struct rawAccessor
-{
-    // generic case: both accessors are the same
-    typedef Accessor type;
-};
-
-template< typename DataType > struct RawAccessor : public StandardAccessor< DataType >
-{
-    RawAccessor() {}
-    // converting constructor, which in fact discards argument
-    template< typename ValueType > explicit RawAccessor(
-        const PaletteImageAccessor< ValueType, DataType >& ) {}
-};
-
-// specialization for PaletteImageAccessor, to provide the
-// corresponding StandardAccessor to the pixel index values
-template< typename ValueType, typename DataType >
-struct rawAccessor< PaletteImageAccessor< ValueType, DataType > >
-{
-    typedef RawAccessor< DataType > type;
-};
-
-
-//-----------------------------------------------------------------------------
-
-/// Retrieve stand-alone color lookup function for given Accessor type
-template< class Accessor > struct colorLookup
-{
-    // generic case: accessor has no lookup functionality
-    typedef std::project2nd< Accessor, typename Accessor::value_type > type;
-};
 
 /** Lookup index value for given Color value in PaletteImageAccessor
  */
@@ -186,12 +184,39 @@ template< class Accessor > struct ColorLookup
     }
 };
 
-// specialization for PaletteImageAccessor, to provide the
-// corresponding ColorLookup functor
-template< typename ValueType, typename DataType >
-struct colorLookup< PaletteImageAccessor< ValueType, DataType > >
+//-----------------------------------------------------------------------------
+
+// partial specialization for PaletteAccessor
+template< class Accessor, typename ColorType > struct AccessorTraits<
+    PaletteImageAccessor< Accessor, ColorType > >
 {
-    typedef ColorLookup< PaletteImageAccessor< ValueType, DataType > > type;
+    /// value type of described accessor
+    typedef typename PaletteImageAccessor< Accessor, ColorType >::value_type  value_type;
+
+    /// Retrieve stand-alone color lookup function for given Accessor type
+    typedef ColorLookup< PaletteImageAccessor< Accessor, ColorType > >        color_lookup;
+
+    /// Retrieve raw pixel data accessor for given Accessor type
+    typedef Accessor                                                          raw_accessor;
+
+    /** accessor for XOR setter access is disabled, since the results
+     *  are usually completely unintended - you'll usually want to
+     *  wrap an xor_accessor with a PaletteAccessor, not the other way
+     *  around.
+     */
+    typedef vigra::VigraFalseType                                             xor_accessor;
+
+    /** accessor for masked setter access is disabled, since the
+     *  results are usually completely unintended - you'll usually
+     *  want to wrap a masked_accessor with a PaletteAccessor, not the
+     *  other way around.
+     */
+    template< class MaskAccessor,
+              class Iterator,
+              class MaskIterator > struct                                     masked_accessor
+    {
+        typedef vigra::VigraFalseType type;
+    };
 };
 
 } // namespace basebmp

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: packedpixeliterator.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-28 16:50:19 $
+ *  last change: $Author: thb $ $Date: 2006-07-06 10:00:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@
 #include <basebmp/metafunctions.hxx>
 #include <basebmp/stridedarrayiterator.hxx>
 #include <basebmp/nonstandarditerator.hxx>
+#include <basebmp/accessortraits.hxx>
 
 #include <boost/static_assert.hpp>
 #include <vigra/metaprogramming.hxx>
@@ -649,6 +650,31 @@ public:
         pointer p = current(d.x,d.y);
         *p = (*p & ~mask) | pixel_value;
     }
+};
+
+//-----------------------------------------------------------------------------
+
+// partial specialization for the accessor traits masked_accessor
+// selector metafunction - can employ fast mask functor for the 1bpp
+// case.
+template< class Accessor,
+          class MaskAccessor,
+          class Iterator,
+          bool  MsbFirst > struct maskedAccessorSelector< Accessor,
+                                                          MaskAccessor,
+                                                          Iterator,
+                                                          PackedPixelIterator< typename MaskAccessor::value_type,
+                                                                               1,
+                                                                               MsbFirst > >
+{
+    typedef TernarySetterFunctionAccessorAdapter<
+        Accessor,
+        MaskAccessor,
+        typename outputMaskFunctorSelector<
+            typename Accessor::value_type,
+            typename MaskAccessor::value_type,
+            FastMask>::type >
+        type;
 };
 
 } // namespace basebmp

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: colormisc.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-30 13:36:14 $
+ *  last change: $Author: thb $ $Date: 2006-07-06 10:00:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 #ifndef INCLUDED_BASEBMP_COLORMISC_HXX
 #define INCLUDED_BASEBMP_COLORMISC_HXX
 
+#include <osl/diagnose.h>
 #include <basebmp/color.hxx>
 #include <basebmp/accessoradapters.hxx>
 #include <vigra/mathutil.hxx>
@@ -52,6 +53,8 @@ struct ColorBitmaskOutputMaskFunctor
 {
     Color operator()( Color v1, sal_uInt8 m, Color v2 ) const
     {
+        OSL_ASSERT(m<=1);
+
         return Color(v1.toInt32()*(sal_uInt8)(1-m) + v2.toInt32()*m);
     }
 };
@@ -81,8 +84,29 @@ struct ColorBlendFunctor
     }
 };
 
-/// Specialized metafunction to select blend functor for Color value types
-template<> struct blendFunctorSelector<Color, sal_uInt8>
+//-----------------------------------------------------------------------------
+
+template<> struct ColorTraits< Color >
+{
+    /// @return number of color channels
+    static int numChannels() { return 3; }
+
+    /// Type of a color component (i.e. the type of an individual channel)
+    typedef sal_uInt8 component_type;
+
+    /// Metafunction to select blend functor from color and alpha type
+    template< typename AlphaType > struct blend_functor;
+
+    /// Calculate normalized distance between color c1 and c2
+    static double distance( const Color& c1,
+                            const Color& c2 )
+    {
+        return (c1 - c2).magnitude();
+    }
+};
+
+/// Only defined for 8 bit alpha, currently
+template<> template<> struct ColorTraits< Color >::blend_functor< sal_uInt8 >
 {
     typedef ColorBlendFunctor type;
 };

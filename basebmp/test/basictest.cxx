@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basictest.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-30 11:05:21 $
+ *  last change: $Author: thb $ $Date: 2006-07-06 10:00:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -179,6 +179,54 @@ public:
                                    pDevice->getPixel(aPt3) == aCol6);
         }
 
+        // 16bpp
+        {
+            pDevice = createBitmapDevice( aSize,
+                                          true,
+                                          Format::SIXTEEN_BIT_LSB_TC_MASK );
+            const Color aCol7(0);
+            pDevice->clear( aCol7 );
+
+            const Color aCol4(0x00101010);
+            pDevice->setPixel( aPt, aCol4, DrawMode_PAINT );
+            std::ofstream output("16bpp_test.dump");
+            CPPUNIT_ASSERT_MESSAGE("get/setPixel roundtrip #7",
+                                   pDevice->getPixel(aPt) == aCol4);
+
+            const Color aCol5(0x00F0F0F0);
+            pDevice->setPixel( aPt2, aCol5, DrawMode_PAINT );
+            debugDump( pDevice, output );
+            CPPUNIT_ASSERT_MESSAGE("get/setPixel roundtrip #8",
+                                   pDevice->getPixel(aPt2) == aCol5);
+
+            const Color aCol6(0x00FFFFFF);
+            pDevice->setPixel( aPt3, aCol6, DrawMode_PAINT );
+            CPPUNIT_ASSERT_MESSAGE("get/setPixel roundtrip #9",
+                                   pDevice->getPixel(aPt3) != aCol7);
+        }
+
+        // 24bpp
+        {
+            pDevice = createBitmapDevice( aSize,
+                                          true,
+                                          Format::TWENTYFOUR_BIT_TC_MASK );
+
+            const Color aCol4(0x01010101);
+            pDevice->setPixel( aPt, aCol4, DrawMode_PAINT );
+            CPPUNIT_ASSERT_MESSAGE("get/setPixel roundtrip #10",
+                                   pDevice->getPixel(aPt) == aCol4);
+
+            const Color aCol5(0x0F0F0F0F);
+            pDevice->setPixel( aPt2, aCol5, DrawMode_PAINT );
+            CPPUNIT_ASSERT_MESSAGE("get/setPixel roundtrip #11",
+                                   pDevice->getPixel(aPt2) == aCol5);
+
+            const Color aCol6(0xFFFFFFFF);
+            pDevice->setPixel( aPt3, aCol6, DrawMode_PAINT );
+            CPPUNIT_ASSERT_MESSAGE("get/setPixel roundtrip #12",
+                                   pDevice->getPixel(aPt3) == aCol6);
+        }
+
         // 32bpp
         {
             pDevice = createBitmapDevice( aSize,
@@ -187,17 +235,17 @@ public:
 
             const Color aCol4(0x01010101);
             pDevice->setPixel( aPt, aCol4, DrawMode_PAINT );
-            CPPUNIT_ASSERT_MESSAGE("get/setPixel roundtrip #7",
+            CPPUNIT_ASSERT_MESSAGE("get/setPixel roundtrip #13",
                                    pDevice->getPixel(aPt) == aCol4);
 
             const Color aCol5(0x0F0F0F0F);
             pDevice->setPixel( aPt2, aCol5, DrawMode_PAINT );
-            CPPUNIT_ASSERT_MESSAGE("get/setPixel roundtrip #8",
+            CPPUNIT_ASSERT_MESSAGE("get/setPixel roundtrip #14",
                                    pDevice->getPixel(aPt2) == aCol5);
 
             const Color aCol6(0xFFFFFFFF);
             pDevice->setPixel( aPt3, aCol6, DrawMode_PAINT );
-            CPPUNIT_ASSERT_MESSAGE("get/setPixel roundtrip #9",
+            CPPUNIT_ASSERT_MESSAGE("get/setPixel roundtrip #15",
                                    pDevice->getPixel(aPt3) == aCol6);
         }
     }
