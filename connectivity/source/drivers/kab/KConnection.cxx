@@ -4,9 +4,9 @@
  *
  *  $RCSfile: KConnection.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:38:11 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 14:09:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,8 @@
 #include <com/sun/star/sdbc/TransactionIsolation.hpp>
 #endif
 
-#include "kabc_stdaddressbook.hxx"
+#define KDE_HEADERS_WANT_KABC_STDADDRESSBOOK
+#include "kde_headers.hxx"
 
 using namespace connectivity::kab;
 using namespace com::sun::star::uno;
@@ -184,7 +185,7 @@ sal_Bool SAL_CALL KabConnection::isClosed(  ) throw(SQLException, RuntimeExcepti
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    // just simple -> we are close when we are disposed taht means someone called dispose(); (XComponent)
+    // just simple -> we are closed when we are disposed, that means someone called dispose(); (XComponent)
     return KabConnection_BASE::rBHelper.bDisposed;
 }
 // --------------------------------------------------------------------------------
