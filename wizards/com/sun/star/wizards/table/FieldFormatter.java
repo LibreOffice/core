@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FieldFormatter.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 12:53:49 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 14:27:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,7 +101,7 @@ public class FieldFormatter  implements XItemListener{
         try {
             xlstFieldNames = CurUnoDialog.insertListBox("lstfieldnames", 3, null, this,
                     new String[] {"Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-                    new Object[] { new Integer(125),"HID:41220", new Integer(92), new Integer(37), IFieldFormatStep, new Short(curtabindex++), new Integer(62)});
+                    new Object[] { new Integer(133),"HID:41220", new Integer(92), new Integer(37), IFieldFormatStep, new Short(curtabindex++), new Integer(62)});
         } catch (Exception e) {
             e.printStackTrace(System.out);
         }
@@ -111,25 +111,25 @@ public class FieldFormatter  implements XItemListener{
 
         btnShiftUp = CurUnoDialog.insertButton("btnShiftUp", "shiftFieldNameUp", this,
                                 new String[] { "Enabled", "FontDescriptor", "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
-                                new Object[] { Boolean.FALSE, oFontDesc, new Integer(14), "HID:41221", String.valueOf((char) 8743), new Integer(158), new Integer(131), IFieldFormatStep, new Short(curtabindex++), new Integer(14)});
+                                new Object[] { Boolean.FALSE, oFontDesc, new Integer(14), "HID:41221", String.valueOf((char) 8743), new Integer(158), new Integer(139), IFieldFormatStep, new Short(curtabindex++), new Integer(14)});
 
         btnShiftDown = CurUnoDialog.insertButton("btnShiftDown", "shiftFieldNameDown", this,
                                 new String[] { "Enabled", "FontDescriptor", "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
-                                new Object[] { Boolean.FALSE, oFontDesc, new Integer(14), "HID:41222", String.valueOf((char) 8744), new Integer(158), new Integer(148), IFieldFormatStep, new Short(curtabindex++), new Integer(14) });
+                                new Object[] { Boolean.FALSE, oFontDesc, new Integer(14), "HID:41222", String.valueOf((char) 8744), new Integer(158), new Integer(156), IFieldFormatStep, new Short(curtabindex++), new Integer(14) });
         oFontDesc = new FontDescriptor();
         oFontDesc.Weight = com.sun.star.awt.FontWeight.BOLD;
         oFontDesc.Height = (short) 13;
         btnminus = CurUnoDialog.insertButton("btnminus", "removeFieldName", this,
                                 new String[] {"FontDescriptor", "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
-                                new Object[] {oFontDesc, new Integer(14), "HID:41223", "-", new Integer(118), new Integer(167), IFieldFormatStep, new Short(curtabindex++), new Integer(14) });
+                                new Object[] {oFontDesc, new Integer(14), "HID:41223", "-", new Integer(118), new Integer(175), IFieldFormatStep, new Short(curtabindex++), new Integer(14) });
 
         btnplus = CurUnoDialog.insertButton("btnplus", "addFieldName", this,
                                 new String[] {"FontDescriptor", "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
-                                new Object[] { oFontDesc, new Integer(14), "HID:41224", "+", new Integer(137), new Integer(167), IFieldFormatStep, new Short(curtabindex++), new Integer(14) });
+                                new Object[] { oFontDesc, new Integer(14), "HID:41224", "+", new Integer(137), new Integer(175), IFieldFormatStep, new Short(curtabindex++), new Integer(14) });
 
         CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlFixedLineModel", "ColDescriptorHeader",
                 new String[] { "Height", "Label", "Orientation", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
-                new Object[] { new Integer(8), sfieldinfo, new Integer(0), new Integer(158), new Integer(27), IFieldFormatStep, new Short(curtabindex++), new Integer(145) });
+                new Object[] { new Integer(8), sfieldinfo, new Integer(0), new Integer(158), new Integer(27), IFieldFormatStep, new Short(curtabindex++), new Integer(165) });
 
 
         CurUnoDialog.insertLabel("lblFieldName",
@@ -138,7 +138,7 @@ public class FieldFormatter  implements XItemListener{
 
         txtfieldname = CurUnoDialog.insertTextField("txtfieldname", MODIFYFIELDNAME, this,
                 new String[] {"Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Text", "Width"},
-                new Object[] { UIConsts.INTEGER_12, "HID:41225", new Integer(254), new Integer(37), IFieldFormatStep, new Short(curtabindex++),"", new Integer(50)});
+                new Object[] { UIConsts.INTEGER_12, "HID:41225", new Integer(274), new Integer(37), IFieldFormatStep, new Short(curtabindex++),"", new Integer(50)});
         txtfieldname.addTextListener(CurUnoDialog);
         CurUnoDialog.getPeerConfiguration().setAccessiblityName(btnplus, sbtnplushelptext);
         CurUnoDialog.getPeerConfiguration().setAccessiblityName(btnminus, sbtnminushelptext);
@@ -148,8 +148,8 @@ public class FieldFormatter  implements XItemListener{
     public void initialize(TableDescriptor _curTableDescriptor, String[] _fieldnames){
         if (oColumnDescriptorModel == null){
             oColumnDescriptorModel = CurUnoDialog.insertControlModel("com.sun.star.sdb.ColumnDescriptorControlModel", "oColumnDescriptor",
-                    new String[] {"Height", "PositionX", "PositionY", "Step", "TabIndex", "Width","EditWidth"}, // "HelpURL"
-                    new Object[] {new Integer(81), new Integer(158), new Integer(49), IFieldFormatStep, new Short(curtabindex++), new Integer(146), new Integer(50)});  //, "HID:41226"
+                    new String[] {"Height", "PositionX", "PositionY", "Step", "TabIndex", "Width", "EditWidth"}, // "HelpURL"
+                    new Object[] {new Integer(85), new Integer(158), new Integer(49), IFieldFormatStep, new Short(curtabindex++), new Integer(166), new Integer(50)});  //, "HID:41226"
             curTableDescriptor = _curTableDescriptor;
             Helper.setUnoPropertyValue(oColumnDescriptorModel, "ActiveConnection", _curTableDescriptor.DBConnection);
             txtfieldname.setMaxTextLen((short) this.curTableDescriptor.getMaxColumnNameLength());
