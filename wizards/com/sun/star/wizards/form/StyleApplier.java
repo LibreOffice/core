@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StyleApplier.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 12:44:18 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 14:20:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,6 +94,7 @@ public class StyleApplier{
 //  final static int SODBCONTROLBACKGROUNDCOLOR = 3;
     final static int SOLABELBACKGROUNDCOLOR = 4;
     final static int SOBORDERCOLOR = 5;
+    Short IBorderValue = new Short((short) 1);
 
 
     public StyleApplier(WizardDialog _CurUnoDialog, FormDocument _curFormDocument)  throws NoValidPathException{
@@ -215,11 +216,15 @@ public class StyleApplier{
     }
     */
 
+    public Short getBorderType(){
+        return IBorderValue;
+    }
+
 
     public void changeBorderLayouts(){
     try {
         curFormDocument.xTextDocument.lockControllers();
-        Short IBorderValue = null;
+
         if (optNoBorder.getState())
             IBorderValue = new Short((short) 0);
         else if (opt3DLook.getState())
