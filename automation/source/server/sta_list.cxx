@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sta_list.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:24:33 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 14:32:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -992,7 +992,11 @@ String StatementList::ClientTree(Window *pBase, int Indent)
     WRITEc("UId : ");
     WRITE(UIdString(pBase->GetSmartUniqueOrHelpId()));
     WRITEc(":0x");
-    WRITE(String::CreateFromInt32( sal_Int32(pBase), 16 ));
+    WRITE(
+        String::CreateFromInt64(
+            sal::static_int_cast< sal_Int64 >(
+                reinterpret_cast< sal_IntPtr >(pBase)),
+            16 ));
     WRITEc(":");
     WRITE(pBase->GetQuickHelpText());
     WRITEc(":");
