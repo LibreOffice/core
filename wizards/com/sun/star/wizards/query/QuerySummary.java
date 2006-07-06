@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QuerySummary.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 12:49:31 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 14:21:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,20 +132,19 @@ public class QuerySummary extends QueryMetaData {
     private String combineFieldNameFraction() {
         String CurString = "";
         String sReturn = oResource.getResText(RID_QUERY + 50);
-        int FieldCount = FieldNames.length;
         String BaseString = oResource.getResText(RID_QUERY + 92);
-        for (int i = 0; i < FieldCount; i++) {
+        for (int i = 0; i < FieldColumns.length; i++) {
             CurString = BaseString;
-            FieldColumn CurDBFieldColumn = super.getFieldColumnByDisplayName(FieldNames[i]);
-            int iAggregate = getAggregateIndex(FieldNames[i]);
+            FieldColumn CurDBFieldColumn = super.getFieldColumnByDisplayName(FieldColumns[i].DisplayFieldName);
+            int iAggregate = getAggregateIndex(FieldColumns[i].FieldName);
             if (iAggregate > -1) {
                 String sAggregateDisplay = AggregateFieldNames[iAggregate][1] + "(" + AggregateFieldNames[iAggregate][0] + ")";
                 CurString = JavaTools.replaceSubString(CurString, sAggregateDisplay, "<FIELDNAME>");
             }
             else
                 CurString = JavaTools.replaceSubString(CurString, CurDBFieldColumn.DisplayFieldName, "<FIELDNAME>");
-            sReturn += JavaTools.replaceSubString(CurString, CurDBFieldColumn.AliasName, "<FIELDTITLE>");
-            sReturn = appendClauseSeparator(sReturn, sSeparator, i, FieldCount);
+            sReturn += JavaTools.replaceSubString(CurString, CurDBFieldColumn.FieldTitle, "<FIELDTITLE>");
+            sReturn = appendClauseSeparator(sReturn, sSeparator, i, FieldColumns.length);
         }
         return sReturn;
     }
@@ -172,7 +171,7 @@ public class QuerySummary extends QueryMetaData {
         String sReturn = oResource.getResText(_InitResID);
         int FieldCount = _FieldNames.length;
         for (int i = 0; i < FieldCount; i++) {
-            sReturn += this.getFieldColumnByDisplayName(_FieldNames[i]).AliasName;
+            sReturn += this.getFieldColumnByDisplayName(_FieldNames[i]).FieldTitle;
             if (i < FieldCount - 1)
                 sReturn += sSeparator;
         }
@@ -203,7 +202,7 @@ public class QuerySummary extends QueryMetaData {
                             CurString = JavaTools.replaceSubString(BaseString, sAggregateDisplay, _ReplaceTags[a]);
                         }
                         else
-                            CurString = JavaTools.replaceSubString(BaseString, this.getFieldColumnByDisplayName(_FieldNames[i][a]).AliasName, _ReplaceTags[a]);
+                            CurString = JavaTools.replaceSubString(BaseString, this.getFieldColumnByDisplayName(_FieldNames[i][a]).FieldTitle, _ReplaceTags[a]);
                     }
                     else
                         CurString = JavaTools.replaceSubString(CurString, _FieldNames[i][a], _ReplaceTags[a]);
