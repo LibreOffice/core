@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryMetaData.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 12:36:15 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 14:15:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,13 +43,11 @@ import com.sun.star.wizards.common.*;
 
 public class QueryMetaData extends CommandMetaData {
 
-    public Vector QueryFields;
     FieldColumn CurFieldColumn;
     public String Command;
     Vector CommandNames;
     public PropertyValue[][] FilterConditions = new PropertyValue[][] {};
     public PropertyValue[][] GroupByFilterConditions = new PropertyValue[][] {};
-    public String[] FieldTitles = new String[] {};
     public String[] UniqueAggregateFieldNames = new String[]{};
     public int Type = QueryType.SODETAILQUERY;
 
@@ -61,13 +59,10 @@ public class QueryMetaData extends CommandMetaData {
 
     public QueryMetaData(XMultiServiceFactory xMSF, Locale CharLocale, NumberFormatter oNumberFormatter) {
         super(xMSF, CharLocale, oNumberFormatter);
-        QueryFields = new Vector(0);
     }
 
     public QueryMetaData(XMultiServiceFactory _xMSF) {
         super(_xMSF);
-        QueryFields = new Vector(0);
-        //      FieldColumn(CommandMetaData oCommandMetaData, String FieldName, boolean bgetDefaultValue){
     }
 
     public void setFilterConditions(PropertyValue[][] _FilterConditions) {
@@ -86,57 +81,87 @@ public class QueryMetaData extends CommandMetaData {
         return this.GroupByFilterConditions;
     }
 
-    public Vector getQueryFields() {
-        return QueryFields;
-    }
 
-    void removeQueryField() {
-
-    }
-
-
-    public void setFieldNames(String[] _FieldNames, XNameAccess _xColumns) {
-        int FieldCount = _FieldNames.length;
-        FieldNames = new String[FieldCount];
-        //      FieldTitles = new String[FieldCount];
-        QueryFields.removeAllElements();
-        for (int i = 0; i < FieldCount; i++) {
-            CurFieldColumn = new FieldColumn(this,_xColumns, _FieldNames[i] );
-            QueryFields.add(QueryFields.size(), CurFieldColumn);
-            FieldNames[i] = _FieldNames[i];
-        }
-    }
+//  public void addFieldColumn(String _FieldName, String _sCommandName){
+//      FieldColumn oFieldColumn = getFieldColumn(_FieldName, _sCommandName);
+//      if (oFieldColumn == null){
+//          FieldColumn[] LocFieldColumns = new FieldColumn[FieldColumns.length + 1];
+//          System.arraycopy(FieldColumns, 0, LocFieldColumns, 0, FieldColumns.length);
+//          LocFieldColumns[FieldColumns.length] = new FieldColumn(this, _FieldName, _sCommandName);
+//          FieldColumns = LocFieldColumns;
+//      }
+//    }
 
 
-    public void setFieldNames(String[] _FieldNames){ //, String _CommandName) {
-        int FieldCount = _FieldNames.length;
-        FieldNames = new String[FieldCount];
-        //      FieldTitles = new String[FieldCount];
-        QueryFields.removeAllElements();
-        for (int i = 0; i < FieldCount; i++) {
-            CurFieldColumn = new FieldColumn(this, _FieldNames[i]); //, _CommandName);
-            QueryFields.add(QueryFields.size(), CurFieldColumn);
-            FieldNames[i] = _FieldNames[i];
-            if (FieldTitleSet != null){
-                if (FieldTitleSet.containsKey(FieldNames[i])){
-                    CurFieldColumn.AliasName = (String) FieldTitleSet.get(FieldNames[i]);
-                    if (CurFieldColumn.AliasName == null){
-                        CurFieldColumn.AliasName = _FieldNames[i];
-                        FieldTitleSet.put(FieldNames[i], _FieldNames[i]);
-                    }
-
-                }
+    public void addSeveralFieldColumns(String[] _FieldNames, String _sCommandName){
+        Vector oToBeAddedFieldColumns = new Vector();
+        for (int i = 0; i < _FieldNames.length; i++){
+            FieldColumn oFieldColumn = getFieldColumn(_FieldNames[i], _sCommandName);
+            if (oFieldColumn == null){
+                oToBeAddedFieldColumns.add( new FieldColumn(this, _FieldNames[i], _sCommandName, false));
             }
         }
+        if (oToBeAddedFieldColumns.size() > 0){
+            int nOldFieldCount = FieldColumns.length;
+            FieldColumn[] LocFieldColumns = new FieldColumn[nOldFieldCount + oToBeAddedFieldColumns.size()];
+            System.arraycopy(FieldColumns, 0, LocFieldColumns, 0, nOldFieldCount);
+            for (int i = 0; i < oToBeAddedFieldColumns.size(); i++){
+                LocFieldColumns[nOldFieldCount + i] = (FieldColumn) oToBeAddedFieldColumns.elementAt(i);
+            }
+            FieldColumns = LocFieldColumns;
+        }
     }
+
+
+    public void reorderFieldColumns(String[] _sDisplayFieldNames){
+        Vector numericfieldsvector = new java.util.Vector();
+        FieldColumn[] LocFieldColumns = new FieldColumn[FieldColumns.length];
+        for (int i = 0; i < _sDisplayFieldNames.length; i++){
+            FieldColumn LocFieldColumn = this.getFieldColumnByDisplayName(_sDisplayFieldNames[i]);
+            LocFieldColumns[i] = LocFieldColumn;
+        }
+        System.arraycopy(LocFieldColumns, 0, FieldColumns, 0, LocFieldColumns.length);
+    }
+
+
+    public void removeSeveralFieldColumnsByDisplayFieldName(String[] _DisplayFieldNames){
+        Vector oRemainingFieldColumns = new Vector();
+        int a = 0;
+        for (int n = 0; n < FieldColumns.length; n++){
+            String sDisplayFieldName = FieldColumns[n].DisplayFieldName;
+            if (!(JavaTools.FieldInList(_DisplayFieldNames, sDisplayFieldName) > -1)){
+                oRemainingFieldColumns.add(FieldColumns[n]);
+            }
+        }
+        FieldColumns = new FieldColumn[oRemainingFieldColumns.size()];
+        oRemainingFieldColumns.toArray(FieldColumns);
+                    }
+
+
+    public void removeFieldColumn(String _sFieldName, String _sCommandName){
+        FieldColumn oFieldColumn = getFieldColumn(_sFieldName, _sCommandName);
+        int a = 0;
+        if (oFieldColumn != null){
+            FieldColumn[] LocFieldColumns = new FieldColumn[FieldColumns.length -1];
+            for (int i = 0; i < FieldColumns.length;i++){
+                if (!FieldColumns[i].FieldName.equals(_sFieldName))
+                    if (!FieldColumns[i].CommandName.equals(_sCommandName)){
+                        LocFieldColumns[a] = FieldColumns[i];
+                        a++;
+                }
+            }
+            FieldColumns = LocFieldColumns;
+        }
+    }
+
 
     public String[] getIncludedCommandNames() {
         FieldColumn CurQueryField;
         CommandNames = new Vector(1);
         String CurCommandName;
         int SearchIndex;
-        for (int i = 0; i < QueryFields.size(); i++) {
-            CurQueryField = (FieldColumn) QueryFields.elementAt(i);
+        for (int i = 0; i < FieldColumns.length; i++) {
+            CurQueryField = FieldColumns[i];
             CurCommandName = CurQueryField.getCommandName();
             if (!CommandNames.contains(CurCommandName))
                 CommandNames.addElement(CurCommandName);
@@ -166,43 +191,30 @@ public class QueryMetaData extends CommandMetaData {
         return sIncludedCommandNames;
     }
 
-    public String[] getAllFieldNames() {
-        return AllFieldNames;
+    public String[] getFieldNamesOfCommand(String _sCommandName){
+        CommandObject oTable = getTableByName(_sCommandName);
+        return oTable.xColumns.getElementNames();
+
     }
 
-    public void setAllIncludedFieldNames(boolean _bAppendMode) {
+    public void initializeFieldTitleSet(boolean _bAppendMode) {
         try {
             this.getIncludedCommandNames();
             if (FieldTitleSet == null)
                 FieldTitleSet = new HashMap();
             for (int i = 0; i < CommandNames.size(); i++) {
-                CommandObject otable = getTableByName((String) CommandNames.elementAt(i));
-                String[] LocFieldNames = otable.xColumns.getElementNames();
+                CommandObject oTable = getTableByName((String) CommandNames.elementAt(i));
+                String sTableName = oTable.Name;
+                String[] LocFieldNames = oTable.xColumns.getElementNames();
                 for (int a = 0; a < LocFieldNames.length; a++) {
-                    String CurFieldDisplayString = "";
-                    if (_bAppendMode)
-                        CurFieldDisplayString = ((String) CommandNames.elementAt(i)) + "." + LocFieldNames[a];
-                    else
-                        CurFieldDisplayString = LocFieldNames[a];
-                    if (!FieldTitleSet.containsKey(CurFieldDisplayString))
-                        FieldTitleSet.put(CurFieldDisplayString, null);
+                    String sDisplayFieldName = FieldColumn.composeDisplayFieldName(LocFieldNames[a], sTableName);
+                    if (!FieldTitleSet.containsKey(sDisplayFieldName))
+                        FieldTitleSet.put(sDisplayFieldName, LocFieldNames[a]);
                 }
             }
-            FieldTitleSet.keySet().toArray(this.AllFieldNames);
         } catch (Exception exception) {
             exception.printStackTrace(System.out);
         }
-    }
-
-
-    public FieldColumn getFieldColumnByDisplayName(String _DisplayFieldName) {
-        FieldColumn CurFieldColumn;
-        for (int i = 0; i < QueryFields.size(); i++) {
-            CurFieldColumn = (FieldColumn) QueryFields.elementAt(i);
-            if (CurFieldColumn.DisplayFieldName.equals(_DisplayFieldName))
-                return CurFieldColumn;
-        }
-        return null;
     }
 
 
@@ -219,46 +231,20 @@ public class QueryMetaData extends CommandMetaData {
 
 
     public boolean hasNumericalFields() {
-        FieldColumn CurQueryField = null;
-        for (int i = 0; i < QueryFields.size(); i++) {
-            CurQueryField = (FieldColumn) QueryFields.elementAt(i);
-            if (CurQueryField.bIsNumberFormat)
+        for (int i = 0; i < FieldColumns.length; i++) {
+            if (FieldColumns[i].bIsNumberFormat)
                 return true;
         }
         return false;
     }
 
-    public void setfieldtitles() {
-        FieldTitles = new String[FieldNames.length];
-        for (int i = 0; i < FieldNames.length; i++) {
-            if (this.FieldTitleSet.containsKey(FieldNames[i])) {
-                String curvalue = (String) this.FieldTitleSet.get(FieldNames[i]);
-                if ((curvalue == null) || (curvalue.equals(FieldNames[i])))
-                    curvalue = FieldNames[i];
-                else {
-                    CurFieldColumn = getFieldColumnByDisplayName(FieldNames[i]);
-                    CurFieldColumn.AliasName = (String) curvalue;
-                }
-                FieldTitles[i] = curvalue;
-            }
-        }
-    }
 
 
-    public int getAggregateIndex(String _FieldName){
+    public int getAggregateIndex(String _DisplayFieldName){
         int iAggregate = -1;
         if (Type == QueryType.SOSUMMARYQUERY)
-            iAggregate = JavaTools.FieldInTable(AggregateFieldNames, _FieldName);
+            iAggregate = JavaTools.FieldInTable(AggregateFieldNames, _DisplayFieldName);
         return iAggregate;
-    }
-
-
-    public String getFieldName(String _FieldTitle) {
-        int NameIndex = JavaTools.FieldInList(this.FieldTitles, _FieldTitle);
-        if (NameIndex > -1)
-            return FieldNames[NameIndex];
-        else
-            return null;
     }
 
 }
