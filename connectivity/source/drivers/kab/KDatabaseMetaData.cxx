@@ -4,9 +4,9 @@
  *
  *  $RCSfile: KDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:38:27 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 14:14:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,9 @@
 
 #ifndef _CONNECTIVITY_KAB_FIELDS_HXX_
 #include "kfields.hxx"
+#endif
+#ifndef CONNECTIVITY_KAB_KDEINIT_H
+#include "KDEInit.h"
 #endif
 #include <klocale.h>
 
@@ -603,8 +606,7 @@ sal_Bool SAL_CALL KabDatabaseMetaData::supportsANSI92IntermediateSQL(  ) throw(S
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL KabDatabaseMetaData::getDriverVersion() throw(SQLException, RuntimeException)
 {
-    // version 0.1
-    ::rtl::OUString aValue = ::rtl::OUString::createFromAscii("0.1");
+    ::rtl::OUString aValue = ::rtl::OUString::createFromAscii(KAB_DRIVER_VERSION);
     return aValue;
 }
 // -------------------------------------------------------------------------
@@ -634,7 +636,7 @@ sal_Bool SAL_CALL KabDatabaseMetaData::supportsANSI92IntermediateSQL(  ) throw(S
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL KabDatabaseMetaData::getDriverMajorVersion(  ) throw(RuntimeException)
 {
-    return 1;
+    return KAB_DRIVER_VERSION_MAJOR;
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL KabDatabaseMetaData::getDefaultTransactionIsolation(  ) throw(SQLException, RuntimeException)
@@ -644,7 +646,7 @@ sal_Int32 SAL_CALL KabDatabaseMetaData::getDefaultTransactionIsolation(  ) throw
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL KabDatabaseMetaData::getDriverMinorVersion(  ) throw(RuntimeException)
 {
-    return 0;
+    return KAB_DRIVER_VERSION_MINOR;
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL KabDatabaseMetaData::getSQLKeywords(  ) throw(SQLException, RuntimeException)
