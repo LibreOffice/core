@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impastp4.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:33:22 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 14:23:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -276,7 +276,7 @@ OUString SvXMLAutoStylePoolP_Impl::Find( sal_Int32 nFamily,
 {
     OUString sName;
 
-    sal_uInt32 nPos;
+    ULONG nPos;
     XMLFamilyData_Impl aTemporary( nFamily );
     XMLFamilyData_Impl *pFamily = 0;
     if( maFamilyList.Seek_Entry( &aTemporary, &nPos ) )
