@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TextSectionHandler.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 12:56:44 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 14:31:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,9 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNamed;
+import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.text.ControlCharacter;
 import com.sun.star.text.SectionFileLink;
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextContent;
@@ -169,11 +171,21 @@ public class TextSectionHandler {
             xSectionName.setName(SectionName);
     }
 
-    public void insertTextSection(String GroupName, String TemplateName) {
-        XTextCursor xTextCursor = xText.createTextCursor();
-        xTextCursor.gotoEnd(false);
-        insertTextSection( GroupName, TemplateName, xTextCursor );
+    public void insertTextSection(String GroupName, String TemplateName, boolean _bAddParagraph) {
+    try {
+        if (_bAddParagraph){
+            XTextCursor xTextCursor = xText.createTextCursor();
+            xText.insertControlCharacter(xTextCursor, ControlCharacter.PARAGRAPH_BREAK, false);
+            //      Helper.setUnoPropertyValue(xTextCursor, "PageDescName", "First Page");
+            xTextCursor.collapseToEnd();
+        }
+        XTextCursor xSecondTextCursor = xText.createTextCursor();
+        xSecondTextCursor.gotoEnd(false);
+        insertTextSection( GroupName, TemplateName, xSecondTextCursor );
     }
+    catch (IllegalArgumentException e) {
+        e.printStackTrace(System.out);
+    }}
 
     public void insertTextSection( String sectionName, String templateName, XTextCursor position ) {
         try {
