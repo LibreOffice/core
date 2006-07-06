@@ -4,9 +4,9 @@
  *
  *  $RCSfile: defaultnumberingprovider.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:44:55 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 09:36:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,13 @@
 #define NDEBUG
 #endif
 #include <assert.h>
+
+// Cyrillic upper case
+#define C_CYR_A "\xD0\x90"
+#define C_CYR_B "\xD0\x91"
+// Cyrillic lower case
+#define S_CYR_A "\xD0\xB0"
+#define S_CYR_B "\xD0\xB1"
 
 #include <math.h>
 #include <rtl/ustring.hxx>
@@ -191,6 +198,33 @@ void lcl_formatChars1( sal_Unicode table[], int tableSize, int n, OUString& s )
 
      for( int i=0; i<repeat_count; i++ )
          s += OUString::valueOf( table[ n%tableSize ] );
+}
+
+static
+void lcl_formatChars2( sal_Unicode table_capital[], sal_Unicode table_small[], int tableSize, int n, OUString& s )
+{
+     // string representation of n is appended to s.
+     // if A=='A' then 0=>A, 1=>B, ..., 25=>Z, 26=>Aa, 27=>Ab, ...
+
+     if( n>=tableSize )
+     {
+          lcl_formatChars2( table_capital, table_small, tableSize, (n-tableSize)/tableSize, s );
+          s += OUString::valueOf( table_small[ n % tableSize ] );
+     } else
+          s += OUString::valueOf( table_capital[ n % tableSize ] );
+}
+
+static
+void lcl_formatChars3( sal_Unicode table_capital[], sal_Unicode table_small[], int tableSize, int n, OUString& s )
+{
+     // string representation of n is appended to s.
+     // if A=='A' then 0=>A, 1=>B, ..., 25=>Z, 26=>Aa, 27=>Bb, ...
+
+     int repeat_count = n / tableSize + 1;
+     s += OUString::valueOf( table_capital[ n%tableSize ] );
+
+     for( int i=1; i<repeat_count; i++ )
+         s += OUString::valueOf( table_small[ n%tableSize ] );
 }
 
 static
@@ -438,6 +472,58 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
          case CHARS_TIBETAN:
               lcl_formatChars(table_Alphabet_dz, sizeof(table_Alphabet_dz) / sizeof(sal_Unicode), number - 1, result);
               break;
+         case CHARS_CYRILLIC_UPPER_LETTER_BG:
+              lcl_formatChars2( table_CyrillicUpperLetter_bg,
+                      table_CyrillicLowerLetter_bg,
+                      sizeof(table_CyrillicLowerLetter_bg) /
+                      sizeof(table_CyrillicLowerLetter_bg[0]), number-1,
+                      result); // 1=>a, 2=>b, ..., 28=>z, 29=>Aa, 30=>Ab, ...
+              break;
+         case CHARS_CYRILLIC_LOWER_LETTER_BG:
+              lcl_formatChars( table_CyrillicLowerLetter_bg,
+                      sizeof(table_CyrillicLowerLetter_bg) /
+                      sizeof(table_CyrillicLowerLetter_bg[0]), number-1,
+                      result); // 1=>a, 2=>b, ..., 28=>z, 29=>aa, 30=>ab, ...
+              break;
+         case CHARS_CYRILLIC_UPPER_LETTER_N_BG:
+              lcl_formatChars3( table_CyrillicUpperLetter_bg,
+                      table_CyrillicLowerLetter_bg,
+                      sizeof(table_CyrillicLowerLetter_bg) /
+                      sizeof(table_CyrillicLowerLetter_bg[0]), number-1,
+                      result); // 1=>a, 2=>b, ..., 28=>z, 29=>Aa, 30=>Bb, ...
+              break;
+         case CHARS_CYRILLIC_LOWER_LETTER_N_BG:
+              lcl_formatChars1( table_CyrillicLowerLetter_bg,
+                      sizeof(table_CyrillicLowerLetter_bg) /
+                      sizeof(table_CyrillicLowerLetter_bg[0]), number-1,
+                      result); // 1=>a, 2=>b, ..., 28=>z, 29=>aa, 30=>bb, ...
+              break;
+         case CHARS_CYRILLIC_UPPER_LETTER_RU:
+              lcl_formatChars2( table_CyrillicUpperLetter_ru,
+                      table_CyrillicLowerLetter_ru,
+                      sizeof(table_CyrillicLowerLetter_ru) /
+                      sizeof(table_CyrillicLowerLetter_ru[0]), number-1,
+                      result); // 1=>a, 2=>b, ..., 27=>z, 28=>Aa, 29=>Ab, ...
+              break;
+         case CHARS_CYRILLIC_LOWER_LETTER_RU:
+              lcl_formatChars( table_CyrillicLowerLetter_ru,
+                      sizeof(table_CyrillicLowerLetter_ru) /
+                      sizeof(table_CyrillicLowerLetter_ru[0]), number-1,
+                      result); // 1=>a, 2=>b, ..., 27=>z, 28=>aa, 29=>ab, ...
+              break;
+         case CHARS_CYRILLIC_UPPER_LETTER_N_RU:
+              lcl_formatChars3( table_CyrillicUpperLetter_ru,
+                      table_CyrillicLowerLetter_ru,
+                      sizeof(table_CyrillicLowerLetter_ru) /
+                      sizeof(table_CyrillicLowerLetter_ru[0]), number-1,
+                      result); // 1=>a, 2=>b, ..., 27=>z, 28=>Aa, 29=>Bb, ...
+              break;
+         case CHARS_CYRILLIC_LOWER_LETTER_N_RU:
+              lcl_formatChars1( table_CyrillicLowerLetter_ru,
+                      sizeof(table_CyrillicLowerLetter_ru) /
+                      sizeof(table_CyrillicLowerLetter_ru[0]), number-1,
+                      result); // 1=>a, 2=>b, ..., 27=>z, 28=>aa, 29=>bb, ...
+              break;
 
           default:
                assert(0);
@@ -512,6 +598,14 @@ static const Supported_NumberingType aSupportedTypes[] =
         {style::NumberingType::CHARS_KHMER,     NULL, LANG_CTL},
         {style::NumberingType::CHARS_LAO,       NULL, LANG_CTL},
         {style::NumberingType::CHARS_TIBETAN,   NULL, LANG_CTL},
+        {style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_BG,   C_CYR_A ", " C_CYR_B ", .., " C_CYR_A S_CYR_A ", " C_CYR_A S_CYR_B ", ... (bg)", LANG_ALL},
+        {style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_BG,   S_CYR_A ", " S_CYR_B ", .., " S_CYR_A S_CYR_A ", " S_CYR_A S_CYR_B ", ... (bg)", LANG_ALL},
+        {style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_N_BG, C_CYR_A ", " C_CYR_B ", .., " C_CYR_A S_CYR_A ", " C_CYR_B S_CYR_B ", ... (bg)", LANG_ALL},
+        {style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_N_BG, S_CYR_A ", " S_CYR_B ", .., " S_CYR_A S_CYR_A ", " S_CYR_B S_CYR_B ", ... (bg)", LANG_ALL},
+        {style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_RU,   C_CYR_A ", " C_CYR_B ", .., " C_CYR_A S_CYR_A ", " C_CYR_A S_CYR_B ", ... (ru)", LANG_ALL},
+        {style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_RU,   S_CYR_A ", " S_CYR_B ", .., " S_CYR_A S_CYR_A ", " S_CYR_A S_CYR_B ", ... (ru)", LANG_ALL},
+        {style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_N_RU, C_CYR_A ", " C_CYR_B ", .., " C_CYR_A S_CYR_A ", " C_CYR_B S_CYR_B ", ... (ru)", LANG_ALL},
+        {style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_N_RU, S_CYR_A ", " S_CYR_B ", .., " S_CYR_A S_CYR_A ", " S_CYR_B S_CYR_B ", ... (ru)", LANG_ALL},
 };
 static const sal_Int32 nSupported_NumberingTypes = sizeof(aSupportedTypes) / sizeof(Supported_NumberingType);
 /* -----------------------------21.02.01 15:57--------------------------------
@@ -522,7 +616,8 @@ OUString DefaultNumberingProvider::makeNumberingIdentifier(sal_Int16 index)
                                 throw(RuntimeException)
 {
         if (aSupportedTypes[index].cSymbol)
-            return OUString::createFromAscii(aSupportedTypes[index].cSymbol);
+            return OUString(aSupportedTypes[index].cSymbol, strlen(aSupportedTypes[index].cSymbol), RTL_TEXTENCODING_UTF8);
+//            return OUString::createFromAscii(aSupportedTypes[index].cSymbol);
         else {
             OUString result;
             Locale aLocale(OUString::createFromAscii("en"), OUString(), OUString());
