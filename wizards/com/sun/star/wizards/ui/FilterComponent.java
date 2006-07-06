@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FilterComponent.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 13:23:36 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 14:32:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -299,7 +299,7 @@ public class FilterComponent{
             String FieldName;
             if (_CurDBMetaData != null) {
                 FieldColumn CurDBFieldColumn = _CurDBMetaData.getFieldColumnByDisplayName(_filtercondition.Name);
-                FieldName = CurDBFieldColumn.AliasName;
+                FieldName = CurDBFieldColumn.FieldTitle;
             } else
                 FieldName = _filtercondition.Name;
             String sreturn = JavaTools.replaceSubString(_BaseString, FieldName, "<FIELDNAME>");
