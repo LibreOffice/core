@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormWizard.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 12:43:41 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 14:19:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,7 @@ public class FormWizard extends WizardDialog{
     boolean bFormOpenMode;
     boolean bcreateForm = false;
     String  FormName;
+    Short NBorderValue = null;
 
     public FormWizard(XMultiServiceFactory xMSF) {
         super(xMSF, 34400);
@@ -101,7 +102,7 @@ public class FormWizard extends WizardDialog{
     protected void enterStep(int nOldStep, int nNewStep) {
     try {
         if ((nOldStep < SOCONTROLPAGE) && (nNewStep >= SOCONTROLPAGE)){
-            curFormDocument.initialize(curDBCommandFieldSelection.isModified(), curFormConfiguration.hasSubForm(), curSubFormFieldSelection.isModified());
+            curFormDocument.initialize(curDBCommandFieldSelection.isModified(), curFormConfiguration.hasSubForm(), curSubFormFieldSelection.isModified(), getBorderType());
             curDBCommandFieldSelection.setModified(false);
             curSubFormFieldSelection.setModified(false);
         }
@@ -118,7 +119,7 @@ public class FormWizard extends WizardDialog{
                 curSubFormFieldSelection.preselectCommand(spreselectedTableName, (spreselectedTableName.length() > 0));
                 break;
             case SOFIELDLINKERPAGE:
-                curFieldLinker.initialize(curFormDocument.oMainFormDBMetaData.FieldNames, curFormDocument.oSubFormDBMetaData.FieldNames, curFormDocument.LinkFieldNames);
+                curFieldLinker.initialize(curFormDocument.oMainFormDBMetaData.getFieldNames(), curFormDocument.oSubFormDBMetaData.getFieldNames(), curFormDocument.LinkFieldNames);
                 break;
             case SOCONTROLPAGE:
                 curControlArranger.enableSubFormImageList(curFormConfiguration.hasSubForm());
@@ -137,20 +138,22 @@ public class FormWizard extends WizardDialog{
         e.printStackTrace(System.out);
     }}
 
+    protected Short getBorderType(){
+        return curStyleApplier.getBorderType();
+    }
 
     protected void leaveStep(int nOldStep, int nNewStep){
          switch (nOldStep){
             case SOMAINPAGE:
-                curFormDocument.oMainFormDBMetaData.setFieldNames(curDBCommandFieldSelection.getSelectedFieldNames());
-                curFormDocument.oMainFormDBMetaData.setFieldColumns(true, curDBCommandFieldSelection.getSelectedCommandName());
-                curFormDocument.LinkFieldNames = JavaTools.removeOutdatedFields(curFormDocument.LinkFieldNames, curFormDocument.oMainFormDBMetaData.FieldNames, 1);
+//              curFormDocument.oMainFormDBMetaData.setFieldNames(curDBCommandFieldSelection.getSelectedFieldNames());
+                curFormDocument.oMainFormDBMetaData.initializeFieldColumns(true, curDBCommandFieldSelection.getSelectedCommandName(), curDBCommandFieldSelection.getSelectedFieldNames());
+                curFormDocument.LinkFieldNames = JavaTools.removeOutdatedFields(curFormDocument.LinkFieldNames, curFormDocument.oMainFormDBMetaData.getFieldNames(), 1);
                 break;
             case SOSUBFORMPAGE:
                 break;
             case SOSUBFORMFIELDSPAGE:
-                curFormDocument.oSubFormDBMetaData.setFieldNames(curSubFormFieldSelection.getSelectedFieldNames());
-                curFormDocument.oSubFormDBMetaData.setFieldColumns(true, curSubFormFieldSelection.getSelectedCommandName());
-                curFormDocument.LinkFieldNames = JavaTools.removeOutdatedFields(curFormDocument.LinkFieldNames, curFormDocument.oSubFormDBMetaData.FieldNames, 0);
+                curFormDocument.oSubFormDBMetaData.initializeFieldColumns(true, curSubFormFieldSelection.getSelectedCommandName(), curSubFormFieldSelection.getSelectedFieldNames());
+                curFormDocument.LinkFieldNames = JavaTools.removeOutdatedFields(curFormDocument.LinkFieldNames, curFormDocument.oSubFormDBMetaData.getFieldNames(), 0);
                 break;
             case SOFIELDLINKERPAGE:
                 break;
@@ -177,9 +180,9 @@ public class FormWizard extends WizardDialog{
         if(xLocMSF != null){
             System.out.println("Connected to "+ ConnectStr);
             curproperties = new PropertyValue[1];
-            curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/Mydbwizardpp3TestDatabase.odb"); //Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb MyDBase.odb; Mydbwizard2DocAssign.odb; NewAccessDatabase, MyDocAssign baseLocation ); "DataSourceName", "db1");
-            curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///x:/bc/Mydbwizardpp3TestDatabase.odb"); //Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb MyDBase.odb; Mydbwizard2DocAssign.odb; NewAccessDatabase, MyDocAssign baseLocation ); "DataSourceName", "db1");
-//          curproperties[0] = Properties.createProperty("DataSourceName", "Bibliography");  //file:///C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/myjapanesehsqldatasourceMyDocAssign.odb"); //MyDBase; Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb ; Mydbwizard2DocAssign.odb; NewAccessDatabase, MyDocAssign baseLocation ); "DataSourceName", "db1");*//          /--/curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///x:/bc/MyHSQL Database.odb"); //MyDBase; Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb ; Mydbwizard2DocAssign.odb; NewAccessDatabase,  baseLocation ); "DataSourceName", "db1");*//          curproperties[0] = Properties.createProperty("DataSourceName", "Bibliography");*                        //          curproperties[0] = Properties.createProperty("DataSourceName", "Bibliography"); //Bibliography*         CurTableWizard.startTableWizard(xLocMSF, curproperties);
+//            curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/MyHSQL.odb");
+            curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/MyHSQL.odb");
+          curproperties[0] = Properties.createProperty("DataSourceName", "MyHSQLDatabase");  //file:///C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/myjapanesehsqldatasourceMyDocAssign.odb"); //MyDBase; Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb ; Mydbwizard2DocAssign.odb; NewAccessDatabase, MyDocAssign baseLocation ); "DataSourceName", "db1");*//          /--/curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///x:/bc/MyHSQL Database.odb"); //MyDBase; Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb ; Mydbwizard2DocAssign.odb; NewAccessDatabase,  baseLocation ); "DataSourceName", "db1");*//          curproperties[0] = Properties.createProperty("DataSourceName", "Bibliography");*                        //          curproperties[0] = Properties.createProperty("DataSourceName", "Bibliography"); //Bibliography*         CurTableWizard.startTableWizard(xLocMSF, curproperties);
             CurFormWizard.startFormWizard(xLocMSF, curproperties);
         }
     }
