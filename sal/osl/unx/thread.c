@@ -4,9 +4,9 @@
  *
  *  $RCSfile: thread.c,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:19:58 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 14:42:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -597,14 +597,11 @@ static sal_uInt16 LastIdent = 0;
 
 static sal_uInt16 lookupThreadId (pthread_t hThread)
 {
-    int       i, n;
     HashEntry *pEntry;
 
     pthread_mutex_lock(&HashLock);
 
-    for (n = 0, i = HASHID(hThread); n < HashSize; n++, i = ++i % HashSize)
-    {
-        pEntry = HashTable[i];
+        pEntry = HashTable[HASHID(hThread)];
         while (pEntry != NULL)
         {
             if (pthread_equal(pEntry->Handle, hThread))
@@ -614,7 +611,6 @@ static sal_uInt16 lookupThreadId (pthread_t hThread)
             }
             pEntry = pEntry->Next;
         }
-    }
 
     pthread_mutex_unlock(&HashLock);
 
