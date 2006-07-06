@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xdictionary.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:42:40 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 10:33:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,16 +67,16 @@ xdictionary::xdictionary(const sal_Char *lang)
     aBuf.appendAscii( "dict_" ).appendAscii( lang ).appendAscii( SAL_DLLEXTENSION );
         hModule = osl_loadModule( aBuf.makeStringAndClear().pData, SAL_LOADMODULE_DEFAULT );
         if( hModule ) {
-            int (*func)();
-            func = (int(*)()) osl_getFunctionSymbol( hModule, OUString::createFromAscii("getExistMark").pData );
+            sal_IntPtr (*func)();
+            func = (sal_IntPtr(*)()) osl_getFunctionSymbol( hModule, OUString::createFromAscii("getExistMark").pData );
             existMark = (sal_uInt8*) (*func)();
-            func = (int(*)()) osl_getFunctionSymbol( hModule, OUString::createFromAscii("getIndex1").pData );
+            func = (sal_IntPtr(*)()) osl_getFunctionSymbol( hModule, OUString::createFromAscii("getIndex1").pData );
             index1 = (sal_Int16*) (*func)();
-            func = (int(*)()) osl_getFunctionSymbol( hModule, OUString::createFromAscii("getIndex2").pData );
+            func = (sal_IntPtr(*)()) osl_getFunctionSymbol( hModule, OUString::createFromAscii("getIndex2").pData );
             index2 = (sal_Int32*) (*func)();
-            func = (int(*)()) osl_getFunctionSymbol( hModule, OUString::createFromAscii("getLenArray").pData );
+            func = (sal_IntPtr(*)()) osl_getFunctionSymbol( hModule, OUString::createFromAscii("getLenArray").pData );
             lenArray = (sal_Int32*) (*func)();
-            func = (int(*)()) osl_getFunctionSymbol( hModule, OUString::createFromAscii("getDataArea").pData );
+            func = (sal_IntPtr(*)()) osl_getFunctionSymbol( hModule, OUString::createFromAscii("getDataArea").pData );
             dataArea = (sal_Unicode*) (*func)();
         }
         else
