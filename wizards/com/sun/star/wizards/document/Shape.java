@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Shape.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 12:39:03 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 14:16:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,6 @@ public class Shape {
 
     private void createShape(String sServiceName){
     try {
-        String[] savailservicenames = oFormHandler.xMSFDoc.getAvailableServiceNames();
         xMSF = oFormHandler.xMSFDoc;
         Object oShape = xMSF.createInstance(sServiceName);
         xShape = (XShape) UnoRuntime.queryInterface(XShape.class, oShape);
