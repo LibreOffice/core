@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localedata.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:47:12 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 09:43:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,6 +84,7 @@ static const struct {
         { "en_TT",  lcl_DATA_EN, NULL },
         { "en_ZA",  lcl_DATA_EN, NULL },
         { "en_ZW",  lcl_DATA_EN, NULL },
+        { "en_NA",  lcl_DATA_EN, NULL },
 
         { "es_ES",  lcl_DATA_ES, "es" },
         { "es_AR",  lcl_DATA_ES, NULL },
@@ -213,6 +214,11 @@ static const struct {
         { "ts_ZA",  lcl_DATA_OTHERS, "ts" },
         { "ku_TR",  lcl_DATA_OTHERS, "ku" },
         { "ak_GH",  lcl_DATA_OTHERS, "ak" },
+        { "af_NA",  lcl_DATA_OTHERS, NULL },
+        { "am_ET",  lcl_DATA_OTHERS, "am" },
+        { "ti_ER",  lcl_DATA_OTHERS, "ti" },
+        { "tg_TJ",  lcl_DATA_OTHERS, "tg" },
+        { "ky_KG",  lcl_DATA_OTHERS, "ky" },
 
 //      { "br_AE",  lcl_DATA, "br" },
 
