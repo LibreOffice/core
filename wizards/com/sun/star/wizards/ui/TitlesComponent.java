@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TitlesComponent.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 13:25:55 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 14:32:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,20 +162,21 @@ public class TitlesComponent extends ControlScroller{
                 else
                     fieldtitles[i] = fieldnames[i];
             }
+            else{
+                fieldtitles[i] = fieldnames[i];
+            }
         }
     }
 
 
     public String getFieldNameByTitleControl(Object _fieldtitlemodel){
-        Map locfieldtitles = getFieldTitles();
         String sTitleModelName = (String) Helper.getUnoPropertyValue(_fieldtitlemodel, "Name");
         String sindex = JavaTools.getSuffixNumber(sTitleModelName);
         return (String) CurUnoDialog.getControlProperty(this.SOLABELPREFIX + sindex, "Label");
     }
 
 
-
-    public Map getFieldTitles() {
+    public String[] getFieldTitles(){
         PropertyValue[][] titlelist = this.getScrollFieldValues();
         PropertyValue[] currowproperties;
         PropertyValue curtitleproperty;
@@ -185,7 +186,7 @@ public class TitlesComponent extends ControlScroller{
             fieldtitles[i] = (String) curtitleproperty.Value;
         }
         refreshtitleset();
-        return fieldtitleset;
+        return fieldtitles;
     }
 
 
