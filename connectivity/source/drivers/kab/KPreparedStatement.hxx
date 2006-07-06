@@ -4,9 +4,9 @@
  *
  *  $RCSfile: KPreparedStatement.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-19 16:50:16 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 14:17:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,11 +39,13 @@
 #ifndef _CONNECTIVITY_KAB_STATEMENT_HXX_
 #include "KStatement.hxx"
 #endif
-
 #ifndef _CONNECTIVITY_KAB_RESULTSETMETADATA_HXX_
 #include "KResultSetMetaData.hxx"
 #endif
 
+#ifndef _CONNECTIVITY_FILE_VALUE_HXX_
+#include <connectivity/FValue.hxx>
+#endif
 #ifndef _COM_SUN_STAR_SDBC_XPARAMETERS_HPP_
 #include <com/sun/star/sdbc/XParameters.hpp>
 #endif
@@ -69,36 +71,31 @@ namespace connectivity
         class KabPreparedStatement : public  KabPreparedStatement_BASE
         {
         protected:
-            struct Parameter
-            {
-                ::com::sun::star::uno::Any  aValue;
-                sal_Int32                   nDataType;
-
-                Parameter(const ::com::sun::star::uno::Any& rValue,
-                          sal_Int32                         rDataType)
-                    : aValue(rValue), nDataType(rDataType)
-                { }
-            };
-
-//          ::std::vector< Parameter>       m_aParameters;
-// Not used so far
             ::rtl::OUString                 m_sSqlStatement;
             ::rtl::Reference< KabResultSetMetaData >
                                             m_xMetaData;
             sal_Bool                        m_bPrepared;
+            mutable sal_Int32                   m_nParameterIndex;
+            OValueRow                       m_aParameterRow;
 
-            void checkParameterIndex(sal_Int32 _parameterIndex);
+            void checkAndResizeParameters(sal_Int32 nParams) throw(::com::sun::star::sdbc::SQLException);
             void setKabFields() const throw(::com::sun::star::sdbc::SQLException);
 
         protected:
             virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
                     sal_Int32 nHandle,
                     const ::com::sun::star::uno::Any& rValue) throw (::com::sun::star::uno::Exception);
+
+            virtual void resetParameters() const throw(::com::sun::star::sdbc::SQLException);
+            virtual void getNextParameter(::rtl::OUString &rParameter) const throw(::com::sun::star::sdbc::SQLException);
             virtual ~KabPreparedStatement();
 
         public:
             DECLARE_SERVICE_INFO();
             KabPreparedStatement(KabConnection* _pConnection, const ::rtl::OUString& sql);
+
+            // OComponentHelper
+            virtual void SAL_CALL disposing();
 
             // XPreparedStatement
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL executeQuery(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
