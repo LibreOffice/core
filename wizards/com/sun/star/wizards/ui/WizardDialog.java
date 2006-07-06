@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WizardDialog.java,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 13:27:44 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 14:32:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -194,9 +194,11 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
 
     public void addRoadmap() {
         try {
+            int iDialogHeight = ((Integer) Helper.getUnoPropertyValue(this.xDialogModel, "Height")).intValue();
+
             oRoadmap = insertControlModel("com.sun.star.awt.UnoControlRoadmapModel", "rdmNavi",
                                         new String[] { "Height", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
-                                        new Object[] { new Integer(184), new Integer(0), new Integer(0), new Integer(0), new Short((short) 0), new Integer(85)});
+                                        new Object[] { new Integer(iDialogHeight-26), new Integer(0), new Integer(0), new Integer(0), new Short((short) 0), new Integer(85)});
             XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oRoadmap);
             xPSet.setPropertyValue("Name", "rdmNavi");
 
@@ -358,7 +360,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
 
             insertControlModel("com.sun.star.awt.UnoControlFixedLineModel", "lnNaviSep",
                                 new String[] { "Height", "Orientation", "PositionX", "PositionY", "Step", "Width" },
-                                new Object[] { new Integer(1), new Integer(0), new Integer(0), new Integer(184), ICurStep, new Integer(iDialogWidth)});
+                                new Object[] { new Integer(1), new Integer(0), new Integer(0), new Integer(iDialogHeight - 26), ICurStep, new Integer(iDialogWidth)});
 
             insertControlModel("com.sun.star.awt.UnoControlFixedLineModel", "lnRoadSep",
                                 new String[] { "Height", "Orientation", "PositionX", "PositionY", "Step", "Width" },
