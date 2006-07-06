@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TextDocument.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 12:55:25 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 14:31:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,6 +77,7 @@ import com.sun.star.wizards.common.Configuration;
 import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.JavaTools;
+import com.sun.star.wizards.common.Properties;
 import com.sun.star.wizards.common.Helper.DateUtils;
 import com.sun.star.wizards.document.OfficeDocument;
 
@@ -110,12 +111,10 @@ public class TextDocument {
         xFrame = OfficeDocument.createNewFrame(xMSF, listener, FrameName);
     }
 
-
     //creates an instance of TextDocument and creates a frame with an empty document
-    public TextDocument(XMultiServiceFactory xMSF, boolean bshowStatusIndicator, boolean bgetCurrentFrame, XTerminateListener listener) {
+    public TextDocument(XMultiServiceFactory xMSF, boolean bshowStatusIndicator, boolean bgetCurrentFrame, XTerminateListener listener, String _sUrl, boolean bShowPreview) {
         this.xMSF = xMSF;
         XDesktop xDesktop = Desktop.getDesktop(xMSF);
-
         if (bgetCurrentFrame) {
             XFramesSupplier xFrameSupplier = (XFramesSupplier) UnoRuntime.queryInterface(XFramesSupplier.class, xDesktop);
             xFrame = xFrameSupplier.getActiveFrame();
@@ -123,14 +122,15 @@ public class TextDocument {
             xTextDocument = (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class, xComponent);
         } else {
             xFrame = OfficeDocument.createNewFrame(xMSF, listener);
-            PropertyValue[] xEmptyArgs = new PropertyValue[0];
-            Object oDoc = OfficeDocument.load(xFrame, "private:factory/swriter", "_self", xEmptyArgs);
-            xTextDocument = (XTextDocument) oDoc;
+            if (bShowPreview){
+                xTextDocument = loadAsPreview(_sUrl, true);
+            }
+            else{
+                Object oDoc = OfficeDocument.load(xFrame, "private:factory/swriter", "_self", new PropertyValue[]{});
+                xTextDocument = (XTextDocument) oDoc;
+            }
             xComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, xTextDocument);
         }
-        XWindow xWindow = xFrame.getComponentWindow();
-        //PosSize = xFrame.getComponentWindow().getPosSize();
-
         if (bshowStatusIndicator) {
             XStatusIndicatorFactory xStatusIndicatorFactory = (XStatusIndicatorFactory) UnoRuntime.queryInterface(XStatusIndicatorFactory.class, xFrame);
             xProgressBar = xStatusIndicatorFactory.createStatusIndicator();
@@ -147,18 +147,19 @@ public class TextDocument {
         xText = xTextDocument.getText();
     }
 
+    //creates an instance of TextDocument and creates a frame with an empty document
+    public TextDocument(XMultiServiceFactory xMSF, boolean bshowStatusIndicator, boolean bgetCurrentFrame, XTerminateListener listener) {
+        this(xMSF, bshowStatusIndicator, bgetCurrentFrame, listener, "", false);
+    }
+
 
     //creates an instance of TextDocument and creates a frame with an empty document
     public TextDocument(XMultiServiceFactory xMSF,XTextDocument _textDocument, boolean bshowStatusIndicator) {
         this.xMSF = xMSF;
-        XDesktop xDesktop = Desktop.getDesktop(xMSF);
-
                 xFrame = _textDocument.getCurrentController().getFrame();
                 xComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, _textDocument);
                 xTextDocument = (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class, xComponent);
-        XWindow xWindow = xFrame.getComponentWindow();
         //PosSize = xFrame.getComponentWindow().getPosSize();
-
         if (bshowStatusIndicator) {
             XStatusIndicatorFactory xStatusIndicatorFactory = (XStatusIndicatorFactory) UnoRuntime.queryInterface(XStatusIndicatorFactory.class, xFrame);
             xProgressBar = xStatusIndicatorFactory.createStatusIndicator();
@@ -195,8 +196,7 @@ public class TextDocument {
                 XModifiable xModi = (XModifiable) UnoRuntime.queryInterface(XModifiable.class, xTextDocument);
                 xModi.setModified(false);
             } catch (PropertyVetoException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
+                e1.printStackTrace(System.out);
             }
         }
         Object oDoc = OfficeDocument.load(xFrame, sDefaultTemplate, "_self", loadValues);
@@ -271,7 +271,7 @@ public class TextDocument {
 
     public int getCharWidth(String ScaleString) {
         int iScale = 200;
-//      xTextDocument.lockControllers();
+        xTextDocument.lockControllers();
         int iScaleLen = ScaleString.length();
         com.sun.star.text.XTextCursor xTextCursor = createTextCursor(xTextDocument.getText());
         xTextCursor.gotoStart(false);
