@@ -4,9 +4,9 @@
  *
  *  $RCSfile: isolang.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:46:36 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 09:38:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -379,6 +379,11 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_LUXEMBOURGISH_LUXEMBOURG,    "lb", "LU" },
     { LANGUAGE_OBSOLETE_USER_LUXEMBOURGISH, "lb", "LU" },
     { LANGUAGE_USER_FRIULIAN,              "fur", "IT" },
+    { LANGUAGE_USER_FIJIAN,                 "fj", "FJ" },
+    { LANGUAGE_USER_AFRIKAANS_NAMIBIA,      "af", "NA" },
+    { LANGUAGE_USER_ENGLISH_NAMIBIA,        "en", "NA" },
+    { LANGUAGE_USER_WALLOON,                "wa", "BE" },
+    { LANGUAGE_USER_COPTIC,                "cop", "EG" },
     { LANGUAGE_DONTKNOW,                    "",   ""   }    // marks end of table
 };
 
