@@ -4,9 +4,9 @@
  *
  *  $RCSfile: kdedata.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:47:55 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 14:31:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,13 +35,7 @@
 
 #define _SV_SALDATA_CXX
 
-#define Region QtXRegion
-#include <kaboutdata.h>
-#include <kapplication.h>
-#include <kcmdlineargs.h>
-#include <kstartupinfo.h>
-#include <qpaintdevice.h>
-#undef Region
+#include "kdewrapper.h"
 
 #include <unistd.h>
 #include <fcntl.h>
