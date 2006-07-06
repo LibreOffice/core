@@ -4,9 +4,9 @@
  *
  *  $RCSfile: KDriver.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:38:42 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 14:16:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -443,14 +443,12 @@ Sequence< DriverPropertyInfo > SAL_CALL KabDriver::getPropertyInfo( const ::rtl:
 // --------------------------------------------------------------------------------
 sal_Int32 SAL_CALL KabDriver::getMajorVersion(  ) throw(RuntimeException)
 {
-    // version 0.1
-    return 0;
+    return KAB_DRIVER_VERSION_MAJOR;
 }
 // --------------------------------------------------------------------------------
 sal_Int32 SAL_CALL KabDriver::getMinorVersion(  ) throw(RuntimeException)
 {
-    // version 0.1
-    return 1;
+    return KAB_DRIVER_VERSION_MINOR;
 }
 // --------------------------------------------------------------------------------
 void SAL_CALL KabDriver::queryTermination( const EventObject& ) throw (TerminationVetoException, RuntimeException)
