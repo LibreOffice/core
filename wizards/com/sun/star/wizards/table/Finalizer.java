@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Finalizer.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 12:54:09 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 14:27:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,11 +98,11 @@ public class Finalizer{
 
             CurUnoDialog.insertLabel("lblTableName",
               new String[] {"Height", "Label", "PositionX", "PositionY", "Step", "Width"},
-              new Object[] { UIConsts.INTEGERS[8], slblTableName, new Integer(97), new Integer(25), IFINALSTEP, new Integer(200)}
+              new Object[] { UIConsts.INTEGERS[8], slblTableName, new Integer(97), new Integer(25), IFINALSTEP, new Integer(220)}
             );
             txtTableName = CurUnoDialog.insertTextField("txtTableName", SETCOMPLETIONFLAG, this,
               new String[] {"Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Text", "Width"},
-              new Object[] { UIConsts.INTEGER_12, "HID:41240", new Integer(97), new Integer(35),IFINALSTEP, new Short(curtabindex++),"", new Integer(183)}
+              new Object[] { UIConsts.INTEGER_12, "HID:41240", new Integer(97), new Integer(35),IFINALSTEP, new Short(curtabindex++),"", new Integer(223)}
             );
             txtTableName.addTextListener(CurUnoDialog);
             txtTableName.setMaxTextLen((short) this.curtabledescriptor.getMaxTableNameLength());
@@ -118,7 +118,7 @@ public class Finalizer{
                         }
                         CurUnoDialog.insertLabel("lblCatalog",
                                 new String[] {"Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
-                                new Object[] {new Integer(8), slblCatalog, new Integer(nListBoxPosX), new Integer(52), IFINALSTEP, new Short(curtabindex++), new Integer(100) });
+                                new Object[] {new Integer(8), slblCatalog, new Integer(nListBoxPosX), new Integer(52), IFINALSTEP, new Short(curtabindex++), new Integer(120) });
 
                         try {
                             xCatalogListBox = CurUnoDialog.insertListBox("lstCatalog", null, null,
@@ -166,26 +166,26 @@ public class Finalizer{
             if ((!bsupportsCatalogs) && (!bsupportsSchemata)) {
                 CurUnoDialog.insertLabel("lblcongratulations",
                       new String[] {"Height", "Label", "MultiLine", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-                      new Object[] { new Integer(16), sCongratulations, Boolean.TRUE, new Integer(97), new Integer(62),IFINALSTEP, new Short(curtabindex++), new Integer(206)});
+                      new Object[] { new Integer(16), sCongratulations, Boolean.TRUE, new Integer(97), new Integer(62),IFINALSTEP, new Short(curtabindex++), new Integer(226)});
             }
             else{
                 ndiffPosY = 10;
             }
             CurUnoDialog.insertLabel("lblProceed",
               new String[] {"Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-              new Object[] { UIConsts.INTEGERS[8], slblProceed, new Integer(97), new Integer(82+ndiffPosY),IFINALSTEP, new Short(curtabindex++), new Integer(207)}
+              new Object[] { UIConsts.INTEGERS[8], slblProceed, new Integer(97), new Integer(82+ndiffPosY),IFINALSTEP, new Short(curtabindex++), new Integer(227)}
             );
             optWorkWithTable = CurUnoDialog.insertRadioButton("optWorkWithTable", null,
               new String[] {"Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"},
-              new Object[] { UIConsts.INTEGERS[8], "HID:41242", sWorkWithTable, new Integer(101), new Integer(97+ndiffPosY), new Short((short)1),IFINALSTEP, new Short(curtabindex++), new Integer(157)}
+              new Object[] { UIConsts.INTEGERS[8], "HID:41242", sWorkWithTable, new Integer(101), new Integer(97+ndiffPosY), new Short((short)1),IFINALSTEP, new Short(curtabindex++), new Integer(177)}
             );
             optModifyTable = CurUnoDialog.insertRadioButton("optModifyTable", null,
               new String[] {"Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-              new Object[] { UIConsts.INTEGERS[8], "HID:41241", sModifyTable, new Integer(101), new Integer(109+ndiffPosY),IFINALSTEP, new Short(curtabindex++), new Integer(157)}
+              new Object[] { UIConsts.INTEGERS[8], "HID:41241", sModifyTable, new Integer(101), new Integer(109+ndiffPosY),IFINALSTEP, new Short(curtabindex++), new Integer(177)}
             );
             optStartFormWizard = CurUnoDialog.insertRadioButton("optStartFormWizard", null,
               new String[] {"Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-              new Object[] { UIConsts.INTEGERS[8], "HID:41243", sStartFormWizard, new Integer(101), new Integer(121+ndiffPosY),IFINALSTEP, new Short(curtabindex++), new Integer(157)}
+              new Object[] { UIConsts.INTEGERS[8], "HID:41243", sStartFormWizard, new Integer(101), new Integer(121+ndiffPosY),IFINALSTEP, new Short(curtabindex++), new Integer(177)}
             );
         } catch (SQLException e) {
             e.printStackTrace(System.out);
