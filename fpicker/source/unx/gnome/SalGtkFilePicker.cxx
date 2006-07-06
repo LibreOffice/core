@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SalGtkFilePicker.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:13:35 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 10:31:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,7 +208,7 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference<lang::XMultiServiceFact
             GTK_FILE_CHOOSER_ACTION_OPEN,
             GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
             GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
-            NULL );
+            (char *)NULL );
 
     gtk_dialog_set_default_response( GTK_DIALOG (m_pDialog), GTK_RESPONSE_ACCEPT );
 
@@ -347,7 +347,7 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference<lang::XMultiServiceFact
         cell = gtk_cell_renderer_text_new ();
         gtk_tree_view_column_set_expand (column, TRUE);
         gtk_tree_view_column_pack_start (column, cell, FALSE);
-        gtk_tree_view_column_set_attributes (column, cell, "text", i, NULL);
+        gtk_tree_view_column_set_attributes (column, cell, "text", i, (char *)NULL);
         gtk_tree_view_append_column (GTK_TREE_VIEW(m_pFilterView), column);
     }
 
@@ -377,7 +377,7 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference<lang::XMultiServiceFact
     PangoRectangle row_height;
     pango_layout_set_markup (layout, "All Files", -1);
     pango_layout_get_pixel_extents (layout, NULL, &row_height);
-    g_object_get (cell, "ypad", &ypad, NULL);
+    g_object_get (cell, "ypad", &ypad, (char *)NULL);
     guint height = (row_height.height + 2*ypad) * 5;
     gtk_widget_set_size_request (m_pFilterView, -1, height);
     gtk_widget_set_size_request (m_pPreview, 1, height);
@@ -1413,7 +1413,7 @@ void SAL_CALL SalGtkFilePicker::setLabel( sal_Int16 nControlId, const ::rtl::OUS
     }
     if( tType == GTK_TYPE_TOGGLE_BUTTON || tType == GTK_TYPE_BUTTON || tType == GTK_TYPE_LABEL )
         g_object_set( pWidget, "label", aTxt.getStr(),
-                      "use_underline", TRUE, NULL );
+                      "use_underline", TRUE, (char *)NULL );
     else
         OSL_TRACE("Can't set label on list\n");
 }
