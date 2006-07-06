@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numpages.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:19:53 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 09:31:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,6 +145,7 @@
 #endif
 
 #include <algorithm>
+#include <vector>
 #include "opengrf.hxx"
 
 
@@ -1453,6 +1454,16 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(Window* pParent,
     Reference<XDefaultNumberingProvider> xDefNum = lcl_GetNumberingProvider();
     Reference<XNumberingTypeInfo> xInfo(xDefNum, UNO_QUERY);
 
+    // Extended numbering schemes present in the resource but not offered by
+    // the i18n framework per configuration must be removed from the listbox.
+    const USHORT nDontRemove = 0xffff;
+    ::std::vector< USHORT> aRemove( aFmtLB.GetEntryCount(), nDontRemove);
+    for (size_t i=0; i<aRemove.size(); ++i)
+    {
+        USHORT nEntryData = (USHORT)(ULONG)aFmtLB.GetEntryData(i);
+        if (nEntryData > NumberingType::CHARS_LOWER_LETTER_N)
+            aRemove[i] = nEntryData;
+    }
     if(xInfo.is())
     {
         Sequence<sal_Int16> aTypes = xInfo->getSupportedNumberingTypes(  );
@@ -1469,6 +1480,7 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(Window* pParent,
                     if(nEntryData == (USHORT) nCurrent)
                     {
                         bInsert = sal_False;
+                        aRemove[nEntry] = nDontRemove;
                         break;
                     }
                 }
@@ -1479,6 +1491,14 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(Window* pParent,
                     aFmtLB.SetEntryData(nPos,(void*)(ULONG)nCurrent);
                 }
             }
+        }
+    }
+    for (size_t i=0; i<aRemove.size(); ++i)
+    {
+        if (aRemove[i] != nDontRemove)
+        {
+            USHORT nPos = aFmtLB.GetEntryPos( (void*)(ULONG)aRemove[i]);
+            aFmtLB.RemoveEntry( nPos);
         }
     }
 }
