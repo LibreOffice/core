@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets-kde.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:48:09 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 14:32:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,41 +35,7 @@
 
 #define _SV_SALNATIVEWIDGETS_KDE_CXX
 
-// Hack, but needed because of conflicting types...
-#define Region QtXRegion
-
-#include <qcheckbox.h>
-#include <qcombobox.h>
-#include <qframe.h>
-#include <qlineedit.h>
-#include <qlistview.h>
-#include <qmainwindow.h>
-#include <qpainter.h>
-#include <qpushbutton.h>
-#include <qradiobutton.h>
-#include <qrangecontrol.h>
-#include <qtabbar.h>
-#include <qtabwidget.h>
-#include <qtoolbar.h>
-#include <qtoolbutton.h>
-#include <qwidget.h>
-
-// Ugly hack to be able to access QMenuItem::is_enabled
-#define private public
-#include <qmenudata.h>
-#undef private
-
-#include <kaboutdata.h>
-#include <kapplication.h>
-#include <kcmdlineargs.h>
-#include <kconfig.h>
-#include <kglobal.h>
-#include <kmainwindow.h>
-#include <kmenubar.h>
-#include <kstartupinfo.h>
-#include <kstyle.h>
-
-#undef Region
+#include "kdewrapper.h"
 
 #include <salunx.h>
 
