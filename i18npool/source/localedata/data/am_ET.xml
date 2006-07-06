@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Locale SYSTEM 'locale.dtd'>
+<Locale versionDTD="2.0.3" allowUpdateFromCLDR="no" version="0.1">
+  <LC_INFO>
+    <Language>
+      <LangID>am</LangID>
+      <DefaultName>Amharic</DefaultName>
+    </Language>
+    <Country>
+      <CountryID>ET</CountryID>
+      <DefaultName>Ethiopia</DefaultName>
+    </Country>
+  </LC_INFO>
+  <LC_CTYPE unoid="generic">
+    <Separators>
+      <DateSeparator>/</DateSeparator>
+      <ThousandSeparator>,</ThousandSeparator>
+      <DecimalSeparator>.</DecimalSeparator>
+      <TimeSeparator>:</TimeSeparator>
+      <Time100SecSeparator>.</Time100SecSeparator>
+      <ListSeparator>;</ListSeparator>
+      <LongDateDayOfWeekSeparator> </LongDateDayOfWeekSeparator>
+      <LongDateDaySeparator> </LongDateDaySeparator>
+      <LongDateMonthSeparator> </LongDateMonthSeparator>
+      <LongDateYearSeparator> </LongDateYearSeparator>
+    </Separators>
+    <Markers>
+      <QuotationStart>‘</QuotationStart>
+      <QuotationEnd>’</QuotationEnd>
+      <DoubleQuotationStart>“</DoubleQuotationStart>
+      <DoubleQuotationEnd>”</DoubleQuotationEnd>
+    </Markers>
+    <TimeAM>ጡዋት</TimeAM>
+    <TimePM>ከሰዓት</TimePM>
+    <MeasurementSystem>Metric</MeasurementSystem>
+  </LC_CTYPE>
+  <LC_FORMAT ref="en_GB" replaceTo="[$ETB-45E]"/>
+  <LC_COLLATION ref="en_US"/>
+  <LC_SEARCH ref="en_US"/>
+  <LC_INDEX>
+    <IndexKey unoid="alphanumeric" default="true" phonetic="false">A-Z</IndexKey>
+    <UnicodeScript>30</UnicodeScript>
+    <FollowPageWord>ገዽ</FollowPageWord>
+    <FollowPageWord>ገዾች</FollowPageWord>
+  </LC_INDEX>
+  <LC_CALENDAR>
+    <Calendar unoid="gregorian" default="true">
+      <DaysOfWeek>
+        <Day>
+          <DayID>sun</DayID>
+          <DefaultAbbrvName>እሑድ</DefaultAbbrvName>
+          <DefaultFullName>እሑድ</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>mon</DayID>
+          <DefaultAbbrvName>ሰኞ</DefaultAbbrvName>
+          <DefaultFullName>ሰኞ</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>tue</DayID>
+          <DefaultAbbrvName>ማክሰኞ</DefaultAbbrvName>
+          <DefaultFullName>ማክሰኞ</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>wed</DayID>
+          <DefaultAbbrvName>ረቡዕ</DefaultAbbrvName>
+          <DefaultFullName>ረቡዕ</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>thu</DayID>
+          <DefaultAbbrvName>ሐሙስ</DefaultAbbrvName>
+          <DefaultFullName>ሐሙስ</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>fri</DayID>
+          <DefaultAbbrvName>ዓርብ</DefaultAbbrvName>
+          <DefaultFullName>ዓርብ</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>sat</DayID>
+          <DefaultAbbrvName>ቅዳሜ</DefaultAbbrvName>
+          <DefaultFullName>ቅዳሜ</DefaultFullName>
+        </Day>
+      </DaysOfWeek>
+      <MonthsOfYear>
+        <Month>
+          <MonthID>jan</MonthID>
+          <DefaultAbbrvName>ጃንዩ</DefaultAbbrvName>
+          <DefaultFullName>ጃንዩወሪ</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>feb</MonthID>
+          <DefaultAbbrvName>ፌብሩ</DefaultAbbrvName>
+          <DefaultFullName>ፌብሩወሪ</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>mar</MonthID>
+          <DefaultAbbrvName>ማርች</DefaultAbbrvName>
+          <DefaultFullName>ማርች</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>apr</MonthID>
+          <DefaultAbbrvName>ኤፕረ</DefaultAbbrvName>
+          <DefaultFullName>ኤፕረል</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>may</MonthID>
+          <DefaultAbbrvName>ሜይ</DefaultAbbrvName>
+          <DefaultFullName>ሜይ</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jun</MonthID>
+          <DefaultAbbrvName>ጁን</DefaultAbbrvName>
+          <DefaultFullName>ጁን</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jul</MonthID>
+          <DefaultAbbrvName>ጁላይ</DefaultAbbrvName>
+          <DefaultFullName>ጁላይ</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>aug</MonthID>
+          <DefaultAbbrvName>ኦገስ</DefaultAbbrvName>
+          <DefaultFullName>ኦገስት</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>sep</MonthID>
+          <DefaultAbbrvName>ሴፕቴ</DefaultAbbrvName>
+          <DefaultFullName>ሴፕቴምበር</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>oct</MonthID>
+          <DefaultAbbrvName>ኦክተ</DefaultAbbrvName>
+          <DefaultFullName>ኦክተውበር</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>nov</MonthID>
+          <DefaultAbbrvName>ኖቬም</DefaultAbbrvName>
+          <DefaultFullName>ኖቬምበር</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>dec</MonthID>
+          <DefaultAbbrvName>ዲሴም</DefaultAbbrvName>
+          <DefaultFullName>ዲሴምበር</DefaultFullName>
+        </Month>
+      </MonthsOfYear>
+      <Eras>
+        <Era>
+          <EraID>bc</EraID>
+          <DefaultAbbrvName>አ.አለም</DefaultAbbrvName>
+          <DefaultFullName>ከክርስቶስ ልደት በፊት</DefaultFullName>
+        </Era>
+        <Era>
+          <EraID>ad</EraID>
+          <DefaultAbbrvName>አ.ም</DefaultAbbrvName>
+          <DefaultFullName>አመተ ምህረት</DefaultFullName>
+        </Era>
+      </Eras>
+      <StartDayOfWeek>
+        <DayID>sun</DayID>
+      </StartDayOfWeek>
+      <MinimalDaysInFirstWeek>1</MinimalDaysInFirstWeek>
+    </Calendar>
+  </LC_CALENDAR>
+  <LC_CURRENCY>
+    <Currency default="true" usedInCompatibleFormatCodes="true">
+      <CurrencyID>ETB</CurrencyID>
+      <CurrencySymbol>ETB</CurrencySymbol>
+      <BankSymbol>ETB</BankSymbol>
+      <CurrencyName>Ethiopian Birr</CurrencyName>
+      <DecimalPlaces>2</DecimalPlaces>
+    </Currency>
+  </LC_CURRENCY>
+  <LC_TRANSLITERATION ref="en_US"/>
+  <LC_MISC>
+    <ReservedWords>
+      <trueWord>አውነት</trueWord>
+      <falseWord>ሔሰት</falseWord>
+      <quarter1Word>ክፍል አንድ</quarter1Word>
+      <quarter2Word>ክፍል ሁለት</quarter2Word>
+      <quarter3Word>ክፍል ሶስት</quarter3Word>
+      <quarter4Word>ክፍል አራት</quarter4Word>
+      <aboveWord>በላይ</aboveWord>
+      <belowWord>በታች</belowWord>
+      <quarter1Abbreviation>ክአ</quarter1Abbreviation>
+      <quarter2Abbreviation>ክሁ</quarter2Abbreviation>
+      <quarter3Abbreviation>ክሶ</quarter3Abbreviation>
+      <quarter4Abbreviation>ክአ</quarter4Abbreviation>
+    </ReservedWords>
+  </LC_MISC>
+  <LC_NumberingLevel ref="en_US"/>
+  <LC_OutLineNumberingLevel ref="en_US"/>
+</Locale>
