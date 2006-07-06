@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objtest.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:27:12 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 14:33:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1731,6 +1731,11 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                 case ID_StartUse:
                     if ( !rPar )  // rPar = NULL  <=>  Kein Parameter
                     {
+                        {
+                            BasicRuntime aRun = BasicRuntimeAccess::GetRuntime();
+                            aLogFileName = DirEntry(aRun.GetModuleName(SbxNAME_NONE)).GetBase().AppendAscii(".res");
+                        }
+
                         ADD_RUN_LOG();
                         ADD_CASE_LOG(GEN_RES_STR0(S_READING_FILE));
 
@@ -2066,11 +2071,11 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                     }
                     break;
                 case ID_MaybeAddErr:
-                    if ( ((StarBASIC*)GetParent())->GetErr() && ( !IS_ERROR() ||
-                         pFehlerListe->GetObject(pFehlerListe->Count()-1)->nError != ((StarBASIC*)GetParent())->GetErr() ) )
+                    if ( ((StarBASIC*)GetParent())->GetErrBasic() && ( !IS_ERROR() ||
+                         pFehlerListe->GetObject(pFehlerListe->Count()-1)->nError != ((StarBASIC*)GetParent())->GetErrBasic() ) )
                     {
-                        ((StarBASIC*)GetParent())->MakeErrorText(((StarBASIC*)GetParent())->GetErr(),String());
-                        ADD_ERROR_QUIET(((StarBASIC*)GetParent())->GetErr() , ((StarBASIC*)GetParent())->GetErrorText())
+                        ((StarBASIC*)GetParent())->MakeErrorText(((StarBASIC*)GetParent())->GetErrBasic(),String());
+                        ADD_ERROR_QUIET(((StarBASIC*)GetParent())->GetErrBasic() , ((StarBASIC*)GetParent())->GetErrorText())
                     }
                     break;
                 case ID_GetNextCloseWindow:
@@ -2855,7 +2860,7 @@ SbxVariable* TestToolObj::Find( const String& aStr, SbxClassType aType)
 
 String TestToolObj::GetRevision( String const &aSourceIn )
 {
-    // search $Revision: 1.25 $
+    // search $Revision: 1.26 $
     xub_StrLen nPos;
     if ( ( nPos = aSourceIn.SearchAscii( "$Revision:" ) ) != STRING_NOTFOUND )
         return aSourceIn.Copy( nPos+ 10, aSourceIn.SearchAscii( "$", nPos+10 ) -nPos-10);
@@ -4191,6 +4196,5 @@ String TTFormat::ms2s( ULONG nMilliSeconds )
         return String::CreateFromInt32( nMilliSeconds / 1000 ).AppendAscii("Sec");
     return String::CreateFromInt32( nMilliSeconds / 1000 / 60 ).AppendAscii("Min");
 }
-
 
 
