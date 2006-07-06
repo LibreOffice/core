@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormControlArranger.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 12:43:05 $
+ *  last change: $Author: kz $ $Date: 2006-07-06 14:18:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,10 +91,11 @@ public class FormControlArranger {
     int a;
     int StartA;
     int nMaxDBYPos = 0;     //the maximum YPosition of a DBControl in the form
+    Short NBorderType = new Short((short) 1); //3-D Border
 
 
     public FormControlArranger(FormHandler _oFormHandler, XNameContainer _xFormName, CommandMetaData oDBMetaData, XStatusIndicator _xProgressBar, Point _StartPoint, Size _FormSize) {
-        FieldColumns = oDBMetaData.DBFieldColumns;
+        FieldColumns = oDBMetaData.FieldColumns;
         xMSF = oDBMetaData.xMSF;
         xFormName = _xFormName;
         xProgressBar = _xProgressBar;
@@ -115,6 +116,11 @@ public class FormControlArranger {
                 return getCheckBoxDiffHeight(_index);
         }
         return oFormHandler.getBasicLabelDiffHeight();
+    }
+
+
+    public void setBorderType(short _nBorderType){
+        NBorderType = new Short(_nBorderType);
     }
 
 
@@ -311,8 +317,9 @@ public class FormControlArranger {
     }
 
 
-    public void positionControls(int _icurArrangement, Point _aStartPoint,Size _aFormSize, short _iAlign){
+    public void positionControls(int _icurArrangement, Point _aStartPoint,Size _aFormSize, short _iAlign, Short _NBorderType){
     try {
+        this.NBorderType = _NBorderType;
         this.setStartPoint(_aStartPoint);
         icurArrangement = _icurArrangement;
         initializePosSizes();
@@ -528,6 +535,7 @@ public class FormControlArranger {
             curDBControl.setPosition(aPoint);
         }
         checkOuterPoints(nXDBPos, nDBWidth, nYDBPos, nDBHeight, true);
+        curDBControl.xPropertySet.setPropertyValue("Border", NBorderType);
     } catch (Exception e) {
         e.printStackTrace(System.out);
     }}
