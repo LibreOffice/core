@@ -27,9 +27,7 @@
 #include <cppuhelper/implbase2.hxx>
 #endif
 
-#ifndef QSTRING_H
-#include <qstring.h>
-#endif
+#include "qstring_wrapper.h"
 
 namespace css = com::sun::star ;
 namespace uno = css::uno ;
