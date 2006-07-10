@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqlmessage.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:10:03 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:27:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,11 +81,11 @@
 
 #define BUTTONID_MORE   BUTTONID_RETRY + 1
 
-#define DLG_LIMIT       320 // max dialog size
-#define BTN_HEIGHT      14
-#define BTN_WIDTH       50
-#define BORDER_HEIGHT   6   // default distance control - dialog
-#define BORDER_WIDTH    6   // default distance control - dialog
+#define DIALOG_WIDTH    220
+#define OUTER_MARGIN    6
+#define IMAGE_SIZE      20
+#define INNER_PADDING   3
+#define TEXT_POS_X      ( OUTER_MARGIN + IMAGE_SIZE + INNER_PADDING )
 
 using namespace dbtools;
 using namespace com::sun::star::uno;
@@ -96,6 +96,227 @@ using namespace com::sun::star::sdbc;
 namespace dbaui
 {
 //.........................................................................
+
+namespace
+{
+    //------------------------------------------------------------------------------
+    class IImageProvider
+    {
+    public:
+        virtual Image   getImage( bool _highContrast ) const = 0;
+
+        virtual ~IImageProvider() { }
+    };
+
+    //------------------------------------------------------------------------------
+    class ILabelProvider
+    {
+    public:
+        virtual String  getLabel() const = 0;
+
+        virtual ~ILabelProvider() { };
+    };
+
+    //------------------------------------------------------------------------------
+    class ImageProvider : public IImageProvider
+    {
+    private:
+        USHORT  m_defaultImageID;
+        USHORT  m_highContrastImageID;
+
+        mutable Image   m_defaultImage;
+        mutable Image   m_highContrastImage;
+
+    public:
+        ImageProvider( USHORT _defaultImageID, USHORT _highContrastImageID )
+            :m_defaultImageID( _defaultImageID )
+            ,m_highContrastImageID( _highContrastImageID )
+        {
+        }
+
+        virtual Image getImage( bool _highContrast ) const
+        {
+            if ( _highContrast )
+            {
+                if ( !m_highContrastImage )
+                    m_highContrastImage = Image( ModuleRes( m_highContrastImageID ) );
+                return m_highContrastImage;
+            }
+
+            if ( !m_defaultImage )
+                m_defaultImage = Image( ModuleRes( m_defaultImageID ) );
+            return m_defaultImage;
+        }
+    };
+
+    //------------------------------------------------------------------------------
+    class LabelProvider : public ILabelProvider
+    {
+    private:
+        String  m_label;
+    public:
+        LabelProvider( USHORT _labelResourceID )
+            :m_label( ModuleRes( _labelResourceID ) )
+        {
+        }
+
+        virtual String  getLabel() const
+        {
+            return m_label;
+        }
+    };
+
+    //------------------------------------------------------------------------------
+    class ProviderFactory
+    {
+    private:
+        mutable ::boost::shared_ptr< IImageProvider >   m_pErrorImage;
+        mutable ::boost::shared_ptr< IImageProvider >   m_pWarningsImage;
+        mutable ::boost::shared_ptr< IImageProvider >   m_pInfoImage;
+        mutable ::boost::shared_ptr< ILabelProvider >   m_pErrorLabel;
+        mutable ::boost::shared_ptr< ILabelProvider >   m_pWarningsLabel;
+        mutable ::boost::shared_ptr< ILabelProvider >   m_pInfoLabel;
+
+    public:
+        ProviderFactory()
+        {
+        }
+
+        ::boost::shared_ptr< IImageProvider >   getImageProvider( SQLExceptionInfo::TYPE _eType ) const
+        {
+            ::boost::shared_ptr< IImageProvider >* ppProvider( &m_pErrorImage );
+            USHORT nNormalImageID( BMP_EXCEPTION_ERROR );
+            USHORT nHCImageID( BMP_EXCEPTION_ERROR_SCH );
+
+            switch ( _eType )
+            {
+            case SQLExceptionInfo::SQL_WARNING:
+                ppProvider = &m_pWarningsImage;
+                nNormalImageID = BMP_EXCEPTION_WARNING;
+                nHCImageID = BMP_EXCEPTION_WARNING_SCH;
+                break;
+
+            case SQLExceptionInfo::SQL_CONTEXT:
+                ppProvider = &m_pInfoImage;
+                nNormalImageID = BMP_EXCEPTION_INFO;
+                nHCImageID = BMP_EXCEPTION_INFO_SCH;
+                break;
+
+            default:
+                break;
+            }
+
+            if ( !ppProvider->get() )
+                ppProvider->reset( new ImageProvider( nNormalImageID, nHCImageID ) );
+            return *ppProvider;
+        }
+
+        ::boost::shared_ptr< ILabelProvider >   getLabelProvider( SQLExceptionInfo::TYPE _eType, bool _bSubLabel ) const
+        {
+            ::boost::shared_ptr< ILabelProvider >* ppProvider( &m_pErrorLabel );
+            USHORT nLabelID( STR_EXCEPTION_ERROR );
+
+            switch ( _eType )
+            {
+            case SQLExceptionInfo::SQL_WARNING:
+                ppProvider = &m_pWarningsLabel;
+                nLabelID = STR_EXCEPTION_WARNING;
+                break;
+
+            case SQLExceptionInfo::SQL_CONTEXT:
+                ppProvider = &m_pInfoLabel;
+                nLabelID = _bSubLabel ? STR_EXCEPTION_DETAILS : STR_EXCEPTION_INFO;
+                break;
+            default:
+                break;
+            }
+
+            if ( !ppProvider->get() )
+                ppProvider->reset( new LabelProvider( nLabelID ) );
+            return *ppProvider;
+        }
+
+    };
+
+    //------------------------------------------------------------------------------
+    /// a stripped version of the SQLException, packed for displaying
+    struct ExceptionDisplayInfo
+    {
+        SQLExceptionInfo::TYPE                  eType;
+
+        ::boost::shared_ptr< IImageProvider >   pImageProvider;
+        ::boost::shared_ptr< ILabelProvider >   pLabelProvider;
+
+        bool                                    bSubEntry;
+
+        String                                  sMessage;
+        String                                  sSQLState;
+        String                                  sErrorCode;
+
+        ExceptionDisplayInfo() : eType( SQLExceptionInfo::UNDEFINED ), bSubEntry( false ) { }
+        ExceptionDisplayInfo( SQLExceptionInfo::TYPE _eType ) : eType( _eType ), bSubEntry( false ) { }
+    };
+
+    typedef ::std::vector< ExceptionDisplayInfo >   ExceptionDisplayChain;
+
+    //------------------------------------------------------------------------------
+    void lcl_buildExceptionChain( const SQLExceptionInfo& _rErrorInfo, const ProviderFactory& _rFactory, ExceptionDisplayChain& _out_rChain )
+    {
+        {
+            ExceptionDisplayChain empty;
+            _out_rChain.swap( empty );
+        }
+
+        SQLExceptionIteratorHelper iter( _rErrorInfo );
+        while ( iter.hasMoreElements() )
+        {
+            // current chain element
+            SQLExceptionInfo aCurrentElement;
+            iter.next( aCurrentElement );
+
+            const SQLException* pCurrentError = (const SQLException*)aCurrentElement;
+            DBG_ASSERT( pCurrentError, "lcl_buildExceptionChain: iterator failure!" );
+                // hasMoreElements should not have returned <TRUE/> in this case
+
+            ExceptionDisplayInfo aDisplayInfo( aCurrentElement.getType() );
+
+            aDisplayInfo.sMessage = pCurrentError->Message;
+            aDisplayInfo.sSQLState = pCurrentError->SQLState;
+            if ( pCurrentError->ErrorCode )
+                aDisplayInfo.sErrorCode = String::CreateFromInt32( pCurrentError->ErrorCode );
+
+            aDisplayInfo.pImageProvider = _rFactory.getImageProvider( aCurrentElement.getType() );
+            aDisplayInfo.pLabelProvider = _rFactory.getLabelProvider( aCurrentElement.getType(), false );
+
+            _out_rChain.push_back( aDisplayInfo );
+
+            if ( aCurrentElement.getType() == SQLExceptionInfo::SQL_CONTEXT )
+            {
+                const SQLContext* pContext = (const SQLContext*)aCurrentElement;
+                if ( pContext->Details.getLength() )
+                {
+                    ExceptionDisplayInfo aSubInfo( aCurrentElement.getType() );
+
+                    aSubInfo.sMessage = pContext->Details;
+                    aSubInfo.pImageProvider = _rFactory.getImageProvider( aCurrentElement.getType() );
+                    aSubInfo.pLabelProvider = _rFactory.getLabelProvider( aCurrentElement.getType(), true );
+                    aSubInfo.bSubEntry = true;
+
+                    _out_rChain.push_back( aSubInfo );
+                }
+            }
+        }
+    }
+
+    //------------------------------------------------------------------------------
+    void lcl_insertExceptionEntry( SvTreeListBox& _rList, bool _bHiContrast, size_t _nElementPos, const ExceptionDisplayInfo& _rEntry )
+    {
+        Image aEntryImage( _rEntry.pImageProvider->getImage( _bHiContrast ) );
+        SvLBoxEntry* pListEntry =
+            _rList.InsertEntry( _rEntry.pLabelProvider->getLabel(), aEntryImage, aEntryImage );
+        pListEntry->SetUserData( reinterpret_cast< void* >( _nElementPos ) );
+    }
+}
 
 //==============================================================================
 class OExceptionChainDialog : public ModalDialog
@@ -110,8 +331,10 @@ class OExceptionChainDialog : public ModalDialog
     String          m_sStatusLabel;
     String          m_sErrorCodeLabel;
 
+    ExceptionDisplayChain   m_aExceptions;
+
 public:
-    OExceptionChainDialog(Window* pParent, const Any& _rStart);
+    OExceptionChainDialog( Window* pParent, const ExceptionDisplayChain& _rExceptions );
     ~OExceptionChainDialog();
 
 protected:
@@ -120,7 +343,7 @@ protected:
 
 DBG_NAME(OExceptionChainDialog)
 //------------------------------------------------------------------------------
-OExceptionChainDialog::OExceptionChainDialog(Window* pParent, const Any& _rStart)
+OExceptionChainDialog::OExceptionChainDialog( Window* pParent, const ExceptionDisplayChain& _rExceptions )
     :ModalDialog(pParent, ModuleRes(DLG_SQLEXCEPTIONCHAIN))
     ,m_aFrame           (this, ResId(FL_DETAILS))
     ,m_aListLabel       (this, ResId(FT_ERRORLIST))
@@ -128,13 +351,10 @@ OExceptionChainDialog::OExceptionChainDialog(Window* pParent, const Any& _rStart
     ,m_aDescLabel       (this, ResId(FT_DESCRIPTION))
     ,m_aExceptionText   (this, ResId(ME_DESCRIPTION))
     ,m_aOK              (this, ResId(PB_OK))
+    ,m_aExceptions( _rExceptions )
 {
     DBG_CTOR(OExceptionChainDialog,NULL);
 
-    String sErrorLabel(ResId(STR_EXCEPTION_ERROR));
-    String sWarningLabel(ResId(STR_EXCEPTION_WARNING));
-    String sInfoLabel(ResId(STR_EXCEPTION_INFO));
-    String sDetailsLabel(ResId(STR_EXCEPTION_DETAILS));
     m_sStatusLabel = String( ResId( STR_EXCEPTION_STATUS ) );
     m_sErrorCodeLabel = String( ResId( STR_EXCEPTION_ERRORCODE ) );
 
@@ -146,95 +366,41 @@ OExceptionChainDialog::OExceptionChainDialog(Window* pParent, const Any& _rStart
     m_aExceptionList.SetWindowBits(WB_HASLINES | WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HSCROLL);
 
     m_aExceptionList.SetSelectHdl(LINK(this, OExceptionChainDialog, OnExceptionSelected));
-    sal_Bool bHiContrast = isHiContrast(this);
-
     m_aExceptionList.SetNodeDefaultImages( );
-
     m_aExceptionText.SetReadOnly(sal_True);
 
-    SQLExceptionInfo aInfo(_rStart);
-    DBG_ASSERT(aInfo.isValid(), "OExceptionChainDialog::OExceptionChainDialog : invalid chain start !");
-    SQLExceptionIteratorHelper aIter(aInfo);
-
-    Image   aErrorImage(    ModuleRes( bHiContrast ? BMP_EXCEPTION_ERROR_SCH    : BMP_EXCEPTION_ERROR)),
-            aWarningImage(  ModuleRes( bHiContrast ? BMP_EXCEPTION_WARNING_SCH  : BMP_EXCEPTION_WARNING)),
-            m_aInfoImage(   ModuleRes( bHiContrast ? BMP_EXCEPTION_INFO_SCH     : BMP_EXCEPTION_INFO));
-
     bool bHave22018 = false;
+    bool bHiContrast = isHiContrast( this );
+    size_t elementPos = 0;
 
-    SQLExceptionInfo aCurrent;
-    while (aIter.hasMoreElements())
+    for (   ExceptionDisplayChain::const_iterator loop = m_aExceptions.begin();
+            loop != m_aExceptions.end();
+            ++loop, ++elementPos
+        )
     {
-        aIter.next(aCurrent);
-        if (aCurrent.isValid())
-        {
-            const SQLException* pCurrentException = (const SQLException*)aCurrent;
-            bHave22018 = pCurrentException->SQLState.equalsAscii( "22018" );
-
-            SvLBoxEntry* pListEntry = NULL;
-            SQLExceptionInfo* pUserData = new SQLExceptionInfo(aCurrent);
-
-            switch (aCurrent.getType())
-            {
-                case SQLExceptionInfo::SQL_EXCEPTION:
-                {
-                    pListEntry = m_aExceptionList.InsertEntry(sErrorLabel, aErrorImage, aErrorImage);
-                }
-                break;
-
-                case SQLExceptionInfo::SQL_WARNING:
-                    pListEntry = m_aExceptionList.InsertEntry(sWarningLabel, aWarningImage, aWarningImage);
-                    break;
-
-                case SQLExceptionInfo::SQL_CONTEXT:
-                {
-                    pListEntry = m_aExceptionList.InsertEntry(sInfoLabel, m_aInfoImage, m_aInfoImage);
-                    const SQLContext* pContext = (const SQLContext*)aCurrent;
-                    if (pContext->Details.getLength())
-                    {
-                        SvLBoxEntry* pDetailsEntry = m_aExceptionList.InsertEntry(sDetailsLabel, m_aInfoImage, m_aInfoImage, pListEntry);
-                        pDetailsEntry->SetUserData(pUserData);
-                        m_aExceptionList.Expand(pListEntry);
-                    }
-                }
-                break;
-
-                default:
-                    DBG_ERROR("OExceptionChainDialog::OExceptionChainDialog : valid SQLException but unknown type !");
-                    break;
-            }
-            if ( pListEntry )
-                pListEntry->SetUserData( pUserData );
-            else
-                delete (SQLExceptionInfo*)pUserData;
-        }
+        lcl_insertExceptionEntry( m_aExceptionList, bHiContrast, elementPos, *loop );
+        bHave22018 = loop->sSQLState.EqualsAscii( "22018" );
     }
 
     // if the error has the code 22018, then add an additional explanation
     // #i24021# / 2004-10-14 / frank.schoenheit@sun.com
     if ( bHave22018 )
     {
-        SvLBoxEntry* pExplanation = m_aExceptionList.InsertEntry( sInfoLabel, m_aInfoImage, m_aInfoImage );
+        ProviderFactory aProviderFactory;
 
-        SQLContext aExplanation;
-        aExplanation.Message = String( ModuleRes( STR_EXPLAN_STRINGCONVERSION_ERROR ) );
+        ExceptionDisplayInfo aInfo22018;
+        aInfo22018.sMessage = String( ModuleRes( STR_EXPLAN_STRINGCONVERSION_ERROR ) );
+        aInfo22018.pLabelProvider = aProviderFactory.getLabelProvider( SQLExceptionInfo::SQL_CONTEXT, false );
+        aInfo22018.pImageProvider = aProviderFactory.getImageProvider( SQLExceptionInfo::SQL_CONTEXT );
+        m_aExceptions.push_back( aInfo22018 );
 
-        pExplanation->SetUserData( new SQLExceptionInfo( aExplanation ) );
+        lcl_insertExceptionEntry( m_aExceptionList, bHiContrast, m_aExceptions.size() - 1, aInfo22018 );
     }
 }
 
 //------------------------------------------------------------------------------
 OExceptionChainDialog::~OExceptionChainDialog()
 {
-    SvLBoxEntry* pLoop = m_aExceptionList.First();
-    while (pLoop)
-    {
-        if (!m_aExceptionList.GetParent(pLoop))
-            // it's not the "details" entry for an SQLContext object
-            delete static_cast<SQLExceptionInfo*>(pLoop->GetUserData());
-        pLoop = m_aExceptionList.Next(pLoop);
-    }
-
     DBG_DTOR(OExceptionChainDialog,NULL);
 }
 
@@ -244,81 +410,180 @@ IMPL_LINK(OExceptionChainDialog, OnExceptionSelected, void*, EMPTYARG)
     SvLBoxEntry* pSelected = m_aExceptionList.FirstSelected();
     DBG_ASSERT(!pSelected || !m_aExceptionList.NextSelected(pSelected), "OExceptionChainDialog::OnExceptionSelected : multi selection ?");
 
-    if (!pSelected)
-        m_aExceptionText.SetText(UniString());
-    else
-    {
-        SQLExceptionInfo aInfo(*(const SQLExceptionInfo*)pSelected->GetUserData());
-        const SQLException* pException = (const SQLException*)aInfo;
+    String sText;
 
-        String sText;
-        if (   ( aInfo.getType() == SQLExceptionInfo::SQL_CONTEXT )
-            &&  ( m_aExceptionList.GetParent( pSelected ) != NULL )
-            )
+    if ( pSelected )
+    {
+        size_t pos = reinterpret_cast< size_t >( pSelected->GetUserData() );
+        const ExceptionDisplayInfo& aExceptionInfo( m_aExceptions[ pos ] );
+
+        if ( aExceptionInfo.sSQLState.Len() )
         {
-            sText = static_cast< const SQLContext* >( pException )->Details;
+            sText += m_sStatusLabel;
+            sText.AppendAscii(": ");
+            sText += aExceptionInfo.sSQLState;
+            sText.AppendAscii("\n");
         }
-        else
+
+        if ( aExceptionInfo.sErrorCode.Len() )
         {
-            if ( pException->SQLState.getLength() )
-            {
-                sText += m_sStatusLabel;
-                sText.AppendAscii(": ");
-                sText += pException->SQLState.getStr();
-                sText.AppendAscii("\n");
-            }
-            if ( pException->ErrorCode )
-            {
-                sText += m_sErrorCodeLabel;
-                sText.AppendAscii(": ");
-                sText += String::CreateFromInt32( pException->ErrorCode );
-                sText.AppendAscii("\n");
-            }
-            if ( sText.Len() )
-                sText.AppendAscii( "\n" );
-            sText += String( pException->Message );
+            sText += m_sErrorCodeLabel;
+            sText.AppendAscii(": ");
+            sText += aExceptionInfo.sErrorCode;
+            sText.AppendAscii("\n");
         }
-        m_aExceptionText.SetText(sText);
+
+        if ( sText.Len() )
+            sText.AppendAscii( "\n" );
+
+        sText += aExceptionInfo.sMessage;
     }
+
+    m_aExceptionText.SetText(sText);
 
     return 0L;
 }
 
-//------------------------------------------------------------------------------
-void OSQLMessageBox::Construct(const UniString& rTitle,
-                          const UniString& rMessage,
-                          WinBits nStyle,
-                          MessageType eImage)
+//==============================================================================
+//= SQLMessageBox_Impl
+//==============================================================================
+struct SQLMessageBox_Impl
 {
-    // Changed as per BugID 79541 Branding/Configuration
-    Any aProductName = ::utl::ConfigManager::GetConfigManager()->GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
-    ::rtl::OUString sProductName;
-    aProductName >>= sProductName;
+    ExceptionDisplayChain   aDisplayInfo;
 
-    String aTitle = sProductName;
-    aTitle.AppendAscii(" Base");
-    SetText(aTitle);
-    SetSizePixel(LogicToPixel(Size(220, 30),MAP_APPFONT));
+    SQLMessageBox_Impl( const SQLExceptionInfo& _rExceptionInfo )
+    {
+        // transform the exception chain to a form more suitable for displaying it here
+        ProviderFactory aProviderFactory;
+        lcl_buildExceptionChain( _rExceptionInfo, aProviderFactory, aDisplayInfo );
+    }
+};
 
-    m_aInfoImage.SetPosSizePixel(LogicToPixel(Point(6, 6),MAP_APPFONT),
-                               LogicToPixel(Size(20, 20),MAP_APPFONT));
+//------------------------------------------------------------------------------
+namespace
+{
+    ::rtl::OUString lcl_getProductName()
+    {
+        ::rtl::OUString sProductName;
+        ::utl::ConfigManager* pConfigManager = ::utl::ConfigManager::GetConfigManager();
+        OSL_ENSURE( pConfigManager, "lcl_getProductName: no config manager!" );
+        OSL_VERIFY( pConfigManager->GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME ) >>= sProductName );
+        return sProductName;
+    }
+
+    void lcl_positionInAppFont( const Window& _rParent, Window& _rChild, long _nX, long _nY, long _Width, long _Height )
+    {
+        Point aPos = _rParent.LogicToPixel( Point( _nX, _nY ), MAP_APPFONT );
+        Size aSize = _rParent.LogicToPixel( Size( _Width, _Height ), MAP_APPFONT );
+        _rChild.SetPosSizePixel( aPos, aSize );
+    }
+
+    void lcl_addButton( ButtonDialog& _rDialog, StandardButtonType _eType, bool _bDefault )
+    {
+        USHORT nButtonID = 0;
+        switch ( _eType )
+        {
+        case BUTTON_YES:    nButtonID = BUTTONID_YES; break;
+        case BUTTON_NO:     nButtonID = BUTTONID_NO; break;
+        case BUTTON_OK:     nButtonID = BUTTONID_OK; break;
+        case BUTTON_CANCEL: nButtonID = BUTTONID_CANCEL; break;
+        case BUTTON_RETRY:  nButtonID = BUTTONID_RETRY; break;
+        default:
+            OSL_ENSURE( false, "lcl_addButton: invalid button id!" );
+            break;
+        }
+        _rDialog.AddButton( _eType, nButtonID, _bDefault ? BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON : 0 );
+    }
+}
+
+//------------------------------------------------------------------------------
+void OSQLMessageBox::impl_positionControls()
+{
+    OSL_PRECOND( !m_pImpl->aDisplayInfo.empty(), "OSQLMessageBox::impl_positionControls: nothing to display at all?" );
+
+    const ExceptionDisplayInfo& rFirstInfo = *m_pImpl->aDisplayInfo.begin();
+    const ExceptionDisplayInfo* pSecondInfo = NULL;
+    if ( m_pImpl->aDisplayInfo.size() > 1 )
+        pSecondInfo = &m_pImpl->aDisplayInfo[1];
+
+    // one or two texts to display?
+    String sPrimary, sSecondary;
+    sPrimary = rFirstInfo.sMessage;
+    if ( pSecondInfo )
+    {
+        bool bFirstElementIsContext = ( rFirstInfo.eType == SQLExceptionInfo::SQL_CONTEXT );
+        if ( !bFirstElementIsContext || ( pSecondInfo->bSubEntry ) )
+            sSecondary = pSecondInfo->sMessage;
+    }
+
+    // image
+    lcl_positionInAppFont( *this, m_aInfoImage, OUTER_MARGIN, OUTER_MARGIN, IMAGE_SIZE, IMAGE_SIZE );
     m_aInfoImage.Show();
 
-    m_aTitle.SetPosSizePixel(LogicToPixel(Point(45, 6),MAP_APPFONT),
-                             LogicToPixel(Size(169, 20),MAP_APPFONT));
-
+    // primary text
+    lcl_positionInAppFont( *this, m_aTitle, TEXT_POS_X, OUTER_MARGIN, DIALOG_WIDTH - TEXT_POS_X - 2 * OUTER_MARGIN, 16 );
+    m_aTitle.SetText( sPrimary );
     m_aTitle.Show();
 
+    Rectangle aPrimaryRect( m_aTitle.GetPosPixel(), m_aTitle.GetSizePixel() );
+
+    // secondary text (if applicable)
     m_aMessage.SetStyle( m_aMessage.GetStyle() | WB_NOLABEL );
-    m_aMessage.SetPosSizePixel(LogicToPixel(Point(45, 29),MAP_APPFONT),
-                               LogicToPixel(Size(169, 1),MAP_APPFONT));
-    m_aMessage.Show();
+    m_aMessage.SetText( sSecondary );
 
-    m_pInfoButton = NULL;
+    lcl_positionInAppFont( *this, m_aMessage, TEXT_POS_X, OUTER_MARGIN + 16 + 3, DIALOG_WIDTH - TEXT_POS_X - 2 * OUTER_MARGIN, 8 );
+    Rectangle aSecondaryRect( m_aMessage.GetPosPixel(), m_aMessage.GetSizePixel() );
 
-    // Image festlegen
-    switch (eImage)
+    bool bHaveSecondaryText = sSecondary.Len() != 0;
+
+    // determine which space the secondary text would occupy
+    if ( bHaveSecondaryText )
+        aSecondaryRect = GetTextRect( aSecondaryRect, sSecondary, TEXT_DRAW_WORDBREAK | TEXT_DRAW_MULTILINE | TEXT_DRAW_LEFT );
+    else
+        aSecondaryRect.Bottom() = aSecondaryRect.Top() - 1;
+
+    // adjust secondary control height accordingly
+    m_aMessage.SetSizePixel( aSecondaryRect.GetSize() );
+    m_aMessage.Show( aSecondaryRect.GetHeight() > 0 );
+
+    // if there's no secondary text ...
+    if ( !bHaveSecondaryText )
+    {   // then give the primary text as much horizontal space as it needs
+        Rectangle aSuggestedRect( GetTextRect( aPrimaryRect, sPrimary, TEXT_DRAW_WORDBREAK | TEXT_DRAW_MULTILINE | TEXT_DRAW_CENTER ) );
+        aPrimaryRect.Right() = aPrimaryRect.Left() + aSuggestedRect.GetWidth();
+        aPrimaryRect.Bottom() = aPrimaryRect.Top() + aSuggestedRect.GetHeight();
+        // and center it horizontally
+        m_aTitle.SetStyle( ( m_aTitle.GetStyle() & ~WB_LEFT ) | WB_CENTER );
+
+        // also, if it's not as high as the image ...
+        if ( aPrimaryRect.GetHeight() < m_aInfoImage.GetSizePixel().Height() )
+        {   // ... make it fit the image height
+            aPrimaryRect.Bottom() += m_aInfoImage.GetSizePixel().Height() - aPrimaryRect.GetHeight();
+            // and center it vertically
+            m_aTitle.SetStyle( m_aTitle.GetStyle() | WB_VCENTER );
+        }
+
+        m_aTitle.SetPosSizePixel( aPrimaryRect.TopLeft(), aPrimaryRect.GetSize() );
+    }
+
+    // adjust dialog size accordingly
+    Size aBorderSize = LogicToPixel( Size( OUTER_MARGIN, OUTER_MARGIN ), MAP_APPFONT );
+    Size aDialogSize( LogicToPixel( Size( DIALOG_WIDTH, 30 ), MAP_APPFONT ) );
+    aDialogSize.Height() = aSecondaryRect.Bottom() + aBorderSize.Height();
+    aDialogSize.Width() = aPrimaryRect.Right() + aBorderSize.Width();
+
+    SetSizePixel( aDialogSize );
+    SetPageSizePixel( aDialogSize );
+}
+
+//------------------------------------------------------------------------------
+void OSQLMessageBox::impl_initImage( MessageType _eImage )
+{
+    switch (_eImage)
     {
+        default:
+            DBG_ERROR( "OSQLMessageBox::impl_initImage: unsupported image type!" );
+
         case Info:
             m_aInfoImage.SetImage(InfoBox::GetStandardImage());
             break;
@@ -332,189 +597,82 @@ void OSQLMessageBox::Construct(const UniString& rTitle,
             m_aInfoImage.SetImage(QueryBox::GetStandardImage());
             break;
     }
+}
 
-    // Title setzen
-    m_aTitle.SetText(rTitle);
-
-    // Ermitteln der Hoehe des Textfeldes und des Dialogs
-    Size aBorderSize = LogicToPixel(Size(BORDER_WIDTH, BORDER_HEIGHT),MAP_APPFONT);
-    Rectangle aDlgRect(GetPosPixel(),GetSizePixel());
-    Rectangle aMessageRect(m_aMessage.GetPosPixel(),m_aMessage.GetSizePixel());
-    Rectangle aTextRect  =
-        GetTextRect(aMessageRect,rMessage, TEXT_DRAW_WORDBREAK |
-                                           TEXT_DRAW_MULTILINE | TEXT_DRAW_LEFT);
-
-    long nHText = aTextRect.Bottom() > aMessageRect.Bottom() ? aTextRect.Bottom() - aMessageRect.Bottom() : 0;
-
-    aDlgRect.Bottom() += nHText + 2 * aBorderSize.Height();
-    aMessageRect.Bottom() += nHText;
-
-    // Dialog anpassen
-    SetSizePixel(aDlgRect.GetSize());
-    SetPageSizePixel(aDlgRect.GetSize());
-
-    // Message Text anpassen und setzen
-    m_aMessage.SetSizePixel(aMessageRect.GetSize());
-    m_aMessage.SetText(rMessage);
-
-    // Buttons anlegen
-    sal_uInt16 nDefId = 0;
-
-    if (nStyle & WB_DEF_YES)
-        nDefId = BUTTONID_YES;
-    else if (nStyle & WB_DEF_NO)
-        nDefId = BUTTONID_NO;
-    else if (nStyle & WB_DEF_CANCEL)
-        nDefId = BUTTONID_CANCEL;
-    else if (nStyle & WB_DEF_RETRY)
-        nDefId = BUTTONID_RETRY;
-    else
-        nDefId = BUTTONID_OK;
-
-    if (nStyle & WB_YES_NO_CANCEL)
+//------------------------------------------------------------------------------
+void OSQLMessageBox::impl_createStandardButtons( WinBits _nStyle )
+{
+    if ( _nStyle & WB_YES_NO_CANCEL )
     {
-        if (nStyle & WB_DEF_YES)
-            AddButton(BUTTON_YES,BUTTONID_YES,BUTTONDIALOG_DEFBUTTON|BUTTONDIALOG_FOCUSBUTTON);
-        else
-            AddButton(BUTTON_YES,BUTTONID_YES,0);
-
-        if (nStyle & WB_DEF_NO)
-            AddButton(BUTTON_NO,BUTTONID_NO,BUTTONDIALOG_DEFBUTTON|BUTTONDIALOG_FOCUSBUTTON);
-        else
-            AddButton(BUTTON_NO,BUTTONID_NO, 0);
-
-        if (nStyle & WB_DEF_CANCEL)
-            AddButton(BUTTON_CANCEL,BUTTONID_CANCEL,BUTTONDIALOG_DEFBUTTON|BUTTONDIALOG_FOCUSBUTTON);
-        else
-            AddButton(BUTTON_CANCEL,BUTTONID_CANCEL, 0);
+        lcl_addButton( *this, BUTTON_YES,    ( _nStyle & WB_DEF_YES ) != 0 );
+        lcl_addButton( *this, BUTTON_NO,     ( _nStyle & WB_DEF_NO ) != 0 );
+        lcl_addButton( *this, BUTTON_CANCEL, ( _nStyle & WB_DEF_CANCEL ) != 0 );
     }
-    else if (nStyle & WB_OK_CANCEL)
+    else if ( _nStyle & WB_OK_CANCEL )
     {
-        if (nStyle & WB_DEF_CANCEL)
-        {
-            AddButton(BUTTON_OK,BUTTONID_OK,0);
-            AddButton(BUTTON_CANCEL,BUTTONID_CANCEL,BUTTONDIALOG_DEFBUTTON|BUTTONDIALOG_FOCUSBUTTON);
-        }
-        else
-        {
-            AddButton(BUTTON_OK,BUTTONID_OK,BUTTONDIALOG_DEFBUTTON|BUTTONDIALOG_FOCUSBUTTON);
-            AddButton(BUTTON_CANCEL,BUTTONID_CANCEL,0);
-        }
+        lcl_addButton( *this, BUTTON_OK,     ( _nStyle & WB_DEF_OK ) != 0 );
+        lcl_addButton( *this, BUTTON_CANCEL, ( _nStyle & WB_DEF_CANCEL ) != 0 );
     }
-    else if (nStyle & WB_YES_NO)
+    else if ( _nStyle & WB_YES_NO )
     {
-        if (nStyle & WB_DEF_YES)
-            AddButton(BUTTON_YES,BUTTONID_YES,BUTTONDIALOG_DEFBUTTON|BUTTONDIALOG_FOCUSBUTTON);
-        else
-            AddButton(BUTTON_YES,BUTTONID_YES,0);
-
-        if (nStyle & WB_DEF_NO)
-            AddButton(BUTTON_NO,BUTTONID_NO,BUTTONDIALOG_DEFBUTTON|BUTTONDIALOG_FOCUSBUTTON);
-        else
-            AddButton(BUTTON_NO,BUTTONID_NO, 0);
+        lcl_addButton( *this, BUTTON_YES,    ( _nStyle & WB_DEF_YES ) != 0 );
+        lcl_addButton( *this, BUTTON_NO,     ( _nStyle & WB_DEF_NO ) != 0 );
     }
-    else if (nStyle & WB_RETRY_CANCEL)
+    else if ( _nStyle & WB_RETRY_CANCEL )
     {
-        if (nStyle & WB_DEF_RETRY)
-            AddButton(BUTTON_RETRY,BUTTONID_RETRY,BUTTONDIALOG_DEFBUTTON|BUTTONDIALOG_FOCUSBUTTON);
-        else
-            AddButton(BUTTON_YES,BUTTONID_YES,0);
-
-        if (nStyle & WB_DEF_CANCEL)
-            AddButton(BUTTON_CANCEL,BUTTONID_CANCEL,BUTTONDIALOG_DEFBUTTON|BUTTONDIALOG_FOCUSBUTTON);
-        else
-            AddButton(BUTTON_CANCEL,BUTTONID_CANCEL, 0);
+        lcl_addButton( *this, BUTTON_RETRY,  ( _nStyle & WB_DEF_RETRY ) != 0 );
+        lcl_addButton( *this, BUTTON_CANCEL, ( _nStyle & WB_DEF_CANCEL ) != 0 );
     }
     else
     {
-        DBG_ASSERT(WB_OK & nStyle, "kein Button gesetzt");
-        AddButton(BUTTON_OK,BUTTONID_OK,BUTTONDIALOG_DEFBUTTON|BUTTONDIALOG_FOCUSBUTTON);
+        OSL_ENSURE( WB_OK & _nStyle, "OSQLMessageBox::impl_createStandardButtons: unsupported dialog style requested!" );
+        AddButton( BUTTON_OK, BUTTONID_OK, BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON );
     }
 
-    sal_Bool bAtLeastTwo = m_aNextChainElement.hasValue() && ((SQLException*)m_aNextChainElement.getValue())->NextException.getValue();
-    if (bAtLeastTwo)
+}
+
+//------------------------------------------------------------------------------
+void OSQLMessageBox::impl_addDetailsButton()
+{
+    size_t nFirstPageVisible = m_aMessage.IsVisible() ? 2 : 1;
+    bool bMoreDetailsAvailable = m_pImpl->aDisplayInfo.size() > nFirstPageVisible;
+    if ( bMoreDetailsAvailable )
     {
-        m_pInfoButton = new PushButton(this);
-        m_pInfoButton->SetText(Button::GetStandardText(BUTTON_MORE));
-        m_pInfoButton->SetClickHdl(LINK(this,OSQLMessageBox,ButtonClickHdl));
-        m_pInfoButton->SetUniqueId(UID_SQLERROR_BUTTONMORE);
-        m_pInfoButton->Show();
-        AddButton(m_pInfoButton, BUTTONID_MORE, 0);
+        AddButton( BUTTON_MORE, BUTTONID_MORE, 0 );
+        PushButton* pButton = GetPushButton( BUTTONID_MORE );
+        OSL_ENSURE( pButton, "OSQLMessageBox::impl_addDetailsButton: just added this button, why isn't it there?" );
+        pButton->SetClickHdl( LINK( this, OSQLMessageBox, ButtonClickHdl ) );
+        pButton->SetUniqueId( UID_SQLERROR_BUTTONMORE );
     }
 }
 
 //------------------------------------------------------------------------------
-void OSQLMessageBox::Construct(const SQLExceptionInfo& _rException, WinBits _nStyle, MessageType _eImage)
+void OSQLMessageBox::Construct( WinBits _nStyle, MessageType _eImage )
 {
-    const SQLException* pFirst = NULL;
-    if (_rException.isKindOf(SQLExceptionInfo::SQL_EXCEPTION))
-        pFirst = (const SQLException*)_rException;
+    // Changed as per BugID 79541 Branding/Configuration
+    String sDialogTitle( lcl_getProductName() );
+    SetText( sDialogTitle.AppendAscii( " Base" ) );
 
-    // get the first two strings in the chain
-    String sTitle, sMessage;
-    if (pFirst)
+    // position and size the controls and the dialog, depending on whether we have one or two texts to display
+    impl_positionControls();
+
+    // init the image
+    MessageType eType( _eImage );
+    if ( eType == AUTO )
     {
-        sTitle = pFirst->Message;
-            // we assume this to be not empty, so in reall we're searching the only te second string, the first
-            // one is always the Message of the first exception)
-
-        if (_rException.isKindOf(SQLExceptionInfo::SQL_CONTEXT))
-        {   // take the detailed message
-            const SQLContext* pContext = (const SQLContext*)_rException;
-            sMessage = pContext->Details.getStr();
-        }
-
-        if (!sMessage.Len())
+        switch ( m_pImpl->aDisplayInfo[0].eType )
         {
-            // loop through all the remaining exceptions
-            SQLExceptionIteratorHelper aIter((const SQLException*)pFirst);
-            // skip the first one
-            if(aIter.hasMoreElements())
-                aIter.next();
-                // note that this leaves aIter in a state where it's current exception is only an SQLException,
-                // even if _rException was more than this. But this is irrelevant here, as we always handled
-                // this first chain element
-            while (aIter.hasMoreElements() && !sMessage.Len())
-            {
-                SQLExceptionInfo aInfo(*aIter.next());
-                if (aInfo.isValid())
-                {   // first take the normal message of the exception
-                    const SQLException* pException = (const SQLException*)aInfo;
-                    sMessage = pException->Message.getStr();
-                    // the, if necessary and possible, the details
-                    if (aInfo.isKindOf(SQLExceptionInfo::SQL_CONTEXT))
-                    {   // check if we have a detailed message
-                        const SQLContext* pContext = (const SQLContext*)aInfo;
-                        sMessage = pContext->Details.getStr();
-                    }
-                }
-            }
+        case SQLExceptionInfo::SQL_EXCEPTION: eType = Error;    break;
+        case SQLExceptionInfo::SQL_WARNING:   eType = Warning;  break;
+        case SQLExceptionInfo::SQL_CONTEXT:   eType = Info;     break;
+        default: OSL_ENSURE( false, "OSQLMessageBox::Construct: invalid type!" );
         }
     }
+    impl_initImage( eType );
 
-    if (!sMessage.Len())
-    {   // use the only string we have as message and an default title
-        sMessage = sTitle;
-        sTitle = ModuleRes(STR_GENERAL_SDB_ERROR);
-    }
-
-    Construct(sTitle, sMessage, _nStyle, _eImage);
-}
-
-DBG_NAME(OSQLMessageBox)
-//------------------------------------------------------------------------------
-OSQLMessageBox::OSQLMessageBox(Window* _pParent, const UniString& _rTitle, const SQLException& _rError, WinBits _nStyle,
-                        MessageType _eImage)
-    :ButtonDialog(_pParent,WB_HORZ | WB_STDDIALOG)
-    ,m_aInfoImage(this)
-    ,m_aTitle(this,WB_WORDBREAK | WB_LEFT)
-    ,m_aMessage(this,WB_WORDBREAK | WB_LEFT)
-    ,m_aNextChainElement(SQLExceptionInfo(_rError).get())
-    ,m_pInfoButton(NULL)
-{
-    DBG_CTOR(OSQLMessageBox,NULL);
-
-    Construct(_rTitle, _rError.Message, _nStyle, _eImage);
+    // create buttons
+    impl_createStandardButtons( _nStyle );
+    impl_addDetailsButton();
 }
 
 //------------------------------------------------------------------------------
@@ -523,53 +681,47 @@ OSQLMessageBox::OSQLMessageBox(Window* _pParent, const SQLException& _rError, Wi
     ,m_aInfoImage(this)
     ,m_aTitle(this,WB_WORDBREAK | WB_LEFT)
     ,m_aMessage(this,WB_WORDBREAK | WB_LEFT)
-    ,m_aNextChainElement(SQLExceptionInfo(_rError).get())
-    ,m_pInfoButton(NULL)
+    ,m_pImpl( new SQLMessageBox_Impl( SQLExceptionInfo( _rError ) ) )
 {
-    DBG_CTOR(OSQLMessageBox,NULL);
-
-    Construct(SQLExceptionInfo(_rError), _nStyle, _eImage);
+    Construct( _nStyle, _eImage );
 }
 
 //------------------------------------------------------------------------------
 OSQLMessageBox::OSQLMessageBox(Window* _pParent, const SQLExceptionInfo& _rException, WinBits _nStyle, MessageType _eImage)
-      :ButtonDialog(_pParent,WB_HORZ | WB_STDDIALOG)
-      ,m_aInfoImage(this)
-      ,m_aTitle(this,WB_WORDBREAK | WB_LEFT)
-      ,m_aMessage(this,WB_WORDBREAK | WB_LEFT)
-      ,m_aNextChainElement(_rException.get())
-      ,m_pInfoButton(NULL)
+    :ButtonDialog( _pParent, WB_HORZ | WB_STDDIALOG )
+    ,m_aInfoImage( this )
+    ,m_aTitle( this, WB_WORDBREAK | WB_LEFT )
+    ,m_aMessage( this, WB_WORDBREAK | WB_LEFT )
+    ,m_pImpl( new SQLMessageBox_Impl( _rException ) )
 {
-    DBG_CTOR(OSQLMessageBox,NULL);
-
-    Construct(_rException, _nStyle, _eImage);
+    Construct( _nStyle, _eImage );
 }
 
 //------------------------------------------------------------------------------
-OSQLMessageBox::OSQLMessageBox(Window* pParent, const UniString& rTitle, const UniString& rMessage, WinBits nStyle, MessageType eImage)
-      :ButtonDialog(pParent,WB_HORZ | WB_STDDIALOG)
-      ,m_aInfoImage(this)
-      ,m_aTitle(this,WB_WORDBREAK | WB_LEFT)
-      ,m_aMessage(this,WB_WORDBREAK | WB_LEFT)
-      ,m_pInfoButton(NULL)
+OSQLMessageBox::OSQLMessageBox( Window* _pParent, const UniString& _rTitle, const UniString& _rMessage, WinBits _nStyle, MessageType _eImage )
+    :ButtonDialog( _pParent, WB_HORZ | WB_STDDIALOG )
+    ,m_aInfoImage( this )
+    ,m_aTitle( this, WB_WORDBREAK | WB_LEFT )
+    ,m_aMessage( this, WB_WORDBREAK | WB_LEFT )
 {
-    DBG_CTOR(OSQLMessageBox,NULL);
+    SQLContext aError;
+    aError.Message = _rTitle;
+    aError.Details = _rMessage;
 
-    Construct(rTitle, rMessage, nStyle, eImage);
+    m_pImpl.reset( new SQLMessageBox_Impl( SQLExceptionInfo( aError ) ) );
+
+    Construct( _nStyle, _eImage );
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------
 OSQLMessageBox::~OSQLMessageBox()
 {
-    delete m_pInfoButton;
-
-    DBG_DTOR(OSQLMessageBox,NULL);
 }
 
 //--------------------------------------------------------------------------
 IMPL_LINK( OSQLMessageBox, ButtonClickHdl, Button *, /*pButton*/ )
 {
-    OExceptionChainDialog aDlg( this, m_aNextChainElement );
+    OExceptionChainDialog aDlg( this, m_pImpl->aDisplayInfo );
     aDlg.Execute();
     return 0;
 }
