@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.48 $
+#   $Revision: 1.49 $
 #
-#   last change: $Author: rt $ $Date: 2005-11-11 10:59:10 $
+#   last change: $Author: obo $ $Date: 2006-07-10 19:00:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -188,7 +188,7 @@ INCLUDETOPDIRLIST += $(INCOUT)$/systools
 INCLUDEDIRLIST:={$(subst,/,$/ $(shell $(FIND) $(INCLUDETOPDIRLIST) -type d -print))}
 
 INCLUDEFILELIST=\
-    $(INCOUT)$/udkversion.mk \
+    $(SOLARENV)$/inc$/udkversion.mk \
     $(INCOUT)$/com$/sun$/star$/uno$/Any.h \
     $(INCOUT)$/com$/sun$/star$/uno$/Any.hxx \
     $(INCOUT)$/com$/sun$/star$/uno$/genfunc.h \
