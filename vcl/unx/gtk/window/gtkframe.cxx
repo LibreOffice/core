@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:45:29 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 16:36:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2280,8 +2280,13 @@ gboolean GtkSalFrame::signalKey( GtkWidget*, GdkEventKey* pEvent, gpointer frame
     vcl::DeletionListener aDel( pThis );
 
     if( pThis->m_pIMHandler )
+    {
         if( pThis->m_pIMHandler->handleKeyEvent( pEvent ) )
+        {
+            pThis->m_bSingleAltPress = false;
             return TRUE;
+        }
+    }
     GTK_YIELD_GRAB();
 
     // handle modifiers
