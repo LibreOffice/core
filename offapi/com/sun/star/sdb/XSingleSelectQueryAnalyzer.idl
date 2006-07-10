@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XSingleSelectQueryAnalyzer.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:32:11 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:50:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -188,6 +188,45 @@ interface XSingleSelectQueryAnalyzer : com::sun::star::uno::XInterface
             a collection of <type scope="com::sun::star::sdb">OrderColumn</type> which form the ORDER BY.
      */
     com::sun::star::container::XIndexAccess getOrderColumns();
+
+    //-------------------------------------------------------------------------
+    /** returns the query previously set at the analyzer, with all application-level
+        features being substituted by their database-level counterparts.
+
+        <p>The <type>XSingleSelectQueryAnalyzer</type> is an application-level component,
+        which in some respect understands SQL features usually not present at the database
+        level. As a prominent example, you might pass a <code>SELECT</code> statement to the analyzer
+        which is based on another query.</p>
+
+        <p>While all other methods will handle those additional features transparently - e.g.
+        the query in the <code>FROM</code> part of a <code>SELECT</code> statement will be handled
+        as if it really is a table -, <code>getQueryWithSubstitution</code> gives you the SQL statement
+        where all those features have been stripped, and replaced with appropriate standard SQL.</p>
+
+        <p>For example, consider a database document which contains a client-side query named <code>All Orders</code>.
+        This query is not known to the underlying database, so an SQL statement like
+        <code>SELECT * from "All Orders"</code> would be rejected by the database. However, instantiating
+        a <type>SingleSelectQueryAnalyzer</type> at the <type>Connection</type> object, and passing it the above query,
+        you can then use <code>getQueryWithSubstitution</code> to retrieve a statement where <code>"All Orders"</code>
+        has been replaced with the <code>SELECT</code> statement which actually constitutes the <code>"All Orders"</code>
+        query.</p>
+
+        @throws com::sun::star::sdbc::SQLException
+            if the query represented cannot be completely substituted. A usual case for this is a recursion in
+            the sub queries: Consider a query named <code>foo</code>, which is defined as <code>SELECT * FROM "bar"</code>.
+            Now assume that <code>bar</code> is a query defined as <code>SELECT * FROM "foo"</code>. Passing either
+            of those statements to an analyzer, and calling <member>getQueryWithSubstitution</member>, would result
+            in an exception being thrown, since it's impossible to substitute the sub queries with their
+            constituting statements.
+
+        @see Connection
+        @see XQueriesSupplier
+        @see DatabaseDocument
+
+        @since OOo 2.0.4
+    */
+    string getQueryWithSubstitution()
+        raises (com::sun::star::sdbc::SQLException);
 };
 
 //=============================================================================
