@@ -4,9 +4,9 @@
  *
  *  $RCSfile: staticdbtools_s.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:49:13 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:40:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,11 +135,17 @@ namespace connectivity
         ) const;
 
         // ------------------------------------------------
-        virtual ::rtl::OUString quoteTableName(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _rxMeta,
+        virtual ::rtl::OUString composeTableNameForSelect(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
+            const ::rtl::OUString& _rCatalog,
+            const ::rtl::OUString& _rSchema,
             const ::rtl::OUString& _rName
-            , sal_Bool _bUseCatalogInSelect = sal_True
-            , sal_Bool _bUseSchemaInSelect = sal_True
+        ) const;
+
+        // ------------------------------------------------
+        virtual ::rtl::OUString composeTableNameForSelect(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xTable
         ) const;
 
         // ------------------------------------------------

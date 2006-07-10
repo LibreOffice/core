@@ -4,9 +4,9 @@
  *
  *  $RCSfile: staticdbtools_s.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:48:54 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:39:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,11 +156,15 @@ namespace connectivity
     }
 
     //----------------------------------------------------------------
-    ::rtl::OUString ODataAccessStaticTools::quoteTableName(const Reference< XDatabaseMetaData>& _rxMeta, const ::rtl::OUString& _rName
-                                , sal_Bool _bUseCatalogInSelect
-                                , sal_Bool _bUseSchemaInSelect) const
+    ::rtl::OUString ODataAccessStaticTools::composeTableNameForSelect( const Reference< XConnection >& _rxConnection, const ::rtl::OUString& _rCatalog, const ::rtl::OUString& _rSchema, const ::rtl::OUString& _rName ) const
     {
-        return ::dbtools::quoteTableName(_rxMeta, _rName,::dbtools::eInDataManipulation,_bUseCatalogInSelect,_bUseSchemaInSelect);
+        return ::dbtools::composeTableNameForSelect( _rxConnection, _rCatalog, _rSchema, _rName );
+    }
+
+    //----------------------------------------------------------------
+    ::rtl::OUString ODataAccessStaticTools::composeTableNameForSelect( const Reference< XConnection >& _rxConnection, const Reference< XPropertySet>& _xTable ) const
+    {
+        return ::dbtools::composeTableNameForSelect( _rxConnection, _xTable );
     }
 
     //----------------------------------------------------------------
