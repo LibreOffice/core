@@ -1,0 +1,92 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XConnectionTools.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:51:21 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sdb_tools_XConnectionTools_idl__
+#define __com_sun_star_sdb_tools_XConnectionTools_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+//=============================================================================
+module com {  module sun {  module star {  module sdb { module tools {
+//=============================================================================
+
+interface XTableName;
+interface XObjectNames;
+interface XDataSourceMetaData;
+
+//-----------------------------------------------------------------------------
+/** encapsulates various useful functionality around a
+    <type scope="com::sun::star::sdb">Connection</type>
+
+    <p>Most of the functionality provided here is meaningful only relative to
+    a given database connection. For instance, for quoting table names, you need
+    the meta data instance of the connection. Thus, the entry point for obtaining
+    a <type>XConnectionTools</type> instance is the
+    <type scope="com::sun::star::sdb">Connection</type> service.</p>
+
+    <p>Note that nearly all functionality provided by this interface is also
+    available by other means, it's only provided here for convenience purposes.</p>
+
+    @since OOo 2.0.4
+*/
+interface XConnectionTools
+{
+    /** creates an instance supporting the <type>XTableName</type> interface,
+        which can be used to manipulate table names for various purposes.
+
+        <p>The returned object is guanrateed to not be <NULL/>.</p>
+    */
+    XTableName      createTableName();
+
+    /** returns an instance supporting the <type>XObjectNames</type> interface,
+        which provides access to functionality around table and query names.
+
+        <p>The returned object is guanrateed to not be <NULL/>.</p>
+    */
+    XObjectNames    getObjectNames();
+
+    /** provides access to the application-level data source meta data
+    */
+    XDataSourceMetaData
+                    getDataSourceMetaData();
+};
+
+//=============================================================================
+}; }; }; }; };
+//=============================================================================
+
+#endif
