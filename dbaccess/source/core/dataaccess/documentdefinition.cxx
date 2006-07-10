@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentdefinition.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:45:23 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:11:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -486,10 +486,10 @@ Sequence< sal_Int8 > lcl_GetSequenceClassID( sal_uInt32 n1, sal_uInt16 n2, sal_u
     aResult[1] = static_cast<sal_Int8>(( n1 << 8 ) >> 24);
     aResult[2] = static_cast<sal_Int8>(( n1 << 16 ) >> 24);
     aResult[3] = static_cast<sal_Int8>(( n1 << 24 ) >> 24);
-    aResult[4] = n2 >> 8;
-    aResult[5] = ( n2 << 8 ) >> 8;
-    aResult[6] = n3 >> 8;
-    aResult[7] = ( n3 << 8 ) >> 8;
+    aResult[4] = (sal_Int8)(n2 >> 8);
+    aResult[5] = (sal_Int8)(( n2 << 8 ) >> 8);
+    aResult[6] = (sal_Int8)(n3 >> 8);
+    aResult[7] = (sal_Int8)(( n3 << 8 ) >> 8);
     aResult[8] = b8;
     aResult[9] = b9;
     aResult[10] = b10;
