@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqlnode.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:00:44 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:16:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,8 @@
 #endif
 #include <vector>
 #include <functional>
+#include <set>
+#include <boost/shared_ptr.hpp>
 
 // forward declarations
 namespace com
@@ -69,13 +71,17 @@ namespace com
             {
                 class XNumberFormatter;
             }
+            namespace container
+            {
+                class XNameAccess;
+            }
         }
     }
 }
 
 namespace connectivity
 {
-
+    class OSQLParser;
     class OSQLParseNode;
     class IParseContext;
 
@@ -86,6 +92,45 @@ namespace connectivity
                          SQL_NODE_STRING,   SQL_NODE_INTNUM, SQL_NODE_APPROXNUM,
                          SQL_NODE_EQUAL,SQL_NODE_LESS,SQL_NODE_GREAT,SQL_NODE_LESSEQ,SQL_NODE_GREATEQ,SQL_NODE_NOTEQUAL,
                          SQL_NODE_PUNCTUATION, SQL_NODE_AMMSC, SQL_NODE_ACCESS_DATE,SQL_NODE_DATE};
+
+    typedef ::std::set< ::rtl::OUString >   QueryNameSet;
+    //==================================================================
+    //= SQLParseNodeParameter
+    //==================================================================
+    struct SQLParseNodeParameter
+    {
+        const ::com::sun::star::lang::Locale&   rLocale;
+        const ::rtl::OUString                   aIdentifierQuote;
+        const ::rtl::OUString                   aCatalogSeparator;
+        OSQLParser*                             pParser;
+        ::boost::shared_ptr< QueryNameSet >     pSubQueryHistory;
+        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    xFormatter;
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       xField;
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    xQueries;  // see bParseToSDBCLevel
+        const IParseContext& m_rContext;
+        sal_Char            cDecSep;
+        bool                bQuote                      : 1;    /// should we quote identifiers?
+        bool                bInternational              : 1;    /// should we internationalize keywords and placeholders?
+        bool                bPredicate                  : 1;    /// are we going to parse a mere predicate?
+        bool                bParseToSDBCLevel           : 1;    /// should we create an SDBC-level statement (e.g. with substituted sub queries)?
+        bool                bCaseSensistiveIdentCompare : 1;    /// should identifiers be compared case-sensitively?
+
+        SQLParseNodeParameter(
+            const ::rtl::OUString& _rIdentifierQuote,
+            const ::rtl::OUString& _rCatalogSep,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _xFormatter,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xField,
+            const ::com::sun::star::lang::Locale& _rLocale,
+            const IParseContext* _pContext,
+            bool _bIntl,
+            bool _bQuote,
+            sal_Char _cDecSep,
+            bool _bPredicate,
+            bool _bParseToSDBC,
+            bool _bCaseSensistiveIdentCompare
+        );
+        ~SQLParseNodeParameter();
+    };
 
     //==========================================================================
     //= OSQLParseNode
@@ -102,32 +147,6 @@ namespace connectivity
         sal_uInt32                      m_nNodeID;      // ::com::sun::star::chaos::Rule ID (bei IsRule()) oder Token ID (bei !IsRule())
                                             // ::com::sun::star::chaos::Rule IDs und Token IDs koennen nicht anhand des Wertes
                                             // unterschieden werden, dafuer ist IsRule() abzufragen!
-    protected:
-        struct SQLParseNodeParameter
-        {
-            const ::com::sun::star::lang::Locale&   rLocale;
-            const ::rtl::OUString                   aIdentifierQuote;
-            const ::rtl::OUString                   aCatalogSeparator;
-            ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > xFormatter;
-            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xField;
-            const IParseContext* m_pContext;
-            sal_Char            cDecSep ;
-            sal_Bool            bQuote : 1;
-            sal_Bool            bInternational : 1;
-            sal_Bool            bPredicate : 1;
-
-            SQLParseNodeParameter(const ::rtl::OUString& _rIdentifierQuote,
-                                  const ::rtl::OUString& _rCatalogSep,
-                                  const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > & _xFormatter,
-                                  const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & _xField,
-                                  const ::com::sun::star::lang::Locale& _rIntl,
-                                  const IParseContext* _pContext,
-                                  sal_Bool _bIntl = sal_False,
-                                  sal_Bool _bQuote= sal_True,
-                                  sal_Char _cDecSep = '.',
-                                  sal_Bool _bPredicate = sal_False);
-        };
-
     public:
         enum Rule
         {
@@ -216,7 +235,11 @@ namespace connectivity
             base_table_element_commalist,
             data_type,
             column_def,
-            rule_count                      // letzter_wert
+            table_node,
+            as,
+            op_column_commalist,
+            rule_count,             // letzter_wert
+            UNKNOWN_RULE            // ID indicating that a node is no rule with a matching Rule-enum value (see getKnownRuleID)
         };
 
         // must be ascii encoding for the value
@@ -266,6 +289,47 @@ namespace connectivity
 
         void replaceNodeValue(const ::rtl::OUString& rTableAlias,const ::rtl::OUString& rColumnName);
 
+        /** parses the node to a string which can be passed to a driver's connection for execution
+
+            Any particles of the parse tree which represent application-level features - such
+            as queries appearing in the FROM part - are subsituted, so that the resulting statement can
+            be executed at an SDBC-level connection.
+
+            @param  _out_rString
+                is an output parameter taking the resulting SQL statement
+
+            @param  _rxConnection
+                the connection relative to which to parse. This must be an SDB-level connection (e.g.
+                support the XQueriesSupplier interface) for the method to be able to do all necessary
+                substitutions.
+
+            @param _rParser
+                the SQLParser used to create the node. This is needed in case we need to parse
+                sub queries which are present in the SQL statement - those sub queries need to be parsed,
+                too, to check whether they contain nested sub queries.
+
+            @param _pErrorHolder
+                takes the error which occured while generating the statement, if any. Might be <NULL/>,
+                in this case the error is not reported back, and can only be recognized by examing the
+                return value.
+
+            @return
+                <TRUE/> if and only if the parsing was successful.<br/>
+
+                Currently, there's only one condition how this method can fail: If it contains a nested
+                query which causes a cycle. E.g., consider a statement <code>SELECT * from "foo"</code>,
+                where <code>bar </code> is a query defined as <code>SELECT * FROM "bar"</code>, where
+                <code>bar</code> is defined as <code>SELECT * FROM "foo"</code>. This statement obviously
+                cannot be parsed to an executable statement.
+
+                If this method returns <FALSE/>, you're encouraged to check and handle the error in
+                <arg>_pErrorHolder</arg>.
+        */
+        bool parseNodeToExecutableStatement( ::rtl::OUString& _out_rString,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
+            OSQLParser& _rParser,
+            ::com::sun::star::sdbc::SQLException* _pErrorHolder ) const;
+
         void parseNodeToStr(::rtl::OUString& rString,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData > & xMeta,
                             const IParseContext* pContext = NULL,
@@ -300,6 +364,12 @@ namespace connectivity
 
             // RuleId liefert die RuleId der Regel des Knotens (nur bei IsRule())
         sal_uInt32 getRuleID() const {return m_nNodeID;}
+
+        /** returns the ID of the rule represented by the node
+
+            If the node does not represent a rule, UNKNOWN_RULE is returned
+        */
+        Rule getKnownRuleID() const;
 
             // RuleId liefert die TokenId des Tokens des Knotens (nur bei ! IsRule())
         sal_uInt32 getTokenID() const {return m_nNodeID;}
@@ -360,18 +430,24 @@ namespace connectivity
                             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & _xField,
                             const ::com::sun::star::lang::Locale& rIntl,
                             const IParseContext* pContext,
-                            sal_Bool _bIntl,
-                            sal_Bool _bQuote,
+                            bool _bIntl,
+                            bool _bQuote,
                             sal_Char _cDecSep,
-                            sal_Bool bPredicate) const;
+                            bool _bPredicate,
+                            bool _bSubstitute) const;
 
-        virtual void parseNodeToStr(::rtl::OUString& rString,
-                                    const SQLParseNodeParameter& rParam) const;
     private:
-        void likeNodeToStr(::rtl::OUString& rString,
-                           const SQLParseNodeParameter& rParam) const;
-        void tableRangeNodeToStr(::rtl::OUString& rString,
-                                 const SQLParseNodeParameter& rParam) const;
+        void impl_parseNodeToString_throw( ::rtl::OUString& rString, const SQLParseNodeParameter& rParam) const;
+        void impl_parseLikeNodeToString_throw( ::rtl::OUString& rString, const SQLParseNodeParameter& rParam ) const;
+        void impl_parseTableRangeNodeToString_throw( ::rtl::OUString& rString, const SQLParseNodeParameter& rParam ) const;
+
+        /** parses a table_name node into a SQL statement particle.
+            @return
+                <TRUE/> if and only if parsing was successful, <FALSE/> if default handling should
+                be applied.
+        */
+        bool impl_parseTableNameNodeToString_throw( ::rtl::OUString& rString, const SQLParseNodeParameter& rParam ) const;
+
         sal_Bool addDateValue(::rtl::OUString& rString, const SQLParseNodeParameter& rParam) const;
         ::rtl::OUString convertDateTimeString(const SQLParseNodeParameter& rParam, const ::rtl::OUString& rString) const;
         ::rtl::OUString convertDateString(const SQLParseNodeParameter& rParam, const ::rtl::OUString& rString) const;
