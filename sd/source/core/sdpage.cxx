@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:30:42 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 11:21:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -803,7 +803,7 @@ void SdPage::CreateTitleAndLayout(BOOL bInit, BOOL bCreate )
 
             // delete all available handout presentation objects
             SdrObject* pObj;
-            while( pObj = GetPresObj(PRESOBJ_HANDOUT) )
+            while( pObj = pMasterPage->GetPresObj(PRESOBJ_HANDOUT) )
             {
                 if( bUndo )
                     pUndoManager->AddUndoAction(pModel->GetSdrUndoFactory().CreateUndoDeleteObject(*pObj));
