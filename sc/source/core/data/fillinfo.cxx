@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fillinfo.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:25:30 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:24:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -382,44 +382,42 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
 
         if ( ValidCol(nX) )
         {
-            bool bHidden = (GetColFlags(nX,nTab) & CR_HIDDEN) != 0;
+            // #i58049#, #i57939# Hidden columns must be skipped here, or their attributes
+            // will disturb the output
 
-//           if ( (GetColFlags(nX,nTab) & CR_HIDDEN) == 0 )          // Spalte nicht versteckt
+            if ( (GetColFlags(nX,nTab) & CR_HIDDEN) == 0 )          // column not hidden
             {
                 USHORT nThisWidth = (USHORT) (GetColWidth( nX, nTab ) * nScaleX);
-                if (!bHidden && !nThisWidth)
+                if (!nThisWidth)
                     nThisWidth = 1;
 
                 pRowInfo[0].pCellInfo[nArrX].nWidth = nThisWidth;           //! dies sollte reichen
 
                 ScColumn* pThisCol = &pTab[nTab]->aCol[nX];                 // Spalten-Daten
 
-                if( !bHidden )
+                nArrY = 1;
+                SCSIZE nUIndex;
+                (void) pThisCol->Search( nY1, nUIndex );
+                while ( nUIndex < pThisCol->nCount &&
+                        (nThisRow=pThisCol->pItems[nUIndex].nRow) <= nY2 )
                 {
-                    nArrY = 1;
-                    SCSIZE nUIndex;
-                    (void) pThisCol->Search( nY1, nUIndex );
-                    while ( nUIndex < pThisCol->nCount &&
-                            (nThisRow=pThisCol->pItems[nUIndex].nRow) <= nY2 )
+                    if ( !RowHidden( nThisRow,nTab ) )
                     {
-                        if ( !RowHidden( nThisRow,nTab ) )
-                        {
-                            while ( pRowInfo[nArrY].nRowNo < nThisRow )
-                                ++nArrY;
-                            DBG_ASSERT( pRowInfo[nArrY].nRowNo == nThisRow, "Zeile nicht gefunden in FillInfo" );
-
-                            RowInfo* pThisRowInfo = &pRowInfo[nArrY];
-                            CellInfo* pInfo = &pThisRowInfo->pCellInfo[nArrX];
-                            pInfo->pCell = pThisCol->pItems[nUIndex].pCell;
-                            if (pInfo->pCell->GetCellType() != CELLTYPE_NOTE)
-                            {
-                                pThisRowInfo->bEmptyText = FALSE;                   // Zeile nicht leer
-                                pInfo->bEmptyCellText = FALSE;                      // Zelle nicht leer
-                            }
+                        while ( pRowInfo[nArrY].nRowNo < nThisRow )
                             ++nArrY;
+                        DBG_ASSERT( pRowInfo[nArrY].nRowNo == nThisRow, "Zeile nicht gefunden in FillInfo" );
+
+                        RowInfo* pThisRowInfo = &pRowInfo[nArrY];
+                        CellInfo* pInfo = &pThisRowInfo->pCellInfo[nArrX];
+                        pInfo->pCell = pThisCol->pItems[nUIndex].pCell;
+                        if (pInfo->pCell->GetCellType() != CELLTYPE_NOTE)
+                        {
+                            pThisRowInfo->bEmptyText = FALSE;                   // Zeile nicht leer
+                            pInfo->bEmptyCellText = FALSE;                      // Zelle nicht leer
                         }
-                        ++nUIndex;
+                        ++nArrY;
                     }
+                    ++nUIndex;
                 }
 
                 if (nX+1 >= nX1)                                // Attribute/Blockmarken ab nX1-1
