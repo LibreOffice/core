@@ -4,9 +4,9 @@
  *
  *  $RCSfile: adtabdlg.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:05:39 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:25:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,18 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
+#endif
+#ifndef _SVTOOLS_LOCALRESACCESS_HXX_
+#include <svtools/localresaccess.hxx>
+#endif
+#ifndef _DBA_DBACCESS_HELPID_HRC_
 #include "dbaccess_helpid.hrc"
+#endif
+#ifndef _DBU_RESOURCE_HRC_
+#include "dbu_resource.hrc"
+#endif
 #ifndef _DBU_DLG_HRC_
 #include "dbu_dlg.hrc"
 #endif
@@ -69,6 +80,9 @@
 #ifndef DBACCESS_UI_BROWSER_ID_HXX
 #include "browserids.hxx"
 #endif
+#ifndef _COM_SUN_STAR_SDB_XQUERIESSUPPLIER_HPP_
+#include <com/sun/star/sdb/XQueriesSupplier.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDBCX_XVIEWSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XViewsSupplier.hpp>
 #endif
@@ -89,116 +103,321 @@
 using namespace dbaui;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace dbtools;
 
-DBG_NAME(OAddTableDlg)
+//==============================================================================
+//= TableObjectListFacade
+//==============================================================================
+TableObjectListFacade::~TableObjectListFacade()
+{
+}
+
+//==============================================================================
+//= TableListFacade
+//==============================================================================
+class TableListFacade : public TableObjectListFacade
+{
+    OTableTreeListBox&          m_rTableList;
+    Reference< XConnection >    m_xConnection;
+
+public:
+    TableListFacade( OTableTreeListBox& _rTableList, const Reference< XConnection >& _rxConnection )
+        :m_rTableList( _rTableList )
+        ,m_xConnection( _rxConnection )
+    {
+    }
+
+    virtual void    updateTableObjectList( bool _bAllowViews );
+    virtual String  getSelectedName( String& _out_rAliasName ) const;
+    virtual bool    isLeafSelected() const;
+};
+
 //------------------------------------------------------------------------------
-OAddTableDlg::OAddTableDlg( Window* pParent,OJoinTableView* _pTableView)
+String TableListFacade::getSelectedName( String& _out_rAliasName ) const
+{
+    SvLBoxEntry* pEntry = m_rTableList.FirstSelected();
+    if ( !pEntry )
+        return String();
+
+    ::rtl::OUString aCatalog, aSchema, aTableName;
+    SvLBoxEntry* pSchema = m_rTableList.GetParent(pEntry);
+    if(pSchema && pSchema != m_rTableList.getAllObjectsEntry())
+    {
+        SvLBoxEntry* pCatalog = m_rTableList.GetParent(pSchema);
+        if(pCatalog && pCatalog != m_rTableList.getAllObjectsEntry())
+            aCatalog = m_rTableList.GetEntryText(pCatalog);
+        aSchema = m_rTableList.GetEntryText(pSchema);
+    }
+    aTableName = m_rTableList.GetEntryText(pEntry);
+
+    ::rtl::OUString aComposedName;
+    try
+    {
+        Reference< XDatabaseMetaData > xMeta( m_xConnection->getMetaData(), UNO_QUERY_THROW );
+        if (  !aCatalog.getLength()
+            && aSchema.getLength()
+            && xMeta->supportsCatalogsInDataManipulation()
+            && !xMeta->supportsSchemasInDataManipulation() )
+        {
+            aCatalog = aSchema;
+            aSchema = ::rtl::OUString();
+        }
+
+        aComposedName = ::dbtools::composeTableName(
+            xMeta, aCatalog, aSchema, aTableName, sal_False, ::dbtools::eInDataManipulation );
+    }
+    catch ( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+
+    _out_rAliasName = aTableName;
+    return aComposedName;
+}
+
+//------------------------------------------------------------------------------
+void TableListFacade::updateTableObjectList( bool _bAllowViews )
+{
+    m_rTableList.Clear();
+    try
+    {
+        Reference< XTablesSupplier > xTableSupp( m_xConnection, UNO_QUERY_THROW );
+        Reference< XViewsSupplier > xViewSupp;
+        Reference< XNameAccess > xTables, xViews;
+        Sequence< ::rtl::OUString > sTables, sViews;
+
+        xTables = xTableSupp->getTables();
+        if ( xTables.is() )
+            sTables = xTables->getElementNames();
+
+        xViewSupp.set( xTableSupp, UNO_QUERY );
+        if ( xViewSupp.is() )
+        {
+            xViews = xViewSupp->getViews();
+            if ( xViews.is() )
+                sViews = xViews->getElementNames();
+        }
+
+        // if no views are allowed remove the views also out the table name filter
+        if ( !_bAllowViews )
+        {
+            const ::rtl::OUString* pTableBegin  = sTables.getConstArray();
+            const ::rtl::OUString* pTableEnd    = pTableBegin + sTables.getLength();
+            ::std::vector< ::rtl::OUString > aTables(pTableBegin,pTableEnd);
+
+            const ::rtl::OUString* pViewBegin = sViews.getConstArray();
+            const ::rtl::OUString* pViewEnd   = pViewBegin + sViews.getLength();
+            ::comphelper::TStringMixEqualFunctor aEqualFunctor;
+            for(;pViewBegin != pViewEnd;++pViewBegin)
+                aTables.erase(::std::remove_if(aTables.begin(),aTables.end(),::std::bind2nd(aEqualFunctor,*pViewBegin)),aTables.end());
+            ::rtl::OUString* pTables = aTables.empty() ? 0 : &aTables[0];
+            sTables = Sequence< ::rtl::OUString>(pTables, aTables.size());
+            sViews = Sequence< ::rtl::OUString>();
+        }
+
+        m_rTableList.UpdateTableList( m_xConnection->getMetaData(), sTables, sViews );
+        SvLBoxEntry* pEntry = m_rTableList.First();
+        while( pEntry && m_rTableList.GetModel()->HasChilds( pEntry ) )
+        {
+            m_rTableList.Expand( pEntry );
+            pEntry = m_rTableList.Next( pEntry );
+        }
+        if ( pEntry )
+            m_rTableList.Select(pEntry);
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+}
+
+//------------------------------------------------------------------------------
+bool TableListFacade::isLeafSelected() const
+{
+    SvLBoxEntry* pEntry = m_rTableList.FirstSelected();
+    return pEntry && !m_rTableList.GetModel()->HasChilds( pEntry );
+}
+
+//==============================================================================
+//= QueryListFacade
+//==============================================================================
+class QueryListFacade : public TableObjectListFacade
+{
+    SvTreeListBox&              m_rQueryList;
+    Reference< XConnection >    m_xConnection;
+
+public:
+    QueryListFacade( SvTreeListBox& _rQueryList, const Reference< XConnection >& _rxConnection )
+        :m_rQueryList( _rQueryList )
+        ,m_xConnection( _rxConnection )
+    {
+    }
+
+    virtual void    updateTableObjectList( bool _bAllowViews );
+    virtual String  getSelectedName( String& _out_rAliasName ) const;
+    virtual bool    isLeafSelected() const;
+};
+
+//------------------------------------------------------------------------------
+void QueryListFacade::updateTableObjectList( bool /*_bAllowViews*/ )
+{
+    m_rQueryList.Clear();
+    try
+    {
+        Image aQueryImage( ModuleRes( QUERY_TREE_ICON ) );
+        Image aQueryImageHC( ModuleRes( QUERY_TREE_ICON_SCH ) );
+        m_rQueryList.SetDefaultExpandedEntryBmp( aQueryImage, BMP_COLOR_NORMAL );
+        m_rQueryList.SetDefaultCollapsedEntryBmp( aQueryImage, BMP_COLOR_NORMAL );
+        m_rQueryList.SetDefaultExpandedEntryBmp( aQueryImageHC, BMP_COLOR_HIGHCONTRAST );
+        m_rQueryList.SetDefaultCollapsedEntryBmp( aQueryImageHC, BMP_COLOR_HIGHCONTRAST );
+
+        Reference< XQueriesSupplier > xSuppQueries( m_xConnection, UNO_QUERY_THROW );
+        Reference< XNameAccess > xQueries( xSuppQueries->getQueries(), UNO_QUERY_THROW );
+        Sequence< ::rtl::OUString > aQueryNames = xQueries->getElementNames();
+
+        const ::rtl::OUString* pQuery = aQueryNames.getConstArray();
+        const ::rtl::OUString* pQueryEnd = aQueryNames.getConstArray() + aQueryNames.getLength();
+        while ( pQuery != pQueryEnd )
+            m_rQueryList.InsertEntry( *pQuery++ );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+}
+
+//------------------------------------------------------------------------------
+String QueryListFacade::getSelectedName( String& _out_rAliasName ) const
+{
+    String sSelected;
+    SvLBoxEntry* pEntry = m_rQueryList.FirstSelected();
+    if ( pEntry )
+        sSelected = _out_rAliasName = m_rQueryList.GetEntryText( pEntry );
+    return sSelected;
+}
+
+//------------------------------------------------------------------------------
+bool QueryListFacade::isLeafSelected() const
+{
+    SvLBoxEntry* pEntry = m_rQueryList.FirstSelected();
+    return pEntry && !m_rQueryList.GetModel()->HasChilds( pEntry );
+}
+
+//==============================================================================
+//= OAddTableDlg
+//==============================================================================
+//------------------------------------------------------------------------------
+OAddTableDlg::OAddTableDlg( Window* pParent, IAddTableDialogContext& _rContext )
              :ModelessDialog( pParent, ModuleRes(DLG_JOIN_TABADD) )
-             ,aFTTable( this, ResId( FT_TABLE ) )
-             ,aTableList( this, NULL, ResId( LB_TABLE ), sal_False )
+             ,m_aCaseTables( this, ResId( RB_CASE_TABLES ) )
+             ,m_aCaseQueries( this, ResId( RB_CASE_QUERIES ) )
+             ,m_aTableList( this, NULL, ResId( LB_TABLE_OR_QUERY ), sal_False )
+             ,m_aQueryList( this, ResId( LB_TABLE_OR_QUERY ) )
              ,aAddButton( this, ResId( PB_ADDTABLE ) )
              ,aCloseButton( this, ResId( PB_CLOSE ) )
              ,aHelpButton( this, ResId( PB_HELP ) )
-             ,aFixedLineTable( this, ResId( FL_TABLE ) )
-             ,aDefaultString( ResId( STR_DEFAULT ) )
-             ,m_pTableView(_pTableView)
-             ,m_bInitialized(sal_False)
+             ,m_rContext( _rContext )
 {
-    DBG_CTOR(OAddTableDlg,NULL);
-    OSL_ENSURE(_pTableView,"Must be a valid pointer!");
     // der Close-Button hat schon einen Standard-Help-Text, den ich aber hier nicht haben moechte, also den Text ruecksetzen
     // und eine neue ID verteilen
     aCloseButton.SetHelpText(String());
     aCloseButton.SetHelpId(HID_JOINSH_ADDTAB_CLOSE);
 
-    aTableList.SetHelpId(HID_JOINSH_ADDTAB_TABLELIST);
+    m_aTableList.SetHelpId( HID_JOINSH_ADDTAB_TABLELIST );
+    m_aQueryList.SetHelpId( HID_JOINSH_ADDTAB_QUERYLIST );
 
     //////////////////////////////////////////////////////////////////////
-    // Handler setzen
-    aAddButton.SetClickHdl( LINK(this,OAddTableDlg, AddClickHdl) );
-    aCloseButton.SetClickHdl( LINK(this,OAddTableDlg, CloseClickHdl) );
-    aTableList.SetDoubleClickHdl( LINK(this,OAddTableDlg, TableListDoubleClickHdl) );
-    aTableList.SetSelectHdl( LINK(this,OAddTableDlg, TableListSelectHdl) );
+    m_aCaseTables.SetClickHdl( LINK( this, OAddTableDlg, OnTypeSelected ) );
+    m_aCaseQueries.SetClickHdl( LINK( this, OAddTableDlg, OnTypeSelected ) );
+    aAddButton.SetClickHdl( LINK( this, OAddTableDlg, AddClickHdl ) );
+    aCloseButton.SetClickHdl( LINK( this, OAddTableDlg, CloseClickHdl ) );
+    m_aTableList.SetDoubleClickHdl( LINK( this, OAddTableDlg, TableListDoubleClickHdl ) );
+    m_aTableList.SetSelectHdl( LINK( this, OAddTableDlg, TableListSelectHdl ) );
+    m_aQueryList.SetDoubleClickHdl( LINK( this, OAddTableDlg, TableListDoubleClickHdl ) );
+    m_aQueryList.SetSelectHdl( LINK( this, OAddTableDlg, TableListSelectHdl ) );
 
-    aTableList.EnableInplaceEditing( FALSE );
-    aTableList.SetWindowBits(WB_BORDER | WB_HASLINES |WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HASLINESATROOT | WB_SORT | WB_HSCROLL );
-    aTableList.EnableCheckButton( NULL ); // do not show any buttons
-    aTableList.SetSelectionMode( SINGLE_SELECTION );
-    aTableList.notifyHiContrastChanged();
+    //////////////////////////////////////////////////////////////////////
+    m_aTableList.EnableInplaceEditing( FALSE );
+    m_aTableList.SetWindowBits(WB_BORDER | WB_HASLINES |WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HASLINESATROOT | WB_SORT | WB_HSCROLL );
+    m_aTableList.EnableCheckButton( NULL ); // do not show any buttons
+    m_aTableList.SetSelectionMode( SINGLE_SELECTION );
+    m_aTableList.notifyHiContrastChanged();
+
+    //////////////////////////////////////////////////////////////////////
+    m_aQueryList.EnableInplaceEditing( FALSE );
+    m_aQueryList.SetSelectionMode( SINGLE_SELECTION );
+
+    //////////////////////////////////////////////////////////////////////
+    if ( !m_rContext.allowQueries() )
+    {
+        m_aCaseTables.Hide();
+        m_aCaseQueries.Hide();
+
+        long nPixelDiff = m_aTableList.GetPosPixel().Y() - m_aCaseTables.GetPosPixel().Y();
+
+        Point aListPos( m_aTableList.GetPosPixel() );
+        aListPos.Y() -= nPixelDiff;
+
+        Size aListSize( m_aTableList.GetSizePixel() );
+        aListSize.Height() += nPixelDiff;
+
+        m_aTableList.SetPosSizePixel( aListPos, aListSize );
+    }
 
     FreeResource();
+
+    SetText( getDialogTitleForContext( m_rContext ) );
 }
 
 //------------------------------------------------------------------------------
 OAddTableDlg::~OAddTableDlg()
 {
-    DBG_DTOR(OAddTableDlg,NULL);
-    ::dbaui::notifySystemWindow(m_pTableView->getDesignView(),this,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
+    m_rContext.onWindowClosing( this );
+}
+
+//------------------------------------------------------------------------------
+void OAddTableDlg::impl_switchTo( ObjectList _eList )
+{
+    switch ( _eList )
+    {
+    case Tables:
+        m_aTableList.Show( TRUE );  m_aCaseTables.Check( TRUE );
+        m_aQueryList.Show( FALSE ); m_aCaseQueries.Check( FALSE );
+        m_pCurrentList.reset( new TableListFacade( m_aTableList, m_rContext.getConnection() ) );
+        m_aTableList.GrabFocus();
+        break;
+
+    case Queries:
+        m_aTableList.Show( FALSE ); m_aCaseTables.Check( FALSE );
+        m_aQueryList.Show( TRUE );  m_aCaseQueries.Check( TRUE );
+        m_pCurrentList.reset( new QueryListFacade( m_aQueryList, m_rContext.getConnection() ) );
+        m_aQueryList.GrabFocus();
+        break;
+    }
+    m_pCurrentList->updateTableObjectList( m_rContext.allowViews() );
 }
 
 //------------------------------------------------------------------------------
 void OAddTableDlg::Update()
 {
-    if(!m_bInitialized)
-    {
-        UpdateTableList(m_pTableView->getDesignView()->getController()->isViewAllowed());
-        m_bInitialized = sal_True;
-    }
+    if ( !m_pCurrentList.get() )
+        impl_switchTo( Tables );
+    else
+        m_pCurrentList->updateTableObjectList( m_rContext.allowViews() );
 }
 
 //------------------------------------------------------------------------------
-void OAddTableDlg::AddTable()
+void OAddTableDlg::impl_addTable()
 {
-    //////////////////////////////////////////////////////////////////
-    // Tabelle hinzufuegen
-    SvLBoxEntry* pEntry = aTableList.FirstSelected();
-    if( pEntry && !aTableList.GetModel()->HasChilds(pEntry))
+    if ( m_pCurrentList->isLeafSelected() )
     {
-        ::rtl::OUString aCatalog,aSchema,aTableName;
-        SvLBoxEntry* pSchema = aTableList.GetParent(pEntry);
-        if(pSchema && pSchema != aTableList.getAllObjectsEntry())
-        {
-            SvLBoxEntry* pCatalog = aTableList.GetParent(pSchema);
-            if(pCatalog && pCatalog != aTableList.getAllObjectsEntry())
-                aCatalog = aTableList.GetEntryText(pCatalog);
-            aSchema = aTableList.GetEntryText(pSchema);
-        }
-        aTableName = aTableList.GetEntryText(pEntry);
+        String sSelectedName, sAliasName;
+        sSelectedName = m_pCurrentList->getSelectedName( sAliasName );
 
-        ::rtl::OUString aComposedName;
-        try
-        {
-            Reference<XDatabaseMetaData> xMeta = m_pTableView->getDesignView()->getController()->getConnection()->getMetaData();
-            // den Datenbank-Namen besorgen
-            if (  !aCatalog.getLength()
-                && aSchema.getLength()
-                && xMeta->supportsCatalogsInDataManipulation()
-                && !xMeta->supportsSchemasInDataManipulation() )
-            {
-                aCatalog = aSchema;
-                aSchema = ::rtl::OUString();
-            }
-
-
-
-            ::dbtools::composeTableName(xMeta,
-                                        aCatalog,
-                                        aSchema,
-                                        aTableName,
-                                        aComposedName,
-                                        sal_False,
-                                        ::dbtools::eInDataManipulation);
-        }
-        catch(const Exception&)
-        {
-            OSL_ENSURE(0,"Exception catched!");
-        }
-        // aOrigTableName is used because AddTabWin would like to have this
-        // und das Ganze dem Container uebergeben
-        m_pTableView->AddTabWin( aComposedName,aTableName, TRUE );
+        m_rContext.addTableWindow( sSelectedName, sAliasName );
     }
 }
 
@@ -210,23 +429,24 @@ IMPL_LINK( OAddTableDlg, AddClickHdl, Button*, /*pButton*/ )
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK( OAddTableDlg, TableListDoubleClickHdl, ListBox *, /*EMPTY_ARG*/ )
+IMPL_LINK( OAddTableDlg, TableListDoubleClickHdl, void*, /*EMPTY_ARG*/ )
 {
-    if (IsAddAllowed())
-        AddTable();
+    if ( impl_isAddAllowed() )
+        impl_addTable();
 
-    if (!IsAddAllowed())
+    if ( !impl_isAddAllowed() )
         Close();
 
     return 0;
 }
+
 //------------------------------------------------------------------------------
-IMPL_LINK( OAddTableDlg, TableListSelectHdl, ListBox *, /*EMPTY_ARG*/ )
+IMPL_LINK( OAddTableDlg, TableListSelectHdl, void*, /*EMPTY_ARG*/ )
 {
-    SvLBoxEntry* pEntry = aTableList.FirstSelected();
-    aAddButton.Enable( pEntry && !aTableList.GetModel()->HasChilds(pEntry) );
+    aAddButton.Enable( m_pCurrentList->isLeafSelected() );
     return 0;
 }
+
 //------------------------------------------------------------------------------
 IMPL_LINK( OAddTableDlg, CloseClickHdl, Button*, /*pButton*/ )
 {
@@ -234,69 +454,41 @@ IMPL_LINK( OAddTableDlg, CloseClickHdl, Button*, /*pButton*/ )
 }
 
 //------------------------------------------------------------------------------
+IMPL_LINK( OAddTableDlg, OnTypeSelected, void*, /*EMPTY_ARG*/ )
+{
+    if ( m_aCaseTables.IsChecked() )
+        impl_switchTo( Tables );
+    else
+        impl_switchTo( Queries );
+    return 0;
+}
+
+//------------------------------------------------------------------------------
 BOOL OAddTableDlg::Close()
 {
-    ::dbaui::notifySystemWindow(m_pTableView->getDesignView(),this,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
-    m_pTableView->getDesignView()->getController()->InvalidateFeature(ID_BROWSER_ADDTABLE);
-    m_pTableView->getDesignView()->getController()->getView()->GrabFocus();
+    m_rContext.onWindowClosing( this );
     return ModelessDialog::Close();
 }
 
 //------------------------------------------------------------------------------
-BOOL OAddTableDlg::IsAddAllowed()
+bool OAddTableDlg::impl_isAddAllowed()
 {
-    return  m_pTableView && m_pTableView->IsAddAllowed();
+    return  m_rContext.allowAddition();
 }
 
 //------------------------------------------------------------------------------
-void OAddTableDlg::UpdateTableList(BOOL bViewsAllowed)
+String OAddTableDlg::getDialogTitleForContext( IAddTableDialogContext& _rContext )
 {
-    //////////////////////////////////////////////////////////////////////
-    // Datenbank- und Tabellennamen setzen
-    Reference< XTablesSupplier > xTableSupp(m_pTableView->getDesignView()->getController()->getConnection(),UNO_QUERY);
-    Reference< XViewsSupplier > xViewSupp;
-    Reference< XNameAccess > xTables, xViews;
+    String sTitle;
 
-    xTables = xTableSupp->getTables();
+    ::svt::OLocalResourceAccess aLocalRes( ModuleRes( DLG_JOIN_TABADD ), RSC_MODELESSDIALOG );
+    if ( _rContext.allowQueries() )
+        sTitle = String( ResId( STR_ADD_TABLE_OR_QUERY ) );
+    else
+        sTitle = String( ResId( STR_ADD_TABLES ) );
 
-    // get the views supplier and the views
-    Sequence< ::rtl::OUString> sTables,sViews;
-    if (xTables.is())
-        sTables = xTables->getElementNames();
-
-    xViewSupp.set(xTableSupp,UNO_QUERY);
-    if (xViewSupp.is())
-    {
-        xViews = xViewSupp->getViews();
-        if (xViews.is())
-            sViews = xViews->getElementNames();
-    }
-    // if no views are allowed remove the views also out the table name filter
-    if ( !bViewsAllowed )
-    {
-        const ::rtl::OUString* pTableBegin  = sTables.getConstArray();
-        const ::rtl::OUString* pTableEnd    = pTableBegin + sTables.getLength();
-        ::std::vector< ::rtl::OUString > aTables(pTableBegin,pTableEnd);
-
-        const ::rtl::OUString* pViewBegin = sViews.getConstArray();
-        const ::rtl::OUString* pViewEnd   = pViewBegin + sViews.getLength();
-        ::comphelper::TStringMixEqualFunctor aEqualFunctor;
-        for(;pViewBegin != pViewEnd;++pViewBegin)
-            aTables.erase(::std::remove_if(aTables.begin(),aTables.end(),::std::bind2nd(aEqualFunctor,*pViewBegin)),aTables.end());
-        ::rtl::OUString* pTables = aTables.empty() ? 0 : &aTables[0];
-        sTables = Sequence< ::rtl::OUString>(pTables, aTables.size());
-        sViews = Sequence< ::rtl::OUString>();
-    }
-
-    aTableList.UpdateTableList(Reference< XConnection>(xTableSupp,UNO_QUERY)->getMetaData(),sTables,sViews);
-    SvLBoxEntry* pEntry = aTableList.First();
-    while( pEntry && aTableList.GetModel()->HasChilds(pEntry))
-    {
-        aTableList.Expand(pEntry);
-        pEntry = aTableList.Next(pEntry);
-    }
-    if ( pEntry )
-        aTableList.Select(pEntry);
+    return sTitle;
 }
+
 // -----------------------------------------------------------------------------
 
