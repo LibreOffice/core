@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.144 $
+ *  $Revision: 1.145 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:35:33 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:03:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,9 @@
 #endif
 #ifndef _CPPUHELPER_INTERFACECONTAINER_H_
 #include <cppuhelper/interfacecontainer.h>
+#endif
+#ifndef _CPPUHELPER_EXC_HLP_HXX_
+#include <cppuhelper/exc_hlp.hxx>
 #endif
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
@@ -131,11 +134,11 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
+#endif
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
-#endif
-#ifndef DBACCESS_CORE_API_SINGLESELECTQUERYCOMPOSER_HXX
-#include "SingleSelectQueryComposer.hxx"
 #endif
 #ifndef _DBA_CORE_TABLECONTAINER_HXX_
 #include "tablecontainer.hxx"
@@ -205,7 +208,7 @@ namespace
 {
     static void throwRowSetVetoException( const Reference< XInterface >& _rSource, const sal_Char* _pAsciiMessage )
     {
-        // TODO: localize the message
+        // TODO: resource (localize the message)
         RowSetVetoException aException;
         aException.Message = ::rtl::OUString::createFromAscii( _pAsciiMessage );
         aException.Context = _rSource;
@@ -680,7 +683,6 @@ void ORowSet::freeResources()
         // dispose the composer to avoid that everbody knows that the querycomposer is eol
         try
         {
-            m_xAnalyzer = NULL;
             ::comphelper::disposeComponent(m_xComposer);
         }
         catch(Exception&)
@@ -1101,14 +1103,19 @@ void SAL_CALL ORowSet::deleteRow(  ) throw(SQLException, RuntimeException)
 
     if ( m_bBeforeFirst || m_bAfterLast )
         throwSQLException( "Cannot delete the before-first or after-last row.", SQL_INVALID_CURSOR_POSITION, *this );
+        // TODO: resource
     if ( m_bNew )
         throwSQLException( "Cannot delete the insert-row.", SQL_INVALID_CURSOR_POSITION, *this );
+        // TODO: resource
     if  ( m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY )
         throwSQLException( "Result set is read only.", SQL_FUNCTION_SEQUENCE_ERROR, *this );
+        // TODO: resource
     if ( ( m_pCache->m_nPrivileges & Privilege::DELETE ) != Privilege::DELETE )
         throwSQLException( "DELETE privilege not available.", SQL_FUNCTION_SEQUENCE_ERROR, *this );
+        // TODO: resource
     if ( rowDeleted() )
         throwSQLException( "Current row already deleted.", SQL_FUNCTION_SEQUENCE_ERROR, *this );
+        // TODO: resource
 
     // this call position the cache indirect
     Any aBookmarkToDelete( m_aBookmark );
@@ -1239,6 +1246,7 @@ void ORowSet::notifyAllListenersRowBeforeChange(::osl::ResettableMutexGuard& _rG
     NOTIFY_LISTERNERS_CHECK(m_aApproveListeners,XRowSetApproveListener,approveRowChange);
     if ( !bCheck )
         throwRowSetVetoException( *this, "The record operation has been vetoed." );
+        // TODO: resource
 }
 // -------------------------------------------------------------------------
 void ORowSet::fireRowcount()
@@ -1273,6 +1281,7 @@ void SAL_CALL ORowSet::moveToInsertRow(  ) throw(SQLException, RuntimeException)
     checkPositioningAllowed();
     if ( ( m_pCache->m_nPrivileges & Privilege::INSERT ) != Privilege::INSERT )
         throwSQLException( "No insert privileges", SQL_GENERAL_ERROR, *this );
+        // TODO: resource
 
     if ( notifyAllListenersCursorBeforeMove( aGuard ) )
     {
@@ -1339,6 +1348,7 @@ void SAL_CALL ORowSet::moveToCurrentRow(  ) throw(SQLException, RuntimeException
         // our current row should not be deleted anymore. So, we should not have survived the above
         // check "if ( !m_pCache->m_bInserted && !m_bModified )"
         throwSQLException( "The current row is deleted.", SQL_FUNCTION_SEQUENCE_ERROR, *this );
+        // TODO: resource
 
     if ( notifyAllListenersCursorBeforeMove( aGuard ) )
     {
@@ -1634,278 +1644,286 @@ void ORowSet::setStatementResultSetType( const Reference< XPropertySet >& _rxSta
 }
 
 // -----------------------------------------------------------------------------
-// XRowSet
+Reference< XResultSet > ORowSet::impl_prepareAndExecute_throw()
+{
+    sal_Bool bUseEscapeProcessing = impl_buildActiveCommand_throw( );
+    ::rtl::OUString sCommandToExecute( m_aActiveCommand );
+    if ( bUseEscapeProcessing )
+        sCommandToExecute = impl_getComposedQuery_throw( true );
+
+    Reference< XResultSet> xResultSet;
+    try
+    {
+        m_xStatement = m_xActiveConnection->prepareStatement( sCommandToExecute );
+        if ( !m_xStatement.is() )
+        {
+            SQLException aError;
+            aError.Context = *this;
+            aError.SQLState = getStandardSQLState( SQL_GENERAL_ERROR );
+            aError.Message = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Internal error: no statement object provided by the database driver." ) );
+                // TODO: resource
+            throw aError;
+        }
+
+        Reference< XPropertySet > xStatementProps( m_xStatement, UNO_QUERY_THROW );
+        // set the result set type and concurrency
+        try
+        {
+            xStatementProps->setPropertyValue( PROPERTY_USEBOOKMARKS, makeAny( sal_True ) );
+            setStatementResultSetType( xStatementProps, m_nResultSetType, m_nResultSetConcurrency );
+        }
+        catch(Exception&)
+        {
+            // this exception doesn't matter here because when we catch an exception
+            // then the driver doesn't support this feature
+        }
+
+        Reference< XParameters > xParam( m_xStatement, UNO_QUERY_THROW );
+        sal_Int32 index = 1;
+        for (   ORowVector< ORowSetValue >::const_iterator aParam = m_aParameterRow.begin();
+                aParam != m_aParameterRow.end();
+                ++aParam, ++index )
+        {
+            ::dbtools::setObjectWithInfo( xParam, index, aParam->makeAny(), aParam->getTypeKind() );
+        }
+
+        xResultSet = m_xStatement->executeQuery();
+    }
+    catch( const SQLException& )
+    {
+        SQLExceptionInfo aError( ::cppu::getCaughtException() );
+        OSL_ENSURE( aError.isValid(), "ORowSet::execute_NoApprove_NoNewConn: caught an SQLException which we cannot analyze!" );
+
+        String sInfo( DBA_RES_PARAM( RID_STR_COMMAND_LEADING_TO_ERROR, "$command$", impl_getComposedQuery_throw( false ) ) );
+        aError.append( SQLExceptionInfo::SQL_CONTEXT, sInfo );
+
+        aError.doThrow();
+    }
+
+    return xResultSet;
+}
+
+// -----------------------------------------------------------------------------
 void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotification)
 {
     // now we can dispose our old connection
     ::comphelper::disposeComponent(m_xOldConnection);
     m_xOldConnection = NULL;
 
-    ::rtl::OUString aSql;
     // do we need a new statement
     if (m_bCreateStatement)
     {
         m_xStatement    = NULL;
         m_xComposer     = NULL;
-        m_xAnalyzer     = NULL;
 
-        // Build the statement
-        sal_Bool bUseEscapeProcessing;
-        Reference< ::com::sun::star::container::XNameAccess > xTables;
-        // xTables will be filled in getCommand
-        m_aActiveCommand = getCommand(bUseEscapeProcessing,xTables);
-        if (!m_aActiveCommand.getLength())
-            throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Empty command submitted!")),*this);
+        Reference< XResultSet > xResultSet( impl_prepareAndExecute_throw() );
 
+        ::rtl::OUString aComposedUpdateTableName;
+        if ( m_aUpdateTableName.getLength() )
+            aComposedUpdateTableName = composeTableName( m_xActiveConnection->getMetaData(), m_aUpdateCatalogName, m_aUpdateSchemaName, m_aUpdateTableName, sal_False, ::dbtools::eInDataManipulation );
+
+        m_pCache = new ORowSetCache(xResultSet,m_xComposer.get(),m_xServiceManager,aComposedUpdateTableName,m_bModified,m_bNew);
+        if ( m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY )
         {
-            m_xStatement = m_xActiveConnection->prepareStatement(
-                                        aSql = getComposedQuery(m_aActiveCommand, bUseEscapeProcessing,xTables));
+            m_nPrivileges = Privilege::SELECT;
+            m_pCache->m_nPrivileges = Privilege::SELECT;
+        }
+        m_pCache->setMaxRowSize(m_nFetchSize);
+        m_aCurrentRow   = m_pCache->createIterator(this);
+        m_aOldRow = m_pCache->registerOldRow();
+        // now we can clear the parameter row
+        m_aParameterRow.clear();
 
-            if(m_xStatement.is())
+        // get the locale
+        //  ConfigManager*  pConfigMgr = ConfigManager::GetConfigManager();
+        Locale aLocale = SvtSysLocale().GetLocaleData().getLocale();
+        //  pConfigMgr->GetDirectConfigProperty(ConfigManager::LOCALE) >>= aLocale;
+
+        // get the numberformatTypes
+        OSL_ENSURE(m_xActiveConnection.is(),"No ActiveConnection");
+        Reference< XNumberFormatTypes> xNumberFormatTypes;
+        Reference< XNumberFormatsSupplier> xNumberFormat = ::dbtools::getNumberFormats(m_xActiveConnection);
+        if ( xNumberFormat.is() )
+            m_xNumberFormatTypes.set(xNumberFormat->getNumberFormats(),UNO_QUERY);
+
+        ::vos::ORef< ::connectivity::OSQLColumns> aColumns = new ::connectivity::OSQLColumns();
+        ::std::vector< ::rtl::OUString> aNames;
+        ::rtl::OUString aDescription;
+        sal_Int32 nFormatKey = 0;
+
+        if(!m_xColumns.is())
+        {
+            // use the meta data
+            Reference<XResultSetMetaDataSupplier> xMetaSup(m_xStatement,UNO_QUERY);
+            try
             {
-                Reference<XPropertySet> xProp(m_xStatement,UNO_QUERY);
-
-                // set the result set type and concurrency
-                try
+                Reference<XResultSetMetaData> xMetaData = xMetaSup->getMetaData();
+                if ( xMetaData.is() )
                 {
-                    xProp->setPropertyValue( PROPERTY_USEBOOKMARKS, makeAny( sal_True ) );
-                    setStatementResultSetType( xProp, m_nResultSetType, m_nResultSetConcurrency );
-                }
-                catch(Exception&)
-                {
-                    // this exception doesn't matter here because when we catch an exception
-                    // then the driver doesn't support this feature
-                }
-                //  xProp->setPropertyValue(PROPERTY_RESULTSETTYPE,makeAny(m_nResultSetType));
-                //  xProp->setPropertyValue(PROPERTY_RESULTSETCONCURRENCY,makeAny(m_nResultSetConcurrency));
-                //  if(m_nFetchDirection != FetchDirection::FORWARD)
-                    //  xProp->setPropertyValue(PROPERTY_FETCHDIRECTION,makeAny((sal_Int32)m_nFetchDirection));
-
-                {
-                    Reference<XParameters> xParam(m_xStatement,UNO_QUERY);
-                    sal_Int32 index = 1;
-                    for(ORowVector< ORowSetValue >::const_iterator aIter = m_aParameterRow.begin(); aIter != m_aParameterRow.end();++aIter,++index)
+                    sal_Int32 nCount = xMetaData->getColumnCount();
+                    m_aDataColumns.reserve(nCount+1);
+                    aColumns->reserve(nCount+1);
+                    DECLARE_STL_USTRINGACCESS_MAP(int,StringMap);
+                    StringMap aColumnMap;
+                    for (sal_Int32 i = 0 ; i < nCount; ++i)
                     {
-                        ::dbtools::setObjectWithInfo(xParam,index,aIter->makeAny(),aIter->getTypeKind());
-                    }
+                        // retrieve the name of the column
+                        ::rtl::OUString sName = xMetaData->getColumnName(i + 1);
+                        // check for duplicate entries
+                        if(aColumnMap.find(sName) != aColumnMap.end())
+                        {
+                            ::rtl::OUString sAlias(sName);
+                            sal_Int32 searchIndex=1;
+                            while(aColumnMap.find(sAlias) != aColumnMap.end())
+                            {
+                                (sAlias = sName) += ::rtl::OUString::valueOf(searchIndex++);
+                            }
+                            sName = sAlias;
+                        }
+                        ORowSetDataColumn* pColumn = new ORowSetDataColumn( getMetaData(),
+                                                                            this,
+                                                                            this,
+                                                                            i+1,
+                                                                            m_xActiveConnection->getMetaData(),
+                                                                            aDescription,
+                                                                            m_aCurrentRow);
+                        aColumnMap.insert(StringMap::value_type(sName,0));
+                        aColumns->push_back(pColumn);
+                        pColumn->setName(sName);
+                        aNames.push_back(sName);
+                        m_aDataColumns.push_back(pColumn);
 
-                    Reference< XResultSet> xRs = m_xStatement->executeQuery();
-                    // create the composed table name
-                    ::rtl::OUString aComposedTableName;
-                    if(m_aUpdateTableName.getLength())
-                        composeTableName(m_xActiveConnection->getMetaData(),m_aUpdateCatalogName,m_aUpdateSchemaName,m_aUpdateTableName,aComposedTableName,sal_False,::dbtools::eInDataManipulation);
-
-                    m_pCache = new ORowSetCache(xRs,m_xAnalyzer,m_xServiceManager,aComposedTableName,m_bModified,m_bNew);
-                    if ( m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY )
-                    {
-                        m_nPrivileges = Privilege::SELECT;
-                        m_pCache->m_nPrivileges = Privilege::SELECT;
-                    }
-                    m_pCache->setMaxRowSize(m_nFetchSize);
-                    m_aCurrentRow   = m_pCache->createIterator(this);
-                    m_aOldRow = m_pCache->registerOldRow();
-                    // now we can clear the parameter row
-                    m_aParameterRow.clear();
-
-                    // get the locale
-                    //  ConfigManager*  pConfigMgr = ConfigManager::GetConfigManager();
-                    Locale aLocale = SvtSysLocale().GetLocaleData().getLocale();
-                    //  pConfigMgr->GetDirectConfigProperty(ConfigManager::LOCALE) >>= aLocale;
-
-                    // get the numberformatTypes
-                    OSL_ENSURE(m_xActiveConnection.is(),"No ActiveConnection");
-                    Reference< XNumberFormatTypes> xNumberFormatTypes;
-                    Reference< XNumberFormatsSupplier> xNumberFormat = ::dbtools::getNumberFormats(m_xActiveConnection);
-                    if ( xNumberFormat.is() )
-                        m_xNumberFormatTypes.set(xNumberFormat->getNumberFormats(),UNO_QUERY);
-
-                    ::vos::ORef< ::connectivity::OSQLColumns> aColumns = new ::connectivity::OSQLColumns();
-                    ::std::vector< ::rtl::OUString> aNames;
-                    ::rtl::OUString aDescription;
-                    sal_Int32 nFormatKey = 0;
-
-                    if(!m_xColumns.is())
-                    {
-                        // use the meta data
-                        Reference<XResultSetMetaDataSupplier> xMetaSup(m_xStatement,UNO_QUERY);
                         try
                         {
-                            Reference<XResultSetMetaData> xMetaData = xMetaSup->getMetaData();
-                            if ( xMetaData.is() )
-                            {
-                                sal_Int32 nCount = xMetaData->getColumnCount();
-                                m_aDataColumns.reserve(nCount+1);
-                                aColumns->reserve(nCount+1);
-                                DECLARE_STL_USTRINGACCESS_MAP(int,StringMap);
-                                StringMap aColumnMap;
-                                for (sal_Int32 i = 0 ; i < nCount; ++i)
-                                {
-                                    // retrieve the name of the column
-                                    ::rtl::OUString sName = xMetaData->getColumnName(i + 1);
-                                    // check for duplicate entries
-                                    if(aColumnMap.find(sName) != aColumnMap.end())
-                                    {
-                                        ::rtl::OUString sAlias(sName);
-                                        sal_Int32 searchIndex=1;
-                                        while(aColumnMap.find(sAlias) != aColumnMap.end())
-                                        {
-                                            (sAlias = sName) += ::rtl::OUString::valueOf(searchIndex++);
-                                        }
-                                        sName = sAlias;
-                                    }
-                                    ORowSetDataColumn* pColumn = new ORowSetDataColumn( getMetaData(),
-                                                                                        this,
-                                                                                        this,
-                                                                                        i+1,
-                                                                                        m_xActiveConnection->getMetaData(),
-                                                                                        aDescription,
-                                                                                        m_aCurrentRow);
-                                    aColumnMap.insert(StringMap::value_type(sName,0));
-                                    aColumns->push_back(pColumn);
-                                    pColumn->setName(sName);
-                                    aNames.push_back(sName);
-                                    m_aDataColumns.push_back(pColumn);
-
-                                    try
-                                    {
-                                        nFormatKey = 0;
-                                        if(m_xNumberFormatTypes.is())
-                                            nFormatKey = ::dbtools::getDefaultNumberFormat(pColumn,m_xNumberFormatTypes,aLocale);
+                            nFormatKey = 0;
+                            if(m_xNumberFormatTypes.is())
+                                nFormatKey = ::dbtools::getDefaultNumberFormat(pColumn,m_xNumberFormatTypes,aLocale);
 
 
-                                        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_NUMBERFORMAT,makeAny(nFormatKey));
-                                        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_RELATIVEPOSITION,makeAny(sal_Int32(i+1)));
-                                        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_WIDTH,makeAny(sal_Int32(227)));
-                                        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_ALIGN,makeAny((sal_Int32)0));
-                                        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_HIDDEN,::cppu::bool2any(sal_False));
-                                    }
-                                    catch(Exception&)
-                                    {
-                                    }
-                                }
-                            }
+                            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_NUMBERFORMAT,makeAny(nFormatKey));
+                            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_RELATIVEPOSITION,makeAny(sal_Int32(i+1)));
+                            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_WIDTH,makeAny(sal_Int32(227)));
+                            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_ALIGN,makeAny((sal_Int32)0));
+                            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_HIDDEN,::cppu::bool2any(sal_False));
                         }
-                        catch (SQLException&)
+                        catch(Exception&)
                         {
                         }
-                    }
-                    else
-                    {
-                        // create the rowset columns
-                        Reference<XResultSetMetaData> xMeta = getMetaData();
-                        if ( xMeta.is() )
-                        {
-                            sal_Int32 nCount = xMeta->getColumnCount();
-                            m_aDataColumns.reserve(nCount+1);
-                            aColumns->reserve(nCount+1);
-                            ::std::map<Reference<XPropertySet>,int> aColumnMap; // need to find duplicates
-
-                            for(sal_Int32 i=1; i <= nCount ;++i)
-                            {
-                                sal_Bool bReFetchName = sal_False;
-                                ::rtl::OUString sName = xMeta->getColumnName(i);
-                                Reference<XPropertySet> xColumn;
-                                if (m_xColumns->hasByName(sName))
-                                    m_xColumns->getByName(sName) >>= xColumn;
-                                if (!xColumn.is() && m_xColumns->hasByName(xMeta->getColumnLabel(i)))
-                                    m_xColumns->getByName(xMeta->getColumnLabel(i)) >>= xColumn;
-                                // check if column already in the list we need another
-                                if(aColumnMap.find(xColumn) != aColumnMap.end())
-                                {
-                                    xColumn = NULL;
-                                    bReFetchName = sal_True;
-                                }
-                                if(!xColumn.is())
-                                {
-                                    // no column found so we could look at the position i
-                                    Reference<XIndexAccess> xIndexAccess(m_xColumns,UNO_QUERY);
-                                    if(xIndexAccess.is() && i <= xIndexAccess->getCount())
-                                    {
-                                        xIndexAccess->getByIndex(i-1) >>= xColumn;
-                                    }
-                                    else
-                                    {
-                                        Sequence< ::rtl::OUString> aSeq = m_xColumns->getElementNames();
-                                        if( i <= aSeq.getLength())
-                                            m_xColumns->getByName(aSeq.getConstArray()[i-1]) >>= xColumn;
-                                    }
-                                }
-                                if(bReFetchName && xColumn.is())
-                                    xColumn->getPropertyValue(PROPERTY_NAME) >>= sName;
-                                aColumnMap.insert(::std::map< Reference<XPropertySet>,int>::value_type(xColumn,0));
-
-                                Reference<XPropertySetInfo> xInfo = xColumn.is() ? xColumn->getPropertySetInfo() : Reference<XPropertySetInfo>();
-                                if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_DESCRIPTION))
-                                    aDescription = comphelper::getString(xColumn->getPropertyValue(PROPERTY_DESCRIPTION));
-
-                                ORowSetDataColumn* pColumn = new ORowSetDataColumn( getMetaData(),
-                                                                                    this,
-                                                                                    this,
-                                                                                    i,
-                                                                                    m_xActiveConnection->getMetaData(),
-                                                                                    aDescription,
-                                                                                    m_aCurrentRow);
-                                aColumns->push_back(pColumn);
-                                if(!sName.getLength())
-                                {
-                                    if(xColumn.is())
-                                        xColumn->getPropertyValue(PROPERTY_NAME) >>= sName;
-                                    else
-                                        sName = ::rtl::OUString::createFromAscii("Expression1");
-                                }
-                                pColumn->setName(sName);
-                                aNames.push_back(sName);
-                                m_aDataColumns.push_back(pColumn);
-
-                                try
-                                {
-                                    if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_ALIGN))
-                                        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_ALIGN,xColumn->getPropertyValue(PROPERTY_ALIGN));
-
-                                    nFormatKey = 0;
-                                    if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_NUMBERFORMAT))
-                                        nFormatKey = comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_NUMBERFORMAT));
-                                    if (!nFormatKey && xColumn.is() && m_xNumberFormatTypes.is())
-                                        nFormatKey = ::dbtools::getDefaultNumberFormat(xColumn,m_xNumberFormatTypes,aLocale);
-
-                                    pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_NUMBERFORMAT,makeAny(nFormatKey));
-                                    if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_RELATIVEPOSITION))
-                                        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_RELATIVEPOSITION,xColumn->getPropertyValue(PROPERTY_RELATIVEPOSITION));
-                                    if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_WIDTH))
-                                        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_WIDTH,xColumn->getPropertyValue(PROPERTY_WIDTH));
-                                    if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_HIDDEN))
-                                        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_HIDDEN,xColumn->getPropertyValue(PROPERTY_HIDDEN));
-                                    if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_CONTROLMODEL))
-                                        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_CONTROLMODEL,xColumn->getPropertyValue(PROPERTY_CONTROLMODEL));
-                                    if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_HELPTEXT))
-                                        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_HELPTEXT,xColumn->getPropertyValue(PROPERTY_HELPTEXT));
-                                    if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_CONTROLDEFAULT))
-                                        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_CONTROLDEFAULT,xColumn->getPropertyValue(PROPERTY_CONTROLDEFAULT));
-                                }
-                                catch(Exception&)
-                                {
-                                }
-                            }
-                        }
-                    }
-                    // now create the columns we need
-                    if(m_pColumns)
-                        m_pColumns->assign(aColumns,aNames);
-                    else
-                    {
-                        Reference<XDatabaseMetaData> xMeta = m_xActiveConnection->getMetaData();
-                        m_pColumns = new ORowSetDataColumns(xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers(),
-                                                            aColumns,*this,m_aColumnsMutex,aNames);
                     }
                 }
             }
-            else
+            catch (SQLException&)
             {
-                ::rtl::OUString sErrorMsg(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("The command '")));
-                sErrorMsg += aSql;
-                sErrorMsg += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("' did not succeed."));
-                throwGenericSQLException(sErrorMsg,*this);
             }
+        }
+        else
+        {
+            // create the rowset columns
+            Reference<XResultSetMetaData> xMeta = getMetaData();
+            if ( xMeta.is() )
+            {
+                sal_Int32 nCount = xMeta->getColumnCount();
+                m_aDataColumns.reserve(nCount+1);
+                aColumns->reserve(nCount+1);
+                ::std::map<Reference<XPropertySet>,int> aColumnMap; // need to find duplicates
+
+                for(sal_Int32 i=1; i <= nCount ;++i)
+                {
+                    sal_Bool bReFetchName = sal_False;
+                    ::rtl::OUString sName = xMeta->getColumnName(i);
+                    Reference<XPropertySet> xColumn;
+                    if (m_xColumns->hasByName(sName))
+                        m_xColumns->getByName(sName) >>= xColumn;
+                    if (!xColumn.is() && m_xColumns->hasByName(xMeta->getColumnLabel(i)))
+                        m_xColumns->getByName(xMeta->getColumnLabel(i)) >>= xColumn;
+                    // check if column already in the list we need another
+                    if(aColumnMap.find(xColumn) != aColumnMap.end())
+                    {
+                        xColumn = NULL;
+                        bReFetchName = sal_True;
+                    }
+                    if(!xColumn.is())
+                    {
+                        // no column found so we could look at the position i
+                        Reference<XIndexAccess> xIndexAccess(m_xColumns,UNO_QUERY);
+                        if(xIndexAccess.is() && i <= xIndexAccess->getCount())
+                        {
+                            xIndexAccess->getByIndex(i-1) >>= xColumn;
+                        }
+                        else
+                        {
+                            Sequence< ::rtl::OUString> aSeq = m_xColumns->getElementNames();
+                            if( i <= aSeq.getLength())
+                                m_xColumns->getByName(aSeq.getConstArray()[i-1]) >>= xColumn;
+                        }
+                    }
+                    if(bReFetchName && xColumn.is())
+                        xColumn->getPropertyValue(PROPERTY_NAME) >>= sName;
+                    aColumnMap.insert(::std::map< Reference<XPropertySet>,int>::value_type(xColumn,0));
+
+                    Reference<XPropertySetInfo> xInfo = xColumn.is() ? xColumn->getPropertySetInfo() : Reference<XPropertySetInfo>();
+                    if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_DESCRIPTION))
+                        aDescription = comphelper::getString(xColumn->getPropertyValue(PROPERTY_DESCRIPTION));
+
+                    ORowSetDataColumn* pColumn = new ORowSetDataColumn( getMetaData(),
+                                                                        this,
+                                                                        this,
+                                                                        i,
+                                                                        m_xActiveConnection->getMetaData(),
+                                                                        aDescription,
+                                                                        m_aCurrentRow);
+                    aColumns->push_back(pColumn);
+                    if(!sName.getLength())
+                    {
+                        if(xColumn.is())
+                            xColumn->getPropertyValue(PROPERTY_NAME) >>= sName;
+                        else
+                            sName = ::rtl::OUString::createFromAscii("Expression1");
+                        // TODO: resource
+                    }
+                    pColumn->setName(sName);
+                    aNames.push_back(sName);
+                    m_aDataColumns.push_back(pColumn);
+
+                    try
+                    {
+                        if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_ALIGN))
+                            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_ALIGN,xColumn->getPropertyValue(PROPERTY_ALIGN));
+
+                        nFormatKey = 0;
+                        if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_NUMBERFORMAT))
+                            nFormatKey = comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_NUMBERFORMAT));
+                        if (!nFormatKey && xColumn.is() && m_xNumberFormatTypes.is())
+                            nFormatKey = ::dbtools::getDefaultNumberFormat(xColumn,m_xNumberFormatTypes,aLocale);
+
+                        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_NUMBERFORMAT,makeAny(nFormatKey));
+                        if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_RELATIVEPOSITION))
+                            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_RELATIVEPOSITION,xColumn->getPropertyValue(PROPERTY_RELATIVEPOSITION));
+                        if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_WIDTH))
+                            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_WIDTH,xColumn->getPropertyValue(PROPERTY_WIDTH));
+                        if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_HIDDEN))
+                            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_HIDDEN,xColumn->getPropertyValue(PROPERTY_HIDDEN));
+                        if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_CONTROLMODEL))
+                            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_CONTROLMODEL,xColumn->getPropertyValue(PROPERTY_CONTROLMODEL));
+                        if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_HELPTEXT))
+                            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_HELPTEXT,xColumn->getPropertyValue(PROPERTY_HELPTEXT));
+                        if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_CONTROLDEFAULT))
+                            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_CONTROLDEFAULT,xColumn->getPropertyValue(PROPERTY_CONTROLDEFAULT));
+                    }
+                    catch(Exception&)
+                    {
+                    }
+                }
+            }
+        }
+        // now create the columns we need
+        if(m_pColumns)
+            m_pColumns->assign(aColumns,aNames);
+        else
+        {
+            Reference<XDatabaseMetaData> xMeta = m_xActiveConnection->getMetaData();
+            m_pColumns = new ORowSetDataColumns(xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers(),
+                                                aColumns,*this,m_aColumnsMutex,aNames);
         }
     }
     checkCache();
@@ -2087,186 +2105,196 @@ Reference< XConnection >  ORowSet::calcConnection(const Reference< XInteractionH
     return m_xActiveConnection;
 }
 //------------------------------------------------------------------------------
-rtl::OUString ORowSet::getCommand(sal_Bool& bEscapeProcessing,::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxRetTables)  throw( SQLException)
+sal_Bool ORowSet::impl_buildActiveCommand_throw()
 {
     // create the sql command
     // from a table name or get the command out of a query (not a view)
     // the last use the command as it is
-    bEscapeProcessing = m_bUseEscapeProcessing;
-    rtl::OUString aQuery;
-    if (m_aCommand.getLength())
+    sal_Bool bDoEscapeProcessing = m_bUseEscapeProcessing;
+
+    m_aActiveCommand = ::rtl::OUString();
+    ::rtl::OUString sCommand;
+
+    if ( !m_aCommand.getLength() )
+        return bDoEscapeProcessing;
+
+    switch (m_nCommandType)
     {
-        // i always need a tables for the querycomposer
-        Reference< XTablesSupplier >  xTablesAccess(m_xActiveConnection, UNO_QUERY);
-        if (xTablesAccess.is())
+        case CommandType::TABLE:
         {
-            _rxRetTables = xTablesAccess->getTables();
-        }
-        else // the connection is no table supplier so I make it myself
-        {
-            if(!m_xActiveConnection.is())
-                throw SQLException(DBACORE_RESSTRING(RID_STR_CONNECTION_INVALID),*this,SQLSTATE_GENERAL,1000,Any() );
-            sal_Bool bCase = sal_True;
-            try
+            Reference< XNameAccess > xTables;
+            Reference< XTablesSupplier >  xTablesAccess( m_xActiveConnection, UNO_QUERY );
+            if ( xTablesAccess.is() )
             {
-                Reference<XDatabaseMetaData> xMeta = m_xActiveConnection->getMetaData();
-                bCase = xMeta.is() && xMeta->storesMixedCaseQuotedIdentifiers();
+                xTables.set( xTablesAccess->getTables(), UNO_QUERY_THROW );
             }
-            catch(SQLException&)
+            else
             {
-            }
-            m_pTables = new OTableContainer(*this,m_aMutex,m_xActiveConnection,bCase,NULL,NULL);
-            _rxRetTables = m_pTables;
-            Sequence< ::rtl::OUString> aTableFilter(1);
-            aTableFilter[0] = ::rtl::OUString::createFromAscii("%");
-            m_pTables->construct(aTableFilter,Sequence< ::rtl::OUString>());
-        }
-        switch (m_nCommandType)
-        {
-            case CommandType::TABLE:
-            {
-                OSL_ENSURE(_rxRetTables.is(),"ORowSet::getCommand: We got no tables from the connection!");
-                if ( _rxRetTables.is() && _rxRetTables->hasByName(m_aCommand) )
+                if(!m_xActiveConnection.is())
+                    throw SQLException(DBA_RES(RID_STR_CONNECTION_INVALID),*this,SQLSTATE_GENERAL,1000,Any() );
+                sal_Bool bCase = sal_True;
+                try
                 {
-                    Reference< XPropertySet > xTable;
-                    try
-                    {
-                        ::cppu::extractInterface(xTable,_rxRetTables->getByName(m_aCommand));
-                    }
-                    catch(const WrappedTargetException& e)
-                    {
-                        SQLException e2;
-                        if ( e.TargetException >>= e2 )
-                            throw e2;
-                    }
-                    catch(Exception&)
-                    {
-                        OSL_ENSURE(0,"Exception catched!");
-                    }
+                    Reference<XDatabaseMetaData> xMeta = m_xActiveConnection->getMetaData();
+                    bCase = xMeta.is() && xMeta->storesMixedCaseQuotedIdentifiers();
+                }
+                catch(SQLException&)
+                {
+                    DBG_UNHANDLED_EXCEPTION();
+                }
 
-                    Reference<XColumnsSupplier> xSup(xTable,UNO_QUERY);
-                    if ( xSup.is() )
-                        m_xColumns = xSup->getColumns();
+                if ( m_pTables )
+                {
+                    m_pTables->dispose(); // clear all references
+                    DELETEZ(m_pTables);
+                }
 
-                    sal_Bool bUseCatalogInSelect = ::dbtools::isDataSourcePropertyEnabled(m_xActiveConnection,PROPERTY_USECATALOGINSELECT,sal_True);
-                    sal_Bool bUseSchemaInSelect = ::dbtools::isDataSourcePropertyEnabled(m_xActiveConnection,PROPERTY_USESCHEMAINSELECT,sal_True);
+                m_pTables = new OTableContainer(*this,m_aMutex,m_xActiveConnection,bCase,NULL,NULL);
+                xTables = m_pTables;
+                Sequence< ::rtl::OUString> aTableFilter(1);
+                aTableFilter[0] = ::rtl::OUString::createFromAscii("%");
+                m_pTables->construct(aTableFilter,Sequence< ::rtl::OUString>());
+            }
 
-                    aQuery = rtl::OUString::createFromAscii("SELECT * FROM ");
-                    aQuery += ::dbtools::quoteTableName(m_xActiveConnection->getMetaData(), m_aCommand,::dbtools::eInDataManipulation,bUseCatalogInSelect,bUseSchemaInSelect);
+            if ( xTables->hasByName(m_aCommand) )
+            {
+                Reference< XPropertySet > xTable;
+                try
+                {
+                    xTables->getByName( m_aCommand ) >>= xTable;
+                }
+                catch(const WrappedTargetException& e)
+                {
+                    SQLException e2;
+                    if ( e.TargetException >>= e2 )
+                        throw e2;
+                }
+                catch(Exception&)
+                {
+                    DBG_UNHANDLED_EXCEPTION();
+                }
+
+                Reference<XColumnsSupplier> xSup(xTable,UNO_QUERY);
+                if ( xSup.is() )
+                    m_xColumns = xSup->getColumns();
+
+                sCommand = rtl::OUString::createFromAscii("SELECT * FROM ");
+                ::rtl::OUString sCatalog, sSchema, sTable;
+                ::dbtools::qualifiedNameComponents( m_xActiveConnection->getMetaData(), m_aCommand, sCatalog, sSchema, sTable, ::dbtools::eInDataManipulation );
+                sCommand += ::dbtools::composeTableNameForSelect( m_xActiveConnection, sCatalog, sSchema, sTable );
+            }
+            else
+            {
+                ::rtl::OUString sError(RTL_CONSTASCII_USTRINGPARAM("There exists no table with given name: \""));
+                sError += m_aCommand;
+                sError += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\"!"));
+                throwGenericSQLException(sError,*this);
+                // TODO: resource
+            }
+        }
+        break;
+
+        case CommandType::QUERY:
+        {
+            Reference< XQueriesSupplier >  xQueriesAccess(m_xActiveConnection, UNO_QUERY);
+            if (xQueriesAccess.is())
+            {
+                Reference< ::com::sun::star::container::XNameAccess >  xQueries(xQueriesAccess->getQueries());
+                if (xQueries->hasByName(m_aCommand))
+                {
+                    Reference< XPropertySet > xQuery(xQueries->getByName(m_aCommand),UNO_QUERY);
+                    OSL_ENSURE(xQuery.is(),"ORowSet::impl_buildActiveCommand_throw: Query is NULL!");
+                    if ( xQuery.is() )
+                    {
+                        xQuery->getPropertyValue(PROPERTY_COMMAND) >>= sCommand;
+                        xQuery->getPropertyValue(PROPERTY_USE_ESCAPE_PROCESSING) >>= bDoEscapeProcessing;
+
+                        ::rtl::OUString aCatalog,aSchema,aTable;
+                        xQuery->getPropertyValue(PROPERTY_UPDATE_CATALOGNAME)   >>= aCatalog;
+                        xQuery->getPropertyValue(PROPERTY_UPDATE_SCHEMANAME)    >>= aSchema;
+                        xQuery->getPropertyValue(PROPERTY_UPDATE_TABLENAME)     >>= aTable;
+                        if(aTable.getLength())
+                            m_aUpdateTableName = composeTableName( m_xActiveConnection->getMetaData(), aCatalog, aSchema, aTable, sal_False, ::dbtools::eInDataManipulation );
+
+                        Reference<XColumnsSupplier> xSup(xQuery,UNO_QUERY);
+                        if(xSup.is())
+                            m_xColumns = xSup->getColumns();
+                    }
                 }
                 else
                 {
-                    ::rtl::OUString sError(RTL_CONSTASCII_USTRINGPARAM("There exists no table with given name: \""));
+                    ::rtl::OUString sError(RTL_CONSTASCII_USTRINGPARAM("There exists no query with given name: \""));
                     sError += m_aCommand;
                     sError += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\"!"));
                     throwGenericSQLException(sError,*this);
                 }
             }
-                break;
-            case CommandType::QUERY:
-            {
-                Reference< XQueriesSupplier >  xQueriesAccess(m_xActiveConnection, UNO_QUERY);
-                if (xQueriesAccess.is())
-                {
-                    Reference< ::com::sun::star::container::XNameAccess >  xQueries(xQueriesAccess->getQueries());
-                    if (xQueries->hasByName(m_aCommand))
-                    {
-                        Reference< XPropertySet > xQuery(xQueries->getByName(m_aCommand),UNO_QUERY);
-                        OSL_ENSURE(xQuery.is(),"ORowSet::getCommand: Query is NULL!");
-                        if ( xQuery.is() )
-                        {
-                            xQuery->getPropertyValue(PROPERTY_COMMAND) >>= aQuery;
-                            bEscapeProcessing = any2bool(xQuery->getPropertyValue(PROPERTY_USE_ESCAPE_PROCESSING));
-
-                            ::rtl::OUString aCatalog,aSchema,aTable;
-                            xQuery->getPropertyValue(PROPERTY_UPDATE_CATALOGNAME)   >>= aCatalog;
-                            xQuery->getPropertyValue(PROPERTY_UPDATE_SCHEMANAME)    >>= aSchema;
-                            xQuery->getPropertyValue(PROPERTY_UPDATE_TABLENAME)     >>= aTable;
-                            if(aTable.getLength())
-                                composeTableName(m_xActiveConnection->getMetaData(),aCatalog,aSchema,aTable,m_aUpdateTableName,sal_False,::dbtools::eInDataManipulation);
-
-                            Reference<XColumnsSupplier> xSup(xQuery,UNO_QUERY);
-                            if(xSup.is())
-                                m_xColumns = xSup->getColumns();
-                        }
-                    }
-                    else
-                    {
-                        ::rtl::OUString sError(RTL_CONSTASCII_USTRINGPARAM("There exists no query with given name: \""));
-                        sError += m_aCommand;
-                        sError += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\"!"));
-                        throwGenericSQLException(sError,*this);
-                    }
-                }
-                else
-                    throw SQLException(DBACORE_RESSTRING(RID_STR_NO_XQUERIESSUPPLIER),*this,::rtl::OUString(),0,Any());
-            }   break;
-            default:
-                aQuery = m_aCommand;
+            else
+                throw SQLException(DBA_RES(RID_STR_NO_XQUERIESSUPPLIER),*this,::rtl::OUString(),0,Any());
         }
+        break;
+
+        default:
+            sCommand = m_aCommand;
+            break;
     }
-    return aQuery;
+
+    m_aActiveCommand = sCommand;
+
+    if ( !m_aActiveCommand.getLength() )
+        throwSQLException( "No SQL command was provided.", SQL_FUNCTION_SEQUENCE_ERROR, *this );
+        // TODO: resource
+
+    return bDoEscapeProcessing;
 }
 //------------------------------------------------------------------------------
-rtl::OUString ORowSet::getComposedQuery(const rtl::OUString& rQuery, sal_Bool bEscapeProcessing,Reference< XNameAccess >& _rxRetTables) throw( SQLException, RuntimeException )
+::rtl::OUString ORowSet::impl_getComposedQuery_throw( bool _bForExecution )
 {
-    // use query composer to make a useful query with filter and/or order by part
-    rtl::OUString aComposedStatement = rQuery;
-    if (bEscapeProcessing)
+    Reference< XMultiServiceFactory > xFactory( m_xActiveConnection, UNO_QUERY_THROW );
+    try
     {
-        Reference< XMultiServiceFactory >  xFactory(m_xActiveConnection, UNO_QUERY);
-        if (xFactory.is())
-        {
-            try
-            {
-                m_xAnalyzer.set(xFactory->createInstance(SERVICE_NAME_SINGLESELECTQUERYCOMPOSER),UNO_QUERY);
-                m_xComposer.set(m_xAnalyzer,UNO_QUERY);
-            }
-            catch (Exception&)
-            {
-                m_xComposer = NULL;
-            }
-        }
-        if(!m_xComposer.is()) // no composer so we create one
-        {
-            m_xAnalyzer = new OSingleSelectQueryComposer(_rxRetTables,m_xActiveConnection,m_xServiceManager);
-            m_xComposer.set(m_xAnalyzer,UNO_QUERY);
-        }
-        if ( m_xComposer.is() )
-        {
-            m_xComposer->setElementaryQuery( rQuery );
-
-            if ( m_bApplyFilter )
-            {
-                if ( m_aFilter.getLength() )
-                    m_xComposer->setFilter(m_aFilter);
-                if ( m_aHavingClause.getLength() )
-                    m_xComposer->setHavingClause(m_aHavingClause);
-                if ( m_aGroupBy.getLength() )
-                    m_xComposer->setGroup(m_aGroupBy);
-            }
-
-            if ( m_bIgnoreResult )
-            {   // append a "0=1" filter
-                // don't simply overwrite an existent filter, this would lead to problems if this existent
-                // filter contains paramters (since a keyset may add parameters itself)
-                // 2003-12-12 - #23418# - fs@openoffice.org
-                m_xComposer->setElementaryQuery( m_xComposer->getQuery( ) );
-                m_xComposer->setFilter( ::rtl::OUString::createFromAscii( "0 = 1" ) );
-            }
-
-            if (m_aOrder.getLength())
-                m_xComposer->setOrder(m_aOrder);
-
-            aComposedStatement = m_xComposer->getQuery();
-            if(!m_xColumns.is())
-            {
-                Reference<XColumnsSupplier> xCols(m_xComposer,UNO_QUERY);
-                m_xColumns = xCols->getColumns();
-            }
-        }
+        ::comphelper::disposeComponent( m_xComposer );
+        m_xComposer.set( xFactory->createInstance( SERVICE_NAME_SINGLESELECTQUERYCOMPOSER ), UNO_QUERY_THROW );
     }
-    return aComposedStatement;
+    catch (const Exception& )
+    {
+        m_xComposer = NULL;
+    }
+    if ( !m_xComposer.is() )
+        throwSQLException( "No query composer could be provided by the connection.", SQL_GENERAL_ERROR, *this );
+        // TODO: resource
+
+    m_xComposer->setElementaryQuery( m_aActiveCommand );
+
+    if ( m_bApplyFilter )
+    {
+        if ( m_aFilter.getLength() )
+            m_xComposer->setFilter(m_aFilter);
+        if ( m_aHavingClause.getLength() )
+            m_xComposer->setHavingClause(m_aHavingClause);
+        if ( m_aGroupBy.getLength() )
+            m_xComposer->setGroup(m_aGroupBy);
+    }
+
+    if ( m_bIgnoreResult )
+    {   // append a "0=1" filter
+        // don't simply overwrite an existent filter, this would lead to problems if this existent
+        // filter contains paramters (since a keyset may add parameters itself)
+        // 2003-12-12 - #23418# - fs@openoffice.org
+        m_xComposer->setElementaryQuery( m_xComposer->getQuery( ) );
+        m_xComposer->setFilter( ::rtl::OUString::createFromAscii( "0 = 1" ) );
+    }
+
+    if ( m_aOrder.getLength() )
+        m_xComposer->setOrder( m_aOrder );
+
+    if ( !m_xColumns.is() )
+    {
+        Reference<XColumnsSupplier> xCols( m_xComposer, UNO_QUERY_THROW );
+        m_xColumns = xCols->getColumns();
+    }
+
+    return _bForExecution ? m_xComposer->getQueryWithSubstitution() : m_xComposer->getQuery();
 }
 // -----------------------------------------------------------------------------
 void ORowSet::checkAndResizeParameters(sal_Int32 parameterIndex)
@@ -2500,12 +2528,16 @@ void ORowSet::checkUpdateConditions(sal_Int32 columnIndex)
     checkCache();
     if ( columnIndex <= 0 )
         throwSQLException( "Invalid column index", SQL_INVALID_DESCRIPTOR_INDEX, *this );
+        // TODO: resource
     if ( rowDeleted() )
         throwSQLException( "Current row is deleted", SQL_INVALID_CURSOR_POSITION, *this );
+        // TODO: resource
     if ( m_aCurrentRow.isNull() )
         throwSQLException( "Invalid cursor state", SQL_INVALID_CURSOR_STATE, *this );
+        // TODO: resource
     if ( m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY)
         throwSQLException( "Result set is not writeable", SQL_GENERAL_ERROR, *this );
+        // TODO: resource
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL ORowSet::refreshRow(  ) throw(SQLException, RuntimeException)
