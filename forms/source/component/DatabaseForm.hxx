@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DatabaseForm.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:47:09 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:46:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -562,7 +562,7 @@ private:
 
     // error handling
     void    onError(const ::com::sun::star::sdb::SQLErrorEvent& _rEvent);
-    void    onError(::com::sun::star::sdbc::SQLException&, const ::rtl::OUString& _rContextDescription);
+    void    onError(const ::com::sun::star::sdbc::SQLException&, const ::rtl::OUString& _rContextDescription);
 
     // html tools
     ::rtl::OUString         GetDataURLEncoded(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& SubmitButton, const ::com::sun::star::awt::MouseEvent& MouseEvt);
