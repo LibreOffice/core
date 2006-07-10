@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppController.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:53:25 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:22:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,6 +141,9 @@
 #endif
 #ifndef _DBU_APP_HRC_
 #include "dbu_app.hrc"
+#endif
+#ifndef DBACCESS_SOURCE_UI_MISC_DEFAULTOBJECTNAMECHECK_HXX
+#include "defaultobjectnamecheck.hxx"
 #endif
 #ifndef _SV_MENU_HXX
 #include <vcl/menu.hxx>
@@ -640,11 +643,11 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 break;
             case ID_BROWSER_SORTUP:
                 aReturn.bEnabled = getContainer()->isFilled() && getContainer()->getElementCount();
-                aReturn.aState <<= (aReturn.bEnabled && getContainer()->isSortUp());
+                aReturn.bChecked = aReturn.bEnabled && getContainer()->isSortUp();
                 break;
             case ID_BROWSER_SORTDOWN:
                 aReturn.bEnabled = getContainer()->isFilled() && getContainer()->getElementCount();
-                aReturn.aState <<= (aReturn.bEnabled && !getContainer()->isSortUp());
+                aReturn.bChecked = aReturn.bEnabled && !getContainer()->isSortUp();
                 break;
 
             case SID_NEWDOC:
@@ -654,19 +657,19 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 break;
             case SID_DB_APP_VIEW_TABLES:
                 aReturn.bEnabled = sal_True;
-                aReturn.aState <<= getContainer()->getElementType() == E_TABLE;
+                aReturn.bChecked = getContainer()->getElementType() == E_TABLE;
                 break;
             case SID_DB_APP_VIEW_QUERIES:
                 aReturn.bEnabled = sal_True;
-                aReturn.aState <<= getContainer()->getElementType() == E_QUERY;
+                aReturn.bChecked = getContainer()->getElementType() == E_QUERY;
                 break;
             case SID_DB_APP_VIEW_FORMS:
                 aReturn.bEnabled = sal_True;
-                aReturn.aState <<= getContainer()->getElementType() == E_FORM;
+                aReturn.bChecked = getContainer()->getElementType() == E_FORM;
                 break;
             case SID_DB_APP_VIEW_REPORTS:
                 aReturn.bEnabled = sal_True;
-                aReturn.aState <<= getContainer()->getElementType() == E_REPORT;
+                aReturn.bChecked = getContainer()->getElementType() == E_REPORT;
                 break;
             case ID_NEW_QUERY_DESIGN:
             case ID_NEW_QUERY_SQL:
@@ -801,18 +804,18 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 break;
             case SID_DB_APP_DISABLE_PREVIEW:
                 aReturn.bEnabled = !isDataSourceReadOnly();
-                aReturn.aState <<= getContainer()->getPreviewMode() == E_PREVIEWNONE;
+                aReturn.bChecked = getContainer()->getPreviewMode() == E_PREVIEWNONE;
                 break;
             case SID_DB_APP_VIEW_DOCINFO_PREVIEW:
                 {
                     ElementType eType = getContainer()->getElementType();
                     aReturn.bEnabled = !isDataSourceReadOnly() && (E_REPORT == eType || E_FORM == eType);
-                    aReturn.aState <<= getContainer()->getPreviewMode() == E_DOCUMENTINFO;
+                    aReturn.bChecked = getContainer()->getPreviewMode() == E_DOCUMENTINFO;
                 }
                 break;
             case SID_DB_APP_VIEW_DOC_PREVIEW:
                 aReturn.bEnabled = !isDataSourceReadOnly();
-                aReturn.aState <<= getContainer()->getPreviewMode() == E_DOCUMENT;
+                aReturn.bChecked = getContainer()->getPreviewMode() == E_DOCUMENT;
                 break;
             case ID_BROWSER_UNDO:
                 aReturn.bEnabled = sal_False;
@@ -835,7 +838,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 {
                     DATASOURCE_TYPE eType = m_aTypeCollection.getType(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
                     ::rtl::OUString sDSTypeName = m_aTypeCollection.getTypeDisplayName(eType);
-                    aReturn.aState <<= sDSTypeName;
+                    aReturn.sTitle = sDSTypeName;
                 }
                 break;
             case SID_DB_APP_STATUS_DBNAME:
@@ -871,12 +874,12 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                     }
                     else
                         sDatabaseName = m_aTypeCollection.getEmbeddedDatabaseUIName(getORB());
-                    aReturn.aState <<= ::rtl::OUString(sDatabaseName);
+                    aReturn.sTitle = sDatabaseName;
                 }
                 break;
             case SID_DB_APP_STATUS_USERNAME:
                 if ( aReturn.bEnabled = m_xDataSource.is() )
-                    aReturn.aState = m_xDataSource->getPropertyValue(PROPERTY_USER);
+                    m_xDataSource->getPropertyValue( PROPERTY_USER ) >>= aReturn.sTitle;
                 break;
             case SID_DB_APP_STATUS_HOSTNAME:
                 if ( aReturn.bEnabled = m_xDataSource.is() )
@@ -893,7 +896,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                                                             ,sDatabaseName
                                                             ,sHostName
                                                             ,nPortNumber);
-                        aReturn.aState <<= ::rtl::OUString(sHostName);
+                        aReturn.sTitle = sHostName;
                     }
                 }
                 break;
@@ -1486,9 +1489,7 @@ void SAL_CALL OApplicationController::elementReplaced( const ContainerEvent& _rE
                 {
                     ensureConnection();
                     if ( xProp.is() && m_xMetaData.is() )
-                    {
-                        sNewName = ::dbaui::composeTableName(m_xMetaData,xProp,sal_False,::dbtools::eInDataManipulation);
-                    }
+                        sNewName = ::dbaui::composeTableName( m_xMetaData, xProp, ::dbtools::eInDataManipulation, false, false, false );
                 }
                 break;
                 case E_FORM:
@@ -1826,7 +1827,9 @@ void OApplicationController::renameEntry()
     {
         if ( xContainer.is() )
         {
-            ::std::auto_ptr<OSaveAsDlg> aDlg;
+            ::std::auto_ptr< IObjectNameCheck > pNameChecker;
+            ::std::auto_ptr< OSaveAsDlg > aDialog;
+
             Reference<XRename> xRename;
             ElementType eType = getContainer()->getElementType();
             switch( eType )
@@ -1839,13 +1842,9 @@ void OApplicationController::renameEntry()
                         {
                             String sLabel;
                             if ( eType == E_FORM )
-                            {
                                 sLabel = String(ModuleRes( STR_FRM_LABEL ));
-                            }
                             else
-                            {
                                 sLabel = String(ModuleRes( STR_RPT_LABEL ));
-                            }
 
                             ::rtl::OUString sName = *aList.begin();
                             if ( xHNames->hasByHierarchicalName(sName) )
@@ -1861,7 +1860,9 @@ void OApplicationController::renameEntry()
                                         Reference<XPropertySet>(xRename,UNO_QUERY)->getPropertyValue(PROPERTY_NAME) >>= sName;
                                     }
                                 }
-                                aDlg.reset( new OSaveAsDlg(getView(),xHNames.get(),sName,sLabel,String(),SAD_TITLE_RENAME) );
+                                pNameChecker.reset( new HierarchicalNameCheck( xHNames.get(), String() ) );
+                                aDialog.reset( new OSaveAsDlg(
+                                    getView(), getORB(), sName, sLabel, *pNameChecker, SAD_TITLE_RENAME ) );
                             }
                         }
                     }
@@ -1877,36 +1878,37 @@ void OApplicationController::renameEntry()
                         xRename.set(xContainer->getByName(*aList.begin()),UNO_QUERY);
                         sal_Int32 nCommandType = eType == E_QUERY ? CommandType::QUERY : CommandType::TABLE;
 
-                        aDlg.reset( new OSaveAsDlg(
-                            getView(), nCommandType, xContainer,
-                            m_xMetaData, getConnection(), *aList.begin(), SAD_TITLE_RENAME) );
+                        pNameChecker.reset( new DynamicTableOrQueryNameCheck( getConnection(), nCommandType ) );
+                        aDialog.reset( new OSaveAsDlg(
+                            getView(), nCommandType, getORB(), getConnection(),
+                                *aList.begin(), *pNameChecker, SAD_TITLE_RENAME ) );
                     }
                     break;
                 default:
                     break;
             }
 
-            if ( xRename.is() && aDlg.get() )
+            if ( xRename.is() && aDialog.get() )
             {
 
                 sal_Bool bTryAgain = sal_True;
                 while( bTryAgain )
                 {
-                    if ( aDlg->Execute() == RET_OK )
+                    if ( aDialog->Execute() == RET_OK )
                     {
                         try
                         {
                             ::rtl::OUString sNewName;
                             if ( eType == E_TABLE )
                             {
-                                ::rtl::OUString sName = aDlg->getName();
-                                ::rtl::OUString sCatalog = aDlg->getCatalog();
-                                ::rtl::OUString sSchema  = aDlg->getSchema();
+                                ::rtl::OUString sName = aDialog->getName();
+                                ::rtl::OUString sCatalog = aDialog->getCatalog();
+                                ::rtl::OUString sSchema  = aDialog->getSchema();
 
-                                ::dbtools::composeTableName( m_xMetaData, sCatalog, sSchema, sName, sNewName, sal_False, ::dbtools::eInTableDefinitions );
+                                sNewName = ::dbtools::composeTableName( m_xMetaData, sCatalog, sSchema, sName, sal_False, ::dbtools::eInTableDefinitions );
                             }
                             else
-                                sNewName = aDlg->getName();
+                                sNewName = aDialog->getName();
 
                             ::rtl::OUString sOldName = *aList.begin();
                             if ( eType == E_FORM || eType == E_REPORT )
@@ -1933,7 +1935,7 @@ void OApplicationController::renameEntry()
                         catch(const ElementExistException& e)
                         {
                             static ::rtl::OUString sStatus = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000"));
-                            String sMsg = String(ModuleRes(STR_OBJECT_ALREADY_EXISTS));
+                            String sMsg = String( ModuleRes( STR_NAME_ALREADY_EXISTS ) );
                             sMsg.SearchAndReplace('#',e.Message);
                             showError(SQLExceptionInfo(SQLException(sMsg, e.Context, sStatus, 0, Any())));
                         }
