@@ -4,9 +4,9 @@
  *
  *  $RCSfile: exctools.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:42:36 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:29:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -340,7 +340,7 @@ ExcScenario::ExcScenario( XclImpStream& rIn, const RootData& rR ) : nTab( rR.pIR
     rIn >> nProtected;
     rIn.Ignore( 1 );                // Hide
     rIn >> nName >> nComment;
-    rIn.Ignore( 1 );        // statt nUser!
+    rIn.Ignore( 1 );       // statt nUser!
 
     if( nName )
         pName = new String( rIn.ReadUniString( nName ) );
