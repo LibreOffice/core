@@ -4,9 +4,9 @@
  *
  *  $RCSfile: warnings.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:38:53 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:15:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,21 @@ namespace dbaccess
             :m_xExternalWarnings( _rxExternalWarnings )
         {
         }
+        virtual ~WarningsContainer();
+
+        // convenience
+        /** appends an SQLWarning instance to the chain
+            @param  _rWarning
+                the warning message
+            @param  _pAsciiSQLState
+                the SQLState of the warning
+            @param  _rxContext
+                the context of the warning
+        */
+        void appendWarning(
+            const ::rtl::OUString& _rWarning,
+            const sal_Char* _pAsciiSQLState,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext );
 
         // IWarningsContainer
         virtual void appendWarning(const ::com::sun::star::sdbc::SQLException& _rWarning);
