@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:21:13 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:36:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,8 +54,14 @@
 #ifndef DBAUI_DBTREELISTBOX_HXX
 #include "dbtreelistbox.hxx"
 #endif
+#ifndef DBACCESS_SOURCE_UI_INC_DEFAULTOBJECTNAMECHECK_HXX
+#include "defaultobjectnamecheck.hxx"
+#endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
+#endif
+#ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYANALYZER_HPP_
+#include <com/sun/star/sdb/XSingleSelectQueryAnalyzer.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDB_XCOMPLETEDCONNECTION_HPP_
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
@@ -276,6 +282,9 @@
 #endif
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 #ifndef _NUMUNO_HXX
 #include <svtools/numuno.hxx>
@@ -924,7 +933,7 @@ void setColumnProperties(const Reference<XPropertySet>& _rxColumn,const OFieldDe
         {
             sSchema = _xMetaData->getUserName();
         }
-        ::dbtools::composeTableName(_xMetaData,sCatalog,sSchema,_sName,sCompsedName,sal_False,::dbtools::eInDataManipulation);
+        sCompsedName = ::dbtools::composeTableName( _xMetaData, sCatalog, sSchema, _sName, sal_False, ::dbtools::eInDataManipulation );
         sDefaultName = ::dbtools::createUniqueName(_xTables,sCompsedName);
     }
     catch(const SQLException&)
@@ -1375,7 +1384,7 @@ sal_Bool isSQL92CheckEnabled(const Reference<XConnection>& _xConnection)
 // -----------------------------------------------------------------------------
 sal_Bool isAppendTableAliasEnabled(const Reference<XConnection>& _xConnection)
 {
-    return ::dbtools::isDataSourcePropertyEnabled(_xConnection,INFO_APPEND_TABLE_ALIAS,sal_True);
+    return ::dbtools::isDataSourcePropertyEnabled(_xConnection,INFO_APPEND_TABLE_ALIAS,sal_False);
 }
 
 // -----------------------------------------------------------------------------
@@ -1671,6 +1680,28 @@ sal_Int32 askForUserAction(Window* _pParent,USHORT _nTitle,USHORT _nText,sal_Boo
     }
     return aAsk.Execute();
 }
+
+// -----------------------------------------------------------------------------
+namespace
+{
+    static ::rtl::OUString lcl_createSDBCLevelStatement( const ::rtl::OUString& _rStatement, const Reference< XConnection >& _rxConnection )
+    {
+        ::rtl::OUString sSDBCLevelStatement( _rStatement );
+        try
+        {
+            Reference< XMultiServiceFactory > xAnalyzerFactory( _rxConnection, UNO_QUERY_THROW );
+            Reference< XSingleSelectQueryAnalyzer > xAnalyzer( xAnalyzerFactory->createInstance( SERVICE_NAME_SINGLESELECTQUERYCOMPOSER ), UNO_QUERY_THROW );
+            xAnalyzer->setQuery( _rStatement );
+            sSDBCLevelStatement = xAnalyzer->getQueryWithSubstitution();
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        return sSDBCLevelStatement;
+    }
+}
+
 // -----------------------------------------------------------------------------
 Reference<XPropertySet> createView( const ::rtl::OUString& _sName
                                    ,const Reference< ::com::sun::star::sdbc::XConnection >& _xConnection
@@ -1705,13 +1736,16 @@ Reference<XPropertySet> createView( const ::rtl::OUString& _sName
     if(_xSourceObject->getPropertySetInfo()->hasPropertyByName(PROPERTY_COMMAND))
     {
         _xSourceObject->getPropertyValue(PROPERTY_COMMAND) >>= sCommand;
+
+        sal_Bool bEscapeProcessing( sal_False );
+        OSL_VERIFY( _xSourceObject->getPropertyValue( PROPERTY_USE_ESCAPE_PROCESSING ) >>= bEscapeProcessing );
+        if ( bEscapeProcessing )
+            sCommand = lcl_createSDBCLevelStatement( sCommand, _xConnection );
     }
     else
     {
         sCommand = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT * FROM "));
-        sal_Bool bUseCatalogInSelect = ::dbtools::isDataSourcePropertyEnabled(_xConnection,PROPERTY_USECATALOGINSELECT,sal_True);
-        sal_Bool bUseSchemaInSelect = ::dbtools::isDataSourcePropertyEnabled(_xConnection,PROPERTY_USESCHEMAINSELECT,sal_True);
-        sCommand += ::dbaui::composeTableName(_xConnection->getMetaData(),_xSourceObject,sal_True,::dbtools::eInDataManipulation,bUseCatalogInSelect,bUseSchemaInSelect);
+        sCommand += composeTableNameForSelect( _xConnection, _xSourceObject );
     }
     xView->setPropertyValue(PROPERTY_COMMAND,makeAny(sCommand));
 
@@ -1815,108 +1849,111 @@ void fillTreeListNames( const Reference< XNameAccess >& _xContainer, DBTreeListB
     }
 }
 // -----------------------------------------------------------------------------
-sal_Bool insertHierachyElement(Window* _pParent
-                           ,const Reference<XHierarchicalNameContainer>& _xNames
-                           ,const String& _sParentFolder
-                           ,sal_Bool _bForm
-                           ,sal_Bool _bCollection
-                           ,const Reference<XContent>& _xContent
-                           ,sal_Bool _bMove)
+sal_Bool insertHierachyElement( Window* _pParent, const Reference< XMultiServiceFactory >& _rxORB,
+                           const Reference<XHierarchicalNameContainer>& _xNames,
+                           const String& _sParentFolder,
+                           sal_Bool _bForm,
+                           sal_Bool _bCollection,
+                           const Reference<XContent>& _xContent,
+                           sal_Bool _bMove)
 {
-    if ( _xNames.is() )
+    OSL_ENSURE( _xNames.is(), "insertHierachyElement: illegal name container!" );
+    if ( !_xNames.is() )
+        return sal_False;
+
+    Reference<XNameAccess> xNameAccess( _xNames, UNO_QUERY );
+    ::rtl::OUString sName = _sParentFolder;
+    if ( _xNames->hasByHierarchicalName(sName) )
     {
-        Reference<XNameAccess> xNameAccess(_xNames,UNO_QUERY);
-        ::rtl::OUString sName = _sParentFolder;
-        if ( _xNames->hasByHierarchicalName(sName) )
+        Reference<XChild> xChild(_xNames->getByHierarchicalName(sName),UNO_QUERY);
+        xNameAccess.set(xChild,UNO_QUERY);
+        if ( !xNameAccess.is() && xChild.is() )
+            xNameAccess.set(xChild->getParent(),UNO_QUERY);
+    }
+
+    OSL_ENSURE( xNameAccess.is(), "insertHierachyElement: could not find the proper name container!" );
+    if ( !xNameAccess.is() )
+        return sal_False;
+
+    ::rtl::OUString sNewName;
+    Reference<XPropertySet> xProp(_xContent,UNO_QUERY);
+    if ( xProp.is() )
+        xProp->getPropertyValue(PROPERTY_NAME) >>= sNewName;
+
+    if ( !_bMove || !sNewName.getLength() )
+    {
+        String sTargetName,sLabel;
+        if ( !sNewName.getLength() || xNameAccess->hasByName(sNewName) )
         {
-            Reference<XChild> xChild(_xNames->getByHierarchicalName(sName),UNO_QUERY);
-            xNameAccess.set(xChild,UNO_QUERY);
-            if ( !xNameAccess.is() && xChild.is() )
-                xNameAccess.set(xChild->getParent(),UNO_QUERY);
-        }
-
-        if ( xNameAccess.is() )
-        {
-            ::rtl::OUString sNewName;
-            Reference<XPropertySet> xProp(_xContent,UNO_QUERY);
-            if ( xProp.is() )
-                xProp->getPropertyValue(PROPERTY_NAME) >>= sNewName;
-
-            if ( !_bMove || !sNewName.getLength() )
-            {
-                String sTargetName,sLabel;
-                if ( !sNewName.getLength() || xNameAccess->hasByName(sNewName) )
-                {
-                    if ( sNewName.getLength() )
-                        sTargetName = sNewName;
-                    else
-                        sTargetName = String(ModuleRes( _bCollection ? STR_NEW_FOLDER : ((_bForm) ? RID_STR_FORM : RID_STR_REPORT)));
-                    sLabel = String(ModuleRes( _bCollection ? STR_FOLDER_LABEL  : ((_bForm) ? STR_FRM_LABEL : STR_RPT_LABEL)));
-                    sTargetName = ::dbtools::createUniqueName(xNameAccess,sTargetName);
-
-
-                    // here we have everything needed to create a new query object ...
-                    // ... ehm, except a new name
-                    OSaveAsDlg aAskForName( _pParent,
-                                            _xNames.get(),
-                                            sTargetName,
-                                            sLabel,
-                                            sName,
-                                            SAD_ADDITIONAL_DESCRIPTION | SAD_TITLE_PASTE_AS);
-                    if ( RET_OK != aAskForName.Execute() )
-                        // cancelled by the user
-                        return sal_False;
-
-                    sNewName = aAskForName.getName();
-                }
-            }
-            else if ( xNameAccess->hasByName(sNewName) )
-            {
-                String sError(ModuleRes(STR_OBJECT_ALREADY_EXISTS));
-                sError.SearchAndReplaceAscii("#",sNewName);
-                throw SQLException(sError,NULL,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000")) ,0,Any());
-            }
-
             if ( sNewName.getLength() )
-            {
-                try
-                {
-                    Reference<XMultiServiceFactory> xORB(xNameAccess,UNO_QUERY);
-                    OSL_ENSURE(xORB.is(),"No service factory given");
-                    if ( xORB.is() )
-                    {
-                        Sequence< Any > aArguments(3);
-                        PropertyValue aValue;
-                        // set as folder
-                        aValue.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"));
-                        aValue.Value <<= sNewName;
-                        aArguments[0] <<= aValue;
-                        //parent
-                        aValue.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Parent"));
-                        aValue.Value <<= xNameAccess;
-                        aArguments[1] <<= aValue;
+                sTargetName = sNewName;
+            else
+                sTargetName = String(ModuleRes( _bCollection ? STR_NEW_FOLDER : ((_bForm) ? RID_STR_FORM : RID_STR_REPORT)));
+            sLabel = String(ModuleRes( _bCollection ? STR_FOLDER_LABEL  : ((_bForm) ? STR_FRM_LABEL : STR_RPT_LABEL)));
+            sTargetName = ::dbtools::createUniqueName(xNameAccess,sTargetName);
 
-                        aValue.Name = PROPERTY_EMBEDDEDOBJECT;
-                        aValue.Value <<= _xContent;
-                        aArguments[2] <<= aValue;
 
-                        ::rtl::OUString sServiceName =
-                            (_bCollection ? ((_bForm) ? SERVICE_NAME_FORM_COLLECTION : SERVICE_NAME_REPORT_COLLECTION) : SERVICE_SDB_DOCUMENTDEFINITION);
+            // here we have everything needed to create a new query object ...
+            HierarchicalNameCheck aNameChecker( _xNames.get(), sName );
+            // ... ehm, except a new name
+            OSaveAsDlg aAskForName( _pParent,
+                                    _rxORB,
+                                    sTargetName,
+                                    sLabel,
+                                    aNameChecker,
+                                    SAD_ADDITIONAL_DESCRIPTION | SAD_TITLE_PASTE_AS);
+            if ( RET_OK != aAskForName.Execute() )
+                // cancelled by the user
+                return sal_False;
 
-                        Reference<XContent > xNew(xORB->createInstanceWithArguments(sServiceName,aArguments),UNO_QUERY);
-                        Reference<XNameContainer> xNameContainer(xNameAccess,UNO_QUERY);
-                        if ( xNameContainer.is() )
-                            xNameContainer->insertByName(sNewName,makeAny(xNew));
-                    }
-                }
-                catch(Exception&)
-                {
-                    OSL_ENSURE(0,"OApplicationController::OApplicationController -> exception catched");
-                    return sal_False;
-                }
-            }
+            sNewName = aAskForName.getName();
         }
     }
+    else if ( xNameAccess->hasByName(sNewName) )
+    {
+        String sError(ModuleRes(STR_NAME_ALREADY_EXISTS));
+        sError.SearchAndReplaceAscii("#",sNewName);
+        throw SQLException(sError,NULL,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000")) ,0,Any());
+    }
+
+    if ( !sNewName.getLength() )
+        return sal_False;
+    try
+    {
+        Reference<XMultiServiceFactory> xORB(xNameAccess,UNO_QUERY);
+        OSL_ENSURE(xORB.is(),"No service factory given");
+        if ( xORB.is() )
+        {
+            Sequence< Any > aArguments(3);
+            PropertyValue aValue;
+            // set as folder
+            aValue.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"));
+            aValue.Value <<= sNewName;
+            aArguments[0] <<= aValue;
+            //parent
+            aValue.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Parent"));
+            aValue.Value <<= xNameAccess;
+            aArguments[1] <<= aValue;
+
+            aValue.Name = PROPERTY_EMBEDDEDOBJECT;
+            aValue.Value <<= _xContent;
+            aArguments[2] <<= aValue;
+
+            ::rtl::OUString sServiceName =
+                (_bCollection ? ((_bForm) ? SERVICE_NAME_FORM_COLLECTION : SERVICE_NAME_REPORT_COLLECTION) : SERVICE_SDB_DOCUMENTDEFINITION);
+
+            Reference<XContent > xNew(xORB->createInstanceWithArguments(sServiceName,aArguments),UNO_QUERY);
+            Reference<XNameContainer> xNameContainer(xNameAccess,UNO_QUERY);
+            if ( xNameContainer.is() )
+                xNameContainer->insertByName(sNewName,makeAny(xNew));
+        }
+    }
+    catch(Exception&)
+    {
+        DBG_UNHANDLED_EXCEPTION();
+        return sal_False;
+    }
+
     return sal_True;
 }
 // -----------------------------------------------------------------------------
