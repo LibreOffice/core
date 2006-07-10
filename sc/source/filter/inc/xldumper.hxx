@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xldumper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:42:36 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:03:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,9 @@
 
 #include <stack>
 
+#ifndef SC_FDUMPEROLE_HXX
+#include "fdumperole.hxx"
+#endif
 #ifndef SC_XLCONST_HXX
 #include "xlconst.hxx"
 #endif
@@ -61,14 +64,10 @@ struct XclImpRootData;
 class XclImpRoot;
 class XclImpStream;
 class XclFunctionProvider;
-struct XclGuid;
-struct XclAddress;
-struct XclRange;
-class XclRangeList;
 
 namespace scf {
-namespace xls {
 namespace dump {
+namespace xls {
 
 // ============================================================================
 // ============================================================================
@@ -77,18 +76,44 @@ struct Address
 {
     sal_Int32           mnCol;
     sal_Int32           mnRow;
-    bool                mbRelCol;
-    bool                mbRelRow;
-    inline explicit     Address() : mnCol( 0 ), mnRow( 0 ), mbRelCol( false ), mbRelRow( false ) {}
+    inline explicit     Address() : mnCol( 0 ), mnRow( 0 ) {}
+    void                Read( XclImpStream& rStrm, bool bCol16Bit = true, bool bRow32Bit = false );
 };
 
-// ============================================================================
+// ----------------------------------------------------------------------------
 
 struct Range
 {
     Address             maFirst;
     Address             maLast;
     inline explicit     Range() {}
+    void                Read( XclImpStream& rStrm, bool bCol16Bit = true, bool bRow32Bit = false );
+};
+
+// ----------------------------------------------------------------------------
+
+struct RangeList : public ::std::vector< Range >
+{
+    inline explicit     RangeList() {}
+    void                Read( XclImpStream& rStrm, bool bCol16Bit = true, bool bRow32Bit = false );
+};
+
+// ============================================================================
+
+struct FormulaAddress : public Address
+{
+    bool                mbRelCol;
+    bool                mbRelRow;
+    inline explicit     FormulaAddress() : mbRelCol( false ), mbRelRow( false ) {}
+};
+
+// ----------------------------------------------------------------------------
+
+struct FormulaRange
+{
+    FormulaAddress      maFirst;
+    FormulaAddress      maLast;
+    inline explicit     FormulaRange() {}
 };
 
 // ============================================================================
@@ -96,31 +121,29 @@ struct Range
 class StringHelper : public ::scf::dump::StringHelper
 {
 public:
-    static void         AppendGuid( String& rStr, const XclGuid& rGuid );
-
     static void         AppendAddrCol( String& rStr, sal_Int32 nCol, bool bRel );
     static void         AppendAddrRow( String& rStr, sal_Int32 nRow, bool bRel );
     static void         AppendAddrName( String& rStr, sal_Unicode cPrefix, sal_Int32 nColRow, bool bRel );
 
-    static void         AppendAddress( String& rStr, const Address& rPos, bool bNameMode );
-    static void         AppendRange( String& rStr, const Range& rRange, bool bNameMode );
+    static void         AppendAddress( String& rStr, const Address& rPos );
+    static void         AppendRange( String& rStr, const Range& rRange );
+    static void         AppendRangeList( String& rStr, const RangeList& rRanges );
 
-    static void         AppendAddress( String& rStr, const XclAddress& rPos );
-    static void         AppendRange( String& rStr, const XclRange& rRange );
-    static void         AppendRangeList( String& rStr, const XclRangeList& rRanges );
+    static void         AppendAddress( String& rStr, const FormulaAddress& rPos, bool bNameMode );
+    static void         AppendRange( String& rStr, const FormulaRange& rRange, bool bNameMode );
 };
 
 // ============================================================================
 // ============================================================================
 
-class BiffConfig : public ::scf::dump::Config
+class BiffConfig : public Config
 {
 public:
-    explicit            BiffConfig( const ::scf::dump::Config& rParent, XclBiff eBiff );
+    explicit            BiffConfig( const Config& rParent, XclBiff eBiff );
 
 protected:
     virtual bool        ImplIsValid() const;
-    virtual ::scf::dump::NameListRef ImplGetNameList( const String& rKey ) const;
+    virtual NameListRef ImplGetNameList( const String& rKey ) const;
 
 private:
     XclBiff             meBiff;
@@ -130,7 +153,7 @@ typedef ScfRef< BiffConfig > BiffConfigRef;
 
 // ============================================================================
 
-class RootData : public ::scf::dump::Base
+class RootData : public Base
 {
 public:
     explicit            RootData( SfxMedium& rMedium, XclBiff eBiff );
@@ -138,6 +161,7 @@ public:
 
     inline const XclImpRoot& GetRoot() const { return *mxRoot; }
 
+    rtl_TextEncoding    GetTextEncoding() const;
     void                SetTextEncoding( rtl_TextEncoding eTextEnc );
 
 protected:
@@ -157,7 +181,7 @@ typedef ScfRef< RootData > RootDataRef;
 
 // ============================================================================
 
-class RootObjectBase : public ::scf::dump::WrappedStreamObject
+class RootObjectBase : public WrappedStreamObject
 {
 public:
     virtual             ~RootObjectBase();
@@ -169,14 +193,14 @@ public:
 
 protected:
     explicit            RootObjectBase();
-    void                Construct( const ::scf::dump::ObjectBase& rParent, SvStream& rStrm );
-    void                Construct( const ::scf::dump::OleStorageObject& rParentStrg, const String& rStrmName );
+    void                Construct( const ObjectBase& rParent, SvStream& rStrm );
+    void                Construct( const OleStorageObject& rParentStrg, const String& rStrmName );
     void                Construct( const RootObjectBase& rParent );
 
     virtual bool        ImplIsValid() const;
     virtual void        ImplDumpExtendedHeader();
-    virtual ::scf::dump::ConfigRef ImplReconstructConfig();
-    virtual ::scf::dump::InputRef ImplReconstructInput();
+    virtual ConfigRef   ImplReconstructConfig();
+    virtual InputRef    ImplReconstructInput();
 
     String              GetErrorName( sal_uInt8 nErrCode ) const;
 
@@ -185,16 +209,16 @@ protected:
     double              WriteRkItem( const sal_Char* pcName, sal_Int32 nRk );
     void                WriteBooleanItem( const sal_Char* pcName, sal_uInt8 nBool );
     void                WriteErrorCodeItem( const sal_Char* pcName, sal_uInt8 nErrCode );
-    void                WriteGuidItem( const sal_Char* pcName, const XclGuid& rGuid );
 
-    void                WriteAddressItem( const sal_Char* pcName, const XclAddress& rPos );
-    void                WriteRangeItem( const sal_Char* pcName, const XclRange& rRange );
-    void                WriteRangeListItem( const sal_Char* pcName, const XclRangeList& rRanges );
+    void                WriteAddressItem( const sal_Char* pcName, const Address& rPos );
+    void                WriteRangeItem( const sal_Char* pcName, const Range& rRange );
+    void                WriteRangeListItem( const sal_Char* pcName, const RangeList& rRanges );
 
     template< typename Type >
     void                WriteRectItem( const sal_Char* pcName,
                             Type nLeft, Type nTop, Type nWidth, Type nHeight,
-                            ::scf::dump::FormatType eFmtType = ::scf::dump::FORMATTYPE_DEC );
+                            const NameListWrapper& rListWrp = NO_LIST,
+                            FormatType eFmtType = FORMATTYPE_DEC );
 
     // ------------------------------------------------------------------------
 
@@ -207,55 +231,57 @@ protected:
     rtl_TextEncoding    DumpCodePage( const sal_Char* pcName = 0 );
     void                DumpFormulaResult( const sal_Char* pcName = 0 );
 
-    XclAddress          DumpAddress( const sal_Char* pcName = 0, bool bCol16Bit = true, bool bRow32Bit = false );
-    XclRange            DumpRange( const sal_Char* pcName = 0, bool bCol16Bit = true, bool bRow32Bit = false );
-    void                DumpRangeList( const sal_Char* pcName = 0, bool bCol16Bit = true );
+    Address             DumpAddress( const sal_Char* pcName = 0, bool bCol16Bit = true, bool bRow32Bit = false );
+    Range               DumpRange( const sal_Char* pcName = 0, bool bCol16Bit = true, bool bRow32Bit = false );
+    void                DumpRangeList( const sal_Char* pcName = 0, bool bCol16Bit = true, bool bRow32Bit = false );
 
     void                DumpConstArrayHeader( sal_uInt32& rnCols, sal_uInt32& rnRows );
     String              DumpConstValue();
 
     template< typename Type >
     void                DumpRect( const sal_Char* pcName,
-                            ::scf::dump::FormatType eFmtType = ::scf::dump::FORMATTYPE_DEC );
+                            const NameListWrapper& rListWrp = NO_LIST,
+                            FormatType eFmtType = FORMATTYPE_DEC );
 
     // ------------------------------------------------------------------------
 private:
     void                ConstructOwn();
 
 private:
-    typedef ScfRef< XclImpStream >      XclImpStreamRef;
-    typedef ::scf::dump::NameListRef    DumpNameListRef;
+    typedef ScfRef< XclImpStream > XclImpStreamRef;
 
     RootDataRef         mxRootData;
     BiffConfigRef       mxBiffCfg;
     XclImpStreamRef     mxStrm;
     XclBiff             meBiff;
-    DumpNameListRef     mxBoolean;
-    DumpNameListRef     mxErrCodes;
-    DumpNameListRef     mxConstType;
-    DumpNameListRef     mxResultType;
+    NameListRef         mxBoolean;
+    NameListRef         mxErrCodes;
+    NameListRef         mxConstType;
+    NameListRef         mxResultType;
 };
 
 // ----------------------------------------------------------------------------
 
 template< typename Type >
 void RootObjectBase::WriteRectItem( const sal_Char* pcName,
-        Type nLeft, Type nTop, Type nWidth, Type nHeight, ::scf::dump::FormatType eFmtType )
+        Type nLeft, Type nTop, Type nWidth, Type nHeight,
+        const NameListWrapper& rListWrp, FormatType eFmtType )
 {
-    ::scf::dump::MultiItemsGuard aMultiGuard( Out() );
+    MultiItemsGuard aMultiGuard( Out() );
     WriteEmptyItem( pcName );
-    WriteValueItem( "x-pos", nLeft, eFmtType );
-    WriteValueItem( "y-pos", nTop, eFmtType );
-    WriteValueItem( "x-size", nWidth, eFmtType );
-    WriteValueItem( "y-size", nHeight, eFmtType );
+    WriteValueItem( "x-pos", nLeft, eFmtType, rListWrp );
+    WriteValueItem( "y-pos", nTop, eFmtType, rListWrp );
+    WriteValueItem( "x-size", nWidth, eFmtType, rListWrp );
+    WriteValueItem( "y-size", nHeight, eFmtType, rListWrp );
 }
 
 template< typename Type >
-void RootObjectBase::DumpRect( const sal_Char* pcName, ::scf::dump::FormatType eFmtType )
+void RootObjectBase::DumpRect( const sal_Char* pcName,
+        const NameListWrapper& rListWrp, FormatType eFmtType )
 {
     Type nLeft, nTop, nWidth, nHeight;
     *mxStrm >> nLeft >> nTop >> nWidth >> nHeight;
-    WriteRectItem( pcName, nLeft, nTop, nWidth, nHeight, eFmtType );
+    WriteRectItem( pcName, nLeft, nTop, nWidth, nHeight, rListWrp, eFmtType );
 }
 
 // ============================================================================
@@ -286,11 +312,11 @@ public:
     inline const String& GetFormulaString() const { return GetString( maFmlaStack ); }
     inline const String& GetClassesString() const { return GetString( maClassStack ); }
 
-    void                PushOperand( const String& rOp, const String& rTokClass );
-    void                PushOperand( const String& rOp );
-    void                PushUnaryOp( const String& rLOp, const String& rROp );
-    void                PushBinaryOp( const String& rOp );
-    void                PushFuncOp( const String& rFunc, const String& rTokClass, sal_uInt8 nParamCount );
+    void                PushOperand( const StringWrapper& rOp, const String& rTokClass );
+    void                PushOperand( const StringWrapper& rOp );
+    void                PushUnaryOp( const StringWrapper& rLOp, const StringWrapper& rROp );
+    void                PushBinaryOp( const StringWrapper& rOp );
+    void                PushFuncOp( const StringWrapper& rFunc, const String& rTokClass, sal_uInt8 nParamCount );
 
     inline void         SetError() { mbError = true; }
     void                ReplaceOnTop( const String& rOld, const String& rNew );
@@ -331,23 +357,23 @@ protected:
 private:
     void                ConstructOwn();
 
-    Address             CreateTokenAddress( sal_uInt16 nCol, sal_uInt16 nRow, bool bRelC, bool bRelR, bool bNameMode ) const;
+    FormulaAddress      CreateTokenAddress( sal_uInt16 nCol, sal_uInt16 nRow, bool bRelC, bool bRelR, bool bNameMode ) const;
     String              CreateFunc( sal_uInt16 nFuncIdx ) const;
     String              CreateRef( const String& rData ) const;
     String              CreateName( sal_uInt16 nNameIdx ) const;
     String              CreatePlaceHolder( size_t nIdx ) const;
     String              CreatePlaceHolder() const;
 
-    void                WriteTokenAddressItem( const sal_Char* pcName, const Address& rPos, bool bNameMode );
-    void                WriteTokenAddress3dItem( const sal_Char* pcName, const String& rRef, const Address& rPos, bool bNameMode );
-    void                WriteTokenRangeItem( const sal_Char* pcName, const Range& rRange, bool bNameMode );
-    void                WriteTokenRange3dItem( const sal_Char* pcName, const String& rRef, const Range& rRange, bool bNameMode );
+    void                WriteTokenAddressItem( const sal_Char* pcName, const FormulaAddress& rPos, bool bNameMode );
+    void                WriteTokenAddress3dItem( const sal_Char* pcName, const String& rRef, const FormulaAddress& rPos, bool bNameMode );
+    void                WriteTokenRangeItem( const sal_Char* pcName, const FormulaRange& rRange, bool bNameMode );
+    void                WriteTokenRange3dItem( const sal_Char* pcName, const String& rRef, const FormulaRange& rRange, bool bNameMode );
 
     sal_uInt16          DumpTokenFuncIdx();
     sal_uInt16          DumpTokenCol( const sal_Char* pcName, bool& rbRelC, bool& rbRelR );
     sal_uInt16          DumpTokenRow( const sal_Char* pcName, bool& rbRelC, bool& rbRelR );
-    Address             DumpTokenAddress( bool bNameMode );
-    Range               DumpTokenRange( bool bNameMode );
+    FormulaAddress      DumpTokenAddress( bool bNameMode );
+    FormulaRange        DumpTokenRange( bool bNameMode );
     String              DumpTokenRefIdx();
     void                DumpTokenRefTabIdxs();
 
@@ -370,15 +396,15 @@ private:
     void                DumpMemFuncToken( const String& rTokClass );
     void                DumpMemAreaToken( const String& rTokClass, bool bAddData );
 
-    void                DumpUnaryOpToken( const sal_Char* pcLOp, const sal_Char* pcROp );
-    void                DumpBinaryOpToken( const sal_Char* pcOp );
+    void                DumpExpToken( const StringWrapper& rName );
+    void                DumpUnaryOpToken( const StringWrapper& rLOp, const StringWrapper& rROp );
+    void                DumpBinaryOpToken( const StringWrapper& rOp );
     void                DumpFuncToken( const String& rTokClass );
     void                DumpFuncVarToken( const String& rTokClass );
     void                DumpCmdToken( const String& rTokClass );
 
     void                DumpSheetToken();
     void                DumpEndSheetToken();
-    void                DumpExpToken( const sal_Char* pcName );
     bool                DumpAttrToken();
 
     bool                DumpNlrToken();
@@ -395,19 +421,18 @@ private:
 private:
     enum AddDataType { ADDDATA_NLR, ADDDATA_ARRAY, ADDDATA_MEMAREA };
 
-    typedef ::scf::dump::NameListRef        DumpNameListRef;
     typedef ScfRef< FormulaStack >          FormulaStackRef;
     typedef ScfRef< XclFunctionProvider >   XclFuncProvRef;
     typedef ::std::vector< AddDataType >    AddDataTypeVec;
 
-    DumpNameListRef     mxTokens;
-    DumpNameListRef     mxClasses;
-    DumpNameListRef     mxFuncNames;
-    DumpNameListRef     mxParamCnt;
-    DumpNameListRef     mxRelFlags;
-    DumpNameListRef     mxNlrTypes;
-    DumpNameListRef     mxAttrTypes;
-    DumpNameListRef     mxSpTypes;
+    NameListRef         mxTokens;
+    NameListRef         mxClasses;
+    NameListRef         mxFuncNames;
+    NameListRef         mxParamCnt;
+    NameListRef         mxRelFlags;
+    NameListRef         mxNlrTypes;
+    NameListRef         mxAttrTypes;
+    NameListRef         mxSpTypes;
 
     FormulaStackRef     mxStack;
     XclFuncProvRef      mxFuncProv;
@@ -426,14 +451,14 @@ typedef ScfRef< FormulaObject > FormulaObjectRef;
 class RecordStreamObject : public RootObjectBase
 {
 public:
-    explicit            RecordStreamObject( const ::scf::dump::ObjectBase& rParent, SvStream& rStrm );
-    explicit            RecordStreamObject( const ::scf::dump::OleStorageObject& rParentStrg, const String& rStrmName );
+    explicit            RecordStreamObject( const ObjectBase& rParent, SvStream& rStrm );
+    explicit            RecordStreamObject( const OleStorageObject& rParentStrg, const String& rStrmName );
     virtual             ~RecordStreamObject();
 
 protected:
     inline explicit     RecordStreamObject() {}
-    void                Construct( const ::scf::dump::ObjectBase& rParent, SvStream& rStrm );
-    void                Construct( const ::scf::dump::OleStorageObject& rParentStrg, const String& rStrmName );
+    void                Construct( const ObjectBase& rParent, SvStream& rStrm );
+    void                Construct( const OleStorageObject& rParentStrg, const String& rStrmName );
 
     virtual bool        ImplIsValid() const;
     virtual void        ImplDumpBody();
@@ -443,6 +468,8 @@ protected:
     virtual void        ImplPostProcessRecord();
 
     inline bool         IsMergeContRec() const { return mbMergeContRec; }
+
+    void                DumpRepeatedRecordId();
 
     sal_uInt16          DumpFormulaSize( const sal_Char* pcName = 0 );
     void                DumpCellFormula( const sal_Char* pcName, sal_uInt16 nSize );
@@ -458,18 +485,15 @@ private:
     void                DumpSimpleRecord( const String& rRecData );
 
 private:
-    typedef ::scf::dump::NameListRef DumpNameListRef;
-
     String              maProgressName;
     FormulaObjectRef    mxFmlaObj;
-    DumpNameListRef     mxRecNames;
-    DumpNameListRef     mxSimpleRecs;
+    NameListRef         mxRecNames;
+    NameListRef         mxSimpleRecs;
     bool                mbShowRecPos;
     bool                mbShowRecSize;
     bool                mbShowRecId;
     bool                mbShowRecName;
     bool                mbShowRecBody;
-    bool                mbShowTrailing;
     bool                mbMergeContRec;
 };
 
@@ -478,8 +502,8 @@ private:
 class WorkbookStreamObject : public RecordStreamObject
 {
 public:
-    explicit            WorkbookStreamObject( const ::scf::dump::ObjectBase& rParent, SvStream& rStrm );
-    explicit            WorkbookStreamObject( const ::scf::dump::OleStorageObject& rParentStrg, const String& rStrmName );
+    explicit            WorkbookStreamObject( const ObjectBase& rParent, SvStream& rStrm );
+    explicit            WorkbookStreamObject( const OleStorageObject& rParentStrg, const String& rStrmName );
     virtual             ~WorkbookStreamObject();
 
 protected:
@@ -490,9 +514,9 @@ protected:
 private:
     void                ConstructOwn();
 
-    const XclFontData&  GetFontData( sal_uInt16 nFontIdx ) const;
+    const XclFontData*  GetFontData( sal_uInt16 nFontIdx ) const;
     sal_uInt16          GetXfData( sal_uInt16 nXfIdx ) const;
-    rtl_TextEncoding    GetCellEncoding( sal_uInt16 nXfIdx ) const;
+    rtl_TextEncoding    GetFontEncoding( sal_uInt16 nXfIdx ) const;
     String              CreateFontName( const XclFontData& rFontData ) const;
 
     sal_uInt16          DumpPatternIdx( const sal_Char* pcName = 0 );
@@ -501,22 +525,22 @@ private:
     sal_uInt16          DumpFormatIdx( const sal_Char* pcName = 0 );
     sal_uInt16          DumpXfIdx( const sal_Char* pcName = 0, bool bBiff2Style = false );
 
-    void                DumpCellHeader( bool bBiff2Style = false );
+    sal_uInt16          DumpCellHeader( bool bBiff2Style = false );
     void                DumpBoolErr();
 
+    void                DumpCodePageRec();
     void                DumpFontRec();
     void                DumpFormatRec();
     void                DumpXfRec();
 
 private:
-    typedef ::scf::dump::NameListRef        DumpNameListRef;
-    typedef ::std::vector< XclFontData >    XclFontDataVec;
+    typedef ::std::vector< XclFontData > XclFontDataVec;
 
-    DumpNameListRef     mxColors;
-    DumpNameListRef     mxBorderStyles;
-    DumpNameListRef     mxFillPatterns;
-    DumpNameListRef     mxFontNames;
-    DumpNameListRef     mxFormats;
+    NameListRef         mxColors;
+    NameListRef         mxBorderStyles;
+    NameListRef         mxFillPatterns;
+    NameListRef         mxFontNames;
+    NameListRef         mxFormats;
     XclFontDataVec      maFontDatas;
     ScfUInt16Vec        maXfDatas;
     sal_uInt16          mnFormatIdx;
@@ -524,10 +548,10 @@ private:
 
 // ============================================================================
 
-class VbaProjectStreamObject : public ::scf::dump::OleStreamObject
+class VbaProjectStreamObject : public OleStreamObject
 {
 public:
-    explicit            VbaProjectStreamObject( const ::scf::dump::OleStorageObject& rParentStrg );
+    explicit            VbaProjectStreamObject( const OleStorageObject& rParentStrg );
 
 protected:
     virtual void        ImplDumpBody();
@@ -536,10 +560,10 @@ protected:
 // ============================================================================
 // ============================================================================
 
-class VbaProjectStorageObject : public ::scf::dump::OleStorageObject
+class VbaProjectStorageObject : public OleStorageObject
 {
 public:
-    explicit            VbaProjectStorageObject( const ::scf::dump::OleStorageObject& rParentStrg );
+    explicit            VbaProjectStorageObject( const OleStorageObject& rParentStrg );
 
 protected:
     virtual void        ImplDumpBody();
@@ -547,10 +571,10 @@ protected:
 
 // ============================================================================
 
-class RootStorageObject : public ::scf::dump::OleStorageObject
+class RootStorageObject : public OleStorageObject
 {
 public:
-    explicit            RootStorageObject( const ::scf::dump::ObjectBase& rParent );
+    explicit            RootStorageObject( const ObjectBase& rParent );
 
 protected:
     virtual void        ImplDumpBody();
@@ -559,7 +583,7 @@ protected:
 // ============================================================================
 // ============================================================================
 
-class Dumper : public ::scf::dump::DumperBase
+class Dumper : public DumperBase
 {
 public:
     explicit            Dumper( SfxMedium& rMedium, SfxObjectShell* pDocShell );
@@ -571,8 +595,8 @@ protected:
 // ============================================================================
 // ============================================================================
 
-} // namespace dump
 } // namespace xls
+} // namespace dump
 } // namespace scf
 
 #endif
