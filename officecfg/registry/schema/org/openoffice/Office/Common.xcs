@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.117 $
+ *  $Revision: 1.118 $
  *
- *  last change: $Author: rt $ $Date: 2006-06-26 09:53:23 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 11:50:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4530,6 +4530,15 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 					<info>
 						<desc>Contains settings for HTML import.</desc>
 					</info>
+					<prop oor:name="NumbersEnglishUS" oor:type="xs:boolean">
+                        <!-- UIHints: Tools  Options  Load/Save - HTML Compability [Section] Import -->
+						<info>
+							<author>ER</author>
+							<desc>Specifies if numbers should be parsed according to the en-US locale instead of the user's locale.</desc>
+							<label>Use 'English (USA)' locale for numbers</label>
+						</info>
+						<value>false</value>
+					</prop>
 					<prop oor:name="UnknownTag" oor:type="xs:boolean">
 						<!-- OldPath: Browser/HTML/Import -->
 						<!-- OldLocation: soffice.cfg -->
