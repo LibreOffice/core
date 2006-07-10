@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-20 00:20:19 $
+#   last change: $Author: obo $ $Date: 2006-07-10 18:48:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,9 +45,6 @@ TARGET=app
 .INCLUDE :  sv.mk
 
 # --- Allgemein ------------------------------------------------------------
-
-.INCLUDE :  $(UPD)minor.mk
-
 
 CXXFILES = \
     testbasi.cxx            
