@@ -4,9 +4,9 @@
  *
  *  $RCSfile: KeySet.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:35:21 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:02:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,15 +57,33 @@
 
 namespace dbaccess
 {
-    typedef ::std::pair<sal_Int32,::rtl::OUString>          TTypeDefaultValuePair;
-    typedef ::std::pair<sal_Int32,TTypeDefaultValuePair>    TPositionTypePair;
-    DECLARE_STL_MAP(::rtl::OUString, TPositionTypePair,::comphelper::UStringMixLess,OColumnNamePos);
+    struct SelectColumnDescription
+    {
+        sal_Int32       nPosition;
+        sal_Int32       nType;
+        ::rtl::OUString sDefaultValue;
+
+        SelectColumnDescription()
+            :nPosition( 0 )
+            ,nType( 0 )
+            ,sDefaultValue()
+        {
+        }
+
+        SelectColumnDescription( sal_Int32 _nPosition, sal_Int32 _nType, const ::rtl::OUString& _rDefaultValue )
+            :nPosition( _nPosition )
+            ,nType( _nType )
+            ,sDefaultValue( _rDefaultValue )
+        {
+        }
+    };
+    typedef ::std::map< ::rtl::OUString, SelectColumnDescription, ::comphelper::UStringMixLess >    SelectColumnsMetaData;
 
     // the elements of _rxQueryColumns must have the properties PROPERTY_REALNAME and PROPERTY_TABLENAME
     void getColumnPositions(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxQueryColumns,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxColumns,
                             const ::rtl::OUString& _rsUpdateTableName,
-                            OColumnNamePos& _rColumnNames /* out */);
+                            SelectColumnsMetaData& _rColumnNames /* out */);
 
     typedef ::std::pair<ORowSetRow,sal_Int32> OKeySetValue;
     typedef ::std::map<sal_Int32,OKeySetValue > OKeySetMatrix;
@@ -77,8 +95,8 @@ namespace dbaccess
 
         ::std::vector< ::rtl::OUString >                        m_aAutoColumns;  // contains all columns which are autoincrement ones
 
-        OColumnNamePos*                                         m_pKeyColumnNames;  // contains all key column names
-        OColumnNamePos*                                         m_pColumnNames;     // contains all column names
+        SelectColumnsMetaData*                                          m_pKeyColumnNames;  // contains all key column names
+        SelectColumnsMetaData*                                          m_pColumnNames;     // contains all column names
         connectivity::OSQLTable                                 m_xTable; // reference to our table
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement>   m_xStatement;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>           m_xSet;
