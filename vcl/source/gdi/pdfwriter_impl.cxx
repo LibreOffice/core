@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:29:53 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 16:35:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2646,8 +2646,11 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( ImplFontData* 
 
             OutputDevice* pRef = getReferenceDevice();
             pRef->Push( PUSH_FONT | PUSH_MAPMODE );
-            pRef->SetMapMode( MapMode( MAP_POINT ) );
-            Font aFont( pFont->maName, pFont->maStyleName, Size( 0, 100 ) );
+            pRef->SetMapMode( MapMode( MAP_PIXEL ) );
+            Font aFont( pFont->GetFamilyName(), pFont->GetStyleName(), Size( 0, 1000 ) );
+            aFont.SetWeight( pFont->GetWeight() );
+            aFont.SetItalic( pFont->GetSlant() );
+            aFont.SetPitch( pFont->GetPitch() );
             pRef->SetFont( aFont );
             pRef->ImplNewFont();
 
@@ -2659,7 +2662,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( ImplFontData* 
             for( std::vector< EmbedCode >::iterator str_it = enc_it->m_aEncVector.begin(); str_it != enc_it->m_aEncVector.end(); ++str_it )
             {
                 String aStr( str_it->m_aUnicode );
-                aEncWidths[nEncoded] = pRef->GetTextWidth( aStr ) * 10;
+                aEncWidths[nEncoded] = pRef->GetTextWidth( aStr );
                 nEncodedCodes[nEncoded] = str_it->m_aUnicode;
                 nEncoding[nEncoded] = sal::static_int_cast<sal_uInt8>(nEncoded);
 
@@ -2838,13 +2841,13 @@ sal_Int32 PDFWriterImpl::emitFontDescriptor( ImplFontData* pFont, FontSubsetInfo
     // possibly characters outside Adobe standard encoding
     // so set Symbolic flag
     sal_Int32 nFontFlags = (1<<2);
-    if( pFont->meItalic == ITALIC_NORMAL || pFont->meItalic == ITALIC_OBLIQUE )
+    if( pFont->GetSlant() == ITALIC_NORMAL || pFont->GetSlant() == ITALIC_OBLIQUE )
         nFontFlags |= (1 << 6);
-    if( pFont->mePitch == PITCH_FIXED )
+    if( pFont->GetPitch() == PITCH_FIXED )
         nFontFlags |= 1;
-    if( pFont->meFamily == FAMILY_SCRIPT )
+    if( pFont->GetFamilyType() == FAMILY_SCRIPT )
         nFontFlags |= (1 << 3);
-    if( pFont->meFamily == FAMILY_ROMAN )
+    else if( pFont->GetFamilyType() == FAMILY_ROMAN )
         nFontFlags |= (1 << 1);
 
     sal_Int32 nFontDescriptor = createObject();
@@ -2868,7 +2871,7 @@ sal_Int32 PDFWriterImpl::emitFontDescriptor( ImplFontData* pFont, FontSubsetInfo
     aLine.append( ' ' );
     aLine.append( (sal_Int32)(rInfo.m_aFontBBox.BottomRight().Y()+1) );
     aLine.append( "]/ItalicAngle " );
-    if( pFont->meItalic == ITALIC_OBLIQUE || pFont->meItalic == ITALIC_NORMAL )
+    if( pFont->GetSlant() == ITALIC_OBLIQUE || pFont->GetSlant() == ITALIC_NORMAL )
         aLine.append( "-30" );
     else
         aLine.append( "0" );
@@ -5096,8 +5099,8 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
     // perform artificial italics if necessary
     if( ( m_aCurrentPDFState.m_aFont.GetItalic() == ITALIC_NORMAL ||
           m_aCurrentPDFState.m_aFont.GetItalic() == ITALIC_OBLIQUE ) &&
-        !( m_pReferenceDevice->mpFontEntry->maFontSelData.mpFontData->meItalic == ITALIC_NORMAL ||
-           m_pReferenceDevice->mpFontEntry->maFontSelData.mpFontData->meItalic == ITALIC_OBLIQUE )
+        !( m_pReferenceDevice->mpFontEntry->maFontSelData.mpFontData->GetSlant() == ITALIC_NORMAL ||
+           m_pReferenceDevice->mpFontEntry->maFontSelData.mpFontData->GetSlant() == ITALIC_OBLIQUE )
         )
     {
         fSkew = M_PI/12.0;
@@ -5124,8 +5127,8 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
     bool bPop = false;
     bool bABold = false;
     // artificial bold necessary ?
-    if( m_pReferenceDevice->mpFontEntry->maFontSelData.mpFontData->meWeight <= WEIGHT_MEDIUM &&
-        m_pReferenceDevice->mpFontEntry->maFontSelData.meWeight > WEIGHT_MEDIUM )
+    if( m_pReferenceDevice->mpFontEntry->maFontSelData.mpFontData->GetWeight() <= WEIGHT_MEDIUM &&
+        m_pReferenceDevice->mpFontEntry->maFontSelData.GetWeight() > WEIGHT_MEDIUM )
     {
         if( ! bPop )
             aLine.append( "q " );
@@ -6951,7 +6954,6 @@ void PDFWriterImpl::drawPixel( const Polygon& rPoints, const Color* pColors )
     aPixel.append( ' ' );
     appendDouble( 1.0/double(getReferenceDevice()->ImplGetDPIY()), aPixel );
     OString aPixelStr = aPixel.makeStringAndClear();
-
     for( USHORT i = 0; i < nPoints; i++ )
     {
         if( pColors )
