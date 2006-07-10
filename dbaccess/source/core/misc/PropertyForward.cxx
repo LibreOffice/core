@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyForward.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:48:09 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:16:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,7 @@ OPropertyForward::OPropertyForward(const Reference< XPropertySet>& _xSource
                                 , m_bInInsert(sal_False)
 {
     DBG_CTOR(OPropertyForward,NULL);
-    OSL_ENSURE(_xDestContainer.is(),"Destanation should be valid!");
+    OSL_ENSURE(_xDestContainer.is(),"OPropertyForward::OPropertyForward: destination should be valid!");
     osl_incrementInterlockedCount(&m_refCount);
     try
     {
