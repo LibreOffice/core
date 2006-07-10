@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertyids.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 12:13:56 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:21:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,7 +96,6 @@ namespace dbtools
     //============================================================
         const sal_Char* getERRORMSG_SEQUENCE()              { return    "Function sequence error"; }
         const sal_Char* getSQLSTATE_SEQUENCE()              { return    "HY010"; }
-        const sal_Char* getSQLSTATE_GENERAL()               { return    "HY0000"; }
         const sal_Char* getSTR_DELIMITER()                  { return    "/"; }
 
 
@@ -173,7 +172,6 @@ namespace dbtools
                 case PROPERTY_ID_INVALID_INDEX:             { rtl_uString_newFromAscii(&pStr,getSTAT_INVALID_INDEX()            ); break; }
                 case PROPERTY_ID_ERRORMSG_SEQUENCE:         { rtl_uString_newFromAscii(&pStr,getERRORMSG_SEQUENCE()             ); break; }
                 case PROPERTY_ID_HY010:                     { rtl_uString_newFromAscii(&pStr,getSQLSTATE_SEQUENCE()             ); break; }
-                case PROPERTY_ID_HY0000:                    { rtl_uString_newFromAscii(&pStr,getSQLSTATE_GENERAL()              ); break; }
                 case PROPERTY_ID_DELIMITER:                 { rtl_uString_newFromAscii(&pStr,getSTR_DELIMITER()                 ); break; }
                 case PROPERTY_ID_FORMATKEY:                 { rtl_uString_newFromAscii(&pStr,getPROPERTY_FORMATKEY()            ); break; }
                 case PROPERTY_ID_LOCALE:                    { rtl_uString_newFromAscii(&pStr,getPROPERTY_LOCALE()               ); break; }
