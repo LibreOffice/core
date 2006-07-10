@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TIndexColumns.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:11:16 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:18:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,7 +141,7 @@ sdbcx::ObjectType OIndexColumns::createObject(const ::rtl::OUString& _rName)
     return xRet;
 }
 // -------------------------------------------------------------------------
-Reference< XPropertySet > OIndexColumns::createEmptyObject()
+Reference< XPropertySet > OIndexColumns::createDescriptor()
 {
     return new OIndexColumn(sal_True);
 }
@@ -149,12 +149,5 @@ Reference< XPropertySet > OIndexColumns::createEmptyObject()
 void OIndexColumns::impl_refresh() throw(RuntimeException)
 {
     m_pIndex->refreshColumns();
-}
-// -----------------------------------------------------------------------------
-sdbcx::ObjectType OIndexColumns::cloneObject(const Reference< XPropertySet >& _xDescriptor)
-{
-    Reference<XPropertySet> xProp = new OIndexColumn(sal_True);
-    ::comphelper::copyProperties(_xDescriptor,xProp);
-    return xProp;
 }
 // -----------------------------------------------------------------------------

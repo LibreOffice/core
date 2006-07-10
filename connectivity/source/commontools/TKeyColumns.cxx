@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TKeyColumns.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:12:07 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:19:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,7 +157,7 @@ sdbcx::ObjectType OKeyColumnsHelper::createObject(const ::rtl::OUString& _rName)
     return xRet;
 }
 // -------------------------------------------------------------------------
-Reference< XPropertySet > OKeyColumnsHelper::createEmptyObject()
+Reference< XPropertySet > OKeyColumnsHelper::createDescriptor()
 {
     return new OKeyColumn(isCaseSensitive());
 }
@@ -165,13 +165,6 @@ Reference< XPropertySet > OKeyColumnsHelper::createEmptyObject()
 void OKeyColumnsHelper::impl_refresh() throw(::com::sun::star::uno::RuntimeException)
 {
     m_pKey->refreshColumns();
-}
-// -----------------------------------------------------------------------------
-sdbcx::ObjectType OKeyColumnsHelper::cloneObject(const Reference< XPropertySet >& _xDescriptor)
-{
-    Reference<XPropertySet> xProp = new OKeyColumn(isCaseSensitive());
-    ::comphelper::copyProperties(_xDescriptor,xProp);
-    return xProp;
 }
 // -----------------------------------------------------------------------------
 
