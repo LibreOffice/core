@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:36:00 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:03:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -468,8 +468,8 @@ sal_Bool SAL_CALL ORowSetBase::moveToBookmark( const Any& bookmark ) throw(SQLEx
 
     checkCache();
 
-    sal_Bool bRet;
-    if(bRet = notifyAllListenersCursorBeforeMove(aGuard))
+    sal_Bool bRet( notifyAllListenersCursorBeforeMove( aGuard ) );
+    if ( bRet )
     {
         // check if we are inserting a row
         sal_Bool bWasNew = m_pCache->m_bNew || rowDeleted();
@@ -510,8 +510,8 @@ sal_Bool SAL_CALL ORowSetBase::moveRelativeToBookmark( const Any& bookmark, sal_
 
     checkPositioningAllowed();
 
-    sal_Bool bRet;
-    if(bRet = notifyAllListenersCursorBeforeMove(aGuard))
+    sal_Bool bRet( notifyAllListenersCursorBeforeMove( aGuard ) );
+    if ( bRet )
     {
         // check if we are inserting a row
         sal_Bool bWasNew = m_pCache->m_bNew || rowDeleted();
@@ -613,8 +613,8 @@ sal_Bool SAL_CALL ORowSetBase::next(  ) throw(SQLException, RuntimeException)
     ::osl::ResettableMutexGuard aGuard( *m_pMutex );
     checkCache();
 
-    sal_Bool bRet;
-    if(bRet = notifyAllListenersCursorBeforeMove(aGuard))
+    sal_Bool bRet( notifyAllListenersCursorBeforeMove( aGuard ) );
+    if ( bRet )
     {
         // check if we are inserting a row
         sal_Bool bWasNew = m_pCache->m_bNew || rowDeleted();
@@ -819,8 +819,8 @@ sal_Bool SAL_CALL ORowSetBase::move(    ::std::mem_fun_t<sal_Bool,ORowSetBase>& 
     ::osl::ResettableMutexGuard aGuard( *m_pMutex );
     checkPositioningAllowed();
 
-    sal_Bool bRet;
-    if(bRet = notifyAllListenersCursorBeforeMove(aGuard) )
+    sal_Bool bRet( notifyAllListenersCursorBeforeMove( aGuard ) );
+    if( bRet )
     {
         // check if we are inserting a row
         sal_Bool bWasNew = m_pCache->m_bNew || rowDeleted();
@@ -913,8 +913,9 @@ sal_Bool SAL_CALL ORowSetBase::absolute( sal_Int32 row ) throw(SQLException, Run
     ::osl::ResettableMutexGuard aGuard( *m_pMutex );
     checkPositioningAllowed();
 
-    sal_Bool bRet = row > 0;
-    if ( bRet && (bRet = notifyAllListenersCursorBeforeMove(aGuard)) )
+    sal_Bool bRet = ( row > 0 )
+                &&  notifyAllListenersCursorBeforeMove( aGuard );
+    if ( bRet )
     {
         // check if we are inserting a row
         sal_Bool bWasNew = m_pCache->m_bNew || rowDeleted();
@@ -962,10 +963,13 @@ sal_Bool SAL_CALL ORowSetBase::relative( sal_Int32 rows ) throw(SQLException, Ru
 
     checkPositioningAllowed();
 
-    sal_Bool bRet =!((m_bAfterLast && rows > 0) || (m_bBeforeFirst && rows < 0)); // we are already behind the last row or before the first
+    sal_Bool bRet =
+            (  ( !m_bAfterLast || rows <= 0 )
+            && ( !m_bBeforeFirst || rows >= 0 )
+            && notifyAllListenersCursorBeforeMove( aGuard )
+            );
 
-
-    if(bRet && (bRet = notifyAllListenersCursorBeforeMove(aGuard)))
+    if ( bRet )
     {
         // check if we are inserting a row
         sal_Bool bWasNew = m_pCache->m_bNew || rowDeleted();
@@ -1010,9 +1014,10 @@ sal_Bool SAL_CALL ORowSetBase::previous(  ) throw(SQLException, RuntimeException
 
     checkPositioningAllowed();
 
-    sal_Bool bRet = !m_bBeforeFirst;
+    sal_Bool bRet = !m_bBeforeFirst
+                &&  notifyAllListenersCursorBeforeMove(aGuard);
 
-    if(bRet && (bRet = notifyAllListenersCursorBeforeMove(aGuard)))
+    if ( bRet )
     {
         // check if we are inserting a row
         sal_Bool bWasNew = m_pCache->m_bNew || rowDeleted();
@@ -1209,7 +1214,7 @@ void ORowSetBase::firePropertyChange(const ORowSetRow& _rOldRow)
     DBG_TRACE2("DBACCESS ORowSetBase::firePropertyChange() Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
     OSL_ENSURE(m_pColumns,"Columns can not be NULL here!");
 #if OSL_DEBUG_LEVEL > 1
-    sal_Bool bNull = m_aCurrentRow.isNull();
+    sal_Bool bNull = m_aCurrentRow.isNull(); (void)bNull;
     ORowSetMatrix::iterator atest = m_aCurrentRow;
 #endif
     sal_Int32 i=0;
