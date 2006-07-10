@@ -1,0 +1,54 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: sdbt_resource.hrc,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:20:43 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef DBACCESS_SDBT_RESOURCE_HRC
+#define DBACCESS_SDBT_RESOURCE_HRC
+
+#ifndef _SOLAR_HRC
+#include <svtools/solar.hrc>
+#endif
+
+//------------------------------------------------------------------------------
+#define RID_SDBT_STRINGS_START                  RID_DBACCESS_START
+
+//------------------------------------------------------------------------------
+//- String-IDs
+#define STR_NAME_ALREADY_USED_IN_DB         RID_SDBT_STRINGS_START +  1
+#define STR_QUERY_AND_TABLE_DISTINCT_NAMES  RID_SDBT_STRINGS_START +  2
+#define STR_BASENAME_TABLE                  RID_SDBT_STRINGS_START +  3
+#define STR_BASENAME_QUERY                  RID_SDBT_STRINGS_START +  4
+#define STR_NO_QUOTES_IN_QUERY_NAMES        RID_SDBT_STRINGS_START +  5
+
+#endif // DBACCESS_SDBT_RESOURCE_HRC
