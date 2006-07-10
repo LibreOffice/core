@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlstring.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:38:46 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:04:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,7 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
 #ifndef SC_XLSTRING_HXX
 #define SC_XLSTRING_HXX
 
@@ -48,6 +49,7 @@ const XclStrFlags EXC_STR_DEFAULT           = 0x0000;   /// Default string setti
 const XclStrFlags EXC_STR_FORCEUNICODE      = 0x0001;   /// Always use UCS-2 characters (default: try to compress). BIFF8 only.
 const XclStrFlags EXC_STR_8BITLENGTH        = 0x0002;   /// 8-bit string length field (default: 16-bit).
 const XclStrFlags EXC_STR_SMARTFLAGS        = 0x0004;   /// Omit flags on empty string (default: read/write always). BIFF8 only.
+const XclStrFlags EXC_STR_KEEPFORMATS       = 0x0008;   /// Keep old formats when reading unformatted string (default: clear formats).
 
 // ----------------------------------------------------------------------------
 
@@ -68,27 +70,29 @@ const sal_uInt16 EXC_NUL                    = EXC_NUL_C;    /// NUL chararcter (
 // Rich-string formatting runs ================================================
 
 /** Represents a formatting run for rich-strings.
-    @descr  An Excel formatting run stores the first formatted character in a
+
+    An Excel formatting run stores the first formatted character in a
     rich-string and the index of a font used to format this and the following
-    characters. */
+    characters.
+ */
 struct XclFormatRun
 {
     sal_uInt16          mnChar;         /// First character this format applies to.
-    sal_uInt16          mnXclFont;      /// Excel font index for the next characters.
+    sal_uInt16          mnFontIdx;      /// Excel font index for the next characters.
 
-    explicit inline     XclFormatRun() : mnChar( 0 ), mnXclFont( 0 ) {}
-    explicit inline     XclFormatRun( sal_uInt16 nChar, sal_uInt16 nXclFont ) :
-                            mnChar( nChar ), mnXclFont( nXclFont ) {}
+    explicit inline     XclFormatRun() : mnChar( 0 ), mnFontIdx( 0 ) {}
+    explicit inline     XclFormatRun( sal_uInt16 nChar, sal_uInt16 nFontIdx ) :
+                            mnChar( nChar ), mnFontIdx( nFontIdx ) {}
 };
 
 inline bool operator==( const XclFormatRun& rLeft, const XclFormatRun& rRight )
 {
-    return (rLeft.mnChar == rRight.mnChar) && (rLeft.mnXclFont == rRight.mnXclFont);
+    return (rLeft.mnChar == rRight.mnChar) && (rLeft.mnFontIdx == rRight.mnFontIdx);
 }
 
 inline bool operator<( const XclFormatRun& rLeft, const XclFormatRun& rRight )
 {
-    return (rLeft.mnChar < rRight.mnChar) || ((rLeft.mnChar == rRight.mnChar) && (rLeft.mnXclFont < rRight.mnXclFont));
+    return (rLeft.mnChar < rRight.mnChar) || ((rLeft.mnChar == rRight.mnChar) && (rLeft.mnFontIdx < rRight.mnFontIdx));
 }
 
 // ----------------------------------------------------------------------------
