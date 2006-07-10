@@ -4,9 +4,9 @@
  *
  *  $RCSfile: commanddefinition.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 10:49:52 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:09:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,23 +85,23 @@ DBG_NAME(OCommandDefinition)
 //--------------------------------------------------------------------------
 void OCommandDefinition::registerProperties()
 {
-    OCommandDefinition_Impl* pItem = static_cast<OCommandDefinition_Impl*>(m_pImpl.get());
+    OCommandDefinition_Impl& rCommandDefinition( getCommandDefinition() );
     registerProperty(PROPERTY_COMMAND, PROPERTY_ID_COMMAND, PropertyAttribute::BOUND,
-                    &pItem->m_sCommand, ::getCppuType(&pItem->m_sCommand));
+                    &rCommandDefinition.m_sCommand, ::getCppuType(&rCommandDefinition.m_sCommand));
 
     registerProperty(PROPERTY_USE_ESCAPE_PROCESSING, PROPERTY_ID_USE_ESCAPE_PROCESSING, PropertyAttribute::BOUND,
-                    &pItem->m_bEscapeProcessing, ::getBooleanCppuType());
+                    &rCommandDefinition.m_bEscapeProcessing, ::getBooleanCppuType());
 
     registerProperty(PROPERTY_UPDATE_TABLENAME, PROPERTY_ID_UPDATE_TABLENAME, PropertyAttribute::BOUND,
-                    &pItem->m_sUpdateTableName, ::getCppuType(&pItem->m_sUpdateTableName));
+                    &rCommandDefinition.m_sUpdateTableName, ::getCppuType(&rCommandDefinition.m_sUpdateTableName));
 
     registerProperty(PROPERTY_UPDATE_SCHEMANAME, PROPERTY_ID_UPDATE_SCHEMANAME, PropertyAttribute::BOUND,
-                    &pItem->m_sUpdateSchemaName, ::getCppuType(&pItem->m_sUpdateSchemaName));
+                    &rCommandDefinition.m_sUpdateSchemaName, ::getCppuType(&rCommandDefinition.m_sUpdateSchemaName));
 
     registerProperty(PROPERTY_UPDATE_CATALOGNAME, PROPERTY_ID_UPDATE_CATALOGNAME, PropertyAttribute::BOUND,
-                    &pItem->m_sUpdateCatalogName, ::getCppuType(&pItem->m_sUpdateCatalogName));
+                    &rCommandDefinition.m_sUpdateCatalogName, ::getCppuType(&rCommandDefinition.m_sUpdateCatalogName));
     registerProperty(PROPERTY_LAYOUTINFORMATION, PROPERTY_ID_LAYOUTINFORMATION, PropertyAttribute::BOUND,
-                    &pItem->m_aLayoutInformation, ::getCppuType(&pItem->m_aLayoutInformation));
+                    &rCommandDefinition.m_aLayoutInformation, ::getCppuType(&rCommandDefinition.m_aLayoutInformation));
 }
 
 //--------------------------------------------------------------------------
