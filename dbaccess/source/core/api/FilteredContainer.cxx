@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FilteredContainer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:34:56 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:01:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,7 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #endif
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
-#include <connectivity/dbtools.hxx>
+#include "connectivity/dbtools.hxx"
 #endif
 #ifndef _WLDCRD_HXX
 #include <tools/wldcrd.hxx>
@@ -239,7 +239,7 @@ namespace dbaccess
                         // we're not interested in the "wasNull", as the getStrings would return an empty string in
                         // that case, which is sufficient here
 
-                        composeTableName(m_xMetaData, sCatalog, sSchema, sName, sComposedName, sal_False,::dbtools::eInDataManipulation);
+                        sComposedName = composeTableName( m_xMetaData, sCatalog, sSchema, sName, sal_False, ::dbtools::eInDataManipulation );
 
                         const ::rtl::OUString* tableFilter = aTableFilter.getConstArray();
                         const ::rtl::OUString* tableFilterEnd = aTableFilter.getConstArray() + nTableFilterLen;
@@ -338,7 +338,7 @@ namespace dbaccess
     ::rtl::OUString OFilteredContainer::getNameForObject(const ObjectType& _xObject)
     {
         OSL_ENSURE(_xObject.is(),"OTables::getNameForObject: Object is NULL!");
-        return ::dbtools::composeTableName(m_xMetaData,_xObject,sal_False,::dbtools::eInDataManipulation);
+        return ::dbtools::composeTableName( m_xMetaData, _xObject, ::dbtools::eInDataManipulation, false, false, false );
     }
 // ..............................................................................
 } // namespace
