@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr4.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 15:07:16 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 12:32:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -809,7 +809,7 @@ void ScInterpreter::PopSingleRef(SCCOL& rCol, SCROW &rRow, SCTAB& rTab)
                 SetError( errNoRef ), rCol = 0;
             if( !ValidRow( rRow) || rRef.IsRowDeleted() )
                 SetError( errNoRef ), rRow = 0;
-            if( !ValidTab( rTab, pDok->GetTableCount()) || rRef.IsTabDeleted() )
+            if( !ValidTab( rTab, pDok->GetTableCount() - 1) || rRef.IsTabDeleted() )
                 SetError( errNoRef ), rTab = 0;
             if ( pDok->aTableOpList.Count() > 0 )
                 ReplaceCell( rCol, rRow, rTab );
@@ -852,7 +852,7 @@ void ScInterpreter::PopSingleRef( ScAddress& rAdr )
                 SetError( errNoRef ), nCol = 0;
             if( !ValidRow( nRow) || rRef.IsRowDeleted() )
                 SetError( errNoRef ), nRow = 0;
-            if( !ValidTab( (SCTAB)nTab, pDok->GetTableCount()) || rRef.IsTabDeleted() )
+            if( !ValidTab( (SCTAB)nTab, pDok->GetTableCount() - 1) || rRef.IsTabDeleted() )
                 SetError( errNoRef ), nTab = 0;
             rAdr.Set( (SCCOL)nCol, (SCROW)nRow, (SCTAB)nTab );
             if ( pDok->aTableOpList.Count() > 0 )
@@ -3508,6 +3508,7 @@ StackVar ScInterpreter::Interpret()
                 case ocConvert          : ScConvert();                  break;
                 case ocRoman            : ScRoman();                    break;
                 case ocArabic           : ScArabic();                   break;
+                case ocInfo             : ScInfo();                     break;
                 case ocHyperLink        : ScHyperLink();                break;
                 case ocBahtText         : ScBahtText();                 break;
                 case ocAnswer           : ScAnswer();                   break;
