@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr5.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-03 18:24:22 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 12:32:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,9 @@
 #include <string.h>
 #include <math.h>
 
+#ifndef _UTL_BOOTSTRAP_HXX
+#include <unotools/bootstrap.hxx>
+#endif
 #ifndef _ZFORLIST_HXX //autogen
 #include <svtools/zforlist.hxx>
 #endif
@@ -3957,5 +3960,22 @@ void ScInterpreter::ScMatRef()
         SetError( errNoRef );
 }
 
-
-
+void ScInterpreter::ScInfo()
+{
+    if( MustHaveParamCount( GetByte(), 1 ) )
+    {
+        String aStr = String( GetString() ).ToUpperAscii();
+        if( aStr.EqualsAscii( "SYSTEM" ) )
+            PushString( String( RTL_CONSTASCII_USTRINGPARAM( SC_INFO_OSVERSION ) ) );
+        else if( aStr.EqualsAscii( "OSVERSION" ) )
+            PushString( String( RTL_CONSTASCII_USTRINGPARAM( "Windows (32-bit) NT 5.01" ) ) );
+        else if( aStr.EqualsAscii( "RELEASE" ) )
+            PushString( ::utl::Bootstrap::getBuildIdData( ::rtl::OUString() ) );
+        else if( aStr.EqualsAscii( "NUMFILE" ) )
+            PushDouble( 1 );
+        else if( aStr.EqualsAscii( "RECALC" ) )
+            PushString( ScGlobal::GetRscString( pDok->GetAutoCalc() ? STR_RECALC_AUTO : STR_RECALC_MANUAL ) );
+        else
+            SetIllegalParameter();
+    }
+}
