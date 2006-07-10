@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:19:34 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:34:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -263,7 +263,7 @@ namespace dbaui
         virtual sal_Int8    queryDrop( const AcceptDropEvent& _rEvt, const DataFlavorExVector& _rFlavors );
         virtual sal_Int8    executeDrop( const ExecuteDropEvent& _rEvt );
 
-        virtual void impl_initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments );
+        virtual void impl_initialize();
 
         // SbaGridListener overridables
         virtual void RowChanged();
