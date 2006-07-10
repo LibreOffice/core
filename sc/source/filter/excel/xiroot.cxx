@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xiroot.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 12:02:33 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:42:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,9 @@
 
 #ifndef SC_XLTRACER_HXX
 #include "xltracer.hxx"
+#endif
+#ifndef SC_XIFORMULA_HXX
+#include "xiformula.hxx"
 #endif
 #ifndef SC_XILINK_HXX
 #include "xilink.hxx"
@@ -91,6 +94,7 @@ XclImpRoot::XclImpRoot( XclImpRootData& rImpRootData ) :
     mrImpData( rImpRootData )
 {
     mrImpData.mxAddrConv.reset( new XclImpAddressConverter( GetRoot() ) );
+    mrImpData.mxFmlaComp.reset( new XclImpFormulaCompiler( GetRoot() ) );
     mrImpData.mxPalette.reset( new XclImpPalette( GetRoot() ) );
     mrImpData.mxFontBfr.reset( new XclImpFontBuffer( GetRoot() ) );
     mrImpData.mxNumFmtBfr.reset( new XclImpNumFmtBuffer( GetRoot() ) );
@@ -98,13 +102,13 @@ XclImpRoot::XclImpRoot( XclImpRootData& rImpRootData ) :
     mrImpData.mxXFRangeBfr.reset( new XclImpXFRangeBuffer( GetRoot() ) );
     mrImpData.mxTabInfo.reset( new XclImpTabInfo );
     mrImpData.mxNameMgr.reset( new XclImpNameManager( GetRoot() ) );
+    mrImpData.mxObjMgr.reset( new XclImpObjectManager( GetRoot() ) );
 
     if( GetBiff() == EXC_BIFF8 )
     {
         mrImpData.mxLinkMgr.reset( new XclImpLinkManager( GetRoot() ) );
         mrImpData.mxSst.reset( new XclImpSst( GetRoot() ) );
         mrImpData.mxCondFmtMgr.reset( new XclImpCondFormatManager( GetRoot() ) );
-        mrImpData.mxObjMgr.reset( new XclImpObjectManager( GetRoot() ) );
         // TODO still in old RootData (deleted by RootData)
         GetOldRoot().pAutoFilterBuffer = new XclImpAutoFilterBuffer;
         mrImpData.mxWebQueryBfr.reset( new XclImpWebQueryBuffer( GetRoot() ) );
@@ -135,7 +139,12 @@ XclImpAddressConverter& XclImpRoot::GetAddressConverter() const
     return *mrImpData.mxAddrConv;
 }
 
-ExcelToSc& XclImpRoot::GetFmlaConverter() const
+XclImpFormulaCompiler& XclImpRoot::GetFormulaCompiler() const
+{
+    return *mrImpData.mxFmlaComp;
+}
+
+ExcelToSc& XclImpRoot::GetOldFmlaConverter() const
 {
     // TODO still in old RootData
     return *GetOldRoot().pFmlaConverter;
@@ -202,7 +211,6 @@ XclImpLinkManager& XclImpRoot::GetLinkManager() const
 
 XclImpObjectManager& XclImpRoot::GetObjectManager() const
 {
-    DBG_ASSERT( mrImpData.mxObjMgr.is(), "XclImpRoot::GetObjectManager - invalid call, wrong BIFF" );
     return *mrImpData.mxObjMgr;
 }
 
