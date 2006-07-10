@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WizardPages.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 12:15:47 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:37:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -603,10 +603,10 @@ ErrorBox ERROR_INVALID_TABLE_NAME
     Buttons = WB_OK;
     Message [ en-US ] = "This table name is not valid in the current database.";
 };
-String STR_ERR_DUPL_TABLENAME
+String STR_SUGGEST_APPEND_TABLE_DATA
 {
-    Text [ de ] = "Der Tabellenname \'$name$\' existiert bereits.\nSie können einen neuen Namen angeben\noder die Daten an die existierende Tabelle anhängen." ;
-    Text [ en-US ] = "The table name \'$name$\' already exists.\nYou may enter a new name\nor append the data to the existing table." ;
+    Text [ de ] = "Wählen Sie die Option 'Daten anhängen' auf der ersten Seite, um Daten an eine existierende Tabellen anzuhängen.";
+    Text [ en-US ] = "Choose the option 'Append data' on the first page to append data to an existing table.";
 };
 
 ErrorBox ERROR_INVALID_TABLE_NAME_LENGTH
