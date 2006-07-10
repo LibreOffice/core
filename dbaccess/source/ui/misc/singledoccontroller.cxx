@@ -4,9 +4,9 @@
  *
  *  $RCSfile: singledoccontroller.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:24:31 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:39:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,14 +149,14 @@ namespace dbaui
     OSingleDocumentController::OSingleDocumentController(const Reference< XMultiServiceFactory >& _rxORB)
         :OSingleDocumentController_CBASE( _rxORB )
         ,OSingleDocumentController_PBASE( getBroadcastHelper() )
-        ,m_bOwnConnection( sal_False )
         ,m_bSuspended( sal_False )
         ,m_bEditable(sal_True)
         ,m_bModified(sal_False)
 
     {
-        registerProperty( PROPERTY_ACTIVECONNECTION, PROPERTY_ID_ACTIVECONNECTION, PropertyAttribute::READONLY | PropertyAttribute::BOUND,
-            &m_xConnection, ::getCppuType( &m_xConnection ) );
+//      registerProperty( PROPERTY_ACTIVECONNECTION, PROPERTY_ID_ACTIVECONNECTION, PropertyAttribute::READONLY | PropertyAttribute::BOUND,
+//          &m_xConnection, ::getCppuType( &m_xConnection ) );
+        //  TODO: is this still needed?
     }
 
     //--------------------------------------------------------------------
@@ -235,8 +235,8 @@ namespace dbaui
         if ( isConnected() )
             disconnect();
 
-        m_xConnection       = _rxForeignConn;
-        m_bOwnConnection    = sal_False;
+        m_xConnection.reset( _rxForeignConn, SharedConnection::NoTakeOwnership );
+        m_aSdbMetaData.reset( m_xConnection );
         startConnectionListening( m_xConnection );
 
         // get the data source the connection belongs to
@@ -272,18 +272,9 @@ namespace dbaui
         OSL_ENSURE(!m_bSuspended, "Cannot reconnect while suspended!");
         OConnectionChangeBroadcaster( this );
 
-        stopConnectionListening(m_xConnection);
-        if ( m_bOwnConnection )
-        {
-            try
-            {
-                ::comphelper::disposeComponent( m_xConnection );
-            }
-            catch( const Exception& ) { /* allowed: if we reconnect because the old connection has been disposed .... */ }
-        }
-        m_xConnection       = NULL;
-        m_bOwnConnection    = sal_False;
-
+        stopConnectionListening( m_xConnection );
+        m_aSdbMetaData.reset( NULL );
+        m_xConnection.clear();
 
         // reconnect
         sal_Bool bReConnect = sal_True;
@@ -296,8 +287,8 @@ namespace dbaui
         // now really reconnect ...
         if ( bReConnect )
         {
-            m_xConnection = connect( Reference<XDataSource>(m_xDataSource,UNO_QUERY), sal_True );
-            m_bOwnConnection = m_xConnection.is();
+            m_xConnection.reset( connect( Reference<XDataSource>(m_xDataSource,UNO_QUERY), sal_True ), SharedConnection::TakeOwnership );
+            m_aSdbMetaData.reset( m_xConnection );
         }
 
         // invalidate all slots
@@ -310,16 +301,8 @@ namespace dbaui
         OConnectionChangeBroadcaster( this );
 
         stopConnectionListening(m_xConnection);
-        try
-        {
-            if ( m_bOwnConnection )
-                ::comphelper::disposeComponent( m_xConnection );
-        }
-        catch(const Exception&)
-        {
-        }
-        m_xConnection = NULL;
-        m_bOwnConnection = sal_False;
+        m_aSdbMetaData.reset( NULL );
+        m_xConnection.clear();
 
         InvalidateAll();
     }
@@ -372,7 +355,8 @@ namespace dbaui
             }
             else
             {
-                m_bOwnConnection = sal_False;   // this prevents the "disposeComponent" call in disconnect
+                m_xConnection.reset( m_xConnection, SharedConnection::NoTakeOwnership );
+                    // this prevents the "disposeComponent" call in disconnect
                 disconnect();
             }
         }
@@ -394,7 +378,7 @@ namespace dbaui
                 DBG_ASSERT(::dbtools::SQLExceptionInfo(_rChainLeft).isValid(), "concatSQLExceptions: invalid warnings chain (this will crash)!");
 
                 const SQLException* pChainTravel = static_cast<const SQLException*>(_rChainLeft.getValue());
-                ::dbtools::SQLExceptionIteratorHelper aReferenceIterHelper(pChainTravel);
+                ::dbtools::SQLExceptionIteratorHelper aReferenceIterHelper(*pChainTravel);
                 while (aReferenceIterHelper.hasMoreElements())
                     pChainTravel = aReferenceIterHelper.next();
 
@@ -460,7 +444,7 @@ namespace dbaui
                     String sUndo(ModuleRes(STR_UNDO_COLON));
                     sUndo += String(RTL_CONSTASCII_USTRINGPARAM(" "));
                     sUndo += m_aUndoManager.GetUndoActionComment();
-                    aReturn.aState <<= ::rtl::OUString(sUndo);
+                    aReturn.sTitle = sUndo;
                 }
                 break;
             case ID_BROWSER_REDO:
@@ -470,7 +454,7 @@ namespace dbaui
                     String sRedo(ModuleRes(STR_REDO_COLON));
                     sRedo += String(RTL_CONSTASCII_USTRINGPARAM(" "));
                     sRedo += m_aUndoManager.GetRedoActionComment();
-                    aReturn.aState <<= ::rtl::OUString(sRedo);
+                    aReturn.sTitle = sRedo;
                 }
                 break;
             default:
