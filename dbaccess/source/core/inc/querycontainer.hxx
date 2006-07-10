@@ -4,9 +4,9 @@
  *
  *  $RCSfile: querycontainer.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:38:37 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:14:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,8 @@
 #ifndef _DBA_CORE_QUERYCONTAINER_HXX_
 #define _DBA_CORE_QUERYCONTAINER_HXX_
 
-#ifndef _CPPUHELPER_IMPLBASE4_HXX_
-#include <cppuhelper/implbase4.hxx>
+#ifndef _CPPUHELPER_IMPLBASE5_HXX_
+#include <cppuhelper/implbase5.hxx>
 #endif
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
@@ -45,6 +45,8 @@
 #ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
 #include <cppuhelper/interfacecontainer.hxx>
 #endif
+
+/** === begin UNO includes == **/
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
@@ -93,14 +95,16 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYCHANGELISTENER_HPP_
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINERAPPROVELISTENER_HPP_
+#include <com/sun/star/container/XContainerApproveListener.hpp>
+#endif
+/** === end UNO includes === **/
+
 #ifndef _DBA_CORE_DEFINITIONCONTAINER_HXX_
 #include "definitioncontainer.hxx"
 #endif
 #ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
-#endif
-#ifndef DBA_CONTAINERLISTENER_HXX
-#include "ContainerListener.hxx"
 #endif
 
 //........................................................................
@@ -108,16 +112,18 @@ namespace dbaccess
 {
 //........................................................................
 
-    typedef ::cppu::ImplHelper4<     ::com::sun::star::container::XContainerListener,
-                                     ::com::sun::star::sdbcx::XDataDescriptorFactory,
-                                     ::com::sun::star::sdbcx::XAppend,
-                                     ::com::sun::star::sdbcx::XDrop> OQueryContainer_Base;
+    typedef ::cppu::ImplHelper5 <   ::com::sun::star::container::XContainerListener
+                                ,   ::com::sun::star::container::XContainerApproveListener
+                                ,   ::com::sun::star::sdbcx::XDataDescriptorFactory
+                                ,   ::com::sun::star::sdbcx::XAppend
+                                ,   ::com::sun::star::sdbcx::XDrop
+                                >   OQueryContainer_Base;
 
     //==========================================================================
     //= OQueryContainer
     //==========================================================================
     class OQueryContainer;
-    typedef OContainerListener<OQueryContainer> OCommandsListener;
+    class OContainerListener;
     class OQuery;
     class IWarningsContainer;
     class OQueryContainer   : public ODefinitionContainer
@@ -133,7 +139,8 @@ namespace dbaccess
         enum AGGREGATE_ACTION { NONE, INSERTING, FLUSHING };
         AGGREGATE_ACTION        m_eDoingCurrently;
 
-        OCommandsListener*          m_pCommandsListener;
+        OContainerListener*     m_pCommandsListener;
+
         // ------------------------------------------------------------------------
         /** a class which automatically resets m_eDoingCurrently in it's destructor
         */
@@ -181,6 +188,11 @@ namespace dbaccess
         virtual void SAL_CALL elementInserted( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
+
+        // XContainerApproveListener
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XVeto > SAL_CALL approveInsertElement( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XVeto > SAL_CALL approveReplaceElement( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XVeto > SAL_CALL approveRemoveElement( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XEventListener
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
