@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AKeyColumns.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:52:30 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:34:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@ namespace connectivity
         {
         protected:
             virtual ::com::sun::star::uno::Reference< starcontainer::XNamed > createObject(const ::rtl::OUString& _rName);
-            virtual ::com::sun::star::uno::Reference< starbeans::XPropertySet > createEmptyObject();
+            virtual ::com::sun::star::uno::Reference< starbeans::XPropertySet > createDescriptor();
         public:
             OKeyColumns(    ::cppu::OWeakObject& _rParent,
                             ::osl::Mutex& _rMutex,
