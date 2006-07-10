@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlformula.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:43:07 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:04:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -179,6 +179,23 @@ const sal_uInt16 EXC_TOK_NLR_REL            = 0x8000;   /// True = Natural langu
 const sal_uInt32 EXC_TOK_NLR_ADDREL         = 0x80000000;   /// NLR relative (in appended data).
 const sal_uInt32 EXC_TOK_NLR_ADDMASK        = 0x3FFFFFFF;   /// Mask for number of appended ranges.
 
+// ----------------------------------------------------------------------------
+
+/** Type of a formula. */
+enum XclFormulaType
+{
+    EXC_FMLATYPE_CELL,          /// Simple cell formula, also used in change tracking.
+    EXC_FMLATYPE_MATRIX,        /// Matrix (array) formula.
+    EXC_FMLATYPE_SHARED,        /// Shared formula.
+    EXC_FMLATYPE_CONDFMT,       /// Conditional format.
+    EXC_FMLATYPE_DATAVAL,       /// Data validation.
+    EXC_FMLATYPE_NAME,          /// Defined name.
+    EXC_FMLATYPE_CHART,         /// Chart source ranges.
+    EXC_FMLATYPE_CONTROL,       /// Spreadsheet links in form controls.
+    EXC_FMLATYPE_WQUERY,        /// Web query source range.
+    EXC_FMLATYPE_LISTVAL        /// List (cell range) validation.
+};
+
 // Function data ==============================================================
 
 const sal_uInt8 EXC_FUNC_MAXPARAM           = 30;       /// Maximum parameter count.
@@ -263,6 +280,59 @@ private:
 };
 
 // Token array ================================================================
+
+class XclImpStream;
+class XclExpStream;
+
+/** Binary representation of an Excel token array. */
+class XclTokenArray
+{
+public:
+    /** Creates an empty token array. */
+    explicit            XclTokenArray( bool bVolatile = false );
+    /** Creates a token array, swaps passed token vector into own data. */
+    explicit            XclTokenArray( ScfUInt8Vec& rTokVec, bool bVolatile = false );
+
+    /** Returns true, if the token array is empty. */
+    inline bool         Empty() const { return maTokVec.empty(); }
+    /** Returns the size of the token array in bytes. */
+    sal_uInt16          GetSize() const;
+    /** Returns read-only access to the byte vector storing token data. */
+    inline const sal_uInt8* GetData() const { return maTokVec.empty() ? 0 : &maTokVec.front(); }
+    /** Returns true, if the formula contains a volatile function. */
+    inline bool         IsVolatile() const { return mbVolatile; }
+
+    /** Swaps own token vector with passed token vector. */
+    inline void         SwapTokenVec( ScfUInt8Vec& rTokVec ) { maTokVec.swap( rTokVec ); }
+
+    /** Reads the size field of the token array. */
+    void                ReadSize( XclImpStream& rStrm );
+    /** Reads the tokens of the token array (without size field). */
+    void                ReadArray( XclImpStream& rStrm );
+    /** Reads size field and the tokens. */
+    void                Read( XclImpStream& rStrm );
+
+    /** Writes the size field of the token array. */
+    void                WriteSize( XclExpStream& rStrm ) const;
+    /** Writes the tokens of the token array (without size field). */
+    void                WriteArray( XclExpStream& rStrm ) const;
+    /** Writes size field and the tokens. */
+    void                Write( XclExpStream& rStrm ) const;
+
+    /** Compares this token array with the passed. */
+    bool                operator==( const XclTokenArray& rTokArr ) const;
+
+private:
+    ScfUInt8Vec         maTokVec;       /// Byte vector containing token data.
+    bool                mbVolatile;     /// True = Formula contains volatile function.
+};
+
+/** Calls the Read() function at the passed token array. */
+XclImpStream& operator>>( XclImpStream& rStrm, XclTokenArray& rTokArr );
+/** Calls the Write() function at the passed token array. */
+XclExpStream& operator<<( XclExpStream& rStrm, const XclTokenArray& rTokArr );
+
+// ----------------------------------------------------------------------------
 
 class ScToken;
 class ScTokenArray;
