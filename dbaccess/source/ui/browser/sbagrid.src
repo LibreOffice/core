@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbagrid.src,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:09:59 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:24:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,7 +126,7 @@ String STR_VIEW_TITLE
     Text [ en-US ] = "View #" ;
 };
 
-String STR_OBJECT_ALREADY_EXISTS
+String STR_NAME_ALREADY_EXISTS
 {
     Text [ de ] = "Der Name \"#\" existiert bereits." ;
     Text [ en-US ] = "The name \"#\" already exists.";
