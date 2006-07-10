@@ -4,9 +4,9 @@
  *
  *  $RCSfile: epict.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 21:42:21 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:19:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -955,6 +955,11 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
         return;
 
     nBitsPerPixel = aBitmap.GetBitCount();
+
+    // export code below only handles four discrete cases
+    nBitsPerPixel =
+        nBitsPerPixel <= 1 ? 1 : nBitsPerPixel <= 4 ? 4 : nBitsPerPixel <= 8 ? 8 : 24;
+
     nWidth = pAcc->Width();
     nHeight = pAcc->Height();
 
