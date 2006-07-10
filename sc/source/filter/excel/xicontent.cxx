@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xicontent.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-21 11:57:36 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:35:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,7 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
 #ifndef SC_XICONTENT_HXX
 #include "xicontent.hxx"
 #endif
@@ -127,6 +128,9 @@
 #ifndef SC_XLTRACER_HXX
 #include "xltracer.hxx"
 #endif
+#ifndef SC_XISTREAM_HXX
+#include "xistream.hxx"
+#endif
 #ifndef SC_XISTYLE_HXX
 #include "xistyle.hxx"
 #endif
@@ -142,34 +146,37 @@
 // Shared string table ========================================================
 
 XclImpSst::XclImpSst( const XclImpRoot& rRoot ) :
-    XclImpRoot( rRoot ),
-    maErrorString( String( RTL_CONSTASCII_USTRINGPARAM( "*** ERROR IN SST ***" ) ) )
+    XclImpRoot( rRoot )
 {
 }
 
 void XclImpSst::ReadSst( XclImpStream& rStrm )
 {
-    sal_uInt32 nListCount;
+    sal_uInt32 nStrCount;
     rStrm.Ignore( 4 );
-    rStrm >> nListCount;
-    while( nListCount && rStrm.IsValid() )
+    rStrm >> nStrCount;
+    maStrings.clear();
+    maStrings.reserve( static_cast< size_t >( nStrCount ) );
+    while( (nStrCount > 0) && rStrm.IsValid() )
     {
-        maStringList.Append( new XclImpString( rStrm ) );
-        --nListCount;
+        XclImpString aString;
+        aString.Read( rStrm );
+        maStrings.push_back( aString );
+        --nStrCount;
     }
 }
 
 const XclImpString* XclImpSst::GetString( sal_uInt32 nSstIndex ) const
 {
-    return maStringList.GetObject( nSstIndex );
+    return (nSstIndex < maStrings.size()) ? &maStrings[ nSstIndex ] : 0;
 }
 
 ScBaseCell* XclImpSst::CreateCell( sal_uInt32 nSstIndex, sal_uInt16 nXFIndex ) const
 {
-    const XclImpString* pString = GetString( nSstIndex );
-    if( !pString )
-        pString = &maErrorString;
-    return XclImpStringHelper::CreateCell( *this, *pString, nXFIndex );
+    ScBaseCell* pCell = 0;
+    if( const XclImpString* pString = GetString( nSstIndex ) )
+        pCell = XclImpStringHelper::CreateCell( *this, *pString, nXFIndex );
+    return pCell;
 }
 
 // Hyperlinks =================================================================
@@ -184,7 +191,7 @@ void lclAppendString32( String& rString, XclImpStream& rStrm, sal_uInt32 nChars,
     sal_uInt16 nReadChars = ulimit_cast< sal_uInt16 >( nChars );
     rString.Append( rStrm.ReadRawUniString( nReadChars, b16Bit ) );
     // ignore remaining chars
-    sal_uInt32 nIgnore = nChars - nReadChars;
+    sal_Size nIgnore = nChars - nReadChars;
     if( b16Bit )
         nIgnore *= 2;
     rStrm.Ignore( nIgnore );
@@ -368,7 +375,7 @@ void XclImpHyperlink::ReadHlink( XclImpStream& rStrm )
 
     rStrm.SetNulSubstChar();    // back to default
 
-    DBG_ASSERT( !rStrm.GetRecLeft(), "XclImpHyperlink::ReadHlink - record size mismatch" );
+    DBG_ASSERT( rStrm.GetRecLeft() == 0, "XclImpHyperlink::ReadHlink - record size mismatch" );
 
     if( !xLongName.get() && xShortName.get() )
         xLongName = xShortName;
@@ -548,7 +555,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
     {
         XclImpFont aFont( GetRoot() );
         aFont.ReadCFFontBlock( rStrm );
-        aFont.FillToItemSet( rStyleItemSet, EXC_FONTMODE_CELL );
+        aFont.FillToItemSet( rStyleItemSet, EXC_FONTITEM_CELL );
     }
 
     // *** border block ***
@@ -580,25 +587,25 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
     // *** formulas ***
 
     const ScAddress& rPos = maRanges.GetObject( 0 )->aStart;    // assured above that maRanges is not empty
-    ExcelToSc& rFmlaConv = GetFmlaConverter();
+    ExcelToSc& rFmlaConv = GetOldFmlaConverter();
 
     ::std::auto_ptr< ScTokenArray > xTokArr1;
-    if( nFmlaSize1 )
+    if( nFmlaSize1 > 0 )
     {
         const ScTokenArray* pTokArr = 0;
         rFmlaConv.Reset( rPos );
-        rFmlaConv.Convert( pTokArr, nFmlaSize1, FT_RangeName );
+        rFmlaConv.Convert( pTokArr, rStrm, nFmlaSize1, FT_RangeName );
         // formula converter owns pTokArr -> create a copy of the token array
         if( pTokArr )
             xTokArr1.reset( pTokArr->Clone() );
     }
 
     ::std::auto_ptr< ScTokenArray > pTokArr2;
-    if( nFmlaSize2 )
+    if( nFmlaSize2 > 0 )
     {
         const ScTokenArray* pTokArr = 0;
         rFmlaConv.Reset( rPos );
-        rFmlaConv.Convert( pTokArr, nFmlaSize2, FT_RangeName );
+        rFmlaConv.Convert( pTokArr, rStrm, nFmlaSize2, FT_RangeName );
         // formula converter owns pTokArr -> create a copy of the token array
         if( pTokArr )
             pTokArr2.reset( pTokArr->Clone() );
@@ -690,7 +697,7 @@ void XclImpValidation::ReadDV( XclImpStream& rStrm )
 
     ScDocument& rDoc = rRoot.GetDoc();
     SCTAB nScTab = rRoot.GetCurrScTab();
-    ExcelToSc& rFmlaConv = rRoot.GetFmlaConverter();
+    ExcelToSc& rFmlaConv = rRoot.GetOldFmlaConverter();
 
     // flags
     sal_uInt32 nFlags;
@@ -717,11 +724,11 @@ void XclImpValidation::ReadDV( XclImpStream& rStrm )
         ::std::auto_ptr< ScTokenArray > xTokArr1;
         rStrm >> nLen;
         rStrm.Ignore( 2 );
-        if( nLen )
+        if( nLen > 0 )
         {
             const ScTokenArray* pTokArr = 0;
             rFmlaConv.Reset();
-            rFmlaConv.Convert( pTokArr, nLen, FT_RangeName );
+            rFmlaConv.Convert( pTokArr, rStrm, nLen, FT_RangeName );
             // formula converter owns pTokArr -> create a copy of the token array
             if( pTokArr )
                 xTokArr1.reset( pTokArr->Clone() );
@@ -732,11 +739,11 @@ void XclImpValidation::ReadDV( XclImpStream& rStrm )
         ::std::auto_ptr< ScTokenArray > xTokArr2;
         rStrm >> nLen;
         rStrm.Ignore( 2 );
-        if( nLen )
+        if( nLen > 0 )
         {
             const ScTokenArray* pTokArr = 0;
             rFmlaConv.Reset();
-            rFmlaConv.Convert( pTokArr, nLen, FT_RangeName );
+            rFmlaConv.Convert( pTokArr, rStrm, nLen, FT_RangeName );
             // formula converter owns pTokArr -> create a copy of the token array
             if( pTokArr )
                 xTokArr2.reset( pTokArr->Clone() );
@@ -926,6 +933,9 @@ void XclImpWebQueryBuffer::ReadQsi( XclImpStream& rStrm )
     {
         rStrm.Ignore( 10 );
         String aXclName( rStrm.ReadUniString() );
+
+        // #i64794# Excel replaces spaces with underscores
+        aXclName.SearchAndReplaceAll( ' ', '_' );
 
         // #101529# find the defined name used in Calc
         if( const XclImpName* pName = GetNameManager().FindName( aXclName, GetCurrScTab() ) )
