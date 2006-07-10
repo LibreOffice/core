@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scfuncs.hrc,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-21 11:52:25 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 12:31:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,6 +121,8 @@
 #define HID_FUNC_AKTUELL            (HID_SC_FUNC_DUMMY+(ID_FUNCTION_GRP_INFO*ID_FUNCTION_OFFSET)+14)
 #define HID_FUNC_FORMEL             (HID_SC_FUNC_DUMMY+(ID_FUNCTION_GRP_INFO*ID_FUNCTION_OFFSET)+15)
 #define HID_FUNC_ZELLE              (HID_SC_FUNC_DUMMY+(ID_FUNCTION_GRP_INFO*ID_FUNCTION_OFFSET)+16)
+#define HID_FUNC_INFO               (HID_SC_FUNC_DUMMY+(ID_FUNCTION_GRP_INFO*ID_FUNCTION_OFFSET)+17)
+
 
 #define HID_FUNC_FALSCH             (HID_SC_FUNC_DUMMY+(ID_FUNCTION_GRP_LOGIC*ID_FUNCTION_OFFSET)+1)
 #define HID_FUNC_NICHT              (HID_SC_FUNC_DUMMY+(ID_FUNCTION_GRP_LOGIC*ID_FUNCTION_OFFSET)+2)
