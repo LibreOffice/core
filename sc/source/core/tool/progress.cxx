@@ -4,9 +4,9 @@
  *
  *  $RCSfile: progress.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:47:52 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 12:33:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -201,16 +201,25 @@ void ScProgress::DeleteInterpretProgress()
 {
     if ( bAllowInterpretProgress && nInterpretProgress )
     {
-        if ( --nInterpretProgress == 0 )
+        /*  Do not decrement 'nInterpretProgress', before 'pInterpretProgress'
+            is deleted. In rare cases, deletion of 'pInterpretProgress' causes
+            a refresh of the sheet window which may call CreateInterpretProgress
+            and DeleteInterpretProgress again (from Output::DrawStrings),
+            resulting in double deletion of 'pInterpretProgress'. */
+//       if ( --nInterpretProgress == 0 )
+        if ( nInterpretProgress == 1 )
         {
             if ( pInterpretProgress != &theDummyInterpretProgress )
             {
-                delete pInterpretProgress;
+                // move pointer to local temporary to avoid double deletion
+                ScProgress* pTmpProgress = pInterpretProgress;
                 pInterpretProgress = &theDummyInterpretProgress;
+                delete pTmpProgress;
             }
             if ( pInterpretDoc )
                 pInterpretDoc->DisableIdle( bIdleWasDisabled );
         }
+        --nInterpretProgress;
     }
 }
 
