@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ipclient.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:38:08 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 11:29:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -973,9 +973,12 @@ SfxInPlaceClient* SfxInPlaceClient::GetClient( SfxObjectShell* pDoc, const com::
 {
     for ( SfxViewFrame* pFrame = SfxViewFrame::GetFirst(pDoc); pFrame; pFrame=SfxViewFrame::GetNext(*pFrame,pDoc) )
     {
-        SfxInPlaceClient* pClient = pFrame->GetViewShell()->FindIPClient( xObject, NULL );
-        if ( pClient )
-            return pClient;
+        if( pFrame->GetViewShell() )
+        {
+            SfxInPlaceClient* pClient = pFrame->GetViewShell()->FindIPClient( xObject, NULL );
+            if ( pClient )
+                return pClient;
+        }
     }
 
     return NULL;
