@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xiescher.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 21:32:54 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:40:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,9 +53,6 @@
 #endif
 #ifndef _COM_SUN_STAR_STYLE_VERTICALALIGNMENT_HPP_
 #include <com/sun/star/style/VerticalAlignment.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART_XCHARTDOCUMENT_HPP_
-#include <com/sun/star/chart/XChartDocument.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SCRIPT_SCRIPTEVENTDESCRIPTOR_HPP_
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
@@ -130,13 +127,6 @@
 #include <svx/svdoedge.hxx>
 #endif
 
-#ifndef _SCH_DLL_HXX
-#include <sch/schdll.hxx>
-#endif
-#ifndef _SCH_MEMCHRT_HXX
-#include <sch/memchrt.hxx>
-#endif
-
 #ifndef SC_ITEMS_HXX
 #include "scitems.hxx"
 #endif
@@ -177,6 +167,15 @@
 #ifndef SC_XLTRACER_HXX
 #include "xltracer.hxx"
 #endif
+#ifndef SC_XISTREAM_HXX
+#include "xistream.hxx"
+#endif
+#ifndef SC_XIHELPER_HXX
+#include "xihelper.hxx"
+#endif
+#ifndef SC_XIFORMULA_HXX
+#include "xiformula.hxx"
+#endif
 #ifndef SC_XILINK_HXX
 #include "xilink.hxx"
 #endif
@@ -190,7 +189,12 @@
 #include "xichart.hxx"
 #endif
 
-#include "excform.hxx"
+#ifndef _SCH_DLL_HXX
+#include <sch/schdll.hxx>
+#endif
+#ifndef _SCH_MEMCHRT_HXX
+#include <sch/memchrt.hxx>
+#endif
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -199,7 +203,6 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::embed::XEmbeddedObject;
 using ::com::sun::star::embed::XEmbedPersist;
-using ::com::sun::star::chart::XChartDocument;
 using ::com::sun::star::script::ScriptEventDescriptor;
 
 typedef ::std::auto_ptr< SdrObject > SdrObjectPtr;
@@ -457,7 +460,7 @@ ScRange XclImpDrawObjBase::GetUsedArea() const
     return aScUsedArea;
 }
 
-sal_uInt32 XclImpDrawObjBase::GetProgressSize() const
+sal_Size XclImpDrawObjBase::GetProgressSize() const
 {
     return DoGetProgressSize();
 }
@@ -475,7 +478,7 @@ void XclImpDrawObjBase::CreateEscherAnchor( const Rectangle& rAnchorRect )
     mxAnchor->SetRect( GetDoc(), rAnchorRect, MAP_100TH_MM );
 }
 
-sal_uInt32 XclImpDrawObjBase::DoGetProgressSize() const
+sal_Size XclImpDrawObjBase::DoGetProgressSize() const
 {
     return 1;
 }
@@ -577,30 +580,39 @@ XclImpCtrlLinkHelper::XclImpCtrlLinkHelper( XclCtrlBindMode eBindMode ) :
 {
 }
 
+namespace {
+
+void lclReadRangeList( ScRangeList& rScRanges, XclImpStream& rStrm )
+{
+    XclTokenArray aXclTokArr;
+    aXclTokArr.ReadSize( rStrm );
+    rStrm.Ignore( 4 );
+    aXclTokArr.ReadArray( rStrm );
+    rStrm.GetRoot().GetFormulaCompiler().CreateRangeList( rScRanges, EXC_FMLATYPE_CONTROL, aXclTokArr, rStrm );
+}
+
+} // namespace
+
 void XclImpCtrlLinkHelper::ReadCellLinkFormula( XclImpStream& rStrm )
 {
-    sal_uInt16 nFmlaSize;
-    rStrm >> nFmlaSize;
-    rStrm.Ignore( 4 );
-    ScRangeList aRangeList;
-    if( rStrm.GetRoot().GetFmlaConverter().GetAbsRefs( aRangeList, nFmlaSize ) )
+    ScRangeList aScRanges;
+    lclReadRangeList( aScRanges, rStrm );
+    if( aScRanges.Count() > 0 )
     {
         // Use first cell of first range
-        ::std::auto_ptr< ScRange > xRange( aRangeList.Remove( 0UL ) );
-        if( xRange.get() )
-            mxCellLink.reset( new ScAddress( xRange->aStart ) );
+        ::std::auto_ptr< ScRange > xScRange( aScRanges.Remove( 0UL ) );
+        if( xScRange.get() )
+            mxCellLink.reset( new ScAddress( xScRange->aStart ) );
     }
 }
 
 void XclImpCtrlLinkHelper::ReadSrcRangeFormula( XclImpStream& rStrm )
 {
-    sal_uInt16 nFmlaSize;
-    rStrm >> nFmlaSize;
-    rStrm.Ignore( 4 );
-    ScRangeList aRangeList;
-    if( rStrm.GetRoot().GetFmlaConverter().GetAbsRefs( aRangeList, nFmlaSize ) )
-        // Use first range
-        mxSrcRange.reset( aRangeList.Remove( 0UL ) );
+    ScRangeList aScRanges;
+    lclReadRangeList( aScRanges, rStrm );
+    // Use first range
+    if( aScRanges.Count() > 0 )
+        mxSrcRange.reset( aScRanges.Remove( 0UL ) );
 }
 
 // ----------------------------------------------------------------------------
@@ -681,24 +693,10 @@ void XclImpTbxControlObj::WriteToPropertySet( ScfPropertySet& rPropSet ) const
         rPropSet.SetStringProperty( CREATE_OUSTRING( "Label" ), pString->GetText() );
 
         // font properties
-        if( !pString->GetFormats().empty() )
-        {
-            const XclFormatRun& rFormatRun = pString->GetFormats().front();
-            if( const XclImpFont* pFont = GetFontBuffer().GetFont( rFormatRun.mnXclFont ) )
-            {
-                const XclFontData& rFontData = pFont->GetFontData();
-                rPropSet.SetStringProperty( CREATE_OUSTRING( "FontName" ), rFontData.maName );
-                sal_Int16 nHeight = static_cast< sal_Int16 >( rFontData.GetApiHeight() + 0.5 );
-                rPropSet.SetProperty( CREATE_OUSTRING( "FontHeight" ), nHeight );
-                rPropSet.SetProperty( CREATE_OUSTRING( "FontFamily" ), rFontData.GetApiFamily() );
-                rPropSet.SetProperty( CREATE_OUSTRING( "FontCharset" ), rFontData.GetApiCharSet() );
-                rPropSet.SetProperty( CREATE_OUSTRING( "FontWeight" ), rFontData.GetApiWeight() );
-                rPropSet.SetProperty( CREATE_OUSTRING( "FontSlant" ), rFontData.GetApiPosture() );
-                rPropSet.SetProperty( CREATE_OUSTRING( "FontUnderline" ), rFontData.GetApiUnderline() );
-                rPropSet.SetProperty( CREATE_OUSTRING( "FontStrikeout" ), rFontData.GetApiStrikeout() );
-                rPropSet.SetColorProperty( CREATE_OUSTRING( "TextColor" ), GetPalette().GetColor( rFontData.mnColor ) );
-            }
-        }
+        const XclFormatRunVec& rFormatRuns = pString->GetFormats();
+        if( !rFormatRuns.empty() )
+            GetFontBuffer().WriteFontProperties(
+                rPropSet, EXC_FONTPROPSET_CONTROL, rFormatRuns.front().mnFontIdx );
     }
 
     // special control contents -----------------------------------------------
@@ -1060,7 +1058,7 @@ void XclImpOleObj::ReadPictFmla( XclImpStream& rStrm, sal_uInt16 nRecSize )
     else if( nFmlaLen + 2 < nRecSize )  // #107158# ignore picture links (are embedded OLE obj's too)
     {
         String aUserName;
-        sal_uInt32 nPos0 = rStrm.GetRecPos();        // fmla start
+        sal_Size nPos0 = rStrm.GetRecPos();        // fmla start
 
         sal_uInt16 n16;
         rStrm >> n16;     // should be 5 but who knows ...
@@ -1079,8 +1077,8 @@ void XclImpOleObj::ReadPictFmla( XclImpStream& rStrm, sal_uInt16 nRecSize )
                     aUserName = rStrm.ReadUniString( n16 );
                     // 0:= ID follows, 1:= pad byte + ID
 #ifndef PRODUCT
-                    sal_Int32 nLeft = sal_Int32(nFmlaLen) - (rStrm.GetRecPos() - nPos0);
-                    DBG_ASSERT( nLeft == 0 || nLeft == 1, "XclImpOleObj::ReadPictFmla - unknown left over" );
+                    sal_sSize nLeft = static_cast< sal_sSize >( nFmlaLen + nPos0 - rStrm.GetRecPos() );
+                    DBG_ASSERT( (nLeft == 0) || (nLeft == 1), "XclImpOleObj::ReadPictFmla - unknown left over" );
 #endif
                 }
             }
@@ -1162,7 +1160,7 @@ void XclImpChartObj::ReadChartSubStream( XclImpStream& rStrm )
     }
 }
 
-sal_uInt32 XclImpChartObj::DoGetProgressSize() const
+sal_Size XclImpChartObj::DoGetProgressSize() const
 {
     return mxChart.is() ? mxChart->GetProgressSize() : 0;
 }
@@ -1279,7 +1277,7 @@ XclImpDffManager::~XclImpDffManager()
 {
 }
 
-void XclImpDffManager::StartProgressBar( sal_uInt32 nProgressSize )
+void XclImpDffManager::StartProgressBar( sal_Size nProgressSize )
 {
     mxProgress.reset( new ScfProgressBar( GetDocShell(), STR_PROGRESS_CALCULATING ) );
     mxProgress->AddSegment( nProgressSize );
@@ -1678,8 +1676,7 @@ SdrObject* XclImpDffManager::CreateSdrObject( const XclImpChartObj& rChartObj, c
     // convert Excel chart to OOo Chart
     if( svt::EmbeddedObjectRef::TryRunningState( xEmbObj ) )
     {
-        Reference< XChartDocument > xChartDoc( xEmbObj->getComponent(), UNO_QUERY );
-        pChart->Convert( xChartDoc, *mxProgress );
+        pChart->Convert( xEmbObj->getComponent(), *mxProgress );
 
         Reference< XEmbedPersist > xPers( xEmbObj, UNO_QUERY );
         if( xPers.is() )
@@ -1868,7 +1865,7 @@ void XclImpObjectManager::ConvertObjects()
                 pDrawObj->SetInvalid();
 
         // get progress bar size for all valid objects
-        sal_uInt32 nProgressSize = GetProgressSize();
+        sal_Size nProgressSize = GetProgressSize();
         if( nProgressSize > 0 )
         {
             XclImpDffManager& rDffManager = GetDffManager();
@@ -1899,7 +1896,7 @@ ScRange XclImpObjectManager::GetUsedArea( SCTAB nScTab ) const
 
 void XclImpObjectManager::ReadEscherRecord( XclImpStream& rStrm )
 {
-    sal_uInt32 nRecSize = rStrm.GetRecSize();
+    sal_Size nRecSize = rStrm.GetRecSize();
     if( nRecSize > 0 )
     {
         ScfUInt8Vec aBuffer( nRecSize );
@@ -1940,7 +1937,7 @@ void XclImpObjectManager::ReadObj( XclImpStream& rStrm )
 
         rStrm.PopPosition();
         // sometimes the last subrecord has an invalid length -> min()
-        rStrm.Ignore( ::std::min< sal_uInt32 >( nSubRecSize, rStrm.GetRecLeft() ) );
+        rStrm.Ignore( ::std::min< sal_Size >( nSubRecSize, rStrm.GetRecLeft() ) );
     }
 
     // try to read the chart substream
@@ -1977,9 +1974,9 @@ void XclImpObjectManager::ReadTxo( XclImpStream& rStrm )
     maTxoMap[ maEscherStrm.Tell() ] = xTxo;
 }
 
-sal_uInt32 XclImpObjectManager::GetProgressSize() const
+sal_Size XclImpObjectManager::GetProgressSize() const
 {
-    sal_uInt32 nProgressSize = 0;
+    sal_Size nProgressSize = 0;
     for( XclImpObjMap::const_iterator aMIt = maObjMap.begin(), aMEnd = maObjMap.end(); aMIt != aMEnd; ++aMIt )
         nProgressSize += aMIt->second->GetProgressSize();
     for( XclImpChartObjList::const_iterator aLIt = maTabCharts.begin(), aLEnd = maTabCharts.end(); aLIt != aLEnd; ++aLIt )
