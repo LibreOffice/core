@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drwlayer.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-13 16:53:14 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:24:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -551,7 +551,7 @@ void ScDrawLayer::MoveCells( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SC
     for ( ULONG i = 0; i < nCount; i++ )
     {
         SdrObject* pObj = pPage->GetObj( i );
-        ScDrawObjData* pData = GetObjData( pObj );
+        ScDrawObjData* pData = GetObjDataTab( pObj, nTab );
         if( pData )
         {
             ScAddress aOldStt = pData->aStt;
@@ -603,7 +603,7 @@ void ScDrawLayer::SetPageSize( USHORT nPageNo, const Size& rSize )
         for ( ULONG i = 0; i < nCount; i++ )
         {
             SdrObject* pObj = pPage->GetObj( i );
-            ScDrawObjData* pData = GetObjData( pObj );
+            ScDrawObjData* pData = GetObjDataTab( pObj, static_cast<SCTAB>(nPageNo) );
             if( pData )
                 RecalcPos( pObj, pData, bNegativePage );
         }
@@ -1981,6 +1981,19 @@ ScDrawObjData* ScDrawLayer::GetObjData( SdrObject* pObj, BOOL bCreate )     // s
         return pData;
     }
     return NULL;
+}
+
+ScDrawObjData* ScDrawLayer::GetObjDataTab( SdrObject* pObj, SCTAB nTab )    // static
+{
+    ScDrawObjData* pData = GetObjData( pObj );
+    if ( pData )
+    {
+        if ( pData->bValidStart )
+            pData->aStt.SetTab( nTab );
+        if ( pData->bValidEnd )
+            pData->aEnd.SetTab( nTab );
+    }
+    return pData;
 }
 
 ScIMapInfo* ScDrawLayer::GetIMapInfo( SdrObject* pObj )             // static
