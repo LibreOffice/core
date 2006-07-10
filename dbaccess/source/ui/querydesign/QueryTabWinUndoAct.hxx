@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryTabWinUndoAct.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:26:33 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:41:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,7 @@ namespace dbaui
             // anschliessend sollte das SetOwnership aufgerufen werden
 
         // Zugriff auf die verwalteten Connections
-        USHORT  ConnCount() { return m_vTableConnection.size(); }
+        USHORT  ConnCount() { return (USHORT)m_vTableConnection.size(); }
 
         ::std::vector<OTableConnection*>*       GetTabConnList() { return &m_vTableConnection; }
 
