@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:26:07 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:26:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -644,7 +644,7 @@ void SAL_CALL OResultSet::updateRow(  ) throw(SQLException, RuntimeException)
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
     if(!m_pTable || m_pTable->isReadOnly())
-        throw SQLException(::rtl::OUString::createFromAscii("Table is readonly!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
+        ::dbtools::throwGenericSQLException( ::rtl::OUString::createFromAscii( "Table is readonly."), *this );
     m_bRowUpdated = m_pTable->UpdateRow(m_aInsertRow.getBody(), m_aRow,Reference<XIndexAccess>(m_xColNames,UNO_QUERY));
     *(*m_aInsertRow)[0] = (sal_Int32)(*m_aRow)[0]->getValue();
 
@@ -658,11 +658,11 @@ void SAL_CALL OResultSet::deleteRow() throw(SQLException, RuntimeException)
 
 
     if(!m_pTable || m_pTable->isReadOnly())
-        throw SQLException(::rtl::OUString::createFromAscii("Table is readonly!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
+        ::dbtools::throwGenericSQLException( ::rtl::OUString::createFromAscii( "Table is readonly." ), *this );
     if (m_bShowDeleted)
-        throw SQLException(::rtl::OUString::createFromAscii("Row could not be deleted. The option \"Display inactive records\" is set!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
+        ::dbtools::throwGenericSQLException( ::rtl::OUString::createFromAscii( "Row could not be deleted. The option \"Display inactive records\" is set."), *this );
     if(m_aRow->isDeleted())
-        throw SQLException(::rtl::OUString::createFromAscii("Row was already deleted!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
+        ::dbtools::throwGenericSQLException( ::rtl::OUString::createFromAscii( "Row was already deleted."), *this );
 
     sal_Int32 nPos = (sal_Int32)(*m_aRow)[0]->getValue();
     m_bRowDeleted = m_pTable->DeleteRow(m_xColumns.getBody());
@@ -703,7 +703,7 @@ void SAL_CALL OResultSet::moveToInsertRow(  ) throw(SQLException, RuntimeExcepti
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
     if(!m_pTable || m_pTable->isReadOnly())
-        throw SQLException(::rtl::OUString::createFromAscii("Table is readonly!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
+        ::dbtools::throwGenericSQLException( ::rtl::OUString::createFromAscii( "Table is readonly!" ), *this );
 
     m_bInserted     = sal_True;
 
@@ -1210,12 +1210,12 @@ BOOL OResultSet::OpenImpl()
         if ((xTabs.begin() == xTabs.end()) || !xTabs.begin()->second.is())
             throwGenericSQLException(   ::rtl::OUString::createFromAscii("The statement is invalid."),
                                         static_cast<XWeak*>(this),
-                                        makeAny(m_aSQLIterator.getWarning())
+                                        makeAny( m_aSQLIterator.getErrors() )
                                     );
-        if ( xTabs.size() > 1 || m_aSQLIterator.getWarning().Message.getLength() )
+        if ( xTabs.size() > 1 || m_aSQLIterator.hasErrors() )
             throwGenericSQLException(   ::rtl::OUString::createFromAscii("The statement is invalid. it contains more than one table."),
                                         static_cast<XWeak*>(this),
-                                        makeAny(m_aSQLIterator.getWarning()));
+                                        makeAny( m_aSQLIterator.getErrors() ) );
 
         OSQLTable xTable = xTabs.begin()->second;
         m_xColumns = m_aSQLIterator.getSelectColumns();
@@ -1524,7 +1524,6 @@ BOOL OResultSet::OpenImpl()
             }
         }   break;
 
-        case SQL_STATEMENT_SELECT_COUNT:
         case SQL_STATEMENT_UPDATE:
         case SQL_STATEMENT_DELETE:
             // waehrend der Bearbeitung die Anzahl der bearbeiteten Rows zaehlen:
