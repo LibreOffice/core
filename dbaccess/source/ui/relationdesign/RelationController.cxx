@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RelationController.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:31:07 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:45:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -221,7 +221,6 @@ ORelationController::ORelationController(const Reference< XMultiServiceFactory >
     ,m_bRelationsPossible(sal_True)
 {
     DBG_CTOR(ORelationController,NULL);
-    m_bViewsAllowed = sal_False;
     InvalidateAll();
 }
 // -----------------------------------------------------------------------------
@@ -238,7 +237,7 @@ FeatureState ORelationController::GetState(sal_uInt16 _nId) const
     {
         case SID_RELATION_ADD_RELATION:
             aReturn.bEnabled = m_vTableData.size() > 1 && isConnected() && isEditable();
-            aReturn.aState = ::cppu::bool2any(sal_False);
+            aReturn.bChecked = false;
             break;
         case ID_BROWSER_SAVEDOC:
             aReturn.bEnabled = haveDataSource() && isModified();
@@ -294,25 +293,14 @@ void ORelationController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue
     InvalidateFeature(_nId);
 }
 // -----------------------------------------------------------------------------
-void ORelationController::impl_initialize( const Sequence< Any >& aArguments )
+void ORelationController::impl_initialize()
 {
-    PropertyValue aValue;
-    const Any* pIter    = aArguments.getConstArray();
-    const Any* pEnd     = pIter + aArguments.getLength();
+    const NamedValueCollection& rArguments( getInitParams() );
 
-    for(;pIter != pEnd;++pIter)
-    {
-        if (!(*pIter >>= aValue))
-            throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid type in argument list. PropertyValue expected.")),*this);
-        if ( 0 == aValue.Name.compareToAscii(PROPERTY_ACTIVECONNECTION) )
-        {
-            Reference< XConnection > xConn;
-            if ( !(aValue.Value >>= xConn) )
-                throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid argument type for ActiveConnection.")),*this);
-            initializeConnection( xConn );
-            break;
-        }
-    }
+    Reference< XConnection > xConnection;
+    xConnection = rArguments.getOrDefault( (::rtl::OUString)PROPERTY_ACTIVECONNECTION, xConnection );
+    if ( xConnection.is() )
+        initializeConnection( xConnection );
 
     if ( !ensureConnected( sal_False ) )
     {
@@ -348,7 +336,7 @@ void ORelationController::impl_initialize( const Sequence< Any >& aArguments )
         throw SQLException();
     }
 
-    OJoinController::impl_initialize(aArguments);
+    OJoinController::impl_initialize();
 
     if(!m_bRelationsPossible)
         InvalidateAll();
@@ -416,7 +404,6 @@ void ORelationController::describeSupportedFeatures()
 {
     OJoinController::describeSupportedFeatures();
     implDescribeSupportedFeature( ".uno:DBAddRelation", SID_RELATION_ADD_RELATION, CommandGroup::EDIT );
-    implDescribeSupportedFeature( ".uno:DBAddTable", ID_BROWSER_ADDTABLE, CommandGroup::EDIT );
 }
 // -----------------------------------------------------------------------------
 void ORelationController::loadData()
@@ -482,7 +469,7 @@ void ORelationController::loadTableData(const Any& _aTable)
                     ::rtl::OUString sSourceName,sReferencedTable;
                     Reference<XPropertySet> xTableProp(xKeySup,UNO_QUERY);
 
-                    sSourceName = ::dbtools::composeTableName(getConnection()->getMetaData(),xTableProp,sal_False,::dbtools::eInTableDefinitions);
+                    sSourceName = ::dbtools::composeTableName( getConnection()->getMetaData(), xTableProp, ::dbtools::eInTableDefinitions, false, false, false );
                     xKey->getPropertyValue(PROPERTY_REFERENCEDTABLE) >>= sReferencedTable;
                     //////////////////////////////////////////////////////////////////////
                     // insert windows
@@ -593,6 +580,19 @@ void ORelationController::reset()
         pView->Invalidate(INVALIDATE_NOERASE);
     }
 }
+
+// -----------------------------------------------------------------------------
+bool ORelationController::allowViews() const
+{
+    return false;
+}
+
+// -----------------------------------------------------------------------------
+bool ORelationController::allowQueries() const
+{
+    return false;
+}
+
 // -----------------------------------------------------------------------------
 
 
