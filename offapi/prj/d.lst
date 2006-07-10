@@ -67,6 +67,7 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\script
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\script\provider
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\script\browse
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\sdb
+mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\sdb\tools
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\sdbc
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\sdbcx
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\setup
@@ -167,6 +168,7 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\wrapper
 ..\com\sun\star\script\browse\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\script\browse
 ..\com\sun\star\script\provider\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\script\provider
 ..\com\sun\star\sdb\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\sdb
+..\com\sun\star\sdb\tools\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\sdb\tools
 ..\com\sun\star\sdbc\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\sdbc
 ..\com\sun\star\sdbcx\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\sdbcx
 ..\com\sun\star\setup\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\setup
