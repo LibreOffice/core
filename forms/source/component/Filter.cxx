@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Filter.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:48:43 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:47:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -541,11 +541,12 @@ namespace frm
                     }
 
                     aStatement.appendAscii( " FROM " );
-                    sal_Bool bUseCatalogInSelect = ::dbtools::isDataSourcePropertyEnabled(xConnection,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseCatalogInSelect")),sal_True);
-                    sal_Bool bUseSchemaInSelect = ::dbtools::isDataSourcePropertyEnabled(xConnection,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseSchemaInSelect")),sal_True);
-                    aStatement.append( ::dbtools::quoteTableName( xMeta, sTableName, ::dbtools::eInDataManipulation ,bUseCatalogInSelect,bUseSchemaInSelect) );
-                    ::rtl::OUString sSelectStatement( aStatement.makeStringAndClear( ) );
 
+                    ::rtl::OUString sCatalog, sSchema, sTable;
+                    ::dbtools::qualifiedNameComponents( xMeta, sTableName, sCatalog, sSchema, sTable, ::dbtools::eInDataManipulation );
+                    aStatement.append( ::dbtools::composeTableNameForSelect( xConnection, sCatalog, sSchema, sTable ) );
+
+                    ::rtl::OUString sSelectStatement( aStatement.makeStringAndClear( ) );
                     xStatement = xConnection->createStatement();
                     xListCursor = xStatement->executeQuery( sSelectStatement );
 
