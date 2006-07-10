@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HsqlTableDescriptor.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 16:43:25 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:18:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,15 @@
 
 package connectivity.tools;
 
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.container.XNameAccess;
+import com.sun.star.sdbc.ColumnValue;
+import com.sun.star.sdbc.XConnection;
+import com.sun.star.sdbcx.XColumnsSupplier;
+import com.sun.star.sdbcx.XDataDescriptorFactory;
+import com.sun.star.sdbcx.XTablesSupplier;
+import com.sun.star.uno.UnoRuntime;
+
 /** is a very simply descriptor of a HSQL table, to be used with a HsqlDatabase.createTable method
  */
 public class HsqlTableDescriptor
@@ -61,5 +70,45 @@ public class HsqlTableDescriptor
     public HsqlColumnDescriptor[] getColumns()
     {
         return m_columns;
+    }
+
+    public XPropertySet createSdbcxDescriptor( XConnection _forConnection )
+    {
+        XTablesSupplier suppTables = (XTablesSupplier)UnoRuntime.queryInterface(
+            XTablesSupplier.class, _forConnection );
+        XDataDescriptorFactory tableDescFac = (XDataDescriptorFactory)UnoRuntime.queryInterface(
+            XDataDescriptorFactory.class, suppTables.getTables() );
+        XPropertySet tableDesc = tableDescFac.createDataDescriptor();
+
+        try
+        {
+            tableDesc.setPropertyValue( "Name", getName() );
+        }
+        catch ( Exception e ) { e.printStackTrace( System.err ); }
+
+        XColumnsSupplier suppDescCols = (XColumnsSupplier)UnoRuntime.queryInterface(
+            XColumnsSupplier.class, tableDesc );
+
+        XNameAccess descColumns = suppDescCols.getColumns();
+        XDataDescriptorFactory columnDescFac = (XDataDescriptorFactory)UnoRuntime.queryInterface(
+            XDataDescriptorFactory.class, descColumns );
+
+        HsqlColumnDescriptor[] myColumns = getColumns();
+        for ( int i = 0; i < myColumns.length; ++i )
+        {
+            XPropertySet columnDesc = columnDescFac.createDataDescriptor();
+            try
+            {
+                columnDesc.setPropertyValue( "Name", myColumns[i].getName() );
+                columnDesc.setPropertyValue( "IsNullable", new Integer( myColumns[i].isRequired() ? ColumnValue.NO_NULLS : ColumnValue.NULLABLE) );
+                columnDesc.setPropertyValue( "TypeName", myColumns[i].getTypeName() );
+                if ( myColumns[i].isPrimaryKey() || myColumns[i].isForeignKey() )
+                    // not yet implemented
+                    throw new java.lang.UnsupportedOperationException("creating a primary or foreign key via SDBCX not yet implemented" );
+            }
+            catch( com.sun.star.uno.Exception e ) { e.printStackTrace( System.err ); }
+        }
+
+        return tableDesc;
     }
 }
