@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xistream.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:34:15 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:00:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-// ============================================================================
 
 #ifndef SC_XISTREAM_HXX
 #define SC_XISTREAM_HXX
@@ -97,13 +95,13 @@ private:
     /** Implementation of cloning this object. */
     virtual XclImpDecrypter* OnClone() const = 0;
     /** Implementation of updating the decrypter. */
-    virtual void        OnUpdate( ULONG nOldStrmPos, ULONG nNewStrmPos, sal_uInt16 nRecSize ) = 0;
+    virtual void        OnUpdate( sal_Size nOldStrmPos, sal_Size nNewStrmPos, sal_uInt16 nRecSize ) = 0;
     /** Implementation of the decryption. */
     virtual sal_uInt16  OnRead( SvStream& rStrm, sal_uInt8* pnData, sal_uInt16 nBytes ) = 0;
 
 private:
     ErrCode             mnError;        /// Decrypter error code.
-    ULONG               mnOldPos;       /// Last known stream position.
+    sal_Size            mnOldPos;       /// Last known stream position.
     sal_uInt16          mnRecSize;      /// Current record size.
 };
 
@@ -127,7 +125,7 @@ private:
     /** Implementation of cloning this object. */
     virtual XclImpBiff5Decrypter* OnClone() const;
     /** Implementation of updating the decrypter. */
-    virtual void        OnUpdate( ULONG nOldStrmPos, ULONG nNewStrmPos, sal_uInt16 nRecSize );
+    virtual void        OnUpdate( sal_Size nOldStrmPos, sal_Size nNewStrmPos, sal_uInt16 nRecSize );
     /** Implementation of the decryption. */
     virtual sal_uInt16  OnRead( SvStream& rStrm, sal_uInt8* pnData, sal_uInt16 nBytes );
 
@@ -162,7 +160,7 @@ private:
     /** Implementation of cloning this object. */
     virtual XclImpBiff8Decrypter* OnClone() const;
     /** Implementation of updating the decrypter. */
-    virtual void        OnUpdate( ULONG nOldStrmPos, ULONG nNewStrmPos, sal_uInt16 nRecSize );
+    virtual void        OnUpdate( sal_Size nOldStrmPos, sal_Size nNewStrmPos, sal_uInt16 nRecSize );
     /** Implementation of the decryption. */
     virtual sal_uInt16  OnRead( SvStream& rStrm, sal_uInt8* pnData, sal_uInt16 nBytes );
 
@@ -172,9 +170,9 @@ private:
                             sal_uInt8 pnSaltData[ 16 ], sal_uInt8 pnSaltHash[ 16 ] );
 
     /** Returns the block number corresponding to the passed stream position. */
-    sal_uInt32          GetBlock( ULONG nStrmPos ) const;
+    sal_uInt32          GetBlock( sal_Size nStrmPos ) const;
     /** Returns the block offset corresponding to the passed stream position. */
-    sal_uInt16          GetOffset( ULONG nStrmPos ) const;
+    sal_uInt16          GetOffset( sal_Size nStrmPos ) const;
 
 private:
     ::svx::MSCodec_Std97 maCodec;       /// Crypto algorithm implementation.
@@ -196,19 +194,19 @@ public:
     explicit            XclImpStreamPos();
 
     /** Sets the stream position data to the passed values. */
-    void                Set( const SvStream& rStrm, ULONG nNextPos, sal_uInt32 nCurrSize,
+    void                Set( const SvStream& rStrm, sal_Size nNextPos, sal_Size nCurrSize,
                             sal_uInt16 nRawRecId, sal_uInt16 nRawRecSize, sal_uInt16 nRawRecLeft,
                             bool bValid );
 
     /** Writes the contained stream position data to the given variables. */
-    void                Get( SvStream& rStrm, ULONG& rnNextPos, sal_uInt32& rnCurrSize,
+    void                Get( SvStream& rStrm, sal_Size& rnNextPos, sal_Size& rnCurrSize,
                             sal_uInt16& rnRawRecId, sal_uInt16& rnRawRecSize, sal_uInt16& rnRawRecLeft,
                             bool& rbValid ) const;
 
 private:
-    ULONG               mnPos;          /// Absolute position of the stream.
-    ULONG               mnNextPos;      /// Absolute position of next record.
-    sal_uInt32          mnCurrSize;     /// Current calculated size of the record.
+    sal_Size            mnPos;          /// Absolute position of the stream.
+    sal_Size            mnNextPos;      /// Absolute position of next record.
+    sal_Size            mnCurrSize;     /// Current calculated size of the record.
     sal_uInt16          mnRawRecId;     /// Current raw record ID (including CONTINUEs).
     sal_uInt16          mnRawRecSize;   /// Current raw record size (without following CONTINUEs).
     sal_uInt16          mnRawRecLeft;   /// Bytes left in current raw record (without following CONTINUEs).
@@ -338,11 +336,11 @@ public:
     /** Returns the current record ID. */
     inline sal_uInt16   GetRecId() const { return mnRecId; }
     /** Returns the position inside of the whole record content. */
-    sal_uInt32          GetRecPos() const;
+    sal_Size            GetRecPos() const;
     /** Returns the data size of the whole record without record headers. */
-    sal_uInt32          GetRecSize();
+    sal_Size            GetRecSize();
     /** Returns remaining data size of the whole record without record headers. */
-    sal_uInt32          GetRecLeft();
+    sal_Size            GetRecLeft();
     /** Returns the record ID of the following record. */
     sal_uInt16          GetNextRecId();
 
@@ -366,19 +364,19 @@ public:
 
     /** Reads nBytes bytes to the existing(!) buffer pData.
         @return  Count of bytes really read. */
-    sal_uInt32          Read( void* pData, sal_uInt32 nBytes );
+    sal_Size            Read( void* pData, sal_Size nBytes );
     /** Copies nBytes bytes to rOutStrm.
         @return  Count of bytes really written. */
-    sal_uInt32          CopyToStream( SvStream& rOutStrm, sal_uInt32 nBytes );
+    sal_Size            CopyToStream( SvStream& rOutStrm, sal_Size nBytes );
     /** Copies the entire record to rOutStrm. The current record position keeps unchanged.
         @return  Count of bytes really written. */
-    sal_uInt32          CopyRecordToStream( SvStream& rOutStrm );
+    sal_Size            CopyRecordToStream( SvStream& rOutStrm );
 
     /** Seeks absolute in record content to the specified position.
         @descr  The value 0 means start of record, independent from physical stream position. */
-    void                Seek( sal_uInt32 nPos );
+    void                Seek( sal_Size nPos );
     /** Seeks forward inside the current record. */
-    void                Ignore( sal_uInt32 nBytes );
+    void                Ignore( sal_Size nBytes );
 
     // *** special string functions *** ---------------------------------------
 
@@ -402,14 +400,12 @@ public:
 
     /** Reads ext. header, detects 8/16 bit mode, sets all ext. info.
         @return  Total size of ext. data. */
-    sal_uInt32          ReadUniStringExtHeader(
+    sal_Size            ReadUniStringExtHeader(
                             bool& rb16Bit, bool& rbRich, bool& rbFareast,
                             sal_uInt16& rnFormatRuns, sal_uInt32& rnExtInf, sal_uInt8 nFlags );
     /** Seeks to begin of character array, detects 8/16 bit mode.
         @return  Total size of ext. data. */
-    sal_uInt32          ReadUniStringExtHeader( bool& rb16Bit, sal_uInt8 nFlags );
-    /** Skips ext. data after character array. */
-    inline void         SkipUniStringExtData( sal_uInt32 nExtSize ) { Ignore( nExtSize ); }
+    sal_Size            ReadUniStringExtHeader( bool& rb16Bit, sal_uInt8 nFlags );
 
     /** Sets a replacement character for NUL characters.
         @descr  NUL characters must be replaced, because Tools strings cannot
@@ -445,18 +441,15 @@ public:
     String              ReadRawByteString( sal_uInt16 nChars );
     /** Reads 8/16 bit string length, character array and returns the string. */
     String              ReadByteString( bool b16BitLen );
-
-    /** Ignores nChar byte characters. */
-    void                IgnoreRawByteString( sal_uInt16 nChars );
     /** Ignores 8/16 bit string length, character array. */
     void                IgnoreByteString( bool b16BitLen );
 
     // *** SvStream functions *** ---------------------------------------------
 
     /** Returns the absolute stream position. */
-    inline ULONG        GetSvStreamPos() const { return mrStrm.Tell(); }
+    inline sal_Size     GetSvStreamPos() const { return mrStrm.Tell(); }
     /** Returns the stream size. */
-    inline ULONG        GetSvStreamSize() const { return mnStreamSize; }
+    inline sal_Size     GetSvStreamSize() const { return mnStreamSize; }
 
 private:
     /** Stores current stream position into rPos. */
@@ -501,7 +494,7 @@ private:
         @return  Copy of mbValid. */
     bool                EnsureRawReadSize( sal_uInt16 nBytes );
     /** Returns the maximum size of raw data possible to read in one block. */
-    sal_uInt16          GetMaxRawReadSize( sal_uInt32 nBytes ) const;
+    sal_uInt16          GetMaxRawReadSize( sal_Size nBytes ) const;
 
     /** Reads and decrypts nBytes bytes to the existing(!) buffer pData.
         @return  Count of bytes really read. */
@@ -527,10 +520,10 @@ private:
     bool                mbGlobValidRec; /// Was user position a valid record?
     bool                mbHasGlobPos;   /// Is user position defined?
 
-    ULONG               mnStreamSize;   /// Size of system stream.
-    ULONG               mnNextRecPos;   /// Start of next record header.
-    sal_uInt32          mnCurrRecSize;  /// Helper for record position.
-    sal_uInt32          mnComplRecSize; /// Size of complete record data (with CONTINUEs).
+    sal_Size            mnStreamSize;   /// Size of system stream.
+    sal_Size            mnNextRecPos;   /// Start of next record header.
+    sal_Size            mnCurrRecSize;  /// Helper for record position.
+    sal_Size            mnComplRecSize; /// Size of complete record data (with CONTINUEs).
     bool                mbHasComplRec;  /// true = mnComplRecSize is valid.
 
     sal_uInt16          mnRecId;        /// Current record ID (not the CONTINUE ID).
