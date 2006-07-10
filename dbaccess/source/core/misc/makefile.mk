@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2006-05-04 08:39:07 $
+#   last change: $Author: obo $ $Date: 2006-07-10 15:16:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,13 +47,16 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files -------------------------------------
 
 SLOFILES=	\
-        $(SLO)$/sdbcoretools.obj				\
-        $(SLO)$/propertyhelper.obj			\
-        $(SLO)$/services.obj				\
-        $(SLO)$/PropertyForward.obj				\
-        $(SLO)$/ContainerMediator.obj			\
-        $(SLO)$/userinformation.obj             \
-        $(SLO)$/warnings.obj
+        $(SLO)$/sdbcoretools.obj        \
+        $(SLO)$/propertyhelper.obj      \
+        $(SLO)$/services.obj            \
+        $(SLO)$/PropertyForward.obj     \
+        $(SLO)$/ContainerMediator.obj   \
+        $(SLO)$/userinformation.obj     \
+        $(SLO)$/ContainerListener.obj   \
+        $(SLO)$/objectnameapproval.obj  \
+        $(SLO)$/warnings.obj            \
+        $(SLO)$/veto.obj
 
 # --- Targets ----------------------------------
 
