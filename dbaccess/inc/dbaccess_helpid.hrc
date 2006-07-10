@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbaccess_helpid.hrc,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:47:50 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:58:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,6 +128,7 @@
 #define HID_CTL_QRYDGNTAB                           (HID_DBACCESS_START + 86)
 #define HID_DLG_QRY_JOIN                            (HID_DBACCESS_START + 87)
 #define HID_DLG_QRY_JOINTYPE                        (HID_DBACCESS_START + 88)
+#define HID_JOINSH_ADDTAB_QUERYLIST                 (HID_DBACCESS_START + 89)
 #define HID_DLG_QRY_HELPTEXT                        (HID_DBACCESS_START + 92)
 
 #define HID_CTL_QRYDGNCRIT                          (HID_DBACCESS_START + 93)
