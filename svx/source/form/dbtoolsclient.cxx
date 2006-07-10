@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtoolsclient.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:52:11 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:56:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -261,15 +261,13 @@ namespace svxform
         return sReturn;
     }
 
-    //--------------------------------------------------------------------
-    ::rtl::OUString OStaticDataAccessTools::quoteTableName(const Reference< XDatabaseMetaData>& _rxMeta, const ::rtl::OUString& _rName
-                                    ,sal_Bool _bUseCatalogInSelect
-                                    ,sal_Bool _bUseSchemaInSelect) const
+    // ------------------------------------------------
+    ::rtl::OUString OStaticDataAccessTools::composeTableNameForSelect( const Reference< XConnection >& _rxConnection, const Reference< XPropertySet>& _xTable ) const
     {
         ::rtl::OUString sReturn;
         checkIfLoaded();
-        if (m_xDataAccessTools.is())
-            sReturn = m_xDataAccessTools->quoteTableName(_rxMeta, _rName,_bUseCatalogInSelect,_bUseSchemaInSelect);
+        if ( m_xDataAccessTools.is() )
+            sReturn = m_xDataAccessTools->composeTableNameForSelect( _rxConnection, _xTable );
         return sReturn;
     }
 
