@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impex.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 16:26:15 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:07:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1722,6 +1722,11 @@ BOOL ScImportExport::Dif2Doc( SvStream& rStrm )
     SCCOL nEndCol;
     SCROW nEndRow;
     pImportDoc->GetCellArea( nTab, nEndCol, nEndRow );
+    // #131247# if there are no cells in the imported content, nEndCol/nEndRow may be before the start
+    if ( nEndCol < aRange.aStart.Col() )
+        nEndCol = aRange.aStart.Col();
+    if ( nEndRow < aRange.aStart.Row() )
+        nEndRow = aRange.aStart.Row();
     aRange.aEnd = ScAddress( nEndCol, nEndRow, nTab );
 
     BOOL bOk = StartPaste();
