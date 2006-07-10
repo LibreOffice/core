@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msocximex.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:20:04 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:15:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -648,111 +648,104 @@ class ContainerRecReader
         bool bOk = true;
         for (sal_uInt32 nRecord = 0; nRecord < nNoRecords; ++nRecord)
         {
+            // DR #134146# redo loading of FrameChild data
+
             ContainerRecord rec;
 
-            sal_uInt16 nUnknown12;
-            *pS >> nUnknown12;
-            sal_uInt16 nRecordLen;
-            *pS >> nRecordLen;
-            sal_uInt32 nUnknown13;
-            *pS >> nUnknown13;
-            sal_uInt32 nNameLen;
-            *pS >> nNameLen;
-            /*
-             i.e.  the "i"nSubStorage directory contains the contents if its a
-             frame
-            */
-            *pS >> rec.nSubStorageId;
-            long nCount = 12;
+            // record header
+            sal_uInt16 nId, nSize;
+            *pS >> nId >> nSize;
+            sal_Size nStartPos = pS->Tell();
 
-            sal_uInt32 nSkipLen = 0;
-            bool bHasControlTip = false;
-#if 0
-// alternative to below, yet to be proven
-            sal_uInt8* pFlags;
-            pFlags = static_cast<sal_uInt8*>(&nUnknown13);
-            if ( pFlags[0] == 0xf5 )
-            {
-                nSkipLen = 4;
-            }
-            else
-            {
-                nSkipLen = 4;
-            }
-            if ( pFlags[1] != 0x01 )
-            {
-                bHasControlTip = true;
-            }
-#else
-            switch (nUnknown13)
-            {
-                default:
-                    bOk = false;
-                    break;
-                case 0x3E5:
-                case 0x9d5:
-                case 0x9e5:
-                case 0x11e5:
-                case 0x21e5:
-                case 0x41e5:
-                    nSkipLen = 0;
-                    bHasControlTip = true;
-                    break;
-                case 0x1D5:
-                case 0x1E5:
-                    nSkipLen = 0;
-                    break;
-                case 0x3f5:
-                case 0x9f5:
-                case 0x11f5: //
-                case 0x21f5: //  Guess
-                case 0x41f5: //
-                    nSkipLen = 4;
-                    bHasControlTip = true;
-                    break;
-                case 0x1F5:
-                    nSkipLen = 4;
-                    break;
-            }
-#endif
+            // content flags
+            sal_uInt32 nContentFlags;
+            *pS >> nContentFlags;
 
-            if (!bOk)
-                break;
-            pS->SeekRel(nSkipLen);
-            nCount += nSkipLen;
-
-            *pS >> rec.nSubStreamLen;
-            *pS >> rec.nTabPos;
-            *pS >> rec.nTypeIdent;
-            nCount += 4;
-            sal_uInt32 nControlTipLen = 0;
-            if (bHasControlTip)
+            // length of control name
+            sal_uInt32 nNameLen = 0;
+            if( nContentFlags & 0x00000001 )
+                *pS >> nNameLen;
+            // length of control tag
+            sal_uInt32 nTagLen = 0;
+            if( nContentFlags & 0x00000002 )
+                *pS >> nTagLen;
+            // substorage id for frames
+            if( nContentFlags & 0x00000004 )
+                *pS >> rec.nSubStorageId;
+            // help-context id
+            if( nContentFlags & 0x00000008 )
+                pS->SeekRel( 4 );
+            // option flags
+            if( nContentFlags & 0x00000010 )
+                pS->SeekRel( 4 );
+            // substream size
+            if( nContentFlags & 0x00000020 )
+                *pS >> rec.nSubStreamLen;
+            // tabstop position
+            if( nContentFlags & 0x00000040 )
+                *pS >> rec.nTabPos;
+            // control type
+            if( nContentFlags & 0x00000080 )
+                *pS >> rec.nTypeIdent;
+            // length of infotip
+            sal_uInt32 nTipLen = 0;
+            if( nContentFlags & 0x00000800 )
             {
-                *pS >> nControlTipLen;
-                nCount += 4;
+                ReadAlign( pS, pS->Tell() - nStartPos, 4 );
+                *pS >> nTipLen;
+            }
+            // length of control source name
+            sal_uInt32 nCtrlSrcLen = 0;
+            if( nContentFlags & 0x00002000 )
+            {
+                ReadAlign( pS, pS->Tell() - nStartPos, 4 );
+                *pS >> nCtrlSrcLen;
             }
 
-            sal_Char *pName = 0;
-            sal_uInt32 nBufSize = lclGetBufferSize(nNameLen);
-            if (nBufSize)
+            // control name
+            sal_Char* pName = 0;
+            sal_uInt32 nNameBufSize = lclGetBufferSize( nNameLen );
+            if( nNameBufSize > 0 )
             {
-                pName = new char[ nBufSize ];
-                pS->Read( pName, nBufSize );
-                nCount += nBufSize;
+                pName = new char[ nNameBufSize ];
+                ReadAlign( pS, pS->Tell() - nStartPos, 4 );
+                pS->Read( pName, nNameBufSize );
+            }
+            // control tag
+            sal_uInt32 nTagBufSize = lclGetBufferSize( nTagLen );
+            if( nTagBufSize > 0 )
+            {
+                ReadAlign( pS, pS->Tell() - nStartPos, 4 );
+                pS->SeekRel( nTagBufSize );
             }
 
-            nCount += ReadAlign(pS, nCount, 4);
-
-            if ( !isMultiPage )
+            // control position
+            if( nContentFlags & 0x00000100 )
             {
-                *pS >> rec.nLeft;
-                *pS >> rec.nTop;
-                nCount += 8;
+                ReadAlign( pS, pS->Tell() - nStartPos, 4 );
+                *pS >> rec.nLeft >> rec.nTop;
             }
-            pS->SeekRel(nRecordLen - nCount);
+
+            // control infotip
+            sal_uInt32 nTipBufSize = lclGetBufferSize( nTipLen );
+            if( nTipBufSize > 0 )
+            {
+                ReadAlign( pS, pS->Tell() - nStartPos, 4 );
+                pS->SeekRel( nTipBufSize );
+            }
+            // control source name
+            sal_uInt32 nCtrlSrcBufSize = lclGetBufferSize( nCtrlSrcLen );
+            if( nCtrlSrcBufSize > 0 )
+            {
+                ReadAlign( pS, pS->Tell() - nStartPos, 4 );
+                pS->SeekRel( nCtrlSrcBufSize );
+            }
+
+            // seek to end of data
+            pS->Seek( nStartPos + nSize );
 
             rec.cName = lclCreateOUString(pName, nNameLen);
-            delete pName;
+            delete[] pName;
 
             OCX_Control* pControl = NULL;
             if( pContainerControl->createFromContainerRecord( rec, pControl ) &&
