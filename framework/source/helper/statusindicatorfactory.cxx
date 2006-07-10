@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statusindicatorfactory.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:41:23 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 16:26:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -555,8 +555,6 @@ void StatusIndicatorFactory::impl_createProgress()
 //-----------------------------------------------
 void StatusIndicatorFactory::impl_reschedule(sal_Bool bForce)
 {
-    const sal_Int32 MAX_RESCHEDULE = 1000;
-
     // SAFE ->
     ReadGuard aReadLock(m_aLock);
     if (m_bDisableReschedule)
@@ -587,11 +585,7 @@ void StatusIndicatorFactory::impl_reschedule(sal_Bool bForce)
         aGlobalLock.unlock();
         // <- SAFE
 
-        // reschedule all pending events
-        // but avoid an endless loop
-        sal_Int32 nRescheduleCount = MAX_RESCHEDULE;
-        while (Application::AnyInput() && nRescheduleCount-- > 0)
-            Application::Reschedule();
+        Application::Reschedule(true);
 
         // SAFE ->
         aGlobalLock.lock();
