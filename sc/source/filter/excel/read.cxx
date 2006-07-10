@@ -4,9 +4,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:36:13 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:30:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,7 @@ FltError ImportExcel::Read( void )
     {
         Biff8RecDumper aDumper( GetRoot(), FALSE );
         if( aDumper.Dump( aIn ) )
-            return eERR_OK;
+            return ERRCODE_ABORT;
     }
 #endif
 
@@ -821,7 +821,7 @@ FltError ImportExcel8::Read( void )
     {
         Biff8RecDumper aDumper( GetRoot(), TRUE );
         if( aDumper.Dump( aIn ) )
-            return eERR_OK;
+            return ERRCODE_ABORT;
     }
 #endif
     // read the entire BIFF8 stream
