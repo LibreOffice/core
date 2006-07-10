@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rscibas.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:46:00 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 16:31:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -336,113 +336,113 @@ RscEnum * RscTypCont::InitKey(){
     RscEnum * pKey;
     pKey = new RscEnum( pHS->getID( "EnumKey" ), RSC_NOTYPE );
 
-    SETCONST( pKey, "KEY_0",                    KEY_0 );
-    SETCONST( pKey, "KEY_1",                    KEY_1 );
-    SETCONST( pKey, "KEY_2",                    KEY_2 );
-    SETCONST( pKey, "KEY_3",                    KEY_3 );
-    SETCONST( pKey, "KEY_4",                    KEY_4 );
-    SETCONST( pKey, "KEY_5",                    KEY_5 );
-    SETCONST( pKey, "KEY_6",                    KEY_6 );
-    SETCONST( pKey, "KEY_7",                    KEY_7 );
-    SETCONST( pKey, "KEY_8",                    KEY_8 );
-    SETCONST( pKey, "KEY_9",                    KEY_9 );
+    SETCONST( pKey, "KEY_0",                    com::sun::star::awt::Key::NUM0 );
+    SETCONST( pKey, "KEY_1",                    com::sun::star::awt::Key::NUM1 );
+    SETCONST( pKey, "KEY_2",                    com::sun::star::awt::Key::NUM2 );
+    SETCONST( pKey, "KEY_3",                    com::sun::star::awt::Key::NUM3 );
+    SETCONST( pKey, "KEY_4",                    com::sun::star::awt::Key::NUM4 );
+    SETCONST( pKey, "KEY_5",                    com::sun::star::awt::Key::NUM5 );
+    SETCONST( pKey, "KEY_6",                    com::sun::star::awt::Key::NUM6 );
+    SETCONST( pKey, "KEY_7",                    com::sun::star::awt::Key::NUM7 );
+    SETCONST( pKey, "KEY_8",                    com::sun::star::awt::Key::NUM8 );
+    SETCONST( pKey, "KEY_9",                    com::sun::star::awt::Key::NUM9 );
 
-    SETCONST( pKey, "KEY_A",                    KEY_A );
-    SETCONST( pKey, "KEY_B",                    KEY_B );
-    SETCONST( pKey, "KEY_C",                    KEY_C );
-    SETCONST( pKey, "KEY_D",                    KEY_D );
-    SETCONST( pKey, "KEY_E",                    KEY_E );
-    SETCONST( pKey, "KEY_F",                    KEY_F );
-    SETCONST( pKey, "KEY_G",                    KEY_G );
-    SETCONST( pKey, "KEY_H",                    KEY_H );
-    SETCONST( pKey, "KEY_I",                    KEY_I );
-    SETCONST( pKey, "KEY_J",                    KEY_J );
-    SETCONST( pKey, "KEY_K",                    KEY_K );
-    SETCONST( pKey, "KEY_L",                    KEY_L );
-    SETCONST( pKey, "KEY_M",                    KEY_M );
-    SETCONST( pKey, "KEY_N",                    KEY_N );
-    SETCONST( pKey, "KEY_O",                    KEY_O );
-    SETCONST( pKey, "KEY_P",                    KEY_P );
-    SETCONST( pKey, "KEY_Q",                    KEY_Q );
-    SETCONST( pKey, "KEY_R",                    KEY_R );
-    SETCONST( pKey, "KEY_S",                    KEY_S );
-    SETCONST( pKey, "KEY_T",                    KEY_T );
-    SETCONST( pKey, "KEY_U",                    KEY_U );
-    SETCONST( pKey, "KEY_V",                    KEY_V );
-    SETCONST( pKey, "KEY_W",                    KEY_W );
-    SETCONST( pKey, "KEY_X",                    KEY_X );
-    SETCONST( pKey, "KEY_Y",                    KEY_Y );
-    SETCONST( pKey, "KEY_Z",                    KEY_Z );
+    SETCONST( pKey, "KEY_A",                    com::sun::star::awt::Key::A );
+    SETCONST( pKey, "KEY_B",                    com::sun::star::awt::Key::B );
+    SETCONST( pKey, "KEY_C",                    com::sun::star::awt::Key::C );
+    SETCONST( pKey, "KEY_D",                    com::sun::star::awt::Key::D );
+    SETCONST( pKey, "KEY_E",                    com::sun::star::awt::Key::E );
+    SETCONST( pKey, "KEY_F",                    com::sun::star::awt::Key::F );
+    SETCONST( pKey, "KEY_G",                    com::sun::star::awt::Key::G );
+    SETCONST( pKey, "KEY_H",                    com::sun::star::awt::Key::H );
+    SETCONST( pKey, "KEY_I",                    com::sun::star::awt::Key::I );
+    SETCONST( pKey, "KEY_J",                    com::sun::star::awt::Key::J );
+    SETCONST( pKey, "KEY_K",                    com::sun::star::awt::Key::K );
+    SETCONST( pKey, "KEY_L",                    com::sun::star::awt::Key::L );
+    SETCONST( pKey, "KEY_M",                    com::sun::star::awt::Key::M );
+    SETCONST( pKey, "KEY_N",                    com::sun::star::awt::Key::N );
+    SETCONST( pKey, "KEY_O",                    com::sun::star::awt::Key::O );
+    SETCONST( pKey, "KEY_P",                    com::sun::star::awt::Key::P );
+    SETCONST( pKey, "KEY_Q",                    com::sun::star::awt::Key::Q );
+    SETCONST( pKey, "KEY_R",                    com::sun::star::awt::Key::R );
+    SETCONST( pKey, "KEY_S",                    com::sun::star::awt::Key::S );
+    SETCONST( pKey, "KEY_T",                    com::sun::star::awt::Key::T );
+    SETCONST( pKey, "KEY_U",                    com::sun::star::awt::Key::U );
+    SETCONST( pKey, "KEY_V",                    com::sun::star::awt::Key::V );
+    SETCONST( pKey, "KEY_W",                    com::sun::star::awt::Key::W );
+    SETCONST( pKey, "KEY_X",                    com::sun::star::awt::Key::X );
+    SETCONST( pKey, "KEY_Y",                    com::sun::star::awt::Key::Y );
+    SETCONST( pKey, "KEY_Z",                    com::sun::star::awt::Key::Z );
 
-    SETCONST( pKey, "KEY_F1",                   KEY_F1 );
-    SETCONST( pKey, "KEY_F2",                   KEY_F2 );
-    SETCONST( pKey, "KEY_F3",                   KEY_F3 );
-    SETCONST( pKey, "KEY_F4",                   KEY_F4 );
-    SETCONST( pKey, "KEY_F5",                   KEY_F5 );
-    SETCONST( pKey, "KEY_F6",                   KEY_F6 );
-    SETCONST( pKey, "KEY_F7",                   KEY_F7 );
-    SETCONST( pKey, "KEY_F8",                   KEY_F8 );
-    SETCONST( pKey, "KEY_F9",                   KEY_F9 );
-    SETCONST( pKey, "KEY_F10",                  KEY_F10 );
-    SETCONST( pKey, "KEY_F11",                  KEY_F11 );
-    SETCONST( pKey, "KEY_F12",                  KEY_F12 );
-    SETCONST( pKey, "KEY_F13",                  KEY_F13 );
-    SETCONST( pKey, "KEY_F14",                  KEY_F14 );
-    SETCONST( pKey, "KEY_F15",                  KEY_F15 );
-    SETCONST( pKey, "KEY_F16",                  KEY_F16 );
-    SETCONST( pKey, "KEY_F17",                  KEY_F17 );
-    SETCONST( pKey, "KEY_F18",                  KEY_F18 );
-    SETCONST( pKey, "KEY_F19",                  KEY_F19 );
-    SETCONST( pKey, "KEY_F20",                  KEY_F20 );
-    SETCONST( pKey, "KEY_F21",                  KEY_F21 );
-    SETCONST( pKey, "KEY_F22",                  KEY_F22 );
-    SETCONST( pKey, "KEY_F23",                  KEY_F23 );
-    SETCONST( pKey, "KEY_F24",                  KEY_F24 );
-    SETCONST( pKey, "KEY_F25",                  KEY_F25 );
-    SETCONST( pKey, "KEY_F26",                  KEY_F26 );
+    SETCONST( pKey, "KEY_F1",                   com::sun::star::awt::Key::F1 );
+    SETCONST( pKey, "KEY_F2",                   com::sun::star::awt::Key::F2 );
+    SETCONST( pKey, "KEY_F3",                   com::sun::star::awt::Key::F3 );
+    SETCONST( pKey, "KEY_F4",                   com::sun::star::awt::Key::F4 );
+    SETCONST( pKey, "KEY_F5",                   com::sun::star::awt::Key::F5 );
+    SETCONST( pKey, "KEY_F6",                   com::sun::star::awt::Key::F6 );
+    SETCONST( pKey, "KEY_F7",                   com::sun::star::awt::Key::F7 );
+    SETCONST( pKey, "KEY_F8",                   com::sun::star::awt::Key::F8 );
+    SETCONST( pKey, "KEY_F9",                   com::sun::star::awt::Key::F9 );
+    SETCONST( pKey, "KEY_F10",                  com::sun::star::awt::Key::F10 );
+    SETCONST( pKey, "KEY_F11",                  com::sun::star::awt::Key::F11 );
+    SETCONST( pKey, "KEY_F12",                  com::sun::star::awt::Key::F12 );
+    SETCONST( pKey, "KEY_F13",                  com::sun::star::awt::Key::F13 );
+    SETCONST( pKey, "KEY_F14",                  com::sun::star::awt::Key::F14 );
+    SETCONST( pKey, "KEY_F15",                  com::sun::star::awt::Key::F15 );
+    SETCONST( pKey, "KEY_F16",                  com::sun::star::awt::Key::F16 );
+    SETCONST( pKey, "KEY_F17",                  com::sun::star::awt::Key::F17 );
+    SETCONST( pKey, "KEY_F18",                  com::sun::star::awt::Key::F18 );
+    SETCONST( pKey, "KEY_F19",                  com::sun::star::awt::Key::F19 );
+    SETCONST( pKey, "KEY_F20",                  com::sun::star::awt::Key::F20 );
+    SETCONST( pKey, "KEY_F21",                  com::sun::star::awt::Key::F21 );
+    SETCONST( pKey, "KEY_F22",                  com::sun::star::awt::Key::F22 );
+    SETCONST( pKey, "KEY_F23",                  com::sun::star::awt::Key::F23 );
+    SETCONST( pKey, "KEY_F24",                  com::sun::star::awt::Key::F24 );
+    SETCONST( pKey, "KEY_F25",                  com::sun::star::awt::Key::F25 );
+    SETCONST( pKey, "KEY_F26",                  com::sun::star::awt::Key::F26 );
 
-    SETCONST( pKey, "KEY_DOWN",                 KEY_DOWN );
-    SETCONST( pKey, "KEY_UP",                   KEY_UP );
-    SETCONST( pKey, "KEY_LEFT",                 KEY_LEFT );
-    SETCONST( pKey, "KEY_RIGHT",                KEY_RIGHT );
-    SETCONST( pKey, "KEY_HOME",                 KEY_HOME );
-    SETCONST( pKey, "KEY_END",                  KEY_END );
-    SETCONST( pKey, "KEY_PAGEUP",               KEY_PAGEUP );
-    SETCONST( pKey, "KEY_PAGEDOWN",             KEY_PAGEDOWN );
+    SETCONST( pKey, "KEY_DOWN",                 com::sun::star::awt::Key::DOWN );
+    SETCONST( pKey, "KEY_UP",                   com::sun::star::awt::Key::UP );
+    SETCONST( pKey, "KEY_LEFT",                 com::sun::star::awt::Key::LEFT );
+    SETCONST( pKey, "KEY_RIGHT",                com::sun::star::awt::Key::RIGHT );
+    SETCONST( pKey, "KEY_HOME",                 com::sun::star::awt::Key::HOME );
+    SETCONST( pKey, "KEY_END",                  com::sun::star::awt::Key::END );
+    SETCONST( pKey, "KEY_PAGEUP",               com::sun::star::awt::Key::PAGEUP );
+    SETCONST( pKey, "KEY_PAGEDOWN",             com::sun::star::awt::Key::PAGEDOWN );
 
-    SETCONST( pKey, "KEY_RETURN",               KEY_RETURN );
-    SETCONST( pKey, "KEY_ESCAPE",               KEY_ESCAPE );
-    SETCONST( pKey, "KEY_TAB",                  KEY_TAB );
-    SETCONST( pKey, "KEY_BACKSPACE",            KEY_BACKSPACE );
-    SETCONST( pKey, "KEY_SPACE",                KEY_SPACE );
-    SETCONST( pKey, "KEY_INSERT",               KEY_INSERT );
-    SETCONST( pKey, "KEY_DELETE",               KEY_DELETE );
+    SETCONST( pKey, "KEY_RETURN",               com::sun::star::awt::Key::RETURN );
+    SETCONST( pKey, "KEY_ESCAPE",               com::sun::star::awt::Key::ESCAPE );
+    SETCONST( pKey, "KEY_TAB",                  com::sun::star::awt::Key::TAB );
+    SETCONST( pKey, "KEY_BACKSPACE",            com::sun::star::awt::Key::BACKSPACE );
+    SETCONST( pKey, "KEY_SPACE",                com::sun::star::awt::Key::SPACE );
+    SETCONST( pKey, "KEY_INSERT",               com::sun::star::awt::Key::INSERT );
+    SETCONST( pKey, "KEY_DELETE",               com::sun::star::awt::Key::DELETE );
 
-    SETCONST( pKey, "KEY_ADD",                  KEY_ADD );
-    SETCONST( pKey, "KEY_SUBTRACT",             KEY_SUBTRACT );
-    SETCONST( pKey, "KEY_MULTIPLY",             KEY_MULTIPLY );
-    SETCONST( pKey, "KEY_DIVIDE",               KEY_DIVIDE );
-    SETCONST( pKey, "KEY_POINT",                KEY_POINT );
-    SETCONST( pKey, "KEY_COMMA",                KEY_COMMA );
-    SETCONST( pKey, "KEY_LESS",                 KEY_LESS );
-    SETCONST( pKey, "KEY_GREATER",              KEY_GREATER );
-    SETCONST( pKey, "KEY_EQUAL",                KEY_EQUAL );
+    SETCONST( pKey, "KEY_ADD",                  com::sun::star::awt::Key::ADD );
+    SETCONST( pKey, "KEY_SUBTRACT",             com::sun::star::awt::Key::SUBTRACT );
+    SETCONST( pKey, "KEY_MULTIPLY",             com::sun::star::awt::Key::MULTIPLY );
+    SETCONST( pKey, "KEY_DIVIDE",               com::sun::star::awt::Key::DIVIDE );
+    SETCONST( pKey, "KEY_POINT",                com::sun::star::awt::Key::POINT );
+    SETCONST( pKey, "KEY_COMMA",                com::sun::star::awt::Key::COMMA );
+    SETCONST( pKey, "KEY_LESS",                 com::sun::star::awt::Key::LESS );
+    SETCONST( pKey, "KEY_GREATER",              com::sun::star::awt::Key::GREATER );
+    SETCONST( pKey, "KEY_EQUAL",                com::sun::star::awt::Key::EQUAL );
 
-    SETCONST( pKey, "KEY_OPEN",                 KEY_OPEN );
-    SETCONST( pKey, "KEY_CUT",                  KEY_CUT );
-    SETCONST( pKey, "KEY_COPY",                 KEY_COPY );
-    SETCONST( pKey, "KEY_PASTE",                KEY_PASTE );
-    SETCONST( pKey, "KEY_UNDO",                 KEY_UNDO );
-    SETCONST( pKey, "KEY_REPEAT",               KEY_REPEAT );
-    SETCONST( pKey, "KEY_FIND",                 KEY_FIND );
-    SETCONST( pKey, "KEY_PROPERTIES",           KEY_PROPERTIES );
-    SETCONST( pKey, "KEY_FRONT",                KEY_FRONT );
-    SETCONST( pKey, "KEY_CONTEXTMENU",          KEY_CONTEXTMENU );
-    SETCONST( pKey, "KEY_HELP",                 KEY_HELP );
-    SETCONST( pKey, "KEY_HANGUL_HANJA",         KEY_HANGUL_HANJA );
-    SETCONST( pKey, "KEY_DECIMAL",              KEY_DECIMAL );
-    SETCONST( pKey, "KEY_TILDE",                KEY_TILDE );
-    SETCONST( pKey, "KEY_QUOTELEFT",            KEY_QUOTELEFT );
+    SETCONST( pKey, "KEY_OPEN",                 com::sun::star::awt::Key::OPEN );
+    SETCONST( pKey, "KEY_CUT",                  com::sun::star::awt::Key::CUT );
+    SETCONST( pKey, "KEY_COPY",                 com::sun::star::awt::Key::COPY );
+    SETCONST( pKey, "KEY_PASTE",                com::sun::star::awt::Key::PASTE );
+    SETCONST( pKey, "KEY_UNDO",                 com::sun::star::awt::Key::UNDO );
+    SETCONST( pKey, "KEY_REPEAT",               com::sun::star::awt::Key::REPEAT );
+    SETCONST( pKey, "KEY_FIND",                 com::sun::star::awt::Key::FIND );
+    SETCONST( pKey, "KEY_PROPERTIES",           com::sun::star::awt::Key::PROPERTIES );
+    SETCONST( pKey, "KEY_FRONT",                com::sun::star::awt::Key::FRONT );
+    SETCONST( pKey, "KEY_CONTEXTMENU",          com::sun::star::awt::Key::CONTEXTMENU );
+    SETCONST( pKey, "KEY_HELP",                 com::sun::star::awt::Key::HELP );
+    SETCONST( pKey, "KEY_HANGUL_HANJA",         com::sun::star::awt::Key::HANGUL_HANJA );
+    SETCONST( pKey, "KEY_DECIMAL",              com::sun::star::awt::Key::DECIMAL );
+    SETCONST( pKey, "KEY_TILDE",                com::sun::star::awt::Key::TILDE );
+    SETCONST( pKey, "KEY_QUOTELEFT",            com::sun::star::awt::Key::QUOTELEFT );
 
     return( pKey );
 }
