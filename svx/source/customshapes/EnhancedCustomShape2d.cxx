@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShape2d.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 14:56:16 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 11:26:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1226,6 +1226,8 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
         fYRatio = 1.0;
 
     sal_Int32 i, nLength = seqEquations.getLength();
+
+
     if ( nLength )
     {
         vNodesSharedPtr.resize( nLength );
@@ -1233,9 +1235,9 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
         {
             try
             {
-                vNodesSharedPtr[ i ] = EnhancedCustomShapeFunctionParser::parseFunction( seqEquations[ i ], *this );
+                vNodesSharedPtr[ i ] = EnhancedCustomShape::FunctionParser::parseFunction( seqEquations[ i ], *this );
             }
-            catch ( ParseError& )
+            catch ( EnhancedCustomShape::ParseError& )
             {
             }
         }
