@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formel.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:19:20 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:52:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -229,18 +229,16 @@ public:
 class ExcelConverterBase : public ConverterBase
 {
 protected:
-    XclImpStream&       aIn;
-
-                        ExcelConverterBase( XclImpStream& rStr, UINT16 nNewBuffer );
+                        ExcelConverterBase( UINT16 nNewBuffer );
     virtual             ~ExcelConverterBase();
 
 public:
     void                Reset();
     void                Reset( ScAddress aEingPos );
 
-    virtual ConvErr     Convert( const ScTokenArray*& rpErg, UINT32 nFormulaLen,
+    virtual ConvErr     Convert( const ScTokenArray*& rpErg, XclImpStream& rStrm, sal_Size nFormulaLen,
                                     const FORMULA_TYPE eFT = FT_CellFormula ) = 0;
-    virtual ConvErr     Convert( _ScRangeListTabs&, UINT32 nFormulaLen,
+    virtual ConvErr     Convert( _ScRangeListTabs&, XclImpStream& rStrm, sal_Size nFormulaLen,
                                     const FORMULA_TYPE eFT = FT_CellFormula ) = 0;
 };
 
