@@ -4,9 +4,9 @@
  *
  *  $RCSfile: etiff.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 21:43:59 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:19:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -204,6 +204,11 @@ BOOL TIFFWriter::WriteTIFF( const Graphic& rGraphic, SvStream& rTIFF,
             if ( mpAcc )
             {
                 mnBitsPerPixel = aBmp.GetBitCount();
+
+                // export code below only handles four discrete cases
+                mnBitsPerPixel =
+                    mnBitsPerPixel <= 1 ? 1 : mnBitsPerPixel <= 4 ? 4 : mnBitsPerPixel <= 8 ? 8 : 24;
+
                 if ( ImplWriteHeader( ( aAnimation.Count() > 0 ) ) )
                 {
                     Size aDestMapSize( 300, 300 );
