@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QTableWindow.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:26:25 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:40:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,35 +147,27 @@ sal_Bool OQueryTableWindow::Init()
     OQueryTableView* pContainer = static_cast<OQueryTableView*>(getTableView());
 
     // zuerst Alias bestimmen
-    ::rtl::OUString strAliasName;
+    ::rtl::OUString sAliasName;
 
     OTableWindowData* pWinData = GetData();
     DBG_ASSERT(pWinData->ISA(OQueryTableWindowData), "OQueryTableWindow::Init() : habe keine OQueryTableWindowData");
 
     if (m_strInitialAlias.getLength() )
         // Der Alias wurde explizit mit angegeben
-        strAliasName = m_strInitialAlias;
+        sAliasName = m_strInitialAlias;
     else
-    {
-        ::rtl::OUString aInitialTitle = pWinData->GetTableName();
-        if(GetTable().is())
-        {
-            ::rtl::OUString sName;
-            GetTable()->getPropertyValue(PROPERTY_NAME) >>= sName;
-            strAliasName = sName.getStr();
-        }
-    }
+        GetTableOrQuery()->getPropertyValue( PROPERTY_NAME ) >>= sAliasName;
 
     // Alias mit fortlaufender Nummer versehen
-    if (pContainer->CountTableAlias(strAliasName, m_nAliasNum))
+    if (pContainer->CountTableAlias(sAliasName, m_nAliasNum))
     {
-        strAliasName += ::rtl::OUString('_');
-        strAliasName += ::rtl::OUString::valueOf(m_nAliasNum);
+        sAliasName += ::rtl::OUString('_');
+        sAliasName += ::rtl::OUString::valueOf(m_nAliasNum);
     }
 
 
-    strAliasName = String(strAliasName).EraseAllChars('"');
-    SetAliasName(strAliasName);
+    sAliasName = String(sAliasName).EraseAllChars('"');
+    SetAliasName(sAliasName);
         // SetAliasName reicht das als WinName weiter, dadurch benutzt es die Basisklasse
     // reset the titel
     m_aTitle.SetText( pWinData->GetWinName() );
@@ -211,6 +203,22 @@ void* OQueryTableWindow::createUserData(const Reference< XPropertySet>& _xColumn
     if ( _xColumn.is() )
         pInfo->SetDataType(::comphelper::getINT32(_xColumn->getPropertyValue(PROPERTY_TYPE)));
     return pInfo;
+}
+// -----------------------------------------------------------------------------
+void OQueryTableWindow::onNoColumns_throw()
+{
+    if ( isQuery() )
+    {
+        String sError( ModuleRes( STR_STATEMENT_WITHOUT_RESULT_SET ) );
+        ::dbtools::throwSQLException( sError, ::dbtools::SQL_GENERAL_ERROR, NULL );
+    }
+    OTableWindow::onNoColumns_throw();
+}
+
+// -----------------------------------------------------------------------------
+bool OQueryTableWindow::allowQueries() const
+{
+    return true;
 }
 // -----------------------------------------------------------------------------
 void OQueryTableWindow::deleteUserData(void*& _pUserData)
