@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xestring.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:02:29 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:34:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,7 +91,7 @@ struct XclDirectHasher : public XclHasher< Type >
 struct XclFormatRunHasher : public XclHasher< const XclFormatRun& >
 {
     inline sal_uInt32   operator()( const XclFormatRun& rRun ) const
-                            { return (rRun.mnChar << 8) ^ rRun.mnXclFont; }
+                            { return (rRun.mnChar << 8) ^ rRun.mnFontIdx; }
 };
 
 /** Calculates a hash value from a vector.
@@ -257,11 +257,11 @@ void XclExpString::SetFormats( const XclFormatRunVec& rFormats )
     LimitFormatCount( mbIsBiff8 ? EXC_STR_MAXLEN : EXC_STR_MAXLEN_8BIT );
 }
 
-void XclExpString::AppendFormat( sal_uInt16 nChar, sal_uInt16 nXclFont )
+void XclExpString::AppendFormat( sal_uInt16 nChar, sal_uInt16 nFontIdx )
 {
     DBG_ASSERT( maFormats.empty() || (maFormats.back().mnChar < nChar), "XclExpString::AppendFormat - invalid char index" );
     if( maFormats.size() < static_cast< size_t >( mbIsBiff8 ? EXC_STR_MAXLEN : EXC_STR_MAXLEN_8BIT ) )
-        maFormats.push_back( XclFormatRun( nChar, nXclFont ) );
+        maFormats.push_back( XclFormatRun( nChar, nFontIdx ) );
 }
 
 void XclExpString::LimitFormatCount( sal_uInt16 nMaxCount )
@@ -272,13 +272,13 @@ void XclExpString::LimitFormatCount( sal_uInt16 nMaxCount )
 
 sal_uInt16 XclExpString::RemoveLeadingFont()
 {
-    sal_uInt16 nXclFont = EXC_FONT_NOTFOUND;
+    sal_uInt16 nFontIdx = EXC_FONT_NOTFOUND;
     if( !maFormats.empty() && (maFormats.front().mnChar == 0) )
     {
-        nXclFont = maFormats.front().mnXclFont;
+        nFontIdx = maFormats.front().mnFontIdx;
         maFormats.erase( maFormats.begin() );
     }
-    return nXclFont;
+    return nFontIdx;
 }
 
 bool XclExpString::IsEqual( const XclExpString& rCmp ) const
@@ -315,7 +315,7 @@ sal_uInt8 XclExpString::GetFlagField() const
     return (mbIsUnicode ? EXC_STRF_16BIT : 0) | (IsRich() ? EXC_STRF_RICH : 0);
 }
 
-sal_uInt32 XclExpString::GetHeaderSize() const
+sal_uInt16 XclExpString::GetHeaderSize() const
 {
     return
         (mb8BitLen ? 1 : 2) +           // length field
@@ -323,12 +323,12 @@ sal_uInt32 XclExpString::GetHeaderSize() const
         (IsWriteFormats() ? 2 : 0);     // richtext formattting count
 }
 
-sal_uInt32 XclExpString::GetBufferSize() const
+sal_Size XclExpString::GetBufferSize() const
 {
     return mnLen * (mbIsUnicode ? 2 : 1);
 }
 
-sal_uInt32 XclExpString::GetSize() const
+sal_Size XclExpString::GetSize() const
 {
     return
         GetHeaderSize() +                                   // header
@@ -401,13 +401,13 @@ void XclExpString::WriteFormats( XclExpStream& rStrm ) const
         {
             rStrm.SetSliceSize( 4 );
             for( ; aIt != aEnd; ++aIt )
-                rStrm << aIt->mnChar << aIt->mnXclFont;
+                rStrm << aIt->mnChar << aIt->mnFontIdx;
         }
         else
         {
             rStrm.SetSliceSize( 2 );
             for( ; aIt != aEnd; ++aIt )
-                rStrm << static_cast< sal_uInt8 >( aIt->mnChar ) << static_cast< sal_uInt8 >( aIt->mnXclFont );
+                rStrm << static_cast< sal_uInt8 >( aIt->mnChar ) << static_cast< sal_uInt8 >( aIt->mnFontIdx );
         }
         rStrm.SetSliceSize( 0 );
     }
@@ -587,7 +587,7 @@ void XclExpString::BuildAppend( const sal_Char* pcSource, sal_Int32 nAddLen )
     }
 }
 
-void XclExpString::PrepareWrite( XclExpStream& rStrm, sal_uInt32 nBytes ) const
+void XclExpString::PrepareWrite( XclExpStream& rStrm, sal_uInt16 nBytes ) const
 {
     rStrm.SetSliceSize( nBytes + (mbIsUnicode ? 2 : 1) );
 }
