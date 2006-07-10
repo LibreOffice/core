@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgsave.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:53:21 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:32:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,14 +47,11 @@
 #ifndef _EDIT_HXX //autogen
 #include <vcl/edit.hxx>
 #endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
-#include <com/sun/star/container/XNameAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALNAMEACCESS_HPP_
-#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
-#endif
 #ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
@@ -64,8 +61,7 @@
 #endif
 
 #define SAD_DEFAULT                 0x0000
-#define SAD_OVERWRITE               0x0001
-#define SAD_ADDITIONAL_DESCRIPTION  0x0002
+#define SAD_ADDITIONAL_DESCRIPTION  0x0001
 
 #define SAD_TITLE_STORE_AS          0x0000
 #define SAD_TITLE_PASTE_AS          0x0100
@@ -73,6 +69,7 @@
 
 namespace dbaui
 {
+    class IObjectNameCheck;
     class OSaveAsDlg : public ModalDialog
     {
     private:
@@ -89,33 +86,27 @@ namespace dbaui
         String              m_aQryLabel;
         String              m_sTblLabel;
         String              m_aName;
-        String              m_aExists;
-        String              m_aExistsOverwrite;
-        String              m_sParentURL;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>             m_xNames;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XHierarchicalNameAccess> m_xHierarchyNames;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>            m_xMetaData;
+        const IObjectNameCheck&
+                            m_rObjectNameCheck;
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xORB;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >       m_xMetaData;
         sal_Int32           m_nType;
         sal_Int32           m_nFlags;
 
 
     public:
         OSaveAsDlg( Window * pParent,const sal_Int32& _rType,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>&  _rxNames,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _rxMetaData,
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
                     const String& rDefault,
+                    const IObjectNameCheck& _rObjectNameCheck,
                     sal_Int32 _nFlags = SAD_DEFAULT | SAD_TITLE_STORE_AS);
-        OSaveAsDlg( Window * pParent,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>&  _rxNames,
-                    const String& rDefault,
+
+        OSaveAsDlg( Window* _pParent,
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
+                    const String& _rDefault,
                     const String& _sLabel,
-                    sal_Int32 _nFlags = SAD_DEFAULT | SAD_TITLE_STORE_AS);
-        OSaveAsDlg( Window * pParent,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XHierarchicalNameAccess>&  _rxNames,
-                    const String& rDefault,
-                    const String& _sLabel,
-                    const String& _sParentURL,
+                    const IObjectNameCheck& _rObjectNameCheck,
                     sal_Int32 _nFlags = SAD_DEFAULT | SAD_TITLE_STORE_AS);
 
         String getName() const      { return m_aName; }
