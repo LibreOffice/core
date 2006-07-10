@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfun3.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:13:06 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:11:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -417,9 +417,13 @@ void ScViewFunc::PasteFromSystem()
     ScDrawTransferObj* pDrawClip = ScDrawTransferObj::GetOwnClipboard( pWin );
 
     if (pOwnClip)
+    {
+        // #129384# keep a reference in case the clipboard is changed during PasteFromClip
+        uno::Reference<datatransfer::XTransferable> aOwnClipRef( pOwnClip );
         PasteFromClip( IDF_ALL, pOwnClip->GetDocument(),
                         PASTE_NOFUNC, FALSE, FALSE, FALSE, INS_NONE, IDF_NONE,
                         TRUE );     // allow warning dialog
+    }
     else if (pDrawClip)
         PasteDraw();
     else
@@ -508,9 +512,13 @@ BOOL ScViewFunc::PasteFromSystem( ULONG nFormatId, BOOL bApi )
     Window* pWin = GetActiveWin();
     ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard( pWin );
     if ( nFormatId == 0 && pOwnClip )
+    {
+        // #129384# keep a reference in case the clipboard is changed during PasteFromClip
+        uno::Reference<datatransfer::XTransferable> aOwnClipRef( pOwnClip );
         PasteFromClip( IDF_ALL, pOwnClip->GetDocument(),
                         PASTE_NOFUNC, FALSE, FALSE, FALSE, INS_NONE, IDF_NONE,
                         !bApi );        // allow warning dialog
+    }
     else
     {
         TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pWin ) );
