@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fudraw.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 12:10:36 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:08:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -346,7 +346,7 @@ BOOL __EXPORT FuDraw::KeyInput(const KeyEvent& rKEvt)
                                 pUndoMan->AddUndoAction( pShowUndo );
                         }
                         ScAddress aTabPos;
-                        ScDrawObjData* pData = ScDrawLayer::GetObjData( pObj );
+                        ScDrawObjData* pData = ScDrawLayer::GetObjDataTab( pObj, pViewShell->GetViewData()->GetTabNo() );
                         if( pData )
                             aTabPos = pData->aStt;
                         ScPostIt aNote(pDoc);
@@ -930,7 +930,7 @@ void FuDraw::CheckVisibleNote() const
         SdrObject* pObj = rNoteMarkList.GetMark( 0 )->GetObj();
         if ( pObj && pObj->GetLayer() == SC_LAYER_INTERN && pObj->ISA(SdrCaptionObj) )
         {
-            ScDrawObjData* pData = ScDrawLayer::GetObjData( pObj );
+            ScDrawObjData* pData = ScDrawLayer::GetObjDataTab( pObj, pViewShell->GetViewData()->GetTabNo() );
             if( pData )
             {
                 ScAddress aTabPos = ScAddress( pData->aStt);
