@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ComponentDefinition.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:42:45 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:08:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,13 +81,34 @@ namespace dbaccess
                                      ,public ODataSettings_Base
     {
     public:
-        DECLARE_STL_USTRINGACCESS_MAP(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> , TColumns);
-        DECLARE_STL_VECTOR(TColumns::iterator, TColumnsIndexAccess);
+        typedef ::std::map  <   ::rtl::OUString
+                            ,   ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+                            >   Columns;
+    typedef Columns::iterator           iterator;
+    typedef Columns::const_iterator     const_iterator;
 
-        TColumnsIndexAccess m_aColumns;             // for a efficient index access
-        TColumns            m_aColumnNames;             // for a efficient name access
+    private:
+        Columns             m_aColumns;
+
+    public:
         ::rtl::OUString     m_sSchemaName;
         ::rtl::OUString     m_sCatalogName;
+
+    public:
+        inline size_t size() const { return m_aColumns.size(); }
+
+        inline const_iterator begin() const   { return m_aColumns.begin(); }
+        inline const_iterator end() const     { return m_aColumns.end(); }
+
+        inline const_iterator find( const ::rtl::OUString& _rName ) const { return m_aColumns.find( _rName ); }
+
+        inline void erase( const ::rtl::OUString& _rName ) { m_aColumns.erase( _rName ); }
+
+        inline void insert( const ::rtl::OUString& _rName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColumn )
+        {
+            OSL_PRECOND( m_aColumns.find( _rName ) == m_aColumns.end(), "OComponentDefinition_Impl::insert: there's already an element wihh this name!" );
+            m_aColumns.insert( Columns::value_type( _rName, _rxColumn ) );
+        }
     };
 
 //=========================================================================
@@ -109,13 +130,16 @@ protected:
 
     virtual ~OComponentDefinition();
     virtual void SAL_CALL disposing();
+
+
 protected:
     OComponentDefinition(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&
         ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&   _xParentContainer
         ,const TContentPtr& _pImpl
         ,sal_Bool _bTable = sal_True);
 
-
+    const   OComponentDefinition_Impl& getDefinition() const { return dynamic_cast< const OComponentDefinition_Impl& >( *m_pImpl.get() ); }
+            OComponentDefinition_Impl& getDefinition()       { return dynamic_cast<       OComponentDefinition_Impl& >( *m_pImpl.get() ); }
 public:
 
     OComponentDefinition(
@@ -152,9 +176,9 @@ public:
 
     // IColumnFactory
     virtual OColumn*    createColumn(const ::rtl::OUString& _rName) const;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createEmptyObject();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createColumnDescriptor();
+    virtual void columnAppended( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxSourceDescriptor );
     virtual void columnDropped(const ::rtl::OUString& _sName);
-    virtual void columnCloned(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xClone);
 
 protected:
 // OPropertyArrayUsageHelper
