@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormControlTest.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:29:51 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:45:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XComponent;
 
 import com.sun.star.util.XCloseable;
+import com.sun.star.util.XRefreshable;
 import com.sun.star.util.XURLTransformer;
 import com.sun.star.util.URL;
 
@@ -492,26 +493,8 @@ public class FormControlTest extends complexlib.ComplexTestCase
         String documentURL = m_databaseDocument.getDocumentURL();
         namingService.registerObject( m_dataSourceName, databaseContext.getByName( documentURL ) );
 
-        String sDataSourceName = (String)param.get( "datasource" );
-        if ( null == sDataSourceName )
-            sDataSourceName = m_dataSourceName;
-        if ( !databaseContext.hasByName( sDataSourceName ) )
-        {
-            log.println( "\n" );
-            log.println( "There is no data source named '" + sDataSourceName + "'\n" );
-            log.println( "You need to create a data source in your office installation, pointing" );
-            log.println( "to a database (preferably embedded HSQLDB, other types not tested so far)" );
-            log.println( "which this test should work with.\n" );
-            log.println( "The test will automatically create and populate a sample table in this" );
-            log.println( "data source.\n" );
-            log.println( "Unless specified otherwise in the FormControlTest.props, the expected" );
-            log.println( "name of the data source is \"" + m_dataSourceName + "\".\n\n" );
-            return false;
-        }
-        log.println( "using data source " + sDataSourceName );
-
         m_dataSource = (XDataSource)UnoRuntime.queryInterface( XDataSource.class,
-            databaseContext.getByName( sDataSourceName ) );
+            databaseContext.getByName( m_dataSourceName ) );
         m_dataSourceProps = dbfTools.queryPropertySet( m_dataSource );
         return m_dataSource != null;
     }
@@ -587,7 +570,7 @@ public class FormControlTest extends complexlib.ComplexTestCase
     /* ------------------------------------------------------------------ */
     private String getCreateTableStatement( )
     {
-        String sCreateTableStatement = "CREATE TABLE \"CTC_form_controls\" (";
+        String sCreateTableStatement = "CREATE TABLE \"" + s_tableName + "\" (";
         sCreateTableStatement += "\"ID\" INTEGER NOT NULL PRIMARY KEY,";
         sCreateTableStatement += "\"f_integer\" INTEGER default NULL,";
         sCreateTableStatement += "\"f_text\" VARCHAR(50) default NULL,";
@@ -615,49 +598,11 @@ public class FormControlTest extends complexlib.ComplexTestCase
     /* ------------------------------------------------------------------ */
     private boolean ensureTables() throws com.sun.star.uno.Exception,  java.lang.Exception
     {
-        // conenct to the data source
-        String user = (String)param.get( "user" );
-        if ( ( user == null ) || ( user.length() == 0 ) )
-        {
-            user = (String)m_dataSourceProps.getPropertyValue( "User" );
-            if ( user.length() == 0 )
-                user = "testtool";
-        }
-
-        String password = (String)param.get( "password" );
-        boolean needPasswordOverride = true;
-
-        if ( ( password == null ) || ( password.length() == 0 ) )
-        {
-            password = (String)m_dataSourceProps.getPropertyValue( "Password" );
-            if ( password.length() == 0 )
-                password = "testtool";
-            else
-                needPasswordOverride = false;
-        }
-
-        XConnection xConn = m_dataSource.getConnection( user, password );
-        if ( xConn == null )
-        {
-            failed( "could not connect to the data source, authenticating with '" + user + "'/'**********'" );
-            return false;
-        }
-        if ( ( user.length() == 0 ) && ( password.length() == 0 ) )
-            log.println( "connected to the data source" );
-        else
-            log.println( "connected to the data source, authenticated with '" + user + "'/'**********'" );
-
-        // if we successfully connected, remember the password. Later on, when the form document is switched
-        // to alive mode, this is needed, since we unfortunately have no chance to pass the password to the
-        // form to use when connecting
-        if ( needPasswordOverride )
-        {
-            m_dataSourceProps.setPropertyValue( "User", user );
-            m_dataSourceProps.setPropertyValue( "Password", password );
-        }
+        XConnection xConn = m_dataSource.getConnection( "", "" );
+        assure( "could not connect to the data source", xConn != null );
 
         // drop the table, if it already exists
-        if  (  !implExecuteStatement( xConn, "DROP TABLE CTC_form_controls IF EXISTS" )
+        if  (  !implExecuteStatement( xConn, "DROP TABLE \"" + s_tableName + "\" IF EXISTS" )
             || !implExecuteStatement( xConn, getCreateTableStatement() )
             )
         {
@@ -665,7 +610,7 @@ public class FormControlTest extends complexlib.ComplexTestCase
             return false;
         }
 
-        String sInsertionPrefix = "INSERT INTO \"CTC_form_controls\" VALUES (";
+        String sInsertionPrefix = "INSERT INTO \"" + s_tableName + "\" VALUES (";
         String[] aValues = getSampleDataValueString();
         for ( int i=0; i<aValues.length; ++i )
             if ( !implExecuteStatement( xConn, sInsertionPrefix + aValues[ i ] + ")" ) )
@@ -674,21 +619,7 @@ public class FormControlTest extends complexlib.ComplexTestCase
                 return false;
             }
 
-        XTablesSupplier xSuppTables = (XTablesSupplier)UnoRuntime.queryInterface( XTablesSupplier.class,
-            xConn );
-        XNameAccess xTables = xSuppTables.getTables();
-
-        if ( !xTables.hasByName( s_tableName ) )
-        {
-            String sNewTableName = (String)param.get( "TablePrefix" );
-            sNewTableName += '.' + s_tableName;
-            if ( !xTables.hasByName( sNewTableName ) )
-            {
-                failed( "could not find the table " + s_tableName );
-                return false;
-            }
-            s_tableName = sNewTableName;
-        }
+        m_databaseDocument.getDataSource().refreshTables( xConn );
 
         // do not need the connection anymore
         dbfTools.disposeComponent( xConn );
