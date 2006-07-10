@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlescher.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:42:51 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:03:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,6 @@ const long EXC_ESCHER_AUTOMARGIN            = 20000;    /// Automatic text margi
 // (0x001C) NOTE --------------------------------------------------------------
 
 const sal_uInt16 EXC_ID_NOTE                = 0x001C;
-
 const sal_uInt16 EXC_NOTE_VISIBLE           = 0x0002;
 const sal_uInt16 EXC_NOTE5_MAXLEN           = 2048;
 
