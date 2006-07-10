@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbumiscres.src,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-28 10:37:01 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:37:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -248,17 +248,10 @@ String 1
     };
 };
 
-//-------------------------------------------------------------------------
-String STR_GENERAL_SDB_ERROR
+String STR_ERROR_DURING_CREATION
 {
-Text [ de ] = "Fehler bei der Verbindung mit der Datenquelle";
-Text [ en-US ] = "Error while connecting to the data source";
-};
-
-String STR_OBJECT_ALREADY_EXSISTS
-{
-Text [ de ] = "Fehler beim Erzeugen";
-Text [ en-US ] = "Error during creation";
+    Text [ de ] = "Fehler beim Erzeugen";
+    Text [ en-US ] = "Error during creation";
 };
 
 String STR_UNEXPECTED_ERROR
@@ -308,4 +301,16 @@ String STR_FILE_DOES_NOT_EXIST
 {
     Text [ de ] ="Die Datei \"$file$\" existiert nicht.";
     Text[ en-US ] = "The file \"$file$\" does not exist.";
+};
+
+String STR_WARNINGS_DURING_CONNECT
+{
+    Text [ de ] = "Beim Verbindungsaufbau sind Warnungen aufgetreten. Drücken Sie \"Mehr\", um sie anzuzeigen.";
+    Text [ en-US ] = "Warnings were encountered while connecting to the data source. Press \"More\" to view them.";
+};
+
+String STR_NAMED_OBJECT_ALREADY_EXISTS
+{
+    Text [ de ] = "Der Name '$#$' existiert bereits.\nBitte geben Sie einen neuen Namen an." ;
+    Text [ en-US ] = "The name '$#$' already exists.\nPlease enter another name." ;
 };
