@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 21:32:20 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:27:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -530,7 +530,7 @@ void ExcDocument::Write( SvStream& rSvStrm )
             // set current stream position in BOUNDSHEET record
             ExcBoundsheetRef xBoundsheet = maBoundsheetList.GetRecord( nTab );
             if( xBoundsheet.get() )
-                xBoundsheet->SetStreamPos( aXclStrm.GetStreamPos() );
+                xBoundsheet->SetStreamPos( aXclStrm.GetSvStreamPos() );
             // write the table
             maTableList.GetRecord( nTab )->Write( aXclStrm );
         }
