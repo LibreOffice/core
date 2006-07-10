@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rangenam.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-27 09:25:12 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:23:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,6 +158,7 @@ public:
     void            UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY );
 
     BOOL            IsReference( ScRange& rRef ) const;
+    BOOL            IsValidReference( ScRange& rRef ) const;
 
     BOOL            IsRangeAtCursor( const ScAddress&, BOOL bStartOnly ) const;
     BOOL            IsRangeAtBlock( const ScRange& ) const;
