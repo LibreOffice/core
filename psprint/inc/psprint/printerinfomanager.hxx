@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printerinfomanager.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2006-05-24 12:02:03 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 16:29:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,7 +178,9 @@ public:
     virtual void changePrinterInfo( const rtl::OUString& rPrinter, const PrinterInfo& rNewInfo );
 
     // check if the printer configuration has changed
-    virtual bool checkPrintersChanged();
+    // if bwait is true, then this method waits for eventual asynchronous
+    // printer discovery to finish
+    virtual bool checkPrintersChanged( bool bWait );
 
     // members for administration (->padmin)
 
