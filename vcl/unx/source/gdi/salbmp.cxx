@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:53:52 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:20:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,7 +133,7 @@ void X11SalBitmap::ImplRemovedFromCache()
 
 BitmapBuffer* X11SalBitmap::ImplCreateDIB( const Size& rSize, USHORT nBitCount, const BitmapPalette& rPal )
 {
-    DBG_ASSERT( nBitCount == 1 || nBitCount == 4 || nBitCount == 8 || nBitCount == 24, "Unsupported BitCount!" );
+    DBG_ASSERT( nBitCount == 1 || nBitCount == 4 || nBitCount == 8 || nBitCount == 16 || nBitCount == 24, "Unsupported BitCount!" );
 
     BitmapBuffer* pDIB;
 
@@ -152,6 +152,11 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB( const Size& rSize, USHORT nBitCount, 
                 case( 1 ): pDIB->mnFormat |= BMP_FORMAT_1BIT_MSB_PAL; break;
                 case( 4 ): pDIB->mnFormat |= BMP_FORMAT_4BIT_MSN_PAL; break;
                 case( 8 ): pDIB->mnFormat |= BMP_FORMAT_8BIT_PAL; break;
+#ifdef OSL_BIGENDIAN
+                case(16 ) : pDIB->mnFormat|= BMP_FORMAT_16BIT_TC_MSB_MASK; break;
+#else
+                case(16 ) : pDIB->mnFormat|= BMP_FORMAT_16BIT_TC_LSB_MASK; break;
+#endif
                 default:
                     nBitCount = 24;
                     //fall through
@@ -820,19 +825,7 @@ USHORT X11SalBitmap::GetBitCount() const
     if( mpDIB )
         nBitCount = mpDIB->mnBitCount;
     else if( mpDDB )
-    {
         nBitCount = mpDDB->ImplGetDepth();
-
-        if( nBitCount && nBitCount > 1 )
-        {
-            if( nBitCount <= 4 )
-                nBitCount = 4;
-            else if( nBitCount <= 8 )
-                nBitCount = 8;
-            else
-                nBitCount = 24;
-        }
-    }
     else
         nBitCount = 0;
 
