@@ -4,9 +4,9 @@
  *
  *  $RCSfile: present.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:35:44 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 11:22:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -230,8 +230,8 @@ ModalDialog DLG_START_PRESENTATION
     };
     CheckBox CBX_PEN
     {
-        Pos = MAP_APPFONT ( 116, 108 ) ;
-        Size = MAP_APPFONT ( 131, 12 ) ;
+        Pos = MAP_APPFONT ( 108, 108 ) ;
+        Size = MAP_APPFONT ( 139, 12 ) ;
         Text [ de ] = "Mauszeiger als ~Stift" ;
         Text [ en-US ] = "Mouse pointer as ~pen" ;
         TabStop = TRUE ;
