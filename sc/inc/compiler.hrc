@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compiler.hrc,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-21 11:51:34 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 12:30:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,6 +170,8 @@
 #define SC_OPCODE_ERR_CELL          129
 #define SC_OPCODE_FORMULA           130
 #define SC_OPCODE_ARABIC            131
+#define SC_OPCODE_INFO              132
+#define SC_OPCODE_BAHTTEXT          133
 #define SC_OPCODE_END_1_PAR         200
 
 /*** Funktionen mit mehreren Parametern ***/
@@ -360,10 +362,9 @@
 #define SC_OPCODE_CELL              385
 #define SC_OPCODE_ISPMT             386
 #define SC_OPCODE_HYPERLINK         387
-#define SC_OPCODE_BAHTTEXT          388
-#define SC_OPCODE_END_2_PAR         389
+#define SC_OPCODE_END_2_PAR         388
 
-#define SC_OPCODE_LAST_OPCODE_ID    388      /* letzter OpCode */
+#define SC_OPCODE_LAST_OPCODE_ID    387      /* letzter OpCode */
 
 /*** Interna ***/
 #define SC_OPCODE_INTERNAL_BEGIN   9995
