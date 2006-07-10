@@ -1,12 +1,12 @@
-/*************************************************************************
+Ôªø/*************************************************************************
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
  *  $RCSfile: adtabdlg.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:12:46 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:25:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,33 +48,39 @@ ModelessDialog DLG_JOIN_TABADD
     SVLook = TRUE ;
     HelpID = DLG_JOIN_TABADD ;
     Size = MAP_APPFONT ( 178 , 147 ) ;
-    /* ### ACHTUNG: Neuer Text in Resource? Tabellen hinzuf¸gen : Tabellen hinzuf≥gen */
-    Text [ de ] = "Tabellen hinzuf√ºgen" ;
-    Text [ en-US ] = "Add Tables" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
     Hide = TRUE ;
 
-    FixedText FT_TABLE
+    RadioButton RB_CASE_TABLES
     {
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 100 , 8 ) ;
-        Text [ de ] = "~Tabellenname" ;
-        Text [ en-US ] = "~Table name" ;
-        Text [ x-comment ] = " ";
+        Pos = MAP_APPFONT( 6, 6 );
+        Size = MAP_APPFONT( 50, 8 );
+        Text [ de ] = "Tabellen";
+        Text [ en-US ] = "Tables";
     };
-    Control LB_TABLE
+
+    RadioButton RB_CASE_QUERIES
+    {
+        Pos = MAP_APPFONT( 62, 6 );
+        Size = MAP_APPFONT( 50, 8 );
+        Text [ de ] = "Abfragen";
+        Text [ en-US ] = "Queries";
+    };
+
+    Control LB_TABLE_OR_QUERY
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 25 ) ;
-        Size = MAP_APPFONT ( 100 , 115 ) ;
+        Pos = MAP_APPFONT ( 6 , 18 ) ;
+        Size = MAP_APPFONT ( 106 , 122 ) ;
         TabStop = TRUE ;
+        Hide = TRUE;
+        Group = TRUE;
     };
     PushButton PB_ADDTABLE
     {
         Pos = MAP_APPFONT ( 123 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Hinzu~f¸gen : Hinzu~f≥gen */
         Text [ de ] = "Hinzu~f√ºgen" ;
         Text [ en-US ] = "~Add" ;
         TabStop = TRUE ;
@@ -86,7 +92,6 @@ ModelessDialog DLG_JOIN_TABADD
         Pos = MAP_APPFONT ( 123 , 22 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         HelpId = HID_JOINSH_ADDTAB_CLOSE;
-        /* ### ACHTUNG: Neuer Text in Resource? Schlieﬂen : Schlieòen */
         Text [ de ] = "S~chlie√üen" ;
         Text [ en-US ] = "~Close" ;
         TabStop = TRUE ;
@@ -98,55 +103,16 @@ ModelessDialog DLG_JOIN_TABADD
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
-    FixedLine FL_TABLE
+
+    String STR_ADD_TABLES
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 111 , 8 ) ;
-        Text [ de ] = "Tabelle" ;
-        Text [ en-US ] = "Table" ;
-        Text [ x-comment ] = " ";
+        Text [ de ] = "Tabellen hinzuf√ºgen";
+        Text [ en-US ] = "Add Tables";
     };
-    String STR_DEFAULT
+
+    String STR_ADD_TABLE_OR_QUERY
     {
-        Text [ de ] = "<Standard>" ;
-        Text [ en-US ] = "<default>" ;
-        Text [ x-comment ] = " ";
+        Text [ de ] = "Tabelle oder Abfrage hinzuf√ºgen" ;
+        Text [ en-US ] = "Add Table or Query" ;
     };
-    Text [ x-comment ] = " ";
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
