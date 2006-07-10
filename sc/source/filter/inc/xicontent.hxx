@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xicontent.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:32:09 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:58:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,10 @@ globals for the document).
 // Shared string table ========================================================
 
 /** The SST (shared string table) contains all strings used in a BIFF8 file.
-    @descr  This class loads the SST and provides access to the strings. */
+
+    This class loads the SST, provides access to the strings, and is able to
+    create Calc string or edit cells.
+ */
 class XclImpSst : protected XclImpRoot
 {
 public:
@@ -83,10 +86,8 @@ public:
     ScBaseCell*         CreateCell( sal_uInt32 nSstIndex, sal_uInt16 nXFIndex = 0 ) const;
 
 private:
-    typedef ScfDelList< XclImpString > XclImpStringList;
-
-    XclImpStringList    maStringList;       /// List with formatted and unformatted strings.
-    XclImpString        maErrorString;      /// Placeholder for strings not found in the list.
+    typedef ::std::vector< XclImpString > XclImpStringVec;
+    XclImpStringVec     maStrings;          /// List with all strings in the SST.
 };
 
 // Hyperlinks =================================================================
