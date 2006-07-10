@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DExport.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:19:47 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:35:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -735,7 +735,8 @@ sal_Bool ODatabaseExport::createRowSet()
     Reference<XPropertySet > xProp(xDestSet,UNO_QUERY);
     if(xProp.is())
     {
-        ::rtl::OUString sDestName = ::dbtools::composeTableName(m_xConnection->getMetaData(),m_xTable,sal_False,::dbtools::eInDataManipulation);
+        ::rtl::OUString sDestName = ::dbtools::composeTableName(
+            m_xConnection->getMetaData(), m_xTable, ::dbtools::eInDataManipulation, false, false, false );
 
         xProp->setPropertyValue(PROPERTY_ACTIVECONNECTION,makeAny(m_xConnection.getTyped()));
         xProp->setPropertyValue(PROPERTY_COMMANDTYPE,makeAny(CommandType::TABLE));
@@ -892,7 +893,7 @@ Reference< XPreparedStatement > ODatabaseExport::createPreparedStatment( const R
                                                        ,const TPositions& _rvColumns)
 {
     ::rtl::OUString aSql(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("INSERT INTO ")));
-    ::rtl::OUString sComposedTableName = ::dbtools::composeTableName(_xMetaData,_xDestTable,sal_True,::dbtools::eInDataManipulation);
+    ::rtl::OUString sComposedTableName = ::dbtools::composeTableName( _xMetaData, _xDestTable, ::dbtools::eInDataManipulation, false, false, true );
 
     aSql += sComposedTableName;
     aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ( "));
