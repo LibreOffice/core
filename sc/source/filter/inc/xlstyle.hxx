@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlstyle.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:43:24 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:05:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,7 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
 #ifndef SC_XLSTYLE_HXX
 #define SC_XLSTYLE_HXX
 
@@ -63,8 +64,8 @@
 #include <svtools/zforlist.hxx>
 #endif
 
-#ifndef SC_FTOOLS_HXX
-#include "ftools.hxx"
+#ifndef SC_FAPIHELPER_HXX
+#include "fapihelper.hxx"
 #endif
 
 class XclRoot;
@@ -388,6 +389,8 @@ struct XclFontData
     float               GetApiWeight() const;
     /** Returns the API font underline style. */
     sal_Int16           GetApiUnderline() const;
+    /** Returns the API escapement style. */
+    sal_Int16           GetApiEscapement() const;
     /** Returns the API font strike-out style. */
     sal_Int16           GetApiStrikeout() const;
 
@@ -403,11 +406,55 @@ struct XclFontData
     void                SetApiWeight( float fApiWeight );
     /** Sets the API font underline style. */
     void                SetApiUnderline( sal_Int16 nApiUnderl );
+    /** Sets the API escapement style. */
+    void                SetApiEscapement( sal_Int16 nApiEscapem );
     /** Sets the API font strike-out style. */
     void                SetApiStrikeout( sal_Int16 nApiStrikeout );
 };
 
 bool operator==( const XclFontData& rLeft, const XclFontData& rRight );
+
+// ----------------------------------------------------------------------------
+
+/** Enumerates different types of Which-IDs for font items. */
+enum XclFontItemType
+{
+    EXC_FONTITEM_CELL,          /// Use Calc Which-IDs (ATTR_*).
+    EXC_FONTITEM_EDITENG,       /// Use edit engine Which-IDs (EE_CHAR_*).
+    EXC_FONTITEM_HF,            /// Use header/footer edit engine Which-IDs (EE_CHAR_*).
+    EXC_FONTITEM_NOTE           /// Use note edit engine Which-IDs (EE_CHAR_*), special font handling.
+};
+
+/** Enumerates different types for objects with font settings (using different property names). */
+enum XclFontPropSetType
+{
+    EXC_FONTPROPSET_CHART,          /// All text objects in charts.
+    EXC_FONTPROPSET_CONTROL         /// Text formatting in form controls.
+};
+
+// ----------------------------------------------------------------------------
+
+/** Helper class for usage of property sets. */
+class XclFontPropSetHelper
+{
+public:
+    explicit            XclFontPropSetHelper();
+
+    /** Writes all font properties to the passed property set, uses passed color as font color. */
+    void                WriteFontProperties(
+                            ScfPropertySet& rPropSet, XclFontPropSetType eType,
+                            const XclFontData& rFontData, const Color& rFontColor,
+                            bool bHasWstrn, bool bHasAsian, bool bHasCmplx );
+
+private:
+    ScfPropSetHelper    maHlpWstrn;         /// Properties for Western script.
+    ScfPropSetHelper    maHlpAsian;         /// Properties for Asian script.
+    ScfPropSetHelper    maHlpCmplx;         /// Properties for Complex script.
+    ScfPropSetHelper    maHlpWstrnNoName;   /// Properties for Western script, no font name.
+    ScfPropSetHelper    maHlpAsianNoName;   /// Properties for Asian script, no font name.
+    ScfPropSetHelper    maHlpCmplxNoName;   /// Properties for Complex script, no font name.
+    ScfPropSetHelper    maHlpControl;       /// Properties for form controls.
+};
 
 // Number formats =============================================================
 
