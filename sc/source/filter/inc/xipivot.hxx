@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xipivot.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:33:44 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:59:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,8 +46,6 @@
 
 class ScDPSaveData;
 class ScDPSaveDimension;
-
-typedef ::std::vector< String > XclImpPTNameVec;
 
 // ============================================================================
 // Pivot cache
@@ -95,7 +93,7 @@ public:
     // general field/item access ----------------------------------------------
 
     /** Returns the name of the field, uses the passed visible name if supported. */
-    const String&       GetFieldName( const XclImpPTNameVec& rVisNames ) const;
+    const String&       GetFieldName( const ScfStringVec& rVisNames ) const;
 
     /** Returns the base field if this is a grouping field. */
     const XclImpPCField* GetGroupBaseField() const;
@@ -122,16 +120,16 @@ public:
     // grouping ---------------------------------------------------------------
 
     /** Inserts grouping information of this field into the passed ScDPSaveData. */
-    void                ApplyGroupField( ScDPSaveData& rSaveData, const XclImpPTNameVec& rVisNames ) const;
+    void                ApplyGroupField( ScDPSaveData& rSaveData, const ScfStringVec& rVisNames ) const;
 
     // ------------------------------------------------------------------------
 private:
     /** Inserts standard grouping information of this field into the passed ScDPSaveData. */
-    void                ApplyStdGroupField( ScDPSaveData& rSaveData, const XclImpPTNameVec& rVisNames ) const;
+    void                ApplyStdGroupField( ScDPSaveData& rSaveData, const ScfStringVec& rVisNames ) const;
     /** Inserts numeric grouping information of this field into the passed ScDPSaveData. */
-    void                ApplyNumGroupField( ScDPSaveData& rSaveData, const XclImpPTNameVec& rVisNames ) const;
+    void                ApplyNumGroupField( ScDPSaveData& rSaveData, const ScfStringVec& rVisNames ) const;
     /** Inserts date grouping information of this field into the passed ScDPSaveData. */
-    void                ApplyDateGroupField( ScDPSaveData& rSaveData, const XclImpPTNameVec& rVisNames ) const;
+    void                ApplyDateGroupField( ScDPSaveData& rSaveData, const ScfStringVec& rVisNames ) const;
 
     /** Returns a Calc struct with numeric grouping data. */
     ScDPNumGroupInfo    GetScNumGroupInfo() const;
@@ -317,7 +315,7 @@ public:
     // cache/field access, misc. ----------------------------------------------
 
     inline const XclImpPivotCache* GetPivotCache() const { return mpPCache; }
-    inline const XclImpPTNameVec& GetVisFieldNames() const { return maVisFieldNames; }
+    inline const ScfStringVec& GetVisFieldNames() const { return maVisFieldNames; }
 
     sal_uInt16          GetFieldCount() const;
     const XclImpPTField* GetField( sal_uInt16 nFieldIdx ) const;
@@ -360,7 +358,7 @@ private:
     XclPTInfo           maPTInfo;           /// General info about the pivot table (SXVIEW record).
     XclPTExtInfo        maPTExtInfo;        /// Extended info about the pivot table (SXEX record).
     XclImpPTFieldList   maFieldList;        /// List containing all fields.
-    XclImpPTNameVec     maVisFieldNames;    /// Vector containing all visible field names.
+    ScfStringVec        maVisFieldNames;    /// Vector containing all visible field names.
     ScfUInt16Vec        maRowFields;        /// Row field indexes.
     ScfUInt16Vec        maColFields;        /// Column field indexes.
     ScfUInt16Vec        maPageFields;       /// Page field indexes.
