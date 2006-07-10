@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pagechg.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 18:20:22 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:30:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -242,9 +242,8 @@ SwPageFrm::SwPageFrm( SwFrmFmt *pFmt, SwPageDesc *pPgDsc ) :
     SetMaxFtnHeight( pPgDsc->GetFtnInfo().GetHeight() ?
                      pPgDsc->GetFtnInfo().GetHeight() : LONG_MAX ),
     nType = FRMC_PAGE;
-    bInvalidLayout = bInvalidCntnt = bInvalidSpelling = TRUE;
-    bInvalidFlyLayout = bInvalidFlyCntnt = bInvalidFlyInCnt =
-    bFtnPage = bEndNotePage = FALSE;
+    bInvalidLayout = bInvalidCntnt = bInvalidSpelling = bInvalidAutoCmplWrds = bInvalidWordCount = TRUE;
+    bInvalidFlyLayout = bInvalidFlyCntnt = bInvalidFlyInCnt = bFtnPage = bEndNotePage = FALSE;
 
     SwDoc *pDoc = pFmt->GetDoc();
     if ( pDoc->IsBrowseMode() )
