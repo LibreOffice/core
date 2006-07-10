@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fapihelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:11:16 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:46:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,11 @@
 #include "fapihelper.hxx"
 #endif
 
+#include <algorithm>
+
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #endif
@@ -44,15 +49,20 @@
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #endif
 
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
-// no include guard in this header!!!
-//#ifndef ...
-#include <svtools/docpasswdrequest.hxx>
-//#endif
+#ifndef _SFX_OBJSH_HXX
+#include <sfx2/objsh.hxx>
+#endif
 #ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
+#endif
+#ifndef _SFXSIDS_HRC
+#include <sfx2/sfxsids.hrc>
 #endif
 #ifndef _SFXSTRITEM_HXX
 #include <svtools/stritem.hxx>
@@ -60,8 +70,8 @@
 #ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
 #endif
-#ifndef _SFXSIDS_HRC
-#include <sfx2/sfxsids.hrc>
+#ifndef INCLUDED_SVTOOLS_DOCPASSWDREQUEST_HXX
+#include <svtools/docpasswdrequest.hxx>
 #endif
 
 using ::rtl::OUString;
@@ -71,33 +81,80 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::TypeClass_BOOLEAN;
+using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::beans::XPropertySetInfo;
+using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::task::XInteractionHandler;
 using ::com::sun::star::task::XInteractionRequest;
 
-// Get properties =============================================================
+// Static helper functions ====================================================
 
-bool getPropAny( Any& rAny, const Reference< XPropertySet >& rxProp, const OUString& rName )
+Reference< XMultiServiceFactory > ScfApiHelper::GetServiceFactory( SfxObjectShell* pShell )
 {
-    DBG_ASSERT( rxProp.is(), "getPropAny - invalid XPropertySet" );
-    bool bSuccess = false;
-    try
-    {
-        Reference< XPropertySetInfo > xInfo = rxProp->getPropertySetInfo();
-        if( xInfo.is() && xInfo->hasPropertyByName( rName ) )
-        {
-            rAny = rxProp->getPropertyValue( rName );
-            bSuccess = true;
-        }
-    }
-    catch( Exception& )
-    {
-    }
-    return bSuccess;
+    Reference< XMultiServiceFactory > xFactory;
+    if( pShell )
+        xFactory.set( pShell->GetModel(), UNO_QUERY );
+    return xFactory;
 }
 
-// Static helper functions ====================================================
+Reference< XInterface > ScfApiHelper::CreateInstance(
+        Reference< XMultiServiceFactory > xFactory, const OUString& rServiceName )
+{
+    Reference< XInterface > xInt;
+    if( xFactory.is() )
+    {
+        try
+        {
+            xInt = xFactory->createInstance( rServiceName );
+        }
+        catch( Exception& )
+        {
+            DBG_ERRORFILE( "ScfApiHelper::CreateInstance - cannot create instance" );
+        }
+    }
+    return xInt;
+}
+
+Reference< XInterface > ScfApiHelper::CreateInstance( SfxObjectShell* pShell, const OUString& rServiceName )
+{
+    return CreateInstance( GetServiceFactory( pShell ), rServiceName );
+}
+
+Reference< XInterface > ScfApiHelper::CreateInstance( const OUString& rServiceName )
+{
+    return CreateInstance( ::comphelper::getProcessServiceFactory(), rServiceName );
+}
+
+Reference< XInterface > ScfApiHelper::CreateInstanceWithArgs(
+        Reference< XMultiServiceFactory > xFactory, const OUString& rServiceName, const Sequence< Any >& rArgs )
+{
+    Reference< XInterface > xInt;
+    if( xFactory.is() )
+    {
+        try
+        {
+            xInt = xFactory->createInstanceWithArguments( rServiceName, rArgs );
+        }
+        catch( Exception& )
+        {
+            DBG_ERRORFILE( "ScfApiHelper::CreateInstanceWithArgs - cannot create instance" );
+        }
+    }
+    return xInt;
+}
+
+Reference< XInterface > ScfApiHelper::CreateInstanceWithArgs(
+        SfxObjectShell* pShell, const OUString& rServiceName, const Sequence< Any >& rArgs )
+{
+    return CreateInstanceWithArgs( GetServiceFactory( pShell ), rServiceName, rArgs );
+}
+
+Reference< XInterface > ScfApiHelper::CreateInstanceWithArgs(
+        const OUString& rServiceName, const Sequence< Any >& rArgs )
+{
+    return CreateInstanceWithArgs( ::comphelper::getProcessServiceFactory(), rServiceName, rArgs );
+}
 
 String ScfApiHelper::QueryPasswordForMedium( SfxMedium& rMedium )
 {
@@ -185,7 +242,7 @@ bool ScfPropertySet::GetColorProperty( Color& rColor, const ::rtl::OUString& rPr
     sal_Int32 nApiColor;
     bool bRet = GetProperty( nApiColor, rPropName );
     if( bRet )
-        rColor.SetColor( static_cast< ColorData >( nApiColor ) );
+        rColor = ScfApiHelper::ConvertFromApiColor( nApiColor );
     return bRet;
 }
 
@@ -193,6 +250,7 @@ void ScfPropertySet::GetProperties( Sequence< Any >& rValues, const Sequence< OU
 {
     try
     {
+        DBG_ASSERT( mxMultiPropSet.is(), "ScfPropertySet::GetProperties - multi property set not available" );
         if( mxMultiPropSet.is() )   // first try the XMultiPropertySet
         {
             rValues = mxMultiPropSet->getPropertyValues( rPropNames );
@@ -224,6 +282,11 @@ void ScfPropertySet::SetAnyProperty( const OUString& rPropName, const Any& rValu
     }
     catch( Exception& )
     {
+        DBG_ERRORFILE(
+            ByteString( "ScfPropertySet::SetAnyProperty - cannot set property \"" ).
+                Append( ByteString( String( rPropName ), RTL_TEXTENCODING_ASCII_US ) ).
+                Append( '"' ).
+                GetBuffer() );
     }
 }
 
@@ -232,6 +295,7 @@ void ScfPropertySet::SetProperties( const Sequence< OUString >& rPropNames, cons
     DBG_ASSERT( rPropNames.getLength() == rValues.getLength(), "ScfPropertySet::SetProperties - length of sequences different" );
     try
     {
+//        DBG_ASSERT( mxMultiPropSet.is(), "ScfPropertySet::SetProperties - multi property set not available" );
         if( mxMultiPropSet.is() )   // first try the XMultiPropertySet
         {
             mxMultiPropSet->setPropertyValues( rPropNames, rValues );
@@ -247,35 +311,89 @@ void ScfPropertySet::SetProperties( const Sequence< OUString >& rPropNames, cons
     }
     catch( Exception& )
     {
+//        DBG_ERRORFILE( "ScfPropertySet::SetAnyProperty - cannot set multiple properties" );
     }
 }
 
 // ============================================================================
 
-ScfPropSetHelper::ScfPropSetHelper( const sal_Char** ppcPropNames, sal_Int32 nPropCount ) :
-    maNameSeq( nPropCount ),
-    maValueSeq( nPropCount )
+ScfPropSetHelper::ScfPropSetHelper( const sal_Char* const* ppcPropNames ) :
+    mnNextIdx( 0 )
 {
-    DBG_ASSERT( nPropCount > 0, "ScfPropSetHelper::ScfPropSetHelper - invalid sequence size" );
-    DBG_ASSERT( ppcPropNames && *ppcPropNames, "ScfPropSetHelper::ScfPropSetHelper - no strings found" );
+    DBG_ASSERT( ppcPropNames, "ScfPropSetHelper::ScfPropSetHelper - no strings found" );
 
-    const sal_Char** ppCurrName = ppcPropNames;
-    for( sal_Int32 nIndex = 0; nIndex < nPropCount; ++nIndex, ++ppCurrName )
+    // create OUStrings from ASCII property names
+    typedef ::std::pair< OUString, size_t >     IndexedOUString;
+    typedef ::std::vector< IndexedOUString >    IndexedOUStringVec;
+    IndexedOUStringVec aPropNameVec;
+    for( size_t nVecIdx = 0; *ppcPropNames; ++ppcPropNames, ++nVecIdx )
     {
-        maNameSeq[ nIndex ] = OUString::createFromAscii( *ppCurrName );
-        DBG_ASSERT( !nIndex || (maNameSeq[ nIndex - 1 ] < maNameSeq[ nIndex ]),
-            "ScfPropSetHelper::ScfPropSetHelper - names MUST be ordered alphabetically" );
+        OUString aPropName = OUString::createFromAscii( *ppcPropNames );
+        aPropNameVec.push_back( IndexedOUString( aPropName, nVecIdx ) );
+    }
+
+    // sorts the pairs, which will be sorted by first component (the property name)
+    ::std::sort( aPropNameVec.begin(), aPropNameVec.end() );
+
+    // resize member sequences
+    size_t nSize = aPropNameVec.size();
+    maNameSeq.realloc( static_cast< sal_Int32 >( nSize ) );
+    maValueSeq.realloc( static_cast< sal_Int32 >( nSize ) );
+    maNameOrder.resize( nSize );
+
+    // fill the property name sequence and store original sort order
+    sal_Int32 nSeqIdx = 0;
+    for( IndexedOUStringVec::const_iterator aIt = aPropNameVec.begin(),
+            aEnd = aPropNameVec.end(); aIt != aEnd; ++aIt, ++nSeqIdx )
+    {
+        maNameSeq[ nSeqIdx ] = aIt->first;
+        maNameOrder[ aIt->second ] = nSeqIdx;
     }
 }
+
+// read properties ------------------------------------------------------------
 
 void ScfPropSetHelper::ReadFromPropertySet( const ScfPropertySet& rPropSet )
 {
     rPropSet.GetProperties( maValueSeq, maNameSeq );
 }
 
+// write properties -----------------------------------------------------------
+
+void ScfPropSetHelper::InitializeWrite( bool bClearAllAnys )
+{
+    mnNextIdx = 0;
+    if( bClearAllAnys )
+        for( sal_Int32 nIdx = 0, nLen = maValueSeq.getLength(); nIdx < nLen; ++nIdx )
+            maValueSeq[ nIdx ].clear();
+}
+
+void ScfPropSetHelper::WriteValue( const Any& rAny )
+{
+    if( UnoAny* pAny = GetNextAny() )
+        *pAny = rAny;
+}
+
+void ScfPropSetHelper::WriteValue( const bool& rbValue )
+{
+    if( Any* pAny = GetNextAny() )
+        ::comphelper::setBOOL( *pAny, rbValue );
+}
+
 void ScfPropSetHelper::WriteToPropertySet( ScfPropertySet& rPropSet ) const
 {
     rPropSet.SetProperties( maNameSeq, maValueSeq );
+}
+
+// private --------------------------------------------------------------------
+
+Any* ScfPropSetHelper::GetNextAny()
+{
+    DBG_ASSERT( mnNextIdx < maNameOrder.size(), "ScfPropSetHelper::GetNextAny - sequence overflow" );
+    Any* pAny = 0;
+    if( mnNextIdx < maNameOrder.size() )
+        pAny = &maValueSeq[ maNameOrder[ mnNextIdx++ ] ];
+    return pAny;
 }
 
 // ============================================================================
