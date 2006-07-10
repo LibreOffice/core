@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 08:29:22 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:06:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,7 +148,7 @@ using ::com::sun::star::drawing::XShape;
 
 // --- class XclMsodrawing_Base --------------------------------------
 
-XclMsodrawing_Base::XclMsodrawing_Base( XclEscher& rEscher, ULONG nInitialSize )
+XclMsodrawing_Base::XclMsodrawing_Base( XclEscher& rEscher, sal_Size nInitialSize )
         :
         pEscher( &rEscher ),
         nStartPos( rEscher.GetEx()->GetLastOffsetMapPos() )
@@ -166,14 +166,14 @@ XclMsodrawing_Base::~XclMsodrawing_Base()
 
 void XclMsodrawing_Base::UpdateStopPos()
 {
-    if ( nStopPos )
+    if ( nStopPos > 0 )
         GetEscherEx()->ReplaceCurrentOffsetInMap( nStopPos );
     else
         nStopPos = GetEscherEx()->AddCurrentOffsetToMap();
 }
 
 
-ULONG XclMsodrawing_Base::GetDataLen() const
+sal_Size XclMsodrawing_Base::GetDataLen() const
 {
     if ( nStartPos < nStopPos )
     {
@@ -249,7 +249,7 @@ UINT16 XclMsodrawinggroup::GetNum() const
 }
 
 
-ULONG XclMsodrawinggroup::GetLen() const
+sal_Size XclMsodrawinggroup::GetLen() const
 {
     return GetDataLen();
 }
@@ -258,7 +258,7 @@ ULONG XclMsodrawinggroup::GetLen() const
 
 // --- class XclMsodrawing --------------------------------------
 
-XclMsodrawing::XclMsodrawing( const XclExpRoot& rRoot, UINT16 nEscherType, UINT32 nInitialSize ) :
+XclMsodrawing::XclMsodrawing( const XclExpRoot& rRoot, UINT16 nEscherType, sal_Size nInitialSize ) :
     XclMsodrawing_Base( *rRoot.GetOldRoot().pEscher, nInitialSize )
 {
     if ( nEscherType )
@@ -299,7 +299,7 @@ UINT16 XclMsodrawing::GetNum() const
 }
 
 
-ULONG XclMsodrawing::GetLen() const
+sal_Size XclMsodrawing::GetLen() const
 {
     return GetDataLen();
 }
@@ -347,8 +347,8 @@ void XclObjList::EndSheet()
     XclEscherEx* pEx = pMsodrawingPerSheet->GetEscherEx();
 
     // Is there still something in the stream? -> The solver container
-    UINT32 nSolverSize = pEx->GetStreamPos() - pEx->GetOffsetFromMap( pEx->GetLastOffsetMapPos() );
-    if( nSolverSize )
+    sal_Size nSolverSize = pEx->GetStreamPos() - pEx->GetOffsetFromMap( pEx->GetLastOffsetMapPos() );
+    if( nSolverSize > 0 )
         pSolverContainer = new XclMsodrawing( GetRoot(), ESCHER_SolverContainer, nSolverSize );
 
     //! close ESCHER_DgContainer created by XclObjList ctor MSODRAWING
@@ -785,7 +785,7 @@ void XclTxo::Save( XclExpStream& rStrm )
         rStrm.StartRecord( EXC_ID_CONT, 8 * mpString->GetFormatsCount() );
         const XclFormatRunVec& rFormats = mpString->GetFormats();
         for( XclFormatRunVec::const_iterator aIt = rFormats.begin(), aEnd = rFormats.end(); aIt != aEnd; ++aIt )
-            rStrm << aIt->mnChar << aIt->mnXclFont << sal_uInt32( 0 );
+            rStrm << aIt->mnChar << aIt->mnFontIdx << sal_uInt32( 0 );
         rStrm.EndRecord();
     }
 }
@@ -795,7 +795,7 @@ UINT16 XclTxo::GetNum() const
     return EXC_ID_TXO;
 }
 
-ULONG XclTxo::GetLen() const
+sal_Size XclTxo::GetLen() const
 {
     return 18;
 }
@@ -946,7 +946,7 @@ UINT16 ExcBof8_Base::GetNum() const
 }
 
 
-ULONG ExcBof8_Base::GetLen() const
+sal_Size ExcBof8_Base::GetLen() const
 {
     return 16;
 }
@@ -993,13 +993,13 @@ ExcBundlesheet8::ExcBundlesheet8( const String& rString ) :
 
 void ExcBundlesheet8::SaveCont( XclExpStream& rStrm )
 {
-    nOwnPos = rStrm.GetStreamPos();
+    nOwnPos = rStrm.GetSvStreamPos();
     // write dummy position, real position comes later
     rStrm << sal_uInt32( 0 ) << nGrbit << aUnicodeName;
 }
 
 
-ULONG ExcBundlesheet8::GetLen() const
+sal_Size ExcBundlesheet8::GetLen() const
 {   // Text max 255 chars
     return 8 + aUnicodeName.GetBufferSize();
 }
@@ -1014,7 +1014,7 @@ UINT16 XclObproj::GetNum() const
 }
 
 
-ULONG XclObproj::GetLen() const
+sal_Size XclObproj::GetLen() const
 {
     return 0;
 }
@@ -1052,7 +1052,7 @@ UINT16 XclDConRef::GetNum() const
     return 0x0051;
 }
 
-ULONG XclDConRef::GetLen() const
+sal_Size XclDConRef::GetLen() const
 {
     return 7 + pWorkbook->GetSize();
 }
@@ -1078,7 +1078,7 @@ UINT16 XclCodename::GetNum() const
 }
 
 
-ULONG XclCodename::GetLen() const
+sal_Size XclCodename::GetLen() const
 {
     return aName.GetSize();
 }
@@ -1181,7 +1181,7 @@ BOOL ExcEScenario::Append( UINT16 nCol, UINT16 nRow, const String& rTxt )
 
     ExcEScenarioCell* pCell = new ExcEScenarioCell( nCol, nRow, rTxt );
     List::Insert( pCell, LIST_APPEND );
-    nRecLen += 6 + pCell->GetStringBytes();     // 4 bytes address, 2 bytes ifmt
+    nRecLen += 6 + pCell->GetStringBytes();        // 4 bytes address, 2 bytes ifmt
     return TRUE;
 }
 
@@ -1215,7 +1215,7 @@ UINT16 ExcEScenario::GetNum() const
     return 0x00AF;
 }
 
-ULONG ExcEScenario::GetLen() const
+sal_Size ExcEScenario::GetLen() const
 {
     return nRecLen;
 }
@@ -1270,7 +1270,7 @@ UINT16 ExcEScenarioManager::GetNum() const
     return 0x00AE;
 }
 
-ULONG ExcEScenarioManager::GetLen() const
+sal_Size ExcEScenarioManager::GetLen() const
 {
     return 8;
 }
@@ -1285,9 +1285,9 @@ const BYTE      XclProtection::pMyData[] =
     0xDD, 0x00, 0x02, 0x00, 0x01, 0x00,         // SCENPROTECT
     0x63, 0x00, 0x02, 0x00, 0x01, 0x00          // OBJPROTECT
 };
-const ULONG XclProtection::nMyLen = sizeof( XclProtection::pMyData );
+const sal_Size XclProtection::nMyLen = sizeof( XclProtection::pMyData );
 
-ULONG XclProtection::GetLen( void ) const
+sal_Size XclProtection::GetLen( void ) const
 {
     return nMyLen;
 }
@@ -1324,7 +1324,7 @@ UINT16 XclCalccount::GetNum() const
 }
 
 
-ULONG XclCalccount::GetLen() const
+sal_Size XclCalccount::GetLen() const
 {
     return 2;
 }
@@ -1350,7 +1350,7 @@ UINT16 XclIteration::GetNum() const
 }
 
 
-ULONG XclIteration::GetLen() const
+sal_Size XclIteration::GetLen() const
 {
     return 2;
 }
@@ -1377,7 +1377,7 @@ UINT16 XclDelta::GetNum() const
 }
 
 
-ULONG XclDelta::GetLen() const
+sal_Size XclDelta::GetLen() const
 {
     return 8;
 }
