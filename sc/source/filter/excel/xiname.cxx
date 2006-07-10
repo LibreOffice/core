@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xiname.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:49:21 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:41:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
     mnScTab( SCTAB_MAX ),
     mbVBName( false )
 {
-    ExcelToSc& rFmlaConv = GetFmlaConverter();
+    ExcelToSc& rFmlaConv = GetOldFmlaConverter();
     ScRangeName& rRangeNames = GetNamedRanges();
 
     // 1) *** read data from stream *** ---------------------------------------
@@ -176,18 +176,18 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
         switch( mcBuiltIn )
         {
             case EXC_BUILTIN_PRINTAREA:
-                if( rFmlaConv.Convert( GetPrintAreaBuffer(), nFmlaSize, FT_RangeName ) == ConvOK )
+                if( rFmlaConv.Convert( GetPrintAreaBuffer(), rStrm, nFmlaSize, FT_RangeName ) == ConvOK )
                     nNameType |= RT_PRINTAREA;
             break;
             case EXC_BUILTIN_PRINTTITLES:
-                if( rFmlaConv.Convert( GetTitleAreaBuffer(), nFmlaSize, FT_RangeName ) == ConvOK )
+                if( rFmlaConv.Convert( GetTitleAreaBuffer(), rStrm, nFmlaSize, FT_RangeName ) == ConvOK )
                     nNameType |= RT_COLHEADER | RT_ROWHEADER;
             break;
         }
         rStrm.PopPosition();
 
         // --- name formula ---
-        rFmlaConv.Convert( pTokArr, nFmlaSize, FT_RangeName );
+        rFmlaConv.Convert( pTokArr, rStrm, nFmlaSize, FT_RangeName );
 
         // --- auto or advanced filter ---
         if( (GetBiff() == EXC_BIFF8) && pTokArr && bBuiltIn )
@@ -215,7 +215,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
     else if( nFmlaSize > 0 )
     {
         // regular defined name
-        rFmlaConv.Convert( pTokArr, nFmlaSize, FT_RangeName );
+        rFmlaConv.Convert( pTokArr, rStrm, nFmlaSize, FT_RangeName );
     }
 
     // 4) *** create a defined name in the Calc document *** ------------------
