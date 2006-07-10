@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 14:29:57 $
+#   last change: $Author: obo $ $Date: 2006-07-10 15:24:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -44,9 +44,9 @@ TARGET=browser
 # --- Files --------------------------------------------------------
 
 EXCEPTIONSFILES=\
+            $(SLO)$/genericcontroller.obj		\
             $(SLO)$/dsbrowserDnD.obj			\
             $(SLO)$/dataview.obj				\
-            $(SLO)$/genericcontroller.obj		\
             $(SLO)$/dbexchange.obj				\
             $(SLO)$/dbloader.obj				\
             $(SLO)$/sbagrid.obj					\
