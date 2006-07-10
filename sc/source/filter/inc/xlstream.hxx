@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlstream.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:38:25 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:04:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,6 @@
  *
  ************************************************************************/
 
-// ============================================================================
-
 #ifndef SC_XLSTREAM_HXX
 #define SC_XLSTREAM_HXX
 
@@ -51,8 +49,8 @@
 
 // Constants ==================================================================
 
-const sal_uInt32 EXC_REC_SEEK_TO_BEGIN      = 0;
-const sal_uInt32 EXC_REC_SEEK_TO_END        = SAL_MAX_UINT32;
+const sal_Size EXC_REC_SEEK_TO_BEGIN        = 0;
+const sal_Size EXC_REC_SEEK_TO_END          = static_cast< sal_Size >( -1 );
 
 const sal_uInt16 EXC_MAXRECSIZE_BIFF5       = 2080;
 const sal_uInt16 EXC_MAXRECSIZE_BIFF8       = 8224;
