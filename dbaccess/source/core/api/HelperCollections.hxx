@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HelperCollections.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:58:29 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:02:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,7 @@ namespace dbaccess
     protected:
         virtual connectivity::sdbcx::ObjectType createObject(const ::rtl::OUString& _rName);
         virtual void impl_refresh() throw(RuntimeException) {}
-        virtual Reference< XPropertySet > createEmptyObject()
+        virtual Reference< XPropertySet > createDescriptor()
         {
             return NULL;
         }
@@ -86,6 +86,16 @@ namespace dbaccess
                         const ::std::vector< ::rtl::OUString> &_rVector,
                         sal_Bool _bUseAsIndex = sal_False
                     );
+
+        /** creates a columns instance as above, but taking the names from the columns itself
+        */
+        static OPrivateColumns* createWithIntrinsicNames(
+            const ::vos::ORef< ::connectivity::OSQLColumns >& _rColumns,
+            sal_Bool _bCase,
+            ::cppu::OWeakObject& _rParent,
+            ::osl::Mutex& _rMutex
+        );
+
         virtual void SAL_CALL disposing(void);
     };
     typedef connectivity::sdbcx::OCollection OPrivateTables_BASE;
@@ -99,7 +109,7 @@ namespace dbaccess
     protected:
         virtual connectivity::sdbcx::ObjectType createObject(const ::rtl::OUString& _rName);
         virtual void impl_refresh() throw(RuntimeException) {}
-        virtual Reference< XPropertySet > createEmptyObject()
+        virtual Reference< XPropertySet > createDescriptor()
         {
             return NULL;
         }
