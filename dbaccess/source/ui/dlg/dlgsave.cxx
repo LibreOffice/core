@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgsave.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:07:21 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:26:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,6 +66,12 @@
 #ifndef _DBA_DBACCESS_HELPID_HRC_
 #include "dbaccess_helpid.hrc"
 #endif
+#ifndef DBACCESS_SOURCE_UI_INC_OBJECTNAMECHECK_HXX
+#include "objectnamecheck.hxx"
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
+#endif
 
 
 using namespace dbaui;
@@ -74,46 +80,91 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::lang;
+
+//==================================================================
+namespace
+{
+    typedef Reference< XResultSet > (SAL_CALL XDatabaseMetaData::*FGetMetaStrings)();
+
+    void lcl_fillComboList( ComboBox& _rList, const Reference< XConnection >& _rxConnection,
+        FGetMetaStrings _GetAll, const ::rtl::OUString& _rCurrent )
+    {
+        try
+        {
+            Reference< XDatabaseMetaData > xMetaData( _rxConnection->getMetaData(), UNO_QUERY_THROW );
+
+            Reference< XResultSet > xRes = (xMetaData.get()->*_GetAll)();
+            Reference< XRow > xRow( xRes, UNO_QUERY_THROW );
+            ::rtl::OUString sValue;
+            while ( xRes->next() )
+            {
+                sValue = xRow->getString( 1 );
+                if ( !xRow->wasNull() )
+                    _rList.InsertEntry( sValue );
+            }
+
+            USHORT nPos = _rList.GetEntryPos( String( _rCurrent ) );
+            if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
+                _rList.SelectEntryPos( nPos );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+    }
+}
 
 //==================================================================
 OSaveAsDlg::OSaveAsDlg( Window * pParent,
                         const sal_Int32& _rType,
-                        const Reference<XNameAccess>& _rxNames,
-                        const Reference< XDatabaseMetaData>& _rxMetaData,
+                        const Reference< XMultiServiceFactory >& _rxORB,
                         const Reference< XConnection>& _xConnection,
                         const String& rDefault,
+                        const IObjectNameCheck& _rObjectNameCheck,
                         sal_Int32 _nFlags)
     :ModalDialog( pParent, ModuleRes(DLG_SAVE_AS))
     ,m_aDescription(this, ResId (FT_DESCRIPTION))
     ,m_aCatalogLbl(this, ResId (FT_CATALOG))
-    ,m_aCatalog(this, ResId (ET_CATALOG),_rxMetaData.is() ? _rxMetaData->getExtraNameCharacters() : ::rtl::OUString())
+    ,m_aCatalog(this, ResId (ET_CATALOG), ::rtl::OUString())
     ,m_aSchemaLbl(this, ResId (FT_SCHEMA))
-    ,m_aSchema(this, ResId (ET_SCHEMA),_rxMetaData.is() ? _rxMetaData->getExtraNameCharacters() : ::rtl::OUString())
+    ,m_aSchema(this, ResId (ET_SCHEMA), ::rtl::OUString())
     ,m_aLabel(this, ResId (FT_TITLE))
-    ,m_aTitle(this, ResId (ET_TITLE), _rxMetaData.is() ? _rxMetaData->getExtraNameCharacters() : ::rtl::OUString())
+    ,m_aTitle(this, ResId (ET_TITLE), ::rtl::OUString())
     ,m_aPB_OK(this, ResId( PB_OK ) )
     ,m_aPB_CANCEL(this, ResId( PB_CANCEL ))
     ,m_aPB_HELP(this, ResId( PB_HELP))
     ,m_aQryLabel(ResId(STR_QRY_LABEL))
     ,m_sTblLabel(ResId(STR_TBL_LABEL))
     ,m_aName(rDefault)
-    ,m_aExists(ResId(STR_OBJECT_EXISTS_ALREADY))
-    ,m_aExistsOverwrite(ResId(STR_OBJECT_EXISTS_ALREADY_OVERWRITE))
-    ,m_xNames(_rxNames)
-    ,m_xMetaData(_rxMetaData)
+    ,m_rObjectNameCheck( _rObjectNameCheck )
+    ,m_xORB( _rxORB )
     ,m_nType(_rType)
     ,m_nFlags(_nFlags)
 {
+    if ( _xConnection.is() )
+        m_xMetaData = _xConnection->getMetaData();
+
+    if ( m_xMetaData.is() )
+    {
+        ::rtl::OUString sExtraNameChars( m_xMetaData->getExtraNameCharacters() );
+        m_aCatalog.setAllowedChars( sExtraNameChars );
+        m_aSchema.setAllowedChars( sExtraNameChars );
+        m_aTitle.setAllowedChars( sExtraNameChars );
+    }
+
     switch (_rType)
     {
         case CommandType::QUERY:
             implInitOnlyTitle(m_aQryLabel);
             break;
+
         case CommandType::TABLE:
+            OSL_ENSURE( m_xMetaData.is(), "OSaveAsDlg::OSaveAsDlg: no meta data for entering table names: this will crash!" );
             {
                 m_aLabel.SetText(m_sTblLabel);
                 Point aPos(m_aPB_OK.GetPosPixel());
-                if(_rxMetaData.is() && !_rxMetaData->supportsCatalogsInTableDefinitions())
+                if ( !m_xMetaData->supportsCatalogsInTableDefinitions() )
                 {
                     m_aCatalogLbl.Hide();
                     m_aCatalog.Hide();
@@ -126,36 +177,14 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
                     m_aSchemaLbl.SetPosPixel(m_aCatalogLbl.GetPosPixel());
                     m_aSchema.SetPosPixel(m_aCatalog.GetPosPixel());
                 }
-                else if ( _rxMetaData.is() )
+                else
                 {
                     // now fill the catalogs
-                    try
-                    {
-                        Reference<XResultSet> xRes = m_xMetaData->getCatalogs();
-                        Reference<XRow> xRow(xRes,UNO_QUERY);
-                        ::rtl::OUString sCatalog;
-                        while(xRes.is() && xRes->next())
-                        {
-                            sCatalog = xRow->getString(1);
-                            if(!xRow->wasNull())
-                                m_aCatalog.InsertEntry(sCatalog);
-                        }
-                        if ( _xConnection.is() )
-                        {
-                            String sCurrentCatalog = _xConnection->getCatalog();
-                            USHORT nPos = m_aCatalog.GetEntryPos( sCurrentCatalog );
-                            if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
-                                m_aCatalog.SelectEntryPos( nPos );
-                        }
-                        else
-                            m_aCatalog.SetText(String());
-                    }
-                    catch(const SQLException&)
-                    {
-                    }
+                    lcl_fillComboList( m_aCatalog, _xConnection,
+                        &XDatabaseMetaData::getCatalogs, _xConnection->getCatalog() );
                 }
 
-                if(_rxMetaData.is() && !_rxMetaData->supportsSchemasInTableDefinitions())
+                if ( !m_xMetaData->supportsSchemasInTableDefinitions())
                 {
                     m_aSchemaLbl.Hide();
                     m_aSchema.Hide();
@@ -165,62 +194,37 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
                     m_aLabel.SetPosPixel(m_aSchemaLbl.GetPosPixel());
                     m_aTitle.SetPosPixel(m_aSchema.GetPosPixel());
                 }
-                else if ( _rxMetaData.is() )
-                {
-                    // now fill the schemata
-                    try
-                    {
-                        Reference<XResultSet> xRes = m_xMetaData->getSchemas();
-                        Reference<XRow> xRow(xRes,UNO_QUERY);
-                        ::rtl::OUString sSchema;
-                        while(xRes.is() && xRes->next())
-                        {
-                            sSchema = xRow->getString(1);
-                            if(!xRow->wasNull() && m_aSchema.GetEntryPos(XubString(sSchema)) == COMBOBOX_ENTRY_NOTFOUND)
-                                m_aSchema.InsertEntry(sSchema);
-                        }
-                        String sTemp = m_xMetaData->getUserName();
-                        USHORT nPos = m_aSchema.GetEntryPos(sTemp);
-                        if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
-                            m_aSchema.SelectEntryPos(nPos);
-                    }
-                    catch(const SQLException&)
-                    {
-                    }
-                }
-
-                OSL_ENSURE(m_xMetaData.is(),"The metadata can not be null!");
-                if(m_aName.Search('.') != STRING_NOTFOUND)
-                {
-                    ::rtl::OUString sCatalog,sSchema,sTable;
-                    ::dbtools::qualifiedNameComponents(_rxMetaData,
-                                                        m_aName,
-                                                        sCatalog,
-                                                        sSchema,
-                                                        sTable,
-                                                        ::dbtools::eInDataManipulation);
-
-                    USHORT nPos = m_aCatalog.GetEntryPos(String(sCatalog));
-                    if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
-                        m_aCatalog.SelectEntryPos(nPos);
-
-                    if ( sSchema.getLength() )
-                    {
-                        nPos = m_aSchema.GetEntryPos(String(sSchema));
-                        if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
-                            m_aSchema.SelectEntryPos(nPos);
-                    }
-                    m_aTitle.SetText(sTable);
-                }
                 else
-                    m_aTitle.SetText(m_aName);
+                {
+                    lcl_fillComboList( m_aSchema, _xConnection,
+                        &XDatabaseMetaData::getSchemas, m_xMetaData->getUserName() );
+                }
+
+                ::rtl::OUString sCatalog,sSchema,sTable;
+                ::dbtools::qualifiedNameComponents( m_xMetaData,
+                                                    m_aName,
+                                                    sCatalog,
+                                                    sSchema,
+                                                    sTable,
+                                                    ::dbtools::eInDataManipulation);
+
+                USHORT nPos = m_aCatalog.GetEntryPos( String( sCatalog ) );
+                if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
+                    m_aCatalog.SelectEntryPos( nPos );
+
+                if ( sSchema.getLength() )
+                {
+                    nPos = m_aSchema.GetEntryPos( String( sSchema ) );
+                    if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
+                        m_aSchema.SelectEntryPos( nPos );
+                }
+                m_aTitle.SetText(sTable);
 
                 m_aPB_OK.SetPosPixel(Point(m_aPB_OK.GetPosPixel().X(),aPos.Y()));
                 m_aPB_CANCEL.SetPosPixel(Point(m_aPB_CANCEL.GetPosPixel().X(),aPos.Y()));
                 m_aPB_HELP.SetPosPixel(Point(m_aPB_HELP.GetPosPixel().X(),aPos.Y()));
 
-
-                USHORT nLength =  _rxMetaData.is() ? static_cast<USHORT>(_rxMetaData->getMaxTableNameLength()) : 0;
+                USHORT nLength =  m_xMetaData.is() ? static_cast<USHORT>(m_xMetaData->getMaxTableNameLength()) : 0;
                 nLength = nLength ? nLength : EDIT_NOLIMIT;
 
                 m_aTitle.SetMaxTextLen(nLength);
@@ -232,24 +236,25 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
                 m_aSchema.setCheck(bCheck); // enable non valid sql chars as well
                 m_aCatalog.setCheck(bCheck); // enable non valid sql chars as well
 
-
                 Size aSize = GetSizePixel();
                 aSize.Height() =
                     aPos.Y() + m_aPB_OK.GetSizePixel().Height() + m_aTitle.GetSizePixel().Height() / 2;
                 SetSizePixel(aSize);
             }
             break;
+
         default:
-            OSL_ENSURE(0,"Type not supported yet!");
+            OSL_ENSURE( false, "OSaveAsDlg::OSaveAsDlg: Type not supported yet!" );
     }
 
     implInit();
 }
 // -----------------------------------------------------------------------------
 OSaveAsDlg::OSaveAsDlg( Window * pParent,
-                        const Reference<XNameAccess>& _rxNames,
+                        const Reference< XMultiServiceFactory >& _rxORB,
                         const String& rDefault,
                         const String& _sLabel,
+                        const IObjectNameCheck& _rObjectNameCheck,
                         sal_Int32 _nFlags)
              :ModalDialog( pParent, ModuleRes(DLG_SAVE_AS))
              ,m_aDescription(this, ResId (FT_DESCRIPTION))
@@ -265,86 +270,41 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
              ,m_aQryLabel(ResId(STR_QRY_LABEL))
              ,m_sTblLabel(ResId(STR_TBL_LABEL))
              ,m_aName(rDefault)
-             ,m_aExists(ResId(STR_OBJECT_EXISTS_ALREADY))
-             ,m_aExistsOverwrite(ResId(STR_OBJECT_EXISTS_ALREADY_OVERWRITE))
-             ,m_xNames(_rxNames)
+             ,m_rObjectNameCheck( _rObjectNameCheck )
+             ,m_xORB( _rxORB )
              ,m_nType(CommandType::COMMAND)
              ,m_nFlags(_nFlags)
 {
     implInitOnlyTitle(_sLabel);
     implInit();
 }
-// -----------------------------------------------------------------------------
-OSaveAsDlg::OSaveAsDlg( Window * pParent,
-                        const Reference<XHierarchicalNameAccess>& _rxNames,
-                        const String& rDefault,
-                        const String& _sLabel,
-                        const String& _sParentURL,
-                        sal_Int32 _nFlags)
-             :ModalDialog( pParent, ModuleRes(DLG_SAVE_AS))
-             ,m_aDescription(this, ResId (FT_DESCRIPTION))
-             ,m_aCatalogLbl(this, ResId (FT_CATALOG))
-             ,m_aCatalog(this, ResId (ET_CATALOG))
-             ,m_aSchemaLbl(this, ResId (FT_SCHEMA))
-             ,m_aSchema(this, ResId (ET_SCHEMA))
-             ,m_aLabel(this, ResId (FT_TITLE))
-             ,m_aTitle(this, ResId (ET_TITLE))
-             ,m_aPB_OK(this, ResId( PB_OK ) )
-             ,m_aPB_CANCEL(this, ResId( PB_CANCEL ))
-             ,m_aPB_HELP(this, ResId( PB_HELP))
-             ,m_aQryLabel(ResId(STR_QRY_LABEL))
-             ,m_sTblLabel(ResId(STR_TBL_LABEL))
-             ,m_aName(rDefault)
-             ,m_aExists(ResId(STR_OBJECT_EXISTS_ALREADY))
-             ,m_aExistsOverwrite(ResId(STR_OBJECT_EXISTS_ALREADY_OVERWRITE))
-             ,m_sParentURL(_sParentURL)
-             ,m_xHierarchyNames(_rxNames)
-             ,m_nType(CommandType::COMMAND)
-             ,m_nFlags(_nFlags)
-{
-    implInitOnlyTitle(_sLabel);
-    implInit();
-}
-// -----------------------------------------------------------------------------
 
+// -----------------------------------------------------------------------------
 IMPL_LINK(OSaveAsDlg, ButtonClickHdl, Button *, pButton)
 {
     if (pButton == &m_aPB_OK)
     {
         m_aName = m_aTitle.GetText();
-        sal_Bool bError = sal_False;
-        if ( m_xHierarchyNames.is() )
-        {
-            String sTest;
-            if ( m_sParentURL.Len() )
-                sTest = m_sParentURL + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
-            sTest += m_aName;
-            bError = m_xHierarchyNames->hasByHierarchicalName(sTest);
-        }
-        else
-            bError = m_xNames->hasByName(m_aName);
+        ::rtl::OUString sNameToCheck( m_aName );
+
         if ( m_nType == CommandType::TABLE )
         {
-            OSL_ENSURE(m_xNames.is(),"Who try this one with a hierarchical access!");
-            OSL_ENSURE(m_xMetaData.is(),"The metadata can not be null!");
-            ::rtl::OUString sComposedName;
-            ::dbtools::composeTableName(m_xMetaData,getCatalog(),getSchema(),m_aName,sComposedName,sal_False,::dbtools::eInDataManipulation);
-            bError = m_xNames->hasByName(sComposedName);
+            m_aName = ::dbtools::composeTableName(
+                m_xMetaData,
+                getCatalog(),
+                getSchema(),
+                sNameToCheck,
+                sal_False,  // no quoting
+                ::dbtools::eInDataManipulation
+            );
         }
-        if(bError)
-        {
-            m_aTitle.GrabFocus();
 
-            sal_Bool bOverwrite = ( (m_nFlags & SAD_OVERWRITE) == SAD_OVERWRITE );
-            String aText( bOverwrite ? m_aExistsOverwrite : m_aExists);
-            aText.SearchAndReplace(String::CreateFromAscii("$#$"),m_aName);
-            OSQLMessageBox aDlg(this, String(ModuleRes(STR_OBJECT_ALREADY_EXSISTS)), aText, bOverwrite ? WB_YES_NO : WB_OK, OSQLMessageBox::Warning);
+        SQLExceptionInfo aNameError;
+        if ( m_rObjectNameCheck.isNameValid( sNameToCheck, aNameError ) )
+            EndDialog( RET_OK );
 
-            if ( aDlg.Execute() == RET_YES && bOverwrite )
-                EndDialog(RET_OK);
-        }
-        else
-            EndDialog(RET_OK);
+        showError( aNameError, this, m_xORB );
+        m_aTitle.GrabFocus();
     }
     return 0;
 }
