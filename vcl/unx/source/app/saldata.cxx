@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:51:21 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 16:37:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -681,7 +681,7 @@ bool SalXLib::CheckTimeout( bool bExecuteTimers )
     return bRet;
 }
 
-void SalXLib::Yield( BOOL bWait )
+void SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
 {
     // check for timeouts here if you want to make screenshots
     static char* p_prioritize_timer = getenv ("SAL_HIGHPRIORITY_REPAINT");
@@ -795,7 +795,8 @@ void SalXLib::Yield( BOOL bWait )
                 }
                 if ( FD_ISSET( nFD, &ReadFDS ) )
                 {
-                    if ( pEntry->IsEventQueued() )
+                    int nMaxEvents = bHandleAllCurrentEvents ? 100 : 1;
+                    for( int i = 0; pEntry->IsEventQueued() && i < nMaxEvents; i++ )
                     {
                         pEntry->HandleNextEvent();
                         // if a recursive call has done the job
