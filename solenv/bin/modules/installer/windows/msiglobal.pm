@@ -4,9 +4,9 @@
 #
 #   $RCSfile: msiglobal.pm,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: rt $ $Date: 2006-03-06 14:01:56 $
+#   last change: $Author: obo $ $Date: 2006-07-10 18:51:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1278,7 +1278,7 @@ sub include_cabs_into_msi
 
     $msifilename = installer::converter::make_path_conform($msifilename);
 
-    if ( $ENV{'USE_SHELL'} eq "tcsh" ) {
+    if ( $ENV{'USE_SHELL'} ne "4nt" ) {
         # msidb.exe really wants backslashes. (And double escaping because system() expands the string.)
         $idtdirbase =~ s/\//\\\\/g;
         $msifilename =~ s/\//\\\\/g;
