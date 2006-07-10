@@ -4,9 +4,9 @@
  *
  *  $RCSfile: column3.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 15:03:34 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:24:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -724,10 +724,12 @@ void ScColumn::CopyFromClip(SCROW nRow1, SCROW nRow2, long nDy,
     }
 
     SCSIZE nColCount = rColumn.nCount;
-    if ((nInsFlag & IDF_CONTENTS) == IDF_CONTENTS && nRow2-nRow1 >= 64)
+
+    // ignore IDF_FORMULA - "all contents but no formulas" results in the same number of cells
+    if ((nInsFlag & ( IDF_CONTENTS & ~IDF_FORMULA )) == ( IDF_CONTENTS & ~IDF_FORMULA ) && nRow2-nRow1 >= 64)
     {
-        //! Resize immer aussen, wenn die Wiederholungen bekannt sind
-        //! (dann hier gar nicht mehr)
+        //! Always do the Resize from the outside, where the number of repetitions is known
+        //! (then it can be removed here)
 
         SCSIZE nNew = nCount + nColCount;
         if ( nLimit < nNew )
