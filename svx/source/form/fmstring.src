@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmstring.src,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:57:57 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:56:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -510,7 +510,7 @@ String RID_STR_FILTER_FILTER_OR
 
 String RID_STR_NOCONTROLS_FOR_EXTERNALDISPLAY
 {
-    Text [ de ] = "Im aktuellen Formular existieren keine gültig gebundenen Controls, die für die Tabellenansicht verwendet werden könnten!";
+    Text [ de ] = "Im aktuellen Formular existieren keine gültig gebundenen Controls, die für die Tabellenansicht verwendet werden könnten.";
     Text [ en-US ] = "Valid bound controls which can be used in the table view do not exist in the current form.";
     Text [ x-comment ] = " ";
 };
@@ -559,19 +559,19 @@ String RID_STR_SVT_SQL_SYNTAX_ERROR_BEFORE
 
 String RID_STR_SVT_SQL_SYNTAX_VALUE_NO_LIKE
 {
-    Text [ de ] = "Der Wert #1 kann nicht mit WIE verwendet werden!";
-    Text [ en-US ] = "The value #1 cannot be used with LIKE!";
+    Text [ de ] = "Der Wert #1 kann nicht mit WIE verwendet werden.";
+    Text [ en-US ] = "The value #1 cannot be used with LIKE.";
 };
 
 String RID_STR_SVT_SQL_SYNTAX_FIELD_NO_LIKE
 {
-    Text [ de ] = "WIE kann bei diesem Feld nicht benutzt werden!";
+    Text [ de ] = "WIE kann bei diesem Feld nicht benutzt werden.";
     Text [ en-US ] = "LIKE cannot be used with this field.";
 };
 
 String RID_STR_SVT_SQL_SYNTAX_NO_NUM
 {
-    Text [ de ] = "Das Feld kann nicht mit einer Zeichenkette verglichen werden!";
+    Text [ de ] = "Das Feld kann nicht mit einer Zeichenkette verglichen werden.";
     Text [ en-US ] = "The field cannot be compared with a string.";
 };
 
@@ -583,36 +583,51 @@ String RID_STR_SVT_SQL_SYNTAX_ACCESS_DAT_NO_VALID
 
 String RID_STR_SVT_SQL_SYNTAX_INT_NO_VALID
 {
-    Text [ de ] = "Das Feld kann nicht mit einem Integer verglichen werden!";
+    Text [ de ] = "Das Feld kann nicht mit einem Integer verglichen werden.";
     Text [ en-US ] = "The field cannot be compared with an integer.";
 };
 String RID_STR_SVT_SQL_SYNTAX_TABLE
 {
-    Text [ de ] = "Die Tabelle \"#\" ist in der Datenbank unbekannt!";
-    Text [ en-US ] = "The table \"#\" is unknown in the database.";
+    Text [ de ] = "Die Datenbank enthält keine Tabelle namens \"#\".";
+    Text [ en-US ] = "The database does not contain a table named \"#\".";
+};
+String RID_STR_SVT_SQL_SYNTAX_TABLE_OR_QUERY
+{
+    Text [ de ] = "Die Datenbank enthält weder eine Tabelle noch eine Abfrage namens \"#\".";
+    Text [ en-US ] = "The database does contain neither a table nor a query named \"#\".";
+};
+String RID_STR_SVT_SQL_SYNTAX_TABLE_EXISTS
+{
+    Text [ de ] = "Die Datenbank enthält bereits eine Tabelle oder Ansicht namens \"#\".";
+    Text [ en-US ] = "The database already contains a table or view with name \"#\".";
+};
+String RID_STR_SVT_SQL_SYNTAX_QUERY_EXISTS
+{
+    Text [ de ] = "Die Datenbank enthält bereits eine Abfrage namens \"#\".";
+    Text [ en-US ] = "The database already contains a query with name \"#\".";
+};
+String RID_STR_SVT_SQL_CYCLIC_SUB_QUERIES
+{
+    Text [ de ] = "Der SQL-Ausdruck enthält eine zyklische Referenz zu einer oder mehr Unterabfragen.";
+    Text [ en-US ] = "The statement contains a cyclic reference to one or more sub queries.";
 };
 String RID_STR_SVT_SQL_SYNTAX_COLUMN
 {
-    Text [ de ] = "Die Spalte \"#\" ist in der Tabelle \"#\" unbekannt!";
-    Text [ en-US ] = "The column \"#\" is unknown in the table \"#\"!";
+    Text [ de ] = "Die Spalte \"#\" ist in der Tabelle \"#\" unbekannt.";
+    Text [ en-US ] = "The column \"#\" is unknown in the table \"#\".";
 };
 String RID_STR_SVT_SQL_SYNTAX_REAL_NO_VALID
 {
-    Text [ de ] = "Das Feld kann nicht mit einer Fließkommazahl verglichen werden!";
+    Text [ de ] = "Das Feld kann nicht mit einer Fließkommazahl verglichen werden.";
     Text [ en-US ] = "The field cannot be compared with a floating point number.";
 };
 
 String RID_STR_SVT_SQL_SYNTAX_CRIT_NO_COMPARE
 {
-    Text [ de ] = "Das angegebene Kriterium kann nicht mit diesem Feld verglichen werden";
+    Text [ de ] = "Das angegebene Kriterium kann nicht mit diesem Feld verglichen werden.";
     Text [ en-US ] = "The entered criterion cannot be compared with this field.";
 };
 
-String RID_STR_SVT_SQL_TABLE_EXISTS
-{
-    Text [ de ] = "Eine Tabelle mit dem angegebenen Namen existiert bereits.";
-    Text [ en-US ] = "A table with the given name already exists.";
-};
 
 String RID_STR_DATANAVIGATOR
 {
