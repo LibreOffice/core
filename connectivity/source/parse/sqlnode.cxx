@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqlnode.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:09:05 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:39:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,9 @@
 #ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDB_XQUERIESSUPPLIER_HPP_
+#include <com/sun/star/sdb/XQueriesSupplier.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTER_HPP_
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #endif
@@ -116,27 +119,35 @@
 #ifndef _COMPHELPER_NUMBERS_HXX_
 #include <comphelper/numbers.hxx>
 #endif
+#ifndef _COMPHELPER_STLTYPES_HXX_
+#include <comphelper/stl_types.hxx>
+#endif
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include "connectivity/dbtools.hxx"
+#endif
+#ifndef CONNECTIVITY_INC_CONNECTIVITY_DBMETADATA_HXX
+#include "connectivity/dbmetadata.hxx"
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 
 
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::i18n;
 using namespace ::osl;
-using namespace ::connectivity;
 using namespace ::dbtools;
 using namespace ::comphelper;
 
 
 extern int SQLyyparse (void);
-
-extern ::rtl::OUString ConvertLikeToken(const OSQLParseNode* pTokenNode, const OSQLParseNode* pEscapeNode, sal_Bool bInternational);
+extern ::rtl::OUString ConvertLikeToken(const ::connectivity::OSQLParseNode* pTokenNode, const ::connectivity::OSQLParseNode* pEscapeNode, sal_Bool bInternational);
+extern void setParser( ::connectivity::OSQLParser* );
 
 namespace
 {
@@ -155,7 +166,7 @@ namespace
         return bRet;
     }
     // -----------------------------------------------------------------------------
-    void replaceAndReset(OSQLParseNode*& _pResetNode,OSQLParseNode* _pNewNode)
+    void replaceAndReset(connectivity::OSQLParseNode*& _pResetNode,connectivity::OSQLParseNode* _pNewNode)
     {
         _pResetNode->getParent()->replace(_pResetNode, _pNewNode);
         delete _pResetNode;
@@ -193,24 +204,43 @@ namespace
         return rNewValue;
     }
 }
-//------------------------------------------------------------------
-OSQLParseNode::SQLParseNodeParameter::SQLParseNodeParameter(const ::rtl::OUString& _rIdentifierQuote, const ::rtl::OUString& _rCatalogSep,
-                                                            const Reference< XNumberFormatter > & _xFormatter, const Reference< XPropertySet > & _xField, const ::com::sun::star::lang::Locale& _rLocale,
-        const IParseContext* _pContext, sal_Bool _bIntl,  sal_Bool _bQuote, sal_Char _cDecSep,
-        sal_Bool _bPredicate)
+
+namespace connectivity
+{
+
+//=============================================================================
+//= SQLParseNodeParameter
+//=============================================================================
+//-----------------------------------------------------------------------------
+SQLParseNodeParameter::SQLParseNodeParameter( const ::rtl::OUString& _rIdentifierQuote, const ::rtl::OUString& _rCatalogSep,
+        const Reference< XNumberFormatter >& _xFormatter, const Reference< XPropertySet >& _xField,
+        const Locale& _rLocale, const IParseContext* _pContext,
+        bool _bIntl, bool _bQuote, sal_Char _cDecSep, bool _bPredicate, bool _bParseToSDBC, bool _bCaseSensistiveIdentCompare  )
     :rLocale(_rLocale)
     ,aIdentifierQuote(_rIdentifierQuote)
     ,aCatalogSeparator(_rCatalogSep)
+    ,pParser( NULL )
+    ,pSubQueryHistory( new QueryNameSet )
     ,xFormatter(_xFormatter)
     ,xField(_xField)
-    ,m_pContext(_pContext ? _pContext : &OSQLParser::s_aDefaultContext)
+    ,m_rContext( _pContext ? (const IParseContext&)(*_pContext) : (const IParseContext&)OSQLParser::s_aDefaultContext )
     ,cDecSep(_cDecSep)
     ,bQuote(_bQuote)
     ,bInternational(_bIntl)
     ,bPredicate(_bPredicate)
+    ,bParseToSDBCLevel( _bParseToSDBC )
+    ,bCaseSensistiveIdentCompare( _bCaseSensistiveIdentCompare )
 {
 }
 
+//-----------------------------------------------------------------------------
+SQLParseNodeParameter::~SQLParseNodeParameter()
+{
+}
+
+//=============================================================================
+//= OSQLParseNode
+//=============================================================================
 //-----------------------------------------------------------------------------
 ::rtl::OUString OSQLParseNode::convertDateString(const SQLParseNodeParameter& rParam, const ::rtl::OUString& rString) const
 {
@@ -259,7 +289,7 @@ void OSQLParseNode::parseNodeToStr(::rtl::OUString& rString,
     parseNodeToStr(
         rString, xMeta, Reference< XNumberFormatter >(),  Reference< XPropertySet >(),
         pContext ? pContext->getPreferredLocale() : OParseContext::getDefaultLocale(),
-        pContext, _bIntl, _bQuote, '.', sal_False);
+        pContext, _bIntl, _bQuote, '.', false, false );
 }
 
 //-----------------------------------------------------------------------------
@@ -274,7 +304,7 @@ void OSQLParseNode::parseNodeToPredicateStr(::rtl::OUString& rString,
     OSL_ENSURE(xFormatter.is(), "OSQLParseNode::parseNodeToPredicateStr:: no formatter!");
 
     if (xFormatter.is())
-        parseNodeToStr(rString, xMeta, xFormatter, Reference< XPropertySet >(), rIntl, pContext, sal_True, sal_True, _cDec, sal_True);
+        parseNodeToStr(rString, xMeta, xFormatter, Reference< XPropertySet >(), rIntl, pContext, sal_True, sal_True, _cDec, true, false);
 }
 
 //-----------------------------------------------------------------------------
@@ -290,7 +320,7 @@ void OSQLParseNode::parseNodeToPredicateStr(::rtl::OUString& rString,
     OSL_ENSURE(xFormatter.is(), "OSQLParseNode::parseNodeToPredicateStr:: no formatter!");
 
     if (xFormatter.is())
-        parseNodeToStr(rString, xMeta, xFormatter, _xField, rIntl, pContext, sal_True, sal_True, _cDec, sal_True);
+        parseNodeToStr(rString, xMeta, xFormatter, _xField, rIntl, pContext, true, true, _cDec, true, false);
 }
 
 //-----------------------------------------------------------------------------
@@ -300,10 +330,11 @@ void OSQLParseNode::parseNodeToStr(::rtl::OUString& rString,
                       const Reference< XPropertySet > & _xField,
                       const ::com::sun::star::lang::Locale& rIntl,
                       const IParseContext* pContext,
-                      sal_Bool _bIntl,
-                      sal_Bool _bQuote,
+                      bool _bIntl,
+                      bool _bQuote,
                       sal_Char _cDecSep,
-                      sal_Bool bPredicate) const
+                      bool _bPredicate,
+                      bool _bSubstitute) const
 {
 
     OSL_ENSURE(xMeta.is(), "OSQLParseNode::parseNodeToStr:: no meta data!");
@@ -313,199 +344,413 @@ void OSQLParseNode::parseNodeToStr(::rtl::OUString& rString,
         ::rtl::OUString aIdentifierQuote(xMeta->getIdentifierQuoteString());
         ::rtl::OUString aCatalogSeparator(xMeta->getCatalogSeparator());
 
-        OSQLParseNode::parseNodeToStr(rString,
-            SQLParseNodeParameter(aIdentifierQuote, aCatalogSeparator, xFormatter, _xField, rIntl, pContext, _bIntl, _bQuote, _cDecSep, bPredicate));
+        try
+        {
+            OSQLParseNode::impl_parseNodeToString_throw( rString,
+                SQLParseNodeParameter(
+                    aIdentifierQuote, aCatalogSeparator, xFormatter, _xField, rIntl, pContext,
+                    _bIntl, _bQuote, _cDecSep, _bPredicate, _bSubstitute,
+                    xMeta->storesMixedCaseQuotedIdentifiers()
+                ) );
+        }
+        catch( const SQLException& )
+        {
+            OSL_ENSURE( false, "OSQLParseNode::parseNodeToStr: this should not throw!" );
+            // our callers don't expect this method to throw anything. The only known situation
+            // where impl_parseNodeToString_throw can throw is when there is a cyclic reference
+            // in the sub queries, but this cannot be the case here, as we do not parse to
+            // SDBC level.
+        }
     }
 }
 //-----------------------------------------------------------------------------
-void OSQLParseNode::parseNodeToStr(::rtl::OUString& rString, const SQLParseNodeParameter& rParam) const
+bool OSQLParseNode::parseNodeToExecutableStatement( ::rtl::OUString& _out_rString, const Reference< XConnection >& _rxConnection,
+    OSQLParser& _rParser, ::com::sun::star::sdbc::SQLException* _pErrorHolder ) const
 {
+    OSL_PRECOND( _rxConnection.is(), "OSQLParseNode::parseNodeToExecutableStatement: invalid connection!" );
+    Reference< XDatabaseMetaData > xMeta( _rxConnection->getMetaData() );
 
+    SQLParseNodeParameter aParseParam( xMeta->getIdentifierQuoteString(), xMeta->getCatalogSeparator(),
+        NULL, NULL, OParseContext::getDefaultLocale(), NULL, false, true, '.', false, true,
+        xMeta->storesMixedCaseQuotedIdentifiers() );
 
-    if (!isToken())
+    DatabaseMetaData aMeta( _rxConnection );
+    if ( aMeta.supportsSubqueriesInFrom() )
     {
-        // einmal auswerten wieviel Subtrees dieser Knoten besitzt
-        sal_uInt32 nCount = count();
+        Reference< XQueriesSupplier > xSuppQueries( _rxConnection, UNO_QUERY );
+        OSL_ENSURE( xSuppQueries.is(), "OSQLParseNode::parseNodeToExecutableStatement: cannot substitute everything without a QueriesSupplier!" );
+        if ( xSuppQueries.is() )
+            aParseParam.xQueries = xSuppQueries->getQueries();
+    }
 
-        // parameter erhalten sonderbehandlung
-        if (SQL_ISRULE(this,parameter))
+    aParseParam.pParser = &_rParser;
+
+    _out_rString = ::rtl::OUString();
+    bool bSuccess = false;
+    try
+    {
+        impl_parseNodeToString_throw( _out_rString, aParseParam );
+        bSuccess = true;
+    }
+    catch( const SQLException& e )
+    {
+        if ( _pErrorHolder )
+            *_pErrorHolder = e;
+    }
+    return bSuccess;
+}
+
+//-----------------------------------------------------------------------------
+namespace
+{
+    bool lcl_isAliasNamePresent( const OSQLParseNode& _rTableNameNode )
+    {
+        OSL_ENSURE( _rTableNameNode.getKnownRuleID() == OSQLParseNode::table_name, "lcl_isAliasNamePresent: Must be a 'table_name' rule!" );
+        OSL_ENSURE( _rTableNameNode.getParent()->getKnownRuleID() == OSQLParseNode::table_ref, "lcl_isAliasNamePresent: parent must be a 'table_ref'!" );
+
+        const OSQLParseNode* pTableRef = _rTableNameNode.getParent();
+        if ( pTableRef->count() == 4 )
         {
-            if(rString.getLength())
-                rString += ::rtl::OUString::createFromAscii(" ");
-            if (nCount == 1)    // ?
-               m_aChilds[0]->parseNodeToStr(rString, rParam);
-            else if (nCount == 2)   // :Name
-            {
-               m_aChilds[0]->parseNodeToStr(rString, rParam);
-               rString += m_aChilds[1]->m_aNodeValue;
-            }                   // [Name]
-            else
-            {
-               m_aChilds[0]->parseNodeToStr(rString, rParam);
-               rString += m_aChilds[1]->m_aNodeValue;
-               rString += m_aChilds[2]->m_aNodeValue;
-            }
+            // table_ref := table_node as range_variable op_column_commalist
+            // table_node := table_name | ...
+            if ( pTableRef->getChild(1)->getKnownRuleID() == OSQLParseNode::as )
+                return true;
+
+            // table_ref := '{' SQL_TOKEN_OJ joined_table '}'
+            OSL_ENSURE( SQL_ISPUNCTUATION( pTableRef->getChild(0), "(" ), "lcl_isAliasNamePresent: grammar changed(1)!" );
+            return false;
         }
 
-        else if(SQL_ISRULE(this,table_ref) &&
-            (nCount == 4|| (nCount == 6 && SQL_ISPUNCTUATION(m_aChilds[0],"("))))
-            tableRangeNodeToStr(rString, rParam);
+        if ( pTableRef->count() == 6 )
+        {   // '(' joined_table ')' as range_variable op_column_commalist
+            OSL_ENSURE( SQL_ISPUNCTUATION( pTableRef->getChild(2), "(" )
+                    &&  SQL_ISRULE( pTableRef->getChild(3), as ),
+                    "lcl_isAliasNamePresent: grammar changed(3)!" );
+            return true;
+        }
+
+        if ( pTableRef->count() == 3 )
+            // subquery as range_variable
+            return true;
+
+        if ( pTableRef->count() == 1 )
+            return false;
+
+#if OSL_DEBUG_LEVEL > 0
+        for ( size_t i=0; i<pTableRef->count(); ++i )
+        {
+            const OSQLParseNode* pChildNode = pTableRef->getChild( i );
+            OSQLParseNode::Rule eRuleID = pChildNode->getKnownRuleID();
+            OSL_UNUSED( eRuleID );
+        }
+#endif
+        OSL_ENSURE( false, "lcl_isAliasNamePresent: unreachable code - except you extended the production rules for table_ref!" );
+        return false;
+    }
+}
+
+//-----------------------------------------------------------------------------
+void OSQLParseNode::impl_parseNodeToString_throw(::rtl::OUString& rString, const SQLParseNodeParameter& rParam) const
+{
+    if ( isToken() )
+    {
+        parseLeaf(rString,rParam);
+        return;
+    }
+
+    // einmal auswerten wieviel Subtrees dieser Knoten besitzt
+    sal_uInt32 nCount = count();
+
+    bool bHandled = false;
+    switch ( getKnownRuleID() )
+    {
+    // special handling for parameters
+    case parameter:
+    {
+        if(rString.getLength())
+            rString += ::rtl::OUString::createFromAscii(" ");
+        if (nCount == 1)    // ?
+            m_aChilds[0]->impl_parseNodeToString_throw( rString, rParam );
+        else if (nCount == 2)   // :Name
+        {
+            m_aChilds[0]->impl_parseNodeToString_throw( rString, rParam );
+            rString += m_aChilds[1]->m_aNodeValue;
+        }                   // [Name]
+        else
+        {
+            m_aChilds[0]->impl_parseNodeToString_throw( rString, rParam );
+            rString += m_aChilds[1]->m_aNodeValue;
+            rString += m_aChilds[2]->m_aNodeValue;
+        }
+        bHandled = true;
+    }
+    break;
+
+    // table refs
+    case table_ref:
+        if  (   ( nCount == 4 )
+            ||  ( ( nCount == 6 ) &&  SQL_ISPUNCTUATION( m_aChilds[0], "(" ) )
+            )
+        {
+            impl_parseTableRangeNodeToString_throw( rString, rParam );
+            bHandled = true;
+        }
+        break;
+
+    // table name - might be a query name
+    case table_name:
+        bHandled = impl_parseTableNameNodeToString_throw( rString, rParam );
+        break;
+
+    case as:
+        rString += ::rtl::OUString::createFromAscii( " AS" );
+        bHandled = true;
+        break;
+
+    case like_predicate:
         // je nachdem ob international angegeben wird oder nicht wird like anders behandelt
         // interanational: *, ? sind Platzhalter
         // sonst SQL92 konform: %, _
-        else if (SQL_ISRULE(this,like_predicate))
-            likeNodeToStr(rString, rParam);
+        impl_parseLikeNodeToString_throw( rString, rParam );
+        bHandled = true;
+        break;
 
-        else if (SQL_ISRULE(this,general_set_fct)   || SQL_ISRULE(this,set_fct_spec)    ||
-                SQL_ISRULE(this,position_exp)       || SQL_ISRULE(this,extract_exp)     ||
-                SQL_ISRULE(this,length_exp)         || SQL_ISRULE(this,char_value_fct))
+    case general_set_fct:
+    case set_fct_spec:
+    case position_exp:
+    case extract_exp:
+    case length_exp:
+    case char_value_fct:
+    {
+        if (!addDateValue(rString, rParam))
         {
-            if (!addDateValue(rString, rParam))
-            {
-                // Funktionsname nicht quoten
-                SQLParseNodeParameter aNewParam(rParam);
-                aNewParam.bQuote = ( SQL_ISRULE(this,length_exp)    || SQL_ISRULE(this,char_value_fct) );
+            // Funktionsname nicht quoten
+            SQLParseNodeParameter aNewParam(rParam);
+            aNewParam.bQuote = ( SQL_ISRULE(this,length_exp)    || SQL_ISRULE(this,char_value_fct) );
 
-                m_aChilds[0]->parseNodeToStr(rString, aNewParam);
-                aNewParam.bQuote = rParam.bQuote;
-                aNewParam.bPredicate = sal_False; // disable [ ] around names
-                ::rtl::OUString aStringPara;
-                for (sal_uInt32 i=1; i<nCount; i++)
-                {
-                    const OSQLParseNode * pSubTree = m_aChilds[i];
-                    if (pSubTree)
-                    {
-                        pSubTree->parseNodeToStr(aStringPara, aNewParam);
-
-                        // bei den CommaListen zwischen alle Subtrees Commas setzen
-                        if ((m_eNodeType == SQL_NODE_COMMALISTRULE)     && (i < (nCount - 1)))
-                            aStringPara += ::rtl::OUString::createFromAscii(",");
-                    }
-                }
-                aStringPara.trim();
-                rString += aStringPara;
-            }
-        }
-        else
-        {
-            for (OSQLParseNodes::const_iterator i = m_aChilds.begin();
-                i != m_aChilds.end();)
+            m_aChilds[0]->impl_parseNodeToString_throw( rString, aNewParam );
+            aNewParam.bQuote = rParam.bQuote;
+            aNewParam.bPredicate = sal_False; // disable [ ] around names
+            ::rtl::OUString aStringPara;
+            for (sal_uInt32 i=1; i<nCount; i++)
             {
-                const OSQLParseNode* pSubTree = *i;
+                const OSQLParseNode * pSubTree = m_aChilds[i];
                 if (pSubTree)
                 {
-                    SQLParseNodeParameter aNewParam(rParam);
+                    pSubTree->impl_parseNodeToString_throw( aStringPara, aNewParam );
 
-                    // don't replace the field for subqueries
-                    if (rParam.xField.is() && SQL_ISRULE(pSubTree,subquery))
-                        aNewParam.xField = NULL;
+                    // bei den CommaListen zwischen alle Subtrees Commas setzen
+                    if ((m_eNodeType == SQL_NODE_COMMALISTRULE)     && (i < (nCount - 1)))
+                        aStringPara += ::rtl::OUString::createFromAscii(",");
+                }
+            }
+            aStringPara.trim();
+            rString += aStringPara;
+        }
+        bHandled = true;
+    }
+    break;
+    default:
+        break;
+    }   // switch ( getKnownRuleID() )
 
-                    // if there is a field given we don't display the fieldname, if there is any
-                    if (rParam.xField.is() && SQL_ISRULE(pSubTree,column_ref))
+    if ( !bHandled )
+    {
+        for (OSQLParseNodes::const_iterator i = m_aChilds.begin();
+            i != m_aChilds.end();)
+        {
+            const OSQLParseNode* pSubTree = *i;
+            if ( !pSubTree )
+                continue;
+            SQLParseNodeParameter aNewParam(rParam);
+
+            // don't replace the field for subqueries
+            if (rParam.xField.is() && SQL_ISRULE(pSubTree,subquery))
+                aNewParam.xField = NULL;
+
+            // if there is a field given we don't display the fieldname, if there is any
+            if (rParam.xField.is() && SQL_ISRULE(pSubTree,column_ref))
+            {
+                sal_Bool bFilter = sal_False;
+                // retrieve the fields name
+                ::rtl::OUString aFieldName;
+                try
+                {
+                    sal_Int32 nNamePropertyId = PROPERTY_ID_NAME;
+                    if ( rParam.xField->getPropertySetInfo()->hasPropertyByName( OMetaConnection::getPropMap().getNameByIndex( PROPERTY_ID_REALNAME ) ) )
+                        nNamePropertyId = PROPERTY_ID_REALNAME;
+                    rParam.xField->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex( nNamePropertyId ) ) >>= aFieldName;
+                }
+                catch ( Exception& )
+                {
+                }
+
+                if(pSubTree->count())
+                {
+                    const OSQLParseNode* pCol = pSubTree->m_aChilds[pSubTree->count()-1];
+                    if  (   (   SQL_ISRULE(pCol,column_val)
+                            &&  pCol->getChild(0)->getTokenValue().equalsIgnoreAsciiCase(aFieldName)
+                            )
+                        ||  pCol->getTokenValue().equalsIgnoreAsciiCase(aFieldName)
+                        )
+                        bFilter = sal_True;
+                }
+
+                // ok we found the field, if the following node is the
+                // comparision operator '=' we filter it as well
+                if (bFilter)
+                {
+                    if (SQL_ISRULE(this, comparison_predicate))
                     {
-                        sal_Bool bFilter = sal_False;
-                        // retrieve the fields name
-                        ::rtl::OUString aFieldName;
-                        try
+                        ++i;
+                        if(i != m_aChilds.end())
                         {
-                            sal_Int32 nNamePropertyId = PROPERTY_ID_NAME;
-                            if ( rParam.xField->getPropertySetInfo()->hasPropertyByName( OMetaConnection::getPropMap().getNameByIndex( PROPERTY_ID_REALNAME ) ) )
-                                nNamePropertyId = PROPERTY_ID_REALNAME;
-                            rParam.xField->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex( nNamePropertyId ) ) >>= aFieldName;
-                        }
-                        catch ( Exception& )
-                        {
-                        }
-
-                        if(pSubTree->count())
-                        {
-                            const OSQLParseNode* pCol = pSubTree->m_aChilds[pSubTree->count()-1];
-                            if  (   (   SQL_ISRULE(pCol,column_val)
-                                    &&  pCol->getChild(0)->getTokenValue().equalsIgnoreAsciiCase(aFieldName)
-                                    )
-                                ||  pCol->getTokenValue().equalsIgnoreAsciiCase(aFieldName)
-                                )
-                                bFilter = sal_True;
-                        }
-
-                        // ok we found the field, if the following node is the
-                        // comparision operator '=' we filter it as well
-                        if (bFilter)
-                        {
-                            if (SQL_ISRULE(this, comparison_predicate))
-                            {
-                                ++i;
-                                if(i != m_aChilds.end())
-                                {
-                                    pSubTree = *i;
-                                    if (pSubTree && pSubTree->getNodeType() == SQL_NODE_EQUAL)
-                                        i++;
-                                }
-                            }
-                            else
+                            pSubTree = *i;
+                            if (pSubTree && pSubTree->getNodeType() == SQL_NODE_EQUAL)
                                 i++;
-                        }
-                        else
-                        {
-                            pSubTree->parseNodeToStr(rString, aNewParam);
-                            i++;
-
-                            // bei den CommaListen zwischen alle Subtrees Commas setzen
-                            if ((m_eNodeType == SQL_NODE_COMMALISTRULE)     && (i != m_aChilds.end()))
-                                rString += ::rtl::OUString::createFromAscii(",");
                         }
                     }
                     else
-                    {
-                        pSubTree->parseNodeToStr(rString, aNewParam);
                         i++;
+                }
+                else
+                {
+                    pSubTree->impl_parseNodeToString_throw( rString, aNewParam );
+                    i++;
 
-                        // bei den CommaListen zwischen alle Subtrees Commas setzen
-                        if ((m_eNodeType == SQL_NODE_COMMALISTRULE)     && (i != m_aChilds.end()))
-                        {
-                            if (SQL_ISRULE(this,value_exp_commalist) && rParam.bPredicate)
-                                rString += ::rtl::OUString::createFromAscii(";");
-                            else
-                                rString += ::rtl::OUString::createFromAscii(",");
-                        }
-                    }
+                    // bei den CommaListen zwischen alle Subtrees Commas setzen
+                    if ((m_eNodeType == SQL_NODE_COMMALISTRULE)     && (i != m_aChilds.end()))
+                        rString += ::rtl::OUString::createFromAscii(",");
+                }
+            }
+            else
+            {
+                pSubTree->impl_parseNodeToString_throw( rString, aNewParam );
+                i++;
+
+                // bei den CommaListen zwischen alle Subtrees Commas setzen
+                if ((m_eNodeType == SQL_NODE_COMMALISTRULE)     && (i != m_aChilds.end()))
+                {
+                    if (SQL_ISRULE(this,value_exp_commalist) && rParam.bPredicate)
+                        rString += ::rtl::OUString::createFromAscii(";");
+                    else
+                        rString += ::rtl::OUString::createFromAscii(",");
                 }
             }
         }
     }
-    else
-    {
-        parseLeaf(rString,rParam);
-    }
 }
+
 //-----------------------------------------------------------------------------
-void OSQLParseNode::tableRangeNodeToStr(::rtl::OUString& rString, const SQLParseNodeParameter& rParam) const
+bool OSQLParseNode::impl_parseTableNameNodeToString_throw( ::rtl::OUString& rString, const SQLParseNodeParameter& rParam ) const
+{
+    // is the table_name part of a table_ref?
+    OSL_ENSURE( getParent(), "OSQLParseNode::impl_parseTableNameNodeToString_throw: table_name without parent?" );
+    if ( !getParent() || ( getParent()->getKnownRuleID() != table_ref ) )
+        return false;
+
+    // if it's a query, maybe we need to substitute the SQL statement ...
+    if ( !rParam.bParseToSDBCLevel )
+        return false;
+
+    if ( !rParam.xQueries.is() )
+        // connection does not support queries in queries, or was no query supplier
+        return false;
+
+    try
+    {
+        ::rtl::OUString sTableOrQueryName( getChild(0)->getTokenValue() );
+        bool bIsQuery = rParam.xQueries->hasByName( sTableOrQueryName );
+        if ( !bIsQuery )
+            return false;
+
+        // avoid recursion (e.g. "foo" defined as "SELECT * FROM bar" and "bar" defined as "SELECT * FROM foo".
+        if ( rParam.pSubQueryHistory->find( sTableOrQueryName ) != rParam.pSubQueryHistory->end() )
+        {
+            ::rtl::OUString sMessage( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "cyclic sub queries" ) ) );
+            if ( rParam.pParser )
+                sMessage = rParam.pParser->getContext().getErrorMessage( IParseContext::ERROR_CYCLIC_SUB_QUERIES );
+            ::dbtools::throwSQLException( sMessage, SQL_CYCLIC_SUB_QUERIES, NULL );
+        }
+        rParam.pSubQueryHistory->insert( sTableOrQueryName );
+
+        Reference< XPropertySet > xQuery( rParam.xQueries->getByName( sTableOrQueryName ), UNO_QUERY_THROW );
+
+        // substitute the query name with the constituting command
+        ::rtl::OUString sCommand;
+        OSL_VERIFY( xQuery->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex( PROPERTY_ID_COMMAND ) ) >>= sCommand );
+
+        sal_Bool bEscapeProcessing = sal_False;
+        OSL_VERIFY( xQuery->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex( PROPERTY_ID_ESCAPEPROCESSING ) ) >>= bEscapeProcessing );
+
+        // the query we found here might itself be based on another query, so parse it recursively
+        OSL_ENSURE( rParam.pParser, "OSQLParseNode::impl_parseTableNameNodeToString_throw: cannot analyze sub queries without a parser!" );
+        if ( bEscapeProcessing && rParam.pParser )
+        {
+            ::rtl::OUString sError;
+            ::std::auto_ptr< OSQLParseNode > pSubQueryNode( rParam.pParser->parseTree( sError, sCommand, sal_False ) );
+            if ( pSubQueryNode.get() )
+            {
+                // parse the sub-select to SDBC level, too
+                ::rtl::OUString sSubSelect;
+                pSubQueryNode->impl_parseNodeToString_throw( sSubSelect, rParam );
+                if ( sSubSelect.getLength() )
+                    sCommand = sSubSelect;
+            }
+        }
+
+        rString += ::rtl::OUString::createFromAscii( " ( " );
+        rString += sCommand;
+        rString += ::rtl::OUString::createFromAscii( " )" );
+
+        // append the query name as table alias, since it might be referenced in other
+        // parts of the statement - but only if there's no other alias name present
+        if ( !lcl_isAliasNamePresent( *this ) )
+        {
+            rString += ::rtl::OUString::createFromAscii( " AS " );
+            if ( rParam.bQuote )
+                rString += SetQuotation( sTableOrQueryName, rParam.aIdentifierQuote, rParam.aIdentifierQuote );
+        }
+
+        return true;
+    }
+    catch( const SQLException& )
+    {
+        throw;
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+    return false;
+}
+
+//-----------------------------------------------------------------------------
+void OSQLParseNode::impl_parseTableRangeNodeToString_throw(::rtl::OUString& rString, const SQLParseNodeParameter& rParam) const
 {
     sal_uInt32 nCount(count());
     rString += ::rtl::OUString::createFromAscii(" ");
 
-    SQLParseNodeParameter aNewParam(rParam);
-    //  aNewParam.bQuote = sal_False;
     if (nCount == 4)
     {
-        m_aChilds[0]->parseNodeToStr(rString, rParam);
-        m_aChilds[1]->parseNodeToStr(rString, rParam);
-        m_aChilds[2]->parseNodeToStr(rString, aNewParam);
-        m_aChilds[3]->parseNodeToStr(rString, rParam);
+        m_aChilds[0]->impl_parseNodeToString_throw( rString, rParam );
+        m_aChilds[1]->impl_parseNodeToString_throw( rString, rParam );
+        m_aChilds[2]->impl_parseNodeToString_throw( rString, rParam );
+        m_aChilds[3]->impl_parseNodeToString_throw( rString, rParam );
     }
     else if(nCount == 6 && SQL_ISPUNCTUATION(m_aChilds[0],"("))
     {
-        m_aChilds[0]->parseNodeToStr(rString, rParam);
-        m_aChilds[1]->parseNodeToStr(rString, rParam);
-        m_aChilds[2]->parseNodeToStr(rString, rParam);
-        m_aChilds[3]->parseNodeToStr(rString, rParam);
-        m_aChilds[4]->parseNodeToStr(rString, aNewParam);
-        m_aChilds[5]->parseNodeToStr(rString, rParam);
+        m_aChilds[0]->impl_parseNodeToString_throw( rString, rParam );
+        m_aChilds[1]->impl_parseNodeToString_throw( rString, rParam );
+        m_aChilds[2]->impl_parseNodeToString_throw( rString, rParam );
+        m_aChilds[3]->impl_parseNodeToString_throw( rString, rParam );
+        m_aChilds[4]->impl_parseNodeToString_throw( rString, rParam );
+        m_aChilds[5]->impl_parseNodeToString_throw( rString, rParam );
     }
 }
 
 //-----------------------------------------------------------------------------
-void OSQLParseNode::likeNodeToStr(::rtl::OUString& rString, const SQLParseNodeParameter& rParam) const
+void OSQLParseNode::impl_parseLikeNodeToString_throw( ::rtl::OUString& rString, const SQLParseNodeParameter& rParam ) const
 {
     OSL_ENSURE(count() >= 4,"count != 5: Prepare for GPF");
 
@@ -530,7 +775,7 @@ void OSQLParseNode::likeNodeToStr(::rtl::OUString& rString, const SQLParseNodePa
         }
         catch ( Exception& )
         {
-            OSL_ENSURE(0,"OSQLParseNode::likeNodeToStr Exception occured!");
+            OSL_ENSURE( false, "OSQLParseNode::impl_parseLikeNodeToString_throw Exception occured!" );
         }
         if ( !m_aChilds[0]->isLeaf() )
         {
@@ -542,11 +787,11 @@ void OSQLParseNode::likeNodeToStr(::rtl::OUString& rString, const SQLParseNodePa
     }
 
     if (bAddName)
-        m_aChilds[0]->parseNodeToStr(rString, aNewParam);
+        m_aChilds[0]->impl_parseNodeToString_throw( rString, aNewParam );
 
-    m_aChilds[1]->parseNodeToStr(rString, aNewParam);
+    m_aChilds[1]->impl_parseNodeToString_throw( rString, aNewParam );
     if(count() == 5)
-        m_aChilds[2]->parseNodeToStr(rString, aNewParam);
+        m_aChilds[2]->impl_parseNodeToString_throw( rString, aNewParam );
 
     sal_Int32 nCurentPos = m_aChilds.size()-2;
     pParaNode = m_aChilds[nCurentPos];
@@ -559,9 +804,9 @@ void OSQLParseNode::likeNodeToStr(::rtl::OUString& rString, const SQLParseNodePa
         rString += SetQuotation(aStr,::rtl::OUString::createFromAscii("\'"),::rtl::OUString::createFromAscii("\'\'"));
     }
     else
-        pParaNode->parseNodeToStr(rString, aNewParam);
+        pParaNode->impl_parseNodeToString_throw( rString, aNewParam );
 
-    pEscNode->parseNodeToStr(rString, aNewParam);
+    pEscNode->impl_parseNodeToString_throw( rString, aNewParam );
 }
 
 
@@ -659,6 +904,7 @@ sal_Int16 OSQLParser::buildComparsionRule(OSQLParseNode*& pAppend,OSQLParseNode*
                             break;
                         default:
                             m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_INVALID_COMPARE);
+                            break;
                     }
                     break;
                 case SQL_NODE_ACCESS_DATE:
@@ -675,6 +921,7 @@ sal_Int16 OSQLParser::buildComparsionRule(OSQLParseNode*& pAppend,OSQLParseNode*
                             break;
                         default:
                             m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_INVALID_COMPARE);
+                            break;
                     }
                     break;
                 case SQL_NODE_INTNUM:
@@ -708,6 +955,7 @@ sal_Int16 OSQLParser::buildComparsionRule(OSQLParseNode*& pAppend,OSQLParseNode*
                             break;
                         default:
                             m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_INVALID_INT_COMPARE);
+                            break;
                     }
                     break;
                 case SQL_NODE_APPROXNUM:
@@ -740,6 +988,7 @@ sal_Int16 OSQLParser::buildComparsionRule(OSQLParseNode*& pAppend,OSQLParseNode*
                         case DataType::INTEGER:
                         default:
                             m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_INVALID_REAL_COMPARE);
+                            break;
                     }
                     break;
                 default:
@@ -816,15 +1065,15 @@ sal_Int16 OSQLParser::buildLikeRule(OSQLParseNode*& pAppend, OSQLParseNode*& pLi
                         nErg = 1;
                         break;
                     default:
-                    {
                         m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_VALUE_NO_LIKE);
                         m_sErrorMessage = m_sErrorMessage.replaceAt(m_sErrorMessage.indexOf(::rtl::OUString::createFromAscii("#1")),2,pLiteral->getTokenValue());
-                    }
+                        break;
                 }
             }
             break;
         default:
             m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_FIELD_NO_LIKE);
+            break;
     }
     return nErg;
 }
@@ -898,7 +1147,6 @@ sal_Int16 OSQLParser::buildNode_STR_NUM(OSQLParseNode*& pAppend,OSQLParseNode*& 
     return aMutex;
 }
 
-extern void setParser(OSQLParser*);
 //-----------------------------------------------------------------------------
 OSQLParseNode* OSQLParser::predicateTree(::rtl::OUString& rErrorMessage, const ::rtl::OUString& rStatement,
                                           const Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter,
@@ -1102,6 +1350,114 @@ OSQLParser::OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star:
 
         // auf 0 zuruecksetzen
         memset(OSQLParser::s_nRuleIDs,0,sizeof(OSQLParser::s_nRuleIDs[0]) * (OSQLParseNode::rule_count+1));
+
+        struct
+        {
+            OSQLParseNode::Rule eRule;      // the parse node's ID for the rule
+            ::rtl::OString      sRuleName;  // the name of the rule ("select_statement")
+        }   aRuleDescriptions[] =
+        {
+            { OSQLParseNode::select_statement, "select_statement" },
+            { OSQLParseNode::table_exp, "table_exp" },
+            { OSQLParseNode::table_ref_commalist, "table_ref_commalist" },
+            { OSQLParseNode::table_ref, "table_ref" },
+            { OSQLParseNode::catalog_name, "catalog_name" },
+            { OSQLParseNode::schema_name, "schema_name" },
+            { OSQLParseNode::table_name, "table_name" },
+            { OSQLParseNode::opt_column_commalist, "opt_column_commalist" },
+            { OSQLParseNode::column_commalist, "column_commalist" },
+            { OSQLParseNode::column_ref_commalist, "column_ref_commalist" },
+            { OSQLParseNode::column_ref, "column_ref" },
+            { OSQLParseNode::opt_order_by_clause, "opt_order_by_clause" },
+            { OSQLParseNode::ordering_spec_commalist, "ordering_spec_commalist" },
+            { OSQLParseNode::ordering_spec, "ordering_spec" },
+            { OSQLParseNode::opt_asc_desc, "opt_asc_desc" },
+            { OSQLParseNode::where_clause, "where_clause" },
+            { OSQLParseNode::opt_where_clause, "opt_where_clause" },
+            { OSQLParseNode::search_condition, "search_condition" },
+            { OSQLParseNode::comparison_predicate, "comparison_predicate" },
+            { OSQLParseNode::between_predicate, "between_predicate" },
+            { OSQLParseNode::like_predicate, "like_predicate" },
+            { OSQLParseNode::opt_escape, "opt_escape" },
+            { OSQLParseNode::test_for_null, "test_for_null" },
+            { OSQLParseNode::scalar_exp_commalist, "scalar_exp_commalist" },
+            { OSQLParseNode::scalar_exp, "scalar_exp" },
+            { OSQLParseNode::parameter_ref, "parameter_ref" },
+            { OSQLParseNode::parameter, "parameter" },
+            { OSQLParseNode::general_set_fct, "general_set_fct" },
+            { OSQLParseNode::range_variable, "range_variable" },
+            { OSQLParseNode::column, "column" },
+            { OSQLParseNode::delete_statement_positioned, "delete_statement_positioned" },
+            { OSQLParseNode::delete_statement_searched, "delete_statement_searched" },
+            { OSQLParseNode::update_statement_positioned, "update_statement_positioned" },
+            { OSQLParseNode::update_statement_searched, "update_statement_searched" },
+            { OSQLParseNode::assignment_commalist, "assignment_commalist" },
+            { OSQLParseNode::assignment, "assignment" },
+            { OSQLParseNode::values_or_query_spec, "values_or_query_spec" },
+            { OSQLParseNode::insert_statement, "insert_statement" },
+            { OSQLParseNode::insert_atom_commalist, "insert_atom_commalist" },
+            { OSQLParseNode::insert_atom, "insert_atom" },
+            { OSQLParseNode::predicate_check, "predicate_check" },
+            { OSQLParseNode::from_clause, "from_clause" },
+            { OSQLParseNode::qualified_join, "qualified_join" },
+            { OSQLParseNode::cross_union, "cross_union" },
+            { OSQLParseNode::select_sublist, "select_sublist" },
+            { OSQLParseNode::derived_column, "derived_column" },
+            { OSQLParseNode::column_val, "column_val" },
+            { OSQLParseNode::set_fct_spec, "set_fct_spec" },
+            { OSQLParseNode::boolean_term, "boolean_term" },
+            { OSQLParseNode::boolean_primary, "boolean_primary" },
+            { OSQLParseNode::num_value_exp, "num_value_exp" },
+            { OSQLParseNode::join_type, "join_type" },
+            { OSQLParseNode::position_exp, "position_exp" },
+            { OSQLParseNode::extract_exp, "extract_exp" },
+            { OSQLParseNode::length_exp, "length_exp" },
+            { OSQLParseNode::char_value_fct, "char_value_fct" },
+            { OSQLParseNode::odbc_call_spec, "odbc_call_spec" },
+            { OSQLParseNode::in_predicate, "in_predicate" },
+            { OSQLParseNode::existence_test, "existence_test" },
+            { OSQLParseNode::unique_test, "unique_test" },
+            { OSQLParseNode::all_or_any_predicate, "all_or_any_predicate" },
+            { OSQLParseNode::named_columns_join, "named_columns_join" },
+            { OSQLParseNode::join_condition, "join_condition" },
+            { OSQLParseNode::joined_table, "joined_table" },
+            { OSQLParseNode::boolean_factor, "boolean_factor" },
+            { OSQLParseNode::sql_not, "sql_not" },
+            { OSQLParseNode::boolean_test, "boolean_test" },
+            { OSQLParseNode::manipulative_statement, "manipulative_statement" },
+            { OSQLParseNode::subquery, "subquery" },
+            { OSQLParseNode::value_exp_commalist, "value_exp_commalist" },
+            { OSQLParseNode::odbc_fct_spec, "odbc_fct_spec" },
+            { OSQLParseNode::union_statement, "union_statement" },
+            { OSQLParseNode::outer_join_type, "outer_join_type" },
+            { OSQLParseNode::char_value_exp, "char_value_exp" },
+            { OSQLParseNode::term, "term" },
+            { OSQLParseNode::value_exp_primary, "value_exp_primary" },
+            { OSQLParseNode::value_exp, "value_exp" },
+            { OSQLParseNode::selection, "selection" },
+            { OSQLParseNode::fold, "fold" },
+            { OSQLParseNode::char_substring_fct, "char_substring_fct" },
+            { OSQLParseNode::factor, "factor" },
+            { OSQLParseNode::base_table_def, "base_table_def" },
+            { OSQLParseNode::base_table_element_commalist, "base_table_element_commalist" },
+            { OSQLParseNode::data_type, "data_type" },
+            { OSQLParseNode::column_def, "column_def" },
+            { OSQLParseNode::table_node, "table_node" },
+            { OSQLParseNode::as, "as" },
+            { OSQLParseNode::op_column_commalist, "op_column_commalist" }
+        };
+        size_t nRuleMapCount = sizeof( aRuleDescriptions ) / sizeof( aRuleDescriptions[0] );
+        OSL_ENSURE( nRuleMapCount == size_t( OSQLParseNode::rule_count ), "OSQLParser::OSQLParser: added a new rule? Adjust this map!" );
+
+        for ( size_t mapEntry = 0; mapEntry < nRuleMapCount; ++mapEntry )
+        {
+            // look up the rule description in the our identifier map
+            sal_uInt32 nParserRuleID = StrToRuleID( aRuleDescriptions[ mapEntry ].sRuleName );
+            // map the parser's rule ID to the OSQLParseNode::Rule
+            s_aReverseRuleIDLookup[ nParserRuleID ] = aRuleDescriptions[ mapEntry ].eRule;
+            // and map the OSQLParseNode::Rule to the parser's rule ID
+            s_nRuleIDs[ aRuleDescriptions[ mapEntry ].eRule ] = nParserRuleID;
+        }
     }
     ++s_nRefCount;
 
@@ -2001,7 +2357,7 @@ void OSQLParseNode::parseLeaf(::rtl::OUString & rString, const SQLParseNodeParam
             if (rString.getLength())
                 rString += ::rtl::OUString::createFromAscii(" ");
 
-            ::rtl::OString sT = OSQLParser::TokenIDToStr(m_nNodeID, rParam.m_pContext);
+            ::rtl::OString sT = OSQLParser::TokenIDToStr(m_nNodeID, &rParam.m_rContext);
             rString += ::rtl::OUString(sT,sT.getLength(),RTL_TEXTENCODING_UTF8);
         }   break;
         case SQL_NODE_STRING:
@@ -2160,3 +2516,11 @@ sal_Int32 OSQLParser::getFunctionReturnType(const ::rtl::OUString& _sFunctionNam
     return nType;
 }
 // -----------------------------------------------------------------------------
+OSQLParseNode::Rule OSQLParseNode::getKnownRuleID() const
+{
+    if ( !isRule() )
+        return UNKNOWN_RULE;
+    return OSQLParser::RuleIDToRule( getRuleID() );
+}
+
+}   // namespace connectivity
