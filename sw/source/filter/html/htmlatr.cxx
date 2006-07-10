@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlatr.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:32:43 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:03:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2518,7 +2518,12 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
     xub_StrLen nOffset = 0;
     String aOutlineTxt;
     String aFullText;
-    if( pNd->IsOutline() )
+    // --> OD 2006-06-12 #b6435904#
+    // export numbering string as plain text only for the outline numbering,
+    // because the outline numbering isn't exported as a numbering - see <SwHTMLNumRuleInfo::Set(..)>
+    if ( pNd->IsOutline() &&
+         pNd->GetNumRule() == pNd->GetDoc()->GetOutlineNumRule() )
+    // <--
     {
         aOutlineTxt = pNd->GetNumString();
         nOffset += aOutlineTxt.Len();
