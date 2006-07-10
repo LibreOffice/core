@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwin4.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 12:16:04 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:10:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,7 @@
 #include <svx/editview.hxx>
 #include <svx/fhgtitem.hxx>
 #include <svx/scripttypeitem.hxx>
+#include <sfx2/bindings.hxx>
 #include <sfx2/printer.hxx>
 
 #ifdef MAC
@@ -82,6 +83,7 @@
 #include "editutil.hxx"
 #include "inputopt.hxx"
 #include "fillinfo.hxx"
+#include "sc.hrc"
 
 //#include "tabvwsh.hxx"            //! Test !!!!
 
@@ -895,6 +897,12 @@ void ScGridWindow::CheckNeedsRepaint()
         else
             Invalidate(PixelToLogic(aRepaintPixel));
         aRepaintPixel = Rectangle();
+
+        // selection function in status bar might also be invalid
+        SfxBindings& rBindings = pViewData->GetBindings();
+        rBindings.Invalidate( SID_STATUS_SUM );
+        rBindings.Invalidate( SID_ATTR_SIZE );
+        rBindings.Invalidate( SID_TABLE_CELL );
     }
 }
 
