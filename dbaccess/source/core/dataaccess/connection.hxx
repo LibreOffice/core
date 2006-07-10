@@ -4,9 +4,9 @@
  *
  *  $RCSfile: connection.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:37:32 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:10:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,26 @@
 #ifndef _DBA_CORE_CONNECTION_HXX_
 #define _DBA_CORE_CONNECTION_HXX_
 
+#ifndef _DBASHARED_APITOOLS_HXX_
+#include "apitools.hxx"
+#endif
+#ifndef _DBA_CORE_QUERYCONTAINER_HXX_
+#include "querycontainer.hxx"
+#endif
+#ifndef _DBA_CORE_TABLECONTAINER_HXX_
+#include "tablecontainer.hxx"
+#endif
+#ifndef _DBA_CORE_VIEWCONTAINER_HXX_
+#include "viewcontainer.hxx"
+#endif
+#ifndef DBA_CORE_REFRESHLISTENER_HXX
+#include "RefreshListener.hxx"
+#endif
+#ifndef DBA_CORE_WARNINGS_HXX
+#include "warning.hxx"
+#endif
+
+/** === begin UNO includes === **/
 #ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
 #endif
@@ -62,32 +82,26 @@
 #ifndef _COM_SUN_STAR_SDB_XQUERIESSUPPLIER_HPP_
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE11_HXX_
-#include <cppuhelper/implbase11.hxx>
-#endif
-#ifndef _DBASHARED_APITOOLS_HXX_
-#include "apitools.hxx"
-#endif
-#ifndef _DBA_CORE_QUERYCONTAINER_HXX_
-#include "querycontainer.hxx"
-#endif
-#ifndef _DBA_CORE_TABLECONTAINER_HXX_
-#include "tablecontainer.hxx"
-#endif
-#ifndef _DBA_CORE_VIEWCONTAINER_HXX_
-#include "viewcontainer.hxx"
-#endif
-#ifndef _CONNECTIVITY_CONNECTIONWRAPPER_HXX_
-#include "connectivity/ConnectionWrapper.hxx"
-#endif
-#ifndef DBA_CORE_REFRESHLISTENER_HXX
-#include "RefreshListener.hxx"
-#endif
-#ifndef DBA_CORE_WARNINGS_HXX
-#include "warning.hxx"
-#endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_TOOLS_XCONNECTIONTOOLS_HPP_
+#include <com/sun/star/sdb/tools/XConnectionTools.hpp>
+#endif
+/** === end UNO includes === **/
+
+#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_13)
+#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_13
+#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 13
+#include <comphelper/implbase_var.hxx>
+#endif
+
+#ifndef COMPHELPER_COMPONENTCONTEXT_HXX
+#include <comphelper/componentcontext.hxx>
+#endif
+
+#ifndef _CONNECTIVITY_CONNECTIONWRAPPER_HXX_
+#include <connectivity/ConnectionWrapper.hxx>
 #endif
 
 //........................................................................
@@ -97,18 +111,20 @@ namespace dbaccess
 
 //==========================================================================
 //==========================================================================
-typedef ::cppu::ImplHelper11<   ::com::sun::star::container::XChild
-                            ,   ::com::sun::star::sdbcx::XTablesSupplier
-                            ,   ::com::sun::star::sdbcx::XViewsSupplier
-                            ,   ::com::sun::star::sdbc::XConnection
-                            ,   ::com::sun::star::sdb::XQueriesSupplier
-                            ,   ::com::sun::star::sdb::XSQLQueryComposerFactory
-                            ,   ::com::sun::star::sdb::XCommandPreparation
-                            ,   ::com::sun::star::lang::XServiceInfo
-                            ,   ::com::sun::star::lang::XMultiServiceFactory
-                            ,   ::com::sun::star::sdbcx::XUsersSupplier
-                            ,   ::com::sun::star::sdbcx::XGroupsSupplier
-                            >   OConnection_Base;
+typedef ::comphelper::ImplHelper13  <   ::com::sun::star::container::XChild
+                                    ,   ::com::sun::star::sdbcx::XTablesSupplier
+                                    ,   ::com::sun::star::sdbcx::XViewsSupplier
+                                    ,   ::com::sun::star::sdbc::XConnection
+                                    ,   ::com::sun::star::sdbc::XWarningsSupplier
+                                    ,   ::com::sun::star::sdb::XQueriesSupplier
+                                    ,   ::com::sun::star::sdb::XSQLQueryComposerFactory
+                                    ,   ::com::sun::star::sdb::XCommandPreparation
+                                    ,   ::com::sun::star::lang::XServiceInfo
+                                    ,   ::com::sun::star::lang::XMultiServiceFactory
+                                    ,   ::com::sun::star::sdbcx::XUsersSupplier
+                                    ,   ::com::sun::star::sdbcx::XGroupsSupplier
+                                    ,   ::com::sun::star::sdb::tools::XConnectionTools
+                                    >   OConnection_Base;
 
 class ODatabaseSource;
 //==========================================================================
@@ -131,8 +147,9 @@ protected:
     // the filter as set on the parent data link at construction of the connection
     ::com::sun::star::uno::Sequence< ::rtl::OUString >  m_aTableFilter;
     ::com::sun::star::uno::Sequence< ::rtl::OUString >  m_aTableTypeFilter;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xORB;
+    ::comphelper::ComponentContext                      m_aContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >             m_xMasterConnection;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdb::tools::XConnectionTools >  m_xConnectionTools;
 
     OTableContainer*            m_pTables;
     OViewContainer*             m_pViews;
@@ -220,6 +237,11 @@ public:
     // XGroupsSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getGroups(  ) throw(::com::sun::star::uno::RuntimeException);
 
+    // XConnectionTools
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdb::tools::XTableName > SAL_CALL createTableName(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdb::tools::XObjectNames > SAL_CALL getObjectNames(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdb::tools::XDataSourceMetaData > SAL_CALL getDataSourceMetaData(  ) throw (::com::sun::star::uno::RuntimeException);
+
     // IRefreshListener
     virtual void refresh(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rToBeRefreshed);
 
@@ -231,6 +253,21 @@ protected:
     }
 
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier > getMasterTables();
+
+private:
+    /** checks whether or not there are naming conflicts between tables and queries
+    */
+    void    impl_checkTableQueryNames_nothrow();
+
+    /** loads the XConnectionTools implementation which we forward the respective functionality to
+
+        @throws ::com::sun::star::uno::RuntimeException
+            if the implementation cannot be loaded
+
+        @postcond
+            m_xConnectionTools is nol <NULL/>
+    */
+    void    impl_loadConnectionTools_throw();
 };
 
 //........................................................................
