@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeFunctionParser.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 14:57:06 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 11:26:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,10 @@
  *
  ************************************************************************/
 
-// must be first
-#include <EnhancedCustomShapeFunctionParser.hxx>
+#ifndef _ENHANCEDCUSTOMSHAPEFUNCTIONPARSER_HXX
+#include "EnhancedCustomShapeFunctionParser.hxx"
+#endif
+
 #ifndef _ENHANCEDCUSTOMSHAPE2D_HXX
 #include "EnhancedCustomShape2d.hxx"
 #endif
@@ -60,10 +62,11 @@
 #include <functional>
 #include <algorithm>
 #include <stack>
+using namespace EnhancedCustomShape;
 using namespace com::sun::star;
 using namespace com::sun::star::drawing;
 
-void FillEquationParameter( const EnhancedCustomShapeParameter& rSource, const sal_Int32 nDestPara, EnhancedCustomShapeEquation& rDest )
+void EnhancedCustomShape::FillEquationParameter( const EnhancedCustomShapeParameter& rSource, const sal_Int32 nDestPara, EnhancedCustomShapeEquation& rDest )
 {
     sal_Int32 nValue = 0;
     if ( rSource.Value.getValueTypeClass() == uno::TypeClass_DOUBLE )
@@ -1151,7 +1154,9 @@ const ParserContextSharedPtr& getParserContext()
 
 };
 
-ExpressionNodeSharedPtr EnhancedCustomShapeFunctionParser::parseFunction( const ::rtl::OUString& rFunction, const EnhancedCustomShape2d& rCustoShape )
+namespace EnhancedCustomShape  {
+
+ExpressionNodeSharedPtr FunctionParser::parseFunction( const ::rtl::OUString& rFunction, const EnhancedCustomShape2d& rCustoShape )
 {
     // TODO(Q1): Check if a combination of the RTL_UNICODETOTEXT_FLAGS_*
     // gives better conversion robustness here (we might want to map space
@@ -1191,4 +1196,6 @@ ExpressionNodeSharedPtr EnhancedCustomShapeFunctionParser::parseFunction( const 
         throw ParseError( "EnhancedCustomShapeFunctionParser::parseFunction(): incomplete or empty expression" );
 
     return pContext->maOperandStack.top();
+}
+
 }
