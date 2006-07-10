@@ -4,9 +4,9 @@
  *
  *  $RCSfile: querycontainer.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:36:19 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:06:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,34 @@
 #ifndef _DBA_COREAPI_QUERY_HXX_
 #include "query.hxx"
 #endif
+#ifndef DBACCESS_OBJECTNAMEAPPROVAL_HXX
+#include "objectnameapproval.hxx"
+#endif
+#ifndef DBA_CONTAINERLISTENER_HXX
+#include "ContainerListener.hxx"
+#endif
+#ifndef DBACCESS_VETO_HXX
+#include "veto.hxx"
+#endif
+
+/** === begin UNO includes === **/
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINER_HPP_
+#include <com/sun/star/container/XContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
+#include <com/sun/star/sdbc/XConnection.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINERAPPROVEBROADCASTER_HPP_
+#include <com/sun/star/container/XContainerApproveBroadcaster.hpp>
+#endif
+/** === end UNO includes === **/
+
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include <connectivity/dbexception.hxx>
+#endif
 
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
@@ -61,18 +89,8 @@
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
-
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
-#include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINER_HPP_
-#include <com/sun/star/container/XContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
-#include <com/sun/star/sdbc/XConnection.hpp>
-#endif
-#ifndef _DBHELPER_DBEXCEPTION_HXX_
-#include <connectivity/dbexception.hxx>
+#ifndef _CPPUHELPER_EXC_HLP_HXX_
+#include <cppuhelper/exc_hlp.hxx>
 #endif
 
 using namespace dbtools;
@@ -80,9 +98,11 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::util;
 using namespace ::osl;
 using namespace ::comphelper;
 using namespace ::cppu;
@@ -110,27 +130,30 @@ OQueryContainer::OQueryContainer(
     DBG_CTOR(OQueryContainer, NULL);
 
     increment(m_refCount);
-
-    m_pCommandsListener = new OCommandsListener(this);
-    m_pCommandsListener->acquire();
-
     {
-        Reference< XContainer > xContainer(m_xCommandDefinitions, UNO_QUERY);
-        DBG_ASSERT(xContainer.is(), "OQueryContainer::OQueryContainer : the CommandDefinitions container is invalid !");
-        xContainer->addContainerListener(m_pCommandsListener);
+        m_pCommandsListener = new OContainerListener( *this, m_aMutex );
+        m_pCommandsListener->acquire();
+
+        Reference< XContainer > xContainer( m_xCommandDefinitions, UNO_QUERY_THROW );
+        xContainer->addContainerListener( m_pCommandsListener );
+
+        Reference< XContainerApproveBroadcaster > xContainerApprove( m_xCommandDefinitions, UNO_QUERY_THROW );
+        xContainerApprove->addContainerApproveListener( m_pCommandsListener );
 
         // fill my structures
-        ODefinitionContainer_Impl* pItem = static_cast<ODefinitionContainer_Impl*>(m_pImpl.get());
+        ODefinitionContainer_Impl& rDefinitions( getDefinitions() );
         Sequence< ::rtl::OUString > sDefinitionNames = m_xCommandDefinitions->getElementNames();
-        const ::rtl::OUString* pIter = sDefinitionNames.getConstArray();
-        const ::rtl::OUString* pEnd = pIter + sDefinitionNames.getLength();
-        for (;pIter != pEnd; ++pIter)
+        const ::rtl::OUString* pDefinitionName = sDefinitionNames.getConstArray();
+        const ::rtl::OUString* pEnd = pDefinitionName + sDefinitionNames.getLength();
+        for ( ; pDefinitionName != pEnd; ++pDefinitionName )
         {
-            pItem->m_aDocumentMap.insert(ODefinitionContainer_Impl::Documents::value_type(*pIter,TContentPtr()));
-            m_aDocuments.push_back(m_aDocumentMap.insert(Documents::value_type(*pIter,Documents::mapped_type())).first);
+            rDefinitions.insert( *pDefinitionName, TContentPtr() );
+            m_aDocuments.push_back(m_aDocumentMap.insert(Documents::value_type(*pDefinitionName,Documents::mapped_type())).first);
         }
     }
     decrement(m_refCount);
+
+    setElementApproval( PContainerApprove( new ObjectNameApproval( _rxConn, ObjectNameApproval::TypeQuery ) ) );
 }
 
 //------------------------------------------------------------------------------
@@ -147,14 +170,22 @@ void OQueryContainer::disposing()
 {
     ODefinitionContainer::disposing();
     MutexGuard aGuard(m_aMutex);
+    if ( !m_xCommandDefinitions.is() )
+        // already disposed
+        return;
 
-    // say our listeners goobye
-    Reference< XContainer > xContainer(m_xCommandDefinitions, UNO_QUERY);
-    if (xContainer.is())
-        xContainer->removeContainerListener(m_pCommandsListener);
-    if(m_pCommandsListener)
+    if ( m_pCommandsListener )
+    {
+        Reference< XContainer > xContainer( m_xCommandDefinitions, UNO_QUERY );
+        xContainer->removeContainerListener( m_pCommandsListener );
+        Reference< XContainerApproveBroadcaster > xContainerApprove( m_xCommandDefinitions, UNO_QUERY );
+        xContainerApprove->removeContainerApproveListener( m_pCommandsListener );
+
+        m_pCommandsListener->dispose();
         m_pCommandsListener->release();
-    m_pCommandsListener     = NULL;
+        m_pCommandsListener = NULL;
+    }
+
     m_xCommandDefinitions   = NULL;
     m_xConnection           = NULL;
 }
@@ -174,60 +205,41 @@ Reference< XPropertySet > SAL_CALL OQueryContainer::createDataDescriptor(  ) thr
 //------------------------------------------------------------------------------
 void SAL_CALL OQueryContainer::appendByDescriptor( const Reference< XPropertySet >& _rxDesc ) throw(SQLException, ElementExistException, RuntimeException)
 {
-    Reference< XContent> xNewObject;
-    ::rtl::OUString sNewObjectName;
-
-    ClearableMutexGuard aGuard(m_aMutex);
-
-    OQueryDescriptor* pImpl = NULL;
-            comphelper::getImplementation(pImpl, Reference< XInterface >(_rxDesc.get()));
-    DBG_ASSERT(pImpl != NULL, "OQueryContainer::appendByDescriptor : can't fully handle this descriptor !");
+    ResettableMutexGuard aGuard(m_aMutex);
+    if ( !m_xCommandDefinitions.is() )
+        throw DisposedException( ::rtl::OUString(), *this );
 
     // first clone this object's CommandDefinition part
-    if (!m_xCommandDefinitions.is())
-    {
-        DBG_ERROR("OQueryContainer::appendByDescriptor : have no CommandDefinition container anymore !");
-            // perhaps somebody modified the DataSource, so all connections were separated
-        throwGenericSQLException(::rtl::OUString::createFromAscii("Unable to insert objects into containers of standalone connections (not belonging to a data source)."), *this);
-            // TODO : resource
-    }
+    Reference< XPropertySet > xCommandDefinitionPart( m_xORB->createInstance( SERVICE_SDB_QUERYDEFINITION ), UNO_QUERY_THROW );
+    ::comphelper::copyProperties( _rxDesc, xCommandDefinitionPart );
+    // TODO : the columns part of the descriptor has to be copied
 
-    Reference< XPropertySet > xCommandDefinitionPart(m_xORB->createInstance(SERVICE_SDB_QUERYDEFINITION), UNO_QUERY);
-    if (!xCommandDefinitionPart.is())
-    {
-        DBG_ERROR("OQueryContainer::appendByDescriptor : could not create a CommandDefinition object !");
-        throwGenericSQLException(::rtl::OUString::createFromAscii("Unable to create an object supporting the com.sun.star.sdb.CommandDefinition service"), *this);
-            // TODO : resource
-    }
+    // create a wrapper for the object (*before* inserting into our command definition container)
+    Reference< XContent > xNewObject( implCreateWrapper( Reference< XContent>( xCommandDefinitionPart, UNO_QUERY_THROW ) ) );
 
-    ::comphelper::copyProperties(_rxDesc, xCommandDefinitionPart);
-    // and insert it into the CommDef container
+    ::rtl::OUString sNewObjectName;
     _rxDesc->getPropertyValue(PROPERTY_NAME) >>= sNewObjectName;
+
+    try
+    {
+        notifyByName( aGuard, sNewObjectName, xNewObject, NULL, E_INSERTED, ApproveListeners );
+    }
+    catch( const Exception& )
+    {
+        disposeComponent( xNewObject );
+        disposeComponent( xCommandDefinitionPart );
+        throw;
+    }
+
+    // insert the basic object into the definition container
     {
         m_eDoingCurrently = INSERTING;
         OAutoActionReset aAutoReset(this);
         m_xCommandDefinitions->insertByName(sNewObjectName, makeAny(xCommandDefinitionPart));
     }
 
-#if DBG_UTIL
-    // check if the object was really inserted
-    try
-    {
-        Reference< XPropertySet > xNewEl(m_xCommandDefinitions->getByName(sNewObjectName),UNO_QUERY);
-        DBG_ASSERT(xNewEl.get() == xCommandDefinitionPart.get(), "OQueryContainer::appendByDescriptor : the CommandDefinition container worked as it had a descriptor !");
-            // normally should not have changed after inserting
-    }
-    catch(Exception&)
-    {
-        DBG_ERROR("OQueryContainer::appendByDescriptor : could not find the just inserted CommandDefinition !");
-    }
-#endif
-    // TODO : the columns part of the descriptor has to be copied
-    xNewObject = implCreateWrapper(Reference< XContent>(xCommandDefinitionPart,UNO_QUERY));
-
-    implAppend(sNewObjectName, xNewObject);
-
-    notifyByName(aGuard,sNewObjectName,xNewObject,NULL,E_INSERTED);
+    implAppend( sNewObjectName, xNewObject );
+    notifyByName( aGuard, sNewObjectName, xNewObject, NULL, E_INSERTED, ContainerListemers );
 }
 
 // XDrop
@@ -239,12 +251,7 @@ void SAL_CALL OQueryContainer::dropByName( const ::rtl::OUString& _rName ) throw
         throw NoSuchElementException(_rName,*this);
 
     if ( !m_xCommandDefinitions.is() )
-    {
-        DBG_ERROR("OQueryContainer::dropByIndex : have no CommandDefinition container anymore !");
-            // perhaps somebody modified the DataSource, so all connections were separated
-        throwGenericSQLException(::rtl::OUString::createFromAscii("Unable to remove objects from containers of standalone connections (not belonging to a data source)."), *this);
-            // TODO : resource
-    }
+        throw DisposedException( ::rtl::OUString(), *this );
 
     // now simply forward the remove request to the CommandDefinition container, we're a listener for the removal
     // and thus we do everything neccessary in ::elementRemoved
@@ -257,6 +264,9 @@ void SAL_CALL OQueryContainer::dropByIndex( sal_Int32 _nIndex ) throw(SQLExcepti
     MutexGuard aGuard(m_aMutex);
     if ((_nIndex<0) || (_nIndex>getCount()))
         throw IndexOutOfBoundsException();
+
+    if ( !m_xCommandDefinitions.is() )
+        throw DisposedException( ::rtl::OUString(), *this );
 
     ::rtl::OUString sName;
     Reference<XPropertySet> xProp(Reference<XIndexAccess>(m_xCommandDefinitions,UNO_QUERY)->getByIndex(_nIndex),UNO_QUERY);
@@ -324,6 +334,37 @@ void SAL_CALL OQueryContainer::elementReplaced( const ::com::sun::star::containe
 }
 
 //------------------------------------------------------------------------------
+Reference< XVeto > SAL_CALL OQueryContainer::approveInsertElement( const ContainerEvent& Event ) throw (WrappedTargetException, RuntimeException)
+{
+    ::rtl::OUString sName;
+    OSL_VERIFY( Event.Accessor >>= sName );
+    Reference< XContent > xElement( Event.Element, UNO_QUERY_THROW );
+
+    Reference< XVeto > xReturn;
+    try
+    {
+        getElementApproval()->approveElement( sName, xElement.get() );
+    }
+    catch( const Exception& )
+    {
+        xReturn = new Veto( ::rtl::OUString(), ::cppu::getCaughtException() );
+    }
+    return xReturn;
+}
+
+//------------------------------------------------------------------------------
+Reference< XVeto > SAL_CALL OQueryContainer::approveReplaceElement( const ContainerEvent& /*Event*/ ) throw (WrappedTargetException, RuntimeException)
+{
+    return NULL;
+}
+
+//------------------------------------------------------------------------------
+Reference< XVeto > SAL_CALL OQueryContainer::approveRemoveElement( const ContainerEvent& /*Event*/ ) throw (WrappedTargetException, RuntimeException)
+{
+    return NULL;
+}
+
+//------------------------------------------------------------------------------
 void SAL_CALL OQueryContainer::disposing( const ::com::sun::star::lang::EventObject& _rSource ) throw(::com::sun::star::uno::RuntimeException)
 {
     if (_rSource.Source.get() == Reference< XInterface >(m_xCommandDefinitions, UNO_QUERY).get())
@@ -370,7 +411,9 @@ Reference< XContent > OQueryContainer::implCreateWrapper(const Reference< XConte
         xReturn = pNewObject;
 
         pNewObject->setWarningsContainer( m_pWarnings );
-        pNewObject->getColumns();
+//      pNewObject->getColumns();
+        // Why? This is expensive. If you comment this in 'cause you really need it, be sure to run the
+        // QueryInQuery test in dbaccess/qa/complex/dbaccess ...
     }
 
     return xReturn;
@@ -419,6 +462,7 @@ Sequence< ::rtl::OUString > SAL_CALL OQueryContainer::getElementNames(  ) throw(
 
     return m_xCommandDefinitions->getElementNames();
 }
+
 //........................................................................
 }   // namespace dbaccess
 //........................................................................
