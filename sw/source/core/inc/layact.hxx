@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layact.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:49:34 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:27:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -234,11 +234,10 @@ class SwLayIdle
 #ifndef PRODUCT
     void ShowIdle( ColorData eName );
 #endif
-    BOOL _FormatSpelling( const SwCntntFrm * );
-    BOOL FormatSpelling( BOOL );
 
-    BOOL _CollectAutoCmplWords( const SwCntntFrm *, BOOL bOnlyVisArea );
-    BOOL CollectAutoCmplWords( BOOL );
+    enum IdleJobType{ ONLINE_SPELLING, AUTOCOMPLETE_WORDS, WORD_COUNT };
+    BOOL _DoIdleJob( const SwCntntFrm*, IdleJobType );
+    BOOL DoIdleJob( IdleJobType, BOOL bVisAreaOnly );
 
 #endif
 
