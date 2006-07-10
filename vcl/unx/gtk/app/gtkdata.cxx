@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkdata.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:44:21 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 16:36:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -415,7 +415,7 @@ public:
     virtual ~GtkXLib();
 
     virtual void    Init();
-    virtual void    Yield( BOOL );
+    virtual void    Yield( bool bWait, bool bHandleAllCurrentEvents );
     virtual void    Insert( int fd, void* data,
                             YieldFunc   pending,
                             YieldFunc   queued,
@@ -698,7 +698,7 @@ void GtkXLib::Wakeup()
     g_main_context_wakeup( g_main_context_default () );
 }
 
-void GtkXLib::Yield( BOOL bWait )
+void GtkXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
 {
     /* #i33212# only enter g_main_context_iteration in one thread at any one
      * time, else one of them potentially will never end as long as there is
@@ -721,7 +721,18 @@ void GtkXLib::Yield( BOOL bWait )
 
 
         if( bDispatchThread )
-            g_main_context_iteration( NULL, bWait );
+        {
+            int nMaxEvents = bHandleAllCurrentEvents ? 100 : 1;
+            gboolean wasEvent = FALSE, wasOneEvent = TRUE;
+            while( nMaxEvents-- && wasOneEvent )
+            {
+                wasOneEvent = g_main_context_iteration( NULL, FALSE );
+                if( wasOneEvent )
+                    wasEvent = TRUE;
+            }
+            if( nMaxEvents == 0 && bWait && ! wasEvent )
+                g_main_context_iteration( NULL, TRUE );
+        }
         else {
             /* #i41693# in case the dispatch thread hangs in join
              * for this thread the condition will never be set
