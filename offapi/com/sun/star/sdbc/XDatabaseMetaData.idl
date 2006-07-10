@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XDatabaseMetaData.idl,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:49:40 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:52:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -199,7 +199,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::getDriverMajorVersion
-    /** returns the JDBC driver major version number.
+    /** returns the SDBC driver major version number.
      */
     long getDriverMajorVersion();
     //-------------------------------------------------------------------------
