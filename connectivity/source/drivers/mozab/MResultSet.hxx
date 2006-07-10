@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MResultSet.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:44:30 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:29:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,7 +137,8 @@ namespace connectivity
 
 
 
-            connectivity::OSQLParseTreeIterator&        m_aSQLIterator;
+            ::boost::shared_ptr< ::connectivity::OSQLParseTreeIterator >
+                                                        m_pSQLIterator;
             const connectivity::OSQLParseNode*          m_pParseTree;
 
             // OPropertyArrayUsageHelper
@@ -166,7 +167,7 @@ namespace connectivity
         public:
             DECLARE_SERVICE_INFO();
 
-            OResultSet(OStatement_Base* pStmt, connectivity::OSQLParseTreeIterator&   _aSQLIterator );
+            OResultSet(OStatement_Base* pStmt, const ::boost::shared_ptr< ::connectivity::OSQLParseTreeIterator >& _pSQLIterator );
 
 
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > operator *()
@@ -289,8 +290,8 @@ protected:
             sal_Bool                 m_bIsAlwaysFalseQuery;
             ::vos::ORef<OKeySet>     m_pKeySet;
             OSortIndex*              m_pSortIndex;
-            sal_Int32                m_nNewRow;     //inserted row
-            sal_Int32                m_nUpdatedRow; //updated row
+            sal_Int32                 m_nNewRow;        //inserted row
+            sal_Int32                     m_nUpdatedRow;    //updated row
             sal_Int32                 m_RowStates;
             sal_Int32                     m_bIsReadOnly;
             inline void resetParameters() { m_nParamIndex = 0; }
@@ -302,8 +303,7 @@ protected:
             void fillRowData() throw( ::com::sun::star::sdbc::SQLException );
             void initializeRow(OValueRow& _rRow,sal_Int32 _nColumnCount);
             void analyseWhereClause( const OSQLParseNode*                 parseTree,
-                                     MQueryExpression                    &queryExpression,
-                                     connectivity::OSQLParseTreeIterator& aSQLIterator);
+                                     MQueryExpression                    &queryExpression);
 
             sal_Bool isCount() const;
 
