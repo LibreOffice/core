@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: obo $ $Date: 2005-11-16 13:54:10 $
+#   last change: $Author: obo $ $Date: 2006-07-10 18:58:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,6 @@ LIBTARGET=NO
 .INCLUDE :  settings.mk
 .INCLUDE :  $(PRJ)$/inc$/sw.mk
 
-.INCLUDE :  $(UPD)minor.mk
 RSCUPDVER=$(RSCREVISION)(SV$(UPD)$(UPDMINOR))
 
 # --- Files --------------------------------------------------------
