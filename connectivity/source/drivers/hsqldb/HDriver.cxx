@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HDriver.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:29:52 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:27:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -225,7 +225,7 @@ namespace connectivity
 
                 bool bIsNewDatabase = !xStorage->hasElements();
 
-                Sequence< PropertyValue > aConvertedProperties(9);
+                Sequence< PropertyValue > aConvertedProperties(8);
                 sal_Int32 nPos = 0;
                 aConvertedProperties[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("storage_key"));
                 ::rtl::OUString sConnPartURL = sSystemPath.copy(0,nIndex);
@@ -241,8 +241,6 @@ namespace connectivity
                 aConvertedProperties[nPos++].Value <<= sal_True;
                 aConvertedProperties[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutoRetrievingStatement"));
                 aConvertedProperties[nPos++].Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CALL IDENTITY()"));
-                aConvertedProperties[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParameterNameSubstitution"));
-                aConvertedProperties[nPos++].Value <<= sal_True;
                 aConvertedProperties[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IgnoreDriverPrivileges"));
                 aConvertedProperties[nPos++].Value <<= sal_True;
 
