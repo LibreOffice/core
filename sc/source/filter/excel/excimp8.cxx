@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.111 $
+ *  $Revision: 1.112 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:35:17 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:29:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,7 +144,7 @@ ImportExcel8::ImportExcel8( XclImpRootData& rImpData, SvStream& rStrm ) :
 {
     delete pFormConv;
 
-    pFormConv = pExcRoot->pFmlaConverter = new ExcelToSc8( aIn );
+    pFormConv = pExcRoot->pFmlaConverter = new ExcelToSc8( GetRoot() );
 
     bHasBasic = FALSE;
 }
@@ -263,7 +263,7 @@ void ImportExcel8::Cellmerging( void )
     UINT16  nCount, nRow1, nRow2, nCol1, nCol2;
     aIn >> nCount;
 
-    DBG_ASSERT( aIn.GetRecLeft() >= (ULONG)(nCount * 8), "ImportExcel8::Cellmerging - wrong record size" );
+    DBG_ASSERT( aIn.GetRecLeft() >= (sal_Size)(nCount * 8), "ImportExcel8::Cellmerging - wrong record size" );
 
     while( nCount-- )
     {
