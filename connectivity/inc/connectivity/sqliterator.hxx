@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqliterator.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:00:33 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:16:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,8 +38,8 @@
 #ifndef _CONNECTIVITY_SQLNODE_HXX
 #include "connectivity/sqlnode.hxx"
 #endif
-#ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
-#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
+#ifndef CONNECTIVITY_IPARSECONTEXT_HXX
+#include <connectivity/IParseContext.hxx>
 #endif
 #ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
@@ -56,9 +56,6 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
-#ifndef _MAP_
-#include <map>
-#endif
 #ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 #include "connectivity/CommonTools.hxx"
 #endif
@@ -68,6 +65,9 @@
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
 #endif
+
+#include <map>
+#include <memory>
 
 namespace connectivity
 {
@@ -82,68 +82,67 @@ namespace connectivity
         SQL_STATEMENT_UPDATE,
         SQL_STATEMENT_DELETE,
         SQL_STATEMENT_ODBC_CALL,
-        SQL_STATEMENT_SELECT_COUNT,
         SQL_STATEMENT_CREATE_TABLE
     };
 
-    //==================================================================
-    // SbaParseIteratorErrorInfo wird dem Call von aErrorHdl aus SbaParseIterator "ubergeben
-    // nErrorCode enth"alt eine Zusatzinformation "uber den Fehler
-    // 1    ->      Tabelle nicht gefunden
-    // 2    ->      Spalte nicht gefunden
-    //==================================================================
-    struct OSQLParseIteratorErrorInfo
-    {
-        sal_uInt16      nErrorCode;     // 1 == Tabelle nicht gefunden, 2 == Spalte nicht gefunden
-        ::rtl::OUString     aExpression;    // der Teil-Ausdruck, der das Problem verursacht hat (kann leer sein)
-    };
-
-    #define RET_CONTINUE    1   // Parsevorgang fortsetzen
-    #define RET_HANDLED     2   // der Fehler wurde schon behandelt, das Parsen soll (mit Status auf Success) abgebrochen werden
-    #define RET_BREAK       3   // Abbrechen, Status-Fehlercode setzen
     struct OSQLParseTreeIteratorImpl;
 
     class OSQLParseTreeIterator
     {
-    public:
-
     private:
-        ::com::sun::star::sdbc::SQLWarning  m_aWarning;         // conatins the error while iterating through the statement
-        const OSQLParseNode*                m_pParseTree;       // aktueller ParseTree
-        const OSQLParser*                   m_pParser;          // if set used for general error messages from the context
-        OSQLStatementType                   m_eStatementType;   // Art des Statements
-        OSQLTables                          m_aTables;          // Alle Tabellen die im ParseTree und bei der Connection gefunden wurden
-        ::vos::ORef<OSQLColumns>            m_aSelectColumns;   // alle Spalten aus dem Select-Clause
-        ::vos::ORef<OSQLColumns>            m_aParameters;      // all parameters
-        ::vos::ORef<OSQLColumns>            m_aGroupColumns;    // the group by columns
-        ::vos::ORef<OSQLColumns>            m_aOrderColumns;    // the order by columns
-        ::vos::ORef<OSQLColumns>            m_aCreateColumns;   // the columns for Create table clause
-        ::comphelper::UStringMixEqual       m_aCaseEqual;
+        ::com::sun::star::sdbc::SQLException            m_aErrors;          // conatins the error while iterating through the statement
+        const OSQLParseNode*                            m_pParseTree;       // aktueller ParseTree
+        const OSQLParser&                               m_rParser;          // if set used for general error messages from the context
+        OSQLStatementType                               m_eStatementType;   // Art des Statements
+        ::vos::ORef<OSQLColumns>                        m_aSelectColumns;   // alle Spalten aus dem Select-Clause
+        ::vos::ORef<OSQLColumns>                        m_aParameters;      // all parameters
+        ::vos::ORef<OSQLColumns>                        m_aGroupColumns;    // the group by columns
+        ::vos::ORef<OSQLColumns>                        m_aOrderColumns;    // the order by columns
+        ::vos::ORef<OSQLColumns>                        m_aCreateColumns;   // the columns for Create table clause
 
-        OSQLParseTreeIteratorImpl*          m_pImpl;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>    m_xDatabaseMetaData;
+        ::std::auto_ptr< OSQLParseTreeIteratorImpl >    m_pImpl;
 
-        void appendWarning(const ::rtl::OUString& _sErrMsg); // append warnings if m_pParser is set
-
-        void                traverseParameter(OSQLParseNode* _pParseNode,OSQLParseNode* _pColumnRef,const ::rtl::OUString& _aColumnName,const ::rtl::OUString& _aTableRange);
+        void                traverseParameter(OSQLParseNode* _pParseNode,OSQLParseNode* _pColumnRef,const ::rtl::OUString& _aColumnName,const ::rtl::OUString& _aTableRange, const ::rtl::OUString& _rColumnAlias);
         // F"ugt eine Tabelle in die Map ein
-        void                traverseOneTableName(OSQLTables& _rTables,const OSQLParseNode * pTableName, const ::rtl::OUString & rTableRange, const sal_Bool bIsCreateTable);
+        void                traverseOneTableName( OSQLTables& _rTables,const OSQLParseNode * pTableName, const ::rtl::OUString & rTableRange );
         void                traverseORCriteria(OSQLParseNode * pSearchCondition);
         void                traverseANDCriteria(OSQLParseNode * pSearchCondition);
         void                traverseOnePredicate(
                                                 OSQLParseNode * pColumnRef,
-                                                sal_Int32 ePredicateType,
                                                 ::rtl::OUString& aValue,
-                                                sal_Bool bCompareNull,
                                                 OSQLParseNode * pParameter);
         void traverseByColumnNames(const OSQLParseNode* pSelectNode,sal_Bool _bOrder);
 
-        OSQLParseNode *     getTableRef(OSQLTables& _rTables,OSQLParseNode *pTableRef,::rtl::OUString& aTableRange);
-        OSQLParseNode *     getQualified_join(OSQLTables& _rTables,OSQLParseNode *pTableRef,::rtl::OUString& aTableRange);
-        void                getSelect_statement(OSQLTables& _rTables,OSQLParseNode *pSelect);
-        ::rtl::OUString     getUniqueColumnName(const ::rtl::OUString & rColumnName)    const;
+        const OSQLParseNode*    getTableNode( OSQLTables& _rTables, const OSQLParseNode* pTableRef, ::rtl::OUString& aTableRange );
+        void                    getQualified_join( OSQLTables& _rTables, const OSQLParseNode *pTableRef, ::rtl::OUString& aTableRange );
+        void                    getSelect_statement(OSQLTables& _rTables,const OSQLParseNode* pSelect);
+        ::rtl::OUString         getUniqueColumnName(const ::rtl::OUString & rColumnName)    const;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > findColumn(const OSQLTables& _rTables,const ::rtl::OUString & rColumnName, const ::rtl::OUString & rTableRange);
+        /** finds the column with a given name, belonging to a given table, in a given tables collection
+            @param  _rTables
+                the tables collection to look in
+            @param  rColumnName
+                the column name to look for
+            @param  rTableRange
+                the table alias name
+            @return
+                the desired column object, or <NULL/> if no such column could be found
+        */
+        static ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > findColumn(
+            const OSQLTables& _rTables, const ::rtl::OUString & rColumnName, const ::rtl::OUString & rTableRange );
+
+        /** finds a column with a given name, belonging to a given table
+            @param  rColumnName
+                the column name to look for
+            @param  rTableRange
+                    the table alias name
+            @param  _bLookInSubTables
+                <TRUE/> if and only if not only our direct tables, but also our sub tables (from sub selects)
+                should be searched
+            @return
+        */
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > findColumn(
+            const ::rtl::OUString & rColumnName, const ::rtl::OUString & rTableRange, bool _bLookInSubTables );
 
       protected:
         void setSelectColumnName(::vos::ORef<OSQLColumns>& _rColumns,const ::rtl::OUString & rColumnName,const ::rtl::OUString & rColumnAlias, const ::rtl::OUString & rTableRange,sal_Bool bFkt=sal_False,sal_Int32 _nType = com::sun::star::sdbc::DataType::VARCHAR,sal_Bool bAggFkt=sal_False);
@@ -156,14 +155,15 @@ namespace connectivity
 
 
       private:
-        OSQLParseTreeIterator();                                    // never implemented
-        OSQLParseTreeIterator(const OSQLParseTreeIterator & rIter); // never implemented
+        OSQLParseTreeIterator();                                        // never implemented
+        OSQLParseTreeIterator(const OSQLParseTreeIterator & rIter);     // never implemented
 
       public:
-        OSQLParseTreeIterator(  const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xTableSupplier ,
-                                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _xDatabaseMetaData,
-                                const OSQLParseNode* pRoot,
-                                const OSQLParser* _pParser = NULL);
+        OSQLParseTreeIterator(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxTables,
+            const OSQLParser& _rParser,
+            const OSQLParseNode* pRoot = NULL );
         ~OSQLParseTreeIterator();
 
         inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
@@ -176,11 +176,11 @@ namespace connectivity
             {  }
 
         void dispose();
-        sal_Bool isCaseSensitive() const { return m_aCaseEqual.isCaseSensitive(); }
+        bool isCaseSensitive() const;
         // Der zu analysierende/zu traversierende Parse Tree:
         // bei "Ubergabe von NULL wird der aktuelle Parsetree gel"oscht und der Fehlerstatus gecleared
         void setParseTree(const OSQLParseNode * pNewParseTree);
-        void setParser(const OSQLParser* _pParser) { m_pParser = _pParser; }
+//      void setParser(const OSQLParser* _pParser) { m_pParser = _pParser; }
         const OSQLParseNode * getParseTree() const { return m_pParseTree; };
 
         // Teilbaueme bei einem select statement
@@ -194,126 +194,49 @@ namespace connectivity
         const OSQLParseNode* getSimpleGroupByTree() const;
         const OSQLParseNode* getSimpleHavingTree() const;
 
-        ::com::sun::star::sdbc::SQLWarning  getWarning() const { return m_aWarning; }
+        /** returns the errors which occured during parsing.
+
+            The returned object contains a chain (via SQLException::NextException) of SQLExceptions.
+        */
+        inline const ::com::sun::star::sdbc::SQLException&   getErrors() const { return m_aErrors; }
+        inline bool hasErrors() const { return m_aErrors.Message.getLength() > 0; }
+
         // Statement-Typ (wird bereits in setParseTree gesetzt):
         OSQLStatementType getStatementType() const { return m_eStatementType; }
 
-        // Die "traverse"-Routinen durchlaufen bestimmte Teile des Parse Tree
-        // und rufen fuer die erkannten Konstrukte die virtuellen "set"-Routinen
-        // auf und uebergeben diesen die erkannten Informationen als Parameter.
-        //
-        // Der Parse Tree muss in einer bestimmten Form vorliegen:
-        //      SELECT [<tablerange>.]<columnname>, [<tablerange>.]<columnname>, ...
-        //        FROM <tablename> [<tablerange>], <tablename> [<tablerange>], ...
-        //       WHERE (
-        //                  <predicate>
-        //              AND <predicate>
-        //              ...
-        //             )
-        //          OR (
-        //              ...
-        //             )
-        //          ...
-        //       ORDER BY <columname>, <columnname>, ...
-        //
-        // (die Klammern sind optional bzw. zusaetzliche Klammern stoeren nicht, aber
-        // es duerfen nur mehrere AND-Bedingungen, die ihrerseits mit OR verknuepft sind,
-        // auftreten).
-        //
-        //
-        // <predicate> kann sein:
-        //          [<tablerange>.]<columnname> <operator> <value>
-        //          [<tablerange>.]<columnname> LIKE <value>
-        //          [<tablerange>.]<columnname> NOT LIKE <value>
-        //          [<tablerange>.]<columnname> IS NULL
-        //          [<tablerange>.]<columnname> IS NOT NULL
-        //
-        // <operator> kann sein:
-        //          "="
-        //          "<>"
-        //          "<"
-        //          "<="
-        //          ">"
-        //          ">="
-        //
-        // <value> kann auch ein Parameter sein, in diesem Fall enthaelt
-        // das Argument "ParameterName" der "set"-Funktionen den Namen des Parameters
-        // (ohne fuehrenden Doppelpunkt) bzw. "?" bei unbenannten Parametern.
-        //
-        // <columnname> in der Select-Klausel kann auch "*" oder "COUNT(*)" sein.
-        //
-        //
-        // Wenn das Statement NICHT diese Form hat, oder wenn eine der "set"-Routinen
-        // den IteratorStatus != IsSuccessful() hinterlaesst, wird die weitere Analyse
-        // des Parse Tree abgebrochen. Ansonsten liefert "Status().IsSuccessful() == TRUE".
+        /** traverses the complete statement tree, and fills all our data with
+            the information obatined during traversal.
 
-        void traverseTableNames(OSQLTables& _rTables);
-        void setTableName(const ::rtl::OUString & rTableName, const ::rtl::OUString & rCatalogName, const ::rtl::OUString& rSchemaName,
-                              const ::rtl::OUString & rTableRange);
-        // [TableName enthaelt immer einen Namen, TableRange ist, falls angegeben, die "Range"-
-        // Variable (eine Art Alias-Name fuer den TableName), falls nicht angegeben, identisch
-        // zum TableName. SchemaName ist leer, wenn nicht angegeben.]
-
-        void traverseSelectColumnNames(const OSQLParseNode* pSelectNode);
-        // [TableRange kann leer sein, wenn nicht angegeben]
-
-        void traverseCreateColumns(const OSQLParseNode* pSelectNode); //traverse columns for "create table" statement
-
-        void traverseOrderByColumnNames(const OSQLParseNode* pSelectNode);
-        void setOrderByColumnName(const ::rtl::OUString & rColumnName, const ::rtl::OUString & rTableRange, sal_Bool bAscending);
-
-        void traverseGroupByColumnNames(const OSQLParseNode* pSelectNode);
-        void setGroupByColumnName(const ::rtl::OUString & rColumnName, const ::rtl::OUString & rTableRange);
-        // [TableRange kann leer sein, wenn nicht angegeben]
-
-        // Bei Selektionskriterien werden (selbst bei einem einfachen Praedikat)
-        // folgende "set"-Funktionen in der angegebenen Reihenfolge aufgerufen:
-        //
-        //          setORCriteriaPre
-        //          |
-        //          |   setANDCriteriaPre
-        //          |   |   setPredicate
-        //          |   |   [weitere setPredicate-Aufrufe] ...
-        //          |   setANDCriteriaPost
-        //          |
-        //          |   ... [weitere setANDCriteriaPre/Post-Paare und darin setPredicate-Aufrufe]
-        //          |
-        //          setORCriteriaPost
-        //
-        // Die AND-Verknuepfungen sind also implizit ODER-Verknuepft. setORCriteriaPre und
-        // setORCriteriaPost werden jeweils nur ein einziges Mal aufgerufen (sind also
-        // eigentlich ziemlich ueberfluessig, da man diese Aktionen auch vor bzw. nach dem
-        // traverse-Aufruf erledigen kann)!
-        //
-        void traverseSelectionCriteria(const OSQLParseNode* pSelectNode);
-        void setORCriteriaPre();
-        void setORCriteriaPost();
-        void setANDCriteriaPre();
-        void setANDCriteriaPost();
-        void setPredicate(const ::rtl::OUString & rColumnName,
-                                  const ::rtl::OUString & rTableRange,
-                                  sal_Int32 ePredicateType,
-                                  const ::rtl::OUString & rValue,
-                                  const ::rtl::OUString & rParameterName);
-
-
-        // Erweiterung auf UPDATE- und INSERT-Statement ... (nyi):
-        void traverseAssignments();
-        void setAssign(const ::rtl::OUString & rColumnName,
-                               const ::rtl::OUString & rValue, sal_Bool bsetNull,
-                               const ::rtl::OUString & rParameterName);
-
-        // Alle "traverse"-Routinen hintereinander aufrufen. Je nach Statement-Typ:
-        // Bei UPDATE und INSERT-Statement nur traverseTableNames und traverseAssignments,
-        // bei DELETE nur traverseTableNames und bei SELECT-Statement
-        // in der Reihenfolge: traverseTableNames, traverseSelectColumnNames,
-        // traverseOrderByColumnNames, traverseSelectionCriteria.
-        // Bricht bei irgendwelchen Fehlern sofort ab und liefert entsprechenden
-        // Status.
+            Implemented by calling the single traverse* methods in the proper
+            order (depending on the statement type).
+        */
         void traverseAll();
 
+        enum TraversalParts
+        {
+            Parameters      = 0x0001,
+            TableNames      = 0x0002,
+            SelectColumns   = 0x0006,   // note that this includes TableNames. No SelectColumns without TableNames
+
+            // Those are not implemented currently
+            // GroupColumns    = 0x0008,
+            // OrderColumns    = 0x0010,
+            // SelectColumns   = 0x0020,
+            // CreateColumns   = 0x0040,
+
+            All             = 0xFFFF
+        };
+        /** traverses selected parts of the statement tree, and fills our data with
+            the information obtained during traversal
+
+            @param _nIncludeMask
+                set of TraversalParts bits, specifying which information is to be collected.
+                Note TraversalParts is currently not
+        */
+        void traverseSome( sal_uInt32 _nIncludeMask );
+
         // Die TableRangeMap enth"alt alle Tabellen unter dem zugeh"origen Rangenamen der zuerst gefunden wird
-        const OSQLTables& getTables() const { return m_aTables;}
+        const OSQLTables& getTables() const;
 
         ::vos::ORef<OSQLColumns> getSelectColumns() const { return m_aSelectColumns;}
         ::vos::ORef<OSQLColumns> getGroupColumns() const { return m_aGroupColumns;}
@@ -333,6 +256,24 @@ namespace connectivity
                                 ::rtl::OUString &_rColumnName,
                                 ::rtl::OUString& _rTableRange) const;
 
+        /** retrieves a column's name, table range, and alias
+
+            @param  _pColumnRef
+                The column_ref parse node.
+            @param  _out_rColumnName
+                The column name to be set.
+            @param  _out_rTableRange
+                The table range to be set.
+            @param _out_rColumnAliasIfPresent
+                If the column specified by _pColumnRef is part of the select columns, and contains a column alias there,
+                this alias is returned here.
+        */
+        void getColumnRange(    const OSQLParseNode* _pColumnRef,
+                                ::rtl::OUString& _out_rColumnName,
+                                ::rtl::OUString& _out_rTableRange,
+                                ::rtl::OUString& _out_rColumnAliasIfPresent
+                                ) const;
+
         /** return the alias name of a column
             @param  _pDerivedColumn
                 The parse node where SQL_ISRULE(_pDerivedColumn,derived_column) must be true
@@ -340,7 +281,6 @@ namespace connectivity
                 The alias name of the column or an empty string.
         */
         static ::rtl::OUString getColumnAlias(const OSQLParseNode* _pDerivedColumn);
-        // gibt den Columnnamen und die Tablerange (falls vorhanden) zur"uck
 
         /** return the columname and the table range
             @param  _pColumnRef
@@ -363,6 +303,79 @@ namespace connectivity
 
         // return true when the tableNode is a rule like catalog_name, schema_name or table_name
         sal_Bool isTableNode(const OSQLParseNode* _pTableNode) const;
+
+    private:
+        /** traverses the list of table names, and filles _rTables
+        */
+        bool traverseTableNames( OSQLTables& _rTables );
+
+        /// traverses columns in a SELECT statement
+        bool traverseSelectColumnNames(const OSQLParseNode* pSelectNode);
+        /// traverses columns in a CREATE TABLE statement
+        void traverseCreateColumns(const OSQLParseNode* pSelectNode);
+
+        bool traverseOrderByColumnNames(const OSQLParseNode* pSelectNode);
+        bool traverseGroupByColumnNames(const OSQLParseNode* pSelectNode);
+
+        bool traverseSelectionCriteria(const OSQLParseNode* pSelectNode);
+
+    private:
+        /** constructs a new iterator, which inherits some of the settings from a parent iterator
+        */
+        OSQLParseTreeIterator(
+            const OSQLParseTreeIterator& _rParentIterator,
+            const OSQLParser& _rParser,
+            const OSQLParseNode* pRoot );
+
+        /** creates a table object and inserts it into our tables collection
+
+            only used when we're iterating through a CREATE TABLE statement
+        */
+        OSQLTable   impl_createTableObject(
+            const ::rtl::OUString& rTableName, const ::rtl::OUString& rCatalogName, const ::rtl::OUString& rSchemaName );
+
+        /** locates a record source (a table or query) with the given name
+        */
+        OSQLTable   impl_locateRecordSource(
+            const ::rtl::OUString& _rComposedName
+        );
+
+        /** implementation for both traverseAll and traverseSome
+        */
+        void    impl_traverse( sal_uInt32 _nIncludeMask );
+
+        /** retrieves the parameter columns of the given query
+        */
+        void    impl_getQueryParameterColumns( const OSQLTable& _rQuery );
+
+        void setOrderByColumnName(const ::rtl::OUString & rColumnName, const ::rtl::OUString & rTableRange, sal_Bool bAscending);
+        void setGroupByColumnName(const ::rtl::OUString & rColumnName, const ::rtl::OUString & rTableRange);
+
+    private:
+        /** appends an SQLException corresponding to the given error code to our error collection
+
+            @param  _eError
+                the code of the error which occured
+            @param  _pReplaceToken1
+                if not <NULL/>, the first occurance of '#' in the error message will be replaced
+                with the given token
+            @param  _pReplaceToken2
+                if not <NULL/>, and if _rReplaceToken1 is not <NULL/>, the second occurance of '#'
+                in the error message will be replaced with _rReplaceToken2
+        */
+        void impl_appendError( IParseContext::ErrorCode _eError,
+            const ::rtl::OUString* _pReplaceToken1 = NULL, const ::rtl::OUString* _pReplaceToken2 = NULL );
+
+        /** appends an SQLException corresponding to the given error code to our error collection
+        */
+        void impl_appendError( const ::com::sun::star::sdbc::SQLException& _rError );
+
+        /** resets our errors
+        */
+        inline void impl_resetErrors()
+        {
+            m_aErrors = ::com::sun::star::sdbc::SQLException();
+        }
     };
 }
 
