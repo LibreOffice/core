@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BConnection.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:08:14 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:21:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -299,10 +299,8 @@ Sequence< sal_Int8 > OAdabasConnection::getUnoTunnelImplementationId()
     if(pNode)
     {
         Reference< XTablesSupplier> xCata = createCatalog();
-        OSQLParseTreeIterator aParseIter(xCata->getTables(),
-                                        getMetaData(),
-                                        pNode,
-                                        &aParser);
+        OSQLParseTreeIterator aParseIter(this, xCata->getTables(),
+                                        aParser, pNode);
         aParseIter.traverseAll();
         aRet = aParseIter.getSelectColumns();
     }
