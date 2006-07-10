@@ -4,9 +4,9 @@
  *
  *  $RCSfile: showwin.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:25:16 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 11:23:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,6 +66,9 @@
 
 namespace sd {
 
+static const ULONG HIDE_MOUSE_TIMEOUT = 10000;
+static const ULONG SHOW_MOUSE_TIMEOUT = 1000;
+
 // =============================================================================
 
 ShowWindow::ShowWindow( ::Window* pParent )
@@ -74,7 +77,10 @@ ShowWindow::ShowWindow( ::Window* pParent )
     mnRestartPageIndex( PAGE_NO_END ),
     mnPauseTimeout( SLIDE_NO_TIMEOUT ),
     mbShowNavigatorAfterSpecialMode( FALSE ),
-    mpSlideshow(0)
+    mpSlideshow(0),
+    mnFirstMouseMove(0),
+    mbMouseCursorHidden(false),
+    mbMouseAutoHide(true)
 {
     SetOutDevViewType( OUTDEV_VIEWTYPE_SLIDESHOW );
 
@@ -92,15 +98,20 @@ ShowWindow::ShowWindow( ::Window* pParent )
 
     maPauseTimer.SetTimeoutHdl( LINK( this, ShowWindow, PauseTimeoutHdl ) );
     maPauseTimer.SetTimeout( 1000 );
+    maMouseTimer.SetTimeoutHdl( LINK( this, ShowWindow, MouseTimeoutHdl ) );
+    maMouseTimer.SetTimeout( HIDE_MOUSE_TIMEOUT );
 
     maShowBackground = Wallpaper( Color( COL_BLACK ) );
 //  SetBackground( Wallpaper( Color( COL_BLACK ) ) );
     SetBackground(); // avoids that VCL paints any background!
     GetParent()->Show();
+    AddEventListener( LINK( this, ShowWindow, EventHdl ) );
 }
 
 ShowWindow::~ShowWindow(void)
 {
+    maPauseTimer.Stop();
+    maMouseTimer.Stop();
 }
 
 /*************************************************************************
@@ -211,6 +222,41 @@ void ShowWindow::MouseButtonDown(const MouseEvent& rMEvt)
 
 void ShowWindow::MouseMove(const MouseEvent& rMEvt)
 {
+    if( mbMouseAutoHide )
+    {
+        if( mbMouseCursorHidden )
+        {
+            if( mnFirstMouseMove )
+            {
+                // if this is not the first mouse move while hidden, see if
+                // enough time has pasted to show mouse pointer again
+                ULONG nTime = Time::GetSystemTicks();
+                if( (nTime - mnFirstMouseMove) >= SHOW_MOUSE_TIMEOUT )
+                {
+                    ShowPointer( TRUE );
+                    mnFirstMouseMove = 0;
+                    mbMouseCursorHidden = false;
+                    maMouseTimer.SetTimeout( HIDE_MOUSE_TIMEOUT );
+                    maMouseTimer.Start();
+                }
+            }
+            else
+            {
+                // if this is the first mouse move, note current
+                // time and start idle timer to cancel show mouse pointer
+                // again if not enough mouse movement is measured
+                mnFirstMouseMove = Time::GetSystemTicks();
+                maMouseTimer.SetTimeout( 2*SHOW_MOUSE_TIMEOUT );
+                maMouseTimer.Start();
+            }
+        }
+        else
+        {
+            // current mousemove restarts the idle timer to hide the mouse
+            maMouseTimer.Start();
+        }
+    }
+
     if( mpViewShell )
     {
         if( SHOWWINDOWMODE_NORMAL == meShowWindowMode )
@@ -470,6 +516,7 @@ void ShowWindow::TerminateShow()
 {
     maLogo.Clear();
     maPauseTimer.Stop();
+    maMouseTimer.Stop();
     Erase();
 //  SetBackground( maShowBackground );
     maShowBackground = Wallpaper( Color( COL_BLACK ) );
@@ -661,6 +708,35 @@ IMPL_LINK( ShowWindow, PauseTimeoutHdl, Timer*, pTimer )
     return 0L;
 }
 
+IMPL_LINK( ShowWindow, MouseTimeoutHdl, Timer*, pTimer )
+{
+    if( mbMouseCursorHidden )
+    {
+        // not enough mouse movements since first recording so
+        // cancle show mouse pointer for now
+        mnFirstMouseMove = 0;
+    }
+    else
+    {
+        // mouse has been idle to long, hide pointer
+        ShowPointer( FALSE );
+        mbMouseCursorHidden = true;
+    }
+    return 0L;
+}
+
+IMPL_LINK( ShowWindow, EventHdl, VclWindowEvent*, pEvent )
+{
+    if( mbMouseAutoHide )
+    {
+        if (pEvent->GetId() == VCLEVENT_WINDOW_SHOW)
+        {
+            maMouseTimer.SetTimeout( HIDE_MOUSE_TIMEOUT );
+            maMouseTimer.Start();
+        }
+    }
+    return 0L;
+}
 
 void ShowWindow::SetPresentationArea( const Rectangle& rPresArea )
 {
