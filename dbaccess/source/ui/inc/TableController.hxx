@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableController.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:43:16 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:29:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -181,7 +181,7 @@ namespace dbaui
     protected:
         void startTableListening();
         void stopTableListening();
-        virtual void impl_initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments );
+        virtual void impl_initialize();
     };
 }
 #endif // DBUI_TABLECONTROLLER_HXX
