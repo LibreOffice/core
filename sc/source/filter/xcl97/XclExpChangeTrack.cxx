@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XclExpChangeTrack.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:46:42 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:05:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,11 +74,11 @@ void lcl_WriteDateTime( XclExpStream& rStrm, const DateTime& rDateTime )
 
 // write string and fill rest of <nLength> with zero bytes
 // <nLength> is without string header
-void lcl_WriteFixedString( XclExpStream& rStrm, const XclExpString& rString, ULONG nLength )
+void lcl_WriteFixedString( XclExpStream& rStrm, const XclExpString& rString, sal_Size nLength )
 {
-    ULONG nStrBytes = rString.GetBufferSize();
+    sal_Size nStrBytes = rString.GetBufferSize();
     DBG_ASSERT( nLength >= nStrBytes, "lcl_WriteFixedString - String too long" );
-    if( rString.Len() )
+    if( rString.Len() > 0 )
         rStrm << rString;
     if( nLength > nStrBytes )
         rStrm.WriteZeroBytes( nLength - nStrBytes );
@@ -93,7 +93,7 @@ inline void lcl_GenerateGUID( sal_uInt8* pGUID, sal_Bool& rValidGUID )
 inline void lcl_WriteGUID( XclExpStream& rStrm, const sal_uInt8* pGUID )
 {
     rStrm.SetSliceSize( 16 );
-    for( sal_uInt32 nIndex = 0; nIndex < 16; nIndex++ )
+    for( sal_Size nIndex = 0; nIndex < 16; nIndex++ )
         rStrm << pGUID[ nIndex ];
     rStrm.SetSliceSize( 0 );
 }
@@ -119,7 +119,7 @@ void XclExpUserBView::SaveCont( XclExpStream& rStrm )
             << (sal_uInt16) 0x0000
             << (sal_uInt16) 0x0001
             << (sal_uInt16) 0x0000;
-    if( sUsername.Len() )
+    if( sUsername.Len() > 0 )
         rStrm << sUsername;
 }
 
@@ -128,9 +128,9 @@ UINT16 XclExpUserBView::GetNum() const
     return 0x01A9;
 }
 
-ULONG XclExpUserBView::GetLen() const
+sal_Size XclExpUserBView::GetLen() const
 {
-    return 50 + (sUsername.Len() ? sUsername.GetSize() : 0);
+    return 50 + ((sUsername.Len() > 0) ? sUsername.GetSize() : 0);
 }
 
 //___________________________________________________________________
@@ -192,7 +192,7 @@ UINT16 XclExpUsersViewBegin::GetNum() const
     return 0x01AA;
 }
 
-ULONG XclExpUsersViewBegin::GetLen() const
+sal_Size XclExpUsersViewBegin::GetLen() const
 {
     return 64;
 }
@@ -209,7 +209,7 @@ UINT16 XclExpUsersViewEnd::GetNum() const
     return 0x01AB;
 }
 
-ULONG XclExpUsersViewEnd::GetLen() const
+sal_Size XclExpUsersViewEnd::GetLen() const
 {
     return 2;
 }
@@ -226,7 +226,7 @@ UINT16 XclExpChTr0x0191::GetNum() const
     return 0x0191;
 }
 
-ULONG XclExpChTr0x0191::GetLen() const
+sal_Size XclExpChTr0x0191::GetLen() const
 {
     return 2;
 }
@@ -244,7 +244,7 @@ UINT16 XclExpChTr0x0198::GetNum() const
     return 0x0198;
 }
 
-ULONG XclExpChTr0x0198::GetLen() const
+sal_Size XclExpChTr0x0198::GetLen() const
 {
     return 4;
 }
@@ -262,7 +262,7 @@ UINT16 XclExpChTr0x0192::GetNum() const
     return 0x0192;
 }
 
-ULONG XclExpChTr0x0192::GetLen() const
+sal_Size XclExpChTr0x0192::GetLen() const
 {
     return 512;
 }
@@ -279,7 +279,7 @@ UINT16 XclExpChTr0x0197::GetNum() const
     return 0x0197;
 }
 
-ULONG XclExpChTr0x0197::GetLen() const
+sal_Size XclExpChTr0x0197::GetLen() const
 {
     return 2;
 }
@@ -295,7 +295,7 @@ UINT16 XclExpChTrEmpty::GetNum() const
     return nRecNum;
 }
 
-ULONG XclExpChTrEmpty::GetLen() const
+sal_Size XclExpChTrEmpty::GetLen() const
 {
     return 0;
 }
@@ -316,7 +316,7 @@ UINT16 XclExpChTr0x0195::GetNum() const
     return 0x0195;
 }
 
-ULONG XclExpChTr0x0195::GetLen() const
+sal_Size XclExpChTr0x0195::GetLen() const
 {
     return 162;
 }
@@ -340,7 +340,7 @@ UINT16 XclExpChTr0x0194::GetNum() const
     return 0x0194;
 }
 
-ULONG XclExpChTr0x0194::GetLen() const
+sal_Size XclExpChTr0x0194::GetLen() const
 {
     return 162;
 }
@@ -369,7 +369,7 @@ UINT16 XclExpChTrHeader::GetNum() const
     return 0x0196;
 }
 
-ULONG XclExpChTrHeader::GetLen() const
+sal_Size XclExpChTrHeader::GetLen() const
 {
     return 50;
 }
@@ -399,7 +399,7 @@ UINT16 XclExpChTrInfo::GetNum() const
     return 0x0138;
 }
 
-ULONG XclExpChTrInfo::GetLen() const
+sal_Size XclExpChTrInfo::GetLen() const
 {
     return 158;
 }
@@ -521,7 +521,7 @@ UINT16 XclExpChTrTabId::GetNum() const
     return 0x013D;
 }
 
-ULONG XclExpChTrTabId::GetLen() const
+sal_Size XclExpChTrTabId::GetLen() const
 {
     return nTabCount << 1;
 }
@@ -620,7 +620,7 @@ void XclExpChTrAction::Save( XclExpStream& rStrm )
     CompleteSaveAction( rStrm );
 }
 
-ULONG XclExpChTrAction::GetLen() const
+sal_Size XclExpChTrAction::GetLen() const
 {
     return GetHeaderByteCount() + GetActionByteCount();
 }
@@ -781,7 +781,7 @@ void XclExpChTrCellContent::GetCellData(
                 ((const ScEditCell*) pScCell)->GetString( sCellStr );
             rpData->pString = new XclExpString( sCellStr, EXC_STR_DEFAULT, 32766 );
             rpData->nType = EXC_CHTR_TYPE_STRING;
-            rpData->nSize = 3 + (sal_uInt16) rpData->pString->GetSize();
+            rpData->nSize = 3 + rpData->pString->GetSize();
             rXclLength1 = 64 + (sCellStr.Len() << 1);
             rXclLength2 = 6 + (sal_uInt16)(sCellStr.Len() << 1);
         }
@@ -796,7 +796,7 @@ void XclExpChTrCellContent::GetCellData(
                 rpData->mxTokArr = GetFormulaCompiler().CreateFormula(
                     EXC_FMLATYPE_CELL, *pTokenArray, &pFmlCell->aPos, &rRefLog );
                 rpData->nType = EXC_CHTR_TYPE_FORMULA;
-                sal_uInt32 nSize = rpData->mxTokArr->GetSize() + 3;
+                sal_Size nSize = rpData->mxTokArr->GetSize() + 3;
 
                 for( XclExpRefLog::const_iterator aIt = rRefLog.begin(), aEnd = rRefLog.end(); aIt != aEnd; ++aIt )
                 {
@@ -805,7 +805,7 @@ void XclExpChTrCellContent::GetCellData(
                     else
                         nSize += (aIt->mnFirstXclTab == aIt->mnLastXclTab) ? 6 : 8;
                 }
-                rpData->nSize = (sal_uInt16) Min( nSize, (sal_uInt32) 0x0000FFFF );
+                rpData->nSize = ::std::min< sal_Size >( nSize, 0xFFFF );
                 rXclLength1 = 0x00000052;
                 rXclLength2 = 0x0018;
             }
@@ -833,9 +833,9 @@ UINT16 XclExpChTrCellContent::GetNum() const
     return 0x013B;
 }
 
-ULONG XclExpChTrCellContent::GetActionByteCount() const
+sal_Size XclExpChTrCellContent::GetActionByteCount() const
 {
-    ULONG nLen = 16;
+    sal_Size nLen = 16;
     if( pOldData )
         nLen += pOldData->nSize;
     if( pNewData )
@@ -911,7 +911,7 @@ UINT16 XclExpChTrInsert::GetNum() const
     return 0x0137;
 }
 
-ULONG XclExpChTrInsert::GetActionByteCount() const
+sal_Size XclExpChTrInsert::GetActionByteCount() const
 {
     return 16;
 }
@@ -948,7 +948,7 @@ UINT16 XclExpChTrInsertTab::GetNum() const
     return 0x014D;
 }
 
-ULONG XclExpChTrInsertTab::GetActionByteCount() const
+sal_Size XclExpChTrInsertTab::GetActionByteCount() const
 {
     return 276;
 }
@@ -1004,7 +1004,7 @@ UINT16 XclExpChTrMoveRange::GetNum() const
     return 0x0140;
 }
 
-ULONG XclExpChTrMoveRange::GetActionByteCount() const
+sal_Size XclExpChTrMoveRange::GetActionByteCount() const
 {
     return 24;
 }
@@ -1035,7 +1035,7 @@ UINT16 XclExpChTr0x014A::GetNum() const
     return 0x014A;
 }
 
-ULONG XclExpChTr0x014A::GetActionByteCount() const
+sal_Size XclExpChTr0x014A::GetActionByteCount() const
 {
     return 14;
 }
