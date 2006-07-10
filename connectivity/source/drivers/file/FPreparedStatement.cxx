@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FPreparedStatement.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:25:53 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:26:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -216,7 +216,7 @@ sal_Bool SAL_CALL OPreparedStatement::execute(  ) throw(SQLException, RuntimeExc
 
     initResultSet();
 
-    return m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT || m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT_COUNT;
+    return m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT;
 }
 // -------------------------------------------------------------------------
 
