@@ -4,9 +4,9 @@
  *
  *  $RCSfile: connection.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:44:04 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:09:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,27 +32,43 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
 #ifndef _DBA_CORE_CONNECTION_HXX_
 #include "connection.hxx"
 #endif
+
 #ifndef DBACCESS_SHARED_DBASTRINGS_HRC
 #include "dbastrings.hrc"
 #endif
 #ifndef _DBA_COREDATAACCESS_DATASOURCE_HXX_
 #include "datasource.hxx"
 #endif
+#ifndef _DBA_CORE_RESOURCE_HRC_
+#include "core_resource.hrc"
+#endif
+#ifndef _DBA_CORE_RESOURCE_HXX_
+#include "core_resource.hxx"
+#endif
 #ifndef _DBA_COREAPI_STATEMENT_HXX_
-#include <statement.hxx>
+#include "statement.hxx"
 #endif
 #ifndef _DBA_COREAPI_PREPAREDSTATEMENT_HXX_
-#include <preparedstatement.hxx>
+#include "preparedstatement.hxx"
 #endif
 #ifndef _DBA_COREAPI_CALLABLESTATEMENT_HXX_
-#include <callablestatement.hxx>
+#include "callablestatement.hxx"
 #endif
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
+#ifndef DBA_CONTAINERMEDIATOR_HXX
+#include "ContainerMediator.hxx"
 #endif
+#ifndef DBACCESS_CORE_API_SINGLESELECTQUERYCOMPOSER_HXX
+#include "SingleSelectQueryComposer.hxx"
+#endif
+#ifndef DBACCESS_CORE_API_QUERYCOMPOSER_HXX
+#include "querycomposer.hxx"
+#endif
+
+/** === begin UNO includes === **/
 #ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
 #include <com/sun/star/sdb/CommandType.hpp>
 #endif
@@ -65,17 +81,26 @@
 #ifndef _COM_SUN_STAR_REFLECTION_XPROXYFACTORY_HPP_
 #include <com/sun/star/reflection/XProxyFactory.hpp>
 #endif
-#ifndef _COMPHELPER_SEQUENCE_HXX_
-#include <comphelper/sequence.hxx>
+#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
+#include <com/sun/star/beans/NamedValue.hpp>
 #endif
+/** === end UNO includes === **/
+
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
 #endif
-#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
-#include <cppuhelper/typeprovider.hxx>
+#ifndef CONNECTIVITY_INC_CONNECTIVITY_DBMETADATA_HXX
+#include <connectivity/dbmetadata.hxx>
 #endif
-#ifndef DBACCESS_CORE_API_QUERYCOMPOSER_HXX
-#include "querycomposer.hxx"
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include <connectivity/dbexception.hxx>
+#endif
+
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
@@ -83,14 +108,11 @@
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
 #endif
-#ifndef _DBHELPER_DBEXCEPTION_HXX_
-#include <connectivity/dbexception.hxx>
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
 #endif
-#ifndef DBA_CONTAINERMEDIATOR_HXX
-#include "ContainerMediator.hxx"
-#endif
-#ifndef DBACCESS_CORE_API_SINGLESELECTQUERYCOMPOSER_HXX
-#include "SingleSelectQueryComposer.hxx"
+#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
+#include <cppuhelper/typeprovider.hxx>
 #endif
 
 using namespace ::com::sun::star::uno;
@@ -329,7 +351,7 @@ OConnection::OConnection(ODatabaseSource& _rDB
                 // same for tables
             ,m_aTableFilter(_rDB.m_pImpl->m_aTableFilter)
             ,m_aTableTypeFilter(_rDB.m_pImpl->m_aTableTypeFilter)
-            ,m_xORB(_rxORB)
+            ,m_aContext( _rxORB )
             ,m_xMasterConnection(_rxMaster)
             ,m_pTables(NULL)
             ,m_pViews(NULL)
@@ -343,9 +365,6 @@ OConnection::OConnection(ODatabaseSource& _rDB
 
     try
     {
-        Reference< XTypeProvider > xTest( _rxMaster, UNO_QUERY );
-        xTest->getTypes();
-
         Reference< XProxyFactory > xProxyFactory(
                 _rxORB->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.ProxyFactory"))),UNO_QUERY);
         Reference<XAggregation> xAgg = xProxyFactory->createProxy(_rxMaster.get());
@@ -370,8 +389,8 @@ OConnection::OConnection(ODatabaseSource& _rDB
         catch(SQLException&)
         {
         }
-        Reference< XNameContainer > xDefNames(_rDB.getTables(),UNO_QUERY);
-        m_pTables = new OTableContainer(*this, m_aMutex,this, bCase, xDefNames,this,&m_aWarnings);
+        Reference< XNameContainer > xTableDefinitions(_rDB.getTables(),UNO_QUERY);
+        m_pTables = new OTableContainer( *this, m_aMutex, this, bCase, xTableDefinitions, this, &m_aWarnings );
 
         // check if we supports types
         if ( xMeta.is() )
@@ -391,7 +410,7 @@ OConnection::OConnection(ODatabaseSource& _rDB
                     }
                 }
             }
-            // some dbs doesn't support this type so we should ask if a XViewsSupplier is supported
+            // some dbs don't support this type so we should ask if a XViewsSupplier is supported
             if(!m_bSupportsViews)
             {
                 Reference< XViewsSupplier > xMaster(getMasterTables(),UNO_QUERY);
@@ -408,6 +427,7 @@ OConnection::OConnection(ODatabaseSource& _rDB
             m_bSupportsUsers = Reference< XUsersSupplier> (getMasterTables(),UNO_QUERY).is();
             m_bSupportsGroups = Reference< XGroupsSupplier> (getMasterTables(),UNO_QUERY).is();
 
+            impl_checkTableQueryNames_nothrow();
         }
     }
     catch(Exception&)
@@ -586,7 +606,7 @@ Reference< XSQLQueryComposer >  OConnection::createQueryComposer(void) throw( Ru
     checkDisposed();
 
     //  Reference< XNumberFormatsSupplier >  xSupplier = pParent->getNumberFormatsSupplier();
-    Reference< XSQLQueryComposer >  xComposer(new OQueryComposer(getTables(),this, m_xORB));
+    Reference< XSQLQueryComposer >  xComposer( new OQueryComposer( this ) );
     m_aComposers.push_back(WeakReferenceHelper(xComposer));
     return xComposer;
 }
@@ -668,10 +688,11 @@ Reference< XPreparedStatement >  SAL_CALL OConnection::prepareCommand( const ::r
     {
         case CommandType::TABLE:
             {
-                sal_Bool bUseCatalogInSelect = ::dbtools::isDataSourcePropertyEnabled(*this,PROPERTY_USECATALOGINSELECT,sal_True);
-                sal_Bool bUseSchemaInSelect = ::dbtools::isDataSourcePropertyEnabled(*this,PROPERTY_USESCHEMAINSELECT,sal_True);
                 aStatement = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT * FROM "));
-                aStatement += ::dbtools::quoteTableName(getMetaData(), command,::dbtools::eInDataManipulation,bUseCatalogInSelect,bUseSchemaInSelect);
+
+                ::rtl::OUString sCatalog, sSchema, sTable;
+                ::dbtools::qualifiedNameComponents( getMetaData(), command, sCatalog, sSchema, sTable, ::dbtools::eInDataManipulation );
+                aStatement += ::dbtools::composeTableNameForSelect( this, sCatalog, sSchema, sTable );
             }
             break;
         case CommandType::QUERY:
@@ -695,7 +716,7 @@ Reference< XInterface > SAL_CALL OConnection::createInstance( const ::rtl::OUStr
         || ( _sServiceSpecifier.equalsAscii( "com.sun.star.sdb.SingleSelectQueryAnalyzer" ) )
         )
     {
-        xRet = new OSingleSelectQueryComposer(getTables(),this, m_xORB);
+        xRet = new OSingleSelectQueryComposer( getTables(),this, m_aContext.getLegacyServiceFactory() );
         m_aComposers.push_back(WeakReferenceHelper(xRet));
     }
     return Reference< XInterface >(xRet,UNO_QUERY);
@@ -722,7 +743,7 @@ Reference< XTablesSupplier > OConnection::getMasterTables()
         {
             Reference<XDatabaseMetaData> xMeta = getMetaData();
             if ( xMeta.is() )
-                m_xMasterTables = ::dbtools::getDataDefinitionByURLAndConnection(xMeta->getURL(),m_xMasterConnection,m_xORB);
+                m_xMasterTables = ::dbtools::getDataDefinitionByURLAndConnection( xMeta->getURL(), m_xMasterConnection, m_aContext.getLegacyServiceFactory() );
         }
         catch(SQLException&)
         {
@@ -749,6 +770,83 @@ Reference< XNameAccess > SAL_CALL OConnection::getGroups(  ) throw(RuntimeExcept
     Reference<XGroupsSupplier> xGrp(getMasterTables(),UNO_QUERY);
     return xGrp.is() ? xGrp->getGroups() : Reference< XNameAccess >();
 }
+
+// -----------------------------------------------------------------------------
+void OConnection::impl_loadConnectionTools_throw()
+{
+    Sequence< Any > aArguments( 1 );
+    aArguments[0] <<= NamedValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Connection" ) ), makeAny( Reference< XConnection >( this ) ) );
+
+    if ( !m_aContext.createComponentWithArguments( "com.sun.star.sdb.tools.ConnectionTools", aArguments, m_xConnectionTools ) )
+        throw RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "service not registered: com.sun.star.sdb.tools.ConnectionTools" ) ), *this );
+}
+
+// -----------------------------------------------------------------------------
+Reference< tools::XTableName > SAL_CALL OConnection::createTableName(  ) throw (RuntimeException)
+{
+    MutexGuard aGuard(m_aMutex);
+    checkDisposed();
+    impl_loadConnectionTools_throw();
+
+    return m_xConnectionTools->createTableName();
+}
+
+// -----------------------------------------------------------------------------
+Reference< tools::XObjectNames > SAL_CALL OConnection::getObjectNames(  ) throw (RuntimeException)
+{
+    MutexGuard aGuard(m_aMutex);
+    checkDisposed();
+    impl_loadConnectionTools_throw();
+
+    return m_xConnectionTools->getObjectNames();
+}
+
+// -----------------------------------------------------------------------------
+Reference< tools::XDataSourceMetaData > SAL_CALL OConnection::getDataSourceMetaData(  ) throw (RuntimeException)
+{
+    MutexGuard aGuard(m_aMutex);
+    checkDisposed();
+    impl_loadConnectionTools_throw();
+
+    return m_xConnectionTools->getDataSourceMetaData();
+}
+
+
+// -----------------------------------------------------------------------------
+void OConnection::impl_checkTableQueryNames_nothrow()
+{
+    DatabaseMetaData aMeta( static_cast< XConnection* >( this ) );
+    if ( !aMeta.supportsSubqueriesInFrom() )
+        // nothing to do
+        return;
+
+    try
+    {
+        Reference< XNameAccess > xTables( getTables() );
+        Sequence< ::rtl::OUString > aTableNames( xTables->getElementNames() );
+        ::std::set< ::rtl::OUString > aSortedTableNames( aTableNames.getConstArray(), aTableNames.getConstArray() + aTableNames.getLength() );
+
+        Reference< XNameAccess > xQueries( getQueries() );
+        Sequence< ::rtl::OUString > aQueryNames( xQueries->getElementNames() );
+
+        for (   const ::rtl::OUString* pQueryName = aQueryNames.getConstArray();
+                pQueryName != aQueryNames.getConstArray() + aQueryNames.getLength();
+                ++pQueryName
+            )
+        {
+            if ( aSortedTableNames.find( *pQueryName ) != aSortedTableNames.end() )
+            {
+                ::rtl::OUString sConflictWarning( DBACORE_RESSTRING( RID_STR_CONFLICTING_NAMES ) );
+                m_aWarnings.appendWarning( sConflictWarning, "01SB0", *this );
+            }
+        }
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+}
+
 //........................................................................
 }   // namespace dbaccess
 //........................................................................
