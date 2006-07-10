@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xiescher.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 12:08:04 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:59:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,8 +47,8 @@
 #ifndef SC_XLESCHER_HXX
 #include "xlescher.hxx"
 #endif
-#ifndef SC_XIHELPER_HXX
-#include "xihelper.hxx"
+#ifndef SC_XIROOT_HXX
+#include "xiroot.hxx"
 #endif
 
 namespace com { namespace sun { namespace star {
@@ -145,13 +145,13 @@ public:
     ScRange             GetUsedArea() const;
 
     /** Returns the needed size on the progress bar (calls virtual DoGetProgressSize() function). */
-    sal_uInt32          GetProgressSize() const;
+    sal_Size            GetProgressSize() const;
     /** Additional processing for the passed SdrObject (calls virtual DoProcessSdrObj() function). */
     void                ProcessSdrObject( SdrObject& rSdrObj ) const;
 
 protected:
     /** Derived classes may return a progress bar size different from 1. */
-    virtual sal_uInt32  DoGetProgressSize() const;
+    virtual sal_Size    DoGetProgressSize() const;
     /** Derived classes may perform additional processing for the passed SdrObject. */
     virtual void        DoProcessSdrObj( SdrObject& rSdrObj ) const;
 
@@ -366,7 +366,7 @@ public:
 
 protected:
     /** Returns the needed size on the progress bar. */
-    virtual sal_uInt32  DoGetProgressSize() const;
+    virtual sal_Size    DoGetProgressSize() const;
 
 private:
     /** Calculates the anchor position of a sheet chart. */
@@ -438,7 +438,7 @@ public:
     virtual             ~XclImpDffManager();
 
     /** Initializes the internal progress bar with the passed size and starts it. */
-    void                StartProgressBar( sal_uInt32 nProgressSize );
+    void                StartProgressBar( sal_Size nProgressSize );
     /** Processes the leading drawing group container in the Escher stream. */
     void                ProcessDrawingGroup( SvStream& rEscherStrm );
     /** Processes a drawing container for a sheet in the Escher stream, converts all objects. */
@@ -568,7 +568,7 @@ private:
     void                ReadTxo( XclImpStream& rStrm );
 
     /** Returns the size of the progress bar shown while processing all objects. */
-    sal_uInt32          GetProgressSize() const;
+    sal_Size            GetProgressSize() const;
 
     // ------------------------------------------------------------------------
 private:
