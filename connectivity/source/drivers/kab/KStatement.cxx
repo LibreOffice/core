@@ -4,9 +4,9 @@
  *
  *  $RCSfile: KStatement.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-06 14:21:13 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:29:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,7 @@ KabCommonStatement::KabCommonStatement(KabConnection* _pConnection )
     : KabCommonStatement_BASE(m_aMutex),
     OPropertySetHelper(KabCommonStatement_BASE::rBHelper),
     m_aParser(_pConnection->getDriver()->getMSFactory()),
-    m_aSQLIterator(_pConnection->createCatalog()->getTables(), _pConnection->getMetaData(), NULL),
+    m_aSQLIterator(_pConnection, _pConnection->createCatalog()->getTables(), m_aParser, NULL ),
     m_pParseTree(NULL),
     m_pConnection(_pConnection),
     rBHelper(KabCommonStatement_BASE::rBHelper)
