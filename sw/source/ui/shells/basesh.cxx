@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 17:24:20 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:58:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1988,6 +1988,10 @@ void SwBaseShell::SetWrapMode( USHORT nSlot )
                 break;
             case FN_WRAP_ANCHOR_ONLY:
                 aWrap.SetAnchorOnly(!aWrap.IsAnchorOnly());
+                // --> OD 2006-06-02 #b6432130#
+                // keep previous wrapping
+                nSurround = nOldSurround;
+                // <--
                 break;
             case FN_FRAME_WRAP_CONTOUR:
                 aWrap.SetContour(!aWrap.IsContour());
