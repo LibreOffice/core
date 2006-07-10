@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AGroups.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:13:45 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:23:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,9 @@
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include <connectivity/dbexception.hxx>
+#endif
 
 using namespace comphelper;
 using namespace connectivity;
@@ -79,17 +82,23 @@ void OGroups::impl_refresh() throw(RuntimeException)
     m_aCollection.Refresh();
 }
 // -------------------------------------------------------------------------
-Reference< XPropertySet > OGroups::createEmptyObject()
+Reference< XPropertySet > OGroups::createDescriptor()
 {
     return new OAdoGroup(m_pCatalog,isCaseSensitive());
 }
 // -------------------------------------------------------------------------
 // XAppend
-void OGroups::appendObject( const Reference< XPropertySet >& descriptor )
+sdbcx::ObjectType OGroups::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     OAdoGroup* pGroup = NULL;
-    if(getImplementation(pGroup,descriptor) && pGroup != NULL)
-        m_aCollection.Append(pGroup->getImpl());
+    if ( !getImplementation(pGroup,descriptor) || pGroup == NULL )
+        ::dbtools::throwGenericSQLException(
+            ::rtl::OUString::createFromAscii( "Could not create group: invalid object descriptor." ),
+            static_cast<XTypeProvider*>(this)
+        );
+
+    m_aCollection.Append( pGroup->getImpl() );
+    return createObject( _rForName );
 }
 // -------------------------------------------------------------------------
 // XDrop
