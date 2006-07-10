@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JoinDesignView.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:25:36 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:40:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,6 @@
 #endif
 //  #include <com/sun/star/util/URL.hdl>
 
-using namespace ::dbaui;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::i18n;
@@ -105,31 +104,28 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::util;
-DBG_NAME(OJoinDesignView)
 
+namespace dbaui
+{
+
+// =============================================================================
+// = OJoinDesignView
+// =============================================================================
+// -----------------------------------------------------------------------------
 OJoinDesignView::OJoinDesignView(Window* _pParent, OJoinController* _pController,const Reference< XMultiServiceFactory >& _rFactory)
     :ODataView(_pParent,_pController,_rFactory)
     ,m_pTableView(NULL)
-    ,m_pAddTabDlg(NULL)
     ,m_pController(_pController)
 {
-    DBG_CTOR(OJoinDesignView,NULL);
-
     m_pScrollWindow = new OScrollWindowHelper(this);
 }
 // -----------------------------------------------------------------------------
 OJoinDesignView::~OJoinDesignView()
 {
-    if ( m_pController )
-        m_pController->clearAddTableDialog();
     ::std::auto_ptr<Window> aT3(m_pScrollWindow);
     m_pScrollWindow = NULL;
     ::std::auto_ptr<Window> aT2(m_pTableView);
     m_pTableView = NULL;
-    ::std::auto_ptr<Window> aT1(m_pAddTabDlg);
-    m_pAddTabDlg = NULL;
-
-    DBG_DTOR(OJoinDesignView,NULL);
 }
 // -------------------------------------------------------------------------
 void OJoinDesignView::Construct()
@@ -138,7 +134,6 @@ void OJoinDesignView::Construct()
     m_pScrollWindow->Show();
     m_pTableView->Show();
 
-    m_pAddTabDlg = new OAddTableDlg(m_pScrollWindow,m_pTableView);
     SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetFaceColor()) );
 
     ODataView::Construct();
@@ -191,3 +186,6 @@ void OJoinDesignView::KeyInput( const KeyEvent& rEvt )
         ODataView::KeyInput(rEvt);
 }
 // -----------------------------------------------------------------------------
+
+}   // namespace dbaui
+
