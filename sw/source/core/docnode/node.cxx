@@ -4,9 +4,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 14:22:22 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:27:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -258,7 +258,6 @@ long SwNode::nSerial = 0;
 SwNode::SwNode( const SwNodeIndex &rWhere, const BYTE nNdType )
     : pStartOfSection( 0 ), nNodeType( nNdType )
 {
-    bWrongDirty = bACmplWrdDirty = TRUE;
     bSetNumLSpace = bIgnoreDontExpand = FALSE;
     nAFmtNumLvl = 0;
 
@@ -293,7 +292,6 @@ SwNode::SwNode( const SwNodeIndex &rWhere, const BYTE nNdType )
 SwNode::SwNode( SwNodes& rNodes, ULONG nPos, const BYTE nNdType )
     : pStartOfSection( 0 ), nNodeType( nNdType )
 {
-    bWrongDirty = bACmplWrdDirty = TRUE;
     bSetNumLSpace = bIgnoreDontExpand = FALSE;
     nAFmtNumLvl = 0;
 
@@ -1433,8 +1431,9 @@ void SwCntntNode::DelFrms()
     if( IsTxtNode() )
     {
         ((SwTxtNode*)this)->SetWrong( NULL );
-        SetWrongDirty( TRUE );
-        SetAutoCompleteWordDirty( TRUE );
+        ((SwTxtNode*)this)->SetWrongDirty( true );
+        ((SwTxtNode*)this)->SetWordCountDirty( true );
+        ((SwTxtNode*)this)->SetAutoCompleteWordDirty( true );
     }
 }
 
