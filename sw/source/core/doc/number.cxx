@@ -4,9 +4,9 @@
  *
  *  $RCSfile: number.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 15:32:58 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:57:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -756,7 +756,10 @@ String SwNumRule::MakeNumString( const SwNodeNum::tNumberVector & rNumVector,
     if (nLevel >= 0 && nLevel < MAXLEVEL)
     {
         const SwNumFmt& rMyNFmt = Get( nLevel );
-        if( SVX_NUM_NUMBER_NONE != rMyNFmt.GetNumberingType() )
+        // --> OD 2006-06-02 #b6432095#
+        // - levels with numbering none has to provide prefix and suffix string
+//        if( SVX_NUM_NUMBER_NONE != rMyNFmt.GetNumberingType() )
+        // <--
         {
             BYTE i = nLevel;
 
