@@ -4,9 +4,9 @@
  *
  *  $RCSfile: servobj.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:50:13 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:07:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@ BOOL lcl_FillRangeFromName( ScRange& rRange, ScDocShell* pDocSh, const String& r
             if( pNames->SearchName( rName, nPos ) )
             {
                 ScRangeData* pData = (*pNames)[ nPos ];
-                if ( pData->IsReference( rRange ) )
+                if ( pData->IsValidReference( rRange ) )
                     return TRUE;
             }
         }
