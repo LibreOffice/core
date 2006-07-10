@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DIndexes.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:20:35 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:25:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,9 @@
 #ifndef _CONNECTIVITY_DBASE_INDEX_HXX_
 #include "dbase/DIndex.hxx"
 #endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include <connectivity/dbexception.hxx>
+#endif
 #ifndef _UNOTOOLS_UCBHELPER_HXX
 #include <unotools/ucbhelper.hxx>
 #endif
@@ -51,8 +54,9 @@
 using namespace ::comphelper;
 
 using namespace utl;
-using namespace connectivity;
-using namespace connectivity::dbase;
+using namespace ::connectivity;
+using namespace ::dbtools;
+using namespace ::connectivity::dbase;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbcx;
@@ -72,7 +76,10 @@ sdbcx::ObjectType ODbaseIndexes::createObject(const ::rtl::OUString& _rName)
     sFile += _rName;
     sFile += ::rtl::OUString::createFromAscii(".ndx");
     if(!UCBContentHelper::Exists(sFile))
-        throw SQLException(::rtl::OUString::createFromAscii("Index file doesn't exists!"),*m_pTable,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
+        ::dbtools::throwGenericSQLException(
+            ::rtl::OUString::createFromAscii( "Index file doesn't exists." ),
+            // TODO: resource
+            *m_pTable );
 
     sdbcx::ObjectType xRet;
     SvStream* pFileStream = ::connectivity::file::OFileTable::createStream_simpleError(sFile,STREAM_READ | STREAM_NOCREATE| STREAM_SHARE_DENYWRITE);
@@ -91,7 +98,10 @@ sdbcx::ObjectType ODbaseIndexes::createObject(const ::rtl::OUString& _rName)
         pIndex->openIndexFile();
     }
     else
-        throw SQLException(::rtl::OUString::createFromAscii("Could not open index file"),*m_pTable,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
+        ::dbtools::throwGenericSQLException(
+            ::rtl::OUString::createFromAscii( "Could not open index file."),
+            // TODO: resource
+            *m_pTable );
     return xRet;
 }
 // -------------------------------------------------------------------------
@@ -101,14 +111,14 @@ void ODbaseIndexes::impl_refresh(  ) throw(RuntimeException)
         m_pTable->refreshIndexes();
 }
 // -------------------------------------------------------------------------
-Reference< XPropertySet > ODbaseIndexes::createEmptyObject()
+Reference< XPropertySet > ODbaseIndexes::createDescriptor()
 {
     return new ODbaseIndex(m_pTable);
 }
 typedef connectivity::sdbcx::OCollection ODbaseTables_BASE_BASE;
 // -------------------------------------------------------------------------
 // XAppend
-void ODbaseIndexes::appendObject( const Reference< XPropertySet >& descriptor )
+sdbcx::ObjectType ODbaseIndexes::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     Reference<XUnoTunnel> xTunnel(descriptor,UNO_QUERY);
     if(xTunnel.is())
@@ -117,6 +127,8 @@ void ODbaseIndexes::appendObject( const Reference< XPropertySet >& descriptor )
         if(!pIndex || !pIndex->CreateImpl())
             throw SQLException();
     }
+
+    return createObject( _rForName );
 }
 // -------------------------------------------------------------------------
 // XDrop
