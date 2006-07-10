@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsh1.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 15:11:29 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:09:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1232,6 +1232,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard( pWin );
                 if ( pOwnClip )
                 {
+                    // #129384# keep a reference in case the clipboard is changed during dialog or PasteFromClip
+                    uno::Reference<datatransfer::XTransferable> aOwnClipRef( pOwnClip );
                     if ( pReqArgs!=NULL && pTabViewShell->SelectionEditable() )
                     {
                         const   SfxPoolItem* pItem;
