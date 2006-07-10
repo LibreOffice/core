@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xehelper.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:28:33 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:55:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,7 +90,7 @@ private:
     ScfProgressBar*     mpSubRowFinal;      /// Sub progress bar for finalizing ROW records.
     sal_Int32           mnSegRowFinal;      /// Progress segment for finalizing ROW records.
 
-    sal_uInt32          mnRowCount;         /// Number of created ROW records.
+    sal_Size            mnRowCount;         /// Number of created ROW records.
 };
 
 // Calc->Excel cell address/range conversion ==================================
@@ -355,8 +355,9 @@ public:
                             XclStrFlags nFlags = EXC_STR_DEFAULT,
                             sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
 
-    /** Returns the script type of the first character of the passed string. */
-    static sal_Int16    GetScriptType( const XclExpRoot& rRoot, const String& rString );
+    /** Returns the script type first text portion different to WEAK, or the system
+        default script type, if there is only weak script in the passed string. */
+    static sal_Int16    GetLeadingScriptType( const XclExpRoot& rRoot, const String& rString );
 };
 
 // Header/footer conversion ===================================================
@@ -507,7 +508,7 @@ public:
                             XclStrFlags nFlags = EXC_STR_DEFAULT );
 
     /** Returns the byte count of all contained data. */
-    sal_uInt32          GetSize() const;
+    sal_Size            GetSize() const;
     /** Writes the complete matrix to stream. */
     void                Save( XclExpStream& rStrm ) const;
 
