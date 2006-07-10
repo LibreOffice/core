@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xerecord.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:01:47 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:33:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,15 +47,15 @@ void XclExpRecordBase::Save( XclExpStream& rStrm )
 {
 }
 
-void XclExpRecordBase::SaveRepeated( XclExpStream& rStrm, sal_uInt32 nCount )
+void XclExpRecordBase::SaveRepeated( XclExpStream& rStrm, size_t nCount )
 {
-    for( sal_uInt32 nIndex = 0; nIndex < nCount; ++nIndex )
+    for( size_t nIndex = 0; nIndex < nCount; ++nIndex )
         Save( rStrm );
 }
 
 // ----------------------------------------------------------------------------
 
-XclExpRecord::XclExpRecord( sal_uInt16 nRecId, sal_uInt32 nRecSize ) :
+XclExpRecord::XclExpRecord( sal_uInt16 nRecId, sal_Size nRecSize ) :
     mnRecId( nRecId ),
     mnRecSize( nRecSize )
 {
@@ -65,7 +65,7 @@ XclExpRecord::~XclExpRecord()
 {
 }
 
-void XclExpRecord::SetRecHeader( sal_uInt16 nRecId, sal_uInt32 nRecSize )
+void XclExpRecord::SetRecHeader( sal_uInt16 nRecId, sal_Size nRecSize )
 {
     SetRecId( nRecId );
     SetRecSize( nRecSize );
@@ -92,13 +92,13 @@ void XclExpBoolRecord::WriteBody( XclExpStream& rStrm )
 
 // ----------------------------------------------------------------------------
 
-XclExpDummyRecord::XclExpDummyRecord( sal_uInt16 nRecId, const void* pRecData, sal_uInt32 nRecSize ) :
+XclExpDummyRecord::XclExpDummyRecord( sal_uInt16 nRecId, const void* pRecData, sal_Size nRecSize ) :
     XclExpRecord( nRecId )
 {
     SetData( pRecData, nRecSize );
 }
 
-void XclExpDummyRecord::SetData( const void* pRecData, sal_uInt32 nRecSize )
+void XclExpDummyRecord::SetData( const void* pRecData, sal_Size nRecSize )
 {
     mpData = pRecData;
     SetRecSize( pRecData ? nRecSize : 0 );
