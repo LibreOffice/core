@@ -4,9 +4,9 @@
  *
  *  $RCSfile: commanddefinition.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 10:53:07 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:09:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,7 @@ namespace dbaccess
     {
     public:
     };
+
 typedef ::cppu::ImplHelper1 <   ::com::sun::star::sdbcx::XRename
                                 >   OCommandDefinition_Base;
 class OCommandDefinition;
@@ -105,6 +106,10 @@ protected:
         ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&   _xParentContainer
         ,const TContentPtr& _pImpl
         );
+
+    inline const OCommandDefinition_Impl& getCommandDefinition() const { return dynamic_cast< const OCommandDefinition_Impl& >( *m_pImpl.get() ); }
+    inline       OCommandDefinition_Impl& getCommandDefinition()       { return dynamic_cast<       OCommandDefinition_Impl& >( *m_pImpl.get() ); }
+
 public:
 
     OCommandDefinition(
