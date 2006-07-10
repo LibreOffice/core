@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xecontent.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:27:36 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:53:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -251,7 +251,6 @@ private:
 // Data Validation ============================================================
 
 class ScValidationData;
-class XclExpTokenArray;
 
 /** Provides export of the data of a DV record.
     @descr  This record contains the settings for a data validation. In detail
@@ -284,8 +283,8 @@ private:
     XclExpString        maErrorTitle;   /// The error title.
     XclExpString        maErrorText;    /// The error text.
     XclExpStringRef     mxString1;      /// String for first condition formula.
-    XclExpTokenArrayRef mxTokArr1;      /// Formula for first condition.
-    XclExpTokenArrayRef mxTokArr2;      /// Formula for second condition.
+    XclTokenArrayRef    mxTokArr1;      /// Formula for first condition.
+    XclTokenArrayRef    mxTokArr2;      /// Formula for second condition.
     sal_uInt32          mnFlags;        /// Miscellaneous flags.
     ULONG               mnScHandle;     /// The core handle for quick list search.
 };
