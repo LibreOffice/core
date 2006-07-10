@@ -4,9 +4,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:58:07 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:23:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -237,7 +237,7 @@ Reference< XWindow > OGenericUnoController::getComponentWindow() const
     return VCLUnoHelper::GetInterface( getView() );
 }
 // -----------------------------------------------------------------------------
-void OGenericUnoController::impl_initialize(const Sequence< Any >& /*aArguments*/)
+void OGenericUnoController::impl_initialize()
 {
 }
 // -------------------------------------------------------------------------
@@ -283,6 +283,7 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
                 throw Exception(::rtl::OUString::createFromAscii("Parent window is null"),*this);
             }
 
+            m_aInitParameters.assign( aArguments );
             Construct( pParentWin );
             if ( !getView() )
                 throw Exception(::rtl::OUString::createFromAscii("Window is null"),*this);
@@ -294,7 +295,8 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
         ODataView* pView = getView();
         if ( (m_bReadOnly || m_bPreview) && pView )
             pView->EnableInput(FALSE);
-        impl_initialize(aArguments);
+
+        impl_initialize();
     }
     catch(Exception& e)
     {
@@ -430,48 +432,53 @@ struct CommandCollector : public ::std::unary_function< SupportedFeatures::value
 };
 
 // -----------------------------------------------------------------------
+namespace
+{
+    typedef ::std::vector< Any >    States;
+
+    // ...................................................................
+    void    lcl_notifyMultipleStates( XStatusListener& _rListener, FeatureStateEvent& _rEvent, const States& _rStates )
+    {
+        for (   States::const_iterator state = _rStates.begin();
+                state != _rStates.end();
+                ++state
+            )
+        {
+            _rEvent.State = *state;
+            _rListener.statusChanged( _rEvent );
+        }
+    }
+
+    // ...................................................................
+    void    lcl_collectStates( const FeatureState& _rFeatureState, States& _out_rStates )
+    {
+        if ( !!_rFeatureState.bChecked )
+            _out_rStates.push_back( makeAny( (sal_Bool)*_rFeatureState.bChecked ) );
+        if ( !!_rFeatureState.sTitle )
+            _out_rStates.push_back( makeAny( *_rFeatureState.sTitle ) );
+        if ( _out_rStates.empty() )
+            _out_rStates.push_back( Any() );
+    }
+}
+
+// -----------------------------------------------------------------------
 void OGenericUnoController::ImplBroadcastFeatureState(const ::rtl::OUString& _rFeature, const Reference< XStatusListener > & xListener, sal_Bool _bIgnoreCache)
 {
     sal_uInt16 nFeat = m_aSupportedFeatures[ _rFeature ].nFeatureId;
     FeatureState aFeatState( GetState( nFeat ) );
 
     FeatureState& rCachedState = m_aStateCache[nFeat];  // creates if neccessary
-
-    if(!_bIgnoreCache)
+    if ( !_bIgnoreCache )
     {
         // check if we really need to notify the listeners : this method may be called much more often than needed, so check
         // the cached state of the feature
-        sal_Bool bAlreadyCached = (m_aStateCache.find(nFeat) != m_aStateCache.end());
-        if (bAlreadyCached && (rCachedState.bEnabled == aFeatState.bEnabled))
-        {   // the enabled flag hasn't changed, maybe the state ?
-            if (rCachedState.aState.getValueTypeClass() == aFeatState.aState.getValueTypeClass())
-            {   // at least the type of the state hasn't
-                sal_Bool bEqualValue = sal_False;
-                switch (rCachedState.aState.getValueTypeClass())
-                {
-                    case TypeClass_VOID:
-                        bEqualValue = !aFeatState.aState.hasValue();
-                        break;
-                    case TypeClass_BOOLEAN:
-                        bEqualValue = ::comphelper::getBOOL(rCachedState.aState) == ::comphelper::getBOOL(aFeatState.aState);
-                        break;
-                    case TypeClass_SHORT:
-                        bEqualValue = ::comphelper::getINT16(rCachedState.aState) == ::comphelper::getINT16(aFeatState.aState);
-                        break;
-                    case TypeClass_LONG:
-                        bEqualValue = ::comphelper::getINT32(rCachedState.aState) == ::comphelper::getINT32(aFeatState.aState);
-                        break;
-                    case TypeClass_STRING:
-                        bEqualValue = ::comphelper::getString(rCachedState.aState).equals(::comphelper::getString(aFeatState.aState));
-                        break;
-                    default:
-                        DBG_ERROR("OGenericUnoController::ImplBroadcastFeatureState : unknown state type (not implemented yet) !");
-                        break;
-                }
-                if (bEqualValue)
-                    return;
-            }
-        }
+        sal_Bool bAlreadyCached = ( m_aStateCache.find(nFeat) != m_aStateCache.end() );
+        if ( bAlreadyCached )
+            if  (   ( rCachedState.bEnabled == aFeatState.bEnabled )
+                &&  ( rCachedState.bChecked == aFeatState.bChecked )
+                &&  ( rCachedState.sTitle == aFeatState.sTitle )
+                )
+            return;
     }
     rCachedState = aFeatState;
 
@@ -481,12 +488,14 @@ void OGenericUnoController::ImplBroadcastFeatureState(const ::rtl::OUString& _rF
         m_xUrlTransformer->parseStrict(aEvent.FeatureURL);
     aEvent.Source       = (XDispatch*)this;
     aEvent.IsEnabled    = aFeatState.bEnabled;
-    aEvent.Requery      = aFeatState.bRequery;
-    aEvent.State        = aFeatState.aState;
+
+    // collect all states to be notified
+    States aStates;
+    lcl_collectStates( aFeatState, aStates );
 
     // a special listener ?
-    if (xListener.is())
-        xListener->statusChanged(aEvent);
+    if ( xListener.is() )
+        lcl_notifyMultipleStates( *xListener.get(), aEvent, aStates );
     else
     {   // no -> iterate through all listeners responsible for the URL
         StringBag aFeatureCommands;
@@ -509,10 +518,8 @@ void OGenericUnoController::ImplBroadcastFeatureState(const ::rtl::OUString& _rF
             DispatchTarget& rCurrent = *iterSearch;
             if ( aFeatureCommands.find( rCurrent.aURL.Complete ) != aFeatureCommands.end() )
             {
-                aEvent.FeatureURL.Complete = rCurrent.aURL.Complete;
-                if (m_xUrlTransformer.is())
-                    m_xUrlTransformer->parseStrict(aEvent.FeatureURL);
-                rCurrent.xListener->statusChanged(aEvent);
+                aEvent.FeatureURL = rCurrent.aURL;
+                lcl_notifyMultipleStates( *rCurrent.xListener.get(), aEvent, aStates );
             }
             ++iterSearch;
         }
@@ -730,10 +737,16 @@ void OGenericUnoController::dispatch(const URL& _aURL, const Sequence< PropertyV
 // -----------------------------------------------------------------------
 void OGenericUnoController::addStatusListener(const Reference< XStatusListener > & aListener, const URL& _rURL) throw(RuntimeException)
 {
+    // parse the ULR now and here, this saves later parsing in each notification round
+    URL aParsedURL( _rURL );
+    if ( m_xUrlTransformer.is() )
+        m_xUrlTransformer->parseStrict( aParsedURL );
+
     // remeber the listener together with the URL
-    m_arrStatusListener.insert(m_arrStatusListener.end(), DispatchTarget(_rURL, aListener));
+    m_arrStatusListener.insert( m_arrStatusListener.end(), DispatchTarget( aParsedURL, aListener ) );
+
     // initially broadcast the state
-    ImplBroadcastFeatureState(_rURL.Complete, aListener, sal_True);
+    ImplBroadcastFeatureState( aParsedURL.Complete, aListener, sal_True );
         // force the new state to be broadcasted to the new listener
 }
 
