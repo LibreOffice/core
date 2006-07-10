@@ -4,9 +4,9 @@
  *
  *  $RCSfile: listcombowizard.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:31:26 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:53:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -207,10 +207,11 @@ namespace dbp
                 ::rtl::OUString sQuoteString = xMetaData->getIdentifierQuoteString();
                 if (isListBox()) // only when we have a listbox this should be not empty
                     getSettings().sLinkedListField = quoteName(sQuoteString, getSettings().sLinkedListField);
-                sal_Bool bUseCatalogInSelect = isDataSourcePropertyEnabled(xConn,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseCatalogInSelect")),sal_True);
-                sal_Bool bUseSchemaInSelect = isDataSourcePropertyEnabled(xConn,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseSchemaInSelect")),sal_True);
 
-                getSettings().sListContentTable = quoteTableName(xMetaData, getSettings().sListContentTable,::dbtools::eInDataManipulation,bUseCatalogInSelect,bUseSchemaInSelect);
+                ::rtl::OUString sCatalog, sSchema, sName;
+                ::dbtools::qualifiedNameComponents( xMetaData, getSettings().sListContentTable, sCatalog, sSchema, sName, ::dbtools::eInDataManipulation );
+                getSettings().sListContentTable = ::dbtools::composeTableNameForSelect( xConn, sCatalog, sSchema, sName );
+
                 getSettings().sListContentField = quoteName(sQuoteString, getSettings().sListContentField);
             }
 
