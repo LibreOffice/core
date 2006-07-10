@@ -4,9 +4,9 @@
  *
  *  $RCSfile: YTable.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:53:17 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:30:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -367,8 +367,8 @@ void OMySQLTable::dropDefaultValue(const ::rtl::OUString& _rColName)
     ::rtl::OUString sSql = ::rtl::OUString::createFromAscii("ALTER TABLE ");
     const ::rtl::OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
 
-    ::rtl::OUString sComposedName;
-    ::dbtools::composeTableName(getMetaData(),m_CatalogName,m_SchemaName,m_Name,sComposedName,sal_True,::dbtools::eInTableDefinitions);
+    ::rtl::OUString sComposedName(
+        ::dbtools::composeTableName( getMetaData(), m_CatalogName, m_SchemaName, m_Name, sal_True, ::dbtools::eInTableDefinitions ) );
     sSql += sComposedName;
 
     return sSql;
