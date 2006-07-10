@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLChangeTrackingImportHelper.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:50:15 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:06:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,7 +150,7 @@ struct ScMyBaseAction
     ScChangeActionState nActionState;
 
     ScMyBaseAction(const ScChangeActionType nActionType);
-    ~ScMyBaseAction();
+    virtual ~ScMyBaseAction();
 };
 
 struct ScMyInsAction : public ScMyBaseAction
