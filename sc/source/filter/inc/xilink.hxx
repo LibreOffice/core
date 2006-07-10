@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xilink.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:32:55 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:59:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,11 +41,9 @@
 #ifndef SC_XLLINK_HXX
 #include "xllink.hxx"
 #endif
-#ifndef SC_XIHELPER_HXX
-#include "xihelper.hxx"
+#ifndef SC_XIROOT_HXX
+#include "xiroot.hxx"
 #endif
-
-class ScTokenArray;
 
 /* ============================================================================
 Classes for import of different kinds of internal/external references.
@@ -118,6 +116,8 @@ enum XclImpExtNameType
 
 // ----------------------------------------------------------------------------
 
+class XclImpCachedMatrix;
+
 /** Stores contents of an external name.
     @descr Supported: External defined names, AddIn names, DDE links and OLE objects. */
 class XclImpExtName
@@ -125,6 +125,7 @@ class XclImpExtName
 public:
     /** Reads the external name from the stream. */
     explicit            XclImpExtName( XclImpStream& rStrm, bool bAddIn = false );
+                        ~XclImpExtName();
 
     /** Create and apply the cached list of this DDE Link to the document. */
     void                CreateDdeData( ScDocument& rDoc,
@@ -162,7 +163,7 @@ class XclImpLinkManagerImpl;
     and sheet indexes for each external reference used anywhere in the workbook.
     This record follows a list of SUPBOOK records (with their attached records).
 */
-class XclImpLinkManager
+class XclImpLinkManager : protected XclImpRoot
 {
 public:
     explicit            XclImpLinkManager( const XclImpRoot& rRoot );
