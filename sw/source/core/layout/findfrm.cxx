@@ -4,9 +4,9 @@
  *
  *  $RCSfile: findfrm.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-09 14:06:56 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:16:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1607,10 +1607,16 @@ const SwRowFrm* SwFrm::IsInSplitTableRow() const
     ASSERT( pRow->GetUpper()->IsTabFrm(), "Confusion in table layout" )
 
     const SwTabFrm* pTab = (SwTabFrm*)pRow->GetUpper();
+    // --> OD 2006-06-28 #b6443897#
+    // If most upper row frame is a headline row, the current frame
+    // can't be in a splitted table row. Thus, add corresponding condition.
     if ( pRow->GetNext() ||
-        !pTab->HasFollowFlowLine() ||
-        !pTab->GetFollow() )
+         pTab->GetTable()->IsHeadline(
+                    *(static_cast<const SwRowFrm*>(pRow)->GetTabLine()) ) ||
+         !pTab->HasFollowFlowLine() ||
+         !pTab->GetFollow() )
         return NULL;
+    // <--
 
     // skip headline
     const SwRowFrm* pFollowRow = pTab->GetFollow()->GetFirstNonHeadlineRow();
