@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ParseContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:51:02 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:56:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,8 +96,11 @@ OSystemParseContext::~OSystemParseContext()
         case ERROR_INVALID_DATE_COMPARE:    aMsg = SVX_RES(RID_STR_SVT_SQL_SYNTAX_ACCESS_DAT_NO_VALID); break;
         case ERROR_INVALID_REAL_COMPARE:    aMsg = SVX_RES(RID_STR_SVT_SQL_SYNTAX_REAL_NO_VALID); break;
         case ERROR_INVALID_TABLE:           aMsg = SVX_RES(RID_STR_SVT_SQL_SYNTAX_TABLE); break;
+        case ERROR_INVALID_TABLE_OR_QUERY:  aMsg = SVX_RES(RID_STR_SVT_SQL_SYNTAX_TABLE_OR_QUERY); break;
         case ERROR_INVALID_COLUMN:          aMsg = SVX_RES(RID_STR_SVT_SQL_SYNTAX_COLUMN); break;
-        case ERROR_INVALID_TABLE_EXIST:     aMsg = SVX_RES(RID_STR_SVT_SQL_TABLE_EXISTS); break;
+        case ERROR_INVALID_TABLE_EXIST:     aMsg = SVX_RES(RID_STR_SVT_SQL_SYNTAX_TABLE_EXISTS); break;
+        case ERROR_INVALID_QUERY_EXIST:     aMsg = SVX_RES(RID_STR_SVT_SQL_SYNTAX_QUERY_EXISTS); break;
+        case ERROR_CYCLIC_SUB_QUERIES:      aMsg = SVX_RES(RID_STR_SVT_SQL_CYCLIC_SUB_QUERIES); break;
         case ERROR_NONE: break;
     }
     return aMsg;
