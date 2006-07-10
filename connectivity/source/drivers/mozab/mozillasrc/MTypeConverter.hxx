@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MTypeConverter.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:30:45 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:30:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,9 +37,7 @@
 #ifndef _CONNECTIVITY_MAB_TYPECONVERTER_HXX_
 #define _CONNECTIVITY_MAB_TYPECONVERTER_HXX_
 
-#ifndef _CONNECTIVITY_FILE_TYPECONVERTER_HXX_
-#include "file/FTable.hxx"
-#endif
+#include <rtl/ustring.hxx>
 
 #include<string>
 
