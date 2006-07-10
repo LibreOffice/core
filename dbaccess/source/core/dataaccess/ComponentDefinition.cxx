@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ComponentDefinition.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:42:33 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:07:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,9 +61,6 @@
 #ifndef _DBACORE_DEFINITIONCOLUMN_HXX_
 #include "definitioncolumn.hxx"
 #endif
-#ifndef DBA_COREDATAACCESS_CHILDHELPER_HXX
-#include "ChildHelper.hxx"
-#endif
 
 
 using namespace ::com::sun::star::uno;
@@ -93,20 +90,19 @@ DBG_NAME(OComponentDefinition)
 //--------------------------------------------------------------------------
 void OComponentDefinition::registerProperties()
 {
-    OComponentDefinition_Impl* pItem = static_cast<OComponentDefinition_Impl*>(m_pImpl.get());
-    OSL_ENSURE(pItem,"Illegal impl struct!");
-    ODataSettings::registerPropertiesFor(pItem);
+    OComponentDefinition_Impl& rDefinition( getDefinition() );
+    ODataSettings::registerPropertiesFor( &rDefinition );
 
     registerProperty(PROPERTY_NAME, PROPERTY_ID_NAME, PropertyAttribute::BOUND | PropertyAttribute::READONLY|PropertyAttribute::CONSTRAINED,
-                    &pItem->m_aProps.aTitle, ::getCppuType(&pItem->m_aProps.aTitle));
+                    &rDefinition.m_aProps.aTitle, ::getCppuType(&rDefinition.m_aProps.aTitle));
 
     if ( m_bTable )
     {
         registerProperty(PROPERTY_SCHEMANAME, PROPERTY_ID_SCHEMANAME, PropertyAttribute::BOUND,
-                        &pItem->m_sSchemaName, ::getCppuType(&pItem->m_sSchemaName));
+                        &rDefinition.m_sSchemaName, ::getCppuType(&rDefinition.m_sSchemaName));
 
         registerProperty(PROPERTY_CATALOGNAME, PROPERTY_ID_CATALOGNAME, PropertyAttribute::BOUND,
-                        &pItem->m_sCatalogName, ::getCppuType(&pItem->m_sCatalogName));
+                        &rDefinition.m_sCatalogName, ::getCppuType(&rDefinition.m_sCatalogName));
     }
 }
 
@@ -216,16 +212,16 @@ Reference< XNameAccess> OComponentDefinition::getColumns() throw (RuntimeExcepti
 
     if ( !m_pColumns.get() )
     {
-        OComponentDefinition_Impl* pItem = static_cast<OComponentDefinition_Impl*>(m_pImpl.get());
-        OSL_ENSURE(pItem,"Invalid impl data!");
         ::std::vector< ::rtl::OUString> aNames;
-        aNames.reserve(pItem->m_aColumnNames.size());
-        OComponentDefinition_Impl::TColumnsIndexAccess::iterator aIter = pItem->m_aColumns.begin();
-        OComponentDefinition_Impl::TColumnsIndexAccess::iterator aEnd = pItem->m_aColumns.end();
-        for (; aIter != aEnd; ++aIter)
-        {
-            aNames.push_back((*aIter)->first);
-        }
+
+        const OComponentDefinition_Impl& rDefinition( getDefinition() );
+        aNames.reserve( rDefinition.size() );
+
+        OComponentDefinition_Impl::const_iterator aIter = rDefinition.begin();
+        OComponentDefinition_Impl::const_iterator aEnd = rDefinition.end();
+        for ( ; aIter != aEnd; ++aIter )
+            aNames.push_back( aIter->first );
+
         m_pColumns.reset(new OColumns(*this, m_aMutex, sal_True, aNames, this,NULL,sal_True,sal_False,sal_False));
         m_pColumns->setParent(*this);
     }
@@ -234,15 +230,14 @@ Reference< XNameAccess> OComponentDefinition::getColumns() throw (RuntimeExcepti
 // -----------------------------------------------------------------------------
 OColumn* OComponentDefinition::createColumn(const ::rtl::OUString& _rName) const
 {
-    OComponentDefinition_Impl* pItem = static_cast<OComponentDefinition_Impl*>(m_pImpl.get());
-    OSL_ENSURE(pItem,"Invalid impl data!");
-    OComponentDefinition_Impl::TColumns::iterator aFind = pItem->m_aColumnNames.find(_rName);
-    if ( aFind != pItem->m_aColumnNames.end() )
-        return new OTableColumnWrapper(aFind->second,aFind->second,sal_True);
-    return new OTableColumn(_rName);
+    const OComponentDefinition_Impl& rDefinition( getDefinition() );
+    OComponentDefinition_Impl::const_iterator aFind = rDefinition.find( _rName );
+    if ( aFind != rDefinition.end() )
+        return new OTableColumnWrapper( aFind->second, aFind->second, sal_True );
+    return new OTableColumn( _rName );
 }
 // -----------------------------------------------------------------------------
-Reference< ::com::sun::star::beans::XPropertySet > OComponentDefinition::createEmptyObject()
+Reference< ::com::sun::star::beans::XPropertySet > OComponentDefinition::createColumnDescriptor()
 {
     return new OTableColumnDescriptor();
 }
@@ -255,38 +250,31 @@ void OComponentDefinition::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,co
 // -----------------------------------------------------------------------------
 void OComponentDefinition::columnDropped(const ::rtl::OUString& _sName)
 {
-    OComponentDefinition_Impl* pItem = static_cast<OComponentDefinition_Impl*>(m_pImpl.get());
-    OSL_ENSURE(pItem,"Invalid impl data!");
-    OComponentDefinition_Impl::TColumns::iterator aFind = pItem->m_aColumnNames.find(_sName);
-    if ( aFind != pItem->m_aColumnNames.end() )
-    {
-        pItem->m_aColumns.erase(::std::find(pItem->m_aColumns.begin(),pItem->m_aColumns.end(),aFind));
-        pItem->m_aColumnNames.erase(aFind);
-    }
+    getDefinition().erase( _sName );
     notifyDataSourceModified();
 }
 // -----------------------------------------------------------------------------
-void OComponentDefinition::columnCloned(const Reference< XPropertySet >& _xClone)
+void OComponentDefinition::columnAppended( const Reference< XPropertySet >& _rxSourceDescriptor )
 {
-    OSL_ENSURE(_xClone.is(),"Ivalid column!");
     ::rtl::OUString sName;
-    _xClone->getPropertyValue(PROPERTY_NAME) >>= sName;
-    OComponentDefinition_Impl* pItem = static_cast<OComponentDefinition_Impl*>(m_pImpl.get());
-    OSL_ENSURE(pItem,"Invalid impl data!");
-    Reference<XPropertySet> xProp = new OTableColumnDescriptor();
-    ::comphelper::copyProperties(_xClone,xProp);
-    pItem->m_aColumns.push_back(pItem->m_aColumnNames.insert(OComponentDefinition_Impl::TColumns::value_type(sName,xProp)).first);
+    _rxSourceDescriptor->getPropertyValue( PROPERTY_NAME ) >>= sName;
 
-    Reference<XChild> xChild(xProp,UNO_QUERY);
-    if ( xChild.is() )
-    {
-        Reference<XChild> xParent = new OChildHelper_Impl(static_cast<XChild*>(static_cast<TXChild*>((m_pColumns.get()))));
-        xChild->setParent(xParent);
-    }
+    Reference<XPropertySet> xColDesc = new OTableColumnDescriptor();
+    ::comphelper::copyProperties( _rxSourceDescriptor, xColDesc );
+    getDefinition().insert( sName, xColDesc );
 
-    // helptext etc. may be modified
+    // formerly, here was a setParent at the xColDesc. The parent used was an adapter (ChildHelper_Impl)
+    // which held another XChild weak, and forwarded all getParent requests to this other XChild.
+    // m_pColumns was used for this. This was nonsense, since m_pColumns dies when our instance dies,
+    // but xColDesc will live longer than this. So effectively, the setParent call was pretty useless.
+    //
+    // The intention for this parenting was that the column descriptor is able to find the data source,
+    // by traveling up the parent hierachy until there's an XDataSource. This didn't work (which
+    // for instance causes #i65023#). We need another way to properly ensure this.
+
     notifyDataSourceModified();
 }
+
 //........................................................................
 }   // namespace dbaccess
 //........................................................................
