@@ -4,9 +4,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:17:56 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 11:27:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,7 +94,7 @@
 #include "../customshapes/EnhancedCustomShapeGeometry.hxx"
 #endif
 #ifndef _ENHANCEDCUSTOMSHAPEFUNCTIONPARSER_HXX
-#include "../customshapes/EnhancedCustomShapeFunctionParser.hxx"
+#include <EnhancedCustomShapeFunctionParser.hxx>
 #endif
 #ifndef _ENHANCEDCUSTOMSHAPE2D_HXX
 #include "../customshapes/EnhancedCustomShape2d.hxx"
@@ -2082,18 +2082,18 @@ void ConvertEnhancedCustomShapeEquation( SdrObjCustomShape* pCustoShape,
                 EnhancedCustomShape2d aCustoShape2d( pCustoShape );
                 try
                 {
-                    ::boost::shared_ptr< ExpressionNode > aExpressNode(
-                        EnhancedCustomShapeFunctionParser::parseFunction( sEquationSource[ i ], aCustoShape2d ) );
+                    ::boost::shared_ptr< EnhancedCustomShape::ExpressionNode > aExpressNode(
+                        EnhancedCustomShape::FunctionParser::parseFunction( sEquationSource[ i ], aCustoShape2d ) );
                     com::sun::star::drawing::EnhancedCustomShapeParameter aPara( aExpressNode->fillNode( rEquations, NULL, 0 ) );
                     if ( aPara.Type != com::sun::star::drawing::EnhancedCustomShapeParameterType::EQUATION )
                     {
                         EnhancedCustomShapeEquation aEquation;
                         aEquation.nOperation = 0;
-                        FillEquationParameter( aPara, 0, aEquation );
+                        EnhancedCustomShape::FillEquationParameter( aPara, 0, aEquation );
                         rEquations.push_back( aEquation );
                     }
                 }
-                catch ( ParseError& )
+                catch ( EnhancedCustomShape::ParseError& )
                 {
                     EnhancedCustomShapeEquation aEquation;      // ups, we should not be here,
                     aEquation.nOperation = 0;                   // creating a default equation with value 1
