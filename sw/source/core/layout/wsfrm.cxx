@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: vg $ $Date: 2006-06-02 12:12:52 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:30:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -947,6 +947,7 @@ void SwCntntFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
     {
         pPage->InvalidateSpelling();
         pPage->InvalidateAutoCompleteWords();
+        pPage->InvalidateWordCount();
     }
 
     if ( GetNext() )
