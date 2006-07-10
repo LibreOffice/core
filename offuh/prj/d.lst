@@ -54,6 +54,7 @@ mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\reflection
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\registry
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\resource
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\sdb
+mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\sdb\tools
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\sdbc
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\sdbcx
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\scanner
@@ -219,6 +220,8 @@ mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\xml\wrapper
 ..\%__SRC%\inc\offuh\com\sun\star\resource\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\resource\*.hdl
 ..\%__SRC%\inc\offuh\com\sun\star\sdb\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\sdb\*.hdl
 ..\%__SRC%\inc\offuh\com\sun\star\sdb\*.hpp %_DEST%\inc%_EXT%\offuh\com\sun\star\sdb\*.hpp
+..\%__SRC%\inc\offuh\com\sun\star\sdb\tools\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\sdb\tools\*.hdl
+..\%__SRC%\inc\offuh\com\sun\star\sdb\tools\*.hpp %_DEST%\inc%_EXT%\offuh\com\sun\star\sdb\tools\*.hpp
 ..\%__SRC%\inc\offuh\com\sun\star\sdbc\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\sdbc\*.hdl
 ..\%__SRC%\inc\offuh\com\sun\star\sdbc\*.hpp %_DEST%\inc%_EXT%\offuh\com\sun\star\sdbc\*.hpp
 ..\%__SRC%\inc\offuh\com\sun\star\sdbcx\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\sdbcx\*.hdl
