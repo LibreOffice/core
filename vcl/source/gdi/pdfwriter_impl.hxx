@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter_impl.hxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:30:07 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 17:26:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -389,6 +389,8 @@ public:
         sal_Int32                   m_nTabOrder; // lowest number gets first in tab order
         sal_Int32                   m_nRadioGroup;
         sal_Int32                   m_nMaxLen;
+        bool                        m_bSubmit;
+        sal_Int32                   m_nDest;
         std::list<rtl::OUString>    m_aListEntries;
         PDFAppearanceMap            m_aAppearances;
         PDFWidget()
@@ -397,7 +399,9 @@ public:
                   m_nFlags( 0 ),
                   m_nParent( 0 ),
                   m_nRadioGroup( -1 ),
-                  m_nMaxLen( 0 )
+                  m_nMaxLen( 0 ),
+                  m_bSubmit( false ),
+                  m_nDest( -1 )
         {}
     };
 
@@ -479,7 +483,6 @@ private:
     OutputDevice*                       m_pReferenceDevice;
 
     MapMode                             m_aMapMode; // PDFWriterImpl scaled units
-    MapMode                             m_aFineMapMode;
     std::vector< PDFPage >              m_aPages;
     PDFDocInfo                          m_aDocInfo;
     /* maps object numbers to file offsets (needed for xref) */
