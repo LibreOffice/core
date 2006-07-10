@@ -4,9 +4,9 @@
  *
  *  $RCSfile: definitioncolumn.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:39:16 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:05:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -769,6 +769,7 @@ void OTableColumnDescriptorWrapper::setFastPropertyValue_NoBroadcast(
 //============================================================
 //= OTableColumnWrapper
 //============================================================
+//--------------------------------------------------------------------------
 OTableColumnWrapper::OTableColumnWrapper(const Reference< XPropertySet >& rCol
                                         ,const Reference< XPropertySet >& _xColDefintion
                                         ,sal_Bool _bPureWrap)
@@ -788,6 +789,12 @@ OTableColumnWrapper::OTableColumnWrapper(const Reference< XPropertySet >& rCol
     }
     osl_decrementInterlockedCount(&m_refCount);
 }
+
+//--------------------------------------------------------------------------
+OTableColumnWrapper::~OTableColumnWrapper()
+{
+}
+
 // com::sun::star::lang::XTypeProvider
 //--------------------------------------------------------------------------
 Sequence< sal_Int8 > OTableColumnWrapper::getImplementationId() throw (RuntimeException)
