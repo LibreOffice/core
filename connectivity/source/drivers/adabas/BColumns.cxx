@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BColumns.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:08:02 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:21:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,56 +128,46 @@ void OColumns::impl_refresh() throw(RuntimeException)
     m_pTable->refreshColumns();
 }
 // -------------------------------------------------------------------------
-Reference< XPropertySet > OColumns::createEmptyObject()
+Reference< XPropertySet > OColumns::createDescriptor()
 {
     return new OColumn(sal_True);
 }
-// -----------------------------------------------------------------------------
-sdbcx::ObjectType OColumns::cloneObject(const Reference< XPropertySet >& _xDescriptor)
-{
-    sdbcx::ObjectType xProp = new OColumn(sal_True);
-    ::comphelper::copyProperties(_xDescriptor,xProp);
-    return xProp;
-}
 // -------------------------------------------------------------------------
 // XAppend
-void OColumns::appendObject( const Reference< XPropertySet >& descriptor )
+sdbcx::ObjectType OColumns::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     ::osl::MutexGuard aGuard(m_rMutex);
-    OSL_ENSURE(m_pTable,"OColumns::appendByDescriptor: Table is null!");
-    OSL_ENSURE(descriptor.is(),"OColumns::appendByDescriptor: descriptor is null!");
+    if ( m_pTable->isNew() )
+        return cloneDescriptor( descriptor );
 
-    if(descriptor.is() && !m_pTable->isNew())
+    ::rtl::OUString aSql(RTL_CONSTASCII_USTRINGPARAM("ALTER TABLE "));
+    ::rtl::OUString sQuote  = m_pTable->getMetaData()->getIdentifierQuoteString(  );
+    const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
+
+    m_pTable->beginTransAction();
+    try
     {
-        ::rtl::OUString aSql(RTL_CONSTASCII_USTRINGPARAM("ALTER TABLE "));
-        ::rtl::OUString sQuote  = m_pTable->getMetaData()->getIdentifierQuoteString(  );
-        const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
+        aSql += ::dbtools::quoteName(sQuote,m_pTable->getSchema()) + sDot + ::dbtools::quoteName(sQuote,m_pTable->getTableName());
+        aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ADD ("));
+        aSql += ::dbtools::quoteName(sQuote,_rForName);
+        aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
+        aSql += OTables::getColumnSqlType(descriptor);
+        aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" )"));
 
-        m_pTable->beginTransAction();
-        try
-        {
-            ::rtl::OUString sColumnName;
-            descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= sColumnName;
-            aSql += ::dbtools::quoteName(sQuote,m_pTable->getSchema()) + sDot + ::dbtools::quoteName(sQuote,m_pTable->getTableName());
-            aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ADD ("));
-            aSql += ::dbtools::quoteName(sQuote,sColumnName);
-            aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
-            aSql += OTables::getColumnSqlType(descriptor);
-            aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" )"));
+        Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement();
+        xStmt->execute(aSql);
+        ::comphelper::disposeComponent(xStmt);
 
-            Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement();
-            xStmt->execute(aSql);
-            ::comphelper::disposeComponent(xStmt);
-
-            m_pTable->alterNotNullValue(getINT32(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE))),sColumnName);
-        }
-        catch(const Exception&)
-        {
-            m_pTable->rollbackTransAction();
-            throw;
-        }
-        m_pTable->endTransAction();
+        m_pTable->alterNotNullValue(getINT32(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE))),_rForName);
     }
+    catch(const Exception&)
+    {
+        m_pTable->rollbackTransAction();
+        throw;
+    }
+    m_pTable->endTransAction();
+
+    return createObject( _rForName );
 }
 // -------------------------------------------------------------------------
 // XDrop
