@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xestream.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:02:14 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:33:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,22 +47,22 @@
 
 // ============================================================================
 
-XclExpStream::XclExpStream( SvStream& rOutStrm, const XclExpRoot& rRoot, sal_uInt32 nMaxRecSize ) :
+XclExpStream::XclExpStream( SvStream& rOutStrm, const XclExpRoot& rRoot, sal_uInt16 nMaxRecSize ) :
     mrStrm( rOutStrm ),
     mrRoot( rRoot ),
     mnMaxRecSize( nMaxRecSize ),
     mnCurrMaxSize( 0 ),
     mnMaxSliceSize( 0 ),
-    mnCalcSize( 0 ),
     mnHeaderSize( 0 ),
     mnCurrSize( 0 ),
     mnSliceSize( 0 ),
+    mnPredictSize( 0 ),
     mnLastSizePos( 0 ),
     mbInRec( false )
 {
-    if( !mnMaxRecSize )
+    if( mnMaxRecSize == 0 )
         mnMaxRecSize = (mrRoot.GetBiff() <= EXC_BIFF5) ? EXC_MAXRECSIZE_BIFF5 : EXC_MAXRECSIZE_BIFF8;
-    mnMaxContSize = nMaxRecSize;
+    mnMaxContSize = mnMaxRecSize;
 }
 
 XclExpStream::~XclExpStream()
@@ -70,78 +70,11 @@ XclExpStream::~XclExpStream()
     mrStrm.Flush();
 }
 
-void XclExpStream::InitRecord( sal_uInt16 nRecId )
-{
-    mrStrm.Seek( STREAM_SEEK_TO_END );
-    mrStrm << nRecId;
-
-    mnLastSizePos = mrStrm.Tell();
-    mnHeaderSize = ::std::min( mnCalcSize, mnCurrMaxSize );
-    mrStrm << static_cast< sal_uInt16 >( mnHeaderSize );
-    mnCurrSize = mnSliceSize = 0;
-}
-
-void XclExpStream::UpdateRecSize()
-{
-    if( mnCurrSize != mnHeaderSize )
-    {
-        mrStrm.Seek( mnLastSizePos );
-        mrStrm << static_cast< sal_uInt16 >( mnCurrSize );
-    }
-}
-
-void XclExpStream::UpdateSizeVars( sal_uInt32 nSize )
-{
-    mnCurrSize += nSize;
-
-    if( mnMaxSliceSize )
-    {
-        mnSliceSize += nSize;
-        DBG_ASSERT( mnSliceSize <= mnMaxSliceSize, "XclExpStream::UpdateSizeVars - slice overwritten" );
-        if( mnSliceSize >= mnMaxSliceSize )
-            mnSliceSize = 0;
-    }
-}
-
-void XclExpStream::StartContinue()
-{
-    UpdateRecSize();
-    mnCurrMaxSize = mnMaxContSize;
-    mnCalcSize -= mnCurrSize;
-    InitRecord( EXC_ID_CONT );
-}
-
-void XclExpStream::PrepareWrite( sal_uInt32 nSize )
-{
-    if( mbInRec )
-    {
-        if( (mnCurrSize + nSize > mnCurrMaxSize) ||
-            (mnMaxSliceSize && !mnSliceSize && (mnCurrSize + mnMaxSliceSize > mnCurrMaxSize)) )
-            StartContinue();
-        UpdateSizeVars( nSize );
-    }
-}
-
-sal_uInt32 XclExpStream::PrepareWrite()
-{
-    sal_uInt32 nRet = 0;
-    if( mbInRec )
-    {
-        if( (mnCurrSize >= mnCurrMaxSize) ||
-            (mnMaxSliceSize && !mnSliceSize && (mnCurrSize + mnMaxSliceSize > mnCurrMaxSize)) )
-            StartContinue();
-        UpdateSizeVars( 0 );
-
-        nRet = mnMaxSliceSize ? mnMaxSliceSize - mnSliceSize : mnCurrMaxSize - mnCurrSize;
-    }
-    return nRet;
-}
-
-void XclExpStream::StartRecord( sal_uInt16 nRecId, sal_uInt32 nRecSize )
+void XclExpStream::StartRecord( sal_uInt16 nRecId, sal_Size nRecSize )
 {
     DBG_ASSERT( !mbInRec, "XclExpStream::StartRecord - another record still open" );
     mnMaxContSize = mnCurrMaxSize = mnMaxRecSize;
-    mnCalcSize = nRecSize;
+    mnPredictSize = nRecSize;
     mbInRec = true;
     InitRecord( nRecId );
     SetSliceSize( 0 );
@@ -155,27 +88,27 @@ void XclExpStream::EndRecord()
     mbInRec = false;
 }
 
-void XclExpStream::SetSliceSize( sal_uInt32 nSize )
+void XclExpStream::SetSliceSize( sal_uInt16 nSize )
 {
     mnMaxSliceSize = nSize;
     mnSliceSize = 0;
 }
 
-sal_uInt32 XclExpStream::Write( const void* pData, sal_uInt32 nBytes )
+sal_Size XclExpStream::Write( const void* pData, sal_Size nBytes )
 {
-    sal_uInt32 nRet = 0;
-    if( pData && nBytes )
+    sal_Size nRet = 0;
+    if( pData && (nBytes > 0) )
     {
         if( mbInRec )
         {
             const sal_uInt8* pBuffer = reinterpret_cast< const sal_uInt8* >( pData );
-            sal_uInt32 nBytesLeft = nBytes;
+            sal_Size nBytesLeft = nBytes;
             bool bValid = true;
 
-            while( bValid && nBytesLeft )
+            while( bValid && (nBytesLeft > 0) )
             {
-                sal_uInt32 nWriteLen = ::std::min( PrepareWrite(), nBytesLeft );
-                sal_uInt32 nWriteRet = mrStrm.Write( pBuffer, nWriteLen );
+                sal_Size nWriteLen = ::std::min< sal_Size >( PrepareWrite(), nBytesLeft );
+                sal_Size nWriteRet = mrStrm.Write( pBuffer, nWriteLen );
                 bValid = (nWriteLen == nWriteRet);
                 DBG_ASSERT( bValid, "XclExpStream::Write - stream write error" );
                 pBuffer += nWriteRet;
@@ -190,27 +123,14 @@ sal_uInt32 XclExpStream::Write( const void* pData, sal_uInt32 nBytes )
     return nRet;
 }
 
-void XclExpStream::WriteRawZeroBytes( sal_uInt32 nBytes )
-{
-    const sal_uInt32 nData = 0;
-    sal_uInt32 nBytesLeft = nBytes;
-    while( nBytesLeft >= sizeof( sal_uInt32 ) )
-    {
-        mrStrm << nData;
-        nBytesLeft -= sizeof( sal_uInt32 );
-    }
-    if( nBytesLeft )
-        mrStrm.Write( &nData, nBytesLeft );
-}
-
-void XclExpStream::WriteZeroBytes( sal_uInt32 nBytes )
+void XclExpStream::WriteZeroBytes( sal_Size nBytes )
 {
     if( mbInRec )
     {
-        sal_uInt32 nBytesLeft = nBytes;
-        while( nBytesLeft )
+        sal_Size nBytesLeft = nBytes;
+        while( nBytesLeft > 0 )
         {
-            sal_uInt32 nWriteLen = ::std::min( PrepareWrite(), nBytesLeft );
+            sal_Size nWriteLen = ::std::min< sal_Size >( PrepareWrite(), nBytesLeft );
             WriteRawZeroBytes( nWriteLen );
             nBytesLeft -= nWriteLen;
             UpdateSizeVars( nWriteLen );
@@ -220,25 +140,26 @@ void XclExpStream::WriteZeroBytes( sal_uInt32 nBytes )
         WriteRawZeroBytes( nBytes );
 }
 
-sal_uInt32 XclExpStream::CopyFromStream( SvStream& rInStrm, sal_uInt32 nBytes )
+sal_Size XclExpStream::CopyFromStream( SvStream& rInStrm, sal_Size nBytes )
 {
-    sal_uInt32 nStreamPos = rInStrm.Tell();
-    sal_uInt32 nStreamSize = rInStrm.Seek( STREAM_SEEK_TO_END );
-    rInStrm.Seek( nStreamPos );
+    sal_Size nStrmPos = rInStrm.Tell();
+    rInStrm.Seek( STREAM_SEEK_TO_END );
+    sal_Size nStrmSize = rInStrm.Tell();
+    rInStrm.Seek( nStrmPos );
 
-    sal_uInt32 nBytesLeft = ::std::min( nBytes, nStreamSize - nStreamPos );
-    sal_uInt32 nRet = 0;
-    if( nBytesLeft )
+    sal_Size nBytesLeft = ::std::min( nBytes, nStrmSize - nStrmPos );
+    sal_Size nRet = 0;
+    if( nBytesLeft > 0 )
     {
-        const sal_uInt32 nMaxBuffer = 0x00001000;
+        const sal_Size nMaxBuffer = 4096;
         sal_uInt8* pBuffer = new sal_uInt8[ ::std::min( nBytesLeft, nMaxBuffer ) ];
         bool bValid = true;
 
-        while( bValid && nBytesLeft )
+        while( bValid && (nBytesLeft > 0) )
         {
-            sal_uInt32 nWriteLen = ::std::min( nBytesLeft, nMaxBuffer );
+            sal_Size nWriteLen = ::std::min( nBytesLeft, nMaxBuffer );
             rInStrm.Read( pBuffer, nWriteLen );
-            sal_uInt32 nWriteRet = Write( pBuffer, nWriteLen );
+            sal_Size nWriteRet = Write( pBuffer, nWriteLen );
             bValid = (nWriteLen == nWriteRet);
             nRet += nWriteRet;
             nBytesLeft -= nWriteRet;
@@ -248,13 +169,13 @@ sal_uInt32 XclExpStream::CopyFromStream( SvStream& rInStrm, sal_uInt32 nBytes )
     return nRet;
 }
 
-void XclExpStream::WriteUnicodeBuffer( const sal_uInt16* pBuffer, sal_uInt32 nChars, sal_uInt8 nFlags )
+void XclExpStream::WriteUnicodeBuffer( const sal_uInt16* pBuffer, sal_Size nChars, sal_uInt8 nFlags )
 {
     SetSliceSize( 0 );
-    if( pBuffer && nChars )
+    if( pBuffer && (nChars > 0) )
     {
-        sal_uInt32 nCharLen = (nFlags & EXC_STRF_16BIT) ? 2 : 1;
-        for( sal_uInt32 nIndex = 0; nIndex < nChars; ++nIndex )
+        sal_uInt16 nCharLen = (nFlags & EXC_STRF_16BIT) ? 2 : 1;
+        for( sal_Size nIndex = 0; nIndex < nChars; ++nIndex )
         {
             if( mbInRec && (mnCurrSize + nCharLen > mnCurrMaxSize) )
             {
@@ -274,7 +195,7 @@ void XclExpStream::WriteUnicodeBuffer( const ScfUInt16Vec& rBuffer, sal_uInt8 nF
 {
     SetSliceSize( 0 );
     nFlags &= EXC_STRF_16BIT;   // repeat only 16bit flag
-    sal_uInt32 nCharLen = nFlags ? 2 : 1;
+    sal_uInt16 nCharLen = nFlags ? 2 : 1;
 
     ScfUInt16Vec::const_iterator aEnd = rBuffer.end();
     for( ScfUInt16Vec::const_iterator aIter = rBuffer.begin(); aIter != aEnd; ++aIter )
@@ -294,7 +215,7 @@ void XclExpStream::WriteUnicodeBuffer( const ScfUInt16Vec& rBuffer, sal_uInt8 nF
 void XclExpStream::WriteByteStringBuffer( const ByteString& rString, sal_uInt16 nMaxLen )
 {
     SetSliceSize( 0 );
-    Write( rString.GetBuffer(), ::std::min< xub_StrLen >( rString.Len(), nMaxLen ) );
+    Write( rString.GetBuffer(), ::std::min< sal_Size >( rString.Len(), nMaxLen ) );
 }
 
 // ER: #71367# Xcl has an obscure sense of whether starting a new record or not,
@@ -303,16 +224,17 @@ void XclExpStream::WriteByteStringBuffer( const ByteString& rString, sal_uInt16 
 void XclExpStream::WriteByteString( const ByteString& rString, sal_uInt16 nMaxLen, bool b16BitCount )
 {
     SetSliceSize( 0 );
-    sal_uInt16 nLen = static_cast< sal_uInt16 >( ::std::min< xub_StrLen >( rString.Len(), nMaxLen ) );
+    sal_Size nLen = ::std::min< sal_Size >( rString.Len(), nMaxLen );
     if( !b16BitCount )
-        nLen = ::std::min< sal_uInt16 >( nLen, 0xFF );
+        nLen = ::std::min< sal_Size >( nLen, 0xFF );
 
-    sal_uInt32 nLeft = PrepareWrite();
-    if( mbInRec && (nLeft <= (b16BitCount ? 2UL : 1UL)) )
+    sal_uInt16 nLeft = PrepareWrite();
+    sal_uInt16 nLenFieldSize = b16BitCount ? 2 : 1;
+    if( mbInRec && (nLeft <= nLenFieldSize) )
         StartContinue();
 
     if( b16BitCount )
-        operator<<( nLen );
+        operator<<( static_cast< sal_uInt16 >( nLen ) );
     else
         operator<<( static_cast< sal_uInt8 >( nLen ) );
     Write( rString.GetBuffer(), nLen );
@@ -324,12 +246,94 @@ void XclExpStream::WriteCharBuffer( const ScfUInt8Vec& rBuffer )
     Write( &rBuffer[ 0 ], rBuffer.size() );
 }
 
-sal_uInt32 XclExpStream::SetStreamPos( sal_uInt32 nPos )
+sal_Size XclExpStream::SetSvStreamPos( sal_Size nPos )
 {
-    DBG_ASSERT( !mbInRec, "XclExpStream::SetStreamPos - not allowed inside of a record" );
+    DBG_ASSERT( !mbInRec, "XclExpStream::SetSvStreamPos - not allowed inside of a record" );
     return mbInRec ? 0 : mrStrm.Seek( nPos );
 }
 
+// private --------------------------------------------------------------------
+
+void XclExpStream::InitRecord( sal_uInt16 nRecId )
+{
+    mrStrm.Seek( STREAM_SEEK_TO_END );
+    mrStrm << nRecId;
+
+    mnLastSizePos = mrStrm.Tell();
+    mnHeaderSize = static_cast< sal_uInt16 >( ::std::min< sal_Size >( mnPredictSize, mnCurrMaxSize ) );
+    mrStrm << mnHeaderSize;
+    mnCurrSize = mnSliceSize = 0;
+}
+
+void XclExpStream::UpdateRecSize()
+{
+    if( mnCurrSize != mnHeaderSize )
+    {
+        mrStrm.Seek( mnLastSizePos );
+        mrStrm << mnCurrSize;
+    }
+}
+
+void XclExpStream::UpdateSizeVars( sal_Size nSize )
+{
+    DBG_ASSERT( mnCurrSize + nSize <= mnCurrMaxSize, "XclExpStream::UpdateSizeVars - record overwritten" );
+    mnCurrSize += static_cast< sal_uInt16 >( nSize );
+
+    if( mnMaxSliceSize > 0 )
+    {
+        DBG_ASSERT( mnSliceSize + nSize <= mnMaxSliceSize, "XclExpStream::UpdateSizeVars - slice overwritten" );
+        mnSliceSize += static_cast< sal_uInt16 >( nSize );
+        if( mnSliceSize >= mnMaxSliceSize )
+            mnSliceSize = 0;
+    }
+}
+
+void XclExpStream::StartContinue()
+{
+    UpdateRecSize();
+    mnCurrMaxSize = mnMaxContSize;
+    mnPredictSize -= mnCurrSize;
+    InitRecord( EXC_ID_CONT );
+}
+
+void XclExpStream::PrepareWrite( sal_uInt16 nSize )
+{
+    if( mbInRec )
+    {
+        if( (mnCurrSize + nSize > mnCurrMaxSize) ||
+            ((mnMaxSliceSize > 0) && (mnSliceSize == 0) && (mnCurrSize + mnMaxSliceSize > mnCurrMaxSize)) )
+            StartContinue();
+        UpdateSizeVars( nSize );
+    }
+}
+
+sal_uInt16 XclExpStream::PrepareWrite()
+{
+    sal_uInt16 nRet = 0;
+    if( mbInRec )
+    {
+        if( (mnCurrSize >= mnCurrMaxSize) ||
+            ((mnMaxSliceSize > 0) && (mnSliceSize == 0) && (mnCurrSize + mnMaxSliceSize > mnCurrMaxSize)) )
+            StartContinue();
+        UpdateSizeVars( 0 );
+
+        nRet = (mnMaxSliceSize > 0) ? (mnMaxSliceSize - mnSliceSize) : (mnCurrMaxSize - mnCurrSize);
+    }
+    return nRet;
+}
+
+void XclExpStream::WriteRawZeroBytes( sal_Size nBytes )
+{
+    const sal_uInt32 nData = 0;
+    sal_Size nBytesLeft = nBytes;
+    while( nBytesLeft >= sizeof( nData ) )
+    {
+        mrStrm << nData;
+        nBytesLeft -= sizeof( nData );
+    }
+    if( nBytesLeft )
+        mrStrm.Write( &nData, nBytesLeft );
+}
 
 // ============================================================================
 
