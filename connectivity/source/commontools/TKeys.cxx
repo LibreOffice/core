@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TKeys.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:04:17 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:19:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,7 +122,7 @@ sdbcx::ObjectType OKeysHelper::createObject(const ::rtl::OUString& _rName)
                 if ( xRow->getString(12) == _rName )
                 {
                     ::rtl::OUString aComposedName;
-                    ::dbtools::composeTableName(m_pTable->getMetaData(),aCatalog,aSchema,aName,aComposedName,sal_False,::dbtools::eInDataManipulation);
+                    aComposedName = ::dbtools::composeTableName(m_pTable->getMetaData(),aCatalog,aSchema,aName,sal_False,::dbtools::eInDataManipulation);
                     OTableKeyHelper* pRet = new OTableKeyHelper(m_pTable,_rName,aComposedName,KeyType::FOREIGN,nUpdateRule,nDeleteRule);
                     xRet = pRet;
                     break;
@@ -145,7 +145,7 @@ void OKeysHelper::impl_refresh() throw(RuntimeException)
     m_pTable->refreshKeys();
 }
 // -------------------------------------------------------------------------
-Reference< XPropertySet > OKeysHelper::createEmptyObject()
+Reference< XPropertySet > OKeysHelper::createDescriptor()
 {
     return new OTableKeyHelper(m_pTable);
 }
@@ -178,104 +178,132 @@ Reference< XPropertySet > OKeysHelper::createEmptyObject()
     return sRet;
 }
 // -------------------------------------------------------------------------
-// XAppend
-void OKeysHelper::appendObject( const Reference< XPropertySet >& descriptor )
+void OKeysHelper::cloneDescriptorColumns( const sdbcx::ObjectType& _rSourceDescriptor, const sdbcx::ObjectType& _rDestDescriptor )
 {
-    const ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
-    ::rtl::OUString aName = getString(descriptor->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME)));
-    if ( !m_pTable->isNew() )
+    Reference< XColumnsSupplier > xColSupp( _rSourceDescriptor, UNO_QUERY_THROW );
+    Reference< XIndexAccess > xSourceCols( xColSupp->getColumns(), UNO_QUERY_THROW );
+
+    xColSupp.set( _rDestDescriptor, UNO_QUERY_THROW );
+    Reference< XAppend > xDestAppend( xColSupp->getColumns(), UNO_QUERY_THROW );
+
+    sal_Int32 nCount = xSourceCols->getCount();
+    for ( sal_Int32 i=0; i< nCount; ++i )
     {
-        sal_Int32 nKeyType      = getINT32(descriptor->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_TYPE)));
+        Reference< XPropertySet > xColProp( xSourceCols->getByIndex(i), UNO_QUERY );
+        xDestAppend->appendByDescriptor( xColProp );
+    }
+}
+// -------------------------------------------------------------------------
+// XAppend
+sdbcx::ObjectType OKeysHelper::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
+{
+    if ( m_pTable->isNew() )
+    {
+        Reference< XPropertySet > xNewDescriptor( cloneDescriptor( descriptor ) );
+        cloneDescriptorColumns( descriptor, xNewDescriptor );
+        return xNewDescriptor;
+    }
 
-        ::rtl::OUString aSql    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ALTER TABLE "));
-        ::rtl::OUString aQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString(  );
-        ::rtl::OUString aDot    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("."));
+    // if we're here, we belong to a table which is not new, i.e. already exists in the database.
+    // In this case, really append the new index.
 
-        aSql += composeTableName(m_pTable->getConnection()->getMetaData(),m_pTable,sal_True,::dbtools::eInTableDefinitions) + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ADD "));
+    const ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
+    sal_Int32 nKeyType      = getINT32(descriptor->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_TYPE)));
 
-        if ( nKeyType == KeyType::PRIMARY )
-        {
-            aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" PRIMARY KEY ("));
-        }
-        else if ( nKeyType == KeyType::FOREIGN )
-        {
-            aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" FOREIGN KEY ("));
-        }
-        else
-            throw SQLException();
+    ::rtl::OUString aSql    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ALTER TABLE "));
+    ::rtl::OUString aQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString(  );
+    ::rtl::OUString aDot    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("."));
 
-        Reference<XColumnsSupplier> xColumnSup(descriptor,UNO_QUERY);
-        Reference<XIndexAccess> xColumns(xColumnSup->getColumns(),UNO_QUERY);
-        Reference< XPropertySet > xColProp;
+    aSql += composeTableName( m_pTable->getConnection()->getMetaData(), m_pTable, ::dbtools::eInTableDefinitions, false, false, true );
+    aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ADD "));
+
+    if ( nKeyType == KeyType::PRIMARY )
+    {
+        aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" PRIMARY KEY ("));
+    }
+    else if ( nKeyType == KeyType::FOREIGN )
+    {
+        aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" FOREIGN KEY ("));
+    }
+    else
+        throw SQLException();
+
+    Reference<XColumnsSupplier> xColumnSup(descriptor,UNO_QUERY);
+    Reference<XIndexAccess> xColumns(xColumnSup->getColumns(),UNO_QUERY);
+    Reference< XPropertySet > xColProp;
+    for(sal_Int32 i=0;i<xColumns->getCount();++i)
+    {
+        ::cppu::extractInterface(xColProp,xColumns->getByIndex(i));
+        aSql += ::dbtools::quoteName( aQuote,getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))))
+                        +   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
+    }
+    aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")")));
+
+    if ( nKeyType == KeyType::FOREIGN )
+    {
+        ::rtl::OUString aRefTable;
+
+        descriptor->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_REFERENCEDTABLE)) >>= aRefTable;
+
+        aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" REFERENCES "))
+                +  ::dbtools::quoteTableName(m_pTable->getConnection()->getMetaData(),aRefTable,::dbtools::eInTableDefinitions);
+        aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ("));
+
         for(sal_Int32 i=0;i<xColumns->getCount();++i)
         {
             ::cppu::extractInterface(xColProp,xColumns->getByIndex(i));
-            aSql += ::dbtools::quoteName( aQuote,getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))))
+            aSql += ::dbtools::quoteName( aQuote,getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_RELATEDCOLUMN))))
                             +   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
         }
         aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")")));
 
+        aSql += getKeyRuleString(sal_True   ,getINT32(descriptor->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_UPDATERULE))));
+        aSql += getKeyRuleString(sal_False  ,getINT32(descriptor->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_DELETERULE))));
+    }
+
+    Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
+    xStmt->execute(aSql);
+    // find the name which the database gave the new key
+    ::rtl::OUString sNewName( _rForName );
+    try
+    {
+        ::rtl::OUString aSchema,aTable;
+        m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME)) >>= aSchema;
+        m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))       >>= aTable;
+        Reference< XResultSet > xResult;
+        sal_Int32 nColumn = 12;
         if ( nKeyType == KeyType::FOREIGN )
+            xResult = m_pTable->getMetaData()->getImportedKeys( m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME))
+                                                                                    ,aSchema
+                                                                                    ,aTable);
+        else
         {
-            ::rtl::OUString aRefTable;
-
-            descriptor->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_REFERENCEDTABLE)) >>= aRefTable;
-
-            aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" REFERENCES "))
-                 +  ::dbtools::quoteTableName(m_pTable->getConnection()->getMetaData(),aRefTable,::dbtools::eInTableDefinitions);
-            aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ("));
-
-            for(sal_Int32 i=0;i<xColumns->getCount();++i)
-            {
-                ::cppu::extractInterface(xColProp,xColumns->getByIndex(i));
-                aSql += ::dbtools::quoteName( aQuote,getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_RELATEDCOLUMN))))
-                                +   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
-            }
-            aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")")));
-
-            aSql += getKeyRuleString(sal_True   ,getINT32(descriptor->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_UPDATERULE))));
-            aSql += getKeyRuleString(sal_False  ,getINT32(descriptor->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_DELETERULE))));
+            xResult = m_pTable->getMetaData()->getPrimaryKeys( m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME))
+                                                                                    ,aSchema
+                                                                                    ,aTable);
+            nColumn = 6;
         }
-
-        Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
-        xStmt->execute(aSql);
-        // we need a name for the insertion
-        try
+        if ( xResult.is() )
         {
-            ::rtl::OUString aSchema,aTable;
-            m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME)) >>= aSchema;
-            m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))       >>= aTable;
-            Reference< XResultSet > xResult;
-            sal_Int32 nColumn = 12;
-            if ( nKeyType == KeyType::FOREIGN )
-                xResult = m_pTable->getMetaData()->getImportedKeys( m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME))
-                                                                                        ,aSchema
-                                                                                        ,aTable);
-            else
+            Reference< XRow > xRow(xResult,UNO_QUERY);
+            while( xResult->next() )
             {
-                xResult = m_pTable->getMetaData()->getPrimaryKeys( m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME))
-                                                                                        ,aSchema
-                                                                                        ,aTable);
-                nColumn = 6;
-            }
-            if ( xResult.is() )
-            {
-                Reference< XRow > xRow(xResult,UNO_QUERY);
-                while( xResult->next() )
+                ::rtl::OUString sName = xRow->getString(nColumn);
+                if ( !m_pElements->exists(sName) ) // this name wasn't inserted yet so it must be te new one
                 {
-                    ::rtl::OUString sName = xRow->getString(nColumn);
-                    if ( !m_pElements->exists(sName) ) // this name wasn't inserted yet so it must be te new one
-                    {
-                        descriptor->setPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME),makeAny(sName));
-                        break;
-                    }
+                    descriptor->setPropertyValue( rPropMap.getNameByIndex( PROPERTY_ID_NAME ), makeAny( sName ) );
+                    sNewName = sName;
+                    break;
                 }
             }
-        }
-        catch(const SQLException&)
-        {
+            ::comphelper::disposeComponent(xResult);
         }
     }
+    catch(const SQLException&)
+    {
+    }
+
+    return createObject( sNewName );
 }
 // -------------------------------------------------------------------------
 // XDrop
@@ -285,7 +313,7 @@ void OKeysHelper::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName
     {
         ::rtl::OUString aSql    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ALTER TABLE "));
 
-        aSql += composeTableName(m_pTable->getConnection()->getMetaData(),m_pTable,sal_True,::dbtools::eInTableDefinitions);
+        aSql += composeTableName( m_pTable->getConnection()->getMetaData(), m_pTable,::dbtools::eInTableDefinitions, false, false, true );
 
         Reference<XPropertySet> xKey(getObject(_nPos),UNO_QUERY);
 
@@ -313,32 +341,6 @@ void OKeysHelper::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName
             ::comphelper::disposeComponent(xStmt);
         }
     }
-}
-// -----------------------------------------------------------------------------
-sdbcx::ObjectType OKeysHelper::cloneObject(const Reference< XPropertySet >& _xDescriptor)
-{
-    sdbcx::ObjectType xName;
-    if(!m_pTable->isNew())
-    {
-        xName = OKeys_BASE::cloneObject(_xDescriptor);
-    }
-    else
-    {
-        Reference<XPropertySet> xProp = createEmptyObject();
-        ::comphelper::copyProperties(_xDescriptor,xProp);
-        Reference<XColumnsSupplier> xSup(_xDescriptor,UNO_QUERY);
-        Reference<XIndexAccess> xIndex(xSup->getColumns(),UNO_QUERY);
-        Reference<XColumnsSupplier> xDestSup(xProp,UNO_QUERY);
-        Reference<XAppend> xAppend(xDestSup->getColumns(),UNO_QUERY);
-        sal_Int32 nCount = xIndex->getCount();
-        for(sal_Int32 i=0;i< nCount;++i)
-        {
-            Reference<XPropertySet> xColProp(xIndex->getByIndex(i),UNO_QUERY);
-            xAppend->appendByDescriptor(xColProp);
-        }
-        xName = xProp;
-    }
-    return xName;
 }
 // -----------------------------------------------------------------------------
 } // namespace connectivity
