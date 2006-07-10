@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtools2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:06:16 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:20:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -229,7 +229,7 @@ namespace dbtools
     descriptor->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME))   >>= sSchema;
     descriptor->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))         >>= sTable;
 
-    ::dbtools::composeTableName(xMetaData,sCatalog,sSchema,sTable,sComposedName,sal_True,::dbtools::eInTableDefinitions);
+    sComposedName = ::dbtools::composeTableName( xMetaData, sCatalog, sSchema, sTable, sal_True, ::dbtools::eInTableDefinitions );
     if ( !sComposedName.getLength() )
         ::dbtools::throwFunctionSequenceException(_xConnection);
 
@@ -346,7 +346,7 @@ namespace
                                                         sSchema,
                                                         sTable,
                                                         ::dbtools::eInDataManipulation);
-                    ::dbtools::composeTableName(xMetaData,sCatalog, sSchema, sTable,sComposedName,sal_True,::dbtools::eInTableDefinitions);
+                    sComposedName = ::dbtools::composeTableName( xMetaData, sCatalog, sSchema, sTable, sal_True, ::dbtools::eInTableDefinitions );
 
 
                     if ( !sComposedName.getLength() )
@@ -446,9 +446,8 @@ namespace
                         const ::rtl::OUString sQuote = xMetaData->getIdentifierQuoteString();
                         ::rtl::OUString sQuotedName  = ::dbtools::quoteName(sQuote,_rName);
                         ::rtl::OUString sComposedName;
-                        sal_Bool bUseCatalogInSelect = isDataSourcePropertyEnabled(_xConnection,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseCatalogInSelect")),sal_True);
-                        sal_Bool bUseSchemaInSelect = isDataSourcePropertyEnabled(_xConnection,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseSchemaInSelect")),sal_True);
-                        ::dbtools::composeTableName(xMetaData,getString(_aCatalog),_aSchema,_aTable,sComposedName,sal_True,::dbtools::eInDataManipulation,bUseCatalogInSelect,bUseSchemaInSelect);
+                        sComposedName = composeTableNameForSelect(
+                            _xConnection, getString( _aCatalog ), _aSchema, _aTable );
 
                         ColumnInformationMap aInfo(_bCase);
                         collectColumnInformation(_xConnection,sComposedName,sQuotedName,aInfo);
@@ -471,15 +470,15 @@ namespace
                             Reference< XResultSet > xPKeys = xMetaData->getPrimaryKeys( _aCatalog, _aSchema, _aTable );
                             Reference< XRow > xPKeyRow( xPKeys, UNO_QUERY_THROW );
                             while( xPKeys->next() ) // there can be only one primary key
-                            {
-                                ::rtl::OUString sKeyColumn = xPKeyRow->getString(4);
-                                if ( aMixCompare(_rName,sKeyColumn) )
                                 {
-                                    nField11 = ColumnValue::NO_NULLS;
-                                    break;
+                                ::rtl::OUString sKeyColumn = xPKeyRow->getString(4);
+                                    if ( aMixCompare(_rName,sKeyColumn) )
+                                    {
+                                        nField11 = ColumnValue::NO_NULLS;
+                                        break;
+                                    }
                                 }
                             }
-                        }
                         catch(SQLException&)
                         {
                             OSL_ENSURE( false, "lcl_createSDBCXColumn: caught an exception!" );
@@ -563,34 +562,6 @@ Reference<XPropertySet> createSDBCXColumn(const Reference<XPropertySet>& _xTable
     }
 
     return xProp;
-}
-// -----------------------------------------------------------------------------
-::rtl::OUString composeTableName(const Reference<XDatabaseMetaData>& _xMetaData,
-                                 const Reference<XPropertySet>& _xTable,
-                                 sal_Bool _bQuote,
-                                 EComposeRule _eComposeRule
-                                 , sal_Bool _bUseCatalogInSelect
-                                , sal_Bool _bUseSchemaInSelect)
-{
-    ::rtl::OUString aComposedName;
-    ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
-    Reference< XPropertySetInfo > xInfo = _xTable->getPropertySetInfo();
-    if (    xInfo.is()
-        &&  xInfo->hasPropertyByName(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME))
-        &&  xInfo->hasPropertyByName(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME))
-        &&  xInfo->hasPropertyByName(rPropMap.getNameByIndex(PROPERTY_ID_NAME)) )
-    {
-
-        ::rtl::OUString aCatalog;
-        ::rtl::OUString aSchema;
-        ::rtl::OUString aTable;
-        _xTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME)) >>= aCatalog;
-        _xTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME))  >>= aSchema;
-        _xTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))        >>= aTable;
-
-        dbtools::composeTableName(_xMetaData,aCatalog,aSchema,aTable,aComposedName,_bQuote,_eComposeRule,_bUseCatalogInSelect,_bUseSchemaInSelect);
-    }
-    return aComposedName;
 }
 // -----------------------------------------------------------------------------
 sal_Bool isDataSourcePropertyEnabled(const Reference<XInterface>& _xProp,const ::rtl::OUString& _sProperty,sal_Bool _bDefault)
