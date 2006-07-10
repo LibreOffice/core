@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HelperCollections.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:58:06 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:02:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,10 @@
 #include "HelperCollections.hxx"
 #endif
 
+#ifndef DBACCESS_SHARED_DBASTRINGS_HRC
+#include "dbastrings.hrc"
+#endif
+
 namespace dbaccess
 {
     using namespace dbtools;
@@ -62,6 +66,26 @@ namespace dbaccess
                         ,m_aColumns(_rColumns)
     {
     }
+
+    // -------------------------------------------------------------------------
+    OPrivateColumns* OPrivateColumns::createWithIntrinsicNames( const ::vos::ORef< ::connectivity::OSQLColumns >& _rColumns,
+        sal_Bool _bCase, ::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex )
+    {
+        ::std::vector< ::rtl::OUString > aNames; aNames.reserve( _rColumns->size() );
+
+        ::rtl::OUString sColumName;
+        for (   ::connectivity::OSQLColumns::const_iterator column = _rColumns->begin();
+                column != _rColumns->end();
+                ++column
+            )
+        {
+            Reference< XPropertySet > xColumn( *column, UNO_QUERY_THROW );
+            xColumn->getPropertyValue( PROPERTY_NAME ) >>= sColumName;
+            aNames.push_back( sColumName );
+        }
+        return new OPrivateColumns( _rColumns, _bCase, _rParent, _rMutex, aNames, sal_False );
+    }
+
     // -------------------------------------------------------------------------
     void SAL_CALL OPrivateColumns::disposing(void)
     {
