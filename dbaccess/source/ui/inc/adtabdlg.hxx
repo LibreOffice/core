@@ -4,9 +4,9 @@
  *
  *  $RCSfile: adtabdlg.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:43:49 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:30:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,10 @@
 #include <vcl/fixed.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
+#include <com/sun/star/sdbc/XConnection.hpp>
+#endif
+
 #ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
 #endif
@@ -61,44 +65,84 @@
 #include "tabletree.hxx"
 #endif
 
+#include <memory>
 
 namespace dbaui
 {
     //========================================================================
-    class OJoinTableView;
+    /** unifies the access to a list of table/query objects
+    */
+    class TableObjectListFacade
+    {
+    public:
+        virtual void    updateTableObjectList( bool _bAllowViews ) = 0;
+        virtual String  getSelectedName( String& _out_rAliasName ) const = 0;
+        virtual bool    isLeafSelected() const = 0;
+
+        virtual ~TableObjectListFacade();
+    };
+
+    //========================================================================
+    class IAddTableDialogContext
+    {
+    public:
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
+                        getConnection() const = 0;
+        virtual bool    allowViews() const = 0;
+        virtual bool    allowQueries() const = 0;
+        virtual bool    allowAddition() const = 0;
+        virtual void    addTableWindow( const String& _rQualifiedTableName, const String& _rAliasName ) = 0;
+        virtual void    onWindowClosing( const Window* _pWindow ) = 0;
+    };
+
+    //========================================================================
     class OAddTableDlg : public ModelessDialog
     {
-        FixedText           aFTTable;
-        OTableTreeListBox   aTableList;
+        RadioButton         m_aCaseTables;
+        RadioButton         m_aCaseQueries;
+
+        OTableTreeListBox   m_aTableList;
+        SvTreeListBox       m_aQueryList;
+        ::std::auto_ptr< TableObjectListFacade >
+                            m_pCurrentList;
+
         PushButton          aAddButton;
         CancelButton        aCloseButton;
         HelpButton          aHelpButton;
-        FixedLine           aFixedLineTable;
 
-        String              aDefaultString;
-
-        OJoinTableView*     m_pTableView;
-        sal_Bool            m_bInitialized;
-
-        BOOL IsAddAllowed();
-        void AddTable();
+        IAddTableDialogContext&
+                            m_rContext;
 
         DECL_LINK( AddClickHdl, Button* );
         DECL_LINK( CloseClickHdl, Button* );
-        DECL_LINK( TableListDoubleClickHdl, ListBox* );
-        DECL_LINK( TableListSelectHdl, ListBox* );
+        DECL_LINK( TableListDoubleClickHdl, void* );
+        DECL_LINK( TableListSelectHdl, void* );
+        DECL_LINK( OnTypeSelected, void* );
+
     public:
-        OAddTableDlg(Window* pParent,OJoinTableView* _pTableView);
+        OAddTableDlg(
+            Window* _pParent,
+            IAddTableDialogContext& _rContext );
         virtual ~OAddTableDlg();
 
+        void DetermineAddTable() { aAddButton.Enable( impl_isAddAllowed() ); }
+        void Update();
+
+        static  String  getDialogTitleForContext(
+            IAddTableDialogContext& _rContext );
+
+    private:
         virtual BOOL Close();
 
-        void DetermineAddTable() { aAddButton.Enable( IsAddAllowed() ); }
-        void Update();
-    protected:
-        void UpdateTableList(BOOL bViewsAllowed);
+        bool impl_isAddAllowed();
+        void impl_addTable();
+
+        enum ObjectList
+        {
+            Tables,
+            Queries
+        };
+        void impl_switchTo( ObjectList _eList );
     };
 }
 #endif // DBAUI_QYDLGTAB_HXX
-
-
