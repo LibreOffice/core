@@ -4,9 +4,9 @@
 #
 #   $RCSfile: parameter.pm,v $
 #
-#   $Revision: 1.33 $
+#   $Revision: 1.34 $
 #
-#   last change: $Author: kz $ $Date: 2006-01-31 18:24:26 $
+#   last change: $Author: obo $ $Date: 2006-07-10 11:00:18 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -320,13 +320,21 @@ sub setglobalvariables
 
     if (( $installer::globals::compiler =~ /unx/ ) && ( $installer::globals::addpackagelist )) { $installer::globals::is_unix_multi = 1; }
 
-    if ( $installer::globals::compiler =~ /unxlngi/ || $installer::globals::compiler =~ /unxlngx/ || $installer::globals::compiler =~ /unxlngs/ )
+    if ( $installer::globals::compiler =~ /unxlngi/ || $installer::globals::compiler =~ /unxlngx/ || $installer::globals::compiler =~ /unxlngs/ || $installer::globals::compiler =~ /unxlngppc/ )
     {
         $installer::globals::islinuxbuild = 1;
         if ( $installer::globals::packageformat eq "rpm" )
         {
             $installer::globals::islinuxrpmbuild = 1;
             $installer::globals::epmoutpath = "RPMS";
+            if ( $installer::globals::compiler =~ /unxlngi/ )
+            {
+                $installer::globals::islinuxintelrpmbuild = 1;
+            }
+            if ( $installer::globals::compiler =~ /unxlngppc/ )
+            {
+                $installer::globals::islinuxppcrpmbuild = 1;
+            }
         }
 
         # Creating Debian packages ?
