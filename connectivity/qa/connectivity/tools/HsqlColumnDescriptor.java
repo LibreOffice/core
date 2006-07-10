@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HsqlColumnDescriptor.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 16:43:01 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:17:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,32 +39,54 @@ package connectivity.tools;
  */
 public class HsqlColumnDescriptor
 {
-    public String Name;
-    public String TypeName;
-    public boolean NotNull;
-    public boolean PrimaryKey;
+    private String Name;
+    private String TypeName;
+    private boolean Required;
+    private boolean PrimaryKey;
+    private String ForeignTable;
+    private String ForeignColumn;
+
+    public final String getName() { return Name; }
+    public final String getTypeName() { return TypeName; }
+    public final boolean isRequired() { return Required; }
+    public final boolean isPrimaryKey() { return PrimaryKey; }
+
+    public final boolean isForeignKey() { return ( ForeignTable.length() != 0 ) && ( ForeignColumn.length() != 0 ); }
+    public final String getForeignTable() { return ForeignTable; }
+    public final String getForeignColumn() { return ForeignColumn; }
+
+    /// determines that a column is required, i.e. not nullable
+    public final static int REQUIRED    = 1;
+    /// determines that a column is part of the primary key of its table
+    public final static int PRIMARY     = 2;
 
     public HsqlColumnDescriptor( String _Name, String _TypeName )
     {
         Name = _Name;
         TypeName = _TypeName;
-        NotNull = false;
+        Required = false;
         PrimaryKey = false;
+        ForeignTable = "";
+        ForeignColumn = "";
     }
 
-    public HsqlColumnDescriptor( String _Name, String _TypeName, boolean _NotNull )
+    public HsqlColumnDescriptor( String _Name, String _TypeName, int _Flags )
     {
         Name = _Name;
         TypeName = _TypeName;
-        NotNull = _NotNull;
-        PrimaryKey = false;
+        Required = ( _Flags & REQUIRED ) != 0;
+        PrimaryKey = ( _Flags & PRIMARY ) != 0;
+        ForeignTable = "";
+        ForeignColumn = "";
     }
 
-    public HsqlColumnDescriptor( String _Name, String _TypeName, boolean _NotNull, boolean _PrimaryKey )
+    public HsqlColumnDescriptor( String _Name, String _TypeName, int _Flags, String _ForeignTable, String _ForeignColumn )
     {
         Name = _Name;
         TypeName = _TypeName;
-        NotNull = _NotNull;
-        PrimaryKey = _PrimaryKey;
+        Required = ( _Flags & REQUIRED ) != 0;
+        PrimaryKey = ( _Flags & PRIMARY ) != 0;
+        ForeignTable = _ForeignTable;
+        ForeignColumn = _ForeignColumn;
     }
 };
