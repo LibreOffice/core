@@ -4,9 +4,9 @@
 #
 #   $RCSfile: worker.pm,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: hr $ $Date: 2006-05-09 15:40:27 $
+#   last change: $Author: obo $ $Date: 2006-07-10 11:00:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1951,9 +1951,13 @@ sub get_platform_name
 {
     my $platformname = "";
 
-    if ( $installer::globals::islinuxrpmbuild )
+    if ( $installer::globals::islinuxintelrpmbuild )
     {
         $platformname = "LinuxIntel";
+    }
+    elsif ( $installer::globals::islinuxppcrpmbuild )
+    {
+        $platformname = "LinuxPowerPC";
     }
     elsif ( $installer::globals::issolarissparcbuild )
     {
