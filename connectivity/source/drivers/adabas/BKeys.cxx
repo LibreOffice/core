@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BKeys.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:09:54 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:22:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,9 @@
 #endif
 #ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
+#endif
+#ifndef CONNECTIVITY_TKEYS_HXX
+#include <connectivity/TKeys.hxx>
 #endif
 
 
@@ -125,109 +128,117 @@ void OKeys::impl_refresh() throw(RuntimeException)
     m_pTable->refreshKeys();
 }
 // -------------------------------------------------------------------------
-Reference< XPropertySet > OKeys::createEmptyObject()
+Reference< XPropertySet > OKeys::createDescriptor()
 {
     return new OAdabasKey(m_pTable);
 }
 // -------------------------------------------------------------------------
 // XAppend
-void OKeys::appendObject( const Reference< XPropertySet >& descriptor )
+sdbcx::ObjectType OKeys::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
-    if(!m_pTable->isNew())
+    if ( m_pTable->isNew() )
     {
-        sal_Int32 nKeyType      = getINT32(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)));
+        Reference< XPropertySet > xNewDescriptor( cloneDescriptor( descriptor ) );
+        OKeysHelper::cloneDescriptorColumns( descriptor, xNewDescriptor );
+        return xNewDescriptor;
+    }
 
-        ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("ALTER TABLE ");
-        ::rtl::OUString aQuote  = m_pTable->getMetaData()->getIdentifierQuoteString(  );
-        const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
+    sal_Int32 nKeyType      = getINT32(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)));
 
-        aSql = aSql + aQuote + m_pTable->getSchema() + aQuote + sDot + aQuote + m_pTable->getTableName() + aQuote;
-        if(nKeyType == KeyType::PRIMARY)
-        {
-            aSql = aSql + ::rtl::OUString::createFromAscii(" ALTER PRIMARY KEY (");
-        }
-        else if(nKeyType == KeyType::FOREIGN)
-        {
-            aSql = aSql + ::rtl::OUString::createFromAscii(" FOREIGN KEY (");
-        }
-        else
-            throw SQLException();
+    ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("ALTER TABLE ");
+    ::rtl::OUString aQuote  = m_pTable->getMetaData()->getIdentifierQuoteString(  );
+    const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
 
-        Reference<XColumnsSupplier> xColumnSup(descriptor,UNO_QUERY);
-        Reference<XIndexAccess> xColumns(xColumnSup->getColumns(),UNO_QUERY);
+    aSql = aSql + aQuote + m_pTable->getSchema() + aQuote + sDot + aQuote + m_pTable->getTableName() + aQuote;
+    if(nKeyType == KeyType::PRIMARY)
+    {
+        aSql = aSql + ::rtl::OUString::createFromAscii(" ALTER PRIMARY KEY (");
+    }
+    else if(nKeyType == KeyType::FOREIGN)
+    {
+        aSql = aSql + ::rtl::OUString::createFromAscii(" FOREIGN KEY (");
+    }
+    else
+        throw SQLException();
+
+    Reference<XColumnsSupplier> xColumnSup(descriptor,UNO_QUERY);
+    Reference<XIndexAccess> xColumns(xColumnSup->getColumns(),UNO_QUERY);
+
+    for(sal_Int32 i=0;i<xColumns->getCount();++i)
+    {
+        Reference< XPropertySet > xColProp;
+        xColumns->getByIndex(i) >>= xColProp;
+        aSql = aSql + aQuote + getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote
+                    +   ::rtl::OUString::createFromAscii(",");
+    }
+    aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
+
+    if(nKeyType == KeyType::FOREIGN)
+    {
+        sal_Int32 nDeleteRule   = getINT32(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELETERULE)));
+
+        ::rtl::OUString aName,aSchema,aRefTable = getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REFERENCEDTABLE)));
+        sal_Int32 nLen = aRefTable.indexOf('.');
+        aSchema = aRefTable.copy(0,nLen);
+        aName   = aRefTable.copy(nLen+1);
+        aSql += ::rtl::OUString::createFromAscii(" REFERENCES ")
+                    + aQuote + aSchema + aQuote + sDot + aQuote + aName + aQuote;
+        aSql += ::rtl::OUString::createFromAscii(" (");
 
         for(sal_Int32 i=0;i<xColumns->getCount();++i)
         {
             Reference< XPropertySet > xColProp;
             xColumns->getByIndex(i) >>= xColProp;
-            aSql = aSql + aQuote + getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote
+            aSql = aSql + aQuote + getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RELATEDCOLUMN))) + aQuote
                         +   ::rtl::OUString::createFromAscii(",");
         }
         aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
 
-        if(nKeyType == KeyType::FOREIGN)
+        switch(nDeleteRule)
         {
-            sal_Int32 nDeleteRule   = getINT32(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELETERULE)));
-
-            ::rtl::OUString aName,aSchema,aRefTable = getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REFERENCEDTABLE)));
-            sal_Int32 nLen = aRefTable.indexOf('.');
-            aSchema = aRefTable.copy(0,nLen);
-            aName   = aRefTable.copy(nLen+1);
-            aSql += ::rtl::OUString::createFromAscii(" REFERENCES ")
-                        + aQuote + aSchema + aQuote + sDot + aQuote + aName + aQuote;
-            aSql += ::rtl::OUString::createFromAscii(" (");
-
-            for(sal_Int32 i=0;i<xColumns->getCount();++i)
-            {
-                Reference< XPropertySet > xColProp;
-                xColumns->getByIndex(i) >>= xColProp;
-                aSql = aSql + aQuote + getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RELATEDCOLUMN))) + aQuote
-                            +   ::rtl::OUString::createFromAscii(",");
-            }
-            aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
-
-            switch(nDeleteRule)
-            {
-                case KeyRule::CASCADE:
-                    aSql += ::rtl::OUString::createFromAscii(" ON DELETE CASCADE ");
-                    break;
-                case KeyRule::RESTRICT:
-                    aSql += ::rtl::OUString::createFromAscii(" ON DELETE RESTRICT ");
-                    break;
-                case KeyRule::SET_NULL:
-                    aSql += ::rtl::OUString::createFromAscii(" ON DELETE SET NULL ");
-                    break;
-                case KeyRule::SET_DEFAULT:
-                    aSql += ::rtl::OUString::createFromAscii(" ON DELETE SET DEFAULT ");
-                    break;
-                default:
-                    ;
-            }
-        }
-
-        Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
-        xStmt->execute(aSql);
-        ::comphelper::disposeComponent(xStmt);
-        // we need a name for the insertion
-        if(nKeyType == KeyType::FOREIGN)
-        {
-            Reference< XResultSet > xResult = m_pTable->getMetaData()->getImportedKeys(Any(),m_pTable->getSchema(),m_pTable->getTableName());
-            if(xResult.is())
-            {
-                Reference< XRow > xRow(xResult,UNO_QUERY);
-                while(xResult->next())
-                {
-                    ::rtl::OUString sName = xRow->getString(12);
-                    if ( !m_pElements->exists(sName) ) // this name wasn't inserted yet so it must be te new one
-                    {
-                        descriptor->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),makeAny(sName));
-                        break;
-                    }
-                }
-                ::comphelper::disposeComponent(xResult);
-            }
+            case KeyRule::CASCADE:
+                aSql += ::rtl::OUString::createFromAscii(" ON DELETE CASCADE ");
+                break;
+            case KeyRule::RESTRICT:
+                aSql += ::rtl::OUString::createFromAscii(" ON DELETE RESTRICT ");
+                break;
+            case KeyRule::SET_NULL:
+                aSql += ::rtl::OUString::createFromAscii(" ON DELETE SET NULL ");
+                break;
+            case KeyRule::SET_DEFAULT:
+                aSql += ::rtl::OUString::createFromAscii(" ON DELETE SET DEFAULT ");
+                break;
+            default:
+                ;
         }
     }
+
+    Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
+    xStmt->execute(aSql);
+    ::comphelper::disposeComponent(xStmt);
+    // find the name which the database gave the new key
+    ::rtl::OUString sNewName( _rForName );
+    if(nKeyType == KeyType::FOREIGN)
+    {
+        Reference< XResultSet > xResult = m_pTable->getMetaData()->getImportedKeys(Any(),m_pTable->getSchema(),m_pTable->getTableName());
+        if(xResult.is())
+        {
+            Reference< XRow > xRow(xResult,UNO_QUERY);
+            while(xResult->next())
+            {
+                ::rtl::OUString sName = xRow->getString(12);
+                if ( !m_pElements->exists(sName) ) // this name wasn't inserted yet so it must be te new one
+                {
+                    descriptor->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),makeAny(sName));
+                    sNewName = sName;
+                    break;
+                }
+            }
+            ::comphelper::disposeComponent(xResult);
+        }
+    }
+
+    return createObject( sNewName );
 }
 // -------------------------------------------------------------------------
 // XDrop
@@ -261,32 +272,6 @@ void OKeys::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
             }
         }
     }
-}
-// -----------------------------------------------------------------------------
-sdbcx::ObjectType OKeys::cloneObject(const Reference< XPropertySet >& _xDescriptor)
-{
-    sdbcx::ObjectType xName;
-    if(!m_pTable->isNew())
-    {
-        xName = OCollection_TYPE::cloneObject(_xDescriptor);
-    }
-    else
-    {
-        OAdabasKey* pKey = new OAdabasKey(m_pTable);
-        xName = pKey;
-        ::comphelper::copyProperties(_xDescriptor,xName);
-        Reference<XColumnsSupplier> xSup(_xDescriptor,UNO_QUERY);
-        Reference<XIndexAccess> xIndex(xSup->getColumns(),UNO_QUERY);
-        Reference<XAppend> xAppend(pKey->getColumns(),UNO_QUERY);
-        sal_Int32 nCount = xIndex->getCount();
-        for(sal_Int32 i=0;i< nCount;++i)
-        {
-            Reference<XPropertySet> xProp;
-            xIndex->getByIndex(i) >>= xProp;
-            xAppend->appendByDescriptor(xProp);
-        }
-    }
-    return xName;
 }
 // -----------------------------------------------------------------------------
 
