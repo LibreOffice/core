@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HsqlDatabase.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 16:43:13 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:18:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,15 +35,25 @@
 
 package connectivity.tools;
 
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.container.ElementExistException;
+import com.sun.star.frame.XStorable;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.sdb.XOfficeDatabaseDocument;
+import com.sun.star.sdbc.SQLException;
+import com.sun.star.sdbc.XCloseable;
+import com.sun.star.sdbc.XConnection;
+import com.sun.star.sdbc.XStatement;
+import com.sun.star.sdbcx.XAppend;
+import com.sun.star.sdbcx.XTablesSupplier;
+import com.sun.star.uno.UnoRuntime;
 import java.io.File;
 
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.sdb.*;
-import com.sun.star.sdbc.*;
-import com.sun.star.lang.*;
-import com.sun.star.beans.*;
-import com.sun.star.frame.*;
 import com.sun.star.util.CloseVetoException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  *
@@ -55,8 +65,10 @@ public class HsqlDatabase
     XMultiServiceFactory    m_orb;
     // the URL of the temporary file used for the database document
     String                  m_databaseDocumentFile;
-    // the data source belonging to the database document
+    // the database document
     XOfficeDatabaseDocument m_databaseDocument;
+    // the data source belonging to the database document
+    DataSource              m_dataSource;
     // the default connection
     XConnection             m_connection;
 
@@ -77,8 +89,8 @@ public class HsqlDatabase
 
         m_databaseDocument = (XOfficeDatabaseDocument)UnoRuntime.queryInterface(
             XOfficeDatabaseDocument.class, m_orb.createInstance( "com.sun.star.sdb.OfficeDatabaseDocument" ) );
-        XDataSource dataSource = m_databaseDocument.getDataSource();
-        XPropertySet dsProperties = (XPropertySet)UnoRuntime.queryInterface( XPropertySet.class, dataSource );
+        m_dataSource = new DataSource( m_orb, m_databaseDocument.getDataSource() );
+        XPropertySet dsProperties = (XPropertySet)UnoRuntime.queryInterface( XPropertySet.class, m_databaseDocument.getDataSource() );
         dsProperties.setPropertyValue("URL", "sdbc:embedded:hsqldb");
 
         XStorable storable = (XStorable)UnoRuntime.queryInterface( XStorable.class, m_databaseDocument );
@@ -115,7 +127,7 @@ public class HsqlDatabase
     public void close()
     {
         // close connection
-        com.sun.star.sdbc.XCloseable closeConn = (com.sun.star.sdbc.XCloseable)UnoRuntime.queryInterface( XCloseable.class,
+        XCloseable closeConn = (XCloseable)UnoRuntime.queryInterface( XCloseable.class,
             m_connection );
         if ( closeConn != null )
         {
@@ -165,15 +177,40 @@ public class HsqlDatabase
         }
     }
 
+    /** drops the table with a given name
+
+        @param _name
+            the name of the table to drop
+        @param _ifExists
+            TRUE if it should be dropped only when it exists.
+    */
+    public void dropTable( String _name, boolean _ifExists ) throws SQLException
+    {
+        String dropStatement = "DROP TABLE \"" + _name;
+        if ( _ifExists )
+            dropStatement += "\" IF EXISTS";
+        executeSQL( dropStatement );
+    }
+
+    public void createTable( HsqlTableDescriptor _tableDesc, boolean _dropIfExists ) throws SQLException
+    {
+        if ( _dropIfExists )
+            dropTable( _tableDesc.getName(), true );
+        createTable( _tableDesc );
+    }
+
     /** creates a table
      */
     public void createTable( HsqlTableDescriptor _tableDesc ) throws SQLException
     {
-        String createStatement = "CREATE TABLE \"";
+        String createStatement = "CREATE CACHED TABLE \"";
         createStatement += _tableDesc.getName();
         createStatement += "\" ( ";
 
         String primaryKeyList = "";
+
+        HashMap foreignKeys = new HashMap();
+        HashMap foreignKeyRefs = new HashMap();
 
         HsqlColumnDescriptor[] columns = _tableDesc.getColumns();
         for ( int i=0; i<columns.length; ++i )
@@ -181,17 +218,34 @@ public class HsqlDatabase
             if ( i > 0 )
                 createStatement += ", ";
 
-            createStatement += "\"" + columns[i].Name;
-            createStatement += "\"" + columns[i].TypeName;
+            createStatement += "\"" + columns[i].getName();
+            createStatement += "\" " + columns[i].getTypeName();
 
-            if ( columns[i].NotNull )
+            if ( columns[i].isRequired() )
                 createStatement += " NOT NULL";
 
-            if ( columns[i].PrimaryKey )
+            if ( columns[i].isPrimaryKey() )
             {
                 if ( primaryKeyList.length() > 0 )
                     primaryKeyList += ", ";
-                primaryKeyList += "\"" + columns[i].Name + "\"";
+                primaryKeyList += "\"" + columns[i].getName() + "\"";
+            }
+
+            if ( columns[i].isForeignKey() )
+            {
+                String foreignTable = columns[i].getForeignTable();
+
+                String foreignKeysForTable = foreignKeys.containsKey( foreignTable ) ? (String)foreignKeys.get( foreignTable ) : "";
+                if ( foreignKeysForTable.length() > 0 )
+                    foreignKeysForTable += ", ";
+                foreignKeysForTable += "\"" + columns[i].getName() + "\"";
+                foreignKeys.put( foreignTable, foreignKeysForTable );
+
+                String foreignKeyRefsForTable = foreignKeyRefs.containsKey( foreignTable ) ? (String)foreignKeyRefs.get( foreignTable ) : "";
+                if ( foreignKeyRefsForTable.length() > 0 )
+                    foreignKeyRefsForTable += ", ";
+                foreignKeyRefsForTable += "\"" + columns[i].getForeignColumn() + "\"";
+                foreignKeyRefs.put( foreignTable, foreignKeyRefsForTable );
             }
         }
 
@@ -202,9 +256,38 @@ public class HsqlDatabase
             createStatement += ")";
         }
 
+        Set foreignKeyTables = foreignKeys.keySet();
+        for (   Iterator foreignKey = foreignKeyTables.iterator();
+                foreignKey.hasNext();
+            )
+        {
+            String foreignTable = (String)foreignKey.next();
+
+            createStatement += ", FOREIGN KEY (";
+            createStatement += (String)foreignKeys.get(foreignTable);
+            createStatement += ") REFERENCES \"";
+            createStatement += foreignTable;
+            createStatement += "\"(";
+            createStatement += (String)foreignKeyRefs.get(foreignTable);
+            createStatement += ")";
+        }
+
         createStatement += ")";
 
+        //System.err.println( createStatement );
         executeSQL( createStatement );
+    }
+
+    /** creates a table in the database. using the SDBCX-API
+     */
+    public void createTableInSDBCX( HsqlTableDescriptor _tableDesc ) throws SQLException, ElementExistException
+    {
+        XPropertySet sdbcxDescriptor = _tableDesc.createSdbcxDescriptor( defaultConnection() );
+        XTablesSupplier suppTables = (XTablesSupplier)UnoRuntime.queryInterface(
+            XTablesSupplier.class, defaultConnection() );
+        XAppend appendTable = (XAppend)UnoRuntime.queryInterface(
+            XAppend.class, suppTables.getTables() );
+        appendTable.appendByDescriptor( sdbcxDescriptor );
     }
 
     /** returns the URL of the ODB document represented by this instance
@@ -212,6 +295,20 @@ public class HsqlDatabase
     public String getDocumentURL()
     {
         return m_databaseDocumentFile;
+    }
+
+    /** returns the data source belonging to this database
+    */
+    public DataSource getDataSource()
+    {
+        return m_dataSource;
+    }
+
+    /** creates a row set operating the database, with a given command/type
+     */
+    public RowSet createRowSet( int _commandType, String _command )
+    {
+        return new RowSet(m_orb, getDocumentURL(), _commandType, _command);
     }
 
     protected void finalize() throws Throwable
