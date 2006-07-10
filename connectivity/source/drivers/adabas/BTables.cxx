@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BTables.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:11:03 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:22:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,19 +133,16 @@ void OTables::disposing(void)
     OCollection::disposing();
 }
 // -------------------------------------------------------------------------
-Reference< XPropertySet > OTables::createEmptyObject()
+Reference< XPropertySet > OTables::createDescriptor()
 {
     return new OAdabasTable(this,static_cast<OAdabasCatalog&>(m_rParent).getConnection());
 }
 // -------------------------------------------------------------------------
 // XAppend
-void OTables::appendObject( const Reference< XPropertySet >& descriptor )
+sdbcx::ObjectType OTables::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
-    ::rtl::OUString aName = getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)));
-    if(!aName.getLength())
-        ::dbtools::throwFunctionSequenceException(static_cast<XTypeProvider*>(this));
-
     createTable(descriptor);
+    return createObject( _rForName );
 }
 // -------------------------------------------------------------------------
 void OTables::setComments(const Reference< XPropertySet >& descriptor ) throw(SQLException, RuntimeException)
