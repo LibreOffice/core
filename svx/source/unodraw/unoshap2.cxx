@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-05 22:18:29 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 11:27:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,6 +83,8 @@
 #ifndef _SVX_IMPGRF_HXX
 #include "impgrf.hxx"
 #endif
+
+#include <boost/scoped_ptr.hpp>
 
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
@@ -2086,67 +2088,61 @@ void SAL_CALL SvxCustomShape::setPropertyValue( const OUString& aPropertyName, c
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, com::sun::star::beans::PropertyVetoException, com::sun::star::lang::IllegalArgumentException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
-    sal_Bool bCustomShapeGeometry = mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CustomShapeGeometry" ) );
+    SdrObject* pObject = mpObj.get();
+
+    sal_Bool bCustomShapeGeometry = pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CustomShapeGeometry" ) );
 
     sal_Bool bMirroredX = sal_False;
     sal_Bool bMirroredY = sal_False;
 
     if ( bCustomShapeGeometry )
     {
-        bMirroredX = ( ((SdrObjCustomShape*)mpObj.get())->IsMirroredX() );
-        bMirroredY = ( ((SdrObjCustomShape*)mpObj.get())->IsMirroredY() );
+        bMirroredX = ( ((SdrObjCustomShape*)pObject)->IsMirroredX() );
+        bMirroredY = ( ((SdrObjCustomShape*)pObject)->IsMirroredY() );
     }
 
     SvxShape::setPropertyValue( aPropertyName, aValue );
 
     if ( bCustomShapeGeometry )
     {
-        Rectangle aRect( mpObj.get()->GetSnapRect() );
+        Rectangle aRect( pObject->GetSnapRect() );
 
         // #i38892#
-        const SdrGluePointList* pList = mpObj.get()->GetGluePointList();
-        SdrGluePointList* pListCopy = (pList && pList->GetCount()) ? new SdrGluePointList(*pList) : 0L;
-        bool bGluePointListChanged(false);
+        bool bNeedsMirrorX = ((SdrObjCustomShape*)pObject)->IsMirroredX() != bMirroredX;
+        bool bNeedsMirrorY = ((SdrObjCustomShape*)pObject)->IsMirroredY() != bMirroredY;
 
-        if ( ((SdrObjCustomShape*)mpObj.get())->IsMirroredX() != bMirroredX )
+        boost::scoped_ptr< SdrGluePointList > pListCopy;
+        if( bNeedsMirrorX || bNeedsMirrorY )
+        {
+            const SdrGluePointList* pList = pObject->GetGluePointList();
+            if( pList )
+                pListCopy.reset( new SdrGluePointList(*pList) );
+        }
+
+        if ( bNeedsMirrorX )
         {
             Point aTop( ( aRect.Left() + aRect.Right() ) >> 1, aRect.Top() );
             Point aBottom( aTop.X(), aTop.Y() + 1000 );
-            ((SdrObjCustomShape*)mpObj.get())->NbcMirror( aTop, aBottom );
+            ((SdrObjCustomShape*)pObject)->NbcMirror( aTop, aBottom );
             // NbcMirroring is flipping the current mirror state,
             // so we have to set the correct state again
-            ((SdrObjCustomShape*)mpObj.get())->SetMirroredX( bMirroredX ? sal_False : sal_True );
-
-            // #i38892#
-            bGluePointListChanged = true;
+            ((SdrObjCustomShape*)pObject)->SetMirroredX( bMirroredX ? sal_False : sal_True );
         }
-        if ( ((SdrObjCustomShape*)mpObj.get())->IsMirroredY() != bMirroredY )
+        if ( bNeedsMirrorY )
         {
             Point aLeft( aRect.Left(), ( aRect.Top() + aRect.Bottom() ) >> 1 );
             Point aRight( aLeft.X() + 1000, aLeft.Y() );
-            ((SdrObjCustomShape*)mpObj.get())->NbcMirror( aLeft, aRight );
+            ((SdrObjCustomShape*)pObject)->NbcMirror( aLeft, aRight );
             // NbcMirroring is flipping the current mirror state,
             // so we have to set the correct state again
-            ((SdrObjCustomShape*)mpObj.get())->SetMirroredY( bMirroredY ? sal_False : sal_True );
-
-            // #i38892#
-            bGluePointListChanged = true;
+            ((SdrObjCustomShape*)pObject)->SetMirroredY( bMirroredY ? sal_False : sal_True );
         }
 
-        // #i38892#
-        if(pListCopy)
+        if( pListCopy )
         {
-            if(bGluePointListChanged)
-            {
-                SdrGluePointList* pNewList = const_cast< SdrGluePointList* >( mpObj->GetGluePointList() );
-
-                if(pNewList)
-                {
-                    *pNewList = *pListCopy;
-                }
-            }
-
-            delete pListCopy;
+            SdrGluePointList* pNewList = const_cast< SdrGluePointList* >( pObject->GetGluePointList() );
+            if(pNewList)
+                *pNewList = *pListCopy;
         }
     }
 }
@@ -2168,5 +2164,4 @@ uno::Any SAL_CALL SvxCustomShape::getPropertyValue( const OUString& aPropertyNam
     }
 
 }
-
 
