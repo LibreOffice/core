@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MStatement.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:45:30 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:30:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,7 +87,7 @@
 #include "MConnection.hxx"
 #include "MTable.hxx"
 
-#include <memory>
+#include <boost/shared_ptr.hpp>
 
 namespace connectivity
 {
@@ -125,7 +125,7 @@ namespace connectivity
             OValueRow                                   m_aRow;
 
             connectivity::OSQLParser                    m_aParser;
-            ::std::auto_ptr< connectivity::OSQLParseTreeIterator >
+            ::boost::shared_ptr< ::connectivity::OSQLParseTreeIterator >
                                                         m_pSQLIterator;
 
             connectivity::OSQLParseNode*                m_pParseTree;
