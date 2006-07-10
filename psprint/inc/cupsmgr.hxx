@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cupsmgr.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 10:22:34 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 16:29:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,7 @@ public:
     virtual void changePrinterInfo( const ::rtl::OUString& rPrinter, const PrinterInfo& rNewInfo );
 
     // check if the printer configuration has changed
-    virtual bool checkPrintersChanged();
+    virtual bool checkPrintersChanged( bool bWait );
 
     // members for administration (->padmin)
     // disable for CUPS
