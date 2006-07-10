@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:59:34 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:20:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -222,13 +222,6 @@ bool WinSalBitmap::Create( const SalBitmap& rSSalBmp, SalGraphics* pSGraphics )
             maSize = Size( aDDBInfo.bmWidth, aDDBInfo.bmHeight );
             mnBitCount = aDDBInfo.bmPlanes * aDDBInfo.bmBitsPixel;
 
-            if( mnBitCount )
-            {
-                mnBitCount = ( mnBitCount <= 1 ) ? 1 :
-                             ( mnBitCount <= 4 ) ? 4 :
-                             ( mnBitCount <= 8 ) ? 8 : 24;
-            }
-
             bRet = TRUE;
         }
         else if( hNewDDB )
@@ -337,11 +330,11 @@ USHORT WinSalBitmap::ImplGetDIBColorCount( HGLOBAL hDIB )
 
 HGLOBAL WinSalBitmap::ImplCreateDIB( const Size& rSize, USHORT nBits, const BitmapPalette& rPal )
 {
-    DBG_ASSERT( nBits == 1 || nBits == 4 || nBits == 8 || nBits == 24, "Unsupported BitCount!" );
+    DBG_ASSERT( nBits == 1 || nBits == 4 || nBits == 8 || nBits == 16 || nBits == 24, "Unsupported BitCount!" );
 
     HGLOBAL hDIB = 0;
 
-    if ( rSize.Width() && rSize.Height() && ( nBits == 1 || nBits == 4 || nBits == 8 || nBits == 24 ) )
+    if ( rSize.Width() && rSize.Height() )
     {
         const ULONG     nImageSize = AlignedWidth4Bytes( nBits * rSize.Width() ) * rSize.Height();
         const USHORT    nColors = ( nBits <= 8 ) ? ( 1 << nBits ) : 0;
