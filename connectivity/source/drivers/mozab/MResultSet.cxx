@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MResultSet.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:44:18 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:29:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,7 +136,7 @@ sal_Bool SAL_CALL OResultSet::supportsService( const ::rtl::OUString& _rServiceN
 }
 
 // -------------------------------------------------------------------------
-OResultSet::OResultSet(OStatement_Base* pStmt, connectivity::OSQLParseTreeIterator&   _aSQLIterator )
+OResultSet::OResultSet(OStatement_Base* pStmt, const ::boost::shared_ptr< connectivity::OSQLParseTreeIterator >& _pSQLIterator )
     : OResultSet_BASE(m_aMutex)
     ,OPropertySetHelper(OResultSet_BASE::rBHelper)
     ,m_pStatement(pStmt)
@@ -148,8 +148,8 @@ OResultSet::OResultSet(OStatement_Base* pStmt, connectivity::OSQLParseTreeIterat
     ,m_nResultSetType(ResultSetType::SCROLL_INSENSITIVE)
     ,m_nFetchDirection(FetchDirection::FORWARD)
     ,m_nResultSetConcurrency(ResultSetConcurrency::UPDATABLE)
-    ,m_aSQLIterator(_aSQLIterator)
-    ,m_pParseTree(_aSQLIterator.getParseTree())
+    ,m_pSQLIterator( _pSQLIterator )
+    ,m_pParseTree( _pSQLIterator->getParseTree() )
     ,m_aQuery(pStmt->getOwnConnection()->getColumnAlias().getAliasMap())
     ,m_pTable(NULL)
     ,m_CurrentRowCount(0)
@@ -315,7 +315,7 @@ Reference< XResultSetMetaData > SAL_CALL OResultSet::getMetaData(  ) throw(SQLEx
 
     if(!m_xMetaData.is())
         m_xMetaData = new OResultSetMetaData(
-        m_aSQLIterator.getSelectColumns(), m_aSQLIterator.getTables().begin()->first ,m_pTable,determineReadOnly());
+        m_pSQLIterator->getSelectColumns(), m_pSQLIterator->getTables().begin()->first ,m_pTable,determineReadOnly());
     return m_xMetaData;
 }
 // -------------------------------------------------------------------------
@@ -803,8 +803,7 @@ void OResultSet::parseParameter( const OSQLParseNode* pNode, rtl::OUString& rMat
 }
 
 void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseTree,
-                                     MQueryExpression                     &queryExpression,
-                                     connectivity::OSQLParseTreeIterator& aSQLIterator)
+                                     MQueryExpression                     &queryExpression)
 {
     ::rtl::OUString         columnName;
     MQueryOp::cond_type     op( MQueryOp::Is );
@@ -813,8 +812,8 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
     if ( parseTree == NULL )
         return;
 
-    if ( aSQLIterator.getParseTree() != NULL ) {
-        ::vos::ORef<OSQLColumns> xColumns = aSQLIterator.getParameters();
+    if ( m_pSQLIterator->getParseTree() != NULL ) {
+        ::vos::ORef<OSQLColumns> xColumns = m_pSQLIterator->getParameters();
         if(xColumns.isValid())
         {
             ::rtl::OUString aTabName,aColName,aParameterName,aParameterValue;
@@ -846,7 +845,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
         OSL_TRACE("analyseSQL : Got WHERE clause\n");
         // Reset Parameter Counter
         resetParameters();
-        analyseWhereClause( parseTree->getChild( 1 ), queryExpression, aSQLIterator);
+        analyseWhereClause( parseTree->getChild( 1 ), queryExpression );
     }
     else if ( parseTree->count() == 3 &&                         // Handle ()'s
         SQL_ISPUNCTUATION(parseTree->getChild(0),"(") &&
@@ -855,7 +854,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
 
         OSL_TRACE("analyseSQL : Got Punctuation ()\n");
         MQueryExpression *subExpression = new MQueryExpression();
-        analyseWhereClause( parseTree->getChild( 1 ), *subExpression, aSQLIterator );
+        analyseWhereClause( parseTree->getChild( 1 ), *subExpression );
         queryExpression.getExpressions().push_back( subExpression );
     }
     else if ((SQL_ISRULE(parseTree,search_condition) || (SQL_ISRULE(parseTree,boolean_term)))
@@ -865,8 +864,8 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
         OSL_TRACE("analyseSQL : Got AND/OR clause\n");
 
         // TODO - Need to take care or AND, for now match is always OR
-        analyseWhereClause( parseTree->getChild( 0 ), queryExpression, aSQLIterator );
-        analyseWhereClause( parseTree->getChild( 2 ), queryExpression, aSQLIterator );
+        analyseWhereClause( parseTree->getChild( 0 ), queryExpression );
+        analyseWhereClause( parseTree->getChild( 2 ), queryExpression );
 
         if (SQL_ISTOKEN(parseTree->getChild(1),OR)) {         // OR-Operator
             queryExpression.setExpressionCondition( MQueryExpression::OR );
@@ -903,7 +902,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
 
         ::rtl::OUString sTableRange;
         if(SQL_ISRULE(parseTree->getChild(0),column_ref))
-            aSQLIterator.getColumnRange(parseTree->getChild(0),columnName,sTableRange);
+            m_pSQLIterator->getColumnRange(parseTree->getChild(0),columnName,sTableRange);
         else if(parseTree->getChild(0)->isToken())
             columnName = parseTree->getChild(0)->getTokenValue();
 
@@ -960,7 +959,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
 
         ::rtl::OUString sTableRange;
         if(SQL_ISRULE(pColumn,column_ref))
-            aSQLIterator.getColumnRange(pColumn,columnName,sTableRange);
+            m_pSQLIterator->getColumnRange(pColumn,columnName,sTableRange);
 
         OSL_TRACE("ColumnName = %s\n", OUtoCStr( columnName ) );
 
@@ -1081,7 +1080,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
                 op = MQueryOp::Exists;
 
         ::rtl::OUString sTableRange;
-        aSQLIterator.getColumnRange(parseTree->getChild(0),columnName,sTableRange);
+        m_pSQLIterator->getColumnRange(parseTree->getChild(0),columnName,sTableRange);
 
         queryExpression.getExpressions().push_back( new MQueryExpressionString( columnName, op ));
     }
@@ -1104,7 +1103,7 @@ void OResultSet::fillRowData()
     MQueryExpression queryExpression;
 
     OConnection* xConnection = static_cast<OConnection*>(m_pStatement->getConnection().get());
-    m_xColumns = m_aSQLIterator.getSelectColumns();
+    m_xColumns = m_pSQLIterator->getSelectColumns();
 
     OSL_ENSURE(m_xColumns.isValid(), "Need the Columns!!");
 
@@ -1124,7 +1123,7 @@ void OResultSet::fillRowData()
 
 
     // Generate Match Conditions for Query
-    const OSQLParseNode*  pParseTree = m_aSQLIterator.getWhereTree();
+    const OSQLParseNode*  pParseTree = m_pSQLIterator->getWhereTree();
 
     // const OSQLParseNode*  pParseTree = NULL;
 
@@ -1135,7 +1134,7 @@ void OResultSet::fillRowData()
 
         OSL_TRACE("\tHave a Where Clause\n");
 
-        analyseWhereClause( pParseTree, queryExpression, m_aSQLIterator);
+        analyseWhereClause( pParseTree, queryExpression );
     }
     else
     {
@@ -1237,11 +1236,11 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
     OSL_ENSURE( m_pTable, "Need a Table object");
     if(!m_pTable)
     {
-        const OSQLTables& xTabs = m_aSQLIterator.getTables();
+        const OSQLTables& xTabs = m_pSQLIterator->getTables();
         if ((xTabs.begin() == xTabs.end()) || !xTabs.begin()->second.is())
             ::dbtools::throwGenericSQLException(   ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("The statement is invalid.")),
                                         static_cast<XWeak*>(this),
-                                        makeAny(m_aSQLIterator.getWarning())
+                                        makeAny( m_pSQLIterator->getErrors() )
                                     );
 
         m_pTable = static_cast< OTable* > ((xTabs.begin()->second).get());
@@ -1258,7 +1257,7 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
     // initializeRow(m_aRow,nColumnCount);
     // initializeRow(m_aEvaluateRow,nColumnCount);
 
-    switch(m_aSQLIterator.getStatementType())
+    switch( m_pSQLIterator->getStatementType() )
     {
         case SQL_STATEMENT_SELECT:
         {
@@ -1403,9 +1402,6 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
             }
         }   break;
 
-        case SQL_STATEMENT_SELECT_COUNT:
-            ::dbtools::throwFunctionNotSupportedException(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("COUNT() - Driver does not support this function.")), NULL);
-            break;
         case SQL_STATEMENT_UPDATE:
         case SQL_STATEMENT_DELETE:
         case SQL_STATEMENT_INSERT:
@@ -1544,12 +1540,12 @@ sal_Bool OResultSet::fillKeySet(sal_Int32 nMaxCardNumber)
     impl_ensureKeySet();
     if (m_CurrentRowCount < nMaxCardNumber)
     {
-         sal_Int32  nKeyValue;
-         sal_Int32  nKeyPos;
-         if ( (sal_Int32)m_pKeySet->capacity() < nMaxCardNumber )
-             m_pKeySet->reserve(nMaxCardNumber + 20 );
+        sal_Int32   nKeyValue;
+        sal_Int32   nKeyPos;
+        if ( (sal_Int32)m_pKeySet->capacity() < nMaxCardNumber )
+            m_pKeySet->reserve(nMaxCardNumber + 20 );
 
-         for (nKeyValue = m_CurrentRowCount+1; nKeyValue  <= nMaxCardNumber; nKeyValue ++)
+        for (nKeyValue = m_CurrentRowCount+1; nKeyValue  <= nMaxCardNumber; nKeyValue ++)
         {
             nKeyPos = m_pKeySet->size();
             m_pKeySet->insert( m_pKeySet->end() );
@@ -1732,9 +1728,7 @@ void OResultSet::checkPendingUpdate() throw(SQLException, RuntimeException)
         const ::rtl::OUString errorMsg=::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(" Please commit row "))
                                                     + ::rtl::OUString::valueOf(nCurrentRow)
                                                     +   ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(" before  update rows or insert new rows. ")) ;
-        throw SQLException(errorMsg,*this
-                    ,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000)
-                    ,1000,Any());
+        ::dbtools::throwGenericSQLException( errorMsg, *this );
     }
 
 }
@@ -1919,16 +1913,13 @@ void SAL_CALL OResultSet::deleteRow(  ) throw(::com::sun::star::sdbc::SQLExcepti
     OSL_TRACE("deleteRow, m_nRowPos = %u", m_nRowPos );
     ResultSetEntryGuard aGuard( *this );
     if (rowDeleted())
-        throw SQLException(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Row Already deleted")) ,*this
-                    ,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000)
-                    ,1000,Any());
+        ::dbtools::throwGenericSQLException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Row Already deleted")), *this );
 
     const sal_Int32 nCurrentRow = getCurrentCardNumber();
     //fetchRow(nCurrentRow);
     if (!nCurrentRow)
-        throw SQLException(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(" Can't get Current Row")) ,*this
-                    ,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000)
-                    ,1000,Any());
+        ::dbtools::throwGenericSQLException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(" Can't get Current Row")), *this );
+
     sal_Bool m_bRowDeleted = ( m_aQuery.deleteRow( nCurrentRow ) > 0 );
     if (!m_bRowDeleted)
         m_pStatement->getOwnConnection()->throwGenericSQLException( m_aQuery.getErrorResourceId() );
