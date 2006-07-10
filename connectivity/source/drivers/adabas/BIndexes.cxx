@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BIndexes.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:09:21 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:22:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,83 +120,71 @@ void OIndexes::impl_refresh() throw(RuntimeException)
     m_pTable->refreshIndexes();
 }
 // -------------------------------------------------------------------------
-Reference< XPropertySet > OIndexes::createEmptyObject()
+Reference< XPropertySet > OIndexes::createDescriptor()
 {
     return new OAdabasIndex(m_pTable);
 }
 // -------------------------------------------------------------------------
-sdbcx::ObjectType OIndexes::cloneObject(const Reference< XPropertySet >& _xDescriptor)
-{
-    sdbcx::ObjectType xName;
-    if(!m_pTable->isNew())
-    {
-        xName = OCollection_TYPE::cloneObject(_xDescriptor);
-    }
-    return xName;
-}
-// -------------------------------------------------------------------------
 // XAppend
-void OIndexes::appendObject( const Reference< XPropertySet >& descriptor )
+sdbcx::ObjectType OIndexes::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
-    ::rtl::OUString aName = getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)));
-    if(!m_pTable->isNew())
-    {
-        ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("CREATE ");
-        ::rtl::OUString aQuote  = m_pTable->getMetaData()->getIdentifierQuoteString(  );
-        const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
-
-        if(getBOOL(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISUNIQUE))))
-            aSql = aSql + ::rtl::OUString::createFromAscii("UNIQUE ");
-        aSql = aSql + ::rtl::OUString::createFromAscii("INDEX ");
-
-
-        if(aName.getLength())
-        {
-            aSql = aSql + aQuote + aName + aQuote
-                        + ::rtl::OUString::createFromAscii(" ON ")
-                        + aQuote + m_pTable->getSchema() + aQuote + sDot
-                        + aQuote + m_pTable->getTableName() + aQuote
-                        + ::rtl::OUString::createFromAscii(" ( ");
-
-            Reference<XColumnsSupplier> xColumnSup(descriptor,UNO_QUERY);
-            Reference<XIndexAccess> xColumns(xColumnSup->getColumns(),UNO_QUERY);
-            Reference< XPropertySet > xColProp;
-            sal_Int32 nCount = xColumns->getCount();
-            for(sal_Int32 i=0;i<nCount;++i)
-            {
-                xColumns->getByIndex(i) >>= xColProp;
-                aSql = aSql + aQuote + getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote;
-                aSql = aSql +   (getBOOL(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISASCENDING)))
-                                            ?
-                                ::rtl::OUString::createFromAscii(" ASC")
-                                            :
-                                ::rtl::OUString::createFromAscii(" DESC"))
-                            +   ::rtl::OUString::createFromAscii(",");
-            }
-            aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
-        }
-        else
-        {
-            aSql = aSql + aQuote + m_pTable->getSchema() + aQuote + sDot + aQuote + m_pTable->getTableName() + aQuote;
-
-            Reference<XColumnsSupplier> xColumnSup(descriptor,UNO_QUERY);
-            Reference<XIndexAccess> xColumns(xColumnSup->getColumns(),UNO_QUERY);
-            Reference< XPropertySet > xColProp;
-            if(xColumns->getCount() != 1)
-                throw SQLException();
-
-            xColumns->getByIndex(0) >>= xColProp;
-
-            aSql = aSql + sDot + aQuote + getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote;
-        }
-
-        Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
-        xStmt->execute(aSql);
-        ::comphelper::disposeComponent(xStmt);
-    }
-    else
+    if ( m_pTable->isNew() )
         ::dbtools::throwFunctionSequenceException(static_cast<XTypeProvider*>(this));
 
+    ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("CREATE ");
+    ::rtl::OUString aQuote  = m_pTable->getMetaData()->getIdentifierQuoteString(  );
+    const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
+
+    if(getBOOL(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISUNIQUE))))
+        aSql = aSql + ::rtl::OUString::createFromAscii("UNIQUE ");
+    aSql = aSql + ::rtl::OUString::createFromAscii("INDEX ");
+
+
+    if(_rForName.getLength())
+    {
+        aSql = aSql + aQuote + _rForName + aQuote
+                    + ::rtl::OUString::createFromAscii(" ON ")
+                    + aQuote + m_pTable->getSchema() + aQuote + sDot
+                    + aQuote + m_pTable->getTableName() + aQuote
+                    + ::rtl::OUString::createFromAscii(" ( ");
+
+        Reference<XColumnsSupplier> xColumnSup(descriptor,UNO_QUERY);
+        Reference<XIndexAccess> xColumns(xColumnSup->getColumns(),UNO_QUERY);
+        Reference< XPropertySet > xColProp;
+        sal_Int32 nCount = xColumns->getCount();
+        for(sal_Int32 i=0;i<nCount;++i)
+        {
+            xColumns->getByIndex(i) >>= xColProp;
+            aSql = aSql + aQuote + getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote;
+            aSql = aSql +   (getBOOL(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISASCENDING)))
+                                        ?
+                            ::rtl::OUString::createFromAscii(" ASC")
+                                        :
+                            ::rtl::OUString::createFromAscii(" DESC"))
+                        +   ::rtl::OUString::createFromAscii(",");
+        }
+        aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
+    }
+    else
+    {
+        aSql = aSql + aQuote + m_pTable->getSchema() + aQuote + sDot + aQuote + m_pTable->getTableName() + aQuote;
+
+        Reference<XColumnsSupplier> xColumnSup(descriptor,UNO_QUERY);
+        Reference<XIndexAccess> xColumns(xColumnSup->getColumns(),UNO_QUERY);
+        Reference< XPropertySet > xColProp;
+        if(xColumns->getCount() != 1)
+            throw SQLException();
+
+        xColumns->getByIndex(0) >>= xColProp;
+
+        aSql = aSql + sDot + aQuote + getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote;
+    }
+
+    Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
+    xStmt->execute(aSql);
+    ::comphelper::disposeComponent(xStmt);
+
+    return createObject( _rForName );
 }
 // -------------------------------------------------------------------------
 // XDrop
