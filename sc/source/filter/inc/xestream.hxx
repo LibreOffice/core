@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xestream.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:30:34 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:56:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,124 +74,125 @@ class XclExpRoot;
 */
 class XclExpStream
 {
-private:
-    SvStream&                   mrStrm;         /// Reference to the system output stream.
-    const XclExpRoot&           mrRoot;         /// Filter root data.
-
-                                // length data
-    sal_uInt32                  mnMaxRecSize;   /// Maximum size of record content.
-    sal_uInt32                  mnMaxContSize;  /// Maximum size of CONTINUE content.
-    sal_uInt32                  mnCurrMaxSize;  /// Current maximum, either mnMaxRecSize or mnMaxContSize.
-    sal_uInt32                  mnMaxSliceSize; /// Maximum size of data slices (parts that cannot be split).
-    sal_uInt32                  mnCalcSize;     /// Calculated size received from calling function.
-    sal_uInt32                  mnHeaderSize;   /// Record size written in last record header.
-    sal_uInt32                  mnCurrSize;     /// Count of bytes already written in current record.
-    sal_uInt32                  mnSliceSize;    /// Count of bytes already written in current slice.
-
-                                // stream position data
-    sal_uInt32                  mnLastSizePos;  /// Stream position of size field in current header.
-    bool                        mbInRec;        /// true = currently writing inside of a record.
-
 public:
     /** Constructs the Excel record export stream.
         @param rOutStrm  The system output stream to write to.
         @param nMaxRecSize  The maximum allowed size of record content (depending on BIFF type).
         If 0 is passed, the record size will be set automatically, depending on the current BIFF type. */
-                                XclExpStream(
-                                    SvStream& rOutStrm,
-                                    const XclExpRoot& rRoot,
-                                    sal_uInt32 nMaxRecSize = 0 );
+                        XclExpStream(
+                            SvStream& rOutStrm,
+                            const XclExpRoot& rRoot,
+                            sal_uInt16 nMaxRecSize = 0 );
 
-                                ~XclExpStream();
+                        ~XclExpStream();
 
     /** Returns the filter root data. */
-    inline const XclExpRoot&    GetRoot() const { return mrRoot; }
+    inline const XclExpRoot& GetRoot() const { return mrRoot; }
 
     /** Starts a new record: writes header data, stores calculated record size. */
-    void                        StartRecord( sal_uInt16 nRecId, sal_uInt32 nRecSize );
+    void                StartRecord( sal_uInt16 nRecId, sal_Size nRecSize );
     /** Checks and corrects real record length. Must be called everytime a record is finished. */
-    void                        EndRecord();
+    void                EndRecord();
 
     /** Returns the position inside of current record (starts by 0 in every CONTINUE). */
-    inline sal_uInt32           GetRecPos() const                   { return mnCurrSize; }
+    inline sal_uInt16   GetRawRecPos() const { return mnCurrSize; }
 
     /** Returns the maximum size of a record. */
-    inline sal_uInt32           GetMaxRecSize() const               { return mnMaxRecSize; }
+    inline sal_uInt16   GetMaxRecSize() const { return mnMaxRecSize; }
     /** Sets maximum record size (valid only for current record). */
-    inline void                 SetMaxRecSize( sal_uInt32 nMax )    { mnCurrMaxSize = nMax; }
+    inline void         SetMaxRecSize( sal_uInt16 nMax ) { mnCurrMaxSize = nMax; }
     /** Sets maximum size of CONTINUE records (valid only for current record). */
-    inline void                 SetMaxContSize( sal_uInt32 nMax )   { mnMaxContSize = nMax; }
+    inline void         SetMaxContSize( sal_uInt16 nMax ) { mnMaxContSize = nMax; }
 
     /** Sets data slice length. 0 = no slices. */
-    void                        SetSliceSize( sal_uInt32 nSize );
+    void                SetSliceSize( sal_uInt16 nSize );
 
-    inline XclExpStream&        operator<<( sal_Int8 nValue );
-    inline XclExpStream&        operator<<( sal_uInt8 nValue );
-    inline XclExpStream&        operator<<( sal_Int16 nValue );
-    inline XclExpStream&        operator<<( sal_uInt16 nValue );
-    inline XclExpStream&        operator<<( sal_Int32 nValue );
-    inline XclExpStream&        operator<<( sal_uInt32 nValue );
-    inline XclExpStream&        operator<<( float fValue );
-    inline XclExpStream&        operator<<( double fValue );
+    inline XclExpStream& operator<<( sal_Int8 nValue );
+    inline XclExpStream& operator<<( sal_uInt8 nValue );
+    inline XclExpStream& operator<<( sal_Int16 nValue );
+    inline XclExpStream& operator<<( sal_uInt16 nValue );
+    inline XclExpStream& operator<<( sal_Int32 nValue );
+    inline XclExpStream& operator<<( sal_uInt32 nValue );
+    inline XclExpStream& operator<<( float fValue );
+    inline XclExpStream& operator<<( double fValue );
 
     /** Writes nBytes bytes from memory. */
-    sal_uInt32                  Write( const void* pData, sal_uInt32 nBytes );
+    sal_Size            Write( const void* pData, sal_Size nBytes );
     /** Writes a sequence of nBytes zero bytes (respects slice setting). */
-    void                        WriteZeroBytes( sal_uInt32 nBytes );
+    void                WriteZeroBytes( sal_Size nBytes );
     /** Copies nBytes bytes from current position of the stream rInStrm.
         @descr  Omitting the second parameter means: read to end of stream. */
-    sal_uInt32                  CopyFromStream( SvStream& rInStrm, sal_uInt32 nBytes = STREAM_SEEK_TO_END );
+    sal_Size            CopyFromStream( SvStream& rInStrm, sal_Size nBytes = STREAM_SEEK_TO_END );
 
     // *** unicode string export is realized with helper class XclExpString ***
     // (slice length setting has no effect here -> disabled automatically)
 
     /** Writes Unicode buffer as 8/16 bit, repeats nFlags at start of a CONTINUE record. */
-    void                        WriteUnicodeBuffer( const sal_uInt16* pBuffer, sal_uInt32 nChars, sal_uInt8 nFlags );
+    void                WriteUnicodeBuffer( const sal_uInt16* pBuffer, sal_Size nChars, sal_uInt8 nFlags );
     /** Writes Unicode buffer as 8/16 bit, repeats nFlags at start of a CONTINUE record. */
-    void                        WriteUnicodeBuffer( const ScfUInt16Vec& rBuffer, sal_uInt8 nFlags );
+    void                WriteUnicodeBuffer( const ScfUInt16Vec& rBuffer, sal_uInt8 nFlags );
 
     // *** write 8-bit-strings ***
     // (slice length setting has no effect here -> disabled automatically)
 
     /** Writes ByteString buffer (without string length field). */
-    void                        WriteByteStringBuffer(
-                                    const ByteString& rString,
-                                    sal_uInt16 nMaxLen = 0x00FF );
+    void                WriteByteStringBuffer(
+                            const ByteString& rString,
+                            sal_uInt16 nMaxLen = 0x00FF );
     /** Writes string length field and ByteString buffer. */
-    void                        WriteByteString(
-                                    const ByteString& rString,
-                                    sal_uInt16 nMaxLen = 0x00FF,
-                                    bool b16BitCount = false );
+    void                WriteByteString(
+                            const ByteString& rString,
+                            sal_uInt16 nMaxLen = 0x00FF,
+                            bool b16BitCount = false );
 
     /** Writes 8-bit character buffer. */
-    void                        WriteCharBuffer( const ScfUInt8Vec& rBuffer );
+    void                WriteCharBuffer( const ScfUInt8Vec& rBuffer );
 
     // *** SvStream access ***
 
     /** Sets position of system stream (only allowed outside of records). */
-    sal_uInt32                  SetStreamPos( sal_uInt32 nPos );
+    sal_Size            SetSvStreamPos( sal_Size nPos );
     /** Returns the absolute position of the system stream. */
-    inline sal_uInt32           GetStreamPos() const { return mrStrm.Tell(); }
+    inline sal_Size     GetSvStreamPos() const { return mrStrm.Tell(); }
 
 private:
     /** Writes header data, internal setup. */
-    void                        InitRecord( sal_uInt16 nRecId );
+    void                InitRecord( sal_uInt16 nRecId );
     /** Rewrites correct record length, if different from calculated. */
-    void                        UpdateRecSize();
+    void                UpdateRecSize();
     /** Recalculates mnCurrSize and mnSliceSize. */
-    void                        UpdateSizeVars( sal_uInt32 nSize );
+    void                UpdateSizeVars( sal_Size nSize );
     /** Writes CONTINUE header, internal setup. */
-    void                        StartContinue();
+    void                StartContinue();
     /** Refreshes counter vars, creates CONTINUE records. */
-    void                        PrepareWrite( sal_uInt32 nSize );
+    void                PrepareWrite( sal_uInt16 nSize );
     /** Creates CONTINUE record at end of record.
         @return  Maximum data block size remaining. */
-    sal_uInt32                  PrepareWrite();
+    sal_uInt16          PrepareWrite();
 
     /** Writes a raw sequence of zero bytes. */
-    void                        WriteRawZeroBytes( sal_uInt32 nBytes );
+    void                WriteRawZeroBytes( sal_Size nBytes );
+
+private:
+    SvStream&           mrStrm;         /// Reference to the system output stream.
+    const XclExpRoot&   mrRoot;         /// Filter root data.
+
+                        // length data
+    sal_uInt16          mnMaxRecSize;   /// Maximum size of record content.
+    sal_uInt16          mnMaxContSize;  /// Maximum size of CONTINUE content.
+    sal_uInt16          mnCurrMaxSize;  /// Current maximum, either mnMaxRecSize or mnMaxContSize.
+    sal_uInt16          mnMaxSliceSize; /// Maximum size of data slices (parts that cannot be split).
+    sal_uInt16          mnHeaderSize;   /// Record size written in last record header.
+    sal_uInt16          mnCurrSize;     /// Count of bytes already written in current record.
+    sal_uInt16          mnSliceSize;    /// Count of bytes already written in current slice.
+    sal_Size            mnPredictSize;   /// Predicted size received from calling function.
+
+                        // stream position data
+    sal_Size            mnLastSizePos;  /// Stream position of size field in current header.
+    bool                mbInRec;        /// true = currently writing inside of a record.
 };
 
+// ----------------------------------------------------------------------------
 
 inline XclExpStream& XclExpStream::operator<<( sal_Int8 nValue )
 {
