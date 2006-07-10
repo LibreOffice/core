@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlroot.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 16:24:54 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:04:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,9 @@
 struct XclAddress;
 struct XclRange;
 class XclRangeList;
+class XclTokenArray;
+
+typedef ScfRef< XclTokenArray > XclTokenArrayRef;
 
 // Global data ================================================================
 
@@ -74,6 +77,8 @@ class ScEditEngineDefaulter;
 class ScHeaderEditEngine;
 class EditEngine;
 class ScExtDocOptions;
+class XclFontPropSetHelper;
+class XclChPropSetHelper;
 class XclTracer;
 
 struct RootData;//!
@@ -87,38 +92,43 @@ struct XclRootData
     typedef ScfRef< ScEditEngineDefaulter > ScEEDefaulterRef;
     typedef ScfRef< ScHeaderEditEngine >    ScHeaderEERef;
     typedef ScfRef< EditEngine >            EditEngineRef;
+    typedef ScfRef< XclFontPropSetHelper >  XclFontPropSetHlpRef;
+    typedef ScfRef< XclChPropSetHelper >    XclChPropSetHlpRef;
     typedef ScfRef< ScExtDocOptions >       ScExtDocOptRef;
     typedef ScfRef< XclTracer >             XclTracerRef;
     typedef ScfRef< RootData >              RootDataRef;
 
-    XclBiff             meBiff;         /// Current BIFF version.
-    SfxMedium&          mrMedium;       /// The medium to import from.
-    SotStorageRef       mxRootStrg;     /// The root OLE storage of imported/exported file.
-    ScDocument&         mrDoc;          /// The source or destination document.
-    String              maDocUrl;       /// Document URL of imported/exported file.
-    String              maBasePath;     /// Base path of imported/exported file (path of maDocUrl).
-    String              maPassw;        /// Entered password for stream encryption/decryption.
-    CharSet             meCharSet;      /// Character set to import/export byte strings.
-    LanguageType        meSysLang;      /// System language.
-    LanguageType        meDocLang;      /// Document language (import: from file, export: from system).
-    LanguageType        meUILang;       /// UI language (import: from file, export: from system).
-    sal_Int16           mnDefApiScript; /// Default script type for blank cells (API constant).
-    ScAddress           maScMaxPos;     /// Highest Calc cell position.
-    ScAddress           maXclMaxPos;    /// Highest Excel cell position.
-    ScAddress           maMaxPos;       /// Highest position valid in Calc and Excel.
+    XclBiff             meBiff;             /// Current BIFF version.
+    SfxMedium&          mrMedium;           /// The medium to import from.
+    SotStorageRef       mxRootStrg;         /// The root OLE storage of imported/exported file.
+    ScDocument&         mrDoc;              /// The source or destination document.
+    String              maDocUrl;           /// Document URL of imported/exported file.
+    String              maBasePath;         /// Base path of imported/exported file (path of maDocUrl).
+    String              maPassw;            /// Entered password for stream encryption/decryption.
+    CharSet             meCharSet;          /// Character set to import/export byte strings.
+    LanguageType        meSysLang;          /// System language.
+    LanguageType        meDocLang;          /// Document language (import: from file, export: from system).
+    LanguageType        meUILang;           /// UI language (import: from file, export: from system).
+    sal_Int16           mnDefApiScript;     /// Default script type for blank cells (API constant).
+    ScAddress           maScMaxPos;         /// Highest Calc cell position.
+    ScAddress           maXclMaxPos;        /// Highest Excel cell position.
+    ScAddress           maMaxPos;           /// Highest position valid in Calc and Excel.
 
-    ScEEDefaulterRef    mxEditEngine;   /// Edit engine for rich strings etc.
-    ScHeaderEERef       mxHFEditEngine; /// Edit engine for header/footer.
-    EditEngineRef       mxDrawEditEng;  /// Edit engine for text boxes.
+    ScEEDefaulterRef    mxEditEngine;       /// Edit engine for rich strings etc.
+    ScHeaderEERef       mxHFEditEngine;     /// Edit engine for header/footer.
+    EditEngineRef       mxDrawEditEng;      /// Edit engine for text boxes.
 
-    ScExtDocOptRef      mxExtDocOpt;    /// Extended document options.
-    XclTracerRef        mxTracer;       /// Filter tracer.
-    RootDataRef         mxRD;           /// Old RootData struct. Will be removed.
+    XclFontPropSetHlpRef mxFontPropSetHlp;  /// Property set helper for fonts.
+    XclChPropSetHlpRef  mxChPropSetHlp;     /// Property set helper for chart filter.
 
-    long                mnCharWidth;    /// Width of '0' in default font (twips).
-    SCTAB               mnScTab;        /// Current Calc sheet index.
-    const bool          mbExport;       /// false = Import, true = Export.
-    bool                mbHasPassw;     /// true = Password already querried.
+    ScExtDocOptRef      mxExtDocOpt;        /// Extended document options.
+    XclTracerRef        mxTracer;           /// Filter tracer.
+    RootDataRef         mxRD;               /// Old RootData struct. Will be removed.
+
+    long                mnCharWidth;        /// Width of '0' in default font (twips).
+    SCTAB               mnScTab;            /// Current Calc sheet index.
+    const bool          mbExport;           /// false = Import, true = Export.
+    bool                mbHasPassw;         /// true = Password already querried.
 
     explicit            XclRootData( XclBiff eBiff, SfxMedium& rMedium,
                             SotStorageRef xRootStrg, ScDocument& rDoc,
@@ -229,6 +239,11 @@ public:
     ScHeaderEditEngine& GetHFEditEngine() const;
     /** Returns the edit engine for import/export of drawing text boxes. */
     EditEngine&         GetDrawEditEngine() const;
+
+    /** Returns the property set helper for fonts. */
+    XclFontPropSetHelper& GetFontPropSetHelper() const;
+    /** Returns the property set helper for the chart filters. */
+    XclChPropSetHelper& GetChartPropSetHelper() const;
 
     /** Returns the extended document options. */
     ScExtDocOptions&    GetExtDocOptions() const;
