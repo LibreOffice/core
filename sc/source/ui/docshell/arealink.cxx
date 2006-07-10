@@ -4,9 +4,9 @@
  *
  *  $RCSfile: arealink.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:44:10 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:07:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -217,7 +217,7 @@ BOOL ScAreaLink::FindExtRange( ScRange& rRange, ScDocument* pSrcDoc, const Strin
     if (pNames)         // benannte Bereiche
     {
         if (pNames->SearchName( rAreaName, nPos ))
-            if ( (*pNames)[nPos]->IsReference( rRange ) )
+            if ( (*pNames)[nPos]->IsValidReference( rRange ) )
                 bFound = TRUE;
     }
     if (!bFound)        // Datenbankbereiche
