@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:46:56 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:46:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1148,21 +1148,19 @@ sal_Bool ODatabaseForm::InsertFilePart( INetMIMEMessage& rParent, const ::rtl::O
 //==============================================================================
 // internals
 //------------------------------------------------------------------------------
-void ODatabaseForm::onError(const SQLErrorEvent& _rEvent)
+void ODatabaseForm::onError( const SQLErrorEvent& _rEvent )
 {
     m_aErrorListeners.notifyEach( &XSQLErrorListener::errorOccured, _rEvent );
 }
 
 //------------------------------------------------------------------------------
-void ODatabaseForm::onError(SQLException& _rException, const ::rtl::OUString& _rContextDescription)
+void ODatabaseForm::onError( const SQLException& _rException, const ::rtl::OUString& _rContextDescription )
 {
-    if (!m_aErrorListeners.getLength())
+    if ( !m_aErrorListeners.getLength() )
         return;
 
-    SQLContext aError = prependContextInfo(_rException, static_cast<XWeak*>(this), _rContextDescription);
-    SQLErrorEvent aEvent(static_cast<XWeak*>(this), makeAny(aError));
-
-    onError(aEvent);
+    SQLErrorEvent aEvent( *this, makeAny( prependErrorInfo( _rException, *this, _rContextDescription ) ) );
+    onError( aEvent );
 }
 
 //------------------------------------------------------------------------------
