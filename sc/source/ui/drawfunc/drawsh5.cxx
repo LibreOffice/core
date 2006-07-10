@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawsh5.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-27 10:06:36 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:08:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -365,10 +365,10 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
             if(rNoteMarkList.GetMarkCount() == 1)
             {
                 SdrObject* pObj = rNoteMarkList.GetMark( 0 )->GetObj();
-        if ( pObj && pObj->GetLayer() == SC_LAYER_INTERN && pObj->ISA(SdrCaptionObj) )
-            {
+                if ( pObj && pObj->GetLayer() == SC_LAYER_INTERN && pObj->ISA(SdrCaptionObj) )
+                {
                     ScAddress aTabPos;
-                    ScDrawObjData* pData = ScDrawLayer::GetObjData( pObj );
+                    ScDrawObjData* pData = ScDrawLayer::GetObjDataTab( pObj, pViewData->GetTabNo() );
                     if( pData )
                         aTabPos = pData->aStt;
                     ScDocument* pDoc = pViewData->GetDocument();
@@ -380,12 +380,14 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                     {
                         SdrPage* pPage = pModel->GetPage( aTabPos.Tab() );
                         if(pPage)
-            {
-                ScDocShell* pDocSh = pViewData->GetDocShell();
-                pDocSh->GetUndoManager()->AddUndoAction( new SdrUndoRemoveObj( *pObj));
+                        {
+                            ScDocShell* pDocSh = pViewData->GetDocShell();
+                            pDocSh->GetUndoManager()->AddUndoAction( new SdrUndoRemoveObj( *pObj));
                             pPage->RemoveObject( pObj->GetOrdNum() );
-            }
+                        }
                     }
+                    if (!pTabView->IsDrawSelMode())
+                        pViewData->GetViewShell()->SetDrawShell( FALSE );
                     break;
                 }
             }
