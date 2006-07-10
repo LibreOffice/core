@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:51:46 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 16:38:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -286,8 +286,8 @@ void X11SalInstance::AcquireYieldMutex( ULONG nCount )
     }
 }
 
-void X11SalInstance::Yield( BOOL bWait )
-{ GetSalData()->GetLib()->Yield( bWait ); }
+void X11SalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
+{ GetSalData()->GetLib()->Yield( bWait, bHandleAllCurrentEvents ); }
 
 void* X11SalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes )
 {
