@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.35 $
+#   $Revision: 1.36 $
 #
-#   last change: $Author: obo $ $Date: 2006-03-22 12:00:45 $
+#   last change: $Author: obo $ $Date: 2006-07-10 13:30:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -89,6 +89,7 @@ SLOFILES =	\
         $(SLO)$/xichart.obj					\
         $(SLO)$/xicontent.obj				\
         $(SLO)$/xiescher.obj				\
+        $(SLO)$/xiformula.obj				\
         $(SLO)$/xihelper.obj				\
         $(SLO)$/xilink.obj					\
         $(SLO)$/xiname.obj					\
@@ -96,6 +97,7 @@ SLOFILES =	\
         $(SLO)$/xipivot.obj					\
         $(SLO)$/xiroot.obj					\
         $(SLO)$/xistream.obj				\
+        $(SLO)$/xistring.obj				\
         $(SLO)$/xistyle.obj					\
         $(SLO)$/xiview.obj					\
         $(SLO)$/xladdress.obj				\
@@ -123,6 +125,7 @@ EXCEPTIONSFILES = \
         $(SLO)$/xecontent.obj				\
         $(SLO)$/xehelper.obj				\
         $(SLO)$/xichart.obj					\
+        $(SLO)$/xlchart.obj					\
         $(SLO)$/xlocx.obj					\
         $(SLO)$/XclExpCharts.obj
 
