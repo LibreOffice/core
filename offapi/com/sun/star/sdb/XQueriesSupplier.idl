@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XQueriesSupplier.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:29:35 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:50:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,16 +46,18 @@
  module com {  module sun {  module star {  module sdb {
 
 
-// DocMerge from xml: interface com::sun::star::sdb::XQueriesSupplier
 /** provides the access to a container of database queries.
  */
 published interface XQueriesSupplier: com::sun::star::uno::XInterface
 {
 
-    // DocMerge from xml: method com::sun::star::sdb::XQueriesSupplier::getQueries
     /** returns the container of queries.
-        @returns
-            the queries
+
+        <p>The single elements of the container support the <type>Query</type> service.</p>
+
+        @return
+            the queries belonging to database connection at which the <type>XQueriesSupplier</type> interface
+            is exposed.
      */
     com::sun::star::container::XNameAccess getQueries();
 };
