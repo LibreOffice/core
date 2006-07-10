@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xepage.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:01:11 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:32:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -197,10 +197,10 @@ void XclExpBitmap::Save( XclExpStream& rStrm )
     {
         sal_Int32 nWidth = ::std::min< sal_Int32 >( pAccess->Width(), 0xFFFF );
         sal_Int32 nHeight = ::std::min< sal_Int32 >( pAccess->Height(), 0xFFFF );
-        if( (0 < nWidth) && (nWidth <= 0xFFFF) && (0 < nHeight) && (nHeight <= 0xFFFF) )
+        if( (nWidth > 0) && (nHeight > 0) )
         {
             sal_uInt8 nPadding = static_cast< sal_uInt8 >( nWidth & 0x03 );
-            sal_uInt32 nTmpSize = (nWidth * 3UL + nPadding) * nHeight + 12;
+            sal_uInt32 nTmpSize = static_cast< sal_uInt32 >( (nWidth * 3 + nPadding) * nHeight + 12 );
 
             rStrm.StartRecord( EXC_ID_BITMAP, nTmpSize + 4 );
 
