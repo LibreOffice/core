@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PColumn.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:59:16 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:15:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,20 @@
 
 #ifndef _CONNECTIVITY_SDBCX_COLUMN_HXX_
 #include "connectivity/sdbcx/VColumn.hxx"
+#endif
+
+#ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
+#include "connectivity/CommonTools.hxx"
+#endif
+#ifndef _VOS_REF_HXX_
+#include <vos/ref.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_SDBC_XRESULTSETMETADATA_HPP_
+#include <com/sun/star/sdbc/XResultSetMetaData.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
+#include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #endif
 
 #ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
@@ -90,6 +104,25 @@ namespace connectivity
             ::rtl::OUString getTableName() const { return  m_aTableName; }
             sal_Bool        getFunction() const { return  m_bFunction; }
             sal_Bool        getDbasePrecisionChanged()  const { return  m_bDbasePrecisionChanged; }
+
+        public:
+            /** creates a collection of OParseColumn, as described by a result set meta data instance.
+            */
+            static ::vos::ORef< OSQLColumns >
+                createColumnsForResultSet(
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >& _rxResMetaData,
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxDBMetaData
+                );
+
+            /** creates a single OParseColumn, as described by a result set meta data instance
+            */
+            static OParseColumn*
+                createColumnForResultSet(
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >& _rxResMetaData,
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxDBMetaData,
+                    sal_Int32 _nColumnPos
+                );
+
         private:
             using OParseColumn_BASE::createArrayHelper;
         };
