@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xeroot.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 12:07:50 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:55:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,11 +45,9 @@
 class XclExpStream;
 class XclExpRecordBase;
 class XclExpString;
-class XclExpTokenArray;
 
 typedef ScfRef< XclExpRecordBase >  XclExpRecordRef;
 typedef ScfRef< XclExpString >      XclExpStringRef;
-typedef ScfRef< XclExpTokenArray >  XclExpTokenArrayRef;
 
 // Global data ================================================================
 
