@@ -4,9 +4,9 @@
  *
  *  $RCSfile: YTables.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:53:30 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:30:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,19 +169,16 @@ void OTables::disposing(void)
     OCollection::disposing();
 }
 // -------------------------------------------------------------------------
-Reference< XPropertySet > OTables::createEmptyObject()
+Reference< XPropertySet > OTables::createDescriptor()
 {
     return new OMySQLTable(this,static_cast<OMySQLCatalog&>(m_rParent).getConnection());
 }
 // -------------------------------------------------------------------------
 // XAppend
-void OTables::appendObject( const Reference< XPropertySet >& descriptor )
+sdbcx::ObjectType OTables::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
-    ::rtl::OUString aName = getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)));
-    if(!aName.getLength())
-        ::dbtools::throwFunctionSequenceException(static_cast<XTypeProvider*>(this));
-
     createTable(descriptor);
+    return createObject( _rForName );
 }
 // -------------------------------------------------------------------------
 // XDrop
@@ -206,8 +203,8 @@ void OTables::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
         else
             aSql += ::rtl::OUString::createFromAscii("TABLE ");
 
-        ::rtl::OUString sComposedName;
-        ::dbtools::composeTableName(m_xMetaData,sCatalog,sSchema,sTable,sComposedName,sal_True,::dbtools::eInDataManipulation);
+        ::rtl::OUString sComposedName(
+            ::dbtools::composeTableName( m_xMetaData, sCatalog, sSchema, sTable, sal_True, ::dbtools::eInDataManipulation ) );
         aSql += sComposedName;
         Reference< XStatement > xStmt = xConnection->createStatement(  );
         if ( xStmt.is() )
@@ -252,7 +249,7 @@ void OTables::appendNew(const ::rtl::OUString& _rsNewTable)
 ::rtl::OUString OTables::getNameForObject(const sdbcx::ObjectType& _xObject)
 {
     OSL_ENSURE(_xObject.is(),"OTables::getNameForObject: Object is NULL!");
-    return ::dbtools::composeTableName(m_xMetaData,_xObject,sal_False,::dbtools::eInDataManipulation);
+    return ::dbtools::composeTableName( m_xMetaData, _xObject, ::dbtools::eInDataManipulation, false, false, false );
 }
 // -----------------------------------------------------------------------------
 
