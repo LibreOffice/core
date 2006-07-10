@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unosqlmessage.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:53:28 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:46:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,9 +167,9 @@ Reference<XPropertySetInfo>  SAL_CALL OSQLMessageDialog::getPropertySetInfo() th
 Dialog* OSQLMessageDialog::createDialog(Window* _pParent)
 {
     if (m_aException.hasValue())
-        return new OSQLMessageBox(_pParent, SQLExceptionInfo(m_aException));
+        return new OSQLMessageBox( _pParent, SQLExceptionInfo( m_aException ) );
 
-    OSL_ENSURE(sal_False, "OSQLMessageDialog::createDialog : You hould use the SQLException property to specify the error to display!");
+    OSL_ENSURE(sal_False, "OSQLMessageDialog::createDialog : You should use the SQLException property to specify the error to display!");
     return new OSQLMessageBox(_pParent, SQLException());
 }
 
