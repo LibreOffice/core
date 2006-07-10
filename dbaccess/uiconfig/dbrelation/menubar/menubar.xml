@@ -28,7 +28,7 @@
     <menu:menu menu:id=".uno:InsertMenu">
         <menu:menupopup>
             <menu:menuitem menu:id=".uno:DBAddRelation"/>
-            <menu:menuitem menu:id=".uno:DBAddTable"/>
+            <menu:menuitem menu:id=".uno:AddTable"/>
         </menu:menupopup>
     </menu:menu>
     <menu:menu menu:id=".uno:ToolsMenu">
