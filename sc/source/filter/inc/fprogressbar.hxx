@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fprogressbar.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:56:51 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:52:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,7 +129,7 @@ public:
 
     /** Adds a new segment to the progress bar.
         @return  the identifier of the segment. */
-    sal_Int32           AddSegment( sal_uInt32 nSize );
+    sal_Int32           AddSegment( sal_Size nSize );
     /** Returns a complete progress bar for the specified segment.
         @descr  The progress bar can be used to create sub segments inside of the
         segment. Do not delete it (done by root progress bar)!
@@ -146,9 +146,9 @@ public:
     /** Starts the progress bar (with first segment). */
     inline void         Activate() { ActivateSegment( 0 ); }
     /** Set current segment to the specified absolute position. */
-    void                ProgressAbs( sal_uInt32 nPos );
+    void                ProgressAbs( sal_Size nPos );
     /** Increase current segment by the passed value. */
-    void                Progress( sal_uInt32 nDelta = 1 );
+    void                Progress( sal_Size nDelta = 1 );
 
 private:
     struct ScfProgressSegment;
@@ -166,7 +166,7 @@ private:
     /** Activates progress bar and sets current segment. */
     void                SetCurrSegment( ScfProgressSegment* pSegment );
     /** Increases mnTotalPos and calls the system progress bar. */
-    void                IncreaseProgressBar( sal_uInt32 nDelta );
+    void                IncreaseProgressBar( sal_Size nDelta );
 
 private:
     /** Contains all data of a segment of the progress bar. */
@@ -175,10 +175,10 @@ private:
         typedef ::std::auto_ptr< ScfProgressBar > ScfProgressBarPtr;
 
         ScfProgressBarPtr   mxProgress;     /// Pointer to sub progress bar for this segment.
-        sal_uInt32          mnSize;         /// Size of this segment.
-        sal_uInt32          mnPos;          /// Current position of this segment.
+        sal_Size            mnSize;         /// Size of this segment.
+        sal_Size            mnPos;          /// Current position of this segment.
 
-        explicit            ScfProgressSegment( sal_uInt32 nSize );
+        explicit            ScfProgressSegment( sal_Size nSize );
                             ~ScfProgressSegment();
     };
 
@@ -194,11 +194,11 @@ private:
     ScfProgressSegment* mpParentSegment;    /// Parent segment, if this is a segment progress bar.
     ScfProgressSegment* mpCurrSegment;      /// Current segment for progress.
 
-    sal_uInt32          mnTotalSize;        /// Total size of all segments.
-    sal_uInt32          mnTotalPos;         /// Sum of positions of all segments.
-    sal_uInt32          mnUnitSize;         /// Size between two calls of system progress.
-    sal_uInt32          mnNextUnitPos;      /// Limit for next system progress call.
-    sal_uInt32          mnSysProgressScale; /// Additionally scaling factor for system progress.
+    sal_Size            mnTotalSize;        /// Total size of all segments.
+    sal_Size            mnTotalPos;         /// Sum of positions of all segments.
+    sal_Size            mnUnitSize;         /// Size between two calls of system progress.
+    sal_Size            mnNextUnitPos;      /// Limit for next system progress call.
+    sal_Size            mnSysProgressScale; /// Additionally scaling factor for system progress.
     bool                mbInProgress;       /// true = progress bar started.
 };
 
@@ -208,17 +208,17 @@ private:
 class ScfSimpleProgressBar
 {
 public:
-    explicit            ScfSimpleProgressBar( sal_uInt32 nSize, SfxObjectShell* pDocShell, const String& rText );
-    explicit            ScfSimpleProgressBar( sal_uInt32 nSize, SfxObjectShell* pDocShell, USHORT nResId );
+    explicit            ScfSimpleProgressBar( sal_Size nSize, SfxObjectShell* pDocShell, const String& rText );
+    explicit            ScfSimpleProgressBar( sal_Size nSize, SfxObjectShell* pDocShell, USHORT nResId );
 
     /** Set progress bar to the specified position. */
-    inline void         ProgressAbs( sal_uInt32 nPos ) { maProgress.ProgressAbs( nPos ); }
+    inline void         ProgressAbs( sal_Size nPos ) { maProgress.ProgressAbs( nPos ); }
     /** Increase progress bar by 1. */
-    inline void         Progress( sal_uInt32 nDelta = 1 ) { maProgress.Progress( nDelta ); }
+    inline void         Progress( sal_Size nDelta = 1 ) { maProgress.Progress( nDelta ); }
 
 private:
     /** Initializes and starts the progress bar. */
-    void                Init( sal_uInt32 nSize );
+    void                Init( sal_Size nSize );
 
 private:
     ScfProgressBar      maProgress;     /// The used progress bar.
