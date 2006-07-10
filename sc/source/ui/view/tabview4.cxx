@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabview4.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:08:03 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:11:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -565,6 +565,9 @@ void ScTabView::InterpretVisible()
             }
         }
     }
+
+    // #i65047# repaint during the above loop may have set the bNeedsRepaint flag
+    CheckNeedsRepaint();
 }
 
 
