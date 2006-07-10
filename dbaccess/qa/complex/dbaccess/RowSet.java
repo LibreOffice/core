@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSet.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 16:53:01 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:59:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,27 +34,18 @@
  ************************************************************************/
 package complex.dbaccess;
 
-import com.sun.star.awt.XWindow;
-import com.sun.star.frame.*;
-import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.util.XCloseable;
 import com.sun.star.beans.*;
 import com.sun.star.lang.*;
 import com.sun.star.sdbcx.*;
 import com.sun.star.sdbc.*;
 import com.sun.star.sdb.*;
-import com.sun.star.container.*;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.util.XRefreshable;
+import connectivity.tools.HsqlDatabase;
 
 import complexlib.ComplexTestCase;
-
-import java.io.PrintWriter;
-import java.io.File;
-import java.util.Random;
-
-import util.utils;
-import util.dbg;
+import complexlib.ComplexTestCase.AssureException;
 
 
 public class RowSet extends ComplexTestCase {
@@ -218,8 +209,8 @@ public class RowSet extends ComplexTestCase {
     // --------------------------------------------------------------------------------------------------------
     void createStruture() throws SQLException
     {
-        m_database.executeStatement( "DROP TABLE \"TEST1\" IF EXISTS" );
-        m_database.executeStatement( "CREATE TABLE \"TEST1\" (\"ID\" integer not null primary key, \"col2\" varchar(50) )" );
+        m_database.executeSQL( "DROP TABLE \"TEST1\" IF EXISTS" );
+        m_database.executeSQL( "CREATE TABLE \"TEST1\" (\"ID\" integer not null primary key, \"col2\" varchar(50) )" );
 
         XConnection connection = m_database.defaultConnection();
         XPreparedStatement prep = connection.prepareStatement("INSERT INTO \"TEST1\" values (?,?)");
@@ -229,6 +220,10 @@ public class RowSet extends ComplexTestCase {
             para.setString(2, "Test" + i);
             prep.executeUpdate();
         }
+
+        XTablesSupplier suppTables = (XTablesSupplier)UnoRuntime.queryInterface( XTablesSupplier.class, connection );
+        XRefreshable refresh = (XRefreshable)UnoRuntime.queryInterface( XRefreshable.class, suppTables.getTables() );
+        refresh.refresh();
     }
 
     // --------------------------------------------------------------------------------------------------------
@@ -328,7 +323,7 @@ public class RowSet extends ComplexTestCase {
             XRow _row = (XRow)UnoRuntime.queryInterface(XRow.class,_resultSet);
             _resultSet.beforeFirst();
 
-            final int numberOfThreads = 2;
+            final int numberOfThreads = 10;
 
             Thread threads[] = new Thread[numberOfThreads];
             for ( int i=0; i<numberOfThreads; ++i )
