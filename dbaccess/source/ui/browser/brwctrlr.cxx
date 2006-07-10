@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:55:50 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:23:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -219,21 +219,20 @@ using namespace ::svt;
 #define HANDLE_SQL_ERRORS( action, successflag, context, message )          \
     try                                                                     \
     {                                                                       \
-        successflag = sal_False;                                                \
+        successflag = sal_False;                                            \
         action;                                                             \
-        successflag = sal_True;                                                 \
+        successflag = sal_True;                                             \
     }                                                                       \
-    catch(SQLException& e)                          \
+    catch(SQLException& e)                                                  \
     {                                                                       \
-        ::com::sun::star::sdb::SQLContext eExtendedInfo =                                           \
-        ::dbtools::prependContextInfo(e, Reference< XInterface > (), context);              \
+        SQLException aError = ::dbtools::prependErrorInfo(e, *this, context); \
         ::com::sun::star::sdb::SQLErrorEvent aEvent;                        \
-        aEvent.Reason <<= eExtendedInfo;                                    \
+        aEvent.Reason <<= aError;                                           \
         errorOccured(aEvent);                                               \
     }                                                                       \
-    catch(Exception&)                                                               \
+    catch(Exception&)                                                       \
     {                                                                       \
-        DBG_ERROR(message);                                                 \
+        DBG_UNHANDLED_EXCEPTION();                                          \
     }                                                                       \
 
 #define DO_SAFE( action, message ) try { action; } catch(Exception&) { DBG_ERROR(message); } ;
@@ -1542,7 +1541,7 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                 else
                     aReturn.bEnabled = sal_True;
 
-                aReturn.aState <<= ::rtl::OUString((ID_BROWSER_UNDORECORD == nId) ? m_sStateUndoRecord : m_sStateSaveRecord);
+                aReturn.sTitle = (ID_BROWSER_UNDORECORD == nId) ? m_sStateUndoRecord : m_sStateSaveRecord;
             }
             break;
             case ID_BROWSER_EDITDOC:
@@ -1565,7 +1564,7 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                 aReturn.bEnabled = sal_True;
 
                 sal_Int16 nGridMode = getBrowserView()->getVclControl()->GetOptions();
-                aReturn.aState = ::comphelper::makeBoolAny(nGridMode > DbGridControl::OPT_READONLY);
+                aReturn.bChecked = nGridMode > DbGridControl::OPT_READONLY;
             }
             break;
             case ID_BROWSER_FILTERED:
@@ -1576,12 +1575,12 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                 ::rtl::OUString aHaving = ::comphelper::getString(xActiveSet->getPropertyValue(PROPERTY_HAVING_CLAUSE));
                 if ( aFilter.getLength() || aHaving.getLength() )
                 {
-                    aReturn.aState = xActiveSet->getPropertyValue(PROPERTY_APPLYFILTER);
+                    xActiveSet->getPropertyValue( PROPERTY_APPLYFILTER ) >>= aReturn.bChecked;
                     aReturn.bEnabled = sal_True;
                 }
                 else
                 {
-                    aReturn.aState = ::comphelper::makeBoolAny(sal_False);
+                    aReturn.bChecked = sal_False;
                     aReturn.bEnabled = sal_False;
                 }
             }
