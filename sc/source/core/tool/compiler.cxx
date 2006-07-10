@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 12:32:16 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:26:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2894,7 +2894,8 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
     rChanged = FALSE;
     if ( eUpdateRefMode == URM_COPY )
     {   // Normally nothing has to be done here since RelRefs are used, also
-        // SharedFormulas don't need any special handling.
+        // SharedFormulas don't need any special handling, except if they
+        // wrapped around sheet borders.
         // #67383# But ColRowName tokens pointing to a ColRow header which was
         // copied along with this formula need to be updated to point to the
         // copied header instead of the old position's new intersection.
@@ -2916,7 +2917,49 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                     rChanged = TRUE;
             }
         }
-        return NULL;
+        // Check for SharedFormulas.
+        ScRangeData* pRangeData = NULL;
+        pArr->Reset();
+        for( t = pArr->GetNextName(); t && !pRangeData;
+             t = pArr->GetNextName() )
+        {
+            if( t->GetOpCode() == ocName )
+            {
+                ScRangeData* pName = pDoc->GetRangeName()->FindIndex( t->GetIndex() );
+                if (pName && pName->HasType(RT_SHARED))
+                    pRangeData = pName;
+            }
+        }
+        // Check SharedFormulas for wraps.
+        if (pRangeData)
+        {
+            ScRangeData* pName = pRangeData;
+            pRangeData = NULL;
+            pArr->Reset();
+            for( t = pArr->GetNextReferenceRPN(); t && !pRangeData;
+                 t = pArr->GetNextReferenceRPN() )
+            {
+                BOOL bRelName = (t->GetType() == svSingleRef ?
+                        t->GetSingleRef().IsRelName() :
+                        (t->GetDoubleRef().Ref1.IsRelName() ||
+                         t->GetDoubleRef().Ref2.IsRelName()));
+                if (bRelName)
+                {
+                    t->CalcAbsIfRel( rOldPos);
+                    BOOL bValid = (t->GetType() == svSingleRef ?
+                            t->GetSingleRef().Valid() :
+                            t->GetDoubleRef().Valid());
+                    // If the reference isn't valid, copying the formula
+                    // wrapped it. Replace SharedFormula.
+                    if (!bValid)
+                    {
+                        pRangeData = pName;
+                        rChanged = TRUE;
+                    }
+                }
+            }
+        }
+        return pRangeData;
     }
     else
     {
