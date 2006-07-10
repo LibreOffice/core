@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 21:13:42 $
+#   last change: $Author: obo $ $Date: 2006-07-10 19:01:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -44,13 +44,12 @@ TARGET=so_hsqldb
 .INCLUDE : antsettings.mk
 
 .INCLUDE :  version.mk
-.INCLUDE :	minor.mk
 
 .IF "$(SOLAR_JAVA)" != ""
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=hsqldb_$(HSQLDB_VERSION)
-      
+
 TARFILE_ROOTDIR=hsqldb
 
 CONVERTFILES=build$/build.xml\
