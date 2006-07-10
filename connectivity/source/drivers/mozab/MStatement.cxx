@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MStatement.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:45:19 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:29:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,7 +126,7 @@ OStatement_Base::OStatement_Base(OConnection* _pConnection )
     ,m_pTable(NULL)
     ,m_pConnection(_pConnection)
     ,m_aParser(_pConnection->getDriver()->getMSFactory())
-    ,m_pSQLIterator( new connectivity::OSQLParseTreeIterator( _pConnection->createCatalog()->getTables(), _pConnection->getMetaData(), NULL ) )
+    ,m_pSQLIterator( new OSQLParseTreeIterator( _pConnection, _pConnection->createCatalog()->getTables(), m_aParser, NULL ) )
     ,m_pParseTree(NULL)
     ,rBHelper(OStatement_BASE::rBHelper)
 {
@@ -260,7 +260,8 @@ void OStatement_Base::createTable( )
             {
                 getOwnConnection()->throwGenericSQLException( _aDbHelper.getErrorResourceId() );
             }
-            m_pSQLIterator.reset( new connectivity::OSQLParseTreeIterator(m_pConnection->createCatalog()->getTables(), m_pConnection->getMetaData(), NULL) );
+            m_pSQLIterator.reset( new ::connectivity::OSQLParseTreeIterator(
+                m_pConnection, m_pConnection->createCatalog()->getTables(), m_aParser, NULL ) );
         }
 
     }
@@ -341,7 +342,7 @@ sal_Bool OStatement_Base::parseSql( const ::rtl::OUString& sql , sal_Bool bAdjus
 
 OResultSet* OStatement_Base::createResultSet()
 {
-    return new OResultSet(this,*m_pSQLIterator);
+    return new OResultSet( this, m_pSQLIterator );
 }
 // -------------------------------------------------------------------------
 
