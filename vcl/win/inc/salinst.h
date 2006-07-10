@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salinst.h,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-24 13:48:36 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 16:38:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,7 @@ public:
     virtual vos::IMutex*        GetYieldMutex();
     virtual ULONG               ReleaseYieldMutex();
     virtual void                AcquireYieldMutex( ULONG nCount );
-    virtual void                Yield( BOOL bWait );
+    virtual void                Yield( bool bWait, bool bHandleAllCurrentEvents );
     virtual bool                AnyInput( USHORT nType );
     virtual SalMenu*                CreateMenu( BOOL bMenuBar );
     virtual void                DestroyMenu( SalMenu* );
