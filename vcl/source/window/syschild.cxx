@@ -4,9 +4,9 @@
  *
  *  $RCSfile: syschild.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:40:55 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 16:36:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,7 @@ long ImplSysChildProc( void* pInst, SalObject* /* pObject */,
     SystemChildWindow* pWindow = (SystemChildWindow*)pInst;
     long nRet = 0;
 
+    ImplDelData aDogTag( pWindow );
     switch ( nEvent )
     {
         case SALOBJ_EVENT_GETFOCUS:
@@ -82,9 +83,13 @@ long ImplSysChildProc( void* pInst, SalObject* /* pObject */,
             pWindow->ImplGetFrameData()->mbSysObjFocus = TRUE;
             pWindow->ImplGetFrameData()->mbInSysObjToTopHdl = TRUE;
             pWindow->ToTop( TOTOP_NOGRABFOCUS );
+            if( aDogTag.IsDead() )
+                break;
             pWindow->ImplGetFrameData()->mbInSysObjToTopHdl = FALSE;
             pWindow->ImplGetFrameData()->mbInSysObjFocusHdl = TRUE;
             pWindow->GrabFocus();
+            if( aDogTag.IsDead() )
+                break;
             pWindow->ImplGetFrameData()->mbInSysObjFocusHdl = FALSE;
             break;
 
@@ -106,7 +111,11 @@ long ImplSysChildProc( void* pInst, SalObject* /* pObject */,
                 pWindow->ToTop( TOTOP_NOGRABFOCUS );
             else
                 pWindow->ToTop();
+            if( aDogTag.IsDead() )
+                break;
             pWindow->GrabFocus();
+            if( aDogTag.IsDead() )
+                break;
             pWindow->ImplGetFrameData()->mbInSysObjToTopHdl = FALSE;
             break;
     }
