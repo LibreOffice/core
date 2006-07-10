@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlcfg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:21:21 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 11:56:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,7 @@
 #define HTMLCFG_PRINT_LAYOUT_EXTENSION  0x20
 #define HTMLCFG_IGNORE_FONT_FAMILY      0x40
 #define HTMLCFG_IS_BASIC_WARNING        0x80
+#define HTMLCFG_NUMBERS_ENGLISH_US      0x100
 
 using namespace utl;
 using namespace rtl;
@@ -115,7 +116,8 @@ const Sequence<OUString>& SvxHtmlOptions::GetPropertyNames()
             "Export/PrintLayout",                   // 11
             "Export/LocalGraphic",                  // 12
             "Export/Warning",                       // 13
-            "Export/Encoding"                       // 14
+            "Export/Encoding",                      // 14
+            "Import/NumbersEnglishUS"               // 15
         };
         const int nCount = sizeof(aPropNames) / sizeof(aPropNames[0]);
         aNames.realloc(nCount);
@@ -197,6 +199,11 @@ SvxHtmlOptions::SvxHtmlOptions() :
                     case 14: pValues[nProp] >>= pImp->eEncoding;
                              pImp->bIsEncodingDefault = sal_False;
                     break;//"Export/Encoding"
+
+                    case 15:
+                        if(*(sal_Bool*)pValues[nProp].getValue())
+                            pImp->nFlags |= HTMLCFG_NUMBERS_ENGLISH_US;
+                    break;//"Import/NumbersEnglishUS"
                 }
             }
         }
@@ -258,8 +265,9 @@ void    SvxHtmlOptions::Commit()
                 if(!pImp->bIsEncodingDefault)
                     pValues[nProp] <<= pImp->eEncoding;
                 break;//"Export/Encoding",
+            case 15: bSet = 0 != (pImp->nFlags & HTMLCFG_NUMBERS_ENGLISH_US);break;//"Import/NumbersEnglishUS"
         }
-        if(nProp < 2 || ( nProp > 9 && nProp < 14 ))
+        if(nProp < 2 || ( nProp > 9 && nProp < 14 ) || nProp == 15)
             pValues[nProp].setValue(&bSet, ::getCppuBooleanType());
     }
     PutProperties(aNames, aValues);
@@ -470,4 +478,22 @@ SvxHtmlOptions* SvxHtmlOptions::Get()
     if ( !pOptions )
         pOptions = new SvxHtmlOptions;
     return pOptions;
+}
+
+
+/* ---------------------- 2006-06-07T21:02+0200 ---------------------- */
+BOOL SvxHtmlOptions::IsNumbersEnglishUS() const
+{
+    return 0 != (pImp->nFlags & HTMLCFG_NUMBERS_ENGLISH_US) ;
+}
+
+
+/* ---------------------- 2006-06-07T21:02+0200 ---------------------- */
+void SvxHtmlOptions::SetNumbersEnglishUS(BOOL bSet)
+{
+    if(bSet)
+        pImp->nFlags |=  HTMLCFG_NUMBERS_ENGLISH_US;
+    else
+        pImp->nFlags &= ~HTMLCFG_NUMBERS_ENGLISH_US;
+    SetModified();
 }

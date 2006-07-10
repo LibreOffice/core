@@ -4,9 +4,9 @@
  *
  *  $RCSfile: opthtml.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:44:28 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 11:56:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,7 @@
 #define GB_IMPORT               20
 #define CB_UNKNOWN_TAGS         21
 #define CB_IGNORE_FONTNAMES     22
+#define CB_NUMBERS_ENGLISH_US   23
 
 #define GB_EXPORT               30
 #define CB_STARBASIC            31
