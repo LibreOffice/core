@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MPreparedStatement.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:43:52 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:29:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,7 +152,7 @@ sal_Bool OPreparedStatement::parseSql( const ::rtl::OUString& sql , sal_Bool bAd
 OResultSet* OPreparedStatement::createResultSet( )
 {
     OSL_TRACE("In/Out : OPreparedStatement::createResultSet( )");
-    return new OResultSet( this, *m_pSQLIterator );
+    return new OResultSet( this, m_pSQLIterator );
 }
 
 // -----------------------------------------------------------------------------
