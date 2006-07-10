@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TTableHelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:05:01 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:19:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -289,10 +289,10 @@ void SAL_CALL OTableHelper::rename( const ::rtl::OUString& newName ) throw(SQLEx
         ::dbtools::qualifiedNameComponents(getMetaData(),newName,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
 
         ::rtl::OUString sComposedName;
-        ::dbtools::composeTableName(getMetaData(),m_CatalogName,m_SchemaName,m_Name,sComposedName,sal_True,::dbtools::eInDataManipulation);
+        sComposedName = ::dbtools::composeTableName(getMetaData(),m_CatalogName,m_SchemaName,m_Name,sal_True,::dbtools::eInDataManipulation);
         sSql += sComposedName
              + ::rtl::OUString::createFromAscii(" TO ");
-        ::dbtools::composeTableName(getMetaData(),sCatalog,sSchema,sTable,sComposedName,sal_True,::dbtools::eInDataManipulation);
+        sComposedName = ::dbtools::composeTableName(getMetaData(),sCatalog,sSchema,sTable,sal_True,::dbtools::eInDataManipulation);
         sSql += sComposedName;
 
         Reference< XStatement > xStmt = m_xConnection->createStatement(  );
@@ -333,7 +333,7 @@ void SAL_CALL OTableHelper::alterColumnByIndex( sal_Int32 index, const Reference
 ::rtl::OUString SAL_CALL OTableHelper::getName() throw(RuntimeException)
 {
     ::rtl::OUString sComposedName;
-    ::dbtools::composeTableName(getMetaData(),m_CatalogName,m_SchemaName,m_Name,sComposedName,sal_False,::dbtools::eInDataManipulation);
+    sComposedName = ::dbtools::composeTableName(getMetaData(),m_CatalogName,m_SchemaName,m_Name,sal_False,::dbtools::eInDataManipulation);
     return sComposedName;
 }
 // -----------------------------------------------------------------------------
