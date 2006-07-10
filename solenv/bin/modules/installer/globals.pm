@@ -4,9 +4,9 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.54 $
+#   $Revision: 1.55 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 21:12:43 $
+#   last change: $Author: obo $ $Date: 2006-07-10 18:49:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -276,7 +276,7 @@ BEGIN
         $iswin = 1;
         $wrapcmd = "";
     }
-    elsif (( $plat =~ /cygwin/i ) && ( $ENV{'USE_SHELL'} eq "tcsh" ))
+    elsif (( $plat =~ /cygwin/i ) && ( $ENV{'USE_SHELL'} ne "4nt" ))
     {
         $unzippath = "unzip";               # Has to be in the path: /usr/bin/unzip
         $zippath = "zip";                   # Has to be in the path: /usr/bin/zip
