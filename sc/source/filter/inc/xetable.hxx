@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xetable.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:31:25 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:57:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,7 @@ public:
     bool                IsBasePos( sal_uInt16 nXclCol, sal_uInt16 nXclRow ) const;
 
     /** Derived classes create the token array for a corresponding FORMULA cell record. */
-    virtual XclExpTokenArrayRef CreateCellTokenArray( const XclExpRoot& rRoot ) const = 0;
+    virtual XclTokenArrayRef CreateCellTokenArray( const XclExpRoot& rRoot ) const = 0;
     /** Derived classes return true, if the own formula contains volatile functions. */
     virtual bool        IsVolatile() const = 0;
 
@@ -125,7 +125,6 @@ typedef ScfRef< XclExpRangeFmlaBase > XclExpRangeFmlaRef;
 // Array formulas =============================================================
 
 class ScTokenArray;
-class XclExpTokenArray;
 
 /** Represents an ARRAY record that contains the token array of a matrix formula.
 
@@ -137,10 +136,10 @@ class XclExpTokenArray;
 class XclExpArray : public XclExpRangeFmlaBase
 {
 public:
-    explicit            XclExpArray( XclExpTokenArrayRef xTokArr, const ScRange& rScRange );
+    explicit            XclExpArray( XclTokenArrayRef xTokArr, const ScRange& rScRange );
 
     /** Creates and returns the token array for a corresponding FORMULA cell record. */
-    virtual XclExpTokenArrayRef CreateCellTokenArray( const XclExpRoot& rRoot ) const;
+    virtual XclTokenArrayRef CreateCellTokenArray( const XclExpRoot& rRoot ) const;
     /** Returns true, if the array formula contains volatile functions. */
     virtual bool        IsVolatile() const;
 
@@ -148,7 +147,7 @@ private:
     virtual void        WriteBody( XclExpStream& rStrm );
 
 private:
-    XclExpTokenArrayRef mxTokArr;       /// The token array of a matrix formula.
+    XclTokenArrayRef    mxTokArr;       /// The token array of a matrix formula.
 };
 
 typedef ScfRef< XclExpArray > XclExpArrayRef;
@@ -184,13 +183,13 @@ class XclExpShrfmla : public XclExpRangeFmlaBase
 {
 public:
     /** Creates a SHRFMLA record that consists of the passed cell address only. */
-    explicit            XclExpShrfmla( XclExpTokenArrayRef xTokArr, const ScAddress& rScPos );
+    explicit            XclExpShrfmla( XclTokenArrayRef xTokArr, const ScAddress& rScPos );
 
     /** Extends the cell range to include the passed cell address. */
     void                ExtendRange( const ScAddress& rScPos );
 
     /** Creates and returns the token array for a corresponding FORMULA cell record. */
-    virtual XclExpTokenArrayRef CreateCellTokenArray( const XclExpRoot& rRoot ) const;
+    virtual XclTokenArrayRef CreateCellTokenArray( const XclExpRoot& rRoot ) const;
     /** Returns true, if the shared formula contains volatile functions. */
     virtual bool        IsVolatile() const;
 
@@ -198,7 +197,7 @@ private:
     virtual void        WriteBody( XclExpStream& rStrm );
 
 private:
-    XclExpTokenArrayRef mxTokArr;       /// The token array of a shared formula.
+    XclTokenArrayRef    mxTokArr;       /// The token array of a shared formula.
     sal_uInt8           mnUsedCount;    /// Number of FORMULA records referring to this record.
 };
 
@@ -245,7 +244,7 @@ public:
     void                Finalize();
 
     /** Creates and returns the token array for a corresponding FORMULA cell record. */
-    virtual XclExpTokenArrayRef CreateCellTokenArray( const XclExpRoot& rRoot ) const;
+    virtual XclTokenArrayRef CreateCellTokenArray( const XclExpRoot& rRoot ) const;
     /** Returns true, if the multiple operations range is volatile. */
     virtual bool        IsVolatile() const;
     /** Writes the record if it is valid. */
@@ -334,7 +333,7 @@ public:
 
 protected:
     explicit            XclExpCellBase(
-                            sal_uInt16 nRecId, sal_uInt32 nContSize, const XclAddress& rXclPos );
+                            sal_uInt16 nRecId, sal_Size nContSize, const XclAddress& rXclPos );
 
     /** Sets this record to a new column position. */
     inline void         SetXclCol( sal_uInt16 nXclCol ) { maXclPos.mnCol = nXclCol; }
@@ -365,15 +364,15 @@ public:
     virtual void        Save( XclExpStream& rStrm );
 
 protected:
-    explicit            XclExpSingleCellBase( sal_uInt16 nRecId, sal_uInt32 nContSize,
+    explicit            XclExpSingleCellBase( sal_uInt16 nRecId, sal_Size nContSize,
                             const XclAddress& rXclPos, sal_uInt32 nXFId );
 
     explicit            XclExpSingleCellBase( const XclExpRoot& rRoot,
-                            sal_uInt16 nRecId, sal_uInt32 nContSize, const XclAddress& rXclPos,
+                            sal_uInt16 nRecId, sal_Size nContSize, const XclAddress& rXclPos,
                             const ScPatternAttr* pPattern, sal_Int16 nScript, sal_uInt32 nForcedXFId );
 
-    inline void         SetContSize( sal_uInt32 nContSize ) { mnContSize = nContSize; }
-    inline sal_uInt32   GetContSize() const { return mnContSize; }
+    inline void         SetContSize( sal_Size nContSize ) { mnContSize = nContSize; }
+    inline sal_Size     GetContSize() const { return mnContSize; }
 
     inline void         SetXFId( sal_uInt32 nXFId ) { maXFId.mnXFId = nXFId; }
     inline sal_uInt32   GetXFId() const { return maXFId.mnXFId; }
@@ -386,7 +385,7 @@ private:
 
 private:
     XclExpXFId          maXFId;         /// The XF identifier of the cell formatting.
-    sal_uInt32          mnContSize;     /// The size of the cell contents.
+    sal_Size            mnContSize;     /// The size of the cell contents.
 };
 
 // ----------------------------------------------------------------------------
@@ -513,7 +512,7 @@ private:
 
 private:
     ScFormulaCell&      mrScFmlaCell;   /// The Calc formula cell.
-    XclExpTokenArrayRef mxTokArr;       /// The token array of the formula.
+    XclTokenArrayRef    mxTokArr;       /// The token array of the formula.
     XclExpRangeFmlaRef  mxAddRec;       /// Additional record for matrix/shared formulas.
     XclExpRecordRef     mxStringRec;    /// STRING record for string result.
 };
@@ -549,12 +548,12 @@ public:
 
 protected:
     explicit            XclExpMultiCellBase( sal_uInt16 nRecId, sal_uInt16 nMulRecId,
-                            sal_uInt32 nContSize, const XclAddress& rXclPos );
+                            sal_Size nContSize, const XclAddress& rXclPos );
 
     /** Sets the size of the remaining contents of one cell (without the XF index). */
-    inline void         SetContSize( sal_uInt32 nContSize ) { mnContSize = nContSize; }
+    inline void         SetContSize( sal_Size nContSize ) { mnContSize = nContSize; }
     /** Returns the size of the remaining contents of one cell (without the XF index). */
-    inline sal_uInt32   GetContSize() const { return mnContSize; }
+    inline sal_Size     GetContSize() const { return mnContSize; }
 
     /** Returns the number of cells this record represents. */
     sal_uInt16          GetCellCount() const;
@@ -584,7 +583,7 @@ private:
     typedef ::std::deque< XclExpMultiXFId > XclExpMultiXFIdDeq;
 
     sal_uInt16          mnMulRecId;     /// Record ID for multiple record variant.
-    sal_uInt32          mnContSize;     /// Data size of contents for one cell
+    sal_Size            mnContSize;     /// Data size of contents for one cell
     XclExpMultiXFIdDeq  maXFIds;        /// The XF identifiers of the cell formatting.
 };
 
