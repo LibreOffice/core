@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: vg $ $Date: 2006-05-16 08:20:25 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:10:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4211,12 +4211,15 @@ void ScGridWindow::ShowCursor()
         return;
     }
 
-    --nCursorHideCount;
-    if (nCursorHideCount==0)
+    if (nCursorHideCount==1)
     {
+        // #i57745# Draw the cursor before setting the variable, in case the
+        // GetSizePixel call from drawing causes a repaint (resize handler is called)
         DrawAutoFillMark();
         DrawCursor();
     }
+
+    --nCursorHideCount;
 }
 
 void __EXPORT ScGridWindow::GetFocus()
