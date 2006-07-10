@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datman.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-05 14:55:50 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:53:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1142,9 +1142,11 @@ Reference< XForm >  BibDataManager::createDatabaseForm(BibDBDescriptor& rDesc)
                     m_xParser.set( xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.SingleSelectQueryComposer" ) ) ), UNO_QUERY );
 
                 ::rtl::OUString aString(C2U("SELECT * FROM "));
-                sal_Bool bUseCatalogInSelect = ::dbtools::isDataSourcePropertyEnabled(xConnection,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseCatalogInSelect")),sal_True);
-                sal_Bool bUseSchemaInSelect = ::dbtools::isDataSourcePropertyEnabled(xConnection,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseSchemaInSelect")),sal_True);
-                aString += ::dbtools::quoteTableName(xMetaData,aActiveDataTable,::dbtools::eInDataManipulation,bUseCatalogInSelect,bUseSchemaInSelect);
+
+                ::rtl::OUString sCatalog, sSchema, sName;
+                ::dbtools::qualifiedNameComponents( xMetaData, aActiveDataTable, sCatalog, sSchema, sName, ::dbtools::eInDataManipulation );
+                aString += ::dbtools::composeTableNameForSelect( xConnection, sCatalog, sSchema, sName );
+
                 m_xParser->setElementaryQuery(aString);
                 BibConfig* pConfig = BibModul::GetConfig();
                 pConfig->setQueryField(getQueryField());
@@ -1340,9 +1342,11 @@ void BibDataManager::setActiveDataSource(const ::rtl::OUString& rURL)
             // quote the table name which may contain catalog.schema.table
             Reference<XDatabaseMetaData> xMetaData(xConnection->getMetaData(),UNO_QUERY);
             aQuoteChar = xMetaData->getIdentifierQuoteString();
-            sal_Bool bUseCatalogInSelect = ::dbtools::isDataSourcePropertyEnabled(xConnection,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseCatalogInSelect")),sal_True);
-            sal_Bool bUseSchemaInSelect = ::dbtools::isDataSourcePropertyEnabled(xConnection,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseSchemaInSelect")),sal_True);
-            aString += ::dbtools::quoteTableName(xMetaData,aActiveDataTable,::dbtools::eInDataManipulation,bUseCatalogInSelect,bUseSchemaInSelect);
+
+            ::rtl::OUString sCatalog, sSchema, sName;
+            ::dbtools::qualifiedNameComponents( xMetaData, aActiveDataTable, sCatalog, sSchema, sName, ::dbtools::eInDataManipulation );
+            aString += ::dbtools::composeTableNameForSelect( xConnection, sCatalog, sSchema, sName );
+
             m_xParser->setElementaryQuery(aString);
             BibConfig* pConfig = BibModul::GetConfig();
             pConfig->setQueryField(getQueryField());
@@ -1410,9 +1414,11 @@ void BibDataManager::setActiveDataTable(const ::rtl::OUString& rTable)
                     m_xParser.set( xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.SingleSelectQueryComposer" ) ) ), UNO_QUERY );
 
                 ::rtl::OUString aString(C2U("SELECT * FROM "));
-                sal_Bool bUseCatalogInSelect = ::dbtools::isDataSourcePropertyEnabled(xConnection,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseCatalogInSelect")),sal_True);
-                sal_Bool bUseSchemaInSelect = ::dbtools::isDataSourcePropertyEnabled(xConnection,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseSchemaInSelect")),sal_True);
-                aString += ::dbtools::quoteTableName(xMetaData,aActiveDataTable,::dbtools::eInDataManipulation,bUseCatalogInSelect,bUseSchemaInSelect);
+
+                ::rtl::OUString sCatalog, sSchema, sName;
+                ::dbtools::qualifiedNameComponents( xMetaData, aActiveDataTable, sCatalog, sSchema, sName, ::dbtools::eInDataManipulation );
+                aString += ::dbtools::composeTableNameForSelect( xConnection, sCatalog, sSchema, sName );
+
                 m_xParser->setElementaryQuery(aString);
 
                 BibConfig* pConfig = BibModul::GetConfig();
