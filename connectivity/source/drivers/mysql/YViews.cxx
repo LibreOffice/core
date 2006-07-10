@@ -4,9 +4,9 @@
  *
  *  $RCSfile: YViews.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:54:08 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:31:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,7 +126,7 @@ void OViews::disposing(void)
     OCollection::disposing();
 }
 // -------------------------------------------------------------------------
-Reference< XPropertySet > OViews::createEmptyObject()
+Reference< XPropertySet > OViews::createDescriptor()
 {
     Reference<XConnection> xConnection = static_cast<OMySQLCatalog&>(m_rParent).getConnection();
     connectivity::sdbcx::OView* pNew = new connectivity::sdbcx::OView(sal_True,xConnection->getMetaData());
@@ -134,13 +134,10 @@ Reference< XPropertySet > OViews::createEmptyObject()
 }
 // -------------------------------------------------------------------------
 // XAppend
-void OViews::appendObject( const Reference< XPropertySet >& descriptor )
+sdbcx::ObjectType OViews::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
-    ::rtl::OUString aName = getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)));
-    if ( !aName.getLength() )
-        ::dbtools::throwFunctionSequenceException(static_cast<XTypeProvider*>(this));
-
     createView(descriptor);
+    return createObject( _rForName );
 }
 // -------------------------------------------------------------------------
 // XDrop
@@ -156,7 +153,7 @@ void OViews::dropObject(sal_Int32 _nPos,const ::rtl::OUString /*_sElementName*/)
         ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("DROP VIEW");
 
         Reference<XPropertySet> xProp(xObject,UNO_QUERY);
-        aSql += ::dbtools::composeTableName(m_xMetaData,xProp,sal_True,::dbtools::eInTableDefinitions);
+        aSql += ::dbtools::composeTableName( m_xMetaData, xProp, ::dbtools::eInTableDefinitions, false, false, true );
 
         Reference<XConnection> xConnection = static_cast<OMySQLCatalog&>(m_rParent).getConnection();
         Reference< XStatement > xStmt = xConnection->createStatement(  );
@@ -180,7 +177,7 @@ void OViews::createView( const Reference< XPropertySet >& descriptor )
     ::rtl::OUString aQuote  = xConnection->getMetaData()->getIdentifierQuoteString(  );
     ::rtl::OUString sSchema,sCommand;
 
-    aSql += ::dbtools::composeTableName(m_xMetaData,descriptor,sal_True,::dbtools::eInTableDefinitions);
+    aSql += ::dbtools::composeTableName( m_xMetaData, descriptor, ::dbtools::eInTableDefinitions, false, false, true );
 
     aSql += ::rtl::OUString::createFromAscii(" AS ");
     descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_COMMAND)) >>= sCommand;
@@ -197,7 +194,7 @@ void OViews::createView( const Reference< XPropertySet >& descriptor )
     OTables* pTables = static_cast<OTables*>(static_cast<OMySQLCatalog&>(m_rParent).getPrivateTables());
     if ( pTables )
     {
-        ::rtl::OUString sName = ::dbtools::composeTableName(m_xMetaData,descriptor,sal_False,::dbtools::eInDataManipulation);
+        ::rtl::OUString sName = ::dbtools::composeTableName( m_xMetaData, descriptor, ::dbtools::eInDataManipulation, false, false, false );
         pTables->appendNew(sName);
     }
 }
