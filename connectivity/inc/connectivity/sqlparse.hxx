@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqlparse.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:02:35 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:16:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,8 @@
 #ifndef CONNECTIVITY_IPARSECONTEXT_HXX
 #include "connectivity/IParseContext.hxx"
 #endif
+
+#include <map>
 
 // forward declarations
 namespace com
@@ -135,11 +137,13 @@ namespace connectivity
     {
         friend class OSQLParseNode;
         friend class OSQLInternalNode;
-        friend struct OSQLParseNode::SQLParseNodeParameter;
+        friend struct SQLParseNodeParameter;
 
     private:
+        typedef ::std::map< sal_uInt32, OSQLParseNode::Rule >   RuleIDMap;
     //  static parts for parsers
         static sal_uInt32           s_nRuleIDs[OSQLParseNode::rule_count + 1];
+        static RuleIDMap            s_aReverseRuleIDLookup;
         static OParseContext        s_aDefaultContext;
 
     //  parts controled by mutex
@@ -205,6 +209,8 @@ namespace connectivity
         // (0, falls nicht gefunden). Die Suche nach der ID aufgrund eines Strings ist
         // extrem ineffizient (sequentielle Suche nach ::rtl::OUString)!
         static sal_uInt32 StrToRuleID(const ::rtl::OString & rValue);
+
+        static OSQLParseNode::Rule RuleIDToRule( sal_uInt32 _nRule );
 
         // RuleId mit enum, wesentlich effizienter
         static sal_uInt32 RuleID(OSQLParseNode::Rule eRule);
