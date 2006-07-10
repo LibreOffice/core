@@ -4,9 +4,9 @@
  *
  *  $RCSfile: opcode.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-21 11:51:53 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 12:30:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,6 +180,8 @@ enum OpCodeEnum
         ocErrCell           = SC_OPCODE_ERR_CELL,
         ocFormula           = SC_OPCODE_FORMULA,
         ocArabic            = SC_OPCODE_ARABIC,
+        ocInfo              = SC_OPCODE_INFO,
+        ocBahtText          = SC_OPCODE_BAHTTEXT,
         ocEnd1Par           = SC_OPCODE_END_1_PAR,
     // Funktionen mit mehreren Parametern
         ocArcTan2           = SC_OPCODE_ARC_TAN_2,
@@ -376,7 +378,6 @@ enum OpCodeEnum
         ocConvert           = SC_OPCODE_CONVERT,
         ocRoman             = SC_OPCODE_ROMAN,
         ocHyperLink         = SC_OPCODE_HYPERLINK,
-        ocBahtText          = SC_OPCODE_BAHTTEXT,
         ocEnd2Par           = SC_OPCODE_END_2_PAR,
     // internes Allerlei
         ocInternalBegin     = SC_OPCODE_INTERNAL_BEGIN,
