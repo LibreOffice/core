@@ -4,9 +4,9 @@
  *
  *  $RCSfile: core_resource.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:12:14 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:17:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,6 +94,14 @@ namespace dbaccess
             sReturn = m_pImpl->ReadString(_nResId);
 
         return sReturn;
+    }
+
+    //------------------------------------------------------------------
+    ::rtl::OUString ResourceManager::loadString( sal_uInt16 _nResId, const sal_Char* _pPlaceholderAscii, const ::rtl::OUString& _rReplace )
+    {
+        String sString( loadString( _nResId ) );
+        sString.SearchAndReplaceAscii( _pPlaceholderAscii, _rReplace );
+        return sString;
     }
 
 //.........................................................................
