@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xeescher.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:27:52 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:53:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,8 +48,6 @@ namespace com { namespace sun { namespace star {
 
 // ============================================================================
 
-class XclExpTokenArray;
-
 /** Helper to manage controls linked to the sheet. */
 class XclExpCtrlLinkHelper : protected XclExpRoot
 {
@@ -64,20 +62,20 @@ public:
 
 protected:
     /** Returns the Excel token array of the cell link, or 0, if no link present. */
-    inline const XclExpTokenArray* GetCellLinkTokArr() const { return mxCellLink.get(); }
+    inline const XclTokenArray* GetCellLinkTokArr() const { return mxCellLink.get(); }
     /** Returns the Excel token array of the source range, or 0, if no link present. */
-    inline const XclExpTokenArray* GetSourceRangeTokArr() const { return mxSrcRange.get(); }
+    inline const XclTokenArray* GetSourceRangeTokArr() const { return mxSrcRange.get(); }
     /** Returns the number of entries in the source range, or 0, if no source set. */
     inline sal_uInt16   GetSourceEntryCount() const { return mnEntryCount; }
 
     /** Writes a formula with special style only valid in OBJ records. */
-    void                WriteFormula( XclExpStream& rStrm, const XclExpTokenArray& rTokArr ) const;
+    void                WriteFormula( XclExpStream& rStrm, const XclTokenArray& rTokArr ) const;
     /** Writes a formula subrecord with special style only valid in OBJ records. */
-    void                WriteFormulaSubRec( XclExpStream& rStrm, sal_uInt16 nSubRecId, const XclExpTokenArray& rTokArr ) const;
+    void                WriteFormulaSubRec( XclExpStream& rStrm, sal_uInt16 nSubRecId, const XclTokenArray& rTokArr ) const;
 
 private:
-    XclExpTokenArrayRef mxCellLink;     /// Formula for linked cell.
-    XclExpTokenArrayRef mxSrcRange;     /// Formula for source data range.
+    XclTokenArrayRef    mxCellLink;     /// Formula for linked cell.
+    XclTokenArrayRef    mxSrcRange;     /// Formula for source data range.
     sal_uInt16          mnEntryCount;   /// Number of entries in source range.
 };
 
@@ -136,7 +134,7 @@ private:
 
 private:
     ScfInt16Vec         maMultiSel;     /// Indexes of all selected entries in a multi selection.
-    XclExpTokenArrayRef mxMacroLink;    /// Token array containing a link to an attached macro.
+    XclTokenArrayRef    mxMacroLink;    /// Token array containing a link to an attached macro.
     sal_Int32           mnHeight;       /// Height of the control.
     sal_uInt16          mnState;        /// Checked/unchecked state.
     sal_Int16           mnLineCount;    /// Combobox dropdown line count.

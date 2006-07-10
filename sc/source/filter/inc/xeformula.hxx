@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xeformula.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:28:11 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:53:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,47 +43,6 @@
 #include "xeroot.hxx"
 #endif
 
-// Token array ================================================================
-
-/** Binary representation of an Excel token array. */
-class XclExpTokenArray
-{
-public:
-    /** Creates an empty token array. */
-    explicit            XclExpTokenArray( bool bVolatile = false );
-    /** Creates a token array, swaps passed token vector into own data. */
-    explicit            XclExpTokenArray( ScfUInt8Vec& rTokVec, bool bVolatile = false );
-
-    /** Returns true, if the token array is empty. */
-    inline bool         Empty() const { return maTokVec.empty(); }
-    /** Returns the size of the token array in bytes. */
-    sal_uInt16          GetSize() const;
-    /** Returns read-only access to the byte vector storing token data. */
-    inline const ScfUInt8Vec& GetTokenVec() const { return maTokVec; }
-    /** Returns true, if the formula contains a volatile function. */
-    inline bool         IsVolatile() const { return mbVolatile; }
-
-    /** Swaps own token vector with passed token vector. */
-    inline void         SwapTokenVec( ScfUInt8Vec& rTokVec ) { maTokVec.swap( rTokVec ); }
-
-    /** Writes the size field of the token array. */
-    void                WriteSize( XclExpStream& rStrm ) const;
-    /** Writes the tokens of the token array (without size field). */
-    void                WriteArray( XclExpStream& rStrm ) const;
-    /** Writes size field and the tokens. */
-    void                Write( XclExpStream& rStrm ) const;
-
-    /** Compares this token array with the passed. */
-    bool                operator==( const XclExpTokenArray& rTokArr ) const;
-
-private:
-    ScfUInt8Vec         maTokVec;       /// Byte vector containing token data.
-    bool                mbVolatile;     /// True = Formula contains volatile function.
-};
-
-/** Calls the Write() function at the passed token array. */
-XclExpStream& operator<<( XclExpStream& rStrm, const XclExpTokenArray& rTokArr );
-
 // External reference log =====================================================
 
 /** Log entry for external references in a formula, used i.e. in change tracking. */
@@ -103,23 +62,6 @@ typedef ::std::vector< XclExpRefLogEntry > XclExpRefLog;
 
 // Formula compiler ===========================================================
 
-/** Type of a creted formula. */
-enum XclExpFomulaType
-{
-    EXC_FMLATYPE_CELL,          /// Simple cell formula, also used in change tracking.
-    EXC_FMLATYPE_MATRIX,        /// Matrix (array) formula.
-    EXC_FMLATYPE_SHARED,        /// Shared formula.
-    EXC_FMLATYPE_CONDFMT,       /// Conditional format.
-    EXC_FMLATYPE_DATAVAL,       /// Data validation.
-    EXC_FMLATYPE_NAME,          /// Defined name.
-    EXC_FMLATYPE_CHART,         /// Chart source ranges.
-    EXC_FMLATYPE_CONTROL,       /// Spreadsheet links in form controls.
-    EXC_FMLATYPE_WQUERY,        /// Web query source range.
-    EXC_FMLATYPE_LISTVAL        /// List (cell range) validation.
-};
-
-// ----------------------------------------------------------------------------
-
 class ScRangeList;
 class XclExpFmlaCompImpl;
 
@@ -131,30 +73,30 @@ public:
     virtual             ~XclExpFormulaCompiler();
 
     /** Creates and returns the token array of a formula. */
-    XclExpTokenArrayRef CreateFormula(
-                            XclExpFomulaType eType, const ScTokenArray& rScTokArr,
+    XclTokenArrayRef    CreateFormula(
+                            XclFormulaType eType, const ScTokenArray& rScTokArr,
                             const ScAddress* pScBasePos = 0, XclExpRefLog* pRefLog = 0 );
 
     /** Creates and returns a token array containing a single cell address. */
-    XclExpTokenArrayRef CreateFormula( XclExpFomulaType eType, const ScAddress& rScPos );
+    XclTokenArrayRef    CreateFormula( XclFormulaType eType, const ScAddress& rScPos );
 
     /** Creates and returns a token array containing a single cell range address. */
-    XclExpTokenArrayRef CreateFormula( XclExpFomulaType eType, const ScRange& rScRange );
+    XclTokenArrayRef    CreateFormula( XclFormulaType eType, const ScRange& rScRange );
 
     /** Creates and returns the token array for a cell range list. */
-    XclExpTokenArrayRef CreateFormula( XclExpFomulaType eType, const ScRangeList& rScRanges );
+    XclTokenArrayRef    CreateFormula( XclFormulaType eType, const ScRangeList& rScRanges );
 
     /** Creates a single error token containing the passed error code. */
-    XclExpTokenArrayRef CreateErrorFormula( sal_uInt8 nErrCode );
+    XclTokenArrayRef    CreateErrorFormula( sal_uInt8 nErrCode );
 
     /** Creates a single token for a special cell reference.
         @descr  This is used for array formulas and shared formulas (token tExp),
             and multiple operation tables (token tTbl). */
-    XclExpTokenArrayRef CreateSpecialRefFormula( sal_uInt8 nTokenId, const XclAddress& rXclPos );
+    XclTokenArrayRef    CreateSpecialRefFormula( sal_uInt8 nTokenId, const XclAddress& rXclPos );
 
     /** Creates a single tNameXR token for a reference to an external name.
         @descr  This is used i.e. for linked macros in push buttons. */
-    XclExpTokenArrayRef CreateNameXFormula( sal_uInt16 nExtSheet, sal_uInt16 nExtName );
+    XclTokenArrayRef    CreateNameXFormula( sal_uInt16 nExtSheet, sal_uInt16 nExtName );
 
 private:
     typedef ScfRef< XclExpFmlaCompImpl > XclExpFmlaCompImplRef;
