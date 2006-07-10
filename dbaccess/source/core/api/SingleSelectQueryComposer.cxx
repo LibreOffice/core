@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SingleSelectQueryComposer.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:37:34 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:04:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,11 +83,17 @@
 #ifndef _UTL_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
 #endif
+#ifndef UNOTOOLS_INC_SHAREDUNOCOMPONENT_HXX
+#include <unotools/sharedunocomponent.hxx>
+#endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -156,9 +162,10 @@ namespace
         const OSQLParseNode* pNewSqlParseNode = _rParser.parseTree( aErrorMsg, _rStatement );
         if ( !pNewSqlParseNode )
         {
-            SQLException aError2(aErrorMsg,_rxContext,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,Any());
-            SQLException aError1(_rStatement,_rxContext,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,makeAny(aError2));
-            throw SQLException(_rParser.getContext().getErrorMessage(OParseContext::ERROR_GENERAL),_rxContext,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,makeAny(aError1));
+            ::rtl::OUString sSQLStateGeneralError( getStandardSQLState( SQL_GENERAL_ERROR ) );
+            SQLException aError2( aErrorMsg, _rxContext, sSQLStateGeneralError, 1000, Any() );
+            SQLException aError1( _rStatement, _rxContext, sSQLStateGeneralError, 1000, makeAny( aError2 ) );
+            throw SQLException(_rParser.getContext().getErrorMessage(OParseContext::ERROR_GENERAL),_rxContext,sSQLStateGeneralError,1000,makeAny(aError1));
         }
         return pNewSqlParseNode;
     }
@@ -175,8 +182,7 @@ namespace
         // determine the statement type
         _rIterator.setParseTree( pStatementNode );
         _rIterator.traverseAll();
-        bool bIsSingleSelect = ( _rIterator.getStatementType() == SQL_STATEMENT_SELECT )
-                            || ( _rIterator.getStatementType() == SQL_STATEMENT_SELECT_COUNT );
+        bool bIsSingleSelect = ( _rIterator.getStatementType() == SQL_STATEMENT_SELECT );
 
         // throw the error, if necessary
         if ( !bIsSingleSelect || SQL_ISRULE( pStatementNode, union_statement ) ) // #i4229# OJ
@@ -184,9 +190,9 @@ namespace
             // restore the old node before throwing the exception
             _rIterator.setParseTree( pOldNode );
             // and now really ...
-            SQLException aError1( _rOriginatingCommand, _rxContext, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HY000" ) ), 1000, Any() );
+            SQLException aError1( _rOriginatingCommand, _rxContext, getStandardSQLState( SQL_GENERAL_ERROR ), 1000, Any() );
             throw SQLException( DBACORE_RESSTRING( RID_STR_ONLY_QUERY ), _rxContext,
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HY000" ) ), 1000, makeAny( aError1 ) );
+                getStandardSQLState( SQL_GENERAL_ERROR ), 1000, makeAny( aError1 ) );
         }
 
         delete pOldNode;
@@ -230,31 +236,30 @@ namespace
 
 DBG_NAME(OSingleSelectQueryComposer)
 // -------------------------------------------------------------------------
-OSingleSelectQueryComposer::OSingleSelectQueryComposer(const Reference< XNameAccess>& _xTableSupplier,
+OSingleSelectQueryComposer::OSingleSelectQueryComposer(const Reference< XNameAccess>& _rxTables,
                                const Reference< XConnection>& _xConnection,
                                const Reference< XMultiServiceFactory >& _xServiceFactory)
     :OSubComponent(m_aMutex,_xConnection)
     ,OPropertyContainer(m_aBHelper)
     ,m_aSqlParser(_xServiceFactory)
-    ,m_aSqlIterator(_xTableSupplier,_xConnection->getMetaData(),NULL)
-    ,m_aAdditiveIterator(_xTableSupplier,_xConnection->getMetaData(),NULL)
+    ,m_aSqlIterator( _xConnection, _rxTables, m_aSqlParser, NULL )
+    ,m_aAdditiveIterator( _xConnection, _rxTables, m_aSqlParser, NULL )
     ,m_aElementaryParts( (size_t)SQLPartCount )
     ,m_xConnection(_xConnection)
     ,m_xMetaData(_xConnection->getMetaData())
-    ,m_xTableSupplier(_xTableSupplier)
+    ,m_xConnectionTables( _rxTables )
     ,m_xServiceFactory(_xServiceFactory)
     ,m_pTables(NULL)
     ,m_nBoolCompareMode(BOOL_COMPARISON_DEFAULT)
 {
     DBG_CTOR(OSingleSelectQueryComposer,NULL);
-    OSL_ENSURE(_xServiceFactory.is()," ServiceFactory cant be null!");
-    OSL_ENSURE(_xConnection.is()," Connection cant be null!");
-    OSL_ENSURE(_xTableSupplier.is(),"TableSupplier cant be null!");
+
+    if ( !m_xServiceFactory.is() || !m_xConnection.is() || !m_xConnectionTables.is() )
+        throw IllegalArgumentException();
 
     registerProperty(PROPERTY_ORIGINAL,PROPERTY_ID_ORIGINAL,PropertyAttribute::BOUND|PropertyAttribute::READONLY,&m_sOrignal,::getCppuType(&m_sOrignal));
 
     m_aCurrentColumns.resize(4);
-
 
     m_aLocale = SvtSysLocale().GetLocaleData().getLocale();
     m_xNumberFormatsSupplier = dbtools::getNumberFormats(m_xConnection,sal_True,m_xServiceFactory);
@@ -312,7 +317,7 @@ void SAL_CALL OSingleSelectQueryComposer::disposing(void)
     resetIterator( m_aSqlIterator, true );
     resetIterator( m_aAdditiveIterator, true );
 
-    m_xTableSupplier    = NULL;
+    m_xConnectionTables = NULL;
     m_xConnection       = NULL;
     m_xServiceFactory   = NULL;
 
@@ -455,7 +460,7 @@ void SAL_CALL OSingleSelectQueryComposer::appendOrderByColumn( const Reference< 
                 {
                     ::rtl::OUString aCatlog,aSchema,aTable;
                     ::dbtools::qualifiedNameComponents(m_xMetaData,sTableName,aCatlog,aSchema,aTable,::dbtools::eInDataManipulation);
-                    ::dbtools::composeTableName(m_xMetaData,aCatlog,aSchema,aTable,sTableName,sal_True,::dbtools::eInDataManipulation);
+                    sTableName = ::dbtools::composeTableName( m_xMetaData, aCatlog, aSchema, aTable, sal_True, ::dbtools::eInDataManipulation );
                 }
                 else
                     sTableName = ::dbtools::quoteName(aQuote,sTableName);
@@ -527,7 +532,7 @@ void SAL_CALL OSingleSelectQueryComposer::appendGroupByColumn( const Reference< 
         {
             ::rtl::OUString aCatlog,aSchema,aTable;
             ::dbtools::qualifiedNameComponents(m_xMetaData,sTableName,aCatlog,aSchema,aTable,::dbtools::eInDataManipulation);
-            ::dbtools::composeTableName(m_xMetaData,aCatlog,aSchema,aTable,sTableName,sal_True,::dbtools::eInDataManipulation);
+            sTableName = ::dbtools::composeTableName( m_xMetaData, aCatlog, aSchema, aTable, sal_True, ::dbtools::eInDataManipulation );
         }
         else
             sTableName = ::dbtools::quoteName(aQuote,sTableName);
@@ -573,7 +578,7 @@ void SAL_CALL OSingleSelectQueryComposer::setElementaryQuery( const ::rtl::OUStr
     ::osl::MutexGuard aGuard( m_aMutex );
 
     // parse and verify the statement, building a temporary iterator
-    OSQLParseTreeIterator aElementaryIterator( m_xTableSupplier, m_xMetaData, NULL );
+    OSQLParseTreeIterator aElementaryIterator( m_xConnection, m_xConnectionTables, m_aSqlParser, NULL );
     parseAndCheck_throwError( m_aSqlParser, _rElementary, aElementaryIterator, *this );
 
     // remember the 4 current "additive" clauses
@@ -724,116 +729,162 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
 {
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
-    if ( !m_aCurrentColumns[SelectColumns] )
+    if ( !!m_aCurrentColumns[SelectColumns] )
+        return m_aCurrentColumns[SelectColumns];
+
+    ::std::vector< ::rtl::OUString> aNames;
+    ::vos::ORef< OSQLColumns> aSelectColumns;
+    sal_Bool bCase = sal_True;
+
+    do {
+
+    try
     {
-        ::std::vector< ::rtl::OUString> aNames;
-        ::vos::ORef< OSQLColumns> aCols;
-        sal_Bool bCase = sal_True;
+        SharedUNOComponent< XStatement, DisposableComponent > xStatement;
+        SharedUNOComponent< XPreparedStatement, DisposableComponent > xPreparedStatement;
+
+        bCase = m_xMetaData->storesMixedCaseQuotedIdentifiers();
+        aSelectColumns = m_aSqlIterator.getSelectColumns();
+
+        ::rtl::OUString sSql = m_aPureSelectSQL;
+        sSql += STR_WHERE;
+        sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" 0 = 1 "));
+        ::rtl::OUString sGroupBy = getSQLPart(Group,m_aSqlIterator,sal_True);
+        if ( sGroupBy.getLength() )
+            sSql += sGroupBy;
+
+        // normalize the statement so that it doesn't contain any application-level features anymore
+        ::rtl::OUString sError;
+        const ::std::auto_ptr< OSQLParseNode > pStatementTree( m_aSqlParser.parseTree( sError, sSql, false ) );
+        DBG_ASSERT( pStatementTree.get(), "OSingleSelectQueryComposer::getColumns: could not parse the column retrieval statement!" );
+        if ( pStatementTree.get() )
+            if ( !pStatementTree->parseNodeToExecutableStatement( sSql, m_xConnection, m_aSqlParser, NULL ) )
+                break;
+
+        Reference< XResultSetMetaData > xResultSetMeta;
         try
         {
-            bCase = m_xMetaData->storesMixedCaseQuotedIdentifiers();
-            aCols = m_aSqlIterator.getSelectColumns();
-            // now set the columns we have to look if the order of the columns is correct
-            Reference<XStatement> xStmt = m_xConnection->createStatement();
-            if ( xStmt.is() )
+            xStatement.reset( Reference< XStatement >( m_xConnection->createStatement(), UNO_QUERY_THROW ) );
+            Reference< XResultSetMetaDataSupplier > xResMetaDataSup( xStatement->executeQuery( sSql ), UNO_QUERY_THROW );
+            xResultSetMeta.set( xResMetaDataSup->getMetaData(), UNO_QUERY_THROW );
+        }
+        catch( const Exception& ) { }
+
+        if ( !xResultSetMeta.is() )
+        {
+            xPreparedStatement.set( m_xConnection->prepareStatement( sSql ), UNO_QUERY_THROW );
+            Reference< XResultSetMetaDataSupplier > xResMetaDataSup( xPreparedStatement, UNO_QUERY_THROW );
+            xResultSetMeta.set( xResMetaDataSup->getMetaData(), UNO_QUERY_THROW );
+        }
+
+        if ( aSelectColumns->empty() )
+        {
+            // This is a valid casse. If we can syntactically parse the query, but not semantically
+            // (e.g. because it is based on a table we do not know), then there will be no SelectColumns
+            aSelectColumns = ::connectivity::parse::OParseColumn::createColumnsForResultSet( xResultSetMeta, m_xMetaData );
+            break;
+        }
+
+        const ::comphelper::UStringMixEqual aCaseCompare( bCase );
+        const ::comphelper::TStringMixEqualFunctor aCaseCompareFunctor( bCase );
+        typedef ::std::set< size_t > SizeTSet;
+        SizeTSet aUsedSelectColumns;
+
+        sal_Int32 nCount = xResultSetMeta.is() ? xResultSetMeta->getColumnCount() : sal_Int32(0);
+        for(sal_Int32 i=1;i<=nCount;++i)
+        {
+            ::rtl::OUString sName = xResultSetMeta->getColumnName(i);
+            sal_Bool bFound = sal_False;
+            OSQLColumns::const_iterator aFind = ::connectivity::find(aSelectColumns->begin(),aSelectColumns->end(),sName,aCaseCompare);
+            size_t nFoundSelectColumnPos = aFind - aSelectColumns->begin();
+            if ( aFind != aSelectColumns->end() )
             {
-                ::rtl::OUString sSql = m_aPureSelectSQL;
-                sSql += STR_WHERE;
-                sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" 0 = 1 "));
-                ::rtl::OUString sGroupBy = getSQLPart(Group,m_aSqlIterator,sal_True);
-                if ( sGroupBy.getLength() )
-                    sSql += sGroupBy;
-
-                Reference<XResultSetMetaDataSupplier> xResMetaDataSup;
-                xResMetaDataSup = Reference<XResultSetMetaDataSupplier>(xStmt->executeQuery(sSql),UNO_QUERY);
-                Reference<XResultSetMetaData> xMeta = xResMetaDataSup->getMetaData();
-
-                sal_Int32 nCount = xMeta.is() ? xMeta->getColumnCount() : sal_Int32(0);
-                ::comphelper::UStringMixEqual stringComp(m_xMetaData->storesMixedCaseQuotedIdentifiers());
-                ::comphelper::TStringMixEqualFunctor stringFunc(m_xMetaData->storesMixedCaseQuotedIdentifiers());
-                ::std::map<OSQLColumns::const_iterator,int> aColumnMap;
-
-                for(sal_Int32 i=1;i<=nCount;++i)
-                {
-                    ::rtl::OUString sName = xMeta->getColumnName(i);
-                    sal_Bool bFound = sal_False;
-                    OSQLColumns::const_iterator aFind = ::connectivity::find(aCols->begin(),aCols->end(),sName,stringComp);
-                    if(aFind != aCols->end())
-                        //aNames.end() == ::std::find_if(aNames.begin(),aNames.end(),::std::bind2nd(stringFunc,sName)))
+                if ( aUsedSelectColumns.find( nFoundSelectColumnPos ) != aUsedSelectColumns.end() )
+                {   // we found a column name which exists twice
+                    // so we start after the first found
+                    do
                     {
-                        if(aColumnMap.find(aFind) != aColumnMap.end())
-                        {   // we found a column name which exists twice
-                            // so we start after the first found
-                            do
-                            {
-                                aFind = ::connectivity::findRealName(++aFind,aCols->end(),sName,stringComp);
-                            }
-                            while(aColumnMap.find(aFind) != aColumnMap.end() && aFind != aCols->end());
-                        }
-                        if(aFind != aCols->end())
-                        {
-                            (*aFind)->getPropertyValue(PROPERTY_NAME) >>= sName;
-                            aColumnMap.insert(::std::map<OSQLColumns::const_iterator,int>::value_type(aFind,0));
-                            aNames.push_back(sName);
-                            bFound = sal_True;
-                        }
+                        aFind = ::connectivity::findRealName(++aFind,aSelectColumns->end(),sName,aCaseCompare);
+                        nFoundSelectColumnPos = aFind - aSelectColumns->begin();
                     }
-                    if ( !bFound )
-                    { // we can now only look if we found it under the realname propertery
-                        OSQLColumns::const_iterator aRealFind = ::connectivity::findRealName(aCols->begin(),aCols->end(),sName,stringComp);
-
-                        if ( i <= static_cast< sal_Int32>(aCols->size()) )
-                        {
-                            if(aRealFind == aCols->end())
-                            { // here we have to make the assumption that the position is correct
-                                OSQLColumns::iterator aFind2 = aCols->begin() + i-1;
-                                Reference<XPropertySet> xProp(*aFind2,UNO_QUERY);
-                                if(xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_REALNAME))
-                                {
-                                    ::connectivity::parse::OParseColumn* pColumn = new ::connectivity::parse::OParseColumn(xProp,m_xMetaData->storesMixedCaseQuotedIdentifiers());
-                                    pColumn->setFunction(::comphelper::getBOOL(xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Function")))));
-                                    pColumn->setAggregateFunction(::comphelper::getBOOL(xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AggregateFunction")))));
-
-                                    ::rtl::OUString sRealName;
-                                    xProp->getPropertyValue(PROPERTY_REALNAME) >>= sRealName;
-                                    ::std::vector< ::rtl::OUString>::iterator aFindName;
-                                    if ( !sName.getLength() )
-                                        xProp->getPropertyValue(PROPERTY_NAME) >>= sName;
-
-
-                                    aFindName = ::std::find_if(aNames.begin(),aNames.end(),::std::bind2nd(stringFunc,sName));
-                                    sal_Int32 j = 0;
-                                    while ( aFindName != aNames.end() )
-                                    {
-                                        sName += ::rtl::OUString::valueOf(++j);
-                                        aFindName = ::std::find_if(aNames.begin(),aNames.end(),::std::bind2nd(stringFunc,sName));
-                                    }
-
-                                    pColumn->setName(sName);
-                                    pColumn->setRealName(sRealName);
-                                    pColumn->setTableName(::comphelper::getString(xProp->getPropertyValue(PROPERTY_TABLENAME)));
-
-                                    (*aCols)[i-1] = pColumn;
-                                    aColumnMap.insert(::std::map<OSQLColumns::const_iterator,int>::value_type((*aCols).begin() + i-1,0));
-                                }
-                            }
-                            aNames.push_back(sName);
-                        }
-                    }
+                    while   (   ( aUsedSelectColumns.find( nFoundSelectColumnPos ) != aUsedSelectColumns.end() )
+                            &&  ( aFind != aSelectColumns->end() )
+                            );
                 }
-                ::comphelper::disposeComponent(xStmt);
+                if ( aFind != aSelectColumns->end() )
+                {
+                    (*aFind)->getPropertyValue(PROPERTY_NAME) >>= sName;
+                    aUsedSelectColumns.insert( nFoundSelectColumnPos );
+                    aNames.push_back(sName);
+                    bFound = sal_True;
+                }
+            }
+
+            if ( bFound )
+                continue;
+
+            OSQLColumns::const_iterator aRealFind = ::connectivity::findRealName(
+                aSelectColumns->begin(), aSelectColumns->end(), sName, aCaseCompare );
+
+            if ( i > static_cast< sal_Int32>( aSelectColumns->size() ) )
+            {
+                aSelectColumns->push_back(
+                    ::connectivity::parse::OParseColumn::createColumnForResultSet( xResultSetMeta, m_xMetaData, i )
+                );
+                OSL_ENSURE( aSelectColumns->size() == (size_t)i, "OSingleSelectQueryComposer::getColumns: inconsistency!" );
+            }
+            else if ( aRealFind == aSelectColumns->end() )
+            {
+                // we can now only look if we found it under the realname propertery
+                // here we have to make the assumption that the position is correct
+                OSQLColumns::iterator aFind2 = aSelectColumns->begin() + i-1;
+                Reference<XPropertySet> xProp(*aFind2,UNO_QUERY);
+                if ( !xProp.is() || !xProp->getPropertySetInfo()->hasPropertyByName( PROPERTY_REALNAME ) )
+                    continue;
+
+                ::connectivity::parse::OParseColumn* pColumn = new ::connectivity::parse::OParseColumn(xProp,bCase);
+                pColumn->setFunction(::comphelper::getBOOL(xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Function")))));
+                pColumn->setAggregateFunction(::comphelper::getBOOL(xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AggregateFunction")))));
+
+                ::rtl::OUString sRealName;
+                xProp->getPropertyValue(PROPERTY_REALNAME) >>= sRealName;
+                ::std::vector< ::rtl::OUString>::iterator aFindName;
+                if ( !sName.getLength() )
+                    xProp->getPropertyValue(PROPERTY_NAME) >>= sName;
+
+
+                aFindName = ::std::find_if(aNames.begin(),aNames.end(),::std::bind2nd(aCaseCompareFunctor,sName));
+                sal_Int32 j = 0;
+                while ( aFindName != aNames.end() )
+                {
+                    sName += ::rtl::OUString::valueOf(++j);
+                    aFindName = ::std::find_if(aNames.begin(),aNames.end(),::std::bind2nd(aCaseCompareFunctor,sName));
+                }
+
+                pColumn->setName(sName);
+                pColumn->setRealName(sRealName);
+                pColumn->setTableName(::comphelper::getString(xProp->getPropertyValue(PROPERTY_TABLENAME)));
+
+                (*aSelectColumns)[i-1] = pColumn;
             }
             else
-            {
-                for(OSQLColumns::const_iterator aIter = aCols->begin(); aIter != aCols->end();++aIter)
-                    aNames.push_back(getString((*aIter)->getPropertyValue(PROPERTY_NAME)));
-            }
+                continue;
+
+            aUsedSelectColumns.insert( (size_t)(i - 1) );
+            aNames.push_back( sName );
         }
-        catch(Exception&)
-        {
-        }
-        m_aCurrentColumns[SelectColumns] = new OPrivateColumns(aCols,bCase,*this,m_aMutex,aNames);
     }
+    catch(const Exception&)
+    {
+    }
+
+    } while ( false );
+
+    if ( aNames.empty() )
+        m_aCurrentColumns[ SelectColumns ] = OPrivateColumns::createWithIntrinsicNames( aSelectColumns, bCase, *this, m_aMutex );
+    else
+        m_aCurrentColumns[ SelectColumns ] = new OPrivateColumns( aSelectColumns, bCase, *this, m_aMutex, aNames );
+
     return m_aCurrentColumns[SelectColumns];
 }
 // -------------------------------------------------------------------------
@@ -1186,7 +1237,7 @@ sal_Bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pCon
         }
         else
         {
-            ::dbtools::composeTableName(m_xMetaData,aCatalog,aSchema,aTable,aComposedName,sal_False,::dbtools::eInDataManipulation);
+            aComposedName = ::dbtools::composeTableName( m_xMetaData, aCatalog, aSchema, aTable, sal_False, ::dbtools::eInDataManipulation );
 
             // first check if this is the table we want to or has it a tablealias
 
@@ -1218,7 +1269,7 @@ sal_Bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pCon
         }
         if(pBegin != pEnd)
         {
-            ::dbtools::composeTableName(m_xMetaData,aCatalog,aSchema,aTable,sReturn,sal_True,::dbtools::eInDataManipulation);
+            sReturn = ::dbtools::composeTableName( m_xMetaData, aCatalog, aSchema, aTable, sal_True, ::dbtools::eInDataManipulation );
             sReturn += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("."));
         }
     }
@@ -1298,6 +1349,24 @@ Reference< XIndexAccess > SAL_CALL OSingleSelectQueryComposer::getGroupColumns( 
 Reference< XIndexAccess > SAL_CALL OSingleSelectQueryComposer::getOrderColumns(  ) throw(RuntimeException)
 {
     return setCurrentColumns( OrderColumns, m_aAdditiveIterator.getOrderColumns() );
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString SAL_CALL OSingleSelectQueryComposer::getQueryWithSubstitution(  ) throw (SQLException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
+
+    ::rtl::OUString sSqlStatement( getQuery() );
+
+    const OSQLParseNode* pStatementNode = m_aSqlIterator.getParseTree();
+    if ( pStatementNode )
+    {
+        SQLException aError;
+        if ( !pStatementNode->parseNodeToExecutableStatement( sSqlStatement, m_xConnection, m_aSqlParser, &aError ) )
+            throw SQLException( aError );
+    }
+
+    return sSqlStatement;
 }
 // -----------------------------------------------------------------------------
 ::rtl::OUString OSingleSelectQueryComposer::getStatementPart( TGetParseNode& _aGetFunctor, OSQLParseTreeIterator& _rIterator )
@@ -1438,7 +1507,7 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
         {
             ::rtl::OUString aCatlog,aSchema,aTable;
             ::dbtools::qualifiedNameComponents(m_xMetaData,sTableName,aCatlog,aSchema,aTable,::dbtools::eInDataManipulation);
-            ::dbtools::composeTableName(m_xMetaData,aCatlog,aSchema,aTable,sTableName,sal_True,::dbtools::eInDataManipulation);
+            sTableName = ::dbtools::composeTableName( m_xMetaData, aCatlog, aSchema, aTable, sal_True, ::dbtools::eInDataManipulation );
         }
         else
             sTableName = ::dbtools::quoteName(aQuote,sTableName);
