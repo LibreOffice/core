@@ -4,9 +4,9 @@
  *
  *  $RCSfile: present.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:49:07 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 11:22:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,7 +98,6 @@ private:
     const SfxItemSet&   rOutAttrs;
 
                         DECL_LINK( ChangeRangeHdl, void * );
-                        DECL_LINK( ChangeMousepointerHdl, void * );
                         DECL_LINK( ClickWindowPresentationHdl, void * );
                         DECL_LINK( ChangePauseHdl, void * );
 
