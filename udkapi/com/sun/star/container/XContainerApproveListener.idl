@@ -1,0 +1,97 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XContainerApproveListener.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2006-07-10 16:13:36 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_container_XContainerApproveListener_idl
+#define __com_sun_star_container_XContainerApproveListener_idl
+
+#ifndef __com_sun_star_container_ContainerEvent_idl__
+#include <com/sun/star/container/ContainerEvent.idl>
+#endif
+
+#ifndef __com_sun_star_lang_WrappedTargetException_idl__
+#include <com/sun/star/lang/WrappedTargetException.idl>
+#endif
+
+#ifndef __com_sun_star_util_XVeto_idl__
+#include <com/sun/star/util/XVeto.idl>
+#endif
+
+//=============================================================================
+
+module com { module sun { module star { module container {
+
+//=============================================================================
+
+/** is notified to approve changes which happen to the content of a generic container
+
+    @see XContainerApproveBroadcaster
+ */
+interface XContainerApproveListener
+{
+    /** is called for the listener to approve an insertion into the container
+
+        @return
+            an instance implementing the <type scope="com::sun::star::util">XVeto</type> interface,
+            if the insertion is vetoed, <NULL/> otherwise.
+     */
+    com::sun::star::util::XVeto approveInsertElement( [in] ContainerEvent Event )
+      raises ( com::sun::star::lang::WrappedTargetException );
+
+    /** is called for the listener to approve a replacement inside the container
+
+        @return
+            an instance implementing the <type scope="com::sun::star::util">XVeto</type> interface,
+            if the replacement is vetoed, <NULL/> otherwise.
+     */
+    com::sun::star::util::XVeto approveReplaceElement( [in] ContainerEvent Event )
+      raises ( com::sun::star::lang::WrappedTargetException );
+
+    /** is called for the listener to approve a removal of an element from the container
+
+        @return
+            an instance implementing the <type scope="com::sun::star::util">XVeto</type> interface,
+            if the removal is vetoed, <NULL/> otherwise.
+     */
+    com::sun::star::util::XVeto approveRemoveElement( [in] ContainerEvent Event )
+      raises ( com::sun::star::lang::WrappedTargetException );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+//=============================================================================
+
+#endif
