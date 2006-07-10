@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ATables.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:15:36 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:24:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,6 +72,9 @@
 #ifndef _CPPUHELPER_INTERFACECONTAINER_H_
 #include <cppuhelper/interfacecontainer.h>
 #endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include <connectivity/dbexception.hxx>
+#endif
 
 using namespace ::cppu;
 using namespace connectivity;
@@ -99,24 +102,27 @@ void OTables::impl_refresh(  ) throw(RuntimeException)
     m_pCatalog->refreshTables();
 }
 // -------------------------------------------------------------------------
-Reference< XPropertySet > OTables::createEmptyObject()
+Reference< XPropertySet > OTables::createDescriptor()
 {
     return new OAdoTable(this,isCaseSensitive(),m_pCatalog);
 }
 // -------------------------------------------------------------------------
 // XAppend
-void OTables::appendObject( const Reference< XPropertySet >& descriptor )
+sdbcx::ObjectType OTables::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     OAdoTable* pTable = NULL;
-    if(getImplementation(pTable,descriptor) && pTable != NULL)
-    {
-        OSL_ENSURE(m_aCollection.IsValid(),"Collection isn't valid");
-        if(!m_aCollection.Append(pTable->getImpl()))
-            ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),static_cast<XTypeProvider*>(this));
-        m_aCollection.Refresh();
-    }
-    else
-        throw SQLException(::rtl::OUString::createFromAscii("Could not append table!"),static_cast<XTypeProvider*>(this),OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
+    if ( !getImplementation( pTable, descriptor ) || pTable == NULL )
+        ::dbtools::throwGenericSQLException(
+            ::rtl::OUString::createFromAscii( "Could not create table: invalid object descriptor." ),
+            static_cast<XTypeProvider*>(this)
+        );
+
+    OSL_ENSURE(m_aCollection.IsValid(),"Collection isn't valid");
+    if(!m_aCollection.Append(pTable->getImpl()))
+        ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),static_cast<XTypeProvider*>(this));
+    m_aCollection.Refresh();
+
+    return new OAdoTable(this,isCaseSensitive(),m_pCatalog,pTable->getImpl());
 }
 // -------------------------------------------------------------------------
 // XDrop
@@ -125,17 +131,6 @@ void OTables::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElementName
     OSL_ENSURE(m_aCollection.IsValid(),"Collection isn't valid");
     if ( !m_aCollection.Delete(_sElementName) )
         ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),static_cast<XTypeProvider*>(this));
-}
-// -------------------------------------------------------------------------
-sdbcx::ObjectType OTables::cloneObject(const Reference< XPropertySet >& _xDescriptor)
-{
-    OAdoTable* pTable = NULL;
-    if(getImplementation(pTable,_xDescriptor) && pTable != NULL)
-    {
-        WpADOTable aTable = pTable->getImpl();
-        return new OAdoTable(this,isCaseSensitive(),m_pCatalog,aTable);
-    }
-    return sdbcx::ObjectType();
 }
 // -----------------------------------------------------------------------------
 void OTables::appendNew(const ::rtl::OUString& _rsNewTable)
