@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xichart.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 21:32:38 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:34:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,15 +39,10 @@
 
 #include <algorithm>
 
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
 #endif
-#ifndef _COM_SUN_STAR_DRAWING_XSHAPE_HPP_
-#include <com/sun/star/drawing/XShape.hpp>
-#endif
+
 #ifndef _COM_SUN_STAR_UTIL_DATE_HPP_
 #include <com/sun/star/util/Date.hpp>
 #endif
@@ -99,6 +94,15 @@
 #ifndef _COM_SUN_STAR_CHART_CHARTLEGENDPOSITION_HPP_
 #include <com/sun/star/chart/ChartLegendPosition.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CHART_CHARTREGRESSIONCURVETYPE_HPP_
+#include <com/sun/star/chart/ChartRegressionCurveType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART_CHARTERRORCATEGORY_HPP_
+#include <com/sun/star/chart/ChartErrorCategory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART_CHARTERRORINDICATORTYPE_HPP_
+#include <com/sun/star/chart/ChartErrorIndicatorType.hpp>
+#endif
 
 #ifndef SC_DOCUMENT_HXX
 #include "document.hxx"
@@ -113,6 +117,12 @@
 #ifndef SC_XLTRACER_HXX
 #include "xltracer.hxx"
 #endif
+#ifndef SC_XISTREAM_HXX
+#include "xistream.hxx"
+#endif
+#ifndef SC_XIFORMULA_HXX
+#include "xiformula.hxx"
+#endif
 #ifndef SC_XISTYLE_HXX
 #include "xistyle.hxx"
 #endif
@@ -126,16 +136,16 @@
 #include "xiescher.hxx"
 #endif
 
-#include "excform.hxx"
-
 using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::uno::Exception;
+using ::com::sun::star::uno::XInterface;
+using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::frame::XModel;
-using ::com::sun::star::drawing::XShape;
 using ::com::sun::star::util::XNumberFormatsSupplier;
 
 using ::com::sun::star::chart::XChartDocument;
@@ -149,19 +159,161 @@ using ::com::sun::star::chart::XAxisZSupplier;
 
 typedef ::com::sun::star::util::Date ApiDate;
 
+// Helpers ====================================================================
+
+namespace {
+
+XclImpStream& operator>>( XclImpStream& rStrm, XclChRectangle& rRect )
+{
+    return rStrm >> rRect.mnX >> rRect.mnY >> rRect.mnWidth >> rRect.mnHeight;
+}
+
+} // namespace
+
 // Common =====================================================================
 
-XclImpChRootData::XclImpChRootData() :
-    mpChartData( 0 )
+/** Stores global data needed in various classes of the Chart import filter. */
+struct XclImpChRootData
+{
+    typedef ScfRef< XclChObjectTable >      XclChObjectTableRef;
+
+    Reference< XChartDocument > mxChartDoc;     /// The destination chart document.
+    XclChObjectTableRef mxLineDashTable;        /// Container for line dash styles.
+    XclChObjectTableRef mxGradientTable;        /// Container for gradient fill styles.
+    XclChObjectTableRef mxBitmapTable;          /// Container for bitmap fill styles.
+    XclImpChChart*      mpChartData;            /// Pointer to the chart data object.
+
+    explicit            XclImpChRootData( XclImpChChart* pChartData );
+};
+
+XclImpChRootData::XclImpChRootData( XclImpChChart* pChartData ) :
+    mpChartData( pChartData )
 {
 }
 
 // ----------------------------------------------------------------------------
 
-XclImpChRoot::XclImpChRoot( const XclImpRoot& rRoot, XclImpChRootData& rRootData ) :
+XclImpChRoot::XclImpChRoot( const XclImpRoot& rRoot, XclImpChChart* pChartData ) :
     XclImpRoot( rRoot ),
-    mrChData( rRootData )
+    mxChData( new XclImpChRootData( pChartData ) )
 {
+}
+
+XclImpChRoot::~XclImpChRoot()
+{
+}
+
+XclImpChChart& XclImpChRoot::GetChartData() const
+{
+    return *mxChData->mpChartData;
+}
+
+Color XclImpChRoot::GetLineAutoColor() const
+{
+    return GetPalette().GetColor( EXC_COLOR_CHBORDERAUTO );
+}
+
+Color XclImpChRoot::GetFillAutoColor() const
+{
+    return GetPalette().GetColor( EXC_COLOR_CHWINDOWBACK );
+}
+
+Color XclImpChRoot::GetFontAutoColor() const
+{
+    return GetPalette().GetColor( EXC_COLOR_CHWINDOWTEXT );
+}
+
+Color XclImpChRoot::GetSeriesLineAutoColor( sal_uInt16 nFormatIdx ) const
+{
+    static const sal_uInt16 spnLineColors[] =
+    {
+        32, 33, 34, 35, 36, 37, 38, 39,
+        40, 41, 42, 43, 44, 45, 46, 47,
+        48, 49, 50, 51, 52, 53, 54, 55,
+        56, 57, 58, 59, 60, 61, 62,  8,
+         9, 10, 11, 12, 13, 14, 15, 16,
+        17, 18, 19, 20, 21, 22, 23, 24,
+        25, 26, 27, 28, 29, 30, 31, 63
+    };
+    return GetPalette().GetColor( spnLineColors[ nFormatIdx % STATIC_TABLE_SIZE( spnLineColors ) ] );
+}
+
+Color XclImpChRoot::GetSeriesFillAutoColor( sal_uInt16 nFormatIdx ) const
+{
+    static const sal_uInt16 spnFillColors[] =
+    {
+        24, 25, 26, 27, 28, 29, 30, 31,
+        32, 33, 34, 35, 36, 37, 38, 39,
+        40, 41, 42, 43, 44, 45, 46, 47,
+        48, 49, 50, 51, 52, 53, 54, 55,
+        56, 57, 58, 59, 60, 61, 62, 63,
+         8,  9, 10, 11, 12, 13, 14, 15,
+        16, 17, 18, 19, 20, 21, 22, 23
+    };
+    static const sal_uInt16 spnTrans[] = { 0x0000, 0x4000, 0x2000, 0x6000, 0x7000 };
+
+    sal_uInt16 nColorIdx = spnFillColors[ nFormatIdx % STATIC_TABLE_SIZE( spnFillColors ) ];
+    Color aColor = GetPalette().GetColor( nColorIdx );
+    int nCycle = nFormatIdx / STATIC_TABLE_SIZE( spnFillColors );
+    sal_uInt16 nTrans = spnTrans[ nCycle % STATIC_TABLE_SIZE( spnTrans ) ];
+    return ScfTools::GetMixedColor( aColor, GetFillAutoColor(), nTrans );
+}
+
+void XclImpChRoot::InitConversion( Reference< XChartDocument > xChartDoc ) const
+{
+    // remember chart document reference
+    mxChData->mxChartDoc = xChartDoc;
+
+    // create object tables
+    Reference< XMultiServiceFactory > xFactory( xChartDoc, UNO_QUERY );
+    mxChData->mxLineDashTable.reset( new XclChObjectTable(
+        xFactory, SERVICE_DRAWING_DASHTABLE, CREATE_OUSTRING( "Excel line dash " ) ) );
+    mxChData->mxGradientTable.reset( new XclChObjectTable(
+        xFactory, SERVICE_DRAWING_GRADIENTTABLE, CREATE_OUSTRING( "Excel gradient " ) ) );
+    mxChData->mxBitmapTable.reset( new XclChObjectTable(
+        xFactory, SERVICE_DRAWING_BITMAPTABLE, CREATE_OUSTRING( "Excel bitmap " ) ) );
+
+    // lock the model to suppress any internal updates
+    Reference< XModel > xModel( xChartDoc, UNO_QUERY );
+    if( xModel.is() )
+        xModel->lockControllers();
+}
+
+void XclImpChRoot::FinishConversion( ScfProgressBar& rProgress ) const
+{
+    // unlock the model
+    Reference< XModel > xModel( mxChData->mxChartDoc, UNO_QUERY );
+    if( xModel.is() )
+        xModel->unlockControllers();
+    rProgress.Progress( EXC_CHART_PROGRESS_SIZE );
+    // forget chart document reference
+    mxChData->mxChartDoc.clear();
+}
+
+void XclImpChRoot::ConvertLineFormat( ScfPropertySet& rPropSet,
+        const XclChLineFormat& rLineFmt, XclChPropertyMode ePropMode ) const
+{
+    GetChartPropSetHelper().WriteLineProperties(
+        rPropSet, *mxChData->mxLineDashTable, rLineFmt, ePropMode );
+}
+
+void XclImpChRoot::ConvertAreaFormat( ScfPropertySet& rPropSet,
+        const XclChAreaFormat& rAreaFmt, XclChPropertyMode ePropMode ) const
+{
+    GetChartPropSetHelper().WriteAreaProperties( rPropSet, rAreaFmt, ePropMode );
+}
+
+void XclImpChRoot::ConvertEscherForrmat( ScfPropertySet& rPropSet,
+        const SfxItemSet& rItemSet, const XclChPicFormat& rPicFmt ) const
+{
+    GetChartPropSetHelper().WriteEscherProperties( rPropSet,
+        *mxChData->mxGradientTable, *mxChData->mxBitmapTable, rItemSet, rPicFmt );
+}
+
+void XclImpChRoot::ConvertFont( ScfPropertySet& rPropSet,
+        sal_uInt16 nFontIdx, const Color* pFontColor ) const
+{
+    GetFontBuffer().WriteFontProperties( rPropSet, EXC_FONTPROPSET_CHART, nFontIdx, pFontColor );
 }
 
 // ----------------------------------------------------------------------------
@@ -217,33 +369,19 @@ void XclImpChGroupBase::SkipBlock( XclImpStream& rStrm )
 
 // Formatting =================================================================
 
-namespace {
-
-XclImpStream& operator>>( XclImpStream& rStrm, XclChPos& rPos )
+void XclImpChFramePos::ReadChFramePos( XclImpStream& rStrm )
 {
-    return rStrm >> rPos.mnX >> rPos.mnY >> rPos.mnWidth >> rPos.mnHeight;
-}
-
-} // namespace
-
-XclImpChPos::XclImpChPos() :
-    mnObjType( EXC_CHPOS_ANY ),
-    mnSizeMode( EXC_CHPOS_AUTOSIZE )
-{
-}
-
-void XclImpChPos::ReadChPos( XclImpStream& rStrm )
-{
-    rStrm >> mnObjType >> mnSizeMode >> maPos;
+    rStrm >> maData.mnObjType >> maData.mnSizeMode >> maData.maRect;
 }
 
 // ----------------------------------------------------------------------------
 
-XclImpChLineFormat::XclImpChLineFormat( sal_uInt16 nObjId )
+XclImpChLineFormat::XclImpChLineFormat( sal_uInt16 nLinkTarget )
 {
-    switch( nObjId )
+    switch( nLinkTarget )
     {
-        case EXC_ID_CHPLOTFRAME:
+        case EXC_CHOBJLINK_BACKGROUND:
+        case EXC_CHOBJLINK_DIAGRAM:
             ::set_flag( maData.mnFlags, EXC_CHLINEFORMAT_AUTO, false );
             maData.mnPattern = EXC_CHLINEFORMAT_NONE;
         break;
@@ -269,59 +407,46 @@ void XclImpChLineFormat::Convert( const XclImpChRoot& rRoot,
     if( IsAuto() )
     {
         XclChLineFormat aLineFmt;
-        aLineFmt.maColor = rRoot.GetPalette().GetColor( EXC_COLOR_CHBORDERAUTO );
+        aLineFmt.maColor = rRoot.GetLineAutoColor();
         aLineFmt.mnPattern = EXC_CHLINEFORMAT_SOLID;
         aLineFmt.mnWeight = nAutoWeight;
-        rRoot.GetPropSetHelper().WriteToPropertySet( rPropSet, aLineFmt );
+        rRoot.ConvertLineFormat( rPropSet, aLineFmt, EXC_CHPROPMODE_COMMON );
     }
     else
-        rRoot.GetPropSetHelper().WriteToPropertySet( rPropSet, maData );
+    {
+        rRoot.ConvertLineFormat( rPropSet, maData, EXC_CHPROPMODE_COMMON );
+    }
 }
 
 void XclImpChLineFormat::ConvertSeries( const XclImpChRoot& rRoot,
-        ScfPropertySet& rPropSet, sal_uInt16 nFormatIdx ) const
+        ScfPropertySet& rPropSet, sal_uInt16 nFormatIdx, bool bLinear2dType ) const
 {
+    // property names depend on chart type
+    XclChPropertyMode ePropMode = bLinear2dType ? EXC_CHPROPMODE_LINEARSERIES : EXC_CHPROPMODE_FILLEDSERIES;
+
     if( IsAuto() )
     {
-        static const sal_uInt16 spnLineColors[] =
-        {
-            32, 33, 34, 35, 36, 37, 38, 39,
-            40, 41, 42, 43, 44, 45, 46, 47,
-            48, 49, 50, 51, 52, 53, 54, 55,
-            56, 57, 58, 59, 60, 61, 62,  8,
-             9, 10, 11, 12, 13, 14, 15, 16,
-            17, 18, 19, 20, 21, 22, 23, 24,
-            25, 26, 27, 28, 29, 30, 31, 63
-        };
-
-        XclChLineFormat aLineFmt( maData );
-
-        sal_uInt16 nTypeId = rRoot.GetChartData().GetChartTypeId();
-        if( rRoot.GetChartData().Is3dChart() )
-        {
-            // 3D charts: no border line for bars
-            aLineFmt.mnPattern = EXC_CHLINEFORMAT_NONE;
-        }
-        else if( (nTypeId == EXC_ID_CHLINE) || (nTypeId == EXC_ID_CHSCATTER) || (nTypeId == EXC_ID_CHRADARLINE) )
-        {
-            // 2D line charts: automatic line color
-            sal_uInt16 nColorIdx = spnLineColors[ nFormatIdx % STATIC_TABLE_SIZE( spnLineColors ) ];
-            aLineFmt.maColor = rRoot.GetPalette().GetColor( nColorIdx );
-        }
-        // write to the property set
-        rRoot.GetPropSetHelper().WriteToPropertySet( rPropSet, aLineFmt );
+        XclChLineFormat aLineFmt;
+        aLineFmt.maColor = bLinear2dType ?
+            rRoot.GetSeriesLineAutoColor( nFormatIdx ) : rRoot.GetLineAutoColor();
+        aLineFmt.mnPattern = EXC_CHLINEFORMAT_SOLID;
+        aLineFmt.mnWeight = EXC_CHLINEFORMAT_SINGLE;
+        rRoot.ConvertLineFormat( rPropSet, aLineFmt, ePropMode );
     }
     else
-        rRoot.GetPropSetHelper().WriteToPropertySet( rPropSet, maData );
+    {
+        rRoot.ConvertLineFormat( rPropSet, maData, ePropMode );
+    }
 }
 
 // ----------------------------------------------------------------------------
 
-XclImpChAreaFormat::XclImpChAreaFormat( sal_uInt16 nObjId )
+XclImpChAreaFormat::XclImpChAreaFormat( sal_uInt16 nLinkTarget )
 {
-    switch( nObjId )
+    switch( nLinkTarget )
     {
-        case EXC_ID_CHPLOTFRAME:
+        case EXC_CHOBJLINK_BACKGROUND:
+        case EXC_CHOBJLINK_DIAGRAM:
             ::set_flag( maData.mnFlags, EXC_CHAREAFORMAT_AUTO, false );
             maData.mnPattern = EXC_CHAREAFORMAT_NONE;
         break;
@@ -348,12 +473,14 @@ void XclImpChAreaFormat::Convert( const XclImpChRoot& rRoot, ScfPropertySet& rPr
     if( IsAuto() )
     {
         XclChAreaFormat aAreaFmt;
-        aAreaFmt.maForeColor = rRoot.GetPalette().GetColor( EXC_COLOR_CHWINDOWBACK );
+        aAreaFmt.maForeColor = rRoot.GetFillAutoColor();
         aAreaFmt.mnPattern = EXC_CHAREAFORMAT_SOLID;
-        rRoot.GetPropSetHelper().WriteToPropertySet( rPropSet, aAreaFmt );
+        rRoot.ConvertAreaFormat( rPropSet, aAreaFmt, EXC_CHPROPMODE_COMMON );
     }
     else
-        rRoot.GetPropSetHelper().WriteToPropertySet( rPropSet, maData );
+    {
+        rRoot.ConvertAreaFormat( rPropSet, maData, EXC_CHPROPMODE_COMMON );
+    }
 }
 
 void XclImpChAreaFormat::ConvertSeries( const XclImpChRoot& rRoot,
@@ -361,34 +488,15 @@ void XclImpChAreaFormat::ConvertSeries( const XclImpChRoot& rRoot,
 {
     if( IsAuto() )
     {
-        static const sal_uInt16 spnFillColors[] =
-        {
-            24, 25, 26, 27, 28, 29, 30, 31,
-            32, 33, 34, 35, 36, 37, 38, 39,
-            40, 41, 42, 43, 44, 45, 46, 47,
-            48, 49, 50, 51, 52, 53, 54, 55,
-            56, 57, 58, 59, 60, 61, 62, 63,
-             8,  9, 10, 11, 12, 13, 14, 15,
-            16, 17, 18, 19, 20, 21, 22, 23
-        };
-        static const sal_uInt16 spnTrans[] = { 0x0000, 0x4000, 0x2000, 0x6000, 0x7000 };
-
-        XclChAreaFormat aAreaFmt( maData );
-        // automatic color
-        const XclImpPalette& rPal = rRoot.GetPalette();
-        sal_uInt16 nColorIdx = spnFillColors[ nFormatIdx % STATIC_TABLE_SIZE( spnFillColors ) ];
-        aAreaFmt.maForeColor = rPal.GetColor( nColorIdx );
-        int nCycle = nFormatIdx / STATIC_TABLE_SIZE( spnFillColors );
-        sal_uInt16 nTrans = spnTrans[ nCycle % STATIC_TABLE_SIZE( spnTrans ) ];
-        aAreaFmt.maForeColor = ScfTools::GetMixedColor( aAreaFmt.maForeColor, rPal.GetColor( EXC_COLOR_CHWINDOWBACK ), nTrans );
-        // style and flags
+        XclChAreaFormat aAreaFmt;
+        aAreaFmt.maForeColor = rRoot.GetSeriesFillAutoColor( nFormatIdx );
         aAreaFmt.mnPattern = EXC_CHAREAFORMAT_SOLID;
-        aAreaFmt.mnFlags = 0;
-        // write to the property set
-        rRoot.GetPropSetHelper().WriteToPropertySet( rPropSet, aAreaFmt );
+        rRoot.ConvertAreaFormat( rPropSet, aAreaFmt, EXC_CHPROPMODE_FILLEDSERIES );
     }
     else
-        rRoot.GetPropSetHelper().WriteToPropertySet( rPropSet, maData );
+    {
+        rRoot.ConvertAreaFormat( rPropSet, maData, EXC_CHPROPMODE_FILLEDSERIES );
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -426,10 +534,24 @@ void XclImpChEscherFormat::ReadSubRecord( XclImpStream& rStrm )
 
 void XclImpChEscherFormat::Convert( const XclImpChRoot& rRoot, ScfPropertySet& rPropSet ) const
 {
-    rRoot.GetPropSetHelper().WriteToPropertySet( rPropSet, maItemSet, maPicFmt );
+    rRoot.ConvertEscherForrmat( rPropSet, maItemSet, maPicFmt );
 }
 
 // ----------------------------------------------------------------------------
+
+XclImpChFrameBase::XclImpChFrameBase( sal_uInt16 nLinkTarget )
+{
+    switch( nLinkTarget )
+    {
+        case EXC_CHOBJLINK_BACKGROUND:
+        case EXC_CHOBJLINK_DIAGRAM:
+        case EXC_CHOBJLINK_LEGEND:
+            // legend, plot frame, and chart page need existing objects due to different defaults
+            mxLineFmt.reset( new XclImpChLineFormat( nLinkTarget ) );
+            mxAreaFmt.reset( new XclImpChAreaFormat( nLinkTarget ) );
+        break;
+    }
+}
 
 void XclImpChFrameBase::ReadSubRecord( XclImpStream& rStrm )
 {
@@ -444,13 +566,15 @@ void XclImpChFrameBase::ReadSubRecord( XclImpStream& rStrm )
             mxAreaFmt->ReadChAreaFormat( rStrm );
         break;
         case EXC_ID_CHESCHERFORMAT:
+            // pass unique object name to escher format object
             mxEscherFmt.reset( new XclImpChEscherFormat( rStrm.GetRoot() ) );
             mxEscherFmt->ReadRecordGroup( rStrm );
         break;
     }
 }
 
-void XclImpChFrameBase::ConvertFrame( const XclImpChRoot& rRoot, ScfPropertySet& rPropSet ) const
+void XclImpChFrameBase::ConvertFrameBase(
+        const XclImpChRoot& rRoot, ScfPropertySet& rPropSet ) const
 {
     // line format
     if( mxLineFmt.is() )
@@ -462,19 +586,28 @@ void XclImpChFrameBase::ConvertFrame( const XclImpChRoot& rRoot, ScfPropertySet&
         mxAreaFmt->Convert( rRoot, rPropSet );
 }
 
+void XclImpChFrameBase::ConvertSeriesFrameBase( const XclImpChRoot& rRoot,
+        ScfPropertySet& rPropSet, sal_uInt16 nFormatIdx, bool bLinear2dType ) const
+{
+    // line format
+    if( mxLineFmt.is() )
+        mxLineFmt->ConvertSeries( rRoot, rPropSet, nFormatIdx, bLinear2dType );
+    // area format
+    if( !bLinear2dType )
+    {
+        // CHESCHERFORMAT overrides CHAREAFORMAT
+        if( mxEscherFmt.is() )
+            mxEscherFmt->Convert( rRoot, rPropSet );
+        else if( mxAreaFmt.is() )
+            mxAreaFmt->ConvertSeries( rRoot, rPropSet, nFormatIdx );
+    }
+}
+
 // ----------------------------------------------------------------------------
 
-XclImpChFrame::XclImpChFrame( sal_uInt16 nObjId )
+XclImpChFrame::XclImpChFrame( sal_uInt16 nLinkTarget ) :
+    XclImpChFrameBase( nLinkTarget )
 {
-    switch( nObjId )
-    {
-        case EXC_ID_CHLEGEND:
-        case EXC_ID_CHPLOTFRAME:
-            // legend and plot frame need existing objects due to different defaults
-            mxLineFmt.reset( new XclImpChLineFormat( nObjId ) );
-            mxAreaFmt.reset( new XclImpChAreaFormat( nObjId ) );
-        break;
-    }
 }
 
 void XclImpChFrame::ReadHeaderRecord( XclImpStream& rStrm )
@@ -484,7 +617,7 @@ void XclImpChFrame::ReadHeaderRecord( XclImpStream& rStrm )
 
 void XclImpChFrame::Convert( const XclImpChRoot& rRoot, ScfPropertySet& rPropSet ) const
 {
-    ConvertFrame( rRoot, rPropSet );
+    ConvertFrameBase( rRoot, rPropSet );
 }
 
 // ----------------------------------------------------------------------------
@@ -510,6 +643,17 @@ void XclImpChMarkerFormat::Convert( const XclImpChRoot& rRoot,
     if( IsAuto() )
     {
         XclChMarkerFormat aMarkerFmt;
+        // line and fill color of the symbol are equal to series line color
+        //! TODO: Excel sets no fill color for specific symbols (e.g. cross)
+        aMarkerFmt.maLineColor = aMarkerFmt.maFillColor = rRoot.GetSeriesLineAutoColor( nFormatIdx );
+        switch( nLineWeight )
+        {
+            case EXC_CHLINEFORMAT_HAIR:     aMarkerFmt.mnMarkerSize = EXC_CHMARKERFORMAT_HAIRSIZE;      break;
+            case EXC_CHLINEFORMAT_SINGLE:   aMarkerFmt.mnMarkerSize = EXC_CHMARKERFORMAT_SINGLESIZE;    break;
+            case EXC_CHLINEFORMAT_DOUBLE:   aMarkerFmt.mnMarkerSize = EXC_CHMARKERFORMAT_DOUBLESIZE;    break;
+            case EXC_CHLINEFORMAT_TRIPLE:   aMarkerFmt.mnMarkerSize = EXC_CHMARKERFORMAT_TRIPLESIZE;    break;
+            default:                        aMarkerFmt.mnMarkerSize = EXC_CHMARKERFORMAT_SINGLESIZE;
+        }
         switch( nFormatIdx % EXC_CHMARKERFORMAT_SYMBOLCOUNT )
         {
             case 0:     aMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_DIAMOND;     break;
@@ -523,18 +667,20 @@ void XclImpChMarkerFormat::Convert( const XclImpChRoot& rRoot,
             case 8:     aMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_STDDEV;      break;
             default:    DBG_ERRORFILE( "XclImpChMarkerFormat::Convert - missing symbol type" );
         }
-        switch( nLineWeight )
-        {
-            case EXC_CHLINEFORMAT_HAIR:     aMarkerFmt.mnMarkerSize = EXC_CHMARKERFORMAT_HAIRSIZE;      break;
-            case EXC_CHLINEFORMAT_SINGLE:   aMarkerFmt.mnMarkerSize = EXC_CHMARKERFORMAT_SINGLESIZE;    break;
-            case EXC_CHLINEFORMAT_DOUBLE:   aMarkerFmt.mnMarkerSize = EXC_CHMARKERFORMAT_DOUBLESIZE;    break;
-            case EXC_CHLINEFORMAT_TRIPLE:   aMarkerFmt.mnMarkerSize = EXC_CHMARKERFORMAT_TRIPLESIZE;    break;
-            default:                        aMarkerFmt.mnMarkerSize = EXC_CHMARKERFORMAT_SINGLESIZE;
-        }
-        rRoot.GetPropSetHelper().WriteToPropertySet( rPropSet, aMarkerFmt );
+        aMarkerFmt.mnFlags = 0;
+        rRoot.GetChartPropSetHelper().WriteMarkerProperties( rPropSet, aMarkerFmt );
     }
     else
-        rRoot.GetPropSetHelper().WriteToPropertySet( rPropSet, maData );
+    {
+        rRoot.GetChartPropSetHelper().WriteMarkerProperties( rPropSet, maData );
+    }
+}
+
+void XclImpChMarkerFormat::ConvertColor( const XclImpChRoot& rRoot,
+        ScfPropertySet& rPropSet, sal_uInt16 nFormatIdx ) const
+{
+    Color aLineColor = IsAuto() ? rRoot.GetSeriesLineAutoColor( nFormatIdx ) : maData.maFillColor;
+    rPropSet.SetColorProperty( EXC_CHPROP_LINECOLOR, aLineColor );
 }
 
 // ----------------------------------------------------------------------------
@@ -586,19 +732,6 @@ void XclImpCh3dDataFormat::Convert( ScfPropertySet& rPropSet ) const
 
 // Text =======================================================================
 
-void XclImpChString::ReadChString( XclImpStream& rStrm )
-{
-    rStrm.Ignore( 2 );
-    maData.Read( rStrm, EXC_STR_8BITLENGTH );
-}
-
-void XclImpChString::Convert( ScfPropertySet& rPropSet ) const
-{
-    rPropSet.SetStringProperty( EXC_CHPROP_STRING, maData.GetText() );
-}
-
-// ----------------------------------------------------------------------------
-
 XclImpChFont::XclImpChFont() :
     mnFontIdx( EXC_FONT_NOTFOUND )
 {
@@ -607,12 +740,6 @@ XclImpChFont::XclImpChFont() :
 void XclImpChFont::ReadChFont( XclImpStream& rStrm )
 {
     rStrm >> mnFontIdx;
-}
-
-void XclImpChFont::Convert( const XclImpChRoot& rRoot, ScfPropertySet& rPropSet ) const
-{
-    if( const XclImpFont* pFont = rRoot.GetFontBuffer().GetFont( mnFontIdx ) )
-        rRoot.GetPropSetHelper().WriteToPropertySet( rPropSet, pFont->GetFontData() );
 }
 
 // ----------------------------------------------------------------------------
@@ -639,6 +766,43 @@ void XclImpChFormat::Convert( const XclImpChRoot& rRoot, ScfPropertySet& rPropSe
 
 // ----------------------------------------------------------------------------
 
+void XclImpChString::ReadChString( XclImpStream& rStrm )
+{
+    rStrm.Ignore( 2 );
+    maData.Read( rStrm, EXC_STR_8BITLENGTH | EXC_STR_KEEPFORMATS );
+}
+
+void XclImpChString::ReadChFormatRuns( XclImpStream& rStrm )
+{
+    rStrm.GetRoot().GetTracer().TraceChartTextFormatting();
+    maData.ReadFormats( rStrm );
+}
+
+void XclImpChString::Convert( ScfPropertySet& rPropSet ) const
+{
+    rPropSet.SetStringProperty( EXC_CHPROP_STRING, maData.GetText() );
+}
+
+// ----------------------------------------------------------------------------
+
+XclImpChFontBase::~XclImpChFontBase()
+{
+}
+
+void XclImpChFontBase::ConvertFontBase( const XclImpChRoot& rRoot, ScfPropertySet& rPropSet ) const
+{
+    Color aFontColor = GetFontColor();
+    rRoot.ConvertFont( rPropSet, GetFontIndex(), &aFontColor );
+}
+
+// ----------------------------------------------------------------------------
+
+XclImpChRotationBase::~XclImpChRotationBase()
+{
+}
+
+// ----------------------------------------------------------------------------
+
 XclImpChText::XclImpChText( const XclImpChRoot& rRoot ) :
     XclImpChRoot( rRoot )
 {
@@ -650,7 +814,7 @@ void XclImpChText::ReadHeaderRecord( XclImpStream& rStrm )
             >> maData.mnVAlign
             >> maData.mnBackMode
             >> maData.maTextColor
-            >> maData.maPos
+            >> maData.maRect
             >> maData.mnFlags;
 
     if( GetBiff() == EXC_BIFF8 )
@@ -670,10 +834,13 @@ void XclImpChText::ReadSubRecord( XclImpStream& rStrm )
             mxFont->ReadChFont( rStrm );
         break;
         case EXC_ID_CHFORMATRUNS:
-            GetTracer().TraceChartTextFormatting();
+            if( !mxString )
+                mxString.reset( new XclImpChString );
+            mxString->ReadChFormatRuns( rStrm );
         break;
         case EXC_ID_CHSTRING:
-            mxString.reset( new XclImpChString );
+            if( !mxString )
+               mxString.reset( new XclImpChString );
             mxString->ReadChString( rStrm );
         break;
         case EXC_ID_CHFRAME:
@@ -681,9 +848,19 @@ void XclImpChText::ReadSubRecord( XclImpStream& rStrm )
             mxFrame->ReadRecordGroup( rStrm );
         break;
         case EXC_ID_CHOBJECTLINK:
-            rStrm >> maObjLink.mnTarget >> maObjLink.maPos.mnSeriesIdx >> maObjLink.maPos.mnPointIdx;
+            rStrm >> maObjLink.mnTarget >> maObjLink.maPointPos.mnSeriesIdx >> maObjLink.maPointPos.mnPointIdx;
         break;
     }
+}
+
+sal_uInt16 XclImpChText::GetFontIndex() const
+{
+    return mxFont.is() ? mxFont->GetFontIndex() : EXC_FONT_NOTFOUND;
+}
+
+Color XclImpChText::GetFontColor() const
+{
+    return ::get_flag( maData.mnFlags, EXC_CHTEXT_AUTOCOLOR ) ? GetFontAutoColor() : maData.maTextColor;
 }
 
 void XclImpChText::UpdateText( const XclImpChText* pParentText )
@@ -696,6 +873,7 @@ void XclImpChText::UpdateText( const XclImpChText* pParentText )
         if( !mxFont )
         {
             mxFont = pParentText->mxFont;
+            // text color is taken from CHTEXT record, not from font in CHFONT
             ::set_flag( maData.mnFlags, EXC_CHTEXT_AUTOCOLOR, ::get_flag( pParentText->maData.mnFlags, EXC_CHTEXT_AUTOCOLOR ) );
             maData.maTextColor = pParentText->maData.maTextColor;
         }
@@ -713,13 +891,13 @@ void XclImpChText::UpdateDataLabel( bool bCateg, bool bValue, bool bPercent )
 
 void XclImpChText::ConvertFont( ScfPropertySet& rPropSet ) const
 {
-    if( mxFont.is() )
-    {
-        mxFont->Convert( GetChRoot(), rPropSet );
-        Color aColor = ::get_flag( maData.mnFlags, EXC_CHTEXT_AUTOCOLOR ) ?
-            GetPalette().GetColor( EXC_COLOR_CHWINDOWTEXT ) : maData.maTextColor;
-        rPropSet.SetColorProperty( EXC_CHPROP_CHARCOLOR, aColor );
-    }
+    ConvertFontBase( GetChRoot(), rPropSet );
+}
+
+void XclImpChText::ConvertFrame( ScfPropertySet& rPropSet ) const
+{
+    if( mxFrame.is() )
+        mxFrame->Convert( GetChRoot(), rPropSet );
 }
 
 void XclImpChText::ConvertRotation( ScfPropertySet& rPropSet ) const
@@ -733,34 +911,16 @@ void XclImpChText::ConvertString( ScfPropertySet& rPropSet ) const
         mxString->Convert( rPropSet );
 }
 
-void XclImpChText::ConvertFrame( ScfPropertySet& rPropSet ) const
-{
-    if( mxFrame.is() )
-        mxFrame->Convert( GetChRoot(), rPropSet );
-}
-
-void XclImpChText::ConvertTitle( ScfPropertySet& rPropSet ) const
-{
-    ConvertFont( rPropSet );
-    ConvertRotation( rPropSet );
-    // frame must be converted before setting the title string, otherwise it will be deleted
-    ConvertFrame( rPropSet );
-    ConvertString( rPropSet );
-}
-
-void XclImpChText::ConvertDataLabel( ScfPropertySet& rPropSet ) const
+void XclImpChText::ConvertDataLabel( ScfPropertySet& rPropSet, sal_uInt16 nTypeId ) const
 {
     const sal_uInt16 EXC_CHTEXT_SHOWANYCATEG   = EXC_CHTEXT_SHOWCATEGPERC | EXC_CHTEXT_SHOWCATEG;
     const sal_uInt16 EXC_CHTEXT_SHOWANYVALUE   = EXC_CHTEXT_SHOWVALUE;
     const sal_uInt16 EXC_CHTEXT_SHOWANYPERCENT = EXC_CHTEXT_SHOWPERCENT | EXC_CHTEXT_SHOWCATEGPERC;
 
-    // no percent values except in pie charts; no values in pie charts
-    sal_uInt16 nTypeId = GetChartData().GetChartTypeId();
-    bool bIsRound = (nTypeId == EXC_ID_CHPIE) || (nTypeId == EXC_ID_CHDONUT);
-
+    bool bIsPie       = XclChartHelper::IsPieChartType( nTypeId );
     bool bShowNone    = ::get_flag( maData.mnFlags, EXC_CHTEXT_DELETED );
     bool bShowCateg   = !bShowNone && ::get_flag( maData.mnFlags, EXC_CHTEXT_SHOWANYCATEG );
-    bool bShowPercent = !bShowNone && bIsRound && ::get_flag( maData.mnFlags, EXC_CHTEXT_SHOWANYPERCENT );
+    bool bShowPercent = !bShowNone && bIsPie && ::get_flag( maData.mnFlags, EXC_CHTEXT_SHOWANYPERCENT );
     bool bShowValue   = !bShowNone && !bShowPercent && ::get_flag( maData.mnFlags, EXC_CHTEXT_SHOWANYVALUE );
     bool bShowAny     = bShowValue || bShowPercent || bShowCateg;
     bool bShowSymbol  = bShowAny && ::get_flag( maData.mnFlags, EXC_CHTEXT_SHOWSYMBOL );
@@ -779,6 +939,15 @@ void XclImpChText::ConvertDataLabel( ScfPropertySet& rPropSet ) const
         ConvertFont( rPropSet );
 }
 
+void XclImpChText::ConvertTitle( ScfPropertySet& rPropSet ) const
+{
+    ConvertFont( rPropSet );
+    ConvertRotation( rPropSet );
+    // frame must be converted before setting the title string, otherwise it will be deleted
+    ConvertFrame( rPropSet );
+    ConvertString( rPropSet );
+}
+
 namespace {
 
 void lclUpdateText( XclImpChTextRef& rxText, XclImpChTextRef xDefText )
@@ -789,7 +958,7 @@ void lclUpdateText( XclImpChTextRef& rxText, XclImpChTextRef xDefText )
         rxText = xDefText;
 }
 
-void lclUpdateTitle( XclImpChTextRef& rxTitle, XclImpChTextRef xDefText )
+void lclFinalizeTitle( XclImpChTextRef& rxTitle, XclImpChTextRef xDefText )
 {
     /*  Do not update a title, if it is not visible (if rxTitle is null).
         Existing reference indicates enabled title. */
@@ -829,7 +998,8 @@ inline bool lclIsVerHorOrient( XclChOrientation eOrient )
 
 // ----------------------------------------------------------------------------
 
-XclImpChSourceLink::XclImpChSourceLink() :
+XclImpChSourceLink::XclImpChSourceLink( const XclImpChRoot& rRoot ) :
+    XclImpChRoot( rRoot ),
     meOrient( EXC_CHORIENT_EMPTY ),
     mnScCol( -1 ),
     mnScRow( -1 ),
@@ -855,14 +1025,14 @@ void XclImpChSourceLink::ReadChSourceLink( XclImpStream& rStrm )
 
     if( GetLinkType() == EXC_CHSRCLINK_WORKSHEET )
     {
-        sal_uInt16 nFmlaSize = rStrm.ReaduInt16();
-        DBG_ASSERT( nFmlaSize > 0, "XclImpChSourceLink::ReadChSourceLink - no link formula" );
-        if( nFmlaSize > 0 )
-        {
-            ScRangeList aScRanges;
-            rStrm.GetRoot().GetFmlaConverter().GetAbsRefs( aScRanges, nFmlaSize );
-            CalcOrientation( aScRanges );
-        }
+        // read token array
+        XclTokenArray aXclTokArr;
+        rStrm >> aXclTokArr;
+        // convert token array to range list
+        ScRangeList aScRanges;
+        GetFormulaCompiler().CreateRangeList( aScRanges, EXC_FMLATYPE_CHART, aXclTokArr, rStrm );
+        // process range list
+        CalcOrientation( aScRanges );
     }
 
     // try to read a following CHSTRING record
@@ -1192,7 +1362,7 @@ XclImpChDataFormat::XclImpChDataFormat( const XclImpChRoot& rRoot ) :
 
 void XclImpChDataFormat::ReadHeaderRecord( XclImpStream& rStrm )
 {
-    rStrm >> maData.maPos.mnPointIdx >> maData.maPos.mnSeriesIdx >> maData.mnFormatIdx >> maData.mnFlags;
+    rStrm >> maData.maPointPos.mnPointIdx >> maData.maPointPos.mnSeriesIdx >> maData.mnFormatIdx >> maData.mnFlags;
 }
 
 void XclImpChDataFormat::ReadSubRecord( XclImpStream& rStrm )
@@ -1226,39 +1396,41 @@ void XclImpChDataFormat::ReadSubRecord( XclImpStream& rStrm )
 
 void XclImpChDataFormat::SetPointPos( sal_uInt16 nSeriesIdx, sal_uInt16 nPointIdx, sal_uInt16 nFormatIdx )
 {
-    maData.maPos.mnSeriesIdx = nSeriesIdx;
-    maData.maPos.mnPointIdx = nPointIdx;
+    maData.maPointPos.mnSeriesIdx = nSeriesIdx;
+    maData.maPointPos.mnPointIdx = nPointIdx;
     maData.mnFormatIdx = nFormatIdx;
 }
 
-void XclImpChDataFormat::UpdateGlobalFormat()
+void XclImpChDataFormat::UpdateGroupFormat( const XclImpChChartGroup& rChartGroup )
 {
     // remove formats not used for the current chart type
-    RemoveUnusedFormats();
+    RemoveUnusedFormats( rChartGroup );
 }
 
-void XclImpChDataFormat::UpdateSeriesFormat( const XclImpChDataFormat* pGlobalFmt )
+void XclImpChDataFormat::UpdateSeriesFormat( const XclImpChChartGroup& rChartGroup )
 {
-    // update missing formats from passed global format
-    if( pGlobalFmt )
+    const XclImpChDataFormat* pGroupFmt = rChartGroup.GetGroupFormat().get();
+
+    // update missing formats from passed chart group format
+    if( pGroupFmt )
     {
         if( !mxLineFmt )
-            mxLineFmt = pGlobalFmt->mxLineFmt;
+            mxLineFmt = pGroupFmt->mxLineFmt;
         if( !mxAreaFmt && !mxEscherFmt )
         {
-            mxAreaFmt = pGlobalFmt->mxAreaFmt;
-            mxEscherFmt = pGlobalFmt->mxEscherFmt;
+            mxAreaFmt = pGroupFmt->mxAreaFmt;
+            mxEscherFmt = pGroupFmt->mxEscherFmt;
         }
         if( !mxMarkerFmt )
-            mxMarkerFmt = pGlobalFmt->mxMarkerFmt;
+            mxMarkerFmt = pGroupFmt->mxMarkerFmt;
         if( !mxPieFmt )
-            mxPieFmt = pGlobalFmt->mxPieFmt;
+            mxPieFmt = pGroupFmt->mxPieFmt;
         if( !mxSeriesFmt )
-            mxSeriesFmt = pGlobalFmt->mxSeriesFmt;
+            mxSeriesFmt = pGroupFmt->mxSeriesFmt;
         if( !mx3dDataFmt )
-            mx3dDataFmt = pGlobalFmt->mx3dDataFmt;
+            mx3dDataFmt = pGroupFmt->mx3dDataFmt;
         if( !mxAttLabel )
-            mxAttLabel = pGlobalFmt->mxAttLabel;
+            mxAttLabel = pGroupFmt->mxAttLabel;
     }
 
     /*  Create missing but required formats. Existing line, area, and marker
@@ -1271,12 +1443,12 @@ void XclImpChDataFormat::UpdateSeriesFormat( const XclImpChDataFormat* pGlobalFm
         mxMarkerFmt.reset( new XclImpChMarkerFormat );
 
     // remove formats not used for the current chart type
-    RemoveUnusedFormats();
+    RemoveUnusedFormats( rChartGroup );
     // update data label
-    UpdateDataLabel( pGlobalFmt );
+    UpdateDataLabel( pGroupFmt );
 }
 
-void XclImpChDataFormat::UpdatePointFormat( const XclImpChDataFormat* pSeriesFmt )
+void XclImpChDataFormat::UpdatePointFormat( const XclImpChChartGroup& rChartGroup, const XclImpChDataFormat* pSeriesFmt )
 {
     // remove formats if they are automatic in this and in the passed series format
     if( pSeriesFmt )
@@ -1290,21 +1462,24 @@ void XclImpChDataFormat::UpdatePointFormat( const XclImpChDataFormat* pSeriesFmt
         mxSeriesFmt.reset();
     }
 
+    // Excel ignores 3D bar format for single data points
+    mx3dDataFmt.reset();
+    // remove point line formats for linear 2D chart types, TODO: implement in OOChart
+    if( rChartGroup.IsLinear2dChart() )
+        mxLineFmt.reset();
+
     // remove formats not used for the current chart type
-    RemoveUnusedFormats();
+    RemoveUnusedFormats( rChartGroup );
     // update data label
     UpdateDataLabel( pSeriesFmt );
 }
 
-void XclImpChDataFormat::Convert( ScfPropertySet& rPropSet ) const
+void XclImpChDataFormat::Convert( ScfPropertySet& rPropSet, const XclImpChChartGroup& rChartGroup ) const
 {
-    if( mxLineFmt.is() )
-        mxLineFmt->ConvertSeries( GetChRoot(), rPropSet, maData.mnFormatIdx );
-    // area format - CHESCHERFORMAT overrides CHAREAFORMAT
-    if( mxEscherFmt.is() )
-        mxEscherFmt->Convert( GetChRoot(), rPropSet );
-    else if( mxAreaFmt.is() )
-        mxAreaFmt->ConvertSeries( GetChRoot(), rPropSet, maData.mnFormatIdx );
+    bool bLinear2dType = rChartGroup.IsLinear2dChart();
+    // line and area format
+    ConvertSeriesFrameBase( GetChRoot(), rPropSet, maData.mnFormatIdx, bLinear2dType );
+    // other formatting
     if( mxMarkerFmt.is() )
         mxMarkerFmt->Convert( GetChRoot(), rPropSet, maData.mnFormatIdx, GetLineWeight() );
     if( mxPieFmt.is() )
@@ -1312,7 +1487,13 @@ void XclImpChDataFormat::Convert( ScfPropertySet& rPropSet ) const
     if( mx3dDataFmt.is() )
         mx3dDataFmt->Convert( rPropSet );
     if( mxLabel.is() )
-        mxLabel->ConvertDataLabel( rPropSet );
+        mxLabel->ConvertDataLabel( rPropSet, rChartGroup.GetChartTypeId() );
+
+    /*  Special case: set marker color as line color, if series line is not
+        visible. This makes the color visible in the marker area.
+        TODO: remove this if OOChart supports own colors in markers. */
+    if( bLinear2dType && !HasLine() && mxMarkerFmt.is() )
+        mxMarkerFmt->ConvertColor( GetChRoot(), rPropSet, maData.mnFormatIdx );
 }
 
 void XclImpChDataFormat::ConvertVarPoint( ScfPropertySet& rPropSet, sal_uInt16 nFormatIdx ) const
@@ -1327,14 +1508,17 @@ void XclImpChDataFormat::ConvertLine( ScfPropertySet& rPropSet, sal_uInt16 nAuto
         mxLineFmt->Convert( GetChRoot(), rPropSet, nAutoWeight );
 }
 
-void XclImpChDataFormat::RemoveUnusedFormats()
+void XclImpChDataFormat::RemoveUnusedFormats( const XclImpChChartGroup& rChartGroup )
 {
-    sal_uInt16 nTypeId = GetChartData().GetChartTypeId();
+    sal_uInt16 nTypeId = rChartGroup.GetChartTypeId();
+    // point marker only in linear 2D charts
+    if( !rChartGroup.IsLinear2dChart() )
+        mxMarkerFmt.reset();
     // pie format only in pie charts (not supported in OOChart donut charts)
     if( nTypeId != EXC_ID_CHPIE )
         mxPieFmt.reset();
     // 3D format only in 3D bar charts
-    if( !GetChartData().Is3dChart() || (nTypeId != EXC_ID_CHBAR) )
+    if( !GetChartData().Is3dChart() || !XclChartHelper::IsBarChartType( nTypeId ) )
         mx3dDataFmt.reset();
 }
 
@@ -1354,6 +1538,174 @@ void XclImpChDataFormat::UpdateDataLabel( const XclImpChDataFormat* pParentFmt )
         mxLabel->UpdateText( xDefText.get() );
     else if( mxAttLabel.is() )
         mxLabel = mxAttLabel->CreateDataLabel( xDefText );
+}
+
+// ----------------------------------------------------------------------------
+
+XclImpChSerTrendLine::XclImpChSerTrendLine( const XclImpChRoot& rRoot ) :
+    XclImpChRoot( rRoot )
+{
+}
+
+void XclImpChSerTrendLine::ReadChSerTrendLine( XclImpStream& rStrm )
+{
+    rStrm   >> maData.mnLineType
+            >> maData.mnOrder
+            >> maData.mfIntercept
+            >> maData.mnShowEquation
+            >> maData.mnShowRSquared
+            >> maData.mfForecastFor
+            >> maData.mfForecastBack;
+}
+
+bool XclImpChSerTrendLine::IsValidType() const
+{
+    return
+        ((maData.mnLineType == EXC_CHSERTREND_POLYNOMIAL) && (maData.mnOrder == 1)) ||
+        (maData.mnLineType == EXC_CHSERTREND_EXPONENTIAL) ||
+        (maData.mnLineType == EXC_CHSERTREND_LOGARITHMIC) ||
+        (maData.mnLineType == EXC_CHSERTREND_POWER);
+}
+
+void XclImpChSerTrendLine::Convert( ScfPropertySet& rPropSet ) const
+{
+    namespace cssc = ::com::sun::star::chart;
+
+    // trend line type
+    cssc::ChartRegressionCurveType eApiType = cssc::ChartRegressionCurveType_NONE;
+    switch( maData.mnLineType )
+    {
+        case EXC_CHSERTREND_POLYNOMIAL:
+            // only linear trend lines are supported by OOChart
+            if( maData.mnOrder == 1 )
+                eApiType = cssc::ChartRegressionCurveType_LINEAR;
+        break;
+        case EXC_CHSERTREND_EXPONENTIAL:
+            eApiType = cssc::ChartRegressionCurveType_EXPONENTIAL;
+        break;
+        case EXC_CHSERTREND_LOGARITHMIC:
+            eApiType = cssc::ChartRegressionCurveType_LOGARITHM;
+        break;
+        case EXC_CHSERTREND_POWER:
+            /*  WORKAROUND for #i47673#. Bug in OOChart API:
+                com.sun.star.chart.ChartRegressionCurveType.POLYNOMIAL is
+                mapped to "power" regression line type, and POWER is mapped to
+                nothing. If the bug is fixed, set type POWER here. */
+            eApiType = cssc::ChartRegressionCurveType_POLYNOMIAL;
+        break;
+    }
+    rPropSet.SetProperty( EXC_CHPROP_REGRESSIONCURVES, eApiType );
+
+    // trend line formatting
+    if( mxLineFmt.is() )
+    {
+        Reference< XPropertySet > xLineProp;
+        if( rPropSet.GetProperty( xLineProp, EXC_CHPROP_DATAREGRESSIONPROPS ) )
+        {
+            ScfPropertySet aLineProp( xLineProp );
+            mxLineFmt->ConvertLine( aLineProp, EXC_CHLINEFORMAT_DOUBLE );
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+
+XclImpChSerErrorBar::XclImpChSerErrorBar( const XclImpChRoot& rRoot ) :
+    XclImpChRoot( rRoot )
+{
+}
+
+void XclImpChSerErrorBar::ReadChSerErrorBar( XclImpStream& rStrm )
+{
+    rStrm >> maData.mnBarType >> maData.mnSourceType >> maData.mnLineEnd;
+    rStrm.Ignore( 1 );
+    rStrm >> maData.mfValue >> maData.mnValueCount;
+}
+
+void XclImpChSerErrorBar::AddErrorBar( const XclImpChSerErrorBar& rErrorBar )
+{
+    // add the error bar type
+    sal_uInt8 nBarType = rErrorBar.maData.mnBarType;
+    switch( nBarType )
+    {
+        case EXC_CHSERERR_XPLUS:
+        case EXC_CHSERERR_XMINUS:
+        case EXC_CHSERERR_XBOTH:
+            DBG_ASSERT( IsXErrorBar(), "XclImpChSerErrorBar::AddErrorBar - wrong orientation" );
+            if( maData.mnBarType != nBarType )
+                maData.mnBarType = EXC_CHSERERR_XBOTH;
+        break;
+        case EXC_CHSERERR_YPLUS:
+        case EXC_CHSERERR_YMINUS:
+        case EXC_CHSERERR_YBOTH:
+            DBG_ASSERT( IsYErrorBar(), "XclImpChSerErrorBar::AddErrorBar - wrong orientation" );
+            if( maData.mnBarType != nBarType )
+                maData.mnBarType = EXC_CHSERERR_YBOTH;
+        break;
+        default:
+            DBG_ERROR1( "XclImpChSerErrorBar::AddErrorBar - unknown error bar type: %d", nBarType );
+    }
+
+    // add error bar formatting settings
+    if( !mxBarFmt )
+        mxBarFmt = rErrorBar.mxBarFmt;
+}
+
+bool XclImpChSerErrorBar::IsXErrorBar() const
+{
+    return (maData.mnBarType == EXC_CHSERERR_XPLUS) || (maData.mnBarType == EXC_CHSERERR_XMINUS) || (maData.mnBarType == EXC_CHSERERR_XBOTH);
+}
+
+bool XclImpChSerErrorBar::IsYErrorBar() const
+{
+    return (maData.mnBarType == EXC_CHSERERR_YPLUS) || (maData.mnBarType == EXC_CHSERERR_YMINUS) || (maData.mnBarType == EXC_CHSERERR_YBOTH);
+}
+
+void XclImpChSerErrorBar::Convert( ScfPropertySet& rPropSet ) const
+{
+    namespace cssc = ::com::sun::star::chart;
+
+    // type (direction) of the error bars
+    cssc::ChartErrorIndicatorType eApiBarType = cssc::ChartErrorIndicatorType_NONE;
+    switch( maData.mnBarType )
+    {
+        case EXC_CHSERERR_YPLUS:    eApiBarType = cssc::ChartErrorIndicatorType_UPPER;          break;
+        case EXC_CHSERERR_YMINUS:   eApiBarType = cssc::ChartErrorIndicatorType_LOWER;          break;
+        case EXC_CHSERERR_YBOTH:    eApiBarType = cssc::ChartErrorIndicatorType_TOP_AND_BOTTOM; break;
+        default:    DBG_ERRORFILE( "XclImpChSerErrorBar::Convert - invalid error bar type" );
+    }
+    rPropSet.SetProperty( EXC_CHPROP_ERRORINDICATOR, eApiBarType );
+
+    // type of displayed error
+    switch( maData.mnSourceType )
+    {
+        case EXC_CHSERERR_PERCENT:
+            rPropSet.SetProperty( EXC_CHPROP_ERRORCATEGORY, cssc::ChartErrorCategory_PERCENT );
+            rPropSet.SetProperty( EXC_CHPROP_PERCENTAGEERROR, maData.mfValue );
+        break;
+        case EXC_CHSERERR_FIXED:
+            rPropSet.SetProperty( EXC_CHPROP_ERRORCATEGORY, cssc::ChartErrorCategory_CONSTANT_VALUE );
+            rPropSet.SetProperty( EXC_CHPROP_CONSTANTERRORLOW, maData.mfValue );
+            rPropSet.SetProperty( EXC_CHPROP_CONSTANTERRORHIGH, maData.mfValue );
+        break;
+        case EXC_CHSERERR_STDDEV:
+            rPropSet.SetProperty( EXC_CHPROP_ERRORCATEGORY, cssc::ChartErrorCategory_STANDARD_DEVIATION );
+        break;
+        // Standard error not supported
+//        case EXC_CHSERERR_STDERR:
+//        break;
+    }
+
+    // error bar formatting
+    if( mxBarFmt.is() )
+    {
+        Reference< XPropertySet > xErrorProp;
+        if( rPropSet.GetProperty( xErrorProp, EXC_CHPROP_DATAERRORPROPS ) )
+        {
+            ScfPropertySet aErrorProp( xErrorProp );
+            mxBarFmt->ConvertLine( aErrorProp, EXC_CHLINEFORMAT_SINGLE );
+        }
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -1394,7 +1746,10 @@ void XclImpChSeries::ReadSubRecord( XclImpStream& rStrm )
             ReadChSerParent( rStrm );
         break;
         case EXC_ID_CHSERTRENDLINE:
-            GetTracer().TraceChartTrendLines();
+            ReadChSerTrendLine( rStrm );
+        break;
+        case EXC_ID_CHSERERRORBAR:
+            ReadChSerErrorBar( rStrm );
         break;
         case EXC_ID_CHEND:
             ReadChEnd( rStrm );
@@ -1517,7 +1872,8 @@ void XclImpChSeries::SetDataFormat( XclImpChDataFormatRef xDataFmt )
             *pxDataFmt = xDataFmt;
             // #i51639# register series format index at chart group
             if( pxDataFmt == &mxSeriesFmt )
-                GetChartData().GetDefChartGroup( mnGroupIdx ).SetUsedFormatIndex( xDataFmt->GetFormatIdx() );
+                if( XclImpChChartGroup* pChartGroup = GetChartGroup() )
+                    pChartGroup->SetUsedFormatIndex( xDataFmt->GetFormatIdx() );
         }
     }
 }
@@ -1532,13 +1888,41 @@ void XclImpChSeries::SetDataLabel( XclImpChTextRef xLabel )
     }
 }
 
+namespace {
+
+void lclAddErrorBar( XclImpChSerErrorBarRef& rxOldErrorBar, XclImpChSerErrorBarRef xNewErrorBar )
+{
+    if( xNewErrorBar.is() )
+    {
+        if( rxOldErrorBar.is() )
+            rxOldErrorBar->AddErrorBar( *xNewErrorBar );
+        else
+            rxOldErrorBar = xNewErrorBar;
+    }
+}
+
+} // namespace
+
+void XclImpChSeries::AddChildSeries( const XclImpChSeries& rSeries )
+{
+    /*  In Excel, trend lines and error bars are stored as own series. In Calc,
+        these are properties of the parent series. This function adds the
+        settings of the passed series to this series. */
+    if( !mxTrendLine )
+        mxTrendLine = rSeries.mxTrendLine;
+    lclAddErrorBar( mxXErrorBar, rSeries.mxXErrorBar );
+    lclAddErrorBar( mxYErrorBar, rSeries.mxYErrorBar );
+}
+
 void XclImpChSeries::FinalizeDataFormats()
 {
+    XclImpChChartGroup* pChartGroup = &GetChartData().GetDefChartGroup( mnGroupIdx );
+
     // create missing series format
-    if( !mxSeriesFmt && !HasParentSeries() )
+    if( pChartGroup && !mxSeriesFmt && !HasParentSeries() )
     {
         // #i51639# use a new unused format index to create series default format
-        sal_uInt16 nFormatIdx = GetChartData().GetDefChartGroup( mnGroupIdx ).PopUnusedFormatIndex();
+        sal_uInt16 nFormatIdx = pChartGroup->PopUnusedFormatIndex();
         mxSeriesFmt = CreateDataFormat( EXC_CHDATAFORMAT_ALLPOINTS, nFormatIdx );
     }
 
@@ -1553,16 +1937,27 @@ void XclImpChSeries::FinalizeDataFormats()
         }
     }
 
-    // update series format (copy missing formatting from global format)
-    if( mxSeriesFmt.is() )
-    {
-        XclImpChDataFormatRef xGlobalFmt = GetChartData().GetDefChartGroup( mnGroupIdx ).GetGlobalFormat();
-        mxSeriesFmt->UpdateSeriesFormat( xGlobalFmt.get() );
-    }
+    // update series format (copy missing formatting from group default format)
+    if( pChartGroup && mxSeriesFmt.is() )
+        mxSeriesFmt->UpdateSeriesFormat( *pChartGroup );
+
+    // copy series formatting to trend lines and error bars
+    if( mxTrendLine.is() )
+        mxTrendLine->SetLineFormat( mxSeriesFmt );
+    if( mxXErrorBar.is() )
+        mxXErrorBar->SetBarFormat( mxSeriesFmt );
+    if( mxYErrorBar.is() )
+        mxYErrorBar->SetBarFormat( mxSeriesFmt );
 
     // update data point formats (removes unchanged automatic formatting)
-    for( XclImpChDataFormatMap::iterator aFIt = maPointFmts.begin(), aFEnd = maPointFmts.end(); aFIt != aFEnd; ++aFIt )
-        aFIt->second->UpdatePointFormat( mxSeriesFmt.get() );
+    if( pChartGroup )
+        for( XclImpChDataFormatMap::iterator aFIt = maPointFmts.begin(), aFEnd = maPointFmts.end(); aFIt != aFEnd; ++aFIt )
+            aFIt->second->UpdatePointFormat( *pChartGroup, mxSeriesFmt.get() );
+}
+
+sal_uInt16 XclImpChSeries::GetChartTypeId() const
+{
+    return GetChartData().GetChartTypeId();
 }
 
 bool XclImpChSeries::HasEqualCategories( const XclImpChSeries& rSeries ) const
@@ -1642,7 +2037,7 @@ ScfPropertySet lclGetPointPropSet( Reference< XDiagram > xDiagram,
 
 } // namespace
 
-void XclImpChSeries::Convert( XChartDocRef xChartDoc, size_t nSeriesIdx ) const
+void XclImpChSeries::Convert( Reference< XChartDocument > xChartDoc, size_t nSeriesIdx ) const
 {
     Reference< XDiagram > xDiagram = xChartDoc->getDiagram();
     DBG_ASSERT( xDiagram.is(), "XclImpChSeries::Convert - no diagram" );
@@ -1650,16 +2045,14 @@ void XclImpChSeries::Convert( XChartDocRef xChartDoc, size_t nSeriesIdx ) const
         return;
 
     // chart type and number of series on the axes set
-    sal_uInt16 nTypeId = GetChartData().GetChartTypeId();
+    const XclImpChChartGroup& rChartGroup = GetChartData().GetDefChartGroup( mnGroupIdx );
+    sal_uInt16 nTypeId = rChartGroup.GetChartTypeId();
     sal_uInt16 nSeriesCount = GetChartData().GetChartGroupSeriesCount( mnGroupIdx );
     sal_uInt16 nPointCount = GetPointCount();
 
     // don't set any formatting on additional pie series (may change formats of first series)
     if( (nTypeId == EXC_ID_CHPIE) && (nSeriesIdx > 0) )
         return;
-
-    // variable automatic point colors in a series
-    bool bVarPoints = GetChartData().GetDefChartGroup( mnGroupIdx ).IsVarPointFormat();
 
     // ------------------------------------------------------------------------
     // write global series formatting and assign series to correct axes set
@@ -1677,9 +2070,9 @@ void XclImpChSeries::Convert( XChartDocRef xChartDoc, size_t nSeriesIdx ) const
                 // get the data point property set from the chart
                 ScfPropertySet aPointProp( lclGetPointPropSet( xDiagram, nTypeId, nSeriesIdx, nPointIdx ) );
                 // set the series formatting
-                mxSeriesFmt->Convert( aPointProp );
+                mxSeriesFmt->Convert( aPointProp, rChartGroup );
                 // set additional formatting for automatic point colors
-                if( bVarPoints && mxSeriesFmt->IsAutoArea() )
+                if( rChartGroup.IsVarPointFormat() && mxSeriesFmt->IsAutoArea() )
                     mxSeriesFmt->ConvertVarPoint( aPointProp, nPointIdx );
             }
         }
@@ -1694,9 +2087,14 @@ void XclImpChSeries::Convert( XChartDocRef xChartDoc, size_t nSeriesIdx ) const
         aSeriesProp.SetProperty( EXC_CHPROP_AXIS, bSecondary ? SECONDARY_Y : PRIMARY_Y );
         // set the series formatting
         if( mxSeriesFmt.is() )
-            mxSeriesFmt->Convert( aSeriesProp );
+            mxSeriesFmt->Convert( aSeriesProp, rChartGroup );
+        // trend line, error bars
+        if( mxTrendLine.is() )
+            mxTrendLine->Convert( aSeriesProp );
+        if( mxYErrorBar.is() )
+            mxYErrorBar->Convert( aSeriesProp );
         // own area formatting for every data point
-        if( bVarPoints && (nSeriesCount == 1) && mxSeriesFmt.is() && mxSeriesFmt->IsAutoArea() )
+        if( rChartGroup.IsVarPointFormat() && (nSeriesCount == 1) && mxSeriesFmt.is() && mxSeriesFmt->IsAutoArea() )
         {
             for( sal_uInt16 nPointIdx = 0; nPointIdx < nPointCount; ++nPointIdx )
             {
@@ -1716,19 +2114,20 @@ void XclImpChSeries::Convert( XChartDocRef xChartDoc, size_t nSeriesIdx ) const
         // get the data point property set from the chart
         ScfPropertySet aPointProp( lclGetPointPropSet( xDiagram, nTypeId, nSeriesIdx, aIt->first ) );
         // set data point formatting
-        aIt->second->Convert( aPointProp );
+        aIt->second->Convert( aPointProp, rChartGroup );
     }
 }
 
 void XclImpChSeries::ReadChSourceLink( XclImpStream& rStrm )
 {
-    XclImpChSourceLinkRef xSrcLink( new XclImpChSourceLink );
+    XclImpChSourceLinkRef xSrcLink( new XclImpChSourceLink( GetChRoot() ) );
     xSrcLink->ReadChSourceLink( rStrm );
     switch( xSrcLink->GetDestType() )
     {
-        case EXC_CHSRCLINK_TITLE:       mxTitleLink = xSrcLink; break;
-        case EXC_CHSRCLINK_VALUES:      mxValueLink = xSrcLink; break;
-        case EXC_CHSRCLINK_CATEGORY:    mxCategLink = xSrcLink; break;
+        case EXC_CHSRCLINK_TITLE:       mxTitleLink = xSrcLink;     break;
+        case EXC_CHSRCLINK_VALUES:      mxValueLink = xSrcLink;     break;
+        case EXC_CHSRCLINK_CATEGORY:    mxCategLink = xSrcLink;     break;
+        case EXC_CHSRCLINK_BUBBLES:     mxBubbleLink = xSrcLink;    break;
     }
 }
 
@@ -1748,10 +2147,30 @@ void XclImpChSeries::ReadChSerParent( XclImpStream& rStrm )
         mnParentIdx = EXC_CHSERIES_INVALID;
 }
 
+void XclImpChSeries::ReadChSerTrendLine( XclImpStream& rStrm )
+{
+    mxTrendLine.reset( new XclImpChSerTrendLine( GetChRoot() ) );
+    mxTrendLine->ReadChSerTrendLine( rStrm );
+}
+
+void XclImpChSeries::ReadChSerErrorBar( XclImpStream& rStrm )
+{
+    XclImpChSerErrorBarRef xErrorBar( new XclImpChSerErrorBar( GetChRoot() ) );
+    xErrorBar->ReadChSerErrorBar( rStrm );
+    if( xErrorBar->IsXErrorBar() )
+        lclAddErrorBar( mxXErrorBar, xErrorBar );
+    else if( xErrorBar->IsYErrorBar() )
+        lclAddErrorBar( mxYErrorBar, xErrorBar );
+}
+
 void XclImpChSeries::ReadChEnd( XclImpStream& rStrm )
 {
     // calculate the orientation of this series
     CalcOrientation();
+
+    // remove invalid trend line
+    if( mxTrendLine.is() && !mxTrendLine->IsValidType() )
+        mxTrendLine.reset();
 }
 
 void XclImpChSeries::CalcOrientation()
@@ -1788,6 +2207,11 @@ void XclImpChSeries::CalcOrientation()
 
     if( mxValueLink.is() && (mxValueLink->GetOrientation() == EXC_CHORIENT_COMPLEX) )
         GetTracer().TraceChartRange();
+}
+
+XclImpChChartGroup* XclImpChSeries::GetChartGroup() const
+{
+    return &GetChartData().GetDefChartGroup( mnGroupIdx );
 }
 
 XclImpChDataFormatRef XclImpChSeries::CreateDataFormat( sal_uInt16 nPointIdx, sal_uInt16 nFormatIdx )
@@ -1920,42 +2344,73 @@ void XclImpChType::Finalize()
     }
 }
 
-void XclImpChType::CreateDiagram( XChartDocRef xChartDoc ) const
+bool XclImpChType::IsStackedChart() const
+{
+    bool bStacked = false;
+    switch( mnTypeId )
+    {
+        case EXC_ID_CHLINE:
+        case EXC_ID_CHAREA:
+        case EXC_ID_CHSTOCK:
+            bStacked = ::get_flag( maData.mnFlags, EXC_CHLINE_STACKED );
+        break;
+        case EXC_ID_CHBAR:
+        case EXC_ID_CHCOLUMN:
+            bStacked = ::get_flag( maData.mnFlags, EXC_CHBAR_STACKED );
+        break;
+    }
+    return bStacked;
+}
+
+bool XclImpChType::IsPercentChart() const
+{
+    bool bPercent = false;
+    switch( mnTypeId )
+    {
+        case EXC_ID_CHLINE:
+        case EXC_ID_CHAREA:
+        case EXC_ID_CHSTOCK:
+            bPercent = ::get_flag( maData.mnFlags, EXC_CHLINE_PERCENT );
+        break;
+        case EXC_ID_CHBAR:
+        case EXC_ID_CHCOLUMN:
+            bPercent = ::get_flag( maData.mnFlags, EXC_CHBAR_PERCENT );
+        break;
+    }
+    return bPercent && IsStackedChart();
+}
+
+void XclImpChType::CreateDiagram( Reference< XChartDocument > xChartDoc ) const
 {
     bool bIsPrimary = GetChartData().GetChartGroupAxesSetId( mnGroupIdx ) == EXC_CHAXESSET_PRIMARY;
     DBG_ASSERT( bIsPrimary, "XclImpChType::CreateDiagram - not allowed for secondary axes" );
-    Reference< XMultiServiceFactory > xFactory( xChartDoc, UNO_QUERY );
-    if( !bIsPrimary || !xFactory.is() ) return;
-
-    OUString aService;
-    switch( mnTypeId )
+    if( bIsPrimary )
     {
-        case EXC_ID_CHLINE:         aService = SERVICE_CHART_LINE;      break;
-        case EXC_ID_CHAREA:         aService = SERVICE_CHART_AREA;      break;
-        case EXC_ID_CHSTOCK:        aService = SERVICE_CHART_STOCK;     break;
-        case EXC_ID_CHBAR:          aService = SERVICE_CHART_BAR;       break;
-        case EXC_ID_CHPIE:          aService = SERVICE_CHART_PIE;       break;
-        case EXC_ID_CHDONUT:        aService = SERVICE_CHART_DONUT;     break;
-        case EXC_ID_CHRADARLINE:
-        case EXC_ID_CHRADARAREA:    aService = SERVICE_CHART_NET;       break;
-        case EXC_ID_CHSCATTER:      aService = SERVICE_CHART_XY;        break;
-        default:
-            DBG_ERRORFILE( "XclImpChType::CreateDiagram - unknown chart type" );
-            aService = SERVICE_CHART_BAR;
-    }
+        OUString aService;
+        switch( mnTypeId )
+        {
+            case EXC_ID_CHLINE:         aService = SERVICE_CHART_LINE;      break;
+            case EXC_ID_CHAREA:         aService = SERVICE_CHART_AREA;      break;
+            case EXC_ID_CHSTOCK:        aService = SERVICE_CHART_STOCK;     break;
+            case EXC_ID_CHBAR:          aService = SERVICE_CHART_BAR;       break;
+            case EXC_ID_CHPIE:          aService = SERVICE_CHART_PIE;       break;
+            case EXC_ID_CHDONUT:        aService = SERVICE_CHART_DONUT;     break;
+            case EXC_ID_CHRADARLINE:
+            case EXC_ID_CHRADARAREA:    aService = SERVICE_CHART_NET;       break;
+            case EXC_ID_CHSCATTER:      aService = SERVICE_CHART_XY;        break;
+            default:
+                DBG_ERRORFILE( "XclImpChType::CreateDiagram - unknown chart type" );
+                aService = SERVICE_CHART_BAR;
+        }
 
-    try
-    {
-        Reference< XDiagram > xDiagram( xFactory->createInstance( aService ), UNO_QUERY );
+        Reference< XMultiServiceFactory > xFactory( xChartDoc, UNO_QUERY );
+        Reference< XDiagram > xDiagram( ScfApiHelper::CreateInstance( xFactory, aService ), UNO_QUERY );
         if( xDiagram.is() )
             xChartDoc->setDiagram( xDiagram );
     }
-    catch( Exception& )
-    {
-    }
 }
 
-void XclImpChType::Convert( XChartDocRef xChartDoc ) const
+void XclImpChType::Convert( Reference< XChartDocument > xChartDoc ) const
 {
     bool bIsPrimary = GetChartData().GetChartGroupAxesSetId( mnGroupIdx ) == EXC_CHAXESSET_PRIMARY;
     Reference< XDiagram > xDiagram( xChartDoc->getDiagram() );
@@ -2040,7 +2495,7 @@ XclImpChLegend::XclImpChLegend( const XclImpChRoot& rRoot ) :
 
 void XclImpChLegend::ReadHeaderRecord( XclImpStream& rStrm )
 {
-    rStrm >> maData.maPos >> maData.mnDockMode >> maData.mnSpacing >> maData.mnFlags;
+    rStrm >> maData.maRect >> maData.mnDockMode >> maData.mnSpacing >> maData.mnFlags;
 
     // trace unsupported features
     if( GetTracer().IsEnabled() )
@@ -2061,13 +2516,13 @@ void XclImpChLegend::ReadSubRecord( XclImpStream& rStrm )
             mxText->ReadRecordGroup( rStrm );
         break;
         case EXC_ID_CHFRAME:
-            mxFrame.reset( new XclImpChFrame( EXC_ID_CHLEGEND ) );
+            mxFrame.reset( new XclImpChFrame( EXC_CHOBJLINK_LEGEND ) );
             mxFrame->ReadRecordGroup( rStrm );
         break;
         case EXC_ID_CHEND:
             // legend default formatting differs in OOChart and Excel
             if( !mxFrame )
-                mxFrame.reset( new XclImpChFrame( EXC_ID_CHLEGEND ) );
+                mxFrame.reset( new XclImpChFrame( EXC_CHOBJLINK_LEGEND ) );
         break;
     }
 }
@@ -2113,7 +2568,7 @@ void XclImpChLegend::Convert( ScfPropertySet& rPropSet ) const
 
 // ----------------------------------------------------------------------------
 
-XclImpChDropBar::XclImpChDropBar() :
+XclImpChDropBar::XclImpChDropBar( sal_uInt16 nDropBar ) :
     mnBarDist( 0 )
 {
 }
@@ -2125,12 +2580,12 @@ void XclImpChDropBar::ReadHeaderRecord( XclImpStream& rStrm )
 
 void XclImpChDropBar::Convert( const XclImpChRoot& rRoot, ScfPropertySet& rPropSet ) const
 {
-    ConvertFrame( rRoot, rPropSet );
+    ConvertFrameBase( rRoot, rPropSet );
 }
 
 // ----------------------------------------------------------------------------
 
-XclImpChChartFormat::XclImpChChartFormat( const XclImpChRoot& rRoot ) :
+XclImpChChartGroup::XclImpChChartGroup( const XclImpChRoot& rRoot ) :
     XclImpChRoot( rRoot ),
     maType( rRoot )
 {
@@ -2141,13 +2596,13 @@ XclImpChChartFormat::XclImpChChartFormat( const XclImpChRoot& rRoot ) :
         maUnusedFormats.insert( maUnusedFormats.end(), nFormatIdx );
 }
 
-void XclImpChChartFormat::ReadHeaderRecord( XclImpStream& rStrm )
+void XclImpChChartGroup::ReadHeaderRecord( XclImpStream& rStrm )
 {
-    rStrm >> maData.maPos >> maData.mnFlags >> maData.mnGroupIdx;
+    rStrm >> maData.maRect >> maData.mnFlags >> maData.mnGroupIdx;
     maType.SetGroupIndex( maData.mnGroupIdx );
 }
 
-void XclImpChChartFormat::ReadSubRecord( XclImpStream& rStrm )
+void XclImpChChartGroup::ReadSubRecord( XclImpStream& rStrm )
 {
     switch( rStrm.GetRecId() )
     {
@@ -2173,29 +2628,29 @@ void XclImpChChartFormat::ReadSubRecord( XclImpStream& rStrm )
     }
 }
 
-void XclImpChChartFormat::Finalize()
+void XclImpChChartGroup::Finalize()
 {
     // check and set valid chart type
     maType.Finalize();
-    // update global series format
-    if( mxGlobalFmt.is() )
-        mxGlobalFmt->UpdateGlobalFormat();
+    // update chart group format, may depend on chart type finalized above
+    if( mxGroupFmt.is() )
+        mxGroupFmt->UpdateGroupFormat( *this );
 }
 
-void XclImpChChartFormat::SetUsedFormatIndex( sal_uInt16 nFormatIdx )
+void XclImpChChartGroup::SetUsedFormatIndex( sal_uInt16 nFormatIdx )
 {
     maUnusedFormats.erase( nFormatIdx );
 }
 
-sal_uInt16 XclImpChChartFormat::PopUnusedFormatIndex()
+sal_uInt16 XclImpChChartGroup::PopUnusedFormatIndex()
 {
-    DBG_ASSERT( !maUnusedFormats.empty(), "XclImpChChartFormat::PopUnusedFormatIndex - no more format indexes available" );
+    DBG_ASSERT( !maUnusedFormats.empty(), "XclImpChChartGroup::PopUnusedFormatIndex - no more format indexes available" );
     sal_uInt16 nFormatIdx = maUnusedFormats.empty() ? 0 : *maUnusedFormats.begin();
     SetUsedFormatIndex( nFormatIdx );
     return nFormatIdx;
 }
 
-void XclImpChChartFormat::CreateDiagram( XChartDocRef xChartDoc ) const
+void XclImpChChartGroup::CreateDiagram( Reference< XChartDocument > xChartDoc ) const
 {
     // chart type (must be done before first getDiagram() call)
     maType.CreateDiagram( xChartDoc );
@@ -2208,7 +2663,7 @@ void XclImpChChartFormat::CreateDiagram( XChartDocRef xChartDoc ) const
     }
 }
 
-void XclImpChChartFormat::Convert( XChartDocRef xChartDoc ) const
+void XclImpChChartGroup::Convert( Reference< XChartDocument > xChartDoc ) const
 {
     // type dependent settings
     maType.Convert( xChartDoc );
@@ -2247,17 +2702,23 @@ void XclImpChChartFormat::Convert( XChartDocRef xChartDoc ) const
     }
 }
 
-void XclImpChChartFormat::ReadChDropBar( XclImpStream& rStrm )
+void XclImpChChartGroup::ReadChDropBar( XclImpStream& rStrm )
 {
-    XclImpChDropBarRef xDropBar( new XclImpChDropBar );
-    xDropBar->ReadRecordGroup( rStrm );
+    sal_uInt16 nDropBar = EXC_CHDROPBAR_NONE;
     if( !maDropBars.has( EXC_CHDROPBAR_UP ) )
-        maDropBars[ EXC_CHDROPBAR_UP ] = xDropBar;
+        nDropBar = EXC_CHDROPBAR_UP;
     else if( !maDropBars.has( EXC_CHDROPBAR_DOWN ) )
-        maDropBars[ EXC_CHDROPBAR_DOWN ] = xDropBar;
+        nDropBar = EXC_CHDROPBAR_DOWN;
+
+    if( nDropBar != EXC_CHDROPBAR_NONE )
+    {
+        XclImpChDropBarRef xDropBar( new XclImpChDropBar( nDropBar ) );
+        xDropBar->ReadRecordGroup( rStrm );
+        maDropBars[ nDropBar ] = xDropBar;
+    }
 }
 
-void XclImpChChartFormat::ReadChChartLine( XclImpStream& rStrm )
+void XclImpChChartGroup::ReadChChartLine( XclImpStream& rStrm )
 {
     sal_uInt16 nLineId = rStrm.ReaduInt16();
     if( (rStrm.GetNextRecId() == EXC_ID_CHLINEFORMAT) && rStrm.StartNextRecord() )
@@ -2268,18 +2729,23 @@ void XclImpChChartFormat::ReadChChartLine( XclImpStream& rStrm )
     }
 }
 
-void XclImpChChartFormat::ReadChDataFormat( XclImpStream& rStrm )
+void XclImpChChartGroup::ReadChDataFormat( XclImpStream& rStrm )
 {
     // global series and data point format
     XclImpChDataFormatRef xDataFmt( new XclImpChDataFormat( GetChRoot() ) );
     xDataFmt->ReadRecordGroup( rStrm );
-    const XclChPoint& rPos = xDataFmt->GetPointPos();
+    const XclChDataPointPos& rPos = xDataFmt->GetPointPos();
     if( (rPos.mnSeriesIdx == 0) && (rPos.mnPointIdx == 0) &&
             (xDataFmt->GetFormatIdx() == EXC_CHDATAFORMAT_DEFAULT) )
-        mxGlobalFmt = xDataFmt;
+        mxGroupFmt = xDataFmt;
 }
 
 // Axes =======================================================================
+
+XclImpChLabelRange::XclImpChLabelRange( const XclImpChRoot& rRoot ) :
+    XclImpChRoot( rRoot )
+{
+}
 
 void XclImpChLabelRange::ReadChLabelRange( XclImpStream& rStrm )
 {
@@ -2394,23 +2860,37 @@ sal_Int32 lclGetApiAxisMarks( sal_uInt8 nXclTickPos )
 
 } // namespace
 
+XclImpChTick::XclImpChTick( const XclImpChRoot& rRoot ) :
+    XclImpChRoot( rRoot )
+{
+}
+
 void XclImpChTick::ReadChTick( XclImpStream& rStrm )
 {
     rStrm   >> maData.mnMajor
             >> maData.mnMinor
             >> maData.mnLabelPos
             >> maData.mnBackMode
-            >> maData.maPos
+            >> maData.maRect
             >> maData.maTextColor
             >> maData.mnFlags;
 
-    const XclImpRoot& rRoot = rStrm.GetRoot();
-    if( rRoot.GetBiff() == EXC_BIFF8 )
+    if( GetBiff() == EXC_BIFF8 )
     {
         rStrm >> maData.mnTextColorIdx >> maData.mnRotation;
         // #116397# BIFF8: index into palette used instead of RGB data
-        maData.maTextColor = rRoot.GetPalette().GetColor( maData.mnTextColorIdx );
+        maData.maTextColor = GetPalette().GetColor( maData.mnTextColorIdx );
     }
+}
+
+Color XclImpChTick::GetFontColor() const
+{
+    return ::get_flag( maData.mnFlags, EXC_CHTICK_AUTOCOLOR ) ? GetFontAutoColor() : maData.maTextColor;
+}
+
+sal_uInt16 XclImpChTick::GetRotation() const
+{
+    return ::get_flag( maData.mnFlags, EXC_CHTICK_AUTOROT ) ? EXC_CHART_AUTOROTATION : maData.mnRotation;
 }
 
 void XclImpChTick::Convert( ScfPropertySet& rPropSet ) const
@@ -2423,11 +2903,9 @@ void XclImpChTick::Convert( ScfPropertySet& rPropSet ) const
         rPropSet.SetProperty( EXC_CHPROP_TEXTROTATION, XclTools::GetScRotation( maData.mnRotation, 27000 ) );
 }
 
-void XclImpChTick::ConvertFontColor( const XclImpChRoot& rRoot, ScfPropertySet& rPropSet ) const
+void XclImpChTick::ConvertFontColor( ScfPropertySet& rPropSet ) const
 {
-    Color aColor = ::get_flag( maData.mnFlags, EXC_CHTICK_AUTOCOLOR ) ?
-        rRoot.GetPalette().GetColor( EXC_COLOR_CHWINDOWTEXT ) : maData.maTextColor;
-    rPropSet.SetColorProperty( EXC_CHPROP_CHARCOLOR, aColor );
+    rPropSet.SetColorProperty( EXC_CHPROP_CHARCOLOR, GetFontColor() );
 }
 
 // ----------------------------------------------------------------------------
@@ -2440,7 +2918,7 @@ XclImpChAxis::XclImpChAxis( const XclImpChRoot& rRoot, sal_uInt16 nAxesSetId ) :
 
 void XclImpChAxis::ReadHeaderRecord( XclImpStream& rStrm )
 {
-    rStrm >> maData.mnType >> maData.maPos;
+    rStrm >> maData.mnType >> maData.maRect;
 }
 
 void XclImpChAxis::ReadSubRecord( XclImpStream& rStrm )
@@ -2448,7 +2926,7 @@ void XclImpChAxis::ReadSubRecord( XclImpStream& rStrm )
     switch( rStrm.GetRecId() )
     {
         case EXC_ID_CHLABELRANGE:
-            mxLabelRange.reset( new XclImpChLabelRange );
+            mxLabelRange.reset( new XclImpChLabelRange( GetChRoot() ) );
             mxLabelRange->ReadChLabelRange( rStrm );
         break;
         case EXC_ID_CHVALUERANGE:
@@ -2460,7 +2938,7 @@ void XclImpChAxis::ReadSubRecord( XclImpStream& rStrm )
             mxFormat->ReadChFormat( rStrm );
         break;
         case EXC_ID_CHTICK:
-            mxTick.reset( new XclImpChTick );
+            mxTick.reset( new XclImpChTick( GetChRoot() ) );
             mxTick->ReadChTick( rStrm );
         break;
         case EXC_ID_CHFONT:
@@ -2470,14 +2948,31 @@ void XclImpChAxis::ReadSubRecord( XclImpStream& rStrm )
         case EXC_ID_CHAXISLINE:
             ReadChAxisLine( rStrm );
         break;
-        case EXC_ID_CHEND:
-            // remove invisible grid lines completely
-            if( mxMajorGrid.is() && !mxMajorGrid->HasLine() )
-                mxMajorGrid.reset();
-            if( mxMinorGrid.is() && !mxMinorGrid->HasLine() )
-                mxMinorGrid.reset();
-        break;
     }
+}
+
+void XclImpChAxis::Finalize()
+{
+    // remove invisible grid lines completely
+    if( mxMajorGrid.is() && !mxMajorGrid->HasLine() )
+        mxMajorGrid.reset();
+    if( mxMinorGrid.is() && !mxMinorGrid->HasLine() )
+        mxMinorGrid.reset();
+}
+
+sal_uInt16 XclImpChAxis::GetFontIndex() const
+{
+    return mxFont.is() ? mxFont->GetFontIndex() : EXC_FONT_NOTFOUND;
+}
+
+Color XclImpChAxis::GetFontColor() const
+{
+    return mxTick.is() ? mxTick->GetFontColor() : GetFontAutoColor();
+}
+
+sal_uInt16 XclImpChAxis::GetRotation() const
+{
+    return mxTick.is() ? mxTick->GetRotation() : EXC_CHART_AUTOROTATION;
 }
 
 void XclImpChAxis::Convert( ScfPropertySet& rAxisProp, ScfPropertySet& rMajorProp, ScfPropertySet& rMinorProp ) const
@@ -2487,17 +2982,11 @@ void XclImpChAxis::Convert( ScfPropertySet& rAxisProp, ScfPropertySet& rMajorPro
         the primary Y axis does not do this... */
     if( HasLabels() )
     {
+        // font settings from CHFONT record or from default text
         if( mxFont.is() )
-        {
-            mxFont->Convert( GetChRoot(), rAxisProp );
-            if( mxTick.is() )
-                mxTick->ConvertFontColor( GetChRoot(), rAxisProp );
-        }
+            ConvertFontBase( GetChRoot(), rAxisProp );
         else if( const XclImpChText* pDefText = GetChartData().GetDefaultText( EXC_CHDEFTEXT_AXIS ).get() )
-        {
-            // no CHFONT record - use font and color information from default text
             pDefText->ConvertFont( rAxisProp );
-        }
     }
 
     // number format
@@ -2546,7 +3035,7 @@ void XclImpChAxis::ReadChAxisLine( XclImpStream& rStrm )
     }
 
     if( pxFrame )
-        pxFrame->reset( new XclImpChFrame );
+        pxFrame->reset( new XclImpChFrame( EXC_CHOBJLINK_DIAGRAM ) );
 
     bool bLoop = pxLineFmt || pxFrame;
     while( bLoop )
@@ -2584,7 +3073,7 @@ inline void lclWriteBoolProperty( ScfPropertySet& rPropSet, const OUString& rPro
 } // namespace
 
 XclImpChAxisHelper::XclImpChAxisHelper(
-        XclImpChAxisRef xAxis, XclImpChTextRef xTitle, XDiagramRef xDiagram ) :
+        XclImpChAxisRef xAxis, XclImpChTextRef xTitle, Reference< XDiagram > xDiagram ) :
     mxAxis( xAxis ),
     mxTitle( xTitle ),
     maDiaProp( xDiagram )
@@ -2614,14 +3103,14 @@ XclImpChAxesSet::XclImpChAxesSet( const XclImpChRoot& rRoot, sal_uInt16 nAxesSet
 {
     maData.mnAxesSetId = nAxesSetId;
     // insert a default chart format, used to always have a filled map
-    XclImpChChartFormatRef xDefFmt( new XclImpChChartFormat( GetChRoot() ) );
-    maChartFmts[ xDefFmt->GetGroupIdx() ] = xDefFmt;
+    XclImpChChartGroupRef xDefFmt( new XclImpChChartGroup( GetChRoot() ) );
+    maChartGroups[ xDefFmt->GetGroupIdx() ] = xDefFmt;
 }
 
 void XclImpChAxesSet::ReadHeaderRecord( XclImpStream& rStrm )
 {
     DBG_ASSERT( !mbAlive, "XclImpChAxesSet::ReadHeaderRecord - axes set read multiple times" );
-    rStrm >> maData.mnAxesSetId >> maData.maPos;
+    rStrm >> maData.mnAxesSetId >> maData.maRect;
     mbAlive = true;
 }
 
@@ -2629,9 +3118,9 @@ void XclImpChAxesSet::ReadSubRecord( XclImpStream& rStrm )
 {
     switch( rStrm.GetRecId() )
     {
-        case EXC_ID_CHPOS:
-            mxPos.reset( new XclImpChPos );
-            mxPos->ReadChPos( rStrm );
+        case EXC_ID_CHFRAMEPOS:
+            mxPos.reset( new XclImpChFramePos );
+            mxPos->ReadChFramePos( rStrm );
         break;
         case EXC_ID_CHAXIS:
             ReadChAxis( rStrm );
@@ -2642,13 +3131,13 @@ void XclImpChAxesSet::ReadSubRecord( XclImpStream& rStrm )
         case EXC_ID_CHPLOTFRAME:
             ReadChPlotFrame( rStrm );
         break;
-        case EXC_ID_CHCHARTFORMAT:
-            ReadChChartFormat( rStrm );
+        case EXC_ID_CHCHARTGROUP:
+            ReadChChartGroup( rStrm );
         break;
         case EXC_ID_CHEND:
             // #i47745# missing plot frame -> invisible border and area
             if( !mxPlotFrame )
-                mxPlotFrame.reset( new XclImpChFrame( EXC_ID_CHPLOTFRAME ) );
+                mxPlotFrame.reset( new XclImpChFrame( EXC_CHOBJLINK_DIAGRAM ) );
         break;
     }
 }
@@ -2657,24 +3146,29 @@ void XclImpChAxesSet::Finalize()
 {
     // finalize chart format (checks and sets valid chart type)
     if( GetAxesSetId() == EXC_CHAXESSET_PRIMARY )
-        maChartFmts.begin()->second->Finalize();
+        maChartGroups.begin()->second->Finalize();
+
+    // finalize axes
+    if( mxXAxis.is() ) mxXAxis->Finalize();
+    if( mxYAxis.is() ) mxYAxis->Finalize();
+    if( mxZAxis.is() ) mxZAxis->Finalize();
 
     // finalize axis titles
     XclImpChTextRef xDefText = GetChartData().GetDefaultText( EXC_CHDEFTEXT_AXIS );
-    lclUpdateTitle( mxXAxisTitle, xDefText );
-    lclUpdateTitle( mxYAxisTitle, xDefText );
-    lclUpdateTitle( mxZAxisTitle, xDefText );
+    lclFinalizeTitle( mxXAxisTitle, xDefText );
+    lclFinalizeTitle( mxYAxisTitle, xDefText );
+    lclFinalizeTitle( mxZAxisTitle, xDefText );
 }
 
 XclImpChLegendRef XclImpChAxesSet::GetLegend() const
 {
     XclImpChLegendRef xLegend;
-    for( XclImpChChartFormatMap::const_iterator aIt = maChartFmts.begin(), aEnd = maChartFmts.end(); !xLegend && (aIt != aEnd); ++aIt )
+    for( XclImpChChartGroupMap::const_iterator aIt = maChartGroups.begin(), aEnd = maChartGroups.end(); !xLegend && (aIt != aEnd); ++aIt )
         xLegend = aIt->second->GetLegend();
     return xLegend;
 }
 
-void XclImpChAxesSet::CreateDiagram( XChartDocRef xChartDoc ) const
+void XclImpChAxesSet::CreateDiagram( Reference< XChartDocument > xChartDoc ) const
 {
     // create diagram type from first chart group in primary axes set
     if( GetAxesSetId() == EXC_CHAXESSET_PRIMARY )
@@ -2689,7 +3183,7 @@ void XclImpChAxesSet::CreateDiagram( XChartDocRef xChartDoc ) const
     }
 }
 
-void XclImpChAxesSet::Convert( XChartDocRef xChartDoc ) const
+void XclImpChAxesSet::Convert( Reference< XChartDocument > xChartDoc ) const
 {
     Reference< XDiagram > xDiagram( xChartDoc->getDiagram() );
     switch( GetAxesSetId() )
@@ -2747,19 +3241,19 @@ void XclImpChAxesSet::ReadChPlotFrame( XclImpStream& rStrm )
 {
     if( (rStrm.GetNextRecId() == EXC_ID_CHFRAME) && rStrm.StartNextRecord() )
     {
-        mxPlotFrame.reset( new XclImpChFrame( EXC_ID_CHPLOTFRAME ) );
+        mxPlotFrame.reset( new XclImpChFrame( EXC_CHOBJLINK_DIAGRAM ) );
         mxPlotFrame->ReadRecordGroup( rStrm );
     }
 }
 
-void XclImpChAxesSet::ReadChChartFormat( XclImpStream& rStrm )
+void XclImpChAxesSet::ReadChChartGroup( XclImpStream& rStrm )
 {
-    XclImpChChartFormatRef xChartFmt( new XclImpChChartFormat( GetChRoot() ) );
-    xChartFmt->ReadRecordGroup( rStrm );
-    maChartFmts[ xChartFmt->GetGroupIdx() ] = xChartFmt;
+    XclImpChChartGroupRef xChartGroup( new XclImpChChartGroup( GetChRoot() ) );
+    xChartGroup->ReadRecordGroup( rStrm );
+    maChartGroups[ xChartGroup->GetGroupIdx() ] = xChartGroup;
 }
 
-void XclImpChAxesSet::ConvertXAxis( XDiagramRef xDiagram ) const
+void XclImpChAxesSet::ConvertXAxis( Reference< XDiagram > xDiagram ) const
 {
     XclImpChAxisHelper aHelper( mxXAxis, mxXAxisTitle, xDiagram );
     Reference< XAxisXSupplier > xAxisSup( xDiagram, UNO_QUERY );
@@ -2789,7 +3283,7 @@ void XclImpChAxesSet::ConvertXAxis( XDiagramRef xDiagram ) const
     aHelper.Convert( GetChRoot() );
 }
 
-void XclImpChAxesSet::ConvertYAxis( XDiagramRef xDiagram ) const
+void XclImpChAxesSet::ConvertYAxis( Reference< XDiagram > xDiagram ) const
 {
     XclImpChAxisHelper aHelper( mxYAxis, mxYAxisTitle, xDiagram );
     Reference< XAxisYSupplier > xAxisSup( xDiagram, UNO_QUERY );
@@ -2807,7 +3301,7 @@ void XclImpChAxesSet::ConvertYAxis( XDiagramRef xDiagram ) const
     aHelper.Convert( GetChRoot() );
 }
 
-void XclImpChAxesSet::ConvertSecYAxis( XDiagramRef xDiagram ) const
+void XclImpChAxesSet::ConvertSecYAxis( Reference< XDiagram > xDiagram ) const
 {
     XclImpChAxisHelper aHelper( mxYAxis, mxYAxisTitle, xDiagram );
     Reference< XTwoAxisYSupplier > xAxisSup( xDiagram, UNO_QUERY );
@@ -2820,7 +3314,7 @@ void XclImpChAxesSet::ConvertSecYAxis( XDiagramRef xDiagram ) const
     aHelper.Convert( GetChRoot() );
 }
 
-void XclImpChAxesSet::ConvertZAxis( XDiagramRef xDiagram ) const
+void XclImpChAxesSet::ConvertZAxis( Reference< XDiagram > xDiagram ) const
 {
     XclImpChAxisHelper aHelper( mxZAxis, mxZAxisTitle, xDiagram );
     Reference< XAxisZSupplier > xAxisSup( xDiagram, UNO_QUERY );
@@ -2838,7 +3332,7 @@ void XclImpChAxesSet::ConvertZAxis( XDiagramRef xDiagram ) const
     aHelper.Convert( GetChRoot() );
 }
 
-void XclImpChAxesSet::ConvertBackground( XDiagramRef xDiagram ) const
+void XclImpChAxesSet::ConvertBackground( Reference< XDiagram > xDiagram ) const
 {
     Reference< X3DDisplay > x3DDisplay( xDiagram, UNO_QUERY );
     if( x3DDisplay.is() )
@@ -2865,47 +3359,25 @@ void XclImpChAxesSet::ConvertBackground( XDiagramRef xDiagram ) const
 
 // The chart object ===========================================================
 
-namespace {
-
-void lclLockChartDoc( Reference< XChartDocument > xChartDoc )
-{
-    Reference< XModel > xModel( xChartDoc, UNO_QUERY );
-    if( xModel.is() )
-        xModel->lockControllers();
-}
-
-void lclUnlockChartDoc( Reference< XChartDocument > xChartDoc, ScfProgressBar& rProgress )
-{
-    Reference< XModel > xModel( xChartDoc, UNO_QUERY );
-    if( xModel.is() )
-        xModel->unlockControllers();
-    rProgress.Progress( EXC_CHART_PROGRESS_SIZE );
-}
-
-} // namespace
-
-XclImpChChart::XclImpChChart( const XclImpChRoot& rRoot ) :
-    XclImpChRoot( rRoot ),
+XclImpChChart::XclImpChChart( const XclImpRoot& rRoot ) :
+    XclImpChRoot( rRoot, this ),
     meOrient( EXC_CHORIENT_EMPTY ),
     mbHasValue( false ),
     mbHasCateg( false ),
     mbHasTitle( false )
 {
-    // remember this object as current chart data object in root data
-    SetChartData( this );
-    // called after SetChartData(), to have a valid chart data object
-    mxPrimAxesSet.reset( new XclImpChAxesSet( rRoot, EXC_CHAXESSET_PRIMARY ) );
-    mxSecnAxesSet.reset( new XclImpChAxesSet( rRoot, EXC_CHAXESSET_SECONDARY ) );
+    mxPrimAxesSet.reset( new XclImpChAxesSet( GetChRoot(), EXC_CHAXESSET_PRIMARY ) );
+    mxSecnAxesSet.reset( new XclImpChAxesSet( GetChRoot(), EXC_CHAXESSET_SECONDARY ) );
 }
 
 XclImpChChart::~XclImpChChart()
 {
-    SetChartData( 0 );
 }
 
 void XclImpChChart::ReadHeaderRecord( XclImpStream& rStrm )
 {
-    rStrm >> maPos;
+    // coordinates are stored as 16.16 fixed point
+    rStrm >> maRect;
     meOrient = EXC_CHORIENT_EMPTY;
 }
 
@@ -2914,7 +3386,7 @@ void XclImpChChart::ReadSubRecord( XclImpStream& rStrm )
     switch( rStrm.GetRecId() )
     {
         case EXC_ID_CHFRAME:
-            mxFrame.reset( new XclImpChFrame );
+            mxFrame.reset( new XclImpChFrame( EXC_CHOBJLINK_BACKGROUND ) );
             mxFrame->ReadRecordGroup( rStrm );
         break;
         case EXC_ID_CHSERIES:
@@ -3003,10 +3475,15 @@ bool XclImpChChart::HasHeaderRow() const
         (mbHasCateg && (meOrient == EXC_CHORIENT_HORIZONTAL));
 }
 
+bool XclImpChChart::Is3dChart() const
+{
+    return mxPrimAxesSet->GetDefChartGroup().Is3dChart();
+}
+
 bool XclImpChChart::IsStockChart() const
 {
-    const XclImpChChartFormat& rPrimGroup = mxPrimAxesSet->GetDefChartGroup();
-    const XclImpChChartFormat& rSecnGroup = mxSecnAxesSet->GetDefChartGroup();
+    const XclImpChChartGroup& rPrimGroup = mxPrimAxesSet->GetDefChartGroup();
+    const XclImpChChartGroup& rSecnGroup = mxSecnAxesSet->GetDefChartGroup();
 
     bool bHasPrim = mxPrimAxesSet->IsAlive();
     bool bPrimHiLo = bHasPrim && (rPrimGroup.GetChartTypeId() == EXC_ID_CHLINE) && rPrimGroup.HasHiLoLine();
@@ -3042,12 +3519,12 @@ sal_uInt16 XclImpChChart::GetChartGroupAxesSetId( sal_uInt16 nGroupIdx ) const
     return GetChartGroupAxesSet( nGroupIdx ).GetAxesSetId();
 }
 
-XclImpChChartFormatRef XclImpChChart::GetChartGroup( sal_uInt16 nGroupIdx ) const
+XclImpChChartGroupRef XclImpChChart::GetChartGroup( sal_uInt16 nGroupIdx ) const
 {
     return GetChartGroupAxesSet( nGroupIdx ).GetChartGroup( nGroupIdx );
 }
 
-XclImpChChartFormat& XclImpChChart::GetDefChartGroup( sal_uInt16 nGroupIdx ) const
+XclImpChChartGroup& XclImpChChart::GetDefChartGroup( sal_uInt16 nGroupIdx ) const
 {
     return GetChartGroupAxesSet( nGroupIdx ).GetDefChartGroup();
 }
@@ -3069,15 +3546,6 @@ sal_uInt16 XclImpChChart::GetChartGroupSeriesCount( sal_uInt16 nGroupIdx ) const
     return nSeriesCnt;
 }
 
-XclImpChLegendRef XclImpChChart::GetLegend() const
-{
-    // #i49218# legend may be attached to primary or secondary axes set
-    XclImpChLegendRef xLegend = mxPrimAxesSet->GetLegend();
-    if( !xLegend )
-        xLegend = mxSecnAxesSet->GetLegend();
-    return xLegend;
-}
-
 XclImpChTextRef XclImpChChart::GetDefaultText( sal_uInt16 nTextId ) const
 {
     return maDefTexts.get( nTextId );
@@ -3091,20 +3559,19 @@ bool XclImpChChart::HasAnySeriesLine() const
     return bHasLine;
 }
 
-void XclImpChChart::Convert( XChartDocRef xChartDoc, ScfProgressBar& rProgress ) const
+void XclImpChChart::Convert( Reference< XChartDocument > xChartDoc, ScfProgressBar& rProgress ) const
 {
-    // lock the model to suppress any internal updates
-    lclLockChartDoc( xChartDoc );
+    // initialize conversion (locks the model to suppress any internal updates)
+    InitConversion( xChartDoc );
 
     /*  chart type, creates the XDiagram in the chart document (must be called
         first), 3d mode, axes on/off, axis titles on/off */
     mxPrimAxesSet->CreateDiagram( xChartDoc );
 
     // chart title on/off, legend on/off
-    XclImpChLegendRef xLegend = GetLegend();
     ScfPropertySet aChartProp( xChartDoc );
     aChartProp.SetBoolProperty( EXC_CHPROP_HASMAINTIT, mxTitle.is() );
-    aChartProp.SetBoolProperty( EXC_CHPROP_HASLEGEND, xLegend.is() );
+    aChartProp.SetBoolProperty( EXC_CHPROP_HASLEGEND, mxLegend.is() );
 
     // source data orientation
     if( mbHasValue )
@@ -3118,18 +3585,18 @@ void XclImpChChart::Convert( XChartDocRef xChartDoc, ScfProgressBar& rProgress )
 
     /*  Unlock/lock the model once. This will create internal objects (e.g.
         axes, legend, titles) to be able to set their properties. */
-    lclUnlockChartDoc( xChartDoc, rProgress );
-    lclLockChartDoc( xChartDoc );
+    FinishConversion( rProgress );
+    InitConversion( xChartDoc );
 
     // axes settings
     mxPrimAxesSet->Convert( xChartDoc );
     mxSecnAxesSet->Convert( xChartDoc );
 
     // legend properties
-    if( xLegend.is() )
+    if( mxLegend.is() )
     {
         ScfPropertySet aLegProp( xChartDoc->getLegend() );
-        xLegend->Convert( aLegProp );
+        mxLegend->Convert( aLegProp );
     }
 
     // series formatting and order
@@ -3148,8 +3615,8 @@ void XclImpChChart::Convert( XChartDocRef xChartDoc, ScfProgressBar& rProgress )
         mxTitle->ConvertTitle( aTitleProp );
     }
 
-    // Unlock the model. Will finalize the chart.
-    lclUnlockChartDoc( xChartDoc, rProgress );
+    // unlock the model
+    FinishConversion( rProgress );
 }
 
 void XclImpChChart::ReadChSeries( XclImpStream& rStrm )
@@ -3203,22 +3670,27 @@ void XclImpChChart::ReadChText( XclImpStream& rStrm )
 
 void XclImpChChart::Finalize()
 {
-    // finalize source data (must be done first)
-    CalcOrientation();
-    // chart title (may reset mxTitle, if it does not contain a string)
-    lclUpdateTitle( mxTitle, GetDefaultText( EXC_CHDEFTEXT_TITLE ) );
-    // axes sets, updates global series formats -> must be called before FinalizeDataFormats()
+    // finalize series (must be done first)
+    FinalizeSeries();
+    // axes sets, updates chart group default formats -> must be called before FinalizeDataFormats()
     mxPrimAxesSet->Finalize();
     mxSecnAxesSet->Finalize();
     // formatting of all series
     FinalizeDataFormats();
-    // legend
-    XclImpChLegendRef xLegend = GetLegend();
-    if( xLegend.is() )
-        xLegend->Finalize();
+    // #i49218# legend may be attached to primary or secondary axes set
+    mxLegend = mxPrimAxesSet->GetLegend();
+    if( !mxLegend )
+        mxLegend = mxSecnAxesSet->GetLegend();
+    if( mxLegend.is() )
+        mxLegend->Finalize();
+    // #i47745# missing frame -> invisible border and area
+    if( !mxFrame )
+        mxFrame.reset( new XclImpChFrame( EXC_CHOBJLINK_BACKGROUND ) );
+    // chart title (may reset mxTitle, if it does not contain a string)
+    lclFinalizeTitle( mxTitle, GetDefaultText( EXC_CHDEFTEXT_TITLE ) );
 }
 
-void XclImpChChart::CalcOrientation()
+void XclImpChChart::FinalizeSeries()
 {
     maValidSeries.clear();
 
@@ -3233,7 +3705,14 @@ void XclImpChChart::CalcOrientation()
     for( XclImpChSeriesVec::iterator aSIt = maSeries.begin(), aSEnd = maSeries.end(); aSIt != aSEnd; ++aSIt )
     {
         XclImpChSeriesRef xSeries = *aSIt;
-        if( !xSeries->HasParentSeries() && xSeries->HasValidValues() )
+        if( xSeries->HasParentSeries() )
+        {
+            /*  Process child series (trend lines and error bars). Data of
+                child series will be set at the connected parent series. */
+            if( xSeries->GetParentIdx() < maSeries.size() )
+                maSeries[ xSeries->GetParentIdx() ]->AddChildSeries( *xSeries );
+        }
+        else if( xSeries->HasValidValues() )
         {
             /*  Compare following valid series with first valid series, push
                 all valid series into the temporary vector. */
@@ -3319,7 +3798,7 @@ void XclImpChChart::FinalizeDataFormats()
         assigned to. This makes it possible to have a data format that is
         related to another series, e.g. a CHDATAFORMAT group for series 2 is
         part of a CHSERIES group that describes series 1. Therefore the chart
-        itself has collected all CHDATAFORMAT groups to be able to collect data
+        itself has collected all CHDATAFORMAT groups to be able to store data
         format groups for series that have not been imported at that time. This
         loop finally assigns these groups to the related series. */
     for( XclImpChDataFormatMap::const_iterator aMIt = maDataFmts.begin(), aMEnd = maDataFmts.end(); aMIt != aMEnd; ++aMIt )
@@ -3336,7 +3815,7 @@ void XclImpChChart::FinalizeDataFormats()
         (*aVIt)->FinalizeDataFormats();
 }
 
-void XclImpChChart::ConvertSeries( XChartDocRef xChartDoc ) const
+void XclImpChChart::ConvertSeries( Reference< XChartDocument > xChartDoc ) const
 {
     if( !maValidSeries.empty() )
     {
@@ -3368,10 +3847,10 @@ void XclImpChChart::ConvertSeries( XChartDocRef xChartDoc ) const
     }
 }
 
-void XclImpChChart::ConvertSeriesOrder( XChartDocRef xChartDoc ) const
+void XclImpChChart::ConvertSeriesOrder( Reference< XChartDocument > xChartDoc ) const
 {
     /*  Reorder the series according to source data from Excel. The properties
-        'TranlatedColumns' or 'TranslatedRows' only reorder the source data,
+        'TranslatedColumns' or 'TranslatedRows' only reorder the source data,
         but leave the series formatting unchanged. Therefore the previous part
         of the filter has used maValidSeries to set the series formatting.
         maValidSeries contains the formatting in the same order displayed by
@@ -3432,10 +3911,8 @@ void XclImpChChart::ConvertSeriesOrder( XChartDocRef xChartDoc ) const
                 if( ::std::adjacent_find( aOIdxBeg, aOIdxEnd, ::std::greater_equal< sal_Int32 >() ) != aOIdxEnd )
                 {
                     // create the UNO sequence and set the property
-                    sal_Int32 nSize = static_cast< sal_Int32 >( aOrderedIndexes.size() );
-                    Sequence< sal_Int32 > aOrderedSeq( &aOrderedIndexes.front(), nSize );
                     ScfPropertySet aChartProp( xChartDoc );
-                    aChartProp.SetProperty( aPropName, aOrderedSeq );
+                    aChartProp.SetProperty( aPropName, ScfApiHelper::VectorToSequence( aOrderedIndexes ) );
                 }
             }
         }
@@ -3460,7 +3937,6 @@ void XclImpChart::ReadChartSubStream( XclImpStream& rStrm )
     {
         sal_uInt16 nRecId = rStrm.GetRecId();
         bLoop = nRecId != EXC_ID_EOF;
-
 
         // page settings - only for charts in entire sheet
         if( mbOwnTab ) switch( rStrm.GetRecId() )
@@ -3495,9 +3971,6 @@ void XclImpChart::ReadChartSubStream( XclImpStream& rStrm )
             case EXC_ID_CHCHART:        ReadChChart( rStrm );                   break;
             case EXC_ID_OBJ:            GetTracer().TraceChartEmbeddedObj();    break;
             case EXC_ID8_CHPIVOTREF:    GetTracer().TracePivotChartExists();    break;
-
-            // #90118# be able to read following CONTINUE record as MSODRAWING
-            case EXC_ID_EOF:            rStrm.ResetRecord( false );             break;
         }
     }
 }
@@ -3519,21 +3992,21 @@ bool XclImpChart::HasHeaderRow() const
     return mxChartData.is() && mxChartData->HasHeaderRow();
 }
 
-sal_uInt32 XclImpChart::GetProgressSize() const
+sal_Size XclImpChart::GetProgressSize() const
 {
     return mxChartData.is() ? mxChartData->GetProgressSize() : 0;
 }
 
-void XclImpChart::Convert( XChartDocRef xChartDoc, ScfProgressBar& rProgress ) const
+void XclImpChart::Convert( Reference< XInterface > xComp, ScfProgressBar& rProgress ) const
 {
+    Reference< XChartDocument > xChartDoc( xComp, UNO_QUERY );
     if( mxChartData.is() && xChartDoc.is() )
         mxChartData->Convert( xChartDoc, rProgress );
 }
 
 void XclImpChart::ReadChChart( XclImpStream& rStrm )
 {
-    XclImpChRoot aRoot( GetRoot(), maRootData );
-    mxChartData.reset( new XclImpChChart( aRoot ) );
+    mxChartData.reset( new XclImpChChart( GetRoot() ) );
     mxChartData->ReadRecordGroup( rStrm );
 }
 
