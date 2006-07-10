@@ -4,9 +4,9 @@
  *
  *  $RCSfile: core_resource.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:36:10 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:13:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,11 @@ class SimpleResMgr;
 namespace dbaccess
 {
 
-#define DBACORE_RESSTRING(id) ResourceManager::loadString(id)
+#define DBA_RES( id )                       ResourceManager::loadString( id )
+#define DBA_RES_PARAM( id, ascii, replace ) ResourceManager::loadString( id, ascii, replace )
+
+#define DBACORE_RESSTRING( id ) DBA_RES( id )
+        // (compatibility)
 
     //==================================================================
     //= ResourceManager
@@ -74,9 +78,24 @@ namespace dbaccess
         static void ensureImplExists();
 
     public:
-        /** loads the string with the specified resource id from the FormLayer resource file
+        /** loads the string with the specified resource id
         */
-        static ::rtl::OUString loadString(sal_uInt16 _nResId);
+        static ::rtl::OUString  loadString(sal_uInt16 _nResId);
+
+        /** loads a string from the resource file, substituting a placeholder with a given string
+
+            @param  _nResId
+                the resource ID of the string to loAD
+            @param  _pPlaceholderAscii
+                the ASCII representation of the placeholder string
+            @param  _rReplace
+                the string which should substutite the placeholder
+        */
+        static ::rtl::OUString  loadString(
+                sal_uInt16              _nResId,
+                const sal_Char*         _pPlaceholderAscii,
+                const ::rtl::OUString&  _rReplace
+        );
     };
 
 //.........................................................................
