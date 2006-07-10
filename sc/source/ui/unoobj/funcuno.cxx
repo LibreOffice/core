@@ -4,9 +4,9 @@
  *
  *  $RCSfile: funcuno.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:47:16 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:09:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -377,6 +377,131 @@ void lcl_AddRef( ScTokenArray& rArray, long nStartRow, long nColCount, long nRow
     rArray.AddDoubleReference(aRef);
 }
 
+class SimpleVisitor
+{
+protected:
+    bool mbArgError;
+    ScDocument* mpDoc;
+public:
+    SimpleVisitor( ScDocument* pDoc ) : mpDoc( pDoc ), mbArgError( false ) {}
+    // could possibly just get away with JUST the following overload
+    // 1) virtual void visitElem( long& nCol, long& nRow, const double& elem )
+    // 2) virtual void visitElem( long& nCol, long& nRow, const rtl::OUString& elem )
+    // 3) virtual void visitElem( long& nCol, long& nRow, const uno::Any& elem )
+    // the other types methods are here just to reflect the orig code and for
+    // completeness.
+
+    void visitElem( long nCol, long nRow, const sal_Int16& elem )
+    {
+        mpDoc->SetValue( (SCCOL) nCol, (SCROW) nRow, 0, elem );
+    }
+    void visitElem( long nCol, long nRow, const sal_Int32& elem )
+    {
+        mpDoc->SetValue( (SCCOL) nCol, (SCROW) nRow, 0, elem );
+    }
+    void visitElem( long nCol, long nRow, const double& elem )
+    {
+        mpDoc->SetValue( (SCCOL) nCol, (SCROW) nRow, 0, elem );
+    }
+    void visitElem( long nCol, long nRow, const rtl::OUString& elem )
+    {
+        if ( elem.getLength() )
+            mpDoc->PutCell( (SCCOL) nCol, (SCROW) nRow, 0,
+                                        new ScStringCell( elem ) );
+    }
+    void visitElem( long nCol, long nRow, const uno::Any& rElement )
+    {
+        uno::TypeClass eElemClass = rElement.getValueTypeClass();
+        if ( eElemClass == uno::TypeClass_VOID )
+        {
+            // leave empty
+        }
+        else if ( eElemClass == uno::TypeClass_BYTE ||
+                    eElemClass == uno::TypeClass_SHORT ||
+                    eElemClass == uno::TypeClass_UNSIGNED_SHORT ||
+                    eElemClass == uno::TypeClass_LONG ||
+                    eElemClass == uno::TypeClass_UNSIGNED_LONG ||
+                    eElemClass == uno::TypeClass_FLOAT ||
+                    eElemClass == uno::TypeClass_DOUBLE )
+        {
+            //  #87871# accept integer types because Basic passes a floating point
+            //  variable as byte, short or long if it's an integer number.
+            double fVal;
+            rElement >>= fVal;
+            visitElem( nCol, nRow, fVal );
+        }
+        else if ( eElemClass == uno::TypeClass_STRING )
+        {
+            rtl::OUString aUStr;
+            rElement >>= aUStr;
+            visitElem( nCol, nRow, aUStr );
+        }
+        else
+            mbArgError = true;
+    }
+    bool hasArgError() { return mbArgError; }
+};
+
+template< class seq >
+class SequencesContainer
+{
+    uno::Sequence< uno::Sequence< seq > > maSeq;
+
+    long& mrDocRow;
+    bool mbOverflow;
+    bool mbArgError;
+    ScDocument* mpDoc;
+    ScTokenArray& mrTokenArr;
+
+public:
+    SequencesContainer( const uno::Any& rArg, ScTokenArray& rTokenArr, long& rDocRow, ScDocument* pDoc ) :
+        mrTokenArr( rTokenArr ), mrDocRow( rDocRow ), mbOverflow(false), mbArgError(false), mpDoc( pDoc )
+    {
+        rArg >>= maSeq;
+    }
+
+    void process()
+    {
+        SimpleVisitor aVisitor(mpDoc);
+        long nStartRow = mrDocRow;
+        long nRowCount = maSeq.getLength();
+        long nMaxColCount = 0;
+        const uno::Sequence< seq >* pRowArr = maSeq.getConstArray();
+        for ( long nRow=0; nRow<nRowCount; nRow++ )
+        {
+            long nColCount = pRowArr[nRow].getLength();
+            if ( nColCount > nMaxColCount )
+                nMaxColCount = nColCount;
+            const seq* pColArr = pRowArr[nRow].getConstArray();
+            for (long nCol=0; nCol<nColCount; nCol++)
+                if ( nCol <= MAXCOL && mrDocRow <= MAXROW )
+                    aVisitor.visitElem( nCol, mrDocRow, pColArr[ nCol ] );
+                else
+                    mbOverflow=true;
+            mrDocRow++;
+        }
+        mbArgError = aVisitor.hasArgError();
+        if ( nRowCount && nMaxColCount && !mbOverflow )
+            lcl_AddRef( mrTokenArr, nStartRow, nMaxColCount, nRowCount );
+    }
+    bool getOverflow() { return mbOverflow; }
+    bool getArgError() { return mbArgError; }
+};
+
+template <class T>
+class ArrayOfArrayProc
+{
+public:
+static void processSequences( ScDocument* pDoc, const uno::Any& rArg, ScTokenArray& rTokenArr,
+                                long& rDocRow, BOOL& rArgErr, BOOL& rOverflow )
+{
+    SequencesContainer< T > aContainer( rArg, rTokenArr, rDocRow, pDoc );
+    aContainer.process();
+    rArgErr = aContainer.getArgError();
+    rOverflow = aContainer.getOverflow();
+}
+};
+
 uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
                             const uno::Sequence<uno::Any>& aArguments )
                 throw(container::NoSuchElementException, lang::IllegalArgumentException,
@@ -391,6 +516,11 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
     //  (deleted in ScTempDocSource dtor)
     ScTempDocSource aSource( aDocCache );
     ScDocument* pDoc = aSource.GetDocument();
+    const static SCTAB nTempSheet = 1;
+    // Create an extra tab to contain the Function Cell
+    // this will allow full rows to be used.
+    if ( !pDoc->HasTable( nTempSheet ) )
+        pDoc->MakeTable( nTempSheet );
 
     if (!ScCompiler::pSymbolTableEnglish)
     {
@@ -459,168 +589,23 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
         }
         else if ( aType.equals( getCppuType( (uno::Sequence< uno::Sequence<sal_Int16> > *)0 ) ) )
         {
-            uno::Sequence< uno::Sequence<sal_Int16> > aRowSeq;
-            rArg >>= aRowSeq;
-
-            long nStartRow = nDocRow;
-            long nMaxColCount = 0;
-            long nRowCount = aRowSeq.getLength();
-            const uno::Sequence<sal_Int16>* pRowArr = aRowSeq.getConstArray();
-            for (long nRow=0; nRow<nRowCount; nRow++)
-            {
-                long nColCount = pRowArr[nRow].getLength();
-                if ( nColCount > nMaxColCount )
-                    nMaxColCount = nColCount;
-                const sal_Int16* pColArr = pRowArr[nRow].getConstArray();
-                for (long nCol=0; nCol<nColCount; nCol++)
-                    if ( nCol <= MAXCOL && nDocRow <= MAXROW )
-                        pDoc->SetValue( (SCCOL) nCol, (SCROW) nDocRow, 0, pColArr[nCol] );
-                    else
-                        bOverflow = TRUE;
-                ++nDocRow;
-            }
-
-            if ( nRowCount && nMaxColCount && !bOverflow )
-                lcl_AddRef( aTokenArr, nStartRow, nMaxColCount, nRowCount );
+            ArrayOfArrayProc<sal_Int16>::processSequences( pDoc, rArg, aTokenArr, nDocRow, bArgErr, bOverflow );
         }
         else if ( aType.equals( getCppuType( (uno::Sequence< uno::Sequence<sal_Int32> > *)0 ) ) )
         {
-            uno::Sequence< uno::Sequence<sal_Int32> > aRowSeq;
-            rArg >>= aRowSeq;
-
-            long nStartRow = nDocRow;
-            long nMaxColCount = 0;
-            long nRowCount = aRowSeq.getLength();
-            const uno::Sequence<sal_Int32>* pRowArr = aRowSeq.getConstArray();
-            for (long nRow=0; nRow<nRowCount; nRow++)
-            {
-                long nColCount = pRowArr[nRow].getLength();
-                if ( nColCount > nMaxColCount )
-                    nMaxColCount = nColCount;
-                const sal_Int32* pColArr = pRowArr[nRow].getConstArray();
-                for (long nCol=0; nCol<nColCount; nCol++)
-                    if ( nCol <= MAXCOL && nDocRow <= MAXROW )
-                        pDoc->SetValue( (SCCOL) nCol, (SCROW) nDocRow, 0, pColArr[nCol] );
-                    else
-                        bOverflow = TRUE;
-                ++nDocRow;
-            }
-
-            if ( nRowCount && nMaxColCount && !bOverflow )
-                lcl_AddRef( aTokenArr, nStartRow, nMaxColCount, nRowCount );
+            ArrayOfArrayProc<sal_Int32>::processSequences( pDoc, rArg, aTokenArr, nDocRow, bArgErr, bOverflow );
         }
         else if ( aType.equals( getCppuType( (uno::Sequence< uno::Sequence<double> > *)0 ) ) )
         {
-            uno::Sequence< uno::Sequence<double> > aRowSeq;
-            rArg >>= aRowSeq;
-
-            long nStartRow = nDocRow;
-            long nMaxColCount = 0;
-            long nRowCount = aRowSeq.getLength();
-            const uno::Sequence<double>* pRowArr = aRowSeq.getConstArray();
-            for (long nRow=0; nRow<nRowCount; nRow++)
-            {
-                long nColCount = pRowArr[nRow].getLength();
-                if ( nColCount > nMaxColCount )
-                    nMaxColCount = nColCount;
-                const double* pColArr = pRowArr[nRow].getConstArray();
-                for (long nCol=0; nCol<nColCount; nCol++)
-                    if ( nCol <= MAXCOL && nDocRow <= MAXROW )
-                        pDoc->SetValue( (SCCOL) nCol, (SCROW) nDocRow, 0, pColArr[nCol] );
-                    else
-                        bOverflow = TRUE;
-                ++nDocRow;
-            }
-
-            if ( nRowCount && nMaxColCount && !bOverflow )
-                lcl_AddRef( aTokenArr, nStartRow, nMaxColCount, nRowCount );
+            ArrayOfArrayProc<double>::processSequences( pDoc, rArg, aTokenArr, nDocRow, bArgErr, bOverflow );
         }
         else if ( aType.equals( getCppuType( (uno::Sequence< uno::Sequence<rtl::OUString> > *)0 ) ) )
         {
-            uno::Sequence< uno::Sequence<rtl::OUString> > aRowSeq;
-            rArg >>= aRowSeq;
-
-            long nStartRow = nDocRow;
-            long nMaxColCount = 0;
-            long nRowCount = aRowSeq.getLength();
-            const uno::Sequence<rtl::OUString>* pRowArr = aRowSeq.getConstArray();
-            for (long nRow=0; nRow<nRowCount; nRow++)
-            {
-                long nColCount = pRowArr[nRow].getLength();
-                if ( nColCount > nMaxColCount )
-                    nMaxColCount = nColCount;
-                const rtl::OUString* pColArr = pRowArr[nRow].getConstArray();
-                for (long nCol=0; nCol<nColCount; nCol++)
-                    if ( nCol <= MAXCOL && nDocRow <= MAXROW )
-                    {
-                        if ( pColArr[nCol].getLength() )
-                            pDoc->PutCell( (SCCOL) nCol, (SCROW) nDocRow, 0,
-                                            new ScStringCell( pColArr[nCol] ) );
-                    }
-                    else
-                        bOverflow = TRUE;
-                ++nDocRow;
-            }
-
-            if ( nRowCount && nMaxColCount && !bOverflow )
-                lcl_AddRef( aTokenArr, nStartRow, nMaxColCount, nRowCount );
+            ArrayOfArrayProc<rtl::OUString>::processSequences( pDoc, rArg, aTokenArr, nDocRow, bArgErr, bOverflow );
         }
         else if ( aType.equals( getCppuType( (uno::Sequence< uno::Sequence<uno::Any> > *)0 ) ) )
         {
-            uno::Sequence< uno::Sequence<uno::Any> > aRowSeq;
-            rArg >>= aRowSeq;
-
-            long nStartRow = nDocRow;
-            long nMaxColCount = 0;
-            long nRowCount = aRowSeq.getLength();
-            const uno::Sequence<uno::Any>* pRowArr = aRowSeq.getConstArray();
-            for (long nRow=0; nRow<nRowCount; nRow++)
-            {
-                long nColCount = pRowArr[nRow].getLength();
-                if ( nColCount > nMaxColCount )
-                    nMaxColCount = nColCount;
-                const uno::Any* pColArr = pRowArr[nRow].getConstArray();
-                for (long nCol=0; nCol<nColCount; nCol++)
-                    if ( nCol <= MAXCOL && nDocRow <= MAXROW )
-                    {
-                        const uno::Any& rElement = pColArr[nCol];
-                        uno::TypeClass eElemClass = rElement.getValueTypeClass();
-                        if ( eElemClass == uno::TypeClass_VOID )
-                        {
-                            // leave empty
-                        }
-                        else if ( eElemClass == uno::TypeClass_BYTE ||
-                                    eElemClass == uno::TypeClass_SHORT ||
-                                    eElemClass == uno::TypeClass_UNSIGNED_SHORT ||
-                                    eElemClass == uno::TypeClass_LONG ||
-                                    eElemClass == uno::TypeClass_UNSIGNED_LONG ||
-                                    eElemClass == uno::TypeClass_FLOAT ||
-                                    eElemClass == uno::TypeClass_DOUBLE )
-                        {
-                            //  #87871# accept integer types because Basic passes a floating point
-                            //  variable as byte, short or long if it's an integer number.
-                            double fVal;
-                            rElement >>= fVal;
-                            pDoc->SetValue( (SCCOL) nCol, (SCROW) nDocRow, 0, fVal );
-                        }
-                        else if ( eElemClass == uno::TypeClass_STRING )
-                        {
-                            rtl::OUString aUStr;
-                            rElement >>= aUStr;
-                            if ( aUStr.getLength() )
-                                pDoc->PutCell( (SCCOL) nCol, (SCROW) nDocRow, 0,
-                                                            new ScStringCell( aUStr ) );
-                        }
-                        else
-                            bArgErr = TRUE;     // invalid type
-                    }
-                    else
-                        bOverflow = TRUE;
-                ++nDocRow;
-            }
-
-            if ( nRowCount && nMaxColCount && !bOverflow )
-                lcl_AddRef( aTokenArr, nStartRow, nMaxColCount, nRowCount );
+            ArrayOfArrayProc<uno::Any>::processSequences( pDoc, rArg, aTokenArr, nDocRow, bArgErr, bOverflow );
         }
         else if ( aType.equals( getCppuType( (uno::Reference<table::XCellRange>*)0 ) ) )
         {
@@ -640,7 +625,7 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
                     long nColCount = aSrcRange.aEnd.Col() - aSrcRange.aStart.Col() + 1;
                     long nRowCount = aSrcRange.aEnd.Row() - aSrcRange.aStart.Row() + 1;
 
-                    if ( nStartRow + nRowCount > MAXROW )
+                    if ( nStartRow + nRowCount > MAXROWCOUNT )
                         bOverflow = TRUE;
                     else
                     {
@@ -670,9 +655,9 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
     //
 
     uno::Any aRet;
-    if ( !bArgErr && !bOverflow && nDocRow <= MAXROW )
+    if ( !bArgErr && !bOverflow && nDocRow <= MAXROWCOUNT )
     {
-        ScAddress aFormulaPos( 0, (SCROW)nDocRow, 0 );
+        ScAddress aFormulaPos( 0, 0, nTempSheet );
         ScFormulaCell* pFormula = new ScFormulaCell( pDoc, aFormulaPos, &aTokenArr, MM_FORMULA );
         pDoc->PutCell( aFormulaPos, pFormula );     //! necessary?
 
@@ -712,6 +697,7 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
         }
 
         pDoc->DeleteAreaTab( 0, 0, MAXCOL, MAXROW, 0, IDF_ALL );
+        pDoc->DeleteAreaTab( 0, 0, 0, 0, nTempSheet, IDF_ALL );
     }
 
     if (bOverflow)
