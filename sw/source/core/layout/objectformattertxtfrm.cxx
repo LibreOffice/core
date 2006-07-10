@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objectformattertxtfrm.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-03 17:18:01 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:16:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -647,6 +647,23 @@ bool SwObjectFormatterTxtFrm::CheckMovedFwdCondition(
         if ( nPageNum > _nFromPageNum )
         {
             _noToPageNum = nPageNum;
+            // --> OD 2006-06-28 #b6443897#
+            // Handling of special case:
+            // If anchor frame is move forward into a follow flow row,
+            // <_noToPageNum> is set to <_nFromPageNum + 1>, because it is
+            // possible that the anchor page frame isn't valid, because the
+            // page distance between master row and follow flow row is greater
+            // than 1.
+            if ( _noToPageNum > (_nFromPageNum + 1) )
+            {
+                SwFrm* pAnchorFrm = _rAnchoredObj.GetAnchorFrmContainingAnchPos();
+                if ( pAnchorFrm->IsInTab() &&
+                     pAnchorFrm->IsInFollowFlowRow() )
+                {
+                    _noToPageNum = _nFromPageNum + 1;
+                }
+            }
+            // <--
             bAnchorIsMovedForward = true;
         }
     }
