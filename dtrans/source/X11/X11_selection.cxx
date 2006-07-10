@@ -4,9 +4,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:58:03 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 16:31:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -499,6 +499,12 @@ SelectionManager::~SelectionManager()
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "shutting down SelectionManager\n" );
 #endif
+
+    if( m_xDisplayConnection.is() )
+    {
+        m_xDisplayConnection->removeEventHandler( Any(), this );
+        m_xDisplayConnection.clear();
+    }
 
     if( m_pDisplay )
     {
@@ -3718,27 +3724,41 @@ void SelectionManager::run( void* pThis )
 sal_Bool SelectionManager::handleEvent( const Any& event ) throw()
 {
     Sequence< sal_Int8 > aSeq;
-    event >>= aSeq;
-
-    XEvent* pEvent = (XEvent*)aSeq.getArray();
-    Time nTimestamp = CurrentTime;
-    if( pEvent->type == ButtonPress || pEvent->type == ButtonRelease )
-        nTimestamp = pEvent->xbutton.time;
-    else if( pEvent->type == KeyPress || pEvent->type == KeyRelease )
-        nTimestamp = pEvent->xkey.time;
-    else if( pEvent->type == MotionNotify )
-        nTimestamp = pEvent->xmotion.time;
-    else if( pEvent->type == PropertyNotify )
-        nTimestamp = pEvent->xproperty.time;
-
-    if( nTimestamp != CurrentTime )
+    if( (event >>= aSeq) )
     {
-        MutexGuard aGuard(m_aMutex);
+        XEvent* pEvent = (XEvent*)aSeq.getArray();
+        Time nTimestamp = CurrentTime;
+        if( pEvent->type == ButtonPress || pEvent->type == ButtonRelease )
+            nTimestamp = pEvent->xbutton.time;
+        else if( pEvent->type == KeyPress || pEvent->type == KeyRelease )
+            nTimestamp = pEvent->xkey.time;
+        else if( pEvent->type == MotionNotify )
+            nTimestamp = pEvent->xmotion.time;
+        else if( pEvent->type == PropertyNotify )
+            nTimestamp = pEvent->xproperty.time;
 
-        m_nSelectionTimestamp = nTimestamp;
+        if( nTimestamp != CurrentTime )
+        {
+            MutexGuard aGuard(m_aMutex);
+
+            m_nSelectionTimestamp = nTimestamp;
+        }
+
+        return sal_Bool( handleXEvent( *pEvent ) );
     }
-
-    return sal_Bool( handleXEvent( *pEvent ) );
+    else
+    {
+        #if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "SelectionManager got downing event\n" );
+        #endif
+        MutexGuard aGuard(m_aMutex);
+        // stop dispatching
+        if( m_aThread )
+            osl_terminateThread( m_aThread );
+        m_xDisplayConnection->removeEventHandler( Any(), this );
+        m_xDisplayConnection.clear();
+    }
+    return sal_True;
 }
 
 // ------------------------------------------------------------------------
