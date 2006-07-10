@@ -4,9 +4,9 @@
  *
  *  $RCSfile: query.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:39:43 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:05:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,12 +42,24 @@
 #ifndef DBA_CORE_WARNINGS_HXX
 #include "warnings.hxx"
 #endif
+#ifndef DBA_HELPERCOLLECTIONS_HXX
+#include "HelperCollections.hxx"
+#endif
+#ifndef _DBA_CORE_RESOURCE_HXX_
+#include "core_resource.hxx"
+#endif
+#ifndef _DBA_CORE_RESOURCE_HRC_
+#include "core_resource.hrc"
+#endif
 
 #ifndef _CPPUHELPER_QUERYINTERFACE_HXX_
 #include <cppuhelper/queryinterface.hxx>
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 #ifndef _COMPHELPER_PROPERTY_AGGREGATION_HXX_
 #include <comphelper/propagg.hxx>
@@ -56,26 +68,32 @@
 #include <comphelper/sequence.hxx>
 #endif
 
+/** === begin UNO includes === **/
 #ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYCOMPOSER_HPP_
+#include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_XRESULTSETMETADATASUPPLIER_HPP_
+#include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
+#endif
+/** === end UNO includes === **/
+
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
 #ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
 #endif
+#ifndef UNOTOOLS_INC_SHAREDUNOCOMPONENT_HXX
+#include <unotools/sharedunocomponent.hxx>
+#endif
 #ifndef _DBACORE_DEFINITIONCOLUMN_HXX_
 #include "definitioncolumn.hxx"
-#endif
-#ifndef _COM_SUN_STAR_SDB_XSQLQUERYCOMPOSERFACTORY_HPP_
-#include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XSQLQUERYCOMPOSER_HPP_
-#include <com/sun/star/sdb/XSQLQueryComposer.hpp>
 #endif
 
 #include <functional>
@@ -105,6 +123,7 @@ using namespace ::com::sun::star::container;
 using namespace ::comphelper;
 using namespace ::osl;
 using namespace ::cppu;
+using namespace ::utl;
 
 //........................................................................
 namespace dbaccess
@@ -164,12 +183,13 @@ IMPLEMENT_IMPLEMENTATION_ID(OQuery);
 IMPLEMENT_GETTYPES3(OQuery,OQueryDescriptor_Base,ODataSettings,OContentHelper);
 IMPLEMENT_FORWARD_XINTERFACE3( OQuery,OContentHelper,OQueryDescriptor_Base,ODataSettings)
 //--------------------------------------------------------------------------
-void OQuery::implCollectColumns( )
+void OQuery::rebuildColumns()
 {
+    OSL_PRECOND( getColumnCount() == 0, "OQuery::rebuildColumns: column container should be empty!" );
+        // the base class' definition of rebuildColumns promised that clearColumns is called before rebuildColumns
+
     try
     {
-        // empty the target container
-        clearColumns( );
         m_pMediator = NULL;
         m_xColumnMediator = NULL;
 
@@ -185,46 +205,57 @@ void OQuery::implCollectColumns( )
         }
 
         // fill the columns with columns from the statement
-        Reference< XSQLQueryComposerFactory >  xFactory(m_xConnection, UNO_QUERY);
-        Reference< XSQLQueryComposer > xComposer;
-        if ( xFactory.is() && m_bEscapeProcessing )
+        Reference< XMultiServiceFactory > xFactory( m_xConnection, UNO_QUERY_THROW );
+        SharedUNOComponent< XSingleSelectQueryComposer, DisposableComponent > xComposer(
+            Reference< XSingleSelectQueryComposer >( xFactory->createInstance( SERVICE_NAME_SINGLESELECTQUERYCOMPOSER ), UNO_QUERY_THROW ) );
+
+        Reference< XNameAccess > xColumns;
+        Reference< XIndexAccess > xColumnsIndexed;
+        try
         {
-            try
-            {
-                xComposer = xFactory->createQueryComposer();
-            }
-            catch (Exception&)
-            {
-                xComposer = NULL;
-            }
+            xComposer->setQuery( m_sCommand );
+            Reference< XColumnsSupplier > xCols( xComposer, UNO_QUERY_THROW );
+            xColumns.set( xCols->getColumns(), UNO_QUERY_THROW );
+            xColumnsIndexed.set( xColumns, UNO_QUERY_THROW );
         }
-        if(xComposer.is())
-        {
-            xComposer->setQuery(m_sCommand);
+        catch( const SQLException& ) { }
 
-            //  xComposer->setFilter(::rtl::OUString::createFromAscii("0=1")); // i21125
-            //  aFilterStatement = m_xComposer->getComposedQuery();
-            Reference<XColumnsSupplier> xCols(xComposer,UNO_QUERY);
-            Reference< XNameAccess > xColumns = xCols->getColumns();
-            if(xColumns.is())
+        SharedUNOComponent< XPreparedStatement, DisposableComponent > xPreparedStatement;
+        if ( !xColumns.is() || ( xColumnsIndexed->getCount() == 0 ) )
+        {   // the QueryComposer could not parse it. Try a lean version.
+            xPreparedStatement.set( m_xConnection->prepareStatement( m_sCommand ), UNO_QUERY_THROW );
+            Reference< XResultSetMetaDataSupplier > xResMetaDataSup( xPreparedStatement, UNO_QUERY_THROW );
+            Reference< XResultSetMetaData > xResultSetMeta( xResMetaDataSup->getMetaData() );
+            if ( !xResultSetMeta.is() )
             {
-                Sequence< ::rtl::OUString> aNames = xColumns->getElementNames();
-                const ::rtl::OUString* pBegin = aNames.getConstArray();
-                const ::rtl::OUString* pEnd   = pBegin + aNames.getLength();
-                for ( ;pBegin != pEnd; ++pBegin)
-                {
-                    Reference<XPropertySet> xSource(xColumns->getByName( *pBegin ),UNO_QUERY);
-                    OTableColumn* pColumn = new OTableColumn( xSource );
-                    Reference<XChild> xChild(*pColumn,UNO_QUERY);
-                    if ( xChild.is() )
-                        xChild->setParent(*this);
-
-                    implAppendColumn( *pBegin, pColumn );
-                    Reference<XPropertySet> xDest(*pColumn,UNO_QUERY);
-                    if ( m_pMediator )
-                        m_pMediator->notifyElementCreated(*pBegin,xDest);
-                }
+                ::rtl::OUString sError( DBA_RES( RID_STR_STATEMENT_WITHOUT_RESULT_SET ) );
+                ::dbtools::throwSQLException( sError, SQL_GENERAL_ERROR, *this );
             }
+
+            Reference< XDatabaseMetaData > xDBMeta( m_xConnection->getMetaData(), UNO_QUERY_THROW );
+            ::vos::ORef< OSQLColumns > aParseColumns(
+                ::connectivity::parse::OParseColumn::createColumnsForResultSet( xResultSetMeta, xDBMeta ) );
+            xColumns = OPrivateColumns::createWithIntrinsicNames(
+                aParseColumns, xDBMeta->storesMixedCaseQuotedIdentifiers(), *this, m_aMutex );
+            if ( !xColumns.is() )
+                throw RuntimeException();
+        }
+
+        Sequence< ::rtl::OUString> aNames = xColumns->getElementNames();
+        const ::rtl::OUString* pBegin = aNames.getConstArray();
+        const ::rtl::OUString* pEnd   = pBegin + aNames.getLength();
+        for ( ;pBegin != pEnd; ++pBegin)
+        {
+            Reference<XPropertySet> xSource(xColumns->getByName( *pBegin ),UNO_QUERY);
+            OTableColumn* pColumn = new OTableColumn( xSource );
+            Reference<XChild> xChild(*pColumn,UNO_QUERY);
+            if ( xChild.is() )
+                xChild->setParent(*this);
+
+            implAppendColumn( *pBegin, pColumn );
+            Reference<XPropertySet> xDest(*pColumn,UNO_QUERY);
+            if ( m_pMediator )
+                m_pMediator->notifyElementCreated(*pBegin,xDest);
         }
     }
     catch( const SQLContext& e )
@@ -244,14 +275,8 @@ void OQuery::implCollectColumns( )
     }
     catch( const Exception& )
     {
-        DBG_ERROR( "OQuery::implCollectColumns: caught a strange exception!" );
+        DBG_UNHANDLED_EXCEPTION();
     }
-}
-
-//--------------------------------------------------------------------------
-void OQuery::rebuildColumns()
-{
-    implCollectColumns( );
 }
 
 // XServiceInfo
