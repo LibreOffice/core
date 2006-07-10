@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undoblk.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-13 17:06:43 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:09:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1026,10 +1026,14 @@ void __EXPORT ScUndoPaste::Repeat(SfxRepeatTarget& rTarget)
         ScTabViewShell* pViewSh = ((ScTabViewTarget&)rTarget).GetViewShell();
         ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard( pViewSh->GetActiveWin() );
         if (pOwnClip)
+        {
+            // #129384# keep a reference in case the clipboard is changed during PasteFromClip
+            com::sun::star::uno::Reference<com::sun::star::datatransfer::XTransferable> aOwnClipRef( pOwnClip );
             pViewSh->PasteFromClip( nFlags, pOwnClip->GetDocument(),
                                     aPasteOptions.nFunction, aPasteOptions.bSkipEmpty, aPasteOptions.bTranspose,
                                     aPasteOptions.bAsLink, aPasteOptions.eMoveMode, IDF_NONE,
                                     TRUE );     // allow warning dialog
+        }
     }
 }
 
