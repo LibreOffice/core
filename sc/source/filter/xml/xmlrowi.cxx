@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlrowi.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-13 17:01:46 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 12:44:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,7 +119,7 @@ ScXMLTableRowContext::ScXMLTableRowContext( ScXMLImport& rImport,
             break;
             case XML_TOK_TABLE_ROW_ATTR_REPEATED:
             {
-                nRepeatedRows = sValue.toInt32();
+                nRepeatedRows = std::max( sValue.toInt32(), (sal_Int32) 1 );
             }
             break;
             case XML_TOK_TABLE_ROW_ATTR_DEFAULT_CELL_STYLE_NAME:
