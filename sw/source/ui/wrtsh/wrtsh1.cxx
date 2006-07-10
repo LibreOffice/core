@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:33:56 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:04:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1217,7 +1217,12 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
         {
             pNumRule = pCollRule;
         }
-        else if ( bNum && pCollRule == GetDoc()->GetOutlineNumRule() )
+        // --> OD 2006-06-12 #b6435904#
+        // no activation or continuation of outline numbering in Writer/Web document
+        else if ( bNum &&
+                  !dynamic_cast<SwWebDocShell*>(GetDoc()->GetDocShell()) &&
+                  pCollRule == GetDoc()->GetOutlineNumRule() )
+        // <--
         {
             if ( pNumRule == pCollRule )
             {
