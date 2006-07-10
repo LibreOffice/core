@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XclImpChangeTrack.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 08:29:06 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:05:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,9 @@
 #include "chgtrack.hxx"
 #endif
 
+#ifndef SC_XIHELPER_HXX
+#include "xihelper.hxx"
+#endif
 #ifndef SC_XILINK_HXX
 #include "xilink.hxx"
 #endif
@@ -225,12 +228,12 @@ void XclImpChangeTrack::ReadFormula( ScTokenArray*& rpTokenArray, const ScAddres
     pStrm->CopyToStream( aMemStrm, nFmlSize );
     XclImpStream aFmlaStrm( aMemStrm, GetRoot() );
     aFmlaStrm.StartNextRecord();
-    XclImpChTrFmlConverter aFmlConv( aFmlaStrm, *this );
+    XclImpChTrFmlConverter aFmlConv( GetRoot(), *this );
 
     // read the formula, 3D tab refs from extended data
     const ScTokenArray* pArray = NULL;
     aFmlConv.Reset( rPosition );
-    BOOL bOK = (aFmlConv.Convert( pArray, nFmlSize ) == ConvOK);
+    BOOL bOK = (aFmlConv.Convert( pArray, aFmlaStrm, nFmlSize ) == ConvOK);
     rpTokenArray = (bOK && pArray) ? new ScTokenArray( *pArray ) : NULL;
     pStrm->Ignore( 1 );
 }
@@ -381,7 +384,7 @@ void XclImpChangeTrack::ReadChTrCellContent()
         sal_uInt32 nNewFormat;
         ReadCell( pOldCell, nOldFormat, nOldValueType, aPosition );
         ReadCell( pNewCell, nNewFormat, nNewValueType, aPosition );
-        if( !pStrm->IsValid() || pStrm->GetRecLeft() )
+        if( !pStrm->IsValid() || (pStrm->GetRecLeft() > 0) )
         {
             DBG_ERROR( "XclImpChangeTrack::ReadChTrCellContent - bytes left, action ignored" );
             if( pOldCell )
@@ -400,7 +403,7 @@ void XclImpChangeTrack::ReadChTrCellContent()
 
 void XclImpChangeTrack::ReadChTrTabId()
 {
-    if( !nTabIdCount )      // read only 1st time, otherwise calculated by <ReadChTrInsertTab()>
+    if( nTabIdCount == 0 )  // read only 1st time, otherwise calculated by <ReadChTrInsertTab()>
         nTabIdCount = static_cast< sal_uInt16 >( pStrm->GetRecLeft() >> 1 );
 }
 
@@ -516,9 +519,9 @@ XclImpChTrFmlConverter::~XclImpChTrFmlConverter()
 }
 
 // virtual, called from ExcToSc8::Convert()
-BOOL XclImpChTrFmlConverter::Read3DTabReference( SCTAB& rFirstTab, SCTAB& rLastTab )
+BOOL XclImpChTrFmlConverter::Read3DTabReference( XclImpStream& rStrm, SCTAB& rFirstTab, SCTAB& rLastTab )
 {
-    aIn.Ignore( 2 );
+    rStrm.Ignore( 2 );
     return rChangeTrack.Read3DTabRefInfo( rFirstTab, rLastTab );
 }
 
