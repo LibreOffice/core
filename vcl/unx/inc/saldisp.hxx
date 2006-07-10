@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldisp.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:46:55 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 16:36:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -245,7 +245,7 @@ public:
     virtual         ~SalXLib();
     virtual void        Init();
 
-    virtual void        Yield( BOOL bWait );
+    virtual void        Yield( bool bWait, bool bHandleAllCurrentEvents );
     virtual void        Wakeup();
     virtual void        PostUserEvent();
 
