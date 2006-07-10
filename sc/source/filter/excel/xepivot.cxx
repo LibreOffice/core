@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xepivot.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:01:27 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:33:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -364,7 +364,7 @@ sal_uInt16 XclExpPCField::GetItemIndex( const String& rItemName ) const
     return EXC_PC_NOITEM;
 }
 
-sal_uInt32 XclExpPCField::GetIndexSize() const
+sal_Size XclExpPCField::GetIndexSize() const
 {
     return ::get_flag( maFieldInfo.mnFlags, EXC_SXFIELD_16BIT ) ? 2 : 1;
 }
@@ -644,7 +644,6 @@ void XclExpPCField::Finalize()
         for the current combination of item types is added to the flags. */
     ::set_flag( maFieldInfo.mnFlags, spnPCItemFlags[ mnTypeFlags ] );
 
-
     // item count fields
     maFieldInfo.mnVisItems = static_cast< sal_uInt16 >( GetVisItemList().Size() );
     maFieldInfo.mnGroupItems = static_cast< sal_uInt16 >( maGroupItemList.Size() );
@@ -674,7 +673,7 @@ void XclExpPCField::WriteSxgroupinfo( XclExpStream& rStrm )
         "XclExpPCField::WriteSxgroupinfo - missing grouping info" );
     if( IsStdGroupField() && !maGroupOrder.empty() )
     {
-        rStrm.StartRecord( EXC_ID_SXGROUPINFO, static_cast< sal_uInt32 >( 2 * maGroupOrder.size() ) );
+        rStrm.StartRecord( EXC_ID_SXGROUPINFO, 2 * maGroupOrder.size() );
         for( ScfUInt16Vec::const_iterator aIt = maGroupOrder.begin(), aEnd = maGroupOrder.end(); aIt != aEnd; ++aIt )
             rStrm << *aIt;
         rStrm.EndRecord();
@@ -771,7 +770,7 @@ const XclExpPCField* XclExpPivotCache::GetField( const String& rFieldName ) cons
 bool XclExpPivotCache::HasAddFields() const
 {
     // pivot cache can be shared, if there are no additional cache fields
-    return maPCInfo.mnStdFields == maPCInfo.mnTotalFields;
+    return maPCInfo.mnStdFields < maPCInfo.mnTotalFields;
 }
 
 bool XclExpPivotCache::HasEqualDataSource( const ScDPObject& rDPObj ) const
@@ -927,7 +926,7 @@ void XclExpPivotCache::WriteSxidarrayList( XclExpStream& rStrm ) const
 {
     if( HasItemIndexList() )
     {
-        sal_uInt32 nRecSize = 0;
+        sal_Size nRecSize = 0;
         size_t nPos, nSize = maFieldList.Size();
         for( nPos = 0; nPos < nSize; ++nPos )
             nRecSize += maFieldList.GetRecord( nPos )->GetIndexSize();
@@ -1539,9 +1538,9 @@ void XclExpPivotTable::WriteSxdiList( XclExpStream& rStrm ) const
 
 void XclExpPivotTable::WriteSxli( XclExpStream& rStrm, sal_uInt16 nLineCount, sal_uInt16 nIndexCount ) const
 {
-    if( nLineCount )
+    if( nLineCount > 0 )
     {
-        sal_uInt32 nLineSize = 8 + 2 * nIndexCount;
+        sal_uInt16 nLineSize = 8 + 2 * nIndexCount;
         rStrm.StartRecord( EXC_ID_SXLI, nLineSize * nLineCount );
         rStrm.SetSliceSize( nLineSize );
         for( sal_uInt16 nLine = 0; nLine < nLineCount; ++nLine )
