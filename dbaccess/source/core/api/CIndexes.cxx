@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CIndexes.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:33:22 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:00:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,23 +81,24 @@ ObjectType OIndexes::createObject(const ::rtl::OUString& _rName)
     return xRet;
 }
 // -------------------------------------------------------------------------
-Reference< XPropertySet > OIndexes::createEmptyObject()
+Reference< XPropertySet > OIndexes::createDescriptor()
 {
     Reference<XDataDescriptorFactory> xData( m_xIndexes,UNO_QUERY);
     if(xData.is())
         return xData->createDataDescriptor();
     else
-        return OIndexesHelper::createEmptyObject();
+        return OIndexesHelper::createDescriptor();
 }
 // -------------------------------------------------------------------------
 // XAppend
-void OIndexes::appendObject( const Reference< XPropertySet >& descriptor )
+ObjectType OIndexes::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     Reference<XAppend> xData( m_xIndexes,UNO_QUERY);
-    if ( xData.is() )
-        xData->appendByDescriptor(descriptor);
-    else
-        OIndexesHelper::appendObject(descriptor);
+    if ( !xData.is() )
+        return OIndexesHelper::appendObject( _rForName, descriptor );
+
+    xData->appendByDescriptor(descriptor);
+    return createObject( _rForName );
 }
 // -------------------------------------------------------------------------
 // XDrop
