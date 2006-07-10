@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:58:52 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 16:38:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -717,34 +717,37 @@ static void ImplSalDispatchMessage( MSG* pMsg )
 
 // -----------------------------------------------------------------------
 
-void ImplSalYield( BOOL bWait )
+void ImplSalYield( BOOL bWait, BOOL bHandleAllCurrentEvents )
 {
     MSG aMsg;
-    bool bMsg = false;
+    bool bWasMsg = false, bOneEvent = false;
 
-    if ( bWait )
-    {
-        if ( ImplGetMessage( &aMsg, 0, 0, 0 ) )
-        {
-            TranslateMessage( &aMsg );
-            ImplSalDispatchMessage( &aMsg );
-            bMsg = true;
-        }
-    }
-    else
+    int nMaxEvents = bHandleAllCurrentEvents ? 100 : 1;
+    do
     {
         if ( ImplPeekMessage( &aMsg, 0, 0, 0, PM_REMOVE ) )
         {
             TranslateMessage( &aMsg );
             ImplSalDispatchMessage( &aMsg );
-            bMsg = true;
+            bOneEvent = bWasMsg = true;
+        }
+        else
+            bOneEvent = false;
+    } while( --nMaxEvents && bOneEvent );
+
+    if ( bWait && ! bWasMsg )
+    {
+        if ( ImplGetMessage( &aMsg, 0, 0, 0 ) )
+        {
+            TranslateMessage( &aMsg );
+            ImplSalDispatchMessage( &aMsg );
         }
     }
 }
 
 // -----------------------------------------------------------------------
 
-void WinSalInstance::Yield( BOOL bWait )
+void WinSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
 {
     SalYieldMutex*  pYieldMutex = mpSalYieldMutex;
     SalData*        pSalData = GetSalData();
@@ -771,7 +774,7 @@ void WinSalInstance::Yield( BOOL bWait )
         if( ImplGetSVData()->maAppData.mnModalMode )
             Sleep(1);
         else
-            ImplSendMessage( mhComWnd, SAL_MSG_THREADYIELD, (WPARAM)bWait, (LPARAM)0 );
+            ImplSendMessage( mhComWnd, SAL_MSG_THREADYIELD, (WPARAM)bWait, (LPARAM)bHandleAllCurrentEvents );
 
         n = nCount;
         while ( n )
@@ -782,7 +785,7 @@ void WinSalInstance::Yield( BOOL bWait )
     }
     else
     {
-        ImplSalYield( bWait );
+        ImplSalYield( bWait, bHandleAllCurrentEvents );
 
         n = nCount;
         while ( n )
@@ -807,7 +810,7 @@ LRESULT CALLBACK SalComWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPar
             rDef = FALSE;
             break;
         case SAL_MSG_THREADYIELD:
-            ImplSalYield( (BOOL)wParam );
+            ImplSalYield( (BOOL)wParam, (BOOL)lParam );
             rDef = FALSE;
             break;
         // If we get this message, because another GetMessage() call
