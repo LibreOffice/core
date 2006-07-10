@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JoinController.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:28:46 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:28:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,15 +38,6 @@
 #ifndef DBAUI_SINGLEDOCCONTROLLER_HXX
 #include "singledoccontroller.hxx"
 #endif
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
-#include <com/sun/star/sdbc/XConnection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XOBJECTOUTPUTSTREAM_HPP_
-#include <com/sun/star/io/XObjectOutputStream.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XOBJECTINPUTSTREAM_HPP_
-#include <com/sun/star/io/XObjectInputStream.hpp>
-#endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
@@ -63,9 +54,10 @@
 class VCLXWindow;
 namespace dbaui
 {
+    class OAddTableDlg;
+    class AddTableDialogContext;
     class OTableConnectionData;
     class OTableWindowData;
-    class OAddTableDlg;
     class OTableWindow;
     typedef OSingleDocumentController OJoinController_BASE;
     class OJoinController : public OJoinController_BASE
@@ -77,9 +69,8 @@ namespace dbaui
         Fraction                                m_aZoom;
         ::dbtools::SQLExceptionInfo             m_aExceptionInfo;
 
-        OAddTableDlg*   m_pAddTabDlg;       // is set by the first call of execute, the owner is the design view
-
-        sal_Bool        m_bViewsAllowed;    // true when the Add Table dialog should also show views
+        OAddTableDlg*                               m_pAddTableDialog;
+        ::std::auto_ptr< AddTableDialogContext >    m_pDialogContext;
 
         // state of a feature. 'feature' may be the handle of a ::com::sun::star::util::URL somebody requested a dispatch interface for OR a toolbar slot.
         virtual FeatureState    GetState(sal_uInt16 nId) const;
@@ -108,24 +99,47 @@ namespace dbaui
     public:
         OJoinController(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM);
 
-        virtual void setModified(sal_Bool _bModified=sal_True);
+        // ---------------------------------------------------------------
+        // attribute access
+        ::std::vector< OTableWindowData*>*      getTableWindowData()        { return &m_vTableData; }
+        ::std::vector< OTableConnectionData*>*  getTableConnectionData()    { return &m_vTableConnectionData;}
 
+        OAddTableDlg*   getAddTableDialog() const { return m_pAddTableDialog; }
+
+        // ---------------------------------------------------------------
+        // OSingleDocumentController overridables
+        virtual void        reconnect( sal_Bool _bUI );
+        virtual void        setModified( sal_Bool _bModified = sal_True );
+
+        // ---------------------------------------------------------------
+        // own overridables
+        /** determines whether or not it's allowed for database views to participate in the game
+        */
+        virtual bool allowViews() const = 0;
+
+        /** determines whether or not it's allowed for queries to participate in the game
+        */
+        virtual bool allowQueries() const = 0;
+
+        /** provides access to the OJoinDesignView belonging to the controller, which might
+            or might not be the direct view (getView)
+        */
+        virtual OJoinDesignView*    getJoinView();
+
+
+        // ---------------------------------------------------------------
         /** erase the data in the data vector
             @param  _pData
                     the data whioch should be erased
         */
-        void removeConnectionData(OTableConnectionData* _pData);
+        void    removeConnectionData(OTableConnectionData* _pData);
 
-        ::std::vector< OTableWindowData*>*      getTableWindowData()        { return &m_vTableData; }
-        ::std::vector< OTableConnectionData*>*  getTableConnectionData()    { return &m_vTableConnectionData;}
+        void    SaveTabWinsPosSize( OJoinTableView::OTableWindowMap* pTabWinList, long nOffsetX, long nOffsetY );
 
-        void SaveTabWinsPosSize( OJoinTableView::OTableWindowMap* pTabWinList, long nOffsetX, long nOffsetY );
+        void    SaveTabWinPosSize(OTableWindow* pTabWin, long nOffsetX, long nOffsetY);
 
-        // should the statement be parsed by our own sql parser
-        inline sal_Bool     isViewAllowed()         const { return m_bViewsAllowed; }
-
-        void            SaveTabWinPosSize(OTableWindow* pTabWin, long nOffsetX, long nOffsetY);
-
+        // ---------------------------------------------------------------
+        // UNO interface overridables
         // XEventListener
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
 
@@ -135,8 +149,9 @@ namespace dbaui
         virtual sal_Bool SAL_CALL suspend(sal_Bool bSuspend) throw( ::com::sun::star::uno::RuntimeException );
 
 
-        /**
-            only defines a method to save a SQLException in d&d methods to show the error at a later state
+        // ---------------------------------------------------------------
+        // misc
+        /** only defines a method to save a SQLException in d&d methods to show the error at a later state
             set the internal member m_aExceptionInfo to _rInfo
         */
         void setErrorOccured(const ::dbtools::SQLExceptionInfo& _rInfo)
@@ -153,8 +168,6 @@ namespace dbaui
             return aInfo;
         }
 
-        void clearAddTableDialog() { m_pAddTabDlg = NULL; }
-
     protected:
         virtual OTableWindowData* createTableWindowData() = 0;
         // ask the user if the design should be saved when it is modified
@@ -163,7 +176,7 @@ namespace dbaui
         virtual void reset()         = 0;
         virtual void describeSupportedFeatures();
 
-        virtual OJoinDesignView*    getJoinView();
+        AddTableDialogContext&  impl_getDialogContext() const;
     };
 }
 #endif // DBAUI_JOINCONTROLLER_HXX
