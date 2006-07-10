@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 16:35:32 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 17:30:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -275,6 +275,26 @@ void doTestCode()
     aBtn.Border = aBtn.Background = true;
     aWriter.CreateControl( aBtn );
 
+    // include a uri button
+    PDFWriter::PushButtonWidget aUriBtn;
+    aUriBtn.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "wwwButton" ) );
+    aUriBtn.Description = OUString( RTL_CONSTASCII_USTRINGPARAM( "A URI button" ) );
+    aUriBtn.Text = OUString( RTL_CONSTASCII_USTRINGPARAM( "to www" ) );
+    aUriBtn.Location = Rectangle( Point( 9500, 9000 ), Size( 4500, 3000 ) );
+    aUriBtn.Border = aUriBtn.Background = true;
+    aUriBtn.URL = OUString( RTL_CONSTASCII_USTRINGPARAM( "http://www.heise.de" ) );
+    aWriter.CreateControl( aUriBtn );
+
+    // include a dest button
+    PDFWriter::PushButtonWidget aDstBtn;
+    aDstBtn.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "destButton" ) );
+    aDstBtn.Description = OUString( RTL_CONSTASCII_USTRINGPARAM( "A Dest button" ) );
+    aDstBtn.Text = OUString( RTL_CONSTASCII_USTRINGPARAM( "to paragraph" ) );
+    aDstBtn.Location = Rectangle( Point( 14500, 9000 ), Size( 4500, 3000 ) );
+    aDstBtn.Border = aDstBtn.Background = true;
+    aDstBtn.Dest = nFirstDest;
+    aWriter.CreateControl( aDstBtn );
+
     PDFWriter::CheckBoxWidget aCBox;
     aCBox.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "textCheckBox" ) );
     aCBox.Description = OUString( RTL_CONSTASCII_USTRINGPARAM( "A test check box" ) );
@@ -386,8 +406,6 @@ void doTestCode()
 #endif
 static const sal_Int32 nLog10Divisor = 1;
 static const double fDivisor = 10.0;
-static const sal_Int32 nFineFactor = 100;
-static const sal_Int32 nFineLog10Divisor = nLog10Divisor+2;
 
 static inline double pixelToPoint( sal_Int32 px ) { return double(px)/fDivisor; }
 static inline double pixelToPoint( double px ) { return px/fDivisor; }
@@ -502,7 +520,7 @@ OString PDFWriterImpl::convertWidgetFieldName( const rtl::OUString& rString )
     return aRet;
 }
 
-static void appendFixedInt( sal_Int32 nValue,  OStringBuffer& rBuffer, sal_Int32 nPrecision = nLog10Divisor )
+static void appendFixedInt( sal_Int32 nValue, OStringBuffer& rBuffer, sal_Int32 nPrecision = nLog10Divisor )
 {
     if( nValue < 0 )
     {
@@ -966,16 +984,6 @@ GEOMETRY lcl_convert( const MapMode& _rSource, const MapMode& _rDest, OutputDevi
 
 void PDFWriterImpl::PDFPage::appendPoint( const Point& rPoint, OStringBuffer& rBuffer, bool bNeg, Point* pOutPoint ) const
 {
-    /* FIXME: this takes advantage of the fact that appendMappedLength is only
-    *  called with backprojection from drawLayout. To make issue 49748 work without
-    *  provoking issue 58366 again text operations work without the finer granularity
-    *  that is with m_pWriter->m_aMapMode instead of m_pWriter->m_aFineMapMode
-    *  the correct solution will be to let PDF itself do the coordinate transformation
-    *  (this will be issue 52411)
-    */
-    const MapMode& rMap = pOutPoint ? m_pWriter->m_aMapMode : m_pWriter->m_aFineMapMode;
-    sal_Int32 nDiv = pOutPoint ? 1 : nFineLog10Divisor;
-    sal_Int32 nFact = pOutPoint ? 1 : nFineFactor;
     if( pOutPoint )
     {
         Point aPoint( lcl_convert( m_pWriter->m_aGraphicsStack.front().m_aMapMode,
@@ -986,7 +994,7 @@ void PDFWriterImpl::PDFPage::appendPoint( const Point& rPoint, OStringBuffer& rB
     }
 
     Point aPoint( lcl_convert( m_pWriter->m_aGraphicsStack.front().m_aMapMode,
-                               rMap,
+                               m_pWriter->m_aMapMode,
                                m_pWriter->getReferenceDevice(),
                                rPoint ) );
 
@@ -994,15 +1002,15 @@ void PDFWriterImpl::PDFPage::appendPoint( const Point& rPoint, OStringBuffer& rB
     if( bNeg )
         nValue = -nValue;
 
-    appendFixedInt( nValue, rBuffer, nDiv );
+    appendFixedInt( nValue, rBuffer );
 
     rBuffer.append( ' ' );
 
-    nValue      = pointToPixel(getHeight())*nFact - aPoint.Y();
+    nValue      = pointToPixel(getHeight()) - aPoint.Y();
     if( bNeg )
         nValue = -nValue;
 
-    appendFixedInt( nValue, rBuffer, nDiv );
+    appendFixedInt( nValue, rBuffer );
 }
 
 void PDFWriterImpl::PDFPage::appendRect( const Rectangle& rRect, OStringBuffer& rBuffer ) const
@@ -1041,16 +1049,8 @@ void PDFWriterImpl::PDFPage::appendPolygon( const Polygon& rPoly, OStringBuffer&
     sal_uInt32 nBufLen = rBuffer.getLength();
     if( nPoints > 0 )
     {
-        /* #i61723# use "higher precision" for rectangles only else rounding
-         * issues similar to those for text can occur. The real solution for
-         * this and #i49748# will be switching to a transformation inside the
-         * produced PDF instead of transforming to user space ourselves.
-         */
-        Point aFakePoint;
-        Point* pFakePoint = rPoly.IsRect() ? NULL : &aFakePoint;
-
         const BYTE* pFlagArray = rPoly.GetConstFlagAry();
-        appendPoint( rPoly[0], rBuffer, false, pFakePoint );
+        appendPoint( rPoly[0], rBuffer );
         rBuffer.append( " m\n" );
         for( USHORT i = 1; i < nPoints; i++ )
         {
@@ -1058,18 +1058,18 @@ void PDFWriterImpl::PDFPage::appendPolygon( const Polygon& rPoly, OStringBuffer&
             {
                 // bezier
                 DBG_ASSERT( pFlagArray[i+1] == POLY_CONTROL && pFlagArray[i+2] != POLY_CONTROL, "unexpected sequence of control points" );
-                appendPoint( rPoly[i], rBuffer, false, pFakePoint );
+                appendPoint( rPoly[i], rBuffer );
                 rBuffer.append( " " );
-                appendPoint( rPoly[i+1], rBuffer, false, pFakePoint );
+                appendPoint( rPoly[i+1], rBuffer );
                 rBuffer.append( " " );
-                appendPoint( rPoly[i+2], rBuffer, false, pFakePoint );
+                appendPoint( rPoly[i+2], rBuffer );
                 rBuffer.append( " c" );
                 i += 2; // add additionally consumed points
             }
             else
             {
                 // line
-                appendPoint( rPoly[i], rBuffer, false, pFakePoint );
+                appendPoint( rPoly[i], rBuffer );
                 rBuffer.append( " l" );
             }
             if( (rBuffer.getLength() - nBufLen) > 65 )
@@ -1100,25 +1100,15 @@ void PDFWriterImpl::PDFPage::appendMappedLength( sal_Int32 nLength, OStringBuffe
         rBuffer.append( '-' );
         nValue = -nLength;
     }
-
-    /* FIXME: this takes advantage of the fact that appendMappedLength is only
-    *  called with backprojection from drawLayout. To make issue 49748 work without
-    *  provoking issue 58366 again text operations work without the finer granularity
-    *  that is with m_pWriter->m_aMapMode instead of m_pWriter->m_aFineMapMode
-    *  the correct solution will be to let PDF itself do the coordinate transformation
-    *  (this will be issue 52411)
-    */
-    const MapMode& rMap = pOutLength ? m_pWriter->m_aMapMode : m_pWriter->m_aFineMapMode;
-
     Size aSize( lcl_convert( m_pWriter->m_aGraphicsStack.front().m_aMapMode,
-                             rMap,
+                             m_pWriter->m_aMapMode,
                              m_pWriter->getReferenceDevice(),
                              Size( nValue, nValue ) ) );
     nValue = bVertical ? aSize.Height() : aSize.Width();
     if( pOutLength )
         *pOutLength = ((nLength < 0 ) ? -nValue : nValue);
 
-    appendFixedInt( nValue, rBuffer, pOutLength ? 1 : nFineLog10Divisor );
+    appendFixedInt( nValue, rBuffer, 1 );
 }
 
 void PDFWriterImpl::PDFPage::appendMappedLength( double fLength, OStringBuffer& rBuffer, bool bVertical, sal_Int32* pOutLength ) const
@@ -1226,7 +1216,6 @@ PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext )
         :
         m_pReferenceDevice( NULL ),
         m_aMapMode( MAP_POINT, Point(), Fraction( 1L, pointToPixel(1) ), Fraction( 1L, pointToPixel(1) ) ),
-        m_aFineMapMode( MAP_POINT, Point(), Fraction( 1L, pointToPixel(1)*nFineFactor ), Fraction( 1L, pointToPixel(1)*nFineFactor ) ),
         m_nCurrentStructElement( 0 ),
         m_bEmitStructure( true ),
         m_bNewMCID( false ),
@@ -1417,7 +1406,7 @@ OutputDevice* PDFWriterImpl::getReferenceDevice()
 
         m_pReferenceDevice = pVDev;
 
-        pVDev->SetReferenceDevice( VirtualDevice::REFDEV_MODE_MSO1 );
+        pVDev->SetReferenceDevice( VirtualDevice::REFDEV_MODE_PDF1 );
 
         pVDev->SetOutputSizePixel( Size( 640, 480 ) );
         pVDev->SetMapMode( MAP_MM );
@@ -4206,12 +4195,19 @@ bool PDFWriterImpl::emitWidgetAnnotations()
         }
         if( rWidget.m_eType == PDFWriter::PushButton )
         {
-            if( rWidget.m_aListEntries.empty() )
+            OStringBuffer aDest;
+            if( appendDest( rWidget.m_nDest, aDest ) )
+            {
+                aLine.append( "/AA<</D<</Type/Action/S/GoTo/D " );
+                aLine.append( aDest.makeStringAndClear() );
+                aLine.append( ">>>>\n" );
+            }
+            else if( rWidget.m_aListEntries.empty() )
             {
                 // create a reset form action
                 aLine.append( "/AA<</D<</Type/Action/S/ResetForm>>>>\n" );
             }
-            else
+            else if( rWidget.m_bSubmit )
             {
                 // create a submit form action
                 aLine.append( "/AA<</D<</Type/Action/S/SubmitForm/F(" );
@@ -4237,6 +4233,13 @@ bool PDFWriterImpl::emitWidgetAnnotations()
                 }
                 aLine.append( nFlags );
                 aLine.append( ">>>>\n" );
+            }
+            else
+            {
+                // create a URI action
+                aLine.append( "/AA<</D<</Type/Action/S/URI/URI(" );
+                aLine.append( OUStringToOString( rWidget.m_aListEntries.front(), RTL_TEXTENCODING_ASCII_US ) );
+                aLine.append( ")>>>>\n" );
             }
         }
         if( rWidget.m_aDAString.getLength() )
@@ -6761,7 +6764,7 @@ void PDFWriterImpl::drawPolyLine( const Polygon& rPoly, const LineInfo& rInfo )
     {
         writeBuffer( aLine.getStr(), aLine.getLength() );
         drawPolyLine( rPoly );
-        writeBuffer( "Q\n", 3 );
+        writeBuffer( "Q\n", 2 );
     }
     else
     {
@@ -9142,8 +9145,10 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
                 TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK;
 
         rNewWidget.m_nFlags |= 0x00010000;
-        if( rBtn.SubmitToURL.getLength() )
-            rNewWidget.m_aListEntries.push_back( rBtn.SubmitToURL );
+        if( rBtn.URL.getLength() )
+            rNewWidget.m_aListEntries.push_back( rBtn.URL );
+        rNewWidget.m_bSubmit = rBtn.Submit;
+        rNewWidget.m_nDest   = rBtn.Dest;
         createDefaultPushButtonAppearance( rNewWidget, rBtn );
     }
     else if( rControl.getType() == PDFWriter::RadioButton )
