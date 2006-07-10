@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:14:36 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:31:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -323,7 +323,6 @@ SwTxtNode::SwTxtNode( const SwNodeIndex &rWhere,
                       SwAttrSet* pAutoAttr )
     : SwCntntNode( rWhere, ND_TEXTNODE, pTxtColl ),
       pSwpHints( 0 ),
-      pWrong( 0 ),
       // --> OD 2005-11-02 #i51089 - TUNING#
       mpNodeNum( 0L ),
       // <--
@@ -335,6 +334,8 @@ SwTxtNode::SwTxtNode( const SwNodeIndex &rWhere,
     // --> OD 2005-11-02 #i51089 - TUNING#
 //    aNdNum.SetTxtNode(this);
     // <--
+
+    InitSwParaStatistics( true );
 
     // soll eine Harte-Attributierung gesetzt werden?
     if( pAutoAttr )
@@ -376,10 +377,6 @@ SwTxtNode::~SwTxtNode()
 
         delete pTmpHints;
     }
-    delete pWrong;
-    // Achtung. im Dtor von SwCntntNode kann DelFrms gerufen werden, wo
-    // ggf. pWrong nochmal deletet wird, deshalb diese Zuweisung
-    pWrong = NULL; // hier nicht wegoptimieren!
 
     // --> OD 2005-11-02 #i51089 - TUNING#
 //    aNdNum.RemoveMe();
@@ -402,6 +399,8 @@ SwTxtNode::~SwTxtNode()
         mpNodeNum = 0L;
     }
     // <--
+
+    InitSwParaStatistics( false );
 }
 
 SwCntntFrm *SwTxtNode::MakeFrm()
@@ -565,7 +564,7 @@ SwCntntNode *SwTxtNode::SplitNode( const SwPosition &rPos )
         if( GetWrong() )
             pNode->SetWrong( GetWrong()->SplitList( nSplitPos ) );
 
-        SetWrongDirty( TRUE );
+        SetWrongDirty( true );
 
         if( pNode->pSwpHints )
         {
@@ -651,9 +650,8 @@ SwCntntNode *SwTxtNode::SplitNode( const SwPosition &rPos )
     else
     {
         SwWrongList *pList = GetWrong();
-        pWrong = NULL;
-
-        SetWrongDirty( TRUE );
+        SetWrong( 0, false );
+        SetWrongDirty( true );
 
         SwIndex aIdx( this );
         Cut( pNode, aIdx, rPos.nContent.GetIndex() );
@@ -678,7 +676,7 @@ SwCntntNode *SwTxtNode::SplitNode( const SwPosition &rPos )
         if( pList )
         {
             pNode->SetWrong( pList->SplitList( nSplitPos ) );
-            pWrong = pList;
+            SetWrong( pList, false );
         }
 
         if ( GetDepends() )
@@ -745,8 +743,8 @@ SwCntntNode *SwTxtNode::JoinNext()
         if( pList )
         {
             pList->JoinList( pTxtNode->GetWrong(), nOldLen );
-            SetWrongDirty( TRUE );
-            pWrong = NULL;
+            SetWrongDirty( true );
+            SetWrong( 0, false );
         }
         else
         {
@@ -754,8 +752,8 @@ SwCntntNode *SwTxtNode::JoinNext()
             if( pList )
             {
                 pList->Move( 0, nOldLen );
-                SetWrongDirty( TRUE );
-                pTxtNode->pWrong = NULL;
+                SetWrongDirty( true );
+                pTxtNode->SetWrong( 0, false );
             }
         }
         { // wg. SwIndex
@@ -771,7 +769,7 @@ SwCntntNode *SwTxtNode::JoinNext()
             pDoc->CorrAbs( aIdx, SwPosition( *this ), nOldLen, TRUE );
         }
         rNds.Delete(aIdx);
-        pWrong = pList;
+        SetWrong( pList, false );
         InvalidateNumRule();
     }
     else
@@ -795,8 +793,8 @@ SwCntntNode *SwTxtNode::JoinPrev()
         if( pList )
         {
             pList->JoinList( GetWrong(), Len() );
-            SetWrongDirty( TRUE );
-            pTxtNode->pWrong = NULL;
+            SetWrongDirty( true );
+            pTxtNode->SetWrong( 0, false );
             SetWrong( NULL );
         }
         else
@@ -805,8 +803,8 @@ SwCntntNode *SwTxtNode::JoinPrev()
             if( pList )
             {
                 pList->Move( 0, nLen );
-                SetWrongDirty( TRUE );
-                pWrong = NULL;
+                SetWrongDirty( true );
+                SetWrong( 0, false );
             }
         }
         { // wg. SwIndex
@@ -822,7 +820,7 @@ SwCntntNode *SwTxtNode::JoinPrev()
             pDoc->CorrAbs( aIdx, SwPosition( *this ), nLen, TRUE );
         }
         rNds.Delete(aIdx);
-        pWrong = pList;
+        SetWrong( pList, false );
         InvalidateNumRule();
     }
     else
