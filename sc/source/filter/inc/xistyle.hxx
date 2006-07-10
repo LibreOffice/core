@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xistyle.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-13 17:00:20 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:03:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,17 +95,6 @@ private:
 
 // FONT record - font information =============================================
 
-/** Enumeration to choose the Which-IDs for font items. */
-enum XclImpFontMode
-{
-    EXC_FONTMODE_CELL,          /// Use Calc Which-IDs (ATTR_*).
-    EXC_FONTMODE_EDITENG,       /// Use edit engine Which-IDs (EE_CHAR_*).
-    EXC_FONTMODE_HF,            /// Use header/footer edit engine Which-IDs (EE_CHAR_*).
-    EXC_FONTMODE_NOTE           /// Use note edit engine Which-IDs (EE_CHAR_*), special font handling.
-};
-
-// ----------------------------------------------------------------------------
-
 /** Stores all data of an Excel font and provides import of FONT records. */
 class XclImpFont : protected XclImpRoot
 {
@@ -124,13 +113,15 @@ public:
     inline const XclFontData& GetFontData() const { return maData; }
     /** Returns true, if the font contains superscript or subscript. */
     inline bool         HasEscapement() const { return maData.mnEscapem != EXC_FONTESC_NONE; }
+    /** Returns the text encoding for strings used with this font. */
+    rtl_TextEncoding    GetFontEncoding() const;
 
-    /** Returns true, if this font contains ASCII characters. */
-    inline bool         HasAscii() const { return mbAscii; }
-    /** Returns true, if this font contains CJK characters. */
-    inline bool         HasCjk() const { return mbCjk; }
-    /** Returns true, if this font contains CTL characters. */
-    inline bool         HasCtl() const { return mbCtl; }
+    /** Returns true, if this font contains characters for Western scripts. */
+    inline bool         HasWesternChars() const { return mbHasWstrn; }
+    /** Returns true, if this font contains characters for Asian scripts (CJK). */
+    inline bool         HasAsianChars() const { return mbHasAsian; }
+    /** Returns true, if this font contains characters for Complex scripts (CTL). */
+    inline bool         HasComplexChars() const { return mbHasCmplx; }
 
     /** Reads a FONT record for all BIFF versions. */
     void                ReadFont( XclImpStream& rStrm );
@@ -141,10 +132,14 @@ public:
 
     /** Fills all font properties to the item set.
         @param rItemSet  The destination item set.
-        @param eMode  The type of Which-IDs.
+        @param eType  The type of Which-IDs.
         @param bSkipPoolDefs  true = Do not put items equal to pool default; false = Put all items. */
-    void                FillToItemSet( SfxItemSet& rItemSet, XclImpFontMode eMode,
+    void                FillToItemSet( SfxItemSet& rItemSet, XclFontItemType eType,
                             bool bSkipPoolDefs = false ) const;
+    /** Writes all font properties to the passed property set.
+        @param pFontColor  If set, overrides internal stored font color. */
+    void                WriteFontProperties( ScfPropertySet& rPropSet,
+                            XclFontPropSetType eType, const Color* pFontColor = 0 ) const;
 
 private:
     /** Reads and sets height and flags. */
@@ -163,9 +158,9 @@ private:
 
 private:
     XclFontData         maData;         /// All font attributes.
-    bool                mbAscii;        /// true = font contains ASCII characters.
-    bool                mbCjk;          /// true = font contains CJK characters.
-    bool                mbCtl;          /// true = font contains CTL characters.
+    bool                mbHasWstrn;     /// true = Font contains Western script characters.
+    bool                mbHasAsian;     /// true = Font contains Asian script characters.
+    bool                mbHasCmplx;     /// true = Font contains Complex script characters.
     bool                mbFontNameUsed; /// true = Font name, family, charset used.
     bool                mbHeightUsed;   /// true = Font height used.
     bool                mbColorUsed;    /// true = Color used.
@@ -199,11 +194,16 @@ public:
 
     /** Fills all font properties from a FONT record to the item set.
         @param rItemSet  The destination item set.
-        @param eMode  The type of Which-IDs.
-        @param nFontIndex  The Excel index of the font.
+        @param eType  The type of Which-IDs.
+        @param nFontIdx  The Excel index of the font.
         @param bSkipPoolDefs  true = Do not put items equal to pool default; false = Put all items. */
-    void                FillToItemSet( SfxItemSet& rItemSet, XclImpFontMode eMode,
-                            sal_uInt16 nFontIndex, bool bSkipPoolDefs = false ) const;
+    void                FillToItemSet( SfxItemSet& rItemSet, XclFontItemType eType,
+                            sal_uInt16 nFontIdx, bool bSkipPoolDefs = false ) const;
+    /** Writes all font properties to the passed property set.
+        @param pFontColor  If set, overrides internal stored font color. */
+    void                WriteFontProperties(
+                            ScfPropertySet& rPropSet, XclFontPropSetType eType,
+                            sal_uInt16 nFontIdx, const Color* pFontColor = 0 ) const;
 
 private:
     ScfDelList< XclImpFont > maFontList;    /// List of all FONT records in the Excel file.
@@ -404,7 +404,7 @@ public:
     inline const String& GetStyleName() const { return maStyleName; }
     inline sal_uInt8    GetHorAlign() const { return maAlignment.mnHorAlign; }
     inline sal_uInt8    GetVerAlign() const { return maAlignment.mnVerAlign; }
-    inline sal_uInt16   GetFont() const { return mnXclFont; }
+    inline sal_uInt16   GetFontIndex() const { return mnXclFont; }
 
     /** Creates the Calc style sheet, if this is a user-defined style. */
     void                CreateUserStyle();
@@ -476,10 +476,11 @@ public:
     /** Returns the object that stores all contents of an XF record. */
     inline XclImpXF*    GetXF( sal_uInt16 nXFIndex ) const
                             { return maXFList.GetObject( nXFIndex ); }
-    /** Returns the index to the Excel font used in this XF record. */
+
+    /** Returns the index to the Excel font used in the specified XF record. */
     sal_uInt16          GetFontIndex( sal_uInt16 nXFIndex ) const;
-    /** Returns true, if either superscript or subscript is used in the font. */
-    bool                HasEscapement( sal_uInt16 nXFIndex ) const;
+    /** Returns the Excel font used in the specified XF record. */
+    const XclImpFont*   GetFont( sal_uInt16 nXFIndex ) const;
 
     /** Creates all user defined style sheets. */
     void                CreateUserStyles();
