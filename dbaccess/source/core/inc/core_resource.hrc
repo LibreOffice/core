@@ -4,9 +4,9 @@
  *
  *  $RCSfile: core_resource.hrc,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:35:51 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:13:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,6 +81,9 @@
 #define RID_STR_REPORT                          ( RID_CORE_STRINGS_START + 33 )
 #define RID_STR_DATASOURCE_NOT_STORED           ( RID_CORE_STRINGS_START + 34 )
 #define RID_STR_FILE_DOES_NOT_EXIST             ( RID_CORE_STRINGS_START + 35 )
+#define RID_STR_CONFLICTING_NAMES               ( RID_CORE_STRINGS_START + 36 )
+#define RID_STR_COMMAND_LEADING_TO_ERROR        ( RID_CORE_STRINGS_START + 37 )
+#define RID_STR_STATEMENT_WITHOUT_RESULT_SET    ( RID_CORE_STRINGS_START + 38 )
 
 #endif // _DBA_CORE_RESOURCE_HRC_
 
