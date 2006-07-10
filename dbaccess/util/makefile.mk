@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: vg $ $Date: 2006-04-07 14:13:59 $
+#   last change: $Author: obo $ $Date: 2006-07-10 15:47:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@ PRJ=..
 PRJNAME=dbaccess
 TARGET=dba
 TARGET2=dbu
+TARGET3=sdbt
 USE_DEFFILE=TRUE
 GEN_HID=TRUE
 GEN_HID_OTHER=TRUE
@@ -161,6 +162,39 @@ SHL2STDLIBS+=		ole32.lib \
 RESLIB2NAME=$(TARGET2)
 RESLIB2IMAGES=$(PRJ)$/res
 RESLIB2SRSFILES=$(RES2FILELIST)
+
+# --- database tools (sdbt) -----------------------------------
+
+LIB3TARGET=$(SLB)$/$(TARGET3).lib
+LIB3FILES=\
+        $(SLB)$/conntools.lib \
+        $(SLB)$/sdbtmisc.lib \
+        $(SLB)$/sdbtshared.lib
+
+SHL3TARGET=$(TARGET3)$(UPD)$(DLLPOSTFIX)
+
+SHL3STDLIBS= \
+        $(CPPULIB) \
+        $(CPPUHELPERLIB) \
+        $(UNOTOOLSLIB) \
+        $(COMPHELPERLIB) \
+        $(TOOLSLIB) \
+        $(DBTOOLSLIB) \
+        $(SALLIB)
+
+SHL3LIBS=$(LIB3TARGET)
+SHL3DEF=$(MISC)$/$(SHL3TARGET).def
+DEF3NAME=$(SHL3TARGET)
+SHL3VERSIONMAP=$(TARGET3).map
+
+# --- .res file ----------------------------------------------------------
+
+RES3FILELIST=\
+    $(SRS)$/sdbt_strings.srs
+
+RESLIB3NAME=$(TARGET3)
+RESLIB3IMAGES=$(PRJ)$/res
+RESLIB3SRSFILES=$(RES3FILELIST)
 
 # --- Targets ----------------------------------
 
