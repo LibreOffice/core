@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ListBox.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:52:12 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:47:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -787,9 +787,10 @@ namespace frm
                         aStatement += quoteName(aQuote, aBoundFieldName);
                     }
                     aStatement += ::rtl::OUString::createFromAscii(" FROM ");
-                    sal_Bool bUseCatalogInSelect = ::dbtools::isDataSourcePropertyEnabled(xConnection,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseCatalogInSelect")),sal_True);
-                    sal_Bool bUseSchemaInSelect = ::dbtools::isDataSourcePropertyEnabled(xConnection,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseSchemaInSelect")),sal_True);
-                    aStatement += quoteTableName(xMeta, sListSource,::dbtools::eInDataManipulation,bUseCatalogInSelect,bUseSchemaInSelect);
+
+                    ::rtl::OUString sCatalog, sSchema, sTable;
+                    qualifiedNameComponents( xMeta, sListSource, sCatalog, sSchema, sTable, eInDataManipulation );
+                    aStatement += composeTableNameForSelect( xConnection, sCatalog, sSchema, sTable );
 
                     xContentSetProperties->setPropertyValue(PROPERTY_COMMAND, makeAny(aStatement));
                     bExecute = sal_True;
