@@ -4,9 +4,9 @@
  *
  *  $RCSfile: detfunc.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 21:32:06 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:27:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1788,7 +1788,7 @@ void ScDetectiveFunc::UpdateAllComments()
                     ScDrawObjData* pData = ScDrawLayer::GetObjData( pCaption, TRUE );
 
                     ScPostIt aCellNote(pDoc);
-                    if(pDoc->GetNote( pData->aStt.Col(), pData->aStt.Row(), pData->aStt.Tab(), aCellNote ))
+                    if(pDoc->GetNote( pData->aStt.Col(), pData->aStt.Row(), nObjTab, aCellNote ))
                     {
                         ScCommentData aData( pDoc, pModel );
                         SfxItemSet rAttrColorSet(aCellNote.GetItemSet());
@@ -1800,7 +1800,7 @@ void ScDetectiveFunc::UpdateAllComments()
                         pCaption->SetSpecialTextBoxShadow();
                         pCaption->SetFixedTail();
                         aCellNote.SetItemSet(rAttrSet);
-                        pDoc->SetNote( pData->aStt.Col(), pData->aStt.Row(), pData->aStt.Tab(), aCellNote );
+                        pDoc->SetNote( pData->aStt.Col(), pData->aStt.Row(), nObjTab, aCellNote );
                     }
                 }
 
@@ -1837,7 +1837,7 @@ void ScDetectiveFunc::UpdateAllArrowColors()
                     ScAddress aPos;
                     ScRange aSource;
                     BOOL bDummy;
-                    ScDetectiveObjType eType = GetDetectiveObjectType( pObject, aPos, aSource, bDummy );
+                    ScDetectiveObjType eType = GetDetectiveObjectType( pObject, nObjTab, aPos, aSource, bDummy );
                     if ( eType == SC_DETOBJ_ARROW || eType == SC_DETOBJ_TOOTHERTAB )
                     {
                         //  source is valid, determine error flag from source range
@@ -1921,7 +1921,7 @@ BOOL ScDetectiveFunc::FindFrameForObject( SdrObject* pObject, ScRange& rRange )
 
             if ( pPrevObj && pPrevObj->GetLayer() == SC_LAYER_INTERN && pPrevObj->ISA(SdrRectObj) )
             {
-                ScDrawObjData* pPrevData = ScDrawLayer::GetObjData( pPrevObj );
+                ScDrawObjData* pPrevData = ScDrawLayer::GetObjDataTab( pPrevObj, rRange.aStart.Tab() );
                 if ( pPrevData && pPrevData->bValidStart && pPrevData->bValidEnd )
                 {
                     if ( pPrevData->aStt == rRange.aStart )
@@ -1941,7 +1941,7 @@ BOOL ScDetectiveFunc::FindFrameForObject( SdrObject* pObject, ScRange& rRange )
     //  SdrObject* pPrevObj = pPage->GetObj( nPos - 1 );
     //  if ( pPrevObj && pPrevObj->GetLayer() == SC_LAYER_INTERN && pPrevObj->ISA(SdrRectObj) )
     //  {
-    //      ScDrawObjData* pPrevData = ScDrawLayer::GetObjData( pPrevObj );
+    //      ScDrawObjData* pPrevData = ScDrawLayer::GetObjDataTab( pPrevObj, rRange.aStart.Tab() );
     //      if ( pPrevData && pPrevData->bValidStart && pPrevData->bValidEnd )
     //      {
     //          if ( pPrevData->aStt.nCol == rRange.aStart.Col() &&
@@ -1960,7 +1960,7 @@ BOOL ScDetectiveFunc::FindFrameForObject( SdrObject* pObject, ScRange& rRange )
     return FALSE;
 }
 
-ScDetectiveObjType ScDetectiveFunc::GetDetectiveObjectType( SdrObject* pObject,
+ScDetectiveObjType ScDetectiveFunc::GetDetectiveObjectType( SdrObject* pObject, SCTAB nObjTab,
                                 ScAddress& rPosition, ScRange& rSource, BOOL& rRedLine )
 {
     rRedLine = FALSE;
@@ -1968,7 +1968,7 @@ ScDetectiveObjType ScDetectiveFunc::GetDetectiveObjectType( SdrObject* pObject,
 
     if ( pObject && pObject->GetLayer() == SC_LAYER_INTERN )
     {
-        ScDrawObjData* pData = ScDrawLayer::GetObjData( pObject );
+        ScDrawObjData* pData = ScDrawLayer::GetObjDataTab( pObject, nObjTab );
         if ( pObject->IsPolyObj() && pObject->GetPointCount() == 2 )
         {
             // line object -> arrow
