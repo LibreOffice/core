@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:32:34 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:46:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,9 @@
 #endif
 #ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
+#endif
+#ifndef DBACCESS_SOURCE_UI_INC_DEFAULTOBJECTNAMECHECK_HXX
+#include "defaultobjectnamecheck.hxx"
 #endif
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
@@ -292,7 +295,7 @@ FeatureState OTableController::GetState(sal_uInt16 _nId) const
             aReturn.bEnabled = sal_True;
             break;
         case ID_BROWSER_EDITDOC:
-            aReturn.aState = ::cppu::bool2any(isEditable());
+            aReturn.bChecked = isEditable();
             aReturn.bEnabled = m_bNew || isEditable();// the editable flag is set through this one -> || isAddAllowed() || isDropAllowed() || isAlterAllowed();
             break;
         case ID_BROWSER_SAVEDOC:
@@ -422,15 +425,14 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
                 aDefaultName = ::dbaui::createDefaultName(getConnection()->getMetaData(),xTables,aName);
             }
 
-            OSaveAsDlg aDlg(getView(),CommandType::TABLE,xTables,getConnection()->getMetaData(),getConnection(),aDefaultName);
-            if(aDlg.Execute() == RET_OK)
-            {
-                m_sName = aDlg.getName();
-                sCatalog = aDlg.getCatalog();
-                sSchema  = aDlg.getSchema();
-            }
-            else
+            DynamicTableOrQueryNameCheck aNameChecker( getConnection(), CommandType::TABLE );
+            OSaveAsDlg aDlg( getView(), CommandType::TABLE, getORB(), getConnection(), aDefaultName, aNameChecker );
+            if ( aDlg.Execute() != RET_OK )
                 return sal_False;
+
+            m_sName = aDlg.getName();
+            sCatalog = aDlg.getCatalog();
+            sSchema  = aDlg.getSchema();
         }
 
         // did we get a name
@@ -486,7 +488,7 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
             if(!m_xTable.is()) // correct name and try again
             {
                 // it can be that someone inserted new data for us
-                m_sName = ::dbtools::composeTableName(getConnection()->getMetaData(),xTable,sal_False,::dbtools::eInDataManipulation);
+                m_sName = ::dbtools::composeTableName( getConnection()->getMetaData(), xTable, ::dbtools::eInDataManipulation, false, false, false );
                 assignTable();
             }
             // now check if our datasource has set a tablefilter and if append the new table name to it
@@ -513,9 +515,9 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
     }
     catch(const ElementExistException& )
     {
-        String sText( ModuleRes(STR_OBJECT_ALREADY_EXISTS));
+        String sText( ModuleRes( STR_NAME_ALREADY_EXISTS ) );
         sText.SearchAndReplaceAscii( "#" , m_sName);
-        OSQLMessageBox aDlg(getView(), String(ModuleRes(STR_OBJECT_ALREADY_EXSISTS)), sText, WB_OK, OSQLMessageBox::Error);
+        OSQLMessageBox aDlg( getView(), String( ModuleRes( STR_ERROR_DURING_CREATION ) ), sText, WB_OK, OSQLMessageBox::Error );
 
         aDlg.Execute();
         bError = sal_True;
@@ -596,35 +598,22 @@ void OTableController::doEditIndexes()
 }
 
 // -----------------------------------------------------------------------------
-void OTableController::impl_initialize( const Sequence< Any >& aArguments )
+void OTableController::impl_initialize()
 {
     try
     {
-        OTableController_BASE::impl_initialize(aArguments);
+        OTableController_BASE::impl_initialize();
 
-        PropertyValue aValue;
-        const Any* pIter    = aArguments.getConstArray();
-        const Any* pEnd     = pIter + aArguments.getLength();
+        const NamedValueCollection& rArguments( getInitParams() );
 
-        for(;pIter != pEnd;++pIter)
-        {
-            if (!(*pIter >>= aValue))
-                throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid type in argument list. PropertyValue expected.")),*this);
-            if ( 0 == aValue.Name.compareToAscii(PROPERTY_ACTIVECONNECTION) )
-            {
-                Reference< XConnection > xConn;
-                if ( !(aValue.Value >>= xConn) )
-                    throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid argument type for ActiveConnection.")),*this);
-                OSL_ENSURE( xConn.is(), "OTableController::initialize: invalid connection given!!" );
-                if ( xConn.is() )
-                    initializeConnection( xConn );
-            }
-            else if (0 == aValue.Name.compareToAscii(PROPERTY_CURRENTTABLE))
-            {
-                if ( !(aValue.Value >>= m_sName) )
-                    throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid argument type for CurrentTable.")),*this);
-            }
-        }
+        Reference< XConnection > xConnection;
+        xConnection = rArguments.getOrDefault( (::rtl::OUString)PROPERTY_ACTIVECONNECTION, xConnection );
+        if ( xConnection.is() )
+            initializeConnection( xConnection );
+
+        if ( !rArguments.getIfExists_ensureType( (::rtl::OUString)PROPERTY_CURRENTTABLE, m_sName ) )
+            throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid argument type for CurrentTable.")),*this);
+
         // read autoincrement value set in the datasource
         ::dbaui::fillAutoIncrementValue(getDataSource(),m_bAllowAutoIncrementValue,m_sAutoIncrementValue);
 
@@ -1645,7 +1634,7 @@ void OTableController::updateTitle()
         if ( m_sName.getLength() && getConnection().is() )
         {
             if ( m_xTable.is() )
-                sTitle = ::dbtools::composeTableName(getConnection()->getMetaData(),m_xTable,sal_False,::dbtools::eInDataManipulation);
+                sTitle = ::dbtools::composeTableName( getConnection()->getMetaData(), m_xTable, ::dbtools::eInDataManipulation, false, false, false );
             else
                 sTitle = m_sName;
         }
