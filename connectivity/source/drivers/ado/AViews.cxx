@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AViews.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:16:24 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:24:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,9 @@
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include <connectivity/dbexception.hxx>
+#endif
 
 using namespace ::comphelper;
 
@@ -79,39 +82,42 @@ void OViews::impl_refresh(  ) throw(RuntimeException)
     m_aCollection.Refresh();
 }
 // -------------------------------------------------------------------------
-Reference< XPropertySet > OViews::createEmptyObject()
+Reference< XPropertySet > OViews::createDescriptor()
 {
     return new OAdoView(isCaseSensitive());
 }
 
 // -------------------------------------------------------------------------
 // XAppend
-void OViews::appendObject( const Reference< XPropertySet >& descriptor )
+sdbcx::ObjectType OViews::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     OAdoView* pView = NULL;
-    if(getImplementation(pView,descriptor) && pView != NULL)
-    {
-        WpADOCommand aCommand;
-        aCommand.Create();
-        if(aCommand.IsValid())
-        {
-            ::rtl::OUString sName;
-            descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= sName;
-            aCommand.put_Name(sName);
-            aCommand.put_CommandText(getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_COMMAND))));
-            ADOViews* pViews = (ADOViews*)m_aCollection;
-            if(FAILED(pViews->Append(OLEString(sName),aCommand)))
-                ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),static_cast<XTypeProvider*>(this));
+    if ( !getImplementation( pView, descriptor ) || pView == NULL )
+        ::dbtools::throwGenericSQLException(
+            ::rtl::OUString::createFromAscii( "Could not create view: invalid object descriptor." ),
+            static_cast<XTypeProvider*>(this)
+        );
 
-            OTables* pTables = static_cast<OTables*>(static_cast<OCatalog&>(m_rParent).getPrivateTables());
-            if(pTables)
-                pTables->appendNew(sName);
-        }
-        else
-            throw SQLException(::rtl::OUString::createFromAscii("Could not append view!"),static_cast<XTypeProvider*>(this),OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
-    }
-    else
-        throw SQLException(::rtl::OUString::createFromAscii("Could not append view!"),static_cast<XTypeProvider*>(this),OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
+    WpADOCommand aCommand;
+    aCommand.Create();
+    if ( !aCommand.IsValid() )
+        ::dbtools::throwGenericSQLException(
+            ::rtl::OUString::createFromAscii( "Could not create view: no command object." ),
+            static_cast<XTypeProvider*>(this)
+        );
+
+    ::rtl::OUString sName( _rForName );
+    aCommand.put_Name(sName);
+    aCommand.put_CommandText(getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_COMMAND))));
+    ADOViews* pViews = (ADOViews*)m_aCollection;
+    if(FAILED(pViews->Append(OLEString(sName),aCommand)))
+        ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),static_cast<XTypeProvider*>(this));
+
+    OTables* pTables = static_cast<OTables*>(static_cast<OCatalog&>(m_rParent).getPrivateTables());
+    if ( pTables )
+        pTables->appendNew(sName);
+
+    return createObject( _rForName );
 }
 // -------------------------------------------------------------------------
 // XDrop
