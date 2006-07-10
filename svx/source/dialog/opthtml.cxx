@@ -4,9 +4,9 @@
  *
  *  $RCSfile: opthtml.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:23:10 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 11:56:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,7 @@
 #include "dialogs.hrc"
 #include "helpid.hrc"
 #include "dialmgr.hxx"
+#include "langtab.hxx"
 
 // Umwandlung der Modi zu den Positionen in der Listbox
 const USHORT aPosToExportArr[] =
@@ -84,6 +85,7 @@ OfaHtmlTabPage::OfaHtmlTabPage(Window* pParent, const SfxItemSet& rSet) :
     aSize7FT        ( this, ResId( FT_SIZE7        ) ),
     aSize7NF        ( this, ResId( NF_SIZE7        ) ),
     aImportGB       ( this, ResId( GB_IMPORT       ) ),
+    aNumbersEnglishUSCB ( this, ResId( CB_NUMBERS_ENGLISH_US ) ),
     aUnknownTagCB   ( this, ResId( CB_UNKNOWN_TAGS ) ),
     aIgnoreFontNamesCB( this, ResId( CB_IGNORE_FONTNAMES ) ),
     aExportGB       ( this, ResId( GB_EXPORT       ) ),
@@ -97,6 +99,22 @@ OfaHtmlTabPage::OfaHtmlTabPage(Window* pParent, const SfxItemSet& rSet) :
 
 {
     FreeResource();
+
+    // replace placeholder with UI string from language list
+    String aText( aNumbersEnglishUSCB.GetText());
+    String aPlaceholder( RTL_CONSTASCII_USTRINGPARAM( "%ENGLISHUSLOCALE"));
+    xub_StrLen nPos;
+    if ((nPos = aText.Search( aPlaceholder)) != STRING_NOTFOUND)
+    {
+        SvxLanguageTable aLangTab;
+        const String& rStr = aLangTab.GetString( LANGUAGE_ENGLISH_US);
+        if (rStr.Len())
+        {
+            aText.Replace( nPos, aPlaceholder.Len(), rStr);
+            aNumbersEnglishUSCB.SetText( aText);
+        }
+    }
+
     aExportLB.SetSelectHdl(LINK(this, OfaHtmlTabPage, ExportHdl_Impl));
     aStarBasicCB.SetClickHdl(LINK(this, OfaHtmlTabPage, CheckBoxHdl_Impl));
 
@@ -144,6 +162,9 @@ BOOL OfaHtmlTabPage::FillItemSet( SfxItemSet& )
     if(aSize7NF.GetSavedValue() != aSize7NF.GetText())
         pHtmlOpt->SetFontSize(6, (USHORT)aSize7NF.GetValue());
 
+    if(aNumbersEnglishUSCB.IsChecked() != aNumbersEnglishUSCB.GetSavedValue())
+        pHtmlOpt->SetNumbersEnglishUS(aNumbersEnglishUSCB.IsChecked());
+
     if(aUnknownTagCB.IsChecked() != aUnknownTagCB.GetSavedValue())
         pHtmlOpt->SetImportUnknown(aUnknownTagCB.IsChecked());
 
@@ -185,6 +206,7 @@ void OfaHtmlTabPage::Reset( const SfxItemSet& )
     aSize5NF.SetValue(pHtmlOpt->GetFontSize(4));
     aSize6NF.SetValue(pHtmlOpt->GetFontSize(5));
     aSize7NF.SetValue(pHtmlOpt->GetFontSize(6));
+    aNumbersEnglishUSCB.Check(pHtmlOpt->IsNumbersEnglishUS());
     aUnknownTagCB.Check(pHtmlOpt->IsImportUnknown());
     aIgnoreFontNamesCB.Check(pHtmlOpt->IsIgnoreFontFamily());
     USHORT nExport = pHtmlOpt->GetExportMode();
@@ -215,6 +237,7 @@ void OfaHtmlTabPage::Reset( const SfxItemSet& )
     aSize5NF.SaveValue();
     aSize6NF.SaveValue();
     aSize7NF.SaveValue();
+    aNumbersEnglishUSCB.SaveValue();
     aUnknownTagCB.SaveValue();
     aIgnoreFontNamesCB.SaveValue();
 
