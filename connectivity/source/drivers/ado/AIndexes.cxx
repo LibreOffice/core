@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AIndexes.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:14:07 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:23:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,9 @@
 #ifndef _CONNECTIVITY_ADO_INDEX_HXX_
 #include "ado/AIndex.hxx"
 #endif
+#ifndef _CONNECTIVITY_ADO_ACONNECTION_HXX_
+#include "ado/AConnection.hxx"
+#endif
 #ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
 #endif
@@ -52,6 +55,9 @@
 #endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
+#endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include <connectivity/dbexception.hxx>
 #endif
 
 using namespace ::comphelper;
@@ -75,38 +81,38 @@ void OIndexes::impl_refresh() throw(RuntimeException)
     m_aCollection.Refresh();
 }
 // -------------------------------------------------------------------------
-Reference< XPropertySet > OIndexes::createEmptyObject()
+Reference< XPropertySet > OIndexes::createDescriptor()
 {
     return new OAdoIndex(isCaseSensitive(),m_pConnection);
 }
 // -------------------------------------------------------------------------
 // XAppend
-void OIndexes::appendObject( const Reference< XPropertySet >& descriptor )
+sdbcx::ObjectType OIndexes::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     OAdoIndex* pIndex = NULL;
-    sal_Bool bError = sal_True;
-    if(getImplementation(pIndex,descriptor) && pIndex != NULL)
+    if ( !getImplementation(pIndex,descriptor) || pIndex == NULL )
+        ::dbtools::throwGenericSQLException(
+            ::rtl::OUString::createFromAscii( "Could not create index: invalid object descriptor." ),
+            static_cast<XTypeProvider*>(this)
+        );
+
+    ADOIndexes* pIndexes = m_aCollection;
+    if ( FAILED( pIndexes->Append( OLEVariant( _rForName ), OLEVariant( pIndex->getImpl() ) ) ) )
     {
-        ADOIndexes* pIndexes = m_aCollection;
-        bError = FAILED(pIndexes->Append(OLEVariant(getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)))),
-                                  OLEVariant(pIndex->getImpl())));
+        ADOS::ThrowException(*m_pConnection->getConnection(),static_cast<XTypeProvider*>(this));
+        ::dbtools::throwGenericSQLException(
+            ::rtl::OUString::createFromAscii( "Could not append index." ),
+            static_cast<XTypeProvider*>(this)
+        );
     }
-    if(bError)
-        throw SQLException(::rtl::OUString::createFromAscii("Could not append index!"),static_cast<XTypeProvider*>(this),OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
+
+    return new OAdoIndex(isCaseSensitive(),m_pConnection,pIndex->getImpl());
 }
 // -------------------------------------------------------------------------
 // XDrop
 void OIndexes::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElementName)
 {
     m_aCollection.Delete(_sElementName);
-}
-// -------------------------------------------------------------------------
-sdbcx::ObjectType OIndexes::cloneObject(const Reference< XPropertySet >& _xDescriptor)
-{
-    OAdoIndex* pIndex = NULL;
-    if(getImplementation(pIndex,_xDescriptor) && pIndex != NULL)
-        return new OAdoIndex(isCaseSensitive(),m_pConnection,pIndex->getImpl());
-    return sdbcx::ObjectType();
 }
 // -----------------------------------------------------------------------------
 
