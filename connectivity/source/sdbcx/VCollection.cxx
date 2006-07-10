@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VCollection.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:09:50 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:39:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,9 @@
 #ifndef _CONNECTIVITY_SDBCX_DESCRIPTOR_HXX_
 #include "connectivity/sdbcx/VDescriptor.hxx"
 #endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include "connectivity/dbexception.hxx"
+#endif
 #ifndef _COMPHELPER_ENUMHELPER_HXX_
 #include <comphelper/enumhelper.hxx>
 #endif
@@ -49,8 +52,14 @@
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
+#ifndef _COMPHELPER_PROPERTY_HXX_
+#include <comphelper/property.hxx>
+#endif
 #ifndef CONNECTIVITY_CONNECTION_HXX
 #include "TConnection.hxx"
+#endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
 #endif
 
 using namespace connectivity::sdbcx;
@@ -341,7 +350,14 @@ Any SAL_CALL OCollection::getByName( const ::rtl::OUString& aName ) throw(NoSuch
     ::osl::MutexGuard aGuard(m_rMutex);
 
     if ( !m_pElements->exists(aName) )
-        throw NoSuchElementException(aName,static_cast<XTypeProvider*>(this));
+    {
+        ::rtl::OUStringBuffer aMessage;
+        aMessage.appendAscii( "There is no element named '" );
+        aMessage.append( aName );
+        aMessage.appendAscii( "'." );
+        // TODO: resource
+        throw NoSuchElementException( aMessage.makeStringAndClear(), static_cast< XTypeProvider* >( this ) );
+    }
 
     return makeAny(getObject(m_pElements->findColumn(aName)));
 }
@@ -373,7 +389,7 @@ Reference< XPropertySet > SAL_CALL OCollection::createDataDescriptor(  ) throw(R
 {
     ::osl::MutexGuard aGuard(m_rMutex);
 
-    return createEmptyObject();
+    return createDescriptor();
 }
 // -----------------------------------------------------------------------------
 ::rtl::OUString OCollection::getNameForObject(const ObjectType& _xObject)
@@ -387,38 +403,29 @@ Reference< XPropertySet > SAL_CALL OCollection::createDataDescriptor(  ) throw(R
 // XAppend
 void SAL_CALL OCollection::appendByDescriptor( const Reference< XPropertySet >& descriptor ) throw(SQLException, ElementExistException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard(m_rMutex);
+    ::osl::ClearableMutexGuard aGuard(m_rMutex);
 
-    ObjectType xName(descriptor,UNO_QUERY);
-    if(xName.is())
-    {
+    ::rtl::OUString sName = getNameForObject( descriptor );
 
-        ::rtl::OUString sName = getNameForObject(xName);
+    if ( m_pElements->exists(sName) )
+        throw ElementExistException(sName,static_cast<XTypeProvider*>(this));
 
-        if ( m_pElements->exists(sName) )
-            throw ElementExistException(sName,static_cast<XTypeProvider*>(this));
+    ObjectType xNewlyCreated = appendObject( sName, descriptor );
+    if ( !xNewlyCreated.is() )
+        throw RuntimeException();
 
-        appendObject(descriptor);
-        ObjectType xNewName = cloneObject(descriptor);
+    ODescriptor* pDescriptor = ODescriptor::getImplementation( xNewlyCreated );
+    if ( pDescriptor )
+        pDescriptor->setNew( sal_False );
 
-        ODescriptor* pDescriptor = ODescriptor::getImplementation( xNewName );
-        if ( pDescriptor )
-            pDescriptor->setNew( sal_False );
+    sName = getNameForObject( xNewlyCreated );
+    if ( !m_pElements->exists( sName ) ) // this may happen when the drived class included it itself
+        m_pElements->insert( sName, xNewlyCreated );
 
-        if(xNewName.is())
-        {
-            sName = getNameForObject(xNewName);
-            if ( !m_pElements->exists(sName) ) // this may happen when the drived class included it itself
-                m_pElements->insert(sName,xNewName);
-            // notify our container listeners
-            ContainerEvent aEvent(static_cast<XContainer*>(this), makeAny(sName), makeAny(xNewName), Any());
-            OInterfaceIteratorHelper aListenerLoop(m_aContainerListeners);
-            while (aListenerLoop.hasMoreElements())
-                static_cast<XContainerListener*>(aListenerLoop.next())->elementInserted(aEvent);
-        }
-        else
-            throw SQLException();
-    }
+    // notify our container listeners
+    ContainerEvent aEvent(static_cast<XContainer*>(this), makeAny(sName), makeAny(xNewlyCreated), Any());
+    aGuard.clear();
+    m_aContainerListeners.notifyEach( &XContainerListener::elementInserted, aEvent );
 }
 // -------------------------------------------------------------------------
 // XDrop
@@ -466,7 +473,7 @@ void OCollection::notifyElementRemoved(const ::rtl::OUString& _sName)
 sal_Int32 SAL_CALL OCollection::findColumn( const ::rtl::OUString& columnName ) throw(SQLException, RuntimeException)
 {
     if ( !m_pElements->exists(columnName) )
-        throw SQLException(::rtl::OUString::createFromAscii("Unknown column name!"),static_cast<XTypeProvider*>(this),OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,makeAny(NoSuchElementException(columnName,static_cast<XTypeProvider*>(this))) );
+        ::dbtools::throwGenericSQLException( ::rtl::OUString::createFromAscii( "Unknown column name." ), static_cast<XTypeProvider*>(this) );
 
     return m_pElements->findColumn(columnName) + 1; // because columns start at one
 }
@@ -585,19 +592,22 @@ void OCollection::disposeElements()
     m_pElements->disposeElements();
 }
 // -----------------------------------------------------------------------------
-Reference< XPropertySet > OCollection::createEmptyObject()
+Reference< XPropertySet > OCollection::createDescriptor()
 {
     OSL_ASSERT(!"Need to be overloaded when used!");
     throw SQLException();
 }
 // -----------------------------------------------------------------------------
-void OCollection::appendObject( const Reference< XPropertySet >& /*descriptor*/ )
+ObjectType OCollection::cloneDescriptor( const ObjectType& _descriptor )
 {
+    ObjectType xNewDescriptor( createDescriptor() );
+    ::comphelper::copyProperties( _descriptor, xNewDescriptor );
+    return xNewDescriptor;
 }
 // -----------------------------------------------------------------------------
-ObjectType OCollection::cloneObject(const Reference< XPropertySet >& _xDescriptor)
+ObjectType OCollection::appendObject( const ::rtl::OUString& /*_rForName*/, const Reference< XPropertySet >& descriptor )
 {
-    return _xDescriptor.is() ? createObject(getNameForObject(_xDescriptor)) : sdbcx::ObjectType();
+    return cloneDescriptor( descriptor );
 }
 // -----------------------------------------------------------------------------
 void OCollection::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString /*_sElementName*/)
