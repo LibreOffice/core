@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XclImpChangeTrack.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:14:14 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:50:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -199,19 +199,19 @@ class XclImpChTrFmlConverter : public ExcelToSc8
 private:
     XclImpChangeTrack&          rChangeTrack;
 
-    virtual BOOL                Read3DTabReference( SCTAB& rFirstTab, SCTAB& rLastTab );
+    virtual BOOL                Read3DTabReference( XclImpStream& rStrm, SCTAB& rFirstTab, SCTAB& rLastTab );
 
 public:
     inline                      XclImpChTrFmlConverter(
-                                    XclImpStream& rStrm,
+                                    const XclImpRoot& rRoot,
                                     XclImpChangeTrack& rXclChTr );
     virtual                     ~XclImpChTrFmlConverter();
 };
 
 inline XclImpChTrFmlConverter::XclImpChTrFmlConverter(
-        XclImpStream& rStrm,
+        const XclImpRoot& rRoot,
         XclImpChangeTrack& rXclChTr ) :
-    ExcelToSc8( rStrm ),
+    ExcelToSc8( rRoot ),
     rChangeTrack( rXclChTr )
 {
 }
