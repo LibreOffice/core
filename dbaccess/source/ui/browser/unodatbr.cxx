@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.175 $
+ *  $Revision: 1.176 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:58:39 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:24:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,6 +98,9 @@
 #endif
 #ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 
 #ifndef _SFXINTITEM_HXX //autogen
@@ -329,6 +332,7 @@ using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::datatransfer;
 using namespace ::dbtools;
+using namespace ::comphelper;
 using namespace ::svx;
 
 using ::com::sun::star::frame::XLayoutManager;      // obsolete of interface is moved outside drafts
@@ -553,7 +557,6 @@ sal_Bool SbaTableQueryBrowser::Construct(Window* pParent)
         m_pTreeView->setModel(m_pTreeModel);
         m_pTreeView->setSelectHdl(LINK(this, SbaTableQueryBrowser, OnSelectEntry));
         m_pTreeView->getListBox()->SetDoubleClickHdl(LINK(this, SbaTableQueryBrowser, OnEntryDoubleClicked));
-        //  initializeTreeModel(); call moved to impl_initialize
 
         // TODO
         getBrowserView()->getVclControl()->GetDataWindow().SetUniqueId(UID_DATABROWSE_DATAWINDOW);
@@ -1661,7 +1664,7 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
         case ID_BROWSER_EXPLORER:
         {       // this slot is available even if no form is loaded
             aReturn.bEnabled = m_bEnableBrowser;
-            aReturn.aState = ::cppu::bool2any(haveExplorer());
+            aReturn.bChecked = haveExplorer();
             return aReturn;
         }
         case ID_BROWSER_REMOVEFILTER:
@@ -1759,7 +1762,7 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
                     String sObject(aName.getStr());
 
                     sTitle.SearchAndReplace('#',sObject);
-                    aReturn.aState <<= ::rtl::OUString(sTitle);
+                    aReturn.sTitle = sTitle;
                     aReturn.bEnabled = sal_True;
                 }
                 break;
@@ -3019,129 +3022,63 @@ void SbaTableQueryBrowser::unloadAndCleanup( sal_Bool _bDisposeConnection )
 }
 
 // -------------------------------------------------------------------------
-void SbaTableQueryBrowser::impl_initialize( const Sequence< Any >& aArguments )
+void SbaTableQueryBrowser::impl_initialize()
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
         // doin' a lot of VCL stuff here -> lock the SolarMutex
 
     // first initialize the parent
-    SbaXDataBrowserController::impl_initialize( aArguments );
+    SbaXDataBrowserController::impl_initialize();
 
     Reference<XConnection> xForeignConnection;
     Reference< XFrame > xFrame;
 
-    PropertyValue aValue;
-    const Any* pIter    = aArguments.getConstArray();
-    const Any* pEnd     = pIter + aArguments.getLength();
-
-    ::rtl::OUString aTableName,aCatalogName,aSchemaName;
+    ::rtl::OUString aTableName, aCatalogName, aSchemaName;
 
     sal_Bool bEsacpeProcessing = sal_True;
-    sal_Bool bShow = sal_True;
     sal_Int32 nInitialDisplayCommandType = CommandType::COMMAND;
     ::rtl::OUString sInitialDataSourceName;
     ::rtl::OUString sInitialCommand;
 
-    for(;pIter != pEnd;++pIter)
-    {
-        if (!(*pIter >>= aValue))
-            throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid type in argument list. PropertyValue expected.")),*this);
+    const NamedValueCollection& rArguments( getInitParams() );
 
-        if (0 == aValue.Name.compareToAscii(PROPERTY_DATASOURCENAME))
-        {
-            if ( !(aValue.Value >>= sInitialDataSourceName) )
-                throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid argument type for DataSourceName.")),*this);
-        }
-        else if (0 == aValue.Name.compareToAscii(PROPERTY_COMMANDTYPE))
-        {
-            if ( !(aValue.Value >>= nInitialDisplayCommandType) )
-                throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid argument type for CommandType.")),*this);
-        }
-        else if (0 == aValue.Name.compareToAscii(PROPERTY_COMMAND))
-        {
-            if ( !(aValue.Value >>= sInitialCommand) )
-                throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid argument type for Command.")),*this);
-        }
-        else if (0 == aValue.Name.compareToAscii(PROPERTY_ACTIVECONNECTION))
-        {
-            if ( !(aValue.Value >>= xForeignConnection) )
-                throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid argument type for ActiveConnection.")),*this);
-        }
-        else if (0 == aValue.Name.compareToAscii(PROPERTY_UPDATE_CATALOGNAME))
-        {
-            if ( !(aValue.Value >>= aCatalogName) )
-                throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid argument type for UpdateCatalogName.")),*this);
-        }
-        else if (0 == aValue.Name.compareToAscii(PROPERTY_UPDATE_SCHEMANAME))
-        {
-            if ( !(aValue.Value >>= aSchemaName) )
-                throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid argument type for UpdateSchemaName.")),*this);
-        }
-        else if (0 == aValue.Name.compareToAscii(PROPERTY_UPDATE_TABLENAME))
-        {
-            if ( !(aValue.Value >>= aTableName) )
-                throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid argument type for UpdateTableName.")),*this);
-        }
-        else if (0 == aValue.Name.compareToAscii(PROPERTY_USE_ESCAPE_PROCESSING))
-        {
-            if ( !(aValue.Value >>= bEsacpeProcessing) )
-                throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid argument type for EscapeProcessing.")),*this);
-        }
-        else if ( 0 == aValue.Name.compareToAscii( "Frame" ) )
-        {
-            if ( !(aValue.Value >>= xFrame) )
-                throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid argument type for Frame.")),*this);
-        }
-        else if (0 == aValue.Name.compareToAscii("Preview"))
-        {
-            if ( ::cppu::any2bool(aValue.Value) )
-                bShow = sal_False;
-        }
-        else if (0 == aValue.Name.compareToAscii(PROPERTY_SHOWTREEVIEW))
-        {
-            bShow = sal_False;
-            try
-            {
-                if(::cppu::any2bool(aValue.Value))
-                    showExplorer();
-                else
-                    hideExplorer();
-            }
-            catch(Exception&)
-            {
-            }
-        }
-        else if (0 == aValue.Name.compareToAscii(PROPERTY_SHOWTREEVIEWBUTTON))
-        {
-            try
-            {
-                // TODO: toolbox
-                if ( !::cppu::any2bool(aValue.Value) && getView() )
-                {
-                    // hide the explorer and the separator
-                    m_bEnableBrowser = sal_False;
-//                  getView()->getToolBox()->HideItem(ID_BROWSER_EXPLORER);
-//                  getView()->getToolBox()->HideItem(getView()->getToolBox()->GetItemId(getView()->getToolBox()->GetItemPos(ID_BROWSER_EXPLORER)+1));
-//                  getView()->getToolBox()->ShowItem(ID_BROWSER_CLOSE);
-                }
-            }
-            catch(Exception&)
-            {
-            }
-        }
-        else if (0 == aValue.Name.compareToAscii(PROPERTY_SHOWMENU))
-        {
-            if ( !(aValue.Value >>= m_bShowMenu) )
-                throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid argument type for ShowMenu.")),*this);
-        }
-    }
+    if ( !rArguments.getIfExists_ensureType( (::rtl::OUString)PROPERTY_DATASOURCENAME, sInitialDataSourceName ) )
+        throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid argument type for DataSourceName.")),*this);
 
-    if ( bShow )
-    {
-        m_pTreeView->Show();
-        m_pSplitter->Show();
-        getBrowserView()->Resize();
-    }
+    if ( !rArguments.getIfExists_ensureType( (::rtl::OUString)PROPERTY_COMMANDTYPE, nInitialDisplayCommandType ) )
+        throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid argument type for CommandType.")),*this);
+
+    if ( !rArguments.getIfExists_ensureType( (::rtl::OUString)PROPERTY_COMMAND, sInitialCommand ) )
+        throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid argument type for Command.")),*this);
+
+    if ( !rArguments.getIfExists_ensureType( (::rtl::OUString)PROPERTY_ACTIVECONNECTION, xForeignConnection ) )
+        throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid argument type for ActiveConnection.")),*this);
+
+    if ( !rArguments.getIfExists_ensureType( (::rtl::OUString)PROPERTY_UPDATE_CATALOGNAME, aCatalogName ) )
+        throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid argument type for UpdateCatalogName.")),*this);
+
+    if ( !rArguments.getIfExists_ensureType( (::rtl::OUString)PROPERTY_UPDATE_SCHEMANAME, aSchemaName ) )
+        throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid argument type for UpdateSchemaName.")),*this);
+
+    if ( !rArguments.getIfExists_ensureType( (::rtl::OUString)PROPERTY_UPDATE_TABLENAME, aTableName ) )
+        throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid argument type for UpdateTableName.")),*this);
+
+    if ( !rArguments.getIfExists_ensureType( (::rtl::OUString)PROPERTY_USE_ESCAPE_PROCESSING, bEsacpeProcessing ) )
+        throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid argument type for EscapeProcessing.")),*this);
+
+    if ( !rArguments.getIfExists_ensureType( "Frame", xFrame ) )
+        throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid argument type for Frame.")),*this);
+
+    if ( !rArguments.getIfExists_ensureType( (::rtl::OUString)PROPERTY_SHOWMENU, m_bShowMenu ) )
+        throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid argument type for ShowMenu.")),*this);
+
+    sal_Bool bShowTreeView = rArguments.getOrDefault( (::rtl::OUString)PROPERTY_SHOWTREEVIEW, sal_True );
+    m_bEnableBrowser = rArguments.getOrDefault( (::rtl::OUString)PROPERTY_SHOWTREEVIEWBUTTON, sal_True );
+
+    if ( bShowTreeView )
+        showExplorer();
+    else
+        hideExplorer();
 
     if ( m_bPreview )
     {
@@ -3157,7 +3094,6 @@ void SbaTableQueryBrowser::impl_initialize( const Sequence< Any >& aArguments )
             *pStringIter++  = PROPERTY_BORDER;
             *pValueIter++   <<= sal_Int16(0);
 
-
             *pStringIter++  = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HasNavigationBar"));
             *pValueIter++       <<= sal_False;
             *pStringIter++  = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HasRecordMarker"));
@@ -3172,6 +3108,7 @@ void SbaTableQueryBrowser::impl_initialize( const Sequence< Any >& aArguments )
         }
         catch(Exception)
         {
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
