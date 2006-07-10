@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:46:23 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:06:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1425,7 +1425,7 @@ void ScPosWnd::FillRangeNames()
             for ( i=0; i<nCount; i++ )
             {
                 ScRangeData* pData = (*pRangeNames)[i];
-                if (pData->IsReference(aDummy))
+                if (pData->IsValidReference(aDummy))
                     nValidCount++;
             }
             if ( nValidCount )
@@ -1435,7 +1435,7 @@ void ScPosWnd::FillRangeNames()
                 for ( i=0, j=0; i<nCount; i++ )
                 {
                     ScRangeData* pData = (*pRangeNames)[i];
-                    if (pData->IsReference(aDummy))
+                    if (pData->IsValidReference(aDummy))
                         ppSortArray[j++] = pData;
                 }
 #ifndef ICC
