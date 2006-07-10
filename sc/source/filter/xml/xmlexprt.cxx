@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.199 $
+ *  $Revision: 1.200 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:36:59 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:06:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2149,7 +2149,7 @@ void ScXMLExport::CollectInternalShape( uno::Reference< drawing::XShape > xShape
         {
             if (pObject->ISA( SdrCaptionObj ))
             {
-                ScDrawObjData* pData = ScDrawLayer::GetObjData( pObject );
+                ScDrawObjData* pData = ScDrawLayer::GetObjDataTab( pObject, static_cast<SCTAB>(nCurrentTable) );
                 if (pData)
                 {
                     pSharedData->AddNoteObj(xShape, pData->aStt);
@@ -2168,7 +2168,7 @@ void ScXMLExport::CollectInternalShape( uno::Reference< drawing::XShape > xShape
                 ScRange         aSourceRange;
                 sal_Bool        bRedLine;
                 ScDetectiveObjType eObjType = aDetFunc.GetDetectiveObjectType(
-                    pObject, aPosition, aSourceRange, bRedLine );
+                    pObject, nCurrentTable, aPosition, aSourceRange, bRedLine );
                 pSharedData->GetDetectiveObjContainer()->AddObject( eObjType, static_cast<SCTAB>(nCurrentTable), aPosition, aSourceRange, bRedLine );
             }
         }
