@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QTableWindow.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:22:29 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:40:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,6 +103,8 @@ namespace dbaui
                                     ::com::sun::star::beans::XPropertySet>& _xColumn,
                                     bool _bPrimaryKey);
 
+        virtual bool    allowQueries() const;
+        virtual void    onNoColumns_throw();
     };
 }
 #endif // DBAUI_QUERY_TABLEWINDOW_HXX
