@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:05:52 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:26:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -445,7 +445,7 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
     *pCounter++ = new SfxStringItem(DSID_AUTOINCREMENTVALUE, String());
     *pCounter++ = new SfxStringItem(DSID_AUTORETRIEVEVALUE, String());
     *pCounter++ = new SfxBoolItem(DSID_AUTORETRIEVEENABLED, sal_False);
-    *pCounter++ = new SfxBoolItem(DSID_APPEND_TABLE_ALIAS, sal_True);
+    *pCounter++ = new SfxBoolItem(DSID_APPEND_TABLE_ALIAS, sal_False);
     *pCounter++ = new SfxInt32Item(DSID_MYSQL_PORTNUMBER, 3306);
     *pCounter++ = new SfxBoolItem(DSID_IGNOREDRIVER_PRIV, sal_True);
     *pCounter++ = new SfxInt32Item(DSID_BOOLEANCOMPARISON, 0);
