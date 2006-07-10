@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryTableView.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:12:43 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:28:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@ namespace dbaui
 
         // Basisklasse ueberschrieben : Fenster kreieren und loeschen
         // (eigentlich nicht wirklich LOESCHEN, es geht in die Verantwortung einer UNDO-Action ueber)
-        virtual void AddTabWin(const ::rtl::OUString& strDatabase, const ::rtl::OUString& strTableName, BOOL bNewTable = FALSE);
+        virtual void AddTabWin( const ::rtl::OUString& _rTableName, const ::rtl::OUString& _rAliasName, BOOL bNewTable = FALSE );
         virtual void RemoveTabWin(OTableWindow* pTabWin);
 
         // und ein AddTabWin, das einen Alias vorgibt
