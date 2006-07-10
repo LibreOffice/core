@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfld.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:22:15 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:58:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -433,7 +433,13 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
             }
             else
             {
-                XubString aTxt( pTxtNd->GetNumString() );
+                // --> OD 2006-06-02 #b6432095#
+                // use method <SwNumRule::MakeNumString(..)> instead of
+                // method <SwTxtNode::GetNumString()>, because for levels with
+                // numbering none the prefix and the suffix strings have to be provided.
+//                XubString aTxt( pTxtNd->GetNumString() );
+                XubString aTxt( pNumRule->MakeNumString( *(pTxtNd->GetNum()) ) );
+                // <--
 
                 // 7974: Nicht nur eine Optimierung...
                 // Eine Numberportion ohne Text wird die Breite von 0
