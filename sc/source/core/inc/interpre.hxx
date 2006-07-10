@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpre.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-21 11:53:21 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 12:31:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -663,6 +663,7 @@ void ScRSQ();
 void ScSTEXY();
 void ScSlope();
 void ScTrend();
+void ScInfo();
 
 
 public:
