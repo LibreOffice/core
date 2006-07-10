@@ -4,9 +4,9 @@
  *
  *  $RCSfile: futext3.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:59:09 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:08:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -323,7 +323,7 @@ void FuText::StopEditMode(BOOL bTextDirection)
     SdrObject* pObject = pView->GetTextEditObject();
     if ( pObject && pObject->GetLayer()==SC_LAYER_INTERN && pObject->ISA(SdrCaptionObj) )
     {
-        ScDrawObjData* pData = ScDrawLayer::GetObjData( pObject );
+        ScDrawObjData* pData = ScDrawLayer::GetObjDataTab( pObject, pViewShell->GetViewData()->GetTabNo() );
         if( pData )
         {
             aTabPos = ScAddress( pData->aStt);
@@ -455,7 +455,7 @@ void FuText::StopDragMode(SdrObject* pObject)
 
     if ( pObject && pObject->GetLayer()==SC_LAYER_INTERN && pObject->ISA(SdrCaptionObj) )
     {
-        ScDrawObjData* pData = ScDrawLayer::GetObjData( pObject );
+        ScDrawObjData* pData = ScDrawLayer::GetObjDataTab( pObject, pViewShell->GetViewData()->GetTabNo() );
         if( pData )
         {
             aTabPos = pData->aStt;
