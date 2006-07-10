@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fcomp.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:27:29 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:27:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -543,7 +543,7 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode) thr
         {
             ::rtl::OUString sMsg = ::rtl::OUString::createFromAscii("Column not found: ");
             sMsg += aColumnName;
-            throw SQLException(sMsg,NULL,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
+            ::dbtools::throwGenericSQLException( sMsg, NULL );
         }
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xCol;
         try
