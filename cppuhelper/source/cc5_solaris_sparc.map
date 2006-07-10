@@ -334,3 +334,8 @@ UDK_3.2 {
         __1cEcppuUPropertySetMixinImplZaddPropertyChangeListener6MrknDrtlIOUString_rknDcomDsunEstarDunoJReference4n0GFbeansXXPropertyChangeListener____v_;
         __1cEcppuUPropertySetMixinImplZaddVetoableChangeListener6MrknDrtlIOUString_rknDcomDsunEstarDunoJReference4n0GFbeansXXVetoableChangeListener____v_;
 } UDK_3.1;
+
+UDK_3.3 { # OOo 2.0.4
+    global:
+        __1cEcppubC__RTTI__1nEcppuLOWeakObject__;
+} UDK_3.2;
