@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AKeyColumns.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:29:57 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:23:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,7 +106,7 @@ sdbcx::ObjectType OKeyColumns::createObject(const ::rtl::OUString& _rName)
     return xRet;
 }
 // -------------------------------------------------------------------------
-Reference< XPropertySet > OKeyColumns::createEmptyObject()
+Reference< XPropertySet > OKeyColumns::createDescriptor()
 {
     OKeyColumn* pNew = new OKeyColumn();
     return pNew;
