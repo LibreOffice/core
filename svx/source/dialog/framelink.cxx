@@ -4,9 +4,9 @@
  *
  *  $RCSfile: framelink.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:10:24 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:14:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -224,8 +224,9 @@ inline long lclD2L( double fValue )
 sal_uInt16 lclScaleValue( long nValue, double fScale, sal_uInt16 nMaxWidth )
 {
     // convert any width except 0 to at least 1 unit
+    // #i61324# 1 twip must scale to 1/100mm
     return nValue ? static_cast< sal_uInt16 >( std::min< long >( std::max(
-        static_cast< long >( nValue * fScale + 0.25 ), 1L ), nMaxWidth ) ) : 0;
+        static_cast< long >( nValue * fScale ), 1L ), nMaxWidth ) ) : 0;
 }
 
 // ----------------------------------------------------------------------------
