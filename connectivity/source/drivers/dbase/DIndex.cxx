@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DIndex.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:19:57 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:25:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -220,7 +220,7 @@ sal_Bool ODbaseIndex::openIndexFile()
         {
             ::rtl::OUString sErrMsg = ::rtl::OUString::createFromAscii("Could not open index: ");
             sErrMsg += sFile;
-            throw SQLException(sErrMsg,*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
+            ::dbtools::throwGenericSQLException( sErrMsg, *this );
         }
     }
 
@@ -489,12 +489,10 @@ BOOL ODbaseIndex::DropImpl()
     if(UCBContentHelper::Exists(sPath))
     {
         if(!UCBContentHelper::Kill(sPath))
-            throw SQLException(
+            ::dbtools::throwGenericSQLException(
                 ::rtl::OUString::createFromAscii("The index could not be deleted. An unknown error while accessing the file system occured."),
-                *m_pTable,
-                OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),
-                1000,
-                Any()
+                // TODO: resource
+                *m_pTable
             );
     }
 
@@ -695,7 +693,10 @@ BOOL ODbaseIndex::CreateImpl()
                     closeImpl();
                     if(UCBContentHelper::Exists(sFile))
                         UCBContentHelper::Kill(sFile);
-                    throw SQLException(::rtl::OUString::createFromAscii("Can not create index. Values are not unique!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
+                    ::dbtools::throwGenericSQLException(
+                        ::rtl::OUString::createFromAscii("Can not create index. Values are not unique!"),
+                        *this
+                    );
                 }
             }
             aInsertKey.setValue(aValue);
