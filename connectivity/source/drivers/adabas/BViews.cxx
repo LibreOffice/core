@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BViews.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:11:38 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:23:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,20 +149,17 @@ void OViews::disposing(void)
     OCollection::disposing();
 }
 // -------------------------------------------------------------------------
-Reference< XPropertySet > OViews::createEmptyObject()
+Reference< XPropertySet > OViews::createDescriptor()
 {
     Reference<XConnection> xConnection = static_cast<OAdabasCatalog&>(m_rParent).getConnection();
     return new connectivity::sdbcx::OView(sal_True,xConnection->getMetaData());
 }
 // -------------------------------------------------------------------------
 // XAppend
-void OViews::appendObject( const Reference< XPropertySet >& descriptor )
+sdbcx::ObjectType OViews::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
-    ::rtl::OUString aName = getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)));
-    if(!aName.getLength())
-        ::dbtools::throwFunctionSequenceException(static_cast<XTypeProvider*>(this));
-
     createView(descriptor);
+    return createObject( _rForName );
 }
 // -------------------------------------------------------------------------
 // XDrop
