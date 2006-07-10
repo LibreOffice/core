@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:00:59 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 11:21:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -212,7 +212,7 @@ PresentationSettings::PresentationSettings()
 :   mbAll( true ),
     mbEndless( false ),
     mbManual( false ),
-    mbMouseVisible( true ),
+    mbMouseVisible( false ),
     mbMouseAsPen( false ),
     mbLockedPages( false ),
     mbAlwaysOnTop( false ),
