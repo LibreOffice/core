@@ -4,9 +4,9 @@
  *
  *  $RCSfile: querycontroller.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:00:38 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:33:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,9 +97,9 @@ namespace dbaui
         OTableFields                            m_vTableFieldDesc;
         OTableFields                            m_vUnUsedFieldsDesc; // contains fields which aren't visible and don't have any criteria
 
-        ::svxform::OSystemParseContext*             m_pParseContext;
-        ::connectivity::OSQLParser*             m_pSqlParser;   // to parse sql statements
-        ::connectivity::OSQLParseTreeIterator*  m_pSqlIterator; // to iterate through them
+        ::svxform::OSystemParseContext*         m_pParseContext;
+        ::connectivity::OSQLParser              m_aSqlParser;
+        ::connectivity::OSQLParseTreeIterator*  m_pSqlIterator;
         ::std::vector<sal_uInt32>               m_vColumnWidth;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >    m_xComposer;
@@ -173,7 +173,7 @@ namespace dbaui
         void            setSplitPos(sal_Int32 _nSplitPos)       { m_nSplitPos = _nSplitPos;}
         void            setVisibleRows(sal_Int32 _nVisibleRows) { m_nVisibleRows = _nVisibleRows;}
 
-        ::connectivity::OSQLParser*             getParser()         { return m_pSqlParser;  }
+        ::connectivity::OSQLParser&             getParser()         { return m_aSqlParser;  }
         ::connectivity::OSQLParseTreeIterator&  getParseIterator()  { return *m_pSqlIterator; }
         sal_uInt32 getColWidth(sal_uInt16 _nPos) const
         {
@@ -206,12 +206,16 @@ namespace dbaui
         // ask the user if the design should be saved when it is modified
         virtual short saveModified();
         virtual void reset();
-        virtual void impl_initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments );
+        virtual void impl_initialize();
 
         void        resetImpl();
 
         /// sets m_sStatement, and notifies our respective property change listeners
         void    setStatement_fireEvent( const ::rtl::OUString& _rNewStatement, bool _bFireStatementChange = true );
+
+        // OJoinController overridables
+        virtual bool allowViews() const;
+        virtual bool allowQueries() const;
 
     private:
         DECL_LINK( OnExecuteAddTable, void* );
