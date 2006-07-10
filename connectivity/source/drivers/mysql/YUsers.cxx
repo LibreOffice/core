@@ -4,9 +4,9 @@
  *
  *  $RCSfile: YUsers.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:53:53 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:31:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,19 +97,18 @@ void OUsers::impl_refresh() throw(RuntimeException)
     m_pParent->refreshUsers();
 }
 // -------------------------------------------------------------------------
-Reference< XPropertySet > OUsers::createEmptyObject()
+Reference< XPropertySet > OUsers::createDescriptor()
 {
     OUserExtend* pNew = new OUserExtend(m_xConnection);
     return pNew;
 }
 // -------------------------------------------------------------------------
 // XAppend
-void OUsers::appendObject( const Reference< XPropertySet >& descriptor )
+sdbcx::ObjectType OUsers::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("GRANT USAGE ON * TO ");
     ::rtl::OUString aQuote  = m_xConnection->getMetaData()->getIdentifierQuoteString(  );
-    ::rtl::OUString sUserName;
-    descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= sUserName;
+    ::rtl::OUString sUserName( _rForName );
     aSql += ::dbtools::quoteName(aQuote,sUserName)
                 + ::rtl::OUString::createFromAscii(" @\"%\" ");
     ::rtl::OUString sPassword;
@@ -125,6 +124,8 @@ void OUsers::appendObject( const Reference< XPropertySet >& descriptor )
     if(xStmt.is())
         xStmt->execute(aSql);
     ::comphelper::disposeComponent(xStmt);
+
+    return createObject( _rForName );
 }
 // -------------------------------------------------------------------------
 // XDrop
