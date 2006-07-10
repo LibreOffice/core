@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentcontainer.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:45:09 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:10:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,6 +92,27 @@ namespace dbaccess
 //........................................................................
 
 //==========================================================================
+//= LocalNameApproval
+//==========================================================================
+class LocalNameApproval : public IContainerApprove
+{
+public:
+    LocalNameApproval() { }
+    void SAL_CALL   approveElement( const ::rtl::OUString& _rName, const Reference< XInterface >& _rxElement );
+};
+
+//--------------------------------------------------------------------------
+void SAL_CALL LocalNameApproval::approveElement( const ::rtl::OUString& _rName, const Reference< XInterface >& /*_rxElement*/ )
+{
+    if ( _rName.indexOf( '/' ) != -1 )
+        throw IllegalArgumentException(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "The name must not contain any / characters." ) ),
+            NULL,
+            0 );
+        // TODO: resource
+}
+
+//==========================================================================
 //= ODocumentContainer
 //==========================================================================
 DBG_NAME(ODocumentContainer)
@@ -108,6 +129,8 @@ ODocumentContainer::ODocumentContainer(const Reference< XMultiServiceFactory >& 
     DBG_CTOR(ODocumentContainer, NULL);
     registerProperty(PROPERTY_NAME, PROPERTY_ID_NAME, PropertyAttribute::BOUND | PropertyAttribute::READONLY | PropertyAttribute::CONSTRAINED,
                     &m_pImpl->m_aProps.aTitle, ::getCppuType(&m_pImpl->m_aProps.aTitle));
+
+    setElementApproval( PContainerApprove( new LocalNameApproval ) );
 }
 
 //--------------------------------------------------------------------------
@@ -138,12 +161,12 @@ Sequence< ::rtl::OUString > SAL_CALL ODocumentContainer::getSupportedServiceName
 //--------------------------------------------------------------------------
 Reference< XContent > ODocumentContainer::createObject( const ::rtl::OUString& _rName)
 {
-    ODefinitionContainer_Impl* pItem = static_cast<ODefinitionContainer_Impl*>(m_pImpl.get());
-    ODefinitionContainer_Impl::Documents::iterator aFind = pItem->m_aDocumentMap.find(_rName);
-    OSL_ENSURE( aFind != pItem->m_aDocumentMap.end() ," Invalid entry in map!");
+    const ODefinitionContainer_Impl& rDefinitions( getDefinitions() );
+    ODefinitionContainer_Impl::const_iterator aFind = rDefinitions.find( _rName );
+    OSL_ENSURE( aFind != rDefinitions.end(), "ODocumentContainer::createObject:Invalid entry in map!" );
     if ( aFind->second->m_aProps.bIsFolder )
-        return new ODocumentContainer(m_xORB,*this,aFind->second,m_bFormsContainer);
-    return new ODocumentDefinition(*this, m_xORB,aFind->second,m_bFormsContainer);
+        return new ODocumentContainer( m_xORB, *this, aFind->second, m_bFormsContainer );
+    return new ODocumentDefinition( *this, m_xORB, aFind->second, m_bFormsContainer );
 }
 // -----------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL ODocumentContainer::createInstance( const ::rtl::OUString& aServiceSpecifier ) throw (Exception, RuntimeException)
@@ -201,7 +224,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
             }
         }
 
-        ODefinitionContainer_Impl* pItem = static_cast<ODefinitionContainer_Impl*>(m_pImpl.get());
+        const ODefinitionContainer_Impl& rDefinitions( getDefinitions() );
 
         sal_Bool bNew = ( 0 == sPersistentName.getLength() );
         if ( bNew )
@@ -209,7 +232,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
             const static ::rtl::OUString sBaseName(RTL_CONSTASCII_USTRINGPARAM("Obj"));
             // -----------------------------------------------------------------------------
             sPersistentName = sBaseName;
-            sPersistentName += ::rtl::OUString::valueOf(sal_Int32(pItem->m_aDocumentMap.size() + 1));
+            sPersistentName += ::rtl::OUString::valueOf(sal_Int32(rDefinitions.size() + 1));
             Reference<XNameAccess> xElements(getStorage(),UNO_QUERY);
             if ( xElements.is() )
                 sPersistentName = ::dbtools::createUniqueName(xElements,sPersistentName);
@@ -235,9 +258,9 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
                 aClassID = ODocumentDefinition::getDefaultDocumentTypeClassId();
         }
 
-        ODefinitionContainer_Impl::Documents::iterator aFind = pItem->m_aDocumentMap.find(sName);
+        ODefinitionContainer_Impl::const_iterator aFind = rDefinitions.find( sName );
         TContentPtr pElementImpl;
-        if ( bNew || ( aFind == pItem->m_aDocumentMap.end() ) )
+        if ( bNew || ( aFind == rDefinitions.end() ) )
         {
             pElementImpl.reset( new OContentHelper_Impl );
             if ( !bNew )
@@ -288,15 +311,15 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
             }
         }
         OSL_ENSURE(sName.getLength(),"Invalid name for a document container!");
-        ODefinitionContainer_Impl* pItem = static_cast<ODefinitionContainer_Impl*>(m_pImpl.get());
-        ODefinitionContainer_Impl::Documents::iterator aFind = pItem->m_aDocumentMap.find(sName);
+        const ODefinitionContainer_Impl& rDefinitions( getDefinitions() );
+        ODefinitionContainer_Impl::const_iterator aFind = rDefinitions.find( sName );
         TContentPtr pElementImpl;
-        if ( aFind == pItem->m_aDocumentMap.end() )
+        if ( aFind == rDefinitions.end() )
         {
             pElementImpl.reset(new ODefinitionContainer_Impl);
             pElementImpl->m_aProps.aTitle = sName;
             pElementImpl->m_pDataSource = m_pImpl->m_pDataSource;
-        } // if ( aFind == pItem->m_aDocumentMap.end() )
+        }
         else
             pElementImpl = aFind->second;
         OSL_ENSURE( pElementImpl ," Invalid entry in map!");
@@ -332,8 +355,13 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
                     aArgument.Value <<= xObjectToCopy;
                     aArguments[2] <<= aArgument;
 
-                    ::rtl::OUString sServiceName =
-                        (Reference<XNameAccess>(xObjectToCopy,UNO_QUERY).is() ? (m_bFormsContainer ? SERVICE_NAME_FORM_COLLECTION : SERVICE_NAME_REPORT_COLLECTION) : SERVICE_SDB_DOCUMENTDEFINITION);
+                    ::rtl::OUString sServiceName;
+                    if ( Reference< XNameAccess >( xObjectToCopy, UNO_QUERY ).is() )
+                        if ( m_bFormsContainer )
+                            sServiceName = SERVICE_NAME_FORM_COLLECTION;
+                        else sServiceName = SERVICE_NAME_REPORT_COLLECTION;
+                    else
+                        sServiceName = SERVICE_SDB_DOCUMENTDEFINITION;
 
                     Reference<XContent > xNew(xORB->createInstanceWithArguments(sServiceName,aArguments),UNO_QUERY);
                     Reference<XNameContainer> xNameContainer(xContent,UNO_QUERY);
@@ -449,7 +477,8 @@ namespace
             {
                 sName = _sName.getToken(0,'/',nIndex);
                 _xNameContainer.set(_rRet,UNO_QUERY);
-                if ( bRet = _xNameContainer.is() )
+                bRet = _xNameContainer.is();
+                if ( bRet )
                 {
                     bRet = _xNameContainer->hasByName(sName);
                     _sSimpleName = sName;
@@ -595,7 +624,7 @@ void SAL_CALL ODocumentContainer::replaceByHierarchicalName( const ::rtl::OUStri
     ::rtl::Reference<OContentHelper> pContent = NULL;
     try
     {
-        Reference<XUnoTunnel> xUnoTunnel(const_cast<ODocumentContainer*>(this)->implGetByName(_sName),UNO_QUERY);
+        Reference<XUnoTunnel> xUnoTunnel(const_cast<ODocumentContainer*>(this)->implGetByName( _sName, sal_True ), UNO_QUERY );
         if ( xUnoTunnel.is() )
             pContent = reinterpret_cast<OContentHelper*>(xUnoTunnel->getSomething(OContentHelper::getUnoTunnelImplementationId()));
     }
@@ -650,38 +679,34 @@ Reference< XStorage> ODocumentContainer::getStorage() const
         ?   m_pImpl->m_pDataSource->getStorage( m_bFormsContainer ? s_sForms : s_sReports )
         :   Reference< XStorage>();
 }
-// -----------------------------------------------------------------------------
-sal_Bool ODocumentContainer::approveNewObject(const ::rtl::OUString& _sName,const Reference< XContent >& _rxObject) const
-{
-    return (_sName.indexOf('/',0) == -1) && ODefinitionContainer::approveNewObject(_sName,_rxObject);
-}
+
 // -----------------------------------------------------------------------------
 void SAL_CALL ODocumentContainer::removeByName( const ::rtl::OUString& _rName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
 {
-    Reference< XContent > xOldElement;
-    ClearableMutexGuard aGuard(m_aMutex);
+    ResettableMutexGuard aGuard(m_aMutex);
+
+    // check the arguments
+    if (!_rName.getLength())
+        throw IllegalArgumentException();
+
+    if (!checkExistence(_rName))
+        throw NoSuchElementException(_rName,*this);
+
+    Reference< XCommandProcessor > xContent( implGetByName( _rName, sal_True ), UNO_QUERY );
+    if ( xContent.is() )
     {
-        // check the arguments
-        if (!_rName.getLength())
-            throw IllegalArgumentException();
+        Command aCommand;
 
-        if (!checkExistence(_rName))
-            throw NoSuchElementException(_rName,*this);
-
-        Reference< XCommandProcessor > xContent(implGetByName(_rName),UNO_QUERY);
-        if ( xContent.is() )
-        {
-            Command aCommand;
-
-            aCommand.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("delete"));
-            xContent->execute(aCommand,xContent->createCommandIdentifier(),Reference< XCommandEnvironment >());
-        }
-        // do the removal
-        implRemove(_rName);
-
-        //  disposeComponent(xOldElement); // no dispose here, the object amy be inserted again unde a different name
+        aCommand.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("delete"));
+        xContent->execute(aCommand,xContent->createCommandIdentifier(),Reference< XCommandEnvironment >());
     }
-    notifyByName(aGuard,_rName,NULL,NULL,E_REMOVED);
+
+    // do the removal
+    implRemove(_rName);
+
+    //  disposeComponent(xContent); // no dispose here, the object may be inserted again under a different name
+
+    notifyByName( aGuard, _rName, NULL, NULL, E_REMOVED, ContainerListemers );
 }
 //........................................................................
 }   // namespace dbaccess
