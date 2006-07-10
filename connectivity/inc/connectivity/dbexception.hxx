@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbexception.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:59:59 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:16:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,41 @@ namespace dbtools
 {
 //.........................................................................
 
+//----------------------------------------------------------------------------------
+/** standard SQLStates to be used with an SQLException
+
+    Extend this list whenever you need a new state ...
+
+    @see http://msdn.microsoft.com/library/default.asp?url=/library/en-us/odbc/htm/odbcodbc_error_codes.asp
+*/
+enum StandardSQLState
+{
+    SQL_WRONG_PARAMETER_NUMBER,     // 07001
+    SQL_INVALID_DESCRIPTOR_INDEX,   // 07009
+    SQL_UNABLE_TO_CONNECT,          // 08001
+    SQL_NUMERIC_OUT_OF_RANGE,       // 22003
+    SQL_INVALID_DATE_TIME,          // 22007
+    SQL_INVALID_CURSOR_STATE,       // 24000
+    SQL_TABLE_OR_VIEW_EXISTS,       // 42S01
+    SQL_TABLE_OR_VIEW_NOT_FOUND,    // 42S02
+    SQL_INDEX_ESISTS,               // 42S11
+    SQL_INDEX_NOT_FOUND,            // 42S12
+    SQL_COLUMN_EXISTS,              // 42S21
+    SQL_COLUMN_NOT_FOUND,           // 42S22
+    SQL_GENERAL_ERROR,              // HY000
+    SQL_OPERATION_CANCELED,         // HY008
+    SQL_FUNCTION_SEQUENCE_ERROR,    // HY010
+    SQL_INVALID_CURSOR_POSITION,    // HY109
+    SQL_INVALID_BOOKMARK_VALUE,     // HY111
+    SQL_FEATURE_NOT_IMPLEMENTED,    // HYC00
+    SQL_FUNCTION_NOT_SUPPORTED,     // IM001
+    SQL_CONNECTION_DOES_NOT_EXIST,  // 08003
+
+    SQL_CYCLIC_SUB_QUERIES,         // OB001
+
+    SQL_ERROR_UNSPECIFIED = SAL_MAX_ENUM    // special value indicating that an SQLState is not to be specified
+};
+
 //==============================================================================
 //= SQLExceptionInfo - encapsulating the type info of an SQLException-derived class
 //==============================================================================
@@ -98,6 +133,38 @@ public:
     SQLExceptionInfo(const ::com::sun::star::uno::Any& _rError);
             // use with the Reason member of an SQLErrorEvent or with NextElement of an SQLException
 
+    /** prepends a plain error message to the chain of exceptions
+        @param  _rSimpleErrorMessage
+            the error message to prepend
+        @param  _pAsciiSQLState
+            the SQLState of the to-be-constructed SQLException, or NULL if this should be defaulted to HY000
+        @param  _nErrorCode
+            the ErrorCode of the to-be-constructed SQLException
+    */
+    void    prepend( const ::rtl::OUString& _rErrorMessage, const sal_Char* _pAsciiSQLState = NULL, const sal_Int32 _nErrorCode = 0 );
+
+    /** appends a plain message to the chain of exceptions
+        @param  _eType
+            the type of exception to append. Must be SQL_EXCEPTION, SQL_WARNING, SQL_CONTEXT, for all other
+            values, the behavior is undefined.
+        @param  _rErrorMessage
+            the message to append
+        @param  _pAsciiSQLState
+            the SQLState of the exception to append
+        @param  _nErrorCode
+            the error code of the exception to append
+    */
+    void    append( TYPE _eType, const ::rtl::OUString& _rErrorMessage, const sal_Char* _pAsciiSQLState = NULL, const sal_Int32 _nErrorCode = 0 );
+
+    /** throws (properly typed) the exception contained in the object
+        @precond
+            isValid() returns <TRUE/>
+        @throws SQLException
+        @throws RuntimeException
+            if the instance does not contain an SQLException
+    */
+    void    doThrow();
+
     const SQLExceptionInfo& operator=(const ::com::sun::star::sdbc::SQLException& _rError);
     const SQLExceptionInfo& operator=(const ::com::sun::star::sdbc::SQLWarning& _rError);
     const SQLExceptionInfo& operator=(const ::com::sun::star::sdb::SQLContext& _rError);
@@ -108,10 +175,10 @@ public:
     TYPE        getType() const { return m_eType; }
 
     operator const ::com::sun::star::sdbc::SQLException*    () const;
-    operator const ::com::sun::star::sdbc::SQLWarning*  () const;
+    operator const ::com::sun::star::sdbc::SQLWarning*      () const;
     operator const ::com::sun::star::sdb::SQLContext*       () const;
 
-    ::com::sun::star::uno::Any get() const { return m_aContent; }
+    const ::com::sun::star::uno::Any& get() const { return m_aContent; }
 
 protected:
     void implDetermineType();
@@ -125,56 +192,84 @@ class SQLExceptionIteratorHelper
 {
 protected:
     const ::com::sun::star::sdbc::SQLException* m_pCurrent;
-    SQLExceptionInfo::TYPE          m_eCurrentType;
+    SQLExceptionInfo::TYPE                      m_eCurrentType;
 
 public:
-    SQLExceptionIteratorHelper(const ::com::sun::star::sdbc::SQLException* _pStart);
-    SQLExceptionIteratorHelper(const ::com::sun::star::sdbc::SQLWarning* _pStart);
-    SQLExceptionIteratorHelper(const ::com::sun::star::sdb::SQLContext* _pStart);
-        // same note as above for the SQLExceptionInfo ctors
-    SQLExceptionIteratorHelper(const SQLExceptionInfo& _rStart);
+    /** constructs an iterator instance from an SQLException
 
-    sal_Bool                                    hasMoreElements() const { return (m_pCurrent != NULL); }
+        @param _rChainStart
+            the start of the exception chain to iterate. Must live as long as the iterator
+            instances lives, at least.
+    */
+    SQLExceptionIteratorHelper( const ::com::sun::star::sdbc::SQLException& _rChainStart );
+
+    /** constructs an iterator instance from an SQLWarning
+
+        @param _rChainStart
+            the start of the exception chain to iterate. Must live as long as the iterator
+            instances lives, at least.
+    */
+    SQLExceptionIteratorHelper( const ::com::sun::star::sdbc::SQLWarning& _rChainStart );
+
+    /** constructs an iterator instance from an SQLContext
+
+        @param _rChainStart
+            the start of the exception chain to iterate. Must live as long as the iterator
+            instances lives, at least.
+    */
+    SQLExceptionIteratorHelper( const ::com::sun::star::sdb::SQLContext& _rChainStart );
+
+    /** constructs an iterator instance from an SQLExceptionInfo
+
+        @param _rErrorInfo
+            the start of the exception chain to iterate. Must live as long as the iterator
+            instances lives, at least.
+    */
+    SQLExceptionIteratorHelper( const SQLExceptionInfo& _rErrorInfo );
+
+    /** determines whether there are more elements in the exception chain
+    */
+    sal_Bool                                    hasMoreElements() const { return ( m_pCurrent != NULL ); }
+
+    /** returns the type of the current element in the exception chain
+    */
+    SQLExceptionInfo::TYPE                      currentType() const { return m_eCurrentType; }
+
+    /** retrieves the current element in the chain, or <NULL/> if the chain has been completely
+        traveled.
+    */
+    const ::com::sun::star::sdbc::SQLException* current() const { return m_pCurrent; }
+
+    /** retrieves the current element in the chain, or <NULL/> if the chain has been completely
+        traveled.
+
+        In opposite to the second <member>current</member>, this version allows typed access to
+        the respective SQLException.
+    */
+    void                                        current( SQLExceptionInfo& _out_rInfo ) const;
+
+    /** proceeds to the next element in the chain
+
+        @return the current element in the chain, as <b>before</em> the chain move.
+    */
     const ::com::sun::star::sdbc::SQLException* next();
-    void                                        next(SQLExceptionInfo& _rOutInfo);
+
+    /** proceeds to the next element in the chain
+
+        In opposite to the second <member>current</member>, this version allows typed access to
+        the respective SQLException.
+    */
+    void                                        next( SQLExceptionInfo& _out_rInfo );
 };
 
 //==================================================================================
 //= StandardExceptions
 //==================================================================================
 //----------------------------------------------------------------------------------
-/** standard SQLStates to be used with an SQLException
-
-    Extend this list whenever you need a new state ...
-
-    @see http://msdn.microsoft.com/library/default.asp?url=/library/en-us/odbc/htm/odbcodbc_error_codes.asp
-*/
-enum StandardSQLState
-{
-    SQL_WRONG_PARAMETER_NUMBER,     // 07001
-    SQL_INVALID_DESCRIPTOR_INDEX,   // 07009
-    SQL_UNABLE_TO_CONNECT,          // 08001
-    SQL_NUMERIC_OUT_OF_RANGE,       // 22003
-    SQL_INVALID_DATE_TIME,          // 22007
-    SQL_INVALID_CURSOR_STATE,       // 24000
-    SQL_TABLE_OR_VIEW_EXISTS,       // 42S01
-    SQL_TABLE_OR_VIEW_NOT_FOUND,    // 42S02
-    SQL_INDEX_ESISTS,               // 42S11
-    SQL_INDEX_NOT_FOUND,            // 42S12
-    SQL_COLUMN_EXISTS,              // 42S21
-    SQL_COLUMN_NOT_FOUND,           // 42S22
-    SQL_GENERAL_ERROR,              // HY000
-    SQL_OPERATION_CANCELED,         // HY008
-    SQL_FUNCTION_SEQUENCE_ERROR,    // HY010
-    SQL_INVALID_CURSOR_POSITION,    // HY109
-    SQL_INVALID_BOOKMARK_VALUE,     // HY111
-    SQL_FEATURE_NOT_IMPLEMENTED,    // HYC00
-    SQL_FUNCTION_NOT_SUPPORTED      // IM001
-};
-
-//----------------------------------------------------------------------------------
 /** returns a standard error string for a given SQLState
 
+    @param _eState
+        describes the state whose description is to retrieve. Must not be SQL_ERROR_UNSPECIFIED.
     @raises RuntimeException
         in case of an internal error
 */
@@ -183,6 +278,8 @@ enum StandardSQLState
 //----------------------------------------------------------------------------------
 /** returns a standard ASCII string for a given SQLState
 
+    @param _eState
+        describes the state whose description is to retrieve. Must not be SQL_ERROR_UNSPECIFIED.
     @return
         a non-<NULL/> pointer to an ASCII character string denoting the requested SQLState
     @raises RuntimeException
@@ -227,7 +324,7 @@ void throwInvalidIndexException(
     throw ( ::com::sun::star::sdbc::SQLException );
 
 //----------------------------------------------------------------------------------
-/** throw a generic SQLException, i.e. one with an SQLState of S1000, an ErrorCode of 0 and no NextException
+/** throw a generic SQLException, i.e. one with an SQLState of HY000, an ErrorCode of 0 and no NextException
 */
 void throwGenericSQLException(
         const ::rtl::OUString& _rMsg,
@@ -236,7 +333,7 @@ void throwGenericSQLException(
     throw (::com::sun::star::sdbc::SQLException);
 
 //----------------------------------------------------------------------------------
-/** throw a generic SQLException, i.e. one with an SQLState of S1000, an ErrorCode of 0 and no NextException
+/** throw a generic SQLException, i.e. one with an SQLState of HY000, an ErrorCode of 0 and no NextException
 */
 void throwGenericSQLException(
         const ::rtl::OUString& _rMsg,
@@ -279,6 +376,18 @@ void throwSQLException(
 */
 void throwSQLException(
         const sal_Char* _pAsciiMessage,
+        StandardSQLState _eSQLState,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext,
+        const sal_Int32 _nErrorCode = 0,
+        const ::com::sun::star::uno::Any* _pNextException = NULL
+    )
+    throw (::com::sun::star::sdbc::SQLException);
+
+//----------------------------------------------------------------------------------
+/** throws an SQLException
+*/
+void throwSQLException(
+        const ::rtl::OUString& _rMessage,
         StandardSQLState _eSQLState,
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext,
         const sal_Int32 _nErrorCode = 0,
