@@ -1,7 +1,7 @@
 %{
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.52 2006-06-20 02:08:26 hr Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.53 2006-07-10 14:38:22 obo Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -9,7 +9,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: hr $ $Date: 2006-06-20 02:08:26 $ $Revision: 1.52 $
+//	$Author: obo $ $Date: 2006-07-10 14:38:22 $ $Revision: 1.53 $
 //
 // Description:
 //
@@ -941,7 +941,7 @@ table_ref_commalist:
 		table_ref
 			{$$ = SQL_NEW_COMMALISTRULE;
 			$$->append($1);}
-	|       table_ref_commalist ',' table_ref /*[^SQL_TOKEN_CROSS SQL_TOKEN_FULL SQL_TOKEN_UNION SQL_TOKEN_LEFT SQL_TOKEN_RIGHT SQL_TOKEN_INNER SQL_TOKEN_NATURAL]*/
+	|       table_ref_commalist ',' table_ref
 			{$1->append($3);
 			$$ = $1;}
 	;
@@ -984,6 +984,13 @@ table_ref:
 			$$->append($2);
 			$$->append($3);
 			$$->append($4 = newNode("}", SQL_NODE_PUNCTUATION));
+		}
+	|   subquery as range_variable
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+			$$->append($3);
 		}
 	;
 where_clause:
@@ -2875,33 +2882,7 @@ table_name:
 			SQL_TOKEN_NAME
 			{$$ = SQL_NEW_RULE;
 			$$->append($1);}
-/*	|	    SQL_TOKEN_NAME '.' SQL_TOKEN_NAME %prec SQL_TOKEN_NAME
-			{$$ = SQL_NEW_RULE;
-			$$->append($1);
-			$$->append($2 = newNode(".", SQL_NODE_PUNCTUATION));
-			$$->append($3);}
-	|       SQL_TOKEN_NAME '.' SQL_TOKEN_NAME '.' SQL_TOKEN_NAME %prec SQL_TOKEN_NAME
-			{$$ = SQL_NEW_RULE;
-			$$->append($1);
-			$$->append($2= newNode(".", SQL_NODE_PUNCTUATION));
-			$$->append($3);
-			$$->append($4 = newNode(".", SQL_NODE_PUNCTUATION));
-			$$->append($5);}
-	|       SQL_TOKEN_NAME ':' SQL_TOKEN_NAME '.' SQL_TOKEN_NAME
-			{$$ = SQL_NEW_RULE;
-			$$->append($1);
-			$$->append($2= newNode(":", SQL_NODE_PUNCTUATION));
-			$$->append($3);
-			$$->append($4 = newNode(".", SQL_NODE_PUNCTUATION));
-			$$->append($5);}
-/*	|       SQL_TOKEN_NAME ';' SQL_TOKEN_NAME '.' SQL_TOKEN_NAME
-			{$$ = SQL_NEW_RULE;
-			$$->append($1);
-			$$->append($2= newNode(";", SQL_NODE_PUNCTUATION));
-			$$->append($3);
-			$$->append($4 = newNode(".", SQL_NODE_PUNCTUATION));
-			$$->append($5);}
-*/	;
+;
 /* Columns */
 column_ref:
 			column
@@ -3131,16 +3112,19 @@ struct _ConstAsciiString_
 
 IMPLEMENT_CONSTASCII_STRING(ERROR_STR_GENERAL, "Syntax error in SQL expression");
 IMPLEMENT_CONSTASCII_STRING(ERROR_STR_GENERAL_HINT,	"in front of \"#\" expression." );
-IMPLEMENT_CONSTASCII_STRING(ERROR_STR_VALUE_NO_LIKE, "The value # can not be used with LIKE!");
-IMPLEMENT_CONSTASCII_STRING(ERROR_STR_FIELD_NO_LIKE, "LIKE can not be used with this field!");
-IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_COMPARE, "The entered criterion can not be compared with this field!");
-IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_STRING_COMPARE, "The field can not be compared with a string!");
-IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_DATE_COMPARE, "The field can not be compared with a date!");
-IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_REAL_COMPARE,	"The field can not be compared with a floating point number!");
-IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_INT_COMPARE,	"The field can not be compared with a number!");
-IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_TABLE,	"The table \"#\" is unknown in the database!");
-IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_COLUMN,	"The column \"#\" is unknown in the table \"#\"!");
-IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_TABLE_EXIST,	"The table or view \"#\" is already in the database!");
+IMPLEMENT_CONSTASCII_STRING(ERROR_STR_VALUE_NO_LIKE, "The value # can not be used with LIKE.");
+IMPLEMENT_CONSTASCII_STRING(ERROR_STR_FIELD_NO_LIKE, "LIKE can not be used with this field.");
+IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_COMPARE, "The entered criterion can not be compared with this field.");
+IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_STRING_COMPARE, "The field can not be compared with a string.");
+IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_DATE_COMPARE, "The field can not be compared with a date.");
+IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_REAL_COMPARE,	"The field can not be compared with a floating point number.");
+IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_INT_COMPARE,	"The field can not be compared with a number.");
+IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_TABLE,	"The database does not contain a table named \"#\".");
+IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_TABLE_OR_QUERY,   "The database does contain neither a table nor a query named \"#\".");
+IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_COLUMN,	"The column \"#\" is unknown in the table \"#\".");
+IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_TABLE_EXIST,	"The database already contains a table or view with name \"#\".");
+IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_QUERY_EXIST,	"The database already contains a query with name \"#\".");
+IMPLEMENT_CONSTASCII_STRING(ERROR_STR_CYCLIC_SUB_QUERIES,   "The statement contains a cyclic reference to one or more sub queries.");
 
 IMPLEMENT_CONSTASCII_STRING(KEY_STR_LIKE, "LIKE");
 IMPLEMENT_CONSTASCII_STRING(KEY_STR_NOT, "NOT");
@@ -3190,7 +3174,11 @@ OParseContext::~OParseContext()
 		case ERROR_INVALID_DATE_COMPARE:	aMsg = ERROR_STR_INVALID_DATE_COMPARE; break;
 		case ERROR_INVALID_REAL_COMPARE:	aMsg = ERROR_STR_INVALID_REAL_COMPARE; break;
 		case ERROR_INVALID_TABLE:			aMsg = ERROR_STR_INVALID_TABLE; break;
+		case ERROR_INVALID_TABLE_OR_QUERY:  aMsg = ERROR_STR_INVALID_TABLE_OR_QUERY; break;
 		case ERROR_INVALID_COLUMN:			aMsg = ERROR_STR_INVALID_COLUMN; break;
+		case ERROR_INVALID_TABLE_EXIST:		aMsg = ERROR_STR_INVALID_TABLE_EXIST; break;
+		case ERROR_INVALID_QUERY_EXIST:		aMsg = ERROR_STR_INVALID_QUERY_EXIST; break;
+		case ERROR_CYCLIC_SUB_QUERIES:      aMsg = ERROR_STR_CYCLIC_SUB_QUERIES; break;
         default:
             OSL_ENSURE( false, "OParseContext::getErrorMessage: unknown error code!" );
             break;
@@ -3328,8 +3316,9 @@ const double fMilliSecondsPerDay = 86400000.0;
 //= OSQLParser
 //==========================================================================
 
-sal_uInt32			OSQLParser::s_nRuleIDs[OSQLParseNode::rule_count + 1];
-OParseContext		OSQLParser::s_aDefaultContext;
+sal_uInt32			    OSQLParser::s_nRuleIDs[OSQLParseNode::rule_count + 1];
+OSQLParser::RuleIDMap   OSQLParser::s_aReverseRuleIDLookup;
+OParseContext		    OSQLParser::s_aDefaultContext;
 
 sal_Int32			OSQLParser::s_nRefCount	= 0;
 //	::osl::Mutex		OSQLParser::s_aMutex;
@@ -3357,6 +3346,9 @@ OSQLParser::~OSQLParser()
 			s_pGarbageCollector = NULL;
 			// is only set the first time so we should delete it only when there no more instances
 			s_xLocaleData = NULL;
+
+            RuleIDMap aEmpty;
+            s_aReverseRuleIDLookup.swap( aEmpty );
 		}
 		m_pParseTree = NULL;
 	}
@@ -3496,7 +3488,7 @@ OSQLParseNode* OSQLParser::parseTree(::rtl::OUString& rErrorMessage,
 //-----------------------------------------------------------------------------
 sal_uInt32 OSQLParser::StrToRuleID(const ::rtl::OString & rValue)
 {
-	// In yysvar nach dem angegebenen Namen suchen, den ::com::sun::star::sdbcx::Index zurueckliefern
+	// In yysvar nach dem angegebenen Namen suchen, den Index zurueckliefern
 	// (oder 0, wenn nicht gefunden)
 	static sal_uInt32 nLen = sizeof(yytname)/sizeof(yytname[0]);
 	for (sal_uInt32 i = YYTRANSLATE(SQL_TOKEN_INVALIDSYMBOL); i < (nLen-1); i++)
@@ -3510,186 +3502,14 @@ sal_uInt32 OSQLParser::StrToRuleID(const ::rtl::OString & rValue)
 }
 
 //-----------------------------------------------------------------------------
+OSQLParseNode::Rule OSQLParser::RuleIDToRule( sal_uInt32 _nRule )
+{
+    return s_aReverseRuleIDLookup[ _nRule ];
+}
+
+//-----------------------------------------------------------------------------
 sal_uInt32 OSQLParser::RuleID(OSQLParseNode::Rule eRule)
 {
-	if (!s_nRuleIDs[eRule])
-	{
-		switch (eRule)
-		{
-			case OSQLParseNode::select_statement:
-				s_nRuleIDs[eRule] = StrToRuleID("select_statement"); break;
-			case OSQLParseNode::from_clause:
-				s_nRuleIDs[eRule] = StrToRuleID("from_clause"); break;
-			case OSQLParseNode::table_ref_commalist:
-				s_nRuleIDs[eRule] = StrToRuleID("table_ref_commalist"); break;
-			case OSQLParseNode::table_exp:
-				s_nRuleIDs[eRule] = StrToRuleID("table_exp"); break;
-			case OSQLParseNode::table_ref:
-				s_nRuleIDs[eRule] = StrToRuleID("table_ref"); break;
-			case OSQLParseNode::catalog_name:
-				s_nRuleIDs[eRule] = StrToRuleID("catalog_name"); break;
-			case OSQLParseNode::schema_name:
-				s_nRuleIDs[eRule] = StrToRuleID("schema_name"); break;
-			case OSQLParseNode::table_name:
-				s_nRuleIDs[eRule] = StrToRuleID("table_name"); break;
-			case OSQLParseNode::opt_column_commalist:
-				s_nRuleIDs[eRule] = StrToRuleID("opt_column_commalist"); break;
-			case OSQLParseNode::column_commalist:
-				s_nRuleIDs[eRule] = StrToRuleID("column_commalist"); break;
-			case OSQLParseNode::column_ref_commalist:
-				s_nRuleIDs[eRule] = StrToRuleID("column_ref_commalist"); break;
-			case OSQLParseNode::column_ref:
-				s_nRuleIDs[eRule] = StrToRuleID("column_ref"); break;
-			case OSQLParseNode::opt_order_by_clause:
-				s_nRuleIDs[eRule] = StrToRuleID("opt_order_by_clause"); break;
-			case OSQLParseNode::ordering_spec_commalist:
-				s_nRuleIDs[eRule] = StrToRuleID("ordering_spec_commalist"); break;
-			case OSQLParseNode::ordering_spec:
-				s_nRuleIDs[eRule] = StrToRuleID("ordering_spec"); break;
-			case OSQLParseNode::opt_asc_desc:
-				s_nRuleIDs[eRule] = StrToRuleID("opt_asc_desc"); break;
-			case OSQLParseNode::where_clause:
-				s_nRuleIDs[eRule] = StrToRuleID("where_clause"); break;
-			case OSQLParseNode::opt_where_clause:
-				s_nRuleIDs[eRule] = StrToRuleID("opt_where_clause"); break;
-			case OSQLParseNode::search_condition:
-				s_nRuleIDs[eRule] = StrToRuleID("search_condition"); break;
-			case OSQLParseNode::comparison_predicate:
-				s_nRuleIDs[eRule] = StrToRuleID("comparison_predicate"); break;
-			case OSQLParseNode::between_predicate:
-				s_nRuleIDs[eRule] = StrToRuleID("between_predicate"); break;
-			case OSQLParseNode::like_predicate:
-				s_nRuleIDs[eRule] = StrToRuleID("like_predicate"); break;
-			case OSQLParseNode::opt_escape:
-				s_nRuleIDs[eRule] = StrToRuleID("opt_escape"); break;
-			case OSQLParseNode::test_for_null:
-				s_nRuleIDs[eRule] = StrToRuleID("test_for_null"); break;
-			case OSQLParseNode::scalar_exp_commalist:
-				s_nRuleIDs[eRule] = StrToRuleID("scalar_exp_commalist"); break;
-			case OSQLParseNode::scalar_exp:
-				s_nRuleIDs[eRule] = StrToRuleID("scalar_exp"); break;
-			case OSQLParseNode::parameter_ref:
-				s_nRuleIDs[eRule] = StrToRuleID("parameter_ref"); break;
-			case OSQLParseNode::parameter:
-				s_nRuleIDs[eRule] = StrToRuleID("parameter"); break;
-			case OSQLParseNode::general_set_fct:
-				s_nRuleIDs[eRule] = StrToRuleID("general_set_fct"); break;
-			case OSQLParseNode::range_variable:
-				s_nRuleIDs[eRule] = StrToRuleID("range_variable"); break;
-			case OSQLParseNode::column:
-				s_nRuleIDs[eRule] = StrToRuleID("column"); break;
-//			case OSQLParseNode::delete_statement_positioned:
-//				s_nRuleIDs[eRule] = StrToRuleID("delete_statement_positioned"); break;
-			case OSQLParseNode::delete_statement_searched:
-				s_nRuleIDs[eRule] = StrToRuleID("delete_statement_searched"); break;
-//			case OSQLParseNode::update_statement_positioned:
-//				s_nRuleIDs[eRule] = StrToRuleID("update_statement_positioned"); break;
-			case OSQLParseNode::update_statement_searched:
-				s_nRuleIDs[eRule] = StrToRuleID("update_statement_searched"); break;
-			case OSQLParseNode::assignment_commalist:
-				s_nRuleIDs[eRule] = StrToRuleID("assignment_commalist"); break;
-			case OSQLParseNode::assignment:
-				s_nRuleIDs[eRule] = StrToRuleID("assignment"); break;
-			case OSQLParseNode::values_or_query_spec:
-				s_nRuleIDs[eRule] = StrToRuleID("values_or_query_spec"); break;
-			case OSQLParseNode::insert_statement:
-				s_nRuleIDs[eRule] = StrToRuleID("insert_statement"); break;
-			case OSQLParseNode::insert_atom_commalist:
-				s_nRuleIDs[eRule] = StrToRuleID("insert_atom_commalist"); break;
-			case OSQLParseNode::insert_atom:
-				s_nRuleIDs[eRule] = StrToRuleID("insert_atom"); break;
-			case OSQLParseNode::predicate_check:
-				s_nRuleIDs[eRule] = StrToRuleID("predicate_check"); break;
-			case OSQLParseNode::qualified_join:
-				s_nRuleIDs[eRule] = StrToRuleID("qualified_join"); break;
-			case OSQLParseNode::cross_union:
-				s_nRuleIDs[eRule] = StrToRuleID("cross_union"); break;
-			case OSQLParseNode::select_sublist:
-				s_nRuleIDs[eRule] = StrToRuleID("select_sublist"); break;
-			case OSQLParseNode::derived_column:
-				s_nRuleIDs[eRule] = StrToRuleID("derived_column"); break;
-			case OSQLParseNode::column_val:
-				s_nRuleIDs[eRule] = StrToRuleID("column_val"); break;
-			case OSQLParseNode::set_fct_spec:
-				s_nRuleIDs[eRule] = StrToRuleID("set_fct_spec"); break;
-			case OSQLParseNode::boolean_term:
-				s_nRuleIDs[eRule] = StrToRuleID("boolean_term"); break;
-			case OSQLParseNode::boolean_primary:
-				s_nRuleIDs[eRule] = StrToRuleID("boolean_primary"); break;
-			case OSQLParseNode::num_value_exp:
-				s_nRuleIDs[eRule] = StrToRuleID("num_value_exp"); break;
-			case OSQLParseNode::join_type:
-				s_nRuleIDs[eRule] = StrToRuleID("join_type"); break;
-			case OSQLParseNode::position_exp:
-				s_nRuleIDs[eRule] = StrToRuleID("position_exp"); break;
-			case OSQLParseNode::extract_exp:
-				s_nRuleIDs[eRule] = StrToRuleID("extract_exp"); break;
-			case OSQLParseNode::length_exp:
-				s_nRuleIDs[eRule] = StrToRuleID("length_exp"); break;
-			case OSQLParseNode::char_value_fct:
-				s_nRuleIDs[eRule] = StrToRuleID("char_value_fct"); break;
-			case OSQLParseNode::odbc_call_spec:
-				s_nRuleIDs[eRule] = StrToRuleID("odbc_call_spec"); break;
-			case OSQLParseNode::in_predicate:
-				s_nRuleIDs[eRule] = StrToRuleID("in_predicate"); break;
-			case OSQLParseNode::existence_test:
-				s_nRuleIDs[eRule] = StrToRuleID("existence_test"); break;
-			case OSQLParseNode::unique_test:
-				s_nRuleIDs[eRule] = StrToRuleID("unique_test"); break;
-			case OSQLParseNode::all_or_any_predicate:
-				s_nRuleIDs[eRule] = StrToRuleID("all_or_any_predicate"); break;
-			case OSQLParseNode::named_columns_join:
-				s_nRuleIDs[eRule] = StrToRuleID("named_columns_join"); break;
-			case OSQLParseNode::join_condition:
-				s_nRuleIDs[eRule] = StrToRuleID("join_condition"); break;
-			case OSQLParseNode::joined_table:
-				s_nRuleIDs[eRule] = StrToRuleID("joined_table"); break;
-			case OSQLParseNode::boolean_factor:
-				s_nRuleIDs[eRule] = StrToRuleID("boolean_factor"); break;
-			case OSQLParseNode::factor:
-				s_nRuleIDs[eRule] = StrToRuleID("factor"); break;
-			case OSQLParseNode::sql_not:
-				s_nRuleIDs[eRule] = StrToRuleID("not"); break;
-			case OSQLParseNode::boolean_test:
-				s_nRuleIDs[eRule] = StrToRuleID("boolean_test"); break;
-			case OSQLParseNode::manipulative_statement:
-				s_nRuleIDs[eRule] = StrToRuleID("manipulative_statement"); break;
-			case OSQLParseNode::subquery:
-				s_nRuleIDs[eRule] = StrToRuleID("subquery"); break;
-			case OSQLParseNode::value_exp_commalist:
-				s_nRuleIDs[eRule] = StrToRuleID("value_exp_commalist"); break;
-			case OSQLParseNode::odbc_fct_spec:
-				s_nRuleIDs[eRule] = StrToRuleID("odbc_fct_spec"); break;
-			case OSQLParseNode::union_statement:
-				s_nRuleIDs[eRule] = StrToRuleID("union_statement"); break;
-			case OSQLParseNode::outer_join_type:
-				s_nRuleIDs[eRule] = StrToRuleID("outer_join_type"); break;
-			case OSQLParseNode::char_value_exp:
-				s_nRuleIDs[eRule] = StrToRuleID("char_value_exp"); break;
-			case OSQLParseNode::term:
-				s_nRuleIDs[eRule] = StrToRuleID("term"); break;
-			case OSQLParseNode::value_exp_primary:
-				s_nRuleIDs[eRule] = StrToRuleID("value_exp_primary"); break;
-			case OSQLParseNode::value_exp:
-				s_nRuleIDs[eRule] = StrToRuleID("value_exp"); break;
-			case OSQLParseNode::fold:
-				s_nRuleIDs[eRule] = StrToRuleID("fold"); break;
-			case OSQLParseNode::char_substring_fct:
-				s_nRuleIDs[eRule] = StrToRuleID("char_substring_fct"); break;
-			case OSQLParseNode::selection:
-				s_nRuleIDs[eRule] = StrToRuleID("selection"); break;
-			case OSQLParseNode::base_table_def:
-				s_nRuleIDs[eRule] = StrToRuleID("base_table_def"); break;
-			case OSQLParseNode::base_table_element_commalist:
-				s_nRuleIDs[eRule] = StrToRuleID("base_table_element_commalist"); break;
-			case OSQLParseNode::data_type:
-				s_nRuleIDs[eRule] = StrToRuleID("data_type"); break;
-			case OSQLParseNode::column_def:
-				s_nRuleIDs[eRule] = StrToRuleID("column_def"); break;
-			default:
-				OSL_ENSURE(0,"interner Fehler: Regel nicht bekannt, in OSQLParser::RuleID nachtragen!");
-		}
-	}
 	return s_nRuleIDs[(sal_uInt16)eRule];
 }
 // -------------------------------------------------------------------------
