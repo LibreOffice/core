@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ContainerMediator.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:47:56 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:16:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -211,9 +211,6 @@ void OContainerMediator::notifyElementCreated(const ::rtl::OUString& _sName,cons
         OPropertyForward* pForward = new OPropertyForward(_xDest,m_xSettings,_sName,aPropertyList);
         Reference<XInterface> xTemp = *pForward;
         m_aForwardList.insert( PropertyForwardList::value_type(_sName,TPropertyForward(pForward,xTemp)));
-    }
-    else
-    {
     }
 }
 // -----------------------------------------------------------------------------
