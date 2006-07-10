@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XSingleSelectQueryComposer.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:32:26 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:50:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -231,9 +231,10 @@ interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
         filter. Instead, only filters which have been set using for instance <member>setFilter</member>
         are covered by the get methods.</p>
 
-        <p>The only method which takes all parts of the elementary statement into account is
-        <member>XSingleSelectQueryAnalyzer::getQuery</member>, which always returns the complete
-        composed query.</p>
+        <p>The only methods which take all parts of the elementary statement into account are
+        <member>XSingleSelectQueryAnalyzer::getQuery</member> and
+        <member>XSingleSelectQueryAnalyzer::getQueryWithSubstitution</member>, which always returns
+        the complete composed query.</p>
 
         <p>As a result, you can use the composer to build culmulative filter expressions. That
         is, you can set <member>ElementaryQuery</member> to a statement already containing
