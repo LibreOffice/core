@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2006-06-02 12:10:50 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:27:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -803,6 +803,7 @@ void SwDoc::ResetModified()
     //  Bit 1:  -> neuer Zustand
     long nCall = bModified ? 1 : 0;
     bModified = FALSE;
+    pDocStat->bModified = FALSE;
     nUndoSavePos = nUndoPos;
     if( nCall && aOle2Link.IsSet() )
     {
@@ -899,7 +900,10 @@ void SwDoc::InvalidateAutoCompleteFlag()
             pPage = (SwPageFrm*)pPage->GetNext();
         }
         for( ULONG nNd = 1, nCnt = GetNodes().Count(); nNd < nCnt; ++nNd )
-            GetNodes()[ nNd ]->SetAutoCompleteWordDirty( TRUE );
+        {
+            SwTxtNode* pTxtNode = GetNodes()[ nNd ]->GetTxtNode();
+            if ( pTxtNode ) pTxtNode->SetAutoCompleteWordDirty( true );
+        }
         GetRootFrm()->SetIdleFlags();
     }
 }
