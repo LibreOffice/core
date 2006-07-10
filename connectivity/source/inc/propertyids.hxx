@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertyids.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:58:46 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:31:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,7 +143,7 @@ pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaCon
 #define PROPERTY_ID_INVALID_INDEX                   41
 #define PROPERTY_ID_ERRORMSG_SEQUENCE               42
 #define PROPERTY_ID_HY010                           43
-#define PROPERTY_ID_HY0000                          44
+    // FREE
 #define PROPERTY_ID_DELIMITER                       45
 #define PROPERTY_ID_FORMATKEY                       46
 #define PROPERTY_ID_LOCALE                          47
