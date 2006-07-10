@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xconnection.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:34:27 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 16:35:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,6 +107,15 @@ void SAL_CALL DisplayConnection::removeErrorHandler( const Reference< XEventHand
 Any SAL_CALL DisplayConnection::getIdentifier() throw()
 {
     return m_aAny;
+}
+
+void DisplayConnection::dispatchDowningEvent()
+{
+    MutexGuard aGuard( m_aMutex );
+    Any aEvent;
+    std::list< Reference< XEventHandler > > aLocalList( m_aHandlers );
+    for( ::std::list< Reference< XEventHandler > >::const_iterator it = aLocalList.begin(); it != aLocalList.end(); ++it )
+        (*it)->handleEvent( aEvent );
 }
 
 bool DisplayConnection::dispatchEvent( void* pThis, void* pData, int nBytes )
