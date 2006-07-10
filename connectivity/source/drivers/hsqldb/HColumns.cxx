@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HColumns.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:29:25 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:27:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@ OHSQLColumns::OHSQLColumns( ::cppu::OWeakObject& _rParent
 {
 }
 // -----------------------------------------------------------------------------
-Reference< XPropertySet > OHSQLColumns::createEmptyObject()
+Reference< XPropertySet > OHSQLColumns::createDescriptor()
 {
     return new OHSQLColumn(sal_True);
 }
