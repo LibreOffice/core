@@ -4,9 +4,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:10:56 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:06:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,9 +96,6 @@
 #ifndef DBA_HELPERCOLLECTIONS_HXX
 #include "HelperCollections.hxx"
 #endif
-#ifndef DBACCESS_CORE_API_SINGLESELECTQUERYCOMPOSER_HXX
-#include "SingleSelectQueryComposer.hxx"
-#endif
 #ifndef DBACCESS_SOURCE_CORE_INC_COMPOSERTOOLS_HXX
 #include "composertools.hxx"
 #endif
@@ -124,32 +121,15 @@ using namespace ::utl;
 
 DBG_NAME(OQueryComposer)
 // -------------------------------------------------------------------------
-OQueryComposer::OQueryComposer(const Reference< XNameAccess>& _xTableSupplier,
-                               const Reference< XConnection>& _xConnection,
-                               const Reference< XMultiServiceFactory >& _xServiceFactory)
+OQueryComposer::OQueryComposer(const Reference< XConnection>& _xConnection)
  : OSubComponent(m_aMutex,_xConnection)
 {
     DBG_CTOR(OQueryComposer,NULL);
     OSL_ENSURE(_xConnection.is()," Connection cant be null!");
 
-    try
-    {
-        Reference<XMultiServiceFactory> xFac(_xConnection,UNO_QUERY);
-        if ( xFac.is() )
-        {
-            m_xComposer.set( xFac->createInstance( SERVICE_NAME_SINGLESELECTQUERYCOMPOSER ), UNO_QUERY );
-            m_xComposerHelper.set( xFac->createInstance( SERVICE_NAME_SINGLESELECTQUERYCOMPOSER ), UNO_QUERY );
-        }
-        else
-        {
-            m_xComposer = new OSingleSelectQueryComposer(_xTableSupplier,_xConnection, _xServiceFactory );
-            m_xComposerHelper = new OSingleSelectQueryComposer(_xTableSupplier,_xConnection, _xServiceFactory );
-        }
-    }
-    catch(Exception)
-    {
-    }
-    OSL_ENSURE( m_xComposer.is(), "OQueryComposer::OQueryComposer: Composer copuld be created!" );
+    Reference<XMultiServiceFactory> xFac( _xConnection, UNO_QUERY_THROW );
+    m_xComposer.set( xFac->createInstance( SERVICE_NAME_SINGLESELECTQUERYCOMPOSER ), UNO_QUERY_THROW );
+    m_xComposerHelper.set( xFac->createInstance( SERVICE_NAME_SINGLESELECTQUERYCOMPOSER ), UNO_QUERY_THROW );
 }
 // -------------------------------------------------------------------------
 OQueryComposer::~OQueryComposer()
