@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableDeco.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:46:22 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:12:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,9 +130,10 @@ namespace dbaccess
 
         // IColumnFactory
         virtual OColumn*    createColumn(const ::rtl::OUString& _rName) const;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createEmptyObject();
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createColumnDescriptor();
+        virtual void columnAppended( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxSourceDescriptor );
         virtual void columnDropped(const ::rtl::OUString& _sName);
-        virtual void columnCloned(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xClone);
+
         virtual void refreshColumns();
 
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper(sal_Int32 _nId) const;
