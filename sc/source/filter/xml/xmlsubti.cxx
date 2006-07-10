@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlsubti.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-03 18:25:55 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 12:44:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -305,10 +305,13 @@ void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& 
                             if (xProperties.is())
                             {
                                 XMLTableStylesContext *pStyles = (XMLTableStylesContext *)rImport.GetAutoStyles();
-                                XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
-                                    XML_STYLE_FAMILY_TABLE_TABLE, sStyleName, sal_True);
-                                if (pStyle)
-                                    pStyle->FillPropertySet(xProperties);
+                                if (pStyles)
+                                {
+                                    XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
+                                        XML_STYLE_FAMILY_TABLE_TABLE, sStyleName, sal_True);
+                                    if (pStyle)
+                                        pStyle->FillPropertySet(xProperties);
+                                }
                             }
                         }
                     }
