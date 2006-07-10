@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FStatement.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:26:32 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:27:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,11 +103,12 @@ using namespace com::sun::star::container;
 DBG_NAME( file_OStatement_Base )
 
 //------------------------------------------------------------------------------
-OStatement_Base::OStatement_Base(OConnection* _pConnection ) :  OStatement_BASE(m_aMutex)
+OStatement_Base::OStatement_Base(OConnection* _pConnection )
+    :OStatement_BASE(m_aMutex)
     ,::comphelper::OPropertyContainer(OStatement_BASE::rBHelper)
     ,m_xDBMetaData(_pConnection->getMetaData())
     ,m_aParser(_pConnection->getDriver()->getFactory())
-    ,m_aSQLIterator(_pConnection->createCatalog()->getTables(),_pConnection->getMetaData(),NULL,&m_aParser)
+    ,m_aSQLIterator( _pConnection, _pConnection->createCatalog()->getTables(), m_aParser, NULL )
     ,m_pConnection(_pConnection)
     ,m_pParseTree(NULL)
     ,m_pSQLAnalyzer(NULL)
@@ -287,7 +288,6 @@ Any SAL_CALL OStatement_Base::getWarnings(  ) throw(SQLException, RuntimeExcepti
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
-
     return makeAny(m_aLastWarning);
 }
 // -------------------------------------------------------------------------
@@ -295,7 +295,6 @@ void SAL_CALL OStatement_Base::clearWarnings(  ) throw(SQLException, RuntimeExce
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
 
     m_aLastWarning = SQLWarning();
 }
@@ -337,7 +336,7 @@ sal_Bool SAL_CALL OStatement::execute( const ::rtl::OUString& sql ) throw(SQLExc
 
     executeQuery(sql);
 
-    return m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT || m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT_COUNT;
+    return m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT;
 }
 
 // -------------------------------------------------------------------------
@@ -501,19 +500,19 @@ void OStatement_Base::construct(const ::rtl::OUString& sql)  throw(SQLException,
             // no tables -> nothing to operate on -> error
             throwGenericSQLException(   ::rtl::OUString::createFromAscii("The statement is invalid. It contains no valid table."),
                                         static_cast<XWeak*>(this),
-                                        makeAny(m_aSQLIterator.getWarning()));
+                                        makeAny( m_aSQLIterator.getErrors() ) );
 
-        if ( xTabs.size() > 1 || m_aSQLIterator.getWarning().Message.getLength() )
+        if ( xTabs.size() > 1 || m_aSQLIterator.hasErrors() )
             // more than one table -> can't operate on them -> error
             throwGenericSQLException(   ::rtl::OUString::createFromAscii("The statement is invalid. It contains more than one table."),
                                         static_cast<XWeak*>(this),
-                                        makeAny(m_aSQLIterator.getWarning()));
+                                        makeAny( m_aSQLIterator.getErrors() ) );
 
-        if ( (m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT || m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT_COUNT) && m_aSQLIterator.getSelectColumns()->empty() )
+        if ( (m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT) && m_aSQLIterator.getSelectColumns()->empty() )
             // SELECT statement without columns -> error
             throwGenericSQLException(   ::rtl::OUString::createFromAscii("The statement is invalid. It contains no valid column names."),
                                         static_cast<XWeak*>(this),
-                                        makeAny(m_aSQLIterator.getWarning()));
+                                        makeAny( m_aSQLIterator.getErrors() ) );
 
         if ( m_aSQLIterator.getStatementType() == SQL_STATEMENT_CREATE_TABLE )
             // CREATE TABLE is not supported at all
