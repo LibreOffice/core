@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtools.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:00:11 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:16:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,7 +106,8 @@ namespace dbtools
         eInIndexDefinitions,
         eInDataManipulation,
         eInProcedureCalls,
-        eInPrivilegeDefinitions
+        eInPrivilegeDefinitions,
+        eComplete
     };
 //=========================================================================
     // date conversion
@@ -321,7 +322,14 @@ namespace dbtools
     /** create a new ::com::sun::star::sdbc::SQLContext, fill it with the given descriptions and the given source,
         and <i>append</i> _rException (i.e. put it into the NextException member of the SQLContext).
     */
-    ::com::sun::star::sdb::SQLContext prependContextInfo(const ::com::sun::star::sdbc::SQLException& _rException, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext, const ::rtl::OUString& _rContextDescription, const ::rtl::OUString& _rContextDetails = ::rtl::OUString());
+    ::com::sun::star::sdb::SQLContext prependContextInfo(const ::com::sun::star::sdbc::SQLException& _rException, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext, const ::rtl::OUString& _rContextDescription, const ::rtl::OUString& _rContextDetails );
+
+    ::com::sun::star::sdbc::SQLException prependErrorInfo(
+        const ::com::sun::star::sdbc::SQLException& _rChainedException,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext,
+        const ::rtl::OUString& _rAdditionalError,
+        const StandardSQLState _eSQLState = SQL_ERROR_UNSPECIFIED,
+        const sal_Int32 _nErrorCode = 0);
 
     /** search the parent hierachy for a data source.
     */
@@ -349,9 +357,7 @@ namespace dbtools
     */
     ::rtl::OUString quoteTableName(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _rxMeta
                                     , const ::rtl::OUString& _rName
-                                    ,EComposeRule _eComposeRule
-                                    ,sal_Bool _bUseCatalogInSelect = sal_True
-                                    ,sal_Bool _bUseSchemaInSelect = sal_True);
+                                    ,EComposeRule _eComposeRule);
 
     /** split a fully qualified table name (including catalog and schema, if appliable) into it's component parts.
         @param  _rxConnMetaData     meta data describing the connection where you got the table name from
@@ -441,16 +447,34 @@ namespace dbtools
     //----------------------------------------------------------------------------------
     /** compose a complete table name from it's up to three parts, regarding to the database meta data composing rules
     */
-    void composeTableName(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxMetaData,
+    ::rtl::OUString composeTableName(   const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxMetaData,
                             const ::rtl::OUString& _rCatalog,
                             const ::rtl::OUString& _rSchema,
                             const ::rtl::OUString& _rName,
-                            ::rtl::OUString& _rComposedName,
                             sal_Bool _bQuote,
-                            EComposeRule _eComposeRule
-                            ,sal_Bool _bUseCatalogInSelect = sal_True
-                            ,sal_Bool _bUseSchemaInSelect = sal_True);
+                            EComposeRule _eComposeRule);
 
+    /** composes a table name for usage in a SELECT statement
+
+        This includes quoting of the table as indicated by the connection's meta data, plus respecting
+        the settings "UseCatalogInSelect" and "UseSchemaInSelect", which might be present
+        in the data source which the connection belongs to.
+    */
+    ::rtl::OUString composeTableNameForSelect(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
+                            const ::rtl::OUString& _rCatalog,
+                            const ::rtl::OUString& _rSchema,
+                            const ::rtl::OUString& _rName );
+
+    /** composes a table name for usage in a SELECT statement
+
+        This includes quoting of the table as indicated by the connection's meta data, plus respecting
+        the settings "UseCatalogInSelect" and "UseSchemaInSelect", which might be present
+        in the data source which the connection belongs to.
+    */
+    ::rtl::OUString composeTableNameForSelect(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xTable );
     //----------------------------------------------------------------------------------
     /** compose the table name out of the property set which must support the properties from the service <member scope= "com::sun::star::sdbcx">table</member>
         @param  _xMetaData
@@ -458,12 +482,13 @@ namespace dbtools
         @param  _xTable
             The table.
     */
-    ::rtl::OUString composeTableName(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _xMetaData,
-                                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xTable,
-                                     sal_Bool _bQuote,
-                                     EComposeRule _eComposeRule
-                                     ,sal_Bool _bUseCatalogInSelect = sal_True
-                                     ,sal_Bool _bUseSchemaInSelect = sal_True);
+    ::rtl::OUString composeTableName(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _xMetaData,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xTable,
+        EComposeRule _eComposeRule,
+        bool _bSuppressCatalogName,
+        bool _bSuppressSchemaName,
+        bool _bQuote);
 
     //----------------------------------------------------------------------------------
     sal_Int32 getSearchColumnFlag( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConn,
@@ -489,8 +514,19 @@ namespace dbtools
     /** create a name which is a valid SQL 92 identifier name
         @param      _rName          the string which should be converted
         @param      _rSpecials      @see com.sun.star.sdbc.XDatabaseMetaData.getExtraNameCharacters
+
+        @see isValidSQLName
     */
     ::rtl::OUString convertName2SQLName(const ::rtl::OUString& _rName,const ::rtl::OUString& _rSpecials);
+
+    /** checks whether the given name is a valid SQL name
+
+        @param      _rName          the string which should be converted
+        @param      _rSpecials      @see com.sun.star.sdbc.XDatabaseMetaData.getExtraNameCharacters
+
+        @see convertName2SQLName
+    */
+    sal_Bool isValidSQLName( const ::rtl::OUString& _rName, const ::rtl::OUString& _rSpecials );
 
     void showError( const SQLExceptionInfo& _rInfo,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>& _pParent,
