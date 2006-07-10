@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtoolsclient.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:04:25 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:56:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,11 +159,9 @@ namespace svxform
         ) const;
 
         // ------------------------------------------------
-        ::rtl::OUString quoteTableName(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _rxMeta,
-            const ::rtl::OUString& _rName
-            ,sal_Bool _bUseCatalogInSelect = sal_True
-            ,sal_Bool _bUseSchemaInSelect = sal_True
+        virtual ::rtl::OUString composeTableNameForSelect(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xTable
         ) const;
 
         // ------------------------------------------------
