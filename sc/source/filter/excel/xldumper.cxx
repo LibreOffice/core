@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xldumper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:39:13 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:45:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,9 +48,6 @@
 #ifndef SC_FPROGRESSBAR_HXX
 #include "fprogressbar.hxx"
 #endif
-#ifndef SC_XLADDRESS_HXX
-#include "xladdress.hxx"
-#endif
 #ifndef SC_XLCHART_HXX
 #include "xlchart.hxx"
 #endif
@@ -66,42 +63,19 @@
 #ifndef SC_XLTABLE_HXX
 #include "xltable.hxx"
 #endif
+#ifndef SC_XISTRING_HXX
+#include "xistring.hxx"
+#endif
 #ifndef SC_XIROOT_HXX
 #include "xiroot.hxx"
 #endif
 #ifndef SC_XISTREAM_HXX
 #include "xistream.hxx"
 #endif
-#ifndef SC_XIHELPER_HXX
-#include "xihelper.hxx"
-#endif
 
 namespace scf {
-namespace xls {
 namespace dump {
-
-using ::scf::dump::ItemFormat;
-using ::scf::dump::NameListBase;
-using ::scf::dump::NameListRef;
-using ::scf::dump::ConstList;
-using ::scf::dump::Config;
-using ::scf::dump::ConfigRef;
-using ::scf::dump::Input;
-using ::scf::dump::InputRef;
-using ::scf::dump::Output;
-using ::scf::dump::OutputRef;
-using ::scf::dump::IndentGuard;
-using ::scf::dump::TableGuard;
-using ::scf::dump::ItemGuard;
-using ::scf::dump::MultiItemsGuard;
-using ::scf::dump::IndexedItemsGuard;
-using ::scf::dump::ObjectBase;
-using ::scf::dump::OleStorageObject;
-using ::scf::dump::InputObjectBase;
-using ::scf::dump::StreamObjectRef;
-using ::scf::dump::OleStreamObject;
-using ::scf::dump::WrappedStreamObject;
-using ::scf::dump::DumperBase;
+namespace xls {
 
 const sal_Unicode SCF_DUMP_BASECLASS    = 'B';
 const sal_Unicode SCF_DUMP_FUNCSEP      = ',';
@@ -117,24 +91,34 @@ const sal_Unicode SCF_DUMP_PLACEHOLDER  = '\x01';
 // ============================================================================
 // ============================================================================
 
-void StringHelper::AppendGuid( String& rStr, const XclGuid& rGuid )
+void Address::Read( XclImpStream& rStrm, bool bCol16Bit, bool bRow32Bit )
 {
-    AppendHex( rStr, SVBT32ToUInt32( rGuid.mpnData ), false );
-    rStr.Append( '-' );
-    AppendHex( rStr, SVBT16ToShort( rGuid.mpnData + 4 ), false );
-    rStr.Append( '-' );
-    AppendHex( rStr, SVBT16ToShort( rGuid.mpnData + 6 ), false );
-    rStr.Append( '-' );
-    AppendHex( rStr, rGuid.mpnData[ 8 ], false );
-    AppendHex( rStr, rGuid.mpnData[ 9 ], false );
-    rStr.Append( '-' );
-    AppendHex( rStr, rGuid.mpnData[ 10 ], false );
-    AppendHex( rStr, rGuid.mpnData[ 11 ], false );
-    AppendHex( rStr, rGuid.mpnData[ 12 ], false );
-    AppendHex( rStr, rGuid.mpnData[ 13 ], false );
-    AppendHex( rStr, rGuid.mpnData[ 14 ], false );
-    AppendHex( rStr, rGuid.mpnData[ 15 ], false );
+    mnRow = bRow32Bit ? rStrm.ReadInt32() : rStrm.ReaduInt16();
+    mnCol = bCol16Bit ? rStrm.ReaduInt16() : rStrm.ReaduInt8();
 }
+
+// ----------------------------------------------------------------------------
+
+void Range::Read( XclImpStream& rStrm, bool bCol16Bit, bool bRow32Bit )
+{
+    maFirst.mnRow = bRow32Bit ? rStrm.ReadInt32() : rStrm.ReaduInt16();
+    maLast.mnRow = bRow32Bit ? rStrm.ReadInt32() : rStrm.ReaduInt16();
+    maFirst.mnCol = bCol16Bit ? rStrm.ReaduInt16() : rStrm.ReaduInt8();
+    maLast.mnCol = bCol16Bit ? rStrm.ReaduInt16() : rStrm.ReaduInt8();
+}
+
+// ----------------------------------------------------------------------------
+
+void RangeList::Read( XclImpStream& rStrm, bool bCol16Bit, bool bRow32Bit )
+{
+    sal_uInt16 nCount;
+    rStrm >> nCount;
+    resize( nCount );
+    for( iterator aIt = begin(), aEnd = end(); rStrm.IsValid() && (aIt != aEnd); ++aIt )
+        aIt->Read( rStrm, bCol16Bit, bRow32Bit );
+}
+
+// ============================================================================
 
 void StringHelper::AppendAddrCol( String& rStr, sal_Int32 nCol, bool bRel )
 {
@@ -159,7 +143,32 @@ void StringHelper::AppendAddrName( String& rStr, sal_Unicode cPrefix, sal_Int32 
     if( bWriteParen ) rStr.Append( ')' );
 }
 
-void StringHelper::AppendAddress( String& rStr, const Address& rPos, bool bNameMode )
+void StringHelper::AppendAddress( String& rStr, const Address& rPos )
+{
+    AppendAddrCol( rStr, rPos.mnCol, true );
+    AppendAddrRow( rStr, rPos.mnRow, true );
+}
+
+void StringHelper::AppendRange( String& rStr, const Range& rRange )
+{
+    AppendAddress( rStr, rRange.maFirst );
+    rStr.Append( SCF_DUMP_RANGESEP );
+    AppendAddress( rStr, rRange.maLast );
+}
+
+void StringHelper::AppendRangeList( String& rStr, const RangeList& rRanges )
+{
+    String aData;
+    for( RangeList::const_iterator aIt = rRanges.begin(), aEnd = rRanges.end(); aIt != aEnd; ++aIt )
+    {
+        String aRange;
+        AppendRange( aRange, *aIt );
+        AppendToken( aData, aRange, SCF_DUMP_LISTSEP );
+    }
+    rStr.Append( aData );
+}
+
+void StringHelper::AppendAddress( String& rStr, const FormulaAddress& rPos, bool bNameMode )
 {
     if( bNameMode && (rPos.mbRelCol || rPos.mbRelRow) )
     {
@@ -173,36 +182,11 @@ void StringHelper::AppendAddress( String& rStr, const Address& rPos, bool bNameM
     }
 }
 
-void StringHelper::AppendRange( String& rStr, const Range& rRange, bool bNameMode )
+void StringHelper::AppendRange( String& rStr, const FormulaRange& rRange, bool bNameMode )
 {
     AppendAddress( rStr, rRange.maFirst, bNameMode );
     rStr.Append( SCF_DUMP_RANGESEP );
     AppendAddress( rStr, rRange.maLast, bNameMode );
-}
-
-void StringHelper::AppendAddress( String& rStr, const XclAddress& rPos )
-{
-    AppendAddrCol( rStr, rPos.mnCol, true );
-    AppendAddrRow( rStr, rPos.mnRow, true );
-}
-
-void StringHelper::AppendRange( String& rStr, const XclRange& rRange )
-{
-    AppendAddress( rStr, rRange.maFirst );
-    rStr.Append( SCF_DUMP_RANGESEP );
-    AppendAddress( rStr, rRange.maLast );
-}
-
-void StringHelper::AppendRangeList( String& rStr, const XclRangeList& rRanges )
-{
-    String aData;
-    for( XclRangeList::const_iterator aIt = rRanges.begin(), aEnd = rRanges.end(); aIt != aEnd; ++aIt )
-    {
-        String aRange;
-        AppendRange( aRange, *aIt );
-        AppendToken( aData, aRange, SCF_DUMP_LISTSEP );
-    }
-    rStr.Append( aData );
 }
 
 // ============================================================================
@@ -242,27 +226,27 @@ StreamInput::~StreamInput()
 
 sal_Size StreamInput::Size() const
 {
-    return static_cast< sal_Size >( mrStrm.GetRecSize() );
+    return mrStrm.GetRecSize();
 }
 
 sal_Size StreamInput::Tell() const
 {
-    return static_cast< sal_Size >( mrStrm.GetRecPos() );
+    return mrStrm.GetRecPos();
 }
 
 void StreamInput::Seek( sal_Size nPos )
 {
-    mrStrm.Seek( static_cast< sal_uInt32 >( nPos ) );
+    mrStrm.Seek( nPos );
 }
 
 void StreamInput::SeekRel( sal_sSize nRelPos )
 {
-    mrStrm.Seek( static_cast< sal_uInt32 >( mrStrm.GetRecPos() + nRelPos ) );
+    mrStrm.Seek( mrStrm.GetRecPos() + nRelPos );
 }
 
 sal_Size StreamInput::Read( void* pBuffer, sal_Size nSize )
 {
-    return static_cast< sal_Size >( mrStrm.Read( pBuffer, static_cast< sal_uInt32 >( nSize ) ) );
+    return mrStrm.Read( pBuffer, nSize );
 }
 
 void StreamInput::ReadLine( String& rLine, rtl_TextEncoding eEnc )
@@ -332,6 +316,11 @@ RootData::~RootData()
 {
 }
 
+rtl_TextEncoding RootData::GetTextEncoding() const
+{
+    return mxRoot->GetCharSet();
+}
+
 void RootData::SetTextEncoding( rtl_TextEncoding eTextEnc )
 {
     mxRoot->SetCharSet( eTextEnc );
@@ -354,13 +343,15 @@ RootObjectBase::~RootObjectBase()
 
 void RootObjectBase::Construct( const ObjectBase& rParent, SvStream& rStrm )
 {
-    WrappedStreamObject::Construct( rParent, rStrm );
+    StreamObjectRef xStrmObj( new SvStreamObject( rParent, rStrm ) );
+    WrappedStreamObject::Construct( rParent, xStrmObj );
     ConstructOwn();
 }
 
 void RootObjectBase::Construct( const OleStorageObject& rParentStrg, const String& rStrmName )
 {
-    WrappedStreamObject::Construct( rParentStrg, rStrmName );
+    StreamObjectRef xStrmObj( new OleStreamObject( rParentStrg, rStrmName ) );
+    WrappedStreamObject::Construct( rParentStrg, xStrmObj );
     ConstructOwn();
 }
 
@@ -377,7 +368,7 @@ bool RootObjectBase::ImplIsValid() const
 void RootObjectBase::ImplDumpExtendedHeader()
 {
     WrappedStreamObject::ImplDumpExtendedHeader();
-    WriteNameItem( "biff-version", "BIFF", static_cast< sal_uInt32 >( meBiff ) );
+    WriteNameItem( "biff-version", static_cast< sal_uInt32 >( meBiff ), "BIFF" );
 }
 
 ConfigRef RootObjectBase::ImplReconstructConfig()
@@ -404,7 +395,7 @@ String RootObjectBase::GetErrorName( sal_uInt8 nErrCode ) const
 double RootObjectBase::WriteRkItem( const sal_Char* pcName, sal_Int32 nRk )
 {
     MultiItemsGuard aMultiGuard( Out() );
-    WriteHexItem( pcName, "RK-FLAGS", static_cast< sal_uInt32 >( nRk ) );
+    WriteHexItem( pcName, static_cast< sal_uInt32 >( nRk ), "RK-FLAGS" );
     double fValue = XclTools::GetDoubleFromRK( nRk );
     WriteDecItem( "decoded", fValue );
     return fValue;
@@ -412,33 +403,27 @@ double RootObjectBase::WriteRkItem( const sal_Char* pcName, sal_Int32 nRk )
 
 void RootObjectBase::WriteBooleanItem( const sal_Char* pcName, sal_uInt8 nBool )
 {
-    WriteDecItem( pcName, mxBoolean, nBool );
+    WriteDecItem( pcName, nBool, mxBoolean );
 }
 
 void RootObjectBase::WriteErrorCodeItem( const sal_Char* pcName, sal_uInt8 nErrCode )
 {
-    WriteHexItem( pcName, mxErrCodes, nErrCode );
+    WriteHexItem( pcName, nErrCode, mxErrCodes );
 }
 
-void RootObjectBase::WriteGuidItem( const sal_Char* pcName, const XclGuid& rGuid )
-{
-    ItemGuard aItem( Out(), pcName );
-    StringHelper::AppendGuid( Out().GetLine(), rGuid );
-}
-
-void RootObjectBase::WriteAddressItem( const sal_Char* pcName, const XclAddress& rPos )
+void RootObjectBase::WriteAddressItem( const sal_Char* pcName, const Address& rPos )
 {
     ItemGuard aItem( Out(), pcName );
     StringHelper::AppendAddress( Out().GetLine(), rPos );
 }
 
-void RootObjectBase::WriteRangeItem( const sal_Char* pcName, const XclRange& rRange )
+void RootObjectBase::WriteRangeItem( const sal_Char* pcName, const Range& rRange )
 {
     ItemGuard aItem( Out(), pcName );
     StringHelper::AppendRange( Out().GetLine(), rRange );
 }
 
-void RootObjectBase::WriteRangeListItem( const sal_Char* pcName, const XclRangeList& rRanges )
+void RootObjectBase::WriteRangeListItem( const sal_Char* pcName, const RangeList& rRanges )
 {
     MultiItemsGuard aMultiGuard( Out() );
     WriteEmptyItem( pcName );
@@ -451,9 +436,10 @@ void RootObjectBase::WriteRangeListItem( const sal_Char* pcName, const XclRangeL
 
 String RootObjectBase::DumpString( const sal_Char* pcName, XclStrFlags nFlags )
 {
-    String aText = XclImpString( GetXclStream(), nFlags ).GetText();
-    WriteStringItem( pcName ? pcName : "text", aText );
-    return aText;
+    XclImpString aString;
+    aString.Read( GetXclStream(), nFlags );
+    WriteStringItem( pcName ? pcName : "text", aString.GetText() );
+    return aString.GetText();
 }
 
 double RootObjectBase::DumpRk( const sal_Char* pcName )
@@ -502,7 +488,7 @@ void RootObjectBase::DumpFormulaResult( const sal_Char* pcName )
     {
         sal_uInt8 nType = pnResult[ 0 ];
         sal_uInt8 nData = pnResult[ 2 ];
-        WriteHexItem( "type", mxResultType, nType );
+        WriteHexItem( "type", nType, mxResultType );
         switch( nType )
         {
             case EXC_FORMULA_RES_BOOL:  WriteBooleanItem( "value", nData );     break;
@@ -513,40 +499,26 @@ void RootObjectBase::DumpFormulaResult( const sal_Char* pcName )
         WriteDecItem( "value", SVBT64ToDouble( pnResult ) );
 }
 
-XclAddress RootObjectBase::DumpAddress( const sal_Char* pcName, bool bCol16Bit, bool bRow32Bit )
+Address RootObjectBase::DumpAddress( const sal_Char* pcName, bool bCol16Bit, bool bRow32Bit )
 {
-    XclAddress aPos;
-    if( bRow32Bit )
-    {
-        aPos.mnRow = static_cast< sal_uInt16 >( mxStrm->ReaduInt32() );
-        aPos.mnCol = bCol16Bit ? mxStrm->ReaduInt16() : mxStrm->ReaduInt8();
-    }
-    else
-        aPos.Read( *mxStrm, bCol16Bit );
+    Address aPos;
+    aPos.Read( *mxStrm, bCol16Bit, bRow32Bit );
     WriteAddressItem( pcName ? pcName : "addr", aPos );
     return aPos;
 }
 
-XclRange RootObjectBase::DumpRange( const sal_Char* pcName, bool bCol16Bit, bool bRow32Bit )
+Range RootObjectBase::DumpRange( const sal_Char* pcName, bool bCol16Bit, bool bRow32Bit )
 {
-    XclRange aRange;
-    if( bRow32Bit )
-    {
-        aRange.maFirst.mnRow = static_cast< sal_uInt16 >( mxStrm->ReaduInt32() );
-        aRange.maLast.mnRow = static_cast< sal_uInt16 >( mxStrm->ReaduInt32() );
-        aRange.maFirst.mnCol = bCol16Bit ? mxStrm->ReaduInt16() : mxStrm->ReaduInt8();
-        aRange.maLast.mnCol = bCol16Bit ? mxStrm->ReaduInt16() : mxStrm->ReaduInt8();
-    }
-    else
-        aRange.Read( *mxStrm, bCol16Bit );
+    Range aRange;
+    aRange.Read( *mxStrm, bCol16Bit, bRow32Bit );
     WriteRangeItem( pcName ? pcName : "range", aRange );
     return aRange;
 }
 
-void RootObjectBase::DumpRangeList( const sal_Char* pcName, bool bCol16Bit )
+void RootObjectBase::DumpRangeList( const sal_Char* pcName, bool bCol16Bit, bool bRow32Bit )
 {
-    XclRangeList aRanges;
-    aRanges.Read( *mxStrm, bCol16Bit );
+    RangeList aRanges;
+    aRanges.Read( *mxStrm, bCol16Bit, bRow32Bit );
     WriteRangeListItem( pcName ? pcName : "range-list", aRanges );
 }
 
@@ -664,32 +636,32 @@ FormulaStack::FormulaStack() :
 {
 }
 
-void FormulaStack::PushOperand( const String& rOp, const String& rTokClass )
+void FormulaStack::PushOperand( const StringWrapper& rOp, const String& rTokClass )
 {
-    maFmlaStack.push( rOp );
+    maFmlaStack.push( rOp.GetString() );
     maClassStack.push( rTokClass );
 }
 
-void FormulaStack::PushOperand( const String& rOp )
+void FormulaStack::PushOperand( const StringWrapper& rOp )
 {
     PushOperand( rOp, String( SCF_DUMP_BASECLASS ) );
 }
 
-void FormulaStack::PushUnaryOp( const String& rLOp, const String& rROp )
+void FormulaStack::PushUnaryOp( const StringWrapper& rLOp, const StringWrapper& rROp )
 {
-    PushUnaryOp( maFmlaStack, rLOp, rROp );
-    PushUnaryOp( maClassStack, rLOp, rROp );
+    PushUnaryOp( maFmlaStack, rLOp.GetString(), rROp.GetString() );
+    PushUnaryOp( maClassStack, rLOp.GetString(), rROp.GetString() );
 }
 
-void FormulaStack::PushBinaryOp( const String& rOp )
+void FormulaStack::PushBinaryOp( const StringWrapper& rOp )
 {
-    PushBinaryOp( maFmlaStack, rOp );
-    PushBinaryOp( maClassStack, rOp );
+    PushBinaryOp( maFmlaStack, rOp.GetString() );
+    PushBinaryOp( maClassStack, rOp.GetString() );
 }
 
-void FormulaStack::PushFuncOp( const String& rFunc, const String& rTokClass, sal_uInt8 nParamCount )
+void FormulaStack::PushFuncOp( const StringWrapper& rFunc, const String& rTokClass, sal_uInt8 nParamCount )
 {
-    PushFuncOp( maFmlaStack, rFunc, nParamCount );
+    PushFuncOp( maFmlaStack, rFunc.GetString(), nParamCount );
     PushFuncOp( maClassStack, rTokClass, nParamCount );
 }
 
@@ -896,7 +868,7 @@ void FormulaObject::ConstructOwn()
     {
         mxFuncProv.reset( new XclFunctionProvider( GetXclRoot() ) );
 
-        const Config& rCfg = Cfg();
+        Config& rCfg = Cfg();
         mxClasses   = rCfg.GetNameList( "TOKENCLASSES" );
         mxFuncNames = rCfg.GetNameList( "FUNCTIONNAMES" );
         mxParamCnt  = rCfg.GetNameList( "PARAMCOUNT" );
@@ -906,8 +878,8 @@ void FormulaObject::ConstructOwn()
         mxSpTypes   = rCfg.GetNameList( "ATTRSPACETYPES" );
 
         // create classified token names
-        mxTokens = Cfg().CreateNameList< ConstList >( "TOKENS" );
-        mxTokens->IncludeList( Cfg().GetNameList( "BASETOKENS" ) );
+        mxTokens = rCfg.CreateNameList< ConstList >( "TOKENS" );
+        mxTokens->IncludeList( rCfg.GetNameList( "BASETOKENS" ) );
 
         NameListRef xClassTokens = rCfg.GetNameList( "CLASSTOKENS" );
         if( mxClasses.is() && xClassTokens.is() )
@@ -936,7 +908,7 @@ String lclCreateNlr( const String& rData, bool bRel = true )
     return aNlr;
 }
 
-String lclCreateNlr( const Address& rPos )
+String lclCreateNlr( const FormulaAddress& rPos )
 {
     String aAddr;
     StringHelper::AppendAddrCol( aAddr, rPos.mnCol, true );
@@ -948,9 +920,9 @@ String lclCreateNlr( const Address& rPos )
 
 // ----------------------------------------------------------------------------
 
-Address FormulaObject::CreateTokenAddress( sal_uInt16 nCol, sal_uInt16 nRow, bool bRelC, bool bRelR, bool bNameMode ) const
+FormulaAddress FormulaObject::CreateTokenAddress( sal_uInt16 nCol, sal_uInt16 nRow, bool bRelC, bool bRelR, bool bNameMode ) const
 {
-    Address aPos;
+    FormulaAddress aPos;
     aPos.mnCol = nCol;
     if( bRelC && bNameMode ) aPos.mnCol -= 0x80;
     aPos.mbRelCol = bRelC;
@@ -997,26 +969,26 @@ String FormulaObject::CreatePlaceHolder() const
     return CreatePlaceHolder( maAddData.size() );
 }
 
-void FormulaObject::WriteTokenAddressItem( const sal_Char* pcName, const Address& rPos, bool bNameMode )
+void FormulaObject::WriteTokenAddressItem( const sal_Char* pcName, const FormulaAddress& rPos, bool bNameMode )
 {
     ItemGuard aItem( Out(), pcName );
     StringHelper::AppendAddress( Out().GetLine(), rPos, bNameMode );
 }
 
-void FormulaObject::WriteTokenAddress3dItem( const sal_Char* pcName, const String& rRef, const Address& rPos, bool bNameMode )
+void FormulaObject::WriteTokenAddress3dItem( const sal_Char* pcName, const String& rRef, const FormulaAddress& rPos, bool bNameMode )
 {
     ItemGuard aItem( Out(), pcName );
     Out().WriteString( rRef );
     StringHelper::AppendAddress( Out().GetLine(), rPos, bNameMode );
 }
 
-void FormulaObject::WriteTokenRangeItem( const sal_Char* pcName, const Range& rRange, bool bNameMode )
+void FormulaObject::WriteTokenRangeItem( const sal_Char* pcName, const FormulaRange& rRange, bool bNameMode )
 {
     ItemGuard aItem( Out(), pcName );
     StringHelper::AppendRange( Out().GetLine(), rRange, bNameMode );
 }
 
-void FormulaObject::WriteTokenRange3dItem( const sal_Char* pcName, const String& rRef, const Range& rRange, bool bNameMode )
+void FormulaObject::WriteTokenRange3dItem( const sal_Char* pcName, const String& rRef, const FormulaRange& rRange, bool bNameMode )
 {
     ItemGuard aItem( Out(), pcName );
     Out().WriteString( rRef );
@@ -1058,7 +1030,7 @@ sal_uInt16 FormulaObject::DumpTokenRow( const sal_Char* pcName, bool& rbRelC, bo
     return nRow;
 }
 
-Address FormulaObject::DumpTokenAddress( bool bNameMode )
+FormulaAddress FormulaObject::DumpTokenAddress( bool bNameMode )
 {
     bool bRelC = false;
     bool bRelR = false;
@@ -1067,7 +1039,7 @@ Address FormulaObject::DumpTokenAddress( bool bNameMode )
     return CreateTokenAddress( nCol, nRow, bRelC, bRelR, bNameMode );
 }
 
-Range FormulaObject::DumpTokenRange( bool bNameMode )
+FormulaRange FormulaObject::DumpTokenRange( bool bNameMode )
 {
     bool bRelC1 = false;
     bool bRelR1 = false;
@@ -1077,7 +1049,7 @@ Range FormulaObject::DumpTokenRange( bool bNameMode )
     sal_uInt16 nRow2 = DumpTokenRow( "row2", bRelC2, bRelR2 );
     sal_uInt16 nCol1 = DumpTokenCol( "col1", bRelC1, bRelR1 );
     sal_uInt16 nCol2 = DumpTokenCol( "col2", bRelC2, bRelR2 );
-    Range aRange;
+    FormulaRange aRange;
     aRange.maFirst = CreateTokenAddress( nCol1, nRow1, bRelC1, bRelR1, bNameMode );
     aRange.maLast  = CreateTokenAddress( nCol2, nRow2, bRelC2, bRelR2, bNameMode );
     return aRange;
@@ -1178,14 +1150,14 @@ void FormulaObject::DumpNameXToken( const String& rTokClass )
 
 void FormulaObject::DumpRefToken( const String& rTokClass, bool bNameMode )
 {
-    Address aPos = DumpTokenAddress( bNameMode );
+    FormulaAddress aPos = DumpTokenAddress( bNameMode );
     WriteTokenAddressItem( "addr", aPos, bNameMode );
     mxStack->PushOperand( CreateRef( Out().GetLastItemValue() ), rTokClass );
 }
 
 void FormulaObject::DumpAreaToken( const String& rTokClass, bool bNameMode )
 {
-    Range aRange = DumpTokenRange( bNameMode );
+    FormulaRange aRange = DumpTokenRange( bNameMode );
     WriteTokenRangeItem( "range", aRange, bNameMode );
     mxStack->PushOperand( CreateRef( Out().GetLastItemValue() ), rTokClass );
 }
@@ -1200,7 +1172,7 @@ void FormulaObject::DumpRef3dToken( const String& rTokClass, bool bNameMode )
 {
     String aRef = DumpTokenRefIdx();
     DumpTokenRefTabIdxs();
-    Address aPos = DumpTokenAddress( bNameMode );
+    FormulaAddress aPos = DumpTokenAddress( bNameMode );
     WriteTokenAddress3dItem( "addr", aRef, aPos, bNameMode );
     mxStack->PushOperand( Out().GetLastItemValue(), rTokClass );
 }
@@ -1209,7 +1181,7 @@ void FormulaObject::DumpArea3dToken( const String& rTokClass, bool bNameMode )
 {
     String aRef = DumpTokenRefIdx();
     DumpTokenRefTabIdxs();
-    Range aRange = DumpTokenRange( bNameMode );
+    FormulaRange aRange = DumpTokenRange( bNameMode );
     WriteTokenRange3dItem( "range", aRef, aRange, bNameMode );
     mxStack->PushOperand( Out().GetLastItemValue(), rTokClass );
 }
@@ -1236,14 +1208,25 @@ void FormulaObject::DumpMemAreaToken( const String& rTokClass, bool bAddData )
         maAddData.push_back( ADDDATA_MEMAREA );
 }
 
-void FormulaObject::DumpUnaryOpToken( const sal_Char* pcLOp, const sal_Char* pcROp )
+void FormulaObject::DumpExpToken( const StringWrapper& rName )
 {
-    mxStack->PushUnaryOp( String::CreateFromAscii( pcLOp ), String::CreateFromAscii( pcROp ) );
+    Address aPos;
+    aPos.mnRow = DumpDec< sal_uInt16 >( "row" );
+    aPos.mnCol = DumpDec< sal_uInt16, sal_uInt8 >( GetBiff() >= EXC_BIFF3, "col" );
+    WriteAddressItem( "base-addr", aPos );
+    String aOp = rName.GetString();
+    StringHelper::AppendIndex( aOp, Out().GetLastItemValue() );
+    mxStack->PushOperand( aOp );
 }
 
-void FormulaObject::DumpBinaryOpToken( const sal_Char* pcOp )
+void FormulaObject::DumpUnaryOpToken( const StringWrapper& rLOp, const StringWrapper& rROp )
 {
-    mxStack->PushBinaryOp( String::CreateFromAscii( pcOp ) );
+    mxStack->PushUnaryOp( rLOp, rROp );
+}
+
+void FormulaObject::DumpBinaryOpToken( const StringWrapper& rOp )
+{
+    mxStack->PushBinaryOp( rOp );
 }
 
 void FormulaObject::DumpFuncToken( const String& rTokClass )
@@ -1286,17 +1269,6 @@ void FormulaObject::DumpEndSheetToken()
     maRefPrefix.Erase();
 }
 
-void FormulaObject::DumpExpToken( const sal_Char* pcName )
-{
-    XclAddress aPos;
-    aPos.mnRow = DumpDec< sal_uInt16 >( "row" );
-    aPos.mnCol = DumpDec< sal_uInt16, sal_uInt8 >( GetBiff() >= EXC_BIFF3, "col" );
-    WriteAddressItem( "base-addr", aPos );
-    String aOp = String::CreateFromAscii( pcName );
-    StringHelper::AppendIndex( aOp, Out().GetLastItemValue() );
-    mxStack->PushOperand( aOp );
-}
-
 bool FormulaObject::DumpAttrToken()
 {
     bool bValid = true;
@@ -1313,11 +1285,9 @@ bool FormulaObject::DumpAttrToken()
         case EXC_TOK_ATTR_CHOOSE:
         {
             sal_uInt16 nCount = DumpDec< sal_uInt16, sal_uInt8 >( bBiff3, "choices" );
-            {
-                IndexedItemsGuard aIndexGuard( Out() );
-                for( sal_uInt16 nIdx = 0; nIdx < nCount; ++nIdx )
-                    DumpDec< sal_uInt16, sal_uInt8 >( bBiff3, "skip" );
-            }
+            Out().ResetItemIndex();
+            for( sal_uInt16 nIdx = 0; nIdx < nCount; ++nIdx )
+                DumpDec< sal_uInt16, sal_uInt8 >( bBiff3, "#skip" );
             DumpDec< sal_uInt16, sal_uInt8 >( bBiff3, "skip-err" );
         }
         break;
@@ -1397,7 +1367,7 @@ void FormulaObject::DumpNlrColRowToken( const String& rTokClass, bool bAddData )
     }
     else
     {
-        Address aPos = DumpTokenAddress( false );
+        FormulaAddress aPos = DumpTokenAddress( false );
         WriteInfoItem( "addr", lclCreateNlr( aPos ) );
         mxStack->PushOperand( Out().GetLastItemValue(), rTokClass );
     }
@@ -1413,7 +1383,7 @@ void FormulaObject::DumpNlrRangeToken( const String& rTokClass, bool bAddData )
     }
     else
     {
-        Address aPos = DumpTokenAddress( false );
+        FormulaAddress aPos = DumpTokenAddress( false );
         WriteInfoItem( "addr", lclCreateNlr( aPos ) );
         mxStack->PushOperand( Out().GetLastItemValue(), rTokClass );
     }
@@ -1430,23 +1400,24 @@ void FormulaObject::DumpNlrRangeErrToken()
 
 void FormulaObject::DumpAddTokenData()
 {
+    Output& rOut = Out();
+    rOut.ResetItemIndex();
     for( AddDataTypeVec::const_iterator aIt = maAddData.begin(), aEnd = maAddData.end(); aIt != aEnd; ++aIt )
     {
         AddDataType eType = *aIt;
-        size_t nIdx = aIt - maAddData.begin();
 
         {
-            IndexedItemsGuard aIndexGuard( Out(), nIdx );
-            ItemGuard aItem( Out(), "add-data" );
+            ItemGuard aItem( rOut, "#add-data" );
             switch( eType )
             {
-                case ADDDATA_NLR:       Out().WriteAscii( "tNlr" );     break;
-                case ADDDATA_ARRAY:     Out().WriteAscii( "tArray" );   break;
-                case ADDDATA_MEMAREA:   Out().WriteAscii( "tMemArea" ); break;
+                case ADDDATA_NLR:       rOut.WriteAscii( "tNlr" );      break;
+                case ADDDATA_ARRAY:     rOut.WriteAscii( "tArray" );    break;
+                case ADDDATA_MEMAREA:   rOut.WriteAscii( "tMemArea" );  break;
             }
         }
 
-        IndentGuard aIndGuard( Out() );
+        size_t nIdx = aIt - maAddData.begin();
+        IndentGuard aIndGuard( rOut );
         switch( eType )
         {
             case ADDDATA_NLR:       DumpAddDataNlr( nIdx );     break;
@@ -1464,8 +1435,8 @@ void FormulaObject::DumpAddDataNlr( size_t nIdx )
     String aAddrList;
     for( sal_uInt32 nPos = 0; nPos < nCount; ++nPos )
     {
-        XclAddress aPos;
-        GetXclStream() >> aPos;
+        Address aPos;
+        aPos.Read( GetXclStream() );
         String aAddr;
         StringHelper::AppendAddress( aAddr, aPos );
         StringHelper::AppendToken( aAddrList, aAddr, SCF_DUMP_LISTSEP );
@@ -1554,12 +1525,8 @@ void RecordStreamObject::ImplDumpBody()
             IndentGuard aIndGuard( Out() );
             if( Cfg().HasName( mxRecNames, rStrm.GetRecId() ) )
                 DumpRecord();
-            // remaining undumped data
-            sal_Size nRemaining = rStrm.GetRecSize() - rStrm.GetRecPos();
-            if( mbShowTrailing )
-                DumpRawBinary( nRemaining, false );
             else
-                SkipBlock( nRemaining );
+                DumpRawBinary( rStrm.GetRecSize(), false );
         }
         if( !rStrm.IsValid() )
             WriteInfoItem( "stream-state", SCF_DUMP_ERR_STREAM );
@@ -1580,6 +1547,12 @@ void RecordStreamObject::ImplDumpRecord()
 
 void RecordStreamObject::ImplPostProcessRecord()
 {
+}
+
+void RecordStreamObject::DumpRepeatedRecordId()
+{
+    DumpHex< sal_uInt16 >( "repeated-rec-id", mxRecNames );
+    DumpUnused( 2 );
 }
 
 sal_uInt16 RecordStreamObject::DumpFormulaSize( const sal_Char* pcName )
@@ -1624,7 +1597,6 @@ void RecordStreamObject::ConstructOwn()
         mbShowRecId     = rCfg.GetBoolOption( "show-record-id", true );
         mbShowRecName   = rCfg.GetBoolOption( "show-record-name", true );
         mbShowRecBody   = rCfg.GetBoolOption( "show-record-body", true );
-        mbShowTrailing  = rCfg.GetBoolOption( "show-trailing-unknown", true );
         mbMergeContRec  = rCfg.GetBoolOption( "merge-continue-record", true );
     }
 }
@@ -1635,18 +1607,24 @@ void RecordStreamObject::DumpRecordHeader()
     WriteEmptyItem( "REC" );
     if( mbShowRecPos )  WriteHexItem( "pos", static_cast< sal_uInt32 >( GetStream().Tell() - 4 ) );
     XclImpStream& rStrm = GetXclStream();
-    if( mbShowRecSize ) WriteHexItem( "size", rStrm.GetRecSize() );
+    if( mbShowRecSize ) WriteHexItem( "size", static_cast< sal_uInt32 >( rStrm.GetRecSize() ) );
     if( mbShowRecId )   WriteHexItem( "id", rStrm.GetRecId() );
-    if( mbShowRecName ) WriteNameItem( "name", mxRecNames, rStrm.GetRecId() );
+    if( mbShowRecName ) WriteNameItem( "name", rStrm.GetRecId(), mxRecNames );
 }
 
 void RecordStreamObject::DumpRecord()
 {
-    sal_uInt16 nRecId = GetXclStream().GetRecId();
+    XclImpStream& rStrm = GetXclStream();
+    sal_uInt16 nRecId = rStrm.GetRecId();
     if( Cfg().HasName( mxSimpleRecs, nRecId ) )
         DumpSimpleRecord( Cfg().GetName( mxSimpleRecs, nRecId ) );
     else
         ImplDumpRecord();
+    // remaining undumped data
+    if( rStrm.GetRecPos() == 0 )
+        DumpRawBinary( rStrm.GetRecSize(), false );
+    else
+        DumpRemaining( rStrm.GetRecLeft() );
 }
 
 void RecordStreamObject::DumpSimpleRecord( const String& rRecData )
@@ -1716,7 +1694,7 @@ void WorkbookStreamObject::ImplDumpRecord()
 {
     XclImpStream& rStrm = GetXclStream();
     sal_uInt16 nRecId = rStrm.GetRecId();
-    sal_uInt32 nRecSize = rStrm.GetRecSize();
+    sal_Size nRecSize = rStrm.GetRecSize();
     XclBiff eBiff = GetBiff();
 
     switch( nRecId )
@@ -1758,13 +1736,87 @@ void WorkbookStreamObject::ImplDumpRecord()
             if( eBiff == EXC_BIFF8 ) DumpColorIdx( "bg-color-idx" );
         break;
 
+        case EXC_ID_CHAXESSET:
+            DumpDec< sal_uInt16 >( "axesset-id", "CHAXESSET-ID" );
+            DumpRect< sal_Int32 >( "position", (eBiff <= EXC_BIFF4) ? "CONV-TWIP-TO-CM" : "" );
+        break;
+
+        case EXC_ID_CHAXIS:
+            DumpDec< sal_uInt16 >( "axis-type", "CHAXIS-TYPE" );
+            if( eBiff <= EXC_BIFF4 )
+                DumpRect< sal_Int32 >( "position", "CONV-TWIP-TO-CM" );
+            else
+                DumpUnused( 16 );
+        break;
+
+        case EXC_ID_CHBAR:
+            DumpDec< sal_Int16 >( "overlap", "CONV-PERCENT-NEG" );
+            DumpDec< sal_Int16 >( "gap", "CONV-PERCENT" );
+            DumpHex< sal_uInt16 >( "flags", "CHBAR-FLAGS" );
+        break;
+
         case EXC_ID_CHCHART:
-            DumpRect< sal_Int32 >( "chart-frame", ::scf::dump::FORMATTYPE_FIX );
+            DumpRect< sal_Int32 >( "chart-frame", "CONV-PT-TO-CM", FORMATTYPE_FIX );
+        break;
+
+        case EXC_ID_CHCHART3D:
+            DumpDec< sal_uInt16 >( "rotation-angle", "CONV-DEG" );
+            DumpDec< sal_Int16 >( "elevation-angle", "CONV-DEG" );
+            DumpDec< sal_uInt16 >( "eye-distance" );
+            DumpDec< sal_uInt16 >( "relative-height" );
+            DumpDec< sal_uInt16 >( "relative-depth" );
+            DumpDec< sal_Int16 >( "gap", "CONV-PERCENT" );
+            DumpHex< sal_uInt16 >( "flags", "CHCHART3D-FLAGS" );
+        break;
+
+        case EXC_ID_CHCHARTGROUP:
+            DumpUnused( 16 );
+            DumpHex< sal_uInt16 >( "flags", "CHCHARTGROUP-FLAGS" );
+            if( eBiff >= EXC_BIFF5 ) DumpDec< sal_uInt16 >( "group-idx" );
+        break;
+
+        case EXC_ID_CHDATAFORMAT:
+            DumpDec< sal_Int16 >( "point-idx", "CHDATAFORMAT-POINTIDX" );
+            DumpDec< sal_Int16 >( "series-idx" );
+            if( eBiff >= EXC_BIFF5 ) DumpDec< sal_Int16 >( "format-idx", "CHDATAFORMAT-FORMATIDX" );
+            if( eBiff >= EXC_BIFF5 ) DumpHex< sal_uInt16 >( "flags", "CHDATAFORMAT-FLAGS" );
+        break;
+
+        case EXC_ID_CHEXTRANGE:
+            DumpDec< sal_uInt16 >( "minimum-categ" );
+            DumpDec< sal_uInt16 >( "maximum-categ" );
+            DumpDec< sal_uInt16 >( "major-unit-value" );
+            DumpDec< sal_uInt16 >( "major-unit" );
+            DumpDec< sal_uInt16 >( "minor-unit-value" );
+            DumpDec< sal_uInt16 >( "minor-unit" );
+            DumpDec< sal_uInt16 >( "base-unit" );
+            DumpDec< sal_uInt16 >( "axis-crossing-date" );
+            DumpHex< sal_uInt16 >( "flags", "CHEXTRANGE-FLAGS" );
         break;
 
         case EXC_ID_CHFRAME:
             DumpDec< sal_uInt16 >( "format", "CHFRAME-FORMAT" );
             DumpHex< sal_uInt16 >( "flags", "CHFRAME-FLAGS" );
+        break;
+
+        case EXC_ID_CHFRAMEPOS:
+            DumpDec< sal_uInt16 >( "object-type", "CHFRAMEPOS-OBJTYPE" );
+            DumpDec< sal_uInt16 >( "size-mode", "CHFRAMEPOS-SIZEMODE" );
+            DumpRect< sal_Int32 >( "position", (eBiff <= EXC_BIFF4) ? "CONV-TWIP-TO-CM" : "" );
+        break;
+
+        case EXC_ID_CHLABELRANGE:
+            DumpDec< sal_uInt16 >( "axis-crossing" );
+            DumpDec< sal_uInt16 >( "label-frequency" );
+            DumpDec< sal_uInt16 >( "tick-frequency" );
+            DumpHex< sal_uInt16 >( "flags", "CHLABELRANGE-FLAGS" );
+        break;
+
+        case EXC_ID_CHLEGEND:
+            DumpRect< sal_Int32 >( "position", (eBiff <= EXC_BIFF4) ? "CONV-TWIP-TO-CM" : "" );
+            DumpDec< sal_uInt8 >( "docked-pos", "CHLEGEND-DOCKPOS" );
+            DumpDec< sal_uInt8 >( "spacing", "CHLEGEND-SPACING" );
+            DumpHex< sal_uInt16 >( "flags", "CHLEGEND-FLAGS" );
         break;
 
         case EXC_ID_CHLINEFORMAT:
@@ -1775,9 +1827,42 @@ void WorkbookStreamObject::ImplDumpRecord()
             if( eBiff == EXC_BIFF8 ) DumpColorIdx();
         break;
 
+        case EXC_ID_CHMARKERFORMAT:
+            DumpRgbColor( "border-color-rgb" );
+            DumpRgbColor( "fill-color-rgb" );
+            DumpDec< sal_uInt16 >( "marker-type", "CHMARKERFORMAT-TYPE" );
+            DumpDec< sal_uInt16 >( "flags", "CHMARKERFORMAT-FLAGS" );
+            if( eBiff == EXC_BIFF8 ) DumpColorIdx( "border-color-idx" );
+            if( eBiff == EXC_BIFF8 ) DumpColorIdx( "fill-color-idx" );
+            if( eBiff == EXC_BIFF8 ) DumpDec< sal_Int32 >( "marker-size", "CONV-TWIP-TO-PT" );
+        break;
+
+        case EXC_ID_CHOBJECTLINK:
+            DumpDec< sal_uInt16 >( "link-target", "CHOBJECTLINK-TARGET" );
+            DumpDec< sal_Int16 >( "series-idx" );
+            DumpDec< sal_Int16 >( "point-idx", "CHOBJECTLINK-POINT" );
+        break;
+
+        case EXC_ID_CHPIE:
+            DumpDec< sal_uInt16 >( "angle", "CONV-DEG" );
+            if( eBiff >= EXC_BIFF5 ) DumpDec< sal_uInt16 >( "hole-size" );
+            if( eBiff >= EXC_BIFF8 ) DumpHex< sal_uInt16 >( "flags", "CHPIE-FLAGS" );
+        break;
+
         case EXC_ID_CHPLOTGROWTH:
             DumpFix< sal_Int32 >( "horizontal-growth" );
             DumpFix< sal_Int32 >( "vertical-growth" );
+        break;
+
+        case EXC_ID_CHPROPERTIES:
+            DumpHex< sal_uInt16 >( "flags", "CHPROPERTIES-FLAGS" );
+            DumpDec< sal_uInt8 >( "empty-cells", "CHPROPERTIES-EMPTYCELLS" );
+        break;
+
+        case EXC_ID_CHSCATTER:
+            if( eBiff == EXC_BIFF8 ) DumpDec< sal_uInt16 >( "bubble-size", "CONV-PERCENT" );
+            if( eBiff == EXC_BIFF8 ) DumpDec< sal_uInt16 >( "size-type", "CHSCATTER-SIZETYPE" );
+            if( eBiff == EXC_BIFF8 ) DumpHex< sal_uInt16 >( "flags", "CHSCATTER-FLAGS" );
         break;
 
         case EXC_ID_CHSERERRORBAR:
@@ -1825,12 +1910,52 @@ void WorkbookStreamObject::ImplDumpRecord()
             DumpString( "text", EXC_STR_8BITLENGTH );
         break;
 
+        case EXC_ID_CHTEXT:
+            DumpDec< sal_uInt8 >( "horizontal-align", "CHTEXT-HORALIGN" );
+            DumpDec< sal_uInt8 >( "vertical-align", "CHTEXT-VERALIGN" );
+            DumpDec< sal_uInt16 >( "fill-mode", "CHTEXT-FILLMODE" );
+            DumpRgbColor();
+            DumpRect< sal_Int32 >( "position", (eBiff <= EXC_BIFF4) ? "CONV-TWIP-TO-CM" : "" );
+            DumpHex< sal_uInt16 >( "flags", "CHTEXT-FLAGS" );
+            if( eBiff == EXC_BIFF8 ) DumpColorIdx();
+            if( eBiff == EXC_BIFF8 ) DumpDec< sal_uInt16 >( "placement", "CHTEXT-PLACEMENT" );
+            if( eBiff == EXC_BIFF8 ) DumpDec< sal_uInt16 >( "rotation", "TEXTROTATION" );
+        break;
+
+        case EXC_ID_CHTICK:
+            DumpDec< sal_uInt8 >( "major-ticks", "CHTICK-TYPE" );
+            DumpDec< sal_uInt8 >( "minor-ticks", "CHTICK-TYPE" );
+            DumpDec< sal_uInt8 >( "label-position", "CHTICK-LABELPOS" );
+            DumpDec< sal_uInt8 >( "fill-mode", "CHTEXT-FILLMODE" );
+            DumpRgbColor( "label-color-rgb" );
+            DumpUnused( 16 );
+            DumpHex< sal_uInt16 >( "flags", "CHTICK-FLAGS" );
+            if( eBiff == EXC_BIFF8 ) DumpColorIdx( "label-color-idx" );
+            if( eBiff == EXC_BIFF8 ) DumpDec< sal_uInt16 >( "label-rotation", "TEXTROTATION" );
+        break;
+
+        case EXC_ID_CHUNITPROPERTIES:
+            DumpRepeatedRecordId();
+            DumpDec< sal_Int16 >( "preset", "CHUNITPROPERTIES-PRESET" );
+            DumpDec< double >( "unit" );
+            DumpHex< sal_uInt16 >( "flags", "CHUNITPROPERTIES-FLAGS" );
+        break;
+
+        case EXC_ID_CHVALUERANGE:
+            DumpDec< double >( "minimum" );
+            DumpDec< double >( "maximum" );
+            DumpDec< double >( "major-inc" );
+            DumpDec< double >( "minor-inc" );
+            DumpDec< double >( "axis-crossing" );
+            DumpHex< sal_uInt16 >( "flags", "CHVALUERANGE-FLAGS" );
+        break;
+
+        case EXC_ID_CHWRAPPEDRECORD:
+            DumpRepeatedRecordId();
+        break;
+
         case EXC_ID_CODEPAGE:
-        {
-            rtl_TextEncoding eTextEnc = DumpCodePage();
-            if( eTextEnc != RTL_TEXTENCODING_DONTKNOW )
-                Root().SetTextEncoding( eTextEnc );
-        }
+            DumpCodePageRec();
         break;
 
         case EXC_ID3_DEFROWHEIGHT:
@@ -1877,8 +2002,14 @@ void WorkbookStreamObject::ImplDumpRecord()
 
         case EXC_ID2_LABEL:
         case EXC_ID3_LABEL:
-            DumpCellHeader( nRecId == EXC_ID2_LABEL );
+        {
+            sal_uInt16 nXfIdx = DumpCellHeader( nRecId == EXC_ID2_LABEL );
+            sal_uInt16 nFontIdx = GetXfData( nXfIdx );
+            rtl_TextEncoding eOldTextEnc = Root().GetTextEncoding();
+            Root().SetTextEncoding( GetFontEncoding( nXfIdx ) );
             DumpString( "value", ((nRecId == EXC_ID2_LABEL) && (GetBiff() <= EXC_BIFF5)) ? EXC_STR_8BITLENGTH : EXC_STR_DEFAULT );
+            Root().SetTextEncoding( eOldTextEnc );
+        }
         break;
 
         case EXC_ID_LABELSST:
@@ -1898,13 +2029,11 @@ void WorkbookStreamObject::ImplDumpRecord()
         break;
 
         case EXC_ID_SST:
-        {
             DumpDec< sal_uInt32 >( "string-cell-count" );
             DumpDec< sal_uInt32 >( "sst-size" );
-            IndexedItemsGuard aIndexGuard( Out() );
+            Out().ResetItemIndex();
             while( rStrm.IsValid() && (rStrm.GetRecLeft() >= 3) )
-                DumpString( "entry" );
-        }
+                DumpString( "#entry" );
         break;
 
         case EXC_ID2_STRING:
@@ -1944,17 +2073,16 @@ void WorkbookStreamObject::ConstructOwn()
         mxBorderStyles  = rCfg.GetNameList( "BORDERSTYLES" );
         mxFillPatterns  = rCfg.GetNameList( "FILLPATTERNS" );
         mxFontNames     = rCfg.CreateNameList< ConstList >( "FONTNAMES" );
-        mxFontNames->SetName( EXC_FONT_APP, CreateFontName( XclFontData() ) );
+        mxFontNames->SetName( EXC_FONT_APP, "'Arial'/10pt" );
         mxFormats       = rCfg.CreateNameList< ConstList >( "FORMATS" );
         mxFormats->IncludeList( rCfg.GetNameList( "BUILTIN-FORMATS" ) );
         mnFormatIdx = 0;
     }
 }
 
-const XclFontData& WorkbookStreamObject::GetFontData( sal_uInt16 nFontIdx ) const
+const XclFontData* WorkbookStreamObject::GetFontData( sal_uInt16 nFontIdx ) const
 {
-    static const XclFontData saDummy;
-    return (nFontIdx < maFontDatas.size()) ? maFontDatas[ nFontIdx ] : saDummy;
+    return (nFontIdx < maFontDatas.size()) ? &maFontDatas[ nFontIdx ] : 0;
 }
 
 sal_uInt16 WorkbookStreamObject::GetXfData( sal_uInt16 nXfIdx ) const
@@ -1962,9 +2090,11 @@ sal_uInt16 WorkbookStreamObject::GetXfData( sal_uInt16 nXfIdx ) const
     return (nXfIdx < maXfDatas.size()) ? maXfDatas[ nXfIdx ] : EXC_FONT_NOTFOUND;
 }
 
-rtl_TextEncoding WorkbookStreamObject::GetCellEncoding( sal_uInt16 nXfIdx ) const
+rtl_TextEncoding WorkbookStreamObject::GetFontEncoding( sal_uInt16 nXfIdx ) const
 {
-    return GetFontData( GetXfData( nXfIdx ) ).GetScCharSet();
+    const XclFontData* pFontData = GetFontData( GetXfData( nXfIdx ) );
+    rtl_TextEncoding eFontEnc = pFontData ? pFontData->GetScCharSet() : Root().GetTextEncoding();
+    return (eFontEnc == RTL_TEXTENCODING_DONTKNOW) ? Root().GetTextEncoding() : eFontEnc;
 }
 
 String WorkbookStreamObject::CreateFontName( const XclFontData& rFontData ) const
@@ -2014,10 +2144,10 @@ sal_uInt16 WorkbookStreamObject::DumpXfIdx( const sal_Char* pcName, bool bBiff2S
     return nXfIdx;
 }
 
-void WorkbookStreamObject::DumpCellHeader( bool bBiff2Style )
+sal_uInt16 WorkbookStreamObject::DumpCellHeader( bool bBiff2Style )
 {
     DumpAddress();
-    DumpXfIdx( 0, bBiff2Style );
+    return DumpXfIdx( 0, bBiff2Style );
 }
 
 void WorkbookStreamObject::DumpBoolErr()
@@ -2031,12 +2161,20 @@ void WorkbookStreamObject::DumpBoolErr()
         WriteBooleanItem( "boolean", nValue );
 }
 
+void WorkbookStreamObject::DumpCodePageRec()
+{
+    rtl_TextEncoding eTextEnc = DumpCodePage();
+    if( eTextEnc != RTL_TEXTENCODING_DONTKNOW )
+        Root().SetTextEncoding( eTextEnc );
+}
+
 void WorkbookStreamObject::DumpFontRec()
 {
     if( maFontDatas.size() == 4 )
         maFontDatas.push_back( XclFontData() );
 
-    WriteDecItem( "#font", static_cast< sal_uInt32 >( maFontDatas.size() ) );
+    Out().ResetItemIndex( static_cast< sal_Int64 >( maFontDatas.size() ) );
+    WriteEmptyItem( "#font" );
     XclFontData aFontData;
     aFontData.mnHeight = DumpDec< sal_uInt16 >( "height", "CONV-TWIP-TO-PT" );
     sal_uInt16 nFlags = DumpHex< sal_uInt16 >( "flags", "FONT-FLAGS" );
@@ -2072,17 +2210,20 @@ void WorkbookStreamObject::DumpFormatRec()
         case EXC_BIFF2:
         case EXC_BIFF3:
             nFormatIdx = mnFormatIdx++;
-            WriteDecItem( "#fmt", nFormatIdx );
+            Out().ResetItemIndex( nFormatIdx );
+            WriteEmptyItem( "#fmt" );
         break;
         case EXC_BIFF4:
             nFormatIdx = mnFormatIdx++;
-            WriteDecItem( "#fmt", nFormatIdx );
+            Out().ResetItemIndex( nFormatIdx );
+            WriteEmptyItem( "#fmt" );
             DumpUnused( 2 );
         break;
         case EXC_BIFF5:
         case EXC_BIFF8:
             GetXclStream() >> nFormatIdx;
-            WriteDecItem( "#fmt", nFormatIdx );
+            Out().ResetItemIndex( nFormatIdx );
+            WriteEmptyItem( "#fmt" );
             WriteDecItem( "fmt-idx", nFormatIdx );
         break;
     }
@@ -2092,7 +2233,8 @@ void WorkbookStreamObject::DumpFormatRec()
 
 void WorkbookStreamObject::DumpXfRec()
 {
-    WriteDecItem( "#xf", static_cast< sal_uInt32 >( maXfDatas.size() ) );
+    Out().ResetItemIndex( static_cast< sal_Int64 >( maXfDatas.size() ) );
+    WriteEmptyItem( "#xf" );
     sal_uInt16 nFontIdx = DumpFontIdx();
     switch( GetBiff() )
     {
@@ -2130,7 +2272,7 @@ void WorkbookStreamObject::DumpXfRec()
             DumpFormatIdx();
             DumpHex< sal_uInt16 >( "type-flags", "XF-TYPEFLAGS" );
             DumpHex< sal_uInt8 >( "alignment", "XF-ALIGNMENT" );
-            DumpDec< sal_uInt8 >( "rotation", "XF-ROTATION" );
+            DumpDec< sal_uInt8 >( "rotation", "TEXTROTATION" );
             DumpHex< sal_uInt8 >( "text-flags", "XF-TEXTFLAGS" );
             DumpHex< sal_uInt8 >( "used-attributes", "XF-USEDATTRIBS-FLAGS" );
             DumpHex< sal_uInt16 >( "border-style", "XF-BORDERSTYLE" );
@@ -2177,8 +2319,11 @@ RootStorageObject::RootStorageObject( const ObjectBase& rParent )
 
 void RootStorageObject::ImplDumpBody()
 {
+    ExtractStorageToFileSystem();
     WorkbookStreamObject( *this, EXC_STREAM_WORKBOOK ).Dump();
     WorkbookStreamObject( *this, EXC_STREAM_BOOK ).Dump();
+    OlePropertyStreamObject( *this, CREATE_STRING( "\005SummaryInformation" ) ).Dump();
+    OlePropertyStreamObject( *this, CREATE_STRING( "\005DocumentSummaryInformation" ) ).Dump();
     OleStreamObject( *this, EXC_STREAM_CTLS ).Dump();
     VbaProjectStorageObject( *this ).Dump();
 }
@@ -2190,6 +2335,7 @@ Dumper::Dumper( SfxMedium& rMedium, SfxObjectShell* pDocShell )
 {
     ConfigRef xCfg( new Config( "XLSDUMPER" ) );
     DumperBase::Construct( xCfg, rMedium, pDocShell );
+    OlePropertyStreamObject::InitializeConfig( *xCfg );
 }
 
 void Dumper::ImplDumpBody()
@@ -2200,8 +2346,8 @@ void Dumper::ImplDumpBody()
 
 // ============================================================================
 
-} // namespace dump
 } // namespace xls
+} // namespace dump
 } // namespace scf
 
 #endif
