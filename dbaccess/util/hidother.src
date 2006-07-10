@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:53:44 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:47:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,6 +118,7 @@ hidspecial HID_DSADMIN_PAGE_ADO                         { HelpId = HID_DSADMIN_P
 
 hidspecial HID_JOINSH_ADDTAB_CLOSE                      { HelpId = HID_JOINSH_ADDTAB_CLOSE; };
 hidspecial HID_JOINSH_ADDTAB_TABLELIST                  { HelpId = HID_JOINSH_ADDTAB_TABLELIST; };
+hidspecial HID_JOINSH_ADDTAB_QUERYLIST                  { HelpId = HID_JOINSH_ADDTAB_QUERYLIST; };
 hidspecial HID_CTL_QRYDGNTAB                            { HelpId = HID_CTL_QRYDGNTAB; };
 hidspecial HID_DLG_QRY_JOIN                             { HelpId = HID_DLG_QRY_JOIN; };
 hidspecial HID_DLG_QRY_JOINTYPE                         { HelpId = HID_DLG_QRY_JOINTYPE; };
