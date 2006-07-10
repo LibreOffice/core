@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xepivot.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:29:45 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:55:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,7 +117,7 @@ public:
     sal_uInt16          GetItemIndex( const String& rItemName ) const;
 
     /** Returns the size an item index needs to write out. */
-    sal_uInt32          GetIndexSize() const;
+    sal_Size            GetIndexSize() const;
     /** Writes the item index at the passed source row position as part of the SXIDARRAY record. */
     void                WriteIndex( XclExpStream& rStrm, sal_uInt32 nSrcRow ) const;
 
