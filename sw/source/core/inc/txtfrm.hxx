@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfrm.hxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 13:39:39 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:28:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -237,7 +237,7 @@ public:
     // Wird von FormatSpelling( ) gerufen
     SwRect _AutoSpell( SwCntntNode* , USHORT );
     // Wird vom CollectAutoCmplWords gerufen
-    void CollectAutoCmplWrds( SwCntntNode* , USHORT , sal_Bool bIsVisArea );
+    void CollectAutoCmplWrds( SwCntntNode* , USHORT );
 
     // Returns the screen position of rPos. The values are relative to the upper
     // left position of the page frame.
