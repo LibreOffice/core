@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xehelper.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:00:23 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:31:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,7 +167,8 @@ void XclExpProgressBar::Initialize()
             SCCOL nLastUsedScCol;
             SCROW nLastUsedScRow;
             rDoc.GetTableArea( nScTab, nLastUsedScCol, nLastUsedScRow );
-            maSubSegRowCreate[ nScTab ] = mpSubRowCreate->AddSegment( nLastUsedScRow + 1 );
+            sal_Size nSegSize = static_cast< sal_Size >( nLastUsedScRow + 1 );
+            maSubSegRowCreate[ nScTab ] = mpSubRowCreate->AddSegment( nSegSize );
         }
     }
 
@@ -199,7 +200,7 @@ void XclExpProgressBar::ActivateCreateRowsSegment()
 
 void XclExpProgressBar::ActivateFinalRowsSegment()
 {
-    if( !mpSubRowFinal && mnRowCount )
+    if( !mpSubRowFinal && (mnRowCount > 0) )
     {
         mpSubRowFinal = &mxProgress->GetSegmentProgressBar( mnSegRowFinal );
         mpSubRowFinal->AddSegment( mnRowCount );
@@ -268,10 +269,7 @@ XclAddress XclExpAddressConverter::CreateValidAddress( const ScAddress& rScPos, 
 {
     XclAddress aXclPos( ScAddress::UNINITIALIZED );
     if( !ConvertAddress( aXclPos, rScPos, bWarn ) )
-    {
-        aXclPos.mnCol = static_cast< sal_uInt16 >( rScPos.Col(), maMaxPos.Col() );
-        aXclPos.mnRow = static_cast< sal_uInt16 >( rScPos.Row(), maMaxPos.Row() );
-    }
+        lclFillAddress( aXclPos, ::std::min( rScPos.Col(), maMaxPos.Col() ), ::std::min( rScPos.Row(), maMaxPos.Row() ) );
     return aXclPos;
 }
 
@@ -434,13 +432,21 @@ XclExpHyperlinkHelper::XclExpHyperlinkRef XclExpHyperlinkHelper::GetLinkRecord()
 
 namespace {
 
-/** Creates a new formatted string from the passed string.
-    @descr  Creates a Unicode string or a byte string, depending on the current
-            BIFF version contained in the passed XclExpRoot object. May create a
-            formatted string object, if the text contains different script types.
-    @param nFlags  Modifiers for string export.
-    @param nMaxLen  The maximum number of characters to store in this string.
-    @return  The new string object. */
+/** Creates a new formatted string from the passed unformatted string.
+
+    Creates a Unicode string or a byte string, depending on the current BIFF
+    version contained in the passed XclExpRoot object. May create a formatted
+    string object, if the text contains different script types.
+
+    @param pCellAttr
+        Cell attributes used for font formatting.
+    @param nFlags
+        Modifiers for string export.
+    @param nMaxLen
+        The maximum number of characters to store in this string.
+    @return
+        The new string object.
+ */
 XclExpStringRef lclCreateFormattedString(
         const XclExpRoot& rRoot, const String& rText, const ScPatternAttr* pCellAttr,
         XclStrFlags nFlags, sal_uInt16 nMaxLen )
@@ -456,7 +462,8 @@ XclExpStringRef lclCreateFormattedString(
     // script type handling
     Reference< XBreakIterator > xBreakIt = rRoot.GetDoc().GetBreakIterator();
     namespace ApiScriptType = ::com::sun::star::i18n::ScriptType;
-    sal_Int16 nLastScript = ApiScriptType::WEAK;
+    // #i63255# get script type for leading weak characters
+    sal_Int16 nLastScript = XclExpStringHelper::GetLeadingScriptType( rRoot, rText );
 
     // cell item set
     const SfxItemSet& rItemSet = pCellAttr ? pCellAttr->GetItemSet() : rRoot.GetDoc().GetDefPattern()->GetItemSet();
@@ -467,13 +474,15 @@ XclExpStringRef lclCreateFormattedString(
     sal_Int32 nTextLen = aOUText.getLength();
     while( nPortionPos < nTextLen )
     {
-        // get script type and position of next script portion
+        // get script type and end position of next script portion
         sal_Int16 nScript = xBreakIt->getScriptType( aOUText, nPortionPos );
         sal_Int32 nPortionEnd = xBreakIt->endOfScript( aOUText, nPortionPos, nScript );
 
-        // construct font from current text portion
+        // reuse previous script for following weak portions
         if( nScript == ApiScriptType::WEAK )
             nScript = nLastScript;
+
+        // construct font from current text portion
         SvxFont aFont( XclExpFontBuffer::GetFontFromItemSet( rItemSet, nScript ) );
         nLastScript = nScript;
 
@@ -499,12 +508,19 @@ XclExpStringRef lclCreateFormattedString(
 }
 
 /** Creates a new formatted string from an edit engine text object.
-    @descr  Creates a Unicode string or a byte string, depending on the current
-            BIFF version contained in the passed XclExpRoot object.
-    @param rEE  The edit engine in use. The text object must already be set.
-    @param nFlags  Modifiers for string export.
-    @param nMaxLen  The maximum number of characters to store in this string.
-    @return  The new string object. */
+
+    Creates a Unicode string or a byte string, depending on the current BIFF
+    version contained in the passed XclExpRoot object.
+
+    @param rEE
+        The edit engine in use. The text object must already be set.
+    @param nFlags
+        Modifiers for string export.
+    @param nMaxLen
+        The maximum number of characters to store in this string.
+    @return
+        The new string object.
+ */
 XclExpStringRef lclCreateFormattedString(
         const XclExpRoot& rRoot, EditEngine& rEE, XclExpHyperlinkHelper* pLinkHelper,
         XclStrFlags nFlags, sal_uInt16 nMaxLen )
@@ -523,7 +539,8 @@ XclExpStringRef lclCreateFormattedString(
     // script type handling
     Reference< XBreakIterator > xBreakIt = rRoot.GetDoc().GetBreakIterator();
     namespace ApiScriptType = ::com::sun::star::i18n::ScriptType;
-    sal_Int16 nLastScript = ApiScriptType::WEAK;
+    // #i63255# get script type for leading weak characters
+    sal_Int16 nLastScript = XclExpStringHelper::GetLeadingScriptType( rRoot, rEE.GetText() );
 
     // process all paragraphs
     sal_uInt16 nParaCount = rEE.GetParagraphCount();
@@ -743,9 +760,20 @@ XclExpStringRef XclExpStringHelper::CreateString(
     return xString;
 }
 
-sal_Int16 XclExpStringHelper::GetScriptType( const XclExpRoot& rRoot, const String& rString )
+sal_Int16 XclExpStringHelper::GetLeadingScriptType( const XclExpRoot& rRoot, const String& rString )
 {
-    return rRoot.GetDoc().GetBreakIterator()->getScriptType( OUString( rString ), 0 );
+    namespace ApiScriptType = ::com::sun::star::i18n::ScriptType;
+    Reference< XBreakIterator > xBreakIt = rRoot.GetDoc().GetBreakIterator();
+    OUString aOUString( rString );
+    sal_Int32 nStrPos = 0;
+    sal_Int32 nStrLen = aOUString.getLength();
+    sal_Int16 nScript = ApiScriptType::WEAK;
+    while( (nStrPos < nStrLen) && (nScript == ApiScriptType::WEAK) )
+    {
+        nScript = xBreakIt->getScriptType( aOUString, nStrPos );
+        nStrPos = xBreakIt->endOfScript( aOUString, nStrPos, nScript );
+    }
+    return (nScript == ApiScriptType::WEAK) ? rRoot.GetDefApiScript() : nScript;
 }
 
 // Header/footer conversion ===================================================
@@ -1173,7 +1201,7 @@ XclExpCachedMatrix::XclExpCachedMatrix( const ScMatrix& rMatrix, XclStrFlags nFl
     }
 }
 
-sal_uInt32 XclExpCachedMatrix::GetSize() const
+sal_Size XclExpCachedMatrix::GetSize() const
 {
     /*  The returned size may be wrong if the matrix contains strings. The only
         effect is that the export stream has to update a wrong record size which is
