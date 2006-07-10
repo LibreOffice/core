@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppControllerGen.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:53:53 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:23:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,6 +129,9 @@
 #ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
 #include <com/sun/star/util/XCloseable.hpp>
 #endif
+#ifndef DBACCESS_SOURCE_UI_MISC_DEFAULTOBJECTNAMECHECK_HXX
+#include "defaultobjectnamecheck.hxx"
+#endif
 
 //........................................................................
 namespace dbaui
@@ -153,43 +156,32 @@ void OApplicationController::convertToView(const ::rtl::OUString& _sName)
     try
     {
         SharedConnection xConnection( getConnection() );
-        Reference<XQueriesSupplier> xSup(xConnection,UNO_QUERY);
-        if ( xSup.is() )
+        Reference< XQueriesSupplier > xSup( xConnection, UNO_QUERY_THROW );
+        Reference< XNameAccess > xQueries( xSup->getQueries(), UNO_QUERY_THROW );
+        Reference< XPropertySet > xSourceObject( xQueries->getByName( _sName ), UNO_QUERY_THROW );
+
+        Reference< XTablesSupplier > xTablesSup( xConnection, UNO_QUERY_THROW );
+        Reference< XNameAccess > xTables( xTablesSup->getTables(), UNO_QUERY_THROW );
+
+        Reference< XDatabaseMetaData  > xMeta = xConnection->getMetaData();
+
+        String aName = String(ModuleRes(STR_TBL_TITLE));
+        aName = aName.GetToken(0,' ');
+        String aDefaultName = ::dbaui::createDefaultName(xMeta,xTables,aName);
+
+        DynamicTableOrQueryNameCheck aNameChecker( xConnection, CommandType::TABLE );
+        OSaveAsDlg aDlg( getView(), CommandType::TABLE, getORB(), xConnection, aDefaultName, aNameChecker );
+        if ( aDlg.Execute() == RET_OK )
         {
-            Reference<XNameAccess> xQueries = xSup->getQueries();
-            if ( xQueries.is() && xQueries->hasByName(_sName) )
-            {
-                Reference<XPropertySet> xSourceObject(xQueries->getByName( _sName ),UNO_QUERY);
-
-                OSL_ENSURE(xSourceObject.is(),"Query is NULL!");
-                if ( xSourceObject.is() )
-                {
-                    Reference<XTablesSupplier> xTablesSup(xConnection,UNO_QUERY);
-                    Reference<XNameAccess> xTables;
-                    if ( xTablesSup.is() )
-                        xTables = xTablesSup->getTables();
-
-                    Reference<XDatabaseMetaData > xMeta = xConnection->getMetaData();
-
-                    String aName = String(ModuleRes(STR_TBL_TITLE));
-                    aName = aName.GetToken(0,' ');
-                    String aDefaultName = ::dbaui::createDefaultName(xMeta,xTables,aName);
-
-                    OSaveAsDlg aDlg(getView(),CommandType::TABLE,xTables,xMeta,xConnection,aDefaultName);
-                    if ( aDlg.Execute() == RET_OK )
-                    {
-                        ::rtl::OUString sName = aDlg.getName();
-                        ::rtl::OUString sCatalog = aDlg.getCatalog();
-                        ::rtl::OUString sSchema  = aDlg.getSchema();
-                        ::rtl::OUString sNewName;
-                        ::dbtools::composeTableName(xMeta,sCatalog,sSchema,sName,sNewName,sal_False,::dbtools::eInTableDefinitions);
-                        Reference<XPropertySet> xView = ::dbaui::createView(sNewName,xConnection,xSourceObject);
-                        if ( !xView.is() )
-                            throw SQLException(String(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE)),*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000")) ,0,Any());
-                        getContainer()->elementAdded(E_TABLE,sNewName,makeAny(xView),xConnection);
-                    }
-                }
-            }
+            ::rtl::OUString sName = aDlg.getName();
+            ::rtl::OUString sCatalog = aDlg.getCatalog();
+            ::rtl::OUString sSchema  = aDlg.getSchema();
+            ::rtl::OUString sNewName(
+                ::dbtools::composeTableName( xMeta, sCatalog, sSchema, sName, sal_False, ::dbtools::eInTableDefinitions ) );
+            Reference<XPropertySet> xView = ::dbaui::createView(sNewName,xConnection,xSourceObject);
+            if ( !xView.is() )
+                throw SQLException(String(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE)),*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000")) ,0,Any());
+            getContainer()->elementAdded(E_TABLE,sNewName,makeAny(xView),xConnection);
         }
     }
     catch(SQLContext& e) { showError(SQLExceptionInfo(e)); }
@@ -547,6 +539,7 @@ sal_Bool OApplicationController::insertHierachyElement(ElementType _eType,const 
 {
     Reference<XHierarchicalNameContainer> xNames(getElements(_eType), UNO_QUERY);
     return dbaui::insertHierachyElement(getView()
+                           ,getORB()
                            ,xNames
                            ,_sParentFolder
                            ,_eType == E_FORM
