@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xilink.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:04:42 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:41:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,12 @@
 #include "tablink.hxx"
 #endif
 
+#ifndef SC_XISTREAM_HXX
+#include "xistream.hxx"
+#endif
+#ifndef SC_XIHELPER_HXX
+#include "xihelper.hxx"
+#endif
 #ifndef SC_XINAME_HXX
 #include "xiname.hxx"
 #endif
@@ -279,11 +285,11 @@ void XclImpTabInfo::ReadTabid( XclImpStream& rStrm )
     DBG_ASSERT_BIFF( rStrm.GetRoot().GetBiff() == EXC_BIFF8 );
     if( rStrm.GetRoot().GetBiff() == EXC_BIFF8 )
     {
-        sal_uInt32 nReadCount = rStrm.GetRecLeft() / 2;
+        sal_Size nReadCount = rStrm.GetRecLeft() / 2;
         DBG_ASSERT( nReadCount <= 0xFFFF, "XclImpTabInfo::ReadTabid - record too long" );
         maTabIdVec.clear();
         maTabIdVec.reserve( nReadCount );
-        for( sal_uInt32 nIndex = 0; rStrm.IsValid() && (nIndex < nReadCount); ++nIndex )
+        for( sal_Size nIndex = 0; rStrm.IsValid() && (nIndex < nReadCount); ++nIndex )
             // #93471# zero index is not allowed in BIFF8, but it seems that it occurs in real life
             maTabIdVec.push_back( rStrm.ReaduInt16() );
     }
@@ -333,6 +339,10 @@ XclImpExtName::XclImpExtName( XclImpStream& rStrm, bool bAddIn )
 
     if( (meType == xlExtDDE) && (rStrm.GetRecLeft() > 1) )
         mxDdeMatrix.reset( new XclImpCachedMatrix( rStrm ) );
+}
+
+XclImpExtName::~XclImpExtName()
+{
 }
 
 void XclImpExtName::CreateDdeData( ScDocument& rDoc, const String& rApplic, const String& rTopic ) const
@@ -668,6 +678,7 @@ bool XclImpLinkManagerImpl::FindNextTabRange(
 // ============================================================================
 
 XclImpLinkManager::XclImpLinkManager( const XclImpRoot& rRoot ) :
+    XclImpRoot( rRoot ),
     mxImpl( new XclImpLinkManagerImpl( rRoot ) )
 {
 }
