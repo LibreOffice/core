@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableCopyHelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:20:36 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:36:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -183,7 +183,7 @@ void insertRows(const Reference<XResultSet>& xSrcRs,
     }
 
     ::rtl::OUString aSql(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("INSERT INTO ")));
-    ::rtl::OUString sComposedTableName = ::dbtools::composeTableName(_xMetaData,_xDestTable,sal_True,::dbtools::eInDataManipulation);
+    ::rtl::OUString sComposedTableName = ::dbtools::composeTableName( _xMetaData, _xDestTable, ::dbtools::eInDataManipulation, false, false, true );
 
     aSql += sComposedTableName;
     aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ( "));
@@ -380,9 +380,7 @@ Reference<XResultSet> createResultSet(  OGenericUnoController* _pBrowser,sal_Boo
         }
         sSql = sSql.replaceAt(sSql.getLength()-1,1,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ")));
         sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FROM "));
-        sal_Bool bUseCatalogInSelect = ::dbtools::isDataSourcePropertyEnabled(_xSrcConnection,PROPERTY_USECATALOGINSELECT,sal_True);
-        sal_Bool bUseSchemaInSelect = ::dbtools::isDataSourcePropertyEnabled(_xSrcConnection,PROPERTY_USESCHEMAINSELECT,sal_True);
-        ::rtl::OUString sComposedName = ::dbtools::composeTableName(_xSrcConnection->getMetaData(),xSourceObject,sal_True,::dbtools::eInDataManipulation,bUseCatalogInSelect,bUseSchemaInSelect);
+        ::rtl::OUString sComposedName = ::dbtools::composeTableNameForSelect( _xSrcConnection, xSourceObject );
         sSql += sComposedName;
         xStmt = _xSrcConnection->createStatement();
         if( xStmt.is() )
@@ -503,7 +501,7 @@ void OTableCopyHelper::pasteTable( ::svx::ODataAccessDescriptor& _rPasteData
     Reference<XConnection> xSrcConnection;
     Reference<XResultSet>   xSrcRs;         // the source resultset may be empty
     Sequence< Any > aSelection;
-    sal_Bool bBookmarkSelection;
+    sal_Bool bBookmarkSelection( sal_False );
     ::rtl::OUString sCommand,
         sSrcDataSourceName = _rPasteData.getDataSource();
 
@@ -777,7 +775,8 @@ sal_Bool OTableCopyHelper::copyTagTable(const TransferableDataHelper& _aDroppedD
         _rAsyncDrop.bHtml           = bHtml;
         _rAsyncDrop.bError          = !copyTagTable(_rAsyncDrop,sal_True,_xConnection);
 
-        if ( bRet = (!_rAsyncDrop.bError && _rAsyncDrop.aHtmlRtfStorage.Is()) )
+        bRet = ( !_rAsyncDrop.bError && _rAsyncDrop.aHtmlRtfStorage.Is() );
+        if ( bRet )
         {
             // now we need to copy the stream
             ::utl::TempFile aTmp;
