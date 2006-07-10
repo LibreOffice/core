@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2006-03-22 12:06:04 $
+#   last change: $Author: obo $ $Date: 2006-07-10 13:48:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,7 @@ PROJECTPCHSOURCE=..\pch\filt_pch
 SLOFILES =	\
         $(SLO)$/fapihelper.obj				\
         $(SLO)$/fdumper.obj					\
+        $(SLO)$/fdumperole.obj				\
         $(SLO)$/fprogressbar.obj			\
         $(SLO)$/ftools.obj
 
