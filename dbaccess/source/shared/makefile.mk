@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 14:16:58 $
+#   last change: $Author: obo $ $Date: 2006-07-10 15:21:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,7 @@ LIB1TARGET=$(SLB)$/dbashared.lib
 LIB2TARGET=$(SLB)$/dbushared.lib
 LIB3TARGET=$(SLB)$/fltshared.lib
 LIB4TARGET=$(SLB)$/cfgshared.lib
+LIB5TARGET=$(SLB)$/sdbtshared.lib
 
 #ENABLE_EXCEPTIONS=TRUE
 
@@ -83,6 +84,9 @@ LIB3OBJFILES=	\
 LIB4OBJFILES=	\
         $(SLO)$/cfg_reghelper.obj	\
         $(SLO)$/cfgstrings.obj
+
+LIB5OBJFILES=	\
+        $(SLO)$/sdbtstrings.obj
 
 # --- Targets ----------------------------------
 
