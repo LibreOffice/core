@@ -4,9 +4,9 @@
  *
  *  $RCSfile: padialog.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:16:31 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 16:39:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -196,7 +196,7 @@ long PADialog::Notify( NotifyEvent& rEv )
         (rEv.GetType() == EVENT_GETFOCUS || rEv.GetType() == EVENT_LOSEFOCUS )
       )
     {
-        if( m_rPIManager.checkPrintersChanged() )
+        if( m_rPIManager.checkPrintersChanged( false ) )
         {
             UpdateDevice();
             UpdateText();
