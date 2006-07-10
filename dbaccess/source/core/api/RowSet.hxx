@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSet.hxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:35:46 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:03:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,7 +124,6 @@ namespace dbaccess
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xTypeMap;
         ::com::sun::star::uno::Any                                                      m_aTypeMap;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement >  m_xStatement;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryAnalyzer >   m_xAnalyzer;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >   m_xComposer;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xColumns; // the columns from a table or query
 
@@ -172,9 +171,40 @@ namespace dbaccess
         sal_Bool                    m_bOwnConnection;
 
     private:
+        /** retrieves the composed SQL query to be used for preparing an SQL statement at the connection
+
+            The query is built from our active command plus our current filter/order criterions.
+
+            @param _bForExecution
+                <TRUE/> if this is for executing the statement (then XSingleSelectQueryAnalyzer::getQueryWithSubstitution will be
+                used), or <FALSE/> if it's for presentation to the user, e.g. in an error message (then
+                XSingleSelectQueryAnalyzer::getQuery will be used).
+
+            @precond
+                m_xActiveConnection points to a valid SDB-level connection
+
+            @throws com::sun::star::sdb::SQLException
+                if an database-related error occured
+            @throws com::sun::star::uno::RuntimeException
+                if any of the components involved throws a com::sun::star::uno::RuntimeException
+        */
+        ::rtl::OUString impl_getComposedQuery_throw( bool _bForExecution );
+
+        /** builds m_aActiveCommand from our settings
+
+            @return
+                whether we should use escape processing before executing the actual command. This is determined
+                from our own EscapeProcessing property, and possibly overruled by the respective property
+                of a query we're based on.
+        */
+        sal_Bool        impl_buildActiveCommand_throw();
+
+        /** prepares and executes our command
+        */
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >
+                        impl_prepareAndExecute_throw();
+
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >  calcConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxHandler) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
-        rtl::OUString getComposedQuery(const rtl::OUString& rQuery, sal_Bool bEscapeProcessing,::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxRetTables) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
-        rtl::OUString getCommand(sal_Bool& bEscapeProcessing,::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxRetTables) throw( ::com::sun::star::sdbc::SQLException);
         // free clones and ParseTree
         void freeResources();
 
