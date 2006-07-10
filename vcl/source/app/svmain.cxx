@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:14:40 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 16:34:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,6 +132,9 @@
 #ifndef _SV_IMPIMAGETREE_HXX
 #include <impimagetree.hxx>
 #endif
+#ifndef _VCL_XCONNECTION_HXX
+#include <xconnection.hxx>
+#endif
 
 #include <vos/process.hxx>
 #include <osl/file.hxx>
@@ -242,6 +245,9 @@ BOOL ImplSVMain()
         pSVData->mpApp->Main();
         pSVData->maAppData.mbInAppMain = FALSE;
     }
+
+    if( pSVData->mpDisplayConnection )
+        pSVData->mpDisplayConnection->dispatchDowningEvent();
 
     // This is a hack to work around the problem of the asynchronous nature
     // of bridging accessibility through Java: on shutdown there might still
