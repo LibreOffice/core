@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclrsc.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 12:42:18 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 16:31:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -201,124 +201,12 @@ enum TimeFieldFormat {TIMEF_NONE, TIMEF_SEC, TIMEF_100TH_SEC, TIMEF_SEC_CS, Time
 // - KeyCode-Types -
 // -----------------
 
-// from vcl/inc/keycodes.hxx
-// Key-Gruppen
-#define KEYGROUP_NUM    ((sal_uInt16)0x0100)
-#define KEYGROUP_ALPHA  ((sal_uInt16)0x0200)
-#define KEYGROUP_FKEYS  ((sal_uInt16)0x0300)
-#define KEYGROUP_CURSOR ((sal_uInt16)0x0400)
-#define KEYGROUP_MISC   ((sal_uInt16)0x0500)
-#define KEYGROUP_TYPE   ((sal_uInt16)0x0F00)
-
-// Key-Codes
-#define KEY_0           ((sal_uInt16)(KEYGROUP_NUM+0))
-#define KEY_1           ((sal_uInt16)(KEYGROUP_NUM+1))
-#define KEY_2           ((sal_uInt16)(KEYGROUP_NUM+2))
-#define KEY_3           ((sal_uInt16)(KEYGROUP_NUM+3))
-#define KEY_4           ((sal_uInt16)(KEYGROUP_NUM+4))
-#define KEY_5           ((sal_uInt16)(KEYGROUP_NUM+5))
-#define KEY_6           ((sal_uInt16)(KEYGROUP_NUM+6))
-#define KEY_7           ((sal_uInt16)(KEYGROUP_NUM+7))
-#define KEY_8           ((sal_uInt16)(KEYGROUP_NUM+8))
-#define KEY_9           ((sal_uInt16)(KEYGROUP_NUM+9))
-
-#define KEY_A           ((sal_uInt16)(KEYGROUP_ALPHA+0))
-#define KEY_B           ((sal_uInt16)(KEYGROUP_ALPHA+1))
-#define KEY_C           ((sal_uInt16)(KEYGROUP_ALPHA+2))
-#define KEY_D           ((sal_uInt16)(KEYGROUP_ALPHA+3))
-#define KEY_E           ((sal_uInt16)(KEYGROUP_ALPHA+4))
-#define KEY_F           ((sal_uInt16)(KEYGROUP_ALPHA+5))
-#define KEY_G           ((sal_uInt16)(KEYGROUP_ALPHA+6))
-#define KEY_H           ((sal_uInt16)(KEYGROUP_ALPHA+7))
-#define KEY_I           ((sal_uInt16)(KEYGROUP_ALPHA+8))
-#define KEY_J           ((sal_uInt16)(KEYGROUP_ALPHA+9))
-#define KEY_K           ((sal_uInt16)(KEYGROUP_ALPHA+10))
-#define KEY_L           ((sal_uInt16)(KEYGROUP_ALPHA+11))
-#define KEY_M           ((sal_uInt16)(KEYGROUP_ALPHA+12))
-#define KEY_N           ((sal_uInt16)(KEYGROUP_ALPHA+13))
-#define KEY_O           ((sal_uInt16)(KEYGROUP_ALPHA+14))
-#define KEY_P           ((sal_uInt16)(KEYGROUP_ALPHA+15))
-#define KEY_Q           ((sal_uInt16)(KEYGROUP_ALPHA+16))
-#define KEY_R           ((sal_uInt16)(KEYGROUP_ALPHA+17))
-#define KEY_S           ((sal_uInt16)(KEYGROUP_ALPHA+18))
-#define KEY_T           ((sal_uInt16)(KEYGROUP_ALPHA+19))
-#define KEY_U           ((sal_uInt16)(KEYGROUP_ALPHA+20))
-#define KEY_V           ((sal_uInt16)(KEYGROUP_ALPHA+21))
-#define KEY_W           ((sal_uInt16)(KEYGROUP_ALPHA+22))
-#define KEY_X           ((sal_uInt16)(KEYGROUP_ALPHA+23))
-#define KEY_Y           ((sal_uInt16)(KEYGROUP_ALPHA+24))
-#define KEY_Z           ((sal_uInt16)(KEYGROUP_ALPHA+25))
-
-#define KEY_F1          ((sal_uInt16)(KEYGROUP_FKEYS+0))
-#define KEY_F2          ((sal_uInt16)(KEYGROUP_FKEYS+1))
-#define KEY_F3          ((sal_uInt16)(KEYGROUP_FKEYS+2))
-#define KEY_F4          ((sal_uInt16)(KEYGROUP_FKEYS+3))
-#define KEY_F5          ((sal_uInt16)(KEYGROUP_FKEYS+4))
-#define KEY_F6          ((sal_uInt16)(KEYGROUP_FKEYS+5))
-#define KEY_F7          ((sal_uInt16)(KEYGROUP_FKEYS+6))
-#define KEY_F8          ((sal_uInt16)(KEYGROUP_FKEYS+7))
-#define KEY_F9          ((sal_uInt16)(KEYGROUP_FKEYS+8))
-#define KEY_F10         ((sal_uInt16)(KEYGROUP_FKEYS+9))
-#define KEY_F11         ((sal_uInt16)(KEYGROUP_FKEYS+10))
-#define KEY_F12         ((sal_uInt16)(KEYGROUP_FKEYS+11))
-#define KEY_F13         ((sal_uInt16)(KEYGROUP_FKEYS+12))
-#define KEY_F14         ((sal_uInt16)(KEYGROUP_FKEYS+13))
-#define KEY_F15         ((sal_uInt16)(KEYGROUP_FKEYS+14))
-#define KEY_F16         ((sal_uInt16)(KEYGROUP_FKEYS+15))
-#define KEY_F17         ((sal_uInt16)(KEYGROUP_FKEYS+16))
-#define KEY_F18         ((sal_uInt16)(KEYGROUP_FKEYS+17))
-#define KEY_F19         ((sal_uInt16)(KEYGROUP_FKEYS+18))
-#define KEY_F20         ((sal_uInt16)(KEYGROUP_FKEYS+19))
-#define KEY_F21         ((sal_uInt16)(KEYGROUP_FKEYS+20))
-#define KEY_F22         ((sal_uInt16)(KEYGROUP_FKEYS+21))
-#define KEY_F23         ((sal_uInt16)(KEYGROUP_FKEYS+22))
-#define KEY_F24         ((sal_uInt16)(KEYGROUP_FKEYS+23))
-#define KEY_F25         ((sal_uInt16)(KEYGROUP_FKEYS+24))
-#define KEY_F26         ((sal_uInt16)(KEYGROUP_FKEYS+25))
-
-#define KEY_DOWN        ((sal_uInt16)(KEYGROUP_CURSOR+0))
-#define KEY_UP          ((sal_uInt16)(KEYGROUP_CURSOR+1))
-#define KEY_LEFT        ((sal_uInt16)(KEYGROUP_CURSOR+2))
-#define KEY_RIGHT       ((sal_uInt16)(KEYGROUP_CURSOR+3))
-#define KEY_HOME        ((sal_uInt16)(KEYGROUP_CURSOR+4))
-#define KEY_END         ((sal_uInt16)(KEYGROUP_CURSOR+5))
-#define KEY_PAGEUP      ((sal_uInt16)(KEYGROUP_CURSOR+6))
-#define KEY_PAGEDOWN    ((sal_uInt16)(KEYGROUP_CURSOR+7))
-
-#define KEY_RETURN      ((sal_uInt16)(KEYGROUP_MISC+0))
-#define KEY_ESCAPE      ((sal_uInt16)(KEYGROUP_MISC+1))
-#define KEY_TAB         ((sal_uInt16)(KEYGROUP_MISC+2))
-#define KEY_BACKSPACE   ((sal_uInt16)(KEYGROUP_MISC+3))
-#define KEY_SPACE       ((sal_uInt16)(KEYGROUP_MISC+4))
-#define KEY_INSERT      ((sal_uInt16)(KEYGROUP_MISC+5))
-#define KEY_DELETE      ((sal_uInt16)(KEYGROUP_MISC+6))
-
-#define KEY_ADD         ((sal_uInt16)(KEYGROUP_MISC+7))
-#define KEY_SUBTRACT    ((sal_uInt16)(KEYGROUP_MISC+8))
-#define KEY_MULTIPLY    ((sal_uInt16)(KEYGROUP_MISC+9))
-#define KEY_DIVIDE      ((sal_uInt16)(KEYGROUP_MISC+10))
-#define KEY_POINT       ((sal_uInt16)(KEYGROUP_MISC+11))
-#define KEY_COMMA       ((sal_uInt16)(KEYGROUP_MISC+12))
-#define KEY_LESS        ((sal_uInt16)(KEYGROUP_MISC+13))
-#define KEY_GREATER     ((sal_uInt16)(KEYGROUP_MISC+14))
-#define KEY_EQUAL       ((sal_uInt16)(KEYGROUP_MISC+15))
-
-#define KEY_OPEN        ((sal_uInt16)(KEYGROUP_MISC+16))
-#define KEY_CUT         ((sal_uInt16)(KEYGROUP_MISC+17))
-#define KEY_COPY        ((sal_uInt16)(KEYGROUP_MISC+18))
-#define KEY_PASTE       ((sal_uInt16)(KEYGROUP_MISC+19))
-#define KEY_UNDO        ((sal_uInt16)(KEYGROUP_MISC+20))
-#define KEY_REPEAT      ((sal_uInt16)(KEYGROUP_MISC+21))
-#define KEY_FIND        ((sal_uInt16)(KEYGROUP_MISC+22))
-#define KEY_PROPERTIES  ((sal_uInt16)(KEYGROUP_MISC+23))
-#define KEY_FRONT       ((sal_uInt16)(KEYGROUP_MISC+24))
-#define KEY_CONTEXTMENU ((sal_uInt16)(KEYGROUP_MISC+25))
-#define KEY_MENU        ((sal_uInt16)(KEYGROUP_MISC+26))
-#define KEY_HELP        ((sal_uInt16)(KEYGROUP_MISC+27))
-#define KEY_HANGUL_HANJA ((USHORT)(KEYGROUP_MISC+28))
-#define KEY_DECIMAL     ((USHORT)(KEYGROUP_MISC+29))
-#define KEY_TILDE       ((USHORT)(KEYGROUP_MISC+30))
-#define KEY_QUOTELEFT   ((USHORT)(KEYGROUP_MISC+31))
+#ifndef _COM_SUN_STAR_AWT_KEY_HPP_
+#include <com/sun/star/awt/Key.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_KEYGROUP_HPP_
+#include <com/sun/star/awt/KeyGroup.hpp>
+#endif
 
 #define KEY_CODE        ((sal_uInt16)0x0FFF)
 
