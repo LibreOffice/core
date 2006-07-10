@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:21:49 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:31:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -345,9 +345,9 @@
 //========================================================================
 // strings
 #define STR_TBL_TITLE                       RID_STR_GEN_START
-#define STR_OBJECT_ALREADY_EXSISTS          RID_STR_GEN_START + 1
+#define STR_ERROR_DURING_CREATION           RID_STR_GEN_START + 1
 #define RID_STR_CONNECTION_LOST             RID_STR_GEN_START + 2
-#define STR_OBJECT_ALREADY_EXISTS           RID_STR_GEN_START + 3
+#define STR_NAME_ALREADY_EXISTS             RID_STR_GEN_START + 3
 // free
 #define STR_TITLE_CONFIRM_DELETION          RID_STR_GEN_START + 5
 #define STR_STAT_WARNING                    RID_STR_GEN_START + 6
@@ -369,7 +369,7 @@
     // FREE
 #define STR_QRY_TITLE                       RID_STR_GEN_START + 23
 #define STR_VIEW_TITLE                      RID_STR_GEN_START + 24
-#define STR_GENERAL_SDB_ERROR               RID_STR_GEN_START + 25
+    // FREE
 #define STR_TABLEDESIGN_DUPLICATE_NAME      RID_STR_GEN_START + 26
 #define STR_COULDNOTCONNECT_DATASOURCE      RID_STR_GEN_START + 27
 #define STR_NO_TABLE_FORMAT_INSIDE          RID_STR_GEN_START + 28
