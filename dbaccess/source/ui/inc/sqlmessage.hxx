@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqlmessage.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:03:36 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:33:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,9 +45,12 @@
 #ifndef _SV_BTNDLG_HXX
 #include <vcl/btndlg.hxx>
 #endif
-#ifndef _COM_SUN_STAR_UNO_ANY_HXX_
-#include <com/sun/star/uno/Any.hxx>
+
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include <connectivity/dbexception.hxx>
 #endif
+
+#include <memory>
 
 // some forwards
 namespace com { namespace sun { namespace star {
@@ -58,10 +61,6 @@ namespace com { namespace sun { namespace star {
         class SQLException;
     }
 } } }
-namespace dbtools
-{
-    class SQLExceptionInfo;
-}
 
 //.........................................................................
 namespace dbaui
@@ -71,14 +70,14 @@ namespace dbaui
 //==================================================================
 // OSQLMessageBox
 //==================================================================
+struct SQLMessageBox_Impl;
 class OSQLMessageBox : public ButtonDialog
 {
     FixedImage      m_aInfoImage;
     FixedText       m_aTitle;
     FixedText       m_aMessage;
 
-    ::com::sun::star::uno::Any      m_aNextChainElement;
-    PushButton*                     m_pInfoButton;
+    ::std::auto_ptr< SQLMessageBox_Impl >   m_pImpl;
 
 public:
     enum MessageType
@@ -86,21 +85,12 @@ public:
         Info,
         Error,
         Warning,
-        Query
+        Query,
+
+        AUTO
     };
 
 public:
-    /** display a SQLException
-        <p/>
-        @param      _rTitle     main message
-        @param      _rError     detailed message, may contain an exception chain to be displayed on an user request
-    */
-    OSQLMessageBox(Window* _pParent,
-                const UniString& _rTitle,
-                const ::com::sun::star::sdbc::SQLException& _rError,
-                WinBits _nStyle = WB_OK | WB_DEF_OK,
-                MessageType _eImage = Info);
-
     /** display an SQLException with auto-recognizing a main and a detailed message
         <p/>
         The first two messages from the exception chain are used as main and detailed message (recognizing the
@@ -111,7 +101,7 @@ public:
     OSQLMessageBox(Window* _pParent,
                 const ::com::sun::star::sdbc::SQLException& _rError,
                 WinBits _nStyle = WB_OK | WB_DEF_OK,
-                MessageType _eImage = Info);
+                MessageType _eImage = Error);
 
     /** display an SQLException with auto-recognizing a main and a detailed message
         <p/>
@@ -123,12 +113,13 @@ public:
     OSQLMessageBox(Window* _pParent,
                 const dbtools::SQLExceptionInfo& _rException,
                 WinBits _nStyle = WB_OK | WB_DEF_OK,
-                MessageType _eImage = Info);
+                MessageType _eImage = AUTO);
 
     /** display a database related error message
         <p/>
         @param  rTitle      the title to display
         @param  rMessage    the detailed message to display
+        @param  eImage      determines the image to use. AUTO is disallowed in this constructor version
     */
     OSQLMessageBox(Window* pParent,
                 const UniString& rTitle,
@@ -139,13 +130,15 @@ public:
     ~OSQLMessageBox();
 
 private:
-    void Construct(const dbtools::SQLExceptionInfo& _rException, WinBits nStyle, MessageType eImage);
-    void Construct(const UniString& rTitle,
-                   const UniString& rMessage,
-                   WinBits nStyle,
-                   MessageType eImage);
+    void Construct( WinBits nStyle, MessageType eImage );
 
     DECL_LINK(ButtonClickHdl, Button* );
+
+private:
+    void    impl_positionControls();
+    void    impl_initImage( MessageType _eImage );
+    void    impl_createStandardButtons( WinBits _nStyle );
+    void    impl_addDetailsButton();
 };
 
 //.........................................................................
