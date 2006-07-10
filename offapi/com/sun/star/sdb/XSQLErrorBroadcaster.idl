@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XSQLErrorBroadcaster.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:31:15 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:50:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,7 @@ published interface XSQLErrorBroadcaster: com::sun::star::uno::XInterface
         @param com::sun::star::sdb::XSQLErrorListener
      */
     [oneway] void addSQLErrorListener(
-            [in]XSQLErrorListener _rListener );
+            [in]XSQLErrorListener Listener );
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdb::XSQLErrorBroadcaster::removeSQLErrorListener
@@ -68,7 +68,7 @@ published interface XSQLErrorBroadcaster: com::sun::star::uno::XInterface
         @param com::sun::star::sdb::XSQLErrorListener
      */
     [oneway] void removeSQLErrorListener(
-            [in]XSQLErrorListener _rListener );
+            [in]XSQLErrorListener Listener );
 };
 
 //=============================================================================
