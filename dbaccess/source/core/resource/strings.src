@@ -4,9 +4,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:09:22 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:18:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,7 @@ String RID_STR_DATASOURCE_NOT_STORED
 String RID_STR_ONLY_QUERY
 {
     Text [ de ] = "Der gesetzte Befehl ist kein SELECT-Befehl.\nEs sind nur Abfragen erlaubt.";
-    Text [ en-US ] = "The given command is not a SELECT statement.\n Only queries are allowed.";
+    Text [ en-US ] = "The given command is not a SELECT statement.\nOnly queries are allowed.";
 };
 String RID_STR_NO_VALUE_CHANGED
 {
@@ -223,4 +223,23 @@ String RID_STR_FILE_DOES_NOT_EXIST
 {
     Text [ de ] ="Die Datei \"$file$\" existiert nicht.";
     Text[ en-US ] = "The file \"$file$\" does not exist.";
+};
+String RID_STR_CONFLICTING_NAMES
+{
+    Text [ de ] = "Die Datenbank enthält Tabellen, deren Namen mit den Namen von existierenden Abfragen kollidieren. Um alle Tabellen und Abfragen voll nutzen zu können, stellen Sie sicher, dass sie unterschiedliche Namen haben.";
+    Text [ en-US ] = "There are tables in the database whose names conflict with the names of existing queries. To make full use of all queries and tables, make sure they have distinct names.";
+};
+
+String RID_STR_COMMAND_LEADING_TO_ERROR
+{
+    Text [ de ] = "Das SQL-Kommando, welches zu diesem Fehler führte, ist:\n\n$command$";
+    Text [ en-US ] = "The SQL command leading to this error is:\n\n$command$";
+
+    Text [ x-comment ] = "$command$ is a placeholder, please preserve it.";
+};
+
+String RID_STR_STATEMENT_WITHOUT_RESULT_SET
+{
+    Text [ de ] = "Das SQL-Kommando beschreibt keine Ergebnismenge.";
+    Text [ de ] = "The SQL command does not describe a result set.";
 };
