@@ -4,9 +4,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:38:33 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:05:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,6 +96,9 @@
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
 #endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include <connectivity/dbexception.hxx>
+#endif
 #ifndef DBA_CONTAINERMEDIATOR_HXX
 #include "ContainerMediator.hxx"
 #endif
@@ -106,6 +109,7 @@
 #include <algorithm>
 
 using namespace dbaccess;
+using namespace connectivity;
 using namespace connectivity;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
@@ -431,7 +435,8 @@ sal_Bool OColumnSettings::convertFastPropertyValue(
                 ::getCppuType(static_cast< ::rtl::OUString* >(NULL)));
             break;
         case PROPERTY_ID_CONTROLDEFAULT:
-            if ( bModified = !::comphelper::compare(rValue,m_aControlDefault) )
+            bModified = rValue != m_aControlDefault;
+            if ( bModified )
             {
                 rConvertedValue = rValue;
                 rOldValue = m_aControlDefault;
@@ -650,11 +655,11 @@ connectivity::sdbcx::ObjectType OColumns::createObject(const ::rtl::OUString& _r
     return xRet;
 }
 // -------------------------------------------------------------------------
-Reference< XPropertySet > OColumns::createEmptyObject()
+Reference< XPropertySet > OColumns::createDescriptor()
 {
     if ( m_pColFactoryImpl )
     {
-        Reference<XPropertySet> xRet = m_pColFactoryImpl->createEmptyObject();
+        Reference<XPropertySet> xRet = m_pColFactoryImpl->createColumnDescriptor();
         Reference<XChild> xChild(xRet,UNO_QUERY);
         if ( xChild.is() )
             xChild->setParent(static_cast<XChild*>(static_cast<TXChild*>(this)));
@@ -742,50 +747,51 @@ Sequence< Type > SAL_CALL OColumns::getTypes(  ) throw(RuntimeException)
 }
 // -------------------------------------------------------------------------
 // XAppend
-void OColumns::appendObject( const Reference< XPropertySet >& descriptor )
+sdbcx::ObjectType OColumns::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
-    Reference<XAppend> xAppend(m_xDrvColumns,UNO_QUERY);
-    if(xAppend.is())
+    sdbcx::ObjectType xReturn;
+
+    Reference< XAppend > xAppend( m_xDrvColumns, UNO_QUERY );
+    if ( xAppend.is() )
     {
         xAppend->appendByDescriptor(descriptor);
     }
-    else if(m_pTable && !m_pTable->isNew() && m_bAddColumn)
+    else if ( m_pTable && !m_pTable->isNew() )
     {
-        OColumns_BASE::appendObject(descriptor);
+        if ( m_bAddColumn )
+            xReturn = OColumns_BASE::appendObject( _rForName, descriptor );
+        else
+            ::dbtools::throwGenericSQLException( DBA_RES( RID_STR_NO_COLUMN_ADD ), static_cast<XChild*>(static_cast<TXChild*>(this)) );
     }
-    else if(m_pTable && !m_pTable->isNew() && !m_bAddColumn)
-        throw SQLException(DBACORE_RESSTRING(RID_STR_NO_COLUMN_ADD),static_cast<XChild*>(static_cast<TXChild*>(this)),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,Any());
+
+    if ( m_pColFactoryImpl )
+        m_pColFactoryImpl->columnAppended( descriptor );
+
     ::dbaccess::notifyDataSourceModified(m_xParent,sal_True);
+
+    return xReturn.is() ? xReturn : createObject( _rForName );
 }
 // -------------------------------------------------------------------------
 // XDrop
 void OColumns::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 {
-    Reference<XDrop> xDrop(m_xDrvColumns,UNO_QUERY);
-    if(xDrop.is())
+    Reference< XDrop > xDrop( m_xDrvColumns, UNO_QUERY );
+    if ( xDrop.is() )
     {
-        xDrop->dropByName(_sElementName);
+        xDrop->dropByName( _sElementName );
     }
-    else if(m_pTable && !m_pTable->isNew() && m_bDropColumn)
+    else if ( m_pTable && !m_pTable->isNew() )
     {
-        OColumns_BASE::dropObject(_nPos,_sElementName);
+        if ( m_bDropColumn )
+            OColumns_BASE::dropObject(_nPos,_sElementName);
+        else
+            ::dbtools::throwGenericSQLException( DBA_RES( RID_STR_NO_COLUMN_DROP ), static_cast<XChild*>(static_cast<TXChild*>(this)) );
     }
-    else if(m_pTable && !m_pTable->isNew() && !m_bDropColumn)
-        throw SQLException(DBACORE_RESSTRING(RID_STR_NO_COLUMN_DROP),static_cast<XChild*>(static_cast<TXChild*>(this)),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,Any());
-    if ( m_pColFactoryImpl )
-        m_pColFactoryImpl->columnDropped(_sElementName);
-    ::dbaccess::notifyDataSourceModified(m_xParent,sal_True);
-}
-// -------------------------------------------------------------------------
-connectivity::sdbcx::ObjectType OColumns::cloneObject(const Reference< XPropertySet >& _xDescriptor)
-{
-    Reference<XPropertySet> xProp = createEmptyObject();
-    if ( xProp.is() )
-        ::comphelper::copyProperties(_xDescriptor,xProp);
 
     if ( m_pColFactoryImpl )
-        m_pColFactoryImpl->columnCloned(xProp);
-    return xProp;
+        m_pColFactoryImpl->columnDropped(_sElementName);
+
+    ::dbaccess::notifyDataSourceModified(m_xParent,sal_True);
 }
 // -----------------------------------------------------------------------------
 
