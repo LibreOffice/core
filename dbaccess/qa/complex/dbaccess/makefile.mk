@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2006-01-25 15:08:54 $
+#   last change: $Author: obo $ $Date: 2006-07-10 15:00:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -44,12 +44,8 @@ PACKAGE = complex$/dbaccess
 
 #----- compile .java files -----------------------------------------
 
-JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar jut.jar java_uno.jar OOoRunner.jar
-JAVAFILES       = \
-        SingleSelectQueryComposer.java \
-        RowSetEventListener.java \
-        HsqlDatabase.java \
-        RowSet.java
+JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar jut.jar java_uno.jar OOoRunner.jar ConnectivityTools.jar
+JAVAFILES       := $(shell $(FIND) ./*.java)
 JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
 #----- make a jar from compiled files ------------------------------
