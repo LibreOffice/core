@@ -1,0 +1,179 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: connectiontools.cxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:18:53 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef DBACCESS_CONNECTIONTOOLS_HXX
+#include "connectiontools.hxx"
+#endif
+
+#ifndef DBACCESS_SOURCE_SDBTOOLS_CONNECTION_TABLENAME_HXX
+#include "tablename.hxx"
+#endif
+#ifndef DBACCESS_SOURCE_SDBTOOLS_CONNECTION_OBJECTNAMES_HXX
+#include "objectnames.hxx"
+#endif
+#ifndef DBACCESS_DATASOURCEMETADATA_HXX
+#include "datasourcemetadata.hxx"
+#endif
+
+/** === begin UNO includes === **/
+/** === end UNO includes === **/
+
+#ifndef COMPHELPER_NAMEDVALUECOLLECTION_HXX
+#include <comphelper/namedvaluecollection.hxx>
+#endif
+
+#include <algorithm>
+
+extern "C" void SAL_CALL createRegistryInfo_ConnectionTools()
+{
+    ::sdbtools::OAutoRegistration< ::sdbtools::ConnectionTools > aRegistration;
+}
+
+//........................................................................
+namespace sdbtools
+{
+//........................................................................
+
+    /** === begin UNO using === **/
+    using ::com::sun::star::uno::Reference;
+    using ::com::sun::star::uno::RuntimeException;
+    using ::com::sun::star::sdb::tools::XTableName;
+    using ::com::sun::star::sdb::tools::XObjectNames;
+    using ::com::sun::star::sdb::tools::XDataSourceMetaData;
+    using ::com::sun::star::uno::Sequence;
+    using ::com::sun::star::uno::XInterface;
+    using ::com::sun::star::uno::Any;
+    using ::com::sun::star::uno::Exception;
+    using ::com::sun::star::sdbc::XConnection;
+    using ::com::sun::star::lang::IllegalArgumentException;
+    using ::com::sun::star::uno::XComponentContext;
+    /** === end UNO using === **/
+
+    //====================================================================
+    //= ConnectionTools
+    //====================================================================
+    //--------------------------------------------------------------------
+    ConnectionTools::ConnectionTools( const Reference< XComponentContext >& _rxContext )
+        :m_aContext( _rxContext )
+    {
+    }
+
+    //--------------------------------------------------------------------
+    ConnectionTools::~ConnectionTools()
+    {
+    }
+
+    //--------------------------------------------------------------------
+    Reference< XTableName > SAL_CALL ConnectionTools::createTableName() throw (RuntimeException)
+    {
+        EntryGuard aGuard( *this );
+        return new TableName( getConnection() );
+    }
+
+    //--------------------------------------------------------------------
+    Reference< XObjectNames > SAL_CALL ConnectionTools::getObjectNames() throw (RuntimeException)
+    {
+        EntryGuard aGuard( *this );
+        return new ObjectNames( getConnection() );
+    }
+
+    //--------------------------------------------------------------------
+    Reference< XDataSourceMetaData > SAL_CALL ConnectionTools::getDataSourceMetaData() throw (RuntimeException)
+    {
+        EntryGuard aGuard( *this );
+        return new DataSourceMetaData( getConnection() );
+    }
+
+    //--------------------------------------------------------------------
+    ::rtl::OUString SAL_CALL ConnectionTools::getImplementationName() throw (RuntimeException)
+    {
+        return getImplementationName_static();
+    }
+
+    //--------------------------------------------------------------------
+    ::sal_Bool SAL_CALL ConnectionTools::supportsService(const ::rtl::OUString & _ServiceName) throw (RuntimeException)
+    {
+        Sequence< ::rtl::OUString > aSupported( getSupportedServiceNames() );
+        const ::rtl::OUString* begin = aSupported.getConstArray();
+        const ::rtl::OUString* end = aSupported.getConstArray() + aSupported.getLength();
+        return ::std::find( begin, end, _ServiceName ) != end;
+    }
+
+    //--------------------------------------------------------------------
+    Sequence< ::rtl::OUString > SAL_CALL ConnectionTools::getSupportedServiceNames() throw (RuntimeException)
+    {
+        return getSupportedServiceNames_static();
+    }
+
+    //--------------------------------------------------------------------
+    ::rtl::OUString SAL_CALL ConnectionTools::getImplementationName_static()
+    {
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.dbaccess.ConnectionTools" ) );
+    }
+
+    //--------------------------------------------------------------------
+    Sequence< ::rtl::OUString > SAL_CALL ConnectionTools::getSupportedServiceNames_static()
+    {
+        Sequence< ::rtl::OUString > aSupported( 1 );
+        aSupported[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.tools.ConnectionTools" ) );
+        return aSupported;
+    }
+
+    //--------------------------------------------------------------------
+    Reference< XInterface > SAL_CALL ConnectionTools::Create(const Reference< XComponentContext >& _rxContext )
+    {
+        return *( new ConnectionTools( _rxContext ) );
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL ConnectionTools::initialize(const Sequence< Any > & _rArguments) throw (RuntimeException, Exception)
+    {
+        ::osl::MutexGuard aGuard( getMutex() );
+
+        ::comphelper::NamedValueCollection aArguments( _rArguments );
+
+        Reference< XConnection > xConnection;
+        aArguments.get( "Connection" ) >>= xConnection;
+        if ( !xConnection.is() )
+            throw IllegalArgumentException();
+
+        setWeakConnection( xConnection );
+    }
+
+
+//........................................................................
+} // namespace sdbtools
+//........................................................................
+
