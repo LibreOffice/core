@@ -4,9 +4,9 @@
  *
  *  $RCSfile: globstr.hrc,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:42:01 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 12:30:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -550,7 +550,10 @@
 
 #define STR_ERR_DATAPILOT_INPUT     411
 
-#define STR_COUNT                   412
+#define STR_RECALC_MANUAL           416
+#define STR_RECALC_AUTO             417
+
+#define STR_COUNT                   418
 
 #endif
 
