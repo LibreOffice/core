@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xestyle.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:38:07 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:34:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -915,7 +915,7 @@ XclExpFont::XclExpFont( const XclExpRoot& rRoot, const XclExpFontData& rFontData
     maData( rFontData ),
     mnHash( rFontData.GetHash() )
 {
-    sal_uInt32 nRecSize = maData.maName.Len();
+    sal_Size nRecSize = maData.maName.Len();
     if( GetBiff() == EXC_BIFF8 )
         (nRecSize *= 2) += 1;
     nRecSize += 15;
@@ -1207,10 +1207,10 @@ size_t XclExpFontBuffer::Find( const XclExpFontData& rFontData )
 /** Predicate for search algorithm. */
 struct XclExpNumFmtPred
 {
-    ULONG                       mnScNumFmt;
-    inline explicit             XclExpNumFmtPred( ULONG nScNumFmt ) : mnScNumFmt( nScNumFmt ) {}
-    inline bool                 operator()( const XclExpNumFmt& rFormat ) const
-                                    { return rFormat.mnScNumFmt == mnScNumFmt; }
+    ULONG               mnScNumFmt;
+    inline explicit     XclExpNumFmtPred( ULONG nScNumFmt ) : mnScNumFmt( nScNumFmt ) {}
+    inline bool         operator()( const XclExpNumFmt& rFormat ) const
+                            { return rFormat.mnScNumFmt == mnScNumFmt; }
 };
 
 // ----------------------------------------------------------------------------
