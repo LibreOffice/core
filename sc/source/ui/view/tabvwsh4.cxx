@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:48:46 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:11:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -741,13 +741,14 @@ void ScTabViewShell::SetDrawShell( BOOL bActive )
     else
     {
         if(bActiveDrawFormSh || bActiveDrawSh ||
-            bActiveGraphicSh  || bActiveOleObjectSh||
+            bActiveGraphicSh || bActiveMediaSh || bActiveOleObjectSh||
             bActiveChartSh || bActiveDrawTextSh)
         {
             SetCurSubShell(OST_Cell);
         }
         bActiveDrawFormSh=FALSE;
         bActiveGraphicSh=FALSE;
+        bActiveMediaSh=FALSE;
         bActiveOleObjectSh=FALSE;
         bActiveChartSh=FALSE;
     }
@@ -778,6 +779,7 @@ void ScTabViewShell::SetDrawTextShell( BOOL bActive )
     {
         bActiveDrawFormSh=FALSE;
         bActiveGraphicSh=FALSE;
+        bActiveMediaSh=FALSE;
         bActiveOleObjectSh=FALSE;
         bActiveChartSh=FALSE;
         bActiveDrawSh = FALSE;
@@ -802,6 +804,7 @@ void ScTabViewShell::SetPivotShell( BOOL bActive )
             bActiveDrawTextSh = bActiveDrawSh = FALSE;
             bActiveDrawFormSh=FALSE;
             bActiveGraphicSh=FALSE;
+            bActiveMediaSh=FALSE;
             bActiveOleObjectSh=FALSE;
             bActiveChartSh=FALSE;
             SetCurSubShell(OST_Pivot);
@@ -819,6 +822,7 @@ void ScTabViewShell::SetAuditShell( BOOL bActive )
         bActiveDrawTextSh = bActiveDrawSh = FALSE;
         bActiveDrawFormSh=FALSE;
         bActiveGraphicSh=FALSE;
+        bActiveMediaSh=FALSE;
         bActiveOleObjectSh=FALSE;
         bActiveChartSh=FALSE;
         SetCurSubShell(OST_Auditing);
