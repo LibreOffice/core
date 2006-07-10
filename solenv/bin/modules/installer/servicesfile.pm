@@ -4,9 +4,9 @@
 #
 #   $RCSfile: servicesfile.pm,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: rt $ $Date: 2005-11-11 10:38:14 $
+#   last change: $Author: obo $ $Date: 2006-07-10 18:51:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -314,7 +314,7 @@ sub get_source_path_cygwin_safe
     my ( $name, $array, $int ) = @_;
 
     my $ret = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$name, $array, $int);
-    if ( $installer::globals::iswin eq 1 && $ENV{'USE_SHELL'} eq "tcsh" )
+    if ( $installer::globals::iswin eq 1 && $ENV{'USE_SHELL'} ne "4nt" )
     {
     if( substr( $$ret, 1,1 ) eq ":" )
     {
@@ -539,7 +539,7 @@ sub prepare_classpath_for_java_registration
         if ( $ENV{'CLASSPATH'} ) { $oldclasspathstring = $ENV{'CLASSPATH'}; }
         else { $oldclasspathstring = "\."; }
         my $classpathstring = $$jarfileref . $local_pathseparator . $oldclasspathstring;
-        if (( $^O =~ /cygwin/i ) && ( $ENV{'USE_SHELL'} eq "tcsh" )) {
+        if (( $^O =~ /cygwin/i ) && ( $ENV{'USE_SHELL'} ne "4nt" )) {
             $classpathstring =~ s/\//\\/g;      # guw.pl likes '\' in $PATH.
         }
         $ENV{'CLASSPATH'} = $classpathstring;
