@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-06 14:17:15 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:25:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -937,7 +937,7 @@ void ODbaseTable::throwInvalidColumnType(const ::rtl::OUString& _sError,const ::
     sMsg += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\""));
     sMsg += _sColumnName;
     sMsg += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\" !"));
-    throw SQLException(sMsg,*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
+    ::dbtools::throwGenericSQLException( sMsg, *this );
 }
 //------------------------------------------------------------------
 // erzeugt grundsaetzlich dBase IV Datei Format
@@ -990,7 +990,7 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
                 ::rtl::OUString sMsg = ::rtl::OUString::createFromAscii("Invalid column name length for column: ");
                 sMsg += aName;
                 sMsg += ::rtl::OUString::createFromAscii("!");
-                throw SQLException(sMsg,*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
+                ::dbtools::throwGenericSQLException( sMsg, *this );
             }
 
             (*m_pFileStream) << aCol.getStr();
@@ -1105,16 +1105,16 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
             (*m_pFileStream) << (BYTE) dBaseIIIMemo;
         } // if (bCreateMemo)
     }
-    catch(const Exception& e)
+    catch ( const Exception& e )
     {
+        (void)e;
+
         try
         {
             // we have to drop the file because it is corrupted now
             DropImpl();
         }
-        catch(const Exception&)
-        {
-        }
+        catch(const Exception&) { }
         throw;
     }
     return TRUE;
@@ -1461,7 +1461,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
                     }
                     sMessage += aColName;
                     sMessage += ::rtl::OUString::createFromAscii( "\"!");
-                    throw SQLException(sMessage,*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
+                    ::dbtools::throwGenericSQLException( sMessage, *this );
                 }
             }
         }
@@ -1674,7 +1674,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
             throw SQLException(
                     sMsg,
                     *this,
-                    bCharacterConversionError ? ::rtl::OUString::createFromAscii( "22018" ) : OMetaConnection::getPropMap().getNameByIndex( PROPERTY_ID_HY0000 ),
+                    bCharacterConversionError ? ::rtl::OUString::createFromAscii( "22018" ) : ::dbtools::getStandardSQLState( SQL_GENERAL_ERROR ),
                     bCharacterConversionError ? 22018 : 1000,
                     aSQLError
                 );
@@ -2166,7 +2166,9 @@ String ODbaseTable::createTempFile()
     String sName(m_Name);
     TempFile aTempFile(sName,&sExt,&sTempName);
     if(!aTempFile.IsValid())
-        throw SQLException(::rtl::OUString::createFromAscii("Error while alter table!"),NULL,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
+        ::dbtools::throwGenericSQLException( ::rtl::OUString::createFromAscii( "Error while alter table." ),
+        // TODO: resource
+        *this );
 
     INetURLObject aURL;
     aURL.SetSmartProtocol(INET_PROT_FILE);
