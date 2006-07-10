@@ -4,9 +4,9 @@
  *
  *  $RCSfile: commandcontainer.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 10:46:38 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:09:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,9 +39,11 @@
 #ifndef _DBA_CORE_DEFINITIONCONTAINER_HXX_
 #include "definitioncontainer.hxx"
 #endif
+
 #ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #endif
+
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
 #endif
@@ -50,15 +52,18 @@
 namespace dbaccess
 {
 //........................................................................
-typedef ::cppu::ImplHelper1< ::com::sun::star::lang::XSingleServiceFactory > OCommandContainer_BASE;
 //==========================================================================
-//= OCommandContainer - collection of command descriptions
+//= OCommandContainer
 //==========================================================================
+
+typedef ::cppu::ImplHelper1 <   ::com::sun::star::lang::XSingleServiceFactory
+                            >   OCommandContainer_BASE;
 
 class OCommandContainer : public ODefinitionContainer
                          ,public OCommandContainer_BASE
 {
     sal_Bool m_bTables;
+
 public:
     /** constructs the container.<BR>
     */
@@ -66,22 +71,20 @@ public:
          const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB
         ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&   _xParentContainer
         ,const TContentPtr& _pImpl
-        ,sal_Bool _bTables = sal_True
+        ,sal_Bool _bTables
         );
 
-    // ::com::sun::star::uno::XInterface
     DECLARE_XINTERFACE( )
-// com::sun::star::lang::XTypeProvider
     DECLARE_TYPEPROVIDER( );
 
-    // ::com::sun::star::lang::XSingleServiceFactory
+    // XSingleServiceFactory
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstance( ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstanceWithArguments( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+
 protected:
     virtual ~OCommandContainer();
 
-
-// ODefinitionContainer
+    // ODefinitionContainer
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent > createObject(const ::rtl::OUString& _rName);
 };
 
