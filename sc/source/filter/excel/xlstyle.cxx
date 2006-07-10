@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlstyle.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 08:27:17 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:46:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -459,6 +459,17 @@ sal_Int16 XclFontData::GetApiUnderline() const
     return nApiUnderl;
 }
 
+sal_Int16 XclFontData::GetApiEscapement() const
+{
+    sal_Int16 nApiEscapem = 0;
+    switch( mnEscapem )
+    {
+        case EXC_FONTESC_SUPER: nApiEscapem = 33;   break;
+        case EXC_FONTESC_SUB:   nApiEscapem = -33;  break;
+    }
+    return nApiEscapem;
+}
+
 sal_Int16 XclFontData::GetApiStrikeout() const
 {
     return mbStrikeout ? AwtFontStrikeout::SINGLE : AwtFontStrikeout::NONE;
@@ -514,6 +525,16 @@ void XclFontData::SetApiUnderline( sal_Int16 nApiUnderl )
     }
 }
 
+void XclFontData::SetApiEscapement( sal_Int16 nApiEscapem )
+{
+    if( nApiEscapem > 0 )
+        mnEscapem = EXC_FONTESC_SUPER;
+    else if( nApiEscapem < 0 )
+        mnEscapem = EXC_FONTESC_SUB;
+    else
+        mnEscapem = EXC_FONTESC_NONE;
+}
+
 void XclFontData::SetApiStrikeout( sal_Int16 nApiStrikeout )
 {
     mbStrikeout =
@@ -538,6 +559,121 @@ bool operator==( const XclFontData& rLeft, const XclFontData& rRight )
         (rLeft.mbOutline   == rRight.mbOutline)   &&
         (rLeft.mbShadow    == rRight.mbShadow)    &&
         (rLeft.maName      == rRight.maName);
+}
+
+// ----------------------------------------------------------------------------
+
+namespace {
+
+/** Property names for Western font settings. */
+const sal_Char *const sppcPropNamesWstrn[] =
+{
+    "CharFontName", "CharHeight", "CharPosture", "CharWeight", "CharUnderline",
+    "CharStrikeout", "CharEscapement", "CharColor", "CharContoured", "CharShadowed", 0
+};
+/** Property names for Asian font settings. */
+const sal_Char *const sppcPropNamesAsian[] =
+{
+    "CharFontNameAsian", "CharHeightAsian", "CharPostureAsian", "CharWeightAsian", 0
+};
+/** Property names for Complex font settings. */
+const sal_Char *const sppcPropNamesCmplx[] =
+{
+    "CharFontNameComplex", "CharHeightComplex", "CharPostureComplex", "CharWeightComplex", 0
+};
+
+/** Property names for Western font settings without font name. */
+const sal_Char *const *const sppcPropNamesWstrnNoName = sppcPropNamesWstrn + 1;
+/** Property names for Asian font settings without font name. */
+const sal_Char *const *const sppcPropNamesAsianNoName = sppcPropNamesAsian + 1;
+/** Property names for Complex font settings without font name. */
+const sal_Char *const *const sppcPropNamesCmplxNoName = sppcPropNamesCmplx + 1;
+
+/** Property names for font settings in form controls. */
+const sal_Char *const sppcPropNamesControl[] =
+{
+    "FontName", "FontFamily", "FontCharset", "FontHeight", "FontSlant",
+    "FontWeight", "FontUnderline", "FontStrikeout", "TextColor", 0
+};
+
+/** Writes initial properties to a font property set helper, returns the used helper. */
+ScfPropSetHelper& lclInitFontHelper(
+        ScfPropSetHelper& rHlpName, ScfPropSetHelper& rHlpNoName,
+        const XclFontData& rFontData, bool bHasFontName )
+{
+    // select the font helper
+    ScfPropSetHelper& rPropSetHlp = bHasFontName ? rHlpName : rHlpNoName;
+    // initialize the font helper (must be called before writing any properties)
+    rPropSetHlp.InitializeWrite();
+    // write font name
+    if( bHasFontName )
+        rPropSetHlp << rFontData.maName;
+    // write remaining properties
+    rPropSetHlp << rFontData.GetApiHeight() << rFontData.GetApiPosture() << rFontData.GetApiWeight();
+    // return the used font helper
+    return rPropSetHlp;
+}
+
+} // namespace
+
+// ----------------------------------------------------------------------------
+
+XclFontPropSetHelper::XclFontPropSetHelper() :
+    maHlpWstrn( sppcPropNamesWstrn ),
+    maHlpAsian( sppcPropNamesAsian ),
+    maHlpCmplx( sppcPropNamesCmplx ),
+    maHlpWstrnNoName( sppcPropNamesWstrnNoName ),
+    maHlpAsianNoName( sppcPropNamesAsianNoName ),
+    maHlpCmplxNoName( sppcPropNamesCmplxNoName ),
+    maHlpControl( sppcPropNamesControl )
+{
+}
+
+void XclFontPropSetHelper::WriteFontProperties(
+        ScfPropertySet& rPropSet, XclFontPropSetType eType,
+        const XclFontData& rFontData, const Color& rFontColor,
+        bool bHasWstrn, bool bHasAsian, bool bHasCmplx )
+{
+    switch( eType )
+    {
+        case EXC_FONTPROPSET_CHART:
+        {
+            // write Western properties
+            ScfPropSetHelper& rHlpWstrn = lclInitFontHelper( maHlpWstrn, maHlpWstrnNoName, rFontData, bHasWstrn );
+            rHlpWstrn   << rFontData.GetApiUnderline()
+                        << rFontData.GetApiStrikeout()
+                        << rFontData.GetApiEscapement()
+                        << rFontColor
+                        << rFontData.mbOutline
+                        << rFontData.mbShadow;
+            rHlpWstrn.WriteToPropertySet( rPropSet );
+
+            // write Asian properties
+            ScfPropSetHelper& rHlpAsian = lclInitFontHelper( maHlpAsian, maHlpAsianNoName, rFontData, bHasAsian );
+            rHlpAsian.WriteToPropertySet( rPropSet );
+
+            // write Complex properties
+            ScfPropSetHelper& rHlpCmplx = lclInitFontHelper( maHlpCmplx, maHlpCmplxNoName, rFontData, bHasCmplx );
+            rHlpCmplx.WriteToPropertySet( rPropSet );
+        }
+        break;
+
+        case EXC_FONTPROPSET_CONTROL:
+        {
+            maHlpControl.InitializeWrite();
+            maHlpControl    << rFontData.maName
+                            << rFontData.GetApiFamily()
+                            << rFontData.GetApiCharSet()
+                            << static_cast< sal_Int16 >( rFontData.GetApiHeight() + 0.5 )
+                            << rFontData.GetApiPosture()
+                            << rFontData.GetApiWeight()
+                            << rFontData.GetApiUnderline()
+                            << rFontData.GetApiStrikeout()
+                            << rFontColor;
+            maHlpControl.WriteToPropertySet( rPropSet );
+        }
+        break;
+    }
 }
 
 // Number formats =============================================================
