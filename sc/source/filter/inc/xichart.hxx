@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xichart.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:59:33 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:58:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,14 +51,20 @@
 #ifndef SC_XLCHART_HXX
 #include "xlchart.hxx"
 #endif
-#ifndef SC_XIHELPER_HXX
-#include "xihelper.hxx"
+#ifndef SC_XISTRING_HXX
+#include "xistring.hxx"
+#endif
+#ifndef SC_XIROOT_HXX
+#include "xiroot.hxx"
 #endif
 
-namespace com { namespace sun { namespace star { namespace chart {
-    class XChartDocument;
-    class XDiagram;
-} } } }
+namespace com { namespace sun { namespace star {
+    namespace chart
+    {
+        class XChartDocument;
+        class XDiagram;
+    }
+} } }
 
 // Common =====================================================================
 
@@ -68,8 +74,8 @@ class XclImpChMap : public ::std::map< KeyType, ScfRef< ObjType > >
 {
 public:
     typedef KeyType                             key_type;
-    typedef ScfRef< ObjType >                   data_type;
-    typedef ::std::map< key_type, data_type >   map_type;
+    typedef ScfRef< ObjType >                   ref_type;
+    typedef ::std::map< key_type, ref_type >    map_type;
 
     /** Returns true, if the object accossiated to the passed key exists. */
     inline bool         has( key_type nKey ) const
@@ -79,49 +85,75 @@ public:
                         }
 
     /** Returns a reference to the object accossiated to the passed key, or 0 on error. */
-    inline data_type    get( key_type nKey ) const
+    inline ref_type     get( key_type nKey ) const
                         {
                             typename map_type::const_iterator aIt = find( nKey );
                             if( aIt != this->end() ) return aIt->second;
-                            return data_type();
+                            return ref_type();
                         }
 };
 
 // ----------------------------------------------------------------------------
 
+class ScfProgressBar;
+struct XclImpChRootData;
 class XclImpChChart;
-
-/** Stores global data needed in various classes of the Chart import filter. */
-struct XclImpChRootData
-{
-    XclChPropSetHelper  maPropSetHlp;           /// Multi property set helper.
-    XclImpChChart*      mpChartData;            /// Pointer to the chart data object.
-
-    explicit            XclImpChRootData();
-};
-
-// ----------------------------------------------------------------------------
 
 /** Base class for complex chart classes, provides access to other components of the chart. */
 class XclImpChRoot : public XclImpRoot
 {
 public:
-    explicit            XclImpChRoot( const XclImpRoot& rRoot, XclImpChRootData& rRootData );
+    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart::XChartDocument > XChartDocRef;
+
+public:
+    explicit            XclImpChRoot( const XclImpRoot& rRoot, XclImpChChart* pChartData );
+    virtual             ~XclImpChRoot();
 
     /** Returns this root instance - for code readability in derived classes. */
     inline const XclImpChRoot& GetChRoot() const { return *this; }
-    /** Returns the chart property set helper object. */
-    inline XclChPropSetHelper& GetPropSetHelper() const { return mrChData.maPropSetHlp; }
     /** Returns a reference to the parent chart data object. */
-    inline XclImpChChart& GetChartData() const { return *mrChData.mpChartData; }
+    XclImpChChart&      GetChartData() const;
 
-protected:
-    /** Sets the current parent chart data object. */
-    inline void         SetChartData( XclImpChChart* pChartData ) const
-                            { mrChData.mpChartData = pChartData; }
+    /** Returns the default line color for charts. */
+    Color               GetLineAutoColor() const;
+    /** Returns the default fill color for charts. */
+    Color               GetFillAutoColor() const;
+    /** Returns the default text color for charts. */
+    Color               GetFontAutoColor() const;
+    /** Returns the automatic line color of linear series. */
+    Color               GetSeriesLineAutoColor( sal_uInt16 nFormatIdx ) const;
+    /** Returns the automatic fill color of filled series. */
+    Color               GetSeriesFillAutoColor( sal_uInt16 nFormatIdx ) const;
+
+    /** Starts the API chart document conversion. Must be called once before all API conversion. */
+    void                InitConversion( XChartDocRef xChartDoc ) const;
+    /** Finishes the API chart document conversion. Must be called once after all API conversion. */
+    void                FinishConversion( ScfProgressBar& rProgress ) const;
+
+    /** Writes all line properties to the passed property set. */
+    void                ConvertLineFormat(
+                            ScfPropertySet& rPropSet,
+                            const XclChLineFormat& rLineFmt,
+                            XclChPropertyMode ePropMode ) const;
+    /** Writes solid area properties to the passed property set. */
+    void                ConvertAreaFormat(
+                            ScfPropertySet& rPropSet,
+                            const XclChAreaFormat& rAreaFmt,
+                            XclChPropertyMode ePropMode ) const;
+    /** Writes gradient or bitmap area properties to the passed property set. */
+    void                ConvertEscherForrmat(
+                            ScfPropertySet& rPropSet,
+                            const SfxItemSet& rItemSet,
+                            const XclChPicFormat& rPicFmt ) const;
+    /** Writes font properties to the passed property set. */
+    void                ConvertFont(
+                            ScfPropertySet& rPropSet,
+                            sal_uInt16 nFontIdx,
+                            const Color* pFontColor = 0 ) const;
 
 private:
-    mutable XclImpChRootData& mrChData;         /// Reference to the root data object.
+    typedef ScfRef< XclImpChRootData > XclImpChRootDataRef;
+    XclImpChRootDataRef mxChData;           /// Reference to the root data object.
 };
 
 // ----------------------------------------------------------------------------
@@ -154,30 +186,25 @@ public:
 
 // Formatting =================================================================
 
-class XclImpChPos
+class XclImpChFramePos
 {
 public:
-    explicit            XclImpChPos();
-
-    /** Reads the CHPOS record (frame position). */
-    void                ReadChPos( XclImpStream& rStrm );
+    /** Reads the CHFRAMEPOS record (frame position and size). */
+    void                ReadChFramePos( XclImpStream& rStrm );
 
 private:
-    XclChPos            maPos;              /// Object dependent position data.
-    sal_uInt16          mnObjType;          /// Object type.
-    sal_uInt16          mnSizeMode;         /// Size mode (manual, automatic).
+    XclChFramePos       maData;             /// Position of the frame.
 };
 
-typedef ScfRef< XclImpChPos > XclImpChPosRef;
+typedef ScfRef< XclImpChFramePos > XclImpChFramePosRef;
 
 // ----------------------------------------------------------------------------
 
 class XclImpChLineFormat
 {
 public:
-    /** Creates a new line format object with specific default formatting.
-        @param nObjId  Optional record identifier for a special default format. */
-    explicit            XclImpChLineFormat( sal_uInt16 nObjId = EXC_ID_CHUNKNOWN );
+    /** Creates a new line format object with specific default formatting. */
+    explicit            XclImpChLineFormat( sal_uInt16 nLinkTarget = EXC_CHOBJLINK_NONE );
 
     /** Reads the CHLINEFORMAT record (basic line properties). */
     void                ReadChLineFormat( XclImpStream& rStrm );
@@ -186,13 +213,17 @@ public:
     inline bool         IsAuto() const { return ::get_flag( maData.mnFlags, EXC_CHLINEFORMAT_AUTO ); }
     /** Returns true, if the line style is set to something visible. */
     inline bool         HasLine() const { return IsAuto() || (maData.mnPattern != EXC_CHLINEFORMAT_NONE); }
-    /** Returns true, if the line style is set to something visible. */
+    /** Returns the line width of this line format (returns 'single', if the line is invisible). */
     inline sal_uInt16   GetWeight() const { return (IsAuto() || !HasLine()) ? EXC_CHLINEFORMAT_SINGLE : maData.mnWeight; }
+    /** Returns true, if the "show axis" flag is set. */
+    inline bool         IsShowAxis() const { return ::get_flag( maData.mnFlags, EXC_CHLINEFORMAT_SHOWAXIS ); }
 
     /** Converts and writes the contained data to the passed property set. */
-    void                Convert( const XclImpChRoot& rRoot, ScfPropertySet& rPropSet, sal_uInt16 nAutoWeight = EXC_CHLINEFORMAT_SINGLE ) const;
+    void                Convert( const XclImpChRoot& rRoot, ScfPropertySet& rPropSet,
+                            sal_uInt16 nAutoWeight = EXC_CHLINEFORMAT_SINGLE ) const;
     /** Converts and writes the contained data to the passed property set of a series or data point. */
-    void                ConvertSeries( const XclImpChRoot& rRoot, ScfPropertySet& rPropSet, sal_uInt16 nFormatIdx ) const;
+    void                ConvertSeries( const XclImpChRoot& rRoot, ScfPropertySet& rPropSet,
+                            sal_uInt16 nFormatIdx, bool bLinear2dType ) const;
 
 private:
     XclChLineFormat     maData;             /// Contents of the CHLINEFORMAT record.
@@ -205,9 +236,8 @@ typedef ScfRef< XclImpChLineFormat > XclImpChLineFormatRef;
 class XclImpChAreaFormat
 {
 public:
-    /** Creates a new area format object with specific default formatting.
-        @param nObjId  Optional record identifier for a special default format. */
-    explicit            XclImpChAreaFormat( sal_uInt16 nObjId = EXC_ID_CHUNKNOWN );
+    /** Creates a new area format object with specific default formatting. */
+    explicit            XclImpChAreaFormat( sal_uInt16 nLinkTarget = EXC_CHOBJLINK_NONE );
 
     /** Reads the CHAREAFORMAT record (basic fill properties, e.g. transparent or colored). */
     void                ReadChAreaFormat( XclImpStream& rStrm );
@@ -220,7 +250,8 @@ public:
     /** Converts and writes the contained data to the passed property set. */
     void                Convert( const XclImpChRoot& rRoot, ScfPropertySet& rPropSet ) const;
     /** Converts and writes the contained data to the passed property set of a series or data point. */
-    void                ConvertSeries( const XclImpChRoot& rRoot, ScfPropertySet& rPropSet, sal_uInt16 nFormatIdx ) const;
+    void                ConvertSeries( const XclImpChRoot& rRoot,
+                            ScfPropertySet& rPropSet, sal_uInt16 nFormatIdx ) const;
 
 private:
     XclChAreaFormat     maData;             /// Contents of the CHAREAFORMAT record.
@@ -261,6 +292,9 @@ typedef ScfRef< XclImpChEscherFormat > XclImpChEscherFormatRef;
 class XclImpChFrameBase : public XclImpChGroupBase
 {
 public:
+    /** Creates a new frame object with specific default formatting. */
+    explicit            XclImpChFrameBase( sal_uInt16 nLinkTarget = EXC_CHOBJLINK_NONE );
+
     /** Reads a frame formatting record (called by base class). */
     virtual void        ReadSubRecord( XclImpStream& rStrm );
 
@@ -278,7 +312,12 @@ public:
 
 protected:
     /** Converts and writes the contained data to the passed property set. */
-    void                ConvertFrame( const XclImpChRoot& rRoot, ScfPropertySet& rPropSet ) const;
+    void                ConvertFrameBase( const XclImpChRoot& rRoot,
+                            ScfPropertySet& rPropSet ) const;
+    /** Converts and writes the contained data to the passed property set of a series or data point. */
+    void                ConvertSeriesFrameBase(
+                            const XclImpChRoot& rRoot, ScfPropertySet& rPropSet,
+                            sal_uInt16 nFormatIdx, bool bLinear2dType ) const;
 
 protected:
     XclImpChLineFormatRef mxLineFmt;        /// Line format (CHLINEFORMAT record).
@@ -296,15 +335,18 @@ protected:
 class XclImpChFrame : public XclImpChFrameBase
 {
 public:
-    /** Creates a new frame object with specific default formatting.
-        @param nObjId  Optional record identifier for a special default format. */
-    explicit            XclImpChFrame( sal_uInt16 nObjId = EXC_ID_CHUNKNOWN );
+    /** Creates a new frame object with specific default formatting. */
+    explicit            XclImpChFrame( sal_uInt16 nLinkTarget = EXC_CHOBJLINK_NONE );
 
     /** Reads the CHFRAME record (called by base class). */
     virtual void        ReadHeaderRecord( XclImpStream& rStrm );
 
     /** Converts and writes the contained data to the passed property set. */
     void                Convert( const XclImpChRoot& rRoot, ScfPropertySet& rPropSet ) const;
+
+private:
+    /** Updates frame objects according to current link target. */
+    void                UpdateObjects();
 
 private:
     XclChFrame          maData;             /// Contents of the CHFRAME record.
@@ -328,6 +370,9 @@ public:
     /** Converts and writes the contained data to the passed property set. */
     void                Convert( const XclImpChRoot& rRoot, ScfPropertySet& rPropSet,
                             sal_uInt16 nFormatIdx, sal_uInt16 nLineWeight ) const;
+    /** Sets the marker fill color as main color to the passed property set. */
+    void                ConvertColor( const XclImpChRoot& rRoot,
+                            ScfPropertySet& rPropSet, sal_uInt16 nFormatIdx ) const;
 
 private:
     XclChMarkerFormat   maData;             /// Contents of the CHMARKERFORMAT record.
@@ -387,32 +432,15 @@ typedef ScfRef< XclImpCh3dDataFormat > XclImpCh3dDataFormatRef;
 
 // Text =======================================================================
 
-class XclImpChString
-{
-public:
-    /** Reads the CHSTRING record (string dat). */
-    void                ReadChString( XclImpStream& rStrm );
-    /** Returns the string read from the CHSTRING record. */
-    inline const String& GetString() const { return maData.GetText(); }
-    /** Writes the contained string to the passed property set. */
-    void                Convert( ScfPropertySet& rPropSet ) const;
-
-private:
-    XclImpString        maData;             /// Contents of the CHSTRING record.
-};
-
-typedef ScfRef< XclImpChString > XclImpChStringRef;
-
-// ----------------------------------------------------------------------------
-
 class XclImpChFont
 {
 public:
     explicit            XclImpChFont();
     /** Reads the CHFONT record (font index). */
     void                ReadChFont( XclImpStream& rStrm );
-    /** Converts and writes the contained data to the passed property set. */
-    void                Convert( const XclImpChRoot& rRoot, ScfPropertySet& rPropSet ) const;
+
+    /** Returns the contained font index. */
+    inline sal_uInt16   GetFontIndex() const { return mnFontIdx; }
 
 private:
     sal_uInt16          mnFontIdx;          /// Index into font buffer.
@@ -439,12 +467,66 @@ typedef ScfRef< XclImpChFormat > XclImpChFormatRef;
 
 // ----------------------------------------------------------------------------
 
+/** Represents linked or literal string data attached to a title or series. */
+class XclImpChString
+{
+public:
+    /** Reads the CHSTRING record (string data). */
+    void                ReadChString( XclImpStream& rStrm );
+    /** Reads the CHFORMATRUNS record (more font indexes). */
+    void                ReadChFormatRuns( XclImpStream& rStrm );
+
+    /** Returns true, if the object contains any text data. */
+    inline bool         HasString() const { return !maData.IsEmpty(); }
+
+    /** Returns the string read from the CHSTRING record. */
+    inline const String& GetString() const { return maData.GetText(); }
+    /** Writes the contained string to the passed property set. */
+    void                Convert( ScfPropertySet& rPropSet ) const;
+
+private:
+    XclImpString        maData;             /// Contents of the CHSTRING record.
+};
+
+typedef ScfRef< XclImpChString > XclImpChStringRef;
+
+// ----------------------------------------------------------------------------
+
+/** Base class for objects with font settings. Provides font conversion helper functions. */
+class XclImpChFontBase
+{
+public:
+    virtual             ~XclImpChFontBase();
+
+    /** Derived classes return the leading font index for the text object. */
+    virtual sal_uInt16  GetFontIndex() const = 0;
+    /** Derived classes return the leading font color for the text object. */
+    virtual Color       GetFontColor() const = 0;
+
+    /** Converts and writes the contained font settings to the passed property set. */
+    void                ConvertFontBase( const XclImpChRoot& rRoot, ScfPropertySet& rPropSet ) const;
+};
+
+// ----------------------------------------------------------------------------
+
+/** Base class for objects with text rotation. Provides conversion helper functions. */
+class XclImpChRotationBase
+{
+public:
+    virtual             ~XclImpChRotationBase();
+
+    /** Derived classes return the rotation value for the text. */
+    virtual sal_uInt16  GetRotation() const = 0;
+};
+
+// ----------------------------------------------------------------------------
+
 /** Represents the CHTEXT record group containing text object properties.
 
-    The CHTEXT group consists of: CHTEXT, CHBEGIN, CHPOS, CHFONT, CHAI,
-    CHSTRING, CHFRAME group, CHOBJECTLINK, CHEND.
+    The CHTEXT group consists of: CHTEXT, CHBEGIN, CHFRAMEPOS, CHFONT,
+    CHFORMATRUNS, CHSOURCELINK, CHSTRING, CHFRAME group, CHOBJECTLINK, and CHEND.
  */
-class XclImpChText : public XclImpChGroupBase, protected XclImpChRoot
+class XclImpChText : public XclImpChGroupBase, public XclImpChFontBase, protected XclImpChRoot
 {
 public:
     explicit            XclImpChText( const XclImpChRoot& rRoot );
@@ -453,6 +535,12 @@ public:
     virtual void        ReadHeaderRecord( XclImpStream& rStrm );
     /** Reads a record from the CHTEXT group (called by base class). */
     virtual void        ReadSubRecord( XclImpStream& rStrm );
+
+    /** Returns the leading font index for the text object. */
+    virtual sal_uInt16  GetFontIndex() const;
+    /** Returns the leading font color for the text object. */
+    virtual Color       GetFontColor() const;
+
     /** Updates missing parts of this text object from the passed object. */
     void                UpdateText( const XclImpChText* pParentText );
     /** Updates display type of this data point label text object. */
@@ -461,30 +549,29 @@ public:
     /** Returns the target object this text is linked to. */
     inline sal_uInt16   GetLinkTarget() const { return maObjLink.mnTarget; }
     /** Returns the position of the data point label this text is linked to. */
-    inline const XclChPoint& GetPointPos() const { return maObjLink.maPos; }
+    inline const XclChDataPointPos& GetPointPos() const { return maObjLink.maPointPos; }
     /** Returns true, if this text group contains string data. */
-    inline bool         HasString() const { return mxString.is(); }
+    inline bool         HasString() const { return mxString.is() && mxString->HasString(); }
 
     /** Converts and writes the contained font settings to the passed property set. */
     void                ConvertFont( ScfPropertySet& rPropSet ) const;
-    /** Converts and writes the contained rotation angle to the passed property set. */
+    /** Converts and writes the contained frame data to the passed property set. */
+    void                ConvertFrame( ScfPropertySet& rPropSet ) const;
+    /** Converts and writes text rotation settings to the passed property set. */
     void                ConvertRotation( ScfPropertySet& rPropSet ) const;
     /** Converts and writes the contained string to the passed property set. */
     void                ConvertString( ScfPropertySet& rPropSet ) const;
-    /** Converts and writes the contained frame data to the passed property set. */
-    void                ConvertFrame( ScfPropertySet& rPropSet ) const;
-
+    /** Converts and writes all contained data to the passed data point label property set. */
+    void                ConvertDataLabel( ScfPropertySet& rPropSet, sal_uInt16 nTypeId ) const;
     /** Converts and writes all contained data to the passed title property set. */
     void                ConvertTitle( ScfPropertySet& rPropSet ) const;
-    /** Converts and writes all contained data to the passed data point label property set. */
-    void                ConvertDataLabel( ScfPropertySet& rPropSet ) const;
 
 private:
     XclChText           maData;             /// Contents of the CHTEXT record.
     XclChObjectLink     maObjLink;          /// Link target for this text object.
     XclImpChFrameRef    mxFrame;            /// Text object frame properties (CHFRAME group).
     XclImpChFontRef     mxFont;             /// Index into font buffer (CHFONT record).
-    XclImpChStringRef   mxString;           /// Text data (CHSTRING record).
+    XclImpChStringRef   mxString;           /// Text data (CHSTRING, CHFORMATRUNS records).
 };
 
 typedef ScfRef< XclImpChText > XclImpChTextRef;
@@ -523,10 +610,10 @@ struct XclImpChInterval
 
 // ----------------------------------------------------------------------------
 
-class XclImpChSourceLink
+class XclImpChSourceLink : protected XclImpChRoot
 {
 public:
-    explicit            XclImpChSourceLink();
+    explicit            XclImpChSourceLink( const XclImpChRoot& rRoot );
 
     /** Reads the CHSOURCELINK record (link to source data). */
     void                ReadChSourceLink( XclImpStream& rStrm );
@@ -581,6 +668,7 @@ private:
 
 private:
     typedef ::std::vector< XclImpChInterval > XclImpChIntervalVec;
+
     XclChSourceLink     maData;             /// Contents of the CHSOURCELINK record.
     XclImpChStringRef   mxString;           /// Text data (CHSTRING record).
     XclChOrientation    meOrient;           /// Orientation of source ranges.
@@ -612,6 +700,8 @@ typedef ScfRef< XclImpChAttachedLabel > XclImpChAttLabelRef;
 
 // ----------------------------------------------------------------------------
 
+class XclImpChChartGroup;
+
 /** Represents the CHDATAFORMAT record group containing data point properties.
 
     The CHDATAFORMAT group consists of: CHDATAFORMAT, CHBEGIN, CHFRAME group,
@@ -633,15 +723,15 @@ public:
     /** Sets type and text formatting for a data point label (CHTEXT group). */
     inline void         SetDataLabel( XclImpChTextRef xLabel ) { mxLabel = xLabel; }
 
-    /** Updates global data format. */
-    void                UpdateGlobalFormat();
-    /** Updates missing series settings from the passed global format. */
-    void                UpdateSeriesFormat( const XclImpChDataFormat* pGlobalFmt );
+    /** Updates default data format for series group. */
+    void                UpdateGroupFormat( const XclImpChChartGroup& rChartGroup );
+    /** Updates missing series settings from the passed chart group format. */
+    void                UpdateSeriesFormat( const XclImpChChartGroup& rChartGroup );
     /** Updates missing data point settings from the passed series format. */
-    void                UpdatePointFormat( const XclImpChDataFormat* pSeriesFmt );
+    void                UpdatePointFormat( const XclImpChChartGroup& rChartGroup, const XclImpChDataFormat* pSeriesFmt );
 
     /** Returns the position of the data point described by this group. */
-    inline const XclChPoint& GetPointPos() const { return maData.maPos; }
+    inline const XclChDataPointPos& GetPointPos() const { return maData.maPointPos; }
     /** Returns the format index of the data point described by this group. */
     inline sal_uInt16   GetFormatIdx() const { return maData.mnFormatIdx; }
     /** Returns true, if markers are set to automatic format. */
@@ -654,7 +744,7 @@ public:
     inline XclImpChTextRef GetDataLabel() const { return mxLabel; }
 
     /** Converts and writes the contained data to the passed property set. */
-    void                Convert( ScfPropertySet& rPropSet ) const;
+    void                Convert( ScfPropertySet& rPropSet, const XclImpChChartGroup& rChartGroup ) const;
     /** Writes the area format for a data point in a series with automatic point colors. */
     void                ConvertVarPoint( ScfPropertySet& rPropSet, sal_uInt16 nFormatIdx ) const;
     /** Writes the line format only, e.g. for trend lines or error bars. */
@@ -662,7 +752,7 @@ public:
 
 private:
     /** Removes unused formatting (e.g. pie distance in a bar chart). */
-    void                RemoveUnusedFormats();
+    void                RemoveUnusedFormats( const XclImpChChartGroup& rChartGroup );
     /** Updates or creates the data point label. */
     void                UpdateDataLabel( const XclImpChDataFormat* pParentFmt );
 
@@ -677,6 +767,62 @@ private:
 };
 
 typedef ScfRef< XclImpChDataFormat > XclImpChDataFormatRef;
+
+// ----------------------------------------------------------------------------
+
+/** Represents the CHSERTRENDLINE record containing settings for a trend line. */
+class XclImpChSerTrendLine : protected XclImpChRoot
+{
+public:
+    explicit            XclImpChSerTrendLine( const XclImpChRoot& rRoot );
+
+    /** Reads the CHSERTRENDLINE record. */
+    void                ReadChSerTrendLine( XclImpStream& rStrm );
+    /** Sets formatting information for the error bars. */
+    inline void         SetLineFormat( XclImpChDataFormatRef xLineFmt ) { mxLineFmt = xLineFmt; }
+
+    /** Returns true, if the type of the trend line is supported in OOChart. */
+    bool                IsValidType() const;
+
+    /** Converts and writes the contained data to the passed property set. */
+    void                Convert( ScfPropertySet& rPropSet ) const;
+
+private:
+    XclChSerTrendLine   maData;             /// Contents of the CHSERTRENDLINE record.
+    XclImpChDataFormatRef mxLineFmt;        /// Formatting settings of the trend line.
+};
+
+typedef ScfRef< XclImpChSerTrendLine > XclImpChSerTrendLineRef;
+
+// ----------------------------------------------------------------------------
+
+/** Represents the CHSERERRORBAR record containing settings for error bars. */
+class XclImpChSerErrorBar : protected XclImpChRoot
+{
+public:
+    explicit            XclImpChSerErrorBar( const XclImpChRoot& rRoot );
+
+    /** Reads the CHSERERRORBAR record. */
+    void                ReadChSerErrorBar( XclImpStream& rStrm );
+    /** Sets formatting information for the error bars. */
+    inline void         SetBarFormat( XclImpChDataFormatRef xBarFmt ) { mxBarFmt = xBarFmt; }
+    /** Adds the passed error bar settings to the own settings. */
+    void                AddErrorBar( const XclImpChSerErrorBar& rErrorBar );
+
+    /** Returns true, if this object describes X error bars. */
+    bool                IsXErrorBar() const;
+    /** Returns true, if this object describes Y error bars. */
+    bool                IsYErrorBar() const;
+
+    /** Converts and writes the contained data to the passed property set. */
+    void                Convert( ScfPropertySet& rPropSet ) const;
+
+private:
+    XclChSerErrorBar    maData;             /// Contents of the CHSERERRORBAR record.
+    XclImpChDataFormatRef mxBarFmt;         /// Formatting settings of the error bars.
+};
+
+typedef ScfRef< XclImpChSerErrorBar > XclImpChSerErrorBarRef;
 
 // ----------------------------------------------------------------------------
 
@@ -715,6 +861,8 @@ public:
     void                SetDataFormat( XclImpChDataFormatRef xDataFmt );
     /** Sets a label text (CHTEXT group) attached  to a series or data point. */
     void                SetDataLabel( XclImpChTextRef xLabel );
+    /** Adds error bar settings from the passed series to the own series. */
+    void                AddChildSeries( const XclImpChSeries& rSeries );
     /** Updates missing series formatting by using default formatting from axes sets. */
     void                FinalizeDataFormats();
 
@@ -725,9 +873,11 @@ public:
     /** Returns the 0-based index of the parent series (e.g. of a trend line). */
     inline sal_uInt16   GetParentIdx() const { return mnParentIdx; }
     /** Returns the format index of the series used for automatic line and area colors. */
-    inline sal_uInt16   GetFormatIdx() const { return mxSeriesFmt.is() ? mxSeriesFmt->GetFormatIdx() : EXC_CHSERIES_INVALID; }
+    inline sal_uInt16   GetFormatIdx() const { return mxSeriesFmt.is() ? mxSeriesFmt->GetFormatIdx() : EXC_CHDATAFORMAT_DEFAULT; }
     /** Returns the number of data points of this series. */
     inline sal_uInt16   GetPointCount() const { return mbHasValue ? mxValueLink->GetCellCount() : 0; }
+    /** Returns the record identifier of the chart type this series is attached to. */
+    sal_uInt16          GetChartTypeId() const;
 
     /** Returns the orientation of the linked range. */
     inline XclChOrientation GetOrientation() const { return meOrient; }
@@ -767,11 +917,18 @@ private:
     void                ReadChDataFormat( XclImpStream& rStrm );
     /** Reads a CHSERPARENT record specifying the parent series of this series. */
     void                ReadChSerParent( XclImpStream& rStrm );
+    /** Reads a CHSERTRENDLINE record containing trend line settings. */
+    void                ReadChSerTrendLine( XclImpStream& rStrm );
+    /** Reads a CHSERERRORBAR record containing error bar settings. */
+    void                ReadChSerErrorBar( XclImpStream& rStrm );
     /** Finalizes the series after reading the CHSERIES group. */
     void                ReadChEnd( XclImpStream& rStrm );
 
     /** Calculates the orientation of the series source ranges. */
     void                CalcOrientation();
+
+    /** Returns the chart type that contains this series. */
+    XclImpChChartGroup* GetChartGroup() const;
 
     /** Creates a new CHDATAFORMAT group with the specified point index. */
     XclImpChDataFormatRef CreateDataFormat( sal_uInt16 nPointIdx, sal_uInt16 nFormatIdx );
@@ -788,11 +945,15 @@ private:
     XclImpChSourceLinkRef mxValueLink;      /// Link data for series values.
     XclImpChSourceLinkRef mxCategLink;      /// Link data for series category names.
     XclImpChSourceLinkRef mxTitleLink;      /// Link data for series title.
+    XclImpChSourceLinkRef mxBubbleLink;     /// Link data for series bubble sizes.
     XclImpChDataFormatRef mxSeriesFmt;      /// CHDATAFORMAT group for series format.
     XclImpChDataFormatMap maPointFmts;      /// CHDATAFORMAT groups for data point formats.
     XclImpChTextMap     maLabels;           /// All text labels for series and points (CHTEXT groups).
+    XclImpChSerTrendLineRef mxTrendLine;    /// Settings for a trend line (CHSERTRENDLINE record).
+    XclImpChSerErrorBarRef mxXErrorBar;     /// Settings for X error bar (CHSERERRORBAR record).
+    XclImpChSerErrorBarRef mxYErrorBar;     /// Settings for Y error bar (CHSERERRORBAR record).
     XclChOrientation    meOrient;           /// Orientation of the series.
-    sal_uInt16          mnGroupIdx;         /// Chart group (CHCHARTFORMAT group) this series is assigned to.
+    sal_uInt16          mnGroupIdx;         /// Chart group (CHCHARTGROUP group) this series is assigned to.
     sal_uInt16          mnSeriesIdx;        /// 0-based series index.
     sal_uInt16          mnParentIdx;        /// 0-based index of parent series (trend lines and error bars).
     bool                mbHasValue;         /// true = Has valid series values.
@@ -821,6 +982,10 @@ public:
 
     /** Returns the record identifier of the chart type record. */
     inline sal_uInt16   GetTypeId() const { return mnTypeId; }
+    /** Returns true, if the series in this chart group are stacked on each other. */
+    bool                IsStackedChart() const;
+    /** Returns true, if the series in this chart group are stacked on each other as percentage. */
+    bool                IsPercentChart() const;
 
     /** Creates the diagram with the correct type in the passed chart. */
     void                CreateDiagram( XChartDocRef xChartDoc ) const;
@@ -840,6 +1005,8 @@ class XclImpChChart3d
 public:
     /** Reads the CHCHART3D record (properties for 3D charts). */
     void                ReadChChart3d( XclImpStream& rStrm );
+    /** Returns true, if the data points are clustered on the X axis. */
+    inline bool         IsClustered() const { return ::get_flag( maData.mnFlags, EXC_CHCHART3D_CLUSTER ); }
     /** Converts and writes the contained data to the passed property set. */
     void                Convert( ScfPropertySet& rPropSet ) const;
 
@@ -889,7 +1056,8 @@ typedef ScfRef< XclImpChLegend > XclImpChLegendRef;
 class XclImpChDropBar : public XclImpChFrameBase
 {
 public:
-    explicit            XclImpChDropBar();
+    explicit            XclImpChDropBar( sal_uInt16 nDropBar );
+
     /** Reads the CHDROPBAR record (called by base class). */
     virtual void        ReadHeaderRecord( XclImpStream& rStrm );
 
@@ -904,24 +1072,24 @@ typedef ScfRef< XclImpChDropBar > XclImpChDropBarRef;
 
 // ----------------------------------------------------------------------------
 
-/** Represents the CHCHARTFORMAT record group describing formats of an axes set.
+/** Represents the CHCHARTGROUP record group describing formats of an axes set.
 
-    The CHCHARTFORMAT group consists of: CHCHARTFORMAT, CHBEGIN, a chart type
+    The CHCHARTGROUP group consists of: CHCHARTGROUP, CHBEGIN, a chart type
     record (e.g. CHBAR, CHLINE, CHAREA, CHPIE, ...), CHCHART3D, CHLEGEND group,
     CHDROPBAR groups, CHCHARTLINE groups (CHCHARTLINE with CHLINEFORMAT),
     CHDATAFORMAT group, CHEND.
  */
-class XclImpChChartFormat : public XclImpChGroupBase, protected XclImpChRoot
+class XclImpChChartGroup : public XclImpChGroupBase, protected XclImpChRoot
 {
 public:
     typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart::XChartDocument > XChartDocRef;
 
 public:
-    explicit            XclImpChChartFormat( const XclImpChRoot& rRoot );
+    explicit            XclImpChChartGroup( const XclImpChRoot& rRoot );
 
-    /** Reads the CHCHARTFORMAT record (called by base class). */
+    /** Reads the CHCHARTGROUP record (called by base class). */
     virtual void        ReadHeaderRecord( XclImpStream& rStrm );
-    /** Reads a record from the CHCHARTFORMAT group (called by base class). */
+    /** Reads a record from the CHCHARTGROUP group (called by base class). */
     virtual void        ReadSubRecord( XclImpStream& rStrm );
     /** Final processing after reading the entire chart. */
     void                Finalize();
@@ -935,8 +1103,16 @@ public:
     inline sal_uInt16   GetGroupIdx() const { return maData.mnGroupIdx; }
     /** Returns the record identifier of the chart type record. */
     inline sal_uInt16   GetChartTypeId() const { return maType.GetTypeId(); }
+    /** Returns true, if the series in this chart group are stacked on each other. */
+    inline bool         IsStackedChart() const { return maType.IsStackedChart(); }
+    /** Returns true, if the series in this chart group are stacked on each other as percentage. */
+    inline bool         IsPercentChart() const { return maType.IsPercentChart(); }
+    /** Returns true, if this chart group is a linear 2d chart type. */
+    inline bool         IsLinear2dChart() const { return !Is3dChart() && XclChartHelper::HasLinearSeries( GetChartTypeId() ); }
     /** Returns true, if the chart is three-dimensional. */
     inline bool         Is3dChart() const { return mxChart3d.is(); }
+    /** Returns true, if the series in this chart group are ordered on the Z axis. */
+    inline bool         IsDeep3dChart() const { return mxChart3d.is() && !mxChart3d->IsClustered(); }
     /** Returns true, if the chart group contains a hi-lo line format. */
     inline bool         HasHiLoLine() const { return maChartLines.has( EXC_CHCHARTLINE_HILO ); }
     /** Returns true, if the chart group contains drop bar formats. */
@@ -944,10 +1120,10 @@ public:
     /** Looks for a legend in all chart groups and returns it. */
     inline XclImpChLegendRef GetLegend() const { return mxLegend; }
 
-    /** Returns true, if points of a single series are colored like series (automatic background color). */
-    inline bool         IsVarPointFormat() const { return ::get_flag( maData.mnFlags, EXC_CHCHARTFORMAT_VARIED ); }
+    /** Returns true, if points of a series have varying automatic area format (only for a single series in this group). */
+    inline bool         IsVarPointFormat() const { return ::get_flag( maData.mnFlags, EXC_CHCHARTGROUP_VARIED ); }
     /** Returns the default series data format. */
-    inline XclImpChDataFormatRef GetGlobalFormat() const { return mxGlobalFmt; }
+    inline XclImpChDataFormatRef GetGroupFormat() const { return mxGroupFmt; }
 
     /** Creates the diagram with the correct type in the passed chart. */
     void                CreateDiagram( XChartDocRef xChartDoc ) const;
@@ -970,27 +1146,26 @@ private:
     typedef XclImpChMap< sal_uInt16, XclImpChLineFormat >   XclImpChLineFormatMap;
     typedef ::std::set< sal_uInt16 >                        UInt16Set;
 
-    XclChChartFormat    maData;             /// Contents of the CHCHARTFORMAT record.
+    XclChChartGroup     maData;             /// Contents of the CHCHARTGROUP record.
     XclImpChType        maType;             /// Chart type (e.g. CHBAR, CHLINE, ...).
     XclImpChChart3dRef  mxChart3d;          /// 3D settings (CHCHART3D record).
     XclImpChLegendRef   mxLegend;           /// Chart legend (CHLEGEND group).
     XclImpChDropBarMap  maDropBars;         /// Dropbars (CHDROPBAR group).
     XclImpChLineFormatMap maChartLines;     /// Global line formats (CHCHARTLINE group).
-    XclImpChDataFormatRef mxGlobalFmt;      /// Global format for series (CHDATAFORMAT group).
+    XclImpChDataFormatRef mxGroupFmt;       /// Default format for all series (CHDATAFORMAT group).
     UInt16Set           maUnusedFormats;    /// Contains unused format indexes for automatic colors.
 };
 
-typedef ScfRef< XclImpChChartFormat > XclImpChChartFormatRef;
+typedef ScfRef< XclImpChChartGroup > XclImpChChartGroupRef;
 
 // Axes =======================================================================
 
-class XclImpChLabelRange
+class XclImpChLabelRange : protected XclImpChRoot
 {
 public:
+    explicit            XclImpChLabelRange( const XclImpChRoot& rRoot );
     /** Reads the CHLABELRANGE record (category axis scaling properties). */
     void                ReadChLabelRange( XclImpStream& rStrm );
-    /** Returns the label frequency of an axis. */
-    inline sal_uInt16   GetLabelFrequency() const { return maData.mnLabelFreq; }
     /** Converts and writes the contained data to the passed property set. */
     void                Convert( ScfPropertySet& rPropSet ) const;
 
@@ -1019,19 +1194,24 @@ typedef ScfRef< XclImpChValueRange > XclImpChValueRangeRef;
 
 // ----------------------------------------------------------------------------
 
-class XclImpChTick
+class XclImpChTick : protected XclImpChRoot
 {
 public:
+    explicit            XclImpChTick( const XclImpChRoot& rRoot );
     /** Reads the CHTICK record (axis ticks properties). */
     void                ReadChTick( XclImpStream& rStrm );
 
     /** Returns true, if the axis shows attached labels. */
     inline bool         HasLabels() const { return maData.mnLabelPos != EXC_CHTICK_NOLABEL; }
+    /** Returns the leading font color for the axis labels. */
+    Color               GetFontColor() const;
+    /** Returns the rotation value for the axis labels. */
+    sal_uInt16          GetRotation() const;
 
     /** Converts and writes the contained data to the passed property set. */
     void                Convert( ScfPropertySet& rPropSet ) const;
     /** Converts and writes the contained font color to the passed property set. */
-    void                ConvertFontColor( const XclImpChRoot& rRoot, ScfPropertySet& rPropSet ) const;
+    void                ConvertFontColor( ScfPropertySet& rPropSet ) const;
 
 private:
     XclChTick           maData;             /// Contents of the CHTICK record.
@@ -1047,7 +1227,7 @@ typedef ScfRef< XclImpChTick > XclImpChTickRef;
     CHVALUERANGE, CHFORMAT, CHTICK, CHFONT, CHAXISLINE groups (CHAXISLINE with
     CHLINEFORMAT, CHAREAFORMAT, and CHESCHERFORMAT group), CHEND.
  */
-class XclImpChAxis : public XclImpChGroupBase, protected XclImpChRoot
+class XclImpChAxis : public XclImpChGroupBase, public XclImpChFontBase, public XclImpChRotationBase, protected XclImpChRoot
 {
 public:
     explicit            XclImpChAxis( const XclImpChRoot& rRoot, sal_uInt16 nAxesSetId );
@@ -1056,9 +1236,20 @@ public:
     virtual void        ReadHeaderRecord( XclImpStream& rStrm );
     /** Reads a record from the CHAXIS group (called by base class). */
     virtual void        ReadSubRecord( XclImpStream& rStrm );
+    /** Final processing after reading the entire chart. */
+    void                Finalize();
+
+    /** Returns the font index for the axis labels. */
+    virtual sal_uInt16  GetFontIndex() const;
+    /** Returns the font color for the axis labels. */
+    virtual Color       GetFontColor() const;
+    /** Returns the rotation value for axis labels. */
+    virtual sal_uInt16  GetRotation() const;
 
     /** Returns the type of this axis. */
     inline sal_uInt16   GetAxisType() const { return maData.mnType; }
+    /** Returns true, if the axis is active. */
+    inline bool         IsAlive() const { return !mxAxisLine || mxAxisLine->IsShowAxis(); }
     /** Returns true, if the axis contains caption labels. */
     inline bool         HasLabels() const { return !mxTick || mxTick->HasLabels(); }
     /** Returns true, if the axis shows its major grid lines. */
@@ -1122,9 +1313,9 @@ struct XclImpChAxisHelper
 
 /** Represents the CHAXESSET record group describing an axes set (X/Y/Z axes).
 
-    The CHAXESSET group consists of: CHAXESSET, CHBEGIN, CHPOS, CHAXIS groups,
-    CHTEXT groups, CHPLOTFRAME group (CHPLOTFRAME with CHFRAME group),
-    CHCHARTFORMAT group, CHEND.
+    The CHAXESSET group consists of: CHAXESSET, CHBEGIN, CHFRAMEPOS, CHAXIS
+    groups, CHTEXT groups, CHPLOTFRAME group (CHPLOTFRAME with CHFRAME group),
+    CHCHARTGROUP group, CHEND.
  */
 class XclImpChAxesSet : public XclImpChGroupBase, protected XclImpChRoot
 {
@@ -1146,12 +1337,14 @@ public:
     inline bool         IsAlive() const { return mbAlive; }
     /** Returns the index of the axes set (primary/secondary). */
     inline sal_uInt16   GetAxesSetId() const { return maData.mnAxesSetId; }
+
     /** Returns true, if the axes set contains the specified chart group. */
-    inline bool         HasChartGroup( sal_uInt16 nGroupIdx ) const { return maChartFmts.has( nGroupIdx ); }
+    inline bool         HasChartGroup( sal_uInt16 nGroupIdx ) const { return maChartGroups.has( nGroupIdx ); }
     /** Returns the specified chart format group. */
-    inline XclImpChChartFormatRef GetChartGroup( sal_uInt16 nGroupIdx ) const { return maChartFmts.get( nGroupIdx ); }
+    inline XclImpChChartGroupRef GetChartGroup( sal_uInt16 nGroupIdx ) const { return maChartGroups.get( nGroupIdx ); }
     /** Returns the default chart format group of this axes set. */
-    inline XclImpChChartFormat& GetDefChartGroup() const { return *maChartFmts.begin()->second; }
+    inline XclImpChChartGroup& GetDefChartGroup() const { return *maChartGroups.begin()->second; }
+
     /** Looks for a legend in all chart groups and returns it. */
     XclImpChLegendRef   GetLegend() const;
 
@@ -1167,8 +1360,8 @@ private:
     void                ReadChText( XclImpStream& rStrm );
     /** Reads the CHPLOTFRAME record group containing diagram area formatting. */
     void                ReadChPlotFrame( XclImpStream& rStrm );
-    /** Reads a CHCHARTFORMAT record group containing chart type and chart settings. */
-    void                ReadChChartFormat( XclImpStream& rStrm );
+    /** Reads a CHCHARTGROUP record group containing chart type and chart settings. */
+    void                ReadChChartGroup( XclImpStream& rStrm );
 
     /** Updates text formatting of the passed axis title with global text formatting. */
     void                UpdateAxisTitle( XclImpChTextRef xTitle );
@@ -1185,10 +1378,10 @@ private:
     void                ConvertBackground( XDiagramRef xDiagram ) const;
 
 private:
-    typedef XclImpChMap< sal_uInt16, XclImpChChartFormat > XclImpChChartFormatMap;
+    typedef XclImpChMap< sal_uInt16, XclImpChChartGroup > XclImpChChartGroupMap;
 
     XclChAxesSet        maData;             /// Contents of the CHAXESSET record.
-    XclImpChPosRef      mxPos;              /// Position of the axes set (CHPOS record).
+    XclImpChFramePosRef mxPos;              /// Position of the axes set (CHFRAMEPOS record).
     XclImpChAxisRef     mxXAxis;            /// The X axis (CHAXIS group).
     XclImpChAxisRef     mxYAxis;            /// The Y axis (CHAXIS group).
     XclImpChAxisRef     mxZAxis;            /// The Z axis (CHAXIS group).
@@ -1196,15 +1389,13 @@ private:
     XclImpChTextRef     mxYAxisTitle;       /// The Y axis title (CHTEXT group).
     XclImpChTextRef     mxZAxisTitle;       /// The Z axis title (CHTEXT group).
     XclImpChFrameRef    mxPlotFrame;        /// Plot area (CHPLOTFRAME group).
-    XclImpChChartFormatMap maChartFmts;     /// Chart group format (chart type) (CHCHARTFORMAT group).
+    XclImpChChartGroupMap maChartGroups;    /// Chart group (chart type) (CHCHARTGROUP group).
     bool                mbAlive;            /// true = Axes set exists; false = dummy object.
 };
 
 typedef ScfRef< XclImpChAxesSet > XclImpChAxesSetRef;
 
 // The chart object ===========================================================
-
-class ScfProgressBar;
 
 /** Represents the CHCHART record group describing the chart contents.
 
@@ -1218,7 +1409,7 @@ public:
     typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart::XChartDocument > XChartDocRef;
 
 public:
-    explicit            XclImpChChart( const XclImpChRoot& rRoot );
+    explicit            XclImpChChart( const XclImpRoot& rRoot );
     virtual             ~XclImpChChart();
 
     /** Reads the CHCHART record (called by base class). */
@@ -1247,7 +1438,7 @@ public:
     /** Returns the final chart type identifier. */
     inline sal_uInt16   GetChartTypeId() const { return mxPrimAxesSet->GetDefChartGroup().GetChartTypeId(); }
     /** Returns true, if the chart is a three-dimensional chart. */
-    inline bool         Is3dChart() const { return mxPrimAxesSet->GetDefChartGroup().Is3dChart(); }
+    bool                Is3dChart() const;
     /** Returns true, the chart is a stock chart. */
     bool                IsStockChart() const;
 
@@ -1260,21 +1451,19 @@ public:
     sal_uInt16          GetChartGroupAxesSetId( sal_uInt16 nGroupIdx ) const;
 
     /** Returns the specified chart format group. */
-    XclImpChChartFormatRef GetChartGroup( sal_uInt16 nGroupIdx ) const;
+    XclImpChChartGroupRef GetChartGroup( sal_uInt16 nGroupIdx ) const;
     /** Returns the default chart format group from one of the axes sets. */
-    XclImpChChartFormat& GetDefChartGroup( sal_uInt16 nGroupIdx ) const;
+    XclImpChChartGroup& GetDefChartGroup( sal_uInt16 nGroupIdx ) const;
     /** Returns the number of series for the specified chart format group. */
     sal_uInt16          GetChartGroupSeriesCount( sal_uInt16 nGroupIdx ) const;
 
-    /** Looks for a legend in all chart groups and returns it. */
-    XclImpChLegendRef   GetLegend() const;
     /** Returns the specified default text. */
     XclImpChTextRef     GetDefaultText( sal_uInt16 nTextId ) const;
 
     /** Returns true, if at least one series contains a visible line format. */
     bool                HasAnySeriesLine() const;
     /** Returns the number of units on the progress bar needed for the chart. */
-    inline sal_uInt32   GetProgressSize() const { return 2 * EXC_CHART_PROGRESS_SIZE; }
+    inline sal_Size     GetProgressSize() const { return 2 * EXC_CHART_PROGRESS_SIZE; }
 
     /** Converts and writes all properties to the passed chart. */
     void                Convert( XChartDocRef xChartDoc, ScfProgressBar& rProgress ) const;
@@ -1291,8 +1480,8 @@ private:
 
     /** Final processing after reading the entire chart data. */
     void                Finalize();
-    /** Calculates the orientation of all series source ranges. */
-    void                CalcOrientation();
+    /** Finalizes series list, assigns child series to parent series. */
+    void                FinalizeSeries();
     /** Assigns all imported CHDATAFORMAT groups to the respective series. */
     void                FinalizeDataFormats();
 
@@ -1302,11 +1491,11 @@ private:
     void                ConvertSeriesOrder( XChartDocRef xChartDoc ) const;
 
 private:
-    typedef ::std::vector< XclImpChSeriesRef >              XclImpChSeriesVec;
-    typedef XclImpChMap< XclChPoint, XclImpChDataFormat >   XclImpChDataFormatMap;
-    typedef XclImpChMap< sal_uInt16, XclImpChText >         XclImpChTextMap;
+    typedef ::std::vector< XclImpChSeriesRef >                      XclImpChSeriesVec;
+    typedef XclImpChMap< XclChDataPointPos, XclImpChDataFormat >    XclImpChDataFormatMap;
+    typedef XclImpChMap< sal_uInt16, XclImpChText >                 XclImpChTextMap;
 
-    XclChPos            maPos;              /// Position of the chart on the sheet (CHCHART record).
+    XclChRectangle      maRect;             /// Position of the chart on the sheet (CHCHART record).
     XclImpChSeriesVec   maSeries;           /// List of series data (CHSERIES groups).
     XclImpChSeriesVec   maValidSeries;      /// All valid series (in original order).
     XclImpChDataFormatMap maDataFmts;       /// All series and point formats (CHDATAFORMAT groups).
@@ -1316,6 +1505,7 @@ private:
     XclImpChTextMap     maDefTexts;         /// Default text objects (CHDEFAULTTEXT groups).
     XclImpChAxesSetRef  mxPrimAxesSet;      /// Primary axes set (CHAXESSET group).
     XclImpChAxesSetRef  mxSecnAxesSet;      /// Secondary axes set (CHAXESSET group).
+    XclImpChLegendRef   mxLegend;           /// Chart legend (CHLEGEND group).
     XclChOrientation    meOrient;           /// Final orientation of the series.
     bool                mbHasValue;         /// true = Has valid series values.
     bool                mbHasCateg;         /// true = Has valid category ranges.
@@ -1330,7 +1520,7 @@ typedef ScfRef< XclImpChChart > XclImpChChartRef;
 class XclImpChart : protected XclImpRoot
 {
 public:
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart::XChartDocument > XChartDocRef;
+    typedef ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > XInterfaceRef;
 
 public:
     /** Constructs a new chart object.
@@ -1348,17 +1538,16 @@ public:
     /** returns true, if the source range contains a header row. */
     bool                HasHeaderRow() const;
     /** Returns the number of units on the progress bar needed for the chart. */
-    sal_uInt32          GetProgressSize() const;
+    sal_Size            GetProgressSize() const;
 
-    /** Creates the chart object in the Calc document using the ::com::sun::star::chart API. */
-    void                Convert( XChartDocRef xChartDoc, ScfProgressBar& rProgress ) const;
+    /** Creates the chart object in the pased component. */
+    void                Convert( XInterfaceRef xComp, ScfProgressBar& rProgress ) const;
 
 private:
     /** Reads the CHCHART group (entire chart data). */
     void                ReadChChart( XclImpStream& rStrm );
 
 private:
-    mutable XclImpChRootData maRootData;    /// Chart root data struct.
     XclImpChChartRef    mxChartData;        /// The chart data (CHCHART group).
     bool                mbOwnTab;           /// true = own sheet; false = embedded object.
 };
