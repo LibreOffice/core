@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShape2d.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 11:58:21 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 11:26:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,6 +72,10 @@
 #ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEADJUSTMENTVALUE_HPP_
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #endif
+#ifndef _ENHANCEDCUSTOMSHAPEFUNCTIONPARSER_HXX
+#include <EnhancedCustomShapeFunctionParser.hxx>
+#endif
+
 #ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
 #endif
@@ -105,7 +109,6 @@ class SvxMSDffAdjustmentHandle;
 // between X_RANGE and Y_RANGE
 
 class SdrPathObj;
-class ExpressionNode;
 class EnhancedCustomShape2d : public SfxItemSet
 {
         SdrObject*                  pCustomShapeObj;
@@ -130,8 +133,8 @@ class EnhancedCustomShape2d : public SfxItemSet
         /*
 
         */
-        com::sun::star::uno::Sequence< rtl::OUString >                                                          seqEquations;
-        std::vector< ::boost::shared_ptr< ExpressionNode > >                                                    vNodesSharedPtr;
+        com::sun::star::uno::Sequence< rtl::OUString >                                                  seqEquations;
+        std::vector< ::boost::shared_ptr< EnhancedCustomShape::ExpressionNode > >                       vNodesSharedPtr;
 
 
         com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeSegment >            seqSegments;
