@@ -4,9 +4,9 @@
  *
  *  $RCSfile: present.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:12:54 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 11:21:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,7 +90,6 @@ SdStartPresentationDlg::SdStartPresentationDlg( Window* pWindow,
     aRbtAll.SetClickHdl( aLink );
     aRbtAtDia.SetClickHdl( aLink );
     aRbtCustomshow.SetClickHdl( aLink );
-    aCbxMousepointer.SetClickHdl( LINK( this, SdStartPresentationDlg, ChangeMousepointerHdl ) );
 
     aLink = LINK( this, SdStartPresentationDlg, ClickWindowPresentationHdl );
     aRbtStandard.SetClickHdl( aLink );
@@ -178,7 +177,6 @@ SdStartPresentationDlg::SdStartPresentationDlg( Window* pWindow,
 */
     ChangeRangeHdl( this );
 
-    ChangeMousepointerHdl( this );
     ClickWindowPresentationHdl( NULL );
     ChangePauseHdl( NULL );
 }
@@ -215,22 +213,6 @@ IMPL_LINK( SdStartPresentationDlg, ChangeRangeHdl, void *, EMPTYARG )
 {
     aLbDias.Enable( aRbtAtDia.IsChecked() );
     aLbCustomshow.Enable( aRbtCustomshow.IsChecked() );
-
-    return( 0L );
-}
-
-/*************************************************************************
-|*      Handler: Enabled/Disabled Checkbox "Pen"
-\************************************************************************/
-IMPL_LINK( SdStartPresentationDlg, ChangeMousepointerHdl, void *, EMPTYARG )
-{
-    if( aCbxMousepointer.IsChecked() )
-        aCbxPen.Enable();
-    else
-    {
-        aCbxPen.Enable( FALSE );
-        aCbxPen.Check( FALSE );
-    }
 
     return( 0L );
 }
