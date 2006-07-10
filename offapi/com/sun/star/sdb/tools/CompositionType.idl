@@ -1,0 +1,97 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: CompositionType.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:51:11 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sdb_tools_CompositionRule_idl__
+#define __com_sun_star_sdb_tools_CompositionRule_idl__
+
+//=============================================================================
+module com {  module sun {  module star {  module sdb { module tools {
+//=============================================================================
+
+/** specifies which composition should be used when composing a table
+    name.
+
+    @see XTableName
+
+    @since OOo 2.0.4
+*/
+constants CompositionType
+{
+    /** specifies composition of a name to be used in table definitions
+
+        @see XDatabaseMetaData::supportsCatalogsInTableDefinitions
+        @see XDatabaseMetaData::supportsSchemasInTableDefinitions
+    */
+    const   long    ForTableDefinitions      = 0;
+
+    /** specifies composition of a name to be used in index definitions
+
+        @see XDatabaseMetaData::supportsCatalogsInIndexDefinitions
+        @see XDatabaseMetaData::supportsSchemasInIndexDefinitions
+    */
+    const   long    ForIndexDefinitions      = 1;
+
+    /** specifies composition of a name to be used in data manipulation
+
+        @see XDatabaseMetaData::supportsCatalogsInDataManipulation
+        @see XDatabaseMetaData::supportsSchemasInDataManipulation
+    */
+    const   long    ForDataManipulation      = 2;
+
+    /** specifies composition of a name to be used in procedure calls
+
+        @see XDatabaseMetaData::supportsCatalogsInProcedureCalls
+        @see XDatabaseMetaData::supportsSchemasInProcedureCalls
+    */
+    const   long    ForProcedureCalls        = 3;
+
+    /** specifies composition of a name to be used in privilege definitions
+
+        @see XDatabaseMetaData::supportsCatalogsInPrivilegeDefinitions
+        @see XDatabaseMetaData::supportsSchemasInPrivilegeDefinitions
+    */
+    const   long    ForPrivilegeDefinitions  = 4;
+
+    /** specifies complete composition of a table name, including catalog and schema (if present),
+        disregarding any database support for catalog and schema in any particular statements
+    */
+    const   long    Complete                 = 5;
+};
+
+//=============================================================================
+}; }; }; }; };
+//=============================================================================
+
+#endif
