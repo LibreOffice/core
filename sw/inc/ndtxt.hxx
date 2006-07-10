@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtxt.hxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:13:21 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:26:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,7 @@ class SwNodeNum;
 class OutputDevice;
 class SwScriptInfo;
 struct SwDocStat;
+struct SwParaIdleData_Impl;
 
 // Konstanten fuer das Text-Insert:
 #define INS_DEFAULT         0x0000 // keine Extras
@@ -96,12 +97,14 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode
     //Kann 0 sein, nur dann nicht 0 wenn harte Attribute drin stehen.
     //Also niemals direkt zugreifen!
     SwpHints    *pSwpHints;
-    SwWrongList *pWrong;    // Rechtschreibfehler nach Online-Spelling
+
     // --> OD 2005-11-02 #i51089 - TUNING#
     mutable SwNodeNum* mpNodeNum;  // Numerierung fuer diesen Absatz
     // <--
     XubString   aText;
     SwNodeNum::tSwNumTreeNumber nStart;
+
+    SwParaIdleData_Impl* pParaIdleData_Impl;
 
     // Some of the chars this para are hidden. Paragraph has to be reformatted
     // on changing the view to print preview.
@@ -159,6 +162,28 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode
             LanguageType nLang, USHORT nLangWhichId,
             const Font *pFont,  USHORT nFontWhichId );
 
+    //
+    // Start: Data collected during idle time
+    //
+    SW_DLLPRIVATE void SetParaNumberOfWords( ULONG nTmpWords ) const;
+    SW_DLLPRIVATE ULONG GetParaNumberOfWords() const;
+    SW_DLLPRIVATE void SetParaNumberOfChars( ULONG nTmpChars ) const;
+    SW_DLLPRIVATE ULONG GetParaNumberOfChars() const;
+    SW_DLLPRIVATE void InitSwParaStatistics( bool bNew );
+
+public:
+    bool IsWordCountDirty() const;
+    bool IsWrongDirty() const;
+    bool IsAutoCompleteWordDirty() const;
+    void SetWordCountDirty( bool bNew ) const;
+    void SetWrongDirty( bool bNew ) const;
+    void SetAutoCompleteWordDirty( bool bNew ) const;
+    void SetWrong( SwWrongList* pNew, bool bDelete = true );
+    SwWrongList* GetWrong();
+    //
+    // End: Data collected during idle time
+    //
+
 public:
     const String& GetTxt() const { return aText; }
 
@@ -167,9 +192,6 @@ public:
     inline const SwpHints &GetSwpHints() const;
     inline       SwpHints *GetpSwpHints() { return pSwpHints; }
     inline const SwpHints *GetpSwpHints() const { return pSwpHints; }
-    void         SetWrong( SwWrongList *pNew );
-    inline       SwWrongList *GetWrong() { return pWrong; }
-    inline const SwWrongList *GetWrong() const { return pWrong; }
     inline BOOL  HasHints() const { return pSwpHints ? TRUE : FALSE; }
     inline       SwpHints &GetOrCreateSwpHints();
 
