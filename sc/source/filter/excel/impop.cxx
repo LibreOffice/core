@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:35:51 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:30:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -177,7 +177,7 @@ ImportExcel::ImportExcel( XclImpRootData& rImpData, SvStream& rStrm ):
     pOutlineListBuffer = new XclImpOutlineListBuffer( );
 
     // ab Biff8
-    pFormConv = pExcRoot->pFmlaConverter = new ExcelToSc( aIn );
+    pFormConv = pExcRoot->pFmlaConverter = new ExcelToSc( GetRoot() );
 
     bTabTruncated = FALSE;
 
@@ -337,7 +337,14 @@ void ImportExcel::ReadLabel()
         bool bBiff2 = maStrm.GetRecId() == EXC_ID2_LABEL;
         sal_uInt16 nXFIdx = ReadXFIndex( bBiff2 );
         XclStrFlags nFlags = (bBiff2 && (GetBiff() <= EXC_BIFF5)) ? EXC_STR_8BITLENGTH : EXC_STR_DEFAULT;
-        XclImpString aString( maStrm, nFlags );
+        XclImpString aString;
+
+        // #i63105# use text encoding from FONT record
+        rtl_TextEncoding eOldTextEnc = GetCharSet();
+        if( const XclImpFont* pFont = GetXFBuffer().GetFont( nXFIdx ) )
+            SetCharSet( pFont->GetFontEncoding() );
+        aString.Read( maStrm, nFlags );
+        SetCharSet( eOldTextEnc );
 
         pColRowBuff->Used( aScPos );
         GetXFRangeBuffer().SetXF( aScPos, nXFIdx );
@@ -420,7 +427,7 @@ void ImportExcel::Row25( void )
     UINT16  nRow, nRowHeight;
 
     aIn >> nRow;
-    aIn.Ignore( 4 );    // Mic und Mac ueberspringen
+    aIn.Ignore( 4 );   // Mic und Mac ueberspringen
 
     if( ValidRow( nRow ) )
     {
@@ -435,7 +442,7 @@ void ImportExcel::Row25( void )
         {// -------------------- BIFF5
             UINT16  nGrbit;
 
-            aIn.Ignore( 2 );    // reserved
+            aIn.Ignore( 2 );   // reserved
             aIn >> nGrbit;
 
             BYTE nLevel = 0;
@@ -520,7 +527,7 @@ void ImportExcel::Columndefault( void )
 
     aIn >> nColMic >> nColMac;
 
-    DBG_ASSERT( aIn.GetRecLeft() == (ULONG)(nColMac - nColMic) * 3 + 2,
+    DBG_ASSERT( aIn.GetRecLeft() == (sal_Size)(nColMac - nColMic) * 3 + 2,
                 "ImportExcel::Columndefault - wrong record size" );
 
     nColMac--;
@@ -531,7 +538,7 @@ void ImportExcel::Columndefault( void )
     for( UINT16 nCol = nColMic ; nCol <= nColMac ; nCol++ )
     {
         aIn >> nOpt0;
-        aIn.Ignore( 2 );    // nur 0. Attribut-Byte benutzt
+        aIn.Ignore( 2 );   // nur 0. Attribut-Byte benutzt
 
         if( nOpt0 & 0x80 )  // Col hidden?
             pColRowBuff->HideCol( nCol );
@@ -564,7 +571,7 @@ void ImportExcel::Array25( void )
 
         pFormConv->Reset( ScAddress( static_cast<SCCOL>(nFirstCol),
                     static_cast<SCROW>(nFirstRow), GetCurrScTab() ) );
-        pFormConv->Convert( pErgebnis, nFormLen );
+        pFormConv->Convert( pErgebnis, maStrm, nFormLen );
 
         DBG_ASSERT( pErgebnis, "*ImportExcel::Array25(): ScTokenArray ist NULL!" );
 
@@ -859,7 +866,7 @@ void ImportExcel::Shrfmla( void )
     const ScTokenArray* pErgebnis;
 
     pFormConv->Reset();
-    pFormConv->Convert( pErgebnis, nLenExpr, FT_SharedFormula );
+    pFormConv->Convert( pErgebnis, maStrm, nLenExpr, FT_SharedFormula );
 
 
     DBG_ASSERT( pErgebnis, "+ImportExcel::Shrfmla(): ScTokenArray ist NULL!" );
@@ -924,21 +931,29 @@ void ImportExcel::Mulblank( void )
 void ImportExcel::Rstring( void )
 {
     XclAddress aXclPos;
-    UINT16 nXF;
-    aIn >> aXclPos >> nXF;
+    sal_uInt16 nXFIdx;
+    aIn >> aXclPos >> nXFIdx;
 
     ScAddress aScPos( ScAddress::UNINITIALIZED );
     if( GetAddressConverter().ConvertAddress( aScPos, aXclPos, GetCurrScTab(), true ) )
     {
-        GetXFRangeBuffer().SetXF( aScPos, nXF );
-        pColRowBuff->Used( aScPos );
-
         // unformatted Unicode string with separate formatting information
-        XclImpString aString( maStrm );
+        XclImpString aString;
+
+        // #i63105# use text encoding from FONT record
+        rtl_TextEncoding eOldTextEnc = GetCharSet();
+        if( const XclImpFont* pFont = GetXFBuffer().GetFont( nXFIdx ) )
+            SetCharSet( pFont->GetFontEncoding() );
+        aString.Read( maStrm );
+        SetCharSet( eOldTextEnc );
+
+        // character formatting runs
         if( !aString.IsRich() )
             aString.ReadFormats( maStrm );
 
-        if( ScBaseCell* pCell = XclImpStringHelper::CreateCell( *this, aString, nXF ) )
+        GetXFRangeBuffer().SetXF( aScPos, nXFIdx );
+        pColRowBuff->Used( aScPos );
+        if( ScBaseCell* pCell = XclImpStringHelper::CreateCell( *this, aString, nXFIdx ) )
             GetDoc().PutCell( aScPos, pCell );
     }
 
@@ -963,7 +978,7 @@ void ImportExcel::Row34( void )
     UINT16  nRow, nRowHeight, nGrbit, nXF;
 
     aIn >> nRow;
-    aIn.Ignore( 4 );    // Mic und Mac ueberspringen
+    aIn.Ignore( 4 );   // Mic und Mac ueberspringen
 
     SCROW nScRow = static_cast< SCROW >( nRow );
 
@@ -1024,7 +1039,7 @@ void ImportExcel::Array34( void )
 
         pFormConv->Reset( ScAddress( static_cast<SCCOL>(nFirstCol),
                     static_cast<SCROW>(nFirstRow), GetCurrScTab() ) );
-        pFormConv->Convert( pErgebnis, nFormLen );
+        pFormConv->Convert( pErgebnis, maStrm, nFormLen );
 
         DBG_ASSERT( pErgebnis, "+ImportExcel::Array34(): ScTokenArray ist NULL!" );
 
