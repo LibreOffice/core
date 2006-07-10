@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Finalizer.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 12:48:51 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 16:05:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -31,7 +31,8 @@
  *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *    MA  02111-1307  USA
  *
- ************************************************************************/package com.sun.star.wizards.query;
+ ************************************************************************/
+package com.sun.star.wizards.query;
 
 import com.sun.star.wizards.common.*;
 import com.sun.star.awt.XRadioButton;
@@ -88,8 +89,8 @@ public class Finalizer {
     }
 
     /* TODO: The title textbox always has to be updated when
-          a new Table has been selected if it is clear that the user has not made any input meanwhile
-        *     */
+        a new Table has been selected if it is clear that the user has not made any input meanwhile
+    */
     protected String initialize() {
         try {
             String sCurQueryName = AnyConverter.toString(Helper.getUnoPropertyValue(UnoDialog.getModel(txtTitle), "Text"));
@@ -97,10 +98,11 @@ public class Finalizer {
                 if (sCurQueryName.equals("")) {
                     String[] sCommandNames = CurDBMetaData.getIncludedCommandNames();
                     sCurQueryName = resQuery + "_" + sCommandNames[0];
-                    sCurQueryName = Desktop.getUniqueName(CurDBMetaData.xQueryNames, sCurQueryName);
+                    sCurQueryName = CurDBMetaData.ConnectionTools.getObjectNames().suggestName(CommandType.QUERY,sCurQueryName);
                     Helper.setUnoPropertyValue(UnoDialog.getModel(txtTitle), "Text", sCurQueryName);
                 }
             }
+
             CurDBMetaData.setSummaryString();
             CurUnoDialog.setControlProperty("txtSummary", "Text", CurDBMetaData.getSummaryString());
             return sCurQueryName;
@@ -120,14 +122,16 @@ public class Finalizer {
             String queryname = getTitle();
             boolean bsuccess = CurDBMetaData.oSQLQueryComposer.setQueryCommand(queryname, CurUnoDialog.xWindow, true, true);
             if (bsuccess) {
-                String sfinalname = CurDBMetaData.createQuery(CurDBMetaData.oSQLQueryComposer, getTitle());
+                bsuccess = CurDBMetaData.createQuery(CurDBMetaData.oSQLQueryComposer, queryname);
+                if ( !bsuccess )
+                    return;
+
                 short igoon = AnyConverter.toShort(Helper.getUnoPropertyValue(UnoDialog.getModel(xRadioDisplayQuery), "State"));
                 if (igoon == (short) 1)
-                    CurDBMetaData.switchtoDataViewmode(sfinalname, CommandType.QUERY);
+                    CurDBMetaData.switchtoDataViewmode(queryname, CommandType.QUERY);
                 else
-                    CurDBMetaData.switchtoDesignmode(sfinalname, CommandType.QUERY);
+                    CurDBMetaData.switchtoDesignmode(queryname, CommandType.QUERY);
                 CurUnoDialog.xDialog.endExecute();
-
             }
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
