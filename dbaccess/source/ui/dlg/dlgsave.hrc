@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgsave.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:01:01 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:26:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,9 +55,7 @@
 #define STR_VW_LABEL                        2
 #define STR_QRY_LABEL                       3
 #define STR_TITLE_RENAME                    4
-#define STR_OBJECT_EXISTS_ALREADY           6
-#define STR_OBJECT_EXISTS_ALREADY_OVERWRITE 7
-#define STR_TITLE_PASTE_AS                  8
+#define STR_TITLE_PASTE_AS                  6
 
 #endif // DBAUI_DLGSAVE_HRC
 
