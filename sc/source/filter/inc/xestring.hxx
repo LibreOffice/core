@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xestring.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:30:50 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:56:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -219,11 +219,11 @@ public:
     /** Returns the current string flags field to export. */
     sal_uInt8           GetFlagField() const;
     /** Returns the byte count the header will take on export. */
-    sal_uInt32          GetHeaderSize() const;
+    sal_uInt16          GetHeaderSize() const;
     /** Returns the byte count the character buffer will take on export. */
-    sal_uInt32          GetBufferSize() const;
+    sal_Size            GetBufferSize() const;
     /** Returns the byte count the whole string will take on export. */
-    sal_uInt32          GetSize() const;
+    sal_Size            GetSize() const;
 
     /** Returns the specified character from the (already encoded) string. */
     sal_uInt16          GetChar( sal_uInt16 nCharIdx ) const;
@@ -306,7 +306,7 @@ private:
     void                BuildAppend( const sal_Char* pcSource, sal_Int32 nAddLen );
 
     /** Initializes write process on stream. */
-    void                PrepareWrite( XclExpStream& rStrm, sal_uInt32 nBytes ) const;
+    void                PrepareWrite( XclExpStream& rStrm, sal_uInt16 nBytes ) const;
 
 private:
     ScfUInt16Vec        maUniBuffer;    /// The Unicode character buffer.
