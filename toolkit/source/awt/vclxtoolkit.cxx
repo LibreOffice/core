@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 23:01:53 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 16:28:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1634,9 +1634,6 @@ void VCLXToolkit::callFocusListeners(::VclSimpleEvent const * pEvent,
 void SAL_CALL VCLXToolkit::reschedule()
     throw (::com::sun::star::uno::RuntimeException)
 {
-    // reschedule _all_ pending events but avoid potential endless loop
-    int nMaxReschedule = 1000;
-    while( Application::AnyInput( INPUT_ANY ) && --nMaxReschedule )
-        Application::Reschedule();
+    Application::Reschedule(true);
 }
 
