@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-06 13:27:30 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 11:24:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -795,6 +795,7 @@ bool SlideshowImpl::startShow( PresentationSettings* pPresSettings )
         pParent = &getViewFrame()->GetWindow();
 
         mpShowWindow = new ShowWindow( pParent );
+        mpShowWindow->SetMouseAutoHide( !maPresSettings.mbMouseVisible );
         if( mpViewShell )
         {
             mpViewShell->SetActiveWindow( mpShowWindow );
@@ -878,13 +879,13 @@ bool SlideshowImpl::startShow( PresentationSettings* pPresSettings )
                 OUString( RTL_CONSTASCII_USTRINGPARAM("ImageAnimationsAllowed") ),
                 -1, Any( maPresSettings.mbAnimationAllowed != sal_False ),
                 beans::PropertyState_DIRECT_VALUE ) );
-
+/*
         aProperties.push_back(
             beans::PropertyValue(
                 OUString( RTL_CONSTASCII_USTRINGPARAM("MouseVisible") ),
                 -1, Any( maPresSettings.mbMouseVisible != sal_False ),
                 beans::PropertyState_DIRECT_VALUE ) );
-
+*/
         aProperties.push_back(
             beans::PropertyValue(
                 OUString( RTL_CONSTASCII_USTRINGPARAM("ForceManualAdvance") ),
@@ -1410,6 +1411,11 @@ void SlideshowImpl::displayCurrentSlide()
         mpSlideController->displayCurrentSlide( mxShow );
         registerShapeEvents(mpSlideController->getCurrentSlideNumber());
         update();
+
+        SfxBindings& rBindings = getViewFrame()->GetBindings();
+        rBindings.Invalidate( SID_NAVIGATOR_STATE );
+        rBindings.Invalidate( SID_NAVIGATOR_PAGENAME );
+
     }
 }
 
