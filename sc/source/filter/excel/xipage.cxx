@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xipage.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:05:17 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:42:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,6 +82,9 @@
 #include "attrib.hxx"
 #endif
 
+#ifndef SC_XISTREAM_HXX
+#include "xistream.hxx"
+#endif
 #ifndef SC_XIHELPER_HXX
 #include "xihelper.hxx"
 #endif
@@ -221,8 +224,8 @@ void XclImpPageSettings::ReadBitmap( XclImpStream& rStrm )
     DBG_ASSERT( nPlanes == 1, "XclImpPageSettings::ReadBitmap - wrong plane count" );
     if( rStrm.IsValid() && (nID == EXC_BITMAP_UNKNOWNID) && (nDepth == 24) && (nPlanes == 1) )
     {
-        sal_uInt32 nPadding = nWidth % 4;
-        if( rStrm.GetRecLeft() == (nWidth * 3UL + nPadding) * nHeight )
+        sal_Size nPadding = nWidth % 4;
+        if( rStrm.GetRecLeft() == (nWidth * 3 + nPadding) * nHeight )
         {
             sal_Int32 nVclWidth = nWidth;
             sal_Int32 nVclHeight = nHeight;
