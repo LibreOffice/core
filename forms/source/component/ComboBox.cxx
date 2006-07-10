@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ComboBox.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:46:18 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:46:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -632,9 +632,9 @@ void OComboBoxModel::loadData()
                     aStatement += quoteName(aQuote, aFieldName);
                     aStatement += ::rtl::OUString::createFromAscii(" FROM ");
 
-                    sal_Bool bUseCatalogInSelect = ::dbtools::isDataSourcePropertyEnabled(xConnection,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseCatalogInSelect")),sal_True);
-                    sal_Bool bUseSchemaInSelect = ::dbtools::isDataSourcePropertyEnabled(xConnection,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseSchemaInSelect")),sal_True);
-                    aStatement += quoteTableName(xMeta, m_aListSource,::dbtools::eInDataManipulation,bUseCatalogInSelect,bUseSchemaInSelect);
+                    ::rtl::OUString sCatalog, sSchema, sTable;
+                    qualifiedNameComponents( xMeta, m_aListSource, sCatalog, sSchema, sTable, eInDataManipulation );
+                    aStatement += composeTableNameForSelect( xConnection, sCatalog, sSchema, sTable );
 
                     xStmt = xConnection->createStatement();
                     xListCursor = xStmt->executeQuery(aStatement);
