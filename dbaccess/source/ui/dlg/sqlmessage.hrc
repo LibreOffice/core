@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqlmessage.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 12:14:46 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:27:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,11 +52,7 @@
 
 #define ME_DESCRIPTION  1
 
-#define STR_EXCEPTION_ERROR         1
-#define STR_EXCEPTION_WARNING       2
-#define STR_EXCEPTION_INFO          3
-#define STR_EXCEPTION_DETAILS       4
-#define STR_EXCEPTION_STATUS        5
-#define STR_EXCEPTION_ERRORCODE     6
+#define STR_EXCEPTION_STATUS        1
+#define STR_EXCEPTION_ERRORCODE     2
 
 #endif // _DBAUI_SQLMESSAGE_HRC_
