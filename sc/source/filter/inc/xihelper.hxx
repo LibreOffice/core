@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xihelper.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:32:39 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:59:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,7 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
 #ifndef SC_XIHELPER_HXX
 #define SC_XIHELPER_HXX
 
@@ -46,14 +47,11 @@
 #ifndef SC_XLADDRESS_HXX
 #include "xladdress.hxx"
 #endif
-#ifndef SC_XLSTRING_HXX
-#include "xlstring.hxx"
-#endif
 #ifndef SC_XIROOT_HXX
 #include "xiroot.hxx"
 #endif
-#ifndef SC_XISTREAM_HXX
-#include "xistream.hxx"
+#ifndef SC_XISTRING_HXX
+#include "xistring.hxx"
 #endif
 
 // Excel->Calc cell address/range conversion ==================================
@@ -139,43 +137,6 @@ public:
             contains invalid cells. */
     void                ConvertRangeList( ScRangeList& rScRanges,
                             const XclRangeList& rXclRanges, SCTAB nScTab, bool bWarn );
-};
-
-// Byte/Unicode strings =======================================================
-
-/** This class represents an unformatted or formatted string and provides importing from stream. */
-class XclImpString
-{
-public:
-    /** Constructs an empty string. */
-    explicit            XclImpString();
-    /** Constructs an unformatted string. */
-    explicit            XclImpString( const String& rString );
-    /** Constructs a formatted string by reading completely from stream. */
-    explicit            XclImpString( XclImpStream& rStrm, XclStrFlags nFlags = EXC_STR_DEFAULT );
-
-                        ~XclImpString();
-
-    /** Insert a formatting run to the format buffer. */
-    void                AppendFormat( sal_uInt16 nChar, sal_uInt16 nXclFont );
-    /** Reads and appends the formatting information (run count and runs) from stream. */
-    void                ReadFormats( XclImpStream& rStrm );
-    /** Reads and appends nRunCount formatting runs from stream. */
-    void                ReadFormats( XclImpStream& rStrm, sal_uInt16 nRunCount );
-
-    /** Reads a complete string from the passed stream. */
-    void                Read( XclImpStream& rStrm, XclStrFlags nFlags = EXC_STR_DEFAULT );
-
-    /** Returns the pure text data of the string. */
-    inline const String& GetText() const { return maString; }
-    /** Returns true, if the string contains formatting information. */
-    inline bool         IsRich() const { return !maFormats.empty(); }
-    /** Returns the formatting run vector. */
-    inline const XclFormatRunVec& GetFormats() const { return maFormats; }
-
-private:
-    String              maString;       /// The text data of the string.
-    XclFormatRunVec     maFormats;      /// All formatting runs.
 };
 
 // String->EditEngine conversion ==============================================
