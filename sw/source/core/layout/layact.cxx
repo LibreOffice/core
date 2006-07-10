@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-09 14:08:07 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:30:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,7 @@
 #include "pam.hxx"      // OnlineSpelling wg. der aktuellen Cursorposition
 #include "dbg_lay.hxx"
 #include "layouter.hxx" // LoopControlling
+#include "docstat.hxx"
 
 #include <ftnidx.hxx>
 
@@ -2521,13 +2522,27 @@ BOOL SwLayAction::IsStopPrt() const
 |*  Letzte Aenderung    AMA 01. Feb. 96
 |*
 |*************************************************************************/
-BOOL SwLayIdle::_FormatSpelling( const SwCntntFrm *pCnt )
+BOOL SwLayIdle::_DoIdleJob( const SwCntntFrm *pCnt, IdleJobType eJob )
 {
     ASSERT( pCnt->IsTxtFrm(), "NoTxt neighbour of Txt" );
     // robust against misuse by e.g. #i52542#
     if( !pCnt->IsTxtFrm() )
         return FALSE;
-    if( pCnt->GetNode()->IsWrongDirty() )
+
+    const SwTxtNode* pTxtNode = pCnt->GetNode()->GetTxtNode();
+
+    bool bProcess = false;
+    switch ( eJob )
+    {
+        case ONLINE_SPELLING :
+            bProcess = pTxtNode->IsWrongDirty(); break;
+        case AUTOCOMPLETE_WORDS :
+            bProcess = pTxtNode->IsAutoCompleteWordDirty(); break;
+        case WORD_COUNT :
+            bProcess = pTxtNode->IsWordCountDirty(); break;
+    }
+
+    if( bProcess )
     {
         if( STRING_LEN == nTxtPos )
         {
@@ -2543,15 +2558,36 @@ BOOL SwLayIdle::_FormatSpelling( const SwCntntFrm *pCnt )
                 }
             }
         }
-        SwRect aRepaint( ((SwTxtFrm*)pCnt)->_AutoSpell( pCntntNode, nTxtPos ) );
-        bPageValid = bPageValid && !pCnt->GetNode()->IsWrongDirty();
-        if( !bPageValid )
-            bAllValid = FALSE;
-        if ( aRepaint.HasArea() )
-            pImp->GetShell()->InvalidateWindows( aRepaint );
-        if ( Application::AnyInput( INPUT_MOUSEANDKEYBOARD|INPUT_OTHER|INPUT_PAINT ) )
-            return TRUE;
+
+        switch ( eJob )
+        {
+            case ONLINE_SPELLING :
+            {
+                SwRect aRepaint( ((SwTxtFrm*)pCnt)->_AutoSpell( pCntntNode, nTxtPos ) );
+                bPageValid = bPageValid && !pTxtNode->IsWrongDirty();
+                if( !bPageValid )
+                    bAllValid = FALSE;
+                if ( aRepaint.HasArea() )
+                    pImp->GetShell()->InvalidateWindows( aRepaint );
+                if ( Application::AnyInput( INPUT_MOUSEANDKEYBOARD|INPUT_OTHER|INPUT_PAINT ) )
+                    return TRUE;
+                break;
+            }
+            case AUTOCOMPLETE_WORDS :
+                ((SwTxtFrm*)pCnt)->CollectAutoCmplWrds( pCntntNode, nTxtPos );
+                if ( Application::AnyInput( INPUT_ANY ) )
+                    return TRUE;
+                break;
+            case WORD_COUNT :
+                const xub_StrLen nEnd = pTxtNode->GetTxt().Len();
+                SwDocStat aStat;
+                pTxtNode->CountWords( aStat, 0, nEnd );
+                if ( Application::AnyInput( INPUT_ANY ) )
+                    return TRUE;
+                break;
+        }
     }
+
     //Die im Absatz verankerten Flys wollen auch mitspielen.
     if ( pCnt->GetDrawObjs() )
     {
@@ -2567,8 +2603,11 @@ BOOL SwLayIdle::_FormatSpelling( const SwCntntFrm *pCnt )
                     const SwCntntFrm *pC = pFly->ContainsCntnt();
                     while( pC )
                     {
-                        if ( pC->IsTxtFrm() && _FormatSpelling( pC ) )
-                            return TRUE;
+                        if ( pC->IsTxtFrm() )
+                        {
+                            if ( _DoIdleJob( pC, eJob ) )
+                                return TRUE;
+                        }
                         pC = pC->GetNextCntntFrm();
                     }
                 }
@@ -2578,179 +2617,88 @@ BOOL SwLayIdle::_FormatSpelling( const SwCntntFrm *pCnt )
     return FALSE;
 }
 
-BOOL SwLayIdle::FormatSpelling( BOOL bVisAreaOnly )
+BOOL SwLayIdle::DoIdleJob( IdleJobType eJob, BOOL bVisAreaOnly )
 {
     //Spellchecken aller Inhalte der Seiten. Entweder nur der sichtbaren
-    //Seiten oder eben aller. Nach dem Checken jedes Absatzes wird abgebrochen
-    //wenn ein Input anliegt.
-    if( !pImp->GetShell()->GetViewOptions()->IsOnlineSpell() )
-        return FALSE;
-    SwPageFrm *pPage;
-    if ( bVisAreaOnly )
-        pPage = pImp->GetFirstVisPage();
-    else
-        pPage = (SwPageFrm*)pRoot->Lower();
-
-    pCntntNode = NULL;
-    nTxtPos = STRING_LEN;
-
-    while ( pPage )
+    //Seiten oder eben aller.
+    switch ( eJob )
     {
-        bPageValid = TRUE;
-        const SwCntntFrm *pCnt = pPage->ContainsCntnt();
-        while( pCnt && pPage->IsAnLower( pCnt ) )
-        {
-            if ( _FormatSpelling( pCnt ) )
-                return TRUE;
-            pCnt = pCnt->GetNextCntntFrm();
-        }
-        if ( pPage->GetSortedObjs() )
-        {
-            for ( USHORT i = 0; pPage->GetSortedObjs() &&
-                                i < pPage->GetSortedObjs()->Count(); ++i )
-            {
-                const SwAnchoredObject* pObj = (*pPage->GetSortedObjs())[i];
-                if ( pObj->ISA(SwFlyFrm) )
-                {
-                    const SwFlyFrm *pFly = static_cast<const SwFlyFrm*>(pObj);
-                    const SwCntntFrm *pC = pFly->ContainsCntnt();
-                    while( pC )
-                    {
-                        if ( pC->IsTxtFrm() && _FormatSpelling( pC ) )
-                            return TRUE;
-                        pC = pC->GetNextCntntFrm();
-                    }
-                }
-            }
-        }
-        if( bPageValid )
-            pPage->ValidateSpelling();
-        pPage = (SwPageFrm*)pPage->GetNext();
-        if ( pPage && bVisAreaOnly &&
-             !pPage->Frm().IsOver( pImp->GetShell()->VisArea()))
-            return  FALSE;
-    }
-    return FALSE;
-}
-
-BOOL SwLayIdle::_CollectAutoCmplWords( const SwCntntFrm *pCnt,
-                                        BOOL bVisAreaOnly )
-{
-    ASSERT( pCnt->IsTxtFrm(), "NoTxt neighbour of Txt" );
-    // robust against misuse by e.g. #i52542#
-    if( !pCnt->IsTxtFrm() )
-        return FALSE;
-    if( pCnt->GetNode()->IsAutoCompleteWordDirty() )
-    {
-        if( STRING_LEN == nTxtPos )
-        {
-            --nTxtPos;
-            ViewShell *pSh = pImp->GetShell();
-            if( pSh->ISA(SwCrsrShell) && !((SwCrsrShell*)pSh)->IsTableMode() )
-            {
-                SwPaM *pCrsr = ((SwCrsrShell*)pSh)->GetCrsr();
-                if( !pCrsr->HasMark() && pCrsr == pCrsr->GetNext() )
-                {
-                    pCntntNode = pCrsr->GetCntntNode();
-                    nTxtPos =  pCrsr->GetPoint()->nContent.GetIndex();
-                }
-            }
-        }
-
-        ((SwTxtFrm*)pCnt)->CollectAutoCmplWrds( pCntntNode, nTxtPos,
-                                                bVisAreaOnly );
-        if ( Application::AnyInput( INPUT_ANY ) )
-            return TRUE;
-    }
-
-    //Die im Absatz verankerten Flys wollen auch mitspielen.
-    if ( pCnt->GetDrawObjs() )
-    {
-        const SwSortedObjs &rObjs = *pCnt->GetDrawObjs();
-        for ( USHORT i = 0; i < rObjs.Count(); ++i )
-        {
-            SwAnchoredObject* pObj = rObjs[i];
-            if ( pObj->ISA(SwFlyFrm) )
-            {
-                SwFlyFrm* pFly = static_cast<SwFlyFrm*>(pObj);
-                if ( pFly->IsFlyInCntFrm() )
-                {
-                    const SwCntntFrm *pC = pFly->ContainsCntnt();
-                    while( pC )
-                    {
-                        if( pC->IsTxtFrm() &&
-                            _CollectAutoCmplWords( pC, bVisAreaOnly ) )
-                            return TRUE;
-                        pC = pC->GetNextCntntFrm();
-                    }
-                }
-            }
-        }
-    }
-    return FALSE;
-}
-
-BOOL SwLayIdle::CollectAutoCmplWords( BOOL bVisAreaOnly )
-{
-
-    //Worte aller Inhalte der Seiten zusammensammeln, um eine
-    //AutoComplete-Liste zu erstellen. Entweder nur der sichtbaren
-    //Seiten oder eben aller. Falls ein Input am Ende einer Seite anliegt,
-    // so wird abgebrochen.
-    if( !pImp->GetShell()->GetViewOptions()->IsAutoCompleteWords() ||
-        pImp->GetShell()->GetDoc()->GetAutoCompleteWords().IsLockWordLstLocked())
-        return FALSE;
-
-    SwPageFrm *pPage;
-    if ( bVisAreaOnly )
-        pPage = pImp->GetFirstVisPage();
-    else
-        pPage = (SwPageFrm*)pRoot->Lower();
-
-    pCntntNode = NULL;
-    nTxtPos = STRING_LEN;
-
-    while ( pPage )
-    {
-        bPageValid = TRUE;
-        const SwCntntFrm *pCnt = pPage->ContainsCntnt();
-        while( pCnt && pPage->IsAnLower( pCnt ) )
-        {
-            if ( _CollectAutoCmplWords( pCnt, bVisAreaOnly ) )
-                return TRUE;
-            pCnt = pCnt->GetNextCntntFrm();
-        }
-        if ( pPage->GetSortedObjs() )
-        {
-            for ( USHORT i = 0; pPage->GetSortedObjs() &&
-                                i < pPage->GetSortedObjs()->Count(); ++i )
-            {
-                const SwAnchoredObject* pObj = (*pPage->GetSortedObjs())[i];
-                if ( pObj->ISA(SwFlyFrm) )
-                {
-                    const SwFlyFrm *pFly = static_cast<const SwFlyFrm*>(pObj);
-                    const SwCntntFrm *pC = pFly->ContainsCntnt();
-                    while( pC )
-                    {
-                        if ( pC->IsTxtFrm() &&
-                            _CollectAutoCmplWords( pC, bVisAreaOnly ) )
-                            return TRUE;
-                        pC = pC->GetNextCntntFrm();
-                    }
-                }
-            }
-        }
-
-        if( bPageValid )
-            pPage->ValidateAutoCompleteWords();
-
-        pPage = (SwPageFrm*)pPage->GetNext();
-        if ( pPage && bVisAreaOnly &&
-             !pPage->Frm().IsOver( pImp->GetShell()->VisArea()))
+        case ONLINE_SPELLING :
+            if( !pImp->GetShell()->GetViewOptions()->IsOnlineSpell() )
+                return FALSE;
             break;
+        case AUTOCOMPLETE_WORDS :
+            if( !pImp->GetShell()->GetViewOptions()->IsAutoCompleteWords() ||
+                 pImp->GetShell()->GetDoc()->GetAutoCompleteWords().IsLockWordLstLocked())
+                return FALSE;
+            break;
+        case WORD_COUNT :
+            if ( !pImp->GetShell()->GetDoc()->GetDocStat().bModified )
+                return FALSE;
+            break;
+        default: ASSERT( false, "Unknown idle job type" )
+    }
+
+    SwPageFrm *pPage;
+    if ( bVisAreaOnly )
+        pPage = pImp->GetFirstVisPage();
+    else
+        pPage = (SwPageFrm*)pRoot->Lower();
+
+    pCntntNode = NULL;
+    nTxtPos = STRING_LEN;
+
+    while ( pPage )
+    {
+        bPageValid = TRUE;
+        const SwCntntFrm *pCnt = pPage->ContainsCntnt();
+        while( pCnt && pPage->IsAnLower( pCnt ) )
+        {
+            if ( _DoIdleJob( pCnt, eJob ) )
+                return TRUE;
+            pCnt = pCnt->GetNextCntntFrm();
+        }
+        if ( pPage->GetSortedObjs() )
+        {
+            for ( USHORT i = 0; pPage->GetSortedObjs() &&
+                                i < pPage->GetSortedObjs()->Count(); ++i )
+            {
+                const SwAnchoredObject* pObj = (*pPage->GetSortedObjs())[i];
+                if ( pObj->ISA(SwFlyFrm) )
+                {
+                    const SwFlyFrm *pFly = static_cast<const SwFlyFrm*>(pObj);
+                    const SwCntntFrm *pC = pFly->ContainsCntnt();
+                    while( pC )
+                    {
+                        if ( pC->IsTxtFrm() )
+                        {
+                            if ( _DoIdleJob( pC, eJob ) )
+                                return TRUE;
+                        }
+                        pC = pC->GetNextCntntFrm();
+                    }
+                }
+            }
+        }
+
+        if( bPageValid )
+        {
+            switch ( eJob )
+            {
+                case ONLINE_SPELLING : pPage->ValidateSpelling(); break;
+                case AUTOCOMPLETE_WORDS : pPage->ValidateAutoCompleteWords(); break;
+                case WORD_COUNT : pPage->ValidateWordCount(); break;
+            }
+        }
+
+        pPage = (SwPageFrm*)pPage->GetNext();
+        if ( pPage && bVisAreaOnly &&
+             !pPage->Frm().IsOver( pImp->GetShell()->VisArea()))
+             break;
     }
     return FALSE;
 }
+
 
 #ifndef PRODUCT
 #if OSL_DEBUG_LEVEL > 1
@@ -2815,7 +2763,8 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
 
     //Zuerst den Sichtbaren Bereich Spellchecken, nur wenn dort nichts
     //zu tun war wird das IdleFormat angestossen.
-    if ( !FormatSpelling( TRUE ) && !CollectAutoCmplWords( TRUE ))
+    if ( !DoIdleJob( ONLINE_SPELLING, TRUE ) &&
+         !DoIdleJob( AUTOCOMPLETE_WORDS, TRUE ) )
     {
         //Formatieren und ggf. Repaint-Rechtecke an der ViewShell vormerken.
         //Dabei muessen kuenstliche Actions laufen, damit es z.B. bei
@@ -2849,7 +2798,8 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
         FASTBOOL bActions = FALSE;
         USHORT nBoolIdx = 0;
         do
-        {   --pSh->nStartAction;
+        {
+            --pSh->nStartAction;
 
             if ( pSh->Imp()->GetRegion() || pSh->Imp()->GetScrollRects() )
                 bActions = TRUE;
@@ -2873,7 +2823,8 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
             //Cursor/Selektion und die VisArea korrekt gesetzt werden.
             nBoolIdx = 0;
             do
-            {   FASTBOOL bCrsrShell = pSh->IsA( TYPE(SwCrsrShell) );
+            {
+                FASTBOOL bCrsrShell = pSh->IsA( TYPE(SwCrsrShell) );
 
                 if ( bCrsrShell )
                     ((SwCrsrShell*)pSh)->SttCrsrMove();
@@ -2926,27 +2877,32 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
 
         if ( !aAction.IsInterrupt() )
         {
-            if( !FormatSpelling( FALSE ))
-                CollectAutoCmplWords( FALSE );
+            if ( !DoIdleJob( WORD_COUNT, FALSE ) )
+                if ( !DoIdleJob( ONLINE_SPELLING, FALSE ) )
+                    DoIdleJob( AUTOCOMPLETE_WORDS, FALSE );
         }
 
-        FASTBOOL bInValid;
+        bool bInValid = false;
         const SwViewOption& rVOpt = *pImp->GetShell()->GetViewOptions();
-        FASTBOOL bSpell = rVOpt.IsOnlineSpell(),
-                 bACmplWrd = rVOpt.IsAutoCompleteWords();
+        const BOOL bSpell = rVOpt.IsOnlineSpell();
+        const BOOL bACmplWrd = rVOpt.IsAutoCompleteWords();
+        const BOOL bWordCount = pImp->GetShell()->GetDoc()->GetDocStat().bModified;
+
         SwPageFrm *pPg = (SwPageFrm*)pRoot->Lower();
         do
-        {   bInValid = pPg->IsInvalidCntnt()    || pPg->IsInvalidLayout() ||
+        {
+            bInValid = pPg->IsInvalidCntnt()    || pPg->IsInvalidLayout() ||
                        pPg->IsInvalidFlyCntnt() || pPg->IsInvalidFlyLayout() ||
                        pPg->IsInvalidFlyInCnt() ||
                        (bSpell && pPg->IsInvalidSpelling()) ||
-                       (bACmplWrd && pPg->IsInvalidAutoCompleteWords());
+                       (bACmplWrd && pPg->IsInvalidAutoCompleteWords()) ||
+                       (bWordCount && pPg->IsInvalidWordCount());
 
             pPg = (SwPageFrm*)pPg->GetNext();
 
-        } while ( pPg && TRUE^bInValid );
+        } while ( pPg && !bInValid );
 
-        if ( TRUE^bInValid )
+        if ( !bInValid )
             pRoot->ResetIdleFormat();
     }
 
