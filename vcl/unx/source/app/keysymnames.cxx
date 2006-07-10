@@ -4,9 +4,9 @@
  *
  *  $RCSfile: keysymnames.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:50:05 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 16:37:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -357,13 +357,21 @@ namespace vcl_sal {
 #endif
         { "U.S. English", aImplReplacements_English, sizeof(aImplReplacements_English)/sizeof(aImplReplacements_English[0]), RTL_TEXTENCODING_ISO_8859_1 },
         { "United Kingdom", aImplReplacements_English, sizeof(aImplReplacements_English)/sizeof(aImplReplacements_English[0]), RTL_TEXTENCODING_ISO_8859_1 },
-        { "Germany", aImplReplacements_German, sizeof(aImplReplacements_German)/sizeof(aImplReplacements_German[0]), RTL_TEXTENCODING_ISO_8859_1 },
+        // Germany, German
+        { "German", aImplReplacements_German, sizeof(aImplReplacements_German)/sizeof(aImplReplacements_German[0]), RTL_TEXTENCODING_ISO_8859_1 },
         { "France", aImplReplacements_French, sizeof(aImplReplacements_French)/sizeof(aImplReplacements_French[0]), RTL_TEXTENCODING_ISO_8859_1 },
-        { "Italy", aImplReplacements_Italian, sizeof(aImplReplacements_Italian)/sizeof(aImplReplacements_Italian[0]), RTL_TEXTENCODING_ISO_8859_1 },
-        { "Norway", aImplReplacements_Norwegian, sizeof(aImplReplacements_Norwegian)/sizeof(aImplReplacements_Norwegian[0]), RTL_TEXTENCODING_ISO_8859_1 },
-        { "Portugal", aImplReplacements_Portuguese, sizeof(aImplReplacements_Portuguese)/sizeof(aImplReplacements_Portuguese[0]), RTL_TEXTENCODING_ISO_8859_1 },
+        { "French", aImplReplacements_French, sizeof(aImplReplacements_French)/sizeof(aImplReplacements_French[0]), RTL_TEXTENCODING_ISO_8859_1 },
+        // Italy, Italian
+        { "Ital", aImplReplacements_Italian, sizeof(aImplReplacements_Italian)/sizeof(aImplReplacements_Italian[0]), RTL_TEXTENCODING_ISO_8859_1 },
+        // Norway, Norwegian
+        { "Norw", aImplReplacements_Norwegian, sizeof(aImplReplacements_Norwegian)/sizeof(aImplReplacements_Norwegian[0]), RTL_TEXTENCODING_ISO_8859_1 },
+        // Portugal, Portuguese
+        { "Portu", aImplReplacements_Portuguese, sizeof(aImplReplacements_Portuguese)/sizeof(aImplReplacements_Portuguese[0]), RTL_TEXTENCODING_ISO_8859_1 },
         { "Spain", aImplReplacements_Spanish, sizeof(aImplReplacements_Spanish)/sizeof(aImplReplacements_Spanish[0]), RTL_TEXTENCODING_ISO_8859_1 },
-        { "Sweden", aImplReplacements_Swedish, sizeof(aImplReplacements_Swedish)/sizeof(aImplReplacements_Swedish[0]), RTL_TEXTENCODING_ISO_8859_1 }
+        { "Spanish", aImplReplacements_Spanish, sizeof(aImplReplacements_Spanish)/sizeof(aImplReplacements_Spanish[0]), RTL_TEXTENCODING_ISO_8859_1 },
+        // Sweden, Swedish
+        { "Swed", aImplReplacements_Swedish, sizeof(aImplReplacements_Swedish)/sizeof(aImplReplacements_Swedish[0]), RTL_TEXTENCODING_ISO_8859_1 },
+        { "English", aImplReplacements_English, sizeof(aImplReplacements_English)/sizeof(aImplReplacements_English[0]), RTL_TEXTENCODING_ISO_8859_1 }
     };
 
     String getKeysymReplacementName( const char* pKeyboard, KeySym nSymbol )
