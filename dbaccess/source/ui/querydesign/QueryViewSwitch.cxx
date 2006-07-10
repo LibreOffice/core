@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryViewSwitch.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:27:13 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:42:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -235,10 +235,13 @@ sal_Bool OQueryViewSwitch::switchView()
     sal_Bool bRet = sal_True;
     sal_Bool bGraphicalDesign = static_cast<OQueryController*>(m_pDesignView->getController())->isDesignMode();
 
+    OAddTableDlg* pAddTabDialog( getAddTableDialog() );
+
     if ( !bGraphicalDesign ) // we have to hide the add table dialog
     {
-        m_bAddTableDialogWasVisible = getAddTableDialog()->IsVisible();
-        m_pDesignView->getAddTableDialog()->Hide();
+        m_bAddTableDialogWasVisible = pAddTabDialog ? pAddTabDialog->IsVisible() : false;
+        if ( m_bAddTableDialogWasVisible )
+            pAddTabDialog->Hide();
     }
 
     OQueryContainerWindow* pContainer = getContainer();
@@ -255,7 +258,9 @@ sal_Bool OQueryViewSwitch::switchView()
         ::rtl::OUString sOldStatement = static_cast<OQueryController*>(m_pDesignView->getController())->getStatement();
         // we have to stop the sqledit from our textview
         m_pTextView->getSqlEdit()->stopTimer();
-        getAddTableDialog()->Update();
+
+        if ( pAddTabDialog )
+            pAddTabDialog->Update();
         bRet = m_pDesignView->InitFromParseNode();
 
         // only show the view when the data is inserted
@@ -266,8 +271,8 @@ sal_Bool OQueryViewSwitch::switchView()
     {
         m_pTextView->Show   ( !bGraphicalDesign );
         m_pDesignView->Show ( bGraphicalDesign );
-        if ( bGraphicalDesign && m_bAddTableDialogWasVisible )
-            getAddTableDialog()->Show();
+        if ( bGraphicalDesign && m_bAddTableDialogWasVisible && pAddTabDialog )
+            pAddTabDialog->Show();
 
         GrabFocus();
     }
@@ -288,7 +293,11 @@ void OQueryViewSwitch::clearDesignView()
 // -----------------------------------------------------------------------------
 OAddTableDlg* OQueryViewSwitch::getAddTableDialog()
 {
-    return m_pDesignView->getAddTableDialog();
+    if ( !m_pDesignView )
+        return NULL;
+    if ( !m_pDesignView->getController() )
+        return NULL;
+    return m_pDesignView->getController()->getAddTableDialog();
 }
 // -----------------------------------------------------------------------------
 BOOL OQueryViewSwitch::IsAddAllowed()
