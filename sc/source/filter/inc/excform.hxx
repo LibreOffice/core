@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excform.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:56:09 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:50:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,16 +70,16 @@ protected:
     void                PushRangeOperator();
 
 public:
-                        ExcelToSc( XclImpStream& rStrm );
+                        ExcelToSc( const XclImpRoot& rRoot );
     virtual             ~ExcelToSc();
-    virtual ConvErr     Convert( const ScTokenArray*&, UINT32 nFormulaLen, const FORMULA_TYPE eFT = FT_CellFormula );
+    virtual ConvErr     Convert( const ScTokenArray*&, XclImpStream& rStrm, sal_Size nFormulaLen, const FORMULA_TYPE eFT = FT_CellFormula );
 
-    virtual ConvErr     Convert( _ScRangeListTabs&, UINT32 nFormulaLen, const FORMULA_TYPE eFT = FT_CellFormula );
-    virtual BOOL        GetAbsRefs( ScRangeList& rRangeList, UINT32 nLen );
+    virtual ConvErr     Convert( _ScRangeListTabs&, XclImpStream& rStrm, sal_Size nFormulaLen, const FORMULA_TYPE eFT = FT_CellFormula );
+    virtual BOOL        GetAbsRefs( ScRangeList& rRangeList, XclImpStream& rStrm, sal_Size nLen );
 
     void                GetDummy( const ScTokenArray*& );
     const ScTokenArray* GetBoolErr( XclBoolError );
-    BOOL                GetShrFmla( const ScTokenArray*&, UINT32 nFormulaLen );
+    BOOL                GetShrFmla( const ScTokenArray*&, XclImpStream& rStrm, sal_Size nFormulaLen );
 
     static BOOL         SetCurVal( ScFormulaCell& rCell, double& rCurVal );
                             // return = TRUE -> String-Record folgt!
@@ -116,19 +116,19 @@ private:
                             const BOOL bName );
 
                         // this function must read 2 bytes from stream and adjust <nBytesLeft>
-    virtual BOOL        Read3DTabReference( SCTAB& rFirstTab, SCTAB& rLastTab );
+    virtual BOOL        Read3DTabReference( XclImpStream& rStrm, SCTAB& rFirstTab, SCTAB& rLastTab );
 
 public:
-                        ExcelToSc8( XclImpStream& rStrm );
+                        ExcelToSc8( const XclImpRoot& rRoot );
     virtual             ~ExcelToSc8();
 
-    virtual ConvErr     Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen, const FORMULA_TYPE eFT = FT_CellFormula );
+    virtual ConvErr     Convert( const ScTokenArray*& rpTokArray, XclImpStream& rStrm, sal_Size nFormulaLen, const FORMULA_TYPE eFT = FT_CellFormula );
 
-    virtual ConvErr     Convert( _ScRangeListTabs&, UINT32 nFormulaLen, const FORMULA_TYPE eFT = FT_CellFormula );
+    virtual ConvErr     Convert( _ScRangeListTabs&, XclImpStream& rStrm, sal_Size nFormulaLen, const FORMULA_TYPE eFT = FT_CellFormula );
 
     static inline BOOL  IsComplRowRange( const UINT16 nRow1, const UINT16 nRow2 );
 
-    virtual BOOL        GetAbsRefs( ScRangeList& rRangeList, UINT32 nLen );
+    virtual BOOL        GetAbsRefs( ScRangeList& rRangeList, XclImpStream& rStrm, sal_Size nLen );
 };
 
 
