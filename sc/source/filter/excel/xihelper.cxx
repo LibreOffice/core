@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xihelper.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-13 16:58:24 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:41:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,9 +43,6 @@
 #ifndef _EDITOBJ_HXX
 #include <svx/editobj.hxx>
 #endif
-#ifndef _UNOTOOLS_CHARCLASS_HXX
-#include <unotools/charclass.hxx>
-#endif
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
@@ -53,6 +50,7 @@
 #ifndef SC_ITEMS_HXX
 #include "scitems.hxx"
 #endif
+#include <svx/eeitem.hxx>
 #define ITEMID_FIELD EE_FEATURE_FIELD
 #ifndef _SVX_FLDITEM_HXX
 #include <svx/flditem.hxx>
@@ -61,11 +59,11 @@
 #ifndef SC_DOCUMENT_HXX
 #include "document.hxx"
 #endif
-#ifndef SC_SCGLOB_HXX
-#include "global.hxx"
-#endif
 #ifndef SC_CELL_HXX
 #include "cell.hxx"
+#endif
+#ifndef SC_RANGELST_HXX
+#include "rangelst.hxx"
 #endif
 #ifndef SC_EDITUTIL_HXX
 #include "editutil.hxx"
@@ -76,6 +74,9 @@
 
 #ifndef SC_XLTRACER_HXX
 #include "xltracer.hxx"
+#endif
+#ifndef SC_XISTREAM_HXX
+#include "xistream.hxx"
 #endif
 #ifndef SC_XISTYLE_HXX
 #include "xistyle.hxx"
@@ -202,151 +203,31 @@ void XclImpAddressConverter::ConvertRangeList( ScRangeList& rScRanges,
     }
 }
 
-// Byte/Unicode strings =======================================================
-
-/** All allowed flags for import. */
-const XclStrFlags nAllowedFlags = EXC_STR_8BITLENGTH | EXC_STR_SMARTFLAGS;
-
-// ----------------------------------------------------------------------------
-
-XclImpString::XclImpString()
-{
-}
-
-XclImpString::XclImpString( const String& rString ) :
-    maString( rString )
-{
-}
-
-XclImpString::XclImpString( XclImpStream& rStrm, XclStrFlags nFlags )
-{
-    Read( rStrm, nFlags );
-}
-
-XclImpString::~XclImpString()
-{
-}
-
-void XclImpString::AppendFormat( sal_uInt16 nChar, sal_uInt16 nXclFont )
-{
-    // #i33341# real life -- same character index may occur several times
-    DBG_ASSERT( maFormats.empty() || (maFormats.back().mnChar <= nChar), "XclImpString::AppendFormat - wrong char order" );
-    if( maFormats.empty() || (maFormats.back().mnChar < nChar) )
-        maFormats.push_back( XclFormatRun( nChar, nXclFont ) );
-    else
-        maFormats.back().mnXclFont = nXclFont;
-}
-
-void XclImpString::ReadFormats( XclImpStream& rStrm )
-{
-    bool bBiff8 = rStrm.GetRoot().GetBiff() == EXC_BIFF8;
-    sal_uInt16 nCount = bBiff8 ? rStrm.ReaduInt16() : rStrm.ReaduInt8();
-    ReadFormats( rStrm, nCount );
-}
-
-void XclImpString::ReadFormats( XclImpStream& rStrm, sal_uInt16 nRunCount )
-{
-    maFormats.clear();
-    maFormats.reserve( nRunCount );
-    /*  #i33341# real life -- same character index may occur several times
-        -> use AppendFormat() to validate formats */
-    switch( rStrm.GetRoot().GetBiff() )
-    {
-        case EXC_BIFF2:
-        case EXC_BIFF3:
-        case EXC_BIFF4:
-        case EXC_BIFF5:
-            for( sal_uInt16 nIdx = 0; nIdx < nRunCount; ++nIdx )
-            {
-                sal_uInt8 nChar, nXclFont;
-                rStrm >> nChar >> nXclFont;
-                AppendFormat( nChar, nXclFont );
-            }
-        break;
-        case EXC_BIFF8:
-            for( sal_uInt16 nIdx = 0; nIdx < nRunCount; ++nIdx )
-            {
-                sal_uInt16 nChar, nXclFont;
-                rStrm >> nChar >> nXclFont;
-                AppendFormat( nChar, nXclFont );
-            }
-        break;
-        default:    DBG_ERROR_BIFF();
-    }
-}
-
-void XclImpString::Read( XclImpStream& rStrm, XclStrFlags nFlags )
-{
-    maString.Erase();
-    maFormats.clear();
-
-    DBG_ASSERT( (nFlags & ~nAllowedFlags) == 0, "XclImpString::Read - unknown flag" );
-    bool b16BitLen = !::get_flag( nFlags, EXC_STR_8BITLENGTH );
-
-    switch( rStrm.GetRoot().GetBiff() )
-    {
-        case EXC_BIFF2:
-        case EXC_BIFF3:
-        case EXC_BIFF4:
-        case EXC_BIFF5:
-            // no integrated formatting in BIFF2-BIFF7
-            maString = rStrm.ReadByteString( b16BitLen );
-        break;
-
-        case EXC_BIFF8:
-        {
-            // --- string header ---
-            sal_uInt16 nChars = b16BitLen ? rStrm.ReaduInt16() : rStrm.ReaduInt8();
-            sal_uInt8 nFlagField = 0;
-            if( nChars || !::get_flag( nFlags, EXC_STR_SMARTFLAGS ) )
-                rStrm >> nFlagField;
-
-            bool b16Bit, bRich, bFarEast;
-            sal_uInt16 nRunCount;
-            sal_uInt32 nExtInf;
-            rStrm.ReadUniStringExtHeader( b16Bit, bRich, bFarEast, nRunCount, nExtInf, nFlagField );
-            // #122185# ignore the flags, they may be wrong
-
-            // --- character array ---
-            maString = rStrm.ReadRawUniString( nChars, b16Bit );
-
-            // --- formatting ---
-            if( nRunCount > 0 )
-                ReadFormats( rStrm, nRunCount );
-
-            // --- extended (FarEast) information ---
-            rStrm.SkipUniStringExtData( nExtInf );
-        }
-        break;
-
-        default:    DBG_ERROR_BIFF();
-    }
-}
-
 // String->EditEngine conversion ==============================================
 
 namespace {
 
 EditTextObject* lclCreateTextObject( const XclImpRoot& rRoot,
-        const XclImpString& rString, XclImpFontMode eFontMode, sal_uInt16 nXFIndex )
+        const XclImpString& rString, XclFontItemType eType, sal_uInt16 nXFIndex )
 {
     EditTextObject* pTextObj = 0;
 
     const XclImpXFBuffer& rXFBuffer = rRoot.GetXFBuffer();
-    bool bFirstEscaped = rXFBuffer.HasEscapement( nXFIndex );
+    const XclImpFont* pFirstFont = rXFBuffer.GetFont( nXFIndex );
+    bool bFirstEscaped = pFirstFont && pFirstFont->HasEscapement();
 
     if( rString.IsRich() || bFirstEscaped )
     {
         const XclImpFontBuffer& rFontBuffer = rRoot.GetFontBuffer();
         const XclFormatRunVec& rFormats = rString.GetFormats();
 
-        ScEditEngineDefaulter& rEE = (eFontMode == EXC_FONTMODE_NOTE) ?
+        ScEditEngineDefaulter& rEE = (eType == EXC_FONTITEM_NOTE) ?
             rRoot.GetDoc().GetNoteEngine() : rRoot.GetEditEngine();
         rEE.SetText( rString.GetText() );
 
         SfxItemSet aItemSet( rEE.GetEmptyItemSet() );
         if( bFirstEscaped )
-            rFontBuffer.FillToItemSet( aItemSet, eFontMode, rXFBuffer.GetFontIndex( nXFIndex ) );
+            rFontBuffer.FillToItemSet( aItemSet, eType, rXFBuffer.GetFontIndex( nXFIndex ) );
         ESelection aSelection;
 
         XclFormatRun aNextRun;
@@ -369,7 +250,7 @@ EditTextObject* lclCreateTextObject( const XclImpRoot& rRoot,
 
                 // start new item set
                 aItemSet.ClearItem();
-                rFontBuffer.FillToItemSet( aItemSet, eFontMode, aNextRun.mnXclFont );
+                rFontBuffer.FillToItemSet( aItemSet, eType, aNextRun.mnFontIdx );
 
                 // read new formatting information
                 if( aIt != aEnd )
@@ -406,13 +287,13 @@ EditTextObject* lclCreateTextObject( const XclImpRoot& rRoot,
 EditTextObject* XclImpStringHelper::CreateTextObject(
         const XclImpRoot& rRoot, const XclImpString& rString )
 {
-    return lclCreateTextObject( rRoot, rString, EXC_FONTMODE_EDITENG, 0 );
+    return lclCreateTextObject( rRoot, rString, EXC_FONTITEM_EDITENG, 0 );
 }
 
 EditTextObject* XclImpStringHelper::CreateNoteObject(
         const XclImpRoot& rRoot, const XclImpString& rString )
 {
-    return lclCreateTextObject( rRoot, rString, EXC_FONTMODE_NOTE, 0 );
+    return lclCreateTextObject( rRoot, rString, EXC_FONTITEM_NOTE, 0 );
 }
 
 ScBaseCell* XclImpStringHelper::CreateCell(
@@ -422,7 +303,7 @@ ScBaseCell* XclImpStringHelper::CreateCell(
 
     if( rString.GetText().Len() )
     {
-        ::std::auto_ptr< EditTextObject > pTextObj( lclCreateTextObject( rRoot, rString, EXC_FONTMODE_EDITENG, nXFIndex ) );
+        ::std::auto_ptr< EditTextObject > pTextObj( lclCreateTextObject( rRoot, rString, EXC_FONTITEM_EDITENG, nXFIndex ) );
         ScDocument& rDoc = rRoot.GetDoc();
 
         if( pTextObj.get() )
@@ -705,7 +586,7 @@ void XclImpHFConverter::SetAttribs()
     {
         SfxItemSet aItemSet( mrEE.GetEmptyItemSet() );
         XclImpFont aFont( GetRoot(), *mxFontData );
-        aFont.FillToItemSet( aItemSet, EXC_FONTMODE_HF );
+        aFont.FillToItemSet( aItemSet, EXC_FONTITEM_HF );
         mrEE.QuickSetAttribs( aItemSet, rSel );
         rSel.nStartPara = rSel.nEndPara;
         rSel.nStartPos = rSel.nEndPos;
@@ -977,7 +858,7 @@ XclImpCachedValue::XclImpCachedValue( XclImpStream& rStrm ) :
             rStrm >> mnBoolErr;
             rStrm.Ignore( 6 );
 
-            const ScTokenArray* pScTokArr = rStrm.GetRoot().GetFmlaConverter().GetBoolErr(
+            const ScTokenArray* pScTokArr = rStrm.GetRoot().GetOldFmlaConverter().GetBoolErr(
                 XclTools::ErrorToEnum( fVal, mnType == EXC_CACHEDVAL_ERROR, mnBoolErr ) );
             if( pScTokArr )
                 mxTokArr.reset( pScTokArr->Clone() );
