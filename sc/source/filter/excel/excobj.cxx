@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excobj.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-13 16:57:09 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:29:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,8 +131,7 @@ void ImportExcel::Obj()
 
     aIn >> nObj >> nType >> nId >> nFlags >> aAnchor >> nMacroLen;
     bool bBiff5 = GetBiff() == EXC_BIFF5;
-    short nReserved = bBiff5 ? 6 : 2;
-    aIn.Ignore( nReserved );
+    aIn.Ignore( bBiff5 ? 6 : 2 );
 
     Rectangle aRect( aAnchor.GetRect( rDoc, MAP_100TH_MM ) );
     Point aTL( aRect.TopLeft() );
@@ -158,7 +157,7 @@ void ImportExcel::Obj()
         rDoc.GetDrawLayer()->GetPage( static_cast<sal_uInt16>(nScTab) )->InsertObject( pObj );
         if( bBiff5 && aIn.GetRecLeft() )
         {
-            BYTE nNameLen;
+            sal_uInt8 nNameLen;
             aIn >> nNameLen;
             aIn.Ignore( nNameLen + nMacroLen );
         }
