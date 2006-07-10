@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salprnpsp.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:55:26 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 16:38:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -499,6 +499,12 @@ void X11SalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
 {
     mbPrinterInit = true;
     PrinterInfoManager& rManager( PrinterInfoManager::get() );
+    static const char* pNoSyncDetection = getenv( "SAL_DISABLE_SYNCHRONOUS_PRINTER_DETECTION" );
+    if( ! pNoSyncDetection || ! *pNoSyncDetection )
+    {
+        // #i62663# synchronize possible asynchronouse printer detection now
+        rManager.checkPrintersChanged( true );
+    }
     ::std::list< OUString > aPrinters;
     rManager.listPrinters( aPrinters );
 
@@ -1147,7 +1153,7 @@ int vcl_sal::PrinterUpdate::nActiveJobs = 0;
 void vcl_sal::PrinterUpdate::doUpdate()
 {
     ::psp::PrinterInfoManager& rManager( ::psp::PrinterInfoManager::get() );
-    if( rManager.checkPrintersChanged() )
+    if( rManager.checkPrintersChanged( false ) )
     {
         SalDisplay* pDisp = GetSalData()->GetDisplay();
         const std::list< SalFrame* >& rList = pDisp->getFrames();
