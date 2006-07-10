@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlformula.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 12:36:55 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:45:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,7 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
 #ifndef SC_XLFORMULA_HXX
 #include "xlformula.hxx"
 #endif
@@ -45,6 +46,12 @@
 
 #ifndef SC_XLROOT_HXX
 #include "xlroot.hxx"
+#endif
+#ifndef SC_XISTREAM_HXX
+#include "xistream.hxx"
+#endif
+#ifndef SC_XESTREAM_HXX
+#include "xestream.hxx"
 #endif
 
 // Function data ==============================================================
@@ -424,6 +431,78 @@ void XclFunctionProvider::FillScFuncMap( const XclFunctionInfo* pBeg, const XclF
 }
 
 // Token array ================================================================
+
+XclTokenArray::XclTokenArray( bool bVolatile ) :
+    mbVolatile( bVolatile )
+{
+}
+
+XclTokenArray::XclTokenArray( ScfUInt8Vec& rTokVec, bool bVolatile ) :
+    mbVolatile( bVolatile )
+{
+    maTokVec.swap( rTokVec );
+}
+
+sal_uInt16 XclTokenArray::GetSize() const
+{
+    DBG_ASSERT( maTokVec.size() <= 0xFFFF, "XclTokenArray::GetSize - array too long" );
+    return limit_cast< sal_uInt16 >( maTokVec.size() );
+}
+
+void XclTokenArray::ReadSize( XclImpStream& rStrm )
+{
+    sal_uInt16 nSize;
+    rStrm >> nSize;
+    maTokVec.resize( nSize );
+}
+
+void XclTokenArray::ReadArray( XclImpStream& rStrm )
+{
+    if( !maTokVec.empty() )
+        rStrm.Read( &maTokVec.front(), GetSize() );
+}
+
+void XclTokenArray::Read( XclImpStream& rStrm )
+{
+    ReadSize( rStrm );
+    ReadArray( rStrm );
+}
+
+void XclTokenArray::WriteSize( XclExpStream& rStrm ) const
+{
+    rStrm << GetSize();
+}
+
+void XclTokenArray::WriteArray( XclExpStream& rStrm ) const
+{
+    if( !maTokVec.empty() )
+        rStrm.Write( &maTokVec.front(), GetSize() );
+}
+
+void XclTokenArray::Write( XclExpStream& rStrm ) const
+{
+    WriteSize( rStrm );
+    WriteArray( rStrm );
+}
+
+bool XclTokenArray::operator==( const XclTokenArray& rTokArr ) const
+{
+    return (mbVolatile == rTokArr.mbVolatile) && (maTokVec == rTokArr.maTokVec);
+}
+
+XclImpStream& operator>>( XclImpStream& rStrm, XclTokenArray& rTokArr )
+{
+    rTokArr.Read( rStrm );
+    return rStrm;
+}
+
+XclExpStream& operator<<( XclExpStream& rStrm, const XclTokenArray& rTokArr )
+{
+    rTokArr.Write( rStrm );
+    return rStrm;
+}
+
+// ----------------------------------------------------------------------------
 
 XclTokenArrayIterator::XclTokenArrayIterator() :
     mppScTokenBeg( 0 ),
