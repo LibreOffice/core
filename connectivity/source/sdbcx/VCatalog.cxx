@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VCatalog.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:42:15 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:39:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -230,8 +230,8 @@ Reference< XNameAccess > SAL_CALL OCatalog::getGroups(  ) throw(RuntimeException
     if ( _xRow->wasNull() )
         sTable = ::rtl::OUString();
 
-    ::rtl::OUString sComposedName;
-    ::dbtools::composeTableName(m_xMetaData,sCatalog,sSchema,sTable,sComposedName,sal_False,::dbtools::eInDataManipulation);
+    ::rtl::OUString sComposedName(
+        ::dbtools::composeTableName( m_xMetaData, sCatalog, sSchema, sTable, sal_False, ::dbtools::eInDataManipulation ) );
     return sComposedName;
 }
 // -----------------------------------------------------------------------------
