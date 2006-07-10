@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pngread.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:30:19 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 11:34:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,13 +151,15 @@ const sal_Bool InitChunkSeq( SvStream& rStm, std::vector< vcl::PNGReader::ChunkD
                 nCRC32 = rtl_crc32( nCRC32, pPtr, nChunkLen );
             }
             rStm >> nCheck;
+
+            if ( rChunkData.nType == PNGCHUNK_IEND )    // SJ: not checking crc for the IEND chunk
+                break;                                  // because of I25246
+
             if ( nCRC32 != nCheck )
             {
                 bRet = sal_False;
                 break;
             }
-            if ( rChunkData.nType == PNGCHUNK_IEND )
-                break;
         }
         if ( !rChunkSeq.size() || ( rChunkSeq[ 0 ].nType != PNGCHUNK_IHDR ) )
             bRet = sal_False;
