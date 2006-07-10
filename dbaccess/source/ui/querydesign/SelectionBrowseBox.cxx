@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:27:27 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:44:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -188,10 +188,10 @@ OSelectionBrowseBox::OSelectionBrowseBox( Window* pParent )
     m_pTextCell     = new Edit(&GetDataWindow(), 0);
     //  m_pTextCell->EnableSpecialCheck(sal_False);
     m_pVisibleCell  = new CheckBoxControl(&GetDataWindow());
-    m_pTableCell    = new ListBoxControl(&GetDataWindow());
-    m_pFieldCell    = new ComboBoxControl(&GetDataWindow());
+    m_pTableCell    = new ListBoxControl(&GetDataWindow());     m_pTableCell->SetDropDownLineCount( 20 );
+    m_pFieldCell    = new ComboBoxControl(&GetDataWindow());    m_pFieldCell->SetDropDownLineCount( 20 );
     m_pOrderCell    = new ListBoxControl(&GetDataWindow());
-    m_pFunctionCell = new ListBoxControl(&GetDataWindow());
+    m_pFunctionCell = new ListBoxControl(&GetDataWindow());     m_pFunctionCell->SetDropDownLineCount( 20 );
 
     m_pVisibleCell->SetHelpId(HID_QRYDGN_ROW_VISIBLE);
     m_pTableCell->SetHelpId(HID_QRYDGN_ROW_TABLE);
@@ -244,7 +244,7 @@ void OSelectionBrowseBox::initialize()
     Reference< XConnection> xConnection = static_cast<OQueryController*>(getDesignView()->getController())->getConnection();
     if(xConnection.is())
     {
-        const IParseContext& rContext = static_cast<OQueryController*>(getDesignView()->getController())->getParser()->getContext();
+        const IParseContext& rContext = static_cast<OQueryController*>(getDesignView()->getController())->getParser().getContext();
         IParseContext::InternationalKeyCode eFunctions[] = { IParseContext::KEY_AVG,IParseContext::KEY_COUNT,IParseContext::KEY_MAX,IParseContext::KEY_MIN,IParseContext::KEY_SUM };
 
         String sGroup = m_aFunctionStrings.GetToken(m_aFunctionStrings.GetTokenCount() - 1);
@@ -455,10 +455,13 @@ void OSelectionBrowseBox::ClearAll()
     SetUpdateMode(sal_False);
 
     OTableFields::reverse_iterator aIter = getFields().rbegin();
-    for(sal_uInt16 nId=getFields().size();aIter != getFields().rend();++aIter,--nId)
+    for ( ;aIter != getFields().rend(); ++aIter )
     {
-        if(!(*aIter)->IsEmpty())
-            RemoveField(GetColumnId(nId));
+        if ( !(*aIter)->IsEmpty() )
+        {
+            RemoveField( (*aIter)->GetColumnId() );
+            aIter = getFields().rbegin();
+        }
     }
     SetUpdateMode(sal_True);
 }
@@ -483,6 +486,8 @@ void OSelectionBrowseBox::SetReadOnly(sal_Bool bRO)
 CellController* OSelectionBrowseBox::GetController(long nRow, sal_uInt16 nColId)
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
+    if ( nColId >= getFields().size() )
+        return NULL;
     OTableFieldDescRef pEntry = getFields()[nColId-1];
     DBG_ASSERT(pEntry.isValid(), "OSelectionBrowseBox::GetController : keine FieldDescription !");
 
@@ -548,7 +553,7 @@ void OSelectionBrowseBox::InitController(CellControllerRef& /*rController*/, lon
         {
             m_pTableCell->Clear();
             enableControl(pEntry,m_pTableCell);
-            if ( !pEntry->isCondition() && !pEntry->isNumeric() )
+            if ( !pEntry->isCondition() )
             {
                 OJoinTableView::OTableWindowMap* pTabWinList = getDesignView()->getTableView()->GetTabWinMap();
                 if (pTabWinList)
@@ -719,11 +724,11 @@ sal_Bool OSelectionBrowseBox::saveField(const String& _sFieldName,OTableFieldDes
     sSql += _sFieldName;
     sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" FROM x"));
 
-    ::connectivity::OSQLParser* pParser = pController->getParser();
+    ::connectivity::OSQLParser& rParser( pController->getParser() );
     // first try the international version
-    OSQLParseNode* pParseNode = pParser->parseTree(sErrorMsg, sSql,sal_True);
+    OSQLParseNode* pParseNode = rParser.parseTree(sErrorMsg, sSql,sal_True);
     if ( !pParseNode ) // if that doesn't work try the english one
-        pParseNode = pParser->parseTree(sErrorMsg, sSql,sal_False);
+        pParseNode = rParser.parseTree(sErrorMsg, sSql,sal_False);
 
     if ( pParseNode ) // we got a valid select column
     {
@@ -821,7 +826,7 @@ sal_Bool OSelectionBrowseBox::saveField(const String& _sFieldName,OTableFieldDes
                             // now parse the parameters
                             ::rtl::OUString sParameters;
                             for(sal_uInt32 function = 2; function < nFunCount; ++function) // we only want to parse the parameters of the function
-                                pColumnRef->getChild(function)->parseNodeToStr(sParameters,xMetaData,&pParser->getContext(),sal_True,bQuote);
+                                pColumnRef->getChild(function)->parseNodeToStr(sParameters,xMetaData,&rParser.getContext(),sal_True,bQuote);
 
                             aSelEntry->SetFunctionType(nFunctionType);
                             aSelEntry->SetField(sParameters);
@@ -862,17 +867,17 @@ sal_Bool OSelectionBrowseBox::saveField(const String& _sFieldName,OTableFieldDes
 
                                 nDataType = OSQLParser::getFunctionReturnType(
                                                     sFunctionName
-                                                    ,&pController->getParser()->getContext());
+                                                    ,&pController->getParser().getContext());
                                 aSelEntry->SetDataType(nDataType);
                             }
                         }
 
 
-                        // now parse the hole statement
+                        // now parse the whole statement
                         sal_uInt32 nFunCount = pColumnRef->count();
                         ::rtl::OUString sParameters;
                         for(sal_uInt32 function = 0; function < nFunCount; ++function)
-                            pColumnRef->getChild(function)->parseNodeToStr(sParameters,xMetaData,&pParser->getContext(),sal_True,bQuote);
+                            pColumnRef->getChild(function)->parseNodeToStr(sParameters,xMetaData,&rParser.getContext(),sal_True,bQuote);
 
                         ::rtl::OUString aSelectionAlias = aSelEntry->GetAlias();
                         aSelEntry->SetAlias(::rtl::OUString());
@@ -895,7 +900,7 @@ sal_Bool OSelectionBrowseBox::saveField(const String& _sFieldName,OTableFieldDes
                         ::rtl::OUString aColumns;
                         pColumnRef->parseNodeToStr( aColumns,
                                                     xMetaData,
-                                                    &pController->getParser()->getContext(),
+                                                    &pController->getParser().getContext(),
                                                     sal_True,
                                                     sal_True);
                         // get the type out of the funtion name
@@ -1157,7 +1162,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                                                             xColumn,
                                                             getDesignView()->getLocale(),
                                                             static_cast<sal_Char>(getDesignView()->getDecimalSeparator().toChar()),
-                                                            &(static_cast<OQueryController*>(getDesignView()->getController())->getParser()->getContext()));
+                                                            &(static_cast<OQueryController*>(getDesignView()->getController())->getParser().getContext()));
                         delete pParseNode;
                     }
                     else
@@ -1182,8 +1187,8 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                                 default:
                                     ;
                             }
-                            ::connectivity::OSQLParser* pParser = static_cast<OQueryController*>(getDesignView()->getController())->getParser();
-                            pParseNode = pParser->predicateTree(aErrorMsg,
+                            ::connectivity::OSQLParser& rParser = static_cast<OQueryController*>(getDesignView()->getController())->getParser();
+                            pParseNode = rParser.predicateTree(aErrorMsg,
                                                                 aText,
                                                                 static_cast<OQueryController*>(getDesignView()->getController())->getNumberFormatter(),
                                                                 xColumn);
@@ -1195,7 +1200,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                                                                     xColumn,
                                                                     getDesignView()->getLocale(),
                                                                     static_cast<sal_Char>(getDesignView()->getDecimalSeparator().toChar()),
-                                                                    &(static_cast<OQueryController*>(getDesignView()->getController())->getParser()->getContext()));
+                                                                    &(static_cast<OQueryController*>(getDesignView()->getController())->getParser().getContext()));
                                 delete pParseNode;
                             }
                             else
