@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AColumns.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:12:22 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:23:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,9 @@
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include <connectivity/dbexception.hxx>
+#endif
 
 using namespace connectivity::ado;
 using namespace connectivity;
@@ -84,70 +87,72 @@ void OColumns::impl_refresh() throw(RuntimeException)
     m_aCollection.Refresh();
 }
 // -------------------------------------------------------------------------
-Reference< XPropertySet > OColumns::createEmptyObject()
+Reference< XPropertySet > OColumns::createDescriptor()
 {
     return new OAdoColumn(isCaseSensitive(),m_pConnection);
 }
 // -------------------------------------------------------------------------
 // XAppend
-void OColumns::appendObject( const Reference< XPropertySet >& descriptor )
+sdbcx::ObjectType OColumns::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     OAdoColumn* pColumn = NULL;
-    if(getImplementation(pColumn,descriptor) && pColumn != NULL)
-    {
-        WpADOColumn aColumn = pColumn->getColumnImpl();
+    if ( !getImplementation( pColumn, descriptor ) || pColumn == NULL )
+        ::dbtools::throwGenericSQLException(
+            ::rtl::OUString::createFromAscii( "Could not append column: invalid column descriptor." ),
+            static_cast<XTypeProvider*>(this)
+        );
 
-    #if OSL_DEBUG_LEVEL > 0
-        DataTypeEnum eType      = aColumn.get_Type();
+    WpADOColumn aColumn = pColumn->getColumnImpl();
+    DataTypeEnum eType = aColumn.get_Type();
 
-        sal_Int32 nPrecision    = aColumn.get_Precision();      (void)nPrecision;
-        sal_Int32 nScale        = aColumn.get_NumericScale();   (void)nScale;
-        sal_Int32 nType         = ADOS::MapADOType2Jdbc(eType); (void)nType;
-    #endif
+#if OSL_DEBUG_LEVEL > 0
+    sal_Int32 nPrecision    = aColumn.get_Precision();  (void)nPrecision;
+    sal_Int32 nScale        = aColumn.get_NumericScale(); (void)nScale;
+    sal_Int32 nType         = ADOS::MapADOType2Jdbc(eType); (void)nType;
+#endif
 
-        ::rtl::OUString sTypeName;
-        pColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME)) >>= sTypeName;
+    ::rtl::OUString sTypeName;
+    pColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME)) >>= sTypeName;
 
-        const OTypeInfoMap* pTypeInfoMap = m_pConnection->getTypeInfo();
-        ::comphelper::TStringMixEqualFunctor aCase(sal_False);
-        // search for typeinfo where the typename is equal sTypeName
-        OTypeInfoMap::const_iterator aFind = ::std::find_if(pTypeInfoMap->begin(),
-                                                            pTypeInfoMap->end(),
+    const OTypeInfoMap* pTypeInfoMap = m_pConnection->getTypeInfo();
+    ::comphelper::TStringMixEqualFunctor aCase(sal_False);
+    // search for typeinfo where the typename is equal sTypeName
+    OTypeInfoMap::const_iterator aFind = ::std::find_if(pTypeInfoMap->begin(),
+                                                        pTypeInfoMap->end(),
+                                                        ::std::compose1(
+                                                            ::std::bind2nd(aCase, sTypeName),
                                                             ::std::compose1(
-                                                                ::std::bind2nd(aCase, sTypeName),
-                                                                ::std::compose1(
-                                                                    ::std::mem_fun(&OExtendedTypeInfo::getDBName),
-                                                                    ::std::select2nd<OTypeInfoMap::value_type>())
-                                                                )
+                                                                ::std::mem_fun(&OExtendedTypeInfo::getDBName),
+                                                                ::std::select2nd<OTypeInfoMap::value_type>())
+                                                            )
 
-                                                    );
+                                                );
 
-        if ( aFind != pTypeInfoMap->end() ) // change column type if necessary
-            aColumn.put_Type(aFind->first);
+    if ( aFind != pTypeInfoMap->end() ) // change column type if necessary
+        aColumn.put_Type(aFind->first);
 
-        if ( SUCCEEDED(((ADOColumns*)m_aCollection)->Append(OLEVariant(aColumn.get_Name()),aColumn.get_Type(),aColumn.get_DefinedSize())) )
+    if ( SUCCEEDED(((ADOColumns*)m_aCollection)->Append(OLEVariant(aColumn.get_Name()),aColumn.get_Type(),aColumn.get_DefinedSize())) )
+    {
+        WpADOColumn aAddedColumn = m_aCollection.GetItem(OLEVariant(aColumn.get_Name()));
+        if ( aAddedColumn.IsValid() )
         {
-            WpADOColumn aAddedColumn = m_aCollection.GetItem(OLEVariant(aColumn.get_Name()));
-            if ( aAddedColumn.IsValid() )
-            {
-                sal_Bool bAutoIncrement = sal_False;
-                pColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT)) >>= bAutoIncrement;
-                if ( bAutoIncrement )
-                    OTools::putValue( aAddedColumn.get_Properties(), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Autoincrement")), bAutoIncrement );
+            sal_Bool bAutoIncrement = sal_False;
+            pColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT)) >>= bAutoIncrement;
+            if ( bAutoIncrement )
+                OTools::putValue( aAddedColumn.get_Properties(), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Autoincrement")), bAutoIncrement );
 
-                if ( aFind != pTypeInfoMap->end() &&  aColumn.get_Type() != aAddedColumn.get_Type() ) // change column type if necessary
-                    aColumn.put_Type(aFind->first);
-                aAddedColumn.put_Precision(aColumn.get_Precision());
-                aAddedColumn.put_NumericScale(aColumn.get_NumericScale());
-                aAddedColumn.put_Attributes(aColumn.get_Attributes());
-                aAddedColumn.put_SortOrder(aColumn.get_SortOrder());
-                aAddedColumn.put_RelatedColumn(aColumn.get_RelatedColumn());
-            }
+            if ( aFind != pTypeInfoMap->end() &&  aColumn.get_Type() != aAddedColumn.get_Type() ) // change column type if necessary
+                aColumn.put_Type(aFind->first);
+            aAddedColumn.put_Precision(aColumn.get_Precision());
+            aAddedColumn.put_NumericScale(aColumn.get_NumericScale());
+            aAddedColumn.put_Attributes(aColumn.get_Attributes());
+            aAddedColumn.put_SortOrder(aColumn.get_SortOrder());
+            aAddedColumn.put_RelatedColumn(aColumn.get_RelatedColumn());
         }
-        ADOS::ThrowException(*m_pConnection->getConnection(),static_cast<XTypeProvider*>(this));
     }
-    else
-        throw SQLException(::rtl::OUString::createFromAscii("Could not append column!"),static_cast<XTypeProvider*>(this),OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
+    ADOS::ThrowException(*m_pConnection->getConnection(),static_cast<XTypeProvider*>(this));
+
+    return new OAdoColumn(isCaseSensitive(),m_pConnection,pColumn->getColumnImpl());
 }
 // -------------------------------------------------------------------------
 // XDrop
@@ -155,14 +160,6 @@ void OColumns::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElementNam
 {
     if(!m_aCollection.Delete(_sElementName))
         ADOS::ThrowException(*m_pConnection->getConnection(),static_cast<XTypeProvider*>(this));
-}
-// -----------------------------------------------------------------------------
-sdbcx::ObjectType OColumns::cloneObject(const Reference< XPropertySet >& _xDescriptor)
-{
-    OAdoColumn* pColumn = NULL;
-    if(getImplementation(pColumn,_xDescriptor) && pColumn != NULL)
-        return new OAdoColumn(isCaseSensitive(),m_pConnection,pColumn->getColumnImpl());
-    return sdbcx::ObjectType();
 }
 // -----------------------------------------------------------------------------
 
