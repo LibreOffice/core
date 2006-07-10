@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 16:25:37 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 12:43:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -270,7 +270,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
             case 23 :
                 {
                     if (IsXMLToken(aLocalName, XML_NUMBER_COLUMNS_REPEATED))
-                        nCellsRepeated = sValue.toInt32();
+                        nCellsRepeated = std::max( sValue.toInt32(), (sal_Int32) 1 );
                     else if (IsXMLToken(aLocalName, XML_CONTENT_VALIDATION_NAME))
                     {
                         DBG_ASSERT(!pContentValidationName, "here should be only one Validation Name");
