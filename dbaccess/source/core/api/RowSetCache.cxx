@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:36:29 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:03:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -227,7 +227,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                             {
                                 Reference<XNameAccess> xSelColumns = xColSup->getColumns();
                                 Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
-                                OColumnNamePos aColumnNames(xMeta.is() && xMeta->storesMixedCaseQuotedIdentifiers() ? true : false);
+                                SelectColumnsMetaData aColumnNames(xMeta.is() && xMeta->storesMixedCaseQuotedIdentifiers() ? true : false);
                                 ::dbaccess::getColumnPositions(xSelColumns,xColumns,aUpdateTableName,aColumnNames);
                                 bAllKeysFound = !aColumnNames.empty() && sal_Int32(aColumnNames.size()) == xColumns->getElementNames().getLength();
                             }
@@ -294,7 +294,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
         else
         {
             Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
-            OColumnNamePos aColumnNames(xMeta.is() && xMeta->storesMixedCaseQuotedIdentifiers() ? true : false);
+            SelectColumnsMetaData aColumnNames(xMeta.is() && xMeta->storesMixedCaseQuotedIdentifiers() ? true : false);
             Reference<XColumnsSupplier> xColSup(_xAnalyzer,UNO_QUERY);
             Reference<XNameAccess> xSelColumns  = xColSup->getColumns();
             Reference<XNameAccess> xColumns     = m_aUpdateTable->getColumns();
@@ -418,7 +418,7 @@ void ORowSetCache::setMaxRowSize(sal_Int32 _nSize)
             if ( !aCacheIter->second.pRowSet->isInsertRow()
                 && aCacheIter->second.aIterator != m_pMatrix->end() && !m_bModified )
             {
-                sal_Int16 nDist = (aCacheIter->second.aIterator - m_pMatrix->begin());
+                ptrdiff_t nDist = (aCacheIter->second.aIterator - m_pMatrix->begin());
                 aPositions.push_back(nDist);
                 aCacheIterToChange[aCacheIter->first] = sal_True;
             }
@@ -513,8 +513,8 @@ sal_Bool ORowSetCache::moveToBookmark( const Any& bookmark )
 sal_Bool ORowSetCache::moveRelativeToBookmark( const Any& bookmark, sal_Int32 rows )
 {
 
-    sal_Bool bRet;
-    if(bRet = moveToBookmark(bookmark))
+    sal_Bool bRet( moveToBookmark( bookmark ) );
+    if ( bRet )
     {
         m_nPosition = m_pCacheSet->getRow() + rows;
         absolute(m_nPosition);
@@ -806,15 +806,15 @@ sal_Bool ORowSetCache::moveWindow()
                 ::std::rotate(m_pMatrix->begin(),aEnd,m_pMatrix->end());
                 // now correct the iterator in our iterator vector
                 //  rotateCacheIterator(aEnd-m_pMatrix->begin()); //can't be used because they decrement and here we need to increment
-                sal_Int16 nNewDist = aEnd - m_pMatrix->begin();
-                sal_Int16 nOffSet = m_pMatrix->end() - aEnd;
+                ptrdiff_t nNewDist = aEnd - m_pMatrix->begin();
+                ptrdiff_t nOffSet = m_pMatrix->end() - aEnd;
                 ORowSetCacheMap::iterator aCacheIter = m_aCacheIterators.begin();
                 for(;aCacheIter != m_aCacheIterators.end();++aCacheIter)
                 {
                     if ( !aCacheIter->second.pRowSet->isInsertRow()
                         && aCacheIter->second.aIterator != m_pMatrix->end() && !m_bModified )
                     {
-                        sal_Int16 nDist = (aCacheIter->second.aIterator - m_pMatrix->begin());
+                        ptrdiff_t nDist = (aCacheIter->second.aIterator - m_pMatrix->begin());
                         if ( nDist >= nNewDist )
                         {
                             aCacheIter->second.aIterator = m_pMatrix->end();
@@ -854,7 +854,8 @@ sal_Bool ORowSetCache::moveWindow()
                 ORowSetMatrix::iterator aIter = m_pMatrix->begin();
                 for(sal_Int32 i=0;i<m_nFetchSize;++i,++aIter)
                 {
-                    if(bCheck = m_pCacheSet->next())
+                    bCheck = m_pCacheSet->next();
+                    if ( bCheck )
                     {
                         if(!aIter->isValid())
                             *aIter = new ORowSetValueVector(m_xMetaData->getColumnCount());
@@ -877,15 +878,19 @@ sal_Bool ORowSetCache::moveWindow()
             m_aMatrixIter = calcPosition();
             if(!m_aMatrixIter->isValid())
             {
-                sal_Bool bOk;
-                if(bOk = m_pCacheSet->absolute(m_nPosition))
+                sal_Bool bOk( m_pCacheSet->absolute( m_nPosition ) );
+                if ( bOk )
                 {
                     *m_aMatrixIter = new ORowSetValueVector(m_xMetaData->getColumnCount());
                     m_pCacheSet->fillValueRow(*m_aMatrixIter,m_nPosition);
                     // we have to read one row forward to enshure that we know when we are on last row
                     // but only when we don't know it already
-                    if(!m_bRowCountFinal && (bOk = m_pCacheSet->absolute(m_nPosition+1)))
-                        m_nRowCount = std::max(sal_Int32(m_nPosition+1),m_nRowCount);
+                    if ( !m_bRowCountFinal )
+                    {
+                        bOk = m_pCacheSet->absolute( m_nPosition + 1 );
+                        if ( bOk )
+                            m_nRowCount = std::max(sal_Int32(m_nPosition+1),m_nRowCount);
+                    }
                 }
                 if(!bOk)
                 {
@@ -923,7 +928,7 @@ sal_Bool ORowSetCache::moveWindow()
             {   // rotate the end to the front
                 ::std::rotate(m_pMatrix->begin(),aIter,m_pMatrix->end());
                 // now correct the iterator in our iterator vector
-                rotateCacheIterator(aIter - m_pMatrix->begin());
+                rotateCacheIterator( (sal_Int16)( aIter - m_pMatrix->begin() ) );
                 m_nStartPos = nNewStartPos - 1; // must be -1
                 // now I can say how many rows we have
                 if(!bOk)
@@ -942,7 +947,7 @@ sal_Bool ORowSetCache::moveWindow()
                 //  m_nStartPos = (aIter - m_pMatrix->begin());
                 ::std::rotate(m_pMatrix->begin(),aIter,m_pMatrix->end());
                 // now correct the iterator in our iterator vector
-                rotateCacheIterator(aIter - m_pMatrix->begin());
+                rotateCacheIterator( (sal_Int16)( aIter - m_pMatrix->begin() ) );
 
                 if ( !m_bRowCountFinal )
                 {
@@ -965,7 +970,8 @@ sal_Bool ORowSetCache::moveWindow()
                 bCheck  = m_pCacheSet->absolute(m_nStartPos);
                 for(; !aIter->isValid() && bCheck;++aIter)
                 {
-                    if(bCheck = m_pCacheSet->next()) // resultset stands on right position
+                    bCheck = m_pCacheSet->next();
+                    if ( bCheck ) // resultset stands on right position
                     {
                         *aIter = new ORowSetValueVector(m_xMetaData->getColumnCount());
                         m_pCacheSet->fillValueRow(*aIter,++nPos);
@@ -1194,10 +1200,10 @@ sal_Bool ORowSetCache::insertRow(  )
     if ( !m_bNew || !m_aInsertRow->isValid() )
         throw SQLException(DBACORE_RESSTRING(RID_STR_NO_MOVETOINSERTROW_CALLED),NULL,SQLSTATE_GENERAL,1000,Any() );
 
-    sal_Bool bRet;
     m_pCacheSet->insertRow(*m_aInsertRow,m_aUpdateTable);
 
-    if ( bRet = rowInserted() )
+    sal_Bool bRet( rowInserted() );
+    if ( bRet )
     {
         ++m_nRowCount;
         Any aBookmark = (*(*m_aInsertRow))[0].makeAny();
@@ -1341,7 +1347,7 @@ void ORowSetCache::rotateCacheIterator(sal_Int16 _nDist)
             if ( !aCacheIter->second.pRowSet->isInsertRow()
                 && aCacheIter->second.aIterator != m_pMatrix->end() && !m_bModified )
             {
-                sal_Int16 nDist = (aCacheIter->second.aIterator - m_pMatrix->begin());
+                ptrdiff_t nDist = (aCacheIter->second.aIterator - m_pMatrix->begin());
                 if(nDist < _nDist)
                 {
                     aCacheIter->second.aIterator = m_pMatrix->end();
