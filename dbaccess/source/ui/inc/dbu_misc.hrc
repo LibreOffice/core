@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbu_misc.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:49:35 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:30:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,16 +50,17 @@
 #define STR_COPYTABLE_TITLE_COPY            RID_STR_MISC_START +  7
 #define STR_COPYTABLE_TITLE_MOVE            RID_STR_MISC_START +  8
 #define STR_COULDNOTOPEN_LINKEDDOC          RID_STR_MISC_START +  9
-#define STR_ERR_DUPL_TABLENAME              RID_STR_MISC_START + 10
+#define STR_SUGGEST_APPEND_TABLE_DATA       RID_STR_MISC_START + 10
 #define STR_UNDO_COLON                      RID_STR_MISC_START + 11
 #define STR_REDO_COLON                      RID_STR_MISC_START + 12
 #define STR_UNKNOWN_TYPE_FOUND              RID_STR_MISC_START + 13
 #define STR_FILE_DOES_NOT_EXIST             RID_STR_MISC_START + 14
-
+#define STR_WARNINGS_DURING_CONNECT         RID_STR_MISC_START + 15
+#define STR_NAMED_OBJECT_ALREADY_EXISTS     RID_STR_MISC_START + 16
 
 // please adjust checking before insert new strings
 
-#if STR_FILE_DOES_NOT_EXIST > RID_STR_MISC_END
+#if STR_NAMED_OBJECT_ALREADY_EXISTS > RID_STR_MISC_END
 #error Resource-Id Ueberlauf in #file, #line
 #endif
 
