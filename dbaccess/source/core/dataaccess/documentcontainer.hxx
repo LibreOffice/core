@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentcontainer.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:29:51 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:11:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,11 +65,11 @@
 namespace dbaccess
 {
 //........................................................................
-typedef ::cppu::ImplHelper4<        ::com::sun::star::frame::XComponentLoader
-                                ,   ::com::sun::star::lang::XMultiServiceFactory
-                                ,   ::com::sun::star::container::XHierarchicalNameContainer
-                                ,   ::com::sun::star::embed::XTransactedObject
-                                >   ODocumentContainer_Base;
+typedef ::cppu::ImplHelper4 <   ::com::sun::star::frame::XComponentLoader
+                            ,   ::com::sun::star::lang::XMultiServiceFactory
+                            ,   ::com::sun::star::container::XHierarchicalNameContainer
+                            ,   ::com::sun::star::embed::XTransactedObject
+                            >   ODocumentContainer_Base;
 //==========================================================================
 //= ODocumentContainer -    collections of database documents (reports/forms)
 //==========================================================================
@@ -148,10 +148,6 @@ protected:
 
     // OPropertyArrayUsageHelper
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
-    /** approve that the object given may be inserted into the container. Should be overloaded by derived classes,
-        the default implementation just checks the object to be non-void.
-    */
-    virtual sal_Bool approveNewObject(const ::rtl::OUString& _sName,const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent >& _rxObject) const;
 };
 
 //........................................................................
