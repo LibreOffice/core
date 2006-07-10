@@ -3,7 +3,7 @@
 # a text file is done. This option does not affect the options 'enable-import'
 # and 'extract-storage-streams'.
 #   0=off, 1=on
-enable-dumper=0
+enable-dumper=1
 
 # Enable import after dumping (default=on). Disabling this option allows
 # to dump a file without loading it. This option is independent from the
@@ -16,14 +16,17 @@ enable-import=1
 #   0=off, 1=on
 extract-storage-streams=0
 
-# Maximum size of binary data blocks (default=infinite).
-max-binary-size=0x0200
+# Maximum size of binary stream dumps (default=infinite).
+max-binary-stream-size=0x1000
+
+# Maximum size of binary data blocks in content dumps (default=infinite).
+max-binary-data-size=0x0200
 
 # ----------------------------------------------------------------------------
 
 # Show total stream position of the record (default=on).
 #   0=off, 1=on
-show-record-pos=1
+show-record-pos=0
 
 # Show total record size in bytes (including CONTINUE records, if enabled,
 # see 'merge-continue-record' option) (default=on).
@@ -119,8 +122,13 @@ merge-continue-record=1
 
 # common ---------------------------------------------------------------------
 
+unitconverter=CONV-PERCENT,1,%
+unitconverter=CONV-PERCENT-NEG,-1,%
+unitconverter=CONV-DEG,1,°
 unitconverter=CONV-INCH-TO-CM,2.54,cm
 unitconverter=CONV-TWIP-TO-PT,/20,pt
+unitconverter=CONV-PT-TO-CM,/28.346457,cm
+unitconverter=CONV-TWIP-TO-CM,/566.92913,cm
 unitconverter=CONV-COLWIDTH,/256,chars
 
 shortlist=BIFF,0,biff2,biff3,biff4,biff5,biff8
@@ -197,6 +205,14 @@ begin
   15=thin-hor-crosshatch,thin-diag-crosshatch,12.5%-grey,6.25%-grey
 end
 
+shortlist=TEXTORIENTATION,0,horizontal,stacked,90°-ccw,90°-cw
+
+constlist=TEXTROTATION-BIFF8
+begin
+  default=''
+  255=stacked
+end
+
 multilist=BUILTIN-FORMATS
 begin
   quote-names=1
@@ -236,11 +252,12 @@ constlist=CODEPAGES
 begin
   367=ascii
   437=ibm-437-us
+  708=iso-8859-6
   720=ibm-720-arabic
   737=ibm-737-greek
   775=ibm-775-baltic
   850=ibm-850-latin-1
-  852=ibm-852-latin-2-central european
+  852=ibm-852-latin-2-central-european
   855=ibm-855-cyrillic
   857=ibm-857-turkish
   858=ibm-858-multilingual-latin-1-with-euro
@@ -269,8 +286,42 @@ begin
   1258=win-1258-vietnamese
   1361=win-1361-korean-johab
   10000=apple-roman
-  32768=apple-roman
+  10001=apple-japanese
+  10002=apple-chinese-traditional
+  10003=apple-korean
+  10004=apple-arabic
+  10005=apple-hebrew
+  10006=apple-greek
+  10007=apple-cyrillic
+  10008=apple-chinese-simplified
+  10010=apple-romanian
+  10017=apple-ukrainian
+  10029=apple-central-european-with-euro
+  10079=apple-icelandic
+  10081=apple-turkish
+  10082=apple-croatian
+  20127=ascii
+  20866=koi8-r
+  21866=koi8-u
+  28591=iso-8859-1
+  28592=iso-8859-2
+  28593=iso-8859-3
+  28594=iso-8859-4
+  28595=iso-8859-5
+  28596=iso-8859-6
+  28597=iso-8859-7
+  28598=iso-8859-8
+  28599=iso-8859-9
+  28605=iso-8859-15
+  32768=apple-romanian
   32769=win-1252-latin-1
+  50220=iso-2022-jp
+  50225=iso-2022-kr
+  51932=euc-jp
+  51936=euc-cn
+  51949=euc-kr
+  65000=utf-7
+  65001=utf-8
 end
 
 # formulas -------------------------------------------------------------------
@@ -431,7 +482,7 @@ begin
   # chart records
   0x1000=,CHUNITS,CHCHART,CHSERIES,CHSOURCELINK,,CHDATAFORMAT,CHLINEFORMAT
   0x1008=,CHMARKERFORMAT,CHAREAFORMAT,CHPIEFORMAT,CHATTACHEDLABEL,CHSTRING,,
-  0x1010=,,,,CHCHARTFORMAT,CHLEGEND,CHSERIESLIST,CHBAR
+  0x1010=,,,,CHCHARTGROUP,CHLEGEND,CHSERIESLIST,CHBAR
   0x1018=CHLINE,CHPIE,CHAREA,CHSCATTER,CHCHARTLINE,CHAXIS,CHTICK,CHVALUERANGE
   0x1020=CHLABELRANGE,CHAXISLINE,CHFORMATLINK,,CHDEFAULTTEXT,CHTEXT,CHFONT,CHOBJECTLINK
   0x1028=,,,,,CHARROW,,CHARROWHEAD
@@ -535,11 +586,14 @@ begin
   0x01B0=CONDFMT,CF,DVAL,,,DCONBIN,TXO,REFRESHALL
   0x01B8=HLINK,NLRDELNAME,CODENAME,SXFDBTYPE,PROT4REVPASS,,DV,
   0x0800=SCREENTIP,,,WEBQRYSETTINGS,WEBQRYTABLES,,,
+  0x0850=,CHWRAPPEDRECORD,,,,,,CHUNITPROPERTIES
   0x0860=,,SHEETLAYOUT,,,,,SHEETPROTECTION
   # chart records
   0x1058=,,,,,,,CH3DDATAFORMAT
   0x1060=CHFONTBASE,CHPIEEXT,CHEXTRANGE,CHDATATABLE,CHPLOTGROWTH,CHSERINDEX,CHESCHERFORMAT,CHPIEEXTSETT
 end
+
+# simple records -------------------------------------------------------------
 
 constlist=SIMPLE-RECORDS-BIFF2
 begin
@@ -566,25 +620,10 @@ begin
   0x0044=uint16,dec,xf-idx
   0x0045=uint16,dec,font-color-idx,COLORS
   0x0055=uint16,dec,default-col-width
-  0x0056=uint16,dec,builtin-fmt-count
-  0x005E=uint16,unused
-  0x005F=uint16,bool,recalc-on-save
-  0x0063=uint16,bool,objects-protected
-  0x0082=uint16,bool,print-gridlines-changed
-  0x0083=uint16,bool,horizontal-centered
-  0x0084=uint16,bool,vertical-centered
-  0x008D=uint16,dec,object-mode,HIDEOBJ
-  0x0099=uint16,dec,standard-col-width,CONV-COLWIDTH
-  0x009C=uint16,dec,func-group-count
-  0x00DA=uint16,bool,strip-cached-values
-  0x00DD=uint16,bool,scenarios-protected
-  0x0160=uint16,bool,use-nat-lang-refs
-  0x0161=uint16,bool,double-stream
-  0x01AF=uint16,bool,revlog-protected
-  0x01B7=uint16,bool,refresh-all
-  0x01BC=uint16,hex,password-hash
-  0x100B=uint16,dec,extrusion,CHPIEFORMAT
+  0x100B=uint16,dec,extrusion,CONV-PERCENT
+  0x1018=uint16,hex,flags,CHLINE-FLAGS
   0x101A=uint16,hex,flags,CHAREA-FLAGS
+  0x101C=uint16,dec,line-type,CHCHARTLINE-TYPE
   0x1021=uint16,dec,axisline-id,CHAXISLINE-ID
   0x1024=uint16,dec,text-idx
   0x1026=uint16,dec,font-idx,FONTNAMES
@@ -592,13 +631,50 @@ begin
   0x1046=uint16,dec,used-axessets
   0x104A=uint16,dec,series-idx
   0x104E=uint16,dec,fmt-idx,FORMATS
-  0x1065=uint16,dec,series-idx
+end
+
+constlist=SIMPLE-RECORDS-BIFF3
+begin
+  include=SIMPLE-RECORDS-BIFF2
+  0x0056=uint16,dec,builtin-fmt-count
+  0x005E=uint16,unused
+  0x005F=uint16,bool,recalc-on-save
+  0x0063=uint16,bool,objects-protected
+  0x0081=uint16,hex,flags,WSBOOL-FLAGS
+  0x0082=uint16,bool,print-gridlines-changed
+  0x0083=uint16,bool,horizontal-centered
+  0x0084=uint16,bool,vertical-centered
+  0x008D=uint16,dec,object-mode,HIDEOBJ
+end
+
+constlist=SIMPLE-RECORDS-BIFF4
+begin
+  include=SIMPLE-RECORDS-BIFF3
+  0x0099=uint16,dec,standard-col-width,CONV-COLWIDTH
+  0x009C=uint16,dec,func-group-count
+  0x103E=uint16,hex,flags,CHRADAR-FLAGS
+  0x103F=uint16,hex,flags,CHSURFACE-FLAGS
+end
+
+constlist=SIMPLE-RECORDS-BIFF5
+begin
+  include=SIMPLE-RECORDS-BIFF4
+  0x00DA=uint16,bool,strip-cached-values
+  0x00DD=uint16,bool,scenarios-protected
+  0x1040=uint16,hex,flags,CHRADAR-FLAGS
+  0x105D=uint16,hex,flags,CHSERIESFORMAT-FLAGS
 end
 
 constlist=SIMPLE-RECORDS-BIFF8
 begin
-  include=SIMPLE-RECORDS-BIFF2
+  include=SIMPLE-RECORDS-BIFF5
   0x00E1=uint16,dec,codepage,CODEPAGES
+  0x0160=uint16,bool,use-nat-lang-refs
+  0x0161=uint16,bool,double-stream
+  0x01AF=uint16,bool,revlog-protected
+  0x01B7=uint16,bool,refresh-all
+  0x01BC=uint16,hex,password-hash
+  0x1065=uint16,dec,series-idx
 end
 
 # BOF ------------------------------------------------------------------------
@@ -662,22 +738,129 @@ begin
   0x0002=swap-negative
 end
 
+# CHAXESSET ------------------------------------------------------------------
+
+shortlist=CHAXESSET-ID,0,primary,secondary
+
+# CHAXIS ---------------------------------------------------------------------
+
+shortlist=CHAXIS-TYPE,0,x-axis,y-axis,z-axis
+
 # CHAXISLINE -----------------------------------------------------------------
 
 shortlist=CHAXISLINE-ID,0,axisline,major-grid,minor-grid,wall
 
+# CHBAR ----------------------------------------------------------------------
+
+flagslist=CHBAR-FLAGS
+begin
+  0x0001=horizontal
+  0x0002=stacked
+  0x0004=percent
+  0x0008=shadow
+end
+
+# CHCHART3D ------------------------------------------------------------------
+
+flagslist=CHCHART3D-FLAGS
+begin
+  ignore=0x0010
+  0x0001=perspective
+  0x0002=clustered
+  0x0004=auto-scaling
+  0x0020=2d-plotarea
+end
+
+# CHCHARTGROUP ---------------------------------------------------------------
+
+flagslist=CHCHARTGROUP-FLAGS
+begin
+  0x0001=varied-colors
+end
+
+# CHCHARTLINE ----------------------------------------------------------------
+
+shortlist=CHCHARTLINE-TYPE,0,drop-line,hi-lo-line,series-connector
+
+# CHDATAFORMAT ---------------------------------------------------------------
+
+constlist=CHDATAFORMAT-POINTIDX
+begin
+  default=''
+  -1=all-points
+end
+
+constlist=CHDATAFORMAT-FORMATIDX
+begin
+  default=''
+  -3=axesset-global
+end
+
+flagslist=CHDATAFORMAT-FLAGS
+begin
+  0x0001=excel4-colors
+end
+
+# CHEXTRANGE -----------------------------------------------------------------
+
+flagslist=CHEXTRANGE-FLAGS
+begin
+  0x0001=auto-minimum
+  0x0002=auto-maximum
+  0x0004=auto-major
+  0x0008=auto-minor
+  0x0010=date-axis
+  0x0020=auto-base
+  0x0040=auto-axis-cross
+  0x0080=auto-date
+end
+
 # CHFRAME --------------------------------------------------------------------
 
-constlist=CHFRAME-FORMAT
-begin
-  0=standard
-  4=shadow
-end
+shortlist=CHFRAME-FORMAT,0,standard,,,,shadow
 
 flagslist=CHFRAME-FLAGS
 begin
   0x0001=auto-size
   0x0002=auto-pos
+end
+
+# CHFRAMEPOS -----------------------------------------------------------------
+
+shortlist=CHFRAMEPOS-OBJTYPE,2,any,,,legend
+shortlist=CHFRAMEPOS-SIZEMODE,1,manual,auto
+
+# CHLABELRANGE ---------------------------------------------------------------
+
+flagslist=CHLABELRANGE-FLAGS
+begin
+  0x0001=cross-between-categ
+  0x0002=reverse-order
+  0x0004=maximum-axis-cross
+end
+
+# CHLEGEND -------------------------------------------------------------------
+
+shortlist=CHLEGEND-DOCKPOS,0,bottom,top-left,top,right,left,,,manual
+shortlist=CHLEGEND-SPACING,0,close,medium,open
+
+flagslist=CHLEGEND-FLAGS
+begin
+  0x0001=docked
+  0x0002=auto-series
+  0x0004=auto-pos-x
+  0x0008=auto-pos-y
+  0x0010=stacked
+  0x0020=data-table
+end
+
+# CHLINE ---------------------------------------------------------------------
+
+flagslist=CHLINE-FLAGS
+begin
+  0x0001=stacked
+  0x0002=percent
+  0x0004=shadow
 end
 
 # CHLINEFORMAT ---------------------------------------------------------------
@@ -691,9 +874,66 @@ begin
   0x0004=axis-enabled
 end
 
-# CHPIEFORMAT ----------------------------------------------------------------
+# CHMARKERFORMAT -------------------------------------------------------------
 
-unitconverter=CHPIEFORMAT,1,%
+shortlist=CHMARKERFORMAT-TYPE,0,none,square,diamond,triangle,cross,star,dow-jones,std-dev,circle,plus
+
+flagslist=CHMARKERFORMAT-FLAGS
+begin
+  0x0001=auto
+  0x0010=no-fill
+  0x0020=no-border
+end
+
+# CHOBJECTLINK ---------------------------------------------------------------
+
+shortlist=CHOBJECTLINK-TARGET,0,none,title,y-axis,x-axis,datapoint,legend,none,z-axis,,,,,axis-unit
+
+constlist=CHOBJECTLINK-POINT
+begin
+  default=''
+  -2=unknown
+  -1=all-points
+end
+
+# CHPIE ----------------------------------------------------------------------
+
+flagslist=CHPIE-FLAGS
+begin
+  0x0001=shadow
+  0x0002=connectors
+end
+
+# CHRADAR, CHRADARAREA -------------------------------------------------------
+
+flagslist=CHRADAR-FLAGS
+begin
+  0x0001=axis-labels
+  0x0002=shadow
+end
+
+# CHPROPERTIES ---------------------------------------------------------------
+
+shortlist=CHPROPERTIES-EMPTYCELLS,0,do-not-plot,as-zero,interpolated
+
+flagslist=CHPROPERTIES-FLAGS
+begin
+  0x0001=manual-format
+  0x0002=plot-visible-only
+  0x0004=fixed-size
+  0x0008=manual-plotarea
+end
+
+# CHSCATTER ------------------------------------------------------------------
+
+shortlist=CHSCATTER-SIZETYPE,0,none,area,width
+
+flagslist=CHSCATTER-FLAGS
+begin
+  0x0001=bubbles
+  0x0002=show-negative
+  0x0004=shadow
+end
 
 # CHSERERRORBAR --------------------------------------------------------------
 
@@ -703,6 +943,15 @@ shortlist=CHSERERRORBAR-SOURCE,1,percent,fixed,std-deviation,custom,std-error
 # CHSERIES -------------------------------------------------------------------
 
 shortlist=CHSERIES-TYPE,0,date,numeric,sequence,text
+
+# CHSERIESFORMAT -------------------------------------------------------------
+
+flagslist=CHSERIESFORMAT-FLAGS
+begin
+  0x0001=spline
+  0x0002=bubbles-3d
+  0x0004=shadow
+end
 
 # CHSERTRENDLINE -------------------------------------------------------------
 
@@ -721,6 +970,98 @@ end
 # CHSTRING -------------------------------------------------------------------
 
 shortlist=CHSTRING-TYPE,0,text,category-default,value-default,x-prefix,x-postfix,y-prefix,y-postfix,comment
+
+# CHSURFACE ------------------------------------------------------------------
+
+flagslist=CHSURFACE-FLAGS
+begin
+  0x0001=filled
+  0x0002=shadow
+end
+
+# CHTEXT ---------------------------------------------------------------------
+
+shortlist=CHTEXT-HORALIGN,1,left,center,right,block,distribute
+shortlist=CHTEXT-VERALIGN,1,top,center,bottom,block,distribute
+shortlist=CHTEXT-FILLMODE,1,transparent,opaque
+
+combilist=CHTEXT-FLAGS-BIFF2
+begin
+  0x0001=auto-color
+  0x0002=show-symbol
+  0x0004=show-value
+  0x0008=vertical
+  0x0010=use-stored
+  0x0020=default
+  0x0040=deleted
+  0x0080=auto-fill
+end
+
+combilist=CHTEXT-FLAGS-BIFF3
+begin
+  include=CHTEXT-FLAGS-BIFF2
+  0x0700=uint8,dec,orientation,TEXTORIENTATION
+end
+
+combilist=CHTEXT-FLAGS-BIFF5
+begin
+  include=CHTEXT-FLAGS-BIFF3
+  0x0800=show-categ-percent
+  0x1000=show-percent
+end
+
+combilist=CHTEXT-FLAGS-BIFF8
+begin
+  include=CHTEXT-FLAGS-BIFF5
+  0x2000=show-bubble-size
+  0x4000=show-categ
+end
+
+shortlist=CHTEXT-PLACEMENT,0,context,outside,inside,center,axis,above,below,left,right,auto,manual
+
+# CHTICK ---------------------------------------------------------------------
+
+shortlist=CHTICK-TYPE,0,none,inside,outside,both
+# TODO: really different label positions in BIFF2-BIFF4?
+shortlist=CHTICK-LABELPOS-BIFF2,0,none,near,below,above
+shortlist=CHTICK-LABELPOS-BIFF5,0,none,below,above,near
+
+flagslist=CHTICK-FLAGS-BIFF2
+begin
+  0x0001=auto-color
+  0x0002=auto-fill
+end
+
+combilist=CHTICK-FLAGS-BIFF3
+begin
+  include=CHTICK-FLAGS-BIFF2
+  0x001C=uint8,dec,orientation,TEXTORIENTATION
+  0x0020=auto-rotation
+end
+
+# CHUNITPROPERTIES -----------------------------------------------------------
+
+shortlist=CHUNITPROPERTIES-PRESET,-1,manual,none,hundred,thousand,(10000),(100000),million,(10million),(100million),billion,trillion
+
+flagslist=CHUNITPROPERTIES-FLAGS
+begin
+  0x0002=show-unit
+end
+
+# CHVALUERANGE ---------------------------------------------------------------
+
+flagslist=CHVALUERANGE-FLAGS
+begin
+  ignore=0x0100
+  0x0001=auto-minimum
+  0x0002=auto-maximum
+  0x0004=auto-major
+  0x0008=auto-minor
+  0x0010=auto-axis-cross
+  0x0020=logarithmic
+  0x0040=reverse-order
+  0x0080=maximum-axis-cross
+end
 
 # DATEMODE -------------------------------------------------------------------
 
@@ -819,11 +1160,41 @@ shortlist=HIDEOBJ,0,show,placeholder,hide
 
 shortlist=REFMODE,0,R1C1,A1
 
+# WSBOOL ---------------------------------------------------------------------
+
+shortlist=WSBOOL-WINDOWPOS,0,tiled,horizontal,vertical,cascaded
+
+flagslist=WSBOOL-FLAGS-BIFF3
+begin
+  0x0001=show-autopagebreak
+  0x0010=dialog-sheet
+  0x0020=outline-autostyle
+  0x0040=outline-buttons-below
+  0x0080=outline-buttons-right
+  0x0100=fit-to-pages
+  0x0200=skip-linked-values
+  0x0400=show-row-outline
+  0x0800=show-column-outline
+end
+
+flagslist=WSBOOL-FLAGS-BIFF4
+begin
+  include=WSBOOL-FLAGS-BIFF3
+  0x3000=uint8,dec,window-pos,WSBOOL-WINDOWPOS
+  0x4000=lotus-expr-eval
+  0x8000=lotus-formula-edit
+end
+
+flagslist=WSBOOL-FLAGS-BIFF5
+begin
+  include=WSBOOL-FLAGS-BIFF4
+  exclude=0x0200,0x3000
+end
+
 # XF -------------------------------------------------------------------------
 
 shortlist=XF-HORALIGN,0,general,left,center,right,fill,block,center-across-sel,distribute
 shortlist=XF-VERALIGN,0,top,center,bottom,justify,distribute
-shortlist=XF-ORIENTATION,0,horizontal,stacked,90°-ccw,90°-cw
 shortlist=XF-TEXTDIRECTION,0,context,left-to-right,right-to-left
 
 flagslist=XF-PROTECTION-FLAGS
@@ -883,7 +1254,7 @@ begin
   0x07=uint8,dec,hor-align,XF-HORALIGN
   0x08=text-wrap
   0x30=uint8,dec,ver-align,XF-VERALIGN
-  0xC0=uint8,dec,orientation,XF-ORIENTATION
+  0xC0=uint8,dec,orientation,TEXTORIENTATION
 end
 
 combilist=XF-ALIGNMENT-BIFF5
@@ -896,13 +1267,7 @@ end
 combilist=XF-ORIENTATTRIBS-BIFF5
 begin
   include=XF-USEDATTRIBS-FLAGS
-  0x03=uint8,dec,orientation,XF-ORIENTATION
-end
-
-constlist=XF-ROTATION-BIFF8
-begin
-  default=''
-  255=stacked
+  0x03=uint8,dec,orientation,TEXTORIENTATION
 end
 
 combilist=XF-TEXTFLAGS-BIFF8
