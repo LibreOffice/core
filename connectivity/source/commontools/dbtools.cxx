@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:06:02 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:20:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -215,6 +215,12 @@ namespace dbtools
 //  using namespace cppu;
 //  using namespace osl;
 
+//==============================================================================
+//==============================================================================
+namespace
+{
+    typedef sal_Bool (SAL_CALL XDatabaseMetaData::*FMetaDataSupport)();
+}
 //==============================================================================
 //==============================================================================
 sal_Int32 getDefaultNumberFormat(const Reference< XPropertySet >& _xColumn,
@@ -845,25 +851,110 @@ Sequence< ::rtl::OUString > getFieldNamesByCommandDescriptor( const Reference< X
 //------------------------------------------------------------------------------
 SQLContext prependContextInfo(const SQLException& _rException, const Reference< XInterface >& _rxContext, const ::rtl::OUString& _rContextDescription, const ::rtl::OUString& _rContextDetails)
 {
-    // determine the type of the exception
-    SQLExceptionInfo aInfo(_rException);
-
-    // the new first chain element
-    SQLContext aContextDescription(_rContextDescription, _rxContext, ::rtl::OUString(), 0, aInfo.get(), _rContextDetails);
-    return aContextDescription;
+    return SQLContext( _rContextDescription, _rxContext, ::rtl::OUString(), 0, makeAny( _rException ), _rContextDetails );
 }
+//------------------------------------------------------------------------------
+SQLException prependErrorInfo( const SQLException& _rChainedException, const Reference< XInterface >& _rxContext,
+    const ::rtl::OUString& _rAdditionalError, const StandardSQLState _eSQLState, const sal_Int32 _nErrorCode )
+{
+    return SQLException( _rAdditionalError, _rxContext,
+        _eSQLState == SQL_ERROR_UNSPECIFIED ? ::rtl::OUString() : getStandardSQLState( _eSQLState ),
+        _nErrorCode, makeAny( _rChainedException ) );
+}
+
+//--------------------------------------------------------------------------
+static ::rtl::OUString impl_doComposeTableName( const Reference< XDatabaseMetaData >& _rxMetaData,
+                const ::rtl::OUString& _rCatalog, const ::rtl::OUString& _rSchema, const ::rtl::OUString& _rName,
+                sal_Bool _bQuote, EComposeRule _eComposeRule )
+{
+    ::rtl::OUString sComposedName;
+
+    OSL_ENSURE(_rxMetaData.is(), "impl_doComposeTableName : invalid meta data !");
+    if ( !_rxMetaData.is() )
+        return sComposedName;
+    OSL_ENSURE(_rName.getLength(), "impl_doComposeTableName : at least the name should be non-empty !");
+
+    FMetaDataSupport pCatalogCall = &XDatabaseMetaData::supportsCatalogsInDataManipulation;
+    FMetaDataSupport pSchemaCall = &XDatabaseMetaData::supportsSchemasInDataManipulation;
+    bool bIgnoreMetaData = false;
+
+    switch ( _eComposeRule )
+    {
+        case eInTableDefinitions:
+            pCatalogCall = &XDatabaseMetaData::supportsCatalogsInTableDefinitions;
+            pSchemaCall = &XDatabaseMetaData::supportsSchemasInTableDefinitions;
+            break;
+        case eInIndexDefinitions:
+            pCatalogCall = &XDatabaseMetaData::supportsCatalogsInIndexDefinitions;
+            pSchemaCall = &XDatabaseMetaData::supportsSchemasInIndexDefinitions;
+            break;
+        case eInProcedureCalls:
+            pCatalogCall = &XDatabaseMetaData::supportsCatalogsInProcedureCalls;
+            pSchemaCall = &XDatabaseMetaData::supportsSchemasInProcedureCalls;
+            break;
+        case eInPrivilegeDefinitions:
+            pCatalogCall = &XDatabaseMetaData::supportsCatalogsInPrivilegeDefinitions;
+            pSchemaCall = &XDatabaseMetaData::supportsSchemasInPrivilegeDefinitions;
+            break;
+        case eComplete:
+            bIgnoreMetaData = true;
+            break;
+        case eInDataManipulation:
+            // already properly set above
+            break;
+    }
+
+
+    ::rtl::OUString sQuoteString = _rxMetaData->getIdentifierQuoteString();
+#define QUOTE(s,s2) if (_bQuote) s += quoteName(sQuoteString,s2); else s += s2
+
+    static ::rtl::OUString sSeparator = ::rtl::OUString::createFromAscii(".");
+
+    ::rtl::OUString sCatalogSep;
+    sal_Bool bCatlogAtStart = sal_True;
+    if ( _rCatalog.getLength() && ( bIgnoreMetaData || (_rxMetaData.get()->*pCatalogCall)() ) )
+    {
+        sCatalogSep     = _rxMetaData->getCatalogSeparator();
+        bCatlogAtStart  = _rxMetaData->isCatalogAtStart();
+
+        if ( bCatlogAtStart && sCatalogSep.getLength())
+        {
+            QUOTE(sComposedName,_rCatalog);
+            sComposedName += sCatalogSep;
+        }
+    }
+
+    if ( _rSchema.getLength() && ( bIgnoreMetaData || (_rxMetaData.get()->*pSchemaCall)() ) )
+    {
+        QUOTE(sComposedName,_rSchema);
+        sComposedName += sSeparator;
+    }
+
+    QUOTE(sComposedName,_rName);
+
+    if  (   _rCatalog.getLength()
+        &&  !bCatlogAtStart
+        &&  sCatalogSep.getLength()
+        &&  (   bIgnoreMetaData
+            ||  (_rxMetaData.get()->*pCatalogCall)()
+            )
+        )
+    {
+        sComposedName += sCatalogSep;
+        QUOTE(sComposedName,_rCatalog);
+    }
+
+    return sComposedName;
+}
+
 //------------------------------------------------------------------------------
 ::rtl::OUString quoteTableName(const Reference< XDatabaseMetaData>& _rxMeta
                                , const ::rtl::OUString& _rName
-                               , EComposeRule _eComposeRule
-                               , sal_Bool _bUseCatalogInSelect
-                               , sal_Bool _bUseSchemaInSelect)
+                               , EComposeRule _eComposeRule)
 {
-    ::rtl::OUString sCatalog,sSchema,sTable,sQuotedName;
+    ::rtl::OUString sCatalog, sSchema, sTable;
     qualifiedNameComponents(_rxMeta,_rName,sCatalog,sSchema,sTable,_eComposeRule);
-    composeTableName(_rxMeta,sCatalog,sSchema,sTable,sQuotedName,sal_True,_eComposeRule,_bUseCatalogInSelect,_bUseSchemaInSelect);
-
-    return sQuotedName;
+    return impl_doComposeTableName( _rxMeta, sCatalog, sSchema, sTable, sal_True, _eComposeRule );
 }
 
 //------------------------------------------------------------------------------
@@ -1278,10 +1369,12 @@ Reference< XDataSource> findDataSource(const Reference< XInterface >& _xParent)
                     if ( !sCommand.getLength() )
                         break;
 
-                    sal_Bool bUseCatalogInSelect = isDataSourcePropertyEnabled(xConn,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseCatalogInSelect")),sal_True);
-                    sal_Bool bUseSchemaInSelect = isDataSourcePropertyEnabled(xConn,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseSchemaInSelect")),sal_True);
                     sStatement = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT * FROM "));
-                    sStatement += quoteTableName(xConn->getMetaData(), sCommand,eInDataManipulation,bUseCatalogInSelect,bUseSchemaInSelect);
+
+                    ::rtl::OUString sCatalog, sSchema, sTable;
+                    qualifiedNameComponents( xConn->getMetaData(), sCommand, sCatalog, sSchema, sTable, eInDataManipulation );
+
+                    sStatement += composeTableNameForSelect( xConn, sCatalog, sSchema, sTable );
                 }
                 break;
 
@@ -1422,84 +1515,87 @@ Reference< XSingleSelectQueryComposer > getCurrentSettingsComposer(
     return xReturn;
 }
 //--------------------------------------------------------------------------
-void composeTableName(  const Reference< XDatabaseMetaData >& _rxMetaData,
+::rtl::OUString composeTableName( const Reference< XDatabaseMetaData >& _rxMetaData,
                         const ::rtl::OUString& _rCatalog,
                         const ::rtl::OUString& _rSchema,
                         const ::rtl::OUString& _rName,
-                        ::rtl::OUString& _rComposedName,
                         sal_Bool _bQuote,
-                        EComposeRule _eComposeRule
-                        , sal_Bool _bUseCatalogInSelect
-                        , sal_Bool _bUseSchemaInSelect)
+                        EComposeRule _eComposeRule)
 {
-    OSL_ENSURE(_rxMetaData.is(), "composeTableName : invalid meta data !");
-    if ( !_rxMetaData.is() )
-        return; // just to be save here
-    OSL_ENSURE(_rName.getLength(), "composeTableName : at least the name should be non-empty !");
+    return impl_doComposeTableName( _rxMetaData, _rCatalog, _rSchema, _rName, _bQuote, _eComposeRule );
+}
 
-    typedef sal_Bool (SAL_CALL XDatabaseMetaData::*GetBooleanMetaData)();
-    GetBooleanMetaData catalogUsage = &XDatabaseMetaData::supportsCatalogsInDataManipulation;
-    GetBooleanMetaData schemaUsage = &XDatabaseMetaData::supportsSchemasInDataManipulation;
+// -----------------------------------------------------------------------------
+::rtl::OUString composeTableNameForSelect( const Reference< XConnection >& _rxConnection,
+    const ::rtl::OUString& _rCatalog, const ::rtl::OUString& _rSchema, const ::rtl::OUString& _rName )
+{
+    sal_Bool bUseCatalogInSelect = isDataSourcePropertyEnabled( _rxConnection, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UseCatalogInSelect" ) ), sal_True );
+    sal_Bool bUseSchemaInSelect = isDataSourcePropertyEnabled( _rxConnection, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UseSchemaInSelect" ) ), sal_True );
 
-    switch ( _eComposeRule )
+    return impl_doComposeTableName(
+        _rxConnection->getMetaData(),
+        bUseCatalogInSelect ? _rCatalog : ::rtl::OUString(),
+        bUseSchemaInSelect ? _rSchema : ::rtl::OUString(),
+        _rName,
+        true,
+        eInDataManipulation
+    );
+}
+
+// -----------------------------------------------------------------------------
+namespace
+{
+    static void lcl_getTableNameComponents( const Reference<XPropertySet>& _xTable,
+        ::rtl::OUString& _out_rCatalog, ::rtl::OUString& _out_rSchema, ::rtl::OUString& _out_rName )
     {
-        case eInTableDefinitions:
-            catalogUsage = &XDatabaseMetaData::supportsCatalogsInTableDefinitions;
-            schemaUsage = &XDatabaseMetaData::supportsSchemasInTableDefinitions;
-            break;
-        case eInIndexDefinitions:
-            catalogUsage = &XDatabaseMetaData::supportsCatalogsInIndexDefinitions;
-            schemaUsage = &XDatabaseMetaData::supportsSchemasInIndexDefinitions;
-            break;
-        case eInProcedureCalls:
-            catalogUsage = &XDatabaseMetaData::supportsCatalogsInProcedureCalls;
-            schemaUsage = &XDatabaseMetaData::supportsSchemasInProcedureCalls;
-            break;
-        case eInPrivilegeDefinitions:
-            catalogUsage = &XDatabaseMetaData::supportsCatalogsInPrivilegeDefinitions;
-            schemaUsage = &XDatabaseMetaData::supportsSchemasInPrivilegeDefinitions;
-            break;
-        case eInDataManipulation:
-            catalogUsage = &XDatabaseMetaData::supportsCatalogsInDataManipulation;
-            schemaUsage = &XDatabaseMetaData::supportsSchemasInDataManipulation;
-            break;
-    }
-
-
-    ::rtl::OUString sQuoteString = _rxMetaData->getIdentifierQuoteString();
-#define QUOTE(s,s2) if (_bQuote) s += quoteName(sQuoteString,s2); else s += s2
-
-    static ::rtl::OUString sEmpty;
-    static ::rtl::OUString sSeparator = ::rtl::OUString::createFromAscii(".");
-
-    _rComposedName = sEmpty;
-    ::rtl::OUString sCatalogSep;
-    sal_Bool bCatlogAtStart = sal_True;
-    if ( _bUseCatalogInSelect && _rCatalog.getLength() && (_rxMetaData.get()->*catalogUsage)() )
-    {
-        sCatalogSep     = _rxMetaData->getCatalogSeparator();
-        bCatlogAtStart  = _rxMetaData->isCatalogAtStart();
-
-        if ( bCatlogAtStart && sCatalogSep.getLength())
+        ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
+        Reference< XPropertySetInfo > xInfo = _xTable->getPropertySetInfo();
+        if (    xInfo.is()
+            &&  xInfo->hasPropertyByName(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME))
+            &&  xInfo->hasPropertyByName(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME))
+            &&  xInfo->hasPropertyByName(rPropMap.getNameByIndex(PROPERTY_ID_NAME)) )
         {
-            QUOTE(_rComposedName,_rCatalog);
-            _rComposedName += sCatalogSep;
+
+            ::rtl::OUString aCatalog;
+            ::rtl::OUString aSchema;
+            ::rtl::OUString aTable;
+            _xTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME)) >>= _out_rCatalog;
+            _xTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME))  >>= _out_rSchema;
+            _xTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))        >>= _out_rName;
         }
+        else
+            OSL_ENSURE( false, "::dbtools::lcl_getTableNameComponents: this is no table object!" );
     }
+}
 
-    if ( _bUseSchemaInSelect && _rSchema.getLength() && (_rxMetaData.get()->*schemaUsage)() )
-    {
-        QUOTE(_rComposedName,_rSchema);
-        _rComposedName += sSeparator;
-    }
+// -----------------------------------------------------------------------------
+::rtl::OUString composeTableNameForSelect( const Reference< XConnection >& _rxConnection, const Reference<XPropertySet>& _xTable )
+{
+    ::rtl::OUString sCatalog, sSchema, sName;
+    lcl_getTableNameComponents( _xTable, sCatalog, sSchema, sName );
 
-    QUOTE(_rComposedName,_rName);
+    return composeTableNameForSelect( _rxConnection, sCatalog, sSchema, sName );
+}
 
-    if ( _bUseCatalogInSelect && _rCatalog.getLength() && !bCatlogAtStart && sCatalogSep.getLength() && (_rxMetaData.get()->*catalogUsage)() )
-    {
-        _rComposedName += sCatalogSep;
-        QUOTE(_rComposedName,_rCatalog);
-    }
+// -----------------------------------------------------------------------------
+::rtl::OUString composeTableName(const Reference<XDatabaseMetaData>& _xMetaData,
+                                 const Reference<XPropertySet>& _xTable,
+                                 EComposeRule _eComposeRule,
+                                 bool _bSuppressCatalog,
+                                 bool _bSuppressSchema,
+                                 bool _bQuote )
+{
+    ::rtl::OUString sCatalog, sSchema, sName;
+    lcl_getTableNameComponents( _xTable, sCatalog, sSchema, sName );
+
+    return impl_doComposeTableName(
+            _xMetaData,
+            _bSuppressCatalog ? ::rtl::OUString() : sCatalog,
+            _bSuppressSchema ? ::rtl::OUString() : sSchema,
+            sName,
+            _bQuote,
+            _eComposeRule
+        );
 }
 // -----------------------------------------------------------------------------
 sal_Int32 getSearchColumnFlag( const Reference< XConnection>& _rxConn,sal_Int32 _nDataType)
