@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 13:40:36 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:30:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -903,13 +903,15 @@ void lcl_SetWrong( SwTxtFrm& rFrm, xub_StrLen nPos, long nCnt )
 {
     if ( !rFrm.IsFollow() )
     {
-        if ( !rFrm.GetTxtNode()->GetWrong() && !rFrm.GetTxtNode()->IsWrongDirty() )
+        SwTxtNode* pTxtNode = rFrm.GetTxtNode();
+        if ( !pTxtNode->GetWrong() && !pTxtNode->IsWrongDirty() )
         {
-            rFrm.GetTxtNode()->SetWrong( new SwWrongList() ); \
-            rFrm.GetTxtNode()->GetWrong()->SetInvalid( nPos, nPos + (USHORT)( nCnt > 0 ? nCnt : 1 ) ); \
+            pTxtNode->SetWrong( new SwWrongList() );
+            pTxtNode->GetWrong()->SetInvalid( nPos, nPos + (USHORT)( nCnt > 0 ? nCnt : 1 ) );
         }
-        rFrm.GetNode()->SetWrongDirty( sal_True ); \
-        rFrm.GetNode()->SetAutoCompleteWordDirty( sal_True ); \
+        pTxtNode->SetWrongDirty( true );
+        pTxtNode->SetWordCountDirty( true );
+        pTxtNode->SetAutoCompleteWordDirty( true );
     }
 
     SwPageFrm *pPage = rFrm.FindPageFrm();
@@ -917,6 +919,7 @@ void lcl_SetWrong( SwTxtFrm& rFrm, xub_StrLen nPos, long nCnt )
     {
         pPage->InvalidateSpelling();
         pPage->InvalidateAutoCompleteWords();
+        pPage->InvalidateWordCount();
     }
 }
 
