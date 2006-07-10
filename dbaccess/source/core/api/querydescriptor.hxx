@@ -4,9 +4,9 @@
  *
  *  $RCSfile: querydescriptor.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:40:20 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:06:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,17 +134,20 @@ protected:
 
 // IColumnFactory
     virtual OColumn*    createColumn(const ::rtl::OUString& _rName) const;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createEmptyObject();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createColumnDescriptor();
+    virtual void columnAppended( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxSourceDescriptor );
     virtual void columnDropped(const ::rtl::OUString& _sName);
-    virtual void columnCloned(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xClone);
 
-    // called (after some preparations) from inside refreshColumns. Never overload refreshColumns directly!
+    /** rebuild our columns set
+
+        clearColumns has already been called before, do <em>NOT</em> call it, again
+    */
     virtual void rebuildColumns( );
 
     virtual void disposeColumns();
-private:
-    virtual void refreshColumns();
 
+    // IRefreshableColumns overridables
+    virtual void refreshColumns();
 };
 
 class OQueryDescriptor : public comphelper::OMutexAndBroadcastHelper
