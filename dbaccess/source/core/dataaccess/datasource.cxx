@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:44:44 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:10:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1255,7 +1255,7 @@ Reference< XNameAccess >  ODatabaseSource::getTables() throw( RuntimeException )
         {
             m_pImpl->m_aContainer[ODatabaseModelImpl::E_TABLE] = TContentPtr(new ODefinitionContainer_Impl);
         }
-        xContainer = new OCommandContainer(m_pImpl->m_xServiceFactory,*this,m_pImpl->m_aContainer[ODatabaseModelImpl::E_TABLE]);
+        xContainer = new OCommandContainer( m_pImpl->m_xServiceFactory, *this, m_pImpl->m_aContainer[ODatabaseModelImpl::E_TABLE], sal_True);
         m_pImpl->m_xTableDefinitions = xContainer;
     }
     return xContainer;
