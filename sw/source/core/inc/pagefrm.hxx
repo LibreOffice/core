@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pagefrm.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:09:34 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:28:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,9 +91,10 @@ class SwPageFrm: public SwFtnBossFrm
     BOOL bInvalidFlyInCnt   :1;
     BOOL bFtnPage           :1; //Diese Seite ist fuer Dokumentende-Fussnoten.
     BOOL bEmptyPage         :1; //Dies ist eine explizite Leerseite
-    BOOL bInvalidSpelling   :1; //Das Online-Spelling ist gefordert
     BOOL bEndNotePage       :1; //'Fussnotenseite' fuer Endnoten
+    BOOL bInvalidSpelling   :1; //Das Online-Spelling ist gefordert
     BOOL bInvalidAutoCmplWrds :1; //Auto-Complete Wordliste aktualisieren
+    BOOL bInvalidWordCount  :1;
     BOOL bHasGrid           :1; // Grid for Asian layout
 
     // OD 2004-05-17 #i28701# - boolean, indicating that layout of page frame
@@ -284,6 +285,7 @@ public:
     inline void InvalidateCntnt() const;
     inline void InvalidateSpelling() const;
     inline void InvalidateAutoCompleteWords() const;
+    inline void InvalidateWordCount() const;
     inline void ValidateFlyLayout() const;
     inline void ValidateFlyCntnt() const;
     inline void ValidateFlyInCnt() const;
@@ -291,6 +293,7 @@ public:
     inline void ValidateCntnt() const;
     inline void ValidateSpelling()  const;
     inline void ValidateAutoCompleteWords() const;
+    inline void ValidateWordCount() const;
     inline BOOL IsInvalid() const;
     inline BOOL IsInvalidFly() const;
     BOOL IsInvalidFlyLayout() const { return bInvalidFlyLayout; }
@@ -300,6 +303,7 @@ public:
     BOOL IsInvalidCntnt() const { return (bInvalidCntnt || bInvalidFlyInCnt); }
     BOOL IsInvalidSpelling() const { return bInvalidSpelling; }
     BOOL IsInvalidAutoCompleteWords() const { return bInvalidAutoCmplWrds; }
+    BOOL IsInvalidWordCount() const { return bInvalidWordCount; }
 
     /** SwPageFrm::GetDrawBackgrdColor - for #102450#
 
@@ -439,7 +443,11 @@ inline void SwPageFrm::InvalidateSpelling() const
 }
 inline void SwPageFrm::InvalidateAutoCompleteWords() const
 {
-    ((SwPageFrm*)this)->bInvalidAutoCmplWrds = FALSE;
+    ((SwPageFrm*)this)->bInvalidAutoCmplWrds = TRUE;
+}
+inline void SwPageFrm::InvalidateWordCount() const
+{
+    ((SwPageFrm*)this)->bInvalidWordCount = TRUE;
 }
 inline void SwPageFrm::ValidateFlyLayout() const
 {
@@ -469,7 +477,10 @@ inline void SwPageFrm::ValidateAutoCompleteWords() const
 {
     ((SwPageFrm*)this)->bInvalidAutoCmplWrds = FALSE;
 }
-
+inline void SwPageFrm::ValidateWordCount() const
+{
+    ((SwPageFrm*)this)->bInvalidWordCount = FALSE;
+}
 
 inline BOOL SwPageFrm::IsInvalid() const
 {
