@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cupsmgr.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 10:25:55 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 16:30:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -861,9 +861,19 @@ void CUPSManager::changePrinterInfo( const OUString& rPrinter, const PrinterInfo
     PrinterInfoManager::changePrinterInfo( rPrinter, rNewInfo );
 }
 
-bool CUPSManager::checkPrintersChanged()
+bool CUPSManager::checkPrintersChanged( bool bWait )
 {
     bool bChanged = false;
+    if( bWait && m_aDestThread )
+    {
+        #if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "syncing cups discovery thread\n" );
+        #endif
+        osl_joinWithThread( m_aDestThread );
+        #if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "done: syncing cups discovery thread\n" );
+        #endif
+    }
     if( m_aCUPSMutex.tryToAcquire() )
     {
         bChanged = m_bNewDests;
@@ -872,7 +882,7 @@ bool CUPSManager::checkPrintersChanged()
 
     if( ! bChanged )
     {
-        bChanged = PrinterInfoManager::checkPrintersChanged();
+        bChanged = PrinterInfoManager::checkPrintersChanged( bWait );
         // #i54375# ensure new merging with CUPS list in :initialize
         if( bChanged )
             m_bNewDests = true;
