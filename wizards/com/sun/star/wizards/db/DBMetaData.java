@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DBMetaData.java,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 12:35:50 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 16:01:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,7 @@ import com.sun.star.lang.XComponent;
 import com.sun.star.sdbc.DataType;
 import com.sun.star.sdb.XOfficeDatabaseDocument;
 import com.sun.star.sdb.XDocumentDataSource;
+import com.sun.star.sdb.tools.XConnectionTools;
 import com.sun.star.sdbcx.XAppend;
 import com.sun.star.sdbcx.XColumnsSupplier;
 
@@ -116,6 +117,7 @@ public class DBMetaData {
     public int[] CommandTypes;
     public String DataSourceName;
     public com.sun.star.sdbc.XConnection DBConnection;
+    public com.sun.star.sdb.tools.XConnectionTools ConnectionTools;
     public com.sun.star.lang.XMultiServiceFactory xMSF;
     public XComponent xConnectionComponent;
     public SQLQueryComposer oSQLQueryComposer;
@@ -526,6 +528,7 @@ public class DBMetaData {
     private boolean getConnection(com.sun.star.sdbc.XConnection _DBConnection){
     try {
         this.DBConnection = _DBConnection;
+        this.ConnectionTools = (XConnectionTools)UnoRuntime.queryInterface( XConnectionTools.class, this.DBConnection );
         getDataSourceObjects();
         return true;
     } catch (Exception e) {
@@ -571,6 +574,7 @@ public class DBMetaData {
         }
         else {
             xConnectionComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, DBConnection);
+            ConnectionTools = (XConnectionTools)UnoRuntime.queryInterface( XConnectionTools.class, DBConnection );
             getDataSourceObjects();
         }
         return bgetConnection;
@@ -623,7 +627,7 @@ public class DBMetaData {
      * @param oQuery
      * @param QueryName
      */
-    public String createQuery(SQLQueryComposer _oSQLQueryComposer, String _QueryName) {
+    public boolean createQuery(SQLQueryComposer _oSQLQueryComposer, String _QueryName) {
         try {
             XQueryDefinitionsSupplier xQueryDefinitionsSuppl = (XQueryDefinitionsSupplier) UnoRuntime.queryInterface(XQueryDefinitionsSupplier.class, xDataSource);
             XNameAccess xQueryDefs = xQueryDefinitionsSuppl.getQueryDefinitions();
@@ -634,16 +638,26 @@ public class DBMetaData {
             xPSet.setPropertyValue("Command", _oSQLQueryComposer.xQueryAnalyzer.getQuery());
             XNameContainer xNameCont = (XNameContainer) UnoRuntime.queryInterface(XNameContainer.class, xQueryDefs);
             XNameAccess xNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, xQueryDefs);
-            String sreturnname = Desktop.getUniqueName(xNameAccess, _QueryName);
-            xNameCont.insertByName(sreturnname, oQuery);
-            return sreturnname;
-            //TODO was passiert mit den folgenden Zeilen????????
-            //      XFlushable xFlush = (XFlushable) UnoRuntime.queryInterface(XFlushable.class, xQueryDefs);
-            //      xFlush.flush();
+            ConnectionTools.getObjectNames().checkNameForCreate(com.sun.star.sdb.CommandType.QUERY,_QueryName);
+            xNameCont.insertByName(_QueryName, oQuery);
+            return true;
+        } catch( WrappedTargetException exception ) {
+            SQLException sqlError = null;
+            try { sqlError = (SQLException)exception.TargetException; }
+            catch( ClassCastException castError ) { }
+
+            if ( sqlError != null ) {
+                callSQLErrorMessageDialog( sqlError, null );
+                return false;
+            }
+            exception.printStackTrace(System.out);
+        }
+        catch (SQLException exception) {
+            callSQLErrorMessageDialog(exception, null);
         } catch (Exception exception) {
             exception.printStackTrace(System.out);
-            return null;
         }
+        return false;
     }
 
     public void dispose() {
