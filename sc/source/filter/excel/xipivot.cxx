@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xipivot.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:49:40 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:42:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,9 @@
 #endif
 #ifndef SC_XISTREAM_HXX
 #include "xistream.hxx"
+#endif
+#ifndef SC_XIHELPER_HXX
+#include "xihelper.hxx"
 #endif
 #ifndef SC_XILINK_HXX
 #include "xilink.hxx"
@@ -179,7 +182,7 @@ XclImpPCField::~XclImpPCField()
 
 // general field/item access --------------------------------------------------
 
-const String& XclImpPCField::GetFieldName( const XclImpPTNameVec& rVisNames ) const
+const String& XclImpPCField::GetFieldName( const ScfStringVec& rVisNames ) const
 {
     if( IsGroupChildField() && (mnFieldIdx < rVisNames.size()) )
     {
@@ -330,7 +333,7 @@ void XclImpPCField::ReadSxgroupinfo( XclImpStream& rStrm )
     DBG_ASSERT( mnTotalItemCount == maFieldInfo.mnVisItems, "XclImpPCField::ReadSxgroupinfo - SXGROUPINFO out of record order" );
     DBG_ASSERT( (rStrm.GetRecLeft() / 2) == maFieldInfo.mnBaseItems, "XclImpPCField::ReadSxgroupinfo - wrong SXGROUPINFO size" );
     maGroupOrder.clear();
-    size_t nSize = static_cast< size_t >( rStrm.GetRecLeft() / 2 );
+    size_t nSize = rStrm.GetRecLeft() / 2;
     maGroupOrder.resize( nSize, 0 );
     for( size_t nIdx = 0; nIdx < nSize; ++nIdx )
         rStrm >> maGroupOrder[ nIdx ];
@@ -338,7 +341,7 @@ void XclImpPCField::ReadSxgroupinfo( XclImpStream& rStrm )
 
 // grouping -------------------------------------------------------------------
 
-void XclImpPCField::ApplyGroupField( ScDPSaveData& rSaveData, const XclImpPTNameVec& rVisNames ) const
+void XclImpPCField::ApplyGroupField( ScDPSaveData& rSaveData, const ScfStringVec& rVisNames ) const
 {
     if( GetFieldName( rVisNames ).Len() )
     {
@@ -353,7 +356,7 @@ void XclImpPCField::ApplyGroupField( ScDPSaveData& rSaveData, const XclImpPTName
 
 // private --------------------------------------------------------------------
 
-void XclImpPCField::ApplyStdGroupField( ScDPSaveData& rSaveData, const XclImpPTNameVec& rVisNames ) const
+void XclImpPCField::ApplyStdGroupField( ScDPSaveData& rSaveData, const ScfStringVec& rVisNames ) const
 {
     if( const XclImpPCField* pBaseField = GetGroupBaseField() )
     {
@@ -386,14 +389,14 @@ void XclImpPCField::ApplyStdGroupField( ScDPSaveData& rSaveData, const XclImpPTN
     }
 }
 
-void XclImpPCField::ApplyNumGroupField( ScDPSaveData& rSaveData, const XclImpPTNameVec& rVisNames ) const
+void XclImpPCField::ApplyNumGroupField( ScDPSaveData& rSaveData, const ScfStringVec& rVisNames ) const
 {
     ScDPNumGroupInfo aNumInfo( GetScNumGroupInfo() );
     ScDPSaveNumGroupDimension aNumGroupDim( GetFieldName( rVisNames ), aNumInfo );
     rSaveData.GetDimensionData()->AddNumGroupDimension( aNumGroupDim );
 }
 
-void XclImpPCField::ApplyDateGroupField( ScDPSaveData& rSaveData, const XclImpPTNameVec& rVisNames ) const
+void XclImpPCField::ApplyDateGroupField( ScDPSaveData& rSaveData, const ScfStringVec& rVisNames ) const
 {
     ScDPNumGroupInfo aDateInfo( GetScDateGroupInfo() );
     sal_Int32 nScDateType = maNumGroupInfo.GetScDateType();
