@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BGroups.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:08:47 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:21:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,23 +76,25 @@ void OGroups::impl_refresh() throw(RuntimeException)
     m_pParent->refreshGroups();
 }
 // -------------------------------------------------------------------------
-Reference< XPropertySet > OGroups::createEmptyObject()
+Reference< XPropertySet > OGroups::createDescriptor()
 {
     //  OAdabasGroup* pNew =
     return new OAdabasGroup(m_pConnection);
 }
 // -------------------------------------------------------------------------
 // XAppend
-void OGroups::appendObject( const Reference< XPropertySet >& descriptor )
+sdbcx::ObjectType OGroups::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& /*descriptor*/ )
 {
     ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("CREATE USERGROUP ");
     ::rtl::OUString aQuote  = m_pConnection->getMetaData()->getIdentifierQuoteString(  );
 
-    aSql = aSql + aQuote + getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote;
+    aSql = aSql + aQuote + _rForName + aQuote;
 
     Reference< XStatement > xStmt = m_pConnection->createStatement(  );
     xStmt->execute(aSql);
     ::comphelper::disposeComponent(xStmt);
+
+    return createObject( _rForName );
 }
 // -------------------------------------------------------------------------
 // XDrop
