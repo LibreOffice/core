@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlnum.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:35:04 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:03:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,9 +108,14 @@ static HTMLOptionEnum __FAR_DATA aHTMLULTypeTable[] =
 
 void SwHTMLNumRuleInfo::Set( const SwTxtNode& rTxtNd )
 {
-    if( rTxtNd.GetNumRule() && ! rTxtNd.IsOutline())
+    // --> OD 2006-06-12 #b6435904#
+    // export all numberings, except the outline numbering.
+//    if( rTxtNd.GetNumRule() && ! rTxtNd.IsOutline())
+    const SwNumRule* pTxtNdNumRule( rTxtNd.GetNumRule() );
+    if ( pTxtNdNumRule &&
+         pTxtNdNumRule != rTxtNd.GetDoc()->GetOutlineNumRule() )
     {
-        pNumRule = (SwNumRule *)rTxtNd.GetNumRule();
+        pNumRule = const_cast<SwNumRule*>(pTxtNdNumRule);
         nDeep = pNumRule ? rTxtNd.GetLevel() + 1 : 0;
         bNumbered = rTxtNd.IsCounted();
         // --> OD 2005-11-16 #i57919#
@@ -123,6 +128,7 @@ void SwHTMLNumRuleInfo::Set( const SwTxtNode& rTxtNd )
                    rTxtNd.GetNum() && rTxtNd.GetNum()->GetStartValue() == USHRT_MAX;
         // <--
     }
+    // <--
     else
     {
         pNumRule = 0;
