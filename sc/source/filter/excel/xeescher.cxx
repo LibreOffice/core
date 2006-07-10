@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xeescher.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-21 11:56:29 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:31:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,7 +112,7 @@ void XclExpCtrlLinkHelper::SetSourceRange( const ScRange& rSrcRange )
     mnEntryCount = static_cast< sal_uInt16 >( rSrcRange.aEnd.Col() - rSrcRange.aStart.Col() + 1 );
 }
 
-void XclExpCtrlLinkHelper::WriteFormula( XclExpStream& rStrm, const XclExpTokenArray& rTokArr ) const
+void XclExpCtrlLinkHelper::WriteFormula( XclExpStream& rStrm, const XclTokenArray& rTokArr ) const
 {
     sal_uInt16 nFmlaSize = rTokArr.GetSize();
     rStrm << nFmlaSize << sal_uInt32( 0 );
@@ -121,7 +121,7 @@ void XclExpCtrlLinkHelper::WriteFormula( XclExpStream& rStrm, const XclExpTokenA
         rStrm << sal_uInt8( 0 );
 }
 
-void XclExpCtrlLinkHelper::WriteFormulaSubRec( XclExpStream& rStrm, sal_uInt16 nSubRecId, const XclExpTokenArray& rTokArr ) const
+void XclExpCtrlLinkHelper::WriteFormulaSubRec( XclExpStream& rStrm, sal_uInt16 nSubRecId, const XclTokenArray& rTokArr ) const
 {
     rStrm.StartRecord( nSubRecId, (rTokArr.GetSize() + 5) & ~1 );
     WriteFormula( rStrm, rTokArr );
@@ -272,17 +272,17 @@ XclExpObjTbxCtrl::XclExpObjTbxCtrl(
     namespace AwtVisualEffect = ::com::sun::star::awt::VisualEffect;
     namespace AwtScrollOrient = ::com::sun::star::awt::ScrollBarOrientation;
 
-    Reference< XPropertySet > xPropSet( rxCtrlModel, UNO_QUERY );
-    if( !rxShape.is() || !xPropSet.is() )
+    ScfPropertySet aCtrlProp( rxCtrlModel );
+    if( !rxShape.is() || !aCtrlProp.Is() )
         return;
 
     mnHeight = rxShape->getSize().Height;
-    if( !mnHeight )
+    if( mnHeight <= 0 )
         return;
 
     // control type
     sal_Int16 nClassId;
-    if( ::getPropValue( nClassId, xPropSet, CREATE_OUSTRING( "ClassId" ) ) )
+    if( aCtrlProp.GetProperty( nClassId, CREATE_OUSTRING( "ClassId" ) ) )
     {
         switch( nClassId )
         {
@@ -302,7 +302,7 @@ XclExpObjTbxCtrl::XclExpObjTbxCtrl(
 
     // OBJ record flags
     SetLocked( TRUE );
-    SetPrintable( ::getPropBool( xPropSet, CREATE_OUSTRING( "Printable" ) ) );
+    SetPrintable( aCtrlProp.GetBoolProperty( CREATE_OUSTRING( "Printable" ) ) );
     SetAutoFill( FALSE );
     SetAutoLine( FALSE );
 
@@ -327,7 +327,7 @@ XclExpObjTbxCtrl::XclExpObjTbxCtrl(
 
     // control label
     OUString aString;
-    if( ::getPropValue( aString, xPropSet, CREATE_OUSTRING( "Label" ) ) )
+    if( aCtrlProp.GetProperty( aString, CREATE_OUSTRING( "Label" ) ) )
     {
         /*  Be sure to construct the MSODRAWING ClientTextbox record after the
             base OBJ's MSODRAWING record Escher data is completed. */
@@ -343,31 +343,28 @@ XclExpObjTbxCtrl::XclExpObjTbxCtrl(
             float fFloatVal;
             sal_Int16 nShortVal;
 
-            if( ::getPropValue( aFontName, xPropSet, CREATE_OUSTRING( "FontName" ) ) )
+            if( aCtrlProp.GetProperty( aFontName, CREATE_OUSTRING( "FontName" ) ) )
                 aFontData.maName = XclTools::GetXclFontName( aFontName );
-            if( ::getPropValue( fFloatVal, xPropSet, CREATE_OUSTRING( "FontHeight" ) ) )
+            if( aCtrlProp.GetProperty( fFloatVal, CREATE_OUSTRING( "FontHeight" ) ) )
                 aFontData.SetApiHeight( fFloatVal );
-            if( ::getPropValue( nShortVal, xPropSet, CREATE_OUSTRING( "FontFamily" ) ) )
+            if( aCtrlProp.GetProperty( nShortVal, CREATE_OUSTRING( "FontFamily" ) ) )
                 aFontData.SetApiFamily( nShortVal );
-            if( ::getPropValue( nShortVal, xPropSet, CREATE_OUSTRING( "FontCharset" ) ) )
+            if( aCtrlProp.GetProperty( nShortVal, CREATE_OUSTRING( "FontCharset" ) ) )
                 aFontData.SetApiCharSet( nShortVal );
-            if( ::getPropValue( nShortVal, xPropSet, CREATE_OUSTRING( "FontSlant" ) ) )
+            if( aCtrlProp.GetProperty( nShortVal, CREATE_OUSTRING( "FontSlant" ) ) )
                 aFontData.SetApiPosture( static_cast< ::com::sun::star::awt::FontSlant >( nShortVal ) );
-            if( ::getPropValue( fFloatVal, xPropSet, CREATE_OUSTRING( "FontWeight" ) ) )
+            if( aCtrlProp.GetProperty( fFloatVal, CREATE_OUSTRING( "FontWeight" ) ) )
                 aFontData.SetApiWeight( fFloatVal );
-            if( ::getPropValue( nShortVal, xPropSet, CREATE_OUSTRING( "FontUnderline" ) ) )
+            if( aCtrlProp.GetProperty( nShortVal, CREATE_OUSTRING( "FontUnderline" ) ) )
                 aFontData.SetApiUnderline( nShortVal );
-            if( ::getPropValue( nShortVal, xPropSet, CREATE_OUSTRING( "FontStrikeout" ) ) )
+            if( aCtrlProp.GetProperty( nShortVal, CREATE_OUSTRING( "FontStrikeout" ) ) )
                 aFontData.SetApiStrikeout( nShortVal );
 
             if( aFontData.maName.Len() && aFontData.mnHeight )
             {
-                sal_Int32 nApiColor;
-                if( ::getPropValue( nApiColor, xPropSet, CREATE_OUSTRING( "TextColor" ) ) )
-                {
-                    Color aColor( static_cast< sal_uInt32 >( nApiColor ) );
+                Color aColor;
+                if( aCtrlProp.GetColorProperty( aColor, CREATE_OUSTRING( "TextColor" ) ) )
                     aFontData.SetColorId( GetRoot(), aColor );
-                }
                 nXclFont = GetFontBuffer().Insert( aFontData );
             }
         }
@@ -380,7 +377,7 @@ XclExpObjTbxCtrl::XclExpObjTbxCtrl(
     rEscherEx.CloseContainer();  // ESCHER_SpContainer
 
     // other properties
-    ::getPropValue( mnLineCount, xPropSet, CREATE_OUSTRING( "LineCount" ) );
+    aCtrlProp.GetProperty( mnLineCount, CREATE_OUSTRING( "LineCount" ) );
 
     // border style
     sal_Int16 nApiButton = AwtVisualEffect::LOOK3D;
@@ -389,11 +386,11 @@ XclExpObjTbxCtrl::XclExpObjTbxCtrl(
     {
         case FormCompType::LISTBOX:
         case FormCompType::COMBOBOX:
-            ::getPropValue( nApiBorder, xPropSet, CREATE_OUSTRING( "Border" ) );
+            aCtrlProp.GetProperty( nApiBorder, CREATE_OUSTRING( "Border" ) );
         break;
         case FormCompType::CHECKBOX:
         case FormCompType::RADIOBUTTON:
-            ::getPropValue( nApiButton, xPropSet, CREATE_OUSTRING( "VisualEffect" ) );
+            aCtrlProp.GetProperty( nApiButton, CREATE_OUSTRING( "VisualEffect" ) );
             nApiBorder = AwtVisualEffect::NONE;
         break;
         // Push button cannot be set to flat in Excel
@@ -421,7 +418,7 @@ XclExpObjTbxCtrl::XclExpObjTbxCtrl(
 
     // control state
     sal_Int16 nApiState = 0;
-    if( ::getPropValue( nApiState, xPropSet, CREATE_OUSTRING( "State" ) ) )
+    if( aCtrlProp.GetProperty( nApiState, CREATE_OUSTRING( "State" ) ) )
     {
         switch( nApiState )
         {
@@ -436,9 +433,9 @@ XclExpObjTbxCtrl::XclExpObjTbxCtrl(
     {
         case FormCompType::LISTBOX:
         {
-            mbMultiSel = ::getPropBool( xPropSet, CREATE_OUSTRING( "MultiSelection" ) );
+            mbMultiSel = aCtrlProp.GetBoolProperty( CREATE_OUSTRING( "MultiSelection" ) );
             Sequence< sal_Int16 > aSelection;
-            if( ::getPropValue( aSelection, xPropSet, CREATE_OUSTRING( "SelectedItems" ) ) )
+            if( aCtrlProp.GetProperty( aSelection, CREATE_OUSTRING( "SelectedItems" ) ) )
             {
                 sal_Int32 nLen = aSelection.getLength();
                 if( nLen > 0 )
@@ -451,7 +448,7 @@ XclExpObjTbxCtrl::XclExpObjTbxCtrl(
             }
 
             // convert listbox with dropdown button to Excel combobox
-            if( ::getPropBool( xPropSet, CREATE_OUSTRING( "Dropdown" ) ) )
+            if( aCtrlProp.GetBoolProperty( CREATE_OUSTRING( "Dropdown" ) ) )
                 mnObjType = EXC_OBJ_CMO_COMBOBOX;
         }
         break;
@@ -460,8 +457,8 @@ XclExpObjTbxCtrl::XclExpObjTbxCtrl(
         {
             Sequence< OUString > aStringList;
             OUString aDefText;
-            if( ::getPropValue( aStringList, xPropSet, CREATE_OUSTRING( "StringItemList" ) ) &&
-                ::getPropValue( aDefText, xPropSet, CREATE_OUSTRING( "Text" ) ) &&
+            if( aCtrlProp.GetProperty( aStringList, CREATE_OUSTRING( "StringItemList" ) ) &&
+                aCtrlProp.GetProperty( aDefText, CREATE_OUSTRING( "Text" ) ) &&
                 aStringList.getLength() && aDefText.getLength() )
             {
                 const OUString* pBegin = aStringList.getConstArray();
@@ -474,7 +471,7 @@ XclExpObjTbxCtrl::XclExpObjTbxCtrl(
             }
 
             // convert combobox without dropdown button to Excel listbox
-            if( !::getPropBool( xPropSet, CREATE_OUSTRING( "Dropdown" ) ) )
+            if( !aCtrlProp.GetBoolProperty( CREATE_OUSTRING( "Dropdown" ) ) )
                 mnObjType = EXC_OBJ_CMO_LISTBOX;
         }
         break;
@@ -482,17 +479,17 @@ XclExpObjTbxCtrl::XclExpObjTbxCtrl(
         case FormCompType::SCROLLBAR:
         {
             sal_Int32 nApiValue;
-            if( ::getPropValue( nApiValue, xPropSet, CREATE_OUSTRING( "ScrollValueMin" ) ) )
+            if( aCtrlProp.GetProperty( nApiValue, CREATE_OUSTRING( "ScrollValueMin" ) ) )
                 mnScrollMin = limit_cast< sal_Int16 >( nApiValue, EXC_OBJ_SBS_MINSCROLL, EXC_OBJ_SBS_MAXSCROLL );
-            if( ::getPropValue( nApiValue, xPropSet, CREATE_OUSTRING( "ScrollValueMax" ) ) )
+            if( aCtrlProp.GetProperty( nApiValue, CREATE_OUSTRING( "ScrollValueMax" ) ) )
                 mnScrollMax = limit_cast< sal_Int16 >( nApiValue, mnScrollMin, EXC_OBJ_SBS_MAXSCROLL );
-            if( ::getPropValue( nApiValue, xPropSet, CREATE_OUSTRING( "ScrollValue" ) ) )
+            if( aCtrlProp.GetProperty( nApiValue, CREATE_OUSTRING( "ScrollValue" ) ) )
                 mnScrollValue = limit_cast< sal_Int16 >( nApiValue, mnScrollMin, mnScrollMax );
-            if( ::getPropValue( nApiValue, xPropSet, CREATE_OUSTRING( "LineIncrement" ) ) )
+            if( aCtrlProp.GetProperty( nApiValue, CREATE_OUSTRING( "LineIncrement" ) ) )
                 mnScrollStep = limit_cast< sal_Int16 >( nApiValue, EXC_OBJ_SBS_MINSCROLL, EXC_OBJ_SBS_MAXSCROLL );
-            if( ::getPropValue( nApiValue, xPropSet, CREATE_OUSTRING( "BlockIncrement" ) ) )
+            if( aCtrlProp.GetProperty( nApiValue, CREATE_OUSTRING( "BlockIncrement" ) ) )
                 mnScrollPage = limit_cast< sal_Int16 >( nApiValue, EXC_OBJ_SBS_MINSCROLL, EXC_OBJ_SBS_MAXSCROLL );
-            if( ::getPropValue( nApiValue, xPropSet, CREATE_OUSTRING( "Orientation" ) ) )
+            if( aCtrlProp.GetProperty( nApiValue, CREATE_OUSTRING( "Orientation" ) ) )
                 mbScrollHor = nApiValue == AwtScrollOrient::HORIZONTAL;
         }
         break;
@@ -500,15 +497,15 @@ XclExpObjTbxCtrl::XclExpObjTbxCtrl(
         case FormCompType::SPINBUTTON:
         {
             sal_Int32 nApiValue;
-            if( ::getPropValue( nApiValue, xPropSet, CREATE_OUSTRING( "SpinValueMin" ) ) )
+            if( aCtrlProp.GetProperty( nApiValue, CREATE_OUSTRING( "SpinValueMin" ) ) )
                 mnScrollMin = limit_cast< sal_Int16 >( nApiValue, EXC_OBJ_SBS_MINSCROLL, EXC_OBJ_SBS_MAXSCROLL );
-            if( ::getPropValue( nApiValue, xPropSet, CREATE_OUSTRING( "SpinValueMax" ) ) )
+            if( aCtrlProp.GetProperty( nApiValue, CREATE_OUSTRING( "SpinValueMax" ) ) )
                 mnScrollMax = limit_cast< sal_Int16 >( nApiValue, mnScrollMin, EXC_OBJ_SBS_MAXSCROLL );
-            if( ::getPropValue( nApiValue, xPropSet, CREATE_OUSTRING( "SpinValue" ) ) )
+            if( aCtrlProp.GetProperty( nApiValue, CREATE_OUSTRING( "SpinValue" ) ) )
                 mnScrollValue = limit_cast< sal_Int16 >( nApiValue, mnScrollMin, mnScrollMax );
-            if( ::getPropValue( nApiValue, xPropSet, CREATE_OUSTRING( "SpinIncrement" ) ) )
+            if( aCtrlProp.GetProperty( nApiValue, CREATE_OUSTRING( "SpinIncrement" ) ) )
                 mnScrollStep = limit_cast< sal_Int16 >( nApiValue, EXC_OBJ_SBS_MINSCROLL, EXC_OBJ_SBS_MAXSCROLL );
-            if( ::getPropValue( nApiValue, xPropSet, CREATE_OUSTRING( "Orientation" ) ) )
+            if( aCtrlProp.GetProperty( nApiValue, CREATE_OUSTRING( "Orientation" ) ) )
                 mbScrollHor = nApiValue == AwtScrollOrient::HORIZONTAL;
         }
         break;
@@ -599,7 +596,7 @@ void XclExpObjTbxCtrl::WriteSubRecs( XclExpStream& rStrm )
 
             rStrm.StartRecord( EXC_ID_OBJ_FTLBSDATA, 0 );
 
-            if( const XclExpTokenArray* pSrcRange = GetSourceRangeTokArr() )
+            if( const XclTokenArray* pSrcRange = GetSourceRangeTokArr() )
             {
                 rStrm << static_cast< sal_uInt16 >( (pSrcRange->GetSize() + 7) & 0xFFFE );
                 WriteFormula( rStrm, *pSrcRange );
@@ -670,7 +667,7 @@ void XclExpObjTbxCtrl::WriteMacroSubRec( XclExpStream& rStrm )
 
 void XclExpObjTbxCtrl::WriteCellLinkSubRec( XclExpStream& rStrm, sal_uInt16 nSubRecId )
 {
-    if( const XclExpTokenArray* pCellLink = GetCellLinkTokArr() )
+    if( const XclTokenArray* pCellLink = GetCellLinkTokArr() )
         WriteFormulaSubRec( rStrm, nSubRecId, *pCellLink );
 }
 
