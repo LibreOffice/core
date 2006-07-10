@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:41:59 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:07:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,9 @@
 #endif
 #ifndef _DBA_CORE_RESOURCE_HRC_
 #include "core_resource.hrc"
+#endif
+#ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
+#include <com/sun/star/sdb/CommandType.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -116,6 +119,9 @@
 #endif
 #ifndef _DBACORE_DEFINITIONCOLUMN_HXX_
 #include "definitioncolumn.hxx"
+#endif
+#ifndef DBACCESS_OBJECTNAMEAPPROVAL_HXX
+#include "objectnameapproval.hxx"
 #endif
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
@@ -342,7 +348,7 @@ connectivity::sdbcx::ObjectType OTableContainer::createObject(const ::rtl::OUStr
     return xRet;
 }
 // -----------------------------------------------------------------------------
-Reference< XPropertySet > OTableContainer::createEmptyObject()
+Reference< XPropertySet > OTableContainer::createDescriptor()
 {
     Reference< XPropertySet > xRet;
 
@@ -367,7 +373,7 @@ Reference< XPropertySet > OTableContainer::createEmptyObject()
 }
 // -----------------------------------------------------------------------------
 // XAppend
-void OTableContainer::appendObject( const Reference< XPropertySet >& descriptor )
+ObjectType OTableContainer::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     // append the new table with a create stmt
     ::rtl::OUString aName = getString(descriptor->getPropertyValue(PROPERTY_NAME));
@@ -377,6 +383,10 @@ void OTableContainer::appendObject( const Reference< XPropertySet >& descriptor 
         sMessage.SearchAndReplaceAscii("$name$", aName);
         throw SQLException(sMessage,static_cast<XTypeProvider*>(static_cast<OFilteredContainer*>(this)),SQLSTATE_GENERAL,1000,Any());
     }
+
+    Reference< XConnection > xConnection( m_xConnection.get(), UNO_QUERY );
+    PContainerApprove pApprove( new ObjectNameApproval( xConnection, ObjectNameApproval::TypeTable ) );
+    pApprove->approveElement( aName, descriptor );
 
     m_bInAppend = sal_True;
     try
@@ -389,7 +399,6 @@ void OTableContainer::appendObject( const Reference< XPropertySet >& descriptor 
         else
         {
             ::rtl::OUString aSql = ::dbtools::createSqlCreateTableStatement(descriptor,m_xConnection);
-
 
             Reference<XConnection> xCon = m_xConnection;
             OSL_ENSURE(xCon.is(),"Connection is null!");
@@ -408,52 +417,52 @@ void OTableContainer::appendObject( const Reference< XPropertySet >& descriptor 
         throw;
     }
     m_bInAppend = sal_False;
+
     Reference<XPropertySet> xTableDefinition;
     Reference<XNameAccess> xColumnDefinitions;
-    if ( descriptor.is() )
+    lcl_createDefintionObject(getNameForObject(descriptor),m_xTableDefinitions,xTableDefinition,xColumnDefinitions,sal_False);
+    Reference<XColumnsSupplier> xSup(descriptor,UNO_QUERY);
+    Reference<XDataDescriptorFactory> xFac(xColumnDefinitions,UNO_QUERY);
+    Reference<XAppend> xAppend(xColumnDefinitions,UNO_QUERY);
+    sal_Bool bModified = sal_False;
+    if ( xSup.is() && xColumnDefinitions.is() && xFac.is() && xAppend.is() )
     {
-        lcl_createDefintionObject(getNameForObject(descriptor),m_xTableDefinitions,xTableDefinition,xColumnDefinitions,sal_False);
-        Reference<XColumnsSupplier> xSup(descriptor,UNO_QUERY);
-        Reference<XDataDescriptorFactory> xFac(xColumnDefinitions,UNO_QUERY);
-        Reference<XAppend> xAppend(xColumnDefinitions,UNO_QUERY);
-        sal_Bool bModified = sal_False;
-        if ( xSup.is() && xColumnDefinitions.is() && xFac.is() && xAppend.is() )
+        Reference<XNameAccess> xNames = xSup->getColumns();
+        if ( xNames.is() )
         {
-            Reference<XNameAccess> xNames = xSup->getColumns();
-            if ( xNames.is() )
+            Reference<XPropertySet> xProp = xFac->createDataDescriptor();
+            Sequence< ::rtl::OUString> aSeq = xNames->getElementNames();
+            const ::rtl::OUString* pIter = aSeq.getConstArray();
+            const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
+            for(;pIter != pEnd;++pIter)
             {
-                Reference<XPropertySet> xProp = xFac->createDataDescriptor();
-                Sequence< ::rtl::OUString> aSeq = xNames->getElementNames();
-                const ::rtl::OUString* pIter = aSeq.getConstArray();
-                const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
-                for(;pIter != pEnd;++pIter)
+                if ( !xColumnDefinitions->hasByName(*pIter) )
                 {
-                    if ( !xColumnDefinitions->hasByName(*pIter) )
+                    Reference<XPropertySet> xColumn(xNames->getByName(*pIter),UNO_QUERY);
+                    OColumnSettings* pColumnSettings = NULL;
+                    if ( ::comphelper::getImplementation( pColumnSettings, xColumn ) )
                     {
-                        Reference<XPropertySet> xColumn(xNames->getByName(*pIter),UNO_QUERY);
-                        OColumnSettings* pColumnSettings = NULL;
-                        if ( ::comphelper::getImplementation( pColumnSettings, xColumn ) )
+                        if ( ( pColumnSettings && !pColumnSettings->isDefaulted() ) )
                         {
-                            if ( ( pColumnSettings && !pColumnSettings->isDefaulted() ) )
-                            {
-                                ::comphelper::copyProperties(xColumn,xProp);
-                                xAppend->appendByDescriptor(xProp);
-                                bModified = sal_True;
-                            }
+                            ::comphelper::copyProperties(xColumn,xProp);
+                            xAppend->appendByDescriptor(xProp);
+                            bModified = sal_True;
                         }
                     }
                 }
             }
         }
-        const static ::rtl::OUString s_pTableProps[] = {    ::rtl::OUString(PROPERTY_FILTER), ::rtl::OUString(PROPERTY_ORDER)
-                                                        , ::rtl::OUString(PROPERTY_APPLYFILTER), ::rtl::OUString(PROPERTY_FONT)
-                                                        , ::rtl::OUString(PROPERTY_ROW_HEIGHT), ::rtl::OUString(PROPERTY_TEXTCOLOR)
-                                                        , ::rtl::OUString(PROPERTY_TEXTLINECOLOR), ::rtl::OUString(PROPERTY_TEXTEMPHASIS)
-                                                        , ::rtl::OUString(PROPERTY_TEXTRELIEF) };
-        Sequence< ::rtl::OUString> aNames(s_pTableProps,sizeof(s_pTableProps)/sizeof(s_pTableProps[0]));
-        if ( bModified || !lcl_isPropertySetDefaulted(aNames,xTableDefinition) )
-            ::dbaccess::notifyDataSourceModified(m_xTableDefinitions,sal_True);
     }
+    const static ::rtl::OUString s_pTableProps[] = {    ::rtl::OUString(PROPERTY_FILTER), ::rtl::OUString(PROPERTY_ORDER)
+                                                    , ::rtl::OUString(PROPERTY_APPLYFILTER), ::rtl::OUString(PROPERTY_FONT)
+                                                    , ::rtl::OUString(PROPERTY_ROW_HEIGHT), ::rtl::OUString(PROPERTY_TEXTCOLOR)
+                                                    , ::rtl::OUString(PROPERTY_TEXTLINECOLOR), ::rtl::OUString(PROPERTY_TEXTEMPHASIS)
+                                                    , ::rtl::OUString(PROPERTY_TEXTRELIEF) };
+    Sequence< ::rtl::OUString> aNames(s_pTableProps,sizeof(s_pTableProps)/sizeof(s_pTableProps[0]));
+    if ( bModified || !lcl_isPropertySetDefaulted(aNames,xTableDefinition) )
+        ::dbaccess::notifyDataSourceModified(m_xTableDefinitions,sal_True);
+
+    return createObject( _rForName );
 }
 // -------------------------------------------------------------------------
 // XDrop
@@ -479,7 +488,7 @@ void OTableContainer::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElement
                     xTable->getPropertyValue(PROPERTY_SCHEMANAME)   >>= sSchema;
                 xTable->getPropertyValue(PROPERTY_NAME)         >>= sTable;
 
-                ::dbtools::composeTableName(m_xMetaData,sCatalog,sSchema,sTable,sComposedName,sal_True,::dbtools::eInTableDefinitions);
+                sComposedName = ::dbtools::composeTableName( m_xMetaData, sCatalog, sSchema, sTable, sal_True, ::dbtools::eInTableDefinitions );
 
                 ::rtl::OUString sType;
                 xTable->getPropertyValue(PROPERTY_TYPE)         >>= sType;
