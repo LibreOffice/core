@@ -1,0 +1,68 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: sdbt_strings.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:21:36 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef DBACCESS_SDBT_RESOURCE_HRC
+#include "sdbt_resource.hrc"
+#endif
+
+String STR_NAME_ALREADY_USED_IN_DB
+{
+    Text [ de ] = "Der Name '$name$' wird bereits in der Datenbank benutzt.";
+    Text [ en-US ] = "The name '$name$' is already in use in the database.";
+};
+
+String STR_QUERY_AND_TABLE_DISTINCT_NAMES
+{
+    Text [ de ] = "Es ist nicht möglich, einer Tabelle und einer Abfrage den selben Namen zu geben. Bitte wählen Sie einen Namen, der noch nicht für eine Abfrage oder Tabelle benutzt wird.";
+    Text [ en-US ] = "You cannot give a table and a query the same name. Please use a name which is not yet used by a query or table.";
+};
+
+String STR_BASENAME_TABLE
+{
+    Text [ de ] = "Tabelle";
+    Text [ en-US ] = "Table";
+};
+
+String STR_BASENAME_QUERY
+{
+    Text [ de ] = "Abfrage";
+    Text [ en-US ] = "Query";
+};
+
+String STR_NO_QUOTES_IN_QUERY_NAMES
+{
+    Text [ de ] = "Abfragenamen dürfen keine Zitatzeichen enthalten.";
+    Text [ en-US ] = "Query names must not contain quote characters.";
+};
