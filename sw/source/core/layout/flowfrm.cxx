@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: vg $ $Date: 2006-06-02 12:11:54 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:29:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2087,8 +2087,10 @@ BOOL SwFlowFrm::MoveFwd( BOOL bMakePage, BOOL bPageBreak, BOOL bMoveAlways )
                     ViewShell *pSh = rThis.GetShell();
                     if ( pSh && !pSh->Imp()->IsUpdateExpFlds() )
                         pSh->GetDoc()->SetNewFldLst();  //Wird von CalcLayout() hinterher erledigt!
+
                     pNewPage->InvalidateSpelling();
                     pNewPage->InvalidateAutoCompleteWords();
+                    pNewPage->InvalidateWordCount();
                 }
             }
         }
@@ -2558,8 +2560,11 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
             ViewShell *pSh = rThis.GetShell();
             if ( pSh && !pSh->Imp()->IsUpdateExpFlds() )
                 pSh->GetDoc()->SetNewFldLst();  //Wird von CalcLayout() hinterher eledigt!
+
             pNewPage->InvalidateSpelling();
             pNewPage->InvalidateAutoCompleteWords();
+            pNewPage->InvalidateWordCount();
+
             // OD 30.10.2002 #97265# - no <CheckPageDesc(..)> in online layout
             if ( !pNewPage->GetFmt()->GetDoc()->IsBrowseMode() )
             {
