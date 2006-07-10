@@ -4,9 +4,9 @@
  *
  *  $RCSfile: warnings.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:39:24 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:17:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,13 +72,18 @@ namespace dbaccess
                 "lcl_concatWarnings: invalid warnings chain (this will crash)!" );
 
             const SQLException* pChainTravel = static_cast< const SQLException* >( _rChainLeft.getValue() );
-            SQLExceptionIteratorHelper aReferenceIterHelper( pChainTravel );
+            SQLExceptionIteratorHelper aReferenceIterHelper( *pChainTravel );
             while ( aReferenceIterHelper.hasMoreElements() )
                 pChainTravel = aReferenceIterHelper.next();
 
             // reached the end of the chain, and pChainTravel points to the last element
             const_cast< SQLException* >( pChainTravel )->NextException = _rChainRight;
         }
+    }
+
+    //--------------------------------------------------------------------
+    WarningsContainer::~WarningsContainer()
+    {
     }
 
     //--------------------------------------------------------------------
@@ -118,6 +123,12 @@ namespace dbaccess
         if ( m_xExternalWarnings.is() )
             m_xExternalWarnings->clearWarnings();
         m_aOwnWarnings.clear();
+    }
+
+    //--------------------------------------------------------------------
+    void WarningsContainer::appendWarning( const ::rtl::OUString& _rWarning, const sal_Char* _pAsciiSQLState, const Reference< XInterface >& _rxContext )
+    {
+        appendWarning( SQLWarning( _rWarning, _rxContext, ::rtl::OUString::createFromAscii( _pAsciiSQLState ), 0, Any() ) );
     }
 
 //........................................................................
