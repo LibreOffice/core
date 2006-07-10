@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xiroot.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 12:08:19 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:00:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,15 +49,14 @@ typedef ScfRef< XclImpString > XclImpStringRef;
 
 // Global data ================================================================
 
-class ExcelToSc;
 class XclImpAddressConverter;
+class XclImpFormulaCompiler;
 class XclImpSst;
 class XclImpPalette;
 class XclImpFontBuffer;
 class XclImpNumFmtBuffer;
 class XclImpXFBuffer;
 class XclImpXFRangeBuffer;
-class _ScRangeListTabs;
 class XclImpTabInfo;
 class XclImpNameManager;
 class XclImpLinkManager;
@@ -70,10 +69,15 @@ class XclImpPageSettings;
 class XclImpDocViewSettings;
 class XclImpTabViewSettings;
 
+class _ScRangeListTabs;
+class ExcelToSc;
+
 /** Stores global buffers and data needed for Excel import filter. */
 struct XclImpRootData : public XclRootData
 {
     typedef ScfRef< XclImpAddressConverter >    XclImpAddrConvRef;
+    typedef ScfRef< XclImpFormulaCompiler >     XclImpFmlaCompRef;
+
     typedef ScfRef< XclImpSst >                 XclImpSstRef;
     typedef ScfRef< XclImpPalette >             XclImpPaletteRef;
     typedef ScfRef< XclImpFontBuffer >          XclImpFontBfrRef;
@@ -92,6 +96,8 @@ struct XclImpRootData : public XclRootData
     typedef ScfRef< XclImpTabViewSettings >     XclImpTabViewSettRef;
 
     XclImpAddrConvRef   mxAddrConv;         /// The address converter.
+    XclImpFmlaCompRef   mxFmlaComp;         /// The formula compiler.
+
     XclImpSstRef        mxSst;              /// The shared string table.
     XclImpPaletteRef    mxPalette;          /// The color buffer.
     XclImpFontBfrRef    mxFontBfr;          /// All fonts in the file.
@@ -136,7 +142,9 @@ public:
     /** Returns the address converter. */
     XclImpAddressConverter& GetAddressConverter() const;
     /** Returns the formula converter. */
-    ExcelToSc&          GetFmlaConverter() const;
+    XclImpFormulaCompiler& GetFormulaCompiler() const;
+    /** Returns the old formula converter. */
+    ExcelToSc&          GetOldFmlaConverter() const;
 
     /** Returns the shared string table. */
     XclImpSst&          GetSst() const;
