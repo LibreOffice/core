@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeEngine.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 15:55:03 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 11:26:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,6 +88,7 @@
 #include "svdopath.hxx"
 #endif
 #include "svdpage.hxx"
+#include "svdmodel.hxx"
 #ifndef _XOUTX_HXX
 #include "xoutx.hxx"
 #endif
@@ -381,14 +382,17 @@ com::sun::star::awt::Rectangle SAL_CALL EnhancedCustomShapeEngine::getTextBounds
 {
     com::sun::star::awt::Rectangle aTextRect;
     SdrObject* pSdrObjCustomShape( GetSdrObjectFromXShape( mxShape ) );
-    if ( pSdrObjCustomShape )
+    if ( pSdrObjCustomShape && pSdrObjCustomShape->GetModel() && !pSdrObjCustomShape->GetModel()->isLocked() )
     {
-        EnhancedCustomShape2d aCustomShape2d( pSdrObjCustomShape );
-        Rectangle aRect( aCustomShape2d.GetTextRect() );
-        aTextRect.X = aRect.Left();
-        aTextRect.Y = aRect.Top();
-        aTextRect.Width = aRect.GetWidth();
-        aTextRect.Height = aRect.GetHeight();
+        if ( pSdrObjCustomShape )
+        {
+            EnhancedCustomShape2d aCustomShape2d( pSdrObjCustomShape );
+            Rectangle aRect( aCustomShape2d.GetTextRect() );
+            aTextRect.X = aRect.Left();
+            aTextRect.Y = aRect.Top();
+            aTextRect.Width = aRect.GetWidth();
+            aTextRect.Height = aRect.GetHeight();
+        }
     }
     return aTextRect;
 }
