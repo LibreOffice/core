@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlformula.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-21 12:01:01 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 12:36:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -201,7 +201,7 @@ static const XclFunctionInfo saFuncTable_2[] =
     { ocExternal,           255,    1,  30, R, { E, R }, EXC_FUNCFLAG_IMPORTONLY }
 };
 
-/** Functions new in BIFF3. Unsupported Excel function: INFO. */
+/** Functions new in BIFF3. */
 static const XclFunctionInfo saFuncTable_3[] =
 {
     { ocRGP,                49,     1,  4,  A, { R, R, V, V } },    // BIFF2: 1-2, BIFF3: 1-4
@@ -221,7 +221,8 @@ static const XclFunctionInfo saFuncTable_3[] =
     { ocArcSinHyp,          232,    1,  1,  V, { V } },
     { ocArcCosHyp,          233,    1,  1,  V, { V } },
     { ocArcTanHyp,          234,    1,  1,  V, { V } },
-    { ocDBGet,              235,    3,  3,  V, { R } }
+    { ocDBGet,              235,    3,  3,  V, { R } },
+    { ocInfo,               244,    1,  1,  V, { V }, EXC_FUNCFLAG_VOLATILE }
 };
 
 /** Functions new in BIFF4. */
