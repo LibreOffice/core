@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JoinController.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:25:26 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:40:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,6 +144,8 @@
 #include "UITools.hxx"
 #endif
 
+#include <boost/optional.hpp>
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::beans;
@@ -156,15 +158,99 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::dbtools;
-using namespace ::dbaui;
 using namespace ::comphelper;
+
+// .............................................................................
+namespace dbaui
+{
+// .............................................................................
+
+// =============================================================================
+// = AddTableDialogContext
+// =============================================================================
+class AddTableDialogContext : public IAddTableDialogContext
+{
+    OJoinController& m_rController;
+
+public:
+    AddTableDialogContext( OJoinController& _rController )
+        :m_rController( _rController )
+    {
+    }
+
+    // IAddTableDialogContext
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
+                    getConnection() const;
+    virtual bool    allowViews() const;
+    virtual bool    allowQueries() const;
+    virtual bool    allowAddition() const;
+    virtual void    addTableWindow( const String& _rQualifiedTableName, const String& _rAliasName );
+    virtual void    onWindowClosing( const Window* _pWindow );
+
+private:
+    OJoinTableView* getTableView() const;
+};
+
+// -----------------------------------------------------------------------------
+Reference< XConnection > AddTableDialogContext::getConnection() const
+{
+    return m_rController.getConnection();
+}
+
+// -----------------------------------------------------------------------------
+bool AddTableDialogContext::allowViews() const
+{
+    return m_rController.allowViews();
+}
+
+// -----------------------------------------------------------------------------
+bool AddTableDialogContext::allowQueries() const
+{
+    return m_rController.allowQueries();
+}
+
+// -----------------------------------------------------------------------------
+bool AddTableDialogContext::allowAddition() const
+{
+    return const_cast< OJoinController& >( m_rController ).getJoinView()->getTableView()->IsAddAllowed();
+}
+
+// -----------------------------------------------------------------------------
+void AddTableDialogContext::addTableWindow( const String& _rQualifiedTableName, const String& _rAliasName )
+{
+    getTableView()->AddTabWin( _rQualifiedTableName, _rAliasName, TRUE );
+}
+
+// -----------------------------------------------------------------------------
+void AddTableDialogContext::onWindowClosing( const Window* _pWindow )
+{
+    if ( !m_rController.getView() )
+        return;
+
+    ::dbaui::notifySystemWindow(
+        m_rController.getView(), const_cast< Window* >( _pWindow ), ::comphelper::mem_fun( &TaskPaneList::RemoveWindow ) );
+
+    m_rController.InvalidateFeature( ID_BROWSER_ADDTABLE );
+    m_rController.getView()->GrabFocus();
+}
+
+// -----------------------------------------------------------------------------
+OJoinTableView* AddTableDialogContext::getTableView() const
+{
+    if ( m_rController.getJoinView() )
+        return m_rController.getJoinView()->getTableView();
+    return NULL;
+}
+
+// =============================================================================
+// = OJoinController
+// =============================================================================
 
 DBG_NAME(OJoinController)
 // -----------------------------------------------------------------------------
 OJoinController::OJoinController(const Reference< XMultiServiceFactory >& _rM)
     :OJoinController_BASE(_rM)
-    ,m_pAddTabDlg(NULL)
-    ,m_bViewsAllowed(sal_True)
+    ,m_pAddTableDialog(NULL)
 {
     DBG_CTOR(OJoinController,NULL);
 }
@@ -189,10 +275,14 @@ OJoinDesignView* OJoinController::getJoinView()
 // -----------------------------------------------------------------------------
 void OJoinController::disposing()
 {
+    {
+        ::std::auto_ptr< Window > pEnsureDelete( m_pAddTableDialog );
+        m_pAddTableDialog   = NULL;
+    }
+
     OJoinController_BASE::disposing();
 
-    m_pAddTabDlg    = NULL;
-    m_pView         = NULL;
+    m_pView             = NULL;
 
     {
         ::std::vector< OTableConnectionData*>::iterator aIter = m_vTableConnectionData.begin();
@@ -207,6 +297,14 @@ void OJoinController::disposing()
         m_vTableData.clear();
     }
 }
+// -----------------------------------------------------------------------------
+void OJoinController::reconnect( sal_Bool _bUI )
+{
+    OJoinController_BASE::reconnect( _bUI );
+    if ( isConnected() && m_pAddTableDialog )
+        m_pAddTableDialog->Update();
+}
+
 // -----------------------------------------------------------------------------
 void OJoinController::setModified(sal_Bool _bModified)
 {
@@ -238,22 +336,35 @@ FeatureState OJoinController::GetState(sal_uInt16 _nId) const
     switch (_nId)
     {
         case ID_BROWSER_EDITDOC:
-            aReturn.aState = ::cppu::bool2any(isEditable());
+            aReturn.bChecked = isEditable();
             break;
         case ID_BROWSER_SAVEDOC:
             aReturn.bEnabled = isConnected() && isModified();
             break;
         case ID_BROWSER_ADDTABLE:
-            if (aReturn.bEnabled = getView() && const_cast< OJoinController* >( this )->getJoinView()->getTableView()->IsAddAllowed())
-                aReturn.aState = ::cppu::bool2any(m_pAddTabDlg && m_pAddTabDlg->IsVisible());
-            else
-                aReturn.aState = ::cppu::bool2any(sal_False);
+            aReturn.bEnabled = ( getView() != NULL )
+                            && const_cast< OJoinController* >( this )->getJoinView()->getTableView()->IsAddAllowed();
+            aReturn.bChecked = aReturn.bEnabled && m_pAddTableDialog != NULL && m_pAddTableDialog->IsVisible() ;
+            aReturn.sTitle = OAddTableDlg::getDialogTitleForContext( impl_getDialogContext() );
             break;
+
         default:
             aReturn = OJoinController_BASE::GetState(_nId);
     }
     return aReturn;
 }
+
+// -----------------------------------------------------------------------------
+AddTableDialogContext& OJoinController::impl_getDialogContext() const
+{
+    if ( !m_pDialogContext.get() )
+    {
+        OJoinController* pNonConstThis = const_cast< OJoinController* >( this );
+        pNonConstThis->m_pDialogContext.reset( new AddTableDialogContext( *pNonConstThis ) );
+    }
+    return *m_pDialogContext;
+}
+
 // -----------------------------------------------------------------------------
 void OJoinController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >& aArgs)
 {
@@ -280,22 +391,22 @@ void OJoinController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >& 
             InvalidateAll();
             return;
         case ID_BROWSER_ADDTABLE:
-            if(!m_pAddTabDlg)
-                m_pAddTabDlg = getJoinView()->getAddTableDialog();
-            if(m_pAddTabDlg->IsVisible())
+            if ( !m_pAddTableDialog )
+                m_pAddTableDialog = new OAddTableDlg( getView(), impl_getDialogContext() );
+
+            if ( m_pAddTableDialog->IsVisible() )
             {
-                // ::dbaui::notifySystemWindow(getView(),m_pAddTabDlg,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
-                m_pAddTabDlg->Show(!m_pAddTabDlg->IsVisible());
-                m_pView->GrabFocus();
+                m_pAddTableDialog->Show( FALSE );
+                getView()->GrabFocus();
             }
-            else if(getJoinView()->getTableView()->IsAddAllowed())
+            else
             {
                 {
-                    WaitObject aWaitCursor(getView());
-                    m_pAddTabDlg->Update();
+                    WaitObject aWaitCursor( getView() );
+                    m_pAddTableDialog->Update();
                 }
-                m_pAddTabDlg->Show(!m_pAddTabDlg->IsVisible());
-                ::dbaui::notifySystemWindow(getView(),m_pAddTabDlg,::comphelper::mem_fun(&TaskPaneList::AddWindow));
+                m_pAddTableDialog->Show( TRUE );
+                ::dbaui::notifySystemWindow(getView(),m_pAddTableDialog,::comphelper::mem_fun(&TaskPaneList::AddWindow));
             }
             break;
         default:
@@ -489,4 +600,7 @@ void OJoinController::saveTableWindows(Sequence<PropertyValue>& _rViewProps)
         pViewIter->Value <<= aTables;
     }
 }
-// -----------------------------------------------------------------------------
+
+// .............................................................................
+}   // namespace dbaui
+// .............................................................................
