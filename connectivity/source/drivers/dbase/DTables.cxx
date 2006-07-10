@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DTables.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:21:24 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:26:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,14 +98,14 @@ void ODbaseTables::impl_refresh(  ) throw(RuntimeException)
     static_cast<ODbaseCatalog*>(&m_rParent)->refreshTables();
 }
 // -------------------------------------------------------------------------
-Reference< XPropertySet > ODbaseTables::createEmptyObject()
+Reference< XPropertySet > ODbaseTables::createDescriptor()
 {
     return new ODbaseTable(this,(ODbaseConnection*)static_cast<OFileCatalog&>(m_rParent).getConnection());
 }
 typedef connectivity::sdbcx::OCollection ODbaseTables_BASE_BASE;
 // -------------------------------------------------------------------------
 // XAppend
-void ODbaseTables::appendObject( const Reference< XPropertySet >& descriptor )
+sdbcx::ObjectType ODbaseTables::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     Reference<XUnoTunnel> xTunnel(descriptor,UNO_QUERY);
     if(xTunnel.is())
@@ -113,7 +113,7 @@ void ODbaseTables::appendObject( const Reference< XPropertySet >& descriptor )
         ODbaseTable* pTable = reinterpret_cast< ODbaseTable* >( xTunnel->getSomething(ODbaseTable::getUnoTunnelImplementationId()) );
         if(pTable)
         {
-            pTable->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)));
+            pTable->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),makeAny(_rForName));
             try
             {
                 if(!pTable->CreateImpl())
@@ -129,6 +129,7 @@ void ODbaseTables::appendObject( const Reference< XPropertySet >& descriptor )
             }
         }
     }
+    return createObject( _rForName );
 }
 // -------------------------------------------------------------------------
 // XDrop
