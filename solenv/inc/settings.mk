@@ -4,9 +4,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.195 $
+#   $Revision: 1.196 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 21:57:12 $
+#   last change: $Author: obo $ $Date: 2006-07-10 18:51:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -77,34 +77,25 @@ SCRIPTEXT=
 .INCLUDE : product.mk
 .ENDIF			# "$(PRODUCTNAME)"!=""
 
-# --- set SOLARVERSION for older workspaces
-
-.IF "$(SOLARVERSION)"==""
-SOLARVERSION=$(SOLARVER)$/$(UPD)
-.ENDIF
-
 .INCLUDE : minor.mk
 
 .IF "$(UPDATER)"!="" || "$(CWS_WORK_STAMP)"!=""
+
+.IF "$(SOURCEVERSION)"!="$(WORK_STAMP)"
+.ERROR : ; @echo Forced error: minor.mk in solenv/inc does not match your version!
+WRONG_SOURCEVERSION
+.ENDIF
+
+# Create $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/$(UPD)minor.mk if needed
 %minor.mk :
-.IF "$(SOURCEVERSION)"=="$(WORK_STAMP)"
     @+-$(MKDIRHIER) $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT) >& $(NULLDEV)
-.ELSE			# "$(SOURCEVERSION)"=="$(WORK_STAMP)"
-    @+echo "#"
-    @+echo "#"
-    @+echo "# ERROR: minor.mk in solenv/inc does not match your version!"
-    @+echo "#"
-    @+echo "#"
-    force_dmake_to_error
-.ENDIF			# "$(SOURCEVERSION)"=="$(WORK_STAMP)"
-.IF "$(GUI)"=="UNX"
-    @+tr -d "\015" < $(SOLARENV)$/inc$/minor.mk > $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/$(UPD)minor.mk
-    @+$(TOUCH) $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/minormkchanged.flg >& $(NULLDEV)
-.ELSE			# "$(GUI)"=="UNX"
     @+$(COPY) $(SOLARENV)$/inc$/minor.mk $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/$(UPD)minor.mk >& $(NULLDEV)
     @+$(TOUCH) $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/minormkchanged.flg >& $(NULLDEV)
-.ENDIF			# "$(GUI)"=="UNX"
 .ENDIF          # "$(UPDATER)"!="" || "$(CWS_WORK_STAMP)"!=""
+
+# Force creation of $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/
+# $(UPD)minor.mk could be empty as it's contents were already included from minor.mk
+.INCLUDE : $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/$(UPD)minor.mk
 
 .IF "$(BSCLIENT)"=="TRUE"
 .IF "$(UPDATER)"!="YES"
@@ -116,16 +107,9 @@ incorrect_settings:
 .ENDIF
 .ENDIF
 
-.INCLUDE : $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/$(UPD)minor.mk
-
-%udkversion.mk : $(PRJ)$/inc$/udkversion.mk
-    @+$(COPY) $(PRJ)$/inc$/udkversion.mk $@
-
-.INCLUDE .IGNORE : $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/udkversion.mk
+.INCLUDE : udkversion.mk
 
 # --- reset defined Environments --------------------
-.SUFFIXES:
-
 ASM=
 AFLAGS=
 
@@ -560,9 +544,6 @@ TARGETTHREAD=ST
 .ENDIF
 .ENDIF
 .ENDIF
-
-# Neues Enironment setzen
-.SUFFIXES : .exe .lst .lin .dll .obj .dlo .asm .lib .c .hxx .cxx .res .rc .src .srs .hlp .y .yxx .odl .idl .java .class .hid .cpp
 
 # --- Pfade setzen -------------------------------------------------
 
