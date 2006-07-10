@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AUsers.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:15:59 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:24:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,9 @@
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
-
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include <connectivity/dbexception.hxx>
+#endif
 
 using namespace comphelper;
 using namespace connectivity;
@@ -77,20 +79,25 @@ void OUsers::impl_refresh() throw(RuntimeException)
     m_aCollection.Refresh();
 }
 // -------------------------------------------------------------------------
-Reference< XPropertySet > OUsers::createEmptyObject()
+Reference< XPropertySet > OUsers::createDescriptor()
 {
     return new OUserExtend(m_pCatalog,isCaseSensitive());
 }
 // -------------------------------------------------------------------------
 // XAppend
-void OUsers::appendObject( const Reference< XPropertySet >& descriptor )
+sdbcx::ObjectType OUsers::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     OUserExtend* pUser = NULL;
-    if(getImplementation(pUser,descriptor) && pUser != NULL)
-    {
-        ADOUsers* pUsers = (ADOUsers*)m_aCollection;
-        pUsers->Append(OLEVariant(pUser->getImpl()),OLEString(pUser->getPassword()));
-    }
+    if ( !getImplementation( pUser, descriptor ) || pUser == NULL )
+        ::dbtools::throwGenericSQLException(
+            ::rtl::OUString::createFromAscii( "Could not create user: invalid object descriptor." ),
+            static_cast<XTypeProvider*>(this)
+        );
+
+    ADOUsers* pUsers = (ADOUsers*)m_aCollection;
+    pUsers->Append(OLEVariant(pUser->getImpl()),OLEString(pUser->getPassword()));
+
+    return createObject( _rForName );
 }
 // -------------------------------------------------------------------------
 // XDrop
