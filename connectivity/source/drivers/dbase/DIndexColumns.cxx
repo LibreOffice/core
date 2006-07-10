@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DIndexColumns.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:20:12 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:25:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,21 +98,14 @@ void ODbaseIndexColumns::impl_refresh() throw(RuntimeException)
     m_pIndex->refreshColumns();
 }
 // -------------------------------------------------------------------------
-Reference< XPropertySet > ODbaseIndexColumns::createEmptyObject()
+Reference< XPropertySet > ODbaseIndexColumns::createDescriptor()
 {
     return new sdbcx::OIndexColumn(m_pIndex->getTable()->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());
 }
-// -----------------------------------------------------------------------------
-sdbcx::ObjectType ODbaseIndexColumns::cloneObject(const Reference< XPropertySet >& _xDescriptor)
-{
-    Reference<XPropertySet> xProp = new sdbcx::OIndexColumn(m_pIndex->getTable()->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());
-    ::comphelper::copyProperties(_xDescriptor,xProp);
-    return xProp;
-}
 // -------------------------------------------------------------------------
-void ODbaseIndexColumns::appendObject( const Reference< XPropertySet >& /*descriptor*/ )
+sdbcx::ObjectType ODbaseIndexColumns::appendObject( const ::rtl::OUString& /*_rForName*/, const Reference< XPropertySet >& descriptor )
 {
-    ::dbtools::throwFeatureNotImplementedException( "XAppend::appendByDescriptor", static_cast< XAppend* >( this ) );
+    return cloneDescriptor( descriptor );
 }
 // -----------------------------------------------------------------------------
 
