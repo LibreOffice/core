@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WCopyTable.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:22:00 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:36:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,7 +180,7 @@ OCopyTableWizard::OCopyTableWizard(Window * pParent,
                 m_xSourceColumns = xColSupp->getColumns();
 
             if ( !m_xSourceObject->getPropertySetInfo()->hasPropertyByName(PROPERTY_COMMAND) )
-                m_sSourceName = ::dbtools::composeTableName(m_xConnection->getMetaData(),m_xSourceObject,sal_False,::dbtools::eInDataManipulation);
+                m_sSourceName = ::dbtools::composeTableName( m_xConnection->getMetaData(), m_xSourceObject, ::dbtools::eInDataManipulation, false, false, false );
             else
                 _xSourceObject->getPropertyValue(PROPERTY_NAME) >>= m_sSourceName;
             if ( m_xSourceConnection == m_xConnection )
@@ -904,8 +904,8 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
             xTables->getByName(m_sName) >>= m_xDestObject;
         else
         {
-            ::rtl::OUString sComposedName;
-            sComposedName = ::dbtools::composeTableName(m_xConnection->getMetaData(),m_xDestObject,sal_False,::dbtools::eInDataManipulation);
+            ::rtl::OUString sComposedName(
+                ::dbtools::composeTableName( m_xConnection->getMetaData(), m_xDestObject, ::dbtools::eInDataManipulation, false, false, false ) );
             if(xTables->hasByName(sComposedName))
             {
                 xTables->getByName(sComposedName) >>= m_xDestObject;
