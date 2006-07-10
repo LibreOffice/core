@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xcl97rec.hxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 08:28:20 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:53:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,17 +49,17 @@ class XclMsodrawing_Base
 {
 protected:
         XclEscher*              pEscher;
-        ULONG                   nStartPos;      // position in OffsetMap
-        ULONG                   nStopPos;       // position in OffsetMap
+        sal_Size                nStartPos;      // position in OffsetMap
+        sal_Size                nStopPos;       // position in OffsetMap
 
 public:
-                                XclMsodrawing_Base( XclEscher& rEscher, ULONG nInitialSize = 0 );
+                                XclMsodrawing_Base( XclEscher& rEscher, sal_Size nInitialSize = 0 );
     virtual                     ~XclMsodrawing_Base();
 
     inline  XclEscher*          GetEscher() const   { return pEscher; }
     inline  XclEscherEx*        GetEscherEx() const { return pEscher->GetEx(); }
             void                UpdateStopPos();
-            ULONG               GetDataLen() const;
+            sal_Size            GetDataLen() const;
 };
 
 
@@ -77,7 +77,7 @@ public:
     virtual                     ~XclMsodrawinggroup();
 
     virtual UINT16              GetNum() const;
-    virtual ULONG               GetLen() const;
+    virtual sal_Size            GetLen() const;
 };
 
 
@@ -93,11 +93,11 @@ public:
                                 XclMsodrawing(
                                     const XclExpRoot& rRoot,
                                     UINT16 nEscherType = 0,
-                                    UINT32 nInitialSize = 0 );
+                                    sal_Size nInitialSize = 0 );
     virtual                     ~XclMsodrawing();
 
     virtual UINT16              GetNum() const;
-    virtual ULONG               GetLen() const;
+    virtual sal_Size            GetLen() const;
 };
 
 
@@ -261,7 +261,7 @@ public:
     virtual void                Save( XclExpStream& rStrm );
 
     virtual UINT16              GetNum() const;
-    virtual ULONG               GetLen() const;
+    virtual sal_Size            GetLen() const;
 
 private:
     virtual void                SaveCont( XclExpStream& rStrm );
@@ -322,7 +322,7 @@ public:
                                 ExcBof8_Base();
 
     virtual UINT16              GetNum() const;
-    virtual ULONG               GetLen() const;
+    virtual sal_Size            GetLen() const;
 };
 
 
@@ -368,7 +368,7 @@ public:
                                 ExcBundlesheet8( RootData& rRootData, SCTAB nTab );
                                 ExcBundlesheet8( const String& rString );
 
-    virtual ULONG               GetLen() const;
+    virtual sal_Size            GetLen() const;
 };
 
 
@@ -378,7 +378,7 @@ class XclObproj : public ExcRecord
 {
 public:
     virtual UINT16              GetNum() const;
-    virtual ULONG               GetLen() const;
+    virtual sal_Size            GetLen() const;
 };
 
 
@@ -397,7 +397,7 @@ public:
     virtual                 ~XclDConRef();
 
     virtual UINT16          GetNum() const;
-    virtual ULONG           GetLen() const;
+    virtual sal_Size        GetLen() const;
 };
 
 
@@ -412,7 +412,7 @@ public:
                                 XclCodename( const String& );
 
     virtual UINT16              GetNum() const;
-    virtual ULONG               GetLen() const;
+    virtual sal_Size            GetLen() const;
 };
 
 
@@ -432,7 +432,7 @@ protected:
 public:
                                 ExcEScenarioCell( UINT16 nC, UINT16 nR, const String& rTxt );
 
-    inline ULONG                GetStringBytes()
+    inline sal_Size             GetStringBytes()
                                     { return sText.GetSize(); }
 
     void                        WriteAddress( XclExpStream& rStrm );
@@ -444,7 +444,7 @@ public:
 class ExcEScenario : public ExcRecord, private List
 {
 private:
-    ULONG                       nRecLen;
+    sal_Size                    nRecLen;
     XclExpString                sName;
     XclExpString                sComment;
     static XclExpString         sUsername;
@@ -463,7 +463,7 @@ public:
     virtual                     ~ExcEScenario();
 
     virtual UINT16              GetNum() const;
-    virtual ULONG               GetLen() const;
+    virtual sal_Size            GetLen() const;
 };
 
 
@@ -489,7 +489,7 @@ public:
     virtual void                Save( XclExpStream& rStrm );
 
     virtual UINT16              GetNum() const;
-    virtual ULONG               GetLen() const;
+    virtual sal_Size            GetLen() const;
 };
 
 
@@ -500,9 +500,9 @@ class XclProtection : public ExcDummyRec
     // replacement for records PROTECT, SCENPROTECT, OBJPROTECT...
 private:
     static const BYTE           pMyData[];
-    static const ULONG          nMyLen;
+    static const sal_Size       nMyLen;
 public:
-    virtual ULONG               GetLen( void ) const;
+    virtual sal_Size            GetLen( void ) const;
     virtual const BYTE*         GetData( void ) const;
 };
 
@@ -520,7 +520,7 @@ public:
                                 XclCalccount( const ScDocument& );
 
     virtual UINT16              GetNum() const;
-    virtual ULONG               GetLen() const;
+    virtual sal_Size            GetLen() const;
 };
 
 
@@ -536,7 +536,7 @@ public:
                                 XclIteration( const ScDocument& );
 
     virtual UINT16              GetNum() const;
-    virtual ULONG               GetLen() const;
+    virtual sal_Size            GetLen() const;
 };
 
 
@@ -552,7 +552,7 @@ public:
                                 XclDelta( const ScDocument& );
 
     virtual UINT16              GetNum() const;
-    virtual ULONG               GetLen() const;
+    virtual sal_Size            GetLen() const;
 };
 
 
