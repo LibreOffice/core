@@ -4,9 +4,9 @@
  *
  *  $RCSfile: column.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:46:37 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:12:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,7 +132,6 @@ namespace dbaccess
                                                 ::com::sun::star::lang::XUnoTunnel > OColumnBase;
 
     //------------------------------------------------------------
-    class OColumnSettings;
     class OColumn   :public comphelper::OBaseMutex
                     ,public OColumnBase
                     ,public ::cppu::OPropertySetHelper
@@ -221,7 +220,7 @@ namespace dbaccess
     // Setting of values
     public:
         OColumnSettings();
-        ~OColumnSettings();
+        virtual ~OColumnSettings();
 
         sal_Bool SAL_CALL convertFastPropertyValue(
                                 ::com::sun::star::uno::Any & rConvertedValue,
@@ -250,13 +249,28 @@ namespace dbaccess
     //============================================================
     //= IColumnFactory - used by OColumns for creating new columns
     //============================================================
-    class IColumnFactory
+    class SAL_NO_VTABLE IColumnFactory
     {
     public:
-        virtual OColumn*    createColumn(const ::rtl::OUString& _rName) const = 0;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createEmptyObject() = 0;
-        virtual void columnDropped(const ::rtl::OUString& _sName) = 0;
-        virtual void columnCloned(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xClone) = 0;
+        /** creates a OColumn object which should represent the column with a given name
+        */
+        virtual OColumn*
+            createColumn( const ::rtl::OUString& _rName ) const = 0;
+
+        /** creates a column descriptor object.
+
+            A column descriptor object is used to append new columns to the collection. If such an append
+            actually happened, columnAppended is called afterwards.
+        */
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createColumnDescriptor() = 0;
+
+        /** notifies that a column, created from a column descriptor, has been appended
+        */
+        virtual void columnAppended( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxSourceDescriptor ) = 0;
+
+        /** notifies that a column with a given name has been dropped
+        */
+        virtual void columnDropped( const ::rtl::OUString& _sName ) = 0;
     };
 
     //============================================================
@@ -267,7 +281,6 @@ namespace dbaccess
     typedef ::std::hash_map<rtl::OUString, OColumn*, ::comphelper::UStringMixHash, ::comphelper::UStringMixEqual> OColumnMap;
     typedef ::std::vector<OColumn*> OColumnArray;
 
-    class ODBTable;
     class OContainerMediator;
     typedef ::cppu::ImplHelper1< ::com::sun::star::container::XChild > TXChild;
     typedef connectivity::OColumnsHelper OColumns_BASE;
@@ -293,9 +306,8 @@ namespace dbaccess
 
         virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException);
         virtual connectivity::sdbcx::ObjectType createObject(const ::rtl::OUString& _rName);
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createEmptyObject();
-        virtual connectivity::sdbcx::ObjectType cloneObject(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xDescriptor);
-        virtual void appendObject( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor );
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createDescriptor();
+        virtual connectivity::sdbcx::ObjectType appendObject( const ::rtl::OUString& _rForName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor );
         virtual void dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName);
 
     public:
