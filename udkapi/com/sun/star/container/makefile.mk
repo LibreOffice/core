@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 15:20:15 $
+#   last change: $Author: obo $ $Date: 2006-07-10 16:13:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,8 @@ IDLFILES=\
     XComponentEnumeration.idl\
     XComponentEnumerationAccess.idl\
     XContainer.idl\
+    XContainerApproveBroadcaster.idl\
+    XContainerApproveListener.idl\
     XContainerListener.idl\
     XContainerQuery.idl\
     XContentEnumerationAccess.idl\
