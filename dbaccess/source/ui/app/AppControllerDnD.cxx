@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppControllerDnD.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:53:40 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:22:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,6 +111,9 @@
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
 #endif
+#ifndef _CPPUHELPER_EXC_HLP_HXX_
+#include <cppuhelper/exc_hlp.hxx>
+#endif
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
 #endif
@@ -204,6 +207,12 @@
 #endif
 #ifndef _SVT_FILEVIEW_HXX
 #include <svtools/fileview.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
+#endif
+#ifndef DBACCESS_SOURCE_UI_MISC_DEFAULTOBJECTNAMECHECK_HXX
+#include "defaultobjectnamecheck.hxx"
 #endif
 
 //........................................................................
@@ -391,15 +400,15 @@ void OApplicationController::deleteObjects( const Reference< XNameContainer>& _r
                         aObsolete = aNextObsolete;
                     }
                 }
-                catch(SQLException& e)
+                catch(const SQLException&)
                 {
-                    showError( SQLExceptionInfo(e) );
+                    showError( SQLExceptionInfo( ::cppu::getCaughtException() ) );
                 }
                 catch(WrappedTargetException& e)
                 {
                     SQLException aSql;
-                    if(e.TargetException >>= aSql)
-                        showError( SQLExceptionInfo( aSql ) );
+                    if ( e.TargetException >>= aSql )
+                        showError( SQLExceptionInfo( e.TargetException ) );
                     else
                         OSL_ENSURE( sal_False, "OApplicationController::deleteObjects: something strange happended!" );
                 }
@@ -570,23 +579,8 @@ void OApplicationController::getElements(ElementType _eType,::std::vector< ::rtl
     }
 }
 // -----------------------------------------------------------------------------
-void OApplicationController::impl_initialize( const Sequence< Any >& aArguments )
+void OApplicationController::impl_initialize()
 {
-    (void)aArguments;
-#if OSL_DEBUG_LEVEL > 0
-    const Any* pIter = aArguments.getConstArray();
-    const Any* pEnd   = pIter + aArguments.getLength();
-    PropertyValue aProp;
-    for(;pIter != pEnd;++pIter)
-    {
-        if ( (*pIter >>= aProp) && aProp.Name == URL_INTERACTIVE )
-        {
-            DBG_ERROR( "OApplicationController::impl_initialize: who's still using the 'Interactive' flag?" );
-            break;
-        }
-    }
-#endif
-
     Reference<XModifiable> xModi(m_xModel,UNO_QUERY);
     m_bCurrentlyModified = (xModi.is() && xModi->isModified());
 }
@@ -651,9 +645,8 @@ void OApplicationController::getSelectionElementNames(::std::vector< ::rtl::OUSt
     {
         xConnection = ensureConnection();
     }
-    catch(SQLContext& e) { showError(SQLExceptionInfo(e)); }
-    catch(SQLWarning& e) { showError(SQLExceptionInfo(e)); }
-    catch(SQLException& e) { showError(SQLExceptionInfo(e)); }
+    catch(const SQLException&) { showError( SQLExceptionInfo( ::cppu::getCaughtException() ) ); }
+
     OSL_ENSURE(xNameAccess.is(),"Data source doesn't return a name access -> GPF");
     return ::std::auto_ptr<OLinkedDocumentsAccess>(
         new OLinkedDocumentsAccess( getView(), getORB(), xNameAccess, xConnection, getDatabaseName() ) );
@@ -713,9 +706,9 @@ TransferableHelper* OApplicationController::copyObject()
         // the owner ship goes to ODataClipboards
         return pData;
     }
-    catch(SQLException& e)
+    catch(const SQLException&)
     {
-        showError(SQLExceptionInfo(e));
+        showError( SQLExceptionInfo( ::cppu::getCaughtException() ) );
     }
     catch(Exception&)
     {
@@ -754,7 +747,7 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
                     bValidDescriptor = (0 != sCommand.getLength());
                 if (!bValidDescriptor)
                 {
-                    DBG_ERROR("OApplicationController::pasteQuery: invalid descriptor!");
+                    DBG_ERROR("OApplicationController::paste: invalid descriptor!");
                     return sal_False;
                 }
 
@@ -814,7 +807,7 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
 
                     if (!bSuccess)
                     {
-                        DBG_ERROR("OApplicationController::pasteQuery: could not extract the source query object!");
+                        DBG_ERROR("OApplicationController::paste: could not extract the source query object!");
                         // TODO: maybe this is worth an error message to be displayed to the user ....
                         return sal_False;
                     }
@@ -825,18 +818,19 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
                 Reference< XSingleServiceFactory > xQueryFactory(xDestQueries, UNO_QUERY);
                 if (!xQueryFactory.is())
                 {
-                    DBG_ERROR("OApplicationController::pasteQuery: invalid destination query container!");
+                    DBG_ERROR("OApplicationController::paste: invalid destination query container!");
                     return sal_False;
                 }
 
                 // here we have everything needed to create a new query object ...
                 // ... ehm, except a new name
+                DynamicTableOrQueryNameCheck aNameChecker( getConnection(), CommandType::QUERY );
                 OSaveAsDlg aAskForName( getView(),
                                         CommandType::QUERY,
-                                        xDestQueries.get(),
-                                        Reference< XDatabaseMetaData>(),
-                                        Reference< XConnection>(),
+                                        getORB(),
+                                        getConnection(),
                                         sTargetName,
+                                        aNameChecker,
                                         SAD_ADDITIONAL_DESCRIPTION | SAD_TITLE_PASTE_AS);
                 if ( RET_OK != aAskForName.Execute() )
                     // cancelled by the user
@@ -846,7 +840,7 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
 
                 // create a new object
                 Reference< XPropertySet > xNewQuery(xQueryFactory->createInstance(), UNO_QUERY);
-                DBG_ASSERT(xNewQuery.is(), "OApplicationController::pasteQuery: invalid object created by factory!");
+                DBG_ASSERT(xNewQuery.is(), "OApplicationController::paste: invalid object created by factory!");
                 if (xNewQuery.is())
                 {
                     // initialize
@@ -870,10 +864,8 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
             return insertHierachyElement(_eType,_sParentFolder,Reference<XNameAccess>(xContent,UNO_QUERY).is(),xContent,_bMove);
         }
     }
-    catch(SQLContext& e) { showError(SQLExceptionInfo(e)); }
-    catch(SQLWarning& e) { showError(SQLExceptionInfo(e)); }
-    catch(SQLException& e) { showError(SQLExceptionInfo(e)); }
-    catch(Exception& )
+    catch(const SQLException&) { showError( SQLExceptionInfo( ::cppu::getCaughtException() ) ); }
+    catch(const Exception& )
     {
         DBG_ERROR("OApplicationController::paste: caught a strange exception!");
     }
