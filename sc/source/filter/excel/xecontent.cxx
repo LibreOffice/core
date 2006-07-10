@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xecontent.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:59:35 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:30:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -281,8 +281,8 @@ void XclExpSstImpl::Save( XclExpStream& rStrm )
         if( !nBucketIndex )
         {
             // write bucket info before string to get correct record position
-            sal_uInt32 nStrmPos = rStrm.GetStreamPos();
-            sal_uInt16 nRecPos = static_cast< sal_uInt16 >( rStrm.GetRecPos() + 4 );
+            sal_uInt32 nStrmPos = static_cast< sal_uInt32 >( rStrm.GetSvStreamPos() );
+            sal_uInt16 nRecPos = rStrm.GetRawRecPos() + 4;
             aExtSst << nStrmPos             // stream position
                     << nRecPos              // position from start of SST or CONTINUE
                     << sal_uInt16( 0 );     // reserved
@@ -574,8 +574,8 @@ private:
     XclFontData         maFontData;         /// Font formatting attributes.
     XclExpCellBorder    maBorder;           /// Border formatting attributes.
     XclExpCellArea      maArea;             /// Pattern formatting attributes.
-    XclExpTokenArrayRef mxTokArr1;          /// Formula for first condition.
-    XclExpTokenArrayRef mxTokArr2;          /// Formula for second condition.
+    XclTokenArrayRef    mxTokArr1;          /// Formula for first condition.
+    XclTokenArrayRef    mxTokArr2;          /// Formula for second condition.
     sal_uInt32          mnFontColorId;      /// Font color ID.
     sal_uInt8           mnType;             /// Type of the condition (cell/formula).
     sal_uInt8           mnOperator;         /// Comparison operator for cell type.
@@ -862,7 +862,7 @@ void XclExpCondFormatBuffer::Save( XclExpStream& rStrm )
 namespace {
 
 /** Writes a formula for the DV record. */
-void lclWriteDvFormula( XclExpStream& rStrm, const XclExpTokenArray* pXclTokArr )
+void lclWriteDvFormula( XclExpStream& rStrm, const XclTokenArray* pXclTokArr )
 {
     sal_uInt16 nFmlaSize = pXclTokArr ? pXclTokArr->GetSize() : 0;
     rStrm << nFmlaSize << sal_uInt16( 0 );
@@ -1249,40 +1249,34 @@ XclExpWebQueryBuffer::XclExpWebQueryBuffer( const XclExpRoot& rRoot )
     ScDocument& rDoc = rRoot.GetDoc();
     SfxObjectShell* pShell = rRoot.GetDocShell();
     if( !pShell ) return;
-    Reference< XPropertySet > xPropSet( pShell->GetModel(), UNO_QUERY );
-    if( !xPropSet.is() ) return;
+    ScfPropertySet aModelProp( pShell->GetModel() );
+    if( !aModelProp.Is() ) return;
 
     Reference< XAreaLinks > xAreaLinks;
-    ::getPropValue( xAreaLinks, xPropSet, OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_AREALINKS ) ) );
+    aModelProp.GetProperty( xAreaLinks, CREATE_OUSTRING( SC_UNO_AREALINKS ) );
     Reference< XIndexAccess > xLinksIA( xAreaLinks, UNO_QUERY );
     if( !xLinksIA.is() ) return;
 
-    const OUString aPropFilter( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_FILTER ) );
-//  const OUString aPropFilterOpt( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_FILTOPT ) );
-    const OUString aPropUrl( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_LINKURL ) );
-    const OUString aPropRefresh( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_REFDELAY ) );
-    OUString aFilter, /*aFilterOpt,*/ aUrl;
-    const OUString aWebQueryFilter( RTL_CONSTASCII_USTRINGPARAM( EXC_WEBQRY_FILTER ) );
-    String aRangeName;
-    sal_Int32 nRefresh;
-
-    sal_Int32 nCount = xLinksIA->getCount();
-    for( sal_Int32 nIndex = 0; nIndex < nCount; ++nIndex )
+    for( sal_Int32 nIndex = 0, nCount = xLinksIA->getCount(); nIndex < nCount; ++nIndex )
     {
-        Reference< XAreaLink > xAreaLink;
-        Any aLinkAny( xLinksIA->getByIndex( nIndex ) );
-        if( aLinkAny >>= xAreaLink )
+        Reference< XAreaLink > xAreaLink( xLinksIA->getByIndex( nIndex ), UNO_QUERY );
+        if( xAreaLink.is() )
         {
             CellRangeAddress aDestRange( xAreaLink->getDestArea() );
             if( static_cast< SCTAB >( aDestRange.Sheet ) == nScTab )
             {
-                Reference< XPropertySet > xLinkProp( xAreaLink, UNO_QUERY );
-                if( xLinkProp.is() && ::getPropValue( aFilter, xLinkProp, aPropFilter ) && (aFilter == aWebQueryFilter) )
+                ScfPropertySet aLinkProp( xAreaLink );
+                OUString aFilter;
+                if( aLinkProp.GetProperty( aFilter, CREATE_OUSTRING( SC_UNONAME_FILTER ) ) &&
+                    (aFilter == CREATE_OUSTRING( EXC_WEBQRY_FILTER )) )
                 {
                     // get properties
-//                  ::getPropValue( aFilterOpt, xLinkProp, aPropFilterOpt );
-                    ::getPropValue( aUrl, xLinkProp, aPropUrl );
-                    ::getPropValue( nRefresh, xLinkProp, aPropRefresh );
+                    OUString /*aFilterOpt,*/ aUrl;
+                    sal_Int32 nRefresh = 0;
+
+//                  aLinkProp.GetProperty( aFilterOpt, CREATE_OUSTRING( SC_UNONAME_FILTOPT ) );
+                    aLinkProp.GetProperty( aUrl, CREATE_OUSTRING( SC_UNONAME_LINKURL ) );
+                    aLinkProp.GetProperty( nRefresh, CREATE_OUSTRING( SC_UNONAME_REFDELAY ) );
 
                     String aAbsDoc( ScGlobal::GetAbsDocName( aUrl, pShell ) );
                     INetURLObject aUrlObj( aAbsDoc );
@@ -1291,6 +1285,7 @@ XclExpWebQueryBuffer::XclExpWebQueryBuffer( const XclExpRoot& rRoot )
                         aWebQueryUrl = aAbsDoc;
 
                     // find range or create a new range
+                    String aRangeName;
                     ScRange aScDestRange;
                     ScUnoConversion::FillScRange( aScDestRange, aDestRange );
                     if( const ScRangeData* pRangeData = rRoot.GetNamedRanges().GetRangeAtBlock( aScDestRange ) )
@@ -1303,7 +1298,7 @@ XclExpWebQueryBuffer::XclExpWebQueryBuffer( const XclExpRoot& rRoot )
                         XclExpNameManager& rNameMgr = rRoot.GetNameManager();
 
                         // create a new unique defined name containing the range
-                        XclExpTokenArrayRef xTokArr = rFmlaComp.CreateFormula( EXC_FMLATYPE_WQUERY, aScDestRange );
+                        XclTokenArrayRef xTokArr = rFmlaComp.CreateFormula( EXC_FMLATYPE_WQUERY, aScDestRange );
                         sal_uInt16 nNameIdx = rNameMgr.InsertUniqueName( aUrlObj.getBase(), xTokArr, nScTab );
                         aRangeName = rNameMgr.GetOrigName( nNameIdx );
                     }
