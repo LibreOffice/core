@@ -4,9 +4,9 @@
  *
  *  $RCSfile: table.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:47:29 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:14:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,7 +120,8 @@ namespace dbaccess
 
         // IColumnFactory
         virtual OColumn*    createColumn(const ::rtl::OUString& _rName) const;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createEmptyObject();
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createColumnDescriptor();
+        virtual void columnAppended( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxSourceDescriptor );
         virtual void columnDropped(const ::rtl::OUString& _sName);
         virtual void columnCloned(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xClone);
 
