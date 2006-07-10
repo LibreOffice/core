@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridcell.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:50:16 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:55:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3013,11 +3013,6 @@ void DbFilterField::Update()
             if (!xTablesNames->hasByName(aTableName))
                 return;
 
-            // this is the tablename
-            Reference< ::com::sun::star::container::XNamed > xTableNameAccess;
-            ::cppu::extractInterface(xTableNameAccess, xTablesNames->getByName(aTableName));
-            aTableName = xTableNameAccess->getName();
-
             // ein Statement aufbauen und abschicken als query
             // Access to the connection
             Reference< XStatement >  xStatement;
@@ -3040,10 +3035,9 @@ void DbFilterField::Update()
                 }
 
                 aStatement.AppendAscii(" FROM ");
-                sal_Bool bUseCatalogInSelect = isDataSourcePropertyEnabled(xConnection,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseCatalogInSelect")),sal_True);
-                sal_Bool bUseSchemaInSelect = isDataSourcePropertyEnabled(xConnection,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseSchemaInSelect")),sal_True);
 
-                aStatement += quoteTableName(xMeta, aTableName,bUseCatalogInSelect,bUseSchemaInSelect).getStr();
+                Reference< XPropertySet > xTableNameAccess( xTablesNames->getByName(aTableName), UNO_QUERY_THROW );
+                aStatement += composeTableNameForSelect( xConnection, xTableNameAccess ).getStr();
 
                 xStatement = xConnection->createStatement();
                 Reference< ::com::sun::star::beans::XPropertySet >  xStatementProps(xStatement, UNO_QUERY);
