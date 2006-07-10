@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 16:52:23 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 11:21:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -849,13 +849,17 @@ sal_Bool SdXMLFilter::Export()
     SvXMLGraphicHelper*         pGraphicHelper = NULL;
     sal_Bool                    bDocRet = FALSE;
 
+    if( !mxModel.is() )
+    {
+        DBG_ERROR("Got NO Model in XMLExport");
+        return FALSE;
+    }
+
+    sal_Bool bLocked = mxModel->hasControllersLocked();
+
     try
     {
-        if( !mxModel.is() )
-        {
-            DBG_ERROR("Got NO Model in XMLExport");
-            return FALSE;
-        }
+        mxModel->lockControllers();
 
         uno::Reference< lang::XServiceInfo > xServiceInfo( mxModel, uno::UNO_QUERY );
 
@@ -880,7 +884,6 @@ sal_Bool SdXMLFilter::Export()
             DBG_ERROR( "com.sun.star.xml.sax.Writer service missing" );
             return FALSE;
         }
-
         uno::Reference<xml::sax::XDocumentHandler>  xHandler( xWriter, uno::UNO_QUERY );
 
         /** property map for export info set */
@@ -1076,7 +1079,6 @@ sal_Bool SdXMLFilter::Export()
                     if( xExporter.is() )
                     {
                         xExporter->setSourceDocument( xComponent );
-
                         // outputstream will be closed by SAX parser
                         bDocRet = xFilter->filter( aDescriptor );
                     }
@@ -1103,13 +1105,14 @@ sal_Bool SdXMLFilter::Export()
 #endif
         bDocRet = sal_False;
     }
+    if ( !bLocked )
+        mxModel->unlockControllers();
 
     if( pGraphicHelper )
         SvXMLGraphicHelper::Destroy( pGraphicHelper );
 
     if( pObjectHelper )
         SvXMLEmbeddedObjectHelper::Destroy( pObjectHelper );
-
 
     return bDocRet;
 }
