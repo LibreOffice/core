@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbexception.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:05:49 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:19:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,17 +54,17 @@
 #ifndef CONNECTIVITY_CONNECTION_HXX
 #include "TConnection.hxx"
 #endif
-using namespace comphelper;
 
 //.........................................................................
 namespace dbtools
 {
 //.........................................................................
 
-    using namespace ::connectivity;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::sdb;
     using namespace ::com::sun::star::sdbc;
+    using namespace ::comphelper;
+    using namespace ::connectivity;
 
 //==============================================================================
 //= SQLExceptionInfo - encapsulating the type info of an SQLException-derived class
@@ -214,151 +214,222 @@ SQLExceptionInfo::operator const ::com::sun::star::sdb::SQLContext*() const
     return reinterpret_cast<const ::com::sun::star::sdb::SQLContext*>(m_aContent.getValue());
 }
 
-//==============================================================================
-//= SQLExceptionIteratorHelper - iterating through an SQLException chain
-//==============================================================================
+//------------------------------------------------------------------------------
+void SQLExceptionInfo::prepend( const ::rtl::OUString& _rErrorMessage, const sal_Char* _pAsciiSQLState, const sal_Int32 _nErrorCode )
+{
+    SQLException aException;
+    aException.Message = _rErrorMessage;
+    aException.ErrorCode = _nErrorCode;
+    aException.SQLState = ::rtl::OUString::createFromAscii( _pAsciiSQLState ? _pAsciiSQLState : "S1000" );
+    aException.NextException = m_aContent;
+    m_aContent <<= aException;
+
+    m_eType = SQL_EXCEPTION;
+}
 
 //------------------------------------------------------------------------------
-SQLExceptionIteratorHelper::SQLExceptionIteratorHelper(const SQLExceptionInfo& _rStart)
-    :m_pCurrent(NULL)
-    ,m_eCurrentType(SQLExceptionInfo::UNDEFINED)
-        // no other chance without RTTI
+void SQLExceptionInfo::append( TYPE _eType, const ::rtl::OUString& _rErrorMessage, const sal_Char* _pAsciiSQLState, const sal_Int32 _nErrorCode )
 {
-    if (_rStart.isValid())
+    // create the to-be-appended exception
+    Any aAppend;
+    switch ( _eType )
     {
-        m_pCurrent = (const SQLException*)_rStart;
-        m_eCurrentType = _rStart.getType();
+    case SQL_EXCEPTION: aAppend <<= SQLException(); break;
+    case SQL_WARNING:   aAppend <<= SQLWarning();   break;
+    case SQL_CONTEXT:   aAppend <<= SQLContext();   break;
+    default:
+        OSL_ENSURE( false, "SQLExceptionInfo::append: invalid exception type: this will crash!" );
+        break;
+    }
+
+    SQLException* pAppendException( static_cast< SQLException* >( const_cast< void* >( aAppend.getValue() ) ) );
+    pAppendException->Message = _rErrorMessage;
+    pAppendException->SQLState = ::rtl::OUString::createFromAscii( _pAsciiSQLState );
+    pAppendException->ErrorCode = _nErrorCode;
+
+    // find the end of the current chain
+    Any* pChainIterator = &m_aContent;
+    SQLException* pLastException = NULL;
+    const Type& aSQLExceptionType( ::getCppuType< SQLException >() );
+    while ( pChainIterator )
+    {
+        if ( !pChainIterator->hasValue() )
+            break;
+
+        if ( !isAssignableFrom( aSQLExceptionType, pChainIterator->getValueType() ) )
+            break;
+
+        pLastException = static_cast< SQLException* >( const_cast< void* >( pChainIterator->getValue() ) );
+        pChainIterator = &pLastException->NextException;
+    }
+
+    // append
+    if ( pLastException )
+        pLastException->NextException = aAppend;
+    else
+    {
+        m_aContent = aAppend;
+        m_eType = _eType;
     }
 }
 
 //------------------------------------------------------------------------------
-SQLExceptionIteratorHelper::SQLExceptionIteratorHelper(const ::com::sun::star::sdbc::SQLException* _pStart)
-            :m_pCurrent(_pStart)
-            ,m_eCurrentType(SQLExceptionInfo::SQL_EXCEPTION)
-                // no other chance without RTTI
+void SQLExceptionInfo::doThrow()
 {
-}
-
-//------------------------------------------------------------------------------
-SQLExceptionIteratorHelper::SQLExceptionIteratorHelper(const ::com::sun::star::sdbc::SQLWarning* _pStart)
-            :m_pCurrent(_pStart)
-            ,m_eCurrentType(SQLExceptionInfo::SQL_WARNING)
-                // no other chance without RTTI
-{
-}
-
-//------------------------------------------------------------------------------
-SQLExceptionIteratorHelper::SQLExceptionIteratorHelper(const ::com::sun::star::sdb::SQLContext* _pStart)
-            :m_pCurrent(_pStart)
-            ,m_eCurrentType(SQLExceptionInfo::SQL_CONTEXT)
-                // no other chance without RTTI
-{
-}
-
-//------------------------------------------------------------------------------
-void SQLExceptionIteratorHelper::next(SQLExceptionInfo& _rOutInfo)
-{
-    SQLExceptionInfo::TYPE eType = m_eCurrentType;
-    const SQLException* pNext = next();
-    switch (eType)
+    switch ( m_eType )
     {
-        case SQLExceptionInfo::SQL_EXCEPTION:
-            _rOutInfo = *pNext;
-            break;
-        case SQLExceptionInfo::SQL_WARNING:
-            _rOutInfo = *static_cast<const SQLWarning*>(pNext);
-            break;
-        case SQLExceptionInfo::SQL_CONTEXT:
-            _rOutInfo = *static_cast<const SQLContext*>(pNext);
-            break;
-        default:
-            OSL_ENSURE(sal_False, "SQLExceptionIteratorHelper::next: invalid type!");
+    case SQL_EXCEPTION: throw *(const SQLException*)(*this);
+    case SQL_WARNING:   throw *(const SQLWarning*)(*this);
+    case SQL_CONTEXT:   throw *(const SQLContext*)(*this);
+    default:            throw RuntimeException();
+    }
+}
+
+//==============================================================================
+//= SQLExceptionIteratorHelper
+//==============================================================================
+
+//------------------------------------------------------------------------------
+SQLExceptionIteratorHelper::SQLExceptionIteratorHelper( const SQLExceptionInfo& _rChainStart )
+    :m_pCurrent( NULL )
+    ,m_eCurrentType( SQLExceptionInfo::UNDEFINED )
+{
+    if ( _rChainStart.isValid() )
+    {
+        m_pCurrent = (const SQLException*)_rChainStart;
+        m_eCurrentType = _rChainStart.getType();
+    }
+}
+
+//------------------------------------------------------------------------------
+SQLExceptionIteratorHelper::SQLExceptionIteratorHelper( const ::com::sun::star::sdbc::SQLException& _rChainStart )
+    :m_pCurrent( &_rChainStart )
+    ,m_eCurrentType( SQLExceptionInfo::SQL_EXCEPTION )
+{
+}
+
+//------------------------------------------------------------------------------
+SQLExceptionIteratorHelper::SQLExceptionIteratorHelper( const ::com::sun::star::sdbc::SQLWarning& _rChainStart )
+    :m_pCurrent( &_rChainStart )
+    ,m_eCurrentType( SQLExceptionInfo::SQL_WARNING )
+{
+}
+
+//------------------------------------------------------------------------------
+SQLExceptionIteratorHelper::SQLExceptionIteratorHelper( const ::com::sun::star::sdb::SQLContext& _rChainStart )
+    :m_pCurrent( &_rChainStart )
+    ,m_eCurrentType( SQLExceptionInfo::SQL_CONTEXT )
+{
+}
+
+//------------------------------------------------------------------------------
+void SQLExceptionIteratorHelper::current( SQLExceptionInfo& _out_rInfo ) const
+{
+    switch ( m_eCurrentType )
+    {
+    case SQLExceptionInfo::SQL_EXCEPTION:
+        _out_rInfo = *m_pCurrent;
+        break;
+
+    case SQLExceptionInfo::SQL_WARNING:
+        _out_rInfo = *static_cast< const SQLWarning* >( m_pCurrent );
+        break;
+
+    case SQLExceptionInfo::SQL_CONTEXT:
+        _out_rInfo = *static_cast< const SQLContext* >( m_pCurrent );
+        break;
+
+    default:
+        _out_rInfo = Any();
+        break;
     }
 }
 
 //------------------------------------------------------------------------------
 const ::com::sun::star::sdbc::SQLException* SQLExceptionIteratorHelper::next()
 {
-    OSL_ENSURE(hasMoreElements(), "SQLExceptionIteratorHelper::next : invalid call (please use hasMoreElements) !");
+    OSL_ENSURE( hasMoreElements(), "SQLExceptionIteratorHelper::next : invalid call (please use hasMoreElements)!" );
 
-    const ::com::sun::star::sdbc::SQLException* pReturn = m_pCurrent;
-    if (m_pCurrent)
-    {   // check for the next element within the chain
-        const staruno::Type& aSqlExceptionCompare = ::getCppuType(reinterpret_cast< ::com::sun::star::sdbc::SQLException*>(NULL));
+    const ::com::sun::star::sdbc::SQLException* pReturn = current();
+    if ( !m_pCurrent )
+        return pReturn;
 
-        const ::com::sun::star::sdbc::SQLException* pSearch         = m_pCurrent;
-        SQLExceptionInfo::TYPE eSearchType  = m_eCurrentType;
+    // check for the next element within the chain
+    const Type aTypeException( ::cppu::UnoType< SQLException >::get() );
 
-        do
-        {
-            if ( !pSearch )
-                break;
-
-            if (!pSearch->NextException.hasValue())
-            {   // last chain element
-                pSearch = NULL;
-                break;
-            }
-
-            staruno::Type aNextElementType = pSearch->NextException.getValueType();
-            if (!isAssignableFrom(aSqlExceptionCompare, aNextElementType))
-            {
-                // the next chain element isn't an SQLException
-                OSL_ENSURE(sal_False, "SQLExceptionIteratorHelper::next : the exception chain is invalid !");
-                pSearch = NULL;
-                break;
-            }
-
-            // the next element
-            SQLExceptionInfo aInfo(pSearch->NextException);
-            eSearchType = aInfo.getType();
-            switch (eSearchType)
-            {
-                case SQLExceptionInfo::SQL_CONTEXT:
-                    pSearch = reinterpret_cast<const ::com::sun::star::sdb::SQLContext*>(pSearch->NextException.getValue());
-                    break;
-
-                case SQLExceptionInfo::SQL_WARNING:
-                    pSearch = reinterpret_cast<const ::com::sun::star::sdbc::SQLWarning*>(pSearch->NextException.getValue());
-                    break;
-
-                case SQLExceptionInfo::SQL_EXCEPTION:
-                    pSearch = reinterpret_cast<const ::com::sun::star::sdbc::SQLException*>(pSearch->NextException.getValue());
-                    break;
-
-                default:
-                    pSearch = NULL;
-                    break;
-            }
-        }
-        while ( false );
-
-        m_pCurrent = pSearch;
-        m_eCurrentType = eSearchType;
+    Type aNextElementType = m_pCurrent->NextException.getValueType();
+    if ( !isAssignableFrom( aTypeException, aNextElementType ) )
+    {
+        // no SQLException at all in the next chain element
+        m_pCurrent = NULL;
+        m_eCurrentType = SQLExceptionInfo::UNDEFINED;
+        return pReturn;
     }
 
+    m_pCurrent = static_cast< const SQLException* >( m_pCurrent->NextException.getValue() );
+
+    // no finally determine the proper type of the exception
+    const Type aTypeContext( ::cppu::UnoType< SQLContext >::get() );
+    if ( isAssignableFrom( aTypeContext, aNextElementType ) )
+    {
+        m_eCurrentType = SQLExceptionInfo::SQL_CONTEXT;
+        return pReturn;
+    }
+
+    const Type aTypeWarning( ::cppu::UnoType< SQLWarning >::get() );
+    if ( isAssignableFrom( aTypeWarning, aNextElementType ) )
+    {
+        m_eCurrentType = SQLExceptionInfo::SQL_WARNING;
+        return pReturn;
+    }
+
+    // a simple SQLException
+    m_eCurrentType = SQLExceptionInfo::SQL_EXCEPTION;
     return pReturn;
 }
-using namespace ::com::sun::star::uno;
+
+//------------------------------------------------------------------------------
+void SQLExceptionIteratorHelper::next( SQLExceptionInfo& _out_rInfo )
+{
+    current( _out_rInfo );
+    next();
+}
+
 //------------------------------------------------------------
 void throwFunctionSequenceException(const Reference< XInterface >& _Context, const Any& _Next)  throw ( ::com::sun::star::sdbc::SQLException )
 {
-    throw SQLException(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ERRORMSG_SEQUENCE), _Context, OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000), 0, _Next);
+    throw SQLException(
+        OMetaConnection::getPropMap().getNameByIndex( PROPERTY_ID_ERRORMSG_SEQUENCE ),
+        _Context,
+        getStandardSQLState( SQL_FUNCTION_SEQUENCE_ERROR ),
+        0,
+        _Next
+    );
 }
 // -----------------------------------------------------------------------------
 void throwInvalidIndexException(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _Context,
         const ::com::sun::star::uno::Any& _Next)  throw ( ::com::sun::star::sdbc::SQLException )
 {
-    static ::rtl::OUString sStatus = ::rtl::OUString::createFromAscii("07009");
-    throw SQLException(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_INVALID_INDEX),_Context,sStatus,0,_Next);
+    throw SQLException(
+        OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_INVALID_INDEX),
+        _Context,
+        getStandardSQLState( SQL_INVALID_DESCRIPTOR_INDEX ),
+        0,
+        _Next
+    );
 }
 // -----------------------------------------------------------------------------
 void throwFunctionNotSupportedException(const ::rtl::OUString& _rMsg,
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _Context,
         const ::com::sun::star::uno::Any& _Next)  throw ( ::com::sun::star::sdbc::SQLException )
 {
-    static ::rtl::OUString sStatus = ::rtl::OUString::createFromAscii("IM001");
-    throw SQLException(_rMsg,_Context,sStatus,0,_Next);
+    throw SQLException(
+        _rMsg,
+        _Context,
+        getStandardSQLState( SQL_FUNCTION_NOT_SUPPORTED ),
+        0,
+        _Next
+    );
 }
 // -----------------------------------------------------------------------------
 void throwFunctionNotSupportedException( const sal_Char* _pAsciiFunctionName, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext,
@@ -366,8 +437,13 @@ void throwFunctionNotSupportedException( const sal_Char* _pAsciiFunctionName, co
 {
     ::rtl::OUString sMessage = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": Driver does not support this function: " ) );
     sMessage += ::rtl::OUString::createFromAscii( _pAsciiFunctionName );
-    ::rtl::OUString sState( RTL_CONSTASCII_USTRINGPARAM( "IM001" ) );
-    throw SQLException( sMessage, _rxContext, sState, 0, _pNextException ? *_pNextException : Any() );
+    throw SQLException(
+        sMessage,
+        _rxContext,
+        getStandardSQLState( SQL_FUNCTION_NOT_SUPPORTED ),
+        0,
+        _pNextException ? *_pNextException : Any()
+    );
 }
 // -----------------------------------------------------------------------------
 void throwGenericSQLException(const ::rtl::OUString& _rMsg, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxSource)
@@ -380,8 +456,7 @@ void throwGenericSQLException(const ::rtl::OUString& _rMsg, const ::com::sun::st
 void throwGenericSQLException(const ::rtl::OUString& _rMsg, const Reference< XInterface >& _rxSource, const Any& _rNextException)
     throw (SQLException)
 {
-    static ::rtl::OUString sStatus = ::rtl::OUString::createFromAscii("S1000");
-    throw SQLException(_rMsg, _rxSource, sStatus, 0, _rNextException);
+    throw SQLException( _rMsg, _rxSource, getStandardSQLState( SQL_GENERAL_ERROR ), 0, _rNextException);
 }
 
 // -----------------------------------------------------------------------------
@@ -389,8 +464,13 @@ void throwFeatureNotImplementedException( const sal_Char* _pAsciiFeatureName, co
     throw (SQLException)
 {
     ::rtl::OUString sMessage = ::rtl::OUString::createFromAscii( _pAsciiFeatureName ) + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": feature not implemented." ) );
-    ::rtl::OUString sState( RTL_CONSTASCII_USTRINGPARAM( "HYC00" ) );
-    throw SQLException( sMessage, _rxContext, sState, 0, _pNextException ? *_pNextException : Any() );
+    throw SQLException(
+        sMessage,
+        _rxContext,
+        getStandardSQLState( SQL_FEATURE_NOT_IMPLEMENTED ),
+        0,
+        _pNextException ? *_pNextException : Any()
+    );
 }
 
 // -----------------------------------------------------------------------------
@@ -412,6 +492,20 @@ void throwSQLException( const sal_Char* _pAsciiMessage, StandardSQLState _eSQLSt
         const Any* _pNextException ) throw (SQLException)
 {
     throwSQLException( _pAsciiMessage, getStandardSQLStateAscii( _eSQLState ), _rxContext, _nErrorCode, _pNextException );
+}
+
+// -----------------------------------------------------------------------------
+void throwSQLException( const ::rtl::OUString& _rMessage, StandardSQLState _eSQLState,
+        const Reference< XInterface >& _rxContext, const sal_Int32 _nErrorCode,
+        const Any* _pNextException ) throw (SQLException)
+{
+    throw SQLException(
+        _rMessage,
+        _rxContext,
+        getStandardSQLState( _eSQLState ),
+        _nErrorCode,
+        _pNextException ? *_pNextException : Any()
+    );
 }
 
 // -----------------------------------------------------------------------------
@@ -439,6 +533,12 @@ const sal_Char* getStandardSQLStateAscii( StandardSQLState _eState )
         case SQL_INVALID_BOOKMARK_VALUE:    pAsciiState = "HY111"; break;
         case SQL_FEATURE_NOT_IMPLEMENTED:   pAsciiState = "HYC00"; break;
         case SQL_FUNCTION_NOT_SUPPORTED:    pAsciiState = "IM001"; break;
+        case SQL_CONNECTION_DOES_NOT_EXIST: pAsciiState = "08003"; break;
+
+         // OOoBase-specific SQLStates
+         case SQL_CYCLIC_SUB_QUERIES:        pAsciiState = "OB001"; break;
+        default:
+            break;
     }
     if ( !pAsciiState )
         throw RuntimeException();
