@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UITools.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:40:48 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:29:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -486,6 +486,8 @@ namespace dbaui
     /** opens a save dialog to store a form or report folder in the current hierachy.
         @param  _pParent
             The parent of the dialog.
+        @param _rxORB
+            a multi service factory which can be used to instantiate usual global services
         @param  _xNames
             Where to insert the new object.
         @param  _sParentFolder
@@ -501,13 +503,16 @@ namespace dbaui
         @return
             <TRUE/> if the insert opertions was successfull, otherwise <FALSE/>.
     */
-    sal_Bool insertHierachyElement(Window* _pParent
-                           ,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XHierarchicalNameContainer>& _xNames
-                           ,const String& _sParentFolder
-                           ,sal_Bool _bForm
-                           ,sal_Bool _bCollection = sal_True
-                            ,const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>& _xContent = ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>()
-                            ,sal_Bool _bMove = sal_False);
+    sal_Bool insertHierachyElement(
+                Window* _pParent,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::container::XHierarchicalNameContainer>& _xNames,
+                const String& _sParentFolder,
+                sal_Bool _bForm,
+                sal_Bool _bCollection = sal_True,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>& _xContent = NULL,
+                sal_Bool _bMove = sal_False
+            );
 
     /** creates a number formatter
         @param  _rxConnection
