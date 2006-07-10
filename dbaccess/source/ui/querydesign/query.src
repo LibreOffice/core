@@ -1,12 +1,12 @@
-/*************************************************************************
+ï»¿/*************************************************************************
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 08:32:48 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:44:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,7 +134,6 @@ ImageList IMG_JOINS_H
 
 String STR_QUERY_UNDO_TABWINSHOW
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Tabellenfenster hinzufügen : Tabellenfenster hinzufügen */
     Text [ de ] = "Tabellenfenster hinzufÃ¼gen" ;
     Text [ en-US ] = "Add Table Window" ;
     Text [ x-comment ] = " ";
@@ -168,7 +167,6 @@ String STR_QUERY_UNDO_SIZETABWIN
 };
 String STR_QUERY_UNDO_TABFIELDDELETE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Spalte löschen : Spalte löschen */
     Text [ de ] = "Spalte lÃ¶schen" ;
     Text [ en-US ] = "Delete Column" ;
     Text [ x-comment ] = " ";
@@ -176,41 +174,38 @@ String STR_QUERY_UNDO_TABFIELDDELETE
 
 String STR_QUERY_UNDO_TABFIELDMOVED
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Spalte hinzufügen : Spalte hinzufügen */
     Text [ de ] = "Spalte verschieben" ;
     Text [ en-US ] = "Move column";
 };
 
 String STR_QUERY_UNDO_TABFIELDCREATE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Spalte hinzufügen : Spalte hinzufügen */
     Text [ de ] = "Spalte hinzufÃ¼gen" ;
     Text [ en-US ] = "Add Column" ;
     Text [ x-comment ] = " ";
 };
 String RID_STR_TABLE_DOESNT_EXIST
 {
-    Text [ de ] = "Der Ausdruck ist ungÃ¼ltig, da keine Tabelle '$name$' existiert !";
-    Text [ en-US ] = "Invalid expression, table '$name$' does not exist!";
+    Text [ de ] = "Der Ausdruck ist ungÃ¼ltig, da keine Tabelle '$name$' existiert .";
+    Text [ en-US ] = "Invalid expression, table '$name$' does not exist.";
     Text [ x-comment ] = " ";
 };
 
 String RID_STR_FIELD_DOESNT_EXIST
 {
-    Text [ de ] = "Der Ausdruck ist ungÃ¼ltig, da der Feldname '$name$' nicht zugeordnet werden kann!";
+    Text [ de ] = "Der Ausdruck ist ungÃ¼ltig, da der Feldname '$name$' nicht zugeordnet werden kann.";
     Text [ en-US ] = "Invalid expression, field name '$name$' does not exist.";
     Text [ x-comment ] = " ";
 };
 String RID_STR_TOMUCHTABLES
 {
-    Text [ de ] = "Die Abfrage enthÃ¤lt #num# Tabellen. Der aktuelle Datenbanktyp kann aber maximal #maxnum# Tabelle(n) pro Statement verarbeiten !";
-    Text [ en-US ] = "The query covers #num# tables. The selected database type, however, can only process a maximum of #maxnum# table(s) per statement!";
+    Text [ de ] = "Die Abfrage enthÃ¤lt #num# Tabellen. Der aktuelle Datenbanktyp kann aber maximal #maxnum# Tabelle(n) pro Statement verarbeiten.";
+    Text [ en-US ] = "The query covers #num# tables. The selected database type, however, can only process a maximum of #maxnum# table(s) per statement.";
     Text [ x-comment ] = " ";
 };
 
 String STR_QUERY_UNDO_TABWINDELETE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Tabellenfenster löschen : Tabellenfenster löschen */
     Text [ de ] = "Tabellenfenster lÃ¶schen" ;
     Text [ en-US ] = "Delete Table Window" ;
     Text [ x-comment ] = " ";
@@ -315,7 +310,6 @@ String STR_QRY_TOO_MANY_COLUMNS
 
 ErrorBox ERR_QRY_CRITERIA_ON_ASTERISK
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Eine Bedingung für Feld [*] ist nicht möglich : Eine Bedingung für Feld [*] ist nicht möglich */
     Message [ de ] = "Eine Bedingung fÃ¼r Feld [*] ist nicht mÃ¶glich" ;
     Message [ en-US ] = "A condition cannot be applied to field [*]" ;
 };
@@ -333,8 +327,8 @@ String STR_QRY_TOOCOMPLEX
 };
 String STR_QRY_NOSELECT
 {
-    Text [ de ] = "Es fehlt eine Selektion!" ;
-    Text [ en-US ] = "Nothing has been selected!" ;
+    Text [ de ] = "Es fehlt eine Selektion." ;
+    Text [ en-US ] = "Nothing has been selected." ;
     Text [ x-comment ] = " ";
 };
 String STR_QRY_TOOMANYCOND
@@ -374,7 +368,6 @@ String STR_QRY_TOO_MANY_TABLES
 
 String STR_QRY_NATIVE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Bei Anfrage im SQL-Dialekt der Datenbank wird das Statement nicht übernommen : Bei Anfrage im SQL-Dialekt der Datenbank wird das Statement nicht übernommen */
     Text [ de ] = "Bei Anfrage im SQL-Dialekt der Datenbank wird das Statement nicht Ã¼bernommen" ;
     Text [ en-US ] = "The statement will not be applied when querying in the SQL dialect of the database." ;
     Text [ x-comment ] = " ";
@@ -387,7 +380,6 @@ ErrorBox ERR_QRY_AMB_FIELD
 };
 String STR_QRY_ILLEGAL_JOIN
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Verknüpfung konnte nicht ausgeführt werden : Verknüpfung konnte nicht ausgeführt werden */
     Text [ de ] = "VerknÃ¼pfung konnte nicht ausgefÃ¼hrt werden" ;
     Text [ en-US ] = "Join could not be processed" ;
     Text [ x-comment ] = " ";
@@ -426,15 +418,14 @@ Resource RSC_QUERY_OBJECT_TYPE
 
 String STR_SVT_SQL_SYNTAX_ERROR
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Syntaxfehler im SQL-Ausdruck : Fehlerhafte Syntax */
     Text [ de ] = "Syntaxfehler im SQL-Ausdruck" ;
     Text [ en-US ] = "Syntax error in SQL statement" ;
 };
 
 String STR_QUERYDESIGN_NO_VIEW_SUPPORT
 {
-    Text [ de ] = "Diese Datenbank unterstÃ¼tzt keine Tabellenansichten!";
-    Text [ en-US ] = "This database does not support table views!";
+    Text [ de ] = "Diese Datenbank unterstÃ¼tzt keine Tabellenansichten.";
+    Text [ en-US ] = "This database does not support table views.";
 };
 
 String STR_QUERYDESIGN_NO_VIEW_ASK
@@ -445,13 +436,13 @@ String STR_QUERYDESIGN_NO_VIEW_ASK
 
 ErrorBox ERR_QRY_NOSTATEMENT
 {
-    Message [ de ] = "Es konnte keine Abfrage erstellt werden!" ;
+    Message [ de ] = "Es konnte keine Abfrage erstellt werden." ;
     Message [ en-US ] = "No query could be created.";
 };
 
 ErrorBox ERR_QRY_NOCRITERIA
 {
-    Message [ de ] = "Es konnte keine Abfrage erstellt werden, da keine Felder ausgewÃ¤hlt wurden!" ;
+    Message [ de ] = "Es konnte keine Abfrage erstellt werden, da keine Felder ausgewÃ¤hlt wurden." ;
     Message [ en-US ] = "No query could be created because no fields were selected.";
 };
 
@@ -467,13 +458,13 @@ String STR_DATASOURCE_DELETED
 
 String STR_QRY_COLUMN_NOT_FOUND
 {
-    Text [ de ] = "Die Spalte '$name$' ist unbekannt!";
+    Text [ de ] = "Die Spalte '$name$' ist unbekannt.";
     Text [ en-US ] = "The column '$name$' is unknown.";
 };
 
 String STR_QRY_JOIN_COLUMN_COMPARE
 {
-    Text [ de ] = "Spalten dÃ¼rfen nur mit '=' verglichen werden!";
+    Text [ de ] = "Spalten dÃ¼rfen nur mit '=' verglichen werden.";
     Text [ en-US ] = "Columns can only be compared using '='.";
 };
 
@@ -501,3 +492,20 @@ String STR_VIEWDESIGN
     Text [ en-US ] = " - %PRODUCTNAME Base: View Design";
 };
 
+String STR_ERROR_PARSING_STATEMENT
+{
+    Text [ de ] = "Der der Abfrage zu Grunde liegende SQL-Befehl konnte nicht analysiert werden.";
+    Text [ en-US ] = "The SQL command which constitutes the query could not be parsed.";
+};
+
+String STR_INFO_OPENING_IN_SQL_VIEW
+{
+    Text [ de ] = "Die Abfrage wird in der SQL-Ansicht geÃ¶ffnet.";
+    Text [ en-US ] = "The query will be opened in SQL view.";
+};
+
+String STR_STATEMENT_WITHOUT_RESULT_SET
+{
+    Text [ de ] = "Die Abfrage erzeugt keine Ergebnismenge, und kann deswegen nicht Teil einer anderen Abfrage sein.";
+    Text [ en-US ] = "The query does not create a result set, and thus cannot be part of another query.";
+};
