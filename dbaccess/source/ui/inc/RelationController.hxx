@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RelationController.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:32:40 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:28:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,12 +87,16 @@ namespace dbaui
         static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                 SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
+        // OJoinController overridables
+        virtual bool allowViews() const;
+        virtual bool allowQueries() const;
+
     protected:
         virtual OTableWindowData* createTableWindowData();
         // ask the user if the design should be saved when it is modified
         virtual short saveModified();
         virtual void reset();
-        virtual void impl_initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments );
+        virtual void impl_initialize();
         virtual void updateTitle();
     };
 }
