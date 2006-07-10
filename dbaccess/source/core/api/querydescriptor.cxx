@@ -4,9 +4,9 @@
  *
  *  $RCSfile: querydescriptor.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:40:08 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:06:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -251,12 +251,25 @@ Reference< XNameAccess > SAL_CALL OQueryDescriptor_Base::getColumns( ) throw (Ru
 
     if ( isColumnsOutOfDate() )
     {
-        // load the columns
-        if ( m_bEscapeProcessing )
-            refreshColumns();
+        // clear the current columns
+        clearColumns();
 
+        // do this before rebuildColumns. This prevents recursion, e.g. in the case where we
+        // have queries with cyclic references:
+        // foo := SELECT * FROM bar
+        // bar := SELECT * FROM foo
         setColumnsOutOfDate( sal_False );
-        m_pColumns->setInitialized();
+
+        // rebuild them
+        try
+        {
+            rebuildColumns();
+        }
+        catch(...)
+        {
+            setColumnsOutOfDate( sal_True );
+            throw;
+        }
     }
 
     return m_pColumns;
@@ -289,20 +302,22 @@ void OQueryDescriptor_Base::disposeColumns()
 }
 
 // -----------------------------------------------------------------------------
-Reference< XPropertySet > OQueryDescriptor_Base::createEmptyObject()
+void OQueryDescriptor_Base::columnAppended( const Reference< XPropertySet >& /*_rxSourceDescriptor*/ )
 {
-    DBG_ERROR( "OQueryDescriptor_Base::createEmptyObject: never to be called!" );
-    return NULL;
+    // not interested in
 }
 
 // -----------------------------------------------------------------------------
 void OQueryDescriptor_Base::columnDropped(const ::rtl::OUString& /*_sName*/)
 {
+    // not interested in
 }
 
 // -----------------------------------------------------------------------------
-void OQueryDescriptor_Base::columnCloned(const Reference< XPropertySet >& /*_xClone*/)
+Reference< XPropertySet > OQueryDescriptor_Base::createColumnDescriptor()
 {
+    OSL_ENSURE( false, "OQueryDescriptor_Base::createColumnDescriptor: called why?" );
+    return NULL;
 }
 
 // -----------------------------------------------------------------------------
@@ -311,14 +326,12 @@ void OQueryDescriptor_Base::rebuildColumns( )
 }
 
 // -----------------------------------------------------------------------------
+// IRefreshableColumns
 void OQueryDescriptor_Base::refreshColumns()
 {
-    MutexGuard aGuard(m_rMutex);
+    MutexGuard aGuard( m_rMutex );
 
-    // clear the current columns
     clearColumns();
-
-    // do the real rebuild
     rebuildColumns();
 }
 
