@@ -4,9 +4,9 @@
  *
  *  $RCSfile: table.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:41:47 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:07:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -185,6 +185,11 @@ OColumn* ODBTable::createColumn(const ::rtl::OUString& _rName) const
     pReturn = new OTableColumnWrapper(xProp,xColumnDefintion);
 
     return pReturn;
+}
+// -----------------------------------------------------------------------------
+void ODBTable::columnAppended( const Reference< XPropertySet >& /*_rxSourceDescriptor*/ )
+{
+    // not interested in
 }
 // -----------------------------------------------------------------------------
 void ODBTable::columnDropped(const ::rtl::OUString& _sName)
@@ -384,7 +389,7 @@ void SAL_CALL ODBTable::alterColumnByName( const ::rtl::OUString& _rName, const 
             aQuote = xMeta->getIdentifierQuoteString(  );
         ::rtl::OUString sComposedName;
 
-        ::dbtools::composeTableName(xMeta,m_CatalogName,m_SchemaName,m_Name,sComposedName,sal_True,::dbtools::eInTableDefinitions);
+        sComposedName = ::dbtools::composeTableName( xMeta, m_CatalogName, m_SchemaName, m_Name, sal_True, ::dbtools::eInTableDefinitions );
         if(!sComposedName.getLength())
             ::dbtools::throwFunctionSequenceException(*this);
 
@@ -456,7 +461,7 @@ Sequence< sal_Int8 > ODBTable::getUnoTunnelImplementationId()
     return pId->getImplementationId();
 }
 // -----------------------------------------------------------------------------
-Reference< XPropertySet > ODBTable::createEmptyObject()
+Reference< XPropertySet > ODBTable::createColumnDescriptor()
 {
     return new OTableColumnDescriptor();
 }
