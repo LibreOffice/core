@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eeimpars.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 08:28:53 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 11:51:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,10 +53,12 @@
 #include <svx/svdograf.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/scripttypeitem.hxx>
+#include <svx/htmlcfg.hxx>
 #ifndef _SFXHTML_HXX //autogen wg. SfxHTMLParser
 #include <sfx2/sfxhtml.hxx>
 #endif
 #include <svtools/parhtml.hxx>
+#include <svtools/zforlist.hxx>
 #include <vcl/virdev.hxx>
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
@@ -160,10 +162,13 @@ void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor )
     nLastMergedRow = SCROW_MAX;
     BOOL bHasGraphics = FALSE;
     ScEEParseEntry* pE;
-
-    const sal_Unicode cDecSep = ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0);
-    const sal_Unicode cThoSep = ScGlobal::pLocaleData->getNumThousandSep().GetChar(0);
     SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+    bool bNumbersEnglishUS = (pFormatter->GetLanguage() != LANGUAGE_ENGLISH_US);
+    if (bNumbersEnglishUS)
+    {
+        SvxHtmlOptions aOpt;
+        bNumbersEnglishUS = aOpt.IsNumbersEnglishUS();
+    }
     ScDocumentPool* pDocPool = pDoc->GetPool();
     ScRangeName* pRangeNames = pDoc->GetRangeName();
     for ( pE = pParser->First(); pE; pE = pParser->Next() )
@@ -358,48 +363,26 @@ void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor )
                         aStr = pEngine->GetText( pE->aSel );
                         aStr.EraseLeadingAndTrailingChars();
                     }
-                    const sal_Unicode cDecSepEng = '.';
-                    const sal_Unicode cThoSepEng = ',';
-                    if ( cDecSep != cDecSepEng
-                      && aStr.GetTokenCount( cDecSepEng ) == 2 )
-                    {   // evtl. englische Zahl wandeln und im Deutschen
-                        // den Numberformatter kein Datum draus machen lassen..
-                        xub_StrLen nInd = 0;
-                        String aLeft( aStr.GetToken( 0, cDecSepEng, nInd ) );
-                        String aRight( aStr.GetToken( 0, cDecSepEng, nInd ) );
-                        aRight.EraseTrailingChars();
-                        if ( CharClass::isAsciiNumeric( aRight ) )
-                        {
-                            aLeft.EraseLeadingChars();
-                            nInd = 0;
-                            xub_StrLen n = aLeft.GetTokenCount( cThoSepEng );
-                            xub_StrLen j;
 
-                            for ( j = 0; j < n; j++ )
-                            {
-                                String aT( aLeft.GetToken( 0, cThoSepEng, nInd ) );
-                                if ( j > 0 && aT.Len() != 3 )
-                                    break;  // Tausenderseparator heisst er
-                                if ( !CharClass::isAsciiNumeric( aT ) )
-                                    break;
-                            }
-                            if ( j == n )
-                            {
-                                if ( n > 1 )
-                                {   // harter cast spart Zeit
-                                    sal_Unicode* p = (sal_Unicode*) aLeft.GetBuffer();
-                                    while ( *p )
-                                    {
-                                        if ( *p == cThoSepEng )
-                                            *p = cThoSep;
-                                        p++;
-                                    }
-                                }
-                                aStr = aLeft;
-                                aStr += cDecSep;
-                                aStr += aRight;
-                            }
+                    // TODO: RTF import should follow the language tag,
+                    // currently this follows the HTML options for both, HTML
+                    // and RTF.
+                    bool bEnUsRecognized = false;
+                    if (bNumbersEnglishUS)
+                    {
+                        pFormatter->ChangeIntl( LANGUAGE_ENGLISH_US);
+                        sal_uInt32 nIndex = pFormatter->GetStandardIndex( LANGUAGE_ENGLISH_US);
+                        double fVal = 0.0;
+                        if (pFormatter->IsNumberFormat( aStr, nIndex, fVal))
+                        {
+                            bEnUsRecognized = true;
+                            sal_uInt32 nNewIndex =
+                                pFormatter->GetFormatForLanguageIfBuiltIn(
+                                        nIndex, LANGUAGE_SYSTEM);
+                            DBG_ASSERT( nNewIndex != nIndex, "ScEEImport::WriteToDocument: NumbersEnglishUS not a built-in format?");
+                            pFormatter->GetInputLineString( fVal, nNewIndex, aStr);
                         }
+                        pFormatter->ChangeIntl( LANGUAGE_SYSTEM);
                     }
 
                     //  #105460#, #i4180# String cells can't contain tabs or linebreaks
@@ -407,7 +390,10 @@ void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor )
                     aStr.SearchAndReplaceAll( (sal_Unicode)'\t', (sal_Unicode)' ' );
                     aStr.SearchAndReplaceAll( (sal_Unicode)'\n', (sal_Unicode)' ' );
 
-                    pDoc->SetString( nCol, nRow, nTab, aStr );
+                    if (bNumbersEnglishUS && !bEnUsRecognized)
+                        pDoc->PutCell( nCol, nRow, nTab, new ScStringCell( aStr));
+                    else
+                        pDoc->SetString( nCol, nRow, nTab, aStr );
                 }
             }
             else
