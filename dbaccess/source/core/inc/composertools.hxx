@@ -4,9 +4,9 @@
  *
  *  $RCSfile: composertools.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:35:21 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:12:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,7 @@ namespace dbaccess
     struct TokenComposer : public ::std::unary_function< ::rtl::OUString, void >
     {
     private:
-        #if OSL_DEBUG_LEVEL > 1
+        #ifdef DBG_UTIL
         bool                    m_bUsed;
         #endif
 
@@ -66,7 +66,7 @@ namespace dbaccess
     public:
         ::rtl::OUString getComposedAndClear()
         {
-            #if OSL_DEBUG_LEVEL > 1
+            #ifdef DBG_UTIL
             m_bUsed = true;
             #endif
             return m_aBuffer.makeStringAndClear();
@@ -74,7 +74,7 @@ namespace dbaccess
 
         void clear()
         {
-            #if OSL_DEBUG_LEVEL > 1
+            #ifdef DBG_UTIL
             m_bUsed = false;
             #endif
             m_aBuffer.makeStringAndClear();
@@ -82,9 +82,13 @@ namespace dbaccess
 
     public:
         TokenComposer()
-        #if OSL_DEBUG_LEVEL > 1
+        #ifdef DBG_UTIL
             :m_bUsed( false )
         #endif
+        {
+        }
+
+        virtual ~TokenComposer()
         {
         }
 
@@ -95,7 +99,7 @@ namespace dbaccess
 
         void append( const ::rtl::OUString& lhs )
         {
-            #if OSL_DEBUG_LEVEL > 1
+            #ifdef DBG_UTIL
             OSL_ENSURE( !m_bUsed, "FilterCreator::append: already used up!" );
             #endif
             if ( lhs.getLength() )
