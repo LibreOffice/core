@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MasterDetailForms.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 16:47:40 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:46:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,14 +98,14 @@ public class MasterDetailForms extends complexlib.ComplexTestCase implements com
     private void createTableStructure() throws SQLException
     {
         HsqlColumnDescriptor[] masterColumns = {
-            new HsqlColumnDescriptor( "ID1", "INTEGER", true, true ),
-            new HsqlColumnDescriptor( "ID2", "INTEGER", true, true ),
+            new HsqlColumnDescriptor( "ID1", "INTEGER", HsqlColumnDescriptor.PRIMARY ),
+            new HsqlColumnDescriptor( "ID2", "INTEGER", HsqlColumnDescriptor.PRIMARY ),
             new HsqlColumnDescriptor( "value", "VARCHAR(50)" ),
         };
         HsqlColumnDescriptor[] detailColumns = {
-            new HsqlColumnDescriptor( "ID", "INTEGER", true, true ),
-            new HsqlColumnDescriptor( "FK_ID1", "INTEGER", true ),
-            new HsqlColumnDescriptor( "FK_ID2", "INTEGER", true ),
+            new HsqlColumnDescriptor( "ID", "INTEGER", HsqlColumnDescriptor.PRIMARY ),
+            new HsqlColumnDescriptor( "FK_ID1", "INTEGER", HsqlColumnDescriptor.REQUIRED, "master", "ID1" ),
+            new HsqlColumnDescriptor( "FK_ID2", "INTEGER", HsqlColumnDescriptor.REQUIRED, "master", "ID2" ),
             new HsqlColumnDescriptor( "name", "VARCHAR(50)" ),
         };
         m_databaseDocument.createTable( new HsqlTableDescriptor( "master", masterColumns ) );
@@ -116,6 +116,8 @@ public class MasterDetailForms extends complexlib.ComplexTestCase implements com
         m_databaseDocument.executeSQL( "INSERT INTO \"detail\" VALUES ( 1, 1, 1, 'record 1.1 (1)')");
         m_databaseDocument.executeSQL( "INSERT INTO \"detail\" VALUES ( 2, 1, 1, 'record 1.1 (2)')");
         m_databaseDocument.executeSQL( "INSERT INTO \"detail\" VALUES ( 3, 1, 2, 'record 1.2 (1)')");
+
+        m_databaseDocument.getDataSource().refreshTables( m_databaseDocument.defaultConnection() );
     }
 
     /* ------------------------------------------------------------------ */
