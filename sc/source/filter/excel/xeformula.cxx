@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xeformula.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:37:24 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:31:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,58 +63,7 @@
 #include "xename.hxx"
 #endif
 
-// ============================================================================
-// Token array
-// ============================================================================
-
-XclExpTokenArray::XclExpTokenArray( bool bVolatile ) :
-    mbVolatile( bVolatile )
-{
-}
-
-XclExpTokenArray::XclExpTokenArray( ScfUInt8Vec& rTokVec, bool bVolatile ) :
-    mbVolatile( bVolatile )
-{
-    maTokVec.swap( rTokVec );
-}
-
-sal_uInt16 XclExpTokenArray::GetSize() const
-{
-    DBG_ASSERT( maTokVec.size() <= 0xFFFF, "XclExpTokenArray::GetSize - array too long" );
-    return limit_cast< sal_uInt16 >( maTokVec.size() );
-}
-
-void XclExpTokenArray::WriteSize( XclExpStream& rStrm ) const
-{
-    rStrm << GetSize();
-}
-
-void XclExpTokenArray::WriteArray( XclExpStream& rStrm ) const
-{
-    if( !maTokVec.empty() )
-        rStrm.Write( &maTokVec.front(), GetSize() );
-}
-
-void XclExpTokenArray::Write( XclExpStream& rStrm ) const
-{
-    WriteSize( rStrm );
-    WriteArray( rStrm );
-}
-
-bool XclExpTokenArray::operator==( const XclExpTokenArray& rTokArr ) const
-{
-    return (mbVolatile == rTokArr.mbVolatile) && (maTokVec == rTokArr.maTokVec);
-}
-
-XclExpStream& operator<<( XclExpStream& rStrm, const XclExpTokenArray& rTokArr )
-{
-    rTokArr.Write( rStrm );
-    return rStrm;
-}
-
-// ============================================================================
-// External reference log
-// ============================================================================
+// External reference log =====================================================
 
 XclExpRefLogEntry::XclExpRefLogEntry() :
     mpUrl( 0 ),
@@ -125,9 +74,7 @@ XclExpRefLogEntry::XclExpRefLogEntry() :
 {
 }
 
-// ============================================================================
-// Formula compiler
-// ============================================================================
+// Formula compiler ===========================================================
 
 /** Type of token class handling. */
 enum XclExpTokenClassType
@@ -150,7 +97,7 @@ enum XclExpLinkMgrType
 /** Configuration data of the formula compiler. */
 struct XclExpCompConfig
 {
-    XclExpFomulaType    meType;         /// Type of the formula to be created.
+    XclFormulaType      meType;         /// Type of the formula to be created.
     XclExpTokenClassType meClassType;   /// Token class handling type.
     XclExpLinkMgrType   meLinkMgrType;  /// Link manager to be used.
     bool                mbFromCell;     /// True = Any kind of cell formula (cell, array, shared).
@@ -194,6 +141,7 @@ XclExpCompData::XclExpCompData() :
     mbOk( false )
 {
 }
+
 // ----------------------------------------------------------------------------
 
 /** Working data for a processed Calc formula token. */
@@ -297,7 +245,6 @@ void XclExpFuncData::IncExpParamClassIdx()
         ++mnClassIdx;
 }
 
-
 // ----------------------------------------------------------------------------
 
 /** Implementation class of the export formula compiler. */
@@ -307,32 +254,32 @@ public:
     explicit            XclExpFmlaCompImpl( const XclExpRoot& rRoot );
 
     /** Creates an Excel token array from the passed Calc token array. */
-    XclExpTokenArrayRef CreateFormula(
-                            XclExpFomulaType eType, const ScTokenArray& rScTokArr,
+    XclTokenArrayRef    CreateFormula(
+                            XclFormulaType eType, const ScTokenArray& rScTokArr,
                             const ScAddress* pScBasePos = 0, XclExpRefLog* pRefLog = 0 );
     /** Creates a single error token containing the passed error code. */
-    XclExpTokenArrayRef CreateErrorFormula( sal_uInt8 nErrCode );
+    XclTokenArrayRef    CreateErrorFormula( sal_uInt8 nErrCode );
     /** Creates a single token for a special cell reference. */
-    XclExpTokenArrayRef CreateSpecialRefFormula( sal_uInt8 nTokenId, const XclAddress& rXclPos );
+    XclTokenArrayRef    CreateSpecialRefFormula( sal_uInt8 nTokenId, const XclAddress& rXclPos );
     /** Creates a single tNameXR token for a reference to an external name. */
-    XclExpTokenArrayRef CreateNameXFormula( sal_uInt16 nExtSheet, sal_uInt16 nExtName );
+    XclTokenArrayRef    CreateNameXFormula( sal_uInt16 nExtSheet, sal_uInt16 nExtName );
 
     /** Returns true, if the passed formula type allows 3D references only. */
-    bool                Is3DRefOnly( XclExpFomulaType eType ) const;
+    bool                Is3DRefOnly( XclFormulaType eType ) const;
 
     // ------------------------------------------------------------------------
 private:
-    const XclExpCompConfig* GetConfigForType( XclExpFomulaType eType ) const;
+    const XclExpCompConfig* GetConfigForType( XclFormulaType eType ) const;
     inline sal_uInt16   GetSize() const { return static_cast< sal_uInt16 >( maTokVec.size() ); }
 
     void                EnterRecursive();
-    void                Init( XclExpFomulaType eType );
-    void                Init( XclExpFomulaType eType, const ScTokenArray& rScTokArr,
+    void                Init( XclFormulaType eType );
+    void                Init( XclFormulaType eType, const ScTokenArray& rScTokArr,
                             const ScAddress* pScBasePos, XclExpRefLog* pRefLog );
 
     void                LeaveRecursive();
     void                FinalizeFormula();
-    XclExpTokenArrayRef CreateTokenArray();
+    XclTokenArrayRef    CreateTokenArray();
 
     // compiler ---------------------------------------------------------------
     // XclExpTokenData: pass-by-value and return-by-value is intended
@@ -448,8 +395,8 @@ private:
 
     // ------------------------------------------------------------------------
 private:
-    typedef ::std::map< XclExpFomulaType, XclExpCompConfig >    XclExpCompConfigMap;
-    typedef ::std::list< XclExpCompData >                       XclExpCompDataList;
+    typedef ::std::map< XclFormulaType, XclExpCompConfig >  XclExpCompConfigMap;
+    typedef ::std::list< XclExpCompData >                   XclExpCompDataList;
 
     XclExpCompConfigMap maCfgMap;       /// Compiler configuration map for all formula types.
     XclFunctionProvider maFuncProv;     /// Excel function data provider.
@@ -505,7 +452,7 @@ XclExpFmlaCompImpl::XclExpFmlaCompImpl( const XclExpRoot& rRoot ) :
         maCfgMap[ pEntry->meType ] = *pEntry;
 }
 
-XclExpTokenArrayRef XclExpFmlaCompImpl::CreateFormula( XclExpFomulaType eType,
+XclTokenArrayRef XclExpFmlaCompImpl::CreateFormula( XclFormulaType eType,
         const ScTokenArray& rScTokArr, const ScAddress* pScBasePos, XclExpRefLog* pRefLog )
 {
     // initialize the compiler
@@ -551,14 +498,14 @@ XclExpTokenArrayRef XclExpFmlaCompImpl::CreateFormula( XclExpFomulaType eType,
     return CreateTokenArray();
 }
 
-XclExpTokenArrayRef XclExpFmlaCompImpl::CreateErrorFormula( sal_uInt8 nErrCode )
+XclTokenArrayRef XclExpFmlaCompImpl::CreateErrorFormula( sal_uInt8 nErrCode )
 {
     Init( EXC_FMLATYPE_NAME );
     AppendErrorToken( nErrCode );
     return CreateTokenArray();
 }
 
-XclExpTokenArrayRef XclExpFmlaCompImpl::CreateSpecialRefFormula( sal_uInt8 nTokenId, const XclAddress& rXclPos )
+XclTokenArrayRef XclExpFmlaCompImpl::CreateSpecialRefFormula( sal_uInt8 nTokenId, const XclAddress& rXclPos )
 {
     Init( EXC_FMLATYPE_NAME );
     AppendOpTokenId( nTokenId, EXC_TOKCLASS_NONE );
@@ -567,14 +514,14 @@ XclExpTokenArrayRef XclExpFmlaCompImpl::CreateSpecialRefFormula( sal_uInt8 nToke
     return CreateTokenArray();
 }
 
-XclExpTokenArrayRef XclExpFmlaCompImpl::CreateNameXFormula( sal_uInt16 nExtSheet, sal_uInt16 nExtName )
+XclTokenArrayRef XclExpFmlaCompImpl::CreateNameXFormula( sal_uInt16 nExtSheet, sal_uInt16 nExtName )
 {
     Init( EXC_FMLATYPE_NAME );
     AppendNameXToken( nExtSheet, nExtName, EXC_TOKCLASS_NONE );
     return CreateTokenArray();
 }
 
-bool XclExpFmlaCompImpl::Is3DRefOnly( XclExpFomulaType eType ) const
+bool XclExpFmlaCompImpl::Is3DRefOnly( XclFormulaType eType ) const
 {
     const XclExpCompConfig* pCfg = GetConfigForType( eType );
     return pCfg && pCfg->mb3DRefOnly;
@@ -582,7 +529,7 @@ bool XclExpFmlaCompImpl::Is3DRefOnly( XclExpFomulaType eType ) const
 
 // private --------------------------------------------------------------------
 
-const XclExpCompConfig* XclExpFmlaCompImpl::GetConfigForType( XclExpFomulaType eType ) const
+const XclExpCompConfig* XclExpFmlaCompImpl::GetConfigForType( XclFormulaType eType ) const
 {
     XclExpCompConfigMap::const_iterator aIt = maCfgMap.find( eType );
     DBG_ASSERT( aIt != maCfgMap.end(), "XclExpFmlaCompImpl::GetConfigForType - unknown formula type" );
@@ -598,7 +545,7 @@ void XclExpFmlaCompImpl::EnterRecursive()
         mbRunning = true;
 }
 
-void XclExpFmlaCompImpl::Init( XclExpFomulaType eType )
+void XclExpFmlaCompImpl::Init( XclFormulaType eType )
 {
     // compiler invoked recursively? - store old working data
     EnterRecursive();
@@ -630,7 +577,7 @@ void XclExpFmlaCompImpl::Init( XclExpFomulaType eType )
     }
 }
 
-void XclExpFmlaCompImpl::Init( XclExpFomulaType eType, const ScTokenArray& rScTokArr,
+void XclExpFmlaCompImpl::Init( XclFormulaType eType, const ScTokenArray& rScTokArr,
         const ScAddress* pScBasePos, XclExpRefLog* pRefLog )
 {
     // common initialization
@@ -711,10 +658,10 @@ void XclExpFmlaCompImpl::FinalizeFormula()
     }
 }
 
-XclExpTokenArrayRef XclExpFmlaCompImpl::CreateTokenArray()
+XclTokenArrayRef XclExpFmlaCompImpl::CreateTokenArray()
 {
     // create the Excel token array object before calling LeaveRecursive()
-    XclExpTokenArrayRef xTokArr( new XclExpTokenArray( maTokVec, mbVolatile ) );
+    XclTokenArrayRef xTokArr( new XclTokenArray( maTokVec, mbVolatile ) );
 
     // compiler invoked recursively? - restore old working data
     LeaveRecursive();
@@ -1656,7 +1603,7 @@ void XclExpFmlaCompImpl::ProcessCellRef( const XclExpTokenData& rTokData, sal_uI
     {
         DBG_ASSERT( aRefData.IsColRel() != aRefData.IsRowRel(),
             "XclExpFmlaCompImpl::ProcessCellRef - broken natural language reference" );
-        // create tExtended token for natural language reference
+        // create tNlr token for natural language reference
         sal_uInt8 nSubId = aRefData.IsColRel() ? EXC_TOK_NLR_COLV : EXC_TOK_NLR_ROWV;
         AppendOpTokenId( EXC_TOKID_NLR, nExpClass, rTokData.mnSpaces );
         Append( nSubId );
@@ -2188,32 +2135,32 @@ XclExpFormulaCompiler::~XclExpFormulaCompiler()
 {
 }
 
-XclExpTokenArrayRef XclExpFormulaCompiler::CreateFormula(
-        XclExpFomulaType eType, const ScTokenArray& rScTokArr,
+XclTokenArrayRef XclExpFormulaCompiler::CreateFormula(
+        XclFormulaType eType, const ScTokenArray& rScTokArr,
         const ScAddress* pScBasePos, XclExpRefLog* pRefLog )
 {
     return mxImpl->CreateFormula( eType, rScTokArr, pScBasePos, pRefLog );
 }
 
-XclExpTokenArrayRef XclExpFormulaCompiler::CreateFormula( XclExpFomulaType eType, const ScAddress& rScPos )
+XclTokenArrayRef XclExpFormulaCompiler::CreateFormula( XclFormulaType eType, const ScAddress& rScPos )
 {
     ScTokenArray aScTokArr;
     lclPutCellToTokenArray( aScTokArr, rScPos, GetCurrScTab(), mxImpl->Is3DRefOnly( eType ) );
     return mxImpl->CreateFormula( eType, aScTokArr );
 }
 
-XclExpTokenArrayRef XclExpFormulaCompiler::CreateFormula( XclExpFomulaType eType, const ScRange& rScRange )
+XclTokenArrayRef XclExpFormulaCompiler::CreateFormula( XclFormulaType eType, const ScRange& rScRange )
 {
     ScTokenArray aScTokArr;
     lclPutRangeToTokenArray( aScTokArr, rScRange, GetCurrScTab(), mxImpl->Is3DRefOnly( eType ) );
     return mxImpl->CreateFormula( eType, aScTokArr );
 }
 
-XclExpTokenArrayRef XclExpFormulaCompiler::CreateFormula( XclExpFomulaType eType, const ScRangeList& rScRanges )
+XclTokenArrayRef XclExpFormulaCompiler::CreateFormula( XclFormulaType eType, const ScRangeList& rScRanges )
 {
     ULONG nCount = rScRanges.Count();
     if( nCount == 0 )
-        return XclExpTokenArrayRef();
+        return XclTokenArrayRef();
 
     ScTokenArray aScTokArr;
     SCTAB nCurrScTab = GetCurrScTab();
@@ -2227,18 +2174,18 @@ XclExpTokenArrayRef XclExpFormulaCompiler::CreateFormula( XclExpFomulaType eType
     return mxImpl->CreateFormula( eType, aScTokArr );
 }
 
-XclExpTokenArrayRef XclExpFormulaCompiler::CreateErrorFormula( sal_uInt8 nErrCode )
+XclTokenArrayRef XclExpFormulaCompiler::CreateErrorFormula( sal_uInt8 nErrCode )
 {
     return mxImpl->CreateErrorFormula( nErrCode );
 }
 
-XclExpTokenArrayRef XclExpFormulaCompiler::CreateSpecialRefFormula(
+XclTokenArrayRef XclExpFormulaCompiler::CreateSpecialRefFormula(
         sal_uInt8 nTokenId, const XclAddress& rXclPos )
 {
     return mxImpl->CreateSpecialRefFormula( nTokenId, rXclPos );
 }
 
-XclExpTokenArrayRef XclExpFormulaCompiler::CreateNameXFormula(
+XclTokenArrayRef XclExpFormulaCompiler::CreateNameXFormula(
         sal_uInt16 nExtSheet, sal_uInt16 nExtName )
 {
     return mxImpl->CreateNameXFormula( nExtSheet, nExtName );
