@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JoinDesignView.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:29:02 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:28:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,13 +48,11 @@
 #ifndef DBAUI_ENUMTYPES_HXX
 #include "QEnumTypes.hxx"
 #endif
-//#ifndef DBAUI_JOINTABLEVIEW_HXX
-//#include "JoinTableView.hxx"
-//#endif
+
+#include <memory>
 
 namespace dbaui
 {
-    class OAddTableDlg;
     class OTableConnection;
     class OConnectionLineData;
     class OJoinController;
@@ -67,7 +65,6 @@ namespace dbaui
     protected:
         OScrollWindowHelper*    m_pScrollWindow;    // contains only the scrollbars
         OJoinTableView*         m_pTableView;       // presents the upper window
-        OAddTableDlg*           m_pAddTabDlg;       // create by the first execute of the add table slot
         OJoinController*        m_pController;
 
     public:
@@ -86,8 +83,6 @@ namespace dbaui
 
         virtual void SaveTabWinUIConfig(OTableWindow* pWin);
         OJoinController* getController() const { return m_pController; }
-        // returs the add table dialog from the design view
-        OAddTableDlg* getAddTableDialog() { return m_pAddTabDlg; }
         // called when fields are deleted
         // called when a table from tabeview was deleted
         void TableDeleted(const ::rtl::OUString& rAliasName);
