@@ -4,9 +4,9 @@
  *
  *  $RCSfile: YColumns.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:32:41 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:37:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@ namespace connectivity
         class OMySQLColumns : public OColumnsHelper
         {
         protected:
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createEmptyObject();
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createDescriptor();
         public:
             OMySQLColumns(  ::cppu::OWeakObject& _rParent
                             ,sal_Bool _bCase
