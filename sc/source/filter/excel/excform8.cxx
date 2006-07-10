@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excform8.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-21 11:55:53 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:28:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,12 @@
 #ifndef SC_XLTRACER_HXX
 #include "xltracer.hxx"
 #endif
+#ifndef SC_XISTREAM_HXX
+#include "xistream.hxx"
+#endif
+#ifndef SC_XIHELPER_HXX
+#include "xihelper.hxx"
+#endif
 #ifndef SC_XILINK_HXX
 #include "xilink.hxx"
 #endif
@@ -49,9 +55,9 @@
 #endif
 
 
-ExcelToSc8::ExcelToSc8( XclImpStream& rStrm ) :
-    ExcelToSc( rStrm ),
-    rLinkMan( rStrm.GetRoot().GetLinkManager() )
+ExcelToSc8::ExcelToSc8( const XclImpRoot& rRoot ) :
+    ExcelToSc( rRoot ),
+    rLinkMan( rRoot.GetLinkManager() )
 {
 }
 
@@ -61,19 +67,19 @@ ExcelToSc8::~ExcelToSc8()
 }
 
 
-BOOL ExcelToSc8::Read3DTabReference( SCTAB& rFirstTab, SCTAB& rLastTab )
+BOOL ExcelToSc8::Read3DTabReference( XclImpStream& rStrm, SCTAB& rFirstTab, SCTAB& rLastTab )
 {
     rFirstTab = rLastTab = 0;
 
     UINT16 nIxti;
-    aIn >> nIxti;
+    rStrm >> nIxti;
 
     return rLinkMan.GetScTabRange( rFirstTab, rLastTab, nIxti );
 }
 
 
 // stream seeks to first byte after <nFormulaLen>
-ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen, const FORMULA_TYPE eFT )
+ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn, sal_Size nFormulaLen, const FORMULA_TYPE eFT )
 {
     BYTE                    nOp, nLen, nByte;
     UINT16                  nUINT16;
@@ -104,9 +110,9 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
         return ConvOK;
     }
 
-    ULONG nMaxPos = aIn.GetRecPos() + nFormulaLen;
+    sal_Size nEndPos = aIn.GetRecPos() + nFormulaLen;
 
-    while( (aIn.GetRecPos() < nMaxPos) && !bError )
+    while( (aIn.GetRecPos() < nEndPos) && !bError )
     {
         aIn >> nOp;
 
@@ -496,26 +502,26 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
             case 0x46:
             case 0x66:
             case 0x26: // Constant Reference Subexpression      [321 271]
-                aIn.Ignore( 6 );        // mehr steht da nicht!
+                aIn.Ignore( 6 );       // mehr steht da nicht!
                 break;
             case 0x47:
             case 0x67:
             case 0x27: // Erroneous Constant Reference Subexpr. [322 272]
-                aIn.Ignore( 6 );    // mehr steht da nicht!
+                aIn.Ignore( 6 );   // mehr steht da nicht!
 //               aPool << ocBad;
 //               aPool >> aStack;
                 break;
             case 0x48:
             case 0x68:
             case 0x28: // Incomplete Constant Reference Subexpr.[331 281]
-                aIn.Ignore( 6 );    // mehr steht da nicht!
+                aIn.Ignore( 6 );   // mehr steht da nicht!
 //               aPool << ocBad;
 //               aPool >> aStack;
                 break;
             case 0x49:
             case 0x69:
             case 0x29: // Variable Reference Subexpression      [331 281]
-                aIn.Ignore( 2 );    // mehr steht da nicht!
+                aIn.Ignore( 2 );   // mehr steht da nicht!
                 break;
             case 0x4C:
             case 0x6C:
@@ -564,14 +570,14 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
             case 0x4E:
             case 0x6E:
             case 0x2E: // Reference Subexpression Within a Name [332 282]
-                aIn.Ignore( 2 );    // mehr steht da nicht!
+                aIn.Ignore( 2 );   // mehr steht da nicht!
 //               aPool << ocBad;
 //               aPool >> aStack;
                 break;
             case 0x4F:
             case 0x6F:
             case 0x2F: // Incomplete Reference Subexpression... [332 282]
-                aIn.Ignore( 2 );    // mehr steht da nicht!
+                aIn.Ignore( 2 );   // mehr steht da nicht!
 //               aPool << ocBad;
 //               aPool >> aStack;
                 break;
@@ -660,7 +666,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
                 UINT16 nRw, nGrbitCol;
                 SCTAB nTabFirst, nTabLast;
 
-                BOOL bOK = Read3DTabReference( nTabFirst, nTabLast );
+                BOOL bOK = Read3DTabReference( aIn, nTabFirst, nTabLast );
                 aIn >> nRw >> nGrbitCol;
 
                 if( bOK )
@@ -710,7 +716,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
                 UINT16 nRw1, nGrbitCol1, nRw2, nGrbitCol2;
                 SCTAB nTabFirst, nTabLast;
 
-                BOOL bOK = Read3DTabReference( nTabFirst, nTabLast );
+                BOOL bOK = Read3DTabReference( aIn, nTabFirst, nTabLast );
                 aIn >> nRw1 >> nRw2 >> nGrbitCol1 >> nGrbitCol2;
 
                 if( bOK )
@@ -772,7 +778,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
         rpTokArray = aPool[ aStack.Get() ];
         eRet = ConvErrNi;
     }
-    else if( aIn.GetRecPos() != nMaxPos )
+    else if( aIn.GetRecPos() != nEndPos )
     {
         aPool << ocBad;
         aPool >> aStack;
@@ -790,13 +796,13 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
         eRet = ConvOK;
     }
 
-    aIn.Seek( nMaxPos );
+    aIn.Seek( nEndPos );
     return eRet;
 }
 
 
 // stream seeks to first byte after <nFormulaLen>
-ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, UINT32 nFormulaLen, const FORMULA_TYPE eFT )
+ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal_Size nFormulaLen, const FORMULA_TYPE eFT )
 {
     BYTE                    nOp, nLen;//, nByte;
     BOOL                    bError = FALSE;
@@ -819,9 +825,9 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, UINT32 nFormulaLen, c
     if( nFormulaLen == 0 )
         return ConvOK;
 
-    ULONG nMaxPos = aIn.GetRecPos() + nFormulaLen;
+    sal_Size nEndPos = aIn.GetRecPos() + nFormulaLen;
 
-    while( (aIn.GetRecPos() < nMaxPos) && !bError )
+    while( (aIn.GetRecPos() < nEndPos) && !bError )
     {
         aIn >> nOp;
 
@@ -889,7 +895,7 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, UINT32 nFormulaLen, c
                 aIn.Ignore( 2 );
                 break;
             case 0x1F: // Number                                [315 266]
-                aIn.Ignore( sizeof( double ) );
+                aIn.Ignore( 8 );
                 break;
             case 0x40:
             case 0x60:
@@ -967,12 +973,12 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, UINT32 nFormulaLen, c
             case 0x48:
             case 0x68:
             case 0x28: // Incomplete Constant Reference Subexpr.[331 281]
-                aIn.Ignore( 6 );    // mehr steht da nicht!
+                aIn.Ignore( 6 );   // mehr steht da nicht!
                 break;
             case 0x49:
             case 0x69:
             case 0x29: // Variable Reference Subexpression      [331 281]
-                aIn.Ignore( 2 );    // mehr steht da nicht!
+                aIn.Ignore( 2 );   // mehr steht da nicht!
                 break;
             case 0x4A:
             case 0x6A:
@@ -1127,14 +1133,14 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, UINT32 nFormulaLen, c
 
     if( bError )
         eRet = ConvErrNi;
-    else if( aIn.GetRecPos() != nMaxPos )
+    else if( aIn.GetRecPos() != nEndPos )
         eRet = ConvErrCount;
     else if( bExternName )
         eRet = ConvErrExternal;
     else
         eRet = ConvOK;
 
-    aIn.Seek( nMaxPos );
+    aIn.Seek( nEndPos );
     return eRet;
 }
 
@@ -1195,18 +1201,18 @@ void ExcelToSc8::ExcRelToScRel( UINT16 nRow, UINT16 nC, SingleRefData &rSRD, con
 
 
 // stream seeks to first byte after <nLen>
-BOOL ExcelToSc8::GetAbsRefs( ScRangeList& r, UINT32 nLen )
+BOOL ExcelToSc8::GetAbsRefs( ScRangeList& r, XclImpStream& aIn, sal_Size nLen )
 {
     UINT8                   nOp;
     UINT16                  nRow1, nRow2, nCol1, nCol2;
     SCTAB                                   nTab1, nTab2;
     UINT16                  nIxti;
 
-    UINT32                  nSeek;
+    sal_Size nSeek;
 
-    ULONG nMaxPos = aIn.GetRecPos() + nLen;
+    sal_Size nEndPos = aIn.GetRecPos() + nLen;
 
-    while( aIn.IsValid() && (aIn.GetRecPos() < nMaxPos) )
+    while( aIn.IsValid() && (aIn.GetRecPos() < nEndPos) )
     {
         aIn >> nOp;
         nSeek = 0;
@@ -1362,7 +1368,7 @@ BOOL ExcelToSc8::GetAbsRefs( ScRangeList& r, UINT32 nLen )
 
         aIn.Ignore( nSeek );
     }
-    aIn.Seek( nMaxPos );
+    aIn.Seek( nEndPos );
 
     return r.Count() != 0;
 }
