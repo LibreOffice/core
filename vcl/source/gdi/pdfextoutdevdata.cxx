@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfextoutdevdata.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:29:30 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 17:25:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -410,20 +410,20 @@ sal_Bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIM
             break;
             case PDFExtOutDevDataSync::EndGroupGfxLink :
             {
+                sal_Int32 nTransparency;
+                Rectangle aOutputRect, aVisibleOutputRect;
+                Graphic   aGraphic( mGraphics.front() );
+
+                mGraphics.pop_front();
+                nTransparency = mParaInts.front();
+                mParaInts.pop_front();
+                aOutputRect = mParaRects.front();
+                mParaRects.pop_front();
+                aVisibleOutputRect = mParaRects.front();
+                mParaRects.pop_front();
+
                 if ( mbGroupIgnoreGDIMtfActions )
                 {
-                    sal_Int32 nTransparency;
-                    Rectangle aOutputRect, aVisibleOutputRect;
-                    Graphic   aGraphic( mGraphics.front() );
-
-                    mGraphics.pop_front();
-                    nTransparency = mParaInts.front();
-                    mParaInts.pop_front();
-                    aOutputRect = mParaRects.front();
-                    mParaRects.pop_front();
-                    aVisibleOutputRect = mParaRects.front();
-                    mParaRects.pop_front();
-
                     sal_Bool bClippingNeeded = ( aOutputRect != aVisibleOutputRect ) && !aVisibleOutputRect.IsEmpty();
 
                     GfxLink   aGfxLink( aGraphic.GetLink() );
