@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CollectionView.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:01:31 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:25:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -278,7 +278,7 @@ IMPL_LINK( OCollectionView, NewFolder_Click, PushButton*, EMPTYARG )
     try
     {
         Reference<XHierarchicalNameContainer> xNameContainer(m_xContent,UNO_QUERY);
-        if ( dbaui::insertHierachyElement(this,xNameContainer,String(),m_bCreateForm) )
+        if ( dbaui::insertHierachyElement(this,m_xORB,xNameContainer,String(),m_bCreateForm) )
             m_aView.Initialize(m_xContent,String());
     }
     catch(Exception)
