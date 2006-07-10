@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xename.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-21 11:57:01 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:32:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,7 @@ public:
     explicit            XclExpName( const XclExpRoot& rRoot, sal_Unicode cBuiltIn );
 
     /** Sets a token array containing the definition of this name. */
-    void                SetTokenArray( XclExpTokenArrayRef xTokArr );
+    void                SetTokenArray( XclTokenArrayRef xTokArr );
     /** Changes this defined name to be local on the specified Calc sheet. */
     void                SetLocalTab( SCTAB nScTab );
     /** Hides or unhides the defined name. */
@@ -93,7 +93,7 @@ public:
     inline sal_Unicode  GetBuiltInName() const { return mcBuiltIn; }
 
     /** Returns the token array for this defined name. */
-    inline XclExpTokenArrayRef GetTokenArray() const { return mxTokArr; }
+    inline XclTokenArrayRef GetTokenArray() const { return mxTokArr; }
 
     /** Returns true, if this is a document-global defined name. */
     inline bool         IsGlobal() const { return mnXclTab == EXC_NAME_GLOBAL; }
@@ -118,7 +118,7 @@ private:
 private:
     String              maOrigName;     /// The original user-defined name.
     XclExpStringRef     mxName;         /// The name as Excel string object.
-    XclExpTokenArrayRef mxTokArr;       /// The definition of the defined name.
+    XclTokenArrayRef    mxTokArr;       /// The definition of the defined name.
     sal_Unicode         mcBuiltIn;      /// The built-in index for built-in names.
     SCTAB               mnScTab;        /// The Calc sheet index for local names.
     sal_uInt16          mnFlags;        /// Additional flags for this defined name.
@@ -146,9 +146,9 @@ public:
     sal_uInt16          InsertDBRange( USHORT nScDBRangeIdx );
 
     /** Inserts a new built-in defined name. */
-    sal_uInt16          InsertBuiltInName( sal_Unicode cBuiltIn, XclExpTokenArrayRef xTokArr, SCTAB nScTab );
+    sal_uInt16          InsertBuiltInName( sal_Unicode cBuiltIn, XclTokenArrayRef xTokArr, SCTAB nScTab );
     /** Inserts a new defined name. Sets another unused name, if rName already exists. */
-    sal_uInt16          InsertUniqueName( const String& rName, XclExpTokenArrayRef xTokArr, SCTAB nScTab );
+    sal_uInt16          InsertUniqueName( const String& rName, XclTokenArrayRef xTokArr, SCTAB nScTab );
     /** Returns index of an existing name, or creates a name without definition. */
     sal_uInt16          InsertRawName( const String& rName );
     /** Searches or inserts a defined name describing a macro name.
@@ -175,7 +175,7 @@ private:
     sal_uInt16          FindNameIdx( const XclExpIndexMap& rMap, USHORT nScIdx ) const;
     /** Returns the index of an existing built-in NAME record with the passed definition, otherwise 0. */
     sal_uInt16          FindBuiltInNameIdx( const String& rName,
-                            const XclExpTokenArray& rTokArr, bool bDBRange ) const;
+                            const XclTokenArray& rTokArr, bool bDBRange ) const;
     /** Returns an unused name for the passed name. */
     String              GetUnusedName( const String& rName ) const;
 
@@ -247,7 +247,7 @@ XclExpName::XclExpName( const XclExpRoot& rRoot, sal_Unicode cBuiltIn ) :
     }
 }
 
-void XclExpName::SetTokenArray( XclExpTokenArrayRef xTokArr )
+void XclExpName::SetTokenArray( XclTokenArrayRef xTokArr )
 {
     mxTokArr = xTokArr;
 }
@@ -366,7 +366,7 @@ sal_uInt16 XclExpNameManagerImpl::InsertDBRange( USHORT nScDBRangeIdx )
     return nNameIdx;
 }
 
-sal_uInt16 XclExpNameManagerImpl::InsertBuiltInName( sal_Unicode cBuiltIn, XclExpTokenArrayRef xTokArr, SCTAB nScTab )
+sal_uInt16 XclExpNameManagerImpl::InsertBuiltInName( sal_Unicode cBuiltIn, XclTokenArrayRef xTokArr, SCTAB nScTab )
 {
     XclExpNameRef xName( new XclExpName( GetRoot(), cBuiltIn ) );
     xName->SetTokenArray( xTokArr );
@@ -375,7 +375,7 @@ sal_uInt16 XclExpNameManagerImpl::InsertBuiltInName( sal_Unicode cBuiltIn, XclEx
 }
 
 sal_uInt16 XclExpNameManagerImpl::InsertUniqueName(
-        const String& rName, XclExpTokenArrayRef xTokArr, SCTAB nScTab )
+        const String& rName, XclTokenArrayRef xTokArr, SCTAB nScTab )
 {
     DBG_ASSERT( rName.Len(), "XclExpNameManagerImpl::InsertUniqueName - empty name" );
     XclExpNameRef xName( new XclExpName( GetRoot(), GetUnusedName( rName ) ) );
@@ -449,7 +449,7 @@ sal_uInt16 XclExpNameManagerImpl::FindNameIdx( const XclExpIndexMap& rMap, USHOR
 }
 
 sal_uInt16 XclExpNameManagerImpl::FindBuiltInNameIdx(
-        const String& rName, const XclExpTokenArray& rTokArr, bool bDBRange ) const
+        const String& rName, const XclTokenArray& rTokArr, bool bDBRange ) const
 {
     /*  Get built-in index from the name. Special case: the database range
         'unnamed' will be mapped to Excel's built-in '_FilterDatabase' name. */
@@ -464,7 +464,7 @@ sal_uInt16 XclExpNameManagerImpl::FindBuiltInNameIdx(
             XclExpNameRef xName = maNameList.GetRecord( nPos );
             if( xName->GetBuiltInName() == cBuiltIn )
             {
-                XclExpTokenArrayRef xTokArr = xName->GetTokenArray();
+                XclTokenArrayRef xTokArr = xName->GetTokenArray();
                 if( xTokArr.is() && (*xTokArr == rTokArr) )
                     return static_cast< sal_uInt16 >( nPos + 1 );
             }
@@ -519,7 +519,7 @@ sal_uInt16 XclExpNameManagerImpl::CreateName( const ScRangeData& rRangeData )
         This may cause recursive creation of other defined names. */
     if( const ScTokenArray* pScTokArr = const_cast< ScRangeData& >( rRangeData ).GetCode() )
     {
-        XclExpTokenArrayRef xTokArr = GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_NAME, *pScTokArr );
+        XclTokenArrayRef xTokArr = GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_NAME, *pScTokArr );
         xName->SetTokenArray( xTokArr );
 
         /*  Try to replace by existing built-in name - complete token array is
@@ -547,7 +547,7 @@ sal_uInt16 XclExpNameManagerImpl::CreateName( const ScDBData& rDBData )
     const String& rName = rDBData.GetName();
     ScRange aRange;
     rDBData.GetArea( aRange );
-    XclExpTokenArrayRef xTokArr = GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_NAME, aRange );
+    XclTokenArrayRef xTokArr = GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_NAME, aRange );
 
     // try to use an existing built-in name
     sal_uInt16 nNameIdx = FindBuiltInNameIdx( rName, *xTokArr, true );
@@ -674,14 +674,14 @@ sal_uInt16 XclExpNameManager::InsertDBRange( USHORT nScDBRangeIdx )
     return mxImpl->InsertDBRange( nScDBRangeIdx );
 }
 
-sal_uInt16 XclExpNameManager::InsertBuiltInName( sal_Unicode cBuiltIn, XclExpTokenArrayRef xTokArr, SCTAB nScTab )
+sal_uInt16 XclExpNameManager::InsertBuiltInName( sal_Unicode cBuiltIn, XclTokenArrayRef xTokArr, SCTAB nScTab )
 {
     return mxImpl->InsertBuiltInName( cBuiltIn, xTokArr, nScTab );
 }
 
 sal_uInt16 XclExpNameManager::InsertBuiltInName( sal_Unicode cBuiltIn, const ScRange& rRange )
 {
-    XclExpTokenArrayRef xTokArr = GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_NAME, rRange );
+    XclTokenArrayRef xTokArr = GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_NAME, rRange );
     return mxImpl->InsertBuiltInName( cBuiltIn, xTokArr, rRange.aStart.Tab() );
 }
 
@@ -690,14 +690,14 @@ sal_uInt16 XclExpNameManager::InsertBuiltInName( sal_Unicode cBuiltIn, const ScR
     sal_uInt16 nNameIdx = 0;
     if( rRangeList.Count() )
     {
-        XclExpTokenArrayRef xTokArr = GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_NAME, rRangeList );
+        XclTokenArrayRef xTokArr = GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_NAME, rRangeList );
         nNameIdx = mxImpl->InsertBuiltInName( cBuiltIn, xTokArr, rRangeList.GetObject( 0 )->aStart.Tab() );
     }
     return nNameIdx;
 }
 
 sal_uInt16 XclExpNameManager::InsertUniqueName(
-        const String& rName, XclExpTokenArrayRef xTokArr, SCTAB nScTab )
+        const String& rName, XclTokenArrayRef xTokArr, SCTAB nScTab )
 {
     return mxImpl->InsertUniqueName( rName, xTokArr, nScTab );
 }
