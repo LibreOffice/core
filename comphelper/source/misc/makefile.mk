@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.36 $
+#   $Revision: 1.37 $
 #
-#   last change: $Author: obo $ $Date: 2006-03-29 12:44:53 $
+#   last change: $Author: obo $ $Date: 2006-07-10 16:15:32 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,9 @@ SLOFILES=	\
             $(SLO)$/servicedecl.obj \
             $(SLO)$/scopeguard.obj \
             $(SLO)$/componentmodule.obj \
-            $(SLO)$/officeresourcebundle.obj
+            $(SLO)$/componentcontext.obj \
+            $(SLO)$/officeresourcebundle.obj \
+            $(SLO)$/namedvaluecollection.obj
 
 # --- Targets ----------------------------------
 
