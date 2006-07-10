@@ -4,9 +4,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: obo $ $Date: 2006-06-23 11:35:17 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 16:39:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1598,6 +1598,11 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
     // scale layout metrics if needed
     if( mfFontScale != 1.0 )
     {
+        mnBaseAdv = (int)((double)mnBaseAdv*mfFontScale);
+
+        for( i = 0; i < mnItemCount; ++i )
+            mpVisualItems[i].mnXOffset = (int)((double)mpVisualItems[i].mnXOffset*mfFontScale);
+
         mnBaseAdv = (int)((double)mnBaseAdv*mfFontScale);
         for( i = 0; i < mnGlyphCount; ++i )
         {
