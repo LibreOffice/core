@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scmod.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:44:18 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:07:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1395,7 +1395,10 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
     {
         WaitObject aWait( pDocSh->GetDialogParent() );
         pDoc->CalcAll();
-        pViewSh->UpdateCharts( TRUE );
+        if ( pViewSh )
+            pViewSh->UpdateCharts( TRUE );
+        else
+            ScDBFunc::DoUpdateCharts( ScAddress(), pDoc, NULL, TRUE );
         if (pBindings)
             pBindings->Invalidate( SID_ATTR_SIZE ); //SvxPosSize-StatusControl-Update
     }
