@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excrecds.hxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:16:56 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:51:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,7 +115,7 @@ public:
     virtual void            Save( XclExpStream& rStrm );
 
     virtual UINT16          GetNum() const = 0;
-    virtual ULONG           GetLen() const = 0;
+    virtual sal_Size        GetLen() const = 0;
 
 protected:
     virtual void            SaveCont( XclExpStream& rStrm );
@@ -135,7 +135,7 @@ protected:
 public:
     virtual void            Save( XclExpStream& rStrm );
     virtual UINT16          GetNum() const;
-    virtual ULONG           GetLen() const;
+    virtual sal_Size        GetLen() const;
 };
 
 
@@ -189,7 +189,7 @@ public:
     inline                  ExcBoolRecord( const BOOL bDefault ) : bVal( bDefault ) {}
                             ExcBoolRecord( SfxItemSet*, USHORT nWhich, BOOL bDefault );
 
-    virtual ULONG           GetLen( void ) const;
+    virtual sal_Size        GetLen( void ) const;
 };
 
 
@@ -219,7 +219,7 @@ public:
                             ExcBof( void );
 
     virtual UINT16          GetNum( void ) const;
-    virtual ULONG           GetLen( void ) const;
+    virtual sal_Size        GetLen( void ) const;
 };
 
 
@@ -234,7 +234,7 @@ public:
                             ExcBofW( void );
 
     virtual UINT16          GetNum( void ) const;
-    virtual ULONG           GetLen( void ) const;
+    virtual sal_Size        GetLen( void ) const;
 };
 
 
@@ -245,7 +245,7 @@ class ExcEof : public ExcRecord
 private:
 public:
     virtual UINT16          GetNum( void ) const;
-    virtual ULONG           GetLen( void ) const;
+    virtual sal_Size        GetLen( void ) const;
 };
 
 
@@ -257,7 +257,7 @@ private:
     virtual void            SaveCont( XclExpStream& rStrm );
 public:
     virtual UINT16          GetNum( void ) const;
-    virtual ULONG           GetLen( void ) const;
+    virtual sal_Size        GetLen( void ) const;
 };
 
 
@@ -268,9 +268,9 @@ class ExcDummy_00 : public ExcDummyRec
 {
 private:
     static const BYTE       pMyData[];
-    static const ULONG      nMyLen;
+    static const sal_Size   nMyLen;
 public:
-    virtual ULONG           GetLen( void ) const;
+    virtual sal_Size        GetLen( void ) const;
     virtual const BYTE*     GetData( void ) const;
 };
 
@@ -296,9 +296,9 @@ class ExcDummy_040 : public ExcDummyRec
 {
 private:
     static const BYTE       pMyData[];
-    static const ULONG      nMyLen;
+    static const sal_Size   nMyLen;
 public:
-    virtual ULONG           GetLen( void ) const;
+    virtual sal_Size        GetLen( void ) const;
     virtual const BYTE*     GetData( void ) const;
 };
 
@@ -308,9 +308,9 @@ class ExcDummy_041 : public ExcDummyRec
 {
 private:
     static const BYTE       pMyData[];
-    static const ULONG      nMyLen;
+    static const sal_Size   nMyLen;
 public:
-    virtual ULONG           GetLen( void ) const;
+    virtual sal_Size        GetLen( void ) const;
     virtual const BYTE*     GetData( void ) const;
 };
 
@@ -330,8 +330,8 @@ public:
 class ExcBundlesheetBase : public ExcRecord
 {
 protected:
-    ULONG                   nStrPos;
-    ULONG                   nOwnPos;    // Position NACH # und Len
+    sal_Size                nStrPos;
+    sal_Size                nOwnPos;    // Position NACH # und Len
     UINT16                  nGrbit;
 
                             ExcBundlesheetBase();
@@ -339,7 +339,7 @@ protected:
 public:
                             ExcBundlesheetBase( RootData& rRootData, SCTAB nTab );
 
-    inline void             SetStreamPos( ULONG nNewStrPos ) { nStrPos = nNewStrPos; }
+    inline void             SetStreamPos( sal_Size nNewStrPos ) { nStrPos = nNewStrPos; }
     void                    UpdateStreamPos( XclExpStream& rStrm );
 
     virtual UINT16          GetNum() const;
@@ -356,7 +356,7 @@ private:
 
 public:
                             ExcBundlesheet( RootData& rRootData, SCTAB nTab );
-    virtual ULONG           GetLen() const;
+    virtual sal_Size        GetLen() const;
 };
 
 //--------------------------------------------------------- class ExcDummy_02 -
@@ -366,9 +366,9 @@ class ExcDummy_02a : public ExcDummyRec
 {
 private:
     static const BYTE       pMyData[];
-    static const ULONG      nMyLen;
+    static const sal_Size   nMyLen;
 public:
-    virtual ULONG           GetLen( void ) const;
+    virtual sal_Size        GetLen( void ) const;
     virtual const BYTE*     GetData( void ) const;
 };
 
