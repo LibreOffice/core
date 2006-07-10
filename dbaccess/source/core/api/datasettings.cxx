@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datasettings.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:39:03 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:05:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,14 +146,14 @@ float ConvertFontWidth( ::FontWidth eWidth )
     aFD.StyleName       = rFont.GetStyleName();
     aFD.Height          = (sal_Int16)rFont.GetSize().Height();
     aFD.Width           = (sal_Int16)rFont.GetSize().Width();
-    aFD.Family          = rFont.GetFamily();
+    aFD.Family          = (sal_Int16)rFont.GetFamily();
     aFD.CharSet         = rFont.GetCharSet();
-    aFD.Pitch           = rFont.GetPitch();
+    aFD.Pitch           = (sal_Int16)rFont.GetPitch();
     aFD.CharacterWidth  = ConvertFontWidth( rFont.GetWidthType() );
     aFD.Weight          = ConvertFontWeight( rFont.GetWeight() );
     aFD.Slant           = (::com::sun::star::awt::FontSlant)rFont.GetItalic();
-    aFD.Underline       = rFont.GetUnderline();
-    aFD.Strikeout       = rFont.GetStrikeout();
+    aFD.Underline       = (sal_Int16)rFont.GetUnderline();
+    aFD.Strikeout       = (sal_Int16)rFont.GetStrikeout();
     aFD.Orientation     = rFont.GetOrientation();
     aFD.Kerning         = rFont.IsKerning();
     aFD.WordLineMode    = rFont.IsWordLineMode();
