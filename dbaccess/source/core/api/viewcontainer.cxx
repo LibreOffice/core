@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontainer.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:42:19 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:07:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,7 +169,7 @@ ObjectType OViewContainer::createObject(const ::rtl::OUString& _rName)
     return xProp;
 }
 // -----------------------------------------------------------------------------
-Reference< XPropertySet > OViewContainer::createEmptyObject()
+Reference< XPropertySet > OViewContainer::createDescriptor()
 {
     Reference< XPropertySet > xRet;
     // frist we have to look if the master tables does support this
@@ -185,7 +185,7 @@ Reference< XPropertySet > OViewContainer::createEmptyObject()
 }
 // -----------------------------------------------------------------------------
 // XAppend
-void OViewContainer::appendObject( const Reference< XPropertySet >& descriptor )
+ObjectType OViewContainer::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     // append the new table with a create stmt
     ::rtl::OUString aName = getString(descriptor->getPropertyValue(PROPERTY_NAME));
@@ -201,7 +201,7 @@ void OViewContainer::appendObject( const Reference< XPropertySet >& descriptor )
     else
     {
         ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("CREATE VIEW ");
-        ::rtl::OUString sComposedName = ::dbtools::composeTableName(m_xMetaData,descriptor,sal_True,::dbtools::eInTableDefinitions);
+        ::rtl::OUString sComposedName = ::dbtools::composeTableName( m_xMetaData, descriptor, ::dbtools::eInTableDefinitions, false, false, true );
         if(!sComposedName.getLength())
             ::dbtools::throwFunctionSequenceException(static_cast<XTypeProvider*>(static_cast<OFilteredContainer*>(this)));
 
@@ -221,6 +221,8 @@ void OViewContainer::appendObject( const Reference< XPropertySet >& descriptor )
             ::comphelper::disposeComponent(xStmt);
         }
     }
+
+    return createObject( _rForName );
 }
 // -------------------------------------------------------------------------
 // XDrop
@@ -240,7 +242,7 @@ void OViewContainer::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementN
             xTable->getPropertyValue(PROPERTY_SCHEMANAME)   >>= sSchema;
             xTable->getPropertyValue(PROPERTY_NAME)         >>= sTable;
 
-            ::dbtools::composeTableName(m_xMetaData,sCatalog,sSchema,sTable,sComposedName,sal_True,::dbtools::eInTableDefinitions);
+            sComposedName = ::dbtools::composeTableName( m_xMetaData, sCatalog, sSchema, sTable, sal_True, ::dbtools::eInTableDefinitions );
         }
 
         if(!sComposedName.getLength())
