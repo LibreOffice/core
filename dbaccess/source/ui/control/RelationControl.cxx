@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RelationControl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:59:20 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:24:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -205,11 +205,11 @@ namespace dbaui
     {
         OJoinTableView::OTableWindowMap::const_iterator aFind = m_pTableMap->find(m_pConnData->GetSourceWinName());
         if( aFind != m_pTableMap->end() )
-            m_xSourceDef = aFind->second->GetTable();
+            m_xSourceDef = aFind->second->GetTableOrQuery();
 
         aFind = m_pTableMap->find(m_pConnData->GetDestWinName());
         if( aFind != m_pTableMap->end() )
-            m_xDestDef = aFind->second->GetTable();
+            m_xDestDef = aFind->second->GetTableOrQuery();
 
         if ( ColCount() == 0 )
         {
