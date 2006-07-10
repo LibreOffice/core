@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmresids.hrc,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:06:09 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:57:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -263,7 +263,10 @@
 #define RID_STR_DATANAV_EDIT_SUBMISSION             (RID_FORMS_START + 142)
 #define RID_STR_DATANAV_REMOVE_SUBMISSION           (RID_FORMS_START + 143)
 #define RID_STR_DATANAV_LINKWARN_BUTTON             (RID_FORMS_START + 144)
-#define RID_STR_SVT_SQL_TABLE_EXISTS                (RID_FORMS_START + 145)
+#define RID_STR_SVT_SQL_SYNTAX_TABLE_OR_QUERY       (RID_FORMS_START + 145)
+#define RID_STR_SVT_SQL_SYNTAX_TABLE_EXISTS         (RID_FORMS_START + 146)
+#define RID_STR_SVT_SQL_SYNTAX_QUERY_EXISTS         (RID_FORMS_START + 147)
+#define RID_STR_SVT_SQL_CYCLIC_SUB_QUERIES          (RID_FORMS_START + 148)
 
 // Error-String-Id's -----------------------------------------------------------
 #define RID_ERR_START                               (RID_FORMS_START + 600)
