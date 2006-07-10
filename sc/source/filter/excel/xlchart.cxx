@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlchart.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:51:29 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:44:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,21 @@
 #include "xlchart.hxx"
 #endif
 
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
+#include <com/sun/star/container/XNameContainer.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
+#include <com/sun/star/awt/Size.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_AWT_GRADIENT_HPP_
+#include <com/sun/star/awt/Gradient.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_XBITMAP_HPP_
+#include <com/sun/star/awt/XBitmap.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_DRAWING_LINEDASH_HPP_
 #include <com/sun/star/drawing/LineDash.hpp>
 #endif
@@ -49,12 +64,7 @@
 #ifndef _COM_SUN_STAR_DRAWING_BITMAPMODE_HPP_
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #endif
-#ifndef _COM_SUN_STAR_AWT_GRADIENT_HPP_
-#include <com/sun/star/awt/Gradient.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XBITMAP_HPP_
-#include <com/sun/star/awt/XBitmap.hpp>
-#endif
+
 #ifndef _COM_SUN_STAR_CHART_CHARTSYMBOLTYPE_HPP_
 #include <com/sun/star/chart/ChartSymbolType.hpp>
 #endif
@@ -62,6 +72,7 @@
 #ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
 #endif
+
 #ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
 #endif
@@ -78,45 +89,51 @@
 #include <svx/unomid.hxx>
 #endif
 
+#ifndef SC_SCGLOB_HXX
+#include "global.hxx"
+#endif
+
+#ifndef SC_XLCONST_HXX
+#include "xlconst.hxx"
+#endif
 #ifndef SC_XLTOOLS_HXX
 #include "xltools.hxx"
-#endif
-#ifndef SC_XLSTYLE_HXX
-#include "xlstyle.hxx"
 #endif
 
 using ::rtl::OUString;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::uno::Exception;
+using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::awt::XBitmap;
 
-typedef ::com::sun::star::awt::Size             ApiSize;
-typedef ::com::sun::star::awt::Gradient         ApiGradient;
-typedef ::com::sun::star::drawing::LineStyle    ApiLineStyle;
-typedef ::com::sun::star::drawing::LineDash     ApiLineDash;
-typedef ::com::sun::star::drawing::FillStyle    ApiFillStyle;
-typedef ::com::sun::star::drawing::BitmapMode   ApiBitmapMode;
+typedef ::com::sun::star::awt::Gradient ApiGradient;
 
 // Common =====================================================================
 
-XclChPoint::XclChPoint() :
+XclChRectangle::XclChRectangle() :
+    mnX( 0 ),
+    mnY( 0 ),
+    mnWidth( 0 ),
+    mnHeight( 0 )
+{
+}
+
+// ----------------------------------------------------------------------------
+
+XclChDataPointPos::XclChDataPointPos() :
     mnSeriesIdx( EXC_CHSERIES_INVALID ),
     mnPointIdx( EXC_CHDATAFORMAT_ALLPOINTS )
 {
 }
 
-XclChPoint::XclChPoint( sal_uInt16 nSeriesIdx, sal_uInt16 nPointIdx ) :
-    mnSeriesIdx( nSeriesIdx ),
-    mnPointIdx( nPointIdx )
-{
-}
-
-bool operator==( const XclChPoint& rL, const XclChPoint& rR )
+bool operator==( const XclChDataPointPos& rL, const XclChDataPointPos& rR )
 {
     return (rL.mnSeriesIdx == rR.mnSeriesIdx) && (rL.mnPointIdx == rR.mnPointIdx);
 }
 
-bool operator<( const XclChPoint& rL, const XclChPoint& rR )
+bool operator<( const XclChDataPointPos& rL, const XclChDataPointPos& rR )
 {
     return (rL.mnSeriesIdx < rR.mnSeriesIdx) ||
         ((rL.mnSeriesIdx == rR.mnSeriesIdx) && (rL.mnPointIdx < rR.mnPointIdx));
@@ -124,11 +141,9 @@ bool operator<( const XclChPoint& rL, const XclChPoint& rR )
 
 // Formatting =================================================================
 
-XclChPos::XclChPos() :
-    mnX( 0 ),
-    mnY( 0 ),
-    mnWidth( 0 ),
-    mnHeight( 0 )
+XclChFramePos::XclChFramePos() :
+    mnObjType( EXC_CHFRAMEPOS_ANY ),
+    mnSizeMode( EXC_CHFRAMEPOS_AUTOSIZE )
 {
 }
 
@@ -229,6 +244,30 @@ XclChDataFormat::XclChDataFormat() :
 
 // ----------------------------------------------------------------------------
 
+XclChSerTrendLine::XclChSerTrendLine() :
+    mfForecastFor( 0.0 ),
+    mfForecastBack( 0.0 ),
+    mnLineType( EXC_CHSERTREND_POLYNOMIAL ),
+    mnOrder( 1 ),
+    mnShowEquation( 0 ),
+    mnShowRSquared( 0 )
+{
+    ::rtl::math::setNan( &mfIntercept );
+}
+
+// ----------------------------------------------------------------------------
+
+XclChSerErrorBar::XclChSerErrorBar() :
+    mfValue( 0.0 ),
+    mnValueCount( 1 ),
+    mnBarType( EXC_CHSERERR_NONE ),
+    mnSourceType( EXC_CHSERERR_FIXED ),
+    mnLineEnd( EXC_CHSERERR_END_TSHAPE )
+{
+}
+
+// ----------------------------------------------------------------------------
+
 XclChSeries::XclChSeries() :
     mnCategType( EXC_CHSERIES_NUMERIC ),
     mnValueType( EXC_CHSERIES_NUMERIC ),
@@ -276,7 +315,7 @@ XclChLegend::XclChLegend() :
 
 // ----------------------------------------------------------------------------
 
-XclChChartFormat::XclChChartFormat() :
+XclChChartGroup::XclChChartGroup() :
     mnFlags( 0 ),
     mnGroupIdx( EXC_CHSERGROUP_NONE )
 {
@@ -339,122 +378,148 @@ XclChAxesSet::XclChAxesSet() :
 {
 }
 
+// Static helper functions ====================================================
+
+bool XclChartHelper::IsLineChartType( sal_uInt16 nTypeId )
+{
+    return
+        (nTypeId == EXC_ID_CHLINE) ||
+        (nTypeId == EXC_ID_CHAREA) ||
+        (nTypeId == EXC_ID_CHSTOCK);
+}
+
+bool XclChartHelper::IsBarChartType( sal_uInt16 nTypeId )
+{
+    return
+        (nTypeId == EXC_ID_CHBAR) ||
+        (nTypeId == EXC_ID_CHCOLUMN);
+}
+
+bool XclChartHelper::IsRadarChartType( sal_uInt16 nTypeId )
+{
+    return
+        (nTypeId == EXC_ID_CHRADARLINE) ||
+        (nTypeId == EXC_ID_CHRADARAREA);
+}
+
+bool XclChartHelper::IsPieChartType( sal_uInt16 nTypeId )
+{
+    return
+        (nTypeId == EXC_ID_CHPIE) ||
+        (nTypeId == EXC_ID_CHDONUT) ||
+        (nTypeId == EXC_ID_CHPIEEXT);
+}
+
+bool XclChartHelper::IsScatterChartType( sal_uInt16 nTypeId )
+{
+    return
+        (nTypeId == EXC_ID_CHSCATTER) ||
+        (nTypeId == EXC_ID_CHBUBBLES);
+}
+
+bool XclChartHelper::HasPolarCoordSystem( sal_uInt16 nTypeId )
+{
+    return IsRadarChartType( nTypeId ) || IsPieChartType( nTypeId );
+}
+
+bool XclChartHelper::HasLinearSeries( sal_uInt16 nTypeId )
+{
+    return
+        (nTypeId == EXC_ID_CHLINE) ||
+        (nTypeId == EXC_ID_CHSTOCK) ||
+        (nTypeId == EXC_ID_CHSCATTER) ||
+        (nTypeId == EXC_ID_CHRADARLINE);
+}
+
+bool XclChartHelper::HasCategoryAxis( sal_uInt16 nTypeId )
+{
+    return !IsScatterChartType( nTypeId );
+}
+
+bool XclChartHelper::HasSwappedAxesSet( sal_uInt16 nTypeId )
+{
+    return nTypeId == EXC_ID_CHBAR;
+}
+
 // Property helpers ===========================================================
+
+XclChObjectTable::XclChObjectTable( Reference< XMultiServiceFactory > xFactory,
+        const OUString& rServiceName, const OUString& rObjNameBase ) :
+    mxFactory( xFactory ),
+    maServiceName( rServiceName ),
+    maObjNameBase( rObjNameBase ),
+    mnIndex( 0 )
+{
+}
+
+OUString XclChObjectTable::InsertObject( const Any& rObj )
+{
+    OUString aObjName;
+    bool bInserted = false;
+
+    // create object table
+    if( !mxContainer.is() )
+        mxContainer.set( ScfApiHelper::CreateInstance( mxFactory, maServiceName ), UNO_QUERY );
+
+    if( mxContainer.is() )
+    {
+        // create new unused identifier
+        do
+        {
+            aObjName = maObjNameBase + OUString::valueOf( ++mnIndex );
+        }
+        while( mxContainer->hasByName( aObjName ) );
+
+        // insert object
+        try
+        {
+            mxContainer->insertByName( aObjName, rObj );
+            bInserted = true;
+        }
+        catch( Exception& )
+        {
+        }
+    }
+    DBG_ASSERT( bInserted, "XclChObjectTable::InsertObject - cannot insert object" );
+    return bInserted ? aObjName : OUString();
+}
 
 // Property names -------------------------------------------------------------
 
-/** Property names for line style without dash. MUST be sorted alphabetically. */
-const sal_Char* sppLineNamesNoDash[] =
-{
-    "LineColor",
-    "LineStyle",
-    "LineTransparence",
-    "LineWidth"
-};
+namespace {
 
-const sal_Int32 PROPINDEX_LINECOLOR_NODASH  = 0;
-const sal_Int32 PROPINDEX_LINESTYLE_NODASH  = 1;
-const sal_Int32 PROPINDEX_LINETRANSP_NODASH = 2;
-const sal_Int32 PROPINDEX_LINEWIDTH_NODASH  = 3;
+/** Property names for line style. */
+const sal_Char* const sppcLineNames[] =
+    { "LineStyle", "LineWidth", "LineColor", "LineTransparence", "LineDashName", 0 };
 
-/** Property names for line style with dash. MUST be sorted alphabetically. */
-const sal_Char* sppLineNamesDash[] =
-{
-    "LineColor",
-    "LineDash",
-    "LineStyle",
-    "LineTransparence",
-    "LineWidth"
-};
+/** Property names for solid area style. */
+const sal_Char* const sppcAreaNames[] = { "FillStyle", "FillColor", 0 };
+/** Property names for gradient area style. */
+const sal_Char* const sppcGradientNames[] = {  "FillStyle", "FillGradientName", 0 };
+/** Property names for bitmap area style. */
+const sal_Char* const sppcBitmapNames[] = { "FillStyle", "FillBitmapName", "FillBitmapMode", 0 };
 
-const sal_Int32 PROPINDEX_LINECOLOR_DASH    = 0;
-const sal_Int32 PROPINDEX_LINEDASH_DASH     = 1;
-const sal_Int32 PROPINDEX_LINESTYLE_DASH    = 2;
-const sal_Int32 PROPINDEX_LINETRANSP_DASH   = 3;
-const sal_Int32 PROPINDEX_LINEWIDTH_DASH    = 4;
+/** Property names for marker settings. */
+const sal_Char* const sppcMarkerNames[] = { "SymbolType", "SymbolSize", 0 };
 
-/** Property names for solid area style. MUST be sorted alphabetically. */
-const sal_Char* sppAreaNamesSolid[] =
-{
-    "FillColor",
-    "FillStyle"
-};
-
-const sal_Int32 PROPINDEX_FILLCOLOR_SOLID   = 0;
-const sal_Int32 PROPINDEX_FILLSTYLE_SOLID   = 1;
-
-/** Property names for gradient area style. MUST be sorted alphabetically. */
-const sal_Char* sppAreaNamesGradient[] =
-{
-    "FillGradient",
-    "FillGradientStepCount",
-    "FillStyle"
-};
-
-const sal_Int32 PROPINDEX_FILLGRADIENT_GRADIENT     = 0;
-const sal_Int32 PROPINDEX_FILLGRADIENTST_GRADIENT   = 1;
-const sal_Int32 PROPINDEX_FILLSTYLE_GRADIENT        = 2;
-
-/** Property names for bitmap area style. MUST be sorted alphabetically. */
-const sal_Char* sppAreaNamesBitmap[] =
-{
-    "FillBitmap",
-    "FillBitmapMode",
-    "FillStyle"
-};
-
-const sal_Int32 PROPINDEX_FILLBITMAP_BITMAP         = 0;
-const sal_Int32 PROPINDEX_FILLBITMAPMODE_BITMAP     = 1;
-const sal_Int32 PROPINDEX_FILLSTYLE_BITMAP          = 2;
-
-/** Property names for font settings. MUST be sorted alphabetically. */
-const sal_Char* sppFontNames[] =
-{
-    "CharContoured",
-    "CharCrossedOut",
-    "CharFontName",
-    "CharHeight",
-    "CharPosture",
-    "CharShadowed",
-    "CharUnderline",
-    "CharWeight"
-};
-
-const sal_Int32 PROPINDEX_CHARCOUNTOURED    = 0;
-const sal_Int32 PROPINDEX_CHARCROSSEDOUT    = 1;
-const sal_Int32 PROPINDEX_CHARFONTNAME      = 2;
-const sal_Int32 PROPINDEX_CHARHEIGHT        = 3;
-const sal_Int32 PROPINDEX_CHARPOSTURE       = 4;
-const sal_Int32 PROPINDEX_CHARSHADOWED      = 5;
-const sal_Int32 PROPINDEX_CHARUNDERLINE     = 6;
-const sal_Int32 PROPINDEX_CHARWEIGHT        = 7;
-
-/** Property names for marker settings. MUST be sorted alphabetically. */
-const sal_Char* sppMarkerNames[] =
-{
-    "SymbolSize",
-    "SymbolType"
-};
-
-const sal_Int32 PROPINDEX_SYMBOLSIZE    = 0;
-const sal_Int32 PROPINDEX_SYMBOLTYPE    = 1;
+} // namespace
 
 // ----------------------------------------------------------------------------
 
 XclChPropSetHelper::XclChPropSetHelper() :
-    maLineHlpNoDash(    sppLineNamesNoDash,     STATIC_TABLE_SIZE( sppLineNamesNoDash ) ),
-    maLineHlpDash(      sppLineNamesDash,       STATIC_TABLE_SIZE( sppLineNamesDash ) ),
-    maAreaHlpSolid(     sppAreaNamesSolid,      STATIC_TABLE_SIZE( sppAreaNamesSolid ) ),
-    maAreaHlpGradient(  sppAreaNamesGradient,   STATIC_TABLE_SIZE( sppAreaNamesGradient ) ),
-    maAreaHlpBitmap(    sppAreaNamesBitmap,     STATIC_TABLE_SIZE( sppAreaNamesBitmap ) ),
-    maFontHlp(          sppFontNames,           STATIC_TABLE_SIZE( sppFontNames ) ),
-    maMarkerHlp(        sppMarkerNames,         STATIC_TABLE_SIZE( sppMarkerNames ) )
+    maLineHlp( sppcLineNames ),
+    maAreaHlp( sppcAreaNames ),
+    maGradientHlp( sppcGradientNames ),
+    maBitmapHlp( sppcBitmapNames ),
+    maMarkerHlp( sppcMarkerNames )
 {
 }
 
-void XclChPropSetHelper::WriteToPropertySet( ScfPropertySet& rPropSet, const XclChLineFormat& rLineFmt )
+void XclChPropSetHelper::WriteLineProperties(
+        ScfPropertySet& rPropSet, XclChObjectTable& rDashTable,
+        const XclChLineFormat& rLineFmt, XclChPropertyMode ePropMode )
 {
-    namespace cssdraw = ::com::sun::star::drawing;
+    namespace cssd = ::com::sun::star::drawing;
 
     // line width
     sal_Int32 nApiWidth = 0;
@@ -466,145 +531,133 @@ void XclChPropSetHelper::WriteToPropertySet( ScfPropertySet& rPropSet, const Xcl
     }
 
     // line style
-    ApiLineStyle eApiStyle = cssdraw::LineStyle_NONE;
+    cssd::LineStyle eApiStyle = cssd::LineStyle_NONE;
     sal_Int16 nApiTrans = 0;
     sal_Int32 nDotLen = ::std::min< sal_Int32 >( rLineFmt.mnWeight + 105, 210 );
-    ApiLineDash aApiDash( cssdraw::DashStyle_RECT, 0, nDotLen, 0, 4 * nDotLen, nDotLen );
+    cssd::LineDash aApiDash( cssd::DashStyle_RECT, 0, nDotLen, 0, 4 * nDotLen, nDotLen );
 
     switch( rLineFmt.mnPattern )
     {
         case EXC_CHLINEFORMAT_SOLID:
-            eApiStyle = cssdraw::LineStyle_SOLID;
+            eApiStyle = cssd::LineStyle_SOLID;
         break;
         case EXC_CHLINEFORMAT_DARKTRANS:
-            eApiStyle = cssdraw::LineStyle_SOLID; nApiTrans = 25;
+            eApiStyle = cssd::LineStyle_SOLID; nApiTrans = 25;
         break;
         case EXC_CHLINEFORMAT_MEDTRANS:
-            eApiStyle = cssdraw::LineStyle_SOLID; nApiTrans = 50;
+            eApiStyle = cssd::LineStyle_SOLID; nApiTrans = 50;
         break;
         case EXC_CHLINEFORMAT_LIGHTTRANS:
-            eApiStyle = cssdraw::LineStyle_SOLID; nApiTrans = 75;
+            eApiStyle = cssd::LineStyle_SOLID; nApiTrans = 75;
         break;
         case EXC_CHLINEFORMAT_DASH:
-            eApiStyle = cssdraw::LineStyle_DASH; aApiDash.Dashes = 1;
+            eApiStyle = cssd::LineStyle_DASH; aApiDash.Dashes = 1;
         break;
         case EXC_CHLINEFORMAT_DOT:
-            eApiStyle = cssdraw::LineStyle_DASH; aApiDash.Dots = 1;
+            eApiStyle = cssd::LineStyle_DASH; aApiDash.Dots = 1;
         break;
         case EXC_CHLINEFORMAT_DASHDOT:
-            eApiStyle = cssdraw::LineStyle_DASH; aApiDash.Dashes = aApiDash.Dots = 1;
+            eApiStyle = cssd::LineStyle_DASH; aApiDash.Dashes = aApiDash.Dots = 1;
         break;
         case EXC_CHLINEFORMAT_DASHDOTDOT:
-            eApiStyle = cssdraw::LineStyle_DASH; aApiDash.Dashes = 1; aApiDash.Dots = 2;
+            eApiStyle = cssd::LineStyle_DASH; aApiDash.Dashes = 1; aApiDash.Dots = 2;
         break;
     }
 
     // color
-    sal_Int32 nApiColor = static_cast< sal_Int32 >( rLineFmt.maColor.GetColor() );
+    sal_Int32 nApiColor = ScfApiHelper::ConvertToApiColor( rLineFmt.maColor );
 
-    // set the properties
-    if( eApiStyle == cssdraw::LineStyle_DASH )
+    // try to insert the dash style and receive its name
+    Any aDashNameAny;
+    if( eApiStyle == cssd::LineStyle_DASH )
     {
-        maLineHlpDash.GetAny( PROPINDEX_LINESTYLE_DASH )  <<= eApiStyle;
-        maLineHlpDash.GetAny( PROPINDEX_LINEWIDTH_DASH )  <<= nApiWidth;
-        maLineHlpDash.GetAny( PROPINDEX_LINECOLOR_DASH )  <<= nApiColor;
-        maLineHlpDash.GetAny( PROPINDEX_LINETRANSP_DASH ) <<= nApiTrans;
-        maLineHlpDash.GetAny( PROPINDEX_LINEDASH_DASH )   <<= aApiDash;
-        maLineHlpDash.WriteToPropertySet( rPropSet );
+        OUString aDashName = rDashTable.InsertObject( ::com::sun::star::uno::makeAny( aApiDash ) );
+        if( aDashName.getLength() )
+            aDashNameAny <<= aDashName;
+    }
+
+    // write the properties
+    maLineHlp.InitializeWrite();
+    maLineHlp << eApiStyle << nApiWidth << nApiColor << nApiTrans << aDashNameAny;
+    maLineHlp.WriteToPropertySet( rPropSet );
+}
+
+void XclChPropSetHelper::WriteAreaProperties( ScfPropertySet& rPropSet,
+        const XclChAreaFormat& rAreaFmt, XclChPropertyMode ePropMode )
+{
+    namespace cssd = ::com::sun::star::drawing;
+    if( rAreaFmt.mnPattern == EXC_CHAREAFORMAT_NONE )
+    {
+        rPropSet.SetProperty( EXC_CHPROP_FILLSTYLE, cssd::FillStyle_NONE );
     }
     else
     {
-        maLineHlpNoDash.GetAny( PROPINDEX_LINESTYLE_NODASH )  <<= eApiStyle;
-        maLineHlpNoDash.GetAny( PROPINDEX_LINEWIDTH_NODASH )  <<= nApiWidth;
-        maLineHlpNoDash.GetAny( PROPINDEX_LINECOLOR_NODASH )  <<= nApiColor;
-        maLineHlpNoDash.GetAny( PROPINDEX_LINETRANSP_NODASH ) <<= nApiTrans;
-        maLineHlpNoDash.WriteToPropertySet( rPropSet );
+        // fill color
+        bool bSolid = rAreaFmt.mnPattern == EXC_CHAREAFORMAT_SOLID;
+        const Color& rColor = bSolid ? rAreaFmt.maForeColor : rAreaFmt.maBackColor;
+
+        // write the properties
+        maAreaHlp.InitializeWrite();
+        maAreaHlp << cssd::FillStyle_SOLID << rColor;
+        maAreaHlp.WriteToPropertySet( rPropSet );
     }
 }
 
-void XclChPropSetHelper::WriteToPropertySet( ScfPropertySet& rPropSet, const XclChAreaFormat& rAreaFmt )
-{
-    namespace cssdraw = ::com::sun::star::drawing;
-
-    ApiFillStyle eApiStyle = cssdraw::FillStyle_NONE;
-    sal_Int32 nApiColor = 0;
-    if( rAreaFmt.mnPattern != EXC_CHAREAFORMAT_NONE )
-    {
-        eApiStyle = cssdraw::FillStyle_SOLID;
-        const Color& rColor = (rAreaFmt.mnPattern == EXC_CHAREAFORMAT_SOLID) ?
-            rAreaFmt.maForeColor : rAreaFmt.maBackColor;
-        nApiColor = static_cast< sal_Int32 >( rColor.GetColor() );
-    }
-
-    maAreaHlpSolid.GetAny( PROPINDEX_FILLSTYLE_SOLID ) <<= eApiStyle;
-    maAreaHlpSolid.GetAny( PROPINDEX_FILLCOLOR_SOLID ) <<= nApiColor;
-    maAreaHlpSolid.WriteToPropertySet( rPropSet );
-}
-
-void XclChPropSetHelper::WriteToPropertySet( ScfPropertySet& rPropSet,
+void XclChPropSetHelper::WriteEscherProperties( ScfPropertySet& rPropSet,
+        XclChObjectTable& rGradientTable, XclChObjectTable& rBitmapTable,
         const SfxItemSet& rItemSet, const XclChPicFormat& rPicFmt )
 {
-    XFillStyle eFillStyle = XFILL_NONE;
     if( const XFillStyleItem* pStyleItem = static_cast< const XFillStyleItem* >( rItemSet.GetItem( XATTR_FILLSTYLE, FALSE ) ) )
-        eFillStyle = pStyleItem->GetValue();
-
-    switch( eFillStyle )
     {
-        case XFILL_GRADIENT:
-            if( const XFillGradientItem* pGradItem = static_cast< const XFillGradientItem* >( rItemSet.GetItem( XATTR_FILLGRADIENT, FALSE ) ) )
-            {
-                ApiGradient aApiGradient;
-                Any aAny;
-                if( pGradItem->QueryValue( aAny, MID_FILLGRADIENT ) && (aAny >>= aApiGradient) )
+        switch( pStyleItem->GetValue() )
+        {
+            case XFILL_GRADIENT:
+                if( const XFillGradientItem* pGradItem = static_cast< const XFillGradientItem* >( rItemSet.GetItem( XATTR_FILLGRADIENT, FALSE ) ) )
                 {
-                    aApiGradient.StepCount = 256;
-
-                    maAreaHlpGradient.GetAny( PROPINDEX_FILLSTYLE_GRADIENT )      <<= ::com::sun::star::drawing::FillStyle_GRADIENT;
-                    maAreaHlpGradient.GetAny( PROPINDEX_FILLGRADIENT_GRADIENT )   <<= aApiGradient;
-                    maAreaHlpGradient.GetAny( PROPINDEX_FILLGRADIENTST_GRADIENT ) <<= aApiGradient.StepCount;
-                    maAreaHlpGradient.WriteToPropertySet( rPropSet );
+                    Any aGradient;
+                    if( pGradItem->QueryValue( aGradient, MID_FILLGRADIENT ) )
+                    {
+                        OUString aGradName = rGradientTable.InsertObject( aGradient );
+                        if( aGradName.getLength() )
+                        {
+                            namespace cssd = ::com::sun::star::drawing;
+                            maGradientHlp.InitializeWrite();
+                            maGradientHlp << cssd::FillStyle_GRADIENT << aGradName;
+                            maGradientHlp.WriteToPropertySet( rPropSet );
+                        }
+                    }
                 }
-            }
-        break;
-        case XFILL_BITMAP:
-            if( const XFillBitmapItem* pBmpItem = static_cast< const XFillBitmapItem* >( rItemSet.GetItem( XATTR_FILLBITMAP, FALSE ) ) )
-            {
-                Reference< XBitmap > xBitmap;
-                Any aAny;
-                if( pBmpItem->QueryValue( aAny, MID_BITMAP ) && (aAny >>= xBitmap) )
+            break;
+            case XFILL_BITMAP:
+                if( const XFillBitmapItem* pBmpItem = static_cast< const XFillBitmapItem* >( rItemSet.GetItem( XATTR_FILLBITMAP, FALSE ) ) )
                 {
-                    namespace cssd = ::com::sun::star::drawing;
-                    ApiBitmapMode eApiBmpMode = (rPicFmt.mnBmpMode == EXC_CHPICFORMAT_STRETCH) ?
-                        cssd::BitmapMode_STRETCH : cssd::BitmapMode_REPEAT;
-
-                    maAreaHlpBitmap.GetAny( PROPINDEX_FILLSTYLE_BITMAP )      <<= ::com::sun::star::drawing::FillStyle_BITMAP;
-                    maAreaHlpBitmap.GetAny( PROPINDEX_FILLBITMAP_BITMAP )     <<= xBitmap;
-                    maAreaHlpBitmap.GetAny( PROPINDEX_FILLBITMAPMODE_BITMAP ) <<= eApiBmpMode;
-                    maAreaHlpBitmap.WriteToPropertySet( rPropSet );
+                    Any aBitmap;
+                    if( pBmpItem->QueryValue( aBitmap, MID_GRAFURL ) )
+                    {
+                        OUString aBmpName = rBitmapTable.InsertObject( aBitmap );
+                        if( aBmpName.getLength() )
+                        {
+                            namespace cssd = ::com::sun::star::drawing;
+                            cssd::BitmapMode eApiBmpMode = (rPicFmt.mnBmpMode == EXC_CHPICFORMAT_STRETCH) ?
+                                cssd::BitmapMode_STRETCH : cssd::BitmapMode_REPEAT;
+                            maBitmapHlp.InitializeWrite();
+                            maBitmapHlp << cssd::FillStyle_BITMAP << aBmpName << eApiBmpMode;
+                            maBitmapHlp.WriteToPropertySet( rPropSet );
+                        }
+                    }
                 }
-            }
-        break;
+            break;
+            default:
+                DBG_ERRORFILE( "XclChPropSetHelper::WriteEscherProperties - unknown fill mode" );
+        }
     }
 }
 
-void XclChPropSetHelper::WriteToPropertySet( ScfPropertySet& rPropSet, const XclFontData& rFontData )
-{
-    maFontHlp.GetAny( PROPINDEX_CHARFONTNAME )    <<= OUString( rFontData.maName );
-    maFontHlp.GetAny( PROPINDEX_CHARHEIGHT )      <<= rFontData.GetApiHeight();
-    maFontHlp.GetAny( PROPINDEX_CHARPOSTURE )     <<= rFontData.GetApiPosture();
-    maFontHlp.GetAny( PROPINDEX_CHARUNDERLINE )   <<= rFontData.GetApiUnderline();
-    maFontHlp.GetAny( PROPINDEX_CHARWEIGHT )      <<= rFontData.GetApiWeight();
-
-    ::comphelper::setBOOL( maFontHlp.GetAny( PROPINDEX_CHARCOUNTOURED ), rFontData.mbOutline );
-    ::comphelper::setBOOL( maFontHlp.GetAny( PROPINDEX_CHARCROSSEDOUT ), rFontData.mbStrikeout );
-    ::comphelper::setBOOL( maFontHlp.GetAny( PROPINDEX_CHARSHADOWED ),   rFontData.mbShadow );
-
-    maFontHlp.WriteToPropertySet( rPropSet );
-}
-
-void XclChPropSetHelper::WriteToPropertySet( ScfPropertySet& rPropSet, const XclChMarkerFormat& rMarkerFmt )
+void XclChPropSetHelper::WriteMarkerProperties(
+        ScfPropertySet& rPropSet, const XclChMarkerFormat& rMarkerFmt )
 {
     using namespace ::com::sun::star::chart::ChartSymbolType;
+    namespace cssa = ::com::sun::star::awt;
     sal_Int32 nApiType = SYMBOL1;
     switch( rMarkerFmt.mnMarkerType )
     {
@@ -620,10 +673,10 @@ void XclChPropSetHelper::WriteToPropertySet( ScfPropertySet& rPropSet, const Xcl
         case EXC_CHMARKERFORMAT_PLUS:       nApiType = SYMBOL5; break;  // triangle left
     }
     sal_Int32 nApiSize = XclTools::GetHmmFromTwips( rMarkerFmt.mnMarkerSize );
-    ApiSize aApiSize( nApiSize, nApiSize );
+    cssa::Size aApiSize( nApiSize, nApiSize );
 
-    maMarkerHlp.GetAny( PROPINDEX_SYMBOLSIZE )  <<= aApiSize;
-    maMarkerHlp.GetAny( PROPINDEX_SYMBOLTYPE )  <<= nApiType;
+    maMarkerHlp.InitializeWrite();
+    maMarkerHlp << nApiType << aApiSize;
     maMarkerHlp.WriteToPropertySet( rPropSet );
 }
 
