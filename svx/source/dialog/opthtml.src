@@ -4,9 +4,9 @@
  *
  *  $RCSfile: opthtml.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:44:29 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 11:56:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -221,24 +221,6 @@ TabPage RID_OFAPAGE_HTMLOPT
         Text [ en-US ] = "Font sizes" ;
         Text [ x-comment ] = " ";
     };
-    CheckBox CB_UNKNOWN_TAGS
-    {
-        Pos = MAP_APPFONT ( 93 , 14 ) ;
-        Size = MAP_APPFONT ( 155 , 10 ) ;
-        TabStop = TRUE ;
-        Text [ de ] = "~Unbekannte HTML-Tags als Felder importieren" ;
-        Text [ en-US ] = "~Import unknown HTML tags as fields" ;
-        Text [ x-comment ] = " ";
-    };
-    CheckBox CB_IGNORE_FONTNAMES
-    {
-        Pos = MAP_APPFONT ( 93 , 28 ) ;
-        Size = MAP_APPFONT ( 155 , 10 ) ;
-        TabStop = TRUE ;
-        Text [ de ] = "~Font-Einstellungen ignorieren" ;
-        Text [ en-US ] = "Ignore ~font settings" ;
-        Text [ x-comment ] = " ";
-    };
     FixedLine GB_IMPORT
     {
         Pos = MAP_APPFONT ( 87 , 3 ) ;
@@ -247,9 +229,44 @@ TabPage RID_OFAPAGE_HTMLOPT
         Text [ en-US ] = "Import" ;
         Text [ x-comment ] = " ";
     };
+    CheckBox CB_NUMBERS_ENGLISH_US
+    {
+        Pos = MAP_APPFONT ( 93 , 14 ) ;
+        Size = MAP_APPFONT ( 161 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ de ] = "~Gebietsschema '%ENGLISHUSLOCALE' für Zahlen" ;
+        Text [ en-US ] = "~Use '%ENGLISHUSLOCALE' locale for numbers" ;
+        Text [ x-comment ] = " ";
+    };
+    CheckBox CB_UNKNOWN_TAGS
+    {
+        Pos = MAP_APPFONT ( 93 , 28 ) ;
+        Size = MAP_APPFONT ( 155 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ de ] = "~Unbekannte HTML-Tags als Felder importieren" ;
+        Text [ en-US ] = "~Import unknown HTML tags as fields" ;
+        Text [ x-comment ] = " ";
+    };
+    CheckBox CB_IGNORE_FONTNAMES
+    {
+        Pos = MAP_APPFONT ( 93 , 42 ) ;
+        Size = MAP_APPFONT ( 155 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ de ] = "~Font-Einstellungen ignorieren" ;
+        Text [ en-US ] = "Ignore ~font settings" ;
+        Text [ x-comment ] = " ";
+    };
+    FixedLine GB_EXPORT
+    {
+        Pos = MAP_APPFONT ( 87 , 58 ) ;
+        Size = MAP_APPFONT ( 167 , 8 ) ;
+        Text [ de ] = "Export" ;
+        Text [ en-US ] = "Export" ;
+        Text [ x-comment ] = " ";
+    };
     ListBox LB_EXPORT
     {
-        Pos = MAP_APPFONT ( 93 , 55 ) ;
+        Pos = MAP_APPFONT ( 93 , 69 ) ;
         Size = MAP_APPFONT ( 155 , 50 ) ;
         Border = TRUE ;
         DropDown = TRUE ;
@@ -263,13 +280,13 @@ TabPage RID_OFAPAGE_HTMLOPT
     };
     CheckBox CB_STARBASIC
     {
-        Pos = MAP_APPFONT ( 93 , 74 ) ;
+        Pos = MAP_APPFONT ( 93 , 88 ) ;
         Size = MAP_APPFONT ( 155 , 10 ) ;
         Text = "%PRODUCTNAME ~Basic" ;
     };
     CheckBox CB_STARBASIC_WARNING
     {
-        Pos = MAP_APPFONT ( 99 , 88 ) ;
+        Pos = MAP_APPFONT ( 99 , 102 ) ;
         Size = MAP_APPFONT ( 149 , 10 ) ;
         Text [ de ] = "~Warnung anzeigen";
         Text [ en-US ] = "Display ~warning";
@@ -277,7 +294,7 @@ TabPage RID_OFAPAGE_HTMLOPT
     };
     CheckBox CB_PRINT_EXTENSION
     {
-        Pos = MAP_APPFONT ( 93 , 102 ) ;
+        Pos = MAP_APPFONT ( 93 , 116 ) ;
         Size = MAP_APPFONT ( 155 , 10 ) ;
         Text [ de ] = "~Drucklayout" ;
         Text [ en-US ] = "~Print layout" ;
@@ -285,7 +302,7 @@ TabPage RID_OFAPAGE_HTMLOPT
     };
     CheckBox CB_LOCAL_GRF
     {
-        Pos = MAP_APPFONT ( 93 , 116 ) ;
+        Pos = MAP_APPFONT ( 93 , 130 ) ;
         Size = MAP_APPFONT ( 155 , 10 ) ;
         Text [ de ] = "~Lokale Grafiken in das Internet kopieren" ;
         Text [ en-US ] = "~Copy local graphics to Internet" ;
@@ -294,26 +311,18 @@ TabPage RID_OFAPAGE_HTMLOPT
 
     FixedText FT_CHARSET
     {
-        Pos = MAP_APPFONT ( 93 , 130 ) ;
+        Pos = MAP_APPFONT ( 93 , 144 ) ;
         Size = MAP_APPFONT ( 65 , 8 ) ;
         Text [ de ] = "Z~eichensatz" ;
         Text [ en-US ] = "Character set";
     };
     ListBox LB_CHARSET
     {
-        Pos = MAP_APPFONT ( 162 , 129 ) ;
+        Pos = MAP_APPFONT ( 162 , 143 ) ;
         Size = MAP_APPFONT ( 86 , 61 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         Sort = TRUE ;
-    };
-    FixedLine GB_EXPORT
-    {
-        Pos = MAP_APPFONT ( 87 , 44 ) ;
-        Size = MAP_APPFONT ( 167 , 8 ) ;
-        Text [ de ] = "Export" ;
-        Text [ en-US ] = "Export" ;
-        Text [ x-comment ] = " ";
     };
 };
  // ******************************************************************* EOF
