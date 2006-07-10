@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PColumn.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:07:27 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:37:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,9 @@
 #ifndef _CONNECTIVITY_SDBCX_COLUMN_HXX_
 #include "connectivity/PColumn.hxx"
 #endif
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include "connectivity/dbtools.hxx"
+#endif
 #ifndef CONNECTIVITY_CONNECTION_HXX
 #include "TConnection.hxx"
 #endif
@@ -48,7 +51,9 @@ using namespace connectivity;
 using namespace dbtools;
 using namespace connectivity::parse;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::beans;
+
 // -------------------------------------------------------------------------
 OParseColumn::OParseColumn(const Reference<XPropertySet>& _xColumn,sal_Bool     _bCase)
     : connectivity::sdbcx::OColumn( getString(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)))
@@ -69,6 +74,7 @@ OParseColumn::OParseColumn(const Reference<XPropertySet>& _xColumn,sal_Bool     
 {
     construct();
 }
+
 // -------------------------------------------------------------------------
 OParseColumn::OParseColumn( const ::rtl::OUString& _Name,
                     const ::rtl::OUString& _TypeName,
@@ -97,6 +103,46 @@ OParseColumn::OParseColumn( const ::rtl::OUString& _Name,
 {
     construct();
 }
+
+// -------------------------------------------------------------------------
+::vos::ORef< OSQLColumns > OParseColumn::createColumnsForResultSet( const Reference< XResultSetMetaData >& _rxResMetaData,
+    const Reference< XDatabaseMetaData >& _rxDBMetaData )
+{
+    sal_Int32 nColumnCount = _rxResMetaData->getColumnCount();
+    ::vos::ORef< OSQLColumns > aReturn( new OSQLColumns ); aReturn->reserve( nColumnCount );
+
+    for ( sal_Int32 i = 1; i <= nColumnCount; ++i )
+        aReturn->push_back( createColumnForResultSet( _rxResMetaData, _rxDBMetaData, i ) );
+
+    return aReturn;
+}
+
+// -------------------------------------------------------------------------
+OParseColumn* OParseColumn::createColumnForResultSet( const Reference< XResultSetMetaData >& _rxResMetaData,
+    const Reference< XDatabaseMetaData >& _rxDBMetaData, sal_Int32 _nColumnPos )
+{
+    OParseColumn* pColumn = new OParseColumn(
+        _rxResMetaData->getColumnName( _nColumnPos ),
+        _rxResMetaData->getColumnTypeName( _nColumnPos ),
+        ::rtl::OUString(),
+        _rxResMetaData->isNullable( _nColumnPos ),
+        _rxResMetaData->getPrecision( _nColumnPos ),
+        _rxResMetaData->getScale( _nColumnPos ),
+        _rxResMetaData->getColumnType( _nColumnPos ),
+        _rxResMetaData->isAutoIncrement( _nColumnPos ),
+        _rxResMetaData->isCurrency( _nColumnPos ),
+        _rxDBMetaData->storesMixedCaseQuotedIdentifiers()
+    );
+    pColumn->setTableName(  ::dbtools::composeTableName( _rxDBMetaData,
+        _rxResMetaData->getCatalogName( _nColumnPos ),
+        _rxResMetaData->getSchemaName( _nColumnPos ),
+        _rxResMetaData->getTableName( _nColumnPos ),
+        sal_False,
+        eComplete
+    ) );
+    return pColumn;
+}
+
 // -------------------------------------------------------------------------
 OParseColumn::~OParseColumn()
 {
