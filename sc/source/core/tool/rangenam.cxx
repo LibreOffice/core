@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rangenam.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-27 09:32:01 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:27:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -471,12 +471,20 @@ BOOL ScRangeData::IsRangeAtBlock( const ScRange& rBlock ) const
 
 BOOL ScRangeData::IsReference( ScRange& rRange ) const
 {
-    BOOL bIs = FALSE;
     if ( eType & ( RT_ABSAREA | RT_REFAREA | RT_ABSPOS ) )
         if ( pCode )
             return pCode->IsReference( rRange );
 
-    return bIs;
+    return FALSE;
+}
+
+BOOL ScRangeData::IsValidReference( ScRange& rRange ) const
+{
+    if ( eType & ( RT_ABSAREA | RT_REFAREA | RT_ABSPOS ) )
+        if ( pCode )
+            return pCode->IsValidReference( rRange );
+
+    return FALSE;
 }
 
 void ScRangeData::UpdateTabRef(SCTAB nOldTable, USHORT nFlag, SCTAB nNewTable)
