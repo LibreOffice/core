@@ -4,9 +4,9 @@
  *
  *  $RCSfile: query.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:39:55 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:06:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,12 +176,6 @@ protected:
     virtual void rebuildColumns( );
 
 private:
-    /** creates column objects for all columns which are necessary when executing our command
-    @param _bOnlyTemporary
-        if <TRUE/>, the resulting columns are inserted into m_aColumnMap only, else they're really appended to m_pColumns
-    */
-    void implCollectColumns( );
-
     void registerProperties();
 };
 
