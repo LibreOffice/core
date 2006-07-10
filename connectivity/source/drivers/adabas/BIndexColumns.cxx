@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BIndexColumns.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:09:10 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:21:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,17 +127,9 @@ ObjectType OIndexColumns::createObject(const ::rtl::OUString& _rName)
     return xRet;
 }
 // -------------------------------------------------------------------------
-Reference< XPropertySet > OIndexColumns::createEmptyObject()
+Reference< XPropertySet > OIndexColumns::createDescriptor()
 {
     return new OIndexColumn(sal_True);
-}
-// -------------------------------------------------------------------------
-ObjectType OIndexColumns::cloneObject(const Reference< XPropertySet >& _xDescriptor)
-{
-    OIndexColumn* pColumn = new OIndexColumn(sal_True);
-    Reference<XPropertySet> xProp = pColumn;
-    ::comphelper::copyProperties(_xDescriptor,xProp);
-    return xProp;
 }
 // -----------------------------------------------------------------------------
 void OIndexColumns::impl_refresh() throw(::com::sun::star::uno::RuntimeException)
@@ -145,9 +137,9 @@ void OIndexColumns::impl_refresh() throw(::com::sun::star::uno::RuntimeException
     m_pIndex->refreshColumns();
 }
 // -----------------------------------------------------------------------------
-void OIndexColumns::appendObject( const Reference< XPropertySet >& /*descriptor*/ )
+ObjectType OIndexColumns::appendObject( const ::rtl::OUString& /*_rForName*/, const Reference< XPropertySet >& descriptor )
 {
-    // nothing to do here
+    return cloneDescriptor( descriptor );
 }
 // -----------------------------------------------------------------------------
 
