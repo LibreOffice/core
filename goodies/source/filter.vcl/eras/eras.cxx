@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eras.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 21:43:46 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:19:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,6 +122,9 @@ BOOL RASWriter::WriteRAS( const Graphic& rGraphic, SvStream& rRAS,
         aBmp.Convert( BMP_CONVERSION_8BIT_COLORS );
 
     mnDepth = aBmp.GetBitCount();
+
+    // export code below only handles three discrete cases
+    mnDepth = mnDepth <= 1 ? 1 : mnDepth <= 8 ? 8 : 24;
 
     if ( ( mpAcc = aBmp.AcquireReadAccess() ) )
     {
