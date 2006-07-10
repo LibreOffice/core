@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TColumnsHelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:03:29 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:18:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,10 +130,7 @@ sdbcx::ObjectType OColumnsHelper::createObject(const ::rtl::OUString& _rName)
     ColumnInformationMap::iterator aFind = m_pImpl->m_aColumnInfo.find(_rName);
     if ( aFind == m_pImpl->m_aColumnInfo.end() ) // we have to fill it
     {
-        Reference<XDatabaseMetaData> xMetaData = xConnection->getMetaData();
-        sal_Bool bUseCatalogInSelect = isDataSourcePropertyEnabled(xConnection,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseCatalogInSelect")),sal_True);
-        sal_Bool bUseSchemaInSelect = isDataSourcePropertyEnabled(xConnection,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseSchemaInSelect")),sal_True);
-        ::rtl::OUString sComposedName = ::dbtools::composeTableName(xMetaData,m_pTable,sal_True,::dbtools::eInDataManipulation,bUseCatalogInSelect,bUseSchemaInSelect);
+        ::rtl::OUString sComposedName = ::dbtools::composeTableNameForSelect( xConnection, m_pTable );
         collectColumnInformation(xConnection,sComposedName,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")) ,m_pImpl->m_aColumnInfo);
         aFind = m_pImpl->m_aColumnInfo.find(_rName);
     }
@@ -167,42 +164,34 @@ void OColumnsHelper::impl_refresh() throw(RuntimeException)
     }
 }
 // -------------------------------------------------------------------------
-Reference< XPropertySet > OColumnsHelper::createEmptyObject()
+Reference< XPropertySet > OColumnsHelper::createDescriptor()
 {
     return new OColumn(sal_True);
 }
 // -----------------------------------------------------------------------------
-sdbcx::ObjectType OColumnsHelper::cloneObject(const Reference< XPropertySet >& _xDescriptor)
-{
-    Reference<XPropertySet> xProp = createEmptyObject();
-    ::comphelper::copyProperties(_xDescriptor,xProp);
-    return xProp;
-}
-// -----------------------------------------------------------------------------
 // XAppend
-void OColumnsHelper::appendObject( const Reference< XPropertySet >& descriptor )
+sdbcx::ObjectType OColumnsHelper::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     OSL_ENSURE(m_pTable,"OColumnsHelper::appendByDescriptor: Table is null!");
-    OSL_ENSURE(descriptor.is(),"OColumnsHelper::appendByDescriptor: descriptor is null!");
+    if ( !m_pTable || m_pTable->isNew() )
+        return cloneDescriptor( descriptor );
 
-    if ( descriptor.is() && m_pTable && !m_pTable->isNew() )
+    Reference<XDatabaseMetaData> xMetaData = m_pTable->getConnection()->getMetaData();
+    ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("ALTER TABLE ");
+    ::rtl::OUString aQuote  = xMetaData->getIdentifierQuoteString(  );
+
+    aSql += ::dbtools::composeTableName( xMetaData, m_pTable, ::dbtools::eInTableDefinitions, false, false, true );
+    aSql += ::rtl::OUString::createFromAscii(" ADD ");
+    aSql += ::dbtools::createStandardColumnPart(descriptor,m_pTable->getConnection());
+
+    Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
+    if ( xStmt.is() )
     {
-        Reference<XDatabaseMetaData> xMetaData = m_pTable->getConnection()->getMetaData();
-        ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("ALTER TABLE ");
-        ::rtl::OUString aQuote  = xMetaData->getIdentifierQuoteString(  );
-
-        aSql += ::dbtools::composeTableName(xMetaData,m_pTable,sal_True,::dbtools::eInTableDefinitions);
-        aSql += ::rtl::OUString::createFromAscii(" ADD ");
-        aSql += ::dbtools::createStandardColumnPart(descriptor,m_pTable->getConnection());
-
-        Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
-        if ( xStmt.is() )
-        {
-            xStmt->execute(aSql);
-            ::comphelper::disposeComponent(xStmt);
-        }
+        xStmt->execute(aSql);
+        ::comphelper::disposeComponent(xStmt);
     }
+    return createObject( _rForName );
 }
 // -------------------------------------------------------------------------
 // XDrop
@@ -215,7 +204,7 @@ void OColumnsHelper::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElem
         Reference<XDatabaseMetaData> xMetaData = m_pTable->getConnection()->getMetaData();
         ::rtl::OUString aQuote  = xMetaData->getIdentifierQuoteString(  );
 
-        aSql += ::dbtools::composeTableName(xMetaData,m_pTable,sal_True,::dbtools::eInTableDefinitions);
+        aSql += ::dbtools::composeTableName( xMetaData, m_pTable, ::dbtools::eInTableDefinitions, false, false, true );
         aSql += ::rtl::OUString::createFromAscii(" DROP ");
         aSql += ::dbtools::quoteName( aQuote,_sElementName);
 
