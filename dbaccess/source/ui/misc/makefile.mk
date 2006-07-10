@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-20 03:24:00 $
+#   last change: $Author: obo $ $Date: 2006-07-10 15:38:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -84,7 +84,8 @@ SLOFILES=	\
         $(SLO)$/ToolBoxHelper.obj			\
         $(SLO)$/stringlistitem.obj			\
         $(SLO)$/charsets.obj				\
-        $(SLO)$/dsntypes.obj
+        $(SLO)$/dsntypes.obj                \
+        $(SLO)$/defaultobjectnamecheck.obj
 
 # --- Targets ----------------------------------
 
