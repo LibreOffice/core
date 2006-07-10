@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbfunc.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:19:50 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:08:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,6 +122,8 @@ public:
     BOOL            OutlinePossible(BOOL bHide);
 
     void            UpdateCharts(BOOL bAllCharts = FALSE);      // Default: am Cursor
+
+    static USHORT   DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, Window* pActiveWin, BOOL bAllCharts );
 };
 
 
