@@ -4,9 +4,9 @@
  *
  *  $RCSfile: virdev.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:32:16 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 17:26:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -401,6 +401,9 @@ void VirtualDevice::SetReferenceDevice( RefDevMode eRefDevMode )
         break;
     case REFDEV_MODE_MSO1:
         mnDPIX = mnDPIY = 6*1440;
+        break;
+    case REFDEV_MODE_PDF1:
+        mnDPIX = mnDPIY = 720;
         break;
     }
 
