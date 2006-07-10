@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excform.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-13 16:56:42 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:28:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,12 +50,16 @@
 #ifndef SC_XLTRACER_HXX
 #include "xltracer.hxx"
 #endif
+#ifndef SC_XIHELPER_HXX
+#include "xihelper.hxx"
+#endif
 #ifndef SC_XILINK_HXX
 #include "xilink.hxx"
 #endif
 #ifndef SC_XINAME_HXX
 #include "xiname.hxx"
 #endif
+
 
 const UINT16 ExcelToSc::nRowMask = 0x3FFF;
 const UINT16 ExcelToSc::nLastInd = 399;
@@ -140,12 +144,12 @@ void ImportExcel::Formula( const XclAddress& rXclPos,
         pFormConv->Reset( aScPos );
 
         if( bShrFmla )
-            bConvert = !pFormConv->GetShrFmla( pErgebnis, nFormLen );
+            bConvert = !pFormConv->GetShrFmla( pErgebnis, maStrm, nFormLen );
         else
             bConvert = TRUE;
 
         if( bConvert )
-            eErr = pFormConv->Convert( pErgebnis, nFormLen );
+            eErr = pFormConv->Convert( pErgebnis, maStrm, nFormLen );
 
         ScFormulaCell*      pZelle = NULL;
 
@@ -190,11 +194,11 @@ void ImportExcel::Formula( const XclAddress& rXclPos,
 
 
 
-ExcelToSc::ExcelToSc( XclImpStream& rStrm ) :
-    ExcelConverterBase( rStrm, 512 ),
-    XclImpRoot( rStrm.GetRoot() ),
-    maFuncProv( rStrm.GetRoot() ),
-    meBiff( rStrm.GetRoot().GetBiff() )
+ExcelToSc::ExcelToSc( const XclImpRoot& rRoot ) :
+    ExcelConverterBase( 512 ),
+    XclImpRoot( rRoot ),
+    maFuncProv( rRoot ),
+    meBiff( rRoot.GetBiff() )
 {
 }
 
@@ -211,7 +215,7 @@ void ExcelToSc::GetDummy( const ScTokenArray*& pErgebnis )
 
 
 // stream seeks to first byte after <nFormulaLen>
-ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, const FORMULA_TYPE eFT )
+ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, sal_Size nFormulaLen, const FORMULA_TYPE eFT )
 {
     RootData&       rR = GetOldRoot();
     BYTE            nOp, nLen, nByte;
@@ -245,9 +249,9 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
         return ConvOK;
     }
 
-    ULONG nMaxPos = aIn.GetRecPos() + nFormulaLen;
+    sal_Size nEndPos = aIn.GetRecPos() + nFormulaLen;
 
-    while( (aIn.GetRecPos() < nMaxPos) && !bError )
+    while( (aIn.GetRecPos() < nEndPos) && !bError )
     {
         aIn >> nOp;
 
@@ -861,7 +865,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
         pErgebnis = aPool[ aStack.Get() ];
         eRet = ConvErrNi;
     }
-    else if( aIn.GetRecPos() != nMaxPos )
+    else if( aIn.GetRecPos() != nEndPos )
     {
         aPool << ocBad;
         aPool >> aStack;
@@ -884,17 +888,17 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
         eRet = ConvOK;
     }
 
-    aIn.Seek( nMaxPos );
+    aIn.Seek( nEndPos );
     return eRet;
 }
 
 
 // stream seeks to first byte after <nFormulaLen>
-ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, UINT32 nFormulaLen, const FORMULA_TYPE eFT )
+ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal_Size nFormulaLen, const FORMULA_TYPE eFT )
 {
     RootData&       rR = GetOldRoot();
     BYTE            nOp, nLen;
-    UINT16          nIgnore;
+    sal_Size        nIgnore;
     UINT16          nUINT16;
     UINT8           nByte;
     BOOL            bError = FALSE;
@@ -918,9 +922,9 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, UINT32 nFormulaLen, co
     if( nFormulaLen == 0 )
         return ConvOK;
 
-    ULONG nMaxPos = aIn.GetRecPos() + nFormulaLen;
+    sal_Size nEndPos = aIn.GetRecPos() + nFormulaLen;
 
-    while( (aIn.GetRecPos() < nMaxPos) && !bError )
+    while( (aIn.GetRecPos() < nEndPos) && !bError )
     {
         aIn >> nOp;
         nIgnore = 0;
@@ -1301,7 +1305,7 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, UINT32 nFormulaLen, co
 
     if( bError )
         eRet = ConvErrNi;
-    else if( aIn.GetRecPos() != nMaxPos )
+    else if( aIn.GetRecPos() != nEndPos )
         eRet = ConvErrCount;
     else if( bExternName )
         eRet = ConvErrExternal;
@@ -1310,11 +1314,11 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, UINT32 nFormulaLen, co
     else
         eRet = ConvOK;
 
-    aIn.Seek( nMaxPos );
+    aIn.Seek( nEndPos );
     return eRet;
 }
 
-BOOL ExcelToSc::GetAbsRefs( ScRangeList& rRangeList, UINT32 nLen )
+BOOL ExcelToSc::GetAbsRefs( ScRangeList& rRangeList, XclImpStream& rStrm, sal_Size nLen )
 {
     DBG_ERRORFILE( "ExcelToSc::GetAbsRefs - not implemented" );
     return false;
@@ -1546,7 +1550,7 @@ const ScTokenArray* ExcelToSc::GetBoolErr( XclBoolError eType )
 
 // if a shared formula was found, stream seeks to first byte after <nFormulaLen>,
 // else stream pointer stays unchanged
-BOOL ExcelToSc::GetShrFmla( const ScTokenArray*& rpErgebnis, UINT32 nFormulaLen )
+BOOL ExcelToSc::GetShrFmla( const ScTokenArray*& rpErgebnis, XclImpStream& aIn, sal_Size nFormulaLen )
 {
     BYTE            nOp;
     BOOL            bRet = TRUE;
