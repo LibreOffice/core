@@ -4,9 +4,9 @@
  *
  *  $RCSfile: detfunc.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:32:10 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:23:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,7 +156,7 @@ public:
 
     static BOOL IsNonAlienArrow( SdrObject* pObject );
 
-    ScDetectiveObjType GetDetectiveObjectType( SdrObject* pObject,
+    ScDetectiveObjType GetDetectiveObjectType( SdrObject* pObject, SCTAB nObjTab,
                                 ScAddress& rPosition, ScRange& rSource, BOOL& rRedLine );
     void        InsertObject( ScDetectiveObjType eType, const ScAddress& rPosition,
                                 const ScRange& rSource, BOOL bRedLine );
