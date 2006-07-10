@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HTable.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:30:28 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:28:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -358,8 +358,7 @@ void OHSQLTable::dropDefaultValue(const ::rtl::OUString& _rColName)
     ::rtl::OUString sSql = ::rtl::OUString::createFromAscii("ALTER TABLE ");
     const ::rtl::OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
 
-    ::rtl::OUString sComposedName;
-    ::dbtools::composeTableName(getMetaData(),m_CatalogName,m_SchemaName,m_Name,sComposedName,sal_True,::dbtools::eInTableDefinitions);
+    ::rtl::OUString sComposedName( ::dbtools::composeTableName( getMetaData(), m_CatalogName, m_SchemaName, m_Name, sal_True, ::dbtools::eInTableDefinitions ) );
     sSql += sComposedName;
 
     return sSql;
@@ -426,12 +425,11 @@ void SAL_CALL OHSQLTable::rename( const ::rtl::OUString& newName ) throw(SQLExce
         ::rtl::OUString sCatalog,sSchema,sTable;
         ::dbtools::qualifiedNameComponents(getMetaData(),newName,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
 
-        ::rtl::OUString sComposedName;
-        ::dbtools::composeTableName(getMetaData(),m_CatalogName,m_SchemaName,m_Name,sComposedName,sal_True,::dbtools::eInDataManipulation);
+        ::rtl::OUString sComposedName(
+            ::dbtools::composeTableName( getMetaData(), m_CatalogName, m_SchemaName, m_Name, sal_True, ::dbtools::eInDataManipulation ) );
         sSql += sComposedName
             + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" RENAME TO "));
-        ::dbtools::composeTableName(getMetaData(),sCatalog,sSchema,sTable,sComposedName,sal_True,::dbtools::eInDataManipulation);
-        sSql += sComposedName;
+        sSql += ::dbtools::composeTableName( getMetaData(), sCatalog, sSchema, sTable, sal_True, ::dbtools::eInDataManipulation );
 
         executeStatement(sSql);
 
