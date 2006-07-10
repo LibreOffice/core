@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-13 17:06:10 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 12:46:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -11010,6 +11010,31 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         {
             Text [ de ] = "Der Text, der eine römische Zahl darstellt." ;
             Text [ en-US ] = "The text that represents a Roman numeral.";
+        };
+    };
+    Resource SC_OPCODE_INFO
+    {
+        String 1
+        {
+            Text [ de ] = "Liefert Informationen über die Arbeitsumgebung zurück.";
+            Text [ en-US ] = "Returns information about the environment.";
+        };
+        ExtraData =
+        {
+            ID_FUNCTION_GRP_INFO;
+            U2S( HID_FUNC_INFO );
+            1;  0;
+        };
+        String 2
+        {
+            Text [ de ] = "Text";
+            Text [ en-US ] = "Text";
+        };
+        String 3
+        {
+            Text [ de ] = "Einer der Werte \"osversion\", \"system\", \"release\", \"numfile\" und \"recalc\".";
+            Text [ en-US ] = "Can be \"osversion\", \"system\", \"release\", \"numfile\", and \"recalc\".";
+            Text [ x-comment ] = "Do not translate the quoted text!";
         };
     };
 };
