@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 08:26:48 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:29:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,20 +135,20 @@ const BYTE      ExcDummy_00::pMyData[] = {
     0x42, 0x00, 0x02, 0x00, 0xe4, 0x04,                     // CODEPAGE
     0x9c, 0x00, 0x02, 0x00, 0x0e, 0x00                      // FNGROUPCOUNT
 };
-const ULONG ExcDummy_00::nMyLen = sizeof( ExcDummy_00::pMyData );
+const sal_Size ExcDummy_00::nMyLen = sizeof( ExcDummy_00::pMyData );
 
 //-------------------------------------------------------- class ExcDummy_04x -
 const BYTE      ExcDummy_040::pMyData[] = {
     0x40, 0x00, 0x02, 0x00, 0x00, 0x00,                     // BACKUP
     0x8d, 0x00, 0x02, 0x00, 0x00, 0x00,                     // HIDEOBJ
 };
-const ULONG ExcDummy_040::nMyLen = sizeof( ExcDummy_040::pMyData );
+const sal_Size ExcDummy_040::nMyLen = sizeof( ExcDummy_040::pMyData );
 
 const BYTE      ExcDummy_041::pMyData[] = {
     0x0e, 0x00, 0x02, 0x00, 0x01, 0x00,                     // PRECISION
     0xda, 0x00, 0x02, 0x00, 0x00, 0x00                      // BOOKBOOL
 };
-const ULONG ExcDummy_041::nMyLen = sizeof( ExcDummy_041::pMyData );
+const sal_Size ExcDummy_041::nMyLen = sizeof( ExcDummy_041::pMyData );
 
 //-------------------------------------------------------- class ExcDummy_02a -
 const BYTE      ExcDummy_02a::pMyData[] = {
@@ -160,14 +160,13 @@ const BYTE      ExcDummy_02a::pMyData[] = {
     0x62, 0x50, 0x3f,
     0x5f, 0x00, 0x02, 0x00, 0x01, 0x00                      // SAVERECALC
 };
-const ULONG ExcDummy_02a::nMyLen = sizeof( ExcDummy_02a::pMyData );
+const sal_Size ExcDummy_02a::nMyLen = sizeof( ExcDummy_02a::pMyData );
 
 //----------------------------------------------------------- class ExcRecord -
 
 void ExcRecord::Save( XclExpStream& rStrm )
 {
-    SetRecId( GetNum() );
-    SetRecSize( GetLen() );
+    SetRecHeader( GetNum(), GetLen() );
     XclExpRecord::Save( rStrm );
 }
 
@@ -194,7 +193,7 @@ UINT16 ExcEmptyRec::GetNum() const
 }
 
 
-ULONG ExcEmptyRec::GetLen() const
+sal_Size ExcEmptyRec::GetLen() const
 {
     return 0;
 }
@@ -222,7 +221,7 @@ void ExcRecordList::Save( XclExpStream& rStrm )
 
 void ExcDummyRec::Save( XclExpStream& rStrm )
 {
-    rStrm.Write( GetData(), GetLen() );     // raw write mode
+    rStrm.Write( GetData(), GetLen() );        // raw write mode
 }
 
 
@@ -247,7 +246,7 @@ void ExcBoolRecord::SaveCont( XclExpStream& rStrm )
 }
 
 
-ULONG ExcBoolRecord::GetLen( void ) const
+sal_Size ExcBoolRecord::GetLen( void ) const
 {
     return 2;
 }
@@ -286,7 +285,7 @@ UINT16 ExcBof::GetNum( void ) const
 }
 
 
-ULONG ExcBof::GetLen( void ) const
+sal_Size ExcBof::GetLen( void ) const
 {
     return 8;
 }
@@ -316,7 +315,7 @@ UINT16 ExcBofW::GetNum( void ) const
 
 
 
-ULONG ExcBofW::GetLen( void ) const
+sal_Size ExcBofW::GetLen( void ) const
 {
     return 8;
 }
@@ -331,7 +330,7 @@ UINT16 ExcEof::GetNum( void ) const
 }
 
 
-ULONG ExcEof::GetLen( void ) const
+sal_Size ExcEof::GetLen( void ) const
 {
     return 0;
 }
@@ -352,7 +351,7 @@ UINT16 ExcFngroupcount::GetNum( void ) const
 }
 
 
-ULONG ExcFngroupcount::GetLen( void ) const
+sal_Size ExcFngroupcount::GetLen( void ) const
 {
     return 2;
 }
@@ -361,7 +360,7 @@ ULONG ExcFngroupcount::GetLen( void ) const
 
 //--------------------------------------------------------- class ExcDummy_00 -
 
-ULONG ExcDummy_00::GetLen( void ) const
+sal_Size ExcDummy_00::GetLen( void ) const
 {
     return nMyLen;
 }
@@ -376,7 +375,7 @@ const BYTE* ExcDummy_00::GetData( void ) const
 
 //-------------------------------------------------------- class ExcDummy_04x -
 
-ULONG ExcDummy_040::GetLen( void ) const
+sal_Size ExcDummy_040::GetLen( void ) const
 {
     return nMyLen;
 }
@@ -390,7 +389,7 @@ const BYTE* ExcDummy_040::GetData( void ) const
 
 
 
-ULONG ExcDummy_041::GetLen( void ) const
+sal_Size ExcDummy_041::GetLen( void ) const
 {
     return nMyLen;
 }
@@ -439,7 +438,7 @@ ExcBundlesheetBase::ExcBundlesheetBase() :
 
 void ExcBundlesheetBase::UpdateStreamPos( XclExpStream& rStrm )
 {
-    rStrm.SetStreamPos( nOwnPos );
+    rStrm.SetSvStreamPos( nOwnPos );
     rStrm << static_cast<sal_uInt32>(nStrPos);
 }
 
@@ -463,14 +462,14 @@ ExcBundlesheet::ExcBundlesheet( RootData& rRootData, SCTAB nTab ) :
 
 void ExcBundlesheet::SaveCont( XclExpStream& rStrm )
 {
-    nOwnPos = rStrm.GetStreamPos();
+    nOwnPos = rStrm.GetSvStreamPos();
     rStrm   << (UINT32) 0x00000000              // dummy (stream position of the sheet)
             << nGrbit;
     rStrm.WriteByteString( aName );             // 8 bit length, max 255 chars
 }
 
 
-ULONG ExcBundlesheet::GetLen() const
+sal_Size ExcBundlesheet::GetLen() const
 {
     return 7 + Min( aName.Len(), (xub_StrLen) 255 );
 }
@@ -478,7 +477,7 @@ ULONG ExcBundlesheet::GetLen() const
 
 //--------------------------------------------------------- class ExcDummy_02 -
 
-ULONG ExcDummy_02a::GetLen( void ) const
+sal_Size ExcDummy_02a::GetLen( void ) const
 {
     return nMyLen;
 }
@@ -558,9 +557,9 @@ ExcFilterCondition::~ExcFilterCondition()
         delete pText;
 }
 
-ULONG ExcFilterCondition::GetTextBytes() const
+sal_Size ExcFilterCondition::GetTextBytes() const
 {
-    return pText ? 1 + pText->GetBufferSize() : 0;
+    return pText ? (1 + pText->GetBufferSize()) : 0;
 }
 
 void ExcFilterCondition::SetCondition( UINT8 nTp, UINT8 nOp, double fV, String* pT )
