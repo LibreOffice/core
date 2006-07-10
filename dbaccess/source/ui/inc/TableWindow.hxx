@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableWindow.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:14:23 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:29:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,8 +89,8 @@ namespace dbaui
 
     private:
         // the columns of the table
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>    m_xTable;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> m_xColumns;
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xTableOrQuery;
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xColumns;
 
         OTableWindowData*       m_pData;
         ::rtl::OUString         m_strInitialWinName;
@@ -98,6 +98,7 @@ namespace dbaui
         sal_Int32               m_nMoveIncrement;       // how many pixel we should move
         UINT16                  m_nSizingFlags;
         BOOL                    m_bActive;
+        bool                    m_bIsQuery;
 
         void Draw3DBorder( const Rectangle& rRect );
 
@@ -143,7 +144,17 @@ namespace dbaui
                                     ::com::sun::star::beans::XPropertySet>& _xColumn,
                                     bool _bPrimaryKey);
 
-        OTableWindow( Window* pParent, OTableWindowData* pTabWinData);
+        /** determines whether the classes Init method should accept a query name, or only table names
+        */
+        virtual bool    allowQueries() const = 0;
+
+        /** called when Init fails because the m_xTableOrQuery object could not provide columns, but no
+            exception was thrown. Expected to throw.
+        */
+        virtual void    onNoColumns_throw();
+
+        OTableWindow( Window* pParent, OTableWindowData* pTabWinData );
+
     public:
         TYPEINFO();
 
@@ -179,8 +190,19 @@ namespace dbaui
                 The composed name or the window name.
         */
         virtual ::rtl::OUString     GetName() const = 0;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> GetOriginalColumns() const { ::osl::MutexGuard aGuard( m_aMutex  ); return m_xColumns; }
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>    GetTable() const { ::osl::MutexGuard aGuard( m_aMutex  ); return m_xTable; }
+
+        inline ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
+            GetOriginalColumns() const
+        { ::osl::MutexGuard aGuard( m_aMutex  ); return m_xColumns; }
+
+        inline ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+            GetTableOrQuery() const
+        { ::osl::MutexGuard aGuard( m_aMutex  ); return m_xTableOrQuery; }
+
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+            GetTable() const;
+
+        inline bool isQuery() const { return m_bIsQuery; }
 
         UINT16                      GetSizingFlags() const { return m_nSizingFlags; }
         /** set the sizing flag to the direction
@@ -210,7 +232,7 @@ namespace dbaui
         // habe ich Connections nach aussen ?
         BOOL ExistsAConn() const;
 
-        virtual void EnumValidFields(::std::vector< ::rtl::OUString>& arrstrFields);
+        void EnumValidFields(::std::vector< ::rtl::OUString>& arrstrFields);
 
         // OEventListenerAdapter
         virtual void _disposing( const ::com::sun::star::lang::EventObject& _rSource );
