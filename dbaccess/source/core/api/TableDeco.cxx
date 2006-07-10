@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableDeco.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:38:18 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:04:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -700,22 +700,20 @@ OColumn* ODBTableDecorator::createColumn(const ::rtl::OUString& _rName) const
     return pReturn;
 }
 // -----------------------------------------------------------------------------
+void ODBTableDecorator::columnAppended( const Reference< XPropertySet >& /*_rxSourceDescriptor*/ )
+{
+    // not interested in
+}
+// -----------------------------------------------------------------------------
 void ODBTableDecorator::columnDropped(const ::rtl::OUString& _sName)
 {
     Reference<XDrop> xDrop(m_xColumnDefinitions,UNO_QUERY);
     if ( xDrop.is() && m_xColumnDefinitions->hasByName(_sName) )
-    {
         xDrop->dropByName(_sName);
-    }
 }
 
 // -----------------------------------------------------------------------------
-void ODBTableDecorator::columnCloned(const Reference< XPropertySet >& /*_xClone*/)
-{
-}
-
-// -----------------------------------------------------------------------------
-Reference< XPropertySet > ODBTableDecorator::createEmptyObject()
+Reference< XPropertySet > ODBTableDecorator::createColumnDescriptor()
 {
     Reference<XDataDescriptorFactory> xNames;
     if(m_xTable.is())
