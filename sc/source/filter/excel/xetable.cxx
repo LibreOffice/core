@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xetable.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:38:32 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:34:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,13 +147,13 @@ void XclExpRangeFmlaBase::WriteRangeAddress( XclExpStream& rStrm ) const
 
 // Array formulas =============================================================
 
-XclExpArray::XclExpArray( XclExpTokenArrayRef xTokArr, const ScRange& rScRange ) :
+XclExpArray::XclExpArray( XclTokenArrayRef xTokArr, const ScRange& rScRange ) :
     XclExpRangeFmlaBase( EXC_ID3_ARRAY, 14 + xTokArr->GetSize(), rScRange ),
     mxTokArr( xTokArr )
 {
 }
 
-XclExpTokenArrayRef XclExpArray::CreateCellTokenArray( const XclExpRoot& rRoot ) const
+XclTokenArrayRef XclExpArray::CreateCellTokenArray( const XclExpRoot& rRoot ) const
 {
     return rRoot.GetFormulaCompiler().CreateSpecialRefFormula( EXC_TOKID_EXP, maBaseXclPos );
 }
@@ -181,7 +181,7 @@ XclExpArrayBuffer::XclExpArrayBuffer( const XclExpRoot& rRoot ) :
 XclExpArrayRef XclExpArrayBuffer::CreateArray( const ScTokenArray& rScTokArr, const ScRange& rScRange )
 {
     const ScAddress& rScPos = rScRange.aStart;
-    XclExpTokenArrayRef xTokArr = GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_MATRIX, rScTokArr, &rScPos );
+    XclTokenArrayRef xTokArr = GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_MATRIX, rScTokArr, &rScPos );
 
     DBG_ASSERT( maRecMap.find( rScPos ) == maRecMap.end(), "XclExpArrayBuffer::CreateArray - array exists already" );
     XclExpArrayRef& rxRec = maRecMap[ rScPos ];
@@ -210,7 +210,7 @@ XclExpArrayRef XclExpArrayBuffer::FindArray( const ScTokenArray& rScTokArr ) con
 
 // Shared formulas ============================================================
 
-XclExpShrfmla::XclExpShrfmla( XclExpTokenArrayRef xTokArr, const ScAddress& rScPos ) :
+XclExpShrfmla::XclExpShrfmla( XclTokenArrayRef xTokArr, const ScAddress& rScPos ) :
     XclExpRangeFmlaBase( EXC_ID_SHRFMLA, 10 + xTokArr->GetSize(), rScPos ),
     mxTokArr( xTokArr ),
     mnUsedCount( 1 )
@@ -223,7 +223,7 @@ void XclExpShrfmla::ExtendRange( const ScAddress& rScPos )
     ++mnUsedCount;
 }
 
-XclExpTokenArrayRef XclExpShrfmla::CreateCellTokenArray( const XclExpRoot& rRoot ) const
+XclTokenArrayRef XclExpShrfmla::CreateCellTokenArray( const XclExpRoot& rRoot ) const
 {
     return rRoot.GetFormulaCompiler().CreateSpecialRefFormula( EXC_TOKID_EXP, maBaseXclPos );
 }
@@ -256,7 +256,7 @@ XclExpShrfmlaRef XclExpShrfmlaBuffer::CreateOrExtendShrfmla(
         if( aIt == maRecMap.end() )
         {
             // create a new record
-            XclExpTokenArrayRef xTokArr = GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_SHARED, *pShrdScTokArr, &rScPos );
+            XclTokenArrayRef xTokArr = GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_SHARED, *pShrdScTokArr, &rScPos );
             xRec.reset( new XclExpShrfmla( xTokArr, rScPos ) );
             maRecMap[ pShrdScTokArr ] = xRec;
         }
@@ -383,7 +383,7 @@ void XclExpTableop::Finalize()
     }
 }
 
-XclExpTokenArrayRef XclExpTableop::CreateCellTokenArray( const XclExpRoot& rRoot ) const
+XclTokenArrayRef XclExpTableop::CreateCellTokenArray( const XclExpRoot& rRoot ) const
 {
     XclExpFormulaCompiler& rFmlaComp = rRoot.GetFormulaCompiler();
     return mbValid ?
@@ -521,7 +521,7 @@ XclExpTableopRef XclExpTableopBuffer::TryCreate( const ScAddress& rScPos, const 
 // ============================================================================
 
 XclExpCellBase::XclExpCellBase(
-        sal_uInt16 nRecId, sal_uInt32 nContSize, const XclAddress& rXclPos ) :
+        sal_uInt16 nRecId, sal_Size nContSize, const XclAddress& rXclPos ) :
     XclExpRecord( nRecId, nContSize + 4 ),
     maXclPos( rXclPos )
 {
@@ -550,7 +550,7 @@ void XclExpCellBase::RemoveUnusedBlankCells( const ScfUInt16Vec& rXFIndexes )
 // Single cell records ========================================================
 
 XclExpSingleCellBase::XclExpSingleCellBase(
-        sal_uInt16 nRecId, sal_uInt32 nContSize, const XclAddress& rXclPos, sal_uInt32 nXFId ) :
+        sal_uInt16 nRecId, sal_Size nContSize, const XclAddress& rXclPos, sal_uInt32 nXFId ) :
     XclExpCellBase( nRecId, 2, rXclPos ),
     maXFId( nXFId ),
     mnContSize( nContSize )
@@ -558,7 +558,7 @@ XclExpSingleCellBase::XclExpSingleCellBase(
 }
 
 XclExpSingleCellBase::XclExpSingleCellBase( const XclExpRoot& rRoot,
-        sal_uInt16 nRecId, sal_uInt32 nContSize, const XclAddress& rXclPos,
+        sal_uInt16 nRecId, sal_Size nContSize, const XclAddress& rXclPos,
         const ScPatternAttr* pPattern, sal_Int16 nScript, sal_uInt32 nForcedXFId ) :
     XclExpCellBase( nRecId, 2, rXclPos ),
     maXFId( nForcedXFId ),
@@ -696,6 +696,7 @@ void XclExpLabelCell::Init( const XclExpRoot& rRoot,
     sal_uInt16 nXclFont = mxText->RemoveLeadingFont();
     if( GetXFId() == EXC_XFID_NOTFOUND )
     {
+        DBG_ASSERT( nXclFont != EXC_FONT_NOTFOUND, "XclExpLabelCell::Init - leading font not found" );
         bool bForceLineBreak = mxText->IsWrapped();
         SetXFId( rRoot.GetXFBuffer().InsertWithFont( pPattern, ApiScriptType::WEAK, nXclFont, bForceLineBreak ) );
     }
@@ -794,7 +795,7 @@ XclExpFormulaCell::XclExpFormulaCell(
         {
             String aResult;
             mrScFmlaCell.GetString( aResult );
-            nScript = XclExpStringHelper::GetScriptType( rRoot, aResult );
+            nScript = XclExpStringHelper::GetLeadingScriptType( rRoot, aResult );
         }
         SetXFId( rRoot.GetXFBuffer().InsertWithNumFmt( pPattern, nScript, nAltScNumFmt ) );
     }
@@ -925,7 +926,7 @@ void XclExpFormulaCell::WriteContents( XclExpStream& rStrm )
 // Multiple cell records ======================================================
 
 XclExpMultiCellBase::XclExpMultiCellBase(
-        sal_uInt16 nRecId, sal_uInt16 nMulRecId, sal_uInt32 nContSize, const XclAddress& rXclPos ) :
+        sal_uInt16 nRecId, sal_uInt16 nMulRecId, sal_Size nContSize, const XclAddress& rXclPos ) :
     XclExpCellBase( nRecId, 0, rXclPos ),
     mnMulRecId( nMulRecId ),
     mnContSize( nContSize )
@@ -987,7 +988,7 @@ void XclExpMultiCellBase::Save( XclExpStream& rStrm )
         {
             sal_uInt16 nCount = nEndXclCol - nBegXclCol;
             bool bIsMulti = nCount > 1;
-            sal_uInt32 nTotalSize = GetRecSize() + (2 + mnContSize) * nCount;
+            sal_Size nTotalSize = GetRecSize() + (2 + mnContSize) * nCount;
             if( bIsMulti ) nTotalSize += 2;
 
             rStrm.StartRecord( bIsMulti ? mnMulRecId : GetRecId(), nTotalSize );
