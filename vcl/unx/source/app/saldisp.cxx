@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:51:34 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 16:37:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1081,7 +1081,9 @@ bHandleStartupNotification
                 if (ImageByteOrder(GetDisplay()) == LSBFirst)
                 {
                     nProperties_ |= PROPERTY_BUG_Tile;
-                    nProperties_ |= PROPERTY_SUPPORT_3ButtonMouse;
+                    static const char* pSal3ButtonEmulate = getenv( "SAL_ENABLE_BUTTON3_MAPPING" );
+                    if( pSal3ButtonEmulate && *pSal3ButtonEmulate )
+                        nProperties_ |= PROPERTY_SUPPORT_3ButtonMouse;
                 }
                 else // MSBFirst Sun-Solaris Sparc Server
                 {
