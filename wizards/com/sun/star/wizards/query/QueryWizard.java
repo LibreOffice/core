@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryWizard.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-06 14:21:55 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 16:40:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,7 @@ import com.sun.star.beans.PropertyValue;
 import com.sun.star.wizards.common.*;
 import com.sun.star.wizards.db.*;
 import com.sun.star.wizards.document.OfficeDocument;
+import com.sun.star.wizards.form.FormWizard.FieldSelectionListener;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.uno.*;
 import com.sun.star.wizards.ui.*;
@@ -213,7 +214,10 @@ public class QueryWizard extends WizardDialog {
     public void buildSteps() {
         try {
             boolean bEnabled;
-            CurDBCommandFieldSelection = new CommandFieldSelection(this, CurDBMetaData, 120, reslblFields, reslblSelFields, reslblTables, false, 40850);
+//            curDBCommandFieldSelection = new CommandFieldSelection(this, curFormDocument.oMainFormDBMetaData, 92, slblFields, slblSelFields,  slblTables, true, 34411);
+//            curDBCommandFieldSelection.addFieldSelectionListener(new FieldSelectionListener());
+
+            CurDBCommandFieldSelection = new CommandFieldSelection(this, CurDBMetaData, 120, reslblFields, reslblSelFields, reslblTables, true, 40850);
             CurDBCommandFieldSelection.addFieldSelectionListener(new FieldSelectionListener());
             CurSortingComponent = new SortingComponent(this, SOSORTINGPAGE, 95, 27, 210, 40865);
             CurFilterComponent = new FilterComponent(this, xMSF, SOFILTERPAGE, 97, 27, 209, 3, CurDBMetaData, 40878);
