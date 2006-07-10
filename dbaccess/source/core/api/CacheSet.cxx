@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CacheSet.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:34:29 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:01:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -183,11 +183,10 @@ void OCacheSet::fillTableName(const Reference<XPropertySet>& _xTable)  throw(SQL
     if(!m_aComposedTableName.getLength() && _xTable.is() )
     {
         Reference<XDatabaseMetaData> xMeta(m_xConnection->getMetaData());
-        composeTableName(xMeta
+        m_aComposedTableName = composeTableName(xMeta
                         ,comphelper::getString(_xTable->getPropertyValue(PROPERTY_CATALOGNAME))
                         ,comphelper::getString(_xTable->getPropertyValue(PROPERTY_SCHEMANAME))
                         ,comphelper::getString(_xTable->getPropertyValue(PROPERTY_NAME))
-                        ,m_aComposedTableName
                         ,sal_True
                         ,::dbtools::eInDataManipulation);
     }
@@ -380,7 +379,8 @@ void SAL_CALL OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetR
         aSql += aCondition;
     }
     else
-        throw SQLException(DBACORE_RESSTRING(RID_STR_NO_UPDATE_MISSING_CONDITION),*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,Any());
+        ::dbtools::throwSQLException(
+            DBACORE_RESSTRING( RID_STR_NO_UPDATE_MISSING_CONDITION ), SQL_GENERAL_ERROR, *this );
 
     // now create end execute the prepared statement
     Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(aSql));
