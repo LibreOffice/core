@@ -4,9 +4,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 21:34:13 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:09:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -700,7 +700,7 @@ void ScContentTree::GetAreaNames()
         for ( i=0; i<nCount; i++ )
         {
             ScRangeData* pData = (*pRangeNames)[i];
-            if (pData->IsReference(aDummy))
+            if (pData->IsValidReference(aDummy))
                 nValidCount++;
         }
         if ( nValidCount )
@@ -710,7 +710,7 @@ void ScContentTree::GetAreaNames()
             for ( i=0, j=0; i<nCount; i++ )
             {
                 ScRangeData* pData = (*pRangeNames)[i];
-                if (pData->IsReference(aDummy))
+                if (pData->IsValidReference(aDummy))
                     ppSortArray[j++] = pData;
             }
 #ifndef ICC
@@ -1048,7 +1048,7 @@ BOOL lcl_GetRange( ScDocument* pDoc, USHORT nType, const String& rName, ScRange&
         ScRangeName* pList = pDoc->GetRangeName();
         if (pList)
             if (pList->SearchName( rName, nPos ))
-                if ( (*pList)[nPos]->IsReference( rRange ) )
+                if ( (*pList)[nPos]->IsValidReference( rRange ) )
                     bFound = TRUE;
     }
     else if ( nType == SC_CONTENT_DBAREA )
