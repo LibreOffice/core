@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:34:03 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 12:32:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2378,6 +2378,7 @@ void ScCompiler::Factor()
             case ocGetActTime:
             // one parameter:
             case ocFormula:
+            case ocInfo:
             // more than one parameters:
                 // ocIndirect otherwise would have to do StopListening and
                 // StartListening on a reference for every interpreted value.
