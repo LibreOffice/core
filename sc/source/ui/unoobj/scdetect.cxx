@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scdetect.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-27 15:52:11 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 12:46:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -547,37 +547,41 @@ static BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
                         //
 
         #define M_DC        0x0100
-        #define M_ALT(ANZ)  0x0200+ANZ
+        #define M_ALT(ANZ)  (0x0200+(ANZ))
         #define M_ENDE      0x8000
 
-                        const UINT16 pLotus[] =         // Lotus 1/1A/2
+                        static const UINT16 pLotus[] =      // Lotus 1/1A/2
                             { 0x0000, 0x0000, 0x0002, 0x0000,
                             M_ALT(2), 0x0004, 0x0006,
                             0x0004, M_ENDE };
 
-                        const UINT16 pLotusNew[] =              // Lotus >= 9.7
+                        static const UINT16 pLotusNew[] =   // Lotus >= 9.7
                             { 0x0000, 0x0000, M_DC, 0x0000,     // Rec# + Len (0x1a)
                               M_ALT(3), 0x0003, 0x0004, 0x0005, // File Revision Code 97->ME
                               0x0010, 0x0004, 0x0000, 0x0000,
                               M_ENDE };
 
-                        const UINT16 pExcel1[] =        // Excel Biff/3/4 Tabellen
-                            { 0x0009,
-                            M_ALT(2), 0x0002, 0x0004,
-                            0x0006, 0x0000, M_DC, M_DC, 0x0010, 0x0000,
-                            M_DC, M_DC, M_ENDE };
+                        static const UINT16 pExcel1[] =     // Excel BIFF2, BIFF3, BIFF4
+                            {   0x09,                                   // lobyte of BOF rec ID (0x0009, 0x0209, 0x0409)
+                                M_ALT(3), 0x00, 0x02, 0x04,             // hibyte of BOF rec ID (0x0009, 0x0209, 0x0409)
+                                M_ALT(3), 4, 6, 8,                      // lobyte of BOF rec size (4, 6, 8, 16)
+                                0x00,                                   // hibyte of BOF rec size (4, 6, 8, 16)
+                                M_DC, M_DC,                             // any version
+                                M_ALT(3), 0x10, 0x20, 0x40,             // lobyte of data type (0x0010, 0x0020, 0x0040)
+                                0x00,                                   // hibyte of data type (0x0010, 0x0020, 0x0040)
+                                M_ENDE };
 
-                        const UINT16 pExcel2[] =        // Excel Biff3/4 Workbooks
-                            { 0x0009,
-                            M_ALT(2), 0x0002, 0x0004,
-                            0x0006, 0x0000, M_DC, M_DC, 0x0000, 0x0001,
-                            M_DC, M_DC, M_ENDE };
+                        static const UINT16 pExcel2[] =     // Excel BIFF4 Workspace
+                            {   0x09,                                   // lobyte of BOF rec ID (0x0409)
+                                0x04,                                   // hibyte of BOF rec ID (0x0409)
+                                M_ALT(3), 4, 6, 8,                      // lobyte of BOF rec size (4, 6, 8, 16)
+                                0x00,                                   // hibyte of BOF rec size (4, 6, 8, 16)
+                                M_DC, M_DC,                             // any version
+                                0x00,                                   // lobyte of data type (0x0100)
+                                0x01,                                   // hibyte of data type (0x0100)
+                                M_ENDE };
 
-                        const UINT16 pExcel3[] =        // Excel Biff2 Tabellen
-                            { 0x0009, 0x0000, 0x0004, 0x0000,
-                            M_DC, M_DC, 0x0010, 0x0000, M_ENDE };
-
-                        const UINT16 pExcel4[] =        // #i23425# Flat-stream BIFF5/7/8 Excel files
+                        static const UINT16 pExcel3[] =     // #i23425# Excel BIFF5, BIFF7, BIFF8 (simple book stream)
                             {   0x09,                                   // lobyte of BOF rec ID (0x0809)
                                 0x08,                                   // hibyte of BOF rec ID (0x0809)
                                 M_ALT(4), 4, 6, 8, 16,                  // lobyte of BOF rec size
@@ -587,7 +591,7 @@ static BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
                                 0x00,                                   // hibyte of data type
                                 M_ENDE };
 
-                        const UINT16 pSc10[] =          // StarCalc 1.0 Dokumente
+                        static const UINT16 pSc10[] =       // StarCalc 1.0 Dokumente
                             { 'B', 'l', 'a', 'i', 's', 'e', '-', 'T', 'a', 'b', 'e', 'l', 'l',
                             'e', 0x000A, 0x000D, 0x0000,    // Sc10CopyRight[16]
                             M_DC, M_DC, M_DC, M_DC, M_DC, M_DC, M_DC, M_DC, M_DC, M_DC, M_DC,
@@ -596,21 +600,21 @@ static BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
                             0x0000,
                             M_ENDE };
 
-                        const UINT16 pLotus2[] =        // Lotus >3
+                        static const UINT16 pLotus2[] =     // Lotus >3
                             { 0x0000, 0x0000, 0x001A, 0x0000,   // Rec# + Len (26)
                             M_ALT(2), 0x0000, 0x0002,         // File Revision Code
                             0x0010,
                             0x0004, 0x0000,                   // File Revision Subcode
                             M_ENDE };
 
-            const UINT16 pQPro[] =
+                        static const UINT16 pQPro[] =
                                { 0x0000, 0x0000, 0x0002, 0x0000,
                                  M_ALT(4), 0x0001, 0x0002, // WB1, WB2
                                  0x0006, 0x0007,           // QPro 6/7 (?)
                                  0x0010,
                                  M_ENDE };
 
-                        const UINT16 pDIF1[] =          // DIF mit CR-LF
+                        static const UINT16 pDIF1[] =       // DIF mit CR-LF
                             {
                             'T', 'A', 'B', 'L', 'E',
                             M_DC, M_DC,
@@ -619,7 +623,7 @@ static BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
                             '\"',
                             M_ENDE };
 
-                        const UINT16 pDIF2[] =          // DIF mit CR oder LF
+                        static const UINT16 pDIF2[] =       // DIF mit CR oder LF
                             {
                             'T', 'A', 'B', 'L', 'E',
                             M_DC,
@@ -628,18 +632,17 @@ static BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
                             '\"',
                             M_ENDE };
 
-                        const UINT16 pSylk[] =          // Sylk
+                        static const UINT16 pSylk[] =       // Sylk
                             {
                             'I', 'D', ';', 'P',
                             M_ENDE };
 
-                        const UINT16 *ppFilterPatterns[] =      // Arrays mit Suchmustern
+                        static const UINT16 *ppFilterPatterns[] =      // Arrays mit Suchmustern
                             {
                             pLotus,
                             pExcel1,
                             pExcel2,
                             pExcel3,
-                            pExcel4,
                             pSc10,
                             pDIF1,
                             pDIF2,
@@ -650,10 +653,9 @@ static BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
                             };
                         const UINT16 nFilterCount = sizeof(ppFilterPatterns) / sizeof(ppFilterPatterns[0]);
 
-                        const sal_Char* pFilterName[ nFilterCount ] =     // zugehoerige Filter
+                        static const sal_Char* const pFilterName[] =     // zugehoerige Filter
                             {
                             pFilterLotus,
-                            pFilterExcel4,
                             pFilterExcel4,
                             pFilterExcel4,
                             pFilterExcel4,
