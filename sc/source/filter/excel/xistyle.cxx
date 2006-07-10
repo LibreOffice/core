@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xistyle.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-13 16:58:37 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:43:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,7 +158,7 @@ void XclImpPalette::ReadPalette( XclImpStream& rStrm )
 {
     sal_uInt16 nCount;
     rStrm >> nCount;
-    DBG_ASSERT( rStrm.GetRecLeft() == 4UL * nCount, "XclImpPalette::ReadPalette - size mismatch" );
+    DBG_ASSERT( rStrm.GetRecLeft() == 4 * nCount, "XclImpPalette::ReadPalette - size mismatch" );
 
     maColorTable.resize( nCount );
     Color aColor;
@@ -173,9 +173,9 @@ void XclImpPalette::ReadPalette( XclImpStream& rStrm )
 
 XclImpFont::XclImpFont( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot ),
-    mbAscii( true ),
-    mbCjk( false ),
-    mbCtl( false )
+    mbHasWstrn( true ),
+    mbHasAsian( false ),
+    mbHasCmplx( false )
 {
     SetAllUsedFlags( false );
 }
@@ -209,6 +209,12 @@ void XclImpFont::SetAllUsedFlags( bool bUsed )
 {
     mbFontNameUsed = mbHeightUsed = mbColorUsed = mbWeightUsed = mbEscapemUsed =
         mbUnderlUsed = mbItalicUsed = mbStrikeUsed = mbOutlineUsed = mbShadowUsed = bUsed;
+}
+
+rtl_TextEncoding XclImpFont::GetFontEncoding() const
+{
+    rtl_TextEncoding eFontEnc = maData.GetScCharSet();
+    return (eFontEnc == RTL_TEXTENCODING_DONTKNOW) ? GetCharSet() : eFontEnc;
 }
 
 void XclImpFont::ReadFont( XclImpStream& rStrm )
@@ -278,10 +284,10 @@ void XclImpFont::ReadCFFontBlock( XclImpStream& rStrm )
         maData.mbStrikeout = ::get_flag( nStyle, EXC_CF_FONT_STRIKEOUT );
 }
 
-void XclImpFont::FillToItemSet( SfxItemSet& rItemSet, XclImpFontMode eMode, bool bSkipPoolDefs ) const
+void XclImpFont::FillToItemSet( SfxItemSet& rItemSet, XclFontItemType eType, bool bSkipPoolDefs ) const
 {
     // true = edit engine Which-IDs (EE_CHAR_*); false = Calc Which-IDs (ATTR_*)
-    bool bEE = eMode != EXC_FONTMODE_CELL;
+    bool bEE = eType != EXC_FONTITEM_CELL;
 
 // item = the item to put into the item set
 // sc_which = the Calc Which-ID of the item
@@ -291,7 +297,7 @@ void XclImpFont::FillToItemSet( SfxItemSet& rItemSet, XclImpFontMode eMode, bool
 
 // Font item
     // #i36997# do not set default Tahoma font from notes
-    bool bDefNoteFont = (eMode == EXC_FONTMODE_NOTE) && (maData.maName.EqualsIgnoreCaseAscii( "Tahoma" ));
+    bool bDefNoteFont = (eType == EXC_FONTITEM_NOTE) && (maData.maName.EqualsIgnoreCaseAscii( "Tahoma" ));
     if( mbFontNameUsed && !bDefNoteFont )
     {
         CharSet eFontCharSet = maData.GetScCharSet();
@@ -300,11 +306,11 @@ void XclImpFont::FillToItemSet( SfxItemSet& rItemSet, XclImpFontMode eMode, bool
 
         SvxFontItem aFontItem( maData.GetScFamily( GetCharSet() ), maData.maName, EMPTY_STRING, PITCH_DONTKNOW, eTempCharSet );
         // #91658# set only for valid script types
-        if( mbAscii )
+        if( mbHasWstrn )
             PUTITEM( aFontItem, ATTR_FONT,      EE_CHAR_FONTINFO );
-        if( mbCjk )
+        if( mbHasAsian )
             PUTITEM( aFontItem, ATTR_CJK_FONT,  EE_CHAR_FONTINFO_CJK );
-        if( mbCtl )
+        if( mbHasCmplx )
             PUTITEM( aFontItem, ATTR_CTL_FONT,  EE_CHAR_FONTINFO_CTL );
     }
 
@@ -312,7 +318,7 @@ void XclImpFont::FillToItemSet( SfxItemSet& rItemSet, XclImpFontMode eMode, bool
     if( mbHeightUsed )
     {
         sal_Int32 nHeight = maData.mnHeight;
-        if( bEE && (eMode != EXC_FONTMODE_HF) )     // do not convert header/footer height
+        if( bEE && (eType != EXC_FONTITEM_HF) )     // do not convert header/footer height
             nHeight = (nHeight * 127 + 36) / EXC_POINTS_PER_INCH;   // #98527# 1 in == 72 pt
 
         SvxFontHeightItem aHeightItem( nHeight );
@@ -365,6 +371,14 @@ void XclImpFont::FillToItemSet( SfxItemSet& rItemSet, XclImpFontMode eMode, bool
 #undef PUTITEM
 }
 
+void XclImpFont::WriteFontProperties( ScfPropertySet& rPropSet,
+        XclFontPropSetType eType, const Color* pFontColor ) const
+{
+    Color aFontColor( pFontColor ? *pFontColor : GetPalette().GetColor( maData.mnColor ) );
+    GetFontPropSetHelper().WriteFontProperties(
+        rPropSet, eType, maData, aFontColor, mbHasWstrn, mbHasAsian, mbHasCmplx );
+}
+
 void XclImpFont::ReadFontData2( XclImpStream& rStrm )
 {
     sal_uInt16 nFlags;
@@ -404,8 +418,8 @@ void XclImpFont::ReadFontName8( XclImpStream& rStrm )
 
 void XclImpFont::GuessScriptType()
 {
-    mbAscii = true;
-    mbCjk = mbCtl = false;
+    mbHasWstrn = true;
+    mbHasAsian = mbHasCmplx = false;
 
     // #91658# #113783# find the script types for which the font contains characters
     if( SfxPrinter* pPrinter = GetPrinter() )
@@ -417,30 +431,32 @@ void XclImpFont::GuessScriptType()
         if( pPrinter->GetFontCharMap( aCharMap ) )
         {
             // #91658# CJK fonts
-            mbCjk = aCharMap.HasChar( 0x3041 ) ||   // 3040-309F: Hiragana
-                    aCharMap.HasChar( 0x30A1 ) ||   // 30A0-30FF: Katakana
-                    aCharMap.HasChar( 0x3111 ) ||   // 3100-312F: Bopomofo
-                    aCharMap.HasChar( 0x3131 ) ||   // 3130-318F: Hangul Compatibility Jamo
-                    aCharMap.HasChar( 0x3301 ) ||   // 3300-33FF: CJK Compatibility
-                    aCharMap.HasChar( 0x3401 ) ||   // 3400-4DBF: CJK Unified Ideographs Extension A
-                    aCharMap.HasChar( 0x4E01 ) ||   // 4E00-9FAF: CJK Unified Ideographs
-                    aCharMap.HasChar( 0x7E01 ) ||   // 4E00-9FAF: CJK unified ideographs
-                    aCharMap.HasChar( 0xA001 ) ||   // A001-A48F: Yi Syllables
-                    aCharMap.HasChar( 0xAC01 ) ||   // AC00-D7AF: Hangul Syllables
-                    aCharMap.HasChar( 0xCC01 ) ||   // AC00-D7AF: Hangul Syllables
-                    aCharMap.HasChar( 0xF901 ) ||   // F900-FAFF: CJK Compatibility Ideographs
-                    aCharMap.HasChar( 0xFF71 );     // FF00-FFEF: Halfwidth/Fullwidth Forms
+            mbHasAsian =
+                aCharMap.HasChar( 0x3041 ) ||   // 3040-309F: Hiragana
+                aCharMap.HasChar( 0x30A1 ) ||   // 30A0-30FF: Katakana
+                aCharMap.HasChar( 0x3111 ) ||   // 3100-312F: Bopomofo
+                aCharMap.HasChar( 0x3131 ) ||   // 3130-318F: Hangul Compatibility Jamo
+                aCharMap.HasChar( 0x3301 ) ||   // 3300-33FF: CJK Compatibility
+                aCharMap.HasChar( 0x3401 ) ||   // 3400-4DBF: CJK Unified Ideographs Extension A
+                aCharMap.HasChar( 0x4E01 ) ||   // 4E00-9FAF: CJK Unified Ideographs
+                aCharMap.HasChar( 0x7E01 ) ||   // 4E00-9FAF: CJK unified ideographs
+                aCharMap.HasChar( 0xA001 ) ||   // A001-A48F: Yi Syllables
+                aCharMap.HasChar( 0xAC01 ) ||   // AC00-D7AF: Hangul Syllables
+                aCharMap.HasChar( 0xCC01 ) ||   // AC00-D7AF: Hangul Syllables
+                aCharMap.HasChar( 0xF901 ) ||   // F900-FAFF: CJK Compatibility Ideographs
+                aCharMap.HasChar( 0xFF71 );     // FF00-FFEF: Halfwidth/Fullwidth Forms
             // #113783# CTL fonts
-            mbCtl = aCharMap.HasChar( 0x05D1 ) ||   // 0590-05FF: Hebrew
-                    aCharMap.HasChar( 0x0631 ) ||   // 0600-06FF: Arabic
-                    aCharMap.HasChar( 0x0721 ) ||   // 0700-074F: Syriac
-                    aCharMap.HasChar( 0x0911 ) ||   // 0900-0DFF: Indic scripts
-                    aCharMap.HasChar( 0x0E01 ) ||   // 0E00-0E7F: Thai
-                    aCharMap.HasChar( 0xFB21 ) ||   // FB1D-FB4F: Hebrew Presentation Forms
-                    aCharMap.HasChar( 0xFB51 ) ||   // FB50-FDFF: Arabic Presentation Forms-A
-                    aCharMap.HasChar( 0xFE71 );     // FE70-FEFF: Arabic Presentation Forms-B
+            mbHasCmplx =
+                aCharMap.HasChar( 0x05D1 ) ||   // 0590-05FF: Hebrew
+                aCharMap.HasChar( 0x0631 ) ||   // 0600-06FF: Arabic
+                aCharMap.HasChar( 0x0721 ) ||   // 0700-074F: Syriac
+                aCharMap.HasChar( 0x0911 ) ||   // 0900-0DFF: Indic scripts
+                aCharMap.HasChar( 0x0E01 ) ||   // 0E00-0E7F: Thai
+                aCharMap.HasChar( 0xFB21 ) ||   // FB1D-FB4F: Hebrew Presentation Forms
+                aCharMap.HasChar( 0xFB51 ) ||   // FB50-FDFF: Arabic Presentation Forms-A
+                aCharMap.HasChar( 0xFE71 );     // FE70-FEFF: Arabic Presentation Forms-B
             // Western fonts
-            mbAscii = (!mbCjk && !mbCtl) || aCharMap.HasChar( 'A' );
+            mbHasWstrn = (!mbHasAsian && !mbHasCmplx) || aCharMap.HasChar( 'A' );
         }
     }
 }
@@ -482,11 +498,18 @@ void XclImpFontBuffer::ReadEfont( XclImpStream& rStrm )
 }
 
 void XclImpFontBuffer::FillToItemSet(
-        SfxItemSet& rItemSet, XclImpFontMode eMode,
-        sal_uInt16 nFontIndex, bool bSkipPoolDefs ) const
+        SfxItemSet& rItemSet, XclFontItemType eType,
+        sal_uInt16 nFontIdx, bool bSkipPoolDefs ) const
 {
-    if( const XclImpFont* pFont = GetFont( nFontIndex ) )
-        pFont->FillToItemSet( rItemSet, eMode, bSkipPoolDefs );
+    if( const XclImpFont* pFont = GetFont( nFontIdx ) )
+        pFont->FillToItemSet( rItemSet, eType, bSkipPoolDefs );
+}
+
+void XclImpFontBuffer::WriteFontProperties( ScfPropertySet& rPropSet,
+        XclFontPropSetType eType, sal_uInt16 nFontIdx, const Color* pFontColor ) const
+{
+    if( const XclImpFont* pFont = GetFont( nFontIdx ) )
+        pFont->WriteFontProperties( rPropSet, eType, pFontColor );
 }
 
 // FORMAT record - number formats =============================================
@@ -674,7 +697,7 @@ void XclImpCellAlign::FillToItemSet( SfxItemSet& rItemSet, const XclImpFont* pFo
     sal_Int32 nAngle = XclTools::GetScRotation( nXclRot, 0 );
     ScfTools::PutItem( rItemSet, SfxInt32Item( ATTR_ROTATE_VALUE, nAngle ), bSkipPoolDefs );
     // #105933# set "Use asian vertical layout", if cell is stacked and font contains CKJ characters
-    bool bAsianVert = bStacked && pFont && pFont->HasCjk();
+    bool bAsianVert = bStacked && pFont && pFont->HasAsianChars();
     ScfTools::PutItem( rItemSet, SfxBoolItem( ATTR_VERTICAL_ASIAN, bAsianVert ), bSkipPoolDefs );
 
     // CTL text direction
@@ -1188,7 +1211,7 @@ const ScPatternAttr& XclImpXF::CreatePattern( bool bSkipPoolDefs )
 
     // font
     if( mbFontUsed )
-        GetFontBuffer().FillToItemSet( rItemSet, EXC_FONTMODE_CELL, mnXclFont, bSkipPoolDefs );
+        GetFontBuffer().FillToItemSet( rItemSet, EXC_FONTITEM_CELL, mnXclFont, bSkipPoolDefs );
 
     // value format
     if( mbFmtUsed )
@@ -1301,14 +1324,12 @@ void XclImpXFBuffer::ReadStyle( XclImpStream& rStrm )
 sal_uInt16 XclImpXFBuffer::GetFontIndex( sal_uInt16 nXFIndex ) const
 {
     const XclImpXF* pXF = GetXF( nXFIndex );
-    return pXF ? pXF->GetFont() : 0;
+    return pXF ? pXF->GetFontIndex() : EXC_FONT_NOTFOUND;
 }
 
-bool XclImpXFBuffer::HasEscapement( sal_uInt16 nXFIndex ) const
+const XclImpFont* XclImpXFBuffer::GetFont( sal_uInt16 nXFIndex ) const
 {
-    const XclImpXF* pXF = GetXF( nXFIndex );
-    const XclImpFont* pFont = pXF ? GetFontBuffer().GetFont( pXF->GetFont() ) : 0;
-    return pFont ? pFont->HasEscapement() : false;
+    return GetFontBuffer().GetFont( GetFontIndex( nXFIndex ) );
 }
 
 void XclImpXFBuffer::CreateUserStyles()
