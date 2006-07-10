@@ -4,9 +4,9 @@
  *
  *  $RCSfile: node.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:12:57 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:26:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,8 +104,6 @@ class SW_DLLPUBLIC SwNode : private /* public*/ BigPtrEntry
 #endif
 
     BYTE nNodeType;
-    BOOL bWrongDirty : 1;       // Ist das Wrong-Feld auf invalid? (nur TxtNodes)
-    BOOL bACmplWrdDirty : 1;    // die ACompl-Liste muss angepasst werden (erstmal nur TxtNodes)
 
     // JP 28.03.96
     // fuer Textnodes: Stufungslevel der Autoformatierung. Ist erstmal hier
@@ -136,12 +134,6 @@ public:
     inline ULONG EndOfSectionIndex() const;
     inline const SwEndNode* EndOfSectionNode() const;
     inline       SwEndNode* EndOfSectionNode();
-
-    inline const BOOL IsWrongDirty() const      { return bWrongDirty; }
-    inline void SetWrongDirty( BOOL bNew )      { bWrongDirty = bNew; }
-
-    inline const BOOL IsAutoCompleteWordDirty() const   { return bACmplWrdDirty; }
-    inline void SetAutoCompleteWordDirty( BOOL bNew )   { bACmplWrdDirty = bNew; }
 
     inline const BYTE GetAutoFmtLvl() const     { return nAFmtNumLvl; }
     inline void SetAutoFmtLvl( BYTE nVal )      { nAFmtNumLvl = nVal; }
