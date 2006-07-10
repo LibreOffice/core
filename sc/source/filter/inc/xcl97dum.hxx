@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xcl97dum.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:26:42 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:53:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,55 +45,55 @@
 class ExcDummy8_00a : public ExcDummyRec
 {
 private:
-        static const BYTE   pMyData[];
-        static const ULONG  nMyLen;
+    static const BYTE       pMyData[];
+    static const sal_Size   nMyLen;
 public:
-    virtual ULONG               GetLen() const;
-    virtual const BYTE*         GetData() const;
+    virtual sal_Size        GetLen() const;
+    virtual const BYTE*     GetData() const;
 };
 
 
 class ExcDummy8_00b : public ExcDummyRec
 {
 private:
-        static const BYTE   pMyData[];
-        static const ULONG  nMyLen;
+    static const BYTE       pMyData[];
+    static const sal_Size   nMyLen;
 public:
-    virtual ULONG               GetLen() const;
-    virtual const BYTE*         GetData() const;
+    virtual sal_Size        GetLen() const;
+    virtual const BYTE*     GetData() const;
 };
 
 
 class ExcDummy8_040 : public ExcDummyRec
 {
 private:
-        static const BYTE   pMyData[];
-        static const ULONG  nMyLen;
+    static const BYTE       pMyData[];
+    static const sal_Size   nMyLen;
 public:
-    virtual ULONG               GetLen() const;
-    virtual const BYTE*         GetData() const;
+    virtual sal_Size        GetLen() const;
+    virtual const BYTE*     GetData() const;
 };
 
 
 class ExcDummy8_041 : public ExcDummyRec
 {
 private:
-        static const BYTE   pMyData[];
-        static const ULONG  nMyLen;
+    static const BYTE       pMyData[];
+    static const sal_Size   nMyLen;
 public:
-    virtual ULONG               GetLen() const;
-    virtual const BYTE*         GetData() const;
+    virtual sal_Size        GetLen() const;
+    virtual const BYTE*     GetData() const;
 };
 
 
 class ExcDummy8_02 : public ExcDummyRec
 {
 private:
-        static const BYTE   pMyData[];
-        static const ULONG  nMyLen;
+    static const BYTE       pMyData[];
+    static const sal_Size   nMyLen;
 public:
-    virtual ULONG               GetLen() const;
-    virtual const BYTE*         GetData() const;
+    virtual sal_Size        GetLen() const;
+    virtual const BYTE*     GetData() const;
 };
 
 
@@ -101,9 +101,9 @@ class XclRefmode : public ExcDummyRec
 {
 private:
     static const BYTE       pMyData[];
-    static const ULONG      nMyLen;
+    static const sal_Size   nMyLen;
 public:
-    virtual ULONG           GetLen( void ) const;
+    virtual sal_Size        GetLen( void ) const;
     virtual const BYTE*     GetData( void ) const;
 };
 
