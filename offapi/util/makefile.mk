@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.96 $
+#   $Revision: 1.97 $
 #
-#   last change: $Author: vg $ $Date: 2006-04-07 08:40:36 $
+#   last change: $Author: obo $ $Date: 2006-07-10 14:53:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -98,6 +98,7 @@ UNOIDLDBFILES= \
     $(UCR)$/csssdb.db \
     $(UCR)$/csssdbc.db \
     $(UCR)$/csssdbcx.db \
+    $(UCR)$/csssdbtools.db \
     $(UCR)$/csssheet.db \
     $(UCR)$/cssstyle.db \
     $(UCR)$/csssystem.db\
