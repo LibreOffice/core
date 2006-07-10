@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ModelImpl.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 12:32:55 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:08:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -320,7 +320,7 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory
         , const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>& _xModel = ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>()
         );
-    ~ODatabaseModelImpl();
+    virtual ~ODatabaseModelImpl();
 
     ODatabaseModelImpl(
         const ::rtl::OUString& _rRegistrationName
@@ -445,8 +445,6 @@ public:
     /** @see osl_decrementInterlockedCount.
      */
     virtual oslInterlockedCount SAL_CALL release();
-
-
 };
 
 /** a small base class for UNO components whose functionality depends on a ODatabaseModelImpl
@@ -459,6 +457,7 @@ protected:
 
 protected:
     ModelDependentComponent( const ::rtl::Reference< ODatabaseModelImpl >& _model );
+    virtual ~ModelDependentComponent();
 
     /** returns the component itself
     */
