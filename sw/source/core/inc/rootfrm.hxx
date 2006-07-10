@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rootfrm.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 14:23:25 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:28:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -210,9 +210,9 @@ public:
 
     virtual void ChgSize( const Size& aNewSize );
 
-    inline void SetIdleFlags();
-           BOOL IsIdleFormat()  const { return bIdleFormat; }
-           void ResetIdleFormat()     { bIdleFormat = FALSE; }
+    void SetIdleFlags() { bIdleFormat = TRUE; }
+    BOOL IsIdleFormat()  const { return bIdleFormat; }
+    void ResetIdleFormat()     { bIdleFormat = FALSE; }
 
     //Sorgt dafuer, dass alle gewuenschten Seitengebunden Flys eine Seite finden
     void SetAssertFlyPages() { bAssertFlyPages = TRUE; }
@@ -342,11 +342,6 @@ inline void SwRootFrm::InvalidateBrowseWidth()
 {
     if ( bBrowseWidthValid )
         ImplInvalidateBrowseWidth();
-}
-
-inline void SwRootFrm::SetIdleFlags()
-{
-    bIdleFormat = TRUE;
 }
 
 inline  void SwRootFrm::SetVirtPageNum( const BOOL bOf) const
