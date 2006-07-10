@@ -4,9 +4,9 @@
  *
  *  $RCSfile: commandcontainer.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:43:50 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:08:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,22 +87,25 @@ IMPLEMENT_TYPEPROVIDER2(OCommandContainer,ODefinitionContainer,OCommandContainer
 //--------------------------------------------------------------------------
 Reference< XContent > OCommandContainer::createObject( const ::rtl::OUString& _rName)
 {
-    ODefinitionContainer_Impl* pItem = static_cast<ODefinitionContainer_Impl*>(m_pImpl.get());
-    OSL_ENSURE(pItem->m_aDocumentMap.find(_rName) != pItem->m_aDocumentMap.end() ," Invalid entry in map!");
+    const ODefinitionContainer_Impl& rDefinitions( getDefinitions() );
+    OSL_ENSURE( rDefinitions.find(_rName) != rDefinitions.end(), "OCommandContainer::createObject: Invalid entry in map!" );
     if ( m_bTables )
-        return new OComponentDefinition(*this, _rName,m_xORB,pItem->m_aDocumentMap.find(_rName)->second,m_bTables);
-    return new OCommandDefinition(*this, _rName,m_xORB,pItem->m_aDocumentMap.find(_rName)->second);
+        return new OComponentDefinition( *this, _rName, m_xORB, rDefinitions.find( _rName )->second, m_bTables );
+    return new OCommandDefinition( *this, _rName, m_xORB, rDefinitions.find( _rName )->second );
 }
+
 // -----------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL OCommandContainer::createInstanceWithArguments(const Sequence< Any >& /*aArguments*/ ) throw (Exception, RuntimeException)
 {
     return createInstance( );
 }
+
 // -----------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL OCommandContainer::createInstance( ) throw (Exception, RuntimeException)
 {
     return m_xORB->createInstance(m_bTables ? SERVICE_SDB_TABLEDEFINITION : SERVICE_SDB_COMMAND_DEFINITION);
 }
+
 //........................................................................
 }   // namespace dbaccess
 //........................................................................
