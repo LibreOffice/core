@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SingleSelectQueryAnalyzer.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:24:41 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:49:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,20 @@ service SingleSelectQueryAnalyzer
     interface XSingleSelectQueryAnalyzer;
 
     /** access to the selected tables.
+
+        <p>The selected tables are those present in the <code>FROM</code> part
+        of a <code>SELECT</code> statement.</p>
+
+        <p>Note that OpenOffice.org since version 2.0.4 also supports queries which are
+        based on other queries. For example, given that you have a database containing
+        a query named <code>All Orders</code>, the SQL statement <code>SELECT * FROM "All Orders"</code>
+        is perfectly valid when used with a <type>SingleSelectQueryAnalyzer</type>.</p>
+
+        <p>In this case, the name container returned by <member scope="com::sun::star::sdbcx">XTablesSupplier::getTables</member>
+        will in fact not return a <type>Table</type>, but a <type>Query</type> object. Semantically, however,
+        this object still acts as a table in the SQL statement.</p>
+
+        @see XSingleSelectQueryAnalyzer::getQueryWithSubstitution
      */
     interface com::sun::star::sdbcx::XTablesSupplier;
 
