@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlcfg.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:54:29 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 11:55:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,6 +102,9 @@ public:
     rtl_TextEncoding GetTextEncoding() const;
     void        SetTextEncoding( rtl_TextEncoding );
     static SvxHtmlOptions* Get();
+
+    BOOL        IsNumbersEnglishUS() const;
+    void        SetNumbersEnglishUS(BOOL bSet);
 };
 
 #endif
