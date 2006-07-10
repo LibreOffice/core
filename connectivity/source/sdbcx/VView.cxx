@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VView.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:11:45 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:39:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,7 +139,7 @@ Any SAL_CALL OView::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     ::rtl::OUString sComposedName;
     if(m_xMetaData.is())
-        ::dbtools::composeTableName(m_xMetaData,m_CatalogName,m_SchemaName,m_Name,sComposedName,sal_False,::dbtools::eInDataManipulation);
+        sComposedName = ::dbtools::composeTableName( m_xMetaData, m_CatalogName, m_SchemaName, m_Name, sal_False, ::dbtools::eInDataManipulation );
     else
     {
         Any aValue;
