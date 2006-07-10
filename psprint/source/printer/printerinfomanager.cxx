@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printerinfomanager.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 10:26:09 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 16:30:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,10 +129,9 @@ PrinterInfoManager::~PrinterInfoManager()
 
 // -----------------------------------------------------------------
 
-bool PrinterInfoManager::checkPrintersChanged()
+bool PrinterInfoManager::checkPrintersChanged( bool bWait )
 {
     // check if files were created, deleted or modified since initialize()
-
     ::std::list< WatchFile >::const_iterator it;
     bool bChanged = false;
     for( it = m_aWatchFiles.begin(); it != m_aWatchFiles.end() && ! bChanged; ++it )
@@ -156,6 +155,18 @@ bool PrinterInfoManager::checkPrintersChanged()
             }
         }
     }
+
+    if( bWait && m_pQueueInfo )
+    {
+        #if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "syncing printer discovery thread\n" );
+        #endif
+        m_pQueueInfo->join();
+        #if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "done: syncing printer discovery thread\n" );
+        #endif
+    }
+
     if( ! bChanged && m_pQueueInfo )
         bChanged = m_pQueueInfo->hasChanged();
     if( bChanged )
