@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlroot.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 12:04:35 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:46:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,19 +104,18 @@
 #ifndef SC_XLSTYLE_HXX
 #include "xlstyle.hxx"
 #endif
+#ifndef SC_XLCHART_HXX
+#include "xlchart.hxx"
+#endif
 #ifndef SC_XLTRACER_HXX
 #include "xltracer.hxx"
 #endif
 
 #include "root.hxx"
 
-namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
-
 namespace ApiScriptType = ::com::sun::star::i18n::ScriptType;
 
 using ::rtl::OUString;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::frame::XModel;
 
 // Global data ================================================================
 
@@ -143,6 +142,8 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
     maScMaxPos( MAXCOL, MAXROW, MAXTAB ),
     maXclMaxPos( EXC_MAXCOL2, EXC_MAXROW2, EXC_MAXTAB2 ),
     maMaxPos( EXC_MAXCOL2, EXC_MAXROW2, EXC_MAXTAB2 ),
+    mxFontPropSetHlp( new XclFontPropSetHelper ),
+    mxChPropSetHlp( new XclChPropSetHelper ),
     mnCharWidth( 110 ),
     mnScTab( 0 ),
     mbExport( bExport ),
@@ -295,7 +296,7 @@ SfxObjectShell* XclRoot::GetDocShell() const
 ScModelObj* XclRoot::GetDocModelObj() const
 {
     SfxObjectShell* pDocShell = GetDocShell();
-    return pDocShell ? ScModelObj::getImplementation( Reference< XModel >( pDocShell->GetModel() ) ) : 0;
+    return pDocShell ? ScModelObj::getImplementation( pDocShell->GetModel() ) : 0;
 }
 
 SfxPrinter* XclRoot::GetPrinter() const
@@ -380,6 +381,16 @@ EditEngine& XclRoot::GetDrawEditEngine() const
         rEE.SetControlWord( rEE.GetControlWord() & ~EE_CNTRL_ALLOWBIGOBJS );
     }
     return *mrData.mxDrawEditEng;
+}
+
+XclFontPropSetHelper& XclRoot::GetFontPropSetHelper() const
+{
+    return *mrData.mxFontPropSetHlp;
+}
+
+XclChPropSetHelper& XclRoot::GetChartPropSetHelper() const
+{
+    return *mrData.mxChPropSetHlp;
 }
 
 ScExtDocOptions& XclRoot::GetExtDocOptions() const
