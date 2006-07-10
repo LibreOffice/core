@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DColumns.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:19:12 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 14:24:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,17 +80,20 @@ void ODbaseColumns::impl_refresh() throw(RuntimeException)
     m_pTable->refreshColumns();
 }
 // -------------------------------------------------------------------------
-Reference< XPropertySet > ODbaseColumns::createEmptyObject()
+Reference< XPropertySet > ODbaseColumns::createDescriptor()
 {
     return new sdbcx::OColumn(isCaseSensitive());
 }
 // -----------------------------------------------------------------------------
 // -------------------------------------------------------------------------
 // XAppend
-void ODbaseColumns::appendObject( const Reference< XPropertySet >& descriptor )
+sdbcx::ObjectType ODbaseColumns::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
-    if(!m_pTable->isNew())
-        m_pTable->addColumn(descriptor);
+    if ( m_pTable->isNew() )
+        return cloneDescriptor( descriptor );
+
+    m_pTable->addColumn( descriptor );
+    return createObject( _rForName );
 }
 // -----------------------------------------------------------------------------
 // -------------------------------------------------------------------------
@@ -99,18 +102,6 @@ void ODbaseColumns::dropObject(sal_Int32 _nPos,const ::rtl::OUString /*_sElement
 {
     if(!m_pTable->isNew())
         m_pTable->dropColumn(_nPos);
-}
-// -----------------------------------------------------------------------------
-sdbcx::ObjectType ODbaseColumns::cloneObject(const Reference< XPropertySet >& _xDescriptor)
-{
-    if(m_pTable->isNew())
-    {
-        Reference<XPropertySet> xProp = new sdbcx::OColumn(isCaseSensitive());
-        ::comphelper::copyProperties(_xDescriptor,xProp);
-        return xProp;
-    }
-
-    return ODbaseColumns_BASE::cloneObject(_xDescriptor);
 }
 // -----------------------------------------------------------------------------
 
