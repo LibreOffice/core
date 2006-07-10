@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fdumper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:40:50 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:52:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,9 +43,6 @@
 #include <map>
 #include <math.h>
 
-#ifndef _SOT_STORAGE_HXX
-#include <sot/storage.hxx>
-#endif
 #ifndef SC_FTOOLS_HXX
 #include "ftools.hxx"
 #endif
@@ -54,11 +51,12 @@ class SvStream;
 class SfxMedium;
 class SfxObjectShell;
 class Color;
+class DateTime;
 
 namespace scf {
 namespace dump {
 
-#define SCF_DUMP_UNUSED                 "?unused"
+#define SCF_DUMP_UNUSED                 "unused"
 #define SCF_DUMP_UNKNOWN                "?unknown"
 
 #define SCF_DUMP_ERRASCII( ascii )      "?err:" ascii
@@ -166,19 +164,21 @@ struct ItemFormat
 class StringHelper
 {
 public:
-    static void         AppendString( String& rStr, const String& rData, xub_StrLen nWidth = 0 );
+    // append string to string ------------------------------------------------
+
+    static void         AppendString( String& rStr, const String& rData, xub_StrLen nWidth = 0, sal_Unicode cFill = ' ' );
 
     // append decimal ---------------------------------------------------------
 
-    static void         AppendDec( String& rStr, sal_uInt8  nData, xub_StrLen nWidth = 0 );
-    static void         AppendDec( String& rStr, sal_Int8   nData, xub_StrLen nWidth = 0 );
-    static void         AppendDec( String& rStr, sal_uInt16 nData, xub_StrLen nWidth = 0 );
-    static void         AppendDec( String& rStr, sal_Int16  nData, xub_StrLen nWidth = 0 );
-    static void         AppendDec( String& rStr, sal_uInt32 nData, xub_StrLen nWidth = 0 );
-    static void         AppendDec( String& rStr, sal_Int32  nData, xub_StrLen nWidth = 0 );
-    static void         AppendDec( String& rStr, sal_uInt64 nData, xub_StrLen nWidth = 0 );
-    static void         AppendDec( String& rStr, sal_Int64  nData, xub_StrLen nWidth = 0 );
-    static void         AppendDec( String& rStr, double     fData, xub_StrLen nWidth = 0 );
+    static void         AppendDec( String& rStr, sal_uInt8  nData, xub_StrLen nWidth = 0, sal_Unicode cFill = ' ' );
+    static void         AppendDec( String& rStr, sal_Int8   nData, xub_StrLen nWidth = 0, sal_Unicode cFill = ' ' );
+    static void         AppendDec( String& rStr, sal_uInt16 nData, xub_StrLen nWidth = 0, sal_Unicode cFill = ' ' );
+    static void         AppendDec( String& rStr, sal_Int16  nData, xub_StrLen nWidth = 0, sal_Unicode cFill = ' ' );
+    static void         AppendDec( String& rStr, sal_uInt32 nData, xub_StrLen nWidth = 0, sal_Unicode cFill = ' ' );
+    static void         AppendDec( String& rStr, sal_Int32  nData, xub_StrLen nWidth = 0, sal_Unicode cFill = ' ' );
+    static void         AppendDec( String& rStr, sal_uInt64 nData, xub_StrLen nWidth = 0, sal_Unicode cFill = ' ' );
+    static void         AppendDec( String& rStr, sal_Int64  nData, xub_StrLen nWidth = 0, sal_Unicode cFill = ' ' );
+    static void         AppendDec( String& rStr, double     fData, xub_StrLen nWidth = 0, sal_Unicode cFill = ' ' );
 
     // append hexadecimal -----------------------------------------------------
 
@@ -296,6 +296,23 @@ void StringHelper::AppendValue( String& rStr, Type nData, FormatType eFmtType )
 }
 
 // ============================================================================
+
+class StringWrapper
+{
+public:
+    inline              StringWrapper() {}
+    inline /*implicit*/ StringWrapper( const String& rStr ) : maStr( rStr ) {}
+    inline /*implicit*/ StringWrapper( const sal_Char* pcStr ) : maStr( String::CreateFromAscii( pcStr ? pcStr : "" ) ) {}
+    inline /*implicit*/ StringWrapper( sal_Unicode cChar ) : maStr( cChar ) {}
+
+    inline bool         Empty() const { return maStr.Len() == 0; }
+    inline const String& GetString() const { return maStr; }
+
+private:
+    String              maStr;
+};
+
+// ============================================================================
 // ============================================================================
 
 class Base;
@@ -408,7 +425,7 @@ public:
     virtual             ~NameListBase();
 
     /** Sets a name for the specified key. */
-    void                SetName( sal_Int64 nKey, const String& rName );
+    void                SetName( sal_Int64 nKey, const StringWrapper& rNameWrp );
     /** Sets names for a list of keys. Must be terminated by an entry with null pointer as name. */
     template< typename Type >
     void                SetNames( const NamedKey< Type >* pNames );
@@ -423,6 +440,9 @@ public:
     template< typename Type >
     inline String       GetName( const Config& rCfg, Type nKey ) const
         { return ImplGetName( rCfg, static_cast< sal_Int64 >( nKey ) ); }
+    /** Returns a display name for the passed double value. */
+    inline String       GetName( const Config& rCfg, double fValue ) const
+        { return ImplGetName( rCfg, fValue ); }
 
     /** Returns a map iterator pointing to the first contained name. */
     inline const_iterator begin() const { return maMap.begin(); }
@@ -436,15 +456,21 @@ protected:
     virtual void        ImplProcessConfigItemStr( SvStream& rStrm, const String& rKey, const String& rData );
     virtual void        ImplProcessConfigItemInt( SvStream& rStrm, sal_Int64 nKey, const String& rData );
 
+    /** Derived classes set the name for the passed key. */
+    virtual void        ImplSetName( sal_Int64 nKey, const String& rName ) = 0;
     /** Derived classes generate and return the name for the passed key. */
     virtual String      ImplGetName( const Config& rCfg, sal_Int64 nKey ) const = 0;
+    /** Derived classes generate and return the name for the passed double value. */
+    virtual String      ImplGetName( const Config& rCfg, double fValue ) const = 0;
     /** Derived classes insert all names and other settings from the passed list. */
     virtual void        ImplIncludeList( const NameListBase& rList ) = 0;
 
     /** Returns the configuration core data, which can be used to access other name lists. */
     inline const ConfigCoreData& GetCoreData() const { return mrCoreData; }
+    /** Inserts the passed name into the internal map. */
+    void                InsertRawName( sal_Int64 nKey, const String& rName );
     /** Returns the name for the passed key, or 0, if nothing found. */
-    const String*       FindName( sal_Int64 nKey ) const;
+    const String*       FindRawName( sal_Int64 nKey ) const;
 
 private:
     /** Includes name lists, given in a comma separated list of names of the lists. */
@@ -474,15 +500,19 @@ public:
     explicit            ConstList( const ConfigCoreData& rCoreData );
 
     /** Sets a default name for unknown keys. */
-    inline void         SetDefaultName( const String& rDefName ) { maDefName = rDefName; }
+    inline void         SetDefaultName( const StringWrapper& rDefName ) { maDefName = rDefName.GetString(); }
     /** Enables or disables automatic quotation of returned names. */
     inline void         SetQuoteNames( bool bQuoteNames ) { mbQuoteNames = bQuoteNames; }
 
 protected:
     virtual void        ImplProcessConfigItemStr( SvStream& rStrm, const String& rKey, const String& rData );
 
+    /** Sets the name for the passed key. */
+    virtual void        ImplSetName( sal_Int64 nKey, const String& rName );
     /** Returns the name for the passed key, or the default name, if key is not contained. */
     virtual String      ImplGetName( const Config& rCfg, sal_Int64 nKey ) const;
+    /** Returns the name for the passed double value. */
+    virtual String      ImplGetName( const Config& rCfg, double fValue ) const;
     /** Inserts all names from the passed list. */
     virtual void        ImplIncludeList( const NameListBase& rList );
 
@@ -498,11 +528,14 @@ class MultiList : public ConstList
 public:
     explicit            MultiList( const ConfigCoreData& rCoreData );
 
-    void                InsertNames( sal_Int64 nStartKey, const ScfStringVec& rNames );
+    void                SetNamesFromVec( sal_Int64 nStartKey, const ScfStringVec& rNames );
 
 protected:
     virtual void        ImplProcessConfigItemStr( SvStream& rStrm, const String& rKey, const String& rData );
-    virtual void        ImplProcessConfigItemInt( SvStream& rStrm, sal_Int64 nKey, const String& rData );
+    virtual void        ImplSetName( sal_Int64 nKey, const String& rName );
+
+private:
+    void                InsertNames( sal_Int64 nStartKey, const String& rData );
 
 private:
     bool                mbIgnoreEmpty;
@@ -523,8 +556,12 @@ public:
 protected:
     virtual void        ImplProcessConfigItemStr( SvStream& rStrm, const String& rKey, const String& rData );
 
+    /** Sets the name for the passed key. */
+    virtual void        ImplSetName( sal_Int64 nKey, const String& rName );
     /** Returns the name for the passed key. */
     virtual String      ImplGetName( const Config& rCfg, sal_Int64 nKey ) const;
+    /** Returns the name for the passed double value. */
+    virtual String      ImplGetName( const Config& rCfg, double fValue ) const;
     /** Inserts all flags from the passed list. */
     virtual void        ImplIncludeList( const NameListBase& rList );
 
@@ -540,9 +577,9 @@ public:
     explicit            CombiList( const ConfigCoreData& rCoreData );
 
 protected:
-    virtual void        ImplProcessConfigItemInt( SvStream& rStrm, sal_Int64 nKey, const String& rData );
-
-    /** Returns the name for the passed key, or the default name, if key is not contained. */
+    /** Sets the name for the passed key. */
+    virtual void        ImplSetName( sal_Int64 nKey, const String& rName );
+    /** Returns the name for the passed key. */
     virtual String      ImplGetName( const Config& rCfg, sal_Int64 nKey ) const;
     /** Inserts all flags from the passed list. */
     virtual void        ImplIncludeList( const NameListBase& rList );
@@ -559,12 +596,16 @@ class UnitConverter : public NameListBase
 public:
     explicit            UnitConverter( const ConfigCoreData& rCoreData );
 
-    inline void         SetUnitName( const String& rUnitName ) { maUnitName = rUnitName; }
+    inline void         SetUnitName( const StringWrapper& rUnitName ) { maUnitName = rUnitName.GetString(); }
     inline void         SetFactor( double fFactor ) { mfFactor = fFactor; }
 
 protected:
+    /** Sets the name for the passed key. */
+    virtual void        ImplSetName( sal_Int64 nKey, const String& rName );
     /** Returns the converted value with appended unit name. */
     virtual String      ImplGetName( const Config& rCfg, sal_Int64 nKey ) const;
+    /** Returns the converted value with appended unit name. */
+    virtual String      ImplGetName( const Config& rCfg, double fValue ) const;
     /** Empty implementation. */
     virtual void        ImplIncludeList( const NameListBase& rList );
 
@@ -572,6 +613,26 @@ private:
     String              maUnitName;
     double              mfFactor;
 };
+
+// ============================================================================
+
+class NameListWrapper
+{
+public:
+    inline              NameListWrapper() {}
+    inline /*implicit*/ NameListWrapper( const String& rListName ) : maNameWrp( rListName ) {}
+    inline /*implicit*/ NameListWrapper( const sal_Char* pcListName ) : maNameWrp( pcListName ) {}
+    inline /*implicit*/ NameListWrapper( NameListRef xList ) : mxList( xList ) {}
+
+    inline bool         Empty() const { return !mxList && maNameWrp.Empty(); }
+    NameListRef         GetNameList( const Config& rCfg ) const;
+
+private:
+    StringWrapper       maNameWrp;
+    mutable NameListRef mxList;
+};
+
+static const NameListWrapper NO_LIST;
 
 // ============================================================================
 // ============================================================================
@@ -599,6 +660,8 @@ protected:
     virtual void        ImplProcessConfigItemStr( SvStream& rStrm, const String& rKey, const String& rData );
 
 private:
+    void                ConstructOwn();
+
     template< typename ListType >
     void                ReadNameList( SvStream& rStrm, const String& rListName );
     void                CreateShortList( const String& rData );
@@ -645,54 +708,28 @@ public:
     explicit            Config( const sal_Char* pcEnvVar );
     virtual             ~Config();
 
-    const String&       GetStringOption( const sal_Char* pcKey, const String& rDefault ) const;
-    bool                GetBoolOption( const sal_Char* pcKey, bool bDefault ) const;
+    void                SetStringOption( const StringWrapper& rKey, const StringWrapper& rData );
+
+    const String&       GetStringOption( const StringWrapper& rKey, const String& rDefault ) const;
+    bool                GetBoolOption( const StringWrapper& rKey, bool bDefault ) const;
     template< typename Type >
-    Type                GetIntOption( const sal_Char* pcKey, Type nDefault ) const;
+    Type                GetIntOption( const StringWrapper& rKey, Type nDefault ) const;
 
     bool                IsDumperEnabled() const;
     bool                IsImportEnabled() const;
-    bool                IsExtractStorage() const;
 
     template< typename ListType >
-    ScfRef< ListType >  CreateNameList( const String& rListName );
-    template< typename ListType >
-    ScfRef< ListType >  CreateNameList( const sal_Char* pcListName );
-
-    void                SetNameList( const String& rListName, NameListRef xList );
-    void                SetNameList( const sal_Char* pcListName, NameListRef xList );
-
-    void                EraseNameList( const String& rListName );
-    void                EraseNameList( const sal_Char* pcListName );
-
-    NameListRef         GetNameList( const String& rListName ) const;
-    NameListRef         GetNameList( const sal_Char* pcListName ) const;
+    ScfRef< ListType >  CreateNameList( const StringWrapper& rListName );
+    void                SetNameList( const StringWrapper& rListName, NameListRef xList );
+    void                EraseNameList( const StringWrapper& rListName );
+    NameListRef         GetNameList( const StringWrapper& rListName ) const;
 
     /** Returns the name for the passed key from the passed name list. */
     template< typename Type >
-    inline String       GetName( NameListRef xList, Type nKey ) const
-        { return xList.is() ? xList->GetName( *this, nKey ) : SCF_DUMP_ERR_NOMAP; }
-    /** Returns the name for the passed key from the specified name list. */
-    template< typename Type >
-    inline String       GetName( const String& rListName, Type nKey ) const
-        { return GetName( GetNameList( rListName ), nKey ); }
-    /** Returns the name for the passed key from the specified name list. */
-    template< typename Type >
-    inline String       GetName( const sal_Char* pcListName, Type nKey ) const
-        { return GetName( GetNameList( pcListName ), nKey ); }
-
+    String              GetName( const NameListWrapper& rListWrp, Type nKey ) const;
     /** Returns true, if the passed name list contains an entry for the passed key. */
     template< typename Type >
-    inline bool         HasName( NameListRef xList, Type nKey ) const
-        { return xList.is() && xList->HasName( nKey ); }
-    /** Returns true, if the specified name list contains an entry for the passed key. */
-    template< typename Type >
-    inline bool         HasName( const String& rListName, Type nKey ) const
-        { return HasName( GetNameList( rListName ), nKey ); }
-    /** Returns true, if the specified name list contains an entry for the passed key. */
-    template< typename Type >
-    inline bool         HasName( const sal_Char* pcListName, Type nKey ) const
-        { return HasName( GetNameList( pcListName ), nKey ); }
+    bool                HasName( const NameListWrapper& rList, Type nKey ) const;
 
 protected:
     inline explicit     Config() {}
@@ -714,24 +751,32 @@ typedef ScfRef< Config > ConfigRef;
 // ----------------------------------------------------------------------------
 
 template< typename Type >
-Type Config::GetIntOption( const sal_Char* pcKey, Type nDefault ) const
+Type Config::GetIntOption( const StringWrapper& rKey, Type nDefault ) const
 {
     sal_Int64 nRawData;
-    const String* pData = ImplGetOption( String::CreateFromAscii( pcKey ) );
+    const String* pData = ImplGetOption( rKey.GetString() );
     return (pData && StringHelper::ConvertStringToInt( nRawData, *pData )) ?
         static_cast< Type >( nRawData ) : nDefault;
 }
 
 template< typename ListType >
-ScfRef< ListType > Config::CreateNameList( const String& rListName )
+ScfRef< ListType > Config::CreateNameList( const StringWrapper& rListName )
 {
-    return mxCoreData->CreateNameList< ListType >( rListName );
+    return mxCoreData->CreateNameList< ListType >( rListName.GetString() );
 }
 
-template< typename ListType >
-ScfRef< ListType > Config::CreateNameList( const sal_Char* pcListName )
+template< typename Type >
+String Config::GetName( const NameListWrapper& rListWrp, Type nKey ) const
 {
-    return CreateNameList< ListType >( String::CreateFromAscii( pcListName ) );
+    NameListRef xList = rListWrp.GetNameList( *this );
+    return xList.is() ? xList->GetName( *this, nKey ) : SCF_DUMP_ERR_NOMAP;
+}
+
+template< typename Type >
+bool Config::HasName( const NameListWrapper& rListWrp, Type nKey ) const
+{
+    NameListRef xList = rListWrp.GetNameList( *this );
+    return xList.is() && xList->HasName( nKey );
 }
 
 // ============================================================================
@@ -778,6 +823,7 @@ public:
     virtual Input&      operator>>( float& rfData ) = 0;
     virtual Input&      operator>>( double& rfData ) = 0;
 
+    inline bool         IsValidPos() const { return Tell() < Size(); }
     template< typename Type >
     inline Type         ReadValue() { Type nValue; *this >> nValue; return nValue; }
 
@@ -848,6 +894,7 @@ public:
     void                Tab( size_t nCol );
     void                EndTable();
 
+    void                ResetItemIndex( sal_Int64 nIdx = 0 );
     void                StartItem( const sal_Char* pcName = 0 );
     void                ContItem();
     void                EndItem();
@@ -855,9 +902,6 @@ public:
 
     void                StartMultiItems();
     void                EndMultiItems();
-
-    void                StartIndexedItems( size_t nStart = 0 );
-    void                EndIndexedItems();
 
     // ------------------------------------------------------------------------
 
@@ -867,11 +911,12 @@ public:
     void                WriteArray( const sal_uInt8* pnData, sal_Size nSize, sal_Unicode cSep = ',' );
     void                WriteBool( bool bData );
     void                WriteColor( const Color& rColor );
+    void                WriteDateTime( const DateTime& rDateTime );
 
 
     template< typename Type >
-    inline void         WriteDec( Type nData, xub_StrLen nWidth = 0 )
-                            { StringHelper::AppendDec( maLine, nData, nWidth ); }
+    inline void         WriteDec( Type nData, xub_StrLen nWidth = 0, sal_Unicode cFill = ' ' )
+                            { StringHelper::AppendDec( maLine, nData, nWidth, cFill ); }
     template< typename Type >
     inline void         WriteHex( Type nData, bool bPrefix = true )
                             { StringHelper::AppendHex( maLine, nData, bPrefix ); }
@@ -885,8 +930,8 @@ public:
     inline void         WriteValue( Type nData, FormatType eFmtType )
                             { StringHelper::AppendValue( maLine, nData, eFmtType ); }
     template< typename Type >
-    inline void         WriteName( const Config& rCfg, NameListRef xList, Type nData )
-                            { WriteString( rCfg.GetName( xList, nData ) ); }
+    inline void         WriteName( const Config& rCfg, Type nData, const NameListWrapper& rListWrp )
+                            { WriteString( rCfg.GetName( rListWrp, nData ) ); }
 
     // ------------------------------------------------------------------------
 protected:
@@ -897,7 +942,6 @@ private:
 
 private:
     typedef ::std::vector< xub_StrLen > StringLenVec;
-    typedef ::std::vector< size_t >     SizeVec;
 
     SvStream&           mrStrm;
     String              maPrefix;
@@ -906,10 +950,10 @@ private:
     String              maLine;
     String              maLastItem;
     StringLenVec        maColPos;
-    SizeVec             maIndexes;
     size_t              mnCol;
     size_t              mnItemLevel;
     size_t              mnMultiLevel;
+    sal_Int64           mnItemIdx;
     xub_StrLen          mnLastItem;
 };
 
@@ -986,18 +1030,6 @@ private:
     Output&             mrOut;
 };
 
-// ----------------------------------------------------------------------------
-
-class IndexedItemsGuard : private ScfNoCopy
-{
-public:
-    inline explicit     IndexedItemsGuard( Output& rOut, size_t nStart = 0 ) :
-                            mrOut( rOut ) { mrOut.StartIndexedItems( nStart ); }
-    inline              ~IndexedItemsGuard() { mrOut.EndIndexedItems(); }
-private:
-    Output&             mrOut;
-};
-
 // ============================================================================
 // ============================================================================
 
@@ -1033,49 +1065,34 @@ protected:
     inline CoreData&    Core() const { return *mxCore; }
     inline Output&      Out() const { return *mxOut; }
 
-    inline NameListRef  GetNameList( const String& rListName ) const { return mxConfig->GetNameList( rListName ); }
-    inline NameListRef  GetNameList( const sal_Char* pcListName ) const { return mxConfig->GetNameList( pcListName ); }
-
     // ------------------------------------------------------------------------
 
     void                WriteEmptyItem( const sal_Char* pcName );
-    void                WriteInfoItem( const sal_Char* pcName, const sal_Char* pcData );
-    void                WriteInfoItem( const sal_Char* pcName, const String& rData );
+    void                WriteInfoItem( const sal_Char* pcName, const StringWrapper& rData );
     void                WriteStringItem( const sal_Char* pcName, const String& rData );
     void                WriteArrayItem( const sal_Char* pcName, const sal_uInt8* pnData, sal_Size nSize, sal_Unicode cSep = ',' );
     void                WriteBoolItem( const sal_Char* pcName, bool bData );
     void                WriteColorItem( const sal_Char* pcName, const Color& rColor );
+    void                WriteDateTimeItem( const sal_Char* pcName, const DateTime& rDateTime );
+    void                WriteGuidItem( const sal_Char* pcName, const String& rGuid );
 
     template< typename Type >
-    void                WriteDecItem( const sal_Char* pcName, Type nData );
-    template< typename Type >
-    void                WriteHexItem( const sal_Char* pcName, Type nData, bool bPrefix = true );
-    template< typename Type >
-    void                WriteBinItem( const sal_Char* pcName, Type nData, bool bDots = true );
-    template< typename Type >
-    void                WriteFixItem( const sal_Char* pcName, Type nData );
-    template< typename Type >
-    void                WriteDecBoolItem( const sal_Char* pcName, Type nData );
-    template< typename Type >
-    void                WriteValueItem( const sal_Char* pcName, Type nData, FormatType eFmtType );
+    void                AddNameToItem( Type nData, const NameListWrapper& rListWrp );
 
     template< typename Type >
-    void                WriteNameItem( const sal_Char* pcName, NameListRef xList, Type nData );
+    void                WriteNameItem( const sal_Char* pcName, Type nData, const NameListWrapper& rListWrp );
     template< typename Type >
-    void                WriteDecItem( const sal_Char* pcName, NameListRef xList, Type nData );
+    void                WriteDecItem( const sal_Char* pcName, Type nData, const NameListWrapper& rListWrp = NO_LIST );
     template< typename Type >
-    void                WriteHexItem( const sal_Char* pcName, NameListRef xList, Type nData, bool bPrefix = true );
+    void                WriteHexItem( const sal_Char* pcName, Type nData, const NameListWrapper& rListWrp = NO_LIST );
     template< typename Type >
-    void                WriteValueItem( const sal_Char* pcName, NameListRef xList, Type nData, FormatType eFmtType );
-
+    void                WriteBinItem( const sal_Char* pcName, Type nData, const NameListWrapper& rListWrp = NO_LIST );
     template< typename Type >
-    void                WriteNameItem( const sal_Char* pcName, const sal_Char* pcList, Type nData );
+    void                WriteFixItem( const sal_Char* pcName, Type nData, const NameListWrapper& rListWrp = NO_LIST );
     template< typename Type >
-    void                WriteDecItem( const sal_Char* pcName, const sal_Char* pcList, Type nData );
+    void                WriteDecBoolItem( const sal_Char* pcName, Type nData, const NameListWrapper& rListWrp = NO_LIST );
     template< typename Type >
-    void                WriteHexItem( const sal_Char* pcName, const sal_Char* pcList, Type nData, bool bPrefix = true );
-    template< typename Type >
-    void                WriteValueItem( const sal_Char* pcName, const sal_Char* pcList, Type nData, FormatType eFmtType );
+    void                WriteValueItem( const sal_Char* pcName, Type nData, FormatType eFmtType, const NameListWrapper& rListWrp = NO_LIST );
 
     template< typename Type >
     void                WriteValueItem( const ItemFormat& rItemFmt, Type nData );
@@ -1091,114 +1108,82 @@ typedef ScfRef< ObjectBase > ObjectRef;
 // ----------------------------------------------------------------------------
 
 template< typename Type >
-void ObjectBase::WriteDecItem( const sal_Char* pcName, Type nData )
+void ObjectBase::AddNameToItem( Type nData, const NameListWrapper& rListWrp )
+{
+    if( !rListWrp.Empty() )
+    {
+        mxOut->ContItem();
+        mxOut->WriteName( *mxConfig, nData, rListWrp );
+    }
+}
+
+template< typename Type >
+void ObjectBase::WriteNameItem( const sal_Char* pcName, Type nData, const NameListWrapper& rListWrp )
+{
+    ItemGuard aItem( *mxOut, pcName );
+    mxOut->WriteName( *mxConfig, nData, rListWrp );
+}
+
+template< typename Type >
+void ObjectBase::WriteDecItem( const sal_Char* pcName, Type nData, const NameListWrapper& rListWrp )
 {
     ItemGuard aItem( *mxOut, pcName );
     mxOut->WriteDec( nData );
+    AddNameToItem( nData, rListWrp );
 }
 
 template< typename Type >
-void ObjectBase::WriteHexItem( const sal_Char* pcName, Type nData, bool bPrefix )
+void ObjectBase::WriteHexItem( const sal_Char* pcName, Type nData, const NameListWrapper& rListWrp )
 {
     ItemGuard aItem( *mxOut, pcName );
-    mxOut->WriteHex( nData, bPrefix );
+    mxOut->WriteHex( nData );
+    AddNameToItem( nData, rListWrp );
 }
 
 template< typename Type >
-void ObjectBase::WriteBinItem( const sal_Char* pcName, Type nData, bool bDots )
+void ObjectBase::WriteBinItem( const sal_Char* pcName, Type nData, const NameListWrapper& rListWrp )
 {
     ItemGuard aItem( *mxOut, pcName );
-    mxOut->WriteBin( nData, bDots );
+    mxOut->WriteBin( nData );
+    AddNameToItem( nData, rListWrp );
 }
 
 template< typename Type >
-void ObjectBase::WriteFixItem( const sal_Char* pcName, Type nData )
+void ObjectBase::WriteFixItem( const sal_Char* pcName, Type nData, const NameListWrapper& rListWrp )
 {
     ItemGuard aItem( *mxOut, pcName );
     mxOut->WriteFix( nData );
+    AddNameToItem( nData, rListWrp );
 }
 
 template< typename Type >
-void ObjectBase::WriteDecBoolItem( const sal_Char* pcName, Type nData )
+void ObjectBase::WriteDecBoolItem( const sal_Char* pcName, Type nData, const NameListWrapper& rListWrp )
 {
     ItemGuard aItem( *mxOut, pcName );
-    WriteDecItem( 0, nData );
+    mxOut->WriteDec( nData );
+    aItem.Cont();
     mxOut->WriteBool( nData != 0 );
+    AddNameToItem( nData, rListWrp );
 }
 
 template< typename Type >
-void ObjectBase::WriteValueItem( const sal_Char* pcName, Type nData, FormatType eFmtType )
+void ObjectBase::WriteValueItem( const sal_Char* pcName, Type nData, FormatType eFmtType, const NameListWrapper& rListWrp )
 {
-    ItemGuard aItem( *mxOut, pcName );
     if( eFmtType == FORMATTYPE_BOOL )
-        WriteDecBoolItem( 0, nData );
+        WriteDecBoolItem( pcName, nData, rListWrp );
     else
+    {
+        ItemGuard aItem( *mxOut, pcName );
         mxOut->WriteValue( nData, eFmtType );
-}
-
-template< typename Type >
-void ObjectBase::WriteNameItem( const sal_Char* pcName, NameListRef xList, Type nData )
-{
-    ItemGuard aItem( *mxOut, pcName );
-    mxOut->WriteString( mxConfig->GetName( xList, nData ) );
-}
-
-template< typename Type >
-void ObjectBase::WriteDecItem( const sal_Char* pcName, NameListRef xList, Type nData )
-{
-    ItemGuard aItem( *mxOut, pcName );
-    WriteDecItem( 0, nData );
-    WriteNameItem( 0, xList, nData );
-}
-
-template< typename Type >
-void ObjectBase::WriteHexItem( const sal_Char* pcName, NameListRef xList, Type nData, bool bPrefix )
-{
-    ItemGuard aItem( *mxOut, pcName );
-    WriteHexItem( 0, nData, bPrefix );
-    WriteNameItem( 0, xList, nData );
-}
-
-template< typename Type >
-void ObjectBase::WriteValueItem( const sal_Char* pcName, NameListRef xList, Type nData, FormatType eFmtType )
-{
-    ItemGuard aItem( *mxOut, pcName );
-    WriteValueItem( 0, nData, eFmtType );
-    WriteNameItem( 0, xList, nData );
-}
-
-template< typename Type >
-void ObjectBase::WriteNameItem( const sal_Char* pcName, const sal_Char* pcList, Type nData )
-{
-    WriteNameItem( pcName, GetNameList( pcList ), nData );
-}
-
-template< typename Type >
-void ObjectBase::WriteDecItem( const sal_Char* pcName, const sal_Char* pcList, Type nData )
-{
-    WriteDecItem( pcName, GetNameList( pcList ), nData );
-}
-
-template< typename Type >
-void ObjectBase::WriteHexItem( const sal_Char* pcName, const sal_Char* pcList, Type nData, bool bPrefix )
-{
-    WriteHexItem( pcName, GetNameList( pcList ), nData, bPrefix );
-}
-
-template< typename Type >
-void ObjectBase::WriteValueItem( const sal_Char* pcName, const sal_Char* pcList, Type nData, FormatType eFmtType )
-{
-    WriteValueItem( pcName, GetNameList( pcList ), nData, eFmtType );
+        AddNameToItem( nData, rListWrp );
+    }
 }
 
 template< typename Type >
 void ObjectBase::WriteValueItem( const ItemFormat& rItemFmt, Type nData )
 {
-    const sal_Char* pcName = rItemFmt.maItemNameUtf8.GetBuffer();
-    if( rItemFmt.maListName.Len() > 0 )
-        WriteValueItem( pcName, GetNameList( rItemFmt.maListName ), nData, rItemFmt.meFmtType );
-    else
-        WriteValueItem( pcName, nData, rItemFmt.meFmtType );
+    WriteValueItem( rItemFmt.maItemNameUtf8.GetBuffer(),
+        nData, rItemFmt.meFmtType, rItemFmt.maListName );
 }
 
 // ============================================================================
@@ -1227,73 +1212,49 @@ protected:
     // ------------------------------------------------------------------------
 
     void                SkipBlock( sal_Size nSize, bool bShowSize = true );
-    void                DumpRawBinary( sal_Size nSize, bool bShowOffset = true );
+    void                DumpRawBinary( sal_Size nSize, bool bShowOffset = true, bool bStream = false );
 
     void                DumpBinary( const sal_Char* pcName, sal_Size nSize, bool bShowOffset = true );
     void                DumpArray( const sal_Char* pcName, sal_Size nSize, sal_Unicode cSep = ',' );
+    void                DumpRemaining( sal_Size nSize );
     inline void         DumpUnused( sal_Size nSize ) { DumpArray( SCF_DUMP_UNUSED, nSize ); }
     inline void         DumpUnknown( sal_Size nSize ) { DumpArray( SCF_DUMP_UNKNOWN, nSize ); }
 
     void                DumpBinaryStream( bool bShowOffset = true );
     void                DumpTextStream( rtl_TextEncoding eEnc, bool bShowLines = true );
 
-    template< typename Type >
-    Type                DumpDec( const sal_Char* pcName );
-    template< typename Type >
-    Type                DumpHex( const sal_Char* pcName, bool bPrefix = true );
-    template< typename Type >
-    Type                DumpBin( const sal_Char* pcName, bool bDots = true );
-    template< typename Type >
-    Type                DumpFix( const sal_Char* pcName );
-    template< typename Type >
-    Type                DumpBool( const sal_Char* pcName );
+    String              DumpGuid( const sal_Char* pcName );
+    void                DumpItem( const ItemFormat& rItemFmt );
 
     template< typename Type >
-    Type                DumpName( const sal_Char* pcName, NameListRef xList );
+    Type                DumpName( const sal_Char* pcName, const NameListWrapper& rListWrp );
     template< typename Type >
-    Type                DumpDec( const sal_Char* pcName, NameListRef xList );
+    Type                DumpDec( const sal_Char* pcName, const NameListWrapper& rListWrp = NO_LIST );
     template< typename Type >
-    Type                DumpHex( const sal_Char* pcName, NameListRef xList, bool bPrefix = true );
-
+    Type                DumpHex( const sal_Char* pcName, const NameListWrapper& rListWrp = NO_LIST );
     template< typename Type >
-    Type                DumpName( const sal_Char* pcName, const sal_Char* pcList );
+    Type                DumpBin( const sal_Char* pcName, const NameListWrapper& rListWrp = NO_LIST );
     template< typename Type >
-    Type                DumpDec( const sal_Char* pcName, const sal_Char* pcList );
+    Type                DumpFix( const sal_Char* pcName, const NameListWrapper& rListWrp = NO_LIST );
     template< typename Type >
-    Type                DumpHex( const sal_Char* pcName, const sal_Char* pcList, bool bPrefix = true );
-
+    Type                DumpBool( const sal_Char* pcName, const NameListWrapper& rListWrp = NO_LIST );
     template< typename Type >
     Type                DumpValue( const ItemFormat& rItemFmt );
 
     template< typename Type1, typename Type2 >
-    Type1               DumpDec( bool bType1, const sal_Char* pcName );
+    Type1               DumpName( bool bType1, const sal_Char* pcName, const NameListWrapper& rListWrp = NO_LIST );
     template< typename Type1, typename Type2 >
-    Type1               DumpHex( bool bType1, const sal_Char* pcName, bool bPrefix = true );
+    Type1               DumpDec( bool bType1, const sal_Char* pcName, const NameListWrapper& rListWrp = NO_LIST );
     template< typename Type1, typename Type2 >
-    Type1               DumpBin( bool bType1, const sal_Char* pcName, bool bDots = true );
+    Type1               DumpHex( bool bType1, const sal_Char* pcName, const NameListWrapper& rListWrp = NO_LIST );
     template< typename Type1, typename Type2 >
-    Type1               DumpFix( bool bType1, const sal_Char* pcName );
+    Type1               DumpBin( bool bType1, const sal_Char* pcName, const NameListWrapper& rListWrp = NO_LIST );
     template< typename Type1, typename Type2 >
-    Type1               DumpBool( bool bType1, const sal_Char* pcName );
-
+    Type1               DumpFix( bool bType1, const sal_Char* pcName, const NameListWrapper& rListWrp = NO_LIST );
     template< typename Type1, typename Type2 >
-    Type1               DumpName( bool bType1, const sal_Char* pcName, NameListRef xList );
-    template< typename Type1, typename Type2 >
-    Type1               DumpDec( bool bType1, const sal_Char* pcName, NameListRef xList );
-    template< typename Type1, typename Type2 >
-    Type1               DumpHex( bool bType1, const sal_Char* pcName, NameListRef xList, bool bPrefix = true );
-
-    template< typename Type1, typename Type2 >
-    Type1               DumpName( bool bType1, const sal_Char* pcName, const sal_Char* pcList );
-    template< typename Type1, typename Type2 >
-    Type1               DumpDec( bool bType1, const sal_Char* pcName, const sal_Char* pcList );
-    template< typename Type1, typename Type2 >
-    Type1               DumpHex( bool bType1, const sal_Char* pcName, const sal_Char* pcList, bool bPrefix = true );
-
+    Type1               DumpBool( bool bType1, const sal_Char* pcName, const NameListWrapper& rListWrp = NO_LIST );
     template< typename Type1, typename Type2 >
     Type1               DumpValue( bool bType1, const ItemFormat& rItemFmt );
-
-    void                DumpItem( const ItemFormat& rItemFmt );
 
     // ------------------------------------------------------------------------
 private:
@@ -1305,93 +1266,57 @@ typedef ScfRef< InputObjectBase > InputObjectRef;
 // ----------------------------------------------------------------------------
 
 template< typename Type >
-Type InputObjectBase::DumpDec( const sal_Char* pcName )
+Type InputObjectBase::DumpName( const sal_Char* pcName, const NameListWrapper& rListWrp )
 {
     Type nData;
     *mxIn >> nData;
-    WriteDecItem( pcName, nData );
+    WriteNameItem( pcName, nData, rListWrp );
     return nData;
 }
 
 template< typename Type >
-Type InputObjectBase::DumpHex( const sal_Char* pcName, bool bPrefix )
+Type InputObjectBase::DumpDec( const sal_Char* pcName, const NameListWrapper& rListWrp )
 {
     Type nData;
     *mxIn >> nData;
-    WriteHexItem( pcName, nData, bPrefix );
+    WriteDecItem( pcName, nData, rListWrp );
     return nData;
 }
 
 template< typename Type >
-Type InputObjectBase::DumpBin( const sal_Char* pcName, bool bDots )
+Type InputObjectBase::DumpHex( const sal_Char* pcName, const NameListWrapper& rListWrp )
 {
     Type nData;
     *mxIn >> nData;
-    WriteBinItem( pcName, nData, bDots );
+    WriteHexItem( pcName, nData, rListWrp );
     return nData;
 }
 
 template< typename Type >
-Type InputObjectBase::DumpFix( const sal_Char* pcName )
+Type InputObjectBase::DumpBin( const sal_Char* pcName, const NameListWrapper& rListWrp )
 {
     Type nData;
     *mxIn >> nData;
-    WriteFixItem( pcName, nData );
+    WriteBinItem( pcName, nData, rListWrp );
     return nData;
 }
 
 template< typename Type >
-Type InputObjectBase::DumpBool( const sal_Char* pcName )
+Type InputObjectBase::DumpFix( const sal_Char* pcName, const NameListWrapper& rListWrp )
 {
     Type nData;
     *mxIn >> nData;
-    WriteDecBoolItem( pcName, nData );
+    WriteFixItem( pcName, nData, rListWrp );
     return nData;
 }
 
 template< typename Type >
-Type InputObjectBase::DumpName( const sal_Char* pcName, NameListRef xList )
+Type InputObjectBase::DumpBool( const sal_Char* pcName, const NameListWrapper& rListWrp )
 {
     Type nData;
     *mxIn >> nData;
-    WriteNameItem( pcName, xList, nData );
+    WriteDecBoolItem( pcName, nData, rListWrp );
     return nData;
-}
-
-template< typename Type >
-Type InputObjectBase::DumpDec( const sal_Char* pcName, NameListRef xList )
-{
-    Type nData;
-    *mxIn >> nData;
-    WriteDecItem( pcName, xList, nData );
-    return nData;
-}
-
-template< typename Type >
-Type InputObjectBase::DumpHex( const sal_Char* pcName, NameListRef xList, bool bPrefix )
-{
-    Type nData;
-    *mxIn >> nData;
-    WriteHexItem( pcName, xList, nData, bPrefix );
-    return nData;
-}
-
-template< typename Type >
-Type InputObjectBase::DumpName( const sal_Char* pcName, const sal_Char* pcList )
-{
-    return DumpName< Type >( pcName, Cfg().GetNameList( pcList ) );
-}
-
-template< typename Type >
-Type InputObjectBase::DumpDec( const sal_Char* pcName, const sal_Char* pcList )
-{
-    return DumpDec< Type >( pcName, Cfg().GetNameList( pcList ) );
-}
-
-template< typename Type >
-Type InputObjectBase::DumpHex( const sal_Char* pcName, const sal_Char* pcList, bool bPrefix )
-{
-    return DumpHex< Type >( pcName, Cfg().GetNameList( pcList ), bPrefix );
 }
 
 template< typename Type >
@@ -1404,69 +1329,39 @@ Type InputObjectBase::DumpValue( const ItemFormat& rItemFmt )
 }
 
 template< typename Type1, typename Type2 >
-Type1 InputObjectBase::DumpDec( bool bType1, const sal_Char* pcName )
+Type1 InputObjectBase::DumpName( bool bType1, const sal_Char* pcName, const NameListWrapper& rListWrp )
 {
-    return bType1 ? DumpDec< Type1 >( pcName ) : static_cast< Type1 >( DumpDec< Type2 >( pcName ) );
+    return bType1 ? DumpName< Type1 >( pcName, rListWrp ) : static_cast< Type1 >( DumpName< Type2 >( pcName, rListWrp ) );
 }
 
 template< typename Type1, typename Type2 >
-Type1 InputObjectBase::DumpHex( bool bType1, const sal_Char* pcName, bool bPrefix )
+Type1 InputObjectBase::DumpDec( bool bType1, const sal_Char* pcName, const NameListWrapper& rListWrp )
 {
-    return bType1 ? DumpHex< Type1 >( pcName, bPrefix ) : static_cast< Type1 >( DumpHex< Type2 >( pcName, bPrefix ) );
+    return bType1 ? DumpDec< Type1 >( pcName, rListWrp ) : static_cast< Type1 >( DumpDec< Type2 >( pcName, rListWrp ) );
 }
 
 template< typename Type1, typename Type2 >
-Type1 InputObjectBase::DumpBin( bool bType1, const sal_Char* pcName, bool bDots )
+Type1 InputObjectBase::DumpHex( bool bType1, const sal_Char* pcName, const NameListWrapper& rListWrp )
 {
-    return bType1 ? DumpBin< Type1 >( pcName, bDots ) : static_cast< Type1 >( DumpBin< Type2 >( pcName, bDots ) );
+    return bType1 ? DumpHex< Type1 >( pcName, rListWrp ) : static_cast< Type1 >( DumpHex< Type2 >( pcName, rListWrp ) );
 }
 
 template< typename Type1, typename Type2 >
-Type1 InputObjectBase::DumpFix( bool bType1, const sal_Char* pcName )
+Type1 InputObjectBase::DumpBin( bool bType1, const sal_Char* pcName, const NameListWrapper& rListWrp )
 {
-    return bType1 ? DumpFix< Type1 >( pcName ) : static_cast< Type1 >( DumpFix< Type2 >( pcName ) );
+    return bType1 ? DumpBin< Type1 >( pcName, rListWrp ) : static_cast< Type1 >( DumpBin< Type2 >( pcName, rListWrp ) );
 }
 
 template< typename Type1, typename Type2 >
-Type1 InputObjectBase::DumpBool( bool bType1, const sal_Char* pcName )
+Type1 InputObjectBase::DumpFix( bool bType1, const sal_Char* pcName, const NameListWrapper& rListWrp )
 {
-    return bType1 ? DumpBool< Type1 >( pcName ) : static_cast< Type1 >( DumpBool< Type2 >( pcName ) );
+    return bType1 ? DumpFix< Type1 >( pcName, rListWrp ) : static_cast< Type1 >( DumpFix< Type2 >( pcName, rListWrp ) );
 }
 
 template< typename Type1, typename Type2 >
-Type1 InputObjectBase::DumpName( bool bType1, const sal_Char* pcName, NameListRef xList )
+Type1 InputObjectBase::DumpBool( bool bType1, const sal_Char* pcName, const NameListWrapper& rListWrp )
 {
-    return bType1 ? DumpName< Type1 >( pcName, xList ) : static_cast< Type1 >( DumpName< Type2 >( pcName, xList ) );
-}
-
-template< typename Type1, typename Type2 >
-Type1 InputObjectBase::DumpDec( bool bType1, const sal_Char* pcName, NameListRef xList )
-{
-    return bType1 ? DumpDec< Type1 >( pcName, xList ) : static_cast< Type1 >( DumpDec< Type2 >( pcName, xList ) );
-}
-
-template< typename Type1, typename Type2 >
-Type1 InputObjectBase::DumpHex( bool bType1, const sal_Char* pcName, NameListRef xList, bool bPrefix )
-{
-    return bType1 ? DumpHex< Type1 >( pcName, xList, bPrefix ) : static_cast< Type1 >( DumpHex< Type2 >( pcName, xList, bPrefix ) );
-}
-
-template< typename Type1, typename Type2 >
-Type1 InputObjectBase::DumpName( bool bType1, const sal_Char* pcName, const sal_Char* pcList )
-{
-    return DumpName< Type1, Type2 >( bType1, pcName, Cfg().GetNameList( pcList ) );
-}
-
-template< typename Type1, typename Type2 >
-Type1 InputObjectBase::DumpDec( bool bType1, const sal_Char* pcName, const sal_Char* pcList )
-{
-    return DumpDec< Type1, Type2 >( bType1, pcName, Cfg().GetNameList( pcList ) );
-}
-
-template< typename Type1, typename Type2 >
-Type1 InputObjectBase::DumpHex( bool bType1, const sal_Char* pcName, const sal_Char* pcList, bool bPrefix )
-{
-    return DumpHex< Type1, Type2 >( bType1, pcName, Cfg().GetNameList( pcList ), bPrefix );
+    return bType1 ? DumpBool< Type1 >( pcName, rListWrp ) : static_cast< Type1 >( DumpBool< Type2 >( pcName, rListWrp ) );
 }
 
 template< typename Type1, typename Type2 >
@@ -1474,45 +1369,6 @@ Type1 InputObjectBase::DumpValue( bool bType1, const ItemFormat& rItemFmt )
 {
     return bType1 ? DumpValue< Type1 >( rItemFmt ) : static_cast< Type1 >( DumpValue< Type2 >( rItemFmt ) );
 }
-
-// ============================================================================
-// ============================================================================
-
-class OleStorageObject : public ObjectBase
-{
-public:
-    explicit            OleStorageObject( const OleStorageObject& rParentStrg, const String& rStrgName );
-    explicit            OleStorageObject( const ObjectBase& rParent, SotStorageRef xRootStrg );
-    explicit            OleStorageObject( const ObjectBase& rParent, SvStream& rRootStrm );
-    explicit            OleStorageObject( const ObjectBase& rParent );
-    virtual             ~OleStorageObject();
-
-    inline SotStorageRef GetStorage() const { return mxStrg; }
-    inline const String& GetStoragePath() const { return maPath; }
-    inline const String& GetStorageName() const { return maName; }
-    String              GetFullName() const;
-
-protected:
-    inline explicit     OleStorageObject() {}
-    void                Construct( const ObjectBase& rParent, SotStorageRef xStrg, const String& rPath );
-    void                Construct( const OleStorageObject& rParentStrg, const String& rStrgName );
-    void                Construct( const ObjectBase& rParent, SvStream& rRootStrm );
-    void                Construct( const ObjectBase& rParent );
-
-    virtual bool        ImplIsValid() const;
-    virtual void        ImplDumpHeader();
-    virtual void        ImplDumpFooter();
-
-private:
-    void                DumpStorageInfo( bool bExtended );
-
-private:
-    SotStorageRef       mxStrg;
-    String              maPath;
-    String              maName;
-};
-
-typedef ScfRef< OleStorageObject > OleStorageObjectRef;
 
 // ============================================================================
 // ============================================================================
@@ -1569,39 +1425,16 @@ typedef ScfRef< SvStreamObject > SvStreamObjectRef;
 
 // ============================================================================
 
-class OleStreamObject : public StreamObjectBase
-{
-public:
-    explicit            OleStreamObject( const OleStorageObject& rParentStrg, const String& rStrmName );
-    virtual             ~OleStreamObject();
-
-protected:
-    inline explicit     OleStreamObject() {}
-    void                Construct( const OleStorageObject& rParentStrg, const String& rStrmName );
-
-    virtual bool        ImplIsValid() const;
-
-private:
-    SotStorageStreamRef mxStrm;
-};
-
-typedef ScfRef< OleStreamObject > OleStreamObjectRef;
-
-// ============================================================================
-
 class WrappedStreamObject : public StreamObjectBase
 {
 public:
-    explicit            WrappedStreamObject( const ObjectBase& rParent, SvStream& rStrm );
-    explicit            WrappedStreamObject( const OleStorageObject& rParentStrg, const String& rStrmName );
+    explicit            WrappedStreamObject( const ObjectBase& rParent, StreamObjectRef xStrmObj );
     virtual             ~WrappedStreamObject();
 
 
 protected:
     inline explicit     WrappedStreamObject() {}
     void                Construct( const ObjectBase& rParent, StreamObjectRef xStrmObj );
-    void                Construct( const ObjectBase& rParent, SvStream& rStrm );
-    void                Construct( const OleStorageObject& rParentStrg, const String& rStrmName );
 
     virtual bool        ImplIsValid() const;
 
@@ -1623,11 +1456,6 @@ protected:
     inline explicit     DumperBase() {}
     void                Construct( ConfigRef xConfig, CoreDataRef xCore );
     void                Construct( ConfigRef xConfig, SfxMedium& rMedium, SfxObjectShell* pDocShell );
-
-private:
-    void                ExtractStorage( SfxMedium& rMedium );
-    void                ExtractStorage( SotStorageRef xStrg, const String& rDirName );
-    void                ExtractStream( SotStorageStreamRef xInStrm, const String& rFileName );
 
 private:
     typedef ScfRef< SvStream > SvStreamRef;
