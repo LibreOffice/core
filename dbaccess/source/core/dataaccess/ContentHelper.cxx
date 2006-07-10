@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ContentHelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:42:59 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:08:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -642,6 +642,18 @@ sal_Int64 OContentHelper::getSomething( const Sequence< sal_Int8 > & rId ) throw
         return reinterpret_cast<sal_Int64>(this);
 
     return 0;
+}
+
+// -----------------------------------------------------------------------------
+OContentHelper* OContentHelper::getImplementation( const Reference< XInterface >& _rxComponent )
+{
+    OContentHelper* pContent( NULL );
+
+    Reference< XUnoTunnel > xUnoTunnel( _rxComponent, UNO_QUERY );
+    if ( xUnoTunnel.is() )
+        pContent = reinterpret_cast< OContentHelper* >( xUnoTunnel->getSomething( getUnoTunnelImplementationId() ) );
+
+    return pContent;
 }
 
 // -----------------------------------------------------------------------------
