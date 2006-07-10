@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WCPage.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:21:35 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 15:36:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,9 @@
 #ifndef DBAUI_WIZARD_CPAGE_HXX
 #include "WCPage.hxx"
 #endif
+#ifndef DBACCESS_SOURCE_UI_MISC_DEFAULTOBJECTNAMECHECK_HXX
+#include "defaultobjectnamecheck.hxx"
+#endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
@@ -53,6 +56,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XRESULTSET_HPP_
 #include <com/sun/star/sdbc/XResultSet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
+#include <com/sun/star/sdb/CommandType.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
@@ -75,6 +81,9 @@
 #ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
 #endif
+#ifndef _CPPUHELPER_EXC_HLP_HXX_
+#include <cppuhelper/exc_hlp.hxx>
+#endif
 
 using namespace ::dbaui;
 using namespace ::dbtools;
@@ -82,6 +91,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 //========================================================================
@@ -134,9 +144,9 @@ OCopyTable::OCopyTable( Window * pParent, EImportMode atWhat, sal_Bool bIsView, 
                     }
                 }
             }
-            catch(const SQLException& e)
+            catch(const SQLException&)
             {
-                ::dbaui::showError(SQLExceptionInfo(e),pParent->GetParent(),m_pParent->m_xFactory);
+                ::dbaui::showError( SQLExceptionInfo( ::cppu::getCaughtException() ), m_pParent, m_pParent->m_xFactory );
             }
         }
 
@@ -264,36 +274,31 @@ sal_Bool OCopyTable::LeavePage()
     // first check if the table already exists in the database
     if( m_pParent->getCreateStyle() != OCopyTableWizard::WIZARD_APPEND_DATA )
     {
-        Reference<XTablesSupplier > xSup(m_pParent->m_xConnection,UNO_QUERY);
-        Reference<XNameAccess> xTables;
-        if ( xSup.is() )
-            xTables = xSup->getTables();
-        if ( xTables.is() && xTables->hasByName(m_edTableName.GetText()) )
+        DynamicTableOrQueryNameCheck aNameCheck( m_pParent->m_xConnection, CommandType::TABLE );
+        SQLExceptionInfo aErrorInfo;
+        if ( !aNameCheck.isNameValid( m_edTableName.GetText(), aErrorInfo ) )
         {
-            String aInfoString( ModuleRes(STR_ERR_DUPL_TABLENAME) );
-            aInfoString.SearchAndReplaceAscii("$name$",m_edTableName.GetText());
-            InfoBox aNameInfoBox( this, aInfoString );
-            aNameInfoBox.Execute();
+            aErrorInfo.append( SQLExceptionInfo::SQL_CONTEXT, String( ModuleRes( STR_SUGGEST_APPEND_TABLE_DATA ) ) );
+            ::dbaui::showError( aErrorInfo, m_pParent, m_pParent->m_xFactory );
             return sal_False;
         }
-        else // we have to check the length of the table name
+
+        // have to check the length of the table name
+        Reference<XDatabaseMetaData> xMeta = m_pParent->m_xConnection->getMetaData();
+        ::rtl::OUString sCatalog;
+        ::rtl::OUString sSchema;
+        ::rtl::OUString sTable;
+        ::dbtools::qualifiedNameComponents( xMeta,
+                                            m_edTableName.GetText(),
+                                            sCatalog,
+                                            sSchema,
+                                            sTable,
+                                            ::dbtools::eInDataManipulation);
+        sal_Int32 nMaxLength = xMeta->getMaxTableNameLength();
+        if ( nMaxLength && sTable.getLength() > nMaxLength )
         {
-            Reference<XDatabaseMetaData> xMeta = m_pParent->m_xConnection->getMetaData();
-            ::rtl::OUString sCatalog;
-            ::rtl::OUString sSchema;
-            ::rtl::OUString sTable;
-            ::dbtools::qualifiedNameComponents( xMeta,
-                                                m_edTableName.GetText(),
-                                                sCatalog,
-                                                sSchema,
-                                                sTable,
-                                                ::dbtools::eInDataManipulation);
-            sal_Int32 nMaxLength = xMeta->getMaxTableNameLength();
-            if ( nMaxLength && sTable.getLength() > nMaxLength )
-            {
-                ErrorBox(this, ModuleRes(ERROR_INVALID_TABLE_NAME_LENGTH)).Execute();
-                return sal_False;
-            }
+            ErrorBox(this, ModuleRes(ERROR_INVALID_TABLE_NAME_LENGTH)).Execute();
+            return sal_False;
         }
 
         // now we have to check if the name of the primary key already exists
