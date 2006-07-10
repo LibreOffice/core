@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlocx.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-13 16:58:57 $
+ *  last change: $Author: obo $ $Date: 2006-07-10 13:45:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -538,12 +538,11 @@ void XclExpOcxConverter::ConvertSheetLinks(
     if( xBindable.is() )
     {
         Reference< XServiceInfo > xServInfo( xBindable->getValueBinding(), UNO_QUERY );
-        Reference< XPropertySet > xPropSet( xServInfo, UNO_QUERY );
-        if( xPropSet.is() && xServInfo.is() &&
-            xServInfo->supportsService( CREATE_OUSTRING( SC_SERVICENAME_VALBIND ) ) )
+        if( xServInfo.is() && xServInfo->supportsService( CREATE_OUSTRING( SC_SERVICENAME_VALBIND ) ) )
         {
+            ScfPropertySet aBindProp( xServInfo );
             CellAddress aApiAddress;
-            if( ::getPropValue( aApiAddress, xPropSet, CREATE_OUSTRING( SC_UNONAME_BOUNDCELL ) ) )
+            if( aBindProp.GetProperty( aApiAddress, CREATE_OUSTRING( SC_UNONAME_BOUNDCELL ) ) )
             {
                 ScAddress aCellLink;
                 ScUnoConversion::FillScAddress( aCellLink, aApiAddress );
@@ -558,12 +557,11 @@ void XclExpOcxConverter::ConvertSheetLinks(
     if( xEntrySink.is() )
     {
         Reference< XServiceInfo > xServInfo( xEntrySink->getListEntrySource(), UNO_QUERY );
-        Reference< XPropertySet > xPropSet( xServInfo, UNO_QUERY );
-        if( xPropSet.is() && xServInfo.is() &&
-            xServInfo->supportsService( CREATE_OUSTRING( SC_SERVICENAME_LISTSOURCE ) ) )
+        if( xServInfo.is() && xServInfo->supportsService( CREATE_OUSTRING( SC_SERVICENAME_LISTSOURCE ) ) )
         {
+            ScfPropertySet aSinkProp( xServInfo );
             CellRangeAddress aApiRange;
-            if( ::getPropValue( aApiRange, xPropSet, CREATE_OUSTRING( SC_UNONAME_CELLRANGE ) ) )
+            if( aSinkProp.GetProperty( aApiRange, CREATE_OUSTRING( SC_UNONAME_CELLRANGE ) ) )
             {
                 ScRange aSrcRange;
                 ScUnoConversion::FillScRange( aSrcRange, aApiRange );
