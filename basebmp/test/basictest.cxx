@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basictest.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-06 10:00:41 $
+ *  last change: $Author: thb $ $Date: 2006-07-11 11:38:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,8 +85,8 @@ public:
         CPPUNIT_ASSERT_MESSAGE("setBlue()",
                                aTestColor.toInt32() == 0x00F0F10 );
 
-        aTestColor.setGray( 0x13 );
-        CPPUNIT_ASSERT_MESSAGE("setGray()",
+        aTestColor.setGrey( 0x13 );
+        CPPUNIT_ASSERT_MESSAGE("setGrey()",
                                aTestColor.toInt32() == 0x00131313 );
 
         aTestColor = Color( 0x10, 0x20, 0xFF );
@@ -161,7 +161,7 @@ public:
         {
             pDevice = createBitmapDevice( aSize,
                                           true,
-                                          Format::EIGHT_BIT_GRAY );
+                                          Format::EIGHT_BIT_GREY );
 
             const Color aCol4(0x010101);
             pDevice->setPixel( aPt, aCol4, DrawMode_PAINT );
@@ -197,12 +197,12 @@ public:
             pDevice->setPixel( aPt2, aCol5, DrawMode_PAINT );
             debugDump( pDevice, output );
             CPPUNIT_ASSERT_MESSAGE("get/setPixel roundtrip #8",
-                                   pDevice->getPixel(aPt2) == aCol5);
+                                   pDevice->getPixel(aPt2) != aCol7);
 
             const Color aCol6(0x00FFFFFF);
             pDevice->setPixel( aPt3, aCol6, DrawMode_PAINT );
             CPPUNIT_ASSERT_MESSAGE("get/setPixel roundtrip #9",
-                                   pDevice->getPixel(aPt3) != aCol7);
+                                   pDevice->getPixel(aPt3) == aCol6);
         }
 
         // 24bpp

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: clippedlinerenderer.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-30 11:05:21 $
+ *  last change: $Author: thb $ $Date: 2006-07-11 11:38:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,8 @@
 #ifndef _BGFX_RANGE_B2IRANGE_HXX
 #include <basegfx/range/b2irange.hxx>
 #endif
+
+#include <vigra/iteratortraits.hxx>
 
 namespace basebmp
 {
@@ -278,8 +280,9 @@ void renderClippedLine( basegfx::B2IPoint             aPt1,
                         rClipRect.getMaxY(), basegfx::tools::RectClipFlags::BOTTOM,
                         bRoundTowardsPt2 ));
 
-        Iterator                        currIter( begin + vigra::Diff2D(0,ys) );
-        typename Iterator::row_iterator rowIter( currIter.rowIterator() + xs );
+        Iterator currIter( begin + vigra::Diff2D(0,ys) );
+        typename vigra::IteratorTraits<Iterator>::row_iterator
+            rowIter( currIter.rowIterator() + xs );
 
         adx *= 2;
         ady *= 2;
@@ -353,8 +356,9 @@ void renderClippedLine( basegfx::B2IPoint             aPt1,
                         rClipRect.getMaxX(), basegfx::tools::RectClipFlags::RIGHT,
                         bRoundTowardsPt2 ));
 
-        Iterator                           currIter( begin + vigra::Diff2D(xs,0) );
-        typename Iterator::column_iterator colIter( currIter.columnIterator() + ys );
+        Iterator currIter( begin + vigra::Diff2D(xs,0) );
+        typename vigra::IteratorTraits<Iterator>::column_iterator
+            colIter( currIter.columnIterator() + ys );
 
         adx *= 2;
         ady *= 2;

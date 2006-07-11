@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmapdevice.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-28 16:50:18 $
+ *  last change: $Author: thb $ $Date: 2006-07-11 11:38:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -48,6 +48,7 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/shared_array.hpp>
+#include <boost/enable_shared_from_this.hpp>
 #include <boost/noncopyable.hpp>
 #include <vector>
 
@@ -78,13 +79,14 @@ struct ImplBitmapDevice;
 
     Implementation note: the clip mask and bitmap parameter instances
     of BitmapDevice that are passed to individual BitmapDevice
-    instances work best with 1 bit gray masks for the clip and a
+    instances work best with 1 bit grey masks for the clip and a
     format matching that of the target BitmapDevice for the other
     parameters. The alpha mask passed to the drawMaskedColor() methods
-    works best when given as an eight bit gray bitmap. Everything else
+    works best when given as an eight bit grey bitmap. Everything else
     is accepted, but potentially slow.
  */
-class BitmapDevice : private boost::noncopyable
+class BitmapDevice : public boost::enable_shared_from_this<BitmapDevice>,
+                     private boost::noncopyable
 {
 public:
     /** Query size of device in pixel
@@ -547,10 +549,11 @@ public:
                            const BitmapDeviceSharedPtr& rClip );
 
 protected:
-    BitmapDevice( const basegfx::B2IVector&        rSize,
+    BitmapDevice( const basegfx::B2IRange&         rBounds,
                   bool                             bTopDown,
                   sal_Int32                        nScanlineFormat,
                   sal_Int32                        nScanlineStride,
+                  sal_uInt8*                       pFirstScanline,
                   const RawMemorySharedArray&      rMem,
                   const PaletteMemorySharedVector& rPalette );
 
@@ -561,7 +564,8 @@ private:
     virtual bool isCompatibleClipMask( const BitmapDeviceSharedPtr& bmp ) const = 0;
     virtual bool isCompatibleAlphaMask( const BitmapDeviceSharedPtr& bmp ) const = 0;
 
-    virtual void clear_i( Color fillColor ) = 0;
+    virtual void clear_i( Color                     fillColor,
+                          const basegfx::B2IRange&  rBounds ) = 0;
 
     virtual void setPixel_i( const basegfx::B2IPoint& rPt,
                              Color                    lineColor,
@@ -642,6 +646,8 @@ private:
                                      DrawMode                     drawMode,
                                      const BitmapDeviceSharedPtr& rClip ) = 0;
 
+    BitmapDeviceSharedPtr getGenericRenderer() const;
+
     boost::scoped_ptr< ImplBitmapDevice > mpImpl;
 };
 
@@ -652,7 +658,19 @@ BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector& rSize,
                                           sal_Int32                 nScanlineFormat );
 
 /** Factory method to create a BitmapDevice for given scanline format
-    from the given piece of raw memory
+    with the given palette
+
+    Note: the provided palette must have sufficient size, to satisfy
+    lookups for the whole range of pixel values from the specified
+    format.
+ */
+BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector&        rSize,
+                                          bool                             bTopDown,
+                                          sal_Int32                        nScanlineFormat,
+                                          const PaletteMemorySharedVector& rPalette );
+
+/** Factory method to create a BitmapDevice for given scanline format
+    from the given piece of raw memory and palette
 
     Note: the provided memory must have sufficient size, to store the
     image of the specified area and format.
@@ -663,6 +681,17 @@ BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector&        rSize
                                           const RawMemorySharedArray&      rMem,
                                           const PaletteMemorySharedVector& rPalette );
 
+
+/** Factory method to retrieve a subsetted BitmapDevice to the same
+    memory.
+
+    This method creates a second bitmap device instance, which renders
+    to the same memory as the original, but to a limited, rectangular
+    area. Useful to implement rectangular clips (usually faster than
+    setting up a 1bpp clip mask).
+ */
+BitmapDeviceSharedPtr subsetBitmapDevice( const BitmapDeviceSharedPtr&     rProto,
+                                          const basegfx::B2IRange&         rSubset );
 
 /** Factory method to clone a BitmapDevice from a given prototype.
 

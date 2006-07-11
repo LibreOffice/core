@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scanlineformats.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-06 10:00:40 $
+ *  last change: $Author: thb $ $Date: 2006-07-11 11:38:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,16 +71,16 @@
 namespace basebmp { namespace Format
 {
     static const sal_Int32 NONE                   = 0;
-    static const sal_Int32 ONE_BIT_MSB_GRAY       = (sal_Int32)0x01;
-    static const sal_Int32 ONE_BIT_LSB_GRAY       = (sal_Int32)0x02;
+    static const sal_Int32 ONE_BIT_MSB_GREY       = (sal_Int32)0x01;
+    static const sal_Int32 ONE_BIT_LSB_GREY       = (sal_Int32)0x02;
     static const sal_Int32 ONE_BIT_MSB_PAL        = (sal_Int32)0x03;
     static const sal_Int32 ONE_BIT_LSB_PAL        = (sal_Int32)0x04;
-    static const sal_Int32 FOUR_BIT_MSB_GRAY      = (sal_Int32)0x05;
-    static const sal_Int32 FOUR_BIT_LSB_GRAY      = (sal_Int32)0x06;
+    static const sal_Int32 FOUR_BIT_MSB_GREY      = (sal_Int32)0x05;
+    static const sal_Int32 FOUR_BIT_LSB_GREY      = (sal_Int32)0x06;
     static const sal_Int32 FOUR_BIT_MSB_PAL       = (sal_Int32)0x07;
     static const sal_Int32 FOUR_BIT_LSB_PAL       = (sal_Int32)0x08;
     static const sal_Int32 EIGHT_BIT_PAL          = (sal_Int32)0x09;
-    static const sal_Int32 EIGHT_BIT_GRAY         = (sal_Int32)0x0A;
+    static const sal_Int32 EIGHT_BIT_GREY         = (sal_Int32)0x0A;
     static const sal_Int32 SIXTEEN_BIT_LSB_TC_MASK= (sal_Int32)0x0B;
     static const sal_Int32 SIXTEEN_BIT_MSB_TC_MASK= (sal_Int32)0x0C;
     static const sal_Int32 TWENTYFOUR_BIT_TC_MASK = (sal_Int32)0x0D;

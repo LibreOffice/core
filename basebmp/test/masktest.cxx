@@ -4,9 +4,9 @@
  *
  *  $RCSfile: masktest.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-09 04:21:01 $
+ *  last change: $Author: thb $ $Date: 2006-07-11 11:38:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,7 +138,7 @@ public:
 
         mpMask = createBitmapDevice( aSize,
                                      true,
-                                     Format::EIGHT_BIT_GRAY );
+                                     Format::EIGHT_BIT_GREY );
 
         ::rtl::OUString aSvg = ::rtl::OUString::createFromAscii(
             "m 0 0h5v10h5v-5h-10z" );

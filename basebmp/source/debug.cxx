@@ -2,9 +2,9 @@
  *
  *  $RCSfile: debug.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-06 10:00:41 $
+ *  last change: $Author: thb $ $Date: 2006-07-11 11:38:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,26 +79,26 @@ namespace basebmp
         {
             switch( nScanlineFormat )
             {
-                case Format::ONE_BIT_MSB_GRAY:
-                    return "ONE_BIT_MSB_GRAY";
-                case Format::ONE_BIT_LSB_GRAY:
-                    return "ONE_BIT_LSB_GRAY";
+                case Format::ONE_BIT_MSB_GREY:
+                    return "ONE_BIT_MSB_GREY";
+                case Format::ONE_BIT_LSB_GREY:
+                    return "ONE_BIT_LSB_GREY";
                 case Format::ONE_BIT_MSB_PAL:
                     return "ONE_BIT_MSB_PAL";
                 case Format::ONE_BIT_LSB_PAL:
                     return "ONE_BIT_LSB_PAL";
-                case Format::FOUR_BIT_MSB_GRAY:
-                    return "FOUR_BIT_MSB_GRAY";
-                case Format::FOUR_BIT_LSB_GRAY:
-                    return "FOUR_BIT_LSB_GRAY";
+                case Format::FOUR_BIT_MSB_GREY:
+                    return "FOUR_BIT_MSB_GREY";
+                case Format::FOUR_BIT_LSB_GREY:
+                    return "FOUR_BIT_LSB_GREY";
                 case Format::FOUR_BIT_MSB_PAL:
                     return "FOUR_BIT_MSB_PAL";
                 case Format::FOUR_BIT_LSB_PAL:
                     return "FOUR_BIT_LSB_PAL";
                 case Format::EIGHT_BIT_PAL:
                     return "EIGHT_BIT_PAL";
-                case Format::EIGHT_BIT_GRAY:
-                    return "EIGHT_BIT_GRAY";
+                case Format::EIGHT_BIT_GREY:
+                    return "EIGHT_BIT_GREY";
                 case Format::SIXTEEN_BIT_LSB_TC_MASK:
                     return "SIXTEEN_BIT_LSB_TC_MASK";
                 case Format::SIXTEEN_BIT_MSB_TC_MASK:

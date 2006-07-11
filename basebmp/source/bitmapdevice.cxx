@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmapdevice.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-06 10:00:40 $
+ *  last change: $Author: thb $ $Date: 2006-07-11 11:38:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,8 +35,6 @@
 
 #include "basebmp/bitmapdevice.hxx"
 
-#include "basebmp/pixeliterator.hxx"
-#include "basebmp/packedpixeliterator.hxx"
 #include "basebmp/compositeiterator.hxx"
 #include "basebmp/iteratortraits.hxx"
 
@@ -44,15 +42,22 @@
 #include "basebmp/accessortraits.hxx"
 #include "basebmp/accessoradapters.hxx"
 #include "basebmp/colorblendaccessoradapter.hxx"
-#include "basebmp/paletteimageaccessor.hxx"
-#include "basebmp/truecolormaskaccessor.hxx"
 
 #include "basebmp/color.hxx"
 #include "basebmp/colormisc.hxx"
 #include "basebmp/colortraits.hxx"
 
+#include "basebmp/greylevelformats.hxx"
+#include "basebmp/paletteformats.hxx"
+#include "basebmp/rgbmaskpixelformats.hxx"
+#include "basebmp/rgb24pixelformats.hxx"
+
 #include "basebmp/scanlineformats.hxx"
+#include "basebmp/fillimage.hxx"
 #include "basebmp/clippedlinerenderer.hxx"
+//#include "basebmp/genericintegerimageaccessor.hxx"
+
+#include "intconversion.hxx"
 
 #include <rtl/alloc.h>
 #include <rtl/memory.h>
@@ -69,6 +74,7 @@
 #include <basegfx/point/b2ipoint.hxx>
 #include <basegfx/vector/b2ivector.hxx>
 
+#include <vigra/iteratortraits.hxx>
 #include <vigra/rgbvalue.hxx>
 #include <vigra/resizeimage.hxx>
 #include <vigra/copyimage.hxx>
@@ -97,157 +103,44 @@ namespace basebmp
 
 namespace
 {
-    // Common accessor and iterator types
-    //------------------------------------------------------------------------
+    // xxx TODO
 
-    typedef PackedPixelIterator< sal_uInt8,
-                                 1,
-                                 true >           MaskIterator;
-    typedef NonStandardAccessor< sal_uInt8 >      MaskAccessor;
+    // TEMP TEMP TEMP
 
-    typedef PixelIterator< sal_uInt8 >            AlphaMaskIterator;
-    typedef StandardAccessor< sal_uInt8 >         AlphaMaskAccessor;
-
-    template< class Accessor > struct PaletteAccessorSelector
+    class GenericImageAccessor
     {
-        typedef PaletteImageAccessor< Accessor, Color > type;
-    };
+    public:
+        typedef Color value_type;
 
-    typedef vigra::RGBValue<sal_uInt8>            TwentyFourBitPixelRGB;
-    typedef vigra::RGBValue<sal_uInt8,2,1,0>      TwentyFourBitPixelBGR;
+        BitmapDeviceSharedPtr mpDevice;
 
+        explicit GenericImageAccessor( BitmapDeviceSharedPtr const& rTarget ) :
+            mpDevice(rTarget)
+        {}
 
-    // metafunctions to retrieve correct POD from/to basebmp::Color
-    //------------------------------------------------------------------------
+        template< typename Iterator >
+        Color operator()( Iterator const& i ) const
+        { return mpDevice->getPixel( basegfx::B2IPoint( i->x,i->y ) ); }
 
-    /// type-safe conversion between color and pod
-    template< typename DataType > struct GreyScaleFromColor
-    {
-        typedef DataType value_type;
-        DataType operator()( Color c ) { return c.getGrayscale(); }
-    };
+        template< typename Iterator, typename Difference >
+        Color operator()( Iterator const& i, Difference const& diff) const
+        { return mpDevice->getPixel( basegfx::B2IPoint( i[diff]->x,
+                                                        i[diff]->y ) ); }
 
-    /// type-safe conversion between color and RgbValue
-    template< class RgbVal > struct RgbValueFromColor
-    {
-        RgbVal operator()( Color c )
-        {
-            RgbVal res;
-            res.setRed(c.getRed());
-            res.setGreen(c.getGreen());
-            res.setBlue(c.getBlue());
-            return res;
-        }
-    };
+        template< typename Iterator >
+        void set(Color const& value, Iterator const& i) const
+        { return mpDevice->setPixel( basegfx::B2IPoint( i->x,i->y ),
+                                     value, DrawMode_PAINT ); }
 
-    /// type-safe conversion between pod and color
-    template< typename DataType > struct ColorFromGreyScale
-    {
-        typedef DataType value_type;
-        Color operator()( DataType c ) { return Color(c,c,c); }
-    };
-
-    /// type-safe conversion between RgbValue and color
-    template< class RgbVal > struct ColorFromRgbValue
-    {
-        Color operator()( RgbVal const& c )
-        {
-            return Color(c.red(),c.green(),c.blue());
-        }
+        template< class Iterator, class Difference >
+        void set(value_type const& value, Iterator const& i, Difference const& diff) const
+        { return mpDevice->setPixel( basegfx::B2IPoint( i[diff]->x,
+                                                        i[diff]->y ),
+                                     value, DrawMode_PAINT ); }
     };
 
 
-    /// type-safe conversion from Color to packed int32
-    struct UInt32FromColor
-    {
-        sal_uInt32 operator()( const Color& c ) { return c.toInt32(); }
-    };
 
-    /// type-safe conversion from RgbValue to packed int32
-    template< class RgbVal > struct UInt32FromRgbValue
-    {
-        sal_uInt32 operator()( RgbVal const& c )
-        {
-            return (c[0] << 16) | (c[1] << 8) | c[2];
-        }
-    };
-
-    /// Get converter from color to given data type
-    template< typename DataType > struct fromColorConverter;
-    template<> struct fromColorConverter< sal_uInt8 >
-    {
-        typedef GreyScaleFromColor<sal_uInt8> type;
-    };
-    template<> struct fromColorConverter< Color >
-    {
-        typedef std::identity<Color> type;
-    };
-    template< unsigned int RedIndex,
-              unsigned int GreenIndex,
-              unsigned int BlueIndex > struct fromColorConverter<
-                  vigra::RGBValue< sal_uInt8,
-                                   RedIndex,
-                                   GreenIndex,
-                                   BlueIndex > >
-    {
-        typedef RgbValueFromColor<
-            vigra::RGBValue< sal_uInt8,
-                             RedIndex,
-                             GreenIndex,
-                             BlueIndex > >
-            type;
-    };
-
-    /// Get converter from given data type to Color
-    template< typename DataType > struct toColorConverter;
-    template<> struct toColorConverter< sal_uInt8 >
-    {
-        typedef ColorFromGreyScale<sal_uInt8> type;
-    };
-    template<> struct toColorConverter< Color >
-    {
-        typedef std::identity<Color> type;
-    };
-    template< unsigned int RedIndex,
-              unsigned int GreenIndex,
-              unsigned int BlueIndex > struct toColorConverter<
-                  vigra::RGBValue< sal_uInt8,
-                                   RedIndex,
-                                   GreenIndex,
-                                   BlueIndex > >
-    {
-        typedef ColorFromRgbValue<
-            vigra::RGBValue< sal_uInt8,
-                             RedIndex,
-                             GreenIndex,
-                             BlueIndex > >
-            type;
-    };
-
-    /// Get converter from given data type to sal_uInt32
-    template< typename DataType > struct toUInt32Converter
-    {
-        typedef std::identity<DataType> type;
-    };
-    template<> struct toUInt32Converter< Color >
-    {
-        typedef UInt32FromColor type;
-    };
-    template< unsigned int RedIndex,
-              unsigned int GreenIndex,
-              unsigned int BlueIndex > struct toUInt32Converter<
-                  vigra::RGBValue< sal_uInt8,
-                                   RedIndex,
-                                   GreenIndex,
-                                   BlueIndex > >
-    {
-        typedef UInt32FromRgbValue<
-            vigra::RGBValue< sal_uInt8,
-                             RedIndex,
-                             GreenIndex,
-                             BlueIndex > >
-            type;
-    };
 
 
     // Polygon scanline conversion
@@ -301,8 +194,10 @@ namespace
                                                          basegfx::fround( rfXRight ))));
 
             DestIterator currIter( begin_ + vigra::Diff2D(0,nY) );
-            typename DestIterator::row_iterator rowIter( currIter.rowIterator() + nStartX);
-            typename DestIterator::row_iterator rowEnd( currIter.rowIterator() + nEndX );
+            typename vigra::IteratorTraits<DestIterator>::row_iterator
+                rowIter( currIter.rowIterator() + nStartX);
+            typename vigra::IteratorTraits<DestIterator>::row_iterator
+                rowEnd( currIter.rowIterator() + nEndX );
 
             // TODO(P2): Provide specialized span fill methods on the
             // iterator/accessor
@@ -316,19 +211,15 @@ namespace
         const basegfx::B2DPolyPolygon&                          rPolyPolyRaster,
         typename DestAccessor::value_type                       fillColor,
         const basegfx::B2IRange&                                outRange,
-        vigra::triple<DestIterator, DestIterator, DestAccessor> dest )
+        const DestIterator&                                     begin,
+        const DestAccessor&                                     acc )
     {
-        basegfx::B2IRange aBmpRange(0,0,
-                                    dest.second.x - dest.first.x,
-                                    dest.second.y - dest.first.y );
-        aBmpRange.intersect( outRange );
-
         return std::auto_ptr< Renderer< DestIterator, DestAccessor > >(
             new Renderer< DestIterator, DestAccessor >(rPolyPolyRaster,
                                                        fillColor,
-                                                       aBmpRange,
-                                                       dest.first,
-                                                       dest.third));
+                                                       outRange,
+                                                       begin,
+                                                       acc));
     }
 
 
@@ -343,33 +234,37 @@ namespace
         @tpl RawAccessor
         Raw accessor, to access pixel values directly
 
-        @tpl VanillaAccessorSelector
-        Accessor adapter selector, which, when applied to one of the
-        raw bitmap accessors, yields a member type named 'type', which
-        is a wrapped accessor that map color values.
+        @tpl AccessorSelector
+        Accessor adapter selector, which, when applying the nested
+        template metafunction wrap_accessor to one of the raw bitmap
+        accessors, yields a member type named 'type', which is a
+        wrapped accessor that map color values.
      */
-    template< class                      DestIterator,
-              class                      RawAccessor,
-              template< typename > class VanillaAccessorSelector > class BitmapRenderer :
+    template< class DestIterator,
+              class RawAccessor,
+              class AccessorSelector,
+              class Masks > class BitmapRenderer :
                   public BitmapDevice
     {
     public:
-        typedef BitmapRenderer<MaskIterator,
-                               MaskAccessor,
-                               boost::mpl::identity>  MaskBitmap;
-        typedef BitmapRenderer<AlphaMaskIterator,
-                               AlphaMaskAccessor,
-                               boost::mpl::identity>  AlphaMaskBitmap;
+        typedef BitmapRenderer<typename Masks::clipmask_format_traits::iterator_type,
+                               typename Masks::clipmask_format_traits::raw_accessor_type,
+                               typename Masks::clipmask_format_traits::accessor_selector,
+                               Masks>  MaskBitmap;
+        typedef BitmapRenderer<typename Masks::alphamask_format_traits::iterator_type,
+                               typename Masks::alphamask_format_traits::raw_accessor_type,
+                               typename Masks::alphamask_format_traits::accessor_selector,
+                               Masks>  AlphaMaskBitmap;
 
         // -------------------------------------------------------
 
         typedef AccessorTraits< RawAccessor >         RawAccessorTraits;
-        typedef typename toUInt32Converter<
-            typename RawAccessor::value_type>::type   ToUInt32Functor;
+        typedef typename uInt32Converter<
+            typename RawAccessor::value_type>::to     ToUInt32Functor;
 
         // -------------------------------------------------------
 
-        typedef typename VanillaAccessorSelector<
+        typedef typename AccessorSelector::template wrap_accessor<
             RawAccessor >::type                       DestAccessor;
         typedef AccessorTraits< DestAccessor >        AccTraits;
 
@@ -377,55 +272,50 @@ namespace
 
         typedef typename RawAccessorTraits::xor_accessor            RawXorAccessor;
         typedef AccessorTraits<RawXorAccessor>                      RawXorAccessorTraits;
-        typedef typename VanillaAccessorSelector<
+        typedef typename AccessorSelector::template wrap_accessor<
             RawXorAccessor >::type                                  XorAccessor;
         typedef AccessorTraits<XorAccessor>                         XorAccessorTraits;
 
         // -------------------------------------------------------
 
         typedef typename RawAccessorTraits::template masked_accessor<
-                                            MaskAccessor,
-                                            DestIterator,
-                                            MaskIterator>::type     RawMaskedAccessor;
-        typedef typename VanillaAccessorSelector<
+            typename Masks::clipmask_format_traits::raw_accessor_type,
+            DestIterator,
+            typename Masks::clipmask_format_traits::iterator_type>::type
+                                                                    RawMaskedAccessor;
+        typedef typename AccessorSelector::template wrap_accessor<
             RawMaskedAccessor >::type                               MaskedAccessor;
         typedef typename RawXorAccessorTraits::template masked_accessor<
-                                            MaskAccessor,
-                                            DestIterator,
-                                            MaskIterator>::type     RawMaskedXorAccessor;
-        typedef typename VanillaAccessorSelector<
+            typename Masks::clipmask_format_traits::raw_accessor_type,
+            DestIterator,
+            typename Masks::clipmask_format_traits::iterator_type>::type
+                                                                    RawMaskedXorAccessor;
+        typedef typename AccessorSelector::template wrap_accessor<
             RawMaskedXorAccessor >::type                            MaskedXorAccessor;
 
         // -------------------------------------------------------
 
         typedef ConstantColorBlendSetterAccessorAdapter<
             DestAccessor,
-            typename AlphaMaskAccessor::value_type>                 ColorBlendAccessor;
+            typename Masks::alphamask_format_traits::raw_accessor_type::value_type>
+                                                                    ColorBlendAccessor;
         typedef AccessorTraits<ColorBlendAccessor>                  BlendAccessorTraits;
         typedef typename BlendAccessorTraits::template masked_accessor<
-                                            MaskAccessor,
-                                            DestIterator,
-                                            MaskIterator>::type     MaskedColorBlendAcc;
+            typename Masks::clipmask_format_traits::raw_accessor_type,
+            DestIterator,
+            typename Masks::clipmask_format_traits::iterator_type>::type
+                                                                    MaskedColorBlendAcc;
 
         // -------------------------------------------------------
 
-        typedef typename fromColorConverter<
-            typename AccTraits::value_type>::type     FromColorFunctor;
-        typedef typename toColorConverter<
-            typename AccTraits::value_type>::type     ToColorFunctor;
-
-        // -------------------------------------------------------
-
-        typedef DestIterator                          dest_iterator;
-        typedef DestAccessor                          dest_accessor;
-        typedef CompositeIterator2D< DestIterator,
-                                     MaskIterator >   composite_iterator_type;
+        typedef DestIterator                                        dest_iterator;
+        typedef DestAccessor                                        dest_accessor;
+        typedef CompositeIterator2D<
+            DestIterator,
+            typename Masks::clipmask_format_traits::iterator_type>  composite_iterator_type;
 
         DestIterator                      maBegin;
-        DestIterator                      maEnd;
         typename AccTraits::color_lookup  maColorLookup;
-        FromColorFunctor                  maFromColorConverter;
-        ToColorFunctor                    maToColorConverter;
         ToUInt32Functor                   maToUInt32Converter;
         DestAccessor                      maAccessor;
         ColorBlendAccessor                maColorBlendAccessor;
@@ -437,24 +327,20 @@ namespace
         MaskedXorAccessor                 maMaskedXorAccessor;
         RawMaskedAccessor                 maRawMaskedAccessor;
         RawMaskedXorAccessor              maRawMaskedXorAccessor;
-        int                               mnWidth;
-        int                               mnHeight;
 
-        BitmapRenderer( const basegfx::B2IVector&        rSize,
+        BitmapRenderer( const basegfx::B2IRange&         rBounds,
                         bool                             bTopDown,
                         sal_Int32                        nScanlineFormat,
                         sal_Int32                        nScanlineStride,
+                        sal_uInt8*                       pFirstScanline,
                         DestIterator                     begin,
-                        DestIterator                     end,
                         DestAccessor                     accessor,
                         const RawMemorySharedArray&      rMem,
                         const PaletteMemorySharedVector& rPalette ) :
-            BitmapDevice( rSize, bTopDown, nScanlineFormat, nScanlineStride, rMem, rPalette ),
+            BitmapDevice( rBounds, bTopDown, nScanlineFormat,
+                          nScanlineStride, pFirstScanline, rMem, rPalette ),
             maBegin( begin ),
-            maEnd( end ),
             maColorLookup(),
-            maFromColorConverter(),
-            maToColorConverter(),
             maToUInt32Converter(),
             maAccessor( accessor ),
             maColorBlendAccessor( accessor ),
@@ -465,9 +351,7 @@ namespace
             maMaskedColorBlendAccessor( maColorBlendAccessor ),
             maMaskedXorAccessor( accessor ),
             maRawMaskedAccessor(),
-            maRawMaskedXorAccessor(),
-            mnWidth( maEnd.x - maBegin.x ),
-            mnHeight( maEnd.y - maBegin.y )
+            maRawMaskedXorAccessor()
         {}
 
     private:
@@ -515,47 +399,36 @@ namespace
             return getCompatibleAlphaMask( bmp ).get() != NULL;
         }
 
-        virtual void clear_i( Color fillColor )
+        virtual void clear_i( Color                     fillColor,
+                              const basegfx::B2IRange&  rBounds )
         {
-            const typename dest_iterator::value_type colorIndex( maColorLookup(
-                                                                     maAccessor,
-                                                                     maFromColorConverter(
-                                                                         fillColor)));
-            DestIterator       currIter( maBegin );
-            const DestIterator endIter ( maBegin + vigra::Diff2D(0,mnHeight) );
-            while( currIter != endIter )
-            {
-                typename DestIterator::row_iterator rowIter( currIter.rowIterator() );
-                const typename DestIterator::row_iterator rowEnd( rowIter + mnWidth );
-
-                // TODO(P2): Provide specialized span fill methods on the
-                // iterator/accessor
-                while( rowIter != rowEnd )
-                    maRawAccessor.set(colorIndex, rowIter++);
-
-                ++currIter.y;
-            }
+            fillImage(maBegin + vigra::Diff2D(rBounds.getMinX(),
+                                              rBounds.getMinY()),
+                      maBegin + vigra::Diff2D(rBounds.getMaxX(),
+                                              rBounds.getMaxY()),
+                      maRawAccessor,
+                      maColorLookup(
+                          maAccessor,
+                          fillColor) );
         }
 
         virtual void setPixel_i( const basegfx::B2IPoint& rPt,
-                                 Color                    lineColor,
+                                 Color                    pixelColor,
                                  DrawMode                 drawMode )
         {
             const DestIterator pixel( maBegin +
                                       vigra::Diff2D(rPt.getX(),
                                                     rPt.getY()) );
             if( drawMode == DrawMode_XOR )
-                maXorAccessor.set( maFromColorConverter(
-                                       lineColor),
+                maXorAccessor.set( pixelColor,
                                    pixel );
             else
-                maAccessor.set( maFromColorConverter(
-                                    lineColor),
+                maAccessor.set( pixelColor,
                                 pixel );
         }
 
         virtual void setPixel_i( const basegfx::B2IPoint&     rPt,
-                                 Color                        lineColor,
+                                 Color                        pixelColor,
                                  DrawMode                     drawMode,
                                  const BitmapDeviceSharedPtr& rClip )
         {
@@ -570,12 +443,10 @@ namespace
                 pMask->maBegin + offset );
 
             if( drawMode == DrawMode_XOR )
-                maMaskedXorAccessor.set( maFromColorConverter(
-                                             lineColor),
+                maMaskedXorAccessor.set( pixelColor,
                                          aIter );
             else
-                maMaskedAccessor.set( maFromColorConverter(
-                                          lineColor),
+                maMaskedAccessor.set( pixelColor,
                                       aIter );
         }
 
@@ -584,7 +455,7 @@ namespace
             const DestIterator pixel( maBegin +
                                       vigra::Diff2D(rPt.getX(),
                                                     rPt.getY()) );
-            return maToColorConverter(maAccessor(pixel));
+            return maAccessor(pixel);
         }
 
         virtual sal_uInt32 getPixelData_i( const basegfx::B2IPoint& rPt )
@@ -595,55 +466,54 @@ namespace
             return maToUInt32Converter(maRawAccessor(pixel));
         }
 
-        template< typename Range, typename Col, typename RawAcc >
+        template< typename Iterator, typename Col, typename RawAcc >
         void implRenderLine2( const basegfx::B2IPoint& rPt1,
                               const basegfx::B2IPoint& rPt2,
                               const basegfx::B2IRange& rBounds,
                               Col                      col,
-                              const Range&             range,
+                              const Iterator&          begin,
                               const RawAcc&            rawAcc )
         {
             renderClippedLine( rPt1,
                                rPt2,
                                rBounds,
                                col,
-                               range.first,
+                               begin,
                                rawAcc );
         }
 
-        template< typename Range, typename Accessor, typename RawAcc >
+        template< typename Iterator, typename Accessor, typename RawAcc >
         void implRenderLine( const basegfx::B2IPoint& rPt1,
                              const basegfx::B2IPoint& rPt2,
                              const basegfx::B2IRange& rBounds,
                              Color                    col,
-                             const Range&             range,
+                             const Iterator&          begin,
                              const Accessor&          acc,
                              const RawAcc&            rawAcc )
         {
             implRenderLine2( rPt1,rPt2,rBounds,
                              maColorLookup( acc,
-                                            maFromColorConverter(
-                                                col)),
-                             range,
+                                            col ),
+                             begin,
                              rawAcc );
         }
 
-        template< typename Range, typename RawAcc, typename XorAcc >
+        template< typename Iterator, typename RawAcc, typename XorAcc >
         void implDrawLine( const basegfx::B2IPoint& rPt1,
                            const basegfx::B2IPoint& rPt2,
                            const basegfx::B2IRange& rBounds,
                            Color                    col,
-                           const Range&             range,
+                           const Iterator&          begin,
                            const RawAcc&            rawAcc,
                            const XorAcc&            xorAcc,
                            DrawMode                 drawMode )
         {
             if( drawMode == DrawMode_XOR )
                 implRenderLine( rPt1, rPt2, rBounds, col,
-                                range, maAccessor, xorAcc );
+                                begin, maAccessor, xorAcc );
             else
                 implRenderLine( rPt1, rPt2, rBounds, col,
-                                range, maAccessor, rawAcc );
+                                begin, maAccessor, rawAcc );
         }
 
         virtual void drawLine_i(const basegfx::B2IPoint& rPt1,
@@ -653,23 +523,17 @@ namespace
                                 DrawMode                 drawMode )
         {
             implDrawLine(rPt1,rPt2,rBounds,lineColor,
-                         std::make_pair(maBegin,maEnd),
+                         maBegin,
                          maRawAccessor,maRawXorAccessor,drawMode);
         }
 
-        vigra::pair<composite_iterator_type,composite_iterator_type>
-          getMaskedRange( const BitmapDeviceSharedPtr& rClip ) const
+        composite_iterator_type getMaskedIter( const BitmapDeviceSharedPtr& rClip ) const
         {
             boost::shared_ptr<MaskBitmap> pMask( getCompatibleClipMask(rClip) );
             OSL_ASSERT( pMask );
 
-            return std::make_pair(
-                composite_iterator_type(
-                    maBegin,
-                    pMask->maBegin ),
-                composite_iterator_type(
-                    maEnd,
-                    pMask->maEnd ));
+            return composite_iterator_type( maBegin,
+                                            pMask->maBegin );
         }
 
         virtual void drawLine_i(const basegfx::B2IPoint&     rPt1,
@@ -680,15 +544,16 @@ namespace
                                 const BitmapDeviceSharedPtr& rClip )
         {
             implDrawLine(rPt1,rPt2,rBounds,lineColor,
-                         getMaskedRange(rClip),
-                         maRawMaskedAccessor,maRawMaskedXorAccessor,drawMode);
+                         getMaskedIter(rClip),
+                         maRawMaskedAccessor,
+                         maRawMaskedXorAccessor,drawMode);
         }
 
-        template< typename Range, typename RawAcc >
+        template< typename Iterator, typename RawAcc >
         void implDrawPolygon( const basegfx::B2DPolygon& rPoly,
                               const basegfx::B2IRange&   rBounds,
                               Color                      col,
-                              const Range&               range,
+                              const Iterator&            begin,
                               const RawAcc&              acc )
         {
             basegfx::B2DPolygon aPoly( rPoly );
@@ -697,15 +562,14 @@ namespace
 
             const typename dest_iterator::value_type colorIndex( maColorLookup(
                                                                      maAccessor,
-                                                                     maFromColorConverter(
-                                                                         col)));
+                                                                     col));
             const sal_uInt32                         nVertices( aPoly.count() );
             for( sal_uInt32 i=1; i<nVertices; ++i )
                 implRenderLine2( basegfx::fround(aPoly.getB2DPoint(i-1)),
                                  basegfx::fround(aPoly.getB2DPoint(i)),
                                  rBounds,
                                  colorIndex,
-                                 range,
+                                 begin,
                                  acc );
 
             if( nVertices > 1 && aPoly.isClosed() )
@@ -713,7 +577,7 @@ namespace
                                  basegfx::fround(aPoly.getB2DPoint(0)),
                                  rBounds,
                                  colorIndex,
-                                 range,
+                                 begin,
                                  acc );
         }
 
@@ -724,13 +588,11 @@ namespace
         {
             if( drawMode == DrawMode_XOR )
                 implDrawPolygon( rPoly, rBounds, lineColor,
-                                 std::make_pair(maBegin,
-                                                maEnd),
+                                 maBegin,
                                  maRawXorAccessor );
             else
                 implDrawPolygon( rPoly, rBounds, lineColor,
-                                 std::make_pair(maBegin,
-                                                maEnd),
+                                 maBegin,
                                  maRawAccessor );
         }
 
@@ -742,18 +604,18 @@ namespace
         {
             if( drawMode == DrawMode_XOR )
                 implDrawPolygon( rPoly, rBounds, lineColor,
-                                 getMaskedRange(rClip),
+                                 getMaskedIter(rClip),
                                  maRawMaskedXorAccessor );
             else
                 implDrawPolygon( rPoly, rBounds, lineColor,
-                                 getMaskedRange(rClip),
+                                 getMaskedIter(rClip),
                                  maRawMaskedAccessor );
         }
 
-        template< typename Range, typename RawAcc >
+        template< typename Iterator, typename RawAcc >
         void implFillPolyPolygon( const basegfx::B2DPolyPolygon& rPoly,
                                   Color                          col,
-                                  const Range&                   range,
+                                  const Iterator&                begin,
                                   const RawAcc&                  acc,
                                   const basegfx::B2IRange&       rBounds )
         {
@@ -763,14 +625,11 @@ namespace
 
             makeRenderer( aPoly,
                           maColorLookup( maAccessor,
-                                         maFromColorConverter(
-                                             col)),
+                                         col),
                           rBounds,
-                          vigra::make_triple(
-                              range.first,
-                              range.second,
-                              acc) )->rasterConvert(
-                                  basegfx::FillRule_NONZERO_WINDING_NUMBER );
+                          begin,
+                          acc )->rasterConvert(
+                              basegfx::FillRule_NONZERO_WINDING_NUMBER );
         }
 
         virtual void fillPolyPolygon_i(const basegfx::B2DPolyPolygon& rPoly,
@@ -780,12 +639,12 @@ namespace
         {
             if( drawMode == DrawMode_XOR )
                 implFillPolyPolygon( rPoly, fillColor,
-                                     std::make_pair(maBegin,maEnd),
+                                     maBegin,
                                      maRawXorAccessor,
                                      rBounds );
             else
                 implFillPolyPolygon( rPoly, fillColor,
-                                     std::make_pair(maBegin,maEnd),
+                                     maBegin,
                                      maRawAccessor,
                                      rBounds );
         }
@@ -798,21 +657,21 @@ namespace
         {
             if( drawMode == DrawMode_XOR )
                 implFillPolyPolygon( rPoly, fillColor,
-                                     getMaskedRange(rClip),
+                                     getMaskedIter(rClip),
                                      maRawMaskedXorAccessor,
                                      rBounds );
             else
                 implFillPolyPolygon( rPoly, fillColor,
-                                     getMaskedRange(rClip),
+                                     getMaskedIter(rClip),
                                      maRawMaskedAccessor,
                                      rBounds );
         }
 
-        template< typename Range, typename RawAcc >
+        template< typename Iterator, typename RawAcc >
         void implDrawBitmap(const BitmapDeviceSharedPtr& rSrcBitmap,
                             const basegfx::B2IRange&     rSrcRect,
                             const basegfx::B2IRange&     rDstRect,
-                            const Range&                 range,
+                            const Iterator&              begin,
                             const RawAcc&                acc)
         {
             boost::shared_ptr<BitmapRenderer> pSrcBmp( getCompatibleBitmap(rSrcBitmap) );
@@ -821,18 +680,41 @@ namespace
             // since resizeImageNoInterpolation() internally copyies
             // to a temporary buffer, also works with *this == rSrcBitmap
             vigra::resizeImageNoInterpolation(
-                vigra::make_triple(
-                    pSrcBmp->maBegin + vigra::Diff2D(rSrcRect.getMinX(),
-                                                     rSrcRect.getMinY()),
-                    pSrcBmp->maBegin + vigra::Diff2D(rSrcRect.getMaxX(),
-                                                     rSrcRect.getMaxY()),
-                    pSrcBmp->maRawAccessor),
-                vigra::make_triple(
-                    range.first + vigra::Diff2D(rDstRect.getMinX(),
-                                                rDstRect.getMinY()),
-                    range.first + vigra::Diff2D(rDstRect.getMaxX(),
-                                                rDstRect.getMaxY()),
-                    acc));
+                pSrcBmp->maBegin + vigra::Diff2D(rSrcRect.getMinX(),
+                                                 rSrcRect.getMinY()),
+                pSrcBmp->maBegin + vigra::Diff2D(rSrcRect.getMaxX(),
+                                                 rSrcRect.getMaxY()),
+                pSrcBmp->maRawAccessor,
+                begin + vigra::Diff2D(rDstRect.getMinX(),
+                                      rDstRect.getMinY()),
+                begin + vigra::Diff2D(rDstRect.getMaxX(),
+                                      rDstRect.getMaxY()),
+                acc);
+        }
+
+        // xxx TODO
+        template< typename Iterator, typename Acc >
+        void implDrawBitmapGeneric(const BitmapDeviceSharedPtr& rSrcBitmap,
+                                   const basegfx::B2IRange&     rSrcRect,
+                                   const basegfx::B2IRange&     rDstRect,
+                                   const Iterator&              begin,
+                                   const Acc&                   acc)
+        {
+            GenericImageAccessor aSrcAcc( rSrcBitmap );
+
+            // since resizeImageNoInterpolation() internally copyies
+            // to a temporary buffer, also works with *this == rSrcBitmap
+            vigra::resizeImageNoInterpolation(
+                vigra::Diff2D(rSrcRect.getMinX(),
+                              rSrcRect.getMinY()),
+                vigra::Diff2D(rSrcRect.getMaxX(),
+                              rSrcRect.getMaxY()),
+                aSrcAcc,
+                begin + vigra::Diff2D(rDstRect.getMinX(),
+                                      rDstRect.getMinY()),
+                begin + vigra::Diff2D(rDstRect.getMaxX(),
+                                      rDstRect.getMaxY()),
+                acc);
         }
 
         virtual void drawBitmap_i(const BitmapDeviceSharedPtr& rSrcBitmap,
@@ -840,14 +722,29 @@ namespace
                                   const basegfx::B2IRange&     rDstRect,
                                   DrawMode                     drawMode )
         {
-            if( drawMode == DrawMode_XOR )
-                implDrawBitmap(rSrcBitmap, rSrcRect, rDstRect,
-                               std::make_pair(maBegin,maEnd),
-                               maRawXorAccessor);
+            // xxx TODO
+            if( isCompatibleBitmap( rSrcBitmap ) )
+            {
+                if( drawMode == DrawMode_XOR )
+                    implDrawBitmap(rSrcBitmap, rSrcRect, rDstRect,
+                                   maBegin,
+                                   maRawXorAccessor);
+                else
+                    implDrawBitmap(rSrcBitmap, rSrcRect, rDstRect,
+                                   maBegin,
+                                   maRawAccessor);
+            }
             else
-                implDrawBitmap(rSrcBitmap, rSrcRect, rDstRect,
-                               std::make_pair(maBegin,maEnd),
-                               maRawAccessor);
+            {
+                if( drawMode == DrawMode_XOR )
+                    implDrawBitmapGeneric(rSrcBitmap, rSrcRect, rDstRect,
+                                          maBegin,
+                                          maXorAccessor);
+                else
+                    implDrawBitmapGeneric(rSrcBitmap, rSrcRect, rDstRect,
+                                          maBegin,
+                                          maAccessor);
+            }
         }
 
         virtual void drawBitmap_i(const BitmapDeviceSharedPtr& rSrcBitmap,
@@ -856,14 +753,29 @@ namespace
                                   DrawMode                     drawMode,
                                   const BitmapDeviceSharedPtr& rClip )
         {
-            if( drawMode == DrawMode_XOR )
-                implDrawBitmap(rSrcBitmap, rSrcRect, rDstRect,
-                               getMaskedRange(rClip),
-                               maRawMaskedXorAccessor);
+            // xxx TODO
+            if( isCompatibleBitmap( rSrcBitmap ) )
+            {
+                if( drawMode == DrawMode_XOR )
+                    implDrawBitmap(rSrcBitmap, rSrcRect, rDstRect,
+                                   getMaskedIter(rClip),
+                                   maRawMaskedXorAccessor);
+                else
+                    implDrawBitmap(rSrcBitmap, rSrcRect, rDstRect,
+                                   getMaskedIter(rClip),
+                                   maRawMaskedAccessor);
+            }
             else
-                implDrawBitmap(rSrcBitmap, rSrcRect, rDstRect,
-                               getMaskedRange(rClip),
-                               maRawMaskedAccessor);
+            {
+                if( drawMode == DrawMode_XOR )
+                    implDrawBitmapGeneric(rSrcBitmap, rSrcRect, rDstRect,
+                                          getMaskedIter(rClip),
+                                          maMaskedXorAccessor);
+                else
+                    implDrawBitmapGeneric(rSrcBitmap, rSrcRect, rDstRect,
+                                          getMaskedIter(rClip),
+                                          maMaskedAccessor);
+            }
         }
 
         virtual void drawMaskedColor_i(Color                        aSrcColor,
@@ -871,18 +783,39 @@ namespace
                                        const basegfx::B2IRange&     rSrcRect,
                                        const basegfx::B2IPoint&     rDstPoint )
         {
+            boost::shared_ptr<MaskBitmap>      pMask( getCompatibleClipMask(rAlphaMask) );
             boost::shared_ptr<AlphaMaskBitmap> pAlpha( getCompatibleAlphaMask(rAlphaMask) );
-            OSL_ASSERT( pAlpha );
-            maColorBlendAccessor.setColor( maFromColorConverter(aSrcColor) );
+            OSL_ASSERT( pAlpha || pMask );
 
-            vigra::copyImage( pAlpha->maBegin + vigra::Diff2D(rSrcRect.getMinX(),
-                                                              rSrcRect.getMinY()),
-                              pAlpha->maBegin + vigra::Diff2D(rSrcRect.getMaxX(),
-                                                              rSrcRect.getMaxY()),
-                              pAlpha->maAccessor,
-                              maBegin + vigra::Diff2D(rDstPoint.getX(),
-                                                      rDstPoint.getY()),
-                              maColorBlendAccessor );
+            if( pAlpha )
+            {
+                maColorBlendAccessor.setColor( aSrcColor );
+
+                vigra::copyImage( pAlpha->maBegin + vigra::Diff2D(rSrcRect.getMinX(),
+                                                                  rSrcRect.getMinY()),
+                                  pAlpha->maBegin + vigra::Diff2D(rSrcRect.getMaxX(),
+                                                                  rSrcRect.getMaxY()),
+                                  pAlpha->maRawAccessor,
+                                  maBegin + vigra::Diff2D(rDstPoint.getX(),
+                                                          rDstPoint.getY()),
+                                  maColorBlendAccessor );
+            }
+            else if( pMask )
+            {
+                const composite_iterator_type aBegin(
+                    maBegin + vigra::Diff2D(rDstPoint.getX(),
+                                            rDstPoint.getY()),
+                    pMask->maBegin + vigra::Diff2D(rSrcRect.getMinX(),
+                                                   rSrcRect.getMinY()) );
+
+                fillImage(aBegin,
+                          aBegin + vigra::Diff2D(rSrcRect.getWidth(),
+                                                 rSrcRect.getHeight()),
+                          maRawMaskedAccessor,
+                          maColorLookup(
+                              maAccessor,
+                              aSrcColor) );
+            }
         }
 
         virtual void drawMaskedColor_i(Color                        aSrcColor,
@@ -891,22 +824,43 @@ namespace
                                        const basegfx::B2IPoint&     rDstPoint,
                                        const BitmapDeviceSharedPtr& rClip )
         {
+            boost::shared_ptr<MaskBitmap>      pMask( getCompatibleClipMask(rAlphaMask) );
             boost::shared_ptr<AlphaMaskBitmap> pAlpha( getCompatibleAlphaMask(rAlphaMask) );
-            OSL_ASSERT( pAlpha );
+            OSL_ASSERT( pAlpha || pMask );
 
-            const vigra::pair<composite_iterator_type,
-                              composite_iterator_type> aRange( getMaskedRange(rClip) );
-            maMaskedColorBlendAccessor.get1stWrappedAccessor().setColor(
-                maFromColorConverter(aSrcColor) );
+            if( pAlpha )
+            {
+                const composite_iterator_type aBegin( getMaskedIter(rClip) );
+                maMaskedColorBlendAccessor.get1stWrappedAccessor().setColor(
+                    aSrcColor );
 
-            vigra::copyImage( pAlpha->maBegin + vigra::Diff2D(rSrcRect.getMinX(),
-                                                              rSrcRect.getMinY()),
-                              pAlpha->maBegin + vigra::Diff2D(rSrcRect.getMaxX(),
-                                                              rSrcRect.getMaxY()),
-                              pAlpha->maAccessor,
-                              aRange.first + vigra::Diff2D(rDstPoint.getX(),
-                                                           rDstPoint.getY()),
-                              maMaskedColorBlendAccessor );
+                vigra::copyImage( pAlpha->maBegin + vigra::Diff2D(rSrcRect.getMinX(),
+                                                                  rSrcRect.getMinY()),
+                                  pAlpha->maBegin + vigra::Diff2D(rSrcRect.getMaxX(),
+                                                                  rSrcRect.getMaxY()),
+                                  pAlpha->maRawAccessor,
+                                  aBegin + vigra::Diff2D(rDstPoint.getX(),
+                                                         rDstPoint.getY()),
+                                  maMaskedColorBlendAccessor );
+            }
+            else if( pMask )
+            {
+                // TODO(F3): clip is currently ignored for 1bpp
+                // drawMaskedColor_i case!
+                const composite_iterator_type aBegin(
+                    maBegin + vigra::Diff2D(rDstPoint.getX(),
+                                            rDstPoint.getY()),
+                    pMask->maBegin + vigra::Diff2D(rSrcRect.getMinX(),
+                                                   rSrcRect.getMinY()) );
+
+                fillImage(aBegin,
+                          aBegin + vigra::Diff2D(rSrcRect.getWidth(),
+                                                 rSrcRect.getHeight()),
+                          maRawMaskedAccessor,
+                          maColorLookup(
+                              maAccessor,
+                              aSrcColor) );
+            }
         }
 
         virtual void drawMaskedBitmap_i(const BitmapDeviceSharedPtr& rSrcBitmap,
@@ -920,11 +874,11 @@ namespace
             // translated. Let alone interpolated.
             if( drawMode == DrawMode_XOR )
                 implDrawBitmap(rSrcBitmap, rSrcRect, rDstRect,
-                               getMaskedRange(rMask),
+                               getMaskedIter(rMask),
                                maRawMaskedXorAccessor);
             else
                 implDrawBitmap(rSrcBitmap, rSrcRect, rDstRect,
-                               getMaskedRange(rMask),
+                               getMaskedIter(rMask),
                                maRawMaskedAccessor);
         }
 
@@ -983,23 +937,37 @@ struct ImplBitmapDevice
 
     /// Scanline stride. Negative for bottom-to-top formats
     sal_Int32                 mnScanlineStride;
+
+    /// raw ptr to 0th scanline. used for cloning a generic renderer
+    sal_uInt8*                mpFirstScanline;
+
+    /** (Optional) device sharing the same memory, and used for input
+        clip masks/alpha masks/bitmaps that don't match our exact
+        bitmap format.
+     */
+    BitmapDeviceSharedPtr     mpGenericRenderer;
 };
 
 
-BitmapDevice::BitmapDevice( const basegfx::B2IVector&        rSize,
+BitmapDevice::BitmapDevice( const basegfx::B2IRange&         rBounds,
                             bool                             bTopDown,
                             sal_Int32                        nScanlineFormat,
                             sal_Int32                        nScanlineStride,
+                            sal_uInt8*                       pFirstScanline,
                             const RawMemorySharedArray&      rMem,
                             const PaletteMemorySharedVector& rPalette ) :
     mpImpl( new ImplBitmapDevice )
 {
     mpImpl->mpMem = rMem;
     mpImpl->mpPalette = rPalette;
-    mpImpl->maBounds = basegfx::B2IRange( 0,0,rSize.getX(),rSize.getY() );
-    mpImpl->maLineClipRect = basegfx::B2IRange( 0,0,rSize.getX()-1,rSize.getY()-1 );
+    mpImpl->maBounds = rBounds;
+    mpImpl->maLineClipRect = basegfx::B2IRange( rBounds.getMinX(),
+                                                rBounds.getMinY(),
+                                                rBounds.getMaxX()-1,
+                                                rBounds.getMaxY()-1 );
     mpImpl->mnScanlineFormat = nScanlineFormat;
-    mpImpl->mnScanlineStride = bTopDown ? nScanlineStride : -nScanlineStride;
+    mpImpl->mnScanlineStride = nScanlineStride;
+    mpImpl->mpFirstScanline  = pFirstScanline;
 }
 
 BitmapDevice::~BitmapDevice()
@@ -1009,8 +977,10 @@ BitmapDevice::~BitmapDevice()
 
 basegfx::B2IVector BitmapDevice::getSize() const
 {
-    return basegfx::B2IVector( mpImpl->maBounds.getWidth(),
-                               mpImpl->maBounds.getHeight() );
+
+    return basegfx::B2IVector(
+        mpImpl->maBounds.getMaxX() - mpImpl->maBounds.getMinX(),
+        mpImpl->maBounds.getMaxY() - mpImpl->maBounds.getMinY() );
 }
 
 bool BitmapDevice::isTopDown() const
@@ -1025,7 +995,8 @@ sal_Int32 BitmapDevice::getScanlineFormat() const
 
 sal_Int32 BitmapDevice::getScanlineStride() const
 {
-    return mpImpl->mnScanlineStride;
+    return mpImpl->mnScanlineStride < 0 ?
+        -mpImpl->mnScanlineStride : mpImpl->mnScanlineStride;
 }
 
 RawMemorySharedArray BitmapDevice::getBuffer() const
@@ -1045,7 +1016,7 @@ const sal_Int32 BitmapDevice::getPaletteEntryCount() const
 
 void BitmapDevice::clear( Color fillColor )
 {
-    clear_i( fillColor );
+    clear_i( fillColor, mpImpl->maBounds );
 }
 
 void BitmapDevice::setPixel( const basegfx::B2IPoint& rPt,
@@ -1072,7 +1043,7 @@ void BitmapDevice::setPixel( const basegfx::B2IPoint&     rPt,
         if( isCompatibleClipMask( rClip ) )
             setPixel_i(rPt,lineColor,drawMode,rClip);
         else
-            OSL_ENSURE( false, "Generic output not yet implemented!" );
+            getGenericRenderer()->setPixel( rPt, lineColor, drawMode, rClip );
     }
 }
 
@@ -1124,7 +1095,8 @@ void BitmapDevice::drawLine( const basegfx::B2IPoint&     rPt1,
                     drawMode,
                     rClip );
     else
-        OSL_ENSURE( false, "Generic output not yet implemented!" );
+        getGenericRenderer()->drawLine( rPt1, rPt2, lineColor,
+                                        drawMode, rClip );
 }
 
 void BitmapDevice::drawPolygon( const basegfx::B2DPolygon& rPoly,
@@ -1156,7 +1128,8 @@ void BitmapDevice::drawPolygon( const basegfx::B2DPolygon&   rPoly,
                            mpImpl->maLineClipRect,
                            lineColor, drawMode, rClip );
         else
-            OSL_ENSURE( false, "Generic output not yet implemented!" );
+            getGenericRenderer()->drawPolygon( rPoly, lineColor,
+                                               drawMode, rClip );
 }
 
 void BitmapDevice::fillPolyPolygon( const basegfx::B2DPolyPolygon& rPoly,
@@ -1180,7 +1153,8 @@ void BitmapDevice::fillPolyPolygon( const basegfx::B2DPolyPolygon& rPoly,
     if( isCompatibleClipMask( rClip ) )
         fillPolyPolygon_i( rPoly, fillColor, drawMode, mpImpl->maBounds, rClip );
     else
-        OSL_ENSURE( false, "Generic output not yet implemented!" );
+        getGenericRenderer()->fillPolyPolygon( rPoly, fillColor,
+                                               drawMode, rClip );
 }
 
 
@@ -1336,10 +1310,15 @@ void BitmapDevice::drawBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
         assertImageRange(aDestRange,mpImpl->maBounds);
         assertImageRange(aSrcRange,aSrcBounds);
 
+#if 0
         if( isCompatibleBitmap( rSrcBitmap ) )
             drawBitmap_i( rSrcBitmap, aSrcRange, aDestRange, drawMode );
         else
-            OSL_ENSURE( false, "Generic output not yet implemented!" );
+            getGenericRenderer()->drawBitmap( rSrcBitmap, rSrcRect,
+                                              rDstRect, drawMode );
+#else
+        drawBitmap_i( rSrcBitmap, aSrcRange, aDestRange, drawMode );
+#endif
     }
 }
 
@@ -1368,6 +1347,7 @@ void BitmapDevice::drawBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
         assertImageRange(aDestRange,mpImpl->maBounds);
         assertImageRange(aSrcRange,aSrcBounds);
 
+#if 0
         if( isCompatibleBitmap( rSrcBitmap ) &&
             isCompatibleClipMask( rClip ) )
         {
@@ -1375,8 +1355,20 @@ void BitmapDevice::drawBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
         }
         else
         {
-            OSL_ENSURE( false, "Generic output not yet implemented!" );
+            getGenericRenderer()->drawBitmap( rSrcBitmap, rSrcRect,
+                                              rDstRect, drawMode, rClip );
         }
+#else
+        if( isCompatibleClipMask( rClip ) )
+        {
+            drawBitmap_i( rSrcBitmap, aSrcRange, aDestRange, drawMode, rClip );
+        }
+        else
+        {
+            getGenericRenderer()->drawBitmap( rSrcBitmap, rSrcRect,
+                                              rDstRect, drawMode, rClip );
+        }
+#endif
     }
 }
 
@@ -1390,6 +1382,7 @@ void BitmapDevice::drawMaskedColor( Color                        rSrcColor,
     basegfx::B2IRange         aSrcRange( rSrcRect );
     basegfx::B2IPoint         aDestPoint( rDstPoint );
 
+#if 0
     if( clipAreaImpl( aSrcRange,
                       aDestPoint,
                       aSrcBounds,
@@ -1398,11 +1391,28 @@ void BitmapDevice::drawMaskedColor( Color                        rSrcColor,
         assertImagePoint(aDestPoint,mpImpl->maBounds);
         assertImageRange(aSrcRange,aSrcBounds);
 
-        if( isCompatibleAlphaMask( rAlphaMask ) )
+        if( isCompatibleClipMask( rAlphaMask ) || isCompatibleAlphaMask( rAlphaMask ) )
             drawMaskedColor_i( rSrcColor, rAlphaMask, aSrcRange, aDestPoint );
         else
-            OSL_ENSURE( false, "Generic output not yet implemented!" );
+            getGenericRenderer()->drawMaskedColor( rSrcColor, rAlphaMask,
+                                                   rSrcRect, rDstPoint );
     }
+#else
+    // drawMaskedBitmap is also used for OutputDevice::DrawMask
+    if( clipAreaImpl( aSrcRange,
+                      aDestPoint,
+                      aSrcBounds,
+                      mpImpl->maBounds ))
+    {
+        assertImagePoint(aDestPoint,mpImpl->maBounds);
+        assertImageRange(aSrcRange,aSrcBounds);
+
+        if( isCompatibleClipMask( rAlphaMask ) || isCompatibleAlphaMask( rAlphaMask ) )
+            drawMaskedColor_i( rSrcColor, rAlphaMask, aSrcRange, aDestPoint );
+        else
+            OSL_ENSURE(false, "Generic output not yet implemented!");
+    }
+#endif
 }
 
 void BitmapDevice::drawMaskedColor( Color                        aSrcColor,
@@ -1430,15 +1440,31 @@ void BitmapDevice::drawMaskedColor( Color                        aSrcColor,
         assertImagePoint(aDestPoint,mpImpl->maBounds);
         assertImageRange(aSrcRange,aSrcBounds);
 
-        if( isCompatibleAlphaMask( rAlphaMask ) &&
+#if 0
+        if( (isCompatibleClipMask( rAlphaMask ) ||
+             isCompatibleAlphaMask( rAlphaMask )) &&
             isCompatibleClipMask( rClip ) )
         {
             drawMaskedColor_i( aSrcColor, rAlphaMask, aSrcRange, aDestPoint, rClip );
         }
         else
         {
-            OSL_ENSURE( false, "Generic output not yet implemented!" );
+            getGenericRenderer()->drawMaskedColor( aSrcColor, rAlphaMask,
+                                                   rSrcRect, rDstPoint, rClip );
         }
+#else
+        // drawMaskedBitmap is also used for OutputDevice::DrawMask
+        if( (isCompatibleClipMask( rAlphaMask ) ||
+             isCompatibleAlphaMask( rAlphaMask )) &&
+            isCompatibleClipMask( rClip ) )
+        {
+            drawMaskedColor_i( aSrcColor, rAlphaMask, aSrcRange, aDestPoint, rClip );
+        }
+        else
+        {
+            OSL_ENSURE(false, "Generic output not yet implemented!");
+        }
+#endif
     }
 }
 
@@ -1463,6 +1489,7 @@ void BitmapDevice::drawMaskedBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
         assertImageRange(aDestRange,mpImpl->maBounds);
         assertImageRange(aSrcRange,aSrcBounds);
 
+#if 0
         if( isCompatibleBitmap( rSrcBitmap ) &&
             isCompatibleClipMask( rMask ) )
         {
@@ -1470,8 +1497,20 @@ void BitmapDevice::drawMaskedBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
         }
         else
         {
-            OSL_ENSURE( false, "Generic output not yet implemented!" );
+            getGenericRenderer()->drawMaskedBitmap( rSrcBitmap, rMask,
+                                                    rSrcRect, rDstRect, drawMode );
         }
+#else
+        if( isCompatibleBitmap( rSrcBitmap ) &&
+            isCompatibleClipMask( rMask ) )
+        {
+            drawMaskedBitmap_i( rSrcBitmap, rMask, aSrcRange, aDestRange, drawMode );
+        }
+        else
+        {
+            OSL_ENSURE(false, "Generic output not yet implemented!");
+        }
+#endif
     }
 }
 
@@ -1503,6 +1542,7 @@ void BitmapDevice::drawMaskedBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
         assertImageRange(aDestRange,mpImpl->maBounds);
         assertImageRange(aSrcRange,aSrcBounds);
 
+#if 0
         if( isCompatibleBitmap( rSrcBitmap ) &&
             isCompatibleClipMask( rMask ) &&
             isCompatibleClipMask( rClip ) )
@@ -1511,46 +1551,77 @@ void BitmapDevice::drawMaskedBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
         }
         else
         {
-            OSL_ENSURE( false, "Generic output not yet implemented!" );
+            getGenericRenderer()->drawMaskedBitmap( rSrcBitmap, rMask, rSrcRect,
+                                                    rDstRect, drawMode, rClip );
         }
+#else
+        if( isCompatibleBitmap( rSrcBitmap ) &&
+            isCompatibleClipMask( rMask ) &&
+            isCompatibleClipMask( rClip ) )
+        {
+            drawMaskedBitmap_i( rSrcBitmap, rMask, aSrcRange, aDestRange, drawMode, rClip );
+        }
+        else
+        {
+            OSL_ENSURE(false, "Generic output not yet implemented!");
+        }
+#endif
     }
 }
 
 
 //----------------------------------------------------------------------------------
 
-/// Produces a specialized renderer for the given packed pixel format
-template< int                       Bits,
-          bool                      MsbFirst,
-          template<typename> class  VanillaAccessorSelector,
-          class                     Accessor >
-BitmapDeviceSharedPtr createPackedPixelRenderer(
-    const basegfx::B2IVector&               rSize,
-    bool                                    bTopDown,
-    sal_Int32                               nScanlineFormat,
-    sal_Int32                               nScanlineStride,
-    sal_uInt8*                              pFirstScanline,
-    const typename VanillaAccessorSelector<
-          Accessor>::type &                 rAccessor,
-    boost::shared_array< sal_uInt8 >        pMem,
-    const PaletteMemorySharedVector&        pPal )
+/** Standard clip and alpha masks
+ */
+struct StdMasks
 {
-    typedef PackedPixelIterator< sal_uInt8,Bits,MsbFirst > Iterator;
+    typedef PixelFormatTraits_GREY1_MSB   clipmask_format_traits;
+    typedef PixelFormatTraits_GREY8       alphamask_format_traits;
+};
+
+#if 0
+/** Clip and alpha masks for the generic renderer (of course, those
+    need to be generic, too)
+ */
+struct MaskTraitsGeneric
+{
+    typedef PixelFormatTraits_GenericInteger   clipmask_format_traits;
+    typedef PixelFormatTraits_GenericInteger   alphamask_format_traits;
+};
+#endif
+
+//----------------------------------------------------------------------------------
+
+/// Produces a specialized renderer for the given pixel format
+template< class FormatTraits, class MaskTraits >
+BitmapDeviceSharedPtr createRenderer(
+    const basegfx::B2IRange&                                     rBounds,
+    bool                                                         bTopDown,
+    sal_Int32                                                    nScanlineFormat,
+    sal_Int32                                                    nScanlineStride,
+    sal_uInt8*                                                   pFirstScanline,
+    typename FormatTraits::accessor_selector::template wrap_accessor<
+          typename FormatTraits::raw_accessor_type>::type const& rAccessor,
+    boost::shared_array< sal_uInt8 >                             pMem,
+    const PaletteMemorySharedVector&                             pPal )
+{
+    typedef typename FormatTraits::iterator_type                Iterator;
     typedef BitmapRenderer< Iterator,
-                            Accessor,
-                            VanillaAccessorSelector >      Renderer;
+                            typename FormatTraits::raw_accessor_type,
+                            typename FormatTraits::accessor_selector,
+                            MaskTraits >                        Renderer;
 
     return BitmapDeviceSharedPtr(
-        new Renderer( rSize,
+        new Renderer( rBounds,
                       bTopDown,
                       nScanlineFormat,
                       nScanlineStride,
-                      Iterator(pFirstScanline,
-                               nScanlineStride),
-                      Iterator(pFirstScanline,
-                               nScanlineStride)
-                      + vigra::Diff2D(rSize.getX(),
-                                      rSize.getY()),
+                      pFirstScanline,
+                      Iterator(
+                          reinterpret_cast<typename Iterator::value_type*>(
+                              pFirstScanline),
+                          nScanlineStride),
                       rAccessor,
                       pMem,
                       pPal ));
@@ -1575,6 +1646,59 @@ PaletteMemorySharedVector createStandardPalette(
     pLocalPal->at(nNumEntries) = Color(0xFFFFFFFF);
 
     return pLocalPal;
+}
+
+template< class FormatTraits, class MaskTraits >
+BitmapDeviceSharedPtr createRenderer(
+    const basegfx::B2IRange&                rBounds,
+    bool                                    bTopDown,
+    sal_Int32                               nScanlineFormat,
+    sal_Int32                               nScanlineStride,
+    sal_uInt8*                              pFirstScanline,
+    boost::shared_array< sal_uInt8 >        pMem,
+    const PaletteMemorySharedVector&        pPal )
+{
+    return createRenderer<FormatTraits,
+                          MaskTraits>(rBounds,
+                                      bTopDown,
+                                      nScanlineFormat,
+                                      nScanlineStride,
+                                      pFirstScanline,
+                                      typename FormatTraits::accessor_selector::template
+                                      wrap_accessor<
+                                          typename FormatTraits::raw_accessor_type>::type(),
+                                      pMem,
+                                      pPal);
+}
+
+template< class FormatTraits, class MaskTraits >
+BitmapDeviceSharedPtr createRenderer(
+    const basegfx::B2IRange&                rBounds,
+    bool                                    bTopDown,
+    sal_Int32                               nScanlineFormat,
+    sal_Int32                               nScanlineStride,
+    sal_uInt8*                              pFirstScanline,
+    boost::shared_array< sal_uInt8 >        pMem,
+    PaletteMemorySharedVector               pPal,
+    int                                     nBitsPerPixel )
+{
+    pPal = createStandardPalette(pPal,
+                                 1UL << nBitsPerPixel);
+
+    OSL_ASSERT(pPal);
+    return createRenderer<FormatTraits,
+                          MaskTraits>(rBounds,
+                                      bTopDown,
+                                      nScanlineFormat,
+                                      nScanlineStride,
+                                      pFirstScanline,
+                                      typename FormatTraits::accessor_selector::template
+                                          wrap_accessor<
+                                      typename FormatTraits::raw_accessor_type>::type(
+                                          &pPal->at(0),
+                                          pPal->size()),
+                                      pMem,
+                                      pPal);
 }
 
 //----------------------------------------------------------------------------------
@@ -1603,74 +1727,14 @@ inline sal_uInt32 nextPow2( sal_uInt32 x )
 
 //----------------------------------------------------------------------------------
 
-typedef PaletteImageAccessor<
-    StandardAccessor<sal_uInt8>,Color>     StandardPaletteAccessor;
-typedef PaletteImageAccessor<
-    NonStandardAccessor<sal_uInt8>,Color>  NonStandardPaletteAccessor;
-
-// -------------------------------------------------------
-
-#ifdef OSL_LITENDIAN
-# define SIXTEENBIT_LSB_SWAP false
-# define SIXTEENBIT_MSB_SWAP true
-#else
-# ifdef OSL_BIGENDIAN
-#  define SIXTEENBIT_LSB_SWAP true
-#  define SIXTEENBIT_MSB_SWAP false
-# else
-#  error Undetermined endianness!
-# endif
-#endif
-
-typedef PixelIterator<sal_uInt16>          SixteenBitPixelIterator;
-typedef StandardAccessor<sal_uInt16>       SixteenBitRawAccessor;
-template< class Accessor > struct TrueColorLsbMaskAccessorSelector
-{
-    typedef TrueColorMaskAccessor<Accessor,
-                                  Color,
-                                  0xF800,
-                                  0x07E0,
-                                  0x001F,
-                                  SIXTEENBIT_LSB_SWAP>     type;
-};
-typedef TrueColorLsbMaskAccessorSelector<
-    SixteenBitRawAccessor>::type            SixteenBitLsbAccessor;
-
-template< class Accessor > struct TrueColorMsbMaskAccessorSelector
-{
-    typedef TrueColorMaskAccessor<Accessor,
-                                  Color,
-                                  0xF800,
-                                  0x07E0,
-                                  0x001F,
-                                  SIXTEENBIT_MSB_SWAP>     type;
-};
-typedef TrueColorMsbMaskAccessorSelector<
-    SixteenBitRawAccessor>::type            SixteenBitMsbAccessor;
-
-// -------------------------------------------------------
-
-typedef PixelIterator<TwentyFourBitPixelRGB>     TwentyFourBitRGBIterator;
-typedef StandardAccessor<TwentyFourBitPixelRGB>  TwentyFourBitRGBAccessor;
-
-// -------------------------------------------------------
-
-typedef PixelIterator<TwentyFourBitPixelBGR>     TwentyFourBitBGRIterator;
-typedef StandardAccessor<TwentyFourBitPixelBGR>  TwentyFourBitBGRAccessor;
-
-// -------------------------------------------------------
-
-typedef PixelIterator<Color>               ThirtyTwoBitPixelIterator;
-typedef StandardAccessor<Color>            ThirtyTwoBitAccessor;
-
-
 namespace
 {
 BitmapDeviceSharedPtr createBitmapDeviceImpl( const basegfx::B2IVector&        rSize,
                                               bool                             bTopDown,
                                               sal_Int32                        nScanlineFormat,
                                               boost::shared_array< sal_uInt8 > pMem,
-                                              PaletteMemorySharedVector        pPal )
+                                              PaletteMemorySharedVector        pPal,
+                                              const basegfx::B2IRange*         pSubset )
 {
     if( nScanlineFormat <= Format::NONE ||
         nScanlineFormat >  Format::MAX )
@@ -1679,16 +1743,16 @@ BitmapDeviceSharedPtr createBitmapDeviceImpl( const basegfx::B2IVector&        r
     static const sal_uInt8 bitsPerPixel[] =
     {
         0,  // NONE
-        1,  // ONE_BIT_MSB_GRAY
-        1,  // ONE_BIT_LSB_GRAY
+        1,  // ONE_BIT_MSB_GREY
+        1,  // ONE_BIT_LSB_GREY
         1,  // ONE_BIT_MSB_PAL
         1,  // ONE_BIT_LSB_PAL
-        4,  // FOUR_BIT_MSB_GRAY
-        4,  // FOUR_BIT_LSB_GRAY
+        4,  // FOUR_BIT_MSB_GREY
+        4,  // FOUR_BIT_LSB_GREY
         4,  // FOUR_BIT_MSB_PAL
         4,  // FOUR_BIT_LSB_PAL
         8,  // EIGHT_BIT_PAL
-        8,  // EIGHT_BIT_GRAY
+        8,  // EIGHT_BIT_GREY
         16, // SIXTEEN_BIT_LSB_TC_MASK
         16, // SIXTEEN_BIT_MSB_TC_MASK
         24, // TWENTYFOUR_BIT_TC_MASK
@@ -1724,294 +1788,109 @@ BitmapDeviceSharedPtr createBitmapDeviceImpl( const basegfx::B2IVector&        r
     sal_uInt8* pFirstScanline = nScanlineStride < 0 ?
         pMem.get() + nMemSize + nScanlineStride : pMem.get();
 
+    // shrink render area to given subset, if given
+    basegfx::B2IRange aBounds(0,0,rSize.getX(),rSize.getY());
+    if( pSubset )
+        aBounds.intersect( *pSubset );
+
     switch( nScanlineFormat )
     {
         // ----------------------------------------------------------------------
         // one bit formats
 
-        case Format::ONE_BIT_MSB_GRAY:
-        {
-            return createPackedPixelRenderer< 1,
-                                              true,
-                                              boost::mpl::identity,
-                                              MaskAccessor >(
-                rSize,
-                bTopDown,
-                nScanlineFormat,
-                nScanlineStride,
-                pFirstScanline,
-                MaskAccessor(),
-                pMem,
-                pPal );
-        }
-        case Format::ONE_BIT_LSB_GRAY:
-        {
-            return createPackedPixelRenderer< 1,
-                                              false,
-                                              boost::mpl::identity,
-                                              MaskAccessor >(
-                rSize,
-                bTopDown,
-                nScanlineFormat,
-                nScanlineStride,
-                pFirstScanline,
-                MaskAccessor(),
-                pMem,
-                pPal );
-        }
+        case Format::ONE_BIT_MSB_GREY:
+            return createRenderer<PixelFormatTraits_GREY1_MSB,StdMasks>(
+                aBounds, bTopDown, nScanlineFormat, nScanlineStride,
+                pFirstScanline, pMem, pPal );
+
+        case Format::ONE_BIT_LSB_GREY:
+            return createRenderer<PixelFormatTraits_GREY1_LSB,StdMasks>(
+                aBounds, bTopDown, nScanlineFormat, nScanlineStride,
+                pFirstScanline, pMem, pPal );
+
         case Format::ONE_BIT_MSB_PAL:
-        {
-            pPal = createStandardPalette(pPal,2);
-            return createPackedPixelRenderer< 1,
-                                              true,
-                                              PaletteAccessorSelector,
-                                              MaskAccessor >(
-                rSize,
-                bTopDown,
-                nScanlineFormat,
-                nScanlineStride,
-                pFirstScanline,
-                NonStandardPaletteAccessor( &pPal->at(0),
-                                            pPal->size() ),
-                pMem,
-                pPal );
-        }
+            return createRenderer<PixelFormatTraits_PAL1_MSB,StdMasks>(
+                aBounds, bTopDown, nScanlineFormat, nScanlineStride,
+                pFirstScanline, pMem, pPal,
+                bitsPerPixel[nScanlineFormat] );
+
         case Format::ONE_BIT_LSB_PAL:
-        {
-            pPal = createStandardPalette(pPal,2);
-            return createPackedPixelRenderer< 1,
-                                              false,
-                                              PaletteAccessorSelector,
-                                              MaskAccessor >(
-                rSize,
-                bTopDown,
-                nScanlineFormat,
-                nScanlineStride,
-                pFirstScanline,
-                NonStandardPaletteAccessor( &pPal->at(0),
-                                            pPal->size() ),
-                pMem,
-                pPal );
-        }
+            return createRenderer<PixelFormatTraits_PAL1_LSB,StdMasks>(
+                aBounds, bTopDown, nScanlineFormat, nScanlineStride,
+                pFirstScanline, pMem, pPal,
+                bitsPerPixel[nScanlineFormat] );
 
 
         // ----------------------------------------------------------------------
         // four bit formats
 
-        case Format::FOUR_BIT_MSB_GRAY:
-        {
-            return createPackedPixelRenderer< 4,
-                                              true,
-                                              boost::mpl::identity,
-                                              MaskAccessor >(
-                rSize,
-                bTopDown,
-                nScanlineFormat,
-                nScanlineStride,
-                pFirstScanline,
-                MaskAccessor(),
-                pMem,
-                pPal );
-        }
-        case Format::FOUR_BIT_LSB_GRAY:
-        {
-            return createPackedPixelRenderer< 4,
-                                              false,
-                                              boost::mpl::identity,
-                                              MaskAccessor >(
-                rSize,
-                bTopDown,
-                nScanlineFormat,
-                nScanlineStride,
-                pFirstScanline,
-                MaskAccessor(),
-                pMem,
-                pPal );
-        }
+        case Format::FOUR_BIT_MSB_GREY:
+            return createRenderer<PixelFormatTraits_GREY4_MSB,StdMasks>(
+                aBounds, bTopDown, nScanlineFormat, nScanlineStride,
+                pFirstScanline, pMem, pPal );
+
+        case Format::FOUR_BIT_LSB_GREY:
+            return createRenderer<PixelFormatTraits_GREY4_LSB,StdMasks>(
+                aBounds, bTopDown, nScanlineFormat, nScanlineStride,
+                pFirstScanline, pMem, pPal );
+
         case Format::FOUR_BIT_MSB_PAL:
-        {
-            pPal = createStandardPalette(pPal,16);
-            return createPackedPixelRenderer< 1,
-                                              true,
-                                              PaletteAccessorSelector,
-                                              MaskAccessor >(
-                rSize,
-                bTopDown,
-                nScanlineFormat,
-                nScanlineStride,
-                pFirstScanline,
-                NonStandardPaletteAccessor( &pPal->at(0),
-                                            pPal->size() ),
-                pMem,
-                pPal );
-        }
+            return createRenderer<PixelFormatTraits_PAL4_MSB,StdMasks>(
+                aBounds, bTopDown, nScanlineFormat, nScanlineStride,
+                pFirstScanline, pMem, pPal,
+                bitsPerPixel[nScanlineFormat] );
+
         case Format::FOUR_BIT_LSB_PAL:
-        {
-            pPal = createStandardPalette(pPal,16);
-            return createPackedPixelRenderer< 1,
-                                              false,
-                                              PaletteAccessorSelector,
-                                              MaskAccessor >(
-                rSize,
-                bTopDown,
-                nScanlineFormat,
-                nScanlineStride,
-                pFirstScanline,
-                NonStandardPaletteAccessor( &pPal->at(0),
-                                            pPal->size() ),
-                pMem,
-                pPal );
-        }
+            return createRenderer<PixelFormatTraits_PAL4_LSB,StdMasks>(
+                aBounds, bTopDown, nScanlineFormat, nScanlineStride,
+                pFirstScanline, pMem, pPal,
+                bitsPerPixel[nScanlineFormat] );
 
 
         // ----------------------------------------------------------------------
         // eight bit formats
 
-        case Format::EIGHT_BIT_GRAY:
-        {
-            return BitmapDeviceSharedPtr(
-                new BitmapRenderer< AlphaMaskIterator,
-                                    AlphaMaskAccessor,
-                                    boost::mpl::identity >(
-                    rSize,
-                    bTopDown,
-                    nScanlineFormat,
-                    nScanlineStride,
-                    AlphaMaskIterator(pFirstScanline,
-                                      nScanlineStride),
-                    AlphaMaskIterator(pFirstScanline,
-                                      nScanlineStride)
-                    + vigra::Diff2D(rSize.getX(),
-                                    rSize.getY()),
-                    AlphaMaskAccessor(),
-                    pMem,
-                    pPal ));
-        }
+        case Format::EIGHT_BIT_GREY:
+            return createRenderer<PixelFormatTraits_GREY8,StdMasks>(
+                aBounds, bTopDown, nScanlineFormat, nScanlineStride,
+                pFirstScanline, pMem, pPal );
+
         case Format::EIGHT_BIT_PAL:
-        {
-            pPal = createStandardPalette(pPal,256);
-            return BitmapDeviceSharedPtr(
-                new BitmapRenderer< AlphaMaskIterator,
-                                    AlphaMaskAccessor,
-                                    PaletteAccessorSelector >(
-                    rSize,
-                    bTopDown,
-                    nScanlineFormat,
-                    nScanlineStride,
-                    AlphaMaskIterator(pFirstScanline,
-                                      nScanlineStride),
-                    AlphaMaskIterator(pFirstScanline,
-                                      nScanlineStride)
-                    + vigra::Diff2D(rSize.getX(),
-                                    rSize.getY()),
-                    StandardPaletteAccessor( &pPal->at(0),
-                                             pPal->size() ),
-                    pMem,
-                    pPal ));
-        }
+            return createRenderer<PixelFormatTraits_PAL8,StdMasks>(
+                aBounds, bTopDown, nScanlineFormat, nScanlineStride,
+                pFirstScanline, pMem, pPal,
+                bitsPerPixel[nScanlineFormat] );
 
 
         // ----------------------------------------------------------------------
         // sixteen bit formats
 
         case Format::SIXTEEN_BIT_LSB_TC_MASK:
-        {
-            return BitmapDeviceSharedPtr(
-                new BitmapRenderer< SixteenBitPixelIterator,
-                                    SixteenBitRawAccessor,
-                                    TrueColorLsbMaskAccessorSelector >(
-                    rSize,
-                    bTopDown,
-                    nScanlineFormat,
-                    nScanlineStride,
-                    SixteenBitPixelIterator(
-                        reinterpret_cast<sal_uInt16*>(pFirstScanline),
-                        nScanlineStride),
-                    SixteenBitPixelIterator(
-                        reinterpret_cast<sal_uInt16*>(pFirstScanline),
-                        nScanlineStride)
-                    + vigra::Diff2D(rSize.getX(),
-                                    rSize.getY()),
-                    SixteenBitLsbAccessor(),
-                    pMem,
-                    pPal ));
-        }
+            return createRenderer<PixelFormatTraits_RGB16_565_LSB,StdMasks>(
+                aBounds, bTopDown, nScanlineFormat, nScanlineStride,
+                pFirstScanline, pMem, pPal );
 
         case Format::SIXTEEN_BIT_MSB_TC_MASK:
-        {
-            return BitmapDeviceSharedPtr(
-                new BitmapRenderer< SixteenBitPixelIterator,
-                                    SixteenBitRawAccessor,
-                                    TrueColorMsbMaskAccessorSelector >(
-                    rSize,
-                    bTopDown,
-                    nScanlineFormat,
-                    nScanlineStride,
-                    SixteenBitPixelIterator(
-                        reinterpret_cast<sal_uInt16*>(pFirstScanline),
-                        nScanlineStride),
-                    SixteenBitPixelIterator(
-                        reinterpret_cast<sal_uInt16*>(pFirstScanline),
-                        nScanlineStride)
-                    + vigra::Diff2D(rSize.getX(),
-                                    rSize.getY()),
-                    SixteenBitMsbAccessor(),
-                    pMem,
-                    pPal ));
-        }
+            return createRenderer<PixelFormatTraits_RGB16_565_MSB,StdMasks>(
+                aBounds, bTopDown, nScanlineFormat, nScanlineStride,
+                pFirstScanline, pMem, pPal );
+
 
         // ----------------------------------------------------------------------
         // twentyfour bit formats
-
         case Format::TWENTYFOUR_BIT_TC_MASK:
-        {
-            return BitmapDeviceSharedPtr(
-                new BitmapRenderer< TwentyFourBitRGBIterator,
-                                    TwentyFourBitRGBAccessor,
-                                    boost::mpl::identity >(
-                    rSize,
-                    bTopDown,
-                    nScanlineFormat,
-                    nScanlineStride,
-                    TwentyFourBitRGBIterator(
-                        reinterpret_cast<TwentyFourBitPixelRGB*>(pFirstScanline),
-                        nScanlineStride),
-                    TwentyFourBitRGBIterator(
-                        reinterpret_cast<TwentyFourBitPixelRGB*>(pFirstScanline),
-                        nScanlineStride)
-                    + vigra::Diff2D(rSize.getX(),
-                                    rSize.getY()),
-                    TwentyFourBitRGBAccessor(),
-                    pMem,
-                    pPal ));
-        }
+            return createRenderer<PixelFormatTraits_RGB24,StdMasks>(
+                aBounds, bTopDown, nScanlineFormat, nScanlineStride,
+                pFirstScanline, pMem, pPal );
 
 
         // ----------------------------------------------------------------------
         // thirtytwo bit formats
 
         case Format::THIRTYTWO_BIT_TC_MASK:
-        {
-            return BitmapDeviceSharedPtr(
-                new BitmapRenderer< ThirtyTwoBitPixelIterator,
-                                    ThirtyTwoBitAccessor,
-                                    boost::mpl::identity >(
-                    rSize,
-                    bTopDown,
-                    nScanlineFormat,
-                    nScanlineStride,
-                    ThirtyTwoBitPixelIterator(
-                        reinterpret_cast<Color*>(pFirstScanline),
-                        nScanlineStride),
-                    ThirtyTwoBitPixelIterator(
-                        reinterpret_cast<Color*>(pFirstScanline),
-                        nScanlineStride)
-                    + vigra::Diff2D(rSize.getX(),
-                                    rSize.getY()),
-                    ThirtyTwoBitAccessor(),
-                    pMem,
-                    pPal ));
-        }
+            return createRenderer<PixelFormatTraits_RGB32_888,StdMasks>(
+                aBounds, bTopDown, nScanlineFormat, nScanlineStride,
+                pFirstScanline, pMem, pPal );
     }
 
     // TODO(F3): other formats not yet implemented
@@ -2028,7 +1907,21 @@ BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector& rSize,
                                    bTopDown,
                                    nScanlineFormat,
                                    boost::shared_array< sal_uInt8 >(),
-                                   PaletteMemorySharedVector() );
+                                   PaletteMemorySharedVector(),
+                                   NULL );
+}
+
+BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector&        rSize,
+                                          bool                             bTopDown,
+                                          sal_Int32                        nScanlineFormat,
+                                          const PaletteMemorySharedVector& rPalette )
+{
+    return createBitmapDeviceImpl( rSize,
+                                   bTopDown,
+                                   nScanlineFormat,
+                                   boost::shared_array< sal_uInt8 >(),
+                                   rPalette,
+                                   NULL );
 }
 
 BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector&        rSize,
@@ -2041,7 +1934,19 @@ BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector&        rSize
                                    bTopDown,
                                    nScanlineFormat,
                                    rMem,
-                                   rPalette );
+                                   rPalette,
+                                   NULL );
+}
+
+BitmapDeviceSharedPtr subsetBitmapDevice( const BitmapDeviceSharedPtr&     rProto,
+                                          const basegfx::B2IRange&         rSubset )
+{
+    return createBitmapDeviceImpl( rProto->getSize(),
+                                   rProto->isTopDown(),
+                                   rProto->getScanlineFormat(),
+                                   rProto->getBuffer(),
+                                   rProto->getPalette(),
+                                   &rSubset );
 }
 
 BitmapDeviceSharedPtr cloneBitmapDevice( const basegfx::B2IVector&        rSize,
@@ -2051,7 +1956,41 @@ BitmapDeviceSharedPtr cloneBitmapDevice( const basegfx::B2IVector&        rSize,
                                    rProto->isTopDown(),
                                    rProto->getScanlineFormat(),
                                    boost::shared_array< sal_uInt8 >(),
-                                   rProto->getPalette() );
+                                   rProto->getPalette(),
+                                   NULL );
+}
+
+//----------------------------------------------------------------------------------
+
+/// Clone our device, with GenericImageAccessor to handle all formats
+BitmapDeviceSharedPtr BitmapDevice::getGenericRenderer() const
+{
+#if 0
+    // xxx TODO
+    typedef BitmapRenderer< PixelFormatTraits_GenericInteger::iterator_type,
+                            PixelFormatTraits_GenericInteger::raw_accessor_type,
+                            PixelFormatTraits_GenericInteger::accessor_selector,
+                            MaskTraitsGeneric >
+            Renderer;
+
+    if( !mpImpl->mpGenericRenderer )
+    {
+        mpImpl->mpGenericRenderer.reset(
+            new Renderer(
+                mpImpl->maBounds,
+                isTopDown(),
+                getScanlineFormat(),
+                getScanlineStride(),
+                mpImpl->mpFirstScanline,
+                PixelFormatTraits_GenericInteger::iterator_type(),
+                GenericIntegerImageAccessor<Color>(
+                    const_cast<BitmapDevice*>(this)->shared_from_this()),
+                getBuffer(),
+                getPalette() ));
+    }
+#endif
+
+    return mpImpl->mpGenericRenderer;
 }
 
 } // namespace basebmp

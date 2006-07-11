@@ -4,9 +4,9 @@
  *
  *  $RCSfile: metafunctions.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-06 10:00:40 $
+ *  last change: $Author: thb $ $Date: 2006-07-11 11:38:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -198,6 +198,20 @@ template<> struct bitcount<0>
 {
     enum { value = 0 };
 };
+
+//--------------------------------------------------------------
+
+/// Shift left for positive shift value, and right otherwise
+template< typename T > inline T shiftLeft( T v, int shift )
+{
+    return shift > 0 ? v << shift : v >> (-shift);
+}
+
+/// Shift right for positive shift value, and left otherwise
+template< typename T > inline T shiftRight( T v, int shift )
+{
+    return shift > 0 ? v >> shift : v << (-shift);
+}
 
 
 } // namespace basebmp

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: colortraits.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-06 10:00:40 $
+ *  last change: $Author: thb $ $Date: 2006-07-11 11:38:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,8 +44,17 @@
 namespace basebmp
 {
 
+template< typename ValueType, typename AlphaType > struct BlendFunctorBase
+{
+    typedef AlphaType first_argument_type;
+    typedef ValueType second_argument_type;
+    typedef ValueType third_argument_type;
+    typedef ValueType result_type;
+};
+
 /// Functor template, to calculate alpha blending between two values. Float case.
-template< typename ValueType, typename AlphaType > struct BlendFunctor
+template< typename ValueType, typename AlphaType > struct BlendFunctor :
+        public BlendFunctorBase<ValueType,AlphaType>
 {
     ValueType operator()( AlphaType alpha,
                           ValueType v1,
@@ -87,10 +96,20 @@ template< typename ColorType > struct ColorTraits
     typedef ColorType component_type;
 
     /// Calculate normalized distance between color c1 and c2
-    static vigra::NormTraits<ColorType> distance( ColorType c1,
-                                                  ColorType c2 )
+    static inline vigra::NormTraits<ColorType> distance( ColorType c1,
+                                                         ColorType c2 )
     {
         return vigra::norm(c1 - c2);
+    }
+
+    static inline component_type toGreyscale( ColorType c )
+    {
+        return c;
+    }
+
+    static inline ColorType fromGreyscale( component_type c )
+    {
+        return c;
     }
 };
 

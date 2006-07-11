@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cliptest.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-28 16:50:20 $
+ *  last change: $Author: thb $ $Date: 2006-07-11 11:38:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,9 +108,6 @@ private:
         const Color aCol(0xFFFFFFFF);
         rDevice->drawLine( aPt1, aPt2, aCol, DrawMode_PAINT, mpClipMask );
 
-        std::ofstream output("32bpp_test.dump");
-        debugDump( mpDevice32bpp, output );
-
         const basegfx::B2IPoint aPt3(1,5);
         CPPUNIT_ASSERT_MESSAGE("get line pixel",
                                rDevice->getPixel(aPt3) != aBgCol);
@@ -164,7 +161,7 @@ private:
     {
         BitmapDeviceSharedPtr pBmp( createBitmapDevice( rDevice->getSize(),
                                                         true,
-                                                        Format::EIGHT_BIT_GRAY ));
+                                                        Format::EIGHT_BIT_GREY ));
 
         ::rtl::OUString aSvg = ::rtl::OUString::createFromAscii(
             "m 0 0h5v10h5v-5h-10z" );
@@ -199,7 +196,7 @@ public:
         const basegfx::B2ISize aSize(11,11);
         mpClipMask = createBitmapDevice( aSize,
                                          true,
-                                         Format::ONE_BIT_MSB_GRAY );
+                                         Format::ONE_BIT_MSB_GREY );
         mpDevice1bpp = createBitmapDevice( aSize,
                                            true,
                                            Format::ONE_BIT_MSB_PAL );
@@ -216,6 +213,9 @@ public:
             aPoly.getB2DPolygon(0),
             Color(0),
             DrawMode_PAINT );
+
+        std::ofstream output("clipmask.dump");
+        debugDump( mpClipMask, output );
     }
 
     void testPixelClip()

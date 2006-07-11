@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessoradapters.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-06 10:00:39 $
+ *  last change: $Author: thb $ $Date: 2006-07-11 11:38:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,14 +47,26 @@ namespace basebmp
     @tpl WrappedAccessor
     Wrapped type must provide the usual get and set accessor methods,
     with the usual signatures (see StandardAccessor for a conforming
-    example). Furthermore, the type must provide a wrapped typedef
-    value_type
+    example).
+
+    @tpl GetterFunctor
+    An Adaptable Unary Function (i.e. providing result_type and
+    argument_type typedefs)
+
+    @tpl SetterFunctor
+    An Adaptable Unary Function (i.e. providing result_type and
+    argument_type typedefs)
  */
 template< class WrappedAccessor,
           typename GetterFunctor,
           typename SetterFunctor > class UnaryFunctionAccessorAdapter
 {
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+// making all members public, if no member template friends
 private:
+    template<class A, typename G, typename S> friend class UnaryFunctionAccessorAdapter;
+#endif
+
     // we don't derive from wrapped type, to avoid ambiguities
     // regarding templatized getter/setter methods.
     WrappedAccessor maAccessor;
@@ -62,12 +74,22 @@ private:
     SetterFunctor   maSetterFunctor;
 
 public:
-    typedef typename WrappedAccessor::value_type value_type;
+    typedef typename GetterFunctor::result_type   value_type;
+    typedef typename SetterFunctor::argument_type argument_type;
 
     UnaryFunctionAccessorAdapter() :
         maAccessor(),
         maGetterFunctor(),
         maSetterFunctor()
+    {}
+
+    template< class A > explicit
+    UnaryFunctionAccessorAdapter( UnaryFunctionAccessorAdapter< A,
+                                                                GetterFunctor,
+                                                                SetterFunctor > const& rSrc ) :
+        maAccessor( rSrc.maAccessor ),
+        maGetterFunctor( rSrc.maGetterFunctor ),
+        maSetterFunctor( rSrc.maSetterFunctor )
     {}
 
     template< class T > explicit UnaryFunctionAccessorAdapter( T accessor ) :
@@ -91,6 +113,17 @@ public:
 
     // -------------------------------------------------------
 
+    value_type getter(typename GetterFunctor::argument_type v) const
+    {
+        return maGetterFunctor(v);
+    }
+    typename SetterFunctor::result_type setter(argument_type v) const
+    {
+        return maSetterFunctor(v);
+    }
+
+    // -------------------------------------------------------
+
     template< class Iterator >
     value_type operator()(Iterator const& i) const
     {
@@ -110,7 +143,8 @@ public:
     {
         maAccessor.set(
             maSetterFunctor(
-                vigra::detail::RequiresExplicitCast<value_type>::cast(value) ));
+                vigra::detail::RequiresExplicitCast<argument_type>::cast(value) ),
+            i );
     }
 
     template< typename V, class Iterator, class Difference >
@@ -118,7 +152,9 @@ public:
     {
         maAccessor.set(
             maSetterFunctor(
-                vigra::detail::RequiresExplicitCast<value_type>::cast(value) ));
+                vigra::detail::RequiresExplicitCast<argument_type>::cast(value) ),
+            i,
+            diff );
     }
 
 };
@@ -133,22 +169,39 @@ public:
     @tpl WrappedAccessor
     Wrapped type must provide the usual get and set accessor methods,
     with the usual signatures (see StandardAccessor for a conforming
-    example). Furthermore, the type must provide a wrapped typedef
-    value_type
+    example). Furthermore, must provide a nested typedef value_type.
+
+    @tpl SetterFunctor
+    An adaptable binary function (i.e. providing nested typedefs for
+    result_type and first and second argument type)
  */
 template< class WrappedAccessor,
           typename SetterFunctor > class BinarySetterFunctionAccessorAdapter
 {
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+// making all members public, if no member template friends
 private:
+    template<class A, typename S> friend class BinarySetterFunctionAccessorAdapter;
+#endif
+
     WrappedAccessor    maAccessor;
     SetterFunctor      maFunctor;
 
 public:
-    typedef typename WrappedAccessor::value_type value_type;
+    typedef typename WrappedAccessor::value_type         value_type;
+    typedef typename SetterFunctor::second_argument_type argument_type;
 
     BinarySetterFunctionAccessorAdapter() :
         maAccessor(),
         maFunctor()
+    {}
+
+    template< class A > explicit
+    BinarySetterFunctionAccessorAdapter(
+        BinarySetterFunctionAccessorAdapter< A,
+                                             SetterFunctor > const& rSrc ) :
+        maAccessor( rSrc.maAccessor ),
+        maFunctor( rSrc.maFunctor )
     {}
 
     template< class T > explicit BinarySetterFunctionAccessorAdapter( T accessor ) :
@@ -166,6 +219,15 @@ public:
 
     WrappedAccessor const& getWrappedAccessor() const { return maAccessor; }
     WrappedAccessor&       getWrappedAccessor() { return maAccessor; }
+
+    // -------------------------------------------------------
+
+    typename SetterFunctor::result_type setter(
+        typename SetterFunctor::first_argument_type v1,
+        argument_type                               v2 ) const
+    {
+        return maSetterFunctor(v1,v2);
+    }
 
     // -------------------------------------------------------
 
@@ -188,7 +250,7 @@ public:
     {
         maAccessor.set(
             maFunctor(maAccessor(i),
-                      vigra::detail::RequiresExplicitCast<value_type>::cast(value)),
+                      vigra::detail::RequiresExplicitCast<argument_type>::cast(value)),
             i );
     }
 
@@ -197,7 +259,7 @@ public:
     {
         maAccessor.set(
             maFunctor(maAccessor(i,diff),
-                      vigra::detail::RequiresExplicitCast<value_type>::cast(value)),
+                      vigra::detail::RequiresExplicitCast<argument_type>::cast(value)),
             i,
             diff );
     }
@@ -218,20 +280,32 @@ public:
     @tpl WrappedAccessor1
     Wrapped type must provide the usual get and set accessor methods,
     with the usual signatures (see StandardAccessor for a conforming
-    example). Furthermore, the type must provide a wrapped typedef
-    value_type
+    example). Furthermore, the type must provide a nested typedef
+    value_type (the selection of WrappedAccessor1 as the provider for
+    that typedef is rather arbitrary. Could have been
+    WrappedAccessor2, too. So sue me)
+
+    @tpl Functor
+    An adaptable ternary function (i.e. providing nested typedefs for
+    result_type and first, second and third argument type)
  */
 template< class WrappedAccessor1,
           class WrappedAccessor2,
           typename Functor > class TernarySetterFunctionAccessorAdapter
 {
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+// making all members public, if no member template friends
 private:
+    template<class A1, class A2, typename F> friend class TernarySetterFunctionAccessorAdapter;
+#endif
+
     WrappedAccessor1 ma1stAccessor;
     WrappedAccessor2 ma2ndAccessor;
     Functor          maFunctor;
 
 public:
     typedef typename WrappedAccessor1::value_type value_type;
+    typedef typename Functor::third_argument_type argument_type;
 
     TernarySetterFunctionAccessorAdapter() :
         ma1stAccessor(),
@@ -243,6 +317,16 @@ public:
         ma1stAccessor( accessor ),
         ma2ndAccessor(),
         maFunctor()
+    {}
+
+    template< class A1, class A2 >
+    TernarySetterFunctionAccessorAdapter(
+        TernarySetterFunctionAccessorAdapter< A1,
+                                              A2,
+                                              Functor > const& rSrc ) :
+        ma1stAccessor( rSrc.ma1stAccessor ),
+        ma2ndAccessor( rSrc.ma2ndAccessor ),
+        maFunctor( rSrc.maFunctor )
     {}
 
     template< class T1, class T2 >
@@ -272,6 +356,16 @@ public:
 
     // -------------------------------------------------------
 
+    typename Functor::result_type setter(
+        typename Functor::first_argument_type  v1,
+        typename Functor::second_argument_type v2,
+        argument_type                          v3 ) const
+    {
+        return maSetterFunctor(v1,v2,v3);
+    }
+
+    // -------------------------------------------------------
+
     template< class Iterator >
     value_type operator()(Iterator const& i) const
     {
@@ -292,7 +386,7 @@ public:
         ma1stAccessor.set(
             maFunctor(ma1stAccessor(i.first()),
                       ma2ndAccessor(i.second()),
-                      vigra::detail::RequiresExplicitCast<value_type>::cast(value)),
+                      vigra::detail::RequiresExplicitCast<argument_type>::cast(value)),
             i.first() );
     }
 
@@ -302,7 +396,7 @@ public:
         ma1stAccessor.set(
             maFunctor(ma1stAccessor(i.first(), diff),
                       ma2ndAccessor(i.second(),diff),
-                      vigra::detail::RequiresExplicitCast<value_type>::cast(value)),
+                      vigra::detail::RequiresExplicitCast<argument_type>::cast(value)),
             i.first(),
             diff );
     }

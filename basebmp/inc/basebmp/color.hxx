@@ -4,9 +4,9 @@
  *
  *  $RCSfile: color.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-06 10:00:39 $
+ *  last change: $Author: thb $ $Date: 2006-07-11 11:38:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,13 +63,13 @@ public:
     void setGreen( sal_uInt8 nGreen ) { mnColor &= ~0x0000FF00UL; mnColor |= (sal_uInt32)nGreen << 8; }
     void setBlue( sal_uInt8 nBlue ) { mnColor &= ~0x000000FFUL; mnColor |= nBlue; }
 
-    void setGray( sal_uInt8 nGrayVal ) { mnColor = (sal_uInt32)nGrayVal << 16 | (sal_uInt32)nGrayVal << 8 | nGrayVal; }
+    void setGrey( sal_uInt8 nGreyVal ) { mnColor = (sal_uInt32)nGreyVal << 16 | (sal_uInt32)nGreyVal << 8 | nGreyVal; }
 
     sal_uInt8 getRed() const   { return 0xFF & (mnColor >> 16); }
     sal_uInt8 getGreen() const { return 0xFF & (mnColor >> 8); }
     sal_uInt8 getBlue() const  { return 0xFF & mnColor; }
 
-    sal_uInt8 getGrayscale() const { return (sal_uInt8)((getBlue()*28UL +
+    sal_uInt8 getGreyscale() const { return (sal_uInt8)((getBlue()*28UL +
                                                          getGreen()*151 +
                                                          getRed()*77) / 256); }
 

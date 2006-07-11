@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paletteimageaccessor.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-06 10:00:40 $
+ *  last change: $Author: thb $ $Date: 2006-07-11 11:38:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,54 +169,6 @@ public:
             i,
             diff );
     }
-};
-
-//-----------------------------------------------------------------------------
-
-/** Lookup index value for given Color value in PaletteImageAccessor
- */
-template< class Accessor > struct ColorLookup
-{
-    typename Accessor::data_type operator()( const Accessor&               acc,
-                                             typename Accessor::value_type v )
-    {
-        return acc.lookup(v);
-    }
-};
-
-//-----------------------------------------------------------------------------
-
-// partial specialization for PaletteAccessor
-template< class Accessor, typename ColorType > struct AccessorTraits<
-    PaletteImageAccessor< Accessor, ColorType > >
-{
-    /// value type of described accessor
-    typedef typename PaletteImageAccessor< Accessor, ColorType >::value_type  value_type;
-
-    /// Retrieve stand-alone color lookup function for given Accessor type
-    typedef ColorLookup< PaletteImageAccessor< Accessor, ColorType > >        color_lookup;
-
-    /// Retrieve raw pixel data accessor for given Accessor type
-    typedef Accessor                                                          raw_accessor;
-
-    /** accessor for XOR setter access is disabled, since the results
-     *  are usually completely unintended - you'll usually want to
-     *  wrap an xor_accessor with a PaletteAccessor, not the other way
-     *  around.
-     */
-    typedef vigra::VigraFalseType                                             xor_accessor;
-
-    /** accessor for masked setter access is disabled, since the
-     *  results are usually completely unintended - you'll usually
-     *  want to wrap a masked_accessor with a PaletteAccessor, not the
-     *  other way around.
-     */
-    template< class MaskAccessor,
-              class Iterator,
-              class MaskIterator > struct                                     masked_accessor
-    {
-        typedef vigra::VigraFalseType type;
-    };
 };
 
 } // namespace basebmp

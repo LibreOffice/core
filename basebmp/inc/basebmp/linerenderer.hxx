@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linerenderer.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-28 16:50:19 $
+ *  last change: $Author: thb $ $Date: 2006-07-11 11:38:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,9 @@
 #ifndef _BGFX_POINT_B2IPOINT_HXX
 #include <basegfx/point/b2ipoint.hxx>
 #endif
+
+#include <vigra/iteratortraits.hxx>
+
 
 /* Scan-converting lines */
 
@@ -120,7 +123,8 @@ void renderLine( const basegfx::B2IPoint&      rPt1,
         ady *= 2;
 
         Iterator currIter( begin + vigra::Diff2D(0,ys) );
-        typename Iterator::row_iterator rowIter( currIter.rowIterator() + xs );
+        typename vigra::IteratorTraits<Iterator>::row_iterator
+            rowIter( currIter.rowIterator() + xs );
         while(true)
         {
             acc.set(color, rowIter);
@@ -153,7 +157,8 @@ void renderLine( const basegfx::B2IPoint&      rPt1,
         ady *= 2;
 
         Iterator currIter( begin + vigra::Diff2D(xs,0) );
-        typename Iterator::column_iterator colIter( currIter.columnIterator() + ys );
+        typename vigra::IteratorTraits<Iterator>::column_iterator
+            colIter( currIter.columnIterator() + ys );
         while(true)
         {
             acc.set(color, colIter);

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessortraits.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-06 10:02:07 $
+ *  last change: $Author: thb $ $Date: 2006-07-11 11:38:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@
 
 #include <osl/diagnose.h>
 #include <basebmp/accessoradapters.hxx>
+#include <basebmp/metafunctions.hxx>
 
 #include <functional>
 
@@ -51,7 +52,7 @@ namespace basebmp
 //-----------------------------------------------------------------------------
 
 // XOR
-template< typename T > struct XorFunctor
+template< typename T > struct XorFunctor : public std::binary_function<T,T,T>
 {
     T operator()( T v1, T v2 ) const { return v1 ^ v2; }
 };
@@ -59,7 +60,17 @@ template< typename T > struct XorFunctor
 //-----------------------------------------------------------------------------
 
 // Mask
-template< typename T, typename M > struct GenericOutputMaskFunctor
+template< typename T, typename M > struct MaskFunctorBase
+{
+    typedef T first_argument_type;
+    typedef M second_argument_type;
+    typedef T third_argument_type;
+    typedef T result_type;
+};
+
+
+// Mask
+template< typename T, typename M > struct GenericOutputMaskFunctor : MaskFunctorBase<T,M>
 {
     /// Ternary mask operation - selects v1 for m == 0, v2 otherwise
     T operator()( T v1, M m, T v2 ) const
@@ -68,7 +79,7 @@ template< typename T, typename M > struct GenericOutputMaskFunctor
     }
 };
 
-template< typename T, typename M > struct IntegerOutputMaskFunctor
+template< typename T, typename M > struct IntegerOutputMaskFunctor : MaskFunctorBase<T,M>
 {
     /** Mask v with state of m
 
@@ -84,7 +95,7 @@ template< typename T, typename M > struct IntegerOutputMaskFunctor
     }
 };
 
-template< typename T, typename M > struct FastIntegerOutputMaskFunctor
+template< typename T, typename M > struct FastIntegerOutputMaskFunctor : MaskFunctorBase<T,M>
 {
     /// Specialization, only valid if mask can only attain 0 or 1
     T operator()( T v1, M m, T v2 ) const

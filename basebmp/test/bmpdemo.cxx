@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bmpdemo.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-30 11:05:21 $
+ *  last change: $Author: thb $ $Date: 2006-07-11 11:38:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1080,6 +1080,31 @@ void TestWindow::Paint( const Rectangle& rRect )
     basebmp::BitmapDeviceSharedPtr pDevice( basebmp::createBitmapDevice( aTestSize,
                                                                          false,
                                                                          basebmp::Format::THIRTYTWO_BIT_TC_MASK ));
+
+    {
+        basebmp::BitmapDeviceSharedPtr pMask( basebmp::createBitmapDevice( aTestSize,
+                                                                           false,
+                                                                           basebmp::Format::ONE_BIT_MSB_GREY ));
+
+        ::rtl::OUString aSvg = ::rtl::OUString::createFromAscii(
+            "m 0 0 h5 l5 5 v5 h-5 l-5-5 z" );
+        basegfx::B2DPolyPolygon aPoly;
+        basegfx::tools::importFromSvgD( aPoly, aSvg );
+        pMask->clear(basebmp::Color(0xFFFFFFFF));
+        pMask->drawPolygon(
+            aPoly.getB2DPolygon(0),
+            basebmp::Color(0),
+            basebmp::DrawMode_PAINT );
+
+        basebmp::BitmapDeviceSharedPtr pSubsetDevice =
+            basebmp::subsetBitmapDevice( pDevice,
+                                         basegfx::B2IRange(3,3,7,7) );
+
+        const basegfx::B2IPoint aPt1(0,0);
+        const basegfx::B2IPoint aPt2(1,9);
+        const basebmp::Color aCol(0xFFFFFFFF);
+        pDevice->drawLine( aPt1, aPt2, aCol, basebmp::DrawMode_PAINT, pMask );
+    }
 
     {
         const basebmp::Color aCol(0xFFFFFFFF);

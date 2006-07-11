@@ -4,9 +4,9 @@
  *
  *  $RCSfile: colormisc.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-06 10:00:39 $
+ *  last change: $Author: thb $ $Date: 2006-07-11 11:38:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,8 @@
 
 #include <osl/diagnose.h>
 #include <basebmp/color.hxx>
-#include <basebmp/accessoradapters.hxx>
+#include <basebmp/colortraits.hxx>
+#include <basebmp/accessortraits.hxx>
 #include <vigra/mathutil.hxx>
 
 // Contents of this header moved out of color.hxx, as it is not useful
@@ -49,7 +50,7 @@
 namespace basebmp
 {
 
-struct ColorBitmaskOutputMaskFunctor
+struct ColorBitmaskOutputMaskFunctor : MaskFunctorBase<Color,sal_uInt8>
 {
     Color operator()( Color v1, sal_uInt8 m, Color v2 ) const
     {
@@ -65,7 +66,7 @@ template<> struct outputMaskFunctorSelector< Color, sal_uInt8, FastMask >
     typedef ColorBitmaskOutputMaskFunctor type;
 };
 
-struct ColorBlendFunctor
+struct ColorBlendFunctor : public BlendFunctorBase<Color,sal_uInt8>
 {
     Color operator()( sal_uInt8 alpha,
                       Color     v1,
@@ -98,10 +99,20 @@ template<> struct ColorTraits< Color >
     template< typename AlphaType > struct blend_functor;
 
     /// Calculate normalized distance between color c1 and c2
-    static double distance( const Color& c1,
-                            const Color& c2 )
+    static inline double distance( const Color& c1,
+                                   const Color& c2 )
     {
         return (c1 - c2).magnitude();
+    }
+
+    static inline component_type toGreyscale( const Color& c )
+    {
+        return c.getGreyscale();
+    }
+
+    static inline Color fromGreyscale( component_type c )
+    {
+        return Color(c,c,c);
     }
 };
 
