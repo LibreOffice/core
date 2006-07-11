@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numtotext_cjk.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:33:51 $
+ *  last change: $Author: obo $ $Date: 2006-07-11 12:51:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,4 +94,9 @@ TRANSLITERATION_NUMTOTEXT ( HangulCircledJamo_ko, table_HangulCircledJamo_ko, sa
 TRANSLITERATION_NUMTOTEXT ( HangulCircledSyllable_ko, table_HangulCircledSyllable_ko, sal_True)
 #undef TRANSLITERATION_NUMTOTEXT
 
+// Only to prevent warnings gcc 3.4.1  (defined but not used)
+sal_Unicode dummy = table_CyrillicUpperLetter_bg[0];
+sal_Unicode dummy1 = table_CyrillicLowerLetter_bg[0];
+sal_Unicode dummy2 = table_CyrillicUpperLetter_ru[0];
+sal_Unicode dummy3 = table_CyrillicLowerLetter_ru[0];
 } } } }
