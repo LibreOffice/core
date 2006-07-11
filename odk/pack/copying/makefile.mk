@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.78 $
+#   $Revision: 1.79 $
 #
-#   last change: $Author: vg $ $Date: 2006-03-15 09:29:36 $
+#   last change: $Author: obo $ $Date: 2006-07-11 14:53:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,8 @@ IDLLIST:={$(subst,/,$/ $(shell $(FIND) $(IDLOUT) -type f | sed -e '/star.portal/
 DESTIDLLIST={$(subst,$(IDLOUT),$(DESTDIRIDL) $(IDLLIST))}
 
 DESTINCLUDELIST={$(subst,$(SOLARINCDIR),$(DESTDIRINC) $(INCLUDELIST))}
+DESTINCLUDELIST+=$(DESTDIRINC)$/udkversion.mk
+
 DESTINCDIRLIST={$(subst,$(INCOUT),$(DESTDIRINC) $(INCLUDEDIRLIST))}
 
 COMPONENTLIST = \
@@ -110,7 +112,7 @@ LIBLIST = \
     $(DESTDIRLIB)$/icppuhelper.lib 	\
     $(DESTDIRLIB)$/irmcxt.lib
 
-.IF "$(COMEX)"=="8" 
+.IF "$(COMEX)"=="8"
     LIBLIST += $(DESTDIRLIB)$/stlport_vc7.lib
 .ELIF "$(COMEX)"=="10"
     LIBLIST += $(DESTDIRLIB)$/stlport_vc71.lib
@@ -209,9 +211,9 @@ DIR_FILE_LIST=\
     $(DESTDIRJAR)$/win$/unowinreg.dll \
     $(DESTDIRDOCU)$/common$/spec$/xml_format$/xml_specification.pdf
 
-DIR_DIRECTORY_LIST=$(uniq $(DIR_FILE_LIST:d))
-DIR_CREATE_FLAG=$(MISC)$/copying_dirs_created.txt
-DIR_FILE_FLAG=$(MISC)$/copying_files.txt
+DIR_DIRECTORY_LIST:=$(uniq $(DIR_FILE_LIST:d))
+DIR_CREATE_FLAG:=$(MISC)$/copying_dirs_created.txt
+DIR_FILE_FLAG:=$(MISC)$/copying_files.txt
 
 # Special work for simple uno bootstrap mechanism
 # zip uno loader class files and winreg helper library for later
@@ -231,9 +233,8 @@ all : \
 
 #--------------------------------------------------
 # use global rules
-#--------------------------------------------------   
+#--------------------------------------------------
 .INCLUDE: $(PRJ)$/util$/odk_rules.pmk
 
 $(MYZIPTARGET) : $(DESTDIRJAR)$/win$/unowinreg.dll $(DESTCLASSESLIST)
     +cd $(MYZIPDIR) && zip $(MYZIPFLAGS) ..$/..$/..$/bin$/$(MYZIPTARGET:b) $(MYZIPLIST)
-
