@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dibpreview.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:44:21 $
+ *  last change: $Author: obo $ $Date: 2006-07-11 07:15:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -286,11 +286,12 @@ void SAL_CALL CDIBPreview::onPaint(HWND hWnd, HDC hDC)
             int nX = abs(nWidth - cxDib) / 2;
             int nY = abs(nHeight - cyDib) / 2;
 
+#if OSL_DEBUG_LEVEL > 0
             int GDIError = StretchDIBits(
                 hDC, nX, nY, cxDib, cyDib,
                 0, 0, cxDib, cyDib, pBits, pbmi,
                 DIB_RGB_COLORS, SRCCOPY);
-
+#endif
             OSL_ASSERT(GDI_ERROR != GDIError);
 
             // paint the border
