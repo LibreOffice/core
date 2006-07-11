@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessoradapters.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-11 11:38:54 $
+ *  last change: $Author: thb $ $Date: 2006-07-11 15:33:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -369,13 +369,13 @@ public:
     template< class Iterator >
     value_type operator()(Iterator const& i) const
     {
-        return ma1stAccessor(i);
+        return ma1stAccessor(i.first());
     }
 
     template< class Iterator, class Difference >
     value_type operator()(Iterator const& i, Difference const& diff) const
     {
-        return ma1stAccessor(i,diff);
+        return ma1stAccessor(i.second(),diff);
     }
 
     // -------------------------------------------------------

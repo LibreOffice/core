@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fillimage.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-11 11:38:55 $
+ *  last change: $Author: thb $ $Date: 2006-07-11 15:33:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,16 +36,17 @@
 #ifndef INCLUDED_BASEBMP_FILLIMAGE_HXX
 #define INCLUDED_BASEBMP_FILLIMAGE_HXX
 
+#include <vigra/tuple.hxx>
 #include <vigra/iteratortraits.hxx>
 
 namespace basebmp
 {
 
 template< class DestIterator, class DestAccessor, typename T >
-void fillImage( DestIterator begin,
-                DestIterator end,
-                DestAccessor ad,
-                T            fillVal )
+inline void fillImage( DestIterator begin,
+                       DestIterator end,
+                       DestAccessor ad,
+                       T            fillVal )
 {
     const int width ( end.x - begin.x );
     const int height( end.y - begin.y );
@@ -62,6 +63,13 @@ void fillImage( DestIterator begin,
         while( rowIter != rowEnd )
             ad.set(fillVal, rowIter++);
     }
+}
+
+template< class DestIterator, class DestAccessor, typename T >
+inline void fillImage( vigra::triple<DestIterator,DestIterator,DestAccessor> const& src,
+                       T                                                            fillVal )
+{
+    fillImage(src.first,src.second,src.third,fillVal);
 }
 
 } // namespace basebmp

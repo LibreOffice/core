@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmapdevice.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-11 11:38:56 $
+ *  last change: $Author: thb $ $Date: 2006-07-11 15:33:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,7 @@
 #include "basebmp/clippedlinerenderer.hxx"
 //#include "basebmp/genericintegerimageaccessor.hxx"
 
+#include "basebmp/tools.hxx"
 #include "intconversion.hxx"
 
 #include <rtl/alloc.h>
@@ -247,94 +248,112 @@ namespace
                   public BitmapDevice
     {
     public:
-        typedef BitmapRenderer<typename Masks::clipmask_format_traits::iterator_type,
-                               typename Masks::clipmask_format_traits::raw_accessor_type,
-                               typename Masks::clipmask_format_traits::accessor_selector,
-                               Masks>  MaskBitmap;
-        typedef BitmapRenderer<typename Masks::alphamask_format_traits::iterator_type,
-                               typename Masks::alphamask_format_traits::raw_accessor_type,
-                               typename Masks::alphamask_format_traits::accessor_selector,
-                               Masks>  AlphaMaskBitmap;
+        typedef DestIterator                                               dest_iterator_type;
+        typedef RawAccessor                                                raw_accessor_type;
+        typedef AccessorSelector                                           accessor_selector;
+
+        typedef typename Masks::clipmask_format_traits::iterator_type      mask_iterator_type;
+        typedef typename Masks::clipmask_format_traits::raw_accessor_type  mask_rawaccessor_type;
+        typedef typename Masks::clipmask_format_traits::accessor_selector  mask_accessorselector_type;
+
+        typedef typename Masks::alphamask_format_traits::iterator_type     alphamask_iterator_type;
+        typedef typename Masks::alphamask_format_traits::raw_accessor_type alphamask_rawaccessor_type;
+        typedef typename Masks::alphamask_format_traits::accessor_selector alphamask_accessorselector_type;
+
+        typedef typename AccessorSelector::template wrap_accessor<
+            raw_accessor_type >::type                                      dest_accessor_type;
+
+        typedef AccessorTraits< dest_accessor_type >                       accessor_traits;
+        typedef CompositeIterator2D< dest_iterator_type,
+                                     mask_iterator_type >                  composite_iterator_type;
+
+        typedef BitmapRenderer<mask_iterator_type,
+                               mask_rawaccessor_type,
+                               mask_accessorselector_type,
+                               Masks>                                      mask_bitmap_type;
+        typedef BitmapRenderer<alphamask_iterator_type,
+                               alphamask_rawaccessor_type,
+                               alphamask_accessorselector_type,
+                               Masks>                                      alphamask_bitmap_type;
 
         // -------------------------------------------------------
 
-        typedef AccessorTraits< RawAccessor >         RawAccessorTraits;
+        typedef AccessorTraits< raw_accessor_type >                        raw_accessor_traits;
         typedef typename uInt32Converter<
-            typename RawAccessor::value_type>::to     ToUInt32Functor;
+            typename raw_accessor_type::value_type>::to                    to_uint32_functor;
 
         // -------------------------------------------------------
 
-        typedef typename AccessorSelector::template wrap_accessor<
-            RawAccessor >::type                       DestAccessor;
-        typedef AccessorTraits< DestAccessor >        AccTraits;
+        typedef typename raw_accessor_traits::xor_accessor                 raw_xor_accessor_type;
+        typedef AccessorTraits<raw_xor_accessor_type>                      raw_xor_accessor_traits;
+        typedef typename accessor_selector::template wrap_accessor<
+            raw_xor_accessor_type >::type                                  xor_accessor_type;
+        typedef AccessorTraits<xor_accessor_type>                          xor_accessor_traits;
 
         // -------------------------------------------------------
 
-        typedef typename RawAccessorTraits::xor_accessor            RawXorAccessor;
-        typedef AccessorTraits<RawXorAccessor>                      RawXorAccessorTraits;
-        typedef typename AccessorSelector::template wrap_accessor<
-            RawXorAccessor >::type                                  XorAccessor;
-        typedef AccessorTraits<XorAccessor>                         XorAccessorTraits;
+        typedef typename raw_accessor_traits::template masked_accessor<
+            mask_rawaccessor_type,
+            dest_iterator_type,
+            mask_iterator_type>::type                                      raw_maskedaccessor_type;
+        typedef typename accessor_selector::template wrap_accessor<
+            raw_maskedaccessor_type >::type                                masked_accessor_type;
+        typedef typename raw_xor_accessor_traits::template masked_accessor<
+            mask_rawaccessor_type,
+            dest_iterator_type,
+            mask_iterator_type>::type                                      raw_maskedxor_accessor_type;
+        typedef typename accessor_selector::template wrap_accessor<
+            raw_maskedxor_accessor_type >::type                            masked_xoraccessor_type;
 
         // -------------------------------------------------------
 
-        typedef typename RawAccessorTraits::template masked_accessor<
-            typename Masks::clipmask_format_traits::raw_accessor_type,
-            DestIterator,
-            typename Masks::clipmask_format_traits::iterator_type>::type
-                                                                    RawMaskedAccessor;
-        typedef typename AccessorSelector::template wrap_accessor<
-            RawMaskedAccessor >::type                               MaskedAccessor;
-        typedef typename RawXorAccessorTraits::template masked_accessor<
-            typename Masks::clipmask_format_traits::raw_accessor_type,
-            DestIterator,
-            typename Masks::clipmask_format_traits::iterator_type>::type
-                                                                    RawMaskedXorAccessor;
-        typedef typename AccessorSelector::template wrap_accessor<
-            RawMaskedXorAccessor >::type                            MaskedXorAccessor;
+        // ((iter,mask),mask) special case (e.g. for clipped
+        // drawMaskedColor())
+        typedef AccessorTraits< raw_maskedaccessor_type >                  raw_maskedaccessor_traits;
+        typedef typename raw_maskedaccessor_traits::template masked_accessor<
+            mask_rawaccessor_type,
+            composite_iterator_type,
+            mask_iterator_type>::type                                      raw_maskedmask_accessor_type;
+
+        typedef CompositeIterator2D<
+            composite_iterator_type,
+            mask_iterator_type>                                            composite_composite_mask_iterator_type;
 
         // -------------------------------------------------------
 
         typedef ConstantColorBlendSetterAccessorAdapter<
-            DestAccessor,
-            typename Masks::alphamask_format_traits::raw_accessor_type::value_type>
-                                                                    ColorBlendAccessor;
-        typedef AccessorTraits<ColorBlendAccessor>                  BlendAccessorTraits;
-        typedef typename BlendAccessorTraits::template masked_accessor<
-            typename Masks::clipmask_format_traits::raw_accessor_type,
-            DestIterator,
-            typename Masks::clipmask_format_traits::iterator_type>::type
-                                                                    MaskedColorBlendAcc;
+            dest_accessor_type,
+            typename alphamask_rawaccessor_type::value_type>               colorblend_accessor_type;
+        typedef AccessorTraits<colorblend_accessor_type>                   colorblend_accessor_traits;
+        typedef typename colorblend_accessor_traits::template masked_accessor<
+            mask_rawaccessor_type,
+            dest_iterator_type,
+            mask_iterator_type>::type                                      masked_colorblend_accessor_type;
 
         // -------------------------------------------------------
 
-        typedef DestIterator                                        dest_iterator;
-        typedef DestAccessor                                        dest_accessor;
-        typedef CompositeIterator2D<
-            DestIterator,
-            typename Masks::clipmask_format_traits::iterator_type>  composite_iterator_type;
-
-        DestIterator                      maBegin;
-        typename AccTraits::color_lookup  maColorLookup;
-        ToUInt32Functor                   maToUInt32Converter;
-        DestAccessor                      maAccessor;
-        ColorBlendAccessor                maColorBlendAccessor;
-        RawAccessor                       maRawAccessor;
-        XorAccessor                       maXorAccessor;
-        RawXorAccessor                    maRawXorAccessor;
-        MaskedAccessor                    maMaskedAccessor;
-        MaskedColorBlendAcc               maMaskedColorBlendAccessor;
-        MaskedXorAccessor                 maMaskedXorAccessor;
-        RawMaskedAccessor                 maRawMaskedAccessor;
-        RawMaskedXorAccessor              maRawMaskedXorAccessor;
+        dest_iterator_type                      maBegin;
+        typename accessor_traits::color_lookup  maColorLookup;
+        to_uint32_functor                       maToUInt32Converter;
+        dest_accessor_type                      maAccessor;
+        colorblend_accessor_type                maColorBlendAccessor;
+        raw_accessor_type                       maRawAccessor;
+        xor_accessor_type                       maXorAccessor;
+        raw_xor_accessor_type                   maRawXorAccessor;
+        masked_accessor_type                    maMaskedAccessor;
+        masked_colorblend_accessor_type         maMaskedColorBlendAccessor;
+        masked_xoraccessor_type                 maMaskedXorAccessor;
+        raw_maskedaccessor_type                 maRawMaskedAccessor;
+        raw_maskedxor_accessor_type             maRawMaskedXorAccessor;
+        raw_maskedmask_accessor_type            maRawMaskedMaskAccessor;
 
         BitmapRenderer( const basegfx::B2IRange&         rBounds,
                         bool                             bTopDown,
                         sal_Int32                        nScanlineFormat,
                         sal_Int32                        nScanlineStride,
                         sal_uInt8*                       pFirstScanline,
-                        DestIterator                     begin,
-                        DestAccessor                     accessor,
+                        dest_iterator_type               begin,
+                        dest_accessor_type               accessor,
                         const RawMemorySharedArray&      rMem,
                         const PaletteMemorySharedVector& rPalette ) :
             BitmapDevice( rBounds, bTopDown, nScanlineFormat,
@@ -351,7 +370,8 @@ namespace
             maMaskedColorBlendAccessor( maColorBlendAccessor ),
             maMaskedXorAccessor( accessor ),
             maRawMaskedAccessor(),
-            maRawMaskedXorAccessor()
+            maRawMaskedXorAccessor(),
+            maRawMaskedMaskAccessor()
         {}
 
     private:
@@ -367,9 +387,9 @@ namespace
             return getCompatibleBitmap(bmp).get() != NULL;
         }
 
-        boost::shared_ptr<MaskBitmap> getCompatibleClipMask( const BitmapDeviceSharedPtr& bmp ) const
+        boost::shared_ptr<mask_bitmap_type> getCompatibleClipMask( const BitmapDeviceSharedPtr& bmp ) const
         {
-            boost::shared_ptr<MaskBitmap> pMask( boost::dynamic_pointer_cast<MaskBitmap>( bmp ));
+            boost::shared_ptr<mask_bitmap_type> pMask( boost::dynamic_pointer_cast<mask_bitmap_type>( bmp ));
 
             if( !pMask )
                 return pMask;
@@ -384,12 +404,12 @@ namespace
         {
             // TODO(P1): dynamic_cast usually called twice for
             // compatible formats
-            return boost::dynamic_pointer_cast<MaskBitmap>( bmp ).get() != NULL;
+            return boost::dynamic_pointer_cast<mask_bitmap_type>( bmp ).get() != NULL;
         }
 
-        boost::shared_ptr<AlphaMaskBitmap> getCompatibleAlphaMask( const BitmapDeviceSharedPtr& bmp ) const
+        boost::shared_ptr<alphamask_bitmap_type> getCompatibleAlphaMask( const BitmapDeviceSharedPtr& bmp ) const
         {
-            return boost::dynamic_pointer_cast<AlphaMaskBitmap>( bmp );
+            return boost::dynamic_pointer_cast<alphamask_bitmap_type>( bmp );
         }
 
         virtual bool isCompatibleAlphaMask( const BitmapDeviceSharedPtr& bmp ) const
@@ -402,11 +422,9 @@ namespace
         virtual void clear_i( Color                     fillColor,
                               const basegfx::B2IRange&  rBounds )
         {
-            fillImage(maBegin + vigra::Diff2D(rBounds.getMinX(),
-                                              rBounds.getMinY()),
-                      maBegin + vigra::Diff2D(rBounds.getMaxX(),
-                                              rBounds.getMaxY()),
-                      maRawAccessor,
+            fillImage(destIterRange(maBegin,
+                                    maRawAccessor,
+                                    rBounds),
                       maColorLookup(
                           maAccessor,
                           fillColor) );
@@ -432,7 +450,7 @@ namespace
                                  DrawMode                     drawMode,
                                  const BitmapDeviceSharedPtr& rClip )
         {
-            boost::shared_ptr<MaskBitmap> pMask( getCompatibleClipMask(rClip) );
+            boost::shared_ptr<mask_bitmap_type> pMask( getCompatibleClipMask(rClip) );
             OSL_ASSERT( pMask );
 
             const vigra::Diff2D offset(rPt.getX(),
@@ -529,7 +547,7 @@ namespace
 
         composite_iterator_type getMaskedIter( const BitmapDeviceSharedPtr& rClip ) const
         {
-            boost::shared_ptr<MaskBitmap> pMask( getCompatibleClipMask(rClip) );
+            boost::shared_ptr<mask_bitmap_type> pMask( getCompatibleClipMask(rClip) );
             OSL_ASSERT( pMask );
 
             return composite_iterator_type( maBegin,
@@ -560,10 +578,10 @@ namespace
             if( rPoly.areControlVectorsUsed() )
                 aPoly = basegfx::tools::adaptiveSubdivideByCount( rPoly );
 
-            const typename dest_iterator::value_type colorIndex( maColorLookup(
-                                                                     maAccessor,
-                                                                     col));
-            const sal_uInt32                         nVertices( aPoly.count() );
+            const typename dest_iterator_type::value_type colorIndex( maColorLookup(
+                                                                          maAccessor,
+                                                                          col));
+            const sal_uInt32                              nVertices( aPoly.count() );
             for( sal_uInt32 i=1; i<nVertices; ++i )
                 implRenderLine2( basegfx::fround(aPoly.getB2DPoint(i-1)),
                                  basegfx::fround(aPoly.getB2DPoint(i)),
@@ -680,16 +698,12 @@ namespace
             // since resizeImageNoInterpolation() internally copyies
             // to a temporary buffer, also works with *this == rSrcBitmap
             vigra::resizeImageNoInterpolation(
-                pSrcBmp->maBegin + vigra::Diff2D(rSrcRect.getMinX(),
-                                                 rSrcRect.getMinY()),
-                pSrcBmp->maBegin + vigra::Diff2D(rSrcRect.getMaxX(),
-                                                 rSrcRect.getMaxY()),
-                pSrcBmp->maRawAccessor,
-                begin + vigra::Diff2D(rDstRect.getMinX(),
-                                      rDstRect.getMinY()),
-                begin + vigra::Diff2D(rDstRect.getMaxX(),
-                                      rDstRect.getMaxY()),
-                acc);
+                srcIterRange(pSrcBmp->maBegin,
+                             pSrcBmp->maRawAccessor,
+                             rSrcRect),
+                destIterRange(begin,
+                              acc,
+                              rDstRect));
         }
 
         // xxx TODO
@@ -705,16 +719,12 @@ namespace
             // since resizeImageNoInterpolation() internally copyies
             // to a temporary buffer, also works with *this == rSrcBitmap
             vigra::resizeImageNoInterpolation(
-                vigra::Diff2D(rSrcRect.getMinX(),
-                              rSrcRect.getMinY()),
-                vigra::Diff2D(rSrcRect.getMaxX(),
-                              rSrcRect.getMaxY()),
-                aSrcAcc,
-                begin + vigra::Diff2D(rDstRect.getMinX(),
-                                      rDstRect.getMinY()),
-                begin + vigra::Diff2D(rDstRect.getMaxX(),
-                                      rDstRect.getMaxY()),
-                acc);
+                srcIterRange(vigra::Diff2D(),
+                             aSrcAcc,
+                             rSrcRect),
+                destIterRange(begin,
+                              acc,
+                              rDstRect));
         }
 
         virtual void drawBitmap_i(const BitmapDeviceSharedPtr& rSrcBitmap,
@@ -783,30 +793,27 @@ namespace
                                        const basegfx::B2IRange&     rSrcRect,
                                        const basegfx::B2IPoint&     rDstPoint )
         {
-            boost::shared_ptr<MaskBitmap>      pMask( getCompatibleClipMask(rAlphaMask) );
-            boost::shared_ptr<AlphaMaskBitmap> pAlpha( getCompatibleAlphaMask(rAlphaMask) );
+            boost::shared_ptr<mask_bitmap_type>      pMask( getCompatibleClipMask(rAlphaMask) );
+            boost::shared_ptr<alphamask_bitmap_type> pAlpha( getCompatibleAlphaMask(rAlphaMask) );
             OSL_ASSERT( pAlpha || pMask );
 
             if( pAlpha )
             {
                 maColorBlendAccessor.setColor( aSrcColor );
 
-                vigra::copyImage( pAlpha->maBegin + vigra::Diff2D(rSrcRect.getMinX(),
-                                                                  rSrcRect.getMinY()),
-                                  pAlpha->maBegin + vigra::Diff2D(rSrcRect.getMaxX(),
-                                                                  rSrcRect.getMaxY()),
-                                  pAlpha->maRawAccessor,
-                                  maBegin + vigra::Diff2D(rDstPoint.getX(),
-                                                          rDstPoint.getY()),
-                                  maColorBlendAccessor );
+                vigra::copyImage( srcIterRange(pAlpha->maBegin,
+                                               pAlpha->maRawAccessor,
+                                               rSrcRect),
+                                  destIter(maBegin,
+                                           maColorBlendAccessor,
+                                           rDstPoint) );
             }
             else if( pMask )
             {
                 const composite_iterator_type aBegin(
                     maBegin + vigra::Diff2D(rDstPoint.getX(),
                                             rDstPoint.getY()),
-                    pMask->maBegin + vigra::Diff2D(rSrcRect.getMinX(),
-                                                   rSrcRect.getMinY()) );
+                    pMask->maBegin + topLeft(rSrcRect) );
 
                 fillImage(aBegin,
                           aBegin + vigra::Diff2D(rSrcRect.getWidth(),
@@ -824,8 +831,8 @@ namespace
                                        const basegfx::B2IPoint&     rDstPoint,
                                        const BitmapDeviceSharedPtr& rClip )
         {
-            boost::shared_ptr<MaskBitmap>      pMask( getCompatibleClipMask(rAlphaMask) );
-            boost::shared_ptr<AlphaMaskBitmap> pAlpha( getCompatibleAlphaMask(rAlphaMask) );
+            boost::shared_ptr<mask_bitmap_type>      pMask( getCompatibleClipMask(rAlphaMask) );
+            boost::shared_ptr<alphamask_bitmap_type> pAlpha( getCompatibleAlphaMask(rAlphaMask) );
             OSL_ASSERT( pAlpha || pMask );
 
             if( pAlpha )
@@ -834,29 +841,33 @@ namespace
                 maMaskedColorBlendAccessor.get1stWrappedAccessor().setColor(
                     aSrcColor );
 
-                vigra::copyImage( pAlpha->maBegin + vigra::Diff2D(rSrcRect.getMinX(),
-                                                                  rSrcRect.getMinY()),
-                                  pAlpha->maBegin + vigra::Diff2D(rSrcRect.getMaxX(),
-                                                                  rSrcRect.getMaxY()),
-                                  pAlpha->maRawAccessor,
-                                  aBegin + vigra::Diff2D(rDstPoint.getX(),
-                                                         rDstPoint.getY()),
-                                  maMaskedColorBlendAccessor );
+                vigra::copyImage( srcIterRange(pAlpha->maBegin,
+                                               pAlpha->maRawAccessor,
+                                               rSrcRect),
+                                  destIter(aBegin,
+                                           maMaskedColorBlendAccessor,
+                                           rDstPoint) );
             }
             else if( pMask )
             {
-                // TODO(F3): clip is currently ignored for 1bpp
-                // drawMaskedColor_i case!
-                const composite_iterator_type aBegin(
-                    maBegin + vigra::Diff2D(rDstPoint.getX(),
-                                            rDstPoint.getY()),
-                    pMask->maBegin + vigra::Diff2D(rSrcRect.getMinX(),
-                                                   rSrcRect.getMinY()) );
+                boost::shared_ptr<mask_bitmap_type> pClipMask( getCompatibleClipMask(rClip) );
+                OSL_ASSERT( pClipMask );
+
+                // setup a ((iter,mask),clipMask) composite composite
+                // iterator, to pass both masks (clip and alpha mask)
+                // to the algorithm
+                const composite_composite_mask_iterator_type aBegin(
+                    composite_iterator_type(
+                        maBegin + vigra::Diff2D(rDstPoint.getX(),
+                                                rDstPoint.getY()),
+                        pMask->maBegin + topLeft(rSrcRect)),
+                    pClipMask->maBegin + vigra::Diff2D(rDstPoint.getX(),
+                                                       rDstPoint.getY()) );
 
                 fillImage(aBegin,
                           aBegin + vigra::Diff2D(rSrcRect.getWidth(),
                                                  rSrcRect.getHeight()),
-                          maRawMaskedAccessor,
+                          maRawMaskedMaskAccessor,
                           maColorLookup(
                               maAccessor,
                               aSrcColor) );
