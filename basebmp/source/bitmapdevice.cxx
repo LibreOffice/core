@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmapdevice.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-12 15:09:44 $
+ *  last change: $Author: thb $ $Date: 2006-07-12 22:47:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1019,7 +1019,7 @@ namespace
                                         const BitmapDeviceSharedPtr& rClip )
         {
             // xxx TODO
-            if( isCompatibleClipMask(rClip) &&
+            if( isCompatibleClipMask(rMask) &&
                 isCompatibleBitmap(rSrcBitmap) )
             {
                 if( drawMode == DrawMode_XOR )
@@ -1559,7 +1559,7 @@ void BitmapDevice::drawMaskedColor( Color                        rSrcColor,
         if( isCompatibleClipMask( rAlphaMask ) || isCompatibleAlphaMask( rAlphaMask ) )
             drawMaskedColor_i( rSrcColor, rAlphaMask, aSrcRange, aDestPoint );
         else
-            OSL_ENSURE(false, "Generic output not yet implemented!");
+            OSL_ENSURE( false, "drawMaskedColor(): Generic output not yet implemented #1!" );
     }
 #endif
 }
@@ -1611,7 +1611,7 @@ void BitmapDevice::drawMaskedColor( Color                        aSrcColor,
         }
         else
         {
-            OSL_ENSURE(false, "Generic output not yet implemented!");
+            OSL_ENSURE(false, "drawMaskedColor(): Generic output not yet implemented #2!");
         }
 #endif
     }
@@ -1650,15 +1650,7 @@ void BitmapDevice::drawMaskedBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
                                                     rSrcRect, rDstRect, drawMode );
         }
 #else
-        if( isCompatibleBitmap( rSrcBitmap ) &&
-            isCompatibleClipMask( rMask ) )
-        {
-            drawMaskedBitmap_i( rSrcBitmap, rMask, aSrcRange, aDestRange, drawMode );
-        }
-        else
-        {
-            OSL_ENSURE(false, "Generic output not yet implemented!");
-        }
+        drawMaskedBitmap_i( rSrcBitmap, rMask, aSrcRange, aDestRange, drawMode );
 #endif
     }
 }
@@ -1704,15 +1696,13 @@ void BitmapDevice::drawMaskedBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
                                                     rDstRect, drawMode, rClip );
         }
 #else
-        if( isCompatibleBitmap( rSrcBitmap ) &&
-            isCompatibleClipMask( rMask ) &&
-            isCompatibleClipMask( rClip ) )
+        if( isCompatibleClipMask( rClip ) )
         {
             drawMaskedBitmap_i( rSrcBitmap, rMask, aSrcRange, aDestRange, drawMode, rClip );
         }
         else
         {
-            OSL_ENSURE(false, "Generic output not yet implemented!");
+            OSL_ENSURE(false, "drawMaskedBitmap(): Generic output not yet implemented #2!");
         }
 #endif
     }

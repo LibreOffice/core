@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basictest.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-12 15:09:45 $
+ *  last change: $Author: thb $ $Date: 2006-07-12 22:47:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -163,6 +163,34 @@ public:
         CPPUNIT_ASSERT_MESSAGE("setPixel clipping",
                                countPixel(pDevice, aCol2) == nPixel);
 
+        CPPUNIT_ASSERT_MESSAGE("raw pixel value #1",
+                               pDevice->getBuffer()[0] == 0x80);
+
+        // 1bit LSB
+        {
+            pDevice = createBitmapDevice( aSize,
+                                          true,
+                                          Format::ONE_BIT_LSB_PAL );
+
+            pDevice->setPixel( aPt2, aCol, DrawMode_PAINT );
+            CPPUNIT_ASSERT_MESSAGE("get/setPixel roundtrip #4",
+                                   pDevice->getPixel(aPt2) == aCol);
+
+            const basegfx::B2IPoint aPt222(1,1);
+            pDevice->setPixel( aPt222, aCol, DrawMode_PAINT );
+            CPPUNIT_ASSERT_MESSAGE("get/setPixel roundtrip #5",
+                                   pDevice->getPixel(aPt222) == aCol);
+
+            pDevice->setPixel( aPt3, aCol, DrawMode_PAINT );
+            CPPUNIT_ASSERT_MESSAGE("get/setPixel roundtrip #6",
+                                   pDevice->getPixel(aPt3) == aCol);
+
+            CPPUNIT_ASSERT_MESSAGE("raw pixel value #2",
+                                   pDevice->getBuffer()[0] == 0x01);
+            CPPUNIT_ASSERT_MESSAGE("raw pixel value #3",
+                                   pDevice->getBuffer()[8] == 0x02);
+        }
+
         // 8bit alpha
         {
             pDevice = createBitmapDevice( aSize,
@@ -195,13 +223,11 @@ public:
 
             const Color aCol4(0x00101010);
             pDevice->setPixel( aPt, aCol4, DrawMode_PAINT );
-            std::ofstream output("16bpp_test.dump");
             CPPUNIT_ASSERT_MESSAGE("get/setPixel roundtrip #7",
                                    pDevice->getPixel(aPt) == aCol4);
 
             const Color aCol5(0x00F0F0F0);
             pDevice->setPixel( aPt2, aCol5, DrawMode_PAINT );
-            debugDump( pDevice, output );
             CPPUNIT_ASSERT_MESSAGE("get/setPixel roundtrip #8",
                                    pDevice->getPixel(aPt2) != aCol7);
 

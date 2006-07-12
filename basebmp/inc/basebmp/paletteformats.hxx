@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paletteformats.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-11 11:39:41 $
+ *  last change: $Author: thb $ $Date: 2006-07-12 22:47:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,7 +127,7 @@ template< int BitsPerPixel,
     public PixelFormatTraitsTemplate_Palette<
                PackedPixelIterator< sal_uInt8,
                                     BitsPerPixel,
-                                    true >,
+                                    MsbFirst >,
                NonStandardAccessor< sal_uInt8 > >
 {};
 

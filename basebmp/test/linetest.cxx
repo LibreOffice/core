@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linetest.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-08 00:01:48 $
+ *  last change: $Author: thb $ $Date: 2006-07-12 22:47:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,6 +93,31 @@ private:
                                countPixel( rDevice, aCol ) == 9);
     }
 
+    void implTestBasicHorizontalLines(const BitmapDeviceSharedPtr& rDevice)
+    {
+        rDevice->clear(Color(0));
+
+        const basegfx::B2IPoint aPt1(10,10);
+        const basegfx::B2IPoint aPt2(0,10);
+        const Color aCol(0xFFFFFFFF);
+        rDevice->drawLine( aPt1, aPt2, aCol, DrawMode_PAINT );
+        CPPUNIT_ASSERT_MESSAGE("first pixel set",
+                               rDevice->getPixel(aPt1) == aCol);
+        CPPUNIT_ASSERT_MESSAGE("last pixel set",
+                               rDevice->getPixel(aPt2) == aCol);
+        CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 11",
+                               countPixel( rDevice, aCol ) == 11);
+
+        rDevice->clear(Color(0));
+        rDevice->drawLine( aPt2, aPt1, aCol, DrawMode_PAINT );
+        CPPUNIT_ASSERT_MESSAGE("first pixel set",
+                               rDevice->getPixel(aPt1) == aCol);
+        CPPUNIT_ASSERT_MESSAGE("last pixel set",
+                               rDevice->getPixel(aPt2) == aCol);
+        CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 11",
+                               countPixel( rDevice, aCol ) == 11);
+    }
+
     void implTestBasicVerticalLines(const BitmapDeviceSharedPtr& rDevice)
     {
         rDevice->clear(Color(0));
@@ -163,6 +188,12 @@ public:
         implTestBasicDiagonalLines( mpDevice32bpp );
     }
 
+    void testBasicHorizontalLines()
+    {
+        implTestBasicHorizontalLines( mpDevice1bpp );
+        implTestBasicHorizontalLines( mpDevice32bpp );
+    }
+
     void testBasicVerticalLines()
     {
         implTestBasicVerticalLines( mpDevice1bpp );
@@ -183,6 +214,7 @@ public:
 
     CPPUNIT_TEST_SUITE(LineTest);
     CPPUNIT_TEST(testBasicDiagonalLines);
+    CPPUNIT_TEST(testBasicHorizontalLines);
     CPPUNIT_TEST(testBasicVerticalLines);
     CPPUNIT_TEST(testTieBreaking);
     CPPUNIT_TEST_SUITE_END();

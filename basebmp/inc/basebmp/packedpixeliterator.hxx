@@ -4,9 +4,9 @@
  *
  *  $RCSfile: packedpixeliterator.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-12 15:09:44 $
+ *  last change: $Author: thb $ $Date: 2006-07-12 22:47:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -355,17 +355,6 @@ public:
     PackedPixelRowIterator& operator+=( difference_type d )
     {
         const difference_type newValue( remainder_ + d );
-
-        data_ += newValue / num_intraword_positions;
-        remainder_ = newValue % num_intraword_positions;
-        update_mask();
-
-        return *this;
-    }
-
-    PackedPixelRowIterator& operator-=( difference_type d )
-    {
-        const difference_type newValue( remainder_ - d );
         const bool            isNegative( is_negative(newValue) );
         const difference_type newRemainder( newValue % num_intraword_positions );
 
@@ -373,14 +362,21 @@ public:
         //       remainder_ = newRemainder;
         // for newValue >= 0, and
         //       data_ += newValue / num_intraword_positions - 1;
-        //       remainder_ = num_intraword_positions - newRemainder;
+        //       remainder_ = newRemainder + num_intraword_positions;
         // (to force remainder_ to be positive).
         // This is branch-free, if is_negative() is branch-free
         data_     += newValue / num_intraword_positions - isNegative;
-        remainder_ = newRemainder + isNegative*(num_intraword_positions - 2*newRemainder);
+        remainder_ = newRemainder + isNegative*num_intraword_positions;
         update_mask();
 
         return *this;
+    }
+
+    PackedPixelRowIterator& operator-=( difference_type d )
+    {
+        // forward to operator+= - which has to cope with negative
+        // values, anyway.
+        return *this += -d;
     }
 
     PackedPixelRowIterator operator+( difference_type d )

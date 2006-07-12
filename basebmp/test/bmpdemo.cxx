@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bmpdemo.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-11 11:38:56 $
+ *  last change: $Author: thb $ $Date: 2006-07-12 22:47:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1086,6 +1086,12 @@ void TestWindow::Paint( const Rectangle& rRect )
                                                                            false,
                                                                            basebmp::Format::ONE_BIT_MSB_GREY ));
 
+        const basegfx::B2IPoint aPt111(10,10);
+        const basegfx::B2IPoint aPt222(0,10);
+        const basebmp::Color aCol333(0xFFFFFFFF);
+        pMask->drawLine( aPt111, aPt222, aCol333, basebmp::DrawMode_PAINT );
+
+
         ::rtl::OUString aSvg = ::rtl::OUString::createFromAscii(
             "m 0 0 h5 l5 5 v5 h-5 l-5-5 z" );
         basegfx::B2DPolyPolygon aPoly;
@@ -1173,9 +1179,6 @@ void TestWindow::Paint( const Rectangle& rRect )
             aPoint.setY( (int)((((double)aP2.getY())*cosd + ((double)aP2.getX())*sind)*factor) );
             aP2 = aPoint;
         }
-
-        std::ofstream output4("svptest.dump");
-        debugDump( pDevice, output4 );
     }
 
     Bitmap aBitmap( Size(aTestSize.getX(),

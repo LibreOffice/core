@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cliptest.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-11 11:38:56 $
+ *  last change: $Author: thb $ $Date: 2006-07-12 22:47:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,8 +128,8 @@ private:
                                   DrawMode_PAINT,
                                   mpClipMask );
         const basegfx::B2IPoint aPt(0,10);
-        CPPUNIT_ASSERT_MESSAGE("number of clipped pixel is not 28",
-                               countPixel( rDevice, rDevice->getPixel(aPt) ) == 121-28);
+        CPPUNIT_ASSERT_MESSAGE("number of clipped pixel is not 30",
+                               countPixel( rDevice, rDevice->getPixel(aPt) ) == 121-30);
     }
 
     void implTestBmpClip(const BitmapDeviceSharedPtr& rDevice)
@@ -213,9 +213,6 @@ public:
             aPoly.getB2DPolygon(0),
             Color(0),
             DrawMode_PAINT );
-
-        std::ofstream output("clipmask.dump");
-        debugDump( mpClipMask, output );
     }
 
     void testPixelClip()
