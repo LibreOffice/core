@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessoradapters.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-11 15:33:04 $
+ *  last change: $Author: thb $ $Date: 2006-07-12 15:09:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -319,7 +319,7 @@ public:
         maFunctor()
     {}
 
-    template< class A1, class A2 >
+    template< class A1, class A2 > explicit
     TernarySetterFunctionAccessorAdapter(
         TernarySetterFunctionAccessorAdapter< A1,
                                               A2,
@@ -398,6 +398,128 @@ public:
                       ma2ndAccessor(i.second(),diff),
                       vigra::detail::RequiresExplicitCast<argument_type>::cast(value)),
             i.first(),
+            diff );
+    }
+
+};
+
+//-----------------------------------------------------------------------------
+
+/** Access two distinct images simultaneously
+
+    Passed iterator must fulfill the CompositeIterator concept
+    (i.e. wrap the two image's iterators into one
+    CompositeIterator). The getter and setter methods expect and
+    return a pair of values, with types equal to the two accessors
+    value types
+
+    @tpl WrappedAccessor1
+    Wrapped type must provide the usual get and set accessor methods,
+    with the usual signatures (see StandardAccessor for a conforming
+    example). Furthermore, the type must provide a nested typedef
+    value_type.
+
+    @tpl WrappedAccessor2
+    Wrapped type must provide the usual get and set accessor methods,
+    with the usual signatures (see StandardAccessor for a conforming
+    example). Furthermore, the type must provide a nested typedef
+    value_type.
+ */
+template< class WrappedAccessor1,
+          class WrappedAccessor2 > class JoinImageAccessorAdapter
+{
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+// making all members public, if no member template friends
+private:
+    template<class A1, class A2> friend class JoinImageAccessorAdapter;
+#endif
+
+    WrappedAccessor1 ma1stAccessor;
+    WrappedAccessor2 ma2ndAccessor;
+
+public:
+    // TODO(F3): Need numeric traits and a few free functions to
+    // actually calculate with a pair (semantic: apply every operation
+    // individually to the contained types)
+    typedef std::pair<typename WrappedAccessor1::value_type,
+                      typename WrappedAccessor2::value_type>    value_type;
+
+    JoinImageAccessorAdapter() :
+        ma1stAccessor(),
+        ma2ndAccessor()
+    {}
+
+    template< class T > explicit JoinImageAccessorAdapter( T accessor ) :
+        ma1stAccessor( accessor ),
+        ma2ndAccessor()
+    {}
+
+    template< class A1, class A2 > explicit
+    JoinImageAccessorAdapter(
+        JoinImageAccessorAdapter< A1,
+                                  A2 > const& rSrc ) :
+        ma1stAccessor( rSrc.ma1stAccessor ),
+        ma2ndAccessor( rSrc.ma2ndAccessor )
+    {}
+
+    template< class T1, class T2 >
+    JoinImageAccessorAdapter( T1 accessor1,
+                              T2 accessor2 ) :
+        ma1stAccessor( accessor1 ),
+        ma2ndAccessor( accessor2 )
+    {}
+
+    // -------------------------------------------------------
+
+    WrappedAccessor1 const& get1stWrappedAccessor() const { return ma1stAccessor; }
+    WrappedAccessor1&       get1stWrappedAccessor() { return ma1stAccessor; }
+
+    WrappedAccessor2 const& get2ndWrappedAccessor() const { return ma2ndAccessor; }
+    WrappedAccessor2&       get2ndWrappedAccessor() { return ma2ndAccessor; }
+
+    // -------------------------------------------------------
+
+    template< class Iterator >
+    value_type operator()(Iterator const& i) const
+    {
+        return std::make_pair(ma1stAccessor(i.first()),
+                              ma2ndAccessor(i.second()));
+    }
+
+    template< class Iterator, class Difference >
+    value_type operator()(Iterator const& i, Difference const& diff) const
+    {
+        return std::make_pair(ma1stAccessor(i.first(),diff),
+                              ma2ndAccessor(i.second(),diff));
+    }
+
+    // -------------------------------------------------------
+
+    template< typename V, class Iterator >
+    void set(V const& value, Iterator const& i) const
+    {
+        ma1stAccessor.set(
+            vigra::detail::RequiresExplicitCast<typename WrappedAccessor1::value_type>::cast(
+                value.first),
+            i.first() );
+        ma2ndAccessor.set(
+            vigra::detail::RequiresExplicitCast<typename WrappedAccessor2::value_type>::cast(
+                value.second),
+            i.second() );
+    }
+
+    template< typename V, class Iterator, class Difference >
+    void set(V const& value, Iterator const& i, Difference const& diff) const
+    {
+        ma1stAccessor.set(
+            vigra::detail::RequiresExplicitCast<typename WrappedAccessor1::value_type>::cast(
+                value.first),
+            i.first(),
+            diff );
+        ma2ndAccessor.set(
+            vigra::detail::RequiresExplicitCast<typename WrappedAccessor2::value_type>::cast(
+                value.second),
+            i.second(),
             diff );
     }
 

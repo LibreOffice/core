@@ -4,9 +4,9 @@
  *
  *  $RCSfile: color.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-11 11:38:54 $
+ *  last change: $Author: thb $ $Date: 2006-07-12 15:09:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,6 +75,7 @@ public:
 
     sal_uInt32 toInt32() const { return mnColor; }
 
+    bool  operator!() const { return mnColor == 0; }
     Color operator&( sal_uInt32 nMask ) const { return Color(mnColor & nMask); }
     Color operator^( Color col ) const { return Color(col.getRed()^getRed(),
                                                       col.getGreen()^getGreen(),

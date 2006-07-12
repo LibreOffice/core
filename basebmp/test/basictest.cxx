@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basictest.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-11 11:38:56 $
+ *  last change: $Author: thb $ $Date: 2006-07-12 15:09:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,6 +114,12 @@ public:
                                pDevice->getScanlineFormat() == Format::ONE_BIT_MSB_PAL );
         CPPUNIT_ASSERT_MESSAGE("Scanline len",
                                pDevice->getScanlineStride() == (aSize2.getY() + 7)/8 );
+        CPPUNIT_ASSERT_MESSAGE("Palette existence",
+                               pDevice->getPalette() );
+        CPPUNIT_ASSERT_MESSAGE("Palette entry 0 is black",
+                               (*pDevice->getPalette())[0] == Color(0) );
+        CPPUNIT_ASSERT_MESSAGE("Palette entry 1 is white",
+                               (*pDevice->getPalette())[1] == Color(0xFFFFFFFF) );
     }
 
     void testPixelFuncs()

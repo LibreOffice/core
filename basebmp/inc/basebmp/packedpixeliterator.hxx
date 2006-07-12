@@ -4,9 +4,9 @@
  *
  *  $RCSfile: packedpixeliterator.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-06 10:00:40 $
+ *  last change: $Author: thb $ $Date: 2006-07-12 15:09:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,11 @@ namespace basebmp
 {
 
 /// Get bitmask for data at given intra-word position, for given bit depth
-template< typename value_type, int bits_per_pixel, bool MsbFirst, typename difference_type > inline value_type get_mask( difference_type d )
+template< typename value_type,
+          int      bits_per_pixel,
+          bool     MsbFirst,
+          typename difference_type >
+inline value_type get_mask( difference_type d )
 {
     BOOST_STATIC_ASSERT(bits_per_pixel > 0);
     BOOST_STATIC_ASSERT(sizeof(value_type)*8 % bits_per_pixel == 0);

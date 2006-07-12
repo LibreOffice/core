@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmapdevice.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-11 15:33:05 $
+ *  last change: $Author: thb $ $Date: 2006-07-12 15:09:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,6 +142,33 @@ namespace
 
 
 
+    /** Create the type for an accessor that takes the (mask,bitmap)
+        input value generated from a JoinImageAccessorAdapter, and
+        pipe that through a mask functor.
+
+        @tpl DestAccessor
+        Destination bitmap accessor
+
+        @tpl JoinedAccessor
+        Input accessor, is expected to generate a std::pair as the
+        value type
+
+        @tpl MaskFunctorMode
+        Either FastMask or NoFastMask, depending on whether the mask
+        is guaranteed to contain only 0s and 1s.
+     */
+    template< class    DestAccessor,
+              class    JoinedAccessor,
+              typename MaskFunctorMode > struct masked_input_splitting_accessor
+    {
+        typedef BinarySetterFunctionAccessorAdapter<
+            DestAccessor,
+            BinaryFunctorSplittingWrapper<
+                typename outputMaskFunctorSelector<
+                         typename JoinedAccessor::value_type::first_type,
+                         typename JoinedAccessor::value_type::second_type,
+                         MaskFunctorMode >::type > > type;
+    };
 
 
     // Polygon scanline conversion
@@ -266,6 +293,8 @@ namespace
         typedef AccessorTraits< dest_accessor_type >                       accessor_traits;
         typedef CompositeIterator2D< dest_iterator_type,
                                      mask_iterator_type >                  composite_iterator_type;
+        typedef CompositeIterator2D< vigra::Diff2D,
+                                     vigra::Diff2D >                       generic_composite_iterator_type;
 
         typedef BitmapRenderer<mask_iterator_type,
                                mask_rawaccessor_type,
@@ -329,6 +358,13 @@ namespace
             mask_rawaccessor_type,
             dest_iterator_type,
             mask_iterator_type>::type                                      masked_colorblend_accessor_type;
+
+        // -------------------------------------------------------
+
+        typedef JoinImageAccessorAdapter< dest_accessor_type,
+                                          mask_rawaccessor_type >          joined_image_accessor_type;
+        typedef JoinImageAccessorAdapter< GenericImageAccessor,
+                                          GenericImageAccessor >           joined_generic_image_accessor_type;
 
         // -------------------------------------------------------
 
@@ -874,23 +910,105 @@ namespace
             }
         }
 
+        template< typename Iterator, typename Acc >
+        void implDrawMaskedBitmap(const BitmapDeviceSharedPtr& rSrcBitmap,
+                                  const BitmapDeviceSharedPtr& rMask,
+                                  const basegfx::B2IRange&     rSrcRect,
+                                  const basegfx::B2IRange&     rDstRect,
+                                  const Iterator&              begin,
+                                  const Acc&                   acc)
+        {
+            boost::shared_ptr<BitmapRenderer>   pSrcBmp( getCompatibleBitmap(rSrcBitmap) );
+            boost::shared_ptr<mask_bitmap_type> pMask( getCompatibleClipMask(rMask) );
+            OSL_ASSERT( pMask && pSrcBmp );
+
+            // since resizeImageNoInterpolation() internally copyies
+            // to a temporary buffer, also works with *this == rSrcBitmap
+            vigra::resizeImageNoInterpolation(
+                srcIterRange(composite_iterator_type(
+                                 pSrcBmp->maBegin,
+                                 pMask->maBegin),
+                             joined_image_accessor_type(
+                                 pSrcBmp->maAccessor,
+                                 pMask->maRawAccessor),
+                             rSrcRect),
+                destIterRange(begin,
+                              typename masked_input_splitting_accessor<
+                                       Acc,
+                                       joined_image_accessor_type,
+                                       FastMask >::type(acc),
+                              rDstRect));
+        }
+
+        // xxx TODO
+        template< typename Iterator, typename Acc >
+        void implDrawMaskedBitmapGeneric(const BitmapDeviceSharedPtr& rSrcBitmap,
+                                         const BitmapDeviceSharedPtr& rMask,
+                                         const basegfx::B2IRange&     rSrcRect,
+                                         const basegfx::B2IRange&     rDstRect,
+                                         const Iterator&              begin,
+                                         const Acc&                   acc)
+        {
+            GenericImageAccessor aSrcAcc( rSrcBitmap );
+            GenericImageAccessor aMaskAcc( rMask );
+
+            const vigra::Diff2D aTopLeft(rSrcRect.getMinX(),
+                                         rSrcRect.getMinY());
+            const vigra::Diff2D aBottomRight(rSrcRect.getMaxX(),
+                                             rSrcRect.getMaxY());
+            // since resizeImageNoInterpolation() internally copyies
+            // to a temporary buffer, also works with *this == rSrcBitmap
+            vigra::resizeImageNoInterpolation(
+                vigra::make_triple(
+                    generic_composite_iterator_type(
+                        aTopLeft,aTopLeft),
+                    generic_composite_iterator_type(
+                        aBottomRight,aBottomRight),
+                    joined_generic_image_accessor_type(
+                        aSrcAcc,
+                        aMaskAcc)),
+                destIterRange(begin,
+                              typename masked_input_splitting_accessor<
+                                       Acc,
+                                       joined_generic_image_accessor_type,
+                                       NoFastMask >::type(acc),
+                              rDstRect));
+        }
+
         virtual void drawMaskedBitmap_i(const BitmapDeviceSharedPtr& rSrcBitmap,
                                         const BitmapDeviceSharedPtr& rMask,
                                         const basegfx::B2IRange&     rSrcRect,
                                         const basegfx::B2IRange&     rDstRect,
                                         DrawMode                     drawMode )
         {
-            // TODO(F3): This is a hack, at best. The mask must be the
-            // size of the source bitmap, and accordingly
-            // translated. Let alone interpolated.
-            if( drawMode == DrawMode_XOR )
-                implDrawBitmap(rSrcBitmap, rSrcRect, rDstRect,
-                               getMaskedIter(rMask),
-                               maRawMaskedXorAccessor);
+            // xxx TODO
+            if( isCompatibleClipMask(rMask) &&
+                isCompatibleBitmap(rSrcBitmap) )
+            {
+                if( drawMode == DrawMode_XOR )
+                    implDrawMaskedBitmap(rSrcBitmap, rMask,
+                                         rSrcRect, rDstRect,
+                                         maBegin,
+                                         maXorAccessor);
+                else
+                    implDrawMaskedBitmap(rSrcBitmap, rMask,
+                                         rSrcRect, rDstRect,
+                                         maBegin,
+                                         maAccessor);
+            }
             else
-                implDrawBitmap(rSrcBitmap, rSrcRect, rDstRect,
-                               getMaskedIter(rMask),
-                               maRawMaskedAccessor);
+            {
+                if( drawMode == DrawMode_XOR )
+                    implDrawMaskedBitmapGeneric(rSrcBitmap, rMask,
+                                                rSrcRect, rDstRect,
+                                                maBegin,
+                                                maXorAccessor);
+                else
+                    implDrawMaskedBitmapGeneric(rSrcBitmap, rMask,
+                                                rSrcRect, rDstRect,
+                                                maBegin,
+                                                maAccessor);
+            }
         }
 
         virtual void drawMaskedBitmap_i(const BitmapDeviceSharedPtr& rSrcBitmap,
@@ -900,14 +1018,34 @@ namespace
                                         DrawMode                     drawMode,
                                         const BitmapDeviceSharedPtr& rClip )
         {
-            // TODO(F3): Clipped drawMaskedBitmap_i() not yet implemented
-            (void)rClip;
-            drawMaskedBitmap_i( rSrcBitmap,
-                                rMask,
-                                rSrcRect,
-                                rDstRect,
-                                drawMode );
-            OSL_ENSURE( false, "Method not yet implemented, falling back to unclipped version!" );
+            // xxx TODO
+            if( isCompatibleClipMask(rClip) &&
+                isCompatibleBitmap(rSrcBitmap) )
+            {
+                if( drawMode == DrawMode_XOR )
+                    implDrawMaskedBitmap(rSrcBitmap, rMask,
+                                         rSrcRect, rDstRect,
+                                         getMaskedIter(rClip),
+                                         maMaskedXorAccessor);
+                else
+                    implDrawMaskedBitmap(rSrcBitmap, rMask,
+                                         rSrcRect, rDstRect,
+                                         getMaskedIter(rClip),
+                                         maMaskedAccessor);
+            }
+            else
+            {
+                if( drawMode == DrawMode_XOR )
+                    implDrawMaskedBitmapGeneric(rSrcBitmap, rMask,
+                                                rSrcRect, rDstRect,
+                                                getMaskedIter(rClip),
+                                                maMaskedXorAccessor);
+                else
+                    implDrawMaskedBitmapGeneric(rSrcBitmap, rMask,
+                                                rSrcRect, rDstRect,
+                                                getMaskedIter(rClip),
+                                                maMaskedAccessor);
+            }
         }
     };
 } // namespace

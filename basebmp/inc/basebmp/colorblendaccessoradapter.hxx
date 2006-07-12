@@ -4,9 +4,9 @@
  *
  *  $RCSfile: colorblendaccessoradapter.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-06 10:02:07 $
+ *  last change: $Author: thb $ $Date: 2006-07-12 15:09:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,8 +48,8 @@ namespace basebmp
 
     The getter functors return a constant value (usually the zero of
     the value type, this preserves the original destination content
-    when blitting through a mask) - there really isn't no sensible
-    default behaviour for these methods.
+    when blitting through a mask) - there really isn't no other
+    sensible default behaviour for these methods.
  */
 template< class WrappedAccessor,
           typename AlphaType > class ConstantColorBlendSetterAccessorAdapter

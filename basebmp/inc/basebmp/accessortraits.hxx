@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessortraits.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-11 11:38:54 $
+ *  last change: $Author: thb $ $Date: 2006-07-12 15:09:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 #ifndef INCLUDED_BASEBMP_ACCESSORTRAITS_HXX
 #define INCLUDED_BASEBMP_ACCESSORTRAITS_HXX
 
-#include <osl/diagnose.h>
+#include <basebmp/accessorfunctors.hxx>
 #include <basebmp/accessoradapters.hxx>
 #include <basebmp/metafunctions.hxx>
 
@@ -44,69 +44,6 @@
 
 namespace basebmp
 {
-
-// Some common accessor functors
-// ------------------------------------------------------------
-
-
-//-----------------------------------------------------------------------------
-
-// XOR
-template< typename T > struct XorFunctor : public std::binary_function<T,T,T>
-{
-    T operator()( T v1, T v2 ) const { return v1 ^ v2; }
-};
-
-//-----------------------------------------------------------------------------
-
-// Mask
-template< typename T, typename M > struct MaskFunctorBase
-{
-    typedef T first_argument_type;
-    typedef M second_argument_type;
-    typedef T third_argument_type;
-    typedef T result_type;
-};
-
-
-// Mask
-template< typename T, typename M > struct GenericOutputMaskFunctor : MaskFunctorBase<T,M>
-{
-    /// Ternary mask operation - selects v1 for m == 0, v2 otherwise
-    T operator()( T v1, M m, T v2 ) const
-    {
-        return m == 0 ? v1 : v2;
-    }
-};
-
-template< typename T, typename M > struct IntegerOutputMaskFunctor : MaskFunctorBase<T,M>
-{
-    /** Mask v with state of m
-
-        @return v2, if m != 0, v1 otherwise.
-     */
-    T operator()( T v1, M m, T v2 ) const
-    {
-        typedef typename make_unsigned<T>::type unsigned_T;
-
-        // mask will be 0, iff m == 0, and 1 otherwise
-        const T mask( unsigned_cast<T>(m | -m) >> (sizeof(unsigned_T)*8 - 1) );
-        return v1*(M)(1-mask) + v2*mask;
-    }
-};
-
-template< typename T, typename M > struct FastIntegerOutputMaskFunctor : MaskFunctorBase<T,M>
-{
-    /// Specialization, only valid if mask can only attain 0 or 1
-    T operator()( T v1, M m, T v2 ) const
-    {
-        OSL_ASSERT(m<=1);
-
-        return v1*(M)(1-m) + v2*m;
-    }
-};
-
-//-----------------------------------------------------------------------------
 
 struct FastMask;
 struct NoFastMask;
