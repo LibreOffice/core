@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bullet.h,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-06 10:26:31 $
+ *  last change: $Author: obo $ $Date: 2006-07-12 07:58:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -393,8 +393,6 @@ static sal_Unicode table_Alphabet_dz[] = {
     0x0F62, 0x0F63, 0x0F64, 0x0F66, 0x0F67, 0x0F68
 };
 
-#endif
-
 // Bulgarian Cyrillic upper case letters
 static sal_Unicode table_CyrillicUpperLetter_bg[] = {
         0x0410, 0x0411, 0x0412, 0x0413, 0x0414, 0x0415, 0x0416, 0x0417, 0x0418,
@@ -426,5 +424,7 @@ static sal_Unicode table_CyrillicLowerLetter_ru[] = {
         0x0441, 0x0442, 0x0443, 0x0444, 0x0445, 0x0446, 0x0447, 0x0448,
         0x0449, 0x044B, 0x044D, 0x044E, 0x044F
 };
+
+#endif
 
 } } } }
