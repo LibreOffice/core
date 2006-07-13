@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentdigitalsignatures.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 11:56:11 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 12:08:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,6 +88,9 @@
 #endif
 #ifndef _UCBHELPER_CONTENTBROKER_HXX
 #include <ucbhelper/contentbroker.hxx>
+#endif
+#ifndef _UNOTOOLS_UCBHELPER_HXX
+#include <unotools/ucbhelper.hxx>
 #endif
 
 #include <stdio.h>
@@ -376,12 +379,6 @@ void DocumentDigitalSignatures::showCertificate( const Reference< ::com::sun::st
     INetURLObject aLocObj( Location );
     INetURLObject aLocObjLowCase( Location.toAsciiLowerCase() ); // will be used for case insensitive comparing
 
-    // the comparing is done in the following way:
-    // - first compare in case sensitive way
-    // - if name are different try a fallback comparing inf case insensitive way
-    // - if the last comparing succeeded get casepreserving normalized names for the files and compare them
-    // ( the second step is required because retrieving of the normalized names might be very expensive in some cases )
-
     ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentProvider > xContentProvider;
     ::ucb::ContentBroker* pBroker = NULL;
     if ( aLocObj.GetProtocol() == INET_PROT_FILE && ( pBroker = ::ucb::ContentBroker::get() ) )
@@ -392,79 +389,7 @@ void DocumentDigitalSignatures::showCertificate( const Reference< ::com::sun::st
     const ::rtl::OUString* pSecURLs = aSecURLs.getConstArray();
     const ::rtl::OUString* pSecURLsEnd = pSecURLs + aSecURLs.getLength();
     for ( ; pSecURLs != pSecURLsEnd && !bFound; ++pSecURLs )
-    {
-        INetURLObject aSecURL( *pSecURLs );
-        INetURLObject aSecURLLowCase( pSecURLs->toAsciiLowerCase() ); // will be used for case insensitive comparing
-
-        if ( aLocObj.GetProtocol() == aSecURL.GetProtocol() )
-        {
-            INetURLObject aTmpObj( aLocObj );
-            INetURLObject aTmpObjLowCase( aLocObjLowCase ); // will be used for case insensitive comparing
-            INetURLObject aLastTmpObj;
-            do
-            {
-                if ( aSecURL == aTmpObj )
-                {
-                    // if case sensitive comparing succeeded there is no need for additional checks
-                    bFound = sal_True;
-                }
-                else if ( xContentProvider.is() && aSecURLLowCase == aTmpObjLowCase )
-                {
-                    // the comparing was done using caseinsensitive way
-                    // the case sensitive comparing have failed already
-                    // the normalized urls must be retrieved
-                    try
-                    {
-                        ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent > xSecCont =
-                            xContentProvider->queryContent(
-                                ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentIdentifierFactory >(
-                                    xContentProvider, ::com::sun::star::uno::UNO_QUERY_THROW )->createContentIdentifier(
-                                        aSecURL.GetMainURL( INetURLObject::NO_DECODE ) ) );
-
-                        ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent > xLocCont =
-                            xContentProvider->queryContent(
-                                ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentIdentifierFactory >(
-                                    xContentProvider, ::com::sun::star::uno::UNO_QUERY_THROW )->createContentIdentifier(
-                                        aTmpObj.GetMainURL( INetURLObject::NO_DECODE ) ) );
-
-                        if ( !xSecCont.is() || !xLocCont.is() )
-                            throw uno::RuntimeException();
-
-                        ::rtl::OUString aSecNormStr;
-                        ::rtl::OUString aLocNormStr;
-
-                        bFound =
-                        ( ( ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandProcessor >(
-                                xSecCont, ::com::sun::star::uno::UNO_QUERY_THROW )->execute(
-                                    ::com::sun::star::ucb::Command(
-                                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "getCasePreservingURL" ) ),
-                                        -1,
-                                        ::com::sun::star::uno::Any() ),
-                                    0,
-                                    ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() )
-                            >>= aSecNormStr )
-                        && ( ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandProcessor >(
-                                xLocCont, ::com::sun::star::uno::UNO_QUERY_THROW )->execute(
-                                    ::com::sun::star::ucb::Command(
-                                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "getCasePreservingURL" ) ),
-                                        -1,
-                                        ::com::sun::star::uno::Any() ),
-                                    0,
-                                    ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() )
-                            >>= aLocNormStr )
-                        && aLocNormStr.equals( aSecNormStr ) );
-                    }
-                    catch( ::com::sun::star::uno::Exception& )
-                    {}
-                }
-
-                // INetURLObject::removeSegment sometimes return true without exchanging URL,
-                // for example in case of "file:///"
-                aLastTmpObj = aTmpObj;
-
-            } while( aTmpObj.removeSegment() && aTmpObjLowCase.removeSegment() && aTmpObj != aLastTmpObj && !bFound );
-        }
-    }
+        bFound = ::utl::UCBContentHelper::IsSubPath( *pSecURLs, Location, xContentProvider );
 
     return bFound;
 }
