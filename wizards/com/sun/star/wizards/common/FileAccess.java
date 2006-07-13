@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FileAccess.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 12:31:14 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 12:13:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,7 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/package com.sun.star.wizards.common;
+import com.sun.star.beans.XPropertySet;
 import java.io.File;
 import java.util.Vector;
 
@@ -124,6 +125,68 @@ public class FileAccess {
     * @param sType use "share" or "user". Set to "" if not needed eg for the WorkPath;
     * In the return Officepath a possible slash at the end is cut off
     */
+
+    public static String getOfficePath(XMultiServiceFactory xMSF, String sPath, String sType, String sSearchDir) throws NoValidPathException {
+        //This method currently only works with sPath="Template"
+
+        String ResultPath = "";
+
+        String Template_writable = "";
+        String [] Template_internal;
+        String [] Template_user;
+
+        boolean bexists = false;
+        try {
+            XInterface xPathInterface = (XInterface) xMSF.createInstance("com.sun.star.util.PathSettings");
+            XPropertySet xPropertySet = (XPropertySet) com.sun.star.uno.UnoRuntime.queryInterface(XPropertySet.class, xPathInterface);
+            String WritePath = "";
+            String [] ReadPaths = null;
+            XInterface xUcbInterface = (XInterface) xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess");
+            XSimpleFileAccess xSimpleFileAccess = (XSimpleFileAccess) com.sun.star.uno.UnoRuntime.queryInterface(XSimpleFileAccess.class, xUcbInterface);
+
+            Template_writable = (String) xPropertySet.getPropertyValue(sPath+"_writable");
+            Template_internal = (String []) xPropertySet.getPropertyValue(sPath+"_internal");
+            Template_user = (String []) xPropertySet.getPropertyValue(sPath+"_user");
+            int iNumEntries = Template_user.length + Template_internal.length + 1;
+            ReadPaths = new String[iNumEntries];
+            int t=0;
+            for (int i=0; i<Template_internal.length; i++) {
+                ReadPaths[t] = Template_internal[i];
+                t++;
+            }
+            for (int i=0; i<Template_user.length; i++) {
+                ReadPaths[t] = Template_user[i];
+                t++;
+            }
+            ReadPaths[t] = Template_writable;
+            WritePath = Template_writable;
+
+            if (sType.equalsIgnoreCase("user")) {
+                ResultPath = WritePath;
+                bexists = true;
+            } else {
+                //find right path using the search sub path
+                for (int i = 0; i<ReadPaths.length; i++) {
+                    String tmpPath = ReadPaths[i]+sSearchDir;
+                    if (xSimpleFileAccess.exists(tmpPath)) {
+                        ResultPath = ReadPaths[i];
+                        bexists = true;
+                        break;
+                    }
+                }
+            }
+            ResultPath = deleteLastSlashfromUrl(ResultPath);
+        } catch (Exception exception) {
+            exception.printStackTrace(System.out);
+            ResultPath = "";
+        }
+        if (bexists == false)
+            throw new NoValidPathException(xMSF);
+        return ResultPath;
+    }
+
+
+    /*
     public static String getOfficePath(XMultiServiceFactory xMSF, String sPath, String sType) throws NoValidPathException {
         String ResultPath = "";
         Object oPathSettings;
@@ -164,6 +227,7 @@ public class FileAccess {
             throw new NoValidPathException(xMSF);
         return ResultPath;
     }
+     **/
 
     public static String combinePaths(XMultiServiceFactory xMSF, String FirstPath, String SecondPath) throws NoValidPathException {
         boolean bexists = false;
