@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbconversion.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:05:37 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 15:13:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,6 +118,8 @@ namespace dbtools
         aTemp += ::rtl::OUString::createFromAscii(" ");
         Time aTime(0,_rDateTime.Seconds,_rDateTime.Minutes,_rDateTime.Hours);
         aTemp += toTimeString(aTime);
+        aTemp += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("."));
+        aTemp += ::rtl::OUString::valueOf(static_cast<sal_Int32>(_rDateTime.HundredthSeconds));
         return  aTemp;
     }
     //------------------------------------------------------------------------------
@@ -456,9 +458,9 @@ namespace dbtools
     //-----------------------------------------------------------------------------
     DateTime DBTypeConversion::toDateTime(const ::rtl::OUString& _sSQLString)
     {
-        // This is very suspicious. Is there any documentation about the format of the string?
-        // Our assumption is that it's "YYYY-MM-DD HH:MM:SS", which makes sense, but how do we know?
-        // #i14997# - 2003-06-05 - fs@openoffice.org
+        //@see http://java.sun.com/j2se/1.4.2/docs/api/java/sql/Timestamp.html#valueOf(java.lang.String)
+        //@see http://java.sun.com/j2se/1.4.2/docs/api/java/sql/Date.html#valueOf(java.lang.String)
+        //@see http://java.sun.com/j2se/1.4.2/docs/api/java/sql/Time.html#valueOf(java.lang.String)
 
         // the date part
         Date aDate = toDate(_sSQLString);
@@ -467,7 +469,7 @@ namespace dbtools
         if ( -1 != nSeparation )
             aTime = toTime( _sSQLString.copy( nSeparation ) );
 
-        return DateTime(0,aTime.Seconds,aTime.Minutes,aTime.Hours,aDate.Day,aDate.Month,aDate.Year);
+        return DateTime(aTime.HundredthSeconds,aTime.Seconds,aTime.Minutes,aTime.Hours,aDate.Day,aDate.Month,aDate.Year);
     }
 
     //-----------------------------------------------------------------------------
@@ -478,15 +480,22 @@ namespace dbtools
         sal_Int32 nIndex    = 0;
         sal_uInt16  nHour   = 0,
                     nMinute = 0,
-                    nSecond = 0;
+                    nSecond = 0,
+                    nNano   = 0;
         nHour   = (sal_uInt16)_sSQLString.getToken(0,sTimeSep,nIndex).toInt32();
         if(nIndex != -1)
         {
             nMinute = (sal_uInt16)_sSQLString.getToken(0,sTimeSep,nIndex).toInt32();
             if(nIndex != -1)
+            {
                 nSecond = (sal_uInt16)_sSQLString.getToken(0,sTimeSep,nIndex).toInt32();
+                nIndex = 0;
+                ::rtl::OUString sNano(_sSQLString.getToken(1,'.',nIndex));
+                if ( sNano.getLength() )
+                    nNano = (sal_uInt16)sNano.toInt32();
+            }
         }
-        return Time(0,nSecond,nMinute,nHour);
+        return Time(nNano,nSecond,nMinute,nHour);
     }
 
 //.........................................................................
