@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.79 $
+#   $Revision: 1.80 $
 #
-#   last change: $Author: obo $ $Date: 2006-07-11 14:53:57 $
+#   last change: $Author: obo $ $Date: 2006-07-13 12:03:32 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -90,7 +90,8 @@ EXELIST = \
     $(DESTDIRBIN)$/javamaker$(EXEPOSTFIX) 	\
     $(DESTDIRBIN)$/xml2cmp$(EXEPOSTFIX)	\
     $(DESTDIRBIN)$/autodoc$(EXEPOSTFIX) \
-    $(DESTDIRBIN)$/unoapploader$(EXEPOSTFIX)
+    $(DESTDIRBIN)$/unoapploader$(EXEPOSTFIX) \
+    $(DESTDIRBIN)$/uno-skeletonmaker$(EXEPOSTFIX)
 
 .IF "$(GUI)"=="WNT"
 EXELIST += \
