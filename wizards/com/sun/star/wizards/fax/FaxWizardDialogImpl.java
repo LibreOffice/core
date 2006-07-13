@@ -300,8 +300,8 @@ public class FaxWizardDialogImpl extends FaxWizardDialog {
 
     private void initializePaths() {
         try {
-            sTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "share");
-            sUserTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "user");
+            sTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "share", "/wizard");
+            sUserTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "user", "");
             sBitmapPath = FileAccess.combinePaths(xMSF, sTemplatePath, "/wizard/bitmap");
         } catch (NoValidPathException e) {
             e.printStackTrace();
@@ -312,7 +312,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog {
             try {
                 String sFaxSubPath = "/wizard/fax";
                 sFaxPath = FileAccess.combinePaths(xMSF, sTemplatePath, sFaxSubPath);
-                sWorkPath = FileAccess.getOfficePath(xMSF, "Work", "");
+                sWorkPath = FileAccess.getOfficePath(xMSF, "Work", "", "");
 
                 BusinessFiles = FileAccess.getFolderTitles(xMSF, "bus", sFaxPath);
                 PrivateFiles = FileAccess.getFolderTitles(xMSF, "pri", sFaxPath);
