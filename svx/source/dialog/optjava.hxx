@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optjava.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:46:14 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 12:00:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,8 @@
 #include "simptabl.hxx"
 #endif
 
+#include "radiobtnbox.hxx"
+
 // forward ---------------------------------------------------------------
 
 typedef struct _JavaInfo JavaInfo;
@@ -90,14 +92,14 @@ public:
 class SvxJavaOptionsPage : public SfxTabPage
 {
 private:
-    FixedLine               m_aJavaLine;
-    CheckBox                m_aJavaEnableCB;
-    FixedText               m_aJavaFoundLabel;
-    SvxJavaTable            m_aJavaList;
-    FixedText               m_aJavaPathText;
-    PushButton              m_aAddBtn;
-    PushButton              m_aParameterBtn;
-    PushButton              m_aClassPathBtn;
+    FixedLine                   m_aJavaLine;
+    CheckBox                    m_aJavaEnableCB;
+    FixedText                   m_aJavaFoundLabel;
+    svx::SvxRadioButtonListBox  m_aJavaList;
+    FixedText                   m_aJavaPathText;
+    PushButton                  m_aAddBtn;
+    PushButton                  m_aParameterBtn;
+    PushButton                  m_aClassPathBtn;
 
     SvxJavaParameterDlg*    m_pParamDlg;
     SvxJavaClassPathDlg*    m_pPathDlg;
@@ -127,7 +129,6 @@ private:
     void                    ClearJavaList();
     void                    LoadJREs();
     void                    AddJRE( JavaInfo* _pInfo );
-    void                    HandleCheckEntry( SvLBoxEntry* _pEntry );
 
 public:
     SvxJavaOptionsPage( Window* pParent, const SfxItemSet& rSet );
