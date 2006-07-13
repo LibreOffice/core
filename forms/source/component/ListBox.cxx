@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ListBox.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:47:20 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 15:18:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1692,6 +1692,7 @@ namespace frm
             if ( m_pItemBroadcaster.is() )
             {
                 m_pItemBroadcaster->removeEventsForProcessor( this );
+                m_pItemBroadcaster->terminate();
                 m_pItemBroadcaster = NULL;
             }
         }
