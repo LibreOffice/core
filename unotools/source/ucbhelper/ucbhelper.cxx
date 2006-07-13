@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ucbhelper.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 14:10:05 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 12:11:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,12 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_XCONTENTIDENTIFIERFACTORY_HPP_
+#include <com/sun/star/ucb/XContentIdentifierFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_XCOMMANDPROCESSOR_HPP_
+#include <com/sun/star/ucb/XCommandProcessor.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_COMMANDABORTEDEXCEPTION_HPP_
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
@@ -113,6 +119,7 @@
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/datetime.hxx>
+#include <ucbhelper/contentbroker.hxx>
 
 #include "unotools/localfilehelper.hxx"
 
@@ -831,5 +838,104 @@ sal_Bool UCBContentHelper::FindInPath( const String& rPath, const String& rName,
     return FALSE;
 }
 
+// -----------------------------------------------------------------------
+sal_Bool UCBContentHelper::IsSubPath( const ::rtl::OUString& rPath, const ::rtl::OUString& rSubfolderCandidate, const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentProvider >& xProv )
+{
+    sal_Bool bResult = sal_False;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentProvider > xContentProvider = xProv;
+
+    // the comparing is done in the following way:
+    // - first compare in case sensitive way
+    // - if name are different try a fallback comparing inf case insensitive way
+    // - if the last comparing succeeded get casepreserving normalized names for the files and compare them
+    // ( the second step is required because retrieving of the normalized names might be very expensive in some cases )
+
+    INetURLObject aCandidate( rSubfolderCandidate );
+    INetURLObject aCandidateLowCase( rSubfolderCandidate.toAsciiLowerCase() ); // will be used for case insensitive comparing
+    INetURLObject aParentFolder( rPath );
+    INetURLObject aParentFolderLowCase( rPath.toAsciiLowerCase() ); // will be used for case insensitive comparing
+
+    if ( aCandidate.GetProtocol() == aParentFolder.GetProtocol() )
+    {
+        if ( !xContentProvider.is() )
+        {
+            ::ucb::ContentBroker* pBroker = NULL;
+            if ( aCandidate.GetProtocol() == INET_PROT_FILE )
+            {
+                        pBroker = ::ucb::ContentBroker::get();
+                if ( pBroker )
+                    xContentProvider = pBroker->getContentProviderInterface();
+            }
+        }
+
+        INetURLObject aLastTmpObj;
+        do
+        {
+            if ( aParentFolder == aCandidate )
+            {
+                // if case sensitive comparing succeeded there is no need for additional checks
+                bResult = sal_True;
+            }
+            else if ( xContentProvider.is() && aParentFolderLowCase == aCandidateLowCase )
+            {
+                // the comparing was done using caseinsensitive way
+                // the case sensitive comparing have failed already
+                // the normalized urls must be retrieved
+                try
+                {
+                    ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent > xSecCont =
+                        xContentProvider->queryContent(
+                            ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentIdentifierFactory >(
+                                xContentProvider, ::com::sun::star::uno::UNO_QUERY_THROW )->createContentIdentifier(
+                                    aParentFolder.GetMainURL( INetURLObject::NO_DECODE ) ) );
+
+                    ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent > xLocCont =
+                        xContentProvider->queryContent(
+                            ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentIdentifierFactory >(
+                                xContentProvider, ::com::sun::star::uno::UNO_QUERY_THROW )->createContentIdentifier(
+                                    aCandidate.GetMainURL( INetURLObject::NO_DECODE ) ) );
+
+                    if ( !xSecCont.is() || !xLocCont.is() )
+                        throw ::com::sun::star::uno::RuntimeException();
+
+                    ::rtl::OUString aSecNormStr;
+                    ::rtl::OUString aLocNormStr;
+
+                    bResult =
+                    ( ( ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandProcessor >(
+                            xSecCont, ::com::sun::star::uno::UNO_QUERY_THROW )->execute(
+                                ::com::sun::star::ucb::Command(
+                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "getCasePreservingURL" ) ),
+                                    -1,
+                                    ::com::sun::star::uno::Any() ),
+                                0,
+                                ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() )
+                        >>= aSecNormStr )
+                    && ( ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandProcessor >(
+                            xLocCont, ::com::sun::star::uno::UNO_QUERY_THROW )->execute(
+                                ::com::sun::star::ucb::Command(
+                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "getCasePreservingURL" ) ),
+                                    -1,
+                                    ::com::sun::star::uno::Any() ),
+                                0,
+                                ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() )
+                        >>= aLocNormStr )
+                    && aLocNormStr.equals( aSecNormStr ) );
+                }
+                catch( ::com::sun::star::uno::Exception& )
+                {}
+            }
+
+            // INetURLObject::removeSegment sometimes return true without exchanging URL,
+            // for example in case of "file:///"
+            aLastTmpObj = aCandidate;
+
+        } while( aCandidate.removeSegment() && aCandidateLowCase.removeSegment() && aCandidate != aLastTmpObj && !bResult );
+    }
+
+    return bResult;
 }
+
+} // namespace utl
 
