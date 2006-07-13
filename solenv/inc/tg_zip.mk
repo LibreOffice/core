@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_zip.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 21:59:47 $
+#   last change: $Author: obo $ $Date: 2006-07-13 12:08:18 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,7 @@ zip$(TNR)langdirs:=$(subst,CVS, $(shell +-dir {$(subst,$/$(LANGDIR), $(ZIP$(TNR)
 .IF "$(ZIP$(TNR)FORCEALLLANG)"!=""
 zip$(TNR)alllangiso:=$(foreach,i,$(completelangiso) $(foreach,j,$(zip$(TNR)langdirs) $(eq,$i,$j  $i $(NULL))))
 .ELSE          # "$(ZIP$(TNR)ALLLANG)" != ""
-zip$(TNR)alllangiso:=$(foreach,i,$(alllangiso) $(foreach,j,$(zip$(TNR)langdirs) $(eq,$i,$j  $i $(NULL))))
+zip$(TNR)alllangiso*:=$(foreach,i,$(alllangiso) $(foreach,j,$(zip$(TNR)langdirs) $(eq,$i,$j  $i $(NULL))))
 .ENDIF          # "$(ZIP$(TNR)ALLLANG)" != ""
 .ENDIF			# "$(ZIP$(TNR)TARGET)"!=""
 
