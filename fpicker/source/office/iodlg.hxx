@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iodlg.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 11:40:15 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 16:55:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -379,6 +379,23 @@ private:
                                     const String& _rURL,
                                     const String& _rFilter
                                 );
+
+    /** helper function to check and append the default filter extension if
+        necessary.
+        The function checks if the specified filename already contains one of
+        the valid extensions of the specified filter. If not the filter default
+        extension is appended to the filename.
+
+        @param _rFileName the filename which is checked and extended if necessary.
+        @param _rFilterDefaultExtension the default extension of the used filter.
+        @param _rFilterExtensions a list of one or more valid filter extensions
+               of the used filter.
+
+     */
+    static void                 appendDefaultExtension(
+                                        String& _rFileName,
+                                        const String& _rFilterDefaultExtension,
+                                        const String& _rFilterExtensions);
 };
 
 //***************************************************************************
