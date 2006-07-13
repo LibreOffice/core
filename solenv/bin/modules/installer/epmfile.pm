@@ -4,9 +4,9 @@
 #
 #   $RCSfile: epmfile.pm,v $
 #
-#   $Revision: 1.51 $
+#   $Revision: 1.52 $
 #
-#   last change: $Author: obo $ $Date: 2006-07-10 10:59:57 $
+#   last change: $Author: obo $ $Date: 2006-07-13 13:15:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -582,6 +582,10 @@ sub find_epm_on_system
         if (($ENV{'EPM'} ne "") && (-x "$ENV{'EPM'}"))
         {
             $epmname = $ENV{'EPM'};
+        }
+        elsif ( ($ENV{'EPM'} eq "no") || ($ENV{'EPM'} eq "internal") )
+        {
+            $epmname = "epm";
         }
         else
         {
