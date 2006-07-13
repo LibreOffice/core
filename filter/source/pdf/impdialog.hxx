@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impdialog.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-04 09:06:06 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 11:13:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,16 +107,26 @@ protected:
     sal_Int32                   mnPageLayout;
     sal_Bool                    mbFirstPageLeft;
 
+    sal_Bool                    mbEncrypt;
+    String                      msUserPassword;
+
+    sal_Bool                    mbRestrictPermissions;
+    String                      msOwnerPassword;
+    sal_Int32                   mnPrint;
+    sal_Int32                   mnChangesAllowed;
+    sal_Bool                    mbCanCopyOrExtract;
+    sal_Bool                    mbCanExtractForAccessibility;
+
     sal_Bool                    mbIsRangeChecked;
     String                      msPageRange;
     sal_Bool                    mbSelectionIsChecked;
 
-
 public:
 
-    friend  class               ImpPDFTabGeneralPage;
-    friend  class               ImpPDFTabViewerPage;
-    friend  class               ImpPDFTabOpnFtrPage;
+    friend class                ImpPDFTabGeneralPage;
+    friend class                ImpPDFTabViewerPage;
+    friend class                ImpPDFTabOpnFtrPage;
+    friend class                ImpPDFTabSecurityPage;
 
     ImpPDFTabDialog( Window* pParent, ResMgr& rResMgr,
                      Sequence< PropertyValue >& rFilterData,
@@ -245,6 +255,68 @@ public:
 
     void                        GetFilterConfigItem( ImpPDFTabDialog* paParent);
     void                        SetFilterConfigItem( const ImpPDFTabDialog* paParent );
+};
+
+//class security tab page
+class ImpPDFTabSecurityPage : public SfxTabPage
+{
+    CheckBox                    maCbEncrypt;
+
+    PushButton                  maPbUserPwd;
+    FixedText                   maFtUserPwdEmpty;
+
+    FixedLine                   maFlPermissions;
+    CheckBox                    maCbPermissions;
+    PushButton                  maPbOwnerPwd;
+    FixedText                   maFtOwnerPwdEmpty;
+
+    FixedLine                   maFlPrintPermissions;
+    RadioButton                 maRbPrintNone;
+    RadioButton                 maRbPrintLowRes;
+    RadioButton                 maRbPrintHighRes;
+
+    FixedLine                   maFlChangesAllowed;
+    RadioButton                 maRbChangesNone;
+    RadioButton                 maRbChangesInsDel;
+    RadioButton                 maRbChangesFillForm;
+    RadioButton                 maRbChangesComment;
+    RadioButton                 maRbChangesAnyNoCopy;
+
+    CheckBox                    maCbEnableCopy;
+    CheckBox                    maCbEnableAccessibility;
+
+    String                      msUserPassword;
+    String                      msSetUserPwd;
+    String                      msUserPwdTitle;
+
+    String                      msRestrPermissions;
+    String                      msOwnerPassword;
+    String                      msSetOwnerPwd;
+    String                      msOwnerPwdTitle;
+
+    ResMgr*                     mpaResMgr;
+
+    long nWidth;
+
+    DECL_LINK( TogglemaCbEncryptHdl, void* );
+    DECL_LINK( TogglemaCbPermissionsHdl, void* );
+
+    DECL_LINK( ClickmaPbUserPwdHdl, void* );
+    DECL_LINK( ClickmaPbOwnerPwdHdl, void* );
+
+    void                        ImplPwdPushButton( String &, String & , FixedText & );
+
+public:
+    ImpPDFTabSecurityPage( Window* pParent,
+                           const SfxItemSet& rSet,
+                           ResMgr* paResMgr );
+
+    ~ImpPDFTabSecurityPage();
+    static SfxTabPage*      Create( Window* pParent,
+                                    const SfxItemSet& rAttrSet );
+
+    void    GetFilterConfigItem( ImpPDFTabDialog* paParent);
+    void    SetFilterConfigItem( const ImpPDFTabDialog* paParent );
 };
 
 #endif // IMPDIALOG_HXX
