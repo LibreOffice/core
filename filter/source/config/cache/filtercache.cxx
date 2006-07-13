@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filtercache.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-12 09:22:00 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 09:12:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1125,6 +1125,17 @@ void FilterCache::impl_validateAndOptimize()
         sal_Int32 cu = lURLPattern.getLength();
 
 #if OSL_DEBUG_LEVEL > 0
+        ::rtl::OUString sInternalTypeNameCheck;
+        aType[PROPNAME_NAME] >>= sInternalTypeNameCheck;
+        if (!sInternalTypeNameCheck.equals(sType))
+        {
+            sLog.appendAscii("Warning\t:\t");
+            sLog.appendAscii("The type \"" );
+            sLog.append     (sType         );
+            sLog.appendAscii("\" does support the property \"Name\" correctly.\n");
+            ++nWarnings;
+        }
+
         if (!ce && !cu)
         {
             sLog.appendAscii("Warning\t:\t");
@@ -1132,7 +1143,6 @@ void FilterCache::impl_validateAndOptimize()
             sLog.append     (sType         );
             sLog.appendAscii("\" does not contain any URL pattern nor any extensions.\n");
             ++nWarnings;
-            continue;
         }
 #endif
 
@@ -1267,6 +1277,17 @@ void FilterCache::impl_validateAndOptimize()
                 sLog.append     (sType                          );
                 sLog.appendAscii("\" is not an IMPORT filter!\n");
                 ++nErrors;
+            }
+
+            ::rtl::OUString sInternalFilterNameCheck;
+            aPrefFilter[PROPNAME_NAME] >>= sInternalFilterNameCheck;
+            if (!sInternalFilterNameCheck.equals(sPrefFilter))
+            {
+                sLog.appendAscii("Warning\t:\t"  );
+                sLog.appendAscii("The filter \"" );
+                sLog.append     (sPrefFilter     );
+                sLog.appendAscii("\" does support the property \"Name\" correctly.\n");
+                ++nWarnings;
             }
         }
 #endif
@@ -2380,7 +2401,7 @@ CacheItem FilterCache::impl_readOldItem(const css::uno::Reference< css::containe
     CacheItem aItem;
     aItem[PROPNAME_NAME] <<= sItem;
 
-    // Installed
+    // Installed flag ...
     // Isnt used any longer!
 
     // UIName
