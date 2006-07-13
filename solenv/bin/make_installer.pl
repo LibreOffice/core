@@ -4,9 +4,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.65 $
+#   $Revision: 1.66 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 21:03:17 $
+#   last change: $Author: obo $ $Date: 2006-07-13 15:14:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1497,7 +1497,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             my $create_download = 0;
             my $downloadname = installer::ziplist::getinfofromziplist($allsettingsarrayref, "downloadname");
             if ( $$downloadname ne "" ) { $create_download = 1; }
-            if (( $is_success ) && ( $create_download ))
+            if (( $is_success ) && ( $create_download ) && ( $ENV{'FORCE_DOWNLOADSETS'} ))
             {
                 my $downloaddir = installer::download::create_download_sets($finalinstalldir, $includepatharrayref, $allvariableshashref, $$downloadname, $languagestringref, $languagesarrayref);
                 installer::worker::analyze_and_save_logfile($loggingdir, $downloaddir, $installlogdir, $allsettingsarrayref, $languagestringref, $current_install_number);
@@ -1878,7 +1878,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         if ( $installer::globals::patch ) { $downloadname = installer::ziplist::getinfofromziplist($allsettingsarrayref, "patchdownloadname"); }
 
         if ( $$downloadname ne "" ) { $create_download = 1; }
-        if (( $is_success ) && ( $create_download ))
+        if (( $is_success ) && ( $create_download ) && ( $ENV{'FORCE_DOWNLOADSETS'} ))
         {
             my $downloaddir = installer::download::create_download_sets($finalinstalldir, $includepatharrayref, $allvariableshashref, $$downloadname, $languagestringref, $languagesarrayref);
             installer::worker::analyze_and_save_logfile($loggingdir, $downloaddir, $installlogdir, $allsettingsarrayref, $languagestringref, $current_install_number);
