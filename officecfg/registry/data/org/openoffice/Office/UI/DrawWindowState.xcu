@@ -5,9 +5,9 @@
  *
  *  $RCSfile: DrawWindowState.xcu,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 10:21:07 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 10:22:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,7 +154,7 @@
                     <value xml:lang="de">Zeichnen</value>
                 </prop>
                 <prop oor:name="ContextSensitive" oor:type="xs:boolean">
-                    <value>false</value>
+                    <value>true</value>
                 </prop>
             </node>
             <node oor:name="private:resource/toolbar/3dobjectsbar" oor:op="replace">
