@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StyleApplier.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-06 14:20:26 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 12:14:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,7 +101,7 @@ public class StyleApplier{
     try {
             this.curFormDocument = _curFormDocument;
             xMSF = curFormDocument.xMSF;
-            StylesPath = FileAccess.getOfficePath(xMSF, "Config","");
+            StylesPath = FileAccess.getOfficePath(xMSF, "Config","", "");
             StylesPath = FileAccess.combinePaths(xMSF, StylesPath, "/wizard/form/styles");
             TextStyleHandler oTextStyleHandler = new TextStyleHandler(xMSF, curFormDocument.xTextDocument);
             xPageStylePropertySet = oTextStyleHandler.getStyleByName("PageStyles", "Standard");
