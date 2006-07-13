@@ -4,9 +4,9 @@
  *
  *  $RCSfile: solar.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 13:56:56 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 12:10:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,6 +103,7 @@ int IsStackGrowingDown()
 
 int GetStackAlignment_3( char*p, long l, int i, short s, char b, char c, ... )
 {
+  (void) p; (void) l; (void) i; (void) s; /* unused */
   if ( IsStackGrowingDown() )
     return &c - &b;
   else
@@ -111,6 +112,7 @@ int GetStackAlignment_3( char*p, long l, int i, short s, char b, char c, ... )
 
 int GetStackAlignment_2( char*p, long l, int i, short s, char b, char c )
 {
+  (void) p; (void) l; (void) i; (void) s; /* unused */
   if ( IsStackGrowingDown() )
     return &c - &b;
   else
