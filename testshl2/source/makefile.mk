@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 12:07:19 $
+#   last change: $Author: obo $ $Date: 2006-07-13 10:02:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@ PRJ=..
 PRJNAME=testshl2
 TARGET=testshl2
 TARGETTYPE=CUI
+PRJINC=.
 
 ENABLE_EXCEPTIONS=TRUE
 #USE_LDUMP2=TRUE
@@ -82,6 +83,10 @@ APP1LIBS= \
     $(LB)$/cppunit_no_regallfkt.lib \
     $(SLB)$/testresult.lib
 
+.IF "$(GUI)"=="WNT" 
+APP1LIBS += $(LB)$/winstuff.lib
+.ENDIF
+
 #
 # ------------------------------------------------------------------
 APP2TARGET= versioninfo
@@ -100,6 +105,10 @@ APP3STDLIBS=$(SALLIB)
 
 APP3DEPN= 
 APP3LIBS= 
+
+.IF "$(GUI)"=="WNT" 
+APP3LIBS += $(LB)$/winstuff.lib
+.ENDIF
 
 
 # --- Targets ------------------------------------------------------
