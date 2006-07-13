@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 09:09:09 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 11:13:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,7 +137,28 @@ PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc, Reference< task::
     mnMaxImageResolution    ( 300 ),
     mnQuality               ( 90 ),
     mnFormsFormat           ( 0 ),
-    mnProgressValue         ( 0 )
+    mnProgressValue         ( 0 ),
+
+    mbHideViewerToolbar         ( sal_False ),
+    mbHideViewerMenubar         ( sal_False ),
+    mbHideViewerWindowControls  ( sal_False ),
+    mbFitWindow                 ( sal_False ),
+    mbCenterWindow              ( sal_False ),
+    mbOpenInFullScreenMode      ( sal_False ),
+    mbDisplayPDFDocumentTitle   ( sal_True ),
+    mnPDFDocumentMode           ( 0 ),
+    mnPDFDocumentAction         ( 0 ),
+    mnPDFPageLayout             ( 0 ),
+    mbFirstPageLeft             ( sal_False ),
+
+    mbEncrypt                   ( sal_False ),
+    msOpenPassword              (),
+    mbRestrictPermissions       ( sal_False ),
+    msPermissionPassword        (),
+    mnPrintAllowed              ( 2 ),
+    mnChangesAllowed            ( 4 ),
+    mbCanCopyOrExtract          ( sal_True ),
+    mbCanExtractForAccessibility( sal_True )
 {
 }
 
@@ -282,7 +303,6 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
             }
 
             PDFWriter::PDFWriterContext aContext;
-            sal_Int32             nPDFDocumentMode = 0, nPDFDocumentAction = 0, nPDFPageLayout = 0;
 
             for( sal_Int32 nData = 0, nDataCount = rFilterData.getLength(); nData < nDataCount; ++nData )
             {
@@ -310,34 +330,63 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     rFilterData[ nData ].Value >>= mbUseTransitionEffects;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "FormsType" ) ) )
                     rFilterData[ nData ].Value >>= mnFormsFormat;
+//viewer properties
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "HideViewerToolbar" ) ) )
-                    rFilterData[ nData ].Value >>= aContext.HideViewerToolbar;
+                    rFilterData[ nData ].Value >>= mbHideViewerToolbar;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "HideViewerMenubar" ) ) )
-                    rFilterData[ nData ].Value >>= aContext.HideViewerMenubar;
+                    rFilterData[ nData ].Value >>= mbHideViewerMenubar;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "HideViewerWindowControls" ) ) )
-                    rFilterData[ nData ].Value >>= aContext.HideViewerWindowControls;
+                    rFilterData[ nData ].Value >>= mbHideViewerWindowControls;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "ResizeWindowToInitialPage" ) ) )
-                    rFilterData[ nData ].Value >>= aContext.FitWindow;
+                    rFilterData[ nData ].Value >>= mbFitWindow;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "CenterWindow" ) ) )
-                    rFilterData[ nData ].Value >>= aContext.CenterWindow;
+                    rFilterData[ nData ].Value >>= mbCenterWindow;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "OpenInFullScreenMode" ) ) )
-                    rFilterData[ nData ].Value >>= aContext.OpenInFullScreenMode;
+                    rFilterData[ nData ].Value >>= mbOpenInFullScreenMode;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "DisplayPDFDocumentTitle" ) ) )
-                    rFilterData[ nData ].Value >>= aContext.DisplayPDFDocumentTitle;
+                    rFilterData[ nData ].Value >>= mbDisplayPDFDocumentTitle;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "InitialView" ) ) )
-                    rFilterData[ nData ].Value >>= nPDFDocumentMode;
+                    rFilterData[ nData ].Value >>= mnPDFDocumentMode;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "Magnification" ) ) )
-                    rFilterData[ nData ].Value >>= nPDFDocumentAction;
+                    rFilterData[ nData ].Value >>= mnPDFDocumentAction;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "PageLayout" ) ) )
-                    rFilterData[ nData ].Value >>= nPDFPageLayout;
+                    rFilterData[ nData ].Value >>= mnPDFPageLayout;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "FirstPageOnLeft" ) ) )
-                    rFilterData[ nData ].Value >>= aContext.FirstPageLeft;
+                    rFilterData[ nData ].Value >>= mbFirstPageLeft;
+//now all the security related properties...
+                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "EncryptFile" ) ) )
+                    rFilterData[ nData ].Value >>= mbEncrypt;
+                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "DocumentOpenPassword" ) ) )
+                    rFilterData[ nData ].Value >>= msOpenPassword;
+                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "RestrictPermissions" ) ) )
+                    rFilterData[ nData ].Value >>= mbRestrictPermissions;
+                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "PermissionPassword" ) ) )
+                    rFilterData[ nData ].Value >>= msPermissionPassword;
+                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "Printing" ) ) )
+                    rFilterData[ nData ].Value >>= mnPrintAllowed;
+                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "Changes" ) ) )
+                    rFilterData[ nData ].Value >>= mnChangesAllowed;
+                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "EnableCopyingOfContent" ) ) )
+                    rFilterData[ nData ].Value >>= mbCanCopyOrExtract;
+                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "EnableTextAccessForAccessibilityTools" ) ) )
+                    rFilterData[ nData ].Value >>= mbCanExtractForAccessibility;
             }
             aContext.URL        = aURL.GetMainURL(INetURLObject::DECODE_TO_IURI);
             aContext.Version    = PDFWriter::PDF_1_4;
+
+//copy in context the values default in the contructor or set by the FilterData sequence of properties
             aContext.Tagged     = mbUseTaggedPDF;
 
-            switch( nPDFDocumentMode )
+//values used in viewer
+            aContext.HideViewerToolbar          = mbHideViewerToolbar;
+            aContext.HideViewerMenubar          = mbHideViewerMenubar;
+            aContext.HideViewerWindowControls   = mbHideViewerWindowControls;
+            aContext.FitWindow                  = mbFitWindow;
+            aContext.CenterWindow               = mbCenterWindow;
+            aContext.OpenInFullScreenMode       = mbOpenInFullScreenMode;
+            aContext.DisplayPDFDocumentTitle    = mbDisplayPDFDocumentTitle;
+
+            switch( mnPDFDocumentMode )
             {
                 default:
                 case 0:
@@ -350,7 +399,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     aContext.PDFDocumentMode = PDFWriter::UseThumbs;
                     break;
             }
-            switch( nPDFDocumentAction )
+            switch( mnPDFDocumentAction )
             {
                 default:
                 case 0:
@@ -367,7 +416,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     break;
             }
 
-            switch( nPDFPageLayout )
+            switch( mnPDFPageLayout )
             {
                 default:
                 case 0:
@@ -383,6 +432,75 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     aContext.PageLayout = PDFWriter::ContinuousFacing;
                     break;
             }
+
+            aContext.FirstPageLeft = mbFirstPageLeft;
+
+//set values needed in encryption
+            aContext.Encrypt = mbEncrypt;
+//set encryption level, fixed, but here it can set by the UI if needed.
+// true is 128 bit, false 40
+//note that in 40 bit mode the UI needs reworking, since the current UI is meaningfull only for
+//128bit security mode
+            aContext.Security128bit = sal_True;
+
+//set the open password
+            if( mbEncrypt &&  msOpenPassword.getLength() > 0 )
+                aContext.UserPassword = msOpenPassword;
+
+//set check for permission change password
+// if not enabled and no permission password, force permissions to default as if PDF where without encryption
+            if( mbRestrictPermissions && msPermissionPassword.getLength() > 0 )
+            {
+                aContext.OwnerPassword = msPermissionPassword;
+                aContext.Encrypt = sal_True;
+//permission set as desired, done after
+            }
+            else
+            {
+//force permission to default
+                mnPrintAllowed                  = 2 ;
+                mnChangesAllowed                = 4 ;
+                mbCanCopyOrExtract              = sal_True;
+                mbCanExtractForAccessibility    = sal_True ;
+            }
+
+            switch( mnPrintAllowed )
+            {
+            case 0: //initialized when aContext is build, means no printing
+                break;
+            default:
+            case 2:
+                aContext.AccessPermissions.CanPrintFull         = sal_True;
+            case 1:
+                aContext.AccessPermissions.CanPrintTheDocument  = sal_True;
+                break;
+            }
+
+//check permitted changes
+            switch( mnChangesAllowed )
+            {
+            case 0: //already in struct PDFSecPermissions CTOR
+                break;
+            case 1:
+                aContext.AccessPermissions.CanAssemble              = sal_True;
+                break;
+            case 2:
+                aContext.AccessPermissions.CanFillInteractive       = sal_True;
+                break;
+            case 3:
+                aContext.AccessPermissions.CanAddOrModify           = sal_True;
+                break;
+            default:
+            case 4:
+                aContext.AccessPermissions.CanModifyTheContent      =
+                    aContext.AccessPermissions.CanCopyOrExtract     =
+                    aContext.AccessPermissions.CanAddOrModify       =
+                    aContext.AccessPermissions.CanFillInteractive   = sal_True;
+                break;
+            }
+
+            aContext.AccessPermissions.CanCopyOrExtract             = mbCanCopyOrExtract;
+            aContext.AccessPermissions.CanExtractForAccessibility   = mbCanExtractForAccessibility;
 
             /*
             * FIXME: the entries are only implicitly defined by the resource file. Should there
@@ -404,12 +522,50 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     aContext.SubmitFormat = PDFWriter::FDF;
                     break;
             }
+
+// all context data set, time to create the printing device
             PDFWriter*          pPDFWriter = new PDFWriter( aContext );
             OutputDevice*       pOut = pPDFWriter->GetReferenceDevice();
             vcl::PDFExtOutDevData* pPDFExtOutDevData = NULL;
 
             DBG_ASSERT( pOut, "PDFExport::Export: no reference device" );
             pXDevice->SetOutputDevice( pOut );
+
+            PDFDocInfo aDocInfo;
+            Reference< document::XDocumentInfoSupplier > xDocumentInfoSupplier( mxSrcDoc, UNO_QUERY );
+            if ( xDocumentInfoSupplier.is() )
+            {
+                Reference< document::XDocumentInfo > xDocumentInfo( xDocumentInfoSupplier->getDocumentInfo() );
+                if ( xDocumentInfo.is() )
+                {
+                    Reference< XPropertySet > xPropSet( xDocumentInfo, UNO_QUERY );
+                    if ( xPropSet.is() )
+                    {
+                        aDocInfo.Title = GetProperty( xPropSet, "Title" );
+                        aDocInfo.Author = GetProperty( xPropSet, "Author" );
+                        aDocInfo.Subject = GetProperty( xPropSet, "Subject" );
+                        aDocInfo.Keywords = GetProperty( xPropSet, "Keywords" );
+                    }
+                }
+            }
+            // getting the string for the producer
+            String aProducer;
+            ::utl::ConfigManager* pMgr = ::utl::ConfigManager::GetConfigManager();
+            if ( pMgr )
+            {
+                Any aProductName = pMgr->GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
+                ::rtl::OUString sProductName;
+                aProductName >>= sProductName;
+                aProducer = sProductName;
+                aProductName = pMgr->GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTVERSION );
+                aProductName >>= sProductName;
+                aProducer.AppendAscii(" ");
+                aProducer += String( sProductName );
+            }
+            aDocInfo.Producer = aProducer;
+            aDocInfo.Creator = aCreator;
+
+            pPDFWriter->SetDocInfo( aDocInfo );
 
             if ( pOut )
             {
@@ -492,42 +648,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
 
                 if( bRet )
                 {
-                    PDFDocInfo aDocInfo;
-                    Reference< document::XDocumentInfoSupplier > xDocumentInfoSupplier( mxSrcDoc, UNO_QUERY );
-                    if ( xDocumentInfoSupplier.is() )
-                    {
-                        Reference< document::XDocumentInfo > xDocumentInfo( xDocumentInfoSupplier->getDocumentInfo() );
-                        if ( xDocumentInfo.is() )
-                        {
-                            Reference< XPropertySet > xPropSet( xDocumentInfo, UNO_QUERY );
-                            if ( xPropSet.is() )
-                            {
-                                aDocInfo.Title = GetProperty( xPropSet, "Title" );
-                                aDocInfo.Author = GetProperty( xPropSet, "Author" );
-                                aDocInfo.Subject = GetProperty( xPropSet, "Subject" );
-                                aDocInfo.Keywords = GetProperty( xPropSet, "Keywords" );
-                            }
-                        }
-                    }
-                    // getting the string for the producer
-                    String aProducer;
-                    ::utl::ConfigManager* pMgr = ::utl::ConfigManager::GetConfigManager();
-                    if ( pMgr )
-                    {
-                        Any aProductName = pMgr->GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
-                        ::rtl::OUString sProductName;
-                        aProductName >>= sProductName;
-                        aProducer = sProductName;
-                        aProductName = pMgr->GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTVERSION );
-                        aProductName >>= sProductName;
-                        aProducer.AppendAscii(" ");
-                        aProducer += String( sProductName );
-                    }
-                    aDocInfo.Producer = aProducer;
-                    aDocInfo.Creator = aCreator;
-
                     pPDFExtOutDevData->PlayGlobalActions( *pPDFWriter );
-                    pPDFWriter->SetDocInfo( aDocInfo );
                     pPDFWriter->Emit();
                 }
                 pOut->SetExtOutDevData( NULL );
@@ -925,9 +1046,9 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
                                     // state and must not be skipped
                                     else if( pAction->GetType() == META_FILLCOLOR_ACTION )
                                     {
-                                        const MetaFillColorAction* pA = (const MetaFillColorAction*) pAction;
-                                        if( pA->IsSetting() )
-                                            rWriter.SetFillColor( pA->GetColor() );
+                                        const MetaFillColorAction* pMA = (const MetaFillColorAction*) pAction;
+                                        if( pMA->IsSetting() )
+                                            rWriter.SetFillColor( pMA->GetColor() );
                                         else
                                             rWriter.SetFillColor();
                                     }
