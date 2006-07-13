@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mkfilt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 13:23:12 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 12:09:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -214,12 +214,9 @@ void MkFilter::Filter()
                 {
                     MkLine *pMkLine = pLine->pPrivateTnrLst->GetObject(i);
                     ByteString aLine = pMkLine->aLine;
-                    if ( pMkLine->bOut )
-                    {
-                        while( aLine.SearchAndReplace( aTnr, ByteString::CreateFromInt32( n )) != (USHORT)-1 );
-                        fputs( aLine.GetBuffer(), pOut );
-                        fprintf( stderr, "o" );
-                    }
+                    while( aLine.SearchAndReplace( aTnr, ByteString::CreateFromInt32( n )) != (USHORT)-1 );
+                    fputs( aLine.GetBuffer(), pOut );
+                    fprintf( stderr, "o" );
                 }
             }
             if ( pLine->pPrivateTnrLst != NULL )
