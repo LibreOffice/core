@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Desktop.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 12:30:57 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 12:12:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -344,10 +344,10 @@ public class Desktop {
 
         public OfficePathRetriever(XMultiServiceFactory xMSF) {
             try {
-                TemplatePath = FileAccess.getOfficePath(xMSF, "Template", "share");
-                UserTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "user");
+                TemplatePath = FileAccess.getOfficePath(xMSF, "Template", "share", "/wizard");
+                UserTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "user", "");
                 BitmapPath = FileAccess.combinePaths(xMSF, TemplatePath, "/wizard/bitmap");
-                WorkPath = FileAccess.getOfficePath(xMSF, "Work", "");
+                WorkPath = FileAccess.getOfficePath(xMSF, "Work", "", "");
             } catch (NoValidPathException nopathexception) {
             }
         }
