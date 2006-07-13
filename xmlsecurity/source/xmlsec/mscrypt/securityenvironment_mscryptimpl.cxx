@@ -4,9 +4,9 @@
  *
  *  $RCSfile: securityenvironment_mscryptimpl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 09:19:51 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 08:09:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1090,77 +1090,6 @@ sal_Int32 SecurityEnvironment_MSCryptImpl :: getCertificateCharacters( const ::c
             characters &= ~ ::com::sun::star::security::CertificateCharacters::HAS_PRIVATE_KEY ;
         }
     }
-
-    //Thirdly, make sentence whether or not the cert is trusted.
-    {
-        HCERTSTORE hCollectionStore ;
-        PCCERT_CONTEXT pTempCert ;
-
-        hCollectionStore = CertOpenStore(
-                CERT_STORE_PROV_COLLECTION ,
-                0 ,
-                NULL ,
-                0 ,
-                NULL
-            ) ;
-
-        if( hCollectionStore != NULL ) {
-            HCERTSTORE hSystemStore ;
-
-            //Add system key store to the collection.
-            hSystemStore = CertOpenSystemStore( 0, "MY" ) ;
-            if( hSystemStore != NULL ) {
-                CertAddStoreToCollection (
-                    hCollectionStore ,
-                    hSystemStore ,
-                    CERT_PHYSICAL_STORE_ADD_ENABLE_FLAG ,
-                    1
-                ) ;
-                CertCloseStore( hSystemStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
-            }
-
-            //Add system root store to the collection.
-            hSystemStore = CertOpenSystemStore( 0, "Root" ) ;
-            if( hSystemStore != NULL ) {
-                CertAddStoreToCollection (
-                    hCollectionStore ,
-                    hSystemStore ,
-                    CERT_PHYSICAL_STORE_ADD_ENABLE_FLAG ,
-                    2
-                ) ;
-                CertCloseStore( hSystemStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
-            }
-
-            //Add system trust store to the collection.
-            hSystemStore = CertOpenSystemStore( 0, "Trust" ) ;
-            if( hSystemStore != NULL ) {
-                CertAddStoreToCollection (
-                    hCollectionStore ,
-                    hSystemStore ,
-                    CERT_PHYSICAL_STORE_ADD_ENABLE_FLAG ,
-                    3
-                ) ;
-                CertCloseStore( hSystemStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
-            }
-
-            //Find the cert in the collection store.
-            pTempCert = CertFindCertificateInStore(
-                hCollectionStore ,
-                X509_ASN_ENCODING | PKCS_7_ASN_ENCODING ,
-                0 ,
-                CERT_FIND_SUBJECT_NAME,
-                &( pCertContext->pCertInfo->Subject ) ,
-                NULL
-            ) ;
-
-            if( pTempCert != NULL && CertCompareCertificate( X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, pCertContext->pCertInfo, pTempCert->pCertInfo ) ) {
-                characters |=  ::com::sun::star::security::CertificateCharacters::TRUSTED ;
-            } else {
-                characters &= ~ ::com::sun::star::security::CertificateCharacters::TRUSTED ;
-            }
-        }
-    }
-
     return characters ;
 }
 
