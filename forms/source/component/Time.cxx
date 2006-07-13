@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Time.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:53:13 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 15:19:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -383,16 +383,7 @@ Any OTimeModel::translateDbColumnToControlValue()
 //------------------------------------------------------------------------------
 Any OTimeModel::getDefaultForReset() const
 {
-    Any aValue;
-    if  (m_aDefault.getValueType().getTypeClass() == TypeClass_LONG)
-        aValue = m_aDefault;
-    else
-    {   // aktuelles Datum einstellen
-        ::Time aCurrentTime;
-        aValue <<= (sal_Int32)aCurrentTime.GetTime();
-    }
-
-    return aValue;
+    return m_aDefault;
 }
 
 //------------------------------------------------------------------------------
