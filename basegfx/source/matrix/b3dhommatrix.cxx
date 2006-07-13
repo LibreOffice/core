@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3dhommatrix.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:56:38 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 09:56:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,10 @@
  *
  ************************************************************************/
 
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
+#endif
+
 #ifndef _BGFX_MATRIX_B3DHOMMATRIX_HXX
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #endif
@@ -51,104 +55,76 @@ namespace basegfx
     {
     };
 
-    static Impl3DHomMatrix& get3DIdentityMatrix()
+    namespace { struct IdentityMatrix : public rtl::Static< B3DHomMatrix::ImplType,
+                                                            IdentityMatrix > {}; }
+
+    B3DHomMatrix::B3DHomMatrix() :
+        mpImpl( IdentityMatrix::get() ) // use common identity matrix
     {
-        static Impl3DHomMatrix maStatic3DIdentityHomMatrix;
-        return maStatic3DIdentityHomMatrix;
     }
 
-    void B3DHomMatrix::implPrepareChange()
+    B3DHomMatrix::B3DHomMatrix(const B3DHomMatrix& rMat) :
+        mpImpl(rMat.mpImpl)
     {
-        if(mpM->getRefCount())
-        {
-            mpM->decRefCount();
-            mpM = new Impl3DHomMatrix(*mpM);
-        }
-    }
-
-    B3DHomMatrix::B3DHomMatrix()
-    :   mpM(&get3DIdentityMatrix())
-    {
-        mpM->incRefCount();
-    }
-
-    B3DHomMatrix::B3DHomMatrix(const B3DHomMatrix& rMat)
-    :   mpM(rMat.mpM)
-    {
-        mpM->incRefCount();
     }
 
     B3DHomMatrix::~B3DHomMatrix()
     {
-        if(mpM->getRefCount())
-            mpM->decRefCount();
-        else
-            delete mpM;
     }
 
     B3DHomMatrix& B3DHomMatrix::operator=(const B3DHomMatrix& rMat)
     {
-        if(mpM->getRefCount())
-            mpM->decRefCount();
-        else
-            delete mpM;
-
-        mpM = rMat.mpM;
-        mpM->incRefCount();
-
+        mpImpl = rMat.mpImpl;
         return *this;
+    }
+
+    void B3DHomMatrix::makeUnique()
+    {
+        mpImpl.make_unique();
     }
 
     double B3DHomMatrix::get(sal_uInt16 nRow, sal_uInt16 nColumn) const
     {
-        return mpM->get(nRow, nColumn);
+        return mpImpl->get(nRow, nColumn);
     }
 
     void B3DHomMatrix::set(sal_uInt16 nRow, sal_uInt16 nColumn, double fValue)
     {
-        implPrepareChange();
-        mpM->set(nRow, nColumn, fValue);
+        mpImpl->set(nRow, nColumn, fValue);
     }
 
     bool B3DHomMatrix::isLastLineDefault() const
     {
-        return mpM->isLastLineDefault();
+        return mpImpl->isLastLineDefault();
     }
 
     bool B3DHomMatrix::isIdentity() const
     {
-        if(mpM == &get3DIdentityMatrix())
+        if(mpImpl.same_object(IdentityMatrix::get()))
             return true;
 
-        return mpM->isIdentity();
+        return mpImpl->isIdentity();
     }
 
     void B3DHomMatrix::identity()
     {
-        if(mpM->getRefCount())
-            mpM->decRefCount();
-        else
-            delete mpM;
-
-        mpM = &get3DIdentityMatrix();
-        mpM->incRefCount();
+        mpImpl = IdentityMatrix::get();
     }
 
     bool B3DHomMatrix::isInvertible() const
     {
-        return mpM->isInvertible();
+        return mpImpl->isInvertible();
     }
 
     bool B3DHomMatrix::invert()
     {
-        Impl3DHomMatrix aWork(*mpM);
-        sal_uInt16* pIndex = new sal_uInt16[mpM->getEdgeLength()];
+        Impl3DHomMatrix aWork(*mpImpl);
+        sal_uInt16* pIndex = new sal_uInt16[mpImpl->getEdgeLength()];
         sal_Int16 nParity;
 
         if(aWork.ludcmp(pIndex, nParity))
         {
-            implPrepareChange();
-            mpM->doInvert(aWork, pIndex);
+            mpImpl->doInvert(aWork, pIndex);
             delete[] pIndex;
 
             return true;
@@ -160,47 +136,39 @@ namespace basegfx
 
     bool B3DHomMatrix::isNormalized() const
     {
-        return mpM->isNormalized();
+        return mpImpl->isNormalized();
     }
 
     void B3DHomMatrix::normalize()
     {
-        if(!mpM->isNormalized())
-        {
-            implPrepareChange();
-            mpM->doNormalize();
-        }
+        if(!const_cast<const B3DHomMatrix*>(this)->mpImpl->isNormalized())
+            mpImpl->doNormalize();
     }
 
     double B3DHomMatrix::determinant() const
     {
-        return mpM->doDeterminant();
+        return mpImpl->doDeterminant();
     }
 
     double B3DHomMatrix::trace() const
     {
-        return mpM->doTrace();
+        return mpImpl->doTrace();
     }
 
     void B3DHomMatrix::transpose()
     {
-        implPrepareChange();
-        mpM->doTranspose();
+        mpImpl->doTranspose();
     }
 
     B3DHomMatrix& B3DHomMatrix::operator+=(const B3DHomMatrix& rMat)
     {
-        implPrepareChange();
-        mpM->doAddMatrix(*rMat.mpM);
-
+        mpImpl->doAddMatrix(*rMat.mpImpl);
         return *this;
     }
 
     B3DHomMatrix& B3DHomMatrix::operator-=(const B3DHomMatrix& rMat)
     {
-        implPrepareChange();
-        mpM->doSubMatrix(*rMat.mpM);
-
+        mpImpl->doSubMatrix(*rMat.mpImpl);
         return *this;
     }
 
@@ -208,11 +176,8 @@ namespace basegfx
     {
         const double fOne(1.0);
 
-        if(!::basegfx::fTools::equal(fOne, fValue))
-        {
-            implPrepareChange();
-            mpM->doMulMatrix(fValue);
-        }
+        if(!fTools::equal(fOne, fValue))
+            mpImpl->doMulMatrix(fValue);
 
         return *this;
     }
@@ -221,11 +186,8 @@ namespace basegfx
     {
         const double fOne(1.0);
 
-        if(!::basegfx::fTools::equal(fOne, fValue))
-        {
-            implPrepareChange();
-            mpM->doMulMatrix(1.0 / fValue);
-        }
+        if(!fTools::equal(fOne, fValue))
+            mpImpl->doMulMatrix(1.0 / fValue);
 
         return *this;
     }
@@ -233,39 +195,31 @@ namespace basegfx
     B3DHomMatrix& B3DHomMatrix::operator*=(const B3DHomMatrix& rMat)
     {
         if(!rMat.isIdentity())
-        {
-            implPrepareChange();
-            mpM->doMulMatrix(*rMat.mpM);
-        }
+            mpImpl->doMulMatrix(*rMat.mpImpl);
 
         return *this;
     }
 
     bool B3DHomMatrix::operator==(const B3DHomMatrix& rMat) const
     {
-        if(mpM == rMat.mpM)
+        if(mpImpl.same_object(rMat.mpImpl))
             return true;
 
-        return mpM->isEqual(*rMat.mpM);
+        return mpImpl->isEqual(*rMat.mpImpl);
     }
 
     bool B3DHomMatrix::operator!=(const B3DHomMatrix& rMat) const
     {
-        if(mpM == rMat.mpM)
-            return false;
-
-        return !mpM->isEqual(*rMat.mpM);
+        return !(*this == rMat);
     }
 
     void B3DHomMatrix::rotate(double fAngleX,double fAngleY,double fAngleZ)
     {
-        if(!::basegfx::fTools::equalZero(fAngleX) || !::basegfx::fTools::equalZero(fAngleY) || !::basegfx::fTools::equalZero(fAngleZ))
+        if(!fTools::equalZero(fAngleX) || !fTools::equalZero(fAngleY) || !fTools::equalZero(fAngleZ))
         {
-            implPrepareChange();
-
-            if(!::basegfx::fTools::equalZero(fAngleX))
+            if(!fTools::equalZero(fAngleX))
             {
-                Impl3DHomMatrix aRotMatX(get3DIdentityMatrix());
+                Impl3DHomMatrix aRotMatX;
                 double fSin(sin(fAngleX));
                 double fCos(cos(fAngleX));
 
@@ -274,12 +228,12 @@ namespace basegfx
                 aRotMatX.set(2, 1, fSin);
                 aRotMatX.set(1, 2, -fSin);
 
-                mpM->doMulMatrix(aRotMatX);
+                mpImpl->doMulMatrix(aRotMatX);
             }
 
-            if(!::basegfx::fTools::equalZero(fAngleY))
+            if(!fTools::equalZero(fAngleY))
             {
-                Impl3DHomMatrix aRotMatY(get3DIdentityMatrix());
+                Impl3DHomMatrix aRotMatY;
                 double fSin(sin(fAngleY));
                 double fCos(cos(fAngleY));
 
@@ -288,12 +242,12 @@ namespace basegfx
                 aRotMatY.set(0, 2, fSin);
                 aRotMatY.set(2, 0, -fSin);
 
-                mpM->doMulMatrix(aRotMatY);
+                mpImpl->doMulMatrix(aRotMatY);
             }
 
-            if(!::basegfx::fTools::equalZero(fAngleZ))
+            if(!fTools::equalZero(fAngleZ))
             {
-                Impl3DHomMatrix aRotMatZ(get3DIdentityMatrix());
+                Impl3DHomMatrix aRotMatZ;
                 double fSin(sin(fAngleZ));
                 double fCos(cos(fAngleZ));
 
@@ -302,23 +256,22 @@ namespace basegfx
                 aRotMatZ.set(1, 0, fSin);
                 aRotMatZ.set(0, 1, -fSin);
 
-                mpM->doMulMatrix(aRotMatZ);
+                mpImpl->doMulMatrix(aRotMatZ);
             }
         }
     }
 
     void B3DHomMatrix::translate(double fX, double fY, double fZ)
     {
-        if(!::basegfx::fTools::equalZero(fX) || !::basegfx::fTools::equalZero(fY) || !::basegfx::fTools::equalZero(fZ))
+        if(!fTools::equalZero(fX) || !fTools::equalZero(fY) || !fTools::equalZero(fZ))
         {
-            Impl3DHomMatrix aTransMat(get3DIdentityMatrix());
+            Impl3DHomMatrix aTransMat;
 
             aTransMat.set(0, 3, fX);
             aTransMat.set(1, 3, fY);
             aTransMat.set(2, 3, fZ);
 
-            implPrepareChange();
-            mpM->doMulMatrix(aTransMat);
+            mpImpl->doMulMatrix(aTransMat);
         }
     }
 
@@ -326,16 +279,15 @@ namespace basegfx
     {
         const double fOne(1.0);
 
-        if(!::basegfx::fTools::equal(fOne, fX) || !::basegfx::fTools::equal(fOne, fY) ||!::basegfx::fTools::equal(fOne, fZ))
+        if(!fTools::equal(fOne, fX) || !fTools::equal(fOne, fY) ||!fTools::equal(fOne, fZ))
         {
-            Impl3DHomMatrix aScaleMat(get3DIdentityMatrix());
+            Impl3DHomMatrix aScaleMat;
 
             aScaleMat.set(0, 0, fX);
             aScaleMat.set(1, 1, fY);
             aScaleMat.set(2, 2, fZ);
 
-            implPrepareChange();
-            mpM->doMulMatrix(aScaleMat);
+            mpImpl->doMulMatrix(aScaleMat);
         }
     }
 
@@ -343,15 +295,14 @@ namespace basegfx
     {
         const double fOne(1.0);
 
-        if(!::basegfx::fTools::equal(fOne, fSx) || !::basegfx::fTools::equal(fOne, fSy))
+        if(!fTools::equal(fOne, fSx) || !fTools::equal(fOne, fSy))
         {
-            Impl3DHomMatrix aShearXYMat(get3DIdentityMatrix());
+            Impl3DHomMatrix aShearXYMat;
 
             aShearXYMat.set(0, 2, fSx);
             aShearXYMat.set(1, 2, fSy);
 
-            implPrepareChange();
-            mpM->doMulMatrix(aShearXYMat);
+            mpImpl->doMulMatrix(aShearXYMat);
         }
     }
 
@@ -359,15 +310,14 @@ namespace basegfx
     {
         const double fOne(1.0);
 
-        if(!::basegfx::fTools::equal(fOne, fSy) || !::basegfx::fTools::equal(fOne, fSz))
+        if(!fTools::equal(fOne, fSy) || !fTools::equal(fOne, fSz))
         {
-            Impl3DHomMatrix aShearYZMat(get3DIdentityMatrix());
+            Impl3DHomMatrix aShearYZMat;
 
             aShearYZMat.set(1, 0, fSy);
             aShearYZMat.set(2, 0, fSz);
 
-            implPrepareChange();
-            mpM->doMulMatrix(aShearYZMat);
+            mpImpl->doMulMatrix(aShearYZMat);
         }
     }
 
@@ -375,127 +325,39 @@ namespace basegfx
     {
         const double fOne(1.0);
 
-        if(!::basegfx::fTools::equal(fOne, fSx) || !::basegfx::fTools::equal(fOne, fSz))
+        if(!fTools::equal(fOne, fSx) || !fTools::equal(fOne, fSz))
         {
-            Impl3DHomMatrix aShearXZMat(get3DIdentityMatrix());
+            Impl3DHomMatrix aShearXZMat;
 
             aShearXZMat.set(0, 1, fSx);
             aShearXZMat.set(2, 1, fSz);
 
-            implPrepareChange();
-            mpM->doMulMatrix(aShearXZMat);
+            mpImpl->doMulMatrix(aShearXZMat);
         }
     }
-
-//  void B3DHomMatrix::frustum(double fLeft, double fRight, double fBottom, double fTop, double fNear, double fFar)
-//  {
-//      const double fZero(0.0);
-//      const double fOne(1.0);
-//
-//      if(!::basegfx::fTools::more(fNear, fZero))
-//      {
-//          fNear = 0.001;
-//      }
-//
-//      if(!::basegfx::fTools::more(fFar, fZero))
-//      {
-//          fFar = fOne;
-//      }
-//
-//      if(::basegfx::fTools::equal(fNear, fFar))
-//      {
-//          fFar = fNear + fOne;
-//      }
-//
-//      if(::basegfx::fTools::equal(fLeft, fRight))
-//      {
-//          fLeft -= fOne;
-//          fRight += fOne;
-//      }
-//
-//      if(::basegfx::fTools::equal(fTop, fBottom))
-//      {
-//          fBottom -= fOne;
-//          fTop += fOne;
-//      }
-//
-//      Impl3DHomMatrix aFrustumMat(get3DIdentityMatrix());
-//
-//      aFrustumMat.set(0, 0, 2.0 * fNear / (fRight - fLeft));
-//      aFrustumMat.set(1, 1, 2.0 * fNear / (fTop - fBottom));
-//      aFrustumMat.set(0, 2, (fRight + fLeft) / (fRight - fLeft));
-//      aFrustumMat.set(1, 2, (fTop + fBottom) / (fTop - fBottom));
-//      aFrustumMat.set(2, 2, -fOne * ((fFar + fNear) / (fFar - fNear)));
-//      aFrustumMat.set(3, 2, -fOne);
-//      aFrustumMat.set(2, 3, -fOne * ((2.0 * fFar * fNear) / (fFar - fNear)));
-//      aFrustumMat.set(3, 3, fZero);
-//
-//      if(mpM->getRefCount())
-//          mpM->decRefCount();
-//      else
-//          delete mpM;
-//
-//      mpM = new Impl3DHomMatrix(aFrustumMat);
-//  }
-
-//  void B3DHomMatrix::ortho(double fLeft, double fRight, double fBottom, double fTop, double fNear, double fFar)
-//  {
-//      if(::basegfx::fTools::equal(fNear, fFar))
-//      {
-//          fFar = fNear + 1.0;
-//      }
-//
-//      if(::basegfx::fTools::equal(fLeft, fRight))
-//      {
-//          fLeft -= 1.0;
-//          fRight += 1.0;
-//      }
-//
-//      if(::basegfx::fTools::equal(fTop, fBottom))
-//      {
-//          fBottom -= 1.0;
-//          fTop += 1.0;
-//      }
-//
-//      Impl3DHomMatrix aOrthoMat(get3DIdentityMatrix());
-//
-//      aOrthoMat.set(0, 0, 2.0 / (fRight - fLeft));
-//      aOrthoMat.set(1, 1, 2.0 / (fTop - fBottom));
-//      aOrthoMat.set(2, 2, -1.0 * (2.0 / (fFar - fNear)));
-//      aOrthoMat.set(0, 3, -1.0 * ((fRight + fLeft) / (fRight - fLeft)));
-//      aOrthoMat.set(1, 3, -1.0 * ((fTop + fBottom) / (fTop - fBottom)));
-//      aOrthoMat.set(2, 3, -1.0 * ((fFar + fNear) / (fFar - fNear)));
-//
-//      if(mpM->getRefCount())
-//          mpM->decRefCount();
-//      else
-//          delete mpM;
-//
-//      mpM = new Impl3DHomMatrix(aOrthoMat);
-//  }
 
     bool B3DHomMatrix::decompose(B3DTuple& rScale, B3DTuple& rTranslate, B3DTuple& rRotate, B3DTuple& rShear) const
     {
         // when perspective is used, decompose is not made here
-        if(!mpM->isLastLineDefault())
+        if(!mpImpl->isLastLineDefault())
             return false;
 
         // If determinant is zero, decomposition is not possible
-        if(0.0 == mpM->doDeterminant())
+        if(0.0 == determinant())
             return false;
 
         // isolate translation
-        rTranslate.setX(mpM->get(0, 3));
-        rTranslate.setY(mpM->get(1, 3));
-        rTranslate.setZ(mpM->get(2, 3));
+        rTranslate.setX(mpImpl->get(0, 3));
+        rTranslate.setY(mpImpl->get(1, 3));
+        rTranslate.setZ(mpImpl->get(2, 3));
 
         // correct translate values
         rTranslate.correctValues();
 
         // get scale and shear
-        B3DVector aCol0(mpM->get(0, 0), mpM->get(1, 0), mpM->get(2, 0));
-        B3DVector aCol1(mpM->get(0, 1), mpM->get(1, 1), mpM->get(2, 1));
-        B3DVector aCol2(mpM->get(0, 2), mpM->get(1, 2), mpM->get(2, 2));
+        B3DVector aCol0(mpImpl->get(0, 0), mpImpl->get(1, 0), mpImpl->get(2, 0));
+        B3DVector aCol1(mpImpl->get(0, 1), mpImpl->get(1, 1), mpImpl->get(2, 1));
+        B3DVector aCol2(mpImpl->get(0, 2), mpImpl->get(1, 2), mpImpl->get(2, 2));
         B3DVector aTemp;
 
         // get ScaleX
