@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registryitem_ooo.scp,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:41:19 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 17:00:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -580,3 +580,40 @@ End
 // End registry items for the MS Indexing server filter component
 
 // "OpenWith" Windows Registry keys for extensions supported by OOo
+
+
+// new oxt file extension for office extension packages
+RegistryItem gid_Regitem_Oxt
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Root;
+    Subkey = ".oxt";
+    Value = "office.Extension.1";
+End
+
+RegistryItem gid_Regitem_Office_Extension_Curver
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Root;
+    Subkey = "office.Extension\CurVer";
+    Value = "office.Extension.1";
+End
+
+RegistryItem gid_Regitem_Office_Extension_1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Root;
+    Subkey = "office.Extension.1";
+End
+
+RegistryItem gid_Regitem_Office_Extension_1_Shell
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Root;
+    Subkey = "office.Extension.1\shell";
+    Value = "open";
+End
+
+RegistryItem gid_Regitem_Office_Extension_1_Shell_Open_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Root;
+    Subkey = "office.Extension.1\shell\open\command";
+    Value = "\"<progpath>\program\unopkg\" add \"%1\"";
+End
+
