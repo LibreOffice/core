@@ -4,9 +4,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.196 $
+#   $Revision: 1.197 $
 #
-#   last change: $Author: obo $ $Date: 2006-07-10 18:51:36 $
+#   last change: $Author: obo $ $Date: 2006-07-13 11:13:32 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -128,7 +128,7 @@ JAVAINTERPRETER=$(DEVROOT)$/vcafe11$/java$/bin$/java.exe
 JAVAINTERPRETER=$(DEVROOT)$/cafepro$/java$/bin$/java.exe
 .ENDIF
 .ELSE
-.IF "$(JDK)" == "gcj"
+.IF "$(JAVACISGCJ)" == "yes"
 JAVAINTERPRETER=gij
 .ELSE
 JAVAINTERPRETER=java
@@ -149,9 +149,8 @@ JAVACOMPILER=$(DEVROOT)$/vcafe11$/bin$/sj.exe
 JAVACOMPILER=$(DEVROOT)$/cafepro$/bin$/sj.exe
 .ENDIF
 .ELSE
-.IF "$(JDK)" == "gcj"
+.IF "$(JAVACISGCJ)" == "yes"
 JAVACOMPILER=gcj
-JAVACISGCJ*="yes"
 .ELSE
 JAVACOMPILER=javac
 .ENDIF
