@@ -5,9 +5,9 @@
  *
  *  $RCSfile: TableWizard.xcu,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 14:11:39 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 15:16:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -613,6 +613,7 @@
                                 <value xml:lang="de">KundendateiID</value>
                             </prop>
                             <prop oor:name="ShortName">
+                                <value xml:lang="en-US">MailingID</value>
                                 <value xml:lang="de">KundedatID</value>
                             </prop>
                             <prop oor:name="Type">
