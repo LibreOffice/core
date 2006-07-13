@@ -4,9 +4,9 @@
  *
  *  $RCSfile: urlobj.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 13:43:16 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 12:09:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3383,6 +3383,17 @@ bool INetURLObject::setPath(rtl::OUString const & rThePath, bool bOctets,
 }
 
 //============================================================================
+bool INetURLObject::checkHierarchical() const {
+    if (m_eScheme == INET_PROT_VND_SUN_STAR_EXPAND) {
+        OSL_ENSURE(
+            false, "INetURLObject::checkHierarchical vnd.sun.star.expand");
+        return true;
+    } else {
+        return getSchemeInfo().m_bHierarchical;
+    }
+}
+
+//============================================================================
 bool INetURLObject::appendSegment(rtl::OUString const & rTheSegment,
                                   bool bOctets, EncodeMechanism eMechanism,
                                   rtl_TextEncoding eCharset)
@@ -3399,43 +3410,38 @@ INetURLObject::SubString INetURLObject::getSegment(sal_Int32 nIndex,
     DBG_ASSERT(nIndex >= 0 || nIndex == LAST_SEGMENT,
                "INetURLObject::getSegment(): Bad index");
 
-    if (!getSchemeInfo().m_bHierarchical)
+    if (!checkHierarchical())
         return SubString();
 
     sal_Unicode const * pPathBegin
         = m_aAbsURIRef.getStr() + m_aPath.getBegin();
     sal_Unicode const * pPathEnd = pPathBegin + m_aPath.getLength();
-    if (pPathBegin == pPathEnd || *pPathBegin != '/')
-        return SubString();
-
     sal_Unicode const * pSegBegin;
     sal_Unicode const * pSegEnd;
     if (nIndex == LAST_SEGMENT)
     {
         pSegEnd = pPathEnd;
-        if (bIgnoreFinalSlash && pSegEnd[-1] == '/'
-            && pSegEnd != pPathBegin + 1)
+        if (bIgnoreFinalSlash && pSegEnd > pPathBegin && pSegEnd[-1] == '/')
             --pSegEnd;
+        if (pSegEnd <= pPathBegin)
+            return SubString();
         pSegBegin = pSegEnd - 1;
-        while (*pSegBegin != '/')
+        while (pSegBegin > pPathBegin && *pSegBegin != '/')
             --pSegBegin;
     }
     else
     {
         pSegBegin = pPathBegin;
-        pSegEnd = pPathEnd;
-        if (bIgnoreFinalSlash && pSegEnd[-1] == '/')
-            --pSegEnd;
         while (nIndex-- > 0)
             do
             {
                 ++pSegBegin;
-                if (pSegBegin >= pSegEnd)
+                if (pSegBegin >= pPathEnd)
                     return SubString();
             }
             while (*pSegBegin != '/');
         pSegEnd = pSegBegin + 1;
-        while (pSegEnd != pPathEnd && *pSegEnd != '/')
+        while (pSegEnd < pPathEnd && *pSegEnd != '/')
             ++pSegEnd;
     }
 
@@ -3453,39 +3459,56 @@ bool INetURLObject::insertName(rtl::OUString const & rTheName, bool bOctets,
     DBG_ASSERT(nIndex >= 0 || nIndex == LAST_SEGMENT,
                "INetURLObject::insertName(): Bad index");
 
-    if (!getSchemeInfo().m_bHierarchical)
+    if (!checkHierarchical())
         return false;
 
     sal_Unicode const * pPathBegin
         = m_aAbsURIRef.getStr() + m_aPath.getBegin();
     sal_Unicode const * pPathEnd = pPathBegin + m_aPath.getLength();
-    if (pPathBegin == pPathEnd || *pPathBegin != '/')
-        return false;
-
     sal_Unicode const * pPrefixEnd;
-    sal_Unicode const * pSuffixBegin = 0;
-    bool bPrefixSlash = true;
+    bool bInsertSlash;
+    sal_Unicode const * pSuffixBegin;
     if (nIndex == LAST_SEGMENT)
     {
         pPrefixEnd = pPathEnd;
-        if (bIgnoreFinalSlash && pPrefixEnd[-1] == '/')
-            bPrefixSlash = false;
-        pSuffixBegin = bAppendFinalSlash ? 0 : pPathEnd;
+        if (bIgnoreFinalSlash && pPrefixEnd > pPathBegin &&
+            pPrefixEnd[-1] == '/')
+        {
+            --pPrefixEnd;
+        }
+        bInsertSlash = bAppendFinalSlash;
+        pSuffixBegin = pPathEnd;
+    }
+    else if (nIndex == 0)
+    {
+        pPrefixEnd = pPathBegin;
+        bInsertSlash = pPathBegin < pPathEnd && *pPathBegin != '/' ||
+            pPathBegin == pPathEnd && bAppendFinalSlash;
+        pSuffixBegin =
+            (pPathEnd - pPathBegin == 1 && *pPathBegin == '/' &&
+             !bAppendFinalSlash && bIgnoreFinalSlash)
+            ? pPathEnd : pPathBegin;
     }
     else
     {
         pPrefixEnd = pPathBegin;
         sal_Unicode const * pEnd = pPathEnd;
-        if (bIgnoreFinalSlash && pEnd[-1] == '/')
+        if (bIgnoreFinalSlash && pEnd > pPathBegin && pEnd[-1] == '/')
             --pEnd;
-        while (nIndex-- > 0)
+        bool bSkip = pPrefixEnd < pEnd && *pPrefixEnd == '/';
+        bInsertSlash = false;
+        pSuffixBegin = pPathEnd;
+         while (nIndex-- > 0)
             for (;;)
             {
-                ++pPrefixEnd;
+                if (bSkip) {
+                    ++pPrefixEnd;
+                }
+                bSkip = true;
                 if (pPrefixEnd >= pEnd)
                     if (nIndex == 0)
                     {
-                        pSuffixBegin = bAppendFinalSlash ? 0 : pPathEnd;
+                        bInsertSlash = bAppendFinalSlash;
                         break;
                     }
                     else
@@ -3500,14 +3523,13 @@ bool INetURLObject::insertName(rtl::OUString const & rTheName, bool bOctets,
 
     rtl::OUStringBuffer aNewPath;
     aNewPath.append(pPathBegin, pPrefixEnd - pPathBegin);
-    if (bPrefixSlash)
-        aNewPath.append(sal_Unicode('/'));
+    aNewPath.append(sal_Unicode('/'));
     aNewPath.append(encodeText(rTheName, bOctets, PART_PCHAR, getEscapePrefix(),
                            eMechanism, eCharset, true));
-    if (pSuffixBegin)
-        aNewPath.append(pSuffixBegin, pPathEnd - pSuffixBegin);
-    else
+    if (bInsertSlash) {
         aNewPath.append(sal_Unicode('/'));
+    }
+    aNewPath.append(pSuffixBegin, pPathEnd - pSuffixBegin);
 
     return setPath(aNewPath.makeStringAndClear(), false, NOT_CANONIC,
         RTL_TEXTENCODING_UTF8);
@@ -4320,18 +4342,14 @@ void INetURLObject::makePortCanonic()
 //============================================================================
 sal_Int32 INetURLObject::getSegmentCount(bool bIgnoreFinalSlash) const
 {
-    if (!getSchemeInfo().m_bHierarchical)
+    if (!checkHierarchical())
         return 0;
 
     sal_Unicode const * p = m_aAbsURIRef.getStr() + m_aPath.getBegin();
     sal_Unicode const * pEnd = p + m_aPath.getLength();
-    if (p == pEnd || *p != '/')
-        return 0;
-
-    if (bIgnoreFinalSlash && pEnd[-1] == '/')
+    if (bIgnoreFinalSlash && pEnd > p && pEnd[-1] == '/')
         --pEnd;
-
-    sal_Int32 n = 0;
+    sal_Int32 n = p == pEnd || *p == '/' ? 0 : 1;
     while (p != pEnd)
         if (*p++ == '/')
             ++n;
@@ -4353,8 +4371,11 @@ bool INetURLObject::removeSegment(sal_Int32 nIndex, bool bIgnoreFinalSlash)
     else
         aNewPath.append(m_aAbsURIRef.getStr() + aSegment.getEnd(),
                         m_aPath.getEnd() - aSegment.getEnd());
-    if (aNewPath.getLength() == 0)
+    if (aNewPath.getLength() == 0 && !aSegment.isEmpty() &&
+        m_aAbsURIRef[aSegment.getBegin()] == '/')
+    {
         aNewPath.append(sal_Unicode('/'));
+    }
 
     return setPath(aNewPath.makeStringAndClear(), false, NOT_CANONIC,
         RTL_TEXTENCODING_UTF8);
@@ -4373,7 +4394,8 @@ rtl::OUString INetURLObject::getName(sal_Int32 nIndex, bool bIgnoreFinalSlash,
         = m_aAbsURIRef.getStr() + aSegment.getBegin();
     sal_Unicode const * pSegEnd = pSegBegin + aSegment.getLength();
 
-    ++pSegBegin;
+    if (pSegBegin < pSegEnd && *pSegBegin == '/')
+        ++pSegBegin;
     sal_Unicode const * p = pSegBegin;
     while (p != pSegEnd && *p != ';')
         ++p;
@@ -4398,7 +4420,8 @@ bool INetURLObject::setName(rtl::OUString const & rTheName, sal_Int32 nIndex,
         = m_aAbsURIRef.getStr() + aSegment.getBegin();
     sal_Unicode const * pSegEnd = pSegBegin + aSegment.getLength();
 
-    ++pSegBegin;
+    if (pSegBegin < pSegEnd && *pSegBegin == '/')
+        ++pSegBegin;
     sal_Unicode const * p = pSegBegin;
     while (p != pSegEnd && *p != ';')
         ++p;
@@ -4425,7 +4448,8 @@ bool INetURLObject::hasExtension(sal_Int32 nIndex, bool bIgnoreFinalSlash)
         = m_aAbsURIRef.getStr() + aSegment.getBegin();
     sal_Unicode const * pSegEnd = pSegBegin + aSegment.getLength();
 
-    ++pSegBegin;
+    if (pSegBegin < pSegEnd && *pSegBegin == '/')
+        ++pSegBegin;
     for (sal_Unicode const * p = pSegBegin; p != pSegEnd && *p != ';'; ++p)
         if (*p == '.' && p != pSegBegin)
             return true;
@@ -4445,7 +4469,8 @@ rtl::OUString INetURLObject::getBase(sal_Int32 nIndex, bool bIgnoreFinalSlash,
         = m_aAbsURIRef.getStr() + aSegment.getBegin();
     sal_Unicode const * pSegEnd = pSegBegin + aSegment.getLength();
 
-    ++pSegBegin;
+    if (pSegBegin < pSegEnd && *pSegBegin == '/')
+        ++pSegBegin;
     sal_Unicode const * pExtension = 0;
     sal_Unicode const * p = pSegBegin;
     for (; p != pSegEnd && *p != ';'; ++p)
@@ -4475,7 +4500,8 @@ bool INetURLObject::setBase(rtl::OUString const & rTheBase, sal_Int32 nIndex,
         = m_aAbsURIRef.getStr() + aSegment.getBegin();
     sal_Unicode const * pSegEnd = pSegBegin + aSegment.getLength();
 
-    ++pSegBegin;
+    if (pSegBegin < pSegEnd && *pSegBegin == '/')
+        ++pSegBegin;
     sal_Unicode const * pExtension = 0;
     sal_Unicode const * p = pSegBegin;
     for (; p != pSegEnd && *p != ';'; ++p)
@@ -4508,7 +4534,8 @@ rtl::OUString INetURLObject::getExtension(sal_Int32 nIndex,
         = m_aAbsURIRef.getStr() + aSegment.getBegin();
     sal_Unicode const * pSegEnd = pSegBegin + aSegment.getLength();
 
-    ++pSegBegin;
+    if (pSegBegin < pSegEnd && *pSegBegin == '/')
+        ++pSegBegin;
     sal_Unicode const * pExtension = 0;
     sal_Unicode const * p = pSegBegin;
     for (; p != pSegEnd && *p != ';'; ++p)
@@ -4538,7 +4565,8 @@ bool INetURLObject::setExtension(rtl::OUString const & rTheExtension,
         = m_aAbsURIRef.getStr() + aSegment.getBegin();
     sal_Unicode const * pSegEnd = pSegBegin + aSegment.getLength();
 
-    ++pSegBegin;
+    if (pSegBegin < pSegEnd && *pSegBegin == '/')
+        ++pSegBegin;
     sal_Unicode const * pExtension = 0;
     sal_Unicode const * p = pSegBegin;
     for (; p != pSegEnd && *p != ';'; ++p)
@@ -4572,7 +4600,8 @@ bool INetURLObject::removeExtension(sal_Int32 nIndex, bool bIgnoreFinalSlash)
         = m_aAbsURIRef.getStr() + aSegment.getBegin();
     sal_Unicode const * pSegEnd = pSegBegin + aSegment.getLength();
 
-    ++pSegBegin;
+    if (pSegBegin < pSegEnd && *pSegBegin == '/')
+        ++pSegBegin;
     sal_Unicode const * pExtension = 0;
     sal_Unicode const * p = pSegBegin;
     for (; p != pSegEnd && *p != ';'; ++p)
@@ -4592,31 +4621,25 @@ bool INetURLObject::removeExtension(sal_Int32 nIndex, bool bIgnoreFinalSlash)
 //============================================================================
 bool INetURLObject::hasFinalSlash() const
 {
-    if (!getSchemeInfo().m_bHierarchical)
+    if (!checkHierarchical())
         return false;
 
     sal_Unicode const * pPathBegin
         = m_aAbsURIRef.getStr() + m_aPath.getBegin();
     sal_Unicode const * pPathEnd = pPathBegin + m_aPath.getLength();
-    if (pPathBegin == pPathEnd || *pPathBegin != '/')
-        return false;
-
-    return pPathEnd[-1] == '/';
+    return pPathEnd > pPathBegin && pPathEnd[-1] == '/';
 }
 
 //============================================================================
 bool INetURLObject::setFinalSlash()
 {
-    if (!getSchemeInfo().m_bHierarchical)
+    if (!checkHierarchical())
         return false;
 
     sal_Unicode const * pPathBegin
         = m_aAbsURIRef.getStr() + m_aPath.getBegin();
     sal_Unicode const * pPathEnd = pPathBegin + m_aPath.getLength();
-    if (pPathBegin == pPathEnd || *pPathBegin != '/')
-        return false;
-
-    if (pPathEnd[-1] == '/')
+    if (pPathEnd > pPathBegin && pPathEnd[-1] == '/')
         return true;
 
     rtl::OUStringBuffer aNewPath;
@@ -4630,20 +4653,17 @@ bool INetURLObject::setFinalSlash()
 //============================================================================
 bool INetURLObject::removeFinalSlash()
 {
-    if (!getSchemeInfo().m_bHierarchical)
+    if (!checkHierarchical())
         return false;
 
     sal_Unicode const * pPathBegin
         = m_aAbsURIRef.getStr() + m_aPath.getBegin();
     sal_Unicode const * pPathEnd = pPathBegin + m_aPath.getLength();
-    if (pPathBegin == pPathEnd || *pPathBegin != '/')
-        return false;
-
-    if (pPathEnd[-1] != '/')
+    if (pPathEnd <= pPathBegin || pPathEnd[-1] != '/')
         return true;
 
     --pPathEnd;
-    if (pPathEnd == pPathBegin)
+    if (pPathEnd == pPathBegin && *pPathBegin == '/')
         return false;
     rtl::OUString aNewPath(pPathBegin, pPathEnd - pPathBegin);
 
@@ -5348,7 +5368,7 @@ rtl::OUString INetURLObject::GetPartBeforeLastName(DecodeMechanism eMechanism,
                                                rtl_TextEncoding eCharset)
     const
 {
-    if (!getSchemeInfo().m_bHierarchical)
+    if (!checkHierarchical())
         return rtl::OUString();
     INetURLObject aTemp(*this);
     aTemp.clearFragment();
