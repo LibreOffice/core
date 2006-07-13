@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databasecontext.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 12:33:33 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 15:21:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -483,61 +483,48 @@ void ODatabaseContext::registerObject(const rtl::OUString& _rName, const Referen
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL ODatabaseContext::disposing( const com::sun::star::lang::EventObject& _rSource ) throw(RuntimeException)
+void ODatabaseContext::storeTransientProperties( ODatabaseModelImpl& _rModelImpl)
 {
-    Reference< XInterface > xSource(_rSource.Source, UNO_QUERY);
-        // the query is for normalizing, else it could be XInterface part of any XInterface-derived concrete interface
-        // the object implements
-    ObjectCacheIterator aLookup;
-    for (   aLookup = m_aDatabaseObjects.begin();
-            aLookup != m_aDatabaseObjects.end();
-            ++aLookup
-        )
-    {
-        Reference< XInterface > xDataSource(aLookup->second->getDataSource(false), UNO_QUERY);
-        if ( xDataSource == xSource )
-            break;
-    }
-    DBG_ASSERT(aLookup != m_aDatabaseObjects.end(), "ODatabaseContext::disposing(EventObject): where does this come from (not from my data sources)?");
-    if (aLookup != m_aDatabaseObjects.end())
-    {
-        Sequence< PropertyValue > aRememberProps;
+    Reference< XPropertySet > xSource(_rModelImpl.getDataSource(),UNO_QUERY);
+    Sequence< PropertyValue > aRememberProps;
 
-        try
+    try
+    {
+        // get the info about the properties, check which ones are transient and not readonly
+        Reference< XPropertySetInfo > xSetInfo;
+        if (xSource.is())
+            xSetInfo = xSource->getPropertySetInfo();
+        Sequence< Property > aProperties;
+        if (xSetInfo.is())
+            aProperties = xSetInfo->getProperties();
+
+        if (aProperties.getLength())
         {
-            // get the info about the properties, check which ones are transient and not readonly
-            Reference< XPropertySet > xSourceProps(xSource, UNO_QUERY);
-            Reference< XPropertySetInfo > xSetInfo;
-            if (xSourceProps.is())
-                xSetInfo = xSourceProps->getPropertySetInfo();
-            Sequence< Property > aProperties;
-            if (xSetInfo.is())
-                aProperties = xSetInfo->getProperties();
-
-            if (aProperties.getLength())
+            const Property* pProperties = aProperties.getConstArray();
+            for (sal_Int32 i=0; i<aProperties.getLength(); ++i, ++pProperties)
             {
-                const Property* pProperties = aProperties.getConstArray();
-                for (sal_Int32 i=0; i<aProperties.getLength(); ++i, ++pProperties)
+                if  (   ((pProperties->Attributes & PropertyAttribute::TRANSIENT) != 0)
+                    &&  ((pProperties->Attributes & PropertyAttribute::READONLY) == 0)
+                    )
                 {
-                    if  (   ((pProperties->Attributes & PropertyAttribute::TRANSIENT) != 0)
-                        &&  ((pProperties->Attributes & PropertyAttribute::READONLY) == 0)
-                        )
-                    {
-                        // found such a property
-                        sal_Int32 nTilNow = aRememberProps.getLength();
-                        aRememberProps.realloc(nTilNow + 1);
-                        aRememberProps[nTilNow] = PropertyValue(pProperties->Name, 0, xSourceProps->getPropertyValue(pProperties->Name), PropertyState_DIRECT_VALUE);
-                    }
+                    // found such a property
+                    sal_Int32 nTilNow = aRememberProps.getLength();
+                    aRememberProps.realloc(nTilNow + 1);
+                    aRememberProps[nTilNow] = PropertyValue(pProperties->Name, 0, xSource->getPropertyValue(pProperties->Name), PropertyState_DIRECT_VALUE);
                 }
             }
         }
-        catch(Exception&)
-        {
-            DBG_ERROR("ODatabaseContext::disposing(EventObject): could not collect the session-persistent properties!");
-        }
-
-        m_aDatasourceProperties[aLookup->first] = aRememberProps;
     }
+    catch(Exception&)
+    {
+        DBG_ERROR("ODatabaseContext::disposing(EventObject): could not collect the session-persistent properties!");
+    }
+
+    if ( m_aDatabaseObjects.find( _rModelImpl.m_sRealFileURL ) != m_aDatabaseObjects.end() )
+        m_aDatasourceProperties[_rModelImpl.m_sRealFileURL] = aRememberProps;
+    else if ( m_aDatabaseObjects.find( _rModelImpl.m_sName ) != m_aDatabaseObjects.end() )
+        m_aDatasourceProperties[_rModelImpl.m_sName] = aRememberProps;
+
 }
 
 //------------------------------------------------------------------------------
@@ -572,19 +559,7 @@ void ODatabaseContext::revokeObject(const rtl::OUString& _rName) throw( Exceptio
         // check if URL is already loaded
         ObjectCacheIterator aExistent = m_aDatabaseObjects.find(sURL);
         if ( aExistent != m_aDatabaseObjects.end() )
-        {
-            xExistent = aExistent->second->getDataSource(false);
-            if (xExistent.is())
-            {
-                Reference< XComponent > xComponent(xExistent, UNO_QUERY);
-                if ( xComponent.is() )
-                {
-                    Reference<XEventListener> xListenerHelper(*this,UNO_QUERY);
-                    xComponent->removeEventListener(xListenerHelper);
-                }
-            }
             m_aDatabaseObjects.erase(aExistent);
-        }
         if (!aDbRegisteredNamesRoot.removeNode(_rName))
             throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("An unexpected und unknown error occured.")), static_cast<XNamingService*>(this));
         aDbRegisteredNamesRoot.commit();
@@ -726,11 +701,6 @@ void ODatabaseContext::registerPrivate(const ::rtl::OUString& _sName
 
         Reference<XDataSource> xDs = _pModelImpl->getDataSource();
         setTransientProperties(_sName,xDs);
-        // add as dispose listener to the data source object, so we know when it's dying to save the session-persistent
-        // properties
-        Reference< XComponent > xComponent(xDs,UNO_QUERY);
-        if ( xComponent.is() )
-            xComponent->addEventListener(this);
     }
 }
 // -----------------------------------------------------------------------------
