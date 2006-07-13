@@ -4,9 +4,9 @@
  *
  *  $RCSfile: urltest.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 13:57:11 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 12:10:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,8 +81,8 @@ std::ostream & operator <<(std::ostream & out, rtl::OUString const & value) {
 
 namespace {
 
-template< typename T > bool assertEqual(
-    rtl::OUString const & message, T const & expected, T const & actual)
+template< typename T1, typename T2 > bool assertEqual(
+    rtl::OUString const & message, T1 const & expected, T2 const & actual)
 {
     bool success = expected == actual;
     if (!success) {
@@ -267,6 +267,50 @@ void abbreviate(INetURLObject aObj)
             printf(" ");
         printf(">\n");
     }
+}
+
+bool test_getSegmentCount(
+    char const * url, bool ignoreFinalSlash, sal_Int32 result)
+{
+    return
+        assertEqual(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("test_getSegmentCount")),
+            result,
+            INetURLObject(rtl::OUString::createFromAscii(url)).getSegmentCount(
+                ignoreFinalSlash));
+}
+
+bool test_insertName(
+    char const * url, char const * name, bool appendFinalSlash, sal_Int32 index,
+    bool ignoreFinalSlash, bool success, char const * result)
+{
+    INetURLObject tmp(rtl::OUString::createFromAscii(url));
+    return
+        assertEqual(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("test_insertName")),
+            success,
+            tmp.insertName(
+                rtl::OUString::createFromAscii(name), appendFinalSlash, index,
+                ignoreFinalSlash)) &
+        assertEqual(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("test_insertName")),
+            rtl::OUString::createFromAscii(result),
+            tmp.GetMainURL(INetURLObject::NO_DECODE));
+}
+
+bool test_removeSegment(
+    char const * url, sal_Int32 index, bool ignoreFinalSlash, bool success,
+    char const * result)
+{
+    INetURLObject tmp(rtl::OUString::createFromAscii(url));
+    return
+        assertEqual(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("test_removeSegment")),
+            success, tmp.removeSegment(index, ignoreFinalSlash)) &
+        assertEqual(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("test_removeSegment")),
+            rtl::OUString::createFromAscii(result),
+            tmp.GetMainURL(INetURLObject::NO_DECODE));
 }
 
 }
@@ -1625,6 +1669,200 @@ main()
              HasError()),
             true);
     }
+
+    bSuccess &= test_getSegmentCount("mailto:a@b", false, 0);
+    bSuccess &= test_getSegmentCount("vnd.sun.star.expand:$PREFIX", false, 1);
+    bSuccess &= test_getSegmentCount("vnd.sun.star.expand:$PREFIX", true, 1);
+    bSuccess &= test_getSegmentCount("vnd.sun.star.expand:$PREFIX/", false, 2);
+    bSuccess &= test_getSegmentCount("vnd.sun.star.expand:$PREFIX/", true, 1);
+    bSuccess &= test_getSegmentCount(
+        "vnd.sun.star.expand:$PREFIX/foo", false, 2);
+    bSuccess &= test_getSegmentCount(
+        "vnd.sun.star.expand:$PREFIX/foo", true, 2);
+    bSuccess &= test_getSegmentCount("file:///", false, 1);
+    bSuccess &= test_getSegmentCount("file:///", true, 0);
+    bSuccess &= test_getSegmentCount("file:///foo", false, 1);
+    bSuccess &= test_getSegmentCount("file:///foo", true, 1);
+
+    bSuccess &= test_insertName(
+        "mailto:a@b", "foo", false, 0, false, false, "mailto:a@b");
+    bSuccess &= test_insertName(
+        "vnd.sun.star.expand:$PREFIX", "foo", false, 0, false, true,
+        "vnd.sun.star.expand:%2Ffoo/$PREFIX");
+    bSuccess &= test_insertName(
+        "vnd.sun.star.expand:$PREFIX", "foo", false, 0, true, true,
+        "vnd.sun.star.expand:%2Ffoo/$PREFIX");
+    bSuccess &= test_insertName(
+        "vnd.sun.star.expand:$PREFIX", "foo", true, 0, false, true,
+        "vnd.sun.star.expand:%2Ffoo/$PREFIX");
+    bSuccess &= test_insertName(
+        "vnd.sun.star.expand:$PREFIX", "foo", true, 0, true, true,
+        "vnd.sun.star.expand:%2Ffoo/$PREFIX");
+    bSuccess &= test_insertName(
+        "vnd.sun.star.expand:$PREFIX", "foo", false, 1, false, true,
+        "vnd.sun.star.expand:$PREFIX/foo");
+    bSuccess &= test_insertName(
+        "vnd.sun.star.expand:$PREFIX", "foo", false, 1, true, true,
+        "vnd.sun.star.expand:$PREFIX/foo");
+    bSuccess &= test_insertName(
+        "vnd.sun.star.expand:$PREFIX", "foo", true, 1, false, true,
+        "vnd.sun.star.expand:$PREFIX/foo/");
+    bSuccess &= test_insertName(
+        "vnd.sun.star.expand:$PREFIX", "foo", true, 1, true, true,
+        "vnd.sun.star.expand:$PREFIX/foo/");
+    bSuccess &= test_insertName(
+        "vnd.sun.star.expand:$PREFIX", "foo", false,
+        INetURLObject::LAST_SEGMENT, false, true,
+        "vnd.sun.star.expand:$PREFIX/foo");
+    bSuccess &= test_insertName(
+        "vnd.sun.star.expand:$PREFIX", "foo", false,
+        INetURLObject::LAST_SEGMENT, true, true,
+        "vnd.sun.star.expand:$PREFIX/foo");
+    bSuccess &= test_insertName(
+        "vnd.sun.star.expand:$PREFIX", "foo", true,
+        INetURLObject::LAST_SEGMENT, false, true,
+        "vnd.sun.star.expand:$PREFIX/foo/");
+    bSuccess &= test_insertName(
+        "vnd.sun.star.expand:$PREFIX", "foo", true,
+        INetURLObject::LAST_SEGMENT, true, true,
+        "vnd.sun.star.expand:$PREFIX/foo/");
+    bSuccess &= test_insertName(
+        "vnd.sun.star.expand:$PREFIX/", "foo", false,
+        1, false, true,
+        "vnd.sun.star.expand:$PREFIX/foo/");
+    bSuccess &= test_insertName(
+        "vnd.sun.star.expand:$PREFIX/", "foo", false,
+        1, true, true,
+        "vnd.sun.star.expand:$PREFIX/foo");
+    bSuccess &= test_insertName(
+        "vnd.sun.star.expand:$PREFIX/", "foo", true,
+        1, false, true,
+        "vnd.sun.star.expand:$PREFIX/foo/");
+    bSuccess &= test_insertName(
+        "vnd.sun.star.expand:$PREFIX/", "foo", true,
+        1, true, true,
+        "vnd.sun.star.expand:$PREFIX/foo/");
+    bSuccess &= test_insertName(
+        "vnd.sun.star.expand:$PREFIX/", "foo", false,
+        INetURLObject::LAST_SEGMENT, false, true,
+        "vnd.sun.star.expand:$PREFIX//foo");
+    bSuccess &= test_insertName(
+        "vnd.sun.star.expand:$PREFIX/", "foo", false,
+        INetURLObject::LAST_SEGMENT, true, true,
+        "vnd.sun.star.expand:$PREFIX/foo");
+    bSuccess &= test_insertName(
+        "vnd.sun.star.expand:$PREFIX/", "foo", true,
+        INetURLObject::LAST_SEGMENT, false, true,
+        "vnd.sun.star.expand:$PREFIX//foo/");
+    bSuccess &= test_insertName(
+        "vnd.sun.star.expand:$PREFIX/", "foo", true,
+        INetURLObject::LAST_SEGMENT, true, true,
+        "vnd.sun.star.expand:$PREFIX/foo/");
+    bSuccess &= test_insertName(
+        "file:///", "foo", false, 0, false, true, "file:///foo/");
+    bSuccess &= test_insertName(
+        "file:///", "foo", false, 0, true, true, "file:///foo");
+    bSuccess &= test_insertName(
+        "file:///", "foo", true, 0, false, true, "file:///foo/");
+    bSuccess &= test_insertName(
+        "file:///", "foo", true, 0, true, true, "file:///foo/");
+    bSuccess &= test_insertName(
+        "file:///bar", "foo", false, 0, false, true, "file:///foo/bar");
+    bSuccess &= test_insertName(
+        "file:///bar", "foo", false, 0, true, true, "file:///foo/bar");
+    bSuccess &= test_insertName(
+        "file:///bar", "foo", true, 0, false, true, "file:///foo/bar");
+    bSuccess &= test_insertName(
+        "file:///bar", "foo", true, 0, true, true, "file:///foo/bar");
+
+    bSuccess &= test_removeSegment("mailto:a@b", 0, false, false, "mailto:a@b");
+    bSuccess &= test_removeSegment(
+        "vnd.sun.star.expand:$PREFIX", 0, false, false,
+        "vnd.sun.star.expand:$PREFIX");
+    bSuccess &= test_removeSegment(
+        "vnd.sun.star.expand:$PREFIX", 0, true, true,
+        "vnd.sun.star.expand:%2F");
+    bSuccess &= test_removeSegment(
+        "vnd.sun.star.expand:$PREFIX", 1, false, false,
+        "vnd.sun.star.expand:$PREFIX");
+    bSuccess &= test_removeSegment(
+        "vnd.sun.star.expand:$PREFIX", 1, true, false,
+        "vnd.sun.star.expand:$PREFIX");
+    bSuccess &= test_removeSegment(
+        "vnd.sun.star.expand:$PREFIX", 2, false, false,
+        "vnd.sun.star.expand:$PREFIX");
+    bSuccess &= test_removeSegment(
+        "vnd.sun.star.expand:$PREFIX", 2, true, false,
+        "vnd.sun.star.expand:$PREFIX");
+    bSuccess &= test_removeSegment(
+        "vnd.sun.star.expand:$PREFIX", INetURLObject::LAST_SEGMENT, false,
+        false, "vnd.sun.star.expand:$PREFIX");
+    bSuccess &= test_removeSegment(
+        "vnd.sun.star.expand:$PREFIX", INetURLObject::LAST_SEGMENT, true, true,
+        "vnd.sun.star.expand:%2F");
+    bSuccess &= test_removeSegment(
+        "vnd.sun.star.expand:$PREFIX/", 0, false, true,
+        "vnd.sun.star.expand:%2F");
+    bSuccess &= test_removeSegment(
+        "vnd.sun.star.expand:$PREFIX/", 0, true, true,
+        "vnd.sun.star.expand:%2F");
+    bSuccess &= test_removeSegment(
+        "vnd.sun.star.expand:$PREFIX/", 1, false, true,
+        "vnd.sun.star.expand:$PREFIX");
+    bSuccess &= test_removeSegment(
+        "vnd.sun.star.expand:$PREFIX/", 1, true, true,
+        "vnd.sun.star.expand:$PREFIX/");
+    bSuccess &= test_removeSegment(
+        "vnd.sun.star.expand:$PREFIX/", 2, false, false,
+        "vnd.sun.star.expand:$PREFIX/");
+    bSuccess &= test_removeSegment(
+        "vnd.sun.star.expand:$PREFIX/", 2, true, false,
+        "vnd.sun.star.expand:$PREFIX/");
+    bSuccess &= test_removeSegment(
+        "vnd.sun.star.expand:$PREFIX/", INetURLObject::LAST_SEGMENT, false,
+        true, "vnd.sun.star.expand:$PREFIX");
+    bSuccess &= test_removeSegment(
+        "vnd.sun.star.expand:$PREFIX/", INetURLObject::LAST_SEGMENT, true,
+        true, "vnd.sun.star.expand:%2F");
+    bSuccess &= test_removeSegment("file:///", 0, false, true, "file:///");
+    bSuccess &= test_removeSegment("file:///", 0, true, true, "file:///");
+    bSuccess &= test_removeSegment("file:///", 1, false, false, "file:///");
+    bSuccess &= test_removeSegment("file:///", 1, true, false, "file:///");
+    bSuccess &= test_removeSegment("file:///", 2, false, false, "file:///");
+    bSuccess &= test_removeSegment("file:///", 2, true, false, "file:///");
+    bSuccess &= test_removeSegment(
+        "file:///", INetURLObject::LAST_SEGMENT, false, true, "file:///");
+    bSuccess &= test_removeSegment(
+        "file:///", INetURLObject::LAST_SEGMENT, true, false, "file:///");
+    bSuccess &= test_removeSegment("file:///foo", 0, false, true, "file:///");
+    bSuccess &= test_removeSegment("file:///foo", 0, true, true, "file:///");
+    bSuccess &= test_removeSegment(
+        "file:///foo", 1, false, false, "file:///foo");
+    bSuccess &= test_removeSegment(
+        "file:///foo", 1, true, false, "file:///foo");
+    bSuccess &= test_removeSegment(
+        "file:///foo", 2, false, false, "file:///foo");
+    bSuccess &= test_removeSegment(
+        "file:///foo", 2, true, false, "file:///foo");
+    bSuccess &= test_removeSegment(
+        "file:///foo", INetURLObject::LAST_SEGMENT, false, true, "file:///");
+    bSuccess &= test_removeSegment(
+        "file:///foo", INetURLObject::LAST_SEGMENT, true, true, "file:///");
+    bSuccess &= test_removeSegment("file:///foo/", 0, false, true, "file:///");
+    bSuccess &= test_removeSegment("file:///foo/", 0, true, true, "file:///");
+    bSuccess &= test_removeSegment(
+        "file:///foo/", 1, false, true, "file:///foo");
+    bSuccess &= test_removeSegment(
+        "file:///foo/", 1, true, true, "file:///foo/");
+    bSuccess &= test_removeSegment(
+        "file:///foo/", 2, false, false, "file:///foo/");
+    bSuccess &= test_removeSegment(
+        "file:///foo/", 2, true, false, "file:///foo/");
+    bSuccess &= test_removeSegment(
+        "file:///foo/", INetURLObject::LAST_SEGMENT, false, true,
+        "file:///foo");
+    bSuccess &= test_removeSegment(
+        "file:///foo/", INetURLObject::LAST_SEGMENT, true, true, "file:///");
 
     return bSuccess ? EXIT_SUCCESS : EXIT_FAILURE;
 }
