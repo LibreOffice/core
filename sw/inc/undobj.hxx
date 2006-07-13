@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undobj.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 14:16:21 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 11:30:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -433,11 +433,12 @@ class SwUndoDelete: public SwUndo, private SwUndRng, private SwUndoSaveCntnt
     BOOL bDelFullPara : 1;  // TRUE: gesamte Nodes wurden geloescht
     BOOL bResetPgDesc : 1;  // TRUE: am nachfolgenden Node das PgDsc zuruecksetzen
     BOOL bResetPgBrk : 1;   // TRUE: am nachfolgenden Node das PgBreak zuruecksetzen
+    BOOL bFromTableCopy : 1; // TRUE: called by SwUndoTblCpyTbl
 
     BOOL SaveCntnt( const SwPosition* pStt, const SwPosition* pEnd,
                     SwTxtNode* pSttTxtNd, SwTxtNode* pEndTxtNd );
 public:
-    SwUndoDelete( SwPaM&, BOOL bFullPara = FALSE );
+    SwUndoDelete( SwPaM&, BOOL bFullPara = FALSE, BOOL bCalledByTblCpy = FALSE );
     virtual ~SwUndoDelete();
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
