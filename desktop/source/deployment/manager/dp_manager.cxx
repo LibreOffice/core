@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_manager.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-06 10:19:51 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 17:05:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@
 #include "rtl/ustrbuf.hxx"
 #include "rtl/string.hxx"
 #include "rtl/uri.hxx"
+#include "rtl/bootstrap.hxx"
 #include "osl/diagnose.h"
 #include "osl/file.hxx"
 #include "cppuhelper/weakref.hxx"
@@ -122,8 +123,13 @@ void PackageManagerImpl::initActivationLayer(
                                             "temporary_limitation_of_the_"
                                             "storage_api_implementation") ))
                     continue;
-                if (title.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
-                                            "META-INF") ))
+//                 if (title.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
+//                                             "META-INF") ) )
+                // be more error tolerant, can be changed when the appropriate
+                // UCP is case insensitive (currently different behaviour on
+                // windows and linux)
+                if (title.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM(
+                                            "meta-inf") ) )
                     continue;
 
                 ::ucb::Content sourceContent(
@@ -661,10 +667,30 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
         Reference<deployment::XPackage> xPackage(
             m_xRegistry->bindPackage( makeURL( destFolder, title_enc ),
                                       mediaType, xCmdEnv ) );
+
         OSL_ASSERT( xPackage.is() );
-        // register package:
         if (xPackage.is())
-            xPackage->registerPackage( xAbortChannel, xCmdEnv );
+        {
+            bool bPrerequisites = false;
+            try
+            {
+                bPrerequisites = xPackage->checkPrerequisites(xAbortChannel, xCmdEnv);
+            }
+            catch (Exception& )
+            {
+                removePackageAndDeleteFromCache(xAbortChannel, xCmdEnv_, title, destFolder);
+                throw;
+            }
+
+            if (bPrerequisites)
+            {
+                xPackage->registerPackage( xAbortChannel, xCmdEnv );
+            }
+            else
+            {
+                removePackageAndDeleteFromCache(xAbortChannel, xCmdEnv_, title, destFolder);
+            }
+        }
         return xPackage;
     }
     catch (RuntimeException &) {
@@ -690,7 +716,24 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
             static_cast<OWeakObject *>(this), exc );
     }
 }
+void PackageManagerImpl::removePackageAndDeleteFromCache(
+    Reference<task::XAbortChannel> const & xAbortChannel,
+    Reference<XCommandEnvironment> const & xCmdEnv_,
+    OUString const & title, OUString const & destFolder)
+{
+    removePackage_(
+        title, xAbortChannel, xCmdEnv_ /* unwrapped cmd env */ );
 
+    //we remove the package from the uno cache
+    //no service from the package may be loaded at this time!!!
+    erase_path( destFolder, Reference<XCommandEnvironment>(),
+        false /* no throw: ignore errors */ );
+    //rm last character '_'
+    OUString url = destFolder.copy(0, destFolder.getLength() - 1);
+    erase_path( url, Reference<XCommandEnvironment>(),
+        false /* no throw: ignore errors */ );
+
+}
 //______________________________________________________________________________
 void PackageManagerImpl::removePackage_(
     OUString const & name,
