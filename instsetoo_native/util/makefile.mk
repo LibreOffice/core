@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.57 $
+#   $Revision: 1.58 $
 #
-#   last change: $Author: obo $ $Date: 2006-07-10 18:59:28 $
+#   last change: $Author: obo $ $Date: 2006-07-13 15:15:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,14 @@ PYTHONPATH:=$(PWD)$/$(BIN):$(SOLARLIBDIR):$(SOLARLIBDIR)$/python:$(SOLARLIBDIR)$
 .ENDIF			# "$(GUI)"=="WNT"
 .EXPORT: PYTHONPATH
 
+.IF "$(CWS_WORK_STAMP)=="" || "$(UPDATER)!=""
+ENABLE_DOWNLOADSETS*=TRUE
+.ENDIF			# "$(CWS_WORK_STAMP)=="" || "$(UPDATER)!=""
+.IF "$(FORCE_DOWNLOADSETS)"!=""
+ENABLE_DOWNLOADSETS=TRUE
+.ENDIF			# "$(FORCE_DOWNLOADSETS)"!=""
+
+.EXPORT: ENABLE_DOWNLOADSETS
 .EXPORT: LAST_MINOR
 .EXPORT: PRJ
 .EXPORT: PRJNAME
