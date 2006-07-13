@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:29:50 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 13:28:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,6 +89,10 @@
 
 #ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATORFACTORY_HPP_
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
+#endif
+
+#ifndef  _COM_SUN_STAR_FRAME_XDOCUMENTTEMPLATES_HPP_
+#include <com/sun/star/frame/XDocumentTemplates.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
@@ -437,6 +441,11 @@ sal_Bool SfxObjectShell::APISaveAs_Impl
             sal_Bool bCopyTo =  bSaveTo || GetCreateMode() == SFX_CREATE_MODE_EMBEDDED;
             if ( bCopyTo )
                 aSavedInfo = GetDocInfo();
+
+            // use the title that is provided in the media descriptor
+            SFX_ITEMSET_ARG( aParams, pDocTitleItem, SfxStringItem, SID_DOCINFO_TITLE, sal_False );
+            if ( pDocTitleItem )
+                GetDocInfo().SetTitle( pDocTitleItem->GetValue() );
 
             bOk = CommonSaveAs_Impl( INetURLObject(aFileName), aFilterName,
                 aParams );
@@ -905,39 +914,15 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             SfxErrorContext aEc(ERRCTX_SFX_DOCTEMPLATE,GetTitle());
             SfxDocumentTemplates *pTemplates =  new SfxDocumentTemplates;
 
-            // Find the template filter with the highest version number
-            const SfxObjectFactory& rFactory = GetFactory();
-            const SfxFilter* pFilter = rFactory.GetTemplateFilter();
-            DBG_ASSERT( pFilter, "Template Filter nicht gefunden" );
-            if ( !pFilter )
-            {
-                ErrorHandler::HandleError( ERRCODE_IO_GENERAL );
-                return;
-            }
-
             if ( !rReq.GetArgs() )
             {
                 pDlg = new SfxDocumentTemplateDlg(0, pTemplates);
                 if ( RET_OK == pDlg->Execute() && pDlg->GetTemplateName().Len())
                 {
-                    String aTargetURL = pTemplates->GetTemplatePath(
-                            pDlg->GetRegion(),
-                            pDlg->GetTemplateName());
-
-                    if ( aTargetURL.Len() )
-                    {
-                        INetURLObject aTargetObj( aTargetURL );
-                        String aTplExtension( pFilter->GetDefaultExtension().Copy(2) );
-                        aTargetObj.setExtension( aTplExtension );
-                        aTargetURL = aTargetObj.GetMainURL( INetURLObject::NO_DECODE );
-                    }
-
-                    rReq.AppendItem( SfxStringItem( SID_FILE_NAME, aTargetURL ) );
-
                     rReq.AppendItem(SfxStringItem(
                         SID_TEMPLATE_NAME, pDlg->GetTemplateName()));
-                    rReq.AppendItem(SfxUInt16Item(
-                        SID_TEMPLATE_REGION, pDlg->GetRegion()));
+                    rReq.AppendItem(SfxStringItem(
+                        SID_TEMPLATE_REGIONNAME, pDlg->GetRegionName()));
                 }
                 else
                 {
@@ -947,7 +932,6 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 }
             }
 
-            // Region und Name aus Parameter holen
             SFX_REQUEST_ARG(rReq, pRegionItem, SfxStringItem, SID_TEMPLATE_REGIONNAME, FALSE);
             SFX_REQUEST_ARG(rReq, pNameItem, SfxStringItem, SID_TEMPLATE_NAME, FALSE);
             SFX_REQUEST_ARG(rReq, pRegionNrItem, SfxUInt16Item, SID_TEMPLATE_REGION, FALSE);
@@ -958,100 +942,48 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 rReq.Ignore();
                 return;
             }
-            String aTemplateName = pNameItem->GetValue();
 
-            // Region-Nr besorgen
-            USHORT nRegion = 0;
-            if( pRegionItem )
+            ::rtl::OUString aTemplateName = pNameItem->GetValue();
+            ::rtl::OUString aTemplateGroup;
+            if ( pRegionItem )
+                aTemplateGroup = pRegionItem->GetValue();
+            else
+                // pRegionNrItem must not be NULL, it was just checked
+                aTemplateGroup = pTemplates->GetFullRegionName( pRegionNrItem->GetValue() );
+            // check Group and Name
+            delete pTemplates;
+
+            sal_Bool bOk = sal_False;
+            try
             {
-                // Region-Name finden (eigentlich nicht unbedingt eindeutig)
-                nRegion = pTemplates->GetRegionNo( pRegionItem->GetValue() );
-                if ( nRegion == USHRT_MAX )
-                {
-                    SbxBase::SetError( ERRCODE_IO_INVALIDPARAMETER );
-                    rReq.Ignore();
-                    return;
-                }
+                uno::Reference< frame::XStorable > xStorable( GetModel(), uno::UNO_QUERY_THROW );
+                ::rtl::OUString aService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.DocumentTemplates" ) );
+                uno::Reference< frame::XDocumentTemplates > xTemplates(
+                                comphelper::getProcessServiceFactory()->createInstance( aService ),
+                                uno::UNO_QUERY_THROW );
+
+                bOk = xTemplates->storeTemplate( aTemplateGroup, aTemplateName, xStorable );
             }
-            if ( pRegionNrItem )
-                nRegion = pRegionNrItem->GetValue();
-
-            // kein File-Name angegeben?
-            if ( SFX_ITEM_SET != rReq.GetArgs()->GetItemState( SID_FILE_NAME ) )
+            catch( uno::Exception& )
             {
-                // TemplatePath nicht angebgeben => aus Region+Name ermitteln
-                // Dateiname zusammenbauen lassen
-                String aTemplPath = pTemplates->GetTemplatePath( nRegion, aTemplateName );
-                INetURLObject aURLObj( aTemplPath );
-                String aExtension( pFilter->GetDefaultExtension().Copy(2) );
-                aURLObj.setExtension( aExtension, INetURLObject::LAST_SEGMENT, true, INetURLObject::ENCODE_ALL );
-
-                rReq.AppendItem( SfxStringItem( SID_FILE_NAME, aURLObj.GetMainURL( INetURLObject::NO_DECODE ) ) );
-            }
-
-            // Dateiname
-            SFX_REQUEST_ARG(rReq, pFileItem, SfxStringItem, SID_FILE_NAME, FALSE);
-            const String aFileName(((const SfxStringItem *)pFileItem)->GetValue());
-
-            // Medium zusammenbauen
-            SfxItemSet* pSet = new SfxAllItemSet( *rReq.GetArgs() );
-            SfxMedium aMedium( aFileName, STREAM_STD_READWRITE, FALSE, pFilter, pSet);
-
-            // als Vorlage speichern
-            BOOL bModified = IsModified();
-//REMOVE                BOOL bHasTemplateConfig = HasTemplateConfig();
-//REMOVE                SetTemplateConfig( FALSE );
-            BOOL bOK = FALSE;
-
-            //aMedium.CreateTempFileNoCopy();
-
-            // Because we can't save into a storage directly ( only using tempfile ), we must save the DocInfo first, then
-            // we can call SaveTo_Impl and Commit
-//REMOVE                if ( pFilter->UsesStorage() && ( pFilter->GetVersion() < SOFFICE_FILEFORMAT_60 ) )
-//REMOVE                {
-//REMOVE                    SfxDocumentInfo *pInfo = new SfxDocumentInfo;
-//REMOVE                    pInfo->CopyUserData(GetDocInfo());
-//REMOVE                    pInfo->SetTitle( aTemplateName );
-//REMOVE                    pInfo->SetChanged( SfxStamp(SvtUserOptions().GetFullName()));
-//REMOVE                    SvStorageRef aRef = aMedium.GetStorage();
-//REMOVE                    if ( aRef.Is() )
-//REMOVE                    {
-//REMOVE                        pInfo->SetTime(0L);
-//REMOVE                        pInfo->Save(aRef);
-//REMOVE                    }
-//REMOVE
-//REMOVE                    delete pInfo;
-//REMOVE                }
-
-            if ( SaveTo_Impl( aMedium, NULL ) )
-            {
-                bOK = TRUE;
-                pTemplates->NewTemplate( nRegion, aTemplateName, aFileName );
             }
 
             DELETEX(pDlg);
 
-            SetError(aMedium.GetErrorCode());
-            ULONG lErr=GetErrorCode();
-            if(!lErr && !bOK)
-                lErr=ERRCODE_IO_GENERAL;
-            ErrorHandler::HandleError(lErr);
-            ResetError();
-            delete pTemplates;
-
-//REMOVE                if ( IsHandsOff() )
-//REMOVE                {
-//REMOVE                    if ( !DoSaveCompleted( pMedium ) )
-//REMOVE                        DBG_ERROR("Case not handled - no way to get a storage!");
-//REMOVE                }
-//REMOVE                else
-                DoSaveCompleted();
-
-//REMOVE                SetTemplateConfig( bHasTemplateConfig );
-            SetModified(bModified);
-            rReq.SetReturnValue( SfxBoolItem( 0, bOK ) );
-            if ( !bOK )
+            rReq.SetReturnValue( SfxBoolItem( 0, bOk ) );
+            if ( bOk )
+            {
+                // update the Organizer runtime cache from the template component if the cache has already been created
+                // TODO/LATER: get rid of this cache duplication
+                SfxDocumentTemplates aTemplates;
+                aTemplates.ReInitFromComponent();
+            }
+            else
+            {
+                ErrorHandler::HandleError( ERRCODE_IO_GENERAL );
                 return;
+            }
+
             break;
         }
     }
