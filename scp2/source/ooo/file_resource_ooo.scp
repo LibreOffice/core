@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_resource_ooo.scp,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 16:16:26 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 17:00:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,8 +71,8 @@ STD_RES_FILE_PATCH( gid_File_Res_Gal, gal )
 
 STD_RES_FILE_PATCH( gid_File_Res_Imp, imp )
 
-STD_RES_FILE( gid_File_Res_Deployment, deployment )
-STD_RES_FILE( gid_File_Res_DeploymentGui, deploymentgui )
+STD_RES_FILE_PATCH( gid_File_Res_Deployment, deployment )
+STD_RES_FILE_PATCH( gid_File_Res_DeploymentGui, deploymentgui )
 
 STD_RES_FILE_PATCH( gid_File_Res_Ofa, ofa )
 
