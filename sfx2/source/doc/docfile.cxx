@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.180 $
+ *  $Revision: 1.181 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:26:29 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 13:26:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3326,7 +3326,10 @@ void SfxMedium::TryToSwitchToRepairedTemp()
 void SfxMedium::CreateTempFile()
 {
     if ( pImp->pTempFile )
+    {
         DELETEZ( pImp->pTempFile );
+        aName = String();
+    }
 
     StreamMode nOpenMode = nStorOpenMode;
     BOOL bCopy = ( nStorOpenMode == nOpenMode && ! ( nOpenMode & STREAM_TRUNC ) );
