@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:15:22 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 17:01:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,27 @@
 #define RID_IMG_PLUS_HC                        42
 #define RID_IMG_MINUS                          43
 #define RID_IMG_MINUS_HC                       44
-//
+
+#define PB_LICENSE_DOWN                         50
+#define ML_LICENSE                              51
+#define RID_STR_LICENSE_TITLE                   52
+#define BTN_LICENSE_DECLINE                     53
+#define FT_LICENSE_HEADER                       54
+#define FT_LICENSE_BODY_1                       55
+#define FT_LICENSE_BODY_1_TXT                   56
+#define FT_LICENSE_BODY_2                       57
+#define FT_LICENSE_BODY_2_TXT                   58
+#define FL_LICENSE                              69
+#define FI_LICENSE_ARROW1                       60
+#define FI_LICENSE_ARROW2                       61
+#define IMG_LICENCE_ARROW_HC                    62
+#define BTN_LICENSE_ACCEPT                      63
+
+#define RID_DLG_DEPENDENCIES (RID_DEPLOYMENT_GUI_START + 1)
+#define RID_DLG_DEPENDENCIES_TEXT 1
+#define RID_DLG_DEPENDENCIES_LIST 2
+#define RID_DLG_DEPENDENCIES_OK 3
+#define RID_DLG_DEPENDENCIES_UNKNOWN 4
 
 #define RID_IMG_DEF_INSTALLATION               (RID_DEPLOYMENT_GUI_START+50)
 #define RID_IMG_DEF_INSTALLATION_HC            (RID_DEPLOYMENT_GUI_START+51)
@@ -90,5 +110,10 @@
 #define RID_STR_ENABLING_PACKAGES              (RID_DEPLOYMENT_GUI_START+92)
 #define RID_STR_DISABLING_PACKAGES             (RID_DEPLOYMENT_GUI_START+93)
 #define RID_STR_EXPORTING_PACKAGES             (RID_DEPLOYMENT_GUI_START+94)
+
+#define RID_DLG_LICENSE                         RID_DEPLOYMENT_LICENSE_START
+#define WARNINGBOX_NOSHAREDALLOWED              (RID_DEPLOYMENT_LICENSE_START+1)
+
+
 
 #endif
