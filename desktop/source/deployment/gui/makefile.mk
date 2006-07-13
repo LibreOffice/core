@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2006-04-07 14:45:37 $
+#   last change: $Author: obo $ $Date: 2006-07-13 17:04:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,9 @@ SLOFILES = \
         $(SLO)$/dp_gui_service.obj \
         $(SLO)$/dp_gui_dialog.obj \
         $(SLO)$/dp_gui_treelb.obj \
-        $(SLO)$/dp_gui_cmdenv.obj
+        $(SLO)$/dp_gui_cmdenv.obj \
+        $(SLO)$/license_dialog.obj \
+        $(SLO)$/dp_gui_dependencydialog.obj
 
 SHL1OBJS = \
         $(SLO)$/dp_misc.obj
@@ -68,7 +70,8 @@ SHL1STDLIBS = \
         $(I18NISOLANGLIB) \
         $(TKLIB) \
         $(VCLLIB) \
-        $(SVTOOLLIB)
+        $(SVTOOLLIB)	\
+        $(SVLLIB)			
 
 SHL1DEPN =
 SHL1IMPLIB = i$(TARGET)
@@ -82,10 +85,12 @@ DEF1NAME = $(SHL1TARGET)
 SRS1NAME = $(TARGET)
 SRC1FILES = \
         dp_gui_dialog.src \
-        dp_gui_backend.src
+        dp_gui_backend.src \
+        dp_gui_dependencydialog.src
 
 RESLIB1NAME = $(TARGET)
 RESLIB1SRSFILES = $(SRS)$/$(TARGET).srs
+RESLIB1IMAGES=	$(PRJ)$/res
 
 .INCLUDE : target.mk
 
