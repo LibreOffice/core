@@ -4,9 +4,9 @@
  *
  *  $RCSfile: templwin.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 20:53:24 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 12:07:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -325,6 +325,7 @@ public:
     String              GetSelectedFile() const;
     void                OpenFile( sal_Bool bNotAsTemplate );
     String              GetFolderTitle() const;
+    String              GetFolderURL() const;
     void                SetFocus( sal_Bool bIconWin );
     void                OpenTemplateRoot();
     void                SetPrevLevelButtonState( const String& rURL );  // sets state (enable/disable) for previous level button
