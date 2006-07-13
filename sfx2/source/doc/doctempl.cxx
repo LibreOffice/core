@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:27:20 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 13:27:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -203,6 +203,7 @@ using namespace ::ucb;
 #endif
 
 #include <comphelper/storagehelper.hxx>
+#include <unotools/ucbhelper.hxx>
 
 //========================================================================
 
@@ -343,6 +344,7 @@ public:
 
     sal_Bool            Construct( );
     void                CreateFromHierarchy( Content &rTemplRoot );
+    void                ReInitFromComponent();
     void                AddRegion( const OUString& rTitle,
                                    Content& rContent );
 
@@ -737,6 +739,9 @@ String SfxDocumentTemplates::GetTemplatePath
         return pEntry->GetTargetURL();
     else if ( pRegion )
     {
+        // a new template is going to be inserted, generate a new URL
+        // TODO/LATER: if the title is localized, use minimized URL in future
+
         // --**-- extension handling will become more complicated, because
         //          every new document type will have it's own extension
         //          e.g.: .stw or .stc instead of .vor
@@ -790,6 +795,9 @@ String SfxDocumentTemplates::GetDefaultTemplatePath
         return pEntry->GetTargetURL();
     else if ( pRegion )
     {
+        // a new template is going to be inserted, generate a new URL
+        // TODO/LATER: if the title is localized, use minimized URL in future
+
         INetURLObject aURLObj( pRegion->GetTargetURL() );
         aURLObj.insertName( rLongName, false,
                      INetURLObject::LAST_SEGMENT, true,
@@ -824,6 +832,35 @@ String SfxDocumentTemplates::GetDefaultTemplatePath
     pDirs->Insert(pEntry, pDirs->Count());
     return aPath.GetFull();
 */
+}
+
+//------------------------------------------------------------------------
+
+::rtl::OUString SfxDocumentTemplates::GetTemplateTargetURLFromComponent( const ::rtl::OUString& aGroupName,
+                                                                         const ::rtl::OUString& aTitle )
+{
+    INetURLObject aTemplateObj( pImp->GetRootURL() );
+
+    aTemplateObj.insertName( aGroupName, false,
+                         INetURLObject::LAST_SEGMENT, true,
+                         INetURLObject::ENCODE_ALL );
+
+    aTemplateObj.insertName( aTitle, false,
+                         INetURLObject::LAST_SEGMENT, true,
+                         INetURLObject::ENCODE_ALL );
+
+
+    ::rtl::OUString aResult;
+    Content aTemplate;
+    Reference< XCommandEnvironment > aCmdEnv;
+    if ( Content::create( aTemplateObj.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv, aTemplate ) )
+    {
+        OUString aPropName( RTL_CONSTASCII_USTRINGPARAM( TARGET_URL ) );
+        getTextProperty_Impl( aTemplate, aPropName, aResult );
+        aResult = SvtPathOptions().SubstituteVariable( aResult );
+    }
+
+    return aResult;
 }
 
 //------------------------------------------------------------------------
@@ -981,15 +1018,12 @@ sal_Bool SfxDocumentTemplates::CopyOrMove
                                   aTitle,
                                   pSource->GetTargetURL() ) )
     {
+
         INetURLObject aSourceObj( pSource->GetTargetURL() );
-        INetURLObject aNewTarget( pTargetRgn->GetTargetURL() );
 
-        aNewTarget.insertName( aTitle, false,
-                     INetURLObject::LAST_SEGMENT, true,
-                     INetURLObject::ENCODE_ALL );
-        aNewTarget.setExtension( aSourceObj.getExtension() );
-
-        pTargetRgn->AddEntry( aTitle, aNewTarget.GetMainURL( INetURLObject::NO_DECODE ), &nTargetIdx );
+        ::rtl::OUString aNewTargetURL = GetTemplateTargetURLFromComponent( pTargetRgn->GetTitle(), aTitle );
+        if ( !aNewTargetURL.getLength() )
+            return sal_False;
 
         if ( bMove )
         {
@@ -998,7 +1032,18 @@ sal_Bool SfxDocumentTemplates::CopyOrMove
                                                             pSource->GetTitle() );
             if ( bDeleted )
                 pSourceRgn->DeleteEntry( nSourceIdx );
+            else
+            {
+                if ( xTemplates->removeTemplate( pTargetRgn->GetTitle(), aTitle ) )
+                    return sal_False; // will trigger tetry with copy instead of move
+
+                // if it is not possible to remove just created template ( must be possible! )
+                // it is better to report success here, since at least the copy has succeeded
+                // TODO/LATER: solve it more gracefully in future
+            }
         }
+
+        pTargetRgn->AddEntry( aTitle, aNewTargetURL, &nTargetIdx );
 
         return sal_True;
     }
@@ -1811,14 +1856,57 @@ void SfxDocumentTemplates::Update( sal_Bool _bSmart )
 
 void SfxDocumentTemplates::ReInitFromComponent()
 {
-    Reference< XDocumentTemplates > xTemplates = pImp->getDocTemplates();
-    if ( xTemplates.is() )
+    pImp->ReInitFromComponent();
+}
+
+
+sal_Bool SfxDocumentTemplates::HasUserContents( sal_uInt16 nRegion, sal_uInt16 nIdx ) const
+{
+    sal_Bool bResult = sal_False;
+
+    RegionData_Impl* pRegion = pImp->GetRegion( nRegion );
+
+    if ( pRegion )
     {
-        Reference < XContent > aRootContent = xTemplates->getContent();
-        Reference < XCommandEnvironment > aCmdEnv;
-        Content aTemplRoot( aRootContent, aCmdEnv );
-        pImp->CreateFromHierarchy( aTemplRoot );
+        ::rtl::OUString aRegionTargetURL = pRegion->GetTargetURL();
+        if ( aRegionTargetURL.getLength() )
+        {
+            sal_uInt16 nLen = 0;
+            sal_uInt16 nStartInd = 0;
+
+            if( nIdx == USHRT_MAX )
+            {
+                // this is a folder
+                // check whether there is at least one editable template
+                nLen = ( sal_uInt16 )pRegion->GetCount();
+                nStartInd = 0;
+            }
+            else
+            {
+                // this is a template
+                // check whether the template is inserted by user
+                nLen = 1;
+                nStartInd = nIdx;
+            }
+
+            for ( sal_uInt16 nInd = nStartInd; nInd < nStartInd + nLen; nInd++ )
+            {
+                DocTempl_EntryData_Impl* pEntryData = pRegion->GetEntry( nInd );
+                if ( pEntryData )
+                {
+                    ::rtl::OUString aEntryTargetURL = pEntryData->GetTargetURL();
+                    if ( aEntryTargetURL.getLength()
+                      && ::utl::UCBContentHelper::IsSubPath( aRegionTargetURL, aEntryTargetURL ) )
+                    {
+                        bResult = sal_True;
+                        break;
+                    }
+                }
+            }
+        }
     }
+
+    return bResult;
 }
 
 // -----------------------------------------------------------------------
@@ -2400,6 +2488,19 @@ sal_Bool SfxDocTemplate_Impl::Construct( )
     return sal_True;
 }
 
+// -----------------------------------------------------------------------
+void SfxDocTemplate_Impl::ReInitFromComponent()
+{
+    Reference< XDocumentTemplates > xTemplates = getDocTemplates();
+    if ( xTemplates.is() )
+    {
+        Reference < XContent > aRootContent = xTemplates->getContent();
+        Reference < XCommandEnvironment > aCmdEnv;
+        Content aTemplRoot( aRootContent, aCmdEnv );
+        Clear();
+        CreateFromHierarchy( aTemplRoot );
+    }
+}
 
 // -----------------------------------------------------------------------
 void SfxDocTemplate_Impl::GetTemplates( Content& rTargetFolder,
