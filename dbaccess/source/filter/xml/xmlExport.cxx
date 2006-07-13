@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlExport.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:50:59 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 15:22:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,6 +96,9 @@
 #ifndef DBA_XMLHELPER_HXX
 #include "xmlHelper.hxx"
 #endif
+#ifndef _COM_SUN_STAR_AWT_FONTDESCRIPTOR_HPP_
+#include <com/sun/star/awt/FontDescriptor.hpp>
+#endif
 
 namespace dbaxml
 {
@@ -103,6 +106,7 @@ namespace dbaxml
     using namespace ::com::sun::star::sdb;
     using namespace ::com::sun::star::sdbcx;
     using namespace ::com::sun::star::util;
+    using namespace ::com::sun::star;
 
     class ODBExportHelper
     {
@@ -228,8 +232,8 @@ namespace dbaxml
                 const XMLPropertyState& /*rProperty*/,
                 const SvXMLUnitConverter& /*rUnitConverter*/,
                 const SvXMLNamespaceMap& /*rNamespaceMap*/,
-                const ::std::vector< XMLPropertyState > */*pProperties*/ = 0,
-                sal_uInt32 /*nIdx*/ = 0 ) const
+                const ::std::vector< XMLPropertyState > /*pProperties*/ ,
+                sal_uInt32 /*nIdx*/ ) const
         {
             // nothing to do here
         }
@@ -237,6 +241,7 @@ namespace dbaxml
 // -----------------------------------------------------------------------------
 ODBExport::ODBExport(const Reference< XMultiServiceFactory >& _rxMSF,sal_uInt16 nExportFlag)
 : SvXMLExport( _rxMSF,MAP_10TH_MM,XML_DATABASE, EXPORT_OASIS)
+,m_bAllreadyFilled(sal_False)
 {
     setExportFlags( EXPORT_OASIS | nExportFlag);
     GetMM100UnitConverter().setCoreMeasureUnit(MAP_10TH_MM);
@@ -244,6 +249,7 @@ ODBExport::ODBExport(const Reference< XMultiServiceFactory >& _rxMSF,sal_uInt16 
 
     _GetNamespaceMap().Add( GetXMLToken(XML_NP_OFFICE), GetXMLToken((getExportFlags() & EXPORT_CONTENT) != 0 ? XML_N_OOO : XML_N_OFFICE), XML_NAMESPACE_OFFICE );
     _GetNamespaceMap().Add( GetXMLToken(XML_NP_OOO), GetXMLToken(XML_N_OOO), XML_NAMESPACE_OOO );
+    _GetNamespaceMap().Add( GetXMLToken(XML_NP_SVG), GetXMLToken(XML_N_SVG), XML_NAMESPACE_SVG );
 
     _GetNamespaceMap().Add( GetXMLToken(XML_NP_DB), GetXMLToken(XML_N_DB), XML_NAMESPACE_DB );
 
@@ -874,7 +880,7 @@ void ODBExport::exportTables(sal_Bool _bExportContext)
 // -----------------------------------------------------------------------------
 void ODBExport::exportAutoStyle(XPropertySet* _xProp)
 {
-    ::std::vector< XMLPropertyState > aPropertyStates( m_xExportHelper->Filter(_xProp) );
+    ::std::vector< XMLPropertyState > aPropertyStates = m_xExportHelper->Filter(_xProp);
 
     Reference<XColumnsSupplier> xSup(_xProp,UNO_QUERY);
     if ( xSup.is() )
@@ -882,6 +888,16 @@ void ODBExport::exportAutoStyle(XPropertySet* _xProp)
         if ( !aPropertyStates.empty() )
             m_aAutoStyleNames.insert( TPropertyStyleMap::value_type(_xProp,GetAutoStylePool()->Add( XML_STYLE_FAMILY_TABLE_TABLE, aPropertyStates )));
         Reference< XNameAccess > xCollection = xSup->getColumns();
+        try
+        {
+            awt::FontDescriptor aFont;
+            _xProp->getPropertyValue(PROPERTY_FONT) >>= aFont;
+            GetFontAutoStylePool()->Add(aFont.Name,aFont.StyleName,aFont.Family,aFont.Pitch,aFont.CharSet );
+        }
+        catch(Exception&)
+        {
+            // not interested in
+        }
         ::comphelper::mem_fun1_t<ODBExport,XPropertySet* > aMemFunc(&ODBExport::exportAutoStyle);
         exportCollection(xCollection,XML_TOKEN_INVALID,XML_TOKEN_INVALID,sal_False,aMemFunc);
     }
@@ -939,8 +955,7 @@ void ODBExport::_ExportAutoStyles()
     // there are no styles that require their own autostyles
     if ( getExportFlags() & EXPORT_CONTENT )
     {
-        exportQueries(sal_False);
-        exportTables(sal_False);
+        collectComponentStyles();
         GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_TABLE
                                         ,GetDocHandler()
                                         ,GetMM100UnitConverter()
@@ -1085,6 +1100,23 @@ void SAL_CALL ODBExport::setSourceDocument( const Reference< XComponent >& xDoc 
     Reference< XNumberFormatsSupplier > xNum(m_xDataSource->getPropertyValue(PROPERTY_NUMBERFORMATSSUPPLIER),UNO_QUERY);
     SetNumberFormatsSupplier(xNum);
     SvXMLExport::setSourceDocument(xDoc);
+}
+// -----------------------------------------------------------------------------
+void ODBExport::_ExportFontDecls()
+{
+    GetFontAutoStylePool(); // make sure the pool is created
+    collectComponentStyles();
+    SvXMLExport::_ExportFontDecls();
+}
+// -----------------------------------------------------------------------------
+void ODBExport::collectComponentStyles()
+{
+    if ( m_bAllreadyFilled )
+        return;
+
+    m_bAllreadyFilled = sal_True;
+    exportQueries(sal_False);
+    exportTables(sal_False);
 }
 // -----------------------------------------------------------------------------
 }// dbaxml
