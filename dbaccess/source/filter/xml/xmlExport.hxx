@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlExport.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:06:31 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 15:22:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,6 +144,7 @@ class ODBExport : public SvXMLExport
     mutable UniReference < XMLPropertySetMapper >   m_xTableStylesPropertySetMapper;
     mutable UniReference < XMLPropertySetMapper >   m_xColumnStylesPropertySetMapper;
     Reference<XPropertySet>                         m_xDataSource;
+    sal_Bool                                        m_bAllreadyFilled;
 
     void                    exportDataSource();
     void                    exportLogin();
@@ -173,6 +174,7 @@ class ODBExport : public SvXMLExport
     void                    exportTableName(XPropertySet* _xProp,sal_Bool _bUpdate);
     void                    exportAutoStyle(XPropertySet* _xProp);
     void                    exportColumns(const Reference<XColumnsSupplier>& _xColSup);
+    void                    collectComponentStyles();
 
     ::rtl::OUString         implConvertAny(const Any& _rValue);
 
@@ -186,6 +188,7 @@ protected:
     virtual void                    _ExportAutoStyles();
     virtual void                    _ExportContent();
     virtual void                    _ExportMasterStyles();
+    virtual void                    _ExportFontDecls();
     virtual sal_uInt32              exportDoc( enum ::xmloff::token::XMLTokenEnum eClass );
     virtual SvXMLAutoStylePoolP*    CreateAutoStylePool();
 
@@ -195,7 +198,7 @@ protected:
     virtual                 ~ODBExport(){};
 public:
 
-    ODBExport(const Reference< XMultiServiceFactory >& _rxMSF, sal_uInt16 nExportFlag = EXPORT_CONTENT | EXPORT_AUTOSTYLES | EXPORT_PRETTY);
+    ODBExport(const Reference< XMultiServiceFactory >& _rxMSF, sal_uInt16 nExportFlag = EXPORT_CONTENT | EXPORT_AUTOSTYLES | EXPORT_PRETTY|EXPORT_FONTDECLS);
     // XServiceInfo
     DECLARE_SERVICE_INFO_STATIC( );
 
