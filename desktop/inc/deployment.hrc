@@ -1,0 +1,86 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: deployment.hrc,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2006-07-13 17:01:11 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#if ! defined INCLUDED_DEPLOYMENT_HRC
+#define INCLUDED_DEPLOYMENT_HRC
+
+#define MASKCOLOR MaskColor = \
+    Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
+
+#define RID_DEPLOYMENT_START                 2000
+
+#define RID_DEPLOYMENT_GUI_START             RID_DEPLOYMENT_START
+#define RID_DEPLOYMENT_MISC_START            (RID_DEPLOYMENT_START+500)
+#define RID_DEPLOYMENT_MANAGER_START         (RID_DEPLOYMENT_START+1000)
+#define RID_DEPLOYMENT_REGISTRY_START        (RID_DEPLOYMENT_START+1500)
+
+#define RID_DEPLOYMENT_BUNDLE_START          (RID_DEPLOYMENT_START+2000)
+#define RID_IMG_DEF_PACKAGE_BUNDLE           RID_DEPLOYMENT_BUNDLE_START
+#define RID_IMG_DEF_PACKAGE_BUNDLE_HC        (RID_DEPLOYMENT_BUNDLE_START+1)
+
+#define RID_DEPLOYMENT_SCRIPT_START          (RID_DEPLOYMENT_START+2500)
+#define RID_IMG_SCRIPTLIB                    RID_DEPLOYMENT_SCRIPT_START
+#define RID_IMG_SCRIPTLIB_HC                 (RID_DEPLOYMENT_SCRIPT_START+1)
+#define RID_IMG_DIALOGLIB                    (RID_DEPLOYMENT_SCRIPT_START+2)
+#define RID_IMG_DIALOGLIB_HC                 (RID_DEPLOYMENT_SCRIPT_START+3)
+
+#define RID_DEPLOYMENT_CONF_START            (RID_DEPLOYMENT_START+3000)
+#define RID_IMG_CONF_XML                     RID_DEPLOYMENT_CONF_START
+#define RID_IMG_CONF_XML_HC                  (RID_DEPLOYMENT_CONF_START+1)
+
+#define RID_DEPLOYMENT_COMPONENT_START       (RID_DEPLOYMENT_START+3500)
+#define RID_IMG_COMPONENT                    RID_DEPLOYMENT_COMPONENT_START
+#define RID_IMG_COMPONENT_HC                 (RID_DEPLOYMENT_COMPONENT_START+1)
+#define RID_IMG_JAVA_COMPONENT               (RID_DEPLOYMENT_COMPONENT_START+2)
+#define RID_IMG_JAVA_COMPONENT_HC            (RID_DEPLOYMENT_COMPONENT_START+3)
+#define RID_IMG_TYPELIB                      (RID_DEPLOYMENT_COMPONENT_START+4)
+#define RID_IMG_TYPELIB_HC                   (RID_DEPLOYMENT_COMPONENT_START+5)
+#define RID_IMG_JAVA_TYPELIB                 (RID_DEPLOYMENT_COMPONENT_START+6)
+#define RID_IMG_JAVA_TYPELIB_HC              (RID_DEPLOYMENT_COMPONENT_START+7)
+
+#define RID_DEPLOYMENT_UNOPKG_START          (RID_DEPLOYMENT_START+4000)
+#define RID_STR_UNOPKG_NO_SHARED_ALLOWED            RID_DEPLOYMENT_UNOPKG_START
+#define RID_STR_UNOPKG_ACCEPT_LIC_1          (RID_DEPLOYMENT_UNOPKG_START+1)
+#define RID_STR_UNOPKG_ACCEPT_LIC_2          (RID_DEPLOYMENT_UNOPKG_START+2)
+#define RID_STR_UNOPKG_ACCEPT_LIC_3          (RID_DEPLOYMENT_UNOPKG_START+3)
+#define RID_STR_UNOPKG_ACCEPT_LIC_4          (RID_DEPLOYMENT_UNOPKG_START+4)
+#define RID_STR_UNOPKG_ACCEPT_LIC_YES        (RID_DEPLOYMENT_UNOPKG_START+5)
+#define RID_STR_UNOPKG_ACCEPT_LIC_Y          (RID_DEPLOYMENT_UNOPKG_START+6)
+#define RID_STR_UNOPKG_ACCEPT_LIC_NO         (RID_DEPLOYMENT_UNOPKG_START+7)
+#define RID_STR_UNOPKG_ACCEPT_LIC_N          (RID_DEPLOYMENT_UNOPKG_START+8)
+
+
+#define RID_DEPLOYMENT_LICENSE_START        (RID_DEPLOYMENT_START+4500)
+#endif
