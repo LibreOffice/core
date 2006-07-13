@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XPlayer.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:20:32 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 12:00:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,47 +47,142 @@
 
 module com {  module sun {  module star {  module media {
 
-/**
+/** is the multimedia stream handling interface. This allows to
+    perform every basic operation on videos and sounds.
  */
-interface XPlayer : ::com::sun::star::uno::XInterface
+interface XPlayer
 {
+    /** starts reading the stream from the current position.
+     */
     void start();
 
+    /** stops reading the stream and leave the cursor at its current
+        position.
+     */
     void stop();
 
+    /** indicates whether the stream is played or not.
+
+        @returns
+            <TRUE /> if the stream is played, <FALSE /> otherwise
+     */
     boolean isPlaying();
 
+    /** gets the stream length
+
+        @returns
+            the stream length in second
+     */
     double getDuration();
 
+    /** sets the new cursor position in the media stream. After using
+        this method the stream is stopped.
+
+        @param fTime
+            the new position to set in seconds
+     */
     void setMediaTime( [in] double fTime );
 
+    /** gets the current position of the cursor in the stream
+
+        @returns
+            the cursor position in seconds
+     */
     double getMediaTime();
 
+    /** sets the time at which to stop reading the stream.
+
+        @param fTime
+            the time at which to stop reading the stream in seconds
+     */
     void setStopTime( [in] double fTime );
 
+    /** gets the time at which the stream will stop. The result
+        is not guaranteed if no stop time has been set.
+     */
     double getStopTime();
 
+    /** sets the speed of the stream reading relatively to the normal
+        speed.
+
+        @param fRate
+            the stream reading rate. <code>1.0</code> means normal speed.
+     */
     void setRate( [in] double fRate );
 
+    /** gets the speed of the stream reading relatively to the normal
+        reading.
+
+        @returns
+            the relative speed. <code>1.0</code> is the normal speed.
+     */
     double getRate();
 
+    /** sets whether the stream reading should restart at the stream
+        start after the end of the stream.
+
+        @param bSet
+            loops if set to <TRUE/>, otherwise stops at the end of the
+            stream.
+     */
     void setPlaybackLoop( [in] boolean bSet );
 
+    /** indicates whether the stream reading will restart after the
+        end of the stream.
+
+        @returns
+            <TRUE/> if the stream will loop, <FALSE/> otherwise.
+     */
     boolean isPlaybackLoop();
 
+    /** sets the audio volume in decibel.
+
+        @param nDB
+            the new volume in Decibel
+     */
     void setVolumeDB( [in] short nDB );
 
+    /** gets the current audio volume in decibel
+
+        @returns
+            the volume in decibel
+     */
     short getVolumeDB();
 
+    /** sets the volume to <code>0</code> or to its previous value.
+
+        @param bSet
+            sets the volume to <code>0</code> if <TRUE/>, and switch
+            to the previous non-null value if <FALSE/>
+     */
     void setMute( [in] boolean bSet );
 
+    /** gets whether the volume is temporarily down to <code>0</code>
+        or not.
+
+        @returns
+            <TRUE/> if the volume is temporarily set to <code>0</code>,
+            <FALSE/> otherwise.
+     */
     boolean isMute();
 
+    /** gets the preferred window size
+
+        @returns
+            the <type scope="com::sun::star::awt">Size</type>
+     */
     ::com::sun::star::awt::Size getPreferredPlayerWindowSize();
 
-    ::com::sun::star::media::XPlayerWindow createPlayerWindow( [in] sequence< any > aArguments );
+    /** gets a new player window for this stream control
 
-    ::com::sun::star::media::XFrameGrabber createFrameGrabber();
+        @param aArguments
+            arguments passed to the window during its creation.
+     */
+    XPlayerWindow createPlayerWindow( [in] sequence< any > aArguments );
+
+    /** gets a frame grabber for this stream.
+     */
+    XFrameGrabber createFrameGrabber();
 };
 
 }; }; }; };
