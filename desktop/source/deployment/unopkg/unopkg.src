@@ -1,0 +1,99 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: unopkg.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2006-07-13 17:07:47 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#include "deployment.hrc"
+
+String RID_STR_UNOPKG_NO_SHARED_ALLOWED
+{
+    Text [ en-US ] = "The option \"--shared\" cannot be used to install the extension %NAME, "
+        "because every user has to agree to the license agreement of the extension. The extension will not be installed.";
+    Text [ de ] = "Die Option \"--shared\" kann nicht verwendet werden, um die Erweiterung %NAME zu installieren, "
+        "da jeder Anwender der Lizenz der Erweiterung zustimmen muss. Die Extension wird nicht installiert.";
+};
+
+String RID_STR_UNOPKG_ACCEPT_LIC_1
+{
+    Text [ en-US ] = "Extension License Agreement:";
+    Text [ de ] = "Lizenzvertrag  Softwareerweiterung:";
+};
+
+String RID_STR_UNOPKG_ACCEPT_LIC_2
+{
+    Text [ en-US ] = "Read the complete License Agreement displayed above. "
+        "Accept the License Agreement by typing \"yes\" on the console "
+        "then press the Return key. Type \"no\" to decline and to abort the "
+        "extension setup.";
+    Text [ de ] = "Lesen Sie den gesamten obigen Lizenzvertrag. Akzeptieren Sie "
+        "diesen Lizenzvertrag indem Sie \"Ja\" auf der Konsole eingeben. Betätigen "
+        "Sie anschließend die Eingabetaste. Geben Sie \"Nein\" ein, um die Installation "
+        "der Erweiterung abzubrechen.";
+};
+
+String RID_STR_UNOPKG_ACCEPT_LIC_3
+{
+    Text [ en-US ] = "[Enter \"yes\" or \"no\"]:";
+    Text [ de ] = "[\"Ja\" oder \"Nein\" eingeben]:";
+};
+
+String RID_STR_UNOPKG_ACCEPT_LIC_4
+{
+    Text [ en-US ] = "Your input was not correct. Please enter \"yes\" or \"no\":";
+    Text [ de ] = "Ihre Eingabe war nicht korrekt. Bitte geben Sie entweder \"Ja\" oder \"Nein\" ein:";
+};
+
+String RID_STR_UNOPKG_ACCEPT_LIC_YES
+{
+    Text [ en-US ] = "YES";
+    Text [ de ] = "JA";
+};
+
+String RID_STR_UNOPKG_ACCEPT_LIC_Y
+{
+    Text [ en-US ] = "Y";
+    Text [ de ] = "J";
+};
+
+String RID_STR_UNOPKG_ACCEPT_LIC_NO
+{
+    Text [ en-US ] = "NO";
+    Text [ de ] = "NEIN";
+};
+
+String RID_STR_UNOPKG_ACCEPT_LIC_N
+{
+    Text [ en-US ] = "N";
+    Text [ de ] = "N";
+};
+
