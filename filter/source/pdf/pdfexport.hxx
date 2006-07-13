@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfexport.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 10:54:06 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 11:14:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,29 @@ private:
     sal_Int32               mnQuality;
     sal_Int32               mnFormsFormat;
     sal_Int32               mnProgressValue;
+
+//these variable are here only to have a location in filter/pdf to set the default
+//to be used by the macro (when the FilterData are set by the macro itself)
+    sal_Bool                mbHideViewerToolbar;
+    sal_Bool                mbHideViewerMenubar;
+    sal_Bool                mbHideViewerWindowControls;
+    sal_Bool                mbFitWindow;
+    sal_Bool                mbCenterWindow;
+    sal_Bool                mbOpenInFullScreenMode;
+    sal_Bool                mbDisplayPDFDocumentTitle;
+    sal_Int32               mnPDFDocumentMode;
+    sal_Int32               mnPDFDocumentAction;
+    sal_Int32               mnPDFPageLayout;
+    sal_Bool                mbFirstPageLeft;
+
+    sal_Bool                mbEncrypt;
+    rtl::OUString           msOpenPassword;
+    sal_Bool                mbRestrictPermissions;
+    rtl::OUString           msPermissionPassword;
+    sal_Int32               mnPrintAllowed;
+    sal_Int32               mnChangesAllowed;
+    sal_Bool                mbCanCopyOrExtract;
+    sal_Bool                mbCanExtractForAccessibility;
 
     sal_Bool                ImplExportPage( ::vcl::PDFWriter& rWriter, ::vcl::PDFExtOutDevData& rPDFExtOutDevData,
                                                 const GDIMetaFile& rMtf );
