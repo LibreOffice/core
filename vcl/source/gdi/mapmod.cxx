@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mapmod.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:26:32 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 10:24:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,7 +154,7 @@ MapMode::MapMode( const MapMode& rMapMode )
 {
     DBG_CTOR( MapMode, NULL );
     DBG_CHKOBJ( &rMapMode, MapMode, NULL );
-    DBG_ASSERT( rMapMode.mpImplMapMode->mnRefCount < 0xFFFE, "MapMode: RefCount overflow" );
+    DBG_ASSERT( rMapMode.mpImplMapMode->mnRefCount < 0xFFFFFFFE, "MapMode: RefCount overflow" );
 
     // shared Instance Daten uebernehmen und Referenzcounter erhoehen
     mpImplMapMode = rMapMode.mpImplMapMode;
@@ -249,7 +249,7 @@ MapMode& MapMode::operator=( const MapMode& rMapMode )
 {
     DBG_CHKTHIS( MapMode, NULL );
     DBG_CHKOBJ( &rMapMode, MapMode, NULL );
-    DBG_ASSERT( rMapMode.mpImplMapMode->mnRefCount < 0xFFFE, "MapMode: RefCount overflow" );
+    DBG_ASSERT( rMapMode.mpImplMapMode->mnRefCount < 0xFFFFFFFE, "MapMode: RefCount overflow" );
 
     // Zuerst Referenzcounter erhoehen, damit man sich selbst zuweisen kann
     // RefCount == 0 fuer statische Objekte
