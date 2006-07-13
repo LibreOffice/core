@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svlbox.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 20:52:27 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 12:06:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1078,6 +1078,11 @@ BOOL SvLBox::CopySelection( SvLBox* pSource, SvLBoxEntry* pTarget )
 // Rueckgabe: Alle Entries wurden verschoben
 BOOL SvLBox::MoveSelection( SvLBox* pSource, SvLBoxEntry* pTarget )
 {
+    return MoveSelectionCopyFallbackPossible( pSource, pTarget, sal_False );
+}
+
+BOOL SvLBox::MoveSelectionCopyFallbackPossible( SvLBox* pSource, SvLBoxEntry* pTarget, sal_Bool bAllowCopyFallback )
+{
     DBG_CHKTHIS(SvLBox,0);
     nCurEntrySelPos = 0; // Selektionszaehler fuer NotifyMoving/Copying
     BOOL bSuccess = TRUE;
@@ -1101,8 +1106,15 @@ BOOL SvLBox::MoveSelection( SvLBox* pSource, SvLBoxEntry* pTarget )
     {
         SvLBoxEntry* pNewParent = 0;
         ULONG nInsertionPos = LIST_APPEND;
-        BOOL bOk= NotifyMoving(pTarget,pSourceEntry,pNewParent,nInsertionPos);
-        if ( bOk )
+        sal_Bool bOk = NotifyMoving(pTarget,pSourceEntry,pNewParent,nInsertionPos);
+        sal_Bool bCopyOk = bOk;
+        if ( !bOk && bAllowCopyFallback )
+        {
+            nInsertionPos = LIST_APPEND;
+            bCopyOk = NotifyCopying(pTarget,pSourceEntry,pNewParent,nInsertionPos);
+        }
+
+        if ( bOk || bCopyOk )
         {
             if ( bClone )
             {
@@ -1114,8 +1126,12 @@ BOOL SvLBox::MoveSelection( SvLBox* pSource, SvLBoxEntry* pTarget )
             }
             else
             {
-                pModel->Move( (SvListEntry*)pSourceEntry,
-                              (SvListEntry*)pNewParent, nInsertionPos );
+                if ( bOk )
+                    pModel->Move( (SvListEntry*)pSourceEntry,
+                                  (SvListEntry*)pNewParent, nInsertionPos );
+                else
+                    pModel->Copy( (SvListEntry*)pSourceEntry,
+                                  (SvListEntry*)pNewParent, nInsertionPos );
             }
         }
         else
@@ -1667,10 +1683,21 @@ sal_Int8 SvLBox::ExecuteDrop( const ExecuteDropEvent& rEvt, SvLBox* pSourceView 
 
         SvLBoxEntry* pTarget = pTargetEntry; // !!! kann 0 sein !!!
 
-        if( DND_ACTION_COPY == rEvt.mnAction
-             ? CopySelection( aDDInfo.pSource, pTarget )
-             : MoveSelection( aDDInfo.pSource, pTarget ))
-            nRet = rEvt.mnAction;
+        if( DND_ACTION_COPY == rEvt.mnAction )
+        {
+            if ( CopySelection( aDDInfo.pSource, pTarget ) )
+                nRet = rEvt.mnAction;
+        }
+        else if( DND_ACTION_MOVE == rEvt.mnAction )
+        {
+            if ( MoveSelection( aDDInfo.pSource, pTarget ) )
+                nRet = rEvt.mnAction;
+        }
+        else if( DND_ACTION_COPYMOVE == rEvt.mnAction )
+        {
+            if ( MoveSelectionCopyFallbackPossible( aDDInfo.pSource, pTarget, sal_True ) )
+                nRet = rEvt.mnAction;
+        }
     }
     return nRet;
 }
