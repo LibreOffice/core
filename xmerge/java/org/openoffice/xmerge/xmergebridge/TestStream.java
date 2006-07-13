@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TestStream.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:45:38 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 09:15:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,8 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+package org.openoffice.xmerge.xmergebridge;
+
 import com.sun.star.io.XInputStream;
 import com.sun.star.io.XOutputStream;
 import com.sun.star.io.NotConnectedException;
