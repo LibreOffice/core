@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_package.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-06 10:22:49 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 17:07:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@
 #include "dp_backend.h"
 #include "dp_ucb.h"
 #include "dp_interact.h"
+#include "dp_description.hxx"
 #include "rtl/uri.hxx"
 #include "cppuhelper/exc_hlp.hxx"
 #include "cppuhelper/implbase1.hxx"
@@ -61,6 +62,11 @@
 #include "com/sun/star/sdbc/XRow.hpp"
 #include "com/sun/star/packages/manifest/XManifestReader.hpp"
 #include "com/sun/star/packages/manifest/XManifestWriter.hpp"
+#include "com/sun/star/deployment/DependencyException.hpp"
+#include "com/sun/star/deployment/LicenseException.hpp"
+#include "com/sun/star/xml/dom/XDocumentBuilder.hpp"
+#include "com/sun/star/xml/xpath/XXPathAPI.hpp"
+
 #include <vector>
 
 
@@ -68,6 +74,7 @@ using namespace ::dp_misc;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
+namespace css = ::com::sun::star;
 using ::rtl::OUString;
 
 namespace dp_registry {
@@ -110,6 +117,31 @@ class BackendImpl : public ImplBaseT
             Reference<XCommandEnvironment> const & xCmdEnv,
             bool skip_registration = false );
 
+        bool checkDependencies(
+            css::uno::Reference< css::ucb::XCommandEnvironment > const &
+                environment,
+            ExtensionDescription const & description);
+            // throws css::uno::RuntimeException,
+            // css::deployment::DependencyException
+
+        ::sal_Bool checkLicense(
+            css::uno::Reference< css::ucb::XCommandEnvironment > const & xCmdEnv,
+            ExtensionDescription const& description)
+                throw (css::deployment::DeploymentException,
+                    css::ucb::CommandFailedException,
+                    css::ucb::CommandAbortedException,
+                    css::uno::RuntimeException);
+        OUString findLocalizedLicense(
+            const css::uno::Reference<css::xml::dom::XElement>& xRoot,
+            const css::uno::Reference<css::xml::xpath::XXPathAPI>& xXPath);
+        OUString BackendImpl::PackageImpl::getLicenseText(
+            const css::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv,
+            const OUString& licenseUrl);
+
+
+
+
+
         // Package
         virtual beans::Optional< beans::Ambiguous<sal_Bool> > isRegistered_(
             ::osl::ResettableMutexGuard & guard,
@@ -122,6 +154,8 @@ class BackendImpl : public ImplBaseT
             Reference<XCommandEnvironment> const & xCmdEnv );
 
         virtual void SAL_CALL disposing();
+
+
 
     public:
         PackageImpl(
@@ -153,6 +187,15 @@ class BackendImpl : public ImplBaseT
             Reference<XCommandEnvironment> const & xCmdEnv )
             throw (CommandFailedException, CommandAbortedException,
                    RuntimeException);
+
+        virtual ::sal_Bool SAL_CALL checkPrerequisites(
+            const css::uno::Reference< css::task::XAbortChannel >& xAbortChannel,
+            const css::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv )
+            throw (css::deployment::DeploymentException,
+                css::ucb::CommandFailedException,
+                css::ucb::CommandAbortedException,
+                css::uno::RuntimeException);
+
     };
     friend class PackageImpl;
 
@@ -195,7 +238,7 @@ BackendImpl::BackendImpl(
       m_xRootRegistry( xRootRegistry ),
       m_xBundleTypeInfo( new Package::TypeInfo(
                              OUSTR("application/vnd.sun.star.package-bundle"),
-                             OUSTR("*.uno.pkg"),
+                             OUSTR("*.oxt;*.uno.pkg"),
                              getResourceString(RID_STR_PACKAGE_BUNDLE),
                              RID_IMG_DEF_PACKAGE_BUNDLE,
                              RID_IMG_DEF_PACKAGE_BUNDLE_HC ) ),
@@ -246,6 +289,8 @@ BackendImpl::getSupportedPackageTypes() throw (RuntimeException)
     return m_typeInfos;
 }
 
+
+
 // PackageRegistryBackend
 //______________________________________________________________________________
 Reference<deployment::XPackage> BackendImpl::bindPackage_(
@@ -262,6 +307,8 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
             const OUString title( ucbContent.getPropertyValue(
                                       StrTitle::get() ).get<OUString>() );
             if (title.endsWithIgnoreAsciiCaseAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM(".oxt") ) ||
+                title.endsWithIgnoreAsciiCaseAsciiL(
                     RTL_CONSTASCII_STRINGPARAM(".uno.pkg") ))
                 mediaType = OUSTR("application/vnd.sun.star.package-bundle");
             else if (title.endsWithIgnoreAsciiCaseAsciiL(
@@ -358,6 +405,258 @@ BackendImpl::PackageImpl::isRegistered_(
     }
     return beans::Optional< beans::Ambiguous<sal_Bool> >(
         present, beans::Ambiguous<sal_Bool>(reg, ambig) );
+}
+
+/* Obtains the value of the /description/registration/simple-license/license-text@href.
+    May throw a com::sun::star::uno::DeploymentException.
+    If the value of the attribut is empty then an exception is thrown.
+*/
+OUString BackendImpl::PackageImpl::findLocalizedLicense(
+    const css::uno::Reference<css::xml::dom::XElement>& xRoot,
+    const css::uno::Reference<css::xml::xpath::XXPathAPI>& xXPath)
+{
+    try {
+        css::uno::Reference<css::xml::dom::XNode> xRootNode (xRoot, css::uno::UNO_QUERY_THROW);
+        lang::Locale const & officeLocale = getOfficeLocale();
+        css::uno::Reference<css::xml::dom::XNodeList> listLicText =
+            xXPath->selectNodeList(xRootNode,
+            OUSTR("/desc:description/desc:registration/desc:simple-license/desc:license-text"));
+        sal_Int32 numNodes = listLicText->getLength();
+        OUString sCountry = officeLocale.Country;
+        OUString sLang = officeLocale.Language;
+        css::uno::Reference<css::xml::dom::XNode> nodeMatch;
+
+        //check if we match lang + country
+        if (sCountry.getLength() > 0)
+        {
+            OUString exp(
+                OUSTR("/desc:description/desc:registration/desc:simple-license"
+                "/desc:license-text[@lang=\"") + sLang +
+                OUSTR("\" and @country=\"") + sCountry +
+                OUSTR("\"]"));
+            nodeMatch = xXPath->selectSingleNode(xRootNode, exp);
+        }
+        //check if we match lang
+        if (!nodeMatch.is() && sLang.getLength() > 0)
+        {
+            OUString exp(
+                OUSTR("/desc:description/desc:registration/desc:simple-license"
+                "/desc:license-text[@lang=\"") + sLang + OUSTR("\"]"));
+            nodeMatch = xXPath->selectSingleNode(xRootNode, exp);
+        }
+        //get default
+        if (!nodeMatch.is())
+        {
+            OUString exp(
+                OUSTR("/desc:description/desc:registration/desc:simple-license"
+                "/desc:license-text[@default=\"true\"]"));
+            nodeMatch = xXPath->selectSingleNode(xRootNode, exp);
+        }
+
+        if (!nodeMatch.is())
+            throw css::uno::Exception(
+            OUSTR("Cannot find a localized license text or a default license text."), 0);
+
+
+        css::uno::Reference<css::xml::dom::XElement> elemLicText(
+            nodeMatch, css::uno::UNO_QUERY_THROW);
+
+        OUString value = elemLicText->getAttributeNS(OUSTR("http://www.w3.org/1999/xlink"), OUSTR("href"));
+        if (value.getLength() == 0)
+            throw css::uno::Exception(
+            OUSTR("The value of the attribut license-text@href is empty."), 0);
+
+        // /desc:description/desc:registration/desc:simple-license/desc:license-text
+        return value;
+    }
+    catch (css::uno::Exception& )
+    {
+        Any exc( ::cppu::getCaughtException() );
+        throw css::deployment::DeploymentException(
+            OUSTR("Could not obtain the url to the license text file."), 0, exc);
+    }
+}
+
+OUString BackendImpl::PackageImpl::getLicenseText(
+    const css::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv,
+    const OUString& licenseUrl)
+{
+    try
+    {
+        ::ucb::Content descContent(licenseUrl, xCmdEnv);
+        css::uno::Reference<css::io::XInputStream> xInput = descContent.openStream();
+
+        //read out the complete content and create a string
+        const sal_Int32 nConstBufferSize = 32000;
+        sal_Int32 nRead = 0;
+        css::uno::Sequence<sal_Int8> seqTemp(nConstBufferSize);
+        css::uno::Sequence<sal_Int8> seqAll(0);
+
+        do
+        {
+            nRead = xInput->readBytes ( seqTemp, nConstBufferSize );
+            sal_Int32 lenAll = seqAll.getLength();
+            seqAll.realloc(seqAll.getLength() + nRead);
+            sal_Int8 const * arTemp = seqTemp.getConstArray();
+            sal_Int8 * arAll = seqAll.getArray();
+            rtl_copyMemory(arAll + lenAll, arTemp, nRead);
+        }
+        while ( nRead == nConstBufferSize );
+
+        xInput->closeInput();
+
+        OUString sLic(reinterpret_cast<sal_Char const *>(seqAll.getConstArray()),
+            seqAll.getLength(), RTL_TEXTENCODING_UTF8);
+
+        return sLic;
+    }
+    catch (css::uno::Exception&)
+    {
+        Any exc( ::cppu::getCaughtException() );
+            throw css::deployment::DeploymentException(
+                OUSTR("Could not read license text in ") + licenseUrl, 0, exc);
+    }
+
+}
+
+bool BackendImpl::PackageImpl::checkDependencies(
+    css::uno::Reference< css::ucb::XCommandEnvironment > const & environment,
+    ExtensionDescription const & description)
+{
+    css::uno::Reference< css::xml::xpath::XXPathAPI > xpath(
+        description.getXPathAPI());
+    xpath->registerNS(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("desc")),
+        rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM(
+                "http://openoffice.org/extensions/description/2006")));
+    css::uno::Reference< css::xml::dom::XNodeList > deps(
+        xpath->selectNodeList(
+            css::uno::Reference< css::xml::dom::XNode >(
+                description.getRootElement(), css::uno::UNO_QUERY_THROW),
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "/desc:description/desc:dependencies/*"))));
+    sal_Int32 n = deps->getLength();
+    if (n == 0) {
+        return true;
+    } else {
+        // Until any kinds of dependencies are actually specified, all
+        // dependencies are unsatisfied:
+        css::deployment::DependencyException e;
+        e.Message = rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM("unsatisfied dependencies"));
+        e.Context = static_cast<OWeakObject *>(this);
+        e.UnsatisfiedDependencies.realloc(n);
+        for (sal_Int32 i = 0; i < n; ++i) {
+            e.UnsatisfiedDependencies[i] =
+                css::uno::Reference< css::xml::dom::XElement >(
+                    deps->item(i), css::uno::UNO_QUERY_THROW);
+        }
+        Any ae(e);
+        if (!interactContinuation(
+                ae, cppu::UnoType< css::task::XInteractionApprove >::get(),
+                environment, NULL, NULL))
+        {
+            cppu::throwException(ae);
+        }
+        return false;
+    }
+}
+
+::sal_Bool BackendImpl::PackageImpl::checkLicense(
+    css::uno::Reference< css::ucb::XCommandEnvironment > const & xCmdEnv,
+    ExtensionDescription const & desc)
+        throw (css::deployment::DeploymentException,
+            css::ucb::CommandFailedException,
+            css::ucb::CommandAbortedException,
+            css::uno::RuntimeException)
+{
+    try
+    {
+        css::uno::Reference<css::xml::xpath::XXPathAPI> xPath = desc.getXPathAPI();
+        css::uno::Reference<css::xml::dom::XElement> xRoot = desc.getRootElement();
+        OUString ns = xRoot->getNamespaceURI();
+        //OUString s = xRoot->getTagName();
+        xPath->registerNS(OUSTR("desc"), ns);
+
+        css::uno::Reference<css::xml::dom::XNode> nodeSimpleLic =
+            xPath->selectSingleNode(Reference<css::xml::dom::XNode>(xRoot, UNO_QUERY_THROW),
+            OUSTR("/desc:description/desc:registration/desc:simple-license"));
+
+        if (!nodeSimpleLic.is())
+            return true;
+        //throws an exception if nothing adequate was found
+        OUString sHref = desc.getExtensionRootUrl() + OUSTR("/") + findLocalizedLicense(xRoot, xPath);
+           OUString sLicense = getLicenseText(xCmdEnv, sHref);
+        //determine who has to agree to the license
+        css::uno::Reference<css::xml::xpath::XXPathObject> nodeAttribWho3 =
+            xPath->eval(nodeSimpleLic,
+            OUSTR("@accept-by"));
+        OUString s = nodeAttribWho3->getString();
+
+        css::deployment::LicenseException licExc;
+        if (s.equals(OUSTR("user")))
+        {
+            licExc = css::deployment::LicenseException(OUString(), 0, m_name, sLicense, sal_True);
+        }
+        else if (s.equals(OUSTR("admin")))
+        {
+            licExc = css::deployment::LicenseException(OUString(), 0, m_name, sLicense, sal_False);
+        }
+        else
+        {
+            throw css::deployment::DeploymentException(
+                OUSTR("Could not obtain attribute simple-lincense@accept-by or it has no valid value"), 0, Any());;
+        }
+
+        bool approve = false;
+        bool abort = false;
+        if (! interactContinuation(
+            Any(licExc), task::XInteractionApprove::static_type(), xCmdEnv, &approve, &abort ))
+            throw css::deployment::DeploymentException(
+                OUSTR("Could not interact with user."), 0, Any());
+
+        if (approve == true)
+            return true;
+        return false;
+    } catch (css::ucb::CommandFailedException&) {
+        throw;
+    } catch (css::ucb::CommandAbortedException&) {
+        throw;
+    } catch (css::deployment::DeploymentException&) {
+        throw;
+    } catch (css::uno::RuntimeException&) {
+        throw;
+    } catch (css::uno::Exception&) {
+        Any anyExc = cppu::getCaughtException();
+        throw css::deployment::DeploymentException(OUSTR("Unexpected exception"), 0, anyExc);
+    }
+}
+
+::sal_Bool BackendImpl::PackageImpl::checkPrerequisites(
+        const css::uno::Reference< css::task::XAbortChannel >& xAbortChannel,
+        const css::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv )
+        throw (css::deployment::DeploymentException,
+            css::ucb::CommandFailedException,
+            css::ucb::CommandAbortedException,
+            css::uno::RuntimeException)
+{
+    std::auto_ptr<ExtensionDescription> spDescription;
+    try {
+        spDescription.reset(
+            new ExtensionDescription(
+                getMyBackend()->getComponentContext(),
+                m_url_expanded,
+                xCmdEnv));
+    } catch (NoDescriptionException& ) {
+        return sal_True;
+    } catch (Exception& e) {
+        Any exc( ::cppu::getCaughtException() );
+        throw css::deployment::DeploymentException(e.Message, 0, exc);
+    }
+    return checkDependencies(xCmdEnv, *spDescription)
+        && checkLicense(xCmdEnv, *spDescription);
 }
 
 //______________________________________________________________________________
@@ -582,7 +881,7 @@ void BackendImpl::PackageImpl::exportTo(
     if (m_legacyBundle)
     {
         // easy to migrate legacy bundles to new format:
-        // just export them once using a .uno.pkg name!
+        // just export them once using a .oxt name!
         // set detected media-types of any bundle item:
 
         // collect all manifest entries:
@@ -662,9 +961,23 @@ void BackendImpl::PackageImpl::exportTo(
     else
     {
         // overwrite manifest.xml:
-        ::ucb::Content manifestContent(
-            makeURL( m_url_expanded, OUSTR("META-INF/manifest.xml") ),
-            xCmdEnv );
+//         ::ucb::Content manifestContent(
+//             makeURL( m_url_expanded, OUSTR("META-INF/manifest.xml") ),
+//             xCmdEnv );
+
+        // be more error tolerant, can be changed when the appropriate
+        // UCP is case insensitive (currently different behaviour on
+        // windows and linux)
+        ::ucb::Content manifestContent;
+        if ( ! create_ucb_content(
+                 &manifestContent,
+                 makeURL( m_url_expanded, OUSTR("META-INF/manifest.xml") ),
+                 xCmdEnv, false ) )
+            create_ucb_content(
+                 &manifestContent,
+                 makeURL( m_url_expanded, OUSTR("meta-inf/manifest.xml") ),
+                 xCmdEnv, false );
+
         if (! metainfFolderContent.transferContent(
                 manifestContent, ::ucb::InsertOperation_COPY,
                 OUString(), NameClash::OVERWRITE ))
@@ -729,7 +1042,7 @@ Sequence< Reference<deployment::XPackage> > BackendImpl::PackageImpl::getBundle(
             }
             else
             {
-                // .uno.pkg:
+                // .oxt:
                 scanBundle( bundle, AbortChannel::get(xAbortChannel), xCmdEnv );
             }
         }
@@ -873,8 +1186,13 @@ void BackendImpl::PackageImpl::scanBundle(
             &manifestContent,
             makeURL( m_url_expanded, OUSTR("META-INF/manifest.xml") ),
             xCmdEnv, false /* no throw */ )) {
-        OSL_ENSURE( 0, "### missing META-INF/manifest.xml file!" );
-        return;
+        if (! create_ucb_content(
+                &manifestContent,
+                makeURL( m_url_expanded, OUSTR("meta-inf/manifest.xml") ),
+                xCmdEnv, false /* no throw */ )) {
+            OSL_ENSURE( 0, "### missing META-INF/manifest.xml file!" );
+            return;
+        }
     }
 
     lang::Locale const & officeLocale = getOfficeLocale();
