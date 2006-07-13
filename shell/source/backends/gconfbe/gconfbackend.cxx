@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gconfbackend.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 14:15:52 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 12:30:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -253,20 +253,6 @@ static const ConfigurationValue CommonConfigurationValuesList[] =
         SETTINGS_LAST
     },
 
-/*
- * This should be in a different backend actually, but this has to wait ..
- */
-
-    {
-        SETTING_WORK_DIRECTORY,
-        "/desktop/gnome/url-handlers/mailto/command", // dummy, needed for getTimestamp
-        "org.openoffice.Office.Common/Path/Current/Work",
-        "string",
-        sal_False,
-        sal_True,
-        SETTING_WORK_DIRECTORY, // so that the existence of the dir can be checked
-    },
-
 #ifdef ENABLE_LOCKDOWN
 
     {
@@ -503,6 +489,19 @@ static const ConfigurationValue CommonConfigurationValuesList[] =
 
 };
 
+static const ConfigurationValue PathsConfigurationValuesList[] =
+{
+    {
+        SETTING_WORK_DIRECTORY,
+        "/desktop/gnome/url-handlers/mailto/command", // dummy, needed for getTimestamp
+        "org.openoffice.Office.Paths/Variables/Work",
+        "string",
+        sal_False,
+        sal_True,
+        SETTING_WORK_DIRECTORY, // so that the existence of the dir can be checked
+    },
+};
+
 #ifdef ENABLE_LOCKDOWN
 static const char * SetupPreloadValuesList[] =
 {
@@ -549,6 +548,11 @@ static const char * CommonPreloadValuesList[] =
     "/apps/openoffice/lockdown",
     "/apps/openoffice",
 #endif // ENABLE_LOCKDOWN
+    NULL
+};
+
+static const char * PathsPreloadValuesList[] =
+{
     NULL
 };
 
@@ -664,6 +668,13 @@ uno::Reference<backend::XLayer> SAL_CALL GconfBackend::getLayer(
                                  VCLConfigurationValuesList,
                                  G_N_ELEMENTS( VCLConfigurationValuesList ),
                                  VCLPreloadValuesList );
+    }
+    else if( aComponent.equalsAscii("org.openoffice.Office.Paths" ) )
+    {
+        xLayer = new GconfLayer( m_xContext,
+                                 PathsConfigurationValuesList,
+                                 G_N_ELEMENTS( PathsConfigurationValuesList ),
+                                 PathsPreloadValuesList );
     }
 
 #ifdef ENABLE_LOCKDOWN
@@ -950,9 +961,9 @@ uno::Sequence<rtl::OUString> SAL_CALL GconfBackend::getBackendServiceNames(void)
 uno::Sequence<rtl::OUString> SAL_CALL GconfBackend::getSupportedComponents(void)
 {
 #ifdef ENABLE_LOCKDOWN
-    const sal_Int32 nComponents = 6;
+    const sal_Int32 nComponents = 7;
 #else
-    const sal_Int32 nComponents = 3;
+    const sal_Int32 nComponents = 4;
 #endif // ENABLE_LOCKDOWN
 
     uno::Sequence<rtl::OUString> aSupportedComponentsList(nComponents) ;
@@ -963,13 +974,15 @@ uno::Sequence<rtl::OUString> SAL_CALL GconfBackend::getSupportedComponents(void)
         RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Inet")) ;
     aSupportedComponentsList[2] = rtl::OUString(
         RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common")) ;
+    aSupportedComponentsList[3] = rtl::OUString(
+        RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Paths")) ;
 
 #ifdef ENABLE_LOCKDOWN
-    aSupportedComponentsList[3] = rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("org.openoffice.UserProfile")) ;
     aSupportedComponentsList[4] = rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Recovery")) ;
+        RTL_CONSTASCII_USTRINGPARAM("org.openoffice.UserProfile")) ;
     aSupportedComponentsList[5] = rtl::OUString(
+        RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Recovery")) ;
+    aSupportedComponentsList[6] = rtl::OUString(
         RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup")) ;
 #endif // ENABLE_LOCKDOWN
 
