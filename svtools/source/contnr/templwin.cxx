@@ -4,9 +4,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 20:53:12 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 12:06:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,6 +110,9 @@
 #ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
 #include <com/sun/star/util/XURLTransformer.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_XOFFICEINSTALLATIONDIRECTORIES_HPP_
+#include <com/sun/star/util/XOfficeInstallationDirectories.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #endif
@@ -185,6 +188,10 @@
 #include <vcl/mnemonic.hxx>
 #endif
 
+#include <ucbhelper/content.hxx>
+
+
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::frame;
@@ -1574,6 +1581,14 @@ String SvtTemplateWindow::GetFolderTitle() const
 
 // ------------------------------------------------------------------------
 
+String SvtTemplateWindow::GetFolderURL() const
+{
+    return pFileWin->GetFolderURL();
+}
+
+
+// ------------------------------------------------------------------------
+
 void SvtTemplateWindow::SetFocus( sal_Bool bIconWin )
 {
     if ( bIconWin )
@@ -1726,10 +1741,48 @@ struct SvtTmplDlg_Impl
     Timer               aUpdateTimer;
     sal_Bool            bSelectNoOpen;
 
+    uno::Reference< util::XOfficeInstallationDirectories > m_xOfficeInstDirs;
+
+
     SvtTmplDlg_Impl( Window* pParent ) : pWin( new SvtTemplateWindow( pParent ) ) ,bSelectNoOpen( sal_False ) {}
 
     ~SvtTmplDlg_Impl() { delete pWin; }
+
+    uno::Reference< util::XOfficeInstallationDirectories > getOfficeInstDirs();
 };
+
+uno::Reference< util::XOfficeInstallationDirectories > SvtTmplDlg_Impl::getOfficeInstDirs()
+{
+    if ( !m_xOfficeInstDirs.is() )
+    {
+        try
+        {
+            uno::Reference< lang::XMultiServiceFactory > xSMgr = comphelper::getProcessServiceFactory();
+
+            uno::Reference< beans::XPropertySet > xPropSet( xSMgr, uno::UNO_QUERY );
+            if ( xPropSet.is() )
+            {
+                uno::Reference< uno::XComponentContext > xCtx;
+                xPropSet->getPropertyValue(
+                    rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) )
+                >>= xCtx;
+
+                if ( xCtx.is() )
+                {
+                    xCtx->getValueByName(
+                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                            "/singletons/com.sun.star.util.theOfficeInstallationDirectories" ) ) )
+                    >>= m_xOfficeInstDirs;
+                }
+            }
+        }
+        catch( uno::Exception& )
+        {}
+    }
+
+    return m_xOfficeInstDirs;
+}
 
 // class SvtDocumentTemplateDialog ---------------------------------------
 
@@ -1854,11 +1907,45 @@ String SvtDocumentTemplateDialog::GetSelectedFileURL( ) const
 
 // ------------------------------------------------------------------------
 
+sal_Bool SvtDocumentTemplateDialog::CanEnableEditBtn() const
+{
+    sal_Bool bEnable = sal_False;
+
+    ::rtl::OUString aFolderURL = pImpl->pWin->GetFolderURL();
+    if ( pImpl->pWin->IsFileSelected() && aFolderURL.getLength() )
+    {
+        ::rtl::OUString aFileTargetURL = pImpl->pWin->GetSelectedFile();
+        ::rtl::OUString aFolderTargetURL;
+
+        ::ucb::Content aFolderContent;
+        Reference< XCommandEnvironment > xEnv;
+        if ( ::ucb::Content::create( aFolderURL, xEnv, aFolderContent ) )
+        try
+        {
+            ::rtl::OUString aTmpURL;
+            uno::Any aValue = aFolderContent.getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("TargetDirURL") ) );
+            aValue >>= aTmpURL;
+
+            uno::Reference< util::XOfficeInstallationDirectories > xOffInstDirs = pImpl->getOfficeInstDirs();
+            if ( xOffInstDirs.is() )
+                aFolderTargetURL = xOffInstDirs->makeAbsoluteURL( aTmpURL );
+        }
+        catch( uno::Exception& )
+        {}
+
+        if ( aFolderTargetURL.getLength() && ::utl::UCBContentHelper::IsSubPath( aFolderTargetURL, aFileTargetURL ) )
+            bEnable = sal_True;
+    }
+
+    return bEnable;
+}
+
+// ------------------------------------------------------------------------
+
 IMPL_LINK ( SvtDocumentTemplateDialog , SelectHdl_Impl, SvtTemplateWindow *, EMPTYARG )
 {
-    sal_Bool bEnable = pImpl->pWin->IsFileSelected();
-    aEditBtn.Enable( bEnable && pImpl->pWin->IsTemplateFolderOpen() );
-    aOKBtn.Enable( bEnable );
+    aEditBtn.Enable( pImpl->pWin->IsTemplateFolderOpen() && CanEnableEditBtn() );
+    aOKBtn.Enable( pImpl->pWin->IsFileSelected() );
     return 0;
 }
 
