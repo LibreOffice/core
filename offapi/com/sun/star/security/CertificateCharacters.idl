@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CertificateCharacters.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:09:19 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 08:16:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,11 +56,6 @@ constants CertificateCharacters
      * It is a self-signed certificate.
      */
     const long SELF_SIGNED = 0x00000001 ;
-
-    /**
-     * It is a trusted certificate.
-     */
-    const long TRUSTED = 0x00000002 ;
 
     /**
      * A private key binding with the certificate is in user's profile.
