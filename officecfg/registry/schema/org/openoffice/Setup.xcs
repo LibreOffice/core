@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Setup.xcs,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-27 16:13:59 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 11:48:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,6 +104,12 @@
 				<info>
 					<desc>It's the "most actual" filter, which is able to import/export ALL currently implemented features of this office module.
 					      It has to be the programatic name of the filter.</desc>
+				</info>
+			</prop>
+			<prop oor:name="ooSetupFactoryActualTemplateFilter" oor:type="xs:string">
+				<!-- UIHints: setup -->
+				<info>
+					<desc>The same meaning as ooSetupFactoryActualFilter ... but regarding to the actual template format.</desc>
 				</info>
 			</prop>
 			<prop oor:name="ooSetupFactoryDefaultFilter" oor:type="xs:string">
