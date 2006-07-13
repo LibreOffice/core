@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_hidden_ooo.scp,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 10:32:37 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 13:31:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -596,6 +596,7 @@ Module gid_Module_Root_Files_6
 	gid_File_Dtd_Accelerator,
 	gid_File_Dtd_Dialog,
 	gid_File_Dtd_Event,
+	gid_File_Dtd_Groupuinames,
 	gid_File_Dtd_Image,
 	gid_File_Dtd_Libraries,
 	gid_File_Dtd_Library,
