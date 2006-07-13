@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_writer.scp,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:50:00 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 09:35:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,7 @@ Module gid_Module_Prg_Wrt_Bin
     gid_File_Jar_Email, 
     gid_File_Jar_Mail, 
     gid_File_Jar_Activation,
+    gid_File_Jar_Writer2latex,
     gid_File_Oo_Office_Ui_Writercommands_Xcs,
     gid_File_Oo_Office_Ui_Writercommands_Xcu,
     gid_File_Registry_Spool_Oo_Common_Writer_Xcu,
