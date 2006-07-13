@@ -4,6 +4,9 @@
  <node oor:name="UIElements">
   <node oor:name="States">
   <node oor:name="private:resource/toolbar/designobjectbar" oor:op="replace">
+    <prop oor:name="DockPos" oor:type="xs:string">
+     <value>1,0</value>
+    </prop>
     <prop oor:name="Docked" oor:type="xs:boolean">
      <value>true</value>
     </prop>
@@ -22,6 +25,9 @@
     </prop>
    </node>
    <node oor:name="private:resource/toolbar/sqlobjectbar" oor:op="replace">
+    <prop oor:name="DockPos" oor:type="xs:string">
+     <value>1,0</value>
+    </prop>
     <prop oor:name="Docked" oor:type="xs:boolean">
      <value>true</value>
     </prop>
