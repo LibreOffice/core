@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impdialog.hrc,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-04 09:05:40 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 11:12:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,9 +39,20 @@
 #define RID_PDF_TAB_GENER           (RID_PDF_DIALOG_START +   1)
 #define RID_PDF_TAB_VPREFER         (RID_PDF_DIALOG_START +   2)
 #define RID_PDF_TAB_OPNFTR          (RID_PDF_DIALOG_START +   3)
-#define STR_PDF_EXPORT              (RID_PDF_DIALOG_START +   4)
+#define RID_PDF_TAB_SECURITY        (RID_PDF_DIALOG_START +   4)
+//strings
+#define STR_PDF_EXPORT              (RID_PDF_DIALOG_START +   5)
 
-//ATTENTION: maximum above is( RID_PDF_DIALOG_START +   9)
+//strings for PDF security, user password management
+#define STR_PDF_EXPORT_USPWD         (RID_PDF_DIALOG_START +  6)
+#define STR_PDF_EXPORT_UDPWD         (RID_PDF_DIALOG_START +  7)
+
+//strings for PDF security, owner password management
+#define STR_PDF_EXPORT_CB_PERM       (RID_PDF_DIALOG_START + 8)
+#define STR_PDF_EXPORT_OSPWD         (RID_PDF_DIALOG_START + 9)
+#define STR_PDF_EXPORT_ODPWD         (RID_PDF_DIALOG_START + 10)
+
+//ATTENTION: maximum allowed value is( RID_PDF_DIALOG_START +   19)
 
 //controls for General tab page
 #define FL_PAGES                    1
@@ -65,7 +76,7 @@
 #define CB_TRANSITIONEFFECTS        19
 #define FT_FORMSFORMAT              20
 #define LB_FORMSFORMAT              21
-#define CB_EXPORTEMPTYPAGES                      22
+#define CB_EXPORTEMPTYPAGES         22
 
 #define FL_OLD_PAGES        51
 #define RB_OLD_ALL          52
@@ -110,3 +121,27 @@
 #define CB_UOP_HIDEVMENUBAR      106
 #define CB_UOP_HIDEVTOOLBAR      107
 #define CB_UOP_HIDEVWINCTRL      108
+
+//controls for security preferences tab page
+#define CB_SEC_ENCRYPT          110
+#define BTN_USER_PWD            112
+#define FT_USER_PWD_EMPTY       113
+
+#define FL_PERMISSIONS          114
+#define CB_SEL_PERMISSIONS      115
+#define BTN_OWNER_PWD           116
+#define FT_OWNER_PWD_EMPTY      117
+
+#define FL_PRINT_PERMISSIONS    118
+#define RB_PRINT_NONE           119
+#define RB_PRINT_LOWRES         120
+#define RB_PRINT_HIGHRES        121
+
+#define FL_CHANGES_ALLOWED      122
+#define RB_CHANGES_NONE         123
+#define RB_CHANGES_INSDEL       124
+#define RB_CHANGES_FILLFORM     125
+#define RB_CHANGES_COMMENT      126
+#define RB_CHANGES_ANY_NOCOPY   127
+#define CB_ENDAB_COPY           128
+#define CB_ENAB_ACCESS          129
