@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GraphicViewShellBase.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 17:37:04 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 10:31:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,7 +122,6 @@ void GraphicViewShellBase::Execute (SfxRequest& rRequest)
 
     switch (nSlotId)
     {
-        case SID_LEFT_PANE_IMPRESS:
         case SID_RIGHT_PANE:
         case SID_NOTES_WINDOW:
         case SID_SLIDE_SORTER_MULTI_PANE_GUI:
@@ -137,6 +136,7 @@ void GraphicViewShellBase::Execute (SfxRequest& rRequest)
 
         case SID_SWITCH_SHELL:
         case SID_LEFT_PANE_DRAW:
+        case SID_LEFT_PANE_IMPRESS:
         default:
             // The remaining requests are forwarded to out base class.
             ViewShellBase::Execute (rRequest);
