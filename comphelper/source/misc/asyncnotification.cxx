@@ -4,9 +4,9 @@
  *
  *  $RCSfile: asyncnotification.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:47:35 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 15:24:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -253,6 +253,10 @@ namespace comphelper
                         xNextProcessor->processEvent( *aNextEvent.get() );
                 }
             }
+
+            // if there was a termination request (->terminate), respect it
+            if ( !schedule() )
+                return;
 
             // wait for new events to process
             aGuard.clear();
