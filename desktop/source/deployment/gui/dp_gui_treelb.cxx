@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_treelb.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 16:38:32 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 17:04:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -327,7 +327,7 @@ void NodeImpl::modified( lang::EventObject const & )
 {
     try {
         const Reference<XCommandEnvironment> xCmdEnv(
-            new ProgressCommandEnv( m_treelb->m_dialog, String() ) );
+           new ProgressCommandEnv( m_treelb->m_dialog, String(), OUString() ) );
         modified( xCmdEnv );
     }
     catch (RuntimeException &) {
@@ -702,7 +702,7 @@ void DialogImpl::TreeListBoxImpl::RequestingChilds( SvLBoxEntry * pParent )
         NodeImpl * parentNode = NodeImpl::get(pParent);
 
         const Reference<XCommandEnvironment> xCmdEnv(
-            new ProgressCommandEnv( m_dialog, String() ) );
+            new ProgressCommandEnv( m_dialog, String(), OUString() ) );
         if (parentNode->m_xPackage.is()) {
             packages = parentNode->m_xPackage->getBundle(
                 Reference<task::XAbortChannel>(), xCmdEnv );
