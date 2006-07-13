@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-06 14:26:43 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 12:17:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -299,7 +299,7 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
     try{
         this.xMSF = _xMSF;
         // Check general availability of office paths
-        ReportPath = FileAccess.getOfficePath(xMSF, "Template","share");
+        ReportPath = FileAccess.getOfficePath(xMSF, "Template","share", "/wizard");
         ReportPath = FileAccess.combinePaths(xMSF, ReportPath, "/wizard/report");
         if (ReportPath.equals(""))
             return ret;
