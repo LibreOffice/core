@@ -4,9 +4,9 @@
  *
  *  $RCSfile: colormisc.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-11 11:38:55 $
+ *  last change: $Author: thb $ $Date: 2006-07-13 12:03:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,8 @@
 namespace basebmp
 {
 
-struct ColorBitmaskOutputMaskFunctor : MaskFunctorBase<Color,sal_uInt8>
+template< bool polarity > struct ColorBitmaskOutputMaskFunctor;
+template<> struct ColorBitmaskOutputMaskFunctor<true> : MaskFunctorBase<Color,sal_uInt8>
 {
     Color operator()( Color v1, sal_uInt8 m, Color v2 ) const
     {
@@ -59,19 +60,31 @@ struct ColorBitmaskOutputMaskFunctor : MaskFunctorBase<Color,sal_uInt8>
         return Color(v1.toInt32()*(sal_uInt8)(1-m) + v2.toInt32()*m);
     }
 };
-
-/// Specialized output mask functor for Color value type
-template<> struct outputMaskFunctorSelector< Color, sal_uInt8, FastMask >
+template<> struct ColorBitmaskOutputMaskFunctor<false> : MaskFunctorBase<Color,sal_uInt8>
 {
-    typedef ColorBitmaskOutputMaskFunctor type;
+    Color operator()( Color v1, sal_uInt8 m, Color v2 ) const
+    {
+        OSL_ASSERT(m<=1);
+
+        return Color(v1.toInt32()*m + v2.toInt32()*(sal_uInt8)(1-m));
+    }
 };
 
-struct ColorBlendFunctor : public BlendFunctorBase<Color,sal_uInt8>
+/// Specialized output mask functor for Color value type
+template<bool polarity> struct outputMaskFunctorSelector< Color, sal_uInt8, polarity, FastMask >
+{
+    typedef ColorBitmaskOutputMaskFunctor<polarity> type;
+};
+
+template< bool polarity > struct ColorBlendFunctor
+  : public TernaryFunctorBase<sal_uInt8,Color,Color,Color>
 {
     Color operator()( sal_uInt8 alpha,
                       Color     v1,
                       Color     v2 ) const
     {
+        alpha = polarity ? alpha : 255 - alpha;
+
         const sal_uInt8 v1_red( v1.getRed() );
         const sal_uInt8 v1_green( v1.getGreen() );
         const sal_uInt8 v1_blue( v1.getBlue() );
@@ -96,7 +109,7 @@ template<> struct ColorTraits< Color >
     typedef sal_uInt8 component_type;
 
     /// Metafunction to select blend functor from color and alpha type
-    template< typename AlphaType > struct blend_functor;
+    template< typename AlphaType, bool polarity > struct blend_functor;
 
     /// Calculate normalized distance between color c1 and c2
     static inline double distance( const Color& c1,
@@ -117,9 +130,9 @@ template<> struct ColorTraits< Color >
 };
 
 /// Only defined for 8 bit alpha, currently
-template<> template<> struct ColorTraits< Color >::blend_functor< sal_uInt8 >
+template<> template<bool polarity> struct ColorTraits< Color >::blend_functor< sal_uInt8, polarity >
 {
-    typedef ColorBlendFunctor type;
+    typedef ColorBlendFunctor<polarity> type;
 };
 
 } // namespace basebmp

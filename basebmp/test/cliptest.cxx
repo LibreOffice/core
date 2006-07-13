@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cliptest.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-12 22:47:21 $
+ *  last change: $Author: thb $ $Date: 2006-07-13 12:03:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,10 +208,10 @@ public:
             "m 0 0 h5 l5 5 v5 h-5 l-5-5 z" );
         basegfx::B2DPolyPolygon aPoly;
         basegfx::tools::importFromSvgD( aPoly, aSvg );
-        mpClipMask->clear(Color(0xFFFFFFFF));
+        mpClipMask->clear(Color(0));
         mpClipMask->drawPolygon(
             aPoly.getB2DPolygon(0),
-            Color(0),
+            Color(0xFFFFFFFF),
             DrawMode_PAINT );
     }
 

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmapdevice.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-12 22:47:21 $
+ *  last change: $Author: thb $ $Date: 2006-07-13 12:03:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,6 +159,7 @@ namespace
      */
     template< class    DestAccessor,
               class    JoinedAccessor,
+              bool     polarity,
               typename MaskFunctorMode > struct masked_input_splitting_accessor
     {
         typedef BinarySetterFunctionAccessorAdapter<
@@ -167,6 +168,7 @@ namespace
                 typename outputMaskFunctorSelector<
                          typename JoinedAccessor::value_type::first_type,
                          typename JoinedAccessor::value_type::second_type,
+                         polarity,
                          MaskFunctorMode >::type > > type;
     };
 
@@ -324,13 +326,15 @@ namespace
         typedef typename raw_accessor_traits::template masked_accessor<
             mask_rawaccessor_type,
             dest_iterator_type,
-            mask_iterator_type>::type                                      raw_maskedaccessor_type;
+            mask_iterator_type,
+            Masks::clipmask_polarity>::type                                raw_maskedaccessor_type;
         typedef typename accessor_selector::template wrap_accessor<
             raw_maskedaccessor_type >::type                                masked_accessor_type;
         typedef typename raw_xor_accessor_traits::template masked_accessor<
             mask_rawaccessor_type,
             dest_iterator_type,
-            mask_iterator_type>::type                                      raw_maskedxor_accessor_type;
+            mask_iterator_type,
+            Masks::clipmask_polarity>::type                                raw_maskedxor_accessor_type;
         typedef typename accessor_selector::template wrap_accessor<
             raw_maskedxor_accessor_type >::type                            masked_xoraccessor_type;
 
@@ -342,7 +346,8 @@ namespace
         typedef typename raw_maskedaccessor_traits::template masked_accessor<
             mask_rawaccessor_type,
             composite_iterator_type,
-            mask_iterator_type>::type                                      raw_maskedmask_accessor_type;
+            mask_iterator_type,
+            Masks::clipmask_polarity>::type                                raw_maskedmask_accessor_type;
 
         typedef CompositeIterator2D<
             composite_iterator_type,
@@ -352,12 +357,14 @@ namespace
 
         typedef ConstantColorBlendSetterAccessorAdapter<
             dest_accessor_type,
-            typename alphamask_rawaccessor_type::value_type>               colorblend_accessor_type;
+            typename alphamask_rawaccessor_type::value_type,
+            Masks::alphamask_polarity>                                     colorblend_accessor_type;
         typedef AccessorTraits<colorblend_accessor_type>                   colorblend_accessor_traits;
         typedef typename colorblend_accessor_traits::template masked_accessor<
             mask_rawaccessor_type,
             dest_iterator_type,
-            mask_iterator_type>::type                                      masked_colorblend_accessor_type;
+            mask_iterator_type,
+            Masks::clipmask_polarity>::type                                masked_colorblend_accessor_type;
 
         // -------------------------------------------------------
 
@@ -936,6 +943,7 @@ namespace
                               typename masked_input_splitting_accessor<
                                        Acc,
                                        joined_image_accessor_type,
+                                       Masks::clipmask_polarity,
                                        FastMask >::type(acc),
                               rDstRect));
         }
@@ -971,6 +979,7 @@ namespace
                               typename masked_input_splitting_accessor<
                                        Acc,
                                        joined_generic_image_accessor_type,
+                                       Masks::clipmask_polarity,
                                        NoFastMask >::type(acc),
                               rDstRect));
         }
@@ -1547,7 +1556,7 @@ void BitmapDevice::drawMaskedColor( Color                        rSrcColor,
                                                    rSrcRect, rDstPoint );
     }
 #else
-    // drawMaskedBitmap is also used for OutputDevice::DrawMask
+    // drawMaskedColor is also used for OutputDevice::DrawMask
     if( clipAreaImpl( aSrcRange,
                       aDestPoint,
                       aSrcBounds,
@@ -1559,7 +1568,14 @@ void BitmapDevice::drawMaskedColor( Color                        rSrcColor,
         if( isCompatibleClipMask( rAlphaMask ) || isCompatibleAlphaMask( rAlphaMask ) )
             drawMaskedColor_i( rSrcColor, rAlphaMask, aSrcRange, aDestPoint );
         else
+        {
             OSL_ENSURE( false, "drawMaskedColor(): Generic output not yet implemented #1!" );
+            drawBitmap( rAlphaMask, aSrcRange, basegfx::B2IRange(aDestPoint.getX(),
+                                                                 aDestPoint.getY(),
+                                                                 aDestPoint.getX()+aSrcRange.getWidth(),
+                                                                 aDestPoint.getY()+aSrcRange.getHeight()),
+                        DrawMode_PAINT );
+        }
     }
 #endif
 }
@@ -1602,7 +1618,7 @@ void BitmapDevice::drawMaskedColor( Color                        aSrcColor,
                                                    rSrcRect, rDstPoint, rClip );
         }
 #else
-        // drawMaskedBitmap is also used for OutputDevice::DrawMask
+        // drawMaskedColor is also used for OutputDevice::DrawMask
         if( (isCompatibleClipMask( rAlphaMask ) ||
              isCompatibleAlphaMask( rAlphaMask )) &&
             isCompatibleClipMask( rClip ) )
@@ -1612,6 +1628,12 @@ void BitmapDevice::drawMaskedColor( Color                        aSrcColor,
         else
         {
             OSL_ENSURE(false, "drawMaskedColor(): Generic output not yet implemented #2!");
+            drawBitmap( rAlphaMask, aSrcRange, basegfx::B2IRange(aDestPoint.getX(),
+                                                                 aDestPoint.getY(),
+                                                                 aDestPoint.getX()+aSrcRange.getWidth(),
+                                                                 aDestPoint.getY()+aSrcRange.getHeight()),
+                        DrawMode_PAINT,
+                        rClip );
         }
 #endif
     }
@@ -1717,6 +1739,12 @@ struct StdMasks
 {
     typedef PixelFormatTraits_GREY1_MSB   clipmask_format_traits;
     typedef PixelFormatTraits_GREY8       alphamask_format_traits;
+
+    /// Clipmask: 0 means opaque
+    static const bool clipmask_polarity  = false;
+
+    /// Alpha mask: 0 means fully transparent
+    static const bool alphamask_polarity = true;
 };
 
 #if 0
@@ -2018,7 +2046,7 @@ BitmapDeviceSharedPtr createBitmapDeviceImpl( const basegfx::B2IVector&        r
         // ----------------------------------------------------------------------
         // twentyfour bit formats
         case Format::TWENTYFOUR_BIT_TC_MASK:
-            return createRenderer<PixelFormatTraits_RGB24,StdMasks>(
+            return createRenderer<PixelFormatTraits_BGR24,StdMasks>(
                 aBounds, bTopDown, nScanlineFormat, nScanlineStride,
                 pFirstScanline, pMem, pPal );
 

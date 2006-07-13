@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmapdevice.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-11 11:38:54 $
+ *  last change: $Author: thb $ $Date: 2006-07-13 12:03:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,7 @@ public:
         Draw mode to use when changing the pixel value
 
         @param rClip
-        Clip mask to use. If the clip mask is 0 at the given pixel
+        Clip mask to use. If the clip mask is 1 at the given pixel
         position, no change will take place.
      */
     void setPixel( const basegfx::B2IPoint&     rPt,
@@ -233,7 +233,7 @@ public:
 
         @param rClip
         Clip mask to use. Pixel where the corresponding clip mask
-        pixel is 0 will not be modified.
+        pixel is 1 will not be modified.
      */
     void drawLine( const basegfx::B2IPoint&     rPt1,
                    const basegfx::B2IPoint&     rPt2,
@@ -273,7 +273,7 @@ public:
 
         @param rClip
         Clip mask to use. Pixel where the corresponding clip mask
-        pixel is 0 will not be modified.
+        pixel is 1 will not be modified.
      */
     void drawPolygon( const basegfx::B2DPolygon&   rPoly,
                       Color                        lineColor,
@@ -322,7 +322,7 @@ public:
 
         @param rClip
         Clip mask to use. Pixel where the corresponding clip mask
-        pixel is 0 will not be modified.
+        pixel is 1 will not be modified.
      */
     void fillPolyPolygon( const basegfx::B2DPolyPolygon& rPoly,
                           Color                          fillColor,
@@ -384,7 +384,7 @@ public:
 
         @param rClip
         Clip mask to use. Pixel where the corresponding clip mask
-        pixel is 0 will not be modified.
+        pixel is 1 will not be modified.
      */
     void drawBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
                      const basegfx::B2IRange&     rSrcRect,
@@ -453,7 +453,7 @@ public:
 
         @param rClip
         Clip mask to use. Pixel where the corresponding clip mask
-        pixel is 0 will not be modified.
+        pixel is 1 will not be modified.
      */
     void drawMaskedColor( Color                        aSrcColor,
                           const BitmapDeviceSharedPtr& rAlphaMask,
@@ -474,7 +474,7 @@ public:
         and destination bitmap are the same.
 
         @param rMask
-        Bitmap to use as a mask. Pixel with value zero in this mask
+        Bitmap to use as a mask. Pixel with value != zero in this mask
         will result in destination pixel not being affected by the
         blit operation.
 
@@ -507,7 +507,7 @@ public:
         This method renders a source bitmap into this device, much
         like the drawBitmap() method. The only difference is the
         additional mask parameter, which operates much like an
-        additional clip mask: pixel with value zero in this mask
+        additional clip mask: pixel with value != zero in this mask
         result in destination pixel not being modified.
 
         @param rSrcBitmap
@@ -515,7 +515,7 @@ public:
         and destination bitmap are the same.
 
         @param rMask
-        Bitmap to use as a mask. Pixel with value zero in this mask
+        Bitmap to use as a mask. Pixel with value != zero in this mask
         will result in destination pixel not being affected by the
         blit operation.
 
@@ -539,7 +539,7 @@ public:
 
         @param rClip
         Clip mask to use. Pixel where the corresponding clip mask
-        pixel is 0 will not be modified.
+        pixel is 1 will not be modified.
      */
     void drawMaskedBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
                            const BitmapDeviceSharedPtr& rMask,

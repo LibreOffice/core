@@ -4,9 +4,9 @@
  *
  *  $RCSfile: packedpixeliterator.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-12 22:47:20 $
+ *  last change: $Author: thb $ $Date: 2006-07-13 12:03:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -660,12 +660,14 @@ public:
 template< class Accessor,
           class MaskAccessor,
           class Iterator,
+          bool  polarity,
           bool  MsbFirst > struct maskedAccessorSelector< Accessor,
                                                           MaskAccessor,
                                                           Iterator,
                                                           PackedPixelIterator< typename MaskAccessor::value_type,
                                                                                1,
-                                                                               MsbFirst > >
+                                                                               MsbFirst >,
+                                                          polarity >
 {
     typedef TernarySetterFunctionAccessorAdapter<
         Accessor,
@@ -673,6 +675,7 @@ template< class Accessor,
         typename outputMaskFunctorSelector<
             typename Accessor::value_type,
             typename MaskAccessor::value_type,
+            polarity,
             FastMask>::type >
         type;
 };

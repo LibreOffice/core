@@ -4,9 +4,9 @@
  *
  *  $RCSfile: metafunctions.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-11 11:38:55 $
+ *  last change: $Author: thb $ $Date: 2006-07-13 12:03:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,6 +77,17 @@ template <typename T> struct remove_const
 template <typename T> struct remove_const<const T>
 {
     typedef T type;
+};
+
+//--------------------------------------------------------------
+
+/// Base class for an adaptable ternary functor
+template< typename A1, typename A2, typename A3, typename R > struct TernaryFunctorBase
+{
+    typedef A1 first_argument_type;
+    typedef A2 second_argument_type;
+    typedef A3 third_argument_type;
+    typedef R  result_type;
 };
 
 //--------------------------------------------------------------

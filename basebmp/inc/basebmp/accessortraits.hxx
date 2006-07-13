@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessortraits.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-12 15:09:44 $
+ *  last change: $Author: thb $ $Date: 2006-07-13 12:03:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,16 +49,16 @@ struct FastMask;
 struct NoFastMask;
 
 /// Metafunction to select output mask functor from iterator and mask value type
-template< typename T, typename M, typename DUMMY > struct outputMaskFunctorSelector : public
+template< typename T, typename M, bool polarity, typename DUMMY > struct outputMaskFunctorSelector : public
     ifBothScalarIntegral< T, M,
-                          IntegerOutputMaskFunctor< T, M >,
-                          GenericOutputMaskFunctor< T, M > >
+                          IntegerOutputMaskFunctor< T, M, polarity >,
+                          GenericOutputMaskFunctor< T, M, polarity > >
 {
 };
-template< typename T, typename M > struct outputMaskFunctorSelector< T, M, FastMask > : public
+template< typename T, typename M, bool polarity > struct outputMaskFunctorSelector< T, M, polarity, FastMask > : public
     ifBothScalarIntegral< T, M,
-                          FastIntegerOutputMaskFunctor< T, M >,
-                          GenericOutputMaskFunctor< T, M > >
+                          FastIntegerOutputMaskFunctor< T, M, polarity >,
+                          GenericOutputMaskFunctor< T, M, polarity > >
 {
 };
 
@@ -71,7 +71,8 @@ template< typename T, typename M > struct outputMaskFunctorSelector< T, M, FastM
 template< class Accessor,
           class MaskAccessor,
           class Iterator,
-          class MaskIterator > struct maskedAccessorSelector
+          class MaskIterator,
+          bool  polarity > struct maskedAccessorSelector
 {
     typedef TernarySetterFunctionAccessorAdapter<
         Accessor,
@@ -79,6 +80,7 @@ template< class Accessor,
         typename outputMaskFunctorSelector<
             typename Accessor::value_type,
             typename MaskAccessor::value_type,
+            polarity,
             NoFastMask > ::type >
         type;
 };
@@ -120,8 +122,13 @@ template< class Accessor > struct AccessorTraits
      */
     template< class MaskAccessor,
               class Iterator,
-              class MaskIterator > struct           masked_accessor :
-        public maskedAccessorSelector< Accessor,MaskAccessor,Iterator,MaskIterator >
+              class MaskIterator,
+              bool  polarity > struct               masked_accessor :
+        public maskedAccessorSelector< Accessor,
+                                       MaskAccessor,
+                                       Iterator,
+                                       MaskIterator,
+                                       polarity >
     {};
 
 };

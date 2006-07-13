@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessorfunctors.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-12 15:09:44 $
+ *  last change: $Author: thb $ $Date: 2006-07-13 12:03:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,34 +56,37 @@ template< typename T > struct XorFunctor : public std::binary_function<T,T,T>
 
 //-----------------------------------------------------------------------------
 
-/// Base class for an adaptable ternary functor
-template< typename A1, typename A2, typename A3, typename R > struct TernaryFunctorBase
-{
-    typedef A1 first_argument_type;
-    typedef A2 second_argument_type;
-    typedef A3 third_argument_type;
-    typedef R  result_type;
-};
-
 /// Base class, passing on the arg types
 template< typename T, typename M > struct MaskFunctorBase :
         public TernaryFunctorBase<T,M,T,T> {};
 
 
-/// Let a mask flag decide between two values
-template< typename T, typename M > struct GenericOutputMaskFunctor : MaskFunctorBase<T,M>
+/** Let a mask flag decide between two values
+
+    @tpl polarity
+    Mask polarity. When true, a false in the mask denotes
+    transparency, i.e. the original value will display. And vice
+    versa.
+ */
+template< typename T,
+          typename M,
+          bool     polarity > struct GenericOutputMaskFunctor : public MaskFunctorBase<T,M>
 {
-    /// Ternary mask operation - selects v1 for !m == true, v2 otherwise
+    /// Ternary mask operation - selects v1 for !m == polarity, v2 otherwise
     T operator()( T v1, M m, T v2 ) const
     {
-        return !m ? v1 : v2;
+        return !m == polarity ? v1 : v2;
     }
 };
 
 /** Let a mask bit decide between two values (specialization for
     integer mask types)
  */
-template< typename T, typename M > struct IntegerOutputMaskFunctor : MaskFunctorBase<T,M>
+template< typename T,
+          typename M,
+          bool     polarity > struct IntegerOutputMaskFunctor;
+template< typename T,
+          typename M > struct IntegerOutputMaskFunctor<T,M,true> : public MaskFunctorBase<T,M>
 {
     /** Mask v with state of m
 
@@ -98,11 +101,29 @@ template< typename T, typename M > struct IntegerOutputMaskFunctor : MaskFunctor
         return v1*(M)(1-mask) + v2*mask;
     }
 };
+template< typename T,
+          typename M > struct IntegerOutputMaskFunctor<T,M,false> : public MaskFunctorBase<T,M>
+{
+    /** Mask v with state of m
+
+        @return v2, if m != 0, v1 otherwise.
+     */
+    T operator()( T v1, M m, T v2 ) const
+    {
+        typedef typename make_unsigned<T>::type unsigned_T;
+
+        // mask will be 0, iff m == 0, and 1 otherwise
+        const T mask( unsigned_cast<T>(m | -m) >> (sizeof(unsigned_T)*8 - 1) );
+        return v1*mask + v2*(M)(1-mask);
+    }
+};
 
 /** Let a mask bit decide between two values (specialization for
     binary-valued mask types)
  */
-template< typename T, typename M > struct FastIntegerOutputMaskFunctor : MaskFunctorBase<T,M>
+template< typename T, typename M, bool polarity > struct FastIntegerOutputMaskFunctor;
+template< typename T, typename M > struct FastIntegerOutputMaskFunctor<T,M,true> :
+   public MaskFunctorBase<T,M>
 {
     /// Specialization, only valid if mask can only attain 0 or 1
     T operator()( T v1, M m, T v2 ) const
@@ -110,6 +131,17 @@ template< typename T, typename M > struct FastIntegerOutputMaskFunctor : MaskFun
         OSL_ASSERT(m<=1);
 
         return v1*(M)(1-m) + v2*m;
+    }
+};
+template< typename T, typename M > struct FastIntegerOutputMaskFunctor<T,M,false> :
+   public MaskFunctorBase<T,M>
+{
+    /// Specialization, only valid if mask can only attain 0 or 1
+    T operator()( T v1, M m, T v2 ) const
+    {
+        OSL_ASSERT(m<=1);
+
+        return v1*m + v2*(M)(1-m);
     }
 };
 

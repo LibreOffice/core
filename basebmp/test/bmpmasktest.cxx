@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bmpmasktest.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-12 15:09:45 $
+ *  last change: $Author: thb $ $Date: 2006-07-13 12:03:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,14 +139,15 @@ public:
 
         basegfx::B2DPolyPolygon aPoly;
         basegfx::tools::importFromSvgD( aPoly, aSvg );
-        const Color aCol(0xFFFFFFFF);
+        const Color aColWhite(0xFFFFFFFF);
+        const Color aColBlack(0);
         mpBmp1bpp->fillPolyPolygon(
             aPoly,
-            aCol,
+            aColWhite,
             DrawMode_PAINT );
         mpBmp32bpp->fillPolyPolygon(
             aPoly,
-            aCol,
+            aColWhite,
             DrawMode_PAINT );
 
         aSvg = ::rtl::OUString::createFromAscii(
@@ -154,9 +155,10 @@ public:
 
         aPoly.clear();
         basegfx::tools::importFromSvgD( aPoly, aSvg );
+        mpMaskBmp1bpp->clear(aColWhite);
         mpMaskBmp1bpp->fillPolyPolygon(
             aPoly,
-            aCol,
+            aColBlack,
             DrawMode_PAINT );
     }
 

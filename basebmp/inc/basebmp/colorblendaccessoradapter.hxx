@@ -4,9 +4,9 @@
  *
  *  $RCSfile: colorblendaccessoradapter.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-12 15:09:44 $
+ *  last change: $Author: thb $ $Date: 2006-07-13 12:03:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,8 +51,9 @@ namespace basebmp
     when blitting through a mask) - there really isn't no other
     sensible default behaviour for these methods.
  */
-template< class WrappedAccessor,
-          typename AlphaType > class ConstantColorBlendSetterAccessorAdapter
+template< class    WrappedAccessor,
+          typename AlphaType,
+          bool     polarity > class ConstantColorBlendSetterAccessorAdapter
 {
 public:
     typedef AlphaType                            alpha_type;
@@ -61,10 +62,10 @@ public:
 
 private:
     typename ColorTraits< color_type >::
-             template blend_functor<alpha_type>::type   maFunctor;
-    WrappedAccessor                                     maWrappee;
-    color_type                                          maBlendColor;
-    value_type                                          maGetterValue;
+             template blend_functor<alpha_type,polarity>::type   maFunctor;
+    WrappedAccessor                                              maWrappee;
+    color_type                                                   maBlendColor;
+    value_type                                                   maGetterValue;
 
 public:
     ConstantColorBlendSetterAccessorAdapter() :

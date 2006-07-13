@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basictest.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-12 22:47:21 $
+ *  last change: $Author: thb $ $Date: 2006-07-13 12:03:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -248,7 +248,7 @@ public:
             CPPUNIT_ASSERT_MESSAGE("get/setPixel roundtrip #10",
                                    pDevice->getPixel(aPt) == aCol4);
 
-            const Color aCol5(0x0F0F0F0F);
+            const Color aCol5(0x0F3F2F1F);
             pDevice->setPixel( aPt2, aCol5, DrawMode_PAINT );
             CPPUNIT_ASSERT_MESSAGE("get/setPixel roundtrip #11",
                                    pDevice->getPixel(aPt2) == aCol5);
@@ -257,6 +257,11 @@ public:
             pDevice->setPixel( aPt3, aCol6, DrawMode_PAINT );
             CPPUNIT_ASSERT_MESSAGE("get/setPixel roundtrip #12",
                                    pDevice->getPixel(aPt3) == aCol6);
+
+            CPPUNIT_ASSERT_MESSAGE("raw pixel value #4",
+                                   pDevice->getBuffer()[2] == 0x3F
+                                   && pDevice->getBuffer()[1] == 0x2F
+                                   && pDevice->getBuffer()[0] == 0x1F);
         }
 
         // 32bpp
