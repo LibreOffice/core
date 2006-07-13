@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.158 $
+ *  $Revision: 1.159 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:53:09 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 13:30:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -450,6 +450,13 @@ File gid_File_Dtd_Event
     Styles = (PACKED);
     Dir = gid_Dir_Share_Dtd_Ooo_1_0;
     Name = "event.dtd";
+End
+
+File gid_File_Dtd_Groupuinames
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "groupuinames.dtd";
 End
 
 File gid_File_Dtd_Image
@@ -1116,6 +1123,13 @@ File gid_File_Oo_Office_Common_Xcs
     Name = "/registry/schema/org/openoffice/Office/Common.xcs";
 End
 
+File gid_File_Oo_Office_Paths_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED,PATCH);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
+    Name = "/registry/schema/org/openoffice/Office/Paths.xcs";
+End
+
 File gid_File_Oo_Office_OptionsDialog_Xcs
     TXT_FILE_BODY;
     Styles = (PACKED,PATCH);
@@ -1135,6 +1149,13 @@ File gid_File_Oo_Office_Common_Xcu
     Styles = (PACKED, SCPZIP_REPLACE, PATCH);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
     Name = "/registry/data/org/openoffice/Office/Common.xcu";
+End
+
+File gid_File_Oo_Office_Paths_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED, SCPZIP_REPLACE, PATCH);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
+    Name = "/registry/data/org/openoffice/Office/Paths.xcu";
 End
 
 File gid_File_Oo_Office_Views_Xcu
