@@ -4,9 +4,9 @@
  *
  *  $RCSfile: untbl.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 08:41:30 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 11:31:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,6 +138,7 @@
 #ifndef _COMCORE_HRC
 #include <comcore.hrc>
 #endif
+
 
 #ifdef PRODUCT
     #define _DEBUG_REDLINE( pDoc )
@@ -2535,11 +2536,12 @@ void SwUndoTblCpyTbl::Undo( SwUndoIter& rIter )
         // b62341295: Redline for copying tables
         const SwNode *pEndNode = rBox.GetSttNd()->EndOfSectionNode();
         SwPaM aPam( aInsIdx.GetNode(), *pEndNode );
+        SwUndoDelete* pUndo = 0;
 
-        bool bDeleteCompleteParagraph = false;
-        bool bShiftPam = false;
         if( IsRedlineOn( GetRedlineMode() ) )
         {
+            bool bDeleteCompleteParagraph = false;
+            bool bShiftPam = false;
             // There are a couple of different situations to consider during redlining
             if( pEntry->pUndo )
             {
@@ -2580,29 +2582,37 @@ void SwUndoTblCpyTbl::Undo( SwUndoIter& rIter )
                 }
             }
             rDoc.DeleteRedline( aPam );
-        }
 
-        if( pEntry->pUndo )
-        {
-            pEntry->pUndo->Undo( rIter );
-            delete pEntry->pUndo;
-        }
-        if( bShiftPam )
-        {
-            // The aPam.Point is at the moment at the last position of the new content and has to be
-            // moved to the first postion of the old content for the SwUndoDelete operation
-            SwNodeIndex aTmpIdx( aPam.GetPoint()->nNode, 1 );
-            SwTxtNode *pTxt = aTmpIdx.GetNode().GetTxtNode();
-            if( pTxt )
+            if( pEntry->pUndo )
             {
-                aPam.GetPoint()->nNode = *pTxt;
-                aPam.GetPoint()->nContent.Assign( pTxt, 0 );
+                pEntry->pUndo->Undo( rIter );
+                delete pEntry->pUndo;
             }
-            else
-                *aPam.GetPoint() = SwPosition( aTmpIdx );
+            if( bShiftPam )
+            {
+                // The aPam.Point is at the moment at the last position of the new content and has to be
+                // moved to the first postion of the old content for the SwUndoDelete operation
+                SwNodeIndex aTmpIdx( aPam.GetPoint()->nNode, 1 );
+                SwTxtNode *pTxt = aTmpIdx.GetNode().GetTxtNode();
+                if( pTxt )
+                {
+                    aPam.GetPoint()->nNode = *pTxt;
+                    aPam.GetPoint()->nContent.Assign( pTxt, 0 );
+                }
+                else
+                    *aPam.GetPoint() = SwPosition( aTmpIdx );
+            }
+            pUndo = new SwUndoDelete( aPam, bDeleteCompleteParagraph, TRUE );
         }
-
-        SwUndoDelete* pUndo = new SwUndoDelete( aPam, bDeleteCompleteParagraph );
+        else
+        {
+            pUndo = new SwUndoDelete( aPam, true );
+            if( pEntry->pUndo )
+            {
+                pEntry->pUndo->Undo( rIter );
+                delete pEntry->pUndo;
+            }
+        }
         pEntry->pUndo = pUndo;
 
         aInsIdx = rBox.GetSttIdx() + 1;
