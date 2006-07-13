@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.10 $
+#  $Revision: 1.11 $
 #
-#  last change: $Author: rt $ $Date: 2005-03-29 12:15:43 $
+#  last change: $Author: obo $ $Date: 2006-07-13 12:03:09 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -142,7 +142,7 @@ else
 	uno -rw $(OUT_BIN)/remoteserver.rdb --singleaccept -s com.sun.star.io.Pipe \
 	-u "uno:socket,host=localhost,port=2083;urp;MyPipe" &
 	@echo waiting on the server process ...
-	sleep 3
+	sleep 5
 endif
 	@echo -
 	@echo ... remote server process runs ...
