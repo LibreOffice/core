@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShell.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 17:28:35 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 10:29:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -319,7 +319,8 @@ public:
     void    SetStartShowWithDialog( BOOL bIn = TRUE ) { bStartShowWithDialog = bIn; }
     BOOL    IsStartShowWithDialog() const { return bStartShowWithDialog; }
 
-    USHORT  GetPrintedHandoutPageNum() const { return nPrintedHandoutPageNum; }
+    USHORT GetPrintedHandoutPageNum (void) const { return mnPrintedHandoutPageNum; }
+    void SetPrintedHandoutPageNum (USHORT nPageNumber) {mnPrintedHandoutPageNum=nPageNumber; }
 
     virtual USHORT PrepareClose( BOOL bUI = TRUE, BOOL bForBrowsing = FALSE );
 
@@ -454,45 +455,6 @@ public:
     */
     virtual ErrCode DoVerb (long nVerb);
 
-    void PrintOutline (
-        SfxPrinter& rPrinter,
-        SfxProgress& rProgress,
-        const MultiSelection& rSelPages,
-        const String& rTimeDateStr,
-        const Font& rTimeDateFont,
-        const SdOptionsPrintItem* pPrintOpts,
-        USHORT nPage,
-        USHORT nPageMax,
-        USHORT nCopies,
-        USHORT nProgressOffset,
-        USHORT nTotal );
-    void PrintHandout (
-        SfxPrinter& rPrinter,
-        SfxProgress& rProgress,
-        const MultiSelection& rSelPages,
-        const String& rTimeDateStr,
-        const Font& rTimeDateFont,
-        const SdOptionsPrintItem* pPrintOpts,
-        USHORT nPage,
-        USHORT nPageMax,
-        USHORT nCopies,
-        USHORT nProgressOffset,
-        USHORT nTotal);
-    void PrintStdOrNotes (
-        SfxPrinter& rPrinter,
-        SfxProgress& rProgress,
-        const MultiSelection& rSelPages,
-        const String& rTimeDateStr,
-        const Font& rTimeDateFont,
-        const SdOptionsPrintItem* pPrintOpts,
-        USHORT nPage,
-        USHORT nPageMax,
-        USHORT nCopies,
-        USHORT nProgressOffset,
-        USHORT nTotal,
-        PageKind ePageKind,
-        BOOL bPrintMarkedOnly);
-
     virtual void UIActivating( SfxInPlaceClient* );
     virtual void UIDeactivated( SfxInPlaceClient* );
 
@@ -550,7 +512,7 @@ protected:
     BOOL        bCenterAllowed;           // wird an Fenster weitergegeben
 
     BOOL        bStartShowWithDialog;   // Praesentation wurde ueber Dialog gestartet
-    USHORT      nPrintedHandoutPageNum; // Seitennummer der zu durckenden Handzettelseite
+    USHORT mnPrintedHandoutPageNum; // Page number of the handout page that is to be printed.
 
     //af    BOOL        bPrintDirectSelected;       // Print only selected objects in direct print
     //afString      sPageRange;                 // pagerange if selected objects in direct print
@@ -599,13 +561,6 @@ protected:
 
     virtual void SetZoomFactor( const Fraction &rZoomX,
                                 const Fraction &rZoomY );
-
-
-    //  virtual void PreparePrint(PrintDialog* pPrintDialog = 0);
-
-
-    void PrintPage( SfxPrinter& rPrinter, ::sd::View* pPrintView,
-                    SdPage* pPage, BOOL bPrintMarkedOnly );
 
     /** Depending on the given request create a new page or duplicate an
         existing one.  A new page is created behind the given slide.
