@@ -5,9 +5,9 @@
 
 	$RCSfile: spreadsheetml2ooo.xsl,v $
 
-	$Revision: 1.4 $
+	$Revision: 1.5 $
 
-	last change: $Author: rt $ $Date: 2005-11-10 16:53:44 $
+	last change: $Author: obo $ $Date: 2006-07-13 09:14:11 $
 
 	The Contents of this file are made available subject to
 	the terms of GNU Lesser General Public License Version 2.1.
@@ -5791,7 +5791,15 @@
 				<xsl:attribute name="table:number-rows-repeated">
 					<xsl:value-of select="@ss:Index - $expandedRowCountIndex"/>
 				</xsl:attribute>
-				<table:table-cell table:number-columns-repeated="{$expandedColumnCount}"/>
+				<xsl:choose>
+					<xsl:when test="$expandedColumnCount != 0">
+						<table:table-cell table:number-columns-repeated="{$expandedColumnCount}"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<!-- OASIS XML row can not be empty -->
+						<table:table-cell table:number-columns-repeated="256"/>
+					</xsl:otherwise>
+				</xsl:choose>
 			</xsl:element>
 		</xsl:if>
 		<xsl:element name="table:table-row">
@@ -5817,7 +5825,16 @@
 				<!-- Excel row without content -->
 				<xsl:when test="not(*)">
 					<!-- OASIS OpenDocument Format does not allow rows without a cell -->
-					<table:table-cell table:number-columns-repeated="{$expandedColumnCount}"/>
+				<xsl:choose>
+					<xsl:when test="$expandedColumnCount != 0">
+						<table:table-cell table:number-columns-repeated="{$expandedColumnCount}"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<!-- OASIS XML row can not be empty -->
+						<table:table-cell table:number-columns-repeated="256"/>
+					</xsl:otherwise>
+				</xsl:choose>
+
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:call-template name="create-cells">
@@ -5862,7 +5879,15 @@
 					<xsl:attribute name="table:number-rows-repeated">
 						<xsl:value-of select="65536 - $currentRowNo"/>
 					</xsl:attribute>
-					<table:table-cell table:number-columns-repeated="{$expandedColumnCount}"/>
+					<xsl:choose>
+						<xsl:when test="$expandedColumnCount != 0">
+							<table:table-cell table:number-columns-repeated="{$expandedColumnCount}"/>
+						</xsl:when>
+						<xsl:otherwise>
+							<!-- OASIS XML row can not be empty -->
+							<table:table-cell table:number-columns-repeated="256"/>
+						</xsl:otherwise>
+					</xsl:choose>
 				</xsl:element>
 			</xsl:when>
 		</xsl:choose>
@@ -6276,7 +6301,15 @@
 					</xsl:when>
 					<xsl:otherwise>
 						<!-- OASIS XML does not allow an empty row -->
-						<table:table-cell table:number-columns-repeated="{$expandedColumnCount}"/>
+						<xsl:choose>
+							<xsl:when test="$expandedColumnCount != 0">
+								<table:table-cell table:number-columns-repeated="{$expandedColumnCount}"/>
+							</xsl:when>
+							<xsl:otherwise>
+								<!-- OASIS XML row can not be empty -->
+								<table:table-cell table:number-columns-repeated="256"/>
+							</xsl:otherwise>
+						</xsl:choose>
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:otherwise>
