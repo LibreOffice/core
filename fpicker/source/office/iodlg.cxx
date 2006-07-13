@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iodlg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:12:46 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 16:55:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1297,31 +1297,10 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
             )                                                   //    (in SvtFileDialog::GetPathList) be taken as file to save to
         )                                                       // (#114818# - 2004-03-17 - fs@openoffice.org)
     {
-        // und diese nicht eh schon dran haengt
-        String aExt = String(RTL_CONSTASCII_USTRINGPARAM("*."));
-        INetURLObject aTemp( aFileName );
-        aExt += String(aTemp.GetExtension().toAsciiLowerCase());
-        const String& rType = pThis->_pImp->GetCurFilter()->GetType();
-        String aType = rType;
-        aType.ToLowerAscii();
-
-        if ( ! aType.EqualsAscii(FILEDIALOG_FILTER_ALL) )
-        {
-            USHORT nWildCard = aType.GetTokenCount( FILEDIALOG_DEF_EXTSEP );
-            USHORT nIndex, nPos = 0;
-
-            for ( nIndex = 0; nIndex < nWildCard; nIndex++ )
-            {
-                if ( aExt == aType.GetToken( 0, FILEDIALOG_DEF_EXTSEP, nPos ) )
-                    break;
-            }
-
-            if ( nIndex >= nWildCard )
-            {
-                aFileName += '.';
-                aFileName += pThis->GetDefaultExt();
-            }
-        }
+        // check extension and append the default extension if necessary
+        appendDefaultExtension(aFileName,
+                               pThis->GetDefaultExt(),
+                               pThis->_pImp->GetCurFilter()->GetType());
     }
 
     BOOL bOpenFolder = ( FILEDLG_TYPE_PATHDLG == pThis->_pImp->_eDlgType ) &&
@@ -3411,6 +3390,41 @@ sal_Bool SvtFileDialog::ContentGetTitle( const rtl::OUString& rURL, String& rTit
     rTitle = sTitle;
 
     return m_aContent.isValid();
+}
+
+void SvtFileDialog::appendDefaultExtension(String& _rFileName,
+                                           const String& _rFilterDefaultExtension,
+                                           const String& _rFilterExtensions)
+{
+    String aTemp(_rFileName);
+    aTemp.ToLowerAscii();
+    String aType(_rFilterExtensions);
+    aType.ToLowerAscii();
+
+    if ( ! aType.EqualsAscii(FILEDIALOG_FILTER_ALL) )
+    {
+        USHORT nWildCard = aType.GetTokenCount( FILEDIALOG_DEF_EXTSEP );
+        USHORT nIndex, nPos = 0;
+
+        for ( nIndex = 0; nIndex < nWildCard; nIndex++ )
+        {
+            String aExt(aType.GetToken( 0, FILEDIALOG_DEF_EXTSEP, nPos ));
+            // take care of a leading *
+            USHORT nExtOffset = (aExt.GetBuffer()[0] == '*' ? 1 : 0);
+            sal_Unicode* pExt = aExt.GetBufferAccess() + nExtOffset;
+            xub_StrLen nExtLen = aExt.Len() - nExtOffset;
+            xub_StrLen nOffset = aTemp.Len() - nExtLen;
+            // minimize search by starting at last possible index
+            if ( aTemp.Search(pExt, nOffset) == nOffset )
+                break;
+        }
+
+        if ( nIndex >= nWildCard )
+        {
+            _rFileName += '.';
+            _rFileName += _rFilterDefaultExtension;
+        }
+    }
 }
 
 // -----------------------------------------------------------------------
