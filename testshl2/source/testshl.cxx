@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testshl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:28:35 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 10:03:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,22 +42,8 @@
 #endif
 
 #ifdef WNT
-#define UNDER_WINDOWS_DEBUGGING
-// Nice feature, to debug under windows, install msdev locally and use DebugBreak() to stop a new process at a point you want.
-#ifdef UNDER_WINDOWS_DEBUGGING
-#if defined _MSC_VER
-#pragma warning(push, 1)
+# include "winstuff.hxx"
 #endif
-#include <windows.h>
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
-#include <MAPIWin.h>
-
-#define VCL_NEED_BASETSD
-
-#endif /* UNDER_WINDOWS_DEBUGGING */
-#endif /* WNT */
 
 #include <iostream>
 #include <vector>
@@ -99,7 +85,7 @@ void initTPrint(GetOpt & _aOptions)
 void my_sleep(int sec)
 {
 #ifdef WNT
-    Sleep(sec * 1000);
+    WinSleep(sec * 1000);
 #else
     usleep(sec * 1000000); // 10 ms
 #endif
@@ -130,7 +116,7 @@ int ProcessHandler::getPID()
 {
     int nPID = 0;
 #ifdef WNT
-    nPID = GetCurrentProcessId();
+    nPID = WinGetCurrentProcessId();
 #else
     nPID = getpid();
 #endif
@@ -273,7 +259,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(, argv)
 
     if ( opt.hasOpt("-verbose") )
     {
-        fprintf(stderr, "testshl2 $Revision: 1.19 $\n");
+        fprintf(stderr, "testshl2 $Revision: 1.20 $\n");
     }
 
     if ( opt.hasOpt("-endless"))                 // this exists only for self test issues
@@ -311,9 +297,6 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(, argv)
         {
             setSignalFilename(opt);
 
-//#ifdef UNDER_WINDOWS_DEBUGGING
-//    DebugBreak();
-//#endif
             rtl::OUString suLibraryName;
             if (bLibrary)
             {
