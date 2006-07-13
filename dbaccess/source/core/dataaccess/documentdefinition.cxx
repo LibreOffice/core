@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentdefinition.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:11:25 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 15:21:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -923,6 +923,7 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
             {
                 xPersist->storeToEntry(xStorage,sPersistentName,Sequence<PropertyValue>(),Sequence<PropertyValue>());
                 xPersist->storeOwn();
+                m_xEmbeddedObject->changeState(EmbedStates::LOADED);
             }
             else
                 throw CommandAbortedException();
@@ -1332,17 +1333,14 @@ void ODocumentDefinition::loadEmbeddedObject(const Sequence< sal_Int8 >& _aClass
     {
         Sequence<PropertyValue> aArgs = xModel->getArgs();
         ::comphelper::MediaDescriptor aHelper(aArgs);
-        aHelper.createItemIfMissing(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ReadOnly" ) ), _bReadOnly );
+        aHelper[ ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ReadOnly" ) )] <<= _bReadOnly;
 
         if ( m_pImpl->m_aProps.aTitle.getLength() )
-        {
-            aHelper.createItemIfMissing(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DocumentTitle" ) ), m_pImpl->m_aProps.aTitle );
-        }
+            aHelper[
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DocumentTitle" ) )] <<= m_pImpl->m_aProps.aTitle;
 
-        aHelper.createItemIfMissing(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MacroExecutionMode" ) ), MacroExecMode::USE_CONFIG );
+        aHelper[
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MacroExecutionMode" ))] <<= MacroExecMode::USE_CONFIG;
 
         aHelper >> aArgs;
 
@@ -1520,10 +1518,7 @@ void ODocumentDefinition::setModelReadOnly(sal_Bool _bReadOnly)
     {
         Sequence<PropertyValue> aArgs = xModel->getArgs();
         ::comphelper::MediaDescriptor aHelper(aArgs);
-        static const ::rtl::OUString s_sReadOnly(RTL_CONSTASCII_USTRINGPARAM("ReadOnly"));
-        if ( ! aHelper.createItemIfMissing(s_sReadOnly,_bReadOnly) )
-            aHelper[s_sReadOnly] <<= _bReadOnly;
-
+        aHelper[ ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ReadOnly" ) )] <<= _bReadOnly;
         aHelper >> aArgs;
         xModel->attachResource(xModel->getURL(),aArgs);
     }
@@ -1557,9 +1552,7 @@ void ODocumentDefinition::updateDocumentTitle()
         {
             Sequence<PropertyValue> aArgs = xModel->getArgs();
             ::comphelper::MediaDescriptor aHelper(aArgs);
-            static const ::rtl::OUString s_sDocumentTitle(RTL_CONSTASCII_USTRINGPARAM("DocumentTitle"));
-            if ( ! aHelper.createItemIfMissing(s_sDocumentTitle,m_pImpl->m_aProps.aTitle) )
-                aHelper[s_sDocumentTitle] <<= m_pImpl->m_aProps.aTitle;
+            aHelper[ ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DocumentTitle" ) )] <<= m_pImpl->m_aProps.aTitle;
             aHelper >> aArgs;
             xModel->attachResource(xModel->getURL(),aArgs);
         }
