@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2006-05-08 14:43:02 $
+#   last change: $Author: obo $ $Date: 2006-07-13 15:15:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -44,8 +44,9 @@ PACKAGE = complex$/dispatches
 #----- compile .java files -----------------------------------------
 
 JARFILES = mysql.jar ridl.jar unoil.jar jurt.jar juh.jar jut.jar java_uno.jar \
-                  OOoRunner.jar mysql.jar
+                  OOoRunner.jar mysql.jar ConnectivityTools.jar
 JAVAFILES       = checkdispatchapi.java
+
 JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
 SUBDIRS=helper
