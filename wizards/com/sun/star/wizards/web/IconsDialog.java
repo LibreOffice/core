@@ -4,9 +4,9 @@
  *
  *  $RCSfile: IconsDialog.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 13:39:29 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 12:20:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,7 +84,7 @@ public class IconsDialog extends ImageListDialog implements ImageList.ImageRende
             resources.resCounter
         } );
 
-        htmlexpDirectory = FileAccess.getOfficePath(xmsf,"Gallery","share");
+        htmlexpDirectory = FileAccess.getOfficePath(xmsf,"Gallery","share", "");
         set = set_;
         objects = new Integer[set.getSize() * icons.length];
         for (int i = 0; i<objects.length; i++)
