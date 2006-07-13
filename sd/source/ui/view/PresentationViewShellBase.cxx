@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PresentationViewShellBase.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 17:39:34 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 10:31:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,17 @@
 #include "strings.hrc"
 #include "ViewTabBar.hxx"
 #include "UpdateLockManager.hxx"
+
+#include <sfx2/viewfrm.hxx>
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
+#include <com/sun/star/frame/XLayoutManager.hpp>
+#endif
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
 
 namespace sd {
 
@@ -89,6 +100,26 @@ PresentationViewShellBase::PresentationViewShellBase (
     : ViewShellBase (pFrame, pOldShell, ViewShell::ST_PRESENTATION)
 {
     GetUpdateLockManager().Disable();
+
+    // Hide the automatic (non-context sensitive) tool bars.
+    if (pFrame!=NULL && pFrame->GetFrame()!=NULL)
+    {
+        Reference<beans::XPropertySet> xFrameSet (
+            pFrame->GetFrame()->GetFrameInterface(),
+            UNO_QUERY);
+        if (xFrameSet.is())
+        {
+            Reference<beans::XPropertySet> xLayouterSet (
+                xFrameSet->getPropertyValue(::rtl::OUString::createFromAscii("LayoutManager")),
+                UNO_QUERY);
+            if (xLayouterSet.is())
+            {
+                xLayouterSet->setPropertyValue(
+                    ::rtl::OUString::createFromAscii("AutomaticToolbars"),
+                    makeAny(sal_False));
+            }
+        }
+    }
 }
 
 
