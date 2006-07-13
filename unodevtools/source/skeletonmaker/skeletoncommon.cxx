@@ -4,9 +4,9 @@
  *
  *  $RCSfile: skeletoncommon.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-15 09:19:50 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 11:57:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,9 +68,9 @@ void printLicenseHeader(std::ostream& o, rtl::OString const & filename)
       << shortfilename
       << ",v $\n"
         " *\n"
-        " *  $Revision: 1.5 $\n"
+        " *  $Revision: 1.6 $\n"
         " *\n"
-        " *  last change: $Author: vg $ $Date: 2006-03-15 09:19:50 $\n"
+        " *  last change: $Author: obo $ $Date: 2006-07-13 11:57:21 $\n"
         " *\n"
         " *  The Contents of this file are made available subject to\n"
         " *  the terms of GNU Lesser General Public License Version 2.1.\n"
@@ -662,8 +662,8 @@ void generateFunctionParamterMap(std::ostream& o,
             }
             else {
                 if ( options.java5 )
-                    o << "        java.util.Hashtable fpm = new java.util.Hashtable"
-                        "< Integer, String >();\n";
+                    o << "        java.util.Hashtable< Integer, String > fpm = "
+                        "new java.util.Hashtable< Integer, String >();\n";
                 else
                     o << "        java.util.Hashtable fpm = "
                         "new java.util.Hashtable();\n";
