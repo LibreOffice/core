@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfuno.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:50:51 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 11:14:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,14 +54,14 @@ using namespace ::com::sun::star::registry;
 extern "C"
 {
     void SAL_CALL component_getImplementationEnvironment(
-        const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+        const sal_Char ** ppEnvTypeName, uno_Environment ** )
     {
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
     }
 
     // -------------------------------------------------------------------------
 
-    sal_Bool SAL_CALL component_writeInfo( void* pServiceManager, void* pRegistryKey )
+    sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, void* pRegistryKey )
     {
         if (pRegistryKey)
         {
@@ -96,7 +96,7 @@ extern "C"
 
     // -------------------------------------------------------------------------
 
-    void* SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
+    void* SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
     {
         OUString    aImplName( OUString::createFromAscii( pImplName ) );
         void*       pRet = 0;
