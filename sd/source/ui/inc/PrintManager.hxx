@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PrintManager.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:13:07 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 10:28:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,11 +35,17 @@
 #ifndef SD_PRINT_MANAGER_HXX
 #define SD_PRINT_MANAGER_HXX
 
+#include "pres.hxx"
 #include <tools/solar.h>
 #include <tools/errcode.hxx>
 #include <sfx2/viewsh.hxx>
 
+class Font;
+class MultiSelection;
 class PrintDialog;
+class SdOptionsPrintItem;
+class SdPage;
+class String;
 class SfxItemSet;
 class SfxPrinter;
 class SfxProgress;
@@ -48,12 +54,14 @@ class Window;
 
 namespace sd {
 
+class DrawView;
+class View;
+class ViewShell;
 class ViewShellBase;
 
-/** Provide some functions to aid the view shell in printing a
-    document.  The functions are about asking the user for specific
-    information what to print and doing the high level printing.  The
-    printing of the actual pages is done by the main sub-shell.
+/** Manage the printing of documents.
+    This includes functions about asking the user for specific
+    information what to print as well as high to medium level printing.
 */
 class PrintManager
 {
@@ -116,7 +124,7 @@ public:
     void PreparePrint (PrintDialog* pPrintDialog = 0);
 
 private:
-    ViewShellBase& mrViewShell;
+    ViewShellBase& mrBase;
 
     bool mbPrintDirectSelected;
 
@@ -150,6 +158,51 @@ private:
     bool FitPageToPrinterWithDialog (
         SfxPrinter *pPrinter,
         bool bSilent);
+
+    class PrintInfo;
+
+    /** Print outline pages.
+    */
+    void PrintOutline (
+        PrintInfo& rInfo,
+        USHORT nPage);
+
+    /** Print handout pages.
+    */
+    void PrintHandout (
+        PrintInfo& rInfo,
+        USHORT nPage);
+
+    /** Print slides or notes pages.
+    */
+    void PrintStdOrNotes (
+        PrintInfo& rInfo,
+        USHORT nPage,
+        PageKind ePageKind,
+        BOOL bPrintMarkedOnly);
+
+    /** Print a part of the given page that is specified by the given page
+        origin and the size of the printable area.  This method is used
+        primarily when the page to print is larger than the printable area
+        and the page is printed in several parts.
+    */
+    void PrintPagePart (
+        PrintInfo& rInfo,
+        SdPage* pPage,
+        DrawView& rPrintView,
+        const Point& rPageOrigin,
+        BOOL bPrintMarkedOnly,
+        const String& rsPageString,
+        const Point& rStringOffset);
+
+    /** This method is similar to PrintPagePart() and should be unified with
+        that.
+    */
+    void PrintPage(
+        PrintInfo& rInfo,
+        ::sd::View* pPrintView,
+        SdPage* pPage,
+        BOOL bPrintMarkedOnly);
 };
 
 } // end of namespace sd
