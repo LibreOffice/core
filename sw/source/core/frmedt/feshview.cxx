@@ -4,9 +4,9 @@
  *
  *  $RCSfile: feshview.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 15:34:16 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 15:55:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -216,13 +216,14 @@ extern BOOL bNoInterrupt;       // in swapp.cxx
 
 BOOL SwFEShell::SelectObj( const Point& rPt, BYTE nFlag, SdrObject *pObj )
 {
+    SwDrawView *pDView = Imp()->GetDrawView();
+    if(!pDView)
+        return sal_False;
     SET_CURR_SHELL( this );
     StartAction();          //Aktion ist Notwendig, damit nicht mehrere
                             //AttrChgdNotify (etwa durch Unmark->MarkListHasChgd)
                             //durchkommen
 
-    ASSERT( Imp()->HasDrawView(), "SelectObj without DrawView?" );
-    SwDrawView *pDView = Imp()->GetDrawView();
     const SdrMarkList &rMrkList = pDView->GetMarkedObjectList();
     const BOOL bHadSelection = rMrkList.GetMarkCount() ? TRUE : FALSE;
     const BOOL bAddSelect = 0 != (SW_ADD_SELECT & nFlag);
