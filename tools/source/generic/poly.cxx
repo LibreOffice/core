@@ -4,9 +4,9 @@
  *
  *  $RCSfile: poly.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 13:45:14 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 10:00:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -434,7 +434,7 @@ Polygon::Polygon( const Polygon& rPoly )
 {
     DBG_CTOR( Polygon, NULL );
     DBG_CHKOBJ( &rPoly, Polygon, NULL );
-    DBG_ASSERT( rPoly.mpImplPolygon->mnRefCount < 0xFFFE, "Polygon: RefCount overflow" );
+    DBG_ASSERT( rPoly.mpImplPolygon->mnRefCount < 0xFFFFFFFE, "Polygon: RefCount overflow" );
 
     mpImplPolygon = rPoly.mpImplPolygon;
     if ( mpImplPolygon->mnRefCount )
@@ -1890,7 +1890,7 @@ Polygon& Polygon::operator=( const Polygon& rPoly )
 {
     DBG_CHKTHIS( Polygon, NULL );
     DBG_CHKOBJ( &rPoly, Polygon, NULL );
-    DBG_ASSERT( rPoly.mpImplPolygon->mnRefCount < 0xFFFE, "Polygon: RefCount overflow" );
+    DBG_ASSERT( rPoly.mpImplPolygon->mnRefCount < 0xFFFFFFFE, "Polygon: RefCount overflow" );
 
     // Zuerst Referenzcounter erhoehen, damit man sich selbst zuweisen kann
     // RefCount == 0 fuer statische Objekte
