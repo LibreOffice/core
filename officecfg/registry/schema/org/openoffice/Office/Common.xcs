@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.119 $
+ *  $Revision: 1.120 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 11:15:50 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 11:48:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1325,7 +1325,7 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 						<author>DL</author>
 						<desc>Specifies the directory that is displayed when the dialog for opening a graphic or for saving a new graphic is called.</desc>
 					</info>
-					<value>$(insturl)/share/gallery</value>
+					<value>$(insturl)/user/gallery</value>
 				</prop>
 				<prop oor:name="Help" oor:type="xs:string">
 					<info>
@@ -1488,7 +1488,7 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 					<info>
 						<desc>Specifies the default directory used by the dialog for opening a graphic or for saving a new graphic.</desc>
 					</info>
-					<value>$(insturl)/share/gallery</value>
+					<value>$(insturl)/user/gallery</value>
 				</prop>
 				<prop oor:name="Help" oor:type="xs:string">
 					<info>
