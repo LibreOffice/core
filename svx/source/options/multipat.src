@@ -1,12 +1,12 @@
-/*************************************************************************
+﻿/*************************************************************************
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
  *  $RCSfile: multipat.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:57:38 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 12:01:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,18 +43,42 @@ ModalDialog RID_SVXDLG_MULTIPATH
 {
     HelpId = HID_MULTIPATH ;
     OutputSize = TRUE ;
-    Size = MAP_APPFONT ( 256 , 90 ) ;
+    Size = MAP_APPFONT ( 194 , 120 ) ;
     Text [ de ] = "Pfade auswählen" ;
     Text [ en-US ] = "Select Paths" ;
     Text [ x-comment ] = " ";
     Moveable = TRUE ;
     Closeable = TRUE ;
+    FixedLine FL_MULTIPATH
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 182 , 8 ) ;
+        Text [ de ] = "Pfade" ;
+        Text [ en-US ] = "Paths" ;
+        Text [ x-comment ] = " ";
+    };
     ListBox LB_MULTIPATH
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 120 , 64 ) ;
+        Size = MAP_APPFONT ( 120 , 80 ) ;
         AutoHScroll = TRUE ;
+    };
+    Control LB_RADIOBUTTON
+    {
+        Hide = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 126 , 77 ) ;
+    };
+    FixedText FT_RADIOBUTTON
+    {
+        Hide = TRUE ;
+        NoLabel = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 86 );
+        Size = MAP_APPFONT ( 126 , 8 );
+        Text [ de ] = "Wählen Sie den Standardpfad für neue Dateien.";
+        Text [ en-US ] = "Mark the default path for new files.";
     };
     PushButton BTN_ADD_MULTIPATH
     {
@@ -72,29 +96,26 @@ ModalDialog RID_SVXDLG_MULTIPATH
         Text [ en-US ] = "~Delete" ;
         Text [ x-comment ] = " ";
     };
-    FixedLine GB_MULTIPATH
-    {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 188 , 8 ) ;
-        Text [ de ] = "Pfade" ;
-        Text [ en-US ] = "Paths" ;
-        Text [ x-comment ] = " ";
-    };
     OKButton BTN_MULTIPATH_OK
     {
-        Pos = MAP_APPFONT ( 200 , 6 ) ;
+        Pos = MAP_APPFONT ( 29 , 100 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         DefButton = TRUE;
     };
     CancelButton BTN_MULTIPATH_CANCEL
     {
-        Pos = MAP_APPFONT ( 200 , 23 ) ;
+        Pos = MAP_APPFONT ( 82 , 100 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
     HelpButton BTN_MULTIPATH_HELP
     {
-        Pos = MAP_APPFONT ( 200 , 43 ) ;
+        Pos = MAP_APPFONT (  138 , 100 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    String STR_HEADER_PATHS
+    {
+        Text [ de ] = "Pfadliste" ;
+        Text [ en-US ] = "Path list" ;
     };
 };
 String RID_MULTIPATH_DBL_ERR
