@@ -4,9 +4,9 @@
  *
  *  $RCSfile: seinitializer_nssimpl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 17:34:13 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 08:10:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -182,9 +182,6 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
     throw (cssu::RuntimeException)
 {
     CERTCertDBHandle    *pCertHandle = NULL ;
-    PK11SlotInfo        *pSlot = NULL , *pInternalSlot = NULL ;
-    PK11SymKey          *pSymKey = NULL ;
-    PRBool              found;
 
     rtl::OString sCertDir;
     if( sCertDB.getLength() )
@@ -244,144 +241,30 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
 
     pCertHandle = CERT_GetDefaultCertDB() ;
 
-    /*- i39448 - we will get all slots defined in the profile
-    * ---------- and alloc them in each SecurityEnviroment .
-    * ---------- By CP/20050105
-    --------------------------*/
-    pInternalSlot = PK11_GetInternalKeySlot() ;
-    if (pInternalSlot == NULL)
-    {
-    //  PK11_LogoutAll();
-    //  NSS_Shutdown();
-        RTL_LOGFILE_TRACE( "XMLSEC: Error - pInternalSlot is NULL!" );
-        return NULL;
-    }
     try
     {
-        PK11SlotList* soltList ;
-        PK11SlotListElement* soltEle ;
-
         /* Build XML Security Context */
         const rtl::OUString sSecyrutyContext ( RTL_CONSTASCII_USTRINGPARAM( SECURITY_CONTEXT ) );
         cssu::Reference< cssxc::XXMLSecurityContext > xSecCtx( mxMSF->createInstance ( sSecyrutyContext ), cssu::UNO_QUERY );
         if( !xSecCtx.is() )
-        {
-        //  PK11_LogoutAll();
-        //  NSS_Shutdown();
             return NULL;
-        }
 
-        soltList = PK11_GetAllTokens( CKM_INVALID_MECHANISM, PR_FALSE, PR_FALSE, NULL ) ;
-        if( soltList != NULL ) {
-            for( soltEle = soltList->head ; soltEle != NULL; soltEle = soltEle->next )
-            {
-                RTL_LOGFILE_TRACE( "XMLSEC: Trying token..." );
-                found = PR_FALSE;
+        const rtl::OUString sSecyrutyEnvironment ( RTL_CONSTASCII_USTRINGPARAM( SECURITY_ENVIRONMENT ) );
+        cssu::Reference< cssxc::XSecurityEnvironment > xSecEnv( mxMSF->createInstance ( sSecyrutyEnvironment ), cssu::UNO_QUERY );
+        cssu::Reference< cssl::XUnoTunnel > xEnvTunnel( xSecEnv , cssu::UNO_QUERY ) ;
+        if( !xEnvTunnel.is() )
+            return NULL;
+        SecurityEnvironment_NssImpl* pSecEnv = ( SecurityEnvironment_NssImpl* )xEnvTunnel->getSomething(
+            SecurityEnvironment_NssImpl::getUnoTunnelId() ) ;
+        pSecEnv->setCertDb(pCertHandle);
 
-                pSlot = soltEle->slot ;
-
-                if(pSlot != NULL){
-                    RTL_LOGFILE_TRACE2( "XMLSEC: Found a slot: SlotName=%s, TokenName=%s", PK11_GetSlotName(pSlot), PK11_GetTokenName(pSlot) );
-                    pSymKey = PK11_KeyGen( pSlot , CKM_DES3_CBC, NULL, 128, NULL ) ;
-                    if( pSymKey == NULL )
-                    {
-                        PK11_FreeSlot( pSlot ) ;
-                    //  PK11_LogoutAll();
-                    //  NSS_Shutdown();
-                        RTL_LOGFILE_TRACE( "XMLSEC: Error - pSymKey is NULL" );
-                        return NULL;
-                    }
-
-                    /* Build Security Environment */
-                    const rtl::OUString sSecyrutyEnvironment ( RTL_CONSTASCII_USTRINGPARAM( SECURITY_ENVIRONMENT ) );
-                    cssu::Reference< cssxc::XSecurityEnvironment > xSecEnv( mxMSF->createInstance ( sSecyrutyEnvironment ), cssu::UNO_QUERY );
-                    if( !xSecEnv.is() )
-                    {
-                        PK11_FreeSymKey( pSymKey ) ;
-                        PK11_FreeSlot( pSlot ) ;
-                    //  PK11_LogoutAll();
-                    //  NSS_Shutdown();
-                        return NULL;
-                    }
-
-                    /* Setup key slot and certDb */
-                    cssu::Reference< cssl::XUnoTunnel > xEnvTunnel( xSecEnv , cssu::UNO_QUERY ) ;
-                    if( !xEnvTunnel.is() )
-                    {
-                        PK11_FreeSymKey( pSymKey ) ;
-                        PK11_FreeSlot( pSlot ) ;
-                    //  PK11_LogoutAll();
-                    //  NSS_Shutdown();
-                        return NULL;
-                    }
-
-                    SecurityEnvironment_NssImpl* pSecEnv = ( SecurityEnvironment_NssImpl* )xEnvTunnel->getSomething( SecurityEnvironment_NssImpl::getUnoTunnelId() ) ;
-                    if( pSecEnv == NULL )
-                    {
-                        PK11_FreeSymKey( pSymKey ) ;
-                        PK11_FreeSlot( pSlot ) ;
-                    //  PK11_LogoutAll();
-                    //  NSS_Shutdown();
-                        return NULL;
-                    }
-
-                    // search the internal slot.
-                    //PR_fprintf(PR_STDOUT, "Token:%s\n",PK11_GetSlotName(pSlot));
-                    //found = PK11_IsInternal(pSlot) ; //This method will return two true result.
-                    if((!strcmp(PK11_GetSlotName(pInternalSlot),PK11_GetSlotName(pSlot))&&(!strcmp(PK11_GetTokenName(pInternalSlot),PK11_GetTokenName(pSlot)))))
-                    {
-                        found = PR_TRUE;
-                    }
-
-                    pSecEnv->setCryptoSlot( pSlot ) ;
-                    PK11_FreeSlot( pSlot ) ;
-                    pSlot = NULL;
-
-                    pSecEnv->setCertDb( pCertHandle ) ;
-
-                    pSecEnv->adoptSymKey( pSymKey ) ;
-                    PK11_FreeSymKey( pSymKey ) ;
-                    pSymKey = NULL;
-
-                    sal_Int32 n = xSecCtx->addSecurityEnvironment( xSecEnv ) ;
-
-                    if(found != PR_FALSE)
-                    {
-                        RTL_LOGFILE_TRACE( "XMLSEC: Using this slot as the Default Security Environment." );
-                        xSecCtx->setDefaultSecurityEnvironmentIndex( n ) ;
-                    }
-
-
-                }// end of if(pSlot != NULL)
-            }// end of for
-        }// end of if( soltList != NULL )
-
-        if(pInternalSlot != NULL)
-        {
-            PK11_FreeSlot(pInternalSlot) ;
-            pInternalSlot = NULL ;
-        }
-
+        sal_Int32 n = xSecCtx->addSecurityEnvironment(xSecEnv);
+        //originally the SecurityEnvironment with the internal slot was set as default
+        xSecCtx->setDefaultSecurityEnvironmentIndex( n );
         return xSecCtx;
     }
     catch( cssu::Exception& )
     {
-        if (pSymKey != NULL)
-        {
-            PK11_FreeSymKey( pSymKey ) ;
-        }
-
-        if (pSlot != NULL)
-        {
-            PK11_FreeSlot( pSlot ) ;
-        }
-
-        if(pInternalSlot != NULL)
-        {
-            PK11_FreeSlot(pInternalSlot) ;
-            pInternalSlot = NULL ;
-        }
-
         //PK11_LogoutAll();
         //NSS_Shutdown();
         return NULL;
@@ -403,6 +286,7 @@ void SAL_CALL SEInitializer_NssImpl::freeSecurityContext( const cssu::Reference<
 rtl::OUString SEInitializer_NssImpl_getImplementationName ()
     throw (cssu::RuntimeException)
 {
+
     return rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM ( IMPLEMENTATION_NAME ) );
 }
 
