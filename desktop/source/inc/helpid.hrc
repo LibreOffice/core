@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:36:34 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 17:07:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,8 +57,9 @@
 #define HID_FIRSTSTART_CANCEL                       (HID_DESKTOP_START +  13)
 #define HID_FIRSTSTART_FINISH                       (HID_DESKTOP_START +  14)
 #define UID_FIRSTSTART_HELP                         (HID_DESKTOP_START +  15)
+#define UID_BTN_LICENSE_ACCEPT                      (HID_DESKTOP_START +  16)
 
-#define ACT_DESKTOP_HID_END HID_FIRSTSTART_REGISTRATION
+#define ACT_DESKTOP_HID_END UID_BTN_LICENSE_ACCEPT
 
 // check bounds:
 #if ACT_DESKTOP_HID_END > HID_DESKTOP_END
