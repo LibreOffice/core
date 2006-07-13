@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UnoGraphicExporter.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:53:16 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 10:07:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -309,7 +309,7 @@ namespace svx
                 switch( pCopyAction->GetType() )
                 {
                     case( META_CLIPREGION_ACTION ) :
-                        delete pCopyAction;
+                        pCopyAction->Delete();
                     break;
 
                     default:
