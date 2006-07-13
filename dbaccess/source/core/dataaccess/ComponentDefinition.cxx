@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ComponentDefinition.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:07:52 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 15:20:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,6 +82,16 @@ extern "C" void SAL_CALL createRegistryInfo_OComponentDefinition()
 namespace dbaccess
 {
 //........................................................................
+DBG_NAME(OComponentDefinition_Impl)
+OComponentDefinition_Impl::OComponentDefinition_Impl()
+{
+    DBG_CTOR(OComponentDefinition_Impl,NULL);
+}
+// -----------------------------------------------------------------------------
+OComponentDefinition_Impl::~OComponentDefinition_Impl()
+{
+    DBG_DTOR(OComponentDefinition_Impl,NULL);
+}
 //==========================================================================
 //= OComponentDefinition
 //==========================================================================
@@ -183,8 +193,11 @@ Reference< XInterface > OComponentDefinition::Create(const Reference< XMultiServ
 void SAL_CALL OComponentDefinition::disposing()
 {
     OContentHelper::disposing();
-    if ( m_pColumns.get() )
+    if ( m_pColumns.is() )
+    {
         m_pColumns->disposing();
+        m_pColumns.reset();
+    }
 }
 // -----------------------------------------------------------------------------
 IPropertyArrayHelper& OComponentDefinition::getInfoHelper()
@@ -210,7 +223,7 @@ Reference< XNameAccess> OComponentDefinition::getColumns() throw (RuntimeExcepti
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OContentHelper::rBHelper.bDisposed);
 
-    if ( !m_pColumns.get() )
+    if ( !m_pColumns.is() )
     {
         ::std::vector< ::rtl::OUString> aNames;
 
@@ -222,10 +235,10 @@ Reference< XNameAccess> OComponentDefinition::getColumns() throw (RuntimeExcepti
         for ( ; aIter != aEnd; ++aIter )
             aNames.push_back( aIter->first );
 
-        m_pColumns.reset(new OColumns(*this, m_aMutex, sal_True, aNames, this,NULL,sal_True,sal_False,sal_False));
+        m_pColumns = TColumnsHelper( new OColumns( *this, m_aMutex, sal_True, aNames, this, NULL, sal_True, sal_False, sal_False ) ) );
         m_pColumns->setParent(*this);
     }
-    return m_pColumns.get();
+    return m_pColumns.getRef();
 }
 // -----------------------------------------------------------------------------
 OColumn* OComponentDefinition::createColumn(const ::rtl::OUString& _rName) const
