@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 12:13:00 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 15:23:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -245,9 +245,9 @@ String STR_NO_TABLE_FORMAT_INSIDE
 
 String STR_COULDNOTCONNECT_DATASOURCE
 {
-    Text [ de ] = "Die Verbindung zur Datenquelle \"$name$\" konnte nicht hergstellt werden.";
+    Text [ de ] = "Die Verbindung zur Datenquelle \"$name$\" konnte nicht hergestellt werden.";
     Text [ en-US ] = "The connection to the data source \"$name$\" could not be established.";
-    };
+};
 
 Menu RID_MENU_REFRESH_DATA
 {
