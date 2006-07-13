@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XPlayerWindow.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:20:50 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 12:01:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,16 +44,27 @@
 
 module com {  module sun {  module star {  module media {
 
-/**
+/** interacts with the media player window
  */
 interface XPlayerWindow : ::com::sun::star::awt::XWindow
 {
+    /** redraws the player window
+     */
     void update();
 
-    boolean setZoomLevel( [in] ::com::sun::star::media::ZoomLevel ZoomLevel );
+    /** changes the zoom of the media played by the window.
+     */
+    boolean setZoomLevel( [in] ZoomLevel ZoomLevel );
 
-    ::com::sun::star::media::ZoomLevel getZoomLevel();
+    /** gets the current media ratio.
+     */
+    ZoomLevel getZoomLevel();
 
+    /** changes the pointer for the player window.
+
+        @param SystemPointerType
+            a <type>com::sun::star::awt::SystemPointerType</type>
+     */
     void setPointerType( [in] long SystemPointerType );
 };
 
