@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: rt $ $Date: 2006-05-02 16:42:54 $
+#   last change: $Author: obo $ $Date: 2006-07-13 13:28:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,8 @@ SLOFILES =	\
         $(SLO)$/docfilt.obj \
         $(SLO)$/doctempl.obj \
         $(SLO)$/doctemplates.obj \
+        $(SLO)$/doctemplateslocal.obj \
+        $(SLO)$/attributelist.obj \
         $(SLO)$/docvor.obj \
         $(SLO)$/new.obj \
         $(SLO)$/doctdlg.obj \
