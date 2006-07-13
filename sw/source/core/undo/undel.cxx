@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undel.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:18:01 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 11:31:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,12 +154,13 @@ section and the end paragraph not. Then we have to move the paragraph into this 
 record this in nSectDiff.
 */
 
-SwUndoDelete::SwUndoDelete( SwPaM& rPam, BOOL bFullPara )
+SwUndoDelete::SwUndoDelete( SwPaM& rPam, BOOL bFullPara, BOOL bCalledByTblCpy )
     : SwUndo(UNDO_DELETE), SwUndRng( rPam ),
     pMvStt( 0 ), pSttStr(0), pEndStr(0), pRedlData(0), pRedlSaveData(0),
     nNode(0), nNdDiff(0), nSectDiff(0), nReplaceDummy(0), nSetPos(0),
     bGroup( FALSE ), bBackSp( FALSE ), bJoinNext( FALSE ), bTblDelLastNd( FALSE ),
-    bDelFullPara( bFullPara ), bResetPgDesc( FALSE ), bResetPgBrk( FALSE )
+    bDelFullPara( bFullPara ), bResetPgDesc( FALSE ), bResetPgBrk( FALSE ),
+    bFromTableCopy( bCalledByTblCpy )
 {
     bDelFullPara = bFullPara; // This is set e.g. if an empty paragraph before a table is deleted
 
@@ -217,7 +218,7 @@ SwUndoDelete::SwUndoDelete( SwPaM& rPam, BOOL bFullPara )
 
     BOOL bMoveNds = *pStt == *pEnd      // noch ein Bereich vorhanden ??
                 ? FALSE
-                : SaveCntnt( pStt, pEnd, pSttTxtNd, pEndTxtNd );
+                : ( SaveCntnt( pStt, pEnd, pSttTxtNd, pEndTxtNd ) || bFromTableCopy );
 
     if( pSttTxtNd && pEndTxtNd && pSttTxtNd != pEndTxtNd )
     {
@@ -269,7 +270,11 @@ SwUndoDelete::SwUndoDelete( SwPaM& rPam, BOOL bFullPara )
                          rDocNds, nEndNode - nNdDiff );
         if( !bFullPara && !pEndTxtNd &&
             &aRg.aEnd.GetNode() != &pDoc->GetNodes().GetEndOfContent() )
-            aRg.aEnd++; // Deletion of a complete table
+        {
+            SwNode* pNode = aRg.aEnd.GetNode().FindStartNode();
+            if( pNode->GetIndex() >= nSttNode - nNdDiff )
+                aRg.aEnd++; // Deletion of a complete table
+        }
         SwNode* pTmpNd;
         // Step 2: Expand selection if necessary
         if( bJoinNext || bFullPara )
@@ -327,7 +332,18 @@ SwUndoDelete::SwUndoDelete( SwPaM& rPam, BOOL bFullPara )
                 }
             }
         }
-           if( pSttTxtNd && ( pEndTxtNd || pSttTxtNd->GetTxt().Len() ) )
+
+        if( bFromTableCopy )
+        {
+            if( !pEndTxtNd )
+            {
+                if( pSttTxtNd )
+                    aRg.aStart++;
+                else if( !bFullPara && !aRg.aEnd.GetNode().IsCntntNode() )
+                    aRg.aEnd--;
+            }
+        }
+        else if( pSttTxtNd && ( pEndTxtNd || pSttTxtNd->GetTxt().Len() ) )
             aRg.aStart++;
 
         // Step 3: Moving into UndoArray...
@@ -718,7 +734,7 @@ void SwUndoDelete::Undo( SwUndoIter& rUndoIter )
             if( pTxtNd->GetpSwpHints() )
                 pTxtNd->ClearSwpHintsArr( FALSE );
 
-            if( pSttStr )
+            if( pSttStr && !bFromTableCopy )
             {
                 ULONG nOldIdx = aPos.nNode.GetIndex();
                 pDoc->SplitNode( aPos );
