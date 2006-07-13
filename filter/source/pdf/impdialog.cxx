@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impdialog.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-04 09:05:13 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 11:12:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,10 @@
 #include <vcl/msgbox.hxx>
 #endif
 
+#ifndef _SFX_PASSWD_HXX
+#include <sfx2/passwd.hxx>
+#endif
+
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
 #include <com/sun/star/uno/Sequence.h>
 #endif
@@ -71,6 +75,8 @@ using namespace ::com::sun::star;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 // tabbed PDF dialog implementation
+// please note: the default used here are the same as per specification,
+// they should be the same in  PDFFilter::implExport and  in PDFExport::PDFExport
 // -----------------------------------------------------------------------------
 ImpPDFTabDialog::ImpPDFTabDialog( Window* pParent,
                                   ResMgr& rResMgr,
@@ -108,6 +114,13 @@ ImpPDFTabDialog::ImpPDFTabDialog( Window* pParent,
     mnInitialView( 0 ),
     mnPageLayout( 0 ),
     mbFirstPageLeft( sal_False ),
+
+    mbEncrypt( false ),
+    mbRestrictPermissions( false ),
+    mnPrint( 0 ),
+    mnChangesAllowed( 0 ),
+    mbCanCopyOrExtract( false ),
+    mbCanExtractForAccessibility( true ),
 
     mbIsRangeChecked( sal_False ),
     msPageRange( ' ' ),
@@ -204,7 +217,14 @@ ImpPDFTabDialog::ImpPDFTabDialog( Window* pParent,
     mnPageLayout = maConfigItem.ReadInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "PageLayout" ) ), 0 );
     mbFirstPageLeft = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "FirstPageOnLeft" ) ), sal_False );
 
+//prepare values for the security tab page
+    mnPrint = maConfigItem.ReadInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "Printing" ) ), 2 );
+    mnChangesAllowed = maConfigItem.ReadInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "Changes" ) ), 4 );
+    mbCanCopyOrExtract = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "EnableCopyingOfContent" ) ), sal_True );
+    mbCanExtractForAccessibility = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "EnableTextAccessForAccessibilityTools" ) ), sal_True );
+
 //queue the tab pages for later creation (created when first shown)
+    AddTabPage( RID_PDF_TAB_SECURITY, ImpPDFTabSecurityPage::Create, 0 );
     AddTabPage( RID_PDF_TAB_VPREFER, ImpPDFTabViewerPage::Create, 0 );
     AddTabPage( RID_PDF_TAB_OPNFTR, ImpPDFTabOpnFtrPage::Create, 0 );
 
@@ -228,6 +248,7 @@ ImpPDFTabDialog::~ImpPDFTabDialog()
     RemoveTabPage( RID_PDF_TAB_GENER );
     RemoveTabPage( RID_PDF_TAB_VPREFER );
     RemoveTabPage( RID_PDF_TAB_OPNFTR );
+    RemoveTabPage( RID_PDF_TAB_SECURITY );
 }
 
 // -----------------------------------------------------------------------------
@@ -244,6 +265,9 @@ void ImpPDFTabDialog::PageCreated( USHORT _nId,
         break;
     case RID_PDF_TAB_OPNFTR:
         ( ( ImpPDFTabOpnFtrPage* )&_rPage )->SetFilterConfigItem( this );
+        break;
+    case RID_PDF_TAB_SECURITY:
+        ( ( ImpPDFTabSecurityPage* )&_rPage )->SetFilterConfigItem( this );
         break;
     }
 }
@@ -294,27 +318,59 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
     maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "HideViewerWindowControls" ) ), mbHideViewerWindowControls );
     maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ResizeWindowToInitialPage" ) ), mbResizeWinToInit );
     maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "CenterWindow" ) ), mbCenterWindow );
-    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "DisplayPDFDocumentTitle" ) ), mbDisplayPDFDocumentTitle );
     maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "OpenInFullScreenMode" ) ), mbOpenInFullScreenMode );
+    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "DisplayPDFDocumentTitle" ) ), mbDisplayPDFDocumentTitle );
     maConfigItem.WriteInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "InitialView" ) ), mnInitialView );
     maConfigItem.WriteInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "Magnification" ) ), mnMagnification);
     maConfigItem.WriteInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "PageLayout" ) ), mnPageLayout );
     maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "FirstPageOnLeft" ) ), mbFirstPageLeft );
 
+    if( GetTabPage( RID_PDF_TAB_SECURITY ) )
+        ( ( ImpPDFTabSecurityPage* )GetTabPage( RID_PDF_TAB_SECURITY ) )->GetFilterConfigItem( this );
+
+    maConfigItem.WriteInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "Printing" ) ), mnPrint );
+    maConfigItem.WriteInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "Changes" ) ), mnChangesAllowed );
+    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "EnableCopyingOfContent" ) ), mbCanCopyOrExtract );
+    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "EnableTextAccessForAccessibilityTools" ) ), mbCanExtractForAccessibility );
+
     Sequence< PropertyValue > aRet( maConfigItem.GetFilterData() );
 
-    aRet.realloc( aRet.getLength() + 1 );
+    int nElementAdded = 5;
 
+    aRet.realloc( aRet.getLength() + nElementAdded );
+
+// add the encryption enable flag
+    aRet[ aRet.getLength() - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "EncryptFile" ) );
+    aRet[ aRet.getLength() - nElementAdded ].Value <<= mbEncrypt;
+    nElementAdded--;
+
+// add the open password
+    aRet[ aRet.getLength() - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "DocumentOpenPassword" ) );
+    aRet[ aRet.getLength() - nElementAdded ].Value <<= OUString( msUserPassword );
+    nElementAdded--;
+
+//the restrict permission flag (needed to have the scripting consistent with the dialog)
+    aRet[ aRet.getLength() - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "RestrictPermissions" ) );
+    aRet[ aRet.getLength() - nElementAdded ].Value <<= mbRestrictPermissions;
+    nElementAdded--;
+
+//add the permission password
+    aRet[ aRet.getLength() - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PermissionPassword" ) );
+    aRet[ aRet.getLength() - nElementAdded ].Value <<= OUString( msOwnerPassword );
+    nElementAdded--;
+
+// this should be the last added...
     if( mbIsRangeChecked )
     {
-        aRet[ aRet.getLength() - 1 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) );
-        aRet[ aRet.getLength() - 1 ].Value <<= OUString( msPageRange );
+        aRet[ aRet.getLength() - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) );
+        aRet[ aRet.getLength() - nElementAdded ].Value <<= OUString( msPageRange );
     }
     else if( mbSelectionIsChecked )
     {
-        aRet[ aRet.getLength() - 1 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Selection" ) );
-        aRet[ aRet.getLength() - 1 ].Value <<= maSelection;
+        aRet[ aRet.getLength() - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Selection" ) );
+        aRet[ aRet.getLength() - nElementAdded ].Value <<= maSelection;
     }
+
     return aRet;
 }
 
@@ -346,7 +402,8 @@ ImpPDFTabGeneralPage::ImpPDFTabGeneralPage( Window* pParent,
     maFtFormsFormat( this, ResId( FT_FORMSFORMAT, paResMgr ) ),
     maLbFormsFormat( this, ResId( LB_FORMSFORMAT, paResMgr ) ),
     maCbExportEmptyPages( this, ResId( CB_EXPORTEMPTYPAGES, paResMgr ) ),
-    mbIsPresentation( sal_False )
+    mbIsPresentation( sal_False ),
+    mbIsWriter( sal_False)
 {
     mpaResMgr = paResMgr;
     FreeResource();
@@ -456,6 +513,7 @@ SfxTabPage*  ImpPDFTabGeneralPage::Create( Window* pParent,
 // -----------------------------------------------------------------------------
 IMPL_LINK( ImpPDFTabGeneralPage, TogglePagesHdl, void*, p )
 {
+    p = p; //for compiler warning
     maEdPages.Enable( maRbRange.IsChecked() );
     maEdPages.SetReadOnly( !maRbRange.IsChecked() );
     return 0;
@@ -464,6 +522,7 @@ IMPL_LINK( ImpPDFTabGeneralPage, TogglePagesHdl, void*, p )
 // -----------------------------------------------------------------------------
 IMPL_LINK( ImpPDFTabGeneralPage, ToggleCompressionHdl, void*, p )
 {
+    p = p; //for compiler warning
     maNfQuality.Enable( maRbJPEGCompression.IsChecked() );
     return 0;
 }
@@ -471,6 +530,7 @@ IMPL_LINK( ImpPDFTabGeneralPage, ToggleCompressionHdl, void*, p )
 // -----------------------------------------------------------------------------
 IMPL_LINK( ImpPDFTabGeneralPage, ToggleReduceImageResolutionHdl, void*, p )
 {
+    p = p; //for compiler warning
     maCoReduceImageResolution.Enable( maCbReduceImageResolution.IsChecked() );
     return 0;
 }
@@ -614,6 +674,7 @@ void ImpPDFTabOpnFtrPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent 
 
 IMPL_LINK( ImpPDFTabOpnFtrPage, ToggleRbPgLyContinueFacingHdl, void*, p )
 {
+    p = p; //for compiler warning
     maCbPgLyFirstOnLeft.Enable( maRbPgLyContinueFacing.IsChecked() );
     return 0;
 }
@@ -680,4 +741,225 @@ void ImpPDFTabViewerPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent 
     maCbOpenFullScreen.Check( paParent->mbOpenInFullScreenMode );
     maCbCenterWindow.Check( paParent->mbCenterWindow );
     maCbDispDocTitle.Check( paParent->mbDisplayPDFDocumentTitle );
+}
+
+////////////////////////////////////////////////////////
+// The Security preferences tab page
+// -----------------------------------------------------------------------------
+ImpPDFTabSecurityPage::ImpPDFTabSecurityPage( Window* pParent,
+                                              const SfxItemSet& rCoreSet,
+                                              ResMgr* paResMgr ) :
+    SfxTabPage( pParent, ResId( RID_PDF_TAB_SECURITY, paResMgr ), rCoreSet ),
+    maCbEncrypt( this, ResId( CB_SEC_ENCRYPT , paResMgr ) ),
+
+    maPbUserPwd( this, ResId( BTN_USER_PWD , paResMgr ) ),
+    maFtUserPwdEmpty( this, ResId( FT_USER_PWD_EMPTY , paResMgr ) ),
+
+    maFlPermissions( this, ResId( FL_PERMISSIONS, paResMgr ) ),
+    maCbPermissions( this, ResId( CB_SEL_PERMISSIONS, paResMgr ) ),
+
+    maPbOwnerPwd( this, ResId( BTN_OWNER_PWD , paResMgr ) ),
+    maFtOwnerPwdEmpty( this, ResId( FT_OWNER_PWD_EMPTY , paResMgr ) ),
+
+    maFlPrintPermissions( this, ResId( FL_PRINT_PERMISSIONS , paResMgr ) ),
+    maRbPrintNone( this, ResId( RB_PRINT_NONE, paResMgr ) ),
+    maRbPrintLowRes( this, ResId( RB_PRINT_LOWRES , paResMgr ) ),
+    maRbPrintHighRes( this, ResId( RB_PRINT_HIGHRES , paResMgr ) ),
+
+    maFlChangesAllowed( this, ResId( FL_CHANGES_ALLOWED , paResMgr ) ),
+    maRbChangesNone( this, ResId( RB_CHANGES_NONE , paResMgr ) ),
+    maRbChangesInsDel( this, ResId( RB_CHANGES_INSDEL , paResMgr ) ),
+    maRbChangesFillForm( this, ResId( RB_CHANGES_FILLFORM , paResMgr ) ),
+    maRbChangesComment( this, ResId( RB_CHANGES_COMMENT , paResMgr ) ),
+    maRbChangesAnyNoCopy( this, ResId( RB_CHANGES_ANY_NOCOPY , paResMgr ) ),
+
+    maCbEnableCopy( this, ResId( CB_ENDAB_COPY , paResMgr ) ),
+    maCbEnableAccessibility( this, ResId( CB_ENAB_ACCESS , paResMgr ) ),
+
+    msSetUserPwd( ResId( STR_PDF_EXPORT_USPWD, paResMgr ) ),
+    msUserPwdTitle( ResId( STR_PDF_EXPORT_UDPWD, paResMgr ) ),
+
+    msRestrPermissions( ResId( STR_PDF_EXPORT_CB_PERM, paResMgr ) ),
+    msSetOwnerPwd( ResId( STR_PDF_EXPORT_OSPWD, paResMgr ) ),
+    msOwnerPwdTitle( ResId( STR_PDF_EXPORT_ODPWD, paResMgr ) )
+{
+    mpaResMgr = paResMgr;
+    FreeResource();
+    maCbPermissions.SetText( OUString( msRestrPermissions ) );
+}
+
+// -----------------------------------------------------------------------------
+ImpPDFTabSecurityPage::~ImpPDFTabSecurityPage()
+{
+    delete mpaResMgr;
+}
+
+// -----------------------------------------------------------------------------
+SfxTabPage*  ImpPDFTabSecurityPage::Create( Window* pParent,
+                                          const SfxItemSet& rAttrSet)
+{
+    ByteString aResMgrName( "pdffilter" );
+    aResMgrName.Append( ByteString::CreateFromInt32( SOLARUPD ) );
+    ResMgr* paResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
+    return ( new  ImpPDFTabSecurityPage( pParent, rAttrSet, paResMgr ) );
+}
+
+// -----------------------------------------------------------------------------
+void ImpPDFTabSecurityPage::GetFilterConfigItem( ImpPDFTabDialog* paParent  )
+{
+    paParent->mbEncrypt = maCbEncrypt.IsChecked();
+
+    if( paParent->mbEncrypt )
+        paParent->msUserPassword = msUserPassword;
+
+    paParent->mbRestrictPermissions = maCbPermissions.IsChecked();
+
+    if( maCbPermissions.IsChecked() && msOwnerPassword.Len() > 0 )
+            paParent->msOwnerPassword = msOwnerPassword;
+
+//verify print status
+    paParent->mnPrint = 0;
+    if( maRbPrintLowRes.IsChecked() )
+        paParent->mnPrint = 1;
+    else if( maRbPrintHighRes.IsChecked() )
+        paParent->mnPrint = 2;
+
+//verify changes permitted
+    paParent->mnChangesAllowed = 0;
+
+    if( maRbChangesInsDel.IsChecked() )
+        paParent->mnChangesAllowed = 1;
+    else if( maRbChangesFillForm.IsChecked() )
+        paParent->mnChangesAllowed = 2;
+    else if( maRbChangesComment.IsChecked() )
+        paParent->mnChangesAllowed = 3;
+    else if( maRbChangesAnyNoCopy.IsChecked() )
+        paParent->mnChangesAllowed = 4;
+
+    paParent->mbCanCopyOrExtract = maCbEnableCopy.IsChecked();
+    paParent->mbCanExtractForAccessibility = maCbEnableAccessibility.IsChecked();
+}
+
+// -----------------------------------------------------------------------------
+void ImpPDFTabSecurityPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent )
+{
+    maPbUserPwd.SetText( OUString( msSetUserPwd ) );
+    maPbUserPwd.SetClickHdl( LINK( this, ImpPDFTabSecurityPage, ClickmaPbUserPwdHdl ) );
+
+    maPbOwnerPwd.SetText( OUString( msSetOwnerPwd ) );
+    maPbOwnerPwd.SetClickHdl( LINK( this, ImpPDFTabSecurityPage, ClickmaPbOwnerPwdHdl ) );
+
+    switch( paParent->mnPrint )
+    {
+    default:
+    case 0:
+        maRbPrintNone.Check();
+        break;
+    case 1:
+        maRbPrintLowRes.Check();
+        break;
+    case 2:
+        maRbPrintHighRes.Check();
+        break;
+    };
+
+    switch( paParent->mnChangesAllowed )
+    {
+    default:
+    case 0:
+        maRbChangesNone.Check();
+        break;
+    case 1:
+        maRbChangesInsDel.Check();
+        break;
+    case 2:
+        maRbChangesFillForm.Check();
+        break;
+    case 3:
+        maRbChangesComment.Check();
+        break;
+    case 4:
+        maRbChangesAnyNoCopy.Check();
+        break;
+    };
+
+    maCbEnableCopy.Check( paParent->mbCanCopyOrExtract );
+    maCbEnableAccessibility.Check( paParent->mbCanExtractForAccessibility );
+
+    maCbEncrypt.SetToggleHdl( LINK( this, ImpPDFTabSecurityPage, TogglemaCbEncryptHdl ) );
+    maCbEncrypt.Check( sal_False );
+    TogglemaCbEncryptHdl( NULL );
+
+    maCbPermissions.SetToggleHdl( LINK( this, ImpPDFTabSecurityPage, TogglemaCbPermissionsHdl ) );
+    maCbPermissions.Check( sal_False );
+    TogglemaCbPermissionsHdl( NULL );
+}
+
+IMPL_LINK( ImpPDFTabSecurityPage, TogglemaCbEncryptHdl, void*, p )
+{
+    p = p; //for compiler warning
+    maPbUserPwd.Enable( maCbEncrypt.IsChecked() );
+    return 0;
+}
+
+IMPL_LINK( ImpPDFTabSecurityPage, TogglemaCbPermissionsHdl, void*, p )
+{
+    p = p; //for compiler warning
+//now enable the ones needed
+    maPbOwnerPwd.Enable( maCbPermissions.IsChecked() );
+
+    sal_Bool bLocalEnable = ( maCbPermissions.IsChecked() && msOwnerPassword.Len() > 0 );
+
+    maFlPrintPermissions.Enable( bLocalEnable );
+    maRbPrintNone.Enable( bLocalEnable );
+    maRbPrintLowRes.Enable( bLocalEnable );
+    maRbPrintHighRes.Enable( bLocalEnable );
+
+    maFlChangesAllowed.Enable( bLocalEnable );
+    maRbChangesNone.Enable( bLocalEnable );
+    maRbChangesInsDel.Enable( bLocalEnable );
+    maRbChangesFillForm.Enable( bLocalEnable );
+    maRbChangesComment.Enable( bLocalEnable );
+    maRbChangesAnyNoCopy.Enable( bLocalEnable );
+
+    maCbEnableCopy.Enable( bLocalEnable );
+    maCbEnableAccessibility.Enable( bLocalEnable );
+    return 0;
+}
+
+//method common to both the password entry procedures
+void ImpPDFTabSecurityPage::ImplPwdPushButton( String & sDlgTitle, String & sDestPassword, FixedText & aFixedText )
+{
+// string needed: dialog title, message box text, depending on the button clicked
+    SfxPasswordDialog aPwdDialog( this );
+    aPwdDialog.SetMinLen( 0 );
+    aPwdDialog.ShowExtras( SHOWEXTRAS_CONFIRM );
+    aPwdDialog.SetText( sDlgTitle );
+    if( aPwdDialog.Execute() == RET_OK )  //OK issued get password and set it
+        sDestPassword = aPwdDialog.GetPassword();
+
+    if( sDestPassword.Len() == 0 )
+        aFixedText.Show();
+    else
+        aFixedText.Hide();
+}
+
+IMPL_LINK( ImpPDFTabSecurityPage, ClickmaPbUserPwdHdl, void*, p )
+{
+    p = p; //for compiler warning
+    ImplPwdPushButton(msUserPwdTitle, msUserPassword, maFtUserPwdEmpty);
+//check if len(password) is > 0 then set button text to Set, else set to Change
+    return 0;
+}
+
+IMPL_LINK( ImpPDFTabSecurityPage, ClickmaPbOwnerPwdHdl, void*, p )
+{
+    p = p; //for compiler warning
+    ImplPwdPushButton( msOwnerPwdTitle, msOwnerPassword, maFtOwnerPwdEmpty );
+    TogglemaCbPermissionsHdl( NULL );
+
+    if( msOwnerPassword.Len() == 0 )
+        maCbPermissions.Check( false );
+
+    return 0;
 }
