@@ -4,9 +4,9 @@
  *
  *  $RCSfile: multifil.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:19:05 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 11:59:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -189,7 +189,7 @@ SvxMultiFileDialog::SvxMultiFileDialog( Window* pParent, BOOL bEmptyAllowed ) :
     aAddBtn.SetClickHdl( LINK( this, SvxMultiFileDialog, AddHdl_Impl ) );
     aDelBtn.SetClickHdl( LINK( this, SvxMultiFileDialog, DelHdl_Impl ) );
     SetText( SVX_RES( RID_SVXSTR_FILE_TITLE ) );
-    aPathGB.SetText( SVX_RES( RID_SVXSTR_FILE_HEADLINE ) );
+    aPathFL.SetText( SVX_RES( RID_SVXSTR_FILE_HEADLINE ) );
     aDelBtn.Enable();
 }
 
