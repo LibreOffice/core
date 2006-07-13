@@ -2,9 +2,9 @@
 #
 #   $RCSfile: odk_rules.pmk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: vg $ $Date: 2006-03-31 11:00:47 $
+#   last change: $Author: obo $ $Date: 2006-07-13 12:04:35 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -203,7 +203,7 @@ $(DESTDIRSETTINGS)$/component.uno.map : $(SOLARENV)$/bin$/addsym.awk $(SOLARENV)
 .ELSE           # "$(COMID)"=="gcc3"
     +tr -d "\015" < $(SOLARENV)$/src$/component.map | sed -e 's/component_getDescriptionFunc;//' > $@
 .ENDIF          # "$(COMID)"=="gcc3"
-    @+chmod a+w $@
+    @+chmod 664 $@
 
 $(DIR_FILE_LIST) : $(DIR_CREATE_FLAG)
 
