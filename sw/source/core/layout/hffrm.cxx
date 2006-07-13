@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hffrm.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:15:03 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 11:31:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -277,17 +277,24 @@ void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
 
             SwTwips nMaxHeight = LONG_MAX;
             SwTwips nRemaining, nOldHeight;
-            Point aOldPos;
+            // --> OD 2006-05-24 #i64301#
+            // use the position of the footer printing area to control invalidation
+            // of the first footer content.
+            Point aOldFooterPrtPos;
+            // <--
 
             do
             {
                 nOldHeight = Prt().Height();
                 SwFrm* pFrm = Lower();
-                if( Frm().Pos() != aOldPos && pFrm )
+                // --> OD 2006-05-24 #i64301#
+                if ( pFrm &&
+                     aOldFooterPrtPos != ( Frm().Pos() + Prt().Pos() ) )
                 {
                     pFrm->_InvalidatePos();
-                    aOldPos = Frm().Pos();
+                    aOldFooterPrtPos = Frm().Pos() + Prt().Pos();
                 }
+                // <--
                 while( pFrm )
                 {
                     pFrm->Calc();
