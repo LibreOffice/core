@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbcontrl.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:03:46 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 16:04:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,35 +208,6 @@ String RID_SVXSTR_MORE
 {
     Text [ de ] = "Weitere...";
     Text [ en-US ] = "More...";
-};
-StringArray RID_SVXSTRARRAY_DEFAULTSTYLES
-{
-    ItemList [ de ] =
-    {
-        < "Standard" ; 0 ; > ;
-        < "Überschrift 1" ; 0 ; > ;
-        < "Überschrift 2" ; 0 ; > ;
-        < "Überschrift 3" ; 0 ; > ;
-        < "Textkörper" ; 0 ; > ;
-        < "Standard" ; 1 ; > ;
-        < "Überschrift 1" ; 1 ; > ;
-        < "Überschrift 2" ; 1 ; > ;
-        < "Ergebnis" ; 1 ; > ;
-        < "Ergebnis2" ; 1 ; > ;
-    };
-    ItemList [ en-US ] =
-    {
-        < "Default" ; 0 ; > ;
-        < "Heading 1" ; 0 ; > ;
-        < "Heading 2" ; 0 ; > ;
-        < "Heading 3" ; 0 ; > ;
-        < "Text body" ; 0 ; > ;
-        < "Default" ; 1 ; > ;
-        < "Heading 1" ; 1 ; > ;
-        < "Heading 2" ; 1 ; > ;
-        < "Result" ; 1 ; > ;
-        < "Result2" ; 1 ; > ;
-    };
 };
 
 // ********************************************************************** EOF
