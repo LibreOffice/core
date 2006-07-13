@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WWD_Startup.java,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 13:43:39 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 12:28:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -262,7 +262,7 @@ public abstract class WWD_Startup extends WWD_General{
 
         proxies = getOOProxies();
 
-        String soTemplateDir = FileAccess.getOfficePath(xmsf, "Template", "share");
+        String soTemplateDir = FileAccess.getOfficePath(xmsf, "Template", "share", "/wizard");
 
         String exclamationURL = FileAccess.connectURLs( soTemplateDir, "wizard/bitmap/caution_16.png");
         this.drawNaviBar();
