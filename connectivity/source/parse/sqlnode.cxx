@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqlnode.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:39:02 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 15:14:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -543,6 +543,8 @@ void OSQLParseNode::impl_parseNodeToString_throw(::rtl::OUString& rString, const
                     if ((m_eNodeType == SQL_NODE_COMMALISTRULE)     && (i < (nCount - 1)))
                         aStringPara += ::rtl::OUString::createFromAscii(",");
                 }
+                else
+                    i++;
             }
             aStringPara.trim();
             rString += aStringPara;
@@ -849,155 +851,157 @@ sal_Bool OSQLParseNode::getTableComponents(const OSQLParseNode* _pTableNode,
     return _rTable.getLength() != 0;
 }
 // -----------------------------------------------------------------------------
-sal_Int16 OSQLParser::buildComparsionRule(OSQLParseNode*& pAppend,OSQLParseNode* pLiteral,OSQLParseNode*& pCompare)
+void OSQLParser::killThousandSeparator(OSQLParseNode* pLiteral)
 {
-    sal_Int16 nErg = 0;
-    if (m_xField.is())
+    if ( pLiteral )
     {
-        sal_Int32 nType = 0;
-        try
+        if ( s_xLocaleData->getLocaleItem(*m_pLocale).decimalSeparator.toChar() == ',' )
         {
-            Any aValue;
-            {
-                aValue = m_xField->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE));
-                aValue >>= nType;
-            }
+            pLiteral->m_aNodeValue = pLiteral->m_aNodeValue.replace('.', sal_Unicode());
+            // and replace decimal
+            pLiteral->m_aNodeValue = pLiteral->m_aNodeValue.replace(',', '.');
         }
-        catch( Exception& )
-        {
-            return nErg;
+        else
+            pLiteral->m_aNodeValue = pLiteral->m_aNodeValue.replace(',', sal_Unicode());
         }
+}
+// -----------------------------------------------------------------------------
+OSQLParseNode* OSQLParser::convertNode(sal_Int32 nType,OSQLParseNode*& pLiteral)
+{
+    if ( !pLiteral )
+        return NULL;
 
-        if (pLiteral->isRule() && !SQL_ISRULE(pLiteral,value_exp))
+    OSQLParseNode* pReturn = pLiteral;
+
+    if ( pLiteral->isRule() && !SQL_ISRULE(pLiteral,value_exp))
+    {
+        switch(nType)
         {
+            case DataType::CHAR:
+            case DataType::VARCHAR:
+            case DataType::LONGVARCHAR:
+            if ( !SQL_ISRULE(pReturn,char_value_exp) && !buildStringNodes(pReturn) )
+                pReturn = NULL;
+            default:
+                break;
+        }
+    }
+    else
+    {
+        switch(pLiteral->getNodeType())
+        {
+        case SQL_NODE_STRING:
             switch(nType)
             {
                 case DataType::CHAR:
                 case DataType::VARCHAR:
                 case DataType::LONGVARCHAR:
-                    if(!SQL_ISRULE(pLiteral,char_value_exp) && !buildStringNodes(pLiteral))
-                        break;
+                    break;
+                case DataType::DATE:
+                case DataType::TIME:
+                case DataType::TIMESTAMP:
+                    if (m_xFormatter.is())
+                    pReturn = buildDate( nType, pReturn);
+                    break;
                 default:
-                    nErg = buildNode(pAppend,pLiteral,pCompare);
+                    m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_INVALID_COMPARE);
+                    break;
             }
-        }
-        else
-        {
-            switch(pLiteral->getNodeType())
+            break;
+        case SQL_NODE_ACCESS_DATE:
+            switch(nType)
             {
-                case SQL_NODE_STRING:
-                    switch(nType)
-                    {
-                        case DataType::CHAR:
-                        case DataType::VARCHAR:
-                        case DataType::LONGVARCHAR:
-                            nErg = buildNode(pAppend,pLiteral,pCompare);
-                            break;
-                        case DataType::DATE:
-                        case DataType::TIME:
-                        case DataType::TIMESTAMP:
-                            if (m_xFormatter.is())
-                                nErg = buildDate( nType, pAppend, pLiteral, pCompare );
-                            else
-                                nErg = buildNode(pAppend,pLiteral,pCompare);
-
-                            break;
-                        default:
-                            m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_INVALID_COMPARE);
-                            break;
-                    }
-                    break;
-                case SQL_NODE_ACCESS_DATE:
-                    switch(nType)
-                    {
-                        case DataType::DATE:
-                        case DataType::TIME:
-                        case DataType::TIMESTAMP:
-                            nErg = -1;
-                            if (m_xFormatter.is())
-                                nErg = buildDate( nType, pAppend, pLiteral, pCompare );
-                            else
-                                m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_INVALID_DATE_COMPARE);
-                            break;
-                        default:
-                            m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_INVALID_COMPARE);
-                            break;
-                    }
-                    break;
-                case SQL_NODE_INTNUM:
-                    switch(nType)
-                    {
-                        case DataType::BIT:
-                        case DataType::DECIMAL:
-                        case DataType::NUMERIC:
-                        case DataType::TINYINT:
-                        case DataType::SMALLINT:
-                        case DataType::INTEGER:
-                        case DataType::BIGINT:
-                        case DataType::FLOAT:
-                        case DataType::REAL:
-                        case DataType::DOUBLE:
-                            // kill thousand seperators if any
-                            if (s_xLocaleData->getLocaleItem(*m_pLocale).decimalSeparator.toChar() == ',' )
-                            {
-                                pLiteral->m_aNodeValue = pLiteral->m_aNodeValue.replace('.', sal_Unicode());
-                                // and replace decimal
-                                pLiteral->m_aNodeValue = pLiteral->m_aNodeValue.replace(',', '.');
-                            }
-                            else
-                                pLiteral->m_aNodeValue = pLiteral->m_aNodeValue.replace(',', sal_Unicode());
-                            nErg = buildNode(pAppend,pLiteral,pCompare);
-                            break;
-                        case DataType::CHAR:
-                        case DataType::VARCHAR:
-                        case DataType::LONGVARCHAR:
-                            nErg = buildNode_STR_NUM(pAppend,pLiteral,pCompare);
-                            break;
-                        default:
-                            m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_INVALID_INT_COMPARE);
-                            break;
-                    }
-                    break;
-                case SQL_NODE_APPROXNUM:
-                    switch(nType)
-                    {
-                        case DataType::DECIMAL:
-                        case DataType::NUMERIC:
-                        case DataType::FLOAT:
-                        case DataType::REAL:
-                        case DataType::DOUBLE:
-                            if (inPredicateCheck())
-                            {
-                                // kill thousand seperators if any
-                                if (s_xLocaleData->getLocaleItem(*m_pLocale).decimalSeparator.toChar() == ',' )
-                                {
-                                    pLiteral->m_aNodeValue = pLiteral->m_aNodeValue.replace('.', sal_Unicode());
-                                    // and replace decimal
-                                    pLiteral->m_aNodeValue = pLiteral->m_aNodeValue.replace(',', '.');
-                                }
-                                else
-                                    pLiteral->m_aNodeValue = pLiteral->m_aNodeValue.replace(',', sal_Unicode());
-                            }
-                            nErg = buildNode(pAppend,pLiteral,pCompare);
-                            break;
-                        case DataType::CHAR:
-                        case DataType::VARCHAR:
-                        case DataType::LONGVARCHAR:
-                            nErg = buildNode_STR_NUM(pAppend,pLiteral,pCompare);
-                            break;
-                        case DataType::INTEGER:
-                        default:
-                            m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_INVALID_REAL_COMPARE);
-                            break;
-                    }
+                case DataType::DATE:
+                case DataType::TIME:
+                case DataType::TIMESTAMP:
+                if ( m_xFormatter.is() )
+                    pReturn = buildDate( nType, pReturn);
+                    else
+                        m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_INVALID_DATE_COMPARE);
                     break;
                 default:
-                    OSL_ENSURE( false, "OSQLParser::buildComparsionRule: unexpected node type!" );
+                    m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_INVALID_COMPARE);
                     break;
             }
+            break;
+        case SQL_NODE_INTNUM:
+            switch(nType)
+            {
+                case DataType::BIT:
+                case DataType::DECIMAL:
+                case DataType::NUMERIC:
+                case DataType::TINYINT:
+                case DataType::SMALLINT:
+                case DataType::INTEGER:
+                case DataType::BIGINT:
+                case DataType::FLOAT:
+                case DataType::REAL:
+                case DataType::DOUBLE:
+                    // kill thousand seperators if any
+                killThousandSeparator(pReturn);
+                    break;
+                case DataType::CHAR:
+                case DataType::VARCHAR:
+                case DataType::LONGVARCHAR:
+                pReturn = buildNode_STR_NUM(pReturn);
+                    break;
+                default:
+                    m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_INVALID_INT_COMPARE);
+                    break;
+            }
+            break;
+        case SQL_NODE_APPROXNUM:
+            switch(nType)
+            {
+                case DataType::DECIMAL:
+                case DataType::NUMERIC:
+                case DataType::FLOAT:
+                case DataType::REAL:
+                case DataType::DOUBLE:
+                        // kill thousand seperators if any
+                killThousandSeparator(pReturn);
+                    break;
+                case DataType::CHAR:
+                case DataType::VARCHAR:
+                case DataType::LONGVARCHAR:
+                pReturn = buildNode_STR_NUM(pReturn);
+                    break;
+                case DataType::INTEGER:
+                default:
+                    m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_INVALID_REAL_COMPARE);
+                    break;
+            }
+            break;
+        default:
+            OSL_ENSURE(0,"Not handled!");
         }
-        if (!nErg)
-            --nErg;
+    }
+    return pReturn;
+}
+// -----------------------------------------------------------------------------
+sal_Int16 OSQLParser::buildPredicateRule(OSQLParseNode*& pAppend,OSQLParseNode* pLiteral,OSQLParseNode*& pCompare,OSQLParseNode* pLiteral2)
+{
+    OSL_ENSURE(inPredicateCheck(),"Only in predicate check allowed!");
+    sal_Int16 nErg = 0;
+    if ( m_xField.is() )
+    {
+        sal_Int32 nType = 0;
+        try
+        {
+            m_xField->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)) >>= nType;
+        }
+        catch( Exception& )
+        {
+            return nErg;
+            }
+
+        OSQLParseNode* pNode1 = convertNode(nType,pLiteral);
+        if ( pNode1 )
+        {
+            OSQLParseNode* pNode2 = convertNode(nType,pLiteral2);
+            if ( !m_sErrorMessage.getLength() )
+                nErg = buildNode(pAppend,pCompare,pNode1,pNode2);
+        }
     }
     if (!pCompare->getParent()) // I have no parent so I was not used and I must die :-)
         delete pCompare;
@@ -1077,40 +1081,83 @@ sal_Int16 OSQLParser::buildLikeRule(OSQLParseNode*& pAppend, OSQLParseNode*& pLi
     }
     return nErg;
 }
-// -----------------------------------------------------------------------------
-sal_Int16 OSQLParser::buildNode_STR_NUM(OSQLParseNode*& pAppend,OSQLParseNode*& pLiteral,OSQLParseNode*& pCompare)
+//-----------------------------------------------------------------------------
+OSQLParseNode* OSQLParser::buildNode_Date(const double& fValue, sal_Int32 nType)
 {
-    static ::rtl::OUString aEmptyString;
-    OSQLParseNode* pColumnRef = new OSQLInternalNode(aEmptyString, SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::column_ref));
-    pColumnRef->append(new OSQLInternalNode(m_sFieldName,SQL_NODE_NAME));
-    OSQLParseNode* pComp = new OSQLInternalNode(aEmptyString, SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::comparison_predicate));
-    pComp->append(pColumnRef);
-    pComp->append(pCompare);
+    ::rtl::OUString aEmptyString;
+    OSQLParseNode* pNewNode = new OSQLInternalNode(aEmptyString, SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::set_fct_spec));
+    pNewNode->append(new OSQLInternalNode(::rtl::OUString::createFromAscii("{"), SQL_NODE_PUNCTUATION));
+    OSQLParseNode* pDateNode = new OSQLInternalNode(aEmptyString, SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::odbc_fct_spec));
+    pNewNode->append(pDateNode);
+    pNewNode->append(new OSQLInternalNode(::rtl::OUString::createFromAscii("}"), SQL_NODE_PUNCTUATION));
 
-    if (m_nFormatKey)
+    switch (nType)
     {
-        sal_Int16 nScale = 0;
-        ::rtl::OUString aDec;
-        try
+        case DataType::DATE:
         {
-            Any aValue = getNumberFormatProperty( m_xFormatter, m_nFormatKey, ::rtl::OUString::createFromAscii("Decimals") );
-            aValue >>= nScale;
+            Date aDate = DBTypeConversion::toDate(fValue,DBTypeConversion::getNULLDate(m_xFormatter->getNumberFormatsSupplier()));
+            ::rtl::OUString aString = DBTypeConversion::toDateString(aDate);
+            pDateNode->append(new OSQLInternalNode(aEmptyString, SQL_NODE_KEYWORD, SQL_TOKEN_D));
+            pDateNode->append(new OSQLInternalNode(aString, SQL_NODE_STRING));
+            break;
         }
-        catch( Exception& )
+        case DataType::TIME:
         {
+            Time aTime = DBTypeConversion::toTime(fValue);
+            ::rtl::OUString aString = DBTypeConversion::toTimeString(aTime);
+            pDateNode->append(new OSQLInternalNode(aEmptyString, SQL_NODE_KEYWORD, SQL_TOKEN_T));
+            pDateNode->append(new OSQLInternalNode(aString, SQL_NODE_STRING));
+            break;
         }
-
-        pComp->append(new OSQLInternalNode(stringToDouble(pLiteral->getTokenValue(),nScale),SQL_NODE_STRING));
+        case DataType::TIMESTAMP:
+        {
+            DateTime aDateTime = DBTypeConversion::toDateTime(fValue,DBTypeConversion::getNULLDate(m_xFormatter->getNumberFormatsSupplier()));
+            if (aDateTime.Seconds || aDateTime.Minutes || aDateTime.Hours)
+            {
+                ::rtl::OUString aString = DBTypeConversion::toDateTimeString(aDateTime);
+                pDateNode->append(new OSQLInternalNode(aEmptyString, SQL_NODE_KEYWORD, SQL_TOKEN_TS));
+                pDateNode->append(new OSQLInternalNode(aString, SQL_NODE_STRING));
+            }
+            else
+            {
+                Date aDate(aDateTime.Day,aDateTime.Month,aDateTime.Year);
+                pDateNode->append(new OSQLInternalNode(aEmptyString, SQL_NODE_KEYWORD, SQL_TOKEN_D));
+                pDateNode->append(new OSQLInternalNode(DBTypeConversion::toDateString(aDate), SQL_NODE_STRING));
+            }
+            break;
+        }
     }
-    else
-        pComp->append(new OSQLInternalNode(pLiteral->getTokenValue(),SQL_NODE_STRING));
 
-    pAppend->append(pComp);
+    return pNewNode;
+}
+// -----------------------------------------------------------------------------
+OSQLParseNode* OSQLParser::buildNode_STR_NUM(OSQLParseNode*& _pLiteral)
+{
+    OSQLParseNode* pReturn = NULL;
+    if ( _pLiteral )
+    {
+        if (m_nFormatKey)
+        {
+            sal_Int16 nScale = 0;
+            ::rtl::OUString aDec;
+            try
+            {
+                Any aValue = getNumberFormatProperty( m_xFormatter, m_nFormatKey, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Decimals")) );
+                aValue >>= nScale;
+            }
+            catch( Exception& )
+            {
+            }
 
-    delete pLiteral;
-    pLiteral = NULL;
+            pReturn = new OSQLInternalNode(stringToDouble(_pLiteral->getTokenValue(),nScale),SQL_NODE_STRING);
+        }
+        else
+            pReturn = new OSQLInternalNode(_pLiteral->getTokenValue(),SQL_NODE_STRING);
 
-    return 1;
+        delete _pLiteral;
+        _pLiteral = NULL;
+    }
+    return pReturn;
 }
 // -----------------------------------------------------------------------------
 ::rtl::OUString OSQLParser::stringToDouble(const ::rtl::OUString& _rValue,sal_Int16 _nScale)
@@ -1486,14 +1533,9 @@ void OSQLParseNode::substituteParameterNames(OSQLParseNode* _pNode)
 
     }
 }
-
 // -----------------------------------------------------------------------------
-sal_Int16 OSQLParser::buildDate(sal_Int32 _nType,OSQLParseNode*& pAppend,OSQLParseNode* pLiteral,OSQLParseNode*& pCompare)
+bool OSQLParser::extractDate(OSQLParseNode* pLiteral,double& _rfValue)
 {
-    sal_Int16 nErg = -1;
-    double fValue = 0.0;
-    ::rtl::OUString sValue = pLiteral->getTokenValue();
-
     Reference< XNumberFormatsSupplier > xFormatSup = m_xFormatter->getNumberFormatsSupplier();
     Reference< XNumberFormatTypes > xFormatTypes;
     if ( xFormatSup.is() )
@@ -1506,10 +1548,9 @@ sal_Int16 OSQLParser::buildDate(sal_Int32 _nType,OSQLParseNode*& pAppend,OSQLPar
             m_nFormatKey = ::dbtools::getDefaultNumberFormat( m_xField, xFormatTypes, *m_pLocale );
     }
     catch( Exception& ) { }
-
-    // try converting the string into a date, according to our format key
+    ::rtl::OUString sValue = pLiteral->getTokenValue();
     sal_Int32 nTryFormat = m_nFormatKey;
-    bool bSuccess = lcl_saveConvertToNumber( m_xFormatter, nTryFormat, sValue, fValue );
+    bool bSuccess = lcl_saveConvertToNumber( m_xFormatter, nTryFormat, sValue, _rfValue );
 
     // If our format key didn't do, try the default date format for our locale.
     if ( !bSuccess && xFormatTypes.is() )
@@ -1519,7 +1560,7 @@ sal_Int16 OSQLParser::buildDate(sal_Int32 _nType,OSQLParseNode*& pAppend,OSQLPar
             nTryFormat = xFormatTypes->getStandardFormat( NumberFormat::DATE, *m_pLocale );
         }
         catch( Exception& ) { }
-        bSuccess = lcl_saveConvertToNumber( m_xFormatter, nTryFormat, sValue, fValue );
+        bSuccess = lcl_saveConvertToNumber( m_xFormatter, nTryFormat, sValue, _rfValue );
     }
 
     // if this also didn't do, try ISO format
@@ -1530,22 +1571,34 @@ sal_Int16 OSQLParser::buildDate(sal_Int32 _nType,OSQLParseNode*& pAppend,OSQLPar
             nTryFormat = xFormatTypes->getFormatIndex( NumberFormatIndex::DATE_DIN_YYYYMMDD, *m_pLocale );
         }
         catch( Exception& ) { }
-        bSuccess = lcl_saveConvertToNumber( m_xFormatter, nTryFormat, sValue, fValue );
+        bSuccess = lcl_saveConvertToNumber( m_xFormatter, nTryFormat, sValue, _rfValue );
     }
 
     // if this also didn't do, try fallback date format (en-US)
     if ( !bSuccess )
     {
         nTryFormat = m_nDateFormatKey;
-        bSuccess = lcl_saveConvertToNumber( m_xFormatter, nTryFormat, sValue, fValue );
+        bSuccess = lcl_saveConvertToNumber( m_xFormatter, nTryFormat, sValue, _rfValue );
     }
+    return bSuccess;
+}
+// -----------------------------------------------------------------------------
+OSQLParseNode* OSQLParser::buildDate(sal_Int32 _nType,OSQLParseNode*& pLiteral)
+{
+    // try converting the string into a date, according to our format key
+    double fValue = 0.0;
+    OSQLParseNode* pFCTNode = NULL;
 
-    if ( bSuccess )
-        nErg = buildNode_Date( fValue, _nType, pAppend, pLiteral, pCompare );
-    else
+    if ( extractDate(pLiteral,fValue) )
+        pFCTNode = buildNode_Date( fValue, _nType);
+
+    delete pLiteral;
+    pLiteral = NULL;
+
+    if ( !pFCTNode )
         m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_INVALID_DATE_COMPARE);
 
-    return nErg;
+    return pFCTNode;
 }
 // -----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
