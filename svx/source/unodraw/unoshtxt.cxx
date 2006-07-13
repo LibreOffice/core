@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:57:39 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 10:36:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -385,9 +385,9 @@ void SvxTextEditSourceImpl::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
     if( pViewHint )
     {
-        switch( pViewHint->GetId() )
+        switch( pViewHint->GetHintType() )
         {
-            case SVX_HINT_VIEWCHANGED:
+            case SvxViewHint::SVX_HINT_VIEWCHANGED:
                 Broadcast( *pViewHint );
                 break;
         }
@@ -409,7 +409,7 @@ void SvxTextEditSourceImpl::Notify( SfxBroadcaster&, const SfxHint& rHint )
                     // UpdateOutliner();
 
                     // #101029# Broadcast object changes, as they might change visible attributes
-                    SvxViewHint aHint(SVX_HINT_VIEWCHANGED);
+                    SvxViewHint aHint(SvxViewHint::SVX_HINT_VIEWCHANGED);
                     Broadcast( aHint );
                 }
                 break;
