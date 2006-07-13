@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3dpolygon.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:45:13 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 09:57:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,9 +63,8 @@ class CoordinateData3D
     ::basegfx::B3DPoint                             maPoint;
 
 public:
-    CoordinateData3D() {}
-    CoordinateData3D(const ::basegfx::B3DPoint& rData) : maPoint(rData) {}
-    ~CoordinateData3D() {}
+    CoordinateData3D() : maPoint() {}
+    explicit CoordinateData3D(const ::basegfx::B3DPoint& rData) : maPoint(rData) {}
 
     const ::basegfx::B3DPoint& getCoordinate() const { return maPoint; }
     void setCoordinate(const ::basegfx::B3DPoint& rValue) { if(rValue != maPoint) maPoint = rValue; }
@@ -82,22 +81,18 @@ class CoordinateDataArray3D
     CoordinateData3DVector                          maVector;
 
 public:
-    CoordinateDataArray3D(sal_uInt32 nCount)
+    explicit CoordinateDataArray3D(sal_uInt32 nCount)
     :   maVector(nCount)
     {
     }
 
-    CoordinateDataArray3D(const CoordinateDataArray3D& rOriginal)
+    explicit CoordinateDataArray3D(const CoordinateDataArray3D& rOriginal)
     :   maVector(rOriginal.maVector)
     {
     }
 
     CoordinateDataArray3D(const CoordinateDataArray3D& rOriginal, sal_uInt32 nIndex, sal_uInt32 nCount)
     :   maVector(rOriginal.maVector.begin() + nIndex, rOriginal.maVector.begin() + (nIndex + nCount))
-    {
-    }
-
-    ~CoordinateDataArray3D()
     {
     }
 
@@ -223,9 +218,6 @@ public:
 
 class ImplB3DPolygon
 {
-    // the internal RefCount
-    sal_uInt32                                      mnRefCount;
-
     // The point vector. This vector exists always and defines the
     // count of members.
     CoordinateDataArray3D                           maPoints;
@@ -235,49 +227,16 @@ class ImplB3DPolygon
     bool                                            mbIsClosed;
 
 public:
-    // This constructor is only used from the static identity polygon, thus
-    // the RefCount is set to 1 to never 'delete' this static incarnation.
-    ImplB3DPolygon()
-    :   mnRefCount(1),
+    ImplB3DPolygon() :
         maPoints(0L),
         mbIsClosed(false)
     {
-        // complete initialization with defaults
     }
 
-    ImplB3DPolygon(const ImplB3DPolygon& rToBeCopied)
-    :   mnRefCount(0),
-        maPoints(rToBeCopied.maPoints),
-        mbIsClosed(rToBeCopied.mbIsClosed)
-    {
-        // complete initialization using copy
-    }
-
-    ImplB3DPolygon(const ImplB3DPolygon& rToBeCopied, sal_uInt32 nIndex, sal_uInt32 nCount)
-    :   mnRefCount(0),
+    ImplB3DPolygon(const ImplB3DPolygon& rToBeCopied, sal_uInt32 nIndex, sal_uInt32 nCount) :
         maPoints(rToBeCopied.maPoints, nIndex, nCount),
         mbIsClosed(rToBeCopied.mbIsClosed)
     {
-        // complete initialization using partly copy
-    }
-
-    ~ImplB3DPolygon()
-    {
-    }
-
-    const sal_uInt32 getRefCount() const
-    {
-        return mnRefCount;
-    }
-
-    void incRefCount()
-    {
-        mnRefCount++;
-    }
-
-    void decRefCount()
-    {
-        mnRefCount--;
     }
 
     sal_uInt32 count() const
@@ -403,84 +362,55 @@ public:
 
 //////////////////////////////////////////////////////////////////////////////
 
-namespace { struct DefaultPolygon : public rtl::Static< ImplB3DPolygon, DefaultPolygon > {}; }
-
 namespace basegfx
 {
-    void B3DPolygon::implForceUniqueCopy()
+    namespace { struct DefaultPolygon : public rtl::Static< B3DPolygon::ImplType,
+                                                            DefaultPolygon > {}; }
+
+    B3DPolygon::B3DPolygon() :
+        mpPolygon(DefaultPolygon::get())
     {
-        if(mpPolygon->getRefCount())
-        {
-            mpPolygon->decRefCount();
-            mpPolygon = new ImplB3DPolygon(*mpPolygon);
-        }
     }
 
-    B3DPolygon::B3DPolygon()
-    :   mpPolygon(&DefaultPolygon::get())
+    B3DPolygon::B3DPolygon(const B3DPolygon& rPolygon) :
+        mpPolygon(rPolygon.mpPolygon)
     {
-        mpPolygon->incRefCount();
     }
 
-    B3DPolygon::B3DPolygon(const B3DPolygon& rPolygon)
-    :   mpPolygon(rPolygon.mpPolygon)
+    B3DPolygon::B3DPolygon(const B3DPolygon& rPolygon, sal_uInt32 nIndex, sal_uInt32 nCount) :
+        mpPolygon(ImplB3DPolygon(*rPolygon.mpPolygon, nIndex, nCount))
     {
-        mpPolygon->incRefCount();
-    }
-
-    B3DPolygon::B3DPolygon(const B3DPolygon& rPolygon, sal_uInt32 nIndex, sal_uInt32 nCount)
-    :   mpPolygon(new ImplB3DPolygon(*rPolygon.mpPolygon, nIndex, nCount))
-    {
+        // TODO(P2): one extra temporary here (cow_wrapper copies
+        // given ImplB3DPolygon into its internal impl_t wrapper type)
         OSL_ENSURE(nIndex + nCount > rPolygon.mpPolygon->count(), "B3DPolygon constructor outside range (!)");
     }
 
     B3DPolygon::~B3DPolygon()
     {
-        if(mpPolygon->getRefCount())
-        {
-            mpPolygon->decRefCount();
-        }
-        else
-        {
-            delete mpPolygon;
-        }
     }
 
     B3DPolygon& B3DPolygon::operator=(const B3DPolygon& rPolygon)
     {
-        if(mpPolygon->getRefCount())
-        {
-            mpPolygon->decRefCount();
-        }
-        else
-        {
-            delete mpPolygon;
-        }
-
         mpPolygon = rPolygon.mpPolygon;
-        mpPolygon->incRefCount();
-
         return *this;
+    }
+
+    void B3DPolygon::makeUnique()
+    {
+        mpPolygon.make_unique();
     }
 
     bool B3DPolygon::operator==(const B3DPolygon& rPolygon) const
     {
-        if(mpPolygon == rPolygon.mpPolygon)
-        {
+        if(mpPolygon.same_object(rPolygon.mpPolygon))
             return true;
-        }
 
         return mpPolygon->isEqual(*(rPolygon.mpPolygon));
     }
 
     bool B3DPolygon::operator!=(const B3DPolygon& rPolygon) const
     {
-        if(mpPolygon == rPolygon.mpPolygon)
-        {
-            return false;
-        }
-
-        return !mpPolygon->isEqual(*(rPolygon.mpPolygon));
+        return !(*this == rPolygon);
     }
 
     sal_uInt32 B3DPolygon::count() const
@@ -499,11 +429,8 @@ namespace basegfx
     {
         OSL_ENSURE(nIndex < mpPolygon->count(), "B3DPolygon access outside range (!)");
 
-        if(mpPolygon->getPoint(nIndex) != rValue)
-        {
-            implForceUniqueCopy();
+        if(getB3DPoint(nIndex) != rValue)
             mpPolygon->setPoint(nIndex, rValue);
-        }
     }
 
     void B3DPolygon::insert(sal_uInt32 nIndex, const ::basegfx::B3DPoint& rPoint, sal_uInt32 nCount)
@@ -511,19 +438,13 @@ namespace basegfx
         OSL_ENSURE(nIndex <= mpPolygon->count(), "B3DPolygon Insert outside range (!)");
 
         if(nCount)
-        {
-            implForceUniqueCopy();
             mpPolygon->insert(nIndex, rPoint, nCount);
-        }
     }
 
     void B3DPolygon::append(const ::basegfx::B3DPoint& rPoint, sal_uInt32 nCount)
     {
         if(nCount)
-        {
-            implForceUniqueCopy();
             mpPolygon->insert(mpPolygon->count(), rPoint, nCount);
-        }
     }
 
     void B3DPolygon::insert(sal_uInt32 nIndex, const B3DPolygon& rPoly, sal_uInt32 nIndex2, sal_uInt32 nCount)
@@ -532,8 +453,6 @@ namespace basegfx
 
         if(rPoly.count())
         {
-            implForceUniqueCopy();
-
             if(!nCount)
             {
                 nCount = rPoly.count();
@@ -556,8 +475,6 @@ namespace basegfx
     {
         if(rPoly.count())
         {
-            implForceUniqueCopy();
-
             if(!nCount)
             {
                 nCount = rPoly.count();
@@ -581,25 +498,12 @@ namespace basegfx
         OSL_ENSURE(nIndex + nCount <= mpPolygon->count(), "B3DPolygon Remove outside range (!)");
 
         if(nCount)
-        {
-            implForceUniqueCopy();
             mpPolygon->remove(nIndex, nCount);
-        }
     }
 
     void B3DPolygon::clear()
     {
-        if(mpPolygon->getRefCount())
-        {
-            mpPolygon->decRefCount();
-        }
-        else
-        {
-            delete mpPolygon;
-        }
-
-        mpPolygon = &DefaultPolygon::get();
-        mpPolygon->incRefCount();
+        mpPolygon = DefaultPolygon::get();
     }
 
     bool B3DPolygon::isClosed() const
@@ -609,20 +513,14 @@ namespace basegfx
 
     void B3DPolygon::setClosed(bool bNew)
     {
-        if(mpPolygon->isClosed() != bNew)
-        {
-            implForceUniqueCopy();
+        if(isClosed() != bNew)
             mpPolygon->setClosed(bNew);
-        }
     }
 
     void B3DPolygon::flip()
     {
-        if(mpPolygon->count() > 1)
-        {
-            implForceUniqueCopy();
+        if(count() > 1)
             mpPolygon->flip();
-        }
     }
 
     bool B3DPolygon::hasDoublePoints() const
@@ -634,7 +532,6 @@ namespace basegfx
     {
         if(hasDoublePoints())
         {
-            implForceUniqueCopy();
             mpPolygon->removeDoublePointsAtBeginEnd();
             mpPolygon->removeDoublePointsWholeTrack();
         }
@@ -642,11 +539,8 @@ namespace basegfx
 
     void B3DPolygon::transform(const ::basegfx::B3DHomMatrix& rMatrix)
     {
-        if(mpPolygon->count())
-        {
-            implForceUniqueCopy();
+        if(count())
             mpPolygon->transform(rMatrix);
-        }
     }
 } // end of namespace basegfx
 
