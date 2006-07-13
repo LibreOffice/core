@@ -4,9 +4,9 @@
  *
  *  $RCSfile: javacompskeleton.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:50:34 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 11:57:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -493,7 +493,11 @@ void generateAddinConstructorAndHelper(std::ostream& o,
          const std::hash_set< OString, OStringHash >& interfaces)
 {
     // get the one and only add-in service for later use
-    OString sAddinService = (*services.begin()).replace('/', '.');
+    std::hash_set< OString, OStringHash >::const_iterator iter = services.begin();
+    OString sAddinService = (*iter).replace('/', '.');
+    if (sAddinService.equals("com.sun.star.sheet.AddIn")) {
+        sAddinService = (*(++iter)).replace('/', '.');
+    }
 
     // add-in specific fields
     o << "\n    private static final String sADDIN_SERVICENAME = \""
@@ -545,7 +549,7 @@ void generateAddinConstructorAndHelper(std::ostream& o,
         "\"com.sun.star.configuration.ConfigurationAccess\";\n\n";
 
     o << "        StringBuffer sPath = new StringBuffer(\n"
-        "             \"/org.openoffice.Office.Sheet.CalcAddIns/AddInInfo/\");\n"
+        "             \"/org.openoffice.Office.CalcAddIns/AddInInfo/\");\n"
         "        sPath.append(sADDIN_SERVICENAME);\n"
         "        sPath.append(\"/AddInFunctions\");\n\n";
 
@@ -557,8 +561,9 @@ void generateAddinConstructorAndHelper(std::ostream& o,
         "             com.sun.star.uno.Type.STRING, sPath.toString());\n\n";
 
     o << "        Object aArguments[] = new Object[1];\n"
-        "        aArguments[0] = new com.sun.star.uno.Any(\n"
-        "            com.sun.star.beans.PropertyValue.class, aArgument);\n\n";
+        "        aArguments[0] = new com.sun.star.uno.Any("
+        " new com.sun.star.uno.Type(\n"
+        "            com.sun.star.beans.PropertyValue.class), aArgument);\n\n";
 
     o << "        // create the default view using default UI locale\n"
         "         Object xIface = \n"
@@ -573,13 +578,15 @@ void generateAddinConstructorAndHelper(std::ostream& o,
     o << "        // extends arguments to create a view for all locales to get "
         "simple\n        // access to the compatibilityname property\n"
         "        aArguments = new Object[2];\n"
-        "        aArguments[0] = new com.sun.star.uno.Any(\n"
-        "            com.sun.star.beans.PropertyValue.class, aArgument);\n"
+        "        aArguments[0] = new com.sun.star.uno.Any( "
+        "new com.sun.star.uno.Type(\n"
+        "            com.sun.star.beans.PropertyValue.class), aArgument);\n"
         "        aArgument.Name = \"locale\";\n"
         "        aArgument.Value = new com.sun.star.uno.Any(\n"
         "            com.sun.star.uno.Type.STRING, \"*\");\n"
-        "        aArguments[1] = new com.sun.star.uno.Any(\n"
-        "            com.sun.star.beans.PropertyValue.class, aArgument);\n\n";
+        "        aArguments[1] = new com.sun.star.uno.Any( "
+        " new com.sun.star.uno.Type(\n"
+        "            com.sun.star.beans.PropertyValue.class), aArgument);\n\n";
 
     o << "        // create view for all locales\n"
         "        xIface = xProvider.createInstanceWithArguments(sReadOnlyView, "
