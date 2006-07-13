@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dmultirange.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:50:05 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 09:57:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -231,18 +231,29 @@ namespace basegfx
 
 
     B2DMultiRange::B2DMultiRange() :
-        mpImpl( new ImplB2DMultiRange() )
+        mpImpl()
     {
     }
 
     B2DMultiRange::B2DMultiRange( const B2DRange& rRange ) :
-        mpImpl( new ImplB2DMultiRange( rRange ) )
+        mpImpl( ImplB2DMultiRange( rRange ) )
     {
     }
 
     B2DMultiRange::~B2DMultiRange()
     {
-        // to have ImplB2DMultiRange declaration available
+        // otherwise, ImplB2DMultiRange would be an incomplete type
+    }
+
+    B2DMultiRange::B2DMultiRange( const B2DMultiRange& rSrc ) :
+        mpImpl( rSrc.mpImpl )
+    {
+    }
+
+    B2DMultiRange& B2DMultiRange::operator=( const B2DMultiRange& rSrc )
+    {
+        mpImpl = rSrc.mpImpl;
+        return *this;
     }
 
     bool B2DMultiRange::isEmpty() const
