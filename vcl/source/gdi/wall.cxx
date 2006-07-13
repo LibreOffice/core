@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wall.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:12:49 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 10:24:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -248,7 +248,7 @@ Wallpaper::Wallpaper( const Wallpaper& rWallpaper )
 {
     DBG_CTOR( Wallpaper, NULL );
     DBG_CHKOBJ( &rWallpaper, Wallpaper, NULL );
-    DBG_ASSERT( rWallpaper.mpImplWallpaper->mnRefCount < 0xFFFE, "Wallpaper: RefCount overflow" );
+    DBG_ASSERT( rWallpaper.mpImplWallpaper->mnRefCount < 0xFFFFFFFE, "Wallpaper: RefCount overflow" );
 
     // Instance Daten uebernehmen und Referenzcounter erhoehen
     mpImplWallpaper = rWallpaper.mpImplWallpaper;
@@ -585,7 +585,7 @@ Wallpaper& Wallpaper::operator=( const Wallpaper& rWallpaper )
 {
     DBG_CHKTHIS( Wallpaper, NULL );
     DBG_CHKOBJ( &rWallpaper, Wallpaper, NULL );
-    DBG_ASSERT( rWallpaper.mpImplWallpaper->mnRefCount < 0xFFFE, "Wallpaper: RefCount overflow" );
+    DBG_ASSERT( rWallpaper.mpImplWallpaper->mnRefCount < 0xFFFFFFFE, "Wallpaper: RefCount overflow" );
 
     // Zuerst Referenzcounter erhoehen, damit man sich selbst zuweisen kann
     if ( rWallpaper.mpImplWallpaper->mnRefCount )
