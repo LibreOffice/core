@@ -28,7 +28,7 @@ F4_WRITER_BINFILTER =
 .ENDIF
 
 # -----------------------------------------------
-# count = 33
+# count = 39
 T4_WRITER = \
     writer_web_HTML \
     writer_Lotus_1_2_3_10_DOS_StarWriter \
@@ -56,10 +56,12 @@ T4_WRITER = \
     pdf_Portable_Document_Format\
     writer8_template\
     writer8 \
-    writer_MS_Word_2003_XML
+    writer_MS_Word_2003_XML \
+    LaTeX \
+    BibTeX
 
 # -----------------------------------------------
-# count = 33
+# count = 39
 F4_WRITER = \
     HTML__StarWriter_ \
     Lotus_1_2_3_1_0__DOS___StarWriter_ \
@@ -87,10 +89,12 @@ F4_WRITER = \
     writer_pdf_Export\
     writer8\
     writer8_template \
-    MS_Word_2003_XML 
+    MS_Word_2003_XML \
+    LaTeX_Writer \
+    BibTeX_Writer
 
 # -----------------------------------------------
-# count = 13
+# count = 14
 F4_UI_WRITER = \
     HTML__StarWriter__ui \
     MS_Word_95_Vorlage_ui \
@@ -105,8 +109,8 @@ F4_UI_WRITER = \
     writer_StarOffice_XML_Writer_Template_ui \
     writer8_ui \
     writer8_template_ui \
-    MS_Word_2003_XML_ui 
-    
+    MS_Word_2003_XML_ui
+
 # -----------------------------------------------
 # count = 0
 L4_WRITER =
@@ -130,8 +134,8 @@ ALL_4fcfg_writer = \
     $(UI_FILTERS_4fcfg_writer) \
     $(FRAMELOADERS_4fcfg_writer) \
     $(CONTENTHANDLERS_4fcfg_writer)
-    
+
 ALL_UI_FILTERS+=$(UI_FILTERS_4fcfg_writer)
-    
+
 ALL_PACKAGES+=writer
-    
+
