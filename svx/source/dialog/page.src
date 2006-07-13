@@ -4,9 +4,9 @@
  *
  *  $RCSfile: page.src,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-07 10:20:23 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 16:02:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -525,7 +525,7 @@ String RID_SVXSTR_PAPER_C6
 };
 String RID_SVXSTR_PAPER_C65
 {
-    Text = "C65" ;
+    Text = "C6/5" ;
 };
 String RID_SVXSTR_PAPER_DL
 {
@@ -637,7 +637,7 @@ StringArray RID_SVXSTRARY_PAPERSIZE_STD
         < "C4" ; PAPERSIZE_C4 ; > ;
         < "C5" ; PAPERSIZE_C5 ; > ;
         < "C6" ; PAPERSIZE_C6 ; > ;
-        < "C65" ; PAPERSIZE_C65 ; > ;
+        < "C6/5" ; PAPERSIZE_C65 ; > ;
         < "DL" ; PAPERSIZE_DL ; > ;
         < "Env. #6¾" ; PAPERSIZE_COM675; > ;
         < "Env. Monarch" ; PAPERSIZE_MONARCH; > ;
@@ -667,7 +667,7 @@ StringArray RID_SVXSTRARY_PAPERSIZE_STD
         < "; C4" ; PAPERSIZE_C4 ; > ;
         < "; C5" ; PAPERSIZE_C5 ; > ;
         < "; C6" ; PAPERSIZE_C6 ; > ;
-        < "; C65" ; PAPERSIZE_C65 ; > ;
+        < "; C6/5" ; PAPERSIZE_C65 ; > ;
         < "; DL" ; PAPERSIZE_DL ; > ;
         < "; Env. #6¾" ; PAPERSIZE_COM675; > ;
         < "; Env. Monarch" ; PAPERSIZE_MONARCH; > ;
@@ -697,7 +697,7 @@ StringArray RID_SVXSTRARY_PAPERSIZE_STD
         < "C4" ; PAPERSIZE_C4 ; > ;
         < "C5" ; PAPERSIZE_C5 ; > ;
         < "C6" ; PAPERSIZE_C6 ; > ;
-        < "C65" ; PAPERSIZE_C65 ; > ;
+        < "C6/5" ; PAPERSIZE_C65 ; > ;
         < "DL" ; PAPERSIZE_DL ; > ;
         < "Env. #6¾" ; PAPERSIZE_COM675; > ;
         < "Env. Monarch" ; PAPERSIZE_MONARCH; > ;
@@ -733,7 +733,7 @@ StringArray RID_SVXSTRARY_PAPERSIZE_DRAW
         < "C4" ; PAPERSIZE_C4 ; > ;
         < "C5" ; PAPERSIZE_C5 ; > ;
         < "C6" ; PAPERSIZE_C6 ; > ;
-        < "C65" ; PAPERSIZE_C65 ; > ;
+        < "C6/5" ; PAPERSIZE_C65 ; > ;
         < "DL" ; PAPERSIZE_DL ; > ;
         < "Dia" ; PAPERSIZE_DIA ; > ;
         < "Bildschirm" ; PAPERSIZE_SCREEN ; > ;
@@ -762,7 +762,7 @@ StringArray RID_SVXSTRARY_PAPERSIZE_DRAW
         < "; C4" ; PAPERSIZE_C4 ; > ;
         < "; C5" ; PAPERSIZE_C5 ; > ;
         < "; C6" ; PAPERSIZE_C6 ; > ;
-        < "; C65" ; PAPERSIZE_C65 ; > ;
+        < "; C6/5" ; PAPERSIZE_C65 ; > ;
         < "; DL" ; PAPERSIZE_DL ; > ;
         < "; Dia" ; PAPERSIZE_DIA ; > ;
         < "; Bildschirm" ; PAPERSIZE_SCREEN ; > ;
@@ -791,7 +791,7 @@ StringArray RID_SVXSTRARY_PAPERSIZE_DRAW
         < "C4" ; PAPERSIZE_C4 ; > ;
         < "C5" ; PAPERSIZE_C5 ; > ;
         < "C6" ; PAPERSIZE_C6 ; > ;
-        < "C65" ; PAPERSIZE_C65 ; > ;
+        < "C6/5" ; PAPERSIZE_C65 ; > ;
         < "DL" ; PAPERSIZE_DL ; > ;
         < "Slide" ; PAPERSIZE_DIA ; > ;
         < "Screen" ; PAPERSIZE_SCREEN ; > ;
