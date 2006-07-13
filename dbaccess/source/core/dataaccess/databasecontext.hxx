@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databasecontext.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 11:59:16 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 15:21:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,8 +60,8 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XCONTAINER_HPP_
 #include <com/sun/star/container/XContainer.hpp>
 #endif
-#ifndef _CPPUHELPER_COMPBASE8_HXX_
-#include <cppuhelper/compbase8.hxx>
+#ifndef _CPPUHELPER_COMPBASE7_HXX_
+#include <cppuhelper/compbase7.hxx>
 #endif
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
@@ -106,11 +106,10 @@ namespace dbaccess
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
     ODatabaseContext_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
-typedef ::cppu::WeakComponentImplHelper8    <   ::com::sun::star::lang::XServiceInfo
+typedef ::cppu::WeakComponentImplHelper7    <   ::com::sun::star::lang::XServiceInfo
                                             ,   ::com::sun::star::container::XEnumerationAccess
                                             ,   ::com::sun::star::container::XNameAccess
                                             ,   ::com::sun::star::uno::XNamingService
-                                            ,   ::com::sun::star::lang::XEventListener
                                             ,   ::com::sun::star::container::XContainer
                                             ,   ::com::sun::star::lang::XSingleServiceFactory
                                             ,   ::com::sun::star::lang::XUnoTunnel
@@ -196,9 +195,6 @@ public:
     virtual void SAL_CALL registerObject( const ::rtl::OUString& Name, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& Object ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL revokeObject( const ::rtl::OUString& Name ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
-// ::com::sun::star::lang::XEventListener
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
-
 // ::com::sun::star::container::XContainer
     virtual void SAL_CALL addContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
@@ -211,6 +207,7 @@ public:
                         ,const ::rtl::Reference<ODatabaseModelImpl>& _pModelImpl);
     void deregisterPrivate(const ::rtl::OUString& _sName);
     void nameChangePrivate(const ::rtl::OUString& _sOldName, const ::rtl::OUString& _sNewName);
+    void storeTransientProperties( ODatabaseModelImpl& _rModelImpl);
 };
 
 //........................................................................
