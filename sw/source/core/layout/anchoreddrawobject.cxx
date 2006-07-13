@@ -4,9 +4,9 @@
  *
  *  $RCSfile: anchoreddrawobject.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 12:24:04 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 11:30:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -353,7 +353,6 @@ void SwAnchoredDrawObject::MakeObjPos()
     // visible layer.
     if ( mbNotYetPositioned )
     {
-        mbNotYetPositioned = false;
         // --> OD 2004-11-17 #i35635#
         pDrawContact->MoveObjToVisibleLayer( DrawObj() );
         // <--
@@ -366,6 +365,11 @@ void SwAnchoredDrawObject::MakeObjPos()
         {
             _SetPositioningAttr();
         }
+        // <--
+        // --> OD 2006-05-24 #b6418964#
+        // - reset internal flag after all needed actions are performed to
+        //   avoid callbacks from drawing layer
+        mbNotYetPositioned = false;
         // <--
     }
     // <--
