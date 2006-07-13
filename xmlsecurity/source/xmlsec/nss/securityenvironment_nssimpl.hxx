@@ -4,9 +4,9 @@
  *
  *  $RCSfile: securityenvironment_nssimpl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 17:33:57 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 08:10:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,6 +92,8 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
 
+#include "osl/mutex.hxx"
+
 #include "pk11func.h"
 #include "keyhi.h"
 #include "certdb.h"
@@ -105,9 +107,13 @@ class SecurityEnvironment_NssImpl : public ::cppu::WeakImplHelper4<
     ::com::sun::star::lang::XServiceInfo ,
     ::com::sun::star::lang::XUnoTunnel >
 {
-    private :
+private :
 
-        PK11SlotInfo*                       m_pSlot ;
+    std::list< PK11SlotInfo* > m_Slots;
+    typedef std::list< PK11SlotInfo* >::const_iterator CIT_SLOTS;
+
+    osl::Mutex m_mutex;
+
         CERTCertDBHandle*                   m_pHandler ;
         std::list< PK11SymKey* >            m_tSymKeyList ;
         std::list< SECKEYPublicKey* >       m_tPubKeyList ;
@@ -158,10 +164,6 @@ class SecurityEnvironment_NssImpl : public ::cppu::WeakImplHelper4<
         static SecurityEnvironment_NssImpl* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xObj ) ;
 
         //Native mehtods
-        virtual PK11SlotInfo* getCryptoSlot() throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
-
-        virtual void setCryptoSlot( PK11SlotInfo* aSlot ) throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
-
         virtual CERTCertDBHandle* getCertDb() throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
 
         virtual void setCertDb( CERTCertDBHandle* aCertDb ) throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
@@ -200,6 +202,13 @@ class SecurityEnvironment_NssImpl : public ::cppu::WeakImplHelper4<
         //Native mehtods
         virtual xmlSecKeysMngrPtr createKeysManager() throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
         virtual void destroyKeysManager(xmlSecKeysMngrPtr pKeysMngr) throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
+
+private:
+        void updateSlots();
+
+          virtual void addCryptoSlot( PK11SlotInfo* aSlot ) throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
+
+
 } ;
 
 #endif  // _XSECURITYENVIRONMENT_NSSIMPL_HXX_
