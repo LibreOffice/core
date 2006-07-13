@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsPageCache.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 07:41:10 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 10:29:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include "SlsGenericRequestQueue.hxx"
 #include "SlsRequestFactory.hxx"
 #include "SlsQueueProcessor.hxx"
-#include "SlsPreviewBitmapFactory2.hxx"
+#include "SlsPreviewBitmapFactory.hxx"
 
 
 using namespace ::sd::slidesorter::model;
@@ -52,7 +52,7 @@ namespace sd { namespace slidesorter { namespace cache {
 
 
 typedef GenericRequestQueue<PageCache::RequestData> Queue;
-typedef QueueProcessor<Queue, PageCache::RequestData, PreviewBitmapFactory2> Processor;
+typedef QueueProcessor<Queue, PageCache::RequestData, PreviewBitmapFactory> Processor;
 typedef GenericPageCache< PageCache::RequestData, RequestFactory<Queue,false>, Queue, Processor
     > BaseClass;
 
