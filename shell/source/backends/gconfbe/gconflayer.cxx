@@ -136,7 +136,11 @@ uno::Any translateToOOo( const ConfigurationValue aValue, GConfValue *aGconfValu
 
         case SETTING_WORK_DIRECTORY:
         {
-            return uno::makeAny( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "$(work)/Documents" ) ) );
+            osl::Security aSecurity;
+            rtl::OUString aDocumentsDirURL;
+            if ( aSecurity.getHomeDir( aDocumentsDirURL ) )
+                aDocumentsDirURL += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/Documents" ) );
+            return uno::makeAny( aDocumentsDirURL );
         }
 
         case SETTING_USER_GIVENNAME:
