@@ -4,9 +4,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:39:02 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 16:06:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -613,7 +613,7 @@ SfxTopFrame* SfxTopFrame::Create( SfxObjectShell* pDoc, USHORT nViewId, BOOL bHi
         if ( nViewId )
             pDoc->GetMedium()->GetItemSet()->Put( SfxUInt16Item( SID_VIEW_ID, nViewId ) );
         pFrame->InsertDocument( pDoc );
-        if ( pWindow )
+        if ( pWindow && !bHidden )
             pWindow->Show();
     }
 
