@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:08:06 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 13:24:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1011,7 +1011,8 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         if ( nSID == SID_OPENTEMPLATE )
         {
             aPath = SvtPathOptions().GetTemplatePath();
-            aPath = aPath.GetToken(0,';');
+            sal_Int32 nTokenCount = aPath.GetTokenCount( ';' );
+            aPath = aPath.GetToken( ( nTokenCount ? ( nTokenCount - 1 ) : 0 ), ';' );
         }
 
         ULONG nErr = sfx2::FileOpenDialog_Impl(
