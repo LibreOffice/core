@@ -68,6 +68,9 @@
 
     <target name="init" >
         <mkdir dir="${target.dir}"/>
+        <echo message="--------------------------------------------------------------------------------" />
+        <echo message="debug is ${debug}"/>
+        <echo message="--------------------------------------------------------------------------------" />
     </target>
 
     <!-- compile java sources in ${package} -->
