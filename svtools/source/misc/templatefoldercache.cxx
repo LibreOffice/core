@@ -4,9 +4,9 @@
  *
  *  $RCSfile: templatefoldercache.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 21:21:23 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 12:07:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_XCONTENTACCESS_HPP_
+#include <com/sun/star/ucb/XContentAccess.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -361,6 +364,8 @@ namespace svt
 
         void operator() ( const ::vos::ORef< TemplateContent >& _rxContent ) const
         {
+            DBG_ERRORFILE( "This method must not be used, the whole URL must be stored!" );
+
             // use the base class operator with the local name of the content
             StoreString::operator() ( _rxContent->getName() );
         }
@@ -396,8 +401,14 @@ namespace svt
             :public ::std::unary_function< ::vos::ORef< TemplateContent >, void >
             ,public StorageHelper
     {
+        uno::Reference< util::XOfficeInstallationDirectories > m_xOfficeInstDirs;
+
     public:
-        StoreFolderContent( SvStream& _rStorage ) : StorageHelper( _rStorage ) { }
+        StoreFolderContent( SvStream& _rStorage,
+                         const uno::Reference<
+                            util::XOfficeInstallationDirectories > &
+                                xOfficeInstDirs )
+        : StorageHelper( _rStorage ), m_xOfficeInstDirs( xOfficeInstDirs ) { }
 
         //.................................................................
         void operator() ( const TemplateContent& _rContent ) const
@@ -408,11 +419,11 @@ namespace svt
             // store the info about the children
             // the number
             m_rStorage << (sal_Int32)_rContent.size();
-            // their (local!) names
+            // their URLs ( the local name is not enough, since URL might be not a hierarchical one, "expand:" for example )
             ::std::for_each(
                 _rContent.getSubContents().begin(),
                 _rContent.getSubContents().end(),
-                StoreLocalContentName( m_rStorage )
+                StoreContentURL( m_rStorage, m_xOfficeInstDirs )
             );
             // their content
             ::std::for_each(
@@ -438,7 +449,13 @@ namespace svt
             :public ::std::unary_function< ::vos::ORef< TemplateContent >, void >
             ,public StorageHelper
     {
-        ReadFolderContent( SvStream& _rStorage ) : StorageHelper( _rStorage ) { }
+        uno::Reference< util::XOfficeInstallationDirectories > m_xOfficeInstDirs;
+
+        ReadFolderContent( SvStream& _rStorage,
+                         const uno::Reference<
+                            util::XOfficeInstallationDirectories > &
+                                xOfficeInstDirs )
+        : StorageHelper( _rStorage ), m_xOfficeInstDirs( xOfficeInstDirs ) { }
 
         //.................................................................
         void operator() ( TemplateContent& _rContent ) const
@@ -458,10 +475,10 @@ namespace svt
             // initialize them with their (local) names
             while ( nChildren-- )
             {
-                String sLocalName;
-                m_rStorage.ReadByteString( sLocalName );
-                INetURLObject aChildURL( _rContent.getURL() );
-                aChildURL.Append( sLocalName );
+                String sURL;
+                m_rStorage.ReadByteString( sURL );
+                sURL = m_xOfficeInstDirs->makeAbsoluteURL( sURL );
+                INetURLObject aChildURL( sURL );
                 rChildren.push_back( new TemplateContent( aChildURL ) );
             }
 
@@ -621,7 +638,7 @@ namespace svt
             ::std::for_each(
                 m_aCurrentState.begin(),
                 m_aCurrentState.end(),
-                StoreFolderContent( *m_pCacheStream )
+                StoreFolderContent( *m_pCacheStream, getOfficeInstDirs() )
             );
         }
     }
@@ -682,11 +699,13 @@ namespace svt
             // collect the infos about the sub contents
             if ( xResultSet.is() )
             {
-                Reference< XRow > xRow( xResultSet, UNO_QUERY );
+                Reference< XRow > xRow( xResultSet, UNO_QUERY_THROW );
+                Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY_THROW );
+
                 while ( xResultSet->next() )
                 {
-                    INetURLObject aSubContentURL( _rxRoot->getURL() );
-                    aSubContentURL.Append( xRow->getString( 1 ) );
+                    INetURLObject aSubContentURL( xContentAccess->queryContentIdentifierString() );
+
                     // a new content instance
                     ::vos::ORef< TemplateContent > xChild = new TemplateContent( aSubContentURL );
 
@@ -785,7 +804,7 @@ namespace svt
         ::std::for_each(
             m_aPreviousState.begin(),
             m_aPreviousState.end(),
-            ReadFolderContent( *m_pCacheStream )
+            ReadFolderContent( *m_pCacheStream, getOfficeInstDirs() )
         );
 
         DBG_ASSERT( !m_pCacheStream->GetErrorCode(), "TemplateFolderCacheImpl::readPreviousState: unknown error during reading the state cache!" );
