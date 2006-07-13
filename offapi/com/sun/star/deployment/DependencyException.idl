@@ -1,0 +1,79 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: DependencyException.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2006-07-13 16:58:51 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2006 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef INCLUDED_COM_SUN_STAR_DEPLOYMENT_DEPENDENCYEXCEPTION_IDL
+#define INCLUDED_COM_SUN_STAR_DEPLOYMENT_DEPENDENCYEXCEPTION_IDL
+
+#include "com/sun/star/uno/Exception.idl"
+
+module com { module sun { module star { module xml { module dom {
+    interface XElement;
+}; }; }; }; };
+
+module com { module sun { module star { module deployment {
+
+/**
+   describes unsatisfied dependencies a deployment unit has on its target
+   environment.
+
+   <p>This exception is intended to be used with an
+   <type scope="com::sun::star::task">XInteractionHandler</type>.</p>
+
+   @since OOo 2.0.4
+*/
+exception DependencyException: com::sun::star::uno::Exception {
+    /**
+       a sequence of dependencies represented by XML elements.
+
+       <p>The exact nature of those XML elements is deliberately left open, so
+       that new kinds of dependencies can be defined in the future.
+       OOo&nbsp;2.0.4 does not define any kinds of dependencies.  Each such XML
+       element should have an attribute whose global name consists of the
+       namespace name
+       <code>http://openoffice.org/extensions/description/2006</code> and the
+       local part <code>name</code> and whose value is a human-readable
+       (english) description of the dependency.  If an instance of OOo does not
+       know more about a specific kind of dependency, it should display the
+       value of that attribute to the user.</p>
+
+       <p>The sequence must not be emtpy, and none of the elements may be
+       <NULL/>.</p>
+    */
+    sequence< com::sun::star::xml::dom::XElement > UnsatisfiedDependencies;
+};
+
+}; }; }; };
+
+#endif
