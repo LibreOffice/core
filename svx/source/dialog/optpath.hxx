@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optpath.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:48:36 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 12:01:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,8 +72,6 @@ struct OptPath_Impl;
 
 #define SfxPathTabPage SvxPathTabPage
 
-
-
 // class SvxPathTabPage --------------------------------------------------
 
 class SvxPathTabPage : public SfxTabPage
@@ -97,6 +95,11 @@ private:
     DECL_LINK( PathSelect_Impl, OptHeaderTabListBox * );
     DECL_LINK( HeaderSelect_Impl, HeaderBar * );
     DECL_LINK( HeaderEndDrag_Impl, HeaderBar * );
+
+    void        GetPathList( USHORT _nPathHandle,
+                             String& _rInternalPath, String& _rUserPath, String& _rWritablePath );
+    void        SetPathList( USHORT _nPathHandle,
+                             const String& _rUserPath, const String& _rWritablePath );
 #endif
 
 public:
