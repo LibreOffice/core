@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlsecuritycontext_nssimpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 17:35:50 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 08:10:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -189,14 +189,15 @@ void SAL_CALL XMLSecurityContext_NssImpl :: setSecurityEnvironment( const Refere
     //Create key manager
     Reference< XUnoTunnel > xEnvTunnel( m_xSecurityEnvironment , UNO_QUERY ) ;
     if( !xEnvTunnel.is() ) {
-        throw RuntimeException() ;
+        throw RuntimeException() ;^1
     }
 
     SecurityEnvironment_NssImpl* pSecEnv = ( SecurityEnvironment_NssImpl* )xEnvTunnel->getSomething( SecurityEnvironment_NssImpl::getUnoTunnelId() ) ;
     if( pSecEnv == NULL )
         throw RuntimeException() ;
 
-    slot = pSecEnv->getCryptoSlot() ;
+    //todo
+//  slot = pSecEnv->getCryptoSlot() ;
     handler = pSecEnv->getCertDb() ;
 
     /*-
