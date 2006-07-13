@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyBag.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:46:17 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 12:01:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@
 
     <p>Scripting engines might not be able to use such objects as normal
     property sets, giving direct access to the properties.  In this case,
-    use the methods like <member>XPropertySet:getPropertyValue</member>.
+    use the methods like <member>XPropertySet::getPropertyValue</member>.
  */
 published service PropertyBag
 {
