@@ -4,9 +4,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:13:56 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 10:23:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,7 +136,7 @@ MachineSettings::MachineSettings()
 
 MachineSettings::MachineSettings( const MachineSettings& rSet )
 {
-    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFE, "MachineSettings: RefCount overflow" );
+    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFFFFFE, "MachineSettings: RefCount overflow" );
 
     // shared Instance Daten uebernehmen und Referenzcounter erhoehen
     mpData = rSet.mpData;
@@ -158,7 +158,7 @@ MachineSettings::~MachineSettings()
 
 const MachineSettings& MachineSettings::operator =( const MachineSettings& rSet )
 {
-    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFE, "MachineSettings: RefCount overflow" );
+    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFFFFFE, "MachineSettings: RefCount overflow" );
 
     // Zuerst Referenzcounter erhoehen, damit man sich selbst zuweisen kann
     rSet.mpData->mnRefCount++;
@@ -269,7 +269,7 @@ MouseSettings::MouseSettings()
 
 MouseSettings::MouseSettings( const MouseSettings& rSet )
 {
-    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFE, "MouseSettings: RefCount overflow" );
+    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFFFFFE, "MouseSettings: RefCount overflow" );
 
     // shared Instance Daten uebernehmen und Referenzcounter erhoehen
     mpData = rSet.mpData;
@@ -291,7 +291,7 @@ MouseSettings::~MouseSettings()
 
 const MouseSettings& MouseSettings::operator =( const MouseSettings& rSet )
 {
-    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFE, "MouseSettings: RefCount overflow" );
+    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFFFFFE, "MouseSettings: RefCount overflow" );
 
     // Zuerst Referenzcounter erhoehen, damit man sich selbst zuweisen kann
     rSet.mpData->mnRefCount++;
@@ -379,7 +379,7 @@ KeyboardSettings::KeyboardSettings()
 
 KeyboardSettings::KeyboardSettings( const KeyboardSettings& rSet )
 {
-    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFE, "KeyboardSettings: RefCount overflow" );
+    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFFFFFE, "KeyboardSettings: RefCount overflow" );
 
     // shared Instance Daten uebernehmen und Referenzcounter erhoehen
     mpData = rSet.mpData;
@@ -401,7 +401,7 @@ KeyboardSettings::~KeyboardSettings()
 
 const KeyboardSettings& KeyboardSettings::operator =( const KeyboardSettings& rSet )
 {
-    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFE, "KeyboardSettings: RefCount overflow" );
+    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFFFFFE, "KeyboardSettings: RefCount overflow" );
 
     // Zuerst Referenzcounter erhoehen, damit man sich selbst zuweisen kann
     rSet.mpData->mnRefCount++;
@@ -670,7 +670,7 @@ StyleSettings::StyleSettings()
 
 StyleSettings::StyleSettings( const StyleSettings& rSet )
 {
-    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFE, "StyleSettings: RefCount overflow" );
+    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFFFFFE, "StyleSettings: RefCount overflow" );
 
     // shared Instance Daten uebernehmen und Referenzcounter erhoehen
     mpData = rSet.mpData;
@@ -845,7 +845,7 @@ Color StyleSettings::GetSeparatorColor() const
 
 const StyleSettings& StyleSettings::operator =( const StyleSettings& rSet )
 {
-    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFE, "StyleSettings: RefCount overflow" );
+    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFFFFFE, "StyleSettings: RefCount overflow" );
 
     // Zuerst Referenzcounter erhoehen, damit man sich selbst zuweisen kann
     rSet.mpData->mnRefCount++;
@@ -1054,7 +1054,7 @@ MiscSettings::MiscSettings()
 
 MiscSettings::MiscSettings( const MiscSettings& rSet )
 {
-    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFE, "MiscSettings: RefCount overflow" );
+    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFFFFFE, "MiscSettings: RefCount overflow" );
 
     // shared Instance Daten uebernehmen und Referenzcounter erhoehen
     mpData = rSet.mpData;
@@ -1076,7 +1076,7 @@ MiscSettings::~MiscSettings()
 
 const MiscSettings& MiscSettings::operator =( const MiscSettings& rSet )
 {
-    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFE, "MiscSettings: RefCount overflow" );
+    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFFFFFE, "MiscSettings: RefCount overflow" );
 
     // Zuerst Referenzcounter erhoehen, damit man sich selbst zuweisen kann
     rSet.mpData->mnRefCount++;
@@ -1307,7 +1307,7 @@ SoundSettings::SoundSettings()
 
 SoundSettings::SoundSettings( const SoundSettings& rSet )
 {
-    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFE, "SoundSettings: RefCount overflow" );
+    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFFFFFE, "SoundSettings: RefCount overflow" );
 
     // shared Instance Daten uebernehmen und Referenzcounter erhoehen
     mpData = rSet.mpData;
@@ -1329,7 +1329,7 @@ SoundSettings::~SoundSettings()
 
 const SoundSettings& SoundSettings::operator =( const SoundSettings& rSet )
 {
-    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFE, "SoundSettings: RefCount overflow" );
+    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFFFFFE, "SoundSettings: RefCount overflow" );
 
     // Zuerst Referenzcounter erhoehen, damit man sich selbst zuweisen kann
     rSet.mpData->mnRefCount++;
@@ -1397,7 +1397,7 @@ NotificationSettings::NotificationSettings()
 
 NotificationSettings::NotificationSettings( const NotificationSettings& rSet )
 {
-    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFE, "NotificationSettings: RefCount overflow" );
+    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFFFFFE, "NotificationSettings: RefCount overflow" );
 
     // shared Instance Daten uebernehmen und Referenzcounter erhoehen
     mpData = rSet.mpData;
@@ -1419,7 +1419,7 @@ NotificationSettings::~NotificationSettings()
 
 const NotificationSettings& NotificationSettings::operator =( const NotificationSettings& rSet )
 {
-    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFE, "NotificationSettings: RefCount overflow" );
+    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFFFFFE, "NotificationSettings: RefCount overflow" );
 
     // Zuerst Referenzcounter erhoehen, damit man sich selbst zuweisen kann
     rSet.mpData->mnRefCount++;
@@ -1493,7 +1493,7 @@ HelpSettings::HelpSettings()
 
 HelpSettings::HelpSettings( const HelpSettings& rSet )
 {
-    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFE, "HelpSettings: RefCount overflow" );
+    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFFFFFE, "HelpSettings: RefCount overflow" );
 
     // shared Instance Daten uebernehmen und Referenzcounter erhoehen
     mpData = rSet.mpData;
@@ -1515,7 +1515,7 @@ HelpSettings::~HelpSettings()
 
 const HelpSettings& HelpSettings::operator =( const HelpSettings& rSet )
 {
-    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFE, "HelpSettings: RefCount overflow" );
+    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFFFFFE, "HelpSettings: RefCount overflow" );
 
     // Zuerst Referenzcounter erhoehen, damit man sich selbst zuweisen kann
     rSet.mpData->mnRefCount++;
@@ -1647,7 +1647,7 @@ AllSettings::AllSettings()
 AllSettings::AllSettings( const AllSettings& rSet )
 {
     DBG_CTOR( AllSettings, NULL );
-    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFE, "Settings: RefCount overflow" );
+    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFFFFFE, "Settings: RefCount overflow" );
 
     // shared Instance Daten uebernehmen und Referenzcounter erhoehen
     mpData = rSet.mpData;
@@ -1671,7 +1671,7 @@ AllSettings::~AllSettings()
 
 const AllSettings& AllSettings::operator =( const AllSettings& rSet )
 {
-    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFE, "AllSettings: RefCount overflow" );
+    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFFFFFE, "AllSettings: RefCount overflow" );
     DBG_CHKTHIS( AllSettings, NULL );
     DBG_CHKOBJ( &rSet, AllSettings, NULL );
 
