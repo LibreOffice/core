@@ -1,4 +1,4 @@
-od	odk	::	cppuhelper cpputools io jurt jut javaunohelper sandbox remotebridges stoc udkapi ridljar offapi unoil autodoc netbeans_integration NULL
+od	odk	::	cppuhelper cpputools io jurt jut javaunohelper sandbox remotebridges stoc udkapi ridljar offapi unoil autodoc netbeans_integration unodevtools NULL
 od	odk					usr1	-	all	od_mkout NULL
 od	odk\source\com\sun\star\lib\loader	nmake	-	all	od_loader NULL
 od	odk\source\unoapploader\win	nmake	-	n	od_unoapploaderwin NULL
