@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StylePreview.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 13:42:20 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 12:28:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,7 +134,7 @@ public class StylePreview {
      * @throws Exception
      */
     private String createTempDir(XMultiServiceFactory xmsf) throws Exception {
-        String tempPath = FileAccess.getOfficePath(xmsf,"Temp","") ;
+        String tempPath = FileAccess.getOfficePath(xmsf,"Temp","", "") ;
         String s = fileAccess.createNewDir(tempPath, "wwiz");
         fileAccess.createNewDir(s,"images");
         return s;
