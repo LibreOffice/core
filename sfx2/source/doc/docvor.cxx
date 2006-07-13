@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docvor.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:27:47 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 13:28:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -377,7 +377,7 @@ BOOL QueryDelete_Impl(Window *pParent,      // Parent der QueryBox
 
 //-------------------------------------------------------------------------
 
-void ErrorDelete_Impl(Window *pParent, const String &rName)
+void ErrorDelete_Impl(Window *pParent, const String &rName, sal_Bool bFolder = sal_False )
 
 /*  [Beschreibung]
 
@@ -385,9 +385,17 @@ void ErrorDelete_Impl(Window *pParent, const String &rName)
 
 */
 {
-    String aText( SfxResId( STR_ERROR_DELETE_TEMPLATE ) );
-    aText.SearchAndReplaceAscii( "$1", rName );
-    ErrorBox( pParent, WB_OK, aText ).Execute();
+    if ( bFolder )
+    {
+        String aText( SfxResId( STR_ERROR_DELETE_TEMPLATE_DIR ) );
+        ErrorBox( pParent, WB_OK, aText ).Execute();
+    }
+    else
+    {
+        String aText( SfxResId( STR_ERROR_DELETE_TEMPLATE ) );
+        aText.SearchAndReplaceAscii( "$1", rName );
+        ErrorBox( pParent, WB_OK, aText ).Execute();
+    }
 }
 
 
@@ -652,8 +660,9 @@ BOOL SfxOrganizeListBox_Impl::MoveOrCopyTemplates(SvLBox *pSourceBox,
                         pTarget, pSource, pNewParent, rIdx);
             }
         }
-        else
+        else if ( bCopy )
         {
+            // the template organizer always tries copy after the move, so no error is required for move case
             String aText( SfxResId( bCopy ? STR_ERROR_COPY_TEMPLATE : STR_ERROR_MOVE_TEMPLATE ) );
             aText.SearchAndReplaceAscii( "$1",
                                          ( (SvTreeListBox *)pSourceBox )->GetEntryText( pSource ) );
@@ -1427,6 +1436,9 @@ IMPL_LINK( SfxOrganizeListBox_Impl, OnAsyncExecuteDrop, ExecuteDropEvent*, pEven
         if ( !pSourceView )
             pSourceView = pDlg->pSourceView;
         pDlg->bExecDropFinished = false;
+        // if a template can not be moved it should be copied
+        if ( pEvent->mnAction == DND_ACTION_MOVE )
+            pEvent->mnAction = DND_ACTION_COPYMOVE;
         pDlg->nDropAction = SvTreeListBox::ExecuteDrop( *pEvent, pSourceView );
         delete pEvent;
         pDlg->pSourceView = NULL;
@@ -1774,9 +1786,17 @@ BOOL SfxOrganizeDlg_Impl::DontDelete_Impl( SvLBoxEntry *pEntry)
         pFocusBox->GetViewType()) || //Files nicht loeschen
        (0 == nDepth && pFocusBox->GetLevelCount_Impl(0) < 2))
         //Mindestens eine Vorlage behalten
+    {
         return TRUE;
-    else
-        return FALSE;
+    }
+
+    USHORT nRegion = 0, nIndex = 0;
+    GetIndices_Impl( pFocusBox, pEntry, nRegion, nIndex );
+    const SfxDocumentTemplates* pTemplates = aMgr.GetTemplates();
+    if ( !pTemplates || !pTemplates->HasUserContents( nRegion, nIndex ) )
+        return TRUE;
+
+    return FALSE;
 }
 
 SvStringsDtor* SfxOrganizeDlg_Impl::GetAllFactoryURLs_Impl( ) const
@@ -1907,11 +1927,10 @@ long SfxOrganizeDlg_Impl::Dispatch_Impl( USHORT nId, Menu* _pMenu )
                     USHORT nRegion = 0, nIndex = 0;
                     GetIndices_Impl(pFocusBox, pEntry, nRegion, nIndex);
 
-                    if ( !aMgr.Delete(
-                        pFocusBox, nRegion,
-                        STR_DELETE_REGION == nResId? USHRT_MAX: nIndex) )
+                    USHORT nDeleteInd = ( STR_DELETE_REGION == nResId? USHRT_MAX: nIndex );
+                    if ( !aMgr.Delete( pFocusBox, nRegion, nDeleteInd ) )
                         ErrorDelete_Impl(
-                            pDialog, pFocusBox->GetEntryText(pEntry));
+                            pDialog, pFocusBox->GetEntryText(pEntry), ( nDeleteInd == USHRT_MAX ) );
 
                 }
             }
@@ -1934,7 +1953,7 @@ long SfxOrganizeDlg_Impl::Dispatch_Impl( USHORT nId, Menu* _pMenu )
                                  aPath[3+pFocusBox->GetDocLevel()]))
                     pFocusBox->GetModel()->Remove(pEntry);
                 else
-                    ErrorDelete_Impl(pDialog, pFocusBox->GetEntryText(pEntry));
+                    ErrorDelete_Impl(pDialog, pFocusBox->GetEntryText(pEntry), sal_False );
             }
             break;
         }
@@ -2183,7 +2202,8 @@ IMPL_LINK( SfxOrganizeDlg_Impl, MenuActivate_Impl, Menu *, pMenu )
 
     pMenu->EnableItem( ID_DELETE, bEnable && !DontDelete_Impl( pEntry ) );
     pMenu->EnableItem( ID_EDIT,
-                       bEnable && eVT == SfxOrganizeListBox_Impl::VIEW_TEMPLATES && nDepth == nDocLevel );
+                       bEnable && eVT == SfxOrganizeListBox_Impl::VIEW_TEMPLATES && nDepth == nDocLevel
+                           && !DontDelete_Impl( pEntry ) );
     pMenu->EnableItem( ID_COPY_FROM,
                        bEnable && eVT == SfxOrganizeListBox_Impl::VIEW_TEMPLATES &&
                        ( nDepth == nDocLevel || nDepth == nDocLevel - 1 ) );
