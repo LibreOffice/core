@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.205 $
+ *  $Revision: 1.206 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 08:32:55 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 10:26:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1885,7 +1885,7 @@ End
 
 File gid_File_Lib_Spell
     TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT,PATCH);
+    Styles = (PACKED,PATCH,UNO_COMPONENT);
     RegistryID = gid_Starregistry_Services_Rdb;
     Name = LIBNAME(spell);
     Dir = gid_Dir_Program;
