@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gdimtf.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:23:18 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 10:44:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2254,16 +2254,17 @@ SvStream& operator>>( SvStream& rIStm, GDIMetaFile& rGDIMetaFile )
 
         rIStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
-        rIStm.Read( aId, 6 );
+        aId[ 0 ] = 0;
         aId[ 6 ] = 0;
+        rIStm.Read( aId, 6 );
 
         if ( !strcmp( aId, "VCLMTF" ) )
         {
             // new format
             VersionCompat*  pCompat;
             MetaAction*     pAction;
-            UINT32          nStmCompressMode;
-            UINT32          nCount;
+            UINT32          nStmCompressMode = 0;
+            UINT32          nCount = 0;
 
             pCompat = new VersionCompat( rIStm, STREAM_READ );
 
