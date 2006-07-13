@@ -4,9 +4,9 @@
  *
  *  $RCSfile: reader.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:11:52 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 12:04:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -556,7 +556,7 @@ public:
         if (s == 0) {
             throw std::bad_alloc();
         }
-        return s;
+        return rtl::OUString(s, SAL_NO_ACQUIRE);
     }
 
     /**
