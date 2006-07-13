@@ -4,9 +4,9 @@
  *
  *  $RCSfile: kdecommonlayer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2006-06-02 12:25:20 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 13:21:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,22 +41,11 @@
 #include "kemailsettings.h"
 #endif
 
-#ifndef _KGLOBALSETTINGS_H
-#include "kglobalsettings.h"
-#endif
-
 #ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_PROPERTYINFO_HPP_
 #include <com/sun/star/configuration/backend/PropertyInfo.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XLAYERCONTENTDESCIBER_HPP_
 #include <com/sun/star/configuration/backend/XLayerContentDescriber.hpp>
-#endif
-
-#ifndef _OSL_SECURITY_HXX_
-#include <osl/security.hxx>
-#endif
-#ifndef _OSL_FILE_HXX_
-#include <osl/file.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
@@ -99,7 +88,7 @@ void SAL_CALL KDECommonLayer::readData( const uno::Reference<backend::XLayerHand
         ) ), static_cast < backend::XLayer * > (this) );
     }
 
-    uno::Sequence<backend::PropertyInfo> aPropInfoList(2);
+    uno::Sequence<backend::PropertyInfo> aPropInfoList(1);
     sal_Int32 nProperties = 0;
 
     KEMailSettings aEmailSettings;
@@ -119,21 +108,6 @@ void SAL_CALL KDECommonLayer::readData( const uno::Reference<backend::XLayerHand
         RTL_CONSTASCII_USTRINGPARAM( "string" ) );
     aPropInfoList[nProperties].Protected = sal_False;
     aPropInfoList[nProperties++].Value = uno::makeAny( sClientProgram );
-
-    QString aDocumentsDir( "file:" );
-    ::rtl::OUString sDocumentsDir;
-
-    aDocumentsDir += KGlobalSettings::documentPath();
-    if ( aDocumentsDir.endsWith(QChar('/')) )
-        aDocumentsDir.truncate ( aDocumentsDir.length() - 1 );
-    sDocumentsDir = (const sal_Unicode *) aDocumentsDir.ucs2();
-
-    aPropInfoList[nProperties].Name = rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.Office.Common/Path/Current/Work") );
-    aPropInfoList[nProperties].Type = rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM( "string" ) );
-    aPropInfoList[nProperties].Protected = sal_False;
-    aPropInfoList[nProperties++].Value = uno::makeAny( sDocumentsDir );
 
     if( nProperties > 0 )
     {
@@ -157,12 +131,7 @@ rtl::OUString SAL_CALL KDECommonLayer::getTimestamp(void)
     QString aClientProgram = aEmailSettings.getSetting( KEMailSettings::ClientProgram );
     aClientProgram = aClientProgram.section(SPACE, 0, 0);
 
-    QString aDocumentsDir;
-    aDocumentsDir = KGlobalSettings::documentPath();
-
     sTimeStamp = (const sal_Unicode *) aClientProgram.ucs2();
-    sTimeStamp += sep;
-    sTimeStamp += (const sal_Unicode *) aDocumentsDir.ucs2();
 
     return sTimeStamp;
 }
