@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ComponentDefinition.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:08:03 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 15:20:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,10 @@
 #ifndef _DBA_COREAPI_COLUMN_HXX_
 #include <column.hxx>
 #endif
+#ifndef _COMPHELPER_IMPLEMENTATIONREFERENCE_HXX
+#include <comphelper/implementationreference.hxx>
+#endif
+
 #include <memory>
 //........................................................................
 namespace dbaccess
@@ -95,6 +99,9 @@ namespace dbaccess
         ::rtl::OUString     m_sCatalogName;
 
     public:
+        OComponentDefinition_Impl();
+        virtual ~OComponentDefinition_Impl();
+
         inline size_t size() const { return m_aColumns.size(); }
 
         inline const_iterator begin() const   { return m_aColumns.begin(); }
@@ -106,10 +113,13 @@ namespace dbaccess
 
         inline void insert( const ::rtl::OUString& _rName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColumn )
         {
-            OSL_PRECOND( m_aColumns.find( _rName ) == m_aColumns.end(), "OComponentDefinition_Impl::insert: there's already an element wihh this name!" );
+            OSL_PRECOND( m_aColumns.find( _rName ) == m_aColumns.end(), "OComponentDefinition_Impl::insert: there's already an element with this name!" );
             m_aColumns.insert( Columns::value_type( _rName, _rxColumn ) );
         }
     };
+
+
+typedef ::comphelper::ImplementationReference< OColumns,::com::sun::star::container::XNameAccess > TColumnsHelper;
 
 //=========================================================================
 //= OComponentDefinition - a database "document" which describes a query
@@ -124,9 +134,8 @@ class OComponentDefinition  :public OContentHelper
     OComponentDefinition();
 
 protected:
-    ::std::auto_ptr<OColumns>   m_pColumns;
-
-    sal_Bool                    m_bTable;
+    TColumnsHelper  m_pColumns;
+    sal_Bool        m_bTable;
 
     virtual ~OComponentDefinition();
     virtual void SAL_CALL disposing();
