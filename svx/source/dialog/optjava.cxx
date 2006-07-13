@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optjava.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:23:39 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 12:00:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -215,7 +215,7 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( Window* pParent, const SfxItemSet& rSet 
     m_aResetTimer.SetTimeoutHdl( LINK( this, SvxJavaOptionsPage, ResetHdl_Impl ) );
     m_aResetTimer.SetTimeout( RESET_TIMEOUT );
 
-    m_aJavaList.EnableCheckButton( new SvLBoxButtonData( &m_aJavaList, true ) );
+//!   m_aJavaList.EnableCheckButton( new SvLBoxButtonData( &m_aJavaList, true ) );
 
     static long aStaticTabs[]=
     {
@@ -311,7 +311,7 @@ IMPL_LINK( SvxJavaOptionsPage, CheckHdl_Impl, SvxSimpleTable *, pList )
     SvLBoxEntry* pEntry = pList ? m_aJavaList.GetEntry( m_aJavaList.GetCurMousePoint() )
                                 : m_aJavaList.FirstSelected();
     if ( pEntry )
-        HandleCheckEntry( pEntry );
+        m_aJavaList.HandleEntryChecked( pEntry );
     return 0;
 }
 
@@ -393,9 +393,8 @@ IMPL_LINK( SvxJavaOptionsPage, AddHdl_Impl, PushButton *, EMPTYARG )
                 SvLBoxEntry* pEntry = m_aJavaList.GetEntry( nPos );
                 if ( pEntry )
                 {
-                    m_aJavaList.Select( pEntry );
                     m_aJavaList.SetCheckButtonState( pEntry, SV_BUTTON_CHECKED );
-                    HandleCheckEntry( pEntry );
+                    m_aJavaList.HandleEntryChecked( pEntry );
                 }
                 bFinished = true;
             }
@@ -585,7 +584,7 @@ void SvxJavaOptionsPage::LoadJREs()
             {
                 SvLBoxEntry* pEntry = m_aJavaList.GetEntry(i);
                 if ( pEntry )
-                    HandleCheckEntry( pEntry );
+                    m_aJavaList.HandleEntryChecked( pEntry );
                 break;
             }
         }
@@ -609,28 +608,6 @@ void SvxJavaOptionsPage::AddJRE( JavaInfo* _pInfo )
     INetURLObject aLocObj( ::rtl::OUString( _pInfo->sLocation ) );
     String* pLocation = new String( aLocObj.getFSysPath( INetURLObject::FSYS_DETECT ) );
     pEntry->SetUserData( pLocation );
-}
-
-// -----------------------------------------------------------------------
-
-void SvxJavaOptionsPage::HandleCheckEntry( SvLBoxEntry* _pEntry )
-{
-    m_aJavaList.Select( _pEntry, TRUE );
-    SvButtonState eState = m_aJavaList.GetCheckButtonState( _pEntry );
-
-    if ( SV_BUTTON_CHECKED == eState )
-    {
-        // we have radio button behavior -> so uncheck the other entries
-        SvLBoxEntry* pEntry = m_aJavaList.First();
-        while ( pEntry )
-        {
-            if ( pEntry != _pEntry )
-                m_aJavaList.SetCheckButtonState( pEntry, SV_BUTTON_UNCHECKED );
-            pEntry = m_aJavaList.Next( pEntry );
-        }
-    }
-    else
-        m_aJavaList.SetCheckButtonState( _pEntry, SV_BUTTON_CHECKED );
 }
 
 // -----------------------------------------------------------------------
