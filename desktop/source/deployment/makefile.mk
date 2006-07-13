@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 17:14:32 $
+#   last change: $Author: obo $ $Date: 2006-07-13 17:01:35 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -94,7 +94,8 @@ RESLIB1SRSFILES = \
         $(SRS)$/deployment_registry_package.srs \
         $(SRS)$/deployment_registry.srs \
         $(SRS)$/deployment_manager.srs \
-        $(SRS)$/deployment_misc.srs
+        $(SRS)$/deployment_misc.srs \
+    $(SRS)$/deployment_unopkg.srs
 
 .INCLUDE : target.mk
 
