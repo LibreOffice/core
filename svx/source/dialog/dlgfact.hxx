@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgfact.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:07:51 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 11:59:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -431,6 +431,8 @@ class AbstractSvxMultiPathDialog_Impl :public AbstractSvxMultiPathDialog
     DECL_ABSTDLG_BASE(AbstractSvxMultiPathDialog_Impl,SvxMultiPathDialog);
     virtual String          GetPath() const;
     virtual void            SetPath( const String& rPath );
+    virtual void            EnableRadioButtonMode();
+    virtual void            SetTitle( const String& rNewTitle );
 };
 //for SvxMultiPathDialog end
 
@@ -445,6 +447,8 @@ class AbstractSvxMultiFileDialog_Impl :public AbstractSvxMultiFileDialog
     virtual String          GetPath() const;
     virtual void            SetPath( const String& rPath );
     virtual void            SetClassPathMode();
+    virtual void            EnableRadioButtonMode();
+    virtual void            SetTitle( const String& rNewTitle );
     //From Class Window
     virtual void    SetHelpId( ULONG nHelpId ) ;
 
