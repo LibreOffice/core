@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:42:23 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 10:35:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3402,7 +3402,9 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                     aTmpFont.SetEscapement( 0 );
                                     aTmpFont.SetPhysFont( pOutDev );
                                     long nCharWidth = aTmpFont.QuickGetTextSize( pOutDev, pTextPortion->GetExtraValue(), 0, 1, NULL ).Width();
-                                    long nChars = pTextPortion->GetSize().Width() / nCharWidth;
+                                    long nChars = 2;
+                                    if( nCharWidth )
+                                        pTextPortion->GetSize().Width() / nCharWidth;
                                     if ( nChars < 2 )
                                         nChars = 2; // wird durch DrawStretchText gestaucht.
                                     else if ( nChars == 2 )
@@ -3412,17 +3414,9 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                     aText.Fill( (USHORT)nChars, pTextPortion->GetExtraValue() );
                                     pOutDev->DrawStretchText( aTmpPos, pTextPortion->GetSize().Width(), aText );
                                 }
-// R2L                              if ( !IsVertical() )
-// R2L                                  aTmpPos.X() += pTextPortion->GetSize().Width();
-// R2L                              else
-// R2L                                  aTmpPos.Y() += pTextPortion->GetSize().Width();
                             }
                             break;
                         }
-// R2L                      if ( !IsVertical() && ( aTmpPos.X() > aClipRec.Right() ) )
-// R2L                          break;  // Keine weitere Ausgabe in Zeile noetig
-// R2L                      else if ( IsVertical() && ( aTmpPos.Y() > aClipRec.Bottom() ) )
-// R2L                          break;  // Keine weitere Ausgabe in Zeile noetig
                         nIndex += pTextPortion->GetLen();
                     }
                 }
