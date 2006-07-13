@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3dhommatrix.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:53:02 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 09:54:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,25 +40,30 @@
 #include <sal/types.h>
 #endif
 
+#ifndef INCLUDED_O3TL_COW_WRAPPER_HXX
+#include <o3tl/cow_wrapper.hxx>
+#endif
+
 namespace basegfx
 {
-    // predeclaration
     class B3DTuple;
-
-    // forward declaration
     class Impl3DHomMatrix;
 
     class B3DHomMatrix
     {
-    private:
-        Impl3DHomMatrix*                            mpM;
+    public:
+        typedef o3tl::cow_wrapper< Impl3DHomMatrix > ImplType;
 
-        void implPrepareChange();
+    private:
+        ImplType                                     mpImpl;
 
     public:
         B3DHomMatrix();
         B3DHomMatrix(const B3DHomMatrix& rMat);
         ~B3DHomMatrix();
+
+        /// unshare this matrix with all internally shared instances
+        void makeUnique();
 
         double get(sal_uInt16 nRow, sal_uInt16 nColumn) const;
         void set(sal_uInt16 nRow, sal_uInt16 nColumn, double fValue);
@@ -101,16 +106,6 @@ namespace basegfx
         void shearXY(double fSx, double fSy);
         void shearYZ(double fSy, double fSz);
         void shearXZ(double fSx, double fSz);
-
-        // Projection matrices, used for converting between eye and
-        // clip coordinates
-//      void frustum(double fLeft = -1.0, double fRight = 1.0,
-//          double fBottom = -1.0, double fTop = 1.0,
-//          double fNear = 0.001, double fFar = 1.0);
-
-//      void ortho(double fLeft = -1.0, double fRight = 1.0,
-//          double fBottom = -1.0, double fTop = 1.0,
-//          double fNear = 0.0, double fFar = 1.0);
 
         // addition, subtraction
         B3DHomMatrix& operator+=(const B3DHomMatrix& rMat);

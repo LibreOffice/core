@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dhommatrix.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:52:50 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 09:54:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,25 +40,30 @@
 #include <sal/types.h>
 #endif
 
+#ifndef INCLUDED_O3TL_COW_WRAPPER_HXX
+#include <o3tl/cow_wrapper.hxx>
+#endif
+
 namespace basegfx
 {
-    // predeclaration
     class B2DTuple;
-
-    // forward declaration
     class Impl2DHomMatrix;
 
     class B2DHomMatrix
     {
-    private:
-        Impl2DHomMatrix*                            mpM;
+    public:
+        typedef o3tl::cow_wrapper< Impl2DHomMatrix > ImplType;
 
-        void implPrepareChange();
+    private:
+        ImplType                                     mpImpl;
 
     public:
         B2DHomMatrix();
         B2DHomMatrix(const B2DHomMatrix& rMat);
         ~B2DHomMatrix();
+
+        /// unshare this matrix with all internally shared instances
+        void makeUnique();
 
         double get(sal_uInt16 nRow, sal_uInt16 nColumn) const;
         void set(sal_uInt16 nRow, sal_uInt16 nColumn, double fValue);
