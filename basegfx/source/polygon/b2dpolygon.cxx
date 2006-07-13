@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dpolygon.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:43:43 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 09:56:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,7 @@
 #include <rtl/instance.hxx>
 #endif
 
+#include <boost/scoped_ptr.hpp>
 #include <vector>
 #include <algorithm>
 
@@ -67,9 +68,8 @@ class CoordinateData2D
     ::basegfx::B2DPoint                             maPoint;
 
 public:
-    CoordinateData2D() {}
-    CoordinateData2D(const ::basegfx::B2DPoint& rData) : maPoint(rData) {}
-    ~CoordinateData2D() {}
+    CoordinateData2D() : maPoint() {}
+    explicit CoordinateData2D(const ::basegfx::B2DPoint& rData) : maPoint(rData) {}
 
     const ::basegfx::B2DPoint& getCoordinate() const { return maPoint; }
     void setCoordinate(const ::basegfx::B2DPoint& rValue) { if(rValue != maPoint) maPoint = rValue; }
@@ -86,22 +86,18 @@ class CoordinateDataArray2D
     CoordinateData2DVector                          maVector;
 
 public:
-    CoordinateDataArray2D(sal_uInt32 nCount)
+    explicit CoordinateDataArray2D(sal_uInt32 nCount)
     :   maVector(nCount)
     {
     }
 
-    CoordinateDataArray2D(const CoordinateDataArray2D& rOriginal)
+    explicit CoordinateDataArray2D(const CoordinateDataArray2D& rOriginal)
     :   maVector(rOriginal.maVector)
     {
     }
 
     CoordinateDataArray2D(const CoordinateDataArray2D& rOriginal, sal_uInt32 nIndex, sal_uInt32 nCount)
     :   maVector(rOriginal.maVector.begin() + nIndex, rOriginal.maVector.begin() + (nIndex + nCount))
-    {
-    }
-
-    ~CoordinateDataArray2D()
     {
     }
 
@@ -233,9 +229,6 @@ class ControlVectorPair2D
     ::basegfx::B2DVector                            maVectorB;
 
 public:
-    ControlVectorPair2D() {}
-    ~ControlVectorPair2D() {}
-
     const ::basegfx::B2DVector& getVectorA() const { return maVectorA; }
     void setVectorA(const ::basegfx::B2DVector& rValue) { if(rValue != maVectorA) maVectorA = rValue; }
 
@@ -256,15 +249,9 @@ class ControlVectorArray2D
     sal_uInt32                                          mnUsedVectors;
 
 public:
-    ControlVectorArray2D(sal_uInt32 nCount)
+    explicit ControlVectorArray2D(sal_uInt32 nCount)
     :   maVector(nCount),
         mnUsedVectors(0L)
-    {
-    }
-
-    ControlVectorArray2D(const ControlVectorArray2D& rOriginal)
-    :   maVector(rOriginal.maVector),
-        mnUsedVectors(rOriginal.mnUsedVectors)
     {
     }
 
@@ -288,10 +275,6 @@ public:
 
             maVector.push_back(*aStart);
         }
-    }
-
-    ~ControlVectorArray2D()
-    {
     }
 
     sal_uInt32 count() const
@@ -441,86 +424,61 @@ public:
 
 class ImplB2DPolygon
 {
-    // the internal RefCount
-    sal_uInt32                                      mnRefCount;
-
     // The point vector. This vector exists always and defines the
     // count of members.
     CoordinateDataArray2D                           maPoints;
 
     // The control point vectors. This vectors are created on demand
     // and may be zero.
-    ControlVectorArray2D*                           mpControlVector;
+    boost::scoped_ptr<ControlVectorArray2D>         mpControlVector;
 
     // flag which decides if this polygon is opened or closed
     bool                                            mbIsClosed;
 
 public:
-    // This constructor is only used from the static identity polygon, thus
-    // the RefCount is set to 1 to never 'delete' this static incarnation.
-    ImplB2DPolygon()
-    :   mnRefCount(1),
+    ImplB2DPolygon() :
         maPoints(0L),
-        mpControlVector(0L),
+        mpControlVector(),
         mbIsClosed(false)
     {
-        // complete initialization with defaults
     }
 
-    ImplB2DPolygon(const ImplB2DPolygon& rToBeCopied)
-    :   mnRefCount(0),
+    ImplB2DPolygon(const ImplB2DPolygon& rToBeCopied) :
         maPoints(rToBeCopied.maPoints),
-        mpControlVector(0L),
+        mpControlVector(),
         mbIsClosed(rToBeCopied.mbIsClosed)
     {
         // complete initialization using copy
         if(rToBeCopied.mpControlVector && rToBeCopied.mpControlVector->isUsed())
-        {
-            mpControlVector = new ControlVectorArray2D(*rToBeCopied.mpControlVector);
-        }
+            mpControlVector.reset( new ControlVectorArray2D(*rToBeCopied.mpControlVector) );
     }
 
-    ImplB2DPolygon(const ImplB2DPolygon& rToBeCopied, sal_uInt32 nIndex, sal_uInt32 nCount)
-    :   mnRefCount(0),
+    ImplB2DPolygon(const ImplB2DPolygon& rToBeCopied, sal_uInt32 nIndex, sal_uInt32 nCount) :
         maPoints(rToBeCopied.maPoints, nIndex, nCount),
-        mpControlVector(0L),
+        mpControlVector(),
         mbIsClosed(rToBeCopied.mbIsClosed)
     {
         // complete initialization using partly copy
         if(rToBeCopied.mpControlVector && rToBeCopied.mpControlVector->isUsed())
         {
-            mpControlVector = new ControlVectorArray2D(*rToBeCopied.mpControlVector, nIndex, nCount);
+            mpControlVector.reset( new ControlVectorArray2D(*rToBeCopied.mpControlVector, nIndex, nCount) );
 
             if(!mpControlVector->isUsed())
-            {
-                delete mpControlVector;
-                mpControlVector = 0L;
-            }
+                mpControlVector.reset();
         }
     }
 
-    ~ImplB2DPolygon()
+    ImplB2DPolygon& operator=( const ImplB2DPolygon& rToBeCopied )
     {
-        if(mpControlVector)
-        {
-            delete mpControlVector;
-            mpControlVector = 0L;
-        }
-    }
+        maPoints = rToBeCopied.maPoints;
+        mpControlVector.reset();
+        mbIsClosed = rToBeCopied.mbIsClosed;
 
-    const sal_uInt32 getRefCount() const
-    {
-        return mnRefCount;
-    }
+        // complete initialization using copy
+        if(rToBeCopied.mpControlVector && rToBeCopied.mpControlVector->isUsed())
+            mpControlVector.reset( new ControlVectorArray2D(*rToBeCopied.mpControlVector) );
 
-    void incRefCount()
-    {
-        mnRefCount++;
-    }
-
-    void decRefCount()
-    {
-        mnRefCount--;
+        return *this;
     }
 
     sal_uInt32 count() const
@@ -623,7 +581,7 @@ public:
         {
             if(!rValue.equalZero())
             {
-                mpControlVector = new ControlVectorArray2D(maPoints.count());
+                mpControlVector.reset( new ControlVectorArray2D(maPoints.count()) );
                 mpControlVector->setVectorA(nIndex, rValue);
             }
         }
@@ -632,10 +590,7 @@ public:
             mpControlVector->setVectorA(nIndex, rValue);
 
             if(!mpControlVector->isUsed())
-            {
-                delete mpControlVector;
-                mpControlVector = 0L;
-            }
+                mpControlVector.reset();
         }
     }
 
@@ -657,7 +612,7 @@ public:
         {
             if(!rValue.equalZero())
             {
-                mpControlVector = new ControlVectorArray2D(maPoints.count());
+                mpControlVector.reset( new ControlVectorArray2D(maPoints.count()) );
                 mpControlVector->setVectorB(nIndex, rValue);
             }
         }
@@ -666,10 +621,7 @@ public:
             mpControlVector->setVectorB(nIndex, rValue);
 
             if(!mpControlVector->isUsed())
-            {
-                delete mpControlVector;
-                mpControlVector = 0L;
-            }
+                mpControlVector.reset();
         }
     }
 
@@ -686,7 +638,7 @@ public:
         {
             if(rSource.mpControlVector && rSource.mpControlVector->isUsed() && !mpControlVector)
             {
-                mpControlVector = new ControlVectorArray2D(maPoints.count());
+                mpControlVector.reset( new ControlVectorArray2D(maPoints.count()) );
             }
 
             maPoints.insert(nIndex, rSource.maPoints);
@@ -696,10 +648,7 @@ public:
                 mpControlVector->insert(nIndex, *rSource.mpControlVector);
 
                 if(!mpControlVector->isUsed())
-                {
-                    delete mpControlVector;
-                    mpControlVector = 0L;
-                }
+                    mpControlVector.reset();
             }
             else if(mpControlVector)
             {
@@ -720,10 +669,7 @@ public:
                 mpControlVector->remove(nIndex, nCount);
 
                 if(!mpControlVector->isUsed())
-                {
-                    delete mpControlVector;
-                    mpControlVector = 0L;
-                }
+                    mpControlVector.reset();
             }
         }
     }
@@ -741,8 +687,8 @@ public:
                 const sal_uInt32 nCount(maPoints.count());
 
                 // create copies to have access to source data
-                CoordinateDataArray2D* pCoordinateCopy = new CoordinateDataArray2D(maPoints);
-                ControlVectorArray2D* pVectorCopy = new ControlVectorArray2D(*mpControlVector);
+                boost::scoped_ptr<CoordinateDataArray2D> pCoordinateCopy( new CoordinateDataArray2D(maPoints) );
+                boost::scoped_ptr<ControlVectorArray2D>  pVectorCopy( new ControlVectorArray2D(*mpControlVector) );
 
                 // newly fill the local point and vector data
                 for(sal_uInt32 a(0L); a < nCount; a++)
@@ -789,10 +735,6 @@ public:
                         mpControlVector->setVectorA(a, aNewVectorA);
                     }
                 }
-
-                // get rid of copied source data
-                delete pCoordinateCopy;
-                delete pVectorCopy;
             }
             else
             {
@@ -950,10 +892,7 @@ public:
             }
 
             if(!mpControlVector->isUsed())
-            {
-                delete mpControlVector;
-                mpControlVector = 0L;
-            }
+                mpControlVector.reset();
         }
         else
         {
@@ -964,84 +903,55 @@ public:
 
 //////////////////////////////////////////////////////////////////////////////
 
-namespace { struct DefaultPolygon: public rtl::Static<ImplB2DPolygon, DefaultPolygon> {}; }
-
 namespace basegfx
 {
-    void B2DPolygon::implForceUniqueCopy()
+    namespace { struct DefaultPolygon: public rtl::Static<B2DPolygon::ImplType,
+                                                          DefaultPolygon> {}; }
+
+    B2DPolygon::B2DPolygon() :
+        mpPolygon(DefaultPolygon::get())
     {
-        if(mpPolygon->getRefCount())
-        {
-            mpPolygon->decRefCount();
-            mpPolygon = new ImplB2DPolygon(*mpPolygon);
-        }
     }
 
-    B2DPolygon::B2DPolygon()
-    :   mpPolygon(&DefaultPolygon::get())
+    B2DPolygon::B2DPolygon(const B2DPolygon& rPolygon) :
+        mpPolygon(rPolygon.mpPolygon)
     {
-        mpPolygon->incRefCount();
     }
 
-    B2DPolygon::B2DPolygon(const B2DPolygon& rPolygon)
-    :   mpPolygon(rPolygon.mpPolygon)
+    B2DPolygon::B2DPolygon(const B2DPolygon& rPolygon, sal_uInt32 nIndex, sal_uInt32 nCount) :
+        mpPolygon(ImplB2DPolygon(*rPolygon.mpPolygon, nIndex, nCount))
     {
-        mpPolygon->incRefCount();
-    }
-
-    B2DPolygon::B2DPolygon(const B2DPolygon& rPolygon, sal_uInt32 nIndex, sal_uInt32 nCount)
-    :   mpPolygon(new ImplB2DPolygon(*rPolygon.mpPolygon, nIndex, nCount))
-    {
+        // TODO(P2): one extra temporary here (cow_wrapper copies
+        // given ImplB2DPolygon into its internal impl_t wrapper type)
         OSL_ENSURE(nIndex + nCount <= rPolygon.mpPolygon->count(), "B2DPolygon constructor outside range (!)");
     }
 
     B2DPolygon::~B2DPolygon()
     {
-        if(mpPolygon->getRefCount())
-        {
-            mpPolygon->decRefCount();
-        }
-        else
-        {
-            delete mpPolygon;
-        }
     }
 
     B2DPolygon& B2DPolygon::operator=(const B2DPolygon& rPolygon)
     {
-        if(mpPolygon->getRefCount())
-        {
-            mpPolygon->decRefCount();
-        }
-        else
-        {
-            delete mpPolygon;
-        }
-
         mpPolygon = rPolygon.mpPolygon;
-        mpPolygon->incRefCount();
-
         return *this;
+    }
+
+    void B2DPolygon::makeUnique()
+    {
+        mpPolygon.make_unique();
     }
 
     bool B2DPolygon::operator==(const B2DPolygon& rPolygon) const
     {
-        if(mpPolygon == rPolygon.mpPolygon)
-        {
+        if(mpPolygon.same_object(rPolygon.mpPolygon))
             return true;
-        }
 
         return mpPolygon->isEqual(*(rPolygon.mpPolygon));
     }
 
     bool B2DPolygon::operator!=(const B2DPolygon& rPolygon) const
     {
-        if(mpPolygon == rPolygon.mpPolygon)
-        {
-            return false;
-        }
-
-        return !mpPolygon->isEqual(*(rPolygon.mpPolygon));
+        return !(*this == rPolygon);
     }
 
     sal_uInt32 B2DPolygon::count() const
@@ -1060,11 +970,8 @@ namespace basegfx
     {
         OSL_ENSURE(nIndex < mpPolygon->count(), "B2DPolygon access outside range (!)");
 
-        if(mpPolygon->getPoint(nIndex) != rValue)
-        {
-            implForceUniqueCopy();
+        if(getB2DPoint(nIndex) != rValue)
             mpPolygon->setPoint(nIndex, rValue);
-        }
     }
 
     void B2DPolygon::insert(sal_uInt32 nIndex, const ::basegfx::B2DPoint& rPoint, sal_uInt32 nCount)
@@ -1072,19 +979,13 @@ namespace basegfx
         OSL_ENSURE(nIndex <= mpPolygon->count(), "B2DPolygon Insert outside range (!)");
 
         if(nCount)
-        {
-            implForceUniqueCopy();
             mpPolygon->insert(nIndex, rPoint, nCount);
-        }
     }
 
     void B2DPolygon::append(const ::basegfx::B2DPoint& rPoint, sal_uInt32 nCount)
     {
         if(nCount)
-        {
-            implForceUniqueCopy();
             mpPolygon->insert(mpPolygon->count(), rPoint, nCount);
-        }
     }
 
     ::basegfx::B2DVector B2DPolygon::getControlVectorA(sal_uInt32 nIndex) const
@@ -1098,11 +999,8 @@ namespace basegfx
     {
         OSL_ENSURE(nIndex < mpPolygon->count(), "B2DPolygon access outside range (!)");
 
-        if(mpPolygon->getControlVectorA(nIndex) != rValue)
-        {
-            implForceUniqueCopy();
+        if(getControlVectorA(nIndex) != rValue)
             mpPolygon->setControlVectorA(nIndex, rValue);
-        }
     }
 
     ::basegfx::B2DVector B2DPolygon::getControlVectorB(sal_uInt32 nIndex) const
@@ -1116,11 +1014,8 @@ namespace basegfx
     {
         OSL_ENSURE(nIndex < mpPolygon->count(), "B2DPolygon access outside range (!)");
 
-        if(mpPolygon->getControlVectorB(nIndex) != rValue)
-        {
-            implForceUniqueCopy();
+        if(getControlVectorB(nIndex) != rValue)
             mpPolygon->setControlVectorB(nIndex, rValue);
-        }
     }
 
     bool B2DPolygon::areControlVectorsUsed() const
@@ -1147,11 +1042,8 @@ namespace basegfx
         OSL_ENSURE(nIndex < mpPolygon->count(), "B2DPolygon access outside range (!)");
         ::basegfx::B2DVector aNewVector(rValue - mpPolygon->getPoint(nIndex));
 
-        if(mpPolygon->getControlVectorA(nIndex) != aNewVector)
-        {
-            implForceUniqueCopy();
+        if(getControlVectorA(nIndex) != aNewVector)
             mpPolygon->setControlVectorA(nIndex, aNewVector);
-        }
     }
 
     ::basegfx::B2DPoint B2DPolygon::getControlPointB(sal_uInt32 nIndex) const
@@ -1173,11 +1065,8 @@ namespace basegfx
         OSL_ENSURE(nIndex < mpPolygon->count(), "B2DPolygon access outside range (!)");
         ::basegfx::B2DVector aNewVector(rValue - mpPolygon->getPoint(nIndex));
 
-        if(mpPolygon->getControlVectorB(nIndex) != aNewVector)
-        {
-            implForceUniqueCopy();
+        if(getControlVectorB(nIndex) != aNewVector)
             mpPolygon->setControlVectorB(nIndex, aNewVector);
-        }
     }
 
     void B2DPolygon::insert(sal_uInt32 nIndex, const B2DPolygon& rPoly, sal_uInt32 nIndex2, sal_uInt32 nCount)
@@ -1186,8 +1075,6 @@ namespace basegfx
 
         if(rPoly.count())
         {
-            implForceUniqueCopy();
-
             if(!nCount)
             {
                 nCount = rPoly.count();
@@ -1210,8 +1097,6 @@ namespace basegfx
     {
         if(rPoly.count())
         {
-            implForceUniqueCopy();
-
             if(!nCount)
             {
                 nCount = rPoly.count();
@@ -1235,25 +1120,12 @@ namespace basegfx
         OSL_ENSURE(nIndex + nCount <= mpPolygon->count(), "B2DPolygon Remove outside range (!)");
 
         if(nCount)
-        {
-            implForceUniqueCopy();
             mpPolygon->remove(nIndex, nCount);
-        }
     }
 
     void B2DPolygon::clear()
     {
-        if(mpPolygon->getRefCount())
-        {
-            mpPolygon->decRefCount();
-        }
-        else
-        {
-            delete mpPolygon;
-        }
-
-        mpPolygon = &DefaultPolygon::get();
-        mpPolygon->incRefCount();
+        mpPolygon = DefaultPolygon::get();
     }
 
     bool B2DPolygon::isClosed() const
@@ -1263,20 +1135,14 @@ namespace basegfx
 
     void B2DPolygon::setClosed(bool bNew)
     {
-        if(mpPolygon->isClosed() != bNew)
-        {
-            implForceUniqueCopy();
+        if(isClosed() != bNew)
             mpPolygon->setClosed(bNew);
-        }
     }
 
     void B2DPolygon::flip()
     {
-        if(mpPolygon->count() > 1)
-        {
-            implForceUniqueCopy();
+        if(count() > 1)
             mpPolygon->flip();
-        }
     }
 
     bool B2DPolygon::hasDoublePoints() const
@@ -1288,7 +1154,6 @@ namespace basegfx
     {
         if(hasDoublePoints())
         {
-            implForceUniqueCopy();
             mpPolygon->removeDoublePointsAtBeginEnd();
             mpPolygon->removeDoublePointsWholeTrack();
         }
@@ -1296,11 +1161,8 @@ namespace basegfx
 
     void B2DPolygon::transform(const ::basegfx::B2DHomMatrix& rMatrix)
     {
-        if(mpPolygon->count())
-        {
-            implForceUniqueCopy();
+        if(count())
             mpPolygon->transform(rMatrix);
-        }
     }
 } // end of namespace basegfx
 

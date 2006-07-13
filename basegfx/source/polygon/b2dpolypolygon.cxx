@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dpolypolygon.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:58:20 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 09:57:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,9 @@
 #include <rtl/instance.hxx>
 #endif
 
+#include <functional>
 #include <vector>
+#include <algorithm>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -62,38 +64,16 @@ class ImplB2DPolyPolygon
     typedef ::std::vector< ::basegfx::B2DPolygon >  PolygonVector;
 
     PolygonVector                                   maPolygons;
-    sal_uInt32                                      mnRefCount;
 
 public:
-    // This constructor is only used from the static identity polygon, thus
-    // the RefCount is set to 1 to never 'delete' this static incarnation.
-    ImplB2DPolyPolygon()
-    :   mnRefCount(1)
-    {
-        // complete initialization with defaults
-    }
-
-    ImplB2DPolyPolygon(const ImplB2DPolyPolygon& rToBeCopied)
-    :   mnRefCount(0)
-    {
-        // complete initialization using copy
-        maPolygons = rToBeCopied.maPolygons;
-    }
-
-    ImplB2DPolyPolygon(const ::basegfx::B2DPolygon& rToBeCopied)
-    :   mnRefCount(0)
-    {
-        // initialization using given Polygon
-        maPolygons.push_back( rToBeCopied );
-    }
-
-    ~ImplB2DPolyPolygon()
+    ImplB2DPolyPolygon() : maPolygons()
     {
     }
 
-    const sal_uInt32 getRefCount() const { return mnRefCount; }
-    void incRefCount() { mnRefCount++; }
-    void decRefCount() { mnRefCount--; }
+    ImplB2DPolyPolygon(const ::basegfx::B2DPolygon& rToBeCopied) :
+        maPolygons(1,rToBeCopied)
+    {
+    }
 
     bool isEqual(const ImplB2DPolyPolygon& rPolygonList) const
     {
@@ -180,18 +160,16 @@ public:
 
     void flip()
     {
-        for(sal_uInt32 a(0L); a < maPolygons.size(); a++)
-        {
-            maPolygons[a].flip();
-        }
+        std::for_each( maPolygons.begin(),
+                       maPolygons.end(),
+                       std::mem_fun_ref( &::basegfx::B2DPolygon::flip ));
     }
 
     void removeDoublePoints()
     {
-        for(sal_uInt32 a(0L); a < maPolygons.size(); a++)
-        {
-            maPolygons[a].removeDoublePoints();
-        }
+        std::for_each( maPolygons.begin(),
+                       maPolygons.end(),
+                       std::mem_fun_ref( &::basegfx::B2DPolygon::removeDoublePoints ));
     }
 
     void transform(const ::basegfx::B2DHomMatrix& rMatrix)
@@ -201,87 +179,64 @@ public:
             maPolygons[a].transform(rMatrix);
         }
     }
+
+    void makeUnique()
+    {
+        std::for_each( maPolygons.begin(),
+                       maPolygons.end(),
+                       std::mem_fun_ref( &::basegfx::B2DPolygon::makeUnique ));
+    }
 };
 
 //////////////////////////////////////////////////////////////////////////////
 
-namespace { struct DefaultPolyPolygon: public rtl::Static<ImplB2DPolyPolygon, DefaultPolyPolygon> {}; }
-
 namespace basegfx
 {
-    void B2DPolyPolygon::implForceUniqueCopy()
+    namespace { struct DefaultPolyPolygon: public rtl::Static<B2DPolyPolygon::ImplType,
+                                                              DefaultPolyPolygon> {}; }
+
+    B2DPolyPolygon::B2DPolyPolygon() :
+        mpPolyPolygon(DefaultPolyPolygon::get())
     {
-        if(mpPolyPolygon->getRefCount())
-        {
-            mpPolyPolygon->decRefCount();
-            mpPolyPolygon = new ImplB2DPolyPolygon(*mpPolyPolygon);
-        }
     }
 
-    B2DPolyPolygon::B2DPolyPolygon()
-    :   mpPolyPolygon(&DefaultPolyPolygon::get())
+    B2DPolyPolygon::B2DPolyPolygon(const B2DPolyPolygon& rPolyPolygon) :
+        mpPolyPolygon(rPolyPolygon.mpPolyPolygon)
     {
-        mpPolyPolygon->incRefCount();
     }
 
-    B2DPolyPolygon::B2DPolyPolygon(const B2DPolyPolygon& rPolyPolygon)
-    :   mpPolyPolygon(rPolyPolygon.mpPolyPolygon)
-    {
-        mpPolyPolygon->incRefCount();
-    }
-
-    B2DPolyPolygon::B2DPolyPolygon(const B2DPolygon& rPolygon)
-    :   mpPolyPolygon( new ImplB2DPolyPolygon(rPolygon) )
+    B2DPolyPolygon::B2DPolyPolygon(const B2DPolygon& rPolygon) :
+        mpPolyPolygon( ImplB2DPolyPolygon(rPolygon) )
     {
     }
 
     B2DPolyPolygon::~B2DPolyPolygon()
     {
-        if(mpPolyPolygon->getRefCount())
-        {
-            mpPolyPolygon->decRefCount();
-        }
-        else
-        {
-            delete mpPolyPolygon;
-        }
     }
 
     B2DPolyPolygon& B2DPolyPolygon::operator=(const B2DPolyPolygon& rPolyPolygon)
     {
-        if(mpPolyPolygon->getRefCount())
-        {
-            mpPolyPolygon->decRefCount();
-        }
-        else
-        {
-            delete mpPolyPolygon;
-        }
-
         mpPolyPolygon = rPolyPolygon.mpPolyPolygon;
-        mpPolyPolygon->incRefCount();
-
         return *this;
+    }
+
+    void B2DPolyPolygon::makeUnique()
+    {
+        mpPolyPolygon.make_unique();
+        mpPolyPolygon->makeUnique();
     }
 
     bool B2DPolyPolygon::operator==(const B2DPolyPolygon& rPolyPolygon) const
     {
-        if(mpPolyPolygon == rPolyPolygon.mpPolyPolygon)
-        {
+        if(mpPolyPolygon.same_object(rPolyPolygon.mpPolyPolygon))
             return true;
-        }
 
         return mpPolyPolygon->isEqual(*(rPolyPolygon.mpPolyPolygon));
     }
 
     bool B2DPolyPolygon::operator!=(const B2DPolyPolygon& rPolyPolygon) const
     {
-        if(mpPolyPolygon == rPolyPolygon.mpPolyPolygon)
-        {
-            return false;
-        }
-
-        return !mpPolyPolygon->isEqual(*(rPolyPolygon.mpPolyPolygon));
+        return !(*this == rPolyPolygon);
     }
 
     sal_uInt32 B2DPolyPolygon::count() const
@@ -300,11 +255,8 @@ namespace basegfx
     {
         OSL_ENSURE(nIndex < mpPolyPolygon->count(), "B2DPolyPolygon access outside range (!)");
 
-        if(mpPolyPolygon->getB2DPolygon(nIndex) != rPolygon)
-        {
-            implForceUniqueCopy();
+        if(getB2DPolygon(nIndex) != rPolygon)
             mpPolyPolygon->setB2DPolygon(nIndex, rPolygon);
-        }
     }
 
     bool B2DPolyPolygon::areControlVectorsUsed() const
@@ -327,19 +279,13 @@ namespace basegfx
         OSL_ENSURE(nIndex <= mpPolyPolygon->count(), "B2DPolyPolygon Insert outside range (!)");
 
         if(nCount)
-        {
-            implForceUniqueCopy();
             mpPolyPolygon->insert(nIndex, rPolygon, nCount);
-        }
     }
 
     void B2DPolyPolygon::append(const B2DPolygon& rPolygon, sal_uInt32 nCount)
     {
         if(nCount)
-        {
-            implForceUniqueCopy();
             mpPolyPolygon->insert(mpPolyPolygon->count(), rPolygon, nCount);
-        }
     }
 
     void B2DPolyPolygon::insert(sal_uInt32 nIndex, const B2DPolyPolygon& rPolyPolygon)
@@ -347,19 +293,13 @@ namespace basegfx
         OSL_ENSURE(nIndex <= mpPolyPolygon->count(), "B2DPolyPolygon Insert outside range (!)");
 
         if(rPolyPolygon.count())
-        {
-            implForceUniqueCopy();
             mpPolyPolygon->insert(nIndex, rPolyPolygon);
-        }
     }
 
     void B2DPolyPolygon::append(const B2DPolyPolygon& rPolyPolygon)
     {
         if(rPolyPolygon.count())
-        {
-            implForceUniqueCopy();
             mpPolyPolygon->insert(mpPolyPolygon->count(), rPolyPolygon);
-        }
     }
 
     void B2DPolyPolygon::remove(sal_uInt32 nIndex, sal_uInt32 nCount)
@@ -367,25 +307,12 @@ namespace basegfx
         OSL_ENSURE(nIndex + nCount <= mpPolyPolygon->count(), "B2DPolyPolygon Remove outside range (!)");
 
         if(nCount)
-        {
-            implForceUniqueCopy();
             mpPolyPolygon->remove(nIndex, nCount);
-        }
     }
 
     void B2DPolyPolygon::clear()
     {
-        if(mpPolyPolygon->getRefCount())
-        {
-            mpPolyPolygon->decRefCount();
-        }
-        else
-        {
-            delete mpPolyPolygon;
-        }
-
-        mpPolyPolygon = &DefaultPolyPolygon::get();
-        mpPolyPolygon->incRefCount();
+        mpPolyPolygon = DefaultPolyPolygon::get();
     }
 
     bool B2DPolyPolygon::isClosed() const
@@ -408,15 +335,11 @@ namespace basegfx
     void B2DPolyPolygon::setClosed(bool bNew)
     {
         if(bNew != isClosed())
-        {
-            implForceUniqueCopy();
             mpPolyPolygon->setClosed(bNew);
-        }
     }
 
     void B2DPolyPolygon::flip()
     {
-        implForceUniqueCopy();
         mpPolyPolygon->flip();
     }
 
@@ -438,15 +361,11 @@ namespace basegfx
     void B2DPolyPolygon::removeDoublePoints()
     {
         if(hasDoublePoints())
-        {
-            implForceUniqueCopy();
             mpPolyPolygon->removeDoublePoints();
-        }
     }
 
     void B2DPolyPolygon::transform(const ::basegfx::B2DHomMatrix& rMatrix)
     {
-        implForceUniqueCopy();
         mpPolyPolygon->transform(rMatrix);
     }
 } // end of namespace basegfx
