@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleTextHelper.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 14:54:35 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 10:35:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1436,9 +1436,9 @@ namespace accessibility
                     }
                     else if( pViewHint )
                     {
-                        switch( pViewHint->GetId() )
+                        switch( pViewHint->GetHintType() )
                         {
-                            case SVX_HINT_VIEWCHANGED:
+                            case SvxViewHint::SVX_HINT_VIEWCHANGED:
                                 // just check visibility
                                 UpdateVisibleChildren();
                                 UpdateBoundRect();
