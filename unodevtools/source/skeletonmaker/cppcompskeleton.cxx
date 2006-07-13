@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cppcompskeleton.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:50:10 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 11:56:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -445,7 +445,7 @@ void generateAddinConstructorAndHelper(std::ostream& o,
         "                \"com.sun.star.configuration.ConfigurationAccess\"));\n\n";
 
     o << "        ::rtl::OUStringBuffer sPath(::rtl::OUString::createFromAscii(\n"
-        "             \"/org.openoffice.Office.Sheet.CalcAddIns/AddInInfo/\"));\n"
+        "             \"/org.openoffice.Office.CalcAddIns/AddInInfo/\"));\n"
         "        sPath.appendAscii(sADDIN_SERVICENAME);\n"
         "        sPath.appendAscii(\"/AddInFunctions\");\n\n"
         "        // create arguments: nodepath\n"
@@ -1019,7 +1019,11 @@ void generateCalcAddin(ProgramOptions const & options,
     }
 
     // get the one and only add-in service for later use
-    OString sAddinService = (*services.begin()).replace('/', '.');
+    std::hash_set< OString, OStringHash >::const_iterator iter2 = services.begin();
+    OString sAddinService = (*iter2).replace('/', '.');
+    if (sAddinService.equals("com.sun.star.sheet.AddIn")) {
+        sAddinService = (*(++iter2)).replace('/', '.');
+    }
 
     // add AddIn in suported service list, this service is currently necessary
     // to identify all calc add-ins and to support the necessary add-in helper
