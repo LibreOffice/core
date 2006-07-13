@@ -4,9 +4,9 @@
  *
  *  $RCSfile: checkdispatchapi.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-08 14:42:51 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 15:15:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,7 @@ public class checkdispatchapi extends ComplexTestCase
 
     /** points to the global uno service manager. */
     private XMultiServiceFactory m_xMSF = null;
+    private connectivity.tools.HsqlDatabase db;
 
     /** can be used to create new test frames. */
     private XFrame m_xDesktop = null;
@@ -115,6 +116,8 @@ public class checkdispatchapi extends ComplexTestCase
             // get uno service manager from global test environment
             m_xMSF = (XMultiServiceFactory)param.getMSF();
 
+            db = new connectivity.tools.HsqlDatabase(m_xMSF);
+
             // create desktop
             m_xDesktop = (XFrame)UnoRuntime.queryInterface(
                                 XFrame.class,
@@ -133,6 +136,7 @@ public class checkdispatchapi extends ComplexTestCase
      */
     public void after()
     {
+        db.close();
         impl_closeFrame(m_xFrame);
         m_xFrame = null;
     }
@@ -188,13 +192,13 @@ public class checkdispatchapi extends ComplexTestCase
     //-------------------------------------------
     public void checkDispatchInfoOfQueryDesign()
     {
-        impl_checkDispatchInfoOfXXX(".component:DB/QueryDesign");
+        callDatabaseDispatch(".component:DB/QueryDesign");
     }
 
     //-------------------------------------------
     public void checkDispatchInfoOfTableDesign()
     {
-        impl_checkDispatchInfoOfXXX(".component:DB/TableDesign");
+        callDatabaseDispatch(".component:DB/TableDesign");
     }
 
     //-------------------------------------------
@@ -212,7 +216,24 @@ public class checkdispatchapi extends ComplexTestCase
     //-------------------------------------------
     public void checkDispatchInfoOfRelationDesign()
     {
-        impl_checkDispatchInfoOfXXX(".component:DB/RelationDesign");
+        callDatabaseDispatch(".component:DB/RelationDesign");
+    }
+    //-------------------------------------------
+    private void callDatabaseDispatch(String url)
+    {
+        try
+        {
+            final PropertyValue args = new PropertyValue();
+            args.Name = "ActiveConnection";
+            args.Value = (Object)db.defaultConnection();
+
+            XFrame xFrame = impl_createNewFrame();
+
+            impl_loadIntoFrame(xFrame, url, new PropertyValue[] { args });
+            impl_checkDispatchInfo(xFrame);
+            impl_closeFrame(xFrame);
+         } catch(java.lang.Exception e ) {
+         }
     }
 
     //-------------------------------------------
@@ -268,7 +289,7 @@ public class checkdispatchapi extends ComplexTestCase
     private void impl_checkDispatchInfoOfXXX(String sXXX)
     {
         XFrame xFrame = impl_createNewFrame();
-        impl_loadIntoFrame(xFrame, sXXX);
+        impl_loadIntoFrame(xFrame, sXXX,null);
         impl_checkDispatchInfo(xFrame);
         impl_closeFrame(xFrame);
     }
@@ -276,7 +297,7 @@ public class checkdispatchapi extends ComplexTestCase
     //-------------------------------------------
     /** @short  load an URL into the current test frame.
      */
-    private void impl_loadIntoFrame(XFrame xFrame, String sURL)
+    private void impl_loadIntoFrame(XFrame xFrame, String sURL,PropertyValue args[])
     {
         XComponentLoader xLoader = (XComponentLoader)UnoRuntime.queryInterface(
                                         XComponentLoader.class,
@@ -287,7 +308,7 @@ public class checkdispatchapi extends ComplexTestCase
         XComponent xDoc = null;
         try
         {
-            xDoc = xLoader.loadComponentFromURL(sURL, "_self", 0, null);
+            xDoc = xLoader.loadComponentFromURL(sURL, "_self", 0, args);
         }
         catch(java.lang.Throwable ex)
         {
