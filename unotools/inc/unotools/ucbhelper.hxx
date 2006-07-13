@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ucbhelper.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 14:03:07 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 12:11:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,8 +44,14 @@
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
+#include <com/sun/star/uno/Reference.hxx>
+#endif
 #ifndef  _COM_SUN_STAR_UCB_NAMECLASH_HPP_
 #include <com/sun/star/ucb/NameClash.hpp>
+#endif
+#ifndef  _COM_SUN_STAR_UCB_XCONTENTPROVIDER_HPP_
+#include <com/sun/star/ucb/XContentProvider.hpp>
 #endif
 
 #include <tools/string.hxx>
@@ -92,6 +98,7 @@ namespace utl
         static sal_Bool             Exists( const String& rContent );
         static sal_Bool             FindInPath( const String& rPath, const String& rName, String& rFile, char cDelim = ';', BOOL bAllowWildCards = TRUE );
         static sal_Bool             Find( const String& rFolder, const String& rName, String& rFile, BOOL bAllowWildCards = FALSE );
+        static sal_Bool             IsSubPath( const ::rtl::OUString& rPath, const ::rtl::OUString& rChildCandidate, const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentProvider >& xContentProvider = ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentProvider >() );
     };
 }
 
