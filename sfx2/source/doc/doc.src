@@ -1,12 +1,12 @@
-/*************************************************************************
+ï»¿/*************************************************************************
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: hr $ $Date: 2005-11-17 15:22:41 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 13:26:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -276,15 +276,15 @@ InfoBox MSG_DOCINFO_CANTREAD
 };
 String STR_ERROR_NOSTORAGE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Die ausgewählte Datei besitzt ein falsches Format. : Die ausgewõhlte Datei besitzt ein falsches Format. */
-    /* ### ACHTUNG: Neuer Text in Resource? Die ausgewählte Datei besitzt ein falsches Format. : Die ausgewõhlte Datei besitzt ein falsches Format. */
+    /* ### ACHTUNG: Neuer Text in Resource? Die ausgewï¿½hlte Datei besitzt ein falsches Format. : Die ausgewï¿½hlte Datei besitzt ein falsches Format. */
+    /* ### ACHTUNG: Neuer Text in Resource? Die ausgewï¿½hlte Datei besitzt ein falsches Format. : Die ausgewï¿½hlte Datei besitzt ein falsches Format. */
     Text [ de ] = "Die ausgewÃ¤hlte Datei besitzt ein falsches Format." ;
     Text [ en-US ] = "The selected file has an incorrect format." ;
     Text [ x-comment ] = " ";
 };
 String STR_QUERY_SAVEOWNFORMAT
 {
-//    Text [ de ] = "$(FILENAME) enthält möglicherweise Elemente, die mit $(FORMAT)-Format nicht kompatibel sind. Möchten Sie das Dokument in diesem Format speichern?\n\n- Klicken Sie auf 'Ja', um im $(FORMAT)-Format zuspeichern.\n- Klicken Sie auf 'Nein', um die Elemente zu erhalten. Speichern Sie dann das Dokument im aktuellen %PRODUCTNAME-Format.";
+//    Text [ de ] = "$(FILENAME) enthï¿½lt mï¿½glicherweise Elemente, die mit $(FORMAT)-Format nicht kompatibel sind. Mï¿½chten Sie das Dokument in diesem Format speichern?\n\n- Klicken Sie auf 'Ja', um im $(FORMAT)-Format zuspeichern.\n- Klicken Sie auf 'Nein', um die Elemente zu erhalten. Speichern Sie dann das Dokument im aktuellen %PRODUCTNAME-Format.";
     Text [ de ] = "Dieses Dokument beinhaltet unter UmstÃ¤nden Formatierungen oder Inhalte, die im aktuellen %FORMATNAME Format nicht gespeichert werden kÃ¶nnen./n/n MÃ¶chten Sie das Dokument trotzdem in diesem Format speichern?/n/n- Klicken Sie auf 'Ja', um das aktuelle Format beizubehalten./n- Klicken Sie auf 'Nein', um im aktuellsten %PRODUCTNAME Dateiformat zu speichern und dabei  Formatierungen und Inhalte sicher zu speichern.";
     Text [ en-US ] = "This document may contain formatting or content that cannot be saved in the present %FORMATNAME file format./n/nDo you want to save the document in this format anyway?/n/n- Click 'Yes' to keep the present file format./n- Click 'No' to use the latest %PRODUCTNAME file format and be sure all formatting and content is saved correctly.";
 //    Text [ en-US ] = "$(FILENAME) may contain formattings that are not compatible with $(FORMAT) Format. Do you want to save the document in this format?\n\n- To save in $(FORMAT) Format, click 'Yes'\n- To preserve formatting, click No. Next save the document in the latest %PRODUCTNAME format.";
@@ -327,8 +327,8 @@ String STR_CLOSEDOC
 };
 String STR_CLOSEDOC_ANDRETURN
 {
-    /* ### ACHTUNG: Neuer Text in Resource? S~chließen & zurück zu  : S~chlie˜en & zur³ck zu  */
-    /* ### ACHTUNG: Neuer Text in Resource? S~chließen & zurück zu  : S~chlie˜en & zur³ck zu  */
+    /* ### ACHTUNG: Neuer Text in Resource? S~chlieï¿½en & zurï¿½ck zu  : S~chlieï¿½en & zurï¿½ck zu  */
+    /* ### ACHTUNG: Neuer Text in Resource? S~chlieï¿½en & zurï¿½ck zu  : S~chlieï¿½en & zurï¿½ck zu  */
     Text [ de ] = "S~chlieÃŸen & zurÃ¼ck zu " ;
     Text [ en-US ] = "~Close & Return to " ;
     Text [ x-comment ] = " ";
@@ -539,7 +539,7 @@ String STR_EDITOBJECT
 /* obsolete
 String STR_OPENOBJECT
 {
-    Text [ de ] = "~Öffnen";
+    Text [ de ] = "~ï¿½ffnen";
     Text [ en-US ] = "~Open";
     Text [ x-comment ] = " ";
 };
@@ -672,6 +672,13 @@ String STR_MACROS_DISABLED
 {
     Text [ de ] = "Es wurde versucht, ein Makro auszufÃ¼hren.\nMakros werden aus SicherheitsgrÃ¼nden nicht unterstÃ¼tzt.";
     Text [ en-US ] = "An attempt was made to execute a macro.\nFor security reasons, macro support is disabled.";
+    Text [ x-comment ] = " ";
+};
+
+String STR_ERROR_DELETE_TEMPLATE_DIR
+{
+    Text [ de ] = "Einige Templates sind geschÃ¼tzt und konnten daher nicht gelÃ¶scht werden.";
+    Text [ en-US ] = "Some template files are protected and can not be deleted.";
     Text [ x-comment ] = " ";
 };
 
