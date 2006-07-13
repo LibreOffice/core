@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqlparse.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:16:59 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 15:12:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,7 +172,13 @@ namespace connectivity
 
         // convert a string into double trim it to scale of _nscale and than transform it back to string
         ::rtl::OUString stringToDouble(const ::rtl::OUString& _rValue,sal_Int16 _nScale);
-        sal_Int16 buildDate(sal_Int32 _nType,OSQLParseNode*& pAppend,OSQLParseNode* pLiteral,OSQLParseNode*& pCompare);
+        OSQLParseNode*  buildDate(sal_Int32 _nType,OSQLParseNode*& pLiteral);
+        bool            extractDate(OSQLParseNode* pLiteral,double& _rfValue);
+        void            killThousandSeparator(OSQLParseNode* pLiteral);
+        OSQLParseNode*  convertNode(sal_Int32 nType,OSQLParseNode*& pLiteral);
+        // makes a string out of a number, pLiteral will be deleted
+        OSQLParseNode*  buildNode_STR_NUM(OSQLParseNode*& pLiteral);
+        OSQLParseNode*  buildNode_Date(const double& fValue, sal_Int32 nType);
 
         static ::osl::Mutex& getMutex();
 
@@ -231,14 +237,11 @@ namespace connectivity
 
         void reduceLiteral(OSQLParseNode*& pLiteral, sal_Bool bAppendBlank);
          // does not change the pLiteral argument
-        sal_Int16 buildNode(OSQLParseNode*& pAppend,OSQLParseNode* pLiteral,OSQLParseNode*& pCompare);
-        // makes a string out of a number, pLiteral will be deleted
-        sal_Int16 buildNode_STR_NUM(OSQLParseNode*& pAppend,OSQLParseNode*& pLiteral,OSQLParseNode*& pCompare);
-        sal_Int16 buildNode_Date(const double& fValue, sal_Int32 nType, OSQLParseNode*& pAppend,OSQLParseNode* pLiteral,OSQLParseNode*& pCompare);
+        sal_Int16 buildNode(OSQLParseNode*& pAppend,OSQLParseNode* pCompare,OSQLParseNode* pLiteral,OSQLParseNode* pLiteral2);
 
         sal_Int16 buildComparsionRule(OSQLParseNode*& pAppend,OSQLParseNode* pLiteral);
         // pCompre will be deleted if it is not used
-        sal_Int16 buildComparsionRule(OSQLParseNode*& pAppend,OSQLParseNode* pLiteral,OSQLParseNode*& pCompare);
+        sal_Int16 buildPredicateRule(OSQLParseNode*& pAppend,OSQLParseNode* pLiteral,OSQLParseNode*& pCompare,OSQLParseNode* pLiteral2 = NULL);
 
         sal_Int16 buildLikeRule(OSQLParseNode*& pAppend,OSQLParseNode*& pLiteral,const OSQLParseNode* pEscape);
         sal_Int16 buildStringNodes(OSQLParseNode*& pLiteral);
