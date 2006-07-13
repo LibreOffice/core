@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_writer.scp,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:54:06 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 09:35:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,13 @@ File gid_File_Exe_Swriter
     Dir = gid_Dir_Program;
     Name = EXENAME(swriter);
     Styles = (PACKED);
+End
+
+File gid_File_Jar_Writer2latex
+    TXT_FILE_BODY;
+    Name = "writer2latex.jar";
+    Dir = gid_Dir_Classes;
+    Styles = (PACKED,PATCH);
 End
 
 #if defined UNX && ! defined MACOSX
