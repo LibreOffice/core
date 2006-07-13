@@ -24,7 +24,7 @@ zip1langdirs:=$(subst,CVS, $(shell +-dir {$(subst,$/$(LANGDIR), $(ZIP1DIR))} /ba
 .IF "$(ZIP1FORCEALLLANG)"!=""
 zip1alllangiso:=$(foreach,i,$(completelangiso) $(foreach,j,$(zip1langdirs) $(eq,$i,$j  $i $(NULL))))
 .ELSE          # "$(ZIP1ALLLANG)" != ""
-zip1alllangiso:=$(foreach,i,$(alllangiso) $(foreach,j,$(zip1langdirs) $(eq,$i,$j  $i $(NULL))))
+zip1alllangiso*:=$(foreach,i,$(alllangiso) $(foreach,j,$(zip1langdirs) $(eq,$i,$j  $i $(NULL))))
 .ENDIF          # "$(ZIP1ALLLANG)" != ""
 .ENDIF			# "$(ZIP1TARGET)"!=""
 
@@ -121,7 +121,7 @@ zip2langdirs:=$(subst,CVS, $(shell +-dir {$(subst,$/$(LANGDIR), $(ZIP2DIR))} /ba
 .IF "$(ZIP2FORCEALLLANG)"!=""
 zip2alllangiso:=$(foreach,i,$(completelangiso) $(foreach,j,$(zip2langdirs) $(eq,$i,$j  $i $(NULL))))
 .ELSE          # "$(ZIP2ALLLANG)" != ""
-zip2alllangiso:=$(foreach,i,$(alllangiso) $(foreach,j,$(zip2langdirs) $(eq,$i,$j  $i $(NULL))))
+zip2alllangiso*:=$(foreach,i,$(alllangiso) $(foreach,j,$(zip2langdirs) $(eq,$i,$j  $i $(NULL))))
 .ENDIF          # "$(ZIP2ALLLANG)" != ""
 .ENDIF			# "$(ZIP2TARGET)"!=""
 
@@ -218,7 +218,7 @@ zip3langdirs:=$(subst,CVS, $(shell +-dir {$(subst,$/$(LANGDIR), $(ZIP3DIR))} /ba
 .IF "$(ZIP3FORCEALLLANG)"!=""
 zip3alllangiso:=$(foreach,i,$(completelangiso) $(foreach,j,$(zip3langdirs) $(eq,$i,$j  $i $(NULL))))
 .ELSE          # "$(ZIP3ALLLANG)" != ""
-zip3alllangiso:=$(foreach,i,$(alllangiso) $(foreach,j,$(zip3langdirs) $(eq,$i,$j  $i $(NULL))))
+zip3alllangiso*:=$(foreach,i,$(alllangiso) $(foreach,j,$(zip3langdirs) $(eq,$i,$j  $i $(NULL))))
 .ENDIF          # "$(ZIP3ALLLANG)" != ""
 .ENDIF			# "$(ZIP3TARGET)"!=""
 
@@ -315,7 +315,7 @@ zip4langdirs:=$(subst,CVS, $(shell +-dir {$(subst,$/$(LANGDIR), $(ZIP4DIR))} /ba
 .IF "$(ZIP4FORCEALLLANG)"!=""
 zip4alllangiso:=$(foreach,i,$(completelangiso) $(foreach,j,$(zip4langdirs) $(eq,$i,$j  $i $(NULL))))
 .ELSE          # "$(ZIP4ALLLANG)" != ""
-zip4alllangiso:=$(foreach,i,$(alllangiso) $(foreach,j,$(zip4langdirs) $(eq,$i,$j  $i $(NULL))))
+zip4alllangiso*:=$(foreach,i,$(alllangiso) $(foreach,j,$(zip4langdirs) $(eq,$i,$j  $i $(NULL))))
 .ENDIF          # "$(ZIP4ALLLANG)" != ""
 .ENDIF			# "$(ZIP4TARGET)"!=""
 
@@ -412,7 +412,7 @@ zip5langdirs:=$(subst,CVS, $(shell +-dir {$(subst,$/$(LANGDIR), $(ZIP5DIR))} /ba
 .IF "$(ZIP5FORCEALLLANG)"!=""
 zip5alllangiso:=$(foreach,i,$(completelangiso) $(foreach,j,$(zip5langdirs) $(eq,$i,$j  $i $(NULL))))
 .ELSE          # "$(ZIP5ALLLANG)" != ""
-zip5alllangiso:=$(foreach,i,$(alllangiso) $(foreach,j,$(zip5langdirs) $(eq,$i,$j  $i $(NULL))))
+zip5alllangiso*:=$(foreach,i,$(alllangiso) $(foreach,j,$(zip5langdirs) $(eq,$i,$j  $i $(NULL))))
 .ENDIF          # "$(ZIP5ALLLANG)" != ""
 .ENDIF			# "$(ZIP5TARGET)"!=""
 
@@ -509,7 +509,7 @@ zip6langdirs:=$(subst,CVS, $(shell +-dir {$(subst,$/$(LANGDIR), $(ZIP6DIR))} /ba
 .IF "$(ZIP6FORCEALLLANG)"!=""
 zip6alllangiso:=$(foreach,i,$(completelangiso) $(foreach,j,$(zip6langdirs) $(eq,$i,$j  $i $(NULL))))
 .ELSE          # "$(ZIP6ALLLANG)" != ""
-zip6alllangiso:=$(foreach,i,$(alllangiso) $(foreach,j,$(zip6langdirs) $(eq,$i,$j  $i $(NULL))))
+zip6alllangiso*:=$(foreach,i,$(alllangiso) $(foreach,j,$(zip6langdirs) $(eq,$i,$j  $i $(NULL))))
 .ENDIF          # "$(ZIP6ALLLANG)" != ""
 .ENDIF			# "$(ZIP6TARGET)"!=""
 
@@ -606,7 +606,7 @@ zip7langdirs:=$(subst,CVS, $(shell +-dir {$(subst,$/$(LANGDIR), $(ZIP7DIR))} /ba
 .IF "$(ZIP7FORCEALLLANG)"!=""
 zip7alllangiso:=$(foreach,i,$(completelangiso) $(foreach,j,$(zip7langdirs) $(eq,$i,$j  $i $(NULL))))
 .ELSE          # "$(ZIP7ALLLANG)" != ""
-zip7alllangiso:=$(foreach,i,$(alllangiso) $(foreach,j,$(zip7langdirs) $(eq,$i,$j  $i $(NULL))))
+zip7alllangiso*:=$(foreach,i,$(alllangiso) $(foreach,j,$(zip7langdirs) $(eq,$i,$j  $i $(NULL))))
 .ENDIF          # "$(ZIP7ALLLANG)" != ""
 .ENDIF			# "$(ZIP7TARGET)"!=""
 
@@ -703,7 +703,7 @@ zip8langdirs:=$(subst,CVS, $(shell +-dir {$(subst,$/$(LANGDIR), $(ZIP8DIR))} /ba
 .IF "$(ZIP8FORCEALLLANG)"!=""
 zip8alllangiso:=$(foreach,i,$(completelangiso) $(foreach,j,$(zip8langdirs) $(eq,$i,$j  $i $(NULL))))
 .ELSE          # "$(ZIP8ALLLANG)" != ""
-zip8alllangiso:=$(foreach,i,$(alllangiso) $(foreach,j,$(zip8langdirs) $(eq,$i,$j  $i $(NULL))))
+zip8alllangiso*:=$(foreach,i,$(alllangiso) $(foreach,j,$(zip8langdirs) $(eq,$i,$j  $i $(NULL))))
 .ENDIF          # "$(ZIP8ALLLANG)" != ""
 .ENDIF			# "$(ZIP8TARGET)"!=""
 
@@ -800,7 +800,7 @@ zip9langdirs:=$(subst,CVS, $(shell +-dir {$(subst,$/$(LANGDIR), $(ZIP9DIR))} /ba
 .IF "$(ZIP9FORCEALLLANG)"!=""
 zip9alllangiso:=$(foreach,i,$(completelangiso) $(foreach,j,$(zip9langdirs) $(eq,$i,$j  $i $(NULL))))
 .ELSE          # "$(ZIP9ALLLANG)" != ""
-zip9alllangiso:=$(foreach,i,$(alllangiso) $(foreach,j,$(zip9langdirs) $(eq,$i,$j  $i $(NULL))))
+zip9alllangiso*:=$(foreach,i,$(alllangiso) $(foreach,j,$(zip9langdirs) $(eq,$i,$j  $i $(NULL))))
 .ENDIF          # "$(ZIP9ALLLANG)" != ""
 .ENDIF			# "$(ZIP9TARGET)"!=""
 
@@ -897,7 +897,7 @@ zip10langdirs:=$(subst,CVS, $(shell +-dir {$(subst,$/$(LANGDIR), $(ZIP10DIR))} /
 .IF "$(ZIP10FORCEALLLANG)"!=""
 zip10alllangiso:=$(foreach,i,$(completelangiso) $(foreach,j,$(zip10langdirs) $(eq,$i,$j  $i $(NULL))))
 .ELSE          # "$(ZIP10ALLLANG)" != ""
-zip10alllangiso:=$(foreach,i,$(alllangiso) $(foreach,j,$(zip10langdirs) $(eq,$i,$j  $i $(NULL))))
+zip10alllangiso*:=$(foreach,i,$(alllangiso) $(foreach,j,$(zip10langdirs) $(eq,$i,$j  $i $(NULL))))
 .ENDIF          # "$(ZIP10ALLLANG)" != ""
 .ENDIF			# "$(ZIP10TARGET)"!=""
 
