@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objuno.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:30:23 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 13:29:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,6 +75,7 @@
 #include <svtools/adrparse.hxx>
 #include <unotools/streamwrap.hxx>
 #include <comphelper/sequenceasvector.hxx>
+#include <comphelper/storagehelper.hxx>
 
 #include "objuno.hxx"
 #include "sfx.hrc"
@@ -1140,33 +1141,41 @@ SfxStandaloneDocumentInfoObject::SfxStandaloneDocumentInfoObject( const ::com::s
 
 SfxStandaloneDocumentInfoObject::~SfxStandaloneDocumentInfoObject()
 {
-    delete _pMedium;
+    if ( _pMedium )
+        delete _pMedium;
 }
 
 //-----------------------------------------------------------------------------
 
-uno::Reference< embed::XStorage > SfxStandaloneDocumentInfoObject::GetStorage_Impl( const String& rName, sal_Bool bWrite )
+uno::Reference< embed::XStorage > SfxStandaloneDocumentInfoObject::GetStorage_Impl( const ::rtl::OUString& rName, sal_Bool bWrite )
 {
+    return ::comphelper::OStorageHelper::GetStorageFromURL(
+                        rName,
+                        bWrite ? embed::ElementModes::READWRITE : embed::ElementModes::READ,
+                        _xFactory );
+
+
+    // The medium should not be used here any more
     // Medium erstellen
-    if ( _pMedium )
-        delete _pMedium;
+//  if ( _pMedium )
+//      delete _pMedium;
+//
+//    _pMedium = new SfxMedium( rName, bWrite ? SFX_STREAM_READWRITE : SFX_STREAM_READONLY, sal_True );
+//    if ( !_pMedium->GetStorage().is() || SVSTREAM_OK != _pMedium->GetError() )
+//      // Datei existiert nicht oder ist kein Storage
+//      return NULL;
 
-    _pMedium = new SfxMedium( rName, bWrite ? SFX_STREAM_READWRITE : SFX_STREAM_READONLY, sal_True );
-    if ( !_pMedium->GetStorage().is() || SVSTREAM_OK != _pMedium->GetError() )
-        // Datei existiert nicht oder ist kein Storage
-        return NULL;
-
-    // Filter-Detection wegen FileFormat-Version
-    _pFilter = 0;
-    if ( 0 != SFX_APP()->GetFilterMatcher().GuessFilter( *_pMedium, &_pFilter )
-            || !bWrite && !_pFilter )
-        // unbekanntes Dateiformat
-        return NULL;
+//  // Filter-Detection wegen FileFormat-Version
+//  _pFilter = 0;
+//  if ( 0 != SFX_APP()->GetFilterMatcher().GuessFilter( *_pMedium, &_pFilter )
+//          || !bWrite && !_pFilter )
+//      // unbekanntes Dateiformat
+//      return NULL;
 
     // Storage "offnen
-    uno::Reference< embed::XStorage > xStor = _pMedium->GetStorage();
-    DBG_ASSERT( xStor.is(), "no storage" );
-    return xStor;
+//  uno::Reference< embed::XStorage > xStor = _pMedium->GetStorage();
+//  DBG_ASSERT( xStor.is(), "no storage" );
+//  return xStor;
 }
 
 //-----------------------------------------------------------------------------
@@ -1210,8 +1219,7 @@ void SAL_CALL  SfxStandaloneDocumentInfoObject::loadFromURL(const ::rtl::OUStrin
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     sal_Bool bOK = sal_False;
-    String aName( aURL );
-    uno::Reference< embed::XStorage > xStorage = GetStorage_Impl( aName, sal_False );
+    uno::Reference< embed::XStorage > xStorage = GetStorage_Impl( aURL, sal_False );
     uno::Reference< container::XNameAccess > xStorNameAccess( xStorage, uno::UNO_QUERY );
     if ( xStorNameAccess.is() )
     {
@@ -1270,7 +1278,7 @@ void SAL_CALL  SfxStandaloneDocumentInfoObject::loadFromURL(const ::rtl::OUStrin
         }
     }
 
-    DELETEZ( _pMedium );
+//  DELETEZ( _pMedium );
     if ( !bOK )
         throw task::ErrorCodeIOException( ::rtl::OUString(), uno::Reference< uno::XInterface >(), ERRCODE_IO_CANTREAD );
 }
