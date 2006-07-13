@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwNodeNum.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:13:34 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 11:30:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -304,7 +304,8 @@ SwNumberTreeNode::tSwNumTreeNumber SwNodeNum::GetStart() const
         {
             // --> OD 2006-04-24 #i64311#
             // consider root number tree node
-            int nLevel = GetParent() ? GetLevel() : 1;
+            // --> OD 2006-05-24 #i65705# - correct fix for i64311
+            int nLevel = GetParent() ? GetLevel() : 0;
             // <--
 
             if (nLevel >= 0 && nLevel < MAXLEVEL)
