@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AgendaWizardDialogImpl.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 12:28:45 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 12:12:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -214,8 +214,8 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
 
     private void initializePaths() {
         try {
-            sTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "share");
-            sUserTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "user");
+            sTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "share", "/wizard");
+            sUserTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "user", "");
             sBitmapPath = FileAccess.combinePaths(xMSF, sTemplatePath, "/wizard/bitmap");
         } catch (NoValidPathException e) {
             e.printStackTrace();
@@ -231,7 +231,7 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
                 try  {
                     agenda.cp_TemplatePath =
                         FileAccess.connectURLs(
-                            FileAccess.getOfficePath(xMSF, "Work", "") ,
+                            FileAccess.getOfficePath(xMSF, "Work", "", "") ,
                             resources.resDefaultFilename
                         );
                 }
@@ -318,7 +318,7 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
      */
     public boolean initializeTemplates() {
         try {
-            String sTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "share");
+            String sTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "share", "/wizard");
 
             //sCurrentNorm = Norms[getCurrentLetter().cp_Norm];
             String sAgendaPath = FileAccess.combinePaths(xMSF, sTemplatePath, "/wizard/agenda" );
