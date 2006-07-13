@@ -1,7 +1,7 @@
 %{
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.53 2006-07-10 14:38:22 obo Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.54 2006-07-13 15:14:39 obo Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -9,7 +9,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: obo $ $Date: 2006-07-10 14:38:22 $ $Revision: 1.53 $
+//	$Author: obo $ $Date: 2006-07-13 15:14:39 $ $Revision: 1.54 $
 //
 // Description:
 //
@@ -1187,18 +1187,25 @@ comparison_predicate:
 		}
 	|	comparison row_value_constructor
 		{
-			$$ = SQL_NEW_RULE;
-			sal_Int16 nErg = xxx_pGLOBAL_SQLPARSER->buildComparsionRule($$,$2,$1);
-			if(nErg == 1)
+			if(xxx_pGLOBAL_SQLPARSER->inPredicateCheck())
 			{
-				OSQLParseNode* pTemp = $$;
-				$$ = pTemp->removeAt((sal_uInt32)0);
-				delete pTemp;
+				$$ = SQL_NEW_RULE;
+				sal_Int16 nErg = xxx_pGLOBAL_SQLPARSER->buildPredicateRule($$,$2,$1);
+				if(nErg == 1)
+				{
+					OSQLParseNode* pTemp = $$;
+					$$ = pTemp->removeAt((sal_uInt32)0);
+					delete pTemp;
+				}
+				else
+				{
+					delete $$;
+					YYABORT;
+				}
 			}
 			else
 			{
-				delete $$;
-				YYABORT;
+				YYERROR;
 			}
 		}
 	;
@@ -1224,16 +1231,22 @@ between_predicate:
 		{
 			if (xxx_pGLOBAL_SQLPARSER->inPredicateCheck())
 			{
-				OSQLParseNode* pColumnRef = newNode(aEmptyString, SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::column_ref));
-				pColumnRef->append(newNode(xxx_pGLOBAL_SQLPARSER->getFieldName(),SQL_NODE_NAME));
-
 				$$ = SQL_NEW_RULE;
-				$$->append(pColumnRef);
-				$$->append($1);
-				$$->append($2);
-				$$->append($3);
-				$$->append($4);
-				$$->append($5);
+				
+				sal_Int16 nErg = xxx_pGLOBAL_SQLPARSER->buildPredicateRule($$,$3,$2,$5);
+				if(nErg == 1)
+				{
+					OSQLParseNode* pTemp = $$;
+					$$ = pTemp->removeAt((sal_uInt32)0);
+					$$->insert(1,$1);
+					delete pTemp;
+					delete $4;
+				}
+				else
+				{
+					delete $$;
+					YYABORT;
+				}
 			}
 			else
 				YYERROR;
@@ -3513,75 +3526,25 @@ sal_uInt32 OSQLParser::RuleID(OSQLParseNode::Rule eRule)
 	return s_nRuleIDs[(sal_uInt16)eRule];
 }
 // -------------------------------------------------------------------------
-sal_Int16 OSQLParser::buildNode(OSQLParseNode*& pAppend,OSQLParseNode* pLiteral,OSQLParseNode*& pCompare)
+sal_Int16 OSQLParser::buildNode(OSQLParseNode*& pAppend,OSQLParseNode* pCompare,OSQLParseNode* pLiteral,OSQLParseNode* pLiteral2)
 {
 	OSQLParseNode* pColumnRef = new OSQLInternalNode(aEmptyString, SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::column_ref));
 	pColumnRef->append(new OSQLInternalNode(m_sFieldName,SQL_NODE_NAME));
-	OSQLParseNode* pComp = new OSQLInternalNode(aEmptyString, SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::comparison_predicate));
+	OSQLParseNode* pComp = NULL;
+	if ( SQL_ISTOKEN( pCompare, BETWEEN) && pLiteral2 )
+		pComp = new OSQLInternalNode(aEmptyString, SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::between_predicate));
+	else
+		pComp = new OSQLInternalNode(aEmptyString, SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::comparison_predicate));
+	
 	pComp->append(pColumnRef);
 	pComp->append(pCompare);
 	pComp->append(pLiteral);
-	pAppend->append(pComp);
-	return 1;
-}
-//-----------------------------------------------------------------------------
-sal_Int16 OSQLParser::buildNode_Date(const double& fValue, sal_Int32 nType, OSQLParseNode*& pAppend,OSQLParseNode* pLiteral,OSQLParseNode*& pCompare)
-{
-	OSQLParseNode* pColumnRef = new OSQLInternalNode(aEmptyString, SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::column_ref));
-	pColumnRef->append(new OSQLInternalNode(m_sFieldName,SQL_NODE_NAME));
-	OSQLParseNode* pComp = new OSQLInternalNode(aEmptyString, SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::comparison_predicate));
-	pComp->append(pColumnRef);
-	pComp->append(pCompare);
-
-	OSQLParseNode* pNewNode = new OSQLInternalNode(aEmptyString, SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::set_fct_spec));
-	pNewNode->append(new OSQLInternalNode(::rtl::OUString::createFromAscii("{"), SQL_NODE_PUNCTUATION));
-	OSQLParseNode* pDateNode = new OSQLInternalNode(aEmptyString, SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::odbc_fct_spec));
-	pNewNode->append(pDateNode);
-	pNewNode->append(new OSQLInternalNode(::rtl::OUString::createFromAscii("}"), SQL_NODE_PUNCTUATION));
-
-	switch (nType)
+	if ( pLiteral2 )
 	{
-		case DataType::DATE:
-		{
-			Date aDate = DBTypeConversion::toDate(fValue,DBTypeConversion::getNULLDate(m_xFormatter->getNumberFormatsSupplier()));
-			::rtl::OUString aString = DBTypeConversion::toDateString(aDate);
-			pDateNode->append(new OSQLInternalNode(aEmptyString, SQL_NODE_KEYWORD, SQL_TOKEN_D));
-			pDateNode->append(new OSQLInternalNode(aString, SQL_NODE_STRING));
-			break;
-		}
-		case DataType::TIME:
-		{
-			Time aTime = DBTypeConversion::toTime(fValue);
-			::rtl::OUString aString = DBTypeConversion::toTimeString(aTime);
-			pDateNode->append(new OSQLInternalNode(aEmptyString, SQL_NODE_KEYWORD, SQL_TOKEN_T));
-			pDateNode->append(new OSQLInternalNode(aString, SQL_NODE_STRING));
-			break;
-		}
-		case DataType::TIMESTAMP:
-		{
-			DateTime aDateTime = DBTypeConversion::toDateTime(fValue,DBTypeConversion::getNULLDate(m_xFormatter->getNumberFormatsSupplier()));
-			if (aDateTime.Seconds || aDateTime.Minutes || aDateTime.Hours)
-			{
-				::rtl::OUString aString = DBTypeConversion::toDateTimeString(aDateTime);
-				pDateNode->append(new OSQLInternalNode(aEmptyString, SQL_NODE_KEYWORD, SQL_TOKEN_TS));
-				pDateNode->append(new OSQLInternalNode(aString, SQL_NODE_STRING));
-			}
-			else
-			{
-				Date aDate(aDateTime.Day,aDateTime.Month,aDateTime.Year);
-				pDateNode->append(new OSQLInternalNode(aEmptyString, SQL_NODE_KEYWORD, SQL_TOKEN_D));
-				pDateNode->append(new OSQLInternalNode(DBTypeConversion::toDateString(aDate), SQL_NODE_STRING));
-			}
-			break;
-		}
+		pComp->append(new OSQLInternalNode(aEmptyString, SQL_NODE_KEYWORD,SQL_TOKEN_AND));
+		pComp->append(pLiteral2);		
 	}
-
-	pComp->append(pNewNode);
 	pAppend->append(pComp);
-
-	delete pLiteral;
-	pLiteral = NULL;
-
 	return 1;
 }
 //-----------------------------------------------------------------------------
@@ -3621,7 +3584,7 @@ sal_Int16 OSQLParser::buildStringNodes(OSQLParseNode*& pLiteral)
 sal_Int16 OSQLParser::buildComparsionRule(OSQLParseNode*& pAppend,OSQLParseNode* pLiteral)
 {
 	OSQLParseNode* pComp = new OSQLInternalNode(::rtl::OUString::createFromAscii("="), SQL_NODE_EQUAL);
-	return buildComparsionRule(pAppend,pLiteral,pComp);
+	return buildPredicateRule(pAppend,pLiteral,pComp);
 }
 
 
