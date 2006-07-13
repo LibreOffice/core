@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_manager.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:20:30 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 17:05:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,6 +178,11 @@ public:
         ::rtl::OUString const & name,
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv );
+    void removePackageAndDeleteFromCache(
+        css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
+        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv_,
+    ::rtl::OUString const & title, ::rtl::OUString const & destFolder);
+
     virtual void SAL_CALL removePackage(
         ::rtl::OUString const & name,
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
