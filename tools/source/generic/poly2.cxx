@@ -4,9 +4,9 @@
  *
  *  $RCSfile: poly2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 13:45:29 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 10:00:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -191,7 +191,7 @@ PolyPolygon::PolyPolygon( const PolyPolygon& rPolyPoly )
 {
     DBG_CTOR( PolyPolygon, NULL );
     DBG_CHKOBJ( &rPolyPoly, PolyPolygon, NULL );
-    DBG_ASSERT( rPolyPoly.mpImplPolyPolygon->mnRefCount < 0xFFFE, "PolyPolygon: RefCount overflow" );
+    DBG_ASSERT( rPolyPoly.mpImplPolyPolygon->mnRefCount < 0xFFFFFFFE, "PolyPolygon: RefCount overflow" );
 
     mpImplPolyPolygon = rPolyPoly.mpImplPolyPolygon;
     mpImplPolyPolygon->mnRefCount++;
@@ -1116,7 +1116,7 @@ PolyPolygon& PolyPolygon::operator=( const PolyPolygon& rPolyPoly )
 {
     DBG_CHKTHIS( PolyPolygon, NULL );
     DBG_CHKOBJ( &rPolyPoly, PolyPolygon, NULL );
-    DBG_ASSERT( rPolyPoly.mpImplPolyPolygon->mnRefCount < 0xFFFE, "PolyPolygon: RefCount overflow" );
+    DBG_ASSERT( rPolyPoly.mpImplPolyPolygon->mnRefCount < 0xFFFFFFFE, "PolyPolygon: RefCount overflow" );
 
     rPolyPoly.mpImplPolyPolygon->mnRefCount++;
 
