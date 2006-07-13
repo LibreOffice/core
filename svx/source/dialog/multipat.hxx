@@ -4,9 +4,9 @@
  *
  *  $RCSfile: multipat.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:35:21 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 12:00:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,8 @@
 #include <vcl/fixed.hxx>
 #endif
 
+#include "radiobtnbox.hxx"
+
 // define ----------------------------------------------------------------
 
 // different delimiter for Unix (:) and Windows (;)
@@ -69,19 +71,22 @@ struct MultiPath_Impl;
 class SvxMultiPathDialog : public ModalDialog
 {
 protected:
-    ListBox         aPathLB;
-    PushButton      aAddBtn;
-    PushButton      aDelBtn;
-    FixedLine       aPathGB;
-    OKButton        aOKBtn;
-    CancelButton    aCancelBtn;
-    HelpButton      aHelpButton;
+    FixedLine                   aPathFL;
+    ListBox                     aPathLB;
+    svx::SvxRadioButtonListBox  aRadioLB;
+    FixedText                   aRadioFT;
+    PushButton                  aAddBtn;
+    PushButton                  aDelBtn;
+    OKButton                    aOKBtn;
+    CancelButton                aCancelBtn;
+    HelpButton                  aHelpButton;
 
     MultiPath_Impl* pImpl;
 
     DECL_LINK( AddHdl_Impl, PushButton * );
     DECL_LINK( DelHdl_Impl, PushButton * );
-    DECL_LINK( SelectHdl_Impl, ListBox * );
+    DECL_LINK( SelectHdl_Impl, void * );
+    DECL_LINK( CheckHdl_Impl, svx::SvxRadioButtonListBox * );
 
 public:
     SvxMultiPathDialog( Window* pParent, BOOL bEmptyAllowed = FALSE );
@@ -91,6 +96,7 @@ public:
     void            SetPath( const String& rPath );
     void            SetClassPathMode();
     sal_Bool        IsClassPathMode() const;
+    void            EnableRadioButtonMode();
 };
 
 #endif // #ifndef _SVX_MULTIPAT_HXX
