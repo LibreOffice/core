@@ -4,9 +4,9 @@
  *
  *  $RCSfile: substitutepathvars.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 11:29:38 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 12:04:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,6 +124,8 @@
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
+
+#include <comphelper/configurationhelper.hxx>
 
 //_________________________________________________________________________________________________________________
 //  Defines
@@ -282,25 +284,6 @@ static FixedVariable aFixedVarTable[] =
 //  Implementation helper classes
 //_________________________________________________________________________________________________________________
 //
-
-WorkPathHelper_Impl::WorkPathHelper_Impl() :
-    utl::ConfigItem( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Path/Current" ))),
-    m_aPathNameSeq( 1 )
-{
-    m_aPathNameSeq[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Work" ));
-}
-
-rtl::OUString WorkPathHelper_Impl::GetWorkPath()
-{
-    rtl::OUString aWorkPath;
-    Sequence< Any > aValues = GetProperties( m_aPathNameSeq );
-
-    if ( aValues.getLength() == 1 && aValues[0].hasValue() )
-         aValues[0] >>= aWorkPath;
-
-    return aWorkPath;
-}
-
 
 OperatingSystem SubstitutePathVariables_Impl::GetOperatingSystemFromString( const rtl::OUString& aOSString )
 {
@@ -791,13 +774,38 @@ rtl::OUString SubstitutePathVariables::ConvertOSLtoUCBURL( const rtl::OUString& 
         return rtl::OUString( aResult );
 }
 
+rtl::OUString SubstitutePathVariables::GetWorkPath() const
+{
+    rtl::OUString aWorkPath;
+    css::uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(
+                            m_xServiceManager,
+                            ::rtl::OUString::createFromAscii("org.openoffice.Office.Paths"),
+                            ::rtl::OUString::createFromAscii("Paths/Work"),
+                            ::rtl::OUString::createFromAscii("WritePath"),
+                            ::comphelper::ConfigurationHelper::E_READONLY);
+    aVal >>= aWorkPath;
+    return aWorkPath;
+}
+
 rtl::OUString SubstitutePathVariables::GetWorkVariableValue() const
 {
-    osl::Security   aSecurity;
-    rtl::OUString   aHomePath;
+    css::uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(
+                            m_xServiceManager,
+                            ::rtl::OUString::createFromAscii("org.openoffice.Office.Paths"),
+                            ::rtl::OUString::createFromAscii("Variables"),
+                            ::rtl::OUString::createFromAscii("Work"),
+                            ::comphelper::ConfigurationHelper::E_READONLY);
+    ::rtl::OUString aWorkPath;
+    aVal >>= aWorkPath;
 
-    aSecurity.getHomeDir( aHomePath );
-    return ConvertOSLtoUCBURL( aHomePath );
+    // fallback to $HOME in  case platform dependend config layer does not return
+    // an usuable work dir value.
+    if (aWorkPath.getLength() < 1)
+    {
+        osl::Security aSecurity;
+        aSecurity.getHomeDir( aWorkPath );
+    }
+    return ConvertOSLtoUCBURL( aWorkPath );
 }
 
 rtl::OUString SubstitutePathVariables::GetHomeVariableValue() const
@@ -904,7 +912,7 @@ throw ( NoSuchElementException, RuntimeException )
                 else if ( nIndex == PREDEFVAR_WORKDIRURL && !bWorkDirURLRetrieved )
                 {
                     // Transient value, retrieve it again
-                    m_aPreDefVars.m_FixedVar[ (PreDefVariable)nIndex ] = m_aWorkPathHelper.GetWorkPath();
+                    m_aPreDefVars.m_FixedVar[ (PreDefVariable)nIndex ] = GetWorkPath();
                     bWorkDirURLRetrieved = sal_True;
                 }
 
@@ -1276,7 +1284,7 @@ void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariable
     // Set $(workdirurl) this is the value of the path PATH_WORK which doesn't make sense
     // anymore because the path settings service has this value! It can deliver this value more
     // quickly than the substitution service!
-    aPreDefPathVariables.m_FixedVar[ PREDEFVAR_WORKDIRURL ] = m_aWorkPathHelper.GetWorkPath();
+    aPreDefPathVariables.m_FixedVar[ PREDEFVAR_WORKDIRURL ] = GetWorkPath();
 
     // Set $(path) variable
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_PATH ] = GetPathVariableValue();
