@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowimpl.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-06 13:27:42 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 09:54:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -282,6 +282,8 @@ public:
     DECL_LINK( updateHdl, Timer* );
     DECL_LINK( ReadyForNextInputHdl, Timer* );
     DECL_LINK( endPresentationHdl, void* );
+    DECL_LINK( ContextMenuSelectHdl, Menu * );
+    DECL_LINK( ContextMenuHdl, void* );
 
     // XShapeEventListener
     virtual void SAL_CALL click( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape, const ::com::sun::star::awt::MouseEvent& aOriginalEvent ) throw (::com::sun::star::uno::RuntimeException);
@@ -352,6 +354,7 @@ private:
 
     long            mnRestoreSlide;
     Point           maSlideOrigin;
+    Point           maPopupMousePos;
     Size            maSlideSize;
     Size            maPresSize;
     AnimationMode   meAnimationMode;
@@ -372,6 +375,7 @@ private:
     bool            mbRehearseTimings;
     bool            mbDesignMode;
     bool            mbIsPaused;
+    bool            mbWasPaused;        // used to cache pause state during context menu
     bool            mbInputFreeze;
 
     PresentationSettings maPresSettings;
