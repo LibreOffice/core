@@ -222,7 +222,14 @@ PLATFORM=linux
 PACKAGE_LIB_DIR=linux_x86.plt
 UNOPKG_PLATFORM=Linux_x86
 JAVA_PROC_TYPE=i386
-    
+
+ifeq "$(PROCTYPE)" "x86_64"
+PACKAGE_LIB_DIR=linux_x86_64.plt
+UNOPKG_PLATFORM=Linux_x86_64
+# needs deeper investigation for intel 64 bit
+JAVA_PROC_TYPE=amd64
+endif
+
 ifeq "$(PROCTYPE)" "powerpc"
 PACKAGE_LIB_DIR=linux_powerpc.plt
 UNOPKG_PLATFORM=Linux_PowerPC
