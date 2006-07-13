@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 11:24:26 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 09:53:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,6 +77,8 @@
 #include <svtools/urihelper.hxx>
 #endif
 
+#include <sfx2/imagemgr.hxx>
+
 #ifndef _SFXREQUEST_HXX
 #include <sfx2/request.hxx>
 #endif
@@ -119,13 +121,14 @@
 #endif
 #include "PaneHider.hxx"
 
+#include "glob.hrc"
 #include "res_bmp.hrc"
 #include "sdresid.hxx"
 #include "vcl/canvastools.hxx"
 #include "comphelper/anytostring.hxx"
 #include "cppuhelper/exc_hlp.hxx"
 #include "rtl/ref.hxx"
-
+#include "slideshow.hrc"
 #include "canvas/elapsedtime.hxx"
 #include "canvas/prioritybooster.hxx"
 
@@ -226,9 +229,13 @@ public:
 
     void displayCurrentSlide( const Reference< XSlideShow >& xShow );
 
+    sal_Int32 getNextSlideIndex() const;
+    sal_Int32 getPreviousSlideIndex() const;
+
+    bool isVisibleSlideNumber( sal_Int32 nSlideNumber ) const;
+
 private:
     sal_Int32 getNextSlideNumber() const;
-    sal_Int32 getNextSlideIndex() const;
     bool getSlideAPI( sal_Int32 nSlideNumber, Reference< XDrawPage >& xSlide, Reference< XAnimationNode >& xAnimNode );
     sal_Int32 findSlideIndex( sal_Int32 nSlideNumber ) const;
 
@@ -247,6 +254,17 @@ private:
     sal_Int32 mnHiddenSlideNumber;
     Reference< XIndexAccess > mxSlides;
 };
+
+
+bool AnimationSlideController::isVisibleSlideNumber( sal_Int32 nSlideNumber ) const
+{
+    sal_Int32 nIndex = findSlideIndex( nSlideNumber );
+
+    if( nIndex != -1 )
+        return maSlideVisible[ nIndex ];
+    else
+        return false;
+}
 
 
 void AnimationSlideController::setPreviewNode( const Reference< XAnimationNode >& xPreviewNode )
@@ -423,8 +441,7 @@ sal_Int32 AnimationSlideController::getNextSlideIndex() const
                     }
                 }
             }
-
-            return nNewSlideIndex;
+            return isValidIndex( nNewSlideIndex ) ? nNewSlideIndex : -1;
         }
 
     case FROM:
@@ -457,7 +474,7 @@ bool AnimationSlideController::nextSlide()
     return jumpToSlideIndex( getNextSlideIndex() );
 }
 
-bool AnimationSlideController::previousSlide()
+sal_Int32 AnimationSlideController::getPreviousSlideIndex() const
 {
     sal_Int32 nNewSlideIndex = mnCurrentSlideIndex - 1;
 
@@ -479,10 +496,18 @@ bool AnimationSlideController::previousSlide()
         }
 
         case PREVIEW:
-            return false;
+            return -1;
+
+        default:
+            break;
     }
 
-    return jumpToSlideIndex( nNewSlideIndex );
+    return nNewSlideIndex;
+}
+
+bool AnimationSlideController::previousSlide()
+{
+    return jumpToSlideIndex( getPreviousSlideIndex() );
 }
 
 void AnimationSlideController::displayCurrentSlide( const Reference< XSlideShow >& xShow )
@@ -1160,7 +1185,7 @@ void SlideshowImpl::onFirstPaint()
     maUpdateTimer.Start();
 }
 
-void SlideshowImpl::paint( const Rectangle& rRect )
+void SlideshowImpl::paint( const Rectangle& /* rRect */ )
 {
     if( mxView.is() ) try
     {
@@ -1611,7 +1636,7 @@ bool SlideshowImpl::pause( bool bPause )
 }
 
 // XShapeEventListener
-void SAL_CALL SlideshowImpl::click( const Reference< XShape >& xShape, const ::com::sun::star::awt::MouseEvent& aOriginalEvent ) throw (RuntimeException)
+void SAL_CALL SlideshowImpl::click( const Reference< XShape >& xShape, const ::com::sun::star::awt::MouseEvent& /* aOriginalEvent */ ) throw (RuntimeException)
 {
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
 
@@ -1741,6 +1766,8 @@ void SAL_CALL SlideshowImpl::click( const Reference< XShape >& xShape, const ::c
             mpViewShell->ActivateObject(pOleObject, pEvent->mnVerb);
     }
     break;
+    default:
+        break;
     }
 }
 
@@ -1749,7 +1776,6 @@ sal_Int32 SlideshowImpl::getSlideNumberForBookmark( const OUString& rStrBookmark
     BOOL bIsMasterPage;
     OUString aBookmark = getUiNameFromPageApiNameImpl( rStrBookmark );
     USHORT nPgNum = mpDoc->GetPageByName( aBookmark, bIsMasterPage );
-    SdrObject* pObj = NULL;
 
     if( nPgNum == SDRPAGE_NOTFOUND )
     {
@@ -1759,7 +1785,7 @@ sal_Int32 SlideshowImpl::getSlideNumberForBookmark( const OUString& rStrBookmark
         if( pObj )
         {
             nPgNum = pObj->GetPage()->GetPageNum();
-            bIsMasterPage = pObj->GetPage()->IsMasterPage();
+            bIsMasterPage = (BOOL)pObj->GetPage()->IsMasterPage();
         }
     }
 
@@ -1786,7 +1812,7 @@ void SlideshowImpl::hyperLinkClicked( rtl::OUString const& aHyperLink )
     mpDocSh->OpenBookmark( aBookmark );
 }
 
-void SAL_CALL SlideshowImpl::disposing(  const EventObject& Source ) throw (RuntimeException)
+void SAL_CALL SlideshowImpl::disposing(  const EventObject& /* Source */ ) throw (RuntimeException)
 {
 }
 
@@ -2103,8 +2129,157 @@ bool SlideshowImpl::keyInput(const KeyEvent& rKEvt)
 void SlideshowImpl::mouseButtonUp(const MouseEvent& rMEvt)
 {
     if( rMEvt.IsRight() )
-        gotoPreviousSlide();
+    {
+        maPopupMousePos = rMEvt.GetPosPixel();
+        Application::PostUserEvent( LINK( this, SlideshowImpl, ContextMenuHdl ) );
+    }
 }
+
+IMPL_LINK( SlideshowImpl, ContextMenuHdl, void*, EMPTYARG )
+{
+    if( mpSlideController.get() == 0 )
+        return 0;
+
+    mbWasPaused = mbIsPaused;
+    if( !mbWasPaused )
+        pause( true );
+
+    PopupMenu* pMenu = new PopupMenu( SdResId( RID_SLIDESHOW_CONTEXTMENU ) );
+
+    pMenu->EnableItem( CM_NEXT_SLIDE, ( mpSlideController->getNextSlideIndex() != -1 ) );
+    pMenu->EnableItem( CM_PREV_SLIDE, ( mpSlideController->getPreviousSlideIndex() != -1 ) );
+
+    PopupMenu* pPageMenu = pMenu->GetPopupMenu( CM_GOTO );
+
+    if( mpViewShell && mpViewShell->GetViewShellBase().GetViewFrame() )
+    {
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame( mpViewShell->GetViewShellBase().GetViewFrame()->GetFrame()->GetFrameInterface() );
+        pMenu->SetItemImage( CM_NEXT_SLIDE, GetImage( xFrame, OUString( RTL_CONSTASCII_USTRINGPARAM( "slot:10617") ), FALSE, FALSE ) );
+        pMenu->SetItemImage( CM_PREV_SLIDE, GetImage( xFrame, OUString( RTL_CONSTASCII_USTRINGPARAM( "slot:10618") ), FALSE, FALSE ) );
+
+        if( pPageMenu )
+        {
+            pPageMenu->SetItemImage( CM_FIRST_SLIDE, GetImage( xFrame, OUString( RTL_CONSTASCII_USTRINGPARAM( "slot:10616") ), FALSE, FALSE ) );
+            pPageMenu->SetItemImage( CM_LAST_SLIDE, GetImage( xFrame, OUString( RTL_CONSTASCII_USTRINGPARAM( "slot:10619") ), FALSE, FALSE ) );
+        }
+    }
+
+    // populate slide goto list
+    if( pPageMenu )
+    {
+        const sal_Int32 nPageNumberCount = mpSlideController->getSlideNumberCount();
+        if( nPageNumberCount <= 1 )
+        {
+            pMenu->EnableItem( CM_GOTO, FALSE );
+        }
+        else
+        {
+            const sal_Int32 nCurrentSlideNumber = mpSlideController->getCurrentSlideNumber();
+
+            pPageMenu->EnableItem( CM_FIRST_SLIDE, ( mpSlideController->getSlideNumber(0) != nCurrentSlideNumber ) );
+            pPageMenu->EnableItem( CM_LAST_SLIDE, ( mpSlideController->getSlideNumber( mpSlideController->getSlideIndexCount() - 1) != nCurrentSlideNumber ) );
+
+            sal_Int32 nPageNumber;
+
+            for( nPageNumber = 0; nPageNumber < nPageNumberCount; nPageNumber++ )
+            {
+                if( mpSlideController->isVisibleSlideNumber( nPageNumber ) )
+                {
+                    SdPage* pPage = mpDoc->GetSdPage(nPageNumber, PK_STANDARD);
+                    if (pPage)
+                    {
+                        pPageMenu->InsertItem( CM_SLIDES + nPageNumber, pPage->GetName() );
+                        if( nPageNumber == nCurrentSlideNumber )
+                            pPageMenu->CheckItem( CM_SLIDES + nPageNumber );
+                    }
+                }
+            }
+        }
+    }
+
+    if( mpShowWindow->GetShowWindowMode() == SHOWWINDOWMODE_BLANK )
+    {
+        PopupMenu* pBlankMenu = pMenu->GetPopupMenu( CM_SCREEN );
+        if( pBlankMenu )
+        {
+            pBlankMenu->CheckItem( ( mpShowWindow->GetBlankColor() == Color( COL_WHITE ) ) ? CM_SCREEN_WHITE : CM_SCREEN_BLACK  );
+        }
+    }
+
+    pMenu->SetSelectHdl( LINK( this, SlideshowImpl, ContextMenuSelectHdl ) );
+    pMenu->Execute( mpShowWindow, maPopupMousePos );
+    delete pMenu;
+
+    pause( mbWasPaused );
+    return 0;
+}
+
+IMPL_LINK( SlideshowImpl, ContextMenuSelectHdl, Menu *, pMenu )
+{
+    if( pMenu )
+    {
+        sal_uInt16 nMenuId = pMenu->GetCurItemId();
+
+        switch( nMenuId )
+        {
+        case CM_PREV_SLIDE:
+            gotoPreviousSlide();
+            break;
+        case CM_NEXT_SLIDE:
+            gotoNextSlide();
+            break;
+        case CM_FIRST_SLIDE:
+            gotoFirstSlide();
+            break;
+        case CM_LAST_SLIDE:
+            gotoLastSlide();
+            break;
+        case CM_SCREEN_BLACK:
+        case CM_SCREEN_WHITE:
+        {
+            const Color aBlankColor( (nMenuId == CM_SCREEN_WHITE) ? COL_WHITE : COL_BLACK );
+            if( mbWasPaused )
+            {
+                if( mpShowWindow->GetShowWindowMode() == SHOWWINDOWMODE_BLANK )
+                {
+                    if( mpShowWindow->GetBlankColor() == aBlankColor )
+                    {
+                        mbWasPaused = false;
+                        mpShowWindow->RestartShow();
+                        break;
+                    }
+                }
+                mpShowWindow->RestartShow();
+            }
+            if( mpShowWindow->SetBlankMode( mpSlideController->getCurrentSlideIndex(), aBlankColor ) )
+            {
+                mbWasPaused = true;
+            }
+        }
+        break;
+
+        case CM_ENDSHOW:
+            // in case the user cancels the presentation, switch to current slide
+            // in edit mode
+            if( mpSlideController.get() && (ANIMATIONMODE_SHOW == meAnimationMode) )
+            {
+                if( mpSlideController->getCurrentSlideNumber() != -1 )
+                    mnRestoreSlide = mpSlideController->getCurrentSlideNumber();
+            }
+            endPresentation();
+            break;
+        default:
+            sal_Int32 nPageNumber = nMenuId - CM_SLIDES;
+            if( nPageNumber != mpSlideController->getCurrentSlideNumber() )
+                displaySlideNumber( nPageNumber );
+            mbWasPaused = false;
+            break;
+        }
+    }
+
+    return 0;
+}
+
 
 Reference< XSlideShow > SlideshowImpl::createSlideShow() const
 {
@@ -2425,6 +2600,7 @@ void SlideshowImpl::receiveRequest(SfxRequest& rReq)
                 case PAGE_LAST:         gotoLastSlide(); break;
                 case PAGE_NEXT:         gotoNextSlide(); break;
                 case PAGE_PREVIOUS:     gotoPreviousSlide(); break;
+                case PAGE_NONE:         break;
             }
         }
         break;
