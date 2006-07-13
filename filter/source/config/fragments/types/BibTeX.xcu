@@ -1,0 +1,13 @@
+    <node oor:name="BibTeX" oor:op="replace">
+        <prop oor:name="DetectService"/>
+        <prop oor:name="URLPattern"/>
+        <prop oor:name="Extensions"><value>bib</value></prop>
+        <prop oor:name="MediaType"/>
+        <prop oor:name="Preferred"><value>false</value></prop>
+        <prop oor:name="PreferredFilter"><value>BibTeX_Writer</value></prop>
+        <prop oor:name="UIName">
+            <value>BibTeX</value>
+        </prop>
+        <prop oor:name="ClipboardFormat"/>
+    </node>
+
