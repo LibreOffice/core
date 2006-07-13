@@ -4,9 +4,9 @@
  *
  *  $RCSfile: substitutepathvars.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 11:01:22 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 12:03:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,6 +158,7 @@ struct SubstituteRule
 
 struct SubstitutePathNotify
 {
+    SubstitutePathNotify() {};
     const com::sun::star::uno::Sequence<rtl::OUString> aPropertyNames;
 };
 
@@ -284,17 +285,6 @@ struct ReSubstUserVarOrder
 typedef std::list< ReSubstFixedVarOrder > ReSubstFixedVarOrderVector;
 typedef std::list< ReSubstUserVarOrder > ReSubstUserVarOrderVector;
 
-class WorkPathHelper_Impl : public utl::ConfigItem
-{
-    public:
-        WorkPathHelper_Impl();
-
-        rtl::OUString GetWorkPath();
-
-    private:
-        com::sun::star::uno::Sequence< rtl::OUString > m_aPathNameSeq;
-};
-
 class SubstitutePathVariables :     public com::sun::star::lang::XTypeProvider      ,
                                     public com::sun::star::lang::XServiceInfo       ,
                                     public com::sun::star::util::XStringSubstitution,
@@ -328,6 +318,7 @@ class SubstitutePathVariables :     public com::sun::star::lang::XTypeProvider  
 
         // Special case (transient) values can change during runtime!
         // Don't store them in the pre defined struct
+        rtl::OUString   GetWorkPath() const;
          rtl::OUString  GetWorkVariableValue() const;
          rtl::OUString  GetPathVariableValue() const;
 
@@ -364,7 +355,6 @@ class SubstitutePathVariables :     public com::sun::star::lang::XTypeProvider  
         ReSubstFixedVarOrderVector            m_aReSubstFixedVarOrder;        // To speed up resubstitution fixed variables (order for lookup)
         ReSubstUserVarOrderVector             m_aReSubstUserVarOrder;             // To speed up resubstitution user variables
         com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;
-        WorkPathHelper_Impl             m_aWorkPathHelper;          // Helper class to get a substitution for $(workdirurl)
 };
 
 }
