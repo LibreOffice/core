@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.118 $
+ *  $Revision: 1.119 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 11:50:20 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 11:15:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -5025,6 +5025,80 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 						</info>
 						<value>false</value>
 					</prop>
+                                        <!-- PDF Encryption -->
+					<prop oor:name="Printing" oor:type="xs:int">
+						<info>
+							<author>beppec56</author>
+							<desc>Specifies what printing is allowed.</desc>
+						</info>
+						<constraints>
+							<enumeration oor:value="0">
+								<info>
+									<desc>The document cannot be printed.</desc>
+								</info>
+							</enumeration>
+							<enumeration oor:value="1">
+								<info>
+									<desc>The document can be printed at low resolution only.</desc>
+								</info>
+							</enumeration>
+							<enumeration oor:value="2">
+								<info>
+									<desc>The document can be printed at maximum resolution.</desc>
+								</info>
+							</enumeration>
+						</constraints>
+						<value>2</value>
+					</prop>
+					<prop oor:name="Changes" oor:type="xs:int">
+						<info>
+							<author>beppec56</author>
+							<desc>Specifies the change allowed to the document.</desc>
+						</info>
+						<constraints>
+							<enumeration oor:value="0">
+								<info>
+									<desc>The document cannot be changed.</desc>
+								</info>
+							</enumeration>
+							<enumeration oor:value="1">
+								<info>
+									<desc>Inserting deleting and rotating pages is allowed.</desc>
+								</info>
+							</enumeration>
+							<enumeration oor:value="2">
+								<info>
+									<desc>Filling of form field is allowed.</desc>
+								</info>
+							</enumeration>
+							<enumeration oor:value="3">
+								<info>
+									<desc>Both filling of form field and commenting is allowed.</desc>
+								</info>
+							</enumeration>
+							<enumeration oor:value="4">
+								<info>
+									<desc>All the changes of the previous selections are permitted, with the only exclusion of page extraction (copy).</desc>
+								</info>
+							</enumeration>
+						</constraints>
+						<value>4</value>
+					</prop>
+					<prop oor:name="EnableCopyingOfContent" oor:type="xs:boolean">
+						<info>
+							<author>beppec56</author>
+							<desc>Specifies that the pages and the document content can be extracted to be used in other documents (copy and paste).</desc>
+						</info>
+						<value>true</value>
+					</prop>
+					<prop oor:name="EnableTextAccessForAccessibilityTools" oor:type="xs:boolean">
+						<info>
+							<author>beppec56</author>
+							<desc>Specifies that the document content can be extracted to be used in accessibility applications.</desc>
+						</info>
+						<value>true</value>
+					</prop>
+					<!-- END PDF Encryption -->
 				</group>
 			</group>
 		</group>
