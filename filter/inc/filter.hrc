@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filter.hrc,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-04 09:04:17 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 11:12:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,10 +46,10 @@
 // Help-Ids --------------------------------------------------------------
 
 #define RID_PDF_DIALOG_START        (RID_FILTER_START +   0)
-#define RID_PDF_DIALOG_END          (RID_FILTER_START +   9)
-#define RID_XSLT_DIALOG_START       (RID_FILTER_START +  10)
-#define RID_XSLT_DIALOG_END         (RID_FILTER_START +  59)
-#define RID_PDF_OLD_EXPORT_DLG      (RID_FILTER_START +  60)
+#define RID_PDF_DIALOG_END          (RID_FILTER_START +  19)
+#define RID_XSLT_DIALOG_START       (RID_FILTER_START +  20)
+#define RID_XSLT_DIALOG_END         (RID_FILTER_START +  69)
+#define RID_PDF_OLD_EXPORT_DLG      (RID_FILTER_START +  70)
 
 // warning, next range is RID_FILTER_START + 100 !
 
