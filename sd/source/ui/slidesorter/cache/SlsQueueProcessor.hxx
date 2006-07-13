@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsQueueProcessor.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-07 17:11:35 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 10:30:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,7 @@
 #include "tools/IdleDetection.hxx"
 #include "SlsBitmapCache.hxx"
 #include "taskpane/SlideSorterCacheDisplay.hxx"
+#include "sdpage.hxx"
 
 #include <svx/svdpagv.hxx>
 #include <vcl/svapp.hxx>
@@ -181,6 +182,9 @@ template <class Queue, class RequestData, class BitmapFactory>
         RequestData* pRequest = NULL;
         RequestPriorityClass ePriorityClass (NOT_VISIBLE);
         bool bRequestIsValid = false;
+        Rectangle aDirtyRectangle;
+        Size aPreviewPixelSize;
+        const SdrPage* pPage = NULL;
         {
             ::osl::MutexGuard aGuard (mrQueue.GetMutex());
 
@@ -191,41 +195,47 @@ template <class Queue, class RequestData, class BitmapFactory>
                 ePriorityClass = mrQueue.GetFrontPriorityClass();
                 pRequest = &mrQueue.GetFront();
                 mrQueue.PopFront();
-                bRequestIsValid = true;
-                SSCD_SET_STATUS(pRequest->GetPage(),RENDERING);
+                if (pRequest != NULL)
+                {
+                    // Save some values while we hold the mutex of the queue.
+                    pPage = pRequest->GetPage();
+                    aDirtyRectangle = pRequest->GetViewContact().GetPaintRectangle()
+                        - mrView.GetPageViewPvNum(0)->GetOffset();
+                    aPreviewPixelSize = pRequest->GetPreviewPixelBox(*mrView.GetWindow()).GetSize();
+                    bRequestIsValid = true;
+                    SSCD_SET_STATUS(pPage,RENDERING);
+                }
             }
         }
         if (bRequestIsValid)
         {
 #ifdef VERBOSE
             OSL_TRACE ("processing request for page %d with priority class %d",
-                (pRequest->GetPage()->GetPageNum()-1)/2,
+                (pPage->GetPageNum()-1)/2,
                 ePriorityClass);
 #endif
             try
             {
+
                 ::osl::MutexGuard aGuard (maMutex);
                 // Create a new preview bitmap and store it in the cache.
-
-                Rectangle aDirtyRectangle;
-                if (ePriorityClass != NOT_VISIBLE)
-                {
-                    SdrPageView* pPageView = mrView.GetPageViewPvNum(0);
-                    aDirtyRectangle
-                        = pRequest->GetViewContact().GetPaintRectangle() - pPageView->GetOffset();
-                }
-
                 if (mpCache.get() != NULL)
-                    mpCache->SetBitmap (
-                        pRequest->GetPage(),
-                        maBitmapFactory.CreateBitmap(*pRequest),
-                        ePriorityClass!=NOT_VISIBLE);
+                {
+                    const SdPage* pSdPage = dynamic_cast<const SdPage*>(pPage);
+                    if (pSdPage != NULL)
+                    {
+                        mpCache->SetBitmap (
+                            pPage,
+                            maBitmapFactory.CreateBitmap(*pSdPage, aPreviewPixelSize),
+                            ePriorityClass!=NOT_VISIBLE);
 
-                // Initiate a repaint of the new preview.
-                if (ePriorityClass != NOT_VISIBLE)
-                    mrView.InvalidateAllWin (aDirtyRectangle);
+                        // Initiate a repaint of the new preview.
+                        if (ePriorityClass != NOT_VISIBLE)
+                            mrView.InvalidateAllWin(aDirtyRectangle);
 
-                SSCD_SET_STATUS(pRequest->GetPage(),NONE);
+                        SSCD_SET_STATUS(pPage,NONE);
+                    }
+                }
             }
             catch (::com::sun::star::uno::RuntimeException aException)
             {
