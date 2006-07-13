@@ -4,9 +4,9 @@
  *
  *  $RCSfile: orgmgr.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:38:20 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 13:29:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -517,17 +517,55 @@ BOOL    SfxOrganizeMgr::Delete(SfxOrganizeListBox_Impl *pCaller,
 */
 
 {
-    const BOOL bOk = pTemplates->Delete(nRegion, nIdx);
-    if(bOk)
-    {
-        bModified = 1;
-            // zu loeschender Eintrag
-        SvLBoxEntry *pEntryToDelete = USHRT_MAX == nIdx?    // Verzeichnis
-            pCaller->SvLBox::GetEntry(nRegion):
-            pCaller->SvLBox::GetEntry(pCaller->SvLBox::GetEntry(nRegion), nIdx);
+    BOOL bOk = FALSE;
 
-        pCaller->GetModel()->Remove(pEntryToDelete);
+    if ( USHRT_MAX == nIdx )
+    {
+        // deleting of a group
+
+        SvLBoxEntry *pGroupToDelete = pCaller->SvLBox::GetEntry(nRegion);
+        if ( pGroupToDelete )
+        {
+            USHORT nItemNum = (USHORT)( pCaller->GetModel()->GetChildCount( pGroupToDelete ) );
+            USHORT nToDeleteNum = 0;
+            SvLBoxEntry **pEntriesToDelete = new SvLBoxEntry*[nItemNum];
+
+            USHORT nInd = 0;
+            for ( nInd = 0; nInd < nItemNum; nInd++ )
+                pEntriesToDelete[nInd] = NULL;
+
+            for ( nInd = 0; nInd < nItemNum; nInd++ )
+            {
+                // TODO/LATER: check that nInd is the same index that is used in pTemplates
+                if ( pTemplates->Delete( nRegion, nInd ) )
+                {
+                    bModified = 1;
+                    pEntriesToDelete[nToDeleteNum++] = pCaller->SvLBox::GetEntry( pGroupToDelete, nInd );
+                }
+            }
+
+            for ( nInd = 0; nInd < nToDeleteNum; nInd++ )
+                if ( pEntriesToDelete[nInd] )
+                    pCaller->GetModel()->Remove( pEntriesToDelete[nInd] );
+
+            if ( !pGroupToDelete->ItemCount() && ( bOk = pTemplates->Delete( nRegion, nIdx ) ) )
+                pCaller->GetModel()->Remove( pGroupToDelete );
+        }
     }
+    else
+    {
+        // deleting of a template
+        bOk = pTemplates->Delete(nRegion, nIdx);
+        if(bOk)
+        {
+            bModified = 1;
+                // zu loeschender Eintrag
+            SvLBoxEntry *pEntryToDelete = pCaller->SvLBox::GetEntry(pCaller->SvLBox::GetEntry(nRegion), nIdx);
+
+            pCaller->GetModel()->Remove(pEntryToDelete);
+        }
+    }
+
     return bOk;
 }
 
