@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dmultirange.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:32:17 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 09:55:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,10 @@
 
 #ifndef _BGFX_RANGE_B2DMULTIRANGE_HXX
 #define _BGFX_RANGE_B2DMULTIRANGE_HXX
+
+#ifndef INCLUDED_O3TL_COW_WRAPPER_HXX
+#include <o3tl/cow_wrapper.hxx>
+#endif
 
 #include <memory>
 
@@ -65,6 +69,9 @@ namespace basegfx
         /** Create a multi range with exactly one containing range
          */
         explicit B2DMultiRange( const B2DRange& rRange );
+
+        B2DMultiRange( const B2DMultiRange& );
+        B2DMultiRange& operator=( const B2DMultiRange& );
 
         /** Check whether range is empty.
 
@@ -111,13 +118,7 @@ namespace basegfx
         B2DPolyPolygon  getPolyPolygon() const;
 
     private:
-        // TODO(F1): Maybe provide a shared COW implementation here
-
-        // default: disabled copy/assignment
-        B2DMultiRange(const B2DMultiRange&);
-        B2DMultiRange& operator=( const B2DMultiRange& );
-
-        ::std::auto_ptr< ImplB2DMultiRange >    mpImpl;
+        o3tl::cow_wrapper< ImplB2DMultiRange > mpImpl;
     };
 }
 
