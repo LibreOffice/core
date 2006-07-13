@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DatabaseControl.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 12:37:57 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 15:17:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -204,11 +204,6 @@ public class DatabaseControl extends Control {
         }
         else if (icontroltype == FormHandler.SOTEXTBOX){     // com.sun.star.sdbc.DataType.CHAR, com.sun.star.sdbc.DataType.VARCHAR, com.sun.star.sdbc.DataType.LONGVARCHAR
         }
-//      else if (CurControlType == cDateBox)
-// TODO Why does this not work?:        oLocObject.DefaultDate = CurDefaultValue
-        else if (icontroltype == FormHandler.SOTIMECONTROL) // com.sun.star.sdbc.DataType.DATE, com.sun.star.sdbc.DataType.TIME
-            xPropertySet.setPropertyValue("DefaultTime", new Integer(3000));
-// TODO: Property TimeFormat? frome where?
         else if (icontroltype == FormHandler.SOCHECKBOX){
 // TODO Why does this not work?:        oLocObject.DefautState = CurDefaultValue
         }
