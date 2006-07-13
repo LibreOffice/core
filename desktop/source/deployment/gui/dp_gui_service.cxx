@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_service.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-08 10:00:18 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 17:03:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,7 @@
 #include "com/sun/star/task/XJobExecutor.hpp"
 
 #include "boost/bind.hpp"
+#include "license_dialog.hxx"
 
 using namespace ::dp_misc;
 using namespace ::com::sun::star;
@@ -207,6 +208,11 @@ sdecl::ServiceDecl const serviceDecl(
     "com.sun.star.comp.deployment.ui.PackageManagerDialog",
     "com.sun.star.deployment.ui.PackageManagerDialog" );
 
+sdecl::class_<LicenseDialog, sdecl::with_args<true> > licenseSI;
+sdecl::ServiceDecl const licenseDecl(
+    licenseSI,
+    "com.sun.star.comp.deployment.ui.LicenseDialog",
+    "com.sun.star.deployment.ui.LicenseDialog" );
 } // namespace dp_gui
 
 extern "C" {
@@ -222,7 +228,7 @@ sal_Bool SAL_CALL component_writeInfo(
     registry::XRegistryKey * pRegistryKey )
 {
     return component_writeInfoHelper(
-        pServiceManager, pRegistryKey, dp_gui::serviceDecl );
+        pServiceManager, pRegistryKey, dp_gui::serviceDecl, dp_gui::licenseDecl );
 }
 
 void * SAL_CALL component_getFactory(
@@ -231,7 +237,7 @@ void * SAL_CALL component_getFactory(
     registry::XRegistryKey * pRegistryKey )
 {
     return component_getFactoryHelper(
-        pImplName, pServiceManager, pRegistryKey, dp_gui::serviceDecl );
+        pImplName, pServiceManager, pRegistryKey, dp_gui::serviceDecl, dp_gui::licenseDecl );
 }
 
 } // extern "C"
