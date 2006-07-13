@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 17:49:01 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 10:32:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -220,7 +220,7 @@ ViewShell::ViewShell (
       aScrBarWH(),
       bCenterAllowed(bAllowCenter),
       bStartShowWithDialog(FALSE),
-      nPrintedHandoutPageNum(1),
+      mnPrintedHandoutPageNum(1),
       maAllWindowRectangle(),
       meShellType(ST_NONE),
       mpParentWindow(pParentWindow),
@@ -255,7 +255,7 @@ ViewShell::ViewShell(
       aScrBarWH(),
       bCenterAllowed(rShell.bCenterAllowed),
       bStartShowWithDialog(FALSE),
-      nPrintedHandoutPageNum(1),
+      mnPrintedHandoutPageNum(1),
       maAllWindowRectangle(),
       meShellType(ST_NONE),
       mpParentWindow(pParentWindow),
