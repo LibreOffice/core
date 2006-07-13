@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Timestamp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:37:27 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 15:13:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -209,11 +209,6 @@ java_sql_Timestamp::java_sql_Timestamp(const ::com::sun::star::util::DateTime& _
     // Parameter konvertieren
     ::rtl::OUString sDateStr;
     sDateStr = ::dbtools::DBTypeConversion::toDateTimeString(_rOut);
-    if ( _rOut.HundredthSeconds )
-    {
-        sDateStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("."));
-        sDateStr += ::rtl::OUString::valueOf(static_cast<sal_Int32>(_rOut.HundredthSeconds));
-    }
 
     args[0].l = convertwchar_tToJavaString(t.pEnv,sDateStr);
 
