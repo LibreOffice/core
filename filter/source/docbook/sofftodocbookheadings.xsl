@@ -1,37 +1,37 @@
 <?xml version='1.0' encoding="UTF-8"?>
-<!-- 
+<!--
 
     OpenOffice.org - a multi-platform office productivity suite
- 
+
     $RCSfile: sofftodocbookheadings.xsl,v $
- 
-    $Revision: 1.7 $
- 
-    last change: $Author: rt $ $Date: 2005-09-08 21:40:04 $
- 
+
+    $Revision: 1.8 $
+
+    last change: $Author: obo $ $Date: 2006-07-13 09:13:48 $
+
     The Contents of this file are made available subject to
     the terms of GNU Lesser General Public License Version 2.1.
- 
- 
+
+
       GNU Lesser General Public License Version 2.1
       =============================================
       Copyright 2005 by Sun Microsystems, Inc.
       901 San Antonio Road, Palo Alto, CA 94303, USA
- 
+
       This library is free software; you can redistribute it and/or
       modify it under the terms of the GNU Lesser General Public
       License version 2.1, as published by the Free Software Foundation.
- 
+
       This library is distributed in the hope that it will be useful,
       but WITHOUT ANY WARRANTY; without even the implied warranty of
       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
       Lesser General Public License for more details.
- 
+
       You should have received a copy of the GNU Lesser General Public
       License along with this library; if not, write to the Free Software
       Foundation, Inc., 59 Temple Place, Suite 330, Boston,
       MA  02111-1307  USA
- 
+
 -->
 <xsl:stylesheet version="1.0" xmlns:style="http://openoffice.org/2000/style" xmlns:text="http://openoffice.org/2000/text" xmlns:office="http://openoffice.org/2000/office" xmlns:table="http://openoffice.org/2000/table" xmlns:draw="http://openoffice.org/2000/drawing" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="http://openoffice.org/2000/meta" xmlns:number="http://openoffice.org/2000/datastyle" xmlns:svg="http://www.w3.org/2000/svg" xmlns:chart="http://openoffice.org/2000/chart" xmlns:dr3d="http://openoffice.org/2000/dr3d" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="http://openoffice.org/2000/form" xmlns:script="http://openoffice.org/2000/script" xmlns:config="http://openoffice.org/2001/config" office:class="text" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" exclude-result-prefixes="office meta  table number dc fo xlink chart math script xsl draw svg dr3d form config text style">
 <xsl:output method="xml" indent="yes" omit-xml-declaration="no"  />
@@ -68,7 +68,7 @@
    		</sect1>-->
 	</xsl:otherwise>
 </xsl:choose>
-   
+
 </xsl:template>
 
 <xsl:template match="text:h[@text:level='2'] | text:h[@text:level='3']| text:h[@text:level='4'] | text:h[@text:level='5']">
@@ -94,7 +94,7 @@
 			</xsl:call-template>
 		<xsl:text disable-output-escaping="yes">&lt;/sect</xsl:text><xsl:value-of select="$prev +1 "/><xsl:text disable-output-escaping="yes">&gt;</xsl:text>
 		</xsl:when>
-		
+
 		<xsl:otherwise>
 			<xsl:text disable-output-escaping="yes">&lt;sect</xsl:text><xsl:value-of select="$current"/><xsl:text disable-output-escaping="yes">&gt;</xsl:text>
 					<title>
@@ -190,7 +190,7 @@
 				</releaseinfo>
 			</xsl:for-each>
 			<xsl:call-template name="ArticleInfo"><xsl:with-param name="level" select="0"/></xsl:call-template>
-	
+
 		</articleinfo>
 	</xsl:when>
 	<xsl:when test="@text:name='Abstract'">
@@ -204,7 +204,7 @@
 		</appendix>
 	</xsl:when>
 	<xsl:otherwise>
-		<xsl:variable name="sectvar"><xsl:text>sect</xsl:text><xsl:value-of select="count(ancestor::text:section)+1"/></xsl:variable>	
+		<xsl:variable name="sectvar"><xsl:text>sect</xsl:text><xsl:value-of select="count(ancestor::text:section)+1"/></xsl:variable>
 		<xsl:variable name="idvar"><xsl:text> id="</xsl:text><xsl:value-of select="@text:name"/><xsl:text>"</xsl:text></xsl:variable>
 		<xsl:text disable-output-escaping="yes">&lt;</xsl:text><xsl:value-of select="$sectvar"/><xsl:value-of select="$idvar"/><xsl:text  disable-output-escaping="yes">&gt;</xsl:text>
 			<xsl:apply-templates/>
@@ -220,15 +220,15 @@
 	<xsl:variable name="author"><xsl:value-of select="concat('articleinfo.author_','', $level)"/></xsl:variable>
 	<xsl:if test="text:p/text:variable-set[contains(@text:name, $author )]">
 		<xsl:call-template name="Author"><xsl:with-param name="AuthorLevel" select="0"/></xsl:call-template>
-		<xsl:call-template name="Copyright"><xsl:with-param name="CopyrightLevel" select="0"/></xsl:call-template>	
-	</xsl:if>	
+		<xsl:call-template name="Copyright"><xsl:with-param name="CopyrightLevel" select="0"/></xsl:call-template>
+	</xsl:if>
 </xsl:template>
 
 <xsl:template name="Copyright">
 	<xsl:param name="CopyrightLevel"/>
-	
+
 	<xsl:variable name="Copyright"><xsl:value-of select="concat('articleinfo.copyright_','', $CopyrightLevel)"/></xsl:variable>
-	
+
 	<xsl:if test="text:p/text:variable-set[contains(@text:name,$Copyright)]">
 		<copyright>
 			<xsl:call-template name="Year">
@@ -276,7 +276,7 @@
 
 <xsl:template name="Author">
 	<xsl:param name="AuthorLevel"/>
-	<xsl:variable name="Author"><xsl:value-of select="concat('articleinfo.author_','', $AuthorLevel)"/></xsl:variable>	
+	<xsl:variable name="Author"><xsl:value-of select="concat('articleinfo.author_','', $AuthorLevel)"/></xsl:variable>
 	<xsl:if test="text:p/text:variable-set[contains(@text:name, $Author )]">
 		<author>
 			<xsl:call-template name="Surname"><xsl:with-param name="AuthorLevel" select="$AuthorLevel"/><xsl:with-param name="SurnameLevel" select="0"/></xsl:call-template>
@@ -284,7 +284,7 @@
 			<xsl:call-template name="Affiliation"><xsl:with-param name="AuthorLevel" select="$AuthorLevel"/><xsl:with-param name="AffilLevel" select="0"/></xsl:call-template>
 		</author>
 		<xsl:call-template name="Author"><xsl:with-param name="AuthorLevel" select="$AuthorLevel+1"/></xsl:call-template>
-	</xsl:if>	
+	</xsl:if>
 </xsl:template>
 
 
@@ -469,7 +469,7 @@
 		</author>
 </xsl:template>-->
 
-<xsl:template match="table:table"> 
+<xsl:template match="table:table">
 	<xsl:choose>
 		<xsl:when test="following-sibling::text:p[@text:style-name='Table']">
 			<table frame="all">
@@ -508,7 +508,7 @@
 		<xsl:element name="tgroup">
 			<xsl:attribute name="cols">
 						<xsl:value-of select="$numcols"/>
-			</xsl:attribute>	
+			</xsl:attribute>
 			<xsl:call-template name="colspec"><xsl:with-param name="left" select="1" /></xsl:call-template>
 				<xsl:apply-templates/>
 		</xsl:element>
@@ -536,7 +536,7 @@
 <xsl:template match="table:table-header-rows">
 	<thead>
 		<xsl:apply-templates/>
-	</thead>	
+	</thead>
 </xsl:template>
 
 <xsl:template match="table:table-header-rows/table:table-row">
@@ -572,7 +572,7 @@
 	<xsl:when test="@text:style-name='Table'">
 	</xsl:when>
 	<xsl:otherwise>
-		<para>		
+		<para>
 			<xsl:apply-templates/>
 		</para>
 	</xsl:otherwise>
@@ -601,7 +601,7 @@
 
 <xsl:template match="text:list-item">
 <!--	<xsl:if test="parent::text:unordered-list/@text:style-name='Var List'">
-		
+
 	</xsl:if>
 	<xsl:if test="not(parent::text:unordered-list/@text:style-name='Var List')">
 		<listitem>
@@ -624,7 +624,7 @@
 				<xsl:apply-templates/>
 			</xsl:element>
 		</xsl:otherwise>
-	</xsl:choose>	
+	</xsl:choose>
 </xsl:template>
 
 
@@ -707,47 +707,47 @@
 <xsl:choose>
 <xsl:when test="./@text:style-name='GuiMenu'">
 		<xsl:element name="guimenu">
-			<xsl:value-of select="."/>	
+			<xsl:value-of select="."/>
 		</xsl:element>
 	</xsl:when>
 	<xsl:when test="./@text:style-name='GuiSubMenu'">
 		<xsl:element name="guisubmenu">
-			<xsl:value-of select="."/>	
+			<xsl:value-of select="."/>
 		</xsl:element>
 	</xsl:when>
 		<xsl:when test="@text:style-name='GuiMenuItem'">
 		<xsl:element name="guimenuitem">
-			<xsl:value-of select="."/>	
+			<xsl:value-of select="."/>
 		</xsl:element>
 	</xsl:when>
 	<xsl:when test="@text:style-name='GuiButton'">
 		<xsl:element name="guibutton">
-			<xsl:value-of select="."/>	
+			<xsl:value-of select="."/>
 		</xsl:element>
 	</xsl:when>
 		<xsl:when test="@text:style-name='GuiButton'">
 		<xsl:element name="guibutton">
-			<xsl:value-of select="."/>	
+			<xsl:value-of select="."/>
 		</xsl:element>
 	</xsl:when>
 	<xsl:when test="@text:style-name='GuiLabel'">
 		<xsl:element name="guilabel">
-			<xsl:value-of select="."/>	
+			<xsl:value-of select="."/>
 		</xsl:element>
 	</xsl:when>
 	<xsl:when test="@text:style-name='Emphasis'">
 		<xsl:element name="emphasis">
-			<xsl:value-of select="."/>	
+			<xsl:value-of select="."/>
 		</xsl:element>
 	</xsl:when>
 	<xsl:when test="@text:style-name='FileName'">
 		<xsl:element name="filename">
-			<xsl:value-of select="."/>	
+			<xsl:value-of select="."/>
 		</xsl:element>
 	</xsl:when>
 	<xsl:when test="@text:style-name='Application'">
 		<xsl:element name="application">
-			<xsl:value-of select="."/>	
+			<xsl:value-of select="."/>
 		</xsl:element>
 	</xsl:when>
 	<xsl:when test="@text:style-name='Command'">
@@ -799,7 +799,7 @@
 		<xsl:apply-templates/>
 	</xsl:otherwise>
 </xsl:choose>
-	
+
 </xsl:template>
 
 
@@ -813,14 +813,14 @@
 				<xsl:apply-templates/>
 			</xsl:element>
 		</xsl:when>
-		<xsl:when test="contains(@xlink:href,'mailto:')"> 
+		<xsl:when test="contains(@xlink:href,'mailto:')">
 	        <xsl:element name="ulink">
-                <xsl:attribute name ="url"> 
-    	            <xsl:value-of select="@xlink:href"/> 
+                <xsl:attribute name ="url">
+    	            <xsl:value-of select="@xlink:href"/>
                 </xsl:attribute>
                 <xsl:apply-templates/>
-            </xsl:element> 
-        </xsl:when> 
+            </xsl:element>
+        </xsl:when>
 		<xsl:when test="not(contains(@xlink:href,'#'))">
 			<xsl:element name="olink">
 				<xsl:attribute name="targetdocent">
@@ -833,7 +833,7 @@
 		<xsl:variable name="linkvar" select="substring-after(@xlink:href,'#')"/>
 			<xsl:element name="link">
 				<xsl:attribute name="linkend">
-					<xsl:value-of select="substring-before($linkvar,'%')"/>	
+					<xsl:value-of select="substring-before($linkvar,'%')"/>
 				</xsl:attribute>
 				<xsl:apply-templates/>
 			</xsl:element>
@@ -841,5 +841,30 @@
 	</xsl:choose>
 </xsl:template>
 
+<!--
+	Change Made By Kevin Fowlks (fowlks@msu.edu) July 2nd, 2003
+	This allows users to create example code in DocBook.
 
+	Note: This type of grouping could also be implemented for
+	<notes>,<literallayout>, <blockquote> or any other tag that requires text to be treated as blocked.
+-->
+<xsl:template match="text:p[@text:style-name='Example']">
+	<xsl:if test="not(preceding-sibling::*[1][self::text:p[@text:style-name='Example']])">
+		<xsl:element name="example">
+			<xsl:element name="title"></xsl:element>
+			<xsl:element name="programlisting">
+				<xsl:value-of select="." />
+				<xsl:text disable-output-escaping="no">&#xD;</xsl:text>
+				<xsl:apply-templates mode="in-list"
+						select="following-sibling::*[1][self::text:p[@text:style-name='Example']]" />
+			</xsl:element>
+		</xsl:element>
+	</xsl:if>
+</xsl:template>
+
+<xsl:template match="text:p[@text:style-name='Example']" mode="in-list">
+	<xsl:value-of select="." />
+	<xsl:text disable-output-escaping="no">&#xD;</xsl:text>
+	<xsl:apply-templates mode="in-list" select="following-sibling::*[1][self::text:p[@text:style-name='Example']]"/>
+</xsl:template>
 </xsl:stylesheet>

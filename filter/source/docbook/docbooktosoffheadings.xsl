@@ -1,36 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
     OpenOffice.org - a multi-platform office productivity suite
- 
+
     $RCSfile: docbooktosoffheadings.xsl,v $
- 
-    $Revision: 1.7 $
- 
-    last change: $Author: rt $ $Date: 2005-09-08 21:39:29 $
- 
+
+    $Revision: 1.8 $
+
+    last change: $Author: obo $ $Date: 2006-07-13 09:13:36 $
+
     The Contents of this file are made available subject to
     the terms of GNU Lesser General Public License Version 2.1.
- 
- 
+
+
       GNU Lesser General Public License Version 2.1
       =============================================
       Copyright 2005 by Sun Microsystems, Inc.
       901 San Antonio Road, Palo Alto, CA 94303, USA
- 
+
       This library is free software; you can redistribute it and/or
       modify it under the terms of the GNU Lesser General Public
       License version 2.1, as published by the Free Software Foundation.
- 
+
       This library is distributed in the hope that it will be useful,
       but WITHOUT ANY WARRANTY; without even the implied warranty of
       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
       Lesser General Public License for more details.
- 
+
       You should have received a copy of the GNU Lesser General Public
       License along with this library; if not, write to the Free Software
       Foundation, Inc., 59 Temple Place, Suite 330, Boston,
       MA  02111-1307  USA
- 
+
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format"
 xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.org/2000/style" xmlns:text="http://openoffice.org/2000/text" xmlns:table="http://openoffice.org/2000/table" xmlns:draw="http://openoffice.org/2000/drawing"  xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="http://openoffice.org/2000/meta" xmlns:number="http://openoffice.org/2000/datastyle" xmlns:svg="http://www.w3.org/2000/svg" xmlns:chart="http://openoffice.org/2000/chart" xmlns:dr3d="http://openoffice.org/2000/dr3d" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="http://openoffice.org/2000/form" xmlns:script="http://openoffice.org/2000/script" xmlns:config="http://openoffice.org/2001/config" office:class="text" office:version="1.0">
@@ -79,7 +79,7 @@ xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.
 		<style:style style:name="T1" style:family="text" style:parent-style-name="Source Text">
 			<style:properties fo:font-style="normal"/>
 		</style:style>
-		
+
 		<style:page-master style:name="pm1">
 			<style:properties fo:page-width="20.999cm" fo:page-height="29.699cm" style:num-format="1" style:print-orientation="portrait" fo:margin-top="2.54cm" fo:margin-bottom="2.54cm" fo:margin-left="3.175cm" fo:margin-right="3.175cm" style:writing-mode="lr-tb" style:footnote-max-height="0cm">
 				<style:footnote-sep style:width="0.018cm" style:distance-before-sep="0.101cm" style:distance-after-sep="0.101cm" style:adjustment="left" style:rel-width="25%" style:color="#000000"/>
@@ -91,7 +91,7 @@ xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.
 	<office:master-styles>
 		<style:master-page style:name="Standard" style:page-master-name="pm1"/>
 	</office:master-styles>
-			<office:body>				 
+			<office:body>
 				<xsl:apply-templates/>
 			</office:body>
 	</xsl:element>
@@ -106,7 +106,7 @@ xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.
 			<xsl:apply-templates/>
 	</xsl:when>
 	<xsl:otherwise>
-		<xsl:element name="text:p">				
+		<xsl:element name="text:p">
 					<xsl:attribute name="text:style-name">Section SubTitle</xsl:attribute>
 		</xsl:element>
 	</xsl:otherwise>
@@ -135,13 +135,13 @@ xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.
 	<xsl:when test="parent::informaltable">
 			<xsl:apply-templates/>
 	</xsl:when>
-	
+
 	<xsl:otherwise>
-		<xsl:element name="text:p">				
-			<xsl:choose>	
-				
+		<xsl:element name="text:p">
+			<xsl:choose>
+
 				<xsl:when test="parent::appendix">
-								 <xsl:attribute name="text:style-name">Appendix Title</xsl:attribute>	 
+								 <xsl:attribute name="text:style-name">Appendix Title</xsl:attribute>
 				</xsl:when>
 		 	</xsl:choose>
 			<xsl:apply-templates/>
@@ -168,7 +168,7 @@ xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.
 				 </xsl:if>
 			<xsl:apply-templates/>
 	</xsl:element>
-	
+
 </xsl:template>
 
 <xsl:template match="appendix">
@@ -177,7 +177,7 @@ xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.
 		<xsl:attribute name="text:name">Appendix</xsl:attribute>
 			<xsl:apply-templates/>
 	</xsl:element>
-	
+
 </xsl:template>
 
 <!--
@@ -201,24 +201,24 @@ xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.
 	<!-- <xsl:element name="text:variable-decls">
              	<xsl:element name="text:variable-decl">
              		<xsl:attribute name="text:value-type">
-             			<xsl:text>string</xsl:text>	
+             			<xsl:text>string</xsl:text>
             		 </xsl:attribute>
       			<xsl:attribute name="text:name">
 		 			<xsl:text disable-output-escaping="yes">articleinfo.title</xsl:text>
       				</xsl:attribute>
       			 </xsl:element>
-      			 
+
       	</xsl:element>
       	<xsl:element name="text:p">
 	 <xsl:element name="text:variable-set">
 	 	<xsl:attribute name="text:value-type">
-             			<xsl:text>string</xsl:text>	
+             			<xsl:text>string</xsl:text>
             		 </xsl:attribute>
 		 <xsl:attribute name="text:name">
 		 	<xsl:text disable-output-escaping="yes">articleinfo.title</xsl:text>
 		</xsl:attribute>
 		<xsl:apply-templates/>
-	</xsl:element>	
+	</xsl:element>
 	</xsl:element>-->
 </xsl:template>
 
@@ -226,7 +226,7 @@ xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.
 	 <xsl:element name="text:variable-decls">
              	<xsl:element name="text:variable-decl">
              		<xsl:attribute name="text:value-type">
-             			<xsl:text>string</xsl:text>	
+             			<xsl:text>string</xsl:text>
             		 </xsl:attribute>
       			<xsl:attribute name="text:name">
 		 			<xsl:text disable-output-escaping="yes">articleinfo.subtitle</xsl:text>
@@ -236,7 +236,7 @@ xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.
       	<xsl:element name="text:p">
 	 <xsl:element name="text:variable-set">
 	 	<xsl:attribute name="text:value-type">
-             			<xsl:text>string</xsl:text>	
+             			<xsl:text>string</xsl:text>
             		 </xsl:attribute>
 		 <xsl:attribute name="text:name">
 		 	<xsl:text disable-output-escaping="yes">articleinfo.subtitle</xsl:text>
@@ -250,7 +250,7 @@ xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.
 	 <xsl:element name="text:variable-decls">
              	<xsl:element name="text:variable-decl">
              		<xsl:attribute name="text:value-type">
-             			<xsl:text>string</xsl:text>	
+             			<xsl:text>string</xsl:text>
             		 </xsl:attribute>
       			<xsl:attribute name="text:name">
 		 			<xsl:text disable-output-escaping="yes">articleinfo.edition</xsl:text>
@@ -260,7 +260,7 @@ xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.
       	<xsl:element name="text:p">
 	 <xsl:element name="text:variable-set">
 	 	<xsl:attribute name="text:value-type">
-             			<xsl:text>string</xsl:text>	
+             			<xsl:text>string</xsl:text>
             	 </xsl:attribute>
 		 <xsl:attribute name="text:name">
 		 	<xsl:text disable-output-escaping="yes">articleinfo.edition</xsl:text>
@@ -274,7 +274,7 @@ xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.
       <xsl:element name="text:variable-decls">
              	<xsl:element name="text:variable-decl">
              		<xsl:attribute name="text:value-type">
-             			<xsl:text>string</xsl:text>	
+             			<xsl:text>string</xsl:text>
             		 </xsl:attribute>
       			<xsl:attribute name="text:name">
 		 			<xsl:text disable-output-escaping="yes">articleinfo.releaseinfo_</xsl:text><xsl:value-of select="count(preceding-sibling::releaseinfo)"/>
@@ -284,7 +284,7 @@ xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.
       	<xsl:element name="text:p">
 	 <xsl:element name="text:variable-set">
 	 	<xsl:attribute name="text:value-type">
-             			<xsl:text>string</xsl:text>	
+             			<xsl:text>string</xsl:text>
             	</xsl:attribute>
 		 <xsl:attribute name="text:name">
 		 	<xsl:text disable-output-escaping="yes">articleinfo.releaseinfo_</xsl:text><xsl:value-of select="count(preceding-sibling::releaseinfo)"/>
@@ -299,9 +299,9 @@ xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.
       <xsl:element name="text:variable-decls">
              	<xsl:element name="text:variable-decl">
              		<xsl:attribute name="text:value-type">
-             			<xsl:text>string</xsl:text>	
+             			<xsl:text>string</xsl:text>
             		 </xsl:attribute>
-            		
+
       			<xsl:attribute name="text:name">
       				<xsl:if test="ancestor::articleinfo">
 		 			<xsl:text disable-output-escaping="yes">articleinfo.author_</xsl:text><xsl:value-of select="count(parent::author[preceding-sibling::author])"/><xsl:text disable-output-escaping="yes">.firstname_</xsl:text><xsl:value-of select="count(preceding-sibling::firstname)"/>
@@ -312,7 +312,7 @@ xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.
       	<xsl:element name="text:p">
 	 <xsl:element name="text:variable-set">
 	 	<xsl:attribute name="text:value-type">
-             			<xsl:text>string</xsl:text>	
+             			<xsl:text>string</xsl:text>
             	</xsl:attribute>
 		 <xsl:attribute name="text:name">
 		 	<xsl:if test="ancestor::articleinfo">
@@ -330,9 +330,9 @@ xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.
       <xsl:element name="text:variable-decls">
              	<xsl:element name="text:variable-decl">
              		<xsl:attribute name="text:value-type">
-             			<xsl:text>string</xsl:text>	
+             			<xsl:text>string</xsl:text>
             		 </xsl:attribute>
-            		
+
       			<xsl:attribute name="text:name">
       				<xsl:if test="ancestor::articleinfo/copyright">
 		 			<xsl:text disable-output-escaping="yes">articleinfo.copyright_</xsl:text><xsl:value-of select="count(parent::copyright[preceding-sibling::copyright])"/><xsl:text disable-output-escaping="yes">.year_</xsl:text><xsl:value-of select="count(preceding-sibling::year)"/>
@@ -343,7 +343,7 @@ xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.
       	<xsl:element name="text:p">
 	 <xsl:element name="text:variable-set">
 	 	<xsl:attribute name="text:value-type">
-             			<xsl:text>string</xsl:text>	
+             			<xsl:text>string</xsl:text>
             	</xsl:attribute>
 		 <xsl:attribute name="text:name">
 		 	<xsl:if test="ancestor::articleinfo/copyright">
@@ -363,9 +363,9 @@ xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.
       <xsl:element name="text:variable-decls">
              	<xsl:element name="text:variable-decl">
              		<xsl:attribute name="text:value-type">
-             			<xsl:text>string</xsl:text>	
+             			<xsl:text>string</xsl:text>
             		 </xsl:attribute>
-            		
+
       			<xsl:attribute name="text:name">
       				<xsl:if test="ancestor::articleinfo/copyright">
 		 			<xsl:text disable-output-escaping="yes">articleinfo.copyright_</xsl:text><xsl:value-of select="count(parent::copyright[preceding-sibling::copyright])"/><xsl:text disable-output-escaping="yes">.holder_</xsl:text><xsl:value-of select="count(preceding-sibling::holder)"/>
@@ -376,7 +376,7 @@ xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.
       	<xsl:element name="text:p">
 	 <xsl:element name="text:variable-set">
 	 	<xsl:attribute name="text:value-type">
-             			<xsl:text>string</xsl:text>	
+             			<xsl:text>string</xsl:text>
             	</xsl:attribute>
 		 <xsl:attribute name="text:name">
 		 	<xsl:if test="ancestor::articleinfo/copyright">
@@ -399,7 +399,7 @@ xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.
       <xsl:element name="text:variable-decls">
              	<xsl:element name="text:variable-decl">
              		<xsl:attribute name="text:value-type">
-             			<xsl:text>string</xsl:text>	
+             			<xsl:text>string</xsl:text>
             		 </xsl:attribute>
       			<xsl:attribute name="text:name">
 		 			<xsl:text disable-output-escaping="yes">articleinfo.author_</xsl:text><xsl:value-of select="count(ancestor::author[preceding-sibling::author])"/><xsl:text disable-output-escaping="yes">.affiliation_</xsl:text><xsl:value-of select="count(parent::affiliation[preceding-sibling::affiliation])"/><xsl:text disable-output-escaping="yes">.address_</xsl:text><xsl:value-of select="count(preceding-sibling::address)"/>
@@ -409,7 +409,7 @@ xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.
       	<xsl:element name="text:p">
 	 <xsl:element name="text:variable-set">
 	 	<xsl:attribute name="text:value-type">
-             			<xsl:text>string</xsl:text>	
+             			<xsl:text>string</xsl:text>
             	</xsl:attribute>
 		 <xsl:attribute name="text:name">
 		 	<xsl:text disable-output-escaping="yes">articleinfo.author_</xsl:text><xsl:value-of select="count(ancestor::author[preceding-sibling::author])"/><xsl:text disable-output-escaping="yes">.affiliation_</xsl:text><xsl:value-of select="count(parent::affiliation[preceding-sibling::affiliation])"/><xsl:text disable-output-escaping="yes">.address_</xsl:text><xsl:value-of select="count(preceding-sibling::address)"/>
@@ -424,7 +424,7 @@ xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.
       <xsl:element name="text:variable-decls">
              	<xsl:element name="text:variable-decl">
              		<xsl:attribute name="text:value-type">
-             			<xsl:text>string</xsl:text>	
+             			<xsl:text>string</xsl:text>
             		 </xsl:attribute>
             		 <xsl:if test="ancestor::articleinfo">
       			<xsl:attribute name="text:name">
@@ -436,14 +436,14 @@ xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.
       	<xsl:element name="text:p">
 	 <xsl:element name="text:variable-set">
 	 	<xsl:attribute name="text:value-type">
-             			<xsl:text>string</xsl:text>	
+             			<xsl:text>string</xsl:text>
             	</xsl:attribute>
             	 <xsl:if test="ancestor::articleinfo">
 		 <xsl:attribute name="text:name">
 		 		<xsl:text disable-output-escaping="yes">articleinfo.author_</xsl:text><xsl:value-of select="count(ancestor::author[preceding-sibling::author])"/><xsl:text disable-output-escaping="yes">.affiliation_</xsl:text><xsl:value-of select="count(parent::affiliation[preceding-sibling::affiliation])"/><xsl:text disable-output-escaping="yes">.orgname_</xsl:text><xsl:value-of select="count(preceding-sibling::orgname)"/>
 		</xsl:attribute>
 		</xsl:if>
-		<xsl:apply-templates/>		
+		<xsl:apply-templates/>
 	</xsl:element>
 	</xsl:element>
 </xsl:template>
@@ -454,9 +454,9 @@ xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.
       <xsl:element name="text:variable-decls">
              	<xsl:element name="text:variable-decl">
              		<xsl:attribute name="text:value-type">
-             			<xsl:text>string</xsl:text>	
+             			<xsl:text>string</xsl:text>
             		 </xsl:attribute>
-            		
+
       			<xsl:attribute name="text:name">
 		 			<xsl:text disable-output-escaping="yes">articleinfo.author_</xsl:text><xsl:value-of select="count(parent::author[preceding-sibling::author])"/><xsl:text disable-output-escaping="yes">.surname_</xsl:text><xsl:value-of select="count(preceding-sibling::surname)"/>
       				</xsl:attribute>
@@ -465,12 +465,12 @@ xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.
       	<xsl:element name="text:p">
 	 <xsl:element name="text:variable-set">
 		<xsl:attribute name="text:value-type">
-             			<xsl:text>string</xsl:text>	
+             			<xsl:text>string</xsl:text>
             	</xsl:attribute>
 		 <xsl:attribute name="text:name">
 		 		<xsl:text disable-output-escaping="yes">articleinfo.author_</xsl:text><xsl:value-of select="count(parent::author[preceding-sibling::author])"/><xsl:text disable-output-escaping="yes">.surname_</xsl:text><xsl:value-of select="count(preceding-sibling::surname)"/>
 
-		
+
 		</xsl:attribute>
 		<xsl:apply-templates/>
 	</xsl:element>
@@ -513,22 +513,22 @@ xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.
 	</xsl:otherwise>
 </xsl:choose>
 
-<xsl:apply-templates/>	
+<xsl:apply-templates/>
 </xsl:element>
 
 </xsl:template>
 
 <xsl:template match="section">
 	<xsl:element name="text:h">
-		<xsl:attribute name="text:level"><xsl:value-of select="count(ancestor-or-self::section) "/></xsl:attribute> 
-		<xsl:value-of select="child::title"/> 
+		<xsl:attribute name="text:level"><xsl:value-of select="count(ancestor-or-self::section) "/></xsl:attribute>
+		<xsl:value-of select="child::title"/>
 	</xsl:element>
 	<xsl:apply-templates/>
 </xsl:template>
 
 <xsl:template match="abstract">
 	<xsl:element name="text:h">
-		<xsl:attribute name="text:level">1</xsl:attribute> 
+		<xsl:attribute name="text:level">1</xsl:attribute>
 		<xsl:text>abstract</xsl:text>
 	</xsl:element>
 	<xsl:apply-templates/>
@@ -537,7 +537,7 @@ xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.
 
 <xsl:template match="appendix">
 	<xsl:element name="text:h">
-		<xsl:attribute name="text:level">1</xsl:attribute> 
+		<xsl:attribute name="text:level">1</xsl:attribute>
 		<xsl:text>appendix</xsl:text>
 	</xsl:element>
 	<xsl:apply-templates/>
@@ -546,46 +546,46 @@ xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.
 <xsl:template match="sect1">
 	<xsl:element name="text:h">
 		<xsl:attribute name="text:level">1</xsl:attribute>
-		<xsl:value-of select="child::title"/> 
+		<xsl:value-of select="child::title"/>
 	</xsl:element>
 	<xsl:apply-templates/>
 </xsl:template>
 
 <xsl:template match="sect2">
 	<xsl:element name="text:h">
-		<xsl:attribute name="text:level">2</xsl:attribute> 
-			<xsl:value-of select="child::title"/> 
+		<xsl:attribute name="text:level">2</xsl:attribute>
+			<xsl:value-of select="child::title"/>
 	</xsl:element>
 	<xsl:apply-templates/>
 </xsl:template>
 
 <xsl:template match="sect3">
 	<xsl:element name="text:h">
-		<xsl:attribute name="text:level">3</xsl:attribute> 
-			<xsl:value-of select="child::title"/> 
+		<xsl:attribute name="text:level">3</xsl:attribute>
+			<xsl:value-of select="child::title"/>
 	</xsl:element>
 	<xsl:apply-templates/>
 </xsl:template>
 
 <xsl:template match="sect4">
 	<xsl:element name="text:h">
-		<xsl:attribute name="text:level">4</xsl:attribute> 
-			<xsl:value-of select="child::title"/> 
+		<xsl:attribute name="text:level">4</xsl:attribute>
+			<xsl:value-of select="child::title"/>
 	</xsl:element>
 	<xsl:apply-templates/>
 </xsl:template>
 
 <xsl:template match="sect5">
 	<xsl:element name="text:h">
-		<xsl:attribute name="text:level">5</xsl:attribute> 
-			<xsl:value-of select="child::title"/> 
+		<xsl:attribute name="text:level">5</xsl:attribute>
+			<xsl:value-of select="child::title"/>
 	</xsl:element>
 	<xsl:apply-templates/>
 </xsl:template>
 
 <!--<xsl:template match="sect5">
 	<xsl:element name="text:section">
-		<xsl:attribute name="text:style-name">Sect1</xsl:attribute> 
+		<xsl:attribute name="text:style-name">Sect1</xsl:attribute>
 		<xsl:attribute name="text:name"><xsl:value-of select="@id"/></xsl:attribute>
 		<xsl:apply-templates/>
 	</xsl:element>
@@ -661,7 +661,7 @@ xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.
 		<xsl:if test="not(ancestor-or-self::thead)">
 			<xsl:attribute name="table:style-name">Table1.A2</xsl:attribute>
 		</xsl:if>
-		
+
 		<xsl:choose>
 			<xsl:when test="@spanname">
 		<!--<xsl:if test="@spanname">-->
@@ -709,7 +709,7 @@ xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.
 		<xsl:if test="not(@namest = '' ) ">
 		     <xsl:attribute name="table:number-columns-spanned">
 				 <xsl:value-of select="(substring-after(@nameend,'c')-substring-after(@namest,'c'))+1"/>
-			 	
+
 			 </xsl:attribute>
 		</xsl:if>
 		-->
@@ -764,13 +764,13 @@ xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.
 <xsl:element name="text:ordered-list">
 	<xsl:attribute name="text:style-name">Ordered List</xsl:attribute>
 	<xsl:attribute name="text:continue-numbering">false</xsl:attribute>
-	<xsl:apply-templates/>	
+	<xsl:apply-templates/>
 </xsl:element>
 </xsl:template>
 
 <xsl:template match="term">
 	<xsl:if test="parent::varlistentry">
-    	<text:list-item>    
+    	<text:list-item>
 	        <xsl:element name="text:p">
 		        <xsl:attribute name="text:style-name">VarList Term</xsl:attribute>
         		<xsl:apply-templates />
@@ -926,8 +926,8 @@ xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.
 		<xsl:attribute name="svg:width">
 			<!--<xsl:value-of select="@width"/>-->
 			<xsl:text>1cm</xsl:text>
-		</xsl:attribute> 
-		<xsl:attribute name="svg:height">	
+		</xsl:attribute>
+		<xsl:attribute name="svg:height">
 			<xsl:text>1cm</xsl:text>
 		</xsl:attribute>
 		<xsl:attribute name="xlink:show">
@@ -940,7 +940,7 @@ xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.
 			<xsl:text disable-output-escaping="yes">&lt;All formats&gt;</xsl:text>
 		</xsl:attribute>
 </xsl:element>
-</xsl:template> 
+</xsl:template>
 
 
 <xsl:template match="footnote">
@@ -1034,8 +1034,8 @@ xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.
 		<xsl:attribute name="svg:width">
 			<!--<xsl:value-of select="@width"/>-->
 			<xsl:text>1cm</xsl:text>
-		</xsl:attribute> 
-		<xsl:attribute name="svg:height">	
+		</xsl:attribute>
+		<xsl:attribute name="svg:height">
 			<xsl:text>1cm</xsl:text>
 		</xsl:attribute>
 		<xsl:attribute name="xlink:show">
@@ -1069,8 +1069,8 @@ xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.
 		<xsl:attribute name="svg:width">
 			<!--<xsl:value-of select="@width"/>-->
 			<xsl:text>1cm</xsl:text>
-		</xsl:attribute> 
-		<xsl:attribute name="svg:height">	
+		</xsl:attribute>
+		<xsl:attribute name="svg:height">
 			<xsl:text>1cm</xsl:text>
 		</xsl:attribute>
 		<xsl:attribute name="xlink:show">
@@ -1114,6 +1114,14 @@ xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.
 	</xsl:element>
 </xsl:template>
 
-
+<!-- Change Made By Kevin Fowlks (fowlks@msu.edu) July 2nd, 2003 -->
+<xsl:template match="example">
+	<xsl:element name="text:p">
+		<xsl:attribute name="text:style-name">
+			<xsl:text disable-output-escaping="yes">Example</xsl:text>
+		</xsl:attribute>
+		<xsl:value-of select="programlisting" />
+	</xsl:element>
+</xsl:template>
 
 </xsl:stylesheet>
