@@ -4,9 +4,9 @@
  *
  *  $RCSfile: terminate.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:28:24 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 10:03:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,24 +44,6 @@
 
 #include <signal.h>
 
-#ifdef WNT
-#define UNDER_WINDOWS_DEBUGGING
-// Nice feature, to debug under windows, install msdev locally and use DebugBreak() to stop a new process at a point you want.
-#ifdef UNDER_WINDOWS_DEBUGGING
-#if defined _MSC_VER
-#pragma warning(push, 1)
-#endif
-#include <windows.h>
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
-#include <MAPIWin.h>
-
-#define VCL_NEED_BASETSD
-
-#endif /* UNDER_WINDOWS_DEBUGGING */
-#endif /* WNT */
-
 #include <iostream>
 #include <string>
 
@@ -71,6 +53,10 @@
 #include <unistd.h> /* usleep */
 #include <sys/types.h>
 #include <signal.h>
+#endif
+
+#ifdef WNT
+# include "winstuff.hxx"
 #endif
 
 using namespace std;
@@ -98,7 +84,7 @@ public:
 void my_sleep(int sec)
 {
 #ifdef WNT
-            Sleep(sec * 1000);
+            WinSleep(sec * 1000);
 #else
             usleep(sec * 1000000); // 10 ms
 #endif
@@ -147,87 +133,12 @@ ProcessHandler::~ProcessHandler()
 {
 }
 
-#ifdef WNT
-#define TA_FAILED 0
-#define TA_SUCCESS_CLEAN 1
-#define TA_SUCCESS_KILL 2
-#define TA_SUCCESS_16 3
-
-   // Declare Callback Enum Functions.
-bool CALLBACK TerminateAppEnum( HWND hwnd, LPARAM lParam );
-
-/*----------------------------------------------------------------
-   DWORD WINAPI TerminateApp( DWORD dwPID, DWORD dwTimeout )
-
-   Purpose:
-      Shut down a 32-Bit Process (or 16-bit process under Windows 95)
-
-   Parameters:
-      dwPID
-         Process ID of the process to shut down.
-
-      dwTimeout
-         Wait time in milliseconds before shutting down the process.
-
-   Return Value:
-      TA_FAILED - If the shutdown failed.
-      TA_SUCCESS_CLEAN - If the process was shutdown using WM_CLOSE.
-      TA_SUCCESS_KILL - if the process was shut down with
-         TerminateProcess().
-      NOTE:  See header for these defines.
-   ----------------------------------------------------------------*/
-DWORD WINAPI TerminateApp( DWORD dwPID, DWORD dwTimeout )
-{
-    HANDLE   hProc;
-    DWORD   dwRet;
-
-    // If we can't open the process with PROCESS_TERMINATE rights,
-    // then we give up immediately.
-    hProc = OpenProcess(SYNCHRONIZE|PROCESS_TERMINATE, false,
-                        dwPID);
-
-    if(hProc == NULL)
-    {
-        return TA_FAILED;
-    }
-
-    // TerminateAppEnum() posts WM_CLOSE to all windows whose PID
-    // matches your process's.
-    EnumWindows((WNDENUMPROC)TerminateAppEnum, (LPARAM) dwPID);
-
-    // Wait on the handle. If it signals, great. If it times out,
-    // then you kill it.
-    if (WaitForSingleObject(hProc, dwTimeout) != WAIT_OBJECT_0)
-        dwRet= (TerminateProcess(hProc,0) ? TA_SUCCESS_KILL : TA_FAILED);
-    else
-        dwRet = TA_SUCCESS_CLEAN;
-
-    CloseHandle(hProc);
-
-    return dwRet;
-}
-
-bool CALLBACK TerminateAppEnum( HWND hwnd, LPARAM lParam )
-{
-    DWORD dwID;
-
-    GetWindowThreadProcessId(hwnd, &dwID);
-
-    if(dwID == (DWORD)lParam)
-    {
-        PostMessage(hwnd, WM_CLOSE, 0, 0);
-    }
-
-    return true;
-}
-#endif
-
 void ProcessHandler::sendSignal(int _nPID)
 {
     if (_nPID != 0)
     {
 #ifdef WNT
-        TerminateApp(_nPID, 100);
+        WinTerminateApp(_nPID, 100);
 #else
         kill(_nPID, SIGKILL);
 #endif
@@ -352,7 +263,7 @@ int _cdecl main( int, char* argv[] )
 
     if ( opt.hasOpt("-version") )
     {
-        fprintf(stderr, "testshl2_timeout $Revision: 1.4 $\n");
+        fprintf(stderr, "testshl2_timeout $Revision: 1.5 $\n");
         exit(0);
     }
 
