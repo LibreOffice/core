@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3dpolypolygon.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:54:19 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 09:55:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,10 @@
 #include <sal/types.h>
 #endif
 
+#ifndef INCLUDED_O3TL_COW_WRAPPER_HXX
+#include <o3tl/cow_wrapper.hxx>
+#endif
+
 // predeclarations
 class ImplB3DPolyPolygon;
 
@@ -55,12 +59,11 @@ namespace basegfx
 {
     class B3DPolyPolygon
     {
-    private:
-        ImplB3DPolyPolygon*                         mpPolyPolygon;
+    public:
+        typedef o3tl::cow_wrapper< ImplB3DPolyPolygon > ImplType;
 
-        // internal method to force a ref-counted instance to be copied
-        // to a modifyable unique copy.
-        void implForceUniqueCopy();
+    private:
+        ImplType                                        mpPolyPolygon;
 
     public:
         B3DPolyPolygon();
@@ -70,6 +73,9 @@ namespace basegfx
 
         // assignment operator
         B3DPolyPolygon& operator=(const B3DPolyPolygon& rPolyPolygon);
+
+        /// unshare this poly-polygon (and all included polygons) with all internally shared instances
+        void makeUnique();
 
         // compare operators
         bool operator==(const B3DPolyPolygon& rPolyPolygon) const;
