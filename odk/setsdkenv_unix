@@ -1,8 +1,8 @@
 #! /bin/sh
 
 CURRENTDIR=`/bin/pwd`
-TMPDIR=`dirname $0`
-SDKDIRECTORY=`(cd $TMPDIR && pwd && cd $CURRENTDIR) | head -n 1`
+SDKTMPDIR=`dirname $0`
+SDKDIRECTORY=`(cd $SDKTMPDIR && pwd && cd $CURRENTDIR) | head -n 1`
 OO_SDK_NAME=`basename $SDKDIRECTORY`
 
 if [ "$1" = "--force-configure" ]
