@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:51:20 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 16:03:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,6 +120,15 @@
 #include <svtools/colorcfg.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_STYLE_XSTYLEFAMILIESSUPPLIER_HPP_
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FRAME_STATUS_ITEMSTATUS_HPP_
 #include <com/sun/star/frame/status/ItemStatus.hpp>
 #endif
@@ -176,6 +185,7 @@ BOOL lcl_FontChangedHint( const SfxHint &rHint );
 
 // namespaces
 using namespace ::rtl;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::util;
@@ -217,6 +227,7 @@ public:
     inline void     SetVisibilityListener( const Link& aVisListener ) { aVisibilityListener = aVisListener; }
     inline void     RemoveVisibilityListener() { aVisibilityListener = Link(); }
 
+    void            SetDefaultStyle( const ::rtl::OUString& rDefault ) { sDefaultStyle = rDefault; }
     DECL_STATIC_LINK( SvxStyleBox_Impl, FocusHdl_Impl, Control* );
 
 protected:
@@ -234,6 +245,7 @@ private:
     OUString                        m_aCommand;
     String                          aClearFormatKey;
     String                          aMoreKey;
+    String                          sDefaultStyle;
     BOOL                            bInSpecialMode;
 
     void            ReleaseFocus();
@@ -354,7 +366,6 @@ protected:
 public:
     SvxFrameWindow_Impl( USHORT nId, const Reference< XFrame >& rFrame, Window* pParentWindow );
     ~SvxFrameWindow_Impl();
-
     void            StartSelection();
 
     virtual void    StateChanged( USHORT nSID, SfxItemState eState,
@@ -432,7 +443,7 @@ SvxStyleBox_Impl::SvxStyleBox_Impl(
     const Reference< XDispatchProvider >&   rDispatchProvider,
     const String&                           rClearFormatKey,
     const String&                           rMoreKey,
-    BOOL                                    bInSpec ) :
+    BOOL                                    bInSpec) :
 
     ComboBox( pParent, SVX_RES( RID_SVXTBX_STYLE ) ),
 
@@ -489,8 +500,12 @@ void SvxStyleBox_Impl::Select()
         {
             if( aSelEntry == aClearFormatKey && GetSelectEntryPos() == 0 )
             {
-                aSelEntry = String::CreateFromAscii( "Default" );
+                aSelEntry = sDefaultStyle;
                 bClear = true;
+                //not only apply default style but also call 'ClearFormatting'
+                Sequence< PropertyValue > aEmptyVals;
+                SfxToolBoxControl::Dispatch( m_xDispatchProvider, String::CreateFromAscii(".uno:ResetAttributes"),
+                    aEmptyVals);
             }
             else if( aSelEntry == aMoreKey && GetSelectEntryPos() == ( GetEntryCount() - 1 ) )
             {
@@ -1002,7 +1017,6 @@ void SvxFontSizeBox_Impl::Update( const SvxFontItem& rFontItem )
     // Sizes-Liste auff"ullen
     long nOldVal = GetValue(); // alten Wert merken
     FontInfo aFontInfo;
-    FASTBOOL bCreate = FALSE;
     const FontList* pFontList = pFontListItem ? pFontListItem->GetFontList() : NULL;
     if ( pFontList )
     {
@@ -2114,7 +2128,7 @@ SfxStyleControllerItem_Impl::SfxStyleControllerItem_Impl(
 // -----------------------------------------------------------------------
 
 void SfxStyleControllerItem_Impl::StateChanged(
-    USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+    USHORT, SfxItemState eState, const SfxPoolItem* pState )
 {
     switch ( GetId() )
     {
@@ -2148,9 +2162,9 @@ void SfxStyleControllerItem_Impl::StateChanged(
 
 struct SvxStyleToolBoxControl::Impl
 {
-    String                      aClearForm;
-    String                      aMore;
-    SvxStringArray              aDefaultStyleArray;
+    String                              aClearForm;
+    String                              aMore;
+    ::std::vector< ::rtl::OUString >    aDefaultStyles;
     BOOL                        bListening;
     BOOL                        bSpecModeWriter;
     BOOL                        bSpecModeCalc;
@@ -2158,11 +2172,87 @@ struct SvxStyleToolBoxControl::Impl
     inline Impl( void )
         :aClearForm         ( SVX_RESSTR( RID_SVXSTR_CLEARFORM ) )
         ,aMore              ( SVX_RESSTR( RID_SVXSTR_MORE ) )
-        ,aDefaultStyleArray ( SVX_RES( RID_SVXSTRARRAY_DEFAULTSTYLES ) )
         ,bListening         ( FALSE )
         ,bSpecModeWriter    ( FALSE )
         ,bSpecModeCalc      ( FALSE )
-    {}
+    {
+
+
+    }
+    void InitializeStyles(Reference < frame::XModel > xModel)
+    {
+        //now convert the default style names to the localized names
+        try
+        {
+            Reference< style::XStyleFamiliesSupplier > xStylesSupplier( xModel, UNO_QUERY_THROW );
+            Reference< lang::XServiceInfo > xServices( xModel, UNO_QUERY_THROW );
+            bSpecModeWriter = xServices->supportsService(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextDocument")));
+            if(bSpecModeWriter)
+            {
+                Reference<container::XNameAccess> xParaStyles;
+                    xStylesSupplier->getStyleFamilies()->getByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParagraphStyles"))) >>=
+                    xParaStyles;
+                static const sal_Char* aWriterStyles[] =
+                {
+                    "Standard",
+                    "Heading 1",
+                    "Heading 2",
+                    "Heading 3",
+                    "Text body"
+                };
+                for( sal_Int32 nStyle = 0; nStyle < sizeof( aWriterStyles ) / sizeof( sal_Char*); ++nStyle )
+                {
+                    try
+                    {
+                        Reference< beans::XPropertySet > xStyle;
+                        xParaStyles->getByName( rtl::OUString::createFromAscii( aWriterStyles[nStyle] )) >>= xStyle;
+                        ::rtl::OUString sName;
+                        xStyle->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DisplayName"))) >>= sName;
+                        if( sName.getLength() )
+                            aDefaultStyles.push_back(sName);
+                    }
+                    catch( const uno::Exception& )
+                    {}
+                }
+
+            }
+            else if( 0 != (
+                bSpecModeCalc = xServices->supportsService(::rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.SpreadsheetDocument")))))
+            {
+                static const sal_Char* aCalcStyles[] =
+                {
+                    "Default",
+                    "Heading 1",
+                    "Heading 2",
+                    "Result",
+                    "Result2"
+                };
+                Reference<container::XNameAccess> xCellStyles;
+                    xStylesSupplier->getStyleFamilies()->getByName(
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CellStyles"))) >>=
+                        xCellStyles;
+                for( sal_Int32 nStyle = 0; nStyle < sizeof( aCalcStyles ) / sizeof( sal_Char*); ++nStyle )
+                {
+                    try
+                    {
+                        Reference< beans::XPropertySet > xStyle;
+                        xCellStyles->getByName( rtl::OUString::createFromAscii( aCalcStyles[nStyle] )) >>= xStyle;
+                        ::rtl::OUString sName;
+                        xStyle->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DisplayName")))>>= sName;
+                        if( sName.getLength() )
+                            aDefaultStyles.push_back(sName);
+                    }
+                    catch( const uno::Exception& )
+                    {}
+                }
+            }
+        }
+        catch(const uno::Exception& )
+        {
+            DBG_ERROR("error while initializing style names")
+        }
+    }
 };
 
 
@@ -2193,14 +2283,14 @@ SvxStyleToolBoxControl::SvxStyleToolBoxControl(
         pFamilyState[i]  = NULL;
     }
 
-    SfxObjectShell*     pDocShell = SfxObjectShell::Current();
+/*  SfxObjectShell*     pDocShell = SfxObjectShell::Current();
     if( pDocShell )
     {
         const char* pName = pDocShell->GetFactory().GetShortName();
         pImpl->bSpecModeWriter = strcmp( pName, "swriter" ) == 0;
         if( !pImpl->bSpecModeWriter )
             pImpl->bSpecModeCalc = strcmp( pName, "scalc" ) == 0;
-    }
+    }*/
 }
 
 // -----------------------------------------------------------------------
@@ -2237,6 +2327,7 @@ throw ( Exception, RuntimeException)
     // dispatch provider.
     if ( m_xFrame.is() )
     {
+        pImpl->InitializeStyles(m_xFrame->getController()->getModel());
         Reference< XDispatchProvider > xDispatchProvider( m_xFrame->getController(), UNO_QUERY );
         for ( USHORT i=0; i<MAX_FAMILIES; i++ )
         {
@@ -2330,9 +2421,7 @@ void SvxStyleToolBoxControl::FillStyleBox()
 
             {
                 USHORT  i;
-                USHORT  nCnt = static_cast< USHORT >( pImpl->aDefaultStyleArray.Count() );
-                USHORT  nPos = 1;
-                long    nType = pImpl->bSpecModeWriter? 0 : 1;
+                sal_uInt32  nCnt = pImpl->aDefaultStyles.size();
                 bool    bInsert;
 
                 pStyle = pStyleSheetPool->First();
@@ -2343,11 +2432,10 @@ void SvxStyleToolBoxControl::FillStyleBox()
                     {
                         // sort out default styles
                         bInsert = true;
-                        String  aName( pStyle->GetName() );
+                        ::rtl::OUString aName( pStyle->GetName() );
                         for( i = 0 ; i < nCnt ; ++i )
                         {
-                            if( pImpl->aDefaultStyleArray.GetValue( i ) == nType
-                                && pImpl->aDefaultStyleArray.GetStringByPos( i ) == aName )
+                            if( pImpl->aDefaultStyles[i] == aName )
                             {
                                 bInsert = false;
                                 break;
@@ -2373,16 +2461,12 @@ void SvxStyleToolBoxControl::FillStyleBox()
             {
                 // insert default styles
                 USHORT  i;
-                USHORT  nCnt = static_cast< USHORT >( pImpl->aDefaultStyleArray.Count() );
-                USHORT  nPos = 1;
-                long    nType = pImpl->bSpecModeWriter? 0 : 1;
+                sal_uInt32  nCnt = pImpl->aDefaultStyles.size();
+                USHORT nPos = 1;
                 for( i = 0 ; i < nCnt ; ++i )
                 {
-                    if( pImpl->aDefaultStyleArray.GetValue( i ) == nType )
-                    {
-                        pBox->InsertEntry( pImpl->aDefaultStyleArray.GetStringByPos( i ), nPos );
-                        ++nPos;
-                    }
+                    pBox->InsertEntry( pImpl->aDefaultStyles[i], nPos );
+                    ++nPos;
                 }
 
                 // disable sort to preserve special order
@@ -2472,7 +2556,9 @@ void SvxStyleToolBoxControl::Update()
         }
 
         if ( !pItem )
-            DBG_WARNING( "Unknown Family" ); // can happens
+        {
+            DBG_WARNING( "Unknown Family" ) // can happen
+        }
     }
     else if ( pPool != pStyleSheetPool )
         pStyleSheetPool = pPool;
@@ -2498,7 +2584,7 @@ void SvxStyleToolBoxControl::SetFamilyState( USHORT nIdx,
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxStyleToolBoxControl, VisibilityNotification, void*, pVoid )
+IMPL_LINK( SvxStyleToolBoxControl, VisibilityNotification, void*, EMPTYARG )
 {
 
     USHORT i;
@@ -2526,7 +2612,7 @@ IMPL_LINK( SvxStyleToolBoxControl, VisibilityNotification, void*, pVoid )
 
 void SvxStyleToolBoxControl::StateChanged(
 
-    USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+    USHORT , SfxItemState eState, const SfxPoolItem* pState )
 
 {
     USHORT       nId    = GetId();
@@ -2574,7 +2660,8 @@ Window* SvxStyleToolBoxControl::CreateItemWindow( Window *pParent )
                                                    pImpl->aClearForm,
                                                    pImpl->aMore,
                                                    pImpl->bSpecModeWriter || pImpl->bSpecModeCalc );
-
+    if( pImpl->aDefaultStyles.size())
+        pBox->SetDefaultStyle( pImpl->aDefaultStyles[0] );
     // Set visibility listener to bind/unbind controller
     pBox->SetVisibilityListener( LINK( this, SvxStyleToolBoxControl, VisibilityNotification ));
 
@@ -2598,7 +2685,7 @@ SvxFontNameToolBoxControl::SvxFontNameToolBoxControl(
 
 void SvxFontNameToolBoxControl::StateChanged(
 
-    USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+    USHORT , SfxItemState eState, const SfxPoolItem* pState )
 
 {
     USHORT               nId    = GetId();
@@ -2809,7 +2896,7 @@ SfxPopupWindow* SvxFontColorToolBoxControl::CreatePopupWindow()
 
 void SvxFontColorToolBoxControl::StateChanged(
 
-    USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+    USHORT , SfxItemState eState, const SfxPoolItem* pState )
 
 {
     USHORT nId = GetId();
@@ -2880,7 +2967,7 @@ SfxPopupWindow* SvxColorToolBoxControl::CreatePopupWindow()
 
 void SvxColorToolBoxControl::StateChanged(
 
-    USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+    USHORT , SfxItemState eState, const SfxPoolItem* pState )
 
 {
     const SvxColorItem* pItem   = 0;
@@ -2989,7 +3076,7 @@ void SvxFontColorExtToolBoxControl::StateChanged(
 
 // -----------------------------------------------------------------------
 
-void SvxFontColorExtToolBoxControl::Select( BOOL bMod1 )
+void SvxFontColorExtToolBoxControl::Select( BOOL )
 {
 /*
     USHORT nId = ( SID_ATTR_CHAR_COLOR2 == GetSlotId() ) ? SID_ATTR_CHAR_COLOR_EXT
@@ -3057,12 +3144,11 @@ SfxPopupWindow* SvxFrameToolBoxControl::CreatePopupWindow()
 
 void SvxFrameToolBoxControl::StateChanged(
 
-    USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+    USHORT, SfxItemState eState, const SfxPoolItem*  )
 
 {
     USHORT                  nId     = GetId();
     ToolBox&                rTbx    = GetToolBox();
-    const SfxUInt16Item*    pItem   = 0;
 
     rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
     rTbx.SetItemState( nId, (SFX_ITEM_DONTCARE == eState)
@@ -3108,8 +3194,7 @@ SfxPopupWindow* SvxFrameLineStyleToolBoxControl::CreatePopupWindow()
 
 void SvxFrameLineStyleToolBoxControl::StateChanged(
 
-    USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
-
+    USHORT , SfxItemState eState, const SfxPoolItem*  )
 {
     USHORT       nId    = GetId();
     ToolBox&     rTbx   = GetToolBox();
@@ -3172,7 +3257,7 @@ SfxPopupWindow* SvxFrameLineColorToolBoxControl::CreatePopupWindow()
 
 void SvxFrameLineColorToolBoxControl::StateChanged(
 
-    USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+    USHORT , SfxItemState eState, const SfxPoolItem* pState )
 
 {
     USHORT nId = GetId();
@@ -3232,7 +3317,7 @@ SvxReloadControllerItem::~SvxReloadControllerItem()
 // -----------------------------------------------------------------------
 
 void SvxReloadControllerItem::StateChanged(
-    USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+    USHORT , SfxItemState eState, const SfxPoolItem* pState )
 {
     SfxBoolItem* pItem = PTR_CAST( SfxBoolItem, pState );
     ToolBox& rBox = GetToolBox();
@@ -3263,7 +3348,7 @@ SvxSimpleUndoRedoController::~SvxSimpleUndoRedoController()
 
 // -----------------------------------------------------------------------
 
-void SvxSimpleUndoRedoController::StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+void SvxSimpleUndoRedoController::StateChanged( USHORT, SfxItemState eState, const SfxPoolItem* pState )
 {
     SfxStringItem* pItem = PTR_CAST( SfxStringItem, pState );
     ToolBox& rBox = GetToolBox();
