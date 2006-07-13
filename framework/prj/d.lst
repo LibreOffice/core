@@ -23,6 +23,7 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\StartModule\statusbar
 ..\dtd\event.dtd %_DEST%\bin%_EXT%\event.dtd
 ..\dtd\accelerator.dtd %_DEST%\bin%_EXT%\accelerator.dtd
 ..\dtd\image.dtd %_DEST%\bin%_EXT%\image.dtd
+..\dtd\groupuinames.dtd %_DEST%\bin%_EXT%\groupuinames.dtd
 
 ..\%__SRC%\lib\ifwe.lib %_DEST%\lib%_EXT%\ifwe.lib
 hedabu: ..\inc\helper\imageproducer.hxx %_DEST%\inc%_EXT%\framework\imageproducer.hxx
