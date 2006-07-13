@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:29:29 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 11:31:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2217,12 +2217,28 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
                     // Thus, hack for issue i14206 no longer needed, but fix for issue 114442
                     // --> OD 2006-05-17 #136024# - correct fix for i53139:
                     // Check for wrong page description before using next new upper.
-                    SwLayoutFrm* pNewNextUpper = pNewUpper->GetLeaf( MAKEPAGE_NONE, TRUE );
-                    if ( pNewNextUpper &&
-                         !rThis.WrongPageDesc( pNewNextUpper->FindPageFrm() ) )
+                    // --> OD 2006-06-06 #i66051# - further correction of fix for i53139
+                    // Check for correct type of new next upper layout frame
+                    // --> OD 2006-06-08 #136538# - another correction of fix for i53139
+                    // Assumption, that in all cases <pNewUpper> is a previous
+                    // layout frame, which contains content, is wrong.
+                    // --> OD 2006-07-05 #136538# - another correction of fix for i53139
+                    // Beside type check, check also, if proposed new next upper
+                    // frame is inside the same frame types.
+                    if ( pNewUpper->Lower() )
                     {
-                        pNewUpper = pNewNextUpper;
-                        bCheckPageDescOfNextPage = true;
+                        SwLayoutFrm* pNewNextUpper = pNewUpper->GetLeaf( MAKEPAGE_NONE, TRUE );
+                        if ( pNewNextUpper &&
+                             pNewNextUpper->GetType() == pNewUpper->GetType() &&
+                             pNewNextUpper->IsInDocBody() == pNewUpper->IsInDocBody() &&
+                             pNewNextUpper->IsInFtn() == pNewUpper->IsInFtn() &&
+                             pNewNextUpper->IsInTab() == pNewUpper->IsInTab() &&
+                             pNewNextUpper->IsInSct() == pNewUpper->IsInSct() &&
+                             !rThis.WrongPageDesc( pNewNextUpper->FindPageFrm() ) )
+                        {
+                            pNewUpper = pNewNextUpper;
+                            bCheckPageDescOfNextPage = true;
+                        }
                     }
                     // <--
 
@@ -2254,8 +2270,19 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
                 // contains content. But the new upper layout frame
                 // has to be the next one.
                 // --> OD 2006-05-17 #136024# - correct fix for i53139
-                SwLayoutFrm* pNewNextUpper = pNewUpper->GetLeaf( MAKEPAGE_NONE, TRUE );
+                // Check for wrong page description before using next new upper.
+                // --> OD 2006-06-06 #i66051# - further correction of fix for i53139
+                // Check for correct type of new next upper layout frame
+                // --> OD 2006-07-05 #136538# - another correction of fix for i53139
+                // Beside type check, check also, if proposed new next upper
+                // frame is inside the same frame types.
+                SwLayoutFrm* pNewNextUpper = pNewUpper->GetLeaf( MAKEPAGE_NOSECTION, TRUE );
                 if ( pNewNextUpper &&
+                     pNewNextUpper->GetType() == pNewUpper->GetType() &&
+                     pNewNextUpper->IsInDocBody() == pNewUpper->IsInDocBody() &&
+                     pNewNextUpper->IsInFtn() == pNewUpper->IsInFtn() &&
+                     pNewNextUpper->IsInTab() == pNewUpper->IsInTab() &&
+                     pNewNextUpper->IsInSct() == pNewUpper->IsInSct() &&
                      !rThis.WrongPageDesc( pNewNextUpper->FindPageFrm() ) )
                 {
                     pNewUpper = pNewNextUpper;
@@ -2295,8 +2322,19 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
                             // contains content. But the new upper layout frame
                             // has to be the next one.
                             // --> OD 2006-05-17 #136024# - correct fix for i53139
+                            // Check for wrong page description before using next new upper.
+                            // --> OD 2006-06-06 #i66051# - further correction of fix for i53139
+                            // Check for correct type of new next upper layout frame
+                            // --> OD 2006-07-05 #136538# - another correction of fix for i53139
+                            // Beside type check, check also, if proposed new next upper
+                            // frame is inside the same frame types.
                             SwLayoutFrm* pNewNextUpper = pNewUpper->GetLeaf( MAKEPAGE_NONE, TRUE );
                             if ( pNewNextUpper &&
+                                 pNewNextUpper->GetType() == pNewUpper->GetType() &&
+                                 pNewNextUpper->IsInDocBody() == pNewUpper->IsInDocBody() &&
+                                 pNewNextUpper->IsInFtn() == pNewUpper->IsInFtn() &&
+                                 pNewNextUpper->IsInTab() == pNewUpper->IsInTab() &&
+                                 pNewNextUpper->IsInSct() == pNewUpper->IsInSct() &&
                                  !rThis.WrongPageDesc( pNewNextUpper->FindPageFrm() ) )
                             {
                                 pNewUpper = pNewNextUpper;
