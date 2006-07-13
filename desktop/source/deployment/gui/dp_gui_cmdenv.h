@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_cmdenv.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-06 10:18:52 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 17:02:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 #if ! defined INCLUDED_DP_GUI_CMDENV_H
 #define INCLUDED_DP_GUI_CMDENV_H
 
+#include "tools/resmgr.hxx"
 #include "osl/conditn.hxx"
 #include "cppuhelper/implbase3.hxx"
 #include "vcl/dialog.hxx"
@@ -68,6 +69,8 @@ class ProgressCommandEnv
     void updateProgress( ::rtl::OUString const & text = ::rtl::OUString() );
     css::uno::Reference<css::task::XAbortChannel> m_xAbortChannel;
     bool m_aborted;
+    // shared or user, may be empty string
+    ::rtl::OUString m_sContext;
 
     struct ProgressDialog : public Dialog
     {
@@ -99,13 +102,18 @@ class ProgressCommandEnv
         throw (css::uno::RuntimeException);
 
     void solarthread_dtor();
+
+    Dialog * activeDialog(); // either m_progressDialog or m_mainDialog
+
 public:
     virtual ~ProgressCommandEnv();
     inline ProgressCommandEnv( DialogImpl * mainDialog,
-                               ::rtl::OUString const & title )
+                               ::rtl::OUString const & title,
+                               ::rtl::OUString const & context)
         : m_mainDialog( mainDialog ),
           m_title( title ),
-          m_aborted( false )
+          m_aborted( false ),
+          m_sContext(context)
         {}
 
     void showProgress( sal_Int32 progressSections );
