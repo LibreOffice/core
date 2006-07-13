@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfilter.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:52:57 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 15:23:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -191,9 +191,9 @@ sal_Int32 ReadThroughComponent(
     {
         xParser->parseStream( aParserInput );
     }
+#if OSL_DEBUG_LEVEL > 1
     catch( SAXParseException& r )
     {
-#if OSL_DEBUG_LEVEL > 1
         ByteString aError( "SAX parse exception catched while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
         aError += ByteString::CreateFromInt32( r.LineNumber );
@@ -201,9 +201,14 @@ sal_Int32 ReadThroughComponent(
         aError += ByteString::CreateFromInt32( r.ColumnNumber );
 
         DBG_ERROR( aError.GetBuffer() );
-#endif
         return 1;
     }
+#else
+    catch( SAXParseException& )
+    {
+        return 1;
+    }
+#endif
     catch( SAXException& )
     {
         return 1;
@@ -362,8 +367,8 @@ sal_Bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
     }
 
 
-    sal_Bool bRet;
-    if ( bRet = (sFileName.getLength() != 0) )
+    sal_Bool bRet = (sFileName.getLength() != 0);
+    if ( bRet )
     {
         Reference<XComponent> xCom(GetModel(),UNO_QUERY);
 
