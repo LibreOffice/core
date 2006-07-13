@@ -4,9 +4,9 @@
  *
  *  $RCSfile: kdebackend.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-22 10:14:12 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 12:31:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,9 @@
 #endif
 #ifndef KDEVCLLAYER_HXX_
 #include "kdevcllayer.hxx"
+#endif
+#ifndef KDEPATHSLAYER_HXX_
+#include "kdepathslayer.hxx"
 #endif
 
 //------------------------------------------------------------------------------
@@ -93,6 +96,10 @@ uno::Reference<backend::XLayer> SAL_CALL KDEBackend::getLayer(
     {
         xLayer = new KDEVCLLayer(m_xContext);
     }
+    else if( aComponent.equalsAscii("org.openoffice.Office.Paths" ) )
+    {
+        xLayer = new KDEPathsLayer(m_xContext);
+    }
 
     return xLayer;
 }
@@ -142,13 +149,15 @@ uno::Sequence<rtl::OUString> SAL_CALL KDEBackend::getBackendServiceNames(void)
 
 uno::Sequence<rtl::OUString> SAL_CALL KDEBackend::getSupportedComponents(void)
 {
-    uno::Sequence<rtl::OUString> aSupportedComponentsList(3) ;
+    uno::Sequence<rtl::OUString> aSupportedComponentsList(4) ;
     aSupportedComponentsList[0] = rtl::OUString(
         RTL_CONSTASCII_USTRINGPARAM("org.openoffice.VCL")) ;
     aSupportedComponentsList[1] = rtl::OUString(
         RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Inet")) ;
     aSupportedComponentsList[2] = rtl::OUString(
         RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common")) ;
+    aSupportedComponentsList[3] = rtl::OUString(
+        RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Paths")) ;
 
     return aSupportedComponentsList ;
 }
