@@ -4,9 +4,9 @@
  *
  *  $RCSfile: calc.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-27 09:45:25 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 15:55:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -650,7 +650,7 @@ SwCalcExp* SwCalc::VarLook( const String& rStr, USHORT ins )
         String sSourceName(sDBName.GetToken(0, DB_DELIM));
         String sTableName(sDBName.GetToken(0).GetToken(1, DB_DELIM));
         if( pMgr && sSourceName.Len() && sTableName.Len() &&
-            pMgr->OpenDataSource(sSourceName, sTableName, false))
+            pMgr->OpenDataSource(sSourceName, sTableName, -1, false))
         {
             String sColumnName( GetColumnName( sTmpName ));
             ASSERT (sColumnName.Len(), "DB-Spaltenname fehlt!");
