@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtcol.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:17:21 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 11:30:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,7 +94,9 @@ void SwTxtFmtColl::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
         return;
     }
 
-    int bNewParent = FALSE;
+    // --> OD 2006-06-16 #i66431# - adjust type of <bNewParent>
+    bool bNewParent( false );
+    // <--
     SvxULSpaceItem *pNewULSpace = 0, *pOldULSpace = 0;
     SvxLRSpaceItem *pNewLRSpace = 0, *pOldLRSpace = 0;
     SvxFontHeightItem* aFontSizeArr[3] = {0,0,0};
@@ -129,6 +131,10 @@ void SwTxtFmtColl::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
             aFontSizeArr[0] = (SvxFontHeightItem*)&pParent->Get( RES_CHRATR_FONTSIZE );
             aFontSizeArr[1] = (SvxFontHeightItem*)&pParent->Get( RES_CHRATR_CJK_FONTSIZE );
             aFontSizeArr[2] = (SvxFontHeightItem*)&pParent->Get( RES_CHRATR_CTL_FONTSIZE );
+            // --> OD 2006-06-16 #i66431#
+            // modify has to be propagated, because of new parent format.
+            bNewParent = true;
+            // <--
         }
         break;
 
