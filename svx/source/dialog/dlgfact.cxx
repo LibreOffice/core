@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgfact.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:07:38 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 11:59:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -776,6 +776,16 @@ void AbstractSvxMultiPathDialog_Impl::SetPath( const String& rPath )
 {
     pDlg->SetPath( rPath );
 }
+
+void AbstractSvxMultiPathDialog_Impl::EnableRadioButtonMode()
+{
+    pDlg->EnableRadioButtonMode();
+}
+
+void AbstractSvxMultiPathDialog_Impl::SetTitle( const String& rNewTitle )
+{
+    pDlg->SetText( rNewTitle );
+}
 //for SvxMultiPathDialog end
 
 //for SvxMultiFileDialog begin
@@ -802,6 +812,16 @@ void AbstractSvxMultiFileDialog_Impl::SetFiles( const String& rPath )
 void AbstractSvxMultiFileDialog_Impl::SetClassPathMode()
 {
     pDlg->SetClassPathMode();
+}
+
+void AbstractSvxMultiFileDialog_Impl::EnableRadioButtonMode()
+{
+    pDlg->EnableRadioButtonMode();
+}
+
+void AbstractSvxMultiFileDialog_Impl::SetTitle( const String& rNewTitle )
+{
+    pDlg->SetText( rNewTitle );
 }
 
 void AbstractSvxMultiFileDialog_Impl::SetHelpId( ULONG nHelpId )
