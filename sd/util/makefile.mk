@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.44 $
+#   $Revision: 1.45 $
 #
-#   last change: $Author: ihi $ $Date: 2006-06-29 11:24:15 $
+#   last change: $Author: obo $ $Date: 2006-07-13 09:54:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,7 @@ RESLIB1SRSFILES=\
     $(SRS)$/accessibility.srs	\
     $(SRS)$/notes.srs			\
     $(SRS)$/animui.srs			\
+    $(SRS)$/slideshow.srs		\
     $(SOLARCOMMONRESDIR)$/sfx.srs
 
 # --- StarDraw DLL
