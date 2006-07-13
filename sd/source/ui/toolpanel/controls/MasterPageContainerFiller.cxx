@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MasterPageContainerFiller.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 20:49:09 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 10:30:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,9 +98,21 @@ void MasterPageContainerFiller::RunNextStep (void)
         case DONE:
         case ERROR:
         default:
-            mrContainerAdapter.FillingDone();
-            mpScannerTask.reset();
             break;
+    }
+
+    // When the state has just been set to DONE or ERROR then tell the
+    // container that no more templates will be coming and stop the
+    // scanning.
+    switch (meState)
+    {
+        case DONE:
+        case ERROR:
+            if (mpScannerTask.get() != NULL)
+            {
+                mrContainerAdapter.FillingDone();
+                mpScannerTask.reset();
+            }
     }
 }
 
