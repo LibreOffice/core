@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.47 $
+#   $Revision: 1.48 $
 #
-#   last change: $Author: rt $ $Date: 2006-02-10 08:55:52 $
+#   last change: $Author: obo $ $Date: 2006-07-13 11:59:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -181,7 +181,7 @@ EXCEPTIONSFILES=\
     $(SLO)$/optjava.obj \
     $(SLO)$/docrecovery.obj	\
     $(SLO)$/treeopt.obj     \
-    $(SLO)$/srchdlg.obj  
+    $(SLO)$/srchdlg.obj
 
 .IF "$(GUI)"=="UNX"
 EXCEPTIONSFILES +=	$(SLO)$/sendreportunx.obj
@@ -312,7 +312,9 @@ SLOFILES=\
     $(SLO)$/svxgrahicitem.obj \
     $(SLO)$/frmsel.obj	\
     $(SLO)$/framelink.obj	\
-    $(SLO)$/framelinkarray.obj
+    $(SLO)$/framelinkarray.obj \
+    $(SLO)$/radiobtnbox.obj
+
 
 LIB1TARGET= $(SLB)$/$(TARGET).lib
 
@@ -387,7 +389,8 @@ LIB1OBJFILES= \
     $(SLO)$/macropg.obj \
     $(SLO)$/cfg.obj	\
     $(SLO)$/framelink.obj	\
-    $(SLO)$/framelinkarray.obj
+    $(SLO)$/framelinkarray.obj \
+    $(SLO)$/radiobtnbox.obj
 
 .IF "$(GUI)"=="UNX"
 LIB1OBJFILES +=	$(SLO)$/sendreportunx.obj
