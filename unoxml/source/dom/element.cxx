@@ -4,9 +4,9 @@
  *
  *  $RCSfile: element.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:45:53 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 16:57:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,8 +60,8 @@ namespace DOM
         if (m_aNodePtr != NULL)
         {
             OString o1 = OUStringToOString(name, RTL_TEXTENCODING_UTF8);
-            xmlChar *xName = (xmlChar*)o1.getStr();
-            aValue = OUString((sal_Char*)xmlGetProp(m_aNodePtr, xName), strlen((char*)xName), RTL_TEXTENCODING_UTF8);
+            xmlChar *xName = xmlGetProp(m_aNodePtr, (xmlChar*)o1.getStr());
+            aValue = OUString((sal_Char*)xName, strlen((char*)xName), RTL_TEXTENCODING_UTF8);
         }
         return aValue;
     }
