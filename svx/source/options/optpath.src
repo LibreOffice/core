@@ -1,12 +1,12 @@
-/*************************************************************************
+﻿/*************************************************************************
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
  *  $RCSfile: optpath.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:00:24 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 12:01:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,8 +88,8 @@ TabPage RID_SFXPAGE_PATH
     {
         Pos = MAP_APPFONT ( 115 , 165 ) ;
         Size = MAP_APPFONT ( 65 , 14 ) ;
-        Text [ de ] = "~Standard" ;
-        Text [ en-US ] = "~Default" ;
+        Text [ de ] = "Von %PRODUCTNAME verwendete Pfade" ;
+        Text [ en-US ] = "Paths used by %PRODUCTNAME" ;
         Text [ x-comment ] = " ";
     };
     FixedLine GB_STD
@@ -110,7 +110,11 @@ TabPage RID_SFXPAGE_PATH
         ImageBitmap = Bitmap { File = "lock_hc.bmp"; };
         MaskColor = STD_MASKCOLOR;
     };
-    Text [ x-comment ] = " ";
+    String STR_MULTIPATHDLG
+    {
+        Text [ de ] = "Pfade Bearbeiten: %1" ;
+        Text [ en-US ] = "Edit Paths: %1" ;
+    };
 };
 ErrorBox RID_SVXERR_OPT_DOUBLEPATHS
 {
