@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hommatrixtemplate.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:43:14 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 09:56:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,11 @@ namespace basegfx
             double                                          mfValue[RowSize];
 
         public:
-            ImplMatLine(sal_uInt16 nRow = 0L, ImplMatLine< RowSize >* pToBeCopied = 0L)
+            ImplMatLine()
+            {
+            }
+
+            ImplMatLine(sal_uInt16 nRow, ImplMatLine< RowSize >* pToBeCopied = 0L)
             {
                 if(pToBeCopied)
                 {
@@ -96,8 +100,6 @@ namespace basegfx
         {
             enum { RowSize = _RowSize };
 
-            sal_uInt32                                      mnRefCount;
-
             ImplMatLine< RowSize >                          maLine[RowSize - 1];
             ImplMatLine< RowSize >*                         mpLine;
 
@@ -126,24 +128,20 @@ namespace basegfx
                 return true;
             }
 
-            // This constructor is only used form the static identity matrix, thus
-            // the RefCount is set to 1 to never 'delete' this static incarnation.
             ImplHomMatrixTemplate()
-                :   mnRefCount(1),
-                    mpLine(0L)
+                :   mpLine(0L)
             {
                 // complete initialization with identity matrix, all lines
                 // were initialized with a trailing 1 followed by 0's.
-                for(sal_uInt16 a(1); a < (RowSize - 1); a++)
+                for(sal_uInt16 a(0); a < RowSize-1; a++)
                 {
-                    maLine[a].set(0, 0.0);
-                    maLine[a].set(a, 1.0);
+                    for(sal_uInt16 b(0); b < RowSize; b++)
+                        maLine[a].set(b, implGetDefaultValue(a, b) );
                 }
             }
 
             ImplHomMatrixTemplate(const ImplHomMatrixTemplate& rToBeCopied)
-                :   mnRefCount(0),
-                    mpLine(0L)
+                :   mpLine(0L)
             {
                 // complete initialization using copy
                 for(sal_uInt16 a(0); a < (RowSize - 1); a++)
@@ -164,10 +162,6 @@ namespace basegfx
                     delete mpLine;
                 }
             }
-
-            const sal_uInt32 getRefCount() const { return mnRefCount; }
-            void incRefCount() { mnRefCount++; }
-            void decRefCount() { mnRefCount--; }
 
             sal_uInt16 getEdgeLength() const { return RowSize; }
 
