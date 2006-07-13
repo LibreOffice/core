@@ -222,10 +222,7 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
      */
     protected void loadStyles(SxcDocument sxcDoc) {
 
-        org.w3c.dom.Document contentDom = sxcDoc.getContentDOM();
-
         styleCat = new StyleCatalog(25);
-
         NodeList nl = null;
         String families[] = new String[] {  SxcConstants.COLUMN_STYLE_FAMILY,
                                             SxcConstants.ROW_STYLE_FAMILY,
@@ -233,12 +230,17 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
         Class classes[]   = new Class[] {   ColumnStyle.class,
                                             RowStyle.class,
                                             CellStyle.class};
-
         /*
          * Process the content XML for any other style info.
-         * Should only be automatic types here.
          */
+        org.w3c.dom.Document contentDom = sxcDoc.getContentDOM();
         nl = contentDom.getElementsByTagName(TAG_OFFICE_AUTOMATIC_STYLES);
+        if (nl.getLength() != 0) {
+            styleCat.add(nl.item(0), families, classes, null, false);
+        }
+
+        org.w3c.dom.Document stylesDom = sxcDoc.getStyleDOM();
+        nl = stylesDom.getElementsByTagName(TAG_OFFICE_STYLES);
         if (nl.getLength() != 0) {
             styleCat.add(nl.item(0), families, classes, null, false);
         }
