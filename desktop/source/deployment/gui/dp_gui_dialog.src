@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_dialog.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:34:25 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 17:03:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,7 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
+#include "svtools/controldims.hrc"
 #include "dp_gui.hrc"
 
 ModelessDialog RID_DLG_PACKAGE_MANAGER
@@ -105,6 +105,7 @@ ModelessDialog RID_DLG_PACKAGE_MANAGER
         ImageBitmap = Bitmap { File = "plus.bmp"; };
         MASKCOLOR
     };
+
     Image RID_IMG_PLUS_HC
     {
         ImageBitmap = Bitmap { File = "plus_sch.bmp"; };
@@ -273,3 +274,194 @@ String RID_STR_EXPORTING_PACKAGES
     Text [ de ] = "Package(s) werden exportiert";
 };
 
+
+// Dialog layout
+// ---------------------------------------------------
+//  row 1 | multi line edit
+// ---------------------------------------------------
+//  row 2 | fixed text
+// ---------------------------------------------------
+//  row 3 | img   | fixed text   | fixed text | button
+// ----------------------------------------------------
+//  row 4 | img   | fixed text   | fixed text
+// ---------------------------------------------------
+//  row 5 |fixed line
+// ---------------------------------------------------
+//  row 6 |       |       |button  | button
+// ---------------------------------------------------
+//        | col 1 | col 2 | col3   | col4      | col5
+
+//To change the overall size of the multi line edit change
+//ROW1_HEIGHT and COL3_WIDTH
+
+#define ROW1_Y RSC_SP_DLG_INNERBORDER_TOP
+#define ROW1_HEIGHT 16*RSC_CD_FIXEDTEXT_HEIGHT
+#define ROW2_Y  ROW1_Y+ROW1_HEIGHT+RSC_SP_CTRL_GROUP_Y
+#define ROW2_HEIGHT RSC_CD_FIXEDTEXT_HEIGHT
+#define ROW3_Y ROW2_Y+ROW2_HEIGHT+RSC_SP_CTRL_GROUP_Y
+#define ROW3_HEIGHT 3*RSC_CD_FIXEDTEXT_HEIGHT
+#define ROW4_Y ROW3_Y+ROW3_HEIGHT+RSC_SP_CTRL_GROUP_Y
+#define ROW4_HEIGHT 3*RSC_CD_FIXEDTEXT_HEIGHT
+#define ROW5_Y ROW4_Y+ROW4_HEIGHT+RSC_SP_CTRL_GROUP_Y
+#define ROW5_HEIGHT RSC_CD_FIXEDTEXT_HEIGHT
+#define ROW6_Y ROW5_Y+ROW5_HEIGHT+RSC_SP_CTRL_GROUP_Y
+#define ROW6_HEIGHT RSC_CD_PUSHBUTTON_HEIGHT
+
+#define LIC_DLG_HEIGHT ROW6_Y+ROW6_HEIGHT+RSC_SP_DLG_INNERBORDER_BOTTOM
+
+#define COL1_X RSC_SP_DLG_INNERBORDER_LEFT
+#define IMG_ARROW_WIDTH 16
+#define COL1_WIDTH IMG_ARROW_WIDTH
+#define COL2_X COL1_X+COL1_WIDTH
+#define COL2_WIDTH 10
+#define COL3_X COL2_X+COL2_WIDTH+RSC_SP_CTRL_GROUP_X
+#define COL3_WIDTH 150
+#define COL4_X COL3_X+COL3_WIDTH
+#define COL4_WIDTH RSC_CD_PUSHBUTTON_WIDTH+RSC_SP_CTRL_GROUP_X
+#define COL5_X COL4_X+COL4_WIDTH
+
+#define LIC_DLG_WIDTH COL5_X+RSC_CD_PUSHBUTTON_WIDTH+RSC_SP_DLG_INNERBORDER_RIGHT
+#define BODYWIDTH LIC_DLG_WIDTH-RSC_SP_DLG_INNERBORDER_LEFT-RSC_SP_DLG_INNERBORDER_RIGHT
+
+ModalDialog RID_DLG_LICENSE
+{
+    Text [ en-US ] = "Extension Software License Agreement";
+    Text [ de ] = "Lizenzvertrag  Softwareerweiterung";
+
+    Size = MAP_APPFONT(LIC_DLG_WIDTH, LIC_DLG_HEIGHT);
+    OutputSize = TRUE;
+    SVLook = TRUE;
+    Moveable = TRUE;
+    Closeable = TRUE;
+    Sizeable = FALSE;
+//    Hide = TRUE;
+
+    MultiLineEdit ML_LICENSE
+    {
+        Pos = MAP_APPFONT(COL1_X, ROW1_Y);
+        Size = MAP_APPFONT(BODYWIDTH, ROW1_HEIGHT);
+        Border = TRUE;
+        VScroll = TRUE;
+        ReadOnly = TRUE;
+    };
+
+    FixedText FT_LICENSE_HEADER
+    {
+        Pos = MAP_APPFONT(COL1_X, ROW2_Y);
+        Size = MAP_APPFONT(COL1_WIDTH+COL2_WIDTH+COL3_WIDTH+COL4_WIDTH, ROW2_HEIGHT);
+        NoLabel = TRUE;
+        Text [ en-US ] = "Please follow these steps to proceed with the installation of the extension:";
+        Text [ de ]    = "Bitte führen Sie die folgenden Schritte aus, um mit der Installation der Erweiterung fortzufahren:";
+    };
+    FixedText FT_LICENSE_BODY_1
+    {
+        Pos = MAP_APPFONT(COL2_X, ROW3_Y);
+        Size = MAP_APPFONT( COL2_WIDTH, ROW3_HEIGHT );
+        NoLabel = TRUE;
+        Text [ en-US ] = "1.";
+        Text [ de ]    = "1.";
+    };
+    //spans col3 + col4
+    FixedText FT_LICENSE_BODY_1_TXT
+    {
+        Pos = MAP_APPFONT(COL3_X, ROW3_Y);
+        Size = MAP_APPFONT(COL3_WIDTH+COL4_WIDTH, ROW3_HEIGHT);
+        WordBreak = TRUE;
+        NoLabel = TRUE;
+        Text [ en-US ] = "Read the complete License Agreement. Use the scroll bar or the \'Scroll Down\' button in this dialog to view the entire license text.";
+        Text [ de ]    = "Lesen Sie den gesamten Lizenzvertrag. Verwenden Sie die Bildlaufleiste oder die \"Blättern\" Schaltfläche in diesem Dialog, um den gesamten Text sichtbar zu machen.";
+    };
+    FixedText FT_LICENSE_BODY_2
+    {
+        Pos = MAP_APPFONT(COL2_X, ROW4_Y);
+        Size = MAP_APPFONT(COL2_WIDTH, ROW4_HEIGHT);
+        NoLabel = TRUE;
+        Text [ en-US ] = "2.";
+        Text [ de ]    = "2.";
+    };
+    FixedText FT_LICENSE_BODY_2_TXT
+    {
+        Pos = MAP_APPFONT(COL3_X, ROW4_Y);
+        Size = MAP_APPFONT(COL3_WIDTH+COL4_WIDTH, ROW4_HEIGHT);
+        WordBreak = TRUE;
+        NoLabel = TRUE;
+        Text [ en-US ] = "Accept the License Agreement for the extension by pressing the \'Accept\' button.";
+        Text [ de ]    = "Akzeptieren Sie den Lizenzvertrag der Erweiterung, indem Sie die \"Akzeptieren\" Schaltfläche betätigen.";
+
+    };
+    PushButton PB_LICENSE_DOWN
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT(COL5_X , ROW3_Y) ;
+        Size = MAP_APPFONT(RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT) ;
+        Text [ de ] = "~Blättern";
+        Text [ en-US ] = "~Scroll Down";
+
+    };
+    FixedLine FL_LICENSE
+    {
+        Pos = MAP_APPFONT ( 0, ROW5_Y) ;
+        Size = MAP_APPFONT ( LIC_DLG_WIDTH, ROW5_HEIGHT ) ;
+    };
+
+    FixedImage FI_LICENSE_ARROW1
+    {
+        Pos = MAP_APPFONT (COL1_X, ROW3_Y) ;
+        Size = (16, 16);
+        Fixed = Image
+        {
+            ImageBitmap = Bitmap { File = "sc06300.png"; };
+            MASKCOLOR
+        };
+    };
+
+    FixedImage FI_LICENSE_ARROW2
+    {
+        Pos = MAP_APPFONT (COL1_X, ROW4_Y) ;
+        Size = (16,16);
+        Fixed = Image
+        {
+            ImageBitmap = Bitmap { File = "sc06300.png"; };
+            MASKCOLOR
+        };
+    };
+
+    Image IMG_LICENCE_ARROW_HC
+    {
+        ImageBitmap = Bitmap { File = "sch06300.png"; };
+        MASKCOLOR
+    };
+
+    OKButton BTN_LICENSE_ACCEPT
+    {
+        Pos = MAP_APPFONT(COL4_X, ROW6_Y);
+        Size = MAP_APPFONT(RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+
+        TabStop = TRUE;
+        DefButton = TRUE;
+        Text [ en-US ] = "Accept";
+        Text [ de ] = "Akzeptieren";
+    };
+
+    CancelButton BTN_LICENSE_DECLINE
+    {
+        Pos = MAP_APPFONT(COL5_X, ROW6_Y);
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+        Text [ de ]= "Ablehnen" ;
+        Text [ en-US ] = "Decline" ;
+        TabStop = TRUE;
+    };
+
+};
+
+
+
+WarningBox WARNINGBOX_NOSHAREDALLOWED
+{
+    Buttons = WB_OK ;
+    DefButton = WB_DEF_OK;
+    Message [ de ] ="Die Erweiterung %NAME kann nicht unter \"%PRODUCTNAME Packages\" installiert werden, da jeder Anwender "
+        "der Lizenz der Extension zustimmen muss. Die Erweiterung wird nicht installiert";
+    Message[ en-US ] ="The extension %NAME cannot be installed under \"%PRODUCTNAME Packages\", because "
+        "every user has to agree to the license agreement of the extension. The extension will not be installed.";
+};
