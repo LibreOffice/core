@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_dialog.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-08 09:58:42 $
+ *  last change: $Author: obo $ $Date: 2006-07-13 17:03:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 
 #include "svtools/controldims.hrc"
 #include "dp_gui.h"
+#include "dp_gui_shared.hxx"
 #include "rtl/uri.hxx"
 #include "cppuhelper/exc_hlp.hxx"
 #include "cppuhelper/implbase1.hxx"
@@ -50,10 +51,12 @@
 #include "svtools/svtools.hrc"
 #include "com/sun/star/container/XChild.hpp"
 #include "com/sun/star/ui/dialogs/XFilePicker.hpp"
+#include "com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp"
 #include "com/sun/star/ui/dialogs/XFilterManager.hpp"
 #include "com/sun/star/ui/dialogs/XFolderPicker.hpp"
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 #include "com/sun/star/ui/dialogs/ExecutableDialogResults.hpp"
+#include "com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp"
 #include "com/sun/star/ucb/XContent.hpp"
 #include "com/sun/star/ucb/XContentAccess.hpp"
 #include "com/sun/star/ucb/NameClash.hpp"
@@ -77,6 +80,7 @@ namespace dp_gui {
 
 const long ITEM_ID_PACKAGE = 1;
 const long ITEM_ID_STATUS = 2;
+
 
 //______________________________________________________________________________
 DialogImpl::DialogImpl(
@@ -605,7 +609,7 @@ void DialogImpl::clickAdd( USHORT )
         return;
 
     ::rtl::Reference<ProgressCommandEnv> currentCmdEnv(
-        new ProgressCommandEnv( this, m_strAddingPackages ) );
+        new ProgressCommandEnv( this, m_strAddingPackages, context ) );
     currentCmdEnv->showProgress( files.getLength() );
     Reference<task::XAbortChannel> xAbortChannel(
         xPackageManager->createAbortChannel() );
@@ -659,7 +663,7 @@ void DialogImpl::clickRemove( USHORT )
     }
 
     ::rtl::Reference<ProgressCommandEnv> currentCmdEnv(
-        new ProgressCommandEnv( this, m_strRemovingPackages ) );
+        new ProgressCommandEnv( this, m_strRemovingPackages, ::rtl::OUString() ) );
     currentCmdEnv->showProgress( to_be_removed.size() );
     for ( ::std::size_t pos = 0;
           !currentCmdEnv->isAborted() && pos < to_be_removed.size(); ++pos )
@@ -688,7 +692,7 @@ void DialogImpl::clickEnableDisable( USHORT id )
     ::rtl::Reference<ProgressCommandEnv> currentCmdEnv(
         new ProgressCommandEnv( this, id == RID_BTN_ENABLE
                                 ? m_strEnablingPackages
-                                : m_strDisablingPackages ) );
+                                : m_strDisablingPackages, ::rtl::OUString() ) );
     currentCmdEnv->showProgress( selection.getLength() );
     for ( sal_Int32 pos = 0;
           !currentCmdEnv->isAborted() && pos < selection.getLength(); ++pos )
@@ -734,7 +738,7 @@ bool DialogImpl::solarthread_raiseExportPickers(
     else // single item selected
     {
         const Any mode( static_cast<sal_Int16>(
-                      ui::dialogs::TemplateDescription::FILESAVE_SIMPLE ) );
+                      ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION ) );
         const Reference<ui::dialogs::XFilePicker> xFilePicker(
             m_xComponentContext->getServiceManager()
             ->createInstanceWithArgumentsAndContext(
@@ -744,14 +748,24 @@ bool DialogImpl::solarthread_raiseExportPickers(
         xFilePicker->setTitle( m_strExportPackage );
         xFilePicker->setMultiSelectionMode(false);
 
+        const Reference<ui::dialogs::XFilePickerControlAccess> xFPControlAccess(
+            xFilePicker, UNO_QUERY_THROW );
+        xFPControlAccess->setValue(
+            ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION,
+            0, Any(true));
+
         ::rtl::Reference<ProgressCommandEnv> currentCmdEnv(
-            new ProgressCommandEnv( this, m_strExportPackage ) );
+            new ProgressCommandEnv( this, m_strExportPackage, ::rtl::OUString()) );
         OSL_ASSERT( selection.getLength() == 1 );
         Reference<deployment::XPackage> const & xPackage = selection[ 0 ];
 
         // set filter:
         const Reference<deployment::XPackageTypeInfo> xPackageType(
             xPackage->getPackageType() );
+        bool isLegacyBundle = false;
+        bool isBundle = false;
+        OUString bundleext(RTL_CONSTASCII_USTRINGPARAM(".oxt"));
+        OUString bundlefilterext(RTL_CONSTASCII_USTRINGPARAM("*.oxt"));
         if (xPackageType.is()) {
             const Reference<ui::dialogs::XFilterManager> xFilterManager(
                 xFilePicker, UNO_QUERY_THROW );
@@ -759,10 +773,24 @@ bool DialogImpl::solarthread_raiseExportPickers(
                 // All files at top:
                 xFilterManager->appendFilter(
                     StrAllFiles::get(), OUSTR("*.*") );
+
                 // then package filter:
-                xFilterManager->appendFilter(
-                    xPackageType->getShortDescription(),
-                    xPackageType->getFileFilter() );
+                if (xPackageType->getMediaType().equals(
+                        OUSTR("application/vnd.sun.star.legacy-package-bundle"))) {
+                    isLegacyBundle = true;
+                    xFilterManager->appendFilter(
+                        xPackageType->getShortDescription(),
+                        bundlefilterext);
+                } else {
+                    if (xPackageType->getMediaType().equals(
+                            OUSTR("application/vnd.sun.star.package-bundle")))
+                        isBundle = true;
+
+                    xFilterManager->appendFilter(
+                        xPackageType->getShortDescription(),
+                        xPackageType->getFileFilter() );
+                }
+
                 xFilterManager->setCurrentFilter(
                     xPackageType->getShortDescription() );
             }
@@ -775,8 +803,25 @@ bool DialogImpl::solarthread_raiseExportPickers(
 
         // set default selection:
         ::ucb::Content sourceContent( xPackage->getURL(), currentCmdEnv.get() );
-        xFilePicker->setDefaultName(
-            sourceContent.getPropertyValue( OUSTR("Title") ).get<OUString>() );
+        OUString defaultname(sourceContent.getPropertyValue(
+                                 OUSTR("Title") ).get<OUString>());
+        OUString legacyext(RTL_CONSTASCII_USTRINGPARAM(".zip"));
+        OUString legacyextlong(RTL_CONSTASCII_USTRINGPARAM(".uno.zip"));
+        OUString bundleextold(RTL_CONSTASCII_USTRINGPARAM(".uno.pkg"));
+        if (isLegacyBundle && defaultname.lastIndexOf(legacyext)>0) {
+            if (defaultname.lastIndexOf(legacyextlong)>0) {
+                defaultname = defaultname.replaceAt(
+                    defaultname.lastIndexOf(legacyextlong), 8, bundleext);
+            } else {
+                defaultname = defaultname.replaceAt(
+                    defaultname.lastIndexOf(legacyext), 4, bundleext);
+            }
+        } else if (isBundle && defaultname.lastIndexOf(bundleextold)>0) {
+                defaultname = defaultname.replaceAt(
+                    defaultname.lastIndexOf(bundleextold), 8, bundleext);
+        }
+        xFilePicker->setDefaultName(defaultname);
+
         if (xFilePicker->execute() != ui::dialogs::ExecutableDialogResults::OK)
             return false; // cancelled
 
@@ -821,7 +866,7 @@ void DialogImpl::clickExport( USHORT )
         return;
 
     ::rtl::Reference<ProgressCommandEnv> currentCmdEnv(
-        new ProgressCommandEnv( this, m_strExportingPackages ) );
+        new ProgressCommandEnv( this, m_strExportingPackages, ::rtl::OUString() ) );
     currentCmdEnv->showProgress( selection.getLength() );
     for ( sal_Int32 pos = 0;
           !currentCmdEnv->isAborted() && pos < selection.getLength(); ++pos )
@@ -909,21 +954,6 @@ DialogImpl::ThreadedPushButton::~ThreadedPushButton()
     }
 }
 
-namespace {
-struct DeploymentGuiResMgr :
-        public rtl::StaticWithInit< ResMgr *, DeploymentGuiResMgr > {
-    ResMgr * operator () () {
-        return ResMgr::CreateResMgr( "deploymentgui" LIBRARY_SOLARUPD() );
-    }
-};
-
-struct BrandName : public rtl::StaticWithInit<const OUString, BrandName> {
-    const OUString operator () () {
-        return ::utl::ConfigManager::GetDirectConfigProperty(
-            ::utl::ConfigManager::PRODUCTNAME ).get<OUString>();
-    }
-};
-} // anon namespace
 
 //==============================================================================
 ResId DialogImpl::getResId( USHORT id )
