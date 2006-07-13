@@ -2,9 +2,9 @@
 #
 #   $RCSfile: check.pl,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: hr $ $Date: 2005-12-28 18:06:47 $
+#   last change: $Author: obo $ $Date: 2006-07-13 12:04:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ if (-d "$StartDir") {
     if (-d "$StartDir/$OperatingSystem/bin") {
     my @binarylist = ( "idlc","idlcpp","cppumaker","javamaker","rdbmaker",
                "sp2bv","regcompare","regmerge","regview","autodoc",
-               "xml2cmp", "unoapploader" );
+               "xml2cmp", "unoapploader", "uno-skeletonmaker" );
 
     foreach $i (@binarylist)
     {
