@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hangulhanjadlg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:12:02 $
+ *  last change: $Author: obo $ $Date: 2006-07-14 08:43:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -905,6 +905,7 @@ namespace svx
     void HangulHanjaConversionDialog::SetByCharacter( sal_Bool _bByCharacter )
     {
         m_aReplaceByChar.Check( _bByCharacter );
+        m_aSuggestions.DisplayListBox( !_bByCharacter );
     }
 
     //-------------------------------------------------------------------------
