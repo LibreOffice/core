@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macropg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:18:24 $
+ *  last change: $Author: obo $ $Date: 2006-07-14 07:17:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,23 +41,22 @@
 #include "macropg.hxx"
 #undef ITEMID_MACRO
 
+#ifndef _SV_MSGBOX_HXX
+#include <vcl/msgbox.hxx>
+#endif
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
 #ifndef _SV_MEDIT_HXX
 #include <svtools/svmedit.hxx>
+#endif
+#ifndef _EITEM_HXX
+#include <svtools/eitem.hxx>
 #endif
 
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/macrconf.hxx>
 #include <sfx2/sfxdefs.hxx>
-
-#ifndef _HEADERTABLISTBOX_HXX
-#include "headertablistbox.hxx"
-#endif
-#ifndef _MACROPG_IMPL_HXX
-#include "macropg_impl.hxx"
-#endif
 
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -69,23 +68,51 @@
 #include "helpid.hrc"
 #include "dialogs.hrc"
 
+#ifndef _HEADERTABLISTBOX_HXX
+#include "headertablistbox.hxx"
+#endif
+#ifndef _MACROPG_IMPL_HXX
+#include "macropg_impl.hxx"
+#endif
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-_SvxMacroTabPage_Impl::_SvxMacroTabPage_Impl( void ) :
+static ::rtl::OUString aVndSunStarUNO =
+    ::rtl::OUString::createFromAscii( "vnd.sun.star.UNO:" );
+static ::rtl::OUString aVndSunStarScript =
+    ::rtl::OUString::createFromAscii( "vnd.sun.star.script:" );
+
+_SvxMacroTabPage_Impl::_SvxMacroTabPage_Impl( const SfxItemSet& rAttrSet ) :
+    pAssignFT( NULL ),
     pAssignPB( NULL ),
+    pAssignComponentPB( NULL ),
     pDeletePB( NULL ),
+    pMacroImg( NULL ),
+    pComponentImg( NULL ),
+    pMacroImg_h( NULL ),
+    pComponentImg_h( NULL ),
     pStrEvent( NULL ),
     pAssignedMacro( NULL ),
     pEventLB( NULL ),
-    bReadOnly( FALSE )
+    bReadOnly( FALSE ),
+    bIDEDialogMode( FALSE )
 {
+    const SfxPoolItem* pItem;
+    if ( SFX_ITEM_SET == rAttrSet.GetItemState( SID_ATTR_MACROITEM, FALSE, &pItem ) )
+        bIDEDialogMode = ((const SfxBoolItem*)pItem)->GetValue();
 }
 
 _SvxMacroTabPage_Impl::~_SvxMacroTabPage_Impl()
 {
+    delete pAssignFT;
     delete pAssignPB;
+    delete pAssignComponentPB;
     delete pDeletePB;
+    delete pMacroImg;
+    delete pComponentImg;
+    delete pMacroImg_h;
+    delete pComponentImg_h;
     delete pStrEvent;
     delete pAssignedMacro;
     delete pEventLB;
@@ -158,9 +185,8 @@ long _HeaderTabListBox::Notify( NotifyEvent& rNEvt )
 
 _HeaderTabListBox::_HeaderTabListBox( Window* pParent, const ResId& rId ) :
     Control( pParent, rId ),
-
     maListBox( this, WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP ),
-    maHeaderBar( this, WB_BOTTOMBORDER )
+    maHeaderBar( this, WB_BUTTONSTYLE | WB_BOTTOMBORDER )
 {
 //  maListBox.SetWindowBits( WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP );
 }
@@ -213,6 +239,8 @@ void _SvxMacroTabPage::EnableButtons( const String& /*rLangName*/ )
         mpImpl->pDeletePB->Enable( 0 != pEventMacro && !mpImpl->bReadOnly );
 
         mpImpl->pAssignPB->Enable( !mpImpl->bReadOnly );
+        if( mpImpl->pAssignComponentPB )
+            mpImpl->pAssignComponentPB->Enable( !mpImpl->bReadOnly );
     }
 }
 
@@ -225,7 +253,7 @@ _SvxMacroTabPage::_SvxMacroTabPage( Window* pParent, const ResId& rResId, const 
     bAppEvents(false),
     bInitialized(false)
 {
-    mpImpl = new _SvxMacroTabPage_Impl;
+    mpImpl = new _SvxMacroTabPage_Impl( rAttrSet );
 }
 
 _SvxMacroTabPage::~_SvxMacroTabPage()
@@ -414,6 +442,75 @@ BOOL _SvxMacroTabPage::IsReadOnly() const
     return mpImpl->bReadOnly;
 }
 
+
+class IconLBoxString : public SvLBoxString
+{
+    Image* m_pMacroImg;
+    Image* m_pComponentImg;
+    Image* m_pMacroImg_h;
+    Image* m_pComponentImg_h;
+    int m_nxImageOffset;
+
+    public:
+        IconLBoxString( SvLBoxEntry* pEntry, USHORT nFlags, const String& sText,
+            Image* pMacroImg, Image* pComponentImg,
+            Image* pMacroImg_h, Image* pComponentImg_h );
+        virtual void Paint(const Point& aPos, SvLBox& aDevice, USHORT nFlags, SvLBoxEntry* pEntry );
+};
+
+
+IconLBoxString::IconLBoxString( SvLBoxEntry* pEntry, USHORT nFlags, const String& sText,
+    Image* pMacroImg, Image* pComponentImg, Image* pMacroImg_h, Image* pComponentImg_h )
+        : SvLBoxString( pEntry, nFlags, sText )
+        , m_pMacroImg( pMacroImg )
+        , m_pComponentImg( pComponentImg )
+        , m_pMacroImg_h( pMacroImg_h )
+        , m_pComponentImg_h( pComponentImg_h )
+{
+    m_nxImageOffset = 20;
+}
+
+//===============================================
+void IconLBoxString::Paint( const Point& aPos, SvLBox& aDevice,
+                               USHORT nFlags, SvLBoxEntry* pEntry )
+{
+    String aTxt( GetText() );
+    if( aTxt.Len() )
+    {
+        ::rtl::OUString aURL( aTxt );
+        sal_Int32 nIndex = aURL.indexOf( aVndSunStarUNO );
+        bool bUNO = nIndex == 0;
+
+        Wallpaper aBackground = aDevice.GetBackground();
+        Color     aColor      = aBackground.GetColor();
+        BOOL      bHC         = aColor.IsDark();
+        const Image* pImg;
+        if( bHC )
+            pImg = bUNO ? m_pComponentImg_h : m_pMacroImg_h;
+        else
+            pImg = bUNO ? m_pComponentImg : m_pMacroImg;
+        aDevice.DrawImage( aPos, *pImg );
+
+        ::rtl::OUString aPureMethod;
+        if( bUNO )
+        {
+            sal_Int32 nBegin = aVndSunStarUNO.getLength();
+            aPureMethod = aURL.copy( nBegin );
+        }
+        else
+        {
+            sal_Int32 nBegin = aVndSunStarScript.getLength();
+            aPureMethod = aURL.copy( nBegin );
+            aPureMethod = aPureMethod.copy( 0, aPureMethod.indexOf( '?' ) );
+        }
+
+        Point aPnt(aPos);
+        aPnt.X() += m_nxImageOffset;
+        aDevice.DrawText( aPnt, aPureMethod );
+    }
+}
+
+
 // displays the app events if appEvents=true, otherwise displays the doc events
 void _SvxMacroTabPage::DisplayAppEvents( bool appEvents)
 {
@@ -470,7 +567,9 @@ void _SvxMacroTabPage::DisplayAppEvents( bool appEvents)
         ::rtl::OUString* pEventName = new ::rtl::OUString( eventName );
         _pE->SetUserData( (void*)pEventName );
         String sNew( eventURL );
-        _pE->ReplaceItem( new SvLBoxString( _pE, 0, sNew ), LB_MACROS_ITEMPOS );
+        _pE->ReplaceItem( new IconLBoxString( _pE, 0, sNew,
+            mpImpl->pMacroImg, mpImpl->pComponentImg,
+            mpImpl->pMacroImg_h, mpImpl->pComponentImg_h ), LB_MACROS_ITEMPOS );
         rListBox.GetModel()->InvalidateEntry( _pE );
         rListBox.Select( _pE );
         rListBox.MakeVisible( _pE );
@@ -501,8 +600,18 @@ IMPL_STATIC_LINK( _SvxMacroTabPage, SelectEvent_Impl, SvTabListBox*, EMPTYARG )
     return 0;
 }
 
-// handler for double click on the listbox, and for the assign/delete buttons
 IMPL_STATIC_LINK( _SvxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
+{
+    return GenericHandler_Impl( pThis, pBtn );
+}
+
+IMPL_STATIC_LINK( _SvxMacroTabPage, DoubleClickHdl_Impl, SvTabListBox *, pTabListBox )
+{
+    return GenericHandler_Impl( pThis, NULL );
+}
+
+// handler for double click on the listbox, and for the assign/delete buttons
+long _SvxMacroTabPage::GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton* pBtn )
 {
     _SvxMacroTabPage_Impl*    pImpl = pThis->mpImpl;
     SvHeaderTabListBox& rListBox = pImpl->pEventLB->GetListBox();
@@ -539,13 +648,30 @@ IMPL_STATIC_LINK( _SvxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
             sEventURL = h_it->second.second;
         }
     }
+
+    bool bDoubleClick = (pBtn == NULL);
+    bool bUNOAssigned = (sEventURL.indexOf( aVndSunStarUNO ) == 0);
     if( pBtn == pImpl->pDeletePB )
     {
         // delete pressed
         sEventType = ::rtl::OUString::createFromAscii("Script");
         sEventURL = ::rtl::OUString();
         if(!pThis->bAppEvents)
+            pThis->bDocModified = true;
+    }
+    else if( pBtn == pImpl->pAssignComponentPB || (bDoubleClick && bUNOAssigned) )
+    {
+        AssignComponentDialog* pAssignDlg = new AssignComponentDialog( pThis, sEventURL );
+
+        short ret = pAssignDlg->Execute();
+        if( ret )
+        {
+            sEventType = ::rtl::OUString::createFromAscii("UNO");
+            sEventURL = pAssignDlg->getURL();
+            if(!pThis->bAppEvents)
                 pThis->bDocModified = true;
+        }
+        delete pAssignDlg;
     }
     else if( bAssEnabled )
     {
@@ -559,7 +685,7 @@ IMPL_STATIC_LINK( _SvxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
                 sEventType = ::rtl::OUString::createFromAscii("Script");
                 sEventURL = pDlg->GetScriptURL();
                 if(!pThis->bAppEvents)
-                        pThis->bDocModified = true;
+                    pThis->bDocModified = true;
             }
         }
     }
@@ -580,7 +706,11 @@ IMPL_STATIC_LINK( _SvxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
 
     // update the listbox entry
     pImpl->pEventLB->SetUpdateMode( FALSE );
-    pE->ReplaceItem( new SvLBoxString( pE, 0, sEventURL ), LB_MACROS_ITEMPOS );
+    // pE->ReplaceItem( new SvLBoxString( pE, 0, sEventURL ), LB_MACROS_ITEMPOS );
+    pE->ReplaceItem( new IconLBoxString( pE, 0, sEventURL,
+            pImpl->pMacroImg, pImpl->pComponentImg,
+            pImpl->pMacroImg_h, pImpl->pComponentImg_h ), LB_MACROS_ITEMPOS );
+
     rListBox.GetModel()->InvalidateEntry( pE );
     rListBox.Select( pE );
     rListBox.MakeVisible( pE );
@@ -602,7 +732,9 @@ void _SvxMacroTabPage::InitAndSetHandler( Reference< container::XNameReplace> xA
     Link                aLnk(STATIC_LINK(this, _SvxMacroTabPage, AssignDeleteHdl_Impl ));
     mpImpl->pDeletePB->SetClickHdl(    aLnk );
     mpImpl->pAssignPB->SetClickHdl(    aLnk );
-    rListBox.SetDoubleClickHdl( aLnk );
+    if( mpImpl->pAssignComponentPB )
+        mpImpl->pAssignComponentPB->SetClickHdl( aLnk );
+    rListBox.SetDoubleClickHdl( STATIC_LINK(this, _SvxMacroTabPage, DoubleClickHdl_Impl ) );
 
     rListBox.SetSelectHdl( STATIC_LINK( this, _SvxMacroTabPage, SelectEvent_Impl ));
 
@@ -616,6 +748,10 @@ void _SvxMacroTabPage::InitAndSetHandler( Reference< container::XNameReplace> xA
 
     mpImpl->pEventLB->Show();
     mpImpl->pEventLB->ConnectElements();
+
+    short nMinLineHeight = mpImpl->pMacroImg->GetSizePixel().Height() + 2;
+    if( nMinLineHeight > mpImpl->pEventLB->GetListBox().GetEntryHeight() )
+        mpImpl->pEventLB->GetListBox().SetEntryHeight( nMinLineHeight );
 
     mpImpl->pEventLB->Enable( TRUE );
 
@@ -692,13 +828,36 @@ Any _SvxMacroTabPage::GetPropsByName( const ::rtl::OUString& eventName, const Ev
 SvxMacroTabPage::SvxMacroTabPage( Window* pParent, const ResId& rResId, const SfxItemSet& rSet, Reference< container::XNameReplace > xNameReplace, sal_uInt16 nSelectedIndex )
     : _SvxMacroTabPage( pParent, rResId, rSet )
 {
-    mpImpl->pStrEvent            = new String(                    SVX_RES( STR_EVENT ) );
-    mpImpl->pAssignedMacro        = new String(                    SVX_RES( STR_ASSMACRO ) );
-    mpImpl->pEventLB            = new _HeaderTabListBox( this,    SVX_RES( LB_EVENT ) );
-    mpImpl->pAssignPB            = new PushButton( this,            SVX_RES( PB_ASSIGN ) );
-    mpImpl->pDeletePB            = new PushButton( this,            SVX_RES( PB_DELETE ) );
+    mpImpl->pStrEvent           = new String(                       SVX_RES( STR_EVENT ) );
+    mpImpl->pAssignedMacro      = new String(                       SVX_RES( STR_ASSMACRO ) );
+    mpImpl->pEventLB            = new _HeaderTabListBox( this,      SVX_RES( LB_EVENT ) );
+    mpImpl->pAssignFT           = new FixedText( this,              SVX_RES( FT_ASSIGN ) );
+    mpImpl->pAssignPB           = new PushButton( this,             SVX_RES( PB_ASSIGN ) );
+    mpImpl->pDeletePB           = new PushButton( this,             SVX_RES( PB_DELETE ) );
+    mpImpl->pAssignComponentPB  = new PushButton( this,         SVX_RES( PB_ASSIGN_COMPONENT ) );
+    mpImpl->pMacroImg           = new Image(                        SVX_RES(IMG_MACRO) );
+    mpImpl->pComponentImg       = new Image(                        SVX_RES(IMG_COMPONENT) );
+    mpImpl->pMacroImg_h         = new Image(                        SVX_RES(IMG_MACRO_H) );
+    mpImpl->pComponentImg_h     = new Image(                        SVX_RES(IMG_COMPONENT_H) );
 
     FreeResource();
+
+    if( !mpImpl->bIDEDialogMode )
+    {
+        // Size aSizeAssign;
+        // Point aPosAssign;
+        // mpImpl->pAssignPB->GetPosSizePixel( aPosAssign, aSizeAssign );
+        Point aPosAssign = mpImpl->pAssignPB->GetPosPixel();
+        Point aPosComp = mpImpl->pAssignComponentPB->GetPosPixel();
+
+        Point aPosDelete = mpImpl->pDeletePB->GetPosPixel();
+        long nYDiff = aPosComp.Y() - aPosAssign.Y();
+        aPosDelete.Y() -= nYDiff;
+        mpImpl->pDeletePB->SetPosPixel( aPosDelete );
+
+        mpImpl->pAssignComponentPB->Hide();
+        mpImpl->pAssignComponentPB->Disable();
+    }
 
     // must be done after FreeResource is called
     InitResources();
@@ -722,8 +881,9 @@ SfxTabPage* SvxMacroTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet
     return new SvxMacroTabPage( pParent, SVX_RES( RID_SVXPAGE_MACROASSIGN ), rAttrSet, xNameReplace, nSelectedIndex );
 }
 
-SvxMacroAssignDlg::SvxMacroAssignDlg( Window* pParent, SfxItemSet& rSet, Reference< container::XNameReplace > xNameReplace, sal_uInt16 nSelectedIndex  )
-    : SfxSingleTabDialog( pParent, rSet, 0 )
+SvxMacroAssignDlg::SvxMacroAssignDlg( Window* pParent, SfxItemSet& rSet,
+    Reference< container::XNameReplace > xNameReplace, sal_uInt16 nSelectedIndex  )
+        : SvxMacroAssignSingleTabDialog( pParent, rSet, 0 )
 {
     SetTabPage( SvxMacroTabPage::Create( this, rSet, xNameReplace, nSelectedIndex ) );
 }
@@ -732,3 +892,151 @@ SvxMacroAssignDlg::~SvxMacroAssignDlg()
 {
 }
 
+
+//===============================================
+
+IMPL_LINK(AssignComponentDialog, ButtonHandler, Button *, EMPTYARG)
+{
+    ::rtl::OUString aMethodName = maMethodEdit.GetText();
+    maURL = ::rtl::OUString();
+    if( aMethodName.getLength() )
+    {
+        maURL = aVndSunStarUNO;
+        maURL += aMethodName;
+    }
+    EndDialog(1);
+    return 0;
+}
+
+AssignComponentDialog::AssignComponentDialog( Window * pParent, const ::rtl::OUString& rURL )
+    : ModalDialog( pParent, SVX_RES( RID_DLG_ASSIGNCOMPONENT ) )
+    , maMethodLabel( this, SVX_RES( FT_METHOD ) )
+    , maMethodEdit( this, SVX_RES( EDIT_METHOD ) )
+    , maOKButton( this, SVX_RES( RID_PB_OK ) )
+    , maCancelButton( this, SVX_RES( RID_PB_CANCEL ) )
+    , maHelpButton( this, SVX_RES( RID_PB_HELP ) )
+    , maURL( rURL )
+{
+    FreeResource();
+    maOKButton.SetClickHdl(LINK(this, AssignComponentDialog, ButtonHandler));
+
+    ::rtl::OUString aMethodName;
+    if( maURL.getLength() )
+    {
+        sal_Int32 nIndex = maURL.indexOf( aVndSunStarUNO );
+        if( nIndex == 0 )
+        {
+            sal_Int32 nBegin = aVndSunStarUNO.getLength();
+            aMethodName = maURL.copy( nBegin );
+        }
+    }
+    maMethodEdit.SetText( aMethodName, Selection( 0, SELECTION_MAX ) );
+}
+
+AssignComponentDialog::~AssignComponentDialog()
+{
+}
+
+// -----------------------------------------------------------------------
+
+IMPL_LINK( SvxMacroAssignSingleTabDialog, OKHdl_Impl, Button *, pButton )
+{
+    (void)pButton; //unused
+    pPage->FillItemSet( *pOutSet );
+    EndDialog( RET_CANCEL );
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
+SvxMacroAssignSingleTabDialog::SvxMacroAssignSingleTabDialog
+    ( Window *pParent, const SfxItemSet& rSet, sal_uInt16 nUniqueId ) :
+        SfxModalDialog( pParent, nUniqueId, WinBits( WB_STDMODAL | WB_3DLOOK ) ),
+        pFixedLine      ( 0 ),
+        pOKBtn          ( 0 ),
+        pCancelBtn      ( 0 ),
+        pHelpBtn        ( 0 ),
+        pPage           ( 0 ),
+        pOptions        ( &rSet ),
+        pOutSet         ( 0 )
+{}
+
+
+// -----------------------------------------------------------------------
+
+SvxMacroAssignSingleTabDialog::~SvxMacroAssignSingleTabDialog()
+{
+    delete pFixedLine;
+    delete pOKBtn;
+    delete pCancelBtn;
+    delete pHelpBtn;
+    delete pPage;
+}
+
+// -----------------------------------------------------------------------
+
+// According to SfxSingleTabDialog
+void SvxMacroAssignSingleTabDialog::SetTabPage( SfxTabPage* pTabPage )
+{
+    pFixedLine = new FixedLine( this );
+
+    pOKBtn = new OKButton( this, WB_DEFBUTTON );
+    pOKBtn->SetClickHdl( LINK( this, SvxMacroAssignSingleTabDialog, OKHdl_Impl ) );
+
+    pCancelBtn = new CancelButton( this );
+    pHelpBtn = new HelpButton( this );
+
+    pPage = pTabPage;
+
+    if ( pPage )
+    {
+        String sUserData;
+        pPage->SetUserData( sUserData );
+        pPage->Reset( *pOptions );
+        pPage->Show();
+
+        // Set dialog's and buttons' size and position according to tabpage size
+        long nSpaceX = LogicToPixel( Size( 6, 0 ), MAP_APPFONT ).Width();
+        long nSpaceY = LogicToPixel( Size( 0, 6 ), MAP_APPFONT ).Height();
+        long nHalfSpaceX = LogicToPixel( Size( 3, 0 ), MAP_APPFONT ).Width();
+        long nHalfSpaceY = LogicToPixel( Size( 0, 3 ), MAP_APPFONT ).Height();
+
+        pPage->SetPosPixel( Point() );
+        Size aTabpageSize( pPage->GetSizePixel() );
+        Size aDialogSize( aTabpageSize );
+        Size aButtonSize = LogicToPixel( Size( 50, 14 ), MAP_APPFONT );
+        long nButtonWidth  = aButtonSize.Width();
+        long nButtonHeight = aButtonSize.Height();
+
+        Size aFixedLineSize( aTabpageSize );
+        long nFixedLineHeight = LogicToPixel( Size( 0, 8 ), MAP_APPFONT ).Height();
+        aFixedLineSize.Height() = nFixedLineHeight;
+
+        aDialogSize.Height() += nFixedLineHeight + nButtonHeight + nSpaceY + nHalfSpaceY;
+        SetOutputSizePixel( aDialogSize );
+
+        long nButtonPosY = aTabpageSize.Height() + nFixedLineHeight + nHalfSpaceY;
+        long nHelpButtonPosX = nSpaceX;
+        pHelpBtn->SetPosSizePixel( Point( nHelpButtonPosX, nButtonPosY), aButtonSize );
+        pHelpBtn->Show();
+
+        long nCancelButtonPosX = aDialogSize.Width() - nButtonWidth - nSpaceX + 1;
+        pCancelBtn->SetPosSizePixel( Point( nCancelButtonPosX, nButtonPosY), aButtonSize );
+        pCancelBtn->Show();
+
+        long nOkButtonPosX = nCancelButtonPosX - nButtonWidth - nHalfSpaceX;
+        pOKBtn->SetPosSizePixel( Point( nOkButtonPosX, nButtonPosY), aButtonSize );
+        pOKBtn->Show();
+
+        long nFixedLinePosY = aTabpageSize.Height();
+        pFixedLine->SetPosSizePixel( Point( 0, nFixedLinePosY), aFixedLineSize );
+        pFixedLine->Show();
+
+        // Get text from TabPage
+        SetText( pPage->GetText() );
+
+        // Get IDs from TabPage
+        SetHelpId( pPage->GetHelpId() );
+        SetUniqueId( pPage->GetUniqueId() );
+    }
+}
