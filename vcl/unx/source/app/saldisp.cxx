@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 16:37:52 $
+ *  last change: $Author: obo $ $Date: 2006-07-14 08:57:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1228,7 +1228,9 @@ void SalDisplay::ModifierMapping()
     nShiftKeySym_   = sal_XModifier2Keysym( pDisp_, pXModMap, ShiftMapIndex );
     nCtrlKeySym_    = sal_XModifier2Keysym( pDisp_, pXModMap, ControlMapIndex );
     nMod1KeySym_    = sal_XModifier2Keysym( pDisp_, pXModMap, Mod1MapIndex );
-
+#ifdef MACOSX
+    nMod2KeySym_    = sal_XModifier2Keysym( pDisp_, pXModMap, Mod2MapIndex );
+#endif
     // Auf Sun-Servern und SCO-Severn beruecksichtigt XLookupString
     // nicht den NumLock Modifier.
     if(     (GetServerVendor() == vendor_sun)
@@ -1255,9 +1257,19 @@ void SalDisplay::ModifierMapping()
 XubString SalDisplay::GetKeyName( USHORT nKeyCode ) const
 {
     String aStrMap;
-
+#ifdef MACOSX
+    if( nKeyCode & KEY_MOD5 )
+    {
+    aStrMap += GetKeyNameFromKeySym( nMod2KeySym_ );
+    }
     if( nKeyCode & KEY_MOD2 )
     {
+    if ( aStrMap.Len() )
+        aStrMap += '+' ;
+#else
+    if( nKeyCode & KEY_MOD2 )
+    {
+#endif
         aStrMap += GetKeyNameFromKeySym( nMod1KeySym_ );
     }
     if( nKeyCode & KEY_MOD1 )
