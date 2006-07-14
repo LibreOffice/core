@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 15:01:19 $
+ *  last change: $Author: obo $ $Date: 2006-07-14 08:22:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3806,6 +3806,9 @@ void SmXMLExport::ExportMath(const SmNode *pNode, int nLevel)
         sal_True,sal_False);
     sal_Unicode nArse[2];
     nArse[0] = pTemp->GetText().GetChar(0);
+    sal_Unicode cTmp = ConvertMathToMathML( nArse[0] );
+    if (cTmp != 0)
+        nArse[0] = cTmp;
     DBG_ASSERT(nArse[0] != 0xffff,"Non existant symbol");
     nArse[1] = 0;
     GetDocHandler()->characters(nArse);
