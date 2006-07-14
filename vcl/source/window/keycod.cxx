@@ -4,9 +4,9 @@
  *
  *  $RCSfile: keycod.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:38:36 $
+ *  last change: $Author: obo $ $Date: 2006-07-14 08:54:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,30 @@
 
 
 // =======================================================================
-
+#ifdef MACOSX
+static USHORT aImplKeyFuncTab[(KEYFUNC_FRONT+1)*3] =
+{
+    0, 0, 0,                                                // KEYFUNC_DONTKNOW
+    KEY_N | KEY_MOD5, 0, 0,                                 // KEYFUNC_NEW
+    KEY_O | KEY_MOD5, KEY_OPEN, 0,                          // KEYFUNC_OPEN
+    KEY_S | KEY_MOD5, 0, 0,                                 // KEYFUNC_SAVE
+    0, 0, 0,                                                // KEYFUNC_SAVEAS
+    KEY_P | KEY_MOD5, 0, 0,                                 // KEYFUNC_PRINT
+    KEY_W | KEY_MOD5, KEY_F4 | KEY_MOD5, 0,                 // KEYFUNC_CLOSE
+    KEY_Q | KEY_MOD5, KEY_F4 | KEY_MOD2, 0,                 // KEYFUNC_QUIT
+    KEY_X | KEY_MOD5, KEY_DELETE | KEY_SHIFT, KEY_CUT,      // KEYFUNC_CUT
+    KEY_C | KEY_MOD5, KEY_INSERT | KEY_MOD5, KEY_COPY,      // KEYFUNC_COPY
+    KEY_V | KEY_MOD5, KEY_INSERT | KEY_SHIFT, KEY_PASTE,    // KEYFUNC_PASTE
+    KEY_Z | KEY_MOD5, KEY_BACKSPACE | KEY_MOD2, KEY_UNDO,   // KEYFUNC_UNDO
+    0, 0, 0,                                                // KEYFUNC_REDO
+    KEY_DELETE, 0, 0,                                       // KEYFUNC_DELETE
+    KEY_REPEAT, 0, 0,                                       // KEYFUNC_REPEAT
+    KEY_F | KEY_MOD5, KEY_FIND, 0,                          // KEYFUNC_FIND
+    KEY_F | KEY_SHIFT | KEY_MOD5, KEY_SHIFT | KEY_FIND, 0,  // KEYFUNC_FINDBACKWARD
+    KEY_RETURN | KEY_MOD2, 0, 0,                            // KEYFUNC_PROPERTIES
+    0, 0, 0                                                 // KEYFUNC_FRONT
+};
+#else
 static USHORT aImplKeyFuncTab[(KEYFUNC_FRONT+1)*3] =
 {
     0, 0, 0,                                                // KEYFUNC_DONTKNOW
@@ -83,7 +106,7 @@ static USHORT aImplKeyFuncTab[(KEYFUNC_FRONT+1)*3] =
     KEY_RETURN | KEY_MOD2, 0, 0,                            // KEYFUNC_PROPERTIES
     0, 0, 0                                                 // KEYFUNC_FRONT
 };
-
+#endif
 // -----------------------------------------------------------------------
 
 void ImplGetKeyCode( KeyFuncType eFunc, USHORT& rCode1, USHORT& rCode2, USHORT& rCode3 )
