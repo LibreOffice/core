@@ -84,3 +84,15 @@
   This of course is accepted to have a 1:1 relation between the reference and 
   OOo2.0.2. With the next update we get in sync and depending versioning processes
   won't be affected.
+
+05/15/06 (JSC, TL): TaskID=i54823,i62825
+  adapt the documentation because of specification errors which have never matched 
+  the existing implmentation.
+  Style -> FollowStyle property is now of type string instead of boolean
+  TextTableRow -> TableColumnSeparators is now a sequence instead of the single return
+
+05/31/06 (TL, JSC)): TaskID i50628
+   Exchange property UserDefinedAttributes with service UserDefinedAttributesSupplier
+   including this property to provide a unique description at a single place for
+   the property.
+
