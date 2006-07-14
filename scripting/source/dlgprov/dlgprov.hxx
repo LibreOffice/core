@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgprov.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:25:26 $
+ *  last change: $Author: obo $ $Date: 2006-07-14 07:10:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,8 +42,8 @@
 #ifndef _COM_SUN_STAR_AWT_XDIALOG_HPP_
 #include <com/sun/star/awt/XDialog.hpp>
 #endif
-#ifndef _COM_SUN_STAR_AWT_XDIALOGPROVIDER_HPP_
-#include <com/sun/star/awt/XDialogProvider.hpp>
+#ifndef _COM_SUN_STAR_AWT_XDIALOGPROVIDER2_HPP_
+#include <com/sun/star/awt/XDialogProvider2.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
@@ -59,6 +59,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XINTROSPECTION_HPP_
+#include <com/sun/star/beans/XIntrospectionAccess.hpp>
 #endif
 
 #ifndef _CPPUHELPER_IMPLBASE3_HXX_
@@ -88,7 +91,7 @@ namespace dlgprov
     typedef ::cppu::WeakImplHelper3<
         ::com::sun::star::lang::XServiceInfo,
         ::com::sun::star::lang::XInitialization,
-        ::com::sun::star::awt::XDialogProvider > DialogProviderImpl_BASE;
+        ::com::sun::star::awt::XDialogProvider2 > DialogProviderImpl_BASE;
 
 
     class DialogProviderImpl : public DialogProviderImpl_BASE
@@ -104,7 +107,17 @@ namespace dlgprov
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > createDialogControl(
             const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& rxDialogModel );
 
-        void attachDialogEvents( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& rxDialogControl );
+        void attachDialogEvents( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDialog >& rxDialog,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxHandler,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XIntrospectionAccess >& rxIntrospectionAccess );
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XIntrospectionAccess > inspectHandler(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxHandler );
+
+        // XDialogProvider / XDialogProvider2 impl method
+        virtual ::com::sun::star::uno::Reference < ::com::sun::star::awt::XDialog > SAL_CALL createDialogImpl(
+            const ::rtl::OUString& URL,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xHandler )
+            throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
     public:
         DialogProviderImpl(
@@ -126,6 +139,12 @@ namespace dlgprov
         // XDialogProvider
         virtual ::com::sun::star::uno::Reference < ::com::sun::star::awt::XDialog > SAL_CALL createDialog(
             const ::rtl::OUString& URL )
+            throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+
+        // XDialogProvider2
+        virtual ::com::sun::star::uno::Reference < ::com::sun::star::awt::XDialog > SAL_CALL createDialogWithHandler(
+            const ::rtl::OUString& URL,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xHandler )
             throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
     };
 
