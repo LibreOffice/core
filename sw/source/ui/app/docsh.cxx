@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 12:25:57 $
+ *  last change: $Author: obo $ $Date: 2006-07-14 08:32:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -222,6 +222,9 @@
 #endif
 #ifndef _NDOLE_HXX
 #include <ndole.hxx>
+#endif
+#ifndef _SWCLI_HXX
+#include <swcli.hxx>
 #endif
 #ifndef _TXTFTN_HXX
 #include <txtftn.hxx>
@@ -1564,6 +1567,28 @@ void SwDocShell::CalcLayoutForOLEObjects()
         }
     }
 }
+
+
+//
+// this function is needed to allow embedded Math objects to automatically
+// change their size when the formula content was modified via the API.
+void SwDocShell::CalcAndSetScaleOfOLEObj( SwOLEObj& rOLEObject )
+{
+    SwWrtShell *pSh = GetWrtShell();
+    if ( pSh )
+    {
+        SfxInPlaceClient* pClient = pSh->GetView().FindIPClient( rOLEObject.GetOleRef(), (Window *)&pSh->GetView().GetEditWin() );
+        if ( !pClient )
+        {
+            svt::EmbeddedObjectRef &rObject = rOLEObject.GetObject();
+            pClient = new SwOleClient( &pSh->GetView(),
+                                        &pSh->GetView().GetEditWin(),
+                                        rObject );
+            pSh->CalcAndSetScale( rObject );
+        }
+    }
+}
+
 
 // --> FME 2005-02-25 #i42634# Overwrites SfxObjectShell::UpdateLinks
 // This new function is necessary to trigger update of links in docs
