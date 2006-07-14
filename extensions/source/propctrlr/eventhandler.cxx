@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventhandler.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 09:01:11 $
+ *  last change: $Author: obo $ $Date: 2006-07-14 07:21:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,6 +135,9 @@
 #endif
 #ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
+#endif
+#ifndef _EITEM_HXX
+#include <svtools/eitem.hxx>
 #endif
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
@@ -844,6 +847,7 @@ namespace pcr
         // the dialog
         SvxAbstractDialogFactory* pFactory = SvxAbstractDialogFactory::Create();
         SfxItemSet aItems( SFX_APP()->GetPool(), SID_ATTR_MACROITEM, SID_ATTR_MACROITEM );
+        aItems.Put( SfxBoolItem( SID_ATTR_MACROITEM, m_bIsDialogElement ) );
         if ( !pFactory )
             return InteractiveSelectionResult_Cancelled;
         ::std::auto_ptr< VclAbstractDialog > pDialog( pFactory->CreateSvxMacroAssignDlg(
