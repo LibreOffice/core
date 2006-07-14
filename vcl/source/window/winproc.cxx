@@ -642,7 +642,11 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
                                 // create a uno mouse event out of the available data
                                 ::com::sun::star::awt::MouseEvent aMouseEvent(
                                     static_cast < ::com::sun::star::uno::XInterface * > ( 0 ),
+#ifdef MACOSX
+                    nCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_MOD5),
+#else
                                     nCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2),
+#endif
                                     nCode & (MOUSE_LEFT | MOUSE_RIGHT | MOUSE_MIDDLE),
                                     nMouseX,
                                     nMouseY,
@@ -2089,7 +2093,11 @@ inline long ImplHandleSalMouseButtonDown( Window* pWindow, SalMouseEvent* pEvent
     return ImplHandleMouseEvent( pWindow, EVENT_MOUSEBUTTONDOWN, FALSE,
                                  pEvent->mnX, pEvent->mnY,
                                  pEvent->mnTime,
+#ifdef MACOSX
+                 pEvent->mnButton | (pEvent->mnCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_MOD5)),
+#else
                                  pEvent->mnButton | (pEvent->mnCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2)),
+#endif
                                  ImplGetMouseButtonMode( pEvent ) );
 }
 
@@ -2100,7 +2108,11 @@ inline long ImplHandleSalMouseButtonUp( Window* pWindow, SalMouseEvent* pEvent )
     return ImplHandleMouseEvent( pWindow, EVENT_MOUSEBUTTONUP, FALSE,
                                  pEvent->mnX, pEvent->mnY,
                                  pEvent->mnTime,
+#ifdef MACOSX
+                 pEvent->mnButton | (pEvent->mnCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_MOD5)),
+#else
                                  pEvent->mnButton | (pEvent->mnCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2)),
+#endif
                                  ImplGetMouseButtonMode( pEvent ) );
 }
 
@@ -2159,11 +2171,19 @@ static void ImplHandleSalKeyMod( Window* pWindow, SalKeyModEvent* pEvent )
     Window* pTrackWin = pSVData->maWinData.mpTrackWin;
     if ( pTrackWin )
         pWindow = pTrackWin;
+#ifdef MACOSX
+    USHORT nOldCode = pWindow->ImplGetWindowImpl()->mpFrameData->mnMouseCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_MOD5);
+#else
     USHORT nOldCode = pWindow->ImplGetWindowImpl()->mpFrameData->mnMouseCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2);
+#endif
     USHORT nNewCode = pEvent->mnCode;
     if ( nOldCode != nNewCode )
     {
+#ifdef MACOSX
+    nNewCode |= pWindow->ImplGetWindowImpl()->mpFrameData->mnMouseCode & ~(KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_MOD5);
+#else
         nNewCode |= pWindow->ImplGetWindowImpl()->mpFrameData->mnMouseCode & ~(KEY_SHIFT | KEY_MOD1 | KEY_MOD2);
+#endif
         pWindow->ImplGetWindowImpl()->mpFrameWindow->ImplCallMouseMove( nNewCode, TRUE );
     }
 
