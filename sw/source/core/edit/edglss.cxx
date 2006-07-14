@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edglss.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:27:58 $
+ *  last change: $Author: obo $ $Date: 2006-07-14 08:30:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -396,7 +396,7 @@ BOOL SwEditShell::GetSelectedText( String &rBuf, int nHndlParaBrk )
                 else
                 {
                     sal_Unicode* pStrBuf = rBuf.AllocBuffer( xub_StrLen(
-                                    ( lLen / sizeof( sal_Unicode )) + 1 ) );
+                                    ( lLen / sizeof( sal_Unicode ))) );
                     aStream.Seek( 0 );
                     aStream.ResetError();
                     aStream.Read( pStrBuf, lLen );
