@@ -4,9 +4,9 @@
  *
  *  $RCSfile: node.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 14:58:56 $
+ *  last change: $Author: obo $ $Date: 2006-07-14 08:21:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -425,7 +425,6 @@ public:
     SmPlaceNode(const SmToken &rNodeToken)
     :   SmMathSymbolNode(NPLACE, rNodeToken)
     {
-        SetText((xub_Unicode) MS_PLACE);
     }
 
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell);
