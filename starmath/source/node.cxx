@@ -4,9 +4,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 15:02:28 $
+ *  last change: $Author: obo $ $Date: 2006-07-14 08:23:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2255,7 +2255,6 @@ void SmRootSymbolNode::Draw(OutputDevice &rDev, const Point &rPosition) const
     // draw root-sign itself
     SmMathSymbolNode::Draw(rDev, rPosition);
 
-    static String aBarStr( (sal_Unicode) MS_BAR );
     SmTmpDevice  aTmpDev( (OutputDevice &) rDev, TRUE );
     aTmpDev.SetFillColor(GetFont().GetColor());
     rDev.SetLineColor();
@@ -2924,8 +2923,6 @@ void SmErrorNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     aTmpDev.SetFont(GetFont());
 
     const XubString &rText = GetText();
-    DBG_ASSERT(rText.Len() == 1  &&  rText.GetChar(0) == (xub_Unicode) MS_ERROR,
-                "Sm : Text ist kein ERROR Symbol");
     SmRect::operator = (SmRect(aTmpDev, &rFormat, rText, GetFont().GetBorderWidth()));
 }
 
