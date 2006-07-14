@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventdlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:09:14 $
+ *  last change: $Author: obo $ $Date: 2006-07-14 07:17:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,14 +88,18 @@ SvxEventConfigPage::SvxEventConfigPage( Window* pParent, const SfxItemSet& rSet 
     _SvxMacroTabPage( pParent, SVX_RES(RID_SVXPAGE_EVENTS), rSet ),
     aSaveInText( this, ResId( TXT_SAVEIN ) ),
     aSaveInListBox( this, ResId( LB_SAVEIN ) ),
-
     bAppConfig  ( TRUE )
 {
     mpImpl->pStrEvent           = new String( ResId( STR_EVENT ));
     mpImpl->pAssignedMacro      = new String( ResId( STR_ASSMACRO ));
     mpImpl->pEventLB            = new _HeaderTabListBox( this, ResId( LB_EVENT ));
+    mpImpl->pAssignFT           = new FixedText( this,  ResId( FT_ASSIGN ));
     mpImpl->pAssignPB           = new PushButton( this, ResId( PB_ASSIGN ));
     mpImpl->pDeletePB           = new PushButton( this, ResId( PB_DELETE ));
+    mpImpl->pMacroImg           = new Image( ResId( IMG_MACRO) );
+    mpImpl->pComponentImg       = new Image( ResId( IMG_COMPONENT) );
+    mpImpl->pMacroImg_h         = new Image( ResId( IMG_MACRO_H) );
+    mpImpl->pComponentImg_h     = new Image( ResId( IMG_COMPONENT_H) );
 
     FreeResource();
 
