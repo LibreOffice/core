@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtfitem.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:49:21 $
+ *  last change: $Author: obo $ $Date: 2006-07-14 08:44:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -779,8 +779,12 @@ SET_FONTALIGNMENT:
                         nTokenValue = 240;
                     else
                         nTokenValue *= 10;
-                    if( IsCalcValue() )
-                        CalcValue();
+// #i66167#
+// for the SwRTFParser 'IsCalcValue' will be false and for the EditRTFParser
+// the converiosn takes now place in EditRTFParser since for other reasons
+// the wrong MapUnit might still be use there
+//                   if( IsCalcValue() )
+//                       CalcValue();
                     SvxFontHeightItem aTmpItem(
                             (const USHORT)nTokenValue, 100,
                             SID_ATTR_CHAR_FONTHEIGHT );
