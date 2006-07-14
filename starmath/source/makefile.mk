@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: vg $ $Date: 2006-06-02 12:46:00 $
+#   last change: $Author: obo $ $Date: 2006-07-14 08:22:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,7 @@ SLO1FILES =  \
         $(SLO)$/utility.obj \
         $(SLO)$/smdll.obj \
         $(SLO)$/smmod.obj \
+        $(SLO)$/types.obj \
         $(SLO)$/view.obj \
         $(SLO)$/viewhdl.obj \
         $(SLO)$/edit.obj \
