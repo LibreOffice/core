@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.205 $
+ *  $Revision: 1.206 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:57:36 $
+ *  last change: $Author: obo $ $Date: 2006-07-14 08:57:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2775,13 +2775,17 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
         nModCode |= KEY_SHIFT;
     if( pEvent->state & ControlMask )
         nModCode |= KEY_MOD1;
+#ifdef MACOSX
+    if( pEvent->state & Mod2Mask )
+        nModCode |= KEY_MOD5;
+#else
     if( pEvent->state & Mod1Mask )
     {
         nModCode |= KEY_MOD2;
         if ( !(nModCode & KEY_MOD1) )
             nModCode |= KEY_CONTROLMOD;
     }
-
+#endif
     if(     nKeySym == XK_Shift_L   || nKeySym == XK_Shift_R
         ||  nKeySym == XK_Control_L || nKeySym == XK_Control_R
         ||  nKeySym == XK_Alt_L     || nKeySym == XK_Alt_R
@@ -2815,11 +2819,19 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
                 break;
             case XK_Alt_L:
                 nExtModMask = MODKEY_LMOD2;
+#ifdef MACOSX
+        nModMask = KEY_MOD2 | (pEvent->type==KeyRelease ? KEY_MOD5 : 0 );
+#else
                 nModMask = KEY_MOD2 | (pEvent->type==KeyRelease ? KEY_CONTROLMOD : 0);
+#endif
                 break;
             case XK_Alt_R:
                 nExtModMask = MODKEY_RMOD2;
+#ifdef MACOSX
+        nModMask = KEY_MOD2 | (pEvent->type==KeyRelease ? KEY_MOD5 : 0 );
+#else
                 nModMask = KEY_MOD2 | (pEvent->type==KeyRelease ? KEY_CONTROLMOD : 0);
+#endif
                 break;
             case XK_Shift_L:
                 nExtModMask = MODKEY_LSHIFT;
@@ -2848,7 +2860,11 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
 
         // emulate KEY_MENU
         if ( ( (nKeySym == XK_Alt_L) || (nKeySym == XK_Alt_R) ) &&
+#ifdef MACOSX
+         ( (nModCode & ~(KEY_MOD5|KEY_MOD2)) == 0 ) )
+#else
              ( (nModCode & ~(KEY_CONTROLMOD|KEY_MOD2)) == 0 ) )
+#endif
         {
             if( pEvent->type == XLIB_KeyPress )
                 mbKeyMenu = true;
