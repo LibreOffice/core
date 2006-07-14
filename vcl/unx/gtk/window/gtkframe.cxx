@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 16:36:45 $
+ *  last change: $Author: obo $ $Date: 2006-07-14 08:56:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,11 @@ static USHORT GetKeyModCode( guint state )
     {
         nCode |= KEY_MOD2;
         if( ! (nCode & KEY_MOD1) )
+#ifdef MACOSX
+            nCode |= KEY_MOD5;
+#else
             nCode |= KEY_CONTROLMOD;
+#endif
     }
     return nCode;
 }
@@ -2334,11 +2338,19 @@ gboolean GtkSalFrame::signalKey( GtkWidget*, GdkEventKey* pEvent, gpointer frame
                 break;
             case GDK_Alt_L:
                 nExtModMask = MODKEY_LMOD2;
+#ifdef MACOSX
+        nModMask = KEY_MOD5 | (pEvent->type == GDK_KEY_RELEASE ? KEY_MOD5: 0);
+#else
                 nModMask = KEY_MOD2 | (pEvent->type == GDK_KEY_RELEASE ? KEY_CONTROLMOD : 0);
+#endif
                 break;
             case GDK_Alt_R:
                 nExtModMask = MODKEY_RMOD2;
+#ifdef MACOSX
+        nModMask = KEY_MOD2 | (pEvent->type == GDK_KEY_RELEASE ? KEY_MOD5 : 0);
+#else
                 nModMask = KEY_MOD2 | (pEvent->type == GDK_KEY_RELEASE ? KEY_CONTROLMOD : 0);
+#endif
                 break;
             case GDK_Shift_L:
                 nExtModMask = MODKEY_LSHIFT;
@@ -2369,7 +2381,11 @@ gboolean GtkSalFrame::signalKey( GtkWidget*, GdkEventKey* pEvent, gpointer frame
         {
             // emulate KEY_MENU
             if( ( pEvent->keyval == GDK_Alt_L || pEvent->keyval == GDK_Alt_R ) &&
+#ifdef MACOSX
+                ( nModCode & ~(KEY_MOD5|KEY_MOD2)) == 0 )
+#else
                 ( nModCode & ~(KEY_CONTROLMOD|KEY_MOD2)) == 0 )
+#endif
             {
                 if( pEvent->type == GDK_KEY_PRESS )
                     pThis->m_bSingleAltPress = true;
