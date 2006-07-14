@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventdlg.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:04:28 $
+ *  last change: $Author: obo $ $Date: 2006-07-14 07:17:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,9 @@
 #include "helpid.hrc"
 #include "eventdlg.hrc"
 
+#define MASKCOLOR  MaskColor = \
+    Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
+
  // TP_CONFIG_EVENT -------------------------------------------------------
 TabPage RID_SVXPAGE_EVENTS
 {
@@ -50,14 +53,14 @@ TabPage RID_SVXPAGE_EVENTS
     };
     String STR_ASSMACRO
     {
-        Text[ de ] = "Zugewiesenes Makro";
-        Text[ en-US ] = "Assigned macro";
+        Text [ de ] = "Zugewiesene Aktion" ;
+        Text [ en-US ] = "Assigned Action" ;
     };
     Control LB_EVENT
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 180 , 229 ) ;
+        Size = MAP_APPFONT ( 205 , 229 ) ;
         TabStop = TRUE ;
         HelpID = HID_SVX_MACRO_LB_EVENT ;
     };
@@ -76,20 +79,47 @@ TabPage RID_SVXPAGE_EVENTS
         Size = MAP_APPFONT ( 132 , 53 ) ;
         DropDown = TRUE ;
     };
+    FixedText FT_ASSIGN
+    {
+        Pos = MAP_APPFONT ( 217, ROW0 ) ;
+        Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_FIXEDTEXT_HEIGHT ) ;
+        Text [ de ] = "Zuweisen:" ;
+        Text [ en-US ] = "Assign:" ;
+    };
     PushButton PB_ASSIGN
     {
-        Pos = MAP_APPFONT ( 192 , 6 ) ;
-        Size = MAP_APPFONT ( 75 , 14 ) ;
+        Pos = MAP_APPFONT ( 217 , ROW0A ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
         Disable = TRUE ;
-        Text [ de ] = "Zuweisen";
-        Text [ en-US ] = "Assign Macro";
+        Text [ de ] = "M~akro..." ;
+        Text [ en-US ] = "M~acro..." ;
     };
     PushButton PB_DELETE
     {
-        Pos = MAP_APPFONT ( 192 , 23 ) ;
-        Size = MAP_APPFONT ( 75 , 14 ) ;
+        Pos = MAP_APPFONT ( 217 , ROW0A+RSC_CD_PUSHBUTTON_HEIGHT+12 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
         Disable = TRUE ;
-        Text [ de ] = "Entfernen";
-        Text [ en-US ] = "Remove Macro";
+        Text [ de ] = "~Entfernen" ;
+        Text [ en-US ] = "~Remove" ;
+    };
+    Image IMG_MACRO
+    {
+        ImageBitmap = Bitmap { File = "id018.png"; };
+        MASKCOLOR
+    };
+    Image IMG_COMPONENT
+    {
+        ImageBitmap = Bitmap { File = "component_16.png"; };
+        MASKCOLOR
+    };
+    Image IMG_MACRO_H
+    {
+        ImageBitmap = Bitmap { File = "idh018.png"; };
+        MASKCOLOR
+    };
+    Image IMG_COMPONENT_H
+    {
+        ImageBitmap = Bitmap { File = "component_16_h.png"; };
+        MASKCOLOR
     };
 };
