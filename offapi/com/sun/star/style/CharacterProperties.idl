@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CharacterProperties.idl,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:26:37 $
+ *  last change: $Author: obo $ $Date: 2006-07-14 08:36:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,10 @@
 
 #ifndef __com_sun_star_awt_FontSlant_idl__
 #include <com/sun/star/awt/FontSlant.idl>
+#endif
+
+#ifndef __com_sun_star_container_XNameContainer_idl__
+#include <com/sun/star/container/XNameContainer.idl>
 #endif
 
 
@@ -357,15 +361,25 @@ published service CharacterProperties
         <p> It is not guaranteed that the order in the sequence reflects
         the order of the evaluation of the character style attributes.</p>
 
-    @since OOo 1.1.2
+        @since OOo 1.1.2
      */
     [optional, property] sequence<string> CharStyleNames;
-        //-------------------------------------------------------------------------
 
-        /** If this optional property is <TRUE/>, then the characters are invisible.
-          @since OOo 2.0.0
-         */
-        [optional, property] boolean CharHidden;
+    //-------------------------------------------------------------------------
+    /** If this optional property is <TRUE/>, then the characters are invisible.
+
+        @since OOo 2.0.0
+     */
+    [optional, property] boolean CharHidden;
+
+    //-------------------------------------------------------------------------
+    /** this property stores xml attributes.
+        They will be saved to and restored from automatic styles inside xml files.
+
+        @see com::sun::star::xml::AttributeContainer
+     */
+    [optional, property] com::sun::star::container::XNameContainer  TextUserDefinedAttributes;
+
 };
 
 //=============================================================================
