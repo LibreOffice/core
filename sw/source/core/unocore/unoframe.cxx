@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 08:08:29 $
+ *  last change: $Author: obo $ $Date: 2006-07-14 08:31:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,14 +71,8 @@
 #ifndef _DOCSH_HXX //autogen
 #include <docsh.hxx>
 #endif
-#ifndef _WRTSH_HXX
-#include <wrtsh.hxx>
-#endif
 #ifndef _SWCLI_HXX
 #include <swcli.hxx>
-#endif
-#ifndef _SWVIEW_HXX
-#include <view.hxx>
 #endif
 #ifndef _NDINDEX_HXX //autogen
 #include <ndindex.hxx>
@@ -106,6 +100,12 @@
 #endif
 #ifndef _NDOLE_HXX //autogen
 #include <ndole.hxx>
+#endif
+#ifndef _FRMFMT_HXX
+#include <frmfmt.hxx>
+#endif
+#ifndef _FRAME_HXX
+#include <frame.hxx>
 #endif
 #ifndef _UNOOBJ_HXX
 #include <unoobj.hxx>
@@ -1714,6 +1714,32 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
             if(FN_UNO_CLSID == pCur->nWID)
                 aAny <<= aHexCLSID;
         }
+        else if(WID_LAYOUT_SIZE == pCur->nWID)
+        {
+            // property is only valid/available if the document is layoutet
+            // so we check this now
+            if (pFmt->GetDoc()->GetRootFrm())
+            {
+                SwClientIter aIter( *pFmt );
+                for (SwClient* pC = aIter.First( TYPE( SwFrm ) );
+                        pC; pC = aIter.Next() )
+                {
+                    SwFrm *pTmpFrm = static_cast< SwFrm * >(pC);
+                    // check if the frame is valid (actually it does not always
+                    // mean that this frame was already formated. But it is the
+                    // best way to check that is available...)
+                    if (pTmpFrm->IsValid())
+                    {
+                        const SwRect &rRect = pTmpFrm->Frm();
+                        Size aMM100Size = OutputDevice::LogicToLogic(
+                                Size( rRect.Width(), rRect.Height() ),
+                                MapMode( MAP_TWIP ), MapMode( MAP_100TH_MM ));
+                        aAny <<= awt::Size( aMM100Size.Width(), aMM100Size.Height() );
+                        break;
+                    }
+                }
+            }
+        }
         else
         {
             const SwAttrSet& rSet = pFmt->GetAttrSet();
@@ -1724,11 +1750,14 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
     {
         if ( ! mpDoc )
             throw RuntimeException();
-        uno::Any* pAny = 0;
-        if( !pProps->GetProperty( pCur->nWID, pCur->nMemberId, pAny ) )
-            pProps->GetProperty( rPropertyName, mxStyleData, aAny );
-        else if ( pAny )
-            aAny = *pAny;
+        if(WID_LAYOUT_SIZE != pCur->nWID)   // there is no LayoutSize in a descriptor
+        {
+            uno::Any* pAny = 0;
+            if( !pProps->GetProperty( pCur->nWID, pCur->nMemberId, pAny ) )
+                pProps->GetProperty( rPropertyName, mxStyleData, aAny );
+            else if ( pAny )
+                aAny = *pAny;
+        }
     }
     else
         throw RuntimeException();
@@ -3070,20 +3099,7 @@ uno::Reference< XComponent >  SwXTextEmbeddedObject::getEmbeddedObject(void) thr
         if ( svt::EmbeddedObjectRef::TryRunningState( xIP ) )
         {
             if ( pDoc->GetDocShell() )
-            {
-                SwWrtShell *pSh = pDoc->GetDocShell()->GetWrtShell();
-                if ( pSh )
-                {
-                    SfxInPlaceClient* pClient = pSh->GetView().FindIPClient( xIP, (Window *)&pSh->GetView().GetEditWin() );
-                    if ( !pClient )
-                    {
-                        pClient = new SwOleClient( &pSh->GetView(),
-                                                    &pSh->GetView().GetEditWin(),
-                                                    pOleNode->GetOLEObj().GetObject() );
-                        pSh->CalcAndSetScale( pOleNode->GetOLEObj().GetObject() );
-                    }
-                }
-            }
+                pDoc->GetDocShell()->CalcAndSetScaleOfOLEObj( pOleNode->GetOLEObj() );
 
             xRet = uno::Reference < lang::XComponent >( xIP->getComponent(), uno::UNO_QUERY );
             uno::Reference< util::XModifyBroadcaster >  xBrdcst( xRet, uno::UNO_QUERY);
