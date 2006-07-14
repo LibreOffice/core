@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TextTable.idl,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 13:24:36 $
+ *  last change: $Author: obo $ $Date: 2006-07-14 08:38:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,9 @@
 #ifndef __com_sun_star_sheet_XCellRangeData_idl__
 #include <com/sun/star/sheet/XCellRangeData.idl>
 #endif
+#ifndef _com_sun_star_xml_UserDefinedAttributesSupplier_idl_
+#include <com/sun/star/xml/UserDefinedAttributesSupplier.idl>
+#endif
 
 
 //=============================================================================
@@ -95,29 +98,7 @@
 
 /** is a table of text cells which is anchored to a surrounding text.
 
-
-
-    <p>If the document in which a table is to be inserted has its own
-    <type scope="com::sun::star::lang">XMultiServiceFactory</type>, this must be
-    used to create the instance.
-    </p>
-
-    <p>If a descriptor is used, a descriptor created by the same
-    <type scope="com::sun::star::lang">XMultiServiceFactory</type> must be used.
-    </p>
-
-    @example Create and insert a TextTable via a TextTableDescriptor:
-
-    <listing>
-    xTable = xTextDoc.createInstance( "com.sun.star.text.TextTable" )
-    xTable.initialize(5, 8)
-    xTable.HoriOrient = 0 'com::sun::star::text::HoriOrientation::NONE
-    xTable.LeftMargin = 2000
-    xTable.RightMargin = 1500
-    xTextDoc.getText.insertTextContent( xTextRange, xTable, false )
-    </listing>
-
-    Create and insert a TextTable directly (may flicker):
+    Create and insert a TextTable:
 
     <listing>
     xTable = xTextDoc.createInstance( "com.sun.star.text.TextTable" )
@@ -148,6 +129,8 @@
 published service TextTable
 {
     service com::sun::star::text::TextContent;
+
+    [optional] service com::sun::star::xml::UserDefinedAttributesSupplier;
 
     interface com::sun::star::text::XTextTable;
 
