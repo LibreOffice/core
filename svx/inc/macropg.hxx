@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macropg.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:02:51 $
+ *  last change: $Author: obo $ $Date: 2006-07-14 07:17:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,6 +75,10 @@ class _SvxMacroTabPage : public SfxTabPage
 #if _SOLAR__PRIVATE
     DECL_STATIC_LINK( _SvxMacroTabPage, SelectEvent_Impl, SvTabListBox * );
     DECL_STATIC_LINK( _SvxMacroTabPage, AssignDeleteHdl_Impl, PushButton * );
+    DECL_STATIC_LINK( _SvxMacroTabPage, DoubleClickHdl_Impl, SvTabListBox * );
+
+    static long GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton* pBtn );
+
 #endif
 protected:
     _SvxMacroTabPage_Impl*      mpImpl;
@@ -116,8 +120,43 @@ public:
     static SfxTabPage* Create( Window* pParent, const SfxItemSet& rAttrSet, ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > xNameReplace, sal_uInt16 nSelectedIndex=0 );
 };
 
+// class SvxMacroAssignDlg --------------------------------------------------
 
-class SVX_DLLPUBLIC SvxMacroAssignDlg : public SfxSingleTabDialog
+typedef USHORT* (*GetTabPageRanges)(); // liefert internationale Which-Werte
+
+class SVX_DLLPUBLIC SvxMacroAssignSingleTabDialog : public SfxModalDialog
+{
+public:
+    SvxMacroAssignSingleTabDialog( Window* pParent, const SfxItemSet& rOptionsSet, USHORT nUniqueId );
+
+    virtual             ~SvxMacroAssignSingleTabDialog();
+
+    void                SetTabPage( SfxTabPage* pTabPage );
+    // SfxTabPage*          GetTabPage() const { return pPage; }
+
+    // OKButton*            GetOKButton() const { return pOKBtn; }
+    // CancelButton*        GetCancelButton() const { return pCancelBtn; }
+
+private:
+    SfxViewFrame*       pFrame;
+
+    FixedLine*          pFixedLine;
+
+    OKButton*           pOKBtn;
+    CancelButton*       pCancelBtn;
+    HelpButton*         pHelpBtn;
+
+    SfxTabPage*         pPage;
+    const SfxItemSet*   pOptions;
+    SfxItemSet*         pOutSet;
+
+#if _SOLAR__PRIVATE
+    DECL_DLLPRIVATE_LINK( OKHdl_Impl, Button * );
+#endif
+};
+
+
+class SVX_DLLPUBLIC SvxMacroAssignDlg : public SvxMacroAssignSingleTabDialog
 {
 public:
     SvxMacroAssignDlg( Window* pParent, SfxItemSet& rSet, ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > xNameReplace, sal_uInt16 nSelectedIndex=0 );
