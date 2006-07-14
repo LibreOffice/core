@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eertfpar.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:41:32 $
+ *  last change: $Author: obo $ $Date: 2006-07-14 08:44:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,6 +103,7 @@ SvParserState __EXPORT EditRTFParser::CallParser()
     EditPaM aStart2PaM = aCurSel.Min();
     // Sinnvoll oder nicht?:
     aStart2PaM.GetNode()->GetContentAttribs().GetItems().ClearItem();
+    AddRTFDefaultValues( aStart2PaM, aStart2PaM );
     EditPaM aEnd1PaM( pImpEditEngine->ImpInsertParaBreak( aCurSel.Max() ) );
     // aCurCel zeigt jetzt auf den Zwischenraum
 
@@ -132,7 +133,7 @@ SvParserState __EXPORT EditRTFParser::CallParser()
         aCurSel.Max() = pImpEditEngine->ImpDeleteSelection( aSel );
     }
     EditPaM aEnd2PaM( aCurSel.Max() );
-    AddRTFDefaultValues( aStart2PaM, aEnd2PaM );
+    //AddRTFDefaultValues( aStart2PaM, aEnd2PaM );
     BOOL bOnlyOnePara = ( aEnd2PaM.GetNode() == aStart2PaM.GetNode() );
     // Den Brocken wieder einfuegen...
     // Problem: Absatzattribute duerfen ggf. nicht uebernommen werden
@@ -310,6 +311,27 @@ void __EXPORT EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
 
     // ggf. noch das Escapemant-Item umbiegen:
     const SfxPoolItem* pItem;
+
+    // #i66167# adapt font heights to destination MapUnit if necessary
+    const MapUnit eDestUnit = static_cast< MapUnit >( pImpEditEngine->GetEditDoc().GetItemPool().GetMetric(0) );
+    const MapUnit eSrcUnit  = aRTFMapMode.GetMapUnit();
+    if (eDestUnit != eSrcUnit)
+    {
+        int aFntHeightIems[3] = { EE_CHAR_FONTHEIGHT, EE_CHAR_FONTHEIGHT_CJK, EE_CHAR_FONTHEIGHT_CTL };
+        for (int i = 0; i < 2; ++i)
+        {
+            if (SFX_ITEM_SET == rSet.GetAttrSet().GetItemState( aFntHeightIems[i], FALSE, &pItem ))
+            {
+                UINT32 nHeight  = ((SvxFontHeightItem*)pItem)->GetHeight();
+                long nNewHeight;
+                nNewHeight = pImpEditEngine->GetRefDevice()->LogicToLogic( (long)nHeight, eSrcUnit, eDestUnit );
+
+                SvxFontHeightItem aFntHeightItem( nNewHeight, ((SvxFontHeightItem*)pItem)->GetProp(), aFntHeightIems[i] );
+                rSet.GetAttrSet().Put( aFntHeightItem );
+            }
+        }
+    }
+
     if( SFX_ITEM_SET == rSet.GetAttrSet().GetItemState( EE_CHAR_ESCAPEMENT, FALSE, &pItem ))
     {
         // die richtige
@@ -469,7 +491,10 @@ void EditRTFParser::CreateStyleSheets()
 
 void __EXPORT EditRTFParser::CalcValue()
 {
-    nTokenValue = TwipsToLogic( nTokenValue );
+    const MapUnit eDestUnit = static_cast< MapUnit >( aEditMapMode.GetMapUnit() );
+    const MapUnit eSrcUnit  = aRTFMapMode.GetMapUnit();
+    if (eDestUnit != eSrcUnit)
+        nTokenValue = OutputDevice::LogicToLogic( (long)nTokenValue, eSrcUnit, eDestUnit );
 }
 
 void EditRTFParser::ReadField()
