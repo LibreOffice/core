@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eertfpar.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:32:32 $
+ *  last change: $Author: obo $ $Date: 2006-07-14 08:44:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,7 +103,6 @@ protected:
     virtual void        UnknownAttrToken( int nToken, SfxItemSet* pSet );
     virtual void        NextToken( int nToken );
     virtual void        SetAttrInDoc( SvxRTFItemStackType &rSet );
-    inline long         TwipsToLogic( long n );
     virtual int         IsEndPara( SvxNodeIdx* pNd, USHORT nCnt ) const;
     virtual void        CalcValue();
     void                CreateStyleSheets();
@@ -132,12 +131,6 @@ public:
 SV_DECL_REF( EditRTFParser );
 SV_IMPL_REF( EditRTFParser );
 
-inline long EditRTFParser::TwipsToLogic( long nTwps )
-{
-    Size aSz( nTwps, 0 );
-    aSz = pImpEditEngine->GetRefDevice()->LogicToLogic( aSz, &aRTFMapMode, &aEditMapMode );
-    return aSz.Width();
-}
 
 #endif  // !SVX_LIGH
 #endif  //_EERTFPAR_HXX
