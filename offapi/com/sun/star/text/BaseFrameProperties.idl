@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BaseFrameProperties.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:04:27 $
+ *  last change: $Author: obo $ $Date: 2006-07-14 08:37:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -328,17 +328,29 @@ published service BaseFrameProperties
      */
     [property] boolean SurroundAnchorOnly;
 
-        //-------------------------------------------------------------------------
-        /** determines the influence of the text wrap on the positioning of the
-            shape
+    //-------------------------------------------------------------------------
+    /** determines the influence of the text wrap on the positioning of the
+        shape
 
-            <p>The value of this property is only evaluated for the positioning
-            of the shape, if the text document setting ConsiderTextWrapOnObjPos
-            is <TRUE\>. Valid values are given by <member>WrapInfluenceOnPosition</member></p>
+        <p>The value of this property is only evaluated for the positioning
+        of the shape, if the text document setting ConsiderTextWrapOnObjPos
+        is <TRUE\>. Valid values are given by <member>WrapInfluenceOnPosition</member></p>
 
-            @since OOo 2.0.0
-         */
-        [optional, property] short WrapInfluenceOnPosition;
+        @since OOo 2.0.0
+     */
+    [optional, property] short WrapInfluenceOnPosition;
+
+    //-------------------------------------------------------------------------
+    /** returns the actual size of the object.
+
+        <p>Since to obtain the actual size of the object the
+        layouting for the frame needs to be finished this property is only
+        available if the document is already formatted.</p>
+
+        @since OOo 2.0.4
+     */
+    [optional, property, maybevoid] com::sun::star::awt::Size LayoutSize;
+
 };
 
 //=============================================================================
