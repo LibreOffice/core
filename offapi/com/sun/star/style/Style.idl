@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Style.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 13:23:25 $
+ *  last change: $Author: obo $ $Date: 2006-07-14 08:37:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,9 @@
 #ifndef __com_sun_star_beans_NamedValue_idl__
 #include <com/sun/star/beans/NamedValue.idl>
 #endif
+#ifndef _com_sun_star_xml_UserDefinedAttributesSupplier_idl_
+#include <com/sun/star/xml/UserDefinedAttributesSupplier.idl>
+#endif
 
 
 //=============================================================================
@@ -63,6 +66,15 @@
  */
 published service Style
 {
+    //-------------------------------------------------------------------------
+    /** contains user defined attributes.
+
+        @see    <type scope="com::sun::star::xml">UserDefinedAttributesSupplier</type>
+     */
+    [optional] service com::sun::star::xml::UserDefinedAttributesSupplier;
+
+    //-------------------------------------------------------------------------
+
     interface com::sun::star::style::XStyle;
 
         interface com::sun::star::beans::XPropertySet;
@@ -71,7 +83,10 @@ published service Style
 
     /* This optional interface is available as an optimisation, allowing users
        to use 'setAllPropertiesToDefault', for example. */
+    //-------------------------------------------------------------------------
+
     [optional] interface com::sun::star::beans::XMultiPropertyStates;
+
     //-------------------------------------------------------------------------
 
     /** determines if a style is physically created.
@@ -88,7 +103,7 @@ published service Style
 
         <p> This property is usually available at paragraph styles only. </p>
      */
-    [optional, property] boolean FollowStyle;
+    [optional, property] string FollowStyle;
     //-------------------------------------------------------------------------
 
     /** contains the name of the style as it is displayed in the user interface.
