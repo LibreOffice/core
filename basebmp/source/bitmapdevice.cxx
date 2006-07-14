@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmapdevice.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-13 12:03:26 $
+ *  last change: $Author: thb $ $Date: 2006-07-14 14:22:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,7 @@
 
 #include "basebmp/scanlineformats.hxx"
 #include "basebmp/fillimage.hxx"
+#include "basebmp/scaleimage.hxx"
 #include "basebmp/clippedlinerenderer.hxx"
 //#include "basebmp/genericintegerimageaccessor.hxx"
 
@@ -77,7 +78,6 @@
 
 #include <vigra/iteratortraits.hxx>
 #include <vigra/rgbvalue.hxx>
-#include <vigra/resizeimage.hxx>
 #include <vigra/copyimage.hxx>
 #include <vigra/tuple.hxx>
 
@@ -738,9 +738,9 @@ namespace
             boost::shared_ptr<BitmapRenderer> pSrcBmp( getCompatibleBitmap(rSrcBitmap) );
             OSL_ASSERT( pSrcBmp );
 
-            // since resizeImageNoInterpolation() internally copyies
+            // since scaleImage() internally copyies
             // to a temporary buffer, also works with *this == rSrcBitmap
-            vigra::resizeImageNoInterpolation(
+            scaleImage(
                 srcIterRange(pSrcBmp->maBegin,
                              pSrcBmp->maRawAccessor,
                              rSrcRect),
@@ -759,9 +759,9 @@ namespace
         {
             GenericImageAccessor aSrcAcc( rSrcBitmap );
 
-            // since resizeImageNoInterpolation() internally copyies
+            // since scaleImage() internally copyies
             // to a temporary buffer, also works with *this == rSrcBitmap
-            vigra::resizeImageNoInterpolation(
+            scaleImage(
                 srcIterRange(vigra::Diff2D(),
                              aSrcAcc,
                              rSrcRect),
@@ -929,9 +929,9 @@ namespace
             boost::shared_ptr<mask_bitmap_type> pMask( getCompatibleClipMask(rMask) );
             OSL_ASSERT( pMask && pSrcBmp );
 
-            // since resizeImageNoInterpolation() internally copyies
+            // since scaleImage() internally copyies
             // to a temporary buffer, also works with *this == rSrcBitmap
-            vigra::resizeImageNoInterpolation(
+            scaleImage(
                 srcIterRange(composite_iterator_type(
                                  pSrcBmp->maBegin,
                                  pMask->maBegin),
@@ -964,9 +964,9 @@ namespace
                                          rSrcRect.getMinY());
             const vigra::Diff2D aBottomRight(rSrcRect.getMaxX(),
                                              rSrcRect.getMaxY());
-            // since resizeImageNoInterpolation() internally copyies
+            // since scaleImage() internally copyies
             // to a temporary buffer, also works with *this == rSrcBitmap
-            vigra::resizeImageNoInterpolation(
+            scaleImage(
                 vigra::make_triple(
                     generic_composite_iterator_type(
                         aTopLeft,aTopLeft),
