@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewling.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-10 08:49:55 $
+ *  last change: $Author: obo $ $Date: 2006-07-14 08:34:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -193,7 +193,8 @@ void SwView::ExecLingu(SfxRequest &rReq)
             rReq.Ignore();
             break;
         case SID_HANGUL_HANJA_CONVERSION:
-            StartTextConversion( LANGUAGE_KOREAN, LANGUAGE_KOREAN, NULL, 0, sal_True );
+            StartTextConversion( LANGUAGE_KOREAN, LANGUAGE_KOREAN, NULL,
+                    i18n::TextConversionOption::CHARACTER_BY_CHARACTER, sal_True );
             break;
         case SID_CHINESE_CONVERSION:
         {
