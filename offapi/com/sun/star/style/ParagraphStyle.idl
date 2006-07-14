@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ParagraphStyle.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:31:52 $
+ *  last change: $Author: obo $ $Date: 2006-07-14 08:36:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,10 @@
 #include <com/sun/star/style/Style.idl>
 #endif
 
+#ifndef _com_sun_star_xml_ParaUserDefinedAttributesSupplier_idl_
+#include <com/sun/star/xml/ParaUserDefinedAttributesSupplier.idl>
+#endif
+
 //=============================================================================
 
  module com {  module sun {  module star {  module style {
@@ -59,10 +63,16 @@ published service ParagraphStyle
     service Style;
 
     //-------------------------------------------------------------------------
+    /** contains user defined attributes for paragraphs.
+
+        @see    <type scope="com::sun::star::xml">ParaUserDefinedAttributesSupplier</type>
+     */
+    [optional] service com::sun::star::xml::ParaUserDefinedAttributesSupplier;
+
+    //-------------------------------------------------------------------------
     /// specifies the style properties.
     service ParagraphProperties;
 
-    // DocMerge from xml: property com::sun::star::style::ParagraphStyle::ParaLeftMarginRelative
     /** determines the left margin of the paragraph relative to the ParaLeftMargin
         of the parent style.
 
@@ -73,7 +83,6 @@ published service ParagraphStyle
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::ParagraphStyle::ParaRightMarginRelative
     /** determines the right margin of the paragraph relative to the ParaRightMargin
         of the parent style.
 
@@ -84,7 +93,6 @@ published service ParagraphStyle
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::ParagraphStyle::ParaTopMarginRelative
     /** determines the top margin of the paragraph relative to the ParaTopMargin
         of the parent style.
 
@@ -95,7 +103,6 @@ published service ParagraphStyle
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::ParagraphStyle::ParaBottomMarginRelative
     /** determines the Bottom margin of the paragraph relative to the ParaBottomMargin
         of the parent style.
 
@@ -105,7 +112,6 @@ published service ParagraphStyle
     [property] long ParaBottomMarginRelative;
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::ParagraphStyle::Category
     /** determines the category of a paragraph style.@see com.sun.star.style.ParagraphStyleCategory
      */
     [property] short Category;
