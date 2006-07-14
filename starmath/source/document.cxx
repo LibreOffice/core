@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 08:01:07 $
+ *  last change: $Author: obo $ $Date: 2006-07-14 08:22:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -420,7 +420,7 @@ void SmDocShell::ArrangeFormula()
     // format/draw formulas always from left to right,
     // and numbers should not be converted
     ULONG nLayoutMode = pOutDev->GetLayoutMode();
-    pOutDev->SetLayoutMode( TEXT_LAYOUT_BIDI_STRONG );
+    pOutDev->SetLayoutMode( TEXT_LAYOUT_BIDI_LTR );
     INT16 nDigitLang = pOutDev->GetDigitLanguage();
     pOutDev->SetDigitLanguage( LANGUAGE_ENGLISH );
     //
@@ -602,7 +602,7 @@ void SmDocShell::Draw(OutputDevice &rDev, Point &rPosition)
     // format/draw formulas always from left to right
     // and numbers should not be converted
     ULONG nLayoutMode = rDev.GetLayoutMode();
-    rDev.SetLayoutMode( TEXT_LAYOUT_BIDI_STRONG );
+    rDev.SetLayoutMode( TEXT_LAYOUT_BIDI_LTR );
     INT16 nDigitLang = rDev.GetDigitLanguage();
     rDev.SetDigitLanguage( LANGUAGE_ENGLISH );
     //
