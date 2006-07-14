@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docshel3.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:05:54 $
+ *  last change: $Author: obo $ $Date: 2006-07-14 08:25:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,6 +81,10 @@
 #endif
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_I18N_TEXTCONVERSIONOPTION_HPP_
+#include <com/sun/star/i18n/TextConversionOption.hpp>
 #endif
 
 #pragma hdrstop
@@ -253,7 +257,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
         case SID_HANGUL_HANJA_CONVERSION:
         {
             FunctionReference aFunc( FuHangulHanjaConversion::Create( pViewShell, pViewShell->GetActiveWindow(), pViewShell->GetView(), pDoc, rReq ) );
-            static_cast< FuHangulHanjaConversion* >( aFunc.get() )->StartConversion( LANGUAGE_KOREAN, LANGUAGE_KOREAN, NULL, 0, sal_True );
+            static_cast< FuHangulHanjaConversion* >( aFunc.get() )->StartConversion( LANGUAGE_KOREAN, LANGUAGE_KOREAN, NULL, i18n::TextConversionOption::CHARACTER_BY_CHARACTER, sal_True );
         }
         break;
 
