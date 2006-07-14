@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macropg.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:43:04 $
+ *  last change: $Author: obo $ $Date: 2006-07-14 07:18:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,10 @@
 #include "macropg.hrc"
 #include "dialogs.hrc"
 #include "helpid.hrc"
+
+#define MASKCOLOR  MaskColor = \
+    Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
+
 TabPage RID_SVXPAGE_MACROASSIGN
 {
      // HelpID = HID_MACROASSIGN ;
@@ -44,8 +48,8 @@ TabPage RID_SVXPAGE_MACROASSIGN
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( WIDTH_TP , HEIGHT_TP ) ;
-    Text [ de ] = "Makro zuweisen" ;
-    Text [ en-US ] = "Assign Macro" ;
+    Text [ de ] = "Aktion zuweisen" ;
+    Text [ en-US ] = "Assign action" ;
     String STR_EVENT
     {
         Text [ de ] = "Ereignis" ;
@@ -53,8 +57,8 @@ TabPage RID_SVXPAGE_MACROASSIGN
     };
     String STR_ASSMACRO
     {
-        Text [ de ] = "Zugewiesenes Makro";
-        Text[ en-US ] = "Assigned macro";
+        Text [ de ] = "Zugewiesene Aktion" ;
+        Text [ en-US ] = "Assigned Action" ;
     };
     Control LB_EVENT
     {
@@ -64,26 +68,106 @@ TabPage RID_SVXPAGE_MACROASSIGN
         Size = MAP_APPFONT ( WIDTH1_2 , HEIGHT0 ) ;
         HelpID = HID_SVX_MACRO_LB_EVENT ;
     };
+    FixedText FT_ASSIGN
+    {
+        Pos = MAP_APPFONT ( COL4 , ROW0 ) ;
+        Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_FIXEDTEXT_HEIGHT ) ;
+        Text [ de ] = "Zuweisen:" ;
+        Text [ en-US ] = "Assign:" ;
+    };
     PushButton PB_ASSIGN
     {
-        Pos = MAP_APPFONT ( COL4 , ROW0  ) ;
+        Pos = MAP_APPFONT ( COL4 , ROW0A  ) ;
         Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
-         // ### ACHTUNG: Neuer Text in Resource? Z~uweisen : Zuweisen
-        Text [ de ] = "Z~uweisen" ;
+        Text [ de ] = "M~akro..." ;
+        Text [ en-US ] = "M~acro..." ;
         Disable = TRUE ;
         TabStop = TRUE ;
-        Text [ en-US ] = "~Assign" ;
     };
-    PushButton PB_DELETE
+    PushButton PB_ASSIGN_COMPONENT
     {
         Pos = MAP_APPFONT ( COL4 , ROW2  ) ;
         Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
-        Text [ de ] = "~Aufheben" ;
+        Text [ de ] = "Kom~ponente..." ;
         Disable = TRUE ;
         TabStop = TRUE ;
+        Text [ en-US ] = "Com~ponent..." ;
+    };
+    PushButton PB_DELETE
+    {
+        Pos = MAP_APPFONT ( COL4 , ROW5_REMOVE  ) ;
+        Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
+        Text [ de ] = "~Entfernen" ;
         Text [ en-US ] = "~Remove" ;
+        Disable = TRUE ;
+        TabStop = TRUE ;
+    };
+    Image IMG_MACRO
+    {
+        ImageBitmap = Bitmap { File = "id018.png"; };
+        MASKCOLOR
+    };
+    Image IMG_COMPONENT
+    {
+        ImageBitmap = Bitmap { File = "component_16.png"; };
+        MASKCOLOR
+    };
+    Image IMG_MACRO_H
+    {
+        ImageBitmap = Bitmap { File = "idh018.png"; };
+        MASKCOLOR
+    };
+    Image IMG_COMPONENT_H
+    {
+        ImageBitmap = Bitmap { File = "component_16_h.png"; };
+        MASKCOLOR
     };
 };
+
+ModalDialog RID_DLG_ASSIGNCOMPONENT
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( COMP_WIDTH , COMP_HEIGHT ) ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Text [ de ] = "Komponente zuweisen";
+    Text [ en-US ] = "Assign Component";
+    OKButton RID_PB_OK
+    {
+        Pos = MAP_APPFONT ( COMP_COL1 , COMP_ROW0 ) ;
+        Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton RID_PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( COMP_COL1 , COMP_ROW1 ) ;
+        Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton RID_PB_HELP
+    {
+        Pos = MAP_APPFONT ( COMP_COL1 , COMP_ROW2 ) ;
+        Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
+    };
+    FixedText FT_METHOD
+    {
+        Pos = MAP_APPFONT ( COMP_COL0 , ROW0 ) ;
+        Size = MAP_APPFONT ( COMP_EDIT_WIDTH , RSC_CD_FIXEDTEXT_HEIGHT ) ;
+        Text [ de ] = "Name der Komponenten-Methode" ;
+        Text [ en-US ] = "Component method name" ;
+    };
+    Edit EDIT_METHOD
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( COMP_COL0 , COMP_ROWEDIT ) ;
+        Size = MAP_APPFONT ( COMP_EDIT_WIDTH , RSC_CD_TEXTBOX_HEIGHT ) ;
+        TabStop = TRUE ;
+    };
+};
+
+
 //DF
 String RID_SVXSTR_EVENT_STARTAPP
 {
