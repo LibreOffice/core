@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rangenam.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 13:27:22 $
+ *  last change: $Author: obo $ $Date: 2006-07-14 09:14:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,6 +103,14 @@ ScRangeData::ScRangeData( ScDocument* pDok,
             aComp.CompileTokenArray();
             pCode->DelRPN();
         }
+    }
+    else
+    {
+        // #i63513#/#i65690# don't leave pCode as NULL.
+        // Copy ctor default-constructs pCode if it was NULL, so it's initialized here, too,
+        // to ensure same behavior if unnecessary copying is left out.
+
+        pCode = new ScTokenArray;
     }
 }
 
