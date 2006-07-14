@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Cell.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:06:19 $
+ *  last change: $Author: obo $ $Date: 2006-07-14 08:37:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,13 +65,11 @@ module com {  module sun {  module star {  module text {
 service Cell
 {
     //-------------------------------------------------------------------------
-
     /** contains the properties of the text table cell.
        */
     service com::sun::star::text::CellProperties;
 
     //-------------------------------------------------------------------------
-
     /** contains properties from table cells.
 
         <p>All of these properties are either already availbale in the
@@ -101,7 +99,6 @@ service Cell
             <li>NumberFormat: already available.</li>
             <li>ShadowFormat: non-functional implementation.</li>
             <li>CellProtection: non-functional implementation.</li>
-            <li>UserDefinedAttributes: already available.</li>
         </ul>
 
         @since OOo 2.0.0
