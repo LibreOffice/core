@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgevtatt.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:24:58 $
+ *  last change: $Author: obo $ $Date: 2006-07-14 07:09:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,12 @@
 #endif
 #ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_XDIALOG_HPP_
+#include <com/sun/star/awt/XDialog.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XINTROSPECTION_HPP_
+#include <com/sun/star/beans/XIntrospectionAccess.hpp>
 #endif
 
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
@@ -140,14 +146,22 @@ namespace dlgprov
 
     class DialogScriptListenerImpl : public DialogScriptListenerImpl_BASE
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >    m_xContext;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >             m_xModel;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >                 m_xModel;
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDialog >                  m_xDialog;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >               m_xHandler;
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XIntrospectionAccess >   m_xIntrospectionAccess;
 
         virtual void firing_impl( const ::com::sun::star::script::ScriptEvent& aScriptEvent, ::com::sun::star::uno::Any* pRet );
 
+        void handleUnoScript( const ::com::sun::star::script::ScriptEvent& aScriptEvent, ::com::sun::star::uno::Any* pRet );
+
     public:
         DialogScriptListenerImpl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel );
+            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDialog >& rxDialog,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxHandler,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XIntrospectionAccess >& rxIntrospectionAccess );
         virtual ~DialogScriptListenerImpl();
 
         // XEventListener
