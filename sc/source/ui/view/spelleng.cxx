@@ -4,9 +4,9 @@
  *
  *  $RCSfile: spelleng.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:06:06 $
+ *  last change: $Author: obo $ $Date: 2006-07-14 08:26:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,10 @@
  ************************************************************************/
 #include "spelleng.hxx"
 
+#ifndef _COM_SUN_STAR_I18N_TEXTCONVERSIONOPTION_HPP_
+#include <com/sun/star/i18n/TextConversionOption.hpp>
+#endif
+
 #include <memory>
 
 #include "scitems.hxx"
@@ -56,6 +60,9 @@
 #include "patattr.hxx"
 #include "waitoff.hxx"
 #include "globstr.hrc"
+
+
+using namespace ::com::sun::star;
 
 // ============================================================================
 
@@ -406,6 +413,8 @@ ScConversionParam::ScConversionParam( ScConversionType eConvType,
     mbUseTargetFont( false ),
     mbIsInteractive( bIsInteractive )
 {
+    if (LANGUAGE_KOREAN == eLang)
+        mnOptions = i18n::TextConversionOption::CHARACTER_BY_CHARACTER;
 }
 
 ScConversionParam::ScConversionParam( ScConversionType eConvType,
@@ -419,6 +428,8 @@ ScConversionParam::ScConversionParam( ScConversionType eConvType,
     mbUseTargetFont( true ),
     mbIsInteractive( bIsInteractive )
 {
+    if (LANGUAGE_KOREAN == meSourceLang && LANGUAGE_KOREAN == meTargetLang)
+        mnOptions = i18n::TextConversionOption::CHARACTER_BY_CHARACTER;
 }
 
 // ----------------------------------------------------------------------------
