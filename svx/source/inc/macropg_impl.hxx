@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macropg_impl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:25:12 $
+ *  last change: $Author: obo $ $Date: 2006-07-14 07:18:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,16 +39,43 @@
 class _SvxMacroTabPage_Impl
 {
 public:
-                                    _SvxMacroTabPage_Impl( void );
+                                    _SvxMacroTabPage_Impl( const SfxItemSet& rAttrSet );
                                     ~_SvxMacroTabPage_Impl();
 
+    FixedText*                      pAssignFT;
     PushButton*                     pAssignPB;
+    PushButton*                     pAssignComponentPB;
     PushButton*                     pDeletePB;
+    Image*                          pMacroImg;
+    Image*                          pComponentImg;
+    Image*                          pMacroImg_h;
+    Image*                          pComponentImg_h;
     String*                         pStrEvent;
     String*                         pAssignedMacro;
     _HeaderTabListBox*              pEventLB;
     BOOL                            bReadOnly;
+    BOOL                            bIDEDialogMode;
 };
 
+class AssignComponentDialog : public ModalDialog
+{
+private:
+    FixedText       maMethodLabel;
+    Edit            maMethodEdit;
+    OKButton        maOKButton;
+    CancelButton    maCancelButton;
+    HelpButton      maHelpButton;
+
+    ::rtl::OUString maURL;
+
+    DECL_LINK(ButtonHandler, Button *);
+
+public:
+    AssignComponentDialog( Window * pParent, const ::rtl::OUString& rURL );
+    ~AssignComponentDialog();
+
+    ::rtl::OUString getURL( void ) const
+        { return maURL; }
+};
 
 #endif
