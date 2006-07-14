@@ -1,12 +1,12 @@
-/*************************************************************************
+ï»¿/*************************************************************************
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
  *  $RCSfile: sfx.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:12:21 $
+ *  last change: $Author: obo $ $Date: 2006-07-14 07:20:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,7 +128,6 @@ String STR_GB
 
 String STR_UNDO
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Rückgängig:  : R³ckgõngig:  */
     Text [ de ] = "RÃ¼ckgÃ¤ngig: " ;
     Text [ en-US ] = "Undo: " ;
 };
@@ -154,7 +153,14 @@ QueryBox MSG_QUERY_LASTVERSION
 {
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_NO ;
-    /* ### ACHTUNG: Neuer Text in Resource? Alle Änderungen aufheben? : Alle Žnderungen aufheben? */
     Message [ de ] = "Alle Ã„nderungen aufheben?" ;
     Message [ en-US ] = "Cancel all changes?" ;
 };
+
+// i66948 used in project scripting
+String STR_ERRUNOEVENTBINDUNG
+{
+    Text [ de ] = "Eine passende Komponenten-Methode %1\nkonnte nicht gefunden werden.\n\nÃœberprÃ¼fen Sie die Schreibweise des Methodennamens.";
+    Text [ en-US ] = "An appropriate component method %1\ncould not be found.\n\nCheck spelling of method name.";
+};
+
