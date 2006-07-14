@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldisp.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 16:36:57 $
+ *  last change: $Author: obo $ $Date: 2006-07-14 08:57:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -360,6 +360,9 @@ protected:
     KeySym          nShiftKeySym_;      // first shift modifier
     KeySym          nCtrlKeySym_;       // first control modifier
     KeySym          nMod1KeySym_;       // first mod1 modifier
+#ifdef MACOSX
+    KeySym          nMod2KeySym_;       //first mod2 modifier
+#endif
     ByteString      m_aKeyboardName;
 
     vcl_sal::WMAdaptor* m_pWMAdaptor;
