@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CellProperties.idl,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:06:33 $
+ *  last change: $Author: obo $ $Date: 2006-07-14 08:37:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,9 @@
 #ifndef __com_sun_star_container_XNameContainer_idl__
 #include <com/sun/star/container/XNameContainer.idl>
 #endif
+#ifndef _com_sun_star_xml_UserDefinedAttributesSupplier_idl_
+#include <com/sun/star/xml/UserDefinedAttributesSupplier.idl>
+#endif
 
 
 //=============================================================================
@@ -69,6 +72,17 @@
  */
 published service CellProperties
 {
+    //-------------------------------------------------------------------------
+    /** contains user defined attributes.
+
+        @see    <type scope="com::sun::star::xml">UserDefinedAttributesSupplier</type>
+     */
+    service com::sun::star::xml::UserDefinedAttributesSupplier;
+
+    //-------------------------------------------------------------------------
+
+    /** gives access to the objects properties
+     */
     interface com::sun::star::beans::XPropertySet;
 
     //-------------------------------------------------------------------------
@@ -145,15 +159,6 @@ published service CellProperties
     /** contains the distance of the bottom border.
      */
     [property] long BottomBorderDistance;
-
-    //-------------------------------------------------------------------------
-    /** contains user defined attributes.
-
-        <p>This <type scope="com::sun::star::container">XNameContainer</type>
-        supports the service
-        <type scope="com::sun::star::xml">AttributeContainer</type>.</p>
-     */
-    [property] com::sun::star::container::XNameContainer UserDefinedAttributes;
 
     //-------------------------------------------------------------------------
     /** contains the text section the text table is contained in if there is any.
