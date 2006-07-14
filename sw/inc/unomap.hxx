@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomap.hxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 13:56:18 $
+ *  last change: $Author: obo $ $Date: 2006-07-14 08:29:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -302,6 +302,7 @@
 #define WID_IS_CONSTANT_SPELLCHECK              1102
 #define WID_IS_HIDE_SPELL_MARKS                 1103
 
+#define WID_LAYOUT_SIZE                         1104
 
 
 //AutoText
