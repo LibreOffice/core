@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UserDefinedAttributeSupplier.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:35:42 $
+ *  last change: $Author: obo $ $Date: 2006-07-14 08:39:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,11 @@ module com { module sun { module star { module xml {
     it (the component).
 
     @since OOo 1.1.2
+
+    @deprecated     because of typo in service name.
+            Please use the service UserDefinedAttributesSupplier instead.
+
+    @see    <type scope="com::sun::star::xml">UserDefinedAttributesSupplier</type>
 */
 published service UserDefinedAttributeSupplier
 {
@@ -60,6 +65,11 @@ published service UserDefinedAttributeSupplier
         <p>The
         <type scope="com::sun::star::container">XNameContainer</type>
         supports the service <type>AttributeContainer</type>.</p>
+
+        @deprecated     because of typo in service name.
+                Please use the service UserDefinedAttributesSupplier instead.
+
+        @see    <type scope="com::sun::star::xml">UserDefinedAttributesSupplier</type>
      */
     [property] ::com::sun::star::container::XNameContainer  UserDefinedAttributes;
 };
