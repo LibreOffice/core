@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:13:30 $
+ *  last change: $Author: obo $ $Date: 2006-07-14 08:29:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,6 +72,7 @@ class   PushButton;
 class   FixedText;
 class   SwPaM;
 class   SwgReaderOption;
+class   SwOLEObj;
 
 class SW_DLLPUBLIC SwDocShell: public SfxObjectShell, public SfxListener
 {
@@ -288,6 +289,8 @@ public:
     // read by the binary filter:
     virtual void UpdateLinks();
     // <--
+
+    SW_DLLPRIVATE void  CalcAndSetScaleOfOLEObj( SwOLEObj& rOLEObject );
 };
 
 #endif
