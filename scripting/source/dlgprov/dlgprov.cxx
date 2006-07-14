@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgprov.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 10:19:02 $
+ *  last change: $Author: obo $ $Date: 2006-07-14 07:10:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,9 @@
 #ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_HXX_
 #include <cppuhelper/implementationentry.hxx>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XINTROSPECTION_HPP_
+#include <com/sun/star/beans/XIntrospection.hpp>
+#endif
 
 #ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
@@ -79,6 +82,7 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::script;
+using namespace ::com::sun::star::beans;
 
 
 //.........................................................................
@@ -115,8 +119,9 @@ namespace dlgprov
             ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
             if ( !pNames )
             {
-                static Sequence< ::rtl::OUString > aNames(1);
+                static Sequence< ::rtl::OUString > aNames(2);
                 aNames.getArray()[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.DialogProvider" ) );
+                aNames.getArray()[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.DialogProvider2" ) );
                 pNames = &aNames;
             }
         }
@@ -395,11 +400,13 @@ namespace dlgprov
 
     // -----------------------------------------------------------------------------
 
-    void DialogProviderImpl::attachDialogEvents( const Reference< XControl >& rxDialogControl )
+    void DialogProviderImpl::attachDialogEvents( const Reference< XDialog >& rxDialog,
+        const Reference< XInterface >& rxHandler,
+        const Reference< XIntrospectionAccess >& rxIntrospectionAccess )
     {
-        if ( rxDialogControl.is() )
+        if ( rxDialog.is() )
         {
-            Reference< XControlContainer > xControlContainer( rxDialogControl, UNO_QUERY );
+            Reference< XControlContainer > xControlContainer( rxDialog, UNO_QUERY );
 
             if ( xControlContainer.is() )
             {
@@ -415,9 +422,10 @@ namespace dlgprov
                 }
 
                 // also add the dialog control itself to the sequence
-                pObjects[nControlCount] = Reference< XInterface >( rxDialogControl, UNO_QUERY );
+                pObjects[nControlCount] = Reference< XInterface >( rxDialog, UNO_QUERY );
 
-                Reference< XScriptListener > xScriptListener = new DialogScriptListenerImpl( m_xContext, m_xModel );
+                Reference< XScriptListener > xScriptListener = new DialogScriptListenerImpl
+                    ( m_xContext, m_xModel, rxDialog, rxHandler, rxIntrospectionAccess );
 
                 if ( xScriptListener.is() )
                 {
@@ -433,6 +441,49 @@ namespace dlgprov
             }
         }
     }
+
+    Reference< XIntrospectionAccess > DialogProviderImpl::inspectHandler( const Reference< XInterface >& rxHandler )
+    {
+        Reference< XIntrospectionAccess > xIntrospectionAccess;
+        static Reference< XIntrospection > xIntrospection;
+
+        if( !rxHandler.is() )
+            return xIntrospectionAccess;
+
+        if( !xIntrospection.is() )
+        {
+            Reference< XMultiComponentFactory > xSMgr( m_xContext->getServiceManager(), UNO_QUERY );
+            if ( !xSMgr.is() )
+            {
+                throw RuntimeException(
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DialogProviderImpl::getIntrospectionAccess: Couldn't instantiate MultiComponent factory" ) ),
+                        Reference< XInterface >() );
+            }
+
+            // Get introspection service
+            Reference< XInterface > xI = xSMgr->createInstanceWithContext
+                ( rtl::OUString::createFromAscii("com.sun.star.beans.Introspection"), m_xContext );
+            if (xI.is())
+                xIntrospection = Reference< XIntrospection >::query( xI );
+        }
+
+        if( xIntrospection.is() )
+        {
+            // Do introspection
+            try
+            {
+                Any aHandlerAny;
+                aHandlerAny <<= rxHandler;
+                xIntrospectionAccess = xIntrospection->inspect( aHandlerAny );
+            }
+            catch( RuntimeException& e )
+            {
+                xIntrospectionAccess.clear();
+            }
+        }
+        return xIntrospectionAccess;
+    }
+
 
     // -----------------------------------------------------------------------------
     // XServiceInfo
@@ -494,9 +545,43 @@ namespace dlgprov
     // XDialogProvider
     // -----------------------------------------------------------------------------
 
+    Reference < XDialog > DialogProviderImpl::createDialogImpl(
+        const ::rtl::OUString& URL, const Reference< XInterface >& xHandler )
+            throw (IllegalArgumentException, RuntimeException)
+    {
+        // if the dialog is located in a document, the document must already be open!
+
+        ::osl::MutexGuard aGuard( getMutex() );
+
+        OSL_ENSURE( URL.getLength(), "DialogProviderImpl::getDialog: no URL!" );
+
+        // m_xHandler = xHandler;
+
+        Reference< XDialog > xDialog;
+        Reference< XControlModel > xCtrlMod( createDialogModel( URL ) );
+        if ( xCtrlMod.is() )
+        {
+            Reference< XControl > xCtrl( createDialogControl( xCtrlMod ) );
+            if ( xCtrl.is() )
+            {
+                // attachDialogEvents( xCtrl );
+                xDialog = Reference< XDialog >( xCtrl, UNO_QUERY );
+                Reference< XIntrospectionAccess > xIntrospectionAccess = inspectHandler( xHandler );
+                attachDialogEvents( xDialog, xHandler, xIntrospectionAccess );
+            }
+        }
+
+        return xDialog;
+    }
+
     Reference < XDialog > DialogProviderImpl::createDialog( const ::rtl::OUString& URL )
         throw (IllegalArgumentException, RuntimeException)
     {
+        Reference< XInterface > xDummyHandler;
+        Reference< XDialog > xDialog = DialogProviderImpl::createDialogImpl( URL, xDummyHandler );
+        return xDialog;
+
+        /*
         // if the dialog is located in a document, the document must already be open!
 
         ::osl::MutexGuard aGuard( getMutex() );
@@ -516,7 +601,23 @@ namespace dlgprov
         }
 
         return xDialog;
+        */
     }
+
+    Reference < XDialog > DialogProviderImpl::createDialogWithHandler(
+        const ::rtl::OUString& URL, const Reference< XInterface >& xHandler )
+            throw (IllegalArgumentException, RuntimeException)
+    {
+        if( !xHandler.is() )
+        {
+            throw IllegalArgumentException(
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DialogProviderImpl::createDialogWithHandler: Invalid xHandler!" ) ),
+                Reference< XInterface >(), 1 );
+        }
+        Reference< XDialog > xDialog = DialogProviderImpl::createDialogImpl( URL, xHandler );
+        return xDialog;
+    }
+
 
     // =============================================================================
     // component operations
