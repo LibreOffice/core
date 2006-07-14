@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.115 $
+ *  $Revision: 1.116 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 14:01:27 $
+ *  last change: $Author: obo $ $Date: 2006-07-14 08:29:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -776,7 +776,8 @@ enum SwPropNameIds
 // --> OD 2006-03-21 #b6375613#
 /* 0707 */  UNO_NAME_APPLY_WORKAROUND_FOR_B6375613,
 // <--
-/* 0708 */  SW_PROPNAME_END
+/* 0708 */  UNO_NAME_LAYOUT_SIZE,
+/* 0709 */  SW_PROPNAME_END
 };
 
 
