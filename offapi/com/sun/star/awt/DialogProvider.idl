@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DialogProvider.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:59:16 $
+ *  last change: $Author: obo $ $Date: 2006-07-14 07:13:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,10 +54,11 @@ module com { module sun { module star { module awt {
 /** specifies a provider for dialogs implementing the
     <type scope="com::sun::star::awt">XDialog</type> interface.
  */
-service DialogProvider {
-    interface com::sun::star::awt::XDialogProvider;
+service DialogProvider : com::sun::star::awt::XDialogProvider;
 
-};
+// service DialogProvider {
+    // interface com::sun::star::awt::XDialogProvider;
+// };
 
 //=============================================================================
 
