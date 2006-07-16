@@ -1,10 +1,10 @@
-fx	drawinglayer	:	goodies sal vcl basegfx offuh cppuhelper cppu NULL
-fx	drawinglayer						usr1	-	all	fx_mkout NULL
-fx	drawinglayer\inc					get		-	all	fx_inc NULL
-fx	drawinglayer\prj					get		-	all	fx_prj NULL
-fx	drawinglayer\source\primitive		nmake	-	all	fx_primitive NULL
-fx	drawinglayer\source\primitive3d		nmake	-	all	fx_primitive3d NULL
-fx	drawinglayer\source\animation		nmake	-	all	fx_animation NULL
-fx	drawinglayer\source\geometry		nmake	-	all	fx_geometry NULL
-fx	drawinglayer\source\processor		nmake	-	all	fx_processor NULL
-fx	drawinglayer\util					nmake	-	all	fx_util fx_primitive fx_primitive3d fx_animation fx_geometry fx_processor NULL
+dx	drawinglayer	:	goodies sal vcl basegfx offuh cppuhelper cppu NULL
+dx	drawinglayer						usr1	-	all	dx_mkout NULL
+dx	drawinglayer\inc					get		-	all	dx_inc NULL
+dx	drawinglayer\prj					get		-	all	dx_prj NULL
+dx	drawinglayer\source\primitive		nmake	-	all	dx_primitive NULL
+dx	drawinglayer\source\primitive3d		nmake	-	all	dx_primitive3d NULL
+dx	drawinglayer\source\animation		nmake	-	all	dx_animation NULL
+dx	drawinglayer\source\geometry		nmake	-	all	dx_geometry NULL
+dx	drawinglayer\source\processor		nmake	-	all	dx_processor NULL
+dx	drawinglayer\util					nmake	-	all	dx_util dx_primitive dx_primitive3d dx_animation dx_geometry dx_processor NULL
