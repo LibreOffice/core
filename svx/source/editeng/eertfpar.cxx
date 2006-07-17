@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eertfpar.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-14 08:44:04 $
+ *  last change: $Author: obo $ $Date: 2006-07-17 15:07:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -313,7 +313,7 @@ void __EXPORT EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
     const SfxPoolItem* pItem;
 
     // #i66167# adapt font heights to destination MapUnit if necessary
-    const MapUnit eDestUnit = static_cast< MapUnit >( pImpEditEngine->GetEditDoc().GetItemPool().GetMetric(0) );
+    const MapUnit eDestUnit = ( MapUnit )( pImpEditEngine->GetEditDoc().GetItemPool().GetMetric(0) );
     const MapUnit eSrcUnit  = aRTFMapMode.GetMapUnit();
     if (eDestUnit != eSrcUnit)
     {
