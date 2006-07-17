@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Process.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 13:40:32 $
+ *  last change: $Author: obo $ $Date: 2006-07-17 14:13:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -243,7 +243,7 @@ public class Process implements WebWizardConst, ProcessErrors {
      */
     static String getSOTempDir(XMultiServiceFactory xmsf) {
         try {
-            String s = FileAccess.getOfficePath(xmsf,"Temp","");
+            String s = FileAccess.getOfficePath(xmsf,"Temp","", "");
             return s;
         }
         catch (Exception e) {}
