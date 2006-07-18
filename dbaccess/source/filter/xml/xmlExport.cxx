@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlExport.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 15:22:03 $
+ *  last change: $Author: obo $ $Date: 2006-07-18 06:41:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -232,7 +232,7 @@ namespace dbaxml
                 const XMLPropertyState& /*rProperty*/,
                 const SvXMLUnitConverter& /*rUnitConverter*/,
                 const SvXMLNamespaceMap& /*rNamespaceMap*/,
-                const ::std::vector< XMLPropertyState > /*pProperties*/ ,
+                const ::std::vector< XMLPropertyState > * /*pProperties*/ ,
                 sal_uInt32 /*nIdx*/ ) const
         {
             // nothing to do here
