@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLIndexMarkExport.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:40:20 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:37:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -219,7 +219,7 @@ void XMLIndexMarkExport::ExportTOCMarkAttributes(
     const Reference<XPropertySet> & rPropSet)
 {
     // outline level
-    sal_Int16 nLevel;
+    sal_Int16 nLevel = 0;
     Any aAny = rPropSet->getPropertyValue(sLevel);
     aAny >>= nLevel;
     OUStringBuffer sBuf;
