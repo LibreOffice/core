@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rscrange.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:48:14 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 17:14:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -253,9 +253,9 @@ void RscRange::WriteRcAccess
 {
     fprintf( fOutput, "\t\tSet%s( ", pName );
     if( nMin >= 0 )
-        fprintf( fOutput, "*(sal_uInt32 *)(pResData+nOffset) );\n", pName );
+        fprintf( fOutput, "*(sal_uInt32 *)(pResData+nOffset) );\n" );
     else
-        fprintf( fOutput, "*(sal_Int32 *)(pResData+nOffset) );\n", pName );
+        fprintf( fOutput, "*(sal_Int32 *)(pResData+nOffset) );\n" );
     fprintf( fOutput, "\t\tnOffset += sizeof( sal_uInt32 );\n" );
 }
 
@@ -457,7 +457,7 @@ void RscLongRange::WriteRcAccess
 )
 {
     fprintf( fOutput, "\t\tSet%s( ", pName );
-    fprintf( fOutput, "GetLong( pResData+nOffset ) );\n", pName );
+    fprintf( fOutput, "GetLong( pResData+nOffset ) );\n" );
     fprintf( fOutput, "\t\tnOffset += sizeof( INT32 );\n" );
 }
 
@@ -709,7 +709,7 @@ void RscIdRange::WriteRcAccess
 )
 {
     fprintf( fOutput, "\t\tSet%s( ", pName );
-    fprintf( fOutput, "GetLong( pResData+nOffset ) );\n", pName );
+    fprintf( fOutput, "GetLong( pResData+nOffset ) );\n" );
     fprintf( fOutput, "\t\tnOffset += sizeof( INT32 );\n" );
 }
 
@@ -795,7 +795,7 @@ void RscBool::WriteRcAccess
 )
 {
     fprintf( fOutput, "\t\tSet%s( ", pName );
-    fprintf( fOutput, "(BOOL)*(short *)(pResData+nOffset) );\n", pName );
+    fprintf( fOutput, "(BOOL)*(short *)(pResData+nOffset) );\n" );
     fprintf( fOutput, "\t\tnOffset += sizeof( short );\n" );
 }
 
