@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optpath.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 12:01:59 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:17:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,16 +88,16 @@ TabPage RID_SFXPAGE_PATH
     {
         Pos = MAP_APPFONT ( 115 , 165 ) ;
         Size = MAP_APPFONT ( 65 , 14 ) ;
-        Text [ de ] = "Von %PRODUCTNAME verwendete Pfade" ;
-        Text [ en-US ] = "Paths used by %PRODUCTNAME" ;
+        Text [ de ] = "~Standard" ;
+        Text [ en-US ] = "~Default" ;
         Text [ x-comment ] = " ";
     };
     FixedLine GB_STD
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Standard" ;
-        Text [ en-US ] = "Default" ;
+        Text [ de ] = "Von %PRODUCTNAME verwendete Pfade" ;
+        Text [ en-US ] = "Paths used by %PRODUCTNAME" ;
         Text [ x-comment ] = " ";
     };
     Image IMG_LOCK
