@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docredln.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 14:16:59 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 09:35:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -188,6 +188,8 @@
             USHORT nDummy = 0;
             const SwRedline* pCurrent = rTbl[ n ];
             const SwRedline* pNext = n+1 < rTbl.Count() ? rTbl[ n+1 ] : 0;
+            if( pCurrent == pNext )
+                ++nDummy;
             if( n == nWatch )
                 ++nDummy; // Possible debugger breakpoint
         }
@@ -321,18 +323,25 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
             }
         }
 
-        BOOL bCompress = FALSE;
         SwPosition* pStt = pNewRedl->Start(),
                   * pEnd = pStt == pNewRedl->GetPoint() ? pNewRedl->GetMark()
                                                         : pNewRedl->GetPoint();
+        if( ( *pStt == *pEnd ) &&
+            ( pNewRedl->GetContentIdx() == NULL ) )
+        {   // Do not insert empty redlines
+            delete pNewRedl;
+            return FALSE;
+        }
+        BOOL bCompress = FALSE;
         USHORT n = 0;
             // zur StartPos das erste Redline suchen
         if( !GetRedline( *pStt, &n ) && n )
             --n;
+        bool bDec = false;
 
-        for( ; pNewRedl && n < pRedlineTbl->Count(); ++n )
+        for( ; pNewRedl && n < pRedlineTbl->Count(); bDec ? n : ++n )
         {
-
+            bDec = false;
 #ifdef DVO_TEST
             _CHECK_REDLINE( this )
 #endif
@@ -409,10 +418,16 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                         else if( POS_OVERLAP_BEHIND == eCmpPos )
                         {
                             *pStt = *pREnd;
+                            if( ( *pStt == *pEnd ) &&
+                                ( pNewRedl->GetContentIdx() == NULL ) )
+                                bDelete = true;
                         }
                         else if( POS_OVERLAP_BEFORE == eCmpPos )
                         {
                             *pEnd = *pRStt;
+                            if( ( *pStt == *pEnd ) &&
+                                ( pNewRedl->GetContentIdx() == NULL ) )
+                                bDelete = true;
                         }
                         else if( POS_INSIDE == eCmpPos || POS_EQUAL == eCmpPos)
                             bDelete = true;
@@ -433,7 +448,13 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                             pRedlineTbl->Insert( pCpy );
                         }
                         pRedl->SetEnd( *pStt, pREnd );
-                        if( !pRedl->HasValidRange() )
+                        if( ( *pStt == *pRStt ) &&
+                            ( pRedl->GetContentIdx() == NULL ) )
+                        {
+                            pRedlineTbl->DeleteAndDestroy( n );
+                            bDec = true;
+                        }
+                        else if( !pRedl->HasValidRange() )
                         {
                             // neu einsortieren
                             pRedlineTbl->Remove( n );
@@ -452,6 +473,12 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                         pSplit->SetEnd( *pRStt );
                         pNewRedl->SetStart( *pREnd );
                         pRedlineTbl->Insert( pSplit );
+                        if( *pStt == *pEnd && pNewRedl->GetContentIdx() == NULL )
+                        {
+                            delete pNewRedl;
+                            pNewRedl = 0;
+                            bCompress = true;
+                        }
                     }
                     else if ( POS_OVERLAP_BEHIND == eCmpPos )
                     {
@@ -463,18 +490,34 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                     {
                         // #107164# handle overlapping redlines in broken
                         // documents
-                        pNewRedl->SetEnd( *pRStt );
+                        *pEnd = *pRStt;
+                        if( ( *pStt == *pEnd ) &&
+                            ( pNewRedl->GetContentIdx() == NULL ) )
+                        {
+                            delete pNewRedl;
+                            pNewRedl = 0;
+                            bCompress = true;
+                        }
                     }
                     break;
                 case REDLINE_DELETE:
                     if( POS_INSIDE == eCmpPos )
                     {
                         // aufsplitten
-                        SwRedline* pCpy = new SwRedline( *pRedl );
-                        pCpy->SetStart( *pEnd );
-                        pRedlineTbl->Insert( pCpy );
+                        if( *pEnd != *pREnd )
+                        {
+                            SwRedline* pCpy = new SwRedline( *pRedl );
+                            pCpy->SetStart( *pEnd );
+                            pRedlineTbl->Insert( pCpy );
+                        }
                         pRedl->SetEnd( *pStt, pREnd );
-                        if( !pRedl->HasValidRange() )
+                        if( ( *pStt == *pRStt ) &&
+                            ( pRedl->GetContentIdx() == NULL ) )
+                        {
+                            pRedlineTbl->DeleteAndDestroy( n );
+                            bDec = true;
+                        }
+                        else if( !pRedl->HasValidRange() )
                         {
                             // neu einsortieren
                             pRedlineTbl->Remove( n );
@@ -493,12 +536,19 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                         pSplit->SetEnd( *pRStt );
                         pNewRedl->SetStart( *pREnd );
                         pRedlineTbl->Insert( pSplit );
+                        if( *pStt == *pEnd && pNewRedl->GetContentIdx() == NULL )
+                        {
+                            delete pNewRedl;
+                            pNewRedl = 0;
+                            bCompress = true;
+                        }
                     }
                     else if ( POS_EQUAL == eCmpPos )
                     {
                         // #112895# handle identical redlines in broken
                         // documents - delete old (delete) redline
-                        pRedlineTbl->DeleteAndDestroy( n-- );
+                        pRedlineTbl->DeleteAndDestroy( n );
+                        bDec = true;
                     }
                     break;
                 case REDLINE_FORMAT:
@@ -509,17 +559,24 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                         // neu einsortieren
                         pRedlineTbl->Remove( n );
                         pRedlineTbl->Insert( pRedl, n );
+                        bDec = true;
                         break;
 
                     case POS_OVERLAP_BEHIND:
                         pRedl->SetEnd( *pStt, pREnd );
+                        if( *pStt == *pRStt && pRedl->GetContentIdx() == NULL )
+                        {
+                            pRedlineTbl->DeleteAndDestroy( n );
+                            bDec = true;
+                        }
                         break;
 
                     case POS_EQUAL:
                     case POS_OUTSIDE:
                         // ueberlappt den akt. komplett oder hat gleiche
                         // Ausdehung, dann muss der alte geloescht werden
-                        pRedlineTbl->DeleteAndDestroy( n-- );
+                        pRedlineTbl->DeleteAndDestroy( n );
+                        bDec = true;
                         break;
 
                     case POS_INSIDE:
@@ -527,11 +584,17 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                         // der neue gesplittet oder verkuertzt werden
                         if( *pEnd != *pREnd )
                         {
-                            SwRedline* pNew = new SwRedline( *pRedl );
-                            pNew->SetStart( *pEnd );
-                            pRedl->SetEnd( *pStt, pREnd );
-                            AppendRedline( pNew, bCallDelete );
-                            n = (USHORT)-1;     // neu Aufsetzen
+                            if( *pEnd != *pRStt )
+                            {
+                                SwRedline* pNew = new SwRedline( *pRedl );
+                                pNew->SetStart( *pEnd );
+                                pRedl->SetEnd( *pStt, pREnd );
+                                if( *pStt == *pRStt && pRedl->GetContentIdx() == NULL )
+                                    pRedlineTbl->DeleteAndDestroy( n );
+                                AppendRedline( pNew, bCallDelete );
+                                n = 0;      // neu Aufsetzen
+                                bDec = true;
+                            }
                         }
                         else
                             pRedl->SetEnd( *pStt, pREnd );
@@ -561,7 +624,8 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                                 pNew->SetStart( *pREnd );
                                 pNewRedl->SetEnd( *pRStt, pEnd );
                                 AppendRedline( pNew, bCallDelete );
-                                n = (USHORT)-1;     // neu Aufsetzen
+                                n = 0;      // neu Aufsetzen
+                                bDec = true;
                             }
                             else
                                 pNewRedl->SetEnd( *pRStt, pEnd );
@@ -586,7 +650,8 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                                 pNewRedl->SetStart( *pRStt, pStt );
                             else
                                 pNewRedl->SetEnd( *pREnd, pEnd );
-                            pRedlineTbl->DeleteAndDestroy( n-- );
+                            pRedlineTbl->DeleteAndDestroy( n );
+                            bDec = true;
                         }
                         else if( POS_OVERLAP_BEHIND == eCmpPos )
                             pNewRedl->SetStart( *pREnd, pStt );
@@ -624,7 +689,7 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                             // delete current (below), and restart process with
                             // previous
                             USHORT nToBeDeleted = n;
-                            n--;
+                            bDec = true;
 
                             // #107359# Do it again, Sam!
                             // If you can do it for them, you can do it for me.
@@ -637,7 +702,8 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                                 // but unfortunately this code is buggy and
                                 // totally rotten so it does happen and we
                                 // better fix it.
-                                n = -1;
+                                n = 0;
+                                bDec = true;
                             }
 
                             pRedlineTbl->DeleteAndDestroy( nToBeDeleted );
@@ -664,7 +730,8 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                         {
                         case POS_EQUAL:
                             bCompress = TRUE;
-                            pRedlineTbl->DeleteAndDestroy( n-- );
+                            pRedlineTbl->DeleteAndDestroy( n );
+                            bDec = true;
                             // kein break!
 
                         case POS_INSIDE:
@@ -697,7 +764,8 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
 
                         case POS_OUTSIDE:
                             {
-                                pRedlineTbl->Remove( n-- );
+                                pRedlineTbl->Remove( n );
+                                bDec = true;
                                 // damit pNew auch beim Verschieben der Indizies
                                 // behandelt wird, erstmal temp. einfuegen
                                 if( bCallDelete )
@@ -719,7 +787,7 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                                 SwPaM aPam( *pRStt, *pEnd );
 
                                 if( *pEnd == *pREnd )
-                                    pRedlineTbl->DeleteAndDestroy( n-- );
+                                    pRedlineTbl->DeleteAndDestroy( n );
                                 else
                                 {
                                     pRedl->SetStart( *pEnd, pRStt );
@@ -739,8 +807,9 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                                         pRedlineTbl->Remove( nFnd );
                                     else
                                         pNewRedl = 0;
-                                    n = (USHORT)-1;     // neu Aufsetzen
+                                    n = 0;      // neu Aufsetzen
                                 }
+                                bDec = true;
                             }
                             break;
 
@@ -749,7 +818,10 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                                 SwPaM aPam( *pStt, *pREnd );
 
                                 if( *pStt == *pRStt )
-                                    pRedlineTbl->DeleteAndDestroy( n-- );
+                                {
+                                    pRedlineTbl->DeleteAndDestroy( n );
+                                    bDec = true;
+                                }
                                 else
                                     pRedl->SetEnd( *pStt, pREnd );
 
@@ -764,7 +836,8 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                                         pRedlineTbl->Remove( nFnd );
                                     else
                                         pNewRedl = 0;
-                                    n = (USHORT)-1;     // neu Aufsetzen
+                                    n = 0;      // neu Aufsetzen
+                                    bDec = true;
                                 }
                             }
                             break;
@@ -803,17 +876,16 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                                     // neu einsortieren
                                     pRedlineTbl->Remove( n );
                                     pRedlineTbl->Insert( pRedl, n );
+                                    bDec = true;
                                 }
                                 else
                                 {
-                                    if( *pREnd == *pEnd )
-                                        pRedl->SetEnd( *pStt, pREnd );
-                                    else
+                                    if( *pREnd != *pEnd )
                                     {
                                         pNew = new SwRedline( *pRedl );
                                         pNew->SetStart( *pEnd );
-                                        pRedl->SetEnd( *pStt, pREnd );
                                     }
+                                    pRedl->SetEnd( *pStt, pREnd );
                                     if( !pRedl->HasValidRange() )
                                     {
                                         // neu einsortieren
@@ -859,6 +931,7 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                                     // neu einsortieren
                                     pRedlineTbl->Remove( n );
                                     pRedlineTbl->Insert( pRedl );
+                                    bDec = true;
                                 }
                             }
                             break;
@@ -909,7 +982,8 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                             ASSERT( bRet, "Can't insert existing redline?" );
 
                             // restart (now with pRedl being split up)
-                            n = (USHORT)-1;
+                            n = 0;
+                            bDec = true;
                         }
                     }
                 }
@@ -923,6 +997,7 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                         // neu einsortieren
                         pRedlineTbl->Remove( n );
                         pRedlineTbl->Insert( pRedl, n );
+                        bDec = true;
                         break;
 
                     case POS_OVERLAP_BEHIND:
@@ -933,7 +1008,8 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                     case POS_OUTSIDE:
                         // ueberlappt den akt. komplett oder hat gleiche
                         // Ausdehung, dann muss der alte geloescht werden
-                        pRedlineTbl->DeleteAndDestroy( n-- );
+                        pRedlineTbl->DeleteAndDestroy( n );
+                        bDec = true;
                         break;
 
                     case POS_INSIDE:
@@ -941,11 +1017,18 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                         // der neue gesplittet oder verkuertzt werden
                         if( *pEnd != *pREnd )
                         {
-                            SwRedline* pNew = new SwRedline( *pRedl );
-                            pNew->SetStart( *pEnd );
-                            pRedl->SetEnd( *pStt, pREnd );
-                            AppendRedline( pNew, bCallDelete );
-                            n = (USHORT)-1;     // neu Aufsetzen
+                            if( *pEnd != *pRStt )
+                            {
+                                SwRedline* pNew = new SwRedline( *pRedl );
+                                pNew->SetStart( *pEnd );
+                                pRedl->SetEnd( *pStt, pREnd );
+                                if( ( *pStt == *pRStt ) &&
+                                    ( pRedl->GetContentIdx() == NULL ) )
+                                    pRedlineTbl->DeleteAndDestroy( n );
+                                AppendRedline( pNew, bCallDelete );
+                                n = 0;      // neu Aufsetzen
+                                bDec = true;
+                            }
                         }
                         else
                             pRedl->SetEnd( *pStt, pREnd );
@@ -981,14 +1064,18 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
 
                     case POS_OUTSIDE:
                         // ueberlappt den akt. komplett, dann muss
-                        // der neue gesplittet oder verkuertzt werden
+                        // der neue gesplittet oder verkuerzt werden
                         if( *pEnd != *pREnd )
                         {
-                            SwRedline* pNew = new SwRedline( *pNewRedl );
-                            pNew->SetStart( *pREnd );
-                            pNewRedl->SetEnd( *pRStt, pEnd );
-                            AppendRedline( pNew, bCallDelete );
-                            n = (USHORT)-1;     // neu Aufsetzen
+                            if( *pEnd != *pRStt )
+                            {
+                                SwRedline* pNew = new SwRedline( *pNewRedl );
+                                pNew->SetStart( *pREnd );
+                                pNewRedl->SetEnd( *pRStt, pEnd );
+                                AppendRedline( pNew, bCallDelete );
+                                n = 0;      // neu Aufsetzen
+                                bDec = true;
+                            }
                         }
                         else
                             pNewRedl->SetEnd( *pRStt, pEnd );
@@ -1004,8 +1091,9 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                     case POS_EQUAL:
                         {
                             // ueberlappt den akt. komplett oder hat gleiche
-                            // Ausdehung, dann muss der alte geloescht werden
-                            pRedlineTbl->DeleteAndDestroy( n-- );
+                            // Ausdehnung, dann muss der alte geloescht werden
+                            pRedlineTbl->DeleteAndDestroy( n );
+                            bDec = true;
                         }
                         break;
 
@@ -1025,6 +1113,7 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                             // neu einsortieren
                             pRedlineTbl->Remove( n );
                             pRedlineTbl->Insert( pRedl, n );
+                            bDec = true;
                         }
                         else
                         {
@@ -1034,7 +1123,8 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                             pNew->SetStart( *pEnd );
                             pRedl->SetEnd( *pStt, pREnd );
                             AppendRedline( pNew, bCallDelete );
-                            n = (USHORT)-1;     // neu Aufsetzen
+                            n = 0;      // neu Aufsetzen
+                            bDec = true;
                         }
                         break;
 
@@ -1049,7 +1139,8 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                                 pNewRedl->SetStart( *pRStt, pStt );
                             else
                                 pNewRedl->SetEnd( *pREnd, pEnd );
-                            pRedlineTbl->DeleteAndDestroy( n-- );
+                            pRedlineTbl->DeleteAndDestroy( n );
+                            bDec = 0;
                         }
                         else if( POS_OVERLAP_BEHIND == eCmpPos )
                             pNewRedl->SetStart( *pREnd, pStt );
@@ -1065,7 +1156,8 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                             // dann kann das zusammengefasst werden, sprich
                             // der neue deckt das schon ab.
                             pNewRedl->SetEnd( *pREnd, pEnd );
-                            pRedlineTbl->DeleteAndDestroy( n-- );
+                            pRedlineTbl->DeleteAndDestroy( n );
+                            bDec = true;
                         }
                         break;
                     case POS_COLLIDE_START:
@@ -1077,7 +1169,8 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                             // dann kann das zusammengefasst werden, sprich
                             // der neue deckt das schon ab.
                             pNewRedl->SetStart( *pRStt, pStt );
-                            pRedlineTbl->DeleteAndDestroy( n-- );
+                            pRedlineTbl->DeleteAndDestroy( n );
+                            bDec = true;
                         }
                         break;
                     default:
@@ -1100,7 +1193,16 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
         }
 
         if( pNewRedl )
-            pRedlineTbl->Insert( pNewRedl );
+        {
+            if( ( *pStt == *pEnd ) &&
+                ( pNewRedl->GetContentIdx() == NULL ) )
+            {   // Do not insert empty redlines
+                delete pNewRedl;
+                pNewRedl = 0;
+            }
+            else
+                pRedlineTbl->Insert( pNewRedl );
+        }
 
         if( bCompress )
             CompressRedlines();
@@ -1839,7 +1941,6 @@ int lcl_AcceptRejectRedl( Fn_AcceptReject fn_AcceptReject,
                             SwRedlineTbl& rArr, BOOL bCallDelete,
                             const SwPaM& rPam)
 {
-    BOOL bRet = FALSE;
     USHORT n = 0;
     int nCount = 0; // #111827#
 
@@ -2023,7 +2124,7 @@ BOOL SwDoc::AcceptRedline( const SwPaM& rPam, BOOL bCallDelete )
 
         EndUndo( UNDO_ACCEPT_REDLINE, &aRewriter );
     }
-    return nRet;
+    return nRet != 0;
 }
 
 BOOL SwDoc::RejectRedline( USHORT nPos, BOOL bCallDelete )
@@ -2132,7 +2233,7 @@ BOOL SwDoc::RejectRedline( const SwPaM& rPam, BOOL bCallDelete )
         EndUndo( UNDO_REJECT_REDLINE, &aRewriter );
     }
 
-    return nRet;
+    return nRet != 0;
 }
 
 const SwRedline* SwDoc::SelNextRedline( SwPaM& rPam ) const
