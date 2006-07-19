@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sortedobjsimpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:16:04 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 09:30:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -215,7 +215,10 @@ struct ObjAnchorOrder
         // objects anchored at the same content with same wrap influence and
         // same anchor type.
         // Thus, compare content anchor node positions, if existing
-        if ( pCntntAnchorListed && pCntntAnchorNew &&
+        // --> OD 2006-07-07 #134369#
+        // compare doesn't make sense for at-paragraph anchored objects.
+        if ( pAnchorListed->GetAnchorId() != FLY_AT_CNTNT &&
+             pCntntAnchorListed && pCntntAnchorNew &&
              pCntntAnchorListed->nContent != pCntntAnchorNew->nContent )
         {
             return pCntntAnchorListed->nContent < pCntntAnchorNew->nContent;
