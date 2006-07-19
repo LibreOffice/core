@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 16:37:37 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:50:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,15 +68,7 @@
 #include <vos/mutex.hxx>
 #endif
 
-#include <prex.h>
-#if defined __SUNPRO_CC
-#pragma disable_warn
-#endif
-#include <X11/Xproto.h>
-#if defined __SUNPRO_CC
-#pragma enable_warn
-#endif
-#include <postx.h>
+#include "Xproto.h"
 
 #ifndef _SV_SALDISP_HXX
 #include <saldisp.hxx>
