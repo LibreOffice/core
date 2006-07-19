@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlnumi.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:37:09 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:37:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -795,7 +795,7 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
             if( pFontDecls->FillProperties( sFontName, aProps, 0, 1, 2, 3, 4 ) )
             {
                 OUString sTmp;
-                sal_Int16 nTmp;
+                sal_Int16 nTmp = 0;
                 ::std::vector< XMLPropertyState >::iterator i;
                 for( i = aProps.begin(); i != aProps.end(); i++ )
                 {
@@ -843,7 +843,7 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
         if( sFontFamilyGeneric.getLength() &&
             aFamilyHdl.importXML( sFontFamilyGeneric, aAny, rUnitConv  ) )
         {
-            sal_Int16 nTmp;
+            sal_Int16 nTmp = 0;
             aAny >>= nTmp;
             rListLevel.SetBulletFontFamily( nTmp );
         }
@@ -855,7 +855,7 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
         if( sFontPitch.getLength() &&
             aPitchHdl.importXML( sFontPitch, aAny, rUnitConv  ) )
         {
-            sal_Int16 nTmp;
+            sal_Int16 nTmp = 0;
             aAny >>= nTmp;
             rListLevel.SetBulletFontPitch( nTmp );
         }
@@ -864,7 +864,7 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
         if( sFontCharset.getLength() &&
             aEncHdl.importXML( sFontCharset, aAny, rUnitConv  ) )
         {
-            sal_Int16 nTmp;
+            sal_Int16 nTmp = 0;
             aAny >>= nTmp;
             rListLevel.SetBulletFontEncoding( nTmp );
         }
