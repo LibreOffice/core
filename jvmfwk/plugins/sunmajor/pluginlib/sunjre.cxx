@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sunjre.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:09:26 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 09:37:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,6 +76,7 @@ char const* const* SunInfo::getRuntimePaths(int * size)
         "/bin/classic/jvm.dll"
 #elif UNX
         "/lib/" JFW_PLUGIN_ARCH "/client/libjvm.so",
+        "/lib/" JFW_PLUGIN_ARCH "/server/libjvm.so",
         "/lib/" JFW_PLUGIN_ARCH "/classic/libjvm.so"
 #endif
 
