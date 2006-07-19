@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 15:55:52 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 09:39:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1929,34 +1929,43 @@ ULONG SwNewDBMgr::GetColumnFmt( uno::Reference< XDataSource> xSource,
                 }
             }
         }
-        Any aFormat = xColumn->getPropertyValue(C2U("FormatKey"));
-        if(aFormat.hasValue())
+        bool bUseDefault = true;
+        try
         {
-            sal_Int32 nFmt;
-            aFormat >>= nFmt;
-            if(xNumberFormats.is())
+            Any aFormat = xColumn->getPropertyValue(C2U("FormatKey"));
+            if(aFormat.hasValue())
             {
-                try
+                sal_Int32 nFmt;
+                aFormat >>= nFmt;
+                if(xNumberFormats.is())
                 {
-                    uno::Reference<XPropertySet> xNumProps = xNumberFormats->getByKey( nFmt );
-                    Any aFormat = xNumProps->getPropertyValue(C2U("FormatString"));
-                    Any aLocale = xNumProps->getPropertyValue(C2U("Locale"));
-                    rtl::OUString sFormat;
-                    aFormat >>= sFormat;
-                    com::sun::star::lang::Locale aLoc;
-                    aLocale >>= aLoc;
-                    nFmt = xDocNumberFormats->queryKey( sFormat, aLoc, sal_False );
-                    if(NUMBERFORMAT_ENTRY_NOT_FOUND == nFmt)
-                        nFmt = xDocNumberFormats->addNew( sFormat, aLoc );
-                    nRet = nFmt;
-                }
-                catch(Exception&)
-                {
-                    DBG_ERROR("illegal number format key")
+                    try
+                    {
+                        uno::Reference<XPropertySet> xNumProps = xNumberFormats->getByKey( nFmt );
+                        Any aFormat = xNumProps->getPropertyValue(C2U("FormatString"));
+                        Any aLocale = xNumProps->getPropertyValue(C2U("Locale"));
+                        rtl::OUString sFormat;
+                        aFormat >>= sFormat;
+                        com::sun::star::lang::Locale aLoc;
+                        aLocale >>= aLoc;
+                        nFmt = xDocNumberFormats->queryKey( sFormat, aLoc, sal_False );
+                        if(NUMBERFORMAT_ENTRY_NOT_FOUND == nFmt)
+                            nFmt = xDocNumberFormats->addNew( sFormat, aLoc );
+                        nRet = nFmt;
+                        bUseDefault = false;
+                    }
+                    catch(const Exception&)
+                    {
+                        DBG_ERROR("illegal number format key")
+                    }
                 }
             }
         }
-        else
+        catch( const Exception& )
+        {
+            DBG_ERROR("no FormatKey property found")
+        }
+        if(bUseDefault)
             nRet = SwNewDBMgr::GetDbtoolsClient().getDefaultNumberFormat(xColumn, xDocNumberFormatTypes,  aLocale);
     }
     return nRet;
