@@ -6,10 +6,6 @@
 			<Text id="a" xml:lang="en-US">Welcome</Text>
 			<Text id="a" xml:lang="de">Willkommen</Text>
 		</Paragraph>
-		<Paragraph id="A2">
-			<Text id="a" xml:lang="en-US">Last updated $Date: 2006-02-10 11:12:44 $</Text>
-			<Text id="a" xml:lang="de">Letztes Update $Date: 2006-02-10 11:12:44 $</Text>
-		</Paragraph>
 		<Paragraph id="A3" style="H1">
 			<Text id="a" xml:lang="en-US">OpenOffice.org 2.0 ReadMe</Text>
 			<Text id="a" xml:lang="de">OpenOffice.org 2.0 ReadMe</Text>
