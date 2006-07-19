@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:54:22 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:52:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,15 +36,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <prex.h>
-#if defined __SUNPRO_CC
-#pragma disable_warn
-#endif
-#include <X11/Xproto.h>
-#if defined __SUNPRO_CC
-#pragma enable_warn
-#endif
-#include <postx.h>
+#include "Xproto.h"
 
 #include <salunx.h>
 
