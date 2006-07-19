@@ -4,9 +4,9 @@
  *
  *  $RCSfile: indexentrysupplier_asian.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:45:06 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:29:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,7 +118,7 @@ IndexEntrySupplier_asian::getPhoneticCandidate( const OUString& rIndexEntry,
         int (*func)()=NULL;
         const sal_Char *func_name=NULL;
         if (rLocale.Language.equalsAscii("zh"))
-            func_name=(OUString::createFromAscii("TW HK MO").indexOf(rLocale.Country) >= 0) ?  "get_zh_zhuyin" : func_name="get_zh_pinyin";
+            func_name=(OUString::createFromAscii("TW HK MO").indexOf(rLocale.Country) >= 0) ?  "get_zh_zhuyin" : "get_zh_pinyin";
         else if (rLocale.Language.equalsAscii("ko"))
             func_name="get_ko_phonetic";
         if (func_name)
