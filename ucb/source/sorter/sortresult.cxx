@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sortresult.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:18:35 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 17:01:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -961,7 +961,7 @@ Any SAL_CALL SortedResultSet::getPropertyValue( const OUString& PropertyName )
     else if ( PropertyName.compareToAscii( "IsRowCountFinal" ) == 0 )
     {
         sal_uInt32  nOrgCount;
-        sal_Bool    bOrgFinal;
+        sal_Bool    bOrgFinal = false;
         Any         aOrgRet;
 
         aRet <<= (sal_Bool) sal_False;
@@ -1526,8 +1526,7 @@ void SortedResultSet::CheckProperties( long nOldCount, sal_Bool bWasFinal )
 
             OUString aName = OUString::createFromAscii( "IsRowCountFinal" );
             Any aRet = getPropertyValue( aName );
-            aRet >>= bIsFinal;
-            if ( bIsFinal != bWasFinal )
+            if ( (aRet >>= bIsFinal) && bIsFinal != bWasFinal )
             {
                 aEvt.PropertyName = aName;
                 aEvt.Further = sal_False;
