@@ -4,9 +4,9 @@
  *
  *  $RCSfile: untbl.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 11:31:59 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 09:35:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1675,27 +1675,33 @@ void SwUndoTblNdsChg::SaveNewBoxes( const SwTableNode& rTblNd,
 
             // find the source box. It must be one in rBoxes.
             // We found the right one if it's in the same column as pBox.
-            USHORT j = 0;
+            // No, if more than one selected cell in the same column has been splitted,
+            // we have to look for the nearest one (i65201)!
             const SwTableBox* pSourceBox = NULL;
-            do
+            const SwTableBox* pCheckBox = NULL;
+            const SwTableLine* pBoxLine = pBox->GetUpper();
+            USHORT nLineDiff = lcl_FindParentLines(rTbl,*pBox).C40_GETPOS(SwTableLine,pBoxLine);
+            USHORT nLineNo = 0;
+            for( USHORT j = 0; j < rBoxes.Count(); ++j )
             {
-                ASSERT( j < aBoxes.Count(), "box not found" );
-                pSourceBox = rBoxes[j];
-                j++;
+                pCheckBox = rBoxes[j];
+                if( pCheckBox->GetUpper()->GetUpper() == pBox->GetUpper()->GetUpper() )
+                {
+                    const SwTableLine* pCheckLine = pCheckBox->GetUpper();
+                    USHORT nCheckLine = lcl_FindParentLines( rTbl, *pCheckBox ).
+                    C40_GETPOS( SwTableLine, pCheckLine );
+                    if( ( !pSourceBox || nCheckLine > nLineNo ) && nCheckLine < nLineDiff )
+                    {
+                        nLineNo = nCheckLine;
+                        pSourceBox = pCheckBox;
+                    }
+                }
             }
-            while( pSourceBox->GetUpper()->GetUpper() !=
-                   pBox->GetUpper()->GetUpper() );
 
             // find the line number difference
             // (to help determine bNodesMoved flag below)
-            const SwTableLine* pBoxLine = pBox->GetUpper();
-            const SwTableLine* pSourceLine = pSourceBox->GetUpper();
-            USHORT nLineDiff =
-                lcl_FindParentLines( rTbl, *pBox ).
-                    C40_GETPOS( SwTableLine, pBoxLine ) -
-                lcl_FindParentLines( rTbl, *pSourceBox ).
-                    C40_GETPOS( SwTableLine, pSourceLine );
-
+            nLineDiff -= nLineNo;
+            ASSERT( pSourceBox, "Splitted source box not found!" );
             // find out how many nodes the source box used to have
             // (to help determine bNodesMoved flag below)
             USHORT nNdsPos = 0;
