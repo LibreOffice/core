@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:19:15 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 09:38:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -379,7 +379,7 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
     if( nAction )
     {
-        BOOL bUnlockView;
+        BOOL bUnlockView = sal_True; //initializing prevents warning
         if( pWrtShell )
         {
             bUnlockView = !pWrtShell->IsViewLocked();
@@ -794,9 +794,6 @@ void SwDocShell::Execute(SfxRequest& rReq)
             aTmpLst.Insert( &rACW.GetWordList() );
             pAFlags->pAutoCmpltList = &aTmpLst;
 
-            SfxViewShell* pViewShell = GetView()
-                                            ? (SfxViewShell*)GetView()
-                                            : SfxViewShell::Current();
             SfxApplication* pApp = SFX_APP();
             SfxRequest aAppReq(SID_AUTO_CORRECT_DLG, SFX_CALLMODE_SYNCHRON, pApp->GetPool());
             aAppReq.AppendItem(aSwOptions);
@@ -951,12 +948,30 @@ void SwDocShell::Execute(SfxRequest& rReq)
                             }
                             pFlt = aIter.Next();
                         }
-                        const SfxFilter *pOwnFlt = SwIoSystem::GetFilterOfFormat(
-                                String::CreateFromAscii( GetFILTER_XML() ),
-                                SwDocShell::Factory().GetFilterContainer() );
-                        xFltMgr->setCurrentFilter( pOwnFlt->GetUIName() );
+                        BOOL bWeb = 0 != dynamic_cast< SwWebDocShell *>( this );
+                        const SfxFilter *pOwnFlt =
+                                SwDocShell::Factory().GetFilterContainer()->
+                                GetFilter4FilterName(String::CreateFromAscii("writer8"));
 
-                        if( ERRCODE_NONE == aDlgHelper.Execute() )
+                        //#b6439685# make sure the default file format is also available
+                        if(bWeb)
+                        {
+                            const String sWild = ((WildCard&)pOwnFlt->GetWildcard()).GetWildCard();
+                            xFltMgr->appendFilter( pOwnFlt->GetUIName(), sWild );
+                        }
+
+                        bool bError = false;
+                        //#b6439685# catch expception if wrong filter is selected - should not happen anymore
+                        try
+                        {
+                            xFltMgr->setCurrentFilter( pOwnFlt->GetUIName() );
+                        }
+                        catch( const uno::Exception& )
+                        {
+                            bError = true;
+                        }
+
+                        if( !bError && ERRCODE_NONE == aDlgHelper.Execute() )
                         {
                             aFileName = xFP->getFiles().getConstArray()[0];
                         }
@@ -1274,7 +1289,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
             case FN_PRINT_LAYOUT:   //Fuer Web, genau umgekehrt zum BrowserMode
             {
                 int eState = STATE_TOGGLE;
-                BOOL bSet;
+                BOOL bSet = sal_True;
                 const SfxPoolItem* pAttr=NULL;
                 if ( pArgs && SFX_ITEM_SET == pArgs->GetItemState( nWhich , FALSE, &pAttr ))
                 {
@@ -1361,7 +1376,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     if ( pTemplItem )
                         aTemplateName = pTemplItem->GetValue();
                 }
-
+                bool bError = false;
                 if ( !aFileName.Len() )
                 {
                     FileDialogHelper aDlgHelper( TemplateDescription::FILESAVE_AUTOEXTENSION_TEMPLATE, 0 );
@@ -1414,74 +1429,83 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
                         const String sWild = ((WildCard&)pFlt->GetWildcard()).GetWildCard();
                         xFltMgr->appendFilter( pFlt->GetUIName(), sWild );
-                        xFltMgr->setCurrentFilter( pFlt->GetUIName() ) ;
-                    }
-
-                    Reference<XFilePickerControlAccess> xCtrlAcc(xFP, UNO_QUERY);
-                    const USHORT nCount = pDoc->GetTxtFmtColls()->Count();
-                    Sequence<OUString> aListBoxEntries(nCount);
-                    OUString* pEntries = aListBoxEntries.getArray();
-                    sal_Int32 nIdx = 0;
-                    sal_Int16 nSelect = 0;
-                    OUString sStartTemplate;
-                    SwTxtFmtColl *pFnd = 0, *pAny = 0;
-                    for(USHORT i = 0; i < nCount; ++i)
-                    {
-                        SwTxtFmtColl &rTxtColl =
-                                        *pDoc->GetTxtFmtColls()->GetObject( i );
-                        if( !rTxtColl.IsDefault() && rTxtColl.IsAtDocNodeSet() )
+                        try
                         {
-                            if( MAXLEVEL >= rTxtColl.GetOutlineLevel() && ( !pFnd ||
-                                pFnd->GetOutlineLevel() > rTxtColl.GetOutlineLevel() ))
-                            {
-                                    nSelect = (sal_Int16)nIdx;
-                                    pFnd = &rTxtColl;
-                                    sStartTemplate = rTxtColl.GetName();
-                            }
-                            else if( !pAny )
-                                pAny = &rTxtColl;
-                            pEntries[nIdx++] = rTxtColl.GetName();
+                            xFltMgr->setCurrentFilter( pFlt->GetUIName() ) ;
+                        }
+                        catch( const uno::Exception& )
+                        {
+                            bError = true;
                         }
                     }
-                    if(!sStartTemplate.getLength() && pAny)
-                        sStartTemplate = pAny->GetName();
-
-                    aListBoxEntries.realloc(nIdx);
-
-                    try
+                    if(!bError)
                     {
-                        Any aTemplates(&aListBoxEntries, ::getCppuType(&aListBoxEntries));
-
-                        xCtrlAcc->setValue( ExtendedFilePickerElementIds::LISTBOX_TEMPLATE,
-                            ListboxControlActions::ADD_ITEMS , aTemplates );
-                        Any aSelectPos(&nSelect, ::getCppuType(&nSelect));
-                        xCtrlAcc->setValue( ExtendedFilePickerElementIds::LISTBOX_TEMPLATE,
-                            ListboxControlActions::SET_SELECT_ITEM, aSelectPos );
-                        xCtrlAcc->setLabel( ExtendedFilePickerElementIds::LISTBOX_TEMPLATE,
-                                                String(SW_RES( STR_FDLG_TEMPLATE_NAME )));
-                    }
-                    catch(Exception& rEx)
-                    {
-                        DBG_ERROR("control acces failed")
-                    }
-
-                    xFP->setTitle( SW_RESSTR( nStrId ));
-                    SvtPathOptions aPathOpt;
-                    xFP->setDisplayDirectory( aPathOpt.GetWorkPath() );
-                    if( ERRCODE_NONE == aDlgHelper.Execute())
-                    {
-                        aFileName = xFP->getFiles().getConstArray()[0];
-                        Any aTemplateValue = xCtrlAcc->getValue(
-                            ExtendedFilePickerElementIds::LISTBOX_TEMPLATE,
-                            ListboxControlActions::GET_SELECTED_ITEM );
-                        OUString sTmpl;
-                        aTemplateValue >>= sTmpl;
-                        aTemplateName = sTmpl;
-                        if ( aFileName.Len() )
+                        Reference<XFilePickerControlAccess> xCtrlAcc(xFP, UNO_QUERY);
+                        const USHORT nCount = pDoc->GetTxtFmtColls()->Count();
+                        Sequence<OUString> aListBoxEntries(nCount);
+                        OUString* pEntries = aListBoxEntries.getArray();
+                        sal_Int32 nIdx = 0;
+                        sal_Int16 nSelect = 0;
+                        OUString sStartTemplate;
+                        SwTxtFmtColl *pFnd = 0, *pAny = 0;
+                        for(USHORT i = 0; i < nCount; ++i)
                         {
-                            rReq.AppendItem( SfxStringItem( nWhich, aFileName ) );
-                            if( aTemplateName.Len() )
-                                rReq.AppendItem( SfxStringItem( SID_TEMPLATE_NAME, aTemplateName ) );
+                            SwTxtFmtColl &rTxtColl =
+                                            *pDoc->GetTxtFmtColls()->GetObject( i );
+                            if( !rTxtColl.IsDefault() && rTxtColl.IsAtDocNodeSet() )
+                            {
+                                if( MAXLEVEL >= rTxtColl.GetOutlineLevel() && ( !pFnd ||
+                                    pFnd->GetOutlineLevel() > rTxtColl.GetOutlineLevel() ))
+                                {
+                                        nSelect = (sal_Int16)nIdx;
+                                        pFnd = &rTxtColl;
+                                        sStartTemplate = rTxtColl.GetName();
+                                }
+                                else if( !pAny )
+                                    pAny = &rTxtColl;
+                                pEntries[nIdx++] = rTxtColl.GetName();
+                            }
+                        }
+                        if(!sStartTemplate.getLength() && pAny)
+                            sStartTemplate = pAny->GetName();
+
+                        aListBoxEntries.realloc(nIdx);
+
+                        try
+                        {
+                            Any aTemplates(&aListBoxEntries, ::getCppuType(&aListBoxEntries));
+
+                            xCtrlAcc->setValue( ExtendedFilePickerElementIds::LISTBOX_TEMPLATE,
+                                ListboxControlActions::ADD_ITEMS , aTemplates );
+                            Any aSelectPos(&nSelect, ::getCppuType(&nSelect));
+                            xCtrlAcc->setValue( ExtendedFilePickerElementIds::LISTBOX_TEMPLATE,
+                                ListboxControlActions::SET_SELECT_ITEM, aSelectPos );
+                            xCtrlAcc->setLabel( ExtendedFilePickerElementIds::LISTBOX_TEMPLATE,
+                                                    String(SW_RES( STR_FDLG_TEMPLATE_NAME )));
+                        }
+                        catch(Exception& )
+                        {
+                            DBG_ERROR("control acces failed")
+                        }
+
+                        xFP->setTitle( SW_RESSTR( nStrId ));
+                        SvtPathOptions aPathOpt;
+                        xFP->setDisplayDirectory( aPathOpt.GetWorkPath() );
+                        if( ERRCODE_NONE == aDlgHelper.Execute())
+                        {
+                            aFileName = xFP->getFiles().getConstArray()[0];
+                            Any aTemplateValue = xCtrlAcc->getValue(
+                                ExtendedFilePickerElementIds::LISTBOX_TEMPLATE,
+                                ListboxControlActions::GET_SELECTED_ITEM );
+                            OUString sTmpl;
+                            aTemplateValue >>= sTmpl;
+                            aTemplateName = sTmpl;
+                            if ( aFileName.Len() )
+                            {
+                                rReq.AppendItem( SfxStringItem( nWhich, aFileName ) );
+                                if( aTemplateName.Len() )
+                                    rReq.AppendItem( SfxStringItem( SID_TEMPLATE_NAME, aTemplateName ) );
+                            }
                         }
                     }
                 }
@@ -1604,7 +1628,7 @@ long SwDocShell::DdeSetData( const String& rItem, const String& rMimeType,
 
 void SwDocShell::FillClass( SvGlobalName * pClassName,
                                    sal_uInt32 * pClipFormat,
-                                   String * pAppName,
+                                   String * /*pAppName*/,
                                    String * pLongUserName,
                                    String * pUserName,
                                    sal_Int32 nVersion ) const
@@ -1864,8 +1888,20 @@ ULONG SwDocShell::LoadStylesFromFile( const String& rURL,
     SwPaM* pPam = 0;
 
     // Filter bestimmen:
-    const SfxFilter* pFlt = SwIoSystem::GetFileFilter( rURL, aEmptyStr );
+//  const SfxFilter* pFlt = SwIoSystem::GetFileFilter( rURL, aEmptyStr );
+    String sFactory(String::CreateFromAscii(SwDocShell::Factory().GetShortName()));
+    SfxFilterMatcher aMatcher( sFactory );
+
+    //#b6445961#  search for filter in WebDocShell, too
     SfxMedium aMed( rURL, STREAM_STD_READ, FALSE );
+    const SfxFilter* pFlt = 0;
+    aMatcher.DetectFilter( aMed, &pFlt, FALSE, FALSE );
+    if(!pFlt)
+    {
+        String sWebFactory(String::CreateFromAscii(SwWebDocShell::Factory().GetShortName()));
+        SfxFilterMatcher aWebMatcher( sWebFactory );
+        aWebMatcher.DetectFilter( aMed, &pFlt, FALSE, FALSE );
+    }
     if( aMed.IsStorage() )
     {
         ULONG nVersion = pFlt ? pFlt->GetVersion() : 0;
