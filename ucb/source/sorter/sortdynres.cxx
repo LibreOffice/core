@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sortdynres.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:18:09 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 17:00:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -365,7 +365,7 @@ SortedDynamicResultSet::impl_notify( const ListEvent& Changes )
     catch ( WrappedTargetException ) {}
 
     long nOldCount = pCurSet->GetCount();
-    sal_Bool bWasFinal;
+    sal_Bool bWasFinal = false;
 
     aRet >>= bWasFinal;
 
