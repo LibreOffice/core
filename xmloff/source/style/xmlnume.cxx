@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlnume.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:36:27 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:36:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -216,7 +216,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
         }
         else if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_ADJUST, sizeof(XML_UNO_NAME_NRULE_ADJUST)-1 ) )
         {
-            sal_Int16 nValue;
+            sal_Int16 nValue = 0;
             rProp.Value >>= nValue;
             eAdjust = nValue;
         }
@@ -282,7 +282,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
         }
         else if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_VERT_ORIENT, sizeof(XML_UNO_NAME_NRULE_VERT_ORIENT)-1 ) )
         {
-            sal_Int16 nValue;
+            sal_Int16 nValue = 0;
             rProp.Value >>= nValue;
             eImageVertOrient = nValue;
         }
