@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gsicheck.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 17:21:53 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:21:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -716,7 +716,7 @@ int _cdecl main( int argc, char *argv[] )
                 aFilename = ByteString( argv[ i ] );
             else
             {
-                fprintf( stderr, "\nERROR: Only one filename may be specified!\n\n", argv[ i ]);
+                fprintf( stderr, "\nERROR: Only one filename may be specified!\n\n");
                 bError = TRUE;
             }
         }
