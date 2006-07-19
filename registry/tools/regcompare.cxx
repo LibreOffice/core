@@ -4,9 +4,9 @@
  *
  *  $RCSfile: regcompare.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 14:29:14 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 17:20:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -592,10 +592,15 @@ static void printConstValue(RTConstValue& constValue)
             fprintf(stdout, "%d", constValue.m_value.aUShort);
             break;
         case RT_TYPE_INT32:
-            fprintf(stdout, "%d", constValue.m_value.aLong);
+            fprintf(
+                stdout, "%ld",
+                sal::static_int_cast< long >(constValue.m_value.aLong));
             break;
         case RT_TYPE_UINT32:
-            fprintf(stdout, "%d", constValue.m_value.aULong);
+            fprintf(
+                stdout, "%lu",
+                sal::static_int_cast< unsigned long >(
+                    constValue.m_value.aULong));
             break;
 //      case RT_TYPE_INT64:
 //          fprintf(stdout, "%d", constValue.m_value.aHyper);
@@ -608,7 +613,11 @@ static void printConstValue(RTConstValue& constValue)
             fprintf(stdout, "%f", constValue.m_value.aDouble);
             break;
         case RT_TYPE_STRING:
-            fprintf(stdout, "%s", constValue.m_value.aString);
+            fprintf(
+                stdout, "%s",
+                (rtl::OUStringToOString(
+                    constValue.m_value.aString, RTL_TEXTENCODING_UTF8).
+                 getStr()));
             break;
         default:
             break;
@@ -701,8 +710,9 @@ static sal_uInt32 checkConstValue(const OUString& keyName,
                         fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                         bDump = sal_False;
                     }
-                    fprintf(stdout, "  Field %d: Value1 = %d  !=  Value2 = %d\n", index1,
-                            constValue1.m_value.aLong, constValue2.m_value.aLong);
+                    fprintf(stdout, "  Field %d: Value1 = %ld  !=  Value2 = %ld\n", index1,
+                            sal::static_int_cast< long >(constValue1.m_value.aLong),
+                            sal::static_int_cast< long >(constValue2.m_value.aLong));
                 }
                 return 1;
             }
@@ -717,8 +727,9 @@ static sal_uInt32 checkConstValue(const OUString& keyName,
                         fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                         bDump = sal_False;
                     }
-                    fprintf(stdout, "  Field %d: Value1 = %d  !=  Value2 = %d\n", index1,
-                            constValue1.m_value.aULong, constValue2.m_value.aULong);
+                    fprintf(stdout, "  Field %d: Value1 = %lu  !=  Value2 = %lu\n", index1,
+                            sal::static_int_cast< unsigned long >(constValue1.m_value.aULong),
+                            sal::static_int_cast< unsigned long >(constValue2.m_value.aULong));
                 }
                 return 1;
             }
@@ -785,7 +796,7 @@ static sal_uInt32 checkConstValue(const OUString& keyName,
                         fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                         bDump = sal_False;
                     }
-                    fprintf(stdout, "  Field %d: Value1 = %d  !=  Value2 = %d\n", index1,
+                    fprintf(stdout, "  Field %d: Value1 = %f  !=  Value2 = %f\n", index1,
                             constValue1.m_value.aFloat, constValue2.m_value.aFloat);
                 }
                 return 1;
@@ -801,7 +812,7 @@ static sal_uInt32 checkConstValue(const OUString& keyName,
                         fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                         bDump = sal_False;
                     }
-                    fprintf(stdout, "  Field %d: Value1 = %d  !=  Value2 = %d\n", index1,
+                    fprintf(stdout, "  Field %d: Value1 = %f  !=  Value2 = %f\n", index1,
                             constValue1.m_value.aDouble, constValue2.m_value.aDouble);
                 }
                 return 1;
@@ -1348,7 +1359,10 @@ static sal_uInt32 checkBlob(const OUString& keyName, typereg::Reader& reader1, s
     {
         if ( options.forceOutput() )
         {
-            fprintf(stdout, "    Size1 = %d    Size2 = %d\n", size1, size2);
+            fprintf(
+                stdout, "    Size1 = %lu    Size2 = %lu\n",
+                sal::static_int_cast< unsigned long >(size1),
+                sal::static_int_cast< unsigned long >(size2));
         }
     }
     if (reader1.isPublished()) {
@@ -1802,19 +1816,25 @@ static sal_uInt32 checkValueDifference(RegistryKey& key1, RegValueType valueType
             {
             case RG_VALUETYPE_LONG:
                 fprintf(stdout, "    Registry 1: Value: Type = RG_VALUETYPE_LONG\n");
-                fprintf(stdout, "                       Size = %d\n", size1);
+                fprintf(
+                    stdout, "                       Size = %lu\n",
+                    sal::static_int_cast< unsigned long >(size1));
                 fprintf(stdout, "                       Data = %p\n", value1);
                 break;
             case RG_VALUETYPE_STRING:
                 fprintf(stdout, "    Registry 1: Value: Type = RG_VALUETYPE_STRING\n");
-                fprintf(stdout, "                       Size = %d\n", size1);
+                fprintf(
+                    stdout, "                       Size = %lu\n",
+                    sal::static_int_cast< unsigned long >(size1));
                 fprintf(stdout, "                       Data = \"%s\"\n", (sal_Char*)value1);
                 break;
             case RG_VALUETYPE_UNICODE:
                 {
                 OUString uStrValue((sal_Unicode*)value1);
                 fprintf(stdout, "    Registry 1: Value: Type = RG_VALUETYPE_UNICODE\n");
-                fprintf(stdout, "                       Size = %d\n", size1);
+                fprintf(
+                    stdout, "                       Size = %lu\n",
+                    sal::static_int_cast< unsigned long >(size1));
                 fprintf(stdout, "                       Data = \"%s\"\n", U2S(uStrValue));
                 }
                 break;
@@ -1834,11 +1854,16 @@ static sal_uInt32 checkValueDifference(RegistryKey& key1, RegValueType valueType
             RegistryValueList<sal_Int32> valueList;
             key1.getLongListValue(tmpName, valueList);
             fprintf(stdout, "    Registry 1: Value: Type = RG_VALUETYPE_LONGLIST\n");
-            fprintf(stdout, "                       Size = %d\n", size1);
+            fprintf(
+                stdout, "                       Size = %lu\n",
+                sal::static_int_cast< unsigned long >(size1));
             sal_uInt32 length = valueList.getLength();
             for (sal_uInt32 i=0; i<length; i++)
             {
-                fprintf(stdout, "                       Data[%d] = %d\n", i, valueList.getElement(i));
+                fprintf(
+                    stdout, "                       Data[%lu] = %ld\n",
+                    sal::static_int_cast< unsigned long >(i),
+                    sal::static_int_cast< long >(valueList.getElement(i)));
             }
             }
             break;
@@ -1847,11 +1872,16 @@ static sal_uInt32 checkValueDifference(RegistryKey& key1, RegValueType valueType
             RegistryValueList<sal_Char*> valueList;
             key1.getStringListValue(tmpName, valueList);
             fprintf(stdout, "    Registry 1: Value: Type = RG_VALUETYPE_STRINGLIST\n");
-            fprintf(stdout, "                       Size = %d\n", size1);
+            fprintf(
+                stdout, "                       Size = %lu\n",
+                sal::static_int_cast< unsigned long >(size1));
             sal_uInt32 length = valueList.getLength();
             for (sal_uInt32 i=0; i<length; i++)
             {
-                fprintf(stdout, "                       Data[%d] = \"%s\"\n", i, valueList.getElement(i));
+                fprintf(
+                    stdout, "                       Data[%lu] = \"%s\"\n",
+                    sal::static_int_cast< unsigned long >(i),
+                    valueList.getElement(i));
             }
             }
             break;
@@ -1860,13 +1890,17 @@ static sal_uInt32 checkValueDifference(RegistryKey& key1, RegValueType valueType
             RegistryValueList<sal_Unicode*> valueList;
             key1.getUnicodeListValue(tmpName, valueList);
             fprintf(stdout, "    Registry 1: Value: Type = RG_VALUETYPE_UNICODELIST\n");
-            fprintf(stdout, "                       Size = %d\n", size1);
+            fprintf(
+                stdout, "                       Size = %lu\n",
+                sal::static_int_cast< unsigned long >(size1));
             sal_uInt32 length = valueList.getLength();
             OUString uStrValue;
             for (sal_uInt32 i=0; i<length; i++)
             {
                 uStrValue = OUString(valueList.getElement(i));
-                fprintf(stdout, "                       Data[%d] = \"%s\"\n", i, U2S(uStrValue));
+                fprintf(
+                    stdout, "                       Data[%lu] = \"%s\"\n",
+                    sal::static_int_cast< unsigned long >(i), U2S(uStrValue));
             }
             }
             break;
@@ -1888,19 +1922,25 @@ static sal_uInt32 checkValueDifference(RegistryKey& key1, RegValueType valueType
             {
             case RG_VALUETYPE_LONG:
                 fprintf(stdout, "    Registry 2: Value: Type = RG_VALUETYPE_LONG\n");
-                fprintf(stdout, "                       Size = %d\n", size2);
+                fprintf(
+                    stdout, "                       Size = %lu\n",
+                    sal::static_int_cast< unsigned long >(size2));
                 fprintf(stdout, "                       Data = %p\n", value2);
                 break;
             case RG_VALUETYPE_STRING:
                 fprintf(stdout, "    Registry 2: Value: Type = RG_VALUETYPE_STRING\n");
-                fprintf(stdout, "                       Size = %d\n", size2);
+                fprintf(
+                    stdout, "                       Size = %lu\n",
+                    sal::static_int_cast< unsigned long >(size2));
                 fprintf(stdout, "                       Data = \"%s\"\n", (sal_Char*)value2);
                 break;
             case RG_VALUETYPE_UNICODE:
                 {
                 OUString uStrValue((sal_Unicode*)value2);
                 fprintf(stdout, "    Registry 2: Value: Type = RG_VALUETYPE_UNICODE\n");
-                fprintf(stdout, "                       Size = %d\n", size2);
+                fprintf(
+                    stdout, "                       Size = %lu\n",
+                    sal::static_int_cast< unsigned long >(size2));
                 fprintf(stdout, "                       Data = \"%s\"\n", U2S(uStrValue));
                 }
                 break;
@@ -1920,11 +1960,16 @@ static sal_uInt32 checkValueDifference(RegistryKey& key1, RegValueType valueType
             RegistryValueList<sal_Int32> valueList;
             key2.getLongListValue(tmpName, valueList);
             fprintf(stdout, "    Registry 2: Value: Type = RG_VALUETYPE_LONGLIST\n");
-            fprintf(stdout, "                       Size = %d\n", size2);
+            fprintf(
+                stdout, "                       Size = %lu\n",
+                sal::static_int_cast< unsigned long >(size2));
             sal_uInt32 length = valueList.getLength();
             for (sal_uInt32 i=0; i<length; i++)
             {
-                fprintf(stdout, "                       Data[%d] = %d\n", i, valueList.getElement(i));
+                fprintf(
+                    stdout, "                       Data[%lu] = %ld\n",
+                    sal::static_int_cast< unsigned long >(i),
+                    sal::static_int_cast< long >(valueList.getElement(i)));
             }
             }
             break;
@@ -1933,11 +1978,16 @@ static sal_uInt32 checkValueDifference(RegistryKey& key1, RegValueType valueType
             RegistryValueList<sal_Char*> valueList;
             key2.getStringListValue(tmpName, valueList);
             fprintf(stdout, "    Registry 2: Value: Type = RG_VALUETYPE_STRINGLIST\n");
-            fprintf(stdout, "                       Size = %d\n", size2);
+            fprintf(
+                stdout, "                       Size = %lu\n",
+                sal::static_int_cast< unsigned long >(size2));
             sal_uInt32 length = valueList.getLength();
             for (sal_uInt32 i=0; i<length; i++)
             {
-                fprintf(stdout, "                       Data[%d] = \"%s\"\n", i, valueList.getElement(i));
+                fprintf(
+                    stdout, "                       Data[%lu] = \"%s\"\n",
+                    sal::static_int_cast< unsigned long >(i),
+                    valueList.getElement(i));
             }
             }
             break;
@@ -1946,13 +1996,17 @@ static sal_uInt32 checkValueDifference(RegistryKey& key1, RegValueType valueType
             RegistryValueList<sal_Unicode*> valueList;
             key2.getUnicodeListValue(tmpName, valueList);
             fprintf(stdout, "    Registry 2: Value: Type = RG_VALUETYPE_UNICODELIST\n");
-            fprintf(stdout, "                       Size = %d\n", size2);
+            fprintf(
+                stdout, "                       Size = %lu\n",
+                sal::static_int_cast< unsigned long >(size2));
             sal_uInt32 length = valueList.getLength();
             OUString uStrValue;
             for (sal_uInt32 i=0; i<length; i++)
             {
                 uStrValue = OUString(valueList.getElement(i));
-                fprintf(stdout, "                       Data[%d] = \"%s\"\n", i, U2S(uStrValue));
+                fprintf(
+                    stdout, "                       Data[%lu] = \"%s\"\n",
+                    sal::static_int_cast< unsigned long >(i), U2S(uStrValue));
             }
             }
             break;
@@ -2325,12 +2379,14 @@ int _cdecl main( int argc, char * argv[] )
     {
         if ( options.unoTypeCheck() )
         {
-            fprintf(stdout, "%s: registries are incompatible: %d differences!\n",
-                    options.getProgramName().getStr(), nError);
+            fprintf(stdout, "%s: registries are incompatible: %lu differences!\n",
+                    options.getProgramName().getStr(),
+                    sal::static_int_cast< unsigned long >(nError));
         } else
         {
-            fprintf(stdout, "%s: registries contain %d differences!\n",
-                    options.getProgramName().getStr(), nError);
+            fprintf(stdout, "%s: registries contain %lu differences!\n",
+                    options.getProgramName().getStr(),
+                    sal::static_int_cast< unsigned long >(nError));
         }
     } else
     {
