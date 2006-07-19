@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stbitem.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:36:40 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 17:19:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -304,13 +304,13 @@ throw ( ::com::sun::star::uno::RuntimeException )
                 }
                 else if ( pType == ::getBooleanCppuType() )
                 {
-                    sal_Bool bTemp ;
+                    sal_Bool bTemp = 0;
                     rEvent.State >>= bTemp ;
                     pItem = new SfxBoolItem( nSlotID, bTemp );
                 }
                 else if ( pType == ::getCppuType((const sal_uInt16*)0) )
                 {
-                    sal_uInt16 nTemp ;
+                    sal_uInt16 nTemp = 0;
                     rEvent.State >>= nTemp ;
                     pItem = new SfxUInt16Item( nSlotID, nTemp );
                 }
