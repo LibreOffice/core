@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:25:43 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 15:52:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1158,9 +1158,9 @@ BOOL ODbaseTable::Drop_Static(const ::rtl::OUString& _sUrl,sal_Bool _bHasMemoFie
     INetURLObject aURL;
     aURL.SetURL(_sUrl);
 
-    BOOL bDropped = FALSE;
+    BOOL bDropped = ::utl::UCBContentHelper::Kill(aURL.GetMainURL(INetURLObject::NO_DECODE));
 
-    if(bDropped = ::utl::UCBContentHelper::Kill(aURL.GetMainURL(INetURLObject::NO_DECODE)))
+    if(bDropped)
     {
         if (_bHasMemoFields)
         {  // delete the memo fields
