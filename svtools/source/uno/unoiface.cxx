@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoiface.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 21:29:09 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 17:11:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1526,7 +1526,7 @@ void SVTXRoadmap::propertyChange( const ::com::sun::star::beans::PropertyChangeE
         ::rtl::OUString sPropertyName = evt.PropertyName;
         if ( sPropertyName.equals(::rtl::OUString::createFromAscii( "Enabled" ) ) )
         {
-            sal_Bool bEnable;
+            sal_Bool bEnable = false;
             evt.NewValue >>= bEnable;
             pField->EnableRoadmapItem( (RoadmapTypes::ItemId)nID , bEnable );
         }
@@ -1638,7 +1638,7 @@ void SVTXRoadmap::setProperty( const ::rtl::OUString& PropertyName, const ::com:
         {
             case BASEPROPERTY_COMPLETE:
             {
-                sal_Bool b;
+                sal_Bool b = false;
                 Value >>= b;
                 pField->SetRoadmapComplete( b);
             }
@@ -1646,7 +1646,7 @@ void SVTXRoadmap::setProperty( const ::rtl::OUString& PropertyName, const ::com:
 
             case BASEPROPERTY_ACTIVATED:
             {
-                   sal_Bool b;
+                   sal_Bool b = false;
                 Value >>= b;
                 pField->SetRoadmapInteractive( b);
             }
@@ -2121,7 +2121,7 @@ void SVTXCurrencyField::setProperty( const ::rtl::OUString& PropertyName, const 
             break;
             case BASEPROPERTY_CURSYM_POSITION:
             {
-                sal_Bool b;
+                sal_Bool b = false;
                 Value >>= b;
                 pField->setPrependCurrSym(b);
             }
