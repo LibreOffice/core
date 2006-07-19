@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HCatalog.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:02:34 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 15:52:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,7 +112,7 @@ void OHCatalog::refreshViews()
         Reference<XRow> xRow(xRes,UNO_QUERY);
         while ( xRow.is() && xRes->next() )
         {
-            if ( bSupportsViews = xRow->getString(1).equalsIgnoreAsciiCase(aTypes[0]) )
+            if ( (bSupportsViews = xRow->getString(1).equalsIgnoreAsciiCase(aTypes[0])) )
             {
                 break;
             }
