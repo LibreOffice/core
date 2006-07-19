@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NeonHeadRequest.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:25:55 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 09:34:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@
 using namespace webdav_ucp;
 using namespace com::sun::star;
 
-#ifdef NEONTWOFIVE
+#if NEON_VERSION >= 0250
 static void process_headers(ne_request *req,
                             DAVResource &rResource,
                             const std::vector< ::rtl::OUString > &rHeaderNames)
@@ -190,14 +190,14 @@ NeonHeadRequest::NeonHeadRequest( HttpSession* inSession,
                                             inPath,
                                             RTL_TEXTENCODING_UTF8 ) );
 
-#ifndef NEONTWOFIVE
+#if NEON_VERSION < 0250
     NeonHeadRequestContext aCtx( &ioResource, &inHeaderNames );
     ne_add_response_header_catcher( req, NHR_ResponseHeaderCatcher, &aCtx );
 #endif
 
     nError = ne_request_dispatch( req );
 
-#ifdef NEONTWOFIVE
+#if NEON_VERSION >= 0250
     process_headers(req, ioResource, inHeaderNames);
 #endif
 
