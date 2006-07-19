@@ -4,9 +4,9 @@
  *
  *  $RCSfile: errorhandler.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:48:18 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:18:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -505,7 +505,8 @@ static void errorHeader(ErrorCode eCode, sal_Int32 lineNumber)
     else
         file = idlc()->getFileName();
 
-    fprintf(stderr, "%s(%d) : %s", file.getStr(), lineNumber,
+    fprintf(stderr, "%s(%lu) : %s", file.getStr(),
+            sal::static_int_cast< unsigned long >(lineNumber),
             errorCodeToMessage(eCode));
 }
 
@@ -522,7 +523,8 @@ static void warningHeader(WarningCode wCode)
     else
         file = idlc()->getFileName();
 
-    fprintf(stderr, "%s(%d) : WARNING, %s", file.getStr(), idlc()->getLineNumber(),
+    fprintf(stderr, "%s(%lu) : WARNING, %s", file.getStr(),
+            sal::static_int_cast< unsigned long >(idlc()->getLineNumber()),
             warningCodeToMessage(wCode));
 }
 
