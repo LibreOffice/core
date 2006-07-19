@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeexport3.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:12:33 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:35:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -448,7 +448,7 @@ void XMLShapeExport::export3DSceneAttributes( const com::sun::star::uno::Referen
 
     // shadowSlant
     aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneShadowSlant")));
-    sal_Int16 nShadowSlant;
+    sal_Int16 nShadowSlant = 0;
     aAny >>= nShadowSlant;
     mrExport.GetMM100UnitConverter().convertNumber(sStringBuffer, (sal_Int32)nShadowSlant);
     aStr = sStringBuffer.makeStringAndClear();
@@ -486,7 +486,7 @@ void XMLShapeExport::export3DSceneAttributes( const com::sun::star::uno::Referen
 
     // lightingMode
     aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneTwoSidedLighting")));
-    sal_Bool bTwoSidedLighting;
+    sal_Bool bTwoSidedLighting = false;
     aAny >>= bTwoSidedLighting;
     mrExport.GetMM100UnitConverter().convertBool(sStringBuffer, bTwoSidedLighting);
     aStr = sStringBuffer.makeStringAndClear();
@@ -510,7 +510,7 @@ void XMLShapeExport::export3DLamps( const com::sun::star::uno::Reference< com::s
     Color aLightColor;
     Vector3D aLightDirection;
     drawing::Direction3D xLightDir;
-    sal_Bool bLightOnOff;
+    sal_Bool bLightOnOff = false;
     for(sal_Int32 nLamp = 1; nLamp <= 8; nLamp++)
     {
         aIndexStr = OUString::valueOf( nLamp );
