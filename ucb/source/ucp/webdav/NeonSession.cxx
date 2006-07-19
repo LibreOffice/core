@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NeonSession.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:37:07 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 09:35:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -221,7 +221,7 @@ struct NeonRequestContext
 // ResponseBlockReader
 // A simple Neon response_block_reader for use with an XInputStream
 // -------------------------------------------------------------------
-#ifdef NEONTWOFIVE
+#if NEON_VERSION >= 0250
 extern "C" int NeonSession_ResponseBlockReader
 #else
 extern "C" void NeonSession_ResponseBlockReader
@@ -244,7 +244,7 @@ extern "C" void NeonSession_ResponseBlockReader
                 xInputStream->AddToStream( inBuf, inLen );
         }
     }
-#ifdef NEONTWOFIVE
+#if NEON_VERSION >= 0250
     return 0;
 #endif
 }
@@ -253,7 +253,7 @@ extern "C" void NeonSession_ResponseBlockReader
 // ResponseBlockWriter
 // A simple Neon response_block_reader for use with an XOutputStream
 // -------------------------------------------------------------------
-#ifdef NEONTWOFIVE
+#if NEON_VERSION >= 0250
 extern "C" int NeonSession_ResponseBlockWriter
 #else
 extern "C" void NeonSession_ResponseBlockWriter
@@ -273,7 +273,7 @@ extern "C" void NeonSession_ResponseBlockWriter
             xOutputStream->writeBytes( aSeq );
         }
     }
-#ifdef NEONTWOFIVE
+#if NEON_VERSION >= 0250
     return 0;
 #endif
 }
@@ -1542,7 +1542,7 @@ void NeonSession::Lockit( const Lock & inLock, bool inLockit )
 }
 */
 
-#ifdef NEONTWOFIVE
+#if NEON_VERSION >= 0250
 static void run_header_handler(ne_request *req, ne_header_handler handler, void *userdata)
 {
     void *cursor = NULL;
@@ -1570,13 +1570,13 @@ int NeonSession::GET( ne_session * sess,
     //struct get_context ctx;
     ne_request * req = ne_request_create( sess, "GET", uri );
     int ret;
-#ifndef NEONTWOFIVE
+#if NEON_VERSION < 0250
     ne_add_response_header_catcher( req, handler, userdata );
 #endif
     ne_add_response_body_reader( req, ne_accept_2xx, reader, userdata );
 
     ret = ne_request_dispatch( req );
-#ifdef NEONTWOFIVE
+#if NEON_VERSION >= 0250
     run_header_handler(req, handler, userdata);
 #endif
 
