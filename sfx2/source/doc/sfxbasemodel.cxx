@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.112 $
+ *  $Revision: 1.113 $
  *
- *  last change: $Author: rt $ $Date: 2006-06-26 09:52:22 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 17:18:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2204,7 +2204,7 @@ void SAL_CALL SfxBaseModel::storeSelf( const    SEQUENCE< PROPERTYVALUE >&  aSeq
             {
                 // actually in this very rare case only UI parameters have sence
                 // TODO/LATER: should be done later, after integration of sb19
-                if ( bRet = m_pData->m_pObjectShell->DoSave() )
+                if ( (bRet = m_pData->m_pObjectShell->DoSave()) )
                     bRet = m_pData->m_pObjectShell->DoSaveCompleted();
             }
             else
