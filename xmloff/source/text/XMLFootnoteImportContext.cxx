@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLFootnoteImportContext.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:39:29 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:37:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,7 +187,7 @@ void XMLFootnoteImportContext::StartElement(
                 // get ID ...
                 Reference<XPropertySet> xPropertySet(xTextContent, UNO_QUERY);
                 Any aAny =xPropertySet->getPropertyValue(sPropertyReferenceId);
-                sal_Int16 nID;
+                sal_Int16 nID = 0;
                 aAny >>= nID;
 
                 // ... and insert into map
