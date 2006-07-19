@@ -4,9 +4,9 @@
 #
 #   $RCSfile: wntmsci10.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 22:06:01 $
+#   last change: $Author: kz $ $Date: 2006-07-19 15:09:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -205,7 +205,6 @@ MODULES_WITH_WARNINGS := \
     b_server \
     basctl \
     basic \
-    binfilter \
     canvas \
     chart2 \
     connectivity \
@@ -218,34 +217,23 @@ MODULES_WITH_WARNINGS := \
     dxcanvas \
     embeddedobj \
     extensions \
-    extras_full \
     filter \
-    finalize \
     forms \
     fpicker \
     framework \
     glcanvas \
     goodies \
-    helpcontent2 \
-    instset_native \
-    instsetoo_native \
     lingu \
     lingucomponent \
     linguistic \
-    macromigration \
     migrationanalysis \
-    officecfg \
-    postprocess \
     r_tools \
     sc \
-    sch \
     scripting \
     sd \
     sfx2 \
     sj2 \
     slideshow \
-    smoketest_native \
-    smoketestoo_native \
     so3 \
     starmath \
     svtools \
@@ -253,9 +241,7 @@ MODULES_WITH_WARNINGS := \
     sw \
     tab \
     toolkit \
-    top \
     uui \
-    wizards \
     writerperfect \
     xmlhelp \
     xmloff \
