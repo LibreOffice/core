@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JoinController.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:40:03 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 22:36:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -538,7 +538,7 @@ void OJoinController::loadTableWindow(const Sequence<PropertyValue>& _rTable)
         }
         else if ( pIter->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ShowAll" ) ) )
         {
-            sal_Bool bShowAll;
+            sal_Bool bShowAll = false;
             pIter->Value >>= bShowAll;
             pData->ShowAll(bShowAll);
         }
