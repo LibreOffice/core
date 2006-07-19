@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtftne.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:49:46 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:41:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -362,7 +362,7 @@ void XMLTextParagraphExport::exportTextFootnoteConfigurationHelper(
     // numbering style
     OUStringBuffer sBuffer;
     aAny = rFootnoteConfig->getPropertyValue(sNumberingType);
-    sal_Int16 nNumbering;
+    sal_Int16 nNumbering = 0;
     aAny >>= nNumbering;
     GetExport().GetMM100UnitConverter().convertNumFormat( sBuffer, nNumbering);
     GetExport().AddAttribute(XML_NAMESPACE_STYLE, XML_NUM_FORMAT,
@@ -376,7 +376,7 @@ void XMLTextParagraphExport::exportTextFootnoteConfigurationHelper(
 
     // StartAt / start-value
     aAny = rFootnoteConfig->getPropertyValue(sStartAt);
-    sal_Int16 nOffset;
+    sal_Int16 nOffset = 0;
     aAny >>= nOffset;
     SvXMLUnitConverter::convertNumber(sBuffer, (sal_Int32)nOffset);
     GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_START_VALUE,
@@ -393,7 +393,7 @@ void XMLTextParagraphExport::exportTextFootnoteConfigurationHelper(
                                         XML_DOCUMENT : XML_PAGE ) );
 
         aAny = rFootnoteConfig->getPropertyValue(sFootnoteCounting);
-        sal_Int16 nTmp;
+        sal_Int16 nTmp = 0;
         aAny >>= nTmp;
         enum XMLTokenEnum eElement;
         switch (nTmp)
