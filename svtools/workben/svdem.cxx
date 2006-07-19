@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdem.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 16:05:28 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 14:53:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1011,8 +1011,8 @@ IMPL_LINK( MyWin, CalSelectHdl, CalendarField*, pCtrl )
 {
     if ( pCtrl == &aCalendarField )
     {
-        Calendar* pCalendar = pCtrl->GetCalendar();
-        aCalendarField2.SetDate( pCalendar->GetSelectDate( pCalendar->GetSelectDateCount()-1 ) );
+        Calendar* l_pCalendar = pCtrl->GetCalendar();
+        aCalendarField2.SetDate( l_pCalendar->GetSelectDate( l_pCalendar->GetSelectDateCount()-1 ) );
     }
 
     return 0;
