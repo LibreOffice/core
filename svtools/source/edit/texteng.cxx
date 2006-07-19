@@ -4,9 +4,9 @@
  *
  *  $RCSfile: texteng.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 21:02:34 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 09:36:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -748,12 +748,10 @@ uno::Reference < i18n::XExtendedInputSequenceChecker > TextEngine::GetInputSeque
     return xISC;
 }
 
-BOOL TextEngine::IsInputSequenceChecking( sal_Unicode c, const TextSelection& rCurSel ) const
+BOOL TextEngine::IsInputSequenceCheckingRequired( sal_Unicode c, const TextSelection& rCurSel ) const
 {
     uno::Reference< i18n::XBreakIterator > xBI = ((TextEngine *) this)->GetBreakIterator();
     SvtCTLOptions aCTLOptions;
-
-    rtl::OUString aTxt( (const sal_Unicode *) &c );
 
     // get the index that really is first
     USHORT nFirstPos = rCurSel.GetStart().GetIndex();
@@ -765,7 +763,7 @@ BOOL TextEngine::IsInputSequenceChecking( sal_Unicode c, const TextSelection& rC
         aCTLOptions.IsCTLFontEnabled() &&
         aCTLOptions.IsCTLSequenceChecking() &&
         nFirstPos != 0 && /* first char needs not to be checked */
-        xBI.is() && i18n::ScriptType::COMPLEX == xBI->getScriptType( aTxt, 0 );
+        xBI.is() && i18n::ScriptType::COMPLEX == xBI->getScriptType( rtl::OUString( c ), 0 );
 
     return bIsSequenceChecking;
 }
@@ -805,7 +803,7 @@ TextPaM TextEngine::ImpInsertText( sal_Unicode c, const TextSelection& rCurSel, 
             ImpDeleteText( aTmpSel );
         }
 
-        if (bIsUserInput && IsInputSequenceChecking( c, rCurSel ))
+        if (bIsUserInput && IsInputSequenceCheckingRequired( c, rCurSel ))
         {
             uno::Reference < i18n::XExtendedInputSequenceChecker > xISC = GetInputSequenceChecker();
             SvtCTLOptions aCTLOptions;
