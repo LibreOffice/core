@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animexp.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:09:34 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:34:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -382,7 +382,7 @@ void XMLAnimationsExporter::collect( Reference< XShape > xShape, SvXMLExport& rE
             xProps->getPropertyValue( mpImpl->msSpeed ) >>= aEffect.meSpeed;
 
 
-            sal_Bool bIsAnimation;
+            sal_Bool bIsAnimation = false;
             xProps->getPropertyValue( mpImpl->msIsAnimation ) >>= bIsAnimation;
             if( bIsAnimation )
             {
@@ -448,8 +448,8 @@ void XMLAnimationsExporter::collect( Reference< XShape > xShape, SvXMLExport& rE
                     aEffect.maSoundURL = aEmptyStr;
                 }
 
-                sal_Bool bDimPrev;
-                sal_Bool bDimHide;
+                sal_Bool bDimPrev = false;
+                sal_Bool bDimHide = false;
                 xProps->getPropertyValue( mpImpl->msDimPrev ) >>= bDimPrev;
                 xProps->getPropertyValue( mpImpl->msDimHide ) >>= bDimHide;
                 if( bDimPrev || bDimHide )
