@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dindexnode.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:21:48 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 15:52:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -747,7 +747,7 @@ void ONDXNode::Read(SvStream &rStream, ODbaseIndex& rIndex)
     rStream >> aChild;
 }
 
-union
+union NodeData
 {
     double aDbl;
     char   aData[128];
