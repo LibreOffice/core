@@ -4,9 +4,9 @@
  *
  *  $RCSfile: proptypehlp.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:20:11 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 15:56:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,7 @@ inline void SAL_CALL convertPropertyValue( sal_Bool & b   , const ::com::sun::st
         b = ( sal_Bool ) c;
     }
     else if ( ::com::sun::star::uno::TypeClass_SHORT == tc ) {
-        sal_Int16 i16;
+        sal_Int16 i16 = 0;
         a >>= i16;
         b = ( sal_Bool ) i16;
     }
@@ -90,12 +90,12 @@ inline void SAL_CALL convertPropertyValue( sal_Bool & b   , const ::com::sun::st
         b = *((sal_Bool*)a.getValue());
     }
     else if ( ::com::sun::star::uno::TypeClass_BYTE == tc ) {
-        sal_Int8 i8;
+        sal_Int8 i8 = 0;
         a >>= i8;
         b = ( sal_Bool ) i8;
     }
     else if ( ::com::sun::star::uno::TypeClass_UNSIGNED_SHORT == tc ) {
-        sal_uInt16 i16;
+        sal_uInt16 i16 = 0;
         a >>= i16;
         b = ( sal_Bool  ) i16;
     }
@@ -232,7 +232,7 @@ inline void SAL_CALL convertPropertyValue( sal_Int32 & i  , const ::com::sun::st
         i = ( sal_Int32 ) c;
     }
     else if ( ::com::sun::star::uno::TypeClass_SHORT == tc ) {
-        sal_Int16 i16;
+        sal_Int16 i16 = 0;
         a >>= i16;
         i = ( sal_Int32 ) i16;
     }
@@ -242,12 +242,12 @@ inline void SAL_CALL convertPropertyValue( sal_Int32 & i  , const ::com::sun::st
         i = ( sal_Int32 ) b;
     }
     else if ( ::com::sun::star::uno::TypeClass_BYTE == tc ) {
-        sal_Int8 i8;
+        sal_Int8 i8 = 0;
         a >>= i8;
         i = ( sal_Int32 ) i8;
     }
     else if ( ::com::sun::star::uno::TypeClass_UNSIGNED_SHORT == tc ) {
-        sal_uInt16 i16;
+        sal_uInt16 i16 = 0;
         a >>= i16;
         i = ( sal_Int32 ) i16;
     }
@@ -324,12 +324,12 @@ inline void SAL_CALL convertPropertyValue( sal_Int16 & i  , const ::com::sun::st
         i = ( sal_Int16 ) b;
     }
     else if ( ::com::sun::star::uno::TypeClass_BYTE == tc ) {
-        sal_Int8 i8;
+        sal_Int8 i8 = 0;
         a >>= i8;
         i = ( sal_Int16 ) i8;
     }
     else if ( ::com::sun::star::uno::TypeClass_UNSIGNED_SHORT == tc ) {
-        sal_uInt16 i16;
+        sal_uInt16 i16 = 0;
         a >>= i16;
         i = ( sal_Int16 ) i16;
     }
@@ -357,12 +357,12 @@ inline void SAL_CALL convertPropertyValue( sal_uInt16 & i  , const ::com::sun::s
         i = ( sal_Int16 ) b;
     }
     else if ( ::com::sun::star::uno::TypeClass_BYTE == tc ) {
-        sal_Int8 i8;
+        sal_Int8 i8 = 0;
         a >>= i8;
         i = ( sal_Int16 ) i8;
     }
     else if ( ::com::sun::star::uno::TypeClass_SHORT == tc ) {
-        sal_Int16 i16;
+        sal_Int16 i16 = 0;
         a >>= i16;
         i = ( sal_Int16 ) i16;
     }
@@ -424,7 +424,7 @@ inline void SAL_CALL convertPropertyValue( float &f , const ::com::sun::star::un
         f = ( float ) c;
     }
     else if ( ::com::sun::star::uno::TypeClass_SHORT == tc ) {
-        sal_Int16 i16;
+        sal_Int16 i16 = 0;
         a >>= i16;
         f = ( float ) i16;
     }
@@ -434,12 +434,12 @@ inline void SAL_CALL convertPropertyValue( float &f , const ::com::sun::star::un
         f = ( float ) b;
     }
     else if ( ::com::sun::star::uno::TypeClass_BYTE == tc ) {
-        sal_Int8 i8;
+        sal_Int8 i8 = 0;
         a >>= i8;
         f = ( float ) i8;
     }
     else if ( ::com::sun::star::uno::TypeClass_UNSIGNED_SHORT == tc ) {
-        sal_uInt16 i16;
+        sal_uInt16 i16 = 0;
         a >>= i16;
         f = ( float ) i16;
     }
