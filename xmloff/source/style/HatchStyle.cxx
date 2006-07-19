@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HatchStyle.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:24:53 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:36:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -174,14 +174,14 @@ sal_Bool XMLHatchStyleImport::importXML(
             case XML_TOK_HATCH_STYLE:
                 {
                     sal_uInt16 eValue;
-                    if( bHasStyle = rUnitConverter.convertEnum( eValue, rStrValue, pXML_HatchStyle_Enum ) )
+                    if( (bHasStyle = rUnitConverter.convertEnum( eValue, rStrValue, pXML_HatchStyle_Enum )) )
                         aHatch.Style = (drawing::HatchStyle) eValue;
                 }
                 break;
             case XML_TOK_HATCH_COLOR:
                 {
                     Color aColor;
-                    if( bHasColor = rUnitConverter.convertColor( aColor, rStrValue ) )
+                    if( (bHasColor = rUnitConverter.convertColor( aColor, rStrValue )) )
                         aHatch.Color = (sal_Int32)( aColor.GetColor() );
                 }
                 break;

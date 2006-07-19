@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GradientStyle.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:24:40 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:36:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -215,14 +215,14 @@ sal_Bool XMLGradientStyleImport::importXML(
         case XML_TOK_GRADIENT_STARTCOLOR:
             {
                 Color aColor;
-                if( bHasStartColor = rUnitConverter.convertColor( aColor, rStrValue ) )
+                if( (bHasStartColor = rUnitConverter.convertColor( aColor, rStrValue )) )
                     aGradient.StartColor = (sal_Int32)( aColor.GetColor() );
             }
             break;
         case XML_TOK_GRADIENT_ENDCOLOR:
             {
                 Color aColor;
-                if( bHasStartColor = rUnitConverter.convertColor( aColor, rStrValue ) )
+                if( (bHasStartColor = rUnitConverter.convertColor( aColor, rStrValue )) )
                     aGradient.EndColor = (sal_Int32)( aColor.GetColor() );
             }
             break;
