@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zforfind.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 21:24:01 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 17:07:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1459,7 +1459,7 @@ BOOL ImpSvNumberInputScan::ScanStartString( const String& rString,
     SkipBlanks(rString, nPos);
 
     // Yes, nMatchedAllStrings should know about the sign position
-    if ( nSign = GetSign(rString, nPos) )           // sign?
+    if ( (nSign = GetSign(rString, nPos)) )           // sign?
         SkipBlanks(rString, nPos);
 
     // #102371# match against format string only if start string is not a sign character
@@ -1483,10 +1483,10 @@ BOOL ImpSvNumberInputScan::ScanStartString( const String& rString,
         eScannedType = NUMBERFORMAT_CURRENCY;       // !!! it IS currency !!!
         SkipBlanks(rString, nPos);
         if (nSign == 0)                             // no sign yet
-            if ( nSign = GetSign(rString, nPos) )   // DM -1
+            if ( (nSign = GetSign(rString, nPos)) )   // DM -1
                 SkipBlanks(rString, nPos);
     }
-    else if ( nMonth = GetMonth(rString, nPos) )    // month (Jan 1)?
+    else if ( (nMonth = GetMonth(rString, nPos)) )    // month (Jan 1)?
     {
         eScannedType = NUMBERFORMAT_DATE;           // !!! it IS a date !!!
         nMonthPos = 1;                              // month at the beginning
@@ -1494,7 +1494,7 @@ BOOL ImpSvNumberInputScan::ScanStartString( const String& rString,
             SkipChar( '.', rString, nPos );         // abbreviated
         SkipBlanks(rString, nPos);
     }
-    else if ( nDayOfWeek = GetDayOfWeek( rString, nPos ) )
+    else if ( (nDayOfWeek = GetDayOfWeek( rString, nPos )) )
     {   // day of week is just parsed away
         eScannedType = NUMBERFORMAT_DATE;           // !!! it IS a date !!!
         if ( nPos < rString.Len() )
@@ -1510,7 +1510,7 @@ BOOL ImpSvNumberInputScan::ScanStartString( const String& rString,
                 SkipString( pFormatter->GetLocaleData()->getLongDateDayOfWeekSep(), rString, nPos );
             }
             SkipBlanks(rString, nPos);
-            if ( nMonth = GetMonth(rString, nPos) ) // month (Jan 1)?
+            if ( (nMonth = GetMonth(rString, nPos)) ) // month (Jan 1)?
             {
                 nMonthPos = 1;                      // month a the beginning
                 if ( nMonth < 0 )
@@ -1971,7 +1971,7 @@ BOOL ImpSvNumberInputScan::ScanEndString( const String& rString,
             SkipBlanks(rString, nPos);
         }
         short nDayOfWeek;
-        if ( nDayOfWeek = GetDayOfWeek( rString, nPos ) )
+        if ( (nDayOfWeek = GetDayOfWeek( rString, nPos )) )
         {
             if ( nPos < rString.Len() )
             {
@@ -2122,7 +2122,7 @@ BOOL ImpSvNumberInputScan::IsNumberFormatMain(
             String& rStrArray = sStrArray[0];
             rStrArray.EraseTrailingChars( ' ' );
             rStrArray.EraseLeadingChars( ' ' );
-            if ( nLogical = GetLogical( rStrArray ) )
+            if ( (nLogical = GetLogical( rStrArray )) )
             {
                 eScannedType = NUMBERFORMAT_LOGICAL; // !!! it's a BOOLEAN
                 nMatchedAllStrings &= ~nMatchedVirgin;
