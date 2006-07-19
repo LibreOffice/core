@@ -4,9 +4,9 @@
  *
  *  $RCSfile: substitutepathvars.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 12:04:41 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:12:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -529,7 +529,7 @@ sal_Bool SubstitutePathVariables_Impl::FilterRuleSet( const SubstituteRuleVector
                         // No pattern matching for OS type
                         OperatingSystem eOSType = GetOperatingSystem();
 
-                        sal_Int16 nValue;
+                        sal_Int16 nValue = 0;
                         aRule.aEnvValue >>= nValue;
 
                         sal_Bool        bUnix = ( eOSType == OS_LINUX ) || ( eOSType == OS_SOLARIS );
