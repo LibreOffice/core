@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.206 $
+ *  $Revision: 1.207 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-14 08:57:38 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:55:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3096,7 +3096,7 @@ long X11SalFrame::HandleFocusEvent( XFocusChangeEvent *pEvent )
 
 long X11SalFrame::HandleExposeEvent( XEvent *pEvent )
 {
-    XRectangle  aRect;
+    XRectangle  aRect = { 0, 0, 0, 0 };
     USHORT      nCount = 0;
 
     if( pEvent->type == Expose )
