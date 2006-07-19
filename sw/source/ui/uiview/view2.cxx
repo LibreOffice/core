@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 17:25:22 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 09:36:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -256,6 +256,7 @@
 #ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx>
 #endif
+#include <fmthdft.hxx>
 //CHINA001 #ifndef _LINENUM_HXX
 //CHINA001 #include <linenum.hxx>
 //CHINA001 #endif
@@ -1912,6 +1913,29 @@ BOOL SwView::JumpToSwMark( const String& rMark )
     return bRet;
 }
 
+// #i67305, #1367991: Undo after insert from file:
+// Undo "Insert form file" crashes with documents imported from binary filter (.sdw) => disabled
+// Undo "Insert form file" crashes with (.odt) documents crashes if these documents contains
+// page styles with active header/footer => disabled for those documents
+
+sal_uInt16 lcl_PageDescWithHeader( const SwDoc& rDoc )
+{
+    sal_uInt16 nRet = 0;
+    sal_uInt16 nCnt = rDoc.GetPageDescCnt();
+    for( sal_uInt16 i = 0; i < nCnt; ++i )
+    {
+        const SwPageDesc& rPageDesc = rDoc.GetPageDesc( i );
+        const SwFrmFmt& rMaster = rPageDesc.GetMaster();
+        const SfxPoolItem* pItem;
+        if( ( SFX_ITEM_SET == rMaster.GetAttrSet().GetItemState( RES_HEADER, FALSE, &pItem ) &&
+              ((SwFmtHeader*)pItem)->IsActive() ) ||
+            ( SFX_ITEM_SET == rMaster.GetAttrSet().GetItemState( RES_FOOTER, FALSE, &pItem )  &&
+              ((SwFmtFooter*)pItem)->IsActive()) )
+            ++nRet;
+    }
+    return nRet; // number of page styles with active header/footer
+}
+
 /*--------------------------------------------------------------------
     Beschreibung:   Links bearbeiten
  --------------------------------------------------------------------*/
@@ -1937,6 +1961,7 @@ long SwView::InsertDoc( USHORT nSlotId, const String& rFileName,
 
     SfxMedium* pMed = 0;
     SwDocShell* pDocSh = GetDocShell();
+
     if( rFileName.Len() )
     {
         SfxObjectFactory& rFact = pDocSh->GetFactory();
@@ -1992,6 +2017,10 @@ long SwView::InsertDoc( USHORT nSlotId, const String& rFileName,
             if( pRead ||
                 (pMed->GetFilter()->GetFilterFlags() & SFX_FILTER_STARONEFILTER) != 0 )
             {
+                sal_uInt16 nUndoCheck = 0;
+                SwDoc *pDoc = pDocSh->GetDoc();
+                if( pRead && pDocSh->GetDoc() )
+                    nUndoCheck = lcl_PageDescWithHeader( *pDoc );
                 ULONG nErrno;
                 {   //Scope for SwWait-Object, to be able to execute slots
                     //outside this scope.
@@ -2006,8 +2035,10 @@ long SwView::InsertDoc( USHORT nSlotId, const String& rFileName,
                     }
                     else
                     {
-                        nErrno = pDocSh->ImportFrom( *pMed ) ? 0
-                                                : ERR_SWG_READ_ERROR;
+                        sal_Bool bUndo = pDoc->DoesUndo();
+                        pDoc->DoUndo( sal_False );
+                        nErrno = pDocSh->ImportFrom( *pMed ) ? 0 : ERR_SWG_READ_ERROR;
+                        pDoc->DoUndo( bUndo );
                     }
 
                 }
@@ -2018,6 +2049,13 @@ long SwView::InsertDoc( USHORT nSlotId, const String& rFileName,
                     SfxRequest aReq( FN_UPDATE_TOX, SFX_CALLMODE_SLOT, GetPool() );
                     Execute( aReq );
                     pWrtShell->SetUpdateTOX( FALSE );       // wieder zurueck setzen
+                }
+
+                if( pDoc )
+                { // Disable Undo for .sdw (136991) or
+                  // if the number of page styles with header/footer has changed (#i67305)
+                    if( !pRead || nUndoCheck != lcl_PageDescWithHeader( *pDoc ) )
+                        pDoc->DelAllUndoObj();
                 }
 
                 pWrtShell->EndAllAction();
