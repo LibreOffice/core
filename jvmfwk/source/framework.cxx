@@ -4,9 +4,9 @@
  *
  *  $RCSfile: framework.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:11:00 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:26:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -797,7 +797,8 @@ javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
         //JRE. If a plugin recognized it then the loop will break
         typedef std::vector<jfw::PluginLibrary>::const_iterator ci_pl;
         int cModule = 0;
-        for (ci_pl i = vecPlugins.begin(); i != vecPlugins.end(); i++, cModule)
+        for (ci_pl i = vecPlugins.begin(); i != vecPlugins.end();
+             i++, cModule++)
         {
             const jfw::PluginLibrary & library = *i;
             jfw::VersionInfo versionInfo =
