@@ -4,9 +4,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.177 $
+#   $Revision: 1.178 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-19 09:35:45 $
+#   last change: $Author: kz $ $Date: 2006-07-19 09:38:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -479,168 +479,6 @@ SCP9TARGETN:=$(foreach,i,$(SCP9LINK_PRODUCT_TYPE) $(BIN)$/$i$/$(SCP9TARGET)$(SCP
 ZIPALL=ZIPALLTARGET
 
 .ENDIF			#
-
-.IF "$(ZIP1TARGET)"!=""
-.IF "$(common_build_zip)"!=""
-.IF "$(ZIP1LIST:s/LANGDIR//)" == "$(ZIP1LIST)"
-ZIP1TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP1TARGET).zip
-.ELSE
-ZIP1TARGETN=$(foreach,i,$(zip1alllangiso) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP1TARGET)_$i.zip )
-.ENDIF
-.ELSE			# "$(common_build_zip)"!=""
-.IF "$(ZIP1LIST:s/LANGDIR//)" == "$(ZIP1LIST)"
-ZIP1TARGETN=$(BIN)$/$(ZIP1TARGET).zip
-.ELSE
-ZIP1TARGETN=$(foreach,i,$(zip1alllangiso) $(BIN)$/$(ZIP1TARGET)_$i.zip )
-.ENDIF
-.ENDIF			# "$(common_build_zip)"!=""
-ZIP1DEPFILE=$(subst,$(COMMON_OUTDIR),$(OUTPATH) $(subst,$/bin$/,$/misc$/ $(ZIP1TARGETN:s/.zip/.dpzz/)))
-ZIPDEPFILES+=$(ZIP1DEPFILE)
-.ENDIF
-
-.IF "$(ZIP2TARGET)"!=""
-.IF "$(common_build_zip)"!=""
-.IF "$(ZIP2LIST:s/LANGDIR//)" == "$(ZIP2LIST)"
-ZIP2TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP2TARGET).zip
-.ELSE
-ZIP2TARGETN=$(foreach,i,$(zip2alllangiso) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP2TARGET)_$i.zip )
-.ENDIF
-.ELSE			# "$(common_build_zip)"!=""
-.IF "$(ZIP2LIST:s/LANGDIR//)" == "$(ZIP2LIST)"
-ZIP2TARGETN=$(BIN)$/$(ZIP2TARGET).zip
-.ELSE
-ZIP2TARGETN=$(foreach,i,$(zip2alllangiso) $(BIN)$/$(ZIP2TARGET)_$i.zip )
-.ENDIF
-.ENDIF			# "$(common_build_zip)"!=""
-ZIP2DEPFILE=$(subst,$(COMMON_OUTDIR),$(OUTPATH) $(subst,$/bin$/,$/misc$/ $(ZIP2TARGETN:s/.zip/.dpzz/)))
-ZIPDEPFILES+=$(ZIP2DEPFILE)
-.ENDIF
-
-.IF "$(ZIP3TARGET)"!=""
-.IF "$(common_build_zip)"!=""
-.IF "$(ZIP3LIST:s/LANGDIR//)" == "$(ZIP3LIST)"
-ZIP3TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP3TARGET).zip
-.ELSE
-ZIP3TARGETN=$(foreach,i,$(zip3alllangiso) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP3TARGET)_$i.zip )
-.ENDIF
-.ELSE			# "$(common_build_zip)"!=""
-.IF "$(ZIP3LIST:s/LANGDIR//)" == "$(ZIP3LIST)"
-ZIP3TARGETN=$(BIN)$/$(ZIP3TARGET).zip
-.ELSE
-ZIP3TARGETN=$(foreach,i,$(zip3alllangiso) $(BIN)$/$(ZIP3TARGET)_$i.zip )
-.ENDIF
-.ENDIF			# "$(common_build_zip)"!=""
-ZIP3DEPFILE=$(subst,$(COMMON_OUTDIR),$(OUTPATH) $(subst,$/bin$/,$/misc$/ $(ZIP3TARGETN:s/.zip/.dpzz/)))
-ZIPDEPFILES+=$(ZIP3DEPFILE)
-.ENDIF
-
-.IF "$(ZIP4TARGET)"!=""
-.IF "$(common_build_zip)"!=""
-.IF "$(ZIP4LIST:s/LANGDIR//)" == "$(ZIP4LIST)"
-ZIP4TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP4TARGET).zip
-.ELSE
-ZIP4TARGETN=$(foreach,i,$(zip4alllangiso) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP4TARGET)_$i.zip )
-.ENDIF
-.ELSE			# "$(common_build_zip)"!=""
-.IF "$(ZIP4LIST:s/LANGDIR//)" == "$(ZIP4LIST)"
-ZIP4TARGETN=$(BIN)$/$(ZIP4TARGET).zip
-.ELSE
-ZIP4TARGETN=$(foreach,i,$(zip4alllangiso) $(BIN)$/$(ZIP4TARGET)_$i.zip )
-.ENDIF
-.ENDIF			# "$(common_build_zip)"!=""
-ZIP4DEPFILE=$(subst,$(COMMON_OUTDIR),$(OUTPATH) $(subst,$/bin$/,$/misc$/ $(ZIP4TARGETN:s/.zip/.dpzz/)))
-ZIPDEPFILES+=$(ZIP4DEPFILE)
-.ENDIF
-
-.IF "$(ZIP5TARGET)"!=""
-.IF "$(common_build_zip)"!=""
-.IF "$(ZIP5LIST:s/LANGDIR//)" == "$(ZIP5LIST)"
-ZIP5TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP5TARGET).zip
-.ELSE
-ZIP5TARGETN=$(foreach,i,$(zip5alllangiso) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP5TARGET)_$i.zip )
-.ENDIF
-.ELSE			# "$(common_build_zip)"!=""
-.IF "$(ZIP5LIST:s/LANGDIR//)" == "$(ZIP5LIST)"
-ZIP5TARGETN=$(BIN)$/$(ZIP5TARGET).zip
-.ELSE
-ZIP5TARGETN=$(foreach,i,$(zip5alllangiso) $(BIN)$/$(ZIP5TARGET)_$i.zip )
-.ENDIF
-.ENDIF			# "$(common_build_zip)"!=""
-ZIP5DEPFILE=$(subst,$(COMMON_OUTDIR),$(OUTPATH) $(subst,$/bin$/,$/misc$/ $(ZIP5TARGETN:s/.zip/.dpzz/)))
-ZIPDEPFILES+=$(ZIP5DEPFILE)
-.ENDIF
-
-.IF "$(ZIP6TARGET)"!=""
-.IF "$(common_build_zip)"!=""
-.IF "$(ZIP6LIST:s/LANGDIR//)" == "$(ZIP6LIST)"
-ZIP6TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP6TARGET).zip
-.ELSE
-ZIP6TARGETN=$(foreach,i,$(zip6alllangiso) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP6TARGET)_$i.zip )
-.ENDIF
-.ELSE			# "$(common_build_zip)"!=""
-.IF "$(ZIP6LIST:s/LANGDIR//)" == "$(ZIP6LIST)"
-ZIP6TARGETN=$(BIN)$/$(ZIP6TARGET).zip
-.ELSE
-ZIP6TARGETN=$(foreach,i,$(zip6alllangiso) $(BIN)$/$(ZIP6TARGET)_$i.zip )
-.ENDIF
-.ENDIF			# "$(common_build_zip)"!=""
-ZIP6DEPFILE=$(subst,$(COMMON_OUTDIR),$(OUTPATH) $(subst,$/bin$/,$/misc$/ $(ZIP6TARGETN:s/.zip/.dpzz/)))
-ZIPDEPFILES+=$(ZIP6DEPFILE)
-.ENDIF
-
-.IF "$(ZIP7TARGET)"!=""
-.IF "$(common_build_zip)"!=""
-.IF "$(ZIP7LIST:s/LANGDIR//)" == "$(ZIP7LIST)"
-ZIP7TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP7TARGET).zip
-.ELSE
-ZIP7TARGETN=$(foreach,i,$(zip7alllangiso) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP7TARGET)_$i.zip )
-.ENDIF
-.ELSE			# "$(common_build_zip)"!=""
-.IF "$(ZIP7LIST:s/LANGDIR//)" == "$(ZIP7LIST)"
-ZIP7TARGETN=$(BIN)$/$(ZIP7TARGET).zip
-.ELSE
-ZIP7TARGETN=$(foreach,i,$(zip7alllangiso) $(BIN)$/$(ZIP7TARGET)_$i.zip )
-.ENDIF
-.ENDIF			# "$(common_build_zip)"!=""
-ZIP7DEPFILE=$(subst,$(COMMON_OUTDIR),$(OUTPATH) $(subst,$/bin$/,$/misc$/ $(ZIP7TARGETN:s/.zip/.dpzz/)))
-ZIPDEPFILES+=$(ZIP7DEPFILE)
-.ENDIF
-
-.IF "$(ZIP8TARGET)"!=""
-.IF "$(common_build_zip)"!=""
-.IF "$(ZIP8LIST:s/LANGDIR//)" == "$(ZIP8LIST)"
-ZIP8TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP8TARGET).zip
-.ELSE
-ZIP8TARGETN=$(foreach,i,$(zip8alllangiso) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP8TARGET)_$i.zip )
-.ENDIF
-.ELSE			# "$(common_build_zip)"!=""
-.IF "$(ZIP8LIST:s/LANGDIR//)" == "$(ZIP8LIST)"
-ZIP8TARGETN=$(BIN)$/$(ZIP8TARGET).zip
-.ELSE
-ZIP8TARGETN=$(foreach,i,$(zip8alllangiso) $(BIN)$/$(ZIP8TARGET)_$i.zip )
-.ENDIF
-.ENDIF			# "$(common_build_zip)"!=""
-ZIP8DEPFILE=$(subst,$(COMMON_OUTDIR),$(OUTPATH) $(subst,$/bin$/,$/misc$/ $(ZIP8TARGETN:s/.zip/.dpzz/)))
-ZIPDEPFILES+=$(ZIP8DEPFILE)
-.ENDIF
-
-.IF "$(ZIP9TARGET)"!=""
-.IF "$(common_build_zip)"!=""
-.IF "$(ZIP9LIST:s/LANGDIR//)" == "$(ZIP9LIST)"
-ZIP9TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP9TARGET).zip
-.ELSE
-ZIP9TARGETN=$(foreach,i,$(zip9alllangiso) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP9TARGET)_$i.zip )
-.ENDIF
-.ELSE			# "$(common_build_zip)"!=""
-.IF "$(ZIP9LIST:s/LANGDIR//)" == "$(ZIP9LIST)"
-ZIP9TARGETN=$(BIN)$/$(ZIP9TARGET).zip
-.ELSE
-ZIP9TARGETN=$(foreach,i,$(zip9alllangiso) $(BIN)$/$(ZIP9TARGET)_$i.zip )
-.ENDIF
-.ENDIF			# "$(common_build_zip)"!=""
-ZIP9DEPFILE=$(subst,$(COMMON_OUTDIR),$(OUTPATH) $(subst,$/bin$/,$/misc$/ $(ZIP9TARGETN:s/.zip/.dpzz/)))
-ZIPDEPFILES+=$(ZIP9DEPFILE)
-.ENDIF
 
 .IF "$(APP1TARGET)"!=""
 APP1TARGETN=$(BIN)$/$(APP1TARGET)$(EXECPOST)
@@ -1474,6 +1312,7 @@ ALL_JAVA_TARGETS= \
 .IF "$(lintit)"==""
 .IF "$(L10N_framework)"!=""
 ALLTAR:	\
+        "$(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/$(UPD)minor.mk" \
         $(SUBDIRS)		\
         $(DPRTARGET) \
         $(DPZTARGET) \
@@ -1527,7 +1366,9 @@ ALLTAR:	\
 .ELSE			# "$(L10N_framework)"!=""
 #		$(NOOPTTARGET) $(EXCEPTIONSTARGET)
 
-ALLTAR: $(MAKEDEMODIR)	$(MAKECOMPDIR) $(MAKEXLDIR)	\
+ALLTAR: \
+        "$(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/$(UPD)minor.mk" \
+        $(MAKEDEMODIR)	$(MAKECOMPDIR) $(MAKEXLDIR)	\
         $(COMPVERMK) \
         $(JAVAVERMK) \
         $(target_empty) \
@@ -2037,19 +1878,25 @@ $(MISC)$/$(TARGET)genjava.mk: 	$(IDLFILES)
 .IF "$(IDLFILES)"!=""
 
 $(URDTARGET) : $(DEPIDLFILES)
-#.IF "$(MAXPROCESS)"<="1"
+        @+-mkdir $(OUT)$/ucr >& $(NULLDEV)
+# use this target only to speedup single proceess builds
+# see according rules in rules.mk
+.IF "$(MAXPROCESS)"<="1"
         +$(IDLC) @$(mktmp $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -O$(OUT)$/ucr$/$(IDLPACKAGE) $(DEPIDLFILES:+"\n"))
-#.ENDIF			# "$(MAXPROCESS)"<="1"
-        @+echo > $@
+.ENDIF			# "$(MAXPROCESS)"<="1"
+    @+echo > $@
 
 .IF "$(URDDOC)"!=""
 
 $(URDDOCTARGET) : $(DEPIDLFILES)
         @+-mkdir $(OUT)$/ucrdoc >& $(NULLDEV)
-#.IF "$(MAXPROCESS)"<="1"
-        +$(IDLC) @$(mktmp $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -C -O$(OUT)$/ucrdoc$/$(IDLPACKAGE) $(DEPIDLFILES:+"\n"))		
-#.ENDIF			# "$(MAXPROCESS)"<="1"
-        @+echo > $@
+# use this target only to speedup single proceess builds
+# see according rules in rules.mk
+.IF "$(MAXPROCESS)"<="1"
+        +$(IDLC) @$(mktmp $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -C -O$(OUT)$/ucrdoc$/$(IDLPACKAGE) $(DEPIDLFILES:+"\n"))
+.ENDIF			# "$(MAXPROCESS)"<="1"
+    @+echo > $@
+    
 .ENDIF			# "$(URDDOC)"!=""
 .ENDIF			# "$(IDLFILES)"!=""
 
