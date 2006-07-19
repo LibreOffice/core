@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtexppr.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:49:03 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:40:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -617,7 +617,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         sal_Bool bClear = !pUnderlineState;
         if( !bClear )
         {
-            sal_Int16 nUnderline;
+            sal_Int16 nUnderline = 0;
             pUnderlineState->maValue >>= nUnderline;
             bClear = FontUnderline::NONE == nUnderline;
         }
