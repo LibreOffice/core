@@ -4,9 +4,9 @@
  *
  *  $RCSfile: typemanager.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:10:06 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:25:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,7 +149,7 @@ sal_Bool RegistryTypeManager::init(sal_Bool bMerged, const StringVector& regFile
 
             while (iter != regFiles.end())
             {
-                if ( ret = pTmpReg->mergeKey(rootKey, aRoot, convertToFileUrl( *iter )) )
+                if ( (ret = pTmpReg->mergeKey(rootKey, aRoot, convertToFileUrl( *iter ))) )
                 {
                     if (ret != REG_MERGE_CONFLICT)
                     {
