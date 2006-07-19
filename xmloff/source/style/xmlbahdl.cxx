@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlbahdl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:35:44 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:36:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,14 +89,14 @@ sal_Bool lcl_xmloff_getAny( const Any& rValue, sal_Int32& nValue,
     {
     case 1:
         {
-            sal_Int8 nValue8;
+            sal_Int8 nValue8 = 0;
             bRet = rValue >>= nValue8;
             nValue = nValue8;
         }
         break;
     case 2:
         {
-            sal_Int16 nValue16;
+            sal_Int16 nValue16 = 0;
             bRet = rValue >>= nValue16;
             nValue = nValue16;
         }
