@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:20:17 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 17:18:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -618,7 +618,7 @@ SfxConfigGroupListBox_Impl::SfxConfigGroupListBox_Impl(
     // Check configuration to see whether only Basic macros,
   // only Scripting Framework scripts, or both should be listed
     Any value;
-    sal_Bool tmp;
+    sal_Bool tmp = false;
 
     value = ::utl::ConfigManager::GetConfigManager()->GetLocalProperty(
         ::rtl::OUString::createFromAscii(
