@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfgimport.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:48:36 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 15:58:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1042,9 +1042,9 @@ void SAL_CALL  OCfgImport::overrideProperty(
                     else if ( aName == CONFIGKEY_DEFSET_FONT_NAME ) sProp = PROPERTY_FONTNAME;
                     else if ( aName == CONFIGKEY_DEFSET_ORDER ) sProp = PROPERTY_ORDER;
                     else if ( aName == CONFIGKEY_DEFSET_APPLYFILTER ) sProp = PROPERTY_APPLYFILTER;
-                    else if ( m_bPropertyMayBeVoid = (aName == CONFIGKEY_DEFSET_ROW_HEIGHT) ) sProp = PROPERTY_ROW_HEIGHT;
-                    else if ( m_bPropertyMayBeVoid = (aName == CONFIGKEY_DEFSET_TEXTCOLOR) ) sProp = PROPERTY_TEXTCOLOR;
-                    else if ( m_bPropertyMayBeVoid = (aName == CONFIGKEY_DEFSET_FONT_UNDERLINECOLOR) ) sProp = PROPERTY_TEXTLINECOLOR;
+                    else if ( (m_bPropertyMayBeVoid = (aName == CONFIGKEY_DEFSET_ROW_HEIGHT)) ) sProp = PROPERTY_ROW_HEIGHT;
+                    else if ( (m_bPropertyMayBeVoid = (aName == CONFIGKEY_DEFSET_TEXTCOLOR)) ) sProp = PROPERTY_TEXTCOLOR;
+                    else if ( (m_bPropertyMayBeVoid = (aName == CONFIGKEY_DEFSET_FONT_UNDERLINECOLOR)) ) sProp = PROPERTY_TEXTLINECOLOR;
                     else if ( aName == CONFIGKEY_DEFSET_FONT_CHARACTEREMPHASIS ) sProp = PROPERTY_TEXTEMPHASIS;
                     else if ( aName == CONFIGKEY_DEFSET_FONT_CHARACTERRELIEF ) sProp = PROPERTY_TEXTRELIEF;
                         // font
@@ -1080,13 +1080,13 @@ void SAL_CALL  OCfgImport::overrideProperty(
                 {
                     ::rtl::OUString sProp;
                     m_bPropertyMayBeVoid = sal_False;
-                    if ( m_bPropertyMayBeVoid = (aName == CONFIGKEY_COLUMN_ALIGNMENT) ) sProp = PROPERTY_ALIGN;
-                    else if ( m_bPropertyMayBeVoid = (aName == CONFIGKEY_COLUMN_WIDTH) ) sProp = PROPERTY_WIDTH;
-                    else if ( m_bPropertyMayBeVoid = (aName == CONFIGKEY_COLUMN_RELPOSITION) ) sProp = PROPERTY_RELATIVEPOSITION;
+                    if ( (m_bPropertyMayBeVoid = (aName == CONFIGKEY_COLUMN_ALIGNMENT)) ) sProp = PROPERTY_ALIGN;
+                    else if ( (m_bPropertyMayBeVoid = (aName == CONFIGKEY_COLUMN_WIDTH)) ) sProp = PROPERTY_WIDTH;
+                    else if ( (m_bPropertyMayBeVoid = (aName == CONFIGKEY_COLUMN_RELPOSITION)) ) sProp = PROPERTY_RELATIVEPOSITION;
                     else if ( aName == CONFIGKEY_COLUMN_HIDDEN ) sProp = PROPERTY_HIDDEN;
-                    else if ( m_bPropertyMayBeVoid = (aName == CONFIGKEY_COLUMN_HELPTEXT) ) sProp = PROPERTY_HELPTEXT;
-                    else if ( m_bPropertyMayBeVoid = (aName == CONFIGKEY_COLUMN_CONTROLDEFAULT) ) sProp = PROPERTY_CONTROLDEFAULT;
-                    else if ( m_bPropertyMayBeVoid = (aName == CONFIGKEY_COLUMN_NUMBERFORMAT) ) sProp = PROPERTY_NUMBERFORMAT;
+                    else if ( (m_bPropertyMayBeVoid = (aName == CONFIGKEY_COLUMN_HELPTEXT)) ) sProp = PROPERTY_HELPTEXT;
+                    else if ( (m_bPropertyMayBeVoid = (aName == CONFIGKEY_COLUMN_CONTROLDEFAULT)) ) sProp = PROPERTY_CONTROLDEFAULT;
+                    else if ( (m_bPropertyMayBeVoid = (aName == CONFIGKEY_COLUMN_NUMBERFORMAT)) ) sProp = PROPERTY_NUMBERFORMAT;
 
 
                     if ( sProp.getLength() )
