@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtstyle.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:21:37 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:41:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,7 +115,7 @@ void XMLTextParagraphExport::exportStyleAttributes(
             xPropSet->getPropertySetInfo());
     if( xPropSetInfo->hasPropertyByName( sCategory ) )
     {
-        sal_Int16 nCategory;
+        sal_Int16 nCategory = 0;
         xPropSet->getPropertyValue( sCategory ) >>= nCategory;
         enum XMLTokenEnum eValue = XML_TOKEN_INVALID;
         if( -1 != nCategory )
