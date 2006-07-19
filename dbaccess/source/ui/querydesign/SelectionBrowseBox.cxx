@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:44:07 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:06:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2742,8 +2742,8 @@ void OSelectionBrowseBox::setFunctionCell(OTableFieldDescRef& _pEntry)
         else
         {
             // nur COUNT(*) erlaubt
-            sal_Bool bCountRemoved = sal_False;
-            if ( bCountRemoved = !isFieldNameAsterix(_pEntry->GetField()) )
+            sal_Bool bCountRemoved = !isFieldNameAsterix(_pEntry->GetField());
+            if ( bCountRemoved )
                 m_pFunctionCell->RemoveEntry(1);
 
             if ( !bCountRemoved && m_pFunctionCell->GetEntryCount() < 2)
