@@ -4,9 +4,9 @@
  *
  *  $RCSfile: controlpropertyhdl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:16:12 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:35:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -183,7 +183,7 @@ namespace xmloff
             sal_Bool bBelow = 0 != (nFontEmphasis & FontEmphasisMark::BELOW);
 
             // convert
-            if (bSuccess = _rUnitConverter.convertEnum(aReturn, nType, OEnumMapper::getEnumMap(OEnumMapper::epFontEmphasis), XML_NONE))
+            if ((bSuccess = _rUnitConverter.convertEnum(aReturn, nType, OEnumMapper::getEnumMap(OEnumMapper::epFontEmphasis), XML_NONE)))
             {
                 aReturn.append( (sal_Unicode)' ' );
                 aReturn.append( GetXMLToken(bBelow ? XML_BELOW : XML_ABOVE) );
@@ -378,7 +378,7 @@ namespace xmloff
         sal_Bool bSuccess = sal_False;
 
         sal_Int32 nWidth = 0;
-        if (bSuccess = _rUnitConverter.convertMeasure(nWidth, _rStrImpValue, MAP_POINT))
+        if ((bSuccess = _rUnitConverter.convertMeasure(nWidth, _rStrImpValue, MAP_POINT)))
             _rValue <<= (sal_Int16)nWidth;
 
         return bSuccess;
@@ -410,7 +410,7 @@ namespace xmloff
         sal_Bool bSucces = sal_False;
 
         double fValue;
-        if (bSucces = _rUnitConverter.convertDouble(fValue, _rStrImpValue))
+        if ((bSucces = _rUnitConverter.convertDouble(fValue, _rStrImpValue)))
         {
             fValue *= 10;
             _rValue <<= (float)fValue;
@@ -425,7 +425,7 @@ namespace xmloff
         float fAngle;
         sal_Bool bSuccess = sal_False;
 
-        if (bSuccess = (_rValue >>= fAngle))
+        if ((bSuccess = (_rValue >>= fAngle)))
         {
             rtl::OUStringBuffer sValue;
             _rUnitConverter.convertDouble(sValue, ((double)fAngle) / 10);
@@ -442,6 +442,13 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.13.10.1  2006/06/30 12:00:22  sb
+ *  #i66577# Made the code compile (warning-free) on a unxlngi6.pro GCC 4.1.1 Linux box.
+ *
+ *  Revision 1.13  2006/06/19 18:16:12  hr
+ *  INTEGRATION: CWS warnings01 (1.12.34); FILE MERGED
+ *  2005/11/16 22:47:08 pl 1.12.34.1: #i55991# removed warnings
+ *
  *  Revision 1.12.34.1  2005/11/16 22:47:08  pl
  *  #i55991# removed warnings
  *
