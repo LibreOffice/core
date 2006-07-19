@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 14:57:34 $
+#   last change: $Author: kz $ $Date: 2006-07-19 09:55:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -121,7 +121,13 @@ OBJFILES += $(OBJ)$/backtrace.obj
 APP1STDLIBS+=-lC
 .ENDIF
 
-.IF "$(LINUX)" == "YES"
+.IF "$(OS)" == "LINUX"
+.IF "$(PAM)" == "NO"
+CFLAGS+=-DNOPAM
+.IF "$(NEW_SHADOW_API)" == "YES"
+CFLAGS+=-DNEW_SHADOW_API
+.ENDIF
+.ENDIF
 .IF "$(PAM_LINK)" == "YES"
 CFLAGS+=-DPAM_LINK
 .ENDIF
