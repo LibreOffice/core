@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:37:05 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 17:19:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -633,13 +633,13 @@ throw ( ::com::sun::star::uno::RuntimeException )
                 }
                 else if ( pType == ::getBooleanCppuType() )
                 {
-                    sal_Bool bTemp ;
+                    sal_Bool bTemp = false;
                     rEvent.State >>= bTemp ;
                     pItem = new SfxBoolItem( nSlotId, bTemp );
                 }
                 else if ( pType == ::getCppuType((const sal_uInt16*)0) )
                 {
-                    sal_uInt16 nTemp ;
+                    sal_uInt16 nTemp = 0;
                     rEvent.State >>= nTemp ;
                     pItem = new SfxUInt16Item( nSlotId, nTemp );
                 }
@@ -1188,13 +1188,13 @@ throw ( ::com::sun::star::uno::RuntimeException )
                 }
                 else if ( pType == ::getBooleanCppuType() )
                 {
-                    sal_Bool bTemp ;
+                    sal_Bool bTemp = false;
                     rEvent.State >>= bTemp ;
                     pItem = new SfxBoolItem( nSlotId, bTemp );
                 }
                 else if ( pType == ::getCppuType((const sal_uInt16*)0) )
                 {
-                    sal_uInt16 nTemp ;
+                    sal_uInt16 nTemp = 0;
                     rEvent.State >>= nTemp ;
                     pItem = new SfxUInt16Item( nSlotId, nTemp );
                 }
