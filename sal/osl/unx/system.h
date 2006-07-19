@@ -4,9 +4,9 @@
  *
  *  $RCSfile: system.h,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:19:46 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 09:39:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -537,8 +537,10 @@ extern struct spwd *getspnam_r(const char *name, struct spwd *result,
 struct tm *localtime_r(const time_t *timep, struct tm *buffer);
 struct tm *gmtime_r(const time_t *timep, struct tm *buffer);
 #endif /* !defined FREEBSD || (__FreeBSD_version < 500112) */
+#if !defined(FREEBSD) || (__FreeBSD_version < 700015)
 struct hostent *gethostbyname_r(const char *name, struct hostent *result,
                                 char *buffer, int buflen, int *h_errnop);
+#endif /* !defined(FREEBSD) || (__FreeBSD_version < 700015) */
 #endif
 
 #endif /* __OSL_SYSTEM_H__ */
