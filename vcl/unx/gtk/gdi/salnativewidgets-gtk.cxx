@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets-gtk.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-06 10:33:01 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 15:00:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2956,6 +2956,8 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetHighlightColor( aHighlightColor );
     aStyleSet.SetHighlightTextColor( aHighlightTextColor );
 
+    // menu disabled entries handling
+    aStyleSet.SetSkipDisabledInMenus( TRUE );
     // menu colors
     GtkStyle* pMenuStyle = gtk_widget_get_style( gMenuWidget );
     GtkStyle* pMenuItemStyle = gtk_rc_get_style( gMenuItemMenuWidget );
