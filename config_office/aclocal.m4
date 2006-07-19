@@ -275,3 +275,4 @@ AC_DEFUN([AM_RUN_LOG],
    echo "$as_me:$LINENO: \$? = $ac_status" >&AS_MESSAGE_LOG_FD
    (exit $ac_status); }])
 
+m4_include([acinclude.m4])
