@@ -4,9 +4,9 @@
  *
  *  $RCSfile: command.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 13:19:17 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 17:12:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -457,7 +457,7 @@ CCommand::operator const int()
         }
     }
     //fprintf( stderr, "parent: %s %s\n", ppArgv[0] , ppArgv[1] );
-    if ( nRet = waitpid( pid, NULL, 0 ) < 0 )
+    if ( (nRet = waitpid( pid, NULL, 0 ) < 0) )
     {
         DBG_ASSERT( FALSE, "wait error" );
     }
