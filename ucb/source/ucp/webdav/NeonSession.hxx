@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NeonSession.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:37:20 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 09:35:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@
 #include "NeonTypes.hxx"
 #endif
 
-#ifdef NEONTWOFIVE
+#if NEON_VERSION >= 0250
 typedef void (*ne_header_handler)(void *userdata, const char *value);
 #endif
 
