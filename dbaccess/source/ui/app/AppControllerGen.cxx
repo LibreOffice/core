@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppControllerGen.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:23:11 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:01:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -572,7 +572,7 @@ sal_Bool OApplicationController::isRenameDeleteAllowed(ElementType _eType,sal_Bo
                 try
                 {
                     Reference< XNameAccess > xContainer = const_cast<OApplicationController*>(this)->getElements(eType);
-                    if ( bEnabled = (xContainer.is() && xContainer->hasByName(*aList.begin())) )
+                    if ( (bEnabled = (xContainer.is() && xContainer->hasByName(*aList.begin()))) )
                         bEnabled = Reference<XRename>(xContainer->getByName(*aList.begin()),UNO_QUERY).is();
                 }
                 catch(Exception&)
