@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impimagetree.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:25:01 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 14:59:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,41 +144,51 @@ bool ImplImageTree::implInit()
 
         if( xFactory.is() )
         {
-            mxZipAcc.set( xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.packages.zip.ZipFileAccess" ) ), uno::UNO_QUERY ) ;
-            mxPathSettings.set( xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.util.PathSettings" ) ), uno::UNO_QUERY );
-            mxFileAccess.set( xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ), uno::UNO_QUERY );
-
-            if( mxZipAcc.is() && mxPathSettings.is() && mxFileAccess.is() )
+            // #137795# protect against exceptions in service instantiation
+            try
             {
-                uno::Reference< lang::XInitialization > xInit( mxZipAcc, uno::UNO_QUERY );
+                mxZipAcc.set( xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.packages.zip.ZipFileAccess" ) ), uno::UNO_QUERY ) ;
+                mxPathSettings.set( xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.util.PathSettings" ) ), uno::UNO_QUERY );
+                mxFileAccess.set( xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ), uno::UNO_QUERY );
 
-                if( xInit.is() )
+                if( mxZipAcc.is() && mxPathSettings.is() && mxFileAccess.is() )
                 {
-                    uno::Sequence< uno::Any > aInitSeq( 1 );
+                    uno::Reference< lang::XInitialization > xInit( mxZipAcc, uno::UNO_QUERY );
 
-                    try
+                    if( xInit.is() )
                     {
-                        const ::rtl::OUString& rZipURL = implGetZipFileURL();
+                        uno::Sequence< uno::Any > aInitSeq( 1 );
 
-                        if( rZipURL.getLength() )
+                        try
                         {
-                            aInitSeq[ 0 ] <<= rZipURL;
-                            xInit->initialize( aInitSeq );
-                            mxNameAcc.set( mxZipAcc, uno::UNO_QUERY );
-                            implCheckUserCache();
+                            const ::rtl::OUString& rZipURL = implGetZipFileURL();
+
+                            if( rZipURL.getLength() )
+                            {
+                                aInitSeq[ 0 ] <<= rZipURL;
+                                xInit->initialize( aInitSeq );
+                                mxNameAcc.set( mxZipAcc, uno::UNO_QUERY );
+                                implCheckUserCache();
+                            }
+                            else
+                                mxZipAcc.clear();
                         }
-                        else
+                        catch( const uno::Exception& )
+                        {
                             mxZipAcc.clear();
-                    }
-                    catch( const uno::Exception& )
-                    {
-                        mxZipAcc.clear();
+                        }
                     }
                 }
+                else
+                {
+                    mxZipAcc.clear();
+                }
             }
-            else
+            catch( const uno::Exception& )
             {
                 mxZipAcc.clear();
+                mxPathSettings.clear();
+                mxFileAccess.clear();
             }
         }
     }
