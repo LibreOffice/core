@@ -1176,12 +1176,13 @@ static long ImplHandleKey( Window* pWindow, USHORT nSVEvent,
 
     // call handler
     ImplDelData aDelData;
+    pChild->ImplAddDel( &aDelData );
+
     KeyEvent    aKeyEvt( (xub_Unicode)nCharCode, aKeyCode, nRepeat );
     NotifyEvent aNotifyEvt( nSVEvent, pChild, &aKeyEvt );
     BOOL        bKeyPreNotify = (ImplCallPreNotify( aNotifyEvt ) != 0);
     long        nRet = 1;
 
-    pChild->ImplAddDel( &aDelData );
     if ( !bKeyPreNotify && !aDelData.IsDelete() )
     {
         if ( nSVEvent == EVENT_KEYINPUT )
