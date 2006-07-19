@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SettingsExportHelper.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:04:06 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:34:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,7 +140,7 @@ void XMLSettingsExportHelper::CallTypeFunction(const uno::Any& rAny,
         break;
         case uno::TypeClass_BYTE:
         {
-            sal_Int8 nInt8;
+            sal_Int8 nInt8 = 0;
             aAny >>= nInt8;
             exportByte(nInt8, rName);
         }
