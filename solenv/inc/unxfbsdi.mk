@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxfbsdi.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: maho $ $Date: 2006-07-08 03:16:08 $
+#   last change: $Author: kz $ $Date: 2006-07-19 09:27:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -42,3 +42,6 @@ CDEFS+=-DX86
 # architecture dependent flags for the C and C++ compiler that can be changed by
 # exporting the variable ARCH_FLAGS="..." in the shell, which is used to start build
 ARCH_FLAGS*=-mtune=pentiumpro
+
+# platform specific identifier for shared libs
+DLLPOSTFIX=fi
