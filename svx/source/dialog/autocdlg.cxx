@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autocdlg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 14:59:41 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 09:50:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1022,6 +1022,7 @@ struct DoubleString
 typedef DoubleString* DoubleStringPtr;
 SV_DECL_PTRARR_DEL(DoubleStringArray, DoubleStringPtr, 4, 4);
 SV_IMPL_PTRARR(DoubleStringArray, DoubleStringPtr);
+
 /* -----------------19.11.98 16:07-------------------
  *
  * --------------------------------------------------*/
@@ -1135,29 +1136,29 @@ int OfaAutocorrReplacePage::DeactivatePage( SfxItemSet*  )
 BOOL OfaAutocorrReplacePage::FillItemSet( SfxItemSet& )
 {
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
-    DoubleStringArrayPtr pArray = aDoubleStringTable.Last();
-    while(pArray)
+    DoubleStringArrayPtr pDoubleStringArray = aDoubleStringTable.Last();
+    while(pDoubleStringArray)
     {
         LanguageType eCurLang = (LanguageType)aDoubleStringTable.GetCurKey();
         if(eCurLang != eLang) // die aktuelle Sprache wird weiter hinten behandelt
         {
             SvxAutocorrWordList* pWordList = pAutoCorrect->LoadAutocorrWordList(eCurLang);
             USHORT nWordListCount = pWordList->Count();
-            USHORT nEntryCount = pArray->Count();
-            USHORT nPos = nEntryCount;
+            USHORT nDoubleStringArrayCount = pDoubleStringArray->Count();
+            USHORT nPos = nDoubleStringArrayCount;
             USHORT nLastPos = nPos;
             // 1. Durchlauf: Eintraege loeschen oder veraendern:
 
-            USHORT i;
-            for( i = nWordListCount; i; i-- )
+
+            for( USHORT nWordListPos = nWordListCount; nWordListPos; nWordListPos-- )
             {
-                SvxAutocorrWordPtr pWordPtr = pWordList->GetObject(i - 1);
+                SvxAutocorrWordPtr pWordPtr = pWordList->GetObject(nWordListPos - 1);
                 String sEntry(pWordPtr->GetShort());
                 // formatierter Text steht nur im Writer
                 BOOL bFound = !bSWriter && !pWordPtr->IsTextOnly();
                 while(!bFound && nPos)
                 {
-                    DoubleString* pDouble = pArray->GetObject( nPos - 1);
+                    DoubleString* pDouble = pDoubleStringArray->GetObject( nPos - 1);
 
                     if( 0 == pCompareClass->compareString(
                                                     sEntry, pDouble->sShort ))
@@ -1170,7 +1171,7 @@ BOOL OfaAutocorrReplacePage::FillItemSet( SfxItemSet& )
                         {
                             pAutoCorrect->PutText(sEntry, pDouble->sLong, eCurLang);
                         }
-                        pArray->DeleteAndDestroy(i - 1, 1);
+                        pDoubleStringArray->DeleteAndDestroy(nPos - 1, 1);
                         break;
                     }
                     nPos--;
@@ -1181,11 +1182,11 @@ BOOL OfaAutocorrReplacePage::FillItemSet( SfxItemSet& )
                     pAutoCorrect->DeleteText(sEntry, eCurLang);
                 }
             }
-            nEntryCount = pArray->Count();
-            for(i = 0; i < nEntryCount; i++ )
+            nDoubleStringArrayCount = pDoubleStringArray->Count();
+            for(USHORT nDoubleStringArrayPos = 0; nDoubleStringArrayPos < nDoubleStringArrayCount; nDoubleStringArrayPos++ )
             {
                 //jetzt sollte es nur noch neue Eintraege geben
-                DoubleString* pDouble = pArray->GetObject( i );
+                DoubleString* pDouble = pDoubleStringArray->GetObject( nDoubleStringArrayPos );
                 if(pDouble->pUserData == &bHasSelectionText)
                     pAutoCorrect->PutText( pDouble->sShort,
                                 *SfxObjectShell::Current(), eCurLang );
@@ -1196,9 +1197,9 @@ BOOL OfaAutocorrReplacePage::FillItemSet( SfxItemSet& )
                 }
             }
         }
-        pArray->DeleteAndDestroy(0, pArray->Count());
-        delete pArray;
-        pArray = aDoubleStringTable.Prev();
+        pDoubleStringArray->DeleteAndDestroy(0, pDoubleStringArray->Count());
+        delete pDoubleStringArray;
+        pDoubleStringArray = aDoubleStringTable.Prev();
     }
     aDoubleStringTable.Clear();
     // jetzt noch die aktuelle Selektion
