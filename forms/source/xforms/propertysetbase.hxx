@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertysetbase.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 13:04:41 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:44:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,7 +109,7 @@ public:
 
     virtual void    setValue( const com::sun::star::uno::Any& rValue )
     {
-        VALUE aTypedVal;
+        VALUE aTypedVal = VALUE();
         OSL_VERIFY( rValue >>= aTypedVal );
         (m_pInstance->*m_pWriter)( aTypedVal );
     }
