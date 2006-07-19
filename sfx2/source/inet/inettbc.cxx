@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inettbc.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:35:18 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 17:19:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -376,7 +376,7 @@ SfxPopupWindow* SfxCancelToolBoxControl_Impl::CreatePopupWindow()
     }
 
     ToolBox& rToolBox = GetToolBox();
-    USHORT nId = bExecute ? nId = aMenu.Execute( &rToolBox, rToolBox.GetPointerPosPixel() ) : 0;
+    USHORT nId = bExecute ? aMenu.Execute( &rToolBox, rToolBox.GetPointerPosPixel() ) : 0;
     GetToolBox().EndSelection();
 //  ClearCache();
 //  UpdateSlot();
