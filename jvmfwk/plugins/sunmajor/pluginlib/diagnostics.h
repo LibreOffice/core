@@ -4,9 +4,9 @@
  *
  *  $RCSfile: diagnostics.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:08:30 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:25:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,7 +100,9 @@ inline void jfw_warning2(bool condition, const sal_Char * pzFile, sal_Int32 line
                          sal_Char * pzMessage)
 {
     if (! condition)
-        fprintf(stderr, "%s\n File: %s\n Line: %i", pzMessage, pzFile, line);
+        fprintf(
+            stderr, "%s\n File: %s\n Line: %ld", pzMessage, pzFile,
+            sal::static_int_cast< unsigned long >(line));
 }
 
 inline void jfw_trace(rtl::OUString message)
