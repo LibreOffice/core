@@ -4,9 +4,9 @@
  *
  *  $RCSfile: configunoreg.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 23:27:16 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:13:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -400,9 +400,7 @@ extern "C" void* SAL_CALL component_getFactory(
         ||
         aReq.CreateServiceFactory(
             configmgr::backend::getCopyImportServiceInfo(),
-            &configmgr::backend::instantiateCopyImporter)
-        ||
-        false;
+            &configmgr::backend::instantiateCopyImporter);
 
         pRet = aReq.getService();
     }
