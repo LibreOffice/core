@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:11:29 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:35:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1694,7 +1694,7 @@ HeaderFooterPageSettingsImpl SdXMLExport::ImpPrepDrawPageHeaderFooterDecls( cons
         const OUString aStrDateTimeTextProp( RTL_CONSTASCII_USTRINGPARAM( "DateTimeText" ) );
         if( xInfo->hasPropertyByName( aStrDateTimeTextProp ) )
         {
-            sal_Bool bFixed;
+            sal_Bool bFixed = false;
             sal_Int32 nFormat;
             xSet->getPropertyValue( aStrDateTimeTextProp ) >>= aStrText;
             xSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsDateTimeFixed" ) ) ) >>= bFixed;
@@ -2138,7 +2138,7 @@ void SdXMLExport::exportPresentationSettings()
 
         sal_Bool bHasAttr = sal_False;
 
-        sal_Bool bTemp;
+        sal_Bool bTemp = false;
 
         // export range
         xPresProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsShowAll" ) ) ) >>= bTemp;
