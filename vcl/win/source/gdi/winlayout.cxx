@@ -4,9 +4,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 16:39:04 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 15:02:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,6 +135,7 @@ public:
     virtual void        InitFont() const;
     void                SetFontScale( float f ) { mfFontScale = f; }
     float               GetFontScale() const    { return mfFontScale; }
+    HFONT               DisableFontScaling( void) const;
 
 #ifdef USE_UNISCRIBE
     SCRIPT_CACHE&       GetScriptCache() const
@@ -212,6 +213,43 @@ WinLayout::WinLayout( HDC hDC, ImplWinFontData& rWFD, ImplWinFontEntry& rWFE )
 void WinLayout::InitFont() const
 {
     ::SelectObject( mhDC, mhFont );
+}
+
+// -----------------------------------------------------------------------
+
+// Using reasonably sized fonts to emulate huge fonts works around
+// a lot of problems in printer and display drivers. Huge fonts are
+// mostly used by high resolution reference devices which are never
+// painted to anyway. In the rare case that a huge font needs to be
+// displayed somewhere then the workaround doesn't help anymore.
+// If the drivers fail silently for huge fonts, so be it...
+HFONT WinLayout::DisableFontScaling() const
+{
+    if( mfFontScale == 1.0 )
+        return 0;
+
+    HFONT hHugeFont = 0;
+    if( aSalShlData.mbWNT )
+    {
+        LOGFONTW aLogFont;
+        ::GetObjectW( mhFont, sizeof(LOGFONTW), &aLogFont);
+        aLogFont.lfHeight = (LONG)(mfFontScale * aLogFont.lfHeight);
+        aLogFont.lfWidth  = (LONG)(mfFontScale * aLogFont.lfWidth);
+        hHugeFont = ::CreateFontIndirectW( &aLogFont);
+    }
+    else
+    {
+        LOGFONTA aLogFont;
+        ::GetObjectA( mhFont, sizeof(LOGFONTA), &aLogFont);
+        aLogFont.lfHeight = (LONG)(mfFontScale * aLogFont.lfHeight);
+        aLogFont.lfWidth  = (LONG)(mfFontScale * aLogFont.lfWidth);
+        hHugeFont = ::CreateFontIndirectA( &aLogFont);
+    }
+
+    if( !hHugeFont )
+        return 0;
+
+    return SelectFont( mhDC, hHugeFont );
 }
 
 // =======================================================================
@@ -510,16 +548,16 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
     // scale layout metrics if needed
     if( mfFontScale != 1.0 )
     {
-        mnWidth   = (long)((double)mnWidth*mfFontScale);
-        mnBaseAdv = (int)((double)mnBaseAdv*mfFontScale);
+        mnWidth   = (long)(mnWidth * mfFontScale);
+        mnBaseAdv = (int)(mnBaseAdv * mfFontScale);
         for( i = 0; i < mnCharCount; ++i )
-            mpCharWidths[ i ] = (int)((double)mpCharWidths[i]*mfFontScale);
+            mpCharWidths[i] = (int)(mpCharWidths[i] * mfFontScale);
         if( mpGlyphAdvances != mpCharWidths )
             for( i = 0; i < mnGlyphCount; ++i )
-                mpGlyphAdvances[ i ] = (int)((double)mpGlyphAdvances[i]*mfFontScale);
+                mpGlyphAdvances[i] = (int)(mpGlyphAdvances[i] * mfFontScale);
         if( mpGlyphOrigAdvs && (mpGlyphOrigAdvs != mpGlyphAdvances) )
             for( i = 0; i < mnGlyphCount; ++i )
-                mpGlyphOrigAdvs[ i ] = (int)((double)mpGlyphOrigAdvs[i]*mfFontScale);
+                mpGlyphOrigAdvs[i] = (int)(mpGlyphOrigAdvs[i] * mfFontScale);
     }
 
     return true;
@@ -602,7 +640,10 @@ void SimpleWinLayout::DrawText( SalGraphics& rGraphics ) const
     if( mnGlyphCount <= 0 )
         return;
 
-    HDC aHDC = static_cast<WinSalGraphics&>(rGraphics).mhDC;
+    WinSalGraphics& rWinGraphics = static_cast<WinSalGraphics&>(rGraphics);
+    HDC aHDC = rWinGraphics.mhDC;
+
+    HFONT hOrigFont = DisableFontScaling();
 
     UINT mnDrawOptions = ETO_GLYPH_INDEX;
     if( mbDisableGlyphs )
@@ -612,13 +653,13 @@ void SimpleWinLayout::DrawText( SalGraphics& rGraphics ) const
 
      // #108267#, limit the number of glyphs to avoid paint errors
     UINT limitedGlyphCount = Min( 8192, mnGlyphCount );
-   // #108267#, break up into glyph portions of a limited size required by Win32 API
-    const unsigned int maxGlyphCount = 8192;
-    UINT numGlyphPortions = mnGlyphCount / maxGlyphCount;
-    UINT remainingGlyphs = mnGlyphCount % maxGlyphCount;
-
     if( mnDrawOptions || aSalShlData.mbWNT )
     {
+        // #108267#, break up into glyph portions of a limited size required by Win32 API
+        const unsigned int maxGlyphCount = 8192;
+        UINT numGlyphPortions = mnGlyphCount / maxGlyphCount;
+        UINT remainingGlyphs = mnGlyphCount % maxGlyphCount;
+
         if( numGlyphPortions )
         {
             // #108267#,#109387# break up string into smaller chunks
@@ -661,6 +702,9 @@ void SimpleWinLayout::DrawText( SalGraphics& rGraphics ) const
             }
         }
     }
+
+    if( hOrigFont )
+        DeleteFont( SelectFont( aHDC, hOrigFont ) );
 }
 
 // -----------------------------------------------------------------------
@@ -1387,7 +1431,7 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
          || (rArgs.mnMinCharPos >= rVisualItem.mnEndCharPos) )
         {
             for( int i = rVisualItem.mnMinCharPos; i < rVisualItem.mnEndCharPos; ++i )
-                mpLogClusters[ i ] = sal::static_int_cast<WORD>(~0U);
+                mpLogClusters[i] = sal::static_int_cast<WORD>(~0U);
             continue;
         }
 
@@ -1606,14 +1650,14 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
         mnBaseAdv = (int)((double)mnBaseAdv*mfFontScale);
         for( i = 0; i < mnGlyphCount; ++i )
         {
-            mpGlyphAdvances[i]   = (int)((double)mpGlyphAdvances[i]*mfFontScale);
-            mpGlyphOffsets[i].du = (LONG)((double)mpGlyphOffsets[i].du*mfFontScale);
-            mpGlyphOffsets[i].dv = (LONG)((double)mpGlyphOffsets[i].dv*mfFontScale);
+            mpGlyphAdvances[i]   = (int)(mpGlyphAdvances[i] * mfFontScale);
+            mpGlyphOffsets[i].du = (LONG)(mpGlyphOffsets[i].du * mfFontScale);
+            mpGlyphOffsets[i].dv = (LONG)(mpGlyphOffsets[i].dv * mfFontScale);
             // mpJustifications are still NULL
         }
 
         for( i = mnSubStringMin; i < nSubStringEnd; ++i )
-            mpCharWidths[i] = (int)((double)mpCharWidths[i]*mfFontScale);
+            mpCharWidths[i] = (int)(mpCharWidths[i] * mfFontScale);
     }
 
     return true;
@@ -1998,6 +2042,8 @@ void UniscribeLayout::Simplify( bool /*bIsBase*/ )
 
 void UniscribeLayout::DrawText( SalGraphics& ) const
 {
+    HFONT hOrigFont = DisableFontScaling();
+
     int nBaseClusterOffset = 0;
     int nBaseGlyphPos = -1;
     for( int nItem = 0; nItem < mnItemCount; ++nItem )
@@ -2045,6 +2091,9 @@ void UniscribeLayout::DrawText( SalGraphics& ) const
             mpJustifications ? mpJustifications + nMinGlyphPos : NULL,
             mpGlyphOffsets + nMinGlyphPos );
     }
+
+    if( hOrigFont )
+        DeleteFont( SelectFont( mhDC, hOrigFont ) );
 }
 
 // -----------------------------------------------------------------------
