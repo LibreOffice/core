@@ -4,9 +4,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.100 $
+#   $Revision: 1.101 $
 #
-#   last change: $Author: ihi $ $Date: 2006-06-29 11:20:08 $
+#   last change: $Author: kz $ $Date: 2006-07-19 09:38:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,7 @@
 #     MA  02111-1307  USA
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.100 $$"
+LIBSMKREV!:="$$Revision: 1.101 $$"
 
 .IF "$(COM)"=="WTC"
 LIBPRE=libr
@@ -288,7 +288,9 @@ ICULELIB=icule.lib
 ICUUCLIB=icuuc.lib
 I18NUTILLIB=$(LIBPRE) ii18nutil.lib
 I18NISOLANGLIB=$(LIBPRE) ii18nisolang.lib
+.IF "$(GPC)"!="NO"
 GPC3RDLIB=gpc.lib
+.ENDIF
 SALHELPERLIB=$(LIBPRE) isalhelper.lib
 XMLSCRIPTLIB=ixcr.lib
 COMPHELPERLIB=icomphelp.lib
