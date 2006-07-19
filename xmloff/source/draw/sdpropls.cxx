@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:11:12 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:34:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1419,16 +1419,14 @@ void XMLShapeExportPropertyMapper::ContextFilter(
             case CTF_SD_MOVE_PROTECT:
                 {
                     sal_Bool bProtected;
-                    property->maValue >>= bProtected;
-                    if( !bProtected )
+                    if( (property->maValue >>= bProtected) && !bProtected )
                         property->mnIndex = -1;
                 }
                 break;
             case CTF_SD_SIZE_PROTECT:
                 {
                     sal_Bool bProtected;
-                    property->maValue >>= bProtected;
-                    if( !bProtected )
+                    if( (property->maValue >>= bProtected) && !bProtected )
                         property->mnIndex = -1;
                 }
                 break;
@@ -1515,7 +1513,7 @@ void XMLShapeExportPropertyMapper::ContextFilter(
 
     if( pCaptionIsEscRel )
     {
-        sal_Bool bIsRel;
+        sal_Bool bIsRel = false;
         pCaptionIsEscRel->maValue >>= bIsRel;
 
         if( bIsRel )
@@ -1691,7 +1689,7 @@ void XMLPageExportPropertyMapper::ContextFilter(
 //          case CTF_PAGE_NUMBER_VISIBLE:
 //          case CTF_DATE_TIME_VISIBLE:
                 {
-                    sal_Bool bVisible;
+                    sal_Bool bVisible = false;
                     (*property).maValue >>= bVisible;
                     if( bVisible )
                         (*property).mnIndex = -1;
@@ -1726,7 +1724,7 @@ void XMLPageExportPropertyMapper::ContextFilter(
 
     if( pDateTimeFormat && pDateTimeUpdate )
     {
-        sal_Bool bIsFixed;
+        sal_Bool bIsFixed = false;
         pDateTimeUpdate->maValue >>= bIsFixed;
         if( bIsFixed )
             pDateTimeFormat->mnIndex = -1;
