@@ -4,9 +4,9 @@
  *
  *  $RCSfile: valueset.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 20:58:33 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 14:53:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -921,8 +921,9 @@ void ValueSet::ImplHideSelect( USHORT nItemId )
 {
     Rectangle aRect;
 
-    if ( nItemId )
-        aRect = mpItemList->GetObject( GetItemPos( nItemId ) )->maRect;
+    USHORT nItemPos = GetItemPos( nItemId );
+    if ( nItemPos != sal::static_int_cast<USHORT>(LIST_ENTRY_NOTFOUND) )
+        aRect = mpItemList->GetObject( nItemPos )->maRect;
     else
     {
         if ( mpNoneItem )
