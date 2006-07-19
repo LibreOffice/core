@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLTextColumnsExport.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:45:26 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:39:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,7 +154,7 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
 
             // style:height
             aAny = xPropSet->getPropertyValue( sSeparatorLineRelativeHeight );
-            sal_Int8 nHeight;
+            sal_Int8 nHeight = 0;
             aAny >>= nHeight;
             GetExport().GetMM100UnitConverter().convertPercent( sValue,
                                                                 nHeight );

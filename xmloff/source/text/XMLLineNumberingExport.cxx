@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLLineNumberingExport.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:42:41 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:37:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,7 +178,7 @@ void XMLLineNumberingExport::Export()
             // NumeringType
             OUStringBuffer sNumPosBuf;
             aAny = xLineNumbering->getPropertyValue(sNumberingType);
-            sal_Int16 nFormat;
+            sal_Int16 nFormat = 0;
             aAny >>= nFormat;
             rExport.GetMM100UnitConverter().convertNumFormat( sNumPosBuf, nFormat );
             rExport.AddAttribute(XML_NAMESPACE_STYLE, XML_NUM_FORMAT,
@@ -193,7 +193,7 @@ void XMLLineNumberingExport::Export()
 
             // number position
             aAny = xLineNumbering->getPropertyValue(sNumberPosition);
-            sal_Int16 nPosition;
+            sal_Int16 nPosition = 0;
             aAny >>= nPosition;
             if (SvXMLUnitConverter::convertEnum(sNumPosBuf, nPosition,
                                                 aLineNumberPositionMap))
@@ -204,7 +204,7 @@ void XMLLineNumberingExport::Export()
 
             // sInterval
             aAny = xLineNumbering->getPropertyValue(sInterval);
-            sal_Int16 nLineInterval;
+            sal_Int16 nLineInterval = 0;
             aAny >>= nLineInterval;
             OUStringBuffer sBuf;
             SvXMLUnitConverter::convertNumber(sBuf,
@@ -225,7 +225,7 @@ void XMLLineNumberingExport::Export()
 
                 // SeparatorInterval
                 aAny = xLineNumbering->getPropertyValue(sSeparatorInterval);
-                sal_Int16 nLineDistance;
+                sal_Int16 nLineDistance = 0;
                 aAny >>= nLineDistance;
                 SvXMLUnitConverter::convertNumber(sBuf,
                                                   (sal_Int32)nLineDistance);
