@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbarmanager.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 11:42:03 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 13:40:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1664,6 +1664,9 @@ IMPL_LINK( ToolBarManager, MenuButton, ToolBox*, pToolBar )
             aPopupMenu.EnableItem( MENUITEM_TOOLBAR_CUSTOMIZETOOLBAR, sal_False );
         }
 
+        pItemMenu->SetMenuFlags (pItemMenu->GetMenuFlags () |
+                                 MENU_FLAG_SHOWCHECKIMAGES);
+
         for ( nPos = 0; nPos < m_pToolBar->GetItemCount(); ++nPos )
         {
             if ( m_pToolBar->GetItemType(nPos) == TOOLBOXITEM_BUTTON )
@@ -1705,6 +1708,10 @@ IMPL_LINK( ToolBarManager, MenuButton, ToolBox*, pToolBar )
     {
         // create an own submenu to avoid auto-delete when resource menu is deleted
         PopupMenu *pItemMenu = new PopupMenu();
+
+        pItemMenu->SetMenuFlags (pItemMenu->GetMenuFlags () |
+                                 MENU_FLAG_SHOWCHECKIMAGES);
+
         for( i=0; i< aPopupMenu.GetPopupMenu( 1 )->GetItemCount(); i++)
             pItemMenu->CopyItem( *aPopupMenu.GetPopupMenu( 1 ), i, MENU_APPEND );
 
