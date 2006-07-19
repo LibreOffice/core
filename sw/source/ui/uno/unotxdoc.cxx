@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.111 $
+ *  $Revision: 1.112 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-08 15:32:40 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 09:39:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2708,35 +2708,25 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
  ---------------------------------------------------------------------------*/
 SfxViewShell * SwXTextDocument::GuessViewShell()
 {
-    // check for view shell first...
-    const TypeId aTypeId = TYPE(SwView);
-    SfxViewShell* pView = SfxViewShell::GetFirst(&aTypeId, sal_False);
-    while(pView && pView->GetObjectShell() != pDocShell)
-        pView = SfxViewShell::GetNext(*pView, &aTypeId, sal_False);
-    // ...if that is not available check for page pre view shell
-    // in order to allow for PDF export of page preview
-    if(!pView)
+    // #130810# SfxViewShell::Current() / SfxViewShell::GetObjectShell()
+    // must not be used (see comment from MBA)
+    //
+    SfxViewShell    *pView = 0;
+    SwView          *pSwView = 0;
+    SwPagePreView   *pSwPagePreView = 0;
+    SfxViewFrame    *pFrame = SfxViewFrame::GetFirst( pDocShell, 0, sal_False );
+    while (pFrame)
     {
-        const TypeId aPageViewTypeId = TYPE(SwPagePreView);
-        pView= SfxViewShell::GetFirst(&aPageViewTypeId, sal_False);
-        while(pView && pView->GetObjectShell() != pDocShell)
-            pView = SfxViewShell::GetNext(*pView, &aPageViewTypeId, sal_False);
-    }
-    DBG_ASSERT( pView, "view shell missing" );
-/*    if(pCurrentShell->GetObjectShell() != pDocShell)
-        pCurrentShell = 0;
-    SfxViewShell* pView = SfxViewShell::GetFirst();
-    const TypeId aSwSrcViewTypeId = TYPE(SwSrcView);
-    while(pView && pView->GetObjectShell() != pDocShell)
-    {
-        if((!pCurrentShell || pView == pCurrentShell) &&
-            !pView->IsA(aSwSrcViewTypeId) &&
-            (pView->GetObjectShell() == pDocShell))
+        pView = pFrame->GetViewShell();
+        pSwView = dynamic_cast< SwView * >(pView);
+        if (pSwView)
             break;
-        pView = SfxViewShell::GetNext(*pView );
-    }*/
+        if (!pSwPagePreView)
+            pSwPagePreView = dynamic_cast< SwPagePreView * >(pView);
+        pFrame = SfxViewFrame::GetNext( *pFrame, pDocShell, 0, sal_False );
+    }
 
-    return pView;
+    return pSwView ? pSwView : dynamic_cast< SwView * >(pSwPagePreView);
 }
 
 /* -----------------------------23.08.02 16:00--------------------------------
