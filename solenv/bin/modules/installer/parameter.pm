@@ -4,9 +4,9 @@
 #
 #   $RCSfile: parameter.pm,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: obo $ $Date: 2006-07-10 11:00:18 $
+#   last change: $Author: kz $ $Date: 2006-07-19 09:37:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -186,7 +186,7 @@ sub getparameter
             $installer::globals::makejds = 0;
             $installer::globals::strip = 0;
             my $path = shift(@ARGV);
-            $path =~ s/^$installer::globals::destdir//;
+            $path =~ s/^\Q$installer::globals::destdir\E//;
             $installer::globals::rootpath = $path;
         }
         else
