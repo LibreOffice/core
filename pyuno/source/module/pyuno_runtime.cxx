@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pyuno_runtime.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:04:22 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:42:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -435,8 +435,7 @@ PyRef Runtime::any2PyObject (const Any &a ) const
     case typelib_TypeClass_BOOLEAN:
     {
         sal_Bool b;
-        a >>= b;
-        if (b)
+        if ((a >>= b) && b)
             return Py_True;
         else
             return Py_False;
