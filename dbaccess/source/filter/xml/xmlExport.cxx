@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlExport.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-18 06:41:29 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:00:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -599,8 +599,8 @@ void ODBExport::exportLogin()
     Reference<XPropertySet> xProp(getDataSource());
     ::rtl::OUString sValue;
     xProp->getPropertyValue(PROPERTY_USER) >>= sValue;
-    sal_Bool bAddLogin = sal_False;
-    if ( bAddLogin = sValue.getLength() > 0 )
+    sal_Bool bAddLogin = sValue.getLength() > 0;
+    if ( bAddLogin )
         AddAttribute(XML_NAMESPACE_DB, XML_USER_NAME,sValue);
     sal_Bool bValue = sal_False;
     if ( xProp->getPropertyValue(PROPERTY_ISPASSWORDREQUIRED) >>= bValue )
