@@ -4,9 +4,9 @@
  *
  *  $RCSfile: runtime.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 17:46:38 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:33:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -768,7 +768,7 @@ BOOL SbiRuntime::Step()
                             if( pRt == pRtErrHdl )
                                 break;
                         }
-                        while( pRt = pRt->pNext );
+                        while( (pRt = pRt->pNext) );
                     }
                     // Kein Error-Hdl gefunden -> altes Vorgehen
                     else
