@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.109 $
-# Date:        $Date: 2006-07-19 09:36:45 $
+# Version:     $Revision: 1.110 $
+# Date:        $Date: 2006-07-19 09:52:27 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -1643,7 +1643,6 @@ ToFile( "PERL",              $PERL,              "e" );
 ToFile( "RPM",               "@RPM@",            "e" );
 ToFile( "DPKG",              "@DPKG@",           "e" );
 ToFile( "PKGMK",             "@PKGMK@",          "e" );
-ToFile( "NO_BRP_STALE_LINK_ERROR", "yes",       "e" );
 ToFile( "GNUMAKE",           "@GNUMAKE@",        "e" );
 ToFile( "UPD",               $UPD,               "e" );
 ToFile( "SOLARUPD",          $SOLARUPD,          "e" );
@@ -1712,10 +1711,7 @@ ToFile( "ENABLE_FONTCONFIG", "@ENABLE_FONTCONFIG@", "e" );
 ToFile( "ENABLE_DIRECTX",    "@ENABLE_DIRECTX@",    "e" );
 ToFile( "VC_STANDARD",       "@VC_STANDARD@",      "e" );
 ToFile( "WITH_GPC",          "@WITH_GPC@",         "e" );
-ToFile( "WITH_LIBART",       "@WITH_LIBART@",      "e" );
-ToFile( "LIBART_CFLAGS",     "@LIBART_CFLAGS@",    "e" );
 ToFile( "WITH_MYSPELL_DICTS","@WITH_MYSPELL_DICTS@","e");
-ToFile( "LIBART_LIBS",       "@LIBART_LIBS@",      "e" );
 ToFile( "ENABLE_LOCKDOWN",   "@ENABLE_LOCKDOWN@",  "e" );
 ToFile( "WITH_LIBSN",        "@WITH_LIBSN@",       "e" );
 ToFile( "LIBSN_CFLAGS",      "@LIBSN_CFLAGS@",     "e" );
@@ -1724,6 +1720,9 @@ ToFile( "WITH_LDAP",         "@WITH_LDAP@",        "e" );
 ToFile( "WITH_OPENLDAP",     "@WITH_OPENLDAP@",    "e" );
 ToFile( "WITH_MOZILLA",      "@WITH_MOZILLA@",     "e" );
 ToFile( "SYSTEM_MOZILLA",    "@SYSTEM_MOZILLA@",   "e" );
+ToFile( "MOZ_FLAVOUR",       "@MOZ_FLAVOUR@",      "e" );
+ToFile( "NSPR_LIB",          "@NSPR_LIB@",         "e" );
+ToFile( "NSS_LIB",           "@NSS_LIB@",          "e" );
 ToFile( "MOZ_INC",           "@MOZ_INC@",          "e" );
 ToFile( "MOZ_LIB",           "@MOZ_LIB@",          "e" );
 ToFile( "MOZ_LIB_XPCOM",     "@MOZ_LIB_XPCOM@",    "e" );
@@ -1798,6 +1797,7 @@ ToFile( "ENABLE_PASF",       "@ENABLE_PASF@",      "e" );
 ToFile( "SYSTEM_SNDFILE",    "@SYSTEM_SNDFILE@",   "e" );
 ToFile( "SYSTEM_PORTAUDIO",  "@SYSTEM_PORTAUDIO@", "e" );
 ToFile( "SYSTEM_NEON",       "@SYSTEM_NEON@",      "e" );
+ToFile( "NEON_VERSION",      "@NEON_VERSION@",     "e" );
 ToFile( "NEON_LIBS",         "@NEON_LIBS@",        "e" );
 ToFile( "NEON_CFLAGS",       "@NEON_CFLAGS@",      "e" );
 ToFile( "DISABLE_NEON",      "@DISABLE_NEON@",     "e" );
@@ -1812,6 +1812,8 @@ ToFile( "SYSTEM_HUNSPELL",   "@SYSTEM_HUNSPELL@",  "e" );
 ToFile( "HUNSPELL_CFLAGS",   "@HUNSPELL_CFLAGS@",  "e" );
 ToFile( "SYSTEM_HYPH",       "@SYSTEM_HYPH@",      "e" );
 ToFile( "SYSTEM_MYTHES",     "@SYSTEM_MYTHES@",    "e" );
+ToFile( "PAM",               "@PAM@",              "e" );
+ToFile( "NEW_SHADOW_API",    "@NEW_SHADOW_API@",   "e" );
 ToFile( "PAM_LINK",          "@PAM_LINK@",         "e" );
 ToFile( "CRYPT_LINK",        "@CRYPT_LINK@",       "e" );
 ToFile( "GXX_INCLUDE_PATH",  "@GXX_INCLUDE_PATH@", "e" );
