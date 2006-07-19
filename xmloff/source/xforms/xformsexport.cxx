@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xformsexport.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:58:21 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:42:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -487,7 +487,7 @@ OUString lcl_getXSDType( SvXMLExport& rExport,
     // we use string as default...
     XMLTokenEnum eToken = XML_STRING;
 
-    sal_uInt16 nDataTypeClass;
+    sal_uInt16 nDataTypeClass = 0;
     xType->getPropertyValue( OUSTRING("TypeClass") ) >>= nDataTypeClass;
     switch( nDataTypeClass )
     {
@@ -546,7 +546,7 @@ void lcl_exportDataType( SvXMLExport& rExport,
                          const Reference<XPropertySet>& xType )
 {
     // we do not need to export basic types; exit if we have one
-    bool bIsBasic;
+    bool bIsBasic = false;
     xType->getPropertyValue( OUSTRING("IsBasic") ) >>= bIsBasic;
     if( bIsBasic )
         return;
