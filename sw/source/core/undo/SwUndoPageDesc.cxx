@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwUndoPageDesc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 09:51:43 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 13:38:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,9 +173,16 @@ SwUndoPageDesc::SwUndoPageDesc(const SwPageDesc & _aOld,
     const SwFmtHeader& rNewHead = rNewDesc.GetMaster().GetHeader();
     const SwFmtFooter& rOldFoot = rOldDesc.GetMaster().GetFooter();
     const SwFmtFooter& rNewFoot = rNewDesc.GetMaster().GetFooter();
-    // If header/footer will be activated or deactivated, this undo will not work.
-    bExchange = ( rOldHead.IsActive() == rNewHead.IsActive() ) &&
-                      ( rOldFoot.IsActive() == rNewFoot.IsActive() );
+    /* bExchange must not be set, if the old page descriptor will stay active.
+    Two known situations:
+    #i67735#: renaming a page descriptor
+    #i67334#: changing the follow style
+    If header/footer will be activated or deactivated, this undo will not work.
+    */
+    bExchange = ( aOld.GetName() == aNew.GetName() ) &&
+        ( _aOld.GetFollow() == _aNew.GetFollow() ) &&
+        ( rOldHead.IsActive() == rNewHead.IsActive() ) &&
+        ( rOldFoot.IsActive() == rNewFoot.IsActive() );
     if( rOldHead.IsActive() && ( rOldDesc.IsHeaderShared() != rNewDesc.IsHeaderShared() ) )
         bExchange = false;
     if( rOldFoot.IsActive() && ( rOldDesc.IsFooterShared() != rNewDesc.IsFooterShared() ) )
