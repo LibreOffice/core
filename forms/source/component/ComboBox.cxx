@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ComboBox.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:46:21 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:43:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -417,7 +417,7 @@ void SAL_CALL OComboBoxModel::write(const Reference<stario::XObjectOutputStream>
 
     if ((nAnyMask & BOUNDCOLUMN) == BOUNDCOLUMN)
     {
-        sal_Int16 nBoundColumn;
+        sal_Int16 nBoundColumn = 0;
         m_aBoundColumn >>= nBoundColumn;
         _rxOutStream << nBoundColumn;
     }
