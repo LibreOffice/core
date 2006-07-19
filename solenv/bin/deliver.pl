@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.102 $
+#   $Revision: 1.103 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 20:59:06 $
+#   last change: $Author: kz $ $Date: 2006-07-19 09:37:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.102 $ ';
+$id_str = ' $Revision: 1.103 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -1116,7 +1116,7 @@ sub push_on_loglist
     # make 'to' relative to SOLARVERSION
     my $solarversion  = $ENV{'SOLARVERSION'};
     $solarversion =~ s#\\#/#g;
-    $entry[2] =~ s/^$solarversion\///;
+    $entry[2] =~ s/^\Q$solarversion\E\///;
     # strip minor from 'to'
     my $ext = "%_EXT%";
     $ext = expand_macros($ext);
