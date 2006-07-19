@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.127 $
+ *  $Revision: 1.128 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:50:27 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:41:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1686,7 +1686,7 @@ void XMLTextParagraphExport::exportParagraph(
 
                     if( rPropSetHelper.hasProperty( NUMBERING_IS_NUMBER ) )
                     {
-                        bool bIsNumber;
+                        bool bIsNumber = false;
                         if( xMultiPropSet.is() )
                             rPropSetHelper.getValue(
                                        NUMBERING_IS_NUMBER, xMultiPropSet ) >>= bIsNumber;
@@ -2055,7 +2055,7 @@ sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
     // text:anchor-page-number
     if( TextContentAnchorType_AT_PAGE == eAnchor )
     {
-        sal_Int16 nPage;
+        sal_Int16 nPage = 0;
         rPropSet->getPropertyValue( sAnchorPageNo ) >>= nPage;
         GetExport().GetMM100UnitConverter().convertNumber( sValue,
                                                            (sal_Int32)nPage );
@@ -2516,7 +2516,7 @@ void XMLTextParagraphExport::_exportTextGraphic(
     addTextFrameAttributes( rPropSet, sal_False );
 
     // svg:transform
-    sal_Int16 nVal;
+    sal_Int16 nVal = 0;
     rPropSet->getPropertyValue( sGraphicRotation ) >>= nVal;
     if( nVal != 0 )
     {
