@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 23:02:50 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 15:55:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3326,8 +3326,7 @@ void VCLXComboBox::setProperty( const ::rtl::OUString& PropertyName, const ::com
                 if ( nPropType == BASEPROPERTY_BORDER )
                 {
                     sal_uInt16 nBorder;
-                    Value >>= nBorder;
-                    if ( nBorder )
+                    if ( (Value >>= nBorder) && nBorder != 0 )
                         pComboBox->SetBorderStyle( nBorder );
                 }
             }
