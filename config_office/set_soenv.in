@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.107 $
-# Date:        $Date: 2006-07-05 22:32:39 $
+# Version:     $Revision: 1.108 $
+# Date:        $Date: 2006-07-19 09:36:28 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -313,32 +313,60 @@ elsif ( $platform =~ m/netbsd/ )
       $XPVERSION      = "3"; 
 }
 elsif ( $platform =~ m/freebsd/ ) 
-{     print "Setting FreeBSD specific values... ";
-      $outfile        = "FreeBSDEnv.Set"; 
-      $BIG_SVX        = "TRUE";
+{     $BIG_SVX        = "TRUE";
       $COM            = "GCC";
       $COMPATH        = '@COMPATH@'; 
-      $CPU            = "I";
-      $CPUNAME        = "INTEL";
       $CVER           = "C300";
       $GUI            = "UNX";
       $GUIBASE        = "unx";
       $GUIENV         = "sal";
       $GVER           = "VCL";
-      $OUTPATH        = "unxfbsd";
-      $INPATH         = $OUTPATH.$PROEXT;
-      $GVERDIR        = $INPATH;
       $OS             = "FREEBSD";
       $PATH_SEPERATOR = $ps;
       $XPVERSION      = "3";
       $OSVERSION      = '@OSVERSION@';
+   if ($platform =~ m/^amd64/)
+   {  my ( $JAVA_OS );
+      print "Setting FreeBSD AMD64 specific values... ";
+      $outfile        = "FreeBSDAMDEnv.Set";
+      $CPU            = "X";
+      $CPUNAME        = "X86_64";
+      $OUTPATH        = "unxfbsdx";
+      $JAVA_OS        = '@JAVA_HOME@';
+      $JAVA_OS        =~ s/.*\///;
+      if ($JAVA_OS =~ m/^linux/)
+      {  $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386";
+         $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."client";
+         $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
+         $JREEXTRALIBDIR = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."xawt";
+      }
+      else
+      {  $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64";
+         $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64".$ds."server";
+         $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64".$ds."native_threads";
+         $JREEXTRALIBDIR = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64".$ds."xawt";
+      }
+   }
+   elsif ($platform =~ m/^i386/)
+   {  print "Setting FreeBSD Intel specific values... ";
+      $outfile        = "FreeBSDIntelEnv.Set";
+      $CPU            = "I";
+      $CPUNAME        = "INTEL";
+      $OUTPATH        = "unxfbsdi";
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386";
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."client";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
       $JREEXTRALIBDIR = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."xawt";
-      if( @GCCVER@ >= 30401 ) {
-      	 $CVER        = "C341";
-      }
+   }
+   else
+   {  print "Unsupported FreeBSD architecture: $platform \n";
+         exit 1;
+   }
+   if( @GCCVER@ >= 30401 ) {
+      $CVER        = "C341";
+   }
+      $INPATH         = $OUTPATH.$PROEXT;
+      $GVERDIR        = $INPATH;
 } 
 elsif ( $platform =~ m/linux-gnu/ ) 
 {
@@ -1296,6 +1324,7 @@ if ($platform =~ m/linux-gnu/)
    		{
       		$SOLARINC   .=$I.'$JAVA_HOME'.$INCLUDE.$ds."freebsd";
       		$SOLARINC   .=$I.'$JAVA_HOME'.$INCLUDE.$ds."bsd";
+      		$SOLARINC   .=$I.'$JAVA_HOME'.$INCLUDE.$ds."linux";
    		}
    		elsif ($platform =~ m/netbsd/)
    		{  $SOLARINC   .=$I.'$JAVA_HOME'.$INCLUDE.$ds."netbsd";
