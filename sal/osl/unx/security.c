@@ -4,9 +4,9 @@
  *
  *  $RCSfile: security.c,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 09:39:07 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 09:55:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,14 +53,16 @@
 #include "osl/thread.h"
 #include "osl/file.h"
 
-#ifdef SOLARIS
+#if defined LINUX || defined SOLARIS
 #include <crypt.h>
 #endif
 
 #include "secimpl.h"
 
+#ifndef NOPAM
 #ifndef PAM_BINARY_MSG
 #define PAM_BINARY_MSG 6
+#endif
 #endif
 
 extern oslModule SAL_CALL osl_psz_loadModule(const sal_Char *pszModuleName, sal_Int32 nRtldMode);
@@ -111,7 +113,7 @@ oslSecurity SAL_CALL osl_getCurrentSecurity()
 }
 
 
-#ifdef LINUX
+#if defined LINUX && !defined NOPAM
 
 /*
  *
@@ -414,7 +416,7 @@ osl_equalPasswords ( const sal_Char *pEncryptedPassword, const sal_Char *pPlainP
     return success;
 }
 
-#endif
+#endif /* defined LINUX && !defined NOPAM */
 oslSecurityError SAL_CALL osl_loginUser(
     rtl_uString *ustrUserName,
     rtl_uString *ustrPassword,
@@ -494,7 +496,7 @@ osl_psz_loginUser(const sal_Char* pszUserName, const sal_Char* pszPasswd,
                 if (found == NULL) {
                     nError = osl_Security_E_UserUnknown;
                 } else {
-#if defined LINUX
+#if defined LINUX && !defined NOPAM
                     /* only root is able to read the /etc/shadow passwd, a
                        normal user even can't read his own encrypted passwd */
                     if (osl_equalPasswords(p->m_pPasswd.pw_passwd, pszPasswd) ||
@@ -549,9 +551,11 @@ osl_psz_loginUser(const sal_Char* pszUserName, const sal_Char* pszPasswd,
                     char buffer[1024];
                     struct spwd spwdStruct;
                     buffer[0] = '\0';
-                    if (getspnam_r(
-                            pszUserName, &spwdStruct, buffer, sizeof buffer) !=
-                        NULL)
+#ifndef NEW_SHADOW_API
+                    if (getspnam_r(pszUserName, &spwdStruct, buffer, sizeof buffer) != NULL)
+#else
+                    if (getspnam_r(pszUserName, &spwdStruct, buffer, sizeof buffer, NULL) == 0)
+#endif
                     {
                         char salt[3];
                         char * cryptPasswd;
@@ -561,10 +565,11 @@ osl_psz_loginUser(const sal_Char* pszUserName, const sal_Char* pszPasswd,
                         if (strcmp(spwdStruct.sp_pwdp, cryptPasswd) == 0) {
                             nError = osl_Security_E_None;
                         } else if (getuid() == 0 &&
-                                   (getspnam_r(
-                                       "root", &spwdStruct, buffer,
-                                       sizeof buffer)
-                                    != NULL))
+#ifndef NEW_SHADOW_API
+                                   (getspnam_r("root", &spwdStruct, buffer, sizeof buffer) != NULL))
+#else
+                                   (getspnam_r("root", &spwdStruct, buffer, sizeof buffer, NULL) == 0))
+#endif
                         {
                             /* if current process is running as root, allow to
                                logon as any other user */
