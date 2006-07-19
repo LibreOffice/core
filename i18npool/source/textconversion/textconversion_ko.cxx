@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textconversion_ko.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:49:07 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:31:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -219,7 +219,7 @@ TextConversion_ko::getConversions( const OUString& aText, sal_Int32 nStartPos, s
         // FROM_LEFT:  Hangul -> Hanja
         // FROM_RIGHT: Hanja  -> Hangul
         ConversionDirection eDirection = toHanja ? ConversionDirection_FROM_LEFT : ConversionDirection_FROM_RIGHT;
-        sal_Int32 maxLength = maxLength = toHanja ? maxLeftLength : maxRightLength;
+        sal_Int32 maxLength = toHanja ? maxLeftLength : maxRightLength;
         if (maxLength == 0) maxLength = 1;
 
         // search for a max length of convertible text
