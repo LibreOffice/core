@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfgregistrykey.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 23:28:42 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:13:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -886,8 +886,8 @@ sal_Int32 SAL_CALL OConfigurationRegistryKey::getLongValue(  ) throw(InvalidRegi
     switch (aValue.getValueTypeClass())
     {
     // integral types that are small enough are straightforward
-    case TypeClass_BYTE             : { sal_Int8   nNativeValue; aValue >>= nNativeValue; nLongValue = nNativeValue; } break;
-    case TypeClass_BOOLEAN          : { sal_Bool   nNativeValue; aValue >>= nNativeValue; nLongValue = nNativeValue; } break;
+    case TypeClass_BYTE             : { sal_Int8   nNativeValue = 0; aValue >>= nNativeValue; nLongValue = nNativeValue; } break;
+    case TypeClass_BOOLEAN          : { sal_Bool   nNativeValue = false; aValue >>= nNativeValue; nLongValue = nNativeValue; } break;
     case TypeClass_SHORT            : { sal_Int16  nNativeValue; aValue >>= nNativeValue; nLongValue = nNativeValue; } break;
     case TypeClass_UNSIGNED_SHORT   : { sal_uInt16 nNativeValue; aValue >>= nNativeValue; nLongValue = nNativeValue; } break;
     case TypeClass_LONG             : { sal_Int32  nNativeValue; aValue >>= nNativeValue; nLongValue = nNativeValue; } break;
