@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: mkout.pl,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-12-14 12:06:34 $
+#   last change: $Author: kz $ $Date: 2006-07-19 09:28:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@ use File::Path;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.6 $ ';
+$id_str = ' $Revision: 1.7 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -123,8 +123,6 @@ sub get_base {
     # which in turn contains a file 'd.lst'
     my (@field, $base, $dlst);
     my $path = cwd();
-
-    print $path;
 
     @field = split(/\//, $path);
 
