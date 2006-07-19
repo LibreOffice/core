@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UCBDeadPropertyValue.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 09:36:20 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 17:01:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -498,7 +498,7 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
     else if ( rType == getCppuBooleanType() )
     {
         // boolean
-        sal_Bool bValue;
+        sal_Bool bValue = false;
         rInData >>= bValue;
         aStringValue = rtl::OUString::valueOf( bValue );
         aStringType = aTypeBoolean;
@@ -506,7 +506,7 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
     else if ( rType == getCppuCharType() )
     {
         // char
-        sal_Unicode cValue;
+        sal_Unicode cValue = 0;
         rInData >>= cValue;
         aStringValue = rtl::OUString::valueOf( cValue );
         aStringType = aTypeChar;
@@ -514,7 +514,7 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
     else if ( rType == getCppuType( static_cast< const sal_Int8 * >( 0 ) ) )
     {
         // byte
-        sal_Int8 nValue;
+        sal_Int8 nValue = 0;
         rInData >>= nValue;
         aStringValue = rtl::OUString::valueOf( sal_Unicode( nValue ) );
         aStringType = aTypeByte;
