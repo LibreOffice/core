@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parser.y,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:49:55 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:20:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,33 +112,6 @@
 #include <algorithm>
 #include <vector>
     
-#ifdef WNT
-#include <stdarg.h>
-namespace std {
-int fprintf(FILE* stream, const char* format, ...)
-{
-    va_list va_param;
-
-    va_start(va_param, format);
-	int res = ::vfprintf(stream, format, va_param);
-    va_end(va_param);
-
-    return res;
-}
-
-void* malloc( size_t size )
-{
-    return ::malloc(size);
-}
-
-void free( void *memblock )
-{
-    ::free(memblock);
-}
-    
-};
-#endif
-
 using namespace ::rtl;
 
 #define YYDEBUG 1
@@ -294,7 +267,7 @@ bool includes(AstDeclaration const * type1, AstDeclaration const * type2) {
 #pragma disable_warn
 #elif defined _MSC_VER
 #pragma warning(push, 1)
-#pragma warning(disable: 4701 4706)
+#pragma warning(disable: 4273 4701 4706)
 #endif
 %}
 /*
