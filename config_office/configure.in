@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2006-07-10 19:00:12 $
+dnl * Date: $Date: 2006-07-19 09:36:06 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.169 $ )
+AC_REVISION( $Revision: 1.170 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -1059,14 +1059,14 @@ AC_SUBST(WITH_MINGWIN)
 dnl ===================================================================
 dnl Check whether the chosen shell can be used.
 dnl ===================================================================
-if test "$with_use_shell" == "tcsh"; then
+if test "$with_use_shell" = "tcsh"; then
    AC_PATH_PROG(SHELLPATH, tcsh)
    if test -z "$SHELLPATH"; then
       AC_MSG_ERROR([tcsh not found in \$PATH])
    else
       SHELLPATH=`echo $SHELLPATH | $SED -n "s/\/tcsh$//p"`
    fi
-elif test "$with_use_shell" == "bash"; then
+elif test "$with_use_shell" = "bash"; then
    AC_PATH_PROG(SHELLPATH, bash)
    if test -z "$SHELLPATH"; then
       AC_MSG_ERROR([bash not found in \$PATH])
