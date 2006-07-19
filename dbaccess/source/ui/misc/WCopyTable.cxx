@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WCopyTable.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:36:47 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:04:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -273,7 +273,7 @@ OCopyTableWizard::~OCopyTableWizard()
 {
     DBG_DTOR(OCopyTableWizard,NULL);
     TabPage *pPage=0;
-    while(pPage = GetPage(0))
+    while((pPage = GetPage(0)))
     {
         RemovePage( pPage );
         delete pPage;
@@ -426,8 +426,8 @@ IMPL_LINK( OCopyTableWizard, ImplOKHdl, OKButton*, EMPTYARG )
             case WIZARD_DEF_DATA:
             case WIZARD_DEF:
             {
-                sal_Bool bOnFirstPage;
-                if ( bOnFirstPage = (GetCurLevel() == 0) )
+                sal_Bool bOnFirstPage = GetCurLevel() == 0;
+                if ( bOnFirstPage )
                 {
                     // we came from the first page so we have to clear
                     // all column information already collected
