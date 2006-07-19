@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gconfbecdef.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 14:16:03 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 17:15:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@
 
 #include "uno/current_context.hxx"
 #include <stdio.h>
-#include <orbit/orbit.h>
+#include "orbit.h"
 
 namespace css = com::sun::star ;
 namespace uno = css::uno ;

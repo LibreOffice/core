@@ -128,7 +128,7 @@ uno::Any translateToOOo( const ConfigurationValue aValue, GConfValue *aGconfValu
         case SETTING_DISABLE_PRINTING:
 #endif // ENABLE_LOCKDOWN
         {
-            sal_Bool bBooleanValue;
+            sal_Bool bBooleanValue = false;
             uno::Any aOriginalValue = makeAnyOfGconfValue( aGconfValue );
             aOriginalValue >>= bBooleanValue;
             return uno::makeAny( rtl::OUString::valueOf( (sal_Bool) bBooleanValue ) );
