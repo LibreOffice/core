@@ -7697,3 +7697,15 @@
   
   # Force applications to be built non-statically
   # when building the mozcomps meta component
+--- misc/build/mozilla/nsprpub/pr/src/misc/prnetdb.c.orig	Thu Sep  2 08:44:37 2004
++++ misc/build/mozilla/nsprpub/pr/src/misc/prnetdb.c	Wed Jun 21 23:58:12 2006
+@@ -105,7 +105,8 @@
+ #define _PR_HAVE_GETPROTO_R_INT
+ #endif
+ 
+-#if (defined(LINUX) && defined(__GLIBC__) && __GLIBC__ >= 2)
++#if (defined(LINUX) && defined(__GLIBC__) && __GLIBC__ >= 2) || \
++	(defined(__FreeBSD__) && __FreeBSD_version > 700016)
+ #define _PR_HAVE_GETPROTO_R
+ #define _PR_HAVE_5_ARG_GETPROTO_R
+ #endif
