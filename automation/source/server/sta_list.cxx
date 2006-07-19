@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sta_list.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-06 14:32:50 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:57:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -604,7 +604,7 @@ Menu* StatementList::GetMatchingMenu( Window* pWin, Menu* pBaseMenu )
 
         USHORT nSkip = 0;
         Window* pMenuBarWin = NULL;
-        while ( pMenuBarWin = GetWinByRT( NULL, WINDOW_MENUBARWINDOW, TRUE, nSkip++, TRUE ) )
+        while ( (pMenuBarWin = GetWinByRT( NULL, WINDOW_MENUBARWINDOW, TRUE, nSkip++, TRUE )) )
         {
             Window* pParent = pMenuBarWin->GET_REAL_PARENT();
             if ( pParent && pParent->GetType() == WINDOW_BORDERWINDOW && pParent->IsVisible() )
