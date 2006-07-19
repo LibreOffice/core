@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glyphcache.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:33:14 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:48:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -519,7 +519,7 @@ int ExtraKernInfo::GetUnscaledKernPairs( ImplKernPairData** ppKernPairs ) const
 
     // fill in unicode kern pairs with the kern value scaled to the font width
     ImplKernPairData* pKernData = *ppKernPairs;
-    UnicodeKernPairs::const_iterator it =  it = maUnicodeKernPairs.begin();
+    UnicodeKernPairs::const_iterator it = maUnicodeKernPairs.begin();
     for(; it != maUnicodeKernPairs.end(); ++it )
         *(pKernData++) = *it;
 
