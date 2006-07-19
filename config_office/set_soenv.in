@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.108 $
-# Date:        $Date: 2006-07-19 09:36:28 $
+# Version:     $Revision: 1.109 $
+# Date:        $Date: 2006-07-19 09:36:45 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -1855,10 +1855,14 @@ if ($SYSTEM_PYTHON eq "NO")
     ToFile( "PYTHONHOME",        $PYTHONHOME,        "e" );
   }
 }
+
 #
 # Writing the aliases to file.
-# (c = comment, e = environment variable, a = alias )
 ToFile( "Aliases.",          $empty,             "c" );
+ToFile( "Don't set aliases when bootstrapping", $empty, "c" );
+ToFile( 'if ( ! ${?_ISBOOTSTRAP_} ) then', $empty, "y");
+ToFile( "if test -z \"\$_ISBOOTSTRAP_\"; then", $empty, "z");
+
 ToFile( "alias mkout",       $mkout,             "a" );
 ToFile( "alias deliver",     $deliver,           "a" );
 ToFile( "alias build",       $build,             "a" );
@@ -1866,9 +1870,11 @@ ToFile( "alias zipdep",      $zipdep,            "a" );
 if ( $platform !~ m/cygwin/ )
 {  ToFile( "alias nmake",       $nmake,             "a" );
 }
-# write make command for dmake for windows
-# (x = write as is)
 
+ToFile( "endif",             $empty, "y");
+ToFile( "fi",                $empty, "z");
+
+# write make command for dmake for W32-4nt
 if ( $platform =~ m/cygwin/ and '@USE_SHELL@' eq "4nt" )
 {
   ToFile( "build the dmake executable.", $empty, "c");
@@ -1994,7 +2000,7 @@ $bootfile = "bootstrap";
 open( OUT, ">$bootfile" ) ||
 die "Cannot open $bootfile: $!\n";
 print OUT "#!/bin/sh\n";
-print OUT "export _ISBOOTSTRAP_=TRUE ; source $SRC_ROOT/$outfile.sh\n"; 
+print OUT "_ISBOOTSTRAP_=TRUE ; export _ISBOOTSTRAP_ ; . $SRC_ROOT/$outfile.sh\n"; 
 close( OUT ) || print "Can't close $bootfile: $!";
 system(`cat bootstrap.1 >> bootstrap`);
 system(`chmod +x bootstrap`);
@@ -2099,7 +2105,8 @@ sub CreateFileHeader
 #                   n - newline
 #                   j - env. var in DOS style (WINNT only)
 #                   x - raw, write as is to OUT_BAT
-#                   y - raw, write as is to OUT and OUT_SH
+#                   y - raw, write as is to OUT
+#                   z - raw, write as is to OUT_SH
 # Return value:  void
 #---------------------------------------------------------
 sub ToFile {
@@ -2189,6 +2196,10 @@ sub ToFile {
    {
       #Write first argument as is, and nothing else
       print OUT "$_[ 0 ]$newline";
+   }
+   elsif ( $_[ 2 ] eq "z" )
+   {
+      #Write first argument as is, and nothing else
       print OUT_SH "$_[ 0 ]$newline";
    }
    elsif ( $_[ 2 ] eq "j" ) {
