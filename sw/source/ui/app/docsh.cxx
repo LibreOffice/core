@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-14 08:32:42 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 09:36:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -632,6 +632,10 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
     }
     // <--
 
+    sal_uInt16 nRedlineMode = pDoc->GetRedlineMode();
+    // Hide redlines for export
+    pDoc->SetRedlineMode( REDLINE_SHOW_INSERT );
+
     ULONG nErr = ERR_SWG_WRITE_ERROR, nVBWarning = ERRCODE_NONE;
     uno::Reference < embed::XStorage > xStor = rMedium.GetOutputStorage();
     if( SfxObjectShell::SaveAs( rMedium ) )
@@ -700,6 +704,9 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
         SW_MOD()->SetEmbeddedLoadSave( FALSE );
     }
     SetError( nErr ? nErr : nVBWarning );
+
+    // ... and restore redline mode
+    pDoc->SetRedlineMode( nRedlineMode );
 
     return !IsError( nErr );
 }
