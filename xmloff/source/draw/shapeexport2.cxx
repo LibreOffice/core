@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:12:19 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:35:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -298,7 +298,7 @@ sal_Bool XMLShapeExport::ImpExportPresentationAttributes( const uno::Reference< 
     {
         uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
 
-        sal_Bool bTemp;
+        sal_Bool bTemp = false;
 
         // is empty pes shape?
         if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(OUString(RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject"))))
@@ -381,7 +381,7 @@ void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& x
         presentation::AnimationEffect eEffect;
         presentation::AnimationSpeed eSpeed;
         OUString aStrSoundURL;
-        sal_Bool bPlayFull;
+        sal_Bool bPlayFull = false;
         sal_Int32 nVerb;
         OUString aStrMacro;
         OUString aStrLibrary;
@@ -1561,7 +1561,7 @@ void XMLShapeExport::ImpExportOLE2Shape(
 
             OUString sClassId;
             OUString sURL;
-            sal_Bool bInternal;
+            sal_Bool bInternal = false;
             xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("IsInternal"))) >>= bInternal;
 
             if( !bIsEmptyPresObj )
@@ -1813,7 +1813,7 @@ void XMLShapeExport::ImpExportAppletShape(
         mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CODE, aStr );
 
         // export draw:may-script
-        sal_Bool bIsScript;
+        sal_Bool bIsScript = false;
         xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "AppletIsScript" ) ) ) >>= bIsScript;
         mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_MAY_SCRIPT, bIsScript ? XML_TRUE : XML_FALSE );
 
@@ -1918,21 +1918,21 @@ void XMLShapeExport::ImpExportMediaShape(
         // export parameters
         const OUString aFalseStr( RTL_CONSTASCII_USTRINGPARAM( "false" ) ), aTrueStr( RTL_CONSTASCII_USTRINGPARAM( "true" ) );
 
-        sal_Bool bLoop;
+        sal_Bool bLoop = false;
         const OUString aLoopStr( RTL_CONSTASCII_USTRINGPARAM( "Loop" ) );
         xPropSet->getPropertyValue( aLoopStr ) >>= bLoop;
         mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aLoopStr );
         mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, bLoop ? aTrueStr : aFalseStr );
         delete( new SvXMLElementExport( mrExport, XML_NAMESPACE_DRAW, XML_PARAM, sal_False, sal_True ) );
 
-        sal_Bool bMute;
+        sal_Bool bMute = false;
         const OUString aMuteStr( RTL_CONSTASCII_USTRINGPARAM( "Mute" ) );
         xPropSet->getPropertyValue( aMuteStr ) >>= bMute;
         mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aMuteStr );
         mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, bMute ? aTrueStr : aFalseStr );
         delete( new SvXMLElementExport( mrExport, XML_NAMESPACE_DRAW, XML_PARAM, sal_False, sal_True ) );
 
-        sal_Int16 nVolumeDB;
+        sal_Int16 nVolumeDB = 0;
         const OUString aVolumeDBStr( RTL_CONSTASCII_USTRINGPARAM( "VolumeDB" ) );
         xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "VolumeDB" ) ) ) >>= nVolumeDB;
         mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aVolumeDBStr );
