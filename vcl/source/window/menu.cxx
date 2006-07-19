@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.138 $
+ *  $Revision: 1.139 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:39:04 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 14:59:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -230,6 +230,10 @@ struct MenuItemData
                         pSalMenuItem ( NULL )
                     {}
                     ~MenuItemData();
+        bool HasCheck()
+        {
+            return bChecked || ( nBits & ( MIB_RADIOCHECK | MIB_CHECKABLE | MIB_AUTOCHECK ) );
+        }
 };
 
 MenuItemData::~MenuItemData()
@@ -954,7 +958,7 @@ void Menu::ImplInit()
 {
     mnHighlightedItemPos = ITEMPOS_INVALID;
     mpSalMenu       = NULL;
-    nMenuFlags      = 0;
+    nMenuFlags      = MENU_FLAG_SHOWCHECKIMAGES;
     nDefaultItem    = 0;
     //bIsMenuBar      = FALSE;  // this is now set in the ctor, must not be changed here!!!
     nSelectedId     = 0;
@@ -2165,9 +2169,9 @@ void Menu::SetAccessible( const ::com::sun::star::uno::Reference< ::com::sun::st
     mxAccessible = rxAccessible;
 }
 
-long Menu::ImplGetNativeCheckAndRadioHeight( Window* pWin, long& rCheckHeight, long& rRadioHeight ) const
+long Menu::ImplGetNativeCheckAndRadioSize( Window* pWin, long& rCheckHeight, long& rRadioHeight, long &rMaxWidth ) const
 {
-    rCheckHeight = rRadioHeight = 0;
+    rMaxWidth = rCheckHeight = rRadioHeight = 0;
 
     if( ! bIsMenuBar )
     {
@@ -2189,6 +2193,7 @@ long Menu::ImplGetNativeCheckAndRadioHeight( Window* pWin, long& rCheckHeight, l
             )
             {
                 rCheckHeight = aNativeBounds.GetBoundRect().GetHeight();
+                rMaxWidth = aNativeContent.GetBoundRect().GetWidth();
             }
         }
         if( pWin->IsNativeControlSupported( CTRL_MENU_POPUP, PART_MENU_ITEM_RADIO_MARK ) )
@@ -2204,6 +2209,7 @@ long Menu::ImplGetNativeCheckAndRadioHeight( Window* pWin, long& rCheckHeight, l
             )
             {
                 rRadioHeight = aNativeBounds.GetBoundRect().GetHeight();
+                rMaxWidth = Max (rMaxWidth, aNativeContent.GetBoundRect().GetWidth());
             }
         }
     }
@@ -2224,7 +2230,8 @@ Size Menu::ImplCalcSize( Window* pWin )
     long nMaxWidth = 0;
     long nMinMenuItemHeight = nFontHeight;
     long nCheckHeight = 0, nRadioHeight = 0;
-    long nMax = ImplGetNativeCheckAndRadioHeight( pWin, nCheckHeight, nRadioHeight );
+    long nCheckWidth = 0, nMaxCheckWidth = 0;
+    long nMax = ImplGetNativeCheckAndRadioSize( pWin, nCheckHeight, nRadioHeight, nMaxCheckWidth );
     if( nMax > nMinMenuItemHeight )
         nMinMenuItemHeight = nMax;
 
@@ -2275,6 +2282,14 @@ Size Menu::ImplCalcSize( Window* pWin )
                     aMaxImgSz.Height() = aImgSz.Height();
                 if ( aImgSz.Height() > pData->aSz.Height() )
                     pData->aSz.Height() = aImgSz.Height();
+            }
+
+            // Check Buttons:
+            if ( !bIsMenuBar && pData->HasCheck() )
+            {
+                nCheckWidth = nMaxCheckWidth;
+                if (nMenuFlags & MENU_FLAG_SHOWCHECKIMAGES)
+                    nWidth += nCheckWidth + nExtra * 2;
             }
 
             // Text:
@@ -2333,19 +2348,28 @@ Size Menu::ImplCalcSize( Window* pWin )
     {
         USHORT gfxExtra = (USHORT) Max( nExtra, 7L ); // #107710# increase space between checkmarks/images/text
         nCheckPos = (USHORT)nExtra;
-        // non-NWF case has an implicit little extra space around
-        // the symbol; NWF case has not, so image pos needs to
-        // be distinct in this case
-        if( nMax > 0 ) // NWF case
-            nImagePos = (USHORT)(nCheckPos + nMax + nExtra );
-        else // non NWF case
-            nImagePos = (USHORT)(nCheckPos + nFontHeight/2 + gfxExtra );
-        nTextPos = (USHORT)(nImagePos+aMaxImgSz.Width());
-        if ( aMaxImgSz.Width() )
-            nTextPos = nTextPos + gfxExtra;
+        if (nMenuFlags & MENU_FLAG_SHOWCHECKIMAGES)
+        {
+            // non-NWF case has an implicit little extra space around
+            // the symbol; NWF case has not, so image pos needs to
+            // be distinct in this case
+            if( nMax > 0 ) // NWF case
+                nImagePos = (USHORT)(nCheckPos + nMax + nExtra );
+            else // non NWF case
+                nImagePos = (USHORT)(nCheckPos + nFontHeight/2 + gfxExtra );
+            nTextPos = (USHORT)(nImagePos+aMaxImgSz.Width());
+            if ( aMaxImgSz.Width() )
+                nTextPos = nTextPos + gfxExtra;
+        }
+        else
+        {
+            nImagePos = nCheckPos;
+            nTextPos = (USHORT)(nImagePos + Max( aMaxImgSz.Width(), nCheckWidth ));
+        }
+        nTextPos = nTextPos + gfxExtra;
 
         aSz.Width() = nTextPos + nMaxWidth + nExtra;
-        aSz.Width() += 8*nExtra;   // a _little_ more ...
+        aSz.Width() += 4*nExtra;   // a _little_ more ...
 
         int nOuterSpace = ImplGetSVData()->maNWFData.mnMenuFormatExtraBorder;
         aSz.Width() += 2*nOuterSpace;
@@ -2399,7 +2423,8 @@ void Menu::ImplPaint( Window* pWin, USHORT nBorder, long nStartY, MenuItemData* 
     long nFontHeight = pWin->GetTextHeight();
     long nExtra = nFontHeight/4;
 
-    long nCheckHeight = 0, nRadioHeight = 0;
+    long nCheckHeight = 0, nRadioHeight = 0, nMaxCheckWidth = 0;
+    ImplGetNativeCheckAndRadioSize( pWin, nCheckHeight, nRadioHeight, nMaxCheckWidth );
 
     DecorationView aDecoView( pWin );
     const StyleSettings& rSettings = pWin->GetSettings().GetStyleSettings();
@@ -2468,10 +2493,14 @@ void Menu::ImplPaint( Window* pWin, USHORT nBorder, long nStartY, MenuItemData* 
                 // Image:
                 if ( !bLayout && !bIsMenuBar && ( ( pData->eType == MENUITEM_IMAGE ) || ( pData->eType == MENUITEM_STRINGIMAGE ) ) )
                 {
-                    aTmpPos.Y() = aPos.Y();
-                    aTmpPos.X() = aPos.X() + nImagePos;
-                    aTmpPos.Y() += (pData->aSz.Height()-pData->aImage.GetSizePixel().Height())/2;
-                    pWin->DrawImage( aTmpPos, pData->aImage, nImageStyle );
+                    // Don't render an image for a check thing
+                    if ((nMenuFlags & MENU_FLAG_SHOWCHECKIMAGES) || !pData->HasCheck() )
+                    {
+                        aTmpPos.Y() = aPos.Y();
+                        aTmpPos.X() = aPos.X() + nImagePos;
+                        aTmpPos.Y() += (pData->aSz.Height()-pData->aImage.GetSizePixel().Height())/2;
+                        pWin->DrawImage( aTmpPos, pData->aImage, nImageStyle );
+                    }
                 }
 
                 // Text:
@@ -2523,8 +2552,7 @@ void Menu::ImplPaint( Window* pWin, USHORT nBorder, long nStartY, MenuItemData* 
                 }
 
                 // CheckMark
-                if ( !bLayout && !bIsMenuBar &&
-                     ( pData->bChecked  || ( pData->nBits & ( MIB_RADIOCHECK | MIB_CHECKABLE | MIB_AUTOCHECK ) ) ) )
+                if ( !bLayout && !bIsMenuBar && pData->HasCheck() )
                 {
                     if ( pWin->IsNativeControlSupported( CTRL_MENU_POPUP,
                                                          (pData->nBits & MIB_RADIOCHECK)
@@ -3454,7 +3482,8 @@ USHORT PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, ULONG nPopupM
         for ( USHORT n = 0; n < nCount; n++ )
         {
             MenuItemData* pData = pItemList->GetDataFromPos( n );
-            if ( ( pData->eType != MENUITEM_SEPARATOR ) && ImplIsVisible( n ) )
+            if (   ( pData->bEnabled || !Application::GetSettings().GetStyleSettings().GetSkipDisabledInMenus() )
+                && ( pData->eType != MENUITEM_SEPARATOR ) && ImplIsVisible( n ) )
             {
                 pWin->ChangeHighlightItem( n, FALSE );
                 break;
@@ -4400,6 +4429,8 @@ Rectangle MenuFloatingWindow::ImplGetItemRect( USHORT nPos )
 
 void MenuFloatingWindow::ImplCursorUpDown( BOOL bUp, BOOL bHomeEnd )
 {
+    const StyleSettings& rSettings = GetSettings().GetStyleSettings();
+
     USHORT n = nHighlightedItem;
     if ( n == ITEMPOS_INVALID )
     {
@@ -4449,7 +4480,8 @@ void MenuFloatingWindow::ImplCursorUpDown( BOOL bUp, BOOL bHomeEnd )
         }
 
         MenuItemData* pData = (MenuItemData*)pMenu->GetItemList()->GetDataFromPos( n );
-        if ( ( pData->eType != MENUITEM_SEPARATOR ) && pMenu->ImplIsVisible( n ) )
+        if ( ( pData->bEnabled || !rSettings.GetSkipDisabledInMenus() )
+              && ( pData->eType != MENUITEM_SEPARATOR ) && pMenu->ImplIsVisible( n ) )
         {
             // Selektion noch im sichtbaren Bereich?
             if ( IsScrollMenu() )
