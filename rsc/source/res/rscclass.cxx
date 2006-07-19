@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rscclass.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:47:40 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 17:14:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1069,7 +1069,8 @@ void RscClass::WriteRcCtor( FILE * fOutput, RscTypCont * pTC )
             // Superaufruf
             fprintf( fOutput, "\n\t: %s", pHS->getString( GetSuperClass()->GetId() ).getStr() );
             fprintf( fOutput, "%s", GetSuperClass()->aCallPar1.GetBuffer() );
-            fprintf( fOutput, " rResId.SetRT2( 0x%x ) )", GetTypId() );
+            fprintf( fOutput, " rResId.SetRT2( 0x%lx ) )",
+                     sal::static_int_cast< unsigned long >(GetTypId()) );
         }
         fprintf( fOutput, "\n{\n" );
         fprintf( fOutput, "\tsal_uInt32\tnObjMask;\n" );
@@ -1083,8 +1084,9 @@ void RscClass::WriteRcCtor( FILE * fOutput, RscTypCont * pTC )
         {
             if( !((VAR_NODATAINST | VAR_NORC) & pVarTypeList[ i ].nVarType ))
             {
-                fprintf( fOutput, "\tif( nObjMask & 0x%x )\n\t{\n",
-                        pVarTypeList[ i ].nMask );
+                fprintf( fOutput, "\tif( nObjMask & 0x%lx )\n\t{\n",
+                         sal::static_int_cast< unsigned long >(
+                             pVarTypeList[ i ].nMask) );
 
                 pVarTypeList[ i ].pClass->WriteRcAccess( fOutput, pTC,
                                     pHS->getString( pVarTypeList[ i ].nVarName ).getStr() );
