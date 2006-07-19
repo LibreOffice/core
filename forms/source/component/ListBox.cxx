@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ListBox.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 15:18:46 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:44:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -526,7 +526,7 @@ namespace frm
 
         if ((nAnyMask & BOUNDCOLUMN) == BOUNDCOLUMN)
         {
-            sal_Int16 nBoundColumn;
+            sal_Int16 nBoundColumn = 0;
             m_aBoundColumn >>= nBoundColumn;
             _rxOutStream << nBoundColumn;
         }
@@ -1097,7 +1097,7 @@ namespace frm
             if (nSelCount > 1)
             {
                 // Einfach- oder Mehrfach-Selektion
-                sal_Bool bMultiSel;
+                sal_Bool bMultiSel = false;
                 const_cast<OListBoxModel*>(this)->OPropertySetAggregationHelper::getFastPropertyValue(PROPERTY_ID_MULTISELECTION) >>= bMultiSel;
                 if (bMultiSel)
                     nSelCount = 1;
