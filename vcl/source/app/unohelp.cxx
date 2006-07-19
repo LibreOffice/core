@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unohelp.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-08 13:54:35 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:45:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -248,7 +248,7 @@ void vcl::unohelper::NotifyAccessibleStateEventGlobally( const ::com::sun::star:
     if ( xExtToolkit.is() )
     {
         // Only for focus events
-        sal_Int16 nType;
+        sal_Int16 nType = ::com::sun::star::accessibility::AccessibleStateType::INVALID;
         rEventObject.NewValue >>= nType;
         if ( nType == ::com::sun::star::accessibility::AccessibleStateType::FOCUSED )
             xExtToolkit->fireFocusGained( rEventObject.Source );
