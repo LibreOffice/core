@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtvfldi.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:51:43 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:41:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -481,7 +481,7 @@ void XMLSequenceFieldImportContext::PrepareField(
     if (bRefNameOK)
     {
         aAny = xPropertySet->getPropertyValue(sPropertySequenceValue);
-        sal_Int16 nValue;
+        sal_Int16 nValue = 0;
         aAny >>= nValue;
         GetImportHelper().InsertSequenceID(sRefName, GetName(), nValue);
     }
@@ -1020,7 +1020,7 @@ sal_Bool XMLVariableDeclImportContext::FindFieldMaster(
             // sPropertySubType
             OUString::createFromAscii(sAPI_sub_type)
             );
-        sal_Int16 nType;
+        sal_Int16 nType = 0;
         aAny >>= nType;
 
         enum VarType eFMVarType =
