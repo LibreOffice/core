@@ -4,9 +4,9 @@
  *
  *  $RCSfile: delete.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:38:37 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 09:30:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,14 @@
 #include <swcrsr.hxx>
 #endif
 #include <svx/lrspitem.hxx> // #i23725#
+// --> OD 2006-07-10 #134369#
+#ifndef _VIEW_HXX
+#include <view.hxx>
+#endif
+#ifndef _DRAWBASE_HXX
+#include <drawbase.hxx>
+#endif
+// <--
 
 inline void SwWrtShell::OpenMark()
 {
@@ -351,13 +359,35 @@ long SwWrtShell::DelRight(BOOL bDelFrm)
 
             LeaveSelFrmMode();
             UnSelectFrm();
+            // --> OD 2006-07-06 #134369#
+            ASSERT( !IsFrmSelected(),
+                    "<SwWrtShell::DelRight(..)> - <SwWrtShell::UnSelectFrm()> should unmark all objects" )
+            // <--
+            // --> OD 2006-07-10 #134369#
+            // leave draw mode, if necessary.
+            {
+                if (GetView().GetDrawFuncPtr())
+                {
+                    GetView().GetDrawFuncPtr()->Deactivate();
+                    GetView().SetDrawFuncPtr(NULL);
+                }
+                if ( GetView().IsDrawMode() )
+                {
+                    GetView().LeaveDrawCreate();
+                }
+            }
+            // <--
         }
 
-        if( IsFrmSelected() )
+        // --> OD 2006-07-07 #134369#
+        // <IsFrmSelected()> can't be true - see above.
+        // <--
         {
             nSelection = GetSelectionType();
-            if ( SEL_FRM & nSelection || SEL_GRF & nSelection ||
-                SEL_OLE & nSelection || SEL_DRW & nSelection )
+            if ( SEL_FRM & nSelection ||
+                 SEL_GRF & nSelection ||
+                 SEL_OLE & nSelection ||
+                 SEL_DRW & nSelection )
             {
                 EnterSelFrmMode();
                 GotoNextFly();
