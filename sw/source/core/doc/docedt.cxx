@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docedt.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 14:16:47 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 09:35:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -334,7 +334,6 @@ void _SaveFlyInRange( const SwNodeRange& rRg, _SaveFlyArr& rArr )
             0 != ( pAPos = pAnchor->GetCntntAnchor() ) &&
             rRg.aStart <= pAPos->nNode && pAPos->nNode < rRg.aEnd )
         {
-            ASSERT( pAnchor->GetAnchorId() != FLY_AUTO_CNTNT, "FLY-AUTO-Baustelle!" );
             _SaveFly aSave( pAPos->nNode.GetIndex() - rRg.aStart.GetIndex(),
                             pFmt, sal_False );
             rArr.Insert( aSave, rArr.Count());
@@ -378,7 +377,6 @@ void _SaveFlyInRange( const SwPaM& rPam, const SwNodeIndex& rInsPos,
               !( *pCntntIdx < rInsPos &&
                 rInsPos < pCntntIdx->GetNode().EndOfSectionIndex() )) )
         {
-            ASSERT( pAnchor->GetAnchorId() != FLY_AUTO_CNTNT, "FLY-AUTO-Baustelle!" );
             if( !bMoveAllFlys && rEndNdIdx == pAPos->nNode )
             {
                 // wenn nur teil vom EndNode oder der EndNode und SttNode
@@ -432,8 +430,7 @@ void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
                 ? rMkNdIdx < pAPos->nNode && pAPos->nNode <= rPtNdIdx
                 : rPtNdIdx <= pAPos->nNode && pAPos->nNode < rMkNdIdx ))
         {
-            ASSERT( rAnch.GetAnchorId() != FLY_AUTO_CNTNT, "FLY-AUTO-Baustelle!" );
-            // nur den Anker verchieben ??
+            // nur den Anker verschieben ??
             if( rPtNdIdx == pAPos->nNode )
             {
                 SwFmtAnchor aAnch( pFmt->GetAnchor() );
