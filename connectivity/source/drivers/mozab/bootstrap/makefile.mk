@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-20 01:49:11 $
+#   last change: $Author: kz $ $Date: 2006-07-19 15:53:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -133,7 +133,7 @@ CFLAGS +=   -fPIC -g
 CDEFS+=     -DOSTYPE=\"Linux2.2.14-5\" -DOJI
 
 CFLAGSCXX += \
-            -fno-rtti -Wall -Wconversion -Wpointer-arith \
+            -fno-rtti -Wconversion -Wpointer-arith \
             -Wcast-align -Woverloaded-virtual -Wsynth \
             -Wno-long-long -pthread
 CDEFS     += -DTRACING
