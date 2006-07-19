@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pngread.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 11:34:19 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:47:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -992,8 +992,8 @@ void PNGReaderImpl::ImplGetFilter ( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                 p1 = pTmp + nBBP;
                 p2 = pTmp;
 
-                while ( p1 < pTmp + mnScansize - 1 )
-                    ( *p1++ ) = sal::static_int_cast<BYTE>(*p1 + ( *p2++ ));
+                for (; p1 < pTmp + mnScansize - 1; ++p1)
+                    *p1 = sal::static_int_cast<BYTE>(*p1 + ( *p2++ ));
             }
             break;
 
@@ -1002,8 +1002,8 @@ void PNGReaderImpl::ImplGetFilter ( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                 p1 = pTmp;
                 p2 = mpScanprior+1;
 
-                while ( p1 < pTmp + mnScansize - 1 )
-                    ( *p1++ ) = sal::static_int_cast<BYTE>(*p1 + ( *p2++ ));
+                for (; p1 < pTmp + mnScansize - 1; ++p1)
+                    *p1 = sal::static_int_cast<BYTE>(*p1 + ( *p2++ ));
             }
             break;
 
@@ -1013,12 +1013,12 @@ void PNGReaderImpl::ImplGetFilter ( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                 p2 = mpScanprior + 1;
                 p3 = pTmp-nBBP;
 
-                while ( p1 < pTmp + mnScansize - 1 )
+                for (; p1 < pTmp + mnScansize - 1; ++p1)
                 {
                     n1 = (BYTE)( *p2++ );
                     n2 = ( p3 >= pTmp ) ? (BYTE)*p3 : 0;
                     p3++;
-                    ( *p1++ ) = sal::static_int_cast<BYTE>(*p1 + (BYTE)( ( n1 + n2 ) >> 1 ));
+                    *p1 = sal::static_int_cast<BYTE>(*p1 + (BYTE)( ( n1 + n2 ) >> 1 ));
                 }
             }
             break;
@@ -1030,7 +1030,7 @@ void PNGReaderImpl::ImplGetFilter ( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                 p3 = mpScanprior + 1;
                 p4 = p3 - nBBP;
 
-                while ( p1 < pTmp + mnScansize - 1 )
+                for (; p1 < pTmp + mnScansize - 1; ++p1)
                 {
                     nb = *p3++;
                     if ( p2 >= pTmp )
@@ -1055,11 +1055,11 @@ void PNGReaderImpl::ImplGetFilter ( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                         npc =-npc;
 
                     if ( ( npa <= npb ) && ( npa <= npc ) )
-                        *p1++ = sal::static_int_cast<BYTE>(*p1 + (BYTE)na);
+                        *p1 = sal::static_int_cast<BYTE>(*p1 + (BYTE)na);
                     else if ( npb <= npc )
-                        *p1++ = sal::static_int_cast<BYTE>(*p1 + (BYTE)nb);
+                        *p1 = sal::static_int_cast<BYTE>(*p1 + (BYTE)nb);
                     else
-                        *p1++ = sal::static_int_cast<BYTE>(*p1 + (BYTE)nc);
+                        *p1 = sal::static_int_cast<BYTE>(*p1 + (BYTE)nc);
 
                     p2++;
                     p4++;
