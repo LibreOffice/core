@@ -4,9 +4,9 @@
  *
  *  $RCSfile: implbase_var.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-06 10:12:34 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 09:37:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,13 +121,13 @@ struct BOOST_PP_CAT(ImplClassData, COMPHELPER_IMPLBASE_INTERFACE_NUMBER)
             {
 #define COMPHELPER_IMPLBASE_classdataList(z_, n_, unused_) \
 { { BOOST_PP_CAT(Ifc, n_)::static_type }, \
-  reinterpret_cast<sal_Int32>( static_cast< BOOST_PP_CAT(Ifc, n_) * >( \
+  reinterpret_cast<sal_IntPtr>( static_cast< BOOST_PP_CAT(Ifc, n_) * >( \
                                reinterpret_cast<Impl *>(16) ) ) - 16 },
                 BOOST_PP_REPEAT(COMPHELPER_IMPLBASE_INTERFACE_NUMBER,
                                 COMPHELPER_IMPLBASE_classdataList, ~)
 #undef COMPHELPER_IMPLBASE_classdataList
                 { { ::com::sun::star::lang::XTypeProvider::static_type },
-                  reinterpret_cast<sal_Int32>(
+                  reinterpret_cast<sal_IntPtr>(
                       static_cast< ::com::sun::star::lang::XTypeProvider * >(
                           reinterpret_cast<Impl *>(16) ) ) - 16 }
             }
