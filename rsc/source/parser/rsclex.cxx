@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rsclex.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:46:49 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 17:14:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,7 @@ BOOL            bLastInclude;// War letztes Symbol INCLUDE
 RscFileInst*    pFI;
 RscTypCont*     pTC;
 RscExpression * pExp;
-struct {
+struct KeyVal {
     int     nKeyWord;
     YYSTYPE aYYSType;
 } aKeyVal[ 1 ];
