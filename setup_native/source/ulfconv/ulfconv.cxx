@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ulfconv.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:35:33 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:08:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -266,7 +266,7 @@ int main( int argc, char * const argv[] )
             case 'o':
                 if (argi+1 >= argc || argv[argi+1][0] == '-')
                 {
-                    fprintf(stderr, "Option -%c requires an operand\n", argv[argi]);
+                    fprintf(stderr, "Option -%c requires an operand\n", argv[argi][1]);
                     errflg++;
                     break;
                 }
@@ -285,7 +285,7 @@ int main( int argc, char * const argv[] )
                 read_encoding_table(argv[++argi], aEncodingMap);
                 break;
             default:
-                fprintf(stderr, "Unrecognized option: -%c\n", argv[argi]);
+                fprintf(stderr, "Unrecognized option: -%c\n", argv[argi][1]);
                 errflg++;
             }
         }
