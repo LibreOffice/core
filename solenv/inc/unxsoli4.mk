@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxsoli4.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 22:05:19 $
+#   last change: $Author: kz $ $Date: 2006-07-19 15:08:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -104,7 +104,6 @@ CFLAGSWERRCXX=-xwe
 MODULES_WITH_WARNINGS := \
     b_server \
     basctl \
-    binfilter \
     canvas \
     chart2 \
     cppcanvas \
@@ -113,23 +112,15 @@ MODULES_WITH_WARNINGS := \
     dxcanvas \
     extensions \
     filter \
-    finalize \
     glcanvas \
-    instset_native \
-    instsetoo_native \
     lingu \
-    postprocess \
     r_tools \
     sc \
-    sch \
     sd \
     slideshow \
-    smoketest_native \
-    smoketestoo_native \
     starmath \
     svx \
     sw \
-    top \
     writerperfect \
     xmlsecurity
 
