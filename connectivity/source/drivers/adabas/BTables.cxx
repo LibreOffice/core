@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BTables.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:22:40 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 15:52:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -215,7 +215,7 @@ void OTables::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 
         Reference<XPropertySet> xProp(xObject,UNO_QUERY);
         sal_Bool bIsView;
-        if(bIsView = (xProp.is() && ::comphelper::getString(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))) == ::rtl::OUString::createFromAscii("VIEW"))) // here we have a view
+        if((bIsView = (xProp.is() && ::comphelper::getString(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))) == ::rtl::OUString::createFromAscii("VIEW")))) // here we have a view
             aSql += ::rtl::OUString::createFromAscii("VIEW ");
         else
             aSql += ::rtl::OUString::createFromAscii("TABLE ");
