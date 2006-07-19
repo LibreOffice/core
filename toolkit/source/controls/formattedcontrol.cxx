@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formattedcontrol.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:17:02 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 15:55:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,11 +117,11 @@ namespace toolkit
             double dVal = 0;
             sal_Int32  nVal = 0;
             ::rtl::OUString sVal;
-            if ( bStreamed = (rValue >>= dVal) )
+            if ( (bStreamed = (rValue >>= dVal)) )
                 rConvertedValue <<= dVal;
-            else if ( bStreamed = (rValue >>= nVal) )
+            else if ( (bStreamed = (rValue >>= nVal)) )
                 rConvertedValue <<= static_cast<double>(nVal);
-            else if ( bStreamed = (rValue >>= sVal) )
+            else if ( (bStreamed = (rValue >>= sVal)) )
                 rConvertedValue <<= sVal;
 
             if ( bStreamed )
