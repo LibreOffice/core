@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acceleratorexecute.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 21:18:54 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 17:06:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -244,9 +244,9 @@ sal_Bool AcceleratorExecute::execute(const css::awt::KeyEvent& aAWTKey)
     xParser->parseStrict(aURL);
 
     // ask for dispatch object
-    sal_Bool bRet = sal_False;
     css::uno::Reference< css::frame::XDispatch > xDispatch = xProvider->queryDispatch(aURL, ::rtl::OUString(), 0);
-    if ( bRet = xDispatch.is() )
+    sal_Bool bRet = xDispatch.is();
+    if ( bRet )
     {
         // Note: Such instance can be used one times only and destroy itself afterwards .-)
         AsyncAccelExec* pExec = AsyncAccelExec::createOnShotInstance(xDispatch, aURL);
