@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndole.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-24 12:55:08 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 09:35:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -784,7 +784,13 @@ SwOLEObj::~SwOLEObj()
             xOLERef.Lock(FALSE);
 
             // Always remove object from conteiner it is connected to
-            pCnt->RemoveEmbeddedObject( aName );
+            try
+            {
+                pCnt->RemoveEmbeddedObject( aName );
+            }
+            catch ( uno::Exception& )
+            {
+            }
         }
 
     }
