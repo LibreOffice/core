@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:46:21 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:08:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -953,7 +953,7 @@ void OTableController::loadData()
             sal_Int32 nFormatKey    = 0;
             sal_Int32 nAlign        = 0;
 
-            sal_Bool bIsAutoIncrement,bIsCurrency;
+            sal_Bool bIsAutoIncrement = false, bIsCurrency = false;
             ::rtl::OUString sName,sDescription,sTypeName;
             Any aControlDefault;
 
@@ -1204,7 +1204,7 @@ void OTableController::alterColumns()
             OSL_ENSURE(xColumn.is(),"Column is null!");
 
             sal_Int32 nType,nPrecision,nScale,nNullable,nFormatKey=0,nAlignment=0;
-            sal_Bool bAutoIncrement;
+            sal_Bool bAutoIncrement = false;
             ::rtl::OUString sDescription, sTypeName;
             Any aControlDefault;
 
