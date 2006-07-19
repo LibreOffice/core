@@ -4,9 +4,9 @@
  *
  *  $RCSfile: simpleregistry.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:06:00 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:23:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -924,7 +924,7 @@ Sequence< Reference< XRegistryKey > > SAL_CALL RegistryKeyImpl::openKeys(  )
     {
         RegistryKeyArray    subKeys;
         RegError            _ret = REG_NO_ERROR;
-        if ( _ret = m_key.openSubKeys(OUString(), subKeys) )
+        if ( (_ret = m_key.openSubKeys(OUString(), subKeys)) )
         {
             if ( _ret == REG_INVALID_KEY )
             {
@@ -963,7 +963,7 @@ Sequence< OUString > SAL_CALL RegistryKeyImpl::getKeyNames(  )
     {
         RegistryKeyNames    subKeys;
         RegError            _ret = REG_NO_ERROR;
-        if ( _ret = m_key.getKeyNames(OUString(), subKeys) )
+        if ( (_ret = m_key.getKeyNames(OUString(), subKeys)) )
         {
             if ( _ret == REG_INVALID_KEY )
             {
