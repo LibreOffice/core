@@ -4,9 +4,9 @@
  *
  *  $RCSfile: convert.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:06:47 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:24:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -435,7 +435,7 @@ sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt6
     // STRING
     case TypeClass_STRING:
     {
-        sal_Int64 fVal;
+        sal_Int64 fVal = SAL_CONST_INT64(0);
         if (! getHyperValue( fVal, *(OUString const *)rAny.getValue() ))
         {
             throw CannotConvertException(
