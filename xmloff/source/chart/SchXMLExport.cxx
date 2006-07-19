@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:01:21 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:34:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -978,7 +978,7 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
                 if( xDocProp.is())
                 {
                     uno::Any aAny;
-                    sal_Bool bFirstCol, bFirstRow;
+                    sal_Bool bFirstCol = false, bFirstRow = false;
 
                     try
                     {
