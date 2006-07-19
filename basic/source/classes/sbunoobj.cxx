@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbunoobj.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 17:40:26 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:33:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -749,13 +749,13 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
         case TypeClass_FLOAT:           { float val; aValue >>= val; pVar->PutSingle( val ); } break;
         case TypeClass_DOUBLE:          { double val; aValue >>= val; pVar->PutDouble( val ); } break;
         //case TypeClass_OCTET:         break;
-        case TypeClass_BYTE:            { sal_Int8 val; aValue >>= val; pVar->PutInteger( val ); } break;
+        case TypeClass_BYTE:            { sal_Int8 val = 0; aValue >>= val; pVar->PutInteger( val ); } break;
         //case TypeClass_INT:           break;
-        case TypeClass_SHORT:           { sal_Int16 val; aValue >>= val; pVar->PutInteger( val ); } break;
+        case TypeClass_SHORT:           { sal_Int16 val = 0; aValue >>= val; pVar->PutInteger( val ); } break;
         case TypeClass_LONG:            { sal_Int32 val; aValue >>= val; pVar->PutLong( val ); } break;
         case TypeClass_HYPER:           { sal_Int64 val; aValue >>= val; pVar->PutInt64( val ); } break;
         //case TypeClass_UNSIGNED_OCTET:break;
-        case TypeClass_UNSIGNED_SHORT:  { sal_uInt16 val; aValue >>= val; pVar->PutUShort( val ); } break;
+        case TypeClass_UNSIGNED_SHORT:  { sal_uInt16 val = 0; aValue >>= val; pVar->PutUShort( val ); } break;
         case TypeClass_UNSIGNED_LONG:   { sal_uInt32 val; aValue >>= val; pVar->PutULong( val ); } break;
         case TypeClass_UNSIGNED_HYPER:  { sal_uInt64 val; aValue >>= val; pVar->PutUInt64( val ); } break;
         //case TypeClass_UNSIGNED_INT:  break;
