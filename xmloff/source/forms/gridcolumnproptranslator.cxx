@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridcolumnproptranslator.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:19:21 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:35:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,7 +117,7 @@ namespace xmloff
         //----------------------------------------------------------------
         void valueAlignToParaAdjust(Any& rValue)
         {
-            sal_Int16 nValue;
+            sal_Int16 nValue = 0;
             rValue >>= nValue;
             const AlignmentTranslationEntry* pTranslation = AlignmentTranslations;
             while (-1 != pTranslation->nControlValue)
