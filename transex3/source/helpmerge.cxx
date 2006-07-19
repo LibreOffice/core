@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpmerge.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 17:22:46 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:22:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,7 +83,7 @@ void HelpParser::FillInFallbacks( LangHashMap& rElem_out, //int nLangIdx_in ){
         rElem_out[ sCur ] = pTmp;
         pTmp2 = NULL;
     }else{
-        fprintf(stdout,"ERROR: No Fallback found for language %d:\n",sCur.GetBuffer());
+        fprintf(stdout,"ERROR: No Fallback found for language %s:\n",sCur.GetBuffer());
         rElem_out[ sCur ]=new XMLElement(); // Use dummy element
     }
 }
