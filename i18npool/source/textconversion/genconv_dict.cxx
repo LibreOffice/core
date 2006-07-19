@@ -4,9 +4,9 @@
  *
  *  $RCSfile: genconv_dict.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:48:45 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:31:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,7 +146,10 @@ void make_hhc_char(FILE *sfp, FILE *cfp)
                 if (Hanja2HangulData[((i*0x10)+j)*0x100+k] != 0)
                     break;
             }
-            fprintf(cfp, "0x%04x, ", k < 0x100 ? (address++)*0x100 : 0xFFFF);
+            fprintf(
+                cfp, "0x%04lx, ",
+                sal::static_int_cast< unsigned long >(
+                    k < 0x100 ? (address++)*0x100 : 0xFFFF));
         }
     }
     fprintf(cfp, "\n};\n");
@@ -219,7 +222,10 @@ void make_stc_char(FILE *sfp, FILE *cfp)
                 if (SChinese2TChineseData[((i*0x10)+j)*0x100+k] != 0)
                     break;
             }
-            fprintf(cfp, "0x%04x, ", k < 0x100 ? (address++)*0x100 : 0xFFFF);
+            fprintf(
+                cfp, "0x%04lx, ",
+                sal::static_int_cast< unsigned long >(
+                    k < 0x100 ? (address++)*0x100 : 0xFFFF));
         }
     }
     fprintf(cfp, "\n};\n");
@@ -253,7 +259,10 @@ void make_stc_char(FILE *sfp, FILE *cfp)
                 if (SChinese2VChineseData[((i*0x10)+j)*0x100+k] != 0)
                     break;
             }
-            fprintf(cfp, "0x%04x, ", k < 0x100 ? (address++)*0x100 : 0xFFFF);
+            fprintf(
+                cfp, "0x%04lx, ",
+                sal::static_int_cast< unsigned long >(
+                    k < 0x100 ? (address++)*0x100 : 0xFFFF));
         }
     }
     fprintf(cfp, "\n};\n");
@@ -287,7 +296,10 @@ void make_stc_char(FILE *sfp, FILE *cfp)
                 if (TChinese2SChineseData[((i*0x10)+j)*0x100+k] != 0)
                     break;
             }
-            fprintf(cfp, "0x%04x, ", k < 0x100 ? (address++)*0x100 : 0xFFFF);
+            fprintf(
+                cfp, "0x%04lx, ",
+                sal::static_int_cast< unsigned long >(
+                    k < 0x100 ? (address++)*0x100 : 0xFFFF));
         }
     }
     fprintf(cfp, "\n};\n");
@@ -355,7 +367,7 @@ void make_stc_word(FILE *sfp, FILE *cfp)
         OUString Ostr((const sal_Char *)Cstr, strlen(Cstr) - 1, RTL_TEXTENCODING_UTF8);
         sal_Int32  len = Ostr.getLength();
         if (char_total + len + 1 > 0xFFFF) {
-            fprintf(stderr, "Word Dictionary stc_word.dic is too big (line %d)", line);
+            fprintf(stderr, "Word Dictionary stc_word.dic is too big (line %ld)", sal::static_int_cast< long >(line));
             return;
         }
         sal_Int32 sep=-1, eq=-1, gt=-1, lt=-1;
@@ -377,7 +389,7 @@ void make_stc_word(FILE *sfp, FILE *cfp)
                 STC_WordData[char_total++] = (i == sep) ? 0 : Ostr[i];
             STC_WordData[char_total++] = 0;
         } else {
-            fprintf(stderr, "Invalid entry in stc_word.dic (line %d)", line);
+            fprintf(stderr, "Invalid entry in stc_word.dic (line %ld)", sal::static_int_cast< long >(line));
             return;
         }
         line++;
@@ -391,7 +403,7 @@ void make_stc_word(FILE *sfp, FILE *cfp)
         }
         fprintf(cfp, "\n};\n");
 
-        fprintf(cfp, "\nstatic sal_Int32 STC_WordData_Count = %d;\n", char_total);
+        fprintf(cfp, "\nstatic sal_Int32 STC_WordData_Count = %ld;\n", sal::static_int_cast< long >(char_total));
 
         // create function to return arrays
         fprintf (cfp, "\tconst sal_Unicode* getSTC_WordData(sal_Int32& count) { count = STC_WordData_Count; return STC_WordData; }\n");
@@ -426,7 +438,7 @@ void make_stc_word(FILE *sfp, FILE *cfp)
         }
         fprintf(cfp, "\n};\n");
 
-        fprintf(cfp, "\nstatic sal_Int32 STC_WordIndex_S2T_Count = %d;\n", length);
+        fprintf(cfp, "\nstatic sal_Int32 STC_WordIndex_S2T_Count = %ld;\n", sal::static_int_cast< long >(length));
         fprintf (cfp, "\tconst sal_uInt16* getSTC_WordEntry_S2T() { return STC_WordEntry_S2T; }\n");
         fprintf (cfp, "\tconst sal_uInt16* getSTC_WordIndex_S2T(sal_Int32& count) { count = STC_WordIndex_S2T_Count; return STC_WordIndex_S2T; }\n");
     } else {
@@ -459,7 +471,7 @@ void make_stc_word(FILE *sfp, FILE *cfp)
         }
         fprintf(cfp, "\n};\n");
 
-        fprintf(cfp, "\nstatic sal_Int32 STC_WordIndex_T2S_Count = %d;\n\n", length);
+        fprintf(cfp, "\nstatic sal_Int32 STC_WordIndex_T2S_Count = %ld;\n\n", sal::static_int_cast< long >(length));
         fprintf (cfp, "\tconst sal_uInt16* getSTC_WordEntry_T2S() { return STC_WordEntry_T2S; }\n");
         fprintf (cfp, "\tconst sal_uInt16* getSTC_WordIndex_T2S(sal_Int32& count) { count = STC_WordIndex_T2S_Count; return STC_WordIndex_T2S; }\n");
     } else {
