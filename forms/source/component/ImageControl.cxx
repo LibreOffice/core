@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ImageControl.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:51:46 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:43:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -820,7 +820,7 @@ void OImageControlControl::mousePressed(const ::com::sun::star::awt::MouseEvent&
                     return;
             }
 
-            sal_Bool bReadOnly;
+            sal_Bool bReadOnly = false;
             xSet->getPropertyValue(PROPERTY_READONLY) >>= bReadOnly;
             if (bReadOnly)
                 return;
