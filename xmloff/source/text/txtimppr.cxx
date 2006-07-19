@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtimppr.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:50:12 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:41:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -539,7 +539,7 @@ void XMLTextImportPropertyMapper::finished(
     {
         sal_Int16 nVertOrient;
         pVertOrient->maValue >>= nVertOrient;
-        sal_Int16 nVertOrientRel;
+        sal_Int16 nVertOrientRel = 0;
         pVertOrientRelAsChar->maValue >>= nVertOrientRel;
         switch( nVertOrient )
         {
