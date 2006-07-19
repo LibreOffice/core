@@ -4,9 +4,9 @@
  *
  *  $RCSfile: keysymnames.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 16:37:23 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:49:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -607,7 +607,7 @@ const char* SalDisplay::GetKeyboardName( BOOL bRefresh )
             // we are disabling it for the moment until better XDarwin support exists.
             if ( 0 )
         #else
-            if( pXkbDesc = XkbGetKeyboard( GetDisplay(), XkbAllComponentsMask, XkbUseCoreKbd ) )
+            if( (pXkbDesc = XkbGetKeyboard( GetDisplay(), XkbAllComponentsMask, XkbUseCoreKbd )) )
         #endif
             {
                 const char* pAtom = NULL;
