@@ -4,9 +4,9 @@
  *
  *  $RCSfile: idlcmain.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:49:07 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:18:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,8 +68,10 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         nErrors = compileFile(0);
         if (idlc()->getWarningCount() > 0) {
             fprintf(
-                stdout, "%s: detected %d warnings compiling stdin\n",
-                options.getProgramName().getStr(), idlc()->getWarningCount());
+                stdout, "%s: detected %lu warnings compiling stdin\n",
+                options.getProgramName().getStr(),
+                sal::static_int_cast< unsigned long >(
+                    idlc()->getWarningCount()));
         }
         OString outputUrl;
         if (options.isValid("-O")) {
@@ -99,9 +101,11 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         nErrors = compileFile(&sysFileName);
 
         if ( idlc()->getWarningCount() )
-            fprintf(stdout, "%s: detected %d warnings compiling file '%s'\n",
-                    options.getProgramName().getStr(), idlc()->getWarningCount(),
-                    (*i).getStr(), options.prepareVersion().getStr());
+            fprintf(stdout, "%s: detected %lu warnings compiling file '%s'\n",
+                    options.getProgramName().getStr(),
+                    sal::static_int_cast< unsigned long >(
+                        idlc()->getWarningCount()),
+                    (*i).getStr());
 
         // prepare output file name
         OString outputFileUrl;
@@ -130,8 +134,9 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
     if ( nErrors > 0 )
     {
-        fprintf(stdout, "%s: detected %d errors%s",
-            options.getProgramName().getStr(), nErrors,
+        fprintf(stdout, "%s: detected %ld errors%s",
+            options.getProgramName().getStr(),
+            sal::static_int_cast< long >(nErrors),
             options.prepareVersion().getStr());
     } else
     {
