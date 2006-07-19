@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 12:02:32 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 15:01:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1067,8 +1067,8 @@ void ImplGetLogFontFromFontSelect( HDC hDC,
     }
 
     rLogFont.lfWeight          = ImplWeightToWin( pFont->meWeight );
-    rLogFont.lfHeight          = (int)-pFont->mnHeight;
-    rLogFont.lfWidth           = (int)pFont->mnWidth;
+    rLogFont.lfHeight          = (LONG)-pFont->mnHeight;
+    rLogFont.lfWidth           = (LONG)pFont->mnWidth;
     rLogFont.lfUnderline       = 0;
     rLogFont.lfStrikeOut       = 0;
     rLogFont.lfItalic          = (pFont->meItalic) != ITALIC_NONE;
@@ -1141,8 +1141,8 @@ static void ImplGetLogFontFromFontSelect( HDC hDC,
     }
 
     rLogFont.lfWeight           = ImplWeightToWin( pFont->meWeight );
-    rLogFont.lfHeight           = (int)-pFont->mnHeight;
-    rLogFont.lfWidth            = (int)pFont->mnWidth;
+    rLogFont.lfHeight           = (LONG)-pFont->mnHeight;
+    rLogFont.lfWidth            = (LONG)pFont->mnWidth;
     rLogFont.lfUnderline        = 0;
     rLogFont.lfStrikeOut        = 0;
     rLogFont.lfItalic           = (pFont->meItalic) != ITALIC_NONE;
@@ -1194,9 +1194,9 @@ USHORT WinSalGraphics::SetFont( ImplFontSelectData* pFont, int nFallbackLevel )
         // release no longer referenced font handles
         for( int i = nFallbackLevel; i < MAX_FALLBACK; ++i )
         {
-                if( mhFonts[i] )
-                    ::DeleteFont( mhFonts[i] );
-                mhFonts[ i ] = 0;
+            if( mhFonts[i] )
+                ::DeleteFont( mhFonts[i] );
+            mhFonts[ i ] = 0;
         }
         mhDefFont = 0;
         return 0;
@@ -1239,7 +1239,7 @@ USHORT WinSalGraphics::SetFont( ImplFontSelectData* pFont, int nFallbackLevel )
         {
             mfFontScale = -aLogFont.lfHeight / (float)MAXFONTHEIGHT;
             aLogFont.lfHeight = -MAXFONTHEIGHT;
-            aLogFont.lfWidth = static_cast<int>( aLogFont.lfWidth / mfFontScale );
+            aLogFont.lfWidth = static_cast<LONG>( aLogFont.lfWidth / mfFontScale );
         }
 
         hNewFont = ::CreateFontIndirectW( &aLogFont );
@@ -1286,7 +1286,7 @@ USHORT WinSalGraphics::SetFont( ImplFontSelectData* pFont, int nFallbackLevel )
         && (stricmp( aLogFont.lfFaceName, "Courier" ) == 0) )
             strncpy( aLogFont.lfFaceName, "Courier New", 11 );
 
-        // limit font requests to MAXFONTHEIGHT
+        // limit font requests to MAXFONTHEIGHT to work around driver problems
         // TODO: share MAXFONTHEIGHT font instance
         if( -aLogFont.lfHeight <= MAXFONTHEIGHT )
             mfFontScale = 1.0;
@@ -1294,7 +1294,7 @@ USHORT WinSalGraphics::SetFont( ImplFontSelectData* pFont, int nFallbackLevel )
         {
             mfFontScale = -aLogFont.lfHeight / (float)MAXFONTHEIGHT;
             aLogFont.lfHeight = -MAXFONTHEIGHT;
-            aLogFont.lfWidth = static_cast<int>( aLogFont.lfWidth / mfFontScale );
+            aLogFont.lfWidth = static_cast<LONG>( aLogFont.lfWidth / mfFontScale );
         }
 
         hNewFont = ::CreateFontIndirectA( &aLogFont );
@@ -2373,8 +2373,7 @@ BOOL WinSalGraphics::GetGlyphOutline( long nIndex,
     if( rB2DPolyPoly.count() )
     {
         ::basegfx::B2DHomMatrix aMatrix;
-        aMatrix.scale( 1.0/256, 1.0/256 );
-        aMatrix.scale( mfFontScale, mfFontScale );
+        aMatrix.scale( mfFontScale/256, mfFontScale/256 );
         rB2DPolyPoly.transform( aMatrix );
     }
 
