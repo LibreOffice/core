@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brwbox2.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 20:39:43 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 17:05:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2005,7 +2005,7 @@ void BrowseBox::Dispatch( USHORT nId )
                 BOOL bLocalSelect = ( !IsRowSelected( nRow ) ||
                                  GetSelectRowCount() == 1 || IsRowSelected( nRow + 1 ) );
                 SelectRow( nCurRow, bLocalSelect, TRUE );
-                if ( bDone = GoToRow( nRow - 1 , FALSE ) )
+                if ( (bDone = GoToRow( nRow - 1 , FALSE )) )
                     SelectRow( GetCurRow(), TRUE, TRUE );
             }
             break;
