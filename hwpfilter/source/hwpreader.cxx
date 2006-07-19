@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hwpreader.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:55:32 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 17:16:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -334,9 +334,10 @@ void HwpReader::makeMeta()
         }
         if( ISNUMBER( pDate[9 + gab] ) )
         {
-            if( ISNUMBER( pDate[10 + gab]))
-                day = ( pDate[9 + gab] - 0x30 ) * 10 + (pDate[9+ ++gab]-0x30);
-            else
+            if( ISNUMBER( pDate[10 + gab])) {
+                day = ( pDate[9 + gab] - 0x30 ) * 10 + (pDate[9+ gab + 1]-0x30);
+                ++gab;
+            } else
                 day = (pDate[9+gab]-0x30);
         }
         else {
@@ -344,9 +345,10 @@ void HwpReader::makeMeta()
         }
         if( ISNUMBER( pDate[17 + gab] ) )
         {
-            if( ISNUMBER( pDate[18 + gab]))
-                hour = ( pDate[17 + gab] - 0x30 ) * 10 + (pDate[17+ ++gab]-0x30);
-            else
+            if( ISNUMBER( pDate[18 + gab])) {
+                hour = ( pDate[17 + gab] - 0x30 ) * 10 + (pDate[17+ gab + 1]-0x30);
+                ++gab;
+            } else
                 hour = (pDate[17+gab]-0x30);
         }
         else {
@@ -354,9 +356,10 @@ void HwpReader::makeMeta()
         }
         if( ISNUMBER( pDate[20 + gab] ) )
         {
-            if( ISNUMBER( pDate[21 + gab]))
-                minute = ( pDate[20 + gab] - 0x30 ) * 10 + (pDate[20+ ++gab]-0x30);
-            else
+            if( ISNUMBER( pDate[21 + gab])) {
+                minute = ( pDate[20 + gab] - 0x30 ) * 10 + (pDate[20+ gab + 1]-0x30);
+                ++gab;
+            } else
                 minute = (pDate[20+gab]-0x30);
         }
         else {
