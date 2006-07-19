@@ -4,9 +4,9 @@
  *
  *  $RCSfile: keyimpl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 14:26:48 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 17:19:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1102,8 +1102,8 @@ RegError ORegKey::createLink(const OUString& linkName, const OUString& linkTarge
         }
     }
 
-    if (_ret = pKey->setValue(OUString( RTL_CONSTASCII_USTRINGPARAM("LINK_TARGET") ),
-                              RG_VALUETYPE_UNICODE, (RegValue)linkTarget.getStr(), (linkTarget.getLength()+1)*2))
+    if ((_ret = pKey->setValue(OUString( RTL_CONSTASCII_USTRINGPARAM("LINK_TARGET") ),
+                              RG_VALUETYPE_UNICODE, (RegValue)linkTarget.getStr(), (linkTarget.getLength()+1)*2)))
     {
         m_pRegistry->closeKey(pKey);
         _ret = m_pRegistry->deleteKey(this, linkName);
