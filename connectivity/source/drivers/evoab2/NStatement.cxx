@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NStatement.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:26:12 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 09:35:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,8 +94,8 @@ OStatement_Base::OStatement_Base(OEvoabConnection* _pConnection)
       m_xResultSet(NULL),
       m_pResultSet(NULL),
       m_pParseTree(NULL),
-      m_aSQLIterator(_pConnection->createCatalog()->getTables(), _pConnection->getMetaData(), NULL),
-      m_aParser(_pConnection->getDriver()->getMSFactory())
+      m_aParser(_pConnection->getDriver()->getMSFactory()),
+      m_aSQLIterator(_pConnection, _pConnection->createCatalog()->getTables(), m_aParser, NULL)
 {
     m_pConnection->acquire();
 }
