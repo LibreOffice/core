@@ -4,9 +4,9 @@
  *
  *  $RCSfile: YTables.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:30:53 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 15:53:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -197,8 +197,8 @@ void OTables::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
         ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("DROP ");
 
         Reference<XPropertySet> xProp(xObject,UNO_QUERY);
-        sal_Bool bIsView;
-        if(bIsView = (xProp.is() && ::comphelper::getString(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))) == ::rtl::OUString::createFromAscii("VIEW"))) // here we have a view
+        sal_Bool bIsView = xProp.is() && ::comphelper::getString(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))) == ::rtl::OUString::createFromAscii("VIEW");
+        if(bIsView) // here we have a view
             aSql += ::rtl::OUString::createFromAscii("VIEW ");
         else
             aSql += ::rtl::OUString::createFromAscii("TABLE ");
