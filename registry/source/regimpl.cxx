@@ -4,9 +4,9 @@
  *
  *  $RCSfile: regimpl.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 14:27:52 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 17:19:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1825,12 +1825,14 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
         case 1:
             {
                 fprintf(stdout, "%sValue: Type = RG_VALUETYPE_LONG\n", indent);
-                fprintf(stdout, "%s       Size = %d\n", indent, valueSize);
+                fprintf(
+                    stdout, "%s       Size = %lu\n", indent,
+                    sal::static_int_cast< unsigned long >(valueSize));
                 fprintf(stdout, "%s       Data = ", indent);
 
                 sal_Int32 value;
                 readINT32(pBuffer, value);
-                fprintf(stdout, "%d\n", value);
+                fprintf(stdout, "%ld\n", sal::static_int_cast< long >(value));
             }
             break;
         case 2:
@@ -1845,7 +1847,9 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
                 } else
                 {
                     fprintf(stdout, "%sValue: Type = RG_VALUETYPE_STRING\n", indent);
-                    fprintf(stdout, "%s       Size = %d\n", indent, valueSize);
+                    fprintf(
+                        stdout, "%s       Size = %lu\n", indent,
+                        sal::static_int_cast< unsigned long >(valueSize));
                     fprintf(stdout, "%s       Data = \"%s\"\n", indent, value);
                 }
 
@@ -1856,7 +1860,9 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
             {
                 sal_uInt32 size = (valueSize / 2) * sizeof(sal_Unicode);
                 fprintf(stdout, "%sValue: Type = RG_VALUETYPE_UNICODE\n", indent);
-                fprintf(stdout, "%s       Size = %d\n", indent, valueSize);
+                fprintf(
+                    stdout, "%s       Size = %lu\n", indent,
+                    sal::static_int_cast< unsigned long >(valueSize));
                 fprintf(stdout, "%s       Data = ", indent);
 
                 sal_Unicode* value = new sal_Unicode[size];
@@ -1870,7 +1876,9 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
         case 4:
             {
                 fprintf(stdout, "%sValue: Type = RG_VALUETYPE_BINARY\n", indent);
-                fprintf(stdout, "%s       Size = %d\n", indent, valueSize);
+                fprintf(
+                    stdout, "%s       Size = %lu\n", indent,
+                    sal::static_int_cast< unsigned long >(valueSize));
                 fprintf(stdout, "%s       Data = ", indent);
                 dumpType(
                     typereg::Reader(
@@ -1886,8 +1894,12 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
                 readUINT32(pBuffer, len);
 
                 fprintf(stdout, "%sValue: Type = RG_VALUETYPE_LONGLIST\n", indent);
-                fprintf(stdout, "%s       Size = %d\n", indent, valueSize);
-                fprintf(stdout, "%s       Len  = %d\n", indent, len);
+                fprintf(
+                    stdout, "%s       Size = %lu\n", indent,
+                    sal::static_int_cast< unsigned long >(valueSize));
+                fprintf(
+                    stdout, "%s       Len  = %lu\n", indent,
+                    sal::static_int_cast< unsigned long >(len));
                 fprintf(stdout, "%s       Data = ", indent);
 
                 sal_Int32 longValue;
@@ -1898,7 +1910,10 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
                     if (offset > 4)
                         fprintf(stdout, "%s              ", indent);
 
-                    fprintf(stdout, "%d = %d\n", i, longValue);
+                    fprintf(
+                        stdout, "%lu = %ld\n",
+                        sal::static_int_cast< unsigned long >(i),
+                        sal::static_int_cast< long >(longValue));
                     offset += 4; // 4 Bytes fuer sal_Int32
                 }
             }
@@ -1912,8 +1927,12 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
                 readUINT32(pBuffer, len);
 
                 fprintf(stdout, "%sValue: Type = RG_VALUETYPE_STRINGLIST\n", indent);
-                fprintf(stdout, "%s       Size = %d\n", indent, valueSize);
-                fprintf(stdout, "%s       Len  = %d\n", indent, len);
+                fprintf(
+                    stdout, "%s       Size = %lu\n", indent,
+                    sal::static_int_cast< unsigned long >(valueSize));
+                fprintf(
+                    stdout, "%s       Len  = %lu\n", indent,
+                    sal::static_int_cast< unsigned long >(len));
                 fprintf(stdout, "%s       Data = ", indent);
 
                 sal_Char *pValue;
@@ -1929,7 +1948,9 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
                     if (offset > 8)
                         fprintf(stdout, "%s              ", indent);
 
-                    fprintf(stdout, "%d = \"%s\"\n", i, pValue);
+                    fprintf(
+                        stdout, "%lu = \"%s\"\n",
+                        sal::static_int_cast< unsigned long >(i), pValue);
                     offset += sLen;
                 }
             }
@@ -1943,8 +1964,12 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
                 readUINT32(pBuffer, len);
 
                 fprintf(stdout, "%sValue: Type = RG_VALUETYPE_UNICODELIST\n", indent);
-                fprintf(stdout, "%s       Size = %d\n", indent, valueSize);
-                fprintf(stdout, "%s       Len  = %d\n", indent, len);
+                fprintf(
+                    stdout, "%s       Size = %lu\n", indent,
+                    sal::static_int_cast< unsigned long >(valueSize));
+                fprintf(
+                    stdout, "%s       Len  = %lu\n", indent,
+                    sal::static_int_cast< unsigned long >(len));
                 fprintf(stdout, "%s       Data = ", indent);
 
                 sal_Unicode *pValue;
@@ -1962,7 +1987,10 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
                         fprintf(stdout, "%s              ", indent);
 
                     uStr = OUStringToOString(pValue, RTL_TEXTENCODING_UTF8);
-                    fprintf(stdout, "%d = L\"%s\"\n", i, uStr.getStr());
+                    fprintf(
+                        stdout, "%lu = L\"%s\"\n",
+                        sal::static_int_cast< unsigned long >(i),
+                        uStr.getStr());
 
                     offset += sLen;
 
