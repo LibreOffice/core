@@ -4,9 +4,9 @@
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:17:33 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 15:54:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1266,9 +1266,12 @@ ImageCachedPrimitiveSharedPtr Image::fillTexturedPolyPolygonImpl(
                             BYTE b(*pSrc++);
                             BYTE Alpha(*pSrc++);
                             BYTE OneMinusAlpha(0xFF-Alpha);
-                            *pDst++=(((r*Alpha)+((*pDst)*OneMinusAlpha))/0xFF);
-                            *pDst++=(((g*Alpha)+((*pDst)*OneMinusAlpha))/0xFF);
-                            *pDst++=(((b*Alpha)+((*pDst)*OneMinusAlpha))/0xFF);
+                            *pDst=(((r*Alpha)+((*pDst)*OneMinusAlpha))/0xFF);
+                            ++pDst;
+                            *pDst=(((g*Alpha)+((*pDst)*OneMinusAlpha))/0xFF);
+                            ++pDst;
+                            *pDst=(((b*Alpha)+((*pDst)*OneMinusAlpha))/0xFF);
+                            ++pDst;
                         }
                         pSrcBuffer += dwSrcPitch;
                         pDstBuffer += dwDstPitch;
