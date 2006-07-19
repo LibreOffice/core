@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statcach.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:18:59 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 17:18:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,7 +129,7 @@ void SAL_CALL  BindDispatch_Impl::statusChanged( const ::com::sun::star::frame::
     {
         SfxPoolItem *pItem=NULL;
         sal_uInt16 nId = pCache->GetId();
-        SfxItemState eState = eState = SFX_ITEM_DISABLED;
+        SfxItemState eState = SFX_ITEM_DISABLED;
         // pCache->Invalidate( sal_False );
         if ( !aStatus.IsEnabled )
         {
@@ -143,13 +143,13 @@ void SAL_CALL  BindDispatch_Impl::statusChanged( const ::com::sun::star::frame::
             ::com::sun::star::uno::Type pType = aAny.getValueType();
             if ( pType == ::getBooleanCppuType() )
             {
-                sal_Bool bTemp ;
+                sal_Bool bTemp = false;
                 aAny >>= bTemp ;
                 pItem = new SfxBoolItem( nId, bTemp );
             }
             else if ( pType == ::getCppuType((const sal_uInt16*)0) )
             {
-                sal_uInt16 nTemp ;
+                sal_uInt16 nTemp = 0;
                 aAny >>= nTemp ;
                 pItem = new SfxUInt16Item( nId, nTemp );
             }
