@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NeonUri.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:37:31 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 09:36:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,9 +59,15 @@ using namespace webdav_ucp;
 // the string fields of ne_uri are char*, not const char*
 # pragma disable_warn
 # endif
+#if NEON_VERSION >= 0260
+ne_uri NeonUri::sUriDefaultsHTTP  = { "http",  NULL, NULL, DEFAULT_HTTP_PORT };
+ne_uri NeonUri::sUriDefaultsHTTPS = { "https", NULL, NULL, DEFAULT_HTTPS_PORT };
+ne_uri NeonUri::sUriDefaultsFTP   = { "ftp",   NULL, NULL, DEFAULT_FTP_PORT };
+#else
 ne_uri NeonUri::sUriDefaultsHTTP  = { "http",  NULL, DEFAULT_HTTP_PORT,  NULL, NULL };
 ne_uri NeonUri::sUriDefaultsHTTPS = { "https", NULL, DEFAULT_HTTPS_PORT, NULL, NULL };
 ne_uri NeonUri::sUriDefaultsFTP   = { "ftp",   NULL, DEFAULT_FTP_PORT,   NULL, NULL };
+#endif
 # if defined __SUNPRO_CC
 # pragma enable_warn
 #endif
@@ -140,7 +146,11 @@ void NeonUri::init( const rtl::OString & rUri, const ne_uri * pUri )
                     pUri->scheme ? pUri->scheme : pUriDefs->scheme,
                     RTL_TEXTENCODING_UTF8 );
     mUserInfo = rtl::OStringToOUString(
+#if NEON_VERSION >= 0260
+                    pUri->userinfo ? pUri->userinfo : pUriDefs->userinfo,
+#else
                     pUri->authinfo ? pUri->authinfo : pUriDefs->authinfo,
+#endif
                     RTL_TEXTENCODING_UTF8 );
     mHostName = rtl::OStringToOUString(
                     pUri->host ? pUri->host : pUriDefs->host,
