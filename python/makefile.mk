@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: hr $ $Date: 2005-12-28 16:57:47 $
+#   last change: $Author: kz $ $Date: 2006-07-19 09:37:08 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -79,11 +79,6 @@ PYADDITIONAL_PROJECTS = \
     make_versioninfo	\
     bz2			\
     _tkinter		\
-    _testcapi		\
-    _symtable		\
-    _sre			\
-    _socket			\
-    _csv			\
     _bsddb			\
     pythoncore
 
