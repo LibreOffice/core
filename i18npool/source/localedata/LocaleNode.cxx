@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LocaleNode.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:47:00 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:30:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -269,15 +269,17 @@ void LocaleNode :: generateCode (const OFileWriter &of) const
     if (nLen < nMinLen)
     {
         ++nError;
-        fprintf( stderr, "Error: less than %d character%s (%d) in %s '%s'.\n",
-                nMinLen, (nMinLen > 1 ? "s" : ""), nLen,
+        fprintf( stderr, "Error: less than %ld character%s (%ld) in %s '%s'.\n",
+                sal::static_int_cast< long >(nMinLen), (nMinLen > 1 ? "s" : ""),
+                sal::static_int_cast< long >(nLen),
                 (pNode ? OUStringToOString( pNode->getName(), RTL_TEXTENCODING_UTF8).getStr() : ""),
                 OUStringToOString( aVal, RTL_TEXTENCODING_UTF8).getStr());
     }
     else if (nLen > nMaxLen && nMaxLen >= 0)
         fprintf( stderr,
-                "Warning: more than %d character%s (%d) in %s %s not supported by application.\n",
-                nMaxLen, (nMaxLen > 1 ? "s" : ""), nLen,
+                "Warning: more than %ld character%s (%ld) in %s %s not supported by application.\n",
+                sal::static_int_cast< long >(nMaxLen), (nMaxLen > 1 ? "s" : ""),
+                sal::static_int_cast< long >(nLen),
                 (pNode ? OUStringToOString( pNode->getName(), RTL_TEXTENCODING_UTF8).getStr() : ""),
                 OUStringToOString( aVal, RTL_TEXTENCODING_UTF8).getStr());
     return aVal;
@@ -789,7 +791,9 @@ void LCSearchNode::generateCode (const OFileWriter &of) const
     if( getNumberOfChildren() != 1 )
     {
         ++nError;
-        fprintf( stderr, "Error: LC_SEARCH: more than 1 child: %d\n", getNumberOfChildren());
+        fprintf(
+            stderr, "Error: LC_SEARCH: more than 1 child: %ld\n",
+            sal::static_int_cast< long >(getNumberOfChildren()));
     }
     sal_Int32 i;
     LocaleNode* pSearchOptions = getChildAt( 0 );
