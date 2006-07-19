@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menubarmanager.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 11:39:09 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 13:35:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1647,8 +1647,8 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, Reference< XFrame >& rFrame, 
             pMenu->SetItemCommand( nItemId, aItemCommand );
         }
 
-        if (( pMenu->IsMenuBar() && ( pMenu->GetItemText( nItemId ).Len() == 0 )) ||
-            bAccessibilityEnabled )
+        if (( pMenu->IsMenuBar() || bAccessibilityEnabled ) &&
+            ( pMenu->GetItemText( nItemId ).Len() == 0 ))
         {
             if ( aItemCommand.getLength() > 0 )
                 pMenu->SetItemText( nItemId, RetrieveLabelFromCommand( aItemCommand ));
