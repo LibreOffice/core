@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:49:20 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:40:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2765,7 +2765,7 @@ void XMLTextFieldExport::ProcessBibliographyData(
         if (aValues[i].Name.equalsAsciiL("BibiliographicType",
                                          sizeof("BibiliographicType")-1))
         {
-            sal_Int16 nTypeId;
+            sal_Int16 nTypeId = 0;
             aValues[i].Value >>= nTypeId;
             OUStringBuffer sBuf;
 
