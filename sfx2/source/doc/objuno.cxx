@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objuno.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 13:29:00 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 17:18:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -859,7 +859,7 @@ void SAL_CALL  SfxDocumentInfoObject::setFastPropertyValue(sal_Int32 nHandle, co
     }
     else if ( _pInfo && aValue.getValueType() == ::getBooleanCppuType() )
     {
-        sal_Bool bBoolVal ;
+        sal_Bool bBoolVal = false;
         aValue >>= bBoolVal ;
         switch ( nHandle )
         {
@@ -890,7 +890,7 @@ void SAL_CALL  SfxDocumentInfoObject::setFastPropertyValue(sal_Int32 nHandle, co
     }
     else if ( _pInfo && aValue.getValueType() == ::getCppuType((const sal_Int16*)0) )
     {
-        short nIntVal ;
+        short nIntVal = 0;
         aValue >>= nIntVal ;
         switch ( nHandle )
         {
