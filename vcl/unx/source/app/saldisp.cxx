@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-14 08:57:22 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:52:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2620,7 +2620,7 @@ void SalDisplay::PrintEvent( const ByteString &rComment,
 
             case ReparentNotify:
                 fprintf( stderr, "\t\tp=%d x=%d y=%d\n",
-                         pEvent->xreparent.parent,
+                         sal::static_int_cast< int >(pEvent->xreparent.parent),
                          pEvent->xreparent.x,
                          pEvent->xreparent.y );
                 break;
@@ -2637,7 +2637,8 @@ void SalDisplay::PrintEvent( const ByteString &rComment,
             case PropertyNotify:
                 fprintf( stderr, "\t\ta=%s (0x%X)\n",
                          GetAtomName( pDisp_, pEvent->xproperty.atom ),
-                         pEvent->xproperty.atom );
+                         sal::static_int_cast< unsigned int >(
+                             pEvent->xproperty.atom) );
                 break;
 
             case ColormapNotify:
@@ -2650,7 +2651,8 @@ void SalDisplay::PrintEvent( const ByteString &rComment,
             case ClientMessage:
                 fprintf( stderr, "\t\ta=%s (0x%X) f=%i [0x%lX,0x%lX,0x%lX,0x%lX,0x%lX])\n",
                          GetAtomName( pDisp_, pEvent->xclient.message_type ),
-                         pEvent->xclient.message_type,
+                         sal::static_int_cast< unsigned int >(
+                             pEvent->xclient.message_type),
                          pEvent->xclient.format,
                          pEvent->xclient.data.l[0],
                          pEvent->xclient.data.l[1],
@@ -2719,7 +2721,7 @@ void SalDisplay::PrintInfo() const
                  ProtocolVersion(pDisp_), ProtocolRevision(pDisp_) );
         fprintf( stderr, "\tScreen (count,def)\t%d (%d,%d)\n",
                  nScreen_, ScreenCount(pDisp_), DefaultScreen(pDisp_) );
-        fprintf( stderr, "\tshift ctrl alt    \t%s (0x%X) %s (0x%X) %s (0x%X)\n",
+        fprintf( stderr, "\tshift ctrl alt    \t%s (0x%lX) %s (0x%lX) %s (0x%lX)\n",
                  KeyStr( nShiftKeySym_ ), nShiftKeySym_,
                  KeyStr( nCtrlKeySym_ ),  nCtrlKeySym_,
                  KeyStr( nMod1KeySym_ ),  nMod1KeySym_ );
@@ -2732,7 +2734,7 @@ void SalDisplay::PrintInfo() const
             fprintf( stderr, "\tWindowmanager     \t%d\n", eWindowManager_ );
     }
     fprintf( stderr, "Screen\n" );
-    fprintf( stderr, "\tResolution/Size   \t%d*%d %d*%d %.1lf\"\n",
+    fprintf( stderr, "\tResolution/Size   \t%ld*%ld %ld*%ld %.1lf\"\n",
              aResolution_.A(), aResolution_.B(),
              aSize_.Width(), aSize_.Height(),
              Hypothenuse( DisplayWidthMM ( pDisp_, nScreen_ ),
@@ -2744,12 +2746,13 @@ void SalDisplay::PrintInfo() const
     fprintf( stderr, "\tVisual            \t%d-bit %s ID=0x%x\n",
              pVisual_->GetDepth(),
              VisualClassName[ pVisual_->GetClass() ],
-             pVisual_->GetVisualId() );
+             sal::static_int_cast< unsigned int >(pVisual_->GetVisualId()) );
     if( pVisual_ != pRootVisual_ )
         fprintf( stderr, "\tRoot visual       \t%d-bit %s ID=0x%x\n",
                  pRootVisual_->GetDepth(),
                  VisualClassName[ pRootVisual_->GetClass() ],
-                 pRootVisual_->GetVisualId() );
+                 sal::static_int_cast< unsigned int >(
+                     pRootVisual_->GetVisualId()) );
 }
 
 void SalDisplay::GetScreenFontResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) const
