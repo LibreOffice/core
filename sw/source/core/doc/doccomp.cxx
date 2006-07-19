@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doccomp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:10:21 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 09:32:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1378,10 +1378,8 @@ void SwCompareData::ShowInsert( ULONG nStt, ULONG nEnd )
     if( !pInsRing )
         pInsRing = pTmp;
 
-// vom Anfang des 1. Absatzes (1. Buchstabe) bis
-// zum letzten Absatz (letzter Buchstabe!)
-    pTmp->GetPoint()->nNode++;
-    pTmp->GetPoint()->nContent.Assign( pTmp->GetCntntNode(), 0 );
+    // #i65201#: These SwPaMs are calculated smaller than needed, see comment below
+
 }
 
 void SwCompareData::ShowDelete( const CompareData& rData, ULONG nStt,
@@ -1422,8 +1420,12 @@ void SwCompareData::ShowDelete( const CompareData& rData, ULONG nStt,
     rDoc.SetModified();
     aSavePos++;
 
-    SwPaM* pTmp = new SwPaM( aSavePos.GetNode(), aInsPos.GetNode(), 0, 0,
-                                pDelRing );
+    // #i65201#: These SwPaMs are calculated when the (old) delete-redlines are hidden,
+    // they will be inserted when the delete-redlines are shown again.
+    // To avoid unwanted insertions of delete-redlines into these new redlines, what happens
+    // especially at the end of the document, I reduce the SwPaM by one node.
+    // Before the new redlines are inserted, they have to expand again.
+    SwPaM* pTmp = new SwPaM( aSavePos.GetNode(), aInsPos.GetNode(), 0, -1, pDelRing );
     if( !pDelRing )
         pDelRing = pTmp;
 
@@ -1431,7 +1433,10 @@ void SwCompareData::ShowDelete( const CompareData& rData, ULONG nStt,
     {
         SwPaM* pCorr = (SwPaM*)pInsRing->GetPrev();
         if( *pCorr->GetPoint() == *pTmp->GetPoint() )
-            *pCorr->GetPoint() = *pTmp->GetMark();
+        {
+            SwNodeIndex aTmpPos( pTmp->GetMark()->nNode, -1 );
+            *pCorr->GetPoint() = SwPosition( aTmpPos, 0 );
+        }
     }
 }
 
@@ -1477,6 +1482,13 @@ void SwCompareData::SetRedlinesToDoc( BOOL bUseDocInfo, const SwDoc& rSrcDoc )
         SwRedlineData aRedlnData( REDLINE_DELETE, nAuthor, aTimeStamp,
                                     aEmptyStr, 0, 0 );
         do {
+            // #i65201#: Expand again, see comment above.
+            if( pTmp->GetPoint()->nContent == 0 )
+            {
+                pTmp->GetPoint()->nNode++;
+                pTmp->GetPoint()->nContent.Assign( pTmp->GetCntntNode(), 0 );
+            }
+
             rDoc.DeleteRedline( *pTmp, FALSE );
 
             if( rDoc.DoesUndo() )
@@ -1489,6 +1501,13 @@ void SwCompareData::SetRedlinesToDoc( BOOL bUseDocInfo, const SwDoc& rSrcDoc )
     pTmp = pInsRing;
     if( pTmp )
     {
+        do {
+            if( pTmp->GetPoint()->nContent == 0 )
+            {
+                pTmp->GetPoint()->nNode++;
+                pTmp->GetPoint()->nContent.Assign( pTmp->GetCntntNode(), 0 );
+            }
+        } while( pInsRing != ( pTmp = (SwPaM*)pTmp->GetNext() ));
         SwRedlineData aRedlnData( REDLINE_INSERT, nAuthor, aTimeStamp,
                                     aEmptyStr, 0, 0 );
 
