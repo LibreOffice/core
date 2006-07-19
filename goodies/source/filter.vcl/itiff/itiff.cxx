@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itiff.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 21:49:04 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 17:13:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,9 +50,16 @@
 
 #define OOODEBUG(str,Num) //(InfoBox(NULL,String(str)+String(" ")+String(Num)).Execute();
 
-#define BYTESWAP( nByte ) ( nByte << 7 ) | ( ( nByte & 2 ) << 5 ) | ( ( nByte & 4 ) << 3 ) | ( ( nByte & 8 ) << 1 ) | \
-        ( ( nByte & 16 ) >> 1 ) | ( ( nByte & 32 ) >> 3 ) | ( ( nByte & 64 ) >> 5 ) | ( ( nByte & 128 ) >> 7 )
+namespace {
 
+template< typename T > T BYTESWAP(T nByte) {
+    return ( nByte << 7 ) | ( ( nByte & 2 ) << 5 ) | ( ( nByte & 4 ) << 3 ) |
+        ( ( nByte & 8 ) << 1 ) | ( ( nByte & 16 ) >> 1 ) |
+        ( ( nByte & 32 ) >> 3 ) | ( ( nByte & 64 ) >> 5 ) |
+        ( ( nByte & 128 ) >> 7 );
+}
+
+}
 
 //============================ TIFFReader ==================================
 
