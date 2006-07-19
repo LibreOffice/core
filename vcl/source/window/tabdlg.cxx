@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabdlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:41:09 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:48:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -177,12 +177,12 @@ void TabDialog::ImplPosControls()
         if ( nCtrlBarWidth <= (aTabSize.Width()+nBtnEx) )
             nX = (aTabSize.Width()+nBtnEx) - nCtrlBarWidth + IMPL_DIALOG_OFFSET;
 
-        pChild = pChild = GetWindow( WINDOW_FIRSTCHILD );
-        while ( pChild )
+        Window* pChild2 = GetWindow( WINDOW_FIRSTCHILD );
+        while ( pChild2 )
         {
-            if ( pChild->IsVisible() && (pChild != mpViewWindow) )
+            if ( pChild2->IsVisible() && (pChild2 != mpViewWindow) )
             {
-                if ( pChild == pTabControl )
+                if ( pChild2 == pTabControl )
                     bTabCtrl = TRUE;
                 else if ( bTabCtrl )
                 {
@@ -196,18 +196,18 @@ void TabDialog::ImplPosControls()
                         nLines++;
                     }
 
-                    pChild->SetPosSizePixel( Point( nX, nY ), aCtrlSize );
+                    pChild2->SetPosSizePixel( Point( nX, nY ), aCtrlSize );
                     nX += aCtrlSize.Width()+IMPL_DIALOG_OFFSET;
                 }
                 else
                 {
-                    Size aChildSize = pChild->GetSizePixel();
-                    pChild->SetPosPixel( Point( nTopX, (nOffY-aChildSize.Height())/2 ) );
+                    Size aChildSize = pChild2->GetSizePixel();
+                    pChild2->SetPosPixel( Point( nTopX, (nOffY-aChildSize.Height())/2 ) );
                     nTopX += aChildSize.Width()+2;
                 }
             }
 
-            pChild = pChild->GetWindow( WINDOW_NEXT );
+            pChild2 = pChild2->GetWindow( WINDOW_NEXT );
         }
 
         aDlgSize.Height() += nLines * (aCtrlSize.Height()+IMPL_DIALOG_OFFSET);
