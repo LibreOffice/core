@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registry.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 14:28:18 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 17:20:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -203,7 +203,7 @@ static RegError REGISTRY_CALLTYPE createRegistry(rtl_uString* registryName,
     RegError ret;
 
     ORegistry* pReg = new ORegistry();
-    if (ret = pReg->initRegistry(registryName, REG_CREATE))
+    if ((ret = pReg->initRegistry(registryName, REG_CREATE)))
     {
         *phRegistry = NULL;
         return ret;
@@ -249,7 +249,7 @@ static RegError REGISTRY_CALLTYPE openRegistry(rtl_uString* registryName,
     RegError _ret;
 
     ORegistry* pReg = new ORegistry();
-    if (_ret = pReg->initRegistry(registryName, accessMode))
+    if ((_ret = pReg->initRegistry(registryName, accessMode)))
     {
         *phRegistry = NULL;
         delete pReg;
@@ -365,10 +365,10 @@ static RegError REGISTRY_CALLTYPE loadKey(RegHandle hReg,
         pKey->deleteKey(keyName);
     }
 
-    if (_ret = pKey->createKey(keyName, (RegKeyHandle*)&pNewKey))
+    if ((_ret = pKey->createKey(keyName, (RegKeyHandle*)&pNewKey)))
         return _ret;
 
-    if (_ret = pReg->loadKey(pNewKey, regFileName))
+    if ((_ret = pReg->loadKey(pNewKey, regFileName)))
     {
         pKey->closeKey(pNewKey);
         pKey->deleteKey(keyName);
@@ -411,10 +411,10 @@ static RegError REGISTRY_CALLTYPE saveKey(RegHandle hReg,
         return REG_INVALID_KEY;
     }
 
-    if (_ret = pKey->openKey(keyName, (RegKeyHandle*)&pNewKey))
+    if ((_ret = pKey->openKey(keyName, (RegKeyHandle*)&pNewKey)))
         return _ret;
 
-    if (_ret = pReg->saveKey(pNewKey, regFileName))
+    if ((_ret = pReg->saveKey(pNewKey, regFileName)))
     {
         pKey->closeKey(pNewKey);
         return _ret;
@@ -463,7 +463,7 @@ static RegError REGISTRY_CALLTYPE mergeKey(RegHandle hReg,
 
     if (keyName->length)
     {
-        if (_ret = pKey->createKey(keyName, (RegKeyHandle*)&pNewKey) )
+        if ((_ret = pKey->createKey(keyName, (RegKeyHandle*)&pNewKey) ))
             return _ret;
     } else
     {
@@ -656,7 +656,7 @@ RegError REGISTRY_CALLTYPE reg_createRegistry(rtl_uString* registryName,
     RegError ret;
 
     ORegistry* pReg = new ORegistry();
-    if (ret = pReg->initRegistry(registryName, REG_CREATE))
+    if ((ret = pReg->initRegistry(registryName, REG_CREATE)))
     {
         *phRegistry = NULL;
         return ret;
@@ -705,7 +705,7 @@ RegError REGISTRY_CALLTYPE reg_openRegistry(rtl_uString* registryName,
     RegError _ret;
 
     ORegistry* pReg = new ORegistry();
-    if (_ret = pReg->initRegistry(registryName, accessMode))
+    if ((_ret = pReg->initRegistry(registryName, accessMode)))
     {
         *phRegistry = NULL;
         return _ret;
