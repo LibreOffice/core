@@ -4,9 +4,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:09:00 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:24:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,7 +131,7 @@ public:
 
     // friend functions
     friend FileStream &operator<<(FileStream& o, sal_uInt32 i)
-        {   fprintf(o.m_pFile, "%d", i);
+        {   fprintf(o.m_pFile, "%lu", sal::static_int_cast< unsigned long >(i));
             return o;
         }
     friend FileStream &operator<<(FileStream& o, char const * s)
