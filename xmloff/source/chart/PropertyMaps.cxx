@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyMaps.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:00:40 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:34:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -271,7 +271,7 @@ void XMLChartExportPropertyMapper::ContextFilter(
             case XML_SCH_CONTEXT_SPECIAL_STEP_HELP:
             {
                 // do auto-check directly
-                sal_Bool bAuto;
+                sal_Bool bAuto = false;
                 uno::Any aAny = rPropSet->getPropertyValue( ::rtl::OUString::createFromAscii( "AutoStepHelp" ) );
                 aAny >>= bAuto;
                 if( bAuto )
@@ -308,7 +308,7 @@ void XMLChartExportPropertyMapper::ContextFilter(
             {
                 try
                 {
-                    sal_Bool bAuto;
+                    sal_Bool bAuto = false;
                     uno::Any aAny = rPropSet->getPropertyValue( aAutoPropName );
                     aAny >>= bAuto;
                     if( bAuto )
