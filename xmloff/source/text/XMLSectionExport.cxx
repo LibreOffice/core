@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLSectionExport.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:43:36 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:39:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1049,7 +1049,7 @@ void XMLSectionExport::ExportTableAndIllustrationIndexSourceAttributes(
 
     // caption format
     aAny = rPropertySet->getPropertyValue(sLabelDisplayType);
-    sal_Int16 nType;
+    sal_Int16 nType = 0;
     aAny >>= nType;
     GetExport().AddAttribute(XML_NAMESPACE_TEXT,
                              XML_CAPTION_SEQUENCE_FORMAT,
@@ -1338,11 +1338,11 @@ void XMLSectionExport::ExportIndexTemplateElement(
     sal_Bool bFillCharOK = sal_False;
 
     // chapter format
-    sal_Int16 nChapterFormat;
+    sal_Int16 nChapterFormat = 0;
     sal_Bool bChapterFormatOK = sal_False;
 
     // Bibliography Data
-    sal_Int16 nBibliographyData;
+    sal_Int16 nBibliographyData = 0;
     sal_Bool bBibliographyDataOK = sal_False;
 
     // With Tab Stop #i21237#
@@ -1738,7 +1738,7 @@ void XMLSectionExport::ExportBibliographyConfiguration(SvXMLExport& rExport)
                     if (rValue.Name.equalsAsciiL(sAPI_SortKey,
                                                  sizeof(sAPI_SortKey)-1))
                     {
-                        sal_Int16 nKey;
+                        sal_Int16 nKey = 0;
                         rValue.Value >>= nKey;
                         OUStringBuffer sBuf;
                         if (SvXMLUnitConverter::convertEnum( sBuf, nKey,
