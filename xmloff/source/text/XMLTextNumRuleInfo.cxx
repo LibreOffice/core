@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLTextNumRuleInfo.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:24:53 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:39:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,7 +165,7 @@ void XMLTextNumRuleInfo::Set(
 
             if( rProp.Name == sNumberingType )
             {
-                sal_Int16 nType;
+                sal_Int16 nType = 0;
                 rProp.Value >>= nType;
                 if( NumberingType::CHAR_SPECIAL != nType &&
                     NumberingType::BITMAP != nType )
