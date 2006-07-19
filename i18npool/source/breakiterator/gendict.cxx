@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gendict.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:42:18 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:27:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,7 +161,10 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                 break;
             }
             prev = charArray[(i*0x100) + j];
-            fprintf(cfp, "0x%x, ", k < 0x10000 ? charArray[k] + 1 : 0);
+            fprintf(
+                cfp, "0x%lx, ",
+                sal::static_int_cast< unsigned long >(
+                    k < 0x10000 ? charArray[k] + 1 : 0));
             if ((j+1) % 0x10 == 0)
             fprintf (cfp, "\n\t");
         }
