@@ -3183,7 +3183,7 @@ echo "${ECHO_T}$USE_SHELL" >&6
 
 
 
-if test "$with_use_shell" == "tcsh"; then
+if test "$with_use_shell" = "tcsh"; then
    # Extract the first word of "tcsh", so it can be a program name with args.
 set dummy tcsh; ac_word=$2
 echo "$as_me:$LINENO: checking for $ac_word" >&5
@@ -3230,7 +3230,7 @@ echo "$as_me: error: tcsh not found in \$PATH" >&2;}
    else
       SHELLPATH=`echo $SHELLPATH | $SED -n "s/\/tcsh$//p"`
    fi
-elif test "$with_use_shell" == "bash"; then
+elif test "$with_use_shell" = "bash"; then
    # Extract the first word of "bash", so it can be a program name with args.
 set dummy bash; ac_word=$2
 echo "$as_me:$LINENO: checking for $ac_word" >&5
