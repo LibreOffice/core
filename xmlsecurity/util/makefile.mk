@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 17:46:21 $
+#   last change: $Author: kz $ $Date: 2006-07-19 09:39:08 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -107,6 +107,15 @@ SHL2STDLIBS +=			\
     $(COMPHELPERLIB)	\
     $(CPPUHELPERLIB)	\
     $(XMLOFFLIB)
+
+.IF "$(SYSTEM_MOZILLA)" == "YES"
+.IF "$(NSPR_LIB)" != ""
+SHL2STDLIBS += $(NSPR_LIB)
+.ENDIF
+.IF "$(NSS_LIB)" != ""
+SHL2STDLIBS += $(NSS_LIB)
+.ENDIF
+.ENDIF
 
 .IF "$(CRYPTO_ENGINE)" == "mscrypto"
 SHL2STDLIBS+= $(MSCRYPTOLIBS)
