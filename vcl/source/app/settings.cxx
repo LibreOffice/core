@@ -4,9 +4,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 10:23:05 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 14:58:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -569,6 +569,7 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     mnUseFlatMenues             = rData.mnUseFlatMenues;
     mnAutoMnemonic              = rData.mnAutoMnemonic;
     mnUseImagesInMenus          = rData.mnUseImagesInMenus;
+    mnSkipDisabledInMenus       = rData.mnSkipDisabledInMenus;
     mnToolbarIconSize           = rData.mnToolbarIconSize;
     mnSymbolsStyle              = rData.mnSymbolsStyle;
 }
@@ -657,6 +658,7 @@ void ImplStyleData::SetStandardStyles()
     mnUseFlatBorders            = 0;
     mnUseFlatMenues             = 0;
     mnUseImagesInMenus          = (USHORT)TRUE;
+    mnSkipDisabledInMenus       = (USHORT)FALSE;
 }
 
 // -----------------------------------------------------------------------
@@ -1014,6 +1016,7 @@ BOOL StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mpData->maFieldFont               == rSet.mpData->maFieldFont)                &&
          (mpData->maIconFont                == rSet.mpData->maIconFont)                 &&
          (mpData->mnUseImagesInMenus        == rSet.mpData->mnUseImagesInMenus)         &&
+         (mpData->mnSkipDisabledInMenus     == rSet.mpData->mnSkipDisabledInMenus)      &&
          (mpData->maFontColor               == rSet.mpData->maFontColor ))
         return TRUE;
     else
