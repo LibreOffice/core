@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unx.mk,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: kz $ $Date: 2006-02-03 17:33:26 $
+#   last change: $Author: kz $ $Date: 2006-07-19 09:26:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -155,10 +155,9 @@
 .INCLUDE : unxbsds.mk
 .ENDIF
 
-.IF "$(COM)$(OS)$(CPU)" == "GCCFREEBSDI"
-.INCLUDE : unxfbsdi.mk
+.IF "$(COM)$(OS)" == "GCCFREEBSD"
+.INCLUDE : unxfbsd.mk
 .ENDIF
-
 
 .IF "$(COM)$(OS)$(CPU)" == "C730IRIXM"
 .INCLUDE : unxirxm3.mk
