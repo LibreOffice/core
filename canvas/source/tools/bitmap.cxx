@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmap.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:16:50 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 15:54:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -199,6 +199,8 @@ namespace canvas
                     pDst[2] = argb.Color.g;
                     pDst[3] = argb.Color.b;
                     break;
+                default:
+                    break;
             }
 
             mpImage->unlock();
@@ -230,6 +232,8 @@ namespace canvas
                     aRet[1] = pSrc[2];
                     aRet[2] = pSrc[3];
                     aRet[3] = pSrc[0];
+                    break;
+                default:
                     break;
             }
 
@@ -571,8 +575,9 @@ namespace canvas
                 case IColorBuffer::FMT_A8R8G8B8:
                 case IColorBuffer::FMT_X8R8G8B8:
                     return 4;
+                default:
+                    return 0;
             }
-            return 0;
         }
 
         ImageSharedPtr          mpImage;
