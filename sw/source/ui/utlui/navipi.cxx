@@ -4,9 +4,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:26:46 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 09:39:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1063,6 +1063,8 @@ SwNavigationPI::~SwNavigationPI()
     delete pPopupWindow;
     delete pFloatingWindow;
 
+    if ( IsBound() )
+        rBindings.Release(*this);
 }
 
 /*------------------------------------------------------------------------
