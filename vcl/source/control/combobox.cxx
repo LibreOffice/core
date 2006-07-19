@@ -4,9 +4,9 @@
  *
  *  $RCSfile: combobox.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:15:38 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:46:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -368,7 +368,7 @@ IMPL_LINK( ComboBox, ImplAutocompleteHdl, Edit*, pEdit )
         else if ( eAction == AUTOCOMPLETE_TABBACKWARD )
         {
             bForward = FALSE;
-            nStart = nStart ? (nStart--) : mpImplLB->GetEntryList()->GetEntryCount()-1;
+            nStart = nStart ? nStart - 1 : mpImplLB->GetEntryList()->GetEntryCount()-1;
         }
         BOOL bLazy = mbMatchCase ? FALSE : TRUE;
         // 1. Try match full from current position
