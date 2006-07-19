@@ -4,9 +4,9 @@
  *
  *  $RCSfile: roadmapcontrol.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 23:03:43 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 15:55:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -303,7 +303,7 @@ static void lcl_throwIndexOutOfBoundsException( )
     sal_Int16 UnoControlRoadmapModel::GetCurrentItemID( Reference< XPropertySet > xPropertySet )
     {
         Any aAny = xPropertySet->getPropertyValue( GetPropertyName( BASEPROPERTY_CURRENTITEMID ) );
-        sal_Int16 n_CurrentItemID;
+        sal_Int16 n_CurrentItemID = 0;
         aAny >>= n_CurrentItemID;
         return n_CurrentItemID;
     }
@@ -354,7 +354,7 @@ static void lcl_throwIndexOutOfBoundsException( )
                     return;
                 aAny <<= n_CurrentItemID;
             }
-            else if (Index = n_CurrentItemID)
+            else if (Index == n_CurrentItemID)
                 aAny <<= ( sal_Int16 ) -1;
             else if( Index < n_CurrentItemID)
                 aAny <<= ( sal_Int16 ) ( n_CurrentItemID - 1 );
