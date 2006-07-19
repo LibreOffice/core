@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bmpsum.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 20:07:37 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 17:03:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -465,7 +465,9 @@ void BmpSum::ProcessFileList( const String& rInFileList,
             ++nFileCount;
         }
 
-        fprintf( stdout, "unique file count: %u", nFileCount );
+        fprintf(
+            stdout, "unique file count: %lu",
+            sal::static_int_cast< unsigned long >(nFileCount) );
     }
 }
 
