@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menubarmanager.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 13:35:15 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:12:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2071,7 +2071,7 @@ void MenuBarManager::FillMenu( USHORT& nId, Menu* pMenu, const rtl::OUString& rM
         rtl::OUString               aLabel;
         rtl::OUString               aHelpURL;
         rtl::OUString               aModuleIdentifier( rModuleIdentifier );
-        sal_uInt16                  nType;
+        sal_uInt16                  nType = 0;
         Reference< XIndexAccess >   xIndexContainer;
 
         try
