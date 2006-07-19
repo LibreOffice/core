@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 11:24:00 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:11:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -5197,7 +5197,7 @@ sal_Bool LayoutManager::implts_doLayout( sal_Bool bForceRequestBorderSpace )
 
         if ( !bEqual || bForceRequestBorderSpace || bMustDoLayout )
         {
-            if ( bGotRequestedBorderSpace = xDockingAreaAcceptor->requestDockingAreaSpace( aBorderSpace ))
+            if ( (bGotRequestedBorderSpace = xDockingAreaAcceptor->requestDockingAreaSpace( aBorderSpace )))
             {
                 xDockingAreaAcceptor->setDockingAreaSpace( aBorderSpace );
 
