@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxlngi6.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 22:02:36 $
+#   last change: $Author: kz $ $Date: 2006-07-19 15:08:32 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -141,7 +141,6 @@ CFLAGSWERRCC=-Werror
 MODULES_WITH_WARNINGS := \
     b_server \
     basctl \
-    binfilter \
     chart2 \
     cppcanvas \
     desktop \
@@ -149,23 +148,15 @@ MODULES_WITH_WARNINGS := \
     dxcanvas \
     extensions \
     filter \
-    finalize \
     glcanvas \
-    instset_native \
-    instsetoo_native \
     lingu \
-    postprocess \
     r_tools \
     sc \
-    sch \
     sd \
     slideshow \
-    smoketest_native \
-    smoketestoo_native \
     starmath \
     svx \
     sw \
-    top \
     writerperfect \
     xmlsecurity
 
