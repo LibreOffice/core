@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ctrl.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:15:52 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 14:58:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -424,12 +424,14 @@ void Control::ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect )
     aStyle.SetMonoColor( GetSettings().GetStyleSettings().GetMonoColor() );
 
     aNewSettings.SetStyleSettings( aStyle );
-    pDev->SetSettings( aNewSettings );
+    // #i67023# do not call data changed listeners for this fake
+    // since they may understandably invalidate on settings changed
+    pDev->OutputDevice::SetSettings( aNewSettings );
 
     DecorationView aDecoView( pDev );
     rRect = aDecoView.DrawFrame( rRect, FRAME_DRAW_WINDOWBORDER );
 
-    pDev->SetSettings( aOriginalSettings );
+    pDev->OutputDevice::SetSettings( aOriginalSettings );
 }
 
 // -----------------------------------------------------------------------
