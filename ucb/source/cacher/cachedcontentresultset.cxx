@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cachedcontentresultset.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:15:00 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:59:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1853,7 +1853,7 @@ sal_Bool SAL_CALL CachedContentResultSet
 {
     impl_EnsureNotDisposed();
 
-    sal_Int32 nRow;
+    sal_Int32 nRow = 0;
     Reference< XResultSet > xResultSetOrigin;
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
