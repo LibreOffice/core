@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxcontainer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 23:00:49 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 15:54:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,7 +157,7 @@ void VCLXContainer::setTabOrder( const ::com::sun::star::uno::Sequence< ::com::s
             nStyle &= ~(WB_TABSTOP|WB_NOTABSTOP|WB_GROUP);
             if ( pTabs[n].getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_BOOLEAN )
             {
-                sal_Bool bTab;
+                sal_Bool bTab = false;
                 pTabs[n] >>= bTab;
                 nStyle |= ( bTab ? WB_TABSTOP : WB_NOTABSTOP );
             }
