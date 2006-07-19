@@ -11,7 +11,7 @@ RESLIB1HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RES
 $(HIDRES1PARTICLE): $(RESLIB1HIDFILES)
     @echo ------------------------------
     @echo Making: $@
-    @+$(IFEXIST) $@ $(THEN) $(RM) $@
+    @+$(IFEXIST) $@ $(THEN) $(RM) $@ $(FI)
 # need to strip since solaris cannot handle tab-only whitespace here
     +$(TYPE) $(mktmp  $(strip, $(subst,$/,/ $(RESLIB1HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
     @+$(RENAME) $@.$(ROUT).tmp $@
@@ -90,7 +90,7 @@ RESLIB2HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RES
 $(HIDRES2PARTICLE): $(RESLIB2HIDFILES)
     @echo ------------------------------
     @echo Making: $@
-    @+$(IFEXIST) $@ $(THEN) $(RM) $@
+    @+$(IFEXIST) $@ $(THEN) $(RM) $@ $(FI)
 # need to strip since solaris cannot handle tab-only whitespace here
     +$(TYPE) $(mktmp  $(strip, $(subst,$/,/ $(RESLIB2HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
     @+$(RENAME) $@.$(ROUT).tmp $@
@@ -169,7 +169,7 @@ RESLIB3HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RES
 $(HIDRES3PARTICLE): $(RESLIB3HIDFILES)
     @echo ------------------------------
     @echo Making: $@
-    @+$(IFEXIST) $@ $(THEN) $(RM) $@
+    @+$(IFEXIST) $@ $(THEN) $(RM) $@ $(FI)
 # need to strip since solaris cannot handle tab-only whitespace here
     +$(TYPE) $(mktmp  $(strip, $(subst,$/,/ $(RESLIB3HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
     @+$(RENAME) $@.$(ROUT).tmp $@
@@ -248,7 +248,7 @@ RESLIB4HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RES
 $(HIDRES4PARTICLE): $(RESLIB4HIDFILES)
     @echo ------------------------------
     @echo Making: $@
-    @+$(IFEXIST) $@ $(THEN) $(RM) $@
+    @+$(IFEXIST) $@ $(THEN) $(RM) $@ $(FI)
 # need to strip since solaris cannot handle tab-only whitespace here
     +$(TYPE) $(mktmp  $(strip, $(subst,$/,/ $(RESLIB4HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
     @+$(RENAME) $@.$(ROUT).tmp $@
@@ -327,7 +327,7 @@ RESLIB5HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RES
 $(HIDRES5PARTICLE): $(RESLIB5HIDFILES)
     @echo ------------------------------
     @echo Making: $@
-    @+$(IFEXIST) $@ $(THEN) $(RM) $@
+    @+$(IFEXIST) $@ $(THEN) $(RM) $@ $(FI)
 # need to strip since solaris cannot handle tab-only whitespace here
     +$(TYPE) $(mktmp  $(strip, $(subst,$/,/ $(RESLIB5HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
     @+$(RENAME) $@.$(ROUT).tmp $@
@@ -406,7 +406,7 @@ RESLIB6HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RES
 $(HIDRES6PARTICLE): $(RESLIB6HIDFILES)
     @echo ------------------------------
     @echo Making: $@
-    @+$(IFEXIST) $@ $(THEN) $(RM) $@
+    @+$(IFEXIST) $@ $(THEN) $(RM) $@ $(FI)
 # need to strip since solaris cannot handle tab-only whitespace here
     +$(TYPE) $(mktmp  $(strip, $(subst,$/,/ $(RESLIB6HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
     @+$(RENAME) $@.$(ROUT).tmp $@
@@ -485,7 +485,7 @@ RESLIB7HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RES
 $(HIDRES7PARTICLE): $(RESLIB7HIDFILES)
     @echo ------------------------------
     @echo Making: $@
-    @+$(IFEXIST) $@ $(THEN) $(RM) $@
+    @+$(IFEXIST) $@ $(THEN) $(RM) $@ $(FI)
 # need to strip since solaris cannot handle tab-only whitespace here
     +$(TYPE) $(mktmp  $(strip, $(subst,$/,/ $(RESLIB7HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
     @+$(RENAME) $@.$(ROUT).tmp $@
@@ -564,7 +564,7 @@ RESLIB8HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RES
 $(HIDRES8PARTICLE): $(RESLIB8HIDFILES)
     @echo ------------------------------
     @echo Making: $@
-    @+$(IFEXIST) $@ $(THEN) $(RM) $@
+    @+$(IFEXIST) $@ $(THEN) $(RM) $@ $(FI)
 # need to strip since solaris cannot handle tab-only whitespace here
     +$(TYPE) $(mktmp  $(strip, $(subst,$/,/ $(RESLIB8HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
     @+$(RENAME) $@.$(ROUT).tmp $@
@@ -643,7 +643,7 @@ RESLIB9HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RES
 $(HIDRES9PARTICLE): $(RESLIB9HIDFILES)
     @echo ------------------------------
     @echo Making: $@
-    @+$(IFEXIST) $@ $(THEN) $(RM) $@
+    @+$(IFEXIST) $@ $(THEN) $(RM) $@ $(FI)
 # need to strip since solaris cannot handle tab-only whitespace here
     +$(TYPE) $(mktmp  $(strip, $(subst,$/,/ $(RESLIB9HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
     @+$(RENAME) $@.$(ROUT).tmp $@
@@ -722,7 +722,7 @@ RESLIB10HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RE
 $(HIDRES10PARTICLE): $(RESLIB10HIDFILES)
     @echo ------------------------------
     @echo Making: $@
-    @+$(IFEXIST) $@ $(THEN) $(RM) $@
+    @+$(IFEXIST) $@ $(THEN) $(RM) $@ $(FI)
 # need to strip since solaris cannot handle tab-only whitespace here
     +$(TYPE) $(mktmp  $(strip, $(subst,$/,/ $(RESLIB10HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
     @+$(RENAME) $@.$(ROUT).tmp $@
