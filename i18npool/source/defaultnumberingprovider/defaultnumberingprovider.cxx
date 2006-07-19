@@ -4,9 +4,9 @@
  *
  *  $RCSfile: defaultnumberingprovider.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-06 09:36:55 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:29:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -276,7 +276,7 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
      Locale locale;
 
      OUString  prefix;
-     sal_Int16        numType; // type of formatting from style::NumberingType (roman, arabic, etc)
+     sal_Int16        numType = -1; // type of formatting from style::NumberingType (roman, arabic, etc)
      OUString  suffix;
      sal_Int32        number = -12345; // the number that needs to be formatted.
 
