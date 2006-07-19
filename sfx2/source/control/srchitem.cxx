@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srchitem.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:18:47 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 17:17:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -296,7 +296,7 @@ void SvxSearchItem::GetFromDescriptor( const ::com::sun::star::uno::Reference< :
 {
     SetSearchString( rDescr->getSearchString() );
     ::com::sun::star::uno::Any aAny = rDescr->getPropertyValue( DEFINE_CONST_UNICODE("SearchWords") );
-    sal_Bool bTemp ;
+    sal_Bool bTemp = false;
     aAny >>= bTemp ;
     SetWordOnly( bTemp );
     aAny = rDescr->getPropertyValue( DEFINE_CONST_UNICODE("SearchCaseSensitive") );
@@ -318,7 +318,7 @@ void SvxSearchItem::GetFromDescriptor( const ::com::sun::star::uno::Reference< :
     aAny >>= bTemp ;
     SetLEVRelaxed( bTemp );
     aAny = rDescr->getPropertyValue( DEFINE_CONST_UNICODE("SearchSimilarityExchange") );
-    sal_Int16 nTemp ;
+    sal_Int16 nTemp = 0;
     aAny >>= nTemp ;
     SetLEVOther( nTemp );
     aAny = rDescr->getPropertyValue( DEFINE_CONST_UNICODE("SearchSimilarityRemove") );
