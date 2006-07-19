@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 23:02:22 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 15:55:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1647,7 +1647,7 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
             case BASEPROPERTY_BORDER:
             {
                 WinBits nStyle = pWindow->GetStyle();
-                sal_uInt16 nBorder;
+                sal_uInt16 nBorder = 0;
                 Value >>= nBorder;
                 if ( !nBorder )
                 {
@@ -1665,7 +1665,7 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
                 WinBits nStyle = pWindow->GetStyle() & ~WB_TABSTOP;
                 if ( !bVoid )
                 {
-                    sal_Bool bTab;
+                    sal_Bool bTab = false;
                     Value >>= bTab;
                     if ( bTab )
                         nStyle |= WB_TABSTOP;
@@ -1746,7 +1746,7 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
                     )
                 {
                     WinBits nStyle = pWindow->GetStyle();
-                    sal_Bool bMulti;
+                    sal_Bool bMulti = false;
                     Value >>= bMulti;
                     if ( bMulti )
                         nStyle |= WB_WORDBREAK;
@@ -1781,7 +1781,7 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
             break;
             case BASEPROPERTY_AUTOMNEMONICS:
             {
-                sal_Bool bAutoMnemonics;
+                sal_Bool bAutoMnemonics = false;
                 Value >>= bAutoMnemonics;
                 AllSettings aSettings = pWindow->GetSettings();
                 StyleSettings aStyleSettings = aSettings.GetStyleSettings();
@@ -1795,7 +1795,7 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
             break;
             case BASEPROPERTY_MOUSETRANSPARENT:
             {
-                sal_Bool bMouseTransparent;
+                sal_Bool bMouseTransparent = false;
                 Value >>= bMouseTransparent;
                 pWindow->SetMouseTransparent( bMouseTransparent );
             }
