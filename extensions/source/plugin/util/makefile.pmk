@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2005-12-21 11:14:30 $
+#   last change: $Author: kz $ $Date: 2006-07-19 09:56:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,6 @@ NOUNODOC=true
 
 .IF "$(SYSTEM_MOZILLA)" == "YES"
 CFLAGS+=-DSYSTEM_MOZILLA
-PKGCONFIG_MODULES=mozilla-plugin
+PKGCONFIG_MODULES=$(MOZ_FLAVOUR)-plugin
 .INCLUDE : pkg_config.mk
 .ENDIF
