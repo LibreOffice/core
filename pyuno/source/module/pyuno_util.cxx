@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pyuno_util.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:04:45 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:42:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,16 +153,18 @@ void log( RuntimeCargo * cargo, sal_Int32 level, const char *str )
         osl_getDateTimeFromTimeValue( &localTime, &localDateTime );
 
         fprintf( cargo->logFile,
-                 "%4i-%02i-%02i %02i:%02i:%02i,%03i [%s,tid %i]: %s\n",
+                 "%4i-%02i-%02i %02i:%02i:%02i,%03lu [%s,tid %ld]: %s\n",
                  localDateTime.Year,
                  localDateTime.Month,
                  localDateTime.Day,
                  localDateTime.Hours,
                  localDateTime.Minutes,
                  localDateTime.Seconds,
-                 localDateTime.NanoSeconds/1000000,
+                 sal::static_int_cast< unsigned long >(
+                     localDateTime.NanoSeconds/1000000),
                  strLevel[level],
-                 (sal_Int32) osl_getThreadIdentifier( 0),
+                 sal::static_int_cast< long >(
+                     (sal_Int32) osl_getThreadIdentifier( 0)),
                  str );
     }
 }
