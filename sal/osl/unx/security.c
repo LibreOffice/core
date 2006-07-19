@@ -4,9 +4,9 @@
  *
  *  $RCSfile: security.c,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:19:10 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 09:39:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,8 +74,8 @@ static sal_Bool SAL_CALL osl_psz_getHomeDir(oslSecurity Security, sal_Char* pszD
 static sal_Bool SAL_CALL osl_psz_getConfigDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax);
 
 static oslSecurityImpl * newSecurityImpl(size_t * bufSize) {
-#ifdef MACOSX
-    /* #i64906#: sysconf(_SC_GETPW_R_SIZE_MAX) returns -1 on Mac OS X */
+#if defined (MACOSX) || defined (FREEBSD)
+    /* #i64906#: sysconf(_SC_GETPW_R_SIZE_MAX) returns -1 on Mac OS X and FreeBSD */
     size_t n = 1024;
 #else
     size_t n = (size_t) sysconf(_SC_GETPW_R_SIZE_MAX);
