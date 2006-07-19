@@ -4,9 +4,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.176 $
+#   $Revision: 1.177 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 22:10:18 $
+#   last change: $Author: kz $ $Date: 2006-07-19 09:35:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1933,6 +1933,16 @@ $(COMMONPRJHIDOTHERTARGET) : $(PRJHIDOTHERTARGET)
 .INCLUDE : tg_res.mk
 
 # -------
+# - SHL -
+# -------
+
+.INCLUDE : _tg_shl.mk
+
+.IF "$(USE_VERSIONH)"!=""
+.INIT .SEQUENTIAL : $(USE_VERSIONH) $(NULLPRQ)
+.ENDIF          # "$(USE_VERSIONH)"!=""
+
+# -------
 # - APP -
 # -------
 
@@ -1963,16 +1973,6 @@ $(COMMONPRJHIDOTHERTARGET) : $(PRJHIDOTHERTARGET)
 .IF "$(RESLIB1TARGETN)$(RESLIB2TARGETN)$(RESLIB3TARGETN)$(RESLIB4TARGETN)$(RESLIB5TARGETN)$(RESLIB6TARGETN)$(RESLIB7TARGETN)$(RESLIB8TARGETN)$(RESLIB9TARGETN)"!=""
 .INCLUDE : _tg_rslb.mk
 .ENDIF
-
-# -------
-# - SHL -
-# -------
-
-.INCLUDE : _tg_shl.mk
-
-.IF "$(USE_VERSIONH)"!=""
-.INIT .SEQUENTIAL : $(USE_VERSIONH) $(NULLPRQ)
-.ENDIF          # "$(USE_VERSIONH)"!=""
 
 # -------
 # - HXX -
