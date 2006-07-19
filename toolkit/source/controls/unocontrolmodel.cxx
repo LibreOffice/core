@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrolmodel.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 23:05:03 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 15:56:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -689,7 +689,7 @@ void UnoControlModel::write( const ::com::sun::star::uno::Reference< ::com::sun:
 
             if ( rType == ::getBooleanCppuType() )
             {
-                sal_Bool b;
+                sal_Bool b = false;
                 rValue >>= b;
                 OutStream->writeBoolean( b );
             }
@@ -701,13 +701,13 @@ void UnoControlModel::write( const ::com::sun::star::uno::Reference< ::com::sun:
             }
             else if ( rType == ::getCppuType((const sal_uInt16*)0) )
             {
-                sal_uInt16 n;
+                sal_uInt16 n = 0;
                 rValue >>= n;
                 OutStream->writeShort( n );
             }
             else if ( rType == ::getCppuType((const sal_Int16*)0) )
             {
-                sal_Int16 n;
+                sal_Int16 n = 0;
                 rValue >>= n;
                 OutStream->writeShort( n );
             }
@@ -1196,12 +1196,12 @@ sal_Bool UnoControlModel::convertFastPropertyValue( Any & rConvertedValue, Any &
                     {
                         // try as double
                         double nAsDouble = 0;
-                        if ( bConverted = ( rValue >>= nAsDouble ) )
+                        if ( (bConverted = ( rValue >>= nAsDouble )) )
                             rConvertedValue <<= nAsDouble;
                         else
                         {   // try as integer - 96136 - 2002-10-08 - fs@openoffice.org
                             sal_Int32 nAsInteger = 0;
-                            if ( bConverted = ( rValue >>= nAsInteger ) )
+                            if ( (bConverted = ( rValue >>= nAsInteger )) )
                                 rConvertedValue <<= (double)nAsInteger;
                         }
                     }
@@ -1209,28 +1209,28 @@ sal_Bool UnoControlModel::convertFastPropertyValue( Any & rConvertedValue, Any &
                     case TypeClass_SHORT:
                     {
                         sal_Int16 n;
-                        if ( bConverted = ( rValue >>= n ) )
+                        if ( (bConverted = ( rValue >>= n )) )
                             rConvertedValue <<= n;
                     }
                     break;
                     case TypeClass_UNSIGNED_SHORT:
                     {
                         sal_uInt16 n;
-                        if ( bConverted = ( rValue >>= n ) )
+                        if ( (bConverted = ( rValue >>= n )) )
                             rConvertedValue <<= n;
                     }
                     break;
                     case TypeClass_LONG:
                     {
                         sal_Int32 n;
-                        if ( bConverted = ( rValue >>= n ) )
+                        if ( (bConverted = ( rValue >>= n )) )
                             rConvertedValue <<= n;
                     }
                     break;
                     case TypeClass_UNSIGNED_LONG:
                     {
                         sal_uInt32 n;
-                        if ( bConverted = ( rValue >>= n ) )
+                        if ( (bConverted = ( rValue >>= n )) )
                             rConvertedValue <<= n;
                     }
                     break;
@@ -1250,7 +1250,7 @@ sal_Bool UnoControlModel::convertFastPropertyValue( Any & rConvertedValue, Any &
                     case TypeClass_ENUM:
                     {
                         sal_Int32 nValue = 0;
-                        if ( bConverted = ( rValue >>= nValue ) )
+                        if ( (bConverted = ( rValue >>= nValue )) )
                             rConvertedValue = ::cppu::int2enum( nValue, *pDestType );
                     }
                     break;
