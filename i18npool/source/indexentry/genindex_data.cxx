@@ -4,9 +4,9 @@
  *
  *  $RCSfile: genindex_data.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:36:59 $
+ *  last change: $Author: kz $ $Date: 2006-07-19 16:29:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,7 +118,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     fprintf(fp, "\nstatic const sal_uInt16 idx1[] = {");
     for (i = k = 0; i < 0x100;  i++) {
         if (k++ % 16 == 0) fprintf(fp, "\n\t");
-        fprintf(fp, "0x%04x, ", index[i]);
+        fprintf(
+            fp, "0x%04lx, ", sal::static_int_cast< unsigned long >(index[i]));
     }
     fprintf(fp, "\n};\n\n");
 
@@ -130,7 +131,10 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             for (j = 0; j<0x100; j++) {
                 if (k++ % 16 == 0) fprintf(fp, "\n\t");
                 sal_Int32 ad=address[i*0x100+j];
-                fprintf(fp, "0x%04x, ", ad == -1 ? 0 : max == 2 ? ustr[ad] : ad);
+                fprintf(
+                    fp, "0x%04lx, ",
+                    sal::static_int_cast< unsigned long >(
+                        ad == -1 ? 0 : max == 2 ? ustr[ad] : ad));
             }
             fprintf(fp, "\n\t");
         }
