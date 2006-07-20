@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 17:01:19 $
+#   last change: $Author: kz $ $Date: 2006-07-20 16:16:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,10 +48,6 @@ UNIXVERSIONNAMES=UDK
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-
-.IF "$(OS)" == "WNT"
-CFLAGS+= -GR # enable RTTI
-.ENDIF # WNT
 
 # --- Files --------------------------------------------------------
 
