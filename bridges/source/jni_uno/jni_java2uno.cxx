@@ -4,9 +4,9 @@
  *
  *  $RCSfile: jni_java2uno.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 23:47:30 $
+ *  last change: $Author: kz $ $Date: 2006-07-20 16:15:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,7 @@ jobject Bridge::map_to_java(
             oid.pData, (typelib_InterfaceTypeDescription *)info->m_td.get() );
 
         // create java and register java proxy
-        jvalue args2[ 6 ];
+        jvalue args2[ 7 ];
         acquire();
         args2[ 0 ].j = reinterpret_cast< sal_Int64 >( this );
         (*pUnoI->acquire)( pUnoI );
