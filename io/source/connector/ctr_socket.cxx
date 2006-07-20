@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ctr_socket.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:17:15 $
+ *  last change: $Author: kz $ $Date: 2006-07-20 16:16:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,7 +147,7 @@ namespace stoc_connector {
             }
             sal_Int32 i = m_socket.read( aReadBytes.getArray()  , aReadBytes.getLength() );
 
-            if(i != nBytesToRead)
+            if(i != nBytesToRead && m_socket.getError() != osl_Socket_E_None)
             {
                 OUString message(RTL_CONSTASCII_USTRINGPARAM("ctr_socket.cxx:SocketConnection::read: error - "));
                 message += m_socket.getErrorAsString();
