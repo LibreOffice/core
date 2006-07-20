@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: vg $ $Date: 2006-05-16 16:09:03 $
+ *  last change: $Author: kz $ $Date: 2006-07-20 16:19:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1532,8 +1532,10 @@ void MA_FASTCALL lcl_FirstTabCalc( SwTabFrm *pTab )
     SWRECTFN( pTab )
     if ( !pTab->IsFollow() && !pTab->GetTable()->IsTblComplex() )
     {
-        SwLayoutFrm *pRow = (SwLayoutFrm*)pTab->Lower();
-        do
+        SwLayoutFrm* pRow = (SwLayoutFrm*)pTab->Lower();
+        // --> FME 2006-07-17 #134526# TabFrm without a lower? Better we check
+        // it before crashing. However, I still don't know how this can happen!
+        while ( pRow )
         {
             SwLayoutFrm *pCell = (SwLayoutFrm*)pRow->Lower();
             SwFrm *pCnt = pCell->Lower();
@@ -1562,8 +1564,7 @@ void MA_FASTCALL lcl_FirstTabCalc( SwTabFrm *pTab )
             if( (*fnRect->fnYDiff)( nUpBot, nRowTop ) < 0 )
                 break;
             pRow = (SwLayoutFrm*)pRow->GetNext();
-
-        } while ( pRow );
+        }
     }
     SwFrm *pUp = pTab->GetUpper();
     long nBottom = (pUp->*fnRect->fnGetPrtBottom)();
@@ -2188,6 +2189,8 @@ void SwTabFrm::MakeAll()
 
                 if ( bFormat )
                 {
+                    delete pAccess;
+
                     // --> OD 2005-09-28 #b6329202#
                     // Consider case that table is inside another table, because
                     // it has to be avoided, that superior table is formatted.
@@ -2195,6 +2198,9 @@ void SwTabFrm::MakeAll()
                     // is found, get its first content.
                     const SwFrm* pTmpNxt = lcl_FormatNextCntntForKeep( this );
                     // <--
+
+                    pAccess= new SwBorderAttrAccess( SwFrm::GetCache(), this );
+                    pAttrs = pAccess->Get();
 
                     // The last row wants to keep with the frame behind the table.
                     // Check if the next frame is on a different page and valid.
