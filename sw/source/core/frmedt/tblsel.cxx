@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tblsel.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 17:20:02 $
+ *  last change: $Author: kz $ $Date: 2006-07-20 16:15:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1863,7 +1863,12 @@ void lcl_FindStartEndCol( const SwLayoutFrm *&rpStart,
     const SwTwips nEX = ::lcl_CalcWish( rpEnd, nWish, nPrtWidth ) +
                           (pTab->*fnRect->fnGetPrtLeft)();
 
-    rpEnd = pTab->FindLastCntnt()->GetUpper();
+    const SwCntntFrm* pLastCntnt = pTab->FindLastCntnt();
+    rpEnd = pLastCntnt ? pLastCntnt->GetUpper() : 0;
+    // --> FME 2006-07-17 #134385# Made code robust. If pTab does not have a lower,
+    // we would crash here.
+    if ( !pLastCntnt ) return;
+    // <--
 
     while( !rpEnd->IsCellFrm() )
         rpEnd = rpEnd->GetUpper();
@@ -1986,6 +1991,10 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrm *pStart,
         ::lcl_FindStartEndRow( pStart, pEnd, TBLSEARCH_PROTECT & eSearchType );
     else if( TBLSEARCH_COL == ((~TBLSEARCH_PROTECT ) & eSearchType ) )
         ::lcl_FindStartEndCol( pStart, pEnd, TBLSEARCH_PROTECT & eSearchType );
+
+    // --> FME 2006-07-17 #134385# Made code robust.
+    if ( !pEnd ) return;
+    // <--
 
     //neu besorgen, da sie jetzt verschoben sind. MA: 28. Dec. 93 Bug 5190
     pTable = pStart->FindTabFrm();
