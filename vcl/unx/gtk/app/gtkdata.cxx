@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkdata.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 16:36:32 $
+ *  last change: $Author: kz $ $Date: 2006-07-20 16:09:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -730,7 +730,7 @@ void GtkXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
                 if( wasOneEvent )
                     wasEvent = TRUE;
             }
-            if( nMaxEvents == 0 && bWait && ! wasEvent )
+            if( bWait && ! wasEvent )
                 g_main_context_iteration( NULL, TRUE );
         }
         else {
