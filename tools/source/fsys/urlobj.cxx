@@ -4,9 +4,9 @@
  *
  *  $RCSfile: urlobj.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 12:09:57 $
+ *  last change: $Author: kz $ $Date: 2006-07-20 16:11:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -292,6 +292,11 @@ using namespace com::sun;
    ; private
    unknown-url = scheme ":" 1*uric
    scheme = ALPHA *(alphanum / "+" / "-" / ".")
+
+
+   ; private (http://ubiqx.org/cifs/Appendix-D.html):
+   smb-url = "SMB://" login ["/" segment *("/" segment) ["?" *uric]]
+   segment = *(pchar / ";")
  */
 
 //============================================================================
@@ -452,7 +457,9 @@ static INetURLObject::SchemeInfo const aSchemeInfoMap[INET_PROT_END]
           false, false, false, false, false },
         { "vnd.sun.star.tdoc", "vnd.sun.star.tdoc:", 0, false, false, false,
           false, false, false, true, false },
-        { "", "", 0, false, false, false, false, false, false, false, false } };
+        { "", "", 0, false, false, false, false, false, false, false, false },
+        { "smb", "smb://", 139, true, true, false, true, true, true, true,
+          true } };
 
 // static
 inline INetURLObject::SchemeInfo const &
@@ -1358,6 +1365,7 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
                     break;
 
                 case INET_PROT_LDAP:
+                case INET_PROT_SMB:
                     if (pHostPortBegin == pPort && pPort != pHostPortEnd)
                     {
                         setInvalid();
@@ -2086,6 +2094,7 @@ INetURLObject::getPrefix(sal_Unicode const *& rBegin,
               INET_PROT_PRIV_SOFFICE, PrefixInfo::INTERNAL },
             { "slot:", "staroffice.slot:", INET_PROT_SLOT,
               PrefixInfo::INTERNAL },
+            { "smb:", 0, INET_PROT_SMB, PrefixInfo::OFFICIAL },
             { "staroffice.component:", ".component:", INET_PROT_COMPONENT,
               PrefixInfo::EXTERNAL },
             { "staroffice.db:", "db:", INET_PROT_DB, PrefixInfo::EXTERNAL },
@@ -2927,6 +2936,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
         case INET_PROT_HTTP:
         case INET_PROT_VND_SUN_STAR_WEBDAV:
         case INET_PROT_HTTPS:
+        case INET_PROT_SMB:
             if (pPos < pEnd && *pPos != '/')
                 return false;
             while (pPos < pEnd && *pPos != nQueryDelimiter
