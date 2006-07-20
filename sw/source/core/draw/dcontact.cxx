@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dcontact.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 12:23:31 $
+ *  last change: $Author: kz $ $Date: 2006-07-20 16:13:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1314,7 +1314,6 @@ void SwDrawContact::Changed( const SdrObject& rObj,
         if ( pSh )
             pDoc->GetRootFrm()->StartAllAction();
     }
-
     SdrObjUserCall::Changed( rObj, eType, rOldBoundRect );
     _Changed( rObj, eType, &rOldBoundRect );    //Achtung, ggf. Suizid!
 
@@ -1345,8 +1344,16 @@ class NestedUserCallHdl
 
         ~NestedUserCallHdl()
         {
-            mpDrawContact->mbUserCallActive = mbParentUserCallActive;
-            mpDrawContact->meEventTypeOfCurrentUserCall = meParentUserCallEventType;
+            if ( mpDrawContact )
+            {
+                mpDrawContact->mbUserCallActive = mbParentUserCallActive;
+                mpDrawContact->meEventTypeOfCurrentUserCall = meParentUserCallEventType;
+            }
+        }
+
+        void DrawContactDeleted()
+        {
+            mpDrawContact = 0;
         }
 
         bool IsNestedUserCall()
@@ -1388,6 +1395,9 @@ class NestedUserCallHdl
 };
 
 // <--
+//
+// !!!ACHTUNG!!! The object may commit suicide!!!
+//
 void SwDrawContact::_Changed( const SdrObject& rObj,
                               SdrUserCallType eType,
                               const Rectangle* pOldBoundRect )
@@ -1427,6 +1437,9 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
                 DisconnectFromLayout( false );
                 SetMaster( NULL );
                 delete this;
+                // --> FME 2006-07-12 #i65784# Prevent memory corruption
+                aNestedUserCallHdl.DrawContactDeleted();
+                // <--
                 break;
             }
         case SDRUSERCALL_INSERTED:
