@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-08 14:47:20 $
+ *  last change: $Author: kz $ $Date: 2006-07-20 16:20:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -839,14 +839,18 @@ void rtfSections::GetPageULData(const rtfSection &rSection, bool bFirst,
 
     if( rData.bHasHeader )
     {
-        rData.nSwUp  = nWWHTop;             // Header -> umrechnen
-        rData.nSwHLo = nWWUp - nWWHTop;
+        rData.nSwUp  = nWWHTop;             // Header -> umrechnen, see ww8par6.cxx
 
-        if (rData.nSwHLo < MM50)
-            rData.nSwHLo = MM50;
+        if ( nWWUp > 0 && nWWUp >= nWWHTop )
+            rData.nSwHLo = nWWUp - nWWHTop;
+        else
+            rData.nSwHLo = 0;
+
+        if (rData.nSwHLo < cMinHdFtHeight)
+            rData.nSwHLo = cMinHdFtHeight;
     }
     else // kein Header -> Up einfach uebernehmen
-        rData.nSwUp = nWWUp;
+        rData.nSwUp = Abs(nWWUp);
 
     if (bFirst)
     {
@@ -874,13 +878,16 @@ void rtfSections::GetPageULData(const rtfSection &rSection, bool bFirst,
     if( rData.bHasFooter )
     {
         rData.nSwLo = nWWFBot;              // Footer -> Umrechnen
-        rData.nSwFUp = nWWLo - nWWFBot;
+        if ( nWWLo > 0 && nWWLo >= nWWFBot )
+            rData.nSwFUp = nWWLo - nWWFBot;
+        else
+            rData.nSwFUp = 0;
 
-        if (rData.nSwFUp < MM50)
-            rData.nSwFUp = MM50;
+        if (rData.nSwFUp < cMinHdFtHeight)
+            rData.nSwFUp = cMinHdFtHeight;
     }
     else // kein Footer -> Lo einfach uebernehmen
-        rData.nSwLo = nWWLo;
+        rData.nSwLo = Abs(nWWLo);
 }
 
 void rtfSections::SetPageULSpaceItems(SwFrmFmt &rFmt,
@@ -893,7 +900,7 @@ void rtfSections::SetPageULSpaceItems(SwFrmFmt &rFmt,
         {
             pHdFmt->SetAttr(SwFmtFrmSize(ATT_MIN_SIZE, 0, rData.nSwHLo));
             SvxULSpaceItem aHdUL(pHdFmt->GetULSpace());
-            aHdUL.SetLower(rData.nSwHLo - MM50);
+            aHdUL.SetLower( rData.nSwHLo - cMinHdFtHeight );
             pHdFmt->SetAttr(aHdUL);
             pHdFmt->SetAttr(SwHeaderAndFooterEatSpacingItem(
                 RES_HEADER_FOOTER_EAT_SPACING, true));
@@ -906,7 +913,7 @@ void rtfSections::SetPageULSpaceItems(SwFrmFmt &rFmt,
         {
             pFtFmt->SetAttr(SwFmtFrmSize(ATT_MIN_SIZE, 0, rData.nSwFUp));
             SvxULSpaceItem aFtUL(pFtFmt->GetULSpace());
-            aFtUL.SetUpper(rData.nSwFUp - MM50);
+            aFtUL.SetUpper( rData.nSwFUp - cMinHdFtHeight );
             pFtFmt->SetAttr(aFtUL);
             pFtFmt->SetAttr(SwHeaderAndFooterEatSpacingItem(
                 RES_HEADER_FOOTER_EAT_SPACING, true));
