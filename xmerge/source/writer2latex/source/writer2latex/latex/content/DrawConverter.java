@@ -193,7 +193,7 @@ public class DrawConverter extends ConverterHelper {
         /* TODO (0.4): handle cropping and mirror:
            style:mirror can be none, vertical (lodret), horizontal (vandret),
            horizontal-on-odd, or
-           horizontal-on-even (vandret på ulige hhv. lige side).
+           horizontal-on-even (vandret pa ulige hhv. lige side).
               mirror is handled with scalebox, eg:
                 %\\scalebox{-1}[1]{...}
            can check for even/odd page first!!
