@@ -4,9 +4,9 @@
  *
  *  $RCSfile: urltest.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 12:10:39 $
+ *  last change: $Author: kz $ $Date: 2006-07-20 16:13:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1212,7 +1212,11 @@ main()
                 { "http://[0:0:0:0:0:0:13.1.68.3]/",
                   "http://[0:0:0:0:0:0:13.1.68.3]/" },
                 { "http://[0:0:0:0:0:FFFF:129.144.52.38]/",
-                  "http://[0:0:0:0:0:ffff:129.144.52.38]/" } };
+                  "http://[0:0:0:0:0:ffff:129.144.52.38]/" },
+                { "smb://", "smb:///" },
+                { "smb://foo", "smb://foo/" },
+                { "smb://x;foo:bar@baz.xyz:12345/ab?cd",
+                  "smb://x;foo:bar@baz.xyz:12345/ab?cd" } };
         for (std::size_t i = 0; i < sizeof aTest / sizeof aTest[0]; ++i)
         {
             INetURLObject aUrl(aTest[i].m_pInput);
