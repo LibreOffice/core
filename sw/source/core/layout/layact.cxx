@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:30:00 $
+ *  last change: $Author: kz $ $Date: 2006-07-20 16:17:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -669,13 +669,13 @@ void SwLayAction::Action()
     bActionInProgress = FALSE;
 }
 
-SwPageFrm *SwLayAction::CheckFirstVisPage( SwPageFrm *pPage )
+SwPageFrm* SwLayAction::CheckFirstVisPage( SwPageFrm *pPage )
 {
     SwCntntFrm *pCnt = pPage->FindFirstBodyCntnt();
     SwCntntFrm *pChk = pCnt;
     BOOL bPageChgd = FALSE;
     while ( pCnt && pCnt->IsFollow() )
-        pCnt = (SwCntntFrm*)pCnt->FindPrev();
+        pCnt = static_cast<SwCntntFrm*>(pCnt)->FindMaster();
     if ( pCnt && pChk != pCnt )
     {   bPageChgd = TRUE;
         pPage = pCnt->FindPageFrm();
