@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:00:51 $
+ *  last change: $Author: kz $ $Date: 2006-07-20 16:20:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -640,7 +640,12 @@ sal_Bool SwDoubleLinePortion::ChgSpaceAdd( SwLineLayout* pCurr,
 
             if( nMultiSpace < KSHRT_MAX * SPACING_PRECISION_FACTOR )
             {
-                pCurr->SetLLSpaceAdd( nMultiSpace, 0 );
+//                pCurr->SetLLSpaceAdd( nMultiSpace, 0 );
+                // --> FME 2006-07-11 #i65711# SetLLSpaceAdd replaces the first value,
+                // instead we want to insert a new first value:
+                std::vector<long>* pVec = pCurr->GetpLLSpaceAdd();
+                pVec->insert( pVec->begin(), nMultiSpace );
+                // <--
                 bRet = sal_True;
             }
         }
