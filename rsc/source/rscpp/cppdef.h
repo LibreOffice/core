@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cppdef.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:59:51 $
+ *  last change: $Author: kz $ $Date: 2006-07-20 06:14:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -318,7 +318,7 @@
  */
 /* ER 13.06.95 20:05  NWORK wg. grooossen Makros in *.src erhoeht,
  da wir bald 10 Sprachen haben werden gleich ordentlich reingehauen.. */
-#define NWORK                   64000
+#define NWORK                   128000
 #define NBUFF                   NWORK
 #define NFWORK                  1024
 #define NEXP                    128
