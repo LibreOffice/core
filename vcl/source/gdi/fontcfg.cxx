@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontcfg.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:22:47 $
+ *  last change: $Author: kz $ $Date: 2006-07-20 16:08:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,47 +143,56 @@ DefaultFontConfiguration::DefaultFontConfiguration()
         // create configuration hierachical access name
         if( xSMgr.is() )
         {
-            m_xConfigProvider =
-                Reference< XMultiServiceFactory >(
-                    xSMgr->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                    "com.sun.star.configuration.ConfigurationProvider" ))),
-                    UNO_QUERY );
-            if( m_xConfigProvider.is() )
+            try
             {
-                Sequence< Any > aArgs(1);
-                PropertyValue aVal;
-                aVal.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) );
-                aVal.Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.VCL/DefaultFonts" ) );
-                aArgs.getArray()[0] <<= aVal;
-                m_xConfigAccess =
-                    Reference< XNameAccess >(
-                        m_xConfigProvider->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                            "com.sun.star.configuration.ConfigurationAccess" )),
-                                                                        aArgs ),
+                m_xConfigProvider =
+                    Reference< XMultiServiceFactory >(
+                        xSMgr->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                        "com.sun.star.configuration.ConfigurationProvider" ))),
                         UNO_QUERY );
-                if( m_xConfigAccess.is() )
+                if( m_xConfigProvider.is() )
                 {
-                    Sequence< OUString > aLocales = m_xConfigAccess->getElementNames();
-                    // fill config hash with empty interfaces
-                    int nLocales = aLocales.getLength();
-                    const OUString* pLocaleStrings = aLocales.getConstArray();
-                    Locale aLoc;
-                    for( int i = 0; i < nLocales; i++ )
+                    Sequence< Any > aArgs(1);
+                    PropertyValue aVal;
+                    aVal.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) );
+                    aVal.Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.VCL/DefaultFonts" ) );
+                    aArgs.getArray()[0] <<= aVal;
+                    m_xConfigAccess =
+                        Reference< XNameAccess >(
+                            m_xConfigProvider->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                                "com.sun.star.configuration.ConfigurationAccess" )),
+                                                                            aArgs ),
+                            UNO_QUERY );
+                    if( m_xConfigAccess.is() )
                     {
-                        sal_Int32 nIndex = 0;
-                        aLoc.Language = pLocaleStrings[i].getToken( 0, sal_Unicode('-'), nIndex ).toAsciiLowerCase();
-                        if( nIndex != -1 )
-                            aLoc.Country = pLocaleStrings[i].getToken( 0, sal_Unicode('-'), nIndex ).toAsciiUpperCase();
-                        else
-                            aLoc.Country = OUString();
-                        if( nIndex != -1 )
-                            aLoc.Variant = pLocaleStrings[i].getToken( 0, sal_Unicode('-'), nIndex ).toAsciiUpperCase();
-                        else
-                            aLoc.Variant = OUString();
-                        m_aConfig[ aLoc ] = LocaleAccess();
-                        m_aConfig[ aLoc ].aConfigLocaleString = pLocaleStrings[i];
+                        Sequence< OUString > aLocales = m_xConfigAccess->getElementNames();
+                        // fill config hash with empty interfaces
+                        int nLocales = aLocales.getLength();
+                        const OUString* pLocaleStrings = aLocales.getConstArray();
+                        Locale aLoc;
+                        for( int i = 0; i < nLocales; i++ )
+                        {
+                            sal_Int32 nIndex = 0;
+                            aLoc.Language = pLocaleStrings[i].getToken( 0, sal_Unicode('-'), nIndex ).toAsciiLowerCase();
+                            if( nIndex != -1 )
+                                aLoc.Country = pLocaleStrings[i].getToken( 0, sal_Unicode('-'), nIndex ).toAsciiUpperCase();
+                            else
+                                aLoc.Country = OUString();
+                            if( nIndex != -1 )
+                                aLoc.Variant = pLocaleStrings[i].getToken( 0, sal_Unicode('-'), nIndex ).toAsciiUpperCase();
+                            else
+                                aLoc.Variant = OUString();
+                            m_aConfig[ aLoc ] = LocaleAccess();
+                            m_aConfig[ aLoc ].aConfigLocaleString = pLocaleStrings[i];
+                        }
                     }
                 }
+            }
+            catch( Exception& )
+            {
+                // configuration is awry
+                m_xConfigProvider.clear();
+                m_xConfigAccess.clear();
             }
         }
     }
@@ -408,47 +417,56 @@ FontSubstConfiguration::FontSubstConfiguration()
         // create configuration hierachical access name
         if( xSMgr.is() )
         {
-            m_xConfigProvider =
-                Reference< XMultiServiceFactory >(
-                    xSMgr->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                    "com.sun.star.configuration.ConfigurationProvider" ))),
-                    UNO_QUERY );
-            if( m_xConfigProvider.is() )
+            try
             {
-                Sequence< Any > aArgs(1);
-                PropertyValue aVal;
-                aVal.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) );
-                aVal.Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.VCL/FontSubstitutions" ) );
-                aArgs.getArray()[0] <<= aVal;
-                m_xConfigAccess =
-                    Reference< XNameAccess >(
-                        m_xConfigProvider->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                            "com.sun.star.configuration.ConfigurationAccess" )),
-                                                                        aArgs ),
+                m_xConfigProvider =
+                    Reference< XMultiServiceFactory >(
+                        xSMgr->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                        "com.sun.star.configuration.ConfigurationProvider" ))),
                         UNO_QUERY );
-                if( m_xConfigAccess.is() )
+                if( m_xConfigProvider.is() )
                 {
-                    Sequence< OUString > aLocales = m_xConfigAccess->getElementNames();
-                    // fill config hash with empty interfaces
-                    int nLocales = aLocales.getLength();
-                    const OUString* pLocaleStrings = aLocales.getConstArray();
-                    Locale aLoc;
-                    for( int i = 0; i < nLocales; i++ )
+                    Sequence< Any > aArgs(1);
+                    PropertyValue aVal;
+                    aVal.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) );
+                    aVal.Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.VCL/FontSubstitutions" ) );
+                    aArgs.getArray()[0] <<= aVal;
+                    m_xConfigAccess =
+                        Reference< XNameAccess >(
+                            m_xConfigProvider->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                                "com.sun.star.configuration.ConfigurationAccess" )),
+                                                                            aArgs ),
+                            UNO_QUERY );
+                    if( m_xConfigAccess.is() )
                     {
-                        sal_Int32 nIndex = 0;
-                        aLoc.Language = pLocaleStrings[i].getToken( 0, sal_Unicode('-'), nIndex ).toAsciiLowerCase();
-                        if( nIndex != -1 )
-                            aLoc.Country = pLocaleStrings[i].getToken( 0, sal_Unicode('-'), nIndex ).toAsciiUpperCase();
-                        else
-                            aLoc.Country = OUString();
-                        if( nIndex != -1 )
-                            aLoc.Variant = pLocaleStrings[i].getToken( 0, sal_Unicode('-'), nIndex ).toAsciiUpperCase();
-                        else
-                            aLoc.Variant = OUString();
-                        m_aSubst[ aLoc ] = LocaleSubst();
-                        m_aSubst[ aLoc ].aConfigLocaleString = pLocaleStrings[i];
+                        Sequence< OUString > aLocales = m_xConfigAccess->getElementNames();
+                        // fill config hash with empty interfaces
+                        int nLocales = aLocales.getLength();
+                        const OUString* pLocaleStrings = aLocales.getConstArray();
+                        Locale aLoc;
+                        for( int i = 0; i < nLocales; i++ )
+                        {
+                            sal_Int32 nIndex = 0;
+                            aLoc.Language = pLocaleStrings[i].getToken( 0, sal_Unicode('-'), nIndex ).toAsciiLowerCase();
+                            if( nIndex != -1 )
+                                aLoc.Country = pLocaleStrings[i].getToken( 0, sal_Unicode('-'), nIndex ).toAsciiUpperCase();
+                            else
+                                aLoc.Country = OUString();
+                            if( nIndex != -1 )
+                                aLoc.Variant = pLocaleStrings[i].getToken( 0, sal_Unicode('-'), nIndex ).toAsciiUpperCase();
+                            else
+                                aLoc.Variant = OUString();
+                            m_aSubst[ aLoc ] = LocaleSubst();
+                            m_aSubst[ aLoc ].aConfigLocaleString = pLocaleStrings[i];
+                        }
                     }
                 }
+            }
+            catch( Exception& )
+            {
+                // configuration is awry
+                m_xConfigProvider.clear();
+                m_xConfigAccess.clear();
             }
         }
     }
