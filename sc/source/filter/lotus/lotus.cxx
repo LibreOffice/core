@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lotus.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:42:09 $
+ *  last change: $Author: kz $ $Date: 2006-07-21 12:28:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sc.hxx"
 #include "lotimpop.hxx"
 
 #include <sfx2/docfile.hxx>
