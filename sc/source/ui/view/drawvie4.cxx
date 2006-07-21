@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawvie4.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:38:51 $
+ *  last change: $Author: kz $ $Date: 2006-07-21 14:53:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,15 +33,14 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sc.hxx"
+
 #ifndef _COM_SUN_STAR_EMBED_NOVISUALAREASIZEEXCEPTION_HPP_
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #endif
 
-#ifdef PCH
-#include "ui_pch.hxx"
-#endif
 
-#pragma hdrstop
 
 // INCLUDE ---------------------------------------------------------------
 #include <sch/memchrt.hxx>
