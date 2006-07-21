@@ -4,9 +4,9 @@
  *
  *  $RCSfile: output.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:01:40 $
+ *  last change: $Author: kz $ $Date: 2006-07-21 15:05:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,11 +33,10 @@
  *
  ************************************************************************/
 
-#ifdef PCH
-#include "ui_pch.hxx"
-#endif
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sc.hxx"
 
-#pragma hdrstop
+
 
 #ifndef _COM_SUN_STAR_EMBED_EMBEDMISC_HPP_
 #include <com/sun/star/embed/EmbedMisc.hpp>
