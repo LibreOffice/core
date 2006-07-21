@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scmod.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:07:09 $
+ *  last change: $Author: kz $ $Date: 2006-07-21 13:10:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,9 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sc.hxx"
+
 #ifndef _COM_SUN_STAR_UI_DIALOGS_XEXECUTABLEDIALOG_HPP_
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #endif
@@ -40,13 +43,9 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
-#ifdef PCH
-#include "ui_pch.hxx"
-#endif
 
 
 
-#pragma hdrstop
 
 // INCLUDE ---------------------------------------------------------------
 
