@@ -4,9 +4,9 @@
  *
  *  $RCSfile: multipat.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 12:01:46 $
+ *  last change: $Author: kz $ $Date: 2006-07-21 10:40:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@ ModalDialog RID_SVXDLG_MULTIPATH
 {
     HelpId = HID_MULTIPATH ;
     OutputSize = TRUE ;
-    Size = MAP_APPFONT ( 194 , 120 ) ;
+    Size = MAP_APPFONT ( 260 , 120 ) ;
     Text [ de ] = "Pfade auswählen" ;
     Text [ en-US ] = "Select Paths" ;
     Text [ x-comment ] = " ";
@@ -52,7 +52,7 @@ ModalDialog RID_SVXDLG_MULTIPATH
     FixedLine FL_MULTIPATH
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 182 , 8 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text [ de ] = "Pfade" ;
         Text [ en-US ] = "Paths" ;
         Text [ x-comment ] = " ";
@@ -61,7 +61,7 @@ ModalDialog RID_SVXDLG_MULTIPATH
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 120 , 80 ) ;
+        Size = MAP_APPFONT ( 189 , 80 ) ;
         AutoHScroll = TRUE ;
     };
     Control LB_RADIOBUTTON
@@ -69,20 +69,20 @@ ModalDialog RID_SVXDLG_MULTIPATH
         Hide = TRUE ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 126 , 77 ) ;
+        Size = MAP_APPFONT ( 195 , 77 ) ;
     };
     FixedText FT_RADIOBUTTON
     {
         Hide = TRUE ;
         NoLabel = TRUE ;
         Pos = MAP_APPFONT ( 6 , 86 );
-        Size = MAP_APPFONT ( 126 , 8 );
+        Size = MAP_APPFONT ( 195 , 8 );
         Text [ de ] = "Wählen Sie den Standardpfad für neue Dateien.";
         Text [ en-US ] = "Mark the default path for new files.";
     };
     PushButton BTN_ADD_MULTIPATH
     {
-        Pos = MAP_APPFONT ( 138 , 14 ) ;
+        Pos = MAP_APPFONT ( 204 , 14 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ de ] = "Hi~nzufügen..." ;
         Text [ en-US ] = "~Add..." ;
@@ -90,7 +90,7 @@ ModalDialog RID_SVXDLG_MULTIPATH
     };
     PushButton BTN_DEL_MULTIPATH
     {
-        Pos = MAP_APPFONT ( 138 , 31 ) ;
+        Pos = MAP_APPFONT ( 204 , 31 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ de ] = "~Löschen" ;
         Text [ en-US ] = "~Delete" ;
@@ -98,18 +98,18 @@ ModalDialog RID_SVXDLG_MULTIPATH
     };
     OKButton BTN_MULTIPATH_OK
     {
-        Pos = MAP_APPFONT ( 29 , 100 ) ;
+        Pos = MAP_APPFONT ( 95 , 100 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         DefButton = TRUE;
     };
     CancelButton BTN_MULTIPATH_CANCEL
     {
-        Pos = MAP_APPFONT ( 82 , 100 ) ;
+        Pos = MAP_APPFONT ( 148 , 100 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
     HelpButton BTN_MULTIPATH_HELP
     {
-        Pos = MAP_APPFONT (  138 , 100 ) ;
+        Pos = MAP_APPFONT (  204 , 100 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
     String STR_HEADER_PATHS
