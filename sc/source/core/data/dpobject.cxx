@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dpobject.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-13 16:52:58 $
+ *  last change: $Author: kz $ $Date: 2006-07-21 10:55:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,11 +33,10 @@
  *
  ************************************************************************/
 
-#ifdef PCH
-#include "core_pch.hxx"
-#endif
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sc.hxx"
 
-#pragma hdrstop
+
 
 // INCLUDE ---------------------------------------------------------------
 
