@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_package.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 17:07:16 $
+ *  last change: $Author: kz $ $Date: 2006-07-21 17:21:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,7 +134,7 @@ class BackendImpl : public ImplBaseT
         OUString findLocalizedLicense(
             const css::uno::Reference<css::xml::dom::XElement>& xRoot,
             const css::uno::Reference<css::xml::xpath::XXPathAPI>& xXPath);
-        OUString BackendImpl::PackageImpl::getLicenseText(
+        OUString getLicenseText(
             const css::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv,
             const OUString& licenseUrl);
 
