@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pathsettings.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 12:04:18 $
+ *  last change: $Author: kz $ $Date: 2006-07-21 10:35:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,7 +103,8 @@
 
 const ::rtl::OUString CFGPROP_INTERNALPATHES = ::rtl::OUString::createFromAscii("InternalPaths");
 const ::rtl::OUString CFGPROP_USERPATHES     = ::rtl::OUString::createFromAscii("UserPaths"    );
-const ::rtl::OUString CFGPROP_WRITEPATH      = ::rtl::OUString::createFromAscii("WritePath"     );
+const ::rtl::OUString CFGPROP_WRITEPATH      = ::rtl::OUString::createFromAscii("WritePath"    );
+const ::rtl::OUString CFGPROP_ISSINGLEPATH   = ::rtl::OUString::createFromAscii("IsSinglePath" );
 
 /*
     0 : old style              "Template"              string using ";" as seperator
@@ -313,6 +314,9 @@ PathSettings::PathInfo PathSettings::impl_readNewFormat(const ::rtl::OUString& s
     // read the writeable path
     xPath->getByName(CFGPROP_WRITEPATH) >>= aPathVal.sWritePath;
 
+    // read state props
+    xPath->getByName(CFGPROP_ISSINGLEPATH) >>= aPathVal.bIsSinglePath;
+
     return aPathVal;
 }
 
@@ -329,10 +333,13 @@ void PathSettings::impl_storePath(const PathSettings::PathInfo& aPath)
     impl_subst(aResubstPath, sal_True);
 
     // update new configuration
-    ::comphelper::ConfigurationHelper::writeRelativeKey(xCfgNew,
-                                                        aResubstPath.sPathName,
-                                                        CFGPROP_USERPATHES,
-                                                        css::uno::makeAny(aResubstPath.lUserPaths.getAsConstList()));
+    if (! aResubstPath.bIsSinglePath)
+    {
+        ::comphelper::ConfigurationHelper::writeRelativeKey(xCfgNew,
+                                                            aResubstPath.sPathName,
+                                                            CFGPROP_USERPATHES,
+                                                            css::uno::makeAny(aResubstPath.lUserPaths.getAsConstList()));
+    }
 
     ::comphelper::ConfigurationHelper::writeRelativeKey(xCfgNew,
                                                         aResubstPath.sPathName,
@@ -358,7 +365,7 @@ void PathSettings::impl_storePath(const PathSettings::PathInfo& aPath)
 //-----------------------------------------------------------------------------
 #ifdef MIGRATE_OLD_USER_PATHES
 void PathSettings::impl_mergeOldUserPaths(      PathSettings::PathInfo& rPath,
-                                           const OUStringList&           lOld )
+                                          const OUStringList&           lOld )
 {
     OUStringList::const_iterator pIt;
     for (  pIt  = lOld.begin();
@@ -367,12 +374,21 @@ void PathSettings::impl_mergeOldUserPaths(      PathSettings::PathInfo& rPath,
     {
         const ::rtl::OUString& sOld = *pIt;
 
-        if (
-            (  rPath.lInternalPaths.findConst(sOld) == rPath.lInternalPaths.end()) &&
-            (  rPath.lUserPaths.findConst(sOld)     == rPath.lUserPaths.end()    ) &&
-            (! rPath.sWritePath.equals(sOld)                                       )
-           )
-           rPath.lUserPaths.push_back(sOld);
+        if (rPath.bIsSinglePath)
+        {
+            LOG_ASSERT2(lOld.size()>1, "PathSettings::impl_mergeOldUserPaths()", "Single path has more then one path value inside old configuration (Common.xcu)!")
+            if (! rPath.sWritePath.equals(sOld))
+               rPath.sWritePath = sOld;
+        }
+        else
+        {
+            if (
+                (  rPath.lInternalPaths.findConst(sOld) == rPath.lInternalPaths.end()) &&
+                (  rPath.lUserPaths.findConst(sOld)     == rPath.lUserPaths.end()    ) &&
+                (! rPath.sWritePath.equals(sOld)                                     )
+               )
+               rPath.lUserPaths.push_back(sOld);
+        }
     }
 }
 #endif // MIGRATE_OLD_USER_PATHES
@@ -393,6 +409,11 @@ PathSettings::EChangeOp PathSettings::impl_updatePath(const ::rtl::OUString& sPa
     {
         aPath = impl_readNewFormat(sPath);
         aPath.sPathName = sPath;
+        // replace all might existing variables with real values
+        // Do it before these old pathes will be compared against the
+        // new path configuration. Otherwise some striungs uses different variables ... but substitution
+        // will produce strings with same content (because some variables are redundant!)
+        impl_subst(aPath, sal_False);
     }
     catch(const css::uno::RuntimeException& exRun)
         { throw exRun; }
@@ -407,6 +428,11 @@ PathSettings::EChangeOp PathSettings::impl_updatePath(const ::rtl::OUString& sPa
         // migration of old user defined values on demand
         // can be disabled for a new major
         OUStringList lOldVals = impl_readOldFormat(sPath);
+        // replace all might existing variables with real values
+        // Do it before these old pathes will be compared against the
+        // new path configuration. Otherwise some striungs uses different variables ... but substitution
+        // will produce strings with same content (because some variables are redundant!)
+        impl_subst(lOldVals, fa_getSubstitution(), sal_False);
         impl_mergeOldUserPaths(aPath, lOldVals);
     }
     catch(const css::uno::RuntimeException& exRun)
@@ -432,8 +458,6 @@ PathSettings::EChangeOp PathSettings::impl_updatePath(const ::rtl::OUString& sPa
     {
         case PathSettings::E_ADDED :
              {
-                // replace all might existing variables with real values
-                impl_subst(aPath, sal_False);
                 if (bNotifyListener)
                 {
                     pPathOld = 0;
@@ -446,8 +470,6 @@ PathSettings::EChangeOp PathSettings::impl_updatePath(const ::rtl::OUString& sPa
 
         case PathSettings::E_CHANGED :
              {
-                // replace all might existing variables with real values
-                impl_subst(aPath, sal_False);
                 if (bNotifyListener)
                 {
                     pPathOld = &(pPath->second);
@@ -472,6 +494,7 @@ PathSettings::EChangeOp PathSettings::impl_updatePath(const ::rtl::OUString& sPa
                 }
              }
              break;
+
         default: // to let compiler be happy
              break;
     }
@@ -817,9 +840,13 @@ css::uno::Any PathSettings::impl_getPathValue(sal_Int32 nID) const
 void PathSettings::impl_setPathValue(      sal_Int32      nID ,
                                      const css::uno::Any& aVal)
 {
-    PathSettings::PathInfo* pPath = impl_getPathAccess(nID);
-    if (! pPath)
+    PathSettings::PathInfo* pOrgPath = impl_getPathAccess(nID);
+    if (! pOrgPath)
         throw css::container::NoSuchElementException();
+
+    // We work on a copied path ... so we can be sure that errors during this operation
+    // does not make our internal cache invalid  .-)
+    PathSettings::PathInfo aChangePath(*pOrgPath);
 
     switch(impl_getPropGroup(nID))
     {
@@ -828,30 +855,62 @@ void PathSettings::impl_setPathValue(      sal_Int32      nID ,
                 ::rtl::OUString sVal;
                 aVal >>= sVal;
                 OUStringList lList = impl_convertOldStyle2Path(sVal);
-                impl_purgeKnownPaths(*pPath, lList);
+                impl_purgeKnownPaths(aChangePath, lList);
                 if (! impl_isValidPath(lList))
                     throw css::lang::IllegalArgumentException();
-                pPath->lUserPaths = lList;
+
+                if (aChangePath.bIsSinglePath)
+                {
+                    LOG_ASSERT2(lList.size()>1, "PathSettings::impl_setPathValue()", "You try to set more then path value for a defined SINGLE_PATH!")
+                    if (lList.size()>0)
+                        aChangePath.sWritePath = *(lList.begin());
+                    else
+                        aChangePath.sWritePath = ::rtl::OUString();
+                }
+                else
+                {
+                    aChangePath.lUserPaths = lList;
+                }
              }
              break;
 
         case IDGROUP_INTERNAL_PATHES :
              {
+                if (aChangePath.bIsSinglePath)
+                {
+                    ::rtl::OUStringBuffer sMsg(256);
+                    sMsg.appendAscii("The path '"    );
+                    sMsg.append     (aChangePath.sPathName);
+                    sMsg.appendAscii("' is defined as SINGLE_PATH. It's sub set of internal pathes cant be set.");
+                    throw css::uno::Exception(sMsg.makeStringAndClear(),
+                                              static_cast< ::cppu::OWeakObject* >(this));
+                }
+
                 OUStringList lList;
                 lList << aVal;
                 if (! impl_isValidPath(lList))
                     throw css::lang::IllegalArgumentException();
-                pPath->lInternalPaths = lList;
+                aChangePath.lInternalPaths = lList;
              }
              break;
 
         case IDGROUP_USER_PATHES :
              {
+                if (aChangePath.bIsSinglePath)
+                {
+                    ::rtl::OUStringBuffer sMsg(256);
+                    sMsg.appendAscii("The path '"    );
+                    sMsg.append     (aChangePath.sPathName);
+                    sMsg.appendAscii("' is defined as SINGLE_PATH. It's sub set of internal pathes cant be set.");
+                    throw css::uno::Exception(sMsg.makeStringAndClear(),
+                                              static_cast< ::cppu::OWeakObject* >(this));
+                }
+
                 OUStringList lList;
                 lList << aVal;
                 if (! impl_isValidPath(lList))
                     throw css::lang::IllegalArgumentException();
-                pPath->lUserPaths = lList;
+                aChangePath.lUserPaths = lList;
              }
              break;
 
@@ -861,12 +920,31 @@ void PathSettings::impl_setPathValue(      sal_Int32      nID ,
                 aVal >>= sVal;
                 if (! impl_isValidPath(sVal))
                     throw css::lang::IllegalArgumentException();
-                pPath->sWritePath = sVal;
+                aChangePath.sWritePath = sVal;
              }
              break;
     }
 
-    impl_storePath(*pPath);
+    // TODO check if path has at least one path value set
+    // At least it depends from the feature using this path, if an empty path list is allowed.
+    /*
+    if (impl_isPathEmpty(aChangePath))
+    {
+        ::rtl::OUStringBuffer sMsg(256);
+        sMsg.appendAscii("The path '"    );
+        sMsg.append     (aChangePath.sPathName);
+        sMsg.appendAscii("' is empty now ... Not a real good idea.");
+        throw css::uno::Exception(sMsg.makeStringAndClear(),
+                                  static_cast< ::cppu::OWeakObject* >(this));
+    }
+    */
+
+    // first we should try to store the changed (copied!) path ...
+    // In case an error occure on saving time an exception is thrown ...
+    // If no exception occures we can update our internal cache (means
+    // we can overwrite pOrgPath !
+    impl_storePath(aChangePath);
+    pOrgPath->takeOver(aChangePath);
 }
 
 //-----------------------------------------------------------------------------
