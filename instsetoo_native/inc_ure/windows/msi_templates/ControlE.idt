@@ -81,7 +81,7 @@ MaintenanceType	Next	ReinstallMode	[ReinstallModeText]	_IsMaintenance = "Reinsta
 MaintenanceWelcome	Cancel	SpawnDialog	CancelSetup	1	0
 MaintenanceWelcome	Next	NewDialog	MaintenanceType	1	0
 OutOfSpace	Resume	NewDialog	AdminNetworkLocation	ACTION = "ADMIN"	0
-OutOfSpace	Resume	NewDialog	CustomSetup	ACTION <> "ADMIN"	0
+OutOfSpace	Resume	NewDialog	DestinationFolder	ACTION <> "ADMIN"	0
 PatchWelcome	Back	NewDialog	SplashBitmap	Display_IsBitmapDlg	0
 PatchWelcome	Cancel	SpawnDialog	CancelSetup	1	1
 PatchWelcome	Next	EndDialog	Return	1	3
