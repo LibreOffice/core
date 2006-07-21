@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dpgroupdlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:34:36 $
+ *  last change: $Author: kz $ $Date: 2006-07-21 13:22:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,13 +33,13 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sc.hxx"
+
 #ifdef SC_DLLIMPLEMENTATION
 #undef SC_DLLIMPLEMENTATION
 #endif
 
-#ifdef PCH
-#include "ui_pch.hxx"
-#endif
 
 #ifndef SC_DPGROUPDLG_HXX
 #include "dpgroupdlg.hxx"
