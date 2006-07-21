@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbcolect.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:36:52 $
+ *  last change: $Author: kz $ $Date: 2006-07-21 11:26:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,11 +32,10 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#ifdef PCH
-#include "core_pch.hxx"
-#endif
 
-#pragma hdrstop
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sc.hxx"
+
 
 #include <tools/debug.hxx>
 #ifndef _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
