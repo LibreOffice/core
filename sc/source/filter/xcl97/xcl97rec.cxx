@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:06:17 $
+ *  last change: $Author: kz $ $Date: 2006-07-21 12:38:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,11 +33,10 @@
  *
  ************************************************************************/
 
-#ifdef PCH
-#include "filt_pch.hxx"
-#endif
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sc.hxx"
 
-#pragma hdrstop
+
 
 #ifndef _SVDPOOL_HXX //autogen wg. SdrItemPool
 #include <svx/svdpool.hxx>
