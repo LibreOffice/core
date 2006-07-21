@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawpage.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 21:31:52 $
+ *  last change: $Author: kz $ $Date: 2006-07-21 11:01:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,11 +33,10 @@
  *
  ************************************************************************/
 
-#ifdef PCH
-#include "core_pch.hxx"
-#endif
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sc.hxx"
 
-#pragma hdrstop
+
 
 // INCLUDE ---------------------------------------------------------------
 
