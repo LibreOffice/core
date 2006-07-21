@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen5.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-08 14:32:16 $
+ *  last change: $Author: kz $ $Date: 2006-07-21 10:52:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sc.hxx"
 #ifndef _COM_SUN_STAR_EMBED_XCLASSIFIEDOBJECT_HPP_
 #include <com/sun/star/embed/XClassifiedObject.hpp>
 #endif
@@ -40,11 +43,7 @@
 #endif
 
 
-#ifdef PCH
-#include "core_pch.hxx"
-#endif
 
-#pragma hdrstop
 
 #pragma optimize("",off)
 #pragma optimize("q",off) // p-code off
