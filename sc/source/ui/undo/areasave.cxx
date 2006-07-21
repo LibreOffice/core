@@ -4,9 +4,9 @@
  *
  *  $RCSfile: areasave.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 12:13:22 $
+ *  last change: $Author: kz $ $Date: 2006-07-21 14:25:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,13 +33,12 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sc.hxx"
+
 // -----------------------------------------------------------------------
 
-#ifdef PCH
-#include "ui_pch.hxx"
-#endif
 
-#pragma hdrstop
 
 // INCLUDE ---------------------------------------------------------------
 
