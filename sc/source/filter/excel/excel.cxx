@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excel.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 13:28:10 $
+ *  last change: $Author: kz $ $Date: 2006-07-21 11:47:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,11 +32,10 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#ifdef PCH
-#include "filt_pch.hxx"
-#endif
 
-#pragma hdrstop
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sc.hxx"
+
 
 // ============================================================================
 
