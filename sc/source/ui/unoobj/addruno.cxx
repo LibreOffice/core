@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addruno.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:41:04 $
+ *  last change: $Author: kz $ $Date: 2006-07-21 14:28:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,11 +33,10 @@
  *
  ************************************************************************/
 
-#ifdef PCH
-#include "ui_pch.hxx"
-#endif
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sc.hxx"
 
-#pragma hdrstop
+
 
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
