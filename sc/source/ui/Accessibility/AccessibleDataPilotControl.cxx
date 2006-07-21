@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleDataPilotControl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:16:56 $
+ *  last change: $Author: kz $ $Date: 2006-07-21 13:04:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sc.hxx"
 
 #ifndef _SC_ACCESSIBLEDATAPILOTCONTROL_HXX
 #include "AccessibleDataPilotControl.hxx"
