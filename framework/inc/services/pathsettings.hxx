@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pathsettings.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 12:03:39 $
+ *  last change: $Author: kz $ $Date: 2006-07-21 10:34:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,11 +143,26 @@ class PathSettings : public  css::lang::XTypeProvider             ,
         public:
 
             PathInfo()
-                : sPathName      ()
+                : sPathName     ()
                 , lInternalPaths()
                 , lUserPaths    ()
-                , sWritePath     ()
+                , sWritePath    ()
+                , bIsSinglePath (sal_False)
             {}
+
+            PathInfo(const PathInfo& rCopy)
+            {
+                takeOver(rCopy);
+            }
+
+            void takeOver(const PathInfo& rCopy)
+            {
+                sPathName      = rCopy.sPathName;
+                lInternalPaths = rCopy.lInternalPaths;
+                lUserPaths     = rCopy.lUserPaths;
+                sWritePath     = rCopy.sWritePath;
+                bIsSinglePath  = rCopy.bIsSinglePath;
+            }
 
             /// an internal name describing this path
             ::rtl::OUString sPathName;
@@ -160,6 +175,9 @@ class PathSettings : public  css::lang::XTypeProvider             ,
 
             /// this special path is used to generate feature depending content there
             ::rtl::OUString sWritePath;
+
+            /// indicates real single pathes, which uses WritePath property only
+            sal_Bool bIsSinglePath;
     };
 
     typedef BaseHash< PathSettings::PathInfo > PathHash;
