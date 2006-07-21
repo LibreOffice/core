@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sctictac.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:50:54 $
+ *  last change: $Author: kz $ $Date: 2006-07-21 11:44:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,9 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sc.hxx"
+
 /* Tic-Tac-Toe program by Steve Chapel schapel@cs.ucsb.edu
    Uses alpha-beta pruning minimax search to play a "perfect" game.
    The alpha-beta pruning can be removed, but will increase search time.
@@ -42,7 +45,6 @@
 #include <stdio.h>
 #include <ctype.h>
 
-#pragma hdrstop
 
 #include "sctictac.hxx"
 
