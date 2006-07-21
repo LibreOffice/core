@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Paths.xcu,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 09:17:23 $
+ *  last change: $Author: kz $ $Date: 2006-07-21 10:36:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,9 @@
         </node>
 
         <node oor:name="Backup" oor:op="fuse" oor:mandatory="true">
+            <prop oor:name="IsSinglePath" oor:finalized="true">
+                <value>true</value>
+            </prop>
             <node oor:name="InternalPaths" oor:finalized="true" />
             <prop oor:name="UserPaths" oor:finalized="true" />
             <prop oor:name="WritePath">
@@ -162,6 +165,9 @@
         </node>
 
         <node oor:name="Temp" oor:op="fuse" oor:mandatory="true">
+            <prop oor:name="IsSinglePath" oor:finalized="true">
+                <value>true</value>
+            </prop>
             <node oor:name="InternalPaths" oor:finalized="true" />
             <prop oor:name="UserPaths" oor:finalized="true" />
             <prop oor:name="WritePath">
@@ -197,6 +203,9 @@
         </node>
 
         <node oor:name="Work" oor:op="fuse" oor:mandatory="true">
+            <prop oor:name="IsSinglePath" oor:finalized="true">
+                <value>true</value>
+            </prop>
             <node oor:name="InternalPaths" oor:finalized="true" />
             <prop oor:name="UserPaths" oor:finalized="true" />
             <prop oor:name="WritePath">

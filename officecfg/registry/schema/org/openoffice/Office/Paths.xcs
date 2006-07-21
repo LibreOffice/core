@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Paths.xcs,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 09:13:55 $
+ *  last change: $Author: kz $ $Date: 2006-07-21 10:36:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,12 @@
                 <info>
                 <desc>Bind a list of path values to a "path name" e.g. "Template".</desc>
                 </info>
+            <prop oor:name="IsSinglePath" oor:type="xs:boolean">
+				<info>
+					<desc>Mark a NamedPath as SinglePath (false=MultiPath). Only the property WritePath is used for such single pathes then.</desc>
+				</info>
+                <value>false</value>
+            </prop>
             <set oor:name="InternalPaths" oor:node-type="MultiPath">
                 <info>
                 <desc>Contains path values configured by an administrator or package (not visible for the user).</desc>
