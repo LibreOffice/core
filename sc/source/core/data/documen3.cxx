@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen3.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:45:20 $
+ *  last change: $Author: kz $ $Date: 2006-07-21 10:51:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,13 +32,12 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sc.hxx"
 // System - Includes -----------------------------------------------------
 
-#ifdef PCH
-#include "core_pch.hxx"
-#endif
 
-#pragma hdrstop
 
 #ifdef WIN
 // SFX
