@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbinsert.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:29:58 $
+ *  last change: $Author: kz $ $Date: 2006-07-21 13:16:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,15 +33,14 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sc.hxx"
+
 // System - Includes -----------------------------------------------------
 
 #include <string> // HACK: prevent conflict between STLPORT and Workshop headers
 
-#ifdef PCH
-#include "ui_pch.hxx"
-#endif
 
-#pragma hdrstop
 
 // INCLUDE ---------------------------------------------------------------
 
