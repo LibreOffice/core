@@ -4,9 +4,9 @@
  *
  *  $RCSfile: color.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-12 15:09:44 $
+ *  last change: $Author: thb $ $Date: 2006-07-21 20:57:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,7 @@ public:
                                                         getGreen()==rhs.getGreen() &&
                                                         getBlue()==rhs.getBlue()); }
     bool operator!=( const Color& rhs ) const { return !(*this==rhs); }
-    double magnitude() const { return sqrt(getRed()*getRed()
+    double magnitude() const { return sqrt((double)getRed()*getRed()
                                            + getGreen()*getGreen()
                                            + getBlue()*getBlue()); }
 };

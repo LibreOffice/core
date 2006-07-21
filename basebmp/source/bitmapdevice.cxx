@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmapdevice.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-14 14:22:58 $
+ *  last change: $Author: thb $ $Date: 2006-07-21 20:57:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1760,6 +1760,11 @@ struct MaskTraitsGeneric
 
 //----------------------------------------------------------------------------------
 
+// Some compilers don't like the nested template wrap_accessor
+// reference in the parameter list - being slightly less type safe,
+// then.
+#ifndef BASEBMP_NO_NESTED_TEMPLATE_PARAMETER
+
 /// Produces a specialized renderer for the given pixel format
 template< class FormatTraits, class MaskTraits >
 BitmapDeviceSharedPtr createRenderer(
@@ -1772,6 +1777,21 @@ BitmapDeviceSharedPtr createRenderer(
           typename FormatTraits::raw_accessor_type>::type const& rAccessor,
     boost::shared_array< sal_uInt8 >                             pMem,
     const PaletteMemorySharedVector&                             pPal )
+
+#else
+
+template< class FormatTraits, class MaskTraits, class Accessor >
+BitmapDeviceSharedPtr createRenderer(
+    const basegfx::B2IRange&                                     rBounds,
+    bool                                                         bTopDown,
+    sal_Int32                                                    nScanlineFormat,
+    sal_Int32                                                    nScanlineStride,
+    sal_uInt8*                                                   pFirstScanline,
+    Accessor const&                                              rAccessor,
+    boost::shared_array< sal_uInt8 >                             pMem,
+    const PaletteMemorySharedVector&                             pPal )
+
+#endif
 {
     typedef typename FormatTraits::iterator_type                Iterator;
     typedef BitmapRenderer< Iterator,

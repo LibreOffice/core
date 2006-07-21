@@ -4,9 +4,9 @@
  *
  *  $RCSfile: colormisc.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-13 12:03:25 $
+ *  last change: $Author: thb $ $Date: 2006-07-21 20:57:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,7 +130,7 @@ template<> struct ColorTraits< Color >
 };
 
 /// Only defined for 8 bit alpha, currently
-template<> template<bool polarity> struct ColorTraits< Color >::blend_functor< sal_uInt8, polarity >
+template<bool polarity> struct ColorTraits< Color >::blend_functor< sal_uInt8, polarity >
 {
     typedef ColorBlendFunctor<polarity> type;
 };

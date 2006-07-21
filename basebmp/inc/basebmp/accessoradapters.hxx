@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessoradapters.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-12 15:09:43 $
+ *  last change: $Author: thb $ $Date: 2006-07-21 20:57:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,10 @@ template< class WrappedAccessor,
           typename GetterFunctor,
           typename SetterFunctor > class UnaryFunctionAccessorAdapter
 {
+public:
+    typedef typename GetterFunctor::result_type   value_type;
+    typedef typename SetterFunctor::argument_type argument_type;
+
 #ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 // making all members public, if no member template friends
 private:
@@ -74,9 +78,6 @@ private:
     SetterFunctor   maSetterFunctor;
 
 public:
-    typedef typename GetterFunctor::result_type   value_type;
-    typedef typename SetterFunctor::argument_type argument_type;
-
     UnaryFunctionAccessorAdapter() :
         maAccessor(),
         maGetterFunctor(),
@@ -92,7 +93,7 @@ public:
         maSetterFunctor( rSrc.maSetterFunctor )
     {}
 
-    template< class T > explicit UnaryFunctionAccessorAdapter( T accessor ) :
+    template< class T > explicit UnaryFunctionAccessorAdapter( T const& accessor ) :
         maAccessor( accessor ),
         maGetterFunctor(),
         maSetterFunctor()
@@ -178,6 +179,10 @@ public:
 template< class WrappedAccessor,
           typename SetterFunctor > class BinarySetterFunctionAccessorAdapter
 {
+public:
+    typedef typename WrappedAccessor::value_type         value_type;
+    typedef typename SetterFunctor::second_argument_type argument_type;
+
 #ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 // making all members public, if no member template friends
 private:
@@ -188,9 +193,6 @@ private:
     SetterFunctor      maFunctor;
 
 public:
-    typedef typename WrappedAccessor::value_type         value_type;
-    typedef typename SetterFunctor::second_argument_type argument_type;
-
     BinarySetterFunctionAccessorAdapter() :
         maAccessor(),
         maFunctor()
@@ -204,7 +206,7 @@ public:
         maFunctor( rSrc.maFunctor )
     {}
 
-    template< class T > explicit BinarySetterFunctionAccessorAdapter( T accessor ) :
+    template< class T > explicit BinarySetterFunctionAccessorAdapter( T const& accessor ) :
         maAccessor( accessor ),
         maFunctor()
     {}
@@ -293,6 +295,10 @@ template< class WrappedAccessor1,
           class WrappedAccessor2,
           typename Functor > class TernarySetterFunctionAccessorAdapter
 {
+public:
+    typedef typename WrappedAccessor1::value_type value_type;
+    typedef typename Functor::third_argument_type argument_type;
+
 #ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 // making all members public, if no member template friends
 private:
@@ -304,16 +310,13 @@ private:
     Functor          maFunctor;
 
 public:
-    typedef typename WrappedAccessor1::value_type value_type;
-    typedef typename Functor::third_argument_type argument_type;
-
     TernarySetterFunctionAccessorAdapter() :
         ma1stAccessor(),
         ma2ndAccessor(),
         maFunctor()
     {}
 
-    template< class T > explicit TernarySetterFunctionAccessorAdapter( T accessor ) :
+    template< class T > explicit TernarySetterFunctionAccessorAdapter( T const& accessor ) :
         ma1stAccessor( accessor ),
         ma2ndAccessor(),
         maFunctor()
@@ -428,6 +431,13 @@ public:
 template< class WrappedAccessor1,
           class WrappedAccessor2 > class JoinImageAccessorAdapter
 {
+public:
+    // TODO(F3): Need numeric traits and a few free functions to
+    // actually calculate with a pair (semantic: apply every operation
+    // individually to the contained types)
+    typedef std::pair<typename WrappedAccessor1::value_type,
+                      typename WrappedAccessor2::value_type>    value_type;
+
 #ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 // making all members public, if no member template friends
 private:
@@ -438,18 +448,12 @@ private:
     WrappedAccessor2 ma2ndAccessor;
 
 public:
-    // TODO(F3): Need numeric traits and a few free functions to
-    // actually calculate with a pair (semantic: apply every operation
-    // individually to the contained types)
-    typedef std::pair<typename WrappedAccessor1::value_type,
-                      typename WrappedAccessor2::value_type>    value_type;
-
     JoinImageAccessorAdapter() :
         ma1stAccessor(),
         ma2ndAccessor()
     {}
 
-    template< class T > explicit JoinImageAccessorAdapter( T accessor ) :
+    template< class T > explicit JoinImageAccessorAdapter( T const& accessor ) :
         ma1stAccessor( accessor ),
         ma2ndAccessor()
     {}

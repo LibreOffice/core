@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessorfunctors.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-13 12:03:25 $
+ *  last change: $Author: thb $ $Date: 2006-07-21 20:57:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,7 +158,7 @@ template< typename T, typename M > struct FastIntegerOutputMaskFunctor<T,M,false
     An adaptable ternary functor (as can e.g. be passed to the
     TernarySetterFunctionAccessorAdapter)
  */
-template< typename Functor > class BinaryFunctorSplittingWrapper :
+template< typename Functor > struct BinaryFunctorSplittingWrapper :
         public std::binary_function<typename Functor::first_argument_type,
                                     std::pair<typename Functor::third_argument_type,
                                               typename Functor::second_argument_type>,

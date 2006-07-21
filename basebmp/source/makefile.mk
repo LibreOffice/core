@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: thb $ $Date: 2006-07-11 11:38:56 $
+#   last change: $Author: thb $ $Date: 2006-07-21 20:57:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,10 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Settings -----------------------------------------------------------
 
 .INCLUDE :	settings.mk
+
+.IF "$(OS)"=="SOLARIS" && "$(COM)"!="GCC"
+CDEFS+= -DBASEBMP_NO_NESTED_TEMPLATE_PARAMETER
+.ENDIF
 
 # --- Common ----------------------------------------------------------
 
