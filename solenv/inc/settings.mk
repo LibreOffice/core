@@ -4,9 +4,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.198 $
+#   $Revision: 1.199 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-19 09:38:09 $
+#   last change: $Author: kz $ $Date: 2006-07-21 10:38:35 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -747,6 +747,7 @@ COMMONBIN=$(LOCAL_COMMON_OUT)$/bin
 # Include-Pfad
 # still without -I here s.a. target.mk INCLUDE
 INC=$(PRJ)$/inc
+INCPCH=$(PRJ)$/inc$/pch
 INCLOCAL=..$/inc
 INCGUI=$(PRJ)$/$(GUIBASE)$/inc
 INCCOM=$(OUT)$/inc
