@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdundo.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:48:01 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:57:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1195,7 +1195,7 @@ void SdrUndoObjSetText::SdrRepeat(SdrView& rView)
         rView.BegUndo(aStr);
         ULONG nAnz=rML.GetMarkCount();
         for (ULONG nm=0; nm<nAnz; nm++) {
-            SdrObject* pObj2=rML.GetMark(nm)->GetObj();
+            SdrObject* pObj2=rML.GetMark(nm)->GetMarkedSdrObj();
             SdrTextObj* pTextObj=PTR_CAST(SdrTextObj,pObj2);
             if (pTextObj!=NULL) {
                 rView.AddUndo(new SdrUndoObjSetText(*pTextObj));
