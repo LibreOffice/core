@@ -4,9 +4,9 @@
  *
  *  $RCSfile: attriblistmerge.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:02:54 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 09:21:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -175,24 +175,4 @@ namespace xmloff
 //.........................................................................
 }   // namespace xmloff
 //.........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.2.404.1  2005/09/05 14:38:53  rt
- *  #i54170# Change license header: remove SISSL
- *
- *  Revision 1.2  2003/12/01 16:22:27  rt
- *  INTEGRATION: CWS ooo20031110 (1.1.204); FILE MERGED
- *  2003/11/11 11:03:31 waratah 1.1.204.1: #i22301# Correct for scoping rules
- *
- *  Revision 1.1.204.1  2003/11/11 11:03:31  waratah
- *  #i22301# Correct for scoping rules
- *
- *  Revision 1.1  2000/12/12 12:02:06  fs
- *  initial checkin - helper class for mergin XAttributeList instances
- *
- *
- *  Revision 1.0 12.12.00 10:32:56  fs
- ************************************************************************/
 
