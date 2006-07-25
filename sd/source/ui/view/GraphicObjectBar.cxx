@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GraphicObjectBar.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 17:36:45 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:46:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,7 +164,7 @@ void GraphicObjectBar::GetFilterState( SfxItemSet& rSet )
 
     if( rMarkList.GetMarkCount() == 1 )
     {
-        SdrObject* pObj = rMarkList.GetMark( 0 )->GetObj();
+        SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
         if( pObj && pObj->ISA( SdrGrafObj ) && ( ( (SdrGrafObj*) pObj )->GetGraphicType() == GRAPHIC_BITMAP ) )
             bEnable = TRUE;
@@ -182,7 +182,7 @@ void GraphicObjectBar::ExecuteFilter( SfxRequest& rReq )
 
     if( rMarkList.GetMarkCount() == 1 )
     {
-        SdrObject* pObj = rMarkList.GetMark( 0 )->GetObj();
+        SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
         if( pObj && pObj->ISA( SdrGrafObj ) && ( (SdrGrafObj*) pObj )->GetGraphicType() == GRAPHIC_BITMAP )
         {
