@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fefly1.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 15:33:35 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:31:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -382,7 +382,7 @@ SwFlyFrm *SwFEShell::FindFlyFrm() const
         if( rMrkList.GetMarkCount() != 1 )
             return 0;
 
-        SdrObject *pO = rMrkList.GetMark( 0 )->GetObj();
+        SdrObject *pO = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
         return pO->ISA(SwVirtFlyDrawObj) ? ((SwVirtFlyDrawObj*)pO)->GetFlyFrm() : 0;
     }
     return 0;
@@ -418,10 +418,10 @@ const SwFrmFmt* SwFEShell::IsFlyInFly()
         return pFly->GetFmt();
     }
     else if ( rMrkList.GetMarkCount() != 1 ||
-         !GetUserCall(rMrkList.GetMark( 0 )->GetObj()) )
+         !GetUserCall(rMrkList.GetMark( 0 )->GetMarkedSdrObj()) )
         return NULL;
 
-    SdrObject *pObj = rMrkList.GetMark( 0 )->GetObj();
+    SdrObject *pObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
 
     SwFrmFmt *pFmt = FindFrmFmt( pObj );
     if( pFmt && FLY_AT_FLY == pFmt->GetAnchor().GetAnchorId() )
@@ -524,10 +524,10 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
 
     const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
     if ( rMrkList.GetMarkCount() != 1 ||
-         !GetUserCall(rMrkList.GetMark( 0 )->GetObj()) )
+         !GetUserCall(rMrkList.GetMark( 0 )->GetMarkedSdrObj()) )
         return aRet;
 
-    SdrObject* pObj = rMrkList.GetMark( 0 )->GetObj();
+    SdrObject* pObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
     // --> OD 2004-07-16 #i28701#
     SwAnchoredObject* pAnchoredObj = ::GetUserCall( pObj )->GetAnchoredObj( pObj );
     SwFrmFmt& rFmt = pAnchoredObj->GetFrmFmt();
@@ -1238,7 +1238,7 @@ sal_Bool SwFEShell::SetDrawingAttr( SfxItemSet& rSet )
         return bRet;
 
     StartUndo();
-    SdrObject *pObj = rMrkList.GetMark( 0 )->GetObj();
+    SdrObject *pObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
     SwFrmFmt *pFmt = FindFrmFmt( pObj );
     StartAllAction();
     if( SFX_ITEM_SET == rSet.GetItemState( RES_ANCHOR, sal_False ))
@@ -1454,7 +1454,7 @@ SwRect SwFEShell::GetObjRect() const
 /*  const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
      Rectangle aRect;
     for ( sal_uInt16 i = 0; i < rMrkList.GetMarkCount(); ++i )
-        aRect.Union( rMrkList.GetMark( i )->GetObj()->GetBoundRect() );
+        aRect.Union( rMrkList.GetMark( i )->GetMarkedSdrObj()->GetBoundRect() );
     return SwRect( aRect );*/
     if( Imp()->HasDrawView() )
         return Imp()->GetDrawView()->GetAllMarkedRect();
@@ -1903,7 +1903,7 @@ ObjCntType SwFEShell::GetObjCntTypeOfSelection( SdrObject** ppObj ) const
         const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
         for( sal_uInt32 i = 0, nE = rMrkList.GetMarkCount(); i < nE; ++i )
         {
-            SdrObject* pObj = rMrkList.GetMark( i )->GetObj();
+            SdrObject* pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
             ObjCntType eTmp = GetObjCntType( *pObj );
             if( !i )
             {
@@ -1932,7 +1932,7 @@ sal_Bool SwFEShell::ReplaceSdrObj( const String& rGrfName, const String& rFltNam
     if( Imp()->HasDrawView() &&  1 ==
         ( pMrkList = &Imp()->GetDrawView()->GetMarkedObjectList())->GetMarkCount() )
     {
-        SdrObject* pObj = pMrkList->GetMark( 0 )->GetObj();
+        SdrObject* pObj = pMrkList->GetMark( 0 )->GetMarkedSdrObj();
         SwFrmFmt *pFmt = FindFrmFmt( pObj );
 
         // Attribute sichern und dann an der Grafik setzen
