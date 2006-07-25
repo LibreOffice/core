@@ -4,9 +4,9 @@
  *
  *  $RCSfile: configvaluecontainer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 14:05:31 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 09:53:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -468,33 +468,4 @@ namespace utl
 //.........................................................................
 }   // namespace utl
 //.........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.4.16.2  2005/10/27 10:51:15  pl
- *  #i55991# removed warnings for solaris platform
- *
- *  Revision 1.4.16.1  2005/10/21 09:48:54  dbo
- *  #i53898# warning free code
- *
- *  Revision 1.4  2005/09/09 09:42:42  rt
- *  INTEGRATION: CWS ooo19126 (1.3.250); FILE MERGED
- *  2005/09/05 14:01:02 rt 1.3.250.1: #i54170# Change license header: remove SISSL
- *
- *  Revision 1.3.250.1  2005/09/05 14:01:02  rt
- *  #i54170# Change license header: remove SISSL
- *
- *  Revision 1.3  2001/09/27 11:20:49  hr
- *  #65293#: includes
- *
- *  Revision 1.2  2001/08/23 15:15:18  avy
- *  compiler error was checked
- *
- *  Revision 1.1  2001/08/21 12:53:30  fs
- *  initial checkin - helper class for accesing config data in fixed memmory locations (aka class members)
- *
- *
- *  Revision 1.0 20.08.01 15:47:36  fs
- ************************************************************************/
 
