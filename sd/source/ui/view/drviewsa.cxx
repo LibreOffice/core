@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewsa.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 17:44:36 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:49:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -903,7 +903,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
             // Detect whether they belong to the same layer.
             for( ULONG j = 0; j < nMarkCount && bOneLayer && j < 10; j++ )
             {
-                pObj = rMarkList.GetMark( j )->GetObj();
+                pObj = rMarkList.GetMark( j )->GetMarkedSdrObj();
                 if( pObj )
                 {
                     nLayer = pObj->GetLayer();
