@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nlsupport.c,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:18:22 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 09:40:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,6 @@
 #else
 #include <osl/module.h>
 #include <osl/thread.h>
-#include <unxmacxp_protos.h>
 #endif  /* !MACOSX */
 #endif  /* LINUX || SOLARIS || IRIX || NETBSD || MACOSX */
 
