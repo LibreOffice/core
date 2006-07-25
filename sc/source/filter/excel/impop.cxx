@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:50:08 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 09:57:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -276,8 +276,6 @@ void ImportExcel::ReadBlank()
         pColRowBuff->Used( aScPos );
         GetXFRangeBuffer().SetBlankXF( aScPos, nXFIdx );
     }
-
-    pLastFormCell = NULL;
 }
 
 void ImportExcel::ReadInteger()
@@ -296,8 +294,6 @@ void ImportExcel::ReadInteger()
         GetXFRangeBuffer().SetXF( aScPos, nXFIdx );
         GetDoc().PutCell( aScPos, new ScValueCell( nValue ) );
     }
-
-    pLastFormCell = NULL;
 }
 
 void ImportExcel::ReadNumber()
@@ -316,8 +312,6 @@ void ImportExcel::ReadNumber()
         GetXFRangeBuffer().SetXF( aScPos, nXFIdx );
         GetDoc().PutCell( aScPos, new ScValueCell( fValue ) );
     }
-
-    pLastFormCell = NULL;
 }
 
 void ImportExcel::ReadLabel()
@@ -350,8 +344,6 @@ void ImportExcel::ReadLabel()
         if( ScBaseCell* pCell = XclImpStringHelper::CreateCell( GetRoot(), aString, nXFIdx ) )
             GetDoc().PutCell( aScPos, pCell );
     }
-
-    pLastFormCell = NULL;
 }
 
 void ImportExcel::ReadBoolErr()
@@ -378,8 +370,6 @@ void ImportExcel::ReadBoolErr()
         pCell->SetDouble( fValue );
         GetDoc().PutCell( aScPos, pCell );
     }
-
-    pLastFormCell = NULL;
 }
 
 void ImportExcel::ReadRk()
@@ -398,8 +388,6 @@ void ImportExcel::ReadRk()
         GetXFRangeBuffer().SetXF( aScPos, nXFIdx );
         GetDoc().PutCell( aScPos, new ScValueCell( XclTools::GetDoubleFromRK( nRk ) ) );
     }
-
-    pLastFormCell = NULL;
 }
 
 
@@ -409,16 +397,6 @@ void ImportExcel::Window1()
 }
 
 
-
-
-void ImportExcel::RecString( void )
-{
-    if( pLastFormCell )
-    {
-        pLastFormCell->SetString( aIn.ReadByteString( GetBiff() != EXC_BIFF2 ) );
-        pLastFormCell = NULL;
-    }
-}
 
 
 void ImportExcel::Row25( void )
@@ -514,8 +492,6 @@ void ImportExcel::Note( void )
         ScPostIt aScNote( aIn.ReadByteString( TRUE ), GetDocPtr() );
         GetDoc().SetNote( aScPos.Col(), aScPos.Row(), aScPos.Tab(), aScNote );
     }
-
-    pLastFormCell = NULL;
 }
 
 
@@ -874,8 +850,6 @@ void ImportExcel::Shrfmla( void )
                 static_cast<SCROW>(nFirstRow), GetCurrScTab(),
                 static_cast<SCCOL>(nLastCol), static_cast<SCROW>(nLastRow),
                 GetCurrScTab()), *pErgebnis );
-
-    pLastFormCell = NULL;
 }
 
 
@@ -899,8 +873,6 @@ void ImportExcel::Mulrk( void )
             GetDoc().PutCell( aScPos, new ScValueCell( XclTools::GetDoubleFromRK( nRkNum ) ) );
         }
     }
-
-    pLastFormCell = NULL;
 }
 
 
@@ -922,8 +894,6 @@ void ImportExcel::Mulblank( void )
             GetXFRangeBuffer().SetBlankXF( aScPos, nXF );
         }
     }
-
-    pLastFormCell = NULL;
 }
 
 
@@ -955,8 +925,6 @@ void ImportExcel::Rstring( void )
         if( ScBaseCell* pCell = XclImpStringHelper::CreateCell( *this, aString, nXFIdx ) )
             GetDoc().PutCell( aScPos, pCell );
     }
-
-    pLastFormCell = NULL;
 }
 
 
@@ -1049,8 +1017,6 @@ void ImportExcel::Array34( void )
                 static_cast<SCROW>(nLastRow), aMarkData, EMPTY_STRING,
                 pErgebnis);
     }
-
-    pLastFormCell = NULL;
 }
 
 
@@ -1143,12 +1109,10 @@ void ImportExcel::TableOp( void )
         }
     }
     else
-        {
+    {
         bTabTruncated = TRUE;
-            GetTracer().TraceInvalidRow(GetCurrScTab(), nLastRow, MAXROW);
-        }
-
-    pLastFormCell = NULL;
+        GetTracer().TraceInvalidRow(GetCurrScTab(), nLastRow, MAXROW);
+    }
 }
 
 
