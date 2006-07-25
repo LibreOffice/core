@@ -4,9 +4,9 @@
  *
  *  $RCSfile: e3dsceneproperties.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:13:13 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:54:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,15 +153,16 @@ namespace sdr
             if(nCount)
             {
                 // Generate filtered ItemSet which contains all but the SDRATTR_3DSCENE items.
-                SfxItemSet& rNewSet = *(rSet.Clone(TRUE));
-                DBG_ASSERT(&rNewSet, "E3dSceneProperties::SetMergedItemSet(): Could not clone ItemSet (!)");
+                // #i50808# Leak fix, Clone produces a new instance and we get ownership here
+                SfxItemSet* pNewSet = rSet.Clone(TRUE);
+                DBG_ASSERT(pNewSet, "E3dSceneProperties::SetMergedItemSet(): Could not clone ItemSet (!)");
 
                 for(sal_uInt16 b(SDRATTR_3DSCENE_FIRST); b <= SDRATTR_3DSCENE_LAST; b++)
                 {
-                    rNewSet.ClearItem(b);
+                    pNewSet->ClearItem(b);
                 }
 
-                if(rNewSet.Count())
+                if(pNewSet->Count())
                 {
                     for(sal_uInt32 a(0L); a < nCount; a++)
                     {
@@ -170,10 +171,12 @@ namespace sdr
                         if(pObj && pObj->ISA(E3dCompoundObject))
                         {
                             // set merged ItemSet at contained 3d object.
-                            pObj->SetMergedItemSet(rNewSet, bClearAllItems);
+                            pObj->SetMergedItemSet(*pNewSet, bClearAllItems);
                         }
                     }
                 }
+
+                delete pNewSet;
             }
 
             // call parent. This will set items on local object, too.
