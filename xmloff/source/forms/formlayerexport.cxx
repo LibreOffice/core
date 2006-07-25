@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formlayerexport.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:10:24 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 09:24:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -214,60 +214,4 @@ namespace xmloff
 //.........................................................................
 }   // namespace xmloff
 //.........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.14.94.1  2005/09/05 14:38:59  rt
- *  #i54170# Change license header: remove SISSL
- *
- *  Revision 1.14  2005/03/23 11:25:13  vg
- *  INTEGRATION: CWS eforms4 (1.13.430); FILE MERGED
- *  2004/12/13 17:27:32 fs 1.13.430.1: #i36597# +exportXForms/pageContainsForms/documentContainsXForms
- *
- *  Revision 1.13.430.1  2004/12/13 17:27:32  fs
- *  #i36597# +exportXForms/pageContainsForms/documentContainsXForms
- *
- *  Revision 1.13  2002/10/25 07:58:00  fs
- *  #104402# re-introduced exportAutoStyles
- *
- *  Revision 1.12  2002/09/25 12:02:38  fs
- *  #103597# +excludeFromExport
- *
- *  Revision 1.11  2001/05/28 14:59:18  fs
- *  #86712# added control number style related functionality
- *
- *  Revision 1.10  2001/03/20 13:35:38  fs
- *  #83970# +OOfficeFormsExport
- *
- *  Revision 1.9  2001/03/20 08:04:08  fs
- *  removed exportAutoStyles (was obsolete)
- *
- *  Revision 1.8  2001/03/16 14:36:39  sab
- *  did the required change (move of extract.hxx form cppuhelper to comphelper)
- *
- *  Revision 1.7  2001/02/01 09:46:47  fs
- *  no own style handling anymore - the shape exporter is responsible for our styles now
- *
- *  Revision 1.6  2000/12/18 16:22:35  fs
- *  forgot an & on the getControlId parameter
- *
- *  Revision 1.5  2000/12/18 15:14:35  fs
- *  some changes ... now exporting/importing styles
- *
- *  Revision 1.4  2000/12/06 17:28:05  fs
- *  changes for the formlayer import - still under construction
- *
- *  Revision 1.3  2000/12/03 10:57:06  fs
- *  some changes to support more than one page to be examined/exported
- *
- *  Revision 1.2  2000/11/29 10:32:13  mh
- *  add: header for Solaris8
- *
- *  Revision 1.1  2000/11/17 19:02:16  fs
- *  initial checkin - export and/or import the applications form layer
- *
- *
- *  Revision 1.0 13.11.00 14:58:17  fs
- ************************************************************************/
 
