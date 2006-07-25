@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuconstr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 16:56:50 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:32:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -265,7 +265,7 @@ BOOL FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
 
             if (nMarkCount==1)
             {
-                pSingleObj = pView->GetMarkedObjectList().GetMark(0)->GetObj();
+                pSingleObj = pView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
             }
 
             if (pView->GetDragMode() == SDRDRAG_MOVE && pView->IsRotateAllowed() &&
