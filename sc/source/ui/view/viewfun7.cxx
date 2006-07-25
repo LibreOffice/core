@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfun7.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 15:25:13 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:28:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -171,7 +171,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
             ULONG nMarkAnz=aMark.GetMarkCount();
             for (ULONG nm=0; nm<nMarkAnz; nm++) {
                 const SdrMark* pM=aMark.GetMark(nm);
-                const SdrObject* pObj=pM->GetObj();
+                const SdrObject* pObj=pM->GetMarkedSdrObj();
 
                 // #116235#
                 SdrObject* pNeuObj=pObj->Clone();
