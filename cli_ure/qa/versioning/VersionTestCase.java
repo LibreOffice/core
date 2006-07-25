@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VersionTestCase.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-03 17:13:30 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 07:52:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,11 +59,17 @@ public class VersionTestCase extends ComplexTestCase
             String unoPath = System.getProperty("uno_path");
             if (unoPath == null || unoPath.length() == 0)
                 failed("Check the make file. Java must be called with -Duno_path=path_to_program_directory");
+            String sSystemRoot = System.getProperty("SystemRoot");
+            if (sSystemRoot == null || sSystemRoot.length() == 0)
+                failed("Check the make file. Java  must be called with -DSystemRoot=%SystemRoot%.");
+
 //            System.out.println("UNO_PATH="+unoPath);
             //We need to set the PATH because otherwise it appears that runtests inherits the PATH
             //from build environment. Then the bootstrapping fails because the libraries
             //are not used from the office.
-            String[] arEnv = new String[] {"PATH=" + unoPath};
+            //.NET 2 requires SystemRoot being set.
+            String[] arEnv = new String[] {
+                    "PATH=" + unoPath, "SystemRoot=" + sSystemRoot};
             Process proc = null;
 
             proc = Runtime.getRuntime().exec(testProgram, arEnv);
