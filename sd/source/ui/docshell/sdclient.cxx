@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdclient.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-24 12:50:51 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:31:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,7 +144,7 @@ void Client::ObjectAreaChanged()
     if (rMarkList.GetMarkCount() == 1)
     {
         SdrMark* pMark = rMarkList.GetMark(0);
-        SdrObject* pObj = pMark->GetObj();
+        SdrObject* pObj = pMark->GetMarkedSdrObj();
 
         // no need to check for changes, this method is called only if the area really changed
         pObj->SetLogicRect( GetScaledObjArea() );
