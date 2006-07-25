@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews3.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 17:43:22 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:48:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -473,7 +473,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                     if (rMarkList.GetMarkCount() == 1)
                     {
                         SdrMark* pMark = rMarkList.GetMark(0);
-                        SdrObject* pObj = pMark->GetObj();
+                        SdrObject* pObj = pMark->GetMarkedSdrObj();
 
                         UINT16 nSdrObjKind = pObj->GetObjIdentifier();
 
@@ -871,7 +871,7 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
     {
         if( pDrView->IsTextEdit() )
         {
-            SdrObject* pObj = pDrView->GetMarkedObjectList().GetMark( 0 )->GetObj();
+            SdrObject* pObj = pDrView->GetMarkedObjectList().GetMark( 0 )->GetMarkedSdrObj();
             if( pObj->GetObjInventor() == SdrInventor)
             {
                 SfxItemSet aEditAttr( GetDoc()->GetPool() );
