@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formevents.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:19:07 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 09:24:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,42 +94,4 @@ namespace xmloff
 //.........................................................................
 }   // namespace xmloff
 //.........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.4.34.1  2005/11/16 22:47:10  pl
- *  #i55991# removed warnings
- *
- *  Revision 1.4  2005/09/09 14:09:46  rt
- *  INTEGRATION: CWS ooo19126 (1.3.298); FILE MERGED
- *  2005/09/05 14:38:59 rt 1.3.298.1: #i54170# Change license header: remove SISSL
- *
- *  Revision 1.3.298.1  2005/09/05 14:38:59  rt
- *  #i54170# Change license header: remove SISSL
- *
- *  Revision 1.3  2004/07/13 08:12:38  rt
- *  INTEGRATION: CWS oasis (1.2.62); FILE MERGED
- *  2004/06/02 10:53:57 mib 1.2.62.2: - #i20153#: continued events
- *  2004/05/28 16:38:00 mib 1.2.62.1: - #i20153#: Events
- *
- *  Revision 1.2.62.2  2004/06/02 10:53:57  mib
- *  - #i20153#: continued events
- *
- *  Revision 1.2.62.1  2004/05/28 16:38:00  mib
- *  - #i20153#: Events
- *
- *  Revision 1.2  2003/12/11 12:09:40  kz
- *  INTEGRATION: CWS frmcontrols01 (1.1.212); FILE MERGED
- *  2003/10/22 13:17:43 fs 1.1.212.1: #21277# new implementations for exporting/importing scrollbar controls as form:value-range elements
- *
- *  Revision 1.1.212.1  2003/10/22 13:17:43  fs
- *  #21277# new implementations for exporting/importing scrollbar controls as form:value-range elements
- *
- *  Revision 1.1  2001/01/02 15:56:27  fs
- *  initial checkin - code common to event ex- and import
- *
- *
- *  Revision 1.0 21.12.00 15:19:52  fs
- ************************************************************************/
 
