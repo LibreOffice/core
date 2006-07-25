@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:08:01 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:49:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -350,7 +350,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
             rSet.DisableItem( SID_FORMATPAINTBRUSH );
         if( !bHasContent && nMarkCount==1 )
         {
-            SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
+            SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
             if( !pFormatClipboard->CanCopyThisType(pObj->GetObjInventor(),pObj->GetObjIdentifier()) )
                 rSet.DisableItem( SID_FORMATPAINTBRUSH );
         }
@@ -996,7 +996,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         const ULONG nCount = rMarkList.GetMarkCount();
         for(ULONG nNum = 0; nNum < nCount; nNum++)
         {
-            SdrObject* pObj = rMarkList.GetMark(nNum)->GetObj();
+            SdrObject* pObj = rMarkList.GetMark(nNum)->GetMarkedSdrObj();
             if( pObj->GetObjInventor() == SdrInventor )
             {
                 if( pObj->GetObjIdentifier() == OBJ_OUTLINETEXT )
@@ -1468,7 +1468,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 
         for (int i=0; i < (int) aMarkList.GetMarkCount() && !bFoundAny; i++)
         {
-            SdrObject* pObj=  aMarkList.GetMark(i)->GetObj();
+            SdrObject* pObj=  aMarkList.GetMark(i)->GetMarkedSdrObj();
             UINT16 nId = pObj->GetObjIdentifier();
             UINT32 nInv = pObj->GetObjInventor();
 
@@ -1570,7 +1570,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         }
         else
         {
-            SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, pDrView->GetMarkedObjectList().GetMark(0)->GetObj());
+            SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, pDrView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj());
 
             if ( pUnoCtrl && FmFormInventor == pUnoCtrl->GetObjInventor() )
             {
