@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2006-03-09 10:51:45 $
+#   last change: $Author: rt $ $Date: 2006-07-25 07:54:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,6 @@ TARGET = basetypes
 .INCLUDE : $(PRJ)$/util$/target.pmk
 .INCLUDE : target.mk
 
-.INCLUDE : $(BIN)$/cliureversion.mk
 
 .IF "$(USE_SHELL)"!="4nt"
 ECHOQUOTE='
@@ -55,6 +54,7 @@ ECHOQUOTE=
 
 .IF "$(BUILD_FOR_CLI)" != ""
 
+.INCLUDE : $(BIN)$/cliureversion.mk
 
 ASSEMBLY_ATTRIBUTES = $(MISC)$/assembly_ure_$(TARGET).cs
 POLICY_ASSEMBLY_FILE=$(BIN)$/$(CLI_BASETYPES_POLICY_ASSEMBLY).dll
@@ -75,7 +75,7 @@ CSFILES = \
     uno$/PolymorphicType.cs \
     $(ASSEMBLY_ATTRIBUTES)
 
-$(ASSEMBLY_ATTRIBUTES) : assembly.cs $(BIN)$/cliuno.snk $(BIN)$/cliureversion.mk 
+$(ASSEMBLY_ATTRIBUTES) : assembly.cs makefile.mk $(BIN)$/cliuno.snk $(BIN)$/cliureversion.mk 
     $(GNUCOPY) -p assembly.cs $@
     +echo $(ECHOQUOTE) \
     [assembly:System.Reflection.AssemblyVersion( "$(CLI_BASETYPES_NEW_VERSION)")] \
@@ -96,6 +96,7 @@ $(POLICY_ASSEMBLY_FILE) : $(BIN)$/cli_basetypes.config
             -version:$(CLI_BASETYPES_POLICY_VERSION) \
             -keyfile:$(BIN)$/cliuno.snk \
             -link:$(BIN)$/cli_basetypes.config
+
 
 #Create the config file that is used with the policy assembly
 $(BIN)$/cli_basetypes.config: cli_basetypes_config $(BIN)$/cliureversion.mk 
