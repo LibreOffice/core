@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transfrm.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:36:05 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:50:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -322,7 +322,7 @@ void SvxAngleTabPage::Construct()
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
     if( rMarkList.GetMarkCount() >= 1 )
     {
-        const SdrObject* pObj = rMarkList.GetMark( 0 )->GetObj();
+        const SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
         aAnchorPos = pObj->GetAnchorPos();
 
         if( aAnchorPos != Point( 0, 0 ) ) // -> Writer
@@ -833,14 +833,14 @@ void SvxPositionSizeTabPage::Construct()
     const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
     if( rMarkList.GetMarkCount() >= 1 )
     {
-        const SdrObject* pObj = rMarkList.GetMark( 0 )->GetObj();
+        const SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
         maAnchorPos = pObj->GetAnchorPos();
 
         if( maAnchorPos != Point(0,0) ) // -> Writer
         {
             for( USHORT i = 1; i < rMarkList.GetMarkCount(); i++ )
             {
-                pObj = rMarkList.GetMark( i )->GetObj();
+                pObj = rMarkList.GetMark( i )->GetMarkedSdrObj();
                 if( maAnchorPos != pObj->GetAnchorPos() )
                 {
                     // Unterschiedliche Ankerpositionen
@@ -872,7 +872,7 @@ void SvxPositionSizeTabPage::Construct()
     // this should happen via SID_ATTR_TRANSFORM_AUTOSIZE
     if( rMarkList.GetMarkCount() == 1 )
     {
-        const SdrObject* pObj = rMarkList.GetMark( 0 )->GetObj();
+        const SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
         SdrObjKind eKind = (SdrObjKind) pObj->GetObjIdentifier();
         if( ( pObj->GetObjInventor() == SdrInventor ) &&
             ( eKind==OBJ_TEXT || eKind==OBJ_TITLETEXT || eKind==OBJ_OUTLINETEXT) &&
