@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewsg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:29:24 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:51:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,7 @@ void DrawViewShell::ExecIMap( SfxRequest& rReq )
 
         if ( pMark )
         {
-            SdrObject*  pSdrObj = pMark->GetObj();
+            SdrObject*  pSdrObj = pMark->GetMarkedSdrObj();
             SvxIMapDlg* pDlg = SVXIMAPDLG();
 
             if ( pDlg->GetEditingObject() == (void*) pSdrObj )
@@ -133,7 +133,7 @@ void DrawViewShell::GetIMapState( SfxItemSet& rSet )
 
         if ( nMarkCount == 1 )
         {
-            pObj = rMarkList.GetMark( 0 )->GetObj();
+            pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
             if ( ( pObj->ISA( SdrGrafObj ) || pObj->ISA( SdrOle2Obj ) ) &&
                  ( SVXIMAPDLG()->GetEditingObject() == (void*) pObj ) )
