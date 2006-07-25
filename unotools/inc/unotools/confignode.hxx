@@ -4,9 +4,9 @@
  *
  *  $RCSfile: confignode.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:28:56 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 09:51:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -306,35 +306,4 @@ namespace utl
 //........................................................................
 
 #endif // _UNOTOOLS_CONFIGNODE_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.5.34.1  2005/09/05 14:00:51  rt
- *  #i54170# Change license header: remove SISSL
- *
- *  Revision 1.5  2005/04/13 12:24:31  obo
- *  INTEGRATION: CWS visibility03 (1.4.182); FILE MERGED
- *  2005/02/28 04:33:52 mnicel 1.4.182.1: Issue number:  40092
- *  Part of visibility work
- *
- *  Revision 1.4.182.1  2005/02/28 04:33:52  mnicel
- *  Issue number:  40092
- *  Part of visibility work
- *
- *  Revision 1.4  2002/12/05 09:02:46  fs
- *  #104427# +tryCreateWithServiceFactory
- *
- *  Revision 1.3  2001/08/21 12:40:00  fs
- *  #87721# +hasByHierarchicalName
- *
- *  Revision 1.2  2001/07/26 09:13:23  oj
- *  #89831# new method to append an existing node with different name
- *
- *  Revision 1.1  2001/06/13 16:26:04  fs
- *  initial checkin - non-UNO wrapper for configuration nodes
- *
- *
- *  Revision 1.0 13.06.01 17:04:40  fs
- ************************************************************************/
 
