@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: hr $ $Date: 2006-02-17 18:05:21 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:48:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,8 +180,14 @@ using namespace ::com::sun::star::beans;
 #define DRAW_SPECIAL_OPTIONS_ROTATE 2
 #endif
 
-// steht im number.cxx
-extern const sal_Char __FAR_DATA sBulletFntName[];
+// --> OD 2006-06-27 #b6440955#
+// variable moved to class <numfunc:GetDefBulletConfig>
+//extern const sal_Char __FAR_DATA sBulletFntName[];
+namespace numfunc
+{
+    extern const String& GetDefBulletFontname();
+}
+// <--
 
 // OD 24.01.2003 #106593# - no longer needed, included in <frmtool.hxx>
 //extern void MA_FASTCALL SwAlignRect( SwRect &rRect, ViewShell *pSh );
@@ -890,7 +896,10 @@ static void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rP
     {
         pFnt = new SwFont( *pOldFnt );
         pFnt->SetFamily( FAMILY_DONTKNOW, pFnt->GetActual() );
-        pFnt->SetName( XubString::CreateFromAscii( sBulletFntName ), pFnt->GetActual() );
+        // --> OD 2006-06-27 #b6440955#
+//        pFnt->SetName( XubString::CreateFromAscii( sBulletFntName ), pFnt->GetActual() );
+        pFnt->SetName( numfunc::GetDefBulletFontname(), pFnt->GetActual() );
+        // <--
         pFnt->SetStyleName( aEmptyStr, pFnt->GetActual() );
         pFnt->SetCharSet( RTL_TEXTENCODING_SYMBOL, pFnt->GetActual() );
     }
@@ -1848,8 +1857,12 @@ SwDefFontSave::SwDefFontSave( const SwTxtSizeInfo &rInf )
          ( RTL_TEXTENCODING_SYMBOL == pFnt->GetCharSet(pFnt->GetActual()) )
         ;
 
-    const sal_Bool bFamily = bAlter && COMPARE_EQUAL !=
-            pFnt->GetName( pFnt->GetActual() ).CompareToAscii( sBulletFntName );
+    // --> OD 2006-06-27 #b6440955#
+//    const sal_Bool bFamily = bAlter && COMPARE_EQUAL !=
+//            pFnt->GetName( pFnt->GetActual() ).CompareToAscii( sBulletFntName );
+    const sal_Bool bFamily = bAlter &&
+         pFnt->GetName( pFnt->GetActual() ) != numfunc::GetDefBulletFontname();
+    // <--
     const sal_Bool bRotation = (sal_Bool)pFnt->GetOrientation() &&
                                 ! rInf.GetTxtFrm()->IsVertical();
 
@@ -1860,8 +1873,11 @@ SwDefFontSave::SwDefFontSave( const SwTxtSizeInfo &rInf )
         if ( bFamily )
         {
             pNewFnt->SetFamily( FAMILY_DONTKNOW, pFnt->GetActual() );
-            pNewFnt->SetName( XubString::CreateFromAscii( sBulletFntName ),
-                              pFnt->GetActual() );
+            // --> OD 2006-06-27 #b6440955#
+//            pNewFnt->SetName( XubString::CreateFromAscii( sBulletFntName ),
+//                              pFnt->GetActual() );
+            pNewFnt->SetName( numfunc::GetDefBulletFontname(), pFnt->GetActual() );
+            // <--
             pNewFnt->SetStyleName( aEmptyStr, pFnt->GetActual() );
             pNewFnt->SetCharSet( RTL_TEXTENCODING_SYMBOL, pFnt->GetActual() );
             pNewFnt->SetFixKerning( 0 );
