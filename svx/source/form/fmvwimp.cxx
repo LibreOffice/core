@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:59:39 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:53:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1858,7 +1858,7 @@ void FmXFormView::ObjectRemovedInAliveMode( const SdrObject* pObject )
     for (sal_uInt32 i = 0; i < nCount; ++i)
     {
         SdrMark* pMark = m_aMark.GetMark(i);
-        SdrObject* pCurrent = pMark->GetObj();
+        SdrObject* pCurrent = pMark->GetMarkedSdrObj();
         if (pObject == pCurrent)
         {
             m_aMark.DeleteMark(i);
@@ -1906,7 +1906,7 @@ void FmXFormView::saveMarkList( sal_Bool _bSmartUnmark )
             for ( sal_uInt32 i = 0; i < nCount; ++i )
             {
                 SdrMark*   pMark = m_aMark.GetMark(i);
-                SdrObject* pObj  = pMark->GetObj();
+                SdrObject* pObj  = pMark->GetMarkedSdrObj();
 
                 if ( m_pView->IsObjMarked( pObj ) )
                 {
@@ -1920,14 +1920,14 @@ void FmXFormView::saveMarkList( sal_Bool _bSmartUnmark )
                         if ( !bMixed )
                         {
                             // all objects in the group are form objects
-                            m_pView->MarkObj( pMark->GetObj(), pMark->GetPageView(), sal_True /* unmark! */ );
+                            m_pView->MarkObj( pMark->GetMarkedSdrObj(), pMark->GetPageView(), sal_True /* unmark! */ );
                         }
                     }
                     else
                     {
                         if ( pObj->GetObjInventor() == FmFormInventor )
                         {   // this is a form layer object
-                            m_pView->MarkObj( pMark->GetObj(), pMark->GetPageView(), sal_True /* unmark! */ );
+                            m_pView->MarkObj( pMark->GetMarkedSdrObj(), pMark->GetPageView(), sal_True /* unmark! */ );
                         }
                     }
                 }
@@ -1972,14 +1972,14 @@ void FmXFormView::restoreMarkList( SdrMarkList& _rRestoredMarkList )
             sal_uInt32 nCurrentCount = rCurrentList.GetMarkCount();
             for ( sal_uInt32 i=0; i<nCurrentCount&& !bMisMatch; ++i )
             {
-                const SdrObject* pCurrentMarked = rCurrentList.GetMark( i )->GetObj();
+                const SdrObject* pCurrentMarked = rCurrentList.GetMark( i )->GetMarkedSdrObj();
 
                 // loop through all saved marks, check for equality
                 sal_Bool bFound = sal_False;
                 sal_uInt32 nSavedCount = m_aMark.GetMarkCount();
                 for ( sal_uInt32 j=0; j<nSavedCount && !bFound; ++j )
                 {
-                    if ( m_aMark.GetMark( j )->GetObj() == pCurrentMarked )
+                    if ( m_aMark.GetMark( j )->GetMarkedSdrObj() == pCurrentMarked )
                         bFound = sal_True;
                 }
 
@@ -2006,7 +2006,7 @@ void FmXFormView::restoreMarkList( SdrMarkList& _rRestoredMarkList )
         for (sal_uInt32 i = 0; i < nCount && bFound; i++)
         {
             SdrMark*   pMark = m_aMark.GetMark(i);
-            SdrObject* pObj  = pMark->GetObj();
+            SdrObject* pObj  = pMark->GetMarkedSdrObj();
             if (pObj->IsGroupObject())
             {
                 SdrObjListIter aIter(*pObj->GetSubList());
@@ -2027,7 +2027,7 @@ void FmXFormView::restoreMarkList( SdrMarkList& _rRestoredMarkList )
                 for (sal_uInt32 i = 0; i < nCount; i++)
                 {
                     SdrMark* pMark = m_aMark.GetMark(i);
-                    SdrObject* pObj = pMark->GetObj();
+                    SdrObject* pObj = pMark->GetMarkedSdrObj();
                     if ( pObj->GetObjInventor() == FmFormInventor )
                         if ( !m_pView->IsObjMarked( pObj ) )
                             m_pView->MarkObj( pObj, pMark->GetPageView() );
