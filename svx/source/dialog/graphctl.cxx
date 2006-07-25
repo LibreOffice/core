@@ -4,9 +4,9 @@
  *
  *  $RCSfile: graphctl.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:11:20 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:49:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -831,7 +831,7 @@ SdrObject* GraphCtrl::GetSelectedSdrObject() const
         const SdrMarkList&  rMarkList = pView->GetMarkedObjectList();
 
         if ( rMarkList.GetMarkCount() == 1 )
-            pSdrObj = rMarkList.GetMark( 0 )->GetObj();
+            pSdrObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
     }
 
     return pSdrObj;
