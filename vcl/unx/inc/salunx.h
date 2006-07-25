@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salunx.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:47:52 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 09:38:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,10 +49,6 @@
 #endif
 #include <sys/time.h>
 #include <unistd.h>
-#endif
-
-#ifdef MACOSX
-#include <unxmacxp_protos.h>
 #endif
 
 #ifndef _SVUNX_H
