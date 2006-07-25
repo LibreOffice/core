@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Outliner.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 17:38:58 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:46:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -901,7 +901,7 @@ bool Outliner::DetectSelectionChange (void)
                 {
                     SdrMark* pMark = mpView->GetMarkedObjectList().GetMark(0);
                     if (pMark != NULL)
-                        bSelectionHasChanged = (mpObj != pMark->GetObj ());
+                        bSelectionHasChanged = (mpObj != pMark->GetMarkedSdrObj ());
                 }
                 break;
             default:
@@ -1613,7 +1613,7 @@ void Outliner::HandleChangedSelection (void)
             maMarkListCopy.clear();
             maMarkListCopy.reserve (nCount);
             for (ULONG i=0; i<nCount; i++)
-                maMarkListCopy.push_back (rMarkList.GetMark(i)->GetObj ());
+                maMarkListCopy.push_back (rMarkList.GetMark(i)->GetMarkedSdrObj ());
         }
         else
             // No marked object.  Is this case possible?
