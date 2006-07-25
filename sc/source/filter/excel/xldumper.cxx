@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xldumper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:17:15 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 09:58:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1983,18 +1983,12 @@ void WorkbookStreamObject::ImplDumpRecord()
         break;
 
         case EXC_ID2_FORMULA:
+        case EXC_ID3_FORMULA:
+        case EXC_ID4_FORMULA:
             DumpCellHeader( eBiff == EXC_BIFF2 );
             DumpFormulaResult();
             DumpHex< sal_uInt16, sal_uInt8 >( eBiff != EXC_BIFF2, "flags", "FORMULA-FLAGS" );
             if( eBiff >= EXC_BIFF5 ) DumpUnused( 4 );
-            DumpCellFormula();
-        break;
-
-        case EXC_ID3_FORMULA:
-        case EXC_ID4_FORMULA:
-            DumpCellHeader();
-            DumpFormulaResult();
-            DumpHex< sal_uInt16 >( "flags", "FORMULA-FLAGS" );
             DumpCellFormula();
         break;
 
@@ -2010,7 +2004,7 @@ void WorkbookStreamObject::ImplDumpRecord()
             sal_uInt16 nFontIdx = GetXfData( nXfIdx );
             rtl_TextEncoding eOldTextEnc = Root().GetTextEncoding();
             Root().SetTextEncoding( GetFontEncoding( nXfIdx ) );
-            DumpString( "value", ((nRecId == EXC_ID2_LABEL) && (GetBiff() <= EXC_BIFF5)) ? EXC_STR_8BITLENGTH : EXC_STR_DEFAULT );
+            DumpString( "value", ((nRecId == EXC_ID2_LABEL) && (eBiff <= EXC_BIFF5)) ? EXC_STR_8BITLENGTH : EXC_STR_DEFAULT );
             Root().SetTextEncoding( eOldTextEnc );
         }
         break;
@@ -2041,7 +2035,7 @@ void WorkbookStreamObject::ImplDumpRecord()
 
         case EXC_ID2_STRING:
         case EXC_ID3_STRING:
-            DumpString( "result", (eBiff == EXC_BIFF2) ? EXC_STR_8BITLENGTH : EXC_STR_DEFAULT );
+            DumpString( "result", ((nRecId == EXC_ID2_STRING) && (eBiff <= EXC_BIFF4)) ? EXC_STR_8BITLENGTH : EXC_STR_DEFAULT );
         break;
 
         case EXC_ID2_XF:
