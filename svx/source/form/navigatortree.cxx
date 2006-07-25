@@ -4,9 +4,9 @@
  *
  *  $RCSfile: navigatortree.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:00:12 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:53:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -211,7 +211,7 @@ namespace svxform
                 for ( sal_uInt32 i = 0; (i<nMarked ) && !bIsMarked; ++i )
                 {
                     SdrMark* pMark = _pView->GetMarkedObjectList().GetMark( i );
-                    SdrObject* pObj = pMark ? pMark->GetObj() : NULL;
+                    SdrObject* pObj = pMark ? pMark->GetMarkedSdrObj() : NULL;
                     if ( pObj && pObj->IsGroupObject() )
                     {   // the i-th marked shape is a group shape
                         SdrObjListIter aIter( *pObj );
