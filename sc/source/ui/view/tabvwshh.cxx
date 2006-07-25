@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwshh.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 15:18:52 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:27:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,7 @@ void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
                 {
                     const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
                     if (rMarkList.GetMarkCount() == 1)
-                        aName = ScDrawLayer::GetVisibleName( rMarkList.GetMark(0)->GetObj() );
+                        aName = ScDrawLayer::GetVisibleName( rMarkList.GetMark(0)->GetMarkedSdrObj() );
                 }
                 pVisibleSh->SelectObject( aName );
 
@@ -134,7 +134,7 @@ void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
                         const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
                         if (rMarkList.GetMarkCount() == 1)
                         {
-                            SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
+                            SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
                             Rectangle aRect = pObj->GetLogicRect();
 
                             if ( nSlotId == SID_OBJECT_LEFT )
@@ -169,7 +169,7 @@ uno::Reference < embed::XEmbeddedObject > lcl_GetSelectedObj( SdrView* pDrView )
         const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
         if (rMarkList.GetMarkCount() == 1)
         {
-            SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
+            SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
             if (pObj->GetObjIdentifier() == OBJ_OLE2)
             {
                 SdrOle2Obj* pOle2Obj = (SdrOle2Obj*) pObj;
@@ -213,7 +213,7 @@ void ScTabViewShell::GetObjectState( SfxItemSet& rSet )
                         const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
                         if (rMarkList.GetMarkCount() == 1)
                         {
-                            SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
+                            SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
                             Rectangle aRect = pObj->GetLogicRect();
 
                             long nVal;
