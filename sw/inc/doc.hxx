@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.119 $
+ *  $Revision: 1.120 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 13:55:55 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:45:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -551,6 +551,9 @@ class SwDoc
     // - Introduced in order to re-activate clipping of as-character anchored
     //   Writer fly frames in method <SwFlyInCntFrm::MakeAll()> for documents,
     //   which are created with version prior SO8/OOo 2.0
+    //
+    // SO8pp4
+    // mbCutExpandedUnderline                   def = FALSE, hidden, only available via configuration!
 
     sal_Bool    bOldLineSpacing                 : 1;    // OD  2004-01-06 #i11859#
     sal_Bool    bAddParaSpacingToTableCells     : 1;    // OD  2004-02-16 #106629#
@@ -569,6 +572,7 @@ class SwDoc
     sal_Bool    bIgnoreTabsAndBlanksForLineCalculation : 1; // FME 2006-03-01 #i3952#
     sal_Bool    mbDoNotCaptureDrawObjsOnPage     : 1;   // OD 2006-03-14 #i62875#
     sal_Bool    mbClipAsCharacterAnchoredWriterFlyFrames : 1;   // OD 2006-04-13 #b6402800#
+    sal_Bool    mbCutExpandedUnderline          : 1;   // FME 2006-07-12 #b6439097#
 
     sal_Bool    bOutlineLevelYieldsOutlineRule  : 1;
 
@@ -2356,6 +2360,13 @@ public:
     inline void SetClipAsCharacterAnchoredWriterFlyFrames( const sal_Bool p_bNew )
     {
         mbClipAsCharacterAnchoredWriterFlyFrames = p_bNew;
+    }
+    // <--
+
+    // --> FME 2006-07-12 #b6439097#
+    inline sal_Bool IsCutExpandedUnderline() const
+    {
+        return mbCutExpandedUnderline;
     }
     // <--
 
