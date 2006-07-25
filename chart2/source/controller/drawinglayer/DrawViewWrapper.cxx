@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DrawViewWrapper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:20:08 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 13:00:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -209,7 +209,7 @@ SdrObject* DrawViewWrapper::getSelectedObject() const
     if(rMarkList.GetMarkCount() == 1)
     {
         SdrMark* pMark = rMarkList.GetMark(0);
-        pObj = pMark->GetObj();
+        pObj = pMark->GetMarkedSdrObj();
     }
     return pObj;
 }
