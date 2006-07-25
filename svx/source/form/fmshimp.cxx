@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:57:11 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:52:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -452,7 +452,7 @@ namespace
         sal_uInt32 nMarkCount = _rMarkList.GetMarkCount();
         for ( sal_uInt32 i = 0; i < nMarkCount; ++i)
         {
-            SdrObject* pCurrent = _rMarkList.GetMark( i )->GetObj();
+            SdrObject* pCurrent = _rMarkList.GetMark( i )->GetMarkedSdrObj();
 
             SdrObjListIter* pGroupIterator = NULL;
             if ( pCurrent->IsGroupObject() )
@@ -532,7 +532,7 @@ sal_Bool isControlList(const SdrMarkList& rMarkList)
 
     for (sal_uInt32 i = 0; i < nMarkCount && bControlList; i++)
     {
-        SdrObject *pObj = rMarkList.GetMark(i)->GetObj();
+        SdrObject *pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
         E3dObject* pAs3DObject = PTR_CAST(E3dObject, pObj);
         // E3dObject's do not contain any 2D-objects (by definition)
         // we need this extra check here : an E3dObject->IsGroupObject says "YES", but an SdrObjListIter working
