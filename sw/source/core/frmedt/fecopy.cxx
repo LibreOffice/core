@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fecopy.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 14:19:50 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:30:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -365,7 +365,7 @@ BOOL SwFEShell::Copy( SwDoc* pClpDoc, const String* pNewClpTxt )
         const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
         for ( USHORT i = 0; i < rMrkList.GetMarkCount(); ++i )
         {
-            SdrObject *pObj = rMrkList.GetMark( i )->GetObj();
+            SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
 
             if( Imp()->GetDrawView()->IsGroupEntered() ||
                 ( !pObj->GetUserCall() && pObj->GetUpGroup()) )
@@ -484,7 +484,7 @@ BOOL SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
     Size aSiz( rInsPt.X() - rSttPt.X(), rInsPt.Y() - rSttPt.Y() );
     for( USHORT i = 0; i < nMarkCount; ++i )
     {
-        SdrObject *pObj = aMrkList.GetMark( i )->GetObj();
+        SdrObject *pObj = aMrkList.GetMark( i )->GetMarkedSdrObj();
 
         SwDrawContact *pContact = (SwDrawContact*)GetUserCall( pObj );
         SwFrmFmt *pFmt = pContact->GetFmt();
@@ -607,14 +607,14 @@ BOOL SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
             USHORT i;
             for ( i = 0; i < nMarkCount; ++i )
             {
-                SdrObject *pObj = aMrkList.GetMark( i )->GetObj();
+                SdrObject *pObj = aMrkList.GetMark( i )->GetMarkedSdrObj();
                 pSrcDrwView->MarkObj( pObj, pSrcPgView );
             }
             DelSelectedObj();
             nMarkCount = aList.GetMarkCount();
             for ( i = 0; i < nMarkCount; ++i )
             {
-                SdrObject *pObj = aList.GetMark( i )->GetObj();
+                SdrObject *pObj = aList.GetMark( i )->GetMarkedSdrObj();
                 pSrcDrwView->MarkObj( pObj, pSrcPgView );
             }
         }
@@ -1284,7 +1284,7 @@ BOOL SwFEShell::GetDrawObjGraphic( ULONG nFmt, Graphic& rGrf ) const
     if( rMrkList.GetMarkCount() )
     {
         if( rMrkList.GetMarkCount() == 1 &&
-            rMrkList.GetMark( 0 )->GetObj()->ISA(SwVirtFlyDrawObj) )
+            rMrkList.GetMark( 0 )->GetMarkedSdrObj()->ISA(SwVirtFlyDrawObj) )
         {
             // Rahmen selektiert
             if( CNT_GRF == GetCntType() )
@@ -1432,7 +1432,7 @@ void SwFEShell::Paste( SvStream& rStrm, USHORT nAction, const Point* pPt )
         SwDrawView::ReplaceMarkedDrawVirtObjs( *pView );
 
         SdrObject* pClpObj = pModel->GetPage(0)->GetObj(0);
-        SdrObject* pOldObj = pView->GetMarkedObjectList().GetMark( 0 )->GetObj();
+        SdrObject* pOldObj = pView->GetMarkedObjectList().GetMark( 0 )->GetMarkedSdrObj();
 
         if( SW_PASTESDR_SETATTR == nAction && pOldObj->ISA(SwVirtFlyDrawObj) )
             nAction = SW_PASTESDR_REPLACE;
@@ -1557,14 +1557,14 @@ void SwFEShell::Paste( SvStream& rStrm, USHORT nAction, const Point* pPt )
             const Point aNull( 0, 0 );
             for( ULONG i=0; i < nCnt; ++i )
             {
-                SdrObject *pObj = pView->GetMarkedObjectList().GetMark(i)->GetObj();
+                SdrObject *pObj = pView->GetMarkedObjectList().GetMark(i)->GetMarkedSdrObj();
                 pObj->ImpSetAnchorPos( aNull );
             }
 
             pView->SetCurrentObj( OBJ_GRUP, SdrInventor );
             if ( nCnt > 1 )
                 pView->GroupMarked();
-            SdrObject *pObj = pView->GetMarkedObjectList().GetMark(0)->GetObj();
+            SdrObject *pObj = pView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
             if( pObj->ISA( SdrUnoObj ) )
             {
                 pObj->SetLayer( GetDoc()->GetControlsId() );
@@ -1593,7 +1593,7 @@ BOOL SwFEShell::Paste( const Graphic &rGrf )
     SdrView *pView = Imp()->GetDrawView();
 
     BOOL bRet = 1 == pView->GetMarkedObjectList().GetMarkCount() &&
-        (pObj = pView->GetMarkedObjectList().GetMark( 0 )->GetObj())->IsClosedObj() &&
+        (pObj = pView->GetMarkedObjectList().GetMark( 0 )->GetMarkedSdrObj())->IsClosedObj() &&
         !pObj->ISA( SdrOle2Obj );
 
     if( bRet )
