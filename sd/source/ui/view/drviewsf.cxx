@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewsf.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:08:16 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:51:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -181,7 +181,7 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
         {
             if (pDrView->GetMarkedObjectList().GetMarkCount() > 0)
             {
-                SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, pDrView->GetMarkedObjectList().GetMark(0)->GetObj());
+                SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, pDrView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj());
 
                 if (pUnoCtrl && FmFormInventor == pUnoCtrl->GetObjInventor())
                 {
@@ -548,7 +548,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
 //    for (ULONG i = 0;
 //         i < nMarkCount && !bDisabled && i < 50; i++)
 //    {
-//        SdrObject* pObj = rMarkList.GetMark(i)->GetObj();
+//        SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
 //
 //        if (pObj->GetObjInventor() == E3dInventor)
 //        {
