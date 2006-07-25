@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdmark.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:39:12 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:56:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,9 +141,88 @@ void SdrUShortCont::CheckSort(sal_uInt32 nPos)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+SdrMark::SdrMark(SdrObject* pNewObj, SdrPageView* pNewPageView)
+:   mpSelectedSdrObject(pNewObj),
+    mpPageView(pNewPageView),
+    mpPoints(0L),
+    mpLines(0L),
+    mpGluePoints(0L),
+    mbCon1(sal_False),
+    mbCon2(sal_False),
+    mnUser(0)
+{
+    if(mpSelectedSdrObject)
+    {
+        mpSelectedSdrObject->AddObjectUser( *this );
+    }
+}
+
+SdrMark::SdrMark(const SdrMark& rMark)
+:   mpSelectedSdrObject(0L),
+    mpPageView(0L),
+    mpPoints(0L),
+    mpLines(0L),
+    mpGluePoints(0L),
+    mbCon1(sal_False),
+    mbCon2(sal_False),
+    mnUser(0)
+{
+    *this = rMark;
+}
+
+SdrMark::~SdrMark()
+{
+    if(mpSelectedSdrObject)
+    {
+        mpSelectedSdrObject->RemoveObjectUser( *this );
+    }
+
+    if(mpPoints)
+    {
+        delete mpPoints;
+    }
+
+    if(mpLines)
+    {
+        delete mpLines;
+    }
+
+    if(mpGluePoints)
+    {
+        delete mpGluePoints;
+    }
+}
+
+void SdrMark::ObjectInDestruction(const SdrObject& rObject)
+{
+    OSL_ENSURE(mpSelectedSdrObject && mpSelectedSdrObject == &rObject, "SdrMark::ObjectInDestruction: called form object different from hosted one (!)");
+    OSL_ENSURE(mpSelectedSdrObject, "SdrMark::ObjectInDestruction: still seleceted SdrObject is deleted, deselect first (!)");
+    mpSelectedSdrObject = 0L;
+}
+
+void SdrMark::SetMarkedSdrObj(SdrObject* pNewObj)
+{
+    if(mpSelectedSdrObject)
+    {
+        mpSelectedSdrObject->RemoveObjectUser( *this );
+    }
+
+    mpSelectedSdrObject = pNewObj;
+
+    if(mpSelectedSdrObject)
+    {
+        mpSelectedSdrObject->AddObjectUser( *this );
+    }
+}
+
+SdrObject* SdrMark::GetMarkedSdrObj() const
+{
+    return mpSelectedSdrObject;
+}
+
 SdrMark& SdrMark::operator=(const SdrMark& rMark)
 {
-    mpObj = rMark.mpObj;
+    SetMarkedSdrObj(rMark.mpSelectedSdrObject);
     mpPageView = rMark.mpPageView;
     mbCon1 = rMark.mbCon1;
     mbCon2 = rMark.mbCon2;
@@ -214,7 +293,7 @@ SdrMark& SdrMark::operator=(const SdrMark& rMark)
 
 sal_Bool SdrMark::operator==(const SdrMark& rMark) const
 {
-    sal_Bool bRet(mpObj == rMark.mpObj && mpPageView == rMark.mpPageView && mbCon1 == rMark.mbCon1 && mbCon2 == rMark.mbCon2 && mnUser == rMark.mnUser);
+    sal_Bool bRet(mpSelectedSdrObject == rMark.mpSelectedSdrObject && mpPageView == rMark.mpPageView && mbCon1 == rMark.mbCon1 && mbCon2 == rMark.mbCon2 && mnUser == rMark.mnUser);
 
     if((mpPoints != 0L) != (rMark.mpPoints != 0L))
         bRet = sal_False;
@@ -239,12 +318,12 @@ sal_Bool SdrMark::operator==(const SdrMark& rMark) const
 
 SdrPage* SdrMark::GetPage() const
 {
-    return (mpObj ? mpObj->GetPage() : 0L);
+    return (mpSelectedSdrObject ? mpSelectedSdrObject->GetPage() : 0);
 }
 
 SdrObjList* SdrMark::GetObjList() const
 {
-    return (mpObj ? mpObj->GetObjList() : 0L);
+    return (mpSelectedSdrObject ? mpSelectedSdrObject->GetObjList() : 0);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -261,8 +340,8 @@ public:
 
 int ImpSdrMarkListSorter::Compare(const void* pElem1, const void* pElem2) const
 {
-    const SdrObject* pObj1 = ((SdrMark*)pElem1)->GetObj();
-    const SdrObject* pObj2 = ((SdrMark*)pElem2)->GetObj();
+    const SdrObject* pObj1 = ((SdrMark*)pElem1)->GetMarkedSdrObj();
+    const SdrObject* pObj2 = ((SdrMark*)pElem2)->GetMarkedSdrObj();
     const SdrObjList* pOL1 = (pObj1) ? pObj1->GetObjList() : 0L;
     const SdrObjList* pOL2 = (pObj2) ? pObj2->GetObjList() : 0L;
 
@@ -309,7 +388,7 @@ void SdrMarkList::ImpForceSort()
 
                 while(pCmp)
                 {
-                    if(pAkt->GetObj() == pCmp->GetObj())
+                    if(pAkt->GetMarkedSdrObj() == pCmp->GetMarkedSdrObj() && pAkt->GetMarkedSdrObj())
                     {
                         // Con1/Con2 Merging
                         if(pCmp->IsCon1())
@@ -384,7 +463,7 @@ sal_uInt32 SdrMarkList::FindObject(const SdrObject* pObj) const
     {
         for(sal_uInt32 a(0L); a < maList.Count(); a++)
         {
-            if(((SdrMark*)(maList.GetObject(a)))->GetObj() == pObj)
+            if(((SdrMark*)(maList.GetObject(a)))->GetMarkedSdrObj() == pObj)
             {
                 return a;
             }
@@ -409,8 +488,8 @@ void SdrMarkList::InsertEntry(const SdrMark& rMark, sal_Bool bChkSort)
     else
     {
         SdrMark* pLast = GetMark(sal_uInt32(nAnz - 1));
-        const SdrObject* pLastObj = pLast->GetObj();
-        const SdrObject* pNeuObj = rMark.GetObj();
+        const SdrObject* pLastObj = pLast->GetMarkedSdrObj();
+        const SdrObject* pNeuObj = rMark.GetMarkedSdrObj();
 
         if(pLastObj == pNeuObj)
         {
@@ -433,8 +512,8 @@ void SdrMarkList::InsertEntry(const SdrMark& rMark, sal_Bool bChkSort)
 
             if(pLastOL == pNeuOL)
             {
-                sal_uInt32 nLastNum(pLastObj!=0L ? pLastObj->GetOrdNum() : 0);
-                sal_uInt32 nNeuNum(pNeuObj !=0L ? pNeuObj ->GetOrdNum() : 0);
+                const sal_uInt32 nLastNum(pLastObj!=0L ? pLastObj->GetOrdNum() : 0);
+                const sal_uInt32 nNeuNum(pNeuObj !=0L ? pNeuObj ->GetOrdNum() : 0);
 
                 if(nNeuNum < nLastNum)
                 {
@@ -444,11 +523,8 @@ void SdrMarkList::InsertEntry(const SdrMark& rMark, sal_Bool bChkSort)
             }
             else
             {
-                if((long)pNeuOL < (long)pLastOL)
-                {
-                    // irgendwann muss mal sortiert werden
-                    mbSorted = sal_False;
-                }
+                // irgendwann muss mal sortiert werden
+                mbSorted = sal_False;
             }
         }
     }
@@ -566,8 +642,8 @@ const XubString& SdrMarkList::GetMarkDescription() const
     if(mbNameOk && 1L == nAnz)
     {
         // Bei Einfachselektion nur Textrahmen cachen
-        SdrObject* pObj = GetMark(0)->GetObj();
-        SdrTextObj* pTextObj = PTR_CAST(SdrTextObj, pObj);
+        const SdrObject* pObj = GetMark(0)->GetMarkedSdrObj();
+        const SdrTextObj* pTextObj = PTR_CAST(SdrTextObj, pObj);
 
         if(!pTextObj || !pTextObj->IsTextFrame())
         {
@@ -586,24 +662,30 @@ const XubString& SdrMarkList::GetMarkDescription() const
         }
         else if(1L == nAnz)
         {
-            pMark->GetObj()->TakeObjNameSingul(aNam);
+            if(pMark->GetMarkedSdrObj())
+            {
+                pMark->GetMarkedSdrObj()->TakeObjNameSingul(aNam);
+            }
         }
         else
         {
-            pMark->GetObj()->TakeObjNamePlural(aNam);
-            XubString aStr1;
-            sal_Bool bEq(sal_True);
-
-            for(sal_uInt32 i = 1; i < GetMarkCount() && bEq; i++)
+            if(pMark->GetMarkedSdrObj())
             {
-                SdrMark* pMark2 = GetMark(i);
-                pMark2->GetObj()->TakeObjNamePlural(aStr1);
-                bEq = aNam.Equals(aStr1);
-            }
+                pMark->GetMarkedSdrObj()->TakeObjNamePlural(aNam);
+                XubString aStr1;
+                sal_Bool bEq(sal_True);
 
-            if(!bEq)
-            {
-                aNam = ImpGetResStr(STR_ObjNamePlural);
+                for(sal_uInt32 i = 1; i < GetMarkCount() && bEq; i++)
+                {
+                    SdrMark* pMark2 = GetMark(i);
+                    pMark2->GetMarkedSdrObj()->TakeObjNamePlural(aStr1);
+                    bEq = aNam.Equals(aStr1);
+                }
+
+                if(!bEq)
+                {
+                    aNam = ImpGetResStr(STR_ObjNamePlural);
+                }
             }
 
             aNam.Insert(sal_Unicode(' '), 0);
@@ -653,8 +735,8 @@ const XubString& SdrMarkList::GetPointMarkDescription(sal_Bool bGlue) const
     if(rNameOk && 1L == nMarkPtObjAnz)
     {
         // Bei Einfachselektion nur Textrahmen cachen
-        SdrObject* pObj = GetMark(0)->GetObj();
-        SdrTextObj* pTextObj = PTR_CAST(SdrTextObj,pObj);
+        const SdrObject* pObj = GetMark(0)->GetMarkedSdrObj();
+        const SdrTextObj* pTextObj = PTR_CAST(SdrTextObj,pObj);
 
         if(!pTextObj || !pTextObj->IsTextFrame())
         {
@@ -674,11 +756,18 @@ const XubString& SdrMarkList::GetPointMarkDescription(sal_Bool bGlue) const
 
         if(1L == nMarkPtObjAnz)
         {
-            pMark->GetObj()->TakeObjNameSingul(aNam);
+            if(pMark->GetMarkedSdrObj())
+            {
+                pMark->GetMarkedSdrObj()->TakeObjNameSingul(aNam);
+            }
         }
         else
         {
-            pMark->GetObj()->TakeObjNamePlural(aNam);
+            if(pMark->GetMarkedSdrObj())
+            {
+                pMark->GetMarkedSdrObj()->TakeObjNamePlural(aNam);
+            }
+
             XubString aStr1;
             sal_Bool bEq(sal_True);
 
@@ -687,9 +776,9 @@ const XubString& SdrMarkList::GetPointMarkDescription(sal_Bool bGlue) const
                 const SdrMark* pMark2 = GetMark(i);
                 const SdrUShortCont* pPts = bGlue ? pMark2->GetMarkedGluePoints() : pMark2->GetMarkedPoints();
 
-                if(pPts && pPts->GetCount())
+                if(pPts && pPts->GetCount() && pMark2->GetMarkedSdrObj())
                 {
-                    pMark2->GetObj()->TakeObjNamePlural(aStr1);
+                    pMark2->GetMarkedSdrObj()->TakeObjNamePlural(aStr1);
                     bEq = aNam.Equals(aStr1);
                 }
             }
@@ -734,16 +823,19 @@ sal_Bool SdrMarkList::TakeBoundRect(SdrPageView* pPV, Rectangle& rRect) const
 
         if(!pPV || pMark->GetPageView() == pPV)
         {
-            aR = pMark->GetObj()->GetCurrentBoundRect();
+            if(pMark->GetMarkedSdrObj())
+            {
+                aR = pMark->GetMarkedSdrObj()->GetCurrentBoundRect();
 
-            if(bFnd)
-            {
-                rRect.Union(aR);
-            }
-            else
-            {
-                rRect = aR;
-                bFnd = sal_True;
+                if(bFnd)
+                {
+                    rRect.Union(aR);
+                }
+                else
+                {
+                    rRect = aR;
+                    bFnd = sal_True;
+                }
             }
         }
     }
@@ -761,16 +853,19 @@ sal_Bool SdrMarkList::TakeSnapRect(SdrPageView* pPV, Rectangle& rRect) const
 
         if(!pPV || pMark->GetPageView() == pPV)
         {
-            Rectangle aR(pMark->GetObj()->GetSnapRect());
+            if(pMark->GetMarkedSdrObj())
+            {
+                Rectangle aR(pMark->GetMarkedSdrObj()->GetSnapRect());
 
-            if(bFnd)
-            {
-                rRect.Union(aR);
-            }
-            else
-            {
-                rRect = aR;
-                bFnd = sal_True;
+                if(bFnd)
+                {
+                    rRect.Union(aR);
+                }
+                else
+                {
+                    rRect = aR;
+                    bFnd = sal_True;
+                }
             }
         }
     }
@@ -830,85 +925,89 @@ namespace sdr
 
     void ViewSelection::ImplCollectCompleteSelection(SdrObject* pObj)
     {
-        sal_Bool bIsGroup(pObj->IsGroupObject());
-
-        if(bIsGroup && pObj->ISA(E3dObject) && !pObj->ISA(E3dScene))
+        if(pObj)
         {
-            bIsGroup = sal_False;
-        }
+            sal_Bool bIsGroup(pObj->IsGroupObject());
 
-        if(bIsGroup)
-        {
-            SdrObjList* pList = pObj->GetSubList();
-
-            for(sal_uInt32 a(0L); a < pList->GetObjCount(); a++)
+            if(bIsGroup && pObj->ISA(E3dObject) && !pObj->ISA(E3dScene))
             {
-                SdrObject* pObj2 = pList->GetObj(a);
-                ImplCollectCompleteSelection(pObj2);
+                bIsGroup = sal_False;
             }
-        }
 
-        maAllMarkedObjects.Insert(pObj, LIST_APPEND);
+            if(bIsGroup)
+            {
+                SdrObjList* pList = pObj->GetSubList();
+
+                for(sal_uInt32 a(0L); a < pList->GetObjCount(); a++)
+                {
+                    SdrObject* pObj2 = pList->GetObj(a);
+                    ImplCollectCompleteSelection(pObj2);
+                }
+            }
+
+            maAllMarkedObjects.Insert(pObj, LIST_APPEND);
+        }
     }
 
     void ViewSelection::ImpForceEdgesOfMarkedNodes()
     {
         if(mbEdgesOfMarkedNodesDirty)
         {
-            const sal_uInt32 nMarkAnz(maMarkedObjectList.GetMarkCount());
-            sal_uInt32 a;
-
+            mbEdgesOfMarkedNodesDirty = sal_False;
+            maMarkedObjectList.ForceSort();
             maEdgesOfMarkedNodes.Clear();
             maMarkedEdgesOfMarkedNodes.Clear();
             maAllMarkedObjects.Clear();
 
-            for(a = 0L; a < nMarkAnz; a++)
+            // #126320# GetMarkCount after ForceSort
+            const sal_uInt32 nMarkAnz(maMarkedObjectList.GetMarkCount());
+
+            for(sal_uInt32 a(0L); a < nMarkAnz; a++)
             {
-                SdrObject* pObj = maMarkedObjectList.GetMark(a)->GetObj();
-                ImplCollectCompleteSelection(pObj);
-            }
+                SdrObject* pCandidate = maMarkedObjectList.GetMark(a)->GetMarkedSdrObj();
 
-            mbEdgesOfMarkedNodesDirty = sal_False;
-            maMarkedObjectList.ForceSort();
-
-            for(a = 0L; a < nMarkAnz; a++)
-            {
-                SdrObject* pNode = maMarkedObjectList.GetMark(a)->GetObj();
-                const SfxBroadcaster* pBC = pNode->GetBroadcaster();
-
-                if(pNode->IsNode())
+                if(pCandidate)
                 {
-                    if(pBC)
+                    // build transitive hull
+                    ImplCollectCompleteSelection(pCandidate);
+
+                    if(pCandidate->IsNode())
                     {
-                        sal_uInt16 nLstAnz(pBC->GetListenerCount());
+                        // travel over broadcaster/listener to access edges connected to the selected object
+                        const SfxBroadcaster* pBC = pCandidate->GetBroadcaster();
 
-                        for(sal_uInt16 nl(0); nl < nLstAnz; nl++)
+                        if(pBC)
                         {
-                            SfxListener* pLst = pBC->GetListener(nl);
-                            SdrEdgeObj* pEdge = PTR_CAST(SdrEdgeObj, pLst);
+                            sal_uInt16 nLstAnz(pBC->GetListenerCount());
 
-                            if(pEdge && pEdge->IsInserted() && pEdge->GetPage() == pNode->GetPage())
+                            for(sal_uInt16 nl(0); nl < nLstAnz; nl++)
                             {
-                                SdrMark aM(pEdge, maMarkedObjectList.GetMark(a)->GetPageView());
+                                SfxListener* pLst = pBC->GetListener(nl);
+                                SdrEdgeObj* pEdge = PTR_CAST(SdrEdgeObj, pLst);
 
-                                if(pEdge->GetConnectedNode(sal_True) == pNode)
+                                if(pEdge && pEdge->IsInserted() && pEdge->GetPage() == pCandidate->GetPage())
                                 {
-                                    aM.SetCon1(sal_True);
-                                }
+                                    SdrMark aM(pEdge, maMarkedObjectList.GetMark(a)->GetPageView());
 
-                                if(pEdge->GetConnectedNode(sal_False) == pNode)
-                                {
-                                    aM.SetCon2(sal_True);
-                                }
+                                    if(pEdge->GetConnectedNode(sal_True) == pCandidate)
+                                    {
+                                        aM.SetCon1(sal_True);
+                                    }
 
-                                if(CONTAINER_ENTRY_NOTFOUND == maMarkedObjectList.FindObject(pEdge))
-                                {
-                                    // nachsehen, ob er selbst markiert ist
-                                    maEdgesOfMarkedNodes.InsertEntry(aM);
-                                }
-                                else
-                                {
-                                    maMarkedEdgesOfMarkedNodes.InsertEntry(aM);
+                                    if(pEdge->GetConnectedNode(sal_False) == pCandidate)
+                                    {
+                                        aM.SetCon2(sal_True);
+                                    }
+
+                                    if(CONTAINER_ENTRY_NOTFOUND == maMarkedObjectList.FindObject(pEdge))
+                                    {
+                                        // nachsehen, ob er selbst markiert ist
+                                        maEdgesOfMarkedNodes.InsertEntry(aM);
+                                    }
+                                    else
+                                    {
+                                        maMarkedEdgesOfMarkedNodes.InsertEntry(aM);
+                                    }
                                 }
                             }
                         }
