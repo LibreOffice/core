@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numrule.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:13:15 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:46:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,7 +151,10 @@ class SW_DLLPUBLIC SwNumRule
     static SwNumFmt* aBaseFmts [ RULE_END ][ MAXLEVEL ];
     static USHORT aDefNumIndents[ MAXLEVEL ];
     static USHORT nRefCount;
-    static Font* pDefBulletFont;
+    // --> OD 2006-06-27 #6440955#
+    // move to function numfunc::GetDefBulletFont()
+//    static Font* pDefBulletFont;
+    // <--
     static char* pDefOutlineName;
 
     tPamAndNums aNumberRanges;
@@ -184,7 +187,10 @@ class SW_DLLPUBLIC SwNumRule
     BOOL bAbsSpaces : 1;    // die Ebenen repraesentieren absol. Einzuege
     bool mbCountPhantoms;
 
-    SW_DLLPRIVATE static void _MakeDefBulletFont();
+    // --> OD 2006-06-27 #b6440955#
+    // functionality of method moved to function numfunc::GetDefBulletFont()
+//    SW_DLLPRIVATE static void _MakeDefBulletFont();
+    // <--
 
     // forbidden and not implemented.
     SwNumRule();
@@ -240,7 +246,10 @@ public:
     void SetNumRuleMap(std::hash_map<String, SwNumRule *, StringHash> *
                        pNumRuleMap);
 
-    static const Font& GetDefBulletFont();
+    // --> OD 2006-06-27 #b6440955#
+    // move function to own namespace
+//    static const Font& GetDefBulletFont();
+    // <--
 
     static char* GetOutlineRuleName() { return pDefOutlineName; }
 
@@ -345,6 +354,27 @@ public:
     String ToString() const;
 };
 
-sal_Unicode GetBulletChar(BYTE nLevel);
+// --> OD 2006-06-27 #b6440955#
+// namespace for static functions and methods for numbering and bullets
+namespace numfunc
+{
+    /** retrieve font family name used for the default bullet list characters
+
+        @author OD
+    */
+    const String& GetDefBulletFontname();
+
+    /** retrieve font used for the default bullet list characters
+
+        @author OD
+    */
+    const Font& GetDefBulletFont();
+
+    /** retrieve unicode of character used for the default bullet list for the given list level
+
+        @author OD
+    */
+    const sal_Unicode GetBulletChar( BYTE nLevel );
+}
 
 #endif  // _NUMRULE_HXX
