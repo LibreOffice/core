@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drwbassh.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-27 10:17:12 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:43:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -317,7 +317,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
                     if( rMarkList.GetMark(0) != 0 )
                     {
-                        SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
+                        SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
                         //SfxTabDialog *pDlg;       delete for cui CHINA001
                         SfxAbstractTabDialog *pDlg=NULL; //add CHINA001
                         BOOL bCaption = FALSE;
@@ -606,7 +606,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                         if (nVertOrient != -1)
                         {
                             pSh->StartAction();
-                            SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
+                            SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
                             SwFrmFmt* pFrmFmt = FindFrmFmt( pObj );
                             SwFmtVertOrient aVOrient((SwFmtVertOrient&)pFrmFmt->GetAttr(RES_VERT_ORIENT));
                             aVOrient.SetVertOrient((SwVertOrient)nVertOrient);
@@ -666,7 +666,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
             bDone = TRUE;
             const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
             DBG_ASSERT(rMarkList.GetMarkCount() == 1, "Exactly one object has to be selected" )
-            SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
+            SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
             ULONG nMarkCount = rMarkList.GetMarkCount();
             String sName;
             String sDesc(SW_RES( STR_NAME_SHAPE_LABEL ) );
@@ -720,7 +720,7 @@ IMPL_LINK( SwDrawBaseShell, CheckGroupShapeNameHdl, AbstractSvxNameDialog*, pNam
     SdrView *pSdrView = rSh.GetDrawView();
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     DBG_ASSERT(rMarkList.GetMarkCount() == 1, "wrong draw selection")
-    SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
+    SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
     ULONG nMarkCount = rMarkList.GetMarkCount();
     const String sCurrentName = pObj->GetName();
     String sNewName;
@@ -837,7 +837,7 @@ void SwDrawBaseShell::GetState(SfxItemSet& rSet)
 //                const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
 //                if( rMarkList.GetMarkCount() == 1 )
 //                {
-//                    SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
+//                    SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 //                    if(pObj->ISA(SdrObjGroup))
 //                        bDisable = FALSE;
 //                }
@@ -902,7 +902,7 @@ IMPL_LINK(SwDrawBaseShell, ValidatePosition, SvxSwFrameValidation*, pValidation 
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     if( rMarkList.GetMarkCount() == 1 )
     {
-        SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
+        SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
         SwFrmFmt* pFrmFmt = FindFrmFmt( pObj );
         pCntntPos = pFrmFmt->GetAnchor().GetCntntAnchor();
     }
