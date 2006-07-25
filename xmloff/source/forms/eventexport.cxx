@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventexport.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:17:30 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 09:23:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -171,46 +171,4 @@ namespace xmloff
 //.........................................................................
 }   // namespace xmloff
 //.........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.7.34.2  2005/11/16 22:47:09  pl
- *  #i55991# removed warnings
- *
- *  Revision 1.7.34.1  2005/11/03 17:46:59  cl
- *  warning free code changes for unxlngi6
- *
- *  Revision 1.7  2005/09/09 14:06:51  rt
- *  INTEGRATION: CWS ooo19126 (1.6.408); FILE MERGED
- *  2005/09/05 14:38:56 rt 1.6.408.1: #i54170# Change license header: remove SISSL
- *
- *  Revision 1.6.408.1  2005/09/05 14:38:56  rt
- *  #i54170# Change license header: remove SISSL
- *
- *  Revision 1.6  2003/11/18 16:57:21  kz
- *  INTEGRATION: CWS scriptingf1 (1.5.174); FILE MERGED
- *  2003/10/09 13:51:20 dfoster 1.5.174.1: #i19262# - Enable scripting framework scripts to be persisted for forms
- *
- *  Revision 1.5.174.1  2003/10/09 13:51:20  dfoster
- *  #i19262# - Enable scripting framework scripts to be persisted for forms
- *
- *  Revision 1.5  2002/01/18 15:40:36  fs
- *  #96662# don't write a library if the library name is empty
- *
- *  Revision 1.4  2001/09/04 10:19:41  fs
- *  #91865# correctly im- and export application events
- *
- *  Revision 1.3  2001/08/27 17:44:27  fs
- *  #91537# corrected evaluation of macro names for StarBasic script ebents
- *
- *  Revision 1.2  2001/08/27 16:56:33  fs
- *  #91537# export a library attribute when exporting a StarBasic script event descriptor
- *
- *  Revision 1.1  2001/01/02 15:55:28  fs
- *  initial checkin - helper for exporting script events
- *
- *
- *  Revision 1.0 21.12.00 12:16:08  fs
- ************************************************************************/
 
