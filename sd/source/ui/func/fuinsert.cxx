@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuinsert.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 18:40:24 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:34:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -207,7 +207,7 @@ void FuInsertGraphic::DoExecute( SfxRequest& rReq )
                     if (rMarkList.GetMarkCount() == 1)
                     {
                         SdrMark* pMark = rMarkList.GetMark(0);
-                        SdrObject* pObj = pMark->GetObj();
+                        SdrObject* pObj = pMark->GetMarkedSdrObj();
 
                         if (pObj->GetObjInventor() == SdrInventor &&
                             pObj->GetObjIdentifier() == OBJ_GRAF)
@@ -584,7 +584,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                 if (rMarkList.GetMarkCount() == 1)
                 {
                     SdrMark* pMark = rMarkList.GetMark(0);
-                    SdrObject* pObj = pMark->GetObj();
+                    SdrObject* pObj = pMark->GetMarkedSdrObj();
 
                     if (pObj->GetObjInventor() == SdrInventor &&
                         pObj->GetObjIdentifier() == OBJ_OLE2)
