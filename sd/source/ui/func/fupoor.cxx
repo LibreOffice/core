@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fupoor.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:02:14 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:39:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -386,7 +386,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
 
                 if( !pView->IsTextEdit() && 1 == rMarkList.GetMarkCount() )
                 {
-                    SdrObject* pObj = rMarkList.GetMark( 0 )->GetObj();
+                    SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
                     if( pObj && pObj->ISA( SdrOle2Obj ) && !pDocSh->IsUIActive() )
                     {
@@ -937,7 +937,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
 
             if(1 == rMarkList.GetMarkCount())
             {
-                SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
+                SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
                 if(pObj->ISA(SdrTextObj) && pObj->HasTextEdit() && !pObj->ISA(SdrOle2Obj))
                 {
