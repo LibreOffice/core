@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: rt $ $Date: 2006-03-09 10:54:02 $
+#   last change: $Author: rt $ $Date: 2006-07-25 07:55:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,6 @@ TARGET = ure
 .INCLUDE : $(PRJ)$/util$/target.pmk
 .INCLUDE : target.mk
 
-.INCLUDE : $(BIN)$/cliureversion.mk
 
 .IF "$(USE_SHELL)"!="4nt"
 ECHOQUOTE='
@@ -54,6 +53,8 @@ ECHOQUOTE=
 .ENDIF
 
 .IF "$(BUILD_FOR_CLI)" != ""
+
+.INCLUDE : $(BIN)$/cliureversion.mk
 
 ASSEMBLY_ATTRIBUTES = $(MISC)$/assembly_ure_$(TARGET).cs
 
@@ -70,7 +71,7 @@ CSFILES = \
     uno$/util$/WeakComponentBase.cs	\
     $(ASSEMBLY_ATTRIBUTES)
 
-$(ASSEMBLY_ATTRIBUTES) : assembly.cs $(BIN)$/cliuno.snk $(BIN)$/cliureversion.mk 
+$(ASSEMBLY_ATTRIBUTES) : assembly.cs makefile.mk $(BIN)$/cliuno.snk $(BIN)$/cliureversion.mk 
     $(GNUCOPY) -p assembly.cs $@
     +echo $(ECHOQUOTE) \
     [assembly:System.Reflection.AssemblyVersion( "$(CLI_URE_NEW_VERSION)")] \
