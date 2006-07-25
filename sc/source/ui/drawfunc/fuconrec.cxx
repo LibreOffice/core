@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuconrec.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:49:18 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:25:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -331,7 +331,7 @@ BOOL __EXPORT FuConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
             const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
             if (rMarkList.GetMark(0))
             {
-                SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
+                SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
                 //  create OutlinerParaObject now so it can be set to vertical
                 if ( pObj->ISA(SdrTextObj) )
                     ((SdrTextObj*)pObj)->ForceOutlinerParaObject();
