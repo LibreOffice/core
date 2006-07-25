@@ -4,9 +4,9 @@
  *
  *  $RCSfile: callbacks.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:03:32 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 09:21:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -196,85 +196,4 @@ namespace xmloff
 //.........................................................................
 
 #endif // _XMLOFF_FORMS_CALLBACKS_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.12.206.1  2005/09/05 14:38:54  rt
- *  #i54170# Change license header: remove SISSL
- *
- *  Revision 1.12  2004/11/16 10:08:41  obo
- *  INTEGRATION: CWS eforms2 (1.11.28); FILE MERGED
- *  2004/10/01 18:04:45 dvo 1.11.28.4: #i34802# load/save binding fir lists as form:xforms-list-source
- *  2004/08/25 17:48:12 dvo 1.11.28.3: #i31958# load/save xforms:submission attribute on buttons
- *  2004/03/18 17:38:14 dvo 1.11.28.2: #114856# continue XForms implementation
- *           (also remove define DVO_XFORMS)
- *  2004/01/28 14:51:27 dvo 1.11.28.1: #114856# load xforms:bind attribute for form controls
- *           (use DVO_XFORMS define)
- *
- *  Revision 1.11.28.4  2004/10/01 18:04:45  dvo
- *  #i34802# load/save binding fir lists as form:xforms-list-source
- *
- *  Revision 1.11.28.3  2004/08/25 17:48:12  dvo
- *  #i31958# load/save xforms:submission attribute on buttons
- *
- *  Revision 1.11.28.2  2004/03/18 17:38:14  dvo
- *  #114856# continue XForms implementation
- *           (also remove define DVO_XFORMS)
- *
- *  Revision 1.11.28.1  2004/01/28 14:51:27  dvo
- *  #114856# load xforms:bind attribute for form controls
- *           (use DVO_XFORMS define)
- *
- *  Revision 1.11  2003/12/01 12:03:25  rt
- *  INTEGRATION: CWS geordi2q09 (1.10.24); FILE MERGED
- *  2003/11/24 15:00:21 obo 1.10.24.2: undo last change
- *  2003/11/21 16:48:36 obo 1.10.24.1: #111934#: join CWS comboboxlink
- *
- *  Revision 1.10.24.2  2003/11/24 15:00:21  obo
- *  undo last change
- *
- *  Revision 1.10  2003/10/21 08:38:06  obo
- *  INTEGRATION: CWS formcelllinkage (1.9.160); FILE MERGED
- *  2003/10/01 09:55:17 fs 1.9.160.1: #i18994# merging the changes from the CWS fs002
- *
- *  Revision 1.9.160.1  2003/10/01 09:55:17  fs
- *  #i18994# merging the changes from the CWS fs002
- *
- *  Revision 1.9.156.1  2003/09/25 14:28:35  fs
- *  #18994# merging the changes from cws_srx645_fs002 branch
- *
- *  Revision 1.9.152.1  2003/09/17 12:26:44  fs
- *  #18999# #19367# persistence for cell value and cell range bindings
- *
- *  Revision 1.9  2002/10/25 13:11:31  fs
- *  #104402# new methods on the import context callback for importing column styles
- *
- *  Revision 1.8  2002/10/25 07:35:35  fs
- *  #104402# +IFormsExportContext::getObjectStyleName
- *
- *  Revision 1.7  2001/02/01 09:46:47  fs
- *  no own style handling anymore - the shape exporter is responsible for our styles now
- *
- *  Revision 1.6  2001/01/24 09:34:10  fs
- *  +IFormsImportContext::enter-/leaveEventContext
- *
- *  Revision 1.5  2001/01/02 15:58:21  fs
- *  event ex- & import
- *
- *  Revision 1.4  2000/12/18 15:14:35  fs
- *  some changes ... now exporting/importing styles
- *
- *  Revision 1.3  2000/12/13 10:35:50  fs
- *  included XPropertySet.hpp
- *
- *  Revision 1.2  2000/12/12 12:00:37  fs
- *  +IControlIdMap / +IFormsImportContext
- *
- *  Revision 1.1  2000/11/17 19:01:13  fs
- *  initial checkin - export and/or import the applications form layer
- *
- *
- *  Revision 1.0 17.11.00 18:42:07  fs
- ************************************************************************/
 
