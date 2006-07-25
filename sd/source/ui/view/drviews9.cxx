@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews9.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:34:27 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:49:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -238,7 +238,7 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
                     if (rMarkList.GetMarkCount() == 1)
                     {
                         SdrMark* pMark = rMarkList.GetMark(0);
-                        SdrObject* pObj = pMark->GetObj();
+                        SdrObject* pObj = pMark->GetMarkedSdrObj();
 
                         if (pObj->GetObjInventor() == SdrInventor && pObj->GetObjIdentifier() == OBJ_GRAF)
                         {
