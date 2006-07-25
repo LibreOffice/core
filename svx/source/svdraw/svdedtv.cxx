@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdedtv.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:35:34 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:55:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -359,7 +359,7 @@ void SdrEditView::ImpBroadcastEdgesOfMarkedNodes()
 
     for (i=0; i<nMarkedEdgeAnz; i++) {
         SdrMark* pEM = GetMarkedEdgesOfMarkedNodes().GetMark(i);
-        SdrObject* pEdgeTmp=pEM->GetObj();
+        SdrObject* pEdgeTmp=pEM->GetMarkedSdrObj();
         SdrEdgeObj* pEdge=PTR_CAST(SdrEdgeObj,pEdgeTmp);
         if (pEdge!=NULL) {
             pEdge->SetEdgeTrackDirty();
@@ -534,7 +534,7 @@ void SdrEditView::CheckPossibilities()
             {
                 // gradient depends on fillstyle
                 const SdrMark* pM = GetSdrMarkByIndex(0);
-                const SdrObject* pObj = pM->GetObj();
+                const SdrObject* pObj = pM->GetMarkedSdrObj();
 
                 // maybe group object, so get merged ItemSet
                 const SfxItemSet& rSet = pObj->GetMergedItemSet();
@@ -564,7 +564,7 @@ void SdrEditView::CheckPossibilities()
 
             for (ULONG nm=0; nm<nMarkAnz; nm++) {
                 const SdrMark* pM=GetSdrMarkByIndex(nm);
-                const SdrObject* pObj=pM->GetObj();
+                const SdrObject* pObj=pM->GetMarkedSdrObj();
                 const SdrPageView* pPV=pM->GetPageView();
                 if (pPV!=pPV0) {
                     if (pPV->IsReadOnly()) bReadOnly=TRUE;
@@ -675,7 +675,7 @@ void SdrEditView::ForceMarkedObjToAnotherPage()
     BOOL bFlg=FALSE;
     for (ULONG nm=0; nm<GetMarkedObjectCount(); nm++) {
         SdrMark* pM=GetSdrMarkByIndex(nm);
-        SdrObject* pObj=pM->GetObj();
+        SdrObject* pObj=pM->GetMarkedSdrObj();
         Rectangle aObjRect(pObj->GetCurrentBoundRect());
         aObjRect+=pM->GetPageView()->GetOffset(); // auf View-Koordinaten
         Rectangle aPgRect(pM->GetPageView()->GetPageRect());
@@ -714,14 +714,14 @@ void SdrEditView::DeleteMarkedList(const SdrMarkList& rMark)
         for (nm=nMarkAnz; nm>0;) {
             nm--;
             SdrMark* pM=rMark.GetMark(nm);
-            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoDeleteObject(*pM->GetObj()));
+            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoDeleteObject(*pM->GetMarkedSdrObj()));
         }
         // Sicherstellen, dass die OrderNums stimmen:
-        rMark.GetMark(0)->GetObj()->GetOrdNum();
+        rMark.GetMark(0)->GetMarkedSdrObj()->GetOrdNum();
         for (nm=nMarkAnz; nm>0;) {
             nm--;
             SdrMark* pM=rMark.GetMark(nm);
-            SdrObject*   pObj=pM->GetObj();
+            SdrObject*   pObj=pM->GetMarkedSdrObj();
             //SdrPageView* pPV =pM->GetPageView();
             SdrObjList*  pOL =pObj->GetObjList(); //#52680#
             UINT32 nOrdNum=pObj->GetOrdNumDirect();
@@ -776,16 +776,16 @@ void SdrEditView::CopyMarkedObj()
     ULONG nm;
     for (nm=0; nm<nMarkAnz; nm++) {
         SdrMark* pM=aSourceObjectsForCopy.GetMark(nm);
-        SdrObject* pO=pM->GetObj()->Clone();
+        SdrObject* pO=pM->GetMarkedSdrObj()->Clone();
         if (pO!=NULL) {
             SdrInsertReason aReason(SDRREASON_VIEWCALL);
             pM->GetPageView()->GetObjList()->InsertObject(pO,CONTAINER_APPEND,&aReason);
             AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoCopyObject(*pO));
             SdrMark aME(*pM);
-            aME.SetObj(pO);
+            aME.SetMarkedSdrObj(pO);
 
             // aCopiedObjects.InsertEntry(aME);
-            aCloneList.AddPair(pM->GetObj(), pO);
+            aCloneList.AddPair(pM->GetMarkedSdrObj(), pO);
 
             if (pM->GetUser()==0)
             {
