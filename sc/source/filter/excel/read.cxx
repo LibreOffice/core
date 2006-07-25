@@ -4,9 +4,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:51:33 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 09:57:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -265,7 +265,6 @@ FltError ImportExcel::Read( void )
                     case EXC_ID_RK:             ReadRk();               break;
 
                     case 0x06:  Formula25(); break;     // FORMULA      [ 2  5]
-                    case 0x07:  RecString(); break;     // STRING       [ 2345]
                     case 0x08:  Row25(); break;         // ROW          [ 2  5]
                     case 0x0A:                          // EOF          [ 2345]
                         rNumFmtBfr.CreateScFormats();
@@ -355,7 +354,6 @@ FltError ImportExcel::Read( void )
                     case 0x8C:  Country(); break;       // COUNTRY      [  345]
                     case 0x92:  rPal.ReadPalette( maStrm );             break;
                     case 0x0206: Formula3(); break;     // FORMULA      [  3  ]
-                    case 0x0207: RecString(); break;    // STRING       [ 2345]
                     case 0x0208: Row34(); break;        // ROW          [  34 ]
                     case 0x0218: rNameMgr.ReadName( maStrm );           break;
                     case 0x0221: Array34(); break;      // ARRAY        [  34 ]
@@ -420,7 +418,6 @@ FltError ImportExcel::Read( void )
                     case 0x92:  rPal.ReadPalette( maStrm );             break;
                     case 0x99:  Standardwidth(); break; // STANDARDWIDTH[   45]
                     case 0xA1:  rPageSett.ReadSetup( maStrm );          break;
-                    case 0x0207: RecString(); break;    // STRING       [ 2345]
                     case 0x0208: Row34(); break;        // ROW          [  34 ]
                     case 0x0218: rNameMgr.ReadName( maStrm );           break;
                     case 0x0221: Array34(); break;      // ARRAY        [  34 ]
@@ -522,7 +519,6 @@ FltError ImportExcel::Read( void )
                     case 0x92:  rPal.ReadPalette( maStrm );             break;
                     case 0x99:  Standardwidth(); break; // STANDARDWIDTH[   45]
                     case 0xA1:  rPageSett.ReadSetup( maStrm );          break;
-                    case 0x0207: RecString(); break;    // STRING       [ 2345]
                     case 0x0208: Row34(); break;        // ROW          [  34 ]
                     case 0x0218: rNameMgr.ReadName( maStrm );           break;
                     case 0x0221: Array34(); break;
@@ -669,8 +665,9 @@ FltError ImportExcel::Read( void )
                     case EXC_ID3_BOOLERR:       ReadBoolErr();          break;
                     case EXC_ID_RK:             ReadRk();               break;
 
-                    case 0x06:  Formula25(); break;
-                    case 0x07:  RecString(); break;     // STRING       [ 2345]
+                    case 0x0006:
+                    case 0x0206:
+                    case 0x0406:  Formula25(); break;
                     case 0x0A:  Eof(); eAkt = Z_Biff5E;                 break;
                     case 0x14:
                     case 0x15:  rPageSett.ReadHeaderFooter( maStrm );   break;
@@ -697,7 +694,6 @@ FltError ImportExcel::Read( void )
                     case 0xBD:  Mulrk(); break;         // MULRK        [    5]
                     case 0xBE:  Mulblank(); break;      // MULBLANK     [    5]
                     case 0xD6:  Rstring(); break;       // RSTRING      [    5]
-                    case 0x0207: RecString(); break;    // STRING       [ 2345]
                     case 0x0236: TableOp(); break;      // TABLE        [    5]
                     case 0x0809:                        // BOF          [    5]
                         Bof5();
@@ -1145,7 +1141,9 @@ FltError ImportExcel8::Read( void )
                     case EXC_ID3_BOOLERR:       ReadBoolErr();          break;
                     case EXC_ID_RK:             ReadRk();               break;
 
-                    case 0x0006:    Formula25();            break;  // FORMULA      [ 2  5   ]
+                    case 0x0006:
+                    case 0x0206:
+                    case 0x0406:    Formula25();            break;  // FORMULA      [ 2  5   ]
                     case 0x000C:    Calccount();            break;  // CALCCOUNT
                     case 0x0010:    Delta();                break;  // DELTA
                     case 0x0011:    Iteration();            break;  // ITERATION
@@ -1158,7 +1156,6 @@ FltError ImportExcel8::Read( void )
                     case 0x00D6:    Rstring();              break;  // RSTRING      [    5   ]
                     case 0x00E5:    Cellmerging();          break;  // CELLMERGING
                     case 0x00FD:    Labelsst();             break;  // LABELSST     [      8 ]
-                    case 0x0207:    RecString();            break;  // STRING       [ 2345   ]
                     case 0x0236:    TableOp();              break;  // TABLE
 
                     case EXC_ID_HORPAGEBREAKS:
