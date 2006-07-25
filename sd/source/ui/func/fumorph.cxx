@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fumorph.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:32:57 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:35:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,8 +116,8 @@ void FuMorph::DoExecute( SfxRequest& rReq )
     if(rMarkList.GetMarkCount() == 2)
     {
         // Clones erzeugen
-        SdrObject*  pObj1 = rMarkList.GetMark(0)->GetObj();
-        SdrObject*  pObj2 = rMarkList.GetMark(1)->GetObj();
+        SdrObject*  pObj1 = rMarkList.GetMark(0)->GetMarkedSdrObj();
+        SdrObject*  pObj2 = rMarkList.GetMark(1)->GetMarkedSdrObj();
         SdrObject*  pCloneObj1 = pObj1->Clone();
         SdrObject*  pCloneObj2 = pObj2->Clone();
 
