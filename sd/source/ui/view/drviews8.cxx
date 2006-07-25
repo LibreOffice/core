@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews8.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:28:16 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:49:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -587,7 +587,7 @@ void DrawViewShell::ScannerEvent( const ::com::sun::star::lang::EventObject& rEv
                         if( rMarkList.GetMarkCount() == 1 )
                         {
                             SdrMark*    pMark = rMarkList.GetMark(0);
-                            SdrObject*  pObj = pMark->GetObj();
+                            SdrObject*  pObj = pMark->GetMarkedSdrObj();
 
                             if( pObj->ISA( SdrGrafObj ) )
                             {
