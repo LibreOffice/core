@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdview.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:09:02 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:53:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -573,7 +573,7 @@ BOOL View::IsPresObjSelected(BOOL bOnPage, BOOL bOnMasterPage, BOOL bCheckPresOb
     {
         // Rueckwaerts durch die Marklist
         pMark = pMarkList->GetMark(nMark);
-        pObj = pMark->GetObj();
+        pObj = pMark->GetMarkedSdrObj();
 
         if ( pObj && ( bCheckPresObjListOnly || pObj->IsEmptyPresObj() || pObj->GetUserCall() ) )
         {
@@ -1006,8 +1006,8 @@ BOOL View::IsMorphingAllowed() const
 
     if ( rMarkList.GetMarkCount() == 2 )
     {
-        const SdrObject*    pObj1 = rMarkList.GetMark( 0 )->GetObj();
-        const SdrObject*    pObj2 = rMarkList.GetMark( 1 )->GetObj();
+        const SdrObject*    pObj1 = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
+        const SdrObject*    pObj2 = rMarkList.GetMark( 1 )->GetMarkedSdrObj();
         const UINT16        nKind1 = pObj1->GetObjIdentifier();
         const UINT16        nKind2 = pObj2->GetObjIdentifier();
 
@@ -1058,7 +1058,7 @@ BOOL View::IsVectorizeAllowed() const
 
     if( rMarkList.GetMarkCount() == 1 )
     {
-        const SdrObject* pObj = rMarkList.GetMark( 0 )->GetObj();
+        const SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
         if( pObj->ISA( SdrGrafObj ) && ( (SdrGrafObj*) pObj )->GetGraphicType() == GRAPHIC_BITMAP )
             bRet = TRUE;
