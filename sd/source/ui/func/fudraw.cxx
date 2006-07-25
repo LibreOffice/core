@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fudraw.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 16:57:45 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:33:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -745,7 +745,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
                 // 2D-objects acquit in an other way. Otherwise, the rotation of 3d-objects around any axises
                 // wouldn't be possible per default.
                 const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-                SdrObject* pObject = rMarkList.GetMark(0)->GetObj();
+                SdrObject* pObject = rMarkList.GetMark(0)->GetMarkedSdrObj();
                 if ((pObject->ISA(E3dObject)) && (rMarkList.GetMarkCount() == 1))
                 {
                     pWindow->SetPointer(Pointer(POINTER_ROTATE));
@@ -912,7 +912,7 @@ void FuDraw::DoubleClick(const MouseEvent& rMEvt)
         if (rMarkList.GetMarkCount() == 1)
         {
             SdrMark* pMark = rMarkList.GetMark(0);
-            SdrObject* pObj = pMark->GetObj();
+            SdrObject* pObj = pMark->GetMarkedSdrObj();
 
             UINT32 nInv = pObj->GetObjInventor();
             UINT16 nSdrObjKind = pObj->GetObjIdentifier();
