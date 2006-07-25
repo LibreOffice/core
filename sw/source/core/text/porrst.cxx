@@ -4,9 +4,9 @@
  *
  *  $RCSfile: porrst.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 09:31:13 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:48:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -240,7 +240,10 @@ void SwKernPortion::Paint( const SwTxtPaintInfo &rInf ) const
         if( rInf.OnWin() && pPortion && !pPortion->Width() )
             pPortion->PrePaint( rInf, this );
 
-        if( rInf.GetFont()->IsPaintBlank() )
+        if( rInf.GetFont()->IsPaintBlank() &&
+            // --> FME 2006-07-12 #b6439097#
+            !rInf.GetTxtFrm()->GetTxtNode()->GetDoc()->IsCutExpandedUnderline() )
+            // <--
         {
 static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
             // Tabs mit Fuellung
