@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawsh5.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:47:22 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 13:24:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,7 +102,7 @@ void ScDrawShell::GetHLinkState( SfxItemSet& rSet )             //  Hyperlink
 
     if ( nMarkCount == 1 )              // URL-Button markiert ?
     {
-        SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
+        SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
         SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, pObj);
         if (pUnoCtrl && FmFormInventor == pUnoCtrl->GetObjInventor())
         {
@@ -188,7 +188,7 @@ void ScDrawShell::ExecuteHLink( SfxRequest& rReq )
                         const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
                         if ( rMarkList.GetMarkCount() == 1 )
                         {
-                            SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, rMarkList.GetMark(0)->GetObj());
+                            SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, rMarkList.GetMark(0)->GetMarkedSdrObj());
                             if (pUnoCtrl && FmFormInventor == pUnoCtrl->GetObjInventor())
                             {
                                 uno::Reference<awt::XControlModel> xControlModel =
@@ -363,7 +363,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
             const SdrMarkList& rNoteMarkList = pView->GetMarkedObjectList();
             if(rNoteMarkList.GetMarkCount() == 1)
             {
-                SdrObject* pObj = rNoteMarkList.GetMark( 0 )->GetObj();
+                SdrObject* pObj = rNoteMarkList.GetMark( 0 )->GetMarkedSdrObj();
                 if ( pObj && pObj->GetLayer() == SC_LAYER_INTERN && pObj->ISA(SdrCaptionObj) )
                 {
                     ScAddress aTabPos;
@@ -532,7 +532,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                 const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
                 if ( rMarkList.GetMarkCount() == 1 )
                 {
-                    SdrObject* pObj = rMarkList.GetMark( 0 )->GetObj();
+                    SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
                     if ( pObj->GetLayer() != SC_LAYER_INTERN )
                     {
                         UINT16 nObjType = pObj->GetObjIdentifier();
@@ -683,7 +683,7 @@ void ScDrawShell::ExecFormText(SfxRequest& rReq)
                                             GetChildWindow(nId)->GetWindow());
 
             pDlg->CreateStdFormObj(*pDrView, *pDrView->GetPageViewPvNum(0),
-                                    rSet, *rMarkList.GetMark(0)->GetObj(),
+                                    rSet, *rMarkList.GetMark(0)->GetMarkedSdrObj(),
                                    ((const XFormTextStdFormItem*) pItem)->
                                    GetValue());
         }
