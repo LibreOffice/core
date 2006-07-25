@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdglev.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:37:38 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:55:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,7 @@ void SdrGlueEditView::ImpDoMarkedGluePoints(PGlueDoFunc pDoFunc, BOOL bConst, co
     ULONG nMarkAnz=GetMarkedObjectCount();
     for (ULONG nm=0; nm<nMarkAnz; nm++) {
         SdrMark* pM=GetSdrMarkByIndex(nm);
-        SdrObject* pObj=pM->GetObj();
+        SdrObject* pObj=pM->GetMarkedSdrObj();
         const SdrUShortCont* pPts=pM->GetMarkedGluePoints();
         ULONG nPtAnz=pPts==NULL ? 0 : pPts->GetCount();
         if (nPtAnz!=0) {
@@ -252,7 +252,7 @@ void SdrGlueEditView::DeleteMarkedGluePoints()
     ULONG nMarkAnz=GetMarkedObjectCount();
     for (ULONG nm=0; nm<nMarkAnz; nm++) {
         SdrMark* pM=GetSdrMarkByIndex(nm);
-        SdrObject* pObj=pM->GetObj();
+        SdrObject* pObj=pM->GetMarkedSdrObj();
         const SdrUShortCont* pPts=pM->GetMarkedGluePoints();
         ULONG nPtAnz=pPts==NULL ? 0 : pPts->GetCount();
         if (nPtAnz!=0) {
@@ -284,7 +284,7 @@ void SdrGlueEditView::ImpCopyMarkedGluePoints()
     ULONG nMarkAnz=GetMarkedObjectCount();
     for (ULONG nm=0; nm<nMarkAnz; nm++) {
         SdrMark* pM=GetSdrMarkByIndex(nm);
-        SdrObject* pObj=pM->GetObj();
+        SdrObject* pObj=pM->GetMarkedSdrObj();
         SdrUShortCont* pPts=pM->GetMarkedGluePoints();
         SdrGluePointList* pGPL=pObj->ForceGluePointList();
         ULONG nPtAnz=pPts==NULL ? 0 : pPts->GetCount();
@@ -313,7 +313,7 @@ void SdrGlueEditView::ImpTransformMarkedGluePoints(PGlueTrFunc pTrFunc, const vo
     ULONG nMarkAnz=GetMarkedObjectCount();
     for (ULONG nm=0; nm<nMarkAnz; nm++) {
         SdrMark* pM=GetSdrMarkByIndex(nm);
-        SdrObject* pObj=pM->GetObj();
+        SdrObject* pObj=pM->GetMarkedSdrObj();
         const SdrUShortCont* pPts=pM->GetMarkedGluePoints();
         Point aPvOfs(pM->GetPageView()->GetOffset());
         ULONG nPtAnz=pPts==NULL ? 0 : pPts->GetCount();
