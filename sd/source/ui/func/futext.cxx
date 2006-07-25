@@ -4,9 +4,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 17:19:05 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:42:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -302,7 +302,7 @@ void FuText::DoExecute( SfxRequest& rReq )
 
         if (rMarkList.GetMarkCount() == 1)
         {
-            SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
+            SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
             if (pObj->ISA(SdrTextObj))
             {
@@ -720,7 +720,7 @@ BOOL FuText::MouseButtonUp(const MouseEvent& rMEvt)
         const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
 
         if (rMarkList.GetMarkCount() == 1
-            && ( rMarkList.GetMark(0)->GetObj() == pTextObj) )
+            && ( rMarkList.GetMark(0)->GetMarkedSdrObj() == pTextObj) )
         {
             // Ist pTextObj wirklich noch gueltig?
             // (Im FontWork wird z.B. das Objekt ausgetauscht!)
@@ -1018,7 +1018,7 @@ BOOL FuText::KeyInput(const KeyEvent& rKEvt)
         if(1 == rMarkList.GetMarkCount())
         {
             SdrMark* pMark = rMarkList.GetMark(0);
-            pSelectedObj = pMark->GetObj();
+            pSelectedObj = pMark->GetMarkedSdrObj();
         }
 
         if(pTextObj != pSelectedObj)
@@ -1480,7 +1480,7 @@ void FuText::ReceiveRequest(SfxRequest& rReq)
 
             if (rMarkList.GetMarkCount() == 1)
             {
-                SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
+                SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
                 if (pObj->ISA(SdrTextObj))
                 {
