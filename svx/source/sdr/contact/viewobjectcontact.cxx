@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewobjectcontact.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:28:48 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:54:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -526,7 +526,11 @@ namespace sdr
             if(bDoAnimate)
             {
                 // If Yes, create the AnimationState and init it. Creation on demand.
+                // #i63345# OOps, animation disabled ?!? The parameter does not need to be
+                // created, the call to GetAnimationState() already adds the AnimationState
+                // using GetObjectContact().GetObjectAnimator().AddAnimationState(...).
                 //sdr::animation::AnimationState* pState = GetAnimationState(rInfo);
+                GetAnimationState(rInfo);
             }
             else
             {
