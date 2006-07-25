@@ -4,9 +4,9 @@
  *
  *  $RCSfile: concustomshape.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:42:54 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:41:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -296,7 +296,7 @@ void ConstCustomShape::CreateDefaultObject()
         sal_uInt32 nCount = rMarkList.GetMarkCount();
         if ( rMarkList.GetMarkCount() == 1 )
         {
-            SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
+            SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
             if ( pObj && pObj->ISA( SdrObjCustomShape ) )
                 SetAttributes( pObj );
         }
