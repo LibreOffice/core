@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 17:45:15 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:50:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -460,7 +460,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
 
                 while (i < nMarkCnt && !b3DObjMarked)
                 {
-                    if (rMarkList.GetMark(i)->GetObj()->ISA(E3dObject))
+                    if (rMarkList.GetMark(i)->GetMarkedSdrObj()->ISA(E3dObject))
                     {
                         b3DObjMarked = TRUE;
                     }
@@ -850,7 +850,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
             if ( rMarkList.GetMark(0) && !pDrView->IsAction() )
             {
-                SdrPathObj* pPathObj = (SdrPathObj*) rMarkList.GetMark(0)->GetObj();
+                SdrPathObj* pPathObj = (SdrPathObj*) rMarkList.GetMark(0)->GetMarkedSdrObj();
                 pDrView->BegUndo(String(SdResId(STR_UNDO_BEZCLOSE)));
                 pDrView->UnmarkAllPoints();
                 Size aDist(GetActiveWindow()->PixelToLogic(Size(8,8)));
@@ -1511,7 +1511,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
             for (ULONG i=0; i<rMarkList.GetMarkCount(); i++)
             {
-                SdrObject* pObj = rMarkList.GetMark(i)->GetObj();
+                SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
 
                 if (pObj->GetObjInventor() == SdrInventor)
                 {
@@ -1685,7 +1685,7 @@ void DrawViewShell::InsertURLButton(const String& rURL, const String& rText,
 
     if (pDrView->GetMarkedObjectList().GetMarkCount() > 0)
     {
-        SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, pDrView->GetMarkedObjectList().GetMark(0)->GetObj());
+        SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, pDrView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj());
 
         if (pUnoCtrl && FmFormInventor == pUnoCtrl->GetObjInventor() &&
                pUnoCtrl->GetObjIdentifier() == OBJ_FM_BUTTON)
