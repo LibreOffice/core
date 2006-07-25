@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:44:16 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:45:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -751,7 +751,7 @@ uno::Any SwXTextView::getSelection(void) throw( uno::RuntimeException )
                 const SdrMarkList& rMarkList = rSh.GetDrawView()->GetMarkedObjectList();
                 for(sal_uInt16 i = 0; i < rMarkList.GetMarkCount(); i++)
                 {
-                    SdrObject* pObj = rMarkList.GetMark(i)->GetObj();
+                    SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
                     uno::Reference< uno::XInterface >  xInt = pSvxDrawPage->GetInterface( pObj );
                     uno::Reference< drawing::XShape >  xShape(xInt, uno::UNO_QUERY);;
                     xShCol->add(xShape);
