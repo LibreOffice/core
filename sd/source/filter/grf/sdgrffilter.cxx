@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdgrffilter.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 10:02:21 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:27:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -489,7 +489,7 @@ sal_Bool SdGRFFilter::Export()
 
                     if( rMarkList.GetMarkCount() == 1 )
                     {
-                        SdrObject* pObj = rMarkList.GetMark( 0 )->GetObj();
+                        SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
                         if( pObj && pObj->ISA( SdrGrafObj ) && !( (SdrGrafObj*) pObj )->HasText() )
                         {
