@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxdll.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:46:58 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 09:56:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,15 +44,11 @@
 #endif
 
 #ifdef WIN
-#include "segmentc.hxx"
 
 // Statische DLL-Verwaltungs-Variablen
 static HINSTANCE hDLLInst = 0;
 
-SEG_EOFGLOBALS()
-
 //==========================================================================
-#pragma SEG_SEGCLASS(DLLINIT_SEG,DLLINITEXIT_CODE)
 
 extern "C" int CALLBACK LibMain( HINSTANCE hDLL, WORD, WORD nHeap, LPSTR )
 {
@@ -68,7 +64,6 @@ extern "C" int CALLBACK LibMain( HINSTANCE hDLL, WORD, WORD nHeap, LPSTR )
 
 
 //--------------------------------------------------------------------------
-#pragma SEG_SEGCLASS(DLLEXIT_SEG,DLLINITEXIT_CODE)
 
 extern "C" int CALLBACK WEP( int )
 {
@@ -76,9 +71,7 @@ extern "C" int CALLBACK WEP( int )
 }
 
 
-
 //==========================================================================
 
 #endif
-
 
