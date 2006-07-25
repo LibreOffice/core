@@ -4,9 +4,9 @@
  *
  *  $RCSfile: number.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:57:53 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:47:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,12 @@
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
 #endif
+// --> OD 2006-06-28 #b6440955#
+// Needed to load default bullet list configuration
+#ifndef _UTL_CONFIGITEM_HXX_
+#include <unotools/configitem.hxx>
+#endif
+// <--
 
 #include <hash_map>
 
@@ -98,7 +104,10 @@ SwNumFmt* SwNumRule::aBaseFmts[ RULE_END ][ MAXLEVEL ] = {
     0, 0, 0, 0, 0,
     0, 0, 0, 0, 0 };
 
-Font* SwNumRule::pDefBulletFont = 0;
+// --> OD 2006-06-27 #b6440955#
+// variable moved to class <numfunc::SwDefBulletListConfig>
+//Font* SwNumRule::pDefBulletFont = 0;
+// <--
 sal_Char* SwNumRule::pDefOutlineName = "Outline";
 
 // #i30312#
@@ -108,13 +117,15 @@ USHORT SwNumRule::aDefNumIndents[ MAXLEVEL ] = {
         1440*9/4, 1440*5/2
 };
 
-#if defined( UNX ) && defined( GCC )
-extern const sal_Char __FAR_DATA sBulletFntName[];
-const sal_Char __FAR_DATA sBulletFntName[] = "StarSymbol";
-#else
-extern const sal_Char __FAR_DATA sBulletFntName[] = "StarSymbol";
-#endif
-
+// --> OD 2006-06-27 #b6440955#
+// variable moved to function <numfunc::SwDefBulletListConfig>
+//#if defined( UNX ) && defined( GCC )
+//extern const sal_Char __FAR_DATA sBulletFntName[];
+//const sal_Char __FAR_DATA sBulletFntName[] = "StarSymbol";
+//#else
+//extern const sal_Char __FAR_DATA sBulletFntName[] = "StarSymbol";
+//#endif
+// <--
 
 BYTE GetRealLevel( const BYTE nLvl )
 {
@@ -186,12 +197,15 @@ void SwNumRule::SetNumRuleMap(std::hash_map<String, SwNumRule *, StringHash> *
     pNumRuleMap = _pNumRuleMap;
 }
 
-const Font& SwNumRule::GetDefBulletFont()
-{
-    if( !pDefBulletFont )
-        SwNumRule::_MakeDefBulletFont();
-    return *pDefBulletFont;
-}
+// --> OD 2006-06-27 #b6440955#
+// function move to namespace <numfunc>
+//const Font& SwNumRule::GetDefBulletFont()
+//{
+//    if( !pDefBulletFont )
+//        SwNumRule::_MakeDefBulletFont();
+//    return *pDefBulletFont;
+//}
+// <--
 
 USHORT SwNumRule::GetNumIndent( BYTE nLvl )
 {
@@ -540,7 +554,9 @@ SwNumRule::SwNumRule( const String& rNm, SwNumRuleType eType, BOOL bAutoFlg )
             pFmt->SetAbsLSpace( lNumIndent + SwNumRule::GetNumIndent( n ) );
             pFmt->SetFirstLineOffset( lNumFirstLineOffset );
             pFmt->SetSuffix( aDotStr );
-            pFmt->SetBulletChar( GetBulletChar(n));
+            // --> OD 2006-06-29 #b6440955#
+            pFmt->SetBulletChar( numfunc::GetBulletChar(n));
+            // <--
             SwNumRule::aBaseFmts[ NUM_RULE ][ n ] = pFmt;
         }
 
@@ -552,7 +568,9 @@ SwNumRule::SwNumRule( const String& rNm, SwNumRuleType eType, BOOL bAutoFlg )
             pFmt->SetIncludeUpperLevels( MAXLEVEL );
             pFmt->SetStart( 1 );
             pFmt->SetCharTextDistance( lOutlineMinTextDistance );
-            pFmt->SetBulletChar( GetBulletChar(n));
+            // --> OD 2006-06-29 #b6440955#
+            pFmt->SetBulletChar( numfunc::GetBulletChar(n));
+            // <--
             SwNumRule::aBaseFmts[ OUTLINE_RULE ][ n ] = pFmt;
         }
     }
@@ -626,17 +644,18 @@ SwNumRule::~SwNumRule()
 }
 
 
-void SwNumRule::_MakeDefBulletFont()
-{
-    pDefBulletFont = new Font( String::CreateFromAscii( sBulletFntName ),
-                                aEmptyStr, Size( 0, 14 ) );
-    pDefBulletFont->SetCharSet( RTL_TEXTENCODING_SYMBOL );
-    pDefBulletFont->SetFamily( FAMILY_DONTKNOW );
-    pDefBulletFont->SetPitch( PITCH_DONTKNOW );
-    pDefBulletFont->SetWeight( WEIGHT_DONTKNOW );
-    pDefBulletFont->SetTransparent( TRUE );
-}
-
+// --> OD 2006-06-27 #b6440955# - no longer needed
+//void SwNumRule::_MakeDefBulletFont()
+//{
+//    pDefBulletFont = new Font( String::CreateFromAscii( sBulletFntName ),
+//                                aEmptyStr, Size( 0, 14 ) );
+//    pDefBulletFont->SetCharSet( RTL_TEXTENCODING_SYMBOL );
+//    pDefBulletFont->SetFamily( FAMILY_DONTKNOW );
+//    pDefBulletFont->SetPitch( PITCH_DONTKNOW );
+//    pDefBulletFont->SetWeight( WEIGHT_DONTKNOW );
+//    pDefBulletFont->SetTransparent( TRUE );
+//}
+// <--
 
 void SwNumRule::CheckCharFmts( SwDoc* pDoc )
 {
@@ -989,17 +1008,20 @@ void SwNumRule::Indent(short nAmount, int nLevel, int nReferenceLevel,
         SetInvalidRule(bGotInvalid);
 }
 
-sal_Unicode GetBulletChar(BYTE nLevel)
-{
-    static sal_Unicode nLevelChars[MAXLEVEL] =
-        { 0x25cf, 0x25cb, 0x25a0, 0x25cf, 0x25cb,
-          0x25a0, 0x25cf, 0x25cb, 0x25a0, 0x25cf };
+// --> OD 2006-06-27 #6440955#
+// move to namespace <numfunc>
+//sal_Unicode GetBulletChar(BYTE nLevel)
+//{
+//    static sal_Unicode nLevelChars[MAXLEVEL] =
+//        { 0x25cf, 0x25cb, 0x25a0, 0x25cf, 0x25cb,
+//          0x25a0, 0x25cf, 0x25cb, 0x25a0, 0x25cf };
 
-    if (nLevel > MAXLEVEL)
-        nLevel = MAXLEVEL;
+//    if (nLevel > MAXLEVEL)
+//        nLevel = MAXLEVEL;
 
-    return nLevelChars[nLevel];
-}
+//    return nLevelChars[nLevel];
+//}
+// <--
 
 void SwNumRule::NewNumberRange(const SwPaM & rPam)
 {
@@ -1070,4 +1092,241 @@ String SwNumRule::ToString() const
     aResult += String("]\n", RTL_TEXTENCODING_ASCII_US);
 
     return aResult;
+}
+
+// --> OD 2006-06-27 #b6440955#
+namespace numfunc
+{
+    /** class containing default bullet list configuration data
+
+        @author OD
+    */
+    class SwDefBulletConfig : private utl::ConfigItem
+    {
+        public:
+            static SwDefBulletConfig* getInstance()
+            {
+                if ( mpInstance == 0L )
+                {
+                    mpInstance = new SwDefBulletConfig;
+                }
+
+                return mpInstance;
+            }
+
+            inline const String& GetFontname() const
+            {
+                return msFontname;
+            }
+            inline const Font& GetFont() const
+            {
+                return *mpFont;
+            }
+            inline const short GetFontWeight() const
+            {
+                return meFontWeight;
+            }
+            inline const short GetFontItalic() const
+            {
+                return meFontItalic;
+            }
+            inline const sal_Unicode GetChar( BYTE p_nListLevel ) const
+            {
+                if ( p_nListLevel > MAXLEVEL )
+                {
+                    p_nListLevel = MAXLEVEL;
+                }
+
+                return mnLevelChars[p_nListLevel];
+            }
+
+        private:
+            SwDefBulletConfig();
+
+            /** sets internal default bullet configuration data to default values
+
+                @author OD
+            */
+            void SetToDefault();
+
+            /** returns sequence of default bullet configuration property names
+
+                @author OD
+            */
+            com::sun::star::uno::Sequence<rtl::OUString> GetPropNames() const;
+
+            /** loads default bullet configuration properties and applies
+                values to internal data
+
+                @author OD
+            */
+            void LoadConfig();
+
+            /** initialize font instance for default bullet list
+
+                @author OD
+            */
+            void InitFont();
+
+            /** catches notification about changed default bullet configuration data
+
+                @author OD
+            */
+            virtual void Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames );
+
+            static SwDefBulletConfig* mpInstance;
+
+            // default bullet list configuration data
+            String msFontname;
+            FontWeight meFontWeight;
+            FontItalic meFontItalic;
+            sal_Unicode mnLevelChars[MAXLEVEL];
+
+            // default bullet list font instance
+            Font* mpFont;
+    };
+
+    SwDefBulletConfig* SwDefBulletConfig::mpInstance = 0L;
+
+    SwDefBulletConfig::SwDefBulletConfig()
+        : ConfigItem( rtl::OUString::createFromAscii("Office.Writer/Numbering/DefaultBulletList") ),
+          msFontname( String::CreateFromAscii("StarSymbol") ),
+          meFontWeight( WEIGHT_DONTKNOW ),
+          meFontItalic( ITALIC_NONE ),
+          mpFont( 0L )
+    {
+        SetToDefault();
+        LoadConfig();
+        InitFont();
+
+        // enable notification for changes on default bullet configuration change
+        EnableNotification( GetPropNames() );
+    }
+
+    void SwDefBulletConfig::SetToDefault()
+    {
+        msFontname = String::CreateFromAscii("StarSymbol");
+        meFontWeight = WEIGHT_DONTKNOW;
+        meFontItalic = ITALIC_NONE;
+
+        mnLevelChars[0] = 0x25cf;
+        mnLevelChars[1] = 0x25cb;
+        mnLevelChars[2] = 0x25a0;
+        mnLevelChars[3] = 0x25cf;
+        mnLevelChars[4] = 0x25cb;
+        mnLevelChars[5] = 0x25a0;
+        mnLevelChars[6] = 0x25cf;
+        mnLevelChars[7] = 0x25cb;
+        mnLevelChars[8] = 0x25a0;
+        mnLevelChars[9] = 0x25cf;
+    }
+
+    com::sun::star::uno::Sequence<rtl::OUString> SwDefBulletConfig::GetPropNames() const
+    {
+        com::sun::star::uno::Sequence<rtl::OUString> aPropNames(13);
+        rtl::OUString* pNames = aPropNames.getArray();
+        pNames[0] = rtl::OUString::createFromAscii("BulletFont/FontFamilyname");
+        pNames[1] = rtl::OUString::createFromAscii("BulletFont/FontWeight");
+        pNames[2] = rtl::OUString::createFromAscii("BulletFont/FontItalic");
+        pNames[3] = rtl::OUString::createFromAscii("BulletCharLvl1");
+        pNames[4] = rtl::OUString::createFromAscii("BulletCharLvl2");
+        pNames[5] = rtl::OUString::createFromAscii("BulletCharLvl3");
+        pNames[6] = rtl::OUString::createFromAscii("BulletCharLvl4");
+        pNames[7] = rtl::OUString::createFromAscii("BulletCharLvl5");
+        pNames[8] = rtl::OUString::createFromAscii("BulletCharLvl6");
+        pNames[9] = rtl::OUString::createFromAscii("BulletCharLvl7");
+        pNames[10] = rtl::OUString::createFromAscii("BulletCharLvl8");
+        pNames[11] = rtl::OUString::createFromAscii("BulletCharLvl9");
+        pNames[12] = rtl::OUString::createFromAscii("BulletCharLvl10");
+
+        return aPropNames;
+    }
+
+    void SwDefBulletConfig::LoadConfig()
+    {
+        com::sun::star::uno::Sequence<rtl::OUString> aPropNames = GetPropNames();
+        com::sun::star::uno::Sequence<com::sun::star::uno::Any> aValues =
+                                                    GetProperties( aPropNames );
+        const com::sun::star::uno::Any* pValues = aValues.getConstArray();
+        ASSERT( aValues.getLength() == aPropNames.getLength(),
+                "<SwDefBulletConfig::SwDefBulletConfig()> - GetProperties failed")
+        if ( aValues.getLength() == aPropNames.getLength() )
+        {
+            for ( int nProp = 0; nProp < aPropNames.getLength(); ++nProp )
+            {
+                if ( pValues[nProp].hasValue() )
+                {
+                    switch ( nProp )
+                    {
+                        case 0:
+                        {
+                            rtl::OUString aStr;
+                            pValues[nProp] >>= aStr;
+                            msFontname = aStr;
+                        }
+                        break;
+                        case 1:
+                        case 2:
+                        {
+                            sal_uInt8 nTmp;
+                            pValues[nProp] >>= nTmp;
+                            if ( nProp == 1 )
+                                meFontWeight = static_cast<FontWeight>(nTmp);
+                            else if ( nProp == 2 )
+                                meFontItalic = static_cast<FontItalic>(nTmp);
+                        }
+                        break;
+                        case 3:
+                        case 4:
+                        case 5:
+                        case 6:
+                        case 7:
+                        case 8:
+                        case 9:
+                        case 10:
+                        case 11:
+                        case 12:
+                        {
+                            sal_Unicode cChar;
+                            pValues[nProp] >>= cChar;
+                            mnLevelChars[nProp-3] = cChar;
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+
+    }
+
+    void SwDefBulletConfig::InitFont()
+    {
+        delete mpFont;
+
+        mpFont = new Font( msFontname, aEmptyStr, Size( 0, 14 ) );
+        mpFont->SetWeight( meFontWeight );
+        mpFont->SetItalic( meFontItalic );
+    }
+
+    void SwDefBulletConfig::Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames )
+    {
+        SetToDefault();
+        LoadConfig();
+        InitFont();
+    }
+
+    const String& GetDefBulletFontname()
+    {
+        return SwDefBulletConfig::getInstance()->GetFontname();
+    }
+
+    const Font& GetDefBulletFont()
+    {
+        return SwDefBulletConfig::getInstance()->GetFont();
+    }
+
+    const sal_Unicode GetBulletChar( BYTE nLevel )
+    {
+        return SwDefBulletConfig::getInstance()->GetChar( nLevel );
+    }
 }
