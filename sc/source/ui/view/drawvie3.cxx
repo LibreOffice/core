@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawvie3.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:53:35 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:26:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,7 @@ void ScDrawView::SetAnchor( ScAnchorType eType )
         ULONG nCount = pMark->GetMarkCount();
         for( ULONG i=0; i<nCount; i++ )
         {
-            pObj = pMark->GetMark(i)->GetObj();
+            pObj = pMark->GetMark(i)->GetMarkedSdrObj();
             ScDrawLayer::SetAnchor( pObj, eType );
         }
 
@@ -120,7 +120,7 @@ ScAnchorType ScDrawView::GetAnchor() const
         Point p0;
         for( ULONG i=0; i<nCount; i++ )
         {
-            pObj = pMark->GetMark(i)->GetObj();
+            pObj = pMark->GetMark(i)->GetMarkedSdrObj();
             if( ScDrawLayer::GetAnchor( pObj ) == SCA_CELL )
                 bCell =TRUE;
             else
