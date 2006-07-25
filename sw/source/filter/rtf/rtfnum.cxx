@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtfnum.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-19 13:34:32 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:49:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1313,7 +1313,9 @@ void SwRTFWriter::OutRTFListTab()
                 Strm() << sRTF_F;
                 const Font* pFont = rFmt.GetBulletFont();
                 if( !pFont )
-                    pFont = &SwNumRule::GetDefBulletFont();
+                    // --> OD 2006-06-27 #b6440955#
+                    pFont = &numfunc::GetDefBulletFont();
+                    // <--
                 OutULong( GetId( *pFont ));
             }
 
