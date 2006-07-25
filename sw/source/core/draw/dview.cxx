@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dview.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:24:55 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:30:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -175,10 +175,10 @@ void SwDrawView::AddCustomHdl()
 {
     const SdrMarkList &rMrkList = GetMarkedObjectList();
 
-    if(rMrkList.GetMarkCount() != 1 || !GetUserCall(rMrkList.GetMark( 0 )->GetObj()))
+    if(rMrkList.GetMarkCount() != 1 || !GetUserCall(rMrkList.GetMark( 0 )->GetMarkedSdrObj()))
         return;
 
-    SdrObject *pObj = rMrkList.GetMark(0)->GetObj();
+    SdrObject *pObj = rMrkList.GetMark(0)->GetMarkedSdrObj();
     const SwFmtAnchor &rAnchor = ::FindFrmFmt(pObj)->GetAnchor();
 
     if(FLY_IN_CNTNT == rAnchor.GetAnchorId())
@@ -697,7 +697,7 @@ BOOL SwDrawView::TakeDragLimit( SdrDragMode eMode,
     BOOL bRet = FALSE;
     if( 1 == rMrkList.GetMarkCount() )
     {
-        const SdrObject *pObj = rMrkList.GetMark( 0 )->GetObj();
+        const SdrObject *pObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
         SwRect aRect;
         if( ::CalcClipRect( pObj, aRect, eMode == SDRDRAG_MOVE ) )
         {
@@ -724,7 +724,7 @@ const SwFrm* SwDrawView::CalcAnchor()
     if ( rMrkList.GetMarkCount() != 1 )
         return NULL;
 
-    SdrObject* pObj = rMrkList.GetMark( 0 )->GetObj();
+    SdrObject* pObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
 
     //Fuer Absatzgebundene Objekte suchen, andernfalls einfach nur
     //der aktuelle Anker. Nur suchen wenn wir gerade draggen.
@@ -894,7 +894,7 @@ void SwDrawView::CheckPossibilities()
              bSzProtect = FALSE;
     for ( USHORT i = 0; !bProtect && i < rMrkList.GetMarkCount(); ++i )
     {
-        const SdrObject *pObj = rMrkList.GetMark( i )->GetObj();
+        const SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
         const SwFrm *pFrm = NULL;
         if ( pObj->ISA(SwVirtFlyDrawObj) )
         {
@@ -957,7 +957,7 @@ void SwDrawView::ReplaceMarkedDrawVirtObjs( SdrMarkView& _rMarkView )
         std::vector<SdrObject*> aMarkedObjs;
         for( sal_uInt32 i = 0; i < rMarkList.GetMarkCount(); ++i )
         {
-            SdrObject* pMarkedObj = rMarkList.GetMark( i )->GetObj();
+            SdrObject* pMarkedObj = rMarkList.GetMark( i )->GetMarkedSdrObj();
             aMarkedObjs.push_back( pMarkedObj );
         }
         // unmark all objects
