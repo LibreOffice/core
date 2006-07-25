@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlged.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:13:11 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:59:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -757,7 +757,7 @@ void DlgEditor::Copy()
     ULONG nMark = pDlgEdView->GetMarkedObjectList().GetMarkCount();
     for( ULONG i = 0; i < nMark; i++ )
     {
-        SdrObject* pObj = pDlgEdView->GetMarkedObjectList().GetMark(i)->GetObj();
+        SdrObject* pObj = pDlgEdView->GetMarkedObjectList().GetMark(i)->GetMarkedSdrObj();
         DlgEdObj* pDlgEdObj = PTR_CAST(DlgEdObj, pObj);
 
         if (pDlgEdObj && !pDlgEdObj->ISA(DlgEdForm) )
@@ -947,7 +947,7 @@ void DlgEditor::Delete()
 
     for( ULONG i = 0; i < nMark; i++ )
     {
-        SdrObject* pObj = pDlgEdView->GetMarkedObjectList().GetMark(i)->GetObj();
+        SdrObject* pObj = pDlgEdView->GetMarkedObjectList().GetMark(i)->GetMarkedSdrObj();
         DlgEdObj* pDlgEdObj = PTR_CAST(DlgEdObj, pObj);
 
         if ( pDlgEdObj && !pDlgEdObj->ISA(DlgEdForm) )
