@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 10:53:29 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 09:56:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1726,13 +1726,24 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
             SCCOL nCol2 = rDestRange.aEnd.Col();
             SCROW nRow2 = rDestRange.aEnd.Row();
 
-            SCCOL nXw = pClipDoc->aClipRange.aEnd.Col();
-            SCROW nYw = pClipDoc->aClipRange.aEnd.Row();
-            pClipDoc->ExtendMerge( pClipDoc->aClipRange.aStart.Col(),
-                                    pClipDoc->aClipRange.aStart.Row(),
-                                    nXw, nYw, 0 );
-            nXw -= pClipDoc->aClipRange.aEnd.Col();
-            nYw -= pClipDoc->aClipRange.aEnd.Row();         // only extra value from ExtendMerge
+            SCCOL nXw = 0;
+            SCROW nYw = 0;
+            for (SCTAB nTab = 0; nTab <= MAXTAB; nTab++)    // find largest merge overlap
+                if (pClipDoc->pTab[nTab])                   // all sheets of the clipboard content
+                {
+                    SCCOL nThisEndX = pClipDoc->aClipRange.aEnd.Col();
+                    SCROW nThisEndY = pClipDoc->aClipRange.aEnd.Row();
+                    pClipDoc->ExtendMerge( pClipDoc->aClipRange.aStart.Col(),
+                                            pClipDoc->aClipRange.aStart.Row(),
+                                            nThisEndX, nThisEndY, nTab );
+                    nThisEndX -= pClipDoc->aClipRange.aEnd.Col();
+                    nThisEndY -= pClipDoc->aClipRange.aEnd.Row();       // only extra value from ExtendMerge
+                    if ( nThisEndX > nXw )
+                        nXw = nThisEndX;
+                    if ( nThisEndY > nYw )
+                        nYw = nThisEndY;
+                }
+
             SCCOL nDestAddX;
             SCROW nDestAddY;
             pClipDoc->GetClipArea( nDestAddX, nDestAddY, bIncludeFiltered );
