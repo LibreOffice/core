@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edundo.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:30:00 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:30:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -299,7 +299,7 @@ void lcl_SelectSdrMarkList( SwEditShell* pShell,
         for( USHORT i = 0; i < pSdrMarkList->GetMarkCount(); ++i )
             pFEShell->SelectObj( Point(),
                                  (i==0) ? 0 : SW_ADD_SELECT,
-                                 pSdrMarkList->GetMark( i )->GetObj() );
+                                 pSdrMarkList->GetMark( i )->GetMarkedSdrObj() );
 
         // the old implementation would always unselect
         // objects, even if no new ones were selected. If this
