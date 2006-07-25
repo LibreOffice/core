@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Writer.xcs,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 09:13:47 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:42:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -5903,6 +5903,175 @@
 					<value>false</value>
 				</prop>
 			</group>
+                        <group oor:name="DefaultBulletList">
+                                <info>
+                                        <author>OD</author>
+                                        <desc>Contains the font and the character used for each level for the default bullet list.</desc>
+                                </info>
+                                <group oor:name="BulletFont">
+                                        <info>
+                                                <author>OD</author>
+                                                <desc>Contains the font and its relevant attributes used for the default bullet list.</desc>
+                                        </info>
+                                        <prop oor:name="FontFamilyname" oor:type="xs:string">
+                                                <info>
+                                                        <author>OD</author>
+                                                        <desc>Font family name of default bullet character for all list levels.</desc>
+                                                </info>
+                                        </prop>
+                                        <prop oor:name="FontWeight" oor:type="xs:short">
+                                                <info>
+                                                        <author>OD</author>
+                                                        <desc>Font weight of default bullet character for all list levels.</desc>
+                                                </info>
+                                                <constraints>
+                                                        <enumeration oor:value="0">
+                                                                <info>
+                                                                        <desc>Don't know</desc>
+                                                                </info>
+                                                        </enumeration>
+                                                        <enumeration oor:value="1">
+                                                                <info>
+                                                                        <desc>Thin</desc>
+                                                                </info>
+                                                        </enumeration>
+                                                        <enumeration oor:value="2">
+                                                                <info>
+                                                                        <desc>UltraLight</desc>
+                                                                </info>
+                                                        </enumeration>
+                                                        <enumeration oor:value="3">
+                                                                <info>
+                                                                        <desc>Light</desc>
+                                                                </info>
+                                                        </enumeration>
+                                                        <enumeration oor:value="4">
+                                                                <info>
+                                                                        <desc>SemiLight</desc>
+                                                                </info>
+                                                        </enumeration>
+                                                        <enumeration oor:value="5">
+                                                                <info>
+                                                                        <desc>Normal</desc>
+                                                                </info>
+                                                        </enumeration>
+                                                        <enumeration oor:value="6">
+                                                                <info>
+                                                                        <desc>Medium</desc>
+                                                                </info>
+                                                        </enumeration>
+                                                        <enumeration oor:value="7">
+                                                                <info>
+                                                                        <desc>SemiBold</desc>
+                                                                </info>
+                                                        </enumeration>
+                                                        <enumeration oor:value="8">
+                                                                <info>
+                                                                        <desc>Bold</desc>
+                                                                </info>
+                                                        </enumeration>
+                                                        <enumeration oor:value="9">
+                                                                <info>
+                                                                        <desc>UltraBold</desc>
+                                                                </info>
+                                                        </enumeration>
+                                                        <enumeration oor:value="10">
+                                                                <info>
+                                                                        <desc>Black</desc>
+                                                                </info>
+                                                        </enumeration>
+                                                </constraints>
+                                        </prop>
+                                        <prop oor:name="FontItalic" oor:type="xs:short">
+                                                <info>
+                                                        <author>OD</author>
+                                                        <desc>Italic attribute of font of default bullet character for all list levels.</desc>
+                                                </info>
+                                                <constraints>
+                                                        <enumeration oor:value="0">
+                                                                <info>
+                                                                        <desc>None</desc>
+                                                                </info>
+                                                        </enumeration>
+                                                        <enumeration oor:value="1">
+                                                                <info>
+                                                                        <desc>Don't know</desc>
+                                                                </info>
+                                                        </enumeration>
+                                                        <enumeration oor:value="2">
+                                                                <info>
+                                                                        <desc>Oblique</desc>
+                                                                </info>
+                                                        </enumeration>
+                                                        <enumeration oor:value="3">
+                                                                <info>
+                                                                        <desc>Normal</desc>
+                                                                </info>
+                                                        </enumeration>
+                                                </constraints>
+                                        </prop>
+                                </group>
+                                <prop oor:name="BulletCharLvl1" oor:type="xs:short">
+                                        <info>
+                                                <author>OD</author>
+                                                <desc>Unicode value of default bullet character for list level 1.</desc>
+                                        </info>
+                                </prop>
+                                <prop oor:name="BulletCharLvl2" oor:type="xs:short">
+                                        <info>
+                                                <author>OD</author>
+                                                <desc>Unicode value of default bullet character for list level 2.</desc>
+                                        </info>
+                                </prop>
+                                <prop oor:name="BulletCharLvl3" oor:type="xs:short">
+                                        <info>
+                                                <author>OD</author>
+                                                <desc>Unicode value of default bullet character for list level 3.</desc>
+                                        </info>
+                                </prop>
+                                <prop oor:name="BulletCharLvl4" oor:type="xs:short">
+                                        <info>
+                                                <author>OD</author>
+                                                <desc>Unicode value of default bullet character for list level 4.</desc>
+                                        </info>
+                                </prop>
+                                <prop oor:name="BulletCharLvl5" oor:type="xs:short">
+                                        <info>
+                                                <author>OD</author>
+                                                <desc>Unicode value of default bullet character for list level 5.</desc>
+                                        </info>
+                                </prop>
+                                <prop oor:name="BulletCharLvl6" oor:type="xs:short">
+                                        <info>
+                                                <author>OD</author>
+                                                <desc>Unicode value of default bullet character for list level 6.</desc>
+                                        </info>
+                                </prop>
+                                <prop oor:name="BulletCharLvl7" oor:type="xs:short">
+                                        <info>
+                                                <author>OD</author>
+                                                <desc>Unicode value of default bullet character for list level 7.</desc>
+                                        </info>
+                                </prop>
+                                <prop oor:name="BulletCharLvl8" oor:type="xs:short">
+                                        <info>
+                                                <author>OD</author>
+                                                <desc>Unicode value of default bullet character for list level 8.</desc>
+                                        </info>
+                                </prop>
+                                <prop oor:name="BulletCharLvl9" oor:type="xs:short">
+                                        <info>
+                                                <author>OD</author>
+                                                <desc>Unicode value of default bullet character for list level 9.</desc>
+                                        </info>
+                                </prop>
+                                <prop oor:name="BulletCharLvl10" oor:type="xs:short">
+                                        <info>
+                                                <author>OD</author>
+                                                <desc>Unicode value of default bullet character for list level 10.</desc>
+                                        </info>
+                                </prop>
+                        </group>
 		</group>
 		<group oor:name="Statistics">
 			<info>
