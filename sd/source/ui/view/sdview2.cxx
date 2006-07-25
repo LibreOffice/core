@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdview2.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:34:40 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:54:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -512,16 +512,16 @@ void View::DragFinished( sal_Int8 nDropAction )
         {
             nm--;
             SdrMark* pM=pDragSrcMarkList->GetMark(nm);
-            AddUndo(pDoc->GetSdrUndoFactory().CreateUndoDeleteObject(*pM->GetObj()));
+            AddUndo(pDoc->GetSdrUndoFactory().CreateUndoDeleteObject(*pM->GetMarkedSdrObj()));
         }
 
-        pDragSrcMarkList->GetMark(0)->GetObj()->GetOrdNum();
+        pDragSrcMarkList->GetMark(0)->GetMarkedSdrObj()->GetOrdNum();
 
         for (nm=nAnz; nm>0;)
         {
             nm--;
             SdrMark* pM=pDragSrcMarkList->GetMark(nm);
-            SdrObject* pObj=pM->GetObj();
+            SdrObject* pObj=pM->GetMarkedSdrObj();
             UINT32 nOrdNum=pObj->GetOrdNumDirect();
 
             if( pObj && pObj->GetPage() )
@@ -570,7 +570,7 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
             if (GetMarkedObjectCount() == 1)
             {
                 SdrMark* pMark = GetSdrMarkByIndex(0);
-                SdrObject* pObj = pMark->GetObj();
+                SdrObject* pObj = pMark->GetMarkedSdrObj();
                 aRect.Union( pObj->GetLogicRect() );
             }
 
@@ -741,7 +741,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
             if( GetMarkedObjectCount() == 1 )
             {
                 SdrMark* pMark = GetSdrMarkByIndex(0);
-                SdrObject* pObj = pMark->GetObj();
+                SdrObject* pObj = pMark->GetMarkedSdrObj();
                 aRect.Union( pObj->GetLogicRect() );
             }
 
