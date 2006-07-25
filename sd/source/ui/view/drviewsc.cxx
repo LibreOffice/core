@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewsc.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:28:57 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:50:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,7 +166,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
                 String aTitle( SdResId( STR_TITLE_NAMEGROUP ) );
                 String aDesc( SdResId( STR_DESC_NAMEGROUP ) );
 
-                pObj = rMarkList.GetMark( 0 )->GetObj();
+                pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
 //              if( pObj->ISA( SdrObjGroup ) || pObj->ISA( SdrGrafObj ) || pObj->ISA( SdrOle2Obj ) )
                     aName = pObj->GetName();
@@ -421,7 +421,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
                 for(ULONG nm=0; nm<nAnz; nm++)
                 {
                     SdrMark*     pM=rMarkList.GetMark(nm);
-                    SdrObject*   pObj=pM->GetObj();
+                    SdrObject*   pObj=pM->GetMarkedSdrObj();
                     SdrGrafObj*  pGraf=PTR_CAST(SdrGrafObj,pObj);
                     SdrOle2Obj*  pOle2=PTR_CAST(SdrOle2Obj,pObj);
                     if (pGraf!=NULL && pGraf->HasGDIMetaFile())
@@ -666,7 +666,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
                 const SdrMarkList&  rMarkList = pDrView->GetMarkedObjectList();
 
                 if ( rMarkList.GetMarkCount() == 1 )
-                    UpdateIMapDlg( rMarkList.GetMark( 0 )->GetObj() );
+                    UpdateIMapDlg( rMarkList.GetMark( 0 )->GetMarkedSdrObj() );
             }
 
             Cancel();
