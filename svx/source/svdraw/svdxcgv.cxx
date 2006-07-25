@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdxcgv.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:48:52 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:57:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -721,7 +721,7 @@ void SdrExchangeView::DrawMarkedObj(OutputDevice& rOut, const Point& rOfs) const
         SdrMark* pMark = GetSdrMarkByIndex( n );
 
         // paint objects on control layer on top of all otherobjects
-        if( nControlLayerId == pMark->GetObj()->GetLayer() )
+        if( nControlLayerId == pMark->GetMarkedSdrObj()->GetLayer() )
             rObjVector2.push_back( pMark );
         else
             rObjVector1.push_back( pMark );
@@ -741,7 +741,7 @@ void SdrExchangeView::DrawMarkedObj(OutputDevice& rOut, const Point& rOfs) const
             if( aOfs != pXOut->GetOffset() )
                 pXOut->SetOffset(aOfs);
 
-            pMark->GetObj()->SingleObjectPainter( *pXOut, aInfoRec ); // #110094#-17
+            pMark->GetMarkedSdrObj()->SingleObjectPainter( *pXOut, aInfoRec ); // #110094#-17
         }
     }
 
@@ -771,7 +771,7 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
         SdrMark* pMark = GetSdrMarkByIndex( n );
 
         // paint objects on control layer on top of all otherobjects
-        if( nControlLayerId == pMark->GetObj()->GetLayer() )
+        if( nControlLayerId == pMark->GetMarkedSdrObj()->GetLayer() )
             rObjVector2.push_back( pMark );
         else
             rObjVector1.push_back( pMark );
@@ -788,7 +788,7 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
         for( sal_uInt32 i = 0; i < rObjVector.size(); i++ )
         {
                const SdrMark*      pMark = rObjVector[ i ];
-            const SdrObject*    pObj = pMark->GetObj();
+            const SdrObject*    pObj = pMark->GetMarkedSdrObj();
             SdrObject*          pNeuObj;
 
             if( pObj->ISA( SdrPageObj ) )
