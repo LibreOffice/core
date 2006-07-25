@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtwin2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:36:35 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:41:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -454,7 +454,7 @@ aktuelle Zeichenvorlage anzeigen?
                 const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
 
                 if (rMarkList.GetMarkCount() == 1)
-                    pObj = rMarkList.GetMark(0)->GetObj();
+                    pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
             }
 
             if (pObj && pObj->ISA(SdrTextObj) && pOLV &&
