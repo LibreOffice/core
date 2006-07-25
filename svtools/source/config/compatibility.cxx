@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compatibility.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 20:42:23 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:41:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,8 +98,9 @@ using namespace ::com::sun::star::beans;
 #define PROPERTYNAME_USEOBJPOS          COMPATIBILITY_PROPERTYNAME_USEOBJECTPOSITIONING
 #define PROPERTYNAME_USEOURTEXTWRAP     COMPATIBILITY_PROPERTYNAME_USEOURTEXTWRAPPING
 #define PROPERTYNAME_CONSIDERWRAPSTYLE  COMPATIBILITY_PROPERTYNAME_CONSIDERWRAPPINGSTYLE
+#define PROPERTYNAME_CUTEXPANDEDUNDERLINE  COMPATIBILITY_PROPERTYNAME_CUTEXPANDEDUNDERLINE
 
-#define PROPERTYCOUNT               12
+#define PROPERTYCOUNT               13
 
 #define OFFSET_NAME                 0
 #define OFFSET_MODULE               1
@@ -113,6 +114,7 @@ using namespace ::com::sun::star::beans;
 #define OFFSET_USEOBJPOS            9
 #define OFFSET_USEOURTEXTWRAPPING   10
 #define OFFSET_CONSIDERWRAPPINGSTYLE 11
+#define OFFSET_CUTEXPANDEDUNDERLINE 12
 
 //_________________________________________________________________________________________________________________
 //  private declarations!
@@ -124,12 +126,15 @@ using namespace ::com::sun::star::beans;
 struct SvtCompatibilityEntry
 {
     public:
+
         SvtCompatibilityEntry() :
             bUsePrtMetrics( false ), bAddSpacing( false ),
             bAddSpacingAtPages( false ), bUseOurTabStops( false ),
             bNoExtLeading( false ), bUseLineSpacing( false ),
             bAddTableSpacing( false ), bUseObjPos( false ),
-            bUseOurTextWrapping( false ), bConsiderWrappingStyle( false ) {}
+            bUseOurTextWrapping( false ), bConsiderWrappingStyle( false ),
+            bCutExpandedUnderline( false ) {}
+
         SvtCompatibilityEntry(
             const OUString& _rName, const OUString& _rNewModule ) :
                 sName( _rName ), sModule( _rNewModule ),
@@ -137,7 +142,8 @@ struct SvtCompatibilityEntry
                 bAddSpacingAtPages( false ), bUseOurTabStops( false ),
                 bNoExtLeading( false ), bUseLineSpacing( false ),
                 bAddTableSpacing( false ), bUseObjPos( false ),
-                bUseOurTextWrapping( false ), bConsiderWrappingStyle( false ) {}
+                bUseOurTextWrapping( false ), bConsiderWrappingStyle( false ),
+                bCutExpandedUnderline( false ) {}
 
         inline void     SetUsePrtMetrics( bool _bSet ) { bUsePrtMetrics = _bSet; }
         inline void     SetAddSpacing( bool _bSet ) { bAddSpacing = _bSet; }
@@ -149,7 +155,7 @@ struct SvtCompatibilityEntry
         inline void     SetUseObjPos( bool _bSet ) { bUseObjPos = _bSet; }
         inline void     SetUseOurTextWrapping( bool _bSet ) { bUseOurTextWrapping = _bSet; }
         inline void     SetConsiderWrappingStyle( bool _bSet ) { bConsiderWrappingStyle = _bSet; }
-
+        inline void     SetCutExpandedUnderline( bool _bSet ) { bCutExpandedUnderline = _bSet; }
     public:
         OUString    sName;
         OUString    sModule;
@@ -163,6 +169,7 @@ struct SvtCompatibilityEntry
         bool        bUseObjPos;
         bool        bUseOurTextWrapping;
         bool        bConsiderWrappingStyle;
+        bool        bCutExpandedUnderline;
 };
 
 /*-****************************************************************************************************************
@@ -207,6 +214,7 @@ class SvtCompatibility
             lProperties[ OFFSET_USEOBJPOS ].Name = PROPERTYNAME_USEOBJPOS;
             lProperties[ OFFSET_USEOURTEXTWRAPPING ].Name = PROPERTYNAME_USEOURTEXTWRAP;
             lProperties[ OFFSET_CONSIDERWRAPPINGSTYLE ].Name = PROPERTYNAME_CONSIDERWRAPSTYLE;
+            lProperties[ OFFSET_CUTEXPANDEDUNDERLINE ].Name = PROPERTYNAME_CUTEXPANDEDUNDERLINE;
 
             for ( vector< SvtCompatibilityEntry >::const_iterator pItem = pList->begin();
                   pItem != pList->end(); ++pItem )
@@ -223,6 +231,7 @@ class SvtCompatibility
                 lProperties[ OFFSET_USEOBJPOS ].Value <<= pItem->bUseObjPos;
                 lProperties[ OFFSET_USEOURTEXTWRAPPING ].Value <<= pItem->bUseOurTextWrapping;
                 lProperties[ OFFSET_CONSIDERWRAPPINGSTYLE ].Value <<= pItem->bConsiderWrappingStyle;
+                lProperties[ OFFSET_CUTEXPANDEDUNDERLINE ].Value <<= pItem->bCutExpandedUnderline;
                 lResult[ nStep ] = lProperties;
                 ++nStep;
             }
@@ -336,6 +345,7 @@ class SvtCompatibilityOptions_Impl : public ConfigItem
         inline bool                             IsUseObjPos() const { return m_aDefOptions.bUseObjPos; }
         inline bool                             IsUseOurTextWrapping() const { return m_aDefOptions.bUseOurTextWrapping; }
         inline bool                             IsConsiderWrappingStyle() const { return m_aDefOptions.bConsiderWrappingStyle; }
+        inline bool                             IsCutExpandedUnderline() const { return m_aDefOptions.bCutExpandedUnderline; }
 
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
@@ -430,6 +440,7 @@ SvtCompatibilityOptions_Impl::SvtCompatibilityOptions_Impl()
         lValues[ nPosition++ ] >>= aItem.bUseObjPos;
         lValues[ nPosition++ ] >>= aItem.bUseOurTextWrapping;
         lValues[ nPosition++ ] >>= aItem.bConsiderWrappingStyle;
+        lValues[ nPosition++ ] >>= aItem.bCutExpandedUnderline;
         m_aOptions.AppendEntry( aItem );
 
         if ( !bDefaultFound && aItem.sName.equals( COMPATIBILITY_DEFAULT_NAME ) != sal_False )
@@ -490,6 +501,7 @@ void SvtCompatibilityOptions_Impl::Commit()
         lPropertyValues[ OFFSET_USEOBJPOS - 1               ].Name = sNode + PROPERTYNAME_USEOBJPOS;
         lPropertyValues[ OFFSET_USEOURTEXTWRAPPING - 1      ].Name = sNode + PROPERTYNAME_USEOURTEXTWRAP;
         lPropertyValues[ OFFSET_CONSIDERWRAPPINGSTYLE - 1   ].Name = sNode + PROPERTYNAME_CONSIDERWRAPSTYLE;
+        lPropertyValues[ OFFSET_CUTEXPANDEDUNDERLINE - 1    ].Name = sNode + PROPERTYNAME_CUTEXPANDEDUNDERLINE;
 
         lPropertyValues[ OFFSET_MODULE - 1                  ].Value <<= aItem.sModule;
         lPropertyValues[ OFFSET_USEPRTMETRICS - 1           ].Value <<= aItem.bUsePrtMetrics;
@@ -502,6 +514,7 @@ void SvtCompatibilityOptions_Impl::Commit()
         lPropertyValues[ OFFSET_USEOBJPOS - 1               ].Value <<= aItem.bUseObjPos;
         lPropertyValues[ OFFSET_USEOURTEXTWRAPPING - 1      ].Value <<= aItem.bUseOurTextWrapping;
         lPropertyValues[ OFFSET_CONSIDERWRAPPINGSTYLE - 1   ].Value <<= aItem.bConsiderWrappingStyle;
+        lPropertyValues[ OFFSET_CUTEXPANDEDUNDERLINE - 1    ].Value <<= aItem.bCutExpandedUnderline;
 
         SetSetProperties( SETNODE_ALLFILEFORMATS, lPropertyValues );
     }
@@ -621,6 +634,9 @@ void SvtCompatibilityOptions_Impl::impl_ExpandPropertyNames(
         ++nDestStep;
         lDestination[nDestStep] = sFixPath;
         lDestination[nDestStep] += PROPERTYNAME_CONSIDERWRAPSTYLE;
+        ++nDestStep;
+        lDestination[nDestStep] = sFixPath;
+        lDestination[nDestStep] += PROPERTYNAME_CUTEXPANDEDUNDERLINE;
         ++nDestStep;
     }
 }
@@ -758,6 +774,12 @@ bool SvtCompatibilityOptions::IsConsiderWrappingStyle() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->IsConsiderWrappingStyle();
+}
+
+bool SvtCompatibilityOptions::IsCutExpandedUnderline() const
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pDataContainer->IsCutExpandedUnderline();
 }
 
 Sequence< Sequence< PropertyValue > > SvtCompatibilityOptions::GetList() const
