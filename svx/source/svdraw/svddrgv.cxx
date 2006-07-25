@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svddrgv.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:35:19 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:54:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -225,7 +225,7 @@ void SdrDragView::SetDragPolys(BOOL bReset, BOOL bSeparate)
                     if (pM->GetPageView()==pPV) {
                         const SdrUShortCont* pPts=bGlue ? pM->GetMarkedGluePoints() : pM->GetMarkedPoints();
                         if (pPts!=NULL && pPts->GetCount()!=0) {
-                            const SdrObject* pObj=pM->GetObj();
+                            const SdrObject* pObj=pM->GetMarkedSdrObj();
                             const SdrPathObj* pPath=bGlue ? NULL : PTR_CAST(SdrPathObj,pObj);
                             const XPolyPolygon* pPathXPP=pPath!=NULL ? &pPath->GetPathPoly() : NULL;
                             const SdrGluePointList* pGPL=bGlue ? pObj->GetGluePointList() : NULL;
@@ -276,7 +276,7 @@ void SdrDragView::SetDragPolys(BOOL bReset, BOOL bSeparate)
                 for (ULONG nm=0; nm<nMarkAnz && !bBrk; nm++) {
                     SdrMark* pM=GetSdrMarkByIndex(nm);
                     if (pM->GetPageView()==pPV) {
-                        pM->GetObj()->TakeXorPoly(aDazuXPP,FALSE);
+                        pM->GetMarkedSdrObj()->TakeXorPoly(aDazuXPP,FALSE);
                         USHORT nDazuPolyAnz=aDazuXPP.Count();
                         nPolyCnt+=nDazuPolyAnz;
                         for (USHORT i=0; i<nDazuPolyAnz; i++) nPntCnt+=aDazuXPP[i].GetPointCount();
@@ -974,7 +974,7 @@ void SdrDragView::ImpDrawEdgeXor(XOutputDevice& rXOut, BOOL /*bFull*/) const
         if (!bNo) {
             for (USHORT i=0; i<nEdgeAnz; i++) {
                 SdrMark* pEM = GetEdgesOfMarkedNodes().GetMark(i);
-                SdrObject* pEdge=pEM->GetObj();
+                SdrObject* pEdge=pEM->GetMarkedSdrObj();
                 SdrPageView* pEPV=pEM->GetPageView();
                 pXOut->SetOffset(pEPV->GetOffset());
                 pEdge->NspToggleEdgeXor(aDragStat,rXOut,pEM->IsCon1(),pEM->IsCon2(),bDetail);
