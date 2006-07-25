@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:06:27 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:40:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -766,7 +766,7 @@ BOOL FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
 
                 if (nMarkCount==1)
                 {
-                    pSingleObj = pView->GetMarkedObjectList().GetMark(0)->GetObj();
+                    pSingleObj = pView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
                 }
 
                 if (nSlotId == SID_OBJECT_SELECT
@@ -896,7 +896,7 @@ BOOL FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
 
         if (nMarkCount==1)
         {
-            pSingleObj = pView->GetMarkedObjectList().GetMark(0)->GetObj();
+            pSingleObj = pView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
         }
 
         if ( nSlotId != SID_OBJECT_SELECT                            &&
