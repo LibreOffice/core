@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews2.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-05 21:53:48 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:48:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -282,7 +282,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     for (ULONG i=0; i<nCount; i++)
                     {
                         SfxItemSet aAttr(GetDoc()->GetPool());
-                        pObj = rMarkList.GetMark(i)->GetObj();
+                        pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
                         aAttr.Put(pObj->GetMergedItemSet());
 
                         INT32 nActLineWidth = ((const XLineWidthItem&)aAttr.Get(XATTR_LINEWIDTH)).GetValue();
@@ -329,7 +329,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     for (ULONG i=0; i<nCount; i++)
                     {
                         SfxItemSet aAttr(GetDoc()->GetPool());
-                        pObj = rMarkList.GetMark(i)->GetObj();
+                        pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
 
                         // #i25616#
                         if(!pObj->ISA(SdrGrafObj))
@@ -812,7 +812,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 SdrMarkList aMarkList = pDrView->GetMarkedObjectList();
                 for (int i=0; i < (int) aMarkList.GetMarkCount(); i++)
                 {
-                    aAllMarkedRect.Union ( aMarkList.GetMark(i)->GetObj()->GetCurrentBoundRect() );
+                    aAllMarkedRect.Union ( aMarkList.GetMark(i)->GetMarkedSdrObj()->GetCurrentBoundRect() );
                 }
                 pGraphicObj->SetLogicRect (aAllMarkedRect);
 
@@ -865,7 +865,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                 for ( i = 0; i < nCount; i++ )
                 {
-                    SdrObject* pObj = rMarkList.GetMark(i)->GetObj();
+                    SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
 
                     if( pPresPage->IsPresObj( pObj ) )
                     {
@@ -884,7 +884,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 for ( i = 0; i < nCount; i++ )
                 {
                     SfxStyleSheet* pSheet = NULL;
-                    SdrObject* pObj = rMarkList.GetMark(i)->GetObj();
+                    SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
 
                     if (pObj->GetObjIdentifier() == OBJ_TITLETEXT)
                     {
@@ -992,7 +992,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
             if( rMarkList.GetMarkCount() == 1 )
             {
-                SdrGrafObj *pGrafObj = dynamic_cast< SdrGrafObj* >( rMarkList.GetMark( 0 )->GetObj() );
+                SdrGrafObj *pGrafObj = dynamic_cast< SdrGrafObj* >( rMarkList.GetMark( 0 )->GetMarkedSdrObj() );
                 if(pGrafObj )
                 {
                     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape( pGrafObj->getUnoShape(), com::sun::star::uno::UNO_QUERY );
