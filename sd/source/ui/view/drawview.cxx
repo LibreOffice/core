@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:33:16 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:47:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -370,7 +370,7 @@ BOOL DrawView::SetAttributes(const SfxItemSet& rSet,
             SdrObject* pObject = NULL;
             for (ULONG nMark = 0; nMark < nMarkCount; nMark++)
             {
-                pObject = rList.GetMark(nMark)->GetObj();
+                pObject = rList.GetMark(nMark)->GetMarkedSdrObj();
                 UINT32 nInv = pObject->GetObjInventor();
 
                 if (nInv == SdrInventor)
@@ -1039,7 +1039,7 @@ void DrawView::DeleteMarked()
     ULONG nMarkCount         = rList.GetMarkCount();
     for (ULONG nMark = 0; nMark < nMarkCount; nMark++)
     {
-        SdrObject* pObj = rList.GetMark(nMark)->GetObj();
+        SdrObject* pObj = rList.GetMark(nMark)->GetMarkedSdrObj();
         if( pObj && !pObj->IsEmptyPresObj() && pObj->GetUserCall() )
         {
             pPage = dynamic_cast< SdPage* >( pObj->GetPage() );
