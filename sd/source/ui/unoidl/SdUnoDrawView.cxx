@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SdUnoDrawView.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 17:34:06 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:44:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -327,7 +327,7 @@ Any SAL_CALL SdUnoDrawView::getSelection()
                 if(pMark==NULL)
                     continue;
 
-                SdrObject *pObj = pMark->GetObj();
+                SdrObject *pObj = pMark->GetMarkedSdrObj();
                 if(pObj==NULL || pObj->GetPage() == NULL)
                     continue;
 
