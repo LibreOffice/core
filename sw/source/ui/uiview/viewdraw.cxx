@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewdraw.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-05 14:51:29 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:44:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -471,7 +471,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
                         (SID_DRAW_TEXT == nSlotId || SID_DRAW_TEXT_VERTICAL == nSlotId ||
                             SID_DRAW_TEXT_MARQUEE == nSlotId ))
                 {
-                    SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
+                    SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
                     BeginTextEdit(pObj);
                     bEndTextEdit = FALSE;
                 }
@@ -800,7 +800,7 @@ sal_Bool SwView::AreOnlyFormsSelected() const
         for (sal_uInt32 i = 0; i < nCount; i++)
         {
             // Sind ausser Controls noch normale Draw-Objekte selektiert?
-            SdrObject *pSdrObj = rMarkList.GetMark(i)->GetObj();
+            SdrObject *pSdrObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
 
             if (!HasOnlyObj(pSdrObj, FmFormInventor))
             {
