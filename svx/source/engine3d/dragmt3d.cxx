@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dragmt3d.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:44:35 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:51:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,7 +134,7 @@ E3dDragMethod::E3dDragMethod (
     long nCnt = rMark.GetMarkCount();
     for(long nObjs = 0;nObjs < nCnt;nObjs++)
     {
-        SdrObject *pObj = rMark.GetMark(nObjs)->GetObj();
+        SdrObject *pObj = rMark.GetMark(nObjs)->GetMarkedSdrObj();
         if(pObj && pObj->ISA(E3dObject))
         {
             E3dObject* p3DObj = (E3dObject*)pObj;
