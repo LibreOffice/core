@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stringtransfer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:22:31 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 09:48:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,23 +117,4 @@ namespace svt
 //........................................................................
 }   // namespace svt
 //........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.3.1096.1  2005/09/05 14:53:40  rt
- *  #i54170# Change license header: remove SISSL
- *
- *  Revision 1.3  2001/05/21 09:19:00  obr
- *  #81916# copy and paste only with window
- *
- *  Revision 1.2  2001/03/28 08:18:15  fs
- *  +StartStringDrag
- *
- *  Revision 1.1  2001/03/27 14:35:35  fs
- *  initial checkin - helper classes for clipboard handling of strings
- *
- *
- *  Revision 1.0 27.03.01 14:43:33  fs
- ************************************************************************/
 
