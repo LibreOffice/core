@@ -4,9 +4,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:52:37 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:26:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -233,7 +233,7 @@ BOOL __EXPORT FuText::MouseButtonDown(const MouseEvent& rMEvt)
                 const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
                 if( rMarkList.GetMarkCount() == 1 )
                 {
-                    SdrObject* pObj = rMarkList.GetMark( 0 )->GetObj();
+                    SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
                     if( pObj && pObj->ISA( SdrCaptionObj) && pObj->GetLayer() == SC_LAYER_INTERN)
                     {
                         if(pHdl->GetKind() != HDL_POLY && pHdl->GetKind() != HDL_CIRC)
@@ -422,7 +422,7 @@ BOOL __EXPORT FuText::MouseButtonUp(const MouseEvent& rMEvt)
         if (rMarkList.GetMarkCount() == 1)
         {
               SdrMark* pMark = rMarkList.GetMark(0);
-              SdrObject* pObj = pMark->GetObj();
+              SdrObject* pObj = pMark->GetMarkedSdrObj();
               FuPoor* pPoor = pViewShell->GetViewData()->GetView()->GetDrawFuncPtr();
               FuText* pText = static_cast<FuText*>(pPoor);
             pText->StopDragMode(pObj );
@@ -441,7 +441,7 @@ BOOL __EXPORT FuText::MouseButtonUp(const MouseEvent& rMEvt)
                 const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
                 if (rMarkList.GetMark(0))
                 {
-                    SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
+                    SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
                     // die fuer das Scrollen benoetigten Attribute setzen
                     SfxItemSet aItemSet( pDrDoc->GetItemPool(),
@@ -466,7 +466,7 @@ BOOL __EXPORT FuText::MouseButtonUp(const MouseEvent& rMEvt)
                 const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
                 if(rMarkList.GetMark(0))
                 {
-                    SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
+                    SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
                     if(pObj && pObj->ISA(SdrTextObj))
                     {
                         SdrTextObj* pText = (SdrTextObj*)pObj;
@@ -699,7 +699,7 @@ void FuText::SelectionHasChanged()
         if (rMarkList.GetMarkCount() == 1)
         {
             SdrMark* pMark = rMarkList.GetMark(0);
-            SdrObject* pObj = pMark->GetObj();
+            SdrObject* pObj = pMark->GetMarkedSdrObj();
 
             UINT16 nSdrObjKind = pObj->GetObjIdentifier();
 
@@ -773,7 +773,7 @@ void FuText::SetInEditMode(SdrObject* pObj, const Point* pMousePixel,
         if (rMarkList.GetMarkCount() == 1)
         {
             SdrMark* pMark = rMarkList.GetMark(0);
-            pObj = pMark->GetObj();
+            pObj = pMark->GetMarkedSdrObj();
         }
     }
 
