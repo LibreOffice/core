@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:46:30 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:57:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -932,18 +932,20 @@ SdrPageViewWindow* SdrPageView::FindWindow(OutputDevice& rOut) const
 
 SdrPageViewWindow* SdrPageView::GetWindow(sal_uInt32 nIndex) const
 {
-    SdrPageViewWindowVector::const_reference aObject = maWindowVector[nIndex];
-    return aObject;
+    // #126416#
+    OSL_ENSURE(nIndex < maWindowVector.size(), "SdrPageView::GetWindow: Index out of range (!)");
+    return maWindowVector[nIndex];
 }
 
 void SdrPageView::ClearWindows()
 {
-    while(maWindowVector.size())
+    // #126416#
+    for(SdrPageViewWindowVector::const_iterator a = maWindowVector.begin(); a != maWindowVector.end(); a++)
     {
-        SdrPageViewWindowVector::reference aLastObject = maWindowVector.back();
-        maWindowVector.pop_back();
-        delete aLastObject;
+        delete *a;
     }
+
+    maWindowVector.clear();
 }
 
 void SdrPageView::AppendWindow(SdrPageViewWindow& rNew)
@@ -957,9 +959,9 @@ SdrPageViewWindow* SdrPageView::RemoveWindow(sal_uInt32 nPos)
     {
         SdrPageViewWindowVector::iterator aAccess = maWindowVector.begin() + nPos;
         // #114376# remember return value
-        SdrPageViewWindow* pErasedSdrPageViewWindow = *aAccess;
+        SdrPageViewWindow* pSdrPageViewWindow = *aAccess;
         maWindowVector.erase(aAccess);
-        return pErasedSdrPageViewWindow;
+        return pSdrPageViewWindow;
     }
 
     return 0L;
@@ -972,9 +974,9 @@ SdrPageViewWindow* SdrPageView::RemoveWindow(SdrPageViewWindow& rOld)
     if(aFindResult != maWindowVector.end())
     {
         // #114376# remember return value
-        SdrPageViewWindow* pErasedSdrPageViewWindow = *aFindResult;
+        SdrPageViewWindow* pSdrPageViewWindow = *aFindResult;
         maWindowVector.erase(aFindResult);
-        return pErasedSdrPageViewWindow;
+        return pSdrPageViewWindow;
     }
 
     return 0L;
