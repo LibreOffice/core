@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawvie4.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:53:46 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:26:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,7 +91,7 @@ void lcl_CheckOle( const SdrMarkList& rMarkList, BOOL& rAnyOle, BOOL& rOneOle )
     for (ULONG i=0; i<nCount; i++)
     {
         SdrMark* pMark = rMarkList.GetMark(i);
-        SdrObject* pObj = pMark->GetObj();
+        SdrObject* pObj = pMark->GetMarkedSdrObj();
         UINT16 nSdrObjKind = pObj->GetObjIdentifier();
         if (nSdrObjKind == OBJ_OLE2)
         {
@@ -279,7 +279,7 @@ void ScDrawView::SetMarkedOriginalSize()
     ULONG nCount = rMarkList.GetMarkCount();
     for (ULONG i=0; i<nCount; i++)
     {
-        SdrObject* pObj = rMarkList.GetMark(i)->GetObj();
+        SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
         USHORT nIdent = pObj->GetObjIdentifier();
         BOOL bDo = FALSE;
         Size aOriginalSize;
