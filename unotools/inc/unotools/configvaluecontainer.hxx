@@ -4,9 +4,9 @@
  *
  *  $RCSfile: configvaluecontainer.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:30:46 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 09:51:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -248,26 +248,4 @@ namespace utl
 //.........................................................................
 
 #endif // UNOTOOLS_CONFIGVALUECONTAINER_HXX
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.2.34.1  2005/09/05 14:00:51  rt
- *  #i54170# Change license header: remove SISSL
- *
- *  Revision 1.2  2005/04/13 12:25:00  obo
- *  INTEGRATION: CWS visibility03 (1.1.206); FILE MERGED
- *  2005/02/28 04:33:53 mnicel 1.1.206.1: Issue number:  40092
- *  Part of visibility work
- *
- *  Revision 1.1.206.1  2005/02/28 04:33:53  mnicel
- *  Issue number:  40092
- *  Part of visibility work
- *
- *  Revision 1.1  2001/08/21 12:53:11  fs
- *  initial checkin - helper class for accesing config data in fixed memmory locations (aka class members)
- *
- *
- *  Revision 1.0 20.08.01 15:44:28  fs
- ************************************************************************/
 

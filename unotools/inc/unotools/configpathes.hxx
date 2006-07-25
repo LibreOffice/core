@@ -4,9 +4,9 @@
  *
  *  $RCSfile: configpathes.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:30:30 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 09:51:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,25 +187,4 @@ namespace utl
 //----------------------------------------------------------------------------
 
 #endif // UNOTOOLS_CONFIGPATHES_HXX_INCLUDED
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.2.34.1  2005/09/05 14:00:51  rt
- *  #i54170# Change license header: remove SISSL
- *
- *  Revision 1.2  2005/04/13 12:24:46  obo
- *  INTEGRATION: CWS visibility03 (1.1.212); FILE MERGED
- *  2005/02/28 04:33:52 mnicel 1.1.212.1: Issue number:  40092
- *  Part of visibility work
- *
- *  Revision 1.1.212.1  2005/02/28 04:33:52  mnicel
- *  Issue number:  40092
- *  Part of visibility work
- *
- *  Revision 1.1  2001/07/10 11:12:16  jb
- *  #87904# Add support for handling configuration pathes correctly
- *
- *
- ************************************************************************/
 
