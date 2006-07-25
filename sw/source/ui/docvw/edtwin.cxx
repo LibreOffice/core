@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.132 $
+ *  $Revision: 1.133 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:15:28 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:41:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2236,7 +2236,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
         break;
         case KS_GoIntoDrawing :
         {
-            SdrObject* pObj = rSh.GetDrawView()->GetMarkedObjectList().GetMark(0)->GetObj();
+            SdrObject* pObj = rSh.GetDrawView()->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
             if(pObj)
             {
                 EnterDrawTextMode(pObj->GetLogicRect().Center());
