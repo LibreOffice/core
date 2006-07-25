@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewuno.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:50:21 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:26:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -836,7 +836,7 @@ uno::Any SAL_CALL ScTabViewObj::getSelection() throw(uno::RuntimeException)
 
                 for (ULONG i=0; i<nMarkCount; i++)
                 {
-                    SdrObject* pObj = rMarkList.GetMark(i)->GetObj();
+                    SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
                     if (pObj)
                     {
                         uno::Reference<drawing::XShape> xShape( pObj->getUnoShape(), uno::UNO_QUERY );
