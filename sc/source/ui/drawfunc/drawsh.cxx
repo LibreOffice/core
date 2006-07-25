@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawsh.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:46:48 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:24:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -440,7 +440,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                         const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
                         if( rMarkList.GetMark(0) != 0 )
                         {
-                            SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
+                            SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
                             if( pObj->GetObjIdentifier() == OBJ_CAPTION )
                             {
                                 // --------- Itemset fuer Caption --------
@@ -513,7 +513,7 @@ void ScDrawShell::ExecuteLineDlg( SfxRequest& rReq, USHORT nTabPage )
     const SdrMarkList&  rMarkList   = pView->GetMarkedObjectList();
 
     if( rMarkList.GetMarkCount() == 1 )
-        pObj = rMarkList.GetMark(0)->GetObj();
+        pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
     SfxItemSet  aNewAttr( pView->GetDefaultAttr() );
     if( bHasMarked )
