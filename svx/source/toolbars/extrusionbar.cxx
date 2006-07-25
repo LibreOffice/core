@@ -4,9 +4,9 @@
  *
  *  $RCSfile: extrusionbar.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:52:24 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:58:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -617,7 +617,7 @@ void ExtrusionBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rB
 
             for(i=0; i<nCount; i++)
             {
-                SdrObject* pObj = rMarkList.GetMark(i)->GetObj();
+                SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
                 if( pObj->ISA(SdrObjCustomShape) )
                 {
                     String aStr( SVX_RES( nStrResId ) );
@@ -702,7 +702,7 @@ void getExtrusionDirectionState( SdrView* pSdrView, SfxItemSet& rSet )
 
     for(i=0;i<nCount; i++)
     {
-        SdrObject* pObj = rMarkList.GetMark(i)->GetObj();
+        SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
         if( pObj->ISA(SdrObjCustomShape) )
         {
             SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
@@ -850,7 +850,7 @@ void getExtrusionProjectionState( SdrView* pSdrView, SfxItemSet& rSet )
 
     for(i=0;i<nCount; i++)
     {
-        SdrObject* pObj = rMarkList.GetMark(i)->GetObj();
+        SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
         if( pObj->ISA(SdrObjCustomShape) )
         {
             // see if this is an extruded customshape
@@ -909,7 +909,7 @@ void getExtrusionSurfaceState( SdrView* pSdrView, SfxItemSet& rSet )
 
     for(i=0;i<nCount; i++)
     {
-        SdrObject* pObj = rMarkList.GetMark(i)->GetObj();
+        SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
         if( pObj->ISA(SdrObjCustomShape) )
         {
             SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
@@ -995,7 +995,7 @@ void getExtrusionDepthState( SdrView* pSdrView, SfxItemSet& rSet )
 
     for(i=0;i<nCount; i++)
     {
-        SdrObject* pObj = rMarkList.GetMark(i)->GetObj();
+        SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
         if( pObj->ISA(SdrObjCustomShape) )
         {
             SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
@@ -1081,7 +1081,7 @@ void getExtrusionLightingDirectionState( SdrView* pSdrView, SfxItemSet& rSet )
 
     for(i=0;i<nCount; i++)
     {
-        SdrObject* pObj = rMarkList.GetMark(i)->GetObj();
+        SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
         if( pObj->ISA(SdrObjCustomShape) )
         {
             SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
@@ -1156,7 +1156,7 @@ void getExtrusionLightingIntensityState( SdrView* pSdrView, SfxItemSet& rSet )
 
     for(i=0;i<nCount; i++)
     {
-        SdrObject* pObj = rMarkList.GetMark(i)->GetObj();
+        SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
         if( pObj->ISA(SdrObjCustomShape) )
         {
             SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
@@ -1226,7 +1226,7 @@ void getExtrusionColorState( SdrView* pSdrView, SfxItemSet& rSet )
 
     for(i=0;i<nCount; i++)
     {
-        SdrObject* pObj = rMarkList.GetMark(i)->GetObj();
+        SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
         if( pObj->ISA(SdrObjCustomShape) )
         {
             SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
@@ -1292,7 +1292,7 @@ bool checkForSelectedCustomShapes( SdrView* pSdrView, bool bOnlyExtruded )
 
     for(i=0;(i<nCount) && !bFound ; i++)
     {
-        SdrObject* pObj = rMarkList.GetMark(i)->GetObj();
+        SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
         if( pObj->ISA(SdrObjCustomShape) )
         {
             if( bOnlyExtruded )
