@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwSpellDialogChildWindow.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-18 13:50:07 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:39:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -314,7 +314,7 @@ svx::SpellPortions SwSpellDialogChildWindow::GetNextWrongSentence (void)
             {
                 SdrView* pSdrView = pWrtShell->GetDrawView();
                 m_pSpellState->m_SpellStartPosition = SPELL_START_DRAWTEXT;
-                m_pSpellState->m_pStartDrawing = pSdrView->GetMarkedObjectList().GetMark(0)->GetObj();
+                m_pSpellState->m_pStartDrawing = pSdrView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
                 OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
                 m_pSpellState->m_aStartDrawingSelection = pOLV->GetSelection();
             }
@@ -748,7 +748,7 @@ bool SwSpellDialogChildWindow::FindNextDrawTextError_Impl(SwWrtShell& rSh)
     SdrTextObj* pCurrentTextObj = 0;
     if ( rMarkList.GetMarkCount() == 1 )
     {
-        SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
+        SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
         if( pObj && pObj->ISA(SdrTextObj) )
             pCurrentTextObj = static_cast<SdrTextObj*>(pObj);
     }
