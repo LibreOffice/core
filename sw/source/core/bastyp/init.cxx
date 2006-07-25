@@ -4,9 +4,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:00:24 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:46:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1005,7 +1005,10 @@ void _FinitCore()
     delete SwFntObj::pPixMap;
 
     delete SwEditShell::pAutoFmtFlags;
-    delete SwNumRule::pDefBulletFont;
+    // --> OD 2006-06-27 #b6440955#
+    // variable is moved to class <numfunc::GetDefBulletConfig>
+//    delete SwNumRule::pDefBulletFont;
+    // <--
 
 #ifndef PRODUCT
     //Defaultattribut freigeben lassen um asserts zu vermeiden.
