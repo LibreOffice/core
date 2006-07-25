@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:40:57 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:36:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -840,7 +840,7 @@ uno::Reference< drawing::XShapeGroup >  SwXDrawPage::group(const uno::Reference<
                 sal_Bool bFlyInCnt = sal_False;
                 for ( sal_uInt16 i = 0; !bFlyInCnt && i < rMarkList.GetMarkCount(); ++i )
                 {
-                    const SdrObject *pObj = rMarkList.GetMark( i )->GetObj();
+                    const SdrObject *pObj = rMarkList.GetMark( i )->GetMarkedSdrObj();
                     if ( FLY_IN_CNTNT == ::FindFrmFmt( (SdrObject*)pObj )->GetAnchor().GetAnchorId() )
                         bFlyInCnt = sal_True;
                 }
