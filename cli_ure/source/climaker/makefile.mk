@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: obo $ $Date: 2006-07-13 08:34:32 $
+#   last change: $Author: rt $ $Date: 2006-07-25 07:54:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -106,12 +106,23 @@ APP1STDLIBS = \
 
 .ENDIF
 
+
+
 .INCLUDE : $(PRJ)$/util$/target.pmk
 .INCLUDE :  target.mk
+
+.IF "$(BUILD_FOR_CLI)" != ""
+
+$(OBJFILES): $(BIN)$/cli_basetypes.dll
 
 ALLTAR : $(BIN)$/climaker.exe.config
 
 $(BIN)$/climaker.exe.config : climaker.exe.config
     $(GNUCOPY) -f $? $@
 
-$(OBJFILES): $(BIN)$/cli_basetypes.dll
+.ENDIF
+
+
+
+
+
