@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.113 $
+ *  $Revision: 1.114 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:48:38 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 09:56:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,17 +158,6 @@ ImportExcel8::~ImportExcel8()
 }
 
 
-void ImportExcel8::RecString( void )
-{
-    if( pLastFormCell )
-    {
-        pLastFormCell->SetString( aIn.ReadUniString() );
-
-        pLastFormCell = NULL;
-    }
-}
-
-
 void ImportExcel8::Calccount( void )
 {
     ScDocOptions    aOpt = pD->GetDocOptions();
@@ -210,7 +199,6 @@ void ImportExcel8:: WinProtection( void )
 void ImportExcel8::Note( void )
 {
     GetObjectManager().ReadNote( maStrm );
-    pLastFormCell = NULL;
 }
 
 
@@ -300,8 +288,6 @@ void ImportExcel8::Labelsst( void )
         if( ScBaseCell* pCell = GetSst().CreateCell( nSst, nXF ) )
             GetDoc().PutCell( aScPos.Col(), aScPos.Row(), aScPos.Tab(), pCell );
     }
-
-    pLastFormCell = NULL;
 }
 
 
