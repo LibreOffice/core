@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgolbul.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:57:39 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:30:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,7 +130,7 @@ OutlineBulletDlg::OutlineBulletDlg(
         const ULONG nCount = rMarkList.GetMarkCount();
         for(ULONG nNum = 0; nNum < nCount; nNum++)
         {
-            SdrObject* pObj = rMarkList.GetMark(nNum)->GetObj();
+            SdrObject* pObj = rMarkList.GetMark(nNum)->GetMarkedSdrObj();
             if( pObj->GetObjInventor() == SdrInventor )
             {
 
