@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vdraw.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:32:07 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:37:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -360,7 +360,7 @@ BOOL SwViewImp::IsDragPossible( const Point &rPoint )
     if( !rMrkList.GetMarkCount() )
         return FALSE;
 
-    SdrObject *pO = rMrkList.GetMark(rMrkList.GetMarkCount()-1)->GetObj();
+    SdrObject *pO = rMrkList.GetMark(rMrkList.GetMarkCount()-1)->GetMarkedSdrObj();
 
     SwRect aRect;
     if( ::CalcClipRect( pO, aRect, FALSE ) )
