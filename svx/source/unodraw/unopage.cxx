@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:55:49 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:58:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -535,7 +535,7 @@ Reference< drawing::XShapeGroup > SAL_CALL SvxDrawPage::group( const Reference< 
     const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
     if( rMarkList.GetMarkCount() == 1 )
     {
-        SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
+        SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
         if( pObj )
              xShapeGroup = Reference< drawing::XShapeGroup >::query( pObj->getUnoShape() );
     }
