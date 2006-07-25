@@ -4,9 +4,9 @@
  *
  *  $RCSfile: futhes.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:05:32 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:42:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,7 +132,7 @@ void FuThesaurus::DoExecute( SfxRequest& rReq )
             if ( rMarkList.GetMarkCount() == 1 )
             {
                 SdrMark* pMark = rMarkList.GetMark(0);
-                SdrObject* pObj = pMark->GetObj();
+                SdrObject* pObj = pMark->GetMarkedSdrObj();
 
                 if ( pObj->ISA(SdrTextObj) )
                 {
