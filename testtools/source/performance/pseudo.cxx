@@ -1,13 +1,37 @@
-/**************************************************************************
-#*
-#*    last change   $Author: rt $ $Date: 2005-12-14 11:24:01 $
-#*    $Revision: 1.3 $
-#*
-#*    $Logfile: $
-#*
-#*    Copyright (c) 1989 - 2000, Star Office GmbH
-#*
-#************************************************************************/
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: pseudo.cxx,v $
+ *
+ *  $Revision: 1.4 $
+ *
+ *  last change: $Author: rt $ $Date: 2006-07-25 09:46:24 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
 
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
@@ -273,29 +297,3 @@ extern "C" void SAL_CALL uno_ext_getMapping(
 }
 
 
-/**************************************************************************
-    $Log: not supported by cvs2svn $
-    Revision 1.2.88.1  2005/08/23 07:20:29  sb
-    #i52998# Made rotting code compile again (patch supplied by cyb).
-
-    Revision 1.2  2003/04/15 16:42:32  vg
-    INTEGRATION: CWS dbgmacros1 (1.1.46); FILE MERGED
-    2003/04/10 09:20:16 kso 1.1.46.1: #108413# - debug macro unification.
-
-    Revision 1.1.46.1  2003/04/10 09:20:16  kso
-    #108413# - debug macro unification.
-
-    Revision 1.1  2001/05/04 07:05:18  kr
-    moved from grande to openoffice
-
-    Revision 1.3  2001/03/12 16:22:44  jl
-    OSL_ENSHURE replaced by OSL_ENSURE
-
-    Revision 1.2  2000/06/15 08:58:08  dbo
-    runtime changes
-
-    Revision 1.1  2000/05/22 12:50:36  dbo
-    new
-
-
-**************************************************************************/
