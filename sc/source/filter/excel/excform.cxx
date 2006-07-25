@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excform.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:47:55 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 09:56:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -182,13 +182,9 @@ void ImportExcel::Formula( const XclAddress& rXclPos,
         {
             if( eErr != ConvOK )
                 ExcelToSc::SetError( *pZelle, eErr );
-            else if( ExcelToSc::SetCurVal( *pZelle, rCurVal ) )
-                pLastFormCell = pZelle; // String-Record sollte folgen
             else
-                pLastFormCell = NULL;
+                ExcelToSc::SetCurVal( *pZelle, rCurVal );
         }
-        else
-            pLastFormCell = NULL;
 
         GetXFRangeBuffer().SetXF( aScPos, nXF );
     }
