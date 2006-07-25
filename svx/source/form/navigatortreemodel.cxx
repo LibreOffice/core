@@ -4,9 +4,9 @@
  *
  *  $RCSfile: navigatortreemodel.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:00:27 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:53:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -848,7 +848,7 @@ namespace svxform
 
         for (ULONG i=0; (i<mlMarked.GetMarkCount()) && !bIsMixedSelection; i++)
         {
-            SdrObject* pobjCurrent = mlMarked.GetMark(i)->GetObj();
+            SdrObject* pobjCurrent = mlMarked.GetMark(i)->GetMarkedSdrObj();
             bIsMixedSelection |= !InsertFormComponent(rshRequestSelection, pobjCurrent);
                 // bei einem Nicht-Form-Control liefert InsertFormComponent sal_False !
         }
