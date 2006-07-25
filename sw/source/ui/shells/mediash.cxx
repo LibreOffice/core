@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mediash.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:23:03 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:44:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -227,7 +227,7 @@ void SwMediaShell::ExecMedia(SfxRequest &rReq)
 
                         if( 1 == pMarkList->GetMarkCount() )
                         {
-                            SdrObject* pObj = pMarkList->GetMark( 0 )->GetObj();
+                            SdrObject* pObj = pMarkList->GetMark( 0 )->GetMarkedSdrObj();
 
                             if( pObj && pObj->ISA( SdrMediaObj ) )
                             {
@@ -274,7 +274,7 @@ void SwMediaShell::GetMediaState(SfxItemSet &rSet)
 
                 if( 1 == pMarkList->GetMarkCount() )
                 {
-                    SdrObject* pObj = pMarkList->GetMark( 0 )->GetObj();
+                    SdrObject* pObj = pMarkList->GetMark( 0 )->GetMarkedSdrObj();
 
                     if( pObj && pObj->ISA( SdrMediaObj ) )
                     {
