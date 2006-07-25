@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view3d.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:48:10 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:51:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -408,7 +408,7 @@ SdrModel* E3dView::GetMarkedObjModel() const
 
         for(nObjs = 0;nObjs < nCnt;nObjs++)
         {
-            SdrObject *pObj = aOldML.GetMark(nObjs)->GetObj();
+            SdrObject *pObj = aOldML.GetMark(nObjs)->GetMarkedSdrObj();
             if(pObj)
             {
                 if(pObj->ISA(E3dCompoundObject))
@@ -1053,7 +1053,7 @@ void E3dView::ConvertMarkedObjTo3D(BOOL bExtrude, Vector3D aPnt1, Vector3D aPnt2
             for(UINT32 a=0;a<GetMarkedObjectCount();a++)
             {
                 SdrMark* pMark = GetSdrMarkByIndex(a);
-                SdrObject* pObj = pMark->GetObj();
+                SdrObject* pObj = pMark->GetMarkedSdrObj();
                 Rectangle aTurnRect = pObj->GetSnapRect();
                 Vector3D aRot;
                 Point aRotPnt;
@@ -1093,7 +1093,7 @@ void E3dView::ConvertMarkedObjTo3D(BOOL bExtrude, Vector3D aPnt1, Vector3D aPnt2
         for(UINT32 a=0;a<GetMarkedObjectCount();a++)
         {
             SdrMark* pMark = GetSdrMarkByIndex(a);
-            SdrObject* pObj = pMark->GetObj();
+            SdrObject* pObj = pMark->GetMarkedSdrObj();
 
             ImpCreate3DObject(pScene, pObj, bExtrude, fDepth, aLatheMat);
         }
@@ -1806,7 +1806,7 @@ void E3dView::CreateMirrorPolygons ()
         )
     {
         SdrMark   *pMark = GetSdrMarkByIndex(-- nMark);
-        SdrObject *pObj  = pMark->GetObj();
+        SdrObject *pObj  = pMark->GetMarkedSdrObj();
 
         pObj->TakeXorPoly (pMirrorPolygon [nMark], FALSE);
         pMarkedObjs [nMark] = pObj;
