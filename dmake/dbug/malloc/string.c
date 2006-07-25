@@ -11,7 +11,7 @@
 
 #ifndef lint
 static
-char rcs_hdr[] = "$Id: string.c,v 1.1.1.1 2000-09-22 15:33:26 hr Exp $";
+char rcs_hdr[] = "$Id: string.c,v 1.2 2006-07-25 10:10:03 rt Exp $";
 #endif
 
 int malloc_checking = 0;
@@ -531,51 +531,3 @@ strtoken(stringp, delim, skip)
     /* NOTREACHED */
 }
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.1.1.1  1997/09/22 14:51:11  hjs
- * dmake 4.1 orginal sourcen
- *
- * Revision 1.1.1.1  1997/07/15 16:02:26  dvadura
- * dmake gold 4.1.00 initial import
- *
- * Revision 1.1.1.1  1996/10/27 07:30:14  dvadura
- * Dmake 4.1 Initial Import
- *
- * Revision 1.1.1.1  1996/10/24 05:33:14  dvadura
- * Initial import for final release of dmake 4.1
- *
- * Revision 1.1  1994/10/06  17:43:17  dvadura
- * dmake Release Version 4.0, Initial revision
- *
- * Revision 1.1  1994/10/06  03:45:27  dvadura
- * dmake Release Version 4.0, Initial revision
- *
- * Revision 1.1  1992/01/24  03:29:13  dvadura
- * dmake Version 3.8, Initial revision
- *
- * Revision 1.7  90/08/29  22:24:19  cpcahil
- * added new function to check on strings up to a specified length
- * and used it within several strn* functions.
- *
- * Revision 1.6  90/07/16  20:06:56  cpcahil
- * fixed several minor bugs found with Henry Spencer's string/mem function
- * tester program.
- *
- * Revision 1.5  90/06/10  14:59:49  cpcahil
- * Fixed a couple of bugs in strncpy & strdup
- *
- * Revision 1.4  90/05/11  00:13:10  cpcahil
- * added copyright statment
- *
- * Revision 1.3  90/02/24  21:50:32  cpcahil
- * lots of lint fixes
- *
- * Revision 1.2  90/02/24  17:29:40  cpcahil
- * changed $Header to $Id so full path wouldnt be included as part of rcs
- * id string
- *
- * Revision 1.1  90/02/22  23:17:44  cpcahil
- * Initial revision
- *
- */

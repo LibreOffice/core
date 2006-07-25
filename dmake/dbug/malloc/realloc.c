@@ -40,7 +40,7 @@
  */
 #ifndef lint
 static
-char rcs_hdr[] = "$Id: realloc.c,v 1.1.1.1 2000-09-22 15:33:26 hr Exp $";
+char rcs_hdr[] = "$Id: realloc.c,v 1.2 2006-07-25 10:09:48 rt Exp $";
 #endif
 
 char *
@@ -178,56 +178,3 @@ realloc(cptr,size)
 } /* realloc(... */
 
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.1.1.1  1997/09/22 14:51:11  hjs
- * dmake 4.1 orginal sourcen
- *
- * Revision 1.1.1.1  1997/07/15 16:02:26  dvadura
- * dmake gold 4.1.00 initial import
- *
- * Revision 1.1.1.1  1996/10/27 07:30:14  dvadura
- * Dmake 4.1 Initial Import
- *
- * Revision 1.1.1.1  1996/10/24 05:33:14  dvadura
- * Initial import for final release of dmake 4.1
- *
- * Revision 1.1  1994/10/06  17:43:17  dvadura
- * dmake Release Version 4.0, Initial revision
- *
- * Revision 1.1  1994/10/06  03:45:26  dvadura
- * dmake Release Version 4.0, Initial revision
- *
- * Revision 1.1  1992/01/24  03:29:11  dvadura
- * dmake Version 3.8, Initial revision
- *
- * Revision 1.8  90/08/29  21:22:52  cpcahil
- * miscellaneous lint fixes
- *
- * Revision 1.7  90/05/11  00:13:10  cpcahil
- * added copyright statment
- *
- * Revision 1.6  90/02/25  11:01:20  cpcahil
- * added support for malloc chain checking.
- *
- * Revision 1.5  90/02/24  21:50:31  cpcahil
- * lots of lint fixes
- *
- * Revision 1.4  90/02/24  17:29:39  cpcahil
- * changed $Header to $Id so full path wouldnt be included as part of rcs
- * id string
- *
- * Revision 1.3  90/02/24  17:20:00  cpcahil
- * attempt to get rid of full path in rcs header.
- *
- * Revision 1.2  90/02/24  15:14:20  cpcahil
- * 1. added function header
- * 2. changed calls to malloc_warning to conform to new usage
- * 3. added setting of malloc_errno
- *  4. broke up bad pointer determination so that errno's would be more
- *    descriptive
- *
- * Revision 1.1  90/02/22  23:17:43  cpcahil
- * Initial revision
- *
- */

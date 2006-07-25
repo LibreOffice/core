@@ -4,7 +4,7 @@
  * copyright statement is not removed.
  */
 /*
- * $Id: malloc.h,v 1.1.1.1 2000-09-22 15:33:26 hr Exp $
+ * $Id: malloc.h,v 1.2 2006-07-25 10:08:50 rt Exp $
  */
 struct mlist
 {
@@ -83,39 +83,3 @@ void malloc_check_data();
 void malloc_check_str();
 void malloc_verify();
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.1.1.1  1997/09/22 14:51:11  hjs
- * dmake 4.1 orginal sourcen
- *
- * Revision 1.1.1.1  1997/07/15 16:02:26  dvadura
- * dmake gold 4.1.00 initial import
- *
- * Revision 1.1.1.1  1996/10/27 07:30:14  dvadura
- * Dmake 4.1 Initial Import
- *
- * Revision 1.1.1.1  1996/10/24 05:33:14  dvadura
- * Initial import for final release of dmake 4.1
- *
- * Revision 1.1  1994/10/06  17:43:13  dvadura
- * dmake Release Version 4.0, Initial revision
- *
- * Revision 1.1  1994/10/06  03:45:22  dvadura
- * dmake Release Version 4.0, Initial revision
- *
- * Revision 1.1  1992/01/24  03:29:06  dvadura
- * dmake Version 3.8, Initial revision
- *
- * Revision 1.4  90/08/29  22:23:38  cpcahil
- * fixed mallopt to use a union as an argument.
- *
- * Revision 1.3  90/05/11  11:04:10  cpcahil
- * took out some extraneous lines
- *
- * Revision 1.2  90/05/11  00:13:09  cpcahil
- * added copyright statment
- *
- * Revision 1.1  90/02/23  07:09:03  cpcahil
- * Initial revision
- *
- */
