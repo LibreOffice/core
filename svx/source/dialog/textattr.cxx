@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textattr.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:33:17 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:50:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -573,7 +573,7 @@ void SvxTextAttrPage::Construct()
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
     if( rMarkList.GetMarkCount() == 1 )
     {
-        const SdrObject* pObj = rMarkList.GetMark( 0 )->GetObj();
+        const SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
         SdrObjKind eKind = (SdrObjKind) pObj->GetObjIdentifier();
         if( pObj->GetObjInventor() == SdrInventor )
         {
