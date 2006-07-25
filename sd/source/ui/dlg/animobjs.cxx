@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animobjs.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 12:51:25 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:29:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -917,7 +917,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
         if( nMarkCount == 1 )
         {
             SdrMark*            pMark = rMarkList.GetMark(0);
-            SdrObject*          pObject = pMark->GetObj();
+            SdrObject*          pObject = pMark->GetMarkedSdrObj();
             SdAnimationInfo*    pAnimInfo = rView.GetDoc()->GetAnimationInfo( pObject );
             UINT32              nInv = pObject->GetObjInventor();
             UINT16              nId = pObject->GetObjIdentifier();
@@ -1009,7 +1009,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
         if( nMarkCount == 1 && !bAnimObj )
         {
             SdrMark*    pMark   = rMarkList.GetMark(0);
-            SdrObject*  pObject = pMark->GetObj();
+            SdrObject*  pObject = pMark->GetMarkedSdrObj();
             SdrObject*  pClone  = pObject->Clone();
             pPage->InsertObject(pClone, aBmpExList.GetCurPos() + 1);
         }
@@ -1022,7 +1022,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
                 for( ULONG nObject= 0; nObject < nMarkCount; nObject++ )
                 {
                     // Clone
-                    SdrObject* pObject = rMarkList.GetMark( nObject )->GetObj();
+                    SdrObject* pObject = rMarkList.GetMark( nObject )->GetMarkedSdrObj();
 
                     pBitmapEx = new BitmapEx( SdrExchangeView::GetObjGraphic( pObject->GetModel(), pObject ).GetBitmapEx() );
                     aBmpExList.Insert( pBitmapEx, aBmpExList.GetCurPos() + 1 );
@@ -1043,7 +1043,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
                 SdrObjList*  pObjList    = pCloneGroup->GetSubList();
 
                 for (ULONG nObject= 0; nObject < nMarkCount; nObject++)
-                    pObjList->InsertObject(rMarkList.GetMark(nObject)->GetObj()->Clone(), LIST_APPEND);
+                    pObjList->InsertObject(rMarkList.GetMark(nObject)->GetMarkedSdrObj()->Clone(), LIST_APPEND);
 
                 pPage->InsertObject(pCloneGroup, aBmpExList.GetCurPos() + 1);
             }
