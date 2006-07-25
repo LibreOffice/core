@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docdraw.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 12:22:53 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:29:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -319,7 +319,7 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
 
     const SdrMarkList &rMrkList = rDrawView.GetMarkedObjectList();
     SwDrawFrmFmt *pFmt = 0L;
-    SdrObject *pObj = rMrkList.GetMark( 0 )->GetObj();
+    SdrObject *pObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
     BOOL bNoGroup = ( 0 == pObj->GetUpGroup() );
     SwDrawContact* pNewContact = 0;
     if( bNoGroup )
@@ -343,7 +343,7 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
         //ContactObjekte und Formate vernichten.
         for( USHORT i = 0; i < rMrkList.GetMarkCount(); ++i )
         {
-            pObj = rMrkList.GetMark( i )->GetObj();
+            pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
             SwDrawContact *pContact = (SwDrawContact*)GetUserCall(pObj);
 
             // --> OD 2005-08-16 #i53320#
@@ -386,7 +386,7 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
         rDrawView.GroupMarked();
         ASSERT( rMrkList.GetMarkCount() == 1, "GroupMarked more or none groups." );
 
-        SdrObject* pNewGroupObj = rMrkList.GetMark( 0 )->GetObj();
+        SdrObject* pNewGroupObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
         pNewContact = new SwDrawContact( pFmt, pNewGroupObj );
         // --> OD 2004-11-22 #i35635#
         pNewContact->MoveObjToVisibleLayer( pNewGroupObj );
@@ -434,14 +434,14 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
     const SdrMarkList &rMrkList = rDrawView.GetMarkedObjectList();
     if( rMrkList.GetMarkCount() )
     {
-        SdrObject *pObj = rMrkList.GetMark( 0 )->GetObj();
+        SdrObject *pObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
         if( !pObj->GetUpGroup() )
         {
             String sDrwFmtNm( String::CreateFromAscii(
                                 RTL_CONSTASCII_STRINGPARAM("DrawObject" )));
             for ( USHORT i = 0; i < rMrkList.GetMarkCount(); ++i )
             {
-                SdrObject *pObj = rMrkList.GetMark( i )->GetObj();
+                SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
                 if ( pObj->IsA( TYPE(SdrObjGroup) ) )
                 {
                     SwDrawContact *pContact = (SwDrawContact*)GetUserCall(pObj);
@@ -505,7 +505,7 @@ BOOL SwDoc::DeleteSelection( SwDrawView& rDrawView )
 
         if( 1 == rMrkList.GetMarkCount() )
         {
-            SdrObject *pObj = rMrkList.GetMark( 0 )->GetObj();
+            SdrObject *pObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
             if( pObj->ISA(SwVirtFlyDrawObj) )
             {
                 SwFlyFrmFmt* pFrmFmt = (SwFlyFrmFmt*)
@@ -520,7 +520,7 @@ BOOL SwDoc::DeleteSelection( SwDrawView& rDrawView )
 
         for( i = 0; i < rMrkList.GetMarkCount(); ++i )
         {
-            SdrObject *pObj = rMrkList.GetMark( i )->GetObj();
+            SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
             if( !pObj->ISA(SwVirtFlyDrawObj) )
             {
                 SwDrawContact *pC = (SwDrawContact*)GetUserCall(pObj);
@@ -537,7 +537,7 @@ BOOL SwDoc::DeleteSelection( SwDrawView& rDrawView )
 
         if( rMrkList.GetMarkCount() && bDelMarked )
         {
-            SdrObject *pObj = rMrkList.GetMark( 0 )->GetObj();
+            SdrObject *pObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
             if( !pObj->GetUpGroup() )
             {
                 SwUndoDrawDelete* pUndo = !DoesUndo() ? 0
@@ -547,7 +547,7 @@ BOOL SwDoc::DeleteSelection( SwDrawView& rDrawView )
                 for( i = 0; i < rMrkList.GetMarkCount(); ++i )
                 {
                     const SdrMark& rMark = *rMrkList.GetMark( i );
-                    pObj = rMark.GetObj();
+                    pObj = rMark.GetMarkedSdrObj();
                     SwDrawContact *pContact = (SwDrawContact*)pObj->GetUserCall();
                     if( pContact ) // natuerlich nicht bei gruppierten Objekten
                     {
