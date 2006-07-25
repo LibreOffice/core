@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventlisteneradapter.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:31:51 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 09:52:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,33 +81,4 @@ namespace utl
 //.........................................................................
 
 #endif // _UNOTOOLS_EVENTLISTENERADAPTER_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.3.34.1  2005/09/05 14:00:52  rt
- *  #i54170# Change license header: remove SISSL
- *
- *  Revision 1.3  2005/04/13 12:25:44  obo
- *  INTEGRATION: CWS visibility03 (1.2.74); FILE MERGED
- *  2005/02/28 04:33:53 mnicel 1.2.74.1: Issue number:  40092
- *  Part of visibility work
- *
- *  Revision 1.2.74.1  2005/02/28 04:33:53  mnicel
- *  Issue number:  40092
- *  Part of visibility work
- *
- *  Revision 1.2  2004/01/06 18:40:05  vg
- *  INTEGRATION: CWS vclcleanup02 (1.1.120); FILE MERGED
- *  2003/12/04 15:38:35 mt 1.1.120.1: #i23061# DTOR now virtual to avoid gcc WAll warnings
- *
- *  Revision 1.1.120.1  2003/12/04 15:38:35  mt
- *  #i23061# DTOR now virtual to avoid gcc WAll warnings
- *
- *  Revision 1.1  2001/04/19 16:13:06  fs
- *  -initial checkin - base class for non-UNO dispose listeners
- *
- *
- *  Revision 1.0 19.04.01 16:20:10  fs
- ************************************************************************/
 
