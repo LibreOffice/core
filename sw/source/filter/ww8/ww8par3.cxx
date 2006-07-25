@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:15:00 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:50:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -976,7 +976,12 @@ void WW8ListManager::AdjustLVL( sal_uInt8 nLevel, SwNumRule& rNumRule,
         SwCharFmt* pFmt = aNumFmt.GetCharFmt();
         Font aFont;
         if( !pFmt )
-            aFont = SwNumRule::GetDefBulletFont();
+        {
+            // --> OD 2006-06-27 #b6440955#
+//            aFont = SwNumRule::GetDefBulletFont();
+            aFont = numfunc::GetDefBulletFont();
+            // <--
+        }
         else
         {
             const SvxFontItem& rFontItem = pFmt->GetFont();
