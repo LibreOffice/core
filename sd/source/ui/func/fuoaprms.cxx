@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuoaprms.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:30:07 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:38:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -179,7 +179,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
 
     // das erste Objekt untersuchen
     pMark = rMarkList.GetMark(0);
-    SdrObject* pObject = pMark->GetObj();
+    SdrObject* pObject = pMark->GetMarkedSdrObj();
     pInfo = pDoc->GetAnimationInfo(pObject);
     if( pInfo )
     {
@@ -236,7 +236,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
     for( nObject = 1; nObject < nCount; nObject++ )
     {
         pMark = rMarkList.GetMark( nObject );
-        SdrObject* pObject = pMark->GetObj();
+        SdrObject* pObject = pMark->GetMarkedSdrObj();
         pInfo = pDoc->GetAnimationInfo(pObject);
         if( pInfo )
         {
@@ -344,8 +344,8 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
     // am bewegten Objekt.
     if (nCount == 2)
     {
-        SdrObject* pObject1 = rMarkList.GetMark(0)->GetObj();
-        SdrObject* pObject2 = rMarkList.GetMark(1)->GetObj();
+        SdrObject* pObject1 = rMarkList.GetMark(0)->GetMarkedSdrObj();
+        SdrObject* pObject2 = rMarkList.GetMark(1)->GetMarkedSdrObj();
         SdrObjKind eKind1   = (SdrObjKind)pObject1->GetObjIdentifier();
         SdrObjKind eKind2   = (SdrObjKind)pObject2->GetObjIdentifier();
         SdAnimationInfo* pInfo1 = pDoc->GetAnimationInfo(pObject1);
@@ -700,8 +700,8 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
         if (eEffect == presentation::AnimationEffect_PATH && nEffectSet == ATTR_SET)
         {
             DBG_ASSERT(nCount == 2, "dieser Effekt braucht genau 2 selektierte Objekte");
-            SdrObject* pObject1 = rMarkList.GetMark(0)->GetObj();
-            SdrObject* pObject2 = rMarkList.GetMark(1)->GetObj();
+            SdrObject* pObject1 = rMarkList.GetMark(0)->GetMarkedSdrObj();
+            SdrObject* pObject2 = rMarkList.GetMark(1)->GetMarkedSdrObj();
             SdrObjKind eKind1   = (SdrObjKind)pObject1->GetObjIdentifier();
             SdrObjKind eKind2   = (SdrObjKind)pObject2->GetObjIdentifier();
 
@@ -743,7 +743,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
 
         for (nObject = 0; nObject < nCount; nObject++)
         {
-            SdrObject* pObject = rMarkList.GetMark(nObject)->GetObj();
+            SdrObject* pObject = rMarkList.GetMark(nObject)->GetMarkedSdrObj();
 
             pInfo = pDoc->GetAnimationInfo(pObject);
 
