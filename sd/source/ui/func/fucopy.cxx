@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fucopy.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:32:18 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:32:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -277,7 +277,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
             // set protection flags at marked copies to null
             for( j = 0; j < nCopyMarkCount; j++ )
             {
-                pObj = aCopyMarkList.GetMark( j )->GetObj();
+                pObj = aCopyMarkList.GetMark( j )->GetMarkedSdrObj();
 
                 if( pObj )
                 {
@@ -303,8 +303,8 @@ void FuCopy::DoExecute( SfxRequest& rReq )
             {
                 for( j = 0; j < nMarkCount; j++ )
                 {
-                    SdrObject* pSrcObj = aMarkList.GetMark( j )->GetObj();
-                    SdrObject* pDstObj = aCopyMarkList.GetMark( j )->GetObj();
+                    SdrObject* pSrcObj = aMarkList.GetMark( j )->GetMarkedSdrObj();
+                    SdrObject* pDstObj = aCopyMarkList.GetMark( j )->GetMarkedSdrObj();
 
                     if( pSrcObj && pDstObj &&
                         ( pSrcObj->GetObjInventor() == pDstObj->GetObjInventor() ) &&
