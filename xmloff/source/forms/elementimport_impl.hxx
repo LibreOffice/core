@@ -4,9 +4,9 @@
  *
  *  $RCSfile: elementimport_impl.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:06:36 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 09:22:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,40 +126,4 @@ template <class BASE>
     }
     return xReturn;
 }
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.6.220.1  2005/09/05 14:38:56  rt
- *  #i54170# Change license header: remove SISSL
- *
- *  Revision 1.6  2004/11/09 12:17:01  hr
- *  INTEGRATION: CWS oasisbf1 (1.5.2); FILE MERGED
- *  2004/10/15 13:54:39 fs 1.5.2.1: #i30706# removed obsolete parameter from OColumnWrapper
- *
- *  Revision 1.5.2.1  2004/10/15 13:54:39  fs
- *  #i30706# removed obsolete parameter from OColumnWrapper
- *
- *  Revision 1.5  2004/07/30 15:04:34  kz
- *  INTEGRATION: CWS gcc340fixes01 (1.4.334); FILE MERGED
- *  2004/07/13 20:28:08 fa 1.4.334.1: #i31445# explicitly scope data member to satisfy gcc 3.4
- *
- *  Revision 1.4.334.1  2004/07/13 20:28:08  fa
- *  #i31445# explicitly scope data member to satisfy gcc 3.4
- *
- *  Revision 1.4  2001/01/03 16:25:34  fs
- *  file format change (extra wrapper element for controls, similar to columns)
- *
- *  Revision 1.3  2001/01/02 15:58:21  fs
- *  event ex- & import
- *
- *  Revision 1.2  2000/12/13 10:40:15  fs
- *  new import related implementations - at this version, we should be able to import everything we export (which is all except events and styles)
- *
- *  Revision 1.1  2000/12/12 12:02:53  fs
- *  initial checkin - implementations for the template classes in elementimport
- *
- *
- *  Revision 1.0 12.12.00 08:33:20  fs
- ************************************************************************/
 
