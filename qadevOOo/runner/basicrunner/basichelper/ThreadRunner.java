@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ThreadRunner.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:07:46 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 10:01:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -259,33 +259,5 @@ class ExecuteDialogThread extends Thread {
         execDlg.execute();
     }
 }
-
-// $Log: not supported by cvs2svn $
-// Revision 1.4.154.1  2005/09/05 15:31:13  rt
-// #i54170# Change license header: remove SISSL
-//
-// Revision 1.4  2003/06/11 16:24:27  vg
-// INTEGRATION: CWS qadev8 (1.3.12); FILE MERGED
-// 2003/06/05 10:44:24 cn 1.3.12.2: #109975# CHG: Header
-// 2003/06/05 10:29:09 cn 1.3.12.1: #109975# CHG: userinteractionhader for csv files
-//
-// Revision 1.3.12.2  2003/06/05 10:44:24  cn
-// #109975# CHG: Header
-//
-// Revision 1.3.12.1  2003/06/05 10:29:09  cn
-// #109975# CHG: userinteractionhader for csv files
-//
-// Revision 1.3  2003/06/05 10:27:19  cn
-// CHG: userinteractionhandler for csv files
-//
-// Revision 1.2  2002/10/16 15:11:51  cn
-// CHG: ExecuteDialogThread added
-//
-// Revision 1.2  2002/10/16 10:07:06  moa
-// CHG: ExecuteDialogThread added
-//
-// Revision 1.1  2002/09/11 11:17:06  pav
-// ADD: initial version
-//
 
 
