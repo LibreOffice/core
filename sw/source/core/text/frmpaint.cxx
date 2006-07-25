@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmpaint.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:52:31 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:48:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,8 +137,14 @@
 #endif
 // <--
 
-// steht im number.cxx
-extern const sal_Char __FAR_DATA sBulletFntName[];
+// --> OD 2006-06-27 #b6440955#
+// variable moved to class <numfunc:GetDefBulletConfig>
+//extern const sal_Char __FAR_DATA sBulletFntName[];
+namespace numfunc
+{
+    extern const String& GetDefBulletFontname();
+}
+// <--
 
 sal_Bool bInitFont = sal_True;
 
@@ -581,12 +587,18 @@ sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
             if( pSh->GetViewOptions()->IsParagraph() && Prt().Height() )
             {
                 if( RTL_TEXTENCODING_SYMBOL == pFnt->GetCharSet( SW_LATIN ) &&
-                    COMPARE_EQUAL != pFnt->GetName( SW_LATIN ).
-                                            CompareToAscii( sBulletFntName ) )
+                    // --> OD 2006-06-27 #b6440955#
+//                    COMPARE_EQUAL != pFnt->GetName( SW_LATIN ).
+//                                        CompareToAscii( sBulletFntName ) )
+                    pFnt->GetName( SW_LATIN ) != numfunc::GetDefBulletFontname() )
+                    // <--
                 {
                     pFnt->SetFamily( FAMILY_DONTKNOW, SW_LATIN );
-                    pFnt->SetName( String::CreateFromAscii( sBulletFntName ),
-                                    SW_LATIN );
+                    // --> OD 2006-06-27 #b6440955#
+//                    pFnt->SetName( String::CreateFromAscii( sBulletFntName ),
+//                                    SW_LATIN );
+                    pFnt->SetName( numfunc::GetDefBulletFontname(), SW_LATIN );
+                    // <--
                     pFnt->SetStyleName( aEmptyStr, SW_LATIN );
                     pFnt->SetCharSet( RTL_TEXTENCODING_SYMBOL, SW_LATIN );
                 }
