@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdpoev.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:46:58 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:57:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,7 @@ void SdrPolyEditView::ImpCheckPolyPossibilities()
 
         for (ULONG nMarkNum=0; nMarkNum<nMarkAnz; nMarkNum++) {
             SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
-            SdrObject* pObj=pM->GetObj();
+            SdrObject* pObj=pM->GetMarkedSdrObj();
             SdrUShortCont* pPts=pM->GetMarkedPoints();
             SdrPathObj* pPath=PTR_CAST(SdrPathObj,pObj);
             if (pPath!=NULL && pPts!=NULL) {
@@ -163,7 +163,7 @@ void SdrPolyEditView::SetMarkedPointsSmooth(SdrPathSmoothKind eKind)
             nMarkNum--;
             SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
             SdrUShortCont* pPts=pM->GetMarkedPoints();
-            SdrObject* pObj=pM->GetObj();
+            SdrObject* pObj=pM->GetMarkedSdrObj();
             SdrPathObj* pPath=PTR_CAST(SdrPathObj,pObj);
             if (pPts!=NULL && pPath!=NULL) {
                 pPts->ForceSort();
@@ -206,7 +206,7 @@ void SdrPolyEditView::SetMarkedSegmentsKind(SdrPathSegmentKind eKind)
             nMarkNum--;
             SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
             SdrUShortCont* pPts=pM->GetMarkedPoints();
-            SdrObject* pObj=pM->GetObj();
+            SdrObject* pObj=pM->GetMarkedSdrObj();
             SdrPathObj* pPath=PTR_CAST(SdrPathObj,pObj);
             if (pPts!=NULL && pPath!=NULL) {
                 pPts->ForceSort();
@@ -248,7 +248,7 @@ void SdrPolyEditView::DeleteMarkedPoints()
             nMarkNum--;
             SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
             SdrUShortCont* pPts=pM->GetMarkedPoints();
-            SdrObject* pObj=pM->GetObj();
+            SdrObject* pObj=pM->GetMarkedSdrObj();
             BOOL bDel=FALSE;
             if (pPts!=NULL) {
                 pPts->ForceSort();
@@ -304,7 +304,7 @@ void SdrPolyEditView::RipUpAtMarkedPoints()
             nMarkNum--;
             SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
             SdrUShortCont* pPts=pM->GetMarkedPoints();
-            SdrObject* pObj=pM->GetObj();
+            SdrObject* pObj=pM->GetMarkedSdrObj();
             if (pPts!=NULL) {
                 pPts->ForceSort();
                 AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj));
@@ -351,7 +351,7 @@ BOOL SdrPolyEditView::IsRipUpAtMarkedPointsPossible() const
     ULONG nMarkAnz=GetMarkedObjectCount();
     for (ULONG nMarkNum=0; nMarkNum<nMarkAnz && !bRet; nMarkNum++) {
         SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
-        SdrObject* pObj=pM->GetObj();
+        SdrObject* pObj=pM->GetMarkedSdrObj();
         SdrUShortCont* pPts=pM->GetMarkedPoints();
         ULONG nMarkPntAnz=pPts!=NULL ? pPts->GetCount() : 0;
         if (pPts!=NULL && nMarkPntAnz!=0 && pObj!=NULL && pObj->ISA(SdrPathObj)) {
@@ -380,7 +380,7 @@ BOOL SdrPolyEditView::IsOpenCloseMarkedObjectsPossible() const
     ULONG nMarkAnz=GetMarkedObjectCount();
     for (ULONG nm=0; nm<nMarkAnz && !bRet; nm++) {
         SdrMark* pM=GetSdrMarkByIndex(nm);
-        SdrObject* pO=pM->GetObj();
+        SdrObject* pO=pM->GetMarkedSdrObj();
         if (pO->ISA(SdrPathObj)) {
             const XPolyPolygon& rXPP=((SdrPathObj*)pO)->GetPathPoly();
             USHORT nPolyAnz=rXPP.Count();
@@ -403,7 +403,7 @@ SdrObjClosedKind SdrPolyEditView::GetMarkedObjectsClosedState() const
     ULONG nMarkAnz=GetMarkedObjectCount();
     for (ULONG nm=0; nm<nMarkAnz && (!bOpen || !bClosed); nm++) {
         SdrMark* pM=GetSdrMarkByIndex(nm);
-        SdrObject* pO=pM->GetObj();
+        SdrObject* pO=pM->GetMarkedSdrObj();
         if (pO->ISA(SdrPathObj)) {
             const XPolyPolygon& rXPP=((SdrPathObj*)pO)->GetPathPoly();
             if (rXPP.Count()==1) { // es muss genau 1 Polygon drin sein!
@@ -433,7 +433,7 @@ void SdrPolyEditView::CloseMarkedObjects(BOOL bToggle, BOOL bOpen, long nOpenDis
         ULONG nMarkAnz=GetMarkedObjectCount();
         for (ULONG nm=0; nm<nMarkAnz; nm++) {
             SdrMark* pM=GetSdrMarkByIndex(nm);
-            SdrObject* pO=pM->GetObj();
+            SdrObject* pO=pM->GetMarkedSdrObj();
             BOOL bClosed=pO->IsClosedObj();
             if (pO->IsPolyObj() && (bClosed==bOpen) || bToggle) {
                 AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pO));
@@ -466,7 +466,7 @@ void SdrPolyEditView::ImpTransformMarkedPoints(PPolyTrFunc pTrFunc, const void* 
     ULONG nMarkAnz=GetMarkedObjectCount();
     for (ULONG nm=0; nm<nMarkAnz; nm++) {
         SdrMark* pM=GetSdrMarkByIndex(nm);
-        SdrObject* pObj=pM->GetObj();
+        SdrObject* pObj=pM->GetMarkedSdrObj();
         const SdrUShortCont* pPts=pM->GetMarkedPoints();
         Point aPvOfs(pM->GetPageView()->GetOffset());
         ULONG nPtAnz=pPts==NULL ? 0 : pPts->GetCount();

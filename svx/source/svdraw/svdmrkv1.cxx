@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdmrkv1.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:40:05 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:56:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@ BOOL SdrMarkView::HasMarkablePoints() const
         if (nMarkAnz<=nFrameHandlesLimit) {
             for (ULONG nMarkNum=0; nMarkNum<nMarkAnz && !bRet; nMarkNum++) {
                 const SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
-                const SdrObject* pObj=pM->GetObj();
+                const SdrObject* pObj=pM->GetMarkedSdrObj();
                 bRet=pObj->IsPolyObj();
             }
         }
@@ -81,7 +81,7 @@ ULONG SdrMarkView::GetMarkablePointCount() const
         if (nMarkAnz<=nFrameHandlesLimit) {
             for (ULONG nMarkNum=0; nMarkNum<nMarkAnz; nMarkNum++) {
                 const SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
-                const SdrObject* pObj=pM->GetObj();
+                const SdrObject* pObj=pM->GetMarkedSdrObj();
                 if (pObj->IsPolyObj()) {
                     nAnz+=pObj->GetPointCount();
                 }
@@ -385,7 +385,7 @@ void SdrMarkView::UndirtyMrkPnt() const
     ULONG nMarkAnz=GetMarkedObjectCount();
     for (ULONG nMarkNum=0; nMarkNum<nMarkAnz; nMarkNum++) {
         SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
-        const SdrObject* pObj=pM->GetObj();
+        const SdrObject* pObj=pM->GetMarkedSdrObj();
         // PolyPoints
         SdrUShortCont* pPts=pM->GetMarkedPoints();
         if (pPts!=NULL) {
@@ -452,7 +452,7 @@ BOOL SdrMarkView::HasMarkableGluePoints() const
         ULONG nMarkAnz=GetMarkedObjectCount();
         for (ULONG nMarkNum=0; nMarkNum<nMarkAnz && !bRet; nMarkNum++) {
             const SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
-            const SdrObject* pObj=pM->GetObj();
+            const SdrObject* pObj=pM->GetMarkedSdrObj();
             const SdrGluePointList* pGPL=pObj->GetGluePointList();
 
             // #i38892#
@@ -479,7 +479,7 @@ ULONG SdrMarkView::GetMarkableGluePointCount() const
         ULONG nMarkAnz=GetMarkedObjectCount();
         for (ULONG nMarkNum=0; nMarkNum<nMarkAnz; nMarkNum++) {
             const SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
-            const SdrObject* pObj=pM->GetObj();
+            const SdrObject* pObj=pM->GetMarkedSdrObj();
             const SdrGluePointList* pGPL=pObj->GetGluePointList();
 
             // #i38892#
@@ -533,7 +533,7 @@ BOOL SdrMarkView::MarkGluePoints(const Rectangle* pRect, BOOL bUnmark)
     ULONG nMarkAnz=GetMarkedObjectCount();
     for (ULONG nMarkNum=0; nMarkNum<nMarkAnz; nMarkNum++) {
         SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
-        const SdrObject* pObj=pM->GetObj();
+        const SdrObject* pObj=pM->GetMarkedSdrObj();
         const SdrPageView* pPV=pM->GetPageView();
         const SdrGluePointList* pGPL=pObj->GetGluePointList();
         SdrUShortCont* pPts=pM->GetMarkedGluePoints();
@@ -610,7 +610,7 @@ BOOL SdrMarkView::PickGluePoint(const Point& rPnt, SdrObject*& rpObj, USHORT& rn
     while (bBack ? nMarkNum<nMarkAnz : nMarkNum>0) {
         if (!bBack) nMarkNum--;
         const SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
-        SdrObject* pObj=pM->GetObj();
+        SdrObject* pObj=pM->GetMarkedSdrObj();
         SdrPageView* pPV=pM->GetPageView();
         const SdrGluePointList* pGPL=pObj->GetGluePointList();
         if (pGPL!=NULL) {
