@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drwtxtex.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-09 09:56:10 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:43:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -488,7 +488,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         case SID_TEXTDIRECTION_TOP_TO_BOTTOM:
             // Shellwechsel!
             {
-                SdrObject* pTmpObj = pSdrView->GetMarkedObjectList().GetMark(0)->GetObj();
+                SdrObject* pTmpObj = pSdrView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
                 SdrPageView* pTmpPV = pSdrView->GetPageViewPvNum(0);
                 SdrView* pTmpView = pSdrView;
 
@@ -513,7 +513,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         case SID_ATTR_PARA_LEFT_TO_RIGHT:
         case SID_ATTR_PARA_RIGHT_TO_LEFT:
         {
-            SdrObject* pTmpObj = pSdrView->GetMarkedObjectList().GetMark(0)->GetObj();
+            SdrObject* pTmpObj = pSdrView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
             SdrPageView* pTmpPV = pSdrView->GetPageViewPvNum(0);
             SdrView* pTmpView = pSdrView;
 
