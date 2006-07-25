@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fews.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-27 14:35:04 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:34:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -596,7 +596,7 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const String &rTxt, const 
                 {
                     for ( USHORT i = 0; i < rMrkList.GetMarkCount(); ++i )
                     {
-                        SdrObject* pDrawObj = rMrkList.GetMark(i)->GetObj();
+                        SdrObject* pDrawObj = rMrkList.GetMark(i)->GetMarkedSdrObj();
                         aDrawObjs.push_back( pDrawObj );
                     }
                 }
@@ -1287,7 +1287,7 @@ BOOL SwFEShell::IsFrmVertical(BOOL bEnvironment, BOOL& bRTL) const
         if( rMrkList.GetMarkCount() != 1 )
             return bVert;
 
-        SdrObject* pObj = rMrkList.GetMark( 0 )->GetObj();
+        SdrObject* pObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
         // --> OD 2006-01-06 #123831# - make code robust:
         if ( !pObj )
         {
