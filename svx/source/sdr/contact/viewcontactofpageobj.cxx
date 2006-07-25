@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontactofpageobj.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:27:54 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:53:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -379,7 +379,7 @@ namespace sdr
             if(mbIsPainting)
             {
                 // Paint a replacement object
-                Rectangle aNewRectangle = GetPageRectangle();
+                const Rectangle aNewRectangle(GetPageRectangle());
                 bRetval |= PaintPageReplacement(rDisplayInfo, aNewRectangle, rAssociatedVOC);
                 rPaintRectangle.Union(aNewRectangle);
             }
@@ -392,7 +392,7 @@ namespace sdr
                     mbIsPainting = sal_True;
 
                     // Paint a replacement object.
-                    Rectangle aNewRectangle (GetPageRectangle());
+                    const Rectangle aNewRectangle(GetPageRectangle());
                     bRetval |= PaintPageContents(rDisplayInfo, aNewRectangle, rAssociatedVOC);
                     rPaintRectangle.Union(aNewRectangle);
 
@@ -404,7 +404,8 @@ namespace sdr
             // paint frame, but not when printing and no page available
             if(!(rDisplayInfo.OutputToPrinter() && !pPage))
             {
-                Rectangle aNewRectangle;
+                // #i54989# fill aNewRectangle before usage
+                const Rectangle aNewRectangle(GetPageRectangle());
                 bRetval |= PaintPageBorder(rDisplayInfo, aNewRectangle, rAssociatedVOC);
                 rPaintRectangle.Union(aNewRectangle);
             }
