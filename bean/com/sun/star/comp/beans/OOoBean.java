@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOoBean.java,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:02:03 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 07:57:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1336,8 +1336,6 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
      */
     public void paint( java.awt.Graphics aGraphics )
     {
-        // TBD
-        aGraphics.drawString( "empty", 10, 10 );
     }
 
     /** Adds a single argument to an array of arguments.
