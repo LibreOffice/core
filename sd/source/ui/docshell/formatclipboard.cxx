@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formatclipboard.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:30:53 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:31:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,7 +147,7 @@ void SdFormatClipboard::Copy( ::sd::View& rDrawView, bool bPersistentCopy )
         BOOL bOnlyHardAttr = FALSE;
         m_pItemSet = new SfxItemSet( rDrawView.GetAttrFromMarked(bOnlyHardAttr) );
 
-        SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
+        SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
         m_nType_Inventor = pObj->GetObjInventor();
         m_nType_Identifier = pObj->GetObjIdentifier();
     }
@@ -172,7 +172,7 @@ void SdFormatClipboard::Paste( ::sd::View& rDrawView
             bWrongTargetType = true;
         else
         {
-            pObj = rMarkList.GetMark(0)->GetObj();
+            pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
             if( pObj && pObj->GetStyleSheet() )
                 bWrongTargetType = !this->HasContentForThisType( pObj->GetObjInventor(), pObj->GetObjIdentifier() );
         }
