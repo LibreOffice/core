@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layerexport.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:19:52 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 09:25:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -333,74 +333,4 @@ namespace xmloff
 //.........................................................................
 
 #endif // _XMLOFF_FORMS_LAYEREXPORT_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.16.34.1  2005/11/03 17:47:00  cl
- *  warning free code changes for unxlngi6
- *
- *  Revision 1.16  2005/09/09 14:13:10  rt
- *  INTEGRATION: CWS ooo19126 (1.15.78); FILE MERGED
- *  2005/09/05 14:39:01 rt 1.15.78.1: #i54170# Change license header: remove SISSL
- *
- *  Revision 1.15.78.1  2005/09/05 14:39:01  rt
- *  #i54170# Change license header: remove SISSL
- *
- *  Revision 1.15  2005/04/06 09:45:27  hr
- *  INTEGRATION: CWS dba29 (1.14.2); FILE MERGED
- *  2005/03/31 07:08:01 fs 1.14.2.1: #i46288# implCheckPage renamed to impl_isFormPageContainingForms - if this were the original name, #i46288# would perhaps have been prevented :-
- *
- *  Revision 1.14.2.1  2005/03/31 07:08:01  fs
- *  #i46288# implCheckPage renamed to impl_isFormPageContainingForms - if this were the original name, #i46288# would perhaps have been prevented :-
- *
- *  Revision 1.14  2005/03/23 11:25:33  vg
- *  INTEGRATION: CWS eforms4 (1.13.430); FILE MERGED
- *  2004/12/13 17:27:33 fs 1.13.430.1: #i36597# +exportXForms/pageContainsForms/documentContainsXForms
- *
- *  Revision 1.13.430.1  2004/12/13 17:27:33  fs
- *  #i36597# +exportXForms/pageContainsForms/documentContainsXForms
- *
- *  Revision 1.13  2002/10/25 08:00:10  fs
- *  #104402# now exporting the style of a grid column (Align/formatting) as style
- *
- *  Revision 1.12  2002/09/25 12:04:19  fs
- *  #103597# +excludeFromExport/m_aIgnoreList
- *
- *  Revision 1.11  2001/05/29 15:37:44  fs
- *  #86712# no explicit dtor anymore
- *
- *  Revision 1.10  2001/05/28 14:59:18  fs
- *  #86712# added control number style related functionality
- *
- *  Revision 1.9  2001/02/01 09:46:47  fs
- *  no own style handling anymore - the shape exporter is responsible for our styles now
- *
- *  Revision 1.8  2001/01/02 15:58:22  fs
- *  event ex- & import
- *
- *  Revision 1.7  2000/12/19 12:13:57  fs
- *  some changes ... now the exported styles are XSL conform
- *
- *  Revision 1.6  2000/12/18 15:14:35  fs
- *  some changes ... now exporting/importing styles
- *
- *  Revision 1.5  2000/12/13 10:40:15  fs
- *  new import related implementations - at this version, we should be able to import everything we export (which is all except events and styles)
- *
- *  Revision 1.4  2000/12/06 17:28:05  fs
- *  changes for the formlayer import - still under construction
- *
- *  Revision 1.3  2000/12/03 10:57:06  fs
- *  some changes to support more than one page to be examined/exported
- *
- *  Revision 1.2  2000/11/19 15:41:32  fs
- *  extended the export capabilities - generic controls / grid columns / generic properties / some missing form properties
- *
- *  Revision 1.1  2000/11/17 19:02:39  fs
- *  initial checkin - export and/or import the applications form layer
- *
- *
- *  Revision 1.0 17.11.00 17:21:00  fs
- ************************************************************************/
 
