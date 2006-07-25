@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xepivot.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:00:39 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 09:57:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1436,8 +1436,8 @@ void XclExpPivotTable::Finalize()
     maPTInfo.mnPageFields = static_cast< sal_uInt16 >( maPageFields.size() );
     maPTInfo.mnDataFields = static_cast< sal_uInt16 >( maDataFields.size() );
 
-    maPTExtInfo.mnPagePerRow = maPTInfo.mnPageFields ? 1 : 0;
-    maPTExtInfo.mnPagePerCol = maPTInfo.mnPageFields;
+    maPTExtInfo.mnPagePerRow = maPTInfo.mnPageFields;
+    maPTExtInfo.mnPagePerCol = (maPTInfo.mnPageFields > 0) ? 1 : 0;
 
     // subtotal items
     for( size_t nPos = 0, nSize = maFieldList.Size(); nPos < nSize; ++nPos )
