@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drtxtob2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:48:07 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:25:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -236,7 +236,7 @@ void ScDrawTextObjectBar::ExecFormText(SfxRequest& rReq)
                                             GetChildWindow(nId)->GetWindow());
 
             pDlg->CreateStdFormObj(*pDrView, *pDrView->GetPageViewPvNum(0),
-                                    rSet, *rMarkList.GetMark(0)->GetObj(),
+                                    rSet, *rMarkList.GetMark(0)->GetMarkedSdrObj(),
                                    ((const XFormTextStdFormItem*) pItem)->
                                    GetValue());
         }
@@ -258,7 +258,7 @@ void ScDrawTextObjectBar::GetFormTextState(SfxItemSet& rSet)
         pDlg = (SvxFontWorkDialog*)(pViewFrm->GetChildWindow(nId)->GetWindow());
 
     if ( rMarkList.GetMarkCount() == 1 )
-        pObj = rMarkList.GetMark(0)->GetObj();
+        pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
     if ( pObj == NULL || !pObj->ISA(SdrTextObj) ||
         !((SdrTextObj*) pObj)->HasText() )
