@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgedfunc.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:14:14 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:59:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -468,7 +468,7 @@ BOOL DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
         if(rMarkList.GetMarkCount() == 1)
         {
             SdrMark* pMark = rMarkList.GetMark(0);
-            SdrObject* pObj = pMark->GetObj();
+            SdrObject* pObj = pMark->GetMarkedSdrObj();
         }
 
         if ( !pView->AreObjectsMarked() )
@@ -638,7 +638,7 @@ BOOL DlgEdFuncSelect::MouseButtonUp( const MouseEvent& rMEvt )
 //          if (rMarkList.GetMarkCount() == 1)
 //          {
 //              SdrMark* pMark = rMarkList.GetMark(0);
-//              SdrObject* pObj = pMark->GetObj();
+//              SdrObject* pObj = pMark->GetMarkedSdrObj();
 //
 //              // edit objects here
 //          }
