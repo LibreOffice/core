@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuconstr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:49:29 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:25:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -363,7 +363,7 @@ BOOL __EXPORT FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
             if (rMarkList.GetMarkCount() == 1)
             {
                 SdrMark* pMark = rMarkList.GetMark(0);
-                SdrObject* pObj = pMark->GetObj();
+                SdrObject* pObj = pMark->GetMarkedSdrObj();
 
                 //  #49458# bei Uno-Controls nicht in Textmodus
                 if ( pObj->ISA(SdrTextObj) && !pObj->ISA(SdrUnoObj) )
