@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews4.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-07 10:13:46 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:48:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -244,7 +244,7 @@ BOOL DrawViewShell::KeyInput (const KeyEvent& rKEvt, ::sd::Window* pWin)
                 SdrMark* pMark = rMarkList.GetMark(0);
 
                 // remember which object was the text in edit mode
-                SdrObject* pOldObj = pMark->GetObj();
+                SdrObject* pOldObj = pMark->GetMarkedSdrObj();
 
                 // end text edit now
                 GetView()->EndTextEdit();
@@ -683,7 +683,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                 if (pDrView->AreObjectsMarked() &&
                     pDrView->GetMarkedObjectList().GetMarkCount() == 1 )
                 {
-                    SdrObject* pObj = pDrView->GetMarkedObjectList().GetMark(0)->GetObj();
+                    SdrObject* pObj = pDrView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
 
                     if( HasCurrentFunction(SID_BEZIER_EDIT) && pObj->ISA(SdrPathObj) )
                     {
@@ -827,7 +827,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                 else if (pDrView->AreObjectsMarked() &&
                     pDrView->GetMarkedObjectList().GetMarkCount() > 1 )
                 {
-                    // SdrObject* pObj = pDrView->GetMarkedObjectList().GetMark(0)->GetObj();
+                    // SdrObject* pObj = pDrView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
 
                     nSdResId = bGraphicShell ? RID_GRAPHIC_MULTISELECTION_POPUP :
                                                 RID_DRAW_MULTISELECTION_POPUP;
