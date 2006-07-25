@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwshb.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 15:16:42 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:27:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -287,7 +287,7 @@ ErrCode __EXPORT ScTabViewShell::DoVerb(long nVerb)
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
     if (rMarkList.GetMarkCount() == 1)
     {
-        pObj = rMarkList.GetMark(0)->GetObj();
+        pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
         if (pObj->GetObjIdentifier() == OBJ_OLE2)
             pOle2Obj = (SdrOle2Obj*) pObj;
         else if (pObj->GetObjIdentifier() == OBJ_GRAF)
@@ -391,7 +391,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
                         if (rMarkList.GetMarkCount() == 1)
                         {
                             SdrMark* pMark = rMarkList.GetMark(0);
-                            SdrObject* pObj = pMark->GetObj();
+                            SdrObject* pObj = pMark->GetMarkedSdrObj();
 
                             UINT16 nSdrObjKind = pObj->GetObjIdentifier();
 
