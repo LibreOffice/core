@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoautopilot.inl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:33:37 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 09:46:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,19 +139,4 @@ void OUnoAutoPilot<TYPE, SERVICEINFO>::implInitialize(const com::sun::star::uno:
     OUnoAutoPilot_Base::implInitialize(_rValue);
 }
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.2.596.1  2005/09/05 12:59:03  rt
- *  #i54170# Change license header: remove SISSL
- *
- *  Revision 1.2  2001/03/06 10:06:40  obo
- *  #65293# parse error linux
- *
- *  Revision 1.1  2001/02/21 09:24:52  fs
- *  initial checkin - form control auto pilots
- *
- *
- *  Revision 1.0 14.02.01 10:18:07  fs
- ************************************************************************/
 
