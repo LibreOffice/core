@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:46:14 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:56:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1233,6 +1233,9 @@ void SdrPage::operator=(const SdrPage& rSrcPage)
         pBackgroundObj = rSrcPage.pBackgroundObj->Clone();
           pBackgroundObj->SetPage( this );
         pBackgroundObj->SetModel( pModel );
+
+        // #i62000# for single-page MPBGO, force no line
+        pBackgroundObj->SetMergedItem(XLineStyleItem(XLINE_NONE));
     }
 
     // Now copy the contained obejcts (by cloning them)
@@ -1720,8 +1723,13 @@ void SdrPage::SetBackgroundObj( SdrObject* pObj )
         pObj->SetPage( this );
         pObj->SetModel( pModel );
         pObj->SetLayer( 1 );        // Nothing known about the backgroundlayer...
+
+        // #i62000# for single-page MPBGO, force no line
+        pObj->SetMergedItem(XLineStyleItem(XLINE_NONE));
     }
-    delete pBackgroundObj, pBackgroundObj = pObj;
+
+    delete pBackgroundObj;
+    pBackgroundObj = pObj;
 }
 
 void SdrPage::SetInserted( FASTBOOL bIns )
