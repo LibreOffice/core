@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventimport.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:17:54 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 09:23:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,24 +108,4 @@ namespace xmloff
 //.........................................................................
 
 #endif // _XMLOFF_FORMS_EVENTIMPORT_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.2.34.1  2005/11/03 17:46:59  cl
- *  warning free code changes for unxlngi6
- *
- *  Revision 1.2  2005/09/09 14:07:41  rt
- *  INTEGRATION: CWS ooo19126 (1.1.646); FILE MERGED
- *  2005/09/05 14:38:57 rt 1.1.646.1: #i54170# Change license header: remove SISSL
- *
- *  Revision 1.1.646.1  2005/09/05 14:38:57  rt
- *  #i54170# Change license header: remove SISSL
- *
- *  Revision 1.1  2001/01/02 15:56:11  fs
- *  initial checkin - helper for importing script events
- *
- *
- *  Revision 1.0 21.12.00 15:18:21  fs
- ************************************************************************/
 
