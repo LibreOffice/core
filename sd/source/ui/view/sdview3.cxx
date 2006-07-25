@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:34:54 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:55:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -462,7 +462,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                         for( ULONG nM = 0; nM < GetMarkedObjectCount(); nM++ )
                         {
                             SdrMark*    pM = GetSdrMarkByIndex( nM );
-                            SdrObject*  pO = pM->GetObj();
+                            SdrObject*  pO = pM->GetMarkedSdrObj();
 
                             if( pO )
                             {
@@ -535,7 +535,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                                 for(a = 0; a < pMarkList->GetMarkCount(); a++)
                                 {
                                     SdrMark* pM = pMarkList->GetMark(a);
-                                    SdrObject* pObj = pM->GetObj()->Clone();
+                                    SdrObject* pObj = pM->GetMarkedSdrObj()->Clone();
 
                                     if(pObj)
                                     {
@@ -553,7 +553,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
 
                                         // #83525#
                                         ImpRememberOrigAndClone* pRem = new ImpRememberOrigAndClone;
-                                        pRem->pOrig = pM->GetObj();
+                                        pRem->pOrig = pM->GetMarkedSdrObj();
                                         pRem->pClone = pObj;
                                         aConnectorContainer.Insert(pRem, CONTAINER_APPEND);
 
