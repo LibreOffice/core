@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Compatibility.xcs,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:12:43 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:41:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,12 @@
                 <info><desc>Use OpenOffice.org 1.1 text wrapping</desc></info>
                 <value>false</value>
             </prop>
-            <prop oor:name="ConsiderWrappingStyle" oor:type="xs:boolean"><info><desc>Consider wrapping style when positioning objects</desc></info>
+            <prop oor:name="ConsiderWrappingStyle" oor:type="xs:boolean">
+                <info><desc>Consider wrapping style when positioning objects</desc></info>
+                <value>false</value>
+            </prop>
+            <prop oor:name="CutExpandedUnderline" oor:type="xs:boolean">
+                <info><desc>Do not underline spacing behind last character of an expanded portion</desc></info>
                 <value>false</value>
             </prop>
         </group>
