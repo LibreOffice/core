@@ -4,9 +4,9 @@
  *
  *  $RCSfile: seltrans.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:10:57 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:24:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,7 +111,7 @@ ScSelectionTransferObj* ScSelectionTransferObj::CreateFromView( ScTabView* pView
             {
                 if ( nMarkCount == 1 )
                 {
-                    SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
+                    SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
                     UINT16 nSdrObjKind = pObj->GetObjIdentifier();
 
                     if ( nSdrObjKind == OBJ_GRAF )
