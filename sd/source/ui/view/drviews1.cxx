@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 11:24:36 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:48:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -239,7 +239,7 @@ void DrawViewShell::SelectionHasChanged (void)
         if (rMarkList.GetMarkCount() == 1)
         {
             SdrMark* pMark = rMarkList.GetMark(0);
-            SdrObject* pObj = pMark->GetObj();
+            SdrObject* pObj = pMark->GetMarkedSdrObj();
 
             UINT32 nInv = pObj->GetObjInventor();
             UINT16 nSdrObjKind = pObj->GetObjIdentifier();
@@ -834,7 +834,7 @@ ErrCode DrawViewShell::DoVerb(long nVerb)
         if (rMarkList.GetMarkCount() == 1)
         {
             SdrMark* pMark = rMarkList.GetMark(0);
-            SdrObject* pObj = pMark->GetObj();
+            SdrObject* pObj = pMark->GetMarkedSdrObj();
 
             UINT32 nInv = pObj->GetObjInventor();
             UINT16 nSdrObjKind = pObj->GetObjIdentifier();
