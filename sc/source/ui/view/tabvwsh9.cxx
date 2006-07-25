@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsh9.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 15:14:54 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:27:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -206,7 +206,7 @@ void ScTabViewShell::ExecImageMap( SfxRequest& rReq )
                     {
                         const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
                         if ( rMarkList.GetMarkCount() == 1 )
-                            UpdateIMap( rMarkList.GetMark( 0 )->GetObj() );
+                            UpdateIMap( rMarkList.GetMark( 0 )->GetMarkedSdrObj() );
                     }
                 }
             }
@@ -222,7 +222,7 @@ void ScTabViewShell::ExecImageMap( SfxRequest& rReq )
 
             if ( pMark )
             {
-                SdrObject*  pSdrObj = pMark->GetObj();
+                SdrObject*  pSdrObj = pMark->GetMarkedSdrObj();
                 SvxIMapDlg* pDlg = ScGetIMapDlg();
 
                 if ( ScIMapDlgGetObj(pDlg) == (void*) pSdrObj )
@@ -285,7 +285,7 @@ void ScTabViewShell::GetImageMapState( SfxItemSet& rSet )
                         const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
                         if ( rMarkList.GetMarkCount() == 1 )
                             if ( ScIMapDlgGetObj(ScGetIMapDlg()) ==
-                                        (void*) rMarkList.GetMark(0)->GetObj() )
+                                        (void*) rMarkList.GetMark(0)->GetMarkedSdrObj() )
                                 bDisable = FALSE;
                     }
 
