@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.159 $
+ *  $Revision: 1.160 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 13:30:58 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:51:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1167,7 +1167,7 @@ End
 
 File gid_File_Oo_Office_Compatibility_Xcs
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
     Name = "/registry/schema/org/openoffice/Office/Compatibility.xcs";
 End
@@ -2533,7 +2533,7 @@ File gid_File_App_Bundle
     Styles = (ARCHIVE,USE_INTERNAL_RIGHTS);
 End
 #endif
-  
+
 #ifdef MACOSX
 File gid_File_Icns_Bundle
     ARCHIVE_TXT_FILE_BODY;
