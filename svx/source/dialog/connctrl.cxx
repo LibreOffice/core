@@ -4,9 +4,9 @@
  *
  *  $RCSfile: connctrl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:02:32 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:49:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,12 +112,12 @@ void SvxXConnectionPreview::Construct()
     if( nMarkCount >= 1 )
     {
         BOOL bFound = FALSE;
-        const SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
+        const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
 
         for( USHORT i = 0; i < nMarkCount && !bFound; i++ )
         {
-            pObj = rMarkList.GetMark( i )->GetObj();
+            pObj = rMarkList.GetMark( i )->GetMarkedSdrObj();
             UINT32 nInv = pObj->GetObjInventor();
             UINT16 nId = pObj->GetObjIdentifier();
             if( nInv == SdrInventor && nId == OBJ_EDGE )
