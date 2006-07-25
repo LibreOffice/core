@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svddrgmt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:35:05 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:54:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,18 @@ SdrPageView* SdrDragMethod::GetDragPV() const
     if (rView.pDragHdl!=NULL) pPV=rView.pDragHdl->GetPageView();
     if (pPV==NULL) pPV=rView.pMarkedPV;
     return pPV;
+}
+
+// #i58950# also moved constructor implementation to cxx
+SdrDragMethod::SdrDragMethod(SdrDragView& rNewView)
+:   rView(rNewView),
+    bMoveOnly(FALSE)
+{
+}
+
+// #i58950# virtual destructor was missing
+SdrDragMethod::~SdrDragMethod()
+{
 }
 
 void SdrDragMethod::Draw() const
@@ -739,7 +751,7 @@ void SdrDragMove::Mov(const Point& rNoSnapPnt_)
                 const SdrUShortCont* pPts=pM->GetMarkedGluePoints();
                 ULONG nPtAnz=pPts==NULL ? 0 : pPts->GetCount();
                 if (nPtAnz!=0) {
-                    const SdrObject* pObj=pM->GetObj();
+                    const SdrObject* pObj=pM->GetMarkedSdrObj();
                     //const SdrPageView* pPV=pM->GetPageView();
                     const SdrGluePointList* pGPL=pObj->GetGluePointList();
                     Rectangle aBound(pObj->GetCurrentBoundRect());
@@ -1490,7 +1502,7 @@ void SdrDragGradient::Mov(const Point& rPnt)
         }
 
         // new state
-        pIAOHandle->FromIAOToItem(rView.GetMarkedObjectList().GetMark(0)->GetObj(), FALSE, FALSE);
+        pIAOHandle->FromIAOToItem(rView.GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj(), FALSE, FALSE);
     }
 }
 
@@ -1501,7 +1513,7 @@ FASTBOOL SdrDragGradient::End(FASTBOOL /*bCopy*/)
     Ref2() = pIAOHandle->Get2ndPos();
 
     // new state
-    pIAOHandle->FromIAOToItem(rView.GetMarkedObjectList().GetMark(0)->GetObj(), TRUE, TRUE);
+    pIAOHandle->FromIAOToItem(rView.GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj(), TRUE, TRUE);
 
     return TRUE;
 }
@@ -1517,7 +1529,7 @@ void SdrDragGradient::Brk()
         pIAOHandle->GetColorHdl2()->SetPos(DragStat().Ref2());
 
     // new state
-    pIAOHandle->FromIAOToItem(rView.GetMarkedObjectList().GetMark(0)->GetObj(), TRUE, FALSE);
+    pIAOHandle->FromIAOToItem(rView.GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj(), TRUE, FALSE);
 }
 
 Pointer SdrDragGradient::GetPointer() const
@@ -1925,7 +1937,7 @@ FASTBOOL SdrDragCrook::End(FASTBOOL bCopy)
                 ULONG nMarkAnz=rView.GetMarkedObjectList().GetMarkCount();
                 for (ULONG nm=0; nm<nMarkAnz; nm++) {
                     SdrMark* pM=rView.GetMarkedObjectList().GetMark(nm);
-                    SdrObject* pO=pM->GetObj();
+                    SdrObject* pO=pM->GetMarkedSdrObj();
                     Point aCtr0(pO->GetSnapRect().Center());
                     Point aCtr1(aCtr0);
                     if (bVertical) ResizePoint(aCtr1,aCenter-pM->GetPageView()->GetOffset(),aFact1,aFact);
