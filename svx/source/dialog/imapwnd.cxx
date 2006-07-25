@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imapwnd.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:16:29 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:49:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -193,20 +193,38 @@ void IMapWindow::SetImageMap( const ImageMap& rImageMap )
 
 void IMapWindow::ReplaceImageMap( const ImageMap& rImageMap, BOOL /*bScaleToGraphic*/ )
 {
-    SdrPage*    pPage = (SdrPage*) pModel->GetPage( 0 );
-    long        nCount = rImageMap.GetIMapObjectCount();
-
-    // zuerst alle Zeichenobjekte loeschen
+    SdrPage* pPage = 0;
     aIMap = rImageMap;
-    pPage->Clear();
 
-    // neue Zeichenobjekte generieren
-    for ( long i = nCount - 1; i > -1; i-- )
+    if(GetSdrModel())
     {
-        SdrObject* pNewObj = CreateObj( rImageMap.GetIMapObject( (USHORT) i ) );
+        // try to access page
+        pPage = GetSdrModel()->GetPage(0L);
+    }
+
+    if(pPage)
+    {
+        // clear all draw objects
+        pPage->Clear();
+    }
+
+    if(GetSdrView())
+    {
+        // #i63762# reset selection at view
+        GetSdrView()->UnmarkAllObj();
+    }
+
+    // create new drawing objects
+    const sal_Int32 nCount(rImageMap.GetIMapObjectCount());
+
+    for ( sal_Int32 i(nCount - 1L); i > -1L; i-- )
+    {
+        SdrObject* pNewObj = CreateObj( rImageMap.GetIMapObject( (sal_uInt32) i ) );
 
         if ( pNewObj )
+        {
             pPage->InsertObject( pNewObj );
+        }
     }
 }
 
