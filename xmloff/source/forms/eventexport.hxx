@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventexport.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:07:09 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 09:23:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,17 +103,4 @@ namespace xmloff
 //.........................................................................
 
 #endif // _XMLOFF_FORMS_EVENTEXPORT_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.1.646.1  2005/09/05 14:38:57  rt
- *  #i54170# Change license header: remove SISSL
- *
- *  Revision 1.1  2001/01/02 15:55:40  fs
- *  initial checkin - helper for exporting script events
- *
- *
- *  Revision 1.0 21.12.00 12:14:08  fs
- ************************************************************************/
 
