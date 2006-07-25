@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drformsh.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:49:24 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:43:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,7 +143,7 @@ void SwDrawFormShell::Execute(SfxRequest &rReq)
             const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
             if (rMarkList.GetMark(0))
             {
-                SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, rMarkList.GetMark(0)->GetObj());
+                SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, rMarkList.GetMark(0)->GetMarkedSdrObj());
                 if (pUnoCtrl && FmFormInventor == pUnoCtrl->GetObjInventor())
                 {
                     if(bConvertToText)
@@ -228,7 +228,7 @@ void SwDrawFormShell::GetState(SfxItemSet& rSet)
                 SvxHyperlinkItem aHLinkItem;
                 if (rMarkList.GetMark(0))
                 {
-                    SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, rMarkList.GetMark(0)->GetObj());
+                    SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, rMarkList.GetMark(0)->GetMarkedSdrObj());
                     if (pUnoCtrl && FmFormInventor == pUnoCtrl->GetObjInventor())
                     {
                         uno::Reference< awt::XControlModel >  xControlModel = pUnoCtrl->GetUnoControlModel();
