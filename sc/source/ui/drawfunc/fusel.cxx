@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:51:28 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:25:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,7 +155,7 @@ BOOL __EXPORT FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
             if( rMarkList.GetMarkCount() == 1 )
             {
-                SdrObject* pObj = rMarkList.GetMark( 0 )->GetObj();
+                SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
                 if( pObj && pObj->ISA( SdrCaptionObj )&& pObj->GetLayer() == SC_LAYER_INTERN)
                 {
                     // move using the valid caption handles for note text box.
@@ -364,7 +364,7 @@ BOOL __EXPORT FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
             if (rMarkList.GetMarkCount() == 1)
             {
                   SdrMark* pMark = rMarkList.GetMark(0);
-                  SdrObject* pObj = pMark->GetObj();
+                  SdrObject* pObj = pMark->GetMarkedSdrObj();
                   FuPoor* pPoor = pViewShell->GetViewData()->GetView()->GetDrawFuncPtr();
                   FuText* pText = static_cast<FuText*>(pPoor);
                 pText->StopDragMode(pObj );
@@ -412,7 +412,7 @@ BOOL __EXPORT FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
             if (rMarkList.GetMarkCount() == 1)
             {
                 SdrMark* pMark = rMarkList.GetMark(0);
-                SdrObject* pObj = pMark->GetObj();
+                SdrObject* pObj = pMark->GetMarkedSdrObj();
 
                 //  #43984# aktivieren nur, wenn die Maus auch (noch) ueber dem
                 //  selektierten Objekt steht
