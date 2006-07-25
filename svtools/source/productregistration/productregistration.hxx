@@ -4,9 +4,9 @@
  *
  *  $RCSfile: productregistration.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:41:20 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 09:48:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,24 +115,4 @@ namespace svt
 //........................................................................
 
 #endif // SVTOOLS_PRODUCTREGISTRATION_HXX
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.2.122.1  2005/09/05 14:54:05  rt
- *  #i54170# Change license header: remove SISSL
- *
- *  Revision 1.2  2005/04/27 11:14:23  obo
- *  INTEGRATION: CWS mhu07 (1.1.2); FILE ADDED
- *  2005/04/26 13:01:10 mhu 1.1.2.1: #i48107# Moved from svtools/source/inc/
- *
- *  Revision 1.1.2.1  2005/04/26 13:01:10  mhu
- *  #i48107# Moved from svtools/source/inc/
- *
- *  Revision 1.1  2001/12/20 13:12:41  fs
- *  initial checkin - UNO service wrapping the product registration
- *
- *
- *  Revision 1.0 19.12.01 14:21:57  fs
- ************************************************************************/
 

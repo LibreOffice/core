@@ -4,9 +4,9 @@
  *
  *  $RCSfile: regoptions.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:45:35 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 09:48:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -480,20 +480,4 @@ namespace svt
 //........................................................................
 }   // namespace svt
 //........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.2.1084.1  2005/09/05 14:52:08  rt
- *  #i54170# Change license header: remove SISSL
- *
- *  Revision 1.2  2001/12/21 08:22:47  fs
- *  #96127# minor changes after reviewing the first implementation
- *
- *  Revision 1.1  2001/12/20 13:11:37  fs
- *  initial checkin - class encapsulating the product registration configuration settings
- *
- *
- *  Revision 1.0 19.12.01 13:48:37  fs
- ************************************************************************/
 
