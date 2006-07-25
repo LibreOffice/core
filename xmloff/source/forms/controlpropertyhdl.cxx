@@ -4,9 +4,9 @@
  *
  *  $RCSfile: controlpropertyhdl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 16:35:40 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 10:16:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -438,66 +438,4 @@ namespace xmloff
 //.........................................................................
 }   // namespace xmloff
 //.........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.13.10.1  2006/06/30 12:00:22  sb
- *  #i66577# Made the code compile (warning-free) on a unxlngi6.pro GCC 4.1.1 Linux box.
- *
- *  Revision 1.13  2006/06/19 18:16:12  hr
- *  INTEGRATION: CWS warnings01 (1.12.34); FILE MERGED
- *  2005/11/16 22:47:08 pl 1.12.34.1: #i55991# removed warnings
- *
- *  Revision 1.12.34.1  2005/11/16 22:47:08  pl
- *  #i55991# removed warnings
- *
- *  Revision 1.12  2005/09/09 14:04:23  rt
- *  INTEGRATION: CWS ooo19126 (1.11.302); FILE MERGED
- *  2005/09/05 14:38:54 rt 1.11.302.1: #i54170# Change license header: remove SISSL
- *
- *  Revision 1.11.302.1  2005/09/05 14:38:54  rt
- *  #i54170# Change license header: remove SISSL
- *
- *  Revision 1.11  2004/07/05 16:06:44  obo
- *  INTEGRATION: CWS frmcontrols04 (1.10.312); FILE MERGED
- *  2004/04/29 13:54:40 fs 1.10.312.1: #i24694# control border color now exported as part of the fo:border attribute
- *
- *  Revision 1.10.312.1  2004/04/29 13:54:40  fs
- *  #i24694# control border color now exported as part of the fo:border attribute
- *
- *  Revision 1.10  2001/07/16 07:34:21  fs
- *  had uninitialized pointers
- *
- *  Revision 1.9  2001/06/29 21:07:14  dvo
- *  #86004# changes sXML_* strings to XML_* tokens
- *
- *  Revision 1.8  2001/06/15 12:35:28  dvo
- *  #86004# changes sXML_* string to XML_* tokens continued
- *
- *  Revision 1.7  2001/06/07 12:27:21  fs
- *  #86096# handler for FontEmphasis/FontRelief / substituted OEnumInt16Handler by XMLConstantsPropertyHandler
- *
- *  Revision 1.6  2001/05/28 15:03:48  fs
- *  #86712# hold the handler as pointer, not as member instance
- *
- *  Revision 1.5  2001/05/15 14:02:13  fs
- *  #86823# changed the handling for control borders
- *
- *  Revision 1.4  2001/02/26 10:28:04  aw
- *  Changed double import/export to use it's own conversion routines
- *  so iots more clear what type is used
- *
- *  Revision 1.3  2000/12/19 12:13:57  fs
- *  some changes ... now the exported styles are XSL conform
- *
- *  Revision 1.2  2000/12/19 08:43:00  fs
- *  no handling for the font with anymore - stored as measure
- *
- *  Revision 1.1  2000/12/18 15:16:04  fs
- *  initial checkin - property handlers / property handler factory
- *
- *
- *  Revision 1.0 14.12.00 10:53:10  fs
- ************************************************************************/
 
