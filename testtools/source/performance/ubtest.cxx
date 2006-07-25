@@ -1,13 +1,37 @@
-/**************************************************************************
-#*
-#*    last change   $Author: vg $ $Date: 2003-04-15 16:42:43 $
-#*    $Revision: 1.4 $
-#*
-#*    $Logfile: $
-#*
-#*    Copyright (c) 1989 - 2000, Star Office GmbH
-#*
-#************************************************************************/
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: ubtest.cxx,v $
+ *
+ *  $Revision: 1.5 $
+ *
+ *  last change: $Author: rt $ $Date: 2006-07-25 09:46:51 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
 
 #include <stdio.h>
 #include <math.h>
@@ -1319,75 +1343,3 @@ void * SAL_CALL component_getFactory(
 }
 }
 
-
-/**************************************************************************
-    $Log: not supported by cvs2svn $
-    Revision 1.2.20.1.14.2  2003/04/10 16:34:30  kso
-    RESYNC: (1.2.20.1-1.3); FILE MERGED
-
-    Revision 1.2.20.1.14.1  2003/04/10 09:20:16  kso
-    #108413# - debug macro unification.
-
-    Revision 1.3  2003/03/27 16:49:18  hr
-    MWS_SRX644: migrate branch mws_srx644 -> HEAD
-
-    Revision 1.2.20.1  2003/02/18 12:28:35  vg
-    INTEGRATION: CWS kso6 (1.2.30); FILE MERGED
-    2003/02/10 16:01:14 kso 1.2.30.1: #105906# - Checked/removed sprintf, strcpy, strcat
-
-    Revision 1.2.30.1  2003/02/10 16:01:14  kso
-    #105906# - Checked/removed sprintf, strcpy, strcat
-
-    Revision 1.2  2001/06/29 14:01:57  dbo
-    osl_executeProcess has changed
-
-    Revision 1.1  2001/05/04 07:05:18  kr
-    moved from grande to openoffice
-
-    Revision 1.16  2001/04/19 12:53:47  kr
-    java in process test now works
-
-    Revision 1.15  2001/03/14 09:55:11  jl
-    #include <osl/time.h> added
-
-    Revision 1.14  2001/03/12 16:23:18  jl
-    OSL_ENSHURE replaced by OSL_ENSURE
-
-    Revision 1.13  2001/01/17 12:38:33  kr
-    include <string>
-
-    Revision 1.12  2000/09/28 10:38:47  jbu
-    iiopbrdg renaming
-
-    Revision 1.11  2000/09/15 13:23:24  jbu
-    now passes unix compiler
-
-    Revision 1.10  2000/09/12 15:41:07  jbu
-    added duration parameter
-
-    Revision 1.8  2000/07/10 09:41:28  dbo
-    *** empty log message ***
-
-    Revision 1.7  2000/06/23 13:52:58  dbo
-    *** empty log message ***
-
-    Revision 1.6  2000/06/15 08:58:08  dbo
-    runtime changes
-
-    Revision 1.5  2000/05/26 15:23:52  dbo
-    misc
-
-    Revision 1.4  2000/05/26 14:15:34  dbo
-    misc
-
-    Revision 1.3  2000/05/25 16:45:00  dbo
-    shifted XPerformanceTest to api
-
-    Revision 1.2  2000/05/23 14:38:45  dbo
-    *** empty log message ***
-
-    Revision 1.1  2000/05/22 12:50:36  dbo
-    new
-
-
-**************************************************************************/
