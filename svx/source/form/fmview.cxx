@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmview.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:59:21 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:52:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -807,7 +807,7 @@ FmFormObj* FmFormView::getMarkedGrid() const
         SdrMark* pMark = rMarkList.GetMark(0);
         if ( pMark )
         {
-            pObj = PTR_CAST(FmFormObj,pMark->GetObj());
+            pObj = PTR_CAST(FmFormObj,pMark->GetMarkedSdrObj());
             if ( pObj )
             {
                 Reference<XServiceInfo> xServInfo(pObj->GetUnoControlModel(),UNO_QUERY);
