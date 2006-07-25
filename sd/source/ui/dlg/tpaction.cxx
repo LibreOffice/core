@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpaction.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:31:53 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:31:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -296,7 +296,7 @@ void SdTPAction::Construct()
         if (rMarkList.GetMarkCount() == 1)
         {
             SdrMark* pMark = rMarkList.GetMark(0);
-            pObj = pMark->GetObj();
+            pObj = pMark->GetMarkedSdrObj();
 
             UINT32 nInv = pObj->GetObjInventor();
             UINT16 nSdrObjKind = pObj->GetObjIdentifier();
