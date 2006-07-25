@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imp_op.hxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:41:19 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 09:59:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -192,7 +192,6 @@ protected:
 
     void                    Window1();
     void                    Formula25( void );              // 0x06     -> excform.cxx
-    void                    RecString( void );              // 0x07, 0x0207
     void                    Row25( void );                  // 0x08
     void                    Bof2( void );                   // 0x09
     void                    Eof( void );                    // 0x0A
