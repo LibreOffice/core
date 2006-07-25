@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undraw.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:19:56 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:35:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -624,7 +624,7 @@ void SwUndoDrawDelete::AddObj( USHORT , SwDrawFrmFmt* pFmt,
                                 const SdrMark& rMark )
 {
     SwUndoGroupObjImpl& rSave = *( pObjArr + pMarkLst->GetMarkCount() );
-    rSave.pObj = rMark.GetObj();
+    rSave.pObj = rMark.GetMarkedSdrObj();
     rSave.pFmt = pFmt;
     ::lcl_SaveAnchor( pFmt, rSave.nNodeIdx );
 
