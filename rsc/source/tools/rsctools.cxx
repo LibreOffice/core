@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rsctools.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:50:49 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 09:36:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,12 +45,6 @@
 #endif
 #include <string.h>
 #include <ctype.h>
-#ifdef MAC
-#include <cursorctl.h>
-#endif
-#ifdef MACOSX
-#include <unxmacxp_protos.h>
-#endif
 
 #include <tools/fsys.hxx>
 
