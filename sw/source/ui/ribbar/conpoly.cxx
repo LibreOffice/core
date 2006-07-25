@@ -4,9 +4,9 @@
  *
  *  $RCSfile: conpoly.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-05 14:51:04 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:41:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,7 +142,7 @@ BOOL ConstPolygon::MouseButtonUp(const MouseEvent& rMEvt)
                 const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
                 if (rMarkList.GetMark(0))
                 {
-                    SdrObject* pMarkedObject = rMarkList.GetMark(0)->GetObj();
+                    SdrObject* pMarkedObject = rMarkList.GetMark(0)->GetMarkedSdrObj();
                     // #127440# - crash report shows that the marked object is not always an SdrPathObj
                     SdrPathObj* pPathObj = dynamic_cast< SdrPathObj*>(pMarkedObject);
                     DBG_ASSERT(pPathObj, "issue #127440# SdrPathObj expected")
