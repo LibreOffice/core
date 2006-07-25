@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:04:02 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:50:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1349,9 +1349,11 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
                     aFmt.SetNumberingType(SVX_NUM_ARABIC);
                 else
                 {
-                    const Font* pFnt = &SwNumRule::GetDefBulletFont();
+                    // --> OD 2006-06-29 #b6440955#
+                    const Font* pFnt = &numfunc::GetDefBulletFont();
                     aFmt.SetBulletFont( pFnt );
-                    aFmt.SetBulletChar( GetBulletChar(nLevel));
+                    aFmt.SetBulletChar( numfunc::GetBulletChar(nLevel));
+                    // <--
                     aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
                 }
                 aNumRule.Set(nLevel, aFmt);
@@ -1367,7 +1369,9 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
         // Zeichenvorlage an die Numerierung haengen
         SwCharFmt* pChrFmt;
         SwDocShell* pDocSh = GetView().GetDocShell();
-        const Font* pFnt = &SwNumRule::GetDefBulletFont();
+        // --> OD 2006-06-29 #b6440955#
+        const Font* pFnt = &numfunc::GetDefBulletFont();
+        // <--
 
         if (bNum)
         {
@@ -1393,7 +1397,9 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
             if (! bNum)
             {
                 aFmt.SetBulletFont( pFnt );
-                aFmt.SetBulletChar( GetBulletChar(nLvl) );
+                // --> OD 2006-06-29 #b6440955#
+                aFmt.SetBulletChar( numfunc::GetBulletChar(nLvl) );
+                // <--
                 aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
             }
 
