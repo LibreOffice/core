@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuline.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:32:32 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:34:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,7 +134,7 @@ void FuLine::DoExecute( SfxRequest& rReq )
         const SdrObject* pObj = NULL;
         const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
         if( rMarkList.GetMarkCount() == 1 )
-            pObj = rMarkList.GetMark(0)->GetObj();
+            pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
         SfxItemSet* pNewAttr = new SfxItemSet( pDoc->GetPool() );
         pView->GetAttributes( *pNewAttr );
