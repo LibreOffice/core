@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MyPersistObject.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:43:17 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 10:01:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -362,28 +362,3 @@ public class MyPersistObject implements XPersistObject, XTypeProvider,
 }   // finish class MyPersistObject
 
 
-
-//$Log: not supported by cvs2svn $
-//Revision 1.2.82.1  2005/09/05 15:31:44  rt
-//#i54170# Change license header: remove SISSL
-//
-//Revision 1.2  2004/03/09 10:18:45  hr
-//INTEGRATION: CWS fwkmerge1 (1.1.8); FILE ADDED
-//2004/02/18 12:57:19 sw 1.1.8.1: #115240#
-//
-//Revision 1.1.8.1  2004/02/18 12:57:19  sw
-//#115240#
-//
-//Revision 1.1.6.1  2004/01/09 18:27:21  hr
-//#i24240#: merge all changes from branch mws_fix645 -> mws_srx645
-//
-//Revision 1.1.4.1  2004/01/06 14:40:54  vg
-//INTEGRATION: CWS fwk03pp1 (1.1.2); FILE ADDED
-//2003/11/20 12:24:03 sw 1.1.2.1: #112812#
-//
-//Revision 1.1.2.1  2003/11/20 12:24:03  sw
-//#112812#
-//
-//Revision 1.1  2002/07/01 14:48:47  sg
-//ADD: initial version
-//
