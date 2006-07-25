@@ -31,7 +31,7 @@
  */
 #ifndef lint
 static
-char rcs_hdr[] = "$Id: free.c,v 1.1.1.1 2000-09-22 15:33:26 hr Exp $";
+char rcs_hdr[] = "$Id: free.c,v 1.2 2006-07-25 10:07:53 rt Exp $";
 #endif
 
 void
@@ -148,59 +148,3 @@ free(cptr)
 
 }
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.1.1.1  1997/09/22 14:51:11  hjs
- * dmake 4.1 orginal sourcen
- *
- * Revision 1.1.1.1  1997/07/15 16:02:26  dvadura
- * dmake gold 4.1.00 initial import
- *
- * Revision 1.1.1.1  1996/10/27 07:30:14  dvadura
- * Dmake 4.1 Initial Import
- *
- * Revision 1.1.1.1  1996/10/24 05:33:14  dvadura
- * Initial import for final release of dmake 4.1
- *
- * Revision 1.1  1994/10/06  17:43:10  dvadura
- * dmake Release Version 4.0, Initial revision
- *
- * Revision 1.1  1994/10/06  03:45:19  dvadura
- * dmake Release Version 4.0, Initial revision
- *
- * Revision 1.1  1992/01/24  03:29:02  dvadura
- * dmake Version 3.8, Initial revision
- *
- * Revision 1.9  90/08/29  21:22:48  cpcahil
- * miscellaneous lint fixes
- *
- * Revision 1.8  90/05/11  00:13:08  cpcahil
- * added copyright statment
- *
- * Revision 1.7  90/02/25  11:00:18  cpcahil
- * added support for malloc chain checking.
- *
- * Revision 1.6  90/02/24  21:50:18  cpcahil
- * lots of lint fixes
- *
- * Revision 1.5  90/02/24  17:29:13  cpcahil
- * changed $Header to $Id so full path wouldnt be included as part of rcs
- * id string
- *
- * Revision 1.4  90/02/24  15:15:32  cpcahil
- * 1. changed ALREADY_FREE errno to NOT_INUSE so that the same errno could
- *    be used by both free and realloc (since it was the same error).
- * 2. fixed coding bug
- *
- * Revision 1.3  90/02/24  14:23:45  cpcahil
- * fixed malloc_warning calls
- *
- * Revision 1.2  90/02/24  13:59:10  cpcahil
- * added function header.
- * Modified calls to malloc_warning/malloc_fatal to use new code error messages
- * Added support for malloc_errno setting of error codes.
- *
- * Revision 1.1  90/02/22  23:17:43  cpcahil
- * Initial revision
- *
- */
