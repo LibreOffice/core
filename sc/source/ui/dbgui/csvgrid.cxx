@@ -4,9 +4,9 @@
  *
  *  $RCSfile: csvgrid.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:19:15 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 09:59:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1082,14 +1082,29 @@ void ScCsvGrid::ImplDrawColumnHeader( OutputDevice& rOutDev, sal_uInt32 nColInde
 
 void ScCsvGrid::ImplDrawCellText( const Point& rPos, const String& rText )
 {
-    String aText( rText );
-    aText.SearchAndReplaceAll( '\t', ' ' );
-    aText.SearchAndReplaceAll( '\n', ' ' );
+    String aPlainText( rText );
+    aPlainText.SearchAndReplaceAll( '\t', ' ' );
+    aPlainText.SearchAndReplaceAll( '\n', ' ' );
     mpEditEngine->SetPaperSize( maEdEngSize );
-    mpEditEngine->SetText( aText );
-    mpEditEngine->Draw( &maBackgrDev, rPos );
 
+    /*  #i60296# If string contains mixed script types, the space character
+        U+0020 may be drawn with a wrong width (from non-fixed-width Asian or
+        Complex font). Now we draw every non-space portion separately. */
+    xub_StrLen nTokenCount = aPlainText.GetTokenCount( ' ' );
     xub_StrLen nCharIx = 0;
+    for( xub_StrLen nToken = 0; nToken < nTokenCount; ++nToken )
+    {
+        xub_StrLen nBeginIx = nCharIx;
+        String aToken = aPlainText.GetToken( 0, ' ', nCharIx );
+        if( aToken.Len() > 0 )
+        {
+            sal_Int32 nX = rPos.X() + GetCharWidth() * nBeginIx;
+            mpEditEngine->SetText( aToken );
+            mpEditEngine->Draw( &maBackgrDev, Point( nX, rPos.Y() ) );
+        }
+    }
+
+    nCharIx = 0;
     while( (nCharIx = rText.Search( '\t', nCharIx )) != STRING_NOTFOUND )
     {
         sal_Int32 nX1 = rPos.X() + GetCharWidth() * nCharIx;
