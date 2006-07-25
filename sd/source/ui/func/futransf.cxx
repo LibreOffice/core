@@ -4,9 +4,9 @@
  *
  *  $RCSfile: futransf.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:31:13 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:43:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,7 @@ void FuTransform::DoExecute( SfxRequest& rReq )
             SfxItemSet aSet( pView->GetGeoAttrFromMarked() );
 
             const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-            SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
+            SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
             if( rMarkList.GetMarkCount() == 1 &&
                 pObj->GetObjInventor() == SdrInventor &&
                 pObj->GetObjIdentifier() == OBJ_CAPTION )
@@ -161,7 +161,7 @@ void FuTransform::DoExecute( SfxRequest& rReq )
 
             for (ULONG nMark = 0; nMark < nCount; nMark++)
             {
-                SdrObject* pObj = rMarkList.GetMark(nMark)->GetObj();
+                SdrObject* pObj = rMarkList.GetMark(nMark)->GetMarkedSdrObj();
 
                 if (pObj->ISA(E3dPolyScene))
                 {
