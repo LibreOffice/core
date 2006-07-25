@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propbrw.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:15:11 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 13:00:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -361,7 +361,7 @@ sal_Bool PropBrw::Close()
 
     for(sal_uInt32 i=0;i<nMarkCount;i++)
     {
-        SdrObject* pCurrent = _rMarkList.GetMark(i)->GetObj();
+        SdrObject* pCurrent = _rMarkList.GetMark(i)->GetMarkedSdrObj();
 
         SdrObjListIter* pGroupIterator = NULL;
         if (pCurrent->IsGroupObject())
@@ -577,7 +577,7 @@ void PropBrw::Update( SdrView* pNewView )
 
         if ( nMarkCount == 1 )
         {
-            DlgEdObj* pDlgEdObj = PTR_CAST( DlgEdObj, rMarkList.GetMark(0)->GetObj() );
+            DlgEdObj* pDlgEdObj = PTR_CAST( DlgEdObj, rMarkList.GetMark(0)->GetMarkedSdrObj() );
             if ( pDlgEdObj )
             {
                 if ( pDlgEdObj->IsGroupObject() ) // group object
