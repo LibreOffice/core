@@ -4,9 +4,9 @@
  *
  *  $RCSfile: export.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 17:18:57 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 08:28:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -443,7 +443,8 @@ public:
                     const ByteString &nId ,
                     const ByteString &rText,
                     const ByteString &rQuickHelpText,
-                    const ByteString &rTitle )
+                    const ByteString &rTitle
+                    )
         {
 
             sText[ nId ] = rText;
@@ -509,24 +510,27 @@ private:
 
 
 public:
-    MergeDataFile( const ByteString &rFileName, const ByteString& rFile , BOOL bErrLog, CharSet aCharSet
-            );
+    MergeDataFile( const ByteString &rFileName, const ByteString& rFile , BOOL bErrLog, CharSet aCharSet, bool bCaseSensitive = false );
+//    MergeDataFile( const ByteString &rFileName, const ByteString& rFile , BOOL bErrLog, CharSet aCharSet
+//            );
     ~MergeDataFile();
 
 
     std::vector<ByteString> GetLanguages();
-    MergeData *GetMergeData( ResData *pResData );
+    MergeData *GetMergeData( ResData *pResData , bool bCaseSensitve = false );
 
     PFormEntrys *GetPFormEntrys( ResData *pResData );
+    PFormEntrys *GetPFormEntrysCaseSensitive( ResData *pResData );
+
     void InsertEntry( const ByteString &rTYP, const ByteString &rGID, const ByteString &rLID,
                 const ByteString &rPFO,
                 const ByteString &nLang , const ByteString &rTEXT,
                 const ByteString &rQHTEXT, const ByteString &rTITLE ,
-                const ByteString &sFilename
+                const ByteString &sFilename , bool bCaseSensitive
                 );
     static USHORT GetLangIndex( USHORT nId );
-    static ByteString CreateKey( const ByteString& rTYP , const ByteString& rGID , const ByteString& rLID , const ByteString& rFilename //= ByteString("")
-        );
+    static ByteString CreateKey( const ByteString& rTYP , const ByteString& rGID , const ByteString& rLID , const ByteString& rFilename , bool bCaseSensitive = false );
+
     ByteString Dump();
 //  void WriteErrorLog( const ByteString &rFileName );
     void WriteError( const ByteString &rLine );
