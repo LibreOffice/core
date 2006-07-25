@@ -4,9 +4,9 @@
  *
  *  $RCSfile: controlelement.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:03:48 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 09:22:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,30 +75,4 @@ namespace xmloff
 //.........................................................................
 }   // namespace xmloff
 //.........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.4.402.1  2005/09/05 14:38:54  rt
- *  #i54170# Change license header: remove SISSL
- *
- *  Revision 1.4  2003/12/11 12:07:12  kz
- *  INTEGRATION: CWS frmcontrols01 (1.3.210); FILE MERGED
- *  2003/10/22 13:17:41 fs 1.3.210.1: #21277# new implementations for exporting/importing scrollbar controls as form:value-range elements
- *
- *  Revision 1.3.210.1  2003/10/22 13:17:41  fs
- *  #21277# new implementations for exporting/importing scrollbar controls as form:value-range elements
- *
- *  Revision 1.3  2001/02/13 13:43:42  fs
- *  text-area -> textarea
- *
- *  Revision 1.2  2001/01/03 16:25:34  fs
- *  file format change (extra wrapper element for controls, similar to columns)
- *
- *  Revision 1.1  2000/12/06 17:29:46  fs
- *  initial checkin - implementations for formlayer import/export - still under construction
- *
- *
- *  Revision 1.0 06.12.00 14:02:39  fs
- ************************************************************************/
 
