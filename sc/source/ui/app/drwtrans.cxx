@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drwtrans.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:08:52 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:24:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -682,7 +682,7 @@ void lcl_InitMarks( SdrMarkView& rDest, const SdrMarkView& rSource, SCTAB nTab )
     for (ULONG i=0; i<nCount; i++)
     {
         SdrMark* pMark = rMarkList.GetMark(i);
-        SdrObject* pObj = pMark->GetObj();
+        SdrObject* pObj = pMark->GetMarkedSdrObj();
 
         rDest.MarkObj(pObj, pDestPV);
     }
