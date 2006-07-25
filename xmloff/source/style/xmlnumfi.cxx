@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlnumfi.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:36:55 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 09:55:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -879,10 +879,51 @@ void lcl_EnquoteIfNecessary( rtl::OUStringBuffer& rContent, const SvXMLNumFormat
 
     if ( bQuote )
     {
+        // #i55469# quotes in the string itself have to be escaped
+        rtl::OUString aString( rContent.getStr() );
+        bool bEscape = ( aString.indexOf( (sal_Unicode) '"' ) >= 0 );
+        if ( bEscape )
+        {
+            // A quote is turned into "\"" - a quote to end quoted text, an escaped quote,
+            // and a quote to resume quoting.
+            rtl::OUString aInsert( rtl::OUString::createFromAscii( "\"\\\"" ) );
+
+            sal_Int32 nPos = 0;
+            while ( nPos < rContent.getLength() )
+            {
+                if ( rContent.charAt( nPos ) == (sal_Unicode) '"' )
+                {
+                    rContent.insert( nPos, aInsert );
+                    nPos += aInsert.getLength();
+                }
+                ++nPos;
+            }
+        }
+
         //  quote string literals
-        //! escape quotes in string
         rContent.insert( 0, (sal_Unicode) '"' );
         rContent.append( (sal_Unicode) '"' );
+
+        // remove redundant double quotes at start or end
+        if ( bEscape )
+        {
+            if ( rContent.getLength() > 2 &&
+                 rContent.charAt(0) == (sal_Unicode) '"' &&
+                 rContent.charAt(1) == (sal_Unicode) '"' )
+            {
+                String aTrimmed( rContent.makeStringAndClear().copy(2) );
+                rContent = rtl::OUStringBuffer( aTrimmed );
+            }
+
+            sal_Int32 nLen = rContent.getLength();
+            if ( nLen > 2 &&
+                 rContent.charAt(nLen-1) == (sal_Unicode) '"' &&
+                 rContent.charAt(nLen-2) == (sal_Unicode) '"' )
+            {
+                String aTrimmed( rContent.makeStringAndClear().copy( 0, nLen - 2 ) );
+                rContent = rtl::OUStringBuffer( aTrimmed );
+            }
+        }
     }
 }
 
