@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LocalOfficeConnection.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:00:18 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 07:56:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -729,7 +729,7 @@ public class LocalOfficeConnection
         // turn user name into a URL and file system safe name (% chars will not work)
         String aPipeName = System.getProperty("user.name") + OFFICE_ID_SUFFIX;
         aPipeName = replaceAll( aPipeName, "_", "%B7" );
-        return replaceAll( replaceAll( java.net.URLEncoder.encode(aPipeName), "\\+", "%20" ), "%", "_" );
+        return replaceAll( replaceAll( java.net.URLEncoder.encode(aPipeName), "+", "%20" ), "%", "_" );
     }
 
     /**
