@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews6.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:27:47 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:48:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,7 +186,7 @@ void DrawViewShell::ExecFormText(SfxRequest& rReq)
                                         GetChildWindow(nId)->GetWindow();
 
             pDlg->CreateStdFormObj(*pDrView, *pDrView->GetPageViewPvNum(0),
-                                    rSet, *rMarkList.GetMark(0)->GetObj(),
+                                    rSet, *rMarkList.GetMark(0)->GetMarkedSdrObj(),
                                    ((const XFormTextStdFormItem*) pItem)->
                                    GetValue());
 
@@ -219,7 +219,7 @@ void DrawViewShell::GetFormTextState(SfxItemSet& rSet)
         pDlg = (SvxFontWorkDialog*)(GetViewFrame()->GetChildWindow(nId)->GetWindow());
 
     if ( rMarkList.GetMarkCount() == 1 )
-        pObj = rMarkList.GetMark(0)->GetObj();
+        pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
     if ( pObj == NULL || !pObj->ISA(SdrTextObj) ||
         !((SdrTextObj*) pObj)->HasText() )
@@ -350,7 +350,7 @@ void DrawViewShell::GetAnimationWinState( SfxItemSet& rSet )
         nValue = 3;
     else // 1 Objekt
     {
-        const SdrObject* pObj = rMarkList.GetMark( 0 )->GetObj();
+        const SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
         UINT32 nInv = pObj->GetObjInventor();
         UINT16 nId  = pObj->GetObjIdentifier();
         // 1 selektiertes Gruppenobjekt
@@ -458,7 +458,7 @@ void DrawViewShell::ExecBmpMask( SfxRequest& rReq )
 
         case ( SID_BMPMASK_EXEC ) :
         {
-            SdrGrafObj* pObj = (SdrGrafObj*) pDrView->GetMarkedObjectList().GetMark(0)->GetObj();
+            SdrGrafObj* pObj = (SdrGrafObj*) pDrView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
 
             if ( pObj && !pDrView->IsTextEdit() )
             {
@@ -535,7 +535,7 @@ void DrawViewShell::GetBmpMaskState( SfxItemSet& rSet )
     }
 
     if ( rMarkList.GetMarkCount() == 1 )
-        pObj = rMarkList.GetMark(0)->GetObj();
+        pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
     // valid graphic object?
     if( pObj && pObj->ISA( SdrGrafObj ) && !( (SdrGrafObj*) pObj )->IsEPS() && !pDrView->IsTextEdit() )
