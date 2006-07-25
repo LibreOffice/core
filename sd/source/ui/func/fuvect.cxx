@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuvect.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:06:14 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:43:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,7 +101,7 @@ void FuVectorize::DoExecute( SfxRequest& rReq )
 
     if( rMarkList.GetMarkCount() == 1 )
     {
-        SdrObject* pObj = rMarkList.GetMark( 0 )->GetObj();
+        SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
         if( pObj && pObj->ISA( SdrGrafObj ) )
         {
