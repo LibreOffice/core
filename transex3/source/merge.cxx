@@ -4,9 +4,9 @@
  *
  *  $RCSfile: merge.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 17:24:08 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 08:28:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -214,8 +214,9 @@ BOOL MergeData::operator==( ResData *pData )
 }*/
 /*****************************************************************************/
 MergeDataFile::MergeDataFile( const ByteString &rFileName, const ByteString& sFile ,BOOL bErrLog,
-                            CharSet aCharSet
-                            )
+//                          CharSet aCharSet, BOOL bUTF8 , bool bCaseSensitive )
+                            CharSet aCharSet, bool bCaseSensitive )
+
 /*****************************************************************************/
                 : bErrorLog( bErrLog )
 {
@@ -272,7 +273,7 @@ MergeDataFile::MergeDataFile( const ByteString &rFileName, const ByteString& sFi
 #else
                 if (  !nLANG.EqualsIgnoreCaseAscii("en-US")  ){
 #endif
-                    InsertEntry( sTYP, sGID, sLID, sPFO, nLANG, sTEXT, sQHTEXT, sTITLE , filename );
+                    InsertEntry( sTYP, sGID, sLID, sPFO, nLANG, sTEXT, sQHTEXT, sTITLE , filename , bCaseSensitive );
                     if( nLANG.Len() > 0 ){
                         bool bFound = false;
                         for( unsigned int x = 0; x < aLanguages.size(); x++ ){
@@ -345,7 +346,7 @@ std::vector<ByteString> MergeDataFile::GetLanguages(){
 }
 
 /*****************************************************************************/
-MergeData *MergeDataFile::GetMergeData( ResData *pResData )
+MergeData *MergeDataFile::GetMergeData( ResData *pResData , bool bCaseSensitive )
 /*****************************************************************************/
 {
     ByteString sOldG = pResData->sGId;
@@ -359,7 +360,7 @@ MergeData *MergeDataFile::GetMergeData( ResData *pResData )
     pResData->sGId = sGID;
     pResData->sId = sLID;
 
-    ByteString sKey = CreateKey( pResData->sResTyp , pResData->sGId , pResData->sId , pResData->sFilename );
+    ByteString sKey = CreateKey( pResData->sResTyp , pResData->sGId , pResData->sId , pResData->sFilename , bCaseSensitive );
 
     //printf("DBG: Searching [%s]\n",sKey.GetBuffer());
     if( aMap.find( sKey ) != aMap.end() ){
@@ -387,12 +388,22 @@ PFormEntrys *MergeDataFile::GetPFormEntrys( ResData *pResData )
 }
 
 /*****************************************************************************/
+PFormEntrys *MergeDataFile::GetPFormEntrysCaseSensitive( ResData *pResData )
+/*****************************************************************************/
+{
+    // search for requested PFormEntrys
+    MergeData *pData = GetMergeData( pResData , true );
+    if ( pData )
+        return pData->GetPFormEntrys( pResData );
+    return NULL;
+}
+/*****************************************************************************/
 void MergeDataFile::InsertEntry(
                     const ByteString &rTYP, const ByteString &rGID,
                     const ByteString &rLID, const ByteString &rPFO,
                     const ByteString &nLANG, const ByteString &rTEXT,
                     const ByteString &rQHTEXT, const ByteString &rTITLE ,
-                    const ByteString &rFilename
+                    const ByteString &rFilename , bool bCaseSensitive
                     )
 /*****************************************************************************/
 {
@@ -400,14 +411,15 @@ void MergeDataFile::InsertEntry(
     BOOL bFound = FALSE;
 
     // search for MergeData
-    ByteString sKey = CreateKey( rTYP , rGID , rLID , rFilename );
+
+    ByteString sKey = CreateKey( rTYP , rGID , rLID , rFilename , bCaseSensitive );
     ByteString sKey2;
 
     if( aMap.find( sKey ) != aMap.end() ){
         pData = aMap[ sKey ];
     }else{
         pData = new MergeData( rTYP, rGID, rLID , rFilename );
-        aMap.insert( MergeDataHashMap::value_type( CreateKey( rTYP , rGID , rLID , rFilename ) , pData ) );
+        aMap.insert( MergeDataHashMap::value_type( CreateKey( rTYP , rGID , rLID , rFilename , bCaseSensitive ) , pData ) );
     }
 
     bFound = FALSE;
@@ -434,11 +446,12 @@ void MergeDataFile::InsertEntry(
 //      pFEntrys->InsertEntry( sKey2 , rTEXT, rQHTEXT, rTITLE );
 //  }
 //  else
-        pFEntrys->InsertEntry( nLANG , rTEXT, rQHTEXT, rTITLE );
 
-    //printf("DBG: MergeDataFile::Insert[%s]=( sKey=%s,rTEXT=%s,%s,%s)\n",sKey2.GetBuffer(),nLANG.GetBuffer(),rTEXT.GetBuffer(),rQHTEXT.GetBuffer(),rTITLE.GetBuffer());
+    pFEntrys->InsertEntry( nLANG , rTEXT, rQHTEXT, rTITLE );
+
+    //printf("DBG: MergeDataFile::Insert[]=( sKey=%s,nLang=%s,rTEXT=%s)\n",sKey2.GetBuffer(),nLANG.GetBuffer(),rTEXT.GetBuffer());
 }
-ByteString MergeDataFile::CreateKey( const ByteString& rTYP , const ByteString& rGID , const ByteString& rLID , const ByteString& rFilename ){
+ByteString MergeDataFile::CreateKey( const ByteString& rTYP , const ByteString& rGID , const ByteString& rLID , const ByteString& rFilename , bool bCaseSensitive ){
 
     ByteString sKey( rTYP );
     sKey.Append( '-'        );
@@ -448,7 +461,8 @@ ByteString MergeDataFile::CreateKey( const ByteString& rTYP , const ByteString& 
     sKey.Append( '-'        );
     sKey.Append( rFilename  );
 
-    return sKey.ToUpperAscii();
+    if( bCaseSensitive ) return sKey;         // officecfg case sensitive identifier
+    else return sKey.ToUpperAscii();
 }
 
 
