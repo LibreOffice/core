@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlnum.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:03:43 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:49:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,7 +184,10 @@ void SwHTMLParser::NewNumBulList( int nToken )
             // so macht. Dadurch wurd immer auch eine 9pt-Schrift
             // eingestellt, was in Netscape nicht der Fall ist. Bisher hat
             // das noch niemanden gestoert.
-            aNumFmt.SetBulletFont( &rInfo.GetNumRule()->GetDefBulletFont() );
+            // --> OD 2006-06-27 #b6440955#
+//            aNumFmt.SetBulletFont( &rInfo.GetNumRule()->GetDefBulletFont() );
+            aNumFmt.SetBulletFont( &numfunc::GetDefBulletFont() );
+            // <--
             aNumFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
             aNumFmt.SetBulletChar( cBulletChar );       // das Bulletzeichen !!
             nChrFmtPoolId = RES_POOLCHR_BUL_LEVEL;
@@ -446,8 +449,11 @@ void SwHTMLParser::EndNumBulList( int nToken )
                                         ? pRefNumFmt->GetNumberingType() : SVX_NUM_CHAR_SPECIAL);
                     if( SVX_NUM_CHAR_SPECIAL == aNumFmt.GetNumberingType() )
                     {
-                        aNumFmt.SetBulletFont(
-                                &rInfo.GetNumRule()->GetDefBulletFont() );
+                        // --> OD 2006-06-27 #b6440955#
+//                        aNumFmt.SetBulletFont(
+//                                &rInfo.GetNumRule()->GetDefBulletFont() );
+                        aNumFmt.SetBulletFont( &numfunc::GetDefBulletFont() );
+                        // <--
                         aNumFmt.SetBulletChar( cBulletChar );
                     }
                     aNumFmt.SetAbsLSpace( (i+1) * HTML_NUMBUL_MARGINLEFT );
@@ -550,7 +556,10 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
         aNumRuleName = pDoc->GetUniqueNumRuleName();
         SwNumRule aNumRule( aNumRuleName );
         SwNumFmt aNumFmt( aNumRule.Get( 0 ) );
-        aNumFmt.SetBulletFont( &SwNumRule::GetDefBulletFont() );
+        // --> OD 2006-06-27 #b6440955#
+//        aNumFmt.SetBulletFont( &SwNumRule::GetDefBulletFont() );
+        aNumFmt.SetBulletFont( &numfunc::GetDefBulletFont() );
+        // <--
         aNumFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
         aNumFmt.SetBulletChar( cBulletChar );   // das Bulletzeichen !!
         aNumFmt.SetCharFmt( pCSS1Parser->GetCharFmtFromPool(RES_POOLCHR_BUL_LEVEL) );
