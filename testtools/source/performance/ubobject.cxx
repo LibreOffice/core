@@ -1,13 +1,37 @@
-/**************************************************************************
-#*
-#*    last change   $Author: rt $ $Date: 2005-12-14 11:24:18 $
-#*    $Revision: 1.2 $
-#*
-#*    $Logfile: $
-#*
-#*    Copyright (c) 1989 - 2000, Star Office GmbH
-#*
-#************************************************************************/
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: ubobject.cxx,v $
+ *
+ *  $Revision: 1.3 $
+ *
+ *  last change: $Author: rt $ $Date: 2006-07-25 09:46:38 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
 
 #include <osl/diagnose.h>
 #include <osl/interlck.h>
@@ -289,25 +313,3 @@ void * SAL_CALL component_getFactory(
 }
 
 
-/**************************************************************************
-    $Log: not supported by cvs2svn $
-    Revision 1.1.130.1  2005/08/23 07:20:29  sb
-    #i52998# Made rotting code compile again (patch supplied by cyb).
-
-    Revision 1.1  2001/05/04 07:05:18  kr
-    moved from grande to openoffice
-
-    Revision 1.4  2001/03/12 16:22:44  jl
-    OSL_ENSHURE replaced by OSL_ENSURE
-
-    Revision 1.3  2000/05/26 14:15:34  dbo
-    misc
-
-    Revision 1.2  2000/05/25 16:45:00  dbo
-    shifted XPerformanceTest to api
-
-    Revision 1.1  2000/05/22 12:50:36  dbo
-    new
-
-
-**************************************************************************/
