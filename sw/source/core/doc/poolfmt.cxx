@@ -4,9 +4,9 @@
  *
  *  $RCSfile: poolfmt.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 09:15:00 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:47:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1339,7 +1339,9 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId, String* pDesc,
 
     case RES_POOLCHR_BUL_LEVEL:             // Aufzaehlungszeichen
         {
-            const Font& rBulletFont = SwNumRule::GetDefBulletFont();
+            // --> OD 2006-06-29 #6440955#
+            const Font& rBulletFont = numfunc::GetDefBulletFont();
+            // <--
             SetAllScriptItem( aSet, SvxFontItem( rBulletFont.GetFamily(),
                         rBulletFont.GetName(), rBulletFont.GetStyleName(),
                         rBulletFont.GetPitch(), rBulletFont.GetCharSet() ));
@@ -1992,7 +1994,9 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId, String* pDesc,
 
             aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
             aFmt.SetCharFmt( pBullCFmt );
-            aFmt.SetBulletFont(  &SwNumRule::GetDefBulletFont() );
+            // --> OD 2006-06-29 #6440955#
+            aFmt.SetBulletFont(  &numfunc::GetDefBulletFont() );
+            // <--
             aFmt.SetBulletChar( cBulletChar );
             USHORT nOffs = GetMetricVal( CM_01 ) * 4,
                    nOffs2 = GetMetricVal( CM_1 ) * 2;
@@ -2015,7 +2019,9 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId, String* pDesc,
             aFmt.SetCharFmt( pBullCFmt );
             aFmt.SetStart( 1 );
             aFmt.SetIncludeUpperLevels( 1 );
-            aFmt.SetBulletFont( &SwNumRule::GetDefBulletFont() );
+            // --> OD 2006-06-29 #6440955#
+            aFmt.SetBulletFont( &numfunc::GetDefBulletFont() );
+            // <--
             aFmt.SetBulletChar( cBulletChar );
 
             static const USHORT aAbsSpace[ MAXLEVEL ] =
@@ -2051,7 +2057,9 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId, String* pDesc,
             aFmt.SetCharFmt( pBullCFmt );
             aFmt.SetStart( 1 );
             aFmt.SetIncludeUpperLevels( 1 );
-            aFmt.SetBulletFont(  &SwNumRule::GetDefBulletFont() );
+            // --> OD 2006-06-29 #6440955#
+            aFmt.SetBulletFont(  &numfunc::GetDefBulletFont() );
+            // <--
             aFmt.SetBulletChar( 0x2013 );
 
             static const USHORT aAbsSpace[ MAXLEVEL ] =
@@ -2087,7 +2095,9 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId, String* pDesc,
             aFmt.SetCharFmt( pBullCFmt );
             aFmt.SetStart( 1 );
             aFmt.SetIncludeUpperLevels( 1 );
-            aFmt.SetBulletFont(  &SwNumRule::GetDefBulletFont() );
+            // --> OD 2006-06-29 #6440955#
+            aFmt.SetBulletFont(  &numfunc::GetDefBulletFont() );
+            // <--
             USHORT nOffs = GetMetricVal( CM_01 ) * 4;
             aFmt.SetFirstLineOffset( - nOffs );
 
@@ -2106,7 +2116,9 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId, String* pDesc,
             aFmt.SetCharFmt( pBullCFmt );
             aFmt.SetStart( 1 );
             aFmt.SetIncludeUpperLevels( 1 );
-            aFmt.SetBulletFont(  &SwNumRule::GetDefBulletFont() );
+            // --> OD 2006-06-29 #6440955#
+            aFmt.SetBulletFont(  &numfunc::GetDefBulletFont() );
+            // <--
 
             static const USHORT aAbsSpace[ MAXLEVEL ] =
                 {
@@ -2148,7 +2160,9 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId, String* pDesc,
             aFmt.SetStart( 1 );
             aFmt.SetIncludeUpperLevels( 1 );
             aFmt.SetBulletChar( 0x2717 );
-            aFmt.SetBulletFont(  &SwNumRule::GetDefBulletFont() );
+            // --> OD 2006-06-29 #6440955#
+            aFmt.SetBulletFont( &numfunc::GetDefBulletFont() );
+            // <--
 
             static const USHORT aAbsSpace[ MAXLEVEL ] =
                 {
