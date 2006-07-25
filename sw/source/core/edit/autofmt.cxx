@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autofmt.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-05 14:50:18 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:48:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1609,7 +1609,9 @@ void SwAutoFormat::BuildEnum( USHORT nLvl, USHORT nDigitLevel )
                         cBullChar = nBulletPos < cnPosEmDash
                                         ? cStarSymbolEnDash
                                         : cStarSymbolEmDash;
-                        pBullFnt = &SwNumRule::GetDefBulletFont();
+                        // --> OD 2006-06-28 #b6440955#
+                        pBullFnt = &numfunc::GetDefBulletFont();
+                        // <--
                     }
 
                     USHORT nAbsPos = lBullIndent;
