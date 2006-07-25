@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fudraw.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:49:54 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:25:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -325,7 +325,7 @@ BOOL __EXPORT FuDraw::KeyInput(const KeyEvent& rKEvt)
             const SdrMarkList& rNoteMarkList = pView->GetMarkedObjectList();
             if(rNoteMarkList.GetMarkCount() == 1)
             {
-                SdrObject* pObj = rNoteMarkList.GetMark( 0 )->GetObj();
+                SdrObject* pObj = rNoteMarkList.GetMark( 0 )->GetMarkedSdrObj();
                 if ( pObj && pObj->GetLayer() == SC_LAYER_INTERN && pObj->ISA(SdrCaptionObj) )
                 {
                     ScDocument* pDoc = pViewShell->GetViewData()->GetDocument();
@@ -382,7 +382,7 @@ BOOL __EXPORT FuDraw::KeyInput(const KeyEvent& rKEvt)
                 if( !pView->IsTextEdit() && 1 == rMarkList.GetMarkCount() )
                 {
                     BOOL bOle = pViewShell->GetViewFrame()->GetFrame()->IsInPlace();
-                    SdrObject* pObj = rMarkList.GetMark( 0 )->GetObj();
+                    SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
                     if( pObj && pObj->ISA( SdrOle2Obj ) && !bOle )
                     {
                         pView->HideMarkHdl(NULL);
@@ -407,7 +407,7 @@ BOOL __EXPORT FuDraw::KeyInput(const KeyEvent& rKEvt)
                 const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
                 if( !pView->IsTextEdit() && 1 == rMarkList.GetMarkCount() )
                 {
-                    SdrObject* pObj = rMarkList.GetMark( 0 )->GetObj();
+                    SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
                     if ( lcl_KeyEditMode( pObj, pViewShell, NULL ) )            // start text edit for suitable object
                         bReturn = TRUE;
                 }
@@ -534,7 +534,7 @@ BOOL __EXPORT FuDraw::KeyInput(const KeyEvent& rKEvt)
                 {
                     // disable cursor travelling on note objects as the tail connector position
                     // must not move.
-                    SdrObject* pObj = rMarkList.GetMark( 0 )->GetObj();
+                    SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
                     if(pObj && pObj->ISA(SdrCaptionObj) && pObj->GetLayer() == SC_LAYER_INTERN)
                     {
                             break;
@@ -767,7 +767,7 @@ BOOL __EXPORT FuDraw::KeyInput(const KeyEvent& rKEvt)
         const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
         if( !pView->IsTextEdit() && 1 == rMarkList.GetMarkCount() && EditEngine::IsSimpleCharInput(rKEvt) )
         {
-            SdrObject* pObj = rMarkList.GetMark( 0 )->GetObj();
+            SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
             // start text edit for suitable object, pass key event to OutlinerView
             if ( lcl_KeyEditMode( pObj, pViewShell, &rKEvt ) )
@@ -905,7 +905,7 @@ BOOL FuDraw::IsSizingOrMovingNote( const MouseEvent& rMEvt ) const
         const SdrMarkList& rNoteMarkList = pView->GetMarkedObjectList();
         if(rNoteMarkList.GetMarkCount() == 1)
         {
-            SdrObject* pObj = rNoteMarkList.GetMark( 0 )->GetObj();
+            SdrObject* pObj = rNoteMarkList.GetMark( 0 )->GetMarkedSdrObj();
             if ( pObj && pObj->GetLayer() == SC_LAYER_INTERN && pObj->ISA(SdrCaptionObj) )
             {
                 Point aMPos = pWindow->PixelToLogic( rMEvt.GetPosPixel() );
@@ -926,7 +926,7 @@ void FuDraw::CheckVisibleNote() const
     const SdrMarkList& rNoteMarkList = pView->GetMarkedObjectList();
     if(rNoteMarkList.GetMarkCount() == 1)
     {
-        SdrObject* pObj = rNoteMarkList.GetMark( 0 )->GetObj();
+        SdrObject* pObj = rNoteMarkList.GetMark( 0 )->GetMarkedSdrObj();
         if ( pObj && pObj->GetLayer() == SC_LAYER_INTERN && pObj->ISA(SdrCaptionObj) )
         {
             ScDrawObjData* pData = ScDrawLayer::GetObjDataTab( pObj, pViewShell->GetViewData()->GetTabNo() );
