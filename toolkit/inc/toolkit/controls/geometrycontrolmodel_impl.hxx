@@ -4,9 +4,9 @@
  *
  *  $RCSfile: geometrycontrolmodel_impl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:49:20 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 09:19:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,30 +95,4 @@ OGeometryControlModel_Base* OGeometryControlModel<CONTROLMODEL>::createClone_Imp
     return new OGeometryControlModel<CONTROLMODEL>(_rxAggregateInstance);
 }
 
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.4.122.1  2005/09/05 16:57:39  rt
- *  #i54170# Change license header: remove SISSL
- *
- *  Revision 1.4  2004/07/30 15:33:34  kz
- *  INTEGRATION: CWS gcc340fixes01 (1.3.268); FILE MERGED
- *  2004/07/13 16:56:04 hr 1.3.268.1: #i31439#: fix template resolution
- *
- *  Revision 1.3.268.1  2004/07/13 16:56:04  hr
- *  #i31439#: fix template resolution
- *
- *  Revision 1.3  2001/09/05 06:40:48  fs
- *  #88891# override the XTypeProvider methods
- *
- *  Revision 1.2  2001/03/02 12:34:13  tbe
- *  clone geometry control model
- *
- *  Revision 1.1  2001/01/24 14:57:30  mt
- *  model for dialog controls (weith pos/size)
- *
- *
- *  Revision 1.0 17.01.01 12:50:24  fs
- ************************************************************************/
 
