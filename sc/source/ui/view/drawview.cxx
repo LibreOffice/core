@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:53:58 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:27:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,7 +164,7 @@ void ScDrawView::AddCustomHdl()
     UINT32 nCount = rMrkList.GetMarkCount();
     for(UINT32 nPos=0; nPos<nCount; nPos++ )
     {
-        const SdrObject* pObj = rMrkList.GetMark(nPos)->GetObj();
+        const SdrObject* pObj = rMrkList.GetMark(nPos)->GetMarkedSdrObj();
         if(ScDrawLayer::GetAnchor(pObj) == SCA_CELL)
         {
             const INT32 nDelta = 1;
@@ -276,7 +276,7 @@ void ScDrawView::SetMarkedToLayer( BYTE nLayerNo )
         ULONG nCount = rMark.GetMarkCount();
         for (ULONG i=0; i<nCount; i++)
         {
-            SdrObject* pObj = rMark.GetMark(i)->GetObj();
+            SdrObject* pObj = rMark.GetMark(i)->GetMarkedSdrObj();
             if ( !pObj->ISA(SdrUnoObj) )
             {
                 AddUndo( new SdrUndoObjectLayerChange( *pObj, pObj->GetLayer(), (SdrLayerID)nLayerNo) );
@@ -304,7 +304,7 @@ BOOL ScDrawView::HasMarkedControl() const
         ULONG nCount = rMark.GetMarkCount();
         for (ULONG i=0; i<nCount; i++)
         {
-            SdrObject* pObj = rMark.GetMark(i)->GetObj();
+            SdrObject* pObj = rMark.GetMark(i)->GetMarkedSdrObj();
             if ( pObj->ISA(SdrUnoObj) )
                 return TRUE;
             else if ( pObj->ISA(SdrObjGroup) )
@@ -469,7 +469,7 @@ void __EXPORT ScDrawView::MarkListHasChanged()
     BOOL bSubShellSet = FALSE;
     if (nMarkCount == 1)
     {
-        SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
+        SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
         if (pObj->GetObjIdentifier() == OBJ_OLE2)
         {
             pOle2Obj = (SdrOle2Obj*) pObj;
@@ -504,7 +504,7 @@ void __EXPORT ScDrawView::MarkListHasChanged()
         BOOL bOnlyGraf     = TRUE;
         for (ULONG i=0; i<nMarkCount; i++)
         {
-            SdrObject* pObj = rMarkList.GetMark(i)->GetObj();
+            SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
             if ( pObj->ISA( SdrObjGroup ) )
             {
                 const SdrObjList *pLst = ((SdrObjGroup*)pObj)->GetSubList();
@@ -735,7 +735,7 @@ String ScDrawView::GetSelectedChartName() const
     const SdrMarkList& rMarkList = GetMarkedObjectList();
     if (rMarkList.GetMarkCount() == 1)
     {
-        SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
+        SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
         if (pObj->GetObjIdentifier() == OBJ_OLE2)
             if ( pDoc->IsChart(pObj) )
                 return static_cast<SdrOle2Obj*>(pObj)->GetPersistName();
@@ -808,7 +808,7 @@ void ScDrawView::StoreCaptionAttribs()
     const SdrMarkList&  rMarkList   = GetMarkedObjectList();
 
     if( rMarkList.GetMarkCount() == 1 )
-        pObj = rMarkList.GetMark(0)->GetObj();
+        pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
     if ( pObj && pObj->GetLayer() == SC_LAYER_INTERN && pObj->ISA(SdrCaptionObj) )
     {
@@ -831,7 +831,7 @@ void ScDrawView::StoreCaptionDimensions()
     const SdrMarkList&  rMarkList   = GetMarkedObjectList();
 
     if( rMarkList.GetMarkCount() == 1 )
-        pObj = rMarkList.GetMark(0)->GetObj();
+        pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
     if ( pObj && pObj->GetLayer() == SC_LAYER_INTERN && pObj->ISA(SdrCaptionObj) )
     {
