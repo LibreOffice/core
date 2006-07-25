@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawsh2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:46:59 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:24:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,7 +115,7 @@ void ScDrawShell::GetState( SfxItemSet& rSet )          // Zustaende / Toggles
     ULONG nMarkCount = rMarkList.GetMarkCount();
     if ( nMarkCount == 1 )
     {
-            SdrObject* pObj = rMarkList.GetMark( 0 )->GetObj();
+            SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
             if( pObj && pObj->GetObjIdentifier() == OBJ_CAPTION && pObj->GetLayer() == SC_LAYER_INTERN)
         {
                 bDisableAnchor = true;
@@ -210,7 +210,7 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // Funktionen disabl
     BOOL bCanRename = FALSE;
     if ( nMarkCount == 1 )
     {
-        SdrObject* pObj = rMarkList.GetMark( 0 )->GetObj();
+        SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
         SdrLayerID nLayerID = pObj->GetLayer();
         if ( nLayerID != SC_LAYER_INTERN )
             bCanRename = TRUE;                          // #i51351# anything except internal objects can be renamed
@@ -219,7 +219,7 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // Funktionen disabl
         UINT16 nObjType = pObj->GetObjIdentifier();
         if ( nObjType == OBJ_OLE2 )
         {
-            SdrOle2Obj* pOleObj = static_cast<SdrOle2Obj*>(rMarkList.GetMark( 0 )->GetObj());
+            SdrOle2Obj* pOleObj = static_cast<SdrOle2Obj*>(rMarkList.GetMark( 0 )->GetMarkedSdrObj());
             if (pOleObj->GetObjRef().is() &&
                 ((pOleObj->GetObjRef()->getStatus( pOleObj->GetAspect() ) & embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE) ) )
                 //TODO/LATER: why different slots in Draw and Calc?
@@ -375,7 +375,7 @@ BOOL ScDrawShell::AreAllObjectsOnLayer(USHORT nLayerNo,const SdrMarkList& rMark)
     ULONG nCount = rMark.GetMarkCount();
     for (ULONG i=0; i<nCount; i++)
     {
-        SdrObject* pObj = rMark.GetMark(i)->GetObj();
+        SdrObject* pObj = rMark.GetMark(i)->GetMarkedSdrObj();
         if ( !pObj->ISA(SdrUnoObj) )
         {
             if(nLayerNo!=pObj->GetLayer())
