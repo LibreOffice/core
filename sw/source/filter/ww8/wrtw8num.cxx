@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8num.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 13:49:35 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:49:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -275,7 +275,12 @@ void SwWW8Writer::OutListTab()
 
                 pBulletFont = rFmt.GetBulletFont();
                 if (!pBulletFont)
-                    pBulletFont = &SwNumRule::GetDefBulletFont();
+                {
+                    // --> OD 2006-06-27 #b6440955#
+//                    pBulletFont = &SwNumRule::GetDefBulletFont();
+                    pBulletFont = &numfunc::GetDefBulletFont();
+                    // <--
+                }
 
                 eChrSet = pBulletFont->GetCharSet();
                 sFontName = pBulletFont->GetName();
@@ -528,8 +533,13 @@ void SwWW8Writer::BuildAnlvBulletBase(WW8_ANLV& rAnlv, BYTE*& rpCh,
 
     if (1 < rCharLen)
     {
-        const Font& rFont = rFmt.GetBulletFont() ? *rFmt.GetBulletFont()
-            : SwNumRule::GetDefBulletFont();
+        // --> OD 2006-06-27 #b6440955#
+//        const Font& rFont = rFmt.GetBulletFont() ? *rFmt.GetBulletFont()
+//            : SwNumRule::GetDefBulletFont();
+        const Font& rFont = rFmt.GetBulletFont()
+                            ? *rFmt.GetBulletFont()
+                            : numfunc::GetDefBulletFont();
+        // <--
         String sNumStr = rFmt.GetBulletChar();
         rtl_TextEncoding eChrSet = rFont.GetCharSet();
         String sFontName = rFont.GetName();
