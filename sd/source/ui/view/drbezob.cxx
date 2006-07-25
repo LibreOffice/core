@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drbezob.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 17:41:57 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:47:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -300,7 +300,7 @@ void BezierObjectBar::Execute(SfxRequest& rReq)
 
                     case SID_BEZIER_CLOSE:
                     {
-                        SdrPathObj* pPathObj = (SdrPathObj*) rMarkList.GetMark(0)->GetObj();
+                        SdrPathObj* pPathObj = (SdrPathObj*) rMarkList.GetMark(0)->GetMarkedSdrObj();
                         pView->BegUndo(String(SdResId(STR_UNDO_BEZCLOSE)));
                         pView->UnmarkAllPoints();
                         Size aDist(pViewSh->GetActiveWindow()->PixelToLogic(Size(8,8)));
