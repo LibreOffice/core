@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-20 00:57:40 $
+#   last change: $Author: rt $ $Date: 2006-07-25 07:54:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@ USE_DEFFILE = TRUE
 
 .INCLUDE : settings.mk
 .INCLUDE : $(PRJ)$/util$/makefile.pmk
-.INCLUDE : $(BIN)$/cliureversion.mk
+
 use_shl_versions=
 
 .IF "$(USE_SHELL)"!="4nt"
@@ -55,27 +55,15 @@ ECHOQUOTE=
 
 .IF "$(BUILD_FOR_CLI)" != ""
 
+.INCLUDE : $(BIN)$/cliureversion.mk
+
 ASSEMBLY_KEY="$(BIN)$/cliuno.snk"
 
 ASSEMBLY_ATTRIBUTES = $(MISC)$/assembly_cppuhelper.cxx
 
 POLICY_ASSEMBLY_FILE=$(BIN)$/$(CLI_CPPUHELPER_POLICY_ASSEMBLY).dll
 
-ALLTAR : \
-    $(ASSEMBLY_ATTRIBUTES) \
-    $(POLICY_ASSEMBLY_FILE)	
-
 ASSEMBLY_KEY_X=$(subst,\,\\ $(ASSEMBLY_KEY)) 
-
-$(ASSEMBLY_ATTRIBUTES) : assembly.cxx $(BIN)$/cliuno.snk $(BIN)$/cliureversion.mk
-    @+echo $(ASSEMBLY_KEY_X)
-    $(GNUCOPY) -p assembly.cxx $@
-    +echo $(ECHOQUOTE) \
-    [assembly:System::Reflection::AssemblyVersion( "$(CLI_CPPUHELPER_NEW_VERSION)" )]; $(ECHOQUOTE) \
-    >> $(OUT)$/misc$/assembly_cppuhelper.cxx	
-    +echo $(ECHOQUOTE) \
-    [assembly:System::Reflection::AssemblyKeyFile($(ASSEMBLY_KEY_X))]; $(ECHOQUOTE) \
-    >> $(OUT)$/misc$/assembly_cppuhelper.cxx
 
 
 LINKFLAGS += /delayload:cppuhelper3MSC.dll \
@@ -123,6 +111,28 @@ SHL1DEF = $(MISC)$/$(SHL1TARGET).def
 DEF1NAME = $(SHL1TARGET)
 
 
+.ENDIF			# "$(BUILD_FOR_CLI)" != ""
+
+.INCLUDE : $(PRJ)$/util$/target.pmk
+.INCLUDE : target.mk
+
+.IF "$(BUILD_FOR_CLI)" != ""
+
+$(ASSEMBLY_ATTRIBUTES) : assembly.cxx $(BIN)$/cliuno.snk $(BIN)$/cliureversion.mk
+    @+echo $(ASSEMBLY_KEY_X)
+    $(GNUCOPY) -p assembly.cxx $@
+    +echo $(ECHOQUOTE) \
+    [assembly:System::Reflection::AssemblyVersion( "$(CLI_CPPUHELPER_NEW_VERSION)" )]; $(ECHOQUOTE) \
+    >> $(OUT)$/misc$/assembly_cppuhelper.cxx	
+    +echo $(ECHOQUOTE) \
+    [assembly:System::Reflection::AssemblyKeyFile($(ASSEMBLY_KEY_X))]; $(ECHOQUOTE) \
+    >> $(OUT)$/misc$/assembly_cppuhelper.cxx
+
+#make sure we build cli_cppuhelper after the version changed
+$(SHL1OBJS) : $(BIN)$/cli_cppuhelper.config 
+
+ALLTAR : $(POLICY_ASSEMBLY_FILE)	
+    
 #do not forget to deliver cli_cppuhelper.config. It is NOT embedded in the policy file.
 $(POLICY_ASSEMBLY_FILE) : $(BIN)$/cli_cppuhelper.config
     +$(WRAPCMD) AL.exe -out:$@ \
@@ -135,16 +145,5 @@ $(BIN)$/cli_cppuhelper.config: cli_cppuhelper_config $(BIN)$/cliureversion.mk
     +$(PERL) $(PRJ)$/source$/scripts$/subst_template.pl \
     $< $@
 
+.ENDIF			# "$(BUILD_FOR_CLI)" != ""
 
-.ENDIF
-
-.INCLUDE : $(PRJ)$/util$/target.pmk
-.INCLUDE : target.mk
-
-.IF "$(depend)"!=""
-ALLDPC : $(ASSEMBLY_ATTRIBUTES) 
-.ENDIF			# "$(depend)"!=""
-
-#make sure we build cli_cppuhelper after the version changed
-$(SHL1OBJS) : $(BIN)$/cli_cppuhelper.config 
-    
