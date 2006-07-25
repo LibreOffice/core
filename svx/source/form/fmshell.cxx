@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:56:52 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:52:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -380,7 +380,7 @@ sal_Bool IsFormComponentList( const SdrMarkList& rMarkList )
     SdrObject* pObj;
     for( sal_uInt32 i=0; i<nMarkCount; ++i )
     {
-        pObj = rMarkList.GetMark(i)->GetObj();
+        pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
         if( !IsFormComponent(*pObj) )
             return sal_False;
     }
