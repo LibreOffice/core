@@ -4,9 +4,9 @@
  *
  *  $RCSfile: beziersh.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:22:51 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:42:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -247,7 +247,7 @@ void SwBezierShell::Execute(SfxRequest &rReq)
 
                     case SID_BEZIER_CLOSE:
                     {
-                        SdrPathObj* pPathObj = (SdrPathObj*) rMarkList.GetMark(0)->GetObj();
+                        SdrPathObj* pPathObj = (SdrPathObj*) rMarkList.GetMark(0)->GetMarkedSdrObj();
                         pSdrView->UnmarkAllPoints();
                         Size aDist(GetView().GetEditWin().PixelToLogic(Size(8,8)));
                         pPathObj->ToggleClosed(aDist.Width());
