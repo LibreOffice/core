@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfgmerge.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 17:21:15 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 08:28:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -780,9 +780,9 @@ CfgMerge::CfgMerge(
 {
     if ( rMergeSource.Len()){
         pMergeDataFile = new MergeDataFile(
-            rMergeSource, sInputFileName , 0 , RTL_TEXTENCODING_MS_1252
-            //, bUTF8
-            );
+            rMergeSource, sInputFileName  , bErrorLog, RTL_TEXTENCODING_MS_1252, true );
+            //rMergeSource, sInputFileName  , bErrorLog, RTL_TEXTENCODING_MS_1252  );
+        //pMergeDataFile->Dump();
         if( Export::sLanguages.EqualsIgnoreCaseAscii("ALL") ){
             Export::SetLanguages( pMergeDataFile->GetLanguages() );
             aLanguages = pMergeDataFile->GetLanguages();
@@ -833,7 +833,7 @@ void CfgMerge::WorkOnText(
         if (( nLangIndex.EqualsIgnoreCaseAscii("en-US") ))
             bEnglish = TRUE;
 
-        PFormEntrys *pEntrys = pMergeDataFile->GetPFormEntrys( pResData );
+        PFormEntrys *pEntrys = pMergeDataFile->GetPFormEntrysCaseSensitive( pResData );
         if ( pEntrys ) {
             ByteString sContent;
             pEntrys->GetText( sContent, STRING_TYP_TEXT, nLangIndex );
@@ -874,7 +874,7 @@ void CfgMerge::WorkOnRessourceEnd()
 {
 
     if ( pMergeDataFile && pResData && bLocalize && (( bGerman && bEnglish ) || bForce )) {
-        PFormEntrys *pEntrys = pMergeDataFile->GetPFormEntrys( pResData );
+        PFormEntrys *pEntrys = pMergeDataFile->GetPFormEntrysCaseSensitive( pResData );
         if ( pEntrys ) {
             ByteString sCur;
 
