@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2006-03-09 10:50:36 $
+#   last change: $Author: rt $ $Date: 2006-07-25 07:53:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -163,7 +163,7 @@ CT_NOOFFICE = -NoOffice
 # --- Targets ------------------------------------------------------
 
 RUN: $(OUTDIR)$/buildwithofficelibs.dll
-    +java -cp $(CLASSPATH) -Dcli_test_program=$(EXETARGET2) -Duno_path="$(office)"\program $(CT_APP) $(CT_NOOFFICE) $(CT_TESTBASE) $(CT_TEST)
+    +java -cp $(CLASSPATH) -DSystemRoot=$(SystemRoot) -Dcli_test_program=$(EXETARGET2) -Duno_path="$(office)"\program $(CT_APP) $(CT_NOOFFICE) $(CT_TESTBASE) $(CT_TEST)
 
 run: RUN
 
