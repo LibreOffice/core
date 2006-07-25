@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 13:15:12 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:49:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1576,6 +1576,12 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
             // the layout engine requires the total width of the output
             pKernArray[ rInf.GetLen() - 1 ] += nKernSum + nSpaceSum;
+
+            // --> FME 2006-07-12 #b6439097#
+            if ( rInf.GetShell()->GetDoc()->IsCutExpandedUnderline() )
+            {
+                pKernArray[ rInf.GetLen() - 1 ] -= rInf.GetKern();
+            }
 
             if( rInf.GetGreyWave() )
             {
