@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfly.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 15:31:53 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:29:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -672,7 +672,7 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
     ASSERT( GetRootFrm(), "Ohne Layout geht gar nichts" );
 
     if ( !_rMrkList.GetMarkCount() ||
-         _rMrkList.GetMark( 0 )->GetObj()->GetUpGroup() )
+         _rMrkList.GetMark( 0 )->GetMarkedSdrObj()->GetUpGroup() )
     {
         return false;
     }
@@ -682,7 +682,7 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
     BOOL bUnmark = FALSE;
     for ( USHORT i = 0; i < _rMrkList.GetMarkCount(); ++i )
     {
-        SdrObject* pObj = _rMrkList.GetMark( i )->GetObj();
+        SdrObject* pObj = _rMrkList.GetMark( i )->GetMarkedSdrObj();
         if ( !pObj->ISA(SwVirtFlyDrawObj) )
         {
             SwDrawContact* pContact = static_cast<SwDrawContact*>(GetUserCall(pObj));
