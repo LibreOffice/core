@@ -4,9 +4,9 @@
  *
  *  $RCSfile: writer.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-27 14:08:07 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 11:49:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -468,7 +468,11 @@ void Writer::PutNumFmtFontsInAttrPool()
     const SwNumRuleTbl& rListTbl = pDoc->GetNumRuleTbl();
     const SwNumRule* pRule;
     const SwNumFmt* pFmt;
-    const Font *pFont, *pDefFont = &SwNumRule::GetDefBulletFont();
+    // --> OD 2006-06-27 #b644095#
+//    const Font *pFont, *pDefFont = &SwNumRule::GetDefBulletFont();
+    const Font* pFont;
+    const Font* pDefFont = &numfunc::GetDefBulletFont();
+    // <--
     BOOL bCheck = FALSE;
 
     for( USHORT nGet = rListTbl.Count(); nGet; )
