@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:48:51 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:42:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,7 +169,7 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
             const SdrObject* pObj = NULL;
             const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
             if( rMarkList.GetMarkCount() == 1 )
-                pObj = rMarkList.GetMark(0)->GetObj();
+                pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
             //CHINA001 SvxLineTabDialog* pDlg = new SvxLineTabDialog(NULL, &aNewAttr,
 //CHINA001                                                          pDoc, pObj, bHasMarked);
