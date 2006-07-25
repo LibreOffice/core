@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grafctrl.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:51:49 $
+ *  last change: $Author: rt $ $Date: 2006-07-25 12:57:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -980,7 +980,7 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
 
             if( 0 < rMarkList.GetMarkCount() )
             {
-                SdrGrafObj* pObj = (SdrGrafObj*) rMarkList.GetMark( 0 )->GetObj();
+                SdrGrafObj* pObj = (SdrGrafObj*) rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
                 if( pObj && pObj->ISA( SdrGrafObj ) &&
                     ( pObj->GetGraphicType() != GRAPHIC_NONE ) &&
@@ -1230,7 +1230,7 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView& rView )
                     for( USHORT i = 0, nCount = (USHORT) rMarkList.GetMarkCount();
                          ( i < nCount ) && bEnable; i++ )
                     {
-                        SdrObject* pObj = rMarkList.GetMark( 0 )->GetObj();
+                        SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
                         if( !pObj || !pObj->ISA( SdrGrafObj ) ||
                             ( (SdrGrafObj*) pObj )->HasGDIMetaFile() ||
@@ -1256,7 +1256,7 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView& rView )
 
                 if( 1 == rMarkList.GetMarkCount() )
                 {
-                    SdrObject* pObj = rMarkList.GetMark( 0 )->GetObj();
+                    SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
                     if( pObj && pObj->ISA( SdrGrafObj ) )
                     {
