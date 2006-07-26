@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryTabConnUndoAction.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:25:33 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:48:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,6 +117,10 @@ OQueryTabWinShowUndoAct::OQueryTabWinShowUndoAct(OQueryTableView* pOwner)
 {
 }
 // -----------------------------------------------------------------------------
+OQueryTabWinShowUndoAct::~OQueryTabWinShowUndoAct()
+{
+}
+// -----------------------------------------------------------------------------
 void OQueryTabWinShowUndoAct::Undo()
 {
     static_cast<OQueryTableView*>(m_pOwner)->HideTabWin(m_pTabWin, this);
@@ -131,6 +135,10 @@ void OQueryTabWinShowUndoAct::Redo()
 // -----------------------------------------------------------------------------
 OQueryTabWinDelUndoAct::OQueryTabWinDelUndoAct(OQueryTableView* pOwner)
  : OQueryTabWinUndoAct(pOwner, STR_QUERY_UNDO_TABWINDELETE)
+{
+}
+// -----------------------------------------------------------------------------
+OQueryTabWinDelUndoAct::~OQueryTabWinDelUndoAct()
 {
 }
 // -----------------------------------------------------------------------------
