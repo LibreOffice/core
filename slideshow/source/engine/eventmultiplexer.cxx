@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventmultiplexer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 08:32:19 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:25:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -255,7 +255,7 @@ void EventMultiplexer::scheduleTick()
 
     // enabled auto mode: simply schedule a timeout event,
     // which will eventually call our tick() method
-    mrEventQueue.addEvent( pEvent );
+    mrEventQueue.addEventForNextRound( pEvent );
 }
 
 void EventMultiplexer::handleTicks()
