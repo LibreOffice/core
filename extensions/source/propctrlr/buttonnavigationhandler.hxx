@@ -4,9 +4,9 @@
  *
  *  $RCSfile: buttonnavigationhandler.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:18:50 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:53:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,10 @@ namespace pcr
     */
     class ButtonNavigationHandler : public ButtonNavigationHandler_Base
     {
+    private:
+        ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyHandler >
+            m_xSlaveHandler;
+
     public:
         ButtonNavigationHandler(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext
@@ -71,9 +75,19 @@ namespace pcr
 
     protected:
         // XPropertyHandler overriables
+        virtual void                                    SAL_CALL inspect( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxIntrospectee ) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::NullPointerException);
         virtual ::com::sun::star::uno::Any              SAL_CALL getPropertyValue( const ::rtl::OUString& _rPropertyName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
         virtual void                                    SAL_CALL setPropertyValue( const ::rtl::OUString& _rPropertyName, const ::com::sun::star::uno::Any& _rValue ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::beans::PropertyState  SAL_CALL getPropertyState( const ::rtl::OUString& _rPropertyName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >
+                                                        SAL_CALL getSupersededProperties( ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >
+                                                        SAL_CALL getActuatingProperties( ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::inspection::InteractiveSelectionResult
+                                                        SAL_CALL onInteractivePropertySelection( const ::rtl::OUString& _rPropertyName, sal_Bool _bPrimary, ::com::sun::star::uno::Any& _rData, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorUI >& _rxInspectorUI ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException);
+        virtual void                                    SAL_CALL actuatingPropertyChanged( const ::rtl::OUString& _rActuatingPropertyName, const ::com::sun::star::uno::Any& _rNewValue, const ::com::sun::star::uno::Any& _rOldValue, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorUI >& _rxInspectorUI, sal_Bool _bFirstTimeInit ) throw (::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::inspection::LineDescriptor
+                                                        SAL_CALL describePropertyLine( const ::rtl::OUString& _rPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlFactory >& _rxControlFactory ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException);
 
         // PropertyHandler overridables
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >

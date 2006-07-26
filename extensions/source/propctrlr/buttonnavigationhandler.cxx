@@ -4,9 +4,9 @@
  *
  *  $RCSfile: buttonnavigationhandler.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:18:38 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:53:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,7 @@ namespace pcr
     using namespace ::com::sun::star::script;
     using namespace ::com::sun::star::form;
     using namespace ::com::sun::star::frame;
+    using namespace ::com::sun::star::inspection;
 
     //====================================================================
     //= ButtonNavigationHandler
@@ -84,6 +85,12 @@ namespace pcr
         :ButtonNavigationHandler_Base( _rxContext )
     {
         DBG_CTOR( ButtonNavigationHandler, NULL );
+
+        m_aContext.createComponent(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.inspection.FormComponentPropertyHandler" ) ),
+            m_xSlaveHandler );
+        if ( !m_xSlaveHandler.is() )
+            throw RuntimeException();
     }
 
     //--------------------------------------------------------------------
@@ -107,6 +114,13 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
+    void SAL_CALL ButtonNavigationHandler::inspect( const Reference< XInterface >& _rxIntrospectee ) throw (RuntimeException, NullPointerException)
+    {
+        ButtonNavigationHandler_Base::inspect( _rxIntrospectee );
+        m_xSlaveHandler->inspect( _rxIntrospectee );
+    }
+
+    //--------------------------------------------------------------------
     PropertyState  SAL_CALL ButtonNavigationHandler::getPropertyState( const ::rtl::OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -114,7 +128,7 @@ namespace pcr
         PropertyState eState = PropertyState_DIRECT_VALUE;
         switch ( nPropId )
         {
-        case PROPERTY_ID_BUTTONTYPE:
+        case PROPERTY_ID_ACTION_BUTTONTYPE:
         {
             PushButtonNavigation aHelper( m_xComponent );
             eState = aHelper.getCurrentButtonTypeState();
@@ -144,7 +158,7 @@ namespace pcr
         Any aReturn;
         switch ( nPropId )
         {
-        case PROPERTY_ID_BUTTONTYPE:
+        case PROPERTY_ID_ACTION_BUTTONTYPE:
         {
             PushButtonNavigation aHelper( m_xComponent );
             aReturn = aHelper.getCurrentButtonType();
@@ -173,7 +187,7 @@ namespace pcr
         PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
         switch ( nPropId )
         {
-        case PROPERTY_ID_BUTTONTYPE:
+        case PROPERTY_ID_ACTION_BUTTONTYPE:
         {
             PushButtonNavigation aHelper( m_xComponent );
             aHelper.setCurrentButtonType( _rValue );
@@ -212,12 +226,97 @@ namespace pcr
         if ( isNavigationCapableButton( m_xComponent ) )
         {
             addStringPropertyDescription( aProperties, PROPERTY_TARGET_URL );
-            implAddPropertyDescription( aProperties, PROPERTY_BUTTONTYPE, ::getCppuType( static_cast< FormButtonType* >( NULL ) ) );
+            implAddPropertyDescription( aProperties, PROPERTY_ACTION_BUTTONTYPE, ::getCppuType( static_cast< FormButtonType* >( NULL ) ) );
         }
 
         if ( aProperties.empty() )
             return Sequence< Property >();
         return Sequence< Property >( &(*aProperties.begin()), aProperties.size() );
+    }
+
+    //--------------------------------------------------------------------
+    Sequence< ::rtl::OUString > SAL_CALL ButtonNavigationHandler::getSupersededProperties( ) throw (RuntimeException)
+    {
+        Sequence< ::rtl::OUString > aSuperseded( 1 );
+        aSuperseded[0] = PROPERTY_BUTTONTYPE;
+        return aSuperseded;
+    }
+
+    //--------------------------------------------------------------------
+    Sequence< ::rtl::OUString > SAL_CALL ButtonNavigationHandler::getActuatingProperties( ) throw (RuntimeException)
+    {
+        Sequence< ::rtl::OUString > aActuating( 2 );
+        aActuating[0] = PROPERTY_ACTION_BUTTONTYPE;
+        aActuating[1] = PROPERTY_TARGET_URL;
+        return aActuating;
+    }
+
+    //--------------------------------------------------------------------
+    InteractiveSelectionResult SAL_CALL ButtonNavigationHandler::onInteractivePropertySelection( const ::rtl::OUString& _rPropertyName, sal_Bool _bPrimary, Any& _rData, const Reference< XObjectInspectorUI >& _rxInspectorUI ) throw (UnknownPropertyException, NullPointerException, RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
+
+        InteractiveSelectionResult eReturn( InteractiveSelectionResult_Cancelled );
+
+        switch ( nPropId )
+        {
+        case PROPERTY_ID_TARGET_URL:
+            eReturn = m_xSlaveHandler->onInteractivePropertySelection( _rPropertyName, _bPrimary, _rData, _rxInspectorUI );
+            break;
+        default:
+            eReturn = ButtonNavigationHandler_Base::onInteractivePropertySelection( _rPropertyName, _bPrimary, _rData, _rxInspectorUI );
+            break;
+        }
+
+        return eReturn;
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL ButtonNavigationHandler::actuatingPropertyChanged( const ::rtl::OUString& _rActuatingPropertyName, const Any& /*_rNewValue*/, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& _rxInspectorUI, sal_Bool /*_bFirstTimeInit*/ ) throw (NullPointerException, RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        PropertyId nPropId( impl_getPropertyId_throw( _rActuatingPropertyName ) );
+        switch ( nPropId )
+        {
+        case PROPERTY_ID_ACTION_BUTTONTYPE:
+        {
+            PushButtonNavigation aHelper( m_xComponent );
+            _rxInspectorUI->enablePropertyUI( PROPERTY_TARGET_URL, aHelper.currentButtonTypeIsOpenURL() );
+        }
+        break;
+
+        case PROPERTY_ID_TARGET_URL:
+        {
+            PushButtonNavigation aHelper( m_xComponent );
+            _rxInspectorUI->enablePropertyUI( PROPERTY_TARGET_FRAME, aHelper.hasNonEmptyCurrentTargetURL() );
+        }
+        break;
+
+        default:
+            OSL_ENSURE( sal_False, "ButtonNavigationHandler::actuatingPropertyChanged: cannot handle this id!" );
+        }
+    }
+
+    //--------------------------------------------------------------------
+    LineDescriptor SAL_CALL ButtonNavigationHandler::describePropertyLine( const ::rtl::OUString& _rPropertyName, const Reference< XPropertyControlFactory >& _rxControlFactory ) throw (UnknownPropertyException, NullPointerException, RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
+
+        LineDescriptor aReturn;
+
+        switch ( nPropId )
+        {
+        case PROPERTY_ID_TARGET_URL:
+            aReturn = m_xSlaveHandler->describePropertyLine( _rPropertyName, _rxControlFactory );
+            break;
+        default:
+            aReturn = ButtonNavigationHandler_Base::describePropertyLine( _rPropertyName, _rxControlFactory );
+            break;
+        }
+
+        return aReturn;
     }
 
 //........................................................................
