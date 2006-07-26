@@ -4,9 +4,9 @@
  *
  *  $RCSfile: submissionhandler.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:33:39 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 08:01:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -318,8 +318,8 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL SubmissionPropertyHandler::describePropertyLine( const ::rtl::OUString& _rPropertyName,
-        LineDescriptor& /* [out] */ _rDescriptor, const Reference< XPropertyControlFactory >& _rxControlFactory )
+    LineDescriptor SAL_CALL SubmissionPropertyHandler::describePropertyLine( const ::rtl::OUString& _rPropertyName,
+        const Reference< XPropertyControlFactory >& _rxControlFactory )
         throw (UnknownPropertyException, NullPointerException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -347,17 +347,19 @@ namespace pcr
 
         default:
             OSL_ENSURE( sal_False, "SubmissionPropertyHandler::describePropertyLine: cannot handle this id!" );
-            return;
+            return LineDescriptor();
         }
 
-        _rDescriptor.Control = PropertyHandlerHelper::createListBoxControl( _rxControlFactory, aListEntries, sal_False );
-        _rDescriptor.DisplayName = m_pInfoService->getPropertyTranslation( nPropId );
-        _rDescriptor.Category = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "General" ) );
-        _rDescriptor.HelpURL = HelpIdUrl::getHelpURL( m_pInfoService->getPropertyHelpId( nPropId ) );
+        LineDescriptor aDescriptor;
+        aDescriptor.Control = PropertyHandlerHelper::createListBoxControl( _rxControlFactory, aListEntries, sal_False );
+        aDescriptor.DisplayName = m_pInfoService->getPropertyTranslation( nPropId );
+        aDescriptor.Category = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "General" ) );
+        aDescriptor.HelpURL = HelpIdUrl::getHelpURL( m_pInfoService->getPropertyHelpId( nPropId ) );
+        return aDescriptor;
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL SubmissionPropertyHandler::actuatingPropertyChanged( const ::rtl::OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& _rOldValue, const Reference< XObjectInspectorUI >& _rxInspectorUI, sal_Bool ) throw (NullPointerException, RuntimeException)
+    void SAL_CALL SubmissionPropertyHandler::actuatingPropertyChanged( const ::rtl::OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& _rxInspectorUI, sal_Bool ) throw (NullPointerException, RuntimeException)
     {
         if ( !_rxInspectorUI.is() )
             throw NullPointerException();
