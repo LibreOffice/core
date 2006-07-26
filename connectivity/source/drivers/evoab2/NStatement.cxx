@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NStatement.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 09:35:52 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:22:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,10 +186,15 @@ void OStatement_Base::clearMyResultSet () throw (SQLException)
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
-    Reference<XCloseable> xCloseable;
-    if(::comphelper::query_interface(m_xResultSet.get(),xCloseable))
-        xCloseable->close();
-    m_xResultSet = Reference< XResultSet>();
+    try
+    {
+        Reference<XCloseable> xCloseable;
+        if ( ::comphelper::query_interface( m_xResultSet.get(), xCloseable ) )
+            xCloseable->close();
+    }
+    catch( const DisposedException& ) { }
+
+    m_xResultSet = Reference< XResultSet >();
 }
 
 EBookQuery *
