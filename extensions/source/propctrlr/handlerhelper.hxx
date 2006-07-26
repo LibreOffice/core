@@ -4,9 +4,9 @@
  *
  *  $RCSfile: handlerhelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:25:37 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:58:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,7 +84,6 @@ namespace pcr
         /** helper for implementing XPropertyHandler::describePropertyLine in a generic way
         */
         static  void describePropertyLine(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
                 const ::com::sun::star::beans::Property& _rProperty,
                 ::com::sun::star::inspection::LineDescriptor& /* [out] */ _out_rDescriptor,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlFactory >& _rxControlFactory
@@ -93,7 +92,6 @@ namespace pcr
         /** helper for implementing XPropertyHandler::convertToPropertyValue
         */
         static ::com::sun::star::uno::Any convertToPropertyValue(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::script::XTypeConverter >& _rxTypeConverter,
                 const ::com::sun::star::beans::Property& _rProperty,
                 const ::com::sun::star::uno::Any& _rControlValue
@@ -101,9 +99,7 @@ namespace pcr
 
         /// helper for implementing XPropertyHandler::convertToControlValue
         static ::com::sun::star::uno::Any convertToControlValue(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::script::XTypeConverter >& _rxTypeConverter,
-                const ::com::sun::star::beans::Property& _rProperty,
                 const ::com::sun::star::uno::Any& _rPropertyValue,
                 const ::com::sun::star::uno::Type& _rControlValueType
             );
