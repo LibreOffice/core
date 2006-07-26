@@ -4,9 +4,9 @@
  *
  *  $RCSfile: genericunodialog.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 21:28:18 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:29:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -228,12 +228,50 @@ void SAL_CALL OGenericUnoDialog::setTitle( const ::rtl::OUString& _rTitle ) thro
 }
 
 //-------------------------------------------------------------------------
+bool OGenericUnoDialog::impl_ensureDialog_lck()
+{
+    if ( m_pDialog )
+        return true;
+
+    // get the parameters for the dialog from the current settings
+
+    // the parent window
+    Window* pParent = NULL;
+    VCLXWindow* pImplementation = VCLXWindow::GetImplementation(m_xParent);
+    if (pImplementation)
+        pParent = pImplementation->GetWindow();
+
+    // the title
+    String sTitle = m_sTitle;
+
+    Dialog* pDialog = createDialog( pParent );
+    OSL_ENSURE( pDialog, "OGenericUnoDialog::impl_ensureDialog_lck: createDialog returned nonsense!" );
+    if ( !pDialog )
+        return false;
+
+    // do some initialisations
+    if ( !m_bTitleAmbiguous )
+        pDialog->SetText( sTitle );
+
+    // be notified when the dialog is killed by somebody else
+    // #i65958# / 2006-07-07 / frank.schoenheit@sun.com
+    pDialog->AddEventListener( LINK( this, OGenericUnoDialog, OnDialogDying ) );
+
+    m_pDialog = pDialog;
+
+    return true;
+}
+
+//-------------------------------------------------------------------------
 sal_Int16 SAL_CALL OGenericUnoDialog::execute(  ) throw(RuntimeException)
 {
+    // both creation and execution of the dialog must be guarded with the SolarMutex, so be generous here
+    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+
     Dialog* pDialogToExecute = NULL;
     // create the dialog, if neccessary
     {
-        ::osl::ClearableMutexGuard aGuard(m_aMutex);
+        ::osl::MutexGuard aGuard(m_aMutex);
 
         if (m_bExecuting)
             throw RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("already executing the dialog (recursive call)")), THISREF());
@@ -241,57 +279,31 @@ sal_Int16 SAL_CALL OGenericUnoDialog::execute(  ) throw(RuntimeException)
         m_bCanceled = sal_False;
         m_bExecuting = sal_True;
 
-        if (!m_pDialog)
-        {
-            // get the parameters for the dialog from the current settings
+        if ( !impl_ensureDialog_lck() )
+            return 0;
 
-            // the parent window
-            Window* pParent = NULL;
-            VCLXWindow* pImplementation = VCLXWindow::GetImplementation(m_xParent);
-            if (pImplementation)
-                pParent = pImplementation->GetWindow();
-
-            // the title
-            String sTitle = m_sTitle;
-
-            // create the dialog (must be guarded by the solar mutex
-            aGuard.clear();
-                // this may prevent some deadlocks, as the solar mutex is usually locked very
-                // high on the stack, with no mutex locked above, so we try to behave the same way here
-
-            {
-                ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
-                pDialogToExecute = createDialog(pParent);
-                OSL_ENSURE( pDialogToExecute, "OGenericUnoDialog::execute: createDialog returned nonsense!" );
-                // do some initialisations
-                if (!m_bTitleAmbiguous && pDialogToExecute)
-                    pDialogToExecute->SetText(sTitle);
-            }
-
-            m_pDialog = pDialogToExecute;
-                // note that this is not guarded by m_aMutex anymore !
-        }
+        pDialogToExecute = m_pDialog;
     }
 
     // start execution
     sal_Int16 nReturn(0);
     if ( pDialogToExecute )
-    {   // again: this has to be guarded with the solar mutex
-        ::vos::OGuard aGuard(Application::GetSolarMutex());
         nReturn = pDialogToExecute->Execute();
-    }
+
     {
         ::osl::MutexGuard aExecutionGuard(m_aExecutionMutex);
         if (m_bCanceled)
             nReturn = RET_CANCEL;
     }
 
-    ::osl::MutexGuard aGuard(m_aMutex);
+    {
+        ::osl::MutexGuard aGuard(m_aMutex);
 
-    // get the settings of the dialog
-    executedDialog(nReturn);
+        // get the settings of the dialog
+        executedDialog( nReturn );
 
-    m_bExecuting = sal_False;
+        m_bExecuting = sal_False;
+    }
 
     // outta here
     return nReturn;
@@ -359,6 +371,15 @@ void OGenericUnoDialog::destroyDialog()
     ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
     delete m_pDialog;
     m_pDialog = NULL;
+}
+
+//-------------------------------------------------------------------------
+IMPL_LINK( OGenericUnoDialog, OnDialogDying, VclWindowEvent*, _pEvent )
+{
+    OSL_ENSURE( _pEvent->GetWindow() == m_pDialog, "OGenericUnoDialog::OnDialogDying: where does this come from?" );
+    if ( _pEvent->GetId() == VCLEVENT_OBJECT_DYING )
+        m_pDialog = NULL;
+    return 0L;
 }
 
 //.........................................................................
