@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linedescriptor.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:25:51 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:58:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,11 @@ namespace pcr
         OLineDescriptor()
             :bUnknownValue( false )
         {
+        }
+
+        void assignFrom( const ::com::sun::star::inspection::LineDescriptor& _rhs )
+        {
+            ::com::sun::star::inspection::LineDescriptor::operator=( _rhs );
         }
     };
 
