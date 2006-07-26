@@ -4,9 +4,9 @@
  *
  *  $RCSfile: usereventqueue.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 08:36:36 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:27:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -331,7 +331,7 @@ private:
             // (we don't run into busy loop), because we assume that
             // someone has registerered above for next effects
             // (multiplexer prio=0) at the user event queue.
-            return mrEventQueue.addEvent(
+            return mrEventQueue.addEventForNextRound(
                 makeEvent( boost::bind(
                                &EventMultiplexer::notifyNextEffect,
                                boost::ref(mrEventMultiplexer) ) ) );
