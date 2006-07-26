@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basenode.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 08:43:18 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:34:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,23 +44,16 @@
 #include "generateevent.hxx"
 #include "com/sun/star/animations/XAnimate.hpp"
 #include "com/sun/star/presentation/ParagraphTarget.hpp"
-#include "com/sun/star/animations/AnimationNodeType.hpp"
-#include "com/sun/star/animations/AnimationCalcMode.hpp"
-#include "com/sun/star/animations/Timing.hpp"
 #include "com/sun/star/animations/AnimationFill.hpp"
-#include "com/sun/star/animations/Event.hpp"
 #include "com/sun/star/animations/AnimationRestart.hpp"
-#include "com/sun/star/presentation/ShapeAnimationSubType.hpp"
 #include "com/sun/star/presentation/EffectNodeType.hpp"
-#include "com/sun/star/animations/AnimationAdditiveMode.hpp"
 #include "com/sun/star/beans/XPropertySet.hpp"
 #include "boost/bind.hpp"
-#include "boost/mem_fn.hpp"
 #include <vector>
 #include <algorithm>
 #include <iterator>
 
-namespace css = ::com::sun::star;
+namespace css = com::sun::star;
 using namespace css;
 
 namespace presentation {
@@ -68,12 +61,16 @@ namespace internal {
 
 namespace {
 
+typedef int StateTransitionTable[17];
+
 // State transition tables
 // =========================================================================
 
 const int* getStateTransitionTable( sal_Int16 nRestartMode,
                                     sal_Int16 nFillMode )
 {
+    // TODO(F2): restart issues in below tables
+
     // transition table for restart=NEVER, fill=REMOVE
     static const StateTransitionTable stateTransitionTable_Never_Remove = {
         AnimationNode::INVALID,
@@ -262,11 +259,11 @@ bool isMainSequenceRootNode_(
 {
     // detect main sequence root node (need that for
     // end-of-mainsequence signalling below)
-    beans::NamedValue aSearchKey(
+    beans::NamedValue const aSearchKey(
         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "node-type" ) ),
         uno::makeAny( css::presentation::EffectNodeType::MAIN_SEQUENCE ) );
 
-    uno::Sequence<beans::NamedValue> userData(xNode->getUserData());
+    uno::Sequence<beans::NamedValue> const userData(xNode->getUserData());
     return findNamedValue( userData, aSearchKey );
 }
 
@@ -275,21 +272,76 @@ bool isMainSequenceRootNode_(
 // BaseNode implementation
 //=========================================================================
 
+/** state transition handling
+ */
+class BaseNode::StateTransition : private boost::noncopyable
+{
+public:
+    enum Options { NONE, FORCE };
+
+    explicit StateTransition( BaseNode * pNode )
+        : mpNode(pNode), meToState(INVALID) {}
+
+    ~StateTransition() {
+        clear();
+    }
+
+    bool enter( NodeState eToState, int options = NONE )
+    {
+        OSL_ENSURE( meToState == INVALID,
+                    "### commit() before enter()ing again!" );
+        if (meToState != INVALID)
+            return false;
+        bool const bForce = ((options & FORCE) != 0);
+        if (!bForce && !mpNode->isTransition( mpNode->meCurrState, eToState ))
+            return false;
+        // recursion detection:
+        if ((mpNode->meCurrentStateTransition & eToState) != 0)
+            return false; // already in wanted transition
+        // mark transition:
+        mpNode->meCurrentStateTransition |= eToState;
+        meToState = eToState;
+        return true; // in transition
+    }
+
+    void commit() {
+        OSL_ENSURE( meToState != INVALID, "### nothing to commit!" );
+        if (meToState != INVALID) {
+            mpNode->meCurrState = meToState;
+            clear();
+        }
+    }
+
+    void clear() {
+        if (meToState != INVALID) {
+            OSL_ASSERT( (mpNode->meCurrentStateTransition & meToState) != 0 );
+            mpNode->meCurrentStateTransition &= ~meToState;
+            meToState = INVALID;
+        }
+    }
+
+private:
+    BaseNode *const mpNode;
+    NodeState meToState;
+};
+
 BaseNode::BaseNode(
     const uno::Reference< animations::XAnimationNode >& xNode,
     const BaseContainerNodeSharedPtr&                   rParent,
     const NodeContext&                                  rContext )
     : maContext( rContext.maContext ),
       maDeactivatingListeners(),
-      mxNode( xNode ),
+      mxAnimationNode( xNode ),
       mpParent( rParent ),
       mpSelf(),
       mpStateTransitionTable( NULL ),
       mnStartDelay( rContext.mnStartDelay ),
       meCurrState( UNRESOLVED ),
+      meCurrentStateTransition( 0 ),
+      mpCurrentEvent(),
       mbIsMainSequenceRootNode( isMainSequenceRootNode_( xNode ) )
 {
-    ENSURE_AND_THROW( mxNode.is(),
+    ENSURE_AND_THROW( mxAnimationNode.is(),
                       "BaseNode::BaseNode(): Invalid XAnimationNode" );
 
     // setup state transition table
@@ -301,98 +353,291 @@ void BaseNode::dispose()
 {
     meCurrState = INVALID;
 
+    // discharge a loaded event, if any:
+    if (mpCurrentEvent) {
+        mpCurrentEvent->dispose();
+        mpCurrentEvent.reset();
+    }
     maDeactivatingListeners.clear();
-    mxNode.clear();
+    mxAnimationNode.clear();
     mpParent.reset();
     mpSelf.reset();
     maContext.dispose();
 }
 
-uno::Reference< animations::XAnimationNode > BaseNode::getXAnimationNode() const
+
+sal_Int16 BaseNode::getRestartMode()
 {
-    return mxNode;
+    const sal_Int16 nTmp( mxAnimationNode->getRestart() );
+    return (nTmp != animations::AnimationRestart::DEFAULT &&
+            nTmp != animations::AnimationRestart::INHERIT)
+        ? nTmp : getRestartDefaultMode();
+}
+
+sal_Int16 BaseNode::getFillMode()
+{
+    const sal_Int16 nTmp( mxAnimationNode->getFill() );
+    const sal_Int16 nFill((nTmp != animations::AnimationFill::DEFAULT &&
+                           nTmp != animations::AnimationFill::INHERIT)
+                          ? nTmp : getFillDefaultMode());
+
+    // For AUTO fill mode, SMIL specifies that fill mode is FREEZE,
+    // if no explicit active duration is given
+    // (no duration, end, repeatCount or repeatDuration given),
+    // and REMOVE otherwise
+    if( nFill == animations::AnimationFill::AUTO ) {
+        return (isIndefiniteTiming( mxAnimationNode->getDuration() ) &&
+                isIndefiniteTiming( mxAnimationNode->getEnd() ) &&
+                !mxAnimationNode->getRepeatCount().hasValue() &&
+                isIndefiniteTiming( mxAnimationNode->getRepeatDuration() ))
+            ? animations::AnimationFill::FREEZE
+            : animations::AnimationFill::REMOVE;
+    }
+    else {
+        return nFill;
+    }
+}
+
+sal_Int16 BaseNode::getFillDefaultMode() const
+{
+    sal_Int16 nFillDefault = mxAnimationNode->getFillDefault();
+    if (nFillDefault  == animations::AnimationFill::DEFAULT) {
+        nFillDefault = (mpParent.get() != 0
+                        ? mpParent->getFillDefaultMode()
+                        : animations::AnimationFill::AUTO);
+    }
+    return nFillDefault;
+}
+
+sal_Int16 BaseNode::getRestartDefaultMode() const
+{
+    sal_Int16 nRestartDefaultMode = mxAnimationNode->getRestartDefault();
+    if (nRestartDefaultMode == animations::AnimationRestart::DEFAULT) {
+        nRestartDefaultMode = (mpParent.get() != 0
+                               ? mpParent->getRestartDefaultMode()
+                               : animations::AnimationRestart::ALWAYS);
+    }
+    return nRestartDefaultMode;
+}
+
+uno::Reference<animations::XAnimationNode> BaseNode::getXAnimationNode() const
+{
+    return mxAnimationNode;
 }
 
 bool BaseNode::init()
 {
-    // early exit on invalid nodes
-    if( meCurrState == INVALID )
+    if (! checkValidNode())
         return false;
-
-    ENSURE_AND_THROW( mpSelf.get(), "BaseNode::init(): no self set" );
-
     meCurrState = UNRESOLVED;
+    // discharge a loaded event, if any:
+    if (mpCurrentEvent) {
+        mpCurrentEvent->dispose();
+        mpCurrentEvent.reset();
+    }
+    return init_st(); // may call derived class
+}
+
+bool BaseNode::init_st()
+{
     return true;
 }
 
 bool BaseNode::resolve()
 {
-    if( meCurrState == RESOLVED )
-        return true; // avoid duplicate event generation
+    if (! checkValidNode())
+        return false;
 
-    // is this state reachable from meCurrState?
-    if( !(mpStateTransitionTable[meCurrState] & RESOLVED) )
-        return false; // nope, cannot resolv
+    OSL_ASSERT( meCurrState != RESOLVED );
+    if (inStateOrTransition( RESOLVED ))
+        return true;
 
-    ENSURE_AND_THROW( mpSelf.get(), "BaseNode::resolve(): no self set" );
+    StateTransition st(this);
+    if (st.enter( RESOLVED ) &&
+        isTransition( RESOLVED, ACTIVE ) &&
+        resolve_st() /* may call derived class */)
+    {
+        st.commit(); // changing state
 
-    // change state
-    meCurrState = RESOLVED;
+        // discharge a loaded event, if any:
+        if (mpCurrentEvent)
+            mpCurrentEvent->dispose();
 
-    // schedule begin event (if ACTIVE state is reachable)
-    if( !(mpStateTransitionTable[meCurrState] & ACTIVE) )
-        return false; // nope, cannot become active
+        // schedule activation event:
 
-    scheduleActivationEvent();
+        // This method takes the NodeContext::mnStartDelay value into account,
+        // to cater for iterate container time shifts. We cannot put different
+        // iterations of the iterate container's children into different
+        // subcontainer (such as a 'DelayContainer', which delays resolving its
+        // children by a fixed amount), since all iterations' nodes must be
+        // resolved at the same time (otherwise, the delayed subset creation
+        // will not work, i.e. deactivate the subsets too late in the master
+        // shape).
+        uno::Any const aBegin( mxAnimationNode->getBegin() );
+        if (aBegin.hasValue()) {
+            mpCurrentEvent = generateEvent(
+                aBegin, boost::bind( &AnimationNode::activate, mpSelf ),
+                maContext, mnStartDelay );
+        }
+        else {
+            // For some leaf nodes, PPT import yields empty begin time,
+            // although semantically, it should be 0.0
+            // TODO(F3): That should really be provided by the PPT import
 
+            // schedule delayed activation event. Take iterate node
+            // timeout into account
+            mpCurrentEvent = makeDelay(
+                boost::bind( &AnimationNode::activate, mpSelf ), mnStartDelay );
+            maContext.mrEventQueue.addEvent( mpCurrentEvent );
+        }
+
+        return true;
+    }
+    return false;
+}
+
+bool BaseNode::resolve_st()
+{
     return true;
 }
 
+
 bool BaseNode::activate()
 {
-    if( meCurrState == ACTIVE )
-        return true; // avoid duplicate event generation
+    if (! checkValidNode())
+        return false;
 
-    // is the requested state reachable from meCurrState?
-    if( !(mpStateTransitionTable[meCurrState] & ACTIVE) )
-        return false; // nope, cannot become active
+    OSL_ASSERT( meCurrState != ACTIVE );
+    if (inStateOrTransition( ACTIVE ))
+        return true;
 
-    // change state
-    meCurrState = ACTIVE;
+    StateTransition st(this);
+    if (st.enter( ACTIVE )) {
 
-    // notify state change
-    maContext.mrEventMultiplexer.notifyAnimationStart( mpSelf );
+        activate_st(); // calling derived class
 
+        st.commit(); // changing state
+
+        maContext.mrEventMultiplexer.notifyAnimationStart( mpSelf );
+
+        return true;
+    }
+
+    return false;
+}
+
+void BaseNode::activate_st()
+{
     scheduleDeactivationEvent();
+}
 
-    return true;
+void BaseNode::scheduleDeactivationEvent( EventSharedPtr const& pEvent )
+{
+    if (mpCurrentEvent) {
+        mpCurrentEvent->dispose();
+        mpCurrentEvent.reset();
+    }
+    if (pEvent) {
+        if (maContext.mrEventQueue.addEvent( pEvent ))
+            mpCurrentEvent = pEvent;
+    }
+    else {
+        // This method need not take the
+        // NodeContext::mnStartDelay value into account,
+        // because the deactivation event is only scheduled
+        // when the effect is started: the timeout is then
+        // already respected.
+
+        // xxx todo:
+        // think about set node, anim base node!
+        // if anim base node has no activity, this is called to schedule deactivatiion,
+        // but what if it does not schedule anything?
+
+        // TODO(F2): Handle end time attribute, too
+        mpCurrentEvent = generateEvent(
+            mxAnimationNode->getDuration(),
+            boost::bind( &AnimationNode::deactivate, mpSelf ),
+            maContext, 0.0 );
+    }
 }
 
 void BaseNode::deactivate()
 {
-    if( meCurrState == ENDED ||
-        meCurrState == FROZEN )
-    {
-        return; // avoid duplicate event generation
-    }
-
-    // early exit on invalid nodes
-    if( meCurrState == INVALID )
+    if (inStateOrTransition( ENDED | FROZEN ) || !checkValidNode())
         return;
 
-    // is state FROZEN reachable from meCurrState?
-    if( !(mpStateTransitionTable[meCurrState] & FROZEN) )
-        end(); // nope, use end instead
-    else
-        meCurrState = FROZEN; // change state
+    if (isTransition( meCurrState, FROZEN, false /* no OSL_ASSERT */ )) {
+        // do transition to FROZEN:
+        StateTransition st(this);
+        if (st.enter( FROZEN, StateTransition::FORCE )) {
 
+            deactivate_st( FROZEN );
+            st.commit();
+
+            notifyEndListeners();
+
+            // discharge a loaded event, before going on:
+            if (mpCurrentEvent) {
+                mpCurrentEvent->dispose();
+                mpCurrentEvent.reset();
+            }
+        }
+    }
+    else {
+        // use end instead:
+        end();
+    }
+    // state has changed either to FROZEN or ENDED
+}
+
+void BaseNode::deactivate_st( NodeState )
+{
+}
+
+void BaseNode::end()
+{
+    bool const bIsFrozenOrInTransitionToFrozen = inStateOrTransition( FROZEN );
+    if (inStateOrTransition( ENDED ) || !checkValidNode())
+        return;
+
+    // END must always be reachable. If not, that's an error in the
+    // transition tables
+    OSL_ENSURE( isTransition( meCurrState, ENDED ),
+                "end state not reachable in transition table" );
+
+    StateTransition st(this);
+    if (st.enter( ENDED, StateTransition::FORCE )) {
+
+        deactivate_st( ENDED );
+        st.commit(); // changing state
+
+        // if is FROZEN or is to be FROZEN, then
+        // will/already notified deactivating listeners
+        if (!bIsFrozenOrInTransitionToFrozen)
+            notifyEndListeners();
+
+        // discharge a loaded event, before going on:
+        if (mpCurrentEvent) {
+            mpCurrentEvent->dispose();
+            mpCurrentEvent.reset();
+        }
+    }
+}
+
+void BaseNode::notifyDeactivating( const AnimationNodeSharedPtr& rNotifier )
+{
+    OSL_ASSERT( rNotifier->getState() == FROZEN ||
+                rNotifier->getState() == ENDED );
+    // TODO(F1): for end sync functionality, this might indeed be used some day
+}
+
+void BaseNode::notifyEndListeners() const
+{
     // notify all listeners
-    ::std::for_each( maDeactivatingListeners.begin(),
-                     maDeactivatingListeners.end(),
-                     ::boost::bind(
-                         &AnimationNode::notifyDeactivating,
-                         _1,
-                         ::boost::cref(mpSelf) ) );
+    std::for_each( maDeactivatingListeners.begin(),
+                   maDeactivatingListeners.end(),
+                   boost::bind( &AnimationNode::notifyDeactivating, _1,
+                                boost::cref(mpSelf) ) );
 
     // notify state change
     maContext.mrEventMultiplexer.notifyAnimationEnd( mpSelf );
@@ -409,25 +654,6 @@ void BaseNode::deactivate()
         maContext.mrEventMultiplexer.notifySlideAnimationsEnd();
 }
 
-void BaseNode::end()
-{
-    // early exit on invalid nodes, avoid duplicate event generation
-    if( meCurrState == ENDED ||
-        meCurrState == INVALID )
-    {
-        return;
-    }
-
-    // END must always be reachable. If not, that's an error in the
-    // transition tables
-    OSL_ENSURE(
-        mpStateTransitionTable[meCurrState] & ENDED,
-        "BaseNode::end(): end state not reachable in transition table" );
-
-    // change state
-    meCurrState = ENDED;
-}
-
 AnimationNode::NodeState BaseNode::getState() const
 {
     return meCurrState;
@@ -436,8 +662,7 @@ AnimationNode::NodeState BaseNode::getState() const
 bool BaseNode::registerDeactivatingListener(
     const AnimationNodeSharedPtr& rNotifee )
 {
-    // early exit on invalid nodes
-    if( meCurrState == INVALID )
+    if (! checkValidNode())
         return false;
 
     ENSURE_AND_RETURN(
@@ -450,10 +675,6 @@ bool BaseNode::registerDeactivatingListener(
 
 void BaseNode::setSelf( const BaseNodeSharedPtr& rSelf )
 {
-    // early exit on invalid nodes
-    if( meCurrState == INVALID )
-        return;
-
     ENSURE_AND_THROW( rSelf.get() == this,
                       "BaseNode::setSelf(): got ptr to different object" );
     ENSURE_AND_THROW( !mpSelf.get(),
@@ -461,156 +682,6 @@ void BaseNode::setSelf( const BaseNodeSharedPtr& rSelf )
 
     mpSelf = rSelf;
 }
-
-sal_Int16 BaseNode::getFillDefaultMode() const
-{
-    // early exit on invalid nodes
-    if( meCurrState == INVALID )
-        return 0;
-
-    if( mxNode->getFillDefault() == animations::AnimationFill::DEFAULT )
-    {
-        return mpParent.get() != 0
-            ? mpParent->getFillDefaultMode()
-            : animations::AnimationFill::AUTO;
-    }
-
-    return mxNode->getFillDefault();
-}
-
-sal_Int16 BaseNode::getRestartDefaultMode() const
-{
-    // early exit on invalid nodes
-    if( meCurrState == INVALID )
-        return 0;
-
-    if( mxNode->getRestartDefault() == animations::AnimationRestart::DEFAULT )
-    {
-        return mpParent.get() != 0
-            ? mpParent->getRestartDefaultMode()
-            : animations::AnimationRestart::ALWAYS;
-    }
-
-    return mxNode->getRestartDefault();
-}
-
-//     /** Notify a fired user event to this node
-
-//         This method differs from a plain activate(), in that
-//         it is able to also activate a yet unresolved node. If
-//         a node cannot be simply activated, this method issues
-//         a requestResolveOnChildren() on the parent node.
-//     */
-// void BaseNode::notifyUserEvent()
-// {
-//     // early exit on invalid nodes
-//     if( meCurrState == INVALID )
-//         return;
-
-//     // TODO(F2): Check whether this here goes conform with SMILs
-//     // user event and restart specifications.
-
-//     // we're called from e.g. OnClick, try to become active
-//     if( !activate() )
-//     {
-//         // could not start, call parent to activate us
-//         if( mpParent.get() )
-//             mpParent->requestResolveOnChildren();
-//     }
-
-//     // DEBUG_NODES_SHOWTREE_WITHIN(this);
-// }
-
-void BaseNode::scheduleActivationEvent()
-{
-    // This method takes the NodeContext::mnStartDelay value into account,
-    // to cater for iterate container time shifts. We cannot put different
-    // iterations of the iterate container's children into different
-    // subcontainer (such as a 'DelayContainer', which delays resolving its
-    // children by a fixed amount), since all iterations' nodes must be
-    // resolved at the same time (otherwise, the delayed subset creation
-    // will not work, i.e. deactivate the subsets too late in the master
-    // shape).
-
-    // For some leaf nodes, PPT import yields empty begin time,
-    // although semantically, it should be 0.0
-    if( !mxNode->getBegin().hasValue() )
-    {
-        // TODO(F3): That should really be provided by the PPT import
-
-        // schedule delayed activation event. Take iterate node
-        // timeout into account
-        maContext.mrEventQueue.addEvent(
-            makeDelay( boost::bind( &BaseNode::activate, mpSelf ),
-                       mnStartDelay ) );
-    }
-    else
-    {
-        generateEvent( mxNode->getBegin(),
-                       boost::bind( &BaseNode::activate, mpSelf ),
-                       maContext, mnStartDelay );
-    }
-}
-
-void BaseNode::scheduleDeactivationEvent() const
-{
-    // This method need not take the
-    // NodeContext::mnStartDelay value into account,
-    // because the deactivation event is only scheduled
-    // when the effect is started: the timeout is then
-    // already respected.
-
-    // TODO(F2): Handle end time attribute, too
-    generateEvent( mxNode->getDuration(),
-                   boost::bind( &BaseNode::deactivate, mpSelf ),
-                   maContext, 0.0 );
-}
-
-// Helper
-// ------
-
-sal_Int16 BaseNode::getRestartMode()
-{
-    // early exit on invalid nodes
-    if( meCurrState == INVALID )
-        return 0;
-
-    const sal_Int16 nTmp( mxNode->getRestart() );
-    return (nTmp != animations::AnimationRestart::DEFAULT &&
-            nTmp != animations::AnimationRestart::INHERIT)
-        ? nTmp : getRestartDefaultMode();
-}
-
-sal_Int16 BaseNode::getFillMode()
-{
-    // early exit on invalid nodes
-    if( meCurrState == INVALID )
-        return 0;
-
-    const sal_Int16 nTmp( mxNode->getFill() );
-    const sal_Int16 nFill((nTmp != animations::AnimationFill::DEFAULT &&
-                           nTmp != animations::AnimationFill::INHERIT)
-                          ? nTmp : getFillDefaultMode());
-
-    // For AUTO fill mode, SMIL specifies that fill mode is FREEZE,
-    // if no explicit active duration is given
-    // (no duration, end, repeatCound or repeatDuration given),
-    // and REMOVE otherwise
-    if( nFill == animations::AnimationFill::AUTO )
-    {
-        return (isIndefiniteTiming( mxNode->getDuration() ) &&
-                isIndefiniteTiming( mxNode->getEnd() ) &&
-                !mxNode->getRepeatCount().hasValue() &&
-                isIndefiniteTiming( mxNode->getRepeatDuration() ))
-            ? animations::AnimationFill::FREEZE
-            : animations::AnimationFill::REMOVE;
-    }
-    else
-    {
-        return nFill;
-    }
-}
-
 
 // Debug
 //=========================================================================
@@ -633,8 +704,8 @@ void BaseNode::showState() const
                        log((double)getState())/4.0 );
 
     // determine additional node information
-    uno::Reference< animations::XAnimate > xAnimate( mxNode,
-                                                     uno::UNO_QUERY );
+    uno::Reference<animations::XAnimate> const xAnimate( mxAnimationNode,
+                                                         uno::UNO_QUERY );
     if( xAnimate.is() )
     {
         uno::Reference< drawing::XShape > xTargetShape( xAnimate->getTarget(),
