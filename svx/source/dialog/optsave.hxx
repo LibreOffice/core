@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optsave.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:49:06 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 09:09:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,6 +83,7 @@ private:
     CheckBox            aAutoSaveBtn;
     NumericField        aAutoSaveEdit;
     FixedText           aMinuteText;
+    CheckBox            aNoPrettyPrintingBtn;
     CheckBox            aWarnAlienFormatBtn;
 
     FixedLine           aRelBox;
@@ -100,12 +101,13 @@ private:
     String              sAlienMsg;
 
     SvxSaveTabPage_Impl* pImpl;
+
 #ifdef _SVX_OPTSAVE_CXX
     DECL_LINK( AutoClickHdl_Impl, CheckBox * );
     DECL_LINK( FilterHdl_Impl, ListBox * );
 
-    bool AcceptFilter( USHORT nPos );
-
+    bool    AcceptFilter( USHORT nPos );
+    void    DetectHiddenControls();
 #endif
 
 public:
@@ -116,9 +118,7 @@ public:
 
     virtual BOOL        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
-
 };
 
 #endif  // #ifndef _SVX_OPTSAVE_HXX
-
 
