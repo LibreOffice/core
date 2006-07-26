@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventqueue.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:49:14 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:39:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,7 @@
 #endif
 
 #include <queue>
+#include <vector>
 #include <event.hxx>
 
 #include <boost/utility.hpp> // for boost::noncopyable
@@ -68,6 +69,13 @@ namespace presentation
                 at, or shortly after, its Event::getActivationTime instant.
              */
             bool addEvent( const EventSharedPtr& event );
+
+            /** Add the given event to the queue. The event is fired
+                at, or shortly after, its Event::getActivationTime instant.
+                The difference to addEvent() is that events added during
+                process() are postponed to next process().
+             */
+            bool addEventForNextRound( const EventSharedPtr& event );
 
             /** Process the event queue.
 
@@ -106,6 +114,12 @@ namespace presentation
              */
             void clear();
 
+            /** Forces an empty queue, firing all events immediately
+                without minding any times.
+                @attention do only call from event loop, this calls process_()!
+             */
+            void forceEmpty();
+
             /** Gets the queue's timer object.
              */
             ::boost::shared_ptr< ::canvas::tools::ElapsedTime > const &
@@ -118,11 +132,16 @@ namespace presentation
                 double          nTime;
 
                 bool operator<( const EventEntry& ) const; // to leverage priority_queue's default compare
+
+                EventEntry( EventSharedPtr const& p, double t )
+                    : pEvent(p), nTime(t) {}
             };
 
             typedef ::std::priority_queue< EventEntry > ImplQueueType;
-
             ImplQueueType                   maEvents;
+            typedef ::std::vector<EventEntry> EventEntryVector;
+            EventEntryVector                maNextEvents;
+            void process_( bool bFireAllEvents );
 
             // perform timing of events via relative time
             // measurements. The world time starts, when the
