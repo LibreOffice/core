@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sequentialtimecontainer.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 08:44:51 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:37:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,42 +32,52 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+#ifndef INCLUDED_SLIDESHOW_SEQUENTIALTIMECONTAINER_HXX
+#define INCLUDED_SLIDESHOW_SEQUENTIALTIMECONTAINER_HXX
 
-#ifndef _SLIDESHOW_SEQUENTIALTIMECONTAINER_HXX
-#define _SLIDESHOW_SEQUENTIALTIMECONTAINER_HXX
+#include "basecontainernode.hxx"
 
-#include <basecontainernode.hxx>
+namespace presentation {
+namespace internal {
 
+/** This class implements sequential node containers
 
-namespace presentation
+    All children of this node are played sequentially
+*/
+class SequentialTimeContainer : public BaseContainerNode
 {
-    namespace internal
-    {
-        /** This class implements sequential node containers
-
-            All children of this node are played sequentially
-        */
-        class SequentialTimeContainer : public BaseContainerNode
-        {
-        public:
-            SequentialTimeContainer( const ::com::sun::star::uno::Reference<
-                                             ::com::sun::star::animations::XAnimationNode >&    xNode,
-                                     const BaseContainerNodeSharedPtr&                      rParent,
-                                     const NodeContext&                                     rContext );
-
-            virtual bool activate();
-            virtual void notifyDeactivating( const AnimationNodeSharedPtr& rNotifier );
-
-            virtual void dispose();
+public:
+    SequentialTimeContainer(
+        ::com::sun::star::uno::Reference<
+        ::com::sun::star::animations::XAnimationNode> const& xNode,
+        BaseContainerNodeSharedPtr const& pParent,
+        NodeContext const& rContext )
+        : BaseContainerNode( xNode, pParent, rContext ) {}
 
 #if defined(VERBOSE) && defined(DBG_UTIL)
-            virtual const char* getDescription() const;
+    virtual const char* getDescription() const
+        { return "SequentialTimeContainer"; }
 #endif
-        private:
-            bool resolveChild( BaseNodeSharedPtr const & pChildNode );
-            EventSharedPtr m_pCurrentSkipEvent;
-        };
-    }
-}
 
-#endif /* _SLIDESHOW_SEQUENTIALTIMECONTAINER_HXX */
+protected:
+    virtual void dispose();
+
+private:
+    virtual void activate_st();
+    virtual void notifyDeactivating( AnimationNodeSharedPtr const& rNotifier );
+
+    void skipEffect( AnimationNodeSharedPtr const& pChildNode );
+    void rewindEffect( AnimationNodeSharedPtr const& pChildNode );
+
+private:
+    bool resolveChild( AnimationNodeSharedPtr const& pChildNode );
+
+    EventSharedPtr mpCurrentSkipEvent;
+    EventSharedPtr mpCurrentRewindEvent;
+};
+
+} // namespace internal
+} // namespace presentation
+
+#endif /* INCLUDED_SLIDESHOW_SEQUENTIALTIMECONTAINER_HXX */
+
