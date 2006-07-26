@@ -4,9 +4,9 @@
  *
  *  $RCSfile: delayevent.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 08:48:53 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:38:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,23 +47,14 @@ namespace internal {
 
 /** Event, which delays the functor call the given amount of time
  */
-class Delay : public Event,
-              private ::boost::noncopyable
+class Delay : public Event, private ::boost::noncopyable
 {
 public:
-#if defined(VERBOSE) && defined(DBG_UTIL)
-    template <typename FunctorT>
-    Delay( FunctorT const& func,
-           double nTimeout,
-           char const* const origin ) : Event(origin),
-#else
-    template <typename FunctorT>
-    Delay( FunctorT const& func,
-           double nTimeout ) :
-#endif
-        mnTimeout(nTimeout),
-        maFunc(func),
-        mbWasFired(false) {}
+    typedef ::boost::function0<void> FunctorT;
+
+    template <typename FuncT>
+    Delay( FuncT const& func, double nTimeout )
+        : mnTimeout(nTimeout), maFunc(func), mbWasFired(false) {}
 
     // Event:
     virtual bool fire();
@@ -73,23 +64,12 @@ public:
     virtual void dispose();
 
 private:
-    double  mnTimeout;
-    ::boost::function0<void> maFunc;
-    bool    mbWasFired;
+    double const mnTimeout;
+    FunctorT maFunc;
+    bool mbWasFired;
 };
 
-#if defined(VERBOSE) && defined(DBG_UTIL)
-
-template <typename FunctorT>
-EventSharedPtr makeDelay_( FunctorT const& func, double nTimeout,
-                           char const* const origin )
-{
-    return EventSharedPtr( new Delay( func, nTimeout, origin ) );
-}
-#define makeDelay(f, t) makeDelay_(f, t, BOOST_CURRENT_FUNCTION)
-#define makeEvent(f) makeDelay_(f, 0.0, BOOST_CURRENT_FUNCTION)
-
-#else
+#if OSL_DEBUG_LEVEL < 1
 
 /** Generate delay event
 
@@ -101,8 +81,8 @@ EventSharedPtr makeDelay_( FunctorT const& func, double nTimeout,
 
     @return generated delay event
 */
-template <typename FunctorT>
-EventSharedPtr makeDelay( FunctorT const& func, double nTimeout )
+template <typename FuncT>
+inline EventSharedPtr makeDelay( FuncT const& func, double nTimeout )
 {
     return EventSharedPtr( new Delay( func, nTimeout ) );
 }
@@ -114,13 +94,43 @@ EventSharedPtr makeDelay( FunctorT const& func, double nTimeout )
 
     @return generated immediate event.
 */
-template <typename FunctorT>
-EventSharedPtr makeEvent( FunctorT const& func )
+template <typename FuncT>
+inline EventSharedPtr makeEvent( FuncT const& func )
 {
     return EventSharedPtr( new Delay( func, 0.0 ) );
 }
 
-#endif
+#else // OSL_DEBUG_LEVEL > 1
+
+class Delay_ : public Delay {
+public:
+    template <typename FuncT>
+    Delay_( FuncT const& func, double nTimeout,
+            char const* from_function, char const* from_file, int from_line )
+        : Delay(func, nTimeout),
+          FROM_FUNCTION(from_function),
+          FROM_FILE(from_file), FROM_LINE(from_line) {}
+
+    char const* const FROM_FUNCTION;
+    char const* const FROM_FILE;
+    int const FROM_LINE;
+};
+
+template <typename FuncT>
+inline EventSharedPtr makeDelay_(
+    FuncT const& func, double nTimeout,
+    char const* from_function, char const* from_file, int from_line )
+{
+    return EventSharedPtr( new Delay_( func, nTimeout,
+                                       from_function, from_file, from_line ) );
+}
+
+#define makeDelay(f, t) makeDelay_(f, t, \
+BOOST_CURRENT_FUNCTION, __FILE__, __LINE__)
+#define makeEvent(f) makeDelay_(f, 0.0, \
+BOOST_CURRENT_FUNCTION, __FILE__, __LINE__)
+
+#endif // OSL_DEBUG_LEVEL < 1
 
 } // namespace internal
 } // namespace presentation
