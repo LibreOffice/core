@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventhandler.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-14 07:21:10 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:55:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -616,7 +616,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    Any SAL_CALL EventHandler::convertToPropertyValue( const ::rtl::OUString& _rPropertyName, const Any& _rControlValue ) throw (UnknownPropertyException, RuntimeException)
+    Any SAL_CALL EventHandler::convertToPropertyValue( const ::rtl::OUString& /*_rPropertyName*/, const Any& _rControlValue ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         DBG_ASSERT( !_rControlValue.hasValue() || _rControlValue.getValueTypeClass() == TypeClass_STRING,
@@ -625,7 +625,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    Any SAL_CALL EventHandler::convertToControlValue( const ::rtl::OUString& _rPropertyName, const Any& _rPropertyValue, const Type& _rControlValueType ) throw (UnknownPropertyException, RuntimeException)
+    Any SAL_CALL EventHandler::convertToControlValue( const ::rtl::OUString& /*_rPropertyName*/, const Any& _rPropertyValue, const Type& _rControlValueType ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         DBG_ASSERT( !_rPropertyValue.hasValue() || _rPropertyValue.getValueTypeClass() == TypeClass_STRING,
@@ -636,7 +636,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    PropertyState SAL_CALL EventHandler::getPropertyState( const ::rtl::OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
+    PropertyState SAL_CALL EventHandler::getPropertyState( const ::rtl::OUString& /*_rPropertyName*/ ) throw (UnknownPropertyException, RuntimeException)
     {
         return PropertyState_DIRECT_VALUE;
     }
@@ -743,8 +743,8 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL EventHandler::describePropertyLine( const ::rtl::OUString& _rPropertyName,
-        LineDescriptor& /* [out] */ _out_rDescriptor, const Reference< XPropertyControlFactory >& _rxControlFactory )
+    LineDescriptor SAL_CALL EventHandler::describePropertyLine( const ::rtl::OUString& _rPropertyName,
+        const Reference< XPropertyControlFactory >& _rxControlFactory )
         throw (UnknownPropertyException, NullPointerException, RuntimeException)
     {
         if ( !_rxControlFactory.is() )
@@ -752,13 +752,15 @@ namespace pcr
 
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        _out_rDescriptor.Control = _rxControlFactory->createPropertyControl( PropertyControlType::TextField, sal_True );
+        LineDescriptor aDescriptor;
+        aDescriptor.Control = _rxControlFactory->createPropertyControl( PropertyControlType::TextField, sal_True );
         const EventDescription& rEvent = impl_getEventForName_throw( _rPropertyName );
-        _out_rDescriptor.DisplayName = rEvent.sDisplayName;
-        _out_rDescriptor.HelpURL = HelpIdUrl::getHelpURL( rEvent.nHelpId );
-        _out_rDescriptor.PrimaryButtonId = rEvent.nUniqueBrowseId;
-        _out_rDescriptor.HasPrimaryButton = sal_True;
-        _out_rDescriptor.Category = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Events" ) );
+        aDescriptor.DisplayName = rEvent.sDisplayName;
+        aDescriptor.HelpURL = HelpIdUrl::getHelpURL( rEvent.nHelpId );
+        aDescriptor.PrimaryButtonId = rEvent.nUniqueBrowseId;
+        aDescriptor.HasPrimaryButton = sal_True;
+        aDescriptor.Category = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Events" ) );
+        return aDescriptor;
     }
 
     //--------------------------------------------------------------------
@@ -808,13 +810,13 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    ::sal_Bool SAL_CALL EventHandler::isComposable( const ::rtl::OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
+    ::sal_Bool SAL_CALL EventHandler::isComposable( const ::rtl::OUString& /*_rPropertyName*/ ) throw (UnknownPropertyException, RuntimeException)
     {
         return sal_False;
     }
 
     //--------------------------------------------------------------------
-    InteractiveSelectionResult SAL_CALL EventHandler::onInteractivePropertySelection( const ::rtl::OUString& _rPropertyName, sal_Bool _bPrimary, Any& _rData, const Reference< XObjectInspectorUI >& _rxInspectorUI ) throw (UnknownPropertyException, NullPointerException, RuntimeException)
+    InteractiveSelectionResult SAL_CALL EventHandler::onInteractivePropertySelection( const ::rtl::OUString& _rPropertyName, sal_Bool /*_bPrimary*/, Any& /*_rData*/, const Reference< XObjectInspectorUI >& _rxInspectorUI ) throw (UnknownPropertyException, NullPointerException, RuntimeException)
     {
         if ( !_rxInspectorUI.is() )
             throw NullPointerException();
@@ -842,7 +844,7 @@ namespace pcr
         // the inital selection in the dialog
         Sequence< ::rtl::OUString > aNames( pEventHolder->getElementNames() );
         const ::rtl::OUString* pChosenEvent = ::std::find( aNames.getConstArray(), aNames.getConstArray() + aNames.getLength(), rForEvent.sListenerMethodName );
-        sal_uInt16 nInitialSelection = pChosenEvent - aNames.getConstArray();
+        sal_uInt16 nInitialSelection = (sal_uInt16)( pChosenEvent - aNames.getConstArray() );
 
         // the dialog
         SvxAbstractDialogFactory* pFactory = SvxAbstractDialogFactory::Create();
@@ -894,7 +896,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL EventHandler::actuatingPropertyChanged( const ::rtl::OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& _rOldValue, const Reference< XObjectInspectorUI >& _rxInspectorUI, sal_Bool _bFirstTimeInit ) throw (NullPointerException, RuntimeException)
+    void SAL_CALL EventHandler::actuatingPropertyChanged( const ::rtl::OUString& /*_rActuatingPropertyName*/, const Any& /*_rNewValue*/, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& /*_rxInspectorUI*/, sal_Bool /*_bFirstTimeInit*/ ) throw (NullPointerException, RuntimeException)
     {
         DBG_ERROR( "EventHandler::actuatingPropertyChanged: no actuating properties -> no callback (well, this is how it *should* be!)" );
     }
@@ -911,7 +913,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    sal_Bool SAL_CALL EventHandler::suspend( sal_Bool _bSuspend ) throw (RuntimeException)
+    sal_Bool SAL_CALL EventHandler::suspend( sal_Bool /*_bSuspend*/ ) throw (RuntimeException)
     {
         return sal_True;
     }
