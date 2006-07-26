@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transitionfactorytab.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:00:32 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:38:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1120,22 +1120,9 @@ static const TransitionInfo lcl_transitionInfo[] =
     },
 
     {
-        animations::TransitionType::DOUBLEFANWIPE,
-        animations::TransitionSubType::FANOUTVERTICAL,
-        TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        // TODO(F2): Setup parameters
-        0.0,                    // no rotation
-        1.0,                    // no scaling
-        1.0,                    // no scaling
-        TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true,                   // 'out' by parameter sweep inversion
-        false                   // scale isotrophically to target size
-    },
-
-    {
         // mapped to FanWipe(center=true, single=false, fanIn=false):
         animations::TransitionType::DOUBLEFANWIPE,
-        animations::TransitionSubType::FANOUTHORIZONTAL, // (213)
+        animations::TransitionSubType::FANOUTVERTICAL, // (213)
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
         0.0, // no rotation
         1.0, // no scaling
@@ -1147,7 +1134,7 @@ static const TransitionInfo lcl_transitionInfo[] =
     {
         // mapped to FanWipe(center=true, single=false, fanIn=false):
         animations::TransitionType::DOUBLEFANWIPE,
-        animations::TransitionSubType::FANINVERTICAL, // (214)
+        animations::TransitionSubType::FANOUTHORIZONTAL, // (214)
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
         90.0, // rotation
         1.0, // no scaling
@@ -1156,18 +1143,29 @@ static const TransitionInfo lcl_transitionInfo[] =
         true, // 'out' by parameter sweep inversion
         false // scale isotrophically to target size
     },
-
     {
+        // mapped to FanWipe(center=true, single=false, fanIn=true):
         animations::TransitionType::DOUBLEFANWIPE,
-        animations::TransitionSubType::FANINHORIZONTAL,
+        animations::TransitionSubType::FANINVERTICAL, // (235)
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        // TODO(F2): Setup parameters
-        0.0,                    // no rotation
-        1.0,                    // no scaling
-        1.0,                    // no scaling
+        0.0, // no rotation
+        1.0, // no scaling
+        1.0, // no scaling
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true,                   // 'out' by parameter sweep inversion
-        false                   // scale isotrophically to target size
+        true, // 'out' by parameter sweep inversion
+        false // scale isotrophically to target size
+    },
+    {
+        // mapped to FanWipe(center=true, single=false, fanIn=true):
+        animations::TransitionType::DOUBLEFANWIPE,
+        animations::TransitionSubType::FANINHORIZONTAL, // (236)
+        TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
+        90.0, // rotation
+        1.0, // no scaling
+        1.0, // no scaling
+        TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
+        true, // 'out' by parameter sweep inversion
+        false // scale isotrophically to target size
     },
 
     {
