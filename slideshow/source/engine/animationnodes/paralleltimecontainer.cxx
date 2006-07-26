@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paralleltimecontainer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 08:44:01 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:36:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,97 +33,41 @@
  *
  ************************************************************************/
 
-#include <canvas/debug.hxx>
-#include <canvas/verbosetrace.hxx>
-
-#include <paralleltimecontainer.hxx>
-#include <tools.hxx>
-#include <nodetools.hxx>
-
-#ifndef BOOST_BIND_HPP_INCLUDED
-#include <boost/bind.hpp>
-#endif
-#ifndef BOOST_MEM_FN_HPP_INCLUDED
-#include <boost/mem_fn.hpp>
-#endif
-
+#include "paralleltimecontainer.hxx"
+#include "delayevent.hxx"
+#include "boost/bind.hpp"
+#include "boost/mem_fn.hpp"
 #include <algorithm>
 
-using namespace ::com::sun::star;
+namespace presentation {
+namespace internal {
 
-namespace presentation
+void ParallelTimeContainer::activate_st()
 {
-    namespace internal
-    {
-        ParallelTimeContainer::ParallelTimeContainer( const uno::Reference< animations::XAnimationNode >&   xNode,
-                                                      const BaseContainerNodeSharedPtr&                     rParent,
-                                                      const NodeContext&                                    rContext ) :
-            BaseContainerNode( xNode, rParent, rContext )
-        {
-        }
+    // resolve all children:
+    std::size_t const nResolvedNodes =
+        static_cast<std::size_t>(std::count_if(
+                                     maChildren.begin(), maChildren.end(),
+                                     boost::mem_fn(&AnimationNode::resolve) ));
+    OSL_ENSURE( nResolvedNodes == maChildren.size(),
+                "### resolving all children failed!" );
 
-        bool ParallelTimeContainer::activate()
-        {
-            if( getState() == ACTIVE )
-                return true; // avoid duplicate event generation
-
-            if( !BaseContainerNode::activate() )
-                return false;
-
-            // resolve all children, only return true, if _all_
-            // children were resolvable.
-            return ::std::count_if( getChildren().begin(),
-                                    getChildren().end(),
-                                    ::boost::mem_fn(&AnimationNode::resolve) )
-                == static_cast<VectorOfNodes::difference_type>(getChildren().size());
-        }
-
-        void ParallelTimeContainer::notifyDeactivating( const AnimationNodeSharedPtr& rNotifier )
-        {
-            // early exit on invalid nodes
-            if( getState() == INVALID )
-                return;
-
-            // if we don't have indefinite duration, ignore this message
-            if( !isDurationInfinite() )
-                return;
-
-            // find given notifier in child vector
-            const VectorOfNodes::const_iterator aBegin( getChildren().begin() );
-            const VectorOfNodes::const_iterator aEnd( getChildren().end() );
-            VectorOfNodes::const_iterator       aIter;
-            if( (aIter=::std::find( aBegin,
-                                    aEnd,
-                                    rNotifier )) == aEnd )
-            {
-                OSL_ENSURE( false,
-                            "ParallelTimeContainer::notifyDeactivating(): unknown notifier" );
-                return;
-            }
-
-            const ::std::size_t nIndex( ::std::distance(aBegin, aIter) );
-
-            // prevent duplicate increments (for children that notify
-            // more than once)
-            if( getFinishedStates()[ nIndex ] == false )
-                ++getFinishedCount();
-
-            getFinishedStates()[ nIndex ] = true;
-
-            // all children finished?
-            if( getFinishedCount() == getChildren().size() )
-            {
-                // yep. deactivate this node, too
-                deactivate();
-            }
-        }
-
-#if defined(VERBOSE) && defined(DBG_UTIL)
-        const char* ParallelTimeContainer::getDescription() const
-        {
-            return "ParallelTimeContainer";
-        }
-#endif
-
+    if (isDurationIndefinite() && maChildren.empty()) {
+        // deactivate ASAP:
+        scheduleDeactivationEvent(
+            makeEvent( boost::bind( &AnimationNode::deactivate, getSelf() ) ) );
+    }
+    else { // use default
+        scheduleDeactivationEvent();
     }
 }
+
+void ParallelTimeContainer::notifyDeactivating(
+    AnimationNodeSharedPtr const& pChildNode )
+{
+    notifyDeactivatedChild( pChildNode );
+}
+
+} // namespace internal
+} // namespace presentation
+
