@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSetCacheIterator.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:37:06 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:46:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,12 +84,15 @@ namespace dbaccess
         const ORowSetMatrix::iterator& operator ->() const;
 
         bool operator <=(const ORowSetMatrix::iterator& _rRH) const;
+        bool operator <(const ORowSetMatrix::iterator& _rRH) const;
         bool operator !=(const ORowSetMatrix::iterator& _rRH) const;
         bool operator ==(const ORowSetMatrix::iterator& _rRH) const;
 
         void setBookmark(const ::com::sun::star::uno::Any&  _rBookmark);
         ::com::sun::star::uno::Any getBookmark() const { return m_aIter->second.aBookmark; }
         ::osl::Mutex*   getMutex() const;
+
+        ORowSetCacheMap::iterator getIter() const { return m_aIter; }
     };
 }
 #endif // DBACCESS_ROWSETCACHEITERATOR_HXX
