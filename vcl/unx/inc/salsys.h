@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salsys.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:47:20 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 09:11:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,8 @@ public:
     virtual ~X11SalSystem();
 
     // overload pure virtual methods
-    virtual bool GetSalSystemDisplayInfo( DisplayInfo& rInfo );
+    virtual unsigned int GetDisplayScreenCount();
+    virtual Rectangle GetDisplayScreenPosSizePixel( unsigned int nScreen );
     virtual int ShowNativeDialog( const String& rTitle,
                                   const String& rMessage,
                                   const std::list< String >& rButtons,
