@@ -4,9 +4,9 @@
  *
  *  $RCSfile: procimpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:21:55 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:43:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,8 +61,8 @@
 #include "secimpl.h"
 #endif
 
-#ifndef INCLUDED_SAL_INTERNAL_ALLOCATOR_HXX
-#include "internal/allocator.hxx"
+#ifndef INCLUDED_RTL_ALLOCATOR_HXX
+#include "rtl/allocator.hxx"
 #endif
 
 #ifndef _OSL_FILE_HXX_
@@ -86,11 +86,11 @@ const rtl::OUString QUOTE = rtl::OUString::createFromAscii("\"");
 namespace /* private */
 {
     //#################################################
-    typedef std::list<rtl::OUString, sal::Allocator<rtl::OUString> > string_container_t;
+    typedef std::list<rtl::OUString, rtl::Allocator<rtl::OUString> > string_container_t;
     typedef string_container_t::iterator string_container_iterator_t;
     typedef string_container_t::const_iterator string_container_const_iterator_t;
     typedef std::pair<string_container_iterator_t, string_container_iterator_t> iterator_pair_t;
-    typedef std::vector<sal_Unicode, sal::Allocator<sal_Unicode> > environment_container_t;
+    typedef std::vector<sal_Unicode, rtl::Allocator<sal_Unicode> > environment_container_t;
 
     //#################################################
     /* Function object that compares two strings that are
