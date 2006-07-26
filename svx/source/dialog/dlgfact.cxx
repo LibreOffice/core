@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgfact.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 11:59:14 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 08:34:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -989,7 +989,8 @@ VclAbstractDialog* AbstractDialogFactory_Impl::CreateVclDialog( Window* pParent,
         case SID_OPTIONS_TREEDIALOG :
         case SID_OPTIONS_DATABASES:
         {
-            OfaTreeOptionsDialog* pOptDlg = new OfaTreeOptionsDialog( pParent );
+            css::uno::Reference< css::frame::XFrame > xFrame;
+            OfaTreeOptionsDialog* pOptDlg = new OfaTreeOptionsDialog( pParent, xFrame );
             if(rResId.GetId() == SID_OPTIONS_DATABASES)
             {
                 pOptDlg->ActivatePage(SID_SB_DBREGISTEROPTIONS);
@@ -1009,6 +1010,32 @@ VclAbstractDialog* AbstractDialogFactory_Impl::CreateVclDialog( Window* pParent,
 // dialogs that use SfxBindings
 VclAbstractDialog* AbstractDialogFactory_Impl::CreateSfxDialog( Window* /*pParent*/, const SfxBindings&, const ResId& )
 {
+    return 0;
+}
+
+VclAbstractDialog* AbstractDialogFactory_Impl::CreateFrameDialog(
+    Window* pParent, const css::uno::Reference< css::frame::XFrame >& _xFrame, const ResId& rResId )
+{
+    Dialog* pDlg=NULL;
+    switch ( rResId.GetId() )
+    {
+        case SID_OPTIONS_TREEDIALOG :
+        case SID_OPTIONS_DATABASES:
+        {
+            OfaTreeOptionsDialog* pOptDlg = new OfaTreeOptionsDialog( pParent, _xFrame );
+            if(rResId.GetId() == SID_OPTIONS_DATABASES)
+            {
+                pOptDlg->ActivatePage(SID_SB_DBREGISTEROPTIONS);
+            }
+            pDlg = pOptDlg;
+        }
+        break;
+        default:
+            break;
+    }
+
+    if ( pDlg )
+        return new VclAbstractDialog_Impl( pDlg );
     return 0;
 }
 
