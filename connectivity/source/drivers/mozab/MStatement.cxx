@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MStatement.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:29:59 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:24:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -217,11 +217,15 @@ void OStatement_Base::clearMyResultSet () throw (SQLException)
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
+    try
+    {
+        Reference<XCloseable> xCloseable;
+        if ( ::comphelper::query_interface( m_xResultSet.get(), xCloseable ) )
+            xCloseable->close();
+    }
+    catch( const DisposedException& ) { }
 
-    Reference<XCloseable> xCloseable;
-    if(::comphelper::query_interface(m_xResultSet.get(),xCloseable))
-        xCloseable->close();
-    m_xResultSet = Reference< XResultSet>();
+    m_xResultSet = Reference< XResultSet >();
 }
 
 void OStatement_Base::createTable( )
