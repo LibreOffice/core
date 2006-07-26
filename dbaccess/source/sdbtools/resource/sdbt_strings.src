@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdbt_strings.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:21:36 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:47:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,4 +65,10 @@ String STR_NO_QUOTES_IN_QUERY_NAMES
 {
     Text [ de ] = "Abfragenamen dürfen keine Zitatzeichen enthalten.";
     Text [ en-US ] = "Query names must not contain quote characters.";
+};
+
+String STR_NO_VALID_SQL_NAME
+{
+    Text [ de ] = "$name$ ist kein SQL-konformer Bezeichner.";
+    Text [ en-US ] = "$name$ ist no SQL conform identifier.";
 };
