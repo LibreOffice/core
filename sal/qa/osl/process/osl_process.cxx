@@ -4,9 +4,9 @@
  *
  *  $RCSfile: osl_process.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:33:50 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:44:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@
 #   include <tchar.h>
 #endif
 
-#include "internal/allocator.hxx"
+#include "rtl/allocator.hxx"
 
 #include <iostream>
 #include <fstream>
@@ -306,7 +306,7 @@ public:
 
 //#########################################################
 
-typedef std::vector<std::string, sal::Allocator<std::string> >  string_container_t;
+typedef std::vector<std::string, rtl::Allocator<std::string> >  string_container_t;
 typedef string_container_t::const_iterator string_container_const_iter_t;
 typedef string_container_t::iterator       string_container_iter_t;
 
