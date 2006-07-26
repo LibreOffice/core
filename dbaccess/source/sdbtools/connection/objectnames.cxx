@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objectnames.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:19:57 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:47:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,65 +102,131 @@ namespace sdbtools
 
     namespace CommandType = ::com::sun::star::sdb::CommandType;
 
+    namespace
+    {
+        //----------------------------------------------------------------
+        void lcl_throwNameIsUsedError( const ::rtl::OUString& _Name, const Reference< XConnection >& _Connection )
+        {
+            String sNameIsUsed( SdbtRes( STR_NAME_ALREADY_USED_IN_DB ) );
+            sNameIsUsed.SearchAndReplaceAllAscii( "$name$", _Name );
+
+            Any aDetails;
+            ::dbtools::DatabaseMetaData aMeta( _Connection );
+            if ( aMeta.supportsSubqueriesInFrom() )
+            {
+                String sNeedDistinctNames( SdbtRes( STR_QUERY_AND_TABLE_DISTINCT_NAMES ) );
+                aDetails <<= SQLException( sNeedDistinctNames, _Connection, ::rtl::OUString(), 0, Any() );
+            }
+
+            ::dbtools::throwGenericSQLException( sNameIsUsed, _Connection, aDetails );
+        }
+
+        //----------------------------------------------------------------
+        void lcl_throwNoSQLIdentifierError( const ::rtl::OUString& _Name, const Reference< XConnection >& _Connection )
+        {
+            String sNoSQLIdentifier( SdbtRes( STR_NO_VALID_SQL_NAME ) );
+            sNoSQLIdentifier.SearchAndReplaceAllAscii( "$name$", _Name );
+            ::dbtools::throwGenericSQLException( sNoSQLIdentifier, _Connection, Any() );
+        }
+    }
+
     //====================================================================
-    //= INameCheck
+    //= INameValidation
     //====================================================================
-    class INameCheck
+    class INameValidation
     {
     public:
-        virtual bool checkName( const ::rtl::OUString& _rName ) = 0;
+        virtual bool validateName( const ::rtl::OUString& _rName ) = 0;
+        virtual void validateName_throw( const ::rtl::OUString& _rName ) = 0;
 
-        virtual ~INameCheck() { }
+        virtual ~INameValidation() { }
     };
-    typedef ::boost::shared_ptr< INameCheck >   PNameCheck;
+    typedef ::boost::shared_ptr< INameValidation >   PNameValidation;
 
     //====================================================================
     //= PlainExistenceCheck
     //====================================================================
-    class PlainExistenceCheck : public INameCheck
+    class PlainExistenceCheck : public INameValidation
     {
     private:
+        Reference< XConnection >    m_xConnection;
         Reference< XNameAccess >    m_xContainer;
 
     public:
-        PlainExistenceCheck( const Reference< XNameAccess >& _rxContainer )
-            :m_xContainer( _rxContainer )
+        PlainExistenceCheck( const Reference< XConnection >& _rxConnection, const Reference< XNameAccess >& _rxContainer )
+            :m_xConnection( _rxConnection )
+            ,m_xContainer( _rxContainer )
         {
             OSL_ENSURE( m_xContainer.is(), "PlainExistenceCheck::PlainExistenceCheck: this will crash!" );
         }
 
-        // INameCheck
-        virtual bool checkName( const ::rtl::OUString& _rName )
+        // INameValidation
+        virtual bool validateName( const ::rtl::OUString& _rName )
         {
-            return m_xContainer->hasByName( _rName );
+            return !m_xContainer->hasByName( _rName );
+        }
+
+        virtual void validateName_throw( const ::rtl::OUString& _rName )
+        {
+            if ( !validateName( _rName ) )
+                lcl_throwNameIsUsedError( _rName, m_xConnection );
         }
     };
 
     //====================================================================
     //= TableValidityCheck
     //====================================================================
-    class TableValidityCheck : public INameCheck
+    class TableValidityCheck : public INameValidation
     {
-        Reference< XDatabaseMetaData >  m_xMeta;
+        Reference< XConnection >  m_xConnection;
+
     public:
-        TableValidityCheck( const Reference< XDatabaseMetaData >& _rxMeta )
-            :m_xMeta( _rxMeta )
+        TableValidityCheck( const Reference< XConnection >& _rxConnection )
+            :m_xConnection( _rxConnection )
         {
         }
 
-        virtual bool checkName( const ::rtl::OUString& _rName )
+        virtual bool validateName( const ::rtl::OUString& _rName )
         {
-            return ::dbtools::isValidSQLName( _rName, m_xMeta->getExtraNameCharacters() );
+            ::dbtools::DatabaseMetaData aMeta( m_xConnection );
+            if  ( !aMeta.restrictIdentifiersToSQL92() )
+                return true;
+
+            ::rtl::OUString sCatalog, sSchema, sName;
+            ::dbtools::qualifiedNameComponents(
+                m_xConnection->getMetaData(), _rName, sCatalog, sSchema, sName, ::dbtools::eInTableDefinitions );
+
+            ::rtl::OUString sExtraNameCharacters( m_xConnection->getMetaData()->getExtraNameCharacters() );
+            if  (   ( sCatalog.getLength() && !::dbtools::isValidSQLName( sCatalog, sExtraNameCharacters ) )
+                ||  ( sSchema.getLength() && !::dbtools::isValidSQLName( sSchema, sExtraNameCharacters ) )
+                ||  ( sName.getLength() && !::dbtools::isValidSQLName( sName, sExtraNameCharacters ) )
+                )
+                return false;
+
+            return true;
+        }
+
+        virtual void validateName_throw( const ::rtl::OUString& _rName )
+        {
+            if ( !validateName( _rName ) )
+                lcl_throwNoSQLIdentifierError( _rName, m_xConnection );
         }
     };
 
     //====================================================================
     //= QueryValidityCheck
     //====================================================================
-    class QueryValidityCheck : public INameCheck
+    class QueryValidityCheck : public INameValidation
     {
+        Reference< XConnection >  m_xConnection;
+
     public:
-        virtual bool checkName( const ::rtl::OUString& _rName )
+        QueryValidityCheck( const Reference< XConnection >& _rxConnection )
+            :m_xConnection( _rxConnection )
+        {
+        }
+
+        virtual bool validateName( const ::rtl::OUString& _rName )
         {
             if  (   ( _rName.indexOf( (sal_Unicode)34  ) >= 0 )  // "
                 ||  ( _rName.indexOf( (sal_Unicode)39  ) >= 0 )  // '
@@ -172,29 +238,44 @@ namespace sdbtools
                 return false;
             return true;
         }
+
+        virtual void validateName_throw( const ::rtl::OUString& _rName )
+        {
+            if ( !validateName( _rName ) )
+            {
+                String sError( SdbtRes( STR_NO_QUOTES_IN_QUERY_NAMES ) );
+                ::dbtools::throwGenericSQLException( sError, m_xConnection );
+            }
+        }
     };
 
     //====================================================================
     //= CombinedNameCheck
     //====================================================================
-    class CombinedNameCheck : public INameCheck
+    class CombinedNameCheck : public INameValidation
     {
     private:
-        PNameCheck  m_pPrimary;
-        PNameCheck  m_pSecondary;
+        PNameValidation  m_pPrimary;
+        PNameValidation  m_pSecondary;
 
     public:
-        CombinedNameCheck( PNameCheck _pPrimary, PNameCheck _pSecondary )
+        CombinedNameCheck( PNameValidation _pPrimary, PNameValidation _pSecondary )
             :m_pPrimary( _pPrimary )
             ,m_pSecondary( _pSecondary )
         {
             OSL_ENSURE( m_pPrimary.get() && m_pSecondary.get(), "CombinedNameCheck::CombinedNameCheck: this will crash!" );
         }
 
-        // INameCheck
-        virtual bool checkName( const ::rtl::OUString& _rName )
+        // INameValidation
+        virtual bool validateName( const ::rtl::OUString& _rName )
         {
-            return m_pPrimary->checkName( _rName ) || m_pSecondary->checkName( _rName );
+            return m_pPrimary->validateName( _rName ) && m_pSecondary->validateName( _rName );
+        }
+
+        virtual void validateName_throw( const ::rtl::OUString& _rName )
+        {
+            m_pPrimary->validateName_throw( _rName );
+            m_pSecondary->validateName_throw( _rName );
         }
     };
 
@@ -204,7 +285,7 @@ namespace sdbtools
     class NameCheckFactory
     {
     public:
-        /** creates an INameCheck instance which can be used to check the existence of query or table names
+        /** creates an INameValidation instance which can be used to check the existence of query or table names
 
             @param  _nCommandType
                 the type of objects (CommandType::TABLE or CommandType::QUERY) of which names shall be checked for existence
@@ -218,9 +299,9 @@ namespace sdbtools
             @throws IllegalArgumentException
                 if the given command type is neither CommandType::TABLE or CommandType::QUERY
         */
-        static  PNameCheck  createExistenceCheck( sal_Int32 _nCommandType, const Reference< XConnection >& _rxConnection );
+        static  PNameValidation  createExistenceCheck( sal_Int32 _nCommandType, const Reference< XConnection >& _rxConnection );
 
-        /** creates an INameCheck instance which can be used to check the validity of a query or table name
+        /** creates an INameValidation instance which can be used to check the validity of a query or table name
 
             @param  _nCommandType
                 the type of objects (CommandType::TABLE or CommandType::QUERY) of which names shall be validated
@@ -234,7 +315,7 @@ namespace sdbtools
             @throws IllegalArgumentException
                 if the given command type is neither CommandType::TABLE or CommandType::QUERY
         */
-        static  PNameCheck  createValidityCheck( sal_Int32 _nCommandType, const Reference< XConnection >& _rxConnection );
+        static  PNameValidation  createValidityCheck( sal_Int32 _nCommandType, const Reference< XConnection >& _rxConnection );
 
     private:
         NameCheckFactory();                                     // never implemented
@@ -258,7 +339,7 @@ namespace sdbtools
     }
 
     //--------------------------------------------------------------------
-    PNameCheck  NameCheckFactory::createExistenceCheck( sal_Int32 _nCommandType, const Reference< XConnection >& _rxConnection )
+    PNameValidation  NameCheckFactory::createExistenceCheck( sal_Int32 _nCommandType, const Reference< XConnection >& _rxConnection )
     {
         verifyCommandType( _nCommandType );
 
@@ -282,9 +363,9 @@ namespace sdbtools
             // TODO: resource
         }
 
-        PNameCheck pTableCheck( new PlainExistenceCheck( xTables ) );
-        PNameCheck pQueryCheck( new PlainExistenceCheck( xQueries ) );
-        PNameCheck pReturn;
+        PNameValidation pTableCheck( new PlainExistenceCheck( _rxConnection, xTables ) );
+        PNameValidation pQueryCheck( new PlainExistenceCheck( _rxConnection, xQueries ) );
+        PNameValidation pReturn;
 
         if ( aMeta.supportsSubqueriesInFrom() )
             pReturn.reset( new CombinedNameCheck( pTableCheck, pQueryCheck ) );
@@ -296,7 +377,7 @@ namespace sdbtools
     }
 
     //--------------------------------------------------------------------
-    PNameCheck  NameCheckFactory::createValidityCheck( sal_Int32 _nCommandType, const Reference< XConnection >& _rxConnection )
+    PNameValidation  NameCheckFactory::createValidityCheck( sal_Int32 _nCommandType, const Reference< XConnection >& _rxConnection )
     {
         verifyCommandType( _nCommandType );
 
@@ -316,8 +397,8 @@ namespace sdbtools
         }
 
         if ( _nCommandType == CommandType::TABLE )
-            return PNameCheck( new TableValidityCheck( xMeta ) );
-        return PNameCheck( new QueryValidityCheck );
+            return PNameValidation( new TableValidityCheck( _rxConnection ) );
+        return PNameValidation( new QueryValidityCheck( _rxConnection ) );
     }
 
     //====================================================================
@@ -350,7 +431,7 @@ namespace sdbtools
     {
         EntryGuard aGuard( *this );
 
-        PNameCheck pNameCheck( NameCheckFactory::createExistenceCheck( _CommandType, getConnection()) );
+        PNameValidation pNameCheck( NameCheckFactory::createExistenceCheck( _CommandType, getConnection() ) );
 
         String sBaseName( _BaseName );
         if ( sBaseName.Len() == 0 )
@@ -361,7 +442,7 @@ namespace sdbtools
 
         ::rtl::OUString sName( sBaseName );
         sal_Int32 i = 1;
-        while ( pNameCheck->checkName( sName ) )
+        while ( !pNameCheck->validateName( sName ) )
         {
             ::rtl::OUStringBuffer aNameBuffer;
             aNameBuffer.append( sBaseName );
@@ -386,8 +467,8 @@ namespace sdbtools
     {
         EntryGuard aGuard( *this );
 
-        PNameCheck pNameCheck( NameCheckFactory::createExistenceCheck( _CommandType, getConnection()) );
-        return pNameCheck->checkName( _Name );
+        PNameValidation pNameCheck( NameCheckFactory::createExistenceCheck( _CommandType, getConnection()) );
+        return !pNameCheck->validateName( _Name );
     }
 
     //--------------------------------------------------------------------
@@ -395,8 +476,8 @@ namespace sdbtools
     {
         EntryGuard aGuard( *this );
 
-        PNameCheck pNameCheck( NameCheckFactory::createValidityCheck( _CommandType, getConnection()) );
-        return pNameCheck->checkName( _Name );
+        PNameValidation pNameCheck( NameCheckFactory::createValidityCheck( _CommandType, getConnection()) );
+        return pNameCheck->validateName( _Name );
     }
 
     //--------------------------------------------------------------------
@@ -404,27 +485,11 @@ namespace sdbtools
     {
         EntryGuard aGuard( *this );
 
-        PNameCheck pNameCheck( NameCheckFactory::createExistenceCheck( _CommandType, getConnection() ) );
-        if ( pNameCheck->checkName( _Name ) )
-        {
-            String sNameIsUsed( SdbtRes( STR_NAME_ALREADY_USED_IN_DB ) );
-            sNameIsUsed.SearchAndReplaceAllAscii( "$name$", _Name );
-            String sNeedDistinctNames( SdbtRes( STR_QUERY_AND_TABLE_DISTINCT_NAMES ) );
-
-            Any aDetails;
-            ::dbtools::DatabaseMetaData aMeta( getConnection() );
-            if ( aMeta.supportsSubqueriesInFrom() )
-                aDetails <<= SQLException( sNeedDistinctNames, getConnection(), ::rtl::OUString(), 0, Any() );
-
-            throw SQLException( sNameIsUsed, getConnection(), ::rtl::OUString(), 0, aDetails );
-        }
+        PNameValidation pNameCheck( NameCheckFactory::createExistenceCheck( _CommandType, getConnection() ) );
+        pNameCheck->validateName_throw( _Name );
 
         pNameCheck = NameCheckFactory::createValidityCheck( _CommandType, getConnection() );
-        if ( !pNameCheck->checkName( _Name ) )
-        {
-            String sError( SdbtRes( STR_NO_QUOTES_IN_QUERY_NAMES ) );
-            throw SQLException( sError, getConnection(), ::rtl::OUString(), 0, Any() );
-        }
+        pNameCheck->validateName_throw( _Name );
     }
 
 //........................................................................
