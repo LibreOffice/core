@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formcomponenthandler.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 12:19:30 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:56:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -712,8 +712,8 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL FormComponentPropertyHandler::describePropertyLine( const ::rtl::OUString& _rPropertyName,
-        LineDescriptor& _out_rDescriptor, const Reference< XPropertyControlFactory >& _rxControlFactory )
+    LineDescriptor SAL_CALL FormComponentPropertyHandler::describePropertyLine( const ::rtl::OUString& _rPropertyName,
+        const Reference< XPropertyControlFactory >& _rxControlFactory )
         throw (UnknownPropertyException, NullPointerException, RuntimeException)
     {
         if ( !_rxControlFactory.is() )
@@ -745,13 +745,14 @@ namespace pcr
 
         //////////////////////////////////////////////////////////////////////
 
-        _out_rDescriptor.HelpURL = HelpIdUrl::getHelpURL( m_pInfoService->getPropertyHelpId( nPropId ) );
-        _out_rDescriptor.DisplayName = sDisplayName;
+        LineDescriptor aDescriptor;
+        aDescriptor.HelpURL = HelpIdUrl::getHelpURL( m_pInfoService->getPropertyHelpId( nPropId ) );
+        aDescriptor.DisplayName = sDisplayName;
 
         // for the moment, assume a text field
         sal_Int16 nControlType = PropertyControlType::TextField;
         sal_Bool bReadOnly = sal_False;
-        _out_rDescriptor.Control.clear();
+        aDescriptor.Control.clear();
 
         //////////////////////////////////////////////////////////////////////
 
@@ -763,47 +764,47 @@ namespace pcr
         {
         case PROPERTY_ID_DEFAULT_SELECT_SEQ:
         case PROPERTY_ID_SELECTEDITEMS:
-            _out_rDescriptor.PrimaryButtonId = UID_PROP_DLG_SELECTION;
+            aDescriptor.PrimaryButtonId = UID_PROP_DLG_SELECTION;
             break;
 
         case PROPERTY_ID_FILTER:
-            _out_rDescriptor.PrimaryButtonId = UID_PROP_DLG_FILTER;
+            aDescriptor.PrimaryButtonId = UID_PROP_DLG_FILTER;
             break;
 
         case PROPERTY_ID_SORT:
-            _out_rDescriptor.PrimaryButtonId = UID_PROP_DLG_ORDER;
+            aDescriptor.PrimaryButtonId = UID_PROP_DLG_ORDER;
             break;
 
         case PROPERTY_ID_MASTERFIELDS:
         case PROPERTY_ID_DETAILFIELDS:
             nControlType = PropertyControlType::StringListField;
-            _out_rDescriptor.PrimaryButtonId = UID_PROP_DLG_FORMLINKFIELDS;
+            aDescriptor.PrimaryButtonId = UID_PROP_DLG_FORMLINKFIELDS;
             break;
 
         case PROPERTY_ID_COMMAND:
-            _out_rDescriptor.PrimaryButtonId = UID_PROP_DLG_SQLCOMMAND;
+            aDescriptor.PrimaryButtonId = UID_PROP_DLG_SQLCOMMAND;
             break;
 
         case PROPERTY_ID_TABINDEX:
         {
             Reference< XControlContainer > xControlContext( impl_getContextControlContainer_nothrow() );
             if ( xControlContext.is() )
-                _out_rDescriptor.PrimaryButtonId = UID_PROP_DLG_TABINDEX;
+                aDescriptor.PrimaryButtonId = UID_PROP_DLG_TABINDEX;
             nControlType = PropertyControlType::NumericField;
         };
         break;
 
         case PROPERTY_ID_FONT_NAME:
             bReadOnly = sal_True;
-            _out_rDescriptor.PrimaryButtonId = UID_PROP_DLG_FONT_TYPE;
+            aDescriptor.PrimaryButtonId = UID_PROP_DLG_FONT_TYPE;
             break;
 
         case PROPERTY_ID_TARGET_URL:
         case PROPERTY_ID_IMAGE_URL:
         {
-            _out_rDescriptor.Control = new OFileUrlControl( impl_getDefaultDialogParent_nothrow(), WB_TABSTOP | WB_BORDER );
+            aDescriptor.Control = new OFileUrlControl( impl_getDefaultDialogParent_nothrow(), WB_TABSTOP | WB_BORDER );
 
-            _out_rDescriptor.PrimaryButtonId = ( PROPERTY_ID_TARGET_URL == nPropId )
+            aDescriptor.PrimaryButtonId = ( PROPERTY_ID_TARGET_URL == nPropId )
                 ? UID_PROP_DLG_ATTR_TARGET_URL : UID_PROP_DLG_IMAGE_URL;
         }
         break;
@@ -821,13 +822,13 @@ namespace pcr
             switch( nPropId )
             {
             case PROPERTY_ID_BACKGROUNDCOLOR:
-                _out_rDescriptor.PrimaryButtonId = UID_PROP_DLG_BACKGROUNDCOLOR; break;
+                aDescriptor.PrimaryButtonId = UID_PROP_DLG_BACKGROUNDCOLOR; break;
             case PROPERTY_ID_FILLCOLOR:
-                _out_rDescriptor.PrimaryButtonId = UID_PROP_DLG_FILLCOLOR; break;
+                aDescriptor.PrimaryButtonId = UID_PROP_DLG_FILLCOLOR; break;
             case PROPERTY_ID_SYMBOLCOLOR:
-                _out_rDescriptor.PrimaryButtonId = UID_PROP_DLG_SYMBOLCOLOR; break;
+                aDescriptor.PrimaryButtonId = UID_PROP_DLG_SYMBOLCOLOR; break;
             case PROPERTY_ID_BORDERCOLOR:
-                _out_rDescriptor.PrimaryButtonId = UID_PROP_DLG_BORDERCOLOR; break;
+                aDescriptor.PrimaryButtonId = UID_PROP_DLG_BORDERCOLOR; break;
             }
             break;
 
@@ -851,7 +852,7 @@ namespace pcr
 
         case PROPERTY_ID_CONTROLLABEL:
             bReadOnly = sal_True;
-            _out_rDescriptor.PrimaryButtonId = UID_PROP_DLG_CONTROLLABEL;
+            aDescriptor.PrimaryButtonId = UID_PROP_DLG_CONTROLLABEL;
             break;
 
         case PROPERTY_ID_FORMATKEY:
@@ -878,15 +879,15 @@ namespace pcr
                     if ( bIsFormatKey )
                     {
                         OFormatSampleControl* pControl = new OFormatSampleControl( impl_getDefaultDialogParent_nothrow(), WB_READONLY | WB_TABSTOP | WB_BORDER );
-                        _out_rDescriptor.Control = pControl;
+                        aDescriptor.Control = pControl;
                         pControl->SetFormatSupplier( pSupplier );
 
-                        _out_rDescriptor.PrimaryButtonId = UID_PROP_DLG_NUMBER_FORMAT;
+                        aDescriptor.PrimaryButtonId = UID_PROP_DLG_NUMBER_FORMAT;
                     }
                     else
                     {
                         OFormattedNumericControl* pControl = new OFormattedNumericControl( impl_getDefaultDialogParent_nothrow(), WB_TABSTOP | WB_BORDER );
-                        _out_rDescriptor.Control = pControl;
+                        aDescriptor.Control = pControl;
 
                         FormatDescription aDesc;
                         aDesc.pSupplier = pSupplier;
@@ -921,7 +922,7 @@ namespace pcr
         case PROPERTY_ID_VALUE:
             {
                 OFormattedNumericControl* pControl = new OFormattedNumericControl( impl_getDefaultDialogParent_nothrow(), WB_TABSTOP | WB_BORDER | WB_SPIN | WB_REPEAT );
-                _out_rDescriptor.Control = pControl;
+                aDescriptor.Control = pControl;
 
                 // we don't set a formatter so the control uses a default (which uses the application
                 // language and a default numeric format)
@@ -978,10 +979,10 @@ namespace pcr
                 }
 
                 Optional< double > aValueNotPresent( sal_False, 0 );
-                _out_rDescriptor.Control = PropertyHandlerHelper::createNumericControl(
+                aDescriptor.Control = PropertyHandlerHelper::createNumericControl(
                     _rxControlFactory, nDigits, aValueNotPresent, aValueNotPresent, sal_False );
 
-                Reference< XNumericControl > xNumericControl( _out_rDescriptor.Control, UNO_QUERY_THROW );
+                Reference< XNumericControl > xNumericControl( aDescriptor.Control, UNO_QUERY_THROW );
                 if ( nValueUnit != -1 )
                     xNumericControl->setValueUnit( nValueUnit );
                 if ( nDisplayUnit != -1 )
@@ -1011,7 +1012,7 @@ namespace pcr
             ::std::vector< ::rtl::OUString > aListEntries;
             for ( xub_StrLen i=0; i<2; ++i )
                 aListEntries.push_back( aEntries.GetToken(i) );
-            _out_rDescriptor.Control = PropertyHandlerHelper::createListBoxControl( _rxControlFactory, aListEntries, sal_False );
+            aDescriptor.Control = PropertyHandlerHelper::createListBoxControl( _rxControlFactory, aListEntries, sal_False );
             bNeedDefaultStringIfVoidAllowed = true;
         }
 
@@ -1051,10 +1052,10 @@ namespace pcr
 
             // create the control
             if ( PROPERTY_ID_TARGET_FRAME == nPropId )
-                _out_rDescriptor.Control = PropertyHandlerHelper::createComboBoxControl( _rxControlFactory, aListEntries, sal_False );
+                aDescriptor.Control = PropertyHandlerHelper::createComboBoxControl( _rxControlFactory, aListEntries, sal_False );
             else
             {
-                _out_rDescriptor.Control = PropertyHandlerHelper::createListBoxControl( _rxControlFactory, aListEntries, sal_False );
+                aDescriptor.Control = PropertyHandlerHelper::createListBoxControl( _rxControlFactory, aListEntries, sal_False );
                 bNeedDefaultStringIfVoidAllowed = true;
             }
         }
@@ -1065,7 +1066,7 @@ namespace pcr
             case PROPERTY_ID_REPEAT_DELAY:
             {
                 OTimeDurationControl* pControl = new OTimeDurationControl( impl_getDefaultDialogParent_nothrow(), WB_BORDER | WB_TABSTOP );
-                _out_rDescriptor.Control = pControl;
+                aDescriptor.Control = pControl;
 
                 pControl->setMinValue( Optional< double >( sal_True, 0 ) );
                 pControl->setMaxValue( Optional< double >( sal_True, ::std::numeric_limits< double >::max() ) );
@@ -1090,7 +1091,7 @@ namespace pcr
                 else
                     aMinValue.Value = 0;
 
-                _out_rDescriptor.Control = PropertyHandlerHelper::createNumericControl(
+                aDescriptor.Control = PropertyHandlerHelper::createNumericControl(
                     _rxControlFactory, 0, aMinValue, aMaxValue, sal_False );
             }
             break;
@@ -1100,7 +1101,7 @@ namespace pcr
                 Optional< double > aMinValue( sal_True, 0 );
                 Optional< double > aMaxValue( sal_True, 20 );
 
-                _out_rDescriptor.Control = PropertyHandlerHelper::createNumericControl(
+                aDescriptor.Control = PropertyHandlerHelper::createNumericControl(
                     _rxControlFactory, 0, aMinValue, aMaxValue, sal_False );
             }
             break;
@@ -1109,7 +1110,7 @@ namespace pcr
             // DataSource
             case PROPERTY_ID_DATASOURCE:
             {
-                _out_rDescriptor.PrimaryButtonId = UID_PROP_DLG_ATTR_DATASOURCE;
+                aDescriptor.PrimaryButtonId = UID_PROP_DLG_ATTR_DATASOURCE;
 
                 ::std::vector< ::rtl::OUString > aListEntries;
 
@@ -1122,7 +1123,7 @@ namespace pcr
                     ::std::copy( aDatasources.getConstArray(), aDatasources.getConstArray() + aDatasources.getLength(),
                         aListEntries.begin() );
                 }
-                _out_rDescriptor.Control = PropertyHandlerHelper::createComboBoxControl(
+                aDescriptor.Control = PropertyHandlerHelper::createComboBoxControl(
                     _rxControlFactory, aListEntries, sal_False );
             }
             break;
@@ -1131,45 +1132,46 @@ namespace pcr
             {
                 ::std::vector< ::rtl::OUString > aFieldNames;
                 impl_initFieldList_nothrow( aFieldNames );
-                _out_rDescriptor.Control = PropertyHandlerHelper::createComboBoxControl(
+                aDescriptor.Control = PropertyHandlerHelper::createComboBoxControl(
                     _rxControlFactory, aFieldNames, sal_False );
             }
             break;
 
             case PROPERTY_ID_COMMAND:
-                impl_describeCursorSource_nothrow( _out_rDescriptor, _rxControlFactory );
+                impl_describeCursorSource_nothrow( aDescriptor, _rxControlFactory );
                 break;
 
             case PROPERTY_ID_LISTSOURCE:
-                impl_describeListSourceUI_throw( _out_rDescriptor, _rxControlFactory );
+                impl_describeListSourceUI_throw( aDescriptor, _rxControlFactory );
                 break;
         }
 
-        if ( !_out_rDescriptor.Control.is() )
-            _out_rDescriptor.Control = _rxControlFactory->createPropertyControl( nControlType, bReadOnly );
+        if ( !aDescriptor.Control.is() )
+            aDescriptor.Control = _rxControlFactory->createPropertyControl( nControlType, bReadOnly );
 
         if ( ( aProperty.Attributes & PropertyAttribute::MAYBEVOID ) != 0 )
         {
             // insert the string "Default" string, if necessary
             if ( bNeedDefaultStringIfVoidAllowed || ( nControlType == PropertyControlType::ColorListBox ) )
             {
-                Reference< XStringListControl > xStringList( _out_rDescriptor.Control, UNO_QUERY_THROW );
+                Reference< XStringListControl > xStringList( aDescriptor.Control, UNO_QUERY_THROW );
                 xStringList->prependListEntry( m_sDefaultValueString );
                 m_aPropertiesWithDefListEntry.insert( _rPropertyName );
             }
         }
 
-        if ( _out_rDescriptor.PrimaryButtonId )
-            _out_rDescriptor.HasPrimaryButton = sal_True;
-        if ( _out_rDescriptor.SecondaryButtonId )
-            _out_rDescriptor.HasSecondaryButton = sal_True;
+        if ( aDescriptor.PrimaryButtonId )
+            aDescriptor.HasPrimaryButton = sal_True;
+        if ( aDescriptor.SecondaryButtonId )
+            aDescriptor.HasSecondaryButton = sal_True;
 
         bool bIsDataProperty = ( nPropertyUIFlags & PROP_FLAG_DATA_PROPERTY ) != 0;
-        _out_rDescriptor.Category = ::rtl::OUString::createFromAscii( bIsDataProperty ? "Data" : "General" );
+        aDescriptor.Category = ::rtl::OUString::createFromAscii( bIsDataProperty ? "Data" : "General" );
+        return aDescriptor;
     }
 
     //--------------------------------------------------------------------
-    InteractiveSelectionResult SAL_CALL FormComponentPropertyHandler::onInteractivePropertySelection( const ::rtl::OUString& _rPropertyName, sal_Bool _bPrimary, Any& _rData, const Reference< XObjectInspectorUI >& _rxInspectorUI ) throw (UnknownPropertyException, NullPointerException, RuntimeException)
+    InteractiveSelectionResult SAL_CALL FormComponentPropertyHandler::onInteractivePropertySelection( const ::rtl::OUString& _rPropertyName, sal_Bool /*_bPrimary*/, Any& _rData, const Reference< XObjectInspectorUI >& _rxInspectorUI ) throw (UnknownPropertyException, NullPointerException, RuntimeException)
     {
         if ( !_rxInspectorUI.is() )
             throw NullPointerException();
@@ -1271,7 +1273,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL FormComponentPropertyHandler::actuatingPropertyChanged( const ::rtl::OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& _rOldValue, const Reference< XObjectInspectorUI >& _rxInspectorUI, sal_Bool _bFirstTimeInit ) throw (NullPointerException, RuntimeException)
+    void SAL_CALL FormComponentPropertyHandler::actuatingPropertyChanged( const ::rtl::OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& _rxInspectorUI, sal_Bool _bFirstTimeInit ) throw (NullPointerException, RuntimeException)
     {
         if ( !_rxInspectorUI.is() )
             throw NullPointerException();
@@ -1465,7 +1467,7 @@ namespace pcr
                 {
                     xControl = _rxInspectorUI->getPropertyControl( aAffectedProps[i] );
                 }
-                catch( const UnknownPropertyException& e ) { e; }
+                catch( const UnknownPropertyException& e ) { (void)e; }
                 if ( xControl.is() )
                 {
                     OFormattedNumericControl* pControl = dynamic_cast< OFormattedNumericControl* >( xControl.get() );
@@ -1508,7 +1510,7 @@ namespace pcr
                 {
                     xControl = _rxInspectorUI->getPropertyControl( aFormattedPropertyControls[i] );
                 }
-                catch( const UnknownPropertyException& e ) { e; }
+                catch( const UnknownPropertyException& e ) { (void)e; }
                 if ( xControl.is() )
                 {
                     OFormattedNumericControl* pControl = dynamic_cast< OFormattedNumericControl* >( xControl.get() );
@@ -2450,7 +2452,6 @@ namespace pcr
                 throw RuntimeException();   // caught below
 
             SfxTabPage* pPage = (*fnCreatePage)( pDialog.get(), aCoreSet );
-            const SfxPoolItem& rInfoItem = pPage->GetItemSet().Get( SID_ATTR_NUMBERFORMAT_INFO );
             pDialog->SetTabPage( pPage );
 
             _rClearBeforeDialog.clear();
@@ -2700,7 +2701,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    IMPL_LINK( FormComponentPropertyHandler, OnDesignerClosed, void*, NOTINTERESTEDIN )
+    IMPL_LINK( FormComponentPropertyHandler, OnDesignerClosed, void*, /*NOTINTERESTEDIN*/ )
     {
         OSL_ENSURE( m_xBrowserUI.is(), "FormComponentPropertyHandler::OnDesignerClosed: no access to the property browser ui!" );
         if ( m_xBrowserUI.is() )
