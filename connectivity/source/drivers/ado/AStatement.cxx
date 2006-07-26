@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AStatement.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:15:15 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:22:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -218,11 +218,15 @@ void OStatement_Base::clearMyResultSet () throw (SQLException)
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
+    try
+    {
+        Reference<XCloseable> xCloseable;
+        if ( ::comphelper::query_interface( m_xResultSet.get(), xCloseable ) )
+            xCloseable->close();
+    }
+    catch( const DisposedException& ) { }
 
-    Reference<XCloseable> xCloseable;
-    if(::comphelper::query_interface(m_xResultSet.get(),xCloseable))
-        xCloseable->close();
-    m_xResultSet = Reference< XResultSet>();
+    m_xResultSet = Reference< XResultSet >();
 }
 //--------------------------------------------------------------------
 sal_Int32 OStatement_Base::getRowCount () throw( SQLException)
