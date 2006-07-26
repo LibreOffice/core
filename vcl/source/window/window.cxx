@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.238 $
+ *  $Revision: 1.239 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:42:43 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:50:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4210,7 +4210,7 @@ void Window::ImplGrabFocus( USHORT nFlags )
                     ( pOldFocusWindow->GetDialogControlFlags() & WINDOW_DLGCTRL_FLOATWIN_POPUPMODEEND_CANCEL ) )
                     mpWindowImpl->mnGetFocusFlags |= GETFOCUS_FLOATWIN_POPUPMODEEND_CANCEL;
                 NotifyEvent aNEvt( EVENT_GETFOCUS, this );
-                if ( !ImplCallPreNotify( aNEvt ) )
+                if ( !ImplCallPreNotify( aNEvt ) && !aDogTag.IsDelete() )
                     GetFocus();
                 if( !aDogTag.IsDelete() )
                     ImplCallActivateListeners( (pOldFocusWindow && ! aOldFocusDel.IsDelete()) ? pOldFocusWindow : NULL );
