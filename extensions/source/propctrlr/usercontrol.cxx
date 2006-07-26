@@ -4,9 +4,9 @@
  *
  *  $RCSfile: usercontrol.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:34:25 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 08:01:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -303,7 +303,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    IMPL_LINK( OTimeDurationControl, OnCustomConvert, MetricField*, pField )
+    IMPL_LINK( OTimeDurationControl, OnCustomConvert, MetricField*, /*pField*/ )
     {
         long nMultiplier = 1;
         if ( getTypedControlWindow()->GetCurUnitText().EqualsIgnoreCaseAscii( "ms" ) )
