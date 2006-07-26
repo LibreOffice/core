@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paralleltimecontainer.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:45:55 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:36:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,37 +32,40 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+#ifndef INCLUDED_SLIDESHOW_PARALLELTIMECONTAINER_HXX
+#define INCLUDED_SLIDESHOW_PARALLELTIMECONTAINER_HXX
 
-#ifndef _SLIDESHOW_PARALLELTIMECONTAINER_HXX
-#define _SLIDESHOW_PARALLELTIMECONTAINER_HXX
+#include "basecontainernode.hxx"
 
-#include <basecontainernode.hxx>
+namespace presentation {
+namespace internal {
 
+/** This class implements parallel node containers
 
-namespace presentation
+    All children of this node are played in parallel
+*/
+class ParallelTimeContainer : public BaseContainerNode
 {
-    namespace internal
-    {
-        /** This class implements parallel node containers
-
-            All children of this node are played in parallel
-        */
-        class ParallelTimeContainer : public BaseContainerNode
-        {
-        public:
-            ParallelTimeContainer( const ::com::sun::star::uno::Reference<
-                                           ::com::sun::star::animations::XAnimationNode >& xNode,
-                                   const BaseContainerNodeSharedPtr&                    rParent,
-                                   const NodeContext&                                   rContext );
-
-            virtual bool activate();
-            virtual void notifyDeactivating( const AnimationNodeSharedPtr& rNotifier );
+public:
+    ParallelTimeContainer(
+        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::animations::XAnimationNode >& xNode,
+        const BaseContainerNodeSharedPtr&               rParent,
+        const NodeContext&                              rContext )
+        : BaseContainerNode( xNode, rParent, rContext ) {}
 
 #if defined(VERBOSE) && defined(DBG_UTIL)
-            virtual const char* getDescription() const;
+    virtual const char* getDescription() const
+        { return "ParallelTimeContainer"; }
 #endif
-        };
-    }
-}
 
-#endif /* _SLIDESHOW_PARALLELTIMECONTAINER_HXX */
+private:
+    virtual void activate_st();
+    virtual void notifyDeactivating( AnimationNodeSharedPtr const& pChildNode );
+};
+
+} // namespace internal
+} // namespace presentation
+
+#endif /* INCLUDED_SLIDESHOW_PARALLELTIMECONTAINER_HXX */
+
