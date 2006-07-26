@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eformspropertyhandler.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:21:39 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:54:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -437,8 +437,8 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL EFormsPropertyHandler::describePropertyLine( const ::rtl::OUString& _rPropertyName,
-        LineDescriptor& /* [out] */ _rDescriptor, const Reference< XPropertyControlFactory >& _rxControlFactory )
+    LineDescriptor SAL_CALL EFormsPropertyHandler::describePropertyLine( const ::rtl::OUString& _rPropertyName,
+        const Reference< XPropertyControlFactory >& _rxControlFactory )
         throw (UnknownPropertyException, NullPointerException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -447,6 +447,7 @@ namespace pcr
         if ( !m_pHelper.get() )
             throw RuntimeException();
 
+        LineDescriptor aDescriptor;
         sal_Int16 nControlType = PropertyControlType::TextField;
         ::std::vector< ::rtl::OUString > aListEntries;
         PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
@@ -471,12 +472,12 @@ namespace pcr
         }
         break;
 
-        case PROPERTY_ID_BIND_EXPRESSION:   _rDescriptor.PrimaryButtonId = UID_PROP_DLG_BIND_EXPRESSION; break;
-        case PROPERTY_ID_XSD_REQUIRED:      _rDescriptor.PrimaryButtonId = UID_PROP_DLG_XSD_REQUIRED;    break;
-        case PROPERTY_ID_XSD_RELEVANT:      _rDescriptor.PrimaryButtonId = UID_PROP_DLG_XSD_RELEVANT;    break;
-        case PROPERTY_ID_XSD_READONLY:      _rDescriptor.PrimaryButtonId = UID_PROP_DLG_XSD_READONLY;    break;
-        case PROPERTY_ID_XSD_CONSTRAINT:    _rDescriptor.PrimaryButtonId = UID_PROP_DLG_XSD_CONSTRAINT;  break;
-        case PROPERTY_ID_XSD_CALCULATION:   _rDescriptor.PrimaryButtonId = UID_PROP_DLG_XSD_CALCULATION; break;
+        case PROPERTY_ID_BIND_EXPRESSION:   aDescriptor.PrimaryButtonId = UID_PROP_DLG_BIND_EXPRESSION; break;
+        case PROPERTY_ID_XSD_REQUIRED:      aDescriptor.PrimaryButtonId = UID_PROP_DLG_XSD_REQUIRED;    break;
+        case PROPERTY_ID_XSD_RELEVANT:      aDescriptor.PrimaryButtonId = UID_PROP_DLG_XSD_RELEVANT;    break;
+        case PROPERTY_ID_XSD_READONLY:      aDescriptor.PrimaryButtonId = UID_PROP_DLG_XSD_READONLY;    break;
+        case PROPERTY_ID_XSD_CONSTRAINT:    aDescriptor.PrimaryButtonId = UID_PROP_DLG_XSD_CONSTRAINT;  break;
+        case PROPERTY_ID_XSD_CALCULATION:   aDescriptor.PrimaryButtonId = UID_PROP_DLG_XSD_CALCULATION; break;
 
         default:
             DBG_ERROR( "EFormsPropertyHandler::describePropertyLine: cannot handle this property!" );
@@ -486,23 +487,24 @@ namespace pcr
         switch ( nControlType )
         {
         case PropertyControlType::ListBox:
-            _rDescriptor.Control = PropertyHandlerHelper::createListBoxControl( _rxControlFactory, aListEntries, sal_False );
+            aDescriptor.Control = PropertyHandlerHelper::createListBoxControl( _rxControlFactory, aListEntries, sal_False );
             break;
         case PropertyControlType::ComboBox:
-            _rDescriptor.Control = PropertyHandlerHelper::createComboBoxControl( _rxControlFactory, aListEntries, sal_False );
+            aDescriptor.Control = PropertyHandlerHelper::createComboBoxControl( _rxControlFactory, aListEntries, sal_False );
             break;
         default:
-            _rDescriptor.Control = _rxControlFactory->createPropertyControl( nControlType, sal_False );
+            aDescriptor.Control = _rxControlFactory->createPropertyControl( nControlType, sal_False );
             break;
         }
 
-        _rDescriptor.DisplayName = m_pInfoService->getPropertyTranslation( nPropId );
-        _rDescriptor.Category = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Data" ) );
-        _rDescriptor.HelpURL = HelpIdUrl::getHelpURL( m_pInfoService->getPropertyHelpId( nPropId ) );
+        aDescriptor.DisplayName = m_pInfoService->getPropertyTranslation( nPropId );
+        aDescriptor.Category = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Data" ) );
+        aDescriptor.HelpURL = HelpIdUrl::getHelpURL( m_pInfoService->getPropertyHelpId( nPropId ) );
+        return aDescriptor;
     }
 
     //--------------------------------------------------------------------
-    InteractiveSelectionResult SAL_CALL EFormsPropertyHandler::onInteractivePropertySelection( const ::rtl::OUString& _rPropertyName, sal_Bool _bPrimary, Any& _rData, const Reference< XObjectInspectorUI >& _rxInspectorUI ) throw (UnknownPropertyException, NullPointerException, RuntimeException)
+    InteractiveSelectionResult SAL_CALL EFormsPropertyHandler::onInteractivePropertySelection( const ::rtl::OUString& _rPropertyName, sal_Bool /*_bPrimary*/, Any& _rData, const Reference< XObjectInspectorUI >& _rxInspectorUI ) throw (UnknownPropertyException, NullPointerException, RuntimeException)
     {
         if ( !_rxInspectorUI.is() )
             throw NullPointerException();
@@ -579,7 +581,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL EFormsPropertyHandler::actuatingPropertyChanged( const ::rtl::OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& _rOldValue, const Reference< XObjectInspectorUI >& _rxInspectorUI, sal_Bool ) throw (NullPointerException, RuntimeException)
+    void SAL_CALL EFormsPropertyHandler::actuatingPropertyChanged( const ::rtl::OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& _rxInspectorUI, sal_Bool ) throw (NullPointerException, RuntimeException)
     {
         if ( !_rxInspectorUI.is() )
             throw NullPointerException();
