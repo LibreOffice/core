@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertyimport.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:16:11 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:34:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,23 @@ namespace xmloff
 {
 //.........................................................................
 
+    //=====================================================================
+    //= PropertyConversion
+    //=====================================================================
+    class PropertyConversion
+    {
+    public:
+        static ::com::sun::star::uno::Any convertString(
+            SvXMLImport& _rImporter,
+            const ::com::sun::star::uno::Type& _rExpectedType,
+            const ::rtl::OUString& _rReadCharacters,
+            const SvXMLEnumMapEntry* _pEnumMap = NULL,
+            const sal_Bool _bInvertBoolean = sal_False
+        );
+
+        static ::com::sun::star::uno::Type xmlTypeToUnoType( const ::rtl::OUString& _rType );
+    };
+
     class IFormsImportContext;
     //=====================================================================
     //= OPropertyImport
@@ -75,6 +92,7 @@ namespace xmloff
     class OPropertyImport : public SvXMLImportContext
     {
         friend class OSinglePropertyContext;
+        friend class OListPropertyContext;
 
     protected:
         typedef ::std::vector< ::com::sun::star::beans::PropertyValue > PropertyValueArray;
@@ -145,18 +163,6 @@ namespace xmloff
         { m_aValues.push_back(_rProp); }
         void implPushBackGenericPropertyValue(const ::com::sun::star::beans::PropertyValue& _rProp)
         { m_aGenericValues.push_back(_rProp); }
-
-        static ::com::sun::star::uno::Any convertString(
-            SvXMLImport& _rImporter,
-            const ::com::sun::star::uno::Type& _rExpectedType,
-            const ::rtl::OUString& _rReadCharacters,
-            const SvXMLEnumMapEntry* _pEnumMap = NULL,
-            const sal_Bool _bInvertBoolean = sal_False
-            );
-
-    private:
-        static ::com::sun::star::util::Time implGetTime(double _nValue);
-        static ::com::sun::star::util::Date implGetDate(double _nValue);
     };
     SV_DECL_IMPL_REF( OPropertyImport )
 
@@ -188,7 +194,6 @@ namespace xmloff
     //=====================================================================
     //= OSinglePropertyContext
     //=====================================================================
-    SV_DECL_REF( OAccumulateCharacters )
     /** helper class for importing a single &lt;form:property&gt; element
     */
     class OSinglePropertyContext : public SvXMLImportContext
@@ -205,9 +210,45 @@ namespace xmloff
 
         virtual void StartElement(
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
-#if OSL_DEBUG_LEVEL > 0
-        virtual void Characters(const ::rtl::OUString& _rChars);
-#endif
+    };
+
+    //=====================================================================
+    //= OListPropertyContext
+    //=====================================================================
+    class OListPropertyContext : public SvXMLImportContext
+    {
+        OPropertyImportRef                  m_xPropertyImporter;
+        ::rtl::OUString                     m_sPropertyName;
+        ::rtl::OUString                     m_sPropertyType;
+        ::std::vector< ::rtl::OUString >    m_aListValues;
+
+    public:
+        OListPropertyContext( SvXMLImport& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+                const OPropertyImportRef& _rPropertyImporter );
+
+        virtual void StartElement(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList );
+
+        virtual void EndElement();
+
+        virtual SvXMLImportContext* CreateChildContext(
+            sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
+    };
+
+    //=====================================================================
+    //= OListValueContext
+    //=====================================================================
+    class OListValueContext : public SvXMLImportContext
+    {
+        ::rtl::OUString& m_rListValueHolder;
+
+    public:
+        OListValueContext( SvXMLImport& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+            ::rtl::OUString& _rListValueHolder );
+
+        virtual void StartElement(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList );
     };
 
 //.........................................................................
