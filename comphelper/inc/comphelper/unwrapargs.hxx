@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unwrapargs.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-06 10:13:31 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 12:11:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,7 @@
 #include "boost/preprocessor/cat.hpp"
 #include "boost/preprocessor/repetition.hpp"
 #include "boost/preprocessor/arithmetic/add.hpp"
+#include "cppu/unotype.hxx"
 
 namespace comphelper {
 
@@ -77,7 +78,7 @@ inline void extract(
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("Cannot extract ANY { ") );
         buf.append( seq[nArg].getValueType().getTypeName() );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" } to ") );
-        buf.append( getCppuType(&v).getTypeName() );
+        buf.append( ::cppu::UnoType<T>::get().getTypeName() );
         buf.append( static_cast<sal_Unicode>('!') );
         throw ::com::sun::star::lang::IllegalArgumentException(
             buf.makeStringAndClear(), xErrorContext,
