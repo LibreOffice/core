@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salsys.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:51:58 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 09:11:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,10 +39,10 @@
 #include <msgbox.hxx>
 #include <button.hxx>
 #include <svdata.hxx>
+#include <saldata.hxx>
 #include <salinst.h>
 #include <saldisp.hxx>
 #include <salsys.h>
-#include <cstdio>
 
 
 SalSystem* X11SalInstance::CreateSalSystem()
@@ -56,29 +56,26 @@ X11SalSystem::~X11SalSystem()
 {
 }
 
-bool X11SalSystem::GetSalSystemDisplayInfo( DisplayInfo& rInfo )
+// for the moment only handle xinerama case
+unsigned int X11SalSystem::GetDisplayScreenCount()
 {
-    bool bSuccess = false;
-    Display* pDisplay = XOpenDisplay( NULL );
-    if( pDisplay )
+    SalDisplay* pSalDisp = GetSalData()->GetDisplay();
+    return pSalDisp->IsXinerama() ? pSalDisp->GetXineramaScreens().size() : 1U;
+}
+
+Rectangle X11SalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
+{
+    Rectangle aRet;
+    SalDisplay* pSalDisp = GetSalData()->GetDisplay();
+    if( pSalDisp->IsXinerama() )
     {
-        int nScreen = DefaultScreen( pDisplay );
-        XVisualInfo aVI;
-        /*  note: SalDisplay::BestVisual does not
-         *  access saldata or any other data available
-         *  only after InitVCL; nor does SalOpenGL:MakeVisualWeights
-         *  which gets called by SalDisplay::BestVisual.
-         *  this is crucial since GetSalSystemDisplayInfo
-         *  gets called BEFORE Init.
-         */
-        SalDisplay::BestVisual( pDisplay, nScreen, aVI );
-        rInfo.nDepth    = aVI.depth;
-        rInfo.nWidth    = DisplayWidth( pDisplay, nScreen );
-        rInfo.nHeight   = DisplayHeight( pDisplay, nScreen );
-        XCloseDisplay( pDisplay );
-        bSuccess = true;
+        const std::vector< Rectangle >& rScreens = pSalDisp->GetXineramaScreens();
+        if( nScreen < rScreens.size() )
+            aRet = rScreens[nScreen];
     }
-    return bSuccess;
+    else
+        aRet = Rectangle( Point(), pSalDisp->GetScreenSize() );
+    return aRet;
 }
 
 int X11SalSystem::ShowNativeDialog( const String& rTitle, const String& rMessage, const std::list< String >& rButtons, int nDefButton )
