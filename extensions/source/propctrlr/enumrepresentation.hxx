@@ -4,9 +4,9 @@
  *
  *  $RCSfile: enumrepresentation.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:22:01 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:55:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@ namespace pcr
     //====================================================================
     //= IPropertyEnumRepresentation
     //====================================================================
-    class IPropertyEnumRepresentation : public ::rtl::IReference
+    class SAL_NO_VTABLE IPropertyEnumRepresentation : public ::rtl::IReference
     {
     public:
         /** retrieves all descriptions of all possible values of the enumeration property
@@ -79,6 +79,8 @@ namespace pcr
         virtual ::rtl::OUString SAL_CALL getDescriptionForValue(
                 const ::com::sun::star::uno::Any& _rEnumValue
             ) const = 0;
+
+        virtual ~IPropertyEnumRepresentation() { };
     };
 
 //........................................................................
