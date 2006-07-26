@@ -4,9 +4,9 @@
  *
  *  $RCSfile: elementexport.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:16:39 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:31:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -424,14 +424,6 @@ namespace xmloff
     //---------------------------------------------------------------------
     void OControlExport::exportSubTags() throw (Exception)
     {
-        // the ListSource related properties do not need to be exported in a generic way, exportListSourceAsElements
-        // will handle this (if necessary)
-        exportedProperty(PROPERTY_STRING_ITEM_LIST);
-        exportedProperty(PROPERTY_VALUE_SEQ);
-        exportedProperty(PROPERTY_SELECT_SEQ);
-        exportedProperty(PROPERTY_DEFAULT_SELECT_SEQ);
-        exportedProperty(PROPERTY_LISTSOURCE);
-
         // for the upcoming exportRemainingProperties:
         // if a control has the LabelControl property, this is not stored with the control itself, but instead with
         // the control which is referenced by this property. As the base class' exportRemainingProperties doesn't
@@ -472,6 +464,22 @@ namespace xmloff
             // 2004-04-14 - #i27729# - fs@openoffice.org
             exportedProperty( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharCrossedOut" ) ) );
         }
+
+        if ( m_eType == LISTBOX )
+        {
+            // will be exported in exportListSourceAsElements:
+            if ( controlHasUserSuppliedListEntries() )
+                exportedProperty( PROPERTY_DEFAULT_SELECT_SEQ );
+
+            // will not be exported in a generic way. Either exportListSourceAsElements cares
+            // for them, or we don't need them
+            exportedProperty( PROPERTY_STRING_ITEM_LIST );
+            exportedProperty( PROPERTY_VALUE_SEQ );
+            exportedProperty( PROPERTY_SELECT_SEQ );
+            exportedProperty( PROPERTY_LISTSOURCE );
+        }
+        if ( m_eType == COMBOBOX )
+            exportedProperty( PROPERTY_STRING_ITEM_LIST );
 
         // let the base class export the remaining properties and the events
         OElementExport::exportSubTags();
@@ -737,7 +745,7 @@ namespace xmloff
             // However, if the model has a property "PersistenceMaxTextLength", then we prefer this
 
             // determine the name of the property to export
-            ::rtl::OUString sTextLenPropertyName = PROPERTY_MAXTEXTLENGTH;
+            ::rtl::OUString sTextLenPropertyName( PROPERTY_MAXTEXTLENGTH );
             if ( m_xPropertyInfo->hasPropertyByName( PROPERTY_PERSISTENCE_MAXTEXTLENGTH ) )
                 sTextLenPropertyName = PROPERTY_PERSISTENCE_MAXTEXTLENGTH;
 
@@ -1263,6 +1271,8 @@ namespace xmloff
                 OAttributeMetaData::getDatabaseAttributeName(DA_LIST_SOURCE),
                 sListSource);
         }
+
+        exportedProperty( PROPERTY_LISTSOURCE );
     }
 
     //---------------------------------------------------------------------
@@ -2108,10 +2118,12 @@ namespace xmloff
             // now export the data source name or databaselocation or connection resource
             ::rtl::OUString sPropValue;
             m_xProps->getPropertyValue( PROPERTY_DATASOURCENAME ) >>= sPropValue;
-            if ( !(m_bCreateConnectionResourceElement = !sPropValue.getLength()) )
+            m_bCreateConnectionResourceElement = !sPropValue.getLength();
+            if ( !m_bCreateConnectionResourceElement )
             {
                 INetURLObject aURL(sPropValue);
-                if ( ! (m_bCreateConnectionResourceElement = ( aURL.GetProtocol() == INET_PROT_FILE )) )
+                m_bCreateConnectionResourceElement = ( aURL.GetProtocol() == INET_PROT_FILE );
+                if ( !m_bCreateConnectionResourceElement )
                     exportStringPropertyAttribute(
                         OAttributeMetaData::getFormAttributeNamespace(faDatasource),
                         OAttributeMetaData::getFormAttributeName(faDatasource),
