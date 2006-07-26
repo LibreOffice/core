@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryTableView.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:41:36 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:48:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -946,11 +946,13 @@ void OQueryTableView::HideTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUndoAc
         getDesignView()->SaveTabWinUIConfig(pTabWin);
             // (ich muss ueber das Parent gehen, da nur das die Position der Scrollbars kennt)
         // dann aus der Liste der TabWins raus und verstecken
-        pTabWins->erase(
-            ::std::find_if( pTabWins->begin(),
-                                pTabWins->end(),
-                                ::std::compose1(::std::bind2nd(::std::equal_to<OTableWindow*>(),pTabWin),::std::select2nd<OTableWindowMap::value_type>()))
-                ,pTabWins->end());
+        OTableWindowMap::iterator aIter = pTabWins->begin();
+        for ( ;aIter != pTabWins->end(); ++aIter )
+            if ( aIter->second == pTabWin )
+            {
+                pTabWins->erase( aIter );
+                break;
+            }
 
         pTabWin->Hide();    // nicht zerstoeren, steht im Undo!!
 
