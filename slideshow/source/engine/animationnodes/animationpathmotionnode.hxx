@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationpathmotionnode.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:41:42 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:32:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,44 +32,42 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+#ifndef INCLUDED_SLIDESHOW_ANIMATIONPATHMOTIONNODE_HXX
+#define INCLUDED_SLIDESHOW_ANIMATIONPATHMOTIONNODE_HXX
 
-#ifndef _SLIDESHOW_ANIMATIONPATHMOTIONNODE_HXX
-#define _SLIDESHOW_ANIMATIONPATHMOTIONNODE_HXX
+#include "animationbasenode.hxx"
+#include "com/sun/star/animations/XAnimateMotion.hpp"
 
-#include <activityanimationbasenode.hxx>
+namespace presentation {
+namespace internal {
 
-#ifndef _COM_SUN_STAR_ANIMATIONS_XANIMATEMOTION_HPP_
-#include <com/sun/star/animations/XAnimateMotion.hpp>
-#endif
-
-
-namespace presentation
+class AnimationPathMotionNode : public AnimationBaseNode
 {
-    namespace internal
-    {
-        class AnimationPathMotionNode : public ActivityAnimationBaseNode
-        {
-        public:
-            AnimationPathMotionNode( const ::com::sun::star::uno::Reference<
-                                         ::com::sun::star::animations::XAnimationNode >&    xNode,
-                                     const BaseContainerNodeSharedPtr&                  rParent,
-                                     const NodeContext&                                 rContext );
-
-            virtual void dispose();
-            virtual bool init();
+public:
+    AnimationPathMotionNode(
+        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::animations::XAnimationNode >& xNode,
+        const BaseContainerNodeSharedPtr&               rParent,
+        const NodeContext&                              rContext )
+        : AnimationBaseNode( xNode, rParent, rContext ),
+          mxPathMotionNode( xNode, ::com::sun::star::uno::UNO_QUERY_THROW ) {}
 
 #if defined(VERBOSE) && defined(DBG_UTIL)
-            virtual const char* getDescription() const;
+    virtual const char* getDescription() const
+        { return "AnimationPathMotionNode"; }
 #endif
 
-        private:
-            AnimationActivitySharedPtr createPathMotionActivity();
+protected:
+    virtual void dispose();
 
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::animations::XAnimateMotion >  mxPathMotionNode;
-        };
+private:
+    virtual AnimationActivitySharedPtr createActivity() const;
 
-    }
-}
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::animations::XAnimateMotion >  mxPathMotionNode;
+};
 
-#endif /* _SLIDESHOW_ANIMATIONPATHMOTIONNODE_HXX */
+} // namespace internal
+} // namespace presentation
+
+#endif /* INCLUDED_SLIDESHOW_ANIMATIONPATHMOTIONNODE_HXX */

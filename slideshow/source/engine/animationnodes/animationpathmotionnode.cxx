@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationpathmotionnode.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:41:26 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:32:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,76 +34,36 @@
  ************************************************************************/
 
 // must be first
-#include <canvas/debug.hxx>
-#include <canvas/verbosetrace.hxx>
+#include "canvas/debug.hxx"
+#include "canvas/verbosetrace.hxx"
+#include "animationpathmotionnode.hxx"
+#include "animationfactory.hxx"
 
-#include <animationpathmotionnode.hxx>
-#include <animationfactory.hxx>
+namespace presentation {
+namespace internal {
 
-
-using namespace ::com::sun::star;
-
-namespace presentation
+void AnimationPathMotionNode::dispose()
 {
-    namespace internal
-    {
-        AnimationPathMotionNode::AnimationPathMotionNode( const uno::Reference< animations::XAnimationNode >&   xNode,
-                                                          const BaseContainerNodeSharedPtr&                     rParent,
-                                                          const NodeContext&                                    rContext ) :
-            ActivityAnimationBaseNode( xNode, rParent, rContext ),
-            mxPathMotionNode( xNode, uno::UNO_QUERY_THROW )
-        {
-        }
-
-        void AnimationPathMotionNode::dispose()
-        {
-            mxPathMotionNode.clear();
-
-            ActivityAnimationBaseNode::dispose();
-        }
-
-        bool AnimationPathMotionNode::init()
-        {
-            if( !ActivityAnimationBaseNode::init() )
-                return false;
-
-            try
-            {
-                // TODO(F2): For restart functionality, we must regenerate activities,
-                // since they are not able to reset their state (or implement _that_)
-                getActivity() = createPathMotionActivity();
-            }
-            catch( uno::Exception& )
-            {
-                // catch and ignore. We later handle empty activities, but for
-                // other nodes to function properly, the core functionality of
-                // this node must remain up and running.
-            }
-
-            return true;
-        }
-
-#if defined(VERBOSE) && defined(DBG_UTIL)
-        const char* AnimationPathMotionNode::getDescription() const
-        {
-            return "AnimationPathMotionNode";
-        }
-#endif
-
-        AnimationActivitySharedPtr AnimationPathMotionNode::createPathMotionActivity()
-        {
-            ::rtl::OUString aString;
-
-            ENSURE_AND_THROW( (mxPathMotionNode->getPath() >>= aString),
-                              "AnimationPathMotionNode::createPathMotionActivity(): no string-based SVG:d path found" );
-
-            ActivitiesFactory::CommonParameters aParms( fillCommonParameters() );
-            return ActivitiesFactory::createSimpleActivity( aParms,
-                                                            AnimationFactory::createPathMotionAnimation(
-                                                                aString,
-                                                                getShape(),
-                                                                getContext().mpLayerManager ),
-                                                            true );
-        }
-    }
+    mxPathMotionNode.clear();
+    AnimationBaseNode::dispose();
 }
+
+AnimationActivitySharedPtr AnimationPathMotionNode::createActivity() const
+{
+    rtl::OUString aString;
+    ENSURE_AND_THROW( (mxPathMotionNode->getPath() >>= aString),
+                      "no string-based SVG:d path found" );
+
+    ActivitiesFactory::CommonParameters const aParms( fillCommonParameters() );
+    return ActivitiesFactory::createSimpleActivity(
+        aParms,
+        AnimationFactory::createPathMotionAnimation(
+            aString,
+            getShape(),
+            getContext().mpLayerManager ),
+        true );
+}
+
+} // namespace internal
+} // namespace presentation
+
