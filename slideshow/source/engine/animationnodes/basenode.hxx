@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basenode.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 07:35:12 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 15:05:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,7 +84,7 @@ class BaseContainerNode;
     file-private accessor methods.
 */
 class BaseNode : public AnimationNode,
-                 private ::osl::DebugBase<BaseNode>,
+                 protected ::osl::DebugBase<BaseNode>,
                  private ::boost::noncopyable
 {
 public:
