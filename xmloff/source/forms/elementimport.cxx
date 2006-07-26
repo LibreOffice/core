@@ -4,9 +4,9 @@
  *
  *  $RCSfile: elementimport.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:17:05 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:32:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,6 +115,7 @@ namespace xmloff
 //.........................................................................
 
     using namespace ::xmloff::token;
+    using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::container;
@@ -125,6 +126,7 @@ namespace xmloff
     using namespace ::com::sun::star::xml;
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::text;
+    using namespace ::comphelper;
 
 #define PROPID_VALUE            1
 #define PROPID_CURRENT_VALUE    2
@@ -324,8 +326,7 @@ namespace xmloff
         }
 
         // set the generic properties
-        if( !m_aGenericValues.empty() )
-            implImportGenericProperties();
+        implImportGenericProperties();
 
         // set the style properties
         if ( m_pStyleElement && m_xElement.is() )
@@ -351,11 +352,15 @@ namespace xmloff
         LEAVE_LOG_CONTEXT( );
     }
 
+    //---------------------------------------------------------------------
     void OElementImport::implImportGenericProperties()
     {
+        if ( m_aGenericValues.empty() )
+            return;
+
         Reference< XPropertySetInfo > xPropSetInfo = m_xElement->getPropertySetInfo();
 
-        for( PropertyValueArray::iterator aPropValues =
+        for (   PropertyValueArray::iterator aPropValues =
                 m_aGenericValues.begin();
                 aPropValues != m_aGenericValues.end();
                 ++aPropValues
@@ -365,58 +370,88 @@ namespace xmloff
             // the property
             try
             {
-                TypeClass eValueTypeClass =
-                    aPropValues->Value.getValueTypeClass();
-                sal_Bool bValueIsSequence =
-                    TypeClass_SEQUENCE == eValueTypeClass;
-                if( bValueIsSequence )
+                // determine the type of the value (source forthe following conversion)
+                TypeClass eValueTypeClass = aPropValues->Value.getValueTypeClass();
+                sal_Bool bValueIsSequence = TypeClass_SEQUENCE == eValueTypeClass;
+                if ( bValueIsSequence )
                 {
-                    ::com::sun::star::uno::Type aSimpleType(
-                            ::comphelper::getSequenceElementType(
-                                aPropValues->Value.getValueType() ) );
+                    uno::Type aSimpleType( getSequenceElementType( aPropValues->Value.getValueType() ) );
                     eValueTypeClass = aSimpleType.getTypeClass();
                 }
-                OSL_ENSURE( !bValueIsSequence, "sequence is unsupported" );
 
-                TypeClass ePropTypeClass = eValueTypeClass;
-                sal_Bool bPropIsSequence = bValueIsSequence;
-                if( TypeClass_DOUBLE == eValueTypeClass )
+                // determine the type of the property (target forthe following conversion)
+                Property aProperty( xPropSetInfo->getPropertyByName( aPropValues->Name ) );
+                TypeClass ePropTypeClass = aProperty.Type.getTypeClass();
+                sal_Bool bPropIsSequence = TypeClass_SEQUENCE == ePropTypeClass;
+                if( bPropIsSequence )
                 {
-                    Property aProp(
-                        xPropSetInfo->getPropertyByName(aPropValues->Name) );
-                    ePropTypeClass = aProp.Type.getTypeClass();
-                    bPropIsSequence = TypeClass_SEQUENCE == ePropTypeClass;
-                    if( bPropIsSequence )
-                    {
-                        ::com::sun::star::uno::Type aSimpleType(
-                                ::comphelper::getSequenceElementType(
-                                                            aProp.Type ) );
-                        ePropTypeClass = aSimpleType.getTypeClass();
-                    }
+                    uno::Type aSimpleType( ::comphelper::getSequenceElementType( aProperty.Type ) );
+                    ePropTypeClass = aSimpleType.getTypeClass();
                 }
-                if( ePropTypeClass != eValueTypeClass &&
-                     !bPropIsSequence && !bValueIsSequence )
+
+                if ( bPropIsSequence != bValueIsSequence )
                 {
-                    double nVal;
-                    aPropValues->Value >>= nVal;
-                    switch( ePropTypeClass )
+                    OSL_ENSURE( false, "OElementImport::implImportGenericProperties: either both value and property should be a sequence, or none of them!" );
+                    continue;
+                }
+
+                if ( bValueIsSequence )
+                {
+                    OSL_ENSURE( eValueTypeClass == TypeClass_ANY,
+                        "OElementImport::implImportGenericProperties: only ANYs should have been imported as generic list property!" );
+                        // (OPropertyImport should produce only Sequencer< Any >, since it cannot know the real type
+
+                    OSL_ENSURE( ePropTypeClass == TypeClass_SHORT,
+                        "OElementImport::implImportGenericProperties: conversion to sequences other than 'sequence< short >' not implemented, yet!" );
+
+                    Sequence< Any > aXMLValueList;
+                    aPropValues->Value >>= aXMLValueList;
+                    Sequence< sal_Int16 > aPropertyValueList( aXMLValueList.getLength() );
+
+                    const Any*       pXMLValue = aXMLValueList.getConstArray();
+                          sal_Int16* pPropValue = aPropertyValueList.getArray();
+
+                    for ( sal_Int32 i=0; i<aXMLValueList.getLength(); ++i, ++pXMLValue, ++pPropValue )
                     {
-                    case TypeClass_BYTE:
-                    case TypeClass_SHORT:
-                        aPropValues->Value <<=
-                            static_cast< sal_Int16 >( nVal );
-                        break;
-                    case TypeClass_LONG:
-                    case TypeClass_ENUM:
-                        aPropValues->Value <<=
-                            static_cast< sal_Int32 >( nVal );
-                        break;
-                    case TypeClass_HYPER:
-                        aPropValues->Value <<=
-                            static_cast< sal_Int64 >( nVal );
-                        break;
+                        // only value sequences of numeric types implemented so far.
+                        double nVal( 0 );
+                        OSL_VERIFY( *pXMLValue >>= nVal );
+                        *pPropValue = static_cast< sal_Int16 >( nVal );
+                    }
+
+                    aPropValues->Value <<= aPropertyValueList;
+                }
+                else if ( ePropTypeClass != eValueTypeClass )
+                {
+                    switch ( eValueTypeClass )
+                    {
+                    case TypeClass_DOUBLE:
+                    {
+                        double nVal;
+                        aPropValues->Value >>= nVal;
+                        switch( ePropTypeClass )
+                        {
+                        case TypeClass_BYTE:
+                            aPropValues->Value <<= static_cast< sal_Int8 >( nVal );
+                            break;
+                        case TypeClass_SHORT:
+                            aPropValues->Value <<= static_cast< sal_Int16 >( nVal );
+                            break;
+                        case TypeClass_LONG:
+                        case TypeClass_ENUM:
+                            aPropValues->Value <<= static_cast< sal_Int32 >( nVal );
+                            break;
+                        case TypeClass_HYPER:
+                            aPropValues->Value <<= static_cast< sal_Int64 >( nVal );
+                            break;
+                        default:
+                            OSL_ENSURE( false, "OElementImport::implImportGenericProperties: unsupported value type!" );
+                            break;
+                        }
+                    }
+                    break;
                     default:
-                        OSL_ENSURE( false, "OElementImport::EndElement: unsupported value type!" );
+                        OSL_ENSURE( false, "OElementImport::implImportGenericProperties: non-double values not supported!" );
                         break;
                     }
                 }
@@ -432,8 +467,6 @@ namespace xmloff
             }
         }
     }
-
-
 
     //---------------------------------------------------------------------
     ::rtl::OUString OElementImport::implGetDefaultName() const
@@ -598,13 +631,16 @@ namespace xmloff
         }
         else
         {
-            sal_Int32 nHandle;
-            if  (   ( _rLocalName.equalsAscii( OAttributeMetaData::getCommonControlAttributeName( CCA_VALUE ) ) && ( nHandle = PROPID_VALUE ) )
-                ||  ( _rLocalName.equalsAscii( OAttributeMetaData::getCommonControlAttributeName( CCA_CURRENT_VALUE ) ) && ( nHandle = PROPID_CURRENT_VALUE ) )
-                ||  ( _rLocalName.equalsAscii( OAttributeMetaData::getSpecialAttributeName( SCA_MIN_VALUE ) ) && ( nHandle = PROPID_MIN_VALUE ) )
-                ||  ( _rLocalName.equalsAscii( OAttributeMetaData::getSpecialAttributeName( SCA_MAX_VALUE ) ) && ( nHandle = PROPID_MAX_VALUE ) )
-                // it's no == in the second part, it's an assignment!!!!!
-                )
+            sal_Int32 nHandle = -1;
+            if ( _rLocalName.equalsAscii( OAttributeMetaData::getCommonControlAttributeName( CCA_VALUE ) ) )
+                nHandle = PROPID_VALUE;
+            else if ( _rLocalName.equalsAscii( OAttributeMetaData::getCommonControlAttributeName( CCA_CURRENT_VALUE ) ) )
+                nHandle = PROPID_CURRENT_VALUE;
+            else if ( _rLocalName.equalsAscii( OAttributeMetaData::getSpecialAttributeName( SCA_MIN_VALUE ) ) )
+                nHandle = PROPID_MIN_VALUE;
+            else if ( _rLocalName.equalsAscii( OAttributeMetaData::getSpecialAttributeName( SCA_MAX_VALUE ) ) )
+                nHandle = PROPID_MAX_VALUE;
+            if ( nHandle != -1 )
             {
                 // for the moment, simply remember the name and the value
                 PropertyValue aProp;
@@ -769,7 +805,7 @@ namespace xmloff
                 _rPropValue.Value <<= sValue;
         }
         else
-            _rPropValue.Value = convertString(GetImport(), aProp.Type, sValue);
+            _rPropValue.Value = PropertyConversion::convertString(GetImport(), aProp.Type, sValue);
     }
 
     //---------------------------------------------------------------------
@@ -952,7 +988,7 @@ namespace xmloff
     {
         if ( _rLocalName == GetXMLToken( XML_IMAGE_POSITION ) )
         {
-            OSL_VERIFY( convertString(
+            OSL_VERIFY( PropertyConversion::convertString(
                 m_rContext.getGlobalContext(), ::getCppuType( &m_nImagePosition ),
                 _rValue, OEnumMapper::getEnumMap( OEnumMapper::epImagePosition )
             ) >>= m_nImagePosition );
@@ -960,7 +996,7 @@ namespace xmloff
         }
         else if ( _rLocalName == GetXMLToken( XML_IMAGE_ALIGN ) )
         {
-            OSL_VERIFY( convertString(
+            OSL_VERIFY( PropertyConversion::convertString(
                 m_rContext.getGlobalContext(), ::getCppuType( &m_nImageAlign ),
                 _rValue, OEnumMapper::getEnumMap( OEnumMapper::epImageAlign )
             ) >>= m_nImageAlign );
@@ -1078,7 +1114,7 @@ namespace xmloff
             OSL_ENSURE(pProperty, "ORadioImport::handleAttribute: invalid property map!");
             if (pProperty)
             {
-                Any aBooleanValue = convertString(m_rContext.getGlobalContext(), pProperty->aPropertyType, _rValue, pProperty->pEnumMap);
+                Any aBooleanValue = PropertyConversion::convertString(m_rContext.getGlobalContext(), pProperty->aPropertyType, _rValue, pProperty->pEnumMap);
 
                 // create and store a new PropertyValue
                 PropertyValue aNewValue;
@@ -1543,7 +1579,7 @@ namespace xmloff
         else if ( _rLocalName.equalsAscii( OAttributeMetaData::getBindingAttributeName( BA_LIST_LINKING_TYPE ) ) )
         {
             sal_Int16 nLinkageType = 0;
-            convertString(
+            PropertyConversion::convertString(
                 m_rContext.getGlobalContext(),
                 ::getCppuType( static_cast< sal_Int16* >( NULL ) ),
                 _rValue,
@@ -1738,10 +1774,6 @@ namespace xmloff
         if ( xCloneList.is() )
             m_xOwnAttributes = Reference< sax::XAttributeList >(xCloneList->createClone(), UNO_QUERY);
         OSL_ENSURE(m_xOwnAttributes.is(), "OColumnWrapperImport::StartElement: no cloned list!");
-
-        // forward an empty attribute list to the base class
-        // (the attributes are merged into the ones of the upcoming xml element which really describes the control)
-        SvXMLImportContext::StartElement(new OAttribListMerger);
     }
 
     //---------------------------------------------------------------------
