@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertyexport.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:20:32 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:33:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,7 +158,7 @@ namespace xmloff
                 DBG_CHECK_PROPERTY_NO_TYPE(*aProperty);
 
     #if OSL_DEBUG_LEVEL > 0
-                const ::rtl::OUString sPropertyName = *aProperty;
+                const ::rtl::OUString sPropertyName = *aProperty; (void)sPropertyName;
     #endif
                 // if the property state is DEFAULT, it does not need to be written
                 if (xPropertyState.is() && (PropertyState_DEFAULT_VALUE == xPropertyState->getPropertyState(*aProperty)))
@@ -181,41 +181,46 @@ namespace xmloff
                     aValue <<= makeAny(Sequence< ::rtl::OUString >(&sTemp, 1));
                 }
 
+                // the type to export
+                Type aExportType;
+
                 // is it a sequence
                 sal_Bool bIsSequence = TypeClass_SEQUENCE == aValue.getValueTypeClass();
                 // the type of the property, maybe reduced to the element type of a sequence
-                Type aSimpleType;
                 if (bIsSequence)
-                    aSimpleType = getSequenceElementType(aValue.getValueType());
+                    aExportType = getSequenceElementType( aValue.getValueType() );
                 else
-                    aSimpleType = aValue.getValueType();
+                    aExportType = aValue.getValueType();
 
                 // the type attribute
                 // modified by BerryJia for Bug102407
-                com::sun::star::beans::Property aPropertyStruct;
-                aPropertyStruct = m_xPropertyInfo->getPropertyByName(*aProperty);
-                token::XMLTokenEnum eValueType =
-                            implGetPropertyXMLType(aPropertyStruct.Type);
-                sal_Bool bIsVoid = !bIsSequence &&
-                        TypeClass_VOID == aValue.getValueType().getTypeClass();
-                if( bIsVoid )
-                    AddAttribute(XML_NAMESPACE_OFFICE, token::XML_VALUE_TYPE,
-                                 token::XML_VOID );
-                else
-                    AddAttribute(XML_NAMESPACE_OFFICE, token::XML_VALUE_TYPE,
-                                 eValueType);
-                token::XMLTokenEnum eValue =
-                        token::XML_BOOLEAN == eValueType
-                            ? token::XML_BOOLEAN_VALUE
-                            : (token::XML_STRING == eValueType
-                                    ? token::XML_STRING_VALUE
-                                    : token::XML_VALUE);
+                bool bIsEmptyValue = TypeClass_VOID == aValue.getValueType().getTypeClass();
+                if ( bIsEmptyValue )
+                {
+                    com::sun::star::beans::Property aPropDesc;
+                    aPropDesc = m_xPropertyInfo->getPropertyByName( *aProperty );
+                    aExportType = aPropDesc.Type;
+                }
+                token::XMLTokenEnum eValueType = implGetPropertyXMLType( aExportType );
 
-                if( !bIsSequence && !bIsVoid )
+                if ( bIsEmptyValue )
+                    AddAttribute( XML_NAMESPACE_OFFICE, token::XML_VALUE_TYPE, token::XML_VOID );
+                else
+                    AddAttribute( XML_NAMESPACE_OFFICE, token::XML_VALUE_TYPE, eValueType );
+
+                token::XMLTokenEnum eValueAttName( token::XML_VALUE );
+                switch ( eValueType )
+                {
+                case token::XML_BOOLEAN:    eValueAttName = token::XML_BOOLEAN_VALUE; break;
+                case token::XML_STRING:     eValueAttName = token::XML_STRING_VALUE;  break;
+                default:    break;
+                }
+
+                if( !bIsSequence && !bIsEmptyValue )
                 {   // the simple case
                     //add by BerryJia for Bug102407
                     sValue = implConvertAny(aValue);
-                    AddAttribute(XML_NAMESPACE_OFFICE, eValue, sValue );
+                    AddAttribute(XML_NAMESPACE_OFFICE, eValueAttName, sValue );
                 }
 
 
@@ -230,7 +235,8 @@ namespace xmloff
 
                 // the not-that-simple case, we need to iterate through the sequence elements
                 IIterator* pSequenceIterator = NULL;
-                switch (aSimpleType.getTypeClass())
+
+                switch ( aExportType.getTypeClass() )
                 {
                     case TypeClass_STRING:
                         pSequenceIterator = new OSequenceIterator< ::rtl::OUString >(aValue);
@@ -263,7 +269,7 @@ namespace xmloff
                     {
                         sValue =
                             implConvertAny(pSequenceIterator->nextElement());
-                        AddAttribute(XML_NAMESPACE_OFFICE, eValue, sValue );
+                        AddAttribute(XML_NAMESPACE_OFFICE, eValueAttName, sValue );
                         SvXMLElementExport aValueTag(
                                 m_rContext.getGlobalContext(),
                                 XML_NAMESPACE_FORM, token::XML_LIST_VALUE,
