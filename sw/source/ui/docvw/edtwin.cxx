@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.133 $
+ *  $Revision: 1.134 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 12:41:02 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 12:17:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3315,12 +3315,19 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                     else
                         bLockView = FALSE;
 
+                    int nTmpSetCrsr = 0;
+
                     {   // nur temp. Move-Kontext aufspannen, da sonst die
                         // Abfrage auf die Inhaltsform nicht funktioniert!!!
                         MV_KONTEXT( &rSh );
-                        bValidCrsrPos = !(CRSR_POSCHG & (rSh.*rSh.fnSetCrsr)(&aDocPos,bOnlyText));
+                        nTmpSetCrsr = (rSh.*rSh.fnSetCrsr)(&aDocPos,bOnlyText);
+                        bValidCrsrPos = !(CRSR_POSCHG & nTmpSetCrsr);
                         bCallBase = FALSE;
                     }
+
+                    //#i42732# - notify the edit window that from now on we do not use the input language
+                    if ( !(CRSR_POSOLD & nTmpSetCrsr) )
+                        SetUseInputLanguage( sal_False );
 
                     if( bLockView )
                         rSh.LockView( FALSE );
@@ -4450,6 +4457,8 @@ SwEditWin::SwEditWin(Window *pParent, SwView &rMyView):
 
     bLinkRemoved = bMBPressed = bInsDraw = bInsFrm =
     bIsInDrag = bOldIdle = bOldIdleSet = bChainMode = bWasShdwCrsr = FALSE;
+    //#i42732# initially use the input language
+    bUseInputLanguage = sal_True;
 
     SetMapMode(MapMode(MAP_TWIP));
 
@@ -4967,8 +4976,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
         break;
         case COMMAND_INPUTLANGUAGECHANGE :
             //#i42732# update state of fontname if input language changes
-            rView.GetViewFrame()->GetBindings().Invalidate( SID_ATTR_CHAR_FONT );
-            rView.GetViewFrame()->GetBindings().Invalidate( SID_ATTR_CHAR_FONTHEIGHT );
+            SetUseInputLanguage( sal_True );
         break;
 
 #ifdef DBG_UTIL
@@ -5476,3 +5484,17 @@ void SwEditWin::ShowAutoTextCorrectQuickHelp(
         pQuickHlpData->Start( rSh, rWord.Len() );
 }
 
+/* -----------------29.03.2006 11:01-----------------
+ *
+ * --------------------------------------------------*/
+
+void SwEditWin::SetUseInputLanguage( sal_Bool bNew )
+{
+    if ( bNew || bUseInputLanguage )
+    {
+        SfxBindings& rBind = GetView().GetViewFrame()->GetBindings();
+        rBind.Invalidate( SID_ATTR_CHAR_FONT );
+        rBind.Invalidate( SID_ATTR_CHAR_FONTHEIGHT );
+    }
+    bUseInputLanguage = bNew;
+}
