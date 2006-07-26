@@ -4,9 +4,9 @@
  *
  *  $RCSfile: trace.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:47:34 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:42:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include <tools/debug.hxx>
 #endif
 
-#if defined(DBG_UTIL) && defined(ENABLE_RANGE_TRACING)
+#if defined(DBG_UTIL)
 
 //==============================================================================
 
@@ -60,7 +60,7 @@ Tracer::Tracer(const char* _pBlockDescription)
     while (nIndent--)
         sIndent += '\t';
 
-    ByteString sThread((INT32)::vos::OThread::getCurrentIdentifier());
+    ByteString sThread( ByteString::CreateFromInt32( (INT32)::vos::OThread::getCurrentIdentifier() ) );
     sThread += '\t';
 
     ByteString sMessage(sThread);
@@ -80,7 +80,7 @@ Tracer::~Tracer()
     while (nIndent--)
         sIndent += '\t';
 
-    ByteString sThread((INT32)::vos::OThread::getCurrentIdentifier());
+    ByteString sThread( ByteString::CreateFromInt32( (INT32)::vos::OThread::getCurrentIdentifier() ) );
     sThread += '\t';
 
     ByteString sMessage(sThread);
@@ -100,7 +100,7 @@ void Tracer::TraceString(const char* _pMessage)
     while (nIndent--)
         sIndent += '\t';
 
-    ByteString sThread((INT32)::vos::OThread::getCurrentIdentifier());
+    ByteString sThread( ByteString::CreateFromInt32( (INT32)::vos::OThread::getCurrentIdentifier() ) );
     sThread += '\t';
 
     ByteString sMessage(sThread);
@@ -121,7 +121,7 @@ void Tracer::TraceString1StringParam(const char* _pMessage, const char* _pParam)
     while (nIndent--)
         sIndent += '\t';
 
-    ByteString sThread((INT32)::vos::OThread::getCurrentIdentifier());
+    ByteString sThread( ByteString::CreateFromInt32( (INT32)::vos::OThread::getCurrentIdentifier() ) );
     sThread += '\t';
 
     ByteString sMessage(sThread);
