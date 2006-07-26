@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 14:12:39 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 08:17:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -633,6 +633,9 @@ void SwFlyAtCntFrm::MakeAll()
             {
                 SetTmpConsiderWrapInfluence( true );
                 SetRestartLayoutProcess( true );
+                // --> OD 2006-07-24 #b6449874#
+                SetTmpConsiderWrapInfluenceOfOtherObjs( true );
+                // <--
             }
             // <--
             bSetCompletePaintOnInvalidate = FALSE;
