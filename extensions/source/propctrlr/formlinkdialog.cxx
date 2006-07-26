@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formlinkdialog.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 12:19:58 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:56:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -190,7 +190,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    IMPL_LINK( FieldLinkRow, OnFieldNameChanged, ComboBox*, _pBox )
+    IMPL_LINK( FieldLinkRow, OnFieldNameChanged, ComboBox*, /*_pBox*/ )
     {
         if ( m_aLinkChangeHandler.IsSet() )
             return m_aLinkChangeHandler.Call( this );
@@ -661,21 +661,21 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    IMPL_LINK( FormLinkDialog, OnSuggest, void*, _pNotInterestedIn )
+    IMPL_LINK( FormLinkDialog, OnSuggest, void*, /*_pNotInterestedIn*/ )
     {
         initializeFieldRowsFrom( m_aRelationDetailColumns, m_aRelationMasterColumns );
         return 0L;
     }
 
     //------------------------------------------------------------------------
-    IMPL_LINK( FormLinkDialog, OnFieldChanged, FieldLinkRow*, _pRow )
+    IMPL_LINK( FormLinkDialog, OnFieldChanged, FieldLinkRow*, /*_pRow*/ )
     {
         updateOkButton();
         return 0L;
     }
 
     //------------------------------------------------------------------------
-    IMPL_LINK( FormLinkDialog, OnInitialize, void*, _pNotInterestedIn )
+    IMPL_LINK( FormLinkDialog, OnInitialize, void*, /*_pNotInterestedIn*/ )
     {
         initializeColumnLabels();
         initializeFieldLists();
