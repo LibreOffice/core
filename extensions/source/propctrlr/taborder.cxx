@@ -4,9 +4,9 @@
  *
  *  $RCSfile: taborder.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:34:02 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 08:01:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,12 +100,12 @@ namespace pcr
         // XTabControllerModel
         virtual void SAL_CALL setControlModels(const Sequence< Reference< XControlModel > >& rModels) throw( RuntimeException ) {m_aModels = rModels;}
         virtual Sequence< Reference< XControlModel > > SAL_CALL getControlModels(void) throw( RuntimeException ) {return m_aModels;}
-        virtual void SAL_CALL setGroup(const Sequence< Reference< XControlModel > >& Group, const ::rtl::OUString& GroupName) throw( RuntimeException ) {}
+        virtual void SAL_CALL setGroup(const Sequence< Reference< XControlModel > >& /*Group*/, const ::rtl::OUString& /*GroupName*/) throw( RuntimeException ) {}
         virtual sal_Int32 SAL_CALL getGroupCount(void) throw( RuntimeException ) {return 0;}
-        virtual void SAL_CALL getGroup(sal_Int32 nGroup, Sequence< Reference< XControlModel > >& Group, ::rtl::OUString& Name) throw( RuntimeException ) {}
-        virtual void SAL_CALL getGroupByName(const ::rtl::OUString& Name, Sequence< Reference< XControlModel > >& Group) throw( RuntimeException ) {}
+        virtual void SAL_CALL getGroup(sal_Int32 /*nGroup*/, Sequence< Reference< XControlModel > >& /*Group*/, ::rtl::OUString& /*Name*/) throw( RuntimeException ) {}
+        virtual void SAL_CALL getGroupByName(const ::rtl::OUString& /*Name*/, Sequence< Reference< XControlModel > >& /*Group*/) throw( RuntimeException ) {}
         virtual sal_Bool SAL_CALL getGroupControl(void) throw( RuntimeException ){return sal_False;} ;
-        virtual void SAL_CALL setGroupControl(sal_Bool GroupControl) throw( RuntimeException ){};
+        virtual void SAL_CALL setGroupControl(sal_Bool /*GroupControl*/) throw( RuntimeException ){};
     };
 
     //========================================================================
@@ -266,21 +266,21 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    IMPL_LINK( TabOrderDialog, MoveUpClickHdl, Button*, pButton )
+    IMPL_LINK( TabOrderDialog, MoveUpClickHdl, Button*, /*pButton*/ )
     {
         aLB_Controls.MoveSelection( -1 );
         return 0;
     }
 
     //------------------------------------------------------------------------
-    IMPL_LINK( TabOrderDialog, MoveDownClickHdl, Button*, pButton )
+    IMPL_LINK( TabOrderDialog, MoveDownClickHdl, Button*, /*pButton*/ )
     {
         aLB_Controls.MoveSelection( 1 );
         return 0;
     }
 
     //------------------------------------------------------------------------
-    IMPL_LINK( TabOrderDialog, AutoOrderClickHdl, Button*, pButton )
+    IMPL_LINK( TabOrderDialog, AutoOrderClickHdl, Button*, /*pButton*/ )
     {
         try
         {
@@ -309,7 +309,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    IMPL_LINK( TabOrderDialog, OKClickHdl, Button*, pButton )
+    IMPL_LINK( TabOrderDialog, OKClickHdl, Button*, /*pButton*/ )
     {
         sal_uInt32 nEntryCount = aLB_Controls.GetEntryCount();
         Sequence< Reference< XControlModel > > aSortedControlModelSeq( nEntryCount );
@@ -377,7 +377,6 @@ namespace pcr
     //------------------------------------------------------------------------
     void TabOrderListBox::MoveSelection( long nRelPos )
     {
-        long loop = labs(nRelPos);
         UniString aSelEntryPrevText,aSelEntryNextText;
         Image  aImage;
         for (long i=0; i<labs(nRelPos); i++)
@@ -416,7 +415,11 @@ namespace pcr
                 sal_uInt32 nLastSelPos = GetModel()->GetAbsPos( pLastSelected );
 
                 if( (nLastSelPos + nRelPos - i) > (GetEntryCount()-1) ) return;
+
+#if OSL_DEBUG_LEVEL > 0
                 sal_uInt32 nSelCount = GetSelectionCount();
+                (void)nSelCount;
+#endif
 
 
                 SvLBoxEntry* pSelEntry = pLastSelected;
