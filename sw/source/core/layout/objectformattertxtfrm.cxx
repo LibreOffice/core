@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objectformattertxtfrm.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:16:52 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 08:17:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -216,15 +216,17 @@ bool SwObjectFormatterTxtFrm::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
         // wrapping style influence is temporarly considered.
         // --> OD 2005-01-10 #i40147# - consider also anchored objects, for
         // whose the check of a moved forward anchor frame is requested.
+        // --> OD 2006-07-24 #b6449874# - revise decision made for i3317:
+        // anchored objects, whose wrapping style influence is temporarly considered,
+        // have to be considered in method <SwObjectFormatterTxtFrm::DoFormatObjs()>
         if ( bSuccess &&
-             ( ( _rAnchoredObj.ConsiderObjWrapInfluenceOnObjPos() &&
-                 ( _bCheckForMovedFwd ||
-                   _rAnchoredObj.GetFrmFmt().GetWrapInfluenceOnObjPos().
-                        // --> OD 2004-10-18 #i35017# - handle ITERATIVE as ONCE_SUCCESSIVE
-                        GetWrapInfluenceOnObjPos( true ) ==
-                            // --> OD 2004-10-18 #i35017# - constant name has changed
-                            text::WrapInfluenceOnPosition::ONCE_SUCCESSIVE ) ) ||
-               _rAnchoredObj.IsTmpConsiderWrapInfluence() ) )
+             _rAnchoredObj.ConsiderObjWrapInfluenceOnObjPos() &&
+             ( _bCheckForMovedFwd ||
+               _rAnchoredObj.GetFrmFmt().GetWrapInfluenceOnObjPos().
+                    // --> OD 2004-10-18 #i35017# - handle ITERATIVE as ONCE_SUCCESSIVE
+                    GetWrapInfluenceOnObjPos( true ) ==
+                        // --> OD 2004-10-18 #i35017# - constant name has changed
+                        text::WrapInfluenceOnPosition::ONCE_SUCCESSIVE ) )
         // <--
         {
             // --> OD 2004-10-11 #i26945# - check conditions for move forward of
@@ -401,7 +403,14 @@ bool SwObjectFormatterTxtFrm::DoFormatObjs()
         bSuccess = _FormatObjsAtFrm();
     }
 
-    if ( bSuccess && ConsiderWrapOnObjPos() )
+    // --> OD 2006-07-24 #b449874#
+    // consider anchored objects, whose wrapping style influence are temporarly
+    // considered.
+    if ( bSuccess &&
+         ( ConsiderWrapOnObjPos() ||
+           ( !mrAnchorTxtFrm.IsFollow() &&
+             _AtLeastOneObjIsTmpConsiderWrapInfluence() ) ) )
+    // <--
     {
         const bool bDoesAnchorHadPrev = ( mrAnchorTxtFrm.GetIndPrev() != 0 );
 
@@ -859,5 +868,34 @@ void SwObjectFormatterTxtFrm::FormatAnchorFrmAndItsPrevs( SwTxtFrm& _rAnchorTxtF
 void SwObjectFormatterTxtFrm::_FormatAnchorFrmForCheckMoveFwd()
 {
     SwObjectFormatterTxtFrm::FormatAnchorFrmAndItsPrevs( mrAnchorTxtFrm );
+}
+
+/** method to determine if at least one anchored object has state
+    <temporarly consider wrapping style influence> set.
+
+    OD 2006-07-24 #b6449874#
+
+    @author OD
+*/
+bool SwObjectFormatterTxtFrm::_AtLeastOneObjIsTmpConsiderWrapInfluence()
+{
+    bool bRet( false );
+
+    const SwSortedObjs* pObjs = GetAnchorFrm().GetDrawObjs();
+    if ( pObjs && pObjs->Count() > 1 )
+    {
+        sal_uInt32 i = 0;
+        for ( ; i < pObjs->Count(); ++i )
+        {
+            SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
+            if ( pAnchoredObj->ConsiderObjWrapInfluenceOnObjPos() )
+            {
+                bRet = true;
+                break;
+            }
+        }
+    }
+
+    return bRet;
 }
 
