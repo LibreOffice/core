@@ -4,9 +4,9 @@
  *
  *  $RCSfile: anchoredobject.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 12:21:55 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 08:16:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -231,6 +231,15 @@ class SwAnchoredObject
             @author OD
         */
         bool ConsiderObjWrapInfluenceOfOtherObjs() const;
+
+        /** method to apply temporary consideration of wrapping style influence
+            to the anchored objects, which are anchored at the same anchor frame
+
+            OD 2006-07-24 #b6449874#
+
+            @author OD
+        */
+        void SetTmpConsiderWrapInfluenceOfOtherObjs( const bool bTmpConsiderWrapInfluence );
 
     public:
         TYPEINFO();
