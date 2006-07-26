@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propcontroller.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:29:34 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:59:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -398,6 +398,13 @@ namespace pcr
         */
         PropertyHandlerRef
             impl_getHandlerForProperty_throw( const ::rtl::OUString& _rPropertyName ) const;
+
+        /** determines whether we have a handler for the given property
+            @param _rPropertyName
+                the name of the property for which the existence of a handler should be checked
+        */
+        bool
+            impl_hasPropertyHandlerFor_nothrow( const ::rtl::OUString& _rPropertyName ) const;
 
         /** builds up m_aPageIds from InspectorModel::describeCategories, and insert all the
             respective tab pages into our view
