@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basecontainernode.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 08:42:36 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:33:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,13 +40,12 @@
 #include "tools.hxx"
 #include "nodetools.hxx"
 #include "delayevent.hxx"
-#include "boost/bind.hpp"
 #include "boost/mem_fn.hpp"
 #include <vector>
 #include <algorithm>
 #include <iterator>
 
-using namespace ::com::sun::star;
+using namespace com::sun::star;
 
 namespace presentation {
 namespace internal {
@@ -57,197 +56,122 @@ BaseContainerNode::BaseContainerNode(
     const NodeContext&                                      rContext )
     : BaseNode( xNode, rParent, rContext ),
       maChildren(),
-      maFinishedStates(),
       mnFinishedChildren(0),
-      mbOverrideIndefiniteBegin( false ),
       mbDurationIndefinite( isIndefiniteTiming( xNode->getEnd() ) ||
                             isIndefiniteTiming( xNode->getDuration() ) )
 {
 }
 
-bool BaseContainerNode::activate()
-{
-    if( getState() == ACTIVE )
-        return true; // avoid duplicate event generation
-
-    if( !BaseNode::activate() )
-        return false;
-
-    if( isDurationInfinite() &&
-        maChildren.empty() )
-    {
-        // schedule deactivation:
-        getContext().mrEventQueue.addEvent(
-            makeEvent( boost::bind( &BaseNode::deactivate, getSelf() ) ) );
-    }
-
-    return true;
-}
-
-void BaseContainerNode::deactivate()
-{
-    // deactivate all children:
-    VectorOfNodes::iterator iPos( maChildren.begin() );
-    VectorOfNodes::iterator const iEnd( maChildren.end() );
-    for ( ; iPos != iEnd; ++iPos ) {
-        BaseNodeSharedPtr const& pNode = *iPos;
-        NodeState const eState = pNode->getState();
-        if (eState != FROZEN || eState != ENDED)
-            pNode->deactivate();
-    }
-
-    BaseNode::deactivate();
-}
-
 void BaseContainerNode::dispose()
 {
-    std::for_each( maChildren.begin(), maChildren.end(),
-                   boost::mem_fn(&BaseNode::dispose) );
+    forEachChildNode( boost::mem_fn(&Disposable::dispose) );
     maChildren.clear();
-    maFinishedStates.clear();
-
     BaseNode::dispose();
 }
 
-bool BaseContainerNode::init()
+bool BaseContainerNode::init_st()
 {
-    if( !BaseNode::init() )
-        return false;
-
-    // init local state
-    std::fill( maFinishedStates.begin(), maFinishedStates.end(), false );
     mnFinishedChildren = 0;
-    mbOverrideIndefiniteBegin = false;
-
     // initialize all children
-    if( std::count_if( maChildren.begin(), maChildren.end(),
-                       boost::mem_fn(&AnimationNode::init) )
-        != static_cast<VectorOfNodes::difference_type>(maChildren.size()) )
-    {
-        return false; // not all children have been correctly initialized
-    }
-
-    return true;
+    return (std::count_if(
+                maChildren.begin(), maChildren.end(),
+                boost::mem_fn(&AnimationNode::init) ) ==
+            static_cast<VectorOfNodes::difference_type>(maChildren.size()));
 }
 
-void BaseContainerNode::end()
+void BaseContainerNode::deactivate_st( NodeState eDestState )
 {
-    BaseNode::end();
-
-    // end all children
-    std::for_each( maChildren.begin(), maChildren.end(),
-                   boost::mem_fn(&AnimationNode::end) );
+    if (eDestState == FROZEN) {
+        // deactivate all children that are not FROZEN or ENDED:
+        forEachChildNode( boost::mem_fn(&AnimationNode::deactivate),
+                          ~(FROZEN | ENDED) );
+    }
+    else {
+        // end all children that are not ENDED:
+        forEachChildNode( boost::mem_fn(&AnimationNode::end), ~ENDED );
+    }
 }
 
 bool BaseContainerNode::hasPendingAnimation() const
 {
-    const VectorOfNodes::const_iterator aEnd( maChildren.end() );
-
     // does any of our children returns "true" on
     // AnimationNode::hasPendingAnimation()?
     // If yes, we, too, return true
-    return std::find_if( maChildren.begin(), aEnd,
-                         boost::mem_fn(&AnimationNode::hasPendingAnimation) )
-        != aEnd;
+    VectorOfNodes::const_iterator const iEnd( maChildren.end() );
+    return (std::find_if(
+                maChildren.begin(), iEnd,
+                boost::mem_fn(&AnimationNode::hasPendingAnimation) ) != iEnd);
 }
 
-void BaseContainerNode::appendChildNode( const BaseNodeSharedPtr& rNode )
+void BaseContainerNode::appendChildNode( AnimationNodeSharedPtr const& pNode )
 {
-    ENSURE_AND_THROW(
-        getSelf().get(), "BaseContainerNode::appendChildNode(): no self set" );
-
-    // early exit on invalid nodes
-    if( getState() == INVALID )
+    if (! checkValidNode())
         return;
 
-    // register ourself as end listeners at all children.
+    // register derived classes as end listeners at all children.
     // this is necessary to control the children animation
     // sequence, and to determine our own end event
-    if( rNode->registerDeactivatingListener( getSelf() ) ) {
-        maChildren.push_back( rNode );
-        maFinishedStates.push_back( false );
+    if (pNode->registerDeactivatingListener( getSelf() )) {
+        maChildren.push_back( pNode );
     }
 }
 
-void BaseContainerNode::scheduleActivationEvent()
+bool BaseContainerNode::isChildNode( AnimationNodeSharedPtr const& pNode ) const
 {
-    // buffer value for check below
-    const bool bOverrideIndefiniteBegin( mbOverrideIndefiniteBegin );
-
-    // request will be fulfilled, but normalize state early
-    // (prevent callback errors)
-    mbOverrideIndefiniteBegin = false;
-
-    // for indefinite start event - our begin event
-    // becomes definite, if a child has issued a
-    // requestResolveOnChildren(). Otherwise, we'll never
-    // become active.
-    if( bOverrideIndefiniteBegin &&
-        isIndefiniteTiming( getXNode()->getBegin() ) )
-    {
-        // become active immediately.
-        if( !activate() ) {
-            OSL_ENSURE( false, "BaseContainerNode::scheduleActivationEvent(): "
-                        "Could not activate ourselves" );
-        }
-    }
-    else {
-        // no override necessary - use normal BaseNode method
-        BaseNode::scheduleActivationEvent();
-    }
+    // find given notifier in child vector
+    VectorOfNodes::const_iterator const iBegin( maChildren.begin() );
+    VectorOfNodes::const_iterator const iEnd( maChildren.end() );
+    VectorOfNodes::const_iterator const iFind(
+        std::find( iBegin, iEnd, pNode ) );
+    return (iFind != iEnd);
 }
 
-void BaseContainerNode::requestResolveOnChildren()
+bool BaseContainerNode::notifyDeactivatedChild(
+    AnimationNodeSharedPtr const& pChildNode )
 {
+    OSL_ASSERT( pChildNode->getState() == FROZEN ||
+                pChildNode->getState() == ENDED );
     // early exit on invalid nodes
+    OSL_ASSERT( getState() != INVALID );
     if( getState() == INVALID )
-        return;
+        return false;
 
-    // coerce our resolve() to override indefinite begins.
-    // After all, we now _have_ defined begin time, which is
-    // _now_.
-    mbOverrideIndefiniteBegin = true;
-
-    if( getState() == UNRESOLVED ) {
-        ENSURE_AND_THROW( getParentNode().get(),
-                          "BaseContainerNode::requestResolveOnChildren(): "
-                          "No parent, and still unresolved" );
-
-        // if we ourselves are unresolved, request parent
-        // to resolve us
-        getParentNode()->requestResolveOnChildren();
+    if (! isChildNode(pChildNode)) {
+        OSL_ENSURE( false, "unknown notifier!" );
+        return false;
     }
-    else {
-        // otherwise, try to (re)start ourselves.
-        if( !activate() ) {
-            OSL_ENSURE( false,
-                        "BaseContainerNode::requestResolveOnChildren(): "
-                        "Could not (re)start" );
-        }
+
+    std::size_t const nSize = maChildren.size();
+    OSL_ASSERT( mnFinishedChildren < nSize );
+    ++mnFinishedChildren;
+    bool const bFinished = (mnFinishedChildren >= nSize);
+
+    // all children finished, and we've got indefinite duration?
+    // think of ParallelTimeContainer::notifyDeactivating()
+    // if duration given, we will be deactivated by some end event
+    // @see fillCommonParameters()
+    if (bFinished && isDurationIndefinite()) {
+        deactivate();
     }
+
+    return bFinished;
 }
-
-// Debug
-//=========================================================================
 
 #if defined(VERBOSE) && defined(DBG_UTIL)
 void BaseContainerNode::showState() const
 {
     for( std::size_t i=0; i<maChildren.size(); ++i )
     {
+        BaseNodeSharedPtr pNode =
+            boost::shared_dynamic_cast<BaseNode>(maChildren[i]);
         VERBOSE_TRACE(
             "Node connection: n0x%X -> n0x%X",
             (const char*)this+debugGetCurrentOffset(),
-            (const char*)maChildren[i].get()+debugGetCurrentOffset() );
-        maChildren[i]->showState();
+            (const char*)pNode.get()+debugGetCurrentOffset() );
+        pNode->showState();
     }
 
     BaseNode::showState();
-}
-
-const char* BaseContainerNode::getDescription() const
-{
-    return "BaseNode";
 }
 #endif
 

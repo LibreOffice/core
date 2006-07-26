@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basecontainernode.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 08:43:02 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:34:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifndef INCLUDED_SLIDESHOW_BASECONTAINERNODE_HXX
 #define INCLUDED_SLIDESHOW_BASECONTAINERNODE_HXX
 
@@ -48,61 +47,60 @@ class BaseContainerNode : public BaseNode
 {
 public:
     BaseContainerNode(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::animations::XAnimationNode >& xNode,
-        const ::boost::shared_ptr< BaseContainerNode >&      rParent,
-        const NodeContext&                                   rContext );
-
-    // overrides from BaseNode
-    virtual bool activate();
-    virtual void deactivate();
-    virtual bool init();
-    virtual void dispose();
-    virtual void end();
-
-    virtual bool hasPendingAnimation() const;
+        ::com::sun::star::uno::Reference<
+        ::com::sun::star::animations::XAnimationNode> const& xNode,
+        ::boost::shared_ptr<BaseContainerNode> const& pParent,
+        NodeContext const& rContext );
 
     /** Add given child node to this container
      */
-    void appendChildNode( const BaseNodeSharedPtr& rNode );
+    void appendChildNode( AnimationNodeSharedPtr const& pNode );
 
 #if defined(VERBOSE) && defined(DBG_UTIL)
     virtual void showState() const;
-    virtual const char* getDescription() const;
+    virtual const char* getDescription() const { return "BaseContainerNode"; }
 #endif
 
 protected:
-    /** Overridden, to overrule indefinite begin event.
-
-    When children requested resolve, indefinite begin
-    times become resolved for us
-    */
-    virtual void scheduleActivationEvent();
-
-    typedef ::std::vector< BaseNodeSharedPtr > VectorOfNodes;
-
-    VectorOfNodes&      getChildren() { return maChildren; }
-    ::std::bit_vector&  getFinishedStates() { return maFinishedStates; }
-    ::std::size_t&      getFinishedCount() { return mnFinishedChildren; }
-    bool                isDurationInfinite() const
-        { return mbDurationIndefinite; }
+    // overrides from BaseNode
+    virtual void dispose();
 
 private:
+    virtual bool init_st();
+    virtual void deactivate_st( NodeState eDestState );
+    virtual bool hasPendingAnimation() const;
+    // force to be implemented by derived class:
+    virtual void activate_st() = 0;
+    virtual void notifyDeactivating(
+        AnimationNodeSharedPtr const& rNotifier ) = 0;
 
-    /** Requests node to resolve all children
+protected:
+    bool isDurationIndefinite() const { return mbDurationIndefinite; }
 
-        When parents have unresolved start times, and one
-        of the children wants to start (e.g. because of a
-        user event), it must call this method on its
-        parent.
-    */
-    void requestResolveOnChildren();
+    bool isChildNode( AnimationNodeSharedPtr const& pNode ) const;
 
-private:
+    /// @return true: if all children have been deactivated
+    bool notifyDeactivatedChild( AnimationNodeSharedPtr const& pChildNode );
+
+    template <typename FuncT>
+    inline void forEachChildNode( FuncT const& func,
+                                  int nodeStateMask = -1 ) const
+    {
+        VectorOfNodes::const_iterator iPos( maChildren.begin() );
+        VectorOfNodes::const_iterator const iEnd( maChildren.end() );
+        for ( ; iPos != iEnd; ++iPos ) {
+            AnimationNodeSharedPtr const& pNode = *iPos;
+            if (nodeStateMask != -1 && (pNode->getState() & nodeStateMask) == 0)
+                continue;
+            func(pNode);
+        }
+    }
+
+    typedef ::std::vector<AnimationNodeSharedPtr> VectorOfNodes;
     VectorOfNodes       maChildren;
-    ::std::bit_vector   maFinishedStates;
     ::std::size_t       mnFinishedChildren;
-    bool                mbOverrideIndefiniteBegin;
+
+private:
     const bool          mbDurationIndefinite;
 };
 
