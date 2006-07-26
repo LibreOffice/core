@@ -4,9 +4,9 @@
  *
  *  $RCSfile: standardcontrol.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 10:46:20 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 08:01:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -526,7 +526,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    IMPL_LINK( OHyperlinkControl, OnHyperlinkClicked, void*, _NotInterestedIn )
+    IMPL_LINK( OHyperlinkControl, OnHyperlinkClicked, void*, /*_NotInterestedIn*/ )
     {
         ActionEvent aEvent( *this, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "clicked" ) ) );
         m_aActionListeners.forEach< XActionListener >(
@@ -717,7 +717,6 @@ namespace pcr
         String aStr;
         while (nVal>0)
         {
-            sal_uInt16 nDigit=sal_uInt16(nVal & 0x000F);
             char c=char(nVal & 0x000F);
             nVal>>=4;
             if (c<=9) c+='0';
@@ -1181,7 +1180,6 @@ namespace pcr
             xub_StrLen nLines( _rCompsedTextWithLineBreaks.GetTokenCount( '\n' ) );
             StlSyntaxSequence< ::rtl::OUString > aStrings( nLines );
             StlSyntaxSequence< ::rtl::OUString >::iterator stringItem = aStrings.begin();
-            ::rtl::OUString* pStringItem = aStrings.begin();
             for ( xub_StrLen token = 0; token < nLines; ++token, ++stringItem )
                 *stringItem = _rCompsedTextWithLineBreaks.GetToken( token, '\n' );
             return aStrings;
@@ -1320,7 +1318,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    IMPL_LINK( DropDownEditControl, ReturnHdl, OMultilineFloatingEdit*, pMEd)
+    IMPL_LINK( DropDownEditControl, ReturnHdl, OMultilineFloatingEdit*, /*pMEd*/)
     {
 
         String aStr = m_pFloatingEdit->getEdit()->GetText();
@@ -1337,7 +1335,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    IMPL_LINK( DropDownEditControl, DropDownHdl, PushButton*, pPb )
+    IMPL_LINK( DropDownEditControl, DropDownHdl, PushButton*, /*pPb*/ )
     {
         ShowDropDown(!m_bDropdown);
         return 0;
