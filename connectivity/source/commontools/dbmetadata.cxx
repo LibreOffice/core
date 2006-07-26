@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbmetadata.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:20:08 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:21:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,15 @@
 #ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
+#include <com/sun/star/container/XChild.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
 /** === end UNO includes === **/
 
 #ifndef TOOLS_DIAGNOSE_EX_H
@@ -62,6 +71,12 @@ namespace dbtools
     using ::com::sun::star::sdbc::XDatabaseMetaData;
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::uno::Exception;
+    using ::com::sun::star::uno::Any;
+    using ::com::sun::star::container::XChild;
+    using ::com::sun::star::uno::UNO_QUERY_THROW;
+    using ::com::sun::star::beans::XPropertySet;
+    using ::com::sun::star::uno::Sequence;
+    using ::com::sun::star::beans::PropertyValue;
     /** === end UNO using === **/
 
     //====================================================================
@@ -91,6 +106,34 @@ namespace dbtools
         {
             if ( !_metaDataImpl.xConnection.is() )
                 throwSQLException( "not connected", SQL_CONNECTION_DOES_NOT_EXIST, NULL );
+        }
+
+        static bool lcl_getDataSourceSetting( const sal_Char* _asciiName, const DatabaseMetaData_Impl& _metaData, Any& _out_setting )
+        {
+            try
+            {
+                Reference< XChild > connectionAsChild( _metaData.xConnection, UNO_QUERY_THROW );
+                Reference< XPropertySet > dataSource( connectionAsChild->getParent(), UNO_QUERY_THROW );
+
+                Sequence< PropertyValue > dataSourceSettings;
+                OSL_VERIFY( dataSource->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Info" ) ) ) >>= dataSourceSettings );
+
+                const PropertyValue* setting( dataSourceSettings.getConstArray() );
+                const PropertyValue* settingEnd( setting + dataSourceSettings.getLength() );
+                for ( ; setting != settingEnd; ++setting )
+                {
+                    if ( setting->Name.equalsAscii( _asciiName ) )
+                    {
+                        _out_setting = setting->Value;
+                        return true;
+                    }
+                }
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+            return false;
         }
     }
 
@@ -155,6 +198,16 @@ namespace dbtools
             DBG_UNHANDLED_EXCEPTION();
         }
         return supportsSubQueries;
+    }
+
+    //--------------------------------------------------------------------
+    bool SAL_CALL DatabaseMetaData::restrictIdentifiersToSQL92() const
+    {
+        bool restrict( false );
+        Any setting;
+        if ( lcl_getDataSourceSetting( "EnableSQL92Check", *m_pImpl, setting ) )
+            OSL_VERIFY( setting >>= restrict );
+        return restrict;
     }
 
 //........................................................................
