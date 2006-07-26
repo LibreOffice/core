@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSetCache.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:36:41 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:46:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,7 +164,7 @@ namespace dbaccess
 
         void firePropertyChange(sal_Int32 _nColumnIndex,const ::connectivity::ORowSetValue& _rOldValue);
 
-        void rotateCacheIterator(sal_Int16 _nDist);
+        void rotateCacheIterator(ORowSetMatrix::difference_type _nDist);
         void updateValue(sal_Int32 columnIndex,const connectivity::ORowSetValue& x);
         // checks and set the flags isAfterLast isLast and position when afterlast is true
         void checkPositionFlags();
@@ -178,7 +178,6 @@ namespace dbaccess
         ORowSetMatrix::iterator calcPosition() const;
 
     protected:
-        ORowSetMatrix::iterator& getIterator() { return m_aMatrixIter;}
         ORowSetMatrix::iterator& getEnd() { return m_aMatrixEnd;}
         // is called when after a moveToInsertRow a movement (next, etc) was called
         void cancelRowModification();
