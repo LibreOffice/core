@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtcrsr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:55:24 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 12:18:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,6 +129,9 @@ void SwTextShell::ExecBasicMove(SfxRequest &rReq)
         default:            ASSERT(FALSE, falscher Dispatcher); return;
         }
     }
+
+    //#i42732# - notify the edit window that from now on we do not use the input language
+    GetView().GetEditWin().SetUseInputLanguage( sal_False );
 }
 
 void SwTextShell::ExecMove(SfxRequest &rReq)
@@ -166,6 +169,9 @@ void SwTextShell::ExecMove(SfxRequest &rReq)
         rReq.Done();
     else
         rReq.Ignore();
+
+    //#i42732# - notify the edit window that from now on we do not use the input language
+    GetView().GetEditWin().SetUseInputLanguage( sal_False );
 }
 
 void SwTextShell::ExecMovePage(SfxRequest &rReq)
