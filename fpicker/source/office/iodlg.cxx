@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iodlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 16:55:13 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 09:05:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,6 +160,12 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBC_XRESULTSET_HPP_
+#include <com/sun/star/sdbc/XResultSet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
+#include <com/sun/star/sdbc/XRow.hpp>
+#endif
 
 #ifndef  _COM_SUN_STAR_UTIL_URL_HPP_
 #include <com/sun/star/util/URL.hpp>
@@ -225,6 +231,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::task;
+using namespace ::com::sun::star::sdbc;
 using namespace ::utl;
 using namespace ::svt;
 
@@ -2021,6 +2028,67 @@ String SvtFileDialog::implGetInitialURL( const String& _rPath, const String& _rF
 //---------------------------------------------------------------------
 short SvtFileDialog::Execute()
 {
+    rtl::OUString aEnvValue;
+    if ( getEnvironmentValue( "WorkDirMustContainRemovableMedia", aEnvValue ) &&
+         aEnvValue.equalsAscii( "1" ) )
+    {
+        try
+        {
+            INetURLObject aStdDir( GetStandardDir() );
+            ::ucb::Content aCnt( rtl::OUString( aStdDir.GetMainURL(
+                                                    INetURLObject::NO_DECODE ) ),
+                                 Reference< XCommandEnvironment >() );
+            Sequence< rtl::OUString > aProps(2);
+            aProps[0] = rtl::OUString::createFromAscii( "IsVolume" );
+            aProps[1] = rtl::OUString::createFromAscii( "IsRemoveable" );
+
+            Reference< XResultSet > xResultSet
+                = aCnt.createCursor( aProps, ::ucb::INCLUDE_FOLDERS_ONLY );
+            if ( xResultSet.is() )
+            {
+                Reference< XRow > xRow( xResultSet, UNO_QUERY );
+
+                bool bEmpty = true;
+                if ( !xResultSet->next() )
+                {
+                    // folder is empty
+                    bEmpty = true;
+                }
+                else
+                {
+// @@@ KSO 05/18/2006: support for removable media currently hardcoded/incomplete in OSL
+//
+//                    do
+//                    {
+//                        // check, whether child is a removable volume
+//                        if ( xRow->getBoolean( 1 ) && !xRow->wasNull() )
+//                        {
+//                            if ( xRow->getBoolean( 2 ) && !xRow->wasNull() )
+//                            {
+                                bEmpty = false;
+//                                break;
+//                            }
+//                        }
+//                    }
+//                    while ( xResultSet->next() );
+                }
+
+                if ( bEmpty )
+                {
+                    ErrorBox aBox( this, WB_OK, SvtResId( STR_SVT_NOREMOVABLEDEVICE ) );
+                    aBox.Execute();
+                    return 0;
+                }
+            }
+        }
+        catch ( ContentCreationException const & )
+        {
+        }
+        catch ( CommandAbortedException const & )
+        {
+        }
+    }
+
     // #102204# ---------------
     if ( ( _pImp->_nStyle & WB_SAVEAS ) && m_bHasFilename )
         // when doing a save-as, we do not want the handler to handle "this file does not exist" messages
