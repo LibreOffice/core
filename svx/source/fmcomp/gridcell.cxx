@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridcell.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:55:57 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:42:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XSTATEMENT_HPP_
 #include <com/sun/star/sdbc/XStatement.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SCRIPT_XEVENTATTACHERMANAGER_HPP_
+#include <com/sun/star/script/XEventAttacherManager.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDDB_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
@@ -1929,7 +1932,7 @@ namespace
 }
 
 //------------------------------------------------------------------------------
-String DbNumericField::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter, Color** ppColor)
+String DbNumericField::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter, Color** /*ppColor*/)
 {
     return lcl_setFormattedNumeric_nothrow( *dynamic_cast< DoubleNumericField* >( m_pPainter ), *this, _rxField, _rxFormatter );
 }
@@ -2063,7 +2066,7 @@ namespace
 }
 
 //------------------------------------------------------------------------------
-String DbCurrencyField::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter, Color** ppColor)
+String DbCurrencyField::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter, Color** /*ppColor*/)
 {
     return lcl_setFormattedCurrency_nothrow( *dynamic_cast< LongCurrencyField* >( m_pPainter ), *this, _rxField, _rxFormatter );
 }
@@ -2197,7 +2200,7 @@ namespace
     }
 }
 //------------------------------------------------------------------------------
-String DbDateField::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor)
+String DbDateField::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& /*xFormatter*/, Color** /*ppColor*/)
 {
     return lcl_setFormattedDate_nothrow( *dynamic_cast< DateField* >( m_pPainter ), _rxField );
 }
@@ -2303,7 +2306,7 @@ namespace
     }
 }
 //------------------------------------------------------------------------------
-String DbTimeField::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor)
+String DbTimeField::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& /*xFormatter*/, Color** /*ppColor*/)
 {
     return lcl_setFormattedTime_nothrow( *static_cast< TimeField* >( m_pPainter ), _rxField );
 }
@@ -3285,12 +3288,10 @@ void FmXTextCell::PaintFieldToCell(OutputDevice& rDev,
     String aText = GetText(_rxField, xFormatter, &pColor);
     if (pColor != NULL)
     {
-        Font aFont = rDev.GetFont();
-        Font aOldFont = aFont;
-        aFont.SetColor(*pColor);
-        rDev.SetFont(aFont);
+        Color aOldTextColor( rDev.GetTextColor() );
+        rDev.SetTextColor( *pColor );
         rDev.DrawText(rRect, aText, nStyle);
-        rDev.SetFont(aOldFont);
+        rDev.SetTextColor( aOldTextColor );
     }
     else
         rDev.DrawText(rRect, aText, nStyle);
@@ -3633,7 +3634,7 @@ short SAL_CALL FmXCheckBoxCell::getState() throw( RuntimeException )
     if (m_pBox)
     {
         UpdateFromColumn();
-        return m_pBox->GetState();
+        return (short)m_pBox->GetState();
     }
     return STATE_DONTKNOW;
 }
