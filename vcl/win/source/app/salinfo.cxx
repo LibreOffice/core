@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salinfo.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 09:20:53 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 13:47:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,8 +85,8 @@ WinSalSystem::~WinSalSystem()
 
 // -----------------------------------------------------------------------
 
-static BOOL CALLBACK ImplEnumMonitorProc( HMONITOR hMonitor,
-                                          HDC hdcMonitor,
+static BOOL CALLBACK ImplEnumMonitorProc( HMONITOR,
+                                          HDC,
                                           LPRECT lprcMonitor,
                                           LPARAM dwData )
 {
