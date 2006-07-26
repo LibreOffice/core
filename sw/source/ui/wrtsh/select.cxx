@@ -4,9 +4,9 @@
  *
  *  $RCSfile: select.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-05 14:52:00 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 12:19:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -334,6 +334,7 @@ long SwWrtShell::SetCrsr(const Point *pPt, BOOL bTextOnly)
     if(!IsInSelect() && ChgCurrPam(*pPt)) {
         ClearMark();
     }
+
     return SwCrsrShell::SetCrsr(*pPt, bTextOnly);
 }
 
