@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optgdlg.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:22:30 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 08:28:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -502,10 +502,10 @@ IMPL_LINK( OfaMiscTabPage, TwoFigureHdl, NumericField*, pEd )
 
     String aOutput( aStrDateInfo );
     String aStr( aYearValueField.GetText() );
-    const String& rSep = SvtSysLocale().GetLocaleData().getNumThousandSep();
+    String sSep( SvtSysLocale().GetLocaleData().getNumThousandSep() );
     xub_StrLen nIndex = 0;
-    while ((nIndex = aStr.Search( rSep, nIndex)) != STRING_NOTFOUND)
-        aStr.Erase( nIndex, rSep.Len());
+    while ((nIndex = aStr.Search( sSep, nIndex)) != STRING_NOTFOUND)
+        aStr.Erase( nIndex, sSep.Len());
     long nNum = aStr.ToInt32();
     if ( aStr.Len() != 4 || nNum < aYearValueField.GetMin() || nNum > aYearValueField.GetMax() )
         aOutput.AppendAscii("????");
