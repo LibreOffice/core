@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sequentialtimecontainer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 08:44:25 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:36:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,122 +37,118 @@
 #include "canvas/verbosetrace.hxx"
 #include "sequentialtimecontainer.hxx"
 #include "tools.hxx"
-#include "nodetools.hxx"
 #include "delayevent.hxx"
-#include "com/sun/star/animations/EventTrigger.hpp"
 #include "boost/bind.hpp"
-#include "boost/mem_fn.hpp"
 #include <algorithm>
 
-using namespace ::com::sun::star;
+namespace presentation {
+namespace internal {
 
-namespace presentation
+void SequentialTimeContainer::activate_st()
 {
-    namespace internal
+    // resolve first possible child, ignore
+    for ( ; mnFinishedChildren < maChildren.size(); ++mnFinishedChildren ) {
+        if (resolveChild( maChildren[mnFinishedChildren] ))
+            break;
+        else {
+            // node still UNRESOLVED, no need to deactivate or end...
+            OSL_ENSURE( false, "### resolving child failed!" );
+        }
+    }
+
+    if (isDurationIndefinite() &&
+        (maChildren.empty() || mnFinishedChildren >= maChildren.size()))
     {
-        SequentialTimeContainer::SequentialTimeContainer( const uno::Reference< animations::XAnimationNode >&   xNode,
-                                                          const BaseContainerNodeSharedPtr&                     rParent,
-                                                          const NodeContext&                                    rContext ) :
-            BaseContainerNode( xNode, rParent, rContext )
-        {
-        }
+        // deactivate ASAP:
+        scheduleDeactivationEvent(
+            makeEvent( boost::bind( &AnimationNode::deactivate, getSelf() ) ) );
+    }
+    else // use default
+        scheduleDeactivationEvent();
+}
 
-        bool SequentialTimeContainer::activate()
-        {
-            if( getState() == ACTIVE )
-                return true; // avoid duplicate event generation
-
-            if( !BaseContainerNode::activate() )
-                return false;
-
-            // resolve first child
-            if( !getChildren().empty() )
-                return resolveChild( getChildren().front() );
-
-            return true;
-        }
-
-        void SequentialTimeContainer::dispose()
-        {
-            BaseContainerNode::dispose();
-            m_pCurrentSkipEvent.reset();
-        }
-
-        bool SequentialTimeContainer::resolveChild(
-            BaseNodeSharedPtr const & pChildNode )
-        {
-            bool const bResolved = pChildNode->resolve();
-            if (bResolved && isMainSequenceRootNode()) {
-                if (m_pCurrentSkipEvent)
-                    m_pCurrentSkipEvent->dispose();
-                m_pCurrentSkipEvent = makeEvent(
-                    boost::bind( &BaseNode::deactivate, pChildNode ) );
-                // deactivate child node when skip event occurs:
-                getContext().mrUserEventQueue.registerSkipEffectEvent(
-                    m_pCurrentSkipEvent );
-            }
-            return bResolved;
-        }
-
-        void SequentialTimeContainer::notifyDeactivating( const AnimationNodeSharedPtr& rNotifier )
-        {
-            // early exit on invalid nodes
-            if( getState() == INVALID )
-                return;
-
-            // find given notifier in child vector
-            const VectorOfNodes::const_iterator aBegin( getChildren().begin() );
-            const VectorOfNodes::const_iterator aEnd( getChildren().end() );
-            VectorOfNodes::const_iterator       aIter;
-            if( (aIter=::std::find( aBegin,
-                                    aEnd,
-                                    rNotifier )) == aEnd )
-            {
-                OSL_ENSURE( false,
-                            "SequentialTimeContainer::notifyDeactivating(): unknown notifier" );
-                return;
-            }
-
-            const ::std::size_t nIndex( ::std::distance(aBegin, aIter) );
-
-            // prevent duplicate actions (for children that notify
-            // more than once)
-            if( getFinishedStates()[ nIndex ] == false )
-            {
-                // store new child state
-                ++getFinishedCount();
-                getFinishedStates()[ nIndex ] = true;
-
-                // resolve next child
-                if( isDurationInfinite() &&
-                    getFinishedCount() < getChildren().size() &&
-                    !resolveChild( getChildren()[getFinishedCount()] ))
-                {
-                    // could not resolve child - since we risk to
-                    // stall the chain of events here, play it safe
-                    // and deactivate this node (only if we have
-                    // indefinite duration - otherwise, we'll get a
-                    // deactivation event, anyways).
-                    deactivate();
-                    return;
-                }
-            }
-
-            // all children finished, and we've got indefinite duration?
-            if( isDurationInfinite() &&
-                getFinishedCount() == getChildren().size() )
-            {
-                // yep. deactivate this node, too
-                deactivate();
-            }
-        }
-
-#if defined(VERBOSE) && defined(DBG_UTIL)
-        const char* SequentialTimeContainer::getDescription() const
-        {
-            return "SequentialTimeContainer";
-        }
-#endif
-
+void SequentialTimeContainer::dispose()
+{
+    BaseContainerNode::dispose();
+    if (mpCurrentSkipEvent) {
+        mpCurrentSkipEvent->dispose();
+        mpCurrentSkipEvent.reset();
+    }
+    if (mpCurrentRewindEvent) {
+        mpCurrentRewindEvent->dispose();
+        mpCurrentRewindEvent.reset();
     }
 }
+
+void SequentialTimeContainer::skipEffect(
+    AnimationNodeSharedPtr const& pChildNode )
+{
+    if (isChildNode(pChildNode)) {
+        // empty all events ignoring timings => until next effect
+        getContext().mrEventQueue.forceEmpty();
+        getContext().mrEventQueue.addEventForNextRound(
+            makeEvent( boost::bind(&AnimationNode::deactivate, pChildNode) ) );
+    }
+    else
+        OSL_ENSURE( false, "unknown notifier!" );
+}
+
+void SequentialTimeContainer::rewindEffect(
+    AnimationNodeSharedPtr const& pChildNode )
+{
+    // xxx todo: ...
+}
+
+bool SequentialTimeContainer::resolveChild(
+    AnimationNodeSharedPtr const& pChildNode )
+{
+    bool const bResolved = pChildNode->resolve();
+    if (bResolved && isMainSequenceRootNode()) {
+        // discharge events:
+        if (mpCurrentSkipEvent)
+            mpCurrentSkipEvent->dispose();
+        if (mpCurrentRewindEvent)
+            mpCurrentRewindEvent->dispose();
+
+        // event that will deactivate the resolved/running child:
+        mpCurrentSkipEvent = makeEvent(
+            boost::bind( &SequentialTimeContainer::skipEffect, this,
+                         pChildNode ) );
+        // event that will reresolve the resolved/activated child:
+        mpCurrentRewindEvent = makeEvent(
+            boost::bind( &SequentialTimeContainer::rewindEffect, this,
+                         pChildNode ) );
+
+        // deactivate child node when skip event occurs:
+        getContext().mrUserEventQueue.registerSkipEffectEvent(
+            mpCurrentSkipEvent );
+        // rewind to previous child:
+        getContext().mrUserEventQueue.registerRewindEffectEvent(
+            mpCurrentRewindEvent );
+    }
+    return bResolved;
+}
+
+void SequentialTimeContainer::notifyDeactivating(
+    AnimationNodeSharedPtr const& rNotifier )
+{
+    if (notifyDeactivatedChild( rNotifier ))
+        return;
+
+    OSL_ASSERT( mnFinishedChildren < maChildren.size() );
+    AnimationNodeSharedPtr const& pNextChild = maChildren[mnFinishedChildren];
+    OSL_ASSERT( pNextChild->getState() == UNRESOLVED );
+
+    if (! resolveChild( pNextChild )) {
+        // could not resolve child - since we risk to
+        // stall the chain of events here, play it safe
+        // and deactivate this node (only if we have
+        // indefinite duration - otherwise, we'll get a
+        // deactivation event, anyways).
+        deactivate();
+    }
+}
+
+} // namespace internal
+} // namespace presentation
+
