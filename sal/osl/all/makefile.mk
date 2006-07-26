@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 14:51:54 $
+#   last change: $Author: rt $ $Date: 2006-07-26 07:42:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@ PRJ=..$/..
 
 PRJNAME=sal
 TARGET=oslall
+ENABLE_EXCEPTIONS=TRUE
 USE_LDUMP2=TRUE
 
 PROJECTPCH4DLL=TRUE
@@ -54,14 +55,16 @@ MULTITHREAD_OBJ=TRUE
 SLOFILES=	\
             $(SLO)$/utility.obj\
             $(SLO)$/readline.obj\
-            $(SLO)$/filepath.obj
+            $(SLO)$/filepath.obj\
+            $(SLO)$/debugbase.obj
 
 
 #.IF "$(UPDATER)"=="YES"
 OBJFILES=	\
             $(OBJ)$/utility.obj\
             $(OBJ)$/readline.obj\
-            $(OBJ)$/filepath.obj
+            $(OBJ)$/filepath.obj\
+            $(OBJ)$/debugbase.obj
 #.ENDIF
 
 # --- Targets ------------------------------------------------------
