@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertyhandler.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:30:34 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:59:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,7 +208,7 @@ namespace pcr
         }
         else
             aPropertyValue = PropertyHandlerHelper::convertToPropertyValue(
-                m_aContext.getUNOContext(), m_xTypeConverter, aProperty, _rControlValue );
+                m_xTypeConverter, aProperty, _rControlValue );
         return aPropertyValue;
     }
 
@@ -229,18 +229,18 @@ namespace pcr
         }
 
         return PropertyHandlerHelper::convertToControlValue(
-            m_aContext.getUNOContext(), m_xTypeConverter, impl_getPropertyFromName_throw( _rPropertyName ), _rPropertyValue, _rControlValueType );
+            m_xTypeConverter, _rPropertyValue, _rControlValueType );
     }
 
     //--------------------------------------------------------------------
-    PropertyState SAL_CALL PropertyHandler::getPropertyState( const ::rtl::OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
+    PropertyState SAL_CALL PropertyHandler::getPropertyState( const ::rtl::OUString& /*_rPropertyName*/ ) throw (UnknownPropertyException, RuntimeException)
     {
         return PropertyState_DIRECT_VALUE;
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL PropertyHandler::describePropertyLine( const ::rtl::OUString& _rPropertyName,
-        LineDescriptor& _out_rDescriptor, const Reference< XPropertyControlFactory >& _rxControlFactory )
+    LineDescriptor SAL_CALL PropertyHandler::describePropertyLine( const ::rtl::OUString& _rPropertyName,
+        const Reference< XPropertyControlFactory >& _rxControlFactory )
         throw (UnknownPropertyException, NullPointerException, RuntimeException)
     {
         if ( !_rxControlFactory.is() )
@@ -250,23 +250,24 @@ namespace pcr
         PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
         const Property& rProperty( impl_getPropertyFromId_throw( nPropId ) );
 
+        LineDescriptor aDescriptor;
         if ( ( m_pInfoService->getPropertyUIFlags( nPropId ) & PROP_FLAG_ENUM ) != 0 )
         {
-            _out_rDescriptor.Control = PropertyHandlerHelper::createListBoxControl(
+            aDescriptor.Control = PropertyHandlerHelper::createListBoxControl(
                 _rxControlFactory, m_pInfoService->getPropertyEnumRepresentations( nPropId ),
                 PropertyHandlerHelper::requiresReadOnlyControl( rProperty.Attributes ) );
         }
         else
-            PropertyHandlerHelper::describePropertyLine( m_aContext.getUNOContext(),
-                rProperty, _out_rDescriptor, _rxControlFactory );
+            PropertyHandlerHelper::describePropertyLine( rProperty, aDescriptor, _rxControlFactory );
 
-        _out_rDescriptor.HelpURL = HelpIdUrl::getHelpURL( m_pInfoService->getPropertyHelpId( nPropId ) );
-        _out_rDescriptor.DisplayName = m_pInfoService->getPropertyTranslation( nPropId );
+        aDescriptor.HelpURL = HelpIdUrl::getHelpURL( m_pInfoService->getPropertyHelpId( nPropId ) );
+        aDescriptor.DisplayName = m_pInfoService->getPropertyTranslation( nPropId );
 
         if ( ( m_pInfoService->getPropertyUIFlags( nPropId ) & PROP_FLAG_DATA_PROPERTY ) != 0 )
-            _out_rDescriptor.Category = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Data" ) );
+            aDescriptor.Category = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Data" ) );
         else
-            _out_rDescriptor.Category = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "General" ) );
+            aDescriptor.Category = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "General" ) );
+        return aDescriptor;
     }
 
     //--------------------------------------------------------------------
@@ -277,14 +278,14 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    InteractiveSelectionResult SAL_CALL PropertyHandler::onInteractivePropertySelection( const ::rtl::OUString& _rPropertyName, sal_Bool _bPrimary, Any& _rData, const Reference< XObjectInspectorUI >& _rxInspectorUI ) throw (UnknownPropertyException, NullPointerException, RuntimeException)
+    InteractiveSelectionResult SAL_CALL PropertyHandler::onInteractivePropertySelection( const ::rtl::OUString& /*_rPropertyName*/, sal_Bool /*_bPrimary*/, Any& /*_rData*/, const Reference< XObjectInspectorUI >& /*_rxInspectorUI*/ ) throw (UnknownPropertyException, NullPointerException, RuntimeException)
     {
         DBG_ERROR( "PropertyHandler::onInteractivePropertySelection: not implemented!" );
         return InteractiveSelectionResult_Cancelled;
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL PropertyHandler::actuatingPropertyChanged( const ::rtl::OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& _rOldValue, const Reference< XObjectInspectorUI >& _rxInspectorUI, sal_Bool _bFirstTimeInit ) throw (NullPointerException, RuntimeException)
+    void SAL_CALL PropertyHandler::actuatingPropertyChanged( const ::rtl::OUString& /*_rActuatingPropertyName*/, const Any& /*_rNewValue*/, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& /*_rxInspectorUI*/, sal_Bool /*_bFirstTimeInit*/ ) throw (NullPointerException, RuntimeException)
     {
         DBG_ERROR( "PropertyHandler::actuatingPropertyChanged: not implemented!" );
     }
@@ -306,7 +307,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    sal_Bool SAL_CALL PropertyHandler::suspend( sal_Bool _bSuspend ) throw (RuntimeException)
+    sal_Bool SAL_CALL PropertyHandler::suspend( sal_Bool /*_bSuspend*/ ) throw (RuntimeException)
     {
         return sal_True;
     }
