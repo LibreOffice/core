@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbggui.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:12:52 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:50:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,7 +108,6 @@
 #include <map>
 
 using namespace ::com::sun::star;
-
 
 // =======================================================================
 
@@ -1910,6 +1909,7 @@ void DbgPrintMsgBox( const char* pLine )
     if ( Application::IsDialogCancelEnabled() )
     {
 #if defined( WNT )
+        // TODO: Shouldn't this be a IsDebuggerPresent()?
         if ( GetSystemMetrics( SM_DEBUG ) )
         {
             MessageBeep( MB_ICONHAND );
@@ -1934,9 +1934,12 @@ void DbgPrintMsgBox( const char* pLine )
     strcat( aDbgOutBuf, "\nAbort ? (Yes=abort / No=ignore / Cancel=core dump)" );
 
     SolarMessageBoxExecutor aMessageBox( String( aDbgOutBuf, RTL_TEXTENCODING_UTF8 ) );
-    long nResult = aMessageBox.execute();
+    TimeValue aTimeout; aTimeout.Seconds = 2; aTimeout.Nanosec = 0;
+    long nResult = aMessageBox.execute( aTimeout );
 
-    if ( nResult == RET_YES )
+    if ( aMessageBox.didTimeout() )
+        DbgPrintShell( pLine );
+    else if ( nResult == RET_YES )
         GetpApp()->Abort( XubString( RTL_CONSTASCII_USTRINGPARAM( "Debug-Utilities-Error" ) ) );
     else if ( nResult == RET_CANCEL )
         DbgCoreDump();
@@ -1970,6 +1973,7 @@ void DbgPrintWindow( const char* pLine )
 void DbgPrintShell( const char* pLine )
 {
 #if defined( WNT )
+    // TODO: Shouldn't this be a IsDebuggerPresent()?
     if ( GetSystemMetrics( SM_DEBUG ) )
     {
         strcpy( aDbgOutBuf, pLine );
