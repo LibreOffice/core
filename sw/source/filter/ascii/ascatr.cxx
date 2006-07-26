@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ascatr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:33:49 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 08:53:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -224,6 +224,9 @@ static Writer& OutASC_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
     if( rWrt.bASCII_ParaAsBlanc )
         aStr.SearchAndReplaceAll( 0x0A, ' ' );
 
+    const bool bExportSoftHyphens = RTL_TEXTENCODING_UCS2 == rWrt.GetAsciiOptions().GetCharSet() ||
+                                    RTL_TEXTENCODING_UTF8 == rWrt.GetAsciiOptions().GetCharSet();
+
     do {
         xub_StrLen nNextAttr = aAttrIter.WhereNext();
 
@@ -231,8 +234,13 @@ static Writer& OutASC_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
             nNextAttr = nEnde;
 
         if( !aAttrIter.OutAttr( nStrPos ))
-            rWrt.Strm().WriteUnicodeOrByteText(
-                                aStr.Copy( nStrPos, nNextAttr - nStrPos ));
+        {
+            String aOutStr( aStr.Copy( nStrPos, nNextAttr - nStrPos ) );
+            if ( !bExportSoftHyphens )
+                aOutStr.EraseAllChars( CHAR_SOFTHYPHEN );
+
+            rWrt.Strm().WriteUnicodeOrByteText( aOutStr );
+        }
         nStrPos = nNextAttr;
         aAttrIter.NextPos();
     } while( nStrPos < nEnde );
