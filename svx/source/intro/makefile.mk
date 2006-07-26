@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2006-01-13 16:22:47 $
+#   last change: $Author: rt $ $Date: 2006-07-26 08:29:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,6 @@ TARGET=intro
 .INCLUDE :  settings.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
-
 RSCLOCINC!:=$(RSCLOCINC);$(PRJ)$/RES
 
 # setting the compiled by $user$ string in the About box
@@ -63,16 +62,17 @@ RESLIB1SRSFILES= \
     $(SRS)$/$(SRS1NAME).srs
 
 # Version "OpenOffice.org"
-SRS4NAME= ooo
-SRC4FILES=	\
-    $(SRS4NAME).src
+SRS2NAME= ooo
+SRC2FILES=  \
+    $(SRS2NAME).src
 
-RESLIB4NAME=$(SRS4NAME)
-RESLIB4IMAGES=$(PRJ)$/res
-RESLIB4SRSFILES= \
-    $(SRS)$/$(SRS4NAME).srs
+RESLIB2NAME=$(SRS2NAME)
+RESLIB2IMAGES=$(PRJ)$/res
+RESLIB2SRSFILES= \
+    $(SRS)$/$(SRS2NAME).srs
 
 .INCLUDE :  target.mk
 
 $(SRS)$/iso.srs: $(INCCOM)$/intro.hrc
 $(SRS)$/ooo.srs: $(INCCOM)$/intro.hrc
+
