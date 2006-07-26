@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salinfo.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:58:40 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 09:20:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,17 +52,26 @@
 #include <svdata.hxx>
 #include <window.hxx>
 
+#include <multimon.h>
+
+#include <vector>
+
 class WinSalSystem : public SalSystem
 {
+    std::vector< Rectangle > m_aMonitors;
 public:
     WinSalSystem() {}
     virtual ~WinSalSystem();
 
-    virtual bool GetSalSystemDisplayInfo( DisplayInfo& rInfo );
+    virtual unsigned int GetDisplayScreenCount();
+    virtual Rectangle GetDisplayScreenPosSizePixel( unsigned int nScreen );
     virtual int ShowNativeMessageBox( const String& rTitle,
                                       const String& rMessage,
                                       int nButtonCombination,
                                       int nDefaultButton);
+
+    bool initMonitors();
+    void addMonitor( const Rectangle& rRect) { m_aMonitors.push_back( rRect ); }
 };
 
 SalSystem* WinSalInstance::CreateSalSystem()
@@ -76,22 +85,77 @@ WinSalSystem::~WinSalSystem()
 
 // -----------------------------------------------------------------------
 
-bool WinSalSystem::GetSalSystemDisplayInfo( DisplayInfo& rInfo )
+static BOOL CALLBACK ImplEnumMonitorProc( HMONITOR hMonitor,
+                                          HDC hdcMonitor,
+                                          LPRECT lprcMonitor,
+                                          LPARAM dwData )
 {
-    RECT aRect;
-    ImplSalGetWorkArea( NULL, &aRect, NULL );
+    WinSalSystem* pSys = reinterpret_cast<WinSalSystem*>(dwData);
+    pSys->addMonitor( Rectangle( Point( lprcMonitor->left,
+                                        lprcMonitor->top ),
+                                 Size( lprcMonitor->right - lprcMonitor->left,
+                                       lprcMonitor->bottom - lprcMonitor->top ) ) );
+    return TRUE;
+}
 
-    HDC hDC;
-    if( (hDC = GetDC( NULL )) != 0 )
-    {
-        rInfo.nWidth    = aRect.right - aRect.left;
-        rInfo.nHeight   = aRect.bottom - aRect.top;
-        rInfo.nDepth    = GetDeviceCaps( hDC, BITSPIXEL );
-        ReleaseDC( NULL, hDC );
+bool WinSalSystem::initMonitors()
+{
+    if( m_aMonitors.size() > 0 )
         return true;
+
+    bool winVerOk = true;
+
+    // multi monitor calls not available on Win95/NT
+    OSVERSIONINFO aVerInfo;
+    aVerInfo.dwOSVersionInfoSize = sizeof( aVerInfo );
+    if ( GetVersionEx( &aVerInfo ) )
+    {
+        if ( aVerInfo.dwPlatformId == VER_PLATFORM_WIN32_NT )
+        {
+            if ( aVerInfo.dwMajorVersion <= 4 )
+                winVerOk = false;   // NT
+        }
+        else if( aVerInfo.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS )
+        {
+            if ( aVerInfo.dwMajorVersion == 4 && aVerInfo.dwMinorVersion == 0 )
+                winVerOk = false;   // Win95
+        }
+    }
+    if( winVerOk )
+    {
+        int nMonitors = GetSystemMetrics( SM_CMONITORS );
+        if( nMonitors == 1 )
+        {
+            int w = GetSystemMetrics( SM_CXSCREEN );
+            int h = GetSystemMetrics( SM_CYSCREEN );
+            m_aMonitors.push_back( Rectangle( Point(), Size( w, h ) ) );
+        }
+        else
+        {
+            HDC aDesktopRC = GetDC( NULL );
+            EnumDisplayMonitors( aDesktopRC, NULL, ImplEnumMonitorProc, reinterpret_cast<LPARAM>(this) );
+        }
     }
     else
-        return false;
+    {
+        int w = GetSystemMetrics( SM_CXSCREEN );
+        int h = GetSystemMetrics( SM_CYSCREEN );
+        m_aMonitors.push_back( Rectangle( Point(), Size( w, h ) ) );
+    }
+
+    return m_aMonitors.size() > 0;
+}
+
+unsigned int WinSalSystem::GetDisplayScreenCount()
+{
+    initMonitors();
+    return m_aMonitors.size();
+}
+
+Rectangle WinSalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
+{
+    initMonitors();
+    return (nScreen < m_aMonitors.size()) ? m_aMonitors[nScreen] : Rectangle();
 }
 
 // -----------------------------------------------------------------------
