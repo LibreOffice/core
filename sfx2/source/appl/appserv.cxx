@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:08:35 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 08:30:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -832,10 +832,15 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
     {
         case SID_OPTIONS_TREEDIALOG:
         {
+            const SfxItemSet* pArgs = rReq.GetInternalArgs_Impl();
+            const SfxPoolItem* pItem = NULL;
+            Reference < XFrame > xFrame;
+            if ( pArgs && pArgs->GetItemState( SID_DOCFRAME, sal_False, &pItem ) == SFX_ITEM_SET )
+                 ( (SfxUnoAnyItem*)pItem )->GetValue() >>= xFrame;
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
             if ( pFact )
             {
-                  VclAbstractDialog* pDlg = pFact->CreateVclDialog( NULL, ResId( rReq.GetSlot() ) );
+                VclAbstractDialog* pDlg = pFact->CreateFrameDialog( NULL, xFrame, ResId( rReq.GetSlot() ) );
                   pDlg->Execute();
                   delete pDlg;
             }
