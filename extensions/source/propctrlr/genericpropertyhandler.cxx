@@ -4,9 +4,9 @@
  *
  *  $RCSfile: genericpropertyhandler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:25:05 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:57:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -314,7 +314,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL UrlClickHandler::disposing( const EventObject& Source ) throw (RuntimeException)
+    void SAL_CALL UrlClickHandler::disposing( const EventObject& /*Source*/ ) throw (RuntimeException)
     {
         // not interested in
     }
@@ -491,7 +491,7 @@ namespace pcr
             impl_getEnumConverter( pos->second.Type )->getValueFromDescription( sControlValue, aPropertyValue );
         }
         else
-            aPropertyValue = PropertyHandlerHelper::convertToPropertyValue( m_aContext.getUNOContext(), m_xTypeConverter, pos->second, _rControlValue );
+            aPropertyValue = PropertyHandlerHelper::convertToPropertyValue( m_xTypeConverter, pos->second, _rControlValue );
 
         return aPropertyValue;
     }
@@ -516,7 +516,7 @@ namespace pcr
             aControlValue <<= impl_getEnumConverter( pos->second.Type )->getDescriptionForValue( _rPropertyValue );
         }
         else
-            aControlValue = PropertyHandlerHelper::convertToControlValue( m_aContext.getUNOContext(), m_xTypeConverter, pos->second, _rPropertyValue, _rControlValueType );
+            aControlValue = PropertyHandlerHelper::convertToControlValue( m_xTypeConverter, _rPropertyValue, _rControlValueType );
         return aControlValue;
     }
 
@@ -667,8 +667,8 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL GenericPropertyHandler::describePropertyLine( const ::rtl::OUString& _rPropertyName,
-        LineDescriptor& /* [out] */ _out_rDescriptor, const Reference< XPropertyControlFactory >& _rxControlFactory )
+    LineDescriptor SAL_CALL GenericPropertyHandler::describePropertyLine( const ::rtl::OUString& _rPropertyName,
+        const Reference< XPropertyControlFactory >& _rxControlFactory )
         throw (UnknownPropertyException, NullPointerException, RuntimeException)
     {
         if ( !_rxControlFactory.is() )
@@ -681,11 +681,12 @@ namespace pcr
         if ( pos == m_aProperties.end() )
             throw UnknownPropertyException();
 
-        _out_rDescriptor.DisplayName = _rPropertyName;
+        LineDescriptor aDescriptor;
+        aDescriptor.DisplayName = _rPropertyName;
         switch ( pos->second.Type.getTypeClass() )
         {
         case TypeClass_ENUM:
-            _out_rDescriptor.Control = PropertyHandlerHelper::createListBoxControl( _rxControlFactory,
+            aDescriptor.Control = PropertyHandlerHelper::createListBoxControl( _rxControlFactory,
                 impl_getEnumConverter( pos->second.Type )->getDescriptions(),
                 PropertyHandlerHelper::requiresReadOnlyControl( pos->second.Attributes ) );
             break;
@@ -695,43 +696,46 @@ namespace pcr
             bool bIsURLProperty = ( _rPropertyName.getLength() >= 3 ) && _rPropertyName.matchAsciiL( "URL", 3, _rPropertyName.getLength() - 3 );
             if ( bIsURLProperty )
             {
-                _out_rDescriptor.Control = _rxControlFactory->createPropertyControl(
+                aDescriptor.Control = _rxControlFactory->createPropertyControl(
                     PropertyControlType::HyperlinkField, PropertyHandlerHelper::requiresReadOnlyControl( pos->second.Attributes ) );
 
-                Reference< XHyperlinkControl > xControl( _out_rDescriptor.Control, UNO_QUERY_THROW );
+                Reference< XHyperlinkControl > xControl( aDescriptor.Control, UNO_QUERY_THROW );
                 Reference< XActionListener > xEnsureDelete( new UrlClickHandler( m_aContext, xControl ) );
             }
         }
         break;
+        default:
+            break;
         }
         // fallback
-        if ( !_out_rDescriptor.Control.is() )
-            PropertyHandlerHelper::describePropertyLine( m_aContext.getUNOContext(), pos->second, _out_rDescriptor, _rxControlFactory );
+        if ( !aDescriptor.Control.is() )
+            PropertyHandlerHelper::describePropertyLine( pos->second, aDescriptor, _rxControlFactory );
 
-        _out_rDescriptor.Category = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "General" ) );
+        aDescriptor.Category = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "General" ) );
+        return aDescriptor;
     }
 
     //--------------------------------------------------------------------
-    ::sal_Bool SAL_CALL GenericPropertyHandler::isComposable( const ::rtl::OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
+    ::sal_Bool SAL_CALL GenericPropertyHandler::isComposable( const ::rtl::OUString& /*_rPropertyName*/ ) throw (UnknownPropertyException, RuntimeException)
     {
         return sal_False;
     }
 
     //--------------------------------------------------------------------
-    InteractiveSelectionResult SAL_CALL GenericPropertyHandler::onInteractivePropertySelection( const ::rtl::OUString& _rPropertyName, sal_Bool _bPrimary, Any& _rData, const Reference< XObjectInspectorUI >& _rxInspectorUI ) throw (UnknownPropertyException, NullPointerException, RuntimeException)
+    InteractiveSelectionResult SAL_CALL GenericPropertyHandler::onInteractivePropertySelection( const ::rtl::OUString& /*_rPropertyName*/, sal_Bool /*_bPrimary*/, Any& /*_rData*/, const Reference< XObjectInspectorUI >& /*_rxInspectorUI*/ ) throw (UnknownPropertyException, NullPointerException, RuntimeException)
     {
         DBG_ERROR( "GenericPropertyHandler::onInteractivePropertySelection: I'm too dumb to know anything about property browse buttons!" );
         return InteractiveSelectionResult_Cancelled;
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL GenericPropertyHandler::actuatingPropertyChanged( const ::rtl::OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& _rOldValue, const Reference< XObjectInspectorUI >& _rxInspectorUI, sal_Bool _bFirstTimeInit ) throw (NullPointerException, RuntimeException)
+    void SAL_CALL GenericPropertyHandler::actuatingPropertyChanged( const ::rtl::OUString& /*_rActuatingPropertyName*/, const Any& /*_rNewValue*/, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& /*_rxInspectorUI*/, sal_Bool /*_bFirstTimeInit*/ ) throw (NullPointerException, RuntimeException)
     {
         DBG_ERROR( "GenericPropertyHandler::actuatingPropertyChanged: no no no, I did not register for any actuating properties!" );
     }
 
     //--------------------------------------------------------------------
-    sal_Bool SAL_CALL GenericPropertyHandler::suspend( sal_Bool _bSuspend ) throw (RuntimeException)
+    sal_Bool SAL_CALL GenericPropertyHandler::suspend( sal_Bool /*_bSuspend*/ ) throw (RuntimeException)
     {
         return sal_True;
     }

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: handlerhelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:25:27 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:58:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,7 +109,7 @@ namespace pcr
     //= PropertyHandlerHelper
     //====================================================================
     //--------------------------------------------------------------------
-    void PropertyHandlerHelper::describePropertyLine( const Reference< XComponentContext >& _rxContext, const Property& _rProperty,
+    void PropertyHandlerHelper::describePropertyLine( const Property& _rProperty,
         LineDescriptor& /* [out] */ _out_rDescriptor, const Reference< XPropertyControlFactory >& _rxControlFactory )
     {
         // display the pure property name - no L10N
@@ -237,7 +237,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    Any PropertyHandlerHelper::convertToPropertyValue( const Reference< XComponentContext >& _rxContext, const Reference< XTypeConverter >& _rxTypeConverter,
+    Any PropertyHandlerHelper::convertToPropertyValue( const Reference< XTypeConverter >& _rxTypeConverter,
         const Property& _rProperty, const Any& _rControlValue )
     {
         Any aPropertyValue( _rControlValue );
@@ -274,8 +274,8 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    Any PropertyHandlerHelper::convertToControlValue( const Reference< XComponentContext >& _rxContext, const Reference< XTypeConverter >& _rxTypeConverter,
-        const Property& _rProperty,  const Any& _rPropertyValue, const Type& _rControlValueType )
+    Any PropertyHandlerHelper::convertToControlValue( const Reference< XTypeConverter >& _rxTypeConverter,
+        const Any& _rPropertyValue, const Type& _rControlValueType )
     {
         Any aControlValue( _rPropertyValue );
         if ( !aControlValue.hasValue() )
