@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.192 $
+ *  $Revision: 1.193 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-08 14:55:01 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 09:14:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2870,7 +2870,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
 
 void Desktop::OpenSplashScreen()
 {
-       ::rtl::OUString        aTmpString;
+    ::rtl::OUString     aTmpString;
     CommandLineArgs*    pCmdLine = GetCommandLineArgs();
     sal_Bool bVisible = sal_False;
     // Show intro only if this is normal start (e.g. no server, no quickstart, no printing )
@@ -2882,9 +2882,29 @@ void Desktop::OpenSplashScreen()
          !pCmdLine->GetPrintList( aTmpString ) &&
          !pCmdLine->GetPrintToList( aTmpString ) )
     {
+        // Determine application name from command line parameters
+        OUString aAppName;
+        if ( pCmdLine->IsWriter() )
+            aAppName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "writer" ));
+        else if ( pCmdLine->IsCalc() )
+            aAppName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "calc" ));
+        else if ( pCmdLine->IsDraw() )
+            aAppName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "draw" ));
+        else if ( pCmdLine->IsImpress() )
+            aAppName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "impress" ));
+        else if ( pCmdLine->IsBase() )
+            aAppName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "base" ));
+        else if ( pCmdLine->IsGlobal() )
+            aAppName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "global" ));
+        else if ( pCmdLine->IsMath() )
+            aAppName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "math" ));
+        else if ( pCmdLine->IsWeb() )
+            aAppName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "web" ));
+
         bVisible = sal_True;
-        Sequence< Any > aSeq( 1 );
+        Sequence< Any > aSeq( 2 );
         aSeq[0] <<= bVisible;
+        aSeq[1] <<= aAppName;
         m_rSplashScreen = Reference<XStatusIndicator>(
             comphelper::getProcessServiceFactory()->createInstanceWithArguments(
             OUString::createFromAscii("com.sun.star.office.SplashScreen"),
