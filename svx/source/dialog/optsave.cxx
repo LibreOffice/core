@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optsave.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:24:28 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 09:19:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,6 +116,9 @@
 #ifndef _UTL_CONFIGITEM_HXX_
 #include <unotools/configitem.hxx>
 #endif
+#ifndef INCLUDED_SVTOOLS_OPTIONSDLG_HXX
+#include <svtools/optionsdlg.hxx>
+#endif
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::util;
@@ -125,7 +128,13 @@ using namespace com::sun::star::container;
 using namespace rtl;
 using namespace comphelper;
 
-#define C2U(cChar) OUString::createFromAscii(cChar)
+#define C2U(cChar)                  OUString::createFromAscii(cChar)
+#define C2S(cChar)                  String( RTL_CONSTASCII_STRINGPARAM(cChar) )
+#define CFG_PAGE_AND_GROUP          C2S("General"), C2S("LoadSave")
+// !! you have to update these index, if you changed the list of the child windows !!
+#define WININDEX_AUTOSAVE           ((USHORT)6)
+#define WININDEX_NOPRETTYPRINTING   ((USHORT)9)
+
 // -------------------- --------------------------------------------------
 class FilterWarningDialog_Impl : public ModalDialog
 {
@@ -133,13 +142,11 @@ class FilterWarningDialog_Impl : public ModalDialog
     CancelButton    aCancel;
     FixedImage      aImage;
     FixedInfo       aFilterWarningFT;
-//    CheckBox        aDontShowAgainCB;
 
     public:
-        FilterWarningDialog_Impl(Window* pParent);
+    FilterWarningDialog_Impl(Window* pParent);
 
-        void        SetFilterName(const String& rFilterUIName);
-//        sal_Bool    IsCheckBoxSet() {return aDontShowAgainCB.IsChecked();}
+    void            SetFilterName(const String& rFilterUIName);
 };
 // ----------------------------------------------------------------------
 FilterWarningDialog_Impl::FilterWarningDialog_Impl(Window* pParent) :
@@ -223,7 +230,6 @@ struct SvxSaveTabPage_Impl
     Sequence< ::rtl::OUString>   aFilterArr[APP_COUNT];
     Sequence<sal_Bool>          aAlienArr[APP_COUNT];
     Sequence<OUString>          aUIFilterArr[APP_COUNT];
-    CheckBox*                   m_pNoPrettyPrinting;
     rtl::OUString               aDefaultArr[APP_COUNT];
     sal_Bool                    aDefaultReadonlyArr[APP_COUNT];
     sal_Bool                    bInitialized;
@@ -232,15 +238,12 @@ struct SvxSaveTabPage_Impl
     ~SvxSaveTabPage_Impl();
 };
 
-SvxSaveTabPage_Impl::SvxSaveTabPage_Impl()
-    :m_pNoPrettyPrinting( NULL )
-    ,bInitialized( sal_False )
+SvxSaveTabPage_Impl::SvxSaveTabPage_Impl() : bInitialized( sal_False )
 {
 }
 
 SvxSaveTabPage_Impl::~SvxSaveTabPage_Impl()
 {
-    delete m_pNoPrettyPrinting;
 }
 
 // class SvxSaveTabPage --------------------------------------------------
@@ -248,38 +251,31 @@ SvxSaveTabPage_Impl::~SvxSaveTabPage_Impl()
 SfxSaveTabPage::SfxSaveTabPage( Window* pParent, const SfxItemSet& rCoreSet ) :
 
     SfxTabPage( pParent, SVX_RES( RID_SFXPAGE_SAVE ), rCoreSet ),
-    aLoadFL(              this, ResId(  LB_LOAD         ) ),
-    aLoadUserSettingsCB(  this, ResId(  CB_LOAD_SETTINGS) ),
+    aLoadFL             ( this, ResId( LB_LOAD ) ),
+    aLoadUserSettingsCB ( this, ResId( CB_LOAD_SETTINGS ) ),
     aSaveBox            ( this, ResId( GB_SAVE ) ),
     aDocInfoBtn         ( this, ResId( BTN_DOCINFO ) ),
-    aBackupFI(            this, ResId( FI_BACKUP ) ),
+    aBackupFI           ( this, ResId( FI_BACKUP ) ),
     aBackupBtn          ( this, ResId( BTN_BACKUP ) ),
     aAutoSaveBtn        ( this, ResId( BTN_AUTOSAVE ) ),
     aAutoSaveEdit       ( this, ResId( ED_AUTOSAVE ) ),
+    aNoPrettyPrintingBtn( this, ResId( BTN_NOPRETTYPRINTING ) ),
     aMinuteText         ( this, ResId( FT_MINUTE ) ),
     aWarnAlienFormatBtn ( this, ResId( BTN_WARNALIENFORMAT ) ),
     aRelBox             ( this, ResId( GB_RELATIVE ) ),
     aRelFsysBtn         ( this, ResId( BTN_RELATIVE_FSYS ) ),
     aRelInetBtn         ( this, ResId( BTN_RELATIVE_INET ) ),
     aFilterFL           ( this, ResId( FL_FILTER ) ),
-    aApplicationFT      ( this, ResId( FT_APP   ) ),
-    aApplicationLB      ( this, ResId( LB_APP    ) ),
+    aApplicationFT      ( this, ResId( FT_APP ) ),
+    aApplicationLB      ( this, ResId( LB_APP ) ),
     aFiltersFT          ( this, ResId( FT_FILTER ) ),
     aFiltersFI          ( this, ResId( FI_FILTER ) ),
     aFiltersLB          ( this, ResId( LB_FILTER ) ),
-    aWarningFT          ( this, ResId( FT_WARN   ) ),
-    pImpl(new SvxSaveTabPage_Impl)
+    aWarningFT          ( this, ResId( FT_WARN ) ),
+    pImpl( new SvxSaveTabPage_Impl )
 {
-    pImpl->m_pNoPrettyPrinting = new CheckBox( this, ResId( BTN_NOPRETTYPRINTING ) );
-
     FreeResource();
-/*
-    // correct the z-order for the no-pretty-printing checkbox
-    Window* pNewPrev = &aAutoSavePromptBtn;
-    Window* pNewNext = pNewPrev->GetWindow( WINDOW_NEXT );
-    pImpl->m_pNoPrettyPrinting->SetZOrder( pNewNext, WINDOW_ZORDER_BEFOR );
-    pNewPrev->SetZOrder( pImpl->m_pNoPrettyPrinting, WINDOW_ZORDER_BEFOR );
-*/
+
     Link aLink = LINK( this, SfxSaveTabPage, AutoClickHdl_Impl );
     aAutoSaveBtn.SetClickHdl( aLink );
     aAutoSaveEdit.SetMaxTextLen( 2 );
@@ -332,6 +328,8 @@ SfxSaveTabPage::SfxSaveTabPage( Window* pParent, const SfxItemSet& rCoreSet ) :
     Link aLk = LINK(this, SfxSaveTabPage, FilterHdl_Impl);
     aApplicationLB.SetSelectHdl(aLk);
     aFiltersLB.SetSelectHdl(aLk);
+
+    DetectHiddenControls();
 }
 
 // -----------------------------------------------------------------------
@@ -386,6 +384,48 @@ bool SfxSaveTabPage::AcceptFilter( USHORT nPos )
     return bSet;
 }
 // -----------------------------------------------------------------------
+void SfxSaveTabPage::DetectHiddenControls()
+{
+    long nDelta = 0;
+    // the index of the first child window which perhaps have to move upwards
+    USHORT nWinIndex = WININDEX_NOPRETTYPRINTING;
+    SvtOptionsDialogOptions aOptionsDlgOpt;
+
+    if ( aOptionsDlgOpt.IsOptionHidden( C2S("Backup"), CFG_PAGE_AND_GROUP ) )
+    {
+        // hide controls of "Backup"
+        aBackupFI.Hide();
+        aBackupBtn.Hide();
+        // the other controls have to move upwards the height of checkbox + space
+        nDelta = aAutoSaveBtn.GetPosPixel().Y() - aBackupBtn.GetPosPixel().Y();
+    }
+
+    if ( aOptionsDlgOpt.IsOptionHidden( C2S("AutoSave"), CFG_PAGE_AND_GROUP ) )
+    {
+        // hide controls of "AutoSave"
+        aAutoSaveBtn.Hide();
+        aAutoSaveEdit.Hide();
+        aMinuteText.Hide();
+        // the other controls have to move upwards the height of checkbox + space
+        nDelta += aNoPrettyPrintingBtn.GetPosPixel().Y() - aAutoSaveBtn.GetPosPixel().Y();
+    }
+    else if ( nDelta > 0 )
+        // the "AutoSave" controls have to move upwards too
+        nWinIndex = WININDEX_AUTOSAVE;
+
+    if ( nDelta > 0 )
+    {
+        USHORT i, nChildCount = GetChildCount();
+        for ( i = nWinIndex; i < nChildCount; ++i )
+        {
+            Window* pWin = GetChild(i);
+            Point aPos = pWin->GetPosPixel();
+            aPos.Y() -= nDelta;
+            pWin->SetPosPixel( aPos );
+        }
+    }
+}
+// -----------------------------------------------------------------------
 BOOL SfxSaveTabPage::FillItemSet( SfxItemSet& rSet )
 {
     BOOL bModified = FALSE;
@@ -409,9 +449,9 @@ BOOL SfxSaveTabPage::FillItemSet( SfxItemSet& rSet )
         bModified |= TRUE;
     }
 
-    if ( pImpl->m_pNoPrettyPrinting->IsChecked() != pImpl->m_pNoPrettyPrinting->GetSavedValue() )
+    if ( aNoPrettyPrintingBtn.IsChecked() != aNoPrettyPrintingBtn.GetSavedValue() )
     {
-        rSet.Put( SfxBoolItem( GetWhich( SID_ATTR_PRETTYPRINTING ), !pImpl->m_pNoPrettyPrinting->IsChecked() ) );
+        rSet.Put( SfxBoolItem( GetWhich( SID_ATTR_PRETTYPRINTING ), !aNoPrettyPrintingBtn.IsChecked() ) );
         bModified |= TRUE;
     }
 
@@ -575,8 +615,8 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
 //    aAutoSaveBtn.Enable(!aSaveOpt.IsReadOnly(SvtSaveOptions::E_AUTOSAVE));
 
     // the pretty printing
-    pImpl->m_pNoPrettyPrinting->Check( !aSaveOpt.IsPrettyPrinting());
-//    pImpl->m_pNoPrettyPrinting->Enable(!aSaveOpt.IsReadOnly(SvtSaveOptions::E_DOPRETTYPRINTING ));
+    aNoPrettyPrintingBtn.Check( !aSaveOpt.IsPrettyPrinting());
+//    aNoPrettyPrintingBtn.Enable(!aSaveOpt.IsReadOnly(SvtSaveOptions::E_DOPRETTYPRINTING ));
 
 
     aAutoSaveEdit.SetValue( aSaveOpt.GetAutoSaveTime() );
@@ -594,7 +634,7 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
     aDocInfoBtn.SaveValue();
     aBackupBtn.SaveValue();
     aWarnAlienFormatBtn.SaveValue();
-    pImpl->m_pNoPrettyPrinting->SaveValue();
+    aNoPrettyPrintingBtn.SaveValue();
     aAutoSaveBtn.SaveValue();
     aAutoSaveEdit.SaveValue();
 //  aAutoSavePromptBtn.SaveValue();
