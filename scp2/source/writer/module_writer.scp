@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_writer.scp,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 09:35:50 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 09:13:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,7 @@ Module gid_Module_Prg_Wrt_Bin
     gid_File_Oo_Office_Ui_Writerwindowstate_Xcu,
     gid_File_Oo_Office_Ui_Writerglobalwindowstate_Xcu,
     gid_File_Oo_Office_Ui_Writerwebwindowstate_Xcu,
+	gid_File_Registry_Spool_Oo_Office_Embedding_Writer_Xcu,
     gid_File_Registry_Spool_Oo_TypeDetection_Writer_Types_Xcu, gid_File_Registry_Spool_Oo_TypeDetection_Writer_Filters_Xcu,
     gid_File_Registry_Spool_Oo_TypeDetection_Web_Types_Xcu, gid_File_Registry_Spool_Oo_TypeDetection_Web_Filters_Xcu,
     gid_File_Registry_Spool_Oo_TypeDetection_Global_Types_Xcu, gid_File_Registry_Spool_Oo_TypeDetection_Global_Filters_Xcu,
