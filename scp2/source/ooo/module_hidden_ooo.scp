@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_hidden_ooo.scp,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 13:31:16 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 09:13:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -755,15 +755,10 @@ Module gid_Module_Root_Files_6
 	gid_File_Registry_Spool_Oo_Office_Common_UseOOoFileDialogs_Xcu,
 	gid_File_Registry_Spool_Oo_Dataaccess_Adabasdriver_Xcu,
 	gid_File_Registry_Spool_Oo_Writer_javamail_Xcu,
-	gid_File_Registry_Spool_Oo_Office_Embedding_Writer_Xcu,
 	gid_File_Registry_Spool_Oo_TypeDetection_UISort_Writer_Xcu,
-	gid_File_Registry_Spool_Oo_Office_Embedding_Calc_Xcu,
 	gid_File_Registry_Spool_Oo_TypeDetection_Calc_UISort_Xcu,
-	gid_File_Registry_Spool_Oo_Office_Embedding_Draw_Xcu,
 	gid_File_Registry_Spool_Oo_TypeDetection_Draw_UISort_Xcu,
-	gid_File_Registry_Spool_Oo_Office_Embedding_Impress_Xcu,
 	gid_File_Registry_Spool_Oo_TypeDetection_Impress_UISort_Xcu,
-	gid_File_Registry_Spool_Oo_Office_Embedding_Math_Xcu,
 	gid_File_Registry_Spool_Oo_TypeDetection_Math_UISort_Xcu,
 	gid_File_Registry_Spool_Oo_Office_Linguistic_Forcedefaultlanguage_Xcu,
 	gid_File_Share_Xdg_Printeradmin,
