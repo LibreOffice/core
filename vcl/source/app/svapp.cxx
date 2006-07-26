@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 16:34:10 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 09:11:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,9 @@
 #endif
 #ifndef _SV_SALFRAME_HXX
 #include <salframe.hxx>
+#endif
+#ifndef _SV_SALSYS_HXX
+#include <salsys.hxx>
 #endif
 #ifndef _VOS_PROCESS_HXX
 #include <vos/process.hxx>
@@ -1337,6 +1340,20 @@ UniString Application::GetDisplayName()
         return pSVData->maWinData.mpAppWin->GetText();
     else
         return ImplGetSVEmptyStr();
+}
+
+// -----------------------------------------------------------------------
+
+unsigned int Application::GetScreenCount()
+{
+    SalSystem* pSys = ImplGetSalSystem();
+    return pSys ? pSys->GetDisplayScreenCount() : 0;
+}
+
+Rectangle Application::GetScreenPosSizePixel( unsigned int nScreen )
+{
+    SalSystem* pSys = ImplGetSalSystem();
+    return pSys ? pSys->GetDisplayScreenPosSizePixel( nScreen ) : Rectangle();
 }
 
 // -----------------------------------------------------------------------
