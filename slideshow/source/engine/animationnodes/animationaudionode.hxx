@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationaudionode.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:39:11 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:29:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,69 +32,54 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+#ifndef INCLUDED_SLIDESHOW_ANIMATIONAUDIONODE_HXX
+#define INCLUDED_SLIDESHOW_ANIMATIONAUDIONODE_HXX
 
-#ifndef _SLIDESHOW_ANIMATIONAUDIONODE_HXX
-#define _SLIDESHOW_ANIMATIONAUDIONODE_HXX
+#include "basecontainernode.hxx"
+#include "soundplayer.hxx"
+#include "com/sun/star/animations/XAnimationNode.hpp"
+#include "com/sun/star/animations/XAudio.hpp"
 
-#include <basecontainernode.hxx>
-#include <soundplayer.hxx>
+namespace presentation {
+namespace internal {
 
-#ifndef _COM_SUN_STAR_ANIMATIONS_XANIMATIONNODE_HPP_
-#include <com/sun/star/animations/XAnimationNode.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_XAUDIO_HPP_
-#include <com/sun/star/animations/XAudio.hpp>
-#endif
+/** Audio node.
 
-
-using namespace ::com::sun::star;
-
-namespace presentation
+    This animation node contains an audio effect. Duration and
+    start/stop behaviour is affected by the referenced audio
+    file.
+*/
+class AnimationAudioNode : public BaseNode, public AnimationEventHandler
 {
-    namespace internal
-    {
-        /** Audio node.
+public:
+    AnimationAudioNode(
+        ::com::sun::star::uno::Reference<
+        ::com::sun::star::animations::XAnimationNode> const& xNode,
+        ::boost::shared_ptr<BaseContainerNode> const& pParent,
+        NodeContext const& rContext );
 
-            This animation node contains an audio effect. Duration and
-            start/stop behaviour is affected by the referenced audio
-            file.
-        */
-        class AnimationAudioNode : public BaseNode, public AnimationEventHandler
-        {
-        public:
-            AnimationAudioNode( const ::com::sun::star::uno::Reference<
-                                    ::com::sun::star::animations::XAnimationNode >& xNode,
-                                const BaseContainerNodeSharedPtr&                   rParent,
-                                const NodeContext&                                  rContext );
+protected:
+    virtual void dispose();
 
-            virtual void dispose();
-            virtual bool activate();
-            virtual void deactivate();
+private:
+    virtual void activate_st();
+    virtual void deactivate_st( NodeState eDestState, bool );
+    virtual bool hasPendingAnimation() const;
 
-            /** Overridden, because the sound duration normally
-                determines effect duration.
-            */
-            virtual void scheduleDeactivationEvent() const;
+    /// overriden, because we need to deal with STOPAUDIO commands
+    virtual bool handleAnimationEvent( const AnimationNodeSharedPtr& rNode );
 
-            /// overridden, because NO-OP for all leaf nodes (which typically don't register nowhere)
-            virtual void notifyDeactivating( const AnimationNodeSharedPtr& rNotifier );
+private:
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::animations::XAudio >  mxAudioNode;
+    ::rtl::OUString                             maSoundURL;
+    mutable SoundPlayerSharedPtr                mpPlayer;
 
-            virtual bool hasPendingAnimation() const;
+    void createPlayer() const;
+    void resetPlayer() const;
+};
 
-            /// overriden, because we need to deal with STOPAUDIO commands
-            virtual bool handleAnimationEvent( const AnimationNodeSharedPtr& rNode );
+} // namespace internal
+} // namespace presentation
 
-        private:
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::animations::XAudio >  mxAudioNode;
-            ::rtl::OUString                             maSoundURL;
-            mutable SoundPlayerSharedPtr                mpPlayer;
-
-            void createPlayer() const;
-            void resetPlayer() const;
-        };
-
-    }
-}
-
-#endif /* _SLIDESHOW_ANIMATIONAUDIONODE_HXX */
+#endif /* INCLUDED_SLIDESHOW_ANIMATIONAUDIONODE_HXX */
