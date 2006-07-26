@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propcontroller.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 12:20:11 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:58:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -246,7 +246,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    Reference< XDispatch > SAL_CALL OPropertyBrowserController::queryDispatch( const URL& URL, const ::rtl::OUString& TargetFrameName, ::sal_Int32 SearchFlags ) throw (RuntimeException)
+    Reference< XDispatch > SAL_CALL OPropertyBrowserController::queryDispatch( const URL& /*URL*/, const ::rtl::OUString& /*TargetFrameName*/, ::sal_Int32 /*SearchFlags*/ ) throw (RuntimeException)
     {
         // we don't have any dispatches at all, right now
         return Reference< XDispatch >();
@@ -514,7 +514,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    void SAL_CALL OPropertyBrowserController::focusLost( const FocusEvent& _rSource ) throw (RuntimeException)
+    void SAL_CALL OPropertyBrowserController::focusLost( const FocusEvent& /*_rSource*/ ) throw (RuntimeException)
     {
         // not interested in
     }
@@ -631,14 +631,20 @@ namespace pcr
     {
         if ( m_sCommittingProperty != _rEvent.PropertyName )
         {
-            if ( getPropertyBox() )
-                // forward the new value to the property box, to reflect the change in the UI
-                getPropertyBox()->SetPropertyValue( _rEvent.PropertyName, _rEvent.NewValue );
+            Any aNewValue( _rEvent.NewValue );
+            if ( impl_hasPropertyHandlerFor_nothrow( _rEvent.PropertyName ) )
+            {
+                aNewValue = impl_getPropertyValue_throw( _rEvent.PropertyName );
+
+                if ( getPropertyBox() )
+                    // forward the new value to the property box, to reflect the change in the UI
+                    getPropertyBox()->SetPropertyValue( _rEvent.PropertyName, aNewValue );
+            }
 
             // if it's a actuating property, then update the UI for any dependent
             // properties
             if ( impl_isActuatingProperty_nothrow( _rEvent.PropertyName ) )
-                impl_broadcastPropertyChange_nothrow( _rEvent.PropertyName, _rEvent.NewValue, _rEvent.OldValue, false );
+                impl_broadcastPropertyChange_nothrow( _rEvent.PropertyName, aNewValue, _rEvent.OldValue, false );
         }
     }
 
@@ -811,6 +817,13 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
+    bool OPropertyBrowserController::impl_hasPropertyHandlerFor_nothrow( const ::rtl::OUString& _rPropertyName ) const
+    {
+        PropertyHandlerRepository::const_iterator handlerPos = m_aPropertyHandlers.find( _rPropertyName );
+        return ( handlerPos != m_aPropertyHandlers.end() );
+    }
+
+    //------------------------------------------------------------------------
     OPropertyBrowserController::PropertyHandlerRef OPropertyBrowserController::impl_getHandlerForProperty_throw( const ::rtl::OUString& _rPropertyName ) const
     {
         PropertyHandlerRepository::const_iterator handlerPos = m_aPropertyHandlers.find( _rPropertyName );
@@ -920,14 +933,12 @@ namespace pcr
 
                 // remember this handler for every of the properties which it is responsible
                 // for
-                for (   ::std::vector< Property >::const_iterator remember = aProperties.begin();
-                        remember != aProperties.end();
+                for (   StlSyntaxSequence< Property >::const_iterator remember = aThisHandlersProperties.begin();
+                        remember != aThisHandlersProperties.end();
                         ++remember
                     )
                 {
-                    m_aPropertyHandlers.insert( PropertyHandlerRepository::value_type(
-                        remember->Name, *aHandler
-                    ) );
+                    m_aPropertyHandlers[ remember->Name ] = *aHandler;
                     // note that this implies that if two handlers support the same property,
                     // the latter wins
                 }
@@ -1009,7 +1020,7 @@ namespace pcr
             if ( handler == m_aPropertyHandlers.end() )
                 throw RuntimeException();   // caught below
 
-            handler->second->describePropertyLine( _rProperty.Name, _rDescriptor, this );
+            _rDescriptor.assignFrom( handler->second->describePropertyLine( _rProperty.Name, this ) );
 
             //////////////////////////////////////////////////////////////////////
 
@@ -1219,6 +1230,9 @@ namespace pcr
             case InteractiveSelectionResult_Pending:
                 // also okay, we expect that the handler has disabled the UI as necessary
                 break;
+            default:
+                OSL_ENSURE( false, "OPropertyBrowserController::Clicked: unknown result value!" );
+                break;
             }
         }
         catch (Exception&)
@@ -1401,7 +1415,6 @@ namespace pcr
             return;
 
         OLineDescriptor aDescriptor;
-        bool bSuccess = false;
         try
         {
             describePropertyLine( propertyPos->second, aDescriptor );
@@ -1470,7 +1483,6 @@ namespace pcr
 
         // by definition, the properties in m_aProperties are in the order in which they appear in the UI
         // So all we need is a predecessor of pProperty in m_aProperties
-        size_t nPosition = propertyPos->first;
         sal_uInt16 nUIPos = LISTBOX_ENTRY_NOTFOUND;
         do
         {
