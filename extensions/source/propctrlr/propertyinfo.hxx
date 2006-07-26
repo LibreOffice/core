@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertyinfo.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:30:56 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 08:00:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@ namespace pcr
     //========================================================================
     //= IPropertyInfoService
     //========================================================================
-    class IPropertyInfoService
+    class SAL_NO_VTABLE IPropertyInfoService
     {
     public:
         virtual sal_Int32                           getPropertyId(const String& _rName) const = 0;
@@ -67,6 +67,8 @@ namespace pcr
 
         // this is only temporary, until the UNOization of the property browser is completed
         virtual String                  getPropertyName( sal_Int32 _nPropId ) = 0;
+
+        virtual ~IPropertyInfoService() { }
     };
 
 //............................................................................
