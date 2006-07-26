@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationcolornode.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:40:17 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:30:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,41 +33,38 @@
  *
  ************************************************************************/
 
-#ifndef _SLIDESHOW_ANIMATIONCOLORNODE_HXX
-#define _SLIDESHOW_ANIMATIONCOLORNODE_HXX
+#ifndef INCLUDED_SLIDESHOW_ANIMATIONCOLORNODE_HXX
+#define INCLUDED_SLIDESHOW_ANIMATIONCOLORNODE_HXX
 
-#include <activityanimationbasenode.hxx>
+#include "animationbasenode.hxx"
+#include "com/sun/star/animations/XAnimateColor.hpp"
 
-#ifndef _COM_SUN_STAR_ANIMATIONS_XANIMATECOLOR_HPP_
-#include <com/sun/star/animations/XAnimateColor.hpp>
-#endif
+namespace presentation {
+namespace internal {
 
-
-namespace presentation
+class AnimationColorNode : public AnimationBaseNode
 {
-    namespace internal
-    {
-        class AnimationColorNode : public ActivityAnimationBaseNode
-        {
-        public:
-            AnimationColorNode( const ::com::sun::star::uno::Reference<
-                                    ::com::sun::star::animations::XAnimationNode >& xNode,
-                                const BaseContainerNodeSharedPtr&                   rParent,
-                                const NodeContext&                                  rContext );
-
-            virtual bool init();
+public:
+    AnimationColorNode(
+        ::com::sun::star::uno::Reference<
+        ::com::sun::star::animations::XAnimationNode> const& xNode,
+        ::boost::shared_ptr<BaseContainerNode> const& pParent,
+        NodeContext const& rContext )
+        : AnimationBaseNode( xNode, pParent, rContext ),
+          mxColorNode( xNode, ::com::sun::star::uno::UNO_QUERY_THROW ) {}
 
 #if defined(VERBOSE) && defined(DBG_UTIL)
-            virtual const char* getDescription() const;
+    virtual const char* getDescription() const { return "AnimationColorNode"; }
 #endif
 
-        private:
-            AnimationActivitySharedPtr createColorActivity() const;
+private:
+    virtual AnimationActivitySharedPtr createActivity() const;
 
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::animations::XAnimateColor >   mxColorNode;
-        };
-    }
-}
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::animations::XAnimateColor > mxColorNode;
+};
 
-#endif /* _SLIDESHOW_ANIMATIONCOLORNODE_HXX */
+} // namespace internal
+} // namespace presentation
+
+#endif /* INCLUDED_SLIDESHOW_ANIMATIONCOLORNODE_HXX */
