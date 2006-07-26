@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:50:48 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:42:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3261,6 +3261,15 @@ sal_Bool DbGridControl::SaveModified()
 
     DbGridColumn* pColumn = m_aColumns.GetObject(GetModelColumnPos(GetCurColumnId()));
     sal_Bool bOK = pColumn->Commit();
+    DBG_ASSERT( Controller().Is(), "DbGridControl::SaveModified: was modified, by have no controller?!" );
+    if ( !Controller().Is() )
+        // this might happen if the callbacks implicitly triggered by Commit
+        // fiddled with the form or the control ...
+        // (Note that this here is a workaround, at most. We need a general concept how
+        // to treat this, you can imagine an arbitrary number of scenarios where a callback
+        // triggers something which leaves us in an expected state.)
+        // #i67147# / 2006-07-17 / frank.schoenheit@sun.com
+        return bOK;
 
     if (bOK)
     {
@@ -3282,9 +3291,7 @@ sal_Bool DbGridControl::SaveModified()
     else
     {
         // reset the modified flag ....
-        DBG_ASSERT( Controller().Is(), "DbGridControl::SaveModified: was modified, by have no controller?!" );
-        if ( Controller().Is() )
-            Controller()->SetModified();
+        Controller()->SetModified();
     }
 
     return bOK;
