@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgfact.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 11:59:27 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 08:28:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -570,6 +570,7 @@ class AbstractDialogFactory_Impl : public SvxAbstractDialogFactory
 public:
     virtual VclAbstractDialog*          CreateVclDialog( Window* pParent, const ResId& rResId );
     virtual VclAbstractDialog*          CreateSfxDialog( Window* pParent, const SfxBindings& rBindings, const ResId& rResId );
+    virtual VclAbstractDialog*          CreateFrameDialog( Window* pParent, const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& _xFrame, const ResId& rResId );
     virtual SfxAbstractTabDialog*       CreateTabDialog( const ResId& rResId,
                                             Window* pParent,
                                             const SfxItemSet* pAttrSet,
