@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treeopt.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:36:34 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 08:29:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -502,7 +502,7 @@ sal_Bool    OfaOptionsTreeListBox::Collapse( SvLBoxEntry* pParent )
  *
  * --------------------------------------------------*/
 
-OfaTreeOptionsDialog::OfaTreeOptionsDialog( Window* pParent ) :
+OfaTreeOptionsDialog::OfaTreeOptionsDialog( Window* pParent, const Reference< XFrame >& _xFrame ) :
 
     SfxModalDialog( pParent, ResId( RID_OFADLG_OPTIONS_TREE, DIALOG_MGR() ) ),
 
@@ -530,6 +530,7 @@ OfaTreeOptionsDialog::OfaTreeOptionsDialog( Window* pParent ) :
     bForgetSelection    ( sal_False ),
     bImageResized       ( sal_False ),
     bInSelectHdl_Impl   ( false )
+
 {
     aTreeLB.SetNodeDefaultImages();
 
@@ -560,7 +561,7 @@ OfaTreeOptionsDialog::OfaTreeOptionsDialog( Window* pParent ) :
     aSelectTimer.SetTimeout( SELECT_FIRST_TIMEOUT );
     aSelectTimer.SetTimeoutHdl( LINK( this, OfaTreeOptionsDialog, SelectHdl_Impl ) );
 
-    Initialize();
+    Initialize( _xFrame );
 }
 
 /* -----------------11.02.99 07:58-------------------
@@ -615,7 +616,6 @@ OfaTreeOptionsDialog::~OfaTreeOptionsDialog()
         pEntry = aTreeLB.Next(pEntry);
     }
     delete pColorPageItemSet;
-
 }
 
 /* -----------------11.02.99 08:21-------------------
@@ -788,6 +788,7 @@ void OfaTreeOptionsDialog::ApplyItemSets()
         pEntry = aTreeLB.Next(pEntry);
     }
 }
+
 /* -----------------17.02.99 09:51-------------------
  *
  * --------------------------------------------------*/
@@ -1617,17 +1618,20 @@ void OfaTreeOptionsDialog::ApplyLanguageOptions(const SfxItemSet& rSet)
     }
 }
 
-SvtModuleOptions::EFactory getCurrentFactory_Impl()
+SvtModuleOptions::EFactory getCurrentFactory_Impl( const Reference< XFrame >& _xFrame )
 {
     SvtModuleOptions::EFactory eFactory = SvtModuleOptions::E_UNKNOWN_FACTORY;
     ::rtl::OUString sIdentifier, sShortName;
-    Reference < XFrame > xCurrentFrame;
+    Reference < XFrame > xCurrentFrame( _xFrame );
     Reference < XModuleManager > xModuleManager( ::comphelper::getProcessServiceFactory()->createInstance(
         DEFINE_CONST_UNICODE("com.sun.star.frame.ModuleManager") ), UNO_QUERY );
-    Reference< XDesktop > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
-        DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
-    if ( xDesktop.is() )
-        xCurrentFrame = xDesktop->getCurrentFrame();
+    if ( !xCurrentFrame.is() )
+    {
+        Reference< XDesktop > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
+            DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
+        if ( xDesktop.is() )
+            xCurrentFrame = xDesktop->getCurrentFrame();
+    }
 
     if ( xCurrentFrame.is() && xModuleManager.is() )
     {
@@ -1674,7 +1678,7 @@ SvtModuleOptions::EFactory getCurrentFactory_Impl()
     return eFactory;
 }
 
-void OfaTreeOptionsDialog::Initialize()
+void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
 {
     OfaPageResource aDlgResource;
     sal_uInt16 nGroup = 0;
@@ -1731,6 +1735,8 @@ void OfaTreeOptionsDialog::Initialize()
         }
     }
 
+    SvtModuleOptions::EFactory eFactory = getCurrentFactory_Impl( _xFrame );
+
     // Writer and Writer/Web options
     sal_Bool bHasAnyFilter = sal_False;
     SvtModuleOptions aModuleOpt;
@@ -1739,9 +1745,11 @@ void OfaTreeOptionsDialog::Initialize()
         // Textdokument
         bHasAnyFilter = sal_True;
         ResStringArray& rTextArray = aDlgResource.GetTextArray();
-        SfxModule *pSwMod = (*(SfxModule**) GetAppData(SHL_WRITER));
-        if ( pSwMod && pSwMod->IsActive() )
+        if (   SvtModuleOptions::E_WRITER == eFactory
+            || SvtModuleOptions::E_WRITERWEB == eFactory
+            || SvtModuleOptions::E_WRITERGLOBAL == eFactory )
         {
+            SfxModule* pSwMod = (*(SfxModule**) GetAppData(SHL_WRITER));
             if ( !lcl_isOptionHidden( SID_SW_EDITOPTIONS, aOptionsDlgOpt ) )
             {
                 nGroup = AddGroup(rTextArray.GetString(0), pSwMod, pSwMod, SID_SW_EDITOPTIONS );
@@ -1782,12 +1790,12 @@ void OfaTreeOptionsDialog::Initialize()
     if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
     {
         bHasAnyFilter = sal_True;
-        SfxModule* pScMod = ( *( SfxModule** ) GetAppData( SHL_CALC ) );
-        if ( pScMod && pScMod->IsActive() )
+        if ( SvtModuleOptions::E_CALC == eFactory )
         {
             if ( !lcl_isOptionHidden( SID_SC_EDITOPTIONS, aOptionsDlgOpt ) )
             {
                 ResStringArray& rCalcArray = aDlgResource.GetCalcArray();
+                SfxModule* pScMod = ( *( SfxModule** ) GetAppData( SHL_CALC ) );
                 nGroup = AddGroup( rCalcArray.GetString( 0 ), pScMod, pScMod, SID_SC_EDITOPTIONS );
                 const USHORT nCount = static_cast< const USHORT >( rCalcArray.Count() );
                 for ( i = 1; i < nCount; ++i )
@@ -1805,11 +1813,11 @@ void OfaTreeOptionsDialog::Initialize()
     }
 
     // Impress options
+    SfxModule* pSdMod = ( *( SfxModule** ) GetAppData( SHL_DRAW ) );
     if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
     {
         bHasAnyFilter = sal_True;
-        SfxModule* pSdMod = ( *( SfxModule** ) GetAppData( SHL_DRAW ) );
-        if ( pSdMod && pSdMod->IsActive() && getCurrentFactory_Impl() == SvtModuleOptions::E_IMPRESS )
+        if ( eFactory == SvtModuleOptions::E_IMPRESS )
         {
             if ( !lcl_isOptionHidden( SID_SD_EDITOPTIONS, aOptionsDlgOpt ) )
             {
@@ -1832,8 +1840,7 @@ void OfaTreeOptionsDialog::Initialize()
     // Draw options
     if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
     {
-        SfxModule* pSdMod = ( *( SfxModule** ) GetAppData( SHL_DRAW ) );
-        if ( pSdMod && pSdMod->IsActive() && getCurrentFactory_Impl() == SvtModuleOptions::E_DRAW )
+        if ( eFactory == SvtModuleOptions::E_DRAW )
         {
             if ( !lcl_isOptionHidden( SID_SD_GRAPHIC_OPTIONS, aOptionsDlgOpt ) )
             {
@@ -1856,12 +1863,12 @@ void OfaTreeOptionsDialog::Initialize()
     // Math options
     if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SMATH ) )
     {
-        SfxModule* pSmMod = (*(SfxModule**) GetAppData(SHL_SM));
-        if ( pSmMod && pSmMod->IsActive() )
+        if ( SvtModuleOptions::E_MATH == eFactory )
         {
             if ( !lcl_isOptionHidden( SID_SM_EDITOPTIONS, aOptionsDlgOpt ) )
             {
                 ResStringArray& rStarMathArray = aDlgResource.GetStarMathArray();
+                SfxModule* pSmMod = (*(SfxModule**) GetAppData(SHL_SM));
                 nGroup = AddGroup(rStarMathArray.GetString(0), pSmMod, pSmMod, SID_SM_EDITOPTIONS );
                 for ( i = 1; i < rStarMathArray.Count(); ++i )
                 {
