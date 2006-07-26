@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgsave.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:26:32 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:48:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -289,7 +289,7 @@ IMPL_LINK(OSaveAsDlg, ButtonClickHdl, Button *, pButton)
 
         if ( m_nType == CommandType::TABLE )
         {
-            m_aName = ::dbtools::composeTableName(
+            sNameToCheck = ::dbtools::composeTableName(
                 m_xMetaData,
                 getCatalog(),
                 getSchema(),
