@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationcommandnode.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:40:32 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:30:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,89 +34,53 @@
  ************************************************************************/
 
 // must be first
-#include <canvas/debug.hxx>
-#include <canvas/verbosetrace.hxx>
+#include "canvas/debug.hxx"
+#include "canvas/verbosetrace.hxx"
+#include "com/sun/star/presentation/EffectCommands.hpp"
+#include "animationcommandnode.hxx"
+#include "delayevent.hxx"
+#include "tools.hxx"
+#include "nodetools.hxx"
 
-#ifndef _COM_SUN_STAR_PRESENTATION_EFFECTCOMMANDS_HPP_
-#include <com/sun/star/presentation/EffectCommands.hpp>
-#endif
+namespace presentation {
+namespace internal {
 
-#include <animationcommandnode.hxx>
-#include <delayevent.hxx>
-#include <tools.hxx>
-#include <nodetools.hxx>
-
-
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::presentation;
-
-namespace presentation
+void AnimationCommandNode::dispose()
 {
-    namespace internal
-    {
-        AnimationCommandNode::AnimationCommandNode( const uno::Reference< animations::XAnimationNode >& xNode,
-                                                const BaseContainerNodeSharedPtr&                   rParent,
-                                                const NodeContext&                                  rContext ) :
-            BaseNode( xNode, rParent, rContext ),
-            mxCommandNode( xNode, uno::UNO_QUERY_THROW )
-        {
-            ENSURE_AND_THROW( getContext().mxComponentContext.is(),
-                              "AnimationCommandNode::AnimationCommandNode(): Invalid component context" );
-        }
-
-        void AnimationCommandNode::dispose()
-        {
-            mxCommandNode.clear();
-            BaseNode::dispose();
-        }
-
-        bool AnimationCommandNode::activate()
-        {
-            if( !BaseNode::activate() )
-                return false;
-
-            switch( mxCommandNode->getCommand() )
-            {
-            // the command is user defined
-            case EffectCommands::CUSTOM: break;
-
-            // the command is an ole verb.
-            case EffectCommands::VERB: break;
-
-            // the command starts playing on a media object
-            case EffectCommands::PLAY: break;
-
-            // the command toggles the pause status on a media object
-            case EffectCommands::TOGGLEPAUSE: break;
-
-            // the command stops the animation on a media object
-            case EffectCommands::STOP: break;
-
-            // the command stops all currently running sound effects
-            case EffectCommands::STOPAUDIO:
-                getContext().mrEventMultiplexer.notifyCommandStopAudio( getSelf() );
-                break;
-            }
-
-            getContext().mrEventQueue.addEvent(
-                makeEvent( ::boost::bind(&BaseNode::deactivate,
-                                            ::boost::cref( getSelf() ) ) ) );
-            return true;
-        }
-
-        void AnimationCommandNode::deactivate()
-        {
-            BaseNode::deactivate();
-        }
-
-        void AnimationCommandNode::notifyDeactivating( const AnimationNodeSharedPtr& rNotifier )
-        {
-            // NO-OP for all leaf nodes (which typically don't register nowhere)
-        }
-
-        bool AnimationCommandNode::hasPendingAnimation() const
-        {
-            return false;
-        }
-    }
+    mxCommandNode.clear();
+    BaseNode::dispose();
 }
+
+void AnimationCommandNode::activate_()
+{
+    namespace EffectCommands = com::sun::star::presentation::EffectCommands;
+
+    switch( mxCommandNode->getCommand() ) {
+        // the command is user defined
+    case EffectCommands::CUSTOM: break;
+        // the command is an ole verb.
+    case EffectCommands::VERB: break;
+        // the command starts playing on a media object
+    case EffectCommands::PLAY: break;
+        // the command toggles the pause status on a media object
+    case EffectCommands::TOGGLEPAUSE: break;
+        // the command stops the animation on a media object
+    case EffectCommands::STOP: break;
+        // the command stops all currently running sound effects
+    case EffectCommands::STOPAUDIO:
+        getContext().mrEventMultiplexer.notifyCommandStopAudio( getSelf() );
+        break;
+    }
+
+    // deactivate ASAP:
+    scheduleDeactivationEvent(
+        makeEvent( boost::bind( &AnimationNode::deactivate, getSelf() ) ) );
+}
+
+bool AnimationCommandNode::hasPendingAnimation() const
+{
+    return false;
+}
+
+} // namespace internal
+} // namespace presentation
