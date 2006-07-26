@@ -4,9 +4,9 @@
  *
  *  $RCSfile: browserlistbox.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 09:24:18 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:52:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,7 +159,7 @@ namespace pcr
 
         void                        UpdateAll();
 
-        void                        Activate(sal_Bool _bActive = sal_True);
+        void                        ActivateListBox( sal_Bool _bActive );
 
         sal_uInt16                  CalcVisibleLines();
         void                        EnableUpdate();
@@ -244,6 +244,9 @@ namespace pcr
                 found.
         */
         bool        impl_getBrowserLineForName( const ::rtl::OUString& _rEntryName, BrowserLinePointer& _out_rpLine ) const;
+
+    private:
+        using Window::Activate;
     };
 
 //............................................................................
