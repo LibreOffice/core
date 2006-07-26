@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_draw.scp,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:25:47 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 09:12:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,7 @@ Module gid_Module_Prg_Draw_Bin
     Files = (gid_File_Exe_Sdraw,gid_File_Extra_Urldesktop_Draw,gid_File_Extra_Urlnew_Draw,gid_File_Extra_Urlstart_Draw,gid_File_Extra_Urltasks_Draw,gid_File_Share_Config_Sofficecfg_Draw_Menubar_Xml,
     gid_File_Registry_Spool_Oo_Common_Draw_Xcu,gid_File_Registry_Spool_Oo_Setup_Draw_Xcu, gid_File_Xdg_Draw,
     gid_File_Oo_Office_Ui_Drawwindowstate_Xcs,gid_File_Oo_Office_Ui_Drawwindowstate_Xcu,
+	gid_File_Registry_Spool_Oo_Office_Embedding_Draw_Xcu,
     gid_File_Registry_Spool_Oo_TypeDetection_Draw_Types_Xcu,gid_File_Registry_Spool_Oo_TypeDetection_Draw_Filters_Xcu, gid_File_Tmp_Userinstall_Draw_Inf);
 End
 
