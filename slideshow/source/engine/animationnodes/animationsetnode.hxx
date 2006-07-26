@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationsetnode.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:42:11 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:32:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,37 +32,35 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+#ifndef INCLUDED_SLIDESHOW_ANIMATIONSETNODE_HXX
+#define INCLUDED_SLIDESHOW_ANIMATIONSETNODE_HXX
 
-#ifndef _SLIDESHOW_ANIMATIONSETNODE_HXX
-#define _SLIDESHOW_ANIMATIONSETNODE_HXX
+#include "animationbasenode.hxx"
 
-#include <activityanimationbasenode.hxx>
+namespace presentation {
+namespace internal {
 
-namespace presentation
+class AnimationSetNode : public AnimationBaseNode
 {
-    namespace internal
-    {
-        class AnimationSetNode : public ActivityAnimationBaseNode
-        {
-        public:
-            AnimationSetNode( const ::com::sun::star::uno::Reference<
-                                      ::com::sun::star::animations::XAnimationNode >&   xNode,
-                              const BaseContainerNodeSharedPtr&                     rParent,
-                              const NodeContext&                                    rContext );
-
-            virtual bool init();
+public:
+    AnimationSetNode(
+        ::com::sun::star::uno::Reference<
+        ::com::sun::star::animations::XAnimationNode> const& xNode,
+        ::boost::shared_ptr<BaseContainerNode> const& pParent,
+        NodeContext const& rContext )
+        : AnimationBaseNode( xNode, pParent, rContext ) {}
 
 #if defined(VERBOSE) && defined(DBG_UTIL)
-            virtual const char* getDescription() const;
+    virtual const char* getDescription() const { return "AnimationSetNode"; }
 #endif
 
-        private:
-            void implScheduleDeactivationEvent() const;
-            AnimationActivitySharedPtr createSetActivity();
-        };
+private:
+    virtual AnimationActivitySharedPtr createActivity() const;
+    void implScheduleDeactivationEvent();
+};
 
-        typedef ::boost::shared_ptr< AnimationSetNode > AnimationSetNodeSharedPtr;
-    }
-}
+} // namespace internal
+} // namespace presentation
 
-#endif /* _SLIDESHOW_ANIMATIONSETNODE_HXX */
+#endif /* INCLUDED_SLIDESHOW_ANIMATIONSETNODE_HXX */
+
