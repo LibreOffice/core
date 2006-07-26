@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fanwipe.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:52:32 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:37:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,41 +46,29 @@ namespace internal {
 ::basegfx::B2DPolyPolygon FanWipe::operator () ( double t )
 {
     ::basegfx::B2DPolyPolygon res;
-    if (m_center) {
-        ::basegfx::B2DPolygon poly( ClockWipe::calcCenteredClock(
-                                        t / (m_single ? 2.0 : 4.0) ) );
-        res.append( poly );
-        // flip on y-axis:
-        ::basegfx::B2DHomMatrix aTransform;
-        aTransform.scale( -1.0, 1.0 );
-        poly.transform( aTransform );
-        poly.flip();
-        res.append( poly );
+    ::basegfx::B2DPolygon poly(
+        ClockWipe::calcCenteredClock(
+            t / ((m_center && m_single) ? 2.0 : 4.0) ) );
 
-        aTransform.identity();
+    res.append( poly );
+    // flip on y-axis:
+    ::basegfx::B2DHomMatrix aTransform;
+    aTransform.scale( -1.0, 1.0 );
+    poly.transform( aTransform );
+    poly.flip();
+    res.append( poly );
+    aTransform.identity();
+
+    if (m_center) {
         aTransform.scale( 0.5, 0.5 );
         aTransform.translate( 0.5, 0.5 );
         res.transform( aTransform );
 
-        if (! m_single) {
+        if (! m_single)
             res.append( flipOnXAxis(res) );
-            if (m_fanIn) {
-                // xxx todo
-            }
-        }
     }
     else {
-        OSL_ASSERT( !m_single && !m_fanIn );
-        ::basegfx::B2DPolygon poly( ClockWipe::calcCenteredClock( t / 4.0 ) );
-        res.append( poly );
-        // flip on y-axis:
-        ::basegfx::B2DHomMatrix aTransform;
-        aTransform.scale( -1.0, 1.0 );
-        poly.transform( aTransform );
-        poly.flip();
-        res.append( poly );
-
-        aTransform.identity();
+        OSL_ASSERT( ! m_fanIn );
         aTransform.scale( 0.5, 1.0 );
         aTransform.translate( 0.5, 1.0 );
         res.transform( aTransform );
@@ -91,21 +79,3 @@ namespace internal {
 }
 }
 
-// xxx todo: tests
-//     switch (n % 4) {
-//     case 0:
-//         nType = DOUBLEFANWIPE;
-//         nSubType = FANOUTVERTICAL;
-//         break;
-//     case 1:
-//         nType = DOUBLEFANWIPE;
-//         nSubType = FANOUTHOR
-//         break;
-//     case 2:
-//         nType = DOUBLEFANWIPE;
-//         nSubType = FANINVERTICAL;
-//         break;
-//     case 3:
-//         nType = DOUBLEFANWIPE;
-//         nSubType = FANINHORIZONTAL;
-//         break;
