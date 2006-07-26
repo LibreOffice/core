@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 21:21:37 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:28:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1341,6 +1341,7 @@ void TransferableDataHelper::FillDataFlavorExVector( const Sequence< DataFlavor 
 
 void TransferableDataHelper::InitFormats()
 {
+    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     ::osl::MutexGuard aGuard( mpImpl->maMutex );
 
     mpFormats->clear();
