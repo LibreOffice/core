@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basenode.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 08:43:44 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:35:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,19 +32,19 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifndef INCLUDED_SLIDESHOW_BASENODE_HXX
 #define INCLUDED_SLIDESHOW_BASENODE_HXX
 
+#include "canvas/debug.hxx"
+#include "osl/diagnose.hxx"
 #include "animationnode.hxx"
 #include "slideshowcontext.hxx"
 #include "shapesubset.hxx"
+#include "boost/noncopyable.hpp"
 #include <vector>
 
 namespace presentation {
 namespace internal {
-
-typedef int StateTransitionTable[17];
 
 /** Context for every node.
 
@@ -83,13 +83,15 @@ class BaseContainerNode;
 /** This interface extends AnimationNode with some
     file-private accessor methods.
 */
-class BaseNode : public AnimationNode
+class BaseNode : public AnimationNode,
+                 private ::osl::DebugBase<BaseNode>,
+                 private ::boost::noncopyable
 {
 public:
-    BaseNode( const ::com::sun::star::uno::Reference<
-              ::com::sun::star::animations::XAnimationNode >&     xNode,
-              const ::boost::shared_ptr< BaseContainerNode >&     rParent,
-              const NodeContext&                                  rContext );
+    BaseNode( ::com::sun::star::uno::Reference<
+              ::com::sun::star::animations::XAnimationNode> const& xNode,
+              ::boost::shared_ptr<BaseContainerNode> const& pParent,
+              NodeContext const& rContext );
 
     /** Provide the node with a shared_ptr to itself.
 
@@ -100,24 +102,6 @@ public:
     */
     void setSelf( const ::boost::shared_ptr< BaseNode >& rSelf );
 
-    // Disposable interface
-    // --------------------
-
-    virtual void dispose();
-
-    // Implemented subset of AnimationNode interface
-    // ---------------------------------------------
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::animations::XAnimationNode> getXAnimationNode() const;
-
-    virtual bool init();
-    virtual bool resolve();
-    virtual bool activate();
-    virtual void deactivate();
-    virtual void end();
-    virtual NodeState getState() const;
-    virtual bool registerDeactivatingListener(
-        const AnimationNodeSharedPtr& rNotifee );
 
 #if defined(VERBOSE) && defined(DBG_UTIL)
     virtual void showState() const;
@@ -128,40 +112,57 @@ public:
     const ::boost::shared_ptr< BaseContainerNode >& getParentNode() const
         { return mpParent; }
 
-protected:
-    // inline accessors
-    // ----------------
+    // Disposable:
+    virtual void dispose();
 
-    const SlideShowContext& getContext() const { return maContext; }
-    const ::boost::shared_ptr< BaseNode >& getSelf() const { return mpSelf; }
-    const ::com::sun::star::uno::Reference<
-        ::com::sun::star::animations::XAnimationNode >& getXNode() const
-        { return mxNode; }
+    // AnimationNode:
+    virtual bool init();
+    virtual bool resolve();
+    virtual bool activate();
+    virtual void deactivate();
+    virtual void end();
+    virtual ::com::sun::star::uno::Reference<
+        ::com::sun::star::animations::XAnimationNode> getXAnimationNode() const;
+    virtual NodeState getState() const;
+    virtual bool registerDeactivatingListener(
+        const AnimationNodeSharedPtr& rNotifee );
+    // nop:
+    virtual void notifyDeactivating( const AnimationNodeSharedPtr& rNotifier );
+
+protected:
+    void scheduleDeactivationEvent( EventSharedPtr const& pEvent =
+                                    EventSharedPtr() );
+
+    SlideShowContext const& getContext() const { return maContext; }
+
+    ::boost::shared_ptr<BaseNode> const& getSelf() const { return mpSelf; }
 
     bool isMainSequenceRootNode() const { return mbIsMainSequenceRootNode; }
 
-    /** Schedule event that activates the node, once it is resolved
-
-        You can override this method in derived
-        classes. AnimateBaseNode does it to implement its
-        fixed delay
-    */
-    virtual void scheduleActivationEvent();
-
-    /** Schedule event that deactivates the node, once it is active
-
-        You can override this method in derived classes.
-    */
-    virtual void scheduleDeactivationEvent() const;
+    bool checkValidNode() const {
+        ENSURE_AND_THROW( mpSelf, "no self ptr set!" );
+        bool const bRet = (meCurrState != INVALID);
+        OSL_ENSURE( bRet, "### INVALID node!" );
+        return bRet;
+    }
 
 private:
+    // all state affecting methods have "_st" counterparts being called at
+    // derived classes when in state transistion: no-ops here at BaseNode...
+    virtual bool init_st();
+    virtual bool resolve_st();
+    virtual void activate_st();
+    virtual void deactivate_st( NodeState eDestState );
 
-    /** Get the default fill mode.
+private:
+    /// notifies
+    /// - all registered deactivation listeners
+    /// - single animation end (every node)
+    /// - slide animations (if main sequence root node)
+    void notifyEndListeners() const;
 
-        If this node's default mode is AnimationFill::DEFAULT,
-        this method recursively calls the parent node.
-    */
-    sal_Int16 getFillDefaultMode() const;
+    /// Get the node's restart mode
+    sal_Int16 getRestartMode();
 
     /** Get the default restart mode
 
@@ -171,11 +172,30 @@ private:
     */
     sal_Int16 getRestartDefaultMode() const;
 
-    /// Get the node's restart mode
-    sal_Int16 getRestartMode();
-
     /// Get the node's fill mode
     sal_Int16 getFillMode();
+
+    /** Get the default fill mode.
+
+        If this node's default mode is AnimationFill::DEFAULT,
+        this method recursively calls the parent node.
+    */
+    sal_Int16 getFillDefaultMode() const;
+
+    bool isTransition( NodeState eFromState, NodeState eToState,
+                       bool debugAssert = true ) const {
+        bool const bRet =((mpStateTransitionTable[eFromState] & eToState) != 0);
+        OSL_ENSURE( !debugAssert || bRet, "### state unreachable!" );
+        return bRet;
+    }
+
+    bool inStateOrTransition( int mask ) const {
+        return ((meCurrState & mask) != 0 ||
+                (meCurrentStateTransition & mask) != 0);
+    }
+
+    class StateTransition;
+    friend class StateTransition;
 
 private:
     SlideShowContext                                   maContext;
@@ -184,12 +204,14 @@ private:
 
     ListenerVector                                     maDeactivatingListeners;
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::animations::XAnimationNode > mxNode;
+        ::com::sun::star::animations::XAnimationNode > mxAnimationNode;
     ::boost::shared_ptr< BaseContainerNode >           mpParent;
     ::boost::shared_ptr< BaseNode >                    mpSelf;
     const int*                                         mpStateTransitionTable;
     const double                                       mnStartDelay;
-    AnimationNode::NodeState                           meCurrState;
+    NodeState                                          meCurrState;
+    int                                                meCurrentStateTransition;
+    EventSharedPtr                                     mpCurrentEvent;
     const bool                                         mbIsMainSequenceRootNode;
 };
 
