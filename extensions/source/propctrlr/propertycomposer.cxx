@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertycomposer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 12:20:23 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:59:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -328,12 +328,12 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL PropertyComposer::describePropertyLine( const ::rtl::OUString& _rPropertyName,
-        LineDescriptor& /* [out] */ _rDescriptor, const Reference< XPropertyControlFactory >& _rxControlFactory )
+    LineDescriptor SAL_CALL PropertyComposer::describePropertyLine( const ::rtl::OUString& _rPropertyName,
+        const Reference< XPropertyControlFactory >& _rxControlFactory )
         throw (UnknownPropertyException, NullPointerException, RuntimeException)
     {
         MethodGuard aGuard( *this );
-        m_aSlaveHandlers[0]->describePropertyLine( _rPropertyName, _rDescriptor, _rxControlFactory );
+        return m_aSlaveHandlers[0]->describePropertyLine( _rPropertyName, _rxControlFactory );
     }
 
     //--------------------------------------------------------------------
@@ -367,9 +367,10 @@ namespace pcr
         case InteractiveSelectionResult_Cancelled:
             // fine
             break;
+
         case InteractiveSelectionResult_Success:
         case InteractiveSelectionResult_Pending:
-            OSL_ENSURE( false, "PropertyComposer::onInteractivePropertySelection: not chance to forward the new value to the other handlers!" );
+            OSL_ENSURE( false, "PropertyComposer::onInteractivePropertySelection: no chance to forward the new value to the other handlers!" );
             // This means that we cannot know the new property value, which either has already been set
             // at the first component ("Success"), or will be set later on once the asynchronous input
             // is finished ("Pending"). So, we also cannot forward this new property value to the other
@@ -379,9 +380,14 @@ namespace pcr
             // property UI.
             eResult = InteractiveSelectionResult_Cancelled;
             break;
+
         case InteractiveSelectionResult_ObtainedValue:
             // OK. Our own caller will pass this as setPropertyValue, and we will then pass it to
             // all slave handlers
+            break;
+
+        default:
+            OSL_ENSURE( false, "OPropertyBrowserController::onInteractivePropertySelection: unknown result value!" );
             break;
         }
 
