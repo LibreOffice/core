@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationcommandnode.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:40:48 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:31:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,52 +32,46 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+#ifndef INCLUDED_SLIDESHOW_ANIMATIONCOMMANDNODE_HXX
+#define INCLUDED_SLIDESHOW_ANIMATIONCOMMANDNODE_HXX
 
-#ifndef _SLIDESHOW_ANIMATIONCOMMANDNODE_HXX
-#define _SLIDESHOW_ANIMATIONCOMMANDNODE_HXX
+#include "basecontainernode.hxx"
+#include "soundplayer.hxx"
+#include "com/sun/star/animations/XCommand.hpp"
 
-#include <basecontainernode.hxx>
-#include <soundplayer.hxx>
+namespace presentation {
+namespace internal {
 
-#ifndef _COM_SUN_STAR_ANIMATIONS_XCOMMAND_HPP_
-#include <com/sun/star/animations/XCommand.hpp>
-#endif
+/** Command node.
 
-using namespace ::com::sun::star;
-
-namespace presentation
+    TODO
+    This animation node contains a command.  Currently the only implemented
+    command, is STOPAUDIO.
+*/
+class AnimationCommandNode : public BaseNode
 {
-    namespace internal
-    {
-        /** Audio node.
+public:
+    AnimationCommandNode(
+        ::com::sun::star::uno::Reference<
+        ::com::sun::star::animations::XAnimationNode> const& xNode,
+        ::boost::shared_ptr<BaseContainerNode> const& pParent,
+        NodeContext const& rContext )
+        : BaseNode( xNode, pParent, rContext ),
+          mxCommandNode( xNode, ::com::sun::star::uno::UNO_QUERY_THROW ) {}
 
-            This animation node contains an audio effect. Duration and
-            start/stop behaviour is affected by the referenced audio
-            file.
-        */
-        class AnimationCommandNode : public BaseNode
-        {
-        public:
-            AnimationCommandNode( const ::com::sun::star::uno::Reference<
-                                    ::com::sun::star::animations::XAnimationNode >& xNode,
-                                const BaseContainerNodeSharedPtr&                   rParent,
-                                const NodeContext&                                  rContext );
+protected:
+    virtual void dispose();
 
-            virtual void dispose();
-            virtual bool activate();
-            virtual void deactivate();
+private:
+    virtual void activate_();
+    virtual bool hasPendingAnimation() const;
 
-            /// overridden, because NO-OP for all leaf nodes (which typically don't register nowhere)
-            virtual void notifyDeactivating( const AnimationNodeSharedPtr& rNotifier );
+private:
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::animations::XCommand > mxCommandNode;
+};
 
-            virtual bool hasPendingAnimation() const;
+} // namespace internal
+} // namespace presentation
 
-        private:
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::animations::XCommand > mxCommandNode;
-        };
-
-    }
-}
-
-#endif /* _SLIDESHOW_ANIMATIONAUDIONODE_HXX */
+#endif /* INCLUDED_SLIDESHOW_ANIMATIONAUDIONODE_HXX */
