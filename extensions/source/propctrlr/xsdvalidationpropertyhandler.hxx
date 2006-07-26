@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xsdvalidationpropertyhandler.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:35:25 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 08:02:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,8 @@ namespace pcr
                                             SAL_CALL getSupersededProperties( ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >
                                             SAL_CALL getActuatingProperties( ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void                        SAL_CALL describePropertyLine( const ::rtl::OUString& _rPropertyName, ::com::sun::star::inspection::LineDescriptor& /* [out] */ _rDescriptor, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlFactory >& _rxControlFactory ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::inspection::LineDescriptor
+                                            SAL_CALL describePropertyLine( const ::rtl::OUString& _rPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlFactory >& _rxControlFactory ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::inspection::InteractiveSelectionResult
                                             SAL_CALL onInteractivePropertySelection( const ::rtl::OUString& _rPropertyName, sal_Bool _bPrimary, ::com::sun::star::uno::Any& _rData, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorUI >& _rxInspectorUI ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException);
         virtual void                        SAL_CALL actuatingPropertyChanged( const ::rtl::OUString& _rActuatingPropertyName, const ::com::sun::star::uno::Any& _rNewValue, const ::com::sun::star::uno::Any& _rOldValue, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorUI >& _rxInspectorUI, sal_Bool ) throw (::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException);

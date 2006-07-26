@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xsdvalidationpropertyhandler.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:35:13 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 08:02:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -353,8 +353,8 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL XSDValidationPropertyHandler::describePropertyLine( const ::rtl::OUString& _rPropertyName,
-        LineDescriptor& /* [out] */ _rDescriptor, const Reference< XPropertyControlFactory >& _rxControlFactory )
+    LineDescriptor SAL_CALL XSDValidationPropertyHandler::describePropertyLine( const ::rtl::OUString& _rPropertyName,
+        const Reference< XPropertyControlFactory >& _rxControlFactory )
         throw (UnknownPropertyException, NullPointerException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -365,8 +365,9 @@ namespace pcr
 
         PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
 
+        LineDescriptor aDescriptor;
         if ( nPropId != PROPERTY_ID_XSD_DATA_TYPE )
-            _rDescriptor.IndentLevel = 1;
+            aDescriptor.IndentLevel = 1;
 
         // collect some information about the to-be-created control
         sal_Int16 nControlType = PropertyControlType::TextField;
@@ -381,14 +382,14 @@ namespace pcr
 
             implGetAvailableDataTypeNames( aListEntries );
 
-            _rDescriptor.PrimaryButtonId = UID_PROP_ADD_DATA_TYPE;
-            _rDescriptor.SecondaryButtonId = UID_PROP_REMOVE_DATA_TYPE;
+            aDescriptor.PrimaryButtonId = UID_PROP_ADD_DATA_TYPE;
+            aDescriptor.SecondaryButtonId = UID_PROP_REMOVE_DATA_TYPE;
             {
                 PcrRes aResId( RID_RSC_BUTTON_IMAGES );
                 ::svt::OLocalResourceAccess aEnumStrings( aResId, RSC_RESOURCE );
-                _rDescriptor.HasPrimaryButton = _rDescriptor.HasSecondaryButton = sal_True;
-                _rDescriptor.PrimaryButtonImage = Image( ResId( IMG_PLUS ) ).GetXGraphic();
-                _rDescriptor.SecondaryButtonImage = Image( ResId( IMG_MINUS ) ).GetXGraphic();
+                aDescriptor.HasPrimaryButton = aDescriptor.HasSecondaryButton = sal_True;
+                aDescriptor.PrimaryButtonImage = Image( ResId( IMG_PLUS ) ).GetXGraphic();
+                aDescriptor.SecondaryButtonImage = Image( ResId( IMG_MINUS ) ).GetXGraphic();
             }
             break;
 
@@ -474,23 +475,25 @@ namespace pcr
         switch ( nControlType )
         {
         case PropertyControlType::ListBox:
-            _rDescriptor.Control = PropertyHandlerHelper::createListBoxControl( _rxControlFactory, aListEntries, sal_False );
+            aDescriptor.Control = PropertyHandlerHelper::createListBoxControl( _rxControlFactory, aListEntries, sal_False );
             break;
         case PropertyControlType::NumericField:
-            _rDescriptor.Control = PropertyHandlerHelper::createNumericControl( _rxControlFactory, 0, aMinValue, aMaxValue, sal_False );
+            aDescriptor.Control = PropertyHandlerHelper::createNumericControl( _rxControlFactory, 0, aMinValue, aMaxValue, sal_False );
             break;
         default:
-            _rDescriptor.Control = _rxControlFactory->createPropertyControl( nControlType, sal_False );
+            aDescriptor.Control = _rxControlFactory->createPropertyControl( nControlType, sal_False );
             break;
         }
 
-        _rDescriptor.Category = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Data" ) );
-        _rDescriptor.DisplayName = m_pInfoService->getPropertyTranslation( nPropId );
-        _rDescriptor.HelpURL = HelpIdUrl::getHelpURL( m_pInfoService->getPropertyHelpId( nPropId ) );
+        aDescriptor.Category = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Data" ) );
+        aDescriptor.DisplayName = m_pInfoService->getPropertyTranslation( nPropId );
+        aDescriptor.HelpURL = HelpIdUrl::getHelpURL( m_pInfoService->getPropertyHelpId( nPropId ) );
+
+        return aDescriptor;
     }
 
     //--------------------------------------------------------------------
-    InteractiveSelectionResult SAL_CALL XSDValidationPropertyHandler::onInteractivePropertySelection( const ::rtl::OUString& _rPropertyName, sal_Bool _bPrimary, Any& _rData, const Reference< XObjectInspectorUI >& _rxInspectorUI ) throw (UnknownPropertyException, NullPointerException, RuntimeException)
+    InteractiveSelectionResult SAL_CALL XSDValidationPropertyHandler::onInteractivePropertySelection( const ::rtl::OUString& _rPropertyName, sal_Bool _bPrimary, Any& /*_rData*/, const Reference< XObjectInspectorUI >& _rxInspectorUI ) throw (UnknownPropertyException, NullPointerException, RuntimeException)
     {
         if ( !_rxInspectorUI.is() )
             throw NullPointerException();
@@ -643,7 +646,6 @@ namespace pcr
         case PROPERTY_ID_XSD_DATA_TYPE:
         {
             ::rtl::Reference< XSDDataType > xDataType( m_pHelper->getValidatingDataType() );
-            sal_Int16 nTypeClass = xDataType.is() ? xDataType->classify() : DataTypeClass::STRING;
 
             // is removal of this type possible?
             sal_Bool bIsBasicType = xDataType.is() && xDataType->isBasicType();
