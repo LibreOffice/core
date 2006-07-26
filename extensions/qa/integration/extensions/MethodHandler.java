@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MethodHandler.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 12:17:41 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:51:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,24 +102,27 @@ public class MethodHandler implements XPropertyHandler
         return _controlValue;
     }
 
-    public void describePropertyLine(String _propertyName, com.sun.star.inspection.LineDescriptor[] _lineDescriptor, com.sun.star.inspection.XPropertyControlFactory _propertyControlFactory) throws com.sun.star.beans.UnknownPropertyException, com.sun.star.lang.NullPointerException
+    public com.sun.star.inspection.LineDescriptor describePropertyLine(String _propertyName, com.sun.star.inspection.XPropertyControlFactory _propertyControlFactory) throws com.sun.star.beans.UnknownPropertyException, com.sun.star.lang.NullPointerException
     {
-        _lineDescriptor[0] = new LineDescriptor();
-        _lineDescriptor[0].Category = "Methods";
-        _lineDescriptor[0].DisplayName = "has method";
-        _lineDescriptor[0].HasPrimaryButton = _lineDescriptor[0].HasSecondaryButton = false;
-        _lineDescriptor[0].IndentLevel = 0;
+        com.sun.star.inspection.LineDescriptor descriptor = new com.sun.star.inspection.LineDescriptor();
+
+        descriptor = new LineDescriptor();
+        descriptor.Category = "Methods";
+        descriptor.DisplayName = "has method";
+        descriptor.HasPrimaryButton = descriptor.HasSecondaryButton = false;
+        descriptor.IndentLevel = 0;
         try
         {
             XPropertyControl control = (XPropertyControl)UnoRuntime.queryInterface(
                     XPropertyControl.class, _propertyControlFactory.createPropertyControl(
                     PropertyControlType.TextField, true ) );
 
-            _lineDescriptor[0].Control = control;
+            descriptor.Control = control;
         }
         catch( com.sun.star.lang.IllegalArgumentException e )
         {
         }
+        return descriptor;
     }
 
     public void dispose()
