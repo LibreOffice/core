@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:58:41 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 12:18:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -458,6 +458,9 @@ void SwBaseShell::ExecDelete(SfxRequest &rReq)
             return;
     }
     rReq.Done();
+
+    //#i42732# - notify the edit window that from now on we do not use the input language
+    GetView().GetEditWin().SetUseInputLanguage( sal_False );
 }
 
 /*--------------------------------------------------------------------
@@ -2124,7 +2127,7 @@ void SwBaseShell::ExecTxtCtrl( SfxRequest& rReq )
             case SID_ATTR_CHAR_FONT:
             {
                 nScripts = rSh.GetScriptType();
-                // #42732# input language should be preferred over
+                // #i42732# input language should be preferred over
                 // current cursor position to detect script type
                 if(!rSh.HasSelection())
                 {
@@ -2252,15 +2255,19 @@ void SwBaseShell::GetTxtFontCtrlState( SfxItemSet& rSet )
                                     RES_CHRATR_BEGIN, RES_CHRATR_END-1 );
                     rSh.GetAttr( *pFntCoreSet );
                     nScriptType = rSh.GetScriptType();
-                    // #42732# input language should be preferred over
+                    // #i42732# input language should be preferred over
                     // current cursor position to detect script type
-                    if(!rSh.HasSelection() && (
-                        nWhich == RES_CHRATR_FONT ||
-                        nWhich == RES_CHRATR_FONTSIZE ))
+                    SwEditWin& rEditWin = GetView().GetEditWin();
+                    if( rEditWin.IsUseInputLanguage() )
                     {
-                        LanguageType nInputLang = GetView().GetEditWin().GetInputLanguage();
-                        if(nInputLang != LANGUAGE_DONTKNOW && nInputLang != LANGUAGE_SYSTEM)
-                            nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( nInputLang );
+                        if(!rSh.HasSelection() && (
+                            nWhich == RES_CHRATR_FONT ||
+                            nWhich == RES_CHRATR_FONTSIZE ))
+                        {
+                            LanguageType nInputLang = rEditWin.GetInputLanguage();
+                            if(nInputLang != LANGUAGE_DONTKNOW && nInputLang != LANGUAGE_SYSTEM)
+                                nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( nInputLang );
+                        }
                     }
                 }
                 SfxItemPool& rPool = *rSet.GetPool();
