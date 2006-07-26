@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationtransitionfilternode.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:42:57 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:33:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,64 +34,29 @@
  ************************************************************************/
 
 // must be first
-#include <canvas/debug.hxx>
-#include <canvas/verbosetrace.hxx>
+#include "canvas/debug.hxx"
+#include "canvas/verbosetrace.hxx"
+#include "animationtransitionfilternode.hxx"
+#include "transitionfactory.hxx"
 
-#include <animationtransitionfilternode.hxx>
-#include <transitionfactory.hxx>
+namespace presentation {
+namespace internal {
 
-
-using namespace ::com::sun::star;
-
-namespace presentation
+void AnimationTransitionFilterNode::dispose()
 {
-    namespace internal
-    {
-        AnimationTransitionFilterNode::AnimationTransitionFilterNode( const uno::Reference< animations::XAnimationNode >&   xNode,
-                                                                      const BaseContainerNodeSharedPtr&                     rParent,
-                                                                      const NodeContext&                                    rContext ) :
-            ActivityAnimationBaseNode( xNode, rParent, rContext ),
-            mxTransitionFilterNode( xNode, uno::UNO_QUERY_THROW )
-        {
-        }
-
-        void AnimationTransitionFilterNode::dispose()
-        {
-            mxTransitionFilterNode.clear();
-
-            ActivityAnimationBaseNode::dispose();
-        }
-
-        bool AnimationTransitionFilterNode::init()
-        {
-            if( !ActivityAnimationBaseNode::init() )
-                return false;
-
-            try
-            {
-                // TODO(F2): For restart functionality, we must regenerate activities,
-                // since they are not able to reset their state (or implement _that_)
-                getActivity() =
-                    TransitionFactory::createShapeTransition( fillCommonParameters(),
-                                                              getShape(),
-                                                              getContext().mpLayerManager,
-                                                              mxTransitionFilterNode );
-            }
-            catch( uno::Exception& )
-            {
-                // catch and ignore. We later handle empty activities, but for
-                // other nodes to function properly, the core functionality of
-                // this node must remain up and running.
-            }
-
-            return true;
-        }
-
-#if defined(VERBOSE) && defined(DBG_UTIL)
-        const char* AnimationTransitionFilterNode::getDescription() const
-        {
-            return "AnimationTransitionFilterNode";
-        }
-#endif
-    }
+    mxTransitionFilterNode.clear();
+    AnimationBaseNode::dispose();
 }
+
+AnimationActivitySharedPtr
+AnimationTransitionFilterNode::createActivity() const
+{
+    return TransitionFactory::createShapeTransition(
+        fillCommonParameters(),
+        getShape(),
+        getContext().mpLayerManager,
+        mxTransitionFilterNode );
+}
+
+} // namespace internal
+} // namespace presentation

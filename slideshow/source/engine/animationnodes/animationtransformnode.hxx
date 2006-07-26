@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationtransformnode.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:42:41 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:33:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,42 +33,42 @@
  *
  ************************************************************************/
 
-#ifndef _SLIDESHOW_ANIMATIONTRANSFORMNODE_HXX
-#define _SLIDESHOW_ANIMATIONTRANSFORMNODE_HXX
+#ifndef INCLUDED_SLIDESHOW_ANIMATIONTRANSFORMNODE_HXX
+#define INCLUDED_SLIDESHOW_ANIMATIONTRANSFORMNODE_HXX
 
-#include <activityanimationbasenode.hxx>
+#include "animationbasenode.hxx"
+#include "com/sun/star/animations/XAnimateTransform.hpp"
 
-#ifndef _COM_SUN_STAR_ANIMATIONS_XANIMATETRANSFORM_HPP_
-#include <com/sun/star/animations/XAnimateTransform.hpp>
-#endif
+namespace presentation {
+namespace internal {
 
-
-namespace presentation
+class AnimationTransformNode : public AnimationBaseNode
 {
-    namespace internal
-    {
-        class AnimationTransformNode : public ActivityAnimationBaseNode
-        {
-        public:
-            AnimationTransformNode( const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::animations::XAnimationNode >& xNode,
-                                    const BaseContainerNodeSharedPtr&                   rParent,
-                                    const NodeContext&                                  rContext );
-
-            virtual void dispose();
-            virtual bool init();
+public:
+    AnimationTransformNode(
+        ::com::sun::star::uno::Reference<
+        ::com::sun::star::animations::XAnimationNode> const& xNode,
+        ::boost::shared_ptr<BaseContainerNode> const& pParent,
+        NodeContext const& rContext )
+        : AnimationBaseNode( xNode, pParent, rContext ),
+          mxTransformNode( xNode, ::com::sun::star::uno::UNO_QUERY_THROW ) {}
 
 #if defined(VERBOSE) && defined(DBG_UTIL)
-            virtual const char* getDescription() const;
+    virtual const char* getDescription() const
+        { return "AnimationTransformNode"; }
 #endif
 
-        private:
-            AnimationActivitySharedPtr createTransformActivity();
+protected:
+    virtual void dispose();
 
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::animations::XAnimateTransform >   mxTransformNode;
-        };
-    }
-}
+private:
+    virtual AnimationActivitySharedPtr createActivity() const;
 
-#endif /* _SLIDESHOW_ANIMATIONTRANSFORMNODE_HXX */
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::animations::XAnimateTransform >   mxTransformNode;
+};
+
+} // namespace internal
+} // namespace presentation
+
+#endif /* INCLUDED_SLIDESHOW_ANIMATIONTRANSFORMNODE_HXX */

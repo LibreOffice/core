@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationtransitionfilternode.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:43:11 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:33:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,40 +33,43 @@
  *
  ************************************************************************/
 
-#ifndef _SLIDESHOW_ANIMATIONTRANSITIONFILTERNODE_HXX
-#define _SLIDESHOW_ANIMATIONTRANSITIONFILTERNODE_HXX
+#ifndef INCLUDED_SLIDESHOW_ANIMATIONTRANSITIONFILTERNODE_HXX
+#define INCLUDED_SLIDESHOW_ANIMATIONTRANSITIONFILTERNODE_HXX
 
-#include <activityanimationbasenode.hxx>
+#include "animationbasenode.hxx"
+#include "com/sun/star/animations/XTransitionFilter.hpp"
 
-#ifndef _COM_SUN_STAR_ANIMATIONS_XTRANSITIONFILTER_HPP_
-#include <com/sun/star/animations/XTransitionFilter.hpp>
-#endif
+namespace presentation {
+namespace internal {
 
-
-namespace presentation
+class AnimationTransitionFilterNode : public AnimationBaseNode
 {
-    namespace internal
-    {
-        class AnimationTransitionFilterNode : public ActivityAnimationBaseNode
-        {
-        public:
-            AnimationTransitionFilterNode( const ::com::sun::star::uno::Reference<
-                                               ::com::sun::star::animations::XAnimationNode >&  xNode,
-                                           const BaseContainerNodeSharedPtr&                rParent,
-                                           const NodeContext&                               rContext );
+public:
+    AnimationTransitionFilterNode(
+        ::com::sun::star::uno::Reference<
+        ::com::sun::star::animations::XAnimationNode> const& xNode,
+        ::boost::shared_ptr<BaseContainerNode> const& pParent,
+        NodeContext const& rContext )
+        : AnimationBaseNode( xNode, pParent, rContext ),
+          mxTransitionFilterNode( xNode, ::com::sun::star::uno::UNO_QUERY_THROW)
+        {}
 
-            virtual void dispose();
-            virtual bool init();
-
-#if defined(VERBOSE) && defined(DBG_UTIL)
-            virtual const char* getDescription() const;
+#if defined(VERBOSE)
+    virtual const char* getDescription() const
+        { return "AnimationTransitionFilterNode"; }
 #endif
 
-        private:
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::animations::XTransitionFilter >   mxTransitionFilterNode;
-        };
-    }
-}
+protected:
+    virtual void dispose();
 
-#endif /* _SLIDESHOW_ANIMATIONTRANSITIONFILTERNODE_HXX */
+private:
+    virtual AnimationActivitySharedPtr createActivity() const;
+
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::animations::XTransitionFilter> mxTransitionFilterNode;
+};
+
+} // namespace internal
+} // namespace presentation
+
+#endif /* INCLUDED_SLIDESHOW_ANIMATIONTRANSITIONFILTERNODE_HXX */
