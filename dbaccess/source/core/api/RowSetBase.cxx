@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:03:37 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:45:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -284,8 +284,22 @@ const ORowSetValue& ORowSetBase::getValue(sal_Int32 columnIndex)
 #if OSL_DEBUG_LEVEL > 0
         ORowSetMatrix::iterator aCacheEnd = m_pCache->getEnd();
         ORowSetMatrix::iterator aCurrentRow = m_aCurrentRow;
+        ORowSetCacheMap::iterator aCacheIter = m_aCurrentRow.getIter();
+        sal_Int32 n = aCacheIter->first;
+        n = n;
+        ORowSetCacheIterator_Helper aHelper = aCacheIter->second;
+        ORowSetMatrix::iterator k = aHelper.aIterator;
+        for (; k != m_pCache->getEnd(); ++k)
+        {
+            ORowSetValueVector* pTemp = k->getBodyPtr();
+            OSL_ENSURE( pTemp != (void*)0xfeeefeee,"HALT!" );
+        }
 #endif
-        OSL_ENSURE(!m_aCurrentRow.isNull() && m_aCurrentRow <= m_pCache->getEnd(),"Invalid iterator set for currentrow!");
+        OSL_ENSURE(!m_aCurrentRow.isNull() && m_aCurrentRow < m_pCache->getEnd() && aCacheIter != m_pCache->m_aCacheIterators.end(),"Invalid iterator set for currentrow!");
+#if OSL_DEBUG_LEVEL > 0
+        ORowSetRow rRow = (*m_aCurrentRow);
+        OSL_ENSURE(rRow.isValid() && static_cast<sal_uInt16>(columnIndex) < (*rRow).size(),"Invalid size of vector!");
+#endif
         return (*(*m_aCurrentRow))[m_nLastColumnIndex = columnIndex];
     }
 
@@ -1086,7 +1100,10 @@ void ORowSetBase::setCurrentRow( sal_Bool _bMoved, sal_Bool _bDoNotify, const OR
         OSL_ENSURE(nOldRow == nNewRow,"Old position is not equal to new postion");
         m_aCurrentRow   = m_pCache->m_aMatrixIter;
         OSL_ENSURE(!m_aCurrentRow.isNull(),"CurrentRow is nul after positionCache!");
-
+#if OSL_DEBUG_LEVEL > 0
+        ORowSetRow rRow = (*m_aCurrentRow);
+        OSL_ENSURE(rRow.isValid() ,"Invalid size of vector!");
+#endif
         // the cache could repositioned so we need to adjust the cache
         // #104144# OJ
         if ( _bMoved && m_aCurrentRow.isNull() )
