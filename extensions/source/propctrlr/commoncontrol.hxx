@@ -4,9 +4,9 @@
  *
  *  $RCSfile: commoncontrol.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-17 09:47:13 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:54:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,9 @@
 #ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
 #endif
+
+#pragma warning (disable:4505)
+    // "unreferenced local function has been removed"
 
 class NotifyEvent;
 //............................................................................
@@ -147,6 +150,8 @@ namespace pcr
             sal_Int16 _nControlType,
             ::com::sun::star::inspection::XPropertyControl& _rAntiImpl,
             IModifyListener* _pModifyListener );
+
+        virtual ~ControlHelper();
 
         /** sets our "modified" flag to <TRUE/>
         */
