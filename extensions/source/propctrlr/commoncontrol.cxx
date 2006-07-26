@@ -4,9 +4,9 @@
  *
  *  $RCSfile: commoncontrol.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:19:23 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:54:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,6 +76,11 @@ namespace pcr
         ,m_bModified( sal_False )
     {
         DBG_ASSERT( m_pControlWindow != NULL, "ControlHelper::ControlHelper: invalid window!" );
+    }
+
+    //------------------------------------------------------------------
+    ControlHelper::~ControlHelper()
+    {
     }
 
     //--------------------------------------------------------------------
@@ -193,7 +198,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    IMPL_LINK( ControlHelper, ModifiedHdl, Window*, _pWin )
+    IMPL_LINK( ControlHelper, ModifiedHdl, Window*, /*_pWin*/ )
     {
         if ( m_pModifyListener )
             m_pModifyListener->modified();
@@ -201,7 +206,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    IMPL_LINK( ControlHelper, GetFocusHdl, Window*, _pWin )
+    IMPL_LINK( ControlHelper, GetFocusHdl, Window*, /*_pWin*/ )
     {
         try
         {
@@ -223,7 +228,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    IMPL_LINK( ControlHelper, LoseFocusHdl, Window*, _pWin )
+    IMPL_LINK( ControlHelper, LoseFocusHdl, Window*, /*_pWin*/ )
     {
         // TODO/UNOize: should this be outside the default control's implementations? If somebody
         // has an own control implementation, which does *not* do this - would this be allowed?
