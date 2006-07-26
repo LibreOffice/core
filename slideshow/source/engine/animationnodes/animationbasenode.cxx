@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationbasenode.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 08:41:55 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:30:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,8 @@
 // must be first
 #include "canvas/debug.hxx"
 #include "canvas/verbosetrace.hxx"
+#include "cppuhelper/exc_hlp.hxx"
+#include "comphelper/anytostring.hxx"
 #include "com/sun/star/presentation/ParagraphTarget.hpp"
 #include "com/sun/star/animations/Timing.hpp"
 #include "com/sun/star/animations/AnimationAdditiveMode.hpp"
@@ -43,67 +45,17 @@
 #include "nodetools.hxx"
 #include "doctreenode.hxx"
 #include "animationbasenode.hxx"
-#include "animationfactory.hxx"
+#include "delayevent.hxx"
+#include "boost/bind.hpp"
+#include "boost/optional.hpp"
 #include <vector>
 #include <algorithm>
 
-namespace css = ::com::sun::star;
+namespace css = com::sun::star;
 using namespace css;
 
 namespace presentation {
 namespace internal {
-
-namespace {
-
-/** Event, which connects Activity end with AnimationNode::deactivate() methods
- */
-class ActivityEnded : public Event
-{
-public:
-    explicit ActivityEnded( const BaseNodeSharedPtr& rNode )
-        : mpNode( rNode ),
-          mbWasFired( false )
-    {
-        ENSURE_AND_THROW( mpNode.get() != 0,
-                          "ActivityEnded::ActivityEnded(): Invalid node" );
-    }
-
-    virtual bool fire()
-    {
-        if( isCharged() ) {
-            mbWasFired = true;
-
-            if( mpNode.get() )
-                mpNode->deactivate();
-
-            mpNode.reset();
-        }
-
-        return true;
-    }
-
-    virtual bool isCharged() const
-    {
-        return !mbWasFired;
-    }
-
-    virtual double getActivationTime( double nCurrentTime ) const
-    {
-        return nCurrentTime;
-    }
-
-    virtual void dispose()
-    {
-        mbWasFired = true;
-        mpNode.reset();
-    }
-
-private:
-    AnimationNodeSharedPtr  mpNode;
-    bool                    mbWasFired;
-};
-
-} // anon namespace
 
 AnimationBaseNode::AnimationBaseNode(
     const uno::Reference< animations::XAnimationNode >&   xNode,
@@ -112,12 +64,7 @@ AnimationBaseNode::AnimationBaseNode(
     : BaseNode( xNode, rParent, rContext ),
       mxAnimateNode( xNode, uno::UNO_QUERY_THROW ),
       maAttributeLayerHolder(),
-      mpActivity(),// only _held_ by this class.
-                   // Derived classes must actually init this
-                   // (that's because it's factory-generated,
-                   // and the actual parameters
-                   // will vary. See e.g. PropertyAnimationNode and
-                   // AnimationSetNode)
+      mpActivity(),
       mpShape(),
       mpShapeSubset(),
       mbIsIndependentSubset( rContext.mbIsIndependentSubset )
@@ -241,61 +188,68 @@ AnimationBaseNode::AnimationBaseNode(
     }
 }
 
-bool AnimationBaseNode::init()
-{
-    if( !BaseNode::init() )
-        return false;
-
-    // if we've still got an old activity lying
-    // around, dispose it, it will soon be overwritten
-    // with a new one.
-    if( mpActivity.get() )
-        mpActivity->dispose();
-
-    return true;
-}
-
 void AnimationBaseNode::dispose()
 {
-    if( mpActivity.get() )
+    if (mpActivity) {
         mpActivity->dispose();
+        mpActivity.reset();
+    }
 
     maAttributeLayerHolder.reset();
     mxAnimateNode.clear();
-    mpActivity.reset();
     mpShape.reset();
     mpShapeSubset.reset();
 
     BaseNode::dispose();
 }
 
-bool AnimationBaseNode::resolve()
+bool AnimationBaseNode::init_st()
 {
-    if( !BaseNode::resolve() )
-        return false;
+    // if we've still got an old activity lying around, dispose it:
+    if (mpActivity) {
+        mpActivity->dispose();
+        mpActivity.reset();
+    }
 
+    // note: actually disposing the activity too early might cause problems,
+    // because on dequeued() it calls endAnimation(pAnim->end()), thus ending
+    // animation _after_ last screen update.
+    // review that end() is properly called (which calls endAnimation(), too).
+
+    try {
+        // TODO(F2): For restart functionality, we must regenerate activities,
+        // since they are not able to reset their state (or implement _that_)
+        mpActivity = createActivity();
+    }
+    catch (uno::Exception const&) {
+        OSL_ENSURE( false, rtl::OUStringToOString(
+                        comphelper::anyToString(cppu::getCaughtException()),
+                        RTL_TEXTENCODING_UTF8 ) );
+        // catch and ignore. We later handle empty activities, but for
+        // other nodes to function properly, the core functionality of
+        // this node must remain up and running.
+    }
+    return true;
+}
+
+bool AnimationBaseNode::resolve_st()
+{
     // enable shape subset for automatically generated
     // subsets. Independent subsets are already setup
     // during construction time. Doing it only here
     // saves us a lot of sprites and shapes lying
     // around. This is especially important for
     // character-wise iterations, since the shape
-    // content (e.g.  thousands of characters) would
+    // content (e.g. thousands of characters) would
     // otherwise be painted character-by-character.
-    if( isDependentSubsettedShape() )
-        enableShapeSubset();
-
+    if (isDependentSubsettedShape() && mpShapeSubset) {
+        mpShapeSubset->enableSubsetShape();
+    }
     return true;
 }
 
-bool AnimationBaseNode::activate()
+void AnimationBaseNode::activate_st()
 {
-    if( getState() == ACTIVE )
-        return true; // avoid duplicate event generation
-
-    if( !BaseNode::activate() )
-        return false;
-
     // create new attribute layer
     maAttributeLayerHolder.createAttributeLayer( getShape() );
 
@@ -349,50 +303,29 @@ bool AnimationBaseNode::activate()
     // maybe all other effects on the slide are
     // correctly initialized (but won't run, if we
     // signal an error here)
-    if( !mpActivity.get() )
-        return true;
+    if (mpActivity) {
+        // supply Activity (and the underlying Animation) with
+        // it's AttributeLayer, to perform the animation on
+        mpActivity->setTargets( getShape(), maAttributeLayerHolder.get() );
 
-    // supply Activity (and the underlying Animation) with
-    // it's AttributeLayer, to perform the animation on
-    mpActivity->setTargets( getShape(), maAttributeLayerHolder.get() );
-
-    // add to activities queue
-    return getContext().mrActivitiesQueue.addActivity( mpActivity );
+        // add to activities queue
+        getContext().mrActivitiesQueue.addActivity( mpActivity );
+    }
+    else {
+        // Actually, DO generate the event for empty activity,
+        // to keep the chain of animations running
+        BaseNode::scheduleDeactivationEvent();
+    }
 }
 
-void AnimationBaseNode::endAnimation()
+void AnimationBaseNode::deactivate_st( NodeState eDestState )
 {
-    // revoke attribute layer, when parent finishes
-    maAttributeLayerHolder.reset();
-
-    if( !isDependentSubsettedShape() )
-    {
-        // for all other shapes, removing the
-        // attribute layer quite possibly changes
-        // shape display. Thus, force update
-        AttributableShapeSharedPtr pShape( getShape() );
-
-        // don't anybody dare to check against
-        // pShape->isVisible() here, removing the
-        // attribute layer might actually make the
-        // shape invisible!
-        getContext().mpLayerManager->notifyShapeUpdate( pShape );
+    if (eDestState == FROZEN) {
+        if (mpActivity)
+            mpActivity->end();
     }
 
-    if (mpActivity.get() != 0 && mpActivity->isActive()) {
-        // kill activity, if still running:
-        mpActivity->dispose();
-    }
-
-    // destroy activity, we need to re-generate it
-    // when animation is restarted
-    mpActivity.reset();
-}
-
-void AnimationBaseNode::deactivate()
-{
-    if( isDependentSubsettedShape() )
-    {
+    if (isDependentSubsettedShape()) {
         // for dependent subsets, remove subset shape
         // from layer, re-integrate subsetted part
         // back into original shape. For independent
@@ -407,33 +340,36 @@ void AnimationBaseNode::deactivate()
         // sprites for iterated text effects, since
         // those sprites will only exist during the
         // actual lifetime of the effects
-        disableShapeSubset();
-
-        // TODO(P1): We still hold the attribute
-        // layer, until the effect fully ends. This
-        // might be freed here, too, since the shape
-        // still holds it by shared_ptr (we don't even
-        // have to care about calling
-        // revokeAttributeLayer() later on, since the
-        // shape will be deleted, anyway (it's a temp
-        // subset shape)).
+        if (mpShapeSubset) {
+            mpShapeSubset->disableSubsetShape();
+        }
     }
 
-    BaseNode::deactivate();
-}
+    if (eDestState == ENDED) {
 
-void AnimationBaseNode::end()
-{
-    endAnimation();
+        // no shape anymore, no layer needed:
+        maAttributeLayerHolder.reset();
 
-    BaseNode::end();
-}
+        if (! isDependentSubsettedShape()) {
 
-void AnimationBaseNode::notifyDeactivating( const AnimationNodeSharedPtr& rNotifier )
-{
-    // NO-OP for all leaf nodes (which typically don't register nowhere)
+            // for all other shapes, removing the
+            // attribute layer quite possibly changes
+            // shape display. Thus, force update
+            AttributableShapeSharedPtr const pShape( getShape() );
 
-    // TODO(F1): for end sync functionality, this might indeed be used some day
+            // don't anybody dare to check against
+            // pShape->isVisible() here, removing the
+            // attribute layer might actually make the
+            // shape invisible!
+            getContext().mpLayerManager->notifyShapeUpdate( pShape );
+        }
+
+        if (mpActivity) {
+            // kill activity, if still running
+            mpActivity->dispose();
+            mpActivity.reset();
+        }
+    }
 }
 
 bool AnimationBaseNode::hasPendingAnimation() const
@@ -456,23 +392,25 @@ void AnimationBaseNode::showState() const
 ActivitiesFactory::CommonParameters
 AnimationBaseNode::fillCommonParameters() const
 {
-    // TODO(F3): Duration/End handling is barely there
     double nDuration = 0.0;
-    if (! (mxAnimateNode->getDuration() >>= nDuration)) {
+
+    // TODO(F3): Duration/End handling is barely there
+    if( !(mxAnimateNode->getDuration() >>= nDuration) ) {
         mxAnimateNode->getEnd() >>= nDuration; // Wah.
     }
-    // minimal duration we fallback to (avoid 0 here!)
-    nDuration = std::max( 0.001, nDuration );
 
-    bool const bAutoReverse = mxAnimateNode->getAutoReverse();
+    // minimal duration we fallback to (avoid 0 here!)
+    nDuration = ::std::max( 0.001, nDuration );
+
+    const bool bAutoReverse( mxAnimateNode->getAutoReverse() );
 
     boost::optional<double> aRepeats;
     double nRepeats;
-    if ((mxAnimateNode->getRepeatCount() >>= nRepeats)) {
+    if( (mxAnimateNode->getRepeatCount() >>= nRepeats) ) {
         aRepeats.reset( nRepeats );
     }
     else {
-        if ((mxAnimateNode->getRepeatDuration() >>= nRepeats)) {
+        if( (mxAnimateNode->getRepeatDuration() >>= nRepeats) ) {
             // when repeatDuration is given,
             // autoreverse does _not_ modify the
             // active duration. Thus, calc repeat
@@ -480,7 +418,7 @@ AnimationBaseNode::fillCommonParameters() const
             // duration (twice the specified duration)
 
             // convert duration back to repeat counts
-            if (bAutoReverse)
+            if( bAutoReverse )
                 aRepeats.reset( nRepeats / (2.0 * nDuration) );
             else
                 aRepeats.reset( nRepeats / nDuration );
@@ -488,15 +426,17 @@ AnimationBaseNode::fillCommonParameters() const
         else {
             // no double value for both values - Timing::INDEFINITE?
             animations::Timing eTiming;
-            if ((!(mxAnimateNode->getRepeatDuration() >>= eTiming) ||
-                 eTiming != animations::Timing_INDEFINITE)
-                &&
-                (!(mxAnimateNode->getRepeatCount() >>= eTiming) ||
-                 eTiming != animations::Timing_INDEFINITE))
+
+            if( !(mxAnimateNode->getRepeatDuration() >>= eTiming) ||
+                eTiming != animations::Timing_INDEFINITE )
             {
-                // no indefinite timing, no other values given -
-                // use simple run, i.e. repeat of 1.0
-                aRepeats.reset( 1.0 );
+                if( !(mxAnimateNode->getRepeatCount() >>= eTiming) ||
+                    eTiming != animations::Timing_INDEFINITE )
+                {
+                    // no indefinite timing, no other values given -
+                    // use simple run, i.e. repeat of 1.0
+                    aRepeats.reset( 1.0 );
+                }
             }
         }
     }
@@ -504,19 +444,26 @@ AnimationBaseNode::fillCommonParameters() const
     // calc accel/decel:
     double nAcceleration = 0.0;
     double nDeceleration = 0.0;
-    for ( boost::shared_ptr<BaseNode> node( getSelf() );
-          node.get() != 0; node = node->getParentNode() )
+    BaseNodeSharedPtr const pSelf( getSelf() );
+    for ( boost::shared_ptr<BaseNode> pNode( pSelf );
+          pNode; pNode = pNode->getParentNode() )
     {
-        const uno::Reference<animations::XAnimationNode> xAnimationNode(
-            node->getXAnimationNode() );
+        uno::Reference<animations::XAnimationNode> const xAnimationNode(
+            pNode->getXAnimationNode() );
         nAcceleration = std::max( nAcceleration,
                                   xAnimationNode->getAcceleration() );
         nDeceleration = std::max( nDeceleration,
                                   xAnimationNode->getDecelerate() );
     }
 
+    EventSharedPtr pEndEvent;
+    if (pSelf) {
+        pEndEvent = makeEvent(
+            boost::bind( &AnimationNode::deactivate, pSelf ) );
+    }
+
     return ActivitiesFactory::CommonParameters(
-        EventSharedPtr( new ActivityEnded( getSelf() ) ),
+        pEndEvent,
         getContext().mrEventQueue,
         getContext().mrActivitiesQueue,
         nDuration,
@@ -529,101 +476,13 @@ AnimationBaseNode::fillCommonParameters() const
         getContext().mpLayerManager );
 }
 
-AnimationActivitySharedPtr AnimationBaseNode::createActivity() const
-{
-    const ::rtl::OUString& rAttrName( mxAnimateNode->getAttributeName() );
-
-    ActivitiesFactory::CommonParameters aParms( fillCommonParameters() );
-
-    const AttributableShapeSharedPtr& rShape( getShape() );
-
-    switch( AnimationFactory::classifyAttributeName( rAttrName ) )
-    {
-    default:
-    case AnimationFactory::CLASS_UNKNOWN_PROPERTY:
-        ENSURE_AND_THROW(
-            false,
-            "Unexpected attribute class (unknown or empty attribute name)" );
-        break;
-
-    case AnimationFactory::CLASS_NUMBER_PROPERTY:
-        return ActivitiesFactory::createAnimateActivity(
-            aParms,
-            AnimationFactory::createNumberPropertyAnimation(
-                rAttrName,
-                rShape,
-                getContext().mpLayerManager ),
-            mxAnimateNode );
-
-    case AnimationFactory::CLASS_ENUM_PROPERTY:
-        return ActivitiesFactory::createAnimateActivity(
-            aParms,
-            AnimationFactory::createEnumPropertyAnimation(
-                rAttrName,
-                rShape,
-                getContext().mpLayerManager ),
-            mxAnimateNode );
-
-    case AnimationFactory::CLASS_COLOR_PROPERTY:
-        return ActivitiesFactory::createAnimateActivity(
-            aParms,
-            AnimationFactory::createColorPropertyAnimation(
-                rAttrName,
-                rShape,
-                getContext().mpLayerManager ),
-            mxAnimateNode );
-
-    case AnimationFactory::CLASS_STRING_PROPERTY:
-        return ActivitiesFactory::createAnimateActivity(
-            aParms,
-            AnimationFactory::createStringPropertyAnimation(
-                rAttrName,
-                rShape,
-                getContext().mpLayerManager ),
-            mxAnimateNode );
-
-    case AnimationFactory::CLASS_BOOL_PROPERTY:
-        return ActivitiesFactory::createAnimateActivity(
-            aParms,
-            AnimationFactory::createBoolPropertyAnimation(
-                rAttrName,
-                rShape,
-                getContext().mpLayerManager ),
-            mxAnimateNode );
-    }
-
-    return AnimationActivitySharedPtr();
-}
-
-bool AnimationBaseNode::isSubsettedShape() const
-{
-    return mpShapeSubset.get() != 0;
-}
-
-bool AnimationBaseNode::isDependentSubsettedShape() const
-{
-    return mpShapeSubset.get() != 0 && !mbIsIndependentSubset;
-}
-
-void AnimationBaseNode::enableShapeSubset()
-{
-    if( mpShapeSubset.get() )
-        mpShapeSubset->enableSubsetShape();
-}
-
-void AnimationBaseNode::disableShapeSubset()
-{
-    if( mpShapeSubset.get() )
-        mpShapeSubset->disableSubsetShape();
-}
-
 AttributableShapeSharedPtr AnimationBaseNode::getShape() const
 {
     // any subsetting at all?
-    if( !mpShapeSubset.get() )
-        return mpShape; // nope, plain shape always
-    else
+    if (mpShapeSubset)
         return mpShapeSubset->getSubsetShape();
+    else
+        return mpShape; // nope, plain shape always
 }
 
 } // namespace internal
