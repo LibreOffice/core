@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pushbuttonnavigation.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:27:03 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 08:00:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,6 +100,14 @@ namespace pcr
         */
         ::com::sun::star::beans::PropertyState
                 getCurrentTargetURLState( ) const SAL_THROW(());
+
+        /** determines whether the current button tpye is FormButtonType_URL
+        */
+        bool    currentButtonTypeIsOpenURL() const;
+
+        /** determines whether the TargetURL property does currently denote a non-empty string
+        */
+        bool    hasNonEmptyCurrentTargetURL() const;
 
     private:
         sal_Int32 implGetCurrentButtonType() const SAL_THROW(( ::com::sun::star::uno::Exception ));
