@@ -4,9 +4,9 @@
  *
  *  $RCSfile: page.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:24:53 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 08:28:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1148,17 +1148,17 @@ IMPL_LINK( SvxPageDescPage, SwapOrientation_Impl, RadioButton *, pBtn )
         const long lWidth = GetCoreValue( aPaperWidthEdit, SFX_MAPUNIT_TWIP );
         const long lHeight = GetCoreValue( aPaperHeightEdit, SFX_MAPUNIT_TWIP );
 
-        // swappen
+        // swap with and height
         SetMetricValue( aPaperWidthEdit, lHeight, SFX_MAPUNIT_TWIP );
         SetMetricValue( aPaperHeightEdit, lWidth, SFX_MAPUNIT_TWIP );
 
-        // R"ander ggf. neu berechnen
+        // recalculate margins if necessary
         CalcMargin_Impl();
 
         PaperSizeSelect_Impl( &aPaperSizeBox );
         RangeHdl_Impl( 0 );
         SwapFirstValues_Impl( bBorderModified );
-        UpdateExample_Impl();
+        UpdateExample_Impl( true );
     }
     return 0;
 }
@@ -1246,7 +1246,7 @@ IMPL_LINK_INLINE_END( SvxPageDescPage, BorderModify_Impl, MetricField *, EMPTYAR
 
 // -----------------------------------------------------------------------
 
-void SvxPageDescPage::UpdateExample_Impl()
+void SvxPageDescPage::UpdateExample_Impl( bool bResetbackground )
 {
     // Size
     Size aSize( GetCoreValue( aPaperWidthEdit, SFX_MAPUNIT_TWIP ),
@@ -1262,6 +1262,8 @@ void SvxPageDescPage::UpdateExample_Impl()
 
     // Layout
     aBspWin.SetUsage( PosToPageUsage_Impl( aLayoutBox.GetSelectEntryPos() ) );
+    if ( bResetbackground )
+        aBspWin.ResetBackground();
     aBspWin.Invalidate();
 }
 
