@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:00:39 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 09:09:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,10 +94,9 @@ TabPage RID_SFXPAGE_SAVE
         Text [ de ] = "~Sicherungskopie immer erstellen" ;
         Text [ en-US ] = "Al~ways create backup copy" ;
     };
-
     CheckBox BTN_AUTOSAVE
     {
-        Pos = MAP_APPFONT ( 12 , 62 ) ;
+        Pos = MAP_APPFONT ( 12 , 60 ) ;
         Size = MAP_APPFONT ( 150 , 8 ) ;
         Text [ de ] = "Speichern von ~AutoWiederherstellungsinfo alle" ;
         Text [ en-US ] = "Save ~AutoRecovery information every" ;
@@ -105,7 +104,7 @@ TabPage RID_SFXPAGE_SAVE
     NumericField ED_AUTOSAVE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 180 , 60 ) ;
+        Pos = MAP_APPFONT ( 180 , 58 ) ;
         Size = MAP_APPFONT ( 21 , 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -120,39 +119,36 @@ TabPage RID_SFXPAGE_SAVE
     };
     FixedText FT_MINUTE
     {
-        Pos = MAP_APPFONT ( 204 , 62 ) ;
+        Pos = MAP_APPFONT ( 204 , 60 ) ;
         Size = MAP_APPFONT ( 35 , 8 ) ;
         Text [ de ] = "Minuten" ;
         Text [ en-US ] = "Minutes" ;
     };
-
     CheckBox BTN_NOPRETTYPRINTING
     {
-        Pos = MAP_APPFONT ( 12 , 74 ) ;
+        Pos = MAP_APPFONT ( 12 , 71 ) ;
         Size = MAP_APPFONT ( 236 , 8 ) ;
         Text [ de ] = "XML-Format auf Größe optimieren" ;
         Text [ en-US ] = "Size optimization for XML format" ;
     };
-
     CheckBox BTN_WARNALIENFORMAT
     {
-        Pos = MAP_APPFONT ( 12 , 86 ) ;
+        Pos = MAP_APPFONT ( 12 , 82 ) ;
         Size = MAP_APPFONT ( 248 , 16 ) ;
         WordBreak = TRUE;
         Text [ de ] = "Immer warnen, wenn nicht im OpenDocument oder im Standardformat gespeichert werden soll" ;
         Text [ en-US ] = "Warn when not saving in OpenDocument or default format" ;
     };
-
     FixedLine GB_RELATIVE
     {
-        Pos = MAP_APPFONT ( 6 , 107 ) ;
+        Pos = MAP_APPFONT ( 6 , 101 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text [ de ] = "URLs relativ speichern" ;
         Text [ en-US ] = "Save URLs relative to" ;
     };
     CheckBox BTN_RELATIVE_FSYS
     {
-        Pos = MAP_APPFONT ( 12 , 118 ) ;
+        Pos = MAP_APPFONT ( 12 , 112 ) ;
         Size = MAP_APPFONT ( 120 , 10 ) ;
         Text [ de ] = "im Da~teisystem" ;
         Text [ en-US ] = "~File system" ;
@@ -161,68 +157,68 @@ TabPage RID_SFXPAGE_SAVE
     };
     CheckBox BTN_RELATIVE_INET
     {
-        Pos = MAP_APPFONT ( 136 , 118 ) ;
+        Pos = MAP_APPFONT ( 136 , 112 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text [ de ] = "im Int~ernet" ;
         Text [ en-US ] = "~Internet" ;
     };
     FixedLine FL_FILTER
     {
-        Pos = MAP_APPFONT ( 6 , 130 ) ;
+        Pos = MAP_APPFONT ( 6 , 125 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text [ de ] = "Standard Dateiformat" ;
         Text [ en-US ] = "Default file format";
     };
     FixedText FT_APP
     {
-        Pos = MAP_APPFONT ( 12 , 141 ) ;
+        Pos = MAP_APPFONT ( 12 , 136 ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
         Text [ de ] = "~Dokumenttyp" ;
         Text [ en-US ] = "D~ocument type";
     };
     FixedText FT_FILTER
     {
-        Pos = MAP_APPFONT ( 136 , 141 ) ;
+        Pos = MAP_APPFONT ( 136 , 136 ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
         Text [ de ] = "Immer spei~chern als" ;
         Text [ en-US ] = "Always sa~ve as";
     };
     ListBox LB_APP
     {
-        Pos = MAP_APPFONT ( 12 , 151 ) ;
+        Pos = MAP_APPFONT ( 12 , 147 ) ;
         Size = MAP_APPFONT ( 108 , 58 ) ;
         Border = TRUE;
         DropDown = TRUE;
         StringList [ de ] =
         {
-            < "Textdokument" ;     APP_WRITER    ; > ;
-            < "HTML-Dokument" ;    APP_WRITER_WEB;  > ;
+            < "Textdokument" ;      APP_WRITER    ; > ;
+            < "HTML-Dokument" ;     APP_WRITER_WEB;  > ;
             < "Globaldokument" ;    APP_WRITER_GLOBAL;  > ;
-            < "Tabellendokument" ; APP_CALC      ; > ;
+            < "Tabellendokument" ;  APP_CALC      ; > ;
             < "Präsentation" ;     APP_IMPRESS   ; > ;
-            < "Zeichnung" ;        APP_DRAW      ; > ;
-            < "Formel" ;           APP_MATH      ; > ;
+            < "Zeichnung" ;         APP_DRAW      ; > ;
+            < "Formel" ;            APP_MATH      ; > ;
         };
         StringList [ en-US ] =
         {
             < "Text document" ;     APP_WRITER    ; > ;
-            < "HTML document" ;    APP_WRITER_WEB;  > ;
-            < "Master document" ;    APP_WRITER_GLOBAL;  > ;
-            < "Spreadsheet" ; APP_CALC      ; > ;
-            < "Presentation" ;     APP_IMPRESS   ; > ;
-            < "Drawing" ;        APP_DRAW      ; > ;
+            < "HTML document" ;     APP_WRITER_WEB;  > ;
+            < "Master document" ;   APP_WRITER_GLOBAL;  > ;
+            < "Spreadsheet" ;       APP_CALC      ; > ;
+            < "Presentation" ;      APP_IMPRESS   ; > ;
+            < "Drawing" ;           APP_DRAW      ; > ;
             < "Formula" ;           APP_MATH      ; > ;
         };
     };
     FixedImage FI_FILTER
     {
-        Pos = MAP_APPFONT ( 129, 154 ) ;
+        Pos = MAP_APPFONT ( 129, 150 ) ;
         Size = MAP_APPFONT ( 6 , 6 ) ;
         Hide = TRUE;
     };
     ListBox LB_FILTER
     {
-        Pos = MAP_APPFONT ( 136 , 151 ) ;
+        Pos = MAP_APPFONT ( 136 , 147 ) ;
         Size = MAP_APPFONT ( 108 , 58 ) ;
         Border = TRUE;
         Sort = TRUE;
@@ -230,7 +226,7 @@ TabPage RID_SFXPAGE_SAVE
     };
     FixedText FT_WARN
     {
-        Pos = MAP_APPFONT ( 12 , 166 ) ;
+        Pos = MAP_APPFONT ( 12 , 164 ) ;
         Size = MAP_APPFONT ( 250 , 16 ) ;
         WordBreak = TRUE;
         Text [ de ] = "Hinweis: Wenn Sie nicht OpenDocument als Standardformat verwenden, kann dies zum Verlust von Formatierungen oder Inhalten führen." ;
