@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pushbuttonnavigation.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:26:47 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 08:00:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,9 @@
 
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 
 //............................................................................
@@ -299,6 +302,29 @@ namespace pcr
         }
 
         return eState;
+    }
+
+    //------------------------------------------------------------------------
+    bool PushButtonNavigation::currentButtonTypeIsOpenURL() const
+    {
+        sal_Int32 nButtonType( FormButtonType_PUSH );
+        try
+        {
+            nButtonType = implGetCurrentButtonType();
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        return nButtonType == FormButtonType_URL;
+    }
+
+    //------------------------------------------------------------------------
+    bool PushButtonNavigation::hasNonEmptyCurrentTargetURL() const
+    {
+        ::rtl::OUString sTargetURL;
+        OSL_VERIFY( getCurrentTargetURL() >>= sTargetURL );
+        return sTargetURL.getLength() != 0;
     }
 
 //............................................................................
