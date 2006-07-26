@@ -4,9 +4,9 @@
  *
  *  $RCSfile: continuouskeytimeactivitybase.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:35:59 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:28:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,13 +96,13 @@ namespace presentation
             {
                 // nope, find new index
                 mnLastIndex = ::std::min< ::std::ptrdiff_t >(
-                    maKeyTimes.size()-2L,
+                    maKeyTimes.size()-2,
                     // range is ensured by max below
-                    ::std::max( 0L,
+                    ::std::max( 0,
                                 ::std::distance( maKeyTimes.begin(),
                                                  ::std::lower_bound( maKeyTimes.begin(),
                                                                      maKeyTimes.end(),
-                                                                     nT ) ) - 1L ) );
+                                                                     nT ) ) - 1 ) );
             }
 
             OSL_ENSURE( mnLastIndex+1 < maKeyTimes.size(),
