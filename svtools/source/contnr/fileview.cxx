@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 20:50:20 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 08:26:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1101,12 +1101,18 @@ void ViewTabListBox_Impl::DoQuickSearch( const xub_Unicode& rChar )
     if ( bFound )
     {
         SvLBoxEntry* pEntry = GetEntry( mnSearchIndex );
-        SelectAll( FALSE );
-        Select( pEntry );
-        SetCurEntry( pEntry );
-        MakeVisible( pEntry );
+        if ( pEntry )
+        {
+            SelectAll( FALSE );
+            Select( pEntry );
+            SetCurEntry( pEntry );
+            MakeVisible( pEntry );
+        }
+        else
+            bFound = sal_False;
     }
-    else
+
+    if ( !bFound )
         Sound::Beep();
 
     maResetQuickSearch.Start();
