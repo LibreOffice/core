@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationtransformnode.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:42:25 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:32:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,118 +34,81 @@
  ************************************************************************/
 
 // must be first
-#include <canvas/debug.hxx>
-#include <canvas/verbosetrace.hxx>
+#include "canvas/debug.hxx"
+#include "canvas/verbosetrace.hxx"
+#include "animationtransformnode.hxx"
+#include "animationfactory.hxx"
+#include "activitiesfactory.hxx"
+#include "com/sun/star/animations/AnimationTransformType.hpp"
 
-#include <animationtransformnode.hxx>
-#include <animationfactory.hxx>
-#include <activitiesfactory.hxx>
+using namespace com::sun::star;
 
-#ifndef _COM_SUN_STAR_ANIMATIONS_ANIMATIONTRANSFORMTYPE_HPP_
-#include <com/sun/star/animations/AnimationTransformType.hpp>
-#endif
+namespace presentation {
+namespace internal {
 
-
-using namespace ::com::sun::star;
-
-namespace presentation
+void AnimationTransformNode::dispose()
 {
-    namespace internal
+    mxTransformNode.clear();
+    AnimationBaseNode::dispose();
+}
+
+AnimationActivitySharedPtr AnimationTransformNode::createActivity() const
+{
+    ActivitiesFactory::CommonParameters aParms( fillCommonParameters() );
+
+    const sal_Int16 nTransformType( mxTransformNode->getTransformType() );
+
+    const AttributableShapeSharedPtr& rShape( getShape() );
+
+    switch( nTransformType )
     {
-        AnimationTransformNode::AnimationTransformNode( const uno::Reference< animations::XAnimationNode >& xNode,
-                                                        const BaseContainerNodeSharedPtr&                   rParent,
-                                                        const NodeContext&                                  rContext ) :
-            ActivityAnimationBaseNode( xNode, rParent, rContext ),
-            mxTransformNode( xNode, uno::UNO_QUERY_THROW )
-        {
-        }
+    default:
+        ENSURE_AND_THROW(
+            false, "AnimationTransformNode::createTransformActivity(): "
+            "Unknown transform type" );
 
-        void AnimationTransformNode::dispose()
-        {
-            mxTransformNode.clear();
+    case animations::AnimationTransformType::TRANSLATE:
+        // FALLTHROUGH intended
+    case animations::AnimationTransformType::SCALE:
+        return ActivitiesFactory::createAnimateActivity(
+            aParms,
+            AnimationFactory::createPairPropertyAnimation(
+                rShape,
+                getContext().mpLayerManager,
+                nTransformType ),
+            getXAnimateNode() );
 
-            ActivityAnimationBaseNode::dispose();
-        }
+    case animations::AnimationTransformType::ROTATE:
+        return ActivitiesFactory::createAnimateActivity(
+            aParms,
+            AnimationFactory::createNumberPropertyAnimation(
+                ::rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM("Rotate") ),
+                rShape,
+                getContext().mpLayerManager ),
+            getXAnimateNode() );
 
-        bool AnimationTransformNode::init()
-        {
-            if( !ActivityAnimationBaseNode::init() )
-                return false;
+    case animations::AnimationTransformType::SKEWX:
+        return ActivitiesFactory::createAnimateActivity(
+            aParms,
+            AnimationFactory::createNumberPropertyAnimation(
+                ::rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM("SkewX") ),
+                rShape,
+                getContext().mpLayerManager ),
+            getXAnimateNode() );
 
-            try
-            {
-                // TODO(F2): For restart functionality, we must regenerate activities,
-                // since they are not able to reset their state (or implement _that_)
-                getActivity() = createTransformActivity();
-            }
-            catch( uno::Exception& )
-            {
-                // catch and ignore. We later handle empty activities, but for
-                // other nodes to function properly, the core functionality of
-                // this node must remain up and running.
-            }
-
-            return true;
-        }
-
-#if defined(VERBOSE) && defined(DBG_UTIL)
-        const char* AnimationTransformNode::getDescription() const
-        {
-            return "AnimationTransformNode";
-        }
-#endif
-
-        AnimationActivitySharedPtr AnimationTransformNode::createTransformActivity()
-        {
-            ActivitiesFactory::CommonParameters aParms( fillCommonParameters() );
-
-            const sal_Int16 nTransformType( mxTransformNode->getTransformType() );
-
-            const AttributableShapeSharedPtr& rShape( getShape() );
-
-            switch( nTransformType )
-            {
-                default:
-                    ENSURE_AND_THROW( false,
-                                      "AnimationTransformNode::createTransformActivity(): Unknown transform type" );
-
-                case animations::AnimationTransformType::TRANSLATE:
-                    // FALLTHROUGH intended
-                case animations::AnimationTransformType::SCALE:
-                    return ActivitiesFactory::createAnimateActivity( aParms,
-                                                                     AnimationFactory::createPairPropertyAnimation(
-                                                                         rShape,
-                                                                         getContext().mpLayerManager,
-                                                                         nTransformType ),
-                                                                     getXAnimateNode() );
-
-                case animations::AnimationTransformType::ROTATE:
-                    return ActivitiesFactory::createAnimateActivity( aParms,
-                                                                     AnimationFactory::createNumberPropertyAnimation(
-                                                                         ::rtl::OUString(
-                                                                             RTL_CONSTASCII_USTRINGPARAM("Rotate") ),
-                                                                         rShape,
-                                                                         getContext().mpLayerManager ),
-                                                                     getXAnimateNode() );
-
-                case animations::AnimationTransformType::SKEWX:
-                    return ActivitiesFactory::createAnimateActivity( aParms,
-                                                                     AnimationFactory::createNumberPropertyAnimation(
-                                                                         ::rtl::OUString(
-                                                                             RTL_CONSTASCII_USTRINGPARAM("SkewX") ),
-                                                                         rShape,
-                                                                         getContext().mpLayerManager ),
-                                                                     getXAnimateNode() );
-
-                case animations::AnimationTransformType::SKEWY:
-                    return ActivitiesFactory::createAnimateActivity( aParms,
-                                                                     AnimationFactory::createNumberPropertyAnimation(
-                                                                         ::rtl::OUString(
-                                                                             RTL_CONSTASCII_USTRINGPARAM("SkewY") ),
-                                                                         rShape,
-                                                                         getContext().mpLayerManager ),
-                                                                     getXAnimateNode() );
-            }
-        }
+    case animations::AnimationTransformType::SKEWY:
+        return ActivitiesFactory::createAnimateActivity(
+            aParms,
+            AnimationFactory::createNumberPropertyAnimation(
+                ::rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM("SkewY") ),
+                rShape,
+                getContext().mpLayerManager ),
+            getXAnimateNode() );
     }
 }
+
+} // namespace internal
+} // namespace presentation
