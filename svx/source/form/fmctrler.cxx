@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:53:21 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:43:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,9 @@
 #endif
 #ifndef SVX_FMDISPATCH_HXX
 #include "fmdispatch.hxx"
+#endif
+#ifndef _TRACE_HXX_
+#include "trace.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
@@ -875,9 +878,7 @@ void FmXFormController::disposing(void)
 
     // if we're still active, simulate a "deactivated" event
     if ( m_xActiveControl.is() )
-    {
-        NOTIFY_LISTENERS(m_aActivateListeners, XFormControllerListener, formDeactivated, aEvt);
-    }
+        m_aActivateListeners.notifyEach( &XFormControllerListener::formDeactivated, aEvt );
 
     // notify all our listeners
     m_aActivateListeners.disposeAndClear(aEvt);
@@ -1255,7 +1256,7 @@ void FmXFormController::onModify( const Reference< XInterface >& _rxControl )
     }
 
     EventObject aEvt(static_cast<cppu::OWeakObject*>(this));
-    NOTIFY_LISTENERS(m_aModifyListeners, XModifyListener, modified, aEvt);
+    m_aModifyListeners.notifyEach( &XModifyListener::modified, aEvt );
 }
 
 //------------------------------------------------------------------------------
@@ -1278,6 +1279,8 @@ sal_Bool FmXFormController::determineLockState() const
 //------------------------------------------------------------------------------
 void FmXFormController::focusGained(const FocusEvent& e) throw( RuntimeException )
 {
+    TRACE_RANGE( "FmXFormController::focusGained" );
+
     OSL_ENSURE( !FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController::focusGained: Object already disposed!" );
     ::osl::MutexGuard aGuard( m_aMutex );
     Reference< XControl >  xControl(e.Source, UNO_QUERY);
@@ -1342,7 +1345,7 @@ void FmXFormController::focusGained(const FocusEvent& e) throw( RuntimeException
         if (!m_bFiltering && m_bCycle && (e.FocusFlags & FocusChangeReason::AROUND) && m_xCurrentControl.is())
         {
             if ( e.FocusFlags & FocusChangeReason::FORWARD )
-        {
+            {
                 if ( m_aControllerFeatures->canMoveRight() )
                     m_aControllerFeatures->moveRight();
             }
@@ -1380,7 +1383,8 @@ void FmXFormController::focusGained(const FocusEvent& e) throw( RuntimeException
         aFocusDependentFeatures.push_back( SID_FM_SORTUP );
         aFocusDependentFeatures.push_back( SID_FM_SORTDOWN );
         aFocusDependentFeatures.push_back( SID_FM_AUTOFILTER );
-        m_pView->GetFormShell()->GetImpl()->invalidateFeatures( aFocusDependentFeatures );
+        if ( m_pView && m_pView->GetFormShell() && m_pView->GetFormShell()->GetImpl() )
+            m_pView->GetFormShell()->GetImpl()->invalidateFeatures( aFocusDependentFeatures );
         invalidateFeatures( aFocusDependentFeatures );
     }
 
@@ -1405,13 +1409,11 @@ void FmXFormController::onActivate()
     // benachrichtigen, dass form activiert
     EventObject aEvt;
     aEvt.Source = *this;
-    NOTIFY_LISTENERS(m_aActivateListeners, XFormControllerListener, formActivated, aEvt);
+    m_aActivateListeners.notifyEach( &XFormControllerListener::formActivated, aEvt );
 
     // verschicken ob modified
     if (m_bModified)
-    {
-        NOTIFY_LISTENERS(m_aModifyListeners, XModifyListener, modified, aEvt);
-    }
+        m_aModifyListeners.notifyEach( &XModifyListener::modified, aEvt );
 }
 
 //------------------------------------------------------------------------------
@@ -1429,7 +1431,7 @@ void FmXFormController::focusLost(const FocusEvent& e) throw( RuntimeException )
         m_xActiveControl = NULL;
         EventObject aEvt;
         aEvt.Source = *this;
-        NOTIFY_LISTENERS(m_aActivateListeners, XFormControllerListener, formDeactivated, aEvt);
+        m_aActivateListeners.notifyEach( &XFormControllerListener::formDeactivated, aEvt );
     }
 }
 
