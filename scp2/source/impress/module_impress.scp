@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_impress.scp,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:30:13 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 09:13:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@ Module gid_Module_Prg_Impress_Bin
     gid_File_Registry_Spool_Oo_Common_Impress_Xcu,gid_File_Registry_Spool_Oo_Setup_Impress_Xcu,
     gid_File_Oo_Office_Ui_Impresswindowstate_Xcs,gid_File_Oo_Office_Ui_Impresswindowstate_Xcu,
 	gid_File_Lib_Animcore,gid_File_Share_Config_Sofficecfg_Impress_Effects_Xml, gid_File_Share_Config_Sofficecfg_Impress_Transitions_Xml,
-	gid_File_Oo_Office_Ui_Effects_Xcs, gid_File_Oo_Office_Ui_Effects_Xcu, gid_File_Xdg_Impress,
+	gid_File_Oo_Office_Ui_Effects_Xcs, gid_File_Oo_Office_Ui_Effects_Xcu, gid_File_Xdg_Impress, gid_File_Registry_Spool_Oo_Office_Embedding_Impress_Xcu,
     gid_File_Registry_Spool_Oo_TypeDetection_Impress_Filters_Xcu,gid_File_Registry_Spool_Oo_TypeDetection_Impress_Types_Xcu, gid_File_Tmp_Userinstall_Impress_Inf);
 End
 
