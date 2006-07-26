@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertyanimationnode.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:46:25 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:36:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,32 +32,35 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+#ifndef INCLUDED_SLIDESHOW_PROPERTYANIMATIONNODE_HXX
+#define INCLUDED_SLIDESHOW_PROPERTYANIMATIONNODE_HXX
 
-#ifndef _SLIDESHOW_PROPERTYANIMATIONNODE_HXX
-#define _SLIDESHOW_PROPERTYANIMATIONNODE_HXX
+#include "animationbasenode.hxx"
 
-#include <activityanimationbasenode.hxx>
+namespace presentation {
+namespace internal {
 
-
-namespace presentation
+class PropertyAnimationNode : public AnimationBaseNode
 {
-    namespace internal
-    {
-        class PropertyAnimationNode : public ActivityAnimationBaseNode
-        {
-        public:
-            PropertyAnimationNode( const ::com::sun::star::uno::Reference<
-                                           ::com::sun::star::animations::XAnimationNode >&  xNode,
-                                   const BaseContainerNodeSharedPtr&                    rParent,
-                                   const NodeContext&                                   rContext );
-
-            virtual bool init();
+public:
+    PropertyAnimationNode(
+        ::com::sun::star::uno::Reference<
+        ::com::sun::star::animations::XAnimationNode> const& xNode,
+        ::boost::shared_ptr<BaseContainerNode> const& pParent,
+        NodeContext const& rContext )
+        : AnimationBaseNode( xNode, pParent, rContext ) {}
 
 #if defined(VERBOSE) && defined(DBG_UTIL)
-            virtual const char* getDescription() const;
+    virtual const char* getDescription() const
+        { return "PropertyAnimationNode"; }
 #endif
-        };
-    }
-}
 
-#endif /* _SLIDESHOW_PROPERTYANIMATIONNODE_HXX */
+private:
+    virtual AnimationActivitySharedPtr createActivity() const;
+};
+
+} // namespace internal
+} // namespace presentation
+
+#endif /* INCLUDED_SLIDESHOW_PROPERTYANIMATIONNODE_HXX */
+

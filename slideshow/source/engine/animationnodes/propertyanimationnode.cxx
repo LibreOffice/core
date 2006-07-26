@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertyanimationnode.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:46:10 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:36:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,51 +34,81 @@
  ************************************************************************/
 
 // must be first
-#include <canvas/debug.hxx>
-#include <canvas/verbosetrace.hxx>
+#include "canvas/debug.hxx"
+#include "canvas/verbosetrace.hxx"
+#include "propertyanimationnode.hxx"
+#include "animationfactory.hxx"
 
-#include <propertyanimationnode.hxx>
+using namespace com::sun::star;
 
+namespace presentation {
+namespace internal {
 
-using namespace ::com::sun::star;
-
-namespace presentation
+AnimationActivitySharedPtr PropertyAnimationNode::createActivity() const
 {
-    namespace internal
-    {
-        PropertyAnimationNode::PropertyAnimationNode( const uno::Reference< animations::XAnimationNode >&   xNode,
-                                                      const BaseContainerNodeSharedPtr&                     rParent,
-                                                      const NodeContext&                                    rContext ) :
-            ActivityAnimationBaseNode( xNode, rParent, rContext )
-        {
-        }
+    // Create AnimationActivity from common XAnimate parameters:
+    ActivitiesFactory::CommonParameters aParms( fillCommonParameters() );
+    uno::Reference<animations::XAnimate> const& xAnimateNode =getXAnimateNode();
+    rtl::OUString const attrName( xAnimateNode->getAttributeName() );
+    AttributableShapeSharedPtr const pShape( getShape() );
 
-        bool PropertyAnimationNode::init()
-        {
-            if( !ActivityAnimationBaseNode::init() )
-                return false;
+    switch (AnimationFactory::classifyAttributeName( attrName )) {
+    default:
+    case AnimationFactory::CLASS_UNKNOWN_PROPERTY:
+        ENSURE_AND_THROW(
+            false,
+            "Unexpected attribute class (unknown or empty attribute name)" );
+        break;
 
-            try
-            {
-                // TODO(F2): For restart functionality, we must regenerate activities,
-                // since they are not able to reset their state (or implement _that_)
-                getActivity() = createActivity();
-            }
-            catch( uno::Exception& )
-            {
-                // catch and ignore. We later handle empty activities, but for
-                // other nodes to function properly, the core functionality of
-                // this node must remain up and running.
-            }
+    case AnimationFactory::CLASS_NUMBER_PROPERTY:
+        return ActivitiesFactory::createAnimateActivity(
+            aParms,
+            AnimationFactory::createNumberPropertyAnimation(
+                attrName,
+                pShape,
+                getContext().mpLayerManager ),
+            xAnimateNode );
 
-            return true;
-        }
+    case AnimationFactory::CLASS_ENUM_PROPERTY:
+        return ActivitiesFactory::createAnimateActivity(
+            aParms,
+            AnimationFactory::createEnumPropertyAnimation(
+                attrName,
+                pShape,
+                getContext().mpLayerManager ),
+            xAnimateNode );
 
-#if defined(VERBOSE) && defined(DBG_UTIL)
-        const char* PropertyAnimationNode::getDescription() const
-        {
-            return "PropertyAnimationNode";
-        }
-#endif
+    case AnimationFactory::CLASS_COLOR_PROPERTY:
+        return ActivitiesFactory::createAnimateActivity(
+            aParms,
+            AnimationFactory::createColorPropertyAnimation(
+                attrName,
+                pShape,
+                getContext().mpLayerManager ),
+            xAnimateNode );
+
+    case AnimationFactory::CLASS_STRING_PROPERTY:
+        return ActivitiesFactory::createAnimateActivity(
+            aParms,
+            AnimationFactory::createStringPropertyAnimation(
+                attrName,
+                pShape,
+                getContext().mpLayerManager ),
+            xAnimateNode );
+
+    case AnimationFactory::CLASS_BOOL_PROPERTY:
+        return ActivitiesFactory::createAnimateActivity(
+            aParms,
+            AnimationFactory::createBoolPropertyAnimation(
+                attrName,
+                pShape,
+                getContext().mpLayerManager ),
+            xAnimateNode );
     }
+
+    return AnimationActivitySharedPtr();
 }
+
+} // namespace internal
+} // namespace presentation
+
