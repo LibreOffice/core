@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmgridif.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:49:26 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:41:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,6 +139,7 @@ using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::form;
+using namespace ::com::sun::star::util;
 using namespace ::com::sun::star;
 
 using ::com::sun::star::sdbcx::XColumnsSupplier;
@@ -158,14 +159,14 @@ using ::com::sun::star::awt::XVclWindowPeer;
     aFD.StyleName = rFont.GetStyleName();
     aFD.Height = (sal_Int16)rFont.GetSize().Height();
     aFD.Width = (sal_Int16)rFont.GetSize().Width();
-    aFD.Family = rFont.GetFamily();
+    aFD.Family = (sal_Int16)rFont.GetFamily();
     aFD.CharSet = rFont.GetCharSet();
-    aFD.Pitch = rFont.GetPitch();
+    aFD.Pitch = (sal_Int16)rFont.GetPitch();
     aFD.CharacterWidth = VCLUnoHelper::ConvertFontWidth( rFont.GetWidthType() );
     aFD.Weight= VCLUnoHelper::ConvertFontWeight( rFont.GetWeight() );
     aFD.Slant = (::com::sun::star::awt::FontSlant)rFont.GetItalic();
-    aFD.Underline = rFont.GetUnderline();
-    aFD.Strikeout = rFont.GetStrikeout();
+    aFD.Underline = (sal_Int16)rFont.GetUnderline();
+    aFD.Strikeout = (sal_Int16)rFont.GetStrikeout();
     aFD.Orientation = rFont.GetOrientation();
     aFD.Kerning = rFont.IsKerning();
     aFD.WordLineMode = rFont.IsWordLineMode();
@@ -229,7 +230,7 @@ void FmXModifyMultiplexer::modified(const EventObject& e) throw( RuntimeExceptio
 {
     EventObject aMulti( e);
     aMulti.Source = &m_rParent;
-    NOTIFY_LISTENERS((*this), ::com::sun::star::util::XModifyListener, modified, aMulti);
+    notifyEach( &XModifyListener::modified, aMulti );
 }
 
 //==================================================================
@@ -272,8 +273,8 @@ sal_Bool FmXUpdateMultiplexer::approveUpdate(const EventObject &e) throw( Runtim
     if (getLength())
     {
         ::cppu::OInterfaceIteratorHelper aIter(*this);
-        while (bResult && aIter.hasMoreElements())
-            bResult = reinterpret_cast< XUpdateListener*>(aIter.next())->approveUpdate(aMulti);
+        while ( bResult && aIter.hasMoreElements() )
+            bResult = static_cast< XUpdateListener* >( aIter.next() )->approveUpdate( aMulti );
     }
 
     return bResult;
@@ -284,7 +285,7 @@ void FmXUpdateMultiplexer::updated(const EventObject &e) throw( RuntimeException
 {
     EventObject aMulti( e );
     aMulti.Source = &m_rParent;
-    NOTIFY_LISTENERS((*this), XUpdateListener, updated, aMulti);
+    notifyEach( &XUpdateListener::updated, aMulti );
 }
 
 
@@ -323,7 +324,7 @@ void SAL_CALL FmXSelectionMultiplexer::selectionChanged( const EventObject& _rEv
 {
     EventObject aMulti(_rEvent);
     aMulti.Source = &m_rParent;
-    NOTIFY_LISTENERS((*this), XSelectionChangeListener, selectionChanged, aMulti);
+    notifyEach( &XSelectionChangeListener::selectionChanged, aMulti );
 }
 
 //==================================================================
@@ -360,7 +361,7 @@ void FmXContainerMultiplexer::elementInserted(const ContainerEvent& e) throw( Ru
 {
     ContainerEvent aMulti( e );
     aMulti.Source = &m_rParent;
-    NOTIFY_LISTENERS((*this), XContainerListener, elementInserted, aMulti);
+    notifyEach( &XContainerListener::elementInserted, aMulti );
 }
 
 //------------------------------------------------------------------
@@ -368,7 +369,7 @@ void FmXContainerMultiplexer::elementRemoved(const ContainerEvent& e) throw( Run
 {
     ContainerEvent aMulti( e );
     aMulti.Source = &m_rParent;
-    NOTIFY_LISTENERS((*this), XContainerListener, elementRemoved, aMulti);
+    notifyEach( &XContainerListener::elementRemoved, aMulti );
 }
 
 
@@ -377,7 +378,7 @@ void FmXContainerMultiplexer::elementReplaced(const ContainerEvent& e) throw( Ru
 {
     ContainerEvent aMulti( e );
     aMulti.Source = &m_rParent;
-    NOTIFY_LISTENERS((*this), XContainerListener, elementReplaced, aMulti);
+    notifyEach( &XContainerListener::elementReplaced, aMulti );
 }
 
 //==================================================================
@@ -830,7 +831,7 @@ void SAL_CALL FmXGridControl::setDesignMode(sal_Bool bOn) throw( RuntimeExceptio
     }
 
     // --- </mutex_lock> ---
-    NOTIFY_LISTENERS( maModeChangeListeners, ::com::sun::star::util::XModeChangeListener, modeChanged, aModeChangeEvent );
+    maModeChangeListeners.notifyEach( &XModeChangeListener::modeChanged, aModeChangeEvent );
 }
 
 // XBoundComponent
@@ -1097,7 +1098,7 @@ void FmXGridPeer::selectionChanged()
 {
     EventObject aSource;
     aSource.Source = static_cast< ::cppu::OWeakObject* >(this);
-    NOTIFY_LISTENERS(m_aSelectionListeners, XSelectionChangeListener, selectionChanged, aSource);
+    m_aSelectionListeners.notifyEach( &XSelectionChangeListener::selectionChanged, aSource);
 }
 
 //------------------------------------------------------------------
@@ -1444,7 +1445,7 @@ void FmXGridPeer::CellModified()
 {
     EventObject aEvt;
     aEvt.Source = static_cast< ::cppu::OWeakObject* >(this);
-    NOTIFY_LISTENERS(m_aModifyListeners, ::com::sun::star::util::XModifyListener, modified, aEvt);
+    m_aModifyListeners.notifyEach( &XModifyListener::modified, aEvt );
 }
 
 // XPropertyChangeListener
@@ -1584,7 +1585,7 @@ sal_Bool FmXGridPeer::commit() throw( RuntimeException )
     ::cppu::OInterfaceIteratorHelper aIter(m_aUpdateListeners);
     sal_Bool bCancel = sal_False;
     while (aIter.hasMoreElements() && !bCancel)
-        if (!reinterpret_cast< XUpdateListener*>(aIter.next())->approveUpdate(aEvt))
+        if ( !static_cast< XUpdateListener* >( aIter.next() )->approveUpdate( aEvt ) )
             bCancel = sal_True;
 
     if (!bCancel)
@@ -1907,7 +1908,7 @@ void FmXGridPeer::setProperty( const ::rtl::OUString& PropertyName, const Any& V
 
     if ( 0 == PropertyName.compareToAscii( FM_PROP_TEXTLINECOLOR ) )
     {
-        Color aTextLineColor(::comphelper::getINT32(Value));
+        ::Color aTextLineColor(::comphelper::getINT32(Value));
         if (bVoid)
         {
             pGrid->SetTextLineColor();
@@ -1971,7 +1972,7 @@ void FmXGridPeer::setProperty( const ::rtl::OUString& PropertyName, const Any& V
         if (bVoid)
             pGrid->SetCursorColor(COL_TRANSPARENT);
         else
-            pGrid->SetCursorColor(Color(::comphelper::getINT32(Value)));
+            pGrid->SetCursorColor( ::Color(::comphelper::getINT32(Value)));
         if (isDesignMode())
             pGrid->Invalidate();
     }
@@ -2023,7 +2024,7 @@ void FmXGridPeer::setProperty( const ::rtl::OUString& PropertyName, const Any& V
         }
         else
         {
-            Color aColor( ::comphelper::getINT32(Value) );
+            ::Color aColor( ::comphelper::getINT32(Value) );
             pGrid->SetBackground( aColor );
             pGrid->SetControlBackground( aColor );
         }
@@ -2036,7 +2037,7 @@ void FmXGridPeer::setProperty( const ::rtl::OUString& PropertyName, const Any& V
         }
         else
         {
-            Color aColor( ::comphelper::getINT32(Value) );
+            ::Color aColor( ::comphelper::getINT32(Value) );
             pGrid->SetTextColor( aColor );
             pGrid->SetControlForeground( aColor );
         }
@@ -2483,7 +2484,7 @@ void FmXGridPeer::columnVisible(DbGridColumn* pColumn)
     aEvt.Accessor <<= _nIndex;
     aEvt.Element  <<= xControl;
 
-    NOTIFY_LISTENERS(m_aContainerListeners, XContainerListener, elementInserted, aEvt);
+    m_aContainerListeners.notifyEach( &XContainerListener::elementInserted, aEvt );
 }
 
 //------------------------------------------------------------------------------
@@ -2498,7 +2499,7 @@ void FmXGridPeer::columnHidden(DbGridColumn* pColumn)
     aEvt.Accessor <<= _nIndex;
     aEvt.Element  <<= xControl;
 
-    NOTIFY_LISTENERS(m_aContainerListeners, XContainerListener, elementRemoved, aEvt);
+    m_aContainerListeners.notifyEach( &XContainerListener::elementRemoved, aEvt );
 }
 
 //------------------------------------------------------------------------------
