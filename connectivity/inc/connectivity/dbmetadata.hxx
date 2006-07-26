@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbmetadata.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:16:17 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:20:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,6 +115,13 @@ namespace dbtools
                 default-constructed and does not have a connection, yet.
         */
         bool SAL_CALL supportsSubqueriesInFrom() const;
+
+        /** determines whether names in the database should be restricted to SQL-92 identifiers
+
+            Effectively, this method checks the EnableSQL92Check property of the data source settings,
+            if present.
+        */
+        bool SAL_CALL restrictIdentifiersToSQL92() const;
     };
 
 //........................................................................
