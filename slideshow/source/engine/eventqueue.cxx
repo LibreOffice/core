@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventqueue.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:48:22 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:25:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,12 +69,21 @@ namespace presentation
         EventQueue::EventQueue(
             boost::shared_ptr<canvas::tools::ElapsedTime> const & pPresTimer )
             : maEvents(),
+              maNextEvents(),
               mpTimer( pPresTimer )
         {
         }
 
         EventQueue::~EventQueue()
         {
+            // add in all that have been added explicitly for this round:
+            EventEntryVector::const_iterator const iEnd( maNextEvents.end() );
+            for ( EventEntryVector::const_iterator iPos( maNextEvents.begin() );
+                  iPos != iEnd; ++iPos ) {
+                maEvents.push(*iPos);
+            }
+            EventEntryVector().swap( maNextEvents );
+
             // dispose event queue
             while( !maEvents.empty() )
             {
@@ -97,11 +106,6 @@ namespace presentation
                                "EventQueue::addEvent: event ptr NULL" );
 
             // prepare entry
-            EventEntry entry;
-
-            const double nCurrTime( mpTimer->getElapsedTime() );
-            entry.pEvent = rEvent;
-            entry.nTime  = rEvent->getActivationTime( nCurrTime );
 
             // A seemingly obvious optimization cannot be used here,
             // because it breaks assumed order of notification: zero
@@ -110,14 +114,42 @@ namespace presentation
             // order of notification
 
             // add entry
-            maEvents.push( entry );
-
+            maEvents.push( EventEntry( rEvent, rEvent->getActivationTime(
+                                           mpTimer->getElapsedTime()) ) );
             return true;
+        }
+
+        bool EventQueue::addEventForNextRound( EventSharedPtr const& rEvent )
+        {
+            ENSURE_AND_RETURN( rEvent.get() != NULL,
+                               "EventQueue::addEvent: event ptr NULL" );
+            maNextEvents.push_back(
+                EventEntry( rEvent, rEvent->getActivationTime(
+                                mpTimer->getElapsedTime()) ) );
+            return true;
+        }
+
+        void EventQueue::forceEmpty()
+        {
+            process_(true);
         }
 
         void EventQueue::process()
         {
+            process_(false);
+        }
+
+        void EventQueue::process_( bool bFireAllEvents )
+        {
             VERBOSE_TRACE( "EventQueue: heartbeat" );
+
+            // add in all that have been added explicitly for this round:
+            EventEntryVector::const_iterator const iEnd( maNextEvents.end() );
+            for ( EventEntryVector::const_iterator iPos( maNextEvents.begin() );
+                  iPos != iEnd; ++iPos ) {
+                maEvents.push(*iPos);
+            }
+            EventEntryVector().swap( maNextEvents );
 
             // perform topmost, ready-to-execute event
             // =======================================
@@ -129,7 +161,7 @@ namespace presentation
             // processing only those events which where ready when we
             // entered this method.
             while( !maEvents.empty() &&
-                   maEvents.top().nTime <= nCurrTime )
+                   (bFireAllEvents || maEvents.top().nTime <= nCurrTime) )
             {
                 EventEntry event( maEvents.top() );
                 maEvents.pop();
