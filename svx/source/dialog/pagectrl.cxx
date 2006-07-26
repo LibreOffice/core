@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pagectrl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:25:07 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 08:28:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,7 @@ struct PageWindow_Impl
     SvxBoxItem*     pBorder;
     Bitmap          aBitmap;
     FASTBOOL        bBitmap;
+    sal_Bool        bResetBackground;
     sal_Bool        bFrameDirection;
     sal_Int32       nFrameDirection;
 
@@ -63,6 +64,7 @@ struct PageWindow_Impl
     PageWindow_Impl() :
         pBorder(0),
         bBitmap(FALSE),
+        bResetBackground(sal_False),
         bFrameDirection(sal_False),
         nFrameDirection(0) {}
 
@@ -192,12 +194,15 @@ void SvxPageWindow::DrawPage( const Point& rOrg, const BOOL bSecond, const BOOL 
     const Color& rDlgColor = rStyleSettings.GetDialogColor();
 
     // background
-    if(!bSecond)
+    if(!bSecond || pImpl->bResetBackground)
     {
         SetLineColor( Color(COL_TRANSPARENT) );
         SetFillColor( rDlgColor );
-        Size _aWinSize(GetOutputSize());
-        DrawRect( Rectangle( Point(0,0), _aWinSize ) );
+        Size aWinSize(GetOutputSize());
+        DrawRect( Rectangle( Point(0,0), aWinSize ) );
+
+        if ( pImpl->bResetBackground )
+            pImpl->bResetBackground = sal_False;
     }
     SetLineColor( rFieldTextColor );
     // Schatten
@@ -420,3 +425,7 @@ void  SvxPageWindow::SetFrameDirection(sal_Int32 nFrameDirection)
     pImpl->SetFrameDirection(nFrameDirection);
 }
 
+void SvxPageWindow::ResetBackground()
+{
+    pImpl->bResetBackground = sal_True;
+}
