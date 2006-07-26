@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:29:01 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:45:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,8 +67,8 @@
 #include <rtl/instance.hxx>
 #endif
 
-#ifndef INCLUDED_SAL_INTERNAL_ALLOCATOR_HXX
-#include "internal/allocator.hxx"
+#ifndef INCLUDED_RTL_ALLOCATOR_HXX
+#include "rtl/allocator.hxx"
 #endif
 
 #include "macro.hxx"
@@ -103,7 +103,7 @@ struct rtl_bootstrap_NameValue
 
 typedef std::list<
     rtl_bootstrap_NameValue,
-    sal::Allocator< rtl_bootstrap_NameValue >
+    rtl::Allocator< rtl_bootstrap_NameValue >
 > NameValueList;
 
 namespace {
@@ -532,7 +532,7 @@ sal_Bool Bootstrap_Impl::getValue(
 typedef std::hash_map<
     rtl::OUString, Bootstrap_Impl *,
     rtl::OUStringHash, std::equal_to< rtl::OUString >,
-    sal::Allocator< OUString > > t_bootstrap_map;
+    rtl::Allocator< OUString > > t_bootstrap_map;
 
 namespace {
     struct bootstrap_map :
