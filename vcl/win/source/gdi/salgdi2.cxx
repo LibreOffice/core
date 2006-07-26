@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:59:59 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 09:12:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,9 +59,9 @@
 #ifndef _SV_SALGDI_H
 #include <salgdi.h>
 #endif
-
-// defined in salframe.cxx
-extern void ImplSalGetWorkArea( HWND hWnd, RECT *pRect, const RECT *pParentRect );
+#ifndef _SV_SALFRAME_H
+#include <salframe.h>
+#endif
 
 // =======================================================================
 
