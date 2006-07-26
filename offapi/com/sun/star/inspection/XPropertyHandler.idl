@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XPropertyHandler.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 12:05:11 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:38:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,11 +136,11 @@ interface XPropertyHandler
     /** describes the UI to be used to represent the property
         @param PropertyName
             the name of the property whose user interface is to be described
-        @param out_Descriptor
-            the descriptor of the property line, to be filled by the <type>XPropertyHandler</type>
             implementation
         @param ControlFactory
             a factory for creating <type>XPropertyControl</type> instances. Must not be <NULL/>.
+        @return
+            the descriptor of the property line.
         @throws com::sun::star::beans::UnknownPropertyException
             if the given property is not supported by this handler
         @throws com::sun::star::lang::NullPointerException
@@ -148,10 +148,9 @@ interface XPropertyHandler
         @see PropertyControlType
         @see LineDescriptor
     */
-    void
+    LineDescriptor
         describePropertyLine(
             [in] string PropertyName,
-            [out] LineDescriptor out_Descriptor,
             [in] XPropertyControlFactory ControlFactory
         )
         raises (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::NullPointerException);
