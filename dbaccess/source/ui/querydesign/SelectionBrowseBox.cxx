@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 16:06:23 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:48:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1534,8 +1534,11 @@ void OSelectionBrowseBox::DeleteFields(const String& rAliasName)
         for(USHORT nPos=getFields().size();aIter != getFields().rend();++aIter,--nPos)
         {
             pEntry = *aIter;
-            if (pEntry->GetAlias() == ::rtl::OUString(rAliasName) )
+            if ( pEntry->GetAlias().equals( rAliasName ) )
+            {
                 RemoveField( GetColumnId( nPos ) );
+                break;
+            }
         }
 
         if (bWasEditing)
