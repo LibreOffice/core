@@ -4,9 +4,9 @@
  *
  *  $RCSfile: trace.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:27:44 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:43:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 #ifndef _TRACE_HXX_
 #define _TRACE_HXX_
 
-#if defined(DBG_UTIL) && defined(ENABLE_RANGE_TRACING)
+#if defined(DBG_UTIL)
 
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
