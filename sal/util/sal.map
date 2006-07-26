@@ -551,3 +551,12 @@ UDK_3.5 {
         rtl_cache_free;
 } UDK_3.4;
 
+PRIVATE_1.0 {
+    global:
+        osl_detail_ObjectRegistry_storeAddresses;
+        osl_detail_ObjectRegistry_checkObjectCount;
+        osl_detail_ObjectRegistry_registerObject;
+        osl_detail_ObjectRegistry_revokeObject;
+        osl_detail_ObjectRegistry_getMutex;
+};
+
