@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unload.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:31:02 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:45:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,8 +48,8 @@
 #endif
 #include <hash_map>
 
-#ifndef INCLUDED_SAL_INTERNAL_ALLOCATOR_HXX
-#include "internal/allocator.hxx"
+#ifndef INCLUDED_RTL_ALLOCATOR_HXX
+#include "rtl/allocator.hxx"
 #endif
 
 #include <functional>
@@ -179,7 +179,7 @@ typedef std::hash_map<
     std::pair<sal_uInt32, component_canUnloadFunc>,
     hashModule,
     std::equal_to<oslModule>,
-    sal::Allocator<oslModule>
+    rtl::Allocator<oslModule>
 > ModuleMap;
 
 typedef ModuleMap::iterator Mod_IT;
@@ -265,7 +265,7 @@ extern "C" void SAL_CALL rtl_unloadUnusedModules( TimeValue* libUnused)
 {
     MutexGuard guard( getUnloadingMutex());
 
-    typedef std::list< oslModule, sal::Allocator<oslModule> > list_type;
+    typedef std::list< oslModule, rtl::Allocator<oslModule> > list_type;
     list_type unloadedModulesList;
 
     ModuleMap& moduleMap= getModuleMap();
@@ -328,7 +328,7 @@ typedef std::hash_map<
     std::pair<rtl_unloadingListenerFunc, void*>,
     hashListener,
     std::equal_to<sal_Int32>,
-    sal::Allocator<sal_Int32>
+    rtl::Allocator<sal_Int32>
 > ListenerMap;
 
 typedef ListenerMap::iterator Lis_IT;
@@ -357,7 +357,7 @@ static ListenerMap& getListenerMap()
 
 typedef std::deque<
     sal_Int32,
-    sal::Allocator<sal_Int32>
+    rtl::Allocator<sal_Int32>
 > queue_type;
 
 static queue_type& getCookieQueue()
