@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tooltiplbox.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:58:22 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 08:26:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,14 @@ namespace svtools {
 
 void lcl_ToolTipLBox_ShowToolTip( ListBox& rListBox, const HelpEvent& rHEvt )
 {
+    // only show tooltip if helpmode is BALLOON or QUICK
+    if ( !( rHEvt.GetMode() & HELPMODE_BALLOON ) && !( rHEvt.GetMode() & HELPMODE_QUICK ) )
+    {
+        // else call base class method
+        rListBox.ListBox::RequestHelp( rHEvt );
+        return ;
+    }
+
     // find the list box entry the mouse points to
     Point aMousePos( rListBox.ScreenToOutputPixel( rHEvt.GetMousePosPixel() ) );
 
