@@ -4,9 +4,9 @@
  *
  *  $RCSfile: browserlistbox.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 09:00:52 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:52:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -458,7 +458,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    void OBrowserListBox::Activate(sal_Bool _bActive)
+    void OBrowserListBox::ActivateListBox(sal_Bool _bActive)
     {
         m_bIsActive = _bActive;
         if (m_bIsActive)
@@ -543,8 +543,7 @@ namespace pcr
         m_aVScroll.SetPageSize(nLines-1);
         m_aVScroll.SetVisibleSize(nLines-1);
 
-        sal_uInt16 nCount = m_aLines.size();
-        sal_Int32 nThumbPos = m_aVScroll.GetThumbPos();
+        size_t nCount = m_aLines.size();
         if (nCount>0)
         {
             m_aVScroll.SetRange(Range(0,nCount-1));
@@ -602,7 +601,7 @@ namespace pcr
 
         sal_uInt16 nEnd = (sal_uInt16)(nThumbPos + nLines);
         if (nEnd >= m_aOrderedLines.size())
-            nEnd = m_aOrderedLines.size()-1;
+            nEnd = (sal_uInt16)m_aOrderedLines.size()-1;
 
         if ( !m_aOrderedLines.empty() )
         {
@@ -660,7 +659,7 @@ namespace pcr
         {
             if ( (*linePos)->first == _rEntryName )
             {
-                nRet = linePos - m_aOrderedLines.begin();
+                nRet = (sal_uInt16)( linePos - m_aOrderedLines.begin() );
                 break;
             }
         }
@@ -729,7 +728,7 @@ namespace pcr
             nInsertPos = EDITOR_LIST_APPEND;
         if ( EDITOR_LIST_APPEND == nInsertPos )
         {
-            nInsertPos = m_aOrderedLines.size();
+            nInsertPos = (sal_uInt16)m_aOrderedLines.size();
             m_aOrderedLines.push_back( insertPoint.first );
         }
         else
@@ -948,9 +947,9 @@ namespace pcr
                 ++search
             )
             if ( (*search)->second.pLine->getControl().get() == _rxControl.get() )
-                return search - m_aOrderedLines.begin();
+                return sal_uInt16( search - m_aOrderedLines.begin() );
         DBG_ERROR( "OBrowserListBox::impl_getControlPos: invalid control - not part of any of our lines!" );
-        return -1;
+        return (sal_uInt16)-1;
     }
 
     //--------------------------------------------------------------------
@@ -1077,7 +1076,7 @@ namespace pcr
 
         m_aLines.erase( *orderedPos );
         m_aOrderedLines.erase( orderedPos );
-        m_aOutOfDateLines.erase( m_aOrderedLines.size() );
+        m_aOutOfDateLines.erase( (sal_uInt16)m_aOrderedLines.size() );
             // this index *may* have been out of date, which is obsoleted now by m_aOrderedLines shrinking
 
         // update the positions of possibly affected lines
