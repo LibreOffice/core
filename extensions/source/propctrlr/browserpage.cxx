@@ -4,9 +4,9 @@
  *
  *  $RCSfile: browserpage.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:03:20 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:53:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,7 +87,7 @@ namespace pcr
     {
         Window::StateChanged( nType);
         if (STATE_CHANGE_VISIBLE == nType)
-            m_aListBox.Activate(IsVisible());
+            m_aListBox.ActivateListBox(IsVisible());
     }
 
     // #95343# ---------------------------------------------------------
