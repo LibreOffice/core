@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtwin.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 08:09:06 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 12:17:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,7 +153,12 @@ friend void     PageNumNotify(  ViewShell* pVwSh,
                     bChainMode      : 1, //Rahmen verbinden
                     bWasShdwCrsr    : 1, //ShadowCrsr war im MouseButtonDown an
                     bLockInput      : 1, //Lock waehrend die Rechenleiste aktiv ist
-                    bIsRowDrag      : 1; //selection of rows is used, in combination with pRowColumnSelectionStart
+                    bIsRowDrag      : 1, //selection of rows is used, in combination with pRowColumnSelectionStart
+                    /** #i42732# display status of font size/name depending on either the input language or the
+                        selection position depending on what has changed lately
+                     */
+                    bUseInputLanguage: 1;
+
 
     USHORT          nKS_NUMDOWN_Count; // #i23725#
     USHORT          nKS_NUMINDENTINC_Count;
@@ -295,10 +300,15 @@ public:
                                      const bool bVerticalMode );
     // <--
 
+    /** #i42732# display status of font size/name depending on either the input
+        language or the selection position depending on what has changed lately
+     */
+    void        SetUseInputLanguage( sal_Bool bNew );
+    sal_Bool    IsUseInputLanguage() const { return bUseInputLanguage; }
+
     SwEditWin(Window *pParent, SwView &);
     virtual ~SwEditWin();
 };
-
 
 #endif
 
