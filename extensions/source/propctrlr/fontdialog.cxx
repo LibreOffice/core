@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontdialog.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 12:19:02 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:55:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -311,12 +311,12 @@ namespace pcr
             sal_Int16   nFontCharset        = aPropExtractor.getInt16FontProperty(PROPERTY_FONT_CHARSET, aDefaultFont.CharSet);
             float   nFontHeight             = aPropExtractor.getFloatFontProperty(PROPERTY_FONT_HEIGHT, (float)aDefaultFont.Height);
             float   nFontWeight             = aPropExtractor.getFloatFontProperty(PROPERTY_FONT_WEIGHT, aDefaultFont.Weight);
-            sal_Int16 nFontSlant            = aPropExtractor.getInt16FontProperty(PROPERTY_FONT_SLANT, aDefaultFont.Slant);
+            sal_Int16 nFontSlant            = aPropExtractor.getInt16FontProperty(PROPERTY_FONT_SLANT, (sal_Int16)aDefaultFont.Slant);
             sal_Int16 nFontUnderline        = aPropExtractor.getInt16FontProperty(PROPERTY_FONT_UNDERLINE, aDefaultFont.Underline);
             sal_Int16 nFontStrikeout        = aPropExtractor.getInt16FontProperty(PROPERTY_FONT_STRIKEOUT, aDefaultFont.Strikeout);
 
             sal_Int32 nTextLineColor        = aPropExtractor.getInt32FontProperty(PROPERTY_TEXTLINECOLOR, COL_AUTO);
-            sal_Int16 nFontRelief           = aPropExtractor.getInt16FontProperty(PROPERTY_FONT_RELIEF, aDefaultVCLFont.GetRelief());
+            sal_Int16 nFontRelief           = aPropExtractor.getInt16FontProperty(PROPERTY_FONT_RELIEF, (sal_Int16)aDefaultVCLFont.GetRelief());
             sal_Int16 nFontEmphasisMark     = aPropExtractor.getInt16FontProperty(PROPERTY_FONT_EMPHASIS_MARK, aDefaultVCLFont.GetEmphasisMark());
 
             Any aValue;
@@ -471,7 +471,7 @@ namespace pcr
                 const SvxUnderlineItem& rUnderlineItem =
                     static_cast<const SvxUnderlineItem&>(_rSet.Get(CFID_UNDERLINE));
 
-                sal_Int16 nUnderline = rUnderlineItem.GetUnderline();
+                sal_Int16 nUnderline = (sal_Int16)rUnderlineItem.GetUnderline();
                 lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_UNDERLINE,makeAny(nUnderline));
 
                 // the text line color is transported in this item, too
@@ -493,7 +493,7 @@ namespace pcr
                 const SvxCrossedOutItem& rCrossedOutItem =
                     static_cast<const SvxCrossedOutItem&>(_rSet.Get(CFID_STRIKEOUT));
 
-                sal_Int16 nStrikeout = rCrossedOutItem.GetStrikeout();
+                sal_Int16 nStrikeout = (sal_Int16)rCrossedOutItem.GetStrikeout();
                 lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_STRIKEOUT,makeAny(nStrikeout));
             }
 
