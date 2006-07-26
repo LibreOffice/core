@@ -4,9 +4,9 @@
  *
  *  $RCSfile: delayevent.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 11:50:09 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:23:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,8 +62,11 @@ double Delay::getActivationTime( double nCurrentTime ) const
 
 void Delay::dispose()
 {
-    mbWasFired = true;
-    maFunc.clear(); // release of payload
+    // don't clear unconditionally, because it may currently be executed:
+    if (isCharged()) {
+        mbWasFired = true;
+        maFunc.clear(); // release of payload
+    }
 }
 
 } // namespace internal
