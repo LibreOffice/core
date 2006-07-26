@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treeopt.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:20:54 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 08:29:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,10 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
+#include <com/sun/star/uno/Reference.h>
+#endif
 
 #ifndef _BASEDLGS_HXX //autogen
 #include <sfx2/basedlgs.hxx>
@@ -76,6 +80,8 @@ void*           GetSSOCreator( void );
 /* -----------------11.02.99 07:51-------------------
  *
  * --------------------------------------------------*/
+namespace com { namespace sun { namespace star { namespace frame { class XFrame; } } } }
+
 class OfaTreeOptionsDialog : public SfxModalDialog
 {
 private:
@@ -121,7 +127,7 @@ private:
 
     SfxItemSet*     CreateItemSet( USHORT nId );
     void            ApplyItemSet( USHORT nId, const SfxItemSet& rSet );
-    void            Initialize();
+    void            Initialize( const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& _xFrame );
     void            ResizeTreeLB( void );   // resizes dialog so that treelistbox has no horizontal scroll bar
 
 protected:
@@ -137,7 +143,8 @@ protected:
         virtual short   Execute();
 
 public:
-        OfaTreeOptionsDialog(Window* pParent);
+        OfaTreeOptionsDialog( Window* pParent,
+            const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& _xFrame );
         ~OfaTreeOptionsDialog();
 
         void    AddTabPage( USHORT nId, const String& rPageName, USHORT nGroup);
