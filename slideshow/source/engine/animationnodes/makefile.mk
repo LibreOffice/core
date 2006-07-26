@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 20:44:51 $
+#   last change: $Author: rt $ $Date: 2006-07-26 07:35:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -40,32 +40,30 @@ TARGET=animationnodes
 ENABLE_EXCEPTIONS=TRUE
 PRJINC=..$/..
 
-
 # --- Settings -----------------------------------------------------------
 
-.INCLUDE :	settings.mk
+.INCLUDE :      settings.mk
 .INCLUDE : $(PRJ)$/util$/makefile.pmk
 
 # --- Common ----------------------------------------------------------
 
-SLOFILES =	$(SLO)$/activityanimationbasenode.obj 		\
-            $(SLO)$/animationaudionode.obj 				\
-            $(SLO)$/animationcommandnode.obj 			\
-            $(SLO)$/animationbasenode.obj 				\
-            $(SLO)$/animationcolornode.obj 				\
-            $(SLO)$/animationnodefactory.obj 			\
-            $(SLO)$/animationpathmotionnode.obj 		\
-            $(SLO)$/animationsetnode.obj 				\
-            $(SLO)$/animationtransformnode.obj 			\
-            $(SLO)$/animationtransitionfilternode.obj 	\
-            $(SLO)$/basecontainernode.obj 				\
-            $(SLO)$/basenode.obj 						\
-            $(SLO)$/nodetools.obj						\
-            $(SLO)$/paralleltimecontainer.obj			\
-            $(SLO)$/propertyanimationnode.obj			\
-            $(SLO)$/sequentialtimecontainer.obj
-
+SLOFILES = $(SLO)$/animationaudionode.obj \
+           $(SLO)$/animationcommandnode.obj \
+           $(SLO)$/animationbasenode.obj \
+           $(SLO)$/animationcolornode.obj \
+           $(SLO)$/animationnodefactory.obj \
+           $(SLO)$/animationpathmotionnode.obj \
+           $(SLO)$/animationsetnode.obj \
+           $(SLO)$/animationtransformnode.obj \
+           $(SLO)$/animationtransitionfilternode.obj \
+           $(SLO)$/basecontainernode.obj \
+           $(SLO)$/basenode.obj \
+           $(SLO)$/nodetools.obj \
+           $(SLO)$/paralleltimecontainer.obj \
+           $(SLO)$/propertyanimationnode.obj \
+           $(SLO)$/sequentialtimecontainer.obj \
+           $(SLO)$/generateevent.obj
 
 # ==========================================================================
 
-.INCLUDE :	target.mk
+.INCLUDE :      target.mk
