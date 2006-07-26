@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objectformattertxtfrm.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-03 17:18:13 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 08:17:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,6 +136,15 @@ class SwObjectFormatterTxtFrm : public SwObjectFormatter
             @author OD
         */
         void _FormatAnchorFrmForCheckMoveFwd();
+
+        /** method to determine if at least one anchored object has state
+            <temporarly consider wrapping style influence> set.
+
+            OD 2006-07-24 #b6449874#
+
+            @author OD
+        */
+        bool _AtLeastOneObjIsTmpConsiderWrapInfluence();
 
     protected:
 
