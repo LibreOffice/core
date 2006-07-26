@@ -4,9 +4,9 @@
  *
  *  $RCSfile: event.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 08:50:11 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:39:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,11 +76,6 @@ public:
         event is to be fired.
     */
     virtual double getActivationTime( double nCurrentTime ) const = 0;
-
-#if defined(VERBOSE) && defined(DBG_UTIL)
-    char const* const ORIGIN;
-    Event( char const* const origin = "<unknown>" ) : ORIGIN(origin) {}
-#endif
 };
 
 typedef ::boost::shared_ptr< Event > EventSharedPtr;
