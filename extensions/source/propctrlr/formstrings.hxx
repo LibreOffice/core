@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formstrings.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:24:55 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 07:57:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,7 @@ namespace pcr
     PCR_CONSTASCII_STRING( PROPERTY_HIDDEN_VALUE,           "HiddenValue");
     PCR_CONSTASCII_STRING( PROPERTY_BUTTONTYPE,             "ButtonType");
     PCR_CONSTASCII_STRING( PROPERTY_XFORMS_BUTTONTYPE,      "XFormsButtonType");
+    PCR_CONSTASCII_STRING( PROPERTY_ACTION_BUTTONTYPE,      "ActionButtonType");
     PCR_CONSTASCII_STRING( PROPERTY_STRINGITEMLIST,         "StringItemList");
     PCR_CONSTASCII_STRING( PROPERTY_DEFAULT_TEXT,           "DefaultText");
     PCR_CONSTASCII_STRING( PROPERTY_DEFAULTCHECKED,         "DefaultState");
@@ -136,7 +137,6 @@ namespace pcr
     PCR_CONSTASCII_STRING( PROPERTY_ECHO_CHAR,              "EchoChar");
     PCR_CONSTASCII_STRING( PROPERTY_ROWHEIGHT,              "RowHeight");
     PCR_CONSTASCII_STRING( PROPERTY_HELPTEXT,               "HelpText");
-//    PCR_CONSTASCII_STRING( PROPERTY_FONT,                   "Font");
     PCR_CONSTASCII_STRING( PROPERTY_FONT_NAME,              "FontName");
     PCR_CONSTASCII_STRING( PROPERTY_FONT_STYLENAME,         "FontStyleName");
     PCR_CONSTASCII_STRING( PROPERTY_FONT_FAMILY,            "FontFamily");
