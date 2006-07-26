@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view1.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-04 16:02:58 $
+ *  last change: $Author: rt $ $Date: 2006-07-26 12:19:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
