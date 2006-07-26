@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-19 13:44:57 $
+#   last change: $Author: rt $ $Date: 2006-07-26 08:19:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,10 +47,6 @@ TARGET=gen
 
 .IF "$(WITH_GPC)"!="NO"
 CDEFS+=-DHAVE_GPC_H
-.ENDIF
-.IF "$(WITH_LIBART)"!="NO"
-CDEFS+=-DHAVE_LIBART_H
-CFLAGS+=$(LIBART_CFLAGS)
 .ENDIF
 
 # --- Files --------------------------------------------------------
