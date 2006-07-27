@@ -4,9 +4,9 @@
  *
  *  $RCSfile: clippedlinerenderer.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-11 11:38:54 $
+ *  last change: $Author: thb $ $Date: 2006-07-27 11:35:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -209,7 +209,7 @@ inline bool prepareClip( sal_Int32  a1,
     pixel, the pixel closer to pt1 will be chosen. Giving true here
     makes renderClippedLine() choose pt2 in those cases.
  */
-template< class Iterator, class Accessor >
+template< class Iterator, class Accessor > inline
 void renderClippedLine( basegfx::B2IPoint             aPt1,
                         basegfx::B2IPoint             aPt2,
                         const basegfx::B2IRange&      rClipRect,

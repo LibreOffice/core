@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmapdevice.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-21 20:57:06 $
+ *  last change: $Author: thb $ $Date: 2006-07-27 11:35:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,7 @@
 #include "basebmp/fillimage.hxx"
 #include "basebmp/scaleimage.hxx"
 #include "basebmp/clippedlinerenderer.hxx"
+#include "basebmp/polypolygonrenderer.hxx"
 //#include "basebmp/genericintegerimageaccessor.hxx"
 
 #include "basebmp/tools.hxx"
@@ -70,9 +71,7 @@
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <basegfx/polygon/b2dpolypolygonrasterconverter.hxx>
 #include <basegfx/point/b2ipoint.hxx>
 #include <basegfx/vector/b2ivector.hxx>
 
@@ -172,85 +171,6 @@ namespace
                          MaskFunctorMode >::type > > type;
     };
 
-
-    // Polygon scanline conversion
-    //------------------------------------------------------------------------
-
-    template< class DestIterator, class DestAccessor > class Renderer :
-        public basegfx::B2DPolyPolygonRasterConverter
-    {
-    private:
-        basegfx::B2IRange                 bounds_;
-        typename DestAccessor::value_type fillColor_;
-        typename DestAccessor::value_type clearColor_;
-        DestIterator                      begin_;
-        DestAccessor                      accessor_;
-
-    public:
-        Renderer(const basegfx::B2DPolyPolygon&     rPolyPolyRaster,
-                 typename DestAccessor::value_type  fillColor,
-                 const basegfx::B2IRange&           bounds,
-                 DestIterator                       begin,
-                 DestAccessor                       accessor ) :
-            B2DPolyPolygonRasterConverter(rPolyPolyRaster,
-                                          basegfx::B2DRange(bounds) ),
-            bounds_(bounds),
-            fillColor_( fillColor ),
-            begin_( begin ),
-            accessor_( accessor )
-        {
-        }
-
-        virtual void span(const double& rfXLeft,
-                          const double& rfXRight,
-                          sal_Int32     nY,
-                          bool          bOn )
-        {
-            if( !bOn ||
-                nY < bounds_.getMinY() ||
-                nY >= bounds_.getMaxY() ||
-                rfXLeft >= bounds_.getMaxX() ||
-                rfXRight < bounds_.getMinX() )
-            {
-                return;
-            }
-
-            // clip span to bitmap bounds
-            const sal_Int32 nStartX( std::max( bounds_.getMinX(),
-                                               std::min( bounds_.getMaxX()-1,
-                                                         basegfx::fround( rfXLeft ))));
-            const sal_Int32 nEndX  ( std::max( bounds_.getMinX(),
-                                               std::min( bounds_.getMaxX(),
-                                                         basegfx::fround( rfXRight ))));
-
-            DestIterator currIter( begin_ + vigra::Diff2D(0,nY) );
-            typename vigra::IteratorTraits<DestIterator>::row_iterator
-                rowIter( currIter.rowIterator() + nStartX);
-            typename vigra::IteratorTraits<DestIterator>::row_iterator
-                rowEnd( currIter.rowIterator() + nEndX );
-
-            // TODO(P2): Provide specialized span fill methods on the
-            // iterator/accessor
-            while( rowIter != rowEnd )
-                accessor_.set(fillColor_, rowIter++);
-        }
-    };
-
-    template< class DestIterator, class DestAccessor >
-    std::auto_ptr< Renderer< DestIterator, DestAccessor > > makeRenderer(
-        const basegfx::B2DPolyPolygon&                          rPolyPolyRaster,
-        typename DestAccessor::value_type                       fillColor,
-        const basegfx::B2IRange&                                outRange,
-        const DestIterator&                                     begin,
-        const DestAccessor&                                     acc )
-    {
-        return std::auto_ptr< Renderer< DestIterator, DestAccessor > >(
-            new Renderer< DestIterator, DestAccessor >(rPolyPolyRaster,
-                                                       fillColor,
-                                                       outRange,
-                                                       begin,
-                                                       acc));
-    }
 
 
     // Actual BitmapDevice implementation (templatized by accessor and iterator)
@@ -396,6 +316,7 @@ namespace
                         sal_Int32                        nScanlineStride,
                         sal_uInt8*                       pFirstScanline,
                         dest_iterator_type               begin,
+                        raw_accessor_type                rawAccessor,
                         dest_accessor_type               accessor,
                         const RawMemorySharedArray&      rMem,
                         const PaletteMemorySharedVector& rPalette ) :
@@ -406,15 +327,15 @@ namespace
             maToUInt32Converter(),
             maAccessor( accessor ),
             maColorBlendAccessor( accessor ),
-            maRawAccessor(),
+            maRawAccessor( rawAccessor ),
             maXorAccessor( accessor ),
-            maRawXorAccessor(),
+            maRawXorAccessor( rawAccessor ),
             maMaskedAccessor( accessor ),
             maMaskedColorBlendAccessor( maColorBlendAccessor ),
             maMaskedXorAccessor( accessor ),
-            maRawMaskedAccessor(),
-            maRawMaskedXorAccessor(),
-            maRawMaskedMaskAccessor()
+            maRawMaskedAccessor( rawAccessor ),
+            maRawMaskedXorAccessor( rawAccessor ),
+            maRawMaskedMaskAccessor( rawAccessor )
         {}
 
     private:
@@ -684,13 +605,12 @@ namespace
             if( rPoly.areControlVectorsUsed() )
                 aPoly = basegfx::tools::adaptiveSubdivideByCount( rPoly );
 
-            makeRenderer( aPoly,
-                          maColorLookup( maAccessor,
-                                         col),
-                          rBounds,
-                          begin,
-                          acc )->rasterConvert(
-                              basegfx::FillRule_NONZERO_WINDING_NUMBER );
+            renderClippedPolyPolygon( begin,
+                                      acc,
+                                      maColorLookup( maAccessor,
+                                                     col),
+                                      rBounds,
+                                      aPoly );
         }
 
         virtual void fillPolyPolygon_i(const basegfx::B2DPolyPolygon& rPoly,
@@ -1773,6 +1693,7 @@ BitmapDeviceSharedPtr createRenderer(
     sal_Int32                                                    nScanlineFormat,
     sal_Int32                                                    nScanlineStride,
     sal_uInt8*                                                   pFirstScanline,
+    typename FormatTraits::raw_accessor_type const&              rRawAccessor,
     typename FormatTraits::accessor_selector::template wrap_accessor<
           typename FormatTraits::raw_accessor_type>::type const& rAccessor,
     boost::shared_array< sal_uInt8 >                             pMem,
@@ -1809,6 +1730,7 @@ BitmapDeviceSharedPtr createRenderer(
                           reinterpret_cast<typename Iterator::value_type*>(
                               pFirstScanline),
                           nScanlineStride),
+                      rRawAccessor,
                       rAccessor,
                       pMem,
                       pPal ));
@@ -1851,6 +1773,7 @@ BitmapDeviceSharedPtr createRenderer(
                                       nScanlineFormat,
                                       nScanlineStride,
                                       pFirstScanline,
+                                      typename FormatTraits::raw_accessor_type(),
                                       typename FormatTraits::accessor_selector::template
                                       wrap_accessor<
                                           typename FormatTraits::raw_accessor_type>::type(),
@@ -1879,6 +1802,7 @@ BitmapDeviceSharedPtr createRenderer(
                                       nScanlineFormat,
                                       nScanlineStride,
                                       pFirstScanline,
+                                      typename FormatTraits::raw_accessor_type(),
                                       typename FormatTraits::accessor_selector::template
                                           wrap_accessor<
                                       typename FormatTraits::raw_accessor_type>::type(
@@ -2170,6 +2094,8 @@ BitmapDeviceSharedPtr BitmapDevice::getGenericRenderer() const
                 getScanlineStride(),
                 mpImpl->mpFirstScanline,
                 PixelFormatTraits_GenericInteger::iterator_type(),
+                GenericIntegerImageRawAccessor<Color>(
+                    const_cast<BitmapDevice*>(this)->shared_from_this()),
                 GenericIntegerImageAccessor<Color>(
                     const_cast<BitmapDevice*>(this)->shared_from_this()),
                 getBuffer(),

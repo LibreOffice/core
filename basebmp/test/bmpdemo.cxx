@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bmpdemo.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-12 22:47:21 $
+ *  last change: $Author: thb $ $Date: 2006-07-27 11:35:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1082,6 +1082,24 @@ void TestWindow::Paint( const Rectangle& rRect )
                                                                          basebmp::Format::THIRTYTWO_BIT_TC_MASK ));
 
     {
+        ::rtl::OUString aSvg;
+        basegfx::B2DPolyPolygon aPoly;
+
+        basegfx::tools::importFromSvgD( aPoly,
+                                        ::rtl::OUString::createFromAscii(
+                                            "m0 0 h7 v7 h-7 z" ) );
+        basegfx::tools::importFromSvgD( aPoly,
+                                        ::rtl::OUString::createFromAscii(
+                                            "m2 2 h3 v3 h-3 z" ) );
+
+        pDevice->fillPolyPolygon(
+            aPoly,
+            basebmp::Color(0xFFFFFFFF),
+            basebmp::DrawMode_PAINT );
+    }
+
+#if 0
+    {
         basebmp::BitmapDeviceSharedPtr pMask( basebmp::createBitmapDevice( aTestSize,
                                                                            false,
                                                                            basebmp::Format::ONE_BIT_MSB_GREY ));
@@ -1114,11 +1132,9 @@ void TestWindow::Paint( const Rectangle& rRect )
 
     {
         const basebmp::Color aCol(0xFFFFFFFF);
-#if 0
         basegfx::B2DPolygon aRect = basegfx::tools::createPolygonFromRect(
             basegfx::B2DRange( 0,0,1001,1001 ));
         pDevice->drawPolygon( aRect, aCol, basebmp::DrawMode_PAINT );
-#endif
 
         const basegfx::B2IPoint aPt1(0,0);
         const basegfx::B2IPoint aPt2(0,800);
@@ -1127,6 +1143,7 @@ void TestWindow::Paint( const Rectangle& rRect )
         const basegfx::B2IPoint aPt3(0,1001);
         pDevice->drawLine( aPt1, aPt3, aCol, basebmp::DrawMode_PAINT );
     }
+#endif
 
     {
         pDevice->clear(basebmp::Color(0));

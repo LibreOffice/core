@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filltest.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-02 16:14:23 $
+ *  last change: $Author: thb $ $Date: 2006-07-27 11:35:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,6 +81,7 @@ private:
                 basegfx::tools::createPolygonFromRect( aRect )),
             aCol,
             DrawMode_PAINT );
+
         const basegfx::B2IPoint aPt1(1,1);
         CPPUNIT_ASSERT_MESSAGE("first pixel set",
                                rDevice->getPixel(aPt1) == aCol);
@@ -212,7 +213,6 @@ private:
                                       basegfx::tools::createPolygonFromRect(aLeftBottom)),
                                   aCol,
                                   DrawMode_PAINT );
-
         CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 3",
                                countPixel( rDevice, aCol ) == 3);
 

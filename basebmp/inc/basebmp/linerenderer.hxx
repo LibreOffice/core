@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linerenderer.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-11 11:38:55 $
+ *  last change: $Author: thb $ $Date: 2006-07-27 11:35:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@ namespace basebmp
     pixel, the pixel closer to pt1 will be chosen. Giving true here
     makes renderClippedLine() choose pt2 in those cases.
  */
-template< class Iterator, class Accessor >
+template< class Iterator, class Accessor > inline
 void renderLine( const basegfx::B2IPoint&      rPt1,
                  const basegfx::B2IPoint&      rPt2,
                  typename Accessor::value_type color,

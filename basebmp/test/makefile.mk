@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: thb $ $Date: 2006-07-12 15:09:45 $
+#   last change: $Author: thb $ $Date: 2006-07-27 11:35:32 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,7 @@ SHL1OBJS=  \
     $(SLO)$/filltest.obj		\
     $(SLO)$/linetest.obj		\
     $(SLO)$/masktest.obj		\
+    $(SLO)$/polytest.obj		\
     $(SLO)$/tools.obj
 
 SHL1TARGET= tests

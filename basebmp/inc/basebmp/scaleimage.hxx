@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scaleimage.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-14 14:22:58 $
+ *  last change: $Author: thb $ $Date: 2006-07-27 11:35:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,6 +97,29 @@ inline void scaleLine( SourceIter      s_begin,
     }
 }
 
+/** Scale an image using zero order interpolation (pixel replication)
+
+    Source and destination range must be at least one pixel wide and
+    high.
+
+    @param s_begin
+    Start iterator for source image
+
+    @param s_end
+    End iterator for source image
+
+    @param s_acc
+    Source accessor
+
+    @param d_begin
+    Start iterator for destination image
+
+    @param d_end
+    End iterator for destination image
+
+    @param d_acc
+    Destination accessor
+ */
 template< class SourceIter, class SourceAcc,
           class DestIter, class DestAcc >
 inline void scaleImage( SourceIter      s_begin,
@@ -142,6 +165,8 @@ inline void scaleImage( SourceIter      s_begin,
     }
 }
 
+/** Scale an image, range tuple version
+ */
 template< class SourceIter, class SourceAcc,
           class DestIter, class DestAcc >
 inline void scaleImage( vigra::triple<SourceIter,SourceIter,SourceAcc> const& src,

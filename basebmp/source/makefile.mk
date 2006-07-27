@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: thb $ $Date: 2006-07-21 20:57:06 $
+#   last change: $Author: thb $ $Date: 2006-07-27 11:35:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,8 @@ CDEFS+= -DBASEBMP_NO_NESTED_TEMPLATE_PARAMETER
 
 SLOFILES =	\
     $(SLO)$/bitmapdevice.obj \
-    $(SLO)$/debug.obj
+    $(SLO)$/debug.obj \
+    $(SLO)$/polypolygonrenderer.obj
 
 #	$(SLO)$/genericintegerimageaccessor.obj \
 
