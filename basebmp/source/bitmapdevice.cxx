@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmapdevice.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-27 11:35:31 $
+ *  last change: $Author: thb $ $Date: 2006-07-28 09:47:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -320,7 +320,7 @@ namespace
                         dest_accessor_type               accessor,
                         const RawMemorySharedArray&      rMem,
                         const PaletteMemorySharedVector& rPalette ) :
-            BitmapDevice( rBounds, bTopDown, nScanlineFormat,
+            BitmapDevice( rBounds, nScanlineFormat,
                           nScanlineStride, pFirstScanline, rMem, rPalette ),
             maBegin( begin ),
             maColorLookup(),
@@ -1028,7 +1028,6 @@ struct ImplBitmapDevice
 
 
 BitmapDevice::BitmapDevice( const basegfx::B2IRange&         rBounds,
-                            bool                             bTopDown,
                             sal_Int32                        nScanlineFormat,
                             sal_Int32                        nScanlineStride,
                             sal_uInt8*                       pFirstScanline,
@@ -1241,6 +1240,7 @@ namespace
     void assertImagePoint( const basegfx::B2IPoint& rPt,
                            const basegfx::B2IRange& rPermittedRange )
     {
+        (void)rPt; (void)rPermittedRange;
         OSL_ASSERT( rPermittedRange.isInside(rPt) );
     }
 
@@ -1252,6 +1252,8 @@ namespace
         aRange.intersect( rPermittedRange );
 
         OSL_ASSERT( aRange == rRange );
+#else
+        (void)rRange; (void)rPermittedRange;
 #endif
     }
 
@@ -1708,6 +1710,7 @@ BitmapDeviceSharedPtr createRenderer(
     sal_Int32                                                    nScanlineFormat,
     sal_Int32                                                    nScanlineStride,
     sal_uInt8*                                                   pFirstScanline,
+    typename FormatTraits::raw_accessor_type const&              rRawAccessor,
     Accessor const&                                              rAccessor,
     boost::shared_array< sal_uInt8 >                             pMem,
     const PaletteMemorySharedVector&                             pPal )

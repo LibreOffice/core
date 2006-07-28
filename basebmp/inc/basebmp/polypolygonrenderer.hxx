@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polypolygonrenderer.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-27 11:35:31 $
+ *  last change: $Author: thb $ $Date: 2006-07-28 09:47:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,9 +58,9 @@ namespace basebmp
         /// convert double to 32:32 fixed point
         inline sal_Int64 toFractional( double v ) { return (sal_Int64)(v*SAL_MAX_UINT32 + (v < 0.0 ? -0.5 : 0.5 )); }
         /// convert 32:32 fixed point to int32 (truncate)
-        inline sal_Int32 toInteger( sal_Int64 v ) { return v < 0 ? ~((~v) >> 32) : v >> 32; }
+        inline sal_Int32 toInteger( sal_Int64 v ) { return (sal_Int32)(v < 0 ? ~((~v) >> 32) : v >> 32); }
         /// convert 32:32 fixed point to int32 (properly rounded)
-        inline sal_Int32 toRoundedInteger( sal_Int64 v ) { return toInteger(v) + ((v&0x80000000) >> 31); }
+        inline sal_Int32 toRoundedInteger( sal_Int64 v ) { return toInteger(v) + (sal_Int32)((v&0x80000000) >> 31); }
 
         /** internal vertex store -
 
@@ -238,7 +238,7 @@ namespace basebmp
                 // even-odd fill rule
                 detail::VectorOfVertexPtr::iterator       currVertex( pAET->begin() );
                 detail::VectorOfVertexPtr::iterator const lastVertex( pAET->end()-1 );
-                sal_uInt32                                nVertexCount(0);
+                sal_uInt32                                nCrossedEdges(0);
                 while( currVertex != lastVertex )
                 {
                     // TODO(P1): might be worth a try to extend the
@@ -248,7 +248,7 @@ namespace basebmp
                     detail::Vertex const& rV2( **++currVertex );
 
                     // even/odd fillrule
-                    if( !(nVertexCount & 0x01) &&
+                    if( !(nCrossedEdges & 0x01) &&
                         y >= nClipY1 &&
                         rV1.mnX < nClipX2_frac &&
                         rV2.mnX > nClipX1_frac )
@@ -278,7 +278,7 @@ namespace basebmp
                     rV1.mnX += rV1.mnXDelta;
                     --rV1.mnYCounter;
 
-                    ++nVertexCount;
+                    ++nCrossedEdges;
                 }
 
                 // step vertex also for the last one

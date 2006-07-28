@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmapdevice.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-13 12:03:25 $
+ *  last change: $Author: thb $ $Date: 2006-07-28 09:47:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -550,7 +550,6 @@ public:
 
 protected:
     BitmapDevice( const basegfx::B2IRange&         rBounds,
-                  bool                             bTopDown,
                   sal_Int32                        nScanlineFormat,
                   sal_Int32                        nScanlineStride,
                   sal_uInt8*                       pFirstScanline,
