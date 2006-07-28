@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyHandlerImpl.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:49:09 $
+ *  last change: $Author: sg $ $Date: 2006-07-28 09:03:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 package helper;
 
 import com.sun.star.inspection.XPropertyHandler;
-
+import com.sun.star.inspection.LineDescriptor;
 
 /**
  * This implementation of <CODE>PropertyHandler</CODE> do currently nothig.
@@ -122,12 +122,12 @@ public class PropertyHandlerImpl implements XPropertyHandler{
      *
      * @throws com.sun.star.lang.NullPointerException ::com::sun::star::lang::NullPointerException if ControlFactory is NULL .
      */
-    public void describePropertyLine(
+    public LineDescriptor describePropertyLine(
             String PropertyName,
-            com.sun.star.inspection.LineDescriptor[] out_Descriptor,
             com.sun.star.inspection.XPropertyControlFactory ControlFactory)
             throws com.sun.star.beans.UnknownPropertyException,
             com.sun.star.lang.NullPointerException {
+        return null;
     }
 
     /**
