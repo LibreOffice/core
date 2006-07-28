@@ -4,9 +4,9 @@
  *
  *  $RCSfile: color.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-21 20:57:05 $
+ *  last change: $Author: thb $ $Date: 2006-07-28 12:43:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,9 +65,9 @@ public:
 
     void setGrey( sal_uInt8 nGreyVal ) { mnColor = (sal_uInt32)nGreyVal << 16 | (sal_uInt32)nGreyVal << 8 | nGreyVal; }
 
-    sal_uInt8 getRed() const   { return 0xFF & (mnColor >> 16); }
-    sal_uInt8 getGreen() const { return 0xFF & (mnColor >> 8); }
-    sal_uInt8 getBlue() const  { return 0xFF & mnColor; }
+    sal_uInt8 getRed() const   { return 0xFF & (sal_uInt8)(mnColor >> 16); }
+    sal_uInt8 getGreen() const { return 0xFF & (sal_uInt8)(mnColor >> 8); }
+    sal_uInt8 getBlue() const  { return 0xFF & (sal_uInt8)mnColor; }
 
     sal_uInt8 getGreyscale() const { return (sal_uInt8)((getBlue()*28UL +
                                                          getGreen()*151 +
@@ -80,18 +80,18 @@ public:
     Color operator^( Color col ) const { return Color(col.getRed()^getRed(),
                                                       col.getGreen()^getGreen(),
                                                       col.getBlue()^getBlue()); }
-    Color operator-( Color col ) const { return Color(abs((int)getRed()-col.getRed()),
-                                                      abs((int)getGreen()-col.getGreen()),
-                                                      abs((int)getBlue()-col.getBlue())); }
+    Color operator-( Color col ) const { return Color((sal_uInt8)abs((int)getRed()-col.getRed()),
+                                                      (sal_uInt8)abs((int)getGreen()-col.getGreen()),
+                                                      (sal_uInt8)abs((int)getBlue()-col.getBlue())); }
     Color operator+( Color col ) const { return Color(getRed()+col.getRed(),
                                                       getGreen()+col.getGreen(),
                                                       getBlue()+col.getBlue()); }
-    Color operator*( Color col ) const { return Color((sal_uInt32)col.getRed()*getRed()/SAL_MAX_UINT8,
-                                                      (sal_uInt32)col.getGreen()*getGreen()/SAL_MAX_UINT8,
-                                                      (sal_uInt32)col.getBlue()*getBlue()/SAL_MAX_UINT8); }
-    Color operator*( sal_uInt8 n ) const { return Color((sal_uInt32)n*getRed()/SAL_MAX_UINT8,
-                                                        (sal_uInt32)n*getGreen()/SAL_MAX_UINT8,
-                                                        (sal_uInt32)n*getBlue()/SAL_MAX_UINT8); }
+    Color operator*( Color col ) const { return Color((sal_uInt8)((sal_uInt32)col.getRed()*getRed()/SAL_MAX_UINT8),
+                                                      (sal_uInt8)((sal_uInt32)col.getGreen()*getGreen()/SAL_MAX_UINT8),
+                                                      (sal_uInt8)((sal_uInt32)col.getBlue()*getBlue()/SAL_MAX_UINT8)); }
+    Color operator*( sal_uInt8 n ) const { return Color((sal_uInt8)((sal_uInt32)n*getRed()/SAL_MAX_UINT8),
+                                                        (sal_uInt8)((sal_uInt32)n*getGreen()/SAL_MAX_UINT8),
+                                                        (sal_uInt8)((sal_uInt32)n*getBlue()/SAL_MAX_UINT8)); }
     Color operator*( double n ) const { return Color((sal_uInt8)(n*getRed()+.5),
                                                      (sal_uInt8)(n*getGreen()+.5),
                                                      (sal_uInt8)(n*getBlue()+.5)); }

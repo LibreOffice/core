@@ -4,9 +4,9 @@
  *
  *  $RCSfile: clippedlinerenderer.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-27 11:35:31 $
+ *  last change: $Author: thb $ $Date: 2006-07-28 12:43:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@ inline bool prepareClip( sal_Int32  a1,
                          sal_uInt32 bMaxFlag,
                          bool       bRoundTowardsPt2 )
 {
-    int ca, cb;
+    int ca(0), cb(0);
     if( clipCode1 )
     {
         if( clipCode1 & aMinFlag )
@@ -209,7 +209,7 @@ inline bool prepareClip( sal_Int32  a1,
     pixel, the pixel closer to pt1 will be chosen. Giving true here
     makes renderClippedLine() choose pt2 in those cases.
  */
-template< class Iterator, class Accessor > inline
+template< class Iterator, class Accessor >
 void renderClippedLine( basegfx::B2IPoint             aPt1,
                         basegfx::B2IPoint             aPt2,
                         const basegfx::B2IRange&      rClipRect,

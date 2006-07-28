@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polypolygonrenderer.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-27 11:35:31 $
+ *  last change: $Author: thb $ $Date: 2006-07-28 12:43:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@ namespace detail
                                      basegfx::B2DPolyPolygon const& rPolyPoly,
                                      sal_Int32                      nMinY )
     {
-        sal_uInt32 const nNumScanlines( rGET.size() );
+        sal_Int32 const nNumScanlines( (sal_Int32)rGET.size() );
 
         // add all polygons to GET
         for( sal_uInt32 i(0), nCount(rPolyPoly.count());

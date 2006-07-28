@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polypolygonrenderer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-28 09:47:53 $
+ *  last change: $Author: thb $ $Date: 2006-07-28 12:43:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,6 +109,8 @@ namespace basebmp
         /// For the STL algorithms
         struct RasterConvertVertexComparator
         {
+            RasterConvertVertexComparator() {}
+
             bool operator()( const Vertex& rLHS,
                              const Vertex& rRHS ) const
             {
@@ -147,7 +149,7 @@ namespace basebmp
         @param rPoly
         Polygon to fill
      */
-    template< class DestIterator, class DestAccessor, typename T > inline
+    template< class DestIterator, class DestAccessor, typename T >
     void renderClippedPolyPolygon( DestIterator                   begin,
                                    DestAccessor                   ad,
                                    T                              fillColor,

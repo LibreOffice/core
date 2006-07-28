@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fillimage.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-11 15:33:05 $
+ *  last change: $Author: thb $ $Date: 2006-07-28 12:43:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,10 +43,10 @@ namespace basebmp
 {
 
 template< class DestIterator, class DestAccessor, typename T >
-inline void fillImage( DestIterator begin,
-                       DestIterator end,
-                       DestAccessor ad,
-                       T            fillVal )
+void fillImage( DestIterator begin,
+                DestIterator end,
+                DestAccessor ad,
+                T            fillVal )
 {
     const int width ( end.x - begin.x );
     const int height( end.y - begin.y );

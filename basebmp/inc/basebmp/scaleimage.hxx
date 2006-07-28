@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scaleimage.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-27 11:35:31 $
+ *  last change: $Author: thb $ $Date: 2006-07-28 12:43:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,8 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_BASEBIMAGE_SCALEIMAGE_HXX
-#define INCLUDED_BASEBIMAGE_SCALEIMAGE_HXX
+#ifndef INCLUDED_BASEBMP_SCALEIMAGE_HXX
+#define INCLUDED_BASEBMP_SCALEIMAGE_HXX
 
 #include <osl/diagnose.h>
 
@@ -47,12 +47,12 @@ namespace basebmp
 
 template< class SourceIter, class SourceAcc,
           class DestIter, class DestAcc >
-inline void scaleLine( SourceIter      s_begin,
-                       SourceIter      s_end,
-                       SourceAcc       s_acc,
-                       DestIter        d_begin,
-                       DestIter        d_end,
-                       DestAcc         d_acc )
+void scaleLine( SourceIter      s_begin,
+                SourceIter      s_end,
+                SourceAcc       s_acc,
+                DestIter        d_begin,
+                DestIter        d_end,
+                DestAcc         d_acc )
 {
     const int src_width  = s_end - s_begin;
     const int dest_width = d_end - d_begin;
@@ -122,12 +122,12 @@ inline void scaleLine( SourceIter      s_begin,
  */
 template< class SourceIter, class SourceAcc,
           class DestIter, class DestAcc >
-inline void scaleImage( SourceIter      s_begin,
-                        SourceIter      s_end,
-                        SourceAcc       s_acc,
-                        DestIter        d_begin,
-                        DestIter        d_end,
-                        DestAcc         d_acc )
+void scaleImage( SourceIter      s_begin,
+                 SourceIter      s_end,
+                 SourceAcc       s_acc,
+                 DestIter        d_begin,
+                 DestIter        d_end,
+                 DestAcc         d_acc )
 {
     const int src_width ( s_end.x - s_begin.x );
     const int src_height( s_end.y - s_begin.y );
@@ -178,4 +178,4 @@ inline void scaleImage( vigra::triple<SourceIter,SourceIter,SourceAcc> const& sr
 
 }
 
-#endif /* INCLUDED_BASEBIMAGE_SCALEIMAGE_HXX */
+#endif /* INCLUDED_BASEBMP_SCALEIMAGE_HXX */
