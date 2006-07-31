@@ -56,15 +56,15 @@
 -VIGRA_DEFINE_NORM(float)
 -VIGRA_DEFINE_NORM(double)
 -VIGRA_DEFINE_NORM(long double)
-+VIGRA_DEFINE_NORM(signed char,std)
++VIGRA_DEFINE_NORM(signed char,VIGRA_CSTD)
 +VIGRA_DEFINE_NORM(unsigned char,vigra)
-+VIGRA_DEFINE_NORM(short,std)
++VIGRA_DEFINE_NORM(short,VIGRA_CSTD)
 +VIGRA_DEFINE_NORM(unsigned short,vigra)
-+VIGRA_DEFINE_NORM(int,std)
++VIGRA_DEFINE_NORM(int,VIGRA_CSTD)
 +VIGRA_DEFINE_NORM(unsigned int,vigra)
 +#if !defined(SOLARIS) || !defined(SUN) 
 + // there's no std::abs(long) for SunStudio/Solaris
-+ VIGRA_DEFINE_NORM(long,std) 
++ VIGRA_DEFINE_NORM(long,VIGRA_CSTD) 
 + VIGRA_DEFINE_NORM(unsigned long,vigra)
 +#endif
  
@@ -231,6 +231,23 @@
  
      int ix;
      iterator c = k[0].center();
+*** misc/vigra1.4.0/include/vigra/config.hxx	Wed Dec 21 05:53:31 2005
+--- misc/build/vigra1.4.0/include/vigra/config.hxx	Mon Jul 31 17:00:02 2006
+***************
+*** 84,89 ****
+--- 84,95 ----
+  		#endif // VIGRA_NO_STD_MINMAX
+  	#endif // (_MSC_VER < 1300)
+  
++     #if _MSC_VER <= 1310
++ 	    #ifndef CMATH_NOT_IN_STD
++ 	        #define CMATH_NOT_IN_STD
++         #endif
++     #endif // _MSC_VER < 1310
++ 
+      #if _MSC_VER < 1310
+          #define NO_PARTIAL_TEMPLATE_SPECIALIZATION
+          #define NO_OUT_OF_LINE_MEMBER_TEMPLATES
 --- misc/build/vigra1.4.0/include/vigra/fixedpoint.hxx	2005-12-21 05:53:34.000000000 +0100
 +++ misc/vigra1.4.0/include/vigra/fixedpoint.hxx	2006-05-30 10:51:49.000000000 +0200
 @@ -118,20 +118,18 @@ enum FixedPointNoShift { FPNoShift };
