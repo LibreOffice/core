@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.113 $
+ *  $Revision: 1.114 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 17:18:52 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 09:55:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1727,8 +1727,11 @@ void SfxBaseModel::impl_setPrinter(const SEQUENCE< PROPERTYVALUE >& rPrinter,Sfx
                 throw ILLEGALARGUMENTEXCEPTION();
 
             String aPrinterName( sTemp ) ;
-            pPrinter = new SfxPrinter( pPrinter->GetOptions().Clone(), aPrinterName );
-            nChangeFlags = SFX_PRINTER_PRINTER;
+            if ( aPrinterName != pPrinter->GetName() )
+            {
+                pPrinter = new SfxPrinter( pPrinter->GetOptions().Clone(), aPrinterName );
+                nChangeFlags = SFX_PRINTER_PRINTER;
+            }
             break;
         }
     }
@@ -1752,8 +1755,11 @@ void SfxBaseModel::impl_setPrinter(const SEQUENCE< PROPERTYVALUE >& rPrinter,Sfx
                 eOrient = ( PAPERORIENTATION ) lDummy;
             }
 
-            pPrinter->SetOrientation( (Orientation) eOrient );
-            nChangeFlags |= SFX_PRINTER_CHG_ORIENTATION;
+            if ( (Orientation) eOrient != pPrinter->GetOrientation() )
+            {
+                pPrinter->SetOrientation( (Orientation) eOrient );
+                nChangeFlags |= SFX_PRINTER_CHG_ORIENTATION;
+            }
         }
 
         // PaperFormat-Property?
@@ -1766,8 +1772,11 @@ void SfxBaseModel::impl_setPrinter(const SEQUENCE< PROPERTYVALUE >& rPrinter,Sfx
                 nPaperFormat = ( PAPERFORMAT ) lDummy;
             }
 
-            pPrinter->SetPaper( (Paper) nPaperFormat );
-            nChangeFlags |= SFX_PRINTER_CHG_SIZE;
+            if ( (Paper) nPaperFormat != pPrinter->GetPaper() )
+            {
+                pPrinter->SetPaper( (Paper) nPaperFormat );
+                nChangeFlags |= SFX_PRINTER_CHG_SIZE;
+            }
         }
 
         // PaperSize-Property?
