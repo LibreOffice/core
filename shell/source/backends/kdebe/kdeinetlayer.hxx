@@ -27,7 +27,9 @@
 #include <cppuhelper/implbase2.hxx>
 #endif
 
-#include "qstring_wrapper.h"
+#ifndef INCLUDED_VCL_KDE_HEADERS_H
+#include <vcl/kde_headers.h>
+#endif
 
 namespace css = com::sun::star ;
 namespace uno = css::uno ;
