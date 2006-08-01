@@ -1,0 +1,418 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: dropdownboxtoolbarcontroller.cxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: ihi $ $Date: 2006-08-01 09:38:35 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __FRAMEWORK_UIELEMENT_DROPDOWNBOXTOOLBARCONTROLLER_HXX
+#include "uielement/dropdownboxtoolbarcontroller.hxx"
+#endif
+
+//_________________________________________________________________________________________________________________
+//  my own includes
+//_________________________________________________________________________________________________________________
+
+#ifndef __FRAMEWORK_TOOLBAR_HXX_
+#include "uielement/toolbar.hxx"
+#endif
+
+//_________________________________________________________________________________________________________________
+//  interface includes
+//_________________________________________________________________________________________________________________
+
+#ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
+#include <com/sun/star/util/XURLTransformer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
+#include <com/sun/star/frame/XDispatchProvider.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
+#include <com/sun/star/lang/DisposedException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_STATUS_ITEMSTATUS_HPP_
+#include <com/sun/star/frame/status/ItemStatus.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_STATUS_ITEMSTATE_HPP_
+#include <com/sun/star/frame/status/ItemState.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_STATUS_VISIBILITY_HPP_
+#include <com/sun/star/frame/status/Visibility.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XCONTROLNOTIFICATIONLISTENER_HPP_
+#include <com/sun/star/frame/XControlNotificationListener.hpp>
+#endif
+
+//_________________________________________________________________________________________________________________
+//  other includes
+//_________________________________________________________________________________________________________________
+
+#ifndef _SVTOOLS_TOOLBOXCONTROLLER_HXX
+#include <svtools/toolboxcontroller.hxx>
+#endif
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+#ifndef _VCL_MNEMONIC_HXX_
+#include <vcl/mnemonic.hxx>
+#endif
+#include <tools/urlobj.hxx>
+
+using namespace ::rtl;
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::frame::status;
+using namespace ::com::sun::star::util;
+
+namespace framework
+{
+
+// ------------------------------------------------------------------
+
+// Wrapper class to notify controller about events from ListBox.
+// Unfortunaltly the events are notifed through virtual methods instead
+// of Listeners.
+
+class ListBoxControl : public ListBox
+{
+    public:
+        ListBoxControl( Window* pParent, WinBits nStyle, IListBoxListener* pListBoxListener );
+        virtual ~ListBoxControl();
+
+        virtual void Select();
+        virtual void DoubleClick();
+        virtual void GetFocus();
+        virtual void LoseFocus();
+        virtual long PreNotify( NotifyEvent& rNEvt );
+
+    private:
+        IListBoxListener* m_pListBoxListener;
+};
+
+ListBoxControl::ListBoxControl( Window* pParent, WinBits nStyle, IListBoxListener* pListBoxListener ) :
+    ListBox( pParent, nStyle )
+    , m_pListBoxListener( pListBoxListener )
+{
+}
+
+ListBoxControl::~ListBoxControl()
+{
+    m_pListBoxListener = 0;
+}
+
+void ListBoxControl::Select()
+{
+    ListBox::Select();
+    if ( m_pListBoxListener )
+        m_pListBoxListener->Select();
+}
+
+void ListBoxControl::DoubleClick()
+{
+    ListBox::DoubleClick();
+    if ( m_pListBoxListener )
+        m_pListBoxListener->DoubleClick();
+}
+
+void ListBoxControl::GetFocus()
+{
+    ListBox::GetFocus();
+    if ( m_pListBoxListener )
+        m_pListBoxListener->GetFocus();
+}
+
+void ListBoxControl::LoseFocus()
+{
+    ListBox::LoseFocus();
+    if ( m_pListBoxListener )
+        m_pListBoxListener->LoseFocus();
+}
+
+long ListBoxControl::PreNotify( NotifyEvent& rNEvt )
+{
+    long nRet( 0 );
+    if ( m_pListBoxListener )
+        nRet = m_pListBoxListener->PreNotify( rNEvt );
+    if ( nRet == 0 )
+        nRet = ListBox::PreNotify( rNEvt );
+
+    return nRet;
+}
+
+// ------------------------------------------------------------------
+
+DropdownToolbarController::DropdownToolbarController(
+    const Reference< XMultiServiceFactory >& rServiceManager,
+    const Reference< XFrame >&               rFrame,
+    ToolBar*                                 pToolbar,
+    USHORT                                   nID,
+    sal_Int32                                nWidth,
+    const OUString&                          aCommand ) :
+    ComplexToolbarController( rServiceManager, rFrame, pToolbar, nID, aCommand )
+    ,   m_pListBoxControl( 0 )
+{
+    m_pListBoxControl = new ListBoxControl( m_pToolbar, WB_DROPDOWN|WB_AUTOHSCROLL|WB_BORDER, this );
+    if ( nWidth == 0 )
+        nWidth = 100;
+
+    // default dropdown size
+    ::Size aLogicalSize( 0, 160 );
+    ::Size aPixelSize = m_pListBoxControl->LogicToPixel( aLogicalSize, MAP_APPFONT );
+
+    m_pListBoxControl->SetSizePixel( ::Size( nWidth, aPixelSize.Height() ));
+    m_pToolbar->SetItemWindow( m_nID, m_pListBoxControl );
+    m_pListBoxControl->SetDropDownLineCount( 5 );
+}
+
+// ------------------------------------------------------------------
+
+DropdownToolbarController::~DropdownToolbarController()
+{
+}
+
+// ------------------------------------------------------------------
+
+void SAL_CALL DropdownToolbarController::dispose()
+throw ( RuntimeException )
+{
+    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+
+    m_pToolbar->SetItemWindow( m_nID, 0 );
+    delete m_pListBoxControl;
+
+    ComplexToolbarController::dispose();
+
+    m_pListBoxControl = 0;
+}
+
+// ------------------------------------------------------------------
+
+void SAL_CALL DropdownToolbarController::execute( sal_Int16 KeyModifier )
+throw ( RuntimeException )
+{
+    Reference< XDispatch >       xDispatch;
+    Reference< XURLTransformer > xURLTransformer;
+    OUString                     aCommandURL;
+    OUString                     aSelectedText;
+    ::com::sun::star::util::URL  aTargetURL;
+
+    {
+        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+
+        if ( m_bDisposed )
+            throw DisposedException();
+
+        if ( m_bInitialized &&
+             m_xFrame.is() &&
+             m_xServiceManager.is() &&
+             m_aCommandURL.getLength() )
+        {
+            xURLTransformer = m_xURLTransformer;
+            xDispatch = getDispatchFromCommand( m_aCommandURL );
+            aCommandURL = m_aCommandURL;
+            aTargetURL = getInitializedURL();
+            aSelectedText = m_pListBoxControl->GetText();
+        }
+    }
+
+    if ( xDispatch.is() && aTargetURL.Complete.getLength() > 0 )
+    {
+        Sequence<PropertyValue>   aArgs( 2 );
+
+        // Add key modifier to argument list
+        aArgs[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "KeyModifier" ));
+        aArgs[0].Value <<= KeyModifier;
+        aArgs[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Text" ));
+        aArgs[1].Value <<= aSelectedText;
+
+        // Execute dispatch asynchronously
+        ExecuteInfo* pExecuteInfo = new ExecuteInfo;
+        pExecuteInfo->xDispatch     = xDispatch;
+        pExecuteInfo->aTargetURL    = aTargetURL;
+        pExecuteInfo->aArgs         = aArgs;
+        Application::PostUserEvent( STATIC_LINK(0, ComplexToolbarController , ExecuteHdl_Impl), pExecuteInfo );
+    }
+}
+
+// ------------------------------------------------------------------
+
+void DropdownToolbarController::Select()
+{
+    if ( m_pListBoxControl->GetEntryCount() > 0 )
+    {
+        Window::PointerState aState = m_pListBoxControl->GetPointerState();
+
+        sal_uInt16 nKeyModifier = sal_uInt16( aState.mnState & KEY_MODTYPE );
+        execute( nKeyModifier );
+    }
+}
+
+void DropdownToolbarController::DoubleClick()
+{
+}
+
+void DropdownToolbarController::GetFocus()
+{
+    notifyFocusGet();
+}
+
+void DropdownToolbarController::LoseFocus()
+{
+    notifyFocusLost();
+}
+
+long DropdownToolbarController::PreNotify( NotifyEvent& /*rNEvt*/ )
+{
+    return 0;
+}
+
+// --------------------------------------------------------
+
+void DropdownToolbarController::executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand )
+{
+    if ( rControlCommand.Command.equalsAsciiL( "SetList", 7 ))
+    {
+        for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
+        {
+            if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "List", 4 ))
+            {
+                Sequence< OUString > aList;
+                m_pListBoxControl->Clear();
+
+                rControlCommand.Arguments[i].Value >>= aList;
+                for ( sal_Int32 j = 0; j < aList.getLength(); j++ )
+                    m_pListBoxControl->InsertEntry( aList[j] );
+
+                m_pListBoxControl->SelectEntryPos( 0 );
+
+                // send notification
+                uno::Sequence< beans::NamedValue > aInfo( 1 );
+                aInfo[0].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "List" ));
+                aInfo[0].Value <<= aList;
+                addNotifyInfo( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ListChanged" )),
+                               getDispatchFromCommand( m_aCommandURL ),
+                               aInfo );
+
+                break;
+            }
+        }
+    }
+    else if ( rControlCommand.Command.equalsAsciiL( "AddEntry", 8 ))
+    {
+        sal_uInt16      nPos( LISTBOX_APPEND );
+        rtl::OUString   aText;
+        for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
+        {
+            if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "Text", 4 ))
+            {
+                if ( rControlCommand.Arguments[i].Value >>= aText )
+                    m_pListBoxControl->InsertEntry( aText, nPos );
+                break;
+            }
+        }
+    }
+    else if ( rControlCommand.Command.equalsAsciiL( "InsertEntry", 11 ))
+    {
+        sal_uInt16      nPos( LISTBOX_APPEND );
+        rtl::OUString   aText;
+        for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
+        {
+            if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "Pos", 3 ))
+            {
+                sal_Int32 nTmpPos;
+                if ( rControlCommand.Arguments[i].Value >>= nTmpPos )
+                {
+                    if (( nTmpPos >= 0 ) &&
+                        ( nTmpPos < sal_Int32( m_pListBoxControl->GetEntryCount() )))
+                        nPos = sal_uInt16( nTmpPos );
+                }
+            }
+            else if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "Text", 4 ))
+                rControlCommand.Arguments[i].Value >>= aText;
+        }
+
+        m_pListBoxControl->InsertEntry( aText, nPos );
+    }
+    else if ( rControlCommand.Command.equalsAsciiL( "RemoveEntryPos", 14 ))
+    {
+        for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
+        {
+            if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "Pos", 3 ))
+            {
+                sal_Int32 nPos( -1 );
+                if ( rControlCommand.Arguments[i].Value >>= nPos )
+                {
+                    if ( nPos < sal_Int32( m_pListBoxControl->GetEntryCount() ))
+                        m_pListBoxControl->RemoveEntry( sal_uInt16( nPos ));
+                }
+                break;
+            }
+        }
+    }
+    else if ( rControlCommand.Command.equalsAsciiL( "RemoveEntryText", 15 ))
+    {
+        for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
+        {
+            if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "Text", 4 ))
+            {
+                rtl::OUString aText;
+                if ( rControlCommand.Arguments[i].Value >>= aText )
+                    m_pListBoxControl->RemoveEntry( aText );
+                break;
+            }
+        }
+    }
+    else if ( rControlCommand.Command.equalsAsciiL( "SetDropDownLines", 16 ))
+    {
+        for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
+        {
+            if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "Lines", 5 ))
+            {
+                sal_Int32 nValue( 5 );
+                rControlCommand.Arguments[i].Value >>= nValue;
+                m_pListBoxControl->SetDropDownLineCount( sal_uInt16( nValue ));
+                break;
+            }
+        }
+    }
+}
+
+} // namespace
