@@ -31,12 +31,12 @@
 #endif
 
 /* external functions (C++ code, declared as extren "C" */
-extern WorkOnTokenSet( int, char* );
-extern Argument( char * );
-extern InitXrmExport( char * , char * );
-extern EndXrmExport();
-extern GetError();
-extern SetError();
+extern int WorkOnTokenSet( int, char* );
+extern int Argument( char * );
+extern int InitXrmExport( char * , char * );
+extern int EndXrmExport();
+extern int GetError();
+extern int SetError();
 extern char *GetOutputFile( int argc, char* argv[]);
 extern FILE *GetXrmFile();
 extern int isQuiet();
