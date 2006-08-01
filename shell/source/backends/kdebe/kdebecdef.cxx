@@ -4,9 +4,9 @@
  *
  *  $RCSfile: kdebecdef.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2006-06-27 11:51:58 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 10:25:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,9 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #endif
 
-#include <kapplication.h>
+#ifndef INCLUDED_VCL_KDE_HEADERS_H
+#include <vcl/kde_headers.h>
+#endif
 
 #include "uno/current_context.hxx"
 
