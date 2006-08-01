@@ -4,9 +4,9 @@
  *
  *  $RCSfile: comboboxtoolbarcontroller.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 11:36:11 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 09:38:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,8 @@
 #ifndef _VCL_MNEMONIC_HXX_
 #include <vcl/mnemonic.hxx>
 #endif
+#include <vcl/toolbox.hxx>
+#include <vcl/combobox.hxx>
 #include <tools/urlobj.hxx>
 
 using namespace ::rtl;
@@ -204,13 +206,15 @@ ComboboxToolbarController::ComboboxToolbarController(
     ComplexToolbarController( rServiceManager, rFrame, pToolbar, nID, aCommand )
     ,   m_pComboBox( 0 )
 {
-    m_pComboBox = new ComboBoxControl( m_pToolbar,
-                                       WB_BORDER|WB_CLIPCHILDREN|WB_DROPDOWN|WB_AUTOSIZE,
-                                       this );
+    m_pComboBox = new ComboBoxControl( m_pToolbar, WB_DROPDOWN, this );
     if ( nWidth == 0 )
         nWidth = 100;
 
-    m_pComboBox->SetSizePixel( ::Size( nWidth, 150 ));
+    // default dropdown size
+    ::Size aLogicalSize( 8, 160 );
+    ::Size aPixelSize = m_pComboBox->LogicToPixel( aLogicalSize, MAP_APPFONT );
+
+    m_pComboBox->SetSizePixel( ::Size( nWidth, aPixelSize.Height() ));
     m_pToolbar->SetItemWindow( m_nID, m_pComboBox );
     m_pComboBox->SetDropDownLineCount( 5 );
 }
@@ -304,13 +308,7 @@ void ComboboxToolbarController::DoubleClick()
 
 void ComboboxToolbarController::Modify()
 {
-    // send notification
-    uno::Sequence< beans::NamedValue > aInfo( 1 );
-    aInfo[0].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Text" ));
-    aInfo[0].Value <<= rtl::OUString( m_pComboBox->GetText() );
-    addNotifyInfo( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TextChanged" )),
-                   getDispatchFromCommand( m_aCommandURL ),
-                   aInfo );
+    notifyTextChanged( m_pComboBox->GetText() );
 }
 
 void ComboboxToolbarController::KeyInput( const ::KeyEvent& )
@@ -319,20 +317,12 @@ void ComboboxToolbarController::KeyInput( const ::KeyEvent& )
 
 void ComboboxToolbarController::GetFocus()
 {
-    // send notification
-    uno::Sequence< beans::NamedValue > aInfo;
-    addNotifyInfo( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FocusSet" )),
-                    getDispatchFromCommand( m_aCommandURL ),
-                    aInfo );
+    notifyFocusGet();
 }
 
 void ComboboxToolbarController::LoseFocus()
 {
-    // send notification
-    uno::Sequence< beans::NamedValue > aInfo;
-    addNotifyInfo( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FocusLost" )),
-                    getDispatchFromCommand( m_aCommandURL ),
-                    aInfo );
+    notifyFocusLost();
 }
 
 long ComboboxToolbarController::PreNotify( NotifyEvent& rNEvt )
@@ -368,12 +358,7 @@ void ComboboxToolbarController::executeControlCommand( const ::com::sun::star::f
                 m_pComboBox->SetText( aText );
 
                 // send notification
-                uno::Sequence< beans::NamedValue > aInfo( 1 );
-                aInfo[0].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Text" ));
-                aInfo[0].Value <<= aText;
-                addNotifyInfo( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TextChanged" )),
-                               getDispatchFromCommand( m_aCommandURL ),
-                               aInfo );
+                notifyTextChanged( aText );
                 break;
             }
         }
@@ -399,6 +384,20 @@ void ComboboxToolbarController::executeControlCommand( const ::com::sun::star::f
                                getDispatchFromCommand( m_aCommandURL ),
                                aInfo );
 
+                break;
+            }
+        }
+    }
+    else if ( rControlCommand.Command.equalsAsciiL( "AddEntry", 8 ))
+    {
+        sal_uInt16      nPos( COMBOBOX_APPEND );
+        rtl::OUString   aText;
+        for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
+        {
+            if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "Text", 4 ))
+            {
+                if ( rControlCommand.Arguments[i].Value >>= aText )
+                    m_pComboBox->InsertEntry( aText, nPos );
                 break;
             }
         }
