@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MasterPageContainer.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 20:48:16 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 09:22:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,13 +122,12 @@ public:
 namespace sd { namespace toolpanel { namespace controls {
 
 
-/** Inner implementation class of the MasterPageContainer.  For
-    documentation of undocumented methods and members please look in
-    MasterPageContainer at method or member with the same name.
+/** Inner implementation class of the MasterPageContainer.
 */
 class MasterPageContainer::Implementation
     : public SdGlobalResource,
-      public MasterPageContainerFiller::ContainerAdapter
+      public MasterPageContainerFiller::ContainerAdapter,
+      public MasterPageContainerQueue::ContainerAdapter
 {
 public:
     mutable ::osl::Mutex maMutex;
@@ -138,7 +137,7 @@ public:
 
     static ::boost::shared_ptr<Implementation> Instance (void);
 
-    void LateInit (MasterPageContainer& rContainer);
+    void LateInit (void);
     void AddChangeListener (const Link& rLink);
     void RemoveChangeListener (const Link& rLink);
     void UpdatePreviewSizePixel (void);
@@ -163,7 +162,7 @@ public:
         Token aToken,
         bool bNotifyAsynchronously = false);
 
-    bool UpdateDescriptor (
+    virtual bool UpdateDescriptor (
         const SharedMasterPageDescriptor& rpDescriptor,
         bool bForcePageObject,
         bool bForcePreview,
@@ -178,7 +177,7 @@ public:
 
 private:
     Implementation (void);
-    ~Implementation (void);
+    virtual ~Implementation (void);
 
     class Deleter { public:
         void operator() (Implementation* pObject) { delete pObject; }
@@ -290,7 +289,7 @@ MasterPageContainer::MasterPageContainer (void)
     : mpImpl(Implementation::Instance()),
       mePreviewSize(SMALL)
 {
-    mpImpl->LateInit(*this);
+    mpImpl->LateInit();
 }
 
 
@@ -762,7 +761,7 @@ MasterPageContainer::Implementation::~Implementation (void)
 
 
 
-void MasterPageContainer::Implementation::LateInit (MasterPageContainer& rContainer)
+void MasterPageContainer::Implementation::LateInit (void)
 {
     const ::osl::MutexGuard aGuard (maMutex);
 
@@ -770,7 +769,9 @@ void MasterPageContainer::Implementation::LateInit (MasterPageContainer& rContai
     {
         meInitializationState = INITIALIZING;
 
-        mpRequestQueue.reset(MasterPageContainerQueue::Create(rContainer));
+        OSL_ASSERT(Instance().get()==this);
+        mpRequestQueue.reset(MasterPageContainerQueue::Create(
+            ::boost::shared_ptr<MasterPageContainerQueue::ContainerAdapter>(Instance())));
 
         mpFillerTask = ::sd::tools::TimerBasedTaskExecution::Create(
             ::boost::shared_ptr<tools::AsynchronousTask>(new MasterPageContainerFiller(*this)),
@@ -918,6 +919,9 @@ MasterPageContainer::Token MasterPageContainer::Implementation::PutMasterPage (
                 case TEMPLATE:
                 case DEFAULT:
                     ++rpDescriptor->mnUseCount;
+                    break;
+
+                default:
                     break;
             }
 
