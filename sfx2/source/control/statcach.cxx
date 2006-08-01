@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statcach.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 17:18:05 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 09:54:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -312,15 +312,16 @@ const SfxSlotServer* SfxStateCache::GetSlotServer( SfxDispatcher &rDispat , cons
                 return aSlotServ.GetSlot()? &aSlotServ: 0;
             }
 
-            // create the dispatch name from the slot data
+            // create the dispatch URL from the slot data
             ::com::sun::star::util::URL aURL;
             ::rtl::OUString aCmd = DEFINE_CONST_UNICODE(".uno:");
-            aCmd += ::rtl::OUString::createFromAscii( pSlot->GetUnoName() );
+            aURL.Protocol = aCmd;
+            aURL.Path = ::rtl::OUString::createFromAscii( pSlot->GetUnoName() );
+            aCmd += aURL.Path;
+            aURL.Complete = aCmd;
+            aURL.Main = aCmd;
 
             // try to get a dispatch object for this command
-            aURL.Complete = aCmd;
-            Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
-            xTrans->parseStrict( aURL );
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  xDisp = xProv->queryDispatch( aURL, ::rtl::OUString(), 0 );
             if ( xDisp.is() )
             {
