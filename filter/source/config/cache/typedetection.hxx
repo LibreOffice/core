@@ -4,9 +4,9 @@
  *
  *  $RCSfile: typedetection.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:32:49 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 11:14:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -383,16 +383,15 @@ class TypeDetection : public ::cppu::ImplInheritanceHelper1< BaseContainer      
                         and add it into the media descriptor.
 
             @descr      Normaly this is a type detection only ...
-                        but for some special features we need the information,
-                        which application will load this new document.
-                        e.g. PersistentWindowStates rely on that.
+                        but for some special features we must overwrite our detection
+                        because a file must be loaded into a special (means preselected)
+                        application.
 
-                        And here we have all needed informations at a central place.
-                        So we can do this search in a performant way.
+                        E.g. CSV/TXT format are sometimes ugly to handle .-)
 
                         Note: If the descriptor already include a filter
                         (may be selected by a FilterSelect interaction or preselected
-                        by the user itself) ... we dont change that here.
+                        by the user itself) ... we dont change that here !
 
             @param      rDescriptor
                         reference to the MediaDescriptor (represented by an easy-to-use
@@ -400,9 +399,18 @@ class TypeDetection : public ::cppu::ImplInheritanceHelper1< BaseContainer      
 
             @param      sType
                         the internal type name, where we search a filter for.
+                        Used as IN/OUT parameter so we can overrule the detection result for
+                        types too !
+
+            @note       #i60158#
+                        sometimes our text ascii and our csv filter cant work together.
+                        Then we overwrite our detection hardly.
+                        sType param is used as out parameter then too ... and
+                        rDescriptor will be changed by selecting another filter.
+                        (see code)
          */
-        void impl_addBestFilter(      ::comphelper::MediaDescriptor& rDescriptor,
-                                const ::rtl::OUString&               sType      );
+        void impl_checkResultsAndAddBestFilter(::comphelper::MediaDescriptor& rDescriptor,
+                                               ::rtl::OUString&               sType      );
 
     //-------------------------------------------
     // uno interface
