@@ -1,31 +1,4 @@
 //--------------------------------------------------------------------------
-SfxBoolItem ActionMode SID_ACTIONMODE
-
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_OPTIONS;
-]
-
-//--------------------------------------------------------------------------
 TbxImageItem AdvancedMode SID_OBJECT_CHOOSE_MODE
 
 [
@@ -5287,33 +5260,6 @@ SfxBoolItem PickThrough SID_PICK_THROUGH
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = GID_MODIFY;
-]
-
-//--------------------------------------------------------------------------
-SfxBoolItem PixelMode SID_PIXELMODE
-
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_VIEW;
 ]
 
 //--------------------------------------------------------------------------
