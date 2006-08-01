@@ -2,9 +2,9 @@
  *
  *  $RCSfile: service2_impl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 16:13:51 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 16:32:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -79,7 +79,16 @@ class MyService2Impl : public ::cppu::WeakImplHelper3<
       ::my_module::XSomething, lang::XServiceInfo, lang::XInitialization >
 {
     OUString m_sData;
+    // it's good practise to store the context for further use when you use
+    // other UNO API's in your implementation
+    Reference< XComponentContext > m_xContext;
 public:
+    inline MyService2Impl(Reference< XComponentContext > const & xContext) throw ()
+        : m_xContext(xContext)
+        {}
+
+    virtual ~MyService2Impl() {}
+
     // focus on three given interfaces,
     // no need to implement XInterface, XTypeProvider, XWeak
 
@@ -147,7 +156,7 @@ OUString MyService2Impl::getImplementationName()
 {
     // unique implementation name
     return OUString( RTL_CONSTASCII_USTRINGPARAM(
-                         "my_module.my_sc_impl.MyService2") );
+                         "my_module.my_sc_implementation.MyService2") );
 }
 
 sal_Bool MyService2Impl::supportsService( OUString const & serviceName )
@@ -168,7 +177,7 @@ Reference< XInterface > SAL_CALL create_MyService2Impl(
     Reference< XComponentContext > const & xContext )
     SAL_THROW( () )
 {
-    return static_cast< ::cppu::OWeakObject * >( new MyService2Impl );
+    return static_cast< ::cppu::OWeakObject * >( new MyService2Impl( xContext ) );
 }
 
 }
@@ -197,16 +206,18 @@ static struct ::cppu::ImplementationEntry s_component_entries [] =
 extern "C"
 {
 void SAL_CALL component_getImplementationEnvironment(
-    sal_Char const ** ppEnvTypeName, uno_Environment ** ppEnv )
+    sal_Char const ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
+
 sal_Bool SAL_CALL component_writeInfo(
     lang::XMultiServiceFactory * xMgr, registry::XRegistryKey * xRegistry )
 {
     return ::cppu::component_writeInfoHelper(
         xMgr, xRegistry, ::my_sc_impl::s_component_entries );
 }
+
 void * SAL_CALL component_getFactory(
     sal_Char const * implName, lang::XMultiServiceFactory * xMgr,
     registry::XRegistryKey * xRegistry )
@@ -214,6 +225,7 @@ void * SAL_CALL component_getFactory(
     return ::cppu::component_getFactoryHelper(
         implName, xMgr, xRegistry, ::my_sc_impl::s_component_entries );
 }
+
 }
 
 
