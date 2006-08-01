@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 12:19:39 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 14:43:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -729,6 +729,7 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
         case FN_PAGEDOWN_SEL:
         {
             Rectangle aVis( GetVisArea() );
+            SwEditWin& rTmpWin = GetEditWin();
             if ( FN_PAGEUP == nSlot || FN_PAGEUP_SEL == nSlot )
                 PageUpCrsr(FN_PAGEUP_SEL == nSlot);
             else
@@ -737,7 +738,7 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
             rReq.SetReturnValue(SfxBoolItem(nSlot,
                                                 aVis != GetVisArea()));
             //#i42732# - notify the edit window that from now on we do not use the input language
-            GetEditWin().SetUseInputLanguage( sal_False );
+            rTmpWin.SetUseInputLanguage( sal_False );
         }
         break;
         case FN_REDLINE_ON:
