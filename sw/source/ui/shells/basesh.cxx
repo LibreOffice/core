@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 12:18:28 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 12:48:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -419,6 +419,7 @@ BOOL lcl_UpdateContourDlg( SwWrtShell &rSh, int nSel )
 void SwBaseShell::ExecDelete(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
+    SwEditWin& rTmpEditWin = GetView().GetEditWin();
     switch(rReq.GetSlot())
     {
         case SID_DELETE:
@@ -460,7 +461,7 @@ void SwBaseShell::ExecDelete(SfxRequest &rReq)
     rReq.Done();
 
     //#i42732# - notify the edit window that from now on we do not use the input language
-    GetView().GetEditWin().SetUseInputLanguage( sal_False );
+    rTmpEditWin.SetUseInputLanguage( sal_False );
 }
 
 /*--------------------------------------------------------------------
