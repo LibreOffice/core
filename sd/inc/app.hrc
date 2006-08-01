@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.hrc,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-05 21:49:16 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 09:19:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,6 @@
 #define SID_PRESENTATION_END                (SID_SD_START+18)
 #define SID_BULLET                          (SID_SD_START+19)
 #define SID_TEXTFORMAT                      (SID_SD_START+20)
-#define SID_PIXELMODE                       (SID_SD_START+21)
 #define SID_POSITION                        (SID_SD_START+22)
 #define SID_MIRROR                          (SID_SD_START+23)
 #define SID_CONVERT                         (SID_SD_START+24)
@@ -91,7 +90,6 @@
 #define SID_STARTAPP                        (SID_SD_START+52)
 #define SID_MASTERPAGE                      (SID_SD_START+53)
 #define SID_TOOL_CONNECTOR                  (SID_SD_START+58)
-#define SID_ACTIONMODE                      (SID_SD_START+60)
 #define SID_ANIMATION                       (SID_SD_START+61)
 #define SID_ANIMATION_OBJECTS               (SID_SD_START+62)
 #define SID_ANIMATION_EFFECTS               (SID_SD_START+63)
