@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menuids2_tmpl.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:27:25 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 09:20:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -266,15 +266,6 @@
         HelpID = SID_PREVIEW_WIN ; \
         Text [ de ] = "~Vorschau" ; \
         Text [ en-US ] = "~Preview" ; \
-    };
-
-#define MN_PIXELMODE \
-    MenuItem\
-    {\
-        Identifier = SID_PIXELMODE ; \
-        HelpID = SID_PIXELMODE ; \
-        Text [ de ] = "~Pixelmodus" ; \
-        Text [ en-US ] = "~Pixel mode" ; \
     };
 
 #define MN_PAGEMODE \
