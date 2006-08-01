@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.7 $
+#  $Revision: 1.8 $
 #
-#  last change: $Author: rt $ $Date: 2005-03-29 12:08:34 $
+#  last change: $Author: ihi $ $Date: 2006-08-01 16:31:40 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -130,7 +130,7 @@ $(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES)
 else
 $(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D)) && $(DEL) $(subst \\,\,$(subst /,$(PS),$@))
-	$(LINK) $(COMP_LINK_FLAGS) $(LINK_LIBS) -o $@ $^\
+	$(LINK) $(COMP_LINK_FLAGS) $(LINK_LIBS) -o $@ $^ \
 	$(CPPUHELPERLIB) $(CPPULIB) $(SALLIB) $(STLPORTLIB) $(STC++LIB)
 endif	
 
@@ -207,7 +207,8 @@ $(SAMPLE_NAME) : $(COMP_REGISTERFLAG) $(APP1_BINARY)
 	@echo --------------------------------------------------------------------------------
 
 %.run: $(OUT_BIN)/%$(EXE_EXT)
-	cd $(subst /,$(PS),$(OUT_BIN)) && $(basename $@)
+	$(subst /,$(PS),$(OUT_BIN))$(PS)$(basename $@)
+#	cd $(subst /,$(PS),$(OUT_BIN)) && $(basename $@)
 
 SimpleComponent.odt.load : $(COMP_REGISTERFLAG)
 	"$(OFFICE_PROGRAM_PATH)$(PS)soffice" $(basename $@)
