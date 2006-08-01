@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: ihi $ $Date: 2006-08-01 09:30:07 $
+#   last change: $Author: ihi $ $Date: 2006-08-01 11:45:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -83,7 +83,9 @@ EXCEPTIONSFILES=\
             $(SLO)$/wmadaptor.obj		\
             $(SLO)$/saldisp.obj			\
             $(SLO)$/i18n_status.obj		\
-            $(SLO)$/i18n_cb.obj
+            $(SLO)$/i18n_cb.obj				\
+            $(SLO)$/i18n_ic.obj				\
+            $(SLO)$/salsys.obj
 
 
 .IF "$(ENABLE_NAS)" != ""
