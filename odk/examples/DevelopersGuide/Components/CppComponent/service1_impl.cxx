@@ -2,9 +2,9 @@
  *
  *  $RCSfile: service1_impl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-15 09:25:20 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 16:32:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -76,10 +76,16 @@ class MyService1Impl
 {
     oslInterlockedCount m_refcount;
     OUString m_sData;
+    // it's good practise to store the context for further use when you use
+    // other UNO API's in your implementation
+    Reference< XComponentContext > m_xContext;
 public:
-    inline MyService1Impl() throw ()
-        : m_refcount( 0 )
+    inline MyService1Impl(Reference< XComponentContext > const & xContext) throw ()
+        : m_refcount( 0 ),
+          m_xContext(xContext)
         {}
+
+    virtual ~MyService1Impl() {}
 
     // XInterface
     virtual Any SAL_CALL queryInterface( Type const & type )
@@ -234,18 +240,18 @@ Reference< XInterface > SAL_CALL create_MyService1Impl(
     Reference< XComponentContext > const & xContext )
     SAL_THROW( () )
 {
-    return static_cast< lang::XTypeProvider * >( new MyService1Impl() );
+    return static_cast< lang::XTypeProvider * >( new MyService1Impl( xContext) );
 }
 
 // forward decl: implemented in service2_impl.cxx
 Reference< XInterface > SAL_CALL create_MyService2Impl(
-    Reference< XComponentContext > const & xContext ) SAL_THROW( () );
+    Reference< XComponentContext > const & ) SAL_THROW( () );
 
 }
 
 /*
 extern "C" void SAL_CALL component_getImplementationEnvironment(
-    sal_Char const ** ppEnvTypeName, uno_Environment ** ppEnv )
+    sal_Char const ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
@@ -260,13 +266,13 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
             // implementation of MyService1A
             Reference< registry::XRegistryKey > xKey(
                 xRegistry->createKey( OUString( RTL_CONSTASCII_USTRINGPARAM(
-                    "my_module.my_sc_impl.MyService1/UNO/SERVICES") ) ) );
+                    "my_module.my_sc_implementation.MyService1/UNO/SERVICES") ) ) );
             // subkeys denote implemented services of implementation
             xKey->createKey( OUString( RTL_CONSTASCII_USTRINGPARAM(
                 "my_module.MyService1") ) );
             // implementation of MyService1B
             xKey = xRegistry->createKey( OUString( RTL_CONSTASCII_USTRINGPARAM(
-                "my_module.my_sc_impl.MyService2/UNO/SERVICES") ) );
+                "my_module.my_sc_implementation.MyService2/UNO/SERVICES") ) );
             // subkeys denote implemented services of implementation
             xKey->createKey( OUString( RTL_CONSTASCII_USTRINGPARAM(
                 "my_module.MyService2") ) );
@@ -283,22 +289,22 @@ extern "C" void * SAL_CALL component_getFactory(
     sal_Char const * implName, lang::XMultiServiceFactory * xMgr, void * )
 {
     Reference< lang::XSingleComponentFactory > xFactory;
-    if (0 == ::rtl_str_compare( implName, "my_module.my_sc_impl.MyService1" ))
+    if (0 == ::rtl_str_compare( implName, "my_module.my_sc_implementation.MyService1" ))
     {
         // create component factory for MyService1 implementation
         OUString serviceName( RTL_CONSTASCII_USTRINGPARAM("my_module.MyService1") );
         xFactory = ::cppu::createSingleComponentFactory(
             ::my_sc_impl::create_MyService1Impl,
-            OUString( RTL_CONSTASCII_USTRINGPARAM("my_module.my_sc_impl.MyService1") ),
+            OUString( RTL_CONSTASCII_USTRINGPARAM("my_module.my_sc_implementation.MyService1") ),
             Sequence< OUString >( &serviceName, 1 ) );
     }
-    else if (0 == ::rtl_str_compare( implName, "my_module.my_sc_impl.MyService2" ))
+    else if (0 == ::rtl_str_compare( implName, "my_module.my_sc_implementation.MyService2" ))
     {
         // create component factory for MyService12 implementation
         OUString serviceName( RTL_CONSTASCII_USTRINGPARAM("my_module.MyService2") );
         xFactory = ::cppu::createSingleComponentFactory(
             ::my_sc_impl::create_MyService2Impl,
-            OUString( RTL_CONSTASCII_USTRINGPARAM("my_module.my_sc_impl.MyService2") ),
+            OUString( RTL_CONSTASCII_USTRINGPARAM("my_module.my_sc_implementation.MyService2") ),
             Sequence< OUString >( &serviceName, 1 ) );
     }
     if (xFactory.is())
