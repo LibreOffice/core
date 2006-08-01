@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 13:27:01 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 16:05:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1880,6 +1880,8 @@ sal_Bool SfxDocumentTemplates::HasUserContents( sal_uInt16 nRegion, sal_uInt16 n
                 // check whether there is at least one editable template
                 nLen = ( sal_uInt16 )pRegion->GetCount();
                 nStartInd = 0;
+                if ( nLen == 0 )
+                    bResult = sal_True; // the writing part of empty folder with writing URL can be removed
             }
             else
             {
