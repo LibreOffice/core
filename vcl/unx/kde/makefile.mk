@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2005-12-19 17:21:42 $
+#   last change: $Author: ihi $ $Date: 2006-08-01 10:28:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,13 @@ MKDEPENDSOLVER=
 
 .INCLUDE :  settings.mk
 .INCLUDE :  $(PRJ)$/util$/makefile2.pmk
+
+# For some of the included external KDE headers, GCC complains about shadowed
+# symbols in instantiated template code only at the end of a compilation unit,
+# so the only solution is to disable that warning here:
+.IF "$(COM)" == "GCC"
+CFLAGSCXX+=-Wno-shadow
+.ENDIF
 
 # --- Files --------------------------------------------------------
 
