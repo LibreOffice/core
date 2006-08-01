@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swcrsr.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:06:38 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 16:47:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1155,7 +1155,7 @@ FASTBOOL SwCursor::IsEndWord() const
 
 FASTBOOL SwCursor::IsInWord() const
 {
-    return IsEndWordWT( WordType::ANYWORD_IGNOREWHITESPACES );
+    return IsInWordWT( WordType::ANYWORD_IGNOREWHITESPACES );
 }
 
 FASTBOOL SwCursor::GoStartWord()
