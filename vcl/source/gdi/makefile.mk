@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-19 19:26:20 $
+#   last change: $Author: ihi $ $Date: 2006-08-01 11:45:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -136,8 +136,8 @@ EXCEPTIONSFILES=	$(SLO)$/outdev.obj		\
                     $(SLO)$/impimagetree.obj		\
                     $(SLO)$/pngread.obj		\
                     $(SLO)$/pngwrite.obj    \
-                    $(SLO)$/virdev.obj
-                    
+                    $(SLO)$/virdev.obj \
+                $(SLO)$/impprn.obj
 
 # --- Targets ------------------------------------------------------
 
