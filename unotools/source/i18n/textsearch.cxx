@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsearch.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 14:07:39 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 11:50:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -233,7 +233,7 @@ TextSearch::~TextSearch()
  * Methoden fuer die normale Suche oder der Suche nach Regular-Expressions
  * ueber die MethodenPointer auf.
  */
-#if ! defined(__GNUC__)
+#if defined _MSC_VER
 #pragma optimize("", off)
 #endif
 int TextSearch::SearchFrwrd( const String & rStr, xub_StrLen* pStart,
@@ -298,7 +298,7 @@ int TextSearch::SearchBkwrd( const String & rStr, xub_StrLen* pStart,
     return nRet;
 }
 
-#if ! defined(__GNUC__)
+#if defined _MSC_VER
 #pragma optimize("", on)
 #endif
 
