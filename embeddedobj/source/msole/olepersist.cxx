@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olepersist.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:30:41 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 11:16:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -785,14 +785,20 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToRetrieveCachedVisualRepres
     {
         RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OleEmbeddedObject::TryToRetrieveCachedVisualRepresentation, retrieving" );
 
+        uno::Reference< container::XNameContainer > xNameContainer;
         uno::Sequence< uno::Any > aArgs( 2 );
         aArgs[0] <<= xStream;
         aArgs[1] <<= (sal_Bool)sal_True; // do not create copy
-        uno::Reference< container::XNameContainer > xNameContainer(
+        try
+        {
+            xNameContainer = uno::Reference< container::XNameContainer >(
                 m_xFactory->createInstanceWithArguments(
                         ::rtl::OUString::createFromAscii( "com.sun.star.embed.OLESimpleStorage" ),
                         aArgs ),
                 uno::UNO_QUERY );
+        }
+        catch( uno::Exception& )
+        {}
 
         if ( xNameContainer.is() )
         {
