@@ -4,9 +4,9 @@
  *
  *  $RCSfile: complextoolbarcontroller.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-08 15:16:57 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 09:36:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,6 +96,7 @@ class ComplexToolbarController : public svt::ToolboxController
         DECL_STATIC_LINK( ComplexToolbarController, Notify_Impl, NotifyInfo* );
 
     protected:
+        static sal_Int32 getFontSizePixel( const Window* pWindow );
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > getDispatchFromCommand( const rtl::OUString& aCommand ) const;
         void addNotifyInfo( const ::rtl::OUString&                                                        aEventName,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >& xDispatch,
@@ -103,6 +104,9 @@ class ComplexToolbarController : public svt::ToolboxController
 
         virtual void executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand ) = 0;
         const ::com::sun::star::util::URL& getInitializedURL();
+        void notifyFocusGet();
+        void notifyFocusLost();
+        void notifyTextChanged( const ::rtl::OUString& aText );
 
         ToolBar*                                                                    m_pToolbar;
         sal_uInt16                                                                  m_nID;
