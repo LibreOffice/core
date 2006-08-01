@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 13:26:04 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 11:28:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -282,6 +282,7 @@ String STR_ERROR_NOSTORAGE
     Text [ en-US ] = "The selected file has an incorrect format." ;
     Text [ x-comment ] = " ";
 };
+/*
 String STR_QUERY_SAVEOWNFORMAT
 {
 //    Text [ de ] = "$(FILENAME) enth�lt m�glicherweise Elemente, die mit $(FORMAT)-Format nicht kompatibel sind. M�chten Sie das Dokument in diesem Format speichern?\n\n- Klicken Sie auf 'Ja', um im $(FORMAT)-Format zuspeichern.\n- Klicken Sie auf 'Nein', um die Elemente zu erhalten. Speichern Sie dann das Dokument im aktuellen %PRODUCTNAME-Format.";
@@ -290,6 +291,7 @@ String STR_QUERY_SAVEOWNFORMAT
 //    Text [ en-US ] = "$(FILENAME) may contain formattings that are not compatible with $(FORMAT) Format. Do you want to save the document in this format?\n\n- To save in $(FORMAT) Format, click 'Yes'\n- To preserve formatting, click No. Next save the document in the latest %PRODUCTNAME format.";
     Text [ x-comment ] = " ";
 };
+*/
 String STR_QUERY_MUSTOWNFORMAT
 {
     Text [ de ] = "Dokumente können nicht im $(FORMAT) Format gespeichert\nwerden. Möchten Sie das Dokument im $(OWNFORMAT) Format\nspeichern?" ;
