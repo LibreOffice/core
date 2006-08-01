@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 11:48:02 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 09:24:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1272,10 +1272,6 @@ BOOL DrawViewShell::SwitchPage(USHORT nSelectedPage)
         rBindings.Invalidate(SID_NAVIGATOR_PAGENAME, TRUE, FALSE);
         rBindings.Invalidate(SID_STATUS_PAGE, TRUE, FALSE);
         UpdatePreview( pActualPage );
-
-
-//      if (pDrView->GetSlideShow())
-//          pDrView->SetAnimationMode(TRUE);
     }
 
     return (bOK);
