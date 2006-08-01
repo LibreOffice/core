@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxsoli4.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-19 15:08:45 $
+#   last change: $Author: ihi $ $Date: 2006-08-01 11:47:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -87,12 +87,19 @@ CFLAGSOUTOBJ=-o
 #   them in the stable UDK API we cannot change
 # - inllargeuse: "function is too large and will not be expanded inline" is
 #   merely a hint
+# - inllargeint: "function is too large to generate inline, consider writing
+#   it yourself" is merely a hint
 # - notemsource: "could not find source for function" appears to be spurious
 # - reftotemp: warns about calling non-const functions on temporary objects,
 #   something legally done by boost::scoped_array<T>::reset, for example
 #   (this_type(p).swap(*this))
+# - truncwarn: "conversion of 64 bit type value to smaller type causes
+#   truncation" at least with CC 5.8 is reported only at the end of a
+#   compilation unit that uses std::hash_map<sal_Int64, sal_Int64> (see
+#   sfx2/source/toolbox/imgmgr.cxx:1.27) and thus unfortunately needs to be
+#   disabled globally
 CFLAGSWARNCC=
-CFLAGSWARNCXX=+w2 -erroff=doubunder,inllargeuse,notemsource,reftotemp
+CFLAGSWARNCXX=+w2 -erroff=doubunder,inllargeuse,inllargeint,notemsource,reftotemp,truncwarn
 CFLAGSWALLCC=$(CFLAGSWARNCC)
 CFLAGSWALLCXX=$(CFLAGSWARNCXX)
 CFLAGSWERRCC=-errwarn=%all
@@ -188,6 +195,7 @@ STDSLOGUI=
 STDOBJCUI=
 STDSLOCUI=
 
+# CPPRUNTIME - define where to place C++ runtime if required
 STDLIBGUIST=$(DYNAMIC) -lm
 STDLIBCUIST=$(DYNAMIC) -lm
 STDLIBGUIMT=$(DYNAMIC) -lpthread -lm
