@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.80 $
+#   $Revision: 1.81 $
 #
-#   last change: $Author: ihi $ $Date: 2006-06-29 11:25:18 $
+#   last change: $Author: ihi $ $Date: 2006-08-01 09:30:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -276,7 +276,7 @@ SHL2STDLIBS=\
 .IF "$(OS)"=="MACOSX"
 XINERAMALIBS=-lXinerama
 .ELSE
-.IF "$(OS)" != "SOLARIS"
+.IF "$(OS)" != "SOLARIS" || "$(USE_XINERAMA_VERSION)" == "Xorg"
 .IF "$(XINERAMA_LINK)" == "dynamic"
 XINERAMALIBS= -lXinerama
 .ELSE
