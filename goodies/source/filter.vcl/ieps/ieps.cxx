@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ieps.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 21:47:38 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 09:25:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -324,6 +324,7 @@ static bool RenderAsPNG(const sal_uInt8* pBuf, sal_uInt32 nBytesRead,
 void CreateMtfReplacementAction( GDIMetaFile& rMtf, SvStream& rStrm, sal_uInt32 nOrigPos, sal_uInt32 nPSSize,
                                 sal_uInt32 nPosWMF, sal_uInt32 nSizeWMF, sal_uInt32 nPosTIFF, sal_uInt32 nSizeTIFF )
 {
+    ByteString aComment( (const sal_Char*)"EPSReplacementGraphic" );
     if ( nSizeWMF || nSizeTIFF )
     {
         SvMemoryStream aReplacement( nSizeWMF + nSizeTIFF + 28 );
@@ -351,9 +352,10 @@ void CreateMtfReplacementAction( GDIMetaFile& rMtf, SvStream& rStrm, sal_uInt32 
             aReplacement.Write( pBuf, nSizeTIFF );
             delete[] pBuf;
         }
-        ByteString aComment( (const sal_Char*)"EPSReplacementGraphic" );
         rMtf.AddAction( (MetaAction*)( new MetaCommentAction( aComment, 0, (const BYTE*)aReplacement.GetData(), aReplacement.Tell() ) ) );
     }
+    else
+        rMtf.AddAction( (MetaAction*)( new MetaCommentAction( aComment, 0, NULL, 0 ) ) );
 }
 
 //there is no preview -> make a red box
