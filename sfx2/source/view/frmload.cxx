@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:37:30 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 09:55:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -373,6 +373,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< css::bean
     }
 
     // check for the URL pattern of our factory URLs
+    SfxFrameWeak wFrame = pFrame;
     String aPrefix = String::CreateFromAscii( "private:factory/" );
     String aFact( rURL );
     if ( aPrefix.Len() == aFact.Match( aPrefix ) )
@@ -420,11 +421,11 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< css::bean
             else
                 bLoadState = sal_False;
 
-            if ( !bLoadState && bFrameCreated && pFrame && !pFrame->GetCurrentDocument() )
+            if ( !bLoadState && bFrameCreated && wFrame && !wFrame->GetCurrentDocument() )
             {
                 css::uno::Reference< css::frame::XFrame > axFrame;
-                pFrame->SetFrameInterface_Impl( axFrame );
-                pFrame->DoClose();
+                wFrame->SetFrameInterface_Impl( axFrame );
+                wFrame->DoClose();
             }
 
             xFrame.clear();
@@ -491,11 +492,11 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< css::bean
                 else
                     bLoadState = sal_False;
 
-                if ( !bLoadState && bFrameCreated && pFrame && !pFrame->GetCurrentDocument() )
+                if ( !bLoadState && bFrameCreated && wFrame && !wFrame->GetCurrentDocument() )
                 {
                     css::uno::Reference< css::frame::XFrame > axFrame;
-                    pFrame->SetFrameInterface_Impl( axFrame );
-                    pFrame->DoClose();
+                    wFrame->SetFrameInterface_Impl( axFrame );
+                    wFrame->DoClose();
                 }
 
                 xFrame.clear();
@@ -563,6 +564,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< css::bean
                         pFrame = SfxTopFrame::Create( rFrame );
                 }
 
+                wFrame = pFrame;
                 aSet.Put( SfxFrameItem( SID_DOCFRAME, pFrame ) );
                 if( pFrame->InsertDocument( pDoc ) )
                 {
@@ -587,12 +589,13 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< css::bean
 
         if ( bDisaster )
         {
-            if ( pFrame && !pFrame->GetCurrentDocument() )
+            if ( wFrame && !wFrame->GetCurrentDocument() )
             {
                 // document loading was not successful; close SfxFrame (but not XFrame!)
                 css::uno::Reference< css::frame::XFrame > axFrame;
-                pFrame->SetFrameInterface_Impl( axFrame );
-                pFrame->DoClose();
+                wFrame->SetFrameInterface_Impl( axFrame );
+                wFrame->DoClose();
+                aSet.ClearItem( SID_DOCFRAME );
             }
 
             css::uno::Reference< css::util::XCloseable > xCloseable( xLoadable, css::uno::UNO_QUERY );
