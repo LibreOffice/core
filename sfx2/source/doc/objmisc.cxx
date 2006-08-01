@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: rt $ $Date: 2006-06-26 09:52:22 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 11:19:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -858,6 +858,10 @@ String SfxObjectShell::GetTitle
         // ggf. Titel aus Dateiname generieren
         if ( !pImp->aTitle.Len() )
             pImp->aTitle = aURL.GetBase();
+
+        // workaround for the case when the name can not be retrieved from URL by INetURLObject
+        if ( !pImp->aTitle.Len() )
+            pImp->aTitle = aURL.GetMainURL( INetURLObject::DECODE_WITH_CHARSET );
     }
 
     // ganzer Titel
