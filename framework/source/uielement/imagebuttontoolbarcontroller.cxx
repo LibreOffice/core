@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imagebuttontoolbarcontroller.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-08 15:19:09 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 09:38:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,7 +170,7 @@ ImageButtonToolbarController::ImageButtonToolbarController(
 
     Image aImage = AddonsOptions().GetImageFromURL( aCommand, bBigImages, bHiContrast, sal_True );
 
-    // Height will be controlled by WB_AUTOSIZE
+    // Height will be controlled by scaling according to button height
     m_pToolbar->SetItemImage( m_nID, aImage );
 }
 
