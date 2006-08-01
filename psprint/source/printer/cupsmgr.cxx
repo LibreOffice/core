@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cupsmgr.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 16:30:23 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 11:44:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -701,7 +701,12 @@ const PPDParser* CUPSManager::createCUPSParser( const OUString& rPrinter )
     return pNewParser;
 }
 
-void CUPSManager::setupJobContextData( JobData& rData )
+void CUPSManager::setupJobContextData(
+    JobData&
+#ifdef ENABLE_CUPS
+    rData
+#endif
+)
 {
 #ifdef ENABLE_CUPS
     std::hash_map< OUString, int, OUStringHash >::iterator dest_it =
