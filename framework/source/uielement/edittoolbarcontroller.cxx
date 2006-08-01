@@ -1,0 +1,333 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: edittoolbarcontroller.cxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: ihi $ $Date: 2006-08-01 09:38:44 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __FRAMEWORK_UIELEMENT_EDITTOOLBARCONTROLLER_HXX
+#include "uielement/edittoolbarcontroller.hxx"
+#endif
+
+//_________________________________________________________________________________________________________________
+//  my own includes
+//_________________________________________________________________________________________________________________
+
+#ifndef __FRAMEWORK_TOOLBAR_HXX_
+#include "uielement/toolbar.hxx"
+#endif
+
+//_________________________________________________________________________________________________________________
+//  interface includes
+//_________________________________________________________________________________________________________________
+
+#ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
+#include <com/sun/star/util/XURLTransformer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
+#include <com/sun/star/frame/XDispatchProvider.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
+#include <com/sun/star/lang/DisposedException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_STATUS_ITEMSTATUS_HPP_
+#include <com/sun/star/frame/status/ItemStatus.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_STATUS_ITEMSTATE_HPP_
+#include <com/sun/star/frame/status/ItemState.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_STATUS_VISIBILITY_HPP_
+#include <com/sun/star/frame/status/Visibility.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XCONTROLNOTIFICATIONLISTENER_HPP_
+#include <com/sun/star/frame/XControlNotificationListener.hpp>
+#endif
+
+//_________________________________________________________________________________________________________________
+//  other includes
+//_________________________________________________________________________________________________________________
+
+#ifndef _SVTOOLS_TOOLBOXCONTROLLER_HXX
+#include <svtools/toolboxcontroller.hxx>
+#endif
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+#ifndef _VCL_MNEMONIC_HXX_
+#include <vcl/mnemonic.hxx>
+#endif
+#include <tools/urlobj.hxx>
+
+using namespace ::rtl;
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::frame::status;
+using namespace ::com::sun::star::util;
+
+namespace framework
+{
+
+// ------------------------------------------------------------------
+
+// Wrapper class to notify controller about events from edit.
+// Unfortunaltly the events are notifed through virtual methods instead
+// of Listeners.
+
+class EditControl : public Edit
+{
+    public:
+        EditControl( Window* pParent, WinBits nStyle, IEditListener* pEditListener );
+        virtual ~EditControl();
+
+        virtual void Modify();
+        virtual void KeyInput( const ::KeyEvent& rKEvt );
+        virtual void GetFocus();
+        virtual void LoseFocus();
+        virtual long PreNotify( NotifyEvent& rNEvt );
+
+    private:
+        IEditListener* m_pEditListener;
+};
+
+EditControl::EditControl( Window* pParent, WinBits nStyle, IEditListener* pEditListener ) :
+    Edit( pParent, nStyle )
+    , m_pEditListener( pEditListener )
+{
+}
+
+EditControl::~EditControl()
+{
+    m_pEditListener = 0;
+}
+
+void EditControl::Modify()
+{
+    Edit::Modify();
+    if ( m_pEditListener )
+        m_pEditListener->Modify();
+}
+
+void EditControl::KeyInput( const ::KeyEvent& rKEvt )
+{
+    Edit::KeyInput( rKEvt );
+    if ( m_pEditListener )
+        m_pEditListener->KeyInput( rKEvt );
+}
+
+void EditControl::GetFocus()
+{
+    Edit::GetFocus();
+    if ( m_pEditListener )
+        m_pEditListener->GetFocus();
+}
+
+void EditControl::LoseFocus()
+{
+    Edit::LoseFocus();
+    if ( m_pEditListener )
+        m_pEditListener->LoseFocus();
+}
+
+long EditControl::PreNotify( NotifyEvent& rNEvt )
+{
+    long nRet( 0 );
+    if ( m_pEditListener )
+        nRet = m_pEditListener->PreNotify( rNEvt );
+    if ( nRet == 0 )
+        nRet = Edit::PreNotify( rNEvt );
+
+    return nRet;
+}
+
+// ------------------------------------------------------------------
+
+EditToolbarController::EditToolbarController(
+    const Reference< XMultiServiceFactory >& rServiceManager,
+    const Reference< XFrame >&               rFrame,
+    ToolBar*                                 pToolbar,
+    USHORT                                   nID,
+    sal_Int32                                nWidth,
+    const OUString&                          aCommand ) :
+    ComplexToolbarController( rServiceManager, rFrame, pToolbar, nID, aCommand )
+    ,   m_pEditControl( 0 )
+{
+    m_pEditControl = new EditControl( m_pToolbar, WB_BORDER, this );
+    if ( nWidth == 0 )
+        nWidth = 100;
+
+    // Calculate height of the edit field according to the application font height
+    sal_Int32 nHeight = getFontSizePixel( m_pEditControl ) + 6 + 1;
+
+    m_pEditControl->SetSizePixel( ::Size( nWidth, nHeight ));
+    m_pToolbar->SetItemWindow( m_nID, m_pEditControl );
+}
+
+// ------------------------------------------------------------------
+
+EditToolbarController::~EditToolbarController()
+{
+}
+
+// ------------------------------------------------------------------
+
+void SAL_CALL EditToolbarController::dispose()
+throw ( RuntimeException )
+{
+    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+
+    m_pToolbar->SetItemWindow( m_nID, 0 );
+    delete m_pEditControl;
+
+    ComplexToolbarController::dispose();
+
+    m_pEditControl = 0;
+}
+
+// ------------------------------------------------------------------
+
+void SAL_CALL EditToolbarController::execute( sal_Int16 KeyModifier )
+throw ( RuntimeException )
+{
+    Reference< XDispatch >       xDispatch;
+    Reference< XURLTransformer > xURLTransformer;
+    OUString                     aCommandURL;
+    OUString                     aSelectedText;
+    ::com::sun::star::util::URL  aTargetURL;
+
+    {
+        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+
+        if ( m_bDisposed )
+            throw DisposedException();
+
+        if ( m_bInitialized &&
+             m_xFrame.is() &&
+             m_xServiceManager.is() &&
+             m_aCommandURL.getLength() )
+        {
+            xURLTransformer = m_xURLTransformer;
+            xDispatch = getDispatchFromCommand( m_aCommandURL );
+            aCommandURL = m_aCommandURL;
+            aTargetURL = getInitializedURL();
+            aSelectedText = m_pEditControl->GetText();
+        }
+    }
+
+    if ( xDispatch.is() && aTargetURL.Complete.getLength() > 0 )
+    {
+        Sequence<PropertyValue>   aArgs( 2 );
+
+        // Add key modifier to argument list
+        aArgs[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "KeyModifier" ));
+        aArgs[0].Value <<= KeyModifier;
+        aArgs[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Text" ));
+        aArgs[1].Value <<= aSelectedText;
+
+        // Execute dispatch asynchronously
+        ExecuteInfo* pExecuteInfo = new ExecuteInfo;
+        pExecuteInfo->xDispatch     = xDispatch;
+        pExecuteInfo->aTargetURL    = aTargetURL;
+        pExecuteInfo->aArgs         = aArgs;
+        Application::PostUserEvent( STATIC_LINK(0, ComplexToolbarController , ExecuteHdl_Impl), pExecuteInfo );
+    }
+}
+
+// ------------------------------------------------------------------
+
+void EditToolbarController::Modify()
+{
+    notifyTextChanged( m_pEditControl->GetText() );
+}
+
+void EditToolbarController::KeyInput( const ::KeyEvent& /*rKEvt*/ )
+{
+}
+
+void EditToolbarController::GetFocus()
+{
+    notifyFocusGet();
+}
+
+void EditToolbarController::LoseFocus()
+{
+    notifyFocusLost();
+}
+
+long EditToolbarController::PreNotify( NotifyEvent& rNEvt )
+{
+    if( rNEvt.GetType() == EVENT_KEYINPUT )
+    {
+        const ::KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
+        const KeyCode& rKeyCode = pKeyEvent->GetKeyCode();
+        if(( rKeyCode.GetModifier() | rKeyCode.GetCode()) == KEY_RETURN )
+        {
+            // Call execute only with non-empty text
+            if ( m_pEditControl->GetText().Len() > 0 )
+                execute( rKeyCode.GetModifier() );
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+// --------------------------------------------------------
+
+void EditToolbarController::executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand )
+{
+    if ( rControlCommand.Command.equalsAsciiL( "SetText", 7 ))
+    {
+        for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
+        {
+            if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "Text", 4 ))
+            {
+                rtl::OUString aText;
+                rControlCommand.Arguments[i].Value >>= aText;
+                m_pEditControl->SetText( aText );
+
+                // send notification
+                notifyTextChanged( aText );
+                break;
+            }
+        }
+    }
+}
+
+} // namespace
