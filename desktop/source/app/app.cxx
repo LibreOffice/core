@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.193 $
+ *  $Revision: 1.194 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 09:14:33 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 11:19:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1993,8 +1993,9 @@ IMPL_LINK( Desktop, OpenClients_Impl, void*, pvoid )
 {
     RTL_LOGFILE_PRODUCT_CONTEXT( aLog, "PERFORMANCE - DesktopOpenClients_Impl()" );
 
-    OfficeIPCThread::SetReady();
     OpenClients();
+
+    OfficeIPCThread::SetReady();
 
     // CloseStartupScreen();
     CloseSplashScreen();
