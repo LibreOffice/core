@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbox2_tmpl.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-05 21:53:24 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 09:20:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -216,9 +216,6 @@ ToolBox RID_GRAPHIC_OPTIONS_TOOLBOX
         TBI_FORMAT_BEZIER_EDIT
         TBI_GLUE_EDITMODE
         SEPARATOR
-#if SD_TOOLBOX == RID_DRAW_TOOLBOX
-        TBI_ACTIONMODE
-#endif
         TBI_CLICK_CHANGE_ROTATION
         SEPARATOR
         TBI_GRID_VISIBLE
