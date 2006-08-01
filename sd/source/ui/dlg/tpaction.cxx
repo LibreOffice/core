@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpaction.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 11:31:09 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 09:21:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -266,16 +266,22 @@ void SdTPAction::SetView( const ::sd::View* pSdView )
     pView = pSdView;
 
     // Holen der ColorTable und Fuellen der ListBox
-    ::sd::DrawDocShell* pDocSh =
-          static_cast<const ::sd::View*>(pView)->GetDocSh();
-    pDoc = pDocSh->GetDoc();
-    SfxViewFrame* pFrame = pDocSh->GetViewShell()->GetViewFrame();
-    aLbTree.SetViewFrame( pFrame );
-    aLbTreeDocument.SetViewFrame( pFrame );
+    ::sd::DrawDocShell* pDocSh = static_cast<const ::sd::View*>(pView)->GetDocSh();
+    if( pDocSh && pDocSh->GetViewShell() )
+    {
+        pDoc = pDocSh->GetDoc();
+        SfxViewFrame* pFrame = pDocSh->GetViewShell()->GetViewFrame();
+        aLbTree.SetViewFrame( pFrame );
+        aLbTreeDocument.SetViewFrame( pFrame );
 
-    SvxColorTableItem aItem( *(const SvxColorTableItem*)( pDocSh->GetItem( SID_COLOR_TABLE ) ) );
-    pColTab = aItem.GetColorTable();
-    DBG_ASSERT( pColTab, "Keine Farbtabelle vorhanden!" );
+        SvxColorTableItem aItem( *(const SvxColorTableItem*)( pDocSh->GetItem( SID_COLOR_TABLE ) ) );
+        pColTab = aItem.GetColorTable();
+        DBG_ASSERT( pColTab, "Keine Farbtabelle vorhanden!" );
+    }
+    else
+    {
+        DBG_ERROR("sd::SdTPAction::SetView(), no docshell or viewshell?");
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -400,16 +406,23 @@ BOOL SdTPAction::FillItemSet( SfxItemSet& rAttrs )
         rAttrs.InvalidateItem( ATTR_ACTION_FILENAME );
     else
     {
-        String aBaseURL = pDoc->GetDocSh()->GetMedium()->GetBaseURL();
-        if( eCA == presentation::ClickAction_SOUND ||
-            eCA == presentation::ClickAction_DOCUMENT ||
-            eCA == presentation::ClickAction_PROGRAM )
-            aFileName = ::URIHelper::SmartRel2Abs( INetURLObject(aBaseURL), aFileName, URIHelper::GetMaybeFileHdl(), true, false,
-                                                    INetURLObject::WAS_ENCODED,
-                                                    INetURLObject::DECODE_UNAMBIGUOUS );
+        if( pDoc && pDoc->GetDocSh() && pDoc->GetDocSh()->GetMedium() )
+        {
+            String aBaseURL = pDoc->GetDocSh()->GetMedium()->GetBaseURL();
+            if( eCA == presentation::ClickAction_SOUND ||
+                eCA == presentation::ClickAction_DOCUMENT ||
+                eCA == presentation::ClickAction_PROGRAM )
+                aFileName = ::URIHelper::SmartRel2Abs( INetURLObject(aBaseURL), aFileName, URIHelper::GetMaybeFileHdl(), true, false,
+                                                        INetURLObject::WAS_ENCODED,
+                                                        INetURLObject::DECODE_UNAMBIGUOUS );
 
-        rAttrs.Put( SfxStringItem( ATTR_ACTION_FILENAME, aFileName ) );
-        bModified = TRUE;
+            rAttrs.Put( SfxStringItem( ATTR_ACTION_FILENAME, aFileName ) );
+            bModified = TRUE;
+        }
+        else
+        {
+            DBG_ERROR("sd::SdTPAction::FillItemSet(), I need a medium!");
+        }
     }
 
     return( bModified );
@@ -499,7 +512,7 @@ USHORT* SdTPAction::GetRanges()
 
 void SdTPAction::UpdateTree()
 {
-    if( !bTreeUpdated )
+    if( !bTreeUpdated && pDoc && pDoc->GetDocSh() && pDoc->GetDocSh()->GetMedium() )
     {
         //aLbTree.Clear();
         aLbTree.Fill( pDoc, TRUE, pDoc->GetDocSh()->GetMedium()->GetName() );
@@ -976,7 +989,10 @@ String SdTPAction::GetEditText( BOOL bFullDocDestination )
 
     // validate file URI
     INetURLObject aURL( aStr );
-    String aBaseURL = pDoc->GetDocSh()->GetMedium()->GetBaseURL();
+    String aBaseURL;
+    if( pDoc && pDoc->GetDocSh() && pDoc->GetDocSh()->GetMedium() )
+        aBaseURL = pDoc->GetDocSh()->GetMedium()->GetBaseURL();
+
     if( aStr.Len() && aURL.GetProtocol() == INET_PROT_NOT_VALID )
         aURL = INetURLObject( ::URIHelper::SmartRel2Abs( INetURLObject(aBaseURL), aStr, URIHelper::GetMaybeFileHdl(), true, false ) );
 
