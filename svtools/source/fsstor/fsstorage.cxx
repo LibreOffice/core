@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fsstorage.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 21:09:29 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 11:15:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -671,10 +671,10 @@ uno::Reference< embed::XStorage > SAL_CALL FSStorage::openStorageElement(
     INetURLObject aFolderURL( m_pImpl->m_aURL );
     aFolderURL.Append( aStorName );
 
-    if ( ::utl::UCBContentHelper::IsDocument( aFolderURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
+    sal_Bool bFolderExists = ::utl::UCBContentHelper::IsFolder( aFolderURL.GetMainURL( INetURLObject::NO_DECODE ) );
+    if ( !bFolderExists && ::utl::UCBContentHelper::IsDocument( aFolderURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
         throw io::IOException(); // TODO:
 
-    sal_Bool bFolderExists = ::utl::UCBContentHelper::IsFolder( aFolderURL.GetMainURL( INetURLObject::NO_DECODE ) );
     if ( ( nStorageMode & embed::ElementModes::NOCREATE ) && !bFolderExists )
         throw io::IOException(); // TODO:
 
@@ -687,15 +687,19 @@ uno::Reference< embed::XStorage > SAL_CALL FSStorage::openStorageElement(
             if ( ( nStorageMode & embed::ElementModes::TRUNCATE ) && bFolderExists )
             {
                 ::utl::UCBContentHelper::Kill( aFolderURL.GetMainURL( INetURLObject::NO_DECODE ) );
-                MakeFolderNoUI( aFolderURL.GetMainURL( INetURLObject::NO_DECODE ), sal_True ); // TODO: not atomar :(
+                bFolderExists =
+                    MakeFolderNoUI( aFolderURL.GetMainURL( INetURLObject::NO_DECODE ), sal_True ); // TODO: not atomar :(
             }
             else if ( !bFolderExists )
-                MakeFolderNoUI( aFolderURL.GetMainURL( INetURLObject::NO_DECODE ), sal_True ); // TODO: not atomar :(
+            {
+                bFolderExists =
+                    MakeFolderNoUI( aFolderURL.GetMainURL( INetURLObject::NO_DECODE ), sal_True ); // TODO: not atomar :(
+            }
         }
         else if ( ( nStorageMode & embed::ElementModes::TRUNCATE ) )
             throw io::IOException(); // TODO: access denied
 
-        if ( !::utl::UCBContentHelper::IsFolder( aFolderURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
+        if ( !bFolderExists )
             throw io::IOException(); // there is no such folder
 
         ::ucb::Content aResultContent( aFolderURL.GetMainURL( INetURLObject::NO_DECODE ), xDummyEnv );
