@@ -4,9 +4,9 @@
  *
  *  $RCSfile: kcondition.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-06 14:23:11 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 10:24:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,8 +40,9 @@
 #include <comphelper/types.hxx>
 #endif
 
-#define KDE_HEADERS_WANT_KABC_ADDRESSEE
-#include "kde_headers.hxx"
+#ifndef INCLUDED_VCL_KDE_HEADERS_H
+#include <vcl/kde_headers.h>
+#endif
 
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>

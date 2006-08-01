@@ -4,9 +4,9 @@
  *
  *  $RCSfile: kfields.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-06 14:23:42 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 10:25:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,9 @@
 #ifndef _CONNECTIVITY_KAB_FIELDS_HXX_
 #define _CONNECTIVITY_KAB_FIELDS_HXX_
 
-#define KDE_HEADERS_WANT_KABC_FIELD
-#include "kde_headers.hxx"
+#ifndef INCLUDED_VCL_KDE_HEADERS_H
+#include <vcl/kde_headers.h>
+#endif
 
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
