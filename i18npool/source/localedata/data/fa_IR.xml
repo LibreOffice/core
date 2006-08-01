@@ -1,0 +1,640 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE Locale SYSTEM 'locale.dtd'>
+<Locale versionDTD="2.0.3" allowUpdateFromCLDR="no" version="1.0">
+  <LC_INFO>
+    <Language>
+      <LangID>fa</LangID>
+      <DefaultName>Persian</DefaultName>
+    </Language>
+    <Country>
+      <CountryID>IR</CountryID>
+      <DefaultName>Iran</DefaultName>
+    </Country>
+  </LC_INFO>
+  <LC_CTYPE>
+    <Separators>
+      <DateSeparator>/</DateSeparator>
+      <ThousandSeparator>٬</ThousandSeparator>
+      <DecimalSeparator>٫</DecimalSeparator>
+      <TimeSeparator>:</TimeSeparator>
+      <Time100SecSeparator>٫</Time100SecSeparator>
+      <ListSeparator>;</ListSeparator>
+      <LongDateDayOfWeekSeparator> </LongDateDayOfWeekSeparator>
+      <LongDateDaySeparator> </LongDateDaySeparator>
+      <LongDateMonthSeparator> </LongDateMonthSeparator>
+      <LongDateYearSeparator> </LongDateYearSeparator>
+    </Separators>
+    <Markers>
+      <QuotationStart>«</QuotationStart>
+      <QuotationEnd>»</QuotationEnd>
+      <DoubleQuotationStart>«</DoubleQuotationStart>
+      <DoubleQuotationEnd>»</DoubleQuotationEnd>
+    </Markers>
+    <TimeAM>صبح</TimeAM>
+    <TimePM>بعدازظهر</TimePM>
+    <MeasurementSystem>metric</MeasurementSystem>
+  </LC_CTYPE>
+  <LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$﷼-429]">
+    <FormatElement msgid="FixedFormatskey1" default="true" type="medium" usage="FIXED_NUMBER" formatindex="0">
+      <FormatCode>عادی</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="FixedFormatskey2" default="true" type="short" usage="FIXED_NUMBER" formatindex="1">
+      <FormatCode>[NatNum1]0</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="FixedFormatskey3" default="false" type="medium" usage="FIXED_NUMBER" formatindex="2">
+      <FormatCode>[NatNum1]0٫00</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="FixedFormatskey4" default="false" type="short" usage="FIXED_NUMBER" formatindex="3">
+      <FormatCode>[NatNum1]#٬##0</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="FixedFormatskey5" default="false" type="medium" usage="FIXED_NUMBER" formatindex="4">
+      <FormatCode>[NatNum1]#٬##0٫00</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="FixedFormatskey6" default="false" type="medium" usage="FIXED_NUMBER" formatindex="5">
+      <FormatCode>[NatNum1]#٬###٫00</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="ScientificFormatskey1" default="true" type="medium" usage="SCIENTIFIC_NUMBER" formatindex="6">
+      <FormatCode>[NatNum1]0٫00E+000</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="ScientificFormatskey2" default="false" type="medium" usage="SCIENTIFIC_NUMBER" formatindex="7">
+      <FormatCode>[NatNum1]0٫00E+00</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="PercentFormatskey1" default="true" type="short" usage="PERCENT_NUMBER" formatindex="8">
+      <FormatCode>[NatNum1]0%</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="PercentFormatskey2" default="true" type="long" usage="PERCENT_NUMBER" formatindex="9">
+      <FormatCode>[NatNum1]0٫00%</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="CurrencyFormatskey1" default="true" type="short" usage="CURRENCY" formatindex="12">
+      <FormatCode>[NatNum1]#٬##0 [CURRENCY];[NatNum1]-#٬##0 [CURRENCY]</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY" formatindex="13">
+      <FormatCode>[NatNum1]#٬##0 [CURRENCY];[NatNum1]-#٬##0 [CURRENCY]</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="CurrencyFormatskey3" default="false" type="medium" usage="CURRENCY" formatindex="14">
+      <FormatCode>[NatNum1]#٬##0 [CURRENCY];[RED][NatNum1]-#٬##0 [CURRENCY]</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="CurrencyFormatskey4" default="true" type="medium" usage="CURRENCY" formatindex="15">
+      <FormatCode>[NatNum1]#٬##0 [CURRENCY];[RED][NatNum1]-#٬##0 [CURRENCY]</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="CurrencyFormatskey5" default="false" type="medium" usage="CURRENCY" formatindex="16">
+      <FormatCode>[NatNum1]#٬##0 CCC</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY" formatindex="17">
+      <FormatCode>[NatNum1]#٬##0 [CURRENCY];[RED][NatNum1]-#٬##0 [CURRENCY]</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey1" default="true" type="short" usage="DATE" formatindex="18">
+      <FormatCode>[NatNum1][~persian]YY/M/D</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey9" default="true" type="long" usage="DATE" formatindex="19">
+      <FormatCode>[NatNum1][~persian]NNNNDMMMMYYYY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey8" default="true" type="medium" usage="DATE" formatindex="20">
+      <FormatCode>[NatNum1][~persian]YYYY/MM/DD</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey7" default="false" type="medium" usage="DATE" formatindex="21">
+      <FormatCode>[NatNum1][~persian]YYYY/M/D</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey10" default="false" type="long" usage="DATE" formatindex="22">
+      <FormatCode>[NatNum1][~persian]YY/MM/DD</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey11" default="false" type="long" usage="DATE" formatindex="23">
+      <FormatCode>[NatNum1][~persian]D MMM YYYY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey16" default="false" type="long" usage="DATE" formatindex="24">
+      <FormatCode>[NatNum1]D MMM YYYY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey12" default="false" type="long" usage="DATE" formatindex="25">
+      <FormatCode>[NatNum1]NNNND MMMMYYYY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey17" default="false" type="long" usage="DATE" formatindex="26">
+      <FormatCode>[NatNum1][~hijri]D MMMMYYYY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey13" default="false" type="long" usage="DATE" formatindex="27">
+      <FormatCode>[NatNum1]D MMM</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey2" default="false" type="medium" usage="DATE" formatindex="28">
+      <FormatCode>[NatNum1]D MMMMYY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey14" default="false" type="long" usage="DATE" formatindex="29">
+      <FormatCode>[NatNum1]YY/M/D</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey15" default="false" type="long" usage="DATE" formatindex="30">
+      <FormatCode>[NatNum1]YYYY/MM/DD</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey18" default="false" type="short" usage="DATE" formatindex="31">
+      <FormatCode>[NatNum1][~persian]YYYY/MM/D</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey19" default="false" type="medium" usage="DATE" formatindex="32">
+      <FormatCode>YY-MM-DD</FormatCode>
+      <DefaultName>ISO 8601 (EN 28601)</DefaultName>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey20" default="false" type="medium" usage="DATE" formatindex="33">
+      <FormatCode>YYYY-MM-DD</FormatCode>
+      <DefaultName>ISO 8601 (EN 28601)</DefaultName>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey3" default="false" type="medium" usage="DATE" formatindex="34">
+      <FormatCode>[NatNum1]YYYY/M/D</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey4" default="false" type="medium" usage="DATE" formatindex="35">
+      <FormatCode>[NatNum1]D MMM</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey5" default="false" type="medium" usage="DATE" formatindex="36">
+      <FormatCode>[~persian]MMM</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey6" default="false" type="medium" usage="DATE" formatindex="37">
+      <FormatCode>[~persian]QQ YY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey21" default="false" type="medium" usage="DATE" formatindex="38">
+      <FormatCode>WW</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="TimeFormatskey1" default="true" type="short" usage="TIME" formatindex="39">
+      <FormatCode>[NatNum1]HH:MM</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="TimeFormatskey2" default="true" type="medium" usage="TIME" formatindex="40">
+      <FormatCode>[NatNum1]HH:MM:SS</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="TimeFormatskey3" default="false" type="short" usage="TIME" formatindex="41">
+      <FormatCode>[NatNum1]HH:MM AM/PM</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="TimeFormatskey4" default="false" type="medium" usage="TIME" formatindex="42">
+      <FormatCode>[NatNum1]HH:MM:SS AM/PM</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="TimeFormatskey5" default="false" type="medium" usage="TIME" formatindex="43">
+      <FormatCode>[NatNum1][HH]:MM:SS</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="TimeFormatskey6" default="false" type="short" usage="TIME" formatindex="44">
+      <FormatCode>[NatNum1]MM:SS٫00</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="TimeFormatskey7" default="false" type="medium" usage="TIME" formatindex="45">
+      <FormatCode>[NatNum1][HH]:MM:SS٫00</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateTimeFormatskey1" default="true" type="medium" usage="DATE_TIME" formatindex="46">
+      <FormatCode>[NatNum1][~persian]D MMM YYYY، ساعت HH:MM</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateTimeFormatskey2" default="false" type="medium" usage="DATE_TIME" formatindex="47">
+      <FormatCode>[NatNum1][~persian]D MMM YYYY، ساعت HH:MM:SS</FormatCode>
+    </FormatElement>
+  </LC_FORMAT>
+  <LC_COLLATION>
+    <Collator default="true" unoid="alphanumeric" />
+    <CollationOptions>
+      <TransliterationModules>IGNORE_CASE</TransliterationModules>
+    </CollationOptions>
+  </LC_COLLATION>
+  <LC_SEARCH ref="en_US"/>
+  <LC_INDEX>
+    <IndexKey phonetic="false" default="true" unoid="alphanumeric">ء-ؤ ئ-ب پ ت-ج چ ح-ز ژ س-غ ف-ق ک گ ل-ن و ه ة ى</IndexKey>
+    <UnicodeScript>11</UnicodeScript>
+    <FollowPageWord>ص</FollowPageWord>
+    <FollowPageWord>صص</FollowPageWord>
+  </LC_INDEX>
+  <LC_CALENDAR>
+    <Calendar unoid="persian" default="true">
+      <DaysOfWeek>
+        <Day>
+          <DayID>sun</DayID>
+          <DefaultAbbrvName>یکشنبه</DefaultAbbrvName>
+          <DefaultFullName>یکشنبه</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>mon</DayID>
+          <DefaultAbbrvName>دوشنبه</DefaultAbbrvName>
+          <DefaultFullName>دوشنبه</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>tue</DayID>
+          <DefaultAbbrvName>سه‌شنبه</DefaultAbbrvName>
+          <DefaultFullName>سه‌شنبه</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>wed</DayID>
+          <DefaultAbbrvName>چهارشنبه</DefaultAbbrvName>
+          <DefaultFullName>چهارشنبه</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>thu</DayID>
+          <DefaultAbbrvName>پنجشنبه</DefaultAbbrvName>
+          <DefaultFullName>پنجشنبه</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>fri</DayID>
+          <DefaultAbbrvName>جمعه</DefaultAbbrvName>
+          <DefaultFullName>جمعه</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>sat</DayID>
+          <DefaultAbbrvName>شنبه</DefaultAbbrvName>
+          <DefaultFullName>شنبه</DefaultFullName>
+        </Day>
+      </DaysOfWeek>
+      <MonthsOfYear>
+        <Month>
+          <MonthID>jan</MonthID>
+          <DefaultAbbrvName>فروردین</DefaultAbbrvName>
+          <DefaultFullName>فروردین</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>feb</MonthID>
+          <DefaultAbbrvName>اردیبهشت</DefaultAbbrvName>
+          <DefaultFullName>اردیبهشت</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>mar</MonthID>
+          <DefaultAbbrvName>خرداد</DefaultAbbrvName>
+          <DefaultFullName>خرداد</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>apr</MonthID>
+          <DefaultAbbrvName>تیر</DefaultAbbrvName>
+          <DefaultFullName>تیر</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>may</MonthID>
+          <DefaultAbbrvName>مرداد</DefaultAbbrvName>
+          <DefaultFullName>مرداد</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jun</MonthID>
+          <DefaultAbbrvName>شهریور</DefaultAbbrvName>
+          <DefaultFullName>شهریور</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jul</MonthID>
+          <DefaultAbbrvName>مهر</DefaultAbbrvName>
+          <DefaultFullName>مهر</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>aug</MonthID>
+          <DefaultAbbrvName>آبان</DefaultAbbrvName>
+          <DefaultFullName>آبان</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>sep</MonthID>
+          <DefaultAbbrvName>آذر</DefaultAbbrvName>
+          <DefaultFullName>آذر</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>oct</MonthID>
+          <DefaultAbbrvName>دی</DefaultAbbrvName>
+          <DefaultFullName>دی</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>nov</MonthID>
+          <DefaultAbbrvName>بهمن</DefaultAbbrvName>
+          <DefaultFullName>بهمن</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>dec</MonthID>
+          <DefaultAbbrvName>اسفند</DefaultAbbrvName>
+          <DefaultFullName>اسفند</DefaultFullName>
+        </Month>
+      </MonthsOfYear>
+      <Eras>
+        <Era>
+          <EraID>Dummy</EraID>
+          <DefaultAbbrvName></DefaultAbbrvName>
+          <DefaultFullName></DefaultFullName>
+        </Era>
+        <Era>
+          <EraID>ap</EraID>
+          <DefaultAbbrvName>ه‍. ش.</DefaultAbbrvName>
+          <DefaultFullName>هجری شمسی</DefaultFullName>
+        </Era>
+      </Eras>
+      <StartDayOfWeek>
+        <DayID>sat</DayID>
+      </StartDayOfWeek>
+      <MinimalDaysInFirstWeek>1</MinimalDaysInFirstWeek>
+    </Calendar>
+
+    <Calendar unoid="gregorian" default="false">
+      <DaysOfWeek>
+        <Day>
+          <DayID>sun</DayID>
+          <DefaultAbbrvName>یکشنبه</DefaultAbbrvName>
+          <DefaultFullName>یکشنبه</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>mon</DayID>
+          <DefaultAbbrvName>دوشنبه</DefaultAbbrvName>
+          <DefaultFullName>دوشنبه</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>tue</DayID>
+          <DefaultAbbrvName>سه‌شنبه</DefaultAbbrvName>
+          <DefaultFullName>سه‌شنبه</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>wed</DayID>
+          <DefaultAbbrvName>چهارشنبه</DefaultAbbrvName>
+          <DefaultFullName>چهارشنبه</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>thu</DayID>
+          <DefaultAbbrvName>پنجشنبه</DefaultAbbrvName>
+          <DefaultFullName>پنجشنبه</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>fri</DayID>
+          <DefaultAbbrvName>جمعه</DefaultAbbrvName>
+          <DefaultFullName>جمعه</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>sat</DayID>
+          <DefaultAbbrvName>شنبه</DefaultAbbrvName>
+          <DefaultFullName>شنبه</DefaultFullName>
+        </Day>
+      </DaysOfWeek>
+      <MonthsOfYear>
+        <Month>
+          <MonthID>jan</MonthID>
+          <DefaultAbbrvName>ژانویه</DefaultAbbrvName>
+          <DefaultFullName>ژانویه</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>feb</MonthID>
+          <DefaultAbbrvName>فوریه</DefaultAbbrvName>
+          <DefaultFullName>فوریه</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>mar</MonthID>
+          <DefaultAbbrvName>مارس</DefaultAbbrvName>
+          <DefaultFullName>مارس</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>apr</MonthID>
+          <DefaultAbbrvName>آوریل</DefaultAbbrvName>
+          <DefaultFullName>آوریل</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>may</MonthID>
+          <DefaultAbbrvName>مه</DefaultAbbrvName>
+          <DefaultFullName>مه</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jun</MonthID>
+          <DefaultAbbrvName>ژوئن</DefaultAbbrvName>
+          <DefaultFullName>ژوئن</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jul</MonthID>
+          <DefaultAbbrvName>ژوئیه</DefaultAbbrvName>
+          <DefaultFullName>ژوئیه</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>aug</MonthID>
+          <DefaultAbbrvName>اوت</DefaultAbbrvName>
+          <DefaultFullName>اوت</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>sep</MonthID>
+          <DefaultAbbrvName>سپتامبر</DefaultAbbrvName>
+          <DefaultFullName>سپتامبر</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>oct</MonthID>
+          <DefaultAbbrvName>اکتبر</DefaultAbbrvName>
+          <DefaultFullName>اکتبر</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>nov</MonthID>
+          <DefaultAbbrvName>نوامبر</DefaultAbbrvName>
+          <DefaultFullName>نوامبر</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>dec</MonthID>
+          <DefaultAbbrvName>دسامبر</DefaultAbbrvName>
+          <DefaultFullName>دسامبر</DefaultFullName>
+        </Month>
+      </MonthsOfYear>
+      <Eras>
+        <Era>
+          <EraID>bc</EraID>
+          <DefaultAbbrvName>قبل از میلاد</DefaultAbbrvName>
+          <DefaultFullName>قبل از میلاد</DefaultFullName>
+        </Era>
+        <Era>
+          <EraID>ad</EraID>
+          <DefaultAbbrvName>ﻡ</DefaultAbbrvName>
+          <DefaultFullName>میلادی</DefaultFullName>
+        </Era>
+      </Eras>
+      <StartDayOfWeek>
+        <DayID>sat</DayID>
+      </StartDayOfWeek>
+      <MinimalDaysInFirstWeek>1</MinimalDaysInFirstWeek>
+    </Calendar>
+    <Calendar unoid="hijri" default="false">
+      <DaysOfWeek>
+        <Day>
+          <DayID>sun</DayID>
+          <DefaultAbbrvName>یکشنبه</DefaultAbbrvName>
+          <DefaultFullName>یکشنبه</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>mon</DayID>
+          <DefaultAbbrvName>دوشنبه</DefaultAbbrvName>
+          <DefaultFullName>دوشنبه</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>tue</DayID>
+          <DefaultAbbrvName>سه‌شنبه</DefaultAbbrvName>
+          <DefaultFullName>سه‌شنبه</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>wed</DayID>
+          <DefaultAbbrvName>چهارشنبه</DefaultAbbrvName>
+          <DefaultFullName>چهارشنبه</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>thu</DayID>
+          <DefaultAbbrvName>پنجشنبه</DefaultAbbrvName>
+          <DefaultFullName>پنجشنبه</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>fri</DayID>
+          <DefaultAbbrvName>جمعه</DefaultAbbrvName>
+          <DefaultFullName>جمعه</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>sat</DayID>
+          <DefaultAbbrvName>شنبه</DefaultAbbrvName>
+          <DefaultFullName>شنبه</DefaultFullName>
+        </Day>
+      </DaysOfWeek>
+      <MonthsOfYear>
+        <Month>
+          <MonthID>jan</MonthID>
+          <DefaultAbbrvName>محرم</DefaultAbbrvName>
+          <DefaultFullName>محرم</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>feb</MonthID>
+          <DefaultAbbrvName>صفر</DefaultAbbrvName>
+          <DefaultFullName>صفر</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>mar</MonthID>
+          <DefaultAbbrvName>ربیع الاول</DefaultAbbrvName>
+          <DefaultFullName>ربیع الاول</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>apr</MonthID>
+          <DefaultAbbrvName>ربیع الثانی</DefaultAbbrvName>
+          <DefaultFullName>ربیع الثانی</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>may</MonthID>
+          <DefaultAbbrvName>جمادی الاول</DefaultAbbrvName>
+          <DefaultFullName>جمادی الاول</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jun</MonthID>
+          <DefaultAbbrvName>جمادی الثانی</DefaultAbbrvName>
+          <DefaultFullName>جمادی الثانی</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jul</MonthID>
+          <DefaultAbbrvName>رجب</DefaultAbbrvName>
+          <DefaultFullName>رجب</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>aug</MonthID>
+          <DefaultAbbrvName>شعبان</DefaultAbbrvName>
+          <DefaultFullName>شعبان</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>sep</MonthID>
+          <DefaultAbbrvName>رمضان</DefaultAbbrvName>
+          <DefaultFullName>رمضان</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>oct</MonthID>
+          <DefaultAbbrvName>شوال</DefaultAbbrvName>
+          <DefaultFullName>شوال</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>nov</MonthID>
+          <DefaultAbbrvName>ذیقعده</DefaultAbbrvName>
+          <DefaultFullName>ذیقعده</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>dec</MonthID>
+          <DefaultAbbrvName>ذیحجه</DefaultAbbrvName>
+          <DefaultFullName>ذیحجه</DefaultFullName>
+        </Month>
+      </MonthsOfYear>
+      <Eras>
+        <Era>
+          <EraID>Dummy</EraID>
+          <DefaultAbbrvName></DefaultAbbrvName>
+          <DefaultFullName></DefaultFullName>
+        </Era>
+        <Era>
+          <EraID>AfterHijrat</EraID>
+          <DefaultAbbrvName>ه‍. ق.</DefaultAbbrvName>
+          <DefaultFullName>هجری قمری</DefaultFullName>
+        </Era>
+      </Eras>
+      <StartDayOfWeek>
+        <DayID>sat</DayID>
+      </StartDayOfWeek>
+      <MinimalDaysInFirstWeek>1</MinimalDaysInFirstWeek>
+    </Calendar>
+  </LC_CALENDAR>
+  <LC_CURRENCY>
+    <Currency default="true" usedInCompatibleFormatCodes="true">
+      <CurrencyID>IRR</CurrencyID>
+      <CurrencySymbol>﷼</CurrencySymbol>
+      <BankSymbol>IRR</BankSymbol>
+      <CurrencyName>ریال</CurrencyName>
+      <DecimalPlaces>0</DecimalPlaces>
+    </Currency>
+  </LC_CURRENCY>
+  <LC_TRANSLITERATION ref="en_US"/>
+  <LC_MISC>
+    <ReservedWords>
+      <trueWord>درست</trueWord>
+      <falseWord>نادرست</falseWord>
+      <quarter1Word>سه ماههٔ اول</quarter1Word>
+      <quarter2Word>سه ماههٔ دوم</quarter2Word>
+      <quarter3Word>سه ماههٔ سوم</quarter3Word>
+      <quarter4Word>سه ماههٔ چهارم</quarter4Word>
+      <aboveWord>بالای</aboveWord>
+      <belowWord>پایین</belowWord>
+      <quarter1Abbreviation>سه ماههٔ اول</quarter1Abbreviation>
+      <quarter2Abbreviation>سه ماههٔ دوم</quarter2Abbreviation>
+      <quarter3Abbreviation>سه ماههٔ سوم</quarter3Abbreviation>
+      <quarter4Abbreviation>سه ماههٔ چهارم</quarter4Abbreviation>
+    </ReservedWords>
+  </LC_MISC>
+  <LC_NumberingLevel>
+    <NumberingLevel Prefix=" " NumType="12" Suffix=")" />
+    <NumberingLevel Prefix="." NumType="12" Suffix=" " />
+    <NumberingLevel Prefix="(" NumType="12" Suffix=")" />
+    <NumberingLevel Prefix="." NumType="2" Suffix=" " />
+    <NumberingLevel Prefix=" " NumType="31" Suffix=")" />
+    <NumberingLevel Prefix=" " NumType="31" Suffix=")" />
+    <NumberingLevel Prefix="(" NumType="31" Suffix=")" />
+    <NumberingLevel Prefix="." NumType="3" Suffix=" " />
+  </LC_NumberingLevel>
+ <LC_OutLineNumberingLevel>
+<OutlineStyle>
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020" BulletFontName="" ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020" BulletFontName="" ParentNumbering="1" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="1" Suffix="(" BulletChar="0020" BulletFontName="" ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022" BulletFontName="StarSymbol" ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022" BulletFontName="StarSymbol" ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
+</OutlineStyle>
+<OutlineStyle>
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020" BulletFontName="" ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="1" Suffix="(" BulletChar="0020" BulletFontName="" ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022" BulletFontName="StarSymbol" ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022" BulletFontName="StarSymbol" ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022" BulletFontName="StarSymbol" ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
+</OutlineStyle>
+<OutlineStyle>
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020" BulletFontName="" ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=")" NumType="1" Suffix="(" BulletChar="0020" BulletFontName="" ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="3" Suffix="." BulletChar="0020" BulletFontName="" ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="0" Suffix="." BulletChar="0020" BulletFontName="" ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="6" Suffix="." BulletChar="2022" BulletFontName="StarSymbol" ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
+</OutlineStyle>
+<OutlineStyle>
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020" BulletFontName="" ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020" BulletFontName="" ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020" BulletFontName="" ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020" BulletFontName="" ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020" BulletFontName="" ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
+</OutlineStyle>
+<OutlineStyle>
+<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="E008" BulletFontName="StarSymbol" ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="E009" BulletFontName="StarSymbol" ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="E00A" BulletFontName="StarSymbol" ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="E00B" BulletFontName="StarSymbol" ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="E00C" BulletFontName="StarSymbol" ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
+</OutlineStyle>
+<OutlineStyle>
+<OutLineNumberingLevel Prefix=" " NumType="0" Suffix="." BulletChar="0020" BulletFontName="" ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="2" Suffix="." BulletChar="0020" BulletFontName="" ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="1" Suffix="." BulletChar="0020" BulletFontName="" ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="3" Suffix="." BulletChar="0020" BulletFontName="" ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022" BulletFontName="StarSymbol" ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
+</OutlineStyle>
+<OutlineStyle>
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="0020" BulletFontName="" ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="0020" BulletFontName="" ParentNumbering="1" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="0020" BulletFontName="" ParentNumbering="2" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="0020" BulletFontName="" ParentNumbering="3" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="0020" BulletFontName="" ParentNumbering="4" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
+</OutlineStyle>
+<OutlineStyle>
+<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="E02D" BulletFontName="StarSymbol" ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="E027" BulletFontName="StarSymbol" ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="25C2" BulletFontName="StarSymbol" ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="25C3" BulletFontName="StarSymbol" ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="E004" BulletFontName="StarSymbol" ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
+</OutlineStyle>
+</LC_OutLineNumberingLevel>
+</Locale>
