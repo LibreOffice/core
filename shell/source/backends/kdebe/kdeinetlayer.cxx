@@ -4,9 +4,9 @@
  *
  *  $RCSfile: kdeinetlayer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-22 10:14:05 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 10:26:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,10 +46,6 @@
 
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
-#endif
-
-#ifndef __kprotocolmanager_h__
-#include <kprotocolmanager.h>
 #endif
 
 #define COMMA      ','
