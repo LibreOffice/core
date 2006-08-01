@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sstring.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 13:22:12 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 09:20:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,8 @@
 #  define _TOOLS_STRINGLIST
 #endif
 
+#define ENABLE_BYTESTRING_STREAM_OPERATORS
+#include "stream.hxx"
 #include "bootstrp/sstring.hxx"
 
 SByteStringList::SByteStringList()
@@ -159,7 +161,39 @@ ByteString* SByteStringList::RemoveString( const ByteString& rName )
     return NULL;
 }
 
+void SByteStringList::CleanUp()
+{
+    ByteString* pByteString = First();
+    while (pByteString) {
+        delete pByteString;
+        pByteString = Next();
+    }
+    Clear();
+}
 
+SByteStringList& SByteStringList::operator<<  ( SvStream& rStream )
+{
+    ULONG nCount;
+    rStream >> nCount;
+    for ( USHORT i = 0; i < nCount; i++ ) {
+        ByteString* pByteString = new ByteString();
+        rStream >> *pByteString;
+        Insert (pByteString, LIST_APPEND);
+    }
+    return *this;
+}
+
+SByteStringList& SByteStringList::operator>>  ( SvStream& rStream )
+{
+    ULONG nCount = Count();
+    rStream << nCount;
+    ByteString* pByteString = First();
+    while (pByteString) {
+        rStream << *pByteString;
+        pByteString = Next();
+    }
+    return *this;
+}
 
 
 
