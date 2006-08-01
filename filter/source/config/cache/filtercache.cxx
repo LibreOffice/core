@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filtercache.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 09:12:22 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 11:13:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,6 +117,8 @@
 #ifndef _WLDCRD_HXX
 #include <tools/wldcrd.hxx>
 #endif
+
+#include <comphelper/configurationhelper.hxx>
 
 //_______________________________________________
 // namespace
@@ -461,7 +463,7 @@ sal_Bool FilterCache::hasItem(      EItemType        eType,
 }
 
 /*-----------------------------------------------
-    27.10.2003 08:14
+    17.07.2006 09:15
 -----------------------------------------------*/
 CacheItem FilterCache::getItem(      EItemType        eType,
                                const ::rtl::OUString& sItem)
@@ -471,20 +473,42 @@ CacheItem FilterCache::getItem(      EItemType        eType,
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
     // search for right list
-    // An exception is thrown �f "eType" is unknown.
+    // An exception is thrown if "eType" is unknown.
     // => rList will be valid everytimes next line is reached.
     CacheItemList& rList = impl_getItemList(eType);
 
     // check if item exists ...
-    CacheItemList::const_iterator pIt = rList.find(sItem);
-    if (pIt != rList.end())
-        return pIt->second;
+    CacheItemList::iterator pIt = rList.find(sItem);
+    if (pIt == rList.end())
+    {
+        // ... or load it on demand from the
+        // underlying configuration layer.
+        // Note: NoSuchElementException is thrown automaticly here if
+        // item could not be loaded!
+        pIt = impl_loadItemOnDemand(eType, sItem);
+    }
 
-    // ... or load it on demand from the
-    // underlying configuration layer.
-    // Note: NoSuchElementException is thrown automaticly here if
-    // item could not be loaded!
-    pIt = impl_loadItemOnDemand(eType, sItem);
+    /* Workaround for #137955#
+       Draw types and filters are installed ... but draw was disabled during setup.
+       We must supress accessing these filters. Otherwise the office can crash.
+       Solution for the next major release: do not install those filters !
+     */
+    if (eType == E_FILTER)
+    {
+        CacheItem& rFilter = pIt->second;
+        ::rtl::OUString sDocService;
+        rFilter[PROPNAME_DOCUMENTSERVICE] >>= sDocService;
+
+        if (! impl_isModuleInstalled(sDocService))
+        {
+            ::rtl::OUStringBuffer sMsg(256);
+            sMsg.appendAscii("The requested filter '"                                                               );
+            sMsg.append     (sItem                                                                                  );
+            sMsg.appendAscii("' exists ... but it shouldnt; because the corresponding OOo module was not installed.");
+            throw css::container::NoSuchElementException(sMsg.makeStringAndClear(), css::uno::Reference< css::uno::XInterface >());
+        }
+    }
+
     return pIt->second;
     // <- SAFE
 }
@@ -2497,6 +2521,33 @@ OUStringList FilterCache::impl_tokenizeString(const ::rtl::OUString& sData     ,
     }
 
     return ::rtl::OUString();
+}
+
+/*-----------------------------------------------*/
+sal_Bool FilterCache::impl_isModuleInstalled(const ::rtl::OUString& sModule)
+{
+    css::uno::Reference< css::container::XNameAccess > xCfg;
+
+    // SAFE ->
+    ::osl::ResettableMutexGuard aLock(m_aLock);
+    if (! m_xModuleCfg.is())
+    {
+        m_xModuleCfg = css::uno::Reference< css::container::XNameAccess >(
+                            ::comphelper::ConfigurationHelper::openConfig(
+                                m_xSMGR,
+                                ::rtl::OUString::createFromAscii("org.openoffice.Setup/Office/Factories"),
+                                ::comphelper::ConfigurationHelper::E_READONLY),
+                            css::uno::UNO_QUERY_THROW);
+    }
+
+    xCfg = m_xModuleCfg;
+    aLock.clear();
+    // <- SAFE
+
+    if (xCfg.is())
+        return xCfg->hasByName(sModule);
+
+    return sal_False;
 }
 
     } // namespace config
