@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.hrc,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 13:25:40 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 11:16:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,7 +106,7 @@
 #define MSG_TEMPLATE_DIR_NOT_EXIST          (RID_SFX_DOC_START+ 40)
 #define MSG_DOCINFO_CANTREAD                (RID_SFX_DOC_START+ 41)
 #define STR_ERROR_NOSTORAGE                 (RID_SFX_DOC_START+ 42)
-#define STR_QUERY_SAVEOWNFORMAT             (RID_SFX_DOC_START+ 43)
+// #define STR_QUERY_SAVEOWNFORMAT             (RID_SFX_DOC_START+ 43)
 #define STR_QUERY_MUSTOWNFORMAT             (RID_SFX_DOC_START+ 44)
 #define STR_SAVEDOC                         (RID_SFX_DOC_START+ 45)
 #define STR_UPDATEDOC                       (RID_SFX_DOC_START+ 46)
