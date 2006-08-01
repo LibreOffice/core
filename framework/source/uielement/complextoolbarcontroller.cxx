@@ -4,9 +4,9 @@
  *
  *  $RCSfile: complextoolbarcontroller.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 11:36:24 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 09:38:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,6 +139,7 @@ throw ( RuntimeException )
     m_pToolbar->SetItemWindow( m_nID, 0 );
     svt::ToolboxController::dispose();
 
+    m_xURLTransformer.clear();
     m_pToolbar = 0;
     m_nID = 0;
 }
@@ -321,10 +322,29 @@ void ComplexToolbarController::addNotifyInfo(
         pNotifyInfo->aEventName      = aEventName;
         pNotifyInfo->xNotifyListener = xControlNotify;
         pNotifyInfo->aSourceURL      = getInitializedURL();
-        pNotifyInfo->aInfoSeq        = rInfo;
+
+        // Add frame as source to the information sequence
+        sal_Int32 nCount = rInfo.getLength();
+        uno::Sequence< beans::NamedValue > aInfoSeq( rInfo );
+        aInfoSeq.realloc( nCount+1 );
+        aInfoSeq[nCount].Name  = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Source" ));
+        aInfoSeq[nCount].Value = uno::makeAny( getFrameInterface() );
+        pNotifyInfo->aInfoSeq  = aInfoSeq;
 
         Application::PostUserEvent( STATIC_LINK(0, ComplexToolbarController, Notify_Impl), pNotifyInfo );
     }
+}
+
+// --------------------------------------------------------
+sal_Int32 ComplexToolbarController::getFontSizePixel( const Window* pWindow )
+{
+    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+    const Font&          rFont     = rSettings.GetAppFont();
+
+    // Calculate height of the application font used by window
+    sal_Int32 nHeight = sal_Int32( rFont.GetHeight() );
+    ::Size aPixelSize = pWindow->LogicToPixel( ::Size( 0, nHeight ), MAP_APPFONT );
+    return aPixelSize.Height();
 }
 
 // --------------------------------------------------------
@@ -358,6 +378,35 @@ const ::com::sun::star::util::URL& ComplexToolbarController::getInitializedURL()
         m_xURLTransformer->parseStrict( m_aURL );
     }
     return m_aURL;
+}
+
+void ComplexToolbarController::notifyFocusGet()
+{
+    // send focus get notification
+    uno::Sequence< beans::NamedValue > aInfo;
+    addNotifyInfo( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FocusSet" )),
+                    getDispatchFromCommand( m_aCommandURL ),
+                    aInfo );
+}
+
+void ComplexToolbarController::notifyFocusLost()
+{
+    // send focus lost notification
+    uno::Sequence< beans::NamedValue > aInfo;
+    addNotifyInfo( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FocusLost" )),
+                    getDispatchFromCommand( m_aCommandURL ),
+                    aInfo );
+}
+
+void ComplexToolbarController::notifyTextChanged( const ::rtl::OUString& aText )
+{
+    // send text changed notification
+    uno::Sequence< beans::NamedValue > aInfo( 1 );
+    aInfo[0].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Text" ));
+    aInfo[0].Value <<= aText;
+    addNotifyInfo( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TextChanged" )),
+                   getDispatchFromCommand( m_aCommandURL ),
+                   aInfo );
 }
 
 } // namespace
