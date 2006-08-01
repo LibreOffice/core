@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localedata.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-06 09:43:37 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 10:01:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,6 +141,7 @@ static const struct {
         { "ru_RU",  lcl_DATA_EURO, "ru" },
         { "tr_TR",  lcl_DATA_EURO, "tr" },
         { "et_EE",  lcl_DATA_EURO, "et" },
+        { "lb_LU",  lcl_DATA_EURO, "lb" },
         { "lt_LT",  lcl_DATA_EURO, "lt" },
         { "lv_LV",  lcl_DATA_EURO, "lv" },
         { "uk_UA",  lcl_DATA_EURO, "uk" },
@@ -219,6 +220,8 @@ static const struct {
         { "ti_ER",  lcl_DATA_OTHERS, "ti" },
         { "tg_TJ",  lcl_DATA_OTHERS, "tg" },
         { "ky_KG",  lcl_DATA_OTHERS, "ky" },
+        { "kk_KZ",  lcl_DATA_OTHERS, "kk" },
+        { "fa_IR",  lcl_DATA_OTHERS, "fa" },
 
 //      { "br_AE",  lcl_DATA, "br" },
 
