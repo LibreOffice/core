@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doctemplates.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 13:27:18 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 16:05:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -739,7 +739,18 @@ sal_Bool SfxDocTplService_Impl::getTitleFromURL( const OUString& rURL, OUString&
 
     if ( ! aType.getLength() && mxType.is() )
     {
-        aType = mxType->queryTypeByURL( rURL );
+        ::rtl::OUString aDocType = mxType->queryTypeByURL( rURL );
+        if ( aDocType.getLength() )
+            try
+            {
+                uno::Reference< container::XNameAccess > xTypeDetection( mxType, uno::UNO_QUERY_THROW );
+                SequenceAsHashMap aTypeProps( xTypeDetection->getByName( aDocType ) );
+                aType = aTypeProps.getUnpackedValueOrDefault(
+                            ::rtl::OUString::createFromAscii( "MediaType" ),
+                            ::rtl::OUString() );
+            }
+            catch( uno::Exception& )
+            {}
     }
 
     if ( ! aTitle.getLength() )
@@ -1870,9 +1881,12 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
             throw uno::RuntimeException();
 
         // find the mediatype and extension
-        uno::Reference< container::XNameAccess > xTypeDetection(
-            xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.document.TypeDetection" ) ),
-            uno::UNO_QUERY_THROW );
+        uno::Reference< container::XNameAccess > xTypeDetection =
+            mxType.is() ?
+                uno::Reference< container::XNameAccess >( mxType, uno::UNO_QUERY_THROW ) :
+                uno::Reference< container::XNameAccess >(
+                    xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.document.TypeDetection" ) ),
+                    uno::UNO_QUERY_THROW );
 
         SequenceAsHashMap aTypeProps( xTypeDetection->getByName( aTypeName ) );
         uno::Sequence< ::rtl::OUString > aAllExt =
