@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numpages.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-06 09:31:29 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 15:53:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1456,12 +1456,14 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(Window* pParent,
 
     // Extended numbering schemes present in the resource but not offered by
     // the i18n framework per configuration must be removed from the listbox.
+    // Watch out for the ugly 0x88/*SVX_NUM_BITMAP|0x80*/ to not remove that.
     const USHORT nDontRemove = 0xffff;
     ::std::vector< USHORT> aRemove( aFmtLB.GetEntryCount(), nDontRemove);
     for (size_t i=0; i<aRemove.size(); ++i)
     {
         USHORT nEntryData = (USHORT)(ULONG)aFmtLB.GetEntryData(i);
-        if (nEntryData > NumberingType::CHARS_LOWER_LETTER_N)
+        if (nEntryData > NumberingType::CHARS_LOWER_LETTER_N &&
+                nEntryData != (SVX_NUM_BITMAP | 0x80))
             aRemove[i] = nEntryData;
     }
     if(xInfo.is())
