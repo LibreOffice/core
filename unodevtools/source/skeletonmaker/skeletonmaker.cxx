@@ -4,9 +4,9 @@
  *
  *  $RCSfile: skeletonmaker.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:51:11 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 16:24:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,7 @@ static const char usageText[] =
 "                implementation name as the file and class name\n"
 "    calc-add-in generates a language specific code skeleton for a calc add-in\n"
 "                using the implementation name as the file and class name. A \n"
-"                service type is necessary referencing an interface which defines\n"
+"                service type is necessary, referencing an interface which defines\n"
 "                the new add-in functions."
 "\n options:\n"
 "    -env:INIFILENAME=<url> url specifies a URL to an UNO ini|rc file of an\n"
@@ -76,16 +76,23 @@ static const char usageText[] =
 "                           --cpp   generate output for C++\n"
 "    -sn, --shortnames      using namespace abbreviation 'css:': for\n"
 "                           '::com::sun::star::', only valid for sub-command\n"
-"                           'dump' and target language 'cpp'. It's default for\n"
+"                           'dump' and target language 'cpp'. It is default for the\n"
 "                           sub-command 'component'.\n"
-"    --propertysetmixin     means that the generated skeleton implements the\n"
-"                           cppu::PropertySetMixin helper if a referenced new\n"
-"                           style service specifies an interface which provides\n"
-"                           attributes (directly or inherited).\n"
+"    --propertysetmixin     the generated skeleton implements the cppu::PropertySetMixin\n"
+"                           helper if a referenced new style service specifies an\n"
+"                           interface which provides attributes (directly or inherited).\n"
 "    -lh --licenseheader    generates a default OpenOffice.org LGPL license\n"
 "                           header at the beginning of a component source file.\n"
 "                           This option is taken into account in 'component' mode\n"
 "                           only and if -o is unequal 'stdout'.\n"
+"    -bc                    specifies that the generated calc add-in is backward\n"
+"    --backward-compatible  compatible to older office versions and implement the\n"
+"                           former required add-in interfaces where the implementation\n"
+"                           is mapped on the new add-in configuration. In this case\n"
+"                           the config schema needs to be bundled with the extension\n"
+"                           add-in as well. Default is a minimal add-in component\n"
+"                           skeleton based on the configuration coming with the\n"
+"                           office since OO.org 2.0.4.\n"
 "    -o <path>              path specifies an existing directory where the\n"
 "                           output files are generated to, only valid for\n"
 "                           sub-command 'component'. If path=stdout the generated\n"
@@ -217,6 +224,11 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, /*argv*/)
         if ( readOption( &bOption, "lh", &nPos, arg) ||
              readOption( &bOption, "licenseheader", &nPos, arg) ) {
             options.license = true;
+            continue;
+        }
+        if ( readOption( &bOption, "bc", &nPos, arg) ||
+             readOption( &bOption, "backward-compatible", &nPos, arg) ) {
+            options.backwardcompatible = true;
             continue;
         }
         if ( readOption( &bOption, "propertysetmixin", &nPos, arg) ) {
