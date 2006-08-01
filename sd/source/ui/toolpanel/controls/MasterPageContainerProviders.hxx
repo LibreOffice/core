@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MasterPageContainerProviders.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 20:49:40 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 09:22:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,6 +136,7 @@ class TemplatePageObjectProvider : public PageObjectProvider
 {
 public:
     TemplatePageObjectProvider (const ::rtl::OUString& rsURL);
+    virtual ~TemplatePageObjectProvider (void) {};
     virtual SdPage* operator () (SdDrawDocument* pDocument);
     virtual int GetCostIndex (void);
     virtual bool operator== (const PageObjectProvider& rProvider);
@@ -155,6 +156,7 @@ class TemplatePreviewProvider : public PreviewProvider
 {
 public:
     TemplatePreviewProvider (const ::rtl::OUString& rsURL);
+    virtual ~TemplatePreviewProvider (void) {};
     virtual Image operator() (int nWidth, SdPage* pPage, ::sd::PreviewRenderer& rRenderer);
     virtual int GetCostIndex (void);
     virtual bool NeedsPageObject (void);
