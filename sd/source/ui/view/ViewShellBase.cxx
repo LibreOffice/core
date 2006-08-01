@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShellBase.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 08:03:54 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 09:24:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1002,18 +1002,23 @@ void ViewShellBase::SetBusyState (bool bBusy)
 
 void ViewShellBase::UpdateBorder ( bool bForce /* = false */ )
 {
-    SvBorder aCurrentBorder (GetBorderPixel());
-    bool bOuterResize ( ! GetDocShell()->IsInPlaceActive());
-    SvBorder aBorder (GetBorder(bOuterResize));
-
+    // The following calls to SetBorderPixel() and InvalidateBorder() are
+    // made only for the main view shell.  This not only avoids unnecessary
+    // calls for the views in side panes but prevents calling an already
+    // dying SfxViewShell base class.
     ViewShell* pMainViewShell = GetMainViewShell();
     if (pMainViewShell != NULL)
+    {
+        SvBorder aCurrentBorder (GetBorderPixel());
+        bool bOuterResize ( ! GetDocShell()->IsInPlaceActive());
+        SvBorder aBorder (GetBorder(bOuterResize));
         aBorder += pMainViewShell->GetBorder(bOuterResize);
 
-    if (bForce || (aBorder != aCurrentBorder))
-    {
-        SetBorderPixel (aBorder);
-        InvalidateBorder();
+        if (bForce || (aBorder != aCurrentBorder))
+        {
+            SetBorderPixel (aBorder);
+            InvalidateBorder();
+        }
     }
 }
 
