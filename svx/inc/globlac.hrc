@@ -4,9 +4,9 @@
  *
  *  $RCSfile: globlac.hrc,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:50:55 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 09:27:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -223,10 +223,6 @@
 #define AI_REDO                     ACC_CODE( SID_REDO, KEY_Y, FALSE, TRUE, FALSE )
 #define AI_REPEAT                   ACC_CODE( SID_REPEAT, KEY_REPEAT, FALSE, FALSE, FALSE )
 #define AI_DELETE                   ACC_CODE( SID_DELETE, KEY_DELETE, FALSE, FALSE, FALSE )
-
-// Non Product
-#define AI_PIXELMODE                ACC_CODE( SID_PIXELMODE, KEY_P, TRUE, TRUE, TRUE )
-#define AI_ANIMATIONMODE            ACC_CODE( SID_ANIMATIONMODE, KEY_A, TRUE, TRUE, TRUE )
 
 #endif // _GLOBLACC_SRC
 
