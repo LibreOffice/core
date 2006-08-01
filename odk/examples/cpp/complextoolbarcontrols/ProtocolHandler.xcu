@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<oor:component-data oor:name="ProtocolHandler" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <node oor:name="HandlerSet">
+        <node oor:name="vnd.demo.ProtocolHandler" oor:op="replace">
+            <prop oor:name="Protocols" oor:type="oor:string-list">
+                <value>vnd.demo.complextoolbarcontrols.demoaddon:*</value>
+            </prop>
+        </node>
+    </node>
+</oor:component-data>
