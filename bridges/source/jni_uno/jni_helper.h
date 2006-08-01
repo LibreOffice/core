@@ -4,9 +4,9 @@
  *
  *  $RCSfile: jni_helper.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:43:46 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 11:48:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,7 +96,7 @@ inline jclass find_class(
     JNI_context const & jni, char const * class_name, bool inException = false )
 {
     // find_class may be called before the JNI_info is set:
-    jclass c;
+    jclass c=0;
     jmethodID m;
     JNI_info const * info = jni.get_info();
     if (info == 0) {
