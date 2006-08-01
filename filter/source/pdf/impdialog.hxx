@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impdialog.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 11:13:05 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 09:29:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,8 +68,6 @@ class ImpPDFTabOpnFtrPage;
 class ImpPDFTabDialog : public SfxTabDialog
 {
 private:
-
-    FixedLine                   maFlPages; //ugly hack: It seems the dialog is not resizable in any way
 
     FilterConfigItem            maConfigItem;
     FilterConfigItem            maConfigI18N;
