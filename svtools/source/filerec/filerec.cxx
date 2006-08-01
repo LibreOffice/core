@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filerec.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 21:03:50 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 11:47:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -508,7 +508,7 @@ inline FASTBOOL SfxSingleRecordReader::ReadHeader_Impl( USHORT nTypes )
     FASTBOOL bRet;
 
     // Basisklassen-Header einlesen
-    UINT32 nHeader;
+    UINT32 nHeader=0;
     *_pStream >> nHeader;
     if ( !SetHeader_Impl( nHeader ) )
         bRet = FALSE;
