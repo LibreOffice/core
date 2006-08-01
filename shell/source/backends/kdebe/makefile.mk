@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2006-07-13 13:21:39 $
+#   last change: $Author: ihi $ $Date: 2006-08-01 10:26:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,13 @@ INCPRE=$(UNOUCROUT)
 # --- Settings ---
 
 .INCLUDE : settings.mk
+
+# For some of the included external KDE headers, GCC complains about shadowed
+# symbols in instantiated template code only at the end of a compilation unit,
+# so the only solution is to disable that warning here:
+.IF "$(COM)" == "GCC"
+CFLAGSCXX+=-Wno-shadow
+.ENDIF
 
 UNIXTEXT=$(MISC)/$(TARGET)1-ucd.txt
 
