@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sstring.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 13:32:31 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 09:20:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,8 @@
 DECLARE_LIST( ByteStringList, ByteString* )
 DECLARE_LIST( UniStringList, UniString* )
 
+class SvStream;
+
 // ---------------------
 // - class SStringList -
 // ---------------------
@@ -68,6 +70,10 @@ public:
                 // Vorgaenger ermitteln ( auch wenn selbst noch nicht in
                 // Liste enthalten
     ULONG       GetPrevString( ByteString* );
+    void        CleanUp();
+
+    SByteStringList& operator<<  ( SvStream& rStream );
+    SByteStringList& operator>>  ( SvStream& rStream );
 };
 
 // ---------------------
