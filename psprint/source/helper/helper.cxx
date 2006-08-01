@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2006-05-24 12:02:17 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 12:24:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,8 +51,8 @@
 #endif // SOLAR_JAVA
 
 #ifdef MACOSX
-// directory of OS X fonts
-#define MACXP_FONT_DIR        "/Library/Fonts;"
+// directories of OS X fonts
+#define MACXP_FONT_DIR        "/Library/Fonts;/System/Library/Fonts;"
 #endif
 
 using namespace rtl;
@@ -252,17 +252,20 @@ const OUString& psp::getFontPath()
             aPathBuffer.append( OStringToOUString( aEnvPath, osl_getThreadTextEncoding() ) );
         }
 
-#ifdef MACOSX // Search for truetype fonts also in the MACOSX system paths
-    aPath += OUString( RTL_CONSTASCII_USTRINGPARAM( ";" ) );
-        // Add the system font paths to the search path
-        aPath += OUString( RTL_CONSTASCII_USTRINGPARAM(MACXP_FONT_DIR) );
-        //Userfonts
-    if( aUserPath.getLength() )
+#ifdef MACOSX   // Search for truetype fonts also in the MACOSX system paths
+
+    aPathBuffer.append(sal_Unicode(';') );
+    aPath += OUString( RTL_CONSTASCII_USTRINGPARAM(MACXP_FONT_DIR) );
+
+    //Userfonts
+    aPath += aUserPath;
+    // #i67231# [ericb 07/06] aPath was not concatened with other paths
+    if (aUserPath.getLength() )
     {
-      aPath += aUserPath;
-      aPath += OUString( RTL_CONSTASCII_USTRINGPARAM("/../../Fonts;"));
+        aPathBuffer.append(aPath);
+        aPathBuffer.appendAscii("/../../Fonts");
     }
-#endif
+#endif // MACOSX
 
         // append jre/jdk fonts if possible
         OString aJREpath;
