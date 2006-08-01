@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewsh.sdi,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:06:09 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 09:19:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,11 +117,6 @@ interface ImpressEditView : DrawView
     [
         ExecMethod = ExecNavigatorWin ;
         StateMethod = GetNavigatorWinState ;
-    ]
-    SID_ACTIONMODE // ole : no, status : play rec
-    [
-        ExecMethod = FuSupport ;
-        StateMethod = GetMenuState ;
     ]
     SID_PRESENTATION_DLG
     [
