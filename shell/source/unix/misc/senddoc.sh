@@ -1,5 +1,5 @@
 #!/bin/sh
-URI_ENCODE="awk -f `dirname $0`/uri-encode"
+URI_ENCODE="`dirname $0`/uri-encode"
 
 # tries to locate the executable specified
 # as first parameter in the user's path.
