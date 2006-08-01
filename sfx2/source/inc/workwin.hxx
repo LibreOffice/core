@@ -4,9 +4,9 @@
  *
  *  $RCSfile: workwin.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:35:04 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 09:55:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,7 +169,6 @@ struct SfxChildWin_Impl
     SfxChild_Impl*                  pCli;           // != 0 bei direkten Children
     USHORT                          nVisibility;
     BOOL                            bEnable;
-    SfxChildWinController_Impl*     pControl;
     BOOL                            bDisabled;
 
     SfxChildWin_Impl( ULONG nID ) :
@@ -181,7 +180,6 @@ struct SfxChildWin_Impl
         pCli(0),
         nVisibility( FALSE ),
         bEnable( TRUE ),
-        pControl( 0 ),
         bDisabled( FALSE )
     {}
 };
