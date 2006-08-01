@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addonsoptions.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 11:12:38 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 09:37:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -361,7 +361,7 @@ class AddonsOptions_Impl : public ConfigItem
         ImageEntry* ReadOptionalImageData( const OUString& aMenuNodeName );
 
         sal_Int32                                           m_nRootAddonPopupMenuId;
-        OUString                                            m_aPropNames[PROPERTYCOUNT_MENUITEM];
+        OUString                                            m_aPropNames[PROPERTYCOUNT_INDEX];
         OUString                                            m_aPropImagesNames[PROPERTYCOUNT_IMAGES];
         OUString                                            m_aEmpty;
         OUString                                            m_aPathDelimiter;
