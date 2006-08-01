@@ -4,9 +4,9 @@
  *
  *  $RCSfile: guisaveas.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:28:22 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 11:17:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1885,19 +1885,6 @@ sal_Bool SfxStoringHelper::WarnUnacceptableFormat( const uno::Reference< frame::
     Window* pWin = SfxStoringHelper::GetModelWindow( xModel );
     SfxAlienWarningDialog aDlg( pWin, aOldUIName );
 
-    /*String aWarn;
-    if ( bCanProceedFurther )
-        aWarn = String(SfxResId(STR_QUERY_SAVEOWNFORMAT));
-    else
-        aWarn = String(SfxResId(STR_QUERY_MUSTOWNFORMAT));
-
-    aWarn = SearchAndReplace( aWarn, DEFINE_CONST_UNICODE( "$(FILENAME)" ), aCurrentName );
-    aWarn = SearchAndReplace( aWarn, DEFINE_CONST_UNICODE( "$(FORMAT)" ), aOldUIName );
-    aWarn = SearchAndReplace( aWarn, DEFINE_CONST_UNICODE( "$(FORMAT)" ), aOldUIName );
-    aWarn = SearchAndReplace( aWarn, DEFINE_CONST_UNICODE( "$(OWNFORMAT)" ), aDefUIName );
-
-    QueryBox aWarnBox( pWin, WB_YES_NO|WB_DEF_OK, aWarn );
-    return ( aWarnBox.Execute() == RET_YES );*/
     return aDlg.Execute() == RET_OK;
 }
 
