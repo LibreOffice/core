@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docvor.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 13:28:13 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 16:06:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1930,8 +1930,9 @@ long SfxOrganizeDlg_Impl::Dispatch_Impl( USHORT nId, Menu* _pMenu )
                     USHORT nDeleteInd = ( STR_DELETE_REGION == nResId? USHRT_MAX: nIndex );
                     if ( !aMgr.Delete( pFocusBox, nRegion, nDeleteInd ) )
                         ErrorDelete_Impl(
-                            pDialog, pFocusBox->GetEntryText(pEntry), ( nDeleteInd == USHRT_MAX ) );
-
+                            pDialog,
+                            pFocusBox->GetEntryText(pEntry),
+                            ( nDeleteInd == USHRT_MAX && pFocusBox->GetChildCount(pEntry) ) );
                 }
             }
             // Inhaltsformen
