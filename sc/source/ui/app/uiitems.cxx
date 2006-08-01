@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uiitems.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:12:59 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 11:49:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -749,8 +749,3 @@ SfxPoolItem* __EXPORT ScCondFrmtItem::Clone( SfxItemPool * ) const
 {
     return new ScCondFrmtItem( *this );
 }
-
-
-#pragma SEG_EOFMODULE
-
-
