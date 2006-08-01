@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pngread.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 16:47:35 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 09:27:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -215,7 +215,7 @@ class PNGReaderImpl
     BYTE                cNonTransIndex1;
     BOOL                mbStatus;
     BOOL                mbTransparent;  // graphic includes an tRNS Chunk or an alpha Channel
-    BOOL                mbAlphaChannel;
+    BOOL                mbAlphaChannel; // is true for ColorType 4 and 6
     BOOL                mbRGBTriple;
     BOOL                mbPalette;      // FALSE if we need a Palette
     BOOL                mbGrayScale;
@@ -224,8 +224,10 @@ class PNGReaderImpl
     BOOL                mbGamma;        // TRUE if Gamma Correction available
     BOOL                mbpHYs;         // TRUE if pysical size of pixel available
 
+    void                ImplSetPixel( sal_uInt32 y, sal_uInt32 x, BYTE nPalIndex );
+    void                ImplSetPixel( sal_uInt32 y, sal_uInt32 x, const BitmapColor & );
     void                ImplSetPixel( sal_uInt32 y, sal_uInt32 x, const BitmapColor &, BOOL bTrans );
-    void                ImplSetPixel( sal_uInt32 y, sal_uInt32 x, BYTE nPalIndex, BOOL bTrans );
+    void                ImplSetAlphaPixel( sal_uInt32 y, sal_uInt32 x, BYTE nPalIndex, BYTE nAlpha );
     void                ImplSetAlphaPixel( sal_uInt32 y, sal_uInt32 x, const BitmapColor&, BYTE nAlpha );
     void                ImplReadIDAT();
     void                ImplResizeScanline();
@@ -236,7 +238,7 @@ class PNGReaderImpl
     BYTE                ImplScaleColor();
     BOOL                ImplReadHeader();
     BOOL                ImplReadPalette();
-    void                ImplGetGrayPalette( sal_uInt32 );
+    void                ImplGetGrayPalette( sal_uInt16 );
     sal_uInt32          ImplReadsal_uInt32();
 
 public:
@@ -325,7 +327,10 @@ BitmapEx PNGReaderImpl::Read()
             break;
 
             case PNGCHUNK_tRNS :
-                ImplReadTransparent();
+            {
+                if ( !mbIDAT )                                  // the tRNS chunk must precede the IDAT
+                    ImplReadTransparent();
+            }
             break;
 
             case PNGCHUNK_bKGD :                                // the background chunk must appear
@@ -364,9 +369,9 @@ BitmapEx PNGReaderImpl::Read()
 
     if ( mpMaskAcc )
     {
-        if ( mbAlphaChannel )
+        if ( mpAlphaMask )
             mpAlphaMask->ReleaseAccess( mpMaskAcc );
-        else
+        else if ( mpMaskBmp )
             mpMaskBmp->ReleaseAccess( mpMaskAcc );
 
         mpMaskAcc = NULL;
@@ -374,9 +379,9 @@ BitmapEx PNGReaderImpl::Read()
 
     if ( mbStatus )
     {
-        if ( mbAlphaChannel )
+        if ( mpAlphaMask )
             aRet = BitmapEx( *mpBmp, *mpAlphaMask );
-        else if ( mbTransparent )
+        else if ( mpMaskBmp )
             aRet = BitmapEx( *mpBmp, *mpMaskBmp );
         else
             aRet = *mpBmp;
@@ -539,51 +544,60 @@ BOOL PNGReaderImpl::ImplReadHeader()
 
     mpBmp = new Bitmap( Size( mnWidth, mnHeight ), mnDepth);
     mpAcc = mpBmp->AcquireWriteAccess();
+    if ( !mpAcc )
+        return FALSE;
 
     if ( mbAlphaChannel )
     {
         mpAlphaMask = new AlphaMask( Size( mnWidth, mnHeight ) );
-        mpAlphaMask->Erase( 128 );
         mpMaskAcc = mpAlphaMask->AcquireWriteAccess();
+        if ( !mpMaskAcc )
+            return FALSE;
     }
-    else
-    {
-        mpMaskBmp = new Bitmap( Size( mnWidth, mnHeight ), 1 );
-        mpMaskBmp->Erase( Color( COL_WHITE ) );
-        mpMaskAcc = mpMaskBmp->AcquireWriteAccess();
-    }
-
-    if ( ( mpAcc == NULL ) || ( mpMaskAcc == NULL ) )
-        return FALSE;
-
-    const Color aWhite( COL_WHITE );
-    cTransIndex1 = (BYTE)mpMaskAcc->GetBestPaletteIndex( aWhite );
-    cNonTransIndex1 = cTransIndex1 ? 0 : 1;
 
     if ( mbGrayScale )
-        ImplGetGrayPalette( mnDepth );
+        ImplGetGrayPalette( mnBitDepth );
 
     return TRUE;
 }
 
 // ------------------------------------------------------------------------
 
-void PNGReaderImpl::ImplGetGrayPalette( sal_uInt32 nDepth )
+void PNGReaderImpl::ImplGetGrayPalette( sal_uInt16 nBitDepth )
 {
-    sal_uInt32 nAdd, nStart = 0;
+    sal_uInt32  nAdd, nStart = 0;
+    sal_uInt16  nPaletteEntryCount;
 
-    mpAcc->SetPaletteEntryCount( sal::static_int_cast<USHORT>(1 << nDepth) );
-
-    switch ( nDepth )
+    switch ( nBitDepth )
     {
-        case 1 : nAdd = 255; break;
-        case 2 : nAdd = 85; break;
-        case 4 : nAdd = 17; break;
-        case 8 : nAdd = 1; break;
-                 // TODO What is the correct value?
-        default: nAdd = 1; break;
-    }
+        case 1 :
+        {
+            nPaletteEntryCount = 2;
+            nAdd = 255;
+        }
+        break;
+        case 2 :
+        {
+            nPaletteEntryCount = 16;
+            nAdd = 85;
+        }
+        break;
+        case 4 :
+        {
+            nPaletteEntryCount = 16;
+            nAdd = 17;
+        }
+        break;
 
+        default:
+        case 8 :
+        {
+            nPaletteEntryCount = 256;
+            nAdd = 1;
+        }
+        break;
+    }
+    mpAcc->SetPaletteEntryCount( nPaletteEntryCount );
     for ( sal_uInt32 i = 0; nStart < 256; i++, nStart += nAdd )
         mpAcc->SetPaletteColor( (USHORT)i, BitmapColor( mpColorTable[ nStart ],
             mpColorTable[ nStart ], mpColorTable[ nStart ] ) );
@@ -634,7 +648,11 @@ void PNGReaderImpl::ImplReadTransparent()
                     // so the return value can be used as index
                     sal_uInt8 nIndex = ImplScaleColor();
                     mpTransTab[ nIndex ] = 0;
-                    mbTransparent = sal_True;
+
+                    mpAlphaMask = new AlphaMask( Size( mnWidth, mnHeight ) );
+                    mpMaskAcc = mpAlphaMask->AcquireWriteAccess();
+                    if ( mpMaskAcc )
+                        mbTransparent = sal_True;
                 }
             }
             break;
@@ -646,7 +664,18 @@ void PNGReaderImpl::ImplReadTransparent()
                     mnTransRed = ImplScaleColor();
                     mnTransGreen = ImplScaleColor();
                     mnTransBlue = ImplScaleColor();
-                    mbTransparent = sal_True;
+
+                    mpMaskBmp = new Bitmap( Size( mnWidth, mnHeight ), 1 );
+                    mpMaskAcc = mpMaskBmp->AcquireWriteAccess();
+
+                    if ( mpMaskAcc )
+                    {
+                        mbTransparent = mpMaskAcc != NULL;
+
+                        const Color aWhite( COL_WHITE );
+                        cTransIndex1 = (BYTE)mpMaskAcc->GetBestPaletteIndex( aWhite );
+                        cNonTransIndex1 = cTransIndex1 ? 0 : 1;
+                    }
                 }
             }
             break;
@@ -659,7 +688,11 @@ void PNGReaderImpl::ImplReadTransparent()
                     rtl_fillMemory( mpTransTab, 256, 0xff );
                     rtl_copyMemory( mpTransTab, &(*maDataIter), mnChunkLen );
                     maDataIter += mnChunkLen;
-                    mbTransparent = TRUE;
+
+                    mpAlphaMask = new AlphaMask( Size( mnWidth, mnHeight ) );
+                    mpMaskAcc = mpAlphaMask->AcquireWriteAccess();
+                    if ( mpMaskAcc )
+                        mbTransparent = sal_True;
                 }
             }
             break;
@@ -1085,7 +1118,7 @@ void PNGReaderImpl::ImplGetFilter ( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                             else
                                 nCol = sal::static_int_cast<BYTE>(( *pTmp >> nShift ) & 1);
 
-                            ImplSetPixel( nY, nX, nCol, mpTransTab[ nCol ] < PNG_TRANS_VAL );
+                            ImplSetAlphaPixel( nY, nX, nCol, mpTransTab[ nCol ] );
                         }
                     }
                     else
@@ -1095,9 +1128,9 @@ void PNGReaderImpl::ImplGetFilter ( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                             sal_uInt32 nShift = ( nXIndex & 7 ) ^ 7;
 
                             if ( nShift == 0 )
-                                ImplSetPixel( nY, nX, ( *pTmp++ & 1 ), FALSE );
+                                ImplSetPixel( nY, nX, ( *pTmp++ & 1 ) );
                             else
-                                ImplSetPixel( nY, nX, sal::static_int_cast<BYTE>(( *pTmp >> nShift ) & 1), FALSE );
+                                ImplSetPixel( nY, nX, sal::static_int_cast<BYTE>(( *pTmp >> nShift ) & 1) );
                         }
                     }
                 }
@@ -1107,18 +1140,18 @@ void PNGReaderImpl::ImplGetFilter ( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                 {
                     if ( mbTransparent )
                     {
-                        if ( mnBitDepth == 4 )  // maybe the source is a two bitmap graphic
+                        if ( mnBitDepth == 4 )  // maybe the source is a two bit graphic
                         {
                             for ( nX = nXStart, nXIndex = 0; nX < mnWidth; nX += nXAdd, nXIndex++ )
                             {
                                 if( nXIndex & 1 )
                                 {
-                                    ImplSetPixel( nY, nX, *pTmp & 0x0f, mpTransTab[ *pTmp & 0x0f ] < PNG_TRANS_VAL );
+                                    ImplSetAlphaPixel( nY, nX, *pTmp & 0x0f, mpTransTab[ *pTmp & 0x0f ] );
                                     pTmp++;
                                 }
                                 else
                                 {
-                                    ImplSetPixel( nY, nX, ( *pTmp >> 4 ) & 0x0f, mpTransTab[ *pTmp >> 4 ] < PNG_TRANS_VAL );
+                                    ImplSetAlphaPixel( nY, nX, ( *pTmp >> 4 ) & 0x0f, mpTransTab[ *pTmp >> 4 ] );
                                 }
                             }
                         }
@@ -1145,20 +1178,20 @@ void PNGReaderImpl::ImplGetFilter ( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                                     break;
                                 }
 
-                                ImplSetPixel( nY, nX, nCol, mpTransTab[ nCol ] < PNG_TRANS_VAL );
+                                ImplSetAlphaPixel( nY, nX, nCol, mpTransTab[ nCol ] );
                             }
                         }
                     }
                     else
                     {
-                        if ( mnBitDepth == 4 )  // maybe the source is a two bitmap graphic
+                        if ( mnBitDepth == 4 )  // maybe the source is a two bit graphic
                         {
                             for ( nX = nXStart, nXIndex = 0; nX < mnWidth; nX += nXAdd, nXIndex++ )
                             {
                                 if( nXIndex & 1 )
-                                    ImplSetPixel( nY, nX, *pTmp++ & 0x0f, FALSE );
+                                    ImplSetPixel( nY, nX, *pTmp++ & 0x0f );
                                 else
-                                    ImplSetPixel( nY, nX, ( *pTmp >> 4 ) & 0x0f, FALSE );
+                                    ImplSetPixel( nY, nX, ( *pTmp >> 4 ) & 0x0f );
                             }
                         }
                         else
@@ -1168,19 +1201,19 @@ void PNGReaderImpl::ImplGetFilter ( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                                 switch( nXIndex & 3 )
                                 {
                                     case 0 :
-                                        ImplSetPixel( nY, nX, *pTmp >> 6, FALSE );
+                                        ImplSetPixel( nY, nX, *pTmp >> 6 );
                                     break;
 
                                     case 1 :
-                                        ImplSetPixel( nY, nX, ( *pTmp >> 4 ) & 0x03, FALSE );
+                                        ImplSetPixel( nY, nX, ( *pTmp >> 4 ) & 0x03 );
                                     break;
 
                                     case 2 :
-                                        ImplSetPixel( nY, nX, ( *pTmp >> 2 ) & 0x03, FALSE );
+                                        ImplSetPixel( nY, nX, ( *pTmp >> 2 ) & 0x03 );
                                     break;
 
                                     case 3 :
-                                        ImplSetPixel( nY, nX, *pTmp++ & 0x03, FALSE );
+                                        ImplSetPixel( nY, nX, *pTmp++ & 0x03 );
                                     break;
                                 }
                             }
@@ -1211,12 +1244,12 @@ void PNGReaderImpl::ImplGetFilter ( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                             if ( mnBitDepth == 8 )  // maybe the source is a 16 bit grayscale
                             {
                                 for ( nX = nXStart; nX < mnWidth; nX += nXAdd, pTmp++ )
-                                    ImplSetPixel( nY, nX, *pTmp, mpTransTab[ *pTmp ] < PNG_TRANS_VAL );
+                                    ImplSetAlphaPixel( nY, nX, *pTmp, mpTransTab[ *pTmp ] );
                             }
                             else
                             {
                                 for ( nX = nXStart; nX < mnWidth; nX += nXAdd, pTmp += 2 )
-                                    ImplSetPixel( nY, nX, *pTmp, mpTransTab[ *pTmp ] < PNG_TRANS_VAL );
+                                    ImplSetAlphaPixel( nY, nX, *pTmp, mpTransTab[ *pTmp ] );
                             }
                         }
                         else
@@ -1228,13 +1261,13 @@ void PNGReaderImpl::ImplGetFilter ( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                                 else
                                 {
                                     for ( nX = nXStart; nX < mnWidth; nX += nXAdd )
-                                        ImplSetPixel( nY, nX, *pTmp++, FALSE );
+                                        ImplSetPixel( nY, nX, *pTmp++ );
                                 }
                             }
                             else
                             {
                                 for ( nX = nXStart; nX < mnWidth; nX += nXAdd, pTmp += 2 )
-                                    ImplSetPixel( nY, nX, *pTmp, FALSE );
+                                    ImplSetPixel( nY, nX, *pTmp );
                             }
                         }
                     }
@@ -1328,7 +1361,7 @@ void PNGReaderImpl::ImplGetFilter ( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                         for ( nX = nXStart; nX < mnWidth; nX += nXAdd, pTmp += 3 )
                             ImplSetPixel( nY, nX, BitmapColor( mpColorTable[ pTmp[ 0 ] ],
                                                                 mpColorTable[ pTmp[ 1 ] ],
-                                                                    mpColorTable[ pTmp[ 2 ] ] ), FALSE );
+                                                                    mpColorTable[ pTmp[ 2 ] ] ) );
                     }
                     else
                     {
@@ -1337,7 +1370,7 @@ void PNGReaderImpl::ImplGetFilter ( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                         else
                         {
                             for ( nX = nXStart; nX < mnWidth; nX += nXAdd, pTmp += 3 )
-                                ImplSetPixel( nY, nX, BitmapColor( pTmp[ 0 ], pTmp[ 1 ], pTmp[ 2 ] ), FALSE );
+                                ImplSetPixel( nY, nX, BitmapColor( pTmp[ 0 ], pTmp[ 1 ], pTmp[ 2 ] ) );
                         }
 
                     }
@@ -1347,13 +1380,65 @@ void PNGReaderImpl::ImplGetFilter ( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                     for ( nX = nXStart; nX < mnWidth; nX += nXAdd, pTmp += 6 )
                         ImplSetPixel( nY, nX, BitmapColor( mpColorTable[ pTmp[ 0 ] ],
                                                             mpColorTable[ pTmp[ 2 ] ],
-                                                                mpColorTable[ pTmp[ 4 ] ] ), FALSE );
+                                                                mpColorTable[ pTmp[ 4 ] ] ) );
                 }
             }
         }
     }
 
     rtl_copyMemory( mpScanprior, mpInflateInBuf, mnScansize );
+}
+
+// ------------------------------------------------------------------------
+
+void PNGReaderImpl::ImplSetPixel( sal_uInt32 nY, sal_uInt32 nX, BYTE nPalIndex )
+{
+    if ( mnPass == 7 )
+        mpAcc->SetPixel( nY, nX, (BYTE)nPalIndex );
+    else
+    {
+        sal_uInt32 nTX;
+
+        for ( int nBHeight = 0; nBHeight < aBlockHeight[ mnPass ]; nBHeight++ )
+        {
+            nTX = nX;
+
+            for ( int nBWidth = 0; nBWidth < aBlockWidth[ mnPass ]; nBWidth++ )
+            {
+                mpAcc->SetPixel( nY, nTX, (BYTE)nPalIndex );
+                if ( ++nTX == mnWidth )
+                    break;
+            }
+            if ( ++nY == mnHeight )
+                break;
+        }
+    }
+}
+
+// ------------------------------------------------------------------------
+
+void PNGReaderImpl::ImplSetPixel( sal_uInt32 nY, sal_uInt32 nX, const BitmapColor& rBitmapColor )
+{
+    if ( mnPass == 7 )
+        mpAcc->SetPixel( nY, nX, rBitmapColor );
+    else
+    {
+        sal_uInt32 nTX;
+
+        for ( int nBHeight = 0; nBHeight < aBlockHeight[ mnPass ]; nBHeight++ )
+        {
+            nTX = nX;
+
+            for ( int nBWidth = 0; nBWidth < aBlockWidth[ mnPass ]; nBWidth++ )
+            {
+                mpAcc->SetPixel( nY, nTX, rBitmapColor );
+                if ( ++nTX == mnWidth )
+                    break;
+            }
+            if ( ++nY == mnHeight )
+                break;
+        }
+    }
 }
 
 // ------------------------------------------------------------------------
@@ -1398,16 +1483,12 @@ void PNGReaderImpl::ImplSetPixel( sal_uInt32 nY, sal_uInt32 nX, const BitmapColo
 
 // ------------------------------------------------------------------------
 
-void PNGReaderImpl::ImplSetPixel( sal_uInt32 nY, sal_uInt32 nX, BYTE nPalIndex, BOOL bTrans )
+void PNGReaderImpl::ImplSetAlphaPixel( sal_uInt32 nY, sal_uInt32 nX, BYTE nPalIndex, BYTE nAlpha )
 {
     if ( mnPass == 7 )
     {
         mpAcc->SetPixel( nY, nX, (BYTE)nPalIndex );
-
-        if ( bTrans )
-            mpMaskAcc->SetPixel( nY, nX, cTransIndex1 );
-        else
-            mpMaskAcc->SetPixel( nY, nX, cNonTransIndex1 );
+        mpMaskAcc->SetPixel( nY, nX, 255 - nAlpha );
     }
     else
     {
@@ -1420,12 +1501,7 @@ void PNGReaderImpl::ImplSetPixel( sal_uInt32 nY, sal_uInt32 nX, BYTE nPalIndex, 
             for ( int nBWidth = 0; nBWidth < aBlockWidth[ mnPass ]; nBWidth++ )
             {
                 mpAcc->SetPixel( nY, nTX, (BYTE)nPalIndex );
-
-                if ( bTrans )
-                    mpMaskAcc->SetPixel( nY, nTX, cTransIndex1 );
-                else
-                    mpMaskAcc->SetPixel( nY, nTX, cNonTransIndex1 );
-
+                mpMaskAcc->SetPixel( nY, nX, 255 - nAlpha );
                 if ( ++nTX == mnWidth )
                     break;
             }
