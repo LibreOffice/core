@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filterfactory.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:29:10 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 11:13:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -430,51 +430,58 @@ OUStringList FilterFactory::impl_queryMatchByDocumentService(const QueryTokenize
                                       pName != lFilterNames.end()  ;
                                     ++pName                        )
     {
-        const ::rtl::OUString&          sName   = *pName;
-        const CacheItem                 aFilter = pCache->getItem(FilterCache::E_FILTER, sName);
-              CacheItem::const_iterator pProp   ;
-
-        // "matchByDocumentService="                    => any filter will be adressed here
-        // "matchByDocumentService=all"                 => any filter will be adressed here
-        // "matchByDocumentService=com.sun.star..."     => only filter matching this document service will be adressed
-        ::rtl::OUString sCheckValue = aFilter.getUnpackedValueOrDefault(PROPNAME_DOCUMENTSERVICE, ::rtl::OUString());
-        if (
-            ( sDocumentService.getLength()                 ) &&
-            (!sDocumentService.equals(QUERY_CONSTVALUE_ALL)) &&
-            (!sCheckValue.equals(sDocumentService)         )
-           )
+        try
         {
-            continue; // ignore filter -> try next one!
-        }
+            const ::rtl::OUString&          sName   = *pName;
+            const CacheItem                 aFilter = pCache->getItem(FilterCache::E_FILTER, sName);
+                CacheItem::const_iterator pProp   ;
 
-        // "iflags="        => not allowed
-        // "iflags=-1"      => not allowed
-        // "iflags=0"       => not usefull
-        // "iflags=283648"  => only filter, which has set these flag field will be adressed
-        sal_Int32 nCheckValue = aFilter.getUnpackedValueOrDefault(PROPNAME_FLAGS, (sal_Int32)0);
-        if (
-            (nIFlags > 0                       ) &&
-            ((nCheckValue & nIFlags) != nIFlags)
-           )
-        {
-            continue; // ignore filter -> try next one!
-        }
+            // "matchByDocumentService="                    => any filter will be adressed here
+            // "matchByDocumentService=all"                 => any filter will be adressed here
+            // "matchByDocumentService=com.sun.star..."     => only filter matching this document service will be adressed
+            ::rtl::OUString sCheckValue = aFilter.getUnpackedValueOrDefault(PROPNAME_DOCUMENTSERVICE, ::rtl::OUString());
+            if (
+                ( sDocumentService.getLength()                 ) &&
+                (!sDocumentService.equals(QUERY_CONSTVALUE_ALL)) &&
+                (!sCheckValue.equals(sDocumentService)         )
+            )
+            {
+                continue; // ignore filter -> try next one!
+            }
 
-        // "eflags="        => not allowed
-        // "eflags=-1"      => not allowed
-        // "eflags=0"       => not usefull
-        // "eflags=283648"  => only filter, which has not set these flag field will be adressed
-        if (
-            (nEFlags > 0                       ) &&
-            ((nCheckValue & nEFlags) == nEFlags)
-           )
-        {
-            continue; // ignore filter -> try next one!
-        }
+            // "iflags="        => not allowed
+            // "iflags=-1"      => not allowed
+            // "iflags=0"       => not usefull
+            // "iflags=283648"  => only filter, which has set these flag field will be adressed
+            sal_Int32 nCheckValue = aFilter.getUnpackedValueOrDefault(PROPNAME_FLAGS, (sal_Int32)0);
+            if (
+                (nIFlags > 0                       ) &&
+                ((nCheckValue & nIFlags) != nIFlags)
+            )
+            {
+                continue; // ignore filter -> try next one!
+            }
 
-        // OK - this filter passed all checks.
-        // It match the query ...
-        lResult.push_back(sName);
+            // "eflags="        => not allowed
+            // "eflags=-1"      => not allowed
+            // "eflags=0"       => not usefull
+            // "eflags=283648"  => only filter, which has not set these flag field will be adressed
+            if (
+                (nEFlags > 0                       ) &&
+                ((nCheckValue & nEFlags) == nEFlags)
+            )
+            {
+                continue; // ignore filter -> try next one!
+            }
+
+            // OK - this filter passed all checks.
+            // It match the query ...
+            lResult.push_back(sName);
+        }
+        catch(const css::uno::RuntimeException& exRun)
+            { throw exRun; }
+        catch(const css::uno::Exception&)
+            { continue; }
     }
 
     aLock.clear();
