@@ -78,6 +78,7 @@ hedabu: ..\inc\imgctrl.hxx %_DEST%\inc%_EXT%\vcl\imgctrl.hxx
 hedabu: ..\inc\inputctx.hxx %_DEST%\inc%_EXT%\vcl\inputctx.hxx
 hedabu: ..\inc\javachild.hxx %_DEST%\inc%_EXT%\vcl\javachild.hxx
 hedabu: ..\inc\jobset.hxx %_DEST%\inc%_EXT%\vcl\jobset.hxx
+hedabu: ..\unx\inc\kde_headers.h %_DEST%\inc%_EXT%\vcl\kde_headers.h
 hedabu: ..\inc\keycod.hxx %_DEST%\inc%_EXT%\vcl\keycod.hxx
 hedabu: ..\inc\keycodes.hxx %_DEST%\inc%_EXT%\vcl\keycodes.hxx
 hedabu: ..\inc\lineinfo.hxx %_DEST%\inc%_EXT%\vcl\lineinfo.hxx
