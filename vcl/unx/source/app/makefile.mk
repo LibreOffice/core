@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-19 19:50:17 $
+#   last change: $Author: ihi $ $Date: 2006-08-01 09:30:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -108,6 +108,18 @@ CFLAGS+=$(LIBSN_CFLAGS)
 
 .IF "$(USE_XINERAMA)" != "NO"
 CDEFS+=-DUSE_XINERAMA
+.IF "$(USE_XINERAMA_VERSION)" == "Xorg"
+CDEFS+=-DUSE_XINERAMA_XORG
+.ELIF "$(USE_XINERAMA_VERSION)" == "Xsun"
+CDEFS+=-DUSE_XINERAMA_XSUN
+.ELSE
+# provide sensible default
+.IF "$(OS)" != "SOLARIS"
+CDEFS+=-DUSE_XINERAMA_XORG
+.ELSE
+CDEFS+=-DUSE_XINERAMA_XSUN
+.ENDIF
+.ENDIF
 .ENDIF
 
 .IF "$(OS)$(CPU)" == "SOLARISS"
