@@ -4,9 +4,9 @@
  *
  *  $RCSfile: KDEInit.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-06 14:10:11 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 10:23:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,12 +44,9 @@
 #include <osl/process.h>
 #endif
 
-#define KDE_HEADERS_WANT_KAPPLICATION
-#define KDE_HEADERS_WANT_KCMDLINEARGS
-#define KDE_HEADERS_WANT_KGLOBAL
-#define KDE_HEADERS_WANT_KLOCALE
-#define KDE_HEADERS_WANT_KDEVERSION
-#include "kde_headers.hxx"
+#ifndef INCLUDED_VCL_KDE_HEADERS_H
+#include <vcl/kde_headers.h>
+#endif
 
 namespace connectivity
 {
