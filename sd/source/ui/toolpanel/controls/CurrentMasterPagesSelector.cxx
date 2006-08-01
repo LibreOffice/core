@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CurrentMasterPagesSelector.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 20:47:25 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 09:22:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,6 @@ CurrentMasterPagesSelector::CurrentMasterPagesSelector (
     TreeNode* pParent,
     SdDrawDocument& rDocument,
     ViewShellBase& rBase,
-    DrawViewShell& rViewShell,
     const ::boost::shared_ptr<MasterPageContainer>& rpContainer)
     : MasterPagesSelector (pParent, rDocument, rBase, rpContainer)
 {
