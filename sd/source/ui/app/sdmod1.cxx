@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdmod1.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:04:17 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 09:53:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -652,8 +652,6 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
 
                         if ( pTargetFrame )
                         {
-                            pFrame = pTargetFrame;
-
                             SfxAllItemSet aSet( *rReq.GetArgs()->GetPool() );
                             aSet.Put( aFile );
                             aSet.Put( aReferer );
@@ -662,7 +660,10 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                             if (aPasswrd.Len() > 0)
                                 aSet.Put( aPassword );
 
-                            const SfxPoolItem* pRet = pFrame->LoadDocumentSynchron( aSet );
+                            const SfxPoolItem* pRet = pTargetFrame->LoadDocumentSynchron( aSet );
+                            const SfxViewFrameItem* pFrameItem = PTR_CAST( SfxViewFrameItem, pRet );
+                            if ( pFrameItem && pFrameItem->GetFrame() )
+                                pFrame = pFrameItem->GetFrame()->GetFrame();
                         }
                         else
                         {
@@ -678,7 +679,10 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                                 String (RTL_CONSTASCII_USTRINGPARAM ("_default"))));
                             try
                             {
-                                SFX_APP()->ExecuteSlot (aRequest);
+                                const SfxPoolItem* pRet = SFX_APP()->ExecuteSlot (aRequest);
+                                const SfxViewFrameItem* pFrameItem = PTR_CAST( SfxViewFrameItem, pRet );
+                                if ( pFrameItem )
+                                    pFrame = pFrameItem->GetFrame()->GetFrame();
                             }
                             catch (::com::sun::star::uno::Exception e)
                             {
