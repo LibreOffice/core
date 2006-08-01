@@ -31,11 +31,11 @@
 #endif
 
 /* external functions (C++ code, declared as extren "C" */
-extern WorkOnTokenSet( int, char* );
-extern InitCfgExport( char * , char *);
-extern EndCfgExport();
-extern GetError();
-extern SetError();
+extern int WorkOnTokenSet( int, char* );
+extern int InitCfgExport( char * , char *);
+extern int EndCfgExport();
+extern int GetError();
+extern int SetError();
 extern char *GetOutputFile( int argc, char* argv[]);
 extern FILE *GetCfgFile();
 extern int isQuiet();
