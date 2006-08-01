@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bindings.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 17:17:03 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 09:54:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2606,12 +2606,13 @@ SfxItemState SfxBindings::QueryState( sal_uInt16 nSlot, SfxPoolItem* &rpState )
             return SFX_ITEM_DISABLED;
 
         ::com::sun::star::util::URL aURL;
-        String aCmd( DEFINE_CONST_UNICODE(".uno:"));
-        aCmd += String::CreateFromAscii(pSlot->GetUnoName());
+        ::rtl::OUString aCmd( DEFINE_CONST_UNICODE(".uno:"));
+        aURL.Protocol = aCmd;
+        aURL.Path = ::rtl::OUString::createFromAscii(pSlot->GetUnoName());
+        aCmd += aURL.Path;
         aURL.Complete = aCmd;
+        aURL.Main = aCmd;
 
-        Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
-        xTrans->parseStrict( aURL );
         if ( !xDisp.is() )
             xDisp = pImp->xProv->queryDispatch( aURL, ::rtl::OUString(), 0 );
 
