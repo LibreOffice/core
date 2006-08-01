@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MasterPageContainerProviders.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 20:49:29 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 09:22:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,6 +123,11 @@ Image TemplatePreviewProvider::operator() (
     SdPage* pPage,
     ::sd::PreviewRenderer& rRenderer)
 {
+    // Unused parameters.
+    (void)nWidth;
+    (void)pPage;
+    (void)rRenderer;
+
     // Load the thumbnail from a template document.
     uno::Reference<io::XInputStream> xIStream;
 
@@ -269,6 +274,9 @@ TemplatePageObjectProvider::TemplatePageObjectProvider (const ::rtl::OUString& r
 
 SdPage* TemplatePageObjectProvider::operator() (SdDrawDocument* pContainerDocument)
 {
+    // Unused parameters.
+    (void)pContainerDocument;
+
     SdPage* pPage = NULL;
 
     mxDocumentShell = NULL;
@@ -396,6 +404,11 @@ Image DefaultPagePreviewProvider::operator() (
     SdPage* pPage,
     ::sd::PreviewRenderer& rRenderer)
 {
+    // Unused parameters.
+    (void)nWidth;
+    (void)pPage;
+    (void)rRenderer;
+
     return Image();
 }
 
@@ -430,6 +443,8 @@ ExistingPageProvider::ExistingPageProvider (SdPage* pPage)
 
 SdPage* ExistingPageProvider::operator() (SdDrawDocument* pDocument)
 {
+    (void)pDocument; // Unused parameter.
+
     return mpPage;
 }
 
