@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 16:52:07 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 09:30:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,18 +66,20 @@
 #include <X11/Xatom.h>
 
 #ifdef USE_XINERAMA
-#ifndef SOLARIS
+#ifdef USE_XINERAMA_XORG
 #if defined(X86) || defined(MACOSX)
 #include <X11/extensions/Xinerama.h>
 #endif
-#else
-#if defined(INTEL) // missing extension header in standard installation
+#elif defined USE_XINERAMA_XSUN
+#if defined(SOLARIS) && defined(INTEL) // missing extension header in standard installation
 #define MAXFRAMEBUFFERS       16
 Bool XineramaGetState(Display*, int);
 Status XineramaGetInfo(Display*, int, XRectangle*, unsigned char*, int*);
 #else
 #include <X11/extensions/xinerama.h>
 #endif
+#else
+#error USE_XINERAMA but no xinerama version
 #endif
 #endif
 
@@ -2783,7 +2785,7 @@ void SalDisplay::GetScreenFontResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) c
 void SalDisplay::InitXinerama()
 {
 #ifdef USE_XINERAMA
-#if defined( SOLARIS )
+#if defined(USE_XINERAMA_XSUN)
     int nFramebuffers = 1;
     if( XineramaGetState( pDisp_, nScreen_ ) )
     {
@@ -2804,7 +2806,7 @@ void SalDisplay::InitXinerama()
                                                                pFramebuffers[i].height ) ) );
         }
     }
-#else
+#elif defined(USE_XINERAMA_XORG)
 #if defined( X86 ) || defined( MACOSX )
 if( XineramaIsActive( pDisp_ ) )
 {
