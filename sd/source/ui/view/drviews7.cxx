@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 11:49:15 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 09:25:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -722,24 +722,6 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem(SID_CONVERT_TO_3D);
         rSet.DisableItem(SID_CONVERT_TO_3D_LATHE);
         rSet.DisableItem(SID_CONVERT_TO_3D_LATHE_FAST);
-    }
-
-    if (pDrView->IsPixelMode())
-    {
-        rSet.Put(SfxBoolItem(SID_PIXELMODE, TRUE));
-    }
-    else
-    {
-        rSet.Put(SfxBoolItem(SID_PIXELMODE, FALSE));
-    }
-
-    if (pDrView->IsActionMode())
-    {
-        rSet.Put(SfxBoolItem(SID_ACTIONMODE, TRUE));
-    }
-    else
-    {
-        rSet.Put(SfxBoolItem(SID_ACTIONMODE, FALSE));
     }
 
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_MANAGE_LINKS ) )
