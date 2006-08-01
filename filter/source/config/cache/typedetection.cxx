@@ -4,9 +4,9 @@
  *
  *  $RCSfile: typedetection.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 07:49:19 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 11:14:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,9 @@ namespace css = ::com::sun::star;
 
 // Use this switch to change the behaviour of preselection DocumentService ... (see using for further informations)
 #define IGNORE_NON_URLMATCHING_TYPES_FOR_PRESELECTION_DOCUMENTSERVICE
+
+// enable/disable special handling for CSV/TXT problem
+#define WORKAROUND_CSV_TXT_BUG_i60158
 
 /*-----------------------------------------------
     03.07.2003 11:25
@@ -244,8 +247,8 @@ TypeDetection::~TypeDetection()
     //*******************************************
     // adapt media descriptor, so it contains the right values
     // for type/filter name/document service/ etcpp.
+    impl_checkResultsAndAddBestFilter(stlDescriptor, sType); // Attention: sType is used as IN/OUT param here and will might be changed inside this method !!!
     impl_validateAndSetTypeOnDescriptor(stlDescriptor, sType);
-    impl_addBestFilter(stlDescriptor, sType);
 
     stlDescriptor >> lDescriptor;
     return sType;
@@ -254,8 +257,8 @@ TypeDetection::~TypeDetection()
 /*-----------------------------------------------
     03.07.2003 10:36
 -----------------------------------------------*/
-void TypeDetection::impl_addBestFilter(      ::comphelper::MediaDescriptor& rDescriptor,
-                                       const ::rtl::OUString&               sType      )
+void TypeDetection::impl_checkResultsAndAddBestFilter(::comphelper::MediaDescriptor& rDescriptor,
+                                                      ::rtl::OUString&               sType      )
 {
     // a)
     // Dont overwrite a might preselected filter!
@@ -275,6 +278,35 @@ void TypeDetection::impl_addBestFilter(      ::comphelper::MediaDescriptor& rDes
     {
         try
         {
+            ::rtl::OUString sRealType = sType;
+
+            #ifdef WORKAROUND_CSV_TXT_BUG_i60158
+            // Workaround for #i60158#
+            // We do not have right filter for Text_Ascii in calc nor a suitable filter for CSV in writer.
+            // So we must overrule our detection and make the right things. Normaly we should have
+            // one type TextAscii and two filters registered for these one type.
+            // But then we loose automatic opening of CSV files in calc instead of opening these files
+            // inside writer.
+            if (
+                (sDocumentService.equalsAscii("com.sun.star.sheet.SpreadsheetDocument")) &&
+                (
+                    (sRealType.equalsAscii("writer_Text"        )) ||
+                    (sRealType.equalsAscii("writer_Text_encoded"))
+                )
+               )
+            {
+                sRealType = ::rtl::OUString::createFromAscii("calc_Text_txt_csv_StarCalc");
+            }
+            else
+            if (
+                (sDocumentService.equalsAscii("com.sun.star.text.TextDocument")) &&
+                (sRealType.equalsAscii("calc_Text_txt_csv_StarCalc"           ))
+               )
+            {
+                sRealType = ::rtl::OUString::createFromAscii("writer_Text");
+            }
+            #endif // WORKAROUND_CSV_TXT_BUG_i60158
+
             // SAFE ->
             ::osl::ResettableMutexGuard aLock(m_aLock);
 
@@ -285,7 +317,7 @@ void TypeDetection::impl_addBestFilter(      ::comphelper::MediaDescriptor& rDes
 
             CacheItem lIProps;
             lIProps[PROPNAME_DOCUMENTSERVICE] <<= sDocumentService;
-            lIProps[PROPNAME_TYPE           ] <<= sType;
+            lIProps[PROPNAME_TYPE           ] <<= sRealType;
             OUStringList lFilters = m_rCache->getMatchingItemsByProps(FilterCache::E_FILTER, lIProps);
 
             aLock.clear();
@@ -294,8 +326,9 @@ void TypeDetection::impl_addBestFilter(      ::comphelper::MediaDescriptor& rDes
             if (lFilters.size() > 0)
             {
                 sFilter = *(lFilters.begin());
-                rDescriptor[::comphelper::MediaDescriptor::PROP_TYPENAME()  ] <<= sType  ;
+                rDescriptor[::comphelper::MediaDescriptor::PROP_TYPENAME()  ] <<= sRealType;
                 rDescriptor[::comphelper::MediaDescriptor::PROP_FILTERNAME()] <<= sFilter;
+                sType = sRealType;
                 return;
             }
         }
