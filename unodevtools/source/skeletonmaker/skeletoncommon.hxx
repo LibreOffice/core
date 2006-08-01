@@ -4,9 +4,9 @@
  *
  *  $RCSfile: skeletoncommon.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-15 09:20:08 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 16:24:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,7 @@ namespace skeletonmaker {
 struct ProgramOptions {
     ProgramOptions(): java5(true), all(false), dump(false), license(false),
                       shortnames(false), supportpropertysetmixin(false),
-                      language(1), componenttype(1) {}
+                      backwardcompatible(false), language(1), componenttype(1) {}
 
     bool java5;
     bool all;
@@ -65,6 +65,7 @@ struct ProgramOptions {
     bool license;
     bool shortnames;
     bool supportpropertysetmixin;
+    bool backwardcompatible;
     // language specifier - is extendable
     // 1 = Java
     // 2 = C++
