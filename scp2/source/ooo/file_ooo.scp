@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.160 $
+ *  $Revision: 1.161 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 11:51:07 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 10:03:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1885,6 +1885,7 @@ File gid_File_Registry_Spool_Oo_Common_Ctl_Xcu
     Name (gu-IN) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
     Name (or) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
     Name (ne) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
+    Name (fa) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_Writer_Cjk_Xcu
