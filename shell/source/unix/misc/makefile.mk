@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 19:55:11 $
+#   last change: $Author: ihi $ $Date: 2006-08-01 11:26:32 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -55,12 +55,6 @@ SCRIPTFILES = \
     $(BIN)$/gnome-open-url \
     $(BIN)$/kde-open-url
 
-AWKFILES = \
-    $(BIN)$/uri-encode
-
-OBJFILES = \
-    $(OBJ)$/gnome-open-url.obj
-
 APP1TARGET = gnome-open-url.bin
 APP1OBJS = \
     $(OBJ)$/gnome-open-url.obj
@@ -68,6 +62,13 @@ APP1LIBS =
 .IF "$(OS)"!="FREEBSD"
 APP1STDLIBS=-ldl
 .ENDIF
+
+APP2TARGET = uri-encode
+APP2OBJS = $(OBJ)$/uri-encode.obj
+APP2LIBS =
+APP2STDLIBS =
+
+OBJFILES = $(APP1OBJS) $(APP2OBJS)
 
 # --- Targets ------------------------------------------------------
 
@@ -77,7 +78,3 @@ ALLTAR : $(SCRIPTFILES) $(AWKFILES)
 
 $(SCRIPTFILES) : $$(@:f:+".sh")
     +@tr -d "\015" < $(@:f:+".sh") > $@
-
-$(AWKFILES) : $$(@:f:+".awk")
-    +@tr -d "\015" < $(@:f:+".awk") > $@
-
