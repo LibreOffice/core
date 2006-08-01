@@ -4,9 +4,9 @@
  *
  *  $RCSfile: kdevcllayer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2006-06-02 12:26:23 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 10:26:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,11 +48,8 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
 
-#ifndef QGLOBAL_H
-#include "qglobal.h"
-#endif
-#ifndef QACCESSIBLE_H
-#include "qaccessible.h"
+#ifndef INCLUDED_VCL_KDE_HEADERS_H
+#include <vcl/kde_headers.h>
 #endif
 
 //==============================================================================
