@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 17:01:41 $
+#   last change: $Author: ihi $ $Date: 2006-08-01 12:23:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,10 @@ APP1STDLIBS=	$(SVTOOLLIB)	\
                 $(VOSLIB)		\
                 $(CPPUHELPERLIB) 	\
                 $(CPPULIB)
+
+.IF "$(OS)"=="MACOSX" || "$(GUI)"=="WIN"
+APP1STDLIBS +=	$(UNOTOOLSLIB)
+.ENDIF
 
 APP1DEPN=		$(L)$/itools.lib $(SVLIBDEPEND) 
 APP1OBJS=		$(OBJ)$/svdem.obj
