@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CodeSamples.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 16:19:30 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 16:32:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -61,6 +61,7 @@ public class CodeSamples
 {
     public static XComponentContext xContext;
     public static XMultiComponentFactory xMCF;
+
     public static void main(String argv[]) throws java.lang.Exception
     {
         try {
@@ -328,8 +329,10 @@ public class CodeSamples
                 catch(com.sun.star.uno.Exception e)
                 {}
         xCont.insertByName("Query1",xProp);
-                XStorable xStore = (XStorable)UnoRuntime.queryInterface(XStorable.class,xQuerySup);
-                xStore.store();
+        XDocumentDataSource xDs = (XDocumentDataSource)UnoRuntime.queryInterface(XDocumentDataSource.class, xQuerySup);
+
+        XStorable xStore = (XStorable)UnoRuntime.queryInterface(XStorable.class,xDs.getDatabaseDocument());
+        xStore.store();
     }
 
     // prints all column names from Query1
