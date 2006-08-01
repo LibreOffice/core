@@ -4,9 +4,9 @@
  *
  *  $RCSfile: orgmgr.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 13:29:16 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 16:06:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -548,7 +548,7 @@ BOOL    SfxOrganizeMgr::Delete(SfxOrganizeListBox_Impl *pCaller,
                 if ( pEntriesToDelete[nInd] )
                     pCaller->GetModel()->Remove( pEntriesToDelete[nInd] );
 
-            if ( !pGroupToDelete->ItemCount() && ( bOk = pTemplates->Delete( nRegion, nIdx ) ) )
+            if ( !pCaller->GetModel()->GetChildCount( pGroupToDelete ) && ( bOk = pTemplates->Delete( nRegion, nIdx ) ) )
                 pCaller->GetModel()->Remove( pGroupToDelete );
         }
     }
