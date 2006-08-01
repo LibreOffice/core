@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-06 09:47:06 $
+#   last change: $Author: ihi $ $Date: 2006-08-01 10:02:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -123,6 +123,7 @@ MY_MISC_CXXFILES = \
     $(MISC)$/localedata_es_VE.cxx  \
     $(MISC)$/localedata_et_EE.cxx  \
     $(MISC)$/localedata_eu.cxx     \
+    $(MISC)$/localedata_fa_IR.cxx  \
     $(MISC)$/localedata_fi_FI.cxx  \
     $(MISC)$/localedata_fo_FO.cxx  \
     $(MISC)$/localedata_fr_BE.cxx  \
@@ -145,6 +146,7 @@ MY_MISC_CXXFILES = \
     $(MISC)$/localedata_it_IT.cxx  \
     $(MISC)$/localedata_ja_JP.cxx  \
     $(MISC)$/localedata_ka_GE.cxx  \
+    $(MISC)$/localedata_kk_KZ.cxx  \
     $(MISC)$/localedata_kl_GL.cxx  \
     $(MISC)$/localedata_km_KH.cxx  \
     $(MISC)$/localedata_kn_IN.cxx  \
@@ -152,6 +154,7 @@ MY_MISC_CXXFILES = \
     $(MISC)$/localedata_ku_TR.cxx  \
     $(MISC)$/localedata_ky_KG.cxx  \
     $(MISC)$/localedata_la_VA.cxx  \
+    $(MISC)$/localedata_lb_LU.cxx  \
     $(MISC)$/localedata_lo_LA.cxx  \
     $(MISC)$/localedata_lt_LT.cxx  \
     $(MISC)$/localedata_lv_LV.cxx  \
@@ -309,6 +312,7 @@ SHL3OBJS=	\
     $(SLO)$/localedata_ka_GE.obj	\
     $(SLO)$/localedata_kl_GL.obj	\
     $(SLO)$/localedata_la_VA.obj	\
+    $(SLO)$/localedata_lb_LU.obj	\
     $(SLO)$/localedata_lt_LT.obj	\
     $(SLO)$/localedata_lv_LV.obj	\
     $(SLO)$/localedata_mk_MK.obj	\
@@ -359,6 +363,7 @@ SHL4OBJS= \
      $(SLO)$/localedata_dz_BT.obj \
     $(SLO)$/localedata_en_IN.obj \
     $(SLO)$/localedata_eo.obj    \
+    $(SLO)$/localedata_fa_IR.obj \
     $(SLO)$/localedata_gu_IN.obj \
     $(SLO)$/localedata_he_IL.obj \
     $(SLO)$/localedata_hi_IN.obj \
@@ -366,6 +371,7 @@ SHL4OBJS= \
     $(SLO)$/localedata_ia.obj    \
     $(SLO)$/localedata_id_ID.obj \
     $(SLO)$/localedata_ja_JP.obj \
+    $(SLO)$/localedata_kk_KZ.obj \
     $(SLO)$/localedata_km_KH.obj \
     $(SLO)$/localedata_kn_IN.obj \
     $(SLO)$/localedata_ko_KR.obj \
