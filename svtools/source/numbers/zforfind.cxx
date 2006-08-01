@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zforfind.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 17:07:55 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 15:51:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -832,11 +832,12 @@ short ImpSvNumberInputScan::GetESign( const String& rString, xub_StrLen& nPos )
 //---------------------------------------------------------------------------
 //      GetNextNumber
 //
-// i zaehlt Strings, j zaehlt Numbers, eigentlich sollte das SkipNumber heissen
+// i counts string portions, j counts numbers thereof.
+// It should had been called SkipNumber instead.
 
 inline BOOL ImpSvNumberInputScan::GetNextNumber( USHORT& i, USHORT& j )
 {
-    if ( IsNum[i] )
+    if ( i < nAnzStrings && IsNum[i] )
     {
         j++;
         i++;
@@ -1231,18 +1232,24 @@ input for the following reasons:
                     }
                     break;
                     case 1:             // month at the beginning (Jan 01 01)
-                        switch (DateFmt)
+                    {
+                        // The input is valid as MDY in almost any
+                        // constellation, there is no date order (M)YD except if
+                        // set in a format applied.
+                        pCal->setValue( CalendarFieldIndex::MONTH, Abs(nMonth)-1 );
+                        sal_uInt32 nExactDateOrder = (bFormatTurn ? pFormat->GetExactDateOrder() : 0);
+                        if ((((nExactDateOrder >> 8) & 0xff) == 'Y') && ((nExactDateOrder & 0xff) == 'D'))
                         {
-                            case MDY:
-                                pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
-                                pCal->setValue( CalendarFieldIndex::MONTH, Abs(nMonth)-1 );
-                                pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(1) );
-                                break;
-                            default:
-                                res = FALSE;
-                                break;
+                            pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(1) );
+                            pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(0) );
                         }
-                        break;
+                        else
+                        {
+                            pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
+                            pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(1) );
+                        }
+                    }
+                    break;
                     case 2:             // month in the middle (10 Jan 94)
                         pCal->setValue( CalendarFieldIndex::MONTH, Abs(nMonth)-1 );
                         switch (DateFmt)
