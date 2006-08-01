@@ -66,7 +66,7 @@ sa       0  1103   # Sanskrit
 sr-SP 1251  3098   # Serbian Cyrillic
 tn       0  1074   # Setsuana
 hr    1250  1050   # Croatian
-fa    1256  1065   # Farsi
+fa       0  1065   # Farsi
 fo    1252  1080   # Faroese
 sl    1250  1060   # Slovenian
 sb       0  1070   # Sorbian
