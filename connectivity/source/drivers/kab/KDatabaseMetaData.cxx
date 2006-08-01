@@ -4,9 +4,9 @@
  *
  *  $RCSfile: KDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-06 14:14:45 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 10:24:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,10 @@
 #ifndef CONNECTIVITY_KAB_KDEINIT_H
 #include "KDEInit.h"
 #endif
-#include <klocale.h>
+
+#ifndef INCLUDED_VCL_KDE_HEADERS_H
+#include <vcl/kde_headers.h>
+#endif
 
 #ifndef _CONNECTIVITY_FDATABASEMETADATARESULTSET_HXX_
 #include "FDatabaseMetaDataResultSet.hxx"
