@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawview.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:32:12 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 09:21:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,21 +80,11 @@ public:
     BOOL    SetStyleSheet(SfxStyleSheet* pStyleSheet, BOOL bDontRemoveHardAttr = FALSE);
     virtual BOOL IsObjMarkable(SdrObject* pObj, SdrPageView* pPV) const;
 
-    void    AllowPresPaint(BOOL bAllowed);
-    BOOL    IsPresPaintAllowed() const { return nPresPaintSmph == 0; }
-    void    SetPixelMode(BOOL bOn);
-    BOOL    IsPixelMode() const { return bPixelMode; }
-    void    SetActionMode(BOOL bOn) { bActionMode = bOn; }
-    BOOL    IsActionMode() const { return bActionMode; }
-
     virtual void MakeVisible(const Rectangle& rRect, ::Window& rWin);
     virtual void HidePage(SdrPageView* pPV);
 
     void    PresPaint(const Region& rRegion);
 
-    void    SetAnimationMode(BOOL bStart);
-    void    AnimatePage();
-    BOOL    IsInAnimation() { return bInAnimation; }
     Slideshow*  GetSlideShow() { return mpSlideShow; }
 
     virtual SdrObject* GetMaxToBtmObj(SdrObject* pObj) const;
@@ -112,14 +102,7 @@ private:
     VirtualDevice*      pVDev;
 
     USHORT              nPOCHSmph;  // zum blockieren des PageOrderChangedHint
-    USHORT              nPresPaintSmph;     // zum Blockieren des Zeichnens
-                                            // in der Diashow
-    BOOL                bPixelMode;
     Slideshow*          mpSlideShow;
-    BOOL                bInAnimation;
-    ULONG               nMagic;
-
-    BOOL                bActionMode;
 };
 
 } // end of namespace sd
