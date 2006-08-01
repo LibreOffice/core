@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filtercache.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:28:55 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 11:13:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -311,6 +311,10 @@ class FilterCache : public BaseLock
         OUStringList m_lChangedDetectServices;
         OUStringList m_lChangedFrameLoaders;
         OUStringList m_lChangedContentHandlers;
+
+        //---------------------------------------
+        /// readonly acccess to the module configuration of OOo
+        css::uno::Reference< css::container::XNameAccess > m_xModuleCfg;
 
     //-------------------------------------------
     // interface
@@ -1062,6 +1066,16 @@ class FilterCache : public BaseLock
         /** TODO */
         ::rtl::OUString impl_searchFrameLoaderForType(const ::rtl::OUString& sType) const;
         ::rtl::OUString impl_searchContentHandlerForType(const ::rtl::OUString& sType) const;
+
+        //---------------------------------------
+        /** @short check if the specified OOo module is installed.
+
+            @param  sModule
+                    the long name of the module (e.g. "com.sun.star.text.TextDocument").
+
+            @return TRUE if the requested module is installed; FALSE otherwise.
+         */
+        sal_Bool impl_isModuleInstalled(const ::rtl::OUString& sModule);
 
         //---------------------------------------
 
