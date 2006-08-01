@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impdialog.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 11:12:28 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 09:28:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,9 +83,6 @@ ImpPDFTabDialog::ImpPDFTabDialog( Window* pParent,
                                   Sequence< PropertyValue >& rFilterData,
                                   const Reference< XComponent >& rxDoc ) :
     SfxTabDialog( pParent, ResId( RID_PDF_EXPORT_DLG, &rResMgr ), 0, FALSE, 0 ),
-
-    maFlPages( this, ResId( 1 ) ),
-
     maConfigItem( String( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/PDF/Export/" ) ), &rFilterData ),
     maConfigI18N( String( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/I18N/CTL/" ) ) ),
     mbIsPresentation( sal_False ),
@@ -235,8 +232,6 @@ ImpPDFTabDialog::ImpPDFTabDialog( Window* pParent,
     GetOKButton().SetText( OUString( String( ResId( STR_PDF_EXPORT, &rResMgr ) ) ) );
 //remove the reset button, not needed in this tabbed dialog
     RemoveResetButton();
-//FIXME: very, very ugly hack: I don't know how to have the tab pages displayed correctly without this...
-    maFlPages.Hide();
 /////////////////
 }
 
