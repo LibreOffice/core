@@ -4,9 +4,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:13:26 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 09:54:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -747,10 +747,10 @@ void SfxWorkWindow::DeleteControllers_Impl()
     }
 
     // Child-Windows l"oschen
-    USHORT nCount = pChildWins->Count();
-    for ( n=0; n<nCount; n++ )
+    for ( n=0; n<pChildWins->Count(); )
     {
         SfxChildWin_Impl* pCW = (*pChildWins)[n];
+        pChildWins->Remove(n);
            SfxChildWindow *pChild = pCW->pWin;
         if (pChild)
         {
@@ -774,7 +774,6 @@ void SfxWorkWindow::DeleteControllers_Impl()
             pChild->Destroy();
         }
 
-        delete pCW->pControl;
         delete pCW;
 
         // ATTENTION: The array itself is cleared after this loop!!
@@ -783,10 +782,10 @@ void SfxWorkWindow::DeleteControllers_Impl()
         // See task 128307 (Windows)
         // Window::NotifyAllChilds() calls SfxWorkWindow::DataChanged_Impl for
         // 8-bit displays (WM_QUERYPALETTECHANGED message due to focus change)!!
-        (*pChildWins)[n] = 0;
+        //(*pChildWins)[n] = 0;
     }
 
-    pChildWins->Remove((USHORT)0, nCount);
+    //pChildWins->Remove((USHORT)0, nCount);
 
     Reference< com::sun::star::frame::XFrame > xFrame = GetFrameInterface();
     Reference< com::sun::star::beans::XPropertySet > xPropSet( xFrame, UNO_QUERY );
