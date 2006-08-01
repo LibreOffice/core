@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtcrsr.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 12:18:41 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 14:43:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,6 +118,8 @@ void SwTextShell::ExecBasicMove(SfxRequest &rReq)
     }
     USHORT nSlot = rReq.GetSlot();
     rReq.Done();
+    // Get EditWin before calling the move functions (shell change may occur!)
+    SwEditWin& rTmpEditWin = GetView().GetEditWin();
     for( USHORT i = 0; i < nCount; i++ )
     {
         switch(nSlot)
@@ -131,13 +133,14 @@ void SwTextShell::ExecBasicMove(SfxRequest &rReq)
     }
 
     //#i42732# - notify the edit window that from now on we do not use the input language
-    GetView().GetEditWin().SetUseInputLanguage( sal_False );
+    rTmpEditWin.SetUseInputLanguage( sal_False );
 }
 
 void SwTextShell::ExecMove(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
-    GetView().GetEditWin().FlushInBuffer();
+    SwEditWin& rTmpEditWin = GetView().GetEditWin();
+    rTmpEditWin.FlushInBuffer();
 
     USHORT nSlot = rReq.GetSlot();
     BOOL bRet = FALSE;
@@ -171,7 +174,7 @@ void SwTextShell::ExecMove(SfxRequest &rReq)
         rReq.Ignore();
 
     //#i42732# - notify the edit window that from now on we do not use the input language
-    GetView().GetEditWin().SetUseInputLanguage( sal_False );
+    rTmpEditWin.SetUseInputLanguage( sal_False );
 }
 
 void SwTextShell::ExecMovePage(SfxRequest &rReq)
