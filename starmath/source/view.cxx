@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 08:04:37 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 11:15:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -815,9 +815,9 @@ void SmViewShell::InnerResizePixel(const Point &rOfs, const Size &rSize)
     Size aObjSize = GetObjectShell()->GetVisArea().GetSize();
     if ( aObjSize.Width() > 0 && aObjSize.Height() > 0 )
     {
-        Size aObjSizePixel = GetWindow()->LogicToPixel( aObjSize, MAP_100TH_MM );
-        SfxViewShell::SetZoomFactor( Fraction( rSize.Width(),aObjSizePixel.Width() ),
-                        Fraction( rSize.Height(),aObjSizePixel.Height() ) );
+        Size aProvidedSize = GetWindow()->PixelToLogic( rSize, MAP_100TH_MM );
+        SfxViewShell::SetZoomFactor( Fraction( aProvidedSize.Width(), aObjSize.Width() ),
+                        Fraction( aProvidedSize.Height(), aObjSize.Height() ) );
     }
 
     SetBorderPixel( SvBorder() );
