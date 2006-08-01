@@ -4,9 +4,9 @@
  *
  *  $RCSfile: togglebuttontoolbarcontroller.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 11:41:46 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 09:39:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -276,6 +276,88 @@ void ToggleButtonToolbarController::executeControlCommand( const ::com::sun::sta
                         addNotifyInfo( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Pos" )),
                                     getDispatchFromCommand( m_aCommandURL ),
                                     aInfo );
+                    }
+                    break;
+                }
+            }
+        }
+        else if ( rControlCommand.Command.equalsAsciiL( "AddEntry", 8 ))
+        {
+            rtl::OUString   aText;
+            for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
+            {
+                if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "Text", 4 ))
+                {
+                    if ( rControlCommand.Arguments[i].Value >>= aText )
+                        m_aDropdownMenuList.push_back( aText );
+                    break;
+                }
+            }
+        }
+        else if ( rControlCommand.Command.equalsAsciiL( "InsertEntry", 11 ))
+        {
+            sal_Int32      nPos( COMBOBOX_APPEND );
+            sal_Int32      nSize = sal_Int32( m_aDropdownMenuList.size() );
+            rtl::OUString  aText;
+            for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
+            {
+                if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "Pos", 3 ))
+                {
+                    sal_Int32 nTmpPos;
+                    if ( rControlCommand.Arguments[i].Value >>= nTmpPos )
+                    {
+                        if (( nTmpPos >= 0 ) && ( nTmpPos < sal_Int32( nSize )))
+                            nPos = nTmpPos;
+                    }
+                }
+                else if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "Text", 4 ))
+                    rControlCommand.Arguments[i].Value >>= aText;
+            }
+
+            std::vector< ::rtl::OUString >::iterator aIter = m_aDropdownMenuList.begin();
+            aIter += nPos;
+            m_aDropdownMenuList.insert( aIter, aText );
+        }
+        else if ( rControlCommand.Command.equalsAsciiL( "RemoveEntryPos", 14 ))
+        {
+            for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
+            {
+                if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "Pos", 3 ))
+                {
+                    sal_Int32 nPos( -1 );
+                    if ( rControlCommand.Arguments[i].Value >>= nPos )
+                    {
+                        if ( nPos < sal_Int32( m_aDropdownMenuList.size() ))
+                        {
+                            std::vector< ::rtl::OUString >::iterator aIter = m_aDropdownMenuList.begin();
+                            aIter += nPos;
+                            m_aDropdownMenuList.erase( aIter );
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+        else if ( rControlCommand.Command.equalsAsciiL( "RemoveEntryText", 15 ))
+        {
+            for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
+            {
+                if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "Text", 4 ))
+                {
+                    rtl::OUString aText;
+                    if ( rControlCommand.Arguments[i].Value >>= aText )
+                    {
+                        sal_Int32 nSize = sal_Int32( m_aDropdownMenuList.size() );
+                        for ( sal_Int32 j = 0; j < nSize; j++ )
+                        {
+                            if ( m_aDropdownMenuList[j] == aText )
+                            {
+                                std::vector< ::rtl::OUString >::iterator aIter = m_aDropdownMenuList.begin();
+                                aIter += j;
+                                m_aDropdownMenuList.erase( aIter );
+                                break;
+                            }
+                        }
                     }
                     break;
                 }
