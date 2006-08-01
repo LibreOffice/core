@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accel_tmpl.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:39:16 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 09:20:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,10 +118,6 @@ Accelerator SD_ACCELERATOR
         AI_REDO
         AI_REPEAT
         AI_DELETE
-#ifndef PRODUCT
-        AI_PIXELMODE
-        /*AI_ANIMATIONMODE*/
-#endif
     };
 };
 
