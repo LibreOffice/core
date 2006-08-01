@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 11:50:27 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 09:25:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -998,53 +998,10 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         }
         break;
 
-       case SID_PIXELMODE:
-       {
-            const SfxItemSet* pReqArgs = rReq.GetArgs();
-            BOOL  bPixelMode = pDrView->IsPixelMode();
-
-            if (pReqArgs)
-            {
-                SFX_REQUEST_ARG(rReq, pIsActive, SfxBoolItem, SID_PIXELMODE, FALSE);
-                bPixelMode = pIsActive->GetValue();
-            }
-
-            pDrView->SetPixelMode(!bPixelMode);
-
-            Invalidate(SID_PIXELMODE);
-       }
-       break;
-
-       case SID_ACTIONMODE:
-       {
-            const SfxItemSet* pReqArgs = rReq.GetArgs();
-            BOOL  bActionMode = FALSE;
-
-            if (pDrView->IsActionMode())
-            {
-                bActionMode = TRUE;
-            }
-
-            if (pReqArgs)
-            {
-                SFX_REQUEST_ARG(rReq, pIsActive, SfxBoolItem, SID_ACTIONMODE, FALSE);
-                bActionMode = pIsActive->GetValue();
-            }
-
-            pDrView->SetActionMode(!bActionMode);
-
-            Invalidate(SID_ACTIONMODE);
-       }
-       break;
-
         case SID_NOTESMODE:
         case SID_HANDOUTMODE:
             // AutoLayouts have to be ready.
             GetDoc()->StopWorkStartupDelay();
-
-            // Turn off effects.
-            //            pDrView->SetAnimationMode(FALSE);
-
             // Fall through to following case statements.
 
         case SID_DRAWINGMODE:
