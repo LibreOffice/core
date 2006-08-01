@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlnumfi.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 09:55:03 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 15:52:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -784,10 +784,14 @@ sal_Bool lcl_ValidChar( sal_Unicode cChar, const SvXMLNumFormatContext& rParent 
 {
     sal_uInt16 nFormatType = rParent.GetType();
 
+    // Treat space equal to non-breaking space separator.
+    const sal_Unicode cNBSP = 0x00A0;
+    sal_Unicode cTS;
     if ( ( nFormatType == XML_TOK_STYLES_NUMBER_STYLE ||
            nFormatType == XML_TOK_STYLES_CURRENCY_STYLE ||
            nFormatType == XML_TOK_STYLES_PERCENTAGE_STYLE ) &&
-         cChar == rParent.GetLocaleData().getNumThousandSep().GetChar(0) )
+            (cChar == (cTS = rParent.GetLocaleData().getNumThousandSep().GetChar(0)) ||
+             (cChar == ' ' && cTS == cNBSP)) )
     {
         //  #i22394# Extra occurrences of thousands separator must be quoted, so they
         //  aren't mis-interpreted as display-factor.
