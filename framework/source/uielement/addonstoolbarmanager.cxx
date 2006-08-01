@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addonstoolbarmanager.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 11:35:42 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 09:37:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,6 +80,15 @@
 #endif
 #ifndef __FRAMEWORK_UIELEMENT_BUTTONTOOLBARCONTROLLER_HXX_
 #include <uielement/buttontoolbarcontroller.hxx>
+#endif
+#ifndef __FRAMEWORK_UIELEMENT_SPINFIELDTOOLBARCONTROLLER_HXX_
+#include <uielement/spinfieldtoolbarcontroller.hxx>
+#endif
+#ifndef __FRAMEWORK_UIELEMENT_EDITTOOLBARCONTROLLER_HXX_
+#include <uielement/edittoolbarcontroller.hxx>
+#endif
+#ifndef __FRAMEWORK_UIELEMENT_DROPDOWNBOXTOOLBARCONTROLLER_HXX_
+#include <uielement/dropdownboxtoolbarcontroller.hxx>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -422,8 +431,14 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
                         pController = new ButtonToolbarController( m_xServiceManager, m_pToolBar, aURL );
                     else if ( aControlType.equalsAsciiL( "Combobox", 8 ))
                         pController = new ComboboxToolbarController( m_xServiceManager, m_xFrame, m_pToolBar, nId, nWidth, aURL );
+                    else if ( aControlType.equalsAsciiL( "Editfield", 9 ))
+                        pController = new EditToolbarController( m_xServiceManager, m_xFrame, m_pToolBar, nId, nWidth, aURL );
+                    else if ( aControlType.equalsAsciiL( "Spinfield", 9 ))
+                        pController = new SpinfieldToolbarController( m_xServiceManager, m_xFrame, m_pToolBar, nId, nWidth, aURL );
                     else if ( aControlType.equalsAsciiL( "ImageButton", 11 ))
                         pController = new ImageButtonToolbarController( m_xServiceManager, m_xFrame, m_pToolBar, nId, aURL );
+                    else if ( aControlType.equalsAsciiL( "Dropdownbox", 11 ))
+                        pController = new DropdownToolbarController( m_xServiceManager, m_xFrame, m_pToolBar, nId, nWidth, aURL );
                     else if ( aControlType.equalsAsciiL( "DropdownButton", 14 ))
                         pController = new ToggleButtonToolbarController( m_xServiceManager, m_xFrame, m_pToolBar, nId,
                                                                          ToggleButtonToolbarController::STYLE_DROPDOWNBUTTON, aURL );
