@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TestCppComponent.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 16:13:24 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 16:31:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -52,7 +52,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::frame;
 
-int SAL_CALL main( int argc, char **argv )
+int SAL_CALL main( int, char ** )
 {
     try
     {
