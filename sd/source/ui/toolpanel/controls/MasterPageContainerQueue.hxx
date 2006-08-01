@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MasterPageContainerQueue.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 20:50:01 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 09:23:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,8 +40,10 @@
 #include "MasterPageDescriptor.hxx"
 
 #include <boost/scoped_ptr.hpp>
+#include <boost/weak_ptr.hpp>
 
 namespace sd { namespace toolpanel { namespace controls {
+
 
 /** The queue stores and processes all requests from a MasterPageContainer
     for the creation of previews.
@@ -52,7 +54,16 @@ namespace sd { namespace toolpanel { namespace controls {
 class MasterPageContainerQueue
 {
 public:
-    static MasterPageContainerQueue* Create (MasterPageContainer& rContainer);
+    class ContainerAdapter { public:
+        virtual bool UpdateDescriptor (
+            const SharedMasterPageDescriptor& rpDescriptor,
+            bool bForcePageObject,
+            bool bForcePreview,
+            bool bSendEvents) = 0;
+    };
+
+    static MasterPageContainerQueue* Create (
+        const ::boost::weak_ptr<ContainerAdapter>& rpContainer);
     virtual ~MasterPageContainerQueue (void);
 
     /** This method is typically called for entries in the container for
@@ -80,7 +91,7 @@ public:
     void ProcessAllRequests (void);
 
 private:
-    MasterPageContainer& mrContainer;
+    ::boost::weak_ptr<ContainerAdapter> mpWeakContainer;
     class PreviewCreationRequest;
     class RequestQueue;
     ::boost::scoped_ptr<RequestQueue> mpRequestQueue;
@@ -117,7 +128,7 @@ private:
     */
     static sal_uInt32 snWaitForMoreRequestsCount;
 
-    MasterPageContainerQueue (MasterPageContainer& rContainer);
+    MasterPageContainerQueue (const ::boost::weak_ptr<ContainerAdapter>& rpContainer);
     void LateInit (void);
 
     /** Calculate the priority that defines the order in which requests
