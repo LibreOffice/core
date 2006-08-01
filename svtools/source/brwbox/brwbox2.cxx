@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brwbox2.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 17:05:03 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 11:46:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -332,7 +332,7 @@ void BrowseBox::EndScroll()
 
 //-------------------------------------------------------------------
 
-#ifndef GCC
+#ifdef _MSC_VER
 #pragma optimize( "", off )
 #endif
 
@@ -412,7 +412,7 @@ void BrowseBox::ToggleSelection( BOOL bForce )
     bNotToggleSel = FALSE;
 }
 
-#ifndef GCC
+#ifdef _MSC_VER
 #pragma optimize( "", on )
 #endif
 
@@ -1503,7 +1503,7 @@ IMPL_LINK( BrowseBox, StartDragHdl, HeaderBar*, pBar )
 
 //-------------------------------------------------------------------
 // MI: es wurde immer nur die 1. Spalte resized
-#ifndef GCC
+#ifdef _MSC_VER
 #pragma optimize("elg",off)
 #endif
 
@@ -1561,7 +1561,7 @@ void BrowseBox::MouseButtonDown( const MouseEvent& rEvt )
         SetNoSelection();
 }
 
-#ifndef GCC
+#ifdef _MSC_VER
 #pragma optimize("",on)
 #endif
 
