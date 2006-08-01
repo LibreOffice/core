@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AllMasterPagesSelector.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 20:46:58 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 09:21:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,6 +178,9 @@ void AllMasterPagesSelector::AddItem (MasterPageContainer::Token aToken)
             // later by the MasterPageContainerFiller.)
             if (mpContainer->GetTemplateIndexForToken(aToken) >= 0)
                 mpSortedMasterPages->insert(mpContainer->GetDescriptorForToken(aToken));
+            break;
+
+        default:
             break;
     }
 }
