@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.181 $
+ *  $Revision: 1.182 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 13:26:35 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 11:17:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2645,15 +2645,19 @@ void SfxMedium::CloseAndReleaseStreams_Impl()
     // The probably exsisting SvStream wrappers should be closed first
     CloseStreams_Impl();
 
-    try
+    // in case of salvage mode the storage is based on the streams
+    if ( !pImp->m_bSalvageMode )
     {
-        if ( xInToClose.is() )
-            xInToClose->closeInput();
-        if ( xOutToClose.is() )
-            xOutToClose->closeOutput();
-    }
-    catch ( uno::Exception& )
-    {
+        try
+        {
+            if ( xInToClose.is() )
+                xInToClose->closeInput();
+            if ( xOutToClose.is() )
+                xOutToClose->closeOutput();
+        }
+        catch ( uno::Exception& )
+        {
+        }
     }
 }
 
