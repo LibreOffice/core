@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 21:24:37 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 15:52:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3946,23 +3946,23 @@ sal_uInt32 SvNumberformat::GetExactDateOrder() const
     }
     short const * const pType = NumFor[0].Info().nTypeArray;
     USHORT nAnz = NumFor[0].GetnAnz();
-    sal_uInt32 nShift = 0;
-    for ( USHORT j=0; j<nAnz && nShift < 24; j++ )
+    int nShift = 0;
+    for ( USHORT j=0; j<nAnz && nShift < 3; j++ )
     {
         switch ( pType[j] )
         {
             case NF_KEY_D :
             case NF_KEY_DD :
-                nRet = (nRet << nShift) | 'D';
-                nShift += 8;
+                nRet = (nRet << 8) | 'D';
+                ++nShift;
             break;
             case NF_KEY_M :
             case NF_KEY_MM :
             case NF_KEY_MMM :
             case NF_KEY_MMMM :
             case NF_KEY_MMMMM :
-                nRet = (nRet << nShift) | 'M';
-                nShift += 8;
+                nRet = (nRet << 8) | 'M';
+                ++nShift;
             break;
             case NF_KEY_YY :
             case NF_KEY_YYYY :
@@ -3970,8 +3970,8 @@ sal_uInt32 SvNumberformat::GetExactDateOrder() const
             case NF_KEY_EEC :
             case NF_KEY_R :
             case NF_KEY_RR :
-                nRet = (nRet << nShift) | 'Y';
-                nShift += 8;
+                nRet = (nRet << 8) | 'Y';
+                ++nShift;
             break;
         }
     }
