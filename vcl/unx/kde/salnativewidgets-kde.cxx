@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets-kde.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 15:01:13 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 10:28:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,9 @@
 
 #define _SV_SALNATIVEWIDGETS_KDE_CXX
 
-#include "kdewrapper.h"
+#ifndef INCLUDED_VCL_KDE_HEADERS_H
+#include "kde_headers.h"
+#endif
 
 #include <salunx.h>
 
