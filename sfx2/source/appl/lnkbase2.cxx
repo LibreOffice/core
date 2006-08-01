@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lnkbase2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:11:10 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 11:52:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,20 +67,23 @@ class  ImplDdeItem;
 // nur fuer die interne Verwaltung
 struct ImplBaseLinkData
 {
-    union {
-        struct
-        {
-            // gilt fuer alle Links
-            ULONG               nCntntType; // Update Format
-            // nicht Ole-Links
-            BOOL            bIntrnlLnk; // ist es ein interner Link
-            USHORT          nUpdateMode;// UpdateMode
-        } ClientType;
+    struct tClientType
+    {
+        // gilt fuer alle Links
+        ULONG               nCntntType; // Update Format
+        // nicht Ole-Links
+        BOOL            bIntrnlLnk; // ist es ein interner Link
+        USHORT          nUpdateMode;// UpdateMode
+    };
 
-        struct
-        {
-            ImplDdeItem* pItem;
-        } DDEType;
+    struct tDDEType
+    {
+        ImplDdeItem* pItem;
+    };
+
+    union {
+        tClientType ClientType;
+        tDDEType DDEType;
     };
     ImplBaseLinkData()
     {
