@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objuno.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 17:18:40 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 11:19:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -389,6 +389,10 @@ void SAL_CALL  SfxDocumentInfoObject::removeEventListener(const ::com::sun::star
 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >  SAL_CALL  SfxDocumentInfoObject::getPropertySetInfo()  throw( ::com::sun::star::uno::RuntimeException )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    // #i66675# basic makes introspection to early ..
+    if (! _pInfo)
+        return ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >();
 
     MixedPropertySetInfo* pInfo = new MixedPropertySetInfo(aDocInfoPropertyMap_Impl, &(_pInfo->GetDynamicProps_Impl()));
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > xInfo(
