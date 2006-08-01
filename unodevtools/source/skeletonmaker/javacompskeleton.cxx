@@ -4,9 +4,9 @@
  *
  *  $RCSfile: javacompskeleton.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 11:57:06 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 16:24:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -297,8 +297,7 @@ void registerProperties(std::ostream& o,
     }
 }
 
-void generateXAddInBodies(std::ostream& o, ProgramOptions const & options)
-{
+void generateXLocalizableBodies(std::ostream& o) {
     // com.sun.star.lang.XLocalizable:
     // setLocale
     o << "    // com.sun.star.lang.XLocalizable:\n"
@@ -308,7 +307,10 @@ void generateXAddInBodies(std::ostream& o, ProgramOptions const & options)
     // getLocale
     o << "    public com.sun.star.lang.Locale getLocale()\n    {\n"
         "        return m_locale;\n    }\n\n";
+}
 
+void generateXAddInBodies(std::ostream& o, ProgramOptions const & options)
+{
     // com.sun.star.sheet.XAddIn:
     // getProgrammaticFuntionName
     o << "    // com.sun.star.sheet.XAddIn:\n"
@@ -453,6 +455,7 @@ void generateMethodBodies(std::ostream& o,
         iter++;
         if (type.equals("com.sun.star.lang.XServiceInfo")) {
             generateXServiceInfoBodies(o);
+            generated.add(type);
         } else {
             if (options.componenttype == 2) {
                 if (type.equals("com.sun.star.lang.XServiceName")) {
@@ -463,6 +466,16 @@ void generateMethodBodies(std::ostream& o,
                     continue;
                 } else if (type.equals("com.sun.star.sheet.XAddIn")) {
                     generateXAddInBodies(o, options);
+                    generated.add(type);
+
+                    // special handling of XLocalizable -> parent of XAddIn
+                    if (!generated.contains("com.sun.star.lang.XLocalizable")) {
+                        generateXLocalizableBodies(o);
+                        generated.add("com.sun.star.lang.XLocalizable");
+                    }
+                    continue;
+                } else if (type.equals("com.sun.star.lang.XLocalizable")) {
+                    generateXLocalizableBodies(o);
                     generated.add(type);
                     continue;
                 } else if (type.equals("com.sun.star.sheet.XCompatibilityNames")) {
@@ -492,12 +505,24 @@ void generateAddinConstructorAndHelper(std::ostream& o,
          const std::hash_set< OString, OStringHash >& services,
          const std::hash_set< OString, OStringHash >& interfaces)
 {
+    o << "    private com.sun.star.lang.Locale m_locale = "
+        "new com.sun.star.lang.Locale();\n";
+
+    if (!options.backwardcompatible) {
+        // Constructor
+        o << "\n    public " << classname << "( XComponentContext context )\n"
+            "    {\n        m_xContext = context;\n    }\n\n";
+        return;
+    }
+
+
     // get the one and only add-in service for later use
     std::hash_set< OString, OStringHash >::const_iterator iter = services.begin();
     OString sAddinService = (*iter).replace('/', '.');
     if (sAddinService.equals("com.sun.star.sheet.AddIn")) {
         sAddinService = (*(++iter)).replace('/', '.');
     }
+
 
     // add-in specific fields
     o << "\n    private static final String sADDIN_SERVICENAME = \""
@@ -510,9 +535,7 @@ void generateAddinConstructorAndHelper(std::ostream& o,
         "    private static final String sCATEGORYDISPLAYNAME = "
         "\"CategoryDisplayName\";\n\n";
 
-    o << "    private com.sun.star.lang.Locale m_locale = "
-        "new com.sun.star.lang.Locale();\n"
-        "    private com.sun.star.container.XHierarchicalNameAccess  "
+    o << "    private com.sun.star.container.XHierarchicalNameAccess  "
         "m_xHAccess = null;\n"
         "    private com.sun.star.container.XHierarchicalNameAccess  "
         "m_xCompAccess = null;\n";
@@ -763,18 +786,22 @@ void generateSkeleton(ProgramOptions const & options,
                 "necessary! Please reference a valid type with the '-t' option.");
         }
 
-        // add AddIn in suported service list, this service is currently necessary
-        // to identify all calc add-ins and to support the necessary add-in helper
-        // interfaces.
-        // This becomes obsolete in the future when this information is collected
-        // from the configuration
-        checkType(manager, "com.sun.star.sheet.AddIn",
-                  interfaces, services, properties);
-        // special case for XLocalization, it is exlicitly handled and will be
-        // necessary in the future as well
-//         if (interfaces.find("com.sun.star.lang.XLocalizable") ==
-//             interfaces.end())
-//             interfaces.insert("com.sun.star.lang.XLocalizable");
+        // if backwardcompatible==true the AddIn service needs to be added to the
+        // suported service list, the necessary intefaces are mapped to the add-in
+        // configuration. Since OO.org 2.0.4 this is obsolete and the add-in is
+        // take form the configuration from Calc directly, this simplifies the
+        // add-in code
+        if (options.backwardcompatible) {
+            checkType(manager, "com.sun.star.sheet.AddIn",
+                      interfaces, services, properties);
+        } else {
+            // special case for the optional XLocalization interface. It should be
+            // implemented always. But it is parent of the XAddIn and we need it only
+            // if backwardcompatible is false.
+            if (interfaces.find("com.sun.star.lang.XLocalizable") == interfaces.end()) {
+                interfaces.insert("com.sun.star.lang.XLocalizable");
+            }
+        }
     }
 
 

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpptypemaker.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 11:56:52 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 16:24:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -368,6 +368,9 @@ void generateXPropertyAccessBodies(std::ostream& o,
 void generateXAddInBodies(std::ostream& o,
                           const OString & classname);
 
+void generateXLocalizable(std::ostream& o,
+                          const OString & classname);
+
 void generateXCompatibilityNamesBodies(std::ostream& o,
                                        const OString & classname);
 
@@ -424,26 +427,22 @@ void printMethods(std::ostream & o,
         } else if (type.equals("com/sun/star/sheet/XAddIn")) {
             generateXAddInBodies(o, classname);
             generated.add(type);
+
+            // special handling of XLocalizable -> parent of XAddIn
+            if (!generated.contains("com/sun/star/lang/XLocalizable")) {
+                generateXLocalizable(o, classname);
+                generated.add("com/sun/star/lang/XLocalizable");
+            }
+            return;
+        } else if (type.equals("com/sun/star/lang/XLocalizable")) {
+            generateXLocalizable(o, classname);
+            generated.add(type);
             return;
         } else if (type.equals("com/sun/star/sheet/XCompatibilityNames")) {
             generateXCompatibilityNamesBodies(o, classname);
             generated.add(type);
             return;
         }
-
-        // As long as XAddIn is necessary, XLocalizable is handled by XAddIn
-//         }
-//         else if (type.equals("com/sun/star/lang/XLocalizable"))
-//         {
-//             o << "// ::com::sun::star::lang::XLocalizable:\n"
-//                 "void SAL_CALL " << classname << "setLocale(const css::lang::"
-//                 "Locale & eLocale) throw (css::uno::RuntimeException)\n{\n"
-//                 "     m_locale = eLocale;\n}\n\n"
-//                 "css::lang::Locale SAL_CALL " << classname << "getLocale() "
-//                 "throw (css::uno::RuntimeException)\n{\n    return m_locale;\n}\n";
-//             generated.add(type);
-//             return;
-//         }
     }
 
     generated.add(type);

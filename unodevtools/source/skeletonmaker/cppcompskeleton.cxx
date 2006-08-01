@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cppcompskeleton.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 11:56:39 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 16:23:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -317,7 +317,7 @@ void generateXPropertyAccessBodies(std::ostream& o,
       << propertyhelper << " >::setPropertyValues(aProps);\n}\n\n";
 }
 
-void generateXAddInBodies(std::ostream& o,
+void generateXLocalizable(std::ostream& o,
                           const OString & classname)
 {
     o << "// ::com::sun::star::lang::XLocalizable:\n"
@@ -326,7 +326,11 @@ void generateXAddInBodies(std::ostream& o,
         "     m_locale = eLocale;\n}\n\n"
         "css::lang::Locale SAL_CALL " << classname << "getLocale() "
         "throw (css::uno::RuntimeException)\n{\n    return m_locale;\n}\n\n";
+}
 
+void generateXAddInBodies(std::ostream& o,
+                          const OString & classname)
+{
     o << "// ::com::sun::star::sheet::XAddIn:\n";
 
     o << "::rtl::OUString SAL_CALL " << classname << "getProgrammaticFuntionName("
@@ -428,71 +432,74 @@ void generateAddinConstructorAndHelper(std::ostream& o,
 {
     o << classname << "::" << classname
       << "(css::uno::Reference< css::uno::XComponentContext > const & context) :\n"
-      << "    m_xContext(context)\n{\n";
+      << "    m_xContext(context),    m_locale()\n{\n";
 
-    o << "     try {\n";
+    if (options.backwardcompatible) {
+        o << "     try {\n";
 
-    generateFunctionParameterMap(o, options, manager, interfaces);
+        generateFunctionParameterMap(o, options, manager, interfaces);
 
-    o << "        css::uno::Reference< css::lang::XMultiServiceFactory > xProvider"
-        "(\n             m_xContext->getServiceManager()->createInstanceWithContext"
-        "(\n                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(\n    "
-        "                 \"com.sun.star.configuration.ConfigurationProvider\")),"
-        "\n                 m_xContext ), css::uno::UNO_QUERY );\n\n";
+        o << "        css::uno::Reference< css::lang::XMultiServiceFactory > xProvider"
+            "(\n             m_xContext->getServiceManager()->createInstanceWithContext"
+            "(\n                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(\n    "
+            "                 \"com.sun.star.configuration.ConfigurationProvider\")),"
+            "\n                 m_xContext ), css::uno::UNO_QUERY );\n\n";
 
-    o << "        ::rtl::OUString sReadOnlyView(\n"
-        "            RTL_CONSTASCII_USTRINGPARAM(\n"
-        "                \"com.sun.star.configuration.ConfigurationAccess\"));\n\n";
+        o << "        ::rtl::OUString sReadOnlyView(\n"
+            "            RTL_CONSTASCII_USTRINGPARAM(\n"
+            "                \"com.sun.star.configuration.ConfigurationAccess\"));\n\n";
 
-    o << "        ::rtl::OUStringBuffer sPath(::rtl::OUString::createFromAscii(\n"
-        "             \"/org.openoffice.Office.CalcAddIns/AddInInfo/\"));\n"
-        "        sPath.appendAscii(sADDIN_SERVICENAME);\n"
-        "        sPath.appendAscii(\"/AddInFunctions\");\n\n"
-        "        // create arguments: nodepath\n"
-        "        css::beans::PropertyValue aArgument;\n"
-        "        aArgument.Name = ::rtl::OUString::createFromAscii(\"nodepath\");\n"
-        "        aArgument.Value <<= sPath.makeStringAndClear();\n\n"
-        "        css::uno::Sequence< css::uno::Any > aArguments(1);\n"
-        "        aArguments[0] <<= aArgument;\n\n";
+        o << "        ::rtl::OUStringBuffer sPath(::rtl::OUString::createFromAscii(\n"
+            "             \"/org.openoffice.Office.CalcAddIns/AddInInfo/\"));\n"
+            "        sPath.appendAscii(sADDIN_SERVICENAME);\n"
+            "        sPath.appendAscii(\"/AddInFunctions\");\n\n"
+            "        // create arguments: nodepath\n"
+            "        css::beans::PropertyValue aArgument;\n"
+            "        aArgument.Name = ::rtl::OUString::createFromAscii(\"nodepath\");\n"
+            "        aArgument.Value <<= sPath.makeStringAndClear();\n\n"
+            "        css::uno::Sequence< css::uno::Any > aArguments(1);\n"
+            "        aArguments[0] <<= aArgument;\n\n";
 
-    o << "        // create the default view using default UI locale\n"
-        "        css::uno::Reference< css::uno::XInterface > xIface =\n"
-        "            xProvider->createInstanceWithArguments(sReadOnlyView, "
-        "aArguments);\n\n"
-        "         m_xHAccess = css::uno::Reference<\n            "
-        "css::container::XHierarchicalNameAccess >(xIface, css::uno::UNO_QUERY);"
-        "\n\n";
+        o << "        // create the default view using default UI locale\n"
+            "        css::uno::Reference< css::uno::XInterface > xIface =\n"
+            "            xProvider->createInstanceWithArguments(sReadOnlyView, "
+            "aArguments);\n\n"
+            "         m_xHAccess = css::uno::Reference<\n            "
+            "css::container::XHierarchicalNameAccess >(xIface, css::uno::UNO_QUERY);"
+            "\n\n";
 
-    o << "        // extend arguments to create a view for all locales to get "
-        "simple\n        // access to the compatibilityname property\n"
-        "        aArgument.Name = ::rtl::OUString::createFromAscii(\"locale\");\n"
-        "        aArgument.Value <<= ::rtl::OUString::createFromAscii(\"*\");\n"
-        "        aArguments.realloc(2);\n"
-        "        aArguments[1] <<= aArgument;\n\n"
-        "        // create view for all locales\n"
-        "        xIface = xProvider->createInstanceWithArguments(sReadOnlyView, "
-        "aArguments);\n\n"
-        "        m_xCompAccess = css::uno::Reference<\n            "
-        "css::container::XHierarchicalNameAccess >(xIface, css::uno::UNO_QUERY);\n";
+        o << "        // extend arguments to create a view for all locales to get "
+            "simple\n        // access to the compatibilityname property\n"
+            "        aArgument.Name = ::rtl::OUString::createFromAscii(\"locale\");\n"
+            "        aArgument.Value <<= ::rtl::OUString::createFromAscii(\"*\");\n"
+            "        aArguments.realloc(2);\n"
+            "        aArguments[1] <<= aArgument;\n\n"
+            "        // create view for all locales\n"
+            "        xIface = xProvider->createInstanceWithArguments(sReadOnlyView, "
+            "aArguments);\n\n"
+            "        m_xCompAccess = css::uno::Reference<\n            "
+            "css::container::XHierarchicalNameAccess >(xIface, css::uno::UNO_QUERY);\n";
 
-    o << "    }\n    catch ( css::uno::Exception & ) {\n    }\n}\n\n";
+        o << "    }\n    catch ( css::uno::Exception & ) {\n    }\n}\n\n";
 
-    o << "// addin configuration property helper function:\n::rtl::OUString "
-        "SAL_CALL " << classname << "::getAddinProperty(const ::rtl::OUString &"
-        " funcName, const ::rtl::OUString & paramName, const char * propName) "
-        "throw (css::uno::RuntimeException)\n{\n"
-        "    ::rtl::OUString ret;\n    try {\n        "
-        "::rtl::OUStringBuffer buf(funcName);\n"
-        "        if (paramName.getLength() > 0) {\n"
-        "            buf.appendAscii(\"/Parameters/\");\n"
-        "            buf.append(paramName);\n        }\n\n"
-        "        css::uno::Reference< css::beans::XPropertySet > xPropSet(\n"
-        "            m_xHAccess->getByHierarchicalName(\n"
-        "                buf.makeStringAndClear()), css::uno::UNO_QUERY);\n"
-        "        xPropSet->getPropertyValue(\n            "
-        "::rtl::OUString::createFromAscii(propName)) >>= ret;\n    }\n"
-        "     catch ( css::uno::RuntimeException & e ) {\n        throw e;\n    }\n"
-        "     catch ( css::uno::Exception & ) {\n    }\n    return ret;\n}\n\n";
+        o << "// addin configuration property helper function:\n::rtl::OUString "
+            "SAL_CALL " << classname << "::getAddinProperty(const ::rtl::OUString &"
+            " funcName, const ::rtl::OUString & paramName, const char * propName) "
+            "throw (css::uno::RuntimeException)\n{\n"
+            "    ::rtl::OUString ret;\n    try {\n        "
+            "::rtl::OUStringBuffer buf(funcName);\n"
+            "        if (paramName.getLength() > 0) {\n"
+            "            buf.appendAscii(\"/Parameters/\");\n"
+            "            buf.append(paramName);\n        }\n\n"
+            "        css::uno::Reference< css::beans::XPropertySet > xPropSet(\n"
+            "            m_xHAccess->getByHierarchicalName(\n"
+            "                buf.makeStringAndClear()), css::uno::UNO_QUERY);\n"
+            "        xPropSet->getPropertyValue(\n            "
+            "::rtl::OUString::createFromAscii(propName)) >>= ret;\n    }\n"
+            "     catch ( css::uno::RuntimeException & e ) {\n        throw e;\n    }\n"
+            "     catch ( css::uno::Exception & ) {\n    }\n    return ret;\n";
+    }
+    o <<"}\n\n";
 }
 
 void generateMemberInitialization(std::ostream& o,
@@ -663,12 +670,14 @@ OString generateClassDefinition(std::ostream& o,
         o << "   mutable ::osl::Mutex m_aMutex;\n";
 
     if (options.componenttype == 2) {
-        o <<"    css::uno::Reference< css::container::XHierarchicalNameAccess > "
-            "m_xHAccess;\n"
-            "    css::uno::Reference< css::container::XHierarchicalNameAccess > "
-            "m_xCompAccess;\n"
-            "    FunctionMap m_functionMap;\n"
-            "    css::lang::Locale m_locale;\n";
+        if (options.backwardcompatible) {
+            o <<"    css::uno::Reference< css::container::XHierarchicalNameAccess > "
+                "m_xHAccess;\n"
+                "    css::uno::Reference< css::container::XHierarchicalNameAccess > "
+                "m_xCompAccess;\n"
+                "    FunctionMap m_functionMap;\n";
+        }
+        o << "    css::lang::Locale m_locale;\n";
     }
 
     generateMemberDeclaration(o, options, manager, properties);
@@ -1025,18 +1034,22 @@ void generateCalcAddin(ProgramOptions const & options,
         sAddinService = (*(++iter2)).replace('/', '.');
     }
 
-    // add AddIn in suported service list, this service is currently necessary
-    // to identify all calc add-ins and to support the necessary add-in helper
-    // interfaces.
-    // This becomes obsolete in the future when this information is collected
-    // from the configuration
-    checkType(manager, "com.sun.star.sheet.AddIn",
-              interfaces, services, properties);
-    // special case for XLocalization, it is exlicitly handled and will be
-    // necessary in the future as well
-//     if (interfaces.find("com.sun.star.lang.XLocalizable") ==
-//         interfaces.end())
-//         interfaces.insert("com.sun.star.lang.XLocalizable");
+    // if backwardcompatible==true the AddIn service needs to be added to the
+    // suported service list, the necessary intefaces are mapped to the add-in
+    // configuration. Since OO.org 2.0.4 this is obsolete and the add-in is
+    // take form the configuration from Calc directly, this simplifies the
+    // add-in code
+    if (options.backwardcompatible) {
+        checkType(manager, "com.sun.star.sheet.AddIn",
+                  interfaces, services, properties);
+    } else {
+        // special case for the optional XLocalization interface. It should be
+        // implemented always. But it is parent of the XAddIn and we need it only
+        // if backwardcompatible is false.
+        if (interfaces.find("com.sun.star.lang.XLocalizable") == interfaces.end()) {
+            interfaces.insert("com.sun.star.lang.XLocalizable");
+        }
+    }
 
     OString propertyhelper = checkPropertyHelper(
         options, manager, services, interfaces, attributes, propinterfaces);
@@ -1098,13 +1111,15 @@ void generateCalcAddin(ProgramOptions const & options,
             classname = classname.copy(index+1);
         }
 
-        *pofs << "static const char * sADDIN_SERVICENAME = \""
-              << sAddinService << "\";\n\n";
-        *pofs << "static const char * sDISPLAYNAME = \"DisplayName\";\n"
-            "static const char * sDESCRIPTION = \"Description\";\n"
-            "static const char * sCATEGORY = \"Category\";\n"
-            "static const char * sCATEGORYDISPLAYNAME = \"CategoryDisplayName\";"
-            "\n\n";
+        if (options.backwardcompatible) {
+            *pofs << "static const char * sADDIN_SERVICENAME = \""
+                  << sAddinService << "\";\n\n";
+            *pofs << "static const char * sDISPLAYNAME = \"DisplayName\";\n"
+                "static const char * sDESCRIPTION = \"Description\";\n"
+                "static const char * sCATEGORY = \"Category\";\n"
+                "static const char * sCATEGORYDISPLAYNAME = \"CategoryDisplayName\";"
+                "\n\n";
+        }
 
         OString parentname(
             generateClassDefinition(*pofs,
