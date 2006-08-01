@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 11:47:04 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 09:24:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,13 +172,8 @@ DrawView::DrawView (
       pDrawViewShell(pShell),
       pDocShell(pDocSh),
       nPOCHSmph(0),
-//      nPresPaintSmph(0),
       pVDev(NULL),
-      bPixelMode(FALSE),
-      mpSlideShow(NULL),
-      nMagic(SDDRAWVIEW_MAGIC),
-      bInAnimation(FALSE),
-      bActionMode(TRUE)
+      mpSlideShow(NULL)
 {
     SetCurrentObj(OBJ_RECT, SdrInventor);
 }
@@ -191,7 +186,6 @@ DrawView::DrawView (
 
 DrawView::~DrawView()
 {
-    nMagic = 0;
     delete pVDev;
 
     if( mpSlideShow )
@@ -598,44 +592,7 @@ void DrawView::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, ::sdr::
 //      }
 //  }
 
-    if (bPixelMode)
-    {
-        if (!pVDev)
-        {
-            /******************************************************************
-            * VDev erzeugen
-            ******************************************************************/
-            delete pVDev;
-            pVDev = new VirtualDevice(*pOutDev);
-            MapMode aMM(pOutDev->GetMapMode().GetMapUnit());
-            aMM.SetOrigin(Point(0, 0));
-            pVDev->SetMapMode(aMM);
-        }
-
-        /**********************************************************************
-        * Groesse des VDevs auf Seitengroesse setzen
-        **********************************************************************/
-        SdPage* pPage = pDrawViewShell->GetActualPage();
-        Size aPgSize(pPage->GetSize());
-        aPgSize.Width()  -= pPage->GetLftBorder();
-        aPgSize.Width()  -= pPage->GetRgtBorder();
-        aPgSize.Height() -= pPage->GetUppBorder();
-        aPgSize.Height() -= pPage->GetLwrBorder();
-
-        if (aPgSize != pVDev->GetOutputSize())
-        {
-            BOOL bAbort = !pVDev->SetOutputSize(aPgSize);
-            DBG_ASSERT(!bAbort, "VDev nicht korrekt erzeugt");
-
-            if (bAbort)
-            {
-                delete pVDev;
-                pVDev = NULL;
-                SetPixelMode(FALSE);
-            }
-        }
-    }
-    else if (!bPixelMode && pVDev)
+    if( pVDev )
     {
         delete pVDev;
         pVDev = NULL;
@@ -666,53 +623,9 @@ void DrawView::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, ::sdr::
 
     if (bStandardPaint)
     {
-        if (!bPixelMode)
-        {
-            ::sd::View::CompleteRedraw(pOutDev, rReg, pRedirector);
-        }
-        else
-        {
-            /******************************************************************
-            * Pixelmodus
-            ******************************************************************/
-            // Objekte ins VDev zeichnen
-            ::sd::View::CompleteRedraw(pVDev, rReg, pRedirector );
-
-            // VDev auf Window ausgeben
-            pOutDev->DrawOutDev(Point(), pVDev->GetOutputSize(),
-                                Point(), pVDev->GetOutputSize(), *pVDev);
-
-            if (IsShownXorVisible(pOutDev))
-            {
-                // Handles auf Window ausgeben
-                ToggleShownXor(pOutDev, &rReg);
-            }
-        }
+        ::sd::View::CompleteRedraw(pOutDev, rReg, pRedirector);
     }
 }
-
-
-/*************************************************************************
-|*
-|* PaintEvents waehrend der Praesentation erlauben oder auch nicht.
-|*
-\************************************************************************/
-
-/*
-void  DrawView::AllowPresPaint(BOOL bAllowed)
-{
-    if (bAllowed)
-    {
-        DBG_ASSERT(nPresPaintSmph != 0, "Unterlauf im PaintSemaphor");
-        nPresPaintSmph--;
-    }
-    else
-    {
-        DBG_ASSERT(nPresPaintSmph + 1 != 0, "Ueberlauf im PaintSemaphor");
-        nPresPaintSmph++;
-    }
-}
-*/
 
 /*************************************************************************
 |*
@@ -780,87 +693,6 @@ BOOL DrawView::IsObjMarkable(SdrObject* pObj, SdrPageView* pPV) const
 
 /*************************************************************************
 |*
-|* Pixelmodus ein- oder ausschalten
-|*
-\************************************************************************/
-
-void DrawView::SetPixelMode(BOOL bOn)
-{
-    if (bPixelMode != bOn)
-    {
-        bPixelMode = bOn;
-
-        // Sollte der Pixelmode mal aktiv werden, sollte die FieldUnit nicht
-        // mehr von der SFX_APP sondern mit SD_MOD()->GetOptions()->GetMetric()
-        // besorgt werden (SOLL 364 i) !!!
-
-        /**********************************************************************
-        * Default-Units
-        **********************************************************************/
-        MapUnit eMapUnit = MAP_100TH_MM;
-        FieldUnit eFieldUnit = FUNIT_100TH_MM;
-        SfxMapUnit eSfxMapUnit = SFX_MAPUNIT_100TH_MM;
-
-        if (bPixelMode)
-        {
-            /******************************************************************
-            * Units fuer Pixelmodus
-            ******************************************************************/
-            eMapUnit = MAP_PIXEL;
-            eFieldUnit = FUNIT_CUSTOM;      // Pixel gibt es noch nicht
-            eSfxMapUnit = SFX_MAPUNIT_PIXEL;
-        }
-
-        /**********************************************************************
-        * Units setzen
-        **********************************************************************/
-        pDoc->SetScaleUnit(eMapUnit);
-        pDoc->SetUIUnit(eFieldUnit);
-        pDoc->GetItemPool().SetDefaultMetric(eSfxMapUnit);
-
-        MapMode aMapMode = pDocSh->GetFrame()->GetWindow().GetMapMode();
-        aMapMode.SetMapUnit(eMapUnit);
-        pDocSh->GetFrame()->GetWindow().SetMapMode(aMapMode);
-
-        for (USHORT nWin = 0; nWin < GetWinCount(); nWin++)
-        {
-            OutputDevice* pOutDev = GetWin(nWin);
-
-            if (pOutDev && pOutDev->GetOutDevType() == OUTDEV_WINDOW)
-            {
-                MapMode aSrcMapMode = pOutDev->GetMapMode();
-//                MapUnit aSrcMapUnit = aSrcMapMode.GetMapUnit();
-//
-//                Point aOrigin = pOutDev->LogicToLogic(aSrcMapMode.GetOrigin(),
-//                                                      aSrcMapUnit, eMapUnit);
-//                Fraction aScaleX = pOutDev->LogicToLogic(aSrcMapMode.GetScaleX(),
-//                                                         aSrcMapUnit, eMapUnit);
-//                Fraction aScaleY = pOutDev->LogicToLogic(aSrcMapMode.GetScaleY(),
-//                                                         aSrcMapUnit, eMapUnit);
-//                aSrcMapMode.SetOrigin(aOrigin);
-//                aSrcMapMode.SetScaleX(aScaleX);
-//                aSrcMapMode.SetScaleY(aScaleY);
-
-                aSrcMapMode.SetMapUnit(eMapUnit);
-                pOutDev->SetMapMode(aSrcMapMode);
-            }
-        }
-
-        /**********************************************************************
-        * Windows initialisieren und auf Seitengoesse zoomen
-        **********************************************************************/
-        Size aPageSize = pDrawViewShell->GetActualPage()->GetSize();
-        Point aPageOrg = Point(aPageSize.Width(), aPageSize.Height() / 2);
-        Size aViewSize = Size(aPageSize.Width() * 3, aPageSize.Height() * 2);
-        pViewSh->InitWindows(aPageOrg, aViewSize, Point(-1, -1));
-        pViewSh->GetViewFrame()->GetDispatcher()->Execute(SID_SIZE_PAGE);
-    }
-}
-
-
-
-/*************************************************************************
-|*
 |* Uebergebenen Bereich sichtbar machen (es wird ggf. gescrollt)
 |*
 \************************************************************************/
@@ -872,127 +704,6 @@ void DrawView::MakeVisible(const Rectangle& rRect, ::Window& rWin)
         pDrawViewShell->MakeVisible(rRect, rWin);
     }
 }
-
-
-/*************************************************************************
-|*
-|* Animations-Modus starten
-|*
-\************************************************************************/
-
-void DrawView::SetAnimationMode(BOOL bStart)
-{
-/*
-    if (!pSlideShow || !bStart || pDrawViewShell->GetEditMode() != EM_MASTERPAGE)
-    {
-        // Verhindern, dass im EM_MASTERPAGE die Show mehrfach gestartet wird
-
-        if( pSlideShow )
-        {
-            ::sd::Window* pWindow = static_cast< ::sd::Window*>(GetWin(0));
-            const MapMode   aMapMode( pWindow->GetMapMode() );
-
-            pSlideShow->Destroy();
-            pSlideShow = NULL;
-
-            pWindow->SetMapMode( aMapMode );
-        }
-
-        if (bStart)
-        {
-            // Aktuelle Einstellungen merken
-            pViewSh->WriteFrameViewData();
-
-            // Slideshow erzeugen
-            SfxAllItemSet aSet(pDoc->GetItemPool());
-            {
-            SfxBoolItem aBitem(ATTR_PRESENT_ALL, FALSE);
-            aSet.Put(aBitem, aBitem.Which());
-            }
-            SdPage* pPage = (SdPage*) GetPageViewPvNum(0)->GetPage();
-            SfxStringItem aSitem(ATTR_PRESENT_DIANAME, pPage->GetName());
-            aSet.Put(aSitem, aSitem.Which());
-            {
-            SfxBoolItem aBitem(ATTR_PRESENT_ENDLESS, FALSE);
-            aSet.Put(aBitem, aBitem.Which());
-            }
-            {
-            SfxBoolItem aBitem(ATTR_PRESENT_MANUEL, TRUE);
-            aSet.Put(aBitem, aBitem.Which());
-            }
-            {
-            SfxBoolItem aBitem(ATTR_PRESENT_MOUSE, TRUE);
-            aSet.Put(aBitem, aBitem.Which());
-            }
-            {
-            SfxBoolItem aBitem(ATTR_PRESENT_PEN, FALSE);
-            aSet.Put(aBitem, aBitem.Which());
-            }
-            {
-            SfxBoolItem aBitem(ATTR_PRESENT_NAVIGATOR, FALSE);
-            aSet.Put(aBitem, aBitem.Which());
-            }
-            {
-            SfxBoolItem aBitem(ATTR_PRESENT_CHANGE_PAGE, TRUE);
-            aSet.Put(aBitem, aBitem.Which());
-            }
-            {
-            SfxBoolItem aBitem(ATTR_PRESENT_ALWAYS_ON_TOP, FALSE);
-            aSet.Put(aBitem, aBitem.Which());
-            }
-            {
-            SfxBoolItem aBitem(ATTR_PRESENT_FULLSCREEN, FALSE);
-            aSet.Put(aBitem, aBitem.Which());
-            }
-            {
-            SfxBoolItem aBitem(ATTR_PRESENT_ANIMATION_ALLOWED, TRUE);
-            aSet.Put(aBitem, aBitem.Which());
-            }
-            {
-            SfxUInt32Item aUInt32Item(ATTR_PRESENT_PAUSE_TIMEOUT, 0);
-            aSet.Put(aUInt32Item, aUInt32Item.Which());
-            }
-            {
-            SfxBoolItem aBitem(ATTR_PRESENT_SHOW_PAUSELOGO, FALSE);
-            aSet.Put(aBitem, aBitem.Which());
-            }
-
-            SfxRequest aReq(SID_PRESENTATION, 0, aSet);
-            pSlideShow = new FuSlideShow(NULL, NULL, this, pDoc, aReq);
-
-            // Slideshow starten und aktuellen MapMode setzen
-            ::sd::Window* pWindow = static_cast< ::sd::Window*>(GetWin(0));
-            MapMode aMapMode = pWindow->GetMapMode();
-            pSlideShow->SetAnimationMode(ANIMATIONMODE_VIEW,
-                static_cast<ShowWindow*>(pWindow));  // CAST IST FALSCH!
-            pSlideShow->StartShow();
-            pSlideShow->Resize( pWindow->GetOutputSizePixel() );
-            pWindow->SetMapMode(aMapMode);
-        }
-        else if (pViewSh)
-        {
-            // Einstellungen restaurieren
-            pViewSh->ReadFrameViewData(pViewSh->GetFrameView());
-        }
-
-        ::sd::Window* pWindow = static_cast< ::sd::Window*>(GetWin(0));
-        pWindow->Invalidate();
-        pWindow->Update();
-    }
-*/
-}
-
-/*************************************************************************
-|*
-|* Seite animieren
-|*
-\************************************************************************/
-
-void DrawView::AnimatePage()
-{
-    DBG_ERROR( "not implemented" );
-}
-
 /*************************************************************************
 |*
 |* Seite wird gehided
