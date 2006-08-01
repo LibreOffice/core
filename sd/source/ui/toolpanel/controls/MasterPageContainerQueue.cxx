@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MasterPageContainerQueue.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 20:49:51 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 09:23:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,9 +99,10 @@ public:
 
 //===== MasterPageContainerQueue ==============================================
 
-MasterPageContainerQueue* MasterPageContainerQueue::Create (MasterPageContainer& rContainer)
+MasterPageContainerQueue* MasterPageContainerQueue::Create (
+    const ::boost::weak_ptr<ContainerAdapter>& rpContainer)
 {
-    MasterPageContainerQueue* pQueue = new MasterPageContainerQueue(rContainer);
+    MasterPageContainerQueue* pQueue = new MasterPageContainerQueue(rpContainer);
     pQueue->LateInit();
     return pQueue;
 }
@@ -109,8 +110,9 @@ MasterPageContainerQueue* MasterPageContainerQueue::Create (MasterPageContainer&
 
 
 
-MasterPageContainerQueue::MasterPageContainerQueue (MasterPageContainer& rContainer)
-    : mrContainer(rContainer),
+MasterPageContainerQueue::MasterPageContainerQueue (
+    const ::boost::weak_ptr<ContainerAdapter>& rpContainer)
+    : mpWeakContainer(rpContainer),
       maDelayedPreviewCreationTimer(),
       mpRequestQueue(new RequestQueue()),
       mnRequestsServedCount(0)
@@ -148,8 +150,6 @@ bool MasterPageContainerQueue::RequestPreview (const SharedMasterPageDescriptor&
         && rpDescriptor->maLargePreview.GetSizePixel().Width() == 0)
     {
         sal_Int32 nPriority (CalculatePriority(rpDescriptor));
-
-        OSL_TRACE("adding request with priority %d", nPriority);
 
         // Add a new or replace an existing request.
         RequestQueue::iterator iRequest (::std::find_if(
@@ -233,10 +233,6 @@ IMPL_LINK(MasterPageContainerQueue, DelayedPreviewCreation, Timer*, pTimer)
 
         PreviewCreationRequest aRequest (*mpRequestQueue->begin());
 
-        OSL_TRACE("looking at request with priority %d and with %d queued requests and %d served",
-            aRequest.mnPriority,
-            mpRequestQueue->size(),
-            mnRequestsServedCount);
         // Check if the request should really be processed right now.
         // Reasons to not do it are when its cost is high and not many other
         // requests have been inserted into the queue that would otherwise
@@ -257,7 +253,12 @@ IMPL_LINK(MasterPageContainerQueue, DelayedPreviewCreation, Timer*, pTimer)
         if (aRequest.mpDescriptor.get() != NULL)
         {
             mnRequestsServedCount += 1;
-            mrContainer.UpdateDescriptor(aRequest.mpDescriptor,false,true,true);
+            if ( ! mpWeakContainer.expired())
+            {
+                ::boost::shared_ptr<ContainerAdapter> pContainer (mpWeakContainer);
+                if (pContainer.get() != NULL)
+                    pContainer->UpdateDescriptor(aRequest.mpDescriptor,false,true,true);
+            }
         }
     }
     while (false);
