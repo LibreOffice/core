@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fudraw.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 11:33:24 $
+ *  last change: $Author: ihi $ $Date: 2006-08-01 09:21:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -850,7 +850,6 @@ BOOL FuDraw::SetPointer(SdrObject* pObj, const Point& rPos)
                 SdAnimationInfo* pInfo = pDoc->GetAnimationInfo(pObj);
 
                 if ((pView->ISA(DrawView) &&
-                        static_cast<DrawView*>(pView)->IsActionMode()         &&
                       (pInfo->eClickAction == presentation::ClickAction_BOOKMARK  ||
                        pInfo->eClickAction == presentation::ClickAction_DOCUMENT  ||
                        pInfo->eClickAction == presentation::ClickAction_PREVPAGE  ||
