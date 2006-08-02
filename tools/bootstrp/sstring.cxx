@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sstring.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 09:20:02 $
+ *  last change: $Author: kz $ $Date: 2006-08-02 12:10:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,9 +173,9 @@ void SByteStringList::CleanUp()
 
 SByteStringList& SByteStringList::operator<<  ( SvStream& rStream )
 {
-    ULONG nCount;
-    rStream >> nCount;
-    for ( USHORT i = 0; i < nCount; i++ ) {
+    ULONG nListCount;
+    rStream >> nListCount;
+    for ( USHORT i = 0; i < nListCount; i++ ) {
         ByteString* pByteString = new ByteString();
         rStream >> *pByteString;
         Insert (pByteString, LIST_APPEND);
@@ -185,8 +185,8 @@ SByteStringList& SByteStringList::operator<<  ( SvStream& rStream )
 
 SByteStringList& SByteStringList::operator>>  ( SvStream& rStream )
 {
-    ULONG nCount = Count();
-    rStream << nCount;
+    ULONG nListCount = Count();
+    rStream << nListCount;
     ByteString* pByteString = First();
     while (pByteString) {
         rStream << *pByteString;
