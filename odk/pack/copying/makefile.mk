@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.80 $
+#   $Revision: 1.81 $
 #
-#   last change: $Author: obo $ $Date: 2006-07-13 12:03:32 $
+#   last change: $Author: ihi $ $Date: 2006-08-03 15:11:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -209,13 +209,17 @@ DIR_FILE_LIST=\
     $(DESTIDLLIST)  \
     $(DESTINCLUDELIST) \
     $(DESTCLASSESLIST) \
-    $(DESTDIRJAR)$/win$/unowinreg.dll \
     $(DESTDIRDOCU)$/common$/spec$/xml_format$/xml_specification.pdf
+
+.IF "$(SOLAR_JAVA)" != ""
+DIR_FILE_LIST += $(DESTDIRJAR)$/win$/unowinreg.dll
+.ENDIF
 
 DIR_DIRECTORY_LIST:=$(uniq $(DIR_FILE_LIST:d))
 DIR_CREATE_FLAG:=$(MISC)$/copying_dirs_created.txt
 DIR_FILE_FLAG:=$(MISC)$/copying_files.txt
 
+.IF "$(SOLAR_JAVA)" != ""
 # Special work for simple uno bootstrap mechanism
 # zip uno loader class files and winreg helper library for later
 # use in the build process (e.g. helper tools)
@@ -223,6 +227,8 @@ MYZIPTARGET=$(BIN)$/uno_loader_classes.zip
 MYZIPFLAGS=-u -r
 MYZIPDIR=$(DESTDIRJAR)
 MYZIPLIST=com$/* win$/*
+
+.ENDIF
 
 #--------------------------------------------------
 # TARGETS
@@ -237,5 +243,7 @@ all : \
 #--------------------------------------------------
 .INCLUDE: $(PRJ)$/util$/odk_rules.pmk
 
-$(MYZIPTARGET) : $(DESTDIRJAR)$/win$/unowinreg.dll $(DESTCLASSESLIST)
+.IF "$(SOLAR_JAVA)" != ""
+$(MYZIPTARGET) : $(BIN)$/unowinreg.dll $(DESTCLASSESLIST)
     +cd $(MYZIPDIR) && zip $(MYZIPFLAGS) ..$/..$/..$/bin$/$(MYZIPTARGET:b) $(MYZIPLIST)
+.ENDIF
