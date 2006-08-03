@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: ihi $ $Date: 2006-08-01 11:45:44 $
+#   last change: $Author: ihi $ $Date: 2006-08-03 12:41:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -116,7 +116,8 @@ SLOFILES=	$(SLO)$/salmisc.obj 	\
             $(SLO)$/salnativewidgets-none.obj	\
             $(SLO)$/bmpconv.obj		\
             $(SLO)$/pngread.obj		\
-            $(SLO)$/pngwrite.obj	
+            $(SLO)$/pngwrite.obj	\
+            $(SLO)$/graphictools.obj
 
 EXCEPTIONSFILES=	$(SLO)$/outdev.obj		\
                     $(SLO)$/outdev3.obj 	\
@@ -137,7 +138,9 @@ EXCEPTIONSFILES=	$(SLO)$/outdev.obj		\
                     $(SLO)$/pngread.obj		\
                     $(SLO)$/pngwrite.obj    \
                     $(SLO)$/virdev.obj \
-                $(SLO)$/impprn.obj
+                    $(SLO)$/impprn.obj \
+                    $(SLO)$/graphictools.obj
+
 
 # --- Targets ------------------------------------------------------
 
