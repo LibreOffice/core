@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShape2d.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 11:26:21 $
+ *  last change: $Author: ihi $ $Date: 2006-08-03 13:32:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,6 +112,9 @@
 #endif
 #ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
+#endif
+#ifndef _BGFX_NUMERIC_FTOOLS_HXX
+#include <basegfx/numeric/ftools.hxx>
 #endif
 
 //#ifndef _BGFX_POLYPOLYGON_B2DPOLYGONTOOLS_HXX
@@ -1202,9 +1205,9 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
         default:
             break;
     }
-    fXScale = (double)aLogicRect.GetWidth() / (double)nCoordWidth;
-    fYScale = (double)aLogicRect.GetHeight() / (double)nCoordHeight;
-    if ( (sal_uInt32)nXRef != 0x80000000 )
+     fXScale = nCoordWidth == 0 ? 0.0 : (double)aLogicRect.GetWidth() / (double)nCoordWidth;
+     fYScale = nCoordHeight == 0 ? 0.0 : (double)aLogicRect.GetHeight() / (double)nCoordHeight;
+     if ( (sal_uInt32)nXRef != 0x80000000 && aLogicRect.GetHeight() )
     {
         fXRatio = (double)aLogicRect.GetWidth() / (double)aLogicRect.GetHeight();
         if ( fXRatio > 1 )
@@ -1214,7 +1217,7 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
     }
     else
         fXRatio = 1.0;
-    if ( (sal_uInt32)nYRef != 0x80000000 )
+    if ( (sal_uInt32)nYRef != 0x80000000 && aLogicRect.GetWidth() )
     {
         fYRatio = (double)aLogicRect.GetHeight() / (double)aLogicRect.GetWidth();
         if ( fYRatio > 1 )
@@ -1546,7 +1549,11 @@ sal_Bool EnhancedCustomShape2d::GetHandlePosition( const sal_uInt32 nIndex, Poin
                 double dx = fRadius * fXScale;
                 double fX = dx * cos( a );
                 double fY =-dx * sin( a );
-                rReturnPosition = Point( Round( fX + aReferencePoint.X() ), Round( ( fY * fYScale ) / fXScale + aReferencePoint.Y() ) );
+                rReturnPosition =
+                    Point(
+                        Round( fX + aReferencePoint.X() ),
+                        basegfx::fTools::equalZero(fXScale) ? aReferencePoint.Y() :
+                        Round( ( fY * fYScale ) / fXScale + aReferencePoint.Y() ) );
             }
             else
             {
@@ -2425,8 +2432,8 @@ void EnhancedCustomShape2d::ApplyGluePoints( SdrObject* pObj )
             const Point& rPoint = GetPoint( seqGluePoints[ i ], sal_True, sal_True );
             double fXRel = rPoint.X();
             double fYRel = rPoint.Y();
-            fXRel = fXRel / aLogicRect.GetWidth() * 10000;
-            fYRel = fYRel / aLogicRect.GetHeight() * 10000;
+            fXRel = aLogicRect.GetWidth() == 0 ? 0.0 : fXRel / aLogicRect.GetWidth() * 10000;
+            fYRel = aLogicRect.GetHeight() == 0 ? 0.0 : fYRel / aLogicRect.GetHeight() * 10000;
             aGluePoint.SetPos( Point( (sal_Int32)fXRel, (sal_Int32)fYRel ) );
             aGluePoint.SetPercent( sal_True );
             aGluePoint.SetAlign( SDRVERTALIGN_TOP | SDRHORZALIGN_LEFT );
