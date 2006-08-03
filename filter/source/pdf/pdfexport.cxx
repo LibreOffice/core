@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 11:13:58 $
+ *  last change: $Author: ihi $ $Date: 2006-08-03 12:32:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@
 #include <svtools/FilterConfigItem.hxx>
 #include <svtools/filter.hxx>
 #include <svtools/solar.hrc>
-#include <svtools/graphictools.hxx>
+#include <vcl/graphictools.hxx>
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
