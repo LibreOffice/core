@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OfficeFilePicker.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:28:56 $
+ *  last change: $Author: ihi $ $Date: 2006-08-03 13:19:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,8 +35,8 @@
 #ifndef INCLUDED_SVT_FILEPICKER_HXX
 #define INCLUDED_SVT_FILEPICKER_HXX
 
-#ifndef  _CPPUHELPER_IMPLBASE6_HXX_
-#include <cppuhelper/implbase6.hxx>
+#ifndef  _CPPUHELPER_IMPLBASE7_HXX_
+#include <cppuhelper/implbase7.hxx>
 #endif
 
 #ifndef  _COM_SUN_STAR_UI_DIALOGS_XFILEPICKERCONTROLACCESS_HPP_
@@ -44,6 +44,9 @@
 #endif
 #ifndef  _COM_SUN_STAR_UI_DIALOGS_XFILEPICKERNOTIFIER_HPP_
 #include <com/sun/star/ui/dialogs/XFilePickerNotifier.hpp>
+#endif
+#ifndef  _COM_SUN_STAR_UI_DIALOGS_XFILEPICKERWORKAROUND_HPP_
+#include <com/sun/star/ui/dialogs/XFilePickerWorkaround.hpp>
 #endif
 #ifndef  _COM_SUN_STAR_UI_DIALOGS_XFILEPREVIEW_HPP_
 #include <com/sun/star/ui/dialogs/XFilePreview.hpp>
@@ -93,10 +96,11 @@ typedef ::com::sun::star::uno::Sequence< UnoFilterEntry >   UnoFilterList;  // c
 
 // class SvtFilePicker ---------------------------------------------------
 
-typedef ::cppu::ImplHelper6 <   ::com::sun::star::ui::dialogs::XFilePickerControlAccess
+typedef ::cppu::ImplHelper7 <   ::com::sun::star::ui::dialogs::XFilePickerControlAccess
                             ,   ::com::sun::star::ui::dialogs::XFilePickerNotifier
                             ,   ::com::sun::star::ui::dialogs::XFilePreview
                             ,   ::com::sun::star::ui::dialogs::XFilterManager
+                            ,   ::com::sun::star::ui::dialogs::XFilePickerWorkaround
                             ,   ::com::sun::star::ui::dialogs::XFilterGroupManager
                             ,   ::com::sun::star::lang::XServiceInfo
                             >   SvtFilePicker_Base;
@@ -179,6 +183,12 @@ public:
     virtual void SAL_CALL           setImage( sal_Int16 aImageFormat, const com::sun::star::uno::Any& aImage ) throw ( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
     virtual sal_Bool SAL_CALL       setShowState( sal_Bool bShowState ) throw ( ::com::sun::star::uno::RuntimeException );
     virtual sal_Bool SAL_CALL       getShowState() throw ( ::com::sun::star::uno::RuntimeException );
+
+    //------------------------------------------------------------------------------------
+    // XFilePickerWorkaround functions
+    //------------------------------------------------------------------------------------
+
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getFilesAsURIs() throw (::com::sun::star::uno::RuntimeException);
 
     //------------------------------------------------------------------------------------
     // XFilterManager functions
