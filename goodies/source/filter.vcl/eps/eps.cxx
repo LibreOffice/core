@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eps.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 21:43:20 $
+ *  last change: $Author: ihi $ $Date: 2006-08-03 12:35:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@
 #include <svtools/solar.hrc>
 #include <svtools/fltcall.hxx>
 #include <svtools/FilterConfigItem.hxx>
-#include <svtools/graphictools.hxx>
+#include <vcl/graphictools.hxx>
 #include "strings.hrc"
 #include "dlgeps.hrc"
 #include "dlgeps.hxx"
