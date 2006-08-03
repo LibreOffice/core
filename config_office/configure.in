@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2006-07-19 09:52:02 $
+dnl * Date: $Date: 2006-08-03 15:10:25 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.171 $ )
+AC_REVISION( $Revision: 1.172 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -548,6 +548,11 @@ AC_ARG_WITH(mingwin,
                           cygwin environment, this implies --with-use-shell=tcsh
 
                           Usage: --with-mingwin=yes
+
+                           For !Windows use, use the mingw32 C++ compiler to (re-)
+                           build unowinreg.dll
+
+                          Usage: --with-mingwin=i586-mingw32msvc-g++
 ],WITH_MINGWIN=$withval,WITH_MINGWIN=0)
 AC_ARG_WITH(use-shell,
 [  --with-use-shell        Use this option to override the default shell to be
@@ -2589,10 +2594,81 @@ dnl ===================================================================
 AC_MSG_CHECKING([whether to build the ODK])
 if test "z$enable_odk" = "z" -o "$enable_odk" != "no"; then
    AC_MSG_RESULT([yes])
+   AC_MSG_CHECKING([for external/unowinreg/unowinreg.dll])
+   if ! test -f "../external/unowinreg/unowinreg.dll"; then
+      HAVE_UNOWINREG_DLL=no
+   else
+      HAVE_UNOWINREG_DLL=yes
+   fi
+   if test "$HAVE_UNOWINREG_DLL" = "yes"; then
+      AC_MSG_RESULT([found])
+      BUILD_UNOWINREG=NO
+   else
+      if test "$_os" = "WINNT"; then
+         AC_MSG_RESULT([not found, will be built])
+      else
+         AC_MSG_WARN([not found, will be cross-built using mingw32])
+      fi
+      BUILD_UNOWINREG=YES
+   fi
+   if test "$_os" != "WINNT" && test "$BUILD_UNOWINREG" = "YES"; then
+      if test -z "$WITH_MINGWIN" || test "$WITH_MINGWIN" = "0"; then
+         AC_MSG_ERROR([for rebuilding unowinreg.dll you need the mingw32 C++ compiler.
+         Specify mingw32 g++ executable name with --with-mingwin])
+      fi
+      if echo "$WITH_MINGWIN" | $GREP -q "/"; then
+         if ! test -x "$WITH_MINGWIN"; then MINGWCXX=false; else MINGWCXX=`basename $WITH_MINGWIN`; fi
+      else
+         AC_CHECK_TOOL(MINGWCXX, $WITH_MINGWIN, false)
+      fi
+      if test "$MINGWCXX" = "false"; then
+         AC_MSG_ERROR(specified MinGW32 C++ cross-compiler not found. Install it or correct name.)
+      fi
+      AC_MSG_CHECKING(whether we are using the MinGW32 cross C++ compiler)
+      if ! echo "`$MINGWCXX -dumpmachine`" | grep -q mingw32; then
+         AC_MSG_ERROR(no)
+      else
+         AC_MSG_RESULT(yes)
+      fi
+      if echo "$WITH_MINGWIN" | $GREP -q "/"; then
+         if ! test -x "`echo $WITH_MINGWIN | $SED -e s/g++/strip/`"; then MINGSTRIP=false; else MINGWSTRIP=$(basename $(echo $WITH_MINGWIN | $SED -e s/g++/strip/)); fi
+      else
+         AC_CHECK_TOOL(MINGWSTRIP, `echo $WITH_MINGWIN | $SED -e s/g++/strip/`, false)
+      fi
+      if test "$MINGWSTRIP" = "false"; then
+         AC_MSG_ERROR(MinGW32 binutils needed. Install them.)
+      fi
+      AC_LANG(C++)
+      save_CXX=$CXX
+      save_CXXCPP=$CXXCPP
+      CXX=$MINGWCXX
+      CXXCPP="$MINGWCXX -E"
+      save_CXXFLAGS=$CXXFLAGS
+      save_CPPFLAGS=$CPPFLAGS
+      CXXFLAGS="$CXXFLAGS -I$JAVA_HOME/include"
+      CPPFLAGS="$CPPFLAGS -I$JAVA_HOME/include"
+      # LIBS contains -lcrypt etc due to teh AC_CHECK_LIBS which obviously
+      # do not make sense here (and 'd make the check fail)
+      save_LIBS=$LIBS
+      LIBS=""
+      AC_HAVE_LIBRARY(kernel32)
+      AC_HAVE_LIBRARY(advapi32)
+      AC_CHECK_HEADER(windows.h, [], [AC_MSG_ERROR([windows.h missing])])
+      CXXFLAGS=$save_CXXFLAGS
+      CPPFLAGS=$save_CPPFLAGS
+      CXX=$save_CXX
+      CXXCPP=$save_CXXCPP
+      LIBS=$save_LIBS
+      AC_LANG(C)
+   fi
    BUILD_TYPE="$BUILD_TYPE ODK"
 else
    AC_MSG_RESULT([no])
+   BUILD_UNOWINREG=NO
 fi
+AC_SUBST(BUILD_UNOWINREG)
+AC_SUBST(MINGWCXX)
+AC_SUBST(MINGWSTRIP)
 
 dnl ===================================================================
 dnl Check for building qadevOOo
