@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.35 $
+#   $Revision: 1.36 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-19 21:20:40 $
+#   last change: $Author: ihi $ $Date: 2006-08-03 12:33:46 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,6 @@ SLOFILES=\
     $(SLO)$/cliplistener.obj \
     $(SLO)$/embedhlp.obj \
     $(SLO)$/embedtransfer.obj \
-    $(SLO)$/graphictools.obj \
     $(SLO)$/imagemgr.obj \
     $(SLO)$/imageresourceaccess.obj \
     $(SLO)$/templatefoldercache.obj	\
