@@ -4,9 +4,9 @@
  *
  *  $RCSfile: metaact.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:26:47 $
+ *  last change: $Author: ihi $ $Date: 2006-08-03 12:38:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,7 @@
 #ifndef _SV_METAACT_HXX
 #include <metaact.hxx>
 #endif
+#include "graphictools.hxx"
 
 // ========================================================================
 
@@ -3960,6 +3961,86 @@ MetaAction* MetaCommentAction::Clone()
     MetaAction* pClone = (MetaAction*) new MetaCommentAction( *this );
     pClone->ResetRefCount();
     return pClone;
+}
+
+void MetaCommentAction::Move( long nXMove, long nYMove )
+{
+    if ( nXMove || nYMove )
+    {
+        if ( mnDataSize && mpData )
+        {
+            sal_Bool bPathStroke = maComment.Equals( "XPATHSTROKE_SEQ_BEGIN" );
+            if ( bPathStroke || maComment.Equals( "XPATHFILL_SEQ_BEGIN" ) )
+            {
+                SvMemoryStream  aMemStm( (void*)mpData, mnDataSize, STREAM_READ );
+                SvMemoryStream  aDest;
+                if ( bPathStroke )
+                {
+                    SvtGraphicStroke aStroke;
+                    aMemStm >> aStroke;
+                    Polygon aPath;
+                    aStroke.getPath( aPath );
+                    aPath.Move( nXMove, nYMove );
+                    aStroke.setPath( aPath );
+                    aDest << aStroke;
+                }
+                else
+                {
+                    SvtGraphicFill aFill;
+                    aMemStm >> aFill;
+                    PolyPolygon aPath;
+                    aFill.getPath( aPath );
+                    aPath.Scale( nXMove, nYMove );
+                    aFill.setPath( aPath );
+                    aDest << aFill;
+                }
+                delete[] mpData;
+                ImplInitDynamicData( static_cast<const BYTE*>( aDest.GetData() ), aDest.Tell() );
+            }
+        }
+    }
+}
+
+// ------------------------------------------------------------------------
+// SJ: 25.07.06 #i56656# we are not able to mirrorcertain kind of
+// comments properly, especially the XPATHSTROKE and XPATHFILL lead to
+// problems, so it is better to remove these comments when mirroring
+void MetaCommentAction::Scale( double fXScale, double fYScale )
+{
+    if ( ( fXScale != 1.0 ) || ( fYScale != 1.0 ) )
+    {
+        if ( mnDataSize && mpData )
+        {
+            sal_Bool bPathStroke = maComment.Equals( "XPATHSTROKE_SEQ_BEGIN" );
+            if ( bPathStroke || maComment.Equals( "XPATHFILL_SEQ_BEGIN" ) )
+            {
+                SvMemoryStream  aMemStm( (void*)mpData, mnDataSize, STREAM_READ );
+                SvMemoryStream  aDest;
+                if ( bPathStroke )
+                {
+                    SvtGraphicStroke aStroke;
+                    aMemStm >> aStroke;
+                    Polygon aPath;
+                    aStroke.getPath( aPath );
+                    aPath.Scale( fXScale, fYScale );
+                    aStroke.setPath( aPath );
+                    aDest << aStroke;
+                }
+                else
+                {
+                    SvtGraphicFill aFill;
+                    aMemStm >> aFill;
+                    PolyPolygon aPath;
+                    aFill.getPath( aPath );
+                    aPath.Scale( fXScale, fYScale );
+                    aFill.setPath( aPath );
+                    aDest << aFill;
+                }
+                delete[] mpData;
+                ImplInitDynamicData( static_cast<const BYTE*>( aDest.GetData() ), aDest.Tell() );
+            }
+        }
+    }
 }
 
 // ------------------------------------------------------------------------
