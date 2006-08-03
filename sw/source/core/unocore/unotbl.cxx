@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-30 13:23:04 $
+ *  last change: $Author: ihi $ $Date: 2006-08-03 12:56:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2757,8 +2757,9 @@ uno::Sequence< uno::Sequence< uno::Any > > SAL_CALL SwXTextTable::getDataArray()
                 }
                 else
                 {
-                    sal_uInt32 nNdPos = pBox->IsValidNumTxtNd( sal_True );
-                    if(USHRT_MAX == nNdPos)
+                    // check if table box value item is set
+                    BOOL bIsNum = pFmt->GetItemState( RES_BOXATR_VALUE, FALSE ) == SFX_ITEM_SET;
+                    if(!bIsNum)
                         pColArray[nCol] <<= lcl_getString(*pXCell);
                     else
                         pColArray[nCol] <<= lcl_getValue(*pXCell);
