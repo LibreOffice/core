@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2006-07-25 07:55:26 $
+#   last change: $Author: ihi $ $Date: 2006-08-03 14:32:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,16 +52,18 @@ ECHOQUOTE='
 ECHOQUOTE=
 .ENDIF
 
-.IF "$(BUILD_FOR_CLI)" != ""
+
 
 ALLTAR : \
     $(BIN)$/cliureversion.mk 
 
 #	INCVERSION
 
-
+#always deliver a cliureversion.mk. It is needed for the packing process even for all other
+#platforms. Therefore BUILD_FOR_CLI is not used here 
 $(BIN)$/cliureversion.mk: version.txt 
     $(GNUCOPY) $< $@
+
 
 #disabled because of #67482
 #Create the config file that is used with the policy assembly 
@@ -70,6 +72,6 @@ $(BIN)$/cliureversion.mk: version.txt
 #	+$(PERL) $(PRJ)$/source$/scripts$/increment_version.pl \
 #	$< $(BIN)$/cliureversion.mk $(SOLARBINDIR)$/unotype_statistics.txt
 
-.END
+
 
 
