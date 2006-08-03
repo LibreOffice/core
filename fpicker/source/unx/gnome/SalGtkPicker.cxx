@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SalGtkPicker.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2006-05-16 08:05:56 $
+ *  last change: $Author: ihi $ $Date: 2006-08-03 13:20:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,6 +80,9 @@ using namespace ::com::sun::star::uno;
 
 rtl::OUString SalGtkPicker::uritounicode(const gchar* pIn)
 {
+    rtl::OUString aEmpty;
+    g_return_val_if_fail (pIn != NULL, aEmpty);
+
     rtl::OUString sURL( const_cast<const sal_Char *>(pIn), strlen(pIn),
         RTL_TEXTENCODING_UTF8 );
 
