@@ -4,9 +4,9 @@
  *
  *  $RCSfile: keysymnames.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 16:49:34 $
+ *  last change: $Author: ihi $ $Date: 2006-08-03 13:33:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,8 +82,15 @@ namespace vcl_sal {
         const char*                     pKeyboardName;
         const KeysymNameReplacement*    pReplacements;
         int                             nReplacements;
-        rtl_TextEncoding                nEncoding;
     };
+
+    // ====================================================================
+    //
+    // CAUTION CAUTION CAUTION
+    // every string value in the replacements tables must be in UTF8
+    // be careful with your editor !
+    //
+    // ====================================================================
 
     static const struct KeysymNameReplacement aImplReplacements_English[] =
     {
@@ -112,17 +119,17 @@ namespace vcl_sal {
         { XK_Left, "Links" },
         { XK_Up, "Oben" },
         { XK_Down, "Unten" },
-        { XK_BackSpace, "R�ckschritt" },
+        { XK_BackSpace, "Rückschritt" },
         { XK_Return, "Eingabe" },
-        { XK_slash, "Schr�gstrich" },
+        { XK_slash, "Schrägstrich" },
         { XK_space, "Leertaste" },
         { SunXK_Stop,  "Stop" },
         { SunXK_Again, "Wiederholen" },
         { SunXK_Props, "Eigenschaften" },
-        { SunXK_Undo,  "Zur�cknehmen" },
+        { SunXK_Undo,  "Zurücknehmen" },
         { SunXK_Front, "Vordergrund" },
         { SunXK_Copy,  "Kopieren" },
-        { SunXK_Open,  "�ffnen" },
+        { SunXK_Open,  "Öffnen" },
         { SunXK_Paste, "Einsetzen" },
         { SunXK_Find,  "Suchen" },
         { SunXK_Cut,   "Ausschneiden" }
@@ -132,11 +139,11 @@ namespace vcl_sal {
     {
         { XK_Shift_L, "Maj" },
         { XK_Shift_R, "Maj" },
-        { XK_Page_Up, "Pg. Pr�c" },
+        { XK_Page_Up, "Pg. Préc" },
         { XK_Page_Down, "Pg. Suiv" },
         { XK_End, "Fin" },
         { XK_Home, "Origine" },
-        { XK_Insert, "Ins�rer" },
+        { XK_Insert, "Insérer" },
         { XK_Delete, "Suppr" },
         { XK_Escape, "Esc" },
         { XK_Right, "Droite" },
@@ -145,7 +152,7 @@ namespace vcl_sal {
         { XK_Down, "Bas" },
         { XK_BackSpace, "Ret. Arr" },
         { XK_Return, "Retour" },
-        { XK_KP_Enter, "Entr�e" },
+        { XK_KP_Enter, "Entrée" },
         { SunXK_Stop,  "Stop" },
         { SunXK_Again, "Encore" },
         { SunXK_Props, "Props" },
@@ -177,7 +184,7 @@ namespace vcl_sal {
         { XK_space, "Spaziatrice" },
         { SunXK_Stop,  "Stop" },
         { SunXK_Again, "Ancora" },
-        { SunXK_Props, "Propriet�" },
+        { SunXK_Props, "Proprietà" },
         { SunXK_Undo,  "Annulla" },
         { SunXK_Front, "Davanti" },
         { SunXK_Copy,  "Copia" },
@@ -230,9 +237,9 @@ namespace vcl_sal {
         { SunXK_Undo,  "Angre" },
         { SunXK_Front, "Front" },
         { SunXK_Copy,  "Kopi" },
-        { SunXK_Open,  "�pne" },
+        { SunXK_Open,  "Åpne" },
         { SunXK_Paste, "Lim" },
-        { SunXK_Find,  "S�k" },
+        { SunXK_Find,  "Søk" },
         { SunXK_Cut,   "Klipp" }
     };
 
@@ -243,8 +250,8 @@ namespace vcl_sal {
         { XK_Page_Up, "PageUp" },
         { XK_Page_Down, "PageDown" },
         { XK_Escape, "Esc" },
-        { XK_Right, "H�ger" },
-        { XK_Left, "V�nster" },
+        { XK_Right, "Höger" },
+        { XK_Left, "Vänster" },
         { XK_Up, "Up" },
         { XK_Down, "Ned" },
         { XK_BackSpace, "Backsteg" },
@@ -253,12 +260,12 @@ namespace vcl_sal {
         { SunXK_Stop,  "Avbryt" },
         { SunXK_Again, "Upprepa" },
         { SunXK_Props, "Egenskaper" },
-        { SunXK_Undo,  "�ngra" },
+        { SunXK_Undo,  "Ångra" },
         { SunXK_Front, "Fram" },
         { SunXK_Copy,  "Kopiera" },
-        { SunXK_Open,  "�ppna" },
+        { SunXK_Open,  "Öppna" },
         { SunXK_Paste, "Klistra in" },
-        { SunXK_Find,  "S�k" },
+        { SunXK_Find,  "Sök" },
         { SunXK_Cut,   "Klipp ut" }
     };
 
@@ -290,8 +297,8 @@ namespace vcl_sal {
     {
         { XK_Shift_L, "Mayos" },
         { XK_Shift_R, "Mayos" },
-        { XK_Page_Up, "ReP�g" },
-        { XK_Page_Down, "AvP�g" },
+        { XK_Page_Up, "RePág" },
+        { XK_Page_Down, "AvPág" },
         { XK_End, "Fin" },
         { XK_Home, "Inicio" },
         { XK_Delete, "Supr" },
@@ -319,59 +326,61 @@ namespace vcl_sal {
     static const struct KeyboardReplacements aKeyboards[] =
     {
 #ifdef SOLARIS
-        { "Germany5", aImplReplacements_German, sizeof(aImplReplacements_German)/sizeof(aImplReplacements_German[0]), RTL_TEXTENCODING_ISO_8859_1 },
-        { "Germany4", aImplReplacements_German, sizeof(aImplReplacements_German)/sizeof(aImplReplacements_German[0]), RTL_TEXTENCODING_ISO_8859_1 },
-        { "France5", aImplReplacements_French, sizeof(aImplReplacements_French)/sizeof(aImplReplacements_French[0]), RTL_TEXTENCODING_ISO_8859_1 },
-        { "France6", aImplReplacements_French, sizeof(aImplReplacements_French)/sizeof(aImplReplacements_French[0]), RTL_TEXTENCODING_ISO_8859_1 },
-        { "France_x86", aImplReplacements_French, sizeof(aImplReplacements_French)/sizeof(aImplReplacements_French[0]), RTL_TEXTENCODING_ISO_8859_1 },
-        { "Italy5", aImplReplacements_Italian, sizeof(aImplReplacements_Italian)/sizeof(aImplReplacements_Italian[0]), RTL_TEXTENCODING_ISO_8859_1 },
-        { "Italy5-Hobo", aImplReplacements_Italian, sizeof(aImplReplacements_Italian)/sizeof(aImplReplacements_Italian[0]), RTL_TEXTENCODING_ISO_8859_1 },
-        { "Italy4", aImplReplacements_Italian, sizeof(aImplReplacements_Italian)/sizeof(aImplReplacements_Italian[0]), RTL_TEXTENCODING_ISO_8859_1 },
-        { "Italy6", aImplReplacements_Italian, sizeof(aImplReplacements_Italian)/sizeof(aImplReplacements_Italian[0]), RTL_TEXTENCODING_ISO_8859_1 },
-        { "Italy_x86", aImplReplacements_Italian, sizeof(aImplReplacements_Italian)/sizeof(aImplReplacements_Italian[0]), RTL_TEXTENCODING_ISO_8859_1 },
-        { "Netherland4", aImplReplacements_Dutch, sizeof(aImplReplacements_Dutch)/sizeof(aImplReplacements_Dutch[0]), RTL_TEXTENCODING_ISO_8859_1 },
-        { "Netherland5", aImplReplacements_Dutch, sizeof(aImplReplacements_Dutch)/sizeof(aImplReplacements_Dutch[0]), RTL_TEXTENCODING_ISO_8859_1 },
-        { "Netherland5-Hobo", aImplReplacements_Dutch, sizeof(aImplReplacements_Dutch)/sizeof(aImplReplacements_Dutch[0]), RTL_TEXTENCODING_ISO_8859_1 },
-        { "Netherland6", aImplReplacements_Dutch, sizeof(aImplReplacements_Dutch)/sizeof(aImplReplacements_Dutch[0]), RTL_TEXTENCODING_ISO_8859_1 },
-        { "Netherland_x86", aImplReplacements_Dutch, sizeof(aImplReplacements_Dutch)/sizeof(aImplReplacements_Dutch[0]), RTL_TEXTENCODING_ISO_8859_1 },
-        { "Norway5", aImplReplacements_Norwegian, sizeof(aImplReplacements_Norwegian)/sizeof(aImplReplacements_Norwegian[0]), RTL_TEXTENCODING_ISO_8859_1 },
-        { "Norway5-Hobo", aImplReplacements_Norwegian, sizeof(aImplReplacements_Norwegian)/sizeof(aImplReplacements_Norwegian[0]), RTL_TEXTENCODING_ISO_8859_1 },
-        { "Norway4", aImplReplacements_Norwegian, sizeof(aImplReplacements_Norwegian)/sizeof(aImplReplacements_Norwegian[0]), RTL_TEXTENCODING_ISO_8859_1 },
-        { "Norway6", aImplReplacements_Norwegian, sizeof(aImplReplacements_Norwegian)/sizeof(aImplReplacements_Norwegian[0]), RTL_TEXTENCODING_ISO_8859_1 },
-        { "Norway_x86", aImplReplacements_Norwegian, sizeof(aImplReplacements_Norwegian)/sizeof(aImplReplacements_Norwegian[0]), RTL_TEXTENCODING_ISO_8859_1 },
-        { "Portugal5", aImplReplacements_Portuguese, sizeof(aImplReplacements_Portuguese)/sizeof(aImplReplacements_Portuguese[0]), RTL_TEXTENCODING_ISO_8859_1 },
-        { "Portugal5-Hobo", aImplReplacements_Portuguese, sizeof(aImplReplacements_Portuguese)/sizeof(aImplReplacements_Portuguese[0]), RTL_TEXTENCODING_ISO_8859_1 },
-        { "Portugal4", aImplReplacements_Portuguese, sizeof(aImplReplacements_Portuguese)/sizeof(aImplReplacements_Portuguese[0]), RTL_TEXTENCODING_ISO_8859_1 },
-        { "Portugal6", aImplReplacements_Portuguese, sizeof(aImplReplacements_Portuguese)/sizeof(aImplReplacements_Portuguese[0]), RTL_TEXTENCODING_ISO_8859_1 },
-        { "Portugal_x86", aImplReplacements_Portuguese, sizeof(aImplReplacements_Portuguese)/sizeof(aImplReplacements_Portuguese[0]), RTL_TEXTENCODING_ISO_8859_1 },
-        { "Spain5", aImplReplacements_Spanish, sizeof(aImplReplacements_Spanish)/sizeof(aImplReplacements_Spanish[0]), RTL_TEXTENCODING_ISO_8859_1 },
-        { "Spain5-Hobo", aImplReplacements_Spanish, sizeof(aImplReplacements_Spanish)/sizeof(aImplReplacements_Spanish[0]), RTL_TEXTENCODING_ISO_8859_1 },
-        { "Spain4", aImplReplacements_Spanish, sizeof(aImplReplacements_Spanish)/sizeof(aImplReplacements_Spanish[0]), RTL_TEXTENCODING_ISO_8859_1 },
-        { "Spain6", aImplReplacements_Spanish, sizeof(aImplReplacements_Spanish)/sizeof(aImplReplacements_Spanish[0]), RTL_TEXTENCODING_ISO_8859_1 },
-        { "Spain_x86", aImplReplacements_Spanish, sizeof(aImplReplacements_Spanish)/sizeof(aImplReplacements_Spanish[0]), RTL_TEXTENCODING_ISO_8859_1 },
-        { "Sweden5", aImplReplacements_Swedish, sizeof(aImplReplacements_Swedish)/sizeof(aImplReplacements_Swedish[0]), RTL_TEXTENCODING_ISO_8859_1 },
-        { "Sweden5-Hobo", aImplReplacements_Swedish, sizeof(aImplReplacements_Swedish)/sizeof(aImplReplacements_Swedish[0]), RTL_TEXTENCODING_ISO_8859_1 },
-        { "Sweden4", aImplReplacements_Swedish, sizeof(aImplReplacements_Swedish)/sizeof(aImplReplacements_Swedish[0]), RTL_TEXTENCODING_ISO_8859_1 },
-        { "Sweden6", aImplReplacements_Swedish, sizeof(aImplReplacements_Swedish)/sizeof(aImplReplacements_Swedish[0]), RTL_TEXTENCODING_ISO_8859_1 },
-        { "Sweden_x86", aImplReplacements_Swedish, sizeof(aImplReplacements_Swedish)/sizeof(aImplReplacements_Swedish[0]), RTL_TEXTENCODING_ISO_8859_1 },
+        { "Germany5", aImplReplacements_German, sizeof(aImplReplacements_German)/sizeof(aImplReplacements_German[0]) },
+        { "Germany4", aImplReplacements_German, sizeof(aImplReplacements_German)/sizeof(aImplReplacements_German[0]) },
+        { "France5", aImplReplacements_French, sizeof(aImplReplacements_French)/sizeof(aImplReplacements_French[0]) },
+        { "France6", aImplReplacements_French, sizeof(aImplReplacements_French)/sizeof(aImplReplacements_French[0]) },
+        { "France_x86", aImplReplacements_French, sizeof(aImplReplacements_French)/sizeof(aImplReplacements_French[0]) },
+        { "Italy5", aImplReplacements_Italian, sizeof(aImplReplacements_Italian)/sizeof(aImplReplacements_Italian[0]) },
+        { "Italy5-Hobo", aImplReplacements_Italian, sizeof(aImplReplacements_Italian)/sizeof(aImplReplacements_Italian[0]) },
+        { "Italy4", aImplReplacements_Italian, sizeof(aImplReplacements_Italian)/sizeof(aImplReplacements_Italian[0]) },
+        { "Italy6", aImplReplacements_Italian, sizeof(aImplReplacements_Italian)/sizeof(aImplReplacements_Italian[0]) },
+        { "Italy_x86", aImplReplacements_Italian, sizeof(aImplReplacements_Italian)/sizeof(aImplReplacements_Italian[0]) },
+        { "Netherland4", aImplReplacements_Dutch, sizeof(aImplReplacements_Dutch)/sizeof(aImplReplacements_Dutch[0]) },
+        { "Netherland5", aImplReplacements_Dutch, sizeof(aImplReplacements_Dutch)/sizeof(aImplReplacements_Dutch[0]) },
+        { "Netherland5-Hobo", aImplReplacements_Dutch, sizeof(aImplReplacements_Dutch)/sizeof(aImplReplacements_Dutch[0]) },
+        { "Netherland6", aImplReplacements_Dutch, sizeof(aImplReplacements_Dutch)/sizeof(aImplReplacements_Dutch[0]) },
+        { "Netherland_x86", aImplReplacements_Dutch, sizeof(aImplReplacements_Dutch)/sizeof(aImplReplacements_Dutch[0]) },
+        { "Norway5", aImplReplacements_Norwegian, sizeof(aImplReplacements_Norwegian)/sizeof(aImplReplacements_Norwegian[0]) },
+        { "Norway5-Hobo", aImplReplacements_Norwegian, sizeof(aImplReplacements_Norwegian)/sizeof(aImplReplacements_Norwegian[0]) },
+        { "Norway4", aImplReplacements_Norwegian, sizeof(aImplReplacements_Norwegian)/sizeof(aImplReplacements_Norwegian[0]) },
+        { "Norway6", aImplReplacements_Norwegian, sizeof(aImplReplacements_Norwegian)/sizeof(aImplReplacements_Norwegian[0]) },
+        { "Norway_x86", aImplReplacements_Norwegian, sizeof(aImplReplacements_Norwegian)/sizeof(aImplReplacements_Norwegian[0]) },
+        { "Portugal5", aImplReplacements_Portuguese, sizeof(aImplReplacements_Portuguese)/sizeof(aImplReplacements_Portuguese[0]) },
+        { "Portugal5-Hobo", aImplReplacements_Portuguese, sizeof(aImplReplacements_Portuguese)/sizeof(aImplReplacements_Portuguese[0]) },
+        { "Portugal4", aImplReplacements_Portuguese, sizeof(aImplReplacements_Portuguese)/sizeof(aImplReplacements_Portuguese[0]) },
+        { "Portugal6", aImplReplacements_Portuguese, sizeof(aImplReplacements_Portuguese)/sizeof(aImplReplacements_Portuguese[0]) },
+        { "Portugal_x86", aImplReplacements_Portuguese, sizeof(aImplReplacements_Portuguese)/sizeof(aImplReplacements_Portuguese[0]) },
+        { "Spain5", aImplReplacements_Spanish, sizeof(aImplReplacements_Spanish)/sizeof(aImplReplacements_Spanish[0]) },
+        { "Spain5-Hobo", aImplReplacements_Spanish, sizeof(aImplReplacements_Spanish)/sizeof(aImplReplacements_Spanish[0]) },
+        { "Spain4", aImplReplacements_Spanish, sizeof(aImplReplacements_Spanish)/sizeof(aImplReplacements_Spanish[0]) },
+        { "Spain6", aImplReplacements_Spanish, sizeof(aImplReplacements_Spanish)/sizeof(aImplReplacements_Spanish[0]) },
+        { "Spain_x86", aImplReplacements_Spanish, sizeof(aImplReplacements_Spanish)/sizeof(aImplReplacements_Spanish[0]) },
+        { "Sweden5", aImplReplacements_Swedish, sizeof(aImplReplacements_Swedish)/sizeof(aImplReplacements_Swedish[0]) },
+        { "Sweden5-Hobo", aImplReplacements_Swedish, sizeof(aImplReplacements_Swedish)/sizeof(aImplReplacements_Swedish[0]) },
+        { "Sweden4", aImplReplacements_Swedish, sizeof(aImplReplacements_Swedish)/sizeof(aImplReplacements_Swedish[0]) },
+        { "Sweden6", aImplReplacements_Swedish, sizeof(aImplReplacements_Swedish)/sizeof(aImplReplacements_Swedish[0]) },
+        { "Sweden_x86", aImplReplacements_Swedish, sizeof(aImplReplacements_Swedish)/sizeof(aImplReplacements_Swedish[0]) },
 #endif
-        { "U.S. English", aImplReplacements_English, sizeof(aImplReplacements_English)/sizeof(aImplReplacements_English[0]), RTL_TEXTENCODING_ISO_8859_1 },
-        { "United Kingdom", aImplReplacements_English, sizeof(aImplReplacements_English)/sizeof(aImplReplacements_English[0]), RTL_TEXTENCODING_ISO_8859_1 },
+        { "U.S. English", aImplReplacements_English, sizeof(aImplReplacements_English)/sizeof(aImplReplacements_English[0]) },
+        { "United Kingdom", aImplReplacements_English, sizeof(aImplReplacements_English)/sizeof(aImplReplacements_English[0]) },
         // Germany, German
-        { "German", aImplReplacements_German, sizeof(aImplReplacements_German)/sizeof(aImplReplacements_German[0]), RTL_TEXTENCODING_ISO_8859_1 },
-        { "France", aImplReplacements_French, sizeof(aImplReplacements_French)/sizeof(aImplReplacements_French[0]), RTL_TEXTENCODING_ISO_8859_1 },
-        { "French", aImplReplacements_French, sizeof(aImplReplacements_French)/sizeof(aImplReplacements_French[0]), RTL_TEXTENCODING_ISO_8859_1 },
+        { "German", aImplReplacements_German, sizeof(aImplReplacements_German)/sizeof(aImplReplacements_German[0]) },
+        { "France", aImplReplacements_French, sizeof(aImplReplacements_French)/sizeof(aImplReplacements_French[0]) },
+        { "French", aImplReplacements_French, sizeof(aImplReplacements_French)/sizeof(aImplReplacements_French[0]) },
         // Italy, Italian
-        { "Ital", aImplReplacements_Italian, sizeof(aImplReplacements_Italian)/sizeof(aImplReplacements_Italian[0]), RTL_TEXTENCODING_ISO_8859_1 },
+        { "Ital", aImplReplacements_Italian, sizeof(aImplReplacements_Italian)/sizeof(aImplReplacements_Italian[0]) },
         // Norway, Norwegian
-        { "Norw", aImplReplacements_Norwegian, sizeof(aImplReplacements_Norwegian)/sizeof(aImplReplacements_Norwegian[0]), RTL_TEXTENCODING_ISO_8859_1 },
+        { "Norw", aImplReplacements_Norwegian, sizeof(aImplReplacements_Norwegian)/sizeof(aImplReplacements_Norwegian[0]) },
         // Portugal, Portuguese
-        { "Portu", aImplReplacements_Portuguese, sizeof(aImplReplacements_Portuguese)/sizeof(aImplReplacements_Portuguese[0]), RTL_TEXTENCODING_ISO_8859_1 },
-        { "Spain", aImplReplacements_Spanish, sizeof(aImplReplacements_Spanish)/sizeof(aImplReplacements_Spanish[0]), RTL_TEXTENCODING_ISO_8859_1 },
-        { "Spanish", aImplReplacements_Spanish, sizeof(aImplReplacements_Spanish)/sizeof(aImplReplacements_Spanish[0]), RTL_TEXTENCODING_ISO_8859_1 },
+        { "Portu", aImplReplacements_Portuguese, sizeof(aImplReplacements_Portuguese)/sizeof(aImplReplacements_Portuguese[0]) },
+        { "Spain", aImplReplacements_Spanish, sizeof(aImplReplacements_Spanish)/sizeof(aImplReplacements_Spanish[0]) },
+        { "Spanish", aImplReplacements_Spanish, sizeof(aImplReplacements_Spanish)/sizeof(aImplReplacements_Spanish[0]) },
         // Sweden, Swedish
-        { "Swed", aImplReplacements_Swedish, sizeof(aImplReplacements_Swedish)/sizeof(aImplReplacements_Swedish[0]), RTL_TEXTENCODING_ISO_8859_1 },
-        { "English", aImplReplacements_English, sizeof(aImplReplacements_English)/sizeof(aImplReplacements_English[0]), RTL_TEXTENCODING_ISO_8859_1 }
+        { "Swed", aImplReplacements_Swedish, sizeof(aImplReplacements_Swedish)/sizeof(aImplReplacements_Swedish[0]) },
+        { "Netherland", aImplReplacements_Dutch, sizeof(aImplReplacements_Dutch)/sizeof(aImplReplacements_Dutch[0]) },
+        { "Dutch", aImplReplacements_Dutch, sizeof(aImplReplacements_Dutch)/sizeof(aImplReplacements_Dutch[0]) },
+        { "English", aImplReplacements_English, sizeof(aImplReplacements_English)/sizeof(aImplReplacements_English[0]) }
     };
 
     String getKeysymReplacementName( const char* pKeyboard, KeySym nSymbol )
@@ -384,7 +393,7 @@ namespace vcl_sal {
                 for( int m = aKeyboards[n].nReplacements ; m ; )
                 {
                     if( nSymbol == pRepl[--m].aSymbol )
-                        return String( pRepl[m].pName, aKeyboards[n].nEncoding );
+                        return String( pRepl[m].pName, RTL_TEXTENCODING_UTF8 );
                 }
             }
         }
