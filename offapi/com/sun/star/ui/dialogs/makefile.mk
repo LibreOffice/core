@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 08:41:20 $
+#   last change: $Author: ihi $ $Date: 2006-08-03 13:21:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,7 @@ IDLFILES=\
     XFilePickerControlAccess.idl	\
     XFilePickerListener.idl\
     XFilePickerNotifier.idl\
+    XFilePickerWorkaround.idl\
     XFilePreview.idl\
     XFilterGroupManager.idl\
     XFilterManager.idl\
