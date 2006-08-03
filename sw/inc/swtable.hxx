@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swtable.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-27 14:34:07 $
+ *  last change: $Author: ihi $ $Date: 2006-08-03 13:55:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,7 +169,7 @@ public:
 
     void GetTabCols( SwTabCols &rToFill, const SwTableBox *pStart,
                      FASTBOOL bHidden = FALSE, BOOL bCurRowOnly = FALSE ) const;
-    void SetTabCols( const SwTabCols &rNew, SwTabCols &rOld,
+    void SetTabCols( const SwTabCols &rNew, const SwTabCols &rOld,
                      const SwTableBox *pStart, BOOL bCurRowOnly );
 
     BOOL InsertCol( SwDoc*, const SwSelBoxes& rBoxes,
