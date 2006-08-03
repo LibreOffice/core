@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuoltext.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:30:19 $
+ *  last change: $Author: ihi $ $Date: 2006-08-03 12:34:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -269,12 +269,15 @@ BOOL FuOutlineText::KeyInput(const KeyEvent& rKEvt)
 {
     BOOL bReturn = FALSE;
 
-    if( !pDocSh->IsReadOnly() ||
-        rKEvt.GetKeyCode().GetGroup() == KEYGROUP_CURSOR )
+    USHORT nKeyGroup = rKEvt.GetKeyCode().GetGroup();
+    if( !pDocSh->IsReadOnly() || nKeyGroup == KEYGROUP_CURSOR )
     {
         pWindow->GrabFocus();
 
-        OutlineViewModelChangeGuard aGuard( *pOutlineView );
+        std::auto_ptr< OutlineViewModelChangeGuard > aGuard;
+
+        if( (nKeyGroup != KEYGROUP_CURSOR) && (nKeyGroup != KEYGROUP_FKEYS) )
+            aGuard.reset( new OutlineViewModelChangeGuard( *pOutlineView ) );
 
         bReturn = pOutlineView->GetViewByWindow(pWindow)->PostKeyEvent(rKEvt);
 
