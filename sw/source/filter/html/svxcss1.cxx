@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxcss1.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:13:34 $
+ *  last change: $Author: ihi $ $Date: 2006-08-03 13:56:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1791,7 +1791,10 @@ static void ParseCSS1_line_height( const CSS1Expression *pExpr,
             nHeight = rParser.GetMinFixLineSpace();
         SvxLineSpacingItem aLSItem( nHeight, aItemIds.nLineSpacing );
         aLSItem.SetLineHeight( nHeight );
-        aLSItem.GetLineSpaceRule() = SVX_LINE_SPACE_FIX;
+        // --> OD 2006-07-26 #138463#
+        // interpret <line-height> attribute as minimum line height
+        aLSItem.GetLineSpaceRule() = SVX_LINE_SPACE_MIN;
+        // <--
         aLSItem.GetInterLineSpaceRule() = SVX_INTER_LINE_SPACE_OFF;
         rItemSet.Put( aLSItem );
     }
