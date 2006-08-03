@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tools.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 14:06:13 $
+ *  last change: $Author: ihi $ $Date: 2006-08-03 14:40:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,13 +83,15 @@ namespace com { namespace sun { namespace star { namespace beans {
     struct NamedValue;
 } } } }
 
+class GDIMetaFile;
 
 /* Definition of some animation tools */
-
 namespace presentation
 {
     namespace internal
     {
+        typedef ::boost::shared_ptr< GDIMetaFile > GDIMetaFileSharedPtr;
+
         // xxx todo: remove with boost::hash when 1.33 is available
         template <typename T>
         struct hash : ::std::unary_function<T, ::std::size_t>
@@ -119,6 +121,17 @@ namespace presentation
                       x, ::com::sun::star::uno::UNO_QUERY );
             return hash<void *>()(xRoot.get());
         }
+
+        /** Cycle mode of intrinsic animations
+         */
+        enum CycleMode
+        {
+            /// loop the animation back to back
+            CYCLE_LOOP,
+            /// loop, but play backwards from end to start
+            CYCLE_PINGPONGLOOP
+        };
+
 
         // Value extraction from Any
         // =========================
