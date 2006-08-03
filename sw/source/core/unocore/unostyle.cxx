@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: rt $ $Date: 2006-04-28 15:00:25 $
+ *  last change: $Author: ihi $ $Date: 2006-08-03 12:56:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1821,7 +1821,7 @@ void lcl_SetStyleProperty(const SfxItemPropertyMap* pMap,
     {
         case RES_PAPER_BIN:
         {
-            SfxPrinter *pPrinter = pDoc->GetPrt();
+            SfxPrinter *pPrinter = pDoc->GetPrt( sal_True );
             OUString sTmp;
             sal_uInt16 nBin = USHRT_MAX;
             if ( !( rValue >>= sTmp ) )
