@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gdimtf.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 10:44:37 $
+ *  last change: $Author: ihi $ $Date: 2006-08-03 12:37:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,7 @@
 #include <virdev.hxx>
 #endif
 #include <gdimtf.hxx>
+#include "graphictools.hxx"
 
 // -----------
 // - Defines -
@@ -1236,6 +1237,47 @@ void GDIMetaFile::Rotate( long nAngle10 )
                             }
 
                             pAction = (MetaAction*) Next();
+                        }
+                    }
+                    else
+                    {
+                        sal_Bool bPathStroke = pCommentAct->GetComment().Equals( "XPATHSTROKE_SEQ_BEGIN" );
+                        if ( bPathStroke || pCommentAct->GetComment().Equals( "XPATHFILL_SEQ_BEGIN" ) )
+                        {
+                            if ( pCommentAct->GetDataSize() )
+                            {
+                                SvMemoryStream aMemStm( (void*)pCommentAct->GetData(), pCommentAct->GetDataSize(), STREAM_READ );
+                                SvMemoryStream aDest;
+                                if ( bPathStroke )
+                                {
+                                    SvtGraphicStroke aStroke;
+                                    aMemStm >> aStroke;
+                                    Polygon aPath;
+                                    aStroke.getPath( aPath );
+                                    aStroke.setPath( ImplGetRotatedPolygon( aPath, aRotAnchor, aRotOffset, fSin, fCos ) );
+                                    aDest << aStroke;
+                                    aMtf.AddAction( new MetaCommentAction( "XPATHSTROKE_SEQ_BEGIN", 0,
+                                                        static_cast<const BYTE*>( aDest.GetData()), aDest.Tell() ) );
+                                }
+                                else
+                                {
+                                    SvtGraphicFill aFill;
+                                    aMemStm >> aFill;
+                                    PolyPolygon aPath;
+                                    aFill.getPath( aPath );
+                                    aFill.setPath( ImplGetRotatedPolyPolygon( aPath, aRotAnchor, aRotOffset, fSin, fCos ) );
+                                    aDest << aFill;
+                                    aMtf.AddAction( new MetaCommentAction( "XPATHFILL_SEQ_BEGIN", 0,
+                                                        static_cast<const BYTE*>( aDest.GetData()), aDest.Tell() ) );
+                                }
+                            }
+                        }
+                        else if ( pCommentAct->GetComment().Equals( "XPATHSTROKE_SEQ_END" )
+                               || pCommentAct->GetComment().Equals( "XPATHFILL_SEQ_END" ) )
+                        {
+                            pAction->Execute( &aMapVDev );
+                            pAction->Duplicate();
+                            aMtf.AddAction( pAction );
                         }
                     }
                 }
