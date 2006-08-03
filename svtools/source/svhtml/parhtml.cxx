@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parhtml.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 21:26:23 $
+ *  last change: $Author: ihi $ $Date: 2006-08-03 13:53:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -449,6 +449,9 @@ int HTMLParser::FilterToken( int nToken )
 #define HTML_ISALNUM( c ) ( HTML_ISALPHA(c) || HTML_ISDIGIT(c) )
 #define HTML_ISSPACE( c ) ( ' ' == c || (c >= 0x09 && c <= 0x0d) )
 #define HTML_ISPRINTABLE( c ) ( c >= 32 && c != 127)
+// --> OD 2006-07-26 #138464#
+#define HTML_ISHEXDIGIT( c ) ( HTML_ISDIGIT(c) || (c >= 'A' && c <= 'F') || (c >= 'a' && c <= 'f') )
+// <--
 
 int HTMLParser::ScanText( const sal_Unicode cBreak )
 {
@@ -475,14 +478,35 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                 if( '#' == (nNextCh = GetNextChar()) )
                 {
                     nNextCh = GetNextChar();
-                    if( HTML_ISDIGIT(nNextCh) )
+                    // --> OD 2006-07-26 #138464#
+                    // consider hexadecimal digits
+                    const sal_Bool bIsHex( 'x' == nNextCh );
+                    const sal_Bool bIsDecOrHex( bIsHex || HTML_ISDIGIT(nNextCh) );
+                    if ( bIsDecOrHex )
                     {
-                        do
+                        if ( bIsHex )
                         {
-                            cChar = cChar * 10U + sal_Unicode( nNextCh - '0');
                             nNextCh = GetNextChar();
+                            while ( HTML_ISHEXDIGIT(nNextCh) )
+                            {
+                                cChar = cChar * 16U +
+                                        ( nNextCh <= '9'
+                                          ? sal_Unicode( nNextCh - '0' )
+                                          : ( nNextCh <= 'F'
+                                              ? sal_Unicode( nNextCh - 'A' + 10 )
+                                              : sal_Unicode( nNextCh - 'a' + 10 ) ) );
+                                nNextCh = GetNextChar();
+                            }
                         }
-                        while( HTML_ISDIGIT(nNextCh) );
+                        else
+                        {
+                            do
+                            {
+                                cChar = cChar * 10U + sal_Unicode( nNextCh - '0');
+                                nNextCh = GetNextChar();
+                            }
+                            while( HTML_ISDIGIT(nNextCh) );
+                        }
 
                         if( RTL_TEXTENCODING_DONTKNOW != eSrcEnc &&
                             RTL_TEXTENCODING_UCS2 != eSrcEnc &&
@@ -501,6 +525,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                             }
                         }
                     }
+                    // <--
                     else
                         nNextCh = 0U;
                 }
