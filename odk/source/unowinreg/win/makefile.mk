@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 20:20:44 $
+#   last change: $Author: ihi $ $Date: 2006-08-03 15:12:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,27 @@ nojava:
     @echo "Not building javaunohelper because Java is disabled"
 .ENDIF
 
+.IF "$(OS)" != "WNT"
+
+.IF "$(BUILD_UNOWINREG)" == "YES"
+
+$(BIN)$/unowinreg.dll : unowinreg.cxx
+    $(MINGWCXX) -Wall -D_JNI_IMPLEMENTATION_ -I$(JAVA_HOME)/include \
+        -shared -o $(BIN)$/unowinreg.dll unowinreg.cxx \
+            -Wl,--kill-at -lkernel32 -ladvapi32
+    $(MINGWSTRIP) $(BIN)$/unowinreg.dll
+
+.ELSE
+
+$(BIN)$/unowinreg.dll : $(SOLARVERSION)$/$(INPATH)$/bin$(UPDMINOREXT)$/unowinreg.dll
+    +-rm -f $@ >& $(NULLDEV)
+    $(GNUCOPY) $< $@
+
+.ENDIF
+
+.ELSE #  "$(OS)" != "WNT"
+# Always build unowinreg.dll on windows
+
 # --- Files --------------------------------------------------------
 
 SLOFILES = \
@@ -73,6 +94,8 @@ DEF1EXPORTFILE=$(TARGET).dxp
 DEF1DES=unowinreg
 
 NO_SHL1DESCRIPTION=TRUE
+
+.ENDIF #  "$(OS)" != "WNT"
 
 # --- Targets ------------------------------------------------------
 
