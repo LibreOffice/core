@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ControlContainer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:29:24 $
+ *  last change: $Author: ihi $ $Date: 2006-08-03 12:35:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@ namespace sd { namespace toolpanel {
 
 ControlContainer::ControlContainer (TreeNode* pNode)
     : mpNode(pNode),
-      mnActiveControlIndex(-1),
+      mnActiveControlIndex((sal_uInt32)-1),
       mbMultiSelection(false)
 {
 }
@@ -67,11 +67,16 @@ ControlContainer::~ControlContainer (void)
 
 void ControlContainer::DeleteChildren (void)
 {
+    // Deleting the children may lead to calls back to the container.  To
+    // prevent the container from accessing the just deleted children, the
+    // maControlList member is first cleared (by transferring its content to
+    // a local list) before the children are destroyed.
+    ControlList maList;
+    maList.swap(maControlList);
     ControlList::iterator I;
-    ControlList::iterator Iend (maControlList.end());
-    for (I=maControlList.begin(); I!=Iend; ++I)
+    ControlList::iterator Iend (maList.end());
+    for (I=maList.begin(); I!=Iend; ++I)
         delete *I;
-    maControlList.clear();
 
     if (mpNode != NULL)
         mpNode->FireStateChangeEvent(EID_ALL_CHILDREN_REMOVED);
@@ -134,13 +139,16 @@ void ControlContainer::SetExpansionState (
         // control then that is always expanded.
         do
         {
-            // Ignore a call with an invalid index.
-            if (nIndex<0 || nIndex>=GetControlCount())
+            // Ignore a call with an invalid index. (The seperate comparison
+            // with -1 is not strictly necessary but it is here just in
+            // case.)
+            if (nIndex>=GetControlCount() || nIndex==(sal_uInt32)-1)
                 break;
 
             bool bExpand;
             switch (aState)
             {
+                default:
                 case ES_TOGGLE:
                     bExpand = ! GetControl(nIndex)->IsExpanded();
                     break;
@@ -260,7 +268,7 @@ sal_uInt32 ControlContainer::GetVisibleControlCount (void) const
 
 TreeNode* ControlContainer::GetControl (sal_uInt32 nIndex) const
 {
-    if (nIndex>=0 && nIndex<maControlList.size())
+    if (nIndex<maControlList.size() && nIndex!=(sal_uInt32)-1)
         return maControlList[nIndex];
     else
         return NULL;
@@ -437,6 +445,7 @@ void ControlContainer::SetVisibilityState (
         bool bShow;
         switch (aState)
         {
+            default:
             case VS_TOGGLE:
                 bShow = ! pControl->IsShowing();
                 break;
