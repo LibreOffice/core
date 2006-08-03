@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SalGtkFilePicker.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:13:47 $
+ *  last change: $Author: ihi $ $Date: 2006-08-03 13:20:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,8 +40,8 @@
 //  includes of other projects
 //_______________________________________________________________________________________________________________________
 
-#ifndef _CPPUHELPER_COMPBASE9_HXX_
-#include <cppuhelper/compbase9.hxx>
+#ifndef _CPPUHELPER_COMPBASE10_HXX_
+#include <cppuhelper/compbase10.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
@@ -108,17 +108,18 @@ typedef ::com::sun::star::uno::Sequence< UnoFilterEntry >   UnoFilterList;  // c
 //----------------------------------------------------------
 
 class SalGtkFilePicker :
-        public SalGtkPicker,
-    public cppu::WeakComponentImplHelper9<
+    public SalGtkPicker,
+    public cppu::WeakComponentImplHelper10<
         ::com::sun::star::ui::dialogs::XFilterManager,
         ::com::sun::star::ui::dialogs::XFilterGroupManager,
         ::com::sun::star::ui::dialogs::XFilePickerControlAccess,
         ::com::sun::star::ui::dialogs::XFilePickerNotifier,
         ::com::sun::star::ui::dialogs::XFilePreview,
-    ::com::sun::star::lang::XInitialization,
+        ::com::sun::star::ui::dialogs::XFilePickerWorkaround,
+        ::com::sun::star::lang::XInitialization,
         ::com::sun::star::util::XCancellable,
-    ::com::sun::star::lang::XEventListener,
-    ::com::sun::star::lang::XServiceInfo >
+        ::com::sun::star::lang::XEventListener,
+        ::com::sun::star::lang::XServiceInfo >
 {
     public:
 
@@ -161,8 +162,15 @@ class SalGtkFilePicker :
         virtual ::rtl::OUString SAL_CALL getDisplayDirectory(  )
             throw( ::com::sun::star::uno::RuntimeException );
 
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getFiles(  )
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getFiles()
             throw( ::com::sun::star::uno::RuntimeException );
+
+        //------------------------------------------------------------------------------------
+        // XFilePickerWorkaround functions
+        //------------------------------------------------------------------------------------
+
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getFilesAsURIs()
+                throw (::com::sun::star::uno::RuntimeException);
 
         //------------------------------------------------------------------------------------
         // XFilterManager functions
