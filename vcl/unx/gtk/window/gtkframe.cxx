@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-14 08:56:53 $
+ *  last change: $Author: ihi $ $Date: 2006-08-03 13:33:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2686,6 +2686,10 @@ bool GtkSalFrame::IMHandler::handleKeyEvent( GdkEventKey* pEvent )
 
         gboolean bResult = gtk_im_context_filter_keypress( m_pIMContext, pEvent );
         g_object_unref( pRef );
+
+        if( aDel.isDeleted() )
+            return true;
+
         if( bResult )
             return true;
         else
@@ -2705,15 +2709,18 @@ bool GtkSalFrame::IMHandler::handleKeyEvent( GdkEventKey* pEvent )
         }
     }
 
-    if( aDel.isDeleted() )
-        return true;
-
     // Determine if we got an earlier key press event corresponding to this key release
     if (pEvent->type == GDK_KEY_RELEASE)
     {
+        GObject* pRef = G_OBJECT( g_object_ref( G_OBJECT( m_pIMContext ) ) );
+        gboolean bResult = gtk_im_context_filter_keypress( m_pIMContext, pEvent );
+        g_object_unref( pRef );
+
+        if( aDel.isDeleted() )
+            return true;
+
         std::list<PreviousKeyPress>::iterator    iter     = m_aPrevKeyPresses.begin();
         std::list<PreviousKeyPress>::iterator    iter_end = m_aPrevKeyPresses.end();
-
         while (iter != iter_end)
         {
             // If we found a corresponding previous key press event, swallow the release
@@ -2726,6 +2733,9 @@ bool GtkSalFrame::IMHandler::handleKeyEvent( GdkEventKey* pEvent )
             }
             ++iter;
         }
+
+        if( bResult )
+            return true;
     }
 
     return false;
