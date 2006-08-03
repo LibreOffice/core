@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 11:17:14 $
+ *  last change: $Author: ihi $ $Date: 2006-08-03 13:33:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4967,7 +4967,6 @@ bool PDFWriterImpl::emitTrailer()
         aLine.append( nDocInfoObject );
         aLine.append( " 0 R\n" );
     }
-    // add the encryption if needed
     if( m_aDocID.getLength() )
     {
         aLine.append( "/ID [ <" );
@@ -7679,16 +7678,50 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
             aLine.append( "[ /Indexed/DeviceRGB " );
             aLine.append( (sal_Int32)(pAccess->GetPaletteEntryCount()-1) );
             aLine.append( " <\n" );
-            for( USHORT i = 0; i < pAccess->GetPaletteEntryCount(); i++ )
+            if( m_aContext.Encrypt )
             {
-                const BitmapColor& rColor = pAccess->GetPaletteColor( i );
-                appendHex( rColor.GetRed(), aLine );
-                appendHex( rColor.GetGreen(), aLine );
-                appendHex( rColor.GetBlue(), aLine );
-                if( (i+1) & 15 )
-                    aLine.append( ' ' );
-                else
-                    aLine.append( "\n" );
+                enableStringEncryption( rObject.m_nObject );
+                //check encryption buffer size
+                if( checkEncryptionBufferSize( pAccess->GetPaletteEntryCount()*3 ) )
+                {
+                    int nChar = 0;
+                    //fill the encryption buffer
+                    for( USHORT i = 0; i < pAccess->GetPaletteEntryCount(); i++ )
+                    {
+                        const BitmapColor& rColor = pAccess->GetPaletteColor( i );
+                        m_pEncryptionBuffer[nChar++] = rColor.GetRed();
+                        m_pEncryptionBuffer[nChar++] = rColor.GetGreen();
+                        m_pEncryptionBuffer[nChar++] = rColor.GetBlue();
+                    }
+                    //encrypt the colorspace lookup table
+                    rtl_cipher_encodeARCFOUR( m_aCipher, m_pEncryptionBuffer, nChar, m_pEncryptionBuffer, nChar );
+                    //now queue the data for output
+                    nChar = 0;
+                    for( USHORT i = 0; i < pAccess->GetPaletteEntryCount(); i++ )
+                    {
+                        appendHex(m_pEncryptionBuffer[nChar++], aLine );
+                        appendHex(m_pEncryptionBuffer[nChar++], aLine );
+                        appendHex(m_pEncryptionBuffer[nChar++], aLine );
+                        if( (i+1) & 15 )
+                            aLine.append( ' ' );
+                        else
+                            aLine.append( "\n" );
+                    }
+                }
+            }
+            else //no encryption requested
+            {
+                for( USHORT i = 0; i < pAccess->GetPaletteEntryCount(); i++ )
+                {
+                    const BitmapColor& rColor = pAccess->GetPaletteColor( i );
+                    appendHex( rColor.GetRed(), aLine );
+                    appendHex( rColor.GetGreen(), aLine );
+                    appendHex( rColor.GetBlue(), aLine );
+                    if( (i+1) & 15 )
+                        aLine.append( ' ' );
+                    else
+                        aLine.append( "\n" );
+                }
             }
             aLine.append( "> ]\n" );
         }
