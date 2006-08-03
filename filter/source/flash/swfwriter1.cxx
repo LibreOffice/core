@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swfwriter1.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 15:48:38 $
+ *  last change: $Author: ihi $ $Date: 2006-08-03 12:32:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,8 +56,8 @@
 #ifndef _FILTER_HXX
 #include <svtools/filter.hxx>
 #endif
-#ifndef _SVTOOLS_GRAPHICTOOLS_HXX_
-#include <svtools/graphictools.hxx>
+#ifndef _VCL_GRAPHICTOOLS_HXX_
+#include <vcl/graphictools.hxx>
 #endif
 
 #ifndef _ZLIB_H
