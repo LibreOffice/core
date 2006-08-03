@@ -57,6 +57,10 @@
 #include FT_TRUETYPE_TAGS_H
 #include FT_TRUETYPE_IDS_H
 
+#ifndef FT_RENDER_MODE_MONO  // happens in the MACOSX build
+    #define FT_RENDER_MODE_MONO ft_render_mode_mono
+#endif
+
 #ifndef INCLUDED_RTL_INSTANCE_HXX
 #include <rtl/instance.hxx>
 #endif
@@ -465,7 +469,7 @@ FreetypeManager::FreetypeManager()
 
     // disable embedded bitmaps for Freetype-2.1.3 unless explicitly
     // requested by env var below because it crashes StarOffice on RH9
-    // TODO: investigate
+    // reason: double free in freetype's embedded bitmap handling
     if( nFTVERSION == 2103 )
         nDefaultPrioEmbedded = 0;
 
@@ -496,7 +500,7 @@ FreetypeManager::~FreetypeManager()
 // This crashes on Solaris 10
 // TODO: check which versions have this problem
 //
-//    FT_Error rcFT = FT_Done_FreeType( aLibFT );
+// FT_Error rcFT = FT_Done_FreeType( aLibFT );
 }
 
 // -----------------------------------------------------------------------
@@ -569,7 +573,7 @@ long FreetypeManager::AddFontDir( const String& rUrlName )
             {
                 const FT_CharMap aCM = aFaceFT->charmaps[i];
 #if (FTVERSION < 2000)
-                if( aCM->encoding == ft_encoding_none )
+                if( aCM->encoding == FT_ENCODING_NONE )
 #else
                 if( (aCM->platform_id == TT_PLATFORM_MICROSOFT)
                 &&  (aCM->encoding_id == TT_MS_ID_SYMBOL_CS) )
@@ -670,7 +674,8 @@ ImplFontEntry* ImplFTSFontData::CreateFontInstance( ImplFontSelectData& rFSD ) c
 
 FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontInfo* pFI )
 :   ServerFont( rFSD ),
-    mnPrioEmbedded(nDefaultPrioEmbedded), mnPrioAntiAlias(nDefaultPrioAntiAlias),
+    mnPrioEmbedded(nDefaultPrioEmbedded),
+    mnPrioAntiAlias(nDefaultPrioAntiAlias),
     mpFontInfo( pFI ),
     maFaceFT( NULL ),
     maSizeFT( NULL ),
@@ -687,19 +692,38 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
     if( !maFaceFT )
         return;
 
-    FT_Encoding eEncoding = ft_encoding_unicode;
+    // set the pixel size of the font instance
+    mnWidth = rFSD.mnWidth;
+    if( !mnWidth )
+        mnWidth = rFSD.mnHeight;
+    mfStretch = (double)mnWidth / rFSD.mnHeight;
+    // sanity check (e.g. #i66394#, #i66244#, #66537#)
+    if( (mnWidth < 0) || (mfStretch > +64.0) || (mfStretch < -64.0) ) {
+        maFaceFT->num_glyphs = 0;
+        return;
+    }
+    // perf: use maSizeFT if available
+    if( bEnableSizeFT )
+    {
+        pFTNewSize( maFaceFT, &maSizeFT );
+        pFTActivateSize( maSizeFT );
+    }
+    FT_Error rc = FT_Set_Pixel_Sizes( maFaceFT, mnWidth, rFSD.mnHeight );
+
+    // prepare for font encodings other than unicode or symbol
+    FT_Encoding eEncoding = FT_ENCODING_UNICODE;
     if( mpFontInfo->IsSymbolFont() )
     {
 #if (FTVERSION < 2000)
-        eEncoding = ft_encoding_none;
+        eEncoding = FT_ENCODING_NONE;
 #else
         if( FT_IS_SFNT( maFaceFT ) )
             eEncoding = ft_encoding_symbol;
         else
-            eEncoding = ft_encoding_adobe_custom; // freetype wants this for PS symbol fonts
+            eEncoding = FT_ENCODING_ADOBE_CUSTOM; // freetype wants this for PS symbol fonts
 #endif
     }
-    FT_Error rc = FT_Select_Charmap( maFaceFT, eEncoding );
+    rc = FT_Select_Charmap( maFaceFT, eEncoding );
 
     // no standard encoding applies => we need an encoding converter
     if( rc != FT_Err_Ok )
@@ -713,23 +737,23 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
                 switch( aCM->encoding_id )
                 {
                     case TT_MS_ID_SJIS:
-                        eEncoding = ft_encoding_sjis;
+                        eEncoding = FT_ENCODING_SJIS;
                         eRecodeFrom = RTL_TEXTENCODING_SHIFT_JIS;
                         break;
                     case TT_MS_ID_GB2312:
-                        eEncoding = ft_encoding_gb2312;
+                        eEncoding = FT_ENCODING_GB2312;
                         eRecodeFrom = RTL_TEXTENCODING_GB_2312;
                         break;
                     case TT_MS_ID_BIG_5:
-                        eEncoding = ft_encoding_big5;
+                        eEncoding = FT_ENCODING_BIG5;
                         eRecodeFrom = RTL_TEXTENCODING_BIG5;
                         break;
                     case TT_MS_ID_WANSUNG:
-                        eEncoding = ft_encoding_wansung;
+                        eEncoding = FT_ENCODING_WANSUNG;
                         eRecodeFrom = RTL_TEXTENCODING_MS_949;
                         break;
                     case TT_MS_ID_JOHAB:
-                        eEncoding = ft_encoding_johab;
+                        eEncoding = FT_ENCODING_JOHAB;
                         eRecodeFrom = RTL_TEXTENCODING_MS_1361;
                         break;
                 }
@@ -739,7 +763,7 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
                 switch( aCM->encoding_id )
                 {
                     case TT_MAC_ID_ROMAN:
-                        eEncoding = ft_encoding_apple_roman;
+                        eEncoding = FT_ENCODING_APPLE_ROMAN;
                         eRecodeFrom = RTL_TEXTENCODING_UNICODE; // TODO: use better match
                         break;
                     // TODO: add other encodings when Mac-only
@@ -752,12 +776,12 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
                 {
 #ifdef TT_ADOBE_ID_LATIN1
                     case TT_ADOBE_ID_LATIN1:   // better unicode than nothing
-                        eEncoding = ft_encoding_latin_1;
+                        eEncoding = FT_ENCODING_ADOBE_LATIN_1;
                         eRecodeFrom = RTL_TEXTENCODING_ISO_8859_1;
                         break;
 #endif // TT_ADOBE_ID_LATIN1
                     case TT_ADOBE_ID_STANDARD:   // better unicode than nothing
-                        eEncoding = ft_encoding_adobe_standard;
+                        eEncoding = FT_ENCODING_ADOBE_STANDARD;
                         eRecodeFrom = RTL_TEXTENCODING_UNICODE; // TODO: use better match
                         break;
                 }
@@ -773,18 +797,6 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
         if( eRecodeFrom != RTL_TEXTENCODING_UNICODE )
             maRecodeConverter = rtl_createUnicodeToTextConverter( eRecodeFrom );
     }
-
-    if( bEnableSizeFT )
-    {
-        pFTNewSize( maFaceFT, &maSizeFT );
-        pFTActivateSize( maSizeFT );
-    }
-
-    mnWidth = rFSD.mnWidth;
-    if( !mnWidth )
-        mnWidth = rFSD.mnHeight;
-    mfStretch = (double)mnWidth / rFSD.mnHeight;
-    rc = FT_Set_Pixel_Sizes( maFaceFT, mnWidth, rFSD.mnHeight );
 
     ApplyGSUB( rFSD );
 
@@ -803,13 +815,13 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
     static const int TT_CODEPAGE_RANGES1_CJKT = 0x3F0000; // all of the above
     const TT_OS2* pOs2 = (const TT_OS2*)FT_Get_Sfnt_Table( maFaceFT, ft_sfnt_os2 );
     if ((pOs2) && (pOs2->ulCodePageRange1 & TT_CODEPAGE_RANGES1_CJKT )
-          && rFSD.mnHeight < 20)
-    mbUseGamma = true;
+        && rFSD.mnHeight < 20)
+        mbUseGamma = true;
     else
-    mbUseGamma = false;
+        mbUseGamma = false;
 
     if (mbUseGamma)
-    mnLoadFlags |= FT_LOAD_FORCE_AUTOHINT;
+        mnLoadFlags |= FT_LOAD_FORCE_AUTOHINT;
 
     if( (mnSin != 0) && (mnCos != 0) ) // hinting for 0/90/180/270 degrees only
         mnLoadFlags |= FT_LOAD_NO_HINTING;
@@ -1042,7 +1054,7 @@ int FreetypeServerFont::ApplyGlyphTransform( int nGlyphFlags,
     while( nAngle < 0 )
         nAngle += 3600;
 
-    if( pGlyphFT->format != ft_glyph_format_bitmap )
+    if( pGlyphFT->format != FT_GLYPH_FORMAT_BITMAP )
     {
         FT_Glyph_Transform( pGlyphFT, NULL, &aVector );
 
@@ -1051,11 +1063,11 @@ int FreetypeServerFont::ApplyGlyphTransform( int nGlyphFlags,
         {
             // workaround for compatibility with older FT versions
             if( nFTVERSION < 2102 )
-        {
+            {
                 FT_Fixed t = aMatrix.xy;
-        aMatrix.xy = aMatrix.yx;
-        aMatrix.yx = t;
-        }
+                aMatrix.xy = aMatrix.yx;
+                aMatrix.yx = t;
+            }
 
             // apply non-orthogonal or stretch transformations
             FT_Glyph_Transform( pGlyphFT, &aMatrix, NULL );
@@ -1196,8 +1208,8 @@ void FreetypeServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
 
     int nLoadFlags = mnLoadFlags;
 
-//    if( mbArtItalic )
-//  nLoadFlags |= FT_LOAD_NO_BITMAP;
+//  if( mbArtItalic )
+//      nLoadFlags |= FT_LOAD_NO_BITMAP;
 
     FT_Error rc = -1;
 #if (FTVERSION <= 2008)
@@ -1206,7 +1218,7 @@ void FreetypeServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
     if( (nLoadFlags & (FT_LOAD_NO_HINTING | FT_LOAD_NO_BITMAP)) == 0 )
     {
         rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, nLoadFlags|FT_LOAD_NO_HINTING );
-        if( (rc==FT_Err_Ok) && (maFaceFT->glyph->format!=ft_glyph_format_bitmap) )
+        if( (rc==FT_Err_Ok) && (maFaceFT->glyph->format!=FT_GLYPH_FORMAT_BITMAP) )
             rc = -1; // mark as "loading embedded bitmap" was unsuccessful
         nLoadFlags |= FT_LOAD_NO_BITMAP;
     }
@@ -1244,7 +1256,7 @@ void FreetypeServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
     rGD.SetDelta( (pGlyphFT->advance.x + 0x8000) >> 16, -((pGlyphFT->advance.y + 0x8000) >> 16) );
 
     FT_BBox aBbox;
-    FT_Glyph_Get_CBox( pGlyphFT, ft_glyph_bbox_pixels, &aBbox );
+    FT_Glyph_Get_CBox( pGlyphFT, FT_GLYPH_BBOX_PIXELS, &aBbox );
     if( aBbox.yMin > aBbox.yMax )   // circumvent freetype bug
     {
         int t=aBbox.yMin; aBbox.yMin=aBbox.yMax, aBbox.yMax=t;
@@ -1280,7 +1292,7 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
     FT_Int nLoadFlags = mnLoadFlags;
 
     if( mbArtItalic )
-    nLoadFlags |= FT_LOAD_NO_BITMAP;
+        nLoadFlags |= FT_LOAD_NO_BITMAP;
 
 #if (FTVERSION >= 2002)
     // for 0/90/180/270 degree fonts enable autohinting even if not advisable
@@ -1299,7 +1311,7 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
     if( (nLoadFlags & (FT_LOAD_NO_HINTING | FT_LOAD_NO_BITMAP)) == 0 )
     {
         rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, nLoadFlags|FT_LOAD_NO_HINTING );
-        if( (rc==FT_Err_Ok) && (maFaceFT->glyph->format!=ft_glyph_format_bitmap) )
+        if( (rc==FT_Err_Ok) && (maFaceFT->glyph->format != FT_GLYPH_FORMAT_BITMAP) )
             rc = -1; // mark as "loading embedded bitmap" was unsuccessful
         nLoadFlags |= FT_LOAD_NO_BITMAP;
     }
@@ -1319,24 +1331,22 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
 
     if( mbArtItalic )
     {
-    FT_Matrix aMatrix;
-    aMatrix.xx = aMatrix.yy = 0x10000L;
-    if( nFTVERSION >= 2102 )
-        aMatrix.xy = 0x6000L, aMatrix.yx = 0;
-    else
-        aMatrix.yx = 0x6000L, aMatrix.xy = 0;
-    FT_Glyph_Transform( pGlyphFT, &aMatrix, NULL );
+        FT_Matrix aMatrix;
+        aMatrix.xx = aMatrix.yy = 0x10000L;
+        if( nFTVERSION >= 2102 )    // Freetype 2.1.2 API swapped xy with yx
+            aMatrix.xy = 0x6000L, aMatrix.yx = 0;
+        else
+            aMatrix.yx = 0x6000L, aMatrix.xy = 0;
+        FT_Glyph_Transform( pGlyphFT, &aMatrix, NULL );
     }
 
-    if( pGlyphFT->format != ft_glyph_format_bitmap )
+    if( pGlyphFT->format != FT_GLYPH_FORMAT_BITMAP )
     {
-        if( pGlyphFT->format == ft_glyph_format_outline )
-            ((FT_OutlineGlyphRec*)pGlyphFT)->outline.flags |= ft_outline_high_precision;
-#ifdef MACOSX
-        FT_Render_Mode nRenderMode = (FT_Render_Mode)((nFTVERSION<2103) ? 1 : ft_render_mode_mono); // #i15743#
-#else
-        FT_Render_Mode nRenderMode = (FT_Render_Mode)((nFTVERSION<2103) ? 1 : FT_RENDER_MODE_MONO); // #i15743#
-#endif
+        if( pGlyphFT->format == FT_GLYPH_FORMAT_OUTLINE )
+            ((FT_OutlineGlyphRec*)pGlyphFT)->outline.flags |= FT_OUTLINE_HIGH_PRECISION;
+        // #i15743# freetype API 2.1.3 changed the FT_RENDER_MODE_MONO constant
+        FT_Render_Mode nRenderMode = (FT_Render_Mode)((nFTVERSION<2103) ? 1 : FT_RENDER_MODE_MONO);
+
         rc = FT_Glyph_To_Bitmap( &pGlyphFT, nRenderMode, NULL, TRUE );
         if( rc != FT_Err_Ok )
             return false;
@@ -1352,14 +1362,14 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
     rRawBitmap.mnBitCount       = 1;
     if( mbArtBold )
     {
-    rRawBitmap.mnWidth = rBitmapFT.width + 1;
-    int nLineBytes = (rRawBitmap.mnWidth + 7) >> 3;
+        rRawBitmap.mnWidth = rBitmapFT.width + 1;
+        int nLineBytes = (rRawBitmap.mnWidth + 7) >> 3;
         rRawBitmap.mnScanlineSize  = (nLineBytes > rBitmapFT.pitch) ? nLineBytes : rBitmapFT.pitch;
     }
     else
     {
-    rRawBitmap.mnWidth          = rBitmapFT.width;
-    rRawBitmap.mnScanlineSize   = rBitmapFT.pitch;
+        rRawBitmap.mnWidth          = rBitmapFT.width;
+        rRawBitmap.mnScanlineSize   = rBitmapFT.pitch;
     }
 
     const ULONG nNeededSize = rRawBitmap.mnScanlineSize * rRawBitmap.mnHeight;
@@ -1373,32 +1383,32 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
 
     if( !mbArtBold )
     {
-    memcpy( rRawBitmap.mpBits, rBitmapFT.buffer, nNeededSize );
+        memcpy( rRawBitmap.mpBits, rBitmapFT.buffer, nNeededSize );
     }
     else
     {
         memset( rRawBitmap.mpBits, 0, nNeededSize );
-    const unsigned char* pSrcLine = rBitmapFT.buffer;
-    unsigned char* pDstLine = rRawBitmap.mpBits;
-    for( int h = rRawBitmap.mnHeight; --h >= 0; )
-    {
-        memcpy( pDstLine, pSrcLine, rBitmapFT.pitch );
-        pDstLine += rRawBitmap.mnScanlineSize;
-        pSrcLine += rBitmapFT.pitch;
-    }
-
-    unsigned char* p = rRawBitmap.mpBits;
-    for( ULONG y=0; y < rRawBitmap.mnHeight; y++ )
-    {
-        unsigned char nLastByte = 0;
-        for( ULONG x=0; x < rRawBitmap.mnScanlineSize; x++ )
+        const unsigned char* pSrcLine = rBitmapFT.buffer;
+        unsigned char* pDstLine = rRawBitmap.mpBits;
+        for( int h = rRawBitmap.mnHeight; --h >= 0; )
         {
-        unsigned char nTmp = p[x] << 7;
-        p[x] |= (p[x] >> 1) | nLastByte;
-        nLastByte = nTmp;
+            memcpy( pDstLine, pSrcLine, rBitmapFT.pitch );
+            pDstLine += rRawBitmap.mnScanlineSize;
+            pSrcLine += rBitmapFT.pitch;
         }
-        p += rRawBitmap.mnScanlineSize;
-    }
+
+        unsigned char* p = rRawBitmap.mpBits;
+        for( ULONG y=0; y < rRawBitmap.mnHeight; y++ )
+        {
+            unsigned char nLastByte = 0;
+            for( ULONG x=0; x < rRawBitmap.mnScanlineSize; x++ )
+            {
+            unsigned char nTmp = p[x] << 7;
+            p[x] |= (p[x] >> 1) | nLastByte;
+            nLastByte = nTmp;
+            }
+            p += rRawBitmap.mnScanlineSize;
+        }
     }
 
     FT_Done_Glyph( pGlyphFT );
@@ -1430,7 +1440,7 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
     FT_Int nLoadFlags = mnLoadFlags;
 
     if( mbArtItalic )
-    nLoadFlags |= FT_LOAD_NO_BITMAP;
+        nLoadFlags |= FT_LOAD_NO_BITMAP;
 
 #if (FTVERSION <= 2004) && !defined(TT_CONFIG_OPTION_BYTECODE_INTERPRETER)
     // autohinting in FT<=2.0.4 makes antialiased glyphs look worse
@@ -1450,7 +1460,7 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
     if( (nLoadFlags & (FT_LOAD_NO_HINTING | FT_LOAD_NO_BITMAP)) == 0 )
     {
         rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, nLoadFlags|FT_LOAD_NO_HINTING );
-        if( (rc==FT_Err_Ok) && (maFaceFT->glyph->format!=ft_glyph_format_bitmap) )
+        if( (rc==FT_Err_Ok) && (maFaceFT->glyph->format != FT_GLYPH_FORMAT_BITMAP) )
             rc = -1; // mark as "loading embedded bitmap" was unsuccessful
         nLoadFlags |= FT_LOAD_NO_BITMAP;
     }
@@ -1471,22 +1481,22 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
 
     if( mbArtItalic )
     {
-    FT_Matrix aMatrix;
-    aMatrix.xx = aMatrix.yy = 0x10000L;
-    if( nFTVERSION >= 2102 )
-        aMatrix.xy = 0x6000L, aMatrix.yx = 0;
-    else
-        aMatrix.yx = 0x6000L, aMatrix.xy = 0;
-    FT_Glyph_Transform( pGlyphFT, &aMatrix, NULL );
+        FT_Matrix aMatrix;
+        aMatrix.xx = aMatrix.yy = 0x10000L;
+        if( nFTVERSION >= 2102 )    // Freetype 2.1.2 API swapped xy with yx
+            aMatrix.xy = 0x6000L, aMatrix.yx = 0;
+        else
+            aMatrix.yx = 0x6000L, aMatrix.xy = 0;
+        FT_Glyph_Transform( pGlyphFT, &aMatrix, NULL );
     }
 
-    if( pGlyphFT->format == ft_glyph_format_outline )
-        ((FT_OutlineGlyph)pGlyphFT)->outline.flags |= ft_outline_high_precision;
+    if( pGlyphFT->format == FT_GLYPH_FORMAT_OUTLINE )
+        ((FT_OutlineGlyph)pGlyphFT)->outline.flags |= FT_OUTLINE_HIGH_PRECISION;
 
-    bool bEmbedded = (pGlyphFT->format == ft_glyph_format_bitmap);
+    bool bEmbedded = (pGlyphFT->format == FT_GLYPH_FORMAT_BITMAP);
     if( !bEmbedded )
     {
-        rc = FT_Glyph_To_Bitmap( &pGlyphFT, ft_render_mode_normal, NULL, TRUE );
+        rc = FT_Glyph_To_Bitmap( &pGlyphFT, FT_RENDER_MODE_NORMAL, NULL, TRUE );
         if( rc != FT_Err_Ok )
             return false;
     }
@@ -1502,8 +1512,8 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
     rRawBitmap.mnScanlineSize   = bEmbedded ? rBitmapFT.width : rBitmapFT.pitch;
     if( mbArtBold )
     {
-    ++rRawBitmap.mnWidth;
-        ++rRawBitmap.mnScanlineSize;
+        ++rRawBitmap.mnWidth;
+            ++rRawBitmap.mnScanlineSize;
     }
     rRawBitmap.mnScanlineSize = (rRawBitmap.mnScanlineSize + 3) & -4;
 
@@ -1545,32 +1555,32 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
 
     if( mbArtBold )
     {
-    // overlay with glyph image shifted by one left pixel
-    unsigned char* p = rRawBitmap.mpBits;
-    for( ULONG y=0; y < rRawBitmap.mnHeight; y++ )
-    {
-        unsigned char nLastByte = 0;
-        for( ULONG x=0; x < rRawBitmap.mnWidth; x++ )
+        // overlay with glyph image shifted by one left pixel
+        unsigned char* p = rRawBitmap.mpBits;
+        for( ULONG y=0; y < rRawBitmap.mnHeight; y++ )
         {
-            unsigned char nTmp = p[x];
-            p[x] |= p[x] | nLastByte;
-            nLastByte = nTmp;
+            unsigned char nLastByte = 0;
+            for( ULONG x=0; x < rRawBitmap.mnWidth; x++ )
+            {
+                unsigned char nTmp = p[x];
+                p[x] |= p[x] | nLastByte;
+                nLastByte = nTmp;
+            }
+            p += rRawBitmap.mnScanlineSize;
         }
-        p += rRawBitmap.mnScanlineSize;
-    }
     }
 
     if( !bEmbedded && mbUseGamma )
     {
-    unsigned char* p = rRawBitmap.mpBits;
-    for( ULONG y=0; y < rRawBitmap.mnHeight; y++ )
-    {
-        for( ULONG x=0; x < rRawBitmap.mnWidth; x++ )
+        unsigned char* p = rRawBitmap.mpBits;
+        for( ULONG y=0; y < rRawBitmap.mnHeight; y++ )
         {
-            p[x] = aGammaTable[ p[x] ];
+            for( ULONG x=0; x < rRawBitmap.mnWidth; x++ )
+            {
+                p[x] = aGammaTable[ p[x] ];
+            }
+            p += rRawBitmap.mnScanlineSize;
         }
-        p += rRawBitmap.mnScanlineSize;
-    }
     }
 
     FT_Done_Glyph( pGlyphFT );
@@ -1675,7 +1685,7 @@ int FreetypeServerFont::GetGlyphKernValue( int nGlyphLeft, int nGlyphRight ) con
     // use Freetype's kerning info
     FT_Vector aKernVal;
     FT_Error rcFT = FT_Get_Kerning( maFaceFT, nGlyphLeft, nGlyphRight,
-                ft_kerning_default, &aKernVal );
+                FT_KERNING_DEFAULT, &aKernVal );
     int nResult = (rcFT == FT_Err_Ok) ? (aKernVal.x + 32) >> 6 : 0;
     return nResult;
 }
@@ -1898,7 +1908,7 @@ ULONG FreetypeServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
         {
             FT_Vector aKernVal;
             FT_Error rcFT = FT_Get_Kerning( maFaceFT, it->mnChar1, it->mnChar2,
-                ft_kerning_default, &aKernVal );
+                FT_KERNING_DEFAULT, &aKernVal );
             aKernPair.mnKern = aKernVal.x >> 6;
             if( (aKernPair.mnKern == 0) || (rcFT != FT_Err_Ok) )
                 continue;
@@ -2128,7 +2138,7 @@ bool FreetypeServerFont::GetGlyphOutline( int nGlyphIndex,
     if( rc != FT_Err_Ok )
         return false;
 
-    if( pGlyphFT->format != ft_glyph_format_outline )
+    if( pGlyphFT->format != FT_GLYPH_FORMAT_OUTLINE )
         return false;
 
     FT_Outline& rOutline = reinterpret_cast<FT_OutlineGlyphRec*>(pGlyphFT)->outline;
