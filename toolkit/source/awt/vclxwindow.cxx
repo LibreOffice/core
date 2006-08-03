@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 15:55:10 $
+ *  last change: $Author: ihi $ $Date: 2006-08-03 13:31:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1498,9 +1498,23 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
             case BASEPROPERTY_LABEL:
             case BASEPROPERTY_TITLE:
             {
-                ::rtl::OUString aText;
-                if ( Value >>= aText )
-                    pWindow->SetText( aText );
+              ::rtl::OUString aText;
+              if ( Value >>= aText )
+              {
+                switch (eWinType)
+                {
+                case WINDOW_OKBUTTON:
+                case WINDOW_CANCELBUTTON:
+                case WINDOW_HELPBUTTON:
+                  // Standard Button: overwrite only if not empty.
+                  if (aText.getLength())
+                pWindow->SetText( aText );
+                  break;
+                default:
+                  pWindow->SetText( aText );
+                  break;
+                }
+              }
             }
             break;
             case BASEPROPERTY_ACCESSIBLENAME:
