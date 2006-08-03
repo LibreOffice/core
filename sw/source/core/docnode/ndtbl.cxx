@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtbl.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 09:15:16 $
+ *  last change: $Author: ihi $ $Date: 2006-08-03 13:55:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2577,8 +2577,8 @@ void SwDoc::SetTabCols( const SwTabCols &rNew, BOOL bCurRowOnly,
     aOld.SetRight   ( (pTab->Prt().*fnRect->fnGetRight)());
     aOld.SetRightMax( nRightMax - nLeftMin );
 
+    rTab.GetTabCols( aOld, pBox );
     SetTabCols(rTab, rNew, aOld, pBox, bCurRowOnly );
-    ::ClearFEShellTabCols();
 }
 
 void SwDoc::SetTabRows( const SwTabCols &rNew, BOOL bCurColOnly, const SwCursor* pCrsr,
@@ -2686,7 +2686,7 @@ void SwDoc::SetTabRows( const SwTabCols &rNew, BOOL bCurColOnly, const SwCursor*
 /* -----------------18.07.98 11:45-------------------
  *  Direktzugriff fuer UNO
  * --------------------------------------------------*/
-void SwDoc::SetTabCols(SwTable& rTab, const SwTabCols &rNew, SwTabCols &rOld,
+void SwDoc::SetTabCols(SwTable& rTab, const SwTabCols &rNew, const SwTabCols &rOld,
                                 const SwTableBox *pStart, BOOL bCurRowOnly )
 {
     if( DoesUndo() )
@@ -2695,6 +2695,7 @@ void SwDoc::SetTabCols(SwTable& rTab, const SwTabCols &rNew, SwTabCols &rOld,
         AppendUndo( new SwUndoAttrTbl( *rTab.GetTableNode(), TRUE ));
     }
     rTab.SetTabCols( rNew, rOld, pStart, bCurRowOnly );
+      ::ClearFEShellTabCols();
     SetModified();
 }
 
