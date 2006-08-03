@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.120 $
+ *  $Revision: 1.121 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 11:45:47 $
+ *  last change: $Author: ihi $ $Date: 2006-08-03 13:55:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1834,7 +1834,7 @@ public:
 
 
     // Direktzugriff fuer Uno
-    void SetTabCols(SwTable& rTab, const SwTabCols &rNew, SwTabCols &rOld,
+    void SetTabCols(SwTable& rTab, const SwTabCols &rNew, const SwTabCols &rOld,
                                     const SwTableBox *pStart, sal_Bool bCurRowOnly);
 
     void SetRowsToRepeat( SwTable &rTable, USHORT nSet );
