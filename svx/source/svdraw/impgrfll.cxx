@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impgrfll.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:33:10 $
+ *  last change: $Author: ihi $ $Date: 2006-08-03 12:36:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,8 +57,8 @@
 #include <vcl/svapp.hxx>
 #endif
 
-#ifndef _SVTOOLS_GRAPHICTOOLS_HXX_
-#include <svtools/graphictools.hxx>
+#ifndef _VCL_GRAPHICTOOLS_HXX_
+#include <vcl/graphictools.hxx>
 #endif
 
 #include "svdobj.hxx"
