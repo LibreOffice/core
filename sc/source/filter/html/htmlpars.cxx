@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlpars.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:26:47 $
+ *  last change: $Author: ihi $ $Date: 2006-08-03 14:54:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -524,8 +524,10 @@ USHORT ScHTMLLayoutParser::GetWidth( ScEEParseEntry* pE )
 {
     if ( pE->nWidth )
         return pE->nWidth;
-    SCCOL nPos = Min( static_cast<SCCOL>(pE->nCol - nColCntStart + pE->nColOverlap),
-        static_cast<SCCOL>(pLocalColOffset->Count() - 1) );
+    sal_Int32 nTmp = ::std::min( static_cast<sal_Int32>( pE->nCol -
+                nColCntStart + pE->nColOverlap),
+            static_cast<sal_Int32>( pLocalColOffset->Count() - 1));
+    SCCOL nPos = (nTmp < 0 ? 0 : static_cast<SCCOL>(nTmp));
     USHORT nOff2 = (USHORT) (*pLocalColOffset)[nPos];
     if ( pE->nOffset < nOff2 )
         return nOff2 - pE->nOffset;
@@ -693,6 +695,10 @@ void ScHTMLLayoutParser::SetWidths()
 
 void ScHTMLLayoutParser::Colonize( ScEEParseEntry* pE )
 {
+    if ( pE->nCol == SCCOL_MAX )
+        pE->nCol = nColCnt;
+    if ( pE->nRow == SCROW_MAX )
+        pE->nRow = nRowCnt;
     SCCOL nCol = pE->nCol;
     SkipLocked( pE );       // Spaltenverdraengung nach rechts
 
@@ -727,10 +733,6 @@ void ScHTMLLayoutParser::CloseEntry( ImportInfo* pInfo )
         NewActEntry( pList->Last() );   // neuer freifliegender pActEntry
         return ;
     }
-    if ( pActEntry->nCol == SCCOL_MAX )
-        pActEntry->nCol = nColCnt;
-    if ( pActEntry->nRow == SCROW_MAX )
-        pActEntry->nRow = nRowCnt;
     if ( pActEntry->nTab == 0 )
         pActEntry->nWidth = (USHORT) aPageSize.Width();
     Colonize( pActEntry );
