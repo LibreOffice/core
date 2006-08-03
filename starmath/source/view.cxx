@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 11:15:02 $
+ *  last change: $Author: ihi $ $Date: 2006-08-03 12:55:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -705,6 +705,9 @@ void SmCmdBoxWindow::StateChanged( StateChangedType nStateChange )
         // set initial position of window in floating mode
         if (TRUE == IsFloatingMode())
             AdjustPosition();   //! don't change pos in docking-mode !
+
+        // make sure the formula can be edited right away
+        aEdit.GrabFocus();
     }
 
     SfxDockingWindow::StateChanged( nStateChange );
