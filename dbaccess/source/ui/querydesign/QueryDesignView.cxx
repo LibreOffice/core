@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:41:12 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 13:57:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2167,19 +2167,12 @@ namespace
                         aInfo->SetTabWindow( NULL );
 
                         // since we support queries in queries, the thingie might belong to an existing "table"
-                        if ( !lcl_findColumnInTables( aColumns, *pTabList, aInfo ) )
+                        OQueryTableWindow* pExistingTable = lcl_findColumnInTables( aColumns, *pTabList, aInfo );
+                        if ( pExistingTable )
                         {
-                            // okay, it doesn't belong to a query directly. In this case, it must belong
-                            // to the (only) table in the FROM part
-                            DBG_ASSERT( pTabList->size() == 1, "InstallFields: unqualified expression, but more or less than one table!" );
-                            if ( !pTabList->empty() )
-                            {
-                                OQueryTableWindow* pWindow = static_cast< OQueryTableWindow* >( pTabList->begin()->second );
-                                aInfo->SetTabWindow( pWindow );
-                                aInfo->SetTable( pWindow->GetTableName() );
-                                aInfo->SetAlias( pWindow->GetAliasName() );
-                                aInfo->SetDatabase( pWindow->GetComposedName() );
-                            }
+                            aInfo->SetTabWindow( pExistingTable );
+                            aInfo->SetTable( pExistingTable->GetTableName() );
+                            aInfo->SetAlias( pExistingTable->GetAliasName() );
                         }
 
                         aInfo->SetDataType(DataType::DOUBLE);
