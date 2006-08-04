@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventhandler.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 07:55:38 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 13:59:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -249,21 +249,19 @@ namespace pcr
         */
         sal_Int32   impl_getComponentIndexInParent_throw() const;
 
-        /** sets a given script code as event handler at a form component, for a given event
-            @param  _rForEvent
-                the event whose script code is to be set
-            @param  _rScriptCode
-                the script code to set
-        */
-        void    impl_setFormComponentScriptEvent_nothrow( const EventDescription& _rForEvent, const ::rtl::OUString& _rScriptCode );
+        /** sets a given script event as event handler at a form component
 
-        /** sets a given script code as event handler at a dialog element, for a given event
-            @param  _rForEvent
-                the event whose script code is to be set
-            @param  _rScriptCode
-                the script code to set
+            @param  _rScriptEvent
+                the script event to set
         */
-        void    impl_setDialogElementScriptEvent_nothrow( const EventDescription& _rForEvent, const ::rtl::OUString& _rScriptCode );
+        void    impl_setFormComponentScriptEvent_nothrow( const ::com::sun::star::script::ScriptEventDescriptor& _rScriptEvent );
+
+        /** sets a given script event as event handler at a dialog component
+
+            @param  _rScriptEvent
+                the script event to set
+        */
+        void    impl_setDialogElementScriptEvent_nothrow( const ::com::sun::star::script::ScriptEventDescriptor& _rScriptEvent );
 
     private:
         EventHandler();                                 // never implemented
