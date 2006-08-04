@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addonstoolbarmanager.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 09:37:53 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 11:08:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -219,14 +219,18 @@ static Image RetrieveImage( Reference< com::sun::star::frame::XFrame >& rFrame,
 
     if ( aImageId.getLength() > 0 )
     {
-        aImage = GetImageFromURL( rFrame, aImageId, bBigImage, bHiContrast );
+        aImage = framework::AddonsOptions().GetImageFromURL( aImageId, bBigImage, bHiContrast );
+        if ( !!aImage )
+            return aImage;
+        else
+            aImage = GetImageFromURL( rFrame, aImageId, bBigImage, bHiContrast );
         if ( !!aImage )
             return aImage;
     }
 
-    aImage = GetImageFromURL( rFrame, aURL, bBigImage, bHiContrast );
+    aImage = framework::AddonsOptions().GetImageFromURL( aURL, bBigImage, bHiContrast );
     if ( !aImage )
-        aImage = framework::AddonsOptions().GetImageFromURL( aURL, bBigImage, bHiContrast );
+        aImage = GetImageFromURL( rFrame, aImageId, bBigImage, bHiContrast );
 
     return aImage;
 }
