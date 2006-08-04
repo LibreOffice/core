@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: obo $ $Date: 2006-07-10 12:33:06 $
+#   last change: $Author: ihi $ $Date: 2006-08-04 12:12:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,7 @@ CDEFS += -DSC_INFO_OSVERSION=\"$(OS)\"
 # --- Files --------------------------------------------------------
 
 SLOFILES =  \
+        $(SLO)$/addincfg.obj \
         $(SLO)$/addincol.obj \
         $(SLO)$/addinhelpid.obj \
         $(SLO)$/addinlis.obj \
