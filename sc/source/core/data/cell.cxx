@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cell.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 10:49:18 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 11:33:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1484,16 +1484,16 @@ void ScFormulaCell::Interpret()
                             pIterCell = (*aIter).pCell;
                             pIterCell->bIsIterCell = FALSE;
                             pIterCell->nSeenInIteration = 0;
-                            if (pIterCell->IsDirtyOrInTableOpDirty())
-                            {
-                                pIterCell->bRunning = (*aIter).bOldRunning;
-                                pIterCell->bDirty = FALSE;
-                                pIterCell->bTableOpDirty = FALSE;
-                                pIterCell->pCode->SetError( errNoConvergence);
-                                pIterCell->bChanged = TRUE;
-                                pIterCell->SetTextWidth( TEXTWIDTH_DIRTY);
-                                pIterCell->SetScriptType( SC_SCRIPTTYPE_UNKNOWN);
-                            }
+                            pIterCell->bRunning = (*aIter).bOldRunning;
+                            // If one cell didn't converge, all cells of this
+                            // circular dependency don't, no matter whether
+                            // single cells did.
+                            pIterCell->bDirty = FALSE;
+                            pIterCell->bTableOpDirty = FALSE;
+                            pIterCell->pCode->SetError( errNoConvergence);
+                            pIterCell->bChanged = TRUE;
+                            pIterCell->SetTextWidth( TEXTWIDTH_DIRTY);
+                            pIterCell->SetScriptType( SC_SCRIPTTYPE_UNKNOWN);
                         }
                     }
                     // End this iteration and remove entries.
