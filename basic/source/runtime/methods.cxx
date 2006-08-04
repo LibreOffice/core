@@ -4,9 +4,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 17:45:57 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 10:54:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,6 +121,7 @@ using namespace com::sun::star::io;
 #include "stdobj1.hxx"
 #include "rtlproto.hxx"
 #include "basrid.hxx"
+#include "image.hxx"
 #include "sb.hrc"
 #ifndef _SBIOSYS_HXX
 #include "iosys.hxx"
@@ -578,15 +579,22 @@ void implStepRenameUCB( const String& aSource, const String& aDest )
     {
         try
         {
+            String aSourceFullPath = getFullPath( aSource );
+            if( !xSFI->exists( aSourceFullPath ) )
+            {
+                StarBASIC::Error( SbERR_FILE_NOT_FOUND );
+                return;
+            }
+
             String aDestFullPath = getFullPath( aDest );
             if( xSFI->exists( aDestFullPath ) )
                 StarBASIC::Error( SbERR_FILE_EXISTS );
             else
-                xSFI->move( getFullPath( aSource ), aDestFullPath );
+                xSFI->move( aSourceFullPath, aDestFullPath );
         }
         catch( Exception & )
         {
-            StarBASIC::Error( ERRCODE_IO_GENERAL );
+            StarBASIC::Error( SbERR_FILE_NOT_FOUND );
         }
     }
 }
@@ -623,7 +631,7 @@ RTLFUNC(FileCopy) // JSM
                 }
                 catch( Exception & )
                 {
-                    StarBASIC::Error( ERRCODE_IO_GENERAL );
+                    StarBASIC::Error( SbERR_PATH_NOT_FOUND );
                 }
             }
         }
@@ -668,9 +676,15 @@ RTLFUNC(Kill) // JSM
             Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
             if( xSFI.is() )
             {
+                String aFullPath = getFullPath( aFileSpec );
+                if( !xSFI->exists( aFullPath ) )
+                {
+                    StarBASIC::Error( SbERR_PATH_NOT_FOUND );
+                    return;
+                }
                 try
                 {
-                    xSFI->kill( getFullPath( aFileSpec ) );
+                    xSFI->kill( aFullPath );
                 }
                 catch( Exception & )
                 {
@@ -812,16 +826,17 @@ RTLFUNC(RmDir) // JSM
             {
                 try
                 {
+                    if( !xSFI->isFolder( aPath ) )
+                    {
+                        StarBASIC::Error( SbERR_PATH_NOT_FOUND );
+                        return;
+                    }
                     SbiInstance* pInst = pINST;
                     bool bCompatibility = ( pInst && pInst->IsCompatibility() );
                     if( bCompatibility )
                     {
-                        sal_Int32 nCount = 1;
-                        if( xSFI->isFolder( aPath ) )
-                        {
-                            Sequence< OUString > aContent = xSFI->getFolderContents( aPath, true );
-                            nCount = aContent.getLength();
-                        }
+                        Sequence< OUString > aContent = xSFI->getFolderContents( aPath, true );
+                        sal_Int32 nCount = aContent.getLength();
                         if( nCount > 0 )
                         {
                             StarBASIC::Error( SbERR_ACCESS_ERROR );
@@ -970,9 +985,21 @@ RTLFUNC(InStr)
             nStartPos = (USHORT)lStartPos;
             nFirstStringPos++;
         }
-        int bNotCaseSensitive = 1;
+
+        SbiInstance* pInst = pINST;
+        int bTextMode;
+        bool bCompatibility = ( pInst && pInst->IsCompatibility() );
+        if( bCompatibility )
+        {
+            SbiRuntime* pRT = pInst ? pInst->pRun : NULL;
+            bTextMode = pRT ? pRT->GetImageFlag( SBIMG_COMPARETEXT ) : FALSE;
+        }
+        else
+        {
+            bTextMode = 1;;
+        }
         if ( nArgCount == 4 )
-            bNotCaseSensitive = rPar.Get(4)->GetInteger();
+            bTextMode = rPar.Get(4)->GetInteger();
 
         USHORT nPos;
         const String& rToken = rPar.Get(nFirstStringPos+1)->GetString();
@@ -984,7 +1011,7 @@ RTLFUNC(InStr)
         }
         else
         {
-            if( !bNotCaseSensitive )
+            if( !bTextMode )
             {
                 const String& rStr1 = rPar.Get(nFirstStringPos)->GetString();
 
@@ -1039,9 +1066,21 @@ RTLFUNC(InStrRev)
                 lStartPos = -1;
             }
         }
-        int bNotCaseSensitive = 1;
+
+        SbiInstance* pInst = pINST;
+        int bTextMode;
+        bool bCompatibility = ( pInst && pInst->IsCompatibility() );
+        if( bCompatibility )
+        {
+            SbiRuntime* pRT = pInst ? pInst->pRun : NULL;
+            bTextMode = pRT ? pRT->GetImageFlag( SBIMG_COMPARETEXT ) : FALSE;
+        }
+        else
+        {
+            bTextMode = 1;;
+        }
         if ( nArgCount == 4 )
-            bNotCaseSensitive = rPar.Get(4)->GetInteger();
+            bTextMode = rPar.Get(4)->GetInteger();
 
         USHORT nStrLen = aStr1.Len();
         USHORT nStartPos = lStartPos == -1 ? nStrLen : (USHORT)lStartPos;
@@ -1057,7 +1096,7 @@ RTLFUNC(InStrRev)
             }
             else if( nStrLen > 0 )
             {
-                if( !bNotCaseSensitive )
+                if( !bTextMode )
                 {
                     OUString aOUStr1 ( aStr1 );
                     OUString aOUToken( aToken );
@@ -1503,13 +1542,28 @@ RTLFUNC(StrComp)
     }
     const String& rStr1 = rPar.Get(1)->GetString();
     const String& rStr2 = rPar.Get(2)->GetString();
-    INT16 nIgnoreCase = TRUE;
+
+    SbiInstance* pInst = pINST;
+    INT16 nTextCompare;
+    bool bCompatibility = ( pInst && pInst->IsCompatibility() );
+    if( bCompatibility )
+    {
+        SbiRuntime* pRT = pInst ? pInst->pRun : NULL;
+        nTextCompare = pRT ? pRT->GetImageFlag( SBIMG_COMPARETEXT ) : FALSE;
+    }
+    else
+    {
+        nTextCompare = TRUE;
+    }
     if ( rPar.Count() == 4 )
-        nIgnoreCase = rPar.Get(3)->GetInteger();
+        nTextCompare = rPar.Get(3)->GetInteger();
+
+    if( !bCompatibility )
+        nTextCompare = !nTextCompare;
 
     StringCompare aResult;
     int nRetValue = 0;
-    if ( !nIgnoreCase )
+    if( nTextCompare )
     {
         ::utl::TransliterationWrapper* pTransliterationWrapper = GetSbData()->pTransliterationWrapper;
         if( !pTransliterationWrapper )
