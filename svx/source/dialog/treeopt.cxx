@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treeopt.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 09:49:09 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 14:22:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1623,10 +1623,9 @@ void OfaTreeOptionsDialog::ApplyLanguageOptions(const SfxItemSet& rSet)
     }
 }
 
-SvtModuleOptions::EFactory getCurrentFactory_Impl( const Reference< XFrame >& _xFrame )
+rtl::OUString getCurrentFactory_Impl( const Reference< XFrame >& _xFrame )
 {
-    SvtModuleOptions::EFactory eFactory = SvtModuleOptions::E_UNKNOWN_FACTORY;
-    ::rtl::OUString sIdentifier, sShortName;
+    ::rtl::OUString sIdentifier;
     Reference < XFrame > xCurrentFrame( _xFrame );
     Reference < XModuleManager > xModuleManager( ::comphelper::getProcessServiceFactory()->createInstance(
         DEFINE_CONST_UNICODE("com.sun.star.frame.ModuleManager") ), UNO_QUERY );
@@ -1654,33 +1653,7 @@ SvtModuleOptions::EFactory getCurrentFactory_Impl( const Reference< XFrame >& _x
         }
     }
 
-    if ( sIdentifier.getLength() > 0 )
-    {
-        try
-        {
-            Sequence< PropertyValue > lProps;
-            Reference< ::com::sun::star::container::XNameAccess > xCont( xModuleManager, UNO_QUERY );
-            if ( xCont.is() )
-                xCont->getByName( sIdentifier ) >>= lProps;
-            for ( sal_Int32 i = 0; i < lProps.getLength(); ++i )
-            {
-                if ( lProps[i].Name.equalsAscii("ooSetupFactoryShortName") )
-                {
-                    lProps[i].Value >>= sShortName;
-                    break;
-                }
-            }
-        }
-        catch ( Exception& )
-        {
-            DBG_ERRORFILE( "getActiveModule_Impl(): exception of XNameAccess::getByName()" );
-        }
-    }
-
-    if ( sShortName.getLength() > 0 )
-        eFactory = SvtModuleOptions::ClassifyFactoryByShortName( sShortName );
-
-    return eFactory;
+    return sIdentifier;
 }
 
 void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
@@ -1752,7 +1725,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
         }
     }
 
-    SvtModuleOptions::EFactory eFactory = getCurrentFactory_Impl( _xFrame );
+    rtl::OUString aFactory = getCurrentFactory_Impl( _xFrame );
 
     // Writer and Writer/Web options
     sal_Bool bHasAnyFilter = sal_False;
@@ -1762,9 +1735,9 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
         // Textdokument
         bHasAnyFilter = sal_True;
         ResStringArray& rTextArray = aDlgResource.GetTextArray();
-        if (   SvtModuleOptions::E_WRITER == eFactory
-            || SvtModuleOptions::E_WRITERWEB == eFactory
-            || SvtModuleOptions::E_WRITERGLOBAL == eFactory )
+        if (   aFactory.equalsAscii( "com.sun.star.text.TextDocument" )
+            || aFactory.equalsAscii( "com.sun.star.text.WebDocument" )
+            || aFactory.equalsAscii( "com.sun.star.text.GlobalDocument" ) )
         {
             SfxModule* pSwMod = (*(SfxModule**) GetAppData(SHL_WRITER));
             if ( !lcl_isOptionHidden( SID_SW_EDITOPTIONS, aOptionsDlgOpt ) )
@@ -1807,7 +1780,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
     if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
     {
         bHasAnyFilter = sal_True;
-        if ( SvtModuleOptions::E_CALC == eFactory )
+        if ( aFactory.equalsAscii( "com.sun.star.sheet.SpreadsheetDocument" ))
         {
             if ( !lcl_isOptionHidden( SID_SC_EDITOPTIONS, aOptionsDlgOpt ) )
             {
@@ -1834,7 +1807,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
     if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
     {
         bHasAnyFilter = sal_True;
-        if ( eFactory == SvtModuleOptions::E_IMPRESS )
+        if ( aFactory.equalsAscii( "com.sun.star.presentation.PresentationDocument" ))
         {
             if ( !lcl_isOptionHidden( SID_SD_EDITOPTIONS, aOptionsDlgOpt ) )
             {
@@ -1857,7 +1830,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
     // Draw options
     if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
     {
-        if ( eFactory == SvtModuleOptions::E_DRAW )
+        if ( aFactory.equalsAscii( "com.sun.star.drawing.DrawingDocument" ))
         {
             if ( !lcl_isOptionHidden( SID_SD_GRAPHIC_OPTIONS, aOptionsDlgOpt ) )
             {
@@ -1880,7 +1853,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
     // Math options
     if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SMATH ) )
     {
-        if ( SvtModuleOptions::E_MATH == eFactory )
+        if ( aFactory.equalsAscii( "com.sun.star.formula.FormulaProperties" ))
         {
             if ( !lcl_isOptionHidden( SID_SM_EDITOPTIONS, aOptionsDlgOpt ) )
             {
