@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqlnode.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 15:14:51 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 13:50:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -563,7 +563,11 @@ void OSQLParseNode::impl_parseNodeToString_throw(::rtl::OUString& rString, const
         {
             const OSQLParseNode* pSubTree = *i;
             if ( !pSubTree )
+            {
+                ++i;
                 continue;
+            }
+
             SQLParseNodeParameter aNewParam(rParam);
 
             // don't replace the field for subqueries
@@ -993,7 +997,7 @@ sal_Int16 OSQLParser::buildPredicateRule(OSQLParseNode*& pAppend,OSQLParseNode* 
         catch( Exception& )
         {
             return nErg;
-            }
+        }
 
         OSQLParseNode* pNode1 = convertNode(nType,pLiteral);
         if ( pNode1 )
@@ -2330,7 +2334,7 @@ void OSQLParseNode::insert(sal_uInt32 nPos, OSQLParseNode* pNewSubTree)
 
     // stelle Verbindung zum getParent her:
     pNewSubTree->setParent( this );
-    m_aChilds.insert(m_aChilds.begin() + nPos, 0);
+    m_aChilds.insert(m_aChilds.begin() + nPos, pNewSubTree);
 }
 
 // removeAt-Methoden
