@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grviewsh.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:14:26 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 11:09:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 #include "GraphicViewShell.hxx"
 #include "LayerTabBar.hxx"
 #include "FrameView.hxx"
+#include <sfx2/objsh.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/scrbar.hxx>
 
@@ -96,7 +97,10 @@ void GraphicViewShell::Construct (void)
 
     mpLayerTabBar.reset (new LayerTabBar(this,GetParentWindow()));
     mpLayerTabBar->SetSplitHdl(LINK(this,GraphicViewShell,TabBarSplitHandler));
-    mpLayerTabBar->Show();
+
+    // pb: #i67363# no layer tabbar on preview mode
+    if ( !GetObjectShell()->IsPreview() )
+        mpLayerTabBar->Show();
 }
 
 
