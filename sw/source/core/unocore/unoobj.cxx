@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-14 08:31:57 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 13:06:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2067,7 +2067,9 @@ Sequence< PropertyState > SwXTextCursor::GetPropertyStates(
                                 RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER,
                                 0L );
                     }
-                    SwXTextCursor::GetCrsrAttr( rPaM, *pSet, FALSE );
+                    // --> OD 2006-07-12 #i63870#
+                    SwXTextCursor::GetCrsrAttr( rPaM, *pSet );
+                    // <--
                 }
 
                 if( pSet->Count() )
@@ -2081,7 +2083,9 @@ Sequence< PropertyState > SwXTextCursor::GetPropertyStates(
                     if( !pSetParent )
                     {
                         pSetParent = pSet->Clone( FALSE );
-                        SwXTextCursor::GetCrsrAttr( rPaM, *pSetParent, sal_True );
+                        // --> OD 2006-07-12 #i63870#
+                        SwXTextCursor::GetCrsrAttr( rPaM, *pSetParent, TRUE, FALSE );
+                        // <--
                     }
 
                     if( (pSetParent)->Count() )
