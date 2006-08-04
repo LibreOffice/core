@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cmdlineargs.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:06:04 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 11:13:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,7 @@ class CommandLineArgs
             CMD_BOOLPARAM_HEADLESS,
             CMD_BOOLPARAM_QUICKSTART,
             CMD_BOOLPARAM_TERMINATEAFTERINIT,
+                        CMD_BOOLPARAM_NOFIRSTSTARTWIZARD,
             CMD_BOOLPARAM_NOLOGO,
             CMD_BOOLPARAM_NOLOCKCHECK,
             CMD_BOOLPARAM_NODEFAULT,
@@ -134,6 +135,7 @@ class CommandLineArgs
         sal_Bool                IsHeadless() const;
         sal_Bool                IsQuickstart() const;
         sal_Bool                IsTerminateAfterInit() const;
+                sal_Bool                                IsNoFirstStartWizard() const;
         sal_Bool                IsNoLogo() const;
         sal_Bool                IsNoLockcheck() const;
         sal_Bool                IsHelp() const;
