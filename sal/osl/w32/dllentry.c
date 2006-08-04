@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dllentry.c,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:20:20 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 11:12:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -330,7 +330,8 @@ BOOL WINAPI DllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved )
                 if ( dwParentProcessId && GetParentProcessId() == dwParentProcessId )
                 {
                     // No error check, it works or it does not
-                    CreateThread( NULL, 0, ParentMonitorThreadProc, (LPVOID)dwParentProcessId, 0, &dwThreadId );
+                    // Thread should only be started for headless mode, see desktop/win32/source/officeloader.cxx
+                    CreateThread( NULL, 0, ParentMonitorThreadProc, (LPVOID)dwParentProcessId, 0, &dwThreadId ); //
                 }
             }
 
