@@ -4,9 +4,9 @@
  *
  *  $RCSfile: splwrap.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:28:50 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 11:44:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,8 +95,12 @@
 
 #include "dialogs.hrc"
 
-#define WAIT_ON()   pWin->EnterWait()
-#define WAIT_OFF()  pWin->LeaveWait()
+//#define WAIT_ON() pWin->EnterWait()
+//#define WAIT_OFF()    pWin->LeaveWait()
+
+#define WAIT_ON() if(pWin != NULL) { pWin->EnterWait(); }
+
+#define WAIT_OFF() if(pWin != NULL) { pWin->LeaveWait(); }
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
