@@ -4,9 +4,9 @@
  *
  *  $RCSfile: kdebackend.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2006-06-02 12:24:22 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 12:30:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,13 +107,6 @@ class KDEBackend : public BackendBase {
           @return   service names
           */
         static uno::Sequence<rtl::OUString> SAL_CALL getBackendServiceNames(void) ;
-
-        /**
-          Provides the supported component nodes
-
-          @return supported component nodes
-        */
-        static uno::Sequence<rtl::OUString> SAL_CALL getSupportedComponents(void) ;
 
         //XSingleLayerStratum
         virtual uno::Reference<backend::XLayer> SAL_CALL
