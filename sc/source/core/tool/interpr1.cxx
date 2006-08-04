@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr1.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:31:53 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 11:34:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3016,7 +3016,6 @@ void ScInterpreter::GetStVarParams( double& rVal, double& rValCount,
                 BOOL bTextAsZero )
 {
     BYTE nParamCount = GetByte();
-    USHORT i;
 
     std::vector<double> values;
     double fSum    = 0.0;
@@ -3026,7 +3025,7 @@ void ScInterpreter::GetStVarParams( double& rVal, double& rValCount,
     rValCount = 0.0;
     ScAddress aAdr;
     ScRange aRange;
-    for (i = 0; i < nParamCount; i++)
+    for (USHORT i = 0; i < nParamCount; i++)
     {
         switch (GetStackType())
         {
@@ -3120,9 +3119,9 @@ void ScInterpreter::GetStVarParams( double& rVal, double& rValCount,
         }
     }
 
-    vMean = fSum / values.size();
-
-    for (i = 0; i < values.size(); i++)
+    ::std::vector<double>::size_type n = values.size();
+    vMean = fSum / n;
+    for (::std::vector<double>::size_type i = 0; i < n; i++)
         vSum += (values[i] - vMean) * (values[i] - vMean);
 
     rVal = vSum;
@@ -5552,11 +5551,26 @@ void ScInterpreter::ScIndex()
             {
                 SCSIZE nC, nR;
                 pMat->GetDimensions(nC, nR);
-                if (nC == 0 || nR == 0 || static_cast<SCSIZE>(nCol) > nC ||
-                        static_cast<SCSIZE>(nRow) > nR)
+                // Access one element of a vector independent of col/row
+                // orientation?
+                bool bVector = ((nCol == 0 || nRow == 0) && (nC == 1 || nR == 1));
+                SCSIZE nElement = ::std::max( static_cast<SCSIZE>(nCol),
+                        static_cast<SCSIZE>(nRow));
+                if (nC == 0 || nR == 0 ||
+                        (!bVector && (static_cast<SCSIZE>(nCol) > nC ||
+                                      static_cast<SCSIZE>(nRow) > nR)) ||
+                        (bVector && nElement > nC * nR))
                     SetIllegalArgument();
                 else if (nCol == 0 && nRow == 0)
                     sp = nOldSp;
+                else if (bVector)
+                {
+                    --nElement;
+                    if (pMat->IsString( nElement))
+                        PushString( pMat->GetString( nElement));
+                    else
+                        PushDouble( pMat->GetDouble( nElement));
+                }
                 else if (nRow == 0)
                 {
                     ScMatrixRef pResMat = GetNewMat(nC, 1);
