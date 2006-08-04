@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_config.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2006-04-19 15:09:22 $
+#   last change: $Author: ihi $ $Date: 2006-08-04 10:00:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@ PACKAGEDIR*:=$(subst,.,$/ $(PACKAGE))
 
 .IF "$(XCSFILES)"!=""
 # remove unnecessary info from the component schemas
-XCS_TRIM=$(MISC)$/registry$/schema$/$(PACKAGEDIR)$/{$(XCSFILES)}
+XCS_TRIM=$(PROCESSOUT)$/registry$/schema$/$(PACKAGEDIR)$/{$(XCSFILES)}
 
 # transform xcs format to properties format
 # XCS_RESOURCES=$(foreach,i,$(XCSFILES) $(MISC)$/registry$/res$/{$(alllangiso)}$/$(PACKAGEDIR)$/$(i:b).properties)
