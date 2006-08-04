@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.206 $
+ *  $Revision: 1.207 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 10:26:22 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 10:09:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2437,4 +2437,14 @@ File gid_File_Lib_Migrationoo2
   #endif
 End
 
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Updchkui , updchk )
+
+#ifdef WNT
+File gid_File_Lib_Onlinecheck
+    BIN_FILE_BODY;
+    Styles = (PACKED,PATCH);
+    Dir = gid_Dir_Program;
+    Name = "onlinecheck.dll";
+End
+#endif
 
