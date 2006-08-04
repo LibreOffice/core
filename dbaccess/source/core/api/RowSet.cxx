@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.145 $
+ *  $Revision: 1.146 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:03:11 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 13:55:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,9 @@
 #endif
 #ifndef DBACORE_SDBCORETOOLS_HXX
 #include "sdbcoretools.hxx"
+#endif
+#ifndef DBACCESS_CORE_API_SINGLESELECTQUERYCOMPOSER_HXX
+#include "SingleSelectQueryComposer.hxx"
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -693,11 +696,7 @@ void ORowSet::freeResources()
 
         DELETEZ(m_pCache);
 
-        if(m_pTables)
-        {
-            m_pTables->dispose(); // clear all references
-            DELETEZ(m_pTables);
-        }
+        impl_resetTables_nothrow();
 
         m_xStatement    = NULL;
         m_xTypeMap      = NULL;
@@ -1694,9 +1693,16 @@ Reference< XResultSet > ORowSet::impl_prepareAndExecute_throw()
         SQLExceptionInfo aError( ::cppu::getCaughtException() );
         OSL_ENSURE( aError.isValid(), "ORowSet::execute_NoApprove_NoNewConn: caught an SQLException which we cannot analyze!" );
 
-        String sInfo( DBA_RES_PARAM( RID_STR_COMMAND_LEADING_TO_ERROR, "$command$", impl_getComposedQuery_throw( false ) ) );
-        aError.append( SQLExceptionInfo::SQL_CONTEXT, sInfo );
+        // append information about what we were actually going to execute
+        try
+        {
+            String sQuery = bUseEscapeProcessing ? impl_getComposedQuery_throw( false ) : m_aActiveCommand;
+            String sInfo( DBA_RES_PARAM( RID_STR_COMMAND_LEADING_TO_ERROR, "$command$", sQuery ) );
+            aError.append( SQLExceptionInfo::SQL_CONTEXT, sInfo );
+        }
+        catch( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); }
 
+        // propagate
         aError.doThrow();
     }
 
@@ -2104,6 +2110,65 @@ Reference< XConnection >  ORowSet::calcConnection(const Reference< XInteractionH
     }
     return m_xActiveConnection;
 }
+
+//------------------------------------------------------------------------------
+Reference< XNameAccess > ORowSet::impl_getTables_throw()
+{
+    Reference< XNameAccess > xTables;
+
+    Reference< XTablesSupplier >  xTablesAccess( m_xActiveConnection, UNO_QUERY );
+    if ( xTablesAccess.is() )
+    {
+        xTables.set( xTablesAccess->getTables(), UNO_QUERY_THROW );
+    }
+    else if ( m_pTables )
+    {
+        xTables = m_pTables;
+    }
+    else
+    {
+        if ( !m_xActiveConnection.is() )
+            throw SQLException(DBA_RES(RID_STR_CONNECTION_INVALID),*this,SQLSTATE_GENERAL,1000,Any() );
+
+        sal_Bool bCase = sal_True;
+        try
+        {
+            Reference<XDatabaseMetaData> xMeta = m_xActiveConnection->getMetaData();
+            bCase = xMeta.is() && xMeta->storesMixedCaseQuotedIdentifiers();
+        }
+        catch(SQLException&)
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+
+        m_pTables = new OTableContainer(*this,m_aMutex,m_xActiveConnection,bCase,NULL,NULL);
+        xTables = m_pTables;
+        Sequence< ::rtl::OUString> aTableFilter(1);
+        aTableFilter[0] = ::rtl::OUString::createFromAscii("%");
+        m_pTables->construct(aTableFilter,Sequence< ::rtl::OUString>());
+    }
+
+    return xTables;
+}
+
+//------------------------------------------------------------------------------
+void ORowSet::impl_resetTables_nothrow()
+{
+    if ( !m_pTables )
+        return;
+
+    try
+    {
+        m_pTables->dispose();
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+
+    DELETEZ( m_pTables );
+}
+
 //------------------------------------------------------------------------------
 sal_Bool ORowSet::impl_buildActiveCommand_throw()
 {
@@ -2122,39 +2187,8 @@ sal_Bool ORowSet::impl_buildActiveCommand_throw()
     {
         case CommandType::TABLE:
         {
-            Reference< XNameAccess > xTables;
-            Reference< XTablesSupplier >  xTablesAccess( m_xActiveConnection, UNO_QUERY );
-            if ( xTablesAccess.is() )
-            {
-                xTables.set( xTablesAccess->getTables(), UNO_QUERY_THROW );
-            }
-            else
-            {
-                if(!m_xActiveConnection.is())
-                    throw SQLException(DBA_RES(RID_STR_CONNECTION_INVALID),*this,SQLSTATE_GENERAL,1000,Any() );
-                sal_Bool bCase = sal_True;
-                try
-                {
-                    Reference<XDatabaseMetaData> xMeta = m_xActiveConnection->getMetaData();
-                    bCase = xMeta.is() && xMeta->storesMixedCaseQuotedIdentifiers();
-                }
-                catch(SQLException&)
-                {
-                    DBG_UNHANDLED_EXCEPTION();
-                }
-
-                if ( m_pTables )
-                {
-                    m_pTables->dispose(); // clear all references
-                    DELETEZ(m_pTables);
-                }
-
-                m_pTables = new OTableContainer(*this,m_aMutex,m_xActiveConnection,bCase,NULL,NULL);
-                xTables = m_pTables;
-                Sequence< ::rtl::OUString> aTableFilter(1);
-                aTableFilter[0] = ::rtl::OUString::createFromAscii("%");
-                m_pTables->construct(aTableFilter,Sequence< ::rtl::OUString>());
-            }
+            impl_resetTables_nothrow();
+            Reference< XNameAccess > xTables( impl_getTables_throw() );
 
             if ( xTables->hasByName(m_aCommand) )
             {
@@ -2250,19 +2284,18 @@ sal_Bool ORowSet::impl_buildActiveCommand_throw()
 //------------------------------------------------------------------------------
 ::rtl::OUString ORowSet::impl_getComposedQuery_throw( bool _bForExecution )
 {
-    Reference< XMultiServiceFactory > xFactory( m_xActiveConnection, UNO_QUERY_THROW );
-    try
+    Reference< XMultiServiceFactory > xFactory( m_xActiveConnection, UNO_QUERY );
+    if ( xFactory.is() )
     {
-        ::comphelper::disposeComponent( m_xComposer );
-        m_xComposer.set( xFactory->createInstance( SERVICE_NAME_SINGLESELECTQUERYCOMPOSER ), UNO_QUERY_THROW );
-    }
-    catch (const Exception& )
-    {
-        m_xComposer = NULL;
+        try
+        {
+            ::comphelper::disposeComponent( m_xComposer );
+            m_xComposer.set( xFactory->createInstance( SERVICE_NAME_SINGLESELECTQUERYCOMPOSER ), UNO_QUERY_THROW );
+        }
+        catch (const Exception& ) { m_xComposer = NULL; }
     }
     if ( !m_xComposer.is() )
-        throwSQLException( "No query composer could be provided by the connection.", SQL_GENERAL_ERROR, *this );
-        // TODO: resource
+        m_xComposer = new OSingleSelectQueryComposer( impl_getTables_throw(), m_xActiveConnection, m_xServiceManager );
 
     m_xComposer->setElementaryQuery( m_aActiveCommand );
 
