@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cmdlineargs.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:05:40 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 11:13:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -360,6 +360,11 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
         SetBoolParam_Impl( CMD_BOOLPARAM_TERMINATEAFTERINIT, sal_True );
         return sal_True;
     }
+    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-nofirststartwizard" )) == sal_True )
+    {
+        SetBoolParam_Impl( CMD_BOOLPARAM_NOFIRSTSTARTWIZARD, sal_True );
+        return sal_True;
+    }
     else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-nologo" )) == sal_True )
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_NOLOGO, sal_True );
@@ -626,6 +631,12 @@ sal_Bool CommandLineArgs::IsTerminateAfterInit() const
 {
     osl::MutexGuard  aMutexGuard( m_aMutex );
     return m_aBoolParams[ CMD_BOOLPARAM_TERMINATEAFTERINIT ];
+}
+
+sal_Bool CommandLineArgs::IsNoFirstStartWizard() const
+{
+    osl::MutexGuard  aMutexGuard( m_aMutex );
+    return m_aBoolParams[ CMD_BOOLPARAM_NOFIRSTSTARTWIZARD ];
 }
 
 sal_Bool CommandLineArgs::IsNoLogo() const
