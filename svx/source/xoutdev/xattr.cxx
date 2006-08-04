@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xattr.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 17:05:57 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 11:44:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3202,6 +3202,26 @@ SfxItemPresentation XSecondaryFillColorItem::GetPresentation
 // ----------------
 // class XGradient
 // ----------------
+
+/*************************************************************************
+|*
+|*    XGradient::XGradient()
+|*
+*************************************************************************/
+
+XGradient::XGradient() :
+    eStyle( XGRAD_LINEAR ),
+    aStartColor( Color( COL_BLACK ) ),
+    aEndColor( Color( COL_WHITE ) ),
+    nAngle( 0 ),
+    nBorder( 0 ),
+    nOfsX( 50 ),
+    nOfsY( 50 ),
+    nIntensStart( 100 ),
+    nIntensEnd( 100 ),
+    nStepCount( 0 )
+{
+}
 
 /*************************************************************************
 |*
