@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swappatchfiles.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:36:43 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 09:52:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -603,6 +603,29 @@ extern "C" UINT __stdcall SetFeatureState( MSIHANDLE handle )
         } while ( ERROR_SUCCESS == lEnumResult );
 
         RegCloseKey( hKey );
+    }
+
+    return ERROR_SUCCESS;
+}
+
+extern "C" UINT __stdcall SetNewFeatureState( MSIHANDLE handle )
+{
+    std::_tstring mystr;
+    std::_tstring sValueName;
+
+    sValueName = TEXT("gm_o_Onlineupdate");
+
+    if (IsSetMsiProperty(handle, TEXT("SELECT_OU_FEATURE")))
+    {
+        MsiSetFeatureState(handle,sValueName.c_str(),INSTALLSTATE_LOCAL); // do install this feature
+        // mystr = TEXT("OnlineUpdate wird installiert!");
+        // MessageBox(NULL, mystr.c_str(), "INSTALLSTATE_LOCAL", MB_OK);
+    }
+    else
+    {
+        MsiSetFeatureState(handle,sValueName.c_str(),INSTALLSTATE_ABSENT); // do not install this feature
+        // mystr = TEXT("OnlineUpdate wird NICHT installiert!");
+        // MessageBox(NULL, mystr.c_str(), "INSTALLSTATE_ABSENT", MB_OK);
     }
 
     return ERROR_SUCCESS;
