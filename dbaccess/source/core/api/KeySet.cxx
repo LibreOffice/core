@@ -4,9 +4,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:02:45 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 13:54:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -255,7 +255,7 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet)
     Reference<XSingleSelectQueryComposer> xAnalyzer(xFactory->createInstance(SERVICE_NAME_SINGLESELECTQUERYCOMPOSER),UNO_QUERY);
     xAnalyzer->setQuery(m_xComposer->getQuery());
     xAnalyzer->setFilter(aFilter);
-    m_xStatement = m_xConnection->prepareStatement(xAnalyzer->getQuery());
+    m_xStatement = m_xConnection->prepareStatement(xAnalyzer->getQueryWithSubstitution());
     ::comphelper::disposeComponent(xAnalyzer);
 }
 // -------------------------------------------------------------------------
