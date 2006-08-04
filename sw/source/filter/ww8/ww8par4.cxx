@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par4.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:42:38 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 13:34:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -590,6 +590,7 @@ void SwWW8ImplReader::Read_CRevisionMark(SwRedlineType eType,
         {
             pPlcxMan->HasCharSprm(69, aResult);
             pSprmCIbstRMark = aResult.empty() ? 0 : aResult.back();
+            aResult.clear();
             pPlcxMan->HasCharSprm(70, aResult);
             pSprmCDttmRMark = aResult.empty() ? 0 : aResult.back();
         }
@@ -597,6 +598,7 @@ void SwWW8ImplReader::Read_CRevisionMark(SwRedlineType eType,
         {
             pPlcxMan->HasCharSprm( bIns ? 0x4804 : 0x4863, aResult);
             pSprmCIbstRMark = aResult.empty() ? 0 : aResult.back();
+            aResult.clear();
             pPlcxMan->HasCharSprm( bIns ? 0x6805 : 0x6864, aResult);
             pSprmCDttmRMark = aResult.empty() ? 0 : aResult.back();
         }
