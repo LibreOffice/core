@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoobj.hxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 15:30:09 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 13:05:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -565,7 +565,15 @@ public:
     const SwUnoCrsr*    GetCrsr()const{return (SwUnoCrsr*)GetRegisteredIn();}
 
     static void         SetCrsrAttr(SwPaM& rPam, const SfxItemSet& rSet, USHORT nAttrMode );
-    static void         GetCrsrAttr(SwPaM& rPam, SfxItemSet& rSet, BOOL bCurrentAttrOnly = FALSE);
+    // --> OD 2006-07-12 #i63870#
+    // split third parameter <bCurrentAttrOnly> into new parameters <bOnlyTxtAttr>
+    // and <bGetFromChrFmt> to get better control about resulting <SfxItemSet>
+//    static void         GetCrsrAttr(SwPaM& rPam, SfxItemSet& rSet, BOOL bCurrentAttrOnly = FALSE);
+    static void         GetCrsrAttr( SwPaM& rPam,
+                                     SfxItemSet& rSet,
+                                     BOOL bOnlyTxtAttr = FALSE,
+                                     BOOL bGetFromChrFmt = TRUE );
+    // <--
     static void         getTextFromPam(SwPaM& aCrsr, rtl::OUString& rBuffer);
     static SwFmtColl*   GetCurTxtFmtColl(SwPaM& rPam, BOOL bConditional);
 
