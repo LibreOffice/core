@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.194 $
+ *  $Revision: 1.195 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 11:19:53 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 11:12:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1573,12 +1573,19 @@ void Desktop::Main()
 
         // First Start Wizard
         {
+            sal_Bool bWidthUI = sal_True;
+            if (pCmdLineArgs->IsNoFirstStartWizard())
+              bWidthUI = sal_False;
+
             Reference< XJob > xFirstStartJob( xSMgr->createInstance(
                 DEFINE_CONST_UNICODE( "com.sun.star.comp.desktop.FirstStart" ) ), UNO_QUERY );
             if (xFirstStartJob.is())
             {
                 sal_Bool bDone = sal_False;
-                xFirstStartJob->execute(Sequence<NamedValue>()) >>= bDone;
+                Sequence< NamedValue > lArgs(1);
+                lArgs[0].Name    = ::rtl::OUString::createFromAscii("WidthUI");
+                lArgs[0].Value <<= bWidthUI;
+                xFirstStartJob->execute(lArgs) >>= bDone;
                 if (!bDone) {
                     return;
                 }
