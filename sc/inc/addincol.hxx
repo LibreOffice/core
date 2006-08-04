@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addincol.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 16:21:31 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 12:10:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,6 +117,7 @@ enum ScAddInArgumentType
 
 struct ScAddInArgDesc
 {
+    String              aInternalName;      // used to match configuration and reflection information
     String              aName;
     String              aDescription;
     ScAddInArgumentType eType;
@@ -167,6 +168,12 @@ public:
     USHORT                  GetHelpId() const           { return nHelpId; }
 
     const com::sun::star::uno::Sequence< com::sun::star::sheet::LocalizedName>&  GetCompNames() const;
+
+    void    SetFunction( const com::sun::star::uno::Reference< com::sun::star::reflection::XIdlMethod>& rNewFunc,
+                         const com::sun::star::uno::Any& rNewObj );
+    void    SetArguments( long nNewCount, const ScAddInArgDesc* pNewDescs );
+    void    SetCallerPos( long nNewPos );
+    void    SetCompNames( const com::sun::star::uno::Sequence< com::sun::star::sheet::LocalizedName>& rNew );
 };
 
 //------------------------------------------------------------------------
@@ -182,8 +189,13 @@ private:
     BOOL                    bInitialized;
 
     void        Initialize();
+    void        ReadConfiguration();
     void        ReadFromAddIn( const com::sun::star::uno::Reference<
                                 com::sun::star::uno::XInterface>& xInterface );
+    void        UpdateFromAddIn( const com::sun::star::uno::Reference<
+                                  com::sun::star::uno::XInterface>& xInterface,
+                                const String& rServiceName );
+    void        LoadComponent( const ScUnoAddInFuncData& rFuncData );
 
 public:
                 ScUnoAddInCollection();
@@ -191,12 +203,20 @@ public:
 
                         /// User enetered name. rUpperName MUST already be upper case!
     String              FindFunction( const String& rUpperName, BOOL bLocalFirst );
-    const ScUnoAddInFuncData*   GetFuncData( const String& rName );             // exact name
+
+                        // rName is the exact Name.
+                        // Only if bComplete is set, the function reference and argument types
+                        // are initialized (component may have to be loaded).
+    const ScUnoAddInFuncData*   GetFuncData( const String& rName, bool bComplete = false );
+
+    void                Clear();
 
     void                LocalizeString( String& rName );    // modify rName - input: exact name
 
     long                GetFuncCount();
     BOOL                FillFunctionDesc( long nFunc, ScFuncDesc& rDesc );
+
+    static BOOL         FillFunctionDescFromData( const ScUnoAddInFuncData& rFuncData, ScFuncDesc& rDesc );
 
     BOOL                GetExcelName( const String& rCalcName, LanguageType eDestLang, String& rRetExcelName );
     BOOL                GetCalcName( const String& rExcelName, String& rRetCalcName );
