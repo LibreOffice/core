@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atktext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 10:57:47 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 13:11:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@
 #include <com/sun/star/accessibility/AccessibleTextType.hpp>
 #include <com/sun/star/accessibility/TextSegment.hpp>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
+#include <com/sun/star/accessibility/XAccessibleTextAttributes.hpp>
 
 // #define ENABLE_TRACING
 
@@ -164,6 +165,27 @@ static accessibility::XAccessibleText*
         }
 
         return pWrap->mpText;
+    }
+
+    return NULL;
+}
+
+/*****************************************************************************/
+
+static accessibility::XAccessibleTextAttributes*
+    getTextAttributes( AtkText *pText ) throw (uno::RuntimeException)
+{
+    AtkObjectWrapper *pWrap = ATK_OBJECT_WRAPPER( pText );
+    if( pWrap )
+    {
+        if( !pWrap->mpTextAttributes && pWrap->mpContext )
+        {
+            uno::Any any = pWrap->mpContext->queryInterface( accessibility::XAccessibleTextAttributes::static_type(NULL) );
+            pWrap->mpTextAttributes = reinterpret_cast< accessibility::XAccessibleTextAttributes * > (any.pReserved);
+            pWrap->mpTextAttributes->acquire();
+        }
+
+        return pWrap->mpTextAttributes;
     }
 
     return NULL;
@@ -335,12 +357,13 @@ text_wrapper_get_run_attributes( AtkText        *text,
 
     try {
         accessibility::XAccessibleText* pText = getText( text );
-        if( pText )
+        accessibility::XAccessibleTextAttributes* pTextAttributes = getTextAttributes( text );
+        if( pText && pTextAttributes )
         {
             uno::Sequence< beans::PropertyValue > aAttributeList =
-                pText->getCharacterAttributes( offset, uno::Sequence< rtl::OUString > () );
+                pTextAttributes->getRunAttributes( offset, uno::Sequence< rtl::OUString > () );
 
-            pSet = attribute_set_new_from_property_values( aAttributeList, beans::PropertyState_DIRECT_VALUE );
+            pSet = attribute_set_new_from_property_values( aAttributeList );
 
             accessibility::TextSegment aTextSegment =
                 pText->getTextAtIndex(offset, accessibility::AccessibleTextType::ATTRIBUTE_RUN);
@@ -371,13 +394,13 @@ text_wrapper_get_default_attributes( AtkText *text )
     AtkAttributeSet *pSet = NULL;
 
     try {
-        accessibility::XAccessibleText* pText = getText( text );
-        if( pText )
+        accessibility::XAccessibleTextAttributes* pTextAttributes = getTextAttributes( text );
+        if( pTextAttributes )
         {
             uno::Sequence< beans::PropertyValue > aAttributeList =
-                pText->getCharacterAttributes( 0, uno::Sequence< rtl::OUString > () );
+                pTextAttributes->getDefaultAttributes( uno::Sequence< rtl::OUString > () );
 
-            pSet = attribute_set_new_from_property_values( aAttributeList, beans::PropertyState_DEFAULT_VALUE );
+            pSet = attribute_set_new_from_property_values( aAttributeList );
         }
     }
     catch(const uno::Exception& e) {

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atkwrapper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 10:59:14 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 13:12:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
+#include <com/sun/star/accessibility/XAccessibleTextAttributes.hpp>
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
@@ -816,5 +817,6 @@ void atk_object_wrapper_dispose(AtkObjectWrapper* wrapper)
     RELEASE( wrapper->mpSelection )
     RELEASE( wrapper->mpTable )
     RELEASE( wrapper->mpText )
+    RELEASE( wrapper->mpTextAttributes )
     RELEASE( wrapper->mpValue )
 }

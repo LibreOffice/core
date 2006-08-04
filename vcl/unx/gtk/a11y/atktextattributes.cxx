@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atktextattributes.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 10:57:59 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 13:11:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@
 #include <com/sun/star/awt/FontStrikeout.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
 
+#include <com/sun/star/style/CaseMap.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 
 #include <svapp.hxx>
@@ -414,6 +415,80 @@ Pixel2MarginWidth( uno::Any& rAny, const gchar * value )
 
 /*****************************************************************************/
 
+static gchar *
+Bool2String( const uno::Any& rAny )
+{
+    const gchar * value = NULL;
+
+    if( rAny.get<sal_Bool>() )
+        value = "true";
+    else
+        value = "false";
+
+    if( value )
+        return g_strdup( value );
+
+    return NULL;
+}
+
+static bool
+String2Bool( uno::Any& rAny, const gchar * value )
+{
+    sal_Bool bValue;
+
+    if( strncmp( value, STRNCMP_PARAM( "true" ) ) )
+        bValue = sal_True;
+    else if( strncmp( value, STRNCMP_PARAM( "false" ) ) )
+        bValue = sal_False;
+    else
+        return false;
+
+    rAny = uno::makeAny(bValue);
+    return true;
+}
+
+/*****************************************************************************/
+
+static gchar *
+CaseMap2String( const uno::Any& rAny )
+{
+    const gchar * value = NULL;
+
+    switch( rAny.get<short>() )
+    {
+        case style::CaseMap::SMALLCAPS:
+            value = "small_caps";
+            break;
+
+        default:
+            value = "normal";
+            break;
+    }
+
+    if( value )
+        return g_strdup( value );
+
+    return NULL;
+}
+
+static bool
+String2CaseMap( uno::Any& rAny, const gchar * value )
+{
+    short nCaseMap;
+
+    if( strncmp( value, STRNCMP_PARAM( "normal" ) ) )
+        nCaseMap = style::CaseMap::NONE;
+    else if( strncmp( value, STRNCMP_PARAM( "small_caps" ) ) )
+        nCaseMap = style::CaseMap::SMALLCAPS;
+    else
+        return false;
+
+    rAny = uno::makeAny( nCaseMap );
+    return true;
+}
+
+/*****************************************************************************/
+
 struct AtkTextAttrMapping
 {
     const char *          name;
@@ -427,7 +502,7 @@ const AtkTextAttrMapping g_TextAttrMap[] =
     { "ParaLeftMargin", MarginWidth2Pixel, Pixel2MarginWidth },     // ATK_TEXT_ATTR_LEFT_MARGIN
     { "ParaRightMargin", MarginWidth2Pixel, Pixel2MarginWidth },    // ATK_TEXT_ATTR_RIGHT_MARGIN
     { "ParaFirstLineIndent", Long2String, String2Long },            // ATK_TEXT_ATTR_INDENT
-    { "", NullString,   InvalidValue },      // ATK_TEXT_ATTR_INVISIBLE
+    { "CharHidden", Bool2String, String2Bool },                     // ATK_TEXT_ATTR_INVISIBLE
     { "", NullString,   InvalidValue },      // ATK_TEXT_ATTR_EDITABLE
     { "ParaTopMargin", MarginHeight2Pixel, Pixel2MarginHeight },    // ATK_TEXT_ATTR_PIXELS_ABOVE_LINES
     { "ParaBottomMargin", MarginHeight2Pixel, Pixel2MarginHeight }, // ATK_TEXT_ATTR_PIXELS_BELOW_LINES
@@ -449,7 +524,7 @@ const AtkTextAttrMapping g_TextAttrMap[] =
     { "", NullString,   InvalidValue },      // ATK_TEXT_ATTR_DIRECTION
     { "ParaAdjust", Adjust2Justification, Justification2Adjust },   // ATK_TEXT_ATTR_JUSTIFICATION
     { "", NullString,   InvalidValue },      // ATK_TEXT_ATTR_STRETCH
-    { "", NullString,   InvalidValue },      // ATK_TEXT_ATTR_VARIANT
+    { "CharCaseMap", CaseMap2String, String2CaseMap },              // ATK_TEXT_ATTR_VARIANT
     { "CharPosture", FontSlant2Style, Style2FontSlant }             // ATK_TEXT_ATTR_STYLE
 };
 
@@ -477,16 +552,12 @@ attribute_set_prepend( AtkAttributeSet* attribute_set,
 
 AtkAttributeSet*
 attribute_set_new_from_property_values(
-    const uno::Sequence< beans::PropertyValue >& rAttributeList,
-    const beans::PropertyState ePropertyState )
+    const uno::Sequence< beans::PropertyValue >& rAttributeList )
 {
     AtkAttributeSet* attribute_set = NULL;
 
     for( sal_Int32 i = 0; i < rAttributeList.getLength(); i++ )
     {
-        if( rAttributeList[i].State != ePropertyState )
-            continue;
-
         gint j = 0;
         for( ; j < g_TextAttrMapSize; ++j )
         {
@@ -499,32 +570,6 @@ attribute_set_new_from_property_values(
                 break;
             }
         }
-
-/*
-        if( j == g_TextAttrMapSize )
-        {
-            const char * state = "unknown";
-            switch( rAttributeList[i].State )
-            {
-                case beans::PropertyState_DIRECT_VALUE:
-                    state = "direct value";
-                    break;
-
-                case beans::PropertyState_DEFAULT_VALUE:
-                    state = "default value";
-                    break;
-
-                case beans::PropertyState_AMBIGUOUS_VALUE:
-                    state = "ambigues value";
-                    break;
-
-                default:
-                    break;
-            }
-
-            fprintf(stderr, "Property %s (%s)\n", OUStringToOString( rAttributeList[i].Name, RTL_TEXTENCODING_UTF8 ).getStr(), state);
-        }
-*/
     }
 
     return attribute_set;
