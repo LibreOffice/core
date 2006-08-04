@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.183 $
+ *  $Revision: 1.184 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 11:11:35 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 14:23:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3504,6 +3504,17 @@ sal_Bool SfxMedium::SignContents_Impl( sal_Bool bScriptingContent )
                     if ( !xStream.is() )
                         throw uno::RuntimeException();
 
+                    try
+                    {
+                        // to leave the stream unencrypted as before
+                        uno::Reference< beans::XPropertySet > xStrmProps( xStream, uno::UNO_QUERY_THROW );
+                        xStrmProps->setPropertyValue(
+                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UseCommonStoragePasswordEncryption" ) ),
+                            uno::makeAny( (sal_Bool)sal_False ) );
+                    }
+                    catch ( uno::Exception& )
+                    {}
+
                     if ( xD->signScriptingContent( GetLastCommitReadStorage_Impl(), xStream ) )
                     {
                         uno::Reference< embed::XTransactedObject > xTrans( xMetaInf, uno::UNO_QUERY );
@@ -3524,6 +3535,17 @@ sal_Bool SfxMedium::SignContents_Impl( sal_Bool bScriptingContent )
                                                                     nEncrMode );
                     if ( !xStream.is() )
                         throw uno::RuntimeException();
+
+                    try
+                    {
+                        // to leave the stream unencrypted as before
+                        uno::Reference< beans::XPropertySet > xStrmProps( xStream, uno::UNO_QUERY_THROW );
+                        xStrmProps->setPropertyValue(
+                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UseCommonStoragePasswordEncryption" ) ),
+                            uno::makeAny( (sal_Bool)sal_False ) );
+                    }
+                    catch ( uno::Exception& )
+                    {}
 
                     if ( xD->signDocumentContent( GetLastCommitReadStorage_Impl(), xStream ) )
                     {
