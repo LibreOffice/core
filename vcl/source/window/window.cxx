@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.240 $
+ *  $Revision: 1.241 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 09:29:55 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 09:53:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -5586,7 +5586,7 @@ SystemWindow* Window::GetSystemWindow() const
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     const Window* pWin = this;
-    while ( !pWin->IsSystemWindow() )
+    while ( pWin && !pWin->IsSystemWindow() )
         pWin  = pWin->GetParent();
     return (SystemWindow*)pWin;
 }
