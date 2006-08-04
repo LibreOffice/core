@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewshe2.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 18:41:35 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 11:09:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1127,7 +1127,7 @@ void ViewShell::WriteUserData(String& rString)
 
 void ViewShell::SetRuler(BOOL bRuler)
 {
-    mbHasRulers = bRuler;
+    mbHasRulers = ( bRuler && !GetDocSh()->IsPreview() ); // no rulers on preview mode
 
     if (mpHorizontalRuler.get() != NULL)
     {
