@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QTableWindow.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:40:46 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 13:57:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -242,7 +242,6 @@ void OQueryTableWindow::OnEntryDoubleClicked(SvLBoxEntry* pEntry)
     OTableFieldDescRef aInfo = new OTableFieldDesc(GetTableName(),m_pListBox->GetEntryText(pEntry));
     aInfo->SetTabWindow(this);
     aInfo->SetAlias(GetAliasName());
-    aInfo->SetDatabase(GetComposedName());
     aInfo->SetFieldIndex(m_pListBox->GetModel()->GetAbsPos(pEntry));
     aInfo->SetDataType(pInf->GetDataType());
 
@@ -276,7 +275,6 @@ sal_Bool OQueryTableWindow::ExistsField(const ::rtl::OUString& strFieldName, OTa
                     rInfo->SetField(strFieldName);
                     rInfo->SetTable(GetTableName());
                     rInfo->SetAlias(GetAliasName());
-                    rInfo->SetDatabase(GetComposedName());
                     rInfo->SetFieldIndex(m_pListBox->GetModel()->GetAbsPos(pEntry));
                     rInfo->SetDataType(pInf->GetDataType());
                     bExists = sal_True;
