@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 14:52:02 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 13:10:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,6 +94,9 @@
 #ifndef COMPHELPER_ACCESSIBLE_EVENT_NOTIFIER
 #include <comphelper/accessibleeventnotifier.hxx>
 #endif
+#ifndef _COMPHELPER_SEQUENCEASHASHMAP_HXX_
+#include <comphelper/sequenceashashmap.hxx>
+#endif
 
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX_
 #include <unotools/accessiblestatesethelper.hxx>
@@ -117,6 +120,8 @@
 // Project-local header
 //
 //------------------------------------------------------------------------
+
+#include <com/sun/star/beans/PropertyState.hpp>
 
 #ifndef _SVX_UNOSHAPE_HXX
 #include "unoshape.hxx"
@@ -145,6 +150,7 @@
 
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::accessibility;
 
 
@@ -156,6 +162,24 @@ using namespace ::com::sun::star::accessibility;
 
 namespace accessibility
 {
+
+    const SfxItemPropertyMap* ImplGetSvxCharAndParaPropertiesMap()
+    {
+        // PropertyMap for character and paragraph properties
+        static const SfxItemPropertyMap aPropMap[] =
+        {
+            SVX_UNOEDIT_CHAR_PROPERTIES,
+            SVX_UNOEDIT_PARA_PROPERTIES,
+            SVX_UNOEDIT_NUMBERING_PROPERTIE,
+            {MAP_CHAR_LEN("TextUserDefinedAttributes"),     EE_CHAR_XMLATTRIBS,     &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
+            {MAP_CHAR_LEN("ParaUserDefinedAttributes"),     EE_PARA_XMLATTRIBS,     &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
+            {0,0,0,0,0,0}
+        };
+
+        return aPropMap;
+    }
+
+
     DBG_NAME( AccessibleEditableTextPara )
 
     // --> OD 2006-01-11 #i27138# - add parameter <_pParaManager>
@@ -1302,59 +1326,67 @@ namespace accessibility
         return OCommonAccessibleText::getCharacter( nIndex );
     }
 
-    uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleEditableTextPara::getCharacterAttributes( sal_Int32 nIndex, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& /*aRequestedAttributes*/ ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+    uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleEditableTextPara::getCharacterAttributes( sal_Int32 nIndex, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rRequestedAttributes ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
-
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-        #if OSL_DEBUG_LEVEL > 0
-        SvxAccessibleTextAdapter& rCacheTF =
-        #endif
-            GetTextForwarder();
+        CheckIndex(nIndex); // may throw IndexOutOfBoundsException
 
-        #if OSL_DEBUG_LEVEL > 0
-        (void)rCacheTF;
-        #endif
+        // get default attribues...
+        ::comphelper::SequenceAsHashMap aPropHashMap( getDefaultAttributes( rRequestedAttributes ) );
 
-        DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
-                   "AccessibleEditableTextPara::getCharacterAttributes: index value overflow");
-
-        CheckIndex(nIndex);
-
-        // use the portion property map, we're working on single characters
-        // TODO: hold it as a member?
-        SvxAccessibleTextPropertySet aPropSet( &GetEditSource(),
-                                               ImplGetSvxTextPortionPropertyMap() );
-
-        aPropSet.SetSelection( MakeSelection( nIndex ) );
-
-        // fetch property names
-        uno::Reference< beans::XPropertySetInfo > xPropSetInfo = aPropSet.getPropertySetInfo();
-
-        // convert from Any to PropertyValue
-        if( !xPropSetInfo.is() )
-            throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Cannot query XPropertySetInfo")),
-                                        uno::Reference< uno::XInterface >
-                                        ( static_cast< XAccessible* > (this) ) );   // disambiguate hierarchy
-
-        uno::Sequence< beans::Property > aPropertyNames = xPropSetInfo->getProperties();
-        sal_Int32 i, nLength( aPropertyNames.getLength() );
-        uno::Sequence< beans::PropertyValue > aOutSequence(nLength);
-        const beans::Property*  pPropArray = aPropertyNames.getConstArray();
-        beans::PropertyValue* pOutArray = aOutSequence.getArray();
-        for(i=0; i<nLength; ++i)
+        // ... and override them with the direct attributes from the specific position
+        uno::Sequence< beans::PropertyValue > aRunAttribs( getRunAttributes( nIndex, rRequestedAttributes ) );
+        sal_Int32 nRunAttribs = aRunAttribs.getLength();
+        const beans::PropertyValue *pRunAttrib = aRunAttribs.getConstArray();
+        for (sal_Int32 k = 0;  k < nRunAttribs;  ++k)
         {
-            pOutArray->Name = pPropArray->Name;
-            pOutArray->Handle = pPropArray->Handle;
-            pOutArray->Value = aPropSet.getPropertyValue( pPropArray->Name );
-            pOutArray->State = aPropSet.getPropertyState( pPropArray->Name );
+            const beans::PropertyValue &rRunAttrib = pRunAttrib[k];
+            aPropHashMap[ rRunAttrib.Name ] = rRunAttrib.Value; //!! should not only be the value !!
+        }
+#ifdef TL_DEBUG
+        {
+            uno::Sequence< rtl::OUString > aNames(1);
+            aNames.getArray()[0] = rtl::OUString::createFromAscii("CharHeight");
+            const rtl::OUString *pNames = aNames.getConstArray();
+            const uno::Sequence< beans::PropertyValue > aAttribs( getRunAttributes( nIndex, aNames ) );
+            const beans::PropertyValue *pAttribs = aAttribs.getConstArray();
+            double d1 = -1.0;
+            float  f1 = -1.0;
+            if (aAttribs.getLength())
+            {
+                uno::Any aAny( pAttribs[0].Value );
+                aAny >>= d1;
+                aAny >>= f1;
+            }
+            int i = 3;
+        }
+#endif
 
-            ++pPropArray;
-            ++pOutArray;
+        // get resulting sequence
+        uno::Sequence< beans::PropertyValue > aRes;
+        aPropHashMap >> aRes;
+
+        // since SequenceAsHashMap ignores property handles and property state
+        // we have to restore the property state here (property handles are
+        // of no use to the accessibility API).
+        sal_Int32 nRes = aRes.getLength();
+        beans::PropertyValue *pRes = aRes.getArray();
+        for (sal_Int32 i = 0;  i < nRes;  ++i)
+        {
+            beans::PropertyValue &rRes = pRes[i];
+            sal_Bool bIsDirectVal = sal_False;
+            for (sal_Int32 k = 0;  k < nRunAttribs && !bIsDirectVal;  ++k)
+            {
+                if (rRes.Name == pRunAttrib[k].Name)
+                    bIsDirectVal = sal_True;
+            }
+            rRes.Handle = -1;
+            rRes.State  = bIsDirectVal ? PropertyState_DIRECT_VALUE : PropertyState_DEFAULT_VALUE;
         }
 
-        return aOutSequence;
+        return aRes;
     }
 
     awt::Rectangle SAL_CALL AccessibleEditableTextPara::getCharacterBounds( sal_Int32 nIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
@@ -1963,6 +1995,191 @@ namespace accessibility
 
         return replaceText(0, getCharacterCount(), sText);
     }
+
+    // XAccessibleTextAttributes
+    uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleEditableTextPara::getDefaultAttributes(
+            const uno::Sequence< ::rtl::OUString >& rRequestedAttributes )
+        throw (uno::RuntimeException)
+    {
+        DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+        #if OSL_DEBUG_LEVEL > 0
+        SvxAccessibleTextAdapter& rCacheTF =
+        #endif
+            GetTextForwarder();
+
+        #if OSL_DEBUG_LEVEL > 0
+        (void)rCacheTF;
+        #endif
+
+        DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
+                   "AccessibleEditableTextPara::getCharacterAttributes: index value overflow");
+
+        // get XPropertySetInfo for paragraph attributes and
+        // character attributes that span all the paragraphs text.
+        SvxAccessibleTextPropertySet aPropSet( &GetEditSource(),
+                ImplGetSvxCharAndParaPropertiesMap() );
+        aPropSet.SetSelection( MakeSelection( 0, GetTextLen() ) );
+        uno::Reference< beans::XPropertySetInfo > xPropSetInfo = aPropSet.getPropertySetInfo();
+        if (!xPropSetInfo.is())
+            throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Cannot query XPropertySetInfo")),
+                        uno::Reference< uno::XInterface >
+                        ( static_cast< XAccessible* > (this) ) );   // disambiguate hierarchy
+
+        // build sequence of available properties to check
+        sal_Int32 nLenReqAttr = rRequestedAttributes.getLength();
+        uno::Sequence< beans::Property > aProperties;
+        if (nLenReqAttr)
+        {
+            const rtl::OUString *pRequestedAttributes = rRequestedAttributes.getConstArray();
+
+            aProperties.realloc( nLenReqAttr );
+            beans::Property *pProperties = aProperties.getArray();
+            sal_Int32 nCurLen = 0;
+            for (sal_Int32 i = 0;  i < nLenReqAttr;  ++i)
+            {
+                beans::Property aProp;
+                try
+                {
+                    aProp = xPropSetInfo->getPropertyByName( pRequestedAttributes[i] );
+                }
+                catch (beans::UnknownPropertyException &)
+                {
+                    continue;
+                }
+                pProperties[ nCurLen++ ] = aProp;
+            }
+            aProperties.realloc( nCurLen );
+        }
+        else
+            aProperties = xPropSetInfo->getProperties();
+
+        sal_Int32 nLength = aProperties.getLength();
+        const beans::Property *pProperties = aProperties.getConstArray();
+
+        // build resulting sequence
+        uno::Sequence< beans::PropertyValue > aOutSequence( nLength );
+        beans::PropertyValue* pOutSequence = aOutSequence.getArray();
+        sal_Int32 nOutLen = 0;
+        for (sal_Int32 i = 0;  i < nLength;  ++i)
+        {
+            // calling implementation functions:
+            // _getPropertyState and _getPropertyValue (see below) to provide
+            // the proper paragraph number when retrieving paragraph attributes
+            PropertyState eState = aPropSet._getPropertyState( pProperties->Name, mnParagraphIndex );
+            DBG_ASSERT( eState != PropertyState_AMBIGUOUS_VALUE,
+                    "ambiguous property value encountered" );
+
+            //if (eState == PropertyState_DIRECT_VALUE)
+            // per definition all paragraph properties and all character
+            // properties spanning the whole paragraph should be returned
+            // and declared as default value
+            {
+                pOutSequence->Name      = pProperties->Name;
+                pOutSequence->Handle    = pProperties->Handle;
+                pOutSequence->Value     = aPropSet._getPropertyValue( pProperties->Name, mnParagraphIndex );
+                pOutSequence->State     = PropertyState_DEFAULT_VALUE;
+
+                ++pOutSequence;
+                ++nOutLen;
+            }
+            ++pProperties;
+        }
+        aOutSequence.realloc( nOutLen );
+
+        return aOutSequence;
+    }
+
+
+    uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleEditableTextPara::getRunAttributes(
+            sal_Int32 nIndex,
+            const uno::Sequence< ::rtl::OUString >& rRequestedAttributes )
+        throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+    {
+        DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
+
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+        #if OSL_DEBUG_LEVEL > 0
+        SvxAccessibleTextAdapter& rCacheTF =
+        #endif
+            GetTextForwarder();
+
+        #if OSL_DEBUG_LEVEL > 0
+        (void)rCacheTF;
+        #endif
+
+        DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
+                   "AccessibleEditableTextPara::getCharacterAttributes: index value overflow");
+
+        CheckIndex(nIndex);
+
+        SvxAccessibleTextPropertySet aPropSet( &GetEditSource(),
+                                               ImplGetSvxCharAndParaPropertiesMap() );
+        aPropSet.SetSelection( MakeSelection( nIndex ) );
+        uno::Reference< beans::XPropertySetInfo > xPropSetInfo = aPropSet.getPropertySetInfo();
+        if (!xPropSetInfo.is())
+            throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Cannot query XPropertySetInfo")),
+                                        uno::Reference< uno::XInterface >
+                                        ( static_cast< XAccessible* > (this) ) );   // disambiguate hierarchy
+
+        // build sequence of available properties to check
+        sal_Int32 nLenReqAttr = rRequestedAttributes.getLength();
+        uno::Sequence< beans::Property > aProperties;
+        if (nLenReqAttr)
+        {
+            const rtl::OUString *pRequestedAttributes = rRequestedAttributes.getConstArray();
+
+            aProperties.realloc( nLenReqAttr );
+            beans::Property *pProperties = aProperties.getArray();
+            sal_Int32 nCurLen = 0;
+            for (sal_Int32 i = 0;  i < nLenReqAttr;  ++i)
+            {
+                beans::Property aProp;
+                try
+                {
+                    aProp = xPropSetInfo->getPropertyByName( pRequestedAttributes[i] );
+                }
+                catch (beans::UnknownPropertyException &)
+                {
+                    continue;
+                }
+                pProperties[ nCurLen++ ] = aProp;
+            }
+            aProperties.realloc( nCurLen );
+        }
+        else
+            aProperties = xPropSetInfo->getProperties();
+
+        sal_Int32 nLength = aProperties.getLength();
+        const beans::Property *pProperties = aProperties.getConstArray();
+
+        // build resulting sequence
+        uno::Sequence< beans::PropertyValue > aOutSequence( nLength );
+        beans::PropertyValue* pOutSequence = aOutSequence.getArray();
+        sal_Int32 nOutLen = 0;
+        for (sal_Int32 i = 0;  i < nLength;  ++i)
+        {
+            // calling 'regular' functions that will operate on the selection
+            PropertyState eState = aPropSet.getPropertyState( pProperties->Name );
+            if (eState == PropertyState_DIRECT_VALUE)
+            {
+                pOutSequence->Name      = pProperties->Name;
+                pOutSequence->Handle    = pProperties->Handle;
+                pOutSequence->Value     = aPropSet.getPropertyValue( pProperties->Name );
+                pOutSequence->State     = eState;
+
+                ++pOutSequence;
+                ++nOutLen;
+            }
+            ++pProperties;
+        }
+        aOutSequence.realloc( nOutLen );
+
+        return aOutSequence;
+    }
+
 
     // XServiceInfo
     ::rtl::OUString SAL_CALL AccessibleEditableTextPara::getImplementationName (void) throw (uno::RuntimeException)
