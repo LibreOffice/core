@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accpara.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 14:21:25 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 13:06:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,13 @@
 #include <com/sun/star/accessibility/XAccessibleHypertext.hpp>
 #endif
 
+// --> OD 2006-07-11 #i63870#
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLETEXTATTRIBUTES_HPP_
+#include <com/sun/star/accessibility/XAccessibleTextAttributes.hpp>
+#endif
+#include <hash_map>
+// <--
+
 #ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
 #include <com/sun/star/uno/RuntimeException.hpp>
 #endif
@@ -76,12 +83,19 @@ namespace com { namespace sun { namespace star {
     namespace accessibility { class XAccessibleHyperlink; }
 } } }
 
+typedef ::std::hash_map< ::rtl::OUString,
+                         ::com::sun::star::beans::PropertyValue,
+                         ::rtl::OUStringHash,
+                         ::std::equal_to< ::rtl::OUString > > tAccParaPropValMap;
 
 class SwAccessibleParagraph :
         public SwAccessibleContext,
         public ::com::sun::star::accessibility::XAccessibleEditableText,
         public com::sun::star::accessibility::XAccessibleSelection,
-        public com::sun::star::accessibility::XAccessibleHypertext
+        public com::sun::star::accessibility::XAccessibleHypertext,
+        // --> OD 2006-07-11 #i63870#
+        public ::com::sun::star::accessibility::XAccessibleTextAttributes
+        // <--
 {
     friend class SwAccessibleHyperlink;
 
@@ -155,6 +169,16 @@ class SwAccessibleParagraph :
         }
     }
 
+    // --> OD 2006-07-13 #i63870#
+    void _getDefaultAttributesImpl(
+            const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aRequestedAttributes,
+            tAccParaPropValMap& rDefAttrSeq,
+            const bool bOnlyCharAttrs = false );
+    void _getRunAttributesImpl(
+            const sal_Int32 nIndex,
+            const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aRequestedAttributes,
+            tAccParaPropValMap& rRunAttrSeq );
+    // <--
 
 public:
 
@@ -370,18 +394,23 @@ public:
         throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
                 ::com::sun::star::uno::RuntimeException );
 
-//=====  XAccessibleHypertext  ============================================
-virtual sal_Int32 SAL_CALL getHyperLinkCount()
-     throw (::com::sun::star::uno::RuntimeException);
-virtual ::com::sun::star::uno::Reference<
-          ::com::sun::star::accessibility::XAccessibleHyperlink >
-    SAL_CALL getHyperLink( sal_Int32 nLinkIndex )
-      throw (::com::sun::star::lang::IndexOutOfBoundsException,
-              ::com::sun::star::uno::RuntimeException);
-virtual sal_Int32 SAL_CALL getHyperLinkIndex( sal_Int32 nCharIndex )
-    throw (::com::sun::star::lang::IndexOutOfBoundsException,
-            ::com::sun::star::uno::RuntimeException);
+    //=====  XAccessibleHypertext  ============================================
+    virtual sal_Int32 SAL_CALL getHyperLinkCount()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference<
+            ::com::sun::star::accessibility::XAccessibleHyperlink >
+        SAL_CALL getHyperLink( sal_Int32 nLinkIndex )
+        throw (::com::sun::star::lang::IndexOutOfBoundsException,
+                ::com::sun::star::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getHyperLinkIndex( sal_Int32 nCharIndex )
+        throw (::com::sun::star::lang::IndexOutOfBoundsException,
+                ::com::sun::star::uno::RuntimeException);
 
+    // --> OD 2006-07-11 #i63870#
+    //=====  XAccesibleTextAttributes  ========================================
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getDefaultAttributes( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aRequestedAttributes ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getRunAttributes( sal_Int32 nIndex, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aRequestedAttributes ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+    // <--
 };
 
 inline SwAccessibleParagraph::operator ::com::sun::star::accessibility::XAccessibleText *()
