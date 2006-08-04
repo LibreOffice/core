@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-03 13:31:57 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 13:50:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -280,6 +280,7 @@ void VCLXWindowImpl::disposing()
     if ( mpAsyncNotifier.is() )
     {
         mpAsyncNotifier->removeEventsForProcessor( this );
+        mpAsyncNotifier->dispose();
         mpAsyncNotifier = NULL;
     }
 #else
