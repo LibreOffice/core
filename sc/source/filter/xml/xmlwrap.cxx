@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:59:39 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 14:20:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -704,12 +704,15 @@ sal_Bool ScXMLImportWrapper::ExportToComponent(uno::Reference<lang::XMultiServic
         if (xSet.is())
         {
             xSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")), uno::makeAny(sMediaType));
+            OUString aUseCommonPassPropName( RTL_CONSTASCII_USTRINGPARAM("UseCommonStoragePasswordEncryption") );
             if (bPlainText)
+            {
                 xSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Compressed")), uno::makeAny(sal_False));
+                xSet->setPropertyValue( aUseCommonPassPropName, uno::makeAny(sal_False));
+            }
             else
             {
-//REMOVE                xSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Encrypted")), aAny);
-                xSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseCommonStoragePasswordEncryption")), uno::makeAny(sal_True));
+                xSet->setPropertyValue( aUseCommonPassPropName, uno::makeAny(sal_True));
             }
         }
 
