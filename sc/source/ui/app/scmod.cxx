@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scmod.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:10:14 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 12:12:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,6 +95,7 @@
 #include "inputopt.hxx"
 #include "printopt.hxx"
 #include "navicfg.hxx"
+#include "addincfg.hxx"
 #include "tabvwsh.hxx"
 #include "prevwsh.hxx"
 #include "docsh.hxx"
@@ -159,6 +160,7 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
     pInputCfg( NULL ),
     pPrintCfg( NULL ),
     pNavipiCfg( NULL ),
+    pAddInCfg( NULL ),
     pColorConfig( NULL ),
     pAccessOptions( NULL ),
     pCTLOptions( NULL ),
@@ -354,6 +356,7 @@ void ScModule::DeleteCfg()
     DELETEZ( pInputCfg );
     DELETEZ( pPrintCfg );
     DELETEZ( pNavipiCfg );
+    DELETEZ( pAddInCfg );
 
     if ( pColorConfig )
     {
@@ -989,6 +992,14 @@ ScNavipiCfg& ScModule::GetNavipiCfg()
         pNavipiCfg = new ScNavipiCfg;
 
     return *pNavipiCfg;
+}
+
+ScAddInCfg& ScModule::GetAddInCfg()
+{
+    if ( !pAddInCfg )
+        pAddInCfg = new ScAddInCfg;
+
+    return *pAddInCfg;
 }
 
 svtools::ColorConfig& ScModule::GetColorConfig()
