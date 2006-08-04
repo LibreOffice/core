@@ -1,0 +1,113 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XAccessibleTextAttributes.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: ihi $ $Date: 2006-08-04 13:08:42 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_accessibility_XAccessibleTextAttributes_idl__
+#define __com_sun_star_accessibility_XAccessibleTextAttributes_idl__
+
+#ifndef __com_sun_star_lang_IndexOutOfBoundsException_idl__
+#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
+#endif
+#ifndef __com_sun_star_beans_PropertyValue_idl__
+#include <com/sun/star/beans/PropertyValue.idl>
+#endif
+
+module com { module sun { module star { module accessibility {
+
+/** Implement this interface to give access to the attributes of a text.
+
+    @since OOo 2.0.4
+*/
+published interface XAccessibleTextAttributes
+{
+    /** Get the default attribute set for the text.
+
+        <p>Returns a set of all default paragraph and default character
+        attributes that are associated for the text. To prevent the method
+        from returning possibly large sets of attributes that the caller
+        is not interested in the caller can provide a list of attributes
+        that he wants to be returned.</p>
+
+        @param RequestedAttributes
+            This string sequence defines the set of attributes that the
+            caller is interested in. When there are requested attributes
+            that are not defined for the text then they are ignored.
+
+            <p>When the sequence is empty all attributes are returned.</p>
+
+        @return
+            Returns the requested attributes of the text. Each attribute
+            is represented by a <type scope="::com::sun::star::beans">PropertyValue</type>
+            object.
+    */
+    sequence<::com::sun::star::beans::PropertyValue>
+        getDefaultAttributes ( [in] sequence<string> RequestedAttributes );
+
+    /** Get the run attribute set for the specified position.
+
+        <p>Returns a set of character attributes that are associated for
+        the character at the given index and are directly set or are set
+        via a character style. To prevent the method from returning all of
+        these attributes the caller can provide a list of attributes
+        that he wants to be returned.</p>
+
+        @param Index
+            The index of the character for which to return its attributes.
+            The valid range is 0..length of text-1.
+
+        @param RequestedAttributes
+            This string sequence defines the set of attributes that the
+            caller is interested in. When there are requested attributes
+            that are not defined for the text then they are ignored.
+
+            <p>When the sequence is empty all attributes are returned.</p>
+
+        @return
+            Returns the requested attributes of the specified character.
+            Each attribute is represented by a
+            <type scope="::com::sun::star::beans">PropertyValue</type> object.
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if the index is invalid
+    */
+    sequence<::com::sun::star::beans::PropertyValue>
+        getRunAttributes ( [in] long Index,
+                           [in] sequence<string> RequestedAttributes )
+        raises (::com::sun::star::lang::IndexOutOfBoundsException);
+
+};
+
+}; }; }; };
+
+#endif
