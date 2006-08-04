@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 11:21:38 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 14:20:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1044,16 +1044,15 @@ sal_Bool SdXMLFilter::Export()
                     uno::Any aAny; aAny <<= OUString( RTL_CONSTASCII_USTRINGPARAM("text/xml") );
                     xProps->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")), aAny);
 
+                    OUString aUseCommonPassPropName( RTL_CONSTASCII_USTRINGPARAM("UseCommonStoragePasswordEncryption") );
                     if( pServices->mbPlain )
                     {
                         xProps->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Compressed") ), uno::makeAny( (sal_Bool) sal_False ) );
+                        xProps->setPropertyValue( aUseCommonPassPropName, uno::makeAny( (sal_Bool)sal_False ) );
                     }
                     else
                     {
-//REMOVE                            xProps->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Encrypted") ), uno::makeAny( (sal_Bool)sal_True ) );
-                        xProps->setPropertyValue(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseCommonStoragePasswordEncryption") ),
-                            uno::makeAny( (sal_Bool)sal_True ) );
+                        xProps->setPropertyValue( aUseCommonPassPropName, uno::makeAny( (sal_Bool)sal_True ) );
                     }
 
                     OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("StreamName") );
