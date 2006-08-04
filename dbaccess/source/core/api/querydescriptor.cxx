@@ -4,9 +4,9 @@
  *
  *  $RCSfile: querydescriptor.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:06:42 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 13:55:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -200,12 +200,9 @@ OQueryDescriptor_Base::OQueryDescriptor_Base(const OQueryDescriptor_Base& _rSour
 //--------------------------------------------------------------------------
 OQueryDescriptor_Base::~OQueryDescriptor_Base()
 {
-    if ( m_pColumns )
-    {
-        m_pColumns->acquire();
-        m_pColumns->disposing();
-        delete m_pColumns;
-    }
+    m_pColumns->acquire();
+    m_pColumns->disposing();
+    delete m_pColumns;
 
     DBG_DTOR(OQueryDescriptor_Base,NULL);
 }
