@@ -4,9 +4,9 @@
  *
  *  $RCSfile: desktopcontext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:07:10 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 12:32:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,11 +56,7 @@ Any SAL_CALL DesktopContext::getValueByName( const OUString& Name) throw (Runtim
 {
     Any retVal;
 
-    if ( 0 == Name.compareToAscii( DESKTOP_ENVIRONMENT_NAME ) )
-    {
-        retVal = makeAny( Application::GetDesktopEnvironment() );
-    }
-    else if ( 0 == Name.compareToAscii( JAVA_INTERACTION_HANDLER_NAME ))
+    if ( 0 == Name.compareToAscii( JAVA_INTERACTION_HANDLER_NAME ))
     {
         retVal = makeAny( Reference< XInteractionHandler >( new svt::JavaInteractionHandler()) );
     }
