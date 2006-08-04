@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtxml.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:43:39 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 14:21:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -587,20 +587,20 @@ sal_Bool SwXMLWriter::WriteThroughComponent(
         aAny <<= aMime;
         xSet->setPropertyValue( aPropName, aAny );
 
+        OUString aUseCommonPassPropName( RTL_CONSTASCII_USTRINGPARAM("UseCommonStoragePasswordEncryption") );
         if( bPlainStream )
         {
-            OUString aPropName( RTL_CONSTASCII_USTRINGPARAM("Compressed") );
+            OUString aCompressPropName( RTL_CONSTASCII_USTRINGPARAM("Compressed") );
             sal_Bool bFalse = sal_False;
             aAny.setValue( &bFalse, ::getBooleanCppuType() );
-            xSet->setPropertyValue( aPropName, aAny );
+            xSet->setPropertyValue( aCompressPropName, aAny );
+            xSet->setPropertyValue( aUseCommonPassPropName, aAny );
         }
         else
         {
-//REMOVE                OUString aPropName( RTL_CONSTASCII_USTRINGPARAM("Encrypted") );
-            OUString aPropName( RTL_CONSTASCII_USTRINGPARAM("UseCommonStoragePasswordEncryption") );
             sal_Bool bTrue = sal_True;
             aAny.setValue( &bTrue, ::getBooleanCppuType() );
-            xSet->setPropertyValue( aPropName, aAny );
+            xSet->setPropertyValue( aUseCommonPassPropName, aAny );
         }
 
         // set buffer and create outputstream
