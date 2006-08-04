@@ -23,4 +23,9 @@
 // but it won't result any crash and the rest of the library will remain
 // fully functional.
 
+// #i65318# Passing agg version on to clients
+#ifndef AGG_VERSION
+# define AGG_VERSION 2300
+#endif
+
 #endif
