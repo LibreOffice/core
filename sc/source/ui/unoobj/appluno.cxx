@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appluno.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:28:40 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 12:13:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -902,6 +902,8 @@ uno::Sequence<rtl::OUString> ScFunctionListObj::getSupportedServiceNames_Static(
 
 static void lcl_FillSequence( uno::Sequence<beans::PropertyValue>& rSequence, const ScFuncDesc& rDesc )
 {
+    rDesc.InitArgumentInfo();   // full argument info is needed
+
     DBG_ASSERT( rSequence.getLength() == SC_FUNCDESC_PROPCOUNT, "Falscher Count" );
 
     beans::PropertyValue* pArray = rSequence.getArray();
