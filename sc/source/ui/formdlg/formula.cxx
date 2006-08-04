@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formula.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:56:35 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 12:13:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -810,6 +810,8 @@ void ScFormulaDlg::UpdateFunctionDesc()
                                 pScFuncPage->GetFunction() );
         if (pDesc)
         {
+            pDesc->InitArgumentInfo();      // full argument info is needed
+
             String aSig = pDesc->GetSignature();
 
             aFtFuncName.SetText( aSig );
@@ -1909,6 +1911,8 @@ IMPL_LINK( ScFormulaDlg, FuncSelHdl, ScFuncPage*, pLb )
 
         if (pDesc)
         {
+            pDesc->InitArgumentInfo();      // full argument info is needed
+
             String aSig = pDesc->GetSignature();
             if(pDesc->pFuncName)
                 aFtHeadLine.SetText( *(pDesc->pFuncName) );
