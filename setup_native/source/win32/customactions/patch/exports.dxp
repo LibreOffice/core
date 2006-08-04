@@ -5,3 +5,4 @@ SetProductInstallMode
 ShutDownQuickstarter
 IsOfficeRunning
 SetFeatureState
+SetNewFeatureState
