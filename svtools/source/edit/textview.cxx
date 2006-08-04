@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textview.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 21:03:00 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 10:53:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1462,7 +1462,8 @@ TextPaM TextView::ImpDelete( BYTE nMode, BYTE nDelMode )
             i18n::Boundary aBoundary = xBI->getWordBoundary( pNode->GetText(), mpImpl->maSelection.GetEnd().GetIndex(), mpImpl->mpTextEngine->GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES, sal_True );
             if ( aBoundary.startPos == mpImpl->maSelection.GetEnd().GetIndex() )
                 aBoundary = xBI->previousWord( pNode->GetText(), mpImpl->maSelection.GetEnd().GetIndex(), mpImpl->mpTextEngine->GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES );
-            aEndPaM.GetIndex() = (USHORT)aBoundary.startPos;
+            // #i63506# startPos is -1 when the paragraph starts with a tab
+            aEndPaM.GetIndex() = (aBoundary.startPos >= 0) ? (USHORT)aBoundary.startPos : 0;
         }
         else    // DELMODE_RESTOFCONTENT
         {
