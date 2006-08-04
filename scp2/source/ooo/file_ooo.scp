@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.162 $
+ *  $Revision: 1.163 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 11:27:29 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 12:13:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1030,6 +1030,13 @@ File gid_File_Oo_Office_Calc_Xcu
     Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
     Name = "/registry/data/org/openoffice/Office/Calc.xcu";
+End
+
+File gid_File_Oo_Office_CalcAddIns_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED,PATCH);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
+    Name = "/registry/schema/org/openoffice/Office/CalcAddIns.xcs";
 End
 
 File gid_File_Oo_Office_Chart_Xcs
