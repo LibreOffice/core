@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: obo $ $Date: 2006-07-13 11:49:08 $
+#   last change: $Author: ihi $ $Date: 2006-08-04 12:10:08 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,7 @@ PACKAGE=org.openoffice.Office
 XCSFILES= \
     Addons.xcs \
     Calc.xcs \
+    CalcAddIns.xcs \
     Chart.xcs \
     Commands.xcs \
     Common.xcs \
