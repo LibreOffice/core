@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqliterator.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:38:34 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 13:50:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -530,7 +530,7 @@ void OSQLParseTreeIterator::getQualified_join( OSQLTables& _rTables, const OSQLP
         traverseOneTableName( _rTables, pNode, aTableRange );
 }
 //-----------------------------------------------------------------------------
-const OSQLParseNode* OSQLParseTreeIterator::getTableNode( OSQLTables& _rTables, const OSQLParseNode *pTableRef,::rtl::OUString& aTableRange )
+const OSQLParseNode* OSQLParseTreeIterator::getTableNode( OSQLTables& _rTables, const OSQLParseNode *pTableRef,::rtl::OUString& rTableRange )
 {
     OSL_PRECOND( SQL_ISRULE( pTableRef, table_ref ) || SQL_ISRULE( pTableRef, joined_table )
               || SQL_ISRULE( pTableRef, qualified_join ) || SQL_ISRULE( pTableRef, cross_union )
@@ -541,11 +541,11 @@ const OSQLParseNode* OSQLParseTreeIterator::getTableNode( OSQLTables& _rTables, 
 
     if ( SQL_ISRULE( pTableRef, joined_table ) )
     {
-        getQualified_join( _rTables, pTableRef->getChild(1), aTableRange );
+        getQualified_join( _rTables, pTableRef->getChild(1), rTableRange );
     }
     else if ( SQL_ISRULE( pTableRef, qualified_join ) || SQL_ISRULE( pTableRef, cross_union ) )
     {
-        getQualified_join( _rTables, pTableRef, aTableRange );
+        getQualified_join( _rTables, pTableRef, rTableRange );
     }
     else
     {
@@ -553,12 +553,12 @@ const OSQLParseNode* OSQLParseTreeIterator::getTableNode( OSQLTables& _rTables, 
         {
             if ( SQL_ISPUNCTUATION( pTableRef->getChild(0), "{" ) )
             {   // { OJ joined_table }
-                getQualified_join( _rTables, pTableRef->getChild(2), aTableRange );
+                getQualified_join( _rTables, pTableRef->getChild(2), rTableRange );
             }
             else
             {   // table_node as range_variable op_column_commalist
                 pTableNameNode = pTableRef->getChild(0);
-                aTableRange = pTableRef->getChild(2)->getTokenValue();
+                rTableRange = pTableRef->getChild(2)->getTokenValue();
             }
         }
         else if ( pTableRef->count() == 3 )
@@ -569,7 +569,7 @@ const OSQLParseNode* OSQLParseTreeIterator::getTableNode( OSQLTables& _rTables, 
             if ( SQL_ISRULE( pQueryExpression, select_statement ) )
             {
                 getSelect_statement( *m_pImpl->m_pSubTables, pQueryExpression );
-                aTableRange = pTableRef->getChild(2)->getTokenValue();
+                rTableRange = pTableRef->getChild(2)->getTokenValue();
             }
             else
             {
@@ -579,8 +579,13 @@ const OSQLParseNode* OSQLParseTreeIterator::getTableNode( OSQLTables& _rTables, 
         else if ( pTableRef->count() == 6 )
         {
             // '(' joined_table ')' as range_variable op_column_commalist
-            getQualified_join( _rTables, pTableRef->getChild(1), aTableRange );
-            aTableRange = pTableRef->getChild(4)->getTokenValue();
+            getQualified_join( _rTables, pTableRef->getChild(1), rTableRange );
+            rTableRange = pTableRef->getChild(4)->getTokenValue();
+        }
+        else if ( pTableRef->count() == 1 )
+        {
+            // table_node
+            pTableNameNode = pTableRef->getChild(0);
         }
         else
             OSL_ENSURE( false, "OSQLParseTreeIterator::getTableNode: unhandled case!" );
