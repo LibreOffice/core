@@ -4,9 +4,9 @@
  *
  *  $RCSfile: recently_used_file_handler.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 14:20:09 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 12:22:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,10 @@
 
 #ifndef _RTL_STRING_HXX_
 #include "rtl/string.hxx"
+#endif
+
+#ifndef _RTL_STRBUF_HXX_
+#include "rtl/strbuf.hxx"
 #endif
 
 #include "osl/thread.h"
@@ -212,10 +216,33 @@ namespace /* private */ {
             write_xml_end_tag(TAG_RECENT_ITEM, file);
         }
 
+        static rtl::OString escape_content(const string_t &text)
+        {
+            rtl::OStringBuffer aBuf;
+            for (sal_uInt32 i = 0; i < text.length(); i++)
+            {
+#               define MAP(a,b) case a: aBuf.append(b); break
+                switch (text[i])
+                {
+                    MAP ('&',  "&amp;");
+                    MAP ('<',  "&lt;");
+                    MAP ('>',  "&gt;");
+                    MAP ('\'', "&apos;");
+                    MAP ('"',  "&quot;");
+                default:
+                    aBuf.append(text[i]);
+                    break;
+                }
+#               undef MAP
+            }
+            return aBuf.makeStringAndClear();
+        }
+
         void write_xml_tag(const string_t& name, const string_t& value, const recently_used_file& file) const
         {
             write_xml_start_tag(name, file);
-            file.write(value.c_str(), value.length());
+            rtl::OString escaped = escape_content (value);
+            file.write(escaped.getStr(), escaped.getLength());
             write_xml_end_tag(name, file);
         }
 
@@ -541,7 +568,7 @@ const rtl::OUString DEFAULT_CONTEXT = rtl::OUString::createFromAscii("DefaultCon
 
 // We need to re-encode file urls because osl_getFileURLFromSystemPath converts
 // to UTF-8 before encoding non ascii characters, which is not what other apps expect.
-rtl::OUString translateToExternalUrl(const rtl::OUString& internalUrl)
+static rtl::OUString translateToExternalUrl(const rtl::OUString& internalUrl)
 {
     rtl::OUString extUrl;
 
@@ -572,7 +599,7 @@ extern "C" void add_to_recently_used_file_list(const rtl::OUString& file_url, co
         rtl::OUString externalUrl = translateToExternalUrl(file_url);
 
         read_recently_used_items(ruf, item_list);
-        recently_used_item_list_add(item_list, (externalUrl.getLength()) ? externalUrl : file_url, mime_type);
+        recently_used_item_list_add(item_list, externalUrl.getLength() ? externalUrl : file_url, mime_type);
         write_recently_used_items(ruf, item_list);
     }
     catch(const char* ex)
