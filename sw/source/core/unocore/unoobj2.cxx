@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 15:44:25 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 13:06:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1037,7 +1037,13 @@ void SwXTextCursor::SetCrsrAttr(SwPaM& rPam, const SfxItemSet& rSet, USHORT nAtt
 /*-- 09.12.98 14:19:04---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXTextCursor::GetCrsrAttr(SwPaM& rPam, SfxItemSet& rSet, BOOL bCurrentAttrOnly)
+// --> OD 2006-07-12 #i63870#
+// split third parameter <bCurrentAttrOnly> into new parameters <bOnlyTxtAttr>
+// and <bGetFromChrFmt> to get better control about resulting <SfxItemSet>
+void SwXTextCursor::GetCrsrAttr( SwPaM& rPam,
+                                 SfxItemSet& rSet,
+                                 BOOL bOnlyTxtAttr,
+                                 BOOL bGetFromChrFmt )
 {
     static const sal_uInt16 nMaxLookup = 1000;
     SfxItemSet aSet( *rSet.GetPool(), rSet.GetRanges() );
@@ -1075,7 +1081,7 @@ void SwXTextCursor::GetCrsrAttr(SwPaM& rPam, SfxItemSet& rSet, BOOL bCurrentAttr
                         xub_StrLen nStt = n == nSttNd ? nSttCnt : 0,
                                 nEnd = n == nEndNd ? nEndCnt
                                             : ((SwTxtNode*)pNd)->GetTxt().Len();
-                        ((SwTxtNode*)pNd)->GetAttr( *pSet, nStt, nEnd, bCurrentAttrOnly, !bCurrentAttrOnly );
+                        ((SwTxtNode*)pNd)->GetAttr( *pSet, nStt, nEnd, bOnlyTxtAttr, bGetFromChrFmt );
                     }
                     break;
                 case ND_GRFNODE:
