@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cell2.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 10:49:31 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 11:33:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -719,13 +719,14 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
         ScTokenArray* pOld = pUndoDoc ? pCode->Clone() : NULL;
         BOOL bValChanged;
         ScRangeData* pRangeData;
-        BOOL bRangeModified;            // beliebiger Range (nicht nur shared Formula)
+        BOOL bRangeModified;            // any range, not only shared formula
+        BOOL bRefSizeChanged;
         if ( bHasRefs )
         {
             ScCompiler aComp(pDocument, aPos, *pCode);
             pRangeData = aComp.UpdateReference(eUpdateRefMode, aOldPos, r,
                                              nDx, nDy, nDz,
-                                             bValChanged);
+                                             bValChanged, bRefSizeChanged);
             bRangeModified = aComp.HasModifiedRange();
         }
         else
@@ -733,16 +734,17 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
             bValChanged = FALSE;
             pRangeData = NULL;
             bRangeModified = FALSE;
+            bRefSizeChanged = FALSE;
         }
         if ( bOnRefMove )
             bOnRefMove = (bValChanged || (aPos != aOldPos));
-            // Zelle referiert sich evtl. selbst, z.B. ocColumn, ocRow ohne Parameter
+            // Cell may reference itself, e.g. ocColumn, ocRow without parameter
 
         BOOL bColRowNameCompile, bHasRelName, bNewListening, bInDeleteUndo;
         if ( bHasRefs )
         {
-            // Bei Insert muessen ColRowNames neu kompiliert werden, falls genau
-            // am Beginn des Bereiches inserted wird.
+            // Upon Insert ColRowNames have to be recompiled in case the
+            // insertion occurs right in front of the range.
             bColRowNameCompile =
                 (eUpdateRefMode == URM_INSDEL && (nDx > 0 || nDy > 0));
             if ( bColRowNameCompile )
@@ -828,8 +830,8 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
             // Reference changed and new listening needed?
             // Except in Insert/Delete without specialties.
             bNewListening = (bRangeModified || pRangeData || bColRowNameCompile
-                    || (bValChanged &&
-                        (eUpdateRefMode != URM_INSDEL || bInDeleteUndo)) ||
+                    || (bValChanged && (eUpdateRefMode != URM_INSDEL ||
+                            bInDeleteUndo || bRefSizeChanged)) ||
                     (bHasRelName && eUpdateRefMode != URM_COPY))
                 // #i36299# Don't duplicate action during cut&paste / drag&drop
                 // on a cell in the range moved, start/end listeners is done
@@ -847,10 +849,11 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
 
         BOOL bNeedDirty;
         // NeedDirty bei Aenderungen ausser Copy und Move/Insert ohne RelNames
-        if ( bRangeModified || pRangeData || bColRowNameCompile
-          || (bValChanged && eUpdateRefMode != URM_COPY
-                && (eUpdateRefMode != URM_MOVE || bHasRelName)
-                && (!bIsInsert || bHasRelName || bInDeleteUndo)) || bOnRefMove )
+        if ( bRangeModified || pRangeData || bColRowNameCompile ||
+                (bValChanged && eUpdateRefMode != URM_COPY &&
+                 (eUpdateRefMode != URM_MOVE || bHasRelName) &&
+                 (!bIsInsert || bHasRelName || bInDeleteUndo ||
+                  bRefSizeChanged)) || bOnRefMove)
             bNeedDirty = TRUE;
         else
             bNeedDirty = FALSE;
@@ -1374,6 +1377,9 @@ void ScFormulaCell::CompileDBFormula( BOOL bCreateFormulaString )
                 case ocName:
                     if ( p->GetIndex() >= SC_START_INDEX_DB_COLL )
                         bRecompile = TRUE;  // DB-Bereich
+                break;
+                default:
+                    ; // nothing
             }
         }
         if ( bRecompile )
