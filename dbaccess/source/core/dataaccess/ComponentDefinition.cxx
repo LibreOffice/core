@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ComponentDefinition.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-17 13:08:59 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 13:56:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -193,11 +193,8 @@ Reference< XInterface > OComponentDefinition::Create(const Reference< XMultiServ
 void SAL_CALL OComponentDefinition::disposing()
 {
     OContentHelper::disposing();
-    if ( m_pColumns.is() )
-    {
+    if ( m_pColumns.get() )
         m_pColumns->disposing();
-        m_pColumns.reset();
-    }
 }
 // -----------------------------------------------------------------------------
 IPropertyArrayHelper& OComponentDefinition::getInfoHelper()
@@ -223,7 +220,7 @@ Reference< XNameAccess> OComponentDefinition::getColumns() throw (RuntimeExcepti
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OContentHelper::rBHelper.bDisposed);
 
-    if ( !m_pColumns.is() )
+    if ( !m_pColumns.get() )
     {
         ::std::vector< ::rtl::OUString> aNames;
 
@@ -235,10 +232,10 @@ Reference< XNameAccess> OComponentDefinition::getColumns() throw (RuntimeExcepti
         for ( ; aIter != aEnd; ++aIter )
             aNames.push_back( aIter->first );
 
-        m_pColumns = TColumnsHelper( new OColumns( *this, m_aMutex, sal_True, aNames, this, NULL, sal_True, sal_False, sal_False ) );
-        m_pColumns->setParent(*this);
+        m_pColumns.reset( new OColumns( *this, m_aMutex, sal_True, aNames, this, NULL, sal_True, sal_False, sal_False ) );
+        m_pColumns->setParent( *this );
     }
-    return m_pColumns.getRef();
+    return m_pColumns.get();
 }
 // -----------------------------------------------------------------------------
 OColumn* OComponentDefinition::createColumn(const ::rtl::OUString& _rName) const
