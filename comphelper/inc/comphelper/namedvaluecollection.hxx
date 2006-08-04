@@ -4,9 +4,9 @@
  *
  *  $RCSfile: namedvaluecollection.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 16:15:07 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 13:58:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,9 @@
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include <com/sun/star/uno/Any.hxx>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
 /** === end UNO includes === **/
 
 #include <memory>
@@ -75,9 +78,21 @@ namespace comphelper
                 a sequence of Any's containing either PropertyValue's or NamedValue's.
         */
         NamedValueCollection( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rArguments );
+
+        /** constructs a collection
+            @param _rArguments
+                a sequence of PropertyValues's
+        */
+        NamedValueCollection( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rArguments );
+
         ~NamedValueCollection();
 
-        void    assign( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rArguments )
+        inline void assign( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rArguments )
+        {
+            impl_assign( _rArguments );
+        }
+
+        inline void assign( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rArguments )
         {
             impl_assign( _rArguments );
         }
@@ -145,6 +160,7 @@ namespace comphelper
 
     private:
         void    impl_assign( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rArguments );
+        void    impl_assign( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rArguments );
 
         bool    getIfExists_ensureType(
                     const ::rtl::OUString& _rValueName,

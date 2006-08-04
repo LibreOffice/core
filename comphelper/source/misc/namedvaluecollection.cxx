@@ -4,9 +4,9 @@
  *
  *  $RCSfile: namedvaluecollection.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 16:15:46 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 13:58:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,9 +38,6 @@
 #endif
 
 /** === begin UNO includes === **/
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
-#include <com/sun/star/beans/PropertyValue.hpp>
-#endif
 #ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
 #include <com/sun/star/beans/NamedValue.hpp>
 #endif
@@ -95,6 +92,13 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------
+    NamedValueCollection::NamedValueCollection( const Sequence< PropertyValue >& _rArguments )
+        :m_pImpl( new NamedValueCollection_Impl )
+    {
+        impl_assign( _rArguments );
+    }
+
+    //--------------------------------------------------------------------
     NamedValueCollection::~NamedValueCollection()
     {
     }
@@ -121,6 +125,20 @@ namespace comphelper
             else
                 OSL_ENSURE( !pArgument->hasValue(), "NamedValueCollection::NamedValueCollection: encountered a value which I cannot handle!" );
         }
+    }
+
+    //--------------------------------------------------------------------
+    void NamedValueCollection::impl_assign( const Sequence< PropertyValue >& _rArguments )
+    {
+        {
+            NamedValueRepository empty;
+            m_pImpl->aValues.swap( empty );
+        }
+
+        const PropertyValue* pArgument = _rArguments.getConstArray();
+        const PropertyValue* pArgumentEnd = _rArguments.getConstArray() + _rArguments.getLength();
+        for ( ; pArgument != pArgumentEnd; ++pArgument )
+            m_pImpl->aValues[ pArgument->Name ] = pArgument->Value;
     }
 
     //--------------------------------------------------------------------
