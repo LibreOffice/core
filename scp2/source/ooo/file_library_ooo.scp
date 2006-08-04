@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.208 $
+ *  $Revision: 1.209 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 12:31:52 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 12:39:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -498,7 +498,7 @@ STD_LIB_FILE_PATCH( gid_File_Lib_Cui, cui)
 
 File gid_File_Lib_Curl
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED, PATCH);
     Dir = gid_Dir_Program;
   #ifdef UNX
     #ifdef MACOSX
