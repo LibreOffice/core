@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scmod.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 10:12:22 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 12:11:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,6 +101,7 @@ class ScEditFunctionDlg;
 class ScMessagePool;
 class EditFieldInfo;
 class ScNavipiCfg;
+class ScAddInCfg;
 class ScFormEditData;
 class ScTransferObj;
 class ScDrawTransferObj;
@@ -152,6 +153,7 @@ class ScModule: public SfxModule, public SfxListener
     ScInputCfg*         pInputCfg;
     ScPrintCfg*         pPrintCfg;
     ScNavipiCfg*        pNavipiCfg;
+    ScAddInCfg*         pAddInCfg;
     svtools::ColorConfig*   pColorConfig;
     SvtAccessibilityOptions* pAccessOptions;
     SvtCTLOptions*      pCTLOptions;
@@ -237,6 +239,7 @@ SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rO
     USHORT              GetOptDigitLanguage();      // from CTL options
 
     ScNavipiCfg&        GetNavipiCfg();
+    ScAddInCfg&         GetAddInCfg();
     svtools::ColorConfig&   GetColorConfig();
     SvtAccessibilityOptions& GetAccessOptions();
     SvtCTLOptions&      GetCTLOptions();
