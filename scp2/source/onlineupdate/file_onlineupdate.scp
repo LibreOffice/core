@@ -1,0 +1,53 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: file_onlineupdate.scp,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: ihi $ $Date: 2006-08-04 10:08:29 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#include "macros.inc"
+
+SPECIAL_UNO_COMPONENT_LIB_FILE_PATCH( gid_File_Lib_Updchk , updchk.uno )
+
+File gid_File_Registry_Spool_Oo_Office_Addons_Onlineupdate_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED, PATCH);
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Addons;
+    Name = "/registry/spool/org/openoffice/Office/Addons/Addons-onlineupdate.xcu";
+End
+
+File gid_File_Registry_Spool_Oo_Office_Jobs_Onlineupdate_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED, PATCH);
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Jobs;
+    Name = "/registry/spool/org/openoffice/Office/Jobs/Jobs-onlineupdate.xcu";
+End
+
