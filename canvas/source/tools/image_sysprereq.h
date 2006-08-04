@@ -4,9 +4,9 @@
  *
  *  $RCSfile: image_sysprereq.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:17:54 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 13:30:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,15 +62,30 @@
 #include <agg2/agg_renderer_outline_aa.h>
 #include <agg2/agg_renderer_primitives.h>
 #include <agg2/agg_path_storage.h>
+#if AGG_VERSION == 2300
 #include <agg2/agg_span_pattern.h>
+#endif
 #include <agg2/agg_span_pattern_rgba.h>
+#if AGG_VERSION >= 2400
+#include <agg2/agg_span_image_filter_rgb.h>
+#include <agg2/agg_span_image_filter_rgba.h>
+#else
 #include <agg2/agg_span_pattern_resample_rgb.h>
 #include <agg2/agg_span_pattern_resample_rgba.h>
+#endif
 #include <agg2/agg_span_interpolator_linear.h>
 #include <agg2/agg_span_gradient.h>
+#if AGG_VERSION == 2300
 #include <agg2/agg_span_image_resample_rgb.h>
 #include <agg2/agg_span_image_resample_rgba.h>
+#endif
+#if AGG_VERSION >= 2400
+#include <agg2/agg_span_allocator.h>
+#endif
 #include <agg2/agg_image_filters.h>
+#if AGG_VERSION >= 2400
+#include <agg2/agg_image_accessors.h>
+#endif
 #include <agg2/agg_dda_line.h>
 #include <agg2/agg_scanline_storage_aa.h>
 #include <agg2/agg_scanline_storage_bin.h>
