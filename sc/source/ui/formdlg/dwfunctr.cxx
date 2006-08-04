@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dwfunctr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:55:25 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 12:12:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -602,6 +602,8 @@ void ScFunctionDockWin::SetDescription()
                     pAllFuncList->GetSelectEntryPos() );
     if (pDesc)
     {
+        pDesc->InitArgumentInfo();      // full argument info is needed
+
         String  aString=pAllFuncList->GetSelectEntry();
         if(nDockMode==0)
         {
