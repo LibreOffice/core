@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parclass.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:38:40 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 12:12:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -351,7 +351,7 @@ ScParameterClassification::GetExternalParameterType( const ScToken* pToken,
     {
         // the relevant parts of ScUnoAddInCall without having to create one
         const ScUnoAddInFuncData* pFuncData =
-            ScGlobal::GetAddInCollection()->GetFuncData( aUnoName);
+            ScGlobal::GetAddInCollection()->GetFuncData( aUnoName, true );      // need fully initialized data
         if ( pFuncData )
         {
             long nCount = pFuncData->GetArgumentCount();
