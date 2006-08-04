@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: rt $ $Date: 2006-03-08 14:02:57 $
+#   last change: $Author: ihi $ $Date: 2006-08-04 12:39:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@ curl_LDFLAGS+=-L$(SYSBASE)$/usr$/lib
 CONFIGURE_DIR=.$/
 #relative to CONFIGURE_DIR
 CONFIGURE_ACTION=.$/configure
-CONFIGURE_FLAGS= --without-ssl --without-libidn --enable-ftp --enable-ipv6 --disable-http --disable-gopher --disable-file --disable-ldap --disable-telnet --disable-dict --disable-static CFLAGS="$(curl_CFLAGS)"  LDFLAGS="$(curl_LDFLAGS)"
+CONFIGURE_FLAGS= --without-ssl --without-libidn --enable-ftp --enable-ipv6 --enable-http --disable-gopher --disable-file --disable-ldap --disable-telnet --disable-dict --disable-static CFLAGS="$(curl_CFLAGS)"  LDFLAGS="$(curl_LDFLAGS)"
 
 BUILD_DIR=$(CONFIGURE_DIR)$/lib
 .IF "$(OS)"=="IRIX"
