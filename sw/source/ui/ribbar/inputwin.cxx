@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:44:29 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 13:07:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,9 +113,10 @@ SwInputWindow::SwInputWindow( Window* pParent, SfxBindings* pBind )
     InsertWindow( ED_FORMULA, &aEdit);
     SetHelpId(ED_FORMULA, HID_EDIT_FORMULA);
 
-    SetItemImage( FN_FORMULA_CALC, pManager->GetImage(FN_FORMULA_CALC, sal_False ));
-    SetItemImage( FN_FORMULA_CANCEL, pManager->GetImage(FN_FORMULA_CANCEL, sal_False  ));
-    SetItemImage( FN_FORMULA_APPLY, pManager->GetImage(FN_FORMULA_APPLY, sal_False  ));
+    BOOL bDark = GetSettings().GetStyleSettings().GetFaceColor().IsDark();
+    SetItemImage( FN_FORMULA_CALC, pManager->GetImage(FN_FORMULA_CALC, bDark ));
+    SetItemImage( FN_FORMULA_CANCEL, pManager->GetImage(FN_FORMULA_CANCEL, bDark  ));
+    SetItemImage( FN_FORMULA_APPLY, pManager->GetImage(FN_FORMULA_APPLY, bDark  ));
 
     SetItemBits( FN_FORMULA_CALC, GetItemBits( FN_FORMULA_CALC ) | TIB_DROPDOWNONLY );
     SetDropdownClickHdl( LINK( this, SwInputWindow, DropdownClickHdl ));
@@ -162,6 +163,26 @@ __EXPORT SwInputWindow::~SwInputWindow()
             pWrtShell->Undo();
         SwEditShell::SetUndoActionCount( nActionCnt );
     }
+}
+
+//==================================================================
+
+void SwInputWindow::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    if ( rDCEvt.GetType() == DATACHANGED_SETTINGS && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    {
+        //      update item images
+        SwModule *pMod  = SW_MOD();
+        SfxImageManager *pImgMgr = SfxImageManager::GetImageManager( pMod );
+        //!! Don't use display-background to check for IsDark !!
+        BOOL bDark = GetSettings().GetStyleSettings().GetFaceColor().IsDark();
+        //
+        SetItemImage( FN_FORMULA_CALC,   pImgMgr->GetImage(FN_FORMULA_CALC,   bDark ));
+        SetItemImage( FN_FORMULA_CANCEL, pImgMgr->GetImage(FN_FORMULA_CANCEL, bDark ));
+        SetItemImage( FN_FORMULA_APPLY,  pImgMgr->GetImage(FN_FORMULA_APPLY,  bDark ));
+    }
+
+    ToolBox::DataChanged( rDCEvt );
 }
 
 //==================================================================
