@@ -22,5 +22,6 @@ sh    shell\source\backends\localebe               nmake   -   all sh_backends_l
 sh    shell\source\backends\wininetbe              nmake   -   w   sh_backends_wininetbe NULL
 sh    shell\source\backends\gconfbe                nmake   -   u   sh_backends_gconfbe NULL
 sh    shell\source\backends\kdebe                  nmake   -   u   sh_backends_kdebe NULL
+sh    shell\source\backends\desktopbe              nmake   -   u   sh_backends_desktopbe NULL
 sh    shell\source\win32\shlxthandler\ooofilt      nmake   -   w   sh_win32_shlxthandler_ooofilt sh_all_zipfile.w sh_all_ooofilereader.w sh_win32_shlxthandler_util.w sh_all NULL
 sh    shell\source\win32\shlxthandler\ooofilt\proxy nmake   -   w   sh_win32_ooofiltproxy NULL 
