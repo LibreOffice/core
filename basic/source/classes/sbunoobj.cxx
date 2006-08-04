@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbunoobj.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 16:33:11 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 10:53:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -413,14 +413,14 @@ SbxDataType unoToSbxType( TypeClass eType )
     {
         case TypeClass_INTERFACE:
         case TypeClass_TYPE:
-        case TypeClass_STRUCT:          eRetType = SbxOBJECT;   break;
+        case TypeClass_STRUCT:
+        case TypeClass_EXCEPTION:       eRetType = SbxOBJECT;   break;
 
         /* folgende Typen lassen wir erstmal weg
         case TypeClass_SERVICE:         break;
         case TypeClass_CLASS:           break;
         case TypeClass_TYPEDEF:         break;
         case TypeClass_UNION:           break;
-        case TypeClass_EXCEPTION:       break;
         case TypeClass_ARRAY:           break;
         */
         case TypeClass_ENUM:            eRetType = SbxLONG;     break;
@@ -581,6 +581,7 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
         // Interfaces und Structs muessen in ein SbUnoObject gewrappt werden
         case TypeClass_INTERFACE:
         case TypeClass_STRUCT:
+        case TypeClass_EXCEPTION:
         {
             if( eTypeClass == TypeClass_STRUCT )
             {
@@ -665,7 +666,6 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
         case TypeClass_TYPEDEF:         break;
         case TypeClass_UNION:           break;
         case TypeClass_ENUM:            break;
-        case TypeClass_EXCEPTION:       break;
         case TypeClass_ARRAY:           break;
         */
 
@@ -1121,6 +1121,7 @@ Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty 
     {
         case TypeClass_INTERFACE:
         case TypeClass_STRUCT:
+        case TypeClass_EXCEPTION:
         {
             Reference< XIdlClass > xIdlTargetClass = TypeToIdlClass( rType );
 
@@ -1189,7 +1190,6 @@ Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty 
         case TypeClass_TYPEDEF:         break;
         case TypeClass_UNION:           break;
         case TypeClass_ENUM:            break;
-        case TypeClass_EXCEPTION:       break;
         case TypeClass_ARRAY:           break;
         */
 
@@ -2205,7 +2205,7 @@ SbUnoObject::SbUnoObject( const String& aName_, const Any& aUnoObj_ )
     // Ist es ein Interface oder eine struct?
     BOOL bSetClassName = FALSE;
     String aClassName_;
-    if( eType == TypeClass_STRUCT )
+    if( eType == TypeClass_STRUCT || eType == TypeClass_EXCEPTION )
     {
         // Struct ist Ok
         bFatalError = FALSE;
