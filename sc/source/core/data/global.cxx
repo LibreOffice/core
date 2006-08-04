@@ -4,9 +4,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:04:50 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 12:11:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -743,6 +743,11 @@ String ScGlobal::GetCharsetString( CharSet eVal )
 
 //------------------------------------------------------------------------
 
+bool ScGlobal::HasStarCalcFunctionList()
+{
+    return ( pStarCalcFunctionList != NULL );
+}
+
 ScFunctionList* ScGlobal::GetStarCalcFunctionList()
 {
     if ( !pStarCalcFunctionList )
@@ -759,6 +764,14 @@ ScFunctionMgr* ScGlobal::GetStarCalcFunctionMgr()
         pStarCalcFunctionMgr = new ScFunctionMgr;
 
     return pStarCalcFunctionMgr;
+}
+
+void ScGlobal::ResetFunctionList()
+{
+    // FunctionMgr has pointers into FunctionList, must also be updated
+
+    DELETEZ( pStarCalcFunctionMgr );
+    DELETEZ( pStarCalcFunctionList );
 }
 
 //------------------------------------------------------------------------
@@ -1605,16 +1618,22 @@ ScFuncDesc::ScFuncDesc()
         aDefArgNames    (NULL),
         aDefArgDescs    (NULL),
         aDefArgOpt      (NULL),
-        nHelpId         (0)
+        nHelpId         (0),
+        bIncomplete     (FALSE)
 {}
 
 //------------------------------------------------------------------------
 
 ScFuncDesc::~ScFuncDesc()
 {
-    USHORT      nArgs;
+    Clear();
+}
 
-    nArgs = nArgCount;
+//------------------------------------------------------------------------
+
+void ScFuncDesc::Clear()
+{
+    USHORT nArgs = nArgCount;
     if (nArgs >= VAR_ARGS) nArgs -= VAR_ARGS-1;
     if (nArgs)
     {
@@ -1627,11 +1646,49 @@ ScFuncDesc::~ScFuncDesc()
         delete [] aDefArgDescs;
         delete [] aDefArgOpt;
     }
-    if(pFuncName)
-        delete pFuncName;
+    nArgCount = 0;
+    aDefArgNames = NULL;
+    aDefArgDescs = NULL;
+    aDefArgOpt = NULL;
 
-    if(pFuncDesc)
-        delete pFuncDesc;
+    delete pFuncName;
+    pFuncName = NULL;
+
+    delete pFuncDesc;
+    pFuncDesc = NULL;
+
+    nFIndex = 0;
+    nCategory = 0;
+    nHelpId = 0;
+    bIncomplete = FALSE;
+}
+
+//------------------------------------------------------------------------
+
+void ScFuncDesc::InitArgumentInfo() const
+{
+    // get the full argument description
+    // (add-in has to be instantiated to get the type information)
+
+    if ( bIncomplete && pFuncName )
+    {
+        ScUnoAddInCollection& rAddIns = *ScGlobal::GetAddInCollection();
+        String aIntName = rAddIns.FindFunction( *pFuncName, TRUE );         // pFuncName is upper-case
+
+        if ( aIntName.Len() )
+        {
+            // GetFuncData with bComplete=true loads the component and updates
+            // the global function list if needed.
+
+            rAddIns.GetFuncData( aIntName, true );
+        }
+
+        if ( bIncomplete )
+        {
+            DBG_ERRORFILE( "couldn't initialize add-in function" );
+            const_cast<ScFuncDesc*>(this)->bIncomplete = FALSE;         // even if there was an error, don't try again
+        }
+    }
 }
 
 //------------------------------------------------------------------------
