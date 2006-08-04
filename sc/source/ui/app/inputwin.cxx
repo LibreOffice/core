@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:09:17 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 13:04:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -177,7 +177,7 @@ ScInputWindow::ScInputWindow( Window* pParent, SfxBindings* pBind ) :
     SfxImageManager* pImgMgr = SfxImageManager::GetImageManager( pScMod );
     ScTabViewShell*  pViewSh = PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
 
-    BOOL bDark = GetDisplayBackground().GetColor().IsDark();
+    BOOL bDark = GetSettings().GetStyleSettings().GetFaceColor().IsDark();
 
     // Positionsfenster, 3 Buttons, Eingabefenster
     InsertWindow    ( 1, &aWndPos, 0,                                     0 );
@@ -548,7 +548,7 @@ void ScInputWindow::SetOkCancelMode()
     SfxImageManager* pImgMgr = SfxImageManager::GetImageManager( pScMod );
     if (!bIsOkCancelMode)
     {
-        BOOL bDark = GetDisplayBackground().GetColor().IsDark();
+        BOOL bDark = GetSettings().GetStyleSettings().GetFaceColor().IsDark();
 
         RemoveItem( 3 ); // SID_INPUT_SUM und SID_INPUT_EQUAL entfernen
         RemoveItem( 3 );
@@ -572,7 +572,7 @@ void ScInputWindow::SetSumAssignMode()
     SfxImageManager* pImgMgr = SfxImageManager::GetImageManager( pScMod );
     if (bIsOkCancelMode)
     {
-        BOOL bDark = GetDisplayBackground().GetColor().IsDark();
+        BOOL bDark = GetSettings().GetStyleSettings().GetFaceColor().IsDark();
 
         // SID_INPUT_CANCEL, und SID_INPUT_OK entfernen
         RemoveItem( 3 );
@@ -700,7 +700,7 @@ void ScInputWindow::DataChanged( const DataChangedEvent& rDCEvt )
 
         ScModule*        pScMod  = SC_MOD();
         SfxImageManager* pImgMgr = SfxImageManager::GetImageManager( pScMod );
-        BOOL bDark = GetDisplayBackground().GetColor().IsDark();
+        BOOL bDark = GetSettings().GetStyleSettings().GetFaceColor().IsDark();
         // IMAGE macro uses pScMod, pImgMgr, bDark
 
         SetItemImage( SID_INPUT_FUNCTION, IMAGE( SID_INPUT_FUNCTION ) );
