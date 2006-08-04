@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_hidden_ooo.scp,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 09:13:35 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 10:10:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -487,7 +487,9 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Hatchwindowfactory,
 	gid_File_Lib_Passwordcontainer,
 	gid_File_Lib_Productregistration,
-	gid_File_Lib_Svtmisc);
+	gid_File_Lib_Svtmisc,
+    gid_File_Lib_Updchkui,
+	gid_File_Lib_Onlinecheck);
 End
 
 Module gid_Module_Root_Files_6
@@ -895,7 +897,8 @@ Module gid_Module_Root_Files_8
 	gid_File_Res_Eps,
 	gid_File_Res_Egi,
 	gid_File_Res_Ept,
-	gid_File_Res_Eme);
+	gid_File_Res_Eme,
+    gid_File_Res_UpdChk);
 End
 
 Module gid_Module_Root_Files_9
