@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treeopt.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 08:29:05 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 09:49:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -183,6 +183,9 @@
 #ifndef _OFFAPP_CONNPOOLOPTIONS_HXX_
 #include "connpooloptions.hxx"
 #endif
+#ifndef _SVX_OPTUPDT_HXX
+#include "optupdt.hxx"
+#endif
 
 #include "optgdlg.hxx"
 #include "optmemory.hxx"
@@ -329,6 +332,7 @@ SfxTabPage* CreateGeneralTabPage( sal_uInt16 nId, Window* pParent, const SfxItem
         case RID_SVXPAGE_INET_MOZPLUGIN:            fnCreate = &MozPluginTabPage::Create; break;
         //added by jmeng end
         case RID_SVXPAGE_OPTIONS_JAVA:              fnCreate = &SvxJavaOptionsPage::Create ; break;
+            case RID_SVXPAGE_ONLINEUPDATE:                          fnCreate = &SvxOnlineUpdateTabPage::Create; break;
     }
 
     SfxTabPage* pRet = fnCreate ? (*fnCreate)( pParent, rSet ) : NULL;
@@ -360,6 +364,7 @@ static OptionsMapping_Impl __READONLY_DATA OptionsMap_Impl[] =
     { "ProductName",        "Accessibility",        RID_SVXPAGE_ACCESSIBILITYCONFIG },
     { "ProductName",        "Java",                 RID_SVXPAGE_OPTIONS_JAVA },
     { "ProductName",        "NetworkIdentity",      RID_SVXPAGE_SSO },
+    { "ProductName",        "OnlineUpdate",         RID_SVXPAGE_ONLINEUPDATE },
     { "LanguageSettings",   NULL,                   SID_LANGUAGE_OPTIONS },
     { "LanguageSettings",   "Languages",            OFA_TP_LANGUAGES  },
     { "LanguageSettings",   "WritingAids",          RID_SFXPAGE_LINGU },
@@ -1699,6 +1704,18 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
             nPageId = (sal_uInt16)rGeneralArray.GetValue(i);
             if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
                 continue;
+
+            // Disable Online Update page if service not installed
+            if( nPageId == RID_SVXPAGE_ONLINEUPDATE )
+            {
+                Reference < XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
+                Reference < XInterface > xService( xFactory->createInstance(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.setup.UpdateCheck"))) );
+
+                if( ! xService.is() )
+                    continue;
+            }
+
             if ( nPageId != RID_SVXPAGE_SSO || isSSOEnabled )
                 AddTabPage( nPageId, rGeneralArray.GetString(i), nGroup );
         }
