@@ -4,9 +4,9 @@
  *
  *  $RCSfile: owriteablestream.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 06:11:32 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 14:23:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -235,7 +235,7 @@ OWriteStream_Impl::OWriteStream_Impl( OStorage_Impl* pParent,
 , m_xFactory( xFactory )
 , m_pParent( pParent )
 , m_bForceEncrypted( bForceEncrypted )
-, m_bUseCommonPass( sal_False )
+, m_bUseCommonPass( !bForceEncrypted )
 , m_bHasCachedPassword( sal_False )
 , m_xPackage( xPackage )
 , m_bHasInsertedStreamOptimization( sal_False )
@@ -281,9 +281,6 @@ void OWriteStream_Impl::InsertIntoPackageFolder( const ::rtl::OUString& aName,
 //-----------------------------------------------
 sal_Bool OWriteStream_Impl::IsEncrypted()
 {
-    if ( m_bUseCommonPass )
-        return sal_False;
-
     if ( m_bForceEncrypted || m_bHasCachedPassword )
         return sal_True;
 
@@ -762,7 +759,7 @@ void OWriteStream_Impl::Revert()
 
     m_bHasDataToFlush = sal_False;
 
-    m_bUseCommonPass = sal_False;
+    m_bUseCommonPass = sal_True;
     m_bHasCachedPassword = sal_False;
     m_aPass = ::rtl::OUString();
 }
@@ -911,6 +908,8 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream( sal_Int32 nStreamMod
 
         try {
             xResultStream = GetStream_Impl( nStreamMode );
+
+            m_bUseCommonPass = sal_False; // very important to set it to false
             m_bHasCachedPassword = sal_True;
             m_aPass = aPass;
         }
@@ -921,6 +920,8 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream( sal_Int32 nStreamMod
             try {
                 // the stream must be cashed to be resaved
                 xResultStream = GetStream_Impl( nStreamMode | embed::ElementModes::SEEKABLE );
+
+                m_bUseCommonPass = sal_False; // very important to set it to false
                 m_bHasCachedPassword = sal_True;
                 m_aPass = aPass;
 
