@@ -4,9 +4,9 @@
  *
  *  $RCSfile: versdlg.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:15:04 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 11:11:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,12 +83,14 @@ class SfxVersionDialog : public SfxModalDialog
     HelpButton                  aHelpButton;
     SfxViewFrame*               pViewFrame;
     SfxVersionTableDtor*        mpTable;
+    LocaleDataWrapper*          mpLocaleWrapper;
 
     DECL_LINK(                  DClickHdl_Impl, Control* );
     DECL_LINK(                  SelectHdl_Impl, Control* );
     DECL_LINK(                  ButtonHdl_Impl, Button* );
     void                        Init_Impl();
     void                        Open_Impl();
+    void                        RecalcDateColumn();
 
 public:
                                 SfxVersionDialog ( SfxViewFrame* pFrame,
