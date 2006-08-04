@@ -4,9 +4,9 @@
 #
 #   $RCSfile: scriptitems.pm,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 21:13:07 $
+#   last change: $Author: ihi $ $Date: 2006-08-04 11:55:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1192,8 +1192,17 @@ sub make_filename_language_specific
                 my $olddestination = $onefile->{'destination'};
                 my $oldname = $onefile->{'Name'};
 
-                $onefile->{'Name'} =~ s/\./_$language\./;
-                $onefile->{'destination'} =~ s/\./_$language\./;
+                # Including the language into the file name.
+                # But be sure, to include the language before the file extension.
+
+                my $fileextension = "";
+
+                if ( $onefile->{'Name'} =~ /(\.\w+?)\s*$/ ) { $fileextension = $1; }
+                if ( $fileextension ne "" )
+                {
+                    $onefile->{'Name'} =~ s/\Q$fileextension\E\s*$/_$language$fileextension/;
+                    $onefile->{'destination'} =~ s/\Q$fileextension\E\s*$/_$language$fileextension/;
+                }
 
                 $infoline = "Flag MAKE_LANG_SPECIFIC:\n";
                 push( @installer::globals::logfileinfo, $infoline);
