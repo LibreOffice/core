@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleParagraphView.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:01:39 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 13:09:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,9 @@
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.idl>
 #endif
 
+#ifndef __com_sun_star_accessibility_XAccessibleTextAttributes_idl__
+#include <com/sun/star/accessibility/XAccessibleTextAttributes.idl>
+#endif
 
 //=============================================================================
 
@@ -200,6 +203,14 @@ published service AccessibleParagraphView
     /** This is the interface for listeners.
     */
     interface ::com::sun::star::accessibility::XAccessibleEventBroadcaster;
+
+        /** This interface gives access to the default attributes of a paragraph
+            and to the run attributes of a certain character in a paragraph
+
+            @since OOo 2.0.4
+        */
+        [optional] interface ::com::sun::star::accessibility::XAccessibleTextAttributes;
+
 };
 
 //=============================================================================
