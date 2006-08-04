@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-20 16:17:16 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 14:26:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2808,9 +2808,19 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
                 SwRect aTmp( pSh->VisArea() );
                 pSh->UISizeNotify();
 
-                bActions |= aTmp != pSh->VisArea() ||
-                            aBools[nBoolIdx] !=
-                                   ((SwCrsrShell*)pSh)->GetCharRect().IsOver(pSh->VisArea());
+                // --> FME 2006-08-03 #137134#
+                // Are we supposed to crash if pSh isn't a cursor shell?!
+                // bActions |= aTmp != pSh->VisArea() ||
+                //             aBools[nBoolIdx] != ((SwCrsrShell*)pSh)->GetCharRect().IsOver( pSh->VisArea() );
+
+                // aBools[ i ] is true, if the i-th shell is a cursor shell (!!!)
+                // and the cursor is visible.
+                bActions |= aTmp != pSh->VisArea();
+                if ( aTmp == pSh->VisArea() && pSh->ISA(SwCrsrShell) )
+                {
+                    bActions |= aBools[nBoolIdx] !=
+                                static_cast<SwCrsrShell*>(pSh)->GetCharRect().IsOver( pSh->VisArea() );
+                }
             }
 
             pSh = (ViewShell*)pSh->GetNext();
