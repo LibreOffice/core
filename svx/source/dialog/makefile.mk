@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.48 $
+#   $Revision: 1.49 $
 #
-#   last change: $Author: obo $ $Date: 2006-07-13 11:59:39 $
+#   last change: $Author: ihi $ $Date: 2006-08-04 09:48:08 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -126,6 +126,7 @@ SRC1FILES =  \
         eventdlg.src \
         cfg.src \
         optjava.src \
+        optupdt.src \
         docrecovery.src
 
 
@@ -179,6 +180,7 @@ EXCEPTIONSFILES=\
     $(SLO)$/svxbmpnumvalueset.obj \
         $(SLO)$/macropg.obj \
     $(SLO)$/optjava.obj \
+    $(SLO)$/optupdt.obj \
     $(SLO)$/docrecovery.obj	\
     $(SLO)$/treeopt.obj     \
     $(SLO)$/srchdlg.obj
@@ -465,6 +467,7 @@ LIB2OBJFILES= \
     $(SLO)$/optinet2.obj	\
     $(SLO)$/optctl.obj	\
     $(SLO)$/optjava.obj	\
+    $(SLO)$/optupdt.obj	\
     $(SLO)$/optgenrl.obj	\
     $(SLO)$/connect.obj \
     $(SLO)$/tabarea.obj \
