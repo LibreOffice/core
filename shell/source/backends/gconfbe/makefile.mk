@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 14:03:56 $
+#   last change: $Author: ihi $ $Date: 2006-08-04 12:30:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,6 @@ UCDSRCEXT = txt
 
 .IF "$(ENABLE_LOCKDOWN)" == "YES"
 CFLAGS+=-DENABLE_LOCKDOWN
-UCDSRCEXT != lockdown
 .ENDIF
 
 .IF "$(ENABLE_GNOMEVFS)"!=""
