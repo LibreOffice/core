@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xistyle.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:03:02 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 11:34:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,6 +158,7 @@ private:
 
 private:
     XclFontData         maData;         /// All font attributes.
+    bool                mbHasCharSet;   /// true = Font contains own character set info.
     bool                mbHasWstrn;     /// true = Font contains Western script characters.
     bool                mbHasAsian;     /// true = Font contains Asian script characters.
     bool                mbHasCmplx;     /// true = Font contains Complex script characters.
