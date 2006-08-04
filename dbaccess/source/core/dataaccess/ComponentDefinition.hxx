@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ComponentDefinition.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 15:20:27 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 13:56:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,9 +69,6 @@
 #ifndef _DBA_COREAPI_COLUMN_HXX_
 #include <column.hxx>
 #endif
-#ifndef _COMPHELPER_IMPLEMENTATIONREFERENCE_HXX
-#include <comphelper/implementationreference.hxx>
-#endif
 
 #include <memory>
 //........................................................................
@@ -119,8 +116,6 @@ namespace dbaccess
     };
 
 
-typedef ::comphelper::ImplementationReference< OColumns,::com::sun::star::container::XNameAccess > TColumnsHelper;
-
 //=========================================================================
 //= OComponentDefinition - a database "document" which describes a query
 //=========================================================================
@@ -134,8 +129,8 @@ class OComponentDefinition  :public OContentHelper
     OComponentDefinition();
 
 protected:
-    TColumnsHelper  m_pColumns;
-    sal_Bool        m_bTable;
+    ::std::auto_ptr< OColumns > m_pColumns;
+    sal_Bool                    m_bTable;
 
     virtual ~OComponentDefinition();
     virtual void SAL_CALL disposing();
