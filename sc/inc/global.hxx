@@ -4,9 +4,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 16:22:12 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 12:11:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -618,8 +618,10 @@ SC_DLLPUBLIC       static const String& GetEmptyString();
 //  static const Bitmap&    GetAnchorBitmap();
 //  static const Bitmap&    GetGrayAnchorBitmap();
 
+    static bool             HasStarCalcFunctionList();
     static ScFunctionList*  GetStarCalcFunctionList();
     static ScFunctionMgr*   GetStarCalcFunctionMgr();
+    static void             ResetFunctionList();
 
     static String           GetErrorString(USHORT nErrNumber);
     static String           GetLongErrorString(USHORT nErrNumber);
@@ -691,6 +693,9 @@ public:
                 ScFuncDesc();
                 ~ScFuncDesc();
 
+    void        Clear();
+    void        InitArgumentInfo() const;
+
     /** Returns a semicolon separated list of all parameter names. */
     String  GetParamList        () const;
     /** Returns the full function siganture: "FUNCTIONNAME( parameter list )". */
@@ -707,6 +712,7 @@ public:
     String**    aDefArgDescs;   // Parameterbeschreibung(en)
     BOOL*       aDefArgOpt;     // Flags ob Parameter optional ist
     USHORT      nHelpId;        // HilfeId der Funktion
+    BOOL        bIncomplete;    // Incomplete argument info (set for add-in info from configuration)
 };
 
 //==================================================================
