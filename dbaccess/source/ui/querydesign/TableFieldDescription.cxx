@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableFieldDescription.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:28:25 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 13:58:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,6 @@ OTableFieldDesc::OTableFieldDesc(const OTableFieldDesc& rRS)
     ,m_aAliasName(rRS.GetAlias())       // table range
     ,m_aFieldName(rRS.GetField())       // column
     ,m_aFieldAlias(rRS.GetFieldAlias()) // column alias
-    ,m_aDatabaseName(rRS.GetDatabase()) // qualifier or catalog
     ,m_aFunctionName(rRS.GetFunction()) // Funktionsname
     ,m_pTabWindow(rRS.GetTabWindow())
     ,m_eDataType(rRS.GetDataType())
@@ -119,7 +118,6 @@ sal_Bool OTableFieldDesc::operator==( const OTableFieldDesc& rDesc )
     return (    m_eOrderDir != rDesc.GetOrderDir()      ||
                 m_eDataType != rDesc.GetDataType()      ||
                 m_aAliasName != rDesc.GetAlias()        ||
-                m_aDatabaseName != rDesc.GetDatabase()  ||
                 m_aFunctionName != rDesc.GetFunction()  ||
                 m_aFieldName != rDesc.GetField()        ||
                 m_aTableName != rDesc.GetTable()        ||
@@ -133,7 +131,7 @@ void OTableFieldDesc::clear()
 {
     m_vecCriteria.clear();
     ::std::vector< ::rtl::OUString>().swap( m_vecCriteria );
-    m_aTableName    = m_aAliasName = m_aFieldName = m_aFieldAlias = m_aDatabaseName = m_aFunctionName = ::rtl::OUString();
+    m_aTableName    = m_aAliasName = m_aFieldName = m_aFieldAlias = m_aFunctionName = ::rtl::OUString();
     m_pTabWindow    = NULL;
     m_eDataType     = 1000;
     m_bVisible      = sal_False;
@@ -217,8 +215,6 @@ void OTableFieldDesc::Load(const ::com::sun::star::beans::PropertyValue& _rPrope
                 aFieldDesc[nPos].Value >>= m_aFieldName;
             else if ( aFieldDesc[nPos].Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FieldAlias")) )
                 aFieldDesc[nPos].Value >>= m_aFieldAlias;
-            else if ( aFieldDesc[nPos].Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DatabaseName")) )
-                aFieldDesc[nPos].Value >>= m_aDatabaseName;
             else if ( aFieldDesc[nPos].Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FunctionName")) )
                 aFieldDesc[nPos].Value >>= m_aFunctionName;
             else if ( aFieldDesc[nPos].Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataType")) )
@@ -262,8 +258,6 @@ void OTableFieldDesc::Save(::com::sun::star::beans::PropertyValue& _rProperty)
     aFieldDesc[nPos++].Value <<= m_aFieldName;
     aFieldDesc[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FieldAlias"));
     aFieldDesc[nPos++].Value <<= m_aFieldAlias;
-    aFieldDesc[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DatabaseName"));
-    aFieldDesc[nPos++].Value <<= m_aDatabaseName;
     aFieldDesc[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FunctionName"));
     aFieldDesc[nPos++].Value <<= m_aFunctionName;
     aFieldDesc[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataType"));
