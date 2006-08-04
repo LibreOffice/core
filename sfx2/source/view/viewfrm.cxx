@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.122 $
+ *  $Revision: 1.123 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:39:31 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 11:12:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3438,7 +3438,10 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
                     bShow = pShowItem->GetValue();
 
                 if ( bShow )
+                {
+                    xLayoutManager->createElement( aStatusbarResString );
                     xLayoutManager->showElement( aStatusbarResString );
+                }
                 else
                     xLayoutManager->hideElement( aStatusbarResString );
 
