@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.182 $
+ *  $Revision: 1.183 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 11:17:20 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 11:11:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -362,6 +362,7 @@ public:
     sal_Bool bDisposeStorage: 1;
     sal_Bool bStorageBasedOnInStream: 1;
     sal_Bool m_bSalvageMode: 1;
+    sal_Bool m_bVersionsAlreadyLoaded: 1;
     uno::Reference < embed::XStorage > xStorage;
 
     SfxPoolCancelManager_ImplRef xCancelManager;
@@ -450,6 +451,7 @@ SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP )
     bIsCharsetInitialized( sal_False ),
     bStorageBasedOnInStream( sal_False ),
     m_bSalvageMode( sal_False ),
+    m_bVersionsAlreadyLoaded( sal_False ),
     pAntiImpl( pAntiImplP ),
     nFileVersion( 0 ),
     pOrigFilter( 0 ),
@@ -3122,10 +3124,11 @@ void SfxMedium::SetDontCreateCancellable( )
     return pImp->xInputStream;
 }
 
-const uno::Sequence < util::RevisionTag >& SfxMedium::GetVersionList()
+const uno::Sequence < util::RevisionTag >& SfxMedium::GetVersionList( bool _bNoReload )
 {
     // if the medium has no name, then this medium should represent a new document and can have no version info
-    if ( !pImp->aVersions.getLength() && ( aName.Len() || aLogicName.Len() ) && GetStorage().is() )
+    if ( ( !_bNoReload || !pImp->m_bVersionsAlreadyLoaded ) && !pImp->aVersions.getLength() &&
+         ( aName.Len() || aLogicName.Len() ) && GetStorage().is() )
     {
         uno::Reference < document::XDocumentRevisionListPersistence > xReader( comphelper::getProcessServiceFactory()->createInstance(
                 ::rtl::OUString::createFromAscii("com.sun.star.document.DocumentRevisionListPersistence") ), uno::UNO_QUERY );
@@ -3140,6 +3143,9 @@ const uno::Sequence < util::RevisionTag >& SfxMedium::GetVersionList()
             }
         }
     }
+
+    if ( !pImp->m_bVersionsAlreadyLoaded )
+        pImp->m_bVersionsAlreadyLoaded = sal_True;
 
     return pImp->aVersions;
 }
