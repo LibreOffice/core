@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSet.hxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:03:25 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 13:55:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -198,6 +198,25 @@ namespace dbaccess
                 of a query we're based on.
         */
         sal_Bool        impl_buildActiveCommand_throw();
+
+        /** returns the table container of our active connection
+
+            If our connection is able to provide a tables container, this one is returned.
+            Else, if m_pTables is not <NULL/>, this one will returned.
+            Else, m_pTables will be constructed and returned.
+
+            @precond m_xActiveConnection is not <NULL/>
+            @throws ::com::sun::star::sdbc::SQLException
+                if retrieving or constructing the tables container goes wrong
+
+            @see impl_resetTables_nothrow
+        */
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
+                    impl_getTables_throw();
+
+        /** cleans up m_pTables, and resets it to <NULL/>
+        */
+        void        impl_resetTables_nothrow();
 
         /** prepares and executes our command
         */
