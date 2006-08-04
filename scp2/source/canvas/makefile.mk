@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: kz $ $Date: 2006-02-28 10:47:51 $
+#   last change: $Author: ihi $ $Date: 2006-08-04 13:34:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,8 +47,11 @@ TARGETTYPE=CUI
 
 SCP_PRODUCT_TYPE=osl
 
+.IF "$(ENABLE_AGG)" == "YES"
+SCPDEFS+=-DENABLE_AGG
 .IF "$(SYSTEM_AGG)" == "YES"
 SCPDEFS+=-DSYSTEM_AGG
+.ENDIF
 .ENDIF
 
 PARFILES= canvascommons.par		\
