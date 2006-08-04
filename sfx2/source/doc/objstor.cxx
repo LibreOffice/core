@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.180 $
+ *  $Revision: 1.181 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:30:10 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 14:23:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1622,6 +1622,17 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                 if ( xMetaInf.is() && xTargetMetaInf.is() )
                 {
                     xMetaInf->copyElementTo( aScriptSignName, xTargetMetaInf, aScriptSignName );
+
+                    // after loading the UseCommonStoragePassword property might be set to true
+                    // set it to false here, since this is a rare case when it must be so
+                    // TODO/LATER: in future it should be done on loading probably
+                    uno::Reference< beans::XPropertySet > xTargetSignPropSet(
+                        xTargetMetaInf->openStreamElement( aScriptSignName, embed::ElementModes::WRITE ),
+                        uno::UNO_QUERY_THROW );
+                    xTargetSignPropSet->setPropertyValue(
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UseCommonStoragePasswordEncryption" ) ),
+                        uno::makeAny( (sal_Bool)sal_False ) );
+
                     uno::Reference< embed::XTransactedObject > xTransact( xTargetMetaInf, uno::UNO_QUERY );
                     if ( xTransact.is() )
                         xTransact->commit();
