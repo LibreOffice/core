@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_hidden_ooo.scp,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 10:10:10 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 12:13:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -637,6 +637,7 @@ Module gid_Module_Root_Files_6
 	gid_File_Oo_Office_Ui_Bibliographywindowstate_Xcs,
 	gid_File_Oo_Office_Calc_Xcs,
 	gid_File_Oo_Office_Calc_Xcu,
+	gid_File_Oo_Office_CalcAddIns_Xcs,
 	gid_File_Oo_Office_Chart_Xcs,
 	gid_File_Oo_Office_Ui_Chartcommands_Xcs,
 	gid_File_Oo_Office_Ui_Chartcommands_Xcu,
