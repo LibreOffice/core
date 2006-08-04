@@ -4,9 +4,9 @@
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 15:54:35 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 13:30:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1107,7 +1107,11 @@ ImageCachedPrimitiveSharedPtr Image::implDrawBitmap(
 // cachedPrimitiveFTPP [cachedPrimitive for [F]ill[T]extured[P]oly[P]olygon]
 //////////////////////////////////////////////////////////////////////////////////
 
+#if AGG_VERSION >= 2400
+template<class pixel_format_dst,class span_gen_type>
+#else
 template<class pixel_format,class span_gen_type>
+#endif
 class cachedPrimitiveFTPP : public ImageCachedPrimitive
 {
     public:
@@ -1119,10 +1123,19 @@ class cachedPrimitiveFTPP : public ImageCachedPrimitive
             aTransform(rTransform),
             inter(tm),
             filter(filter_kernel),
+#if AGG_VERSION >= 2400
+                        pixs(const_cast<agg::rendering_buffer&>(src)),
+                        source(pixs),
+                        sg(source,inter,filter),
+                        pixd(dst),
+                        rb(pixd),
+                        ren(rb,sa,sg)
+#else
             sg(sa,src,inter,filter),
             pixf(dst),
             rb(pixf),
             ren(rb,sg)
+#endif
         {
             ::basegfx::B2DHomMatrix aFinalTransform(aTransform);
             aFinalTransform *= rViewTransform;
@@ -1154,16 +1167,34 @@ class cachedPrimitiveFTPP : public ImageCachedPrimitive
     private:
 
         typedef agg::span_interpolator_linear<> interpolator_type;
+#if AGG_VERSION >= 2400
+                typedef agg::renderer_base<pixel_format_dst> renderer_base;
+                typedef agg::span_allocator< typename span_gen_type::color_type > span_alloc_type;
+                typedef agg::renderer_scanline_aa<renderer_base, span_alloc_type, span_gen_type> renderer_type;
+                typedef typename span_gen_type::source_type source_type;
+                typedef typename span_gen_type::source_type::pixfmt_type pixel_format_src;
+#else
         typedef agg::renderer_base<pixel_format> renderer_base;
         typedef agg::renderer_scanline_aa<renderer_base, span_gen_type> renderer_type;
+#endif
 
         ::basegfx::B2DHomMatrix aTransform;
         interpolator_type inter;
         agg::image_filter_bilinear filter_kernel;
         agg::image_filter_lut filter;
+#if AGG_VERSION >= 2400
+                span_alloc_type sa;
+                pixel_format_src pixs;
+                source_type source;
+#else
         agg::span_allocator< typename span_gen_type::color_type > sa;
+#endif
         span_gen_type sg;
+#if AGG_VERSION >= 2400
+        pixel_format_dst pixd;
+#else
         pixel_format pixf;
+#endif
         renderer_base rb;
         mutable renderer_type ren;
         mutable agg::scanline_p8 sl;
@@ -1379,6 +1410,13 @@ ImageCachedPrimitiveSharedPtr Image::fillTexturedPolyPolygon(
     typedef agg::wrap_mode_repeat wrap_y_type;
     typedef agg::pixfmt_rgb24 pixfmt_rgb24;
     typedef agg::pixfmt_rgba32 pixfmt_rgba32;
+#if AGG_VERSION >= 2400
+        typedef agg::image_accessor_wrap< pixfmt_rgba32, wrap_x_type, wrap_y_type > img_source_type_rgba;
+        typedef agg::image_accessor_wrap< pixfmt_rgb24, wrap_x_type, wrap_y_type > img_source_type_rgb;
+
+        typedef agg::span_image_resample_rgba_affine< img_source_type_rgba > span_gen_type_rgba;
+        typedef agg::span_image_resample_rgb_affine< img_source_type_rgb > span_gen_type_rgb;
+#else
     typedef agg::span_pattern_resample_rgba_affine< pixfmt_rgba32::color_type,
                                                     pixfmt_rgba32::order_type,
                                                     wrap_x_type,
@@ -1387,6 +1425,7 @@ ImageCachedPrimitiveSharedPtr Image::fillTexturedPolyPolygon(
                                                     pixfmt_rgb24::order_type,
                                                     wrap_x_type,
                                                     wrap_y_type> span_gen_type_rgb;
+#endif
 
     const Format nDest = maDesc.eFormat;
     const Format nSource = rTexture.maDesc.eFormat;
@@ -1537,12 +1576,20 @@ void Image::fillGradientImpl( const ParametricPolyPolygon::Values& rValues,
                             interpolator_type,
                             gradient_polymorphic_wrapper_base,
                             color_generator_type > gradient_span_gen;
+#if AGG_VERSION >= 2400
+    gradient_span_gen span_gen(inter,
+                               *gf[rValues.meType],
+                               colors,
+                               0,
+                               dwNumSteps);
+#else
     gradient_span_gen span_gen(span_alloc,
                                inter,
                                *gf[rValues.meType],
                                colors,
                                0,
                                dwNumSteps);
+#endif
 
     // To draw Anti-Aliased primitives one shoud *rasterize* them first.
     // The primary rasterization technique in AGG is scanline based.
@@ -1558,8 +1605,13 @@ void Image::fillGradientImpl( const ParametricPolyPolygon::Values& rValues,
     // [in contrast to solid renderers, that is]
     // the instance of this particular renderer combines the
     // renderbuffer [i.e. destination] and the spanline generator [i.e. source]
+#if AGG_VERSION >= 2400
+        typedef agg::renderer_scanline_aa<renderer_base, gradient_span_alloc, gradient_span_gen> renderer_gradient;
+        renderer_gradient r1(rb, span_alloc, span_gen);
+#else
     typedef agg::renderer_scanline_aa<renderer_base, gradient_span_gen> renderer_gradient;
     renderer_gradient r1(rb, span_gen);
+#endif
 
     // instantiate the rasterizer and feed the incoming polypolygon.
     agg::rasterizer_scanline_aa<> ras;
