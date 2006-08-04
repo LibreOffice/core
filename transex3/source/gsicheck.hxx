@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gsicheck.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 17:22:08 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 10:24:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,6 +75,9 @@ public:
     ByteString  const GetTitle()      const    { return aTitle; }
 
           void        SetUText( String &aNew ) { aText = ByteString( aNew, RTL_TEXTENCODING_UTF8 ); ReassembleLine(); }
+          void        SetText( ByteString &aNew ) { aText = aNew; ReassembleLine(); }
+          void        SetQuickHelpText( ByteString &aNew ) { aQuickHelpText = aNew; ReassembleLine(); }
+          void        SetTitle( ByteString &aNew ) { aTitle = aNew; ReassembleLine(); }
 
     ParserMessageList* GetMessageList() { return &aMessages; };
     BOOL HasMessages(){ return ( aMessages.Count() > 0 ); };
@@ -104,13 +107,15 @@ private:
     BOOL bCheckSourceLang;
     BOOL bCheckTranslationLang;
     BOOL bReference;
+    BOOL bAllowKeyIDs;
+
     BOOL bHasBlockError;
 
-    BOOL IsUTF8( const ByteString &aTestee, USHORT &nErrorPos, ByteString &aErrorMsg ) const;
-    BOOL TestUTF8( GSILine* pTestee );
+    BOOL IsUTF8( const ByteString &aTestee, BOOL bFixTags, USHORT &nErrorPos, ByteString &aErrorMsg, BOOL &bHasBeenFixed, ByteString &aFixed ) const;
+    BOOL TestUTF8( GSILine* pTestee, BOOL bFixTags );
 
 public:
-    GSIBlock( BOOL PbPrintContext, BOOL bSource, BOOL bTrans, BOOL bRef );
+    GSIBlock( BOOL PbPrintContext, BOOL bSource, BOOL bTrans, BOOL bRef, BOOL bAllowKID );
     ~GSIBlock();
     void PrintMessage( ByteString aType, ByteString aMsg, ByteString aPrefix, ByteString aContext, ULONG nLine, ByteString aUniqueId = ByteString() );
     void PrintError( ByteString aMsg, ByteString aPrefix, ByteString aContext, ULONG nLine, ByteString aUniqueId = ByteString() );
