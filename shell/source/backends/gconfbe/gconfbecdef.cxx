@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gconfbecdef.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 17:15:11 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 12:29:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,13 +137,6 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(void */*pServiceManager*/,
             uno::Sequence<rtl::OUString> sServiceNames = GconfBackend::getBackendServiceNames();
             for (sal_Int32 i = 0 ; i < sServiceNames.getLength() ; ++ i)
                 xServicesKey->createKey(sServiceNames[i]);
-
-            // Register supported components
-            uno::Reference<XRegistryKey> xComponentKey = xImplKey->createKey(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/DATA/SupportedComponents") )
-            );
-
-            xComponentKey->setAsciiListValue( GconfBackend::getSupportedComponents() );
 
             return sal_True;
         }
