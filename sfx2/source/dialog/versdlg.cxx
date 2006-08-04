@@ -4,9 +4,9 @@
  *
  *  $RCSfile: versdlg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:25:38 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 11:11:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -224,24 +224,34 @@ SfxVersionDialog::SfxVersionDialog ( SfxViewFrame* pVwFrame, Window *pParent )
     , aCompareButton( this, ResId( PB_COMPARE ) )
     , aHelpButton( this, ResId ( PB_HELP ) )
     , pViewFrame( pVwFrame )
-    , mpTable( 0 )
+    , mpTable( NULL )
+    , mpLocaleWrapper( NULL )
 {
     FreeResource();
 
-    aViewButton.SetClickHdl ( LINK( this, SfxVersionDialog, ButtonHdl_Impl ) );
-    aSaveButton.SetClickHdl ( LINK( this, SfxVersionDialog, ButtonHdl_Impl ) );
-    aDeleteButton.SetClickHdl ( LINK( this, SfxVersionDialog, ButtonHdl_Impl ) );
-    aCompareButton.SetClickHdl ( LINK( this, SfxVersionDialog, ButtonHdl_Impl ) );
-    aOpenButton.SetClickHdl ( LINK( this, SfxVersionDialog, ButtonHdl_Impl ) );
+    Link aClickLink = LINK( this, SfxVersionDialog, ButtonHdl_Impl );
+    aViewButton.SetClickHdl ( aClickLink );
+    aSaveButton.SetClickHdl ( aClickLink );
+    aDeleteButton.SetClickHdl ( aClickLink );
+    aCompareButton.SetClickHdl ( aClickLink );
+    aOpenButton.SetClickHdl ( aClickLink );
+    aSaveCheckBox.SetClickHdl ( aClickLink );
+
     aVersionBox.SetSelectHdl( LINK( this, SfxVersionDialog, SelectHdl_Impl ) );
     aVersionBox.SetDoubleClickHdl( LINK( this, SfxVersionDialog, DClickHdl_Impl ) );
-    aSaveCheckBox.SetClickHdl ( LINK( this, SfxVersionDialog, ButtonHdl_Impl ) );
 
     aVersionBox.GrabFocus();
     aVersionBox.SetWindowBits( WB_HSCROLL | WB_CLIPCHILDREN );
     aVersionBox.SetSelectionMode( SINGLE_SELECTION );
     aVersionBox.SetTabs( &nTabs_Impl[0], MAP_APPFONT );
     aVersionBox.Resize();   // OS: Hack fuer richtige Selektion
+    RecalcDateColumn();
+
+    // set dialog title (filename or docinfo title)
+    String sText = GetText();
+    ( sText += ' ' ) += pViewFrame->GetObjectShell()->GetTitle();
+    SetText( sText );
+
     Init_Impl();
 }
 
@@ -273,15 +283,14 @@ void SfxVersionDialog::Init_Impl()
 {
     SfxObjectShell *pObjShell = pViewFrame->GetObjectShell();
     SfxMedium* pMedium = pObjShell->GetMedium();
-    uno::Sequence < util::RevisionTag > aVersions = pMedium->GetVersionList();
+    uno::Sequence < util::RevisionTag > aVersions = pMedium->GetVersionList( true );
     delete mpTable;
     mpTable = new SfxVersionTableDtor( aVersions );
     {
-        LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
-        for ( USHORT n=0; n<mpTable->Count(); n++ )
+        for ( USHORT n = 0; n < mpTable->Count(); ++n )
         {
             SfxVersionInfo *pInfo = mpTable->GetObject(n);
-            String aEntry = ConvertDateTime_Impl( pInfo->aCreateStamp, aLocaleWrapper );
+            String aEntry = ConvertDateTime_Impl( pInfo->aCreateStamp, *mpLocaleWrapper );
             aEntry += '\t';
             aEntry += pInfo->aCreateStamp.GetName();
             aEntry += '\t';
@@ -293,25 +302,22 @@ void SfxVersionDialog::Init_Impl()
 
     aSaveCheckBox.Check( pObjShell->GetDocInfo().IsSaveVersionOnClose() );
 
-    aOpenButton.Enable( FALSE );
-    aSaveButton.Enable( !pObjShell->IsReadOnly() );
-    aSaveCheckBox.Enable( !pObjShell->IsReadOnly() );
-    aDeleteButton.Enable( FALSE );
+    BOOL bEnable = !pObjShell->IsReadOnly();
+    aSaveButton.Enable( bEnable );
+    aSaveCheckBox.Enable( bEnable );
 
-    const SfxPoolItem *pDummy=NULL;
-    SfxItemState eState = pViewFrame->GetDispatcher()->QueryState( SID_DOCUMENT_MERGE, pDummy );
-    eState = pViewFrame->GetDispatcher()->QueryState( SID_DOCUMENT_COMPARE, pDummy );
-    aCompareButton.Enable( eState >= SFX_ITEM_AVAILABLE );
+    aOpenButton.Disable();
+    aViewButton.Disable();
+    aDeleteButton.Disable();
+    aCompareButton.Disable();
 
-    // set dialog title (filename or docinfo title)
-    String sText = GetText();
-    ( sText += ' ' ) += pObjShell->GetTitle();
-    SetText( sText );
+    SelectHdl_Impl( &aVersionBox );
 }
 
 SfxVersionDialog::~SfxVersionDialog ()
 {
     delete mpTable;
+    delete mpLocaleWrapper;
 }
 
 void SfxVersionDialog::Open_Impl()
@@ -329,20 +335,57 @@ void SfxVersionDialog::Open_Impl()
     Close();
 }
 
-IMPL_LINK( SfxVersionDialog, DClickHdl_Impl, Control*, pControl )
+void SfxVersionDialog::RecalcDateColumn()
 {
-    (void)pControl; //unused
+    // recalculate the datetime column width
+    DateTime aNow;
+    SfxStamp aStamp( aNow );
+    mpLocaleWrapper = new LocaleDataWrapper(
+        ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
+    String sDateTime = ConvertDateTime_Impl( aStamp, *mpLocaleWrapper );
+    long nWidth = aVersionBox.GetTextWidth( sDateTime );
+    nWidth += 15; // a little offset
+    long nTab = aVersionBox.GetTab(1);
+    if ( nWidth > nTab )
+    {
+        // resize columns
+        long nDelta = nWidth - nTab;
+        aVersionBox.SetTab( 1, nTab + nDelta, MAP_PIXEL );
+        nTab = aVersionBox.GetTab(2);
+        aVersionBox.SetTab( 2, nTab + nDelta, MAP_PIXEL );
+
+        // resize and move header
+        Size aSize = aDateTimeText.GetSizePixel();
+        aSize.Width() += nDelta;
+        aDateTimeText.SetSizePixel( aSize );
+        Point aPos = aSavedByText.GetPosPixel();
+        aPos.X() += nDelta;
+        aSavedByText.SetPosPixel( aPos );
+        aPos = aCommentText.GetPosPixel();
+        aPos.X() += nDelta;
+        aCommentText.SetPosPixel( aPos );
+    }
+}
+
+IMPL_LINK( SfxVersionDialog, DClickHdl_Impl, Control*, EMPTYARG )
+{
     Open_Impl();
     return 0L;
 }
 
-IMPL_LINK( SfxVersionDialog, SelectHdl_Impl, Control*, pControl )
+IMPL_LINK( SfxVersionDialog, SelectHdl_Impl, Control*, EMPTYARG )
 {
-    (void)pControl; //unused
-    SfxObjectShell *pObjShell = pViewFrame->GetObjectShell();
-    aVersionBox.FirstSelected(); // -Wall required??
-    aDeleteButton.Enable( !pObjShell->IsReadOnly() );
-    aOpenButton.Enable( TRUE );
+    bool bEnable = ( aVersionBox.FirstSelected() != NULL );
+    SfxObjectShell* pObjShell = pViewFrame->GetObjectShell();
+    aDeleteButton.Enable( bEnable!= false && !pObjShell->IsReadOnly() );
+    aOpenButton.Enable( bEnable!= false );
+    aViewButton.Enable( bEnable!= false );
+
+    const SfxPoolItem *pDummy=NULL;
+    SfxItemState eState = pViewFrame->GetDispatcher()->QueryState( SID_DOCUMENT_MERGE, pDummy );
+    eState = pViewFrame->GetDispatcher()->QueryState( SID_DOCUMENT_COMPARE, pDummy );
+    aCompareButton.Enable( bEnable!= false && eState >= SFX_ITEM_AVAILABLE );
+
     return 0L;
 }
 
@@ -385,10 +428,10 @@ IMPL_LINK( SfxVersionDialog, ButtonHdl_Impl, Button*, pButton )
     {
         pObjShell->GetMedium()->RemoveVersion_Impl( ((SfxVersionInfo*) pEntry->GetUserData())->aName );
         pObjShell->SetModified( TRUE );
-            aVersionBox.SetUpdateMode( FALSE );
+        aVersionBox.SetUpdateMode( FALSE );
         aVersionBox.Clear();
         Init_Impl();
-            aVersionBox.SetUpdateMode( TRUE );
+        aVersionBox.SetUpdateMode( TRUE );
     }
     else if ( pButton == &aOpenButton && pEntry )
     {
@@ -469,5 +512,4 @@ IMPL_LINK( SfxViewVersionDialog_Impl, ButtonHdl, Button*, pButton )
 
     return 0L;
 }
-
 
