@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableFieldDescription.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:13:59 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 13:57:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,6 @@ namespace dbaui
         ::rtl::OUString             m_aAliasName;       // table range
         ::rtl::OUString             m_aFieldName;       // column
         ::rtl::OUString             m_aFieldAlias;  // column alias
-        ::rtl::OUString             m_aDatabaseName;    // qualifier or catalog
         ::rtl::OUString             m_aFunctionName;    // enth"alt den Funktionsnamen, nur wenn m_eFunctionType != FKT_NONE gesetzt
 
         Window*                     m_pTabWindow;
@@ -104,7 +103,6 @@ namespace dbaui
         void                    SetFieldAlias( const ::rtl::OUString& rF ){ m_aFieldAlias = rF;}
         void                    SetTable( const ::rtl::OUString& rT ){ m_aTableName = rT;}
         void                    SetAlias( const ::rtl::OUString& rT ){ m_aAliasName = rT;}
-        void                    SetDatabase( const ::rtl::OUString& rT ) { m_aDatabaseName = rT;}
         void                    SetFunction( const ::rtl::OUString& rT ) { m_aFunctionName = rT;}
         void                    SetOrderDir( EOrderDir eDir )   { m_eOrderDir = eDir; }
         void                    SetDataType( sal_Int32 eTyp )   { m_eDataType = eTyp; }
@@ -120,7 +118,6 @@ namespace dbaui
         ::rtl::OUString         GetFieldAlias()     const { return m_aFieldAlias;}
         ::rtl::OUString         GetTable()          const { return m_aTableName;}
         ::rtl::OUString         GetAlias()          const { return m_aAliasName;}
-        ::rtl::OUString         GetDatabase()       const { return m_aDatabaseName;}
         ::rtl::OUString         GetFunction()       const { return m_aFunctionName;}
         sal_Int32               GetDataType()       const { return m_eDataType; }
         ETableFieldType         GetFieldType()      const { return m_eFieldType; }
@@ -162,7 +159,6 @@ namespace dbaui
                          !m_aAliasName.getLength()       &&
                          !m_aFieldName.getLength()       &&
                          !m_aFieldAlias.getLength()      &&
-                         !m_aDatabaseName.getLength()    &&
                          !m_aFunctionName.getLength()    &&
                          !HasCriteria());
         return bEmpty;
