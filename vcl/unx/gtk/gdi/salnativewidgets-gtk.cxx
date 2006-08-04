@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets-gtk.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 15:00:46 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 09:53:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2936,7 +2936,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetWorkspaceColor( aBackColor );
     aStyleSet.SetFieldColor( aBackFieldColor );
     aStyleSet.SetWindowColor( aBackFieldColor );
-    aStyleSet.SetHelpColor( aBackColor );
+//    aStyleSet.SetHelpColor( aBackColor );
     // ancient wisdom tells us a mystic algorithm how to set checked color
     if( aBackColor == COL_LIGHTGRAY )
         aStyleSet.SetCheckedColor( Color( 0xCC, 0xCC, 0xCC ) );
