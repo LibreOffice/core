@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xistyle.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:14:10 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 11:34:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,6 +176,7 @@ void XclImpPalette::ReadPalette( XclImpStream& rStrm )
 
 XclImpFont::XclImpFont( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot ),
+    mbHasCharSet( false ),
     mbHasWstrn( true ),
     mbHasAsian( false ),
     mbHasCmplx( false )
@@ -185,7 +186,8 @@ XclImpFont::XclImpFont( const XclImpRoot& rRoot ) :
 
 XclImpFont::XclImpFont( const XclImpRoot& rRoot, const XclFontData& rFontData ) :
     XclImpRoot( rRoot ),
-    maData( rFontData )
+    maData( rFontData ),
+    mbHasCharSet( false )
 {
     if( maData.maStyle.Len() )
     {
@@ -216,7 +218,9 @@ void XclImpFont::SetAllUsedFlags( bool bUsed )
 
 rtl_TextEncoding XclImpFont::GetFontEncoding() const
 {
-    rtl_TextEncoding eFontEnc = maData.GetScCharSet();
+    // #i63105# use text encoding from FONT record
+    // #i67768# BIFF2-BIFF4 FONT records do not contain character set
+    rtl_TextEncoding eFontEnc = mbHasCharSet ? maData.GetScCharSet() : GetCharSet();
     return (eFontEnc == RTL_TEXTENCODING_DONTKNOW) ? GetCharSet() : eFontEnc;
 }
 
@@ -393,6 +397,7 @@ void XclImpFont::ReadFontData2( XclImpStream& rStrm )
     maData.mbStrikeout  = ::get_flag( nFlags, EXC_FONTATTR_STRIKEOUT );
     maData.mbOutline    = ::get_flag( nFlags, EXC_FONTATTR_OUTLINE );
     maData.mbShadow     = ::get_flag( nFlags, EXC_FONTATTR_SHADOW );
+    mbHasCharSet = false;
 }
 
 void XclImpFont::ReadFontData5( XclImpStream& rStrm )
@@ -407,6 +412,7 @@ void XclImpFont::ReadFontData5( XclImpStream& rStrm )
     maData.mbStrikeout  = ::get_flag( nFlags, EXC_FONTATTR_STRIKEOUT );
     maData.mbOutline    = ::get_flag( nFlags, EXC_FONTATTR_OUTLINE );
     maData.mbShadow     = ::get_flag( nFlags, EXC_FONTATTR_SHADOW );
+    mbHasCharSet = true;
 }
 
 void XclImpFont::ReadFontName2( XclImpStream& rStrm )
