@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basscript.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 10:18:36 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 10:53:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,7 +154,11 @@ namespace basprov
                     SbxVariableRef xSbxVar = new SbxVariable( SbxVARIANT );
                     unoToSbxValue( static_cast< SbxVariable* >( xSbxVar ), pParams[i] );
                     xSbxParams->Put( xSbxVar, static_cast< USHORT >( i ) + 1 );
-                }
+
+                    // Enable passing by ref
+                    if ( xSbxVar->GetType() != SbxVARIANT )
+                        xSbxVar->SetFlag( SBX_FIXED );
+                 }
             }
             if ( xSbxParams.Is() )
                 m_xMethod->SetParameters( xSbxParams );
