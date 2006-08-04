@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.120 $
+ *  $Revision: 1.121 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:40:54 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 13:33:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4501,7 +4501,11 @@ namespace
 void WW8RStyle::ImportOldFormatStyles()
 {
     for (sal_uInt16 i=0; i < cstd; ++i)
+    {
         pIo->pCollA[i].bColl = true;
+        //every chain must end eventually at the null style (style code 222)
+        pIo->pCollA[i].nBase = 222;
+    }
 
     rtl_TextEncoding eStructChrSet = WW8Fib::GetFIBCharset(
         pIo->pWwFib->chseTables);
@@ -4630,6 +4634,13 @@ void WW8RStyle::ImportOldFormatStyles()
         rSt >> stcBase;
 
         sal_uInt8 stc = (stcp - cstcStd) & 255;
+
+        /*
+          #i64557# style based on itself
+          every chain must end eventually at the null style (style code 222)
+        */
+        if (stc == stcBase)
+            stcBase = 222;
 
         SwWW8StyInf &rSI = pIo->pCollA[stc];
         rSI.nBase = stcBase;
