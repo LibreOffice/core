@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2006-08-03 15:10:25 $
+dnl * Date: $Date: 2006-08-04 13:32:10 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,13 +12,16 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.172 $ )
+AC_REVISION( $Revision: 1.173 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
 AC_ARG_WITH(gnu-patch,
 [  --with-gnu-patch        Specify location of GNU patch on Solaris or FreeBSD
 ],,)
+AC_ARG_WITH(agg,
+[  --without-agg           Disable the use of agg altogether
+],,with_agg=yes)
 AC_ARG_WITH(gnu-cp,
 [  --with-gnu-cp           Specify location of GNU cp on Solaris or FreeBSD
 ],,)
@@ -3716,23 +3719,50 @@ AC_SUBST(NEON_CFLAGS)
 fi
 
 dnl ===================================================================
-dnl Check for system AGG
+dnl Test for disabling agg
 dnl ===================================================================
-AC_MSG_CHECKING([which AGG to use])
-if test -n "$with_system_agg" -o -n "$with_system_libs" && \
-   test "$with_system_agg" != "no"; then
+AC_MSG_CHECKING([whether to enable agg])
+if test "$with_agg" = "no"; then
+  AC_MSG_RESULT([no])
+else
+  AC_MSG_RESULT([yes])
+  ENABLE_AGG=YES
+  AC_SUBST(ENABLE_AGG)
+
+  dnl ===================================================================
+  dnl Check for system AGG
+  dnl ===================================================================
+  AC_MSG_CHECKING([which AGG to use])
+  if test -n "$with_system_agg" -o -n "$with_system_libs" && \
+     test "$with_system_agg" != "no"; then
          AC_MSG_RESULT([external])
          PKG_CHECK_MODULES(AGG, libagg >= 2.3)
-         # unfortunately, agg 2.4 per default has 2.3 in version, so this check only will work
-         # when you have fixed that / have a fixed package.. :/
-         PKG_CHECK_MODULES(AGG, libagg < 2.4, , AC_MSG_ERROR([you need agg 2.3 for system-agg]))
+         AC_MSG_CHECKING([agg version])
+         # workaround; if AGG_CFLAGS is empty (broken libagg.pc in 2.3), add /usr/include/agg2 anyway
+         # (/usr/include gets stripped from pkg-config output)
+         if test -z "$AGG_CFLAGS" || test "$AGG_CFLAGS" = " "; then
+            AGG_INCDIR="`$PKG_CONFIG --variable includedir libagg`/agg2"
+         else
+            AGG_INCDIR="`echo $AGG_CFLAGS | $SED -e s/-I//`"
+         fi
+         # we could have used pkg-config --modversion but 2.4's libagg.pc.in still contains 2.3 :/
+         if $GREP -q "Version 2.4" `echo $AGG_INCDIR`/agg_basics.h; then
+            AC_MSG_RESULT([2.4])
+            AGG_VERSION=2400
+         else
+            AC_MSG_RESULT([2.3])
+            AGG_VERSION=2300
+         fi
          SYSTEM_AGG=YES
-else
+  else
          AC_MSG_RESULT([internal])
          SYSTEM_AGG=NO
+         AGG_VERSION=2300
          BUILD_TYPE="$BUILD_TYPE AGG"
+  fi
+  AC_SUBST(SYSTEM_AGG)
+  AC_SUBST(AGG_VERSION)
 fi
-AC_SUBST(SYSTEM_AGG)
 
 dnl ===================================================================
 dnl Check for system myspell
