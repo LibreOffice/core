@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inputwin.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:21:21 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 13:06:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,6 +107,7 @@ public:
                     SwInputWindow( Window* pParent, SfxBindings* pBindings );
     virtual         ~SwInputWindow();
 
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
     void            SelectHdl( ToolBox*);
     virtual void    Show();
