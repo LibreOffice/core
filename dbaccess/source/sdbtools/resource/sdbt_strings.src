@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdbt_strings.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 07:47:41 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 13:56:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,5 +70,5 @@ String STR_NO_QUOTES_IN_QUERY_NAMES
 String STR_NO_VALID_SQL_NAME
 {
     Text [ de ] = "$name$ ist kein SQL-konformer Bezeichner.";
-    Text [ en-US ] = "$name$ ist no SQL conform identifier.";
+    Text [ en-US ] = "$name$ is no SQL conform identifier.";
 };
