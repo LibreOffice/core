@@ -4,9 +4,9 @@
  *
  *  $RCSfile: kdebackend.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 12:31:31 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 12:30:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,30 +136,11 @@ rtl::OUString SAL_CALL KDEBackend::getImplementationName(void)
 
 uno::Sequence<rtl::OUString> SAL_CALL KDEBackend::getBackendServiceNames(void)
 {
-    uno::Sequence<rtl::OUString> aServices(2) ;
+    uno::Sequence<rtl::OUString> aServices(1) ;
     aServices[0] = rtl::OUString(
         RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.backend.KDEBackend")) ;
-    aServices[1] = rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.backend.PlatformBackend")) ;
 
     return aServices ;
-}
-
-//------------------------------------------------------------------------------
-
-uno::Sequence<rtl::OUString> SAL_CALL KDEBackend::getSupportedComponents(void)
-{
-    uno::Sequence<rtl::OUString> aSupportedComponentsList(4) ;
-    aSupportedComponentsList[0] = rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("org.openoffice.VCL")) ;
-    aSupportedComponentsList[1] = rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Inet")) ;
-    aSupportedComponentsList[2] = rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common")) ;
-    aSupportedComponentsList[3] = rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Paths")) ;
-
-    return aSupportedComponentsList ;
 }
 
 //------------------------------------------------------------------------------
