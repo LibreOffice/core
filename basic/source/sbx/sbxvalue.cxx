@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxvalue.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 17:51:50 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 10:54:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -536,6 +536,8 @@ BOOL SbxValue::Get( SbxValues& rRes ) const
                 case SbxVARIANT: rRes = p->aData; break;
                 case SbxINTEGER: rRes.nInteger = ImpGetInteger( &p->aData ); break;
                 case SbxLONG:    rRes.nLong = ImpGetLong( &p->aData ); break;
+                case SbxSALINT64:   rRes.nInt64 = ImpGetInt64( &p->aData ); break;
+                case SbxSALUINT64:  rRes.uInt64 = ImpGetUInt64( &p->aData ); break;
                 case SbxSINGLE:  rRes.nSingle = ImpGetSingle( &p->aData ); break;
                 case SbxDOUBLE:  rRes.nDouble = ImpGetDouble( &p->aData ); break;
                 case SbxCURRENCY:rRes.nLong64 = ImpGetCurrency( &p->aData ); break;
@@ -711,6 +713,8 @@ BOOL SbxValue::Put( const SbxValues& rVal )
                 case SbxNULL:       break;
                 case SbxINTEGER:    ImpPutInteger( &p->aData, rVal.nInteger ); break;
                 case SbxLONG:       ImpPutLong( &p->aData, rVal.nLong ); break;
+                case SbxSALINT64:   ImpPutInt64( &p->aData, rVal.nInt64 ); break;
+                case SbxSALUINT64:  ImpPutUInt64( &p->aData, rVal.uInt64 ); break;
                 case SbxSINGLE:     ImpPutSingle( &p->aData, rVal.nSingle ); break;
                 case SbxDOUBLE:     ImpPutDouble( &p->aData, rVal.nDouble ); break;
                 case SbxCURRENCY:   ImpPutCurrency( &p->aData, rVal.nLong64 ); break;
