@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 16:11:52 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 11:07:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -721,6 +721,7 @@ void LayoutManager::implts_reset( sal_Bool bAttached )
         m_xModuleCfgMgr = Reference< XUIConfigurationManager >( xModuleCfgMgr, UNO_QUERY );
         m_xDocCfgMgr = Reference< XUIConfigurationManager >( xDocCfgMgr, UNO_QUERY );
         m_xPersistentWindowState = xPersistentWindowState;
+        m_aStatusBarElement.m_bStateRead = sal_False; // reset state to read data again!
         aWriteLock.unlock();
         /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
@@ -2594,7 +2595,7 @@ void LayoutManager::implts_calcDockingPosSize(
         if ( pToolBox )
         {
             // docked toolbars always have one line
-            ::Size aSize = pToolBox->CalcWindowSizePixel( 1, ImplConvertAlignment( eDockedArea ) );
+            ::Size aSize = pToolBox->CalcWindowSizePixel( 1, ImplConvertAlignment( sal_Int16( eDockedArea )) );
             aTrackingRect.SetSize( ::Size( aSize.Width(), aSize.Height() ));
         }
     }
@@ -3086,6 +3087,7 @@ void LayoutManager::implts_setVisibleState( sal_Bool bShow )
     UIElementVector::iterator pIter;
     for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
         pIter->m_bMasterHide = !bShow;
+    m_aStatusBarElement.m_bMasterHide = !bShow;
     aWriteLock.unlock();
      /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
@@ -3180,6 +3182,12 @@ void LayoutManager::implts_updateUIElementsVisibleState( sal_Bool bSetVisible )
         }
     }
 
+    // Hide/show the statusbar according to bSetVisible
+    if ( bSetVisible )
+        implts_showStatusBar();
+    else
+        implts_hideStatusBar();
+
     if ( !bOld )
     {
         WriteGuard aWriteLock( m_aLock );
@@ -3250,11 +3258,26 @@ void LayoutManager::implts_createStatusBar( const rtl::OUString& aStatusBarName 
     WriteGuard aWriteLock( m_aLock );
     if ( !m_aStatusBarElement.m_xUIElement.is() )
     {
+        implts_readStatusBarState( aStatusBarName );
         m_aStatusBarElement.m_aName      = aStatusBarName;
         m_aStatusBarElement.m_xUIElement = implts_createElement( aStatusBarName );
     }
 
     implts_createProgressBar();
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+}
+
+void LayoutManager::implts_readStatusBarState( const rtl::OUString& rStatusBarName )
+{
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    WriteGuard aWriteLock( m_aLock );
+    if ( !m_aStatusBarElement.m_bStateRead )
+    {
+        // Read persistent data for status bar if not yet read!
+        if ( implts_readWindowStateData( rStatusBarName, m_aStatusBarElement ))
+            m_aStatusBarElement.m_bStateRead = sal_True;
+    }
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 }
 
 void LayoutManager::implts_createProgressBar()
@@ -3290,13 +3313,19 @@ void LayoutManager::implts_createProgressBar()
     }
     else
     {
+        Reference< css::awt::XWindow > xStatusBarWindow = pWrapper->getStatusBar();
+
         vos::OGuard aGuard( Application::GetSolarMutex() );
-        Window* pWindow = VCLUnoHelper::GetWindow( xContainerWindow );
-        if ( pWindow )
+        Window* pStatusBarWnd = VCLUnoHelper::GetWindow( xStatusBarWindow );
+        if ( !pStatusBarWnd )
         {
-            StatusBar* pStatusBar = new StatusBar( pWindow, WinBits( WB_LEFT | WB_3DLOOK ) );
-            Reference< css::awt::XWindow > xStatusBarWindow( VCLUnoHelper::GetInterface( pStatusBar ));
-            pWrapper->setStatusBar( xStatusBarWindow, sal_True );
+            Window* pWindow = VCLUnoHelper::GetWindow( xContainerWindow );
+            if ( pWindow )
+            {
+                StatusBar* pStatusBar = new StatusBar( pWindow, WinBits( WB_LEFT | WB_3DLOOK ) );
+                Reference< css::awt::XWindow > xStatusBarWindow2( VCLUnoHelper::GetInterface( pStatusBar ));
+                pWrapper->setStatusBar( xStatusBarWindow2, sal_True );
+            }
         }
     }
 
@@ -3436,30 +3465,89 @@ sal_Bool LayoutManager::implts_hideProgressBar()
 {
     Reference< XUIElement > xProgressBar;
     Reference< css::awt::XWindow > xWindow;
+    sal_Bool bHideStatusBar( sal_False );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     WriteGuard aWriteLock( m_aLock );
     xProgressBar = Reference< XUIElement >( m_aProgressBarElement.m_xUIElement, UNO_QUERY );
 
+    sal_Bool bInternalStatusBar( sal_False );
     if ( xProgressBar.is() )
     {
+        Reference< css::awt::XWindow > xStatusBar;
         ProgressBarWrapper* pWrapper = (ProgressBarWrapper*)xProgressBar.get();
         if ( pWrapper )
             xWindow = pWrapper->getStatusBar();
+        Reference< css::ui::XUIElement > xStatusBarElement = m_aStatusBarElement.m_xUIElement;
+        if ( xStatusBarElement.is() )
+            xStatusBar = Reference< css::awt::XWindow >( xStatusBarElement->getRealInterface(), UNO_QUERY );
+        bInternalStatusBar = xStatusBar != xWindow;
     }
     m_aProgressBarElement.m_bVisible = sal_False;
+    implts_readStatusBarState( m_aStatusBarAlias );
+    bHideStatusBar = !m_aStatusBarElement.m_bVisible;
     aWriteLock.unlock();
 
     vos::OGuard aGuard( Application::GetSolarMutex() );
     Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
-    if ( pWindow )
+    if ( pWindow && pWindow->IsVisible() &&
+         ( bHideStatusBar || bInternalStatusBar ))
     {
-        if ( pWindow->IsVisible() )
+        pWindow->Hide();
+        doLayout();
+        return sal_True;
+    }
+
+    return sal_False;
+}
+
+sal_Bool LayoutManager::implts_showStatusBar( sal_Bool bStoreState )
+{
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    WriteGuard aWriteLock( m_aLock );
+    Reference< css::ui::XUIElement > xStatusBar = m_aStatusBarElement.m_xUIElement;
+    if ( bStoreState )
+        m_aStatusBarElement.m_bVisible = sal_True;
+    aWriteLock.unlock();
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+
+    if ( xStatusBar.is() )
+    {
+        Reference< css::awt::XWindow > xWindow( xStatusBar->getRealInterface(), UNO_QUERY );
+
+        vos::OGuard aGuard( Application::GetSolarMutex() );
+        Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+        if ( pWindow && !pWindow->IsVisible() )
+        {
+            pWindow->Show();
+            return sal_True;
+        }
+    }
+
+    return sal_False;
+}
+
+sal_Bool LayoutManager::implts_hideStatusBar( sal_Bool bStoreState )
+{
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    WriteGuard aWriteLock( m_aLock );
+    Reference< css::ui::XUIElement > xStatusBar = m_aStatusBarElement.m_xUIElement;
+    if ( bStoreState )
+        m_aStatusBarElement.m_bVisible = sal_False;
+    aWriteLock.unlock();
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+
+    if ( xStatusBar.is() )
+    {
+        Reference< css::awt::XWindow > xWindow( xStatusBar->getRealInterface(), UNO_QUERY );
+
+        vos::OGuard aGuard( Application::GetSolarMutex() );
+        Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+        if ( pWindow && pWindow->IsVisible() )
         {
             pWindow->Hide();
-            doLayout();
+            return sal_True;
         }
-        return sal_True;
     }
 
     return sal_False;
@@ -3855,7 +3943,7 @@ throw (RuntimeException)
     implts_findElement( aName, aElementType, aElementName, xUIElement );
     bFound = xUIElement.is();
 
-    if ( xFrame.is() && m_xContainerWindow.is() )
+    if ( xFrame.is() && m_xContainerWindow.is() && !implts_isPreviewModel( xModel ) ) // no bars on preview mode
     {
         if ( aElementType.equalsIgnoreAsciiCaseAscii( "toolbar" ))
         {
@@ -3925,8 +4013,7 @@ throw (RuntimeException)
         }
         else if ( aElementType.equalsIgnoreAsciiCaseAscii( "menubar" ))
         {
-            sal_Bool bPreview( implts_isPreviewModel( xModel ));
-            if ( aElementName.equalsIgnoreAsciiCaseAscii( "menubar" ) && !bInPlaceMenu && !bPreview )
+            if ( aElementName.equalsIgnoreAsciiCaseAscii( "menubar" ) && !bInPlaceMenu )
             {
                 vos::OGuard aGuard( Application::GetSolarMutex() );
                 // PB 2004-12-15 #i38743# don't create a menubar if frame isn't top
@@ -4133,10 +4220,11 @@ throw (::com::sun::star::uno::RuntimeException)
               aElementName.equalsIgnoreAsciiCaseAscii( "statusbar" )) ||
             ( m_aStatusBarElement.m_aName == ResourceURL ))
         {
-            if ( m_aStatusBarElement.m_xUIElement.is() &&
-                 m_aStatusBarElement.m_bVisible &&
-                 !m_aStatusBarElement.m_bMasterHide )
+            implts_readStatusBarState( ResourceURL );
+            if ( m_aStatusBarElement.m_bVisible && !m_aStatusBarElement.m_bMasterHide )
             {
+                createElement( ResourceURL );
+
                 // we need VCL here to pass special flags to Show()
                 vos::OGuard aGuard( Application::GetSolarMutex() );
                 Reference< css::awt::XWindow > xWindow(
@@ -4343,20 +4431,10 @@ throw (RuntimeException)
             if ( m_aStatusBarElement.m_xUIElement.is() &&
                  !m_aStatusBarElement.m_bMasterHide )
             {
-                Reference< css::awt::XWindow > xWindow(
-                    m_aStatusBarElement.m_xUIElement->getRealInterface(), UNO_QUERY );
-                m_aStatusBarElement.m_bVisible = sal_True;
-                aWriteLock.unlock();
-
-                implts_writeWindowStateData( m_aStatusBarAlias, m_aStatusBarElement );
-
-                vos::OGuard aGuard( Application::GetSolarMutex() );
-                Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
-                if ( pWindow && !pWindow->IsVisible() )
+                if ( implts_showStatusBar( sal_True ))
                 {
-                    pWindow->Show();
+                    implts_writeWindowStateData( m_aStatusBarAlias, m_aStatusBarElement );
                     doLayout();
-
                     return sal_True;
                 }
             }
@@ -4454,20 +4532,10 @@ throw (RuntimeException)
             if ( m_aStatusBarElement.m_xUIElement.is() &&
                  !m_aStatusBarElement.m_bMasterHide )
             {
-                Reference< css::awt::XWindow > xWindow(
-                    m_aStatusBarElement.m_xUIElement->getRealInterface(), UNO_QUERY );
-                m_aStatusBarElement.m_bVisible = sal_False;
-                aWriteLock.unlock();
-
-                implts_writeWindowStateData( m_aStatusBarAlias, m_aStatusBarElement );
-
-                vos::OGuard aGuard( Application::GetSolarMutex() );
-                Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
-                if ( pWindow && pWindow->IsVisible() )
+                if ( implts_hideStatusBar( sal_True ))
                 {
-                    pWindow->Hide();
+                    implts_writeWindowStateData( m_aStatusBarAlias, m_aStatusBarElement );
                     doLayout();
-
                     return sal_True;
                 }
             }
@@ -4526,7 +4594,7 @@ throw (RuntimeException)
                 if ( xWindow.is() &&  xDockWindow.is() )
                 {
                     if ( DockingArea != DockingArea_DOCKINGAREA_DEFAULT )
-                        aUIElement.m_aDockedData.m_nDockedArea = DockingArea;
+                        aUIElement.m_aDockedData.m_nDockedArea = sal_Int16( DockingArea );
 
                     if (( Pos.X != LONG_MAX ) && ( Pos.Y != LONG_MAX ))
                         aUIElement.m_aDockedData.m_aPos = ::Point( Pos.X, Pos.Y );
@@ -5197,7 +5265,8 @@ sal_Bool LayoutManager::implts_doLayout( sal_Bool bForceRequestBorderSpace )
 
         if ( !bEqual || bForceRequestBorderSpace || bMustDoLayout )
         {
-            if ( (bGotRequestedBorderSpace = xDockingAreaAcceptor->requestDockingAreaSpace( aBorderSpace )))
+            bGotRequestedBorderSpace = xDockingAreaAcceptor->requestDockingAreaSpace( aBorderSpace );
+            if ( bGotRequestedBorderSpace )
             {
                 xDockingAreaAcceptor->setDockingAreaSpace( aBorderSpace );
 
