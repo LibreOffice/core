@@ -4,9 +4,9 @@
  *
  *  $RCSfile: userlist.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:45:59 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 11:34:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -223,8 +223,16 @@ ScUserList::ScUserList(USHORT nLim, USHORT nDel) :
         {
             String sDayShort, sDayLong;
             sal_Int32 i;
-            sal_Int32 nCount = xCal.getLength() - 1;
-            for (i = 0; i < nCount; i++)
+            sal_Int32 nLen = xCal.getLength();
+            rtl::OUString sStart = xCalendars[j].StartOfWeek;
+            sal_Int16 nStart = nLen;
+            while (nStart > 0)
+            {
+                if (xCal[--nStart].ID == sStart)
+                    break;
+            }
+            sal_Int16 nLast = (nStart + nLen - 1) % nLen;
+            for (i = nStart; i != nLast; i = (i+1) % nLen)
             {
                 sDayShort += String( xCal[i].AbbrevName );
                 sDayShort += cDelimiter;
@@ -245,8 +253,8 @@ ScUserList::ScUserList(USHORT nLim, USHORT nDel) :
         {
             String sMonthShort, sMonthLong;
             sal_Int32 i;
-            sal_Int32 nCount = xCal.getLength() - 1;
-            for (i = 0; i < nCount; i++)
+            sal_Int32 nLen = xCal.getLength() - 1;
+            for (i = 0; i < nLen; i++)
             {
                 sMonthShort += String( xCal[i].AbbrevName );
                 sMonthShort += cDelimiter;
