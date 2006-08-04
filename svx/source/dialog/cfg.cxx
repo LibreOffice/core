@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:01:08 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 11:10:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3542,7 +3542,13 @@ void SvxToolbarConfigPage::MoveEntry( bool bMoveUp )
 
     // Apply change to currently selected toolbar
     SvxConfigEntry* pToolbar = GetTopLevelSelection();
-    ((ToolbarSaveInData*)GetSaveInData())->ApplyToolbar( pToolbar );
+    if ( pToolbar )
+        ((ToolbarSaveInData*)GetSaveInData())->ApplyToolbar( pToolbar );
+    else
+    {
+        DBG_ERRORFILE( "SvxToolbarConfigPage::MoveEntry(): no entry" );
+        UpdateButtonStates();
+    }
 }
 
 IMPL_LINK( SvxToolbarConfigPage, ToolbarSelectHdl, MenuButton *, pButton )
@@ -3559,6 +3565,7 @@ IMPL_LINK( SvxToolbarConfigPage, ToolbarSelectHdl, MenuButton *, pButton )
         case ID_DELETE:
         {
             DeleteSelectedTopLevel();
+            UpdateButtonStates();
             break;
         }
         case ID_RENAME:
