@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.33 $
+#   $Revision: 1.34 $
 #
-#   last change: $Author: vg $ $Date: 2006-06-02 12:29:12 $
+#   last change: $Author: ihi $ $Date: 2006-08-04 10:10:35 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -133,7 +133,6 @@ SCP1FILES +=                           \
              file_winexplorerext.par   \
              registryitem_winexplorerext.par
 .ENDIF
-
 .ENDIF
 
 .IF "$(GUI)"=="UNX"
@@ -160,6 +159,12 @@ SCP1FILES += \
 
 .IF "$(ENABLE_CAIRO)" == "TRUE"
 SCP1FILES += cairocanvas.par
+.ENDIF
+
+.IF "$(BUILD_SPECIAL)"!=""
+SCP1FILES += \
+             module_onlineupdate.par   \
+             file_onlineupdate.par
 .ENDIF
 
 # ------------------------------------------------------------------------
@@ -251,7 +256,6 @@ SCP2FILES +=                           \
              file_winexplorerext.par   \
              registryitem_winexplorerext.par
 .ENDIF
-
 .ENDIF
 
 .IF "$(GUI)"=="UNX"
@@ -275,6 +279,12 @@ SCP2FILES += \
 
 SCP2FILES += \
              vclcanvas.par
+
+.IF "$(BUILD_SPECIAL)"!=""
+SCP2FILES += \
+             module_onlineupdate.par   \
+             file_onlineupdate.par
+.ENDIF
 
 # ------------------------------------------------------------------------
 # URE
