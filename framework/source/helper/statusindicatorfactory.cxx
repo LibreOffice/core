@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statusindicatorfactory.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 16:26:28 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 11:07:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -340,6 +340,9 @@ void StatusIndicatorFactory::end(const css::uno::Reference< css::task::XStatusIn
         // Se we must "end" our progress realy
         if (xProgress.is())
             xProgress->end();
+        // Now hide the progress bar again.
+        impl_hideProgress();
+
         impl_stopWakeUpThread();
     }
 
@@ -439,7 +442,10 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
         bIsVisible = xVisibleCheck->isVisible();
 
     if (bIsVisible)
+    {
+        impl_showProgress();
         return;
+    }
 
     // Check if the layout manager has been set to invisible state. It this case we are also
     // not allowed to set the frame visible!
@@ -486,13 +492,7 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
     // Show it and bring it to front.
     // But before we have to be sure, that our internal used helper progress
     // is visible too.
-    if (xPropSet.is())
-    {
-        css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
-        xPropSet->getPropertyValue(FRAME_PROPNAME_LAYOUTMANAGER) >>= xLayoutManager;
-        if (xLayoutManager.is())
-            xLayoutManager->showElement(PROGRESS_RESOURCE);
-    }
+    impl_showProgress();
 
     if (xParentWindow.is())
         xParentWindow->setVisible(sal_True);
@@ -550,6 +550,78 @@ void StatusIndicatorFactory::impl_createProgress()
     m_xProgress = xProgress;
     aWriteLock.lock();
     // <- SAFE ----------------------------------
+}
+
+//-----------------------------------------------
+void StatusIndicatorFactory::impl_showProgress()
+{
+    // SAFE -> ----------------------------------
+    ReadGuard aReadLock(m_aLock);
+
+    css::uno::Reference< css::frame::XFrame >              xFrame (m_xFrame.get()      , css::uno::UNO_QUERY);
+    css::uno::Reference< css::awt::XWindow >               xWindow(m_xPluggWindow.get(), css::uno::UNO_QUERY);
+    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR  = m_xSMGR;
+
+    aReadLock.lock();
+    // <- SAFE ----------------------------------
+
+    css::uno::Reference< css::task::XStatusIndicator > xProgress;
+
+    if (xFrame.is())
+    {
+        // use frame layouted progress implementation
+        css::uno::Reference< css::beans::XPropertySet > xPropSet(xFrame, css::uno::UNO_QUERY);
+        if (xPropSet.is())
+        {
+            css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
+            xPropSet->getPropertyValue(FRAME_PROPNAME_LAYOUTMANAGER) >>= xLayoutManager;
+            if (xLayoutManager.is())
+            {
+                // Be sure that we have always a progress. It can be that our frame
+                // was recycled and therefore the progress was destroyed!
+                // CreateElement does nothing if there is already a valid progress.
+                xLayoutManager->createElement( PROGRESS_RESOURCE );
+                xLayoutManager->showElement( PROGRESS_RESOURCE );
+
+                css::uno::Reference< css::ui::XUIElement > xProgressBar = xLayoutManager->getElement(PROGRESS_RESOURCE);
+                if (xProgressBar.is())
+                    xProgress = css::uno::Reference< css::task::XStatusIndicator >(xProgressBar->getRealInterface(), css::uno::UNO_QUERY);
+            }
+        }
+
+        // SAFE -> ----------------------------------
+        WriteGuard aWriteLock(m_aLock);
+        m_xProgress = xProgress;
+        aWriteLock.lock();
+        // <- SAFE ----------------------------------
+    }
+}
+
+//-----------------------------------------------
+void StatusIndicatorFactory::impl_hideProgress()
+{
+    // SAFE -> ----------------------------------
+    ReadGuard aReadLock(m_aLock);
+
+    css::uno::Reference< css::frame::XFrame >              xFrame (m_xFrame.get()      , css::uno::UNO_QUERY);
+    css::uno::Reference< css::awt::XWindow >               xWindow(m_xPluggWindow.get(), css::uno::UNO_QUERY);
+    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR  = m_xSMGR;
+
+    aReadLock.lock();
+    // <- SAFE ----------------------------------
+
+    if (xFrame.is())
+    {
+        // use frame layouted progress implementation
+        css::uno::Reference< css::beans::XPropertySet > xPropSet(xFrame, css::uno::UNO_QUERY);
+        if (xPropSet.is())
+        {
+            css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
+            xPropSet->getPropertyValue(FRAME_PROPNAME_LAYOUTMANAGER) >>= xLayoutManager;
+            if (xLayoutManager.is())
+                xLayoutManager->hideElement( PROGRESS_RESOURCE );
+        }
+    }
 }
 
 //-----------------------------------------------
