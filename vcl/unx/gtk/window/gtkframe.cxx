@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-03 13:33:31 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 10:25:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2171,13 +2171,12 @@ gboolean GtkSalFrame::signalFocus( GtkWidget*, GdkEventFocus* pEvent, gpointer f
             vcl_sal::PrinterUpdate::update();
 
     // FIXME: find out who the hell steals the focus from our frame
-    // if we are plugged and a float opens; why does the same not
-    // happen unplugged ? Is the plugging application (SimpleViewer in SDK)
-    // somehow responsible ? The focus does not seem to get set inside our process
+    // while we have the pointer grabbed, this should not come from
+    // the window manager. Is this an event that was still queued ?
+    // The focus does not seem to get set inside our process
     //
-    // in the meantime do not propagate focus get/lose on a plugged window
-    // if floats are open
-    if( ! ((pThis->m_nStyle & SAL_FRAME_STYLE_CHILD) && m_nFloats > 0 ) )
+    // in the meantime do not propagate focus get/lose if floats are open
+    if( m_nFloats == 0 )
         pThis->CallCallback( pEvent->in ? SALEVENT_GETFOCUS : SALEVENT_LOSEFOCUS, NULL );
 
     return FALSE;
