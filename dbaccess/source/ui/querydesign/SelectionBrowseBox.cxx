@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 07:48:50 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 13:57:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1057,7 +1057,6 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                             OQueryTableWindow* pEntryTab = static_cast<OQueryTableWindow*>(aIter->second);
                             if (pEntryTab)
                             {
-                                pEntry->SetDatabase(pEntryTab->GetComposedName());
                                 pEntry->SetTable(pEntryTab->GetTableName());
                                 pEntry->SetTabWindow(pEntryTab);
                             }
@@ -1067,7 +1066,6 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                 else
                 {
                     pEntry->SetAlias(::rtl::OUString());
-                    pEntry->SetDatabase(::rtl::OUString());
                     pEntry->SetTable(::rtl::OUString());
                     pEntry->SetTabWindow(NULL);
                 }
@@ -1672,7 +1670,6 @@ OTableFieldDescRef OSelectionBrowseBox::InsertField(const OJoinExchangeData& jxd
     aInfo->SetFieldIndex(nFieldIndex);
     aInfo->SetFieldType(pInf->GetKeyType());
     aInfo->SetAlias(pSourceWin->GetAliasName());
-    aInfo->SetDatabase(pSourceWin->GetComposedName());
 
     aInfo->SetDataType(pInf->GetDataType());
     aInfo->SetVisible(bVis);
@@ -2698,7 +2695,6 @@ sal_Bool OSelectionBrowseBox::fillEntryTable(OTableFieldDescRef& _pEntry,const :
             OQueryTableWindow* pEntryTab = static_cast<OQueryTableWindow*>(aIter->second);
             if (pEntryTab)
             {
-                _pEntry->SetDatabase(pEntryTab->GetComposedName());
                 _pEntry->SetTable(pEntryTab->GetTableName());
                 _pEntry->SetTabWindow(pEntryTab);
                 bRet = sal_True;
