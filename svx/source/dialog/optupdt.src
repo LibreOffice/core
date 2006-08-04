@@ -1,0 +1,120 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: optupdt.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: ihi $ $Date: 2006-08-04 09:48:52 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+// include --------------------------------------------------------------
+#include "optupdt.hrc"
+#include "dialogs.hrc"
+#include "helpid.hrc"
+
+ // RID_SVXPAGE_ONLINEUPDATE --------------------------------------------
+TabPage RID_SVXPAGE_ONLINEUPDATE
+{
+    HelpId = HID_SVX_OPTIONS_ONLINEUPDATE ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Text [ de ] = "OnlineUpdate" ;
+    Text [ en-US ] = "OnlineUpdate" ;
+    Text [ x-comment ] = " ";
+    FixedLine FL_OPTIONS
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ de ] = "Online Update Optionen" ;
+        Text [ en-US ] = "Online Update Options" ;
+    };
+    CheckBox CB_AUTOCHECK
+    {
+        Pos = MAP_APPFONT ( 12, 16 ) ;
+        Size = MAP_APPFONT ( 160, 8 ) ;
+        Text [ de ] = "~Automatisch nach Updates suchen" ;
+        Text [ en-US ] = "~Check for updates automatically" ;
+    };
+    RadioButton RB_EVERYDAY
+    {
+        Pos = MAP_APPFONT ( 18, 32 ) ;
+        Size = MAP_APPFONT ( 60, 14 ) ;
+        Text [ de ] = "Jeden ~Tag" ;
+        Text [ en-US ] = "Every Da~y" ;
+    };
+    RadioButton RB_EVERYWEEK
+    {
+        Pos = MAP_APPFONT ( 18, 44 ) ;
+        Size = MAP_APPFONT ( 60, 14 ) ;
+        Text [ de ] = "Jede ~Woche" ;
+        Text [ en-US ] = "Every ~Week" ;
+    };
+    RadioButton RB_EVERYMONTH
+    {
+        Pos = MAP_APPFONT ( 18, 56 ) ;
+        Size = MAP_APPFONT ( 60, 14 ) ;
+        Text [ de ] = "Jeden ~Monat" ;
+        Text [ en-US ] = "Every ~Month" ;
+    };
+    PushButton PB_CHECKNOW
+    {
+        Pos = MAP_APPFONT ( 12, 80 ) ;
+        Size = MAP_APPFONT ( 60, 14 ) ;
+        Text [ de ] = "Jetzt ~suchen" ;
+        Text [ en-US ] = "Check ~now" ;
+    };
+    CheckBox CB_AUTODOWNLOAD
+    {
+        Pos = MAP_APPFONT ( 12, 130 ) ;
+        Size = MAP_APPFONT ( 160, 10 ) ;
+        Text [ de ] = "Updates automatisch ~herunterladen" ;
+        Text [ en-US ] = "~Download updates automatically" ;
+    };
+    FixedText FT_DESTPATHLABEL
+    {
+        Pos = MAP_APPFONT ( 22, 143 ) ;
+        Size = MAP_APPFONT ( 150, 8 ) ;
+        Text [ de ] = "Herunterladen nach:" ;
+        Text [ en-US ] = "Download destination:" ;
+    };
+    FixedText FT_DESTPATH
+    {
+        Pos = MAP_APPFONT ( 22, 154 ) ;
+        Size = MAP_APPFONT ( 138, 8 ) ;
+    };
+    PushButton PB_CHANGEPATH
+    {
+        Pos = MAP_APPFONT ( 162, 151 ) ;
+        Size = MAP_APPFONT ( 60, 14 ) ;
+        Text [ de ] = "Ä~ndern..." ;
+        Text [ en-US ] = "Ch~ange..." ;
+    };
+};
