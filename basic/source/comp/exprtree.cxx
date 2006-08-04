@@ -4,9 +4,9 @@
  *
  *  $RCSfile: exprtree.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 17:41:53 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 10:54:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,9 +116,20 @@ static BOOL DoParametersFollow( SbiParser* p, SbiExprType eCurExpr, SbiToken eTo
     // Aber nur, wenn CALL-aehnlich!
     if( !p->WhiteSpace() || eCurExpr != SbSYMBOL )
         return FALSE;
-    return BOOL(
-           eTok == NUMBER || eTok == FIXSTRING
-        || eTok == SYMBOL || eTok == COMMA  || eTok == DOT );
+    if (   eTok == NUMBER || eTok == FIXSTRING
+        || eTok == SYMBOL || eTok == COMMA  || eTok == DOT )
+    {
+        return TRUE;
+    }
+    else // check for default params with reserved names ( e.g. names of tokens )
+    {
+        SbiTokenizer tokens( *(SbiTokenizer*)p );
+        // Urk the Next() / Peek() symantics are... weird
+        tokens.Next();
+        if ( tokens.Peek() == ASSIGN )
+            return TRUE;
+    }
+    return FALSE;
 }
 
 // Definition eines neuen Symbols
