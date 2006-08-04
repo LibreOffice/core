@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxmod.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 17:40:39 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 10:54:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -644,9 +644,15 @@ void ClearUnoObjectsInRTL_Impl_Rek( StarBASIC* pBasic )
     if( pVar )
         pVar->SbxValue::Clear();
 
-    // return-Wert von CreateUnoDialog loeschen
+    // return-Wert von CDec loeschen
     static String aName3( RTL_CONSTASCII_USTRINGPARAM("CDec") );
     pVar = pBasic->GetRtl()->Find( aName3, SbxCLASS_METHOD );
+    if( pVar )
+        pVar->SbxValue::Clear();
+
+    // return-Wert von CreateObject loeschen
+    static String aName4( RTL_CONSTASCII_USTRINGPARAM("CreateObject") );
+    pVar = pBasic->GetRtl()->Find( aName4, SbxCLASS_METHOD );
     if( pVar )
         pVar->SbxValue::Clear();
 
