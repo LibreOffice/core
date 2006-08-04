@@ -112,7 +112,6 @@
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:HelpSupport"/>
             <menu:menuitem menu:id=".uno:OnlineRegistrationDlg"/>
-            <menu:menuitem menu:id=".uno:OnlineUpdate"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:About"/>
         </menu:menupopup>
