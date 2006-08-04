@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: kz $ $Date: 2005-11-03 17:26:37 $
+#   last change: $Author: ihi $ $Date: 2006-08-04 13:30:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -57,12 +57,10 @@ CDEFS+= -DPROFILER
 
 
 SLOFILES =	\
-    $(SLO)$/bitmap.obj \
     $(SLO)$/cachedprimitivebase.obj \
     $(SLO)$/canvascustomspritehelper.obj \
     $(SLO)$/canvastools.obj \
     $(SLO)$/elapsedtime.obj \
-    $(SLO)$/image.obj \
     $(SLO)$/linepolypolygonbase.obj \
     $(SLO)$/parametricpolypolygon.obj \
     $(SLO)$/prioritybooster.obj \
@@ -77,7 +75,17 @@ SLOFILES =	\
 
 SHL1TARGET= 	$(TARGET)$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB= 	i$(TARGET)
-SHL1STDLIBS=	$(SALLIB) $(CPPULIB) $(BASEGFXLIB) $(CPPUHELPERLIB) $(COMPHELPERLIB) $(VCLLIB) $(AGGLIB) $(TOOLSLIB)
+SHL1STDLIBS=	$(SALLIB) $(CPPULIB) $(BASEGFXLIB) $(CPPUHELPERLIB) $(COMPHELPERLIB) $(VCLLIB) $(TOOLSLIB)
+
+.IF "$(ENABLE_AGG)"=="YES"
+    SLOFILES += $(SLO)$/bitmap.obj \
+                $(SLO)$/image.obj
+
+    .IF "$(AGG_VERSION)"!=""
+        CDEFS += -DAGG_VERSION=$(AGG_VERSION)
+    .ENDIF
+    SHL1STDLIBS += $(AGGLIB)
+.ENDIF
 
 SHL1LIBS=		$(SLB)$/$(TARGET).lib
 
