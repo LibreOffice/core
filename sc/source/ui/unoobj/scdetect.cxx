@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scdetect.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:45:01 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 11:34:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -637,7 +637,8 @@ static BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
 
                         static const UINT16 pSylk[] =       // Sylk
                             {
-                            'I', 'D', ';', 'P',
+                            'I', 'D', ';',
+                            M_ALT(3), 'P', 'N', 'E',        // 'P' plus undocumented Excel extensions 'N' and 'E'
                             M_ENDE };
 
                         static const UINT16 *ppFilterPatterns[] =      // Arrays mit Suchmustern
