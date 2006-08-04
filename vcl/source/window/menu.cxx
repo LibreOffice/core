@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.139 $
+ *  $Revision: 1.140 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 14:59:50 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 09:53:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -640,13 +640,25 @@ void DecoToolBox::DataChanged( const DataChangedEvent& rDCEvt )
 void DecoToolBox::calcMinSize()
 {
     ToolBox aTbx( GetParent() );
-    ResMgr* pResMgr = ImplGetResMgr();
+    if( GetItemCount() == 0 )
+    {
+        ResMgr* pResMgr = ImplGetResMgr();
 
-    Bitmap aBitmap;
-    if( pResMgr )
-        aBitmap = Bitmap( ResId( SV_RESID_BITMAP_CLOSEDOC, pResMgr ) );
+        Bitmap aBitmap;
+        if( pResMgr )
+            aBitmap = Bitmap( ResId( SV_RESID_BITMAP_CLOSEDOC, pResMgr ) );
+        aTbx.InsertItem( IID_DOCUMENTCLOSE, Image( aBitmap ) );
+    }
+    else
+    {
+        USHORT nItems = GetItemCount();
+        for( USHORT i = 0; i < nItems; i++ )
+        {
+            USHORT nId = GetItemId( i );
+            aTbx.InsertItem( nId, GetItemImage( nId ) );
+        }
+    }
     aTbx.SetOutStyle( TOOLBOX_STYLE_FLAT );
-    aTbx.InsertItem( IID_DOCUMENTCLOSE, Image( aBitmap ) );
     maMinSize = aTbx.CalcWindowSizePixel();
 }
 
@@ -701,6 +713,15 @@ class MenuBarWindow : public Window
     friend class MenuBar;
 
 private:
+    struct AddButtonEntry
+    {
+        USHORT      m_nId;
+        Link        m_aSelectLink;
+        Link        m_aHighlightLink;
+
+        AddButtonEntry() : m_nId( 0 ) {}
+    };
+
     Menu*           pMenu;
     PopupMenu*      pActivePopup;
     USHORT          nHighlightedItem;
@@ -712,6 +733,8 @@ private:
     DecoToolBox     aCloser;
     PushButton      aFloatBtn;
     PushButton      aHideBtn;
+
+    std::map< USHORT, AddButtonEntry > m_aAddButtons;
 
     void            HighlightItem( USHORT nPos, BOOL bHighlight );
     void            ChangeHighlightItem( USHORT n, BOOL bSelectPopupEntry, BOOL bAllowRestoreFocus = TRUE, BOOL bDefaultToDocument = TRUE );
@@ -726,6 +749,7 @@ private:
                     DECL_LINK( CloserHdl, PushButton* );
                     DECL_LINK( FloatHdl, PushButton* );
                     DECL_LINK( HideHdl, PushButton* );
+                    DECL_LINK( ToolboxEventHdl, VclWindowEvent* );
 
     void            StateChanged( StateChangedType nType );
     void            DataChanged( const DataChangedEvent& rDCEvt );
@@ -759,6 +783,12 @@ public:
     void SetAutoPopup( BOOL bAuto ) { mbAutoPopup = bAuto; }
     void            ImplLayoutChanged();
     Size            MinCloseButtonSize();
+
+    // add an arbitrary button to the menubar (will appear next to closer)
+    USHORT              AddMenuBarButton( const Image&, const Link&, USHORT nPos );
+    void                SetMenuBarButtonHighlightHdl( USHORT nId, const Link& );
+    Rectangle           GetMenuBarButtonRectPixel( USHORT nId );
+    void                RemoveMenuBarButton( USHORT nId );
 };
 
 static void ImplAddNWFSeparator( Window *pThis, const MenubarValue& rMenubarValue )
@@ -3234,6 +3264,28 @@ BOOL MenuBar::HandleMenuCommandEvent( Menu *pMenu, USHORT nCommandEventId ) cons
         return FALSE;
 }
 
+USHORT MenuBar::AddMenuBarButton( const Image& rImage, const Link& rLink, USHORT nPos )
+{
+    return pWindow ? static_cast<MenuBarWindow*>(pWindow)->AddMenuBarButton( rImage, rLink, nPos ) : 0;
+}
+
+void MenuBar::SetMenuBarButtonHighlightHdl( USHORT nId, const Link& rLink )
+{
+    if( pWindow )
+        static_cast<MenuBarWindow*>(pWindow)->SetMenuBarButtonHighlightHdl( nId, rLink );
+}
+
+Rectangle MenuBar::GetMenuBarButtonRectPixel( USHORT nId )
+{
+    return pWindow ? static_cast<MenuBarWindow*>(pWindow)->GetMenuBarButtonRectPixel( nId ) : Rectangle();
+}
+
+void MenuBar::RemoveMenuBarButton( USHORT nId )
+{
+    if( pWindow )
+        static_cast<MenuBarWindow*>(pWindow)->RemoveMenuBarButton( nId );
+}
+
 // -----------------------------------------------------------------------
 
 // BOOL PopupMenu::bAnyPopupInExecute = FALSE;
@@ -4806,6 +4858,7 @@ MenuBarWindow::MenuBarWindow( Window* pParent ) :
         aCloser.InsertItem( IID_DOCUMENTCLOSE,
         GetSettings().GetStyleSettings().GetMenuBarColor().IsDark() ? aCloser.maImageHC : aCloser.maImage, 0 );
         aCloser.SetSelectHdl( LINK( this, MenuBarWindow, CloserHdl ) );
+        aCloser.AddEventListener( LINK( this, MenuBarWindow, ToolboxEventHdl ) );
         aCloser.SetQuickHelpText( IID_DOCUMENTCLOSE, XubString( ResId( SV_HELPTEXT_CLOSEDOCUMENT, pResMgr ) ) );
 
         aFloatBtn.SetClickHdl( LINK( this, MenuBarWindow, FloatHdl ) );
@@ -4832,7 +4885,8 @@ void MenuBarWindow::SetMenu( MenuBar* pMen )
     ImplInitMenuWindow( this, TRUE, TRUE );
     if ( pMen )
     {
-        aCloser.Show( pMen->HasCloser() );
+        aCloser.ShowItem( IID_DOCUMENTCLOSE, pMen->HasCloser() );
+        aCloser.Show( pMen->HasCloser() || !m_aAddButtons.empty() );
         aFloatBtn.Show( pMen->HasFloatButton() );
         aHideBtn.Show( pMen->HasHideButton() );
     }
@@ -4850,7 +4904,8 @@ void MenuBarWindow::SetMenu( MenuBar* pMen )
 
 void MenuBarWindow::ShowButtons( BOOL bClose, BOOL bFloat, BOOL bHide )
 {
-    aCloser.Show( bClose );
+    aCloser.ShowItem( IID_DOCUMENTCLOSE, bClose );
+    aCloser.Show( bClose || ! m_aAddButtons.empty() );
     aFloatBtn.Show( bFloat );
     aHideBtn.Show( bHide );
     Resize();
@@ -4863,7 +4918,39 @@ Size MenuBarWindow::MinCloseButtonSize()
 
 IMPL_LINK( MenuBarWindow, CloserHdl, PushButton*, EMPTYARG )
 {
-    return ((MenuBar*)pMenu)->GetCloserHdl().Call( pMenu );
+    if( aCloser.GetCurItemId() == IID_DOCUMENTCLOSE )
+        return ((MenuBar*)pMenu)->GetCloserHdl().Call( pMenu );
+    std::map<USHORT,AddButtonEntry>::iterator it = m_aAddButtons.find( aCloser.GetCurItemId() );
+    if( it != m_aAddButtons.end() )
+    {
+        MenuBar::MenuBarButtonCallbackArg aArg;
+        aArg.nId = it->first;
+        aArg.bHighlight = (aCloser.GetHighlightItemId() == it->first);
+        aArg.pMenuBar = dynamic_cast<MenuBar*>(pMenu);
+        return it->second.m_aSelectLink.Call( &aArg );
+    }
+    return 0;
+}
+
+IMPL_LINK( MenuBarWindow, ToolboxEventHdl, VclWindowEvent*, pEvent )
+{
+    MenuBar::MenuBarButtonCallbackArg aArg;
+    aArg.nId = 0xffff;
+    aArg.bHighlight = (pEvent->GetId() == VCLEVENT_TOOLBOX_HIGHLIGHT);
+    aArg.pMenuBar = dynamic_cast<MenuBar*>(pMenu);
+    if( pEvent->GetId() == VCLEVENT_TOOLBOX_HIGHLIGHT )
+        aArg.nId = aCloser.GetHighlightItemId();
+    else if( pEvent->GetId() == VCLEVENT_TOOLBOX_HIGHLIGHTOFF )
+    {
+        USHORT nPos = static_cast< USHORT >(reinterpret_cast<sal_IntPtr>(pEvent->GetData()));
+        aArg.nId = aCloser.GetItemId( nPos );
+    }
+    std::map< USHORT, AddButtonEntry >::iterator it = m_aAddButtons.find( aArg.nId );
+    if( it != m_aAddButtons.end() )
+    {
+        it->second.m_aHighlightLink.Call( &aArg );
+    }
+    return 0;
 }
 
 IMPL_LINK( MenuBarWindow, FloatHdl, PushButton*, EMPTYARG )
@@ -5376,9 +5463,9 @@ void MenuBarWindow::Resize()
     if ( aCloser.IsVisible() )
     {
         aCloser.Hide();
-        nX -= n;
         aCloser.SetImages( n );
         Size aTbxSize( aCloser.CalcWindowSizePixel() );
+        nX -= aTbxSize.Width();
         long nTbxY = (aOutSz.Height() - aTbxSize.Height())/2;
         aCloser.SetPosSizePixel( nX, nTbxY, aTbxSize.Width(), aTbxSize.Height() );
         nX -= 3;
@@ -5523,3 +5610,56 @@ void MenuBarWindow::GetFocus()
 
     return xAcc;
 }
+
+USHORT MenuBarWindow::AddMenuBarButton( const Image& rImage, const Link& rLink, USHORT nPos )
+{
+    // find first free button id
+    USHORT nId = IID_DOCUMENTCLOSE;
+    std::map< USHORT, AddButtonEntry >::const_iterator it;
+    if( nPos > m_aAddButtons.size() )
+        nPos = static_cast<USHORT>(m_aAddButtons.size());
+    do
+    {
+        nId++;
+        it = m_aAddButtons.find( nId );
+    } while( it != m_aAddButtons.end() && nId < 128 );
+    DBG_ASSERT( nId < 128, "too many addbuttons in menubar" );
+    AddButtonEntry& rNewEntry = m_aAddButtons[nId];
+    rNewEntry.m_nId = nId;
+    rNewEntry.m_aSelectLink = rLink;
+    aCloser.InsertItem( nId, rImage, 0, 0 );
+    aCloser.calcMinSize();
+    ShowButtons( aCloser.IsItemVisible( IID_DOCUMENTCLOSE ),
+                 aFloatBtn.IsVisible(),
+                 aHideBtn.IsVisible() );
+    ImplLayoutChanged();
+    return nId;
+}
+
+void MenuBarWindow::SetMenuBarButtonHighlightHdl( USHORT nId, const Link& rLink )
+{
+    std::map< USHORT, AddButtonEntry >::iterator it = m_aAddButtons.find( nId );
+    if( it != m_aAddButtons.end() )
+        it->second.m_aHighlightLink = rLink;
+}
+
+Rectangle MenuBarWindow::GetMenuBarButtonRectPixel( USHORT nId )
+{
+    Rectangle aRect;
+    if( m_aAddButtons.find( nId ) != m_aAddButtons.end() )
+    {
+        aRect = aCloser.GetItemRect( nId );
+        Point aOffset = aCloser.OutputToScreenPixel( Point() );
+        aRect.Move( aOffset.X(), aOffset.Y() );
+    }
+    return aRect;
+}
+
+void MenuBarWindow::RemoveMenuBarButton( USHORT nId )
+{
+    aCloser.RemoveItem( nId );
+    m_aAddButtons.erase( nId );
+    aCloser.calcMinSize();
+    ImplLayoutChanged();
+}
+
