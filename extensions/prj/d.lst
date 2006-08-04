@@ -19,3 +19,14 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\sbibliography\menubar
 ..\source\bibliography\uiconfig\sbibliography\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\sbibliography\menubar\*.xml
 
 ..\source\propctrlr\pcr.xml %_DEST%\xml%_EXT%\pcr.xml
+
+mkdir: %_DEST%\xml%_EXT%\registry\spool
+mkdir: %_DEST%\xml%_EXT%\registry\spool\org
+mkdir: %_DEST%\xml%_EXT%\registry\spool\org\openoffice
+mkdir: %_DEST%\xml%_EXT%\registry\spool\org\openoffice\Office
+mkdir: %_DEST%\xml%_EXT%\registry\spool\org\openoffice\Office\Addons
+mkdir: %_DEST%\xml%_EXT%\registry\spool\org\openoffice\Office\Jobs
+
+..\%__SRC%\misc\registry\spool\org\openoffice\Office\Addons\*.xcu %_DEST%\xml%_EXT%\registry\spool\org\openoffice\Office\Addons
+..\%__SRC%\misc\registry\spool\org\openoffice\Office\Jobs\*.xcu %_DEST%\xml%_EXT%\registry\spool\org\openoffice\Office\Jobs
+
