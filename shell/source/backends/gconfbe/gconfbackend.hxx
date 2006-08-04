@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gconfbackend.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 09:34:06 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 12:29:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,13 +173,6 @@ class GconfBackend : public BackendBase {
           @return   service names
           */
         static uno::Sequence<rtl::OUString> SAL_CALL getBackendServiceNames(void) ;
-
-        /**
-          Provides the supported component nodes
-
-          @return supported component nodes
-        */
-        static uno::Sequence<rtl::OUString> SAL_CALL getSupportedComponents(void) ;
 
         /* returns a GconfClient */
         static GConfClient* getGconfClient();
