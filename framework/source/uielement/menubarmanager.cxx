@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menubarmanager.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 09:59:37 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 11:08:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -311,7 +311,7 @@ MenuBarManager::MenuBarManager(
     , OWeakObject()
     , m_bDisposed( sal_False )
     , m_bModuleIdentified( sal_False )
-    , m_bRetrieveImages( sal_False )
+    , m_bRetrieveImages( sal_True )
     , m_bAcceleratorCfg( sal_False )
     , m_aListenerContainer( m_aLock.getShareableOslMutex() )
     , mxServiceFactory(xServiceFactory)
@@ -398,7 +398,7 @@ MenuBarManager::MenuBarManager(
     , OWeakObject()
     , m_bDisposed( sal_False )
     , m_bModuleIdentified( sal_False )
-    , m_bRetrieveImages( sal_False )
+    , m_bRetrieveImages( sal_True )
     , m_bAcceleratorCfg( sal_False )
     , m_aListenerContainer( m_aLock.getShareableOslMutex() )
     , mxServiceFactory(xServiceFactory)
@@ -1779,8 +1779,8 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, Reference< XFrame >& rFrame, 
                             aImage = AddonsOptions().GetImageFromURL( aItemCommand, FALSE, m_bWasHiContrast );
                     }
 
-                        if ( !!aImage )
-                            pMenu->SetItemImage( nItemId, aImage );
+                    if ( !!aImage )
+                        pMenu->SetItemImage( nItemId, aImage );
                     else
                         m_bRetrieveImages = sal_True;
                 }
