@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gconfbackend.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 12:30:25 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 12:28:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -947,46 +947,11 @@ rtl::OUString SAL_CALL GconfBackend::getImplementationName(void)
 
 uno::Sequence<rtl::OUString> SAL_CALL GconfBackend::getBackendServiceNames(void)
 {
-    uno::Sequence<rtl::OUString> aServices(2) ;
+    uno::Sequence<rtl::OUString> aServices(1) ;
     aServices[0] = rtl::OUString(
         RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.backend.GconfBackend")) ;
-    aServices[1] = rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.backend.PlatformBackend")) ;
 
     return aServices ;
-}
-
-//------------------------------------------------------------------------------
-
-uno::Sequence<rtl::OUString> SAL_CALL GconfBackend::getSupportedComponents(void)
-{
-#ifdef ENABLE_LOCKDOWN
-    const sal_Int32 nComponents = 7;
-#else
-    const sal_Int32 nComponents = 4;
-#endif // ENABLE_LOCKDOWN
-
-    uno::Sequence<rtl::OUString> aSupportedComponentsList(nComponents) ;
-
-    aSupportedComponentsList[0] = rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("org.openoffice.VCL")) ;
-    aSupportedComponentsList[1] = rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Inet")) ;
-    aSupportedComponentsList[2] = rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common")) ;
-    aSupportedComponentsList[3] = rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Paths")) ;
-
-#ifdef ENABLE_LOCKDOWN
-    aSupportedComponentsList[4] = rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("org.openoffice.UserProfile")) ;
-    aSupportedComponentsList[5] = rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Recovery")) ;
-    aSupportedComponentsList[6] = rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup")) ;
-#endif // ENABLE_LOCKDOWN
-
-    return aSupportedComponentsList ;
 }
 
 //------------------------------------------------------------------------------
