@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gsicheck.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 16:21:14 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 10:24:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,6 +122,12 @@ GSILine::GSILine( const ByteString &rLine, ULONG nLine )
             PrintError( "The Language is invalid!", "Line format", aLangId, TRUE, GetLineNumber(), GetUniqId() );
             NotOK();
         }
+        // limit GID and LID to 125 chars each for database conformity, see #137575#
+        if ( rLine.GetToken( 4, '\t' ).Len() > 125 || rLine.GetToken( 5, '\t' ).Len() > 125 )
+        {
+            PrintError( "GID and LID may only be 125 chars long each!", "Line format", aLangId, TRUE, GetLineNumber(), GetUniqId() );
+            NotOK();
+        }
     }
     else    // allow tabs in gsi files
     {
@@ -185,7 +191,13 @@ void GSILine::ReassembleLine()
             aReassemble.Append( "\t" );
         }
         aReassemble.Append( aText );
-        for ( i = 11 ; i < 15 ; i++ )
+        aReassemble.Append( "\t" );
+        aReassemble.Append( GetToken( 11, '\t' ) ); // should be empty but there are some places in sc. Not reflected to sources!!
+        aReassemble.Append( "\t" );
+        aReassemble.Append( aQuickHelpText );
+        aReassemble.Append( "\t" );
+        aReassemble.Append( aTitle );
+        for ( i = 14 ; i < 15 ; i++ )
         {
             aReassemble.Append( "\t" );
             aReassemble.Append( GetToken( i, '\t' ) );
@@ -222,17 +234,17 @@ void GSILine::ReassembleLine()
             *(ByteString*)this = aReassemble;
         }
         else
-            PrintError( "Cannot reassemble GSI line (internal Error).", "File format", "", FALSE, GetLineNumber(), GetUniqId() );
+            PrintError( "Cannot reassemble GSI line (internal Error).", "Line format", "", FALSE, GetLineNumber(), GetUniqId() );
     }
     else
-        PrintError( "Cannot reassemble line of unknown type (internal Error).", "File format", "", FALSE, GetLineNumber(), GetUniqId() );
+        PrintError( "Cannot reassemble line of unknown type (internal Error).", "Line format", "", FALSE, GetLineNumber(), GetUniqId() );
 }
 
 //
 // class GSIBlock
 //
 /*****************************************************************************/
-GSIBlock::GSIBlock( BOOL PbPrintContext, BOOL bSource, BOOL bTrans, BOOL bRef )
+GSIBlock::GSIBlock( BOOL PbPrintContext, BOOL bSource, BOOL bTrans, BOOL bRef, BOOL bAllowKID )
 /*****************************************************************************/
             : pSourceLine( NULL )
             , pReferenceLine( NULL )
@@ -240,6 +252,7 @@ GSIBlock::GSIBlock( BOOL PbPrintContext, BOOL bSource, BOOL bTrans, BOOL bRef )
             , bCheckSourceLang( bSource )
             , bCheckTranslationLang( bTrans )
             , bReference( bRef )
+            , bAllowKeyIDs( bAllowKID )
             , bHasBlockError( FALSE )
 {
 }
@@ -341,7 +354,7 @@ void GSIBlock::PrintList( ParserMessageList *pList, ByteString aPrefix,
 }
 
 /*****************************************************************************/
-BOOL GSIBlock::IsUTF8( const ByteString &aTestee, USHORT &nErrorPos, ByteString &aErrorMsg ) const
+BOOL GSIBlock::IsUTF8( const ByteString &aTestee, BOOL bFixTags, USHORT &nErrorPos, ByteString &aErrorMsg, BOOL &bHasBeenFixed, ByteString &aFixed ) const
 /*****************************************************************************/
 {
     String aUTF8Tester( aTestee, RTL_TEXTENCODING_UTF8 );
@@ -361,33 +374,90 @@ BOOL GSIBlock::IsUTF8( const ByteString &aTestee, USHORT &nErrorPos, ByteString 
         return FALSE;
     }
 
+    if ( bFixTags )
+    {
+        bHasBeenFixed = FALSE;
+        aFixed.Erase();
+    }
+
+    if ( !bAllowKeyIDs && aTestee.GetTokenCount( '.' ) > 1 )
+    {
+        nErrorPos = 1;
+        ByteString aPrefix( aTestee.GetToken( 0, '.' ) );
+        if ( aPrefix.Equals( "{&", 0, 2 ) )
+        {   // check for strings from instset_native like "{&Tahoma8}335795.Installation Wiza ..."
+            USHORT nTagEnd = aPrefix.Search( '}' );
+            if ( nTagEnd != STRING_NOTFOUND )
+            {
+                if ( bFixTags )
+                    aFixed = aPrefix.Copy( 0, nTagEnd+1 );
+                nErrorPos = nTagEnd+1;
+                aPrefix = aPrefix.Copy( nTagEnd+1 );
+            }
+        }
+
+        if ( aPrefix.GetChar(aPrefix.Len()-1) == '*' )
+            aPrefix.Erase( aPrefix.Len()-1 );
+
+        if ( aPrefix.IsNumericAscii() && aPrefix.Len() >= 5 )
+        {
+            aErrorMsg = ByteString( "String contains KeyID" );
+            if ( bFixTags )
+            {
+                aFixed += aTestee.Copy( aTestee.Search( '.' )+1 );
+                bHasBeenFixed = TRUE;
+                aErrorMsg = ByteString( "FIXED String containing KeyID" );
+            }
+            else
+                aErrorMsg = ByteString( "String contains KeyID" );
+            return FALSE;
+        }
+    }
+
     return TRUE;
 }
 
 /*****************************************************************************/
-BOOL GSIBlock::TestUTF8( GSILine* pTestee )
+BOOL GSIBlock::TestUTF8( GSILine* pTestee, BOOL bFixTags )
 /*****************************************************************************/
 {
     USHORT nErrorPos = 0;
     ByteString aErrorMsg;
     BOOL bError = FALSE;
-    if ( !IsUTF8( pTestee->GetText(), nErrorPos, aErrorMsg ) )
+    ByteString aFixed;
+    BOOL bHasBeenFixed = FALSE;
+    if ( !IsUTF8( pTestee->GetText(), bFixTags, nErrorPos, aErrorMsg, bHasBeenFixed, aFixed ) )
     {
         ByteString aContext( pTestee->GetText().Copy( nErrorPos, 20 ) );
-        PrintError( aErrorMsg.Append(" in Text at Position " ).Append( ByteString::CreateFromInt32( nErrorPos ) ), "File format", aContext, pTestee->GetLineNumber(), pTestee->GetUniqId() );
+        PrintError( aErrorMsg.Append(" in Text at Position " ).Append( ByteString::CreateFromInt32( nErrorPos ) ), "Text format", aContext, pTestee->GetLineNumber(), pTestee->GetUniqId() );
         bError = TRUE;
+        if ( bHasBeenFixed )
+        {
+            pTestee->SetText( aFixed );
+            pTestee->SetFixed();
+        }
     }
-    if ( !IsUTF8( pTestee->GetQuickHelpText(), nErrorPos, aErrorMsg ) )
+    if ( !IsUTF8( pTestee->GetQuickHelpText(), bFixTags, nErrorPos, aErrorMsg, bHasBeenFixed, aFixed ) )
     {
         ByteString aContext( pTestee->GetQuickHelpText().Copy( nErrorPos, 20 ) );
-        PrintError( aErrorMsg.Append(" in QuickHelpText at Position " ).Append( ByteString::CreateFromInt32( nErrorPos ) ), "File format", aContext, pTestee->GetLineNumber(), pTestee->GetUniqId() );
+        PrintError( aErrorMsg.Append(" in QuickHelpText at Position " ).Append( ByteString::CreateFromInt32( nErrorPos ) ), "Text format", aContext, pTestee->GetLineNumber(), pTestee->GetUniqId() );
         bError = TRUE;
+        if ( bHasBeenFixed )
+        {
+            pTestee->SetQuickHelpText( aFixed );
+            pTestee->SetFixed();
+        }
     }
-    if ( !IsUTF8( pTestee->GetTitle(), nErrorPos, aErrorMsg ) )
+    if ( !IsUTF8( pTestee->GetTitle(), bFixTags, nErrorPos, aErrorMsg, bHasBeenFixed, aFixed ) )
     {
         ByteString aContext( pTestee->GetTitle().Copy( nErrorPos, 20 ) );
-        PrintError( aErrorMsg.Append(" in Title at Position " ).Append( ByteString::CreateFromInt32( nErrorPos ) ), "File format", aContext, pTestee->GetLineNumber(), pTestee->GetUniqId() );
+        PrintError( aErrorMsg.Append(" in Title at Position " ).Append( ByteString::CreateFromInt32( nErrorPos ) ), "Text format", aContext, pTestee->GetLineNumber(), pTestee->GetUniqId() );
         bError = TRUE;
+        if ( bHasBeenFixed )
+        {
+            pTestee->SetTitle( aFixed );
+            pTestee->SetFixed();
+        }
     }
     if ( bError )
         pTestee->NotOK();
@@ -449,12 +519,12 @@ BOOL GSIBlock::CheckSyntax( ULONG nLine, BOOL bRequireSourceLine, BOOL bFixTags 
     }
 
     if ( pSourceLine )
-        bHasError |= !TestUTF8( pSourceLine );
+        bHasError |= !TestUTF8( pSourceLine, bFixTags );
 
     ULONG i;
     for ( i = 0; i < Count(); i++ )
     {
-        aTester.CheckTestee( GetObject( i ), pSourceLine != NULL , bFixTags );
+        aTester.CheckTestee( GetObject( i ), pSourceLine != NULL, bFixTags );
         if ( GetObject( i )->HasMessages() || aTester.HasCompareWarnings() )
         {
             if ( GetObject( i )->HasMessages() || aTester.GetCompareWarnings().HasErrors() )
@@ -463,7 +533,7 @@ BOOL GSIBlock::CheckSyntax( ULONG nLine, BOOL bRequireSourceLine, BOOL bFixTags 
             PrintList( GetObject( i )->GetMessageList(), "Translation", GetObject( i ) );
             PrintList( &(aTester.GetCompareWarnings()), "Translation Tag Missmatch", GetObject( i ) );
         }
-        bHasError |= !TestUTF8( GetObject( i ) );
+        bHasError |= !TestUTF8( GetObject( i ), bFixTags );
     }
 
     return bHasError || bHasBlockError;
@@ -543,7 +613,7 @@ void Help()
 /*****************************************************************************/
 {
     fprintf( stdout, "\n" );
-    fprintf( stdout, "gsicheck Version 1.8.2 (c)1999 - 2005 by SUN Microsystems\n" );
+    fprintf( stdout, "gsicheck Version 1.8.3 (c)1999 - 2005 by SUN Microsystems\n" );
     fprintf( stdout, "=========================================================\n" );
     fprintf( stdout, "\n" );
     fprintf( stdout, "gsicheck checks the syntax of tags in GSI-Files and SDF-Files\n" );
@@ -564,6 +634,7 @@ void Help()
     fprintf( stdout, "-wcf  Same as above but give own filename\n" );
     fprintf( stdout, "-s    Check only source language. Should be used before handing out to vendor.\n" );
     fprintf( stdout, "-t    Check only Translation language(s). Should be used before merging.\n" );
+    fprintf( stdout, "-k    Allow KeyIDs to be present in strings\n" );
     fprintf( stdout, "-l    ISO Languagecode or numerical 2 digits Identifier of the source language.\n" );
     fprintf( stdout, "      Default is en-US. Use \"\" (empty string) or 'none'\n" );
     fprintf( stdout, "      to disable source language dependent checks\n" );
@@ -589,6 +660,7 @@ int _cdecl main( int argc, char *argv[] )
     BOOL bWriteCorrect = FALSE;
     BOOL bWriteFixed = FALSE;
     BOOL bFixTags = FALSE;
+    BOOL bAllowKID = FALSE;
     String aErrorFilename;
     String aCorrectFilename;
     String aFixedFilename;
@@ -703,6 +775,11 @@ int _cdecl main( int argc, char *argv[] )
                 case 'f':
                     {
                         bFixTags = TRUE;
+                    }
+                    break;
+                case 'k':
+                    {
+                        bAllowKID = TRUE;
                     }
                     break;
                 default:
@@ -883,7 +960,7 @@ int _cdecl main( int argc, char *argv[] )
 
                         delete pBlock;
                     }
-                    pBlock = new GSIBlock( bPrintContext, bCheckSourceLang, bCheckTranslationLang, bReferenceFile );
+                    pBlock = new GSIBlock( bPrintContext, bCheckSourceLang, bCheckTranslationLang, bReferenceFile, bAllowKID );
 
                     aOldId = aId;
 
