@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 17:32:53 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 10:24:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -391,7 +391,18 @@ void BasicApp::Main( )
         {   // look for it besides the executable
             DirEntry aAppFileName( GetAppFileName() );
             String aAppDir ( aAppFileName.GetPath().GetFull() );
-            DirEntry aDefIniPath( Config::GetConfigName( aAppDir, CUniString("testtool") ) );
+
+//            DirEntry aDefIniPath( Config::GetConfigName( aAppDir, CUniString("testtool") ) );
+//            Do not use Config::GetConfigName here because is uses a hidden file for UNIX
+
+            DirEntry aDefIniPath( aAppDir );
+            ByteString aFileName;
+#ifdef UNX
+            aFileName = "testtoolrc";
+#else
+            aFileName = "testtool.ini";
+#endif
+            aDefIniPath += DirEntry( aFileName );
 
             if ( aDefIniPath.Exists() )
             {
