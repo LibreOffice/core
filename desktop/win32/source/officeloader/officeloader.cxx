@@ -4,9 +4,9 @@
  *
  *  $RCSfile: officeloader.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-28 12:53:43 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 11:13:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -306,8 +306,30 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
         }
 
         TCHAR   szParentProcessId[64]; // This is more than large enough for a 128 bit decimal value
+        BOOL    bHeadlessMode( FALSE );
 
-        if ( _ltot( (long)GetCurrentProcessId(),szParentProcessId, 10 ) )
+        {
+            // Check command line arguments for "-headless" parameter. We only
+            // set the environment variable "ATTACHED_PARENT_PROCESSID" for the headless
+            // mode as self-destruction of the soffice.bin process can lead to
+            // certain side-effects (log-off can result in data-loss, ".lock" is not deleted.
+            // See 138244 for more information.
+            int     argc;
+            LPTSTR  *argv = GetCommandArgs( &argc );
+
+            if ( argc > 1 )
+            {
+                int n;
+
+                for ( n = 1; n < argc; n++ )
+                {
+                    if ( 0 == _tcsnicmp( argv[n], _T("-headless"), 9 ) )
+                        bHeadlessMode = TRUE;
+                }
+            }
+        }
+
+        if ( _ltot( (long)GetCurrentProcessId(),szParentProcessId, 10 ) && bHeadlessMode )
             SetEnvironmentVariable( TEXT("ATTACHED_PARENT_PROCESSID"), szParentProcessId );
 
         PROCESS_INFORMATION aProcessInfo;
