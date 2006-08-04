@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 14:21:10 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 13:05:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -190,7 +190,11 @@
 #endif
 // <--
 #include <comphelper/accessibletexthelper.hxx>
-
+// --> OD 2006-07-12 #i63870#
+#ifndef _UNOMAP_HXX
+#include <unomap.hxx>
+#endif
+// <--
 #include <algorithm>
 
 using namespace ::com::sun::star::i18n;
@@ -1067,47 +1071,49 @@ Sequence< OUString > SAL_CALL SwAccessibleParagraph::getSupportedServiceNames()
     return aRet;
 }
 
-Sequence<OUString> getAttributeNames()
-{
-    static Sequence<OUString>* pNames = NULL;
+// --> OD 2006-07-20 #i63870# - no longer needed.
+//Sequence<OUString> getAttributeNames()
+//{
+//    static Sequence<OUString>* pNames = NULL;
 
-    if( pNames == NULL )
-    {
-        Sequence<OUString>* pSeq = new Sequence<OUString>( 15 );
-        OUString* pStrings = pSeq->getArray();
+//    if( pNames == NULL )
+//    {
+//        Sequence<OUString>* pSeq = new Sequence<OUString>( 15 );
+//        OUString* pStrings = pSeq->getArray();
 
-        // sorted list of strings
-        sal_Int32 i = 0;
+//        // sorted list of strings
+//        sal_Int32 i = 0;
 
-#define CHAR_BACK_COLOR_POS 0
+//#define CHAR_BACK_COLOR_POS 0
 
-#define STR(x) pStrings[i++] = OUString(RTL_CONSTASCII_USTRINGPARAM(x))
-        STR("CharBackColor");
-        STR("CharColor");
-        STR("CharEscapement");
-        STR("CharHeight");
-        STR("CharPosture");
-        STR("CharStrikeout");
-        STR("CharUnderline");
-        STR("CharWeight");
-        STR("ParaAdjust");
-        STR("ParaBottomMargin");
-        STR("ParaFirstLineIndent");
-        STR("ParaLeftMargin");
-        STR("ParaLineSpacing");
-        STR("ParaRightMargin");
-        STR("ParaTabStops");
-#undef STR
+//#define STR(x) pStrings[i++] = OUString(RTL_CONSTASCII_USTRINGPARAM(x))
+//        STR("CharBackColor");
+//        STR("CharColor");
+//        STR("CharEscapement");
+//        STR("CharHeight");
+//        STR("CharPosture");
+//        STR("CharStrikeout");
+//        STR("CharUnderline");
+//        STR("CharWeight");
+//        STR("ParaAdjust");
+//        STR("ParaBottomMargin");
+//        STR("ParaFirstLineIndent");
+//        STR("ParaLeftMargin");
+//        STR("ParaLineSpacing");
+//        STR("ParaRightMargin");
+//        STR("ParaTabStops");
+//#undef STR
 
-        DBG_ASSERT( i == pSeq->getLength(), "Please adjust length" );
-        if( i != pSeq->getLength() )
-            pSeq->realloc( i );
+//        DBG_ASSERT( i == pSeq->getLength(), "Please adjust length" );
+//        if( i != pSeq->getLength() )
+//            pSeq->realloc( i );
 
-        pNames = pSeq;
-    }
+//        pNames = pSeq;
+//    }
 
-    return *pNames;
-}
+//    return *pNames;
+//}
+// <--
 
 //
 //=====  XInterface  =======================================================
@@ -1137,6 +1143,14 @@ Any SwAccessibleParagraph::queryInterface( const Type& rType )
         Reference<XAccessibleHypertext> aAccHyp = this;
         aRet <<= aAccHyp;
     }
+    // --> OD 2006-07-13 #i63870#
+    // add interface com::sun:star:accessibility::XAccessibleTextAttributes
+    else if ( rType == ::getCppuType((Reference<XAccessibleTextAttributes> *)0) )
+    {
+        Reference<XAccessibleTextAttributes> aAccTextAttr = this;
+        aRet <<= aAccTextAttr;
+    }
+    // <--
     else
     {
         aRet = SwAccessibleContext::queryInterface(rType);
@@ -1151,12 +1165,16 @@ Sequence< Type > SAL_CALL SwAccessibleParagraph::getTypes() throw(RuntimeExcepti
     Sequence< Type > aTypes( SwAccessibleContext::getTypes() );
 
     sal_Int32 nIndex = aTypes.getLength();
-    aTypes.realloc( nIndex + 3 );
+    // --> OD 2006-07-13 #i63870#
+    // add type com::sun::star::accessibility::XAccessibleTextAttributes
+    aTypes.realloc( nIndex + 4 );
 
     Type* pTypes = aTypes.getArray();
     pTypes[nIndex++] = ::getCppuType( static_cast< Reference< XAccessibleEditableText > * >( 0 ) );
+    pTypes[nIndex++] = ::getCppuType( static_cast< Reference< XAccessibleTextAttributes > * >( 0 ) );
     pTypes[nIndex++] = ::getCppuType( static_cast< Reference< XAccessibleSelection > * >( 0 ) );
     pTypes[nIndex] = ::getCppuType( static_cast< Reference< XAccessibleHypertext > * >( 0 ) );
+    // <--
 
     return aTypes;
 }
@@ -1253,6 +1271,9 @@ sal_Unicode SwAccessibleParagraph::getCharacter( sal_Int32 nIndex )
         throw IndexOutOfBoundsException();
 }
 
+// --> OD 2006-07-20 #i63870#
+// re-implement method on behalf of methods <_getDefaultAttributesImpl(..)> and
+// <_getRunAttributesImpl(..)>
 Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
     sal_Int32 nIndex, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aRequestedAttributes )
     throw (IndexOutOfBoundsException, RuntimeException)
@@ -1266,39 +1287,279 @@ Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
     if( ! IsValidChar( nIndex, rText.getLength() ) )
         throw IndexOutOfBoundsException();
 
-    // create a (dummy) text portion for the sole purpose of calling
-    // getPropertyValues on it
-    Reference<XMultiPropertySet> xPortion = CreateUnoPortion( nIndex, nIndex + 1 );
+    // retrieve default character attributes
+    tAccParaPropValMap aDefAttrSeq;
+    _getDefaultAttributesImpl( aRequestedAttributes, aDefAttrSeq, true );
 
-    // get values
-    Sequence<OUString> aNames = getAttributeNames();
-    sal_Int32 nLength = aNames.getLength();
-    Sequence<Any> aAnys( nLength );
-    aAnys = xPortion->getPropertyValues( aNames );
+    // retrieved run character attributes
+    tAccParaPropValMap aRunAttrSeq;
+    _getRunAttributesImpl( nIndex, aRequestedAttributes, aRunAttrSeq );
 
-    // copy names + anys into return sequence
-    Sequence<PropertyValue> aValues( aNames.getLength() );
-    const OUString* pNames = aNames.getConstArray();
-    const Any* pAnys = aAnys.getConstArray();
+    // merge default and run attributes
+    Sequence< PropertyValue > aValues( aDefAttrSeq.size() );
     PropertyValue* pValues = aValues.getArray();
-    for( sal_Int32 i = 0; i < nLength; i++ )
+    sal_Int32 i = 0;
+    for ( tAccParaPropValMap::const_iterator aDefIter  = aDefAttrSeq.begin();
+          aDefIter != aDefAttrSeq.end();
+          ++aDefIter )
     {
-        PropertyValue& rValue = pValues[i];
-        rValue.Name = pNames[i];
-        rValue.Value = pAnys[i];
-        rValue.Handle = -1;                         // handle not supported
-        rValue.State = PropertyState_DIRECT_VALUE;  // states not supported
+        tAccParaPropValMap::const_iterator aRunIter =
+                                        aRunAttrSeq.find( aDefIter->first );
+        if ( aRunIter != aRunAttrSeq.end() )
+        {
+            pValues[i] = aRunIter->second;
+        }
+        else
+        {
+            pValues[i] = aDefIter->second;
+        }
+        ++i;
     }
 
-    // adjust background color if we're in a gray portion
-    DBG_ASSERT( pValues[CHAR_BACK_COLOR_POS].Name.
-                equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("CharBackColor")),
-                "Please adjust CHAR_BACK_COLOR_POS constant." );
-    if( GetPortionData().IsInGrayPortion( nIndex ) )
-        pValues[CHAR_BACK_COLOR_POS].Value <<= SwViewOption::GetFieldShadingsColor().GetColor();
+//    // create a (dummy) text portion for the sole purpose of calling
+//    // getPropertyValues on it
+//    Reference<XMultiPropertySet> xPortion = CreateUnoPortion( nIndex, nIndex + 1 );
+
+//    // get values
+//    Sequence<OUString> aNames = getAttributeNames();
+//    sal_Int32 nLength = aNames.getLength();
+//    Sequence<Any> aAnys( nLength );
+//    aAnys = xPortion->getPropertyValues( aNames );
+
+//    // copy names + anys into return sequence
+//    Sequence<PropertyValue> aValues( aNames.getLength() );
+//    const OUString* pNames = aNames.getConstArray();
+//    const Any* pAnys = aAnys.getConstArray();
+//    PropertyValue* pValues = aValues.getArray();
+//    for( sal_Int32 i = 0; i < nLength; i++ )
+//    {
+//        PropertyValue& rValue = pValues[i];
+//        rValue.Name = pNames[i];
+//        rValue.Value = pAnys[i];
+//        rValue.Handle = -1;                         // handle not supported
+//        rValue.State = PropertyState_DIRECT_VALUE;  // states not supported
+//    }
+
+//    // adjust background color if we're in a gray portion
+//    DBG_ASSERT( pValues[CHAR_BACK_COLOR_POS].Name.
+//                equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("CharBackColor")),
+//                "Please adjust CHAR_BACK_COLOR_POS constant." );
+//    if( GetPortionData().IsInGrayPortion( nIndex ) )
+//        pValues[CHAR_BACK_COLOR_POS].Value <<= SwViewOption::GetFieldShadingsColor().GetColor();
 
     return aValues;
 }
+
+// --> OD 2006-07-11 #i63870#
+void SwAccessibleParagraph::_getDefaultAttributesImpl(
+        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aRequestedAttributes,
+        tAccParaPropValMap& rDefAttrSeq,
+        const bool bOnlyCharAttrs )
+{
+    // retrieve default attributes
+    const SwTxtNode* pTxtNode( GetTxtNode() );
+    SfxItemSet* pSet( 0L );
+    if ( !bOnlyCharAttrs )
+    {
+        pSet = new SfxItemSet( const_cast<SwTxtNode*>(pTxtNode)->GetDoc()->GetAttrPool(),
+                               RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
+                               RES_PARATR_BEGIN, RES_PARATR_END - 1,
+                               RES_FRMATR_BEGIN, RES_FRMATR_END - 1,
+                               0L );
+    }
+    else
+    {
+        pSet = new SfxItemSet( const_cast<SwTxtNode*>(pTxtNode)->GetDoc()->GetAttrPool(),
+                               RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
+                               0L );
+    }
+    pTxtNode->SwCntntNode::GetAttr( *pSet );
+
+    // build-up sequence containing the run attributes <rDefAttrSeq>
+    {
+        tAccParaPropValMap aDefAttrSeq;
+        {
+            const SfxItemPropertySet& rPropSet =
+                    aSwMapProvider.GetPropertyMap( PROPERTY_MAP_TEXT_CURSOR );
+            const SfxItemPropertyMap* pPropMap( rPropSet.getPropertyMap() );
+            while ( pPropMap->pName )
+            {
+                const SfxPoolItem* pItem = pSet->GetItem( pPropMap->nWID );
+                if ( pItem )
+                {
+                    Any aVal;
+                    pItem->QueryValue( aVal, pPropMap->nMemberId );
+
+                    PropertyValue rPropVal;
+                    rPropVal.Name = OUString::createFromAscii( pPropMap->pName );
+                    rPropVal.Value = aVal;
+                    rPropVal.Handle = -1;
+                    rPropVal.State = ::com::sun::star::beans::PropertyState_DEFAULT_VALUE;
+
+                    aDefAttrSeq[rPropVal.Name] = rPropVal;
+                }
+
+                ++pPropMap;
+            }
+        }
+
+        if ( aRequestedAttributes.getLength() == 0 )
+        {
+            rDefAttrSeq = aDefAttrSeq;
+        }
+        else
+        {
+            const OUString* pReqAttrs = aRequestedAttributes.getConstArray();
+            const sal_Int32 nLength = aRequestedAttributes.getLength();
+            for( sal_Int32 i = 0; i < nLength; ++i )
+            {
+                tAccParaPropValMap::iterator aIter = aDefAttrSeq.find( pReqAttrs[i] );
+                if ( aIter != aDefAttrSeq.end() )
+                {
+                    rDefAttrSeq[ (*aIter).first ] = (*aIter).second;
+                }
+            }
+        }
+    }
+
+    delete pSet;
+}
+
+Sequence< PropertyValue > SwAccessibleParagraph::getDefaultAttributes(
+        const Sequence< ::rtl::OUString >& aRequestedAttributes )
+        throw ( RuntimeException )
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
+
+    tAccParaPropValMap aDefAttrSeq;
+    _getDefaultAttributesImpl( aRequestedAttributes, aDefAttrSeq );
+
+    Sequence< PropertyValue > aValues( aDefAttrSeq.size() );
+    PropertyValue* pValues = aValues.getArray();
+    sal_Int32 i = 0;
+    for ( tAccParaPropValMap::const_iterator aIter  = aDefAttrSeq.begin();
+          aIter != aDefAttrSeq.end();
+          ++aIter )
+    {
+        pValues[i] = aIter->second;
+        ++i;
+    }
+
+    return aValues;
+}
+
+void SwAccessibleParagraph::_getRunAttributesImpl(
+        const sal_Int32 nIndex,
+        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aRequestedAttributes,
+        tAccParaPropValMap& rRunAttrSeq )
+{
+    // create PaM for character at position <nIndex>
+    SwPaM* pPaM( 0L );
+    {
+        const SwTxtNode* pTxtNode( GetTxtNode() );
+        SwPosition* pStartPos = new SwPosition( *pTxtNode );
+        pStartPos->nContent.Assign( const_cast<SwTxtNode*>(pTxtNode), nIndex );
+        SwPosition* pEndPos = new SwPosition( *pTxtNode );
+        pEndPos->nContent.Assign( const_cast<SwTxtNode*>(pTxtNode), nIndex+1 );
+
+        pPaM = new SwPaM( *pStartPos, *pEndPos );
+
+        delete pStartPos;
+        delete pEndPos;
+    }
+
+    // retrieve character attributes for the created PaM <pPaM>
+    SfxItemSet aSet( pPaM->GetDoc()->GetAttrPool(),
+                     RES_CHRATR_BEGIN, RES_CHRATR_END -1,
+                     0L );
+    SwXTextCursor::GetCrsrAttr( *pPaM, aSet, TRUE, TRUE );
+
+    // build-up sequence containing the run attributes <rRunAttrSeq>
+    {
+        tAccParaPropValMap aRunAttrSeq;
+        {
+            const SfxItemPropertySet& rPropSet =
+                    aSwMapProvider.GetPropertyMap( PROPERTY_MAP_TEXT_CURSOR );
+            const SfxItemPropertyMap* pPropMap( rPropSet.getPropertyMap() );
+            while ( pPropMap->pName )
+            {
+                const SfxPoolItem* pItem( 0L );
+                if ( aSet.GetItemState( pPropMap->nWID, TRUE, &pItem ) == SFX_ITEM_SET )
+                {
+                    Any aVal;
+                    pItem->QueryValue( aVal, pPropMap->nMemberId );
+
+                    PropertyValue rPropVal;
+                    rPropVal.Name = OUString::createFromAscii( pPropMap->pName );
+                    rPropVal.Value = aVal;
+                    rPropVal.Handle = -1;
+                    rPropVal.State = PropertyState_DIRECT_VALUE;
+
+                    aRunAttrSeq[rPropVal.Name] = rPropVal;
+                }
+
+                ++pPropMap;
+            }
+        }
+
+        if ( aRequestedAttributes.getLength() == 0 )
+        {
+            rRunAttrSeq = aRunAttrSeq;
+        }
+        else
+        {
+            const OUString* pReqAttrs = aRequestedAttributes.getConstArray();
+            const sal_Int32 nLength = aRequestedAttributes.getLength();
+            for( sal_Int32 i = 0; i < nLength; ++i )
+            {
+                tAccParaPropValMap::iterator aIter = aRunAttrSeq.find( pReqAttrs[i] );
+                if ( aIter != aRunAttrSeq.end() )
+                {
+                    rRunAttrSeq[ (*aIter).first ] = (*aIter).second;
+                }
+            }
+        }
+    }
+
+    delete pPaM;
+}
+
+Sequence< PropertyValue > SwAccessibleParagraph::getRunAttributes(
+        sal_Int32 nIndex,
+        const Sequence< ::rtl::OUString >& aRequestedAttributes )
+        throw ( IndexOutOfBoundsException,
+                RuntimeException )
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
+
+    {
+        const OUString& rText = GetString();
+        if ( !IsValidChar( nIndex, rText.getLength() ) )
+        {
+            throw IndexOutOfBoundsException();
+        }
+    }
+
+    tAccParaPropValMap aRunAttrSeq;
+    _getRunAttributesImpl( nIndex, aRequestedAttributes, aRunAttrSeq );
+
+    Sequence< PropertyValue > aValues( aRunAttrSeq.size() );
+    PropertyValue* pValues = aValues.getArray();
+    sal_Int32 i = 0;
+    for ( tAccParaPropValMap::const_iterator aIter  = aRunAttrSeq.begin();
+          aIter != aRunAttrSeq.end();
+          ++aIter )
+    {
+        pValues[i] = aIter->second;
+        ++i;
+    }
+
+    return aValues;
+}
+
+// <--
 
 com::sun::star::awt::Rectangle SwAccessibleParagraph::getCharacterBounds(
     sal_Int32 nIndex )
