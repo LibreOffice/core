@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 14:52:15 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 13:10:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,8 +48,8 @@
 #include <cppuhelper/weakref.hxx>
 #endif
 
-#ifndef _CPPUHELPER_COMPBASE6_HXX_
-#include <cppuhelper/compbase6.hxx>
+#ifndef _CPPUHELPER_COMPBASE7_HXX_
+#include <cppuhelper/compbase7.hxx>
 #endif
 
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
@@ -84,6 +84,10 @@
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLETEXTATTRIBUTES_HPP_
+#include <com/sun/star/accessibility/XAccessibleTextAttributes.hpp>
+#endif
+
 #ifndef COMPHELPER_ACCESSIBLE_TEXT_HELPER_HXX
 #include <comphelper/accessibletexthelper.hxx>
 #endif
@@ -106,11 +110,12 @@
 
 namespace accessibility
 {
-    typedef ::cppu::WeakComponentImplHelper6< ::com::sun::star::accessibility::XAccessible,
+    typedef ::cppu::WeakComponentImplHelper7< ::com::sun::star::accessibility::XAccessible,
                                      ::com::sun::star::accessibility::XAccessibleContext,
                                      ::com::sun::star::accessibility::XAccessibleComponent,
                                      ::com::sun::star::accessibility::XAccessibleEditableText,
                                      ::com::sun::star::accessibility::XAccessibleEventBroadcaster,
+                                     ::com::sun::star::accessibility::XAccessibleTextAttributes,
                                      ::com::sun::star::lang::XServiceInfo >  AccessibleTextParaInterfaceBase;
 
     /** This class implements the actual text paragraphs for the EditEngine/Outliner UAA
@@ -208,6 +213,10 @@ namespace accessibility
         virtual sal_Bool SAL_CALL replaceText( sal_Int32 nStartIndex, sal_Int32 nEndIndex, const ::rtl::OUString& sReplacement ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
         virtual sal_Bool SAL_CALL setAttributes( sal_Int32 nStartIndex, sal_Int32 nEndIndex, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aAttributeSet ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
         virtual sal_Bool SAL_CALL setText( const ::rtl::OUString& sText ) throw (::com::sun::star::uno::RuntimeException);
+
+        // XAccessibleTextAttributes
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getDefaultAttributes( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& RequestedAttributes ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getRunAttributes( ::sal_Int32 Index, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& RequestedAttributes ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
 
         // XServiceInfo
         virtual ::rtl::OUString SAL_CALL getImplementationName (void) throw (::com::sun::star::uno::RuntimeException);
