@@ -4,9 +4,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 09:54:29 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 11:11:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,6 +81,12 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGEREVENTBROADCASTER_HPP_
 #include <com/sun/star/frame/XLayoutManagerEventBroadcaster.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATOR_HPP_
+#include <com/sun/star/task/XStatusIndicator.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATORFACTORY_HPP_
+#include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_LAYOUTMANAGEREVENTS_HPP_
 #include <com/sun/star/frame/LayoutManagerEvents.hpp>
@@ -1420,28 +1426,11 @@ void SfxIPWorkWin_Impl::UpdateObjectBars_Impl()
 
 Reference< ::com::sun::star::task::XStatusIndicator > SfxWorkWindow::GetStatusIndicator()
 {
-    Reference< com::sun::star::beans::XPropertySet > xPropSet( GetFrameInterface(), UNO_QUERY );
-    Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
+    Reference< task::XStatusIndicatorFactory > xFactory( GetFrameInterface(), UNO_QUERY );
     Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
 
-    if ( xPropSet.is() )
-    {
-        Any aValue = xPropSet->getPropertyValue( m_aLayoutManagerPropName );
-        aValue >>= xLayoutManager;
-        if ( xLayoutManager.is() )
-        {
-            xLayoutManager->createElement( m_aProgressBarResName );
-            xLayoutManager->showElement( m_aProgressBarResName );
-
-            Reference< ::com::sun::star::ui::XUIElement > xProgressBar =
-                xLayoutManager->getElement( m_aProgressBarResName );
-            if ( xProgressBar.is() )
-            {
-                xStatusIndicator = Reference< ::com::sun::star::task::XStatusIndicator >(
-                    xProgressBar->getRealInterface(), UNO_QUERY );
-            }
-        }
-    }
+    if ( xFactory.is() )
+        xStatusIndicator = xFactory->createStatusIndicator();
 
     return xStatusIndicator;
 }
@@ -1860,10 +1849,7 @@ void SfxWorkWindow::UpdateStatusBar_Impl()
         // Id hat sich ge"andert, also passenden Statusbarmanager erzeugen,
         // dieser "ubernimmt die aktuelle Statusleiste;
         if ( xLayoutManager.is() )
-        {
-            xLayoutManager->createElement( m_aStatusBarResName );
-            xLayoutManager->showElement( m_aStatusBarResName );
-        }
+            xLayoutManager->requestElement( m_aStatusBarResName );
     }
     else
     {
