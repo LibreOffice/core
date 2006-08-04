@@ -4,9 +4,9 @@
  *
  *  $RCSfile: firststart.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:48:50 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 11:13:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 
 #include "firststart.hxx"
 #include "../migration/wizard.hxx"
+#include <comphelper/sequenceashashmap.hxx>
 
 using namespace rtl;
 using namespace ::com::sun::star::uno;
@@ -131,14 +132,28 @@ throw ( RuntimeException )
 Any SAL_CALL FirstStart::execute(const Sequence<NamedValue>& args)
 throw ( RuntimeException )
 {
-    sal_Bool bOverride = sal_False;
-    if (args.getLength() > 0 && args[0].Name.equalsAscii("Override"))
-        args[0].Value >>= bOverride;
+    static const ::rtl::OUString ARG_OVERRIDE = ::rtl::OUString::createFromAscii("Override");
+    static const ::rtl::OUString ARG_WIDTHUI  = ::rtl::OUString::createFromAscii("WidthUI");
 
-    if(bOverride || FirstStartWizard::isFirstStart() || !FirstStartWizard::isLicenseAccepted())
+    ::comphelper::SequenceAsHashMap lArgs(args);
+
+    sal_Bool bOverride      = lArgs.getUnpackedValueOrDefault(ARG_OVERRIDE, (sal_Bool)sal_False);
+    sal_Bool bWidthUI       = lArgs.getUnpackedValueOrDefault(ARG_WIDTHUI , (sal_Bool)sal_True );
+    sal_Bool bSomethingTodo = (  bOverride                               ||
+                                 FirstStartWizard::isFirstStart()        ||
+                               ! FirstStartWizard::isLicenseAccepted()   );
+
+    if(bSomethingTodo)
     {
-        FirstStartWizard fsw(NULL);
-        return makeAny((sal_Bool)fsw.Execute());
+        if (bWidthUI)
+        {
+          FirstStartWizard fsw(NULL);
+          return makeAny((sal_Bool)fsw.Execute());
+        }
+        else
+        {
+          return makeAny(sal_True);
+        }
     }
     else
         return makeAny(sal_True);
