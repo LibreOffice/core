@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macropg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-14 07:17:54 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 10:55:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -909,7 +909,7 @@ IMPL_LINK(AssignComponentDialog, ButtonHandler, Button *, EMPTYARG)
 }
 
 AssignComponentDialog::AssignComponentDialog( Window * pParent, const ::rtl::OUString& rURL )
-    : ModalDialog( pParent, SVX_RES( RID_DLG_ASSIGNCOMPONENT ) )
+    : ModalDialog( pParent, SVX_RES( RID_SVXDLG_ASSIGNCOMPONENT ) )
     , maMethodLabel( this, SVX_RES( FT_METHOD ) )
     , maMethodEdit( this, SVX_RES( EDIT_METHOD ) )
     , maOKButton( this, SVX_RES( RID_PB_OK ) )
