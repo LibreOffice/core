@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbarmanager.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 11:06:04 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 11:07:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -174,7 +174,7 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
         void SAL_CALL removeEventListener( const com::sun::star::uno::Reference< XEventListener >& xListener ) throw( com::sun::star::uno::RuntimeException );
 
         void CheckAndUpdateImages();
-        void RefreshImages();
+        virtual void RefreshImages();
         void FillToolbar( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rToolBarData );
         void notifyRegisteredControllers( const rtl::OUString& aUIElementName, const rtl::OUString& aCommand );
         void Destroy();
