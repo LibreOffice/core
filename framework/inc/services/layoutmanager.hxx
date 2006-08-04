@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layoutmanager.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 10:59:41 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 11:06:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -386,6 +386,7 @@ namespace framework
                               m_bContextActive( sal_True ),
                               m_bNoClose( sal_False ),
                               m_bSoftClose( sal_False ),
+                              m_bStateRead( sal_False ),
                               m_nStyle( BUTTON_SYMBOL )
                               {}
 
@@ -406,6 +407,7 @@ namespace framework
                                m_bContextActive( sal_True ),
                                m_bNoClose( sal_False ),
                                m_bSoftClose( sal_False ),
+                               m_bStateRead( sal_False ),
                                m_nStyle( BUTTON_SYMBOL ) {}
 
                 bool operator< ( const UIElement& aUIElement ) const;
@@ -423,7 +425,8 @@ namespace framework
                                                                                          m_bContextSensitive : 1,
                                                                                          m_bContextActive : 1;
                 sal_Bool                                                                 m_bNoClose : 1,
-                                                                                         m_bSoftClose : 1;
+                                                                                         m_bSoftClose : 1,
+                                                                                         m_bStateRead : 1;
                 sal_Int16                                                                m_nStyle;
                 DockedData                                                               m_aDockedData;
                 FloatingData                                                             m_aFloatingData;
@@ -517,6 +520,9 @@ namespace framework
             void        implts_createProgressBar();
             void        implts_destroyProgressBar();
             void        implts_setStatusBarPosSize( const ::Point& rPos, const ::Size& rSize );
+            sal_Bool    implts_showStatusBar( sal_Bool bStoreState=sal_False );
+            sal_Bool    implts_hideStatusBar( sal_Bool bStoreState=sal_False );
+            void        implts_readStatusBarState( const rtl::OUString& rStatusBarName );
             sal_Bool    implts_showProgressBar();
             sal_Bool    implts_hideProgressBar();
             void        implts_backupProgressBarWrapper();
