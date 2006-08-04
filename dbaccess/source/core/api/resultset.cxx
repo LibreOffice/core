@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resultset.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:41:05 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 13:56:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,13 +136,11 @@ OResultSet::OResultSet(const ::com::sun::star::uno::Reference< ::com::sun::star:
 //--------------------------------------------------------------------------
 OResultSet::~OResultSet()
 {
+    m_pColumns->acquire();
+    m_pColumns->disposing();
+    delete m_pColumns;
+
     DBG_DTOR(OResultSet, NULL);
-    if ( m_pColumns )
-    {
-        m_pColumns->acquire();
-        m_pColumns->disposing();
-        delete m_pColumns;
-    }
 }
 
 // com::sun::star::lang::XTypeProvider
