@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compiler.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-07 14:40:47 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 11:33:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -360,7 +360,7 @@ public:
     ScRangeData* UpdateReference( UpdateRefMode eUpdateRefMode,
                                   const ScAddress& rOldPos, const ScRange&,
                                   SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-                                  BOOL& rChanged);
+                                  BOOL& rChanged, BOOL& rRefSizeChanged );
 
     /// Only once for converted shared formulas,
     /// token array has to be compiled afterwards.
