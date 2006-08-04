@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:24:49 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 11:33:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2892,9 +2892,9 @@ void ScCompiler::MoveRelWrap( ScTokenArray& rArr, ScDocument* pDoc,
 ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                                  const ScAddress& rOldPos, const ScRange& r,
                                  SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-                                 BOOL& rChanged)
+                                 BOOL& rChanged, BOOL& rRefSizeChanged )
 {
-    rChanged = FALSE;
+    rChanged = rRefSizeChanged = FALSE;
     if ( eUpdateRefMode == URM_COPY )
     {   // Normally nothing has to be done here since RelRefs are used, also
         // SharedFormulas don't need any special handling, except if they
@@ -3005,11 +3005,21 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                 }
                 else
                 {
+                    ComplRefData& rRef = t->GetDoubleRef();
+                    SCCOL nCols = rRef.Ref2.nCol - rRef.Ref1.nCol;
+                    SCROW nRows = rRef.Ref2.nRow - rRef.Ref1.nRow;
+                    SCTAB nTabs = rRef.Ref2.nTab - rRef.Ref1.nTab;
                     if ( ScRefUpdate::Update( pDoc, eUpdateRefMode, aPos,
                                 r, nDx, nDy, nDz, t->GetDoubleRef() )
                             != UR_NOTHING
                         )
+                    {
                         rChanged = TRUE;
+                        if (rRef.Ref2.nCol - rRef.Ref1.nCol != nCols ||
+                                rRef.Ref2.nRow - rRef.Ref1.nRow != nRows ||
+                                rRef.Ref2.nTab - rRef.Ref1.nTab != nTabs)
+                            rRefSizeChanged = TRUE;
+                    }
                 }
             }
         }
@@ -3066,6 +3076,9 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                 else
                 {
                     ComplRefData& rRef = t->GetDoubleRef();
+                    SCCOL nCols = rRef.Ref2.nCol - rRef.Ref1.nCol;
+                    SCROW nRows = rRef.Ref2.nRow - rRef.Ref1.nRow;
+                    SCTAB nTabs = rRef.Ref2.nTab - rRef.Ref1.nTab;
                     if ( rRef.Ref1.IsRelName() || rRef.Ref2.IsRelName() )
                     {
                         ScRefUpdate::MoveRelWrap( pDoc, aPos, rRef );
@@ -3077,7 +3090,18 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                                     r, nDx, nDy, nDz, rRef )
                                 != UR_NOTHING
                             )
+                        {
                             rChanged = TRUE;
+                            if (rRef.Ref2.nCol - rRef.Ref1.nCol != nCols ||
+                                    rRef.Ref2.nRow - rRef.Ref1.nRow != nRows ||
+                                    rRef.Ref2.nTab - rRef.Ref1.nTab != nTabs)
+                            {
+                                rRefSizeChanged = TRUE;
+#if SC_PRESERVE_SHARED_FORMULAS_IF_POSSIBLE
+                                bEasyShared = FALSE;
+#endif
+                            }
+                        }
                     }
 #if SC_PRESERVE_SHARED_FORMULAS_IF_POSSIBLE
                     if ( bEasyShared )
