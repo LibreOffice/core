@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.207 $
+ *  $Revision: 1.208 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 10:09:45 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 12:31:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -790,6 +790,16 @@ End
 #endif
 
 #ifdef UNX
+
+File gid_File_Lib_Desktopbe
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Program;
+    Name = STRING(CONCAT2(desktopbe1.uno,UNXSUFFIX));
+    RegistryID = gid_Starregistry_Services_Rdb;
+    Regmergefile = "desktopbe1-ucd.txt";
+End
+
 #ifdef ENABLE_GTK
 #ifdef GTK_TWO_FOUR
 File gid_File_Lib_Fps_Gnome
