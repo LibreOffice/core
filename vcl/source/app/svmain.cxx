@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 16:34:23 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 12:31:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,6 +158,12 @@ using namespace ::com::sun::star::lang;
 #include <fontcfg.hxx>
 #include <configsettings.hxx>
 
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
+#endif
+#ifndef _UNO_CURRENT_CONTEXT_HXX_
+#include <uno/current_context.hxx>
+#endif
 
 
 // =======================================================================
@@ -290,6 +296,36 @@ public:
     void                Main(){};
 };
 
+class DesktopEnvironmentContext: public cppu::WeakImplHelper1< com::sun::star::uno::XCurrentContext >
+{
+public:
+    DesktopEnvironmentContext( const com::sun::star::uno::Reference< com::sun::star::uno::XCurrentContext > & ctx)
+        : m_xNextContext( ctx ) {}
+
+    // XCurrentContext
+    virtual com::sun::star::uno::Any SAL_CALL getValueByName( const rtl::OUString& Name )
+            throw (com::sun::star::uno::RuntimeException);
+
+private:
+    com::sun::star::uno::Reference< com::sun::star::uno::XCurrentContext > m_xNextContext;
+};
+
+Any SAL_CALL DesktopEnvironmentContext::getValueByName( const rtl::OUString& Name) throw (RuntimeException)
+{
+    Any retVal;
+
+    if ( 0 == Name.compareToAscii( "system.desktop-environment" ) )
+    {
+        retVal = makeAny( Application::GetDesktopEnvironment() );
+    }
+    else if( m_xNextContext.is() )
+    {
+        // Call next context in chain if found
+        retVal = m_xNextContext->getValueByName( Name );
+    }
+    return retVal;
+}
+
 BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr )
 {
     RTL_LOGFILE_CONTEXT( aLog, "vcl (ss112471) ::InitVCL" );
@@ -330,6 +366,10 @@ BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XM
     if ( !pSVData->mpDefInst )
         return FALSE;
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "} ::CreateSalInstance" );
+
+    // Desktop Environment context (to be able to get value of "system.desktop-environment" as soon as possible)
+    com::sun::star::uno::setCurrentContext(
+        new DesktopEnvironmentContext( com::sun::star::uno::getCurrentContext() ) );
 
     // Initialize application instance (should be done after initialization of VCL SAL part)
     if( pSVData->mpApp )
