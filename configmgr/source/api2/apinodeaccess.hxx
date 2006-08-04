@@ -4,9 +4,9 @@
  *
  *  $RCSfile: apinodeaccess.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:07:19 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 10:01:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -174,7 +174,7 @@ namespace configmgr
             osl::MutexGuard     m_aLock;
             NodeAccess&         m_rNode;
         public:
-            NodeReadGuardImpl(NodeAccess& rNode) throw();
+            NodeReadGuardImpl(NodeAccess& rNode);
             ~NodeReadGuardImpl() throw ();
         public:
             NodeAccess& get() const { return m_rNode; }
