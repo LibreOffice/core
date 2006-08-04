@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macropg.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-14 07:18:06 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 10:55:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,6 @@
 #define     IMG_MACRO_H             32
 #define     IMG_COMPONENT_H         33
 
-#define     RID_DLG_ASSIGNCOMPONENT 40
 #define     RID_PB_OK               41
 #define     RID_PB_CANCEL           42
 #define     RID_PB_HELP             43
