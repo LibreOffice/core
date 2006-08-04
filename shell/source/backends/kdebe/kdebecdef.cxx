@@ -4,9 +4,9 @@
  *
  *  $RCSfile: kdebecdef.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 10:25:46 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 12:31:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,13 +129,6 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(void *,
             uno::Sequence<rtl::OUString> sServiceNames = KDEBackend::getBackendServiceNames();
             for (sal_Int32 i = 0 ; i < sServiceNames.getLength() ; ++ i)
                 xServicesKey->createKey(sServiceNames[i]);
-
-            // Register supported components
-            uno::Reference<XRegistryKey> xComponentKey = xImplKey->createKey(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/DATA/SupportedComponents") )
-            );
-
-            xComponentKey->setAsciiListValue( KDEBackend::getSupportedComponents() );
 
             return sal_True;
         }
