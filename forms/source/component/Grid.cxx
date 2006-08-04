@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Grid.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:50:21 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 13:51:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -461,7 +461,7 @@ void OGridControlModel::fillProperties(
         DECL_PROP2(HASNAVIGATION,       sal_Bool,           BOUND, MAYBEDEFAULT);
         DECL_PROP1(ENABLED,             sal_Bool,           BOUND);
         DECL_PROP1(BORDER,              sal_Int16,          BOUND);
-        DECL_PROP1(BORDERCOLOR,         sal_Int16,          BOUND);
+        DECL_PROP2(BORDERCOLOR,         sal_Int16,          BOUND, MAYBEVOID);
         DECL_PROP1(DEFAULTCONTROL,      ::rtl::OUString,    BOUND);
         DECL_PROP3(TEXTCOLOR,           sal_Int32,          BOUND, MAYBEDEFAULT, MAYBEVOID);
         DECL_PROP3(BACKGROUNDCOLOR,     sal_Int32,          BOUND, MAYBEDEFAULT, MAYBEVOID);
