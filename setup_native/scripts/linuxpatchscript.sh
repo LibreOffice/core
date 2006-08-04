@@ -46,6 +46,26 @@ echo
 rpm --upgrade -v --hash --prefix $PRODUCTINSTALLLOCATION --notriggers $RPMLIST
 echo
 
+# Check, if online update rpm is available
+ONLINEUPDATERPM=`ls $BASEDIR/RPMS/*.rpm | grep onlineupdate`
+
+if [ "x$ONLINEUPDATERPM" != "x" ]; then
+  # Check, that $RPMLIST does not contain online update rpm (then it is already installed)
+  ONLINEPDATEINSTALLED=`grep onlineupdate ${RPMLIST}`
+
+  if [ "x$ONLINEPDATEINSTALLED" == "x" ]; then
+    # Ask user, if online update shall be installed
+    echo
+    read -p "Do you want to install the new online update feature (y/n) ? " -n 1 reply leftover
+    echo
+
+    if [ "$reply" == "y" ]; then
+      # Install the online update rpm
+      rpm --install -v --hash --prefix $PRODUCTINSTALLLOCATION --notriggers $ONLINEUPDATERPM
+    fi
+  fi
+fi
+
 # Some RPM versions have problems with -U and --prefix
 if [ ! -f ${BOOTSTRAPRC} ]; then
   echo Update failed due to a bug in RPM, uninstalling ..
