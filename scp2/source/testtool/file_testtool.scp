@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_testtool.scp,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 08:12:23 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 10:25:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@ File gid_File_Config_Testtool
     Dir = gid_Dir_Program;
     Styles = (PACKED);
   #ifdef UNX
-    Name = ".testtoolrc";
+    Name = "testtoolrc";
   #else
     Name = "testtool.ini";
   #endif
