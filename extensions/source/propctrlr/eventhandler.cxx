@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventhandler.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 07:55:25 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 13:59:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,17 +115,14 @@
 #endif
 /** === end UNO includes === **/
 
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
 #endif
-#ifndef _COMPHELPER_SEQUENCEASHASHMAP_HXX_
-#include <comphelper/sequenceashashmap.hxx>
+#ifndef COMPHELPER_NAMEDVALUECOLLECTION_HXX
+#include <comphelper/namedvaluecollection.hxx>
 #endif
 #ifndef _SVX_DIALOG_HXX
 #include <svx/svxdlg.hxx>
@@ -330,6 +327,98 @@ namespace pcr
             aPropertyName.append( _rMethodName.getStr() );
             return aPropertyName.makeStringAndClear();
         }
+
+        //................................................................
+        ScriptEventDescriptor lcl_getAssignedScriptEvent( const EventDescription& _rEvent, const Sequence< ScriptEventDescriptor >& _rAllAssignedMacros )
+        {
+            ScriptEventDescriptor aScriptEvent;
+            // for the case there is actually no event assigned, initialize at least ListenerType and MethodName,
+            //  so this ScriptEventDescriptor properly describes the given event
+            aScriptEvent.ListenerType = _rEvent.sListenerClassName;
+            aScriptEvent.EventMethod = _rEvent.sListenerMethodName;
+
+            const ScriptEventDescriptor* pAssignedEvent = _rAllAssignedMacros.getConstArray();
+            sal_Int32 assignedEventCount( _rAllAssignedMacros.getLength() );
+            for ( sal_Int32 assignedEvent = 0; assignedEvent < assignedEventCount; ++assignedEvent, ++pAssignedEvent )
+            {
+                if  (   ( pAssignedEvent->ListenerType != _rEvent.sListenerClassName )
+                    ||  ( pAssignedEvent->EventMethod != _rEvent.sListenerMethodName )
+                    )
+                    continue;
+
+                if  (   ( pAssignedEvent->ScriptCode.getLength() == 0 )
+                    ||  ( pAssignedEvent->ScriptType.getLength() == 0 )
+                    )
+                {
+                    DBG_ERROR( "lcl_getAssignedScriptEvent: me thinks this should not happen!" );
+                    continue;
+                }
+
+                ::rtl::OUString sScriptCode = pAssignedEvent->ScriptCode;
+                if ( 0 == pAssignedEvent->ScriptType.compareToAscii( "StarBasic" ) )
+                {   // it's a StarBasic macro
+                    sal_Int32 nPrefixLen = sScriptCode.indexOf( ':' );
+                    if ( nPrefixLen >= 0 )
+                    {
+                        // strip the prefix from the macro name
+
+                        // (This is from the times where Basic macro names were stored
+                        // as "document:<macro_name>" or "application:<macro_name>". Since
+                        // the new scripting framework, they have another format ...)
+
+                        sScriptCode = sScriptCode.copy( nPrefixLen + 1 );
+                    }
+                }
+
+                aScriptEvent = *pAssignedEvent;
+            }
+            return aScriptEvent;
+        }
+
+        //................................................................
+        ::rtl::OUString lcl_getQualifiedKnownListenerName( const ScriptEventDescriptor& _rFormComponentEventDescriptor )
+        {
+            EventDescription aKnownEvent;
+            if ( lcl_getEventDescriptionForMethod( _rFormComponentEventDescriptor.EventMethod, aKnownEvent ) )
+                return aKnownEvent.sListenerClassName;
+            DBG_ERROR( "lcl_getQualifiedKnownListenerName: unknown method name!" );
+                // somebody assigned an script to a form component event which we don't know
+                // Speaking strictly, this is not really an error - it is possible to do
+                // this programmatically -, but it should rarely happen, since it's not possible
+                // via UI
+            return _rFormComponentEventDescriptor.ListenerType;
+        }
+
+        //................................................................
+        typedef ::std::set< Type, TypeLessByName > TypeBag;
+
+        //................................................................
+        void lcl_addListenerTypesFor_throw( const Reference< XInterface >& _rxComponent,
+            const Reference< XIntrospection >& _rxIntrospection, TypeBag& _out_rTypes )
+        {
+            if ( !_rxComponent.is() )
+                return;
+            OSL_PRECOND( _rxIntrospection.is(), "lcl_addListenerTypesFor_throw: this will crash!" );
+
+            Reference< XIntrospectionAccess > xIntrospectionAccess(
+                _rxIntrospection->inspect( makeAny( _rxComponent ) ), UNO_QUERY_THROW );
+
+            Sequence< Type > aListeners( xIntrospectionAccess->getSupportedListeners() );
+
+            ::std::copy( aListeners.getConstArray(), aListeners.getConstArray() + aListeners.getLength(),
+                ::std::insert_iterator< TypeBag >( _out_rTypes, _out_rTypes.begin() ) );
+        }
+
+        //................................................................
+        bool operator ==( const ScriptEventDescriptor _lhs, const ScriptEventDescriptor _rhs )
+        {
+            return  (   ( _lhs.ListenerType         == _rhs.ListenerType        )
+                    &&  ( _lhs.EventMethod          == _rhs.EventMethod         )
+                    &&  ( _lhs.AddListenerParam     == _rhs.AddListenerParam    )
+                    &&  ( _lhs.ScriptType           == _rhs.ScriptType          )
+                    &&  ( _lhs.ScriptCode           == _rhs.ScriptCode          )
+                    );
+        }
     }
 
     //====================================================================
@@ -342,16 +431,21 @@ namespace pcr
     class EventHolder : public EventHolder_Base
     {
     private:
-        typedef ::std::hash_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash >    EventMap;
-        typedef ::std::map< EventId, EventMap::iterator >                                   EventMapIndexAccess;
+        typedef ::std::hash_map< ::rtl::OUString, ScriptEventDescriptor, ::rtl::OUStringHash >  EventMap;
+        typedef ::std::map< EventId, EventMap::iterator >                                       EventMapIndexAccess;
 
-        EventMap            m_aEvents;
+        EventMap            m_aEventNameAccess;
         EventMapIndexAccess m_aEventIndexAccess;
 
     public:
         EventHolder( );
 
-        void AddEvent( EventId _nId, const ::rtl::OUString& _rEventName, const ::rtl::OUString& _rMacroURL );
+        void addEvent( EventId _nId, const ::rtl::OUString& _rEventName, const ScriptEventDescriptor& _rScriptEvent );
+
+        /** effectively the same as getByName, but instead of converting the ScriptEventDescriptor to the weird
+            format used by the macro assignment dialog, it is returned directly
+        */
+        ScriptEventDescriptor getNormalizedDescriptorByName( const ::rtl::OUString& _rEventName ) const;
 
         // XNameReplace
         virtual void SAL_CALL replaceByName( const ::rtl::OUString& _rName, const Any& aElement ) throw (IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException);
@@ -363,6 +457,9 @@ namespace pcr
 
     protected:
         ~EventHolder( );
+
+    private:
+        ScriptEventDescriptor impl_getDescriptor_throw( const ::rtl::OUString& _rEventName ) const;
     };
 
     DBG_NAME( EventHolder )
@@ -375,49 +472,62 @@ namespace pcr
     //------------------------------------------------------------------------
     EventHolder::~EventHolder()
     {
-        m_aEvents.clear();
+        m_aEventNameAccess.clear();
         m_aEventIndexAccess.clear();
         DBG_DTOR( EventHolder, NULL );
     }
 
     //------------------------------------------------------------------------
-    void EventHolder::AddEvent( EventId _nId, const ::rtl::OUString& _rEventName, const ::rtl::OUString&_rMacroURL )
+    void EventHolder::addEvent( EventId _nId, const ::rtl::OUString& _rEventName, const ScriptEventDescriptor& _rScriptEvent )
     {
         ::std::pair< EventMap::iterator, bool > insertionResult =
-            m_aEvents.insert( EventMap::value_type( _rEventName, _rMacroURL ) );
-        DBG_ASSERT( insertionResult.second, "EventHolder::AddEvent: there already was a MacroURL for this event!" );
+            m_aEventNameAccess.insert( EventMap::value_type( _rEventName, _rScriptEvent ) );
+        OSL_ENSURE( insertionResult.second, "EventHolder::addEvent: there already was a MacroURL for this event!" );
         m_aEventIndexAccess[ _nId ] = insertionResult.first;
+    }
+
+    //------------------------------------------------------------------------
+    ScriptEventDescriptor EventHolder::getNormalizedDescriptorByName( const ::rtl::OUString& _rEventName ) const
+    {
+        return impl_getDescriptor_throw( _rEventName );
+    }
+
+    //------------------------------------------------------------------------
+    ScriptEventDescriptor EventHolder::impl_getDescriptor_throw( const ::rtl::OUString& _rEventName ) const
+    {
+        EventMap::const_iterator pos = m_aEventNameAccess.find( _rEventName );
+        if ( pos == m_aEventNameAccess.end() )
+            throw NoSuchElementException( ::rtl::OUString(), *const_cast< EventHolder* >( this ) );
+        return pos->second;
     }
 
     //------------------------------------------------------------------------
     void SAL_CALL EventHolder::replaceByName( const ::rtl::OUString& _rName, const Any& _rElement ) throw (IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException)
     {
-        EventMap::iterator pos = m_aEvents.find( _rName );
-        if ( pos == m_aEvents.end() )
+        EventMap::iterator pos = m_aEventNameAccess.find( _rName );
+        if ( pos == m_aEventNameAccess.end() )
             throw NoSuchElementException( ::rtl::OUString(), *this );
 
         Sequence< PropertyValue > aScriptDescriptor;
         OSL_VERIFY( _rElement >>= aScriptDescriptor );
-        ::comphelper::SequenceAsHashMap aExtractor( aScriptDescriptor );
 
-        ::rtl::OUString sMacroURL;
-        OSL_VERIFY( aExtractor[ ::rtl::OUString::createFromAscii( "Script" ) ] >>= sMacroURL );
-        pos->second = sMacroURL;
+        ::comphelper::NamedValueCollection aExtractor( aScriptDescriptor );
+
+        pos->second.ScriptType = aExtractor.getOrDefault( "EventType", ::rtl::OUString() );
+        pos->second.ScriptCode = aExtractor.getOrDefault( "Script", ::rtl::OUString() );
     }
 
     //------------------------------------------------------------------------
     Any SAL_CALL EventHolder::getByName( const ::rtl::OUString& _rName ) throw (NoSuchElementException, WrappedTargetException, RuntimeException)
     {
-        EventMap::const_iterator pos = m_aEvents.find( _rName );
-        if ( pos == m_aEvents.end() )
-            throw NoSuchElementException( ::rtl::OUString(), *this );
+        ScriptEventDescriptor aDescriptor( impl_getDescriptor_throw( _rName ) );
 
         Any aRet;
         Sequence< PropertyValue > aScriptDescriptor( 2 );
         aScriptDescriptor[0].Name = ::rtl::OUString::createFromAscii( "EventType" );
-        aScriptDescriptor[0].Value <<= ::rtl::OUString::createFromAscii( "Script" );
+        aScriptDescriptor[0].Value <<= aDescriptor.ScriptType;
         aScriptDescriptor[1].Name = ::rtl::OUString::createFromAscii( "Script" );
-        aScriptDescriptor[1].Value <<= pos->second;
+        aScriptDescriptor[1].Value <<= aDescriptor.ScriptCode;
 
         return makeAny( aScriptDescriptor );
     }
@@ -448,8 +558,8 @@ namespace pcr
      //------------------------------------------------------------------------
     sal_Bool SAL_CALL EventHolder::hasByName( const ::rtl::OUString& _rName ) throw (RuntimeException)
     {
-        EventMap::const_iterator pos = m_aEvents.find( _rName );
-        return pos != m_aEvents.end();
+        EventMap::const_iterator pos = m_aEventNameAccess.find( _rName );
+        return pos != m_aEventNameAccess.end();
     }
 
     //------------------------------------------------------------------------
@@ -461,7 +571,7 @@ namespace pcr
     //------------------------------------------------------------------------
     sal_Bool SAL_CALL EventHolder::hasElements(  ) throw (RuntimeException)
     {
-        return !m_aEvents.empty();
+        return !m_aEventNameAccess.empty();
     }
 
 
@@ -568,19 +678,19 @@ namespace pcr
         sal_Int32 nEventCount = aEvents.getLength();
         const ScriptEventDescriptor* pEvents = aEvents.getConstArray();
 
-        ::rtl::OUString sPropertyValue;
+        ScriptEventDescriptor aPropertyValue;
         for ( sal_Int32 event = 0; event < nEventCount; ++event, ++pEvents )
         {
             if  (   rEvent.sListenerClassName == pEvents->ListenerType
                 &&  rEvent.sListenerMethodName == pEvents->EventMethod
                 )
             {
-                sPropertyValue = pEvents->ScriptCode;
+                aPropertyValue = *pEvents;
                 break;
             }
         }
 
-        return makeAny( sPropertyValue );
+        return makeAny( aPropertyValue );
     }
 
     //--------------------------------------------------------------------
@@ -589,18 +699,19 @@ namespace pcr
         ::osl::MutexGuard aGuard( m_aMutex );
 
         const EventDescription& rEvent = impl_getEventForName_throw( _rPropertyName );
-        ::rtl::OUString sNewScriptCode;
-        OSL_VERIFY( _rValue >>= sNewScriptCode );
 
-        ::rtl::OUString sOldScriptCode;
-        OSL_VERIFY( getPropertyValue( _rPropertyName ) >>= sOldScriptCode );
-        if ( sOldScriptCode == sNewScriptCode )
+        ScriptEventDescriptor aNewScriptEvent;
+        OSL_VERIFY( _rValue >>= aNewScriptEvent );
+
+        ScriptEventDescriptor aOldScriptEvent;
+        OSL_VERIFY( getPropertyValue( _rPropertyName ) >>= aOldScriptEvent );
+        if ( aOldScriptEvent == aNewScriptEvent )
             return;
 
         if ( m_bIsDialogElement )
-            impl_setDialogElementScriptEvent_nothrow( rEvent, sNewScriptCode );
+            impl_setDialogElementScriptEvent_nothrow( aNewScriptEvent );
         else
-            impl_setFormComponentScriptEvent_nothrow( rEvent, sNewScriptCode );
+            impl_setFormComponentScriptEvent_nothrow( aNewScriptEvent );
 
         Reference< XModifiable > xDoc( m_aContext.getContextValueByAsciiName( "ContextDocument" ), UNO_QUERY );
         if ( xDoc.is() )
@@ -610,29 +721,48 @@ namespace pcr
         aEvent.Source = m_xComponent;
         aEvent.PropertyHandle = rEvent.nId;
         aEvent.PropertyName = _rPropertyName;
-        aEvent.OldValue <<= sOldScriptCode;
-        aEvent.NewValue <<= sNewScriptCode;
+        aEvent.OldValue <<= aOldScriptEvent;
+        aEvent.NewValue <<= aNewScriptEvent;
         m_aPropertyListeners.notify( aEvent, &XPropertyChangeListener::propertyChange );
     }
 
     //--------------------------------------------------------------------
-    Any SAL_CALL EventHandler::convertToPropertyValue( const ::rtl::OUString& /*_rPropertyName*/, const Any& _rControlValue ) throw (UnknownPropertyException, RuntimeException)
+    Any SAL_CALL EventHandler::convertToPropertyValue( const ::rtl::OUString& _rPropertyName, const Any& _rControlValue ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        DBG_ASSERT( !_rControlValue.hasValue() || _rControlValue.getValueTypeClass() == TypeClass_STRING,
-            "EventHandler::convertToPropertyValue: not NULL and not STRING?" );
-        return _rControlValue;
+
+        OSL_ENSURE( false, "EventHandler::convertToPropertyValue: why calling this for read-only controls?" );
+            // since currently, the controls to display the script events are readonly, this method should normally
+            // not be called.
+
+        Sequence< ScriptEventDescriptor > aAllAssignedEvents;
+        impl_getComponentScriptEvents_nothrow( aAllAssignedEvents );
+
+        const EventDescription& rEvent = impl_getEventForName_throw( _rPropertyName );
+        ScriptEventDescriptor aAssignedScript = lcl_getAssignedScriptEvent( rEvent, aAllAssignedEvents );
+
+#if OSL_DEBUG_LEVEL > 0
+        ::rtl::OUString sControlValue;
+        OSL_VERIFY( _rControlValue >>= sControlValue );
+        OSL_ENSURE( sControlValue == aAssignedScript.ScriptCode, "EventHandler::convertToPropertyValue: somebody really managed to enter a new value in the control?" );
+#else
+        (void)_rControlValue;
+#endif
+
+        return makeAny( aAssignedScript );
     }
 
     //--------------------------------------------------------------------
     Any SAL_CALL EventHandler::convertToControlValue( const ::rtl::OUString& /*_rPropertyName*/, const Any& _rPropertyValue, const Type& _rControlValueType ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        DBG_ASSERT( !_rPropertyValue.hasValue() || _rPropertyValue.getValueTypeClass() == TypeClass_STRING,
-            "EventHandler::convertToControlValue: not NULL and not STRING?" );
-        DBG_ASSERT( _rControlValueType.getTypeClass() == TypeClass_STRING,
+
+        ScriptEventDescriptor aScriptEvent;
+        OSL_VERIFY( _rPropertyValue >>= aScriptEvent );
+
+        OSL_ENSURE( _rControlValueType.getTypeClass() == TypeClass_STRING,
             "EventHandler::convertToControlValue: unexpected ControlValue type class!" );
-        return _rPropertyValue;
+        return makeAny( aScriptEvent.ScriptCode );
     }
 
     //--------------------------------------------------------------------
@@ -764,6 +894,12 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
+    ::sal_Bool SAL_CALL EventHandler::isComposable( const ::rtl::OUString& /*_rPropertyName*/ ) throw (UnknownPropertyException, RuntimeException)
+    {
+        return sal_False;
+    }
+
+    //--------------------------------------------------------------------
     namespace
     {
         //................................................................
@@ -810,12 +946,6 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    ::sal_Bool SAL_CALL EventHandler::isComposable( const ::rtl::OUString& /*_rPropertyName*/ ) throw (UnknownPropertyException, RuntimeException)
-    {
-        return sal_False;
-    }
-
-    //--------------------------------------------------------------------
     InteractiveSelectionResult SAL_CALL EventHandler::onInteractivePropertySelection( const ::rtl::OUString& _rPropertyName, sal_Bool /*_bPrimary*/, Any& /*_rData*/, const Reference< XObjectInspectorUI >& _rxInspectorUI ) throw (UnknownPropertyException, NullPointerException, RuntimeException)
     {
         if ( !_rxInspectorUI.is() )
@@ -824,8 +954,8 @@ namespace pcr
         ::osl::MutexGuard aGuard( m_aMutex );
         const EventDescription& rForEvent = impl_getEventForName_throw( _rPropertyName );
 
-        Sequence< ScriptEventDescriptor > aAssignedEvents;
-        impl_getComponentScriptEvents_nothrow( aAssignedEvents );
+        Sequence< ScriptEventDescriptor > aAllAssignedEvents;
+        impl_getComponentScriptEvents_nothrow( aAllAssignedEvents );
 
         // SvxMacroAssignDlg-compatible structure holding all event/assignments
         ::rtl::Reference< EventHolder >  pEventHolder( new EventHolder );
@@ -836,9 +966,8 @@ namespace pcr
             )
         {
             // the script which is assigned to the current event (if any)
-            ::rtl::OUString sAssignedMacroURL = lcl_getAssignedMacroURL( event->second, aAssignedEvents );
-
-            pEventHolder->AddEvent( event->second.nId, event->second.sListenerMethodName, sAssignedMacroURL );
+            ScriptEventDescriptor aAssignedScript = lcl_getAssignedScriptEvent( event->second, aAllAssignedEvents );
+            pEventHolder->addEvent( event->second.nId, event->second.sListenerMethodName, aAssignedScript );
         }
 
         // the inital selection in the dialog
@@ -864,20 +993,18 @@ namespace pcr
 
         try
         {
-            ::rtl::OUString sScriptCode;
             for (   EventMap::const_iterator event = m_aEvents.begin();
                     event != m_aEvents.end();
                     ++event
                 )
             {
-                Sequence< PropertyValue > aScriptDescriptor;
-                OSL_VERIFY( pEventHolder->getByName( event->second.sListenerMethodName ) >>= aScriptDescriptor );
-                ::comphelper::SequenceAsHashMap aExtractor( aScriptDescriptor );
-                OSL_VERIFY( aExtractor[ ::rtl::OUString::createFromAscii( "Script" ) ] >>= sScriptCode );
+                ScriptEventDescriptor aScriptDescriptor( pEventHolder->getNormalizedDescriptorByName( event->second.sListenerMethodName ) );
 
                 // set the new "property value"
-                ::rtl::OUString sPropertyName( lcl_getEventPropertyName( event->second.sListenerClassName, event->second.sListenerMethodName ) );
-                setPropertyValue( sPropertyName, makeAny( sScriptCode ) );
+                setPropertyValue(
+                    lcl_getEventPropertyName( event->second.sListenerClassName, event->second.sListenerMethodName ),
+                    makeAny( aScriptDescriptor )
+                );
             }
         }
         catch( const Exception& e )
@@ -936,23 +1063,6 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    namespace
-    {
-        ::rtl::OUString lcl_getQualifiedKnownListenerName( const ScriptEventDescriptor& _rFormComponentEventDescriptor )
-        {
-            EventDescription aKnownEvent;
-            if ( lcl_getEventDescriptionForMethod( _rFormComponentEventDescriptor.EventMethod, aKnownEvent ) )
-                return aKnownEvent.sListenerClassName;
-            DBG_ERROR( "lcl_getQualifiedKnownListenerName: unknown method name!" );
-                // somebody assigned an script to a form component event which we don't know
-                // Speaking strictly, this is not really an error - it is possible to do
-                // this programmatically -, but it should rarely happen, since it's not possible
-                // via UI
-            return _rFormComponentEventDescriptor.ListenerType;
-        }
-    }
-
-    //--------------------------------------------------------------------
     void EventHandler::impl_getFormComponentScriptEvents_nothrow( Sequence < ScriptEventDescriptor >& _out_rEvents ) const
     {
         _out_rEvents = Sequence < ScriptEventDescriptor >();
@@ -975,29 +1085,6 @@ namespace pcr
         catch( const Exception& )
         {
             OSL_ENSURE( false, "EventHandler::impl_getFormComponentScriptEvents_nothrow: caught an exception!" );
-        }
-    }
-
-    //--------------------------------------------------------------------
-    namespace
-    {
-        typedef ::std::set< Type, TypeLessByName > TypeBag;
-
-        //----------------------------------------------------------------
-        void lcl_addListenerTypesFor_throw( const Reference< XInterface >& _rxComponent,
-            const Reference< XIntrospection >& _rxIntrospection, TypeBag& _out_rTypes )
-        {
-            if ( !_rxComponent.is() )
-                return;
-            OSL_PRECOND( _rxIntrospection.is(), "lcl_addListenerTypesFor_throw: this will crash!" );
-
-            Reference< XIntrospectionAccess > xIntrospectionAccess(
-                _rxIntrospection->inspect( makeAny( _rxComponent ) ), UNO_QUERY_THROW );
-
-            Sequence< Type > aListeners( xIntrospectionAccess->getSupportedListeners() );
-
-            ::std::copy( aListeners.getConstArray(), aListeners.getConstArray() + aListeners.getLength(),
-                ::std::insert_iterator< TypeBag >( _out_rTypes, _out_rTypes.begin() ) );
         }
     }
 
@@ -1094,10 +1181,13 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    void EventHandler::impl_setFormComponentScriptEvent_nothrow( const EventDescription& _rForEvent, const ::rtl::OUString& _rScriptCode )
+    void EventHandler::impl_setFormComponentScriptEvent_nothrow( const ScriptEventDescriptor& _rScriptEvent )
     {
         try
         {
+            ::rtl::OUString sScriptCode( _rScriptEvent.ScriptCode );
+            bool bResetScript = ( sScriptCode.getLength() == 0 );
+
             sal_Int32 nObjectIndex = impl_getComponentIndexInParent_throw();
             Reference< XChild > xChild( m_xComponent, UNO_QUERY_THROW );
             Reference< XEventAttacherManager > xEventManager( xChild->getParent(), UNO_QUERY_THROW );
@@ -1108,12 +1198,12 @@ namespace pcr
             sal_Int32 eventCount = aEvents.getLength(), event = 0;
             for ( event = 0; event < eventCount; ++event, ++pEvent )
             {
-                if ( pEvent->EventMethod == _rForEvent.sListenerMethodName )
+                if ( pEvent->EventMethod == _rScriptEvent.ListenerType )
                 {
                     // yes
-                    if ( _rScriptCode.getLength() )
+                    if ( !bResetScript )
                         // set to something non-empty -> overwrite
-                        pEvent->ScriptCode = _rScriptCode;
+                        pEvent->ScriptCode = sScriptCode;
                     else
                     {
                         // set to empty -> remove from sequence
@@ -1124,16 +1214,11 @@ namespace pcr
                     break;
                 }
             }
-            if ( ( event >= eventCount ) && _rScriptCode.getLength() )
+            if ( ( event >= eventCount ) && !bResetScript )
             {
                 // no, did not find it -> append
                 aEvents.realloc( eventCount + 1 );
-                ScriptEventDescriptor& rEvent = aEvents[ eventCount ];
-
-                rEvent.ListenerType = _rForEvent.sListenerClassName;
-                rEvent.ScriptCode = _rScriptCode;
-                rEvent.EventMethod = _rForEvent.sListenerMethodName;
-                rEvent.ScriptType = ::rtl::OUString::createFromAscii( "Script" );
+                aEvents[ eventCount ] = _rScriptEvent;
             }
 
             xEventManager->revokeScriptEvents( nObjectIndex );
@@ -1148,34 +1233,32 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    void EventHandler::impl_setDialogElementScriptEvent_nothrow( const EventDescription& _rForEvent, const ::rtl::OUString& _rScriptCode )
+    void EventHandler::impl_setDialogElementScriptEvent_nothrow( const ScriptEventDescriptor& _rScriptEvent )
     {
         try
         {
+            ::rtl::OUString sScriptCode( _rScriptEvent.ScriptCode );
+            bool bResetScript = ( sScriptCode.getLength() == 0 );
+
             Reference< XScriptEventsSupplier > xEventsSupplier( m_xComponent, UNO_QUERY_THROW );
             Reference< XNameContainer > xEvents( xEventsSupplier->getEvents(), UNO_QUERY_THROW );
 
             ::rtl::OUStringBuffer aCompleteName;
-            aCompleteName.append( _rForEvent.sListenerClassName );
+            aCompleteName.append( _rScriptEvent.ListenerType );
             aCompleteName.appendAscii( "::" );
-            aCompleteName.append( _rForEvent.sListenerMethodName );
+            aCompleteName.append( _rScriptEvent.EventMethod );
             ::rtl::OUString sCompleteName( aCompleteName.makeStringAndClear() );
 
             bool bExists = xEvents->hasByName( sCompleteName );
 
-            if ( !_rScriptCode.getLength() )
+            if ( bResetScript )
             {
                 if ( bExists )
                     xEvents->removeByName( sCompleteName );
             }
             else
             {
-                ScriptEventDescriptor aScriptEvent;
-                aScriptEvent.ListenerType = _rForEvent.sListenerClassName;
-                aScriptEvent.ScriptCode = _rScriptCode;
-                aScriptEvent.EventMethod = _rForEvent.sListenerMethodName;
-                aScriptEvent.ScriptType = ::rtl::OUString::createFromAscii( "Script" );
-                Any aNewValue; aNewValue <<= aScriptEvent;
+                Any aNewValue; aNewValue <<= _rScriptEvent;
 
                 if ( bExists )
                     xEvents->replaceByName( sCompleteName, aNewValue );
