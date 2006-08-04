@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macropg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 10:55:45 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 13:52:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -788,21 +788,17 @@ void _SvxMacroTabPage::InitAndSetHandler( Reference< container::XNameReplace> xA
 }
 
 // returns the two props EventType & Script for a given event name
-Any _SvxMacroTabPage::GetPropsByName( const ::rtl::OUString& eventName, const EventsHash& eventsHash )
+Any _SvxMacroTabPage::GetPropsByName( const ::rtl::OUString& eventName, EventsHash& eventsHash )
 {
-    Any ret;
+    const ::std::pair< ::rtl::OUString, ::rtl::OUString >& rAssignedEvent( eventsHash[ eventName ] );
 
     Sequence< beans::PropertyValue > props(2);
     props[0].Name = ::rtl::OUString::createFromAscii("EventType");
-    props[0].Value <<= ::rtl::OUString::createFromAscii("Script");
+    props[0].Value <<= rAssignedEvent.first;
     props[1].Name = ::rtl::OUString::createFromAscii("Script");
-    ::rtl::OUString sTmp;
-    const EventsHash::const_iterator h_it = eventsHash.find( eventName );
-    sTmp = h_it->second.second;
-    props[1].Value <<= sTmp;
+    props[1].Value <<= rAssignedEvent.second;
 
-    ret <<= props;
-    return ret;
+    return makeAny( props );
 }
 
 // converts the Any returned by GetByName into a pair which can be stored in
