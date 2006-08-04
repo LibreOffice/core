@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macropg.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-14 07:17:18 $
+ *  last change: $Author: ihi $ $Date: 2006-08-04 13:52:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,7 @@ protected:
                                 _SvxMacroTabPage( Window* pParent, const ResId& rId, const SfxItemSet& rItemSet );
 
     void                        EnableButtons( const String& rLanguage );
-    ::com::sun::star::uno::Any  GetPropsByName( const ::rtl::OUString& eventName, const EventsHash& eventsHash );
+    ::com::sun::star::uno::Any  GetPropsByName( const ::rtl::OUString& eventName, EventsHash& eventsHash );
     ::std::pair< ::rtl::OUString, ::rtl::OUString > GetPairFromAny( ::com::sun::star::uno::Any aAny );
 
 public:
