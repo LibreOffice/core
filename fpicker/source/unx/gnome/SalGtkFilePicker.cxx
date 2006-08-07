@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SalGtkFilePicker.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-03 13:20:02 $
+ *  last change: $Author: vg $ $Date: 2006-08-07 13:59:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,13 +157,12 @@ void SalGtkFilePicker::InitialMapping()
 }
 
 SalGtkFilePicker::SalGtkFilePicker( const uno::Reference<lang::XMultiServiceFactory>& xServiceMgr ) :
-    cppu::WeakComponentImplHelper10<
+    cppu::WeakComponentImplHelper9<
         XFilterManager,
-        XFilterGroupManager,
-        XFilePickerControlAccess,
+            XFilterGroupManager,
+            XFilePickerControlAccess,
         XFilePickerNotifier,
-        XFilePreview,
-        XFilePickerWorkaround,
+            XFilePreview,
         lang::XInitialization,
         util::XCancellable,
         lang::XEventListener,
@@ -878,41 +877,48 @@ rtl::OUString SAL_CALL SalGtkFilePicker::getDisplayDirectory() throw( uno::Runti
     return implgetDisplayDirectory();
 }
 
-// Obsoleted by XFilePickerWorkaround::getFilesAsURIs
 uno::Sequence<rtl::OUString> SAL_CALL SalGtkFilePicker::getFiles() throw( uno::RuntimeException )
-{
-        uno::Sequence<rtl::OUString> aFiles = getFilesAsURIs();
-        /*
-          The previous multiselection API design was completely broken
-          and unimplementable for some hetrogenous pseudo-URIs eg. search://
-          Thus crop unconditionally to a single selection.
-        */
-        aFiles.realloc (1);
-        return aFiles;
-}
-
-uno::Sequence<rtl::OUString> SAL_CALL SalGtkFilePicker::getFilesAsURIs() throw( uno::RuntimeException )
 {
     OSL_ASSERT( m_pDialog != NULL );
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
     GSList* pPathList = gtk_file_chooser_get_uris( GTK_FILE_CHOOSER(m_pDialog) );
 
-    int nCount = g_slist_length( pPathList );
-    int nIndex = 0;
-    OSL_TRACE( "GETFILES called %d files\n", nCount );
+    int nFromCount = g_slist_length( pPathList );
+    OSL_TRACE( "GETFILES called %d files\n", nFromCount );
 
     // get the current action setting
     GtkFileChooserAction eAction = gtk_file_chooser_get_action(
         GTK_FILE_CHOOSER( m_pDialog ));
 
-    uno::Sequence< rtl::OUString > aSelectedFiles(nCount);
+    /*
+    This is insane, if its one file then return the URL,
+    If its its more return the URL of the dir as the first entry,
+    and then list each seperate entry (relative to the base URL) after it
+    */
+    bool bMultiple = nFromCount > 1;
+    int nToCount = bMultiple ? nFromCount + 1 : nFromCount;
+    int nURLOffset = 0;
+    uno::Sequence< rtl::OUString > aSelectedFiles(nToCount);
+
+    if (bMultiple)
+    {
+        gchar *path = gtk_file_chooser_get_current_folder_uri(
+            GTK_FILE_CHOOSER( m_pDialog ));
+        nURLOffset = strlen(path) + 1;
+        aSelectedFiles[0] = uritounicode(path);
+        g_free(path);
+    }
 
     // Convert to OOo
-    for( GSList *pElem = pPathList; pElem; pElem = pElem->next)
+    for( int nToIndex = bMultiple ? 1 : 0;
+        ((nToIndex < nToCount) && pPathList);
+        ++nToIndex, pPathList = g_slist_next(pPathList)
+       )
     {
-        gchar *pURI = reinterpret_cast<gchar*>(pElem->data);
-        aSelectedFiles[ nIndex ] = uritounicode(pURI);
+        const gchar *path = reinterpret_cast<gchar*>(pPathList->data)
+            + nURLOffset;
+        aSelectedFiles[ nToIndex ] = uritounicode(path);
 
         if( GTK_FILE_CHOOSER_ACTION_SAVE == eAction )
         {
@@ -932,12 +938,12 @@ uno::Sequence<rtl::OUString> SAL_CALL SalGtkFilePicker::getFilesAsURIs() throw( 
             }
             else
             {
-                if( aSelectedFiles[nIndex].indexOf('.') > 0 )
+                if( aSelectedFiles[nToIndex].indexOf('.') > 0 )
                 {
                     rtl::OUString sExtension;
                     nTokenIndex = 0;
                     do
-                        sExtension = aSelectedFiles[nIndex].getToken( 0, '.', nTokenIndex );
+                        sExtension = aSelectedFiles[nToIndex].getToken( 0, '.', nTokenIndex );
                     while( nTokenIndex >= 0 );
 
                     if( sExtension.getLength() >= 3 ) // 3 = typical/minimum extension length
@@ -1004,7 +1010,7 @@ uno::Sequence<rtl::OUString> SAL_CALL SalGtkFilePicker::getFilesAsURIs() throw( 
             {
                 //if the filename does not already have the auto extension, stick it on
                 OUString sExtension = OUString::createFromAscii( "." ) + sToken;
-                OUString &rBase = aSelectedFiles[nIndex];
+                OUString &rBase = aSelectedFiles[nToIndex];
                 sal_Int32 nExtensionIdx = rBase.getLength() - sExtension.getLength();
                 OSL_TRACE( "idx are %d %d\n", rBase.lastIndexOf( sExtension ), nExtensionIdx );
 
@@ -1014,8 +1020,7 @@ uno::Sequence<rtl::OUString> SAL_CALL SalGtkFilePicker::getFilesAsURIs() throw( 
 
         }
 
-        nIndex++;
-        g_free( pURI );
+        g_free( ( char* )( pPathList->data ) );
     }
 
     g_slist_free( pPathList );
@@ -1860,10 +1865,10 @@ case_insensitive_filter (const GtkFileFilterInfo *filter_info, gpointer data)
     g_return_val_if_fail( data != NULL, FALSE );
     g_return_val_if_fail( filter_info != NULL, FALSE );
 
-    if( !filter_info->uri )
+    if( !filter_info->filename )
         return FALSE;
 
-    const char *pExtn = strrchr( filter_info->uri, '.' );
+    const char *pExtn = strrchr( filter_info->filename, '.' );
     if( !pExtn )
         return FALSE;
     pExtn++;
@@ -1873,7 +1878,7 @@ case_insensitive_filter (const GtkFileFilterInfo *filter_info, gpointer data)
 
 #ifdef DEBUG
     fprintf( stderr, "'%s' match extn '%s' vs '%s' yeilds %d\n",
-        filter_info->uri, pExtn, pFilter, bRetval );
+        filter_info->filename, pExtn, pFilter, bRetval );
 #endif
 
     return bRetval;
@@ -1908,7 +1913,7 @@ int SalGtkFilePicker::implAddFilter( const OUString& rFilter, const OUString& rT
                 if (aTokens.getLength())
                     aTokens += OUString::createFromAscii(",");
                 aTokens = aTokens += aToken;
-                gtk_file_filter_add_custom (filter, GTK_FILE_FILTER_URI,
+                gtk_file_filter_add_custom (filter, GTK_FILE_FILTER_FILENAME,
                     case_insensitive_filter,
                     g_strdup( rtl::OUStringToOString( aToken, RTL_TEXTENCODING_UTF8 ) ),
                     (GDestroyNotify) g_free );

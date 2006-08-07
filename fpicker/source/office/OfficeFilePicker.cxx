@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OfficeFilePicker.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-03 13:19:34 $
+ *  last change: $Author: vg $ $Date: 2006-08-07 14:00:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -544,33 +544,6 @@ void SAL_CALL SvtFilePicker::setTitle( const ::rtl::OUString& _rTitle ) throw (R
 sal_Int16 SAL_CALL SvtFilePicker::execute(  ) throw (RuntimeException)
 {
     return OCommonPicker::execute();
-}
-
-//------------------------------------------------------------------------------------
-// XFilePickerWorkaround functions
-//------------------------------------------------------------------------------------
-
-// Obsoletes getFiles
-Sequence< rtl::OUString > SAL_CALL SvtFilePicker::getFilesAsURIs() throw (RuntimeException)
-{
-    checkAlive();
-
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    if ( ! getDialog() )
-    {
-        Sequence< rtl::OUString > aEmpty;
-        return aEmpty;
-    }
-
-    SvStringsDtor* pPathList = getDialog()->GetPathList();
-    USHORT i, nCount = pPathList->Count();
-
-    Sequence< rtl::OUString > aPath( nCount );
-    for ( i = 0; i < nCount; i++)
-        aPath[i] = rtl::OUString( *pPathList->GetObject( i ) );
-
-    delete pPathList;
-    return aPath;
 }
 
 //------------------------------------------------------------------------------------

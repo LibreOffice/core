@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.124 $
+ *  $Revision: 1.125 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-03 13:21:55 $
+ *  last change: $Author: vg $ $Date: 2006-08-07 13:57:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,9 +68,6 @@
 #endif
 #ifndef  _COM_SUN_STAR_UI_DIALOGS_XFILEPICKERNOTIFIER_HPP_
 #include <com/sun/star/ui/dialogs/XFilePickerNotifier.hpp>
-#endif
-#ifndef  _COM_SUN_STAR_UI_DIALOGS_XFILEPICKERWORKAROUND_HPP_
-#include <com/sun/star/ui/dialogs/XFilePickerWorkaround.hpp>
 #endif
 #ifndef  _COM_SUN_STAR_UI_DIALOGS_XFILEPREVIEW_HPP_
 #include <com/sun/star/ui/dialogs/XFilePreview.hpp>
@@ -1554,30 +1551,10 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
         getRealFilter( rFilter );
 
         // fill the rpURLList
-        Reference<XFilePickerWorkaround> xFileWorkarounds(mxFileDlg, UNO_QUERY);
-        Sequence < OUString > aPathSeq;
-        if (xFileWorkarounds.is())
+        Sequence < OUString > aPathSeq = mxFileDlg->getFiles();
+
+        if ( aPathSeq.getLength() )
         {
-            aPathSeq = xFileWorkarounds->getFilesAsURIs();
-            if ( !aPathSeq.getLength() )
-                return ERRCODE_ABORT;
-
-            rpURLList = new SvStringsDtor;
-
-            for ( USHORT i = 0; i < aPathSeq.getLength(); ++i )
-            {
-                String* pURL = new String( aPathSeq[i] );
-                rpURLList->Insert( pURL, rpURLList->Count() );
-            }
-        }
-        else
-        {
-            OSL_TRACE("Obsolete & broken multiselect code path");
-            aPathSeq = mxFileDlg->getFiles();
-
-            if ( !aPathSeq.getLength() )
-                return ERRCODE_ABORT;
-
             rpURLList = new SvStringsDtor;
 
             if ( aPathSeq.getLength() == 1 )
@@ -1603,9 +1580,11 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
                     rpURLList->Insert( pURL, rpURLList->Count() );
                 }
             }
+            SaveLastUsedFilter();
+            return ERRCODE_NONE;
         }
-        SaveLastUsedFilter();
-        return ERRCODE_NONE;
+        else
+            return ERRCODE_ABORT;
     }
     else
         return ERRCODE_ABORT;
