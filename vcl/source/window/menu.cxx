@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.140 $
+ *  $Revision: 1.141 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 09:53:05 $
+ *  last change: $Author: ihi $ $Date: 2006-08-08 12:16:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4875,6 +4875,7 @@ MenuBarWindow::MenuBarWindow( Window* pParent ) :
 
 MenuBarWindow::~MenuBarWindow()
 {
+    aCloser.RemoveEventListener( LINK( this, MenuBarWindow, ToolboxEventHdl ) );
 }
 
 void MenuBarWindow::SetMenu( MenuBar* pMen )
