@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxlngi4.mk,v $
 #
-#   $Revision: 1.41 $
+#   $Revision: 1.42 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 22:02:13 $
+#   last change: $Author: ihi $ $Date: 2006-08-08 11:38:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -135,12 +135,13 @@ STATIC		= -Wl,-Bstatic
 DYNAMIC		= -Wl,-Bdynamic
 
 # name of linker
-LINK*=$(CC)
+LINK*=$(CXX)
+LINKC*=$(CC)
 
 # default linker flags
-LINKFLAGSDEFS*=-z defs
+LINKFLAGSDEFS*=-Wl,-z,defs
 LINKFLAGSRUNPATH*=-Wl,-rpath,\''$$ORIGIN'\'
-LINKFLAGS=-z combreloc $(LINKFLAGSDEFS) $(LINKFLAGSRUNPATH)
+LINKFLAGS=-Wl,-z,combreloc $(LINKFLAGSDEFS) $(LINKFLAGSRUNPATH)
 
 # linker flags for linking applications
 LINKFLAGSAPPGUI= -Wl,-export-dynamic -Wl,--noinhibit-exec
