@@ -4,9 +4,9 @@
  *
  *  $RCSfile: implrenderer.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2006-08-09 07:29:10 $
+ *  last change: $Author: rt $ $Date: 2006-08-09 07:55:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,7 +160,7 @@
 #include <tools/poly.hxx>
 #endif
 
-#ifndef _SVTOOLS_GRAPHICTOOLS_HXX_
+#ifndef _VCL_GRAPHICTOOLS_HXX_
 #include <vcl/graphictools.hxx>
 #endif
 
