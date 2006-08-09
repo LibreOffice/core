@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationtiming.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-05-12 11:46:15 $
+ *  last change: $Author: aw $ $Date: 2006-08-09 16:39:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,7 +120,6 @@ namespace drawinglayer
 
         public:
             animationEntryList();
-            animationEntryList(const animationEntryList& rCandidate);
             virtual ~animationEntryList();
             virtual animationEntry* clone() const;
 
@@ -139,7 +138,7 @@ namespace drawinglayer
             sal_uInt32                                  mnRepeat;
 
         public:
-            animationEntryLoop(sal_uInt32 nRepeat);
+            animationEntryLoop(sal_uInt32 nRepeat = 0xffffffff);
             virtual ~animationEntryLoop();
             virtual animationEntry* clone() const;
 

@@ -2,11 +2,11 @@
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
- *  $RCSfile: polygontubeprimitive3d.hxx,v $
+ *  $RCSfile: modifiedcolorprimitive3d.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: aw $ $Date: 2006-08-09 16:38:13 $
+ *  last change: $Author: aw $ $Date: 2006-08-09 16:38:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,20 +33,16 @@
  *
  ************************************************************************/
 
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_POLYGONTUBEPRIMITIVE3D_HXX
-#define _DRAWINGLAYER_PRIMITIVE3D_POLYGONTUBEPRIMITIVE3D_HXX
+#ifndef _DRAWINGLAYER_PRIMITIVE3D_MODIFIEDCOLORPRIMITIVE3D_HXX
+#define _DRAWINGLAYER_PRIMITIVE3D_MODIFIEDCOLORPRIMITIVE3D_HXX
 
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_POLYGONPRIMITIVE3D_HXX
-#include <drawinglayer/primitive3d/polygonprimitive3d.hxx>
+#ifndef _DRAWINGLAYER_PRIMITIVE3D_VECTORPRIMITIVE3D_HXX
+#include <drawinglayer/primitive3d/vectorprimitive3d.hxx>
 #endif
 
-//////////////////////////////////////////////////////////////////////////////
-// predefines
-
-namespace basegfx {
-    class B3DPolyPolygon;
-    class B3DHomMatrix;
-}
+#ifndef _BGFX_COLOR_BCOLORMODIFIER_HXX
+#include <basegfx/color/bcolormodifier.hxx>
+#endif
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -54,31 +50,19 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        class polygonTubePrimitive3D : public polygonHairlinePrimitive3D
+        class modifiedColorPrimitive3D : public vectorPrimitive3D
         {
         protected:
-            double                                      mfRadius;
-            double                                      mfDegreeStepWidth;
-            double                                      mfMiterMinimumAngle;
-            basegfx::tools::B2DLineJoin             maLineJoin;
-
-            //  create decomposition
-            virtual void decompose(primitiveVector3D& rTarget);
+            basegfx::BColorModifier                 maColorModifier;
 
         public:
-            polygonTubePrimitive3D(
-                const basegfx::B3DPolygon& rPolygon,
-                const basegfx::BColor& rBColor,
-                double fRadius, basegfx::tools::B2DLineJoin aLineJoin,
-                double fDegreeStepWidth = 10.0 * F_PI180,
-                double fMiterMinimumAngle = 15.0 * F_PI180);
-            virtual ~polygonTubePrimitive3D();
+            modifiedColorPrimitive3D(
+                const primitiveVector3D& rPrimitiveVector,
+                const basegfx::BColorModifier& rColorModifier);
+            virtual ~modifiedColorPrimitive3D();
 
             // get data
-            double getRadius() const { return mfRadius; }
-            double getDegreeStepWidth() const { return mfDegreeStepWidth; }
-            double getMiterMinimumAngle() const { return mfMiterMinimumAngle; }
-            basegfx::tools::B2DLineJoin getLineJoin() const { return maLineJoin; }
+            const basegfx::BColorModifier& getColorModifier() const { return maColorModifier; }
 
             // compare operator
             virtual bool operator==(const basePrimitive3D& rPrimitive) const;
@@ -91,6 +75,6 @@ namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif // _DRAWINGLAYER_PRIMITIVE3D_POLYGONTUBEPRIMITIVE3D_HXX
+#endif //_DRAWINGLAYER_PRIMITIVE3D_MODIFIEDCOLORPRIMITIVE3D_HXX
 
 // eof

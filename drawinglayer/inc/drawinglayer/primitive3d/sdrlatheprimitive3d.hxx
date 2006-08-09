@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrlatheprimitive3d.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2006-06-02 13:57:59 $
+ *  last change: $Author: aw $ $Date: 2006-08-09 16:38:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@
 
 namespace drawinglayer
 {
-    namespace primitive
+    namespace primitive3d
     {
         class sdrLathePrimitive3D : public sdrPrimitive3D
         {
@@ -63,7 +63,7 @@ namespace drawinglayer
             sliceVector                                 maSlices;
 
         protected:
-            ::basegfx::B2DPolyPolygon                   maPolyPolygon;
+            basegfx::B2DPolyPolygon                 maPolyPolygon;
             sal_uInt32                                  mnHorizontalSegments;
             sal_uInt32                                  mnVerticalSegments;
             double                                      mfDiagonal;
@@ -79,18 +79,18 @@ namespace drawinglayer
             unsigned                                    mbCloseBack : 1;
 
             //  create decomposition
-            virtual void decompose(primitiveVector& rTarget, const ::drawinglayer::geometry::viewInformation& rViewInformation);
+            virtual void decompose(primitiveVector3D& rTarget);
 
             // get (evtl. create) slices
             const sliceVector& getSlices() const;
 
         public:
             sdrLathePrimitive3D(
-                const ::basegfx::B3DHomMatrix& rTransform,
-                const ::basegfx::B2DVector& rTextureSize,
-                const sdrLineFillShadowAttribute& rSdrLFSAttribute,
-                const sdr3DObjectAttribute& rSdr3DObjectAttribute,
-                const ::basegfx::B2DPolyPolygon& rPolyPolygon,
+                const basegfx::B3DHomMatrix& rTransform,
+                const basegfx::B2DVector& rTextureSize,
+                const attribute::sdrLineFillShadowAttribute& rSdrLFSAttribute,
+                const attribute::sdr3DObjectAttribute& rSdr3DObjectAttribute,
+                const basegfx::B2DPolyPolygon& rPolyPolygon,
                 sal_uInt32 nHorizontalSegments,
                 sal_uInt32 nVerticalSegments,
                 double fDiagonal,
@@ -105,16 +105,16 @@ namespace drawinglayer
             virtual ~sdrLathePrimitive3D();
 
             // compare operator
-            virtual bool operator==(const basePrimitive& rPrimitive) const;
+            virtual bool operator==(const basePrimitive3D& rPrimitive) const;
 
             // id generator
             virtual PrimitiveID getID() const;
 
             // get 3D range of primitive.
-            virtual ::basegfx::B3DRange get3DRange(const ::drawinglayer::geometry::viewInformation& rViewInformation) const;
+            virtual basegfx::B3DRange get3DRange() const;
 
             // data access
-            const ::basegfx::B2DPolyPolygon& getPolyPolygon() const { return maPolyPolygon; }
+            const basegfx::B2DPolyPolygon& getPolyPolygon() const { return maPolyPolygon; }
             sal_uInt32 getHorizontalSegments() const { return mnHorizontalSegments; }
             sal_uInt32 getVerticalSegments() const { return mnVerticalSegments ; }
             double getDiagonal() const { return mfDiagonal; }

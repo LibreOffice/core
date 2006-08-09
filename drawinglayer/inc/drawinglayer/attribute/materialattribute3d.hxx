@@ -2,11 +2,11 @@
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
- *  $RCSfile: sdrsphereprimitive3d.hxx,v $
+ *  $RCSfile: materialattribute3d.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: aw $ $Date: 2006-08-09 16:38:13 $
+ *  last change: $Author: aw $ $Date: 2006-08-09 16:36:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,58 +33,61 @@
  *
  ************************************************************************/
 
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_SDRSPHEREPRIMITIVE3D_HXX
-#define _DRAWINGLAYER_PRIMITIVE3D_SDRSPHEREPRIMITIVE3D_HXX
+#ifndef _DRAWINGLAYER_ATTRIBUTE_MATERIALATTRIBUTE3D_HXX
+#define _DRAWINGLAYER_ATTRIBUTE_MATERIALATTRIBUTE3D_HXX
 
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_SDRPRIMITIVE3D_HXX
-#include <drawinglayer/primitive3d/sdrprimitive3d.hxx>
+#ifndef _SAL_TYPES_H_
+#include <sal/types.h>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
 
+namespace drawinglayer { namespace {
+    class impMaterialAttribute3D;
+}}
+
+namespace basegfx {
+    class BColor;
+}
+
 //////////////////////////////////////////////////////////////////////////////
 
 namespace drawinglayer
 {
-    namespace primitive3d
+    namespace attribute
     {
-        class sdrSpherePrimitive3D : public sdrPrimitive3D
+        class materialAttribute3D
         {
-        protected:
-            sal_uInt32                                  mnHorizontalSegments;
-            sal_uInt32                                  mnVerticalSegments;
-
-            //  create decomposition
-            virtual void decompose(primitiveVector3D& rTarget);
+        private:
+            impMaterialAttribute3D*                             mpMaterialAttribute3D;
 
         public:
-            sdrSpherePrimitive3D(
-                const basegfx::B3DHomMatrix& rTransform,
-                const basegfx::B2DVector& rTextureSize,
-                const attribute::sdrLineFillShadowAttribute& rSdrLFSAttribute,
-                const attribute::sdr3DObjectAttribute& rSdr3DObjectAttribute,
-                sal_uInt32 nHorizontalSegments, sal_uInt32 nVerticalSegments);
-            virtual ~sdrSpherePrimitive3D();
+            // constructors/destructor
+            materialAttribute3D(const basegfx::BColor& rColor, const basegfx::BColor& rSpecular, const basegfx::BColor& rEmission, sal_uInt16 nSpecularIntensity);
+            materialAttribute3D(const basegfx::BColor& rColor);
+            materialAttribute3D();
+            materialAttribute3D(const materialAttribute3D& rCandidate);
+            ~materialAttribute3D();
+
+            // assignment operator
+            materialAttribute3D& operator=(const materialAttribute3D& rCandidate);
 
             // compare operator
-            virtual bool operator==(const basePrimitive3D& rPrimitive) const;
-
-            // id generator
-            virtual PrimitiveID getID() const;
-
-            // get 3D range of primitive.
-            virtual basegfx::B3DRange get3DRange() const;
+            bool operator==(const materialAttribute3D& rCandidate) const;
+            bool operator!=(const materialAttribute3D& rCandidate) const { return !operator==(rCandidate); }
 
             // data access
-            sal_uInt32 getHorizontalSegments() const { return mnHorizontalSegments; }
-            sal_uInt32 getVerticalSegments() const { return mnVerticalSegments ; }
+            const basegfx::BColor& getColor() const;
+            const basegfx::BColor& getSpecular() const;
+            const basegfx::BColor& getEmission() const;
+            sal_uInt16 getSpecularIntensity() const;
         };
-    } // end of namespace overlay
+    } // end of namespace attribute
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif //_DRAWINGLAYER_PRIMITIVE3D_SDRSPHEREPRIMITIVE3D_HXX
+#endif //_DRAWINGLAYER_ATTRIBUTE_MATERIALATTRIBUTE3D_HXX
 
 // eof

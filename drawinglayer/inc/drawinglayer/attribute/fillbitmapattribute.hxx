@@ -2,11 +2,11 @@
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
- *  $RCSfile: sdrcubeprimitive3d.hxx,v $
+ *  $RCSfile: fillbitmapattribute.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: aw $ $Date: 2006-08-09 16:38:13 $
+ *  last change: $Author: aw $ $Date: 2006-08-09 16:36:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,48 +33,60 @@
  *
  ************************************************************************/
 
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_SDRCUBEPRIMITIVE3D_HXX
-#define _DRAWINGLAYER_PRIMITIVE3D_SDRCUBEPRIMITIVE3D_HXX
+#ifndef _DRAWINGLAYER_ATTRIBUTE_FILLBITMAPATTRIBUTE_HXX
+#define _DRAWINGLAYER_ATTRIBUTE_FILLBITMAPATTRIBUTE_HXX
 
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_SDRPRIMITIVE3D_HXX
-#include <drawinglayer/primitive3d/sdrprimitive3d.hxx>
+#ifndef _SV_BITMAP_HXX
+#include <vcl/bitmap.hxx>
+#endif
+
+#ifndef _BGFX_POINT_B2DPOINT_HXX
+#include <basegfx/point/b2dpoint.hxx>
+#endif
+
+#ifndef _BGFX_VECTOR_B2DVECTOR_HXX
+#include <basegfx/vector/b2dvector.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
+class SfxItemSet;
+
+namespace basegfx {
+    class B2DRange;
+    class BColor;
+}
+
+//////////////////////////////////////////////////////////////////////////////
 
 namespace drawinglayer
 {
-    namespace primitive3d
+    namespace attribute
     {
-        class sdrCubePrimitive3D : public sdrPrimitive3D
+        class fillBitmapAttribute
         {
-        protected:
-            //  create decomposition
-            virtual void decompose(primitiveVector3D& rTarget);
+            Bitmap                                      maBitmap;
+            basegfx::B2DPoint                           maTopLeft;
+            basegfx::B2DVector                      maSize;
+
+            // bitfield
+            unsigned                                    mbTiling : 1;
 
         public:
-            sdrCubePrimitive3D(
-                const basegfx::B3DHomMatrix& rTransform,
-                const basegfx::B2DVector& rTextureSize,
-                const attribute::sdrLineFillShadowAttribute& rSdrLFSAttribute,
-                const attribute::sdr3DObjectAttribute& rSdr3DObjectAttribute);
-            virtual ~sdrCubePrimitive3D();
+            fillBitmapAttribute(const Bitmap& rBitmap, const basegfx::B2DPoint& rTopLeft, const basegfx::B2DVector& rSize, bool bTiling);
+            bool operator==(const fillBitmapAttribute& rCandidate) const;
 
-            // compare operator
-            virtual bool operator==(const basePrimitive3D& rPrimitive) const;
-
-            // id generator
-            virtual PrimitiveID getID() const;
-
-            // get 3D range of primitive.
-            virtual basegfx::B3DRange get3DRange() const;
+            // data access
+            const Bitmap& getBitmap() const { return maBitmap; }
+            const basegfx::B2DPoint& getTopLeft() const { return maTopLeft; }
+            const basegfx::B2DVector& getSize() const { return maSize; }
+            bool getTiling() const { return mbTiling; }
         };
-    } // end of namespace overlay
+    } // end of namespace attribute
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif //_DRAWINGLAYER_PRIMITIVE3D_SDRCUBEPRIMITIVE3D_HXX
+#endif //_DRAWINGLAYER_ATTRIBUTE_FILLBITMAPATTRIBUTE_HXX
 
 // eof

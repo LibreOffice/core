@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrextrudelathetools3d.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2006-05-19 09:34:49 $
+ *  last change: $Author: aw $ $Date: 2006-08-09 16:38:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@
 
 namespace drawinglayer
 {
-    namespace primitive
+    namespace primitive3d
     {
         // slice types
         enum sliceType
@@ -67,25 +67,25 @@ namespace drawinglayer
         class slice
         {
         protected:
-            ::basegfx::B3DPolyPolygon                   maPolyPolygon;
+            basegfx::B3DPolyPolygon                 maPolyPolygon;
             sliceType                                   maSliceType;
 
         public:
-            slice(const ::basegfx::B2DPolyPolygon& rPolyPolygon, const ::basegfx::B3DHomMatrix& aTransform, sliceType aSliceType = SLICETYPE_REGULAR)
-            :   maPolyPolygon(::basegfx::tools::createB3DPolyPolygonFromB2DPolyPolygon(rPolyPolygon)),
+            slice(const basegfx::B2DPolyPolygon& rPolyPolygon, const basegfx::B3DHomMatrix& aTransform, sliceType aSliceType = SLICETYPE_REGULAR)
+            :   maPolyPolygon(basegfx::tools::createB3DPolyPolygonFromB2DPolyPolygon(rPolyPolygon)),
                 maSliceType(aSliceType)
             {
                 maPolyPolygon.transform(aTransform);
             }
 
-            slice(const ::basegfx::B3DPolyPolygon& rPolyPolygon, sliceType aSliceType = SLICETYPE_REGULAR)
+            slice(const basegfx::B3DPolyPolygon& rPolyPolygon, sliceType aSliceType = SLICETYPE_REGULAR)
             :   maPolyPolygon(rPolyPolygon),
                 maSliceType(aSliceType)
             {
             }
 
             // data access
-            const ::basegfx::B3DPolyPolygon& getB3DPolyPolygon() const { return maPolyPolygon; }
+            const basegfx::B3DPolyPolygon& getB3DPolyPolygon() const { return maPolyPolygon; }
             sliceType getSliceType() const { return maSliceType; }
         };
 
@@ -93,18 +93,18 @@ namespace drawinglayer
         typedef ::std::vector< slice > sliceVector;
 
         // helpers for creation
-        void createLatheSlices(sliceVector& rSliceVector, const ::basegfx::B2DPolyPolygon& rSource,
+        void createLatheSlices(sliceVector& rSliceVector, const basegfx::B2DPolyPolygon& rSource,
             double fBackScale, double fDiagonal, double fRotation, sal_uInt32 nSteps,
             bool bCharacterMode, bool bCloseFront, bool bCloseBack);
-        void createExtrudeSlices(sliceVector& rSliceVector, const ::basegfx::B2DPolyPolygon& rSource,
+        void createExtrudeSlices(sliceVector& rSliceVector, const basegfx::B2DPolyPolygon& rSource,
             double fBackScale, double fDiagonal, double fDepth,
             bool bCharacterMode, bool bCloseFront, bool bCloseBack);
 
         // helpers for geometry extraction
-        void extractLinesFromSlice(::basegfx::B3DPolyPolygon& rLine, const sliceVector& rSliceVector, bool bClosed);
-        void extractPlanesFromSlice(::std::vector< ::basegfx::B3DPolyPolygon >& rFill, const sliceVector& rSliceVector,
+        void extractLinesFromSlice(basegfx::B3DPolyPolygon& rLine, const sliceVector& rSliceVector, bool bClosed);
+        void extractPlanesFromSlice(::std::vector< basegfx::B3DPolyPolygon >& rFill, const sliceVector& rSliceVector,
             bool bCreateNormals, bool bSmoothHorizontalNormals, bool bSmoothNormals, bool bSmoothLids, bool bClosed,
-            double fSmoothNormalsMix, double fSmoothLidsMix, bool bCreateTextureCoordinates, const ::basegfx::B2DHomMatrix& rTexTransform);
+            double fSmoothNormalsMix, double fSmoothLidsMix, bool bCreateTextureCoordinates, const basegfx::B2DHomMatrix& rTexTransform);
 
     } // end of namespace overlay
 } // end of namespace drawinglayer

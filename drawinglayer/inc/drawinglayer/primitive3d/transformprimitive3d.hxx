@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transformprimitive3d.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-06-02 14:11:41 $
+ *  last change: $Author: aw $ $Date: 2006-08-09 16:38:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,8 @@
 #ifndef _DRAWINGLAYER_PRIMITIVE3D_TRANSFORMPRIMITIVE3D_HXX
 #define _DRAWINGLAYER_PRIMITIVE3D_TRANSFORMPRIMITIVE3D_HXX
 
-#ifndef _DRAWINGLAYER_PRIMITIVE_VECTORPRIMITIVE_HXX
-#include <drawinglayer/primitive/vectorprimitive.hxx>
+#ifndef _DRAWINGLAYER_PRIMITIVE3D_VECTORPRIMITIVE3D_HXX
+#include <drawinglayer/primitive3d/vectorprimitive3d.hxx>
 #endif
 
 #ifndef _BGFX_MATRIX_B3DHOMMATRIX_HXX
@@ -48,30 +48,30 @@
 
 namespace drawinglayer
 {
-    namespace primitive
+    namespace primitive3d
     {
-        class transformPrimitive3D : public vectorPrimitive
+        class transformPrimitive3D : public vectorPrimitive3D
         {
         protected:
-            ::basegfx::B3DHomMatrix                 maTransformation;
+            basegfx::B3DHomMatrix                   maTransformation;
 
         public:
-            transformPrimitive3D(const ::basegfx::B3DHomMatrix& rTransformation, const primitiveVector& rPrimitiveVector);
+            transformPrimitive3D(const basegfx::B3DHomMatrix& rTransformation, const primitiveVector3D& rPrimitiveVector);
             virtual ~transformPrimitive3D();
 
             // get data
-            const ::basegfx::B3DHomMatrix& getTransformation() const { return maTransformation; }
+            const basegfx::B3DHomMatrix& getTransformation() const { return maTransformation; }
 
             // compare operator
-            virtual bool operator==(const basePrimitive& rPrimitive) const;
+            virtual bool operator==(const basePrimitive3D& rPrimitive) const;
 
             // id generator
             virtual PrimitiveID getID() const;
 
             // get 3D range of primitive (for 3D geometries). Default implementation uses decomposition, analog to getRange
-            virtual ::basegfx::B3DRange get3DRange(const ::drawinglayer::geometry::viewInformation& rViewInformation) const;
+            virtual basegfx::B3DRange get3DRange() const;
         };
-    } // end of namespace primitive
+    } // end of namespace primitive3d
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////

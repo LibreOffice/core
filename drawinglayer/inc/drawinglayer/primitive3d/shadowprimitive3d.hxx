@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shadowprimitive3d.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2006-06-02 13:57:59 $
+ *  last change: $Author: aw $ $Date: 2006-08-09 16:38:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,8 @@
 #ifndef _DRAWINGLAYER_PRIMITIVE3D_SHADOWPRIMITIVE3D_HXX
 #define _DRAWINGLAYER_PRIMITIVE3D_SHADOWPRIMITIVE3D_HXX
 
-#ifndef _DRAWINGLAYER_PRIMITIVE_VECTORPRIMITIVE_HXX
-#include <drawinglayer/primitive/vectorprimitive.hxx>
+#ifndef _DRAWINGLAYER_PRIMITIVE3D_VECTORPRIMITIVE3D_HXX
+#include <drawinglayer/primitive3d/vectorprimitive3d.hxx>
 #endif
 
 #ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
@@ -52,13 +52,13 @@
 
 namespace drawinglayer
 {
-    namespace primitive
+    namespace primitive3d
     {
-        class shadowPrimitive3D : public vectorPrimitive
+        class shadowPrimitive3D : public vectorPrimitive3D
         {
         protected:
-            ::basegfx::B2DHomMatrix                     maShadowTransform;
-            ::basegfx::BColor                           maShadowColor;
+            basegfx::B2DHomMatrix                       maShadowTransform;
+            basegfx::BColor                         maShadowColor;
             double                                      mfShadowTransparence;
 
             // bitfield
@@ -66,23 +66,23 @@ namespace drawinglayer
 
         public:
             shadowPrimitive3D(
-                const ::basegfx::B2DHomMatrix& rShadowTransform, const ::basegfx::BColor& rShadowColor,
-                double fShadowTransparence, bool bShadow3D, const primitiveVector& rPrimitiveVector);
+                const basegfx::B2DHomMatrix& rShadowTransform, const basegfx::BColor& rShadowColor,
+                double fShadowTransparence, bool bShadow3D, const primitiveVector3D& rPrimitiveVector);
             virtual ~shadowPrimitive3D();
 
             // get data
-            const ::basegfx::B2DHomMatrix& getShadowTransform() const { return maShadowTransform; }
-            const ::basegfx::BColor& getShadowColor() const { return maShadowColor; }
+            const basegfx::B2DHomMatrix& getShadowTransform() const { return maShadowTransform; }
+            const basegfx::BColor& getShadowColor() const { return maShadowColor; }
             double getShadowTransparence() const { return mfShadowTransparence; }
             bool getShadow3D() const { return mbShadow3D; }
 
             // compare operator
-            virtual bool operator==(const basePrimitive& rPrimitive) const;
+            virtual bool operator==(const basePrimitive3D& rPrimitive) const;
 
             // id generator
             virtual PrimitiveID getID() const;
         };
-    } // end of namespace primitive
+    } // end of namespace primitive3d
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
