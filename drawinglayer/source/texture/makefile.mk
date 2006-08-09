@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.1 $
 #
-#   last change: $Author: aw $ $Date: 2006-08-09 16:58:53 $
+#   last change: $Author: aw $ $Date: 2006-08-09 16:58:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -33,54 +33,19 @@
 #
 #*************************************************************************
 
-PRJ=..
-
+PRJ=..$/..
 PRJNAME=drawinglayer
-TARGET=drawinglayer
+TARGET=texture
 
-# --- Settings ---------------------------------------------------
+# --- Settings ----------------------------------
 
-.INCLUDE :  settings.mk
+.INCLUDE :  	settings.mk
 
-# --- Allgemein ---------------------------------------------------
+# --- Files -------------------------------------
 
-LIB1TARGET=$(SLB)$/drawinglayer.lib
-LIB1FILES=\
-    $(SLB)$/primitive.lib	\
-    $(SLB)$/primitive3d.lib	\
-    $(SLB)$/geometry.lib	\
-    $(SLB)$/processor.lib	\
-    $(SLB)$/processor3d.lib	\
-    $(SLB)$/attribute.lib	\
-    $(SLB)$/animation.lib	\
-    $(SLB)$/texture.lib
+SLOFILES= \
+        $(SLO)$/texture.obj
 
-SHL1TARGET= drawinglayer$(UPD)$(DLLPOSTFIX)
-SHL1IMPLIB= idrawinglayer
+# --- Targets ----------------------------------
 
-SHL1STDLIBS=\
-        $(GOODIESLIB)		\
-        $(VCLLIB)			\
-        $(BASEGFXLIB)		\
-        $(TOOLSLIB)			\
-        $(SALLIB)			\
-        $(CPPUHELPERLIB)	\
-        $(CPPULIB)
-
-SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
-SHL1LIBS=	$(SLB)$/drawinglayer.lib
-
-DEF1NAME	=$(SHL1TARGET)
-DEF1DEPN	=$(MISC)$/$(SHL1TARGET).flt \
-        $(LIB1TARGET)
-
-DEF1DES		=DrawingLayer
-DEFLIB1NAME	=drawinglayer
-
-# --- Targets -----------------------------------------------------------
-
-.INCLUDE :  target.mk
-
-$(MISC)$/$(SHL1TARGET).flt : makefile.mk
-    @+$(TYPE) $(TARGET).flt > $@
-
+.INCLUDE : target.mk
