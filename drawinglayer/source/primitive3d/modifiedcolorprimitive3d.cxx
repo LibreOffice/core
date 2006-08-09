@@ -2,11 +2,11 @@
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
- *  $RCSfile: transformprimitive3d.cxx,v $
+ *  $RCSfile: modifiedcolorprimitive3d.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: aw $ $Date: 2006-08-09 16:51:16 $
+ *  last change: $Author: aw $ $Date: 2006-08-09 16:51:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,8 @@
  *
  ************************************************************************/
 
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_TRANSFORMPRIMITIVE3D_HXX
-#include <drawinglayer/primitive3d/transformprimitive3d.hxx>
+#ifndef _DRAWINGLAYER_PRIMITIVE3D_MODIFIEDCOLORPRIMITIVE3D_HXX
+#include <drawinglayer/primitive3d/modifiedcolorprimitive3d.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -43,37 +43,32 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        transformPrimitive3D::transformPrimitive3D(const basegfx::B3DHomMatrix& rTransformation, const primitiveVector3D& rPrimitiveVector)
+        modifiedColorPrimitive3D::modifiedColorPrimitive3D(
+            const primitiveVector3D& rPrimitiveVector,
+            const basegfx::BColorModifier& rColorModifier)
         :   vectorPrimitive3D(rPrimitiveVector),
-            maTransformation(rTransformation)
+            maColorModifier(rColorModifier)
         {
         }
 
-        transformPrimitive3D::~transformPrimitive3D()
+        modifiedColorPrimitive3D::~modifiedColorPrimitive3D()
         {
         }
 
-        bool transformPrimitive3D::operator==(const basePrimitive3D& rPrimitive) const
+        bool modifiedColorPrimitive3D::operator==(const basePrimitive3D& rPrimitive) const
         {
             if(vectorPrimitive3D::operator==(rPrimitive))
             {
-                const transformPrimitive3D& rCompare = static_cast< const transformPrimitive3D& >(rPrimitive);
-                return (maTransformation == rCompare.maTransformation);
+                const modifiedColorPrimitive3D& rCompare = (modifiedColorPrimitive3D&)rPrimitive;
+                return (maColorModifier == rCompare.maColorModifier);
             }
 
             return false;
         }
 
-        PrimitiveID transformPrimitive3D::getID() const
+        PrimitiveID modifiedColorPrimitive3D::getID() const
         {
-            return CreatePrimitiveID('T', 'R', 'N', '3');
-        }
-
-        basegfx::B3DRange transformPrimitive3D::get3DRange() const
-        {
-            basegfx::B3DRange aRetval(get3DRangeFromVector(maPrimitiveVector));
-            aRetval.transform(maTransformation);
-            return aRetval;
+            return CreatePrimitiveID('M', 'C', 'L', '3');
         }
     } // end of namespace primitive3d
 } // end of namespace drawinglayer

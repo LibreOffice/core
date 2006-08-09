@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrlatheprimitive3d.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2006-06-02 13:58:02 $
+ *  last change: $Author: aw $ $Date: 2006-08-09 16:51:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,29 +65,29 @@
 
 namespace drawinglayer
 {
-    namespace primitive
+    namespace primitive3d
     {
-        void sdrLathePrimitive3D::decompose(primitiveVector& rTarget, const ::drawinglayer::geometry::viewInformation& rViewInformation)
+        void sdrLathePrimitive3D::decompose(primitiveVector3D& rTarget)
         {
             // get slices
             const sliceVector& rSliceVector = getSlices();
 
             if(rSliceVector.size())
             {
-                const bool bBackScale(!::basegfx::fTools::equal(mfBackScale, 1.0));
-                const bool bClosedRotation(!bBackScale && mnHorizontalSegments && ::basegfx::fTools::equal(mfRotation, F_2PI));
+                const bool bBackScale(!basegfx::fTools::equal(mfBackScale, 1.0));
+                const bool bClosedRotation(!bBackScale && mnHorizontalSegments && basegfx::fTools::equal(mfRotation, F_2PI));
 
                 // add fill
                 if(getSdrLFSAttribute().getFill())
                 {
                     sal_uInt32 a;
-                    ::basegfx::B3DRange aRange;
+                    basegfx::B3DRange aRange;
 
                     // decide what to create
                     const bool bCreateNormals(::com::sun::star::drawing::NormalsKind_SPECIFIC == getSdr3DObjectAttribute().getNormalsKind());
                     const bool bCreateTextureCoordiantesX(::com::sun::star::drawing::TextureProjectionMode_OBJECTSPECIFIC == getSdr3DObjectAttribute().getTextureProjectionX());
                     const bool bCreateTextureCoordiantesY(::com::sun::star::drawing::TextureProjectionMode_OBJECTSPECIFIC == getSdr3DObjectAttribute().getTextureProjectionY());
-                    ::basegfx::B2DHomMatrix aTexTransform;
+                    basegfx::B2DHomMatrix aTexTransform;
 
                     if(bCreateTextureCoordiantesX || bCreateTextureCoordiantesY)
                     {
@@ -102,7 +102,7 @@ namespace drawinglayer
                     }
 
                     // create geometry
-                    ::std::vector< ::basegfx::B3DPolyPolygon > aFill;
+                    ::std::vector< basegfx::B3DPolyPolygon > aFill;
                     extractPlanesFromSlice(aFill, rSliceVector,
                         bCreateNormals, mbSmoothHorizontalNormals, mbSmoothNormals, mbSmoothLids, bClosedRotation,
                         0.85, 0.6, bCreateTextureCoordiantesX || bCreateTextureCoordiantesY, aTexTransform);
@@ -110,7 +110,7 @@ namespace drawinglayer
                     // get full range
                     for(a = 0L; a < aFill.size(); a++)
                     {
-                        aRange.expand(::basegfx::tools::getRange(aFill[a]));
+                        aRange.expand(basegfx::tools::getRange(aFill[a]));
                     }
 
                     // normal creation
@@ -118,11 +118,11 @@ namespace drawinglayer
                         if(::com::sun::star::drawing::NormalsKind_SPHERE == getSdr3DObjectAttribute().getNormalsKind())
                         {
                             // create sphere normals
-                            const ::basegfx::B3DPoint aCenter(aRange.getCenter());
+                            const basegfx::B3DPoint aCenter(aRange.getCenter());
 
                             for(a = 0L; a < aFill.size(); a++)
                             {
-                                aFill[a] = ::basegfx::tools::applyDefaultNormalsSphere(aFill[a], aCenter);
+                                aFill[a] = basegfx::tools::applyDefaultNormalsSphere(aFill[a], aCenter);
                             }
                         }
                         else if(::com::sun::star::drawing::NormalsKind_FLAT == getSdr3DObjectAttribute().getNormalsKind())
@@ -138,7 +138,7 @@ namespace drawinglayer
                             // invert normals
                             for(a = 0L; a < aFill.size(); a++)
                             {
-                                aFill[a] = ::basegfx::tools::invertNormals(aFill[a]);
+                                aFill[a] = basegfx::tools::invertNormals(aFill[a]);
                             }
                         }
                     }
@@ -159,23 +159,23 @@ namespace drawinglayer
 
                             for(a = 0L; a < aFill.size(); a++)
                             {
-                                aFill[a] = ::basegfx::tools::applyDefaultTextureCoordinatesParallel(aFill[a], aRange, bParallelX, bParallelY);
+                                aFill[a] = basegfx::tools::applyDefaultTextureCoordinatesParallel(aFill[a], aRange, bParallelX, bParallelY);
                             }
                         }
 
                         if(bSphereX || bSphereY)
                         {
                             // apply spherical texture coordinates in X and/or Y
-                            const ::basegfx::B3DPoint aCenter(aRange.getCenter());
+                            const basegfx::B3DPoint aCenter(aRange.getCenter());
 
                             for(a = 0L; a < aFill.size(); a++)
                             {
-                                aFill[a] = ::basegfx::tools::applyDefaultTextureCoordinatesSphere(aFill[a], aCenter, bSphereX, bSphereY);
+                                aFill[a] = basegfx::tools::applyDefaultTextureCoordinatesSphere(aFill[a], aCenter, bSphereX, bSphereY);
                             }
                         }
 
                         // transform texture coordinates to texture size
-                        ::basegfx::B2DHomMatrix aTexMatrix;
+                        basegfx::B2DHomMatrix aTexMatrix;
                         aTexMatrix.scale(maTextureSize.getX(), maTextureSize.getY());
 
                         for(a = 0L; a < aFill.size(); a++)
@@ -194,7 +194,7 @@ namespace drawinglayer
                 // add line
                 if(getSdrLFSAttribute().getLine())
                 {
-                    ::basegfx::B3DPolyPolygon aLine;
+                    basegfx::B3DPolyPolygon aLine;
                     extractLinesFromSlice(aLine, rSliceVector, bClosedRotation);
                     add3DPolyPolygonLinePrimitive(aLine, maTransform, rTarget, *maSdrLFSAttribute.getLine());
                 }
@@ -210,20 +210,20 @@ namespace drawinglayer
         void sdrLathePrimitive3D::impCreateSlices()
         {
             // prepare the polygon
-            ::basegfx::B2DPolyPolygon aCandidate(::basegfx::tools::adaptiveSubdivideByDistance(maPolyPolygon));
+            basegfx::B2DPolyPolygon aCandidate(basegfx::tools::adaptiveSubdivideByDistance(maPolyPolygon));
             aCandidate.removeDoublePoints();
-            aCandidate = ::basegfx::tools::correctOrientations(aCandidate);
-            aCandidate = ::basegfx::tools::correctOutmostPolygon(aCandidate);
+            aCandidate = basegfx::tools::correctOrientations(aCandidate);
+            aCandidate = basegfx::tools::correctOutmostPolygon(aCandidate);
 
             // check edge count of first sub-polygon. If different, reSegment polyPolygon. This ensures
             // that for polyPolygons, the subPolys 1..n only get reSegmented when polygon 0L is different
             // at all (and not always)
-            const ::basegfx::B2DPolygon aSubCandidate(aCandidate.getB2DPolygon(0L));
+            const basegfx::B2DPolygon aSubCandidate(aCandidate.getB2DPolygon(0L));
             const sal_uInt32 nSubEdgeCount(aSubCandidate.isClosed() ? aSubCandidate.count() : (aSubCandidate.count() ? aSubCandidate.count() - 1L : 0L));
 
             if(nSubEdgeCount != mnVerticalSegments)
             {
-                aCandidate = ::basegfx::tools::reSegmentPolyPolygon(aCandidate, mnVerticalSegments);
+                aCandidate = basegfx::tools::reSegmentPolyPolygon(aCandidate, mnVerticalSegments);
             }
 
             // prepare slices as geometry
@@ -242,11 +242,11 @@ namespace drawinglayer
         }
 
         sdrLathePrimitive3D::sdrLathePrimitive3D(
-            const ::basegfx::B3DHomMatrix& rTransform,
-            const ::basegfx::B2DVector& rTextureSize,
-            const sdrLineFillShadowAttribute& rSdrLFSAttribute,
-            const sdr3DObjectAttribute& rSdr3DObjectAttribute,
-            const ::basegfx::B2DPolyPolygon& rPolyPolygon,
+            const basegfx::B3DHomMatrix& rTransform,
+            const basegfx::B2DVector& rTextureSize,
+            const attribute::sdrLineFillShadowAttribute& rSdrLFSAttribute,
+            const attribute::sdr3DObjectAttribute& rSdr3DObjectAttribute,
+            const basegfx::B2DPolyPolygon& rPolyPolygon,
             sal_uInt32 nHorizontalSegments,
             sal_uInt32 nVerticalSegments,
             double fDiagonal,
@@ -273,17 +273,17 @@ namespace drawinglayer
             mbCloseBack(bCloseBack)
         {
             // make sure Rotation is positive
-            if(::basegfx::fTools::lessOrEqual(mfRotation, 0.0))
+            if(basegfx::fTools::lessOrEqual(mfRotation, 0.0))
             {
                 mfRotation = 0.0;
             }
 
             // make sure the percentage value mfDiagonal is between 0.0 and 1.0
-            if(::basegfx::fTools::lessOrEqual(mfDiagonal, 0.0))
+            if(basegfx::fTools::lessOrEqual(mfDiagonal, 0.0))
             {
                 mfDiagonal = 0.0;
             }
-            else if(::basegfx::fTools::moreOrEqual(mfDiagonal, 1.0))
+            else if(basegfx::fTools::moreOrEqual(mfDiagonal, 1.0))
             {
                 mfDiagonal = 1.0;
             }
@@ -305,7 +305,7 @@ namespace drawinglayer
         {
         }
 
-        bool sdrLathePrimitive3D::operator==(const basePrimitive& rPrimitive) const
+        bool sdrLathePrimitive3D::operator==(const basePrimitive3D& rPrimitive) const
         {
             if(sdrPrimitive3D::operator==(rPrimitive))
             {
@@ -332,7 +332,7 @@ namespace drawinglayer
             return CreatePrimitiveID('S', 'L', 'A', '3');
         }
 
-        ::basegfx::B3DRange sdrLathePrimitive3D::get3DRange(const ::drawinglayer::geometry::viewInformation& rViewInformation) const
+        basegfx::B3DRange sdrLathePrimitive3D::get3DRange() const
         {
             // use defaut from sdrPrimitive3D which uses transformation expanded by line width/2
             // The parent implementation which uses the ranges of the decomposition would be more
@@ -340,9 +340,9 @@ namespace drawinglayer
             // the range of the non-transformed geometry and transform it then. This leads to different
             // ranges where the new method is more correct, but the need to keep the old behaviour
             // has priority here.
-            return get3DRangeFromSlices(getSlices(), rViewInformation);
+            return get3DRangeFromSlices(getSlices());
         }
-    } // end of namespace primitive
+    } // end of namespace primitive3d
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shadowprimitive3d.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2006-06-02 13:58:03 $
+ *  last change: $Author: aw $ $Date: 2006-08-09 16:51:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,12 +41,12 @@
 
 namespace drawinglayer
 {
-    namespace primitive
+    namespace primitive3d
     {
         shadowPrimitive3D::shadowPrimitive3D(
-            const ::basegfx::B2DHomMatrix& rShadowTransform, const ::basegfx::BColor& rShadowColor,
-            double fShadowTransparence, bool bShadow3D, const primitiveVector& rPrimitiveVector)
-        :   vectorPrimitive(rPrimitiveVector),
+            const basegfx::B2DHomMatrix& rShadowTransform, const basegfx::BColor& rShadowColor,
+            double fShadowTransparence, bool bShadow3D, const primitiveVector3D& rPrimitiveVector)
+        :   vectorPrimitive3D(rPrimitiveVector),
             maShadowTransform(rShadowTransform),
             maShadowColor(rShadowColor),
             mfShadowTransparence(fShadowTransparence),
@@ -58,9 +58,9 @@ namespace drawinglayer
         {
         }
 
-        bool shadowPrimitive3D::operator==(const basePrimitive& rPrimitive) const
+        bool shadowPrimitive3D::operator==(const basePrimitive3D& rPrimitive) const
         {
-            if(vectorPrimitive::operator==(rPrimitive))
+            if(vectorPrimitive3D::operator==(rPrimitive))
             {
                 const shadowPrimitive3D& rCompare = (shadowPrimitive3D&)rPrimitive;
                 return (maShadowTransform == rCompare.maShadowTransform
@@ -76,7 +76,7 @@ namespace drawinglayer
         {
             return CreatePrimitiveID('S', 'H', 'D', '3');
         }
-    } // end of namespace primitive
+    } // end of namespace primitive3d
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////

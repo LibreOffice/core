@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrprimitive3d.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2006-06-02 13:58:03 $
+ *  last change: $Author: aw $ $Date: 2006-08-09 16:51:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,8 +37,8 @@
 #include <drawinglayer/primitive3d/sdrprimitive3d.hxx>
 #endif
 
-#ifndef _DRAWINGLAYER_PRIMITIVE_SDRATTRIBUTE_HXX
-#include <drawinglayer/primitive/sdrattribute.hxx>
+#ifndef _DRAWINGLAYER_ATTRIBUTE_SDRATTRIBUTE_HXX
+#include <drawinglayer/attribute/sdrattribute.hxx>
 #endif
 
 #ifndef _BGFX_POLYPOLYGON_B3DPOLYGONTOOLS_HXX
@@ -49,18 +49,18 @@
 
 namespace drawinglayer
 {
-    namespace primitive
+    namespace primitive3d
     {
-        ::basegfx::B3DRange sdrPrimitive3D::getStandard3DRange(const ::drawinglayer::geometry::viewInformation& rViewInformation) const
+        basegfx::B3DRange sdrPrimitive3D::getStandard3DRange() const
         {
-            ::basegfx::B3DRange aUnitRange(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
+            basegfx::B3DRange aUnitRange(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
             aUnitRange.transform(getTransform());
 
             if(maSdrLFSAttribute.getLine())
             {
-                const sdrLineAttribute& rLine = *maSdrLFSAttribute.getLine();
+                const attribute::sdrLineAttribute& rLine = *maSdrLFSAttribute.getLine();
 
-                if(rLine.isVisible() && !::basegfx::fTools::equalZero(rLine.getWidth()))
+                if(rLine.isVisible() && !basegfx::fTools::equalZero(rLine.getWidth()))
                 {
                     // expand by hald LineWidth as tube radius
                     aUnitRange.grow(rLine.getWidth() / 2.0);
@@ -70,24 +70,24 @@ namespace drawinglayer
             return aUnitRange;
         }
 
-        ::basegfx::B3DRange sdrPrimitive3D::get3DRangeFromSlices(const sliceVector& rSlices, const ::drawinglayer::geometry::viewInformation& rViewInformation) const
+        basegfx::B3DRange sdrPrimitive3D::get3DRangeFromSlices(const sliceVector& rSlices) const
         {
-            ::basegfx::B3DRange aRetval;
+            basegfx::B3DRange aRetval;
 
             if(rSlices.size())
             {
                 for(sal_uInt32 a(0L); a < rSlices.size(); a++)
                 {
-                    aRetval.expand(::basegfx::tools::getRange(rSlices[a].getB3DPolyPolygon()));
+                    aRetval.expand(basegfx::tools::getRange(rSlices[a].getB3DPolyPolygon()));
                 }
 
                 aRetval.transform(getTransform());
 
                 if(maSdrLFSAttribute.getLine())
                 {
-                    const sdrLineAttribute& rLine = *maSdrLFSAttribute.getLine();
+                    const attribute::sdrLineAttribute& rLine = *maSdrLFSAttribute.getLine();
 
-                    if(rLine.isVisible() && !::basegfx::fTools::equalZero(rLine.getWidth()))
+                    if(rLine.isVisible() && !basegfx::fTools::equalZero(rLine.getWidth()))
                     {
                         // expand by hald LineWidth as tube radius
                         aRetval.grow(rLine.getWidth() / 2.0);
@@ -99,11 +99,12 @@ namespace drawinglayer
         }
 
         sdrPrimitive3D::sdrPrimitive3D(
-            const ::basegfx::B3DHomMatrix& rTransform,
-            const ::basegfx::B2DVector& rTextureSize,
-            const sdrLineFillShadowAttribute& rSdrLFSAttribute,
-            const sdr3DObjectAttribute& rSdr3DObjectAttribute)
-        :   maTransform(rTransform),
+            const basegfx::B3DHomMatrix& rTransform,
+            const basegfx::B2DVector& rTextureSize,
+            const attribute::sdrLineFillShadowAttribute& rSdrLFSAttribute,
+            const attribute::sdr3DObjectAttribute& rSdr3DObjectAttribute)
+        :   basePrimitive3D(),
+            maTransform(rTransform),
             maTextureSize(rTextureSize),
             maSdrLFSAttribute(rSdrLFSAttribute),
             maSdr3DObjectAttribute(rSdr3DObjectAttribute)
@@ -114,7 +115,7 @@ namespace drawinglayer
         {
         }
 
-        bool sdrPrimitive3D::operator==(const basePrimitive& rPrimitive) const
+        bool sdrPrimitive3D::operator==(const basePrimitive3D& rPrimitive) const
         {
             if(getID() == rPrimitive.getID())
             {
@@ -128,7 +129,7 @@ namespace drawinglayer
 
             return false;
         }
-    } // end of namespace primitive
+    } // end of namespace primitive3d
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////

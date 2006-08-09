@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polygonprimitive3d.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2006-06-02 13:58:02 $
+ *  last change: $Author: aw $ $Date: 2006-08-09 16:51:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,10 +53,11 @@
 
 namespace drawinglayer
 {
-    namespace primitive
+    namespace primitive3d
     {
-        polygonHairlinePrimitive3D::polygonHairlinePrimitive3D(const ::basegfx::B3DPolygon& rPolygon, const ::basegfx::BColor& rBColor)
-        :   maPolygon(rPolygon),
+        polygonHairlinePrimitive3D::polygonHairlinePrimitive3D(const basegfx::B3DPolygon& rPolygon, const basegfx::BColor& rBColor)
+        :   basePrimitive3D(),
+            maPolygon(rPolygon),
             maBColor(rBColor)
         {
         }
@@ -65,7 +66,7 @@ namespace drawinglayer
         {
         }
 
-        bool polygonHairlinePrimitive3D::operator==(const basePrimitive& rPrimitive) const
+        bool polygonHairlinePrimitive3D::operator==(const basePrimitive3D& rPrimitive) const
         {
             if(getID() == rPrimitive.getID())
             {
@@ -83,39 +84,39 @@ namespace drawinglayer
             return CreatePrimitiveID('P', 'O', 'H', '3');
         }
 
-        ::basegfx::B3DRange polygonHairlinePrimitive3D::get3DRange(const ::drawinglayer::geometry::viewInformation& rViewInformation) const
+        basegfx::B3DRange polygonHairlinePrimitive3D::get3DRange() const
         {
-            return ::basegfx::tools::getRange(maPolygon);
+            return basegfx::tools::getRange(maPolygon);
         }
-    } // end of namespace primitive
+    } // end of namespace primitive3d
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
 namespace drawinglayer
 {
-    namespace primitive
+    namespace primitive3d
     {
-        void polygonStrokePrimitive3D::decompose(primitiveVector& rTarget, const ::drawinglayer::geometry::viewInformation& rViewInformation)
+        void polygonStrokePrimitive3D::decompose(primitiveVector3D& rTarget)
         {
             if(maPolygon.count())
             {
-                ::basegfx::B3DPolyPolygon aHairLinePolyPolygon(maPolygon);
+                basegfx::B3DPolyPolygon aHairLinePolyPolygon(maPolygon);
 
                 if(0.0 != maStrokeAttribute.getFullDotDashLen())
                 {
                     // apply LineStyle
-                    aHairLinePolyPolygon = ::basegfx::tools::applyLineDashing(aHairLinePolyPolygon, maStrokeAttribute.getDotDashArray(), maStrokeAttribute.getFullDotDashLen());
+                    aHairLinePolyPolygon = basegfx::tools::applyLineDashing(aHairLinePolyPolygon, maStrokeAttribute.getDotDashArray(), maStrokeAttribute.getFullDotDashLen());
 
                     // merge LineStyle polygons to bigger parts
-                    aHairLinePolyPolygon = ::basegfx::tools::mergeDashedLines(aHairLinePolyPolygon);
+                    aHairLinePolyPolygon = basegfx::tools::mergeDashedLines(aHairLinePolyPolygon);
                 }
 
                 if(maStrokeAttribute.getWidth())
                 {
                     // create fat line data
                     const double fRadius(maStrokeAttribute.getWidth() / 2.0);
-                    const ::basegfx::tools::B2DLineJoin aLineJoin(maStrokeAttribute.getLineJoin());
+                    const basegfx::tools::B2DLineJoin aLineJoin(maStrokeAttribute.getLineJoin());
 
                     for(sal_uInt32 a(0L); a < aHairLinePolyPolygon.count(); a++)
                     {
@@ -123,7 +124,7 @@ namespace drawinglayer
                         polygonTubePrimitive3D* pNew = new polygonTubePrimitive3D(aHairLinePolyPolygon.getB3DPolygon(a),
                             maStrokeAttribute.getColor(),
                             fRadius, aLineJoin);
-                        rTarget.push_back(referencedPrimitive(*pNew));
+                        rTarget.push_back(referencedPrimitive3D(*pNew));
                     }
                 }
                 else
@@ -131,16 +132,19 @@ namespace drawinglayer
                     // create hair line data for all sub polygons
                     for(sal_uInt32 a(0L); a < aHairLinePolyPolygon.count(); a++)
                     {
-                        const ::basegfx::B3DPolygon aCandidate = aHairLinePolyPolygon.getB3DPolygon(a);
-                        basePrimitive* pNew = new polygonHairlinePrimitive3D(aCandidate, maStrokeAttribute.getColor());
-                        rTarget.push_back(referencedPrimitive(*pNew));
+                        const basegfx::B3DPolygon aCandidate = aHairLinePolyPolygon.getB3DPolygon(a);
+                        basePrimitive3D* pNew = new polygonHairlinePrimitive3D(aCandidate, maStrokeAttribute.getColor());
+                        rTarget.push_back(referencedPrimitive3D(*pNew));
                     }
                 }
             }
         }
 
-        polygonStrokePrimitive3D::polygonStrokePrimitive3D(const ::basegfx::B3DPolygon& rPolygon, const strokeAttribute& rStrokeAttribute)
-        :   maPolygon(rPolygon),
+        polygonStrokePrimitive3D::polygonStrokePrimitive3D(
+            const basegfx::B3DPolygon& rPolygon,
+            const attribute::strokeAttribute& rStrokeAttribute)
+        :   basePrimitive3D(),
+            maPolygon(rPolygon),
             maStrokeAttribute(rStrokeAttribute)
         {
         }
@@ -149,7 +153,7 @@ namespace drawinglayer
         {
         }
 
-        bool polygonStrokePrimitive3D::operator==(const basePrimitive& rPrimitive) const
+        bool polygonStrokePrimitive3D::operator==(const basePrimitive3D& rPrimitive) const
         {
             if(getID() == rPrimitive.getID())
             {
@@ -166,7 +170,7 @@ namespace drawinglayer
         {
             return CreatePrimitiveID('P', 'L', 'S', '3');
         }
-    } // end of namespace primitive
+    } // end of namespace primitive3d
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////

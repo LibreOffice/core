@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textureprimitive3d.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2006-06-02 13:58:03 $
+ *  last change: $Author: aw $ $Date: 2006-08-09 16:51:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,13 +41,13 @@
 
 namespace drawinglayer
 {
-    namespace primitive
+    namespace primitive3d
     {
         texturePrimitive3D::texturePrimitive3D(
-            const primitiveVector& rPrimitiveVector,
-            const ::basegfx::B2DVector& rTextureSize,
+            const primitiveVector3D& rPrimitiveVector,
+            const basegfx::B2DVector& rTextureSize,
             bool bModulate, bool bFilter)
-        :   vectorPrimitive(rPrimitiveVector),
+        :   vectorPrimitive3D(rPrimitiveVector),
             maTextureSize(rTextureSize),
             mbModulate(bModulate),
             mbFilter(bFilter)
@@ -58,9 +58,9 @@ namespace drawinglayer
         {
         }
 
-        bool texturePrimitive3D::operator==(const basePrimitive& rPrimitive) const
+        bool texturePrimitive3D::operator==(const basePrimitive3D& rPrimitive) const
         {
-            if(vectorPrimitive::operator==(rPrimitive))
+            if(vectorPrimitive3D::operator==(rPrimitive))
             {
                 const texturePrimitive3D& rCompare = (texturePrimitive3D&)rPrimitive;
                 return (mbModulate == rCompare.mbModulate && mbFilter == rCompare.mbFilter);
@@ -68,16 +68,16 @@ namespace drawinglayer
 
             return false;
         }
-    } // end of namespace primitive
+    } // end of namespace primitive3d
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
 namespace drawinglayer
 {
-    namespace primitive
+    namespace primitive3d
     {
-        void simpleTransparenceTexturePrimitive3D::decompose(primitiveVector& rTarget, const ::drawinglayer::geometry::viewInformation& rViewInformation)
+        void simpleTransparenceTexturePrimitive3D::decompose(primitiveVector3D& rTarget)
         {
             if(0.0 == mfTransparence)
             {
@@ -87,10 +87,10 @@ namespace drawinglayer
             else if(mfTransparence > 0.0 && mfTransparence < 1.0)
             {
                 // create transparenceTexturePrimitive3D with fixed transparence as replacement
-                const ::basegfx::BColor aGray(mfTransparence, mfTransparence, mfTransparence);
-                const fillGradientAttribute aFillGradient(GRADIENTSTYLE_LINEAR, 0.0, 0.0, 0.0, 0.0, aGray, aGray, 1);
-                basePrimitive* pNewTransparenceTexturePrimitive3D = new transparenceTexturePrimitive3D(aFillGradient, maPrimitiveVector, maTextureSize);
-                rTarget.push_back(referencedPrimitive(*pNewTransparenceTexturePrimitive3D));
+                const basegfx::BColor aGray(mfTransparence, mfTransparence, mfTransparence);
+                const attribute::fillGradientAttribute aFillGradient(attribute::GRADIENTSTYLE_LINEAR, 0.0, 0.0, 0.0, 0.0, aGray, aGray, 1);
+                basePrimitive3D* pNewTransparenceTexturePrimitive3D = new transparenceTexturePrimitive3D(aFillGradient, maPrimitiveVector, maTextureSize);
+                rTarget.push_back(referencedPrimitive3D(*pNewTransparenceTexturePrimitive3D));
             }
             else
             {
@@ -100,8 +100,8 @@ namespace drawinglayer
 
         simpleTransparenceTexturePrimitive3D::simpleTransparenceTexturePrimitive3D(
             double fTransparence,
-            const primitiveVector& rPrimitiveVector)
-        :   texturePrimitive3D(rPrimitiveVector, ::basegfx::B2DVector(), false, false),
+            const primitiveVector3D& rPrimitiveVector)
+        :   texturePrimitive3D(rPrimitiveVector, basegfx::B2DVector(), false, false),
             mfTransparence(fTransparence)
         {
         }
@@ -110,7 +110,7 @@ namespace drawinglayer
         {
         }
 
-        bool simpleTransparenceTexturePrimitive3D::operator==(const basePrimitive& rPrimitive) const
+        bool simpleTransparenceTexturePrimitive3D::operator==(const basePrimitive3D& rPrimitive) const
         {
             if(texturePrimitive3D::operator==(rPrimitive))
             {
@@ -125,24 +125,24 @@ namespace drawinglayer
         {
             return CreatePrimitiveID('S', 'T', 'X', '3');
         }
-    } // end of namespace primitive
+    } // end of namespace primitive3d
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
 namespace drawinglayer
 {
-    namespace primitive
+    namespace primitive3d
     {
-        void gradientTexturePrimitive3D::decompose(primitiveVector& rTarget, const ::drawinglayer::geometry::viewInformation& rViewInformation)
+        void gradientTexturePrimitive3D::decompose(primitiveVector3D& rTarget)
         {
             rTarget.insert(rTarget.end(), maPrimitiveVector.begin(), maPrimitiveVector.end());
         }
 
         gradientTexturePrimitive3D::gradientTexturePrimitive3D(
-            const fillGradientAttribute& rGradient,
-            const primitiveVector& rPrimitiveVector,
-            const ::basegfx::B2DVector& rTextureSize,
+            const attribute::fillGradientAttribute& rGradient,
+            const primitiveVector3D& rPrimitiveVector,
+            const basegfx::B2DVector& rTextureSize,
             bool bModulate,
             bool bFilter)
         :   texturePrimitive3D(rPrimitiveVector, rTextureSize, bModulate, bFilter),
@@ -154,7 +154,7 @@ namespace drawinglayer
         {
         }
 
-        bool gradientTexturePrimitive3D::operator==(const basePrimitive& rPrimitive) const
+        bool gradientTexturePrimitive3D::operator==(const basePrimitive3D& rPrimitive) const
         {
             if(texturePrimitive3D::operator==(rPrimitive))
             {
@@ -169,24 +169,24 @@ namespace drawinglayer
         {
             return CreatePrimitiveID('G', 'R', 'X', '3');
         }
-    } // end of namespace primitive
+    } // end of namespace primitive3d
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
 namespace drawinglayer
 {
-    namespace primitive
+    namespace primitive3d
     {
-        void bitmapTexturePrimitive3D::decompose(primitiveVector& rTarget, const ::drawinglayer::geometry::viewInformation& rViewInformation)
+        void bitmapTexturePrimitive3D::decompose(primitiveVector3D& rTarget)
         {
             rTarget.insert(rTarget.end(), maPrimitiveVector.begin(), maPrimitiveVector.end());
         }
 
         bitmapTexturePrimitive3D::bitmapTexturePrimitive3D(
-            const fillBitmapAttribute& rBitmap,
-            const primitiveVector& rPrimitiveVector,
-            const ::basegfx::B2DVector& rTextureSize,
+            const attribute::fillBitmapAttribute& rBitmap,
+            const primitiveVector3D& rPrimitiveVector,
+            const basegfx::B2DVector& rTextureSize,
             bool bModulate, bool bFilter)
         :   texturePrimitive3D(rPrimitiveVector, rTextureSize, bModulate, bFilter),
             maBitmap(rBitmap)
@@ -197,7 +197,7 @@ namespace drawinglayer
         {
         }
 
-        bool bitmapTexturePrimitive3D::operator==(const basePrimitive& rPrimitive) const
+        bool bitmapTexturePrimitive3D::operator==(const basePrimitive3D& rPrimitive) const
         {
             if(texturePrimitive3D::operator==(rPrimitive))
             {
@@ -212,19 +212,19 @@ namespace drawinglayer
         {
             return CreatePrimitiveID('B', 'M', 'X', '3');
         }
-    } // end of namespace primitive
+    } // end of namespace primitive3d
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
 namespace drawinglayer
 {
-    namespace primitive
+    namespace primitive3d
     {
         transparenceTexturePrimitive3D::transparenceTexturePrimitive3D(
-            const fillGradientAttribute& rGradient,
-            const primitiveVector& rPrimitiveVector,
-            const ::basegfx::B2DVector& rTextureSize)
+            const attribute::fillGradientAttribute& rGradient,
+            const primitiveVector3D& rPrimitiveVector,
+            const basegfx::B2DVector& rTextureSize)
         :   gradientTexturePrimitive3D(rGradient, rPrimitiveVector, rTextureSize, false, false)
         {
         }
@@ -233,7 +233,7 @@ namespace drawinglayer
         {
         }
 
-        bool transparenceTexturePrimitive3D::operator==(const basePrimitive& rPrimitive) const
+        bool transparenceTexturePrimitive3D::operator==(const basePrimitive3D& rPrimitive) const
         {
             return (gradientTexturePrimitive3D::operator==(rPrimitive));
         }
@@ -242,7 +242,7 @@ namespace drawinglayer
         {
             return CreatePrimitiveID('T', 'R', 'X', '3');
         }
-    } // end of namespace primitive
+    } // end of namespace primitive3d
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////

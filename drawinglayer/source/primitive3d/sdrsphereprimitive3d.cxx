@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrsphereprimitive3d.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2006-06-02 13:58:03 $
+ *  last change: $Author: aw $ $Date: 2006-08-09 16:51:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,11 +61,11 @@
 
 namespace drawinglayer
 {
-    namespace primitive
+    namespace primitive3d
     {
-        void sdrSpherePrimitive3D::decompose(primitiveVector& rTarget, const ::drawinglayer::geometry::viewInformation& rViewInformation)
+        void sdrSpherePrimitive3D::decompose(primitiveVector3D& rTarget)
         {
-            const ::basegfx::B3DRange aUnitRange(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
+            const basegfx::B3DRange aUnitRange(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
 
             // add fill
             if(getSdrLFSAttribute().getFill())
@@ -74,14 +74,14 @@ namespace drawinglayer
                     || ::com::sun::star::drawing::NormalsKind_SPHERE == getSdr3DObjectAttribute().getNormalsKind());
 
                 // create unit geometry
-                ::basegfx::B3DPolyPolygon aFill(::basegfx::tools::createSphereFillPolyPolygonFromB3DRange(aUnitRange,
+                basegfx::B3DPolyPolygon aFill(basegfx::tools::createSphereFillPolyPolygonFromB3DRange(aUnitRange,
                     getHorizontalSegments(), getVerticalSegments(), bCreateNormals));
 
                 // normal inversion
                 if(bCreateNormals && getSdr3DObjectAttribute().getNormalsInvert() && aFill.areNormalsUsed())
                 {
                     // invert normals
-                    aFill = ::basegfx::tools::invertNormals(aFill);
+                    aFill = basegfx::tools::invertNormals(aFill);
                 }
 
                 // texture coordinates
@@ -99,8 +99,8 @@ namespace drawinglayer
                     if(bParallelX || bParallelY)
                     {
                         // apply parallel texture coordinates in X and/or Y
-                        const ::basegfx::B3DRange aRange(::basegfx::tools::getRange(aFill));
-                        aFill = ::basegfx::tools::applyDefaultTextureCoordinatesParallel(aFill, aRange, bParallelX, bParallelY);
+                        const basegfx::B3DRange aRange(basegfx::tools::getRange(aFill));
+                        aFill = basegfx::tools::applyDefaultTextureCoordinatesParallel(aFill, aRange, bParallelX, bParallelY);
                     }
 
                     if(bSphereX || bObjectSpecificX || bSphereY || bObjectSpecificY)
@@ -114,38 +114,38 @@ namespace drawinglayer
                             // create a old version from it by rotating to old state before applying
                             // the texture coordinates to emulate old behaviour
                             fRelativeAngle = F_2PI * ((double)((getHorizontalSegments() >> 1L)  - 1L) / (double)getHorizontalSegments());
-                            ::basegfx::B3DHomMatrix aRot;
+                            basegfx::B3DHomMatrix aRot;
                             aRot.rotate(0.0, fRelativeAngle, 0.0);
                             aFill.transform(aRot);
                         }
 
                         // apply spherical texture coordinates in X and/or Y
-                        const ::basegfx::B3DRange aRange(::basegfx::tools::getRange(aFill));
-                        const ::basegfx::B3DPoint aCenter(aRange.getCenter());
-                        aFill = ::basegfx::tools::applyDefaultTextureCoordinatesSphere(aFill, aCenter,
+                        const basegfx::B3DRange aRange(basegfx::tools::getRange(aFill));
+                        const basegfx::B3DPoint aCenter(aRange.getCenter());
+                        aFill = basegfx::tools::applyDefaultTextureCoordinatesSphere(aFill, aCenter,
                             bSphereX || bObjectSpecificX, bSphereY || bObjectSpecificY);
 
                         if(bObjectSpecificX)
                         {
                             // rotate back again
-                            ::basegfx::B3DHomMatrix aRot;
+                            basegfx::B3DHomMatrix aRot;
                             aRot.rotate(0.0, -fRelativeAngle, 0.0);
                             aFill.transform(aRot);
                         }
                     }
 
                     // transform texture coordinates to texture size
-                    ::basegfx::B2DHomMatrix aTexMatrix;
+                    basegfx::B2DHomMatrix aTexMatrix;
                     aTexMatrix.scale(maTextureSize.getX(), maTextureSize.getY());
                     aFill.transformTextureCoordiantes(aTexMatrix);
                 }
 
                 // build vector of PolyPolygons
-                ::std::vector< ::basegfx::B3DPolyPolygon > a3DPolyPolygonVector;
+                ::std::vector< basegfx::B3DPolyPolygon > a3DPolyPolygonVector;
 
                 for(sal_uInt32 a(0L); a < aFill.count(); a++)
                 {
-                    a3DPolyPolygonVector.push_back(::basegfx::B3DPolyPolygon(aFill.getB3DPolygon(a)));
+                    a3DPolyPolygonVector.push_back(basegfx::B3DPolyPolygon(aFill.getB3DPolygon(a)));
                 }
 
                 // create single PolyPolygonFill primitives
@@ -158,7 +158,7 @@ namespace drawinglayer
             // add line
             if(maSdrLFSAttribute.getLine())
             {
-                ::basegfx::B3DPolyPolygon aSphere(::basegfx::tools::createSpherePolyPolygonFromB3DRange(aUnitRange, getHorizontalSegments(), getVerticalSegments()));
+                basegfx::B3DPolyPolygon aSphere(basegfx::tools::createSpherePolyPolygonFromB3DRange(aUnitRange, getHorizontalSegments(), getVerticalSegments()));
                 add3DPolyPolygonLinePrimitive(aSphere, maTransform, rTarget, *maSdrLFSAttribute.getLine());
             }
 
@@ -170,10 +170,10 @@ namespace drawinglayer
         }
 
         sdrSpherePrimitive3D::sdrSpherePrimitive3D(
-            const ::basegfx::B3DHomMatrix& rTransform,
-            const ::basegfx::B2DVector& rTextureSize,
-            const sdrLineFillShadowAttribute& rSdrLFSAttribute,
-            const sdr3DObjectAttribute& rSdr3DObjectAttribute,
+            const basegfx::B3DHomMatrix& rTransform,
+            const basegfx::B2DVector& rTextureSize,
+            const attribute::sdrLineFillShadowAttribute& rSdrLFSAttribute,
+            const attribute::sdr3DObjectAttribute& rSdr3DObjectAttribute,
             sal_uInt32 nHorizontalSegments, sal_uInt32 nVerticalSegments)
         :   sdrPrimitive3D(rTransform, rTextureSize, rSdrLFSAttribute, rSdr3DObjectAttribute),
             mnHorizontalSegments(nHorizontalSegments),
@@ -185,7 +185,7 @@ namespace drawinglayer
         {
         }
 
-        bool sdrSpherePrimitive3D::operator==(const basePrimitive& rPrimitive) const
+        bool sdrSpherePrimitive3D::operator==(const basePrimitive3D& rPrimitive) const
         {
             if(sdrPrimitive3D::operator==(rPrimitive))
             {
@@ -202,7 +202,7 @@ namespace drawinglayer
             return CreatePrimitiveID('S', 'S', 'P', '3');
         }
 
-        ::basegfx::B3DRange sdrSpherePrimitive3D::get3DRange(const ::drawinglayer::geometry::viewInformation& rViewInformation) const
+        basegfx::B3DRange sdrSpherePrimitive3D::get3DRange() const
         {
             // use defaut from sdrPrimitive3D which uses transformation expanded by line width/2
             // The parent implementation which uses the ranges of the decomposition would be more
@@ -210,9 +210,9 @@ namespace drawinglayer
             // the range of the non-transformed geometry and transform it then. This leads to different
             // ranges where the new method is more correct, but the need to keep the old behaviour
             // has priority here.
-            return getStandard3DRange(rViewInformation);
+            return getStandard3DRange();
         }
-    } // end of namespace primitive
+    } // end of namespace primitive3d
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationtiming.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-05-12 11:50:12 $
+ *  last change: $Author: aw $ $Date: 2006-08-09 16:47:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,10 @@
 
 #ifndef _DRAWINGLAYER_ANIMATION_ANIMATIONTIMING_HXX
 #include <drawinglayer/animation/animationtiming.hxx>
+#endif
+
+#ifndef _BGFX_NUMERIC_FTOOLS_HXX
+#include <basegfx/numeric/ftools.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -75,8 +79,8 @@ namespace drawinglayer
             const animationEntryFixed* pCompare = dynamic_cast< const animationEntryFixed* >(&rCandidate);
 
             return (pCompare
-                && mfDuration == pCompare->mfDuration
-                && mfState == pCompare->mfState);
+                && basegfx::fTools::equal(mfDuration, pCompare->mfDuration)
+                && basegfx::fTools::equal(mfState, pCompare->mfState));
         }
 
         double animationEntryFixed::getDuration() const
@@ -91,12 +95,14 @@ namespace drawinglayer
 
         double animationEntryFixed::getNextEventTime(double fTime) const
         {
-            if(fTime < mfDuration)
+            if(basegfx::fTools::less(fTime, mfDuration))
             {
-                fTime = mfDuration;
+                return mfDuration;
             }
-
-            return fTime;
+            else
+            {
+                return 0.0;
+            }
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -123,9 +129,9 @@ namespace drawinglayer
             const animationEntryLinear* pCompare = dynamic_cast< const animationEntryLinear* >(&rCandidate);
 
             return (pCompare
-                && mfDuration == pCompare->mfDuration
-                && mfStart == pCompare->mfStart
-                && mfStop == pCompare->mfStop);
+                && basegfx::fTools::equal(mfDuration, pCompare->mfDuration)
+                && basegfx::fTools::equal(mfStart, pCompare->mfStart)
+                && basegfx::fTools::equal(mfStop, pCompare->mfStop));
         }
 
         double animationEntryLinear::getDuration() const
@@ -135,10 +141,18 @@ namespace drawinglayer
 
         double animationEntryLinear::getStateAtTime(double fTime) const
         {
-            if(0.0 != mfDuration)
+            if(basegfx::fTools::more(mfDuration, 0.0))
             {
                 const double fFactor(fTime / mfDuration);
-                return mfStart + ((mfStop - mfStart) * fFactor);
+
+                if(fFactor > 1.0)
+                {
+                    return mfStop;
+                }
+                else
+                {
+                    return mfStart + ((mfStop - mfStart) * fFactor);
+                }
             }
             else
             {
@@ -148,20 +162,24 @@ namespace drawinglayer
 
         double animationEntryLinear::getNextEventTime(double fTime) const
         {
-            if(fTime < mfDuration)
+            if(basegfx::fTools::less(fTime, mfDuration))
             {
                 // use the simple solution: just add the frequency. More correct (but also more
                 // complicated) would be to calculate the slice of time we are in and when this
                 // slice will end. For the animations, this makes no quality difference.
                 fTime += mfFrequency;
 
-                if(fTime > mfDuration)
+                if(basegfx::fTools::more(fTime, mfDuration))
                 {
                     fTime = mfDuration;
                 }
-            }
 
-            return fTime;
+                return fTime;
+            }
+            else
+            {
+                return 0.0;
+            }
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -170,7 +188,7 @@ namespace drawinglayer
         {
             sal_uInt32 nIndex(0L);
 
-            while(nIndex < maEntries.size() && rfAddedTime + maEntries[nIndex]->getDuration() <= fTime)
+            while(nIndex < maEntries.size() && basegfx::fTools::lessOrEqual(rfAddedTime + maEntries[nIndex]->getDuration(), fTime))
             {
                 rfAddedTime += maEntries[nIndex++]->getDuration();
             }
@@ -181,15 +199,6 @@ namespace drawinglayer
         animationEntryList::animationEntryList()
         :   mfDuration(0.0)
         {
-        }
-
-        animationEntryList::animationEntryList(const animationEntryList& rCandidate)
-        :   mfDuration(0.0)
-        {
-            for(sal_uInt32 a(0L); a < rCandidate.maEntries.size(); a++)
-            {
-                append(*rCandidate.maEntries[a]);
-            }
         }
 
         animationEntryList::~animationEntryList()
@@ -236,7 +245,7 @@ namespace drawinglayer
         {
             const double fDuration(rCandidate.getDuration());
 
-            if(0.0 != fDuration)
+            if(!basegfx::fTools::equalZero(fDuration))
             {
                 maEntries.push_back(rCandidate.clone());
                 mfDuration += fDuration;
@@ -250,7 +259,7 @@ namespace drawinglayer
 
         double animationEntryList::getStateAtTime(double fTime) const
         {
-            if(0.0 != mfDuration)
+            if(!basegfx::fTools::equalZero(mfDuration))
             {
                 double fAddedTime(0.0);
                 const sal_uInt32 nIndex(impGetIndexAtTime(fTime, fAddedTime));
@@ -266,18 +275,20 @@ namespace drawinglayer
 
         double animationEntryList::getNextEventTime(double fTime) const
         {
-            if(0.0 != mfDuration)
+            double fNewTime(0.0);
+
+            if(!basegfx::fTools::equalZero(mfDuration))
             {
                 double fAddedTime(0.0);
                 const sal_uInt32 nIndex(impGetIndexAtTime(fTime, fAddedTime));
 
                 if(nIndex < maEntries.size())
                 {
-                    return maEntries[nIndex]->getNextEventTime(fTime - fAddedTime);
+                    fNewTime = maEntries[nIndex]->getNextEventTime(fTime - fAddedTime) + fAddedTime;
                 }
             }
 
-            return fTime;
+            return fNewTime;
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -309,8 +320,8 @@ namespace drawinglayer
             const animationEntryLoop* pCompare = dynamic_cast< const animationEntryLoop* >(&rCandidate);
 
             return (pCompare
-                && animationEntryList::operator==(rCandidate)
-                && mnRepeat == pCompare->mnRepeat);
+                && mnRepeat == pCompare->mnRepeat
+                && animationEntryList::operator==(rCandidate));
         }
 
         double animationEntryLoop::getDuration() const
@@ -320,7 +331,7 @@ namespace drawinglayer
 
         double animationEntryLoop::getStateAtTime(double fTime) const
         {
-            if(mnRepeat && 0.0 != mfDuration)
+            if(mnRepeat && !basegfx::fTools::equalZero(mfDuration))
             {
                 const sal_uInt32 nCurrentLoop((sal_uInt32)(fTime / mfDuration));
 
@@ -341,7 +352,9 @@ namespace drawinglayer
 
         double animationEntryLoop::getNextEventTime(double fTime) const
         {
-            if(mnRepeat && 0.0 != mfDuration)
+            double fNewTime(0.0);
+
+            if(mnRepeat && !basegfx::fTools::equalZero(mfDuration))
             {
                 const sal_uInt32 nCurrentLoop((sal_uInt32)(fTime / mfDuration));
 
@@ -351,14 +364,14 @@ namespace drawinglayer
                     const double fRelativeTime(fTime - fTimeAtLoopStart);
                     const double fNextEventAtLoop(animationEntryList::getNextEventTime(fRelativeTime));
 
-                    if(fNextEventAtLoop != fRelativeTime)
+                    if(!basegfx::fTools::equalZero(fNextEventAtLoop))
                     {
-                        return fNextEventAtLoop + fTimeAtLoopStart;
+                        fNewTime = fNextEventAtLoop + fTimeAtLoopStart;
                     }
                 }
             }
 
-            return fTime;
+            return fNewTime;
         }
     } // end of namespace animation
 } // end of namespace drawinglayer

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polypolygonprimitive3d.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2006-06-02 13:58:02 $
+ *  last change: $Author: aw $ $Date: 2006-08-09 16:51:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,10 +45,14 @@
 
 namespace drawinglayer
 {
-    namespace primitive
+    namespace primitive3d
     {
-        polyPolygonMaterialPrimitive3D::polyPolygonMaterialPrimitive3D(const ::basegfx::B3DPolyPolygon& rPolyPolygon, const materialAttribute3D& rMaterial, bool bDoubleSided)
-        :   maPolyPolygon(rPolyPolygon),
+        polyPolygonMaterialPrimitive3D::polyPolygonMaterialPrimitive3D(
+            const basegfx::B3DPolyPolygon& rPolyPolygon,
+            const attribute::materialAttribute3D& rMaterial,
+            bool bDoubleSided)
+        :   basePrimitive3D(),
+            maPolyPolygon(rPolyPolygon),
             maMaterial(rMaterial),
             mbDoubleSided(bDoubleSided)
         {
@@ -58,7 +62,7 @@ namespace drawinglayer
         {
         }
 
-        bool polyPolygonMaterialPrimitive3D::operator==(const basePrimitive& rPrimitive) const
+        bool polyPolygonMaterialPrimitive3D::operator==(const basePrimitive3D& rPrimitive) const
         {
             if(getID() == rPrimitive.getID())
             {
@@ -77,11 +81,11 @@ namespace drawinglayer
             return CreatePrimitiveID('P', 'O', 'M', '3');
         }
 
-        ::basegfx::B3DRange polyPolygonMaterialPrimitive3D::get3DRange(const ::drawinglayer::geometry::viewInformation& rViewInformation) const
+        basegfx::B3DRange polyPolygonMaterialPrimitive3D::get3DRange() const
         {
-            return ::basegfx::tools::getRange(maPolyPolygon);
+            return basegfx::tools::getRange(maPolyPolygon);
         }
-    } // end of namespace primitive
+    } // end of namespace primitive3d
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////

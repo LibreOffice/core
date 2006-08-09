@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrcubeprimitive3d.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2006-06-02 13:58:02 $
+ *  last change: $Author: aw $ $Date: 2006-08-09 16:51:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,16 +69,16 @@
 
 namespace drawinglayer
 {
-    namespace primitive
+    namespace primitive3d
     {
-        void sdrCubePrimitive3D::decompose(primitiveVector& rTarget, const ::drawinglayer::geometry::viewInformation& rViewInformation)
+        void sdrCubePrimitive3D::decompose(primitiveVector3D& rTarget)
         {
-            const ::basegfx::B3DRange aUnitRange(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
+            const basegfx::B3DRange aUnitRange(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
 
             // add fill
             if(getSdrLFSAttribute().getFill())
             {
-                ::basegfx::B3DPolyPolygon aFill(::basegfx::tools::createCubeFillPolyPolygonFromB3DRange(aUnitRange));
+                basegfx::B3DPolyPolygon aFill(basegfx::tools::createCubeFillPolyPolygonFromB3DRange(aUnitRange));
 
                 // normal creation
                 {
@@ -86,14 +86,14 @@ namespace drawinglayer
                         || ::com::sun::star::drawing::NormalsKind_SPHERE == getSdr3DObjectAttribute().getNormalsKind())
                     {
                         // create sphere normals
-                        const ::basegfx::B3DPoint aCenter(::basegfx::tools::getRange(aFill).getCenter());
-                        aFill = ::basegfx::tools::applyDefaultNormalsSphere(aFill, aCenter);
+                        const basegfx::B3DPoint aCenter(basegfx::tools::getRange(aFill).getCenter());
+                        aFill = basegfx::tools::applyDefaultNormalsSphere(aFill, aCenter);
                     }
 
                     if(getSdr3DObjectAttribute().getNormalsInvert())
                     {
                         // invert normals
-                        aFill = ::basegfx::tools::invertNormals(aFill);
+                        aFill = basegfx::tools::invertNormals(aFill);
                     }
                 }
 
@@ -112,16 +112,16 @@ namespace drawinglayer
                     if(bParallelX || bParallelY)
                     {
                         // apply parallel texture coordinates in X and/or Y
-                        const ::basegfx::B3DRange aRange(::basegfx::tools::getRange(aFill));
-                        aFill = ::basegfx::tools::applyDefaultTextureCoordinatesParallel(aFill, aRange, bParallelX, bParallelY);
+                        const basegfx::B3DRange aRange(basegfx::tools::getRange(aFill));
+                        aFill = basegfx::tools::applyDefaultTextureCoordinatesParallel(aFill, aRange, bParallelX, bParallelY);
                     }
 
                     if(bSphereX || bSphereY)
                     {
                         // apply spherical texture coordinates in X and/or Y
-                        const ::basegfx::B3DRange aRange(::basegfx::tools::getRange(aFill));
-                        const ::basegfx::B3DPoint aCenter(aRange.getCenter());
-                        aFill = ::basegfx::tools::applyDefaultTextureCoordinatesSphere(aFill, aCenter, bSphereX, bSphereY);
+                        const basegfx::B3DRange aRange(basegfx::tools::getRange(aFill));
+                        const basegfx::B3DPoint aCenter(aRange.getCenter());
+                        aFill = basegfx::tools::applyDefaultTextureCoordinatesSphere(aFill, aCenter, bSphereX, bSphereY);
                     }
 
                     if(bObjectSpecificX || bObjectSpecificY)
@@ -129,13 +129,13 @@ namespace drawinglayer
                         // object-specific
                         for(sal_uInt32 a(0L); a < aFill.count(); a++)
                         {
-                            ::basegfx::B3DPolygon aTmpPoly(aFill.getB3DPolygon(a));
+                            basegfx::B3DPolygon aTmpPoly(aFill.getB3DPolygon(a));
 
                             if(aTmpPoly.count() >= 4L)
                             {
                                 for(sal_uInt32 b(0L); b < 4L; b++)
                                 {
-                                    ::basegfx::B2DPoint aPoint(aTmpPoly.getTextureCoordinate(b));
+                                    basegfx::B2DPoint aPoint(aTmpPoly.getTextureCoordinate(b));
 
                                     if(bObjectSpecificX)
                                     {
@@ -156,17 +156,17 @@ namespace drawinglayer
                     }
 
                     // transform texture coordinates to texture size
-                    ::basegfx::B2DHomMatrix aTexMatrix;
+                    basegfx::B2DHomMatrix aTexMatrix;
                     aTexMatrix.scale(maTextureSize.getX(), maTextureSize.getY());
                     aFill.transformTextureCoordiantes(aTexMatrix);
                 }
 
                 // build vector of PolyPolygons
-                ::std::vector< ::basegfx::B3DPolyPolygon > a3DPolyPolygonVector;
+                ::std::vector< basegfx::B3DPolyPolygon > a3DPolyPolygonVector;
 
                 for(sal_uInt32 a(0L); a < aFill.count(); a++)
                 {
-                    a3DPolyPolygonVector.push_back(::basegfx::B3DPolyPolygon(aFill.getB3DPolygon(a)));
+                    a3DPolyPolygonVector.push_back(basegfx::B3DPolyPolygon(aFill.getB3DPolygon(a)));
                 }
 
                 // create single PolyPolygonFill primitives
@@ -179,7 +179,7 @@ namespace drawinglayer
             // add line
             if(getSdrLFSAttribute().getLine())
             {
-                ::basegfx::B3DPolyPolygon aLine(::basegfx::tools::createCubePolyPolygonFromB3DRange(aUnitRange));
+                basegfx::B3DPolyPolygon aLine(basegfx::tools::createCubePolyPolygonFromB3DRange(aUnitRange));
                 add3DPolyPolygonLinePrimitive(aLine, maTransform, rTarget, *getSdrLFSAttribute().getLine());
             }
 
@@ -191,10 +191,10 @@ namespace drawinglayer
         }
 
         sdrCubePrimitive3D::sdrCubePrimitive3D(
-            const ::basegfx::B3DHomMatrix& rTransform,
-            const ::basegfx::B2DVector& rTextureSize,
-            const sdrLineFillShadowAttribute& rSdrLFSAttribute,
-            const sdr3DObjectAttribute& rSdr3DObjectAttribute)
+            const basegfx::B3DHomMatrix& rTransform,
+            const basegfx::B2DVector& rTextureSize,
+            const attribute::sdrLineFillShadowAttribute& rSdrLFSAttribute,
+            const attribute::sdr3DObjectAttribute& rSdr3DObjectAttribute)
         :   sdrPrimitive3D(rTransform, rTextureSize, rSdrLFSAttribute, rSdr3DObjectAttribute)
         {
         }
@@ -203,7 +203,7 @@ namespace drawinglayer
         {
         }
 
-        bool sdrCubePrimitive3D::operator==(const basePrimitive& rPrimitive) const
+        bool sdrCubePrimitive3D::operator==(const basePrimitive3D& rPrimitive) const
         {
             return sdrPrimitive3D::operator==(rPrimitive);
         }
@@ -213,7 +213,7 @@ namespace drawinglayer
             return CreatePrimitiveID('S', 'C', 'U', '3');
         }
 
-        ::basegfx::B3DRange sdrCubePrimitive3D::get3DRange(const ::drawinglayer::geometry::viewInformation& rViewInformation) const
+        basegfx::B3DRange sdrCubePrimitive3D::get3DRange() const
         {
             // use defaut from sdrPrimitive3D which uses transformation expanded by line width/2.
             // The parent implementation which uses the ranges of the decomposition would be more
@@ -221,9 +221,9 @@ namespace drawinglayer
             // the range of the non-transformed geometry and transform it then. This leads to different
             // ranges where the new method is more correct, but the need to keep the old behaviour
             // has priority here.
-            return getStandard3DRange(rViewInformation);
+            return getStandard3DRange();
         }
-    } // end of namespace primitive
+    } // end of namespace primitive3d
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////

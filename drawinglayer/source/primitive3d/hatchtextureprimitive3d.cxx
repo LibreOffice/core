@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hatchtextureprimitive3d.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2006-06-02 13:58:02 $
+ *  last change: $Author: aw $ $Date: 2006-08-09 16:51:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,14 +73,14 @@
 
 namespace drawinglayer
 {
-    namespace primitive
+    namespace primitive3d
     {
-        void hatchTexturePrimitive3D::impCreateDecomposition(const primitiveVector& rSource, primitiveVector& rDest)
+        void hatchTexturePrimitive3D::impCreateDecomposition(const primitiveVector3D& rSource, primitiveVector3D& rDest)
         {
             for(sal_uInt32 a(0L); a < rSource.size(); a++)
             {
                 // get reference
-                const referencedPrimitive& rCandidate = rSource[a];
+                const referencedPrimitive3D& rCandidate = rSource[a];
 
                 // not all content is needed, remove transparencies and ModifiedColorPrimitives
                 switch(rCandidate.getID())
@@ -89,28 +89,28 @@ namespace drawinglayer
                     {
                         // polyPolygonMaterialPrimitive3D, check texturing and hatching
                         const polyPolygonMaterialPrimitive3D& rPrimitive = static_cast< const polyPolygonMaterialPrimitive3D& >(rCandidate.getBasePrimitive());
-                        const ::basegfx::B3DPolyPolygon aFillPolyPolygon(rPrimitive.getB3DPolyPolygon());
+                        const basegfx::B3DPolyPolygon aFillPolyPolygon(rPrimitive.getB3DPolyPolygon());
 
                         if(aFillPolyPolygon.areTextureCoordinatesUsed())
                         {
                             const sal_uInt32 nPolyCount(aFillPolyPolygon.count());
-                            ::basegfx::B2DPolyPolygon aTexPolyPolygon;
-                            ::basegfx::B2DPoint a2N;
-                            ::basegfx::B2DVector a2X, a2Y;
-                            ::basegfx::B3DPoint a3N;
-                            ::basegfx::B3DVector a3X, a3Y;
+                            basegfx::B2DPolyPolygon aTexPolyPolygon;
+                            basegfx::B2DPoint a2N;
+                            basegfx::B2DVector a2X, a2Y;
+                            basegfx::B3DPoint a3N;
+                            basegfx::B3DVector a3X, a3Y;
                             bool b2N(false), b2X(false), b2Y(false);
                             sal_uInt32 a, b;
 
                             for(a = 0L; a < nPolyCount; a++)
                             {
-                                const ::basegfx::B3DPolygon aPartPoly(aFillPolyPolygon.getB3DPolygon(a));
+                                const basegfx::B3DPolygon aPartPoly(aFillPolyPolygon.getB3DPolygon(a));
                                 const sal_uInt32 nPointCount(aPartPoly.count());
-                                ::basegfx::B2DPolygon aTexPolygon;
+                                basegfx::B2DPolygon aTexPolygon;
 
                                 for(b = 0L; b < nPointCount; b++)
                                 {
-                                    const ::basegfx::B2DPoint a2Candidate(aPartPoly.getTextureCoordinate(b));
+                                    const basegfx::B2DPoint a2Candidate(aPartPoly.getTextureCoordinate(b));
 
                                     if(!b2N)
                                     {
@@ -130,7 +130,7 @@ namespace drawinglayer
 
                                         const double fCross(a2X.cross(a2Y));
 
-                                        if(!::basegfx::fTools::equalZero(fCross))
+                                        if(!basegfx::fTools::equalZero(fCross))
                                         {
                                             a3Y = aPartPoly.getB3DPoint(b) - a3N;
                                             b2Y = true;
@@ -148,44 +148,44 @@ namespace drawinglayer
                             {
                                 // found two linearly independent 2D vectors
                                 // get 2d range of texture coordinates
-                                const ::basegfx::B2DRange aOutlineRange(::basegfx::tools::getRange(aTexPolyPolygon));
-                                const ::basegfx::BColor aHatchColor(maHatch.getColor());
+                                const basegfx::B2DRange aOutlineRange(basegfx::tools::getRange(aTexPolyPolygon));
+                                const basegfx::BColor aHatchColor(maHatch.getColor());
                                 const double fAngle(-maHatch.getAngle());
-                                ::std::vector< ::basegfx::B2DHomMatrix > aMatrices;
+                                ::std::vector< basegfx::B2DHomMatrix > aMatrices;
 
                                 // get hatch transformations
                                 switch(maHatch.getStyle())
                                 {
-                                    case HATCHSTYLE_TRIPLE:
+                                    case attribute::HATCHSTYLE_TRIPLE:
                                     {
                                         // rotated 45 degrees
-                                        geoTexSvxHatch aHatch(aOutlineRange, maHatch.getDistance(), fAngle + F_PI4);
+                                        texture::geoTexSvxHatch aHatch(aOutlineRange, maHatch.getDistance(), fAngle + F_PI4);
                                         aHatch.appendTransformations(aMatrices);
                                     }
-                                    case HATCHSTYLE_DOUBLE:
+                                    case attribute::HATCHSTYLE_DOUBLE:
                                     {
                                         // rotated 90 degrees
-                                        geoTexSvxHatch aHatch(aOutlineRange, maHatch.getDistance(), fAngle + F_PI2);
+                                        texture::geoTexSvxHatch aHatch(aOutlineRange, maHatch.getDistance(), fAngle + F_PI2);
                                         aHatch.appendTransformations(aMatrices);
                                     }
-                                    case HATCHSTYLE_SINGLE:
+                                    case attribute::HATCHSTYLE_SINGLE:
                                     {
                                         // angle as given
-                                        geoTexSvxHatch aHatch(aOutlineRange, maHatch.getDistance(), fAngle);
+                                        texture::geoTexSvxHatch aHatch(aOutlineRange, maHatch.getDistance(), fAngle);
                                         aHatch.appendTransformations(aMatrices);
                                     }
                                 }
 
                                 // create geometry from unit line
-                                ::basegfx::B2DPolyPolygon a2DHatchLines;
-                                ::basegfx::B2DPolygon a2DUnitLine;
-                                a2DUnitLine.append(::basegfx::B2DPoint(0.0, 0.0));
-                                a2DUnitLine.append(::basegfx::B2DPoint(1.0, 0.0));
+                                basegfx::B2DPolyPolygon a2DHatchLines;
+                                basegfx::B2DPolygon a2DUnitLine;
+                                a2DUnitLine.append(basegfx::B2DPoint(0.0, 0.0));
+                                a2DUnitLine.append(basegfx::B2DPoint(1.0, 0.0));
 
                                 for(a = 0L; a < aMatrices.size(); a++)
                                 {
-                                    const ::basegfx::B2DHomMatrix& rMatrix = aMatrices[a];
-                                    ::basegfx::B2DPolygon aNewLine(a2DUnitLine);
+                                    const basegfx::B2DHomMatrix& rMatrix = aMatrices[a];
+                                    basegfx::B2DPolygon aNewLine(a2DUnitLine);
                                     aNewLine.transform(rMatrix);
                                     a2DHatchLines.append(aNewLine);
                                 }
@@ -193,14 +193,14 @@ namespace drawinglayer
                                 if(a2DHatchLines.count())
                                 {
                                     // clip against texture polygon
-                                    a2DHatchLines = ::basegfx::tools::clipPolyPolygonOnPolyPolygon(a2DHatchLines, aTexPolyPolygon, true, false);
+                                    a2DHatchLines = basegfx::tools::clipPolyPolygonOnPolyPolygon(a2DHatchLines, aTexPolyPolygon, true, false);
                                 }
 
                                 if(a2DHatchLines.count())
                                 {
                                     // create 2d matrix with 2d vectors as column vectors and 2d point as offset, this represents
                                     // a coordinate system transformation from unit coordinates to the new coordinate system
-                                    ::basegfx::B2DHomMatrix a2D;
+                                    basegfx::B2DHomMatrix a2D;
                                     a2D.set(0, 0, a2X.getX());
                                     a2D.set(1, 0, a2X.getY());
                                     a2D.set(0, 1, a2Y.getX());
@@ -214,11 +214,11 @@ namespace drawinglayer
                                     a2DHatchLines.transform(a2D);
 
                                     // expand back-transformated geometry tpo 3D
-                                    ::basegfx::B3DPolyPolygon a3DHatchLines(::basegfx::tools::createB3DPolyPolygonFromB2DPolyPolygon(a2DHatchLines, 0.0));
+                                    basegfx::B3DPolyPolygon a3DHatchLines(basegfx::tools::createB3DPolyPolygonFromB2DPolyPolygon(a2DHatchLines, 0.0));
 
                                     // create 3d matrix with 3d vectors as column vectors (0,0,1 as Z) and 3d point as offset, this represents
                                     // a coordinate system transformation from unit coordinates to the object's 3d coordinate system
-                                    ::basegfx::B3DHomMatrix a3D;
+                                    basegfx::B3DHomMatrix a3D;
                                     a3D.set(0, 0, a3X.getX());
                                     a3D.set(1, 0, a3X.getY());
                                     a3D.set(2, 0, a3X.getZ());
@@ -237,8 +237,8 @@ namespace drawinglayer
 
                                     for(a = 0L; a < nHatchLines; a++)
                                     {
-                                        basePrimitive* pNew = new polygonHairlinePrimitive3D(a3DHatchLines.getB3DPolygon(a), aHatchColor);
-                                        rDest.push_back(referencedPrimitive(*pNew));
+                                        basePrimitive3D* pNew = new polygonHairlinePrimitive3D(a3DHatchLines.getB3DPolygon(a), aHatchColor);
+                                        rDest.push_back(referencedPrimitive3D(*pNew));
                                     }
                                 }
                             }
@@ -263,21 +263,21 @@ namespace drawinglayer
             }
         }
 
-        void hatchTexturePrimitive3D::decompose(primitiveVector& rTarget, const ::drawinglayer::geometry::viewInformation& rViewInformation)
+        void hatchTexturePrimitive3D::decompose(primitiveVector3D& rTarget)
         {
             if(maPrimitiveVector.size())
             {
                 // create decomposition
-                primitiveVector aNewPrimitiveVector;
+                primitiveVector3D aNewPrimitiveVector;
                 impCreateDecomposition(maPrimitiveVector, aNewPrimitiveVector);
                 rTarget.insert(rTarget.end(), aNewPrimitiveVector.begin(), aNewPrimitiveVector.end());
             }
         }
 
         hatchTexturePrimitive3D::hatchTexturePrimitive3D(
-            const fillHatchAttribute& rHatch,
-            const primitiveVector& rPrimitiveVector,
-            const ::basegfx::B2DVector& rTextureSize,
+            const attribute::fillHatchAttribute& rHatch,
+            const primitiveVector3D& rPrimitiveVector,
+            const basegfx::B2DVector& rTextureSize,
             bool bModulate,
             bool bFilter)
         :   texturePrimitive3D(rPrimitiveVector, rTextureSize, bModulate, bFilter),
@@ -289,7 +289,7 @@ namespace drawinglayer
         {
         }
 
-        bool hatchTexturePrimitive3D::operator==(const basePrimitive& rPrimitive) const
+        bool hatchTexturePrimitive3D::operator==(const basePrimitive3D& rPrimitive) const
         {
             if(texturePrimitive3D::operator==(rPrimitive))
             {
@@ -304,7 +304,7 @@ namespace drawinglayer
         {
             return CreatePrimitiveID('H', 'A', 'X', '3');
         }
-    } // end of namespace primitive
+    } // end of namespace primitive3d
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////

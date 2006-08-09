@@ -2,11 +2,11 @@
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
- *  $RCSfile: transformprimitive3d.cxx,v $
+ *  $RCSfile: fillbitmapattribute.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: aw $ $Date: 2006-08-09 16:51:16 $
+ *  last change: $Author: aw $ $Date: 2006-08-09 16:47:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,49 +33,32 @@
  *
  ************************************************************************/
 
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_TRANSFORMPRIMITIVE3D_HXX
-#include <drawinglayer/primitive3d/transformprimitive3d.hxx>
+#ifndef _DRAWINGLAYER_ATTRIBUTE_FILLBITMAPATTRIBUTE_HXX
+#include <drawinglayer/attribute/fillbitmapattribute.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
 
 namespace drawinglayer
 {
-    namespace primitive3d
+    namespace attribute
     {
-        transformPrimitive3D::transformPrimitive3D(const basegfx::B3DHomMatrix& rTransformation, const primitiveVector3D& rPrimitiveVector)
-        :   vectorPrimitive3D(rPrimitiveVector),
-            maTransformation(rTransformation)
+        fillBitmapAttribute::fillBitmapAttribute(const Bitmap& rBitmap, const basegfx::B2DPoint& rTopLeft, const basegfx::B2DVector& rSize, bool bTiling)
+        :   maBitmap(rBitmap),
+            maTopLeft(rTopLeft),
+            maSize(rSize),
+            mbTiling(bTiling)
         {
         }
 
-        transformPrimitive3D::~transformPrimitive3D()
+        bool fillBitmapAttribute::operator==(const fillBitmapAttribute& rCandidate) const
         {
+            return (maBitmap == rCandidate.maBitmap
+                && maTopLeft == rCandidate.maTopLeft
+                && maSize == rCandidate.maSize
+                && mbTiling == rCandidate.mbTiling);
         }
-
-        bool transformPrimitive3D::operator==(const basePrimitive3D& rPrimitive) const
-        {
-            if(vectorPrimitive3D::operator==(rPrimitive))
-            {
-                const transformPrimitive3D& rCompare = static_cast< const transformPrimitive3D& >(rPrimitive);
-                return (maTransformation == rCompare.maTransformation);
-            }
-
-            return false;
-        }
-
-        PrimitiveID transformPrimitive3D::getID() const
-        {
-            return CreatePrimitiveID('T', 'R', 'N', '3');
-        }
-
-        basegfx::B3DRange transformPrimitive3D::get3DRange() const
-        {
-            basegfx::B3DRange aRetval(get3DRangeFromVector(maPrimitiveVector));
-            aRetval.transform(maTransformation);
-            return aRetval;
-        }
-    } // end of namespace primitive3d
+    } // end of namespace attribute
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
