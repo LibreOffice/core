@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmap.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:20:12 $
+ *  last change: $Author: hr $ $Date: 2006-08-11 17:44:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,6 +103,16 @@ Bitmap::Bitmap( const Bitmap& rBitmap ) :
 
     if ( mpImpBmp )
         mpImpBmp->ImplIncRefCount();
+}
+
+// ------------------------------------------------------------------
+
+Bitmap::Bitmap( SalBitmap* pSalBitmap )
+{
+    mpImpBmp = new ImpBitmap();
+    mpImpBmp->ImplSetSalBitmap( pSalBitmap );
+    maPrefMapMode = MapMode( MAP_PIXEL );
+    maPrefSize = mpImpBmp->ImplGetSize();
 }
 
 // ------------------------------------------------------------------
