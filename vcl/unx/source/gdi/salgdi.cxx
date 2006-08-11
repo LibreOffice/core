@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 16:52:56 $
+ *  last change: $Author: hr $ $Date: 2006-08-11 17:51:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -182,7 +182,7 @@ X11SalGraphics::~X11SalGraphics()
 
 void X11SalGraphics::Init( SalFrame *pFrame, Drawable aTarget )
 {
-    m_pColormap     = &GetSalData()->GetDisplay()->GetColormap();
+    m_pColormap     = &GetX11SalData()->GetDisplay()->GetColormap();
     hDrawable_      = aTarget;
 
     bWindow_        = TRUE;
