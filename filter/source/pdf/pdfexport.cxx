@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-03 12:32:43 $
+ *  last change: $Author: hr $ $Date: 2006-08-11 17:39:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,6 +138,7 @@ PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc, Reference< task::
     mnQuality               ( 90 ),
     mnFormsFormat           ( 0 ),
     mnProgressValue         ( 0 ),
+    mbWatermark             ( sal_False ),
 
     mbHideViewerToolbar         ( sal_False ),
     mbHideViewerMenubar         ( sal_False ),
@@ -352,7 +353,12 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "PageLayout" ) ) )
                     rFilterData[ nData ].Value >>= mnPDFPageLayout;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "FirstPageOnLeft" ) ) )
-                    rFilterData[ nData ].Value >>= mbFirstPageLeft;
+                    rFilterData[ nData ].Value >>= aContext.FirstPageLeft;
+                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "Watermark" ) ) )
+                {
+                    maWatermark = rFilterData[ nData ].Value;
+                    mbWatermark = sal_True;
+                }
 //now all the security related properties...
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "EncryptFile" ) ) )
                     rFilterData[ nData ].Value >>= mbEncrypt;
@@ -679,7 +685,84 @@ sal_Bool PDFExport::ImplExportPage( PDFWriter& rWriter, PDFExtOutDevData& rPDFEx
     rWriter.SetClipRegion( aPageRect );
     bRet = ImplWriteActions( rWriter, &rPDFExtOutDevData, rMtf, aDummyVDev );
     rPDFExtOutDevData.ResetSyncData();
+
+    if( mbWatermark )
+        ImplWriteWatermark( rWriter, aSizePDF );
+
     return bRet;
+}
+
+// -----------------------------------------------------------------------------
+
+void PDFExport::ImplWriteWatermark( PDFWriter& rWriter, const Size& rPageSize )
+{
+    OUString aText( RTL_CONSTASCII_USTRINGPARAM( "Watermark" ) );
+    Font aFont( OUString( RTL_CONSTASCII_USTRINGPARAM( "Helvetica" ) ), Size( 0, 3*rPageSize.Height()/4 ) );
+    aFont.SetItalic( ITALIC_NONE );
+    aFont.SetWidthType( WIDTH_NORMAL );
+    aFont.SetWeight( WEIGHT_NORMAL );
+    aFont.SetAlign( ALIGN_BOTTOM );
+    long nTextWidth = rPageSize.Width();
+    if( rPageSize.Width() < rPageSize.Height() )
+    {
+        nTextWidth = rPageSize.Height();
+        aFont.SetOrientation( 2700 );
+    }
+
+    if( ! ( maWatermark >>= aText ) )
+    {
+        // more complicated watermark ?
+    }
+
+    // adjust font height for text to fit
+    OutputDevice* pDev = rWriter.GetReferenceDevice();
+    pDev->Push( PUSH_ALL );
+    pDev->SetFont( aFont );
+    pDev->SetMapMode( MapMode( MAP_POINT ) );
+    int w = 0;
+    while( ( w = pDev->GetTextWidth( aText ) ) > nTextWidth )
+    {
+        long nNewHeight = aFont.GetHeight() * nTextWidth / w;
+        if( nNewHeight == aFont.GetHeight() )
+        {
+            nNewHeight--;
+            if( nNewHeight <= 0 )
+                break;
+        }
+        aFont.SetHeight( nNewHeight );
+        pDev->SetFont( aFont );
+    }
+    long nTextHeight = pDev->GetTextHeight();
+    // leave some maneuvering room for rounding issues, also
+    // some fonts go a little outside ascent/descent
+    nTextHeight += nTextHeight/20;
+    pDev->Pop();
+
+    rWriter.Push( PUSH_ALL );
+    rWriter.SetMapMode( MapMode( MAP_POINT ) );
+    rWriter.SetFont( aFont );
+    rWriter.SetTextColor( COL_RED );
+    Point aTextPoint;
+    Rectangle aTextRect;
+    if( rPageSize.Width() > rPageSize.Height() )
+    {
+        aTextPoint = Point( (rPageSize.Width()-w)/2,
+                            rPageSize.Height()-(rPageSize.Height()-nTextHeight)/2 );
+        aTextRect = Rectangle( Point( (rPageSize.Width()-w)/2,
+                                      (rPageSize.Height()-nTextHeight)/2 ),
+                               Size( w, nTextHeight ) );
+    }
+    else
+    {
+        aTextPoint = Point( (rPageSize.Width()-nTextHeight)/2,
+                            (rPageSize.Height()-w)/2 );
+        aTextRect = Rectangle( aTextPoint, Size( nTextHeight, w ) );
+    }
+    rWriter.SetClipRegion();
+    rWriter.BeginTransparencyGroup();
+    rWriter.DrawText( aTextPoint, aText );
+    rWriter.EndTransparencyGroup( aTextRect, 50 );
+    rWriter.Pop();
 }
 
 // -----------------------------------------------------------------------------
