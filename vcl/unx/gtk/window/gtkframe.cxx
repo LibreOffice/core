@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 10:25:14 $
+ *  last change: $Author: hr $ $Date: 2006-08-11 17:46:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,7 +120,7 @@ static USHORT GetKeyCode( guint keyval )
         nCode = KEY_A + (keyval-GDK_a );
     else if( keyval >= GDK_F1 && keyval <= GDK_F26 )
     {
-        if( GetSalData()->GetDisplay()->IsNumLockFromXS() )
+        if( GetX11SalData()->GetDisplay()->IsNumLockFromXS() )
         {
             nCode = KEY_F1 + (keyval-GDK_F1);
         }
@@ -130,7 +130,7 @@ static USHORT GetKeyCode( guint keyval )
             {
                 // - - - - - Sun keyboard, see vcl/unx/source/app/saldisp.cxx
                 case GDK_L2:
-                    if( GetSalData()->GetDisplay()->GetServerVendor() == vendor_sun )
+                    if( GetX11SalData()->GetDisplay()->GetServerVendor() == vendor_sun )
                         nCode = KEY_REPEAT;
                     else
                         nCode = KEY_F12;
@@ -512,7 +512,7 @@ void GtkSalFrame::InitCommon()
     gtk_widget_show( GTK_WIDGET(m_pFixedContainer) );
 
     //system data
-    SalDisplay* pDisp = GetSalData()->GetDisplay();
+    SalDisplay* pDisp = GetX11SalData()->GetDisplay();
     m_aSystemData.pDisplay      = pDisp->GetDisplay();
     m_aSystemData.aWindow       = GDK_WINDOW_XWINDOW(GTK_WIDGET(m_pWindow)->window);
     m_aSystemData.pSalFrame     = this;
@@ -591,7 +591,7 @@ static void lcl_set_accept_focus( GtkWindow* pWindow, gboolean bAccept, bool bBe
         p_gtk_window_set_accept_focus( pWindow, bAccept );
     else if( ! bBeforeRealize )
     {
-        Display* pDisplay = GetSalData()->GetDisplay()->GetDisplay();
+        Display* pDisplay = GetX11SalData()->GetDisplay()->GetDisplay();
         XLIB_Window aWindow = GDK_WINDOW_XWINDOW( GTK_WIDGET(pWindow)->window );
         XWMHints* pHints = XGetWMHints( pDisplay, aWindow );
         if( ! pHints )
@@ -868,9 +868,9 @@ void GtkSalFrame::SetExtendedFrameStyle( SalExtStyle nStyle )
         if( GTK_WIDGET_REALIZED( GTK_WIDGET(m_pWindow) ) )
         {
             XClassHint* pClass = XAllocClassHint();
-            rtl::OString aResHint = SalData::getFrameResName( m_nExtStyle );
+            rtl::OString aResHint = X11SalData::getFrameResName( m_nExtStyle );
             pClass->res_name  = const_cast<char*>(aResHint.getStr());
-            pClass->res_class = const_cast<char*>(SalData::getFrameClassName());
+            pClass->res_class = const_cast<char*>(X11SalData::getFrameClassName());
             XSetClassHint( getDisplay()->GetDisplay(),
                            GDK_WINDOW_XWINDOW(GTK_WIDGET(m_pWindow)->window),
                            pClass );
@@ -878,8 +878,8 @@ void GtkSalFrame::SetExtendedFrameStyle( SalExtStyle nStyle )
         }
         else
             gtk_window_set_wmclass( m_pWindow,
-                                    SalData::getFrameResName( m_nExtStyle ),
-                                    SalData::getFrameClassName() );
+                                    X11SalData::getFrameResName( m_nExtStyle ),
+                                    X11SalData::getFrameClassName() );
     }
 }
 
@@ -1067,9 +1067,9 @@ void GtkSalFrame::Center()
         long    nScreenWidth, nScreenHeight;
         long    nScreenX = 0, nScreenY = 0;
 
-        nScreenWidth        = GetSalData()->GetDisplay()->GetScreenSize().Width();
-        nScreenHeight       = GetSalData()->GetDisplay()->GetScreenSize().Height();
-        if( GetSalData()->GetDisplay()->IsXinerama() )
+        nScreenWidth        = GetX11SalData()->GetDisplay()->GetScreenSize().Width();
+        nScreenHeight       = GetX11SalData()->GetDisplay()->GetScreenSize().Height();
+        if( GetX11SalData()->GetDisplay()->IsXinerama() )
         {
             // get xinerama screen we are on
             // if there is a parent, use its center for screen determination
@@ -1079,7 +1079,7 @@ void GtkSalFrame::Center()
             GdkModifierType aMask;
             gdk_display_get_pointer( getGdkDisplay(), &pScreen, &x, &y, &aMask );
 
-            const std::vector< Rectangle >& rScreens = GetSalData()->GetDisplay()->GetXineramaScreens();
+            const std::vector< Rectangle >& rScreens = GetX11SalData()->GetDisplay()->GetXineramaScreens();
             for( unsigned int i = 0; i < rScreens.size(); i++ )
                 if( rScreens[i].IsInside( Point( x, y ) ) )
                 {
@@ -1318,7 +1318,7 @@ void GtkSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, USHOR
 
         // adjust position to avoid off screen windows
         // but allow toolbars to be positioned partly off screen by the user
-        Size aScreenSize = GetSalData()->GetDisplay()->GetScreenSize();
+        Size aScreenSize = GetX11SalData()->GetDisplay()->GetScreenSize();
         if( ! (m_nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) )
         {
             if( nX < (long)maGeometry.nLeftDecoration )
@@ -1376,7 +1376,7 @@ void GtkSalFrame::GetClientSize( long& rWidth, long& rHeight )
 
 void GtkSalFrame::GetWorkArea( Rectangle& rRect )
 {
-    rRect = GetSalData()->GetDisplay()->getWMAdaptor()->getWorkArea( 0 );
+    rRect = GetX11SalData()->GetDisplay()->getWMAdaptor()->getWorkArea( 0 );
 }
 
 SalFrame* GtkSalFrame::GetParent() const
@@ -1716,12 +1716,12 @@ String GtkSalFrame::GetKeyName( USHORT nKeyCode )
 
 GdkDisplay *GtkSalFrame::getGdkDisplay()
 {
-    return static_cast<GtkSalDisplay*>(GetSalData()->GetDisplay())->GetGdkDisplay();
+    return static_cast<GtkSalDisplay*>(GetX11SalData()->GetDisplay())->GetGdkDisplay();
 }
 
 GtkSalDisplay *GtkSalFrame::getDisplay()
 {
-    return static_cast<GtkSalDisplay*>(GetSalData()->GetDisplay());
+    return static_cast<GtkSalDisplay*>(GetX11SalData()->GetDisplay());
 }
 
 SalFrame::SalPointerState GtkSalFrame::GetPointerState()
@@ -2167,7 +2167,7 @@ gboolean GtkSalFrame::signalFocus( GtkWidget*, GdkEventFocus* pEvent, gpointer f
 
     // ask for changed printers like generic implementation
     if( pEvent->in )
-        if( static_cast< X11SalInstance* >(GetSalData()->pInstance_)->isPrinterInit() )
+        if( static_cast< X11SalInstance* >(GetSalData()->m_pInstance)->isPrinterInit() )
             vcl_sal::PrinterUpdate::update();
 
     // FIXME: find out who the hell steals the focus from our frame
