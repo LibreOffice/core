@@ -4,9 +4,9 @@
  *
  *  $RCSfile: porrst.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 11:48:46 $
+ *  last change: $Author: hr $ $Date: 2006-08-11 15:51:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -240,19 +240,18 @@ void SwKernPortion::Paint( const SwTxtPaintInfo &rInf ) const
         if( rInf.OnWin() && pPortion && !pPortion->Width() )
             pPortion->PrePaint( rInf, this );
 
-        if( rInf.GetFont()->IsPaintBlank() &&
-            // --> FME 2006-07-12 #b6439097#
-            !rInf.GetTxtFrm()->GetTxtNode()->GetDoc()->IsCutExpandedUnderline() )
-            // <--
+        if( rInf.GetFont()->IsPaintBlank() )
         {
-static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
-            // Tabs mit Fuellung
-            if( rInf.OnWin() ) // Keine Luecken am Bildschirm
-                ((SwKernPortion*)this)->Width( Width() + 12 );
-            XubString aTxt( sDoubleSpace, RTL_TEXTENCODING_MS_1252 );
-            rInf.DrawText( aTxt, *this, 0, 2, sal_True );
-            if( rInf.OnWin() )
-                ((SwKernPortion*)this)->Width( Width() - 12 );
+            static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
+            XubString aTxtDouble( sDoubleSpace, RTL_TEXTENCODING_MS_1252 );
+
+            // --> FME 2006-07-12 #b6439097#
+            SwRect aClipRect;
+            rInf.CalcRect( *this, &aClipRect, 0 );
+            SwSaveClip aClip( (OutputDevice*)rInf.GetOut() );
+            aClip.ChgClip( aClipRect, 0 );
+            // <--
+            rInf.DrawText( aTxtDouble, *this, 0, 2, sal_True );
         }
     }
 }
