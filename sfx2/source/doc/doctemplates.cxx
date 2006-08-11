@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doctemplates.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 16:05:50 $
+ *  last change: $Author: hr $ $Date: 2006-08-11 15:40:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2766,7 +2766,15 @@ DocTemplates_EntryData_Impl* GroupData_Impl::addEntry( const OUString& rTitle,
     }
     else
     {
-        pData->setInUse();
+        if ( rHierURL.getLength() )
+        {
+            pData->setHierarchyURL( rHierURL );
+            pData->setHierarchy( sal_True );
+        }
+
+        if ( pData->getInHierarchy() )
+            pData->setInUse();
+
         if ( rTargetURL != pData->getTargetURL() )
         {
             pData->setTargetURL( rTargetURL );
