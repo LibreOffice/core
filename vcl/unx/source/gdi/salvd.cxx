@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salvd.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 11:40:32 $
+ *  last change: $Author: hr $ $Date: 2006-08-11 17:52:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,22 +68,23 @@ SalVirtualDevice* X11SalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
     if( !nBitCount && pGraphics )
         nBitCount = pGraphics->GetBitCount();
 
+    SalDisplay* pSalDisplay = GetX11SalData()->GetDisplay();
     if( pData && pData->hDrawable != None )
     {
         XLIB_Window aRoot;
         int x, y;
         unsigned int w = 0, h = 0, bw, d;
-        XGetGeometry( GetSalData()->GetDisplay()->GetDisplay(), pData->hDrawable,
+        XGetGeometry( pSalDisplay->GetDisplay(), pData->hDrawable,
                       &aRoot, &x, &y, &w, &h, &bw, &d );
         nDX = (long)w;
         nDY = (long)h;
-        if( !pVDev->Init( GetSalData()->GetDisplay(), nDX, nDY, nBitCount, pData->hDrawable, pData->pRenderFormat ) )
+        if( !pVDev->Init( pSalDisplay, nDX, nDY, nBitCount, pData->hDrawable, pData->pRenderFormat ) )
         {
             delete pVDev;
             return NULL;
         }
     }
-    else if( !pVDev->Init( GetSalData()->GetDisplay(), nDX, nDY, nBitCount ) )
+    else if( !pVDev->Init( pSalDisplay, nDX, nDY, nBitCount ) )
     {
         delete pVDev;
         return NULL;
