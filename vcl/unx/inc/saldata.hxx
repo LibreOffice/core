@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldata.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 11:56:19 $
+ *  last change: $Author: hr $ $Date: 2006-08-11 17:47:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,14 +42,14 @@
 #ifndef _SALSTD_HXX
 #include <salstd.hxx>
 #endif
-#ifndef _SV_SVDATA_HXX
-#include <svdata.hxx>
-#endif
 #ifndef _SV_SALFRAME_HXX
 #include <salframe.hxx>
 #endif
 #ifndef _SV_SALINST_H
 #include <salinst.h>
+#endif
+#ifndef _SV_SALDATABASIC_HXX
+#include <saldatabasic.hxx>
 #endif
 #ifndef _OSL_MODULE_H
 #include <osl/module.h>
@@ -75,7 +75,7 @@ typedef unsigned int pthread_t;
 #endif
 
 // -=-= SalData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class VCL_DLLPUBLIC SalData
+class VCL_DLLPUBLIC X11SalData : public SalData
 {
 protected:
             BOOL                bNoExceptions_;
@@ -87,11 +87,8 @@ protected:
             pthread_t           hMainThread_;
 
 public:
-            SalInstance*        pInstance_;         // pointer to instance
-            oslModule           m_pPlugin; // plugin library handle
-public:
-    SalData();
-    virtual ~SalData();
+    X11SalData();
+    virtual ~X11SalData();
 
     virtual void            Init();
     virtual void            initNWF();
@@ -123,15 +120,12 @@ public:
 
 };
 
-// -=-= inlines =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-inline void SetSalData( SalData* pData )
-{ ImplGetSVData()->mpSalData = (void*)pData; }
+inline X11SalData* GetX11SalData()
+{ return (X11SalData*)ImplGetSVData()->mpSalData; }
 
-inline SalData* GetSalData()
-{ return (SalData*)ImplGetSVData()->mpSalData; }
 
 #ifdef _SV_SALDISP_HXX
-inline void SalData::XError( Display *pDisplay, XErrorEvent *pEvent ) const
+inline void X11SalData::XError( Display *pDisplay,  XErrorEvent *pEvent ) const
 { pXLib_->XError( pDisplay, pEvent ); }
 #endif
 
@@ -145,12 +139,12 @@ public:
 
 inline YieldMutexReleaser::YieldMutexReleaser()
 {
-    m_nYieldCount = GetSalData()->pInstance_->ReleaseYieldMutex();
+    m_nYieldCount = GetSalData()->m_pInstance->ReleaseYieldMutex();
 }
 
 inline YieldMutexReleaser::~YieldMutexReleaser()
 {
-    GetSalData()->pInstance_->AcquireYieldMutex( m_nYieldCount );
+    GetSalData()->m_pInstance->AcquireYieldMutex( m_nYieldCount );
 }
 
 #endif // _SV_SALDATA_HXX
