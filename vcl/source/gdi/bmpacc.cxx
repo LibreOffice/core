@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bmpacc.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:21:18 $
+ *  last change: $Author: hr $ $Date: 2006-08-11 17:44:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -207,36 +207,48 @@ void BitmapReadAccess::ImplZeroInitUnusedBits()
 
     if( nWidth && nHeight && nScanSize && GetBuffer() )
     {
-        DBG_ASSERT( !( nScanSize % 4 ), "BitmapWriteAccess::ZeroInitUnusedBits: Unsupported scanline alignment" );
-
         sal_uInt32 nBits;
+        bool       bMsb;
 
         const ULONG nScanlineFormat = GetScanlineFormat();
         switch( nScanlineFormat )
         {
             case( BMP_FORMAT_1BIT_MSB_PAL ):
+                nBits = 1;
+                bMsb = true;
+                break;
+
             case( BMP_FORMAT_1BIT_LSB_PAL ):
                 nBits = 1;
-            break;
+                bMsb = false;
+                break;
 
             case( BMP_FORMAT_4BIT_MSN_PAL ):
+                nBits = 4;
+                bMsb = true;
+                break;
+
             case( BMP_FORMAT_4BIT_LSN_PAL ):
                 nBits = 4;
-            break;
+                bMsb = false;
+                break;
 
             case( BMP_FORMAT_8BIT_PAL ):
             case( BMP_FORMAT_8BIT_TC_MASK ):
+                bMsb = true;
                 nBits = 8;
             break;
 
             case( BMP_FORMAT_16BIT_TC_MSB_MASK ):
             case( BMP_FORMAT_16BIT_TC_LSB_MASK ):
+                bMsb = true;
                 nBits = 16;
             break;
 
             case( BMP_FORMAT_24BIT_TC_BGR ):
             case( BMP_FORMAT_24BIT_TC_RGB ):
             case( BMP_FORMAT_24BIT_TC_MASK ):
+                bMsb = true;
                 nBits = 24;
             break;
 
@@ -245,6 +257,7 @@ void BitmapReadAccess::ImplZeroInitUnusedBits()
             case( BMP_FORMAT_32BIT_TC_BGRA ):
             case( BMP_FORMAT_32BIT_TC_RGBA ):
             case( BMP_FORMAT_32BIT_TC_MASK ):
+                bMsb = true;
                 nBits = 32;
             break;
 
@@ -252,11 +265,32 @@ void BitmapReadAccess::ImplZeroInitUnusedBits()
             {
                 DBG_ERROR( "BitmapWriteAccess::ZeroInitUnusedBits: Unsupported pixel format");
                 nBits = 0;
+                bMsb = true;
             }
             break;
         }
 
-        if( ( nBits *= nWidth ) & 0x1f )
+        nBits *= nWidth;
+        if( nScanSize % 4 || !bMsb )
+        {
+            const sal_Int32 nLeftOverBits = sizeof(sal_uInt8)*nScanSize - nBits;
+            const sal_Int32 nBytes = (nLeftOverBits + 7L) >> 3L;
+            sal_uInt8       nMask;
+
+            if( bMsb )
+                nMask = static_cast<sal_uInt8>(0xff << (nLeftOverBits & 3L));
+            else
+                nMask = static_cast<sal_uInt8>(0xff >> (nLeftOverBits & 3L));
+
+            BYTE* pLastBytes = (BYTE*)GetBuffer() + ( nScanSize - nBytes );
+            for( sal_uInt32 i = 0; i < nHeight; i++, pLastBytes += nScanSize )
+            {
+                *pLastBytes &= nMask;
+                for( sal_Int32 j = 1; j < nBytes; j++ )
+                    pLastBytes[j] = 0;
+            }
+        }
+        else if( nBits & 0x1f )
         {
             sal_uInt32  nMask = 0xffffffff << ( ( nScanSize << 3 ) - nBits );
             BYTE*       pLast4Bytes = (BYTE*) GetBuffer() + ( nScanSize - 4 );
