@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_dependencydialog.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 17:02:37 $
+ *  last change: $Author: hr $ $Date: 2006-08-11 17:16:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,6 +76,7 @@ DependencyDialog::DependencyDialog(
             i->getLength() == 0
             ? String(ResId(RID_DLG_DEPENDENCIES_UNKNOWN)) : String(*i));
     }
+    FreeResource();
 }
 
 DependencyDialog::~DependencyDialog() {}
