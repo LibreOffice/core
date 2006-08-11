@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 16:38:04 $
+ *  last change: $Author: hr $ $Date: 2006-08-11 17:49:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,9 +131,9 @@ extern "C"
         X11SalInstance* pInstance = new X11SalInstance( new SalYieldMutex() );
 
         // initialize SalData
-        SalData *pSalData = new SalData;
+        X11SalData *pSalData = new X11SalData;
         SetSalData( pSalData );
-        pSalData->pInstance_ = pInstance;
+        pSalData->m_pInstance = pInstance;
         pSalData->Init();
 
         return pInstance;
@@ -155,7 +155,7 @@ X11SalInstance::~X11SalInstance()
     // would be done in a static destructor else which is
     // a little late
 
-    SalData *pSalData = GetSalData();
+    X11SalData *pSalData = GetX11SalData();
     pSalData->deInitNWF();
     delete pSalData;
     SetSalData( NULL );
@@ -222,7 +222,7 @@ Bool ImplPredicateEvent( Display *, XEvent *pEvent, char *pData )
 
 bool X11SalInstance::AnyInput(USHORT nType)
 {
-    SalData *pSalData = GetSalData();
+    X11SalData *pSalData = GetX11SalData();
     Display *pDisplay  = pSalData->GetDisplay()->GetDisplay();
     BOOL bRet = FALSE;
 
@@ -287,7 +287,7 @@ void X11SalInstance::AcquireYieldMutex( ULONG nCount )
 }
 
 void X11SalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
-{ GetSalData()->GetLib()->Yield( bWait, bHandleAllCurrentEvents ); }
+{ GetX11SalData()->GetLib()->Yield( bWait, bHandleAllCurrentEvents ); }
 
 void* X11SalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes )
 {
