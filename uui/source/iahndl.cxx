@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 23:59:34 $
+ *  last change: $Author: hr $ $Date: 2006-08-11 17:15:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -604,7 +604,9 @@ UUIInteractionHandler::handle(
         HandleData aHD(rRequest);
         Link aLink(&aHD,handlerequest);
         pApp->PostUserEvent(aLink,this);
+        ULONG locks = Application::ReleaseSolarMutex();
         aHD.wait();
+        Application::AcquireSolarMutex(locks);
     }
     else
         handle_impl(rRequest);
