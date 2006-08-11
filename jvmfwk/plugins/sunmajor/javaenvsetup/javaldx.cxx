@@ -4,9 +4,9 @@
  *
  *  $RCSfile: javaldx.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:08:19 $
+ *  last change: $Author: hr $ $Date: 2006-08-11 16:19:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,11 +128,13 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     rtl::OUString sVendor3(RTL_CONSTASCII_USTRINGPARAM("Blackdown Java-Linux Team"));
     rtl::OUString sVendor4(RTL_CONSTASCII_USTRINGPARAM("Apple Computer, Inc."));
     rtl::OUString sVendor5(RTL_CONSTASCII_USTRINGPARAM("BEA Systems, Inc."));
+    rtl::OUString sVendor6(RTL_CONSTASCII_USTRINGPARAM("Free Software Foundation, Inc."));
     if ( ! (sVendor1.equals(pInfo->sVendor) == sal_True
             || sVendor2.equals(pInfo->sVendor) == sal_True
             || sVendor3.equals(pInfo->sVendor) == sal_True
             || sVendor4.equals(pInfo->sVendor) == sal_True
-            || sVendor5.equals(pInfo->sVendor) == sal_True))
+            || sVendor5.equals(pInfo->sVendor) == sal_True
+        || sVendor6.equals(pInfo->sVendor) == sal_True))
         return 0;
 
     rtl::OString sPaths = getLD_LIBRARY_PATH(pInfo->arVendorData);
