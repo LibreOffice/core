@@ -4,9 +4,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:23:57 $
+ *  last change: $Author: hr $ $Date: 2006-08-11 17:16:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -452,10 +452,17 @@ namespace
     // ...................................................................
     void    lcl_collectStates( const FeatureState& _rFeatureState, States& _out_rStates )
     {
-        if ( !!_rFeatureState.bChecked )
-            _out_rStates.push_back( makeAny( (sal_Bool)*_rFeatureState.bChecked ) );
+        // order matters, due to a bug in framework which resets the check state when any non-boolean event
+        // arrives
+        // #i68215# is the bug to (re-)introduce this "ordered" notification here
+        // #i67882# is the bug which was caused by the real fix which we did in framework
+        // #i68216# is the bug which requests to fix the code in Draw which relies on
+        //          framework's implementation details
+        // 2006-08-07 / frank.schoenheit@sun.com
         if ( !!_rFeatureState.sTitle )
             _out_rStates.push_back( makeAny( *_rFeatureState.sTitle ) );
+        if ( !!_rFeatureState.bChecked )
+            _out_rStates.push_back( makeAny( (sal_Bool)*_rFeatureState.bChecked ) );
         if ( _out_rStates.empty() )
             _out_rStates.push_back( Any() );
     }
