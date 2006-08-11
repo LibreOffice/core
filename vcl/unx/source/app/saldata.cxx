@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 16:50:19 $
+ *  last change: $Author: hr $ $Date: 2006-08-11 17:49:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -263,13 +263,13 @@ static const char* XRequest[] = {
 // -=-= C statics =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-int SalData::XErrorHdl( Display *pDisplay, XErrorEvent *pEvent )
+int X11SalData::XErrorHdl( Display *pDisplay, XErrorEvent *pEvent )
 {
-    GetSalData()->XError( pDisplay, pEvent );
+    GetX11SalData()->XError( pDisplay, pEvent );
     return 0;
 }
 
-int SalData::XIOErrorHdl( Display* )
+int X11SalData::XIOErrorHdl( Display * )
 {
     /*  #106197# hack: until a real shutdown procedure exists
      *  _exit ASAP
@@ -297,24 +297,24 @@ int SalData::XIOErrorHdl( Display* )
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pthread.h>
 
-SalData::SalData()
+X11SalData::X11SalData()
 {
     bNoExceptions_  = !!getenv( "SAL_NOSEGV" );
 
     pXLib_          = NULL;
     m_pSalDisplay   = NULL;
-    pInstance_      = NULL;
+    m_pInstance     = NULL;
     m_pPlugin       = NULL;
 
     hMainThread_    = pthread_self();
 }
 
-SalData::~SalData()
+X11SalData::~X11SalData()
 {
     DeleteDisplay();
 }
 
-void SalData::DeleteDisplay()
+void X11SalData::DeleteDisplay()
 {
     delete m_pSalDisplay;
     m_pSalDisplay   = NULL;
@@ -322,17 +322,17 @@ void SalData::DeleteDisplay()
     pXLib_      = NULL;
 }
 
-void SalData::Init()
+void X11SalData::Init()
 {
     pXLib_ = new SalXLib();
     pXLib_->Init();
 }
 
-void SalData::initNWF( void )
+void X11SalData::initNWF( void )
 {
 }
 
-void SalData::deInitNWF( void )
+void X11SalData::deInitNWF( void )
 {
 }
 
@@ -483,8 +483,8 @@ void SalXLib::Init()
                                    aVI.visual,
                                    AllocNone );
 
-    XSetIOErrorHandler    ( (XIOErrorHandler)SalData::XIOErrorHdl );
-    XSetErrorHandler      ( (XErrorHandler)SalData::XErrorHdl );
+    XSetIOErrorHandler    ( (XIOErrorHandler)X11SalData::XIOErrorHdl );
+    XSetErrorHandler      ( (XErrorHandler)X11SalData::XErrorHdl );
 
     SalDisplay *pSalDisplay = new SalX11Display( pDisp, aVI.visual, aColMap );
 
@@ -565,7 +565,7 @@ void SalXLib::XError( Display *pDisplay, XErrorEvent *pEvent )
         fflush( stdout );
         fflush( stderr );
 #endif
-        if( pDisplay != GetSalData()->GetDisplay()->GetDisplay() )
+        if( pDisplay != GetX11SalData()->GetDisplay()->GetDisplay() )
             return;
 
         oslSignalAction eToDo = osl_raiseSignal (OSL_SIGNAL_USER_X11SUBSYSTEMERROR, NULL);
@@ -666,7 +666,7 @@ bool SalXLib::CheckTimeout( bool bExecuteTimers )
                 */
                 m_aTimeout += m_nTimeoutMS;
                 // notify
-                GetSalData()->Timeout();
+                GetX11SalData()->Timeout();
             }
         }
     }
@@ -811,7 +811,7 @@ void SalXLib::PostUserEvent()
     Wakeup();
 }
 
-const char* SalData::getFrameResName()
+const char* X11SalData::getFrameResName()
 {
     /*  according to ICCCM:
      *  first search command line for -name parameter
@@ -845,7 +845,7 @@ const char* SalData::getFrameResName()
     return aResName.getStr();
 }
 
-const char* SalData::getFrameClassName()
+const char* X11SalData::getFrameClassName()
 {
     static rtl::OStringBuffer aClassName;
     if( !aClassName.getLength() )
@@ -865,7 +865,7 @@ const char* SalData::getFrameClassName()
     return aClassName.getStr();
 }
 
-rtl::OString SalData::getFrameResName( SalExtStyle nStyle )
+rtl::OString X11SalData::getFrameResName( SalExtStyle nStyle )
 {
     rtl::OStringBuffer aBuf( 64 );
     aBuf.append( getFrameResName() );
