@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdilayout.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:31:24 $
+ *  last change: $Author: hr $ $Date: 2006-08-11 17:45:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -621,3 +621,12 @@ bool SalGraphics::filterText( const String&, String&, xub_StrLen, xub_StrLen&, x
 {
     return false;
 }
+
+void SalGraphics::AddDevFontSubstitute( OutputDevice* pOutDev,
+                                        const String& rFontName,
+                                        const String& rReplaceFontName,
+                                        USHORT nFlags )
+{
+    pOutDev->ImplAddDevFontSubstitute( rFontName, rReplaceFontName, nFlags );
+}
+
