@@ -4,9 +4,9 @@
 #
 #   $RCSfile: wntmsci10.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-19 15:09:09 $
+#   last change: $Author: hr $ $Date: 2006-08-11 17:40:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -204,6 +204,7 @@ MODULES_WITH_WARNINGS := \
     avmedia \
     b_server \
     basctl \
+    basebmp \
     basic \
     canvas \
     chart2 \
