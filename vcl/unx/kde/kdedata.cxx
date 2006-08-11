@@ -4,9 +4,9 @@
  *
  *  $RCSfile: kdedata.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 10:27:54 $
+ *  last change: $Author: hr $ $Date: 2006-08-11 17:48:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -198,8 +198,8 @@ void KDEXLib::Init()
             static_cast< Visual * >( QPaintDevice::x11AppVisual() ),
             QPaintDevice::x11AppColormap() );
 
-    XSetIOErrorHandler    ( (XIOErrorHandler)SalData::XIOErrorHdl );
-    XSetErrorHandler      ( (XErrorHandler)SalData::XErrorHdl );
+    XSetIOErrorHandler    ( (XIOErrorHandler)X11SalData::XIOErrorHdl );
+    XSetErrorHandler      ( (XErrorHandler)X11SalData::XErrorHdl );
 
     pInputMethod->CreateMethod( pDisp );
     pInputMethod->AddConnectionWatch( pDisp, (void*)this );
@@ -273,9 +273,9 @@ extern "C" {
 #endif
 
         // initialize SalData
-        SalData *pSalData = new KDEData();
+        KDEData *pSalData = new KDEData();
         SetSalData( pSalData );
-        pSalData->pInstance_ = pInstance;
+        pSalData->m_pInstance = pInstance;
         pSalData->Init();
         pSalData->initNWF();
 
