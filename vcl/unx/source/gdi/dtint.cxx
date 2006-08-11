@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dtint.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-07 09:42:35 $
+ *  last change: $Author: hr $ $Date: 2006-08-11 17:50:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,7 +84,7 @@ DtIntegrator::DtIntegrator() :
         mnRefCount( 0 ),
         mnSystemLookCommandProcess( -1 )
 {
-    mpSalDisplay = GetSalData()->GetDisplay();
+    mpSalDisplay = GetX11SalData()->GetDisplay();
     mpDisplay = mpSalDisplay->GetDisplay();
     aIntegratorList.Insert( this, LIST_APPEND );
     OUString aDir;
@@ -105,7 +105,7 @@ DtIntegrator::~DtIntegrator()
 
 DtIntegrator* DtIntegrator::CreateDtIntegrator()
 {
-    SalDisplay* pSalDisplay = GetSalData()->GetDisplay();
+    SalDisplay* pSalDisplay = GetX11SalData()->GetDisplay();
     Display* pDisplay = pSalDisplay->GetDisplay();
 
     for( unsigned int i = 0; i < aIntegratorList.Count(); i++ )
