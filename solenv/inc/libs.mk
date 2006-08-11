@@ -4,9 +4,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.101 $
+#   $Revision: 1.102 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-19 09:38:31 $
+#   last change: $Author: hr $ $Date: 2006-08-11 17:39:52 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,7 @@
 #     MA  02111-1307  USA
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.101 $$"
+LIBSMKREV!:="$$Revision: 1.102 $$"
 
 .IF "$(COM)"=="WTC"
 LIBPRE=libr
@@ -113,6 +113,7 @@ ICOLIB=-lico$(OFFICEUPD)$(DLLPOSTFIX)
 VCLLIBST=-lvcl
 VCLLIB=$(SVLIB)
 BASEGFXLIB=-lbasegfx$(OFFICEUPD)$(DLLPOSTFIX)
+BASEBMPLIB=-lbasebmp$(OFFICEUPD)$(DLLPOSTFIX)
 CANVASTOOLSLIB=-lcanvastools$(OFFICEUPD)$(DLLPOSTFIX)
 CPPCANVASLIB=-lcppcanvas$(OFFICEUPD)$(DLLPOSTFIX)
 .IF "$(SYSTEM_AGG)" == "YES"
@@ -417,6 +418,7 @@ ISDLIB=$(LIBPRE) sdi.lib
 SVLIB=$(LIBPRE) ivcl.lib
 VCLLIB=$(SVLIB)
 BASEGFXLIB=$(LIBPRE) ibasegfx.lib
+BASEBMPLIB=$(LIBPRE) ibasebmp.lib
 CANVASTOOLSLIB=$(LIBPRE) icanvastools.lib
 CPPCANVASLIB=$(LIBPRE) icppcanvas.lib
 AGGLIB=$(LIBPRE) iagg.lib
