@@ -4,9 +4,9 @@
  *
  *  $RCSfile: output2.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 15:05:41 $
+ *  last change: $Author: hr $ $Date: 2006-08-11 17:05:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1382,6 +1382,14 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
                         CellInfo& rCellInfo = pThisRowInfo->pCellInfo[nCellX+1];
                         pPattern = rCellInfo.pPatternAttr;
                         pCondSet = rCellInfo.pConditionSet;
+
+                        if ( !pPattern )
+                        {
+                            // #i68085# pattern from cell info for hidden columns is null,
+                            // test for null is quicker than using column flags
+                            pPattern = pDoc->GetPattern( nCellX, nCellY, nTab );
+                            pCondSet = pDoc->GetCondResult( nCellX, nCellY, nTab );
+                        }
                     }
                     else        // get from document
                     {
