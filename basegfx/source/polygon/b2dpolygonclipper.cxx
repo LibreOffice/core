@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dpolygonclipper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:57:47 $
+ *  last change: $Author: hr $ $Date: 2006-08-11 17:41:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,10 @@
 
 #ifndef _BGFX_CURVE_B2DCUBICBEZIER_HXX
 #include <basegfx/curve/b2dcubicbezier.hxx>
+#endif
+
+#ifndef _BGFX_TOOLS_RECTCLIPTOOLS_HXX
+#include <basegfx/tools/rectcliptools.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -582,17 +586,6 @@ namespace basegfx
             sal_uInt32 clipmask;    // clipping mask, e.g. 1000 1000
         };
 
-        inline sal_uInt32 getClipFlags( const ::basegfx::B2DPoint&     rV,
-                                        const ::basegfx::B2DRectangle& rR )
-        {
-            // maxY | minY | maxX | minX
-            sal_uInt32 clip  = (rV.getX() < rR.getMinX()) << 0;
-                    clip |= (rV.getX() > rR.getMaxX()) << 1;
-                    clip |= (rV.getY() < rR.getMinY()) << 2;
-                    clip |= (rV.getY() > rR.getMaxY()) << 3;
-            return clip;
-        }
-
         /*
         *
         * polygon clipping rules  (straight out of Foley and Van Dam)
@@ -606,10 +599,10 @@ namespace basegfx
         *
         */
         sal_uInt32 scissorLineSegment( ::basegfx::B2DPoint           *in_vertex,    // input buffer
-                                    sal_uInt32                    in_count,     // number of verts in input buffer
-                                    ::basegfx::B2DPoint          *out_vertex,   // output buffer
-                                    scissor_plane                *pPlane,       // scissoring plane
-                                    const ::basegfx::B2DRectangle &rR )         // clipping rectangle
+                                       sal_uInt32                     in_count,     // number of verts in input buffer
+                                       ::basegfx::B2DPoint           *out_vertex,   // output buffer
+                                       scissor_plane                 *pPlane,       // scissoring plane
+                                       const ::basegfx::B2DRectangle &rR )          // clipping rectangle
         {
             ::basegfx::B2DPoint *curr;
             ::basegfx::B2DPoint *next;
@@ -625,7 +618,7 @@ namespace basegfx
                 next = &in_vertex[(i+1)%in_count];
 
                 // perform clipping judgement & mask against current plane.
-                sal_uInt32 clip = pPlane->clipmask & ((getClipFlags(*curr,rR)<<4)|getClipFlags(*next,rR));
+                sal_uInt32 clip = pPlane->clipmask & ((getCohenSutherlandClipFlags(*curr,rR)<<4)|getCohenSutherlandClipFlags(*next,rR));
 
                 if(clip==0) { // both verts are inside
                     out_vertex[out_count++] = *next;
@@ -690,19 +683,19 @@ namespace basegfx
                 sp[0].nx = +1.0;
                 sp[0].ny = +0.0;
                 sp[0].d = -(rRange.getMinX());
-                sp[0].clipmask = 0x11; // 0001 0001
+                sp[0].clipmask = (RectClipFlags::LEFT << 4) | RectClipFlags::LEFT; // 0001 0001
                 sp[1].nx = -1.0;
                 sp[1].ny = +0.0;
                 sp[1].d = +(rRange.getMaxX());
-                sp[1].clipmask = 0x22; // 0010 0010
+                sp[1].clipmask = (RectClipFlags::RIGHT << 4) | RectClipFlags::RIGHT; // 0010 0010
                 sp[2].nx = +0.0;
                 sp[2].ny = +1.0;
                 sp[2].d = -(rRange.getMinY());
-                sp[2].clipmask = 0x44; // 0100 0100
+                sp[2].clipmask = (RectClipFlags::TOP << 4) | RectClipFlags::TOP; // 0100 0100
                 sp[3].nx = +0.0;
                 sp[3].ny = -1.0;
                 sp[3].d = +(rRange.getMaxY());
-                sp[3].clipmask = 0x88; // 1000 1000
+                sp[3].clipmask = (RectClipFlags::BOTTOM << 4) | RectClipFlags::BOTTOM; // 1000 1000
 
                 // retrieve the number of vertices of the triangulated polygon
                 const sal_uInt32 nVertexCount = rCandidate.count();
