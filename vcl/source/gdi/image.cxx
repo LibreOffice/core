@@ -4,9 +4,9 @@
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:24:19 $
+ *  last change: $Author: hr $ $Date: 2006-08-11 17:44:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -946,7 +946,7 @@ void ImageList::AddImage( USHORT nId, const Image& rImage )
             if( !bHasImage )
             {
                 const Bitmap    aBmp( aImageSize, 1 );
-                const BitmapEx  aBmpEx( aBmp, COL_BLACK );
+                const BitmapEx  aBmpEx( aBmp, Color( COL_BLACK ) );
 
                 mpImplData->mpImageBitmap->Replace( nIndex, aBmpEx );
             }
