@@ -85,4 +85,5 @@ mkdir: %_DEST%\inc%_EXT%\basegfx\tuple
 
 mkdir: %_DEST%\inc%_EXT%\basegfx\tools
 ..\inc\basegfx\tools\canvastools.hxx %_DEST%\inc%_EXT%\basegfx\tools\canvastools.hxx
+..\inc\basegfx\tools\rectcliptools.hxx %_DEST%\inc%_EXT%\basegfx\tools\rectcliptools.hxx
 ..\inc\basegfx\tools\tools.hxx %_DEST%\inc%_EXT%\basegfx\tools\tools.hxx
