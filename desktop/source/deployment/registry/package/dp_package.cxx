@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_package.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 17:21:54 $
+ *  last change: $Author: hr $ $Date: 2006-08-11 17:17:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,6 +75,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 namespace css = ::com::sun::star;
+namespace cssu = ::com::sun::star::uno;
 using ::rtl::OUString;
 
 namespace dp_registry {
@@ -422,36 +423,101 @@ OUString BackendImpl::PackageImpl::findLocalizedLicense(
             xXPath->selectNodeList(xRootNode,
             OUSTR("/desc:description/desc:registration/desc:simple-license/desc:license-text"));
         sal_Int32 numNodes = listLicText->getLength();
-        OUString sCountry = officeLocale.Country;
-        OUString sLang = officeLocale.Language;
         css::uno::Reference<css::xml::dom::XNode> nodeMatch;
 
+
+        //check if we match lang + country + variant
+        OSL_ASSERT(officeLocale.Language.getLength());
+        OUString sLangCountry;
+        ::rtl::OUStringBuffer buff(64);
+        buff.append(officeLocale.Language);
+        if ( officeLocale.Country.getLength() || officeLocale.Variant.getLength())
+        {
+            buff.appendAscii("-");
+            if (officeLocale.Country.getLength())
+            {
+                buff.append(officeLocale.Country);
+                sLangCountry = buff.getStr();
+                if (officeLocale.Variant.getLength())
+                    buff.appendAscii("-");
+            }
+            if (officeLocale.Variant.getLength())
+            {
+                buff.append(officeLocale.Variant);
+            }
+        }
+
+        OUString exp(
+            OUSTR("/desc:description/desc:registration/desc:simple-license"
+            "/desc:license-text[normalize-space(@lang)=\"") + buff.makeStringAndClear() +
+            OUSTR("\"]"));
+        nodeMatch = xXPath->selectSingleNode(xRootNode, exp);
         //check if we match lang + country
-        if (sCountry.getLength() > 0)
-        {
-            OUString exp(
-                OUSTR("/desc:description/desc:registration/desc:simple-license"
-                "/desc:license-text[@lang=\"") + sLang +
-                OUSTR("\" and @country=\"") + sCountry +
-                OUSTR("\"]"));
-            nodeMatch = xXPath->selectSingleNode(xRootNode, exp);
-        }
+         if (!nodeMatch.is() )
+         {
+            if (officeLocale.Country.getLength())
+            {
+                //first try exact match for lang-country
+                OUString exp(
+                    OUSTR("/desc:description/desc:registration/desc:simple-license"
+                          "/desc:license-text[normalize-space(@lang)=\"") + sLangCountry + OUSTR("\"]"));
+                nodeMatch = xXPath->selectSingleNode(xRootNode, exp);
+
+                //try to match in strings that also have a variant, for example en-US matches in
+                //en-US-montana
+                if (!nodeMatch.is())
+                {
+                    OUString exp(
+                        OUSTR("/desc:description/desc:registration/desc:simple-license"
+                              "/desc:license-text[starts-with(normalize-space(@lang),\"") + sLangCountry + OUSTR("-\")]"));
+                    nodeMatch = xXPath->selectSingleNode(xRootNode, exp);
+                }
+            }
+         }
+
         //check if we match lang
-        if (!nodeMatch.is() && sLang.getLength() > 0)
-        {
+         if (!nodeMatch.is() )
+         {
+            //first try exact match for lang
             OUString exp(
                 OUSTR("/desc:description/desc:registration/desc:simple-license"
-                "/desc:license-text[@lang=\"") + sLang + OUSTR("\"]"));
+                      "/desc:license-text[normalize-space(@lang)=\"") + officeLocale.Language + OUSTR("\"]"));
             nodeMatch = xXPath->selectSingleNode(xRootNode, exp);
-        }
-        //get default
-        if (!nodeMatch.is())
-        {
+
+            //try to match in strings that also have a country and/orvariant, for example en  matches in
+            //en-US-montana, en-US, en-montana
+            if (!nodeMatch.is())
+            {
+                OUString exp(
+                    OUSTR("/desc:description/desc:registration/desc:simple-license"
+                          "/desc:license-text[starts-with(normalize-space(@lang),\"") + officeLocale.Language + OUSTR("-\")]"));
+                nodeMatch = xXPath->selectSingleNode(xRootNode, exp);
+            }
+         }
+
+         //get default
+         if (!nodeMatch.is())
+         {
+            css::uno::Reference<css::xml::dom::XNode> nodeSimpleLic =
+                xXPath->selectSingleNode(Reference<css::xml::dom::XNode>(xRoot, UNO_QUERY_THROW),
+                                         OUSTR("/desc:description/desc:registration/desc:simple-license"));
+            css::uno::Reference<css::xml::xpath::XXPathObject> nodeDefault =
+                xXPath->eval(nodeSimpleLic, OUSTR("@default-license-id"));
+
+            if (!nodeDefault.is())
+                throw cssu::Exception(
+                OUSTR("The simple-license element has no valid default-license-id attribute."), 0);
+
+            OUString sDefaultId = nodeDefault->getString().trim();
+            if (sDefaultId.getLength() == 0)
+                throw cssu::Exception(
+                OUSTR("The simple-license element has no valid default-license-id attribute."), 0);
+
             OUString exp(
                 OUSTR("/desc:description/desc:registration/desc:simple-license"
-                "/desc:license-text[@default=\"true\"]"));
+                      "/desc:license-text[normalize-space(@license-id) = \"") + sDefaultId + OUSTR("\"]"));
             nodeMatch = xXPath->selectSingleNode(xRootNode, exp);
-        }
+         }
 
         if (!nodeMatch.is())
             throw css::uno::Exception(
@@ -593,7 +659,7 @@ bool BackendImpl::PackageImpl::checkDependencies(
         css::uno::Reference<css::xml::xpath::XXPathObject> nodeAttribWho3 =
             xPath->eval(nodeSimpleLic,
             OUSTR("@accept-by"));
-        OUString s = nodeAttribWho3->getString();
+        OUString s = nodeAttribWho3->getString().trim();
 
         css::deployment::LicenseException licExc;
         if (s.equals(OUSTR("user")))
@@ -961,22 +1027,15 @@ void BackendImpl::PackageImpl::exportTo(
     else
     {
         // overwrite manifest.xml:
-//         ::ucb::Content manifestContent(
-//             makeURL( m_url_expanded, OUSTR("META-INF/manifest.xml") ),
-//             xCmdEnv );
-
-        // be more error tolerant, can be changed when the appropriate
-        // UCP is case insensitive (currently different behaviour on
-        // windows and linux)
         ::ucb::Content manifestContent;
         if ( ! create_ucb_content(
-                 &manifestContent,
-                 makeURL( m_url_expanded, OUSTR("META-INF/manifest.xml") ),
-                 xCmdEnv, false ) )
-            create_ucb_content(
-                 &manifestContent,
-                 makeURL( m_url_expanded, OUSTR("meta-inf/manifest.xml") ),
-                 xCmdEnv, false );
+            &manifestContent,
+            makeURL( m_url_expanded, OUSTR("META-INF/manifest.xml") ),
+            xCmdEnv, false ) )
+        {
+            OSL_ENSURE( 0, "### missing META-INF/manifest.xml file!" );
+            return;
+        }
 
         if (! metainfFolderContent.transferContent(
                 manifestContent, ::ucb::InsertOperation_COPY,
@@ -1185,15 +1244,12 @@ void BackendImpl::PackageImpl::scanBundle(
     if (! create_ucb_content(
             &manifestContent,
             makeURL( m_url_expanded, OUSTR("META-INF/manifest.xml") ),
-            xCmdEnv, false /* no throw */ )) {
-        if (! create_ucb_content(
-                &manifestContent,
-                makeURL( m_url_expanded, OUSTR("meta-inf/manifest.xml") ),
-                xCmdEnv, false /* no throw */ )) {
-            OSL_ENSURE( 0, "### missing META-INF/manifest.xml file!" );
-            return;
-        }
-    }
+            xCmdEnv, false /* no throw */ ))
+    {
+        OSL_ENSURE( 0, "### missing META-INF/manifest.xml file!" );
+        return;
+}
+
 
     lang::Locale const & officeLocale = getOfficeLocale();
     OUString descrFile;
