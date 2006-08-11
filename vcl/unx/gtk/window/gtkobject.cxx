@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkobject.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:45:41 $
+ *  last change: $Author: hr $ $Date: 2006-08-11 17:46:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@ GtkSalObject::GtkSalObject( GtkSalFrame* pParent )
         gtk_widget_set_app_paintable( m_pSocket, TRUE );
 
         //system data
-        SalDisplay* pDisp = GetSalData()->GetDisplay();
+        SalDisplay* pDisp = GetX11SalData()->GetDisplay();
         m_aSystemData.pDisplay      = pDisp->GetDisplay();
         m_aSystemData.aWindow       = GDK_WINDOW_XWINDOW(m_pSocket->window);
         m_aSystemData.pSalFrame     = NULL;
