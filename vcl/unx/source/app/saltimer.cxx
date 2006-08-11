@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saltimer.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:02:27 $
+ *  last change: $Author: hr $ $Date: 2006-08-11 17:50:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@
 
 // -=-= SalData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void SalData::Timeout() const
+void X11SalData::Timeout() const
 {
     ImplSVData* pSVData = ImplGetSVData();
     if( pSVData->mpSalTimer )
@@ -103,11 +103,11 @@ X11SalTimer::~X11SalTimer()
 
 void X11SalTimer::Stop()
 {
-    GetSalData()->GetLib()->StopTimer();
+    GetX11SalData()->GetLib()->StopTimer();
 }
 
 void X11SalTimer::Start( ULONG nMS )
 {
-    GetSalData()->GetLib()->StartTimer( nMS );
+    GetX11SalData()->GetLib()->StartTimer( nMS );
 }
 
