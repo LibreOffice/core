@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 09:30:24 $
+ *  last change: $Author: hr $ $Date: 2006-08-11 17:49:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -593,7 +593,7 @@ SalDisplay::SalDisplay( Display *display, Colormap aColMap ) :
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "SalDisplay::SalDisplay()\n" );
 #endif
-    SalData *pSalData  = GetSalData();
+    X11SalData *pSalData  = GetX11SalData();
 
     DBG_ASSERT( ! pSalData->GetDisplay(), "Second SalDisplay created !!!\n" );
     pSalData->SetSalDisplay( this );
@@ -629,7 +629,7 @@ SalDisplay::~SalDisplay( )
 
 void SalDisplay::doDestruct()
 {
-    SalData *pSalData = GetSalData();
+    X11SalData *pSalData = GetX11SalData();
 
     delete m_pWMAdaptor;
     X11SalBitmap::ImplDestroyCache();
@@ -710,7 +710,7 @@ fd
       return 0;
 
   vos::IMutex* pSalInstYieldMutex   =
-      GetSalData()->pInstance_->GetYieldMutex();
+      GetSalData()->m_pInstance->GetYieldMutex();
   ::vos::OGuard aGuard( *pSalInstYieldMutex );
   return pDisplay->IsEvent();
 }
@@ -723,7 +723,7 @@ fd
   DBG_ASSERT( ConnectionNumber( pDisplay->GetDisplay() ) == fd,
               "wrong fd in DisplayHasEvent" )
   vos::IMutex* pSalInstYieldMutex   =
-      GetSalData()->pInstance_->GetYieldMutex();
+      GetSalData()->m_pInstance->GetYieldMutex();
   ::vos::OGuard aGuard( *pSalInstYieldMutex );
   return XEventsQueued( pDisplay->GetDisplay(),
                         QueuedAfterReading );
@@ -737,7 +737,7 @@ fd
   DBG_ASSERT( ConnectionNumber( pDisplay->GetDisplay() ) == fd,
               "wrong fd in DisplayHasEvent" );
   vos::IMutex* pSalInstYieldMutex   =
-      GetSalData()->pInstance_->GetYieldMutex();
+      GetSalData()->m_pInstance->GetYieldMutex();
   ::vos::OGuard aGuard( *pSalInstYieldMutex );
   pDisplay->Yield();
   return TRUE;
@@ -2471,7 +2471,7 @@ long SalX11Display::Dispatch( XEvent *pEvent )
         if ( mpInputMethod->FilterEvent( pEvent, None ) )
             return 0;
 
-    SalInstance* pInstance = GetSalData()->pInstance_;
+    SalInstance* pInstance = GetSalData()->m_pInstance;
     if( pInstance->GetEventCallback() )
     {
         YieldMutexReleaser aReleaser;
@@ -3182,7 +3182,7 @@ SalColormap::SalColormap( SalDisplay *pDisplay, Colormap hColormap )
 
 // PseudoColor
 SalColormap::SalColormap( const BitmapPalette &rPalette )
-    : pDisplay_( GetSalData()->GetDisplay() ),
+    : pDisplay_( GetX11SalData()->GetDisplay() ),
       hColormap_( None ),
       pVisual_( NULL ),
       pLookupTable_( NULL ),
@@ -3207,7 +3207,7 @@ SalColormap::SalColormap( const BitmapPalette &rPalette )
 
 // MonoChrome
 SalColormap::SalColormap()
-    : pDisplay_( GetSalData()->GetDisplay() ),
+    : pDisplay_( GetX11SalData()->GetDisplay() ),
       hColormap_( None ),
       pVisual_( NULL ),
       pLookupTable_( NULL ),
@@ -3223,7 +3223,7 @@ SalColormap::SalColormap()
 
 // TrueColor
 SalColormap::SalColormap( USHORT nDepth )
-    : pDisplay_( GetSalData()->GetDisplay() ),
+    : pDisplay_( GetX11SalData()->GetDisplay() ),
       hColormap_( None ),
       pPalette_( NULL ),
       pLookupTable_( NULL ),
@@ -3327,7 +3327,7 @@ SalColormap::~SalColormap()
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void SalColormap::SetPalette( const BitmapPalette &rPalette )
 {
-    if( this != &GetSalData()->GetDisplay()->GetColormap() )
+    if( this != &GetX11SalData()->GetDisplay()->GetColormap() )
     {
         nBlackPixel_ = 0xFFFFFFFF;
         nWhitePixel_ = 0xFFFFFFFF;
