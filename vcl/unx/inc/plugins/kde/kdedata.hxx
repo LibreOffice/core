@@ -4,9 +4,9 @@
  *
  *  $RCSfile: kdedata.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:52:40 $
+ *  last change: $Author: hr $ $Date: 2006-08-11 17:47:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include <saldata.hxx>
 #include <salframe.h>
 
-class KDEData : public SalData
+class KDEData : public X11SalData
 {
 public:
     KDEData() {}
