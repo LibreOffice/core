@@ -5,6 +5,8 @@ mkdir: %_DEST%\inc%_EXT%\uno
 mkdir: %_DEST%\inc%_EXT%\uno\awt
 mkdir: %_DEST%\inc%_EXT%\vcl
 mkdir: %_DEST%\inc%_EXT%\vcl\unx
+mkdir: %_DEST%\inc%_EXT%\vcl\plug
+mkdir: %_DEST%\inc%_EXT%\vcl\plug\vcl
 
 ..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
 ..\%__SRC%\bin\vcl*.res %_DEST%\bin%_EXT%\vcl*.res
@@ -172,5 +174,33 @@ hedabu: ..\inc\pngread.hxx %_DEST%\inc%_EXT%\vcl\pngread.hxx
 hedabu: ..\inc\pngwrite.hxx %_DEST%\inc%_EXT%\vcl\pngwrite.hxx
 hedabu: ..\inc\smartid.hxx %_DEST%\inc%_EXT%\vcl\smartid.hxx
 hedabu: ..\inc\configsettings.hxx %_DEST%\inc%_EXT%\vcl\configsettings.hxx
+
+hedabu: ..\inc\salinst.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\salinst.hxx
+hedabu: ..\inc\salwtype.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\salwtype.hxx
+hedabu: ..\inc\salgtype.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\salgtype.hxx
+hedabu: ..\inc\salframe.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\salframe.hxx
+hedabu: ..\inc\salgeom.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\salgeom.hxx
+hedabu: ..\inc\impdel.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\impdel.hxx
+hedabu: ..\inc\saltimer.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\saltimer.hxx
+hedabu: ..\inc\svdata.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\svdata.hxx
+hedabu: ..\inc\salogl.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\salogl.hxx
+hedabu: ..\inc\salsound.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\salsound.hxx
+hedabu: ..\inc\salobj.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\salobj.hxx
+hedabu: ..\inc\salgdi.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\salgdi.hxx
+hedabu: ..\inc\salprn.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\salprn.hxx
+hedabu: ..\inc\salbmp.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\salbmp.hxx
+hedabu: ..\inc\jobset.h %_DEST%\inc%_EXT%\vcl\plug\vcl\jobset.h
+hedabu: ..\inc\sallayout.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\sallayout.hxx
+hedabu: ..\inc\salctrlhandle.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\salctrlhandle.hxx
+hedabu: ..\inc\glyphcache.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\glyphcache.hxx
+hedabu: ..\inc\outfont.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\outfont.hxx
+hedabu: ..\inc\impfont.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\impfont.hxx
+hedabu: ..\inc\salptype.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\salptype.hxx
+hedabu: ..\inc\salatype.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\salatype.hxx
+hedabu: ..\inc\print.h %_DEST%\inc%_EXT%\vcl\plug\vcl\print.h
+hedabu: ..\inc\salimestatus.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\salimestatus.hxx
+hedabu: ..\inc\salsys.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\salsys.hxx
+hedabu: ..\inc\salvd.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\salvd.hxx
+hedabu: ..\unx\inc\saldatabasic.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\saldatabasic.hxx
 
 dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
