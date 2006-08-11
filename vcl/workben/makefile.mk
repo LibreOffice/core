@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: ihi $ $Date: 2006-06-29 11:25:30 $
+#   last change: $Author: hr $ $Date: 2006-08-11 17:53:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,8 @@ TARGET=svdem
 LIBTARGET=NO
 TARGETTYPE=GUI
 
+ENABLE_EXCEPTIONS=TRUE
+
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	svpre.mk
@@ -53,8 +55,6 @@ APP1NOSAL=		TRUE
 APP1TARGET= 	$(TARGET)
 APP1OBJS=		$(OBJFILES)
 
-#				$(OBJ)$/salmain.obj
-
 APP1STDLIBS=	$(CPPULIB)			\
                 $(CPPUHELPERLIB)	\
                 $(COMPHELPERLIB)	\
@@ -67,6 +67,31 @@ APP1STDLIBS=	$(CPPULIB)			\
 
 .IF "$(GUI)"=="WIN" || "$(GUI)"=="OS2"
 APP1DEF=		$(MISC)$/$(TARGET).def
+.ENDIF
+
+# --- Targets ------------------------------------------------------
+
+APP2TARGET= outdevgrind
+APP2OBJS=	\
+    $(OBJ)$/outdevgrind.obj
+
+.IF "$(GUI)"!="UNX"
+    APP2OBJS += $(OBJ)$/salmain.obj
+.ELSE
+    APP2OBJS += $(SLO)$/salmain.obj
+.ENDIF
+
+APP2NOSAL=		TRUE
+APP2STDLIBS=$(TOOLSLIB) 		\
+            $(COMPHELPERLIB)	\
+            $(CPPULIB)			\
+            $(CPPUHELPERLIB)	\
+            $(UCBHELPERLIB)		\
+            $(SALLIB)			\
+            $(VCLLIB)
+
+.IF "$(GUI)"!="UNX"
+APP2DEF=	$(MISC)$/$(TARGET).def
 .ENDIF
 
 # --- Targets ------------------------------------------------------
