@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkdata.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-09 12:20:20 $
+ *  last change: $Author: hr $ $Date: 2006-08-11 17:47:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@
 
 #include <list>
 
-class GtkData : public SalData
+class GtkData : public X11SalData
 {
 public:
     GtkData() {}
