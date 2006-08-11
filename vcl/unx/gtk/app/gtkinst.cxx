@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkinst.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:44:33 $
+ *  last change: $Author: hr $ $Date: 2006-08-11 17:45:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,7 +100,7 @@ void GtkHookedYieldMutex::release()
 
 extern "C"
 {
-    #define GET_YIELD_MUTEX() static_cast<GtkHookedYieldMutex*>(GetSalData()->pInstance_->GetYieldMutex())
+    #define GET_YIELD_MUTEX() static_cast<GtkHookedYieldMutex*>(GetSalData()->m_pInstance->GetYieldMutex())
     static void GdkThreadsEnter( void )
     {
         GtkHookedYieldMutex *pYieldMutex = GET_YIELD_MUTEX();
@@ -163,9 +163,9 @@ extern "C"
 #endif
 
         // initialize SalData
-        SalData *pSalData = new GtkData();
+        GtkData *pSalData = new GtkData();
         SetSalData( pSalData );
-        pSalData->pInstance_ = pInstance;
+        pSalData->m_pInstance = pInstance;
         pSalData->Init();
         pSalData->initNWF();
 
