@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfexport.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 11:14:22 $
+ *  last change: $Author: hr $ $Date: 2006-08-11 17:39:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,9 @@ private:
     sal_Int32               mnFormsFormat;
     sal_Int32               mnProgressValue;
 
+    sal_Bool                mbWatermark;
+    uno::Any                maWatermark;
+
 //these variable are here only to have a location in filter/pdf to set the default
 //to be used by the macro (when the FilterData are set by the macro itself)
     sal_Bool                mbHideViewerToolbar;
@@ -111,6 +114,7 @@ private:
     void                    ImplWriteBitmapEx( ::vcl::PDFWriter& rWriter, VirtualDevice& rDummyVDev,
                                                 const Point& rPoint, const Size& rSize, const BitmapEx& rBitmap );
 
+    void                    ImplWriteWatermark( ::vcl::PDFWriter& rWriter, const Size& rPageSize );
 public:
 
                             PDFExport( const Reference< XComponent >& rxSrcDoc, Reference< task::XStatusIndicator >& xStatusIndicator );
