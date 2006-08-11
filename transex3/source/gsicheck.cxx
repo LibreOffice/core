@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gsicheck.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 10:24:36 $
+ *  last change: $Author: hr $ $Date: 2006-08-11 17:29:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -396,7 +396,7 @@ BOOL GSIBlock::IsUTF8( const ByteString &aTestee, BOOL bFixTags, USHORT &nErrorP
             }
         }
 
-        if ( aPrefix.GetChar(aPrefix.Len()-1) == '*' )
+        if ( aPrefix.Len() > 0 && aPrefix.GetChar(aPrefix.Len()-1) == '*' )
             aPrefix.Erase( aPrefix.Len()-1 );
 
         if ( aPrefix.IsNumericAscii() && aPrefix.Len() >= 5 )
@@ -613,7 +613,7 @@ void Help()
 /*****************************************************************************/
 {
     fprintf( stdout, "\n" );
-    fprintf( stdout, "gsicheck Version 1.8.3 (c)1999 - 2005 by SUN Microsystems\n" );
+    fprintf( stdout, "gsicheck Version 1.8.4 (c)1999 - 2006 by SUN Microsystems\n" );
     fprintf( stdout, "=========================================================\n" );
     fprintf( stdout, "\n" );
     fprintf( stdout, "gsicheck checks the syntax of tags in GSI-Files and SDF-Files\n" );
