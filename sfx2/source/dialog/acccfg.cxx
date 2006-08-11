@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acccfg.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-06 14:36:23 $
+ *  last change: $Author: hr $ $Date: 2006-08-11 17:17:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1107,22 +1107,17 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
 }
 
 //-----------------------------------------------
-IMPL_LINK( SfxAcceleratorConfigPage, RadioHdl, RadioButton *, pBtn )
+IMPL_LINK( SfxAcceleratorConfigPage, RadioHdl, RadioButton *, EMPTYARG )
 {
-    (void)pBtn; //unused
     css::uno::Reference< css::ui::XAcceleratorConfiguration > xOld = m_xAct;
 
     if (aOfficeButton.IsChecked())
         m_xAct = m_xGlobal;
-    else
-    if (aModuleButton.IsChecked())
+    else if (aModuleButton.IsChecked())
         m_xAct = m_xModule;
 
     // nothing changed? => do nothing!
-    if (
-        (m_xAct.is()   ) &&
-        (xOld == m_xAct)
-       )
+    if ( m_xAct.is() && ( xOld == m_xAct ) )
         return 0;
 
     aEntriesBox.SetUpdateMode( FALSE );
@@ -1132,8 +1127,14 @@ IMPL_LINK( SfxAcceleratorConfigPage, RadioHdl, RadioButton *, pBtn )
     aEntriesBox.Invalidate();
 
      aGroupLBox.Init(m_xSMGR, m_xFrame, m_sModuleLongName);
-    aEntriesBox.Select(aEntriesBox.GetEntry(0, 0));
-    aGroupLBox.Select (aGroupLBox.GetEntry (0, 0));
+
+    // pb: #133213# do not select NULL entries
+    SvLBoxEntry* pEntry = aEntriesBox.GetEntry( 0, 0 );
+    if ( pEntry )
+        aEntriesBox.Select( pEntry );
+    pEntry = aGroupLBox.GetEntry( 0, 0 );
+    if ( pEntry )
+        aGroupLBox.Select( pEntry );
 
     ((Link &) aFunctionBox.GetSelectHdl()).Call( &aFunctionBox );
     return 1L;
