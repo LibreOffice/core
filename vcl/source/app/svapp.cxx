@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 09:11:18 $
+ *  last change: $Author: hr $ $Date: 2006-08-11 17:43:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1176,7 +1176,8 @@ void Application::RemoveUserEvent( ULONG nUserEvent )
 
         if ( pSVEvent->mpWindow )
         {
-            pSVEvent->mpWindow->ImplRemoveDel( &(pSVEvent->maDelData) );
+            if( ! pSVEvent->maDelData.IsDelete() )
+                pSVEvent->mpWindow->ImplRemoveDel( &(pSVEvent->maDelData) );
             pSVEvent->mpWindow = NULL;
         }
 
