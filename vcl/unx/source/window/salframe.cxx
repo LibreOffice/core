@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.207 $
+ *  $Revision: 1.208 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 16:55:52 $
+ *  last change: $Author: hr $ $Date: 2006-08-11 17:52:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -485,8 +485,8 @@ void X11SalFrame::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
         XSetWMProtocols( GetXDisplay(), GetShellWindow(), a, n );
 
         XClassHint* pClass = XAllocClassHint();
-        pClass->res_name  = const_cast<char*>(SalData::getFrameResName());
-        pClass->res_class = const_cast<char*>(SalData::getFrameClassName());
+        pClass->res_name  = const_cast<char*>(X11SalData::getFrameResName());
+        pClass->res_class = const_cast<char*>(X11SalData::getFrameClassName());
         XSetClassHint( GetXDisplay(), GetShellWindow(), pClass );
         XFree( pClass );
 
@@ -570,7 +570,7 @@ void X11SalFrame::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 X11SalFrame::X11SalFrame( SalFrame *pParent, ULONG nSalFrameStyle, SystemParentData* pSystemParent )
 {
-    SalData* pSalData = GetSalData();
+    X11SalData* pSalData = GetX11SalData();
 
     // initialize frame geometry
     memset( &maGeometry, 0, sizeof(maGeometry) );
@@ -754,9 +754,9 @@ void X11SalFrame::SetExtendedFrameStyle( SalExtStyle nStyle )
         mnExtStyle = nStyle;
 
         XClassHint* pClass = XAllocClassHint();
-        rtl::OString aResHint = SalData::getFrameResName( mnExtStyle );
+        rtl::OString aResHint = X11SalData::getFrameResName( mnExtStyle );
         pClass->res_name  = const_cast<char*>(aResHint.getStr());
-        pClass->res_class = const_cast<char*>(SalData::getFrameClassName());
+        pClass->res_class = const_cast<char*>(X11SalData::getFrameClassName());
         XSetClassHint( GetXDisplay(), GetShellWindow(), pClass );
         XFree( pClass );
     }
