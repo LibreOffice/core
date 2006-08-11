@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salplug.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:57:05 $
+ *  last change: $Author: hr $ $Date: 2006-08-11 17:52:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -363,10 +363,15 @@ static const char * get_desktop_environment()
         int nParams = osl_getCommandArgCount();
         OUString aParam;
         OString aBParm;
-        for( int i = 0; i < nParams-1; i++ )
+        for( int i = 0; i < nParams; i++ )
         {
             osl_getCommandArg( i, &aParam.pData );
-            if( aParam.equalsAscii( "-display" ) || aParam.equalsAscii( "--display" ) )
+            if( aParam.equalsAscii( "-headless" ) )
+            {
+                pDisplayStr = NULL;
+                break;
+            }
+            if( i < nParams-1 && (aParam.equalsAscii( "-display" ) || aParam.equalsAscii( "--display" )) )
             {
                 osl_getCommandArg( i+1, &aParam.pData );
                 aBParm = OUStringToOString( aParam, osl_getThreadTextEncoding() );
@@ -428,6 +433,19 @@ static const char* autodetect_plugin()
     return pRet;
 }
 
+static SalInstance* check_headless_plugin()
+{
+    int nParams = osl_getCommandArgCount();
+    OUString aParam;
+    for( int i = 0; i < nParams; i++ )
+    {
+        osl_getCommandArg( i, &aParam.pData );
+        if( aParam.equalsAscii( "-headless" ) )
+            return tryInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "svp" ) ) );
+    }
+    return NULL;
+}
+
 SalInstance *CreateSalInstance()
 {
     SalInstance*    pInst = NULL;
@@ -435,9 +453,12 @@ SalInstance *CreateSalInstance()
     static const char* pUsePlugin = getenv( "SAL_USE_VCLPLUGIN" );
 
     if( !(pUsePlugin && *pUsePlugin) )
+        pInst = check_headless_plugin();
+
+    if( ! pInst && !(pUsePlugin && *pUsePlugin) )
         pUsePlugin = autodetect_plugin();
 
-    if( pUsePlugin && *pUsePlugin )
+    if( ! pInst && pUsePlugin && *pUsePlugin )
         pInst = tryInstance( OUString::createFromAscii( pUsePlugin ) );
 
     // fallback to gen
@@ -495,4 +516,14 @@ const OUString& SalGetDesktopEnvironment()
 {
     static OUString aRet = OStringToOUString(OString(get_desktop_environment()), RTL_TEXTENCODING_ASCII_US);
     return aRet;
+}
+
+SalData::SalData() :
+    m_pInstance(NULL),
+    m_pPlugin(NULL)
+{
+}
+
+SalData::~SalData()
+{
 }
