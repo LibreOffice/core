@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i18n_ic.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:48:53 $
+ *  last change: $Author: hr $ $Date: 2006-08-11 17:48:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -214,7 +214,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
     maClientData.aInputEv.mbOnlyCursor      = FALSE;
 
     SalI18N_InputMethod *pInputMethod;
-    pInputMethod = GetSalData()->GetDisplay()->GetInputMethod();
+    pInputMethod = GetX11SalData()->GetDisplay()->GetInputMethod();
     mbMultiLingual = pInputMethod->IsMultiLingual();
 
     mnSupportedPreeditStyle =   XIMPreeditCallbacks | XIMPreeditPosition
@@ -329,7 +329,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
                 // XCreateIC() fails on Redflag Linux 2.0 if there is no
                 // fontset though the data itself is not evaluated nor is
                 // it required according to the X specs.
-                Display* pDisplay = GetSalData()->GetDisplay()->GetDisplay();
+                Display* pDisplay = GetX11SalData()->GetDisplay()->GetDisplay();
                 XFontSet pFontSet = get_font_set(pDisplay);
 
                 if (pFontSet != NULL)
@@ -477,7 +477,7 @@ SalI18N_InputContext::Map( SalFrame *pFrame )
             if ( maContext == NULL )
             {
                 SalI18N_InputMethod *pInputMethod;
-                pInputMethod = GetSalData()->GetDisplay()->GetInputMethod();
+                pInputMethod = GetX11SalData()->GetDisplay()->GetInputMethod();
 
                 maContext = XCreateIC( pInputMethod->GetMethod(),
                                        XNVaNestedList, mpAttributes,
@@ -723,7 +723,7 @@ SalI18N_InputContext::SetICFocus( SalFrame* pFocusFrame )
         {
             sendEmptyCommit(pFocusFrame);
             // begin preedit again
-            GetSalData()->GetDisplay()->SendInternalEvent( pFocusFrame, &maClientData.aInputEv, SALEVENT_EXTTEXTINPUT );
+            GetX11SalData()->GetDisplay()->SendInternalEvent( pFocusFrame, &maClientData.aInputEv, SALEVENT_EXTTEXTINPUT );
         }
 
         XSetICFocus( maContext );
@@ -740,7 +740,7 @@ SalI18N_InputContext::UnsetICFocus( SalFrame* pFrame )
     if ( mbUseable && (maContext != NULL) )
     {
         // cancel an eventual event posted to begin preedit again
-        GetSalData()->GetDisplay()->CancelInternalEvent( maClientData.pFrame, &maClientData.aInputEv, SALEVENT_EXTTEXTINPUT );
+        GetX11SalData()->GetDisplay()->CancelInternalEvent( maClientData.pFrame, &maClientData.aInputEv, SALEVENT_EXTTEXTINPUT );
         maClientData.pFrame = NULL;
         XUnsetICFocus( maContext );
     }
@@ -801,7 +801,7 @@ SalI18N_InputContext::EndExtTextInput( USHORT /*nFlags*/ )
             if( static_cast<X11SalFrame*>(maClientData.pFrame)->hasFocus() )
             {
                 // begin preedit again
-                GetSalData()->GetDisplay()->SendInternalEvent( maClientData.pFrame, &maClientData.aInputEv, SALEVENT_EXTTEXTINPUT );
+                GetX11SalData()->GetDisplay()->SendInternalEvent( maClientData.pFrame, &maClientData.aInputEv, SALEVENT_EXTTEXTINPUT );
             }
         }
     }
