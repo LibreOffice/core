@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-03 13:33:17 $
+ *  last change: $Author: hr $ $Date: 2006-08-11 17:45:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -6661,6 +6661,7 @@ SvStream* PDFWriterImpl::endRedirect()
 
 void PDFWriterImpl::beginTransparencyGroup()
 {
+    updateGraphicsState();
     if( m_aContext.Version >= PDFWriter::PDF_1_4 )
         beginRedirect( new SvMemoryStream( 1024, 1024 ), Rectangle() );
 }
