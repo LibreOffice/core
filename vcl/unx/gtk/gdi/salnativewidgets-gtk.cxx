@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets-gtk.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 09:53:51 $
+ *  last change: $Author: hr $ $Date: 2006-08-11 17:46:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2162,7 +2162,7 @@ BOOL GtkSalGraphics::NWPaintGTKTabItem( ControlType nType, ControlPart,
 //  gtk_widget_set_state( gNotebookWidget, stateType );
 
     pixmap = gdk_pixmap_new( NULL, pixmapRect.GetWidth(), pixmapRect.GetHeight(),
-                             GetSalData()->GetDisplay()->GetVisual()->GetDepth() );
+                             GetX11SalData()->GetDisplay()->GetVisual()->GetDepth() );
     GdkRectangle paintRect;
     paintRect.x = paintRect.y = 0;
     paintRect.width = pixmapRect.GetWidth();
@@ -3112,7 +3112,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     // finally update the collected settings
     rSettings.SetStyleSettings( aStyleSet );
 
-    if( GetSalData()->GetDisplay()->GetServerVendor() == vendor_sun )
+    if( GetX11SalData()->GetDisplay()->GetServerVendor() == vendor_sun )
     {
         // #i52570#, #i61532# workaround a weird paint issue;
         // on a Sunray Xserver sometimes painting buttons and edits
@@ -3148,7 +3148,7 @@ GdkPixmap* GtkSalGraphics::NWGetPixmapFromScreen( Rectangle srcRect )
 {
     // Create a new pixmap to hold the composite of the window background and the control
     GdkPixmap * pPixmap     = gdk_pixmap_new( NULL, srcRect.GetWidth(), srcRect.GetHeight(),
-                                              GetSalData()->GetDisplay()->GetVisual()->GetDepth() );
+                                              GetX11SalData()->GetDisplay()->GetVisual()->GetDepth() );
     GdkGC *  pPixmapGC  = gdk_gc_new( pPixmap );
 
     if( !pPixmap || !pPixmapGC )
