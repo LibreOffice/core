@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salprnpsp.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 16:38:17 $
+ *  last change: $Author: hr $ $Date: 2006-08-11 17:52:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1155,7 +1155,7 @@ void vcl_sal::PrinterUpdate::doUpdate()
     ::psp::PrinterInfoManager& rManager( ::psp::PrinterInfoManager::get() );
     if( rManager.checkPrintersChanged( false ) )
     {
-        SalDisplay* pDisp = GetSalData()->GetDisplay();
+        SalDisplay* pDisp = GetX11SalData()->GetDisplay();
         const std::list< SalFrame* >& rList = pDisp->getFrames();
         for( std::list< SalFrame* >::const_iterator it = rList.begin();
              it != rList.end(); ++it )
@@ -1186,7 +1186,7 @@ void vcl_sal::PrinterUpdate::update()
     if( Application::GetSettings().GetMiscSettings().GetDisablePrinting() )
         return;
 
-    if( ! static_cast< X11SalInstance* >(GetSalData()->pInstance_)->isPrinterInit() )
+    if( ! static_cast< X11SalInstance* >(GetSalData()->m_pInstance)->isPrinterInit() )
     {
         // #i45389# start background printer detection
         psp::PrinterInfoManager::get();
