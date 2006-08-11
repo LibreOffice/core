@@ -28,9 +28,6 @@ SLOFILES = \
 SHL1TARGET=$(TARGET)
 SHL1LIBS=	$(SLB)$/$(TARGET).lib
 SHL1STDLIBS=$(AWTLIB)
-.IF "$(JDK)" == "gcj"
-SHL1STDLIBS+=-lgcj
-.ENDIF
 
 .IF "$(OS)" == "LINUX"
 .IF "$(CPUNAME)" == "S390"
