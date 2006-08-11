@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.112 $
-# Date:        $Date: 2006-08-04 13:32:25 $
+# Version:     $Revision: 1.113 $
+# Date:        $Date: 2006-08-11 16:19:16 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -446,10 +446,18 @@ elsif ( $platform =~ m/linux-gnu/ )
       $CPU            = "P";
       $CPUNAME        = "POWERPC";
       $OUTPATH        = "unxlngppc";
+      if ( $JDK ne "gcj" ) {
 # j2sdk is IBMJava2-ppc-142
-      $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."bin";
-      $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."bin".$ds."classic";
-      $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."bin";
+          $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."bin";
+          $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."bin".$ds."classic";
+          $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."bin";
+      }
+      else {
+# j2sdk has sun-style locations
+          $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc";
+          $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc".$ds."client";
+          $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc".$ds."native_threads";
+      }
    }
    elsif ($platform =~ m/^s390/)
    {  print "Setting Linux S/390 specific values... ";
