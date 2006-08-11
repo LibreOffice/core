@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objuno.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 16:06:22 $
+ *  last change: $Author: hr $ $Date: 2006-08-11 15:41:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1229,8 +1229,11 @@ void SAL_CALL  SfxStandaloneDocumentInfoObject::loadFromURL(const ::rtl::OUStrin
     {
         try
         {
-            if ( !_pInfo )
-                _pInfo = new SfxDocumentInfo;
+            // completely new initialization
+            if ( _pInfo )
+                DELETEZ( _pInfo );
+
+            _pInfo = new SfxDocumentInfo;
 
             // set the mediatype from the storage
             ::rtl::OUString aMediaType;
