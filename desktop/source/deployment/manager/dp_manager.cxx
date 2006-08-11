@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_manager.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 17:05:32 $
+ *  last change: $Author: hr $ $Date: 2006-08-11 17:16:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,13 +123,8 @@ void PackageManagerImpl::initActivationLayer(
                                             "temporary_limitation_of_the_"
                                             "storage_api_implementation") ))
                     continue;
-//                 if (title.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
-//                                             "META-INF") ) )
-                // be more error tolerant, can be changed when the appropriate
-                // UCP is case insensitive (currently different behaviour on
-                // windows and linux)
-                if (title.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM(
-                                            "meta-inf") ) )
+                if (title.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
+                                             "META-INF") ) )
                     continue;
 
                 ::ucb::Content sourceContent(
