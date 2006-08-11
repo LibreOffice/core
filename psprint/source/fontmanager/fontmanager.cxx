@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 10:24:03 $
+ *  last change: $Author: hr $ $Date: 2006-08-11 17:41:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2146,7 +2146,22 @@ void PrintFontManager::initialize( void* pInitDisplay )
         Display *pDisplay = (Display*)pInitDisplay;
 
         if( ! pDisplay )
-        pDisplay = XOpenDisplay( NULL );
+        {
+            int nParams = osl_getCommandArgCount();
+            OUString aParam;
+            bool bIsHeadless = false;
+            for( int i = 0; i < nParams; i++ )
+            {
+                osl_getCommandArg( i, &aParam.pData );
+                if( aParam.equalsAscii( "-headless" ) )
+                {
+                    bIsHeadless = true;
+                    break;
+                }
+            }
+            if( ! bIsHeadless )
+                pDisplay = XOpenDisplay( NULL );
+        }
 
         if( pDisplay )
         {
