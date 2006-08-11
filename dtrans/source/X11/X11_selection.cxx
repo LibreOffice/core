@@ -4,9 +4,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 16:31:52 $
+ *  last change: $Author: hr $ $Date: 2006-08-11 17:42:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,9 @@
 
 #ifndef _RTL_TENCINFO_H
 #include <rtl/tencinfo.h>
+#endif
+#ifndef OSL_PROCESS_H
+#include <osl/process.h>
 #endif
 
 #define DRAG_EVENT_MASK ButtonPressMask         |\
@@ -349,7 +352,20 @@ void SelectionManager::initialize( const Sequence< Any >& arguments ) throw (::c
             arguments.getConstArray()[2] >>= m_xBitmapConverter;
     }
 
-    if( ! m_pDisplay )
+    int nParams = osl_getCommandArgCount();
+    OUString aParam;
+    bool bIsHeadless = false;
+    for( int i = 0; i < nParams; i++ )
+    {
+        osl_getCommandArg( i, &aParam.pData );
+        if( aParam.equalsAscii( "-headless" ) )
+        {
+            bIsHeadless = true;
+            break;
+        }
+    }
+
+    if( ! m_pDisplay && ! bIsHeadless )
     {
         OUString aUDisplay;
         if( m_xDisplayConnection.is() )
@@ -711,7 +727,7 @@ const OUString& SelectionManager::getString( Atom aAtom )
     if( ( it = m_aAtomToString.find( aAtom ) ) == m_aAtomToString.end() )
     {
         static OUString aEmpty;
-        char* pAtom = XGetAtomName( m_pDisplay, aAtom );
+        char* pAtom = m_pDisplay ? XGetAtomName( m_pDisplay, aAtom ) : NULL;
         if( ! pAtom )
             return aEmpty;
         OUString aString( OStringToOUString( pAtom, RTL_TEXTENCODING_ISO_8859_1 ) );
@@ -731,7 +747,8 @@ Atom SelectionManager::getAtom( const OUString& rString )
     ::std::hash_map< OUString, Atom, OUStringHash >::const_iterator it;
     if( ( it = m_aStringToAtom.find( rString ) ) == m_aStringToAtom.end() )
     {
-        Atom aAtom = XInternAtom( m_pDisplay, OUStringToOString( rString, RTL_TEXTENCODING_ISO_8859_1 ), False );
+        static Atom nNoDisplayAtoms = 1;
+        Atom aAtom = m_pDisplay ? XInternAtom( m_pDisplay, OUStringToOString( rString, RTL_TEXTENCODING_ISO_8859_1 ), False ) : nNoDisplayAtoms++;
         m_aStringToAtom[ rString ] = aAtom;
         m_aAtomToString[ aAtom ] = rString;
     }
@@ -899,6 +916,9 @@ bool SelectionManager::getPasteData( Atom selection, Atom type, Sequence< sal_In
 
     {
         MutexGuard aGuard(m_aMutex);
+
+        if( ! m_pDisplay )
+            return false;
 
         it = m_aSelections.find( selection );
         if( it == m_aSelections.end() )
@@ -3800,7 +3820,7 @@ void SelectionManager::registerDropTarget( Window aWindow, DropTarget* pTarget )
           m_aDropTargets.find( aWindow );
     if( it != m_aDropTargets.end() )
         OSL_ASSERT( "attempt to register window as drop target twice" );
-    else if( aWindow )
+    else if( aWindow && m_pDisplay )
     {
         XSelectInput( m_pDisplay, aWindow, PropertyChangeMask );
 
