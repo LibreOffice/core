@@ -4,9 +4,9 @@
  *
  *  $RCSfile: generictoolbarcontroller.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:53:55 $
+ *  last change: $Author: hr $ $Date: 2006-08-11 17:15:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -243,7 +243,7 @@ throw ( RuntimeException )
 
         USHORT nItemBits = m_pToolbar->GetItemBits( m_nID );
         nItemBits &= ~TIB_CHECKABLE;
-        TriState eTri = m_pToolbar->GetItemState( m_nID );
+        TriState eTri = STATE_NOCHECK;
 
         sal_Bool        bValue;
         rtl::OUString   aStrValue;
@@ -256,7 +256,8 @@ throw ( RuntimeException )
             if ( m_bMadeInvisible )
                 m_pToolbar->ShowItem( m_nID, TRUE );
             m_pToolbar->CheckItem( m_nID, bValue );
-            eTri = bValue ? STATE_CHECK : STATE_NOCHECK;
+            if ( bValue )
+                eTri = STATE_CHECK;
             nItemBits |= TIB_CHECKABLE;
         }
         else if ( Event.State >>= aStrValue )
@@ -269,7 +270,8 @@ throw ( RuntimeException )
                     bValue = sal_False;
 
                 m_pToolbar->CheckItem( m_nID, bValue );
-                eTri = bValue ? STATE_CHECK : STATE_NOCHECK;
+                if ( bValue )
+                    eTri = STATE_CHECK;
                 nItemBits |= TIB_CHECKABLE;
             }
             else
