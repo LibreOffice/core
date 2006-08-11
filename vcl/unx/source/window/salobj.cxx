@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salobj.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:58:02 $
+ *  last change: $Author: hr $ $Date: 2006-08-11 17:52:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,7 +91,7 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
 
     pObject->mpParent = pParent;
 
-    SalDisplay* pSalDisp        = GetSalData()->GetDisplay();
+    SalDisplay* pSalDisp        = GetX11SalData()->GetDisplay();
     const SystemEnvData* pEnv   = pParent->GetSystemData();
     Display* pDisp              = pSalDisp->GetDisplay();
     XLIB_Window aObjectParent   = (XLIB_Window)pEnv->aWindow;
@@ -258,7 +258,7 @@ SalClipRegion::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
 X11SalObject::X11SalObject()
 {
     maSystemChildData.nSize     = sizeof( SystemChildData );
-    maSystemChildData.pDisplay  = GetSalData()->GetDisplay()->GetDisplay();
+    maSystemChildData.pDisplay  = GetX11SalData()->GetDisplay()->GetDisplay();
     maSystemChildData.aWindow       = None;
     maSystemChildData.pSalFrame = 0;
     maSystemChildData.pWidget       = 0;
@@ -271,16 +271,16 @@ X11SalObject::X11SalObject()
     maPrimary                       = 0;
     maSecondary                     = 0;
 
-    std::list< SalObject* >& rObjects = GetSalData()->GetDisplay()->getSalObjects();
+    std::list< SalObject* >& rObjects = GetX11SalData()->GetDisplay()->getSalObjects();
     rObjects.push_back( this );
 }
 
 
 X11SalObject::~X11SalObject()
 {
-    std::list< SalObject* >& rObjects = GetSalData()->GetDisplay()->getSalObjects();
+    std::list< SalObject* >& rObjects = GetX11SalData()->GetDisplay()->getSalObjects();
     rObjects.remove( this );
-    SalDisplay* pSalDisp = GetSalData()->GetDisplay();
+    SalDisplay* pSalDisp = GetX11SalData()->GetDisplay();
     BOOL bOldIgnore = pSalDisp->GetXLib()->GetIgnoreXErrors();
     pSalDisp->GetXLib()->SetIgnoreXErrors(TRUE);
     if ( maSecondary )
@@ -475,7 +475,7 @@ static USHORT sal_GetCode( int state )
 
 long X11SalObject::Dispatch( XEvent* pEvent )
 {
-    std::list< SalObject* >& rObjects = GetSalData()->GetDisplay()->getSalObjects();
+    std::list< SalObject* >& rObjects = GetX11SalData()->GetDisplay()->getSalObjects();
 
     for( std::list< SalObject* >::iterator it = rObjects.begin(); it != rObjects.end(); ++it )
     {
