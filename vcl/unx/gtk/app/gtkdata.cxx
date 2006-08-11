@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkdata.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-20 16:09:16 $
+ *  last change: $Author: hr $ $Date: 2006-08-11 17:45:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,7 +144,7 @@ GdkFilterReturn GtkSalDisplay::filterGdkEvent( GdkXEvent* sys_event,
     GtkSalDisplay *pDisplay = (GtkSalDisplay *)data;
 
     // dispatch all XEvents to event callback
-    if( GetSalData()->pInstance_->
+    if( GetSalData()->m_pInstance->
         CallEventCallback( pEvent, sizeof( XEvent ) ) )
         aFilterReturn = GDK_FILTER_REMOVE;
 
@@ -503,7 +503,7 @@ void GtkXLib::Init()
     // init gtk/gdk
     gtk_init_check( &nParams, &pCmdLineAry );
 
-    g_set_application_name(SalData::getFrameClassName());
+    g_set_application_name(X11SalData::getFrameClassName());
 
     for (i = 0; i < nParams; i++ )
         g_free( pCmdLineAry[i] );
@@ -556,8 +556,8 @@ void GtkXLib::Init()
                                    aVI.visual,
                                    AllocNone );
 
-    XSetIOErrorHandler    ( (XIOErrorHandler)SalData::XIOErrorHdl );
-    XSetErrorHandler      ( (XErrorHandler)SalData::XErrorHdl );
+    XSetIOErrorHandler    ( (XIOErrorHandler)X11SalData::XIOErrorHdl );
+    XSetErrorHandler      ( (XErrorHandler)X11SalData::XErrorHdl );
 
     m_pGtkSalDisplay = new GtkSalDisplay( pGdkDisp, aVI.visual, aColMap );
 
@@ -588,7 +588,7 @@ gboolean GtkXLib::timeoutFn(gpointer data)
     SalData *pSalData = GetSalData();
     GtkXLib *pThis = (GtkXLib *) data;
 
-    pSalData->pInstance_->GetYieldMutex()->acquire();
+    pSalData->m_pInstance->GetYieldMutex()->acquire();
 
     if( pThis->m_pTimeout )
     {
@@ -599,9 +599,9 @@ gboolean GtkXLib::timeoutFn(gpointer data)
     // Auto-restart immediately
     pThis->StartTimer( pThis->m_nTimeoutMS );
 
-    GetSalData()->Timeout();
+    GetX11SalData()->Timeout();
 
-    pSalData->pInstance_->GetYieldMutex()->release();
+    pSalData->m_pInstance->GetYieldMutex()->release();
 
     return FALSE;
 }
@@ -654,7 +654,7 @@ gboolean GtkXLib::userEventFn(gpointer data)
     GtkXLib *pThis = (GtkXLib *) data;
     SalData *pSalData = GetSalData();
 
-    pSalData->pInstance_->GetYieldMutex()->acquire();
+    pSalData->m_pInstance->GetYieldMutex()->acquire();
     pThis->m_pGtkSalDisplay->EventGuardAcquire();
 
     if( !pThis->m_pGtkSalDisplay->HasMoreEvents() )
@@ -673,7 +673,7 @@ gboolean GtkXLib::userEventFn(gpointer data)
 
     pThis->m_pGtkSalDisplay->DispatchInternalEvent();
 
-    pSalData->pInstance_->GetYieldMutex()->release();
+    pSalData->m_pInstance->GetYieldMutex()->release();
 
     return bContinue;
 }
@@ -799,11 +799,11 @@ sal_source_dispatch (GSource    *source,
     SalData *pSalData = GetSalData();
     SalWatch *watch = (SalWatch *) source;
 
-    pSalData->pInstance_->GetYieldMutex()->acquire();
+    pSalData->m_pInstance->GetYieldMutex()->acquire();
 
     watch->handle (watch->pollfd.fd, watch->user_data);
 
-    pSalData->pInstance_->GetYieldMutex()->release();
+    pSalData->m_pInstance->GetYieldMutex()->release();
 
     return TRUE;
 }
