@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2006-08-04 13:32:10 $
+dnl * Date: $Date: 2006-08-11 16:19:00 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.173 $ )
+AC_REVISION( $Revision: 1.174 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -2083,7 +2083,9 @@ if test "$SOLAR_JAVA" != ""; then
       elif test `$JAVAINTERPRETER --version 2>&1 | grep -c "GNU libgcj"` -gt 0; then
         JDK=gcj
         AC_MSG_RESULT([checked (gcj)]) 
-        JAVA_HOME=`echo $JAVAINTERPRETER | $SED -n "s,//*bin//*$WITH_JAVA,,p"`
+        if test -z "$JAVA_HOME"; then
+            JAVA_HOME=`echo $JAVAINTERPRETER | $SED -n "s,//*bin//*$WITH_JAVA,,p"`
+        fi
       elif test `$JAVAINTERPRETER -version 2>&1 | awk '{ print }' | grep -c "BEA"` -gt 0; then
         JDK=bea
 
@@ -2254,25 +2256,29 @@ if test "$SOLAR_JAVA" != ""; then
     fi
 fi
 
-if test "$JDK" = "gcj"; then 
-   save_CFLAGS=$CFLAGS
-   save_LDFLAGS=$LDFLAGS
-   CFLAGS="$CFLAGS -I$JAVA_HOME/include"
-   LDFLAGS="$LDFLAGS -L$JAVA_HOME/lib -lgcj"
-   AC_CHECK_HEADER(jni.h, [],
+if test "$SOLAR_JAVA" != ""; then
+   AC_MSG_CHECKING([for jawt lib name])
+   if test "$JDK" = "gcj"; then 
+      save_CFLAGS=$CFLAGS
+      save_LDFLAGS=$LDFLAGS
+      CFLAGS="$CFLAGS -I$JAVA_HOME/include"
+      LDFLAGS="$LDFLAGS -L$JAVA_HOME/lib -lgcj"
+      exec 6>/dev/null # no output
+      AC_CHECK_HEADER(jni.h, [],
                     [AC_MSG_ERROR([jni.h could not be found. Mismatch between gcc and libgcj or libgcj-devel missing?])], [])
-
-   AC_CHECK_LIB(gcjawt, JAWT_GetAWT, [ AWTLIB=-lgcjawt ] )
-   if test -z "$AWTLIB"; then
-      AC_CHECK_LIB(jawt, JAWT_GetAWT, [ AWTLIB=-ljawt ] )
+      AC_CHECK_LIB(gcjawt, JAWT_GetAWT, [ AWTLIB="-lgcjawt -lgcj"] )
+      if test -z "$AWTLIB"; then
+          AC_CHECK_LIB(jawt, JAWT_GetAWT, [ AWTLIB="-ljawt -lgcj"] )
+      fi
+      exec 6>&1 # output on again
+      CFLAGS=$save_CFLAGS
+      LDFLAGS=$save_LDFLAGS
    fi
    if test -z "$AWTLIB"; then
-      AC_MSG_ERROR([either -lgcjawt or -ljawt with JAWT_GetAWT is required to build wih gcj])
+      AWTLIB=-ljawt
    fi
+   AC_MSG_RESULT([$AWTLIB])
    AC_SUBST(AWTLIB)
-
-   CFLAGS=$save_CFLAGS
-   LDFLAGS=$save_LDFLAGS
 fi
 
 dnl ===================================================================
