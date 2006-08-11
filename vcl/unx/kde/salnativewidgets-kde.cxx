@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets-kde.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 10:28:33 $
+ *  last change: $Author: hr $ $Date: 2006-08-11 17:48:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1764,8 +1764,8 @@ static Font toFont( const QFont &rQFont, const ::com::sun::star::lang::Locale& r
         nPointHeight = rQFont.pointSize();
 
     sal_Int32 nDPIX, nDPIY;
-    sal_Int32 nDispDPIY = GetSalData()->GetDisplay()->GetResolution().B();
-    GetSalData()->GetDisplay()->GetScreenFontResolution( nDPIX, nDPIY );
+    sal_Int32 nDispDPIY = GetX11SalData()->GetDisplay()->GetResolution().B();
+    GetX11SalData()->GetDisplay()->GetScreenFontResolution( nDPIX, nDPIY );
 
     int nHeight = nPointHeight * nDispDPIY / nDPIY;
     // allow for rounding in back conversion (at SetFont)
