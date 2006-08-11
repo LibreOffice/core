@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dpolypolygonrasterconverter.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:44:34 $
+ *  last change: $Author: hr $ $Date: 2006-08-11 17:41:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -523,15 +523,11 @@ namespace basegfx
         // it crosses or touches the current scanline.
         VectorOfLineNodes   aActiveVertices;
 
-#if 1
-
         // mickey's optimized version...
-        radixSort rs;
-        sal_uInt32 nb,nb_previous;
-        sal_uInt32 nb_sort;
-        bool bSort = false;
-        nb_previous = 0;
-        nb_sort = 0;
+        radixSort   rs;
+        std::size_t nb(0);
+        std::size_t nb_previous(0);
+        bool        bSort(false);
 
         // process each scanline
         for( sal_Int32 y(0); y <= nScanlines; ++y )
@@ -542,34 +538,26 @@ namespace basegfx
                              maScanlines[y].end(),
                              LineNodeGenerator( aActiveVertices ) );
             nb = aActiveVertices.size();
-            if(nb != nb_previous) {
+            if(nb != nb_previous)
+            {
                 nb_previous = nb;
                 bSort = true;
             }
 
             // sort with increasing X
-            if(bSort) {
+            if(bSort)
+            {
                 bSort = false;
-                float *pInput = &((*aActiveVertices.begin()).mfXPos);
-                rs.sort(pInput,nb,sizeof(ImplLineNode));
-                ++nb_sort;
-#if 0
-                sal_uInt32 *sorted = rs.indices();
-                OSL_TRACE("%d\n",nb);
-                float last = aActiveVertices[sorted[0]].getXPos();
-                for(int n=0; n<nb; ++n) {
-                    float current = aActiveVertices[sorted[n]].getXPos();
-                    if(last > current) {
-                        OSL_TRACE("error\n");
-                    }
-                    OSL_TRACE("%f\n",current);
-                    last = current;
+
+                if( nb )
+                {
+                    rs.sort(&aActiveVertices[0].mfXPos,
+                            nb,
+                            sizeof(ImplLineNode));
                 }
-                OSL_TRACE("-------\n",nb);
-#endif
             }
 
-            const ::std::size_t nLen( nb );
+            const std::size_t nLen( nb );
             if( !nLen )
             {
                 // empty scanline - call derived with an 'off' span
@@ -626,12 +614,15 @@ namespace basegfx
                                   i % 2 == 0 );
 
                             float delta = aActiveVertices[nIndex].nextLine();
-                            if(delta > 0.0f) {
+                            if(delta > 0.0f)
+                            {
                                 if(aActiveVertices[nIndex].getXPos() > aActiveVertices[nNextIndex].getXPos())
                                     bSort = true;
                             }
-                            else if(delta < 0.0f) {
-                                if(i) {
+                            else if(delta < 0.0f)
+                            {
+                                if(i)
+                                {
                                     sal_uInt32 nPrevIndex = sorted[i-1];
                                     if(aActiveVertices[nIndex].getXPos() < aActiveVertices[nPrevIndex].getXPos())
                                         bSort = true;
@@ -658,12 +649,15 @@ namespace basegfx
                                   nWindingNumber != 0 );
 
                             float delta = aActiveVertices[nIndex].nextLine();
-                            if(delta > 0.0f) {
+                            if(delta > 0.0f)
+                            {
                                 if(aActiveVertices[nIndex].getXPos() > aActiveVertices[nNextIndex].getXPos())
                                     bSort = true;
                             }
-                            else if(delta < 0.0f) {
-                                if(i) {
+                            else if(delta < 0.0f)
+                            {
+                                if(i)
+                                {
                                     sal_uInt32 nPrevIndex = sorted[i-1];
                                     if(aActiveVertices[nIndex].getXPos() < aActiveVertices[nPrevIndex].getXPos())
                                         bSort = true;
@@ -674,7 +668,7 @@ namespace basegfx
                 }
 
                 // call derived with 'off' span for everything right of last active span
-                if( aActiveVertices[sorted[nb-1]].getXPos() < maPolyPolyRectangle.getMaxX() )
+                if( aActiveVertices[sorted[nb-1]].getXPos()+1.0 < maPolyPolyRectangle.getMaxX() )
                 {
                     span( aActiveVertices[sorted[nb-1]].getXPos()+1.0,
                           maPolyPolyRectangle.getMaxX(),
@@ -685,8 +679,10 @@ namespace basegfx
                 // also call nextLine on very last line node
                 sal_uInt32 nIndex = sorted[nb-1];
                 float delta = aActiveVertices[nIndex].nextLine();
-                if(delta < 0.0f) {
-                    if(nb) {
+                if(delta < 0.0f)
+                {
+                    if(nb)
+                    {
                         sal_uInt32 nPrevIndex = sorted[nb-2];
                         if(aActiveVertices[nIndex].getXPos() < aActiveVertices[nPrevIndex].getXPos())
                             bSort = true;
@@ -700,138 +696,12 @@ namespace basegfx
                                                      ::boost::mem_fn( &ImplLineNode::isEnded ) ),
                                    aActiveVertices.end() );
             nb = aActiveVertices.size();
-            if(nb != nb_previous) {
+            if(nb != nb_previous)
+            {
                 nb_previous = nb;
                 bSort = true;
             }
         }
-
-        //printf("%d %d",nb_sort,nScanlines);
-
-#else
-
-        // process each scanline
-        for( sal_Int32 y(0); y <= nScanlines; ++y )
-        {
-            // buffer last sorted aActiveVertices index, to later
-            // perform an inplace_merge
-            ::std::size_t nLastIndex( aActiveVertices.size() );
-
-            // add vertices which start at current scanline into
-            // active vertex vector
-            ::std::for_each( maScanlines[y].begin(),
-                             maScanlines[y].end(),
-                             LineNodeGenerator( aActiveVertices ) );
-
-            // sort with increasing X
-            ::std::inplace_merge( aActiveVertices.begin(),
-                                  aActiveVertices.begin()+nLastIndex,
-                                  aActiveVertices.end(),
-                                  LineNodeComparator() );
-
-            const ::std::size_t nLen( aActiveVertices.size() );
-            if( !nLen )
-            {
-                // empty scanline - call derived with an 'off' span
-                // for the full width
-                span( maPolyPolyRectangle.getMinX(),
-                      maPolyPolyRectangle.getMaxX(),
-                      nMinY + y,
-                      false );
-            }
-            else
-            {
-                const sal_Int32 nCurrY( nMinY + y );
-
-                // scanline not empty - forward all scans to derived,
-                // according to selected fill rule
-
-                // TODO(P1): Maybe allow these 'off' span calls to be
-                // switched off (or all 'on' span calls, depending on
-                // use case scenario)
-
-                // call derived with 'off' span for everything left of first active span
-                if( aActiveVertices.front().getXPos() > maPolyPolyRectangle.getMinX() )
-                {
-                    span( maPolyPolyRectangle.getMinX(),
-                          aActiveVertices.front().getXPos(),
-                          nCurrY,
-                          false );
-                }
-
-                switch( eFillRule )
-                {
-                    default:
-                        OSL_ENSURE(false,
-                                   "B2DPolyPolygonRasterConverter::rasterConvert(): Unexpected fill rule");
-                        return;
-
-                    case FillRule_EVEN_ODD:
-                        // process each span in current scanline, with
-                        // even-odd fill rule
-                        for( ::std::size_t i(0), nLen(aActiveVertices.size());
-                             i+1 < nLen;
-                             ++i )
-                        {
-                            span( aActiveVertices[i].getXPos(),
-                                  aActiveVertices[i+1].getXPos(),
-                                  nCurrY,
-                                  i % 2 == 0 );
-
-                            aActiveVertices[i].nextLine();
-                        }
-                        break;
-
-                    case FillRule_NONZERO_WINDING_NUMBER:
-                        // process each span in current scanline, with
-                        // non-zero winding numbe fill rule
-                        sal_Int32 nWindingNumber(0);
-                        for( ::std::size_t i(0), nLen(aActiveVertices.size());
-                             i+1 < nLen;
-                             ++i )
-                        {
-                            nWindingNumber += -1 + 2*aActiveVertices[i].isDownwards();
-
-                            span( aActiveVertices[i].getXPos(),
-                                  aActiveVertices[i+1].getXPos(),
-                                  nCurrY,
-                                  nWindingNumber != 0 );
-
-                            aActiveVertices[i].nextLine();
-                        }
-                        break;
-                }
-
-                // call derived with 'off' span for everything right of last active span
-                if( aActiveVertices.back().getXPos() < maPolyPolyRectangle.getMaxX() )
-                {
-                    span( aActiveVertices.back().getXPos()+1.0,
-                          maPolyPolyRectangle.getMaxX(),
-                          nCurrY,
-                          false );
-                }
-
-                // also call nextLine on very last line node
-                aActiveVertices.back().nextLine();
-            }
-
-            // remove line nodes which have ended on the current scanline
-            aActiveVertices.erase( ::std::remove_if( aActiveVertices.begin(),
-                                                     aActiveVertices.end(),
-                                                     ::boost::mem_fn( &ImplLineNode::isEnded ) ),
-                                   aActiveVertices.end() );
-
-            // TODO(P2): Maybe employ another sort here - typically,
-            // only a few entries will have changed order, quite
-            // probably even only swapped positions.
-
-            // sort line nodes again - the nextLine() call changed the
-            // X positions!
-            ::std::sort( aActiveVertices.begin(),
-                         aActiveVertices.end(),
-                         LineNodeComparator() );
-        }
-#endif
     }
 }
 // eof
