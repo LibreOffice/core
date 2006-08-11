@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objshimp.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2006-06-26 09:52:23 $
+ *  last change: $Author: hr $ $Date: 2006-08-11 17:17:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,6 +208,7 @@ struct SfxObjectShell_Impl
               bSignatureErrorIsShown( sal_False ),
               bModelInitialized( sal_False ),
               bPreserveVersions( sal_True ),
+              m_bMacroSignBroken( sal_False ),
         lErr(ERRCODE_NONE),
         nEventId ( 0),
         bDoNotTouchDocInfo( sal_False ),
