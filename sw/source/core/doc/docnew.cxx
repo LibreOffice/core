@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 11:46:48 $
+ *  last change: $Author: hr $ $Date: 2006-08-11 15:50:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -406,9 +406,6 @@ SwDoc::SwDoc() :
     // --> OD 2006-04-13 #b6402800#
     mbClipAsCharacterAnchoredWriterFlyFrames =
     // <--
-    // --> FME 2006-07-12 #b6439097#
-    mbCutExpandedUnderline          =
-    // <--
     //
     // COMPATIBILITY FLAGS END
     //
@@ -513,9 +510,6 @@ SwDoc::SwDoc() :
     SetUseFormerObjectPositioning( aOptions.IsUseObjectPositioning() );
     SetUseFormerTextWrapping( aOptions.IsUseOurTextWrapping() );
     SetConsiderWrapOnObjPos( aOptions.IsConsiderWrappingStyle() );
-    // --> FME 2006-07-12 #b6439097#
-    mbCutExpandedUnderline = aOptions.IsCutExpandedUnderline();
-    // <--
 
     ResetModified();
 }
