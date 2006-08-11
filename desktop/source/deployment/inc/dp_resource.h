@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_resource.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:19:11 $
+ *  last change: $Author: hr $ $Date: 2006-08-11 17:16:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,15 +59,7 @@ struct StaticResourceString :
 };
 
 //==============================================================================
-inline ::com::sun::star::lang::Locale toLocale( ::rtl::OUString const & slang )
-{
-    ::com::sun::star::lang::Locale locale;
-    sal_Int32 nIndex = 0;
-    locale.Language = slang.getToken( 0, '-', nIndex );
-    locale.Country = slang.getToken( 0, '-', nIndex );
-    locale.Variant = slang.getToken( 0, '-', nIndex );
-    return locale;
-}
+::com::sun::star::lang::Locale toLocale( ::rtl::OUString const & slang );
 
 //==============================================================================
 ::com::sun::star::lang::Locale const & getOfficeLocale();
