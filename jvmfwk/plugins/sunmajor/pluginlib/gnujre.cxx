@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gnujre.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:08:40 $
+ *  last change: $Author: hr $ $Date: 2006-08-11 16:19:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,8 @@ char const* const* GnuInfo::getJavaExePaths(int * size)
 char const* const* GnuInfo::getRuntimePaths(int * size)
 {
     static char const* ar[]= {
+          "/lib/" JFW_PLUGIN_ARCH "/client/libjvm.so",
+          "/gcj-4.1.1/libjvm.so",
           "/libgcj.so.7",
           "/libgcj.so.6"
     };
