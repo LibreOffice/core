@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unredln.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 14:20:52 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:51:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -93,7 +92,7 @@ SwUndoRedline::SwUndoRedline( USHORT nUsrId, const SwPaM& rRange )
         {
         case UNDO_DELETE:
         case UNDO_REPLACE:
-            pRedlData = new SwRedlineData( REDLINE_DELETE, rDoc.GetRedlineAuthor() );
+            pRedlData = new SwRedlineData( IDocumentRedlineAccess::REDLINE_DELETE, rDoc.GetRedlineAuthor() );
             break;
         }
         SetRedlineMode( rDoc.GetRedlineMode() );
@@ -151,8 +150,8 @@ void SwUndoRedline::Undo( SwUndoIter& rIter )
 void SwUndoRedline::Redo( SwUndoIter& rIter )
 {
     SwDoc* pDoc = &rIter.GetDoc();
-    SwRedlineMode eOld = pDoc->GetRedlineMode();
-    pDoc->SetRedlineMode_intern( ( eOld & ~REDLINE_IGNORE) | REDLINE_ON );
+    IDocumentRedlineAccess::RedlineMode_t eOld = pDoc->GetRedlineMode();
+    pDoc->SetRedlineMode_intern( ( eOld & ~IDocumentRedlineAccess::REDLINE_IGNORE) | IDocumentRedlineAccess::REDLINE_ON );
 
     SetPaM( *rIter.pAktPam );
     if( pRedlSaveData && bHiddenRedlines )
@@ -179,7 +178,7 @@ void SwUndoRedline::_Undo( SwUndoIter& )
 // default ist Redlines entfernen
 void SwUndoRedline::_Redo( SwUndoIter& rIter )
 {
-    rIter.GetDoc().DeleteRedline( *rIter.pAktPam );
+    rIter.GetDoc().DeleteRedline( *rIter.pAktPam, true, USHRT_MAX );
 }
 
 
@@ -210,7 +209,7 @@ SwUndoRedlineDelete::SwUndoRedlineDelete( const SwPaM& rRange, USHORT nUsrId )
 
 void SwUndoRedlineDelete::_Undo( SwUndoIter& rIter )
 {
-    rIter.GetDoc().DeleteRedline( *rIter.pAktPam );
+    rIter.GetDoc().DeleteRedline( *rIter.pAktPam, true, USHRT_MAX );
 }
 
 void SwUndoRedlineDelete::_Redo( SwUndoIter& rIter )
@@ -274,7 +273,7 @@ void SwUndoRedlineSort::_Undo( SwUndoIter& rIter )
     // im aSaveRange steht der kopierte, sprich der originale.
     SwDoc& rDoc = rIter.GetDoc();
 
-    if( 0 == ( REDLINE_SHOW_DELETE & rDoc.GetRedlineMode()) )
+    if( 0 == ( IDocumentRedlineAccess::REDLINE_SHOW_DELETE & rDoc.GetRedlineMode()) )
     {
         // die beiden Redline Objecte suchen und diese dann anzeigen lassen,
         // damit die Nodes wieder uebereinstimmen!
@@ -282,7 +281,7 @@ void SwUndoRedlineSort::_Undo( SwUndoIter& rIter )
         // Redline Object. Dahinter steht das Geloeschte
         USHORT nFnd = rDoc.GetRedlinePos(
                             *rDoc.GetNodes()[ nSttNode + nOffset + 1 ],
-                            REDLINE_INSERT );
+                            IDocumentRedlineAccess::REDLINE_INSERT );
         ASSERT( USHRT_MAX != nFnd && nFnd+1 < rDoc.GetRedlineTbl().Count(),
                     "kein Insert Object gefunden" );
         ++nFnd;
@@ -295,7 +294,7 @@ void SwUndoRedlineSort::_Undo( SwUndoIter& rIter )
         aTmp.SetMark();
         aTmp.GetPoint()->nNode = nSaveEndNode;
         aTmp.GetPoint()->nContent.Assign( aTmp.GetCntntNode(), nSaveEndCntnt );
-        rDoc.DeleteRedline( aTmp );
+        rDoc.DeleteRedline( aTmp, true, USHRT_MAX );
     }
 
     rDoc.DelFullPara( *rIter.pAktPam );
@@ -337,12 +336,12 @@ SwUndoAcceptRedline::SwUndoAcceptRedline( const SwPaM& rRange )
 
 void SwUndoAcceptRedline::_Redo( SwUndoIter& rIter )
 {
-    rIter.GetDoc().AcceptRedline( *rIter.pAktPam, FALSE );
+    rIter.GetDoc().AcceptRedline( *rIter.pAktPam, false );
 }
 
 void SwUndoAcceptRedline::Repeat( SwUndoIter& rIter )
 {
-    rIter.GetDoc().AcceptRedline( *rIter.pAktPam );
+    rIter.GetDoc().AcceptRedline( *rIter.pAktPam, true );
 }
 
 SwUndoRejectRedline::SwUndoRejectRedline( const SwPaM& rRange )
@@ -352,12 +351,12 @@ SwUndoRejectRedline::SwUndoRejectRedline( const SwPaM& rRange )
 
 void SwUndoRejectRedline::_Redo( SwUndoIter& rIter )
 {
-    rIter.GetDoc().RejectRedline( *rIter.pAktPam, FALSE );
+    rIter.GetDoc().RejectRedline( *rIter.pAktPam, false );
 }
 
 void SwUndoRejectRedline::Repeat( SwUndoIter& rIter )
 {
-    rIter.GetDoc().RejectRedline( *rIter.pAktPam );
+    rIter.GetDoc().RejectRedline( *rIter.pAktPam, true );
 }
 
 /*  */
@@ -369,7 +368,7 @@ SwUndoCompDoc::SwUndoCompDoc( const SwPaM& rRg, BOOL bIns )
     SwDoc* pDoc = (SwDoc*)rRg.GetDoc();
     if( pDoc->IsRedlineOn() )
     {
-        SwRedlineType eTyp = bInsert ? REDLINE_INSERT : REDLINE_DELETE;
+        IDocumentRedlineAccess::RedlineType_t eTyp = bInsert ? IDocumentRedlineAccess::REDLINE_INSERT : IDocumentRedlineAccess::REDLINE_DELETE;
         pRedlData = new SwRedlineData( eTyp, pDoc->GetRedlineAuthor() );
         SetRedlineMode( pDoc->GetRedlineMode() );
     }
@@ -379,7 +378,7 @@ SwUndoCompDoc::SwUndoCompDoc( const SwRedline& rRedl )
     : SwUndo( UNDO_COMPAREDOC ), SwUndRng( rRedl ), pRedlData( 0 ),
     pUnDel( 0 ), pUnDel2( 0 ), pRedlSaveData( 0 ),
     // fuers MergeDoc wird aber der jeweils umgekehrte Zweig benoetigt!
-    bInsert( REDLINE_DELETE == rRedl.GetType() )
+    bInsert( IDocumentRedlineAccess::REDLINE_DELETE == rRedl.GetType() )
 {
     SwDoc* pDoc = (SwDoc*)rRedl.GetDoc();
     if( pDoc->IsRedlineOn() )
@@ -411,10 +410,10 @@ void SwUndoCompDoc::Undo( SwUndoIter& rIter )
     if( !bInsert )
     {
         // die Redlines loeschen
-        SwRedlineMode eOld = pDoc->GetRedlineMode();
-        pDoc->SetRedlineMode_intern( ( eOld & ~REDLINE_IGNORE) | REDLINE_ON );
+        IDocumentRedlineAccess::RedlineMode_t eOld = pDoc->GetRedlineMode();
+        pDoc->SetRedlineMode_intern( ( eOld & ~IDocumentRedlineAccess::REDLINE_IGNORE) | IDocumentRedlineAccess::REDLINE_ON );
 
-        pDoc->DeleteRedline( *pPam );
+        pDoc->DeleteRedline( *pPam, true, USHRT_MAX );
 
         pDoc->SetRedlineMode_intern( eOld );
 
@@ -459,9 +458,9 @@ void SwUndoCompDoc::Undo( SwUndoIter& rIter )
     }
     else
     {
-        if( IsRedlineOn( GetRedlineMode() ))
+        if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
         {
-            pDoc->DeleteRedline( *pPam );
+            pDoc->DeleteRedline( *pPam, true, USHRT_MAX );
 
             if( pRedlSaveData )
                 SetSaveData( *pDoc, *pRedlSaveData );
@@ -482,7 +481,7 @@ void SwUndoCompDoc::Redo( SwUndoIter& rIter )
     {
         SetPaM( *pPam );
 
-        if( pRedlData && IsRedlineOn( GetRedlineMode() ))
+        if( pRedlData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
         {
             SwRedline* pTmp = new SwRedline( *pRedlData, *pPam );
             ((SwRedlineTbl&)pDoc->GetRedlineTbl()).Insert( pTmp );
@@ -495,7 +494,7 @@ void SwUndoCompDoc::Redo( SwUndoIter& rIter )
             pDoc->SetRedlineMode_intern( eOld );
 */
         }
-        else if( !( REDLINE_IGNORE & GetRedlineMode() ) &&
+        else if( !( IDocumentRedlineAccess::REDLINE_IGNORE & GetRedlineMode() ) &&
                 pDoc->GetRedlineTbl().Count() )
             pDoc->SplitRedline( *pPam );
     }
