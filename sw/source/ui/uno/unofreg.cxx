@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unofreg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:21:16 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 18:00:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #include "SwXFilterOptions.hxx"
 
 #ifndef _SAL_TYPES_H_
@@ -47,10 +46,6 @@
 #ifndef _CPPUHELPER_FACTORY_HXX_
 #include <cppuhelper/factory.hxx>
 #endif
-#ifndef _COM_SUN_STAR_REGISTRY_XREGISTRYKEY_HPP_
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#endif
-
 #ifndef INCLUDED_STRING_H
 #include <string.h>
 #define INCLUDED_STRING_H
