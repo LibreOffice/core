@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 12:19:03 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:56:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -73,9 +72,6 @@
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
 #endif
-#ifndef _SFXVIEWFRM_HXX //autogen
-#include <sfx2/viewfrm.hxx>
-#endif
 #ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
 #endif
@@ -85,6 +81,7 @@
 #ifndef _SFX_PRINTER_HXX
 #include <sfx2/printer.hxx>
 #endif
+#include <sfx2/app.hxx>
 #ifndef _SVX_RULER_HXX //autogen
 #include <svx/ruler.hxx>
 #endif
@@ -100,18 +97,15 @@
 #ifndef _SVX_FONTWORK_BAR_HXX
 #include <svx/fontworkbar.hxx>
 #endif
-
 #ifndef _UNOTXVW_HXX
 #include <unotxvw.hxx>
 #endif
-
 #ifndef _CMDID_H
 #include <cmdid.h>
 #endif
 #ifndef _SWHINTS_HXX
 #include <swhints.hxx>
 #endif
-
 #ifndef _SWMODULE_HXX //autogen
 #include <swmodule.hxx>
 #endif
@@ -123,9 +117,6 @@
 #endif
 #ifndef _UIVWIMP_HXX
 #include <uivwimp.hxx>
-#endif
-#ifndef _SWTYPES_HXX
-#include <swtypes.hxx>
 #endif
 #ifndef _UITOOL_HXX
 #include <uitool.hxx>
@@ -211,9 +202,6 @@
 #ifndef _BARCFG_HXX
 #include <barcfg.hxx>
 #endif
-#ifndef _DOC_HXX //autogen
-#include <doc.hxx>
-#endif
 #ifndef _PVIEW_HXX
 #include <pview.hxx>
 #endif
@@ -232,25 +220,19 @@
 #ifndef _CFGITEMS_HXX
 #include <cfgitems.hxx>
 #endif
-#ifndef _SW_PRINTDATA_HXX
-#include <printdata.hxx>
-#endif
 #ifndef _PRTOPT_HXX
 #include <prtopt.hxx>
 #endif
 #ifndef _SWPRTOPT_HXX
 #include <swprtopt.hxx>
 #endif
-
 #ifndef _LINGUISTIC_LNGPROPS_HHX_
 #include <linguistic/lngprops.hxx>
 #endif
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
 #endif
-
-#include <sfx2/app.hxx>
-
+//#include <sfx2/app.hxx>
 #ifndef _COM_SUN_STAR_FRAME_FRAMESEARCHFLAG_HPP_
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #endif
@@ -993,10 +975,10 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
         SwDoc& rDoc = *((SwDocShell*)pDocSh)->GetDoc();
 
         if( !bOldShellWasSrcView && pWebDShell && !bOldShellWasPagePreView )
-            rDoc.SetBrowseMode( sal_True );
+            rDoc.set(IDocumentSettingAccess::BROWSE_MODE, true);
 
         //Fuer den BrowseMode wollen wir keinen Factor uebernehmen.
-        if( rDoc.IsBrowseMode() && aUsrPref.GetZoomType() != SVX_ZOOM_PERCENT )
+        if( rDoc.get(IDocumentSettingAccess::BROWSE_MODE) && aUsrPref.GetZoomType() != SVX_ZOOM_PERCENT )
         {
             aUsrPref.SetZoomType( SVX_ZOOM_PERCENT );
             aUsrPref.SetZoom( 100 );
@@ -1100,7 +1082,7 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
         static_cast< USHORT >( SW_MOD()->GetUndoOptions().GetUndoCount() ) );
     pWrtShell->DoUndo( 0 != SwEditShell::GetUndoActionCount() );
 
-    const FASTBOOL bBrowse = pWrtShell->GetDoc()->IsBrowseMode();
+    const FASTBOOL bBrowse = pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
     SetNewWindowAllowed(!bBrowse);
 
     ShowVScrollbar(aUsrPref.IsViewVScrollBar());
@@ -1127,7 +1109,7 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
         SET_CURR_SHELL( pWrtShell );
         pWrtShell->StartAction();
         pWrtShell->CalcLayout();
-        pWrtShell->GetDoc()->UpdateFlds();
+        pWrtShell->GetDoc()->UpdateFlds(NULL, false);
         pWrtShell->EndAction();
         pWrtShell->GetDoc()->SetUpdateExpFldStat( sal_False );
     }
@@ -1311,7 +1293,7 @@ void SwView::ReadUserData( const String &rUserData, sal_Bool bBrowse )
     if ( rUserData.GetTokenCount() > 1 &&
         //Fuer Dokumente ohne Layout nur im OnlineLayout oder beim
         //Forward/Backward
-         (!pWrtShell->IsNewLayout() || pWrtShell->IsBrowseMode() || bBrowse) )
+         (!pWrtShell->IsNewLayout() || pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) || bBrowse) )
     {
         //#i43146# go to the last editing position when opening own files
         bool bIsOwnDocument = lcl_IsOwnDocument( *this );
@@ -1334,7 +1316,7 @@ void SwView::ReadUserData( const String &rUserData, sal_Bool bBrowse )
              nRight = rUserData.GetToken(0, ';', nPos ).ToInt32(),
              nBottom= rUserData.GetToken(0, ';', nPos ).ToInt32();
 
-        const long nAdd = pWrtShell->IsBrowseMode() ? DOCUMENTBORDER : DOCUMENTBORDER*2;
+        const long nAdd = pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) ? DOCUMENTBORDER : DOCUMENTBORDER*2;
         if ( nBottom <= (pWrtShell->GetDocSize().Height()+nAdd) )
         {
             pWrtShell->EnableSmooth( sal_False );
@@ -1343,7 +1325,7 @@ void SwView::ReadUserData( const String &rUserData, sal_Bool bBrowse )
 
             sal_uInt16 nOff = 0;
             SvxZoomType eZoom;
-            if( !pWrtShell->GetDoc()->IsBrowseMode() )
+            if( !pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
                 eZoom = (SvxZoomType) (sal_uInt16)rUserData.GetToken(nOff, ';', nPos ).ToInt32();
             else
             {
@@ -1434,7 +1416,7 @@ void SwView::ReadUserDataSequence ( const com::sun::star::uno::Sequence < com::s
     //#i43146# go to the last editing position when opening own files
     bool bIsOwnDocument = lcl_IsOwnDocument( *this );
     sal_Int32 nLength = rSequence.getLength();
-    if (nLength && (!pWrtShell->IsNewLayout() || pWrtShell->IsBrowseMode() || bBrowse) )
+    if (nLength && (!pWrtShell->IsNewLayout() || pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) || bBrowse) )
     {
         SET_CURR_SHELL(pWrtShell);
         const com::sun::star::beans::PropertyValue *pValue = rSequence.getConstArray();
@@ -1509,7 +1491,7 @@ void SwView::ReadUserDataSequence ( const com::sun::star::uno::Sequence < com::s
         if (bGotVisibleBottom)
         {
             Point aCrsrPos( nX, nY );
-            const long nAdd = pWrtShell->IsBrowseMode() ? DOCUMENTBORDER : DOCUMENTBORDER*2;
+            const long nAdd = pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) ? DOCUMENTBORDER : DOCUMENTBORDER*2;
             if (nBottom <= (pWrtShell->GetDocSize().Height()+nAdd) )
             {
                 pWrtShell->EnableSmooth( sal_False );
@@ -1517,7 +1499,7 @@ void SwView::ReadUserDataSequence ( const com::sun::star::uno::Sequence < com::s
 
                 sal_uInt16 nOff = 0;
                 SvxZoomType eZoom;
-                if( !pWrtShell->GetDoc()->IsBrowseMode() )
+                if ( !pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
                     eZoom = static_cast < SvxZoomType > ( nZoomType );
                 else
                 {
