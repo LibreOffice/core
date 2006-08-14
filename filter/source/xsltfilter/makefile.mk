@@ -1,12 +1,12 @@
-#************************************************************************* 
-# 
+#*************************************************************************
+#
 #   OpenOffice.org - a multi-platform office productivity suite
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: hr $ $Date: 2006-04-19 15:08:20 $
+#   last change: $Author: hr $ $Date: 2006-08-14 15:31:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -31,20 +31,20 @@
 #     Foundation, Inc., 59 Temple Place, Suite 330, Boston,
 #     MA  02111-1307  USA
 #
-#*************************************************************************  
-PRJ	= ..$/.. 
-PRJNAME = filter 
+#*************************************************************************
+PRJ	= ..$/..
+PRJNAME = filter
 #PACKAGE = com$/sun$/star$/documentconversion$/XSLTFilter
-TARGET  =XSLTFilter  
+TARGET  =XSLTFilter
 ENABLE_EXCEPTIONS=TRUE
 LIBTARGET=NO
 
-# --- Settings ----------------------------------------------------- 
-CLASSDIR!:=$(CLASSDIR)$/$(TARGET)  
+# --- Settings -----------------------------------------------------
+CLASSDIR!:=$(CLASSDIR)$/$(TARGET)
 .IF "$(XML_CLASSPATH)" != ""
 XCLASSPATH+=":$(XML_CLASSPATH)"
 .ENDIF
-.INCLUDE: settings.mk  
+.INCLUDE: settings.mk
 
 SLOFILES=$(SLO)$/XSLTFilter.obj $(SLO)$/fla.obj
 LIBNAME=xsltfilter
@@ -90,22 +90,22 @@ XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(XML_APIS_JAR)
 JARFILES += xml-apis.jar
 .ENDIF
 
-JAVAFILES		= $(subst,$(CLASSDIR)$/, $(subst,.class,.java $(JAVACLASSFILES))) 
-CUSTOMMANIFESTFILE = Manifest  
+JAVAFILES		= $(subst,$(CLASSDIR)$/, $(subst,.class,.java $(JAVACLASSFILES)))
+CUSTOMMANIFESTFILE = Manifest
 
-JARCOMPRESS		= TRUE  
-JARCLASSDIRS	= XSLTFilter*.class XSLTransformer*.class XSLTFilterOLEExtracter*.class
+JARCOMPRESS		= TRUE
+JARCLASSDIRS	= XSLTransformer*.class XSLTFilterOLEExtracter*.class
 JARTARGET		= $(TARGET).jar
 JARCLASSDIRS 	+= XSLTXalanOLEExtracter*.class
 
-# --- Files --------------------------------------------------------  
-JAVACLASSFILES=$(CLASSDIR)$/XSLTFilter.class  $(CLASSDIR)$/XSLTransformer.class  $(CLASSDIR)$/XSLTFilterOLEExtracter.class
-#this class we need xalan.jar. 
+# --- Files --------------------------------------------------------
+JAVACLASSFILES=$(CLASSDIR)$/XSLTransformer.class  $(CLASSDIR)$/XSLTFilterOLEExtracter.class
+#this class we need xalan.jar.
 JAVACLASSFILES+=$(CLASSDIR)$/XSLTXalanOLEExtracter.class
 .ENDIF
-    
-# --- Targets ------------------------------------------------------  
-.INCLUDE :  target.mk 
+
+# --- Targets ------------------------------------------------------
+.INCLUDE :  target.mk
 .IF "$(SOLAR_JAVA)"!=""
 $(JAVACLASSFILES) : $(CLASSDIR)
 
