@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parcss1.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:13:11 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:06:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #include <ctype.h>
@@ -51,14 +50,9 @@
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
 #endif
-#ifndef _TOOLS_COLOR_HXX
-#include <tools/color.hxx>
-#endif
 #ifndef _HTMLTOKN_H
 #include <svtools/htmltokn.h>
 #endif
-
-
 
 #include "css1kywd.hxx"
 #include "parcss1.hxx"
