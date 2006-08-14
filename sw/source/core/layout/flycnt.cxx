@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 08:17:09 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:25:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,9 +32,7 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #pragma hdrstop
-
 
 #ifndef _BIGINT_HXX //autogen
 #include <tools/bigint.hxx>
@@ -75,9 +73,7 @@
 #ifndef _FMTSRND_HXX //autogen
 #include <fmtsrnd.hxx>
 #endif
-#ifndef _NODE_HXX //autogen
-#include <node.hxx>
-#endif
+
 #include "tabfrm.hxx"
 #include "flyfrms.hxx"
 #include "crstate.hxx"
@@ -1377,10 +1373,10 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
                 nX = rNew.X() - pFrm->Frm().Left() - nBaseOfstForFly;
         }
     }
-    GetFmt()->GetDoc()->StartUndo( UNDO_START );
+    GetFmt()->GetDoc()->StartUndo( UNDO_START, NULL );
 
     if( pCnt != GetAnchorFrm() || ( IsAutoPos() && pCnt->IsTxtFrm() &&
-                                  GetFmt()->GetDoc()->IsHTMLMode() ) )
+                                  GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::HTML_MODE)) )
     {
         //Das Ankerattribut auf den neuen Cnt setzen.
         SwFmtAnchor aAnch( pFmt->GetAnchor() );
@@ -1428,7 +1424,7 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
     const Point aRelPos = bVert ? Point( -nY, nX ) : Point( nX, nY );
     ChgRelPos( aRelPos );
 
-    GetFmt()->GetDoc()->EndUndo( UNDO_END );
+    GetFmt()->GetDoc()->EndUndo( UNDO_END, NULL );
 
     if ( pOldPage != FindPageFrm() )
         ::Notify_Background( GetVirtDrawObj(), pOldPage, aOld, PREP_FLY_LEAVE,
