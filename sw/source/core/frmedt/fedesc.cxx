@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fedesc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2006-04-28 15:00:12 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:15:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -61,9 +60,6 @@
 #endif
 #ifndef _PAM_HXX
 #include <pam.hxx>
-#endif
-#ifndef _NODE_HXX
-#include <node.hxx>
 #endif
 #ifndef _FMTPDSC_HXX //autogen
 #include <fmtpdsc.hxx>
@@ -162,7 +158,7 @@ void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
     else
     {
         SwPaM aPaM( *((SwCntntFrm*)pFlow)->GetNode() );
-        GetDoc()->Insert( aPaM, aNew );
+        GetDoc()->Insert( aPaM, aNew, 0 );
     }
     EndAllActionAndCall();
 }
