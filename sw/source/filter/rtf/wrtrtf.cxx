@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtrtf.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:55:46 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:10:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 #include <stdlib.h>
-
 #define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
@@ -87,17 +86,11 @@
 #ifndef _SVX_LRSPITEM_HXX //autogen
 #include <svx/lrspitem.hxx>
 #endif
-#ifndef _SVX_BRKITEM_HXX //autogen
-#include <svx/brkitem.hxx>
-#endif
 #ifndef _SVX_FRMDIRITEM_HXX
 #include <svx/frmdiritem.hxx>
 #endif
 #ifndef _SVX_UDLNITEM_HXX //autogen
 #include <svx/udlnitem.hxx>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_PRINTERINDEPENDENTLAYOUT_HPP_
-#include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #endif
 
 #ifndef _FMTPDSC_HXX //autogen
@@ -139,9 +132,6 @@
 #ifndef _WRTRTF_HXX
 #include <wrtrtf.hxx>
 #endif
-#ifndef _FMTCOL_HXX
-#include <fmtcol.hxx>
-#endif
 #ifndef _FLYPOS_HXX
 #include <flypos.hxx>
 #endif
@@ -151,17 +141,11 @@
 #ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx>     // fuer SwPageDesc...
 #endif
-#ifndef _NUMRULE_HXX
-#include <numrule.hxx>
-#endif
 #ifndef _FTNINFO_HXX
 #include <ftninfo.hxx>
 #endif
 #ifndef _CHARFMT_HXX
 #include <charfmt.hxx>
-#endif
-#ifndef _POOLFMT_HXX
-#include <poolfmt.hxx>
 #endif
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
@@ -184,14 +168,8 @@
 #ifndef _STATSTR_HRC
 #include <statstr.hrc>      // ResId fuer Statusleiste
 #endif
-#ifndef _REDLINE_HXX
-#include <redline.hxx>
-#endif
 #ifndef _SWDOCSH_HXX
 #include <docsh.hxx>
-#endif
-#ifndef SW_MS_MSFILTER_HXX
-#include <msfilter.hxx>
 #endif
 
 #if defined(MAC)
@@ -492,7 +470,7 @@ void SwRTFWriter::MakeHeader()
                     pDoc->GetAttrPool().GetDefaultItem( RES_PARATR_TABSTOP );
         Strm() << sRTF_DEFTAB;
         OutLong( rTabs[0].GetTabPos() );
-        if (com::sun::star::document::PrinterIndependentLayout::DISABLED == pDoc->IsUseVirtualDevice())
+        if ( !pDoc->get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE) )
             Strm() << sRTF_LYTPRTMET;
     }
 
@@ -1279,7 +1257,7 @@ void SwRTFWriter::OutRedline( xub_StrLen nCntntPos )
                 {
                     // We are at the start of a redline just need to find out which type
                     Strm() << '{';
-                    if(pCurRedline->GetType() == REDLINE_INSERT)
+                    if(pCurRedline->GetType() == IDocumentRedlineAccess::REDLINE_INSERT)
                     {
                         Strm() << sRTF_REVISED;
                         Strm() << sRTF_REVAUTH;
@@ -1289,7 +1267,7 @@ void SwRTFWriter::OutRedline( xub_StrLen nCntntPos )
                         OutLong( sw::ms::DateTime2DTTM(pCurRedline->GetTimeStamp()) );
                         Strm() << ' ';
                     }
-                    else if(pCurRedline->GetType() == REDLINE_DELETE)
+                    else if(pCurRedline->GetType() == IDocumentRedlineAccess::REDLINE_DELETE)
                     {
                         Strm() << sRTF_DELETED;
                         Strm() << sRTF_REVAUTHDEL;
@@ -1325,7 +1303,7 @@ void SwRTFWriter::OutBookmarks( xub_StrLen nCntntPos )
     if (USHRT_MAX == nBkmkTabPos)
         return;
 
-    const SwBookmark* pBookmark = pDoc->GetBookmarks()[nBkmkTabPos];
+    const SwBookmark* pBookmark = pDoc->getBookmarks()[nBkmkTabPos];
     if (!pBookmark)
         return;
 
@@ -1407,10 +1385,10 @@ void SwRTFWriter::OutBookmarks( xub_StrLen nCntntPos )
         RTFOutFuncs::Out_String( Strm(), pBookmark->GetName(),
                                 DEF_ENCODING, bWriteHelpFmt ) << '}';
 
-        if( ++nBkmkTabPos >= pDoc->GetBookmarks().Count() )
+        if( ++nBkmkTabPos >= pDoc->getBookmarks().Count() )
             nBkmkTabPos = USHRT_MAX;
         else
-            pBookmark = pDoc->GetBookmarks()[ nBkmkTabPos ];
+            pBookmark = pDoc->getBookmarks()[ nBkmkTabPos ];
     }
 }
 
@@ -1751,7 +1729,7 @@ BOOL SwRTFWriter::OutBreaks( const SfxItemSet& rSet )
 
 void SwRTFWriter::CheckEndNodeForSection( const SwNode& rNd )
 {
-    const SwSectionNode* pSectNd = rNd.FindStartNode()->GetSectionNode();
+    const SwSectionNode* pSectNd = rNd.StartOfSectionNode()->GetSectionNode();
     if( pSectNd /*&& CONTENT_SECTION == pSectNd->GetSection().GetType()*/ )
     {
         const SwSectionFmt* pSectFmt = pSectNd->GetSection().GetFmt();
@@ -1761,7 +1739,7 @@ void SwRTFWriter::CheckEndNodeForSection( const SwNode& rNd )
         SwNodeIndex aIdx( rNd, 1 );
         pSectNd = aIdx.GetNode().GetSectionNode();
         if( !( ( pSectNd || aIdx.GetNode().IsEndNode() &&
-            0 != ( pSectNd = aIdx.GetNode().FindStartNode()->GetSectionNode() ))
+            0 != ( pSectNd = aIdx.GetNode().StartOfSectionNode()->GetSectionNode() ))
             /*&& CONTENT_SECTION == pSectNd->GetSection().GetType()*/ ))
         {
             // wer bestimmt denn nun den neuen Abschnitt?
