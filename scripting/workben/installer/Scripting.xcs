@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Scripting.xcs,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:46:13 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:02:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,16 +37,19 @@
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Scripting" oor:package="org.openoffice.Office" xml:lang="en-US">
 	<info>
 		<author>DF</author>
-		<desc xml:lang="en-US">Contains the various settings needed by the Scripting Framework and its runtimes.</desc>
+        <desc xml:lang="x-no-translate"></desc>
+        <desc xml:lang="en-US">Contains the various settings needed by the Scripting Framework and its runtimes.</desc>
 	</info>
 	<templates>
 		<group oor:name="RuntimeNode">
 			<info>
-				<desc xml:lang="en-US">Specifies the runtimes available to the Scriptying Framework.</desc>
+	        <desc xml:lang="x-no-translate"></desc>
+			<desc xml:lang="en-US">Specifies the runtimes available to the Scriptying Framework.</desc>
 			</info>
 			<prop oor:name="SupportedFileExtensions" oor:type="oor:string-list">
 				<info>
-					<desc xml:lang="en-US">Lists the file extensions that are recognized by this runtime.</desc>
+	            <desc xml:lang="x-no-translate"></desc>
+				<desc xml:lang="en-US">Lists the file extensions that are recognized by this runtime.</desc>
 				</info>
 			</prop>
 		</group>
@@ -54,7 +57,8 @@
 	<component>
 		<set oor:name="ScriptRuntimes" oor:node-type="RuntimeNode">
 			<info>
-				<desc xml:lang="en-US">Lists the registered Scripting Framework runtimes.</desc>
+	        <desc xml:lang="x-no-translate"></desc>
+			<desc xml:lang="en-US">Lists the registered Scripting Framework runtimes.</desc>
 			</info>
 		</set>
 	</component>
