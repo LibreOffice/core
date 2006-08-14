@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlfly.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:34:10 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:03:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 
 
-
 #pragma hdrstop
 
 #define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
@@ -46,10 +45,6 @@
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
 #endif
-#ifndef _URLOBJ_HXX //autogen
-#include <tools/urlobj.hxx>
-#endif
-
 #ifndef _APP_HXX
 #include <vcl/svapp.hxx>
 #endif
