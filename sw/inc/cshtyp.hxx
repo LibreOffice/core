@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cshtyp.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:38:21 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:18:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,6 @@
 #include "swdllapi.h"
 #endif
 
-class UniString;
 class SwPaM;
 class SwCntntFrm;
 class SwLayoutFrm;
