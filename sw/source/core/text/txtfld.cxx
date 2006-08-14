@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfld.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:58:06 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:43:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #include "hintids.hxx"
@@ -58,12 +57,9 @@
 #include "flyfrm.hxx"   //IsInBody()
 #include "viewimp.hxx"
 #include "txtatr.hxx"   // SwTxtFld
-
 #include "txtcfg.hxx"
-
 #include "swfont.hxx"   // NewFldPortion, new SwFont
 #include "fntcache.hxx"   // NewFldPortion, SwFntAccess
-
 #include "porfld.hxx"
 #include "porftn.hxx"   // NewExtraPortion
 #include "porref.hxx"   // NewExtraPortion
@@ -71,12 +67,12 @@
 #include "porhyph.hxx"   // NewExtraPortion
 #include "porfly.hxx"   // NewExtraPortion
 #include "itrform2.hxx"   // SwTxtFormatter
-
 #include "chpfld.hxx"
 #include "dbfld.hxx"
 #include "expfld.hxx"
 #include "docufld.hxx"
 #include "pagedesc.hxx"  // NewFldPortion, GetNum()
+
 #ifndef _PORMULTI_HXX
 #include <pormulti.hxx>     // SwMultiPortion
 #endif
@@ -160,17 +156,14 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
         {
             if( !bName && pSh && !pSh->Imp()->IsUpdateExpFlds() )
             {
+                SwPageNumberFieldType *pPageNr = (SwPageNumberFieldType *)pFld->GetTyp();
+
+                const SwRootFrm* pTmpRootFrm = pSh->GetLayout();
+                const sal_Bool bVirt = pTmpRootFrm->IsVirtPageNum();
+
                 SwDoc* pDoc = pSh->GetDoc();
-                SwPageNumberFieldType *pPageNr = (SwPageNumberFieldType *)
-                                pFld->GetTyp();
-//???                               pDoc->GetSysFldType( RES_PAGENUMBERFLD );
-
-//              SwPageFrm *pPage = pFrm->FindPageFrm();
-//              sal_Bool bVirt = pPage && pPage->GetNext();
-                sal_Bool bVirt = pSh->GetLayout()->IsVirtPageNum();
-
-                MSHORT nVirtNum = pFrame->GetVirtPageNum(),
-                       nNumPages = pDoc->GetRootFrm()->GetPageNum();
+                MSHORT nVirtNum = pFrame->GetVirtPageNum();
+                MSHORT nNumPages = pTmpRootFrm->GetPageNum();
                 sal_Int16 nNumFmt = -1;
                 if(SVX_NUM_PAGEDESC == pFld->GetFormat())
                     nNumFmt = pFrame->FindPageFrm()->GetPageDesc()->GetNumType().GetNumberingType();
@@ -258,10 +251,10 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
                 aTmpSet.Set( pChFmt->GetAttrSet() );
                 aTmpSet.Differentiate( aSet );
                 if( aTmpSet.Count() )
-                    pTmpFnt->SetDiffFnt( &aTmpSet, rInf.GetDoc() );
+                    pTmpFnt->SetDiffFnt( &aTmpSet, pFrm->GetTxtNode()->getIDocumentSettingAccess() );
             }
             else
-                pTmpFnt->SetDiffFnt( &pChFmt->GetAttrSet(), rInf.GetDoc() );
+                pTmpFnt->SetDiffFnt( &pChFmt->GetAttrSet(), pFrm->GetTxtNode()->getIDocumentSettingAccess() );
         }
         pRet = new SwFldPortion( pFld->GetCntnt( bName ), pTmpFnt );
     }
@@ -381,7 +374,10 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
             // Im Dtor vom SwNumberPortion wird der SwFont deletet.
             SwFont *pNumFnt = 0;
             const SwAttrSet* pFmt = rNumFmt.GetCharFmt() ?
-                &rNumFmt.GetCharFmt()->GetAttrSet() : NULL;
+                                    &rNumFmt.GetCharFmt()->GetAttrSet() :
+                                    NULL;
+            const IDocumentSettingAccess* pIDSA = pTxtNd->getIDocumentSettingAccess();
+
             if( SVX_NUM_CHAR_SPECIAL == rNumFmt.GetNumberingType() )
             {
                 const Font *pFmtFnt = rNumFmt.GetBulletFont();
@@ -389,10 +385,10 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
                 //
                 // Build a new bullet font basing on the current paragraph font:
                 //
-                pNumFnt = new SwFont( &rInf.GetCharAttr(), rInf.GetDoc() );
+                pNumFnt = new SwFont( &rInf.GetCharAttr(), pIDSA );
 
                 // --> FME 2005-08-11 #i53199#
-                if ( !pTxtNd->GetDoc()->DoNotResetParaAttrsForNumFont() )
+                if ( !pIDSA->get(IDocumentSettingAccess::DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT) )
                 {
                     // i18463:
                     // Underline style of paragraph font should not be considered
@@ -412,7 +408,7 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
                 // associated with the numering to the new bullet font.
                 //
                 if( pFmt )
-                    pNumFnt->SetDiffFnt( pFmt, rInf.GetDoc() );
+                    pNumFnt->SetDiffFnt( pFmt, pIDSA );
 
                 if ( pFmtFnt )
                 {
@@ -451,22 +447,23 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
                     //
                     // Build a new numbering font basing on the current paragraph font:
                     //
-                    pNumFnt = new SwFont( &rInf.GetCharAttr(), rInf.GetDoc() );
+                    pNumFnt = new SwFont( &rInf.GetCharAttr(), pIDSA );
 
                     // --> FME 2005-08-11 #i53199#
-                    if ( !pTxtNd->GetDoc()->DoNotResetParaAttrsForNumFont() )
+                    if ( !pIDSA->get(IDocumentSettingAccess::DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT) )
                     {
                         // i18463:
                         // Underline style of paragraph font should not be considered
                         pNumFnt->SetUnderline( UNDERLINE_NONE );
                     }
 
+
                     //
                     // Apply the explicit attributes from the character style
                     // associated with the numering to the new bullet font.
                     //
                     if( pFmt )
-                        pNumFnt->SetDiffFnt( pFmt, rInf.GetDoc() );
+                        pNumFnt->SetDiffFnt( pFmt, pIDSA );
 
                     // we do not allow a vertical font
                     pNumFnt->SetVertical( pNumFnt->GetOrientation(), pFrm->IsVertical() );
