@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-11 15:51:19 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:46:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -69,17 +68,14 @@
 #ifndef _FNTCACHE_HXX
 #include <fntcache.hxx>
 #endif
-#ifndef _DOC_HXX
-#include <doc.hxx>
+#ifndef IDOCUMENTSETTINGACCESS_HXX_INCLUDED
+#include <IDocumentSettingAccess.hxx>
 #endif
 #ifndef _SWFONT_HXX
 #include <swfont.hxx>       // CH_BLANK + CH_BULLET
 #endif
 #ifndef _WRONG_HXX
 #include <wrong.hxx>
-#endif
-#ifndef _DRAWFONT_HXX
-#include <drawfont.hxx>     // SwDrawTextInfo
 #endif
 #include "dbg_lay.hxx"
 #ifndef _TXTFRM_HXX
@@ -309,7 +305,7 @@ USHORT SwFntObj::GetFontAscent( const ViewShell *pSh, const OutputDevice& rOut )
  *  Ersterstellung      AMA 7. Nov. 94
  *  Letzte Aenderung    AMA 7. Nov. 94
  *
- *  Beschreibung: liefern die Höhe des Fonts auf dem
+ *  Beschreibung: liefern die H?he des Fonts auf dem
  *  gewuenschten Outputdevice zurueck, ggf. muss der Bildschirmfont erst
  *  erzeugt werden.
  *************************************************************************/
@@ -368,12 +364,12 @@ USHORT SwFntObj::GetFontLeading( const ViewShell *pSh, const OutputDevice& rOut 
             nExtLeading = static_cast<USHORT>(aMet.GetExtLeading());
         }
 
-        const bool bUseExtLeading = pSh->IsAddExtLeading();
+        const IDocumentSettingAccess& rIDSA = *pSh->getIDocumentSettingAccess();
         const bool bBrowse = ( pSh->GetWin() &&
-                               pSh->GetDoc()->IsBrowseMode() &&
+                               rIDSA.get(IDocumentSettingAccess::BROWSE_MODE) &&
                               !pSh->GetViewOptions()->IsPrtFormat() );
 
-        if ( bUseExtLeading && !bBrowse )
+        if ( !bBrowse && rIDSA.get(IDocumentSettingAccess::ADD_EXT_LEADING) )
             nRet = nExtLeading;
         else
             nRet = nGuessedLeading;
@@ -415,7 +411,7 @@ static sal_Char __READONLY_DATA sStandardString[] = "Dies ist der Teststring";
 
 #ifdef MAC
 
-    if( !rSh.GetDoc()->IsBrowseMode() ||
+    if( !rSh.getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) ||
          rSh.GetViewOptions()->IsPrtFormat() )
     {
         CreatePrtFont( *pPrt );
@@ -429,7 +425,8 @@ static sal_Char __READONLY_DATA sStandardString[] = "Dies ist der Teststring";
 
 #else
 
-    if( !rSh.GetWin() || !rSh.GetDoc()->IsBrowseMode() ||
+    if( !rSh.GetWin() ||
+        !rSh.getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) ||
          rSh.GetViewOptions()->IsPrtFormat() )
     {
         // After CreatePrtFont pPrtFont is the font which is actually used
@@ -844,12 +841,13 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
     OutputDevice& rRefDev = rInf.GetShell()->GetRefDev();
     OutputDevice* pWin = rInf.GetShell()->GetWin();
+    const IDocumentSettingAccess* pIDSA = rInf.GetShell()->getIDocumentSettingAccess();
 
     // true if pOut is the printer and the printer has been used for formatting
     const BOOL bPrt = OUTDEV_PRINTER == rInf.GetOut().GetOutDevType() &&
                       OUTDEV_PRINTER == rRefDev.GetOutDevType();
     const BOOL bBrowse = ( pWin &&
-                           rInf.GetShell()->GetDoc()->IsBrowseMode() &&
+                           pIDSA->get(IDocumentSettingAccess::BROWSE_MODE) &&
                           !rInf.GetShell()->GetViewOptions()->IsPrtFormat() &&
                           !rInf.GetBullet() &&
                            ( rInf.GetSpace() || !rInf.GetKern() ) &&
@@ -883,8 +881,10 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
 #ifndef PRODUCT
 
-    const BOOL bNoAdjust = bPrt || ( pWin && rInf.GetShell()->GetDoc()->IsBrowseMode() &&
-                                     !rInf.GetShell()->GetViewOptions()->IsPrtFormat() );
+    const BOOL bNoAdjust = bPrt ||
+            (  pWin &&
+               pIDSA->get(IDocumentSettingAccess::BROWSE_MODE) &&
+              !rInf.GetShell()->GetViewOptions()->IsPrtFormat() );
 
     if ( OUTDEV_PRINTER == rInf.GetOut().GetOutDevType() )
     {
