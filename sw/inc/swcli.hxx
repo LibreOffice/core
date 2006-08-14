@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swcli.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:12:19 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:32:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _SWCLI_HXX
 #define _SWCLI_HXX
-
 #ifndef _COM_SUN_STAR_EMBED_XEMBEDDEDOBJECT_HPP_
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #endif
@@ -62,7 +61,6 @@ public:
     SwOleClient( SwView *pView, SwEditWin *pWin, const svt::EmbeddedObjectRef& );
 
     void SetInDoVerb( BOOL bFlag )              { bInDoVerb = bFlag; }
-    BOOL IsInDoVerb() const                     { return bInDoVerb; }
 
     BOOL IsCheckForOLEInCaption() const         { return bOldCheckForOLEInCaption; }
 };
