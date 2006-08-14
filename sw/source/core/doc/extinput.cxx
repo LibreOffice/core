@@ -4,9 +4,9 @@
  *
  *  $RCSfile: extinput.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:15:44 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:00:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -60,9 +59,6 @@
 #endif
 #ifndef _TXTFRM_HXX
 #include <txtfrm.hxx>
-#endif
-#ifndef _HINTS_HXX
-#include <hints.hxx>
 #endif
 #ifndef _SWUNDO_HXX
 #include <swundo.hxx>
@@ -138,11 +134,11 @@ SwExtTextInput::~SwExtTextInput()
                     if( bInsText )
                     {
                         rIdx = nSttCnt;
-                        pDoc->StartUndo( UNDO_OVERWRITE );
+                        pDoc->StartUndo( UNDO_OVERWRITE, NULL );
                         pDoc->Overwrite( *this, sTxt.Copy( 0,
                                                     sOverwriteText.Len() ));
-                        pDoc->Insert( *this, sTxt.Copy( sOverwriteText.Len() ));
-                        pDoc->EndUndo( UNDO_OVERWRITE );
+                        pDoc->Insert( *this, sTxt.Copy( sOverwriteText.Len() ), true);
+                        pDoc->EndUndo( UNDO_OVERWRITE, NULL );
                     }
                 }
                 else
@@ -160,7 +156,7 @@ SwExtTextInput::~SwExtTextInput()
                 pTNd->Erase( rIdx, nEndCnt - nSttCnt );
 
                 if( bInsText )
-                    pDoc->Insert( *this, sTxt );
+                    pDoc->Insert( *this, sTxt, true );
             }
         }
     }
