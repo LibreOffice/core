@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewtab.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:25:03 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:58:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 
 #pragma hdrstop
@@ -120,6 +119,8 @@
 #include "ndtxt.hxx"
 #include "pam.hxx"
 // <- #i23726#
+
+#include <IDocumentSettingAccess.hxx>
 
 /*--------------------------------------------------------------------
     Beschreibung:   Debug-Methode
@@ -323,7 +324,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                                     FRMTYPE_DRAWOBJ :
                                         rSh.GetFrmType(0,TRUE);
     const BOOL  bFrmSelection = rSh.IsFrmSelected();
-    BOOL bBrowse = rSh.IsBrowseMode();
+    BOOL bBrowse = rSh.getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
 
 
     const USHORT nSlot      = rReq.GetSlot();
@@ -969,7 +970,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 
     const BOOL  bFrmSelection = rSh.IsFrmSelected();
 
-    BOOL bBrowse = rSh.IsBrowseMode();
+    BOOL bBrowse = rSh.getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
     // PageOffset/Begrenzer
     const SwRect& rPageRect = rSh.GetAnyCurRect( RECT_PAGE, pPt );
     const SwRect& rPagePrtRect = rSh.GetAnyCurRect( RECT_PAGE_PRT, pPt );
