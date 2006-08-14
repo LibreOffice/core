@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtswtbl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-27 14:39:44 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:13:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,11 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifdef PCH
 #include "filt_pch.hxx"
 #endif
-
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
