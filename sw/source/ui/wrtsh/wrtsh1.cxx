@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 11:50:26 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 18:05:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 #ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
@@ -208,9 +207,6 @@
 #ifndef _DOC_HXX
 #include <doc.hxx>
 #endif
-#ifndef _SWERROR_H
-#include <swerror.h>
-#endif
 #ifndef _WRTSH_HRC
 #include <wrtsh.hrc>
 #endif
@@ -220,11 +216,9 @@
 #ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
 #endif
-
 #ifndef _PARATR_HXX
 #include <paratr.hxx>
 #endif
-
 #include <ndtxt.hxx>
 #include <svx/acorrcfg.hxx>
 
@@ -355,12 +349,6 @@ void SwWrtShell::Insert( const String &rStr )
 
     BOOL bStarted = FALSE, bHasSel = HasSelection(),
         bCallIns = bIns /*|| bHasSel*/;
-
-    // Notify abschalten
-    // FME: This seems to be an optimisation: CallChgLink should not be called
-    // for an insert event. This cannot hold any longer, since inserting
-    // characters from a different script type has to call CallChgLink.
-//    SwChgLinkFlag *pChgFlg = bCallIns ? new SwChgLinkFlag( *this ) : 0;
 
     if( bHasSel || ( !bIns && SelectHiddenRange() ) )
     {
@@ -1207,7 +1195,7 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
         }
         if ( pCollRule == NULL &&
              NO_NUMBERING != pColl->GetOutlineLevel() &&
-             GetDoc()->IsOutlineLevelYieldsOutlineRule() )
+             GetDoc()->get(IDocumentSettingAccess::OUTLINE_LEVEL_YIELDS_OUTLINE_RULE) )
         {
             pCollRule = GetDoc()->GetOutlineNumRule();
         }
