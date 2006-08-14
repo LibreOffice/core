@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optpage.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:42:59 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:29:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifdef SW_DLLIMPLEMENTATION
 #undef SW_DLLIMPLEMENTATION
 #endif
@@ -86,11 +85,6 @@
 #ifndef _SVX_DLGUTIL_HXX //autogen
 #include <svx/dlgutil.hxx>
 #endif
-#ifndef _SV_WALL_HXX
-#include <vcl/wall.hxx>
-#endif
-
-
 #ifndef _FMTCOL_HXX //autogen
 #include <fmtcol.hxx>
 #endif
@@ -100,14 +94,14 @@
 #ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
 #endif
-#ifndef _CHARATR_HXX
-#include <charatr.hxx>
-#endif
 #ifndef _VIEW_HXX
 #include <view.hxx>
 #endif
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>
+#endif
+#ifndef IDOCUMENTDEVICEACCESS_HXX_INCLUDED
+#include <IDocumentDeviceAccess.hxx>
 #endif
 #ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
@@ -118,17 +112,8 @@
 #ifndef _UITOOL_HXX
 #include <uitool.hxx>
 #endif
-#ifndef _SWATRSET_HXX
-#include <swatrset.hxx>
-#endif
-//CHINA001 #ifndef _OPTDLG_HXX
-//CHINA001 #include <optdlg.hxx>
-//CHINA001 #endif
 #ifndef _CFGITEMS_HXX
 #include <cfgitems.hxx> //Items fuer Sw-Seiten
-#endif
-#ifndef _FMTCOL_HXX
-#include <fmtcol.hxx>
 #endif
 #ifndef _POOLFMT_HXX
 #include <poolfmt.hxx>
@@ -145,17 +130,11 @@
 #ifndef _SWPRTOPT_HXX
 #include <swprtopt.hxx>
 #endif
-#ifndef _FONTCFG_HXX
-#include <fontcfg.hxx>
-#endif
 #ifndef _MODCFG_HXX
 #include <modcfg.hxx>
 #endif
 #ifndef _SRCVIEW_HXX
 #include <srcview.hxx>
-#endif
-#ifndef _SRCEDTW_HXX
-#include <srcedtw.hxx>
 #endif
 #ifndef _CRSTATE_HXX
 #include <crstate.hxx>
@@ -163,7 +142,6 @@
 #ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>
 #endif
-
 #ifndef _GLOBALS_HRC
 #include <globals.hrc>
 #endif
@@ -176,21 +154,14 @@
 #ifndef _OPTDLG_HRC
 #include <optdlg.hrc>
 #endif
-
 #ifndef _SVX_STRARRAY_HXX
 #include <svx/strarray.hxx>
 #endif
 #ifndef _SFXSLSTITM_HXX //CHINA001
 #include <svtools/slstitm.hxx> //CHINA001
 #endif //CHINA001
-#ifndef _SFXINTITEM_HXX
-#include <svtools/intitem.hxx>
-#endif
 #ifndef _SFXREQUEST_HXX
 #include <sfx2/request.hxx>
-#endif
-#ifndef _SFXENUMITEM_HXX
-#include <svtools/eitem.hxx>
 #endif
 #include <swwrtshitem.hxx> //CHINA001
 #define C2S(cChar) String::CreateFromAscii(cChar)
@@ -853,7 +824,7 @@ BOOL SwStdFontTabPage::FillItemSet( SfxItemSet& rSet )
     if(pWrtShell)
     {
         pWrtShell->StartAllAction();
-        SfxPrinter* pPrt = pWrtShell->GetPrt();
+        SfxPrinter* pPrt = pWrtShell->getIDocumentDeviceAccess()->getPrinter( false );
         BOOL bMod = FALSE;
         USHORT nFontWhich = nFontGroup == FONT_GROUP_DEFAULT  ? RES_CHRATR_FONT :
             FONT_GROUP_CJK == nFontGroup ? RES_CHRATR_CJK_FONT : RES_CHRATR_CTL_FONT;
