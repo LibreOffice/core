@@ -4,9 +4,9 @@
  *
  *  $RCSfile: num.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:36:09 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:49:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifdef SW_DLLIMPLEMENTATION
 #undef SW_DLLIMPLEMENTATION
 #endif
@@ -77,17 +76,9 @@
 #ifndef _SVX_CHARMAP_HXX //autogen
 #include <svx/charmap.hxx>
 #endif
-#ifndef _SV_MENU_HXX //autogen
-#include <vcl/menu.hxx>
-#endif
-#ifndef _SVX_DIALOGS_HRC
-#include <svx/dialogs.hrc>
-#endif
 #ifndef _SVX_NUMITEM_HXX //autogen wg. SvxNumBulletItem
 #include <svx/numitem.hxx>
 #endif
-
-
 #ifndef _SWVSET_HXX //autogen
 #include <swvset.hxx>
 #endif
