@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textfld.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:23:18 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:54:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -170,11 +169,11 @@ String& lcl_AppendRedlineStr( String& rStr, USHORT nRedlId )
     USHORT nResId = 0;
     switch( nRedlId )
     {
-    case REDLINE_INSERT:    nResId = STR_REDLINE_INSERTED;      break;
-    case REDLINE_DELETE:    nResId = STR_REDLINE_DELETED;       break;
-    case REDLINE_FORMAT:    nResId = STR_REDLINE_FORMATED;      break;
-    case REDLINE_TABLE:     nResId = STR_REDLINE_TABLECHG;      break;
-    case REDLINE_FMTCOLL:   nResId = STR_REDLINE_FMTCOLLSET;    break;
+    case IDocumentRedlineAccess::REDLINE_INSERT:    nResId = STR_REDLINE_INSERTED;      break;
+    case IDocumentRedlineAccess::REDLINE_DELETE:    nResId = STR_REDLINE_DELETED;       break;
+    case IDocumentRedlineAccess::REDLINE_FORMAT:    nResId = STR_REDLINE_FORMATED;      break;
+    case IDocumentRedlineAccess::REDLINE_TABLE:     nResId = STR_REDLINE_TABLECHG;      break;
+    case IDocumentRedlineAccess::REDLINE_FMTCOLL:   nResId = STR_REDLINE_FMTCOLLSET;    break;
     }
     if( nResId )
         rStr += SW_RESSTR( nResId );
