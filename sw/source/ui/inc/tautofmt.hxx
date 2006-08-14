@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tautofmt.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:08:17 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:46:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef SW_TAUTOFMT_HXX
 #define SW_TAUTOFMT_HXX
-
 #ifndef _BASEDLGS_HXX //autogen
 #include <sfx2/basedlgs.hxx>
 #endif
@@ -59,10 +58,7 @@
 #include <vcl/virdev.hxx>
 #endif
 
-class SwView;
 class SwTableAutoFmt;
-class SvxBoxItem;
-class SvxBorderLine;
 class AutoFmtPreview;
 class SwTableAutoFmtTbl;
 
