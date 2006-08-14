@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sortedobjs.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:56:55 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:22:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,10 +34,8 @@
  ************************************************************************/
 #ifndef _SORTEDOBJS_HXX
 #define _SORTEDOBJS_HXX
-
 class SwSortedObjsImpl;
 class SwAnchoredObject;
-class SwTxtFrm;
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
