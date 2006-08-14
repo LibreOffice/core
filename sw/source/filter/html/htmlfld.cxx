@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlfld.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 14:50:01 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:03:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -541,7 +541,7 @@ void SwHTMLParser::NewField()
         }
         else
         {
-            pDoc->Insert( *pPam, SwFmtFld(*pFld) );
+            pDoc->Insert( *pPam, SwFmtFld(*pFld), 0 );
             delete pFld;
         }
         bInField = TRUE;
@@ -579,7 +579,7 @@ void SwHTMLParser::EndField()
             break;
         }
 
-        pDoc->Insert( *pPam, SwFmtFld(*pField) );
+        pDoc->Insert( *pPam, SwFmtFld(*pField), 0 );
         delete pField;
         pField = 0;
     }
