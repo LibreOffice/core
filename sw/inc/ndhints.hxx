@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndhints.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:01:31 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:27:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,9 +107,6 @@ public:
         { return SwpHtStart::operator[](nIdx); }
     inline USHORT Count() const { return SwpHtStart::Count(); }
 
-    // Methoden vom PtrArr weiterreichen, wird fuer Node::_Cut benoetigt
-    const SwTxtAttr** GetData() const  { return SwpHtStart::GetData(); }
-
 #ifndef PRODUCT
     BOOL Check() const;
 #endif
@@ -178,10 +175,8 @@ public:
                  const USHORT i, const USHORT nWhich,
                  const xub_StrLen nStrt, const xub_StrLen nEnd );
 
-    inline BOOL HasFntChg() const { return bFntChg; }
     inline BOOL HasFtn() const { return bFtn; }
     inline BOOL IsInSplitNode() const { return bInSplitNode; }
-    inline BOOL HasDDEFld() const { return bDDEFlds; }
 
     // Konstruktor  (wird im nur einmal benutzt!)
     SwpHints()
