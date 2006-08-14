@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accframebase.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:48:37 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:43:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,17 +34,11 @@
  ************************************************************************/
 #ifndef _ACCFRAMEBASE_HXX
 #define _ACCFRAMEBASE_HXX
-
 #ifndef _ACCCONTEXT_HXX
 #include "acccontext.hxx"
 #endif
 
-#ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
-#include <com/sun/star/uno/RuntimeException.hpp>
-#endif
-
 class SwFlyFrm;
-class SwNoTxtNode;
 
 class SwAccessibleFrameBase : public SwAccessibleContext, public SwClient
 {
