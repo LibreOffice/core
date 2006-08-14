@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtwin.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 12:17:36 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:41:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _EDTWIN_HXX
 #define _EDTWIN_HXX
-
 #ifndef _LINK_HXX
 #include <tools/link.hxx>
 #endif
@@ -58,7 +57,6 @@
 class   SwWrtShell;
 class   SwView;
 class   SwRect;
-class   SwDrawBase;
 class   ViewShell;
 class   SwAnchorMarker;
 class   SdrViewUserMarker;
