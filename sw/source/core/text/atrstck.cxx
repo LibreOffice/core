@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atrstck.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 15:39:15 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:35:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -132,17 +131,14 @@
 #ifndef _TXTINET_HXX
 #include <txtinet.hxx>
 #endif
-#ifndef _DOC_HXX
-#include <doc.hxx>
+#ifndef IDOCUMENTSETTINGACCESS_HXX_INCLUDED
+#include <IDocumentSettingAccess.hxx>
 #endif
 #ifndef _VIEWSH_HXX
 #include <viewsh.hxx>   // ViewShell
 #endif
 #ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>  // SwViewOptions
-#endif
-#ifndef _SWFONT_HXX
-#include <swfont.hxx>
 #endif
 
 #define STACK_INCREMENT 4
@@ -420,7 +416,7 @@ USHORT SwAttrHandler::SwAttrStack::Pos( const SwTxtAttr& rAttr ) const
  *                      SwAttrHandler::SwAttrHandler()
  *************************************************************************/
 
-SwAttrHandler::SwAttrHandler() : pShell( 0 ), pFnt( 0 ), bVertLayout( sal_False )
+SwAttrHandler::SwAttrHandler() : mpShell( 0 ), pFnt( 0 ), bVertLayout( sal_False )
 
 {
     memset( pDefaultArray, 0, NUM_DEFAULT_VALUES * sizeof(SfxPoolItem*) );
@@ -435,26 +431,28 @@ SwAttrHandler::~SwAttrHandler()
  *                      SwAttrHandler::Init()
  *************************************************************************/
 
-void SwAttrHandler::Init( const SwAttrSet& rAttrSet, const SwDoc& rDoc,
+void SwAttrHandler::Init( const SwAttrSet& rAttrSet,
+                          const IDocumentSettingAccess& rIDocumentSettingAcces,
                           const ViewShell* pSh )
 {
-    pDoc = &rDoc;
-    pShell = pSh;
+    mpIDocumentSettingAccess = &rIDocumentSettingAcces;
+    mpShell = pSh;
 
     for ( USHORT i = RES_CHRATR_BEGIN; i < RES_CHRATR_END; i++ )
         pDefaultArray[ StackPos[ i ] ] = &rAttrSet.Get( i, TRUE );
 }
 
 void SwAttrHandler::Init( const SfxPoolItem** pPoolItem, const SwAttrSet* pAS,
-                          const SwDoc& rDoc, const ViewShell* pSh,
+                          const IDocumentSettingAccess& rIDocumentSettingAcces,
+                          const ViewShell* pSh,
                           SwFont& rFnt, sal_Bool bVL )
 {
     // initialize default array
     memcpy( pDefaultArray, pPoolItem,
             NUM_DEFAULT_VALUES * sizeof(SfxPoolItem*) );
 
-    pDoc = &rDoc;
-    pShell = pSh;
+    mpIDocumentSettingAccess = &rIDocumentSettingAcces;
+    mpShell = pSh;
 
     // do we have to apply additional paragraph attributes?
     bVertLayout = bVL;
@@ -524,7 +522,7 @@ void SwAttrHandler::PushAndChg( const SwTxtAttr& rAttr, SwFont& rFnt )
                 {
                     // we let pItem change rFnt
                     Color aColor;
-                    if ( lcl_ChgHyperLinkColor( rAttr, *pItem, pShell, &aColor ) )
+                    if ( lcl_ChgHyperLinkColor( rAttr, *pItem, mpShell, &aColor ) )
                     {
                         SvxColorItem aItemNext( aColor );
                         FontChg( aItemNext, rFnt, sal_True );
@@ -567,7 +565,7 @@ sal_Bool SwAttrHandler::Push( const SwTxtAttr& rAttr, const SfxPoolItem& rItem, 
     const SwTxtAttr* pTopAttr = aAttrStack[ nStack ].Top();
     if ( !pTopAttr || rAttr.IsPriorityAttr() ||
             ( !pTopAttr->IsPriorityAttr() &&
-              !lcl_ChgHyperLinkColor( *pTopAttr, rItem, pShell, 0 ) ) )
+              !lcl_ChgHyperLinkColor( *pTopAttr, rItem, mpShell, 0 ) ) )
     {
         aAttrStack[ nStack ].Push( rAttr );
         return sal_True;
@@ -669,7 +667,7 @@ void SwAttrHandler::ActivateTop( SwFont& rFnt, const USHORT nAttr )
             pFmtNext->GetItemState( nAttr, TRUE, &pItemNext );
 
             Color aColor;
-            if ( lcl_ChgHyperLinkColor( *pTopAt, *pItemNext, pShell, &aColor ) )
+            if ( lcl_ChgHyperLinkColor( *pTopAt, *pItemNext, mpShell, &aColor ) )
             {
                 SvxColorItem aItemNext( aColor );
                 FontChg( aItemNext, rFnt, sal_False );
@@ -798,8 +796,12 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, sal_Bool bPu
             break;
         case RES_CHRATR_AUTOKERN :
             if( ((SvxAutoKernItem&)rItem).GetValue() )
-                rFnt.SetAutoKern( ( !pDoc || !pDoc->IsKernAsianPunctuation() ) ?
-                         KERNING_FONTSPECIFIC : KERNING_ASIAN );
+            {
+                rFnt.SetAutoKern( ( !mpIDocumentSettingAccess ||
+                                    !mpIDocumentSettingAccess->get(IDocumentSettingAccess::KERN_ASIAN_PUNCTUATION) ) ?
+                                     KERNING_FONTSPECIFIC :
+                                     KERNING_ASIAN );
+            }
             else
                 rFnt.SetAutoKern( 0 );
             break;
