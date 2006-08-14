@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swmodule.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-27 09:44:45 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:33:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _SWMODULE_HXX
 #define _SWMODULE_HXX
-
 #ifndef _LINK_HXX //autogen
 #include <tools/link.hxx>
 #endif
@@ -72,7 +71,6 @@
 
 class SvStringsDtor;
 class Color;
-class AuthorCharAttr;
 class SfxItemSet;
 class SfxRequest;
 class SfxErrorHandler;
@@ -83,7 +81,6 @@ class SwViewOption;
 class SwView;
 class SwWrtShell;
 class SwPrintOptions;
-class SwAutoFmtOpt;
 class SwChapterNumRules;
 class SwStdFontConfig;
 class SwNavigationConfig;
@@ -283,7 +280,7 @@ inline ::com::sun::star::uno::Reference<
 
 inline void SwModule::SetLngSvcEvtListener(
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XLinguServiceEventListener > & xLstnr)
+       ::com::sun::star::linguistic2::XLinguServiceEventListener > & xLstnr)
 {
     xLngSvcEvtListener = xLstnr;
 }
