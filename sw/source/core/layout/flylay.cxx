@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flylay.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:29:47 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:26:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 #pragma hdrstop
-
 #include "doc.hxx"
 #include "pagefrm.hxx"
 #include "rootfrm.hxx"
@@ -1052,7 +1051,7 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
         const bool bFollowTextFlow = pFly->GetFmt()->GetFollowTextFlow().GetValue();
         // --> OD 2004-07-06 #i28701#
         const bool bConsiderWrapOnObjPos =
-                                pFly->GetFmt()->GetDoc()->ConsiderWrapOnObjPos();
+                                pFly->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION);
         // <--
         const SwFmtVertOrient &rV = pFly->GetFmt()->GetVertOrient();
         if( pFly->IsFlyLayFrm() )
