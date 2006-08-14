@@ -4,9 +4,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 14:21:38 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:51:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,6 @@
 #ifndef _COM_SUN_STAR_UTIL_SEARCHOPTIONS_HPP_
 #include <com/sun/star/util/SearchOptions.hpp>
 #endif
-
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
@@ -44,10 +43,8 @@
 #include <svx/svdmodel.hxx>
 #endif
 
-#ifdef BIDI
 #ifndef _SVX_FRMDIRITEM_HXX
 #include <svx/frmdiritem.hxx>
-#endif
 #endif
 
 #ifndef _DOC_HXX
@@ -64,9 +61,6 @@
 #endif
 #ifndef _VIEWIMP_HXX
 #include <viewimp.hxx>
-#endif
-#ifndef _ERRHDL_HXX
-#include <errhdl.hxx>           // fuer ASSERT
 #endif
 #ifndef _PAM_HXX
 #include <pam.hxx>
@@ -708,8 +702,8 @@ int SwCrsrShell::SetCrsr( const Point &rLPt, BOOL bOnlyText )
         eMvState = MV_RIGHTMARGIN;
     // steht neu Pos im Header/Footer ?
     SwFrm* pFrm = lcl_IsInHeaderFooter( aPos.nNode, aPt );
-    if( IsTableMode() && !pFrm && aPos.nNode.GetNode().FindStartNode() ==
-        pCrsr->GetPoint()->nNode.GetNode().FindStartNode() )
+    if( IsTableMode() && !pFrm && aPos.nNode.GetNode().StartOfSectionNode() ==
+        pCrsr->GetPoint()->nNode.GetNode().StartOfSectionNode() )
         // gleiche Tabellenzelle und nicht im Header/Footer
         // -> zurueck
         return bRet;
@@ -1307,8 +1301,8 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
     if( ( pTstCrsr->HasMark() &&
           pDoc->IsIdxInTbl( pTstCrsr->GetPoint()->nNode ) &&
           ( pTblCrsr ||
-            pTstCrsr->GetNode( TRUE )->FindStartNode() !=
-            pTstCrsr->GetNode( FALSE )->FindStartNode() ))
+            pTstCrsr->GetNode( TRUE )->StartOfSectionNode() !=
+            pTstCrsr->GetNode( FALSE )->StartOfSectionNode() ))
         )
     {
         SwShellCrsr* pITmpCrsr = pTblCrsr ? pTblCrsr : pCurCrsr;
@@ -1636,10 +1630,6 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
                 Point& rPt = pCurCrsr->GetPtPos();
                 rPt = aCharRect.Center();
                 pFrm->GetCrsrOfst( pCurCrsr->GetPoint(), rPt, &aTmpState );
-#ifndef VERTICAL_LAYOUT
-                if ( !pFrm->GetCharRect(aCharRect, *pCurCrsr->GetPoint(), &aTmpState) )
-                    ASSERT( !this, "GetCharRect failed." );
-#endif
             }
 //          ALIGNRECT( aCharRect );
 
@@ -1679,13 +1669,9 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
         if( !(eFlags & SwCrsrShell::UPDOWN ))   // alte Pos. von Up/Down loeschen
         {
             pFrm->Calc();
-#ifdef VERTICAL_LAYOUT
             nUpDownX = pFrm->IsVertical() ?
                        aCharRect.Top() - pFrm->Frm().Top() :
                        aCharRect.Left() - pFrm->Frm().Left();
-#else
-            nUpDownX = aCharRect.Left() - pFrm->Frm().Left();
-#endif
         }
 
         // Curosr in den sichtbaren Bereich scrollen
@@ -1931,36 +1917,6 @@ void SwCrsrShell::ShGetFcs( BOOL bUpdate )
 }
 
 // gebe den aktuellen Frame, in dem der Cursor steht, zurueck
-
-#if 0
-
-//MA 03. Nov. 95: Die letzten Anwender habe ich gerade aus wrtsh1.cxx entfernt.
-//                Weil's so kunstvoll aussieht lass ich die Funktion vorlauefig
-//                hier.
-
-
-Rectangle SwCrsrShell::GetCurrFrmArea() const
-{
-    //Sitzt der Crsr ueberhaupt auf einem CntntNode?
-    SET_CURR_SHELL( (ViewShell*)this );
-    Rectangle aRet;
-    SwCntntNode *pNd = GetNode().GetCntntNode();
-    if ( pNd )
-    {
-        const USHORT* pST = &nStartAction;
-        ++(*((USHORT*)pST));
-        const Size aOldSz( GetLayout()->Frm().SSize() );
-        SwCntntFrm *pFrm = pNd->GetFrm(
-                            &pCurCrsr->GetPtPos(), pCurCrsr->GetPoint() );
-        aRet = pFrm->Frm().SVRect();
-        --(*((USHORT*)pST));
-        if( aOldSz != GetLayout()->Frm().SSize() )
-            ((SwCrsrShell*)this)->SizeChgNotify( GetLayout()->Frm().SSize() );
-    }
-    return aRet;
-}
-#endif
-
 
 SwCntntFrm *SwCrsrShell::GetCurrFrm( const BOOL bCalcFrm ) const
 {
@@ -3032,87 +2988,6 @@ void SwCrsrShell::SetSelection( const SwPaM& rCrsr )
     }
     EndAction();
 }
-
-/*  */
-
-#if !defined(PRODUCT) || defined(WIN)
-
-void SwCrsrShell::SetMark()
-{
-    pCurCrsr->SetMark();
-}
-
-FASTBOOL SwCrsrShell::HasMark()
-{
-    return pCurCrsr->HasMark();
-}
-
-SwCursor* SwCrsrShell::GetSwCrsr( FASTBOOL bMakeTblCrsr ) const
-{
-    return (SwCursor*)GetCrsr( bMakeTblCrsr );
-}
-
-// gebe den Stack Cursor zurueck
-SwPaM * SwCrsrShell::GetStkCrsr() const         { return pCrsrStk; }
-
-// gebe den TabellenCrsr zurueck
-const   SwPaM* SwCrsrShell::GetTblCrs() const   { return pTblCrsr; }
-        SwPaM* SwCrsrShell::GetTblCrs()         { return pTblCrsr; }
-
-// Abfrage, ob ueberhaupt eine Selektion existiert, sprich der akt. Cursor
-// aufgespannt oder nicht der einzigste ist.
-
-FASTBOOL SwCrsrShell::IsSelection() const
-{
-    return IsTableMode() || pCurCrsr->HasMark() ||
-            pCurCrsr->GetNext() != pCurCrsr;
-}
-// returns if multiple cursors are available
-FASTBOOL SwCrsrShell::IsMultiSelection() const
-{
-    return pCurCrsr->GetNext() != pCurCrsr;
-}
-
-// pruefe ob vom aktuellen Crsr der SPoint/Mark in einer Tabelle stehen
-const SwTableNode* SwCrsrShell::IsCrsrInTbl( BOOL bIsPtInTbl ) const
-{
-    return pCurCrsr->GetNode( bIsPtInTbl )->FindTableNode();
-}
-
-
-FASTBOOL SwCrsrShell::IsCrsrPtAtEnd() const
-{
-    return pCurCrsr->End() == pCurCrsr->GetPoint();
-}
-
-
-Point& SwCrsrShell::GetCrsrDocPos( BOOL bPoint ) const
-{
-    return bPoint ? pCurCrsr->GetPtPos() : pCurCrsr->GetMkPos();
-}
-
-
-void SwCrsrShell::UnSetVisCrsr()
-{
-    pVisCrsr->Hide();
-    pVisCrsr->SetDragCrsr( FALSE );
-}
-
-
-FASTBOOL SwCrsrShell::IsSelOnePara() const
-{
-    return pCurCrsr == pCurCrsr->GetNext() &&
-           pCurCrsr->GetPoint()->nNode ==
-           pCurCrsr->GetMark()->nNode;
-}
-
-SwMoveFnCollection* SwCrsrShell::MakeFindRange(
-                            USHORT nStt, USHORT nEnd, SwPaM* pPam ) const
-{
-    return pCurCrsr->MakeFindRange( (SwDocPositions)nStt,
-                                    (SwDocPositions)nEnd, pPam );
-}
-#endif
 
 /**
    Checks if a position is valid. To be valid the position's node must
