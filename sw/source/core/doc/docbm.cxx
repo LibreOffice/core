@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docbm.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 14:16:33 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:55:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -143,15 +142,21 @@ void lcl_FixPosition( SwPosition& rPos )
     }
 }
 
+/** IDocumentBookmarkAccess ssc
+*/
+const SwBookmarks& SwDoc::getBookmarks() const
+{
+    return *pBookmarkTbl;
+}
 
-SwBookmark* SwDoc::MakeBookmark( const SwPaM& rPaM, const KeyCode& rCode,
-                                const String& rName, const String& rShortName,
-                                BOOKMARK_TYPE eMark )
+SwBookmark* SwDoc::makeBookmark( /*[in]*/const SwPaM& rPaM, /*[in]*/const KeyCode& rCode,
+                                 /*[in]*/ const String& rName, /*[in]*/const String& rShortName,
+                                 /*[in]*/IDocumentBookmarkAccess::BookmarkType eMark )
 {
     SwBookmark *pBM;
     if( MARK == eMark )
         pBM = new SwMark( *rPaM.GetPoint(), rCode, rName, rShortName );
-    else if( BOOKMARK == eMark || BOOKMARK_HIDDEN == eMark)
+    else if( BOOKMARK == eMark || HIDDEN_BOOKMARK == eMark)
     {
         pBM = new SwBookmark(*rPaM.GetPoint(), rCode, rName, rShortName);
         if( rPaM.HasMark() )
@@ -181,7 +186,7 @@ SwBookmark* SwDoc::MakeBookmark( const SwPaM& rPaM, const KeyCode& rCode,
         switch( eMark )
         {
             case UNO_BOOKMARK:
-            case BOOKMARK_HIDDEN:
+            case HIDDEN_BOOKMARK:
             break;
             default:
                 SetModified();
@@ -190,7 +195,7 @@ SwBookmark* SwDoc::MakeBookmark( const SwPaM& rPaM, const KeyCode& rCode,
     return pBM;
 }
 
-void SwDoc::DelBookmark(USHORT nPos)
+void SwDoc::deleteBookmark( /*[in]*/sal_uInt16 nPos )
 {
     SwBookmark *pBM = (*pBookmarkTbl)[nPos];
     if( DoesUndo() && !pBM->IsUNOMark())
@@ -213,14 +218,14 @@ void SwDoc::DelBookmark(USHORT nPos)
     delete pBM;
 }
 
-void SwDoc::DelBookmark( const String& rName )
+void SwDoc::deleteBookmark( /*[in]*/const String& rName )
 {
-    USHORT nFnd = FindBookmark( rName );
+    USHORT nFnd = findBookmark( rName );
     if( USHRT_MAX != nFnd )
-        DelBookmark( nFnd );
+        deleteBookmark( nFnd );
 }
 
-USHORT SwDoc::FindBookmark( const String& rName )
+sal_uInt16 SwDoc::findBookmark( /*[in]*/const String& rName )
 {
     ASSERT( rName.Len(), "wo ist der Name?" );
     for( USHORT n = pBookmarkTbl->Count(); n ; )
@@ -232,7 +237,7 @@ USHORT SwDoc::FindBookmark( const String& rName )
 // Zur Vereinfachung gibt es auch den direkten Zugriff
 // auf die "echten" Bookmarks
 
-USHORT SwDoc::GetBookmarkCnt(BOOL bBkmrk) const
+sal_uInt16 SwDoc::getBookmarkCount( /*[in]*/bool bBkmrk) const
 {
     USHORT nRet = pBookmarkTbl->Count();
     if(bBkmrk)
@@ -247,7 +252,7 @@ USHORT SwDoc::GetBookmarkCnt(BOOL bBkmrk) const
 }
 
 
-SwBookmark& SwDoc::GetBookmark(USHORT nPos, BOOL bBkmrk)
+SwBookmark& SwDoc::getBookmark( /*[in]*/sal_uInt16 nPos,  /*[in]*/bool bBkmrk)
 {
     if( bBkmrk )
     {
@@ -263,10 +268,7 @@ SwBookmark& SwDoc::GetBookmark(USHORT nPos, BOOL bBkmrk)
     return *(*pBookmarkTbl)[nPos];
 }
 
-
-    // erzeugt einen eindeutigen Namen. Der Name selbst muss vorgegeben
-    // werden, es wird dann bei gleichen Namen nur durchnumeriert.
-void SwDoc::MakeUniqueBookmarkName( String& rNm )
+void SwDoc::makeUniqueBookmarkName( String& rNm )
 {
     ASSERT( rNm.Len(), "es sollte ein Name vorgegeben werden!" );
 
@@ -367,7 +369,7 @@ void SaveBookmark::SetInDoc( SwDoc* pDoc, const SwNodeIndex& rNewPos,
 
     if( !aPam.HasMark() ||
         CheckNodesRange( aPam.GetPoint()->nNode, aPam.GetMark()->nNode, TRUE ))
-        pDoc->MakeBookmark( aPam, aCode, aName, aShortName, eOrigBkmType );
+        pDoc->makeBookmark( aPam, aCode, aName, aShortName, eOrigBkmType );
 }
 
 
@@ -404,7 +406,7 @@ void _DelBookmarks( const SwNodeIndex& rStt, const SwNodeIndex& rEnd,
     // Array, das alle Angaben auf die Position als Offset speichert.
     // Die neue Zuordung erfolgt nach dem Moven.
     SwDoc* pDoc = rStt.GetNode().GetDoc();
-    const SwBookmarks& rBkmks = pDoc->GetBookmarks();
+    const SwBookmarks& rBkmks = pDoc->getBookmarks();
     USHORT nCnt;
 
     for( nCnt = 0; nCnt < rBkmks.Count(); ++nCnt )
@@ -440,11 +442,11 @@ void _DelBookmarks( const SwNodeIndex& rStt, const SwNodeIndex& rEnd,
 
             SaveBookmark * pSBkmk = new SaveBookmark( eType, *pBkmk, rStt, pSttIdx );
             pSaveBkmk->C40_INSERT( SaveBookmark, pSBkmk, pSaveBkmk->Count() );
-            pDoc->DelBookmark( nCnt-- );
+            pDoc->deleteBookmark( nCnt-- );
         }
         else if( (BKMK_POS_OTHER | BKMK_POS ) == eType ||
                 ( BKMK_POS == eType && !pBkmk->GetOtherPos() ) )
-            pDoc->DelBookmark( nCnt-- );
+            pDoc->deleteBookmark( nCnt-- );
         else
         {
             SwPosition* pPos = (SwPosition*)(BKMK_POS & eType
@@ -483,8 +485,8 @@ void _DelBookmarks( const SwNodeIndex& rStt, const SwNodeIndex& rEnd,
                 String sNm( pBkmk->GetName() ), sShortNm( pBkmk->GetShortName() );
                 KeyCode aKCode( pBkmk->GetKeyCode() );
 
-                pDoc->DelBookmark( nCnt-- );
-                pDoc->MakeBookmark( aPam, aKCode, sNm, sShortNm, BOOKMARK );
+                pDoc->deleteBookmark( nCnt-- );
+                pDoc->makeBookmark( aPam, aKCode, sNm, sShortNm, IDocumentBookmarkAccess::BOOKMARK );
             }
         }
     }
@@ -685,7 +687,7 @@ void _SaveCntntIdx( SwDoc* pDoc, ULONG nNode, xub_StrLen nCntnt,
     _SwSaveTypeCountContent aSave;
     aSave.SetTypeAndCount( 0x8000, 0 );
 
-    const SwBookmarks& rBkmks = pDoc->GetBookmarks();
+    const SwBookmarks& rBkmks = pDoc->getBookmarks();
     for( ; aSave.GetCount() < rBkmks.Count(); aSave.IncCount() )
     {
         const SwBookmark* pBkmk = rBkmks[ aSave.GetCount() ];
@@ -878,7 +880,7 @@ void _RestoreCntntIdx( SwDoc* pDoc, SvULongs& rSaveArr,
                         ULONG nNode, xub_StrLen nOffset, BOOL bAuto )
 {
     SwCntntNode* pCNd = pDoc->GetNodes()[ nNode ]->GetCntntNode();
-    const SwBookmarks& rBkmks = pDoc->GetBookmarks();
+    const SwBookmarks& rBkmks = pDoc->getBookmarks();
     const SwRedlineTbl& rRedlTbl = pDoc->GetRedlineTbl();
     SwSpzFrmFmts* pSpz = pDoc->GetSpzFrmFmts();
     USHORT n = 0;
@@ -1020,7 +1022,7 @@ void _RestoreCntntIdx( SvULongs& rSaveArr, const SwNode& rNd,
                         xub_StrLen nLen, xub_StrLen nChkLen )
 {
     const SwDoc* pDoc = rNd.GetDoc();
-    const SwBookmarks& rBkmks = pDoc->GetBookmarks();
+    const SwBookmarks& rBkmks = pDoc->getBookmarks();
     const SwRedlineTbl& rRedlTbl = pDoc->GetRedlineTbl();
     const SwSpzFrmFmts* pSpz = pDoc->GetSpzFrmFmts();
     SwCntntNode* pCNd = (SwCntntNode*)rNd.GetCntntNode();
