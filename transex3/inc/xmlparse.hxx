@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlparse.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 17:20:18 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:08:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,6 @@
 #define BOOTSTRP_XMLPARSE_HXX
 
 #include <signal.h>
-//#include "osl/signal.h"
 #ifdef SYSTEM_EXPAT
 #include <expat.h>
 #else
@@ -59,12 +58,6 @@
 class XMLParentNode;
 class XMLElement;
 
-/*
-typedef void (*Sigfunc)(int);
-Sigfunc signal(int, Sigfunc*);
-*/
-//typedef void Sigfunc(int);
-//Sigfunc* signal(int, Sigfunc*);
 
 using namespace ::rtl;
 using namespace std;
@@ -124,8 +117,6 @@ class XMLNode
 {
 protected:
     XMLNode() {}
-    //XMLNode( const XMLNode& obj);
-    //XMLNode& operator=(const XMLNode& obj);
 
 public:
     virtual USHORT GetNodeType() = 0;
@@ -146,7 +137,6 @@ protected:
     XMLChildNode():pParent( NULL ){};
     XMLChildNode( const XMLChildNode& obj);
     XMLChildNode& operator=(const XMLChildNode& obj);
-    //XMLChildNode( const XMLChildNode& );
 public:
     virtual USHORT GetNodeType() = 0;
 
@@ -172,12 +162,9 @@ private:
 protected:
     XMLParentNode( XMLParentNode *pPar )
                 : XMLChildNode( pPar ), pChildList( NULL )
-                //, nParentPos( 0 )
               {
-              //printf("Created ParentNode #%d XMLParentNode( XMLParentNode *pPar )\n",++dbgcnt);
               }
     XMLParentNode(): pChildList(NULL){
-        //printf("Created ParentNode #%d XMLParentNode()\n",++dbgcnt);
     }
     /// Copyconstructor
     XMLParentNode( const XMLParentNode& );
@@ -248,7 +235,7 @@ public:
     void        SearchL10NElements( XMLParentNode *pCur  , int pos = 0);
     void        Extract( XMLFile *pCur = NULL );
     void        View();
-    void static Signal_handler(int signo);//void*,oslSignalInfo * pInfo);
+//  void static Signal_handler(int signo);//void*,oslSignalInfo * pInfo);
     void        showType(XMLParentNode* node);
 
     XMLHashMap* GetStrings(){return XMLStrings;}
@@ -279,7 +266,6 @@ private:
 
     const ByteString ID,OLDREF,XML_LANG;
 
-    //HashMap nodes_include,nodes_localize,nodes_print;
     TagMap      nodes_localize;
     XMLHashMap* XMLStrings;
 
@@ -315,12 +301,11 @@ private:
     /// Mapping iso numeric code      <-> iso alpha string code
     ByteString   isoArray[MAX_LANGUAGES];
 
-    //static bool inline XMLUtil::hasPrefix( String& rString , int pos);
     static void UnQuotData( String &rString );
     static void UnQuotTags( String &rString );
 
-    XMLUtil();                  // private Constructor
-    XMLUtil(const XMLUtil&);    // private Copyconstructor
+    XMLUtil();
+    XMLUtil(const XMLUtil&);
 
 };
 
@@ -364,7 +349,6 @@ public:
                    {
                 }
     ~XMLElement();
-    /// Copyconstructor
     XMLElement(const XMLElement&);
 
     XMLElement& operator=(const XMLElement& obj);
@@ -423,7 +407,7 @@ private:
     bool   isNewCreated;
 
 public:
-    /// craete a data node
+    /// create a data node
     XMLData(
         const String &rData,    // the initial data
         XMLParentNode *Parent   // the parent node of this data, typically a element node
@@ -439,7 +423,6 @@ public:
     XMLData(const XMLData& obj);
 
     XMLData& operator=(const XMLData& obj);
-    /// returns node type XML_NODE_TYPE_DATA
     virtual USHORT GetNodeType();
 
     /// returns the data
@@ -472,7 +455,6 @@ public:
     )
                 : XMLChildNode( Parent ), sComment( rComment ) {}
 
-    /// returns node type XML_NODE_TYPE_COMMENT
     virtual USHORT GetNodeType();
 
     XMLComment( const XMLComment& obj );
