@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sectfrm.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:56:02 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:22:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _SECTFRM_HXX
 #define _SECTFRM_HXX
-
 #ifndef _SVMEMPOOL_HXX //autogen
 #include <tools/mempool.hxx>
 #endif
@@ -46,7 +45,6 @@ class SwSection;
 class SwSectionFmt;
 class SwAttrSetChg;
 class SwFtnContFrm;
-class SwFtnFrm;
 class SwLayouter;
 
 #define FINDMODE_ENDNOTE 1
