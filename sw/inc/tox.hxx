@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tox.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:07:46 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:35:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _TOX_HXX
 #define _TOX_HXX
-
 #ifndef INCLUDED_I18NPOOL_LANG_H
 #include <i18npool/lang.h>
 #endif
@@ -169,7 +168,6 @@ public:
     SwTOXType(const SwTOXType& rCopy);
 
     inline  const String&   GetTypeName() const;
-    void                    SetTypeName(const String& rName);
     inline TOXTypes         GetType() const;
 
 private:
@@ -400,9 +398,6 @@ public:
 
     BOOL IsFirstTabPosFlag() const  ;   //{ return bHasFirstTabPos; }
 
-    BOOL IsGenerateTabPos() const       { return bGenerateTabPos; }
-    void SetGenerateTabPos( BOOL b )    { bGenerateTabPos = b; }
-
     BOOL IsRelTabPos() const    {   return bIsRelTabPos; }
     void SetRelTabPos( BOOL b ) {   bIsRelTabPos = b;       }
 
@@ -560,7 +555,6 @@ public:
 
     // user defined index only
     inline void             SetTemplateName(const String& rName); // Absatzlayout beachten
-    inline String           GetTemplateName() const;
 
     const String&           GetStyleNames(USHORT nLevel) const
                                 {
@@ -733,9 +727,6 @@ inline USHORT SwForm::GetFormMax() const
 inline const String& SwTOXType::GetTypeName() const
     {   return aName;   }
 
-inline void SwTOXType::SetTypeName(const String& rName)
-    {   aName = rName;  }
-
 inline TOXTypes SwTOXType::GetType() const
     {   return eType;   }
 
@@ -791,14 +782,6 @@ inline void SwTOXBase::SetTemplateName(const String& rName)
     DBG_WARNING("SwTOXBase::SetTemplateName obsolete")
     aStyleNames[0] = rName;
 
-}
-
-inline String SwTOXBase::GetTemplateName() const
-{
-//  ASSERT(GetTOXType()->GetType() == TOX_USER, "Falscher Feldtyp");
-//  return *aData.pTemplateName;
-    DBG_WARNING("SwTOXBase::GetTemplateName obsolete")
-    return aStyleNames[0].GetToken(0, TOX_STYLE_DELIMITER);
 }
 
 inline USHORT SwTOXBase::GetOptions() const
