@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:30:45 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:44:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
@@ -83,9 +82,6 @@
 #ifndef _PARATR_HXX
 #include <paratr.hxx>
 #endif
-#ifndef _HINTS_HXX
-#include <hints.hxx>        // SwInsChr
-#endif
 #ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>
 #endif
@@ -122,9 +118,6 @@
 #ifndef _TXTFTN_HXX //autogen
 #include <txtftn.hxx>
 #endif
-#ifndef _FRMATR_HXX
-#include <frmatr.hxx>
-#endif
 #ifndef _CHARATR_HXX
 #include <charatr.hxx>
 #endif
@@ -151,9 +144,6 @@
 #endif
 #ifndef _TXTCACHE_HXX
 #include <txtcache.hxx>
-#endif
-#ifndef _SWFONT_HXX
-#include <swfont.hxx>       // GetLineSpace benutzt SwFonts
 #endif
 #ifndef _FNTCACHE_HXX
 #include <fntcache.hxx>     // GetLineSpace benutzt pLastFont
@@ -341,8 +331,6 @@ SwFrmSwapper::~SwFrmSwapper()
         ((SwTxtFrm*)pFrm)->SwapWidthAndHeight();
 }
 
-#ifdef BIDI
-
 void SwTxtFrm::SwitchLTRtoRTL( SwRect& rRect ) const
 {
     SWAP_IF_NOT_SWAPPED( this )
@@ -387,8 +375,6 @@ void SwLayoutModeModifier::SetAuto()
     const ULONG nNewLayoutMode = nOldLayoutMode & ~TEXT_LAYOUT_BIDI_STRONG;
     ((OutputDevice&)rOut).SetLayoutMode( nNewLayoutMode );
 }
-
-#endif
 
 /*************************************************************************
  *                      SwTxtFrm::Init()
@@ -565,11 +551,11 @@ bool lcl_HideObj( const SwTxtFrm& _rFrm,
 
     if ( _eAnchorType == FLY_AUTO_CNTNT )
     {
-        const SwDoc* pDoc( _rFrm.GetTxtNode()->GetDoc() );
-        if ( !pDoc->IsFormerTextWrapping() &&
-             !pDoc->IsFormerLineSpacing() &&
-             !pDoc->IsFormerObjectPositioning() &&
-             pDoc->ConsiderWrapOnObjPos() &&
+        const IDocumentSettingAccess* pIDSA = _rFrm.GetTxtNode()->getIDocumentSettingAccess();
+        if ( !pIDSA->get(IDocumentSettingAccess::USE_FORMER_TEXT_WRAPPING) &&
+             !pIDSA->get(IDocumentSettingAccess::OLD_LINE_SPACING) &&
+             !pIDSA->get(IDocumentSettingAccess::USE_FORMER_OBJECT_POS) &&
+              pIDSA->get(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION) &&
              _rFrm.IsInDocBody() && !_rFrm.FindNextCnt() )
         {
             const xub_Unicode cAnchorChar =
@@ -1391,7 +1377,7 @@ void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
     } // switch
 
     if( bSetFldsDirty )
-        GetNode()->GetDoc()->SetFieldsDirty( sal_True, GetNode(), 1 );
+        GetNode()->getIDocumentFieldsAccess()->SetFieldsDirty( sal_True, GetNode(), 1 );
 
     if ( bRecalcFtnFlag )
         CalcFtnFlag();
@@ -2237,25 +2223,26 @@ SwTwips SwTxtFrm::CalcFitToContent()
 */
 void SwTxtFrm::_CalcHeightOfLastLine( const bool _bUseFont )
 {
+    // determine output device
+    ViewShell* pVsh = (ViewShell*)GetShell();
+    ASSERT( pVsh, "<SwTxtFrm::_GetHeightOfLastLineForPropLineSpacing()> - no ViewShell -> crash" );
+    OutputDevice* pOut = pVsh->GetOut();
+    const IDocumentSettingAccess* pIDSA = GetTxtNode()->getIDocumentSettingAccess();
+    if ( !pIDSA->get(IDocumentSettingAccess::BROWSE_MODE) ||
+          pVsh->GetViewOptions()->IsPrtFormat() )
+    {
+        pOut = GetTxtNode()->getIDocumentDeviceAccess()->getReferenceDevice( true );
+    }
+    ASSERT( pOut, "<SwTxtFrm::_GetHeightOfLastLineForPropLineSpacing()> - no OutputDevice -> crash" );
+
     // determine height of last line
-    if ( _bUseFont ||
-         GetTxtNode()->GetDoc()->IsFormerLineSpacing() )
+
+    if ( _bUseFont || pIDSA->get(IDocumentSettingAccess::OLD_LINE_SPACING ) )
     {
         // former determination of last line height for proprotional line
         // spacing - take height of font set at the paragraph
+        SwFont aFont( GetAttrSet(), pIDSA );
 
-        // determine output device
-        ViewShell* pVsh = (ViewShell*)GetShell();
-        ASSERT( pVsh, "<SwTxtFrm::_GetHeightOfLastLineForPropLineSpacing()> - no ViewShell -> crash" );
-        OutputDevice* pOut = pVsh->GetOut();
-        if ( !pVsh->GetDoc()->IsBrowseMode() ||
-             pVsh->GetViewOptions()->IsPrtFormat() )
-        {
-            pOut = &GetTxtNode()->GetDoc()->GetRefDev();
-        }
-        ASSERT( pOut, "<SwTxtFrm::_GetHeightOfLastLineForPropLineSpacing()> - no OutputDevice -> crash" );
-
-        SwFont aFont( GetAttrSet(), GetTxtNode()->GetDoc() );
         // Wir muessen dafuer sorgen, dass am OutputDevice der Font
         // korrekt restauriert wird, sonst droht ein Last!=Owner.
         if ( pLastFont )
@@ -2428,7 +2415,7 @@ void SwTxtFrm::ChgThisLines()
     //not necassary to format here (GerFormatted etc.), because we have to come from there!
 
     ULONG nNew = 0;
-    const SwLineNumberInfo &rInf = GetNode()->GetDoc()->GetLineNumberInfo();
+    const SwLineNumberInfo &rInf = GetNode()->getIDocumentLineNumberAccess()->GetLineNumberInfo();
     if ( GetTxt().Len() && HasPara() )
     {
         SwTxtSizeInfo aInf( this );
@@ -2500,7 +2487,7 @@ void SwTxtFrm::RecalcAllLines()
             nNewNum = rLineNum.GetStartValue() - 1;
         //If it is a follow or not has not be considered if it is a restart at each page; the
         //restart should also take affekt at follows.
-        else if ( pAttrSet->GetDoc()->GetLineNumberInfo().IsRestartEachPage() &&
+        else if ( GetTxtNode()->getIDocumentLineNumberAccess()->GetLineNumberInfo().IsRestartEachPage() &&
                   FindPageFrm()->FindFirstBodyCntnt() == this )
         {
             nNewNum = 0;
@@ -2634,8 +2621,7 @@ void SwTxtFrm::CalcBaseOfstForFly()
             "SwTxtFrm::CalcBasePosForFly with swapped frame!" )
 
     const SwNode* pNode = GetTxtNode();
-    const SwDoc* pDoc = pNode->GetDoc();
-    if ( !pDoc->IsAddFlyOffsets() )
+    if ( !pNode->getIDocumentSettingAccess()->get(IDocumentSettingAccess::ADD_FLY_OFFSETS) )
         return;
 
     SWRECTFN( this )
