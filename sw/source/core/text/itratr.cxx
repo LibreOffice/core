@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itratr.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:53:58 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:38:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -111,14 +110,8 @@
 #ifndef _PAM_HXX
 #include <pam.hxx>         // SwPosition        (lcl_MinMaxNode)
 #endif
-#ifndef _TXATBASE_HXX
-#include <txatbase.hxx>
-#endif
 #ifndef _ITRATR_HXX
 #include <itratr.hxx>
-#endif
-#ifndef _SWFONT_HXX
-#include <swfont.hxx>
 #endif
 #ifndef _HTMLTBL_HXX
 #include <htmltbl.hxx>
@@ -517,8 +510,10 @@ sal_Bool SwTxtNode::IsSymbol( const xub_StrLen nBegin ) const
     SwScriptInfo aScriptInfo;
     SwAttrIter aIter( *(SwTxtNode*)this, aScriptInfo );
     aIter.Seek( nBegin );
-    return aIter.GetFnt()->IsSymbol( GetDoc()->GetRootFrm() ?
-                GetDoc()->GetRootFrm()->GetCurrShell() : 0 );
+    const SwRootFrm* pTmpRootFrm = getIDocumentLayoutAccess()->GetRootFrm();
+    return aIter.GetFnt()->IsSymbol( pTmpRootFrm ?
+                                     pTmpRootFrm->GetCurrShell() :
+                                     0 );
 }
 
 class SwMinMaxNodeArgs
@@ -564,15 +559,14 @@ sal_Bool lcl_MinMaxNode( const SwFrmFmtPtr& rpNd, void* pArgs )
         if( RES_DRAWFRMFMT != nWhich )
         {
             // Enthaelt der Rahmen zu Beginn oder am Ende eine Tabelle?
-            SwDoc *pDoc = ((SwFrmFmt*)rpNd)->GetDoc();
-
+            const SwNodes& rNodes = static_cast<SwFrmFmt*>(rpNd)->GetDoc()->GetNodes();
             const SwFmtCntnt& rFlyCntnt = ((SwFrmFmt*)rpNd)->GetCntnt();
             ULONG nStt = rFlyCntnt.GetCntntIdx()->GetIndex();
-            SwTableNode* pTblNd = pDoc->GetNodes()[nStt+1]->GetTableNode();
+            SwTableNode* pTblNd = rNodes[nStt+1]->GetTableNode();
             if( !pTblNd )
             {
-                SwNode *pNd = pDoc->GetNodes()[nStt];
-                pNd = pDoc->GetNodes()[pNd->EndOfSectionIndex()-1];
+                SwNode *pNd = rNodes[nStt];
+                pNd = rNodes[pNd->EndOfSectionIndex()-1];
                 if( pNd->IsEndNode() )
                     pTblNd = pNd->StartOfSectionNode()->GetTableNode();
             }
@@ -680,8 +674,6 @@ void SwTxtNode::GetMinMaxSize( ULONG nIndex, ULONG& rMin, ULONG &rMax,
     GetDoc()->GetEditShell( &pSh );
     if( !pOut )
     {
-//      ViewShell* pSh;
-//      GetDoc()->GetEditShell( &pSh );
         if( pSh )
             pOut = pSh->GetWin();
         if( !pOut )
@@ -786,10 +778,10 @@ void SwTxtNode::GetMinMaxSize( ULONG nIndex, ULONG& rMin, ULONG &rMax,
             case CHAR_HARDHYPHEN:
             {
                 XubString sTmp( cChar );
-                SwDrawTextInfo aDrawInf(
-                        GetDoc()->GetRootFrm() ?
-                        GetDoc()->GetRootFrm()->GetCurrShell() : 0,
-                        *pOut, 0, sTmp, 0, 1, 0, sal_False );
+                const SwRootFrm* pTmpRootFrm = getIDocumentLayoutAccess()->GetRootFrm();
+                SwDrawTextInfo aDrawInf( pTmpRootFrm ?
+                                         pTmpRootFrm->GetCurrShell() :
+                                         0, *pOut, 0, sTmp, 0, 1, 0, sal_False );
                 nAktWidth = aIter.GetFnt()->_GetTxtSize( aDrawInf ).Width();
                 aArg.nWordWidth += nAktWidth;
                 aArg.nRowWidth += nAktWidth;
@@ -923,10 +915,10 @@ USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
     else
     {
         //Zugriff ueber StarONE, es muss keine Shell existieren oder aktiv sein.
-        if ( GetDoc()->IsBrowseMode() ) //?!?!?!?
+        if ( getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
             pOut = GetpApp()->GetDefaultDevice();
         else
-            pOut = &GetDoc()->GetRefDev();
+            pOut = getIDocumentDeviceAccess()->getReferenceDevice( true );
     }
 
     ASSERT( pOut, "GetScalingOfSelectedText without outdev" )
