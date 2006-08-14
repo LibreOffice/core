@@ -4,9 +4,9 @@
  *
  *  $RCSfile: index.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 13:47:58 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:25:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,10 +161,8 @@ public:
     // kann ueber das SwIndexReg typsicher gecastet werden.
     TYPEINFO();
 
-    void SetDefMiddle( const SwIndex* pIdx ) { pMiddle = pIdx; }
     void MoveTo( SwIndexReg& rArr );
 };
-
 
 #ifdef PRODUCT
 
@@ -231,8 +229,6 @@ inline SwIndex& SwIndex::operator=( xub_StrLen nWert )
     return *this;
 }
 
-// PRODUCT
-#endif
-
+#endif // PRODUCT
 
 #endif
