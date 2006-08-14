@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwSpellDialogChildWindow.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 12:39:02 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:32:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifndef SW_SPELL_DIALOG_CHILD_WINDOW_HXX
 #include <SwSpellDialogChildWindow.hxx>
 #endif
@@ -816,14 +815,14 @@ bool SwSpellDialogChildWindow::FindNextDrawTextError_Impl(SwWrtShell& rSh)
                     SdrOutliner aTmpOutliner(pDoc->GetDrawModel()->
                                              GetDrawOutliner().GetEmptyItemSet().GetPool(),
                                                 OUTLINERMODE_TEXTOBJECT );
-                    aTmpOutliner.SetRefDevice( pDoc->GetPrt() );
+                    aTmpOutliner.SetRefDevice( pDoc->getPrinter( false ) );
                     MapMode aMapMode (MAP_TWIP);
                     aTmpOutliner.SetRefMapMode(aMapMode);
                     aTmpOutliner.SetPaperSize( pTextObj->GetLogicRect().GetSize() );
                     aTmpOutliner.SetSpeller( xSpell );
 
                     OutlinerView* pOutlView = new OutlinerView( &aTmpOutliner, &(rView.GetEditWin()) );
-                    pOutlView->GetOutliner()->SetRefDevice(rSh.GetPrt());
+                    pOutlView->GetOutliner()->SetRefDevice( rSh.getIDocumentDeviceAccess()->getPrinter( false ) );
                     aTmpOutliner.InsertView( pOutlView );
                     Point aPt;
                     Size aSize(1,1);
