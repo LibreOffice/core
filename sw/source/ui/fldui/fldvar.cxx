@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldvar.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:36:25 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:37:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifdef SW_DLLIMPLEMENTATION
 #undef SW_DLLIMPLEMENTATION
 #endif
@@ -53,9 +52,6 @@
 #endif
 #ifndef _DOCUFLD_HXX
 #include <docufld.hxx>
-#endif
-#ifndef _FLDBAS_HXX
-#include <fldbas.hxx>
 #endif
 #ifndef _EXPFLD_HXX
 #include <expfld.hxx>
