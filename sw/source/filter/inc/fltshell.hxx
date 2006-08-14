@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fltshell.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:15:10 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:08:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,13 +34,11 @@
  ************************************************************************/
 #ifndef _FLTSHELL_HXX
 #define _FLTSHELL_HXX
-
 #include <deque>
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
-
 #ifndef _KEYCOD_HXX //autogen
 #include <vcl/keycod.hxx>
 #endif
@@ -50,40 +48,23 @@
 #ifndef _SVX_BRKITEM_HXX //autogen
 #include <svx/brkitem.hxx>
 #endif
-
-
-#ifndef _FMTCOL_HXX
-#include <fmtcol.hxx>
-#endif
-#ifndef _DOC_HXX
-#include <doc.hxx>
-#endif
-#ifndef _PAM_HXX
-#include <pam.hxx>
-#endif
 #ifndef _POOLFMT_HXX
 #include <poolfmt.hxx>
 #endif
 #ifndef _FMTORNT_HXX //autogen
 #include <fmtornt.hxx>
 #endif
-#ifndef _FRMATR_HXX
-#include <frmatr.hxx>
-#endif
+#include <ndindex.hxx>
+#include <IDocumentRedlineAccess.hxx>
 
-class SwFlyFrmFmt;
 class SwTOXBase;
-class SwNumRule;
 class SwFltShell;
-class SwFmtFld;
 class SwField;
+class SwFieldType;
 class Graphic;
-class SwTableLines;
-class SwTableBoxes;
 class SwTableBox;
-class SwTableLine;
-class DateTime;
-
+class SwDoc;
+class SwPaM;
 
 inline void SwFltClearFlag(ULONG& rFieldFlags, int no)
     { rFieldFlags &= ~(1L << no); }
@@ -189,15 +170,15 @@ class SwFltRedline : public SfxPoolItem
 public:
     DateTime        aStamp;
     DateTime        aStampPrev;
-    SwRedlineType   eType;
-    SwRedlineType   eTypePrev;
+    IDocumentRedlineAccess::RedlineType_t   eType;
+    IDocumentRedlineAccess::RedlineType_t   eTypePrev;
     USHORT          nAutorNo;
     USHORT          nAutorNoPrev;
 
-    SwFltRedline(SwRedlineType   eType_,
+    SwFltRedline(IDocumentRedlineAccess::RedlineType_t   eType_,
                  USHORT          nAutorNo_,
                  const DateTime& rStamp_,
-                 SwRedlineType   eTypePrev_    = REDLINE_INSERT,
+                 IDocumentRedlineAccess::RedlineType_t   eTypePrev_    = IDocumentRedlineAccess::REDLINE_INSERT,
                  USHORT          nAutorNoPrev_ = USHRT_MAX,
                  const DateTime* pStampPrev_   = 0)
         : SfxPoolItem(RES_FLTR_REDLINE), aStamp(rStamp_), eType(eType_),
@@ -502,11 +483,8 @@ public:
     SwPageDesc& GetPageDesc()       { return *pCurrentPageDesc; }
     void NextTab()                  { (*this) << BYTE(0x09); }
     void NextLine()                 { (*this) << BYTE(0x0a); }
-    void NextParagraph()    {   GetDoc().AppendTxtNode(*pPaM->GetPoint()); }
-    void NextPage()         { NextParagraph();
-                                  GetDoc().Insert(*pPaM,
-                                    SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE));
-                            }
+    void NextParagraph();
+    void NextPage();
     void NextSection()      { pCurrentPageDesc = MakePageDesc(); }
 
     SwFltShell& AddGraphic( const String& rPicName );
@@ -620,15 +598,12 @@ public:
         { return aStack.IsFlagSet(no); }
     void ConvertUStr( String& rInOut );
     String QuoteStr( const String& rIn );
-// folgende status kann die shell verwalten:
-    const SfxPoolItem& GetNodeOrStyAttr(USHORT nWhich)
-        { return pOut->GetNodeOrStyAttr( nWhich ); }
-    const SfxPoolItem& GetAttr(USHORT nWhich)
-        { return pOut->GetAttr( nWhich ); }
-    const SfxPoolItem& GetFlyFrmAttr(USHORT nWhich)
-        { return pOut->GetFlyFrmAttr( nWhich ); }
-    SwFieldType *GetSysFldType(USHORT eWhich)
-        { return GetDoc().GetSysFldType(eWhich); }
+
+    // folgende status kann die shell verwalten:
+    const SfxPoolItem& GetNodeOrStyAttr(USHORT nWhich);
+    const SfxPoolItem& GetAttr(USHORT nWhich);
+    const SfxPoolItem& GetFlyFrmAttr(USHORT nWhich);
+    SwFieldType* GetSysFldType(USHORT eWhich);
     BOOL GetWeightBold();
     BOOL GetPostureItalic();
     BOOL GetCrossedOut();
