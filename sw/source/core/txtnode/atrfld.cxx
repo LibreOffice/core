@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atrfld.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:21:45 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:46:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,6 @@
 
 #pragma hdrstop
 
-#include "doc.hxx"          // Update fuer UserFields
 #include "fldbas.hxx"          // fuer FieldType
 
 #ifndef _FMTFLD_HXX //autogen
@@ -56,6 +55,7 @@
 #include "ndtxt.hxx"        // SwTxtNode
 #include "calc.hxx"         // Update fuer UserFields
 #include "hints.hxx"
+#include <IDocumentFieldsAccess.hxx>
 
 TYPEINIT2( SwFmtFld, SfxPoolItem, SwClient )
 
@@ -323,13 +323,13 @@ void SwTxtFld::CopyFld( SwTxtFld *pDest ) const
     ASSERT( pMyTxtNd, "wo ist denn mein Node?" );
     ASSERT( pDest->pMyTxtNd, "wo ist denn mein Node?" );
 
-    SwDoc *pDoc = pMyTxtNd->GetDoc();
-    SwDoc *pDestDoc = pDest->pMyTxtNd->GetDoc();
+    IDocumentFieldsAccess* pIDFA = pMyTxtNd->getIDocumentFieldsAccess();
+    IDocumentFieldsAccess* pDestIDFA = pDest->pMyTxtNd->getIDocumentFieldsAccess();
 
     SwFmtFld& rFmtFld = (SwFmtFld&)pDest->GetFld();
     const USHORT nFldWhich = rFmtFld.GetFld()->GetTyp()->Which();
 
-    if( pDoc != pDestDoc )
+    if( pIDFA != pDestIDFA )
     {
         // Die Hints stehen in unterschiedlichen Dokumenten,
         // der Feldtyp muss im neuen Dokument angemeldet werden.
@@ -338,9 +338,9 @@ void SwTxtFld::CopyFld( SwTxtFld *pDest ) const
         if( nFldWhich != RES_DBFLD && nFldWhich != RES_USERFLD &&
             nFldWhich != RES_SETEXPFLD && nFldWhich != RES_DDEFLD &&
             RES_AUTHORITY != nFldWhich )
-            pFldType = pDestDoc->GetSysFldType( (const RES_FIELDS)nFldWhich );
+            pFldType = pDestIDFA->GetSysFldType( (const RES_FIELDS)nFldWhich );
         else
-            pFldType = pDestDoc->InsertFldType( *rFmtFld.GetFld()->GetTyp() );
+            pFldType = pDestIDFA->InsertFldType( *rFmtFld.GetFld()->GetTyp() );
 
         // Sonderbehandlung fuer DDE-Felder
         if( RES_DDEFLD == nFldWhich )
@@ -360,7 +360,7 @@ void SwTxtFld::CopyFld( SwTxtFld *pDest ) const
         nFldWhich == RES_HIDDENTXTFLD )
     {
         SwTxtFld* pFld = (SwTxtFld*)this;
-        pDestDoc->UpdateExpFlds( pFld );
+        pDestIDFA->UpdateExpFlds( pFld, true );
     }
     // Tabellenfelder auf externe Darstellung
     else if( RES_TABLEFLD == nFldWhich &&
