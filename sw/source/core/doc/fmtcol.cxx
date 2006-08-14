@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtcol.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 11:30:42 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:00:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 #ifndef _HINTIDS_HXX
@@ -199,18 +198,6 @@ void SwTxtFmtColl::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
             else if( pNewChgSet )
                 bWeiter = pNewChgSet->GetTheChgdSet() == &GetAttrSet();
         }
-
-#ifndef NUM_RELSPACE
-        if( !bChg && pOldLRSpace == pNewLRSpace &&
-            // pNewChgSet->GetTheChgdSet() == &aSet &&
-            GetOutlineLevel() < MAXLEVEL )
-        {
-            // dann muss der Wert in die OutlineRule uebertragen werden
-            GetDoc()->SetOutlineLSpace( GetOutlineLevel(),
-                                        pOldLRSpace->GetTxtFirstLineOfst(),
-                                        pOldLRSpace->GetTxtLeft() );
-        }
-#endif
     }
 
     if( pNewULSpace && SFX_ITEM_SET == GetItemState(
