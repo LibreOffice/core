@@ -4,9 +4,9 @@
  *
  *  $RCSfile: writerhelper.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-15 14:20:38 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:14:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 /// @HTML
 
@@ -65,9 +64,6 @@
 #ifndef _NODE_HXX
 #   include <node.hxx>                 //SwCntntNode
 #endif
-#ifndef _DOC_HXX
-#   include <doc.hxx>                  //SwDoc
-#endif
 #ifndef _PAM_HXX
 #   include <pam.hxx>                  //SwPaM
 #endif
@@ -80,7 +76,6 @@
 //#   define DEBUGDUMP
 #endif
 
-class SwDoc;
 class SwTxtFmtColl;
 class SwCharFmt;
 class SdrObject;
@@ -92,6 +87,8 @@ class SwTxtNode;
 class SwNoTxtNode;
 class SwFmtCharFmt;
 class Graphic;
+class SwDoc;
+class SwNumRule;
 
 namespace sw
 {
