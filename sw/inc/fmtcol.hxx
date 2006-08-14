@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtcol.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:48:41 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:23:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -230,7 +230,7 @@ public:
 
 
 typedef SwCollCondition* SwCollConditionPtr;
-SV_DECL_PTRARR_DEL( SwFmtCollConditions, SwCollConditionPtr, 0, 5 );
+SV_DECL_PTRARR_DEL( SwFmtCollConditions, SwCollConditionPtr, 0, 5 )
 
 class SW_DLLPUBLIC SwConditionTxtFmtColl : public SwTxtFmtColl
 {
