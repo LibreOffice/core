@@ -4,9 +4,9 @@
  *
  *  $RCSfile: porrst.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 09:31:27 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:42:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,18 +34,11 @@
  ************************************************************************/
 #ifndef _PORRST_HXX
 #define _PORRST_HXX
-
-#ifndef _SVARRAY_HXX //autogen
-#include <svtools/svarray.hxx>
-#endif
-
 #include "porlay.hxx"
 #include "porexp.hxx"
 
-#ifdef VERTICAL_LAYOUT
 #define LINE_BREAK_WIDTH        150
 #define SPECIAL_FONT_HEIGHT     200
-#endif
 
 class SwTxtFormatInfo;
 
@@ -90,14 +83,10 @@ class SwKernPortion : public SwLinePortion
 {
     short nKern;
     sal_Bool bBackground;
-
-#ifdef VERTICAL_LAYOUT
     sal_Bool bGridKern;
-#endif
 
 public:
 
-#ifdef VERTICAL_LAYOUT
     // This constructor automatically appends the portion to rPortion
     // bBG indicates, that the background of the kerning portion has to
     // be painted, e.g., if the portion if positioned between to fields.
@@ -109,10 +98,6 @@ public:
     // This constructor only sets the height and ascent to the values
     // of rPortion. It is only used for kerning portions for grid mode
     SwKernPortion( const SwLinePortion &rPortion );
-#else
-    SwKernPortion( SwLinePortion &rPortion, short nKrn,
-                   sal_Bool bBG = sal_False );
-#endif
 
     virtual void FormatEOL( SwTxtFormatInfo &rInf );
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
