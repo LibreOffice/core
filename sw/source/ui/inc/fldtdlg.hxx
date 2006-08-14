@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldtdlg.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:13:54 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:41:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,13 +34,11 @@
  ************************************************************************/
 #ifndef _SWFLDTDLG_HXX
 #define _SWFLDTDLG_HXX
-
 #ifndef _SFXTABDLG_HXX //autogen
 #include <sfx2/tabdlg.hxx>
 #endif
 
 class SfxBindings;
-class SfxChildWindow;
 class SfxTabPage;
 class SwChildWinWrapper;
 struct SfxChildWinInfo;
