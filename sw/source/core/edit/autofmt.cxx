@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autofmt.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 11:48:02 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:07:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -138,9 +137,6 @@
 #endif
 #ifndef _SHELLRES_HXX
 #include <shellres.hxx>
-#endif
-#ifndef _ITABENUM_HXX
-#include <itabenum.hxx>
 #endif
 #ifndef _SECTION_HXX //autogen
 #include <section.hxx>
@@ -725,7 +721,7 @@ BOOL SwAutoFormat::DoUnderline()
         aBox.SetLine( &aLine, BOX_LINE_BOTTOM );
         aBox.SetDistance( 42 );     // ~0,75 mm
         aSet.Put(aBox);
-        pDoc->Insert( aDelPam, aSet );
+        pDoc->Insert( aDelPam, aSet, 0 );
 
         aDelPam.DeleteMark();
     }
@@ -1552,9 +1548,7 @@ void SwAutoFormat::BuildEnum( USHORT nLvl, USHORT nDigitLevel )
 
         SwTxtFrmInfo aInfo( pAktTxtFrm );
         nLeftTxtPos = aInfo.GetCharPos( pTxt - pSav );
-#ifdef NUM_RELSPACE
         nLeftTxtPos -= pAktTxtNd->GetSwAttrSet().GetLRSpace().GetLeft();
-#endif
     }
 
     if( bMoreLines )
@@ -1781,7 +1775,7 @@ void SwAutoFormat::BuildEnum( USHORT nLvl, USHORT nDigitLevel )
             String sChgStr( '\t' );
             if( bChgBullet )
                 sChgStr.Insert( aFlags.cBullet, 0 );
-            pDoc->Insert( aDelPam, sChgStr );
+            pDoc->Insert( aDelPam, sChgStr, true );
 
             SfxItemSet aSet( pDoc->GetAttrPool(), aTxtNodeSetRange );
             if( bChgBullet )
@@ -1881,15 +1875,6 @@ void SwAutoFormat::BuildNegIndent( SwTwips nSpaces )
         aDelPam.GetPoint()->nNode = aNdIdx;
         aDelPam.GetPoint()->nContent.Assign( pAktTxtNd, nSpacePos );
 
-#if 0
-// nicht auf den akt. Einzug setzen, sondern Vorlagen benutzen
-        // das Attr. setzen
-        // hier sollte die richtige Vorlage benutzt werden !!!
-        SvxLRSpaceItem aLSpace;
-        aLSpace.SetTxtFirstLineOfst( -(SwTwips)nTxtPos );
-        aLSpace.SetTxtLeft( nTxtPos );
-        pDoc->Insert( aDelPam, aLSpace );
-#endif
         // alten Spaces, usw. loeschen
         if( nSpaceStt < nSpacePos )
         {
@@ -2132,7 +2117,7 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
                                 aFInfo.SetFrm( 0 );
                             }
                             //#125102# in case of the mode REDLINE_SHOW_DELETE the ** are still contained in pTxt
-                            if(0 == (pDoc->GetRedlineMode() & REDLINE_SHOW_DELETE))
+                            if(0 == (pDoc->GetRedlineMode() & IDocumentRedlineAccess::REDLINE_SHOW_DELETE))
                                 nPos = aDelPam.GetPoint()->nContent.GetIndex() - 1;
                             // wurde vorm Start ein Zeichen entfernt?
                             if( cBlank && cBlank != pTxt->GetChar(nSttPos - 1) )
@@ -2297,15 +2282,14 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
                          nEndNdIdx = aEndNdIdx.GetIndex(),
                          pDoc->GetDocShell() );
 
-    SwRedlineMode eRedlMode = pDoc->GetRedlineMode(), eOldMode = eRedlMode;
+    IDocumentRedlineAccess::RedlineMode_t eRedlMode = pDoc->GetRedlineMode(), eOldMode = eRedlMode;
     if( aFlags.bWithRedlining )
     {
         pDoc->SetAutoFmtRedline( TRUE );
-        eRedlMode = SwRedlineMode(REDLINE_ON | REDLINE_SHOW_INSERT );
-        eOldMode = SwRedlineMode( eOldMode | REDLINE_SHOW_DELETE | REDLINE_SHOW_INSERT );
+        eRedlMode = IDocumentRedlineAccess::REDLINE_ON | IDocumentRedlineAccess::REDLINE_SHOW_INSERT;
     }
     else
-        eRedlMode = SwRedlineMode( REDLINE_SHOW_INSERT | REDLINE_IGNORE );
+        eRedlMode = IDocumentRedlineAccess::REDLINE_SHOW_INSERT | IDocumentRedlineAccess::REDLINE_IGNORE;
     pDoc->SetRedlineMode( eRedlMode );
 
     // save undo state (might be turned off)
