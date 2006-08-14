@@ -4,9 +4,9 @@
  *
  *  $RCSfile: porfld.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 14:13:47 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:40:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -62,9 +61,6 @@
 #endif
 #ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>  // SwViewOptions
-#endif
-#ifndef _ERRHDL_HXX
-#include <errhdl.hxx>
 #endif
 #ifndef _TXTCFG_HXX
 #include <txtcfg.hxx>
@@ -108,10 +104,6 @@
 #ifndef _ACCESSIBILITYOPTIONS_HXX
 #include <accessibilityoptions.hxx>
 #endif
-#ifndef _SCRIPTINFO_HXX
-#include <scriptinfo.hxx>
-#endif
-
 #ifndef _SVX_LRSPITEM_HXX
 #include <svx/lrspitem.hxx>
 #endif
@@ -602,7 +594,7 @@ sal_Bool SwNumberPortion::Format( SwTxtFormatInfo &rInf )
         ASSERT( Height() && nAscent, "NumberPortions without Height | Ascent" );
 
         long nDiff;
-        if ( !rInf.GetTxtFrm()->GetTxtNode()->GetDoc()->IgnoreFirstLineIndentInNumbering() &&
+        if ( !rInf.GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) &&
              // --> FME 2004-08-13 #i32902#
              !IsFtnNumPortion() )
              // <--
@@ -1010,13 +1002,11 @@ void SwGrfNumPortion::Paint( const SwTxtPaintInfo &rInf ) const
         rFrm.SwitchHorizontalToVertical( aRepaint );
     }
 
-#ifdef BIDI
     if( rFrm.IsRightToLeft() )
     {
         rFrm.SwitchLTRtoRTL( aTmp );
         rFrm.SwitchLTRtoRTL( aRepaint );
     }
-#endif
 
     if( bDraw && aTmp.HasArea() )
         DrawGraphic( pBrush, (OutputDevice*)rInf.GetOut(),
