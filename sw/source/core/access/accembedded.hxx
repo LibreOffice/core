@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accembedded.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:47:10 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:42:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,15 +34,9 @@
  ************************************************************************/
 #ifndef _ACCEMBEDDED_HXX
 #define _ACCEMBEDDED_HXX
-
 #ifndef _ACCNOTEXTFRAME_HXX
 #include "accnotextframe.hxx"
 #endif
-
-#ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
-#include <com/sun/star/uno/RuntimeException.hpp>
-#endif
-
 
 class SwAccessibleEmbeddedObject : public   SwAccessibleNoTextFrame
 {
