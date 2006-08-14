@@ -4,9 +4,9 @@
  *
  *  $RCSfile: redlnitr.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:04:05 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:43:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,12 +32,15 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifndef _REDLNITR_HXX
 #define _REDLNITR_HXX
 
 #include "ndhints.hxx"
-#include "redlenum.hxx" // SwRedlineType
+
+#ifndef IDOCUMENTREDLINEACCESS_HXX_INCLUDED
+#include <IDocumentRedlineAccess.hxx>
+#endif
+
 #include "swfont.hxx"
 #ifndef _SVSTDARR_USHORTS
 #define _SVSTDARR_USHORTS
@@ -91,7 +94,7 @@ class SwRedlineItr
 
     void _Clear( SwFont* pFnt );
     sal_Bool _ChkSpecialUnderline() const;
-    void FillHints( MSHORT nAuthor, SwRedlineType eType );
+    void FillHints( MSHORT nAuthor, IDocumentRedlineAccess::RedlineType_t eType );
     short _Seek( SwFont& rFnt, xub_StrLen nNew, xub_StrLen nOld );
     xub_StrLen _GetNextRedln( xub_StrLen nNext );
     inline short EnterExtend( SwFont& rFnt, xub_StrLen nNew )
