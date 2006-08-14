@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swcrsr.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 16:47:09 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:52:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -78,9 +77,6 @@
 #endif
 #ifndef _DOCARY_HXX
 #include <docary.hxx>
-#endif
-#ifndef _NODE_HXX
-#include <node.hxx>
 #endif
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
@@ -129,9 +125,6 @@
 #endif
 #ifndef _REDLINE_HXX
 #include <redline.hxx>      // SwRedline
-#endif
-#ifndef _DOCARY_HXX
-#include <docary.hxx>       // SwRedlineTbl
 #endif
 
 using namespace ::com::sun::star::i18n;
@@ -503,7 +496,7 @@ FASTBOOL SwCursor::IsSelOvr( int eFlags )
                 const SwNode* pNd = GetNode();
 
                 if( pNd->IsSectionNode() || ( pNd->IsEndNode() &&
-                    pNd->FindStartNode()->IsSectionNode() ) )
+                    pNd->StartOfSectionNode()->IsSectionNode() ) )
                 {
                     // die lassen wir zu:
                     pNd = bSelTop
@@ -1412,17 +1405,17 @@ FASTBOOL SwCursor::GoSentence( SentenceMoveType eMoveType )
         //mask deleted redlines
         String sNodeText(pTxtNd->GetTxt());
         const SwDoc& rDoc = *pTxtNd->GetDoc();
-        const sal_Bool bShowChg = ::IsShowChanges( rDoc.GetRedlineMode() );
+        const sal_Bool bShowChg = IDocumentRedlineAccess::IsShowChanges( rDoc.GetRedlineMode() );
         if ( bShowChg )
         {
-            USHORT nAct = rDoc.GetRedlinePos( *pTxtNd );
+            USHORT nAct = rDoc.GetRedlinePos( *pTxtNd, USHRT_MAX );
             for ( ; nAct < rDoc.GetRedlineTbl().Count(); nAct++ )
             {
                 const SwRedline* pRed = rDoc.GetRedlineTbl()[ nAct ];
                 if ( pRed->Start()->nNode > pTxtNd->GetIndex() )
                     break;
 
-                if( REDLINE_DELETE == pRed->GetType() )
+                if( IDocumentRedlineAccess::REDLINE_DELETE == pRed->GetType() )
                 {
                     xub_StrLen nStart, nEnd;
                     pRed->CalcStartEnd( pTxtNd->GetIndex(), nStart, nEnd );
@@ -1588,8 +1581,8 @@ FASTBOOL SwCursor::UpDown( BOOL bUp, USHORT nCnt,
 
     // vom Tabellen Crsr Point/Mark in der gleichen Box ??
     // dann stelle den Point an den Anfang der Box
-    if( pTblCrsr && GetNode( TRUE )->FindStartNode() ==
-                    GetNode( FALSE )->FindStartNode() )
+    if( pTblCrsr && GetNode( TRUE )->StartOfSectionNode() ==
+                    GetNode( FALSE )->StartOfSectionNode() )
     {
         if ( End() != GetPoint() )
             Exchange();
@@ -1662,7 +1655,6 @@ FASTBOOL SwCursor::UpDown( BOOL bUp, USHORT nCnt,
                 eTmpState.bSetInReadOnly = bInReadOnly;
                 SwRect aTmpRect;
                 pFrm->GetCharRect( aTmpRect, *GetPoint(), &eTmpState );
-#ifdef VERTICAL_LAYOUT
                 if ( pFrm->IsVertical() )
                 {
                     aPt.X() = aTmpRect.Center().X();
@@ -1675,11 +1667,6 @@ FASTBOOL SwCursor::UpDown( BOOL bUp, USHORT nCnt,
                     pFrm->Calc();
                     aPt.X() = pFrm->Frm().Left() + nUpDownX;
                 }
-#else
-                aPt.Y() = aTmpRect.Center().Y();
-                pFrm->Calc();
-                aPt.X() = pFrm->Frm().Left() + nUpDownX;
-#endif
                 pFrm->GetCrsrOfst( GetPoint(), aPt, &eTmpState );
             }
             bRet = TRUE;
