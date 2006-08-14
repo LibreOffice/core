@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unfmco.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:20:11 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:50:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,10 +58,6 @@ SwUndoFmtColl::SwUndoFmtColl( const SwPaM& rRange, SwFmtColl* pColl )
     if ( pColl )
         aFmtName = pColl->GetName();
     // <--
-
-#ifdef COMPACT
-    ((SwDoc*)rRange.GetDoc())->DelUndoGroups();
-#endif
 }
 
 
