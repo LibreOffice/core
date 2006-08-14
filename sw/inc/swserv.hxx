@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swserv.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:16:26 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:34:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifndef _SWSERV_HXX
 #define _SWSERV_HXX
 
@@ -89,8 +88,7 @@ public:
 
     BOOL IsLinkInServer( const SwBaseLink* ) const;
 
-    void SetNoServer()
-        {  CNTNT_TYPE.pBkmk = 0, eType = NONE_SERVER; }
+    void SetNoServer() {  CNTNT_TYPE.pBkmk = 0, eType = NONE_SERVER; }
 };
 
 #ifndef SW_DECL_SWSERVEROBJECT_DEFINED
