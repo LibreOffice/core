@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undobj1.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:19:42 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:49:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -62,9 +61,6 @@
 #ifndef _FLYFRM_HXX //autogen
 #include <flyfrm.hxx>
 #endif
-#ifndef _FMTFLCNT_HXX //autogen
-#include <fmtflcnt.hxx>
-#endif
 #ifndef _UNDOBJ_HXX
 #include <undobj.hxx>
 #endif
@@ -89,9 +85,6 @@
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
 #endif
-#ifndef _HINTS_HXX
-#include <hints.hxx>
-#endif
 // OD 26.06.2003 #108784#
 #ifndef _DCONTACT_HXX
 #include <dcontact.hxx>
@@ -108,9 +101,6 @@ inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
 SwUndoFlyBase::SwUndoFlyBase( SwFrmFmt* pFormat, USHORT nUndoId )
     : SwUndo( nUndoId ), pFrmFmt( pFormat )
 {
-#ifdef COMPACT
-    pFormat->GetDoc()->DelUndoGroups();
-#endif
 }
 
 SwUndoFlyBase::~SwUndoFlyBase()
@@ -370,7 +360,7 @@ void SwUndoInsLayFmt::Repeat( SwUndoIter& rUndoIter )
     else
         ASSERT( FALSE, "was fuer ein Anker ist es denn nun?" );
 
-    SwFrmFmt* pFlyFmt = pDoc->CopyLayoutFmt( *pFrmFmt, aAnchor );
+    SwFrmFmt* pFlyFmt = pDoc->CopyLayoutFmt( *pFrmFmt, aAnchor, true, true );
     rUndoIter.pSelFmt = pFlyFmt;
 
     rUndoIter.pLastUndoObj = this;
