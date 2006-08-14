@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swmodalredlineacceptdlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:20:20 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:51:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifdef SW_DLLIMPLEMENTATION
 #undef SW_DLLIMPLEMENTATION
 #endif
@@ -50,9 +49,6 @@
 
 #ifndef _REDLINE_HXX
 #include <redline.hxx>
-#endif
-#ifndef _REDLENUM_HXX
-#include <redlenum.hxx>
 #endif
 #ifndef _DATETIME_HXX //autogen
 #include <tools/datetime.hxx>
@@ -87,9 +83,6 @@
 #endif
 #ifndef _WRTSH_HXX
 #include <wrtsh.hxx>
-#endif
-#ifndef _DOC_HXX
-#include <doc.hxx>
 #endif
 #ifndef _VIEW_HXX
 #include <view.hxx>
