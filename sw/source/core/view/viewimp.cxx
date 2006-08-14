@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewimp.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 12:37:57 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:58:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,11 +33,9 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #include "scrrect.hxx"
-#include "doc.hxx"
 #include "crsrsh.hxx"
 #include "rootfrm.hxx"
 #include "pagefrm.hxx"
@@ -50,9 +48,6 @@
 #include "swregion.hxx"
 #include "dflyobj.hxx"
 #include "dview.hxx"
-#ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
-#include <svtools/colorcfg.hxx>
-#endif
 #ifndef _SHL_HXX
 #include <tools/shl.hxx>
 #endif
@@ -73,6 +68,10 @@
 
 #include <comcore.hrc>
 #include <svx/svdundo.hxx>
+#include <IDocumentLayoutAccess.hxx>
+#include <IDocumentDrawModelAccess.hxx>
+#include <IDocumentDeviceAccess.hxx>
+#include <IDocumentSettingAccess.hxx>
 
 /*************************************************************************
 |*
@@ -87,11 +86,12 @@ void SwViewImp::Init( const SwViewOption *pNewOpt )
 {
     ASSERT( pDrawView, "SwViewImp::Init without DrawView" );
     //Jetzt die PageView erzeugen wenn sie noch nicht existiert.
-    SwRootFrm *pRoot = pSh->GetDoc()->GetRootFrm();
+    SwRootFrm *pRoot = pSh->getIDocumentLayoutAccess()->GetRootFrm();
     if ( !pSdrPageView )
     {
+        IDocumentDrawModelAccess* pIDDMA = pSh->getIDocumentDrawModelAccess();
         if ( !pRoot->GetDrawPage() )
-            pRoot->SetDrawPage( pSh->GetDoc()->GetDrawModel()->GetPage( 0 ) );
+            pRoot->SetDrawPage( pIDDMA->GetDrawModel()->GetPage( 0 ) );
 
         if ( pRoot->GetDrawPage()->GetSize() != pRoot->Frm().SSize() )
             pRoot->GetDrawPage()->SetSize( pRoot->Frm().SSize() );
@@ -99,7 +99,7 @@ void SwViewImp::Init( const SwViewOption *pNewOpt )
         pSdrPageView = pDrawView->ShowPage( pRoot->GetDrawPage(), Point());
         // OD 26.06.2003 #108784# - notify drawing page view about invisible
         // layers.
-        pSh->GetDoc()->NotifyInvisibleLayers( *pSdrPageView );
+        pIDDMA->NotifyInvisibleLayers( *pSdrPageView );
     }
     pDrawView->SetDragStripes( pNewOpt->IsCrossHair() );
     pDrawView->SetGridSnap( pNewOpt->IsSnap() );
@@ -329,17 +329,17 @@ void SwViewImp::SetFirstVisPage()
 
 void SwViewImp::MakeDrawView()
 {
-    if( !GetShell()->GetDoc()->GetDrawModel() )
-        GetShell()->GetDoc()->_MakeDrawModel();
+    IDocumentDrawModelAccess* pIDDMA = GetShell()->getIDocumentDrawModelAccess();
+    if( !pIDDMA->GetDrawModel() )
+        pIDDMA->_MakeDrawModel();
     else
     {
         if ( !pDrawView )
         {
-            pDrawView = new SwDrawView( *this,
-                        GetShell()->GetDoc()->GetDrawModel(),
-                           GetShell()->GetWin() ?
-                            GetShell()->GetWin() :
-                            (OutputDevice*)GetShell()->GetDoc()->GetPrt() );
+            pDrawView = new SwDrawView( *this, pIDDMA->GetDrawModel(),
+                                        GetShell()->GetWin() ?
+                                        GetShell()->GetWin() :
+                                        (OutputDevice*)GetShell()->getIDocumentDeviceAccess()->getPrinter( false ) );
         }
         GetDrawView()->SetActiveLayer( XubString::CreateFromAscii(
                             RTL_CONSTASCII_STRINGPARAM( "Heaven" ) ) );
@@ -362,7 +362,7 @@ Color SwViewImp::GetRetoucheColor() const
     const ViewShell &rSh = *GetShell();
     if ( rSh.GetWin() )
     {
-        if ( rSh.GetDoc()->IsBrowseMode() &&
+        if ( rSh.getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) &&
              COL_TRANSPARENT != rSh.GetViewOptions()->GetRetoucheColor().GetColor() )
             aRet = rSh.GetViewOptions()->GetRetoucheColor();
         else if(rSh.GetViewOptions()->IsPagePreview()  &&
@@ -390,12 +390,12 @@ void SwViewImp::InitPagePreviewLayout()
 void SwViewImp::UpdateAccessible()
 {
     // We require a layout and an XModel to be accessible.
-    SwDoc *pDoc = GetShell()->GetDoc();
+    IDocumentLayoutAccess* pIDLA = GetShell()->getIDocumentLayoutAccess();
     Window *pWin = GetShell()->GetWin();
-    ASSERT( pDoc->GetRootFrm(), "no layout, no access" );
+    ASSERT( pIDLA->GetRootFrm(), "no layout, no access" );
     ASSERT( pWin, "no window, no access" );
 
-    if( IsAccessible() && pDoc->GetRootFrm() && pWin )
+    if( IsAccessible() && pIDLA->GetRootFrm() && pWin )
         GetAccessibleMap().GetDocumentView();
 }
 
