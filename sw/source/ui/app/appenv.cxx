@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appenv.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:18:36 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:25:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -67,9 +66,6 @@
 #endif
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
-#endif
-#ifndef _SFX_BINDINGS_HXX //autogen
-#include <sfx2/bindings.hxx>
 #endif
 #ifndef _SVX_BOXITEM_HXX //autogen
 #include <svx/boxitem.hxx>
@@ -119,8 +115,8 @@
 #ifndef _SWUNDO_HXX
 #include <swundo.hxx>
 #endif
-#ifndef _DOC_HXX
-#include <doc.hxx>
+#ifndef IDOCUMENTDEVICEACCESS_HXX_INCLUDED
+#include <IDocumentDeviceAccess.hxx>
 #endif
 #ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
@@ -167,10 +163,6 @@
 #endif
 #include "swabstdlg.hxx" //CHINA001
 #include "envelp.hrc" //CHINA001
-
-#ifndef _SFXTABDLG_HXX //autogen
-#include <sfx2/tabdlg.hxx> //CHINA001
-#endif
 #include "envimg.hxx" //CHINA001
 
 #define ENV_NEWDOC      RET_OK
@@ -239,7 +231,7 @@ String InsertLabEnvText( SwWrtShell& rSh, SwFldMgr& rFldMgr, const String& rText
         }
         rSh.InsertLineBreak();
     }
-    rSh.DelLeft();  // Letzten Linebreak wieder l�schen
+    rSh.DelLeft();  // Letzten Linebreak wieder l???schen
 
     return sRet;
 }
@@ -302,18 +294,21 @@ static USHORT nTitleNo = 0;
     SfxItemSet aSet(GetPool(), FN_ENVELOP, FN_ENVELOP, 0);
     aSet.Put(aEnvCfg.GetItem());
 
-    SfxPrinter* pTempPrinter = pSh->GetPrt( TRUE );
+    SfxPrinter* pTempPrinter = pSh->getIDocumentDeviceAccess()->getPrinter( true );
     if(pOldSh )
     {
         const SwPageDesc& rCurPageDesc = pOldSh->GetPageDesc(pOldSh->GetCurPageDesc());
         String sJacket;
         SwStyleNameMapper::FillUIName( RES_POOLPAGE_JAKET, sJacket );
         bEnvChange = rCurPageDesc.GetName() == sJacket;
-        if(pOldSh->GetPrt(FALSE))
+
+        IDocumentDeviceAccess* pIDDA_old = pOldSh->getIDocumentDeviceAccess();
+        if( pIDDA_old->getPrinter( false ) )
         {
-            pSh->GetDoc()->SetJobsetup(*pOldSh->GetDoc()->GetJobsetup());
+            IDocumentDeviceAccess* pIDDA = pSh->getIDocumentDeviceAccess();
+            pIDDA->setJobsetup( *pIDDA_old->getJobsetup() );
             //#69563# if it isn't the same printer then the pointer has been invalidated!
-            pTempPrinter = pSh->GetPrt( TRUE );
+            pTempPrinter = pIDDA->getPrinter( true );
         }
         pTempPrinter->SetPaperBin(rCurPageDesc.GetMaster().GetPaperBin().GetValue());
 
@@ -359,7 +354,7 @@ static USHORT nTitleNo = 0;
         {
             ASSERT(pOldSh, "Kein Dokument - war 'Einfuegen' nicht disabled???");
             SvxPaperBinItem aItem;
-            aItem.SetValue((BYTE)pSh->GetPrt()->GetPaperBin());
+            aItem.SetValue((BYTE)pSh->getIDocumentDeviceAccess()->getPrinter(true)->GetPaperBin());
             pOldSh->GetPageDescFromPool(RES_POOLPAGE_JAKET)->GetMaster().SetAttr(aItem);
         }
 
@@ -382,7 +377,7 @@ static USHORT nTitleNo = 0;
             //not be deleted on inserting envelopes
             pSh->EnterStdMode();
             // Los geht's (Einfuegen)
-            pSh->StartUndo(UIUNDO_INSERT_ENVELOPE);
+            pSh->StartUndo(UIUNDO_INSERT_ENVELOPE, NULL);
             pSh->StartAllAction();
             pSh->SwCrsrShell::SttDoc();
 
@@ -453,7 +448,7 @@ static USHORT nTitleNo = 0;
         SwPageDesc* pDesc = pSh->GetPageDescFromPool(RES_POOLPAGE_JAKET);
         SwFrmFmt&   rFmt  = pDesc->GetMaster();
 
-        Printer *pPrt = pSh->GetPrt( TRUE );
+        Printer *pPrt = pSh->getIDocumentDeviceAccess()->getPrinter( true );
 
         // Raender (setzen sich zusammen aus Shift-Offset und
         // Ausrichtung)
