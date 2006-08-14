@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pam.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:05:49 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:52:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #ifndef _HINTIDS_HXX
@@ -58,9 +57,6 @@
 #endif
 #ifndef _PAM_HXX
 #include <pam.hxx>
-#endif
-#ifndef _NODE_HXX
-#include <node.hxx>
 #endif
 #ifndef _PAMTYP_HXX
 #include <pamtyp.hxx>
