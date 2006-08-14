@@ -4,9 +4,9 @@
  *
  *  $RCSfile: escher.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 18:50:22 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:14:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,8 +123,8 @@ protected:
     SvStream* QueryPicStream();
 
     virtual void SetPicId(const SdrObject &, UINT32, EscherPropertyContainer &);
-    SdrLayerID GetInvisibleHellId() const
-        {return rWrt.pDoc->GetInvisibleHellId();}
+    SdrLayerID GetInvisibleHellId() const;
+
 public:
     SwBasicEscherEx(SvStream* pStrm, SwWW8Writer& rWrt, UINT32 nDrawings = 1);
     INT32 WriteGrfFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId);
