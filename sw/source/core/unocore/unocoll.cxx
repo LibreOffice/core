@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocoll.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:33:17 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:53:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -90,9 +89,6 @@
 #ifndef _PAGEDESC_HXX //autogen
 #include <pagedesc.hxx>
 #endif
-#ifndef _OSL_MUTEX_HXX_ //autogen
-#include <osl/mutex.hxx>
-#endif
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
 #endif
@@ -116,9 +112,6 @@
 #endif
 #ifndef _SVTOOLS_UNOEVENT_HXX_
 #include <svtools/unoevent.hxx>
-#endif
-#ifndef _FRMFMT_HXX
-#include <frmfmt.hxx>
 #endif
 #ifndef _UNOTBL_HXX
 #include <unotbl.hxx>
@@ -1423,7 +1416,7 @@ sal_Int32 SwXBookmarks::getCount(void) throw( uno::RuntimeException )
     vos::OGuard aGuard(Application::GetSolarMutex());
     if(!IsValid())
         throw uno::RuntimeException();
-    return GetDoc()->GetBookmarkCnt(sal_True);
+    return GetDoc()->getBookmarkCount(sal_True);
 }
 /*-- 14.01.99 09:05:49---------------------------------------------------
 
@@ -1435,9 +1428,9 @@ uno::Any SwXBookmarks::getByIndex(sal_Int32 nIndex)
     uno::Any aRet;
     if(IsValid())
     {
-        if(0 <= nIndex && GetDoc()->GetBookmarkCnt(sal_True) > nIndex)
+        if(0 <= nIndex && GetDoc()->getBookmarkCount(true) > nIndex)
         {
-            SwBookmark& rBkm = GetDoc()->GetBookmark((sal_uInt16) nIndex, sal_True);
+            SwBookmark& rBkm = GetDoc()->getBookmark((sal_uInt16) nIndex, true);
             uno::Reference< XTextContent >  xRef = GetObject(rBkm, GetDoc());
             aRet.setValue(&xRef, ::getCppuType((uno::Reference<XTextContent>*)0));
         }
@@ -1459,11 +1452,11 @@ uno::Any SwXBookmarks::getByName(const rtl::OUString& rName)
     if(IsValid())
     {
         String aName(rName);
-        sal_uInt16 nCount = GetDoc()->GetBookmarkCnt(sal_True);
+        sal_uInt16 nCount = GetDoc()->getBookmarkCount(true);
         uno::Reference< XTextContent >  xRef;
         for( sal_uInt16 i = 0; i < nCount; i++)
         {
-            SwBookmark& rBkMk = GetDoc()->GetBookmark( i, sal_True );
+            SwBookmark& rBkMk = GetDoc()->getBookmark( i, true );
             if(rBkMk.GetName() == aName)
             {
                 xRef = SwXBookmarks::GetObject(rBkMk, GetDoc());
@@ -1486,14 +1479,14 @@ uno::Sequence< OUString > SwXBookmarks::getElementNames(void) throw( uno::Runtim
     vos::OGuard aGuard(Application::GetSolarMutex());
     if(!IsValid())
         throw uno::RuntimeException();
-    sal_uInt16 nCount = GetDoc()->GetBookmarkCnt(sal_True);
+    sal_uInt16 nCount = GetDoc()->getBookmarkCount(true);
     uno::Sequence<OUString> aSeq(nCount);
     if(nCount)
     {
         OUString* pArray = aSeq.getArray();
         for( sal_uInt16 i = 0; i < nCount; i++)
         {
-            SwBookmark& rBkMk = GetDoc()->GetBookmark( i, sal_True );
+            SwBookmark& rBkMk = GetDoc()->getBookmark( i, true );
             pArray[i] = rBkMk.GetName();
         }
     }
@@ -1509,10 +1502,10 @@ sal_Bool SwXBookmarks::hasByName(const OUString& rName) throw( uno::RuntimeExcep
     if(IsValid())
     {
         String aName(rName);
-        sal_uInt16 nCount = GetDoc()->GetBookmarkCnt(sal_True);
+        sal_uInt16 nCount = GetDoc()->getBookmarkCount(true);
         for( sal_uInt16 i = 0; i < nCount; i++)
         {
-            SwBookmark& rBkMk = GetDoc()->GetBookmark( i, sal_True );
+            SwBookmark& rBkMk = GetDoc()->getBookmark( i,true);
             if(rBkMk.GetName() == aName)
             {
                 bRet = sal_True;
@@ -1539,7 +1532,7 @@ sal_Bool SwXBookmarks::hasElements(void) throw( uno::RuntimeException )
     vos::OGuard aGuard(Application::GetSolarMutex());
     if(!IsValid())
         throw uno::RuntimeException();
-    return GetDoc()->GetBookmarkCnt(sal_True) != 0;
+    return GetDoc()->getBookmarkCount(true) != 0;
 }
 /*-- 14.01.99 09:05:50---------------------------------------------------
 
