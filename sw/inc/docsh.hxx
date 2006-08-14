@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-14 08:29:18 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:20:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,22 +57,22 @@
 
 #include <svtools/lstner.hxx>
 
-class   SwDoc;
-class   SfxDocumentInfoDialog;
-class   SfxStyleSheetBasePool;
-class   FontList;
-class   SwView;
-class   SwWrtShell;
-class   SwFEShell;
-class   Reader;
-class   SwReader;
-class   SwCrsrShell;
-class   SwSrcView;
-class   PushButton;
-class   FixedText;
-class   SwPaM;
-class   SwgReaderOption;
-class   SwOLEObj;
+class SwDoc;
+class SfxDocumentInfoDialog;
+class SfxStyleSheetBasePool;
+class FontList;
+class SwView;
+class SwWrtShell;
+class SwFEShell;
+class Reader;
+class SwReader;
+class SwCrsrShell;
+class SwSrcView;
+class SwPaM;
+class SwgReaderOption;
+class SwOLEObj;
+class IDocumentDeviceAccess;
+class IDocumentSettingAccess;
 
 class SW_DLLPUBLIC SwDocShell: public SfxObjectShell, public SfxListener
 {
@@ -137,8 +137,6 @@ class SW_DLLPUBLIC SwDocShell: public SfxObjectShell, public SfxListener
 
     SW_DLLPRIVATE void                  InitDraw();
     SW_DLLPRIVATE void                  SubInitNew();   // fuer InitNew und HtmlSourceModus
-    inline void             SetWrtShell(SwWrtShell* pShell)
-                                { pWrtShell = pShell; }
 
     SW_DLLPRIVATE void                  RemoveOLEObjects();
     SW_DLLPRIVATE void                  CalcLayoutForOLEObjects();
@@ -149,8 +147,8 @@ class SW_DLLPUBLIC SwDocShell: public SfxObjectShell, public SfxListener
 public:
 
     // aber selbst implementieren
-    SFX_DECL_INTERFACE(SW_DOCSHELL);
-    SFX_DECL_OBJECTFACTORY();
+    SFX_DECL_INTERFACE(SW_DOCSHELL)
+    SFX_DECL_OBJECTFACTORY()
     TYPEINFO();
 
     static SfxInterface *_GetInterface() { return GetStaticInterface(); }
@@ -184,7 +182,10 @@ public:
     void                    StateStyleSheet(SfxItemSet&, SwWrtShell* pSh = 0 );
 
     // Doc rausreichen aber VORSICHT
-    inline SwDoc*           GetDoc() { return pDoc; }
+    inline SwDoc*                   GetDoc() { return pDoc; }
+    IDocumentDeviceAccess*          getIDocumentDeviceAccess();
+    const IDocumentSettingAccess*   getIDocumentSettingAccess() const;
+
     void                    UpdateFontList();
     void                    UpdateChildWindows();
 
