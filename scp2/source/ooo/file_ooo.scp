@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.163 $
+ *  $Revision: 1.164 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 12:13:35 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:35:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -810,13 +810,14 @@ End
 #ifdef SOLAR_JAVA
 STD_JAR_FILE( gid_File_Jar_Xt, xt )
 #ifndef SYSTEM_XALAN
-STD_JAR_FILE( gid_File_Jar_Xalan, xalan )
+STD_JAR_FILE_PATCH( gid_File_Jar_Xalan, xalan )
+STD_JAR_FILE_PATCH( gid_File_Jar_Serializer, serializer )
 #endif
 #ifndef SYSTEM_XERCES
-STD_JAR_FILE( gid_File_Jar_XercesImpl, xercesImpl )
+STD_JAR_FILE_PATCH( gid_File_Jar_XercesImpl, xercesImpl )
 #endif
 #ifndef SYSTEM_XML_APIS
-STD_JAR_FILE( gid_File_Jar_Xml_Apis, xml-apis )
+STD_JAR_FILE_PATCH( gid_File_Jar_Xml_Apis, xml-apis )
 #endif
 #endif
 
