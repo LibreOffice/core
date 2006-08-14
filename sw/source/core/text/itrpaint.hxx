@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itrpaint.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:55:29 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:39:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _ITRPAINT_HXX
 #define _ITRPAINT_HXX
-
 #include "itrtxt.hxx"
 
 class SwSaveClip;          // SwTxtPainter
@@ -60,14 +59,10 @@ public:
     void DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
                        const sal_Bool bUnderSz );
     void PaintDropPortion();
-#ifdef BIDI
     // if PaintMultiPortion is called recursively, we have to pass the
     // surrounding SwBidiPortion
     void PaintMultiPortion( const SwRect &rPaint, SwMultiPortion& rMulti,
                             const SwMultiPortion* pEnvPor = 0 );
-#else
-    void PaintMultiPortion( const SwRect &rPaint, SwMultiPortion& rMulti );
-#endif
     inline void SetPaintDrop( const sal_Bool bNew ) { bPaintDrop = bNew; }
     inline sal_Bool IsPaintDrop() const { return bPaintDrop; }
     inline SwTxtPaintInfo &GetInfo()
