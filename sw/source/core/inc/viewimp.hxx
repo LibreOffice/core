@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewimp.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 14:23:38 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:24:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,6 @@
 #ifndef _VIEWIMP_HXX
 #define _VIEWIMP_HXX
 
-
 #ifndef _TIMER_HXX //autogen
 #include <vcl/timer.hxx>
 #endif
@@ -59,7 +58,6 @@ class SwFlyFrm;
 class SwViewOption;
 class SwRegionRects;
 class SwScrollAreas;
-class SwScrollColumn;
 class SwFrm;
 class SwLayAction;
 class SwLayIdle;
@@ -67,8 +65,6 @@ class SwDrawView;
 class SdrPageView;
 class SwPageFrm;
 class SwRegionRects;
-class XOutputDevice;
-class SdrPaintInfoRec;
 struct SdrPaintProcRec;
 class SwAccessibleMap;
 class SdrObject;
