@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optload.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:31:23 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:29:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifdef SW_DLLIMPLEMENTATION
 #undef SW_DLLIMPLEMENTATION
 #endif
@@ -68,18 +67,11 @@
 
 #include "optload.hrc"
 #include "optload.hxx"
-
-#ifndef _FLDUPDE_HXX
-#include <fldupde.hxx>
-#endif
 #ifndef _SVX_DLGUTIL_HXX
 #include <svx/dlgutil.hxx>
 #endif
 #ifndef _SVX_HTMLMODE_HXX
 #include <svx/htmlmode.hxx>
-#endif
-#ifndef _SVX_SVXIDS_HRC
-#include <svx/svxids.hrc>
 #endif
 #ifndef _FLDMGR_HXX
 #include <fldmgr.hxx>
