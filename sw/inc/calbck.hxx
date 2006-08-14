@@ -4,9 +4,9 @@
  *
  *  $RCSfile: calbck.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:53:27 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:17:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,10 +54,6 @@
  */
 #ifndef _CALBCK_HXX
 #define _CALBCK_HXX
-
-#ifndef _SOLAR_H
-#include <tools/solar.h>
-#endif
 
 #ifndef _RTTI_HXX
 #include <tools/rtti.hxx>
