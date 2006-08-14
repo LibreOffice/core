@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:41:10 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:16:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
@@ -41,10 +40,6 @@
 #ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_
 #include <com/sun/star/embed/XStorage.hpp>
 #endif
-#ifndef _COM_SUN_STAR_IO_XSTREAM_HPP_
-#include <com/sun/star/io/XStream.hpp>
-#endif
-
 #include <unotools/ucbstreamhelper.hxx>
 
 #ifdef PCH
@@ -96,9 +91,6 @@
 #endif
 #ifndef _SVX_HYZNITEM_HXX //autogen
 #include <svx/hyznitem.hxx>
-#endif
-#ifndef _SVX_LANGITEM_HXX
-#include <svx/langitem.hxx>
 #endif
 #ifndef _SVX_LANGITEM_HXX
 #include <svx/langitem.hxx>
@@ -157,26 +149,14 @@
 #ifndef _WW8PAR_HXX
 #include <ww8par.hxx>
 #endif
-#ifndef _WW8STRUC_HXX
-#include <ww8struc.hxx>
-#endif
-#ifndef _WRT_FN_HXX
-#include <wrt_fn.hxx>
-#endif
 #ifndef _FLTINI_HXX
 #include <fltini.hxx>
-#endif
-#ifndef _ERRHDL_HXX
-#include <errhdl.hxx>
 #endif
 #ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
 #endif
 #ifndef _SECTION_HXX
 #include <section.hxx>
-#endif
-#ifndef _POOLFMT_HXX
-#include <poolfmt.hxx>          // RES_POOLCOLL_STANDARD
 #endif
 #ifndef _SWFLTOPT_HXX
 #include <swfltopt.hxx>
@@ -212,13 +192,6 @@
 
 #ifndef SW_FMTLINE_HXX
 #include <fmtline.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_I18N_FORBIDDENCHARACTERS_HPP_
-#include <com/sun/star/i18n/ForbiddenCharacters.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_PRINTERINDEPENDENTLAYOUT_HPP_
-#include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
@@ -338,8 +311,8 @@ static void WriteDop( SwWW8Writer& rWrt )
 {
     WW8Dop& rDop = *rWrt.pDop;
 
-    rDop.fNoLeading = !rWrt.pDoc->IsAddExtLeading();
-    rDop.fUsePrinterMetrics = com::sun::star::document::PrinterIndependentLayout::DISABLED == rWrt.pDoc->IsUseVirtualDevice();
+    rDop.fNoLeading = !rWrt.pDoc->get(IDocumentSettingAccess::ADD_EXT_LEADING);
+    rDop.fUsePrinterMetrics = !rWrt.pDoc->get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE);
 
     // default TabStop schreiben
     const SvxTabStopItem& rTabStop =
@@ -382,7 +355,7 @@ static void WriteDop( SwWW8Writer& rWrt )
     rDop.cParasFtnEdn   = rDStat.nPara;
     rDop.cLinesFtnEdn   = rDStat.nPara;
 
-    rDop.fDontUseHTMLAutoSpacing = (rWrt.pDoc->IsParaSpaceMax() != 0);
+    rDop.fDontUseHTMLAutoSpacing = (rWrt.pDoc->get(IDocumentSettingAccess::PARA_SPACE_MAX) != 0);
 
     rDop.Write( *rWrt.pTableStrm, *rWrt.pFib );
 }
@@ -536,7 +509,7 @@ void SwWW8Writer::ExportDopTypography(WW8DopTypography &rTypo)
 
     for (rTypo.reserved1=8;rTypo.reserved1>0;rTypo.reserved1-=2)
     {
-        if ((pForbidden = pDoc->GetForbiddenCharacters(rTypo.GetConvertedLang(),
+        if ((pForbidden = pDoc->getForbiddenCharacters(rTypo.GetConvertedLang(),
             false)))
         {
             int nIdx = (rTypo.reserved1-2)/2;
@@ -602,8 +575,10 @@ void SwWW8Writer::ExportDopTypography(WW8DopTypography &rTypo)
             (rTypo.cchLeadingPunct+1)*2);
     }
 
-    rTypo.fKerningPunct = pDoc->IsKernAsianPunctuation();
-    rTypo.iJustification = pDoc->GetCharCompressType();
+    const IDocumentSettingAccess* pIDocumentSettingAccess = getIDocumentSettingAccess();
+
+    rTypo.fKerningPunct = pIDocumentSettingAccess->get(IDocumentSettingAccess::KERN_ASIAN_PUNCTUATION);
+    rTypo.iJustification = pDoc->getCharacterCompressionType();
 }
 
 // HasItem ist fuer die Zusammenfassung der Doppel-Attribute
@@ -1612,12 +1587,8 @@ void SwWW8Writer::InsAsString8(ww::bytes &rO, const String& rStr,
     const sal_Char *pStart = sTmp.GetBuffer();
     const sal_Char *pEnd = pStart + sTmp.Len();
     rO.reserve(rO.size() + sTmp.Len());
-#if 0
-    //Solaris compiler doesn't like this, I believe its good.
-    rO.insert(rO.end(), pStart, pStart + sTmp.Len());
-#else
+
     std::copy(pStart, pEnd, std::inserter(rO, rO.end()));
-#endif
 }
 
 #ifdef __WW8_NEEDS_COPY
@@ -1882,16 +1853,16 @@ void SwWW8Writer::WriteText()
         else if( pNd->IsSectionNode() && TXT_MAINTEXT == nTxtTyp )
             OutWW8_SwSectionNode( *this, *pNd->GetSectionNode() );
         else if( TXT_MAINTEXT == nTxtTyp && pNd->IsEndNode() &&
-                 pNd->FindStartNode()->IsSectionNode() )
+                 pNd->StartOfSectionNode()->IsSectionNode() )
         {
-            const SwSection& rSect = pNd->FindStartNode()->GetSectionNode()
+            const SwSection& rSect = pNd->StartOfSectionNode()->GetSectionNode()
                                         ->GetSection();
             if( bStartTOX && TOX_CONTENT_SECTION == rSect.GetType() )
                 bStartTOX = false;
 
             SwNodeIndex aIdx( *pNd, 1 );
             if(    aIdx.GetNode().IsEndNode()
-                && aIdx.GetNode().FindStartNode()->IsSectionNode() )
+                && aIdx.GetNode().StartOfSectionNode()->IsSectionNode() )
                 ;
             else
             if(    aIdx.GetNode().IsSectionNode() )
@@ -2245,27 +2216,14 @@ ULONG SwWW8Writer::StoreDoc()
     USHORT nRedlineMode = pDoc->GetRedlineMode();
     if (pDoc->GetRedlineTbl().Count())
     {
-        pDoc->SetRedlineMode(nRedlineMode | REDLINE_SHOW_DELETE |
-            REDLINE_SHOW_INSERT);
+        pDoc->SetRedlineMode(nRedlineMode | IDocumentRedlineAccess::REDLINE_SHOW_DELETE |
+            IDocumentRedlineAccess::REDLINE_SHOW_INSERT);
     }
 
     maFontHelper.InitFontTable(bWrtWW8, *pDoc);
     GatherChapterFields();
 
     pFib = new WW8Fib( bWrtWW8 ? 8 : 6 );
-
-#if 0
-    //If we do this we need to localize the field strings for
-    //english,french,spanish as well as the current german.
-    //
-    //And we also need to consider the two language -> one language
-    //problem
-    if (const SvxLanguageItem* pLang = (const SvxLanguageItem*)
-        pDoc->GetAttrPool().GetPoolDefaultItem(RES_CHRATR_LANGUAGE))
-    {
-        pFib->lid = pLang->GetLanguage();
-    }
-#endif
 
     SvStream* pOldStrm = pStrm;         // JP 19.05.99: wozu das ???
     SvStorageStreamRef xWwStrm( pStg->OpenSotStream( aMainStg ) );
@@ -2317,8 +2275,8 @@ ULONG SwWW8Writer::StoreDoc()
         else if( 0 != ( pSectNd = pNd->FindSectionNode() ) )
         {
             if( TOX_HEADER_SECTION == pSectNd->GetSection().GetType() &&
-                pSectNd->FindStartNode()->IsSectionNode() )
-                pSectNd = pSectNd->FindStartNode()->GetSectionNode();
+                pSectNd->StartOfSectionNode()->IsSectionNode() )
+                pSectNd = pSectNd->StartOfSectionNode()->GetSectionNode();
 
             if( TOX_CONTENT_SECTION == pSectNd->GetSection().GetType() )
             {
@@ -2368,8 +2326,8 @@ ULONG SwWW8Writer::StoreDoc()
     pDop = new WW8Dop;
 
 
-    pDop->fRevMarking = 0 != (REDLINE_ON & nRedlineMode);
-    pDop->fRMView = 0 != ( REDLINE_SHOW_DELETE & nRedlineMode );
+    pDop->fRevMarking = 0 != (IDocumentRedlineAccess::REDLINE_ON & nRedlineMode);
+    pDop->fRMView = 0 != ( IDocumentRedlineAccess::REDLINE_SHOW_DELETE & nRedlineMode );
     pDop->fRMPrint = pDop->fRMView;
 
     // Tabelle fuer die freifliegenden Rahmen erzeugen, aber nur wenn
@@ -2384,7 +2342,7 @@ ULONG SwWW8Writer::StoreDoc()
     // set AutoHyphenation flag if found in default para style
     const SfxPoolItem* pItem;
     SwTxtFmtColl* pStdTxtFmtColl =
-        pDoc->GetTxtCollFromPoolSimple(RES_POOLCOLL_STANDARD, false);
+        pDoc->GetTxtCollFromPool(RES_POOLCOLL_STANDARD, false);
     if (pStdTxtFmtColl && SFX_ITEM_SET == pStdTxtFmtColl->GetItemState(
         RES_PARATR_HYPHENZONE, false, &pItem))
     {
