@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtffld.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:54:03 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:09:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #include <ctype.h>
@@ -65,7 +64,9 @@
 #ifndef _SVX_LANGITEM_HXX //autogen
 #include <svx/langitem.hxx>
 #endif
-
+#ifndef _SVX_BRKITEM_HXX //autogen
+#include <svx/brkitem.hxx>
+#endif
 #ifndef _FMTFLD_HXX //autogen
 #include <fmtfld.hxx>
 #endif
@@ -116,9 +117,6 @@
 #endif
 #ifndef _BREAKIT_HXX
 #include <breakit.hxx>
-#endif
-#ifndef _POOLFMT_HXX
-#include <poolfmt.hxx>
 #endif
 #ifndef _REFFLD_HXX //autogen wg. SwGetRefField
 #include <reffld.hxx>
@@ -510,7 +508,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                 // steht jetzt geanu auf dem Format-Namen
                 aFld.ChangeFormat( CheckNumberFmtStr( aSaveStr ));
             }
-            pDoc->Insert( *pPam, SwFmtFld( aFld ) );
+            pDoc->Insert( *pPam, SwFmtFld( aFld ), 0 );
             SkipGroup();
         }
         break;
@@ -529,7 +527,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                 // steht jetzt geanu auf dem Format-Namen
                 aPF.ChangeFormat( CheckNumberFmtStr( aSaveStr ));
             }
-            pDoc->Insert( *pPam, SwFmtFld( aPF ) );
+            pDoc->Insert( *pPam, SwFmtFld( aPF ), 0 );
             SkipGroup();        // ueberlese den Rest
         }
         break;
@@ -541,7 +539,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                 // es fehlt die Format - Angabe: defaulten auf Datum
                 pFldType = pDoc->GetSysFldType( RES_DATETIMEFLD );
                 pDoc->Insert( *pPam, SwFmtFld( SwDateTimeField(
-                                (SwDateTimeFieldType*)pFldType, DATEFLD )));
+                                (SwDateTimeFieldType*)pFldType, DATEFLD )), 0);
             }
             else
             {
@@ -587,7 +585,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
 
                 if( pFld )
                 {
-                    pDoc->Insert( *pPam, SwFmtFld( *pFld ));
+                    pDoc->Insert( *pPam, SwFmtFld( *pFld ), 0);
                     delete pFld;
                 }
             }
@@ -617,7 +615,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
             {
                 pFldType = pDoc->GetSysFldType( RES_DBNAMEFLD );
                 pDoc->Insert( *pPam, SwFmtFld( SwDBNameField(
-                                (SwDBNameFieldType*)pFldType, SwDBData() ) ));
+                                (SwDBNameFieldType*)pFldType, SwDBData() ) ), 0);
             }
             else
                 pDoc->ChgDBData( aData );       // MS: Keine DBInfo verwenden
@@ -632,7 +630,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
             SwDBField aDBFld( (SwDBFieldType*)pDoc->InsertFldType( aTmp ));
 
             aDBFld.ChangeFormat( UF_STRING );
-            pDoc->Insert( *pPam, SwFmtFld( aDBFld ));
+            pDoc->Insert( *pPam, SwFmtFld( aDBFld ), 0);
             SkipGroup();        // ueberlese den Rest
         }
         break;
@@ -827,7 +825,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                 aRuby.SetAdjustment( (USHORT)aData.nJustificationCode );
 
                 // im FieldStr steht der anzuzeigenden Text, im
-                pDoc->Insert( *pPam, aData.sText );
+                pDoc->Insert( *pPam, aData.sText, true );
                 pPam->SetMark();
                 pPam->GetMark()->nContent -= aData.sText.Len();
                 pDoc->Insert( *pPam, aRuby, SETATTR_DONTEXPAND );
@@ -842,7 +840,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                 sFld += aData.sDown;
                 SwCombinedCharField aFld((SwCombinedCharFieldType*)pDoc->
                                 GetSysFldType( RES_COMBINED_CHARS ), sFld );
-                pDoc->Insert( *pPam, SwFmtFld( aFld ));
+                pDoc->Insert( *pPam, SwFmtFld( aFld ), 0);
 
             }
             SkipGroup();        // ueberlese den Rest
@@ -872,7 +870,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                     sOrigBkmName,REF_BOOKMARK,0,REF_PAGE);
 
             if(!bNestedField)
-                pDoc->Insert( *pPam, SwFmtFld( aFld ) );
+                pDoc->Insert( *pPam, SwFmtFld( aFld ), 0 );
             else
                 bNestedField = false;
         }
@@ -914,14 +912,14 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                     SwGetRefField aFld(
                         (SwGetRefFieldType*)pDoc->GetSysFldType( RES_GETREFFLD ),
                         sOrigBkmName,REF_BOOKMARK,0,REF_CHAPTER);
-                    pDoc->Insert( *pPam, SwFmtFld( aFld ) );
+                    pDoc->Insert( *pPam, SwFmtFld( aFld ), 0 );
                 }
                 else
                 {
                     SwGetRefField aFld(
                         (SwGetRefFieldType*)pDoc->GetSysFldType( RES_GETREFFLD ),
                         sOrigBkmName,REF_BOOKMARK,0,REF_CONTENT);
-                    pDoc->Insert( *pPam, SwFmtFld( aFld ) );
+                    pDoc->Insert( *pPam, SwFmtFld( aFld ), 0 );
                 }
             }
 
@@ -930,7 +928,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                 SwGetRefField aFld( (SwGetRefFieldType*)
                     pDoc->GetSysFldType( RES_GETREFFLD ), sOrigBkmName, REF_BOOKMARK, 0,
                     REF_UPDOWN );
-                pDoc->Insert(*pPam, SwFmtFld(aFld));
+                pDoc->Insert(*pPam, SwFmtFld(aFld), 0);
             }
         }
         break;
@@ -946,7 +944,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
             SwUserFieldType aTmp( pDoc, aSaveStr );
             SwUserField aUFld( (SwUserFieldType*)pDoc->InsertFldType( aTmp ));
             aUFld.ChangeFormat( UF_STRING );
-            pDoc->Insert( *pPam, SwFmtFld( aUFld ));
+            pDoc->Insert( *pPam, SwFmtFld( aUFld ), 0);
             nRet = RTFFLD_UNKNOWN;
         }
         break;
@@ -1143,7 +1141,7 @@ void SwRTFParser::ReadField()
 
                             sNestedFieldStr.Erase();
                             // im FieldStr steht der anzuzeigenden Text, im
-                             pDoc->Insert( *pPam, sFieldStr );
+                             pDoc->Insert( *pPam, sFieldStr, true );
 
                             String sTarget( sFieldNm.GetToken( 1, '\1' ));
                             if( sTarget.Len() )
