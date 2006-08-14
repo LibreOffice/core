@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docglbl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:17:15 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:58:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #ifndef _HINTIDS_HXX
@@ -51,9 +50,6 @@
 #endif
 #ifndef _SFXENUMITEM_HXX
 #include <svtools/eitem.hxx>
-#endif
-#ifndef _URLOBJ_HXX //autogen
-#include <tools/urlobj.hxx>
 #endif
 #ifndef _SFXAPP_HXX //autogen
 #include <sfx2/app.hxx>
@@ -161,7 +157,7 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
     // austauschen.
     // Am Ende wird dieses Doc als GlobalDoc/HTML-Doc gespreichert.
     if( !pDocShell || !pDocShell->GetMedium() ||
-        ( SPLITDOC_TO_GLOBALDOC == eDocType && IsGlobalDoc() ) )
+        ( SPLITDOC_TO_GLOBALDOC == eDocType && get(IDocumentSettingAccess::GLOBAL_DOCUMENT) ) )
         return FALSE;
 
     USHORT nOutl = 0;
@@ -224,7 +220,7 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
 
     // Undo/Redline aufjedenfall abschalten
     DoUndo( FALSE );
-    SetRedlineMode_intern( GetRedlineMode() & ~REDLINE_ON );
+    SetRedlineMode_intern( GetRedlineMode() & ~IDocumentRedlineAccess::REDLINE_ON );
 
     String sExt( pFilter->GetSuffixes().GetToken(0, ',') );
     if( !sExt.Len() )
@@ -509,7 +505,7 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
     switch( eDocType )
     {
     case SPLITDOC_TO_HTML:
-        if( IsGlobalDoc() )
+        if( get(IDocumentSettingAccess::GLOBAL_DOCUMENT) )
         {
             // dann alles verbliebenen Bereiche aufheben
             while( GetSections().Count() )
@@ -523,8 +519,8 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
 //  case SPLITDOC_TO_GLOBALDOC:
     default:
         // dann das Globaldoc speichern
-        SetGlobalDoc( TRUE );
-        SetGlblDocSaveLinks( FALSE );
+        set(IDocumentSettingAccess::GLOBAL_DOCUMENT, true);
+        set(IDocumentSettingAccess::GLOBAL_DOCUMENT_SAVE_LINKS, false);
     }
 
     //              Medium istn't locked after reopen the document. Bug 91462
