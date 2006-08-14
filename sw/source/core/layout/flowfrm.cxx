@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 11:31:19 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:25:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 #pragma hdrstop
-
 #include "pam.hxx"
 #include "swtable.hxx"
 #include "frame.hxx"
@@ -67,9 +66,6 @@
 #endif
 #ifndef SW_TGRDITEM_HXX
 #include <tgrditem.hxx>
-#endif
-#ifndef _NODE_HXX //autogen
-#include <node.hxx>
 #endif
 #ifndef _TXTFTN_HXX //autogen
 #include <txtftn.hxx>
@@ -1061,7 +1057,7 @@ SwLayoutFrm *SwFrm::GetNextLeaf( MakePageType eMakePage )
                  // --> FME 2005-05-10 #i46683#
                  // Do not consider page descriptions in browse mode (since
                  // MoveBwd ignored them)
-                 !pNew->GetFmt()->GetDoc()->IsBrowseMode() )
+                 !pNew->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
                  // <--
             {
                 if( WrongPageDesc( pNew ) )
@@ -1187,7 +1183,7 @@ BOOL SwFlowFrm::IsPrevObjMove() const
     //     und fuer diesen ggf. Umbrechen.
 
     //!!!!!!!!!!!Hack!!!!!!!!!!!
-    if ( rThis.GetUpper()->GetFmt()->GetDoc()->IsBrowseMode() )
+    if ( rThis.GetUpper()->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
         return FALSE;
 
     SwFrm *pPre = rThis.FindPrev();
@@ -1265,11 +1261,12 @@ BOOL SwFlowFrm::IsPrevObjMove() const
 
 BOOL SwFlowFrm::IsPageBreak( BOOL bAct ) const
 {
-    const SwAttrSet *pSet;
     if ( !IsFollow() && rThis.IsInDocBody() &&
          ( !rThis.IsInTab() || rThis.IsTabFrm() ) &&
-         !(pSet = rThis.GetAttrSet())->GetDoc()->IsBrowseMode() )
+         !rThis.GetUpper()->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
     {
+        const SwAttrSet *pSet = rThis.GetAttrSet();
+
         //Vorgaenger ermitteln
         const SwFrm *pPrev = rThis.FindPrev();
         while ( pPrev && ( !pPrev->IsInDocBody() ||
@@ -1516,10 +1513,8 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
     SwTwips nUpper = 0;
     // OD 06.01.2004 #i11859#
     {
-        const SwAttrSet* pSet = rThis.GetAttrSet();
-        const SvxLineSpacingItem &rSpace = pSet->GetLineSpacing();
-        const SwDoc* pDoc = pSet->GetDoc();
-        const bool bUseFormerLineSpacing = pDoc->IsFormerLineSpacing();
+        const IDocumentSettingAccess* pIDSA = rThis.GetUpper()->GetFmt()->getIDocumentSettingAccess();
+        const bool bUseFormerLineSpacing = pIDSA->get(IDocumentSettingAccess::OLD_LINE_SPACING);
         if( pPrevFrm )
         {
             // OD 2004-03-10 #i11860# - use new method to determine needed spacing
@@ -1527,7 +1522,7 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
             SwTwips nPrevLowerSpace = 0;
             SwTwips nPrevLineSpacing = 0;
             GetSpacingValuesOfFrm( (*pPrevFrm), nPrevLowerSpace, nPrevLineSpacing );
-            if( pDoc->IsParaSpaceMax() )
+            if( pIDSA->get(IDocumentSettingAccess::PARA_SPACE_MAX) )
             {
                 nUpper = nPrevLowerSpace + pAttrs->GetULSpace().GetUpper();
                 SwTwips nAdd = nPrevLineSpacing;
@@ -1589,7 +1584,7 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
                 }
             }
         }
-        else if ( pDoc->IsParaSpaceMaxAtPages() &&
+        else if ( pIDSA->get(IDocumentSettingAccess::PARA_SPACE_MAX_AT_PAGES) &&
                   CastFlowFrm( pOwn )->HasParaSpaceAtPages( rThis.IsSctFrm() ) )
         {
             nUpper = pAttrs->GetULSpace().GetUpper();
@@ -1688,8 +1683,9 @@ SwTwips SwFlowFrm::_GetUpperSpaceAmountConsideredForPrevFrm() const
         GetSpacingValuesOfFrm( (*pPrevFrm), nPrevLowerSpace, nPrevLineSpacing );
         if ( nPrevLowerSpace > 0 || nPrevLineSpacing > 0 )
         {
-            if ( rThis.GetAttrSet()->GetDoc()->IsParaSpaceMax() ||
-                 !rThis.GetAttrSet()->GetDoc()->IsFormerLineSpacing() )
+            const IDocumentSettingAccess* pIDSA = rThis.GetUpper()->GetFmt()->getIDocumentSettingAccess();
+            if (  pIDSA->get(IDocumentSettingAccess::PARA_SPACE_MAX) ||
+                 !pIDSA->get(IDocumentSettingAccess::OLD_LINE_SPACING) )
             {
                 nUpperSpaceAmountOfPrevFrm = nPrevLowerSpace + nPrevLineSpacing;
             }
@@ -1715,7 +1711,7 @@ SwTwips SwFlowFrm::GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid() const
 {
     SwTwips nUpperSpaceAmountConsideredForPrevFrmAndPageGrid = 0;
 
-    if ( !rThis.GetAttrSet()->GetDoc()->IsFormerObjectPositioning() )
+    if ( !rThis.GetUpper()->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::USE_FORMER_OBJECT_POS) )
     {
         nUpperSpaceAmountConsideredForPrevFrmAndPageGrid =
             _GetUpperSpaceAmountConsideredForPrevFrm() +
@@ -1782,7 +1778,7 @@ SwTwips SwFlowFrm::CalcAddLowerSpaceAsLastInTableCell(
 {
     SwTwips nAdditionalLowerSpace = 0;
 
-    if ( rThis.GetShell()->GetDoc()->IsAddParaSpacingToTableCells() )
+    if ( rThis.GetUpper()->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::ADD_PARA_SPACING_TO_TABLE_CELLS) )
     {
         const SwFrm* pFrm = &rThis;
         if ( pFrm->IsSctFrm() )
@@ -2001,10 +1997,6 @@ BOOL SwFlowFrm::MoveFwd( BOOL bMakePage, BOOL bPageBreak, BOOL bMoveAlways )
         // First, we move the footnotes.
         BOOL bFtnMoved = FALSE;
 
-        // --> FME 2004-04-19 #i27145#
-        const bool bOldUpperValid = rThis.GetUpper()->IsValid();
-        // <--
-
         // --> FME 2004-07-15 #i26831#
         // If pSect has just been created, the printing area of pSect has
         // been calculated based on the first content of its follow.
@@ -2086,7 +2078,7 @@ BOOL SwFlowFrm::MoveFwd( BOOL bMakePage, BOOL bPageBreak, BOOL bMoveAlways )
                 {
                     ViewShell *pSh = rThis.GetShell();
                     if ( pSh && !pSh->Imp()->IsUpdateExpFlds() )
-                        pSh->GetDoc()->SetNewFldLst();  //Wird von CalcLayout() hinterher erledigt!
+                        pSh->GetDoc()->SetNewFldLst(true);  //Wird von CalcLayout() hinterher erledigt!
 
                     pNewPage->InvalidateSpelling();
                     pNewPage->InvalidateAutoCompleteWords();
@@ -2095,7 +2087,7 @@ BOOL SwFlowFrm::MoveFwd( BOOL bMakePage, BOOL bPageBreak, BOOL bMoveAlways )
             }
         }
         // OD 30.10.2002 #97265# - no <CheckPageDesc(..)> in online layout
-        if ( !pNewPage->GetFmt()->GetDoc()->IsBrowseMode() )
+        if ( !pNewPage->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
         {
             //Bei Sections kann es passieren, das wir gleich  in den Follow geflutscht
             //sind. Dadurch wird nicht vom GetLeaf fuer die richtige Seite gesorgt.
@@ -2597,14 +2589,14 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
             rThis.Prepare( PREP_BOSS_CHGD, (const void*)pOldPage, FALSE );
             ViewShell *pSh = rThis.GetShell();
             if ( pSh && !pSh->Imp()->IsUpdateExpFlds() )
-                pSh->GetDoc()->SetNewFldLst();  //Wird von CalcLayout() hinterher eledigt!
+                pSh->GetDoc()->SetNewFldLst(true);  //Wird von CalcLayout() hinterher eledigt!
 
             pNewPage->InvalidateSpelling();
             pNewPage->InvalidateAutoCompleteWords();
             pNewPage->InvalidateWordCount();
 
             // OD 30.10.2002 #97265# - no <CheckPageDesc(..)> in online layout
-            if ( !pNewPage->GetFmt()->GetDoc()->IsBrowseMode() )
+            if ( !pNewPage->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
             {
                 if ( bCheckPageDescs && pNewPage->GetNext() )
                 {
