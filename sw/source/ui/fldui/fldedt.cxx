@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldedt.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:35:03 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:36:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifdef SW_DLLIMPLEMENTATION
 #undef SW_DLLIMPLEMENTATION
 #endif
@@ -67,9 +66,6 @@
 #endif
 #ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
-#ifndef _FLDBAS_HXX
-#include <fldbas.hxx>
 #endif
 #ifndef _DBFLD_HXX
 #include <dbfld.hxx>
