@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cption.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:32:08 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:37:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifdef SW_DLLIMPLEMENTATION
 #undef SW_DLLIMPLEMENTATION
 #endif
@@ -48,9 +47,6 @@
 #endif
 #ifndef _CPTION_HXX
 #include <cption.hxx>
-#endif
-#ifndef _CAPTION_HXX
-#include <caption.hxx>
 #endif
 #ifndef _FLDMGR_HXX
 #include <fldmgr.hxx>
@@ -81,9 +77,6 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
 #include <com/sun/star/frame/XStorable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
-#include <com/sun/star/frame/XModel.hpp>
 #endif
 #ifndef _COM_SUN_STAR_TEXT_GRAPHICCROP_HPP_
 #include <com/sun/star/text/GraphicCrop.hpp>
