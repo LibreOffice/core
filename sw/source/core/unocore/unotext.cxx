@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:31:08 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:57:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -102,9 +101,6 @@
 #endif
 #ifndef _SECTION_HXX //autogen
 #include <section.hxx>
-#endif
-#ifndef _UNOCRSR_HXX
-#include <unocrsr.hxx>
 #endif
 #ifndef _BOOKMRK_HXX //autogen
 #include <bookmrk.hxx>
@@ -273,10 +269,10 @@ void SwXText::insertString(const uno::Reference< XTextRange > & xTextRange,
             const SwStartNode* pOwnStartNode = GetStartNode();
             if(pCursor)
             {
-                const SwStartNode* pTmp = pCursor->GetPaM()->GetNode()->FindStartNode();
+                const SwStartNode* pTmp = pCursor->GetPaM()->GetNode()->StartOfSectionNode();
                 while(pTmp && pTmp->IsSectionNode())
                 {
-                    pTmp = pTmp->FindStartNode();
+                    pTmp = pTmp->StartOfSectionNode();
                 }
                 if( !pOwnStartNode || pOwnStartNode != pTmp)
                 {
@@ -286,10 +282,10 @@ void SwXText::insertString(const uno::Reference< XTextRange > & xTextRange,
             else //dann pRange
             {
                 SwBookmark* pBkm = pRange->GetBookmark();
-                const SwStartNode* pTmp = pBkm->GetPos().nNode.GetNode().FindStartNode();
+                const SwStartNode* pTmp = pBkm->GetPos().nNode.GetNode().StartOfSectionNode();
                 while( pTmp && pTmp->IsSectionNode())
                 {
-                    pTmp = pTmp->FindStartNode();
+                    pTmp = pTmp->StartOfSectionNode();
                 }
                 if( !pOwnStartNode || pOwnStartNode != pTmp)
                 {
@@ -515,12 +511,12 @@ void SwXText::insertTextContent(const uno::Reference< XTextRange > & xRange,
             //SectionNodes ueberspringen
             while(pTmp && pTmp->IsSectionNode())
             {
-                pTmp = pTmp->FindStartNode();
+                pTmp = pTmp->StartOfSectionNode();
             }
             //if the document starts with a section
             while(pOwnStartNode->IsSectionNode())
             {
-                pOwnStartNode = pOwnStartNode->FindStartNode();
+                pOwnStartNode = pOwnStartNode->StartOfSectionNode();
             }
             //this checks if (this) and xRange are in the same XText interface
             if(pOwnStartNode != pTmp)
@@ -972,7 +968,7 @@ void SwXText::setString(const OUString& aString) throw( uno::RuntimeException )
     if(!pStartNode)
         throw uno::RuntimeException();
 
-    GetDoc()->StartUndo(UNDO_START);
+    GetDoc()->StartUndo(UNDO_START, NULL);
     //insert an empty paragraph at the start and at the end to ensure that
     //all tables and sections can be removed by the selecting XTextCursor
     {
@@ -1009,7 +1005,7 @@ void SwXText::setString(const OUString& aString) throw( uno::RuntimeException )
     uno::Reference< XTextCursor >  xRet = createCursor();
     if(!xRet.is())
     {
-        GetDoc()->EndUndo(UNDO_END);
+        GetDoc()->EndUndo(UNDO_END, NULL);
         RuntimeException aRuntime;
         aRuntime.Message = C2U(cInvalidObject);
         throw aRuntime;
@@ -1019,7 +1015,7 @@ void SwXText::setString(const OUString& aString) throw( uno::RuntimeException )
         xRet->gotoEnd(sal_True);
     }
     xRet->setString(aString);
-    GetDoc()->EndUndo(UNDO_END);
+    GetDoc()->EndUndo(UNDO_END, NULL);
 }
 /* -----------------------------28.03.00 11:12--------------------------------
     Description: Checks if pRange/pCursor are member of the same text interface.
@@ -1040,7 +1036,7 @@ sal_Bool    SwXText::CheckForOwnMember(
         pOwnCursor = (OTextCursorHelper*)xTunnel->getSomething(OTextCursorHelper::getUnoTunnelId());
     }
     DBG_ASSERT(pOwnCursor, "OTextCursorHelper::getUnoTunnelId() ??? ")
-    const SwStartNode* pOwnStartNode = pOwnCursor->GetPaM()->GetNode()->FindStartNode();
+    const SwStartNode* pOwnStartNode = pOwnCursor->GetPaM()->GetNode()->StartOfSectionNode();
     SwStartNodeType eSearchNodeType = SwNormalStartNode;
     switch(eCrsrType)
     {
@@ -1068,12 +1064,12 @@ sal_Bool    SwXText::CheckForOwnMember(
     //SectionNodes ueberspringen
     while(pTmp && pTmp->IsSectionNode())
     {
-        pTmp = pTmp->FindStartNode();
+        pTmp = pTmp->StartOfSectionNode();
     }
     //if the document starts with a section
     while(pOwnStartNode->IsSectionNode())
     {
-        pOwnStartNode = pOwnStartNode->FindStartNode();
+        pOwnStartNode = pOwnStartNode->StartOfSectionNode();
     }
     //this checks if (this) and xRange are in the same XText interface
     return(pOwnStartNode == pTmp);
@@ -1519,13 +1515,13 @@ uno::Reference< XTextCursor >  SwXBodyText::createTextCursorByRange(
     {
         SwNode& rNode = GetDoc()->GetNodes().GetEndOfContent();
 
-        SwStartNode* p1 = aPam.GetNode()->FindStartNode();
+        SwStartNode* p1 = aPam.GetNode()->StartOfSectionNode();
         //document starts with a section?
         while(p1->IsSectionNode())
         {
-            p1 = p1->FindStartNode();
+            p1 = p1->StartOfSectionNode();
         }
-        SwStartNode* p2 = rNode.FindStartNode();
+        SwStartNode* p2 = rNode.StartOfSectionNode();
 
         if(p1 == p2)
             aRef =  (XWordCursor*)new SwXTextCursor(this , *aPam.GetPoint(), CURSOR_BODY, GetDoc(), aPam.GetMark());
