@@ -4,9 +4,9 @@
  *
  *  $RCSfile: warnpassword.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:23:15 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 18:02:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
 + ************************************************************************/
-
 // ============================================================================
 
 #ifndef SW_WARNPASSWORD_HXX
@@ -42,10 +41,6 @@
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #endif
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONREQUEST_HPP_
-#include <com/sun/star/task/XInteractionRequest.hpp>
-#endif
-
 #ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
 #endif
@@ -61,13 +56,9 @@
 #ifndef _COM_SUN_STAR_UCB_INTERACTIVEAPPEXCEPTION_HPP_
 #include <com/sun/star/ucb/InteractiveAppException.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UCB_XCONTENT_HPP_
-#include <com/sun/star/ucb/XContent.hpp>
-#endif
 #ifndef _SVXERR_HXX
 #include <svx/svxerr.hxx>
 #endif
-
 
 using ::rtl::OUString;
 using ::com::sun::star::uno::Any;
