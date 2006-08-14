@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfact.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:34:58 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:00:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@ SwDocFac::SwDocFac( SwDoc *pDc )
     : pDoc( pDc )
 {
     if( pDoc )
-        pDoc->AddLink();
+        pDoc->acquire();
 }
 
 /******************************************************************************
@@ -77,7 +77,7 @@ SwDocFac::SwDocFac( SwDoc *pDc )
 
 SwDocFac::~SwDocFac()
 {
-    if( pDoc && !pDoc->RemoveLink() )
+    if( pDoc && !pDoc->release() )
         delete pDoc;
 }
 
@@ -94,7 +94,7 @@ SwDoc *SwDocFac::GetDoc()
     if( !pDoc )
     {
         pDoc = new SwDoc;
-        pDoc->AddLink();
+        pDoc->acquire();
     }
     return pDoc;
 }
