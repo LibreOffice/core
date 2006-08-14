@@ -4,9 +4,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.179 $
+#   $Revision: 1.180 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-21 10:40:01 $
+#   last change: $Author: hr $ $Date: 2006-08-14 16:19:35 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -399,10 +399,10 @@ DEPSRSFILES+=$(DEPSRS9FILE)
 .IF "$(SOLAR_JAVA)"!=""
 .IF "$(JAVAFILES)$(JAVACLASSFILES)$(GENJAVAFILES)"!=""
 .IF "$(JAVAFILES)$(JAVACLASSFILES)"=="$(JAVAFILES)"
-JAVACLASSFILES=	$(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
+JAVACLASSFILES=	$(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:s/.java//).class)
 .ELSE			# "$(JAVAFILES)$(JAVACLASSFILES)"=="$(JAVAFILES)"
 .IF "$(JAVAFILES)$(JAVACLASSFILES)"=="$(JAVACLASSFILES)"
-JAVAFILES=	$(foreach,i,$(JAVACLASSFILES) $(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(i:b).java))
+JAVAFILES=	$(foreach,i,$(JAVACLASSFILES) $(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(i:s/.class//).java))
 .ENDIF			# "$(JAVAFILES)$(JAVACLASSFILES)"=="$(JAVACLASSFILES)"
 .ENDIF			# "$(JAVAFILES)$(JAVACLASSFILES)"=="$(JAVAFILES)"
 JAVATARGET:=$(MISC)$/$(TARGET)_dummy.java
@@ -1380,7 +1380,6 @@ ALLTAR: \
         $(UNOIDLDEPTARGETS) \
         $(URDTARGET) \
         $(URDDOCTARGET) \
-        $(UNOIDLTARGETS) \
         $(DEPFILES) $(DPCTARGET) \
         $(DPRTARGET) \
         $(DPZTARGET) \
