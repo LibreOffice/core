@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmldraw.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:41:33 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:03:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -67,9 +66,6 @@
 #ifndef _OUTLINER_HXX //autogen
 #define _EEITEMID_HXX
 #include <svx/outliner.hxx>
-#endif
-#ifndef SVX_XFILLIT0_HXX //autogen
-#include <svx/xfillit0.hxx>
 #endif
 #ifndef _SVX_FILLITEM_HXX //autogen
 #include <svx/xfillit.hxx>
@@ -277,7 +273,7 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
         aAnchor.SetAnchor( pPam->GetPoint() );
     aFrmSet.Put( aAnchor );
 
-    pDoc->Insert( *pPam, *pNewDrawObj, &aFrmSet );
+    pDoc->Insert( *pPam, *pNewDrawObj, &aFrmSet, NULL );
 }
 
 /*  */
