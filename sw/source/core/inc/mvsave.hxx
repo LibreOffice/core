@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mvsave.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 14:20:27 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:20:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifndef _MVSAVE_HXX
 #define _MVSAVE_HXX
 
@@ -47,6 +46,10 @@
 #include <svtools/svarray.hxx>
 #endif
 
+#ifndef IDOCUMENTBOOKMARKACCESS_HXX_INCLUDED
+#include <IDocumentBookmarkAccess.hxx>
+#endif
+
 class SvNumberFormatter;
 class SvULongs;
 class SwBookmark;
@@ -57,7 +60,6 @@ class SwIndex;
 class SwNodeIndex;
 class SwNodeRange;
 class SwPaM;
-class SwRedline;
 struct SwPosition;
 
 enum SaveBookmarkType { BKMK_POS_NONE   = 0x00,
@@ -72,13 +74,13 @@ class SaveBookmark
     xub_StrLen nCntnt1, nCntnt2;
     KeyCode aCode;
     SaveBookmarkType eBkmkType;
-    BOOKMARK_TYPE    eOrigBkmType;
+    IDocumentBookmarkAccess::BookmarkType eOrigBkmType;
 
 public:
     SaveBookmark( int, const SwBookmark&, const SwNodeIndex&,
                                     const SwIndex* pIdx = 0 );
     void SetInDoc( SwDoc* pDoc, const SwNodeIndex&, const SwIndex* pIdx = 0);
-    BOOKMARK_TYPE   GetOriginalBkmType() const {return eOrigBkmType;}
+    IDocumentBookmarkAccess::BookmarkType GetOriginalBkmType() const {return eOrigBkmType;}
 };
 
 SV_DECL_PTRARR_DEL( SaveBookmarks, SaveBookmark*, 0, 10 )
