@@ -4,9 +4,9 @@
  *
  *  $RCSfile: redlnaut.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:06:46 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:30:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,21 +59,6 @@ public:
     ~SwRedlineAuthor();
 
     SwRedlineAuthor& operator=( const SwRedlineAuthor& );
-
-    const String& GetAuthor() const { return sAuthor; }
-
-    SfxItemSet& GetInsAttrSet() const { return *pInsAttrSet; }
-    SfxItemSet& GetDelAttrSet() const { return *pDelAttrSet; }
-    SfxItemSet& GetFmtAttrSet() const { return *pFmtAttrSet; }
-
-    const Color& GetChgLineColor() const { return aChgLineColor; }
-    void SetChgLineColor( const Color& rCol ) { aChgLineColor = rCol; }
-
-    SwHoriOrient GetChgLineOrient() const { return eChgLineOrient; }
-    void SetChgLineOrient( SwHoriOrient eVal ) { eChgLineOrient = eVal; }
-
-    BYTE GetDelChar() const { return cDelChar; }
-    void SetDelChar( BYTE cCh = 0 ) { cDelChar = cCh; }
 };
 
 
