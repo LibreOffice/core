@@ -4,9 +4,9 @@
  *
  *  $RCSfile: label1.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 08:30:41 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:35:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifdef SW_DLLIMPLEMENTATION
 #undef SW_DLLIMPLEMENTATION
 #endif
@@ -62,20 +61,11 @@
 #ifndef _LABIMP_HXX
 #include <labimp.hxx>
 #endif
-#ifndef _LABEL_HXX
-#include <label.hxx>
-#endif
 #ifndef _LABFMT_HXX
 #include <labfmt.hxx>
 #endif
 #ifndef _LABPRT_HXX
 #include <labprt.hxx>
-#endif
-#ifndef _LABIMG_HXX
-#include <labimg.hxx>
-#endif
-#ifndef _DOC_HXX
-#include <doc.hxx>
 #endif
 #ifndef _UNOTOOLS_HXX
 #include <unotools.hxx>
