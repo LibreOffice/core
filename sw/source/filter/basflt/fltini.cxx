@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fltini.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:11:02 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:00:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #define _SVSTDARR_STRINGS
 
 #include <string.h>
@@ -72,13 +71,6 @@
 #ifndef _SVX_TSPTITEM_HXX //autogen
 #include <svx/tstpitem.hxx>
 #endif
-#ifndef _COM_SUN_STAR_UNO_ANY_HXX_
-#include <com/sun/star/uno/Any.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
-#include <com/sun/star/uno/Sequence.hxx>
-#endif
-
 #ifndef _DOC_HXX
 #include <doc.hxx>
 #endif
