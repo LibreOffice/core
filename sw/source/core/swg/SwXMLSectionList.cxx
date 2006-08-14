@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXMLSectionList.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:43:13 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:32:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,15 +33,11 @@
  *
  ************************************************************************/
 #pragma hdrstop
-
 #define _SVSTDARR_STRINGSDTOR
 #define _SVSTDARR_STRINGS
 #include <svtools/svstdarr.hxx>
 #ifndef _SW_XMLSECTIONLIST_HXX
 #include <SwXMLSectionList.hxx>
-#endif
-#ifndef _XMLOFF_XMLTOKEN_HXX
-#include <xmloff/xmltoken.hxx>
 #endif
 #ifndef _XMLOFF_NMSPMAP_HXX
 #include <xmloff/nmspmap.hxx>
