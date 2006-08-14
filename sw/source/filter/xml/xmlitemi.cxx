@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlitemi.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:23:55 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:23:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -175,35 +175,6 @@ sal_Bool SwXMLImportTableItemMapper_Impl::handleSpecialItem(
 
 void SwXMLImportTableItemMapper_Impl::finished( SfxItemSet& rSet ) const
 {
-#if 0
-    const SfxPoolItem *pItem;
-
-    // ensure that box item have a distance to a border.
-    if( SFX_ITEM_SET == rSet.GetItemState( RES_BOX, sal_False, &pItem ) )
-    {
-        const SvxBoxItem *pBox = (const SvxBoxItem *)pItem;
-        sal_uInt16 aLines[4] = { BOX_LINE_TOP, BOX_LINE_BOTTOM,
-                             BOX_LINE_LEFT, BOX_LINE_RIGHT };
-        sal_uInt16 i;
-        for( i=0; i<4; i++ )
-        {
-            if( pBox->GetLine( aLines[i] ) &&
-                pBox->GetDistance( aLines[i] ) < MIN_BORDER_DIST )
-                break;
-        }
-        if( i < 4 )
-        {
-            SvxBoxItem aBox( *pBox );
-            for( /*i=0*/; i<4; i++ )    // i points to the mod. line
-            {
-                if( aBox.GetLine( aLines[i] ) &&
-                    aBox.GetDistance( aLines[i] ) < MIN_BORDER_DIST )
-                    aBox.SetDistance( MIN_BORDER_DIST, aLines[i] );
-            }
-            rSet.Put( aBox );
-        }
-    }
-#endif
 }
 
 // ---------------------------------------------------------------------
