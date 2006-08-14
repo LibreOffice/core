@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 04:56:18 $
+#   last change: $Author: hr $ $Date: 2006-08-14 16:40:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
 #     MA  02111-1307  USA
 #
 #*************************************************************************
-
 PRJ=..$/..$/..
 
 PRJNAME=sw
@@ -86,7 +85,7 @@ SLOFILES =  \
         $(SLO)$/portox.obj \
         $(SLO)$/portxt.obj \
         $(SLO)$/redlnitr.obj \
-                $(SLO)$/txtcache.obj \
+        $(SLO)$/txtcache.obj \
         $(SLO)$/txtdrop.obj \
         $(SLO)$/txtfld.obj \
         $(SLO)$/txtfly.obj \
