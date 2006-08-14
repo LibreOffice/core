@@ -4,9 +4,9 @@
  *
  *  $RCSfile: findattr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:08:09 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:51:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1278,13 +1278,13 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
 
         // und noch die Attribute setzen
 #ifdef OLD
-        pCrsr->GetDoc()->Insert( *pCrsr, *pReplSet );
+        pCrsr->GetDoc()->Insert( *pCrsr, *pReplSet, 0 );
 #else
         //JP 13.07.95: alle gesuchten Attribute werden, wenn nicht im
         //              ReplaceSet angegeben, auf Default zurueck gesetzt
 
         if( !pSet->Count() )
-            pCrsr->GetDoc()->Insert( *pCrsr, *pReplSet );
+            pCrsr->GetDoc()->Insert( *pCrsr, *pReplSet, 0 );
         else
         {
             SfxItemPool* pPool = pReplSet->GetPool();
@@ -1304,7 +1304,7 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
                 pItem = aIter.NextItem();
             }
             aSet.Put( *pReplSet );
-            pCrsr->GetDoc()->Insert( *pCrsr, aSet );
+            pCrsr->GetDoc()->Insert( *pCrsr, aSet, 0 );
         }
 #endif
         return FIND_NO_RING;
@@ -1339,7 +1339,7 @@ ULONG SwCursor::Find( const SfxItemSet& rSet, FASTBOOL bNoCollections,
                     (pReplSet && pReplSet->Count());
     BOOL bSttUndo = pDoc->DoesUndo() && bReplace;
     if( bSttUndo )
-        pDoc->StartUndo( UNDO_REPLACE );
+        pDoc->StartUndo( UNDO_REPLACE, NULL );
 
     SwFindParaAttr aSwFindParaAttr( rSet, bNoCollections, pSearchOpt,
                                     pReplSet, *this );
@@ -1350,7 +1350,7 @@ ULONG SwCursor::Find( const SfxItemSet& rSet, FASTBOOL bNoCollections,
         pDoc->SetModified();
 
     if( bSttUndo )
-        pDoc->EndUndo( UNDO_REPLACE );
+        pDoc->EndUndo( UNDO_REPLACE, NULL );
 
     return nRet;
 }
