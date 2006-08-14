@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:41:16 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:19:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifdef PCH
@@ -154,9 +153,6 @@
 #ifndef _SHELLRES_HXX
 #include <shellres.hxx>
 #endif
-#ifndef _SWDBDATA_HXX
-#include <swdbdata.hxx>
-#endif
 #ifndef _FMTRUBY_HXX
 #include <fmtruby.hxx>
 #endif
@@ -188,10 +184,6 @@
 #endif
 #ifndef _WW8PAR2_HXX
 #include "ww8par2.hxx"
-#endif
-
-#ifndef SW_MS_MSFILTER_HXX
-#include <msfilter.hxx>
 #endif
 #ifndef SW_WRITERHELPER
 #include "writerhelper.hxx"
@@ -752,7 +744,7 @@ void SwWW8ImplReader::UpdateFields()
 //  rDoc.UpdateFlds();                                  // SetExp-Fields
 //  rDoc.UpdateFlds();              // alles ???
 //  rDoc.UpdateExpFlds();                               // SetExp-Fields
-    rDoc.SetUpdateExpFldStat();                 // JP: neu fuer alles wichtige
+    rDoc.SetUpdateExpFldStat(true);                 // JP: neu fuer alles wichtige
     rDoc.SetInitDBFields(true);             // Datenbank-Felder auch
 }
 
@@ -1156,7 +1148,7 @@ void SwWW8ImplReader::InsertTagField( const USHORT nId, const String& rTagText )
         USHORT nSubType = ( SwFltGetFlag( nFieldFlags, SwFltControlStack::TAGS_VISIBLE ) ) ? 0 : SUB_INVISIBLE;
         aFld.SetSubType(nSubType|GSE_STRING);
 
-        rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
+        rDoc.Insert( *pPaM, SwFmtFld( aFld ), 0 );
     }
 }
 
@@ -1216,7 +1208,7 @@ eF_ResT SwWW8ImplReader::Read_F_Input( WW8FieldDesc* pF, String& rStr )
 
     SwInputField aFld( (SwInputFieldType*)rDoc.GetSysFldType( RES_INPUTFLD ),
                         aDef, aQ, INP_TXT, 0 ); // sichtbar ( geht z.Zt. nicht anders )
-    rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
+    rDoc.Insert( *pPaM, SwFmtFld( aFld ), 0 );
 
     return FLD_OK;
 }
@@ -1418,7 +1410,7 @@ eF_ResT SwWW8ImplReader::Read_F_InputVar( WW8FieldDesc* pF, String& rStr )
     aFld.SetInputFlag(true);
     aFld.SetPromptText( aQ );
 
-    rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
+    rDoc.Insert( *pPaM, SwFmtFld( aFld ), 0 );
 
     pReffedStck->SetAttr(*pPaM->GetPoint(), RES_FLTR_BOOKMARK, true, nNo);
     return FLD_OK;
@@ -1434,7 +1426,7 @@ eF_ResT SwWW8ImplReader::Read_F_ANumber( WW8FieldDesc*, String& rStr )
     SwSetExpField aFld( (SwSetExpFieldType*)pNumFldType, aEmptyStr,
                         GetNumberPara( rStr ) );
     aFld.SetValue( ++nFldNum );
-    rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
+    rDoc.Insert( *pPaM, SwFmtFld( aFld ), 0 );
     return FLD_OK;
 }
 
@@ -1510,7 +1502,7 @@ eF_ResT SwWW8ImplReader::Read_F_Seq( WW8FieldDesc*, String& rStr )
     else if (!bCountOn)
         aFld.SetFormula(aSequenceName);
 
-    rDoc.Insert(*pPaM, SwFmtFld(aFld));
+    rDoc.Insert(*pPaM, SwFmtFld(aFld), 0);
     return FLD_OK;
 }
 
@@ -1639,7 +1631,7 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, String& rStr )
             aTmp.SetContent(GetFieldResult( pF ));
             SwUserField aUFld( (SwUserFieldType*)rDoc.InsertFldType( aTmp ));
             aUFld.ChangeFormat( UF_STRING );
-            rDoc.Insert( *pPaM, SwFmtFld( aUFld ));
+            rDoc.Insert( *pPaM, SwFmtFld( aUFld ), 0);
 
             return FLD_OK;
         }
@@ -1719,7 +1711,7 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, String& rStr )
         rDoc.GetSysFldType( RES_DOCINFOFLD ), nSub|nReg, nFormat );
     if (bDateTime)
         ForceFieldLanguage(aFld, nLang);
-    rDoc.Insert(*pPaM, SwFmtFld(aFld));
+    rDoc.Insert(*pPaM, SwFmtFld(aFld), 0);
 
     return FLD_OK;
 }
@@ -1732,7 +1724,7 @@ eF_ResT SwWW8ImplReader::Read_F_Author( WW8FieldDesc*, String& )
     SwDocInfoField aFld( (SwDocInfoFieldType*)
                      rDoc.GetSysFldType( RES_DOCINFOFLD ),
                      DI_CREATE|DI_SUB_AUTHOR );
-    rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
+    rDoc.Insert( *pPaM, SwFmtFld( aFld ), 0 );
     return FLD_OK;
 }
 
@@ -1740,7 +1732,7 @@ eF_ResT SwWW8ImplReader::Read_F_TemplName( WW8FieldDesc*, String& )
 {
     SwTemplNameField aFld( (SwTemplNameFieldType*)
                      rDoc.GetSysFldType( RES_TEMPLNAMEFLD ), FF_NAME );
-    rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
+    rDoc.Insert( *pPaM, SwFmtFld( aFld ), 0 );
     return FLD_OK;
 }
 
@@ -1795,14 +1787,14 @@ eF_ResT SwWW8ImplReader::Read_F_DateTime( WW8FieldDesc*pF, String& rStr )
         SwDateTimeField aFld((SwDateTimeFieldType*)
             rDoc.GetSysFldType(RES_DATETIMEFLD ), DATEFLD, nFormat);
         ForceFieldLanguage(aFld, nLang);
-        rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
+        rDoc.Insert( *pPaM, SwFmtFld( aFld ), 0 );
     }
     else if (nDT == NUMBERFORMAT_TIME)
     {
         SwDateTimeField aFld((SwDateTimeFieldType*)
             rDoc.GetSysFldType(RES_DATETIMEFLD), TIMEFLD, nFormat);
         ForceFieldLanguage(aFld, nLang);
-        rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
+        rDoc.Insert( *pPaM, SwFmtFld( aFld ), 0 );
     }
 
     return FLD_OK;
@@ -1832,7 +1824,7 @@ eF_ResT SwWW8ImplReader::Read_F_FileName(WW8FieldDesc*, String &rStr)
 
     SwFileNameField aFld(
         (SwFileNameFieldType*)rDoc.GetSysFldType(RES_FILENAMEFLD), eType);
-    rDoc.Insert(*pPaM, SwFmtFld(aFld));
+    rDoc.Insert(*pPaM, SwFmtFld(aFld), 0);
     return FLD_OK;
 }
 
@@ -1846,7 +1838,7 @@ eF_ResT SwWW8ImplReader::Read_F_Anz( WW8FieldDesc* pF, String& rStr )
     SwDocStatField aFld( (SwDocStatFieldType*)
                          rDoc.GetSysFldType( RES_DOCSTATFLD ), nSub,
                          GetNumberPara( rStr ) );
-    rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
+    rDoc.Insert( *pPaM, SwFmtFld( aFld ), 0 );
     return FLD_OK;
 }
 
@@ -1858,7 +1850,7 @@ eF_ResT SwWW8ImplReader::Read_F_CurPage( WW8FieldDesc*, String& rStr )
         SwChapterField aFld( (SwChapterFieldType*)
                     rDoc.GetSysFldType( RES_CHAPTERFLD ), CF_NUMBER );
         aFld.SetLevel( nPgChpLevel );
-        rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
+        rDoc.Insert( *pPaM, SwFmtFld( aFld ), 0 );
 
         static const sal_Char aDelim[] = "-.:\x97\x96";
         BYTE nDelim = nPgChpDelim;
@@ -1870,7 +1862,7 @@ eF_ResT SwWW8ImplReader::Read_F_CurPage( WW8FieldDesc*, String& rStr )
         if( '-' == c )
             rDoc.Insert( *pPaM, CHAR_HARDHYPHEN );
         else
-            rDoc.Insert( *pPaM, SwFmtHardBlank( c ));
+            rDoc.Insert( *pPaM, SwFmtHardBlank( c ), 0);
     }
 
     // Seitennummer
@@ -1878,7 +1870,7 @@ eF_ResT SwWW8ImplReader::Read_F_CurPage( WW8FieldDesc*, String& rStr )
         rDoc.GetSysFldType( RES_PAGENUMBERFLD ), PG_RANDOM,
         GetNumberPara(rStr, true));
 
-    rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
+    rDoc.Insert( *pPaM, SwFmtFld( aFld ), 0 );
     return FLD_OK;
 }
 
@@ -1946,7 +1938,7 @@ eF_ResT SwWW8ImplReader::Read_F_Symbol( WW8FieldDesc*, String& rStr )
     }
     else
     {
-        rDoc.Insert(*pPaM, CREATE_CONST_ASC("###"));
+        rDoc.Insert(*pPaM, CREATE_CONST_ASC("###"), true);
     }
 
     return FLD_OK;
@@ -2007,7 +1999,7 @@ eF_ResT SwWW8ImplReader::Read_F_Set( WW8FieldDesc* pF, String& rStr )
     SwSetExpField aFld( (SwSetExpFieldType*)pFT, sVal, ULONG_MAX );
     aFld.SetSubType(SUB_INVISIBLE|GSE_STRING);
 
-    rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
+    rDoc.Insert( *pPaM, SwFmtFld( aFld ), 0 );
 
     pReffedStck->SetAttr(*pPaM->GetPoint(), RES_FLTR_BOOKMARK, true, nNo);
 
@@ -2057,7 +2049,7 @@ eF_ResT SwWW8ImplReader::Read_F_Ref( WW8FieldDesc*, String& rStr )
             SwGetRefField aFld(
                 (SwGetRefFieldType*)rDoc.GetSysFldType( RES_GETREFFLD ),
                 sBkmName,REF_BOOKMARK,0,REF_CHAPTER);
-            rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
+            rDoc.Insert( *pPaM, SwFmtFld( aFld ), 0 );
         }
         else
         {
@@ -2080,7 +2072,7 @@ eF_ResT SwWW8ImplReader::Read_F_Ref( WW8FieldDesc*, String& rStr )
         SwGetRefField aFld( (SwGetRefFieldType*)
             rDoc.GetSysFldType( RES_GETREFFLD ), sBkmName, REF_BOOKMARK, 0,
             REF_UPDOWN );
-        rDoc.Insert(*pPaM, SwFmtFld(aFld));
+        rDoc.Insert(*pPaM, SwFmtFld(aFld), 0);
     }
     return FLD_OK;
 }
@@ -2157,7 +2149,7 @@ eF_ResT SwWW8ImplReader::Read_F_PgRef( WW8FieldDesc*, String& rStr )
         (SwGetRefFieldType*)rDoc.GetSysFldType( RES_GETREFFLD ), sName,
         REF_BOOKMARK, 0, REF_PAGE );
 
-    rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
+    rDoc.Insert( *pPaM, SwFmtFld( aFld ), 0 );
     return FLD_OK;
 }
 
@@ -2201,7 +2193,7 @@ eF_ResT SwWW8ImplReader::Read_F_Macro( WW8FieldDesc*, String& rStr )
 
     SwMacroField aFld( (SwMacroFieldType*)
                     rDoc.GetSysFldType( RES_MACROFLD ), aName, aVText );
-    rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
+    rDoc.Insert( *pPaM, SwFmtFld( aFld ), 0 );
     return FLD_OK;
 }
 
@@ -2279,7 +2271,7 @@ eF_ResT SwWW8ImplReader::Read_F_IncludePicture( WW8FieldDesc*, String& rStr )
                                                     aEmptyStr,
                                                     0,          // Graphic*
                                                     &aFlySet,
-                                                    0);         // SwFrmFmt*
+                                                    0, 0);         // SwFrmFmt*
         maGrfNameGenerator.SetUniqueGraphName(pFlyFmtOfJustInsertedGraphic,
             INetURLObject(aGrfName).GetBase());
     }
@@ -2379,7 +2371,8 @@ eF_ResT SwWW8ImplReader::Read_F_DBField( WW8FieldDesc*, String& rStr )
     SwFieldType* pFT = rDoc.InsertFldType( aD );
     SwDBField aFld( (SwDBFieldType*)pFT );
     aFld.SetFieldCode( rStr );
-    rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
+    rDoc.Insert( *pPaM, SwFmtFld( aFld ), 0);
+
     return FLD_OK;
 }
 
@@ -2390,7 +2383,7 @@ eF_ResT SwWW8ImplReader::Read_F_DBNext( WW8FieldDesc*, String& )
     SwFieldType* pFT = rDoc.InsertFldType( aN );
     SwDBNextSetField aFld( (SwDBNextSetFieldType*)pFT, aEmptyStr, aEmptyStr,
                             SwDBData() );       // Datenbank: Nichts
-    rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
+    rDoc.Insert( *pPaM, SwFmtFld( aFld ), 0 );
     return FLD_OK;
 }
 
@@ -2401,7 +2394,7 @@ eF_ResT SwWW8ImplReader::Read_F_DBNum( WW8FieldDesc*, String& )
     SwFieldType* pFT = rDoc.InsertFldType( aN );
     SwDBSetNumberField aFld( (SwDBSetNumberFieldType*)pFT,
                            SwDBData() );            // Datenbank: Nichts
-    rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
+    rDoc.Insert( *pPaM, SwFmtFld( aFld ), 0 );
     return FLD_OK;
 }
 
@@ -2466,7 +2459,7 @@ void SwWW8ImplReader::Read_SubF_Combined( _ReadFieldParams& rReadParam)
     {
         SwCombinedCharField aFld((SwCombinedCharFieldType*)
             rDoc.GetSysFldType(RES_COMBINED_CHARS),sCombinedCharacters);
-        rDoc.Insert(*pPaM,SwFmtFld(aFld));
+        rDoc.Insert(*pPaM,SwFmtFld(aFld), 0);
     }
 }
 
@@ -2624,7 +2617,7 @@ void SwWW8ImplReader::Read_SubF_Ruby( _ReadFieldParams& rReadParam)
         aRuby.SetAdjustment(nJustificationCode);
 
         NewAttr(aRuby);
-        rDoc.Insert( *pPaM, sText );
+        rDoc.Insert( *pPaM, sText, true );
         pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_TXTATR_CJK_RUBY );
     }
 }
@@ -2899,28 +2892,6 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                         eOptions |= TOI_ALPHA_DELIMITTER;
                     }
                     break;
-#if 0
-                //#109413# Doesn't work the way you think it does.
-                case 'r':
-                    {
-                        SwForm aForm( pBase->GetTOXForm() );
-                        aForm.SetCommaSeparated(true);
-                        pBase->SetTOXForm( aForm );
-                    }
-                    break;
-#endif
-                /*
-                // the following switches are not (yet) supported
-                // by good old StarWriter:
-                case 'b':
-                case 'd':
-                case 'f':
-                case 'g':
-                case 'I':
-                case 'p':
-                case 's':
-                    break;
-                */
                 }
             }
             pBase->SetOptions( eOptions );
@@ -3460,7 +3431,7 @@ void lcl_ImportTox(SwDoc &rDoc, SwPaM &rPaM, const String &rStr, bool bIdx)
     if (sFldTxt.Len())
     {
         aM.SetAlternativeText( sFldTxt );
-        rDoc.Insert( rPaM, aM );
+        rDoc.Insert( rPaM, aM, 0 );
     }
 }
 
