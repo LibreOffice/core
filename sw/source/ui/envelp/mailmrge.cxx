@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailmrge.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:31:59 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:36:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifdef SW_DLLIMPLEMENTATION
 #undef SW_DLLIMPLEMENTATION
 #endif
@@ -67,6 +66,9 @@
 #endif
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>
+#endif
+#ifndef IDOCUMENTDEVICEACCESS_HXX_INCLUDED
+#include <IDocumentDeviceAccess.hxx>
 #endif
 #ifndef _WRTSH_HXX
 #include <wrtsh.hxx>
@@ -119,30 +121,14 @@
 #ifndef _COM_SUN_STAR_SDBC_XDATASOURCE_HPP_
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #endif
-#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
-#include <com/sun/star/frame/XFrame.hpp>
-#endif
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
 #endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
-
 #ifndef _COM_SUN_STAR_FORM_XFORMCONTROLLER_HPP_
 #include <com/sun/star/form/XFormController.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XCONTROL_HPP_
-#include <com/sun/star/awt/XControl.hpp>
-#endif
-#ifndef _COM_SUN_STAR_VIEW_XSELECTIONSUPPLIER_HPP_
-#include <com/sun/star/view/XSelectionSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_VIEW_XSELECTIONCHANGELISTENER_HPP_
-#include <com/sun/star/view/XSelectionChangeListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XTABCONTROLLERMODEL_HPP_
-#include <com/sun/star/awt/XTabControllerModel.hpp>
 #endif
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
@@ -684,11 +670,12 @@ void SwMailMergeDlg::ExecQryShell(BOOL bVisible)
         }
     }
     SwPrintData aPrtData = *SW_MOD()->GetPrtOptions(FALSE);
-    SwPrintData* pShellPrintData = rSh.GetPrintData();
+    IDocumentDeviceAccess* pIDDA = rSh.getIDocumentDeviceAccess();
+    SwPrintData* pShellPrintData = pIDDA->getPrintData();
     if(pShellPrintData)
         aPrtData = *pShellPrintData;
     aPrtData.SetPrintSingleJobs(aSingleJobsCB.IsChecked());
-    rSh.SetPrintData(aPrtData);
+    pIDDA->setPrintData(aPrtData);
 
     pModOpt->SetSinglePrintJob(aSingleJobsCB.IsChecked());
 
