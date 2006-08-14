@@ -4,9 +4,9 @@
  *
  *  $RCSfile: conform.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:43:08 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:51:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 
@@ -42,9 +41,6 @@
 #endif
 #ifndef _SVDVIEW_HXX //autogen
 #include <svx/svdview.hxx>
-#endif
-#ifndef _SVDOBJ_HXX //autogen
-#include <svx/svdobj.hxx>
 #endif
 #ifndef _SVX_FMSHELL_HXX //autogen
 #include <svx/fmshell.hxx>
