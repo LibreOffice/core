@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfld.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 08:23:17 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:57:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -75,17 +74,11 @@
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
 #endif
-#ifndef _HINTS_HXX
-#include <hints.hxx>
-#endif
 #ifndef _SWTABLE_HXX
 #include <swtable.hxx>
 #endif
 #ifndef _CALC_HXX
 #include <calc.hxx>
-#endif
-#ifndef _ERRHDL_HXX
-#include <errhdl.hxx>
 #endif
 #ifndef _TXTFLD_HXX //autogen
 #include <txtfld.hxx>
@@ -143,9 +136,6 @@
 #endif
 #ifndef _AUTHFLD_HXX
 #include <authfld.hxx>
-#endif
-#ifndef _FMTCNTNT_HXX
-#include <fmtcntnt.hxx>
 #endif
 #ifndef _TXTINET_HXX
 #include <txtinet.hxx>
@@ -355,12 +345,17 @@ void SwDoc::RemoveFldType(USHORT nFld)
     }
 }
 
+const SwFldTypes* SwDoc::GetFldTypes() const
+{
+    return pFldTypes;
+}
+
 /*--------------------------------------------------------------------
     Beschreibung: Den ersten Typen mit ResId und Namen finden
  --------------------------------------------------------------------*/
 
 SwFieldType* SwDoc::GetFldType( USHORT nResId, const String& rName,
-         sal_Bool bDbFieldMatching // used in some UNO calls for RES_DBFLD
+         bool bDbFieldMatching // used in some UNO calls for RES_DBFLD
                                    // to use different string matching code
                                    // #i51815#
          ) const
@@ -415,7 +410,7 @@ SwFieldType* SwDoc::GetFldType( USHORT nResId, const String& rName,
  *    Alle sollen neu evaluiert werden.
  */
 
-void SwDoc::UpdateFlds( SfxPoolItem *pNewHt, BOOL bCloseDB )
+void SwDoc::UpdateFlds( SfxPoolItem *pNewHt, bool bCloseDB )
 {
     // Modify() fuer jeden Feldtypen rufen,
     // abhaengige SwTxtFld werden benachrichtigt ...
@@ -783,7 +778,7 @@ void SwDoc::UpdatePageFlds( SfxPoolItem* pMsgHnt )
             pFldType->Modify( 0, 0 );
             break;
         }
-    SetNewFldLst();
+    SetNewFldLst(true);
 }
 
 /*--------------------------------------------------------------------
@@ -796,6 +791,37 @@ void SwDoc::GCFieldTypes()
     for( register USHORT n = pFldTypes->Count(); n > INIT_FLDTYPES; )
         if( !(*pFldTypes)[ --n ]->GetDepends() )
             RemoveFldType( n );
+}
+
+void SwDoc::LockExpFlds()
+{
+    ++nLockExpFld;
+}
+
+void SwDoc::UnlockExpFlds()
+{
+    if( nLockExpFld )
+        --nLockExpFld;
+}
+
+bool SwDoc::IsExpFldsLocked() const
+{
+    return 0 != nLockExpFld;
+}
+
+SwDocUpdtFld& SwDoc::GetUpdtFlds() const
+{
+    return *pUpdtFlds;
+}
+
+bool SwDoc::IsNewFldLst() const
+{
+    return mbNewFldLst;
+}
+
+void SwDoc::SetNewFldLst(bool bFlag)
+{
+    mbNewFldLst = bFlag;
 }
 
 
@@ -1176,8 +1202,8 @@ void lcl_CalcFld( SwDoc& rDoc, SwCalc& rCalc, const _SetGetExpFld& rSGEFld,
 void SwDoc::FldsToCalc( SwCalc& rCalc, const _SetGetExpFld& rToThisFld )
 {
     // erzeuge die Sortierteliste aller SetFelder
-    pUpdtFlds->MakeFldList( *this, bNewFldLst, GETFLD_CALC );
-    bNewFldLst = FALSE;
+    pUpdtFlds->MakeFldList( *this, mbNewFldLst, GETFLD_CALC );
+    mbNewFldLst = FALSE;
 
     SwNewDBMgr* pMgr = GetNewDBMgr();
     pMgr->CloseAll(FALSE);
@@ -1200,8 +1226,8 @@ void SwDoc::FldsToCalc( SwCalc& rCalc, const _SetGetExpFld& rToThisFld )
 void SwDoc::FldsToCalc( SwCalc& rCalc, ULONG nLastNd, USHORT nLastCnt )
 {
     // erzeuge die Sortierteliste aller SetFelder
-    pUpdtFlds->MakeFldList( *this, bNewFldLst, GETFLD_CALC );
-    bNewFldLst = FALSE;
+    pUpdtFlds->MakeFldList( *this, mbNewFldLst, GETFLD_CALC );
+    mbNewFldLst = FALSE;
 
     SwNewDBMgr* pMgr = GetNewDBMgr();
     pMgr->CloseAll(FALSE);
@@ -1223,8 +1249,8 @@ void SwDoc::FldsToExpand( SwHash**& ppHashTbl, USHORT& rTblSize,
                             const _SetGetExpFld& rToThisFld )
 {
     // erzeuge die Sortierteliste aller SetFelder
-    pUpdtFlds->MakeFldList( *this, bNewFldLst, GETFLD_EXPAND );
-    bNewFldLst = FALSE;
+    pUpdtFlds->MakeFldList( *this, mbNewFldLst, GETFLD_EXPAND );
+    mbNewFldLst = FALSE;
 
     // HashTabelle fuer alle String Ersetzungen, wird "one the fly" gefuellt
     // (versuche eine "ungerade"-Zahl zu erzeugen)
@@ -1301,7 +1327,7 @@ void SwDoc::FldsToExpand( SwHash**& ppHashTbl, USHORT& rTblSize,
 }
 
 
-void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, BOOL bUpdRefFlds )
+void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
 {
     if( IsExpFldsLocked() || IsInReading() )
         return;
@@ -1310,12 +1336,12 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, BOOL bUpdRefFlds )
     pUpdtFlds->SetInUpdateFlds( TRUE );
 
     pUpdtFlds->MakeFldList( *this, TRUE, GETFLD_ALL );
-    bNewFldLst = FALSE;
+    mbNewFldLst = FALSE;
 
     if( !pUpdtFlds->GetSortLst()->Count() )
     {
         if( bUpdRefFlds )
-            UpdateRefFlds();
+            UpdateRefFlds(NULL);
 
         pUpdtFlds->SetInUpdateFlds( bOldInUpdateFlds );
         pUpdtFlds->SetFieldsDirty( FALSE );
@@ -1596,7 +1622,7 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, BOOL bUpdRefFlds )
 
     // Referenzfelder updaten
     if( bUpdRefFlds )
-        UpdateRefFlds();
+        UpdateRefFlds(NULL);
 
     pUpdtFlds->SetInUpdateFlds( bOldInUpdateFlds );
     pUpdtFlds->SetFieldsDirty( FALSE );
@@ -1692,9 +1718,9 @@ void SwDoc::_InitFieldTypes()       // wird vom CTOR gerufen!!
     ASSERT( nFldType == INIT_FLDTYPES, "Bad initsize: SwFldTypes" );
 }
 
-void SwDoc::InsDelFldInFldLst( BOOL bIns, const SwTxtFld& rFld )
+void SwDoc::InsDelFldInFldLst( bool bIns, const SwTxtFld& rFld )
 {
-    if( !bNewFldLst || !IsInDtor() )
+    if( !mbNewFldLst || !IsInDtor() )
         pUpdtFlds->InsDelFldInFldLst( bIns, rFld );
 }
 
@@ -2082,7 +2108,7 @@ void SwDoc::ReplaceUsedDBs( const SvStringsDtor& rUsedDBNames,
                     rFormel.Insert( sNewName, nPos );
                     //prevent re-searching - this is useless and provokes
                     //endless loops when names containing each other and numbers are exchanged
-                    //e.g.: old ´12345.12345  new: i12345.12345
+                    //e.g.: old ?12345.12345  new: i12345.12345
                     nPos += sNewName.Len();
                     sFormel = rFormel;
                 }
@@ -2110,7 +2136,7 @@ BOOL SwDoc::IsNameInArray( const SvStringsDtor& rArr, const String& rName )
     return FALSE;
 }
 
-void SwDoc::SetFixFields( BOOL bOnlyTimeDate, const DateTime* pNewDateTime )
+void SwDoc::SetFixFields( bool bOnlyTimeDate, const DateTime* pNewDateTime )
 {
     BOOL bIsModified = IsModified();
 
@@ -2217,7 +2243,7 @@ void SwDoc::SetFixFields( BOOL bOnlyTimeDate, const DateTime* pNewDateTime )
         ResetModified();
 }
 
-BOOL SwDoc::SetFieldsDirty( BOOL b, const SwNode* pChk, ULONG nLen )
+bool SwDoc::SetFieldsDirty( bool b, const SwNode* pChk, ULONG nLen )
 {
     // teste ggfs. mal, ob die angegbenen Nodes ueberhaupt Felder beinhalten.
     // wenn nicht, braucht das Flag nicht veraendert werden.
@@ -2323,6 +2349,13 @@ void SwDocUpdtFld::InsDelFldInFldLst( BOOL bIns, const SwTxtFld& rFld )
                 pFldSortLst->DeleteAndDestroy( n--, 1 );
                 // ein Feld kann mehrfach vorhanden sein!
     }
+}
+
+void SwDocUpdtFld::MakeFldList( SwDoc& rDoc, int bAll, int eGetMode )
+{
+    if( !pFldSortLst || bAll || !( eGetMode & nFldLstGetMode ) ||
+        rDoc.GetNodes().Count() != nNodes )
+        _MakeFldList( rDoc, eGetMode );
 }
 
 void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
@@ -2732,9 +2765,9 @@ SwDocUpdtFld::~SwDocUpdtFld()
 }
 
 // #111840#
-BOOL SwDoc::UpdateFld(SwTxtFld * pDstTxtFld, SwField & rSrcFld,
+bool SwDoc::UpdateFld(SwTxtFld * pDstTxtFld, SwField & rSrcFld,
                       SwMsgPoolItem * pMsgHnt,
-                      BOOL bUpdateFlds)
+                      bool bUpdateFlds)
 {
     ASSERT(pDstTxtFld, "no field to update!");
 
@@ -2773,7 +2806,7 @@ BOOL SwDoc::UpdateFld(SwTxtFld * pDstTxtFld, SwField & rSrcFld,
         case RES_GETEXPFLD:
         case RES_HIDDENTXTFLD:
         case RES_HIDDENPARAFLD:
-            UpdateExpFlds( pDstTxtFld );
+            UpdateExpFlds( pDstTxtFld, true );
             break;
 
         case RES_TABLEFLD:
@@ -2837,7 +2870,7 @@ BOOL SwDoc::UpdateFld(SwTxtFld * pDstTxtFld, SwField & rSrcFld,
     return bTblSelBreak;
 }
 
-BOOL SwDoc::PutValueToField(const SwPosition & rPos,
+bool SwDoc::PutValueToField(const SwPosition & rPos,
                             const Any& rVal, BYTE nMId)
 {
     Any aOldVal;
