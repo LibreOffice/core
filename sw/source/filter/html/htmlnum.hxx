@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlnum.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:45:05 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:05:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifndef _HTMLNUM_HXX
 #define _HTMLNUM_HXX
 
@@ -54,10 +53,6 @@ class SwHTMLNumRuleInfo
     sal_uInt16      nDeep;          // aktuelle Num-Tiefe (1, 2, 3, ...)
     sal_Bool        bRestart : 1;   // Export: Numerierung neu starten
     sal_Bool        bNumbered : 1;  // Export: Absatz ist numeriert
-#ifndef NUM_RELSPACE
-    sal_Bool        bUpdateWholeNum : 1;    // Import: Muss die NumRule
-                                        // vollstaendig aktualisiert werden
-#endif
 
 public:
 
@@ -66,9 +61,6 @@ public:
 
     SwHTMLNumRuleInfo() :
         pNumRule( 0 ), nDeep( 0 ),
-#ifndef NUM_RELSPACE
-        bUpdateWholeNum( sal_False ),
-#endif
         bRestart( sal_False ), bNumbered( sal_False )
     {
         memset( &aNumStarts, 0xff, sizeof( aNumStarts ) );
@@ -76,9 +68,6 @@ public:
 
     SwHTMLNumRuleInfo( const SwHTMLNumRuleInfo& rInf ) :
         pNumRule( rInf.pNumRule ), nDeep( rInf.nDeep ),
-#ifndef NUM_RELSPACE
-        bUpdateWholeNum( rInf.bUpdateWholeNum ),
-#endif
         bRestart( rInf.bRestart ), bNumbered( rInf.bNumbered )
     {
         memcpy( &aNumStarts, &rInf.aNumStarts, sizeof( aNumStarts ) );
@@ -98,11 +87,6 @@ public:
     sal_uInt16 IncDepth() { return ++nDeep; }
     sal_uInt16 DecDepth() { return nDeep==0 ? 0 : --nDeep; }
     inline sal_uInt8 GetLevel() const;
-
-#ifndef NUM_RELSPACE
-    void SetUpdateWholeNum( sal_Bool bSet ) { bUpdateWholeNum = bSet; }
-    sal_Bool IsUpdateWholeNum() const { return bUpdateWholeNum; }
-#endif
 
     void SetRestart( sal_Bool bSet ) { bRestart = bSet; }
     sal_Bool IsRestart() const { return bRestart; }
@@ -125,9 +109,6 @@ inline void SwHTMLNumRuleInfo::Set( const SwHTMLNumRuleInfo& rInf )
 {
     pNumRule = rInf.pNumRule;
     nDeep = rInf.nDeep;
-#ifndef NUM_RELSPACE
-    bUpdateWholeNum = rInf.bUpdateWholeNum;
-#endif
     bRestart = rInf.bRestart;
     bNumbered = rInf.bNumbered;
     memcpy( &aNumStarts, &rInf.aNumStarts, sizeof( aNumStarts ) );
@@ -137,9 +118,6 @@ inline void SwHTMLNumRuleInfo::Clear()
 {
     pNumRule = 0;
     nDeep = 0;
-#ifndef NUM_RELSPACE
-    bUpdateWholeNum = sal_False;
-#endif
     bRestart = bNumbered = sal_False;
     memset( &aNumStarts, 0xff, sizeof( aNumStarts ) );
 }
