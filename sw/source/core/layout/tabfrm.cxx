@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-20 16:19:41 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:29:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,9 +32,7 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #pragma hdrstop
-
 #include "pagefrm.hxx"
 #include "rootfrm.hxx"
 #include "cntfrm.hxx"
@@ -1568,7 +1566,7 @@ void MA_FASTCALL lcl_FirstTabCalc( SwTabFrm *pTab )
     }
     SwFrm *pUp = pTab->GetUpper();
     long nBottom = (pUp->*fnRect->fnGetPrtBottom)();
-    if ( pTab->GetFmt()->GetDoc()->IsBrowseMode() )
+    if ( pTab->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
         nBottom += pUp->Grow( LONG_MAX, TRUE );
     lcl_CalcLowers( (SwLayoutFrm*)pTab->Lower(), LONG_MAX );
 }
@@ -1580,8 +1578,6 @@ void MA_FASTCALL lcl_Recalc( SwTabFrm *pTab,
     if ( pTab->Lower() )
     {
         SWRECTFN( pTab )
-        const SwTwips nOldHeight = (pTab->Frm().*fnRect->fnGetHeight)();
-        const SwTwips nOldWidth  = (pTab->Frm().*fnRect->fnGetWidth)();
         if ( !pFirstRow )
         {
             pFirstRow = (SwLayoutFrm*)pTab->Lower();
@@ -1750,7 +1746,7 @@ void SwTabFrm::MakeAll()
     // --> FME 2006-02-16 #131283#
     // Indicates that two individual rows may keep together, based on the keep
     // attribute set at the first paragraph in the first cell.
-    const bool bTableRowKeep = !bDontSplit && GetFmt()->GetDoc()->IsTableRowKeep();
+    const bool bTableRowKeep = !bDontSplit && GetFmt()->GetDoc()->get(IDocumentSettingAccess::TABLE_ROW_KEEP);
 
     // The Magic Move: Used for the table row keep feature.
     // If only the last row of the table wants to keep (implicitely by setting
@@ -2073,8 +2069,8 @@ void SwTabFrm::MakeAll()
 
         /// OD 23.10.2002 #103517# - In online layout try to grow upper of table
         /// frame, if table frame doesn't fit in its upper.
-        if ( nDistanceToUpperPrtBottom < 0 &&
-             GetFmt()->GetDoc()->IsBrowseMode() )
+        const bool bBrowseMode = GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
+        if ( nDistanceToUpperPrtBottom < 0 && bBrowseMode )
         {
             if ( GetUpper()->Grow( -nDistanceToUpperPrtBottom ) )
             {
@@ -2100,7 +2096,7 @@ void SwTabFrm::MakeAll()
                 {
                     SwFrm *pTmp = GetUpper();
                     SwTwips nDeadLine = (pTmp->*fnRect->fnGetPrtBottom)();
-                    if ( GetFmt()->GetDoc()->IsBrowseMode() )
+                    if ( bBrowseMode )
                         nDeadLine += pTmp->Grow( LONG_MAX, TRUE );
                     if( (Frm().*fnRect->fnBottomDist)( nDeadLine ) > 0 )
                     {
@@ -2587,8 +2583,7 @@ BOOL SwTabFrm::CalcFlyOffsets( SwTwips& rUpper,
 
     // --> #108724# Page header/footer content doesn't have to wrap around
     //              floating screen objects
-    const SwDoc* pDoc = GetFmt()->GetDoc();
-    const sal_Bool bWrapAllowed = pDoc->IsFormerTextWrapping() ||
+    const sal_Bool bWrapAllowed = GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::USE_FORMER_TEXT_WRAPPING) ||
                                 ( !IsInFtn() && 0 == FindFooterOrHeader() );
     // <--
 
@@ -2935,7 +2930,7 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
 
         // --> OD 2004-07-15 #i26250# - extend bottom printing area, if table
         // is last content inside a table cell.
-        if ( GetFmt()->GetDoc()->IsAddParaSpacingToTableCells() &&
+        if ( GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::ADD_PARA_SPACING_TO_TABLE_CELLS) &&
              GetUpper()->IsInTab() && !GetIndNext() )
         {
             nLower += pAttrs->GetULSpace().GetLower();
@@ -2948,7 +2943,8 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
             (this->*fnRect->fnSetXMargins)( nLeftSpacing, nRightSpacing );
 
         ViewShell *pSh;
-        if ( bCheckBrowseWidth && GetFmt()->GetDoc()->IsBrowseMode() &&
+        if ( bCheckBrowseWidth &&
+             GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) &&
              GetUpper()->IsPageBodyFrm() &&  // nur PageBodyFrms, nicht etwa ColBodyFrms
              0 != (pSh = GetShell()) && pSh->VisArea().Width() )
         {
@@ -3059,7 +3055,7 @@ SwTwips SwTabFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
         // forward due to the positioning of its objects ). Thus, invalivate this
         // next frame, if document compatibility option 'Consider wrapping style
         // influence on object positioning' is ON.
-        else if ( GetFmt()->GetDoc()->ConsiderWrapOnObjPos() )
+        else if ( GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION) )
         {
             InvalidateNextPos();
         }
@@ -3444,7 +3440,7 @@ BOOL SwTabFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, BOOL bHead, BOOL &rReform
                         nSpace = nTmpSpace;
                     // <--
 
-                    if ( GetFmt()->GetDoc()->IsBrowseMode() )
+                    if ( GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
                         nSpace += pNewUpper->Grow( LONG_MAX, TRUE );
                 }
             }
@@ -4345,7 +4341,6 @@ void SwRowFrm::AdjustCells( const SwTwips nHeight, const BOOL bHeight )
 void SwRowFrm::Cut()
 {
     SwTabFrm *pTab = FindTabFrm();
-    const USHORT nRepeat = pTab->GetTable()->GetRowsToRepeat();
     if ( pTab && pTab->IsFollow() && this == pTab->GetFirstNonHeadlineRow() )
     {
         pTab->FindMaster()->InvalidatePos();
@@ -4518,7 +4513,6 @@ SwTwips SwRowFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
             SetCompletePaint();
 
             SwTabFrm *pTab = FindTabFrm();
-            const USHORT nRepeat = pTab->GetTable()->GetRowsToRepeat();
             if ( !pTab->IsRebuildLastLine() && pTab->IsFollow() &&
                  this == pTab->GetFirstNonHeadlineRow() )
             {
@@ -5010,7 +5004,7 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
         // --> OD 2005-03-30 #i43913# - no vertical alignment, if wrapping
         // style influence is considered on object positioning and
         // an object is anchored inside the cell.
-        const bool bConsiderWrapOnObjPos( GetFmt()->GetDoc()->ConsiderWrapOnObjPos() );
+        const bool bConsiderWrapOnObjPos( GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION) );
         // <--
         //Keine Ausrichtung wenn Rahmen mit Umlauf in die Zelle ragen.
         if ( pPg->GetSortedObjs() )
@@ -5432,7 +5426,7 @@ SwTwips SwTabFrm::CalcHeightOfFirstContentLine() const
         // Calculate the height of the keeping lines
         // (headlines + following keeping lines):
         SwTwips nKeepHeight = nRepeatHeight;
-        if ( GetFmt()->GetDoc()->IsTableRowKeep() )
+        if ( GetFmt()->GetDoc()->get(IDocumentSettingAccess::TABLE_ROW_KEEP) )
         {
             USHORT nKeepRows = nRepeat;
 
