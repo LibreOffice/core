@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 14:19:21 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:22:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,11 +70,9 @@ class SvxBrushItem;
 class SvxFrameDirectionItem;
 class SwTableAutoFmt;
 class SwFrm;
-class SwTabFrm;
 class SwFmtFrmSize;
 class SwFmtRowSplit;
 class SvxBorderLine;
-class SvStorageStream;
 class SdrObject;
 class Color;
 class Outliner;
