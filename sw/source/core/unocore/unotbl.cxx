@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-03 12:56:46 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:57:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #define ITEMID_BOXINFO SID_ATTR_BORDER_INNER
@@ -58,9 +57,6 @@
 
 #ifndef _UNOCRSR_HXX //autogen
 #include <unocrsr.hxx>
-#endif
-#ifndef SW_UNOMID_HXX
-#include <unomid.h>
 #endif
 #ifndef _SVX_UNOMID_HXX
 #include <svx/unomid.hxx>
@@ -106,9 +102,6 @@
 #ifndef _PAGEDESC_HXX //autogen
 #include <pagedesc.hxx>
 #endif
-#ifndef _SVX_BOXITEM_HXX //autogen
-#include <svx/boxitem.hxx>
-#endif
 #define _SVSTDARR_STRINGS
 #include <svtools/svstdarr.hxx>
 #ifndef _VIEWSH_HXX //autogen
@@ -119,9 +112,6 @@
 #endif
 #ifndef _REDLINE_HXX
 #include <redline.hxx>
-#endif
-#ifndef _UNOMAP_HXX
-#include <unomap.hxx>
 #endif
 #ifndef _UNOREDLINE_HXX
 #include <unoredline.hxx>
@@ -159,26 +149,11 @@
 #ifndef _COM_SUN_STAR_STYLE_GRAPHICLOCATION_HPP_
 #include <com/sun/star/style/GraphicLocation.hpp>
 #endif
-#ifndef _COM_SUN_STAR_TABLE_BORDERLINE_HPP_
-#include <com/sun/star/table/BorderLine.hpp>
-#endif
 #ifndef _COM_SUN_STAR_BEANS_PropertyAttribute_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
-#ifndef _COM_SUN_STAR_CHART_XCHARTDATACHANGEEVENTLISTENER_HPP_
-#include <com/sun/star/chart/XChartDataChangeEventListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART_CHARTDATACHANGEEVENT_HPP_
-#include <com/sun/star/chart/ChartDataChangeEvent.hpp>
-#endif
 #ifndef _COM_SUN_STAR_TABLE_CELLCONTENTTYPE_HPP_
 #include <com/sun/star/table/CellContentType.hpp>
-#endif
-#ifndef _UNOTBL_HXX
-#include <unotbl.hxx>
-#endif
-#ifndef _UNOOBJ_HXX
-#include <unoobj.hxx>
 #endif
 #ifndef _SVX_BRKITEM_HXX //autogen
 #include <svx/brkitem.hxx>
@@ -685,7 +660,7 @@ void lcl_setValue( SwXCell &rCell, double nVal )
 {
     if(rCell.IsValid())
     {
-        // Der Text muß zunaechst (vielleicht) geloescht werden
+        // Der Text mu? zunaechst (vielleicht) geloescht werden
         ULONG nNdPos = rCell.pBox->IsValidNumTxtNd( sal_True );
         if(ULONG_MAX != nNdPos)
             lcl_setString( rCell, OUString(), TRUE );   // TRUE == keep number format
@@ -934,7 +909,7 @@ void SwXCell::setFormula(const OUString& rFormula) throw( uno::RuntimeException 
     vos::OGuard aGuard(Application::GetSolarMutex());
     if(IsValid())
     {
-        // Der Text muß zunaechst (vielleicht) geloescht werden
+        // Der Text mu? zunaechst (vielleicht) geloescht werden
         sal_uInt32 nNdPos = pBox->IsValidNumTxtNd( sal_True );
         if(USHRT_MAX == nNdPos)
             lcl_setString( *this, OUString(), TRUE );
@@ -1051,9 +1026,9 @@ uno::Reference< XTextCursor >  SwXCell::createTextCursorByRange(const uno::Refer
     {
         const SwStartNode* pSttNd = pStartNode ? pStartNode : pBox->GetSttNd();
         //skip sections
-        SwStartNode* p1 = aPam.GetNode()->FindStartNode();
+        SwStartNode* p1 = aPam.GetNode()->StartOfSectionNode();
         while(p1->IsSectionNode())
-            p1 = p1->FindStartNode();
+            p1 = p1->StartOfSectionNode();
 
         if( p1 == pSttNd )
             aRef =  (XWordCursor*)new SwXTextCursor(this , *aPam.GetPoint(), CURSOR_TBLTEXT, GetDoc(), aPam.GetMark());
@@ -1824,7 +1799,7 @@ void SwXTextTableCursor::setPropertyValue(const OUString& rPropertyName,
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
-        SwStartNode* pSttNode = pUnoCrsr->GetNode()->FindStartNode();
+        SwStartNode* pSttNode = pUnoCrsr->GetNode()->StartOfSectionNode();
         const SwTableNode* pTblNode = pSttNode->FindTableNode();
         lcl_FormatTable((SwFrmFmt*)pTblNode->GetTable().GetFrmFmt());
         SwUnoTableCrsr* pTblCrsr = *pUnoCrsr;
@@ -1883,7 +1858,7 @@ uno::Any SwXTextTableCursor::getPropertyValue(const OUString& rPropertyName)
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
-        SwStartNode* pSttNode = pUnoCrsr->GetNode()->FindStartNode();
+        SwStartNode* pSttNode = pUnoCrsr->GetNode()->StartOfSectionNode();
         const SwTableNode* pTblNode = pSttNode->FindTableNode();
         lcl_FormatTable((SwFrmFmt*)pTblNode->GetTable().GetFrmFmt());
         SwUnoTableCrsr* pTblCrsr = *pUnoCrsr;
@@ -2472,11 +2447,11 @@ void SwXTextTable::attachToRange(const uno::Reference< XTextRange > & xTextRange
         {
             UnoActionContext aCont( pDoc );
 
-            pDoc->StartUndo();
+            pDoc->StartUndo(0, NULL);
             const SwTable *pTable = 0;
             if( 0 != aPam.Start()->nContent.GetIndex() )
             {
-                pDoc->SplitNode(*aPam.Start() );
+                pDoc->SplitNode(*aPam.Start(), false );
             }
             //TODO: wenn es der letzte Absatz ist, dann muss noch ein Absatz angehaengt werden!
             if( aPam.HasMark() )
@@ -2531,7 +2506,7 @@ void SwXTextTable::attachToRange(const uno::Reference< XTextRange > & xTextRange
                 bIsDescriptor = sal_False;
                 DELETEZ(pTableProps);
             }
-            pDoc->EndUndo( UNDO_END );
+            pDoc->EndUndo( UNDO_END, NULL );
         }
 
     }
