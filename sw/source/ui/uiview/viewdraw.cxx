@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewdraw.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 12:44:48 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:57:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -68,28 +67,21 @@
 #ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
 #include <svx/dataaccessdescriptor.hxx>
 #endif
-#ifndef _SFXENUMITEM_HXX //autogen
-#include <svtools/eitem.hxx>
-#endif
 #ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
 #endif
 #ifndef _DOC_HXX
 #include <doc.hxx>
 #endif
-
 #ifndef _SVX_LANGITEM_HXX
 #include <svx/langitem.hxx>
 #endif
-
 #ifndef _LINGUISTIC_LNGPROPS_HHX_
 #include <linguistic/lngprops.hxx>
 #endif
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
 #endif
-
-
 #ifndef _SVX_FONTWORK_BAR_HXX
 #include <svx/fontworkbar.hxx>
 #endif
@@ -98,9 +90,6 @@
 #endif
 #ifndef _EEITEM_HXX //autogen
 #include <svx/eeitem.hxx>
-#endif
-#ifndef _SVDOTEXT_HXX //autogen
-#include <svx/svdotext.hxx>
 #endif
 #ifndef _SVDOGRP_HXX
 #include <svx/svdogrp.hxx>
@@ -138,7 +127,6 @@
 #include "drwbassh.hxx"
 #include "beziersh.hxx"
 #include "conrect.hxx"
-#include "conctrl.hxx"
 #include "conpoly.hxx"
 #include "conarc.hxx"
 #include "conform.hxx"
@@ -158,9 +146,6 @@
 
 #ifndef _SVX_EXTRUSION_BAR_HXX
 #include <svx/extrusionbar.hxx>
-#endif
-#ifndef _SVX_FONTWORK_BAR_HXX
-#include <svx/fontworkbar.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -612,7 +597,7 @@ sal_Bool SwView::BeginTextEdit( SdrObject* pObj, SdrPageView* pPV,
     uno::Reference< linguistic2::XSpellChecker1 >  xSpell( ::GetSpellChecker() );
     if (pOutliner)
     {
-        pOutliner->SetRefDevice(pSh->GetDoc()->_GetRefDev());
+        pOutliner->SetRefDevice(pSh->getIDocumentDeviceAccess()->getReferenceDevice(false));
         pOutliner->SetSpeller(xSpell);
         uno::Reference<linguistic2::XHyphenator> xHyphenator( ::GetHyphenator() );
         pOutliner->SetHyphenator( xHyphenator );
