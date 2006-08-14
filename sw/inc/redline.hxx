@@ -4,9 +4,9 @@
  *
  *  $RCSfile: redline.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:06:31 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:30:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,8 +48,9 @@
 #ifndef _PAM_HXX
 #include <pam.hxx>
 #endif
-#ifndef _REDLENUM_HXX
-#include <redlenum.hxx>
+
+#ifndef IDOCUMENTREDLINEACCESS_HXX_INCLUDED
+#include <IDocumentRedlineAccess.hxx>
 #endif
 
 class SfxItemSet;
@@ -110,15 +111,15 @@ class SwRedlineData
 
     String sComment;
     DateTime aStamp;
-    SwRedlineType eType;
+    IDocumentRedlineAccess::RedlineType_t eType;
     USHORT nAuthor, nSeqNo;
 
 public:
-    SwRedlineData( SwRedlineType eT, USHORT nAut );
+    SwRedlineData( IDocumentRedlineAccess::RedlineType_t eT, USHORT nAut );
     SwRedlineData( const SwRedlineData& rCpy, BOOL bCpyNext = TRUE );
 
     // fuer sw3io: pNext/pExtraData gehen in eigenen Besitz ueber!
-    SwRedlineData( SwRedlineType eT, USHORT nAut, const DateTime& rDT,
+    SwRedlineData( IDocumentRedlineAccess::RedlineType_t eT, USHORT nAut, const DateTime& rDT,
                    const String& rCmnt, SwRedlineData* pNxt,
                     SwRedlineExtraData* pExtraData = 0 );
 
@@ -138,19 +139,17 @@ public:
     int operator!=( const SwRedlineData& rCmp ) const
         {   return !operator==( rCmp ); }
 
-    SwRedlineType GetType() const
-        { return SwRedlineType( eType & REDLINE_NO_FLAG_MASK); }
-    SwRedlineType GetRealType() const       { return eType; }
+    IDocumentRedlineAccess::RedlineType_t GetType() const
+        { return (eType & IDocumentRedlineAccess::REDLINE_NO_FLAG_MASK); }
+    IDocumentRedlineAccess::RedlineType_t GetRealType() const { return eType; }
     USHORT GetAuthor() const                { return nAuthor; }
     const String& GetComment() const        { return sComment; }
     const DateTime& GetTimeStamp() const    { return aStamp; }
     inline const SwRedlineData* Next() const{ return pNext; }
 
-    void SetTimeStamp( const DateTime& rDT)
-        { aStamp = rDT; aStamp.SetSec( 0 ); aStamp.Set100Sec( 0 ); }
     void SetComment( const String& rS )     { sComment = rS; }
     void SetAutoFmtFlag()
-        { eType = SwRedlineType( eType | REDLINE_FORM_AUTOFMT ); }
+        { eType = ( eType | IDocumentRedlineAccess::REDLINE_FORM_AUTOFMT ); }
     int CanCombine( const SwRedlineData& rCmp ) const
         {
             return nAuthor == rCmp.nAuthor &&
@@ -194,7 +193,7 @@ class SwRedline : public SwPaM
     void MoveFromSection();
 
 public:
-    SwRedline( SwRedlineType eType, const SwPaM& rPam );
+    SwRedline( IDocumentRedlineAccess::RedlineType_t eType, const SwPaM& rPam );
     SwRedline( const SwRedlineData& rData, const SwPaM& rPam );
     SwRedline( const SwRedlineData& rData, const SwPosition& rPos );
     // fuer sw3io: pData geht in eigenen Besitz ueber!
@@ -212,7 +211,6 @@ public:
 
     BOOL IsVisible() const { return bIsVisible; }
     BOOL IsDelLastPara() const { return bDelLastPara; }
-    BOOL IsLastParaDelete() const { return bIsLastParaDelete; }
 
     // das BOOL besagt, ob nach dem setzen der Pos kein Bereich mehr
     // aufgespannt ist. -> TRUE, ansonten Bereich und FALSE
@@ -240,9 +238,9 @@ public:
     USHORT GetAuthor( USHORT nPos = 0) const;
     const String& GetAuthorString( USHORT nPos = 0 ) const;
     const DateTime& GetTimeStamp( USHORT nPos = 0) const;
-    SwRedlineType GetRealType( USHORT nPos = 0 ) const;
-    SwRedlineType GetType( USHORT nPos = 0) const
-        { return SwRedlineType( GetRealType( nPos ) & REDLINE_NO_FLAG_MASK); }
+    IDocumentRedlineAccess::RedlineType_t GetRealType( USHORT nPos = 0 ) const;
+    IDocumentRedlineAccess::RedlineType_t GetType( USHORT nPos = 0) const
+        { return ( GetRealType( nPos ) & IDocumentRedlineAccess::REDLINE_NO_FLAG_MASK); }
     const String& GetComment( USHORT nPos = 0 ) const;
 
     void SetComment( const String& rS ) { pRedlineData->SetComment( rS ); }
