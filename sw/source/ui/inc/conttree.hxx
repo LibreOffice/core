@@ -4,9 +4,9 @@
  *
  *  $RCSfile: conttree.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:07:58 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:39:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifndef _CONTTREE_HXX
 #define _CONTTREE_HXX
 
@@ -45,13 +44,9 @@
 #endif
 
 class SwWrtShell;
-class SwContentArr;
 class SwContentType;
 class SwNavigationPI;
-class SwFmtFld;
-class SwTxtINetFmt;
 class SwNavigationConfig;
-class SwDocShell;
 class Menu;
 class ToolBox;
 
