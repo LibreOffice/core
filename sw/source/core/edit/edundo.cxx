@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edundo.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 12:30:24 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:10:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -99,7 +98,7 @@ BOOL SwEditShell::Undo( USHORT nUndoId, USHORT nCnt )
 
         // JP 02.04.98: Cursor merken - beim Auto-Format/-Korrektur
         //              soll dieser wieder an die Position
-        USHORT nLastUndoId = GetDoc()->GetUndoIds();
+        USHORT nLastUndoId = GetDoc()->GetUndoIds(NULL, NULL);
         BOOL bRestoreCrsr = 1 == nCnt && ( UNDO_AUTOFORMAT == nLastUndoId ||
                                            UNDO_AUTOCORRECT == nLastUndoId );
         Push();
@@ -108,7 +107,7 @@ BOOL SwEditShell::Undo( USHORT nUndoId, USHORT nCnt )
         //          Erkennung darf nur noch fuer die neue "Box" erfolgen!
         ClearTblBoxCntnt();
 
-        SwRedlineMode eOld = GetDoc()->GetRedlineMode();
+        IDocumentRedlineAccess::RedlineMode_t eOld = GetDoc()->GetRedlineMode();
 
         SwUndoIter aUndoIter( GetCrsr(), nUndoId );
         while( nCnt-- )
@@ -194,7 +193,7 @@ USHORT SwEditShell::Redo( USHORT nCnt )
         //          Erkennung darf nur noch fuer die neue "Box" erfolgen!
         ClearTblBoxCntnt();
 
-        SwRedlineMode eOld = GetDoc()->GetRedlineMode();
+        IDocumentRedlineAccess::RedlineMode_t eOld = GetDoc()->GetRedlineMode();
 
         SwUndoIter aUndoIter( GetCrsr(), 0 );
         while( nCnt-- )
