@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:42:04 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:21:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #ifndef _COM_SUN_STAR_TEXT_XTEXTDOCUMENT_HPP_
@@ -41,12 +40,6 @@
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESUPPLIER_HPP_
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGE_HPP_
-#include <com/sun/star/drawing/XDrawPage.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
-#include <com/sun/star/text/XText.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -75,9 +68,6 @@
 #include <svx/xmleohlp.hxx>
 #endif
 #include <svx/xmlgrhlp.hxx>
-#endif
-#ifndef _XMLEOHLP_HXX
-#include <svx/xmleohlp.hxx>
 #endif
 #ifndef _EEITEM_HXX
 #include <svx/eeitem.hxx>
@@ -207,7 +197,7 @@ void SwXMLExport::SetCurPaM( SwPaM& rPaM, sal_Bool bWhole, sal_Bool bTabOnly )
             pCurPaM->GetPoint()->nNode = *pSectNd;
 
             // SwSectionNode::FindSectionNode() returns the section node itself
-            pSectNd = pSectNd->FindStartNode()->FindSectionNode();
+            pSectNd = pSectNd->StartOfSectionNode()->FindSectionNode();
         }
     }
 }
@@ -249,7 +239,7 @@ SwXMLExport::SwXMLExport(
     sal_Bool bExpWholeDoc, sal_Bool bExpFirstTableOnly,
     sal_Bool bShowProg )
 :   SvXMLExport( xServiceFactory, rFileName, rHandler, rModel, rEmbeddedGrfObjs,
-                 SW_MOD()->GetMetric( rPaM.GetDoc()->IsHTMLMode() ) ),
+                 SW_MOD()->GetMetric( rPaM.GetDoc()->get(IDocumentSettingAccess::HTML_MODE) ) ),
     pCurPaM( 0 ),
     pOrigPaM( &rPaM ),
     pTableItemMapper( 0 ),
@@ -357,7 +347,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
     }
 
     MapUnit eUnit =
-        SvXMLUnitConverter::GetMapUnit( SW_MOD()->GetMetric(pDoc->IsHTMLMode()) );
+        SvXMLUnitConverter::GetMapUnit( SW_MOD()->GetMetric(pDoc->get(IDocumentSettingAccess::HTML_MODE)) );
     if( GetMM100UnitConverter().getXMLMeasureUnit() != eUnit )
     {
         GetMM100UnitConverter().setXMLMeasureUnit( eUnit );
@@ -421,12 +411,12 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
     }
 
     // adjust document class (eClass)
-    if (pDoc->IsGlobalDoc())
+    if (pDoc->get(IDocumentSettingAccess::GLOBAL_DOCUMENT))
     {
         eClass = XML_TEXT_GLOBAL;
 
         // additionally, we take care of the save-linked-sections-thingy
-        mbSaveLinkedSections = pDoc->IsGlblDocSaveLinks();
+        mbSaveLinkedSections = pDoc->get(IDocumentSettingAccess::GLOBAL_DOCUMENT_SAVE_LINKS);
     }
     // MIB: 03/26/04: The Label information is saved in the settings, so
     // we don't need it here.
@@ -472,13 +462,13 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
         }
     }
     sal_uInt16 nRedlineMode = 0;
-    bSavedShowChanges = IsShowChanges( pDoc->GetRedlineMode() );
+    bSavedShowChanges = IDocumentRedlineAccess::IsShowChanges( pDoc->GetRedlineMode() );
     if( bSaveRedline )
     {
         // now save and switch redline mode
         nRedlineMode = pDoc->GetRedlineMode();
         pDoc->SetRedlineMode(
-            ( nRedlineMode & REDLINE_SHOW_MASK ) | REDLINE_INSERT );
+            ( nRedlineMode & IDocumentRedlineAccess::REDLINE_SHOW_MASK ) | IDocumentRedlineAccess::REDLINE_INSERT );
     }
 
      sal_uInt32 nRet = SvXMLExport::exportDoc( eClass );
@@ -613,7 +603,7 @@ void SwXMLExport::GetViewSettings(Sequence<PropertyValue>& aProps)
     pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ShowRedlineChanges") );
     pValue[nIndex++].Value.setValue( &bShowRedlineChanges, ::getBooleanCppuType() );
 
-    sal_Bool bInBrowse =  pDoc->IsBrowseMode();
+    sal_Bool bInBrowse =  pDoc->get(IDocumentSettingAccess::BROWSE_MODE);
     pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "InBrowseMode") );
     pValue[nIndex++].Value.setValue( &bInBrowse, ::getBooleanCppuType() );
 
