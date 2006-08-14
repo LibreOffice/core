@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtpaint.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:07:53 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:45:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,21 +34,14 @@
  ************************************************************************/
 #ifndef _TXTPAINT_HXX
 #define _TXTPAINT_HXX
-
-#ifndef _SV_REGION_HXX //autogen
-#include <vcl/region.hxx>
-#endif
 #ifndef _SV_OUTDEV_HXX //autogen
 #include <vcl/outdev.hxx>
 #endif
 
-
 class SwRect;               // SwSaveClip
 
-#ifdef VERTICAL_LAYOUT
 #ifndef _TXTFRM_HXX
 #include <txtfrm.hxx>
-#endif
 #endif
 
 /*************************************************************************
