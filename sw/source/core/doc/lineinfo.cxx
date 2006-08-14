@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lineinfo.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:17:23 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:01:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,11 @@ void SwDoc::SetLineNumberInfo( const SwLineNumberInfo &rNew )
     }
     *pLineNumberInfo = rNew;
     SetModified();
+}
+
+const SwLineNumberInfo& SwDoc::GetLineNumberInfo() const
+{
+    return *pLineNumberInfo;
 }
 
 SwLineNumberInfo::SwLineNumberInfo() :
@@ -122,11 +127,11 @@ BOOL SwLineNumberInfo::operator==( const SwLineNumberInfo& rInf ) const
 }
 
 
-SwCharFmt* SwLineNumberInfo::GetCharFmt(SwDoc &rDoc) const
+SwCharFmt* SwLineNumberInfo::GetCharFmt( IDocumentStylePoolAccess& rIDSPA ) const
 {
     if ( !GetRegisteredIn() )
     {
-        SwCharFmt* pFmt = rDoc.GetCharFmtFromPool( RES_POOLCHR_LINENUM );
+        SwCharFmt* pFmt = rIDSPA.GetCharFmtFromPool( RES_POOLCHR_LINENUM );
         pFmt->Add( (SwClient*)this );
     }
     return (SwCharFmt*)GetRegisteredIn();
