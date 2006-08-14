@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undobj.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 11:30:14 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:36:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _UNDOBJ_HXX
 #define _UNDOBJ_HXX
-
 #ifndef _SVMEMPOOL_HXX //autogen
 #include <tools/mempool.hxx>
 #endif
@@ -55,9 +54,6 @@
 #ifndef _NUMRULE_HXX
 #include <numrule.hxx>
 #endif
-#ifndef _REDLENUM_HXX
-#include <redlenum.hxx>
-#endif
 #ifndef _ITABENUM_HXX
 #include <itabenum.hxx>
 #endif
@@ -75,12 +71,10 @@ class SwIndex;
 class SwPaM;
 struct SwPosition;
 class SwDoc;
-class SwNodes;
 class SwFmt;
 class SwFmtColl;
 class SwTxtFmtColl;
 class SwTxtNode;
-class SwpHints;
 class SwBookmark;
 class SwTableNode;
 class SwTable;
@@ -91,12 +85,10 @@ class SwHstryBookmark;
 class SwSection;
 class SwSectionFmt;
 class SvxTabStopItem;
-class SwNumSection;
 class SwDDEFieldType;
 class Graphic;
 class SwGrfNode;
 class SwUndos;
-class SwUndoRange;
 class SwFtnInfo;
 class SwEndNoteInfo;
 class SwNodeIndex;
@@ -121,7 +113,6 @@ class SwTblToTxtSaves;
 class SwRedlineData;
 class SwRedlineSaveData;
 class SwRedline;
-class SwSectionNode;
 
 namespace utl {
     class TransliterationWrapper;
@@ -1049,7 +1040,6 @@ public:
     virtual void Redo( SwUndoIter& );
     virtual void Repeat( SwUndoIter& );
 
-    SwHistory* GetHistory()                 { return pHistory; }
     void SaveFormula( SwHistory& rHistory );
 };
 
@@ -1216,7 +1206,6 @@ public:
     void Redo();        // Schnittstelle fuers Rollback
 
     void ChgShowSel( BOOL bNew ) { bShowSelFrm = bNew; }
-    BOOL GetShowSel() const { return bShowSelFrm; }
 
     virtual SwRewriter GetRewriter() const;
 
