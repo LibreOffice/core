@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unosect.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:33:31 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:56:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -434,7 +434,7 @@ void SwXTextSection::attachToRange(const uno::Reference< text::XTextRange > & xT
         //das muss jetzt sal_True liefern
         SwXTextRange::XTextRangeToSwPaM(aPam, xTextRange);
         UnoActionContext aCont(pDoc);
-        pDoc->StartUndo( UNDO_INSSECTION );
+        pDoc->StartUndo( UNDO_INSSECTION, NULL );
 
         sal_Bool bRet = sal_False;
 
@@ -547,7 +547,7 @@ void SwXTextSection::attachToRange(const uno::Reference< text::XTextRange > & xT
         }
 
         // Undo-Klammerung hier beenden
-        pDoc->EndUndo( UNDO_INSSECTION );
+        pDoc->EndUndo( UNDO_INSSECTION, NULL );
         DELETEZ(pProps);
         m_bIsDescriptor = sal_False;
     }
