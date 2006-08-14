@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimpit.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:44:45 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:23:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #include "xmlimpit.hxx"
 #include <xmloff/xmluconv.hxx>
 
@@ -120,11 +119,6 @@
 #ifndef _FMTLSPLT_HXX
 #include "fmtlsplt.hxx"
 #endif
-
-#ifndef _XMLOFF_XMLTOKEN_HXX
-#include <xmloff/xmltoken.hxx>
-#endif
-
 #ifndef _XMLOFF_PROPERTYHANDLERFACTORY_HXX
 #include <xmloff/prhdlfac.hxx>
 #endif
