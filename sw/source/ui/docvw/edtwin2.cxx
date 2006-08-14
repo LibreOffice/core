@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtwin2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 12:41:18 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:34:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #include <tools/ref.hxx>
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
@@ -138,9 +137,6 @@
 #ifndef _REDLINE_HXX
 #include <redline.hxx>
 #endif
-#ifndef _REDLENUM_HXX
-#include <redlenum.hxx>
-#endif
 #ifndef _TOX_HXX
 #include <tox.hxx>
 #endif
@@ -168,11 +164,11 @@ static void lcl_GetRedlineHelp( const SwRedline& rRedl, String& rTxt, BOOL bBall
     USHORT nResId = 0;
     switch( rRedl.GetType() )
     {
-    case REDLINE_INSERT:    nResId = STR_REDLINE_INSERT; break;
-    case REDLINE_DELETE:    nResId = STR_REDLINE_DELETE; break;
-    case REDLINE_FORMAT:    nResId = STR_REDLINE_FORMAT; break;
-    case REDLINE_TABLE:     nResId = STR_REDLINE_TABLE; break;
-    case REDLINE_FMTCOLL:   nResId = STR_REDLINE_FMTCOLL; break;
+    case IDocumentRedlineAccess::REDLINE_INSERT:    nResId = STR_REDLINE_INSERT; break;
+    case IDocumentRedlineAccess::REDLINE_DELETE:    nResId = STR_REDLINE_DELETE; break;
+    case IDocumentRedlineAccess::REDLINE_FORMAT:    nResId = STR_REDLINE_FORMAT; break;
+    case IDocumentRedlineAccess::REDLINE_TABLE:     nResId = STR_REDLINE_TABLE; break;
+    case IDocumentRedlineAccess::REDLINE_FMTCOLL:   nResId = STR_REDLINE_FMTCOLL; break;
     }
 
     if( nResId )
@@ -444,7 +440,7 @@ aktuelle Zeichenvorlage anzeigen?
         }
         if (bWeiter && eHit == SDRHIT_TEXTEDIT)
         {
-            // URL-Feld in zum Editieren ge”ffneten DrawText-Objekt suchen
+            // URL-Feld in zum Editieren ge?ffneten DrawText-Objekt suchen
             OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
             const SvxFieldItem* pFieldItem;
             const SdrTextObj* pTextObj = NULL;
