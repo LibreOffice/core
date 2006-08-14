@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hhcwrp.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:36:49 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:48:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,9 +125,6 @@
 #endif
 #ifndef _BREAKIT_HXX
 #include <breakit.hxx>
-#endif
-#ifndef _DOC_HXX
-#include <doc.hxx>
 #endif
 #ifndef _SWDOCSH_HXX
 #include <docsh.hxx>
