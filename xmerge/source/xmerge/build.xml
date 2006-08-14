@@ -6,9 +6,9 @@
  #
  #   $RCSfile: build.xml,v $
  #
- #   $Revision: 1.5 $
+ #   $Revision: 1.6 $
  #
- #   last change: $Author: ihi $ $Date: 2006-08-01 13:16:55 $
+ #   last change: $Author: hr $ $Date: 2006-08-14 15:31:45 $
  #
  #   The Contents of this file are made available subject to
  #   the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,7 @@
                 <attribute name="Specification-Vendor" value="OpenOffice.org"/>
                 <attribute name="Specification-Version" value="0.6.0"/>
                 <attribute name="Implementation-Version" value="#IMPL-VERSION#"/>
-                <attribute name="Class-Path" value="xml-apis.jar xercesImpl.jar"/>
+                <attribute name="Class-Path" value="xml-apis.jar xercesImpl.jar serializer.jar"/>
             </manifest>
          </jar>
     </target>
