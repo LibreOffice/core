@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfgmerge.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 17:18:44 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:07:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,6 @@ private:
     ByteString sTextTag;
     ByteString sEndTextTag;
 
-    //ByteString sText[ LANGUAGES ];
     ByteStringHashMap sText;
 public:
     CfgStackData( const ByteString &rTag, const ByteString &rId )
@@ -71,7 +70,6 @@ public:
     ByteString &GetTagType() { return sTagType; }
     ByteString &GetIdentifier() { return sIdentifier; }
 
-    //void FillInFallbacks();
 };
 
 //
@@ -115,9 +113,7 @@ protected:
 
     virtual void WorkOnText(
         ByteString &rText,
-        const ByteString &nLangIndex
-        //const ByteString &rResTyp
-        )=0;
+        const ByteString &nLangIndex )=0;
 
     virtual void WorkOnRessourceEnd()=0;
 
@@ -169,7 +165,6 @@ protected:
     void WorkOnText(
         ByteString &rText,
         const ByteString &rIsoLang
-        //const ByteString &rResTyp
         );
 
     void WorkOnRessourceEnd();
@@ -201,9 +196,7 @@ private:
 protected:
     void WorkOnText(
         ByteString &rText,
-        const ByteString &nLangIndex
-        //const ByteString &rResTyp
-        );
+        const ByteString &nLangIndex );
 
     void WorkOnRessourceEnd();
 

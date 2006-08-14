@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpmerge.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 17:19:10 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:08:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,6 @@ public:
 
 /// Method merges the String from the SDFfile into XMLfile. Both Strings must
 /// point to existing files.
-    //bool Merge( const ByteString &rSDFFile_in, const ByteString &rDestinationFile_in , const std::vector<ByteString>& aLanguages , MergeDataFile& aMergeDataFile );
     bool Merge( const ByteString &rSDFFile_in, const ByteString &rDestinationFile_in , ByteString& sLanguage , MergeDataFile& aMergeDataFile );
     bool Merge( const ByteString &rSDFFile, const ByteString &rPathX , const ByteString &rPathY , bool bISO
         , const std::vector<ByteString>& aLanguages , MergeDataFile& aMergeDataFile , bool bCreateDir );
