@@ -4,9 +4,9 @@
  *
  *  $RCSfile: crstrvl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-09 14:04:18 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:51:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -79,9 +78,6 @@
 #endif
 #ifndef _FLDBAS_HXX
 #include <fldbas.hxx>
-#endif
-#ifndef _HINTS_HXX
-#include <hints.hxx>        // SwTxtFld
 #endif
 #ifndef _SWTABLE_HXX
 #include <swtable.hxx>      // SwTxtFld
@@ -1325,7 +1321,7 @@ FASTBOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
 
                 if( !bRet && SwContentAtPos::SW_REDLINE & rCntntAtPos.eCntntAtPos )
                 {
-                    const SwRedline* pRedl = GetDoc()->GetRedline( aPos );
+                    const SwRedline* pRedl = GetDoc()->GetRedline(aPos, NULL);
                     if( pRedl )
                     {
                         rCntntAtPos.aFnd.pRedl = pRedl;
@@ -1708,7 +1704,7 @@ FASTBOOL SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
                 pCNd && pCNd->Len() )
                 nUndoId = 0;
 
-            GetDoc()->StartUndo( nUndoId );
+            GetDoc()->StartUndo( nUndoId, NULL );
 
             SwTxtFmtColl* pNextFmt = 0;
             SwTxtNode* pTNd = pCNd->GetTxtNode();
@@ -1744,7 +1740,7 @@ FASTBOOL SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
                 {
                     *pCurCrsr->GetPoint() = aPos;
                     GetDoc()->Insert( *pCurCrsr,
-                            SvxFmtBreakItem( SVX_BREAK_COLUMN_BEFORE ));
+                            SvxFmtBreakItem( SVX_BREAK_COLUMN_BEFORE ), 0);
                 }
             }
 
@@ -1769,7 +1765,7 @@ FASTBOOL SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
                     if( SVX_ADJUST_LEFT != rAdj.GetAdjust() )
                         aSet.Put( SvxAdjustItem( SVX_ADJUST_LEFT ) );
 
-                    GetDoc()->Insert( *pCurCrsr, aSet );
+                    GetDoc()->Insert( *pCurCrsr, aSet, 0 );
                 }
                 else
                     ASSERT( !this, "wo ist mein CntntNode?" );
@@ -1788,7 +1784,7 @@ FASTBOOL SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
                         sInsert += sSpace;
                     }
                     if( sInsert.Len() )
-                        GetDoc()->Insert( *pCurCrsr, sInsert );
+                        GetDoc()->Insert( *pCurCrsr, sInsert, true );
                 }
                 // kein break - Ausrichtung muss noch gesetzt werden
             case FILL_MARGIN:
@@ -1806,12 +1802,12 @@ FASTBOOL SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
                     default:
                         break;
                     }
-                    GetDoc()->Insert( *pCurCrsr, aAdj );
+                    GetDoc()->Insert( *pCurCrsr, aAdj, NULL );
                 }
                 break;
             }
 
-            GetDoc()->EndUndo( nUndoId );
+            GetDoc()->EndUndo( nUndoId, NULL );
             EndAction();
 
             bRet = TRUE;
@@ -1882,7 +1878,7 @@ const SwRedline* SwCrsrShell::_GotoRedline( USHORT nArrPos, BOOL bSelect )
         if( pFnd && bSelect )
         {
             pCurCrsr->SetMark();
-            if( REDLINE_FMTCOLL == pFnd->GetType() )
+            if( IDocumentRedlineAccess::REDLINE_FMTCOLL == pFnd->GetType() )
             {
                 pCNd = pIdx->GetNode().GetCntntNode();
                 pCurCrsr->GetPoint()->nContent.Assign( pCNd, pCNd->Len() );
@@ -2039,7 +2035,7 @@ FASTBOOL SwCrsrShell::SelectNxtPrvHyperlink( BOOL bNext )
 {
     SwNodes& rNds = GetDoc()->GetNodes();
     const SwNode* pBodyEndNd = &rNds.GetEndOfContent();
-    const SwNode* pBodySttNd = pBodyEndNd->FindStartNode();
+    const SwNode* pBodySttNd = pBodyEndNd->StartOfSectionNode();
     ULONG nBodySttNdIdx = pBodySttNd->GetIndex();
     Point aPt;
 
