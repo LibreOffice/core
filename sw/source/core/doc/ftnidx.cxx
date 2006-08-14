@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ftnidx.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:16:13 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:00:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #ifndef _TXTFTN_HXX
@@ -53,9 +52,6 @@
 #endif
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
-#endif
-#ifndef _FMTCOL_HXX
-#include <fmtcol.hxx>
 #endif
 #ifndef _NDINDEX_HXX
 #include <ndindex.hxx>
@@ -371,7 +367,7 @@ const SwSectionNode* SwUpdFtnEndNtAtEnd::FindSectNdWithEndAttr(
             ((const SwFmtFtnAtTxtEnd&)pNd->GetSection().GetFmt()->
             GetAttr( nWh, TRUE )).GetValue() ) &&
             FTNEND_ATTXTEND_OWNNUMANDFMT != nVal )
-        pNd = pNd->FindStartNode()->FindSectionNode();
+        pNd = pNd->StartOfSectionNode()->FindSectionNode();
 
     return pNd;
 }
