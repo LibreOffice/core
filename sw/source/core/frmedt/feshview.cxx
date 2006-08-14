@@ -4,9 +4,9 @@
  *
  *  $RCSfile: feshview.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 12:33:25 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:15:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,9 +33,7 @@
  *
  ************************************************************************/
 #pragma hdrstop
-
 #include <com/sun/star/embed/EmbedMisc.hpp>
-
 #define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
 #include "hintids.hxx"
 
@@ -67,9 +65,6 @@
 #endif
 #ifndef _SVDVMARK_HXX //autogen
 #include <svx/svdvmark.hxx>
-#endif
-#ifndef _XPOLY_HXX //autogen
-#include <svx/xpoly.hxx>
 #endif
 #ifndef _SVDCAPT_HXX //autogen
 #include <svx/svdocapt.hxx>
@@ -1049,8 +1044,9 @@ void SwFEShell::ChangeOpaque( SdrLayerID nLayerId )
     if ( Imp()->HasDrawView() )
     {
         const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
+        const IDocumentDrawModelAccess* pIDDMA = getIDocumentDrawModelAccess();
         // OD 25.06.2003 #108784# - correct type of <nControls>
-        const SdrLayerID nControls = GetDoc()->GetControlsId();
+        const SdrLayerID nControls = pIDDMA->GetControlsId();
         for ( USHORT i = 0; i < rMrkList.GetMarkCount(); ++i )
         {
             SdrObject* pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
@@ -1066,7 +1062,7 @@ void SwFEShell::ChangeOpaque( SdrLayerID nLayerId )
                 {
                     SwFmt *pFmt = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm()->GetFmt();
                     SvxOpaqueItem aOpa( pFmt->GetOpaque() );
-                    aOpa.SetValue(  nLayerId == GetDoc()->GetHellId() );
+                    aOpa.SetValue(  nLayerId == pIDDMA->GetHellId() );
                     pFmt->SetAttr( aOpa );
                 }
             }
@@ -1077,12 +1073,12 @@ void SwFEShell::ChangeOpaque( SdrLayerID nLayerId )
 
 void SwFEShell::SelectionToHeaven()
 {
-    ChangeOpaque( GetDoc()->GetHeavenId() );
+    ChangeOpaque( getIDocumentDrawModelAccess()->GetHeavenId() );
 }
 
 void SwFEShell::SelectionToHell()
 {
-    ChangeOpaque( GetDoc()->GetHellId() );
+    ChangeOpaque( getIDocumentDrawModelAccess()->GetHellId() );
 }
 
 /*************************************************************************
@@ -1260,7 +1256,7 @@ sal_Bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
 
         if(bRet && pObj)
         {
-            SdrPage* pPage = GetDoc()->GetDrawModel()->GetPage(0);
+            SdrPage* pPage = getIDocumentDrawModelAccess()->GetDrawModel()->GetPage(0);
 
             // --> FME 2005-04-18 #i20965# Use GetOrdNum() instead of GetOrdNumDirect()
             // because ordnums might be wrong
@@ -1369,7 +1365,7 @@ BOOL SwFEShell::GotoObj( BOOL bNext, GotoObjType eType )
                 // Here we are if
                 // A  No object has been selected and no group has been entered or
                 // B  An object has been selected and it is not inside a group
-                pList = GetDoc()->GetDrawModel()->GetPage( 0 );
+                pList = getIDocumentDrawModelAccess()->GetDrawModel()->GetPage( 0 );
             }
 
 
@@ -1642,8 +1638,6 @@ BOOL SwFEShell::ImpEndCreate()
 
     Imp()->GetDrawView()->UnmarkAll();
 
-    SwPaM* pCrsr = GetCrsr();
-
     const Rectangle &rBound = rSdrObj.GetSnapRect();
     Point aPt( rBound.TopRight() );
 
@@ -1662,7 +1656,7 @@ BOOL SwFEShell::ImpEndCreate()
         SwPosition aPos( GetDoc()->GetNodes() );
         SwCrsrMoveState aState( MV_SETONLYTEXT );
         Point aPoint( aPt.X(), aPt.Y() + rBound.GetHeight()/2 );
-        GetDoc()->GetRootFrm()->GetCrsrOfst( &aPos, aPoint, &aState );
+        getIDocumentLayoutAccess()->GetRootFrm()->GetCrsrOfst( &aPos, aPoint, &aState );
 
         //JP 22.01.99: Zeichenbindung ist im ReadnOnly-Inhalt nicht erlaubt
         if( !aPos.nNode.GetNode().IsProtect() )
@@ -1823,12 +1817,13 @@ BOOL SwFEShell::ImpEndCreate()
         //ueber vorhandene SS erzeugt werden.
         GetDoc()->SetNoDrawUndoObj( TRUE );         // siehe oben
         // --> OD 2005-08-08 #i52858# - method name changed
-        SdrPage *pPg = GetDoc()->GetOrCreateDrawModel()->GetPage( 0 );
+        SdrPage *pPg = getIDocumentDrawModelAccess()->GetOrCreateDrawModel()->GetPage( 0 );
         // <--
         if( !pPg )
         {
-            pPg = GetDoc()->GetDrawModel()->AllocPage( FALSE );
-            GetDoc()->GetDrawModel()->InsertPage( pPg );
+            SdrModel* pTmpSdrModel = getIDocumentDrawModelAccess()->GetDrawModel();
+            pPg = pTmpSdrModel->AllocPage( FALSE );
+            pTmpSdrModel->InsertPage( pPg );
         }
         pPg->RecalcObjOrdNums();
         delete pPg->RemoveObject( rSdrObj.GetOrdNumDirect() );
@@ -1891,7 +1886,7 @@ BOOL SwFEShell::ImpEndCreate()
         }
         SwFmtVertOrient aVert( nYOffset, VERT_NONE, FRAME );
         aSet.Put( aVert );
-        SwDrawFrmFmt* pFmt = (SwDrawFrmFmt*)GetDoc()->MakeLayoutFmt( RND_DRAW_OBJECT, 0, &aSet );
+        SwDrawFrmFmt* pFmt = (SwDrawFrmFmt*)getIDocumentLayoutAccess()->MakeLayoutFmt( RND_DRAW_OBJECT, &aSet );
         // --> OD 2004-10-25 #i36010# - set layout direction of the position
         pFmt->SetPositionLayoutDir(
             com::sun::star::text::PositionLayoutDir::PositionInLayoutDirOfAnchor );
@@ -2700,8 +2695,7 @@ void SwFEShell::CheckUnboundObjects()
 
             aSet.Put( aAnch );
             aSet.Put( SwFmtSurround( SURROUND_THROUGHT ) );
-            SwFrmFmt* pFmt = GetDoc()->MakeLayoutFmt(
-                                            RND_DRAW_OBJECT, 0, &aSet );
+            SwFrmFmt* pFmt = getIDocumentLayoutAccess()->MakeLayoutFmt( RND_DRAW_OBJECT, &aSet );
 
             SwDrawContact *pContact = new SwDrawContact(
                                             (SwDrawFrmFmt*)pFmt, pObj );
