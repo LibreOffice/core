@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimpit.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:22:48 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:23:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifndef _XMLIMPIT_HXX
 #define _XMLIMPIT_HXX
 
@@ -59,7 +58,6 @@ namespace rtl { class OUString; }
 class SvXMLUnitConverter;
 class SfxPoolItem;
 class SfxItemSet;
-class SvXMLAttributeList;
 class SvXMLNamespaceMap;
 struct SvXMLItemMapEntry;
 
