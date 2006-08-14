@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tolayoutanchoredobjectposition.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:01:33 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:23:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _TOLAYOUTANCHOREDOBJECTPOSITION_HXX
 #define _TOLAYOUTANCHOREDOBJECTPOSITION_HXX
-
 #ifndef _ANCHOREDOBJECTPOSITION_HXX
 #include <anchoredobjectposition.hxx>
 #endif
@@ -47,10 +46,6 @@
 #ifndef _ORNTENUM_HXX
 #include <orntenum.hxx>
 #endif
-
-class SwFlyLayFrm;
-class SvxLRSpaceItem;
-class SvxULSpaceItem;
 
 namespace objectpositioning
 {
