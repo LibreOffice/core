@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view0.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-27 09:50:17 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:56:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,9 +59,6 @@
 #endif
 #ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>
-#endif
-#ifndef _DOC_HXX
-#include <doc.hxx>
 #endif
 #ifndef _GLOBALS_H
 #include <globals.h>
@@ -144,6 +141,8 @@ using namespace ::com::sun::star;
 using namespace ::rtl;
 
 #include <svtools/moduleoptions.hxx>
+
+#include <IDocumentSettingAccess.hxx>
 
 #define C2S(cChar) UniString::CreateFromAscii(cChar)
 
@@ -276,12 +275,12 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
     sal_uInt16 nWhich = aIter.FirstWhich();
     SfxBoolItem aBool;
     const SwViewOption* pOpt = GetWrtShell().GetViewOptions();
-    SwDoc *pDoc = GetDocShell()->GetDoc();
+    const IDocumentSettingAccess* pIDSA = GetDocShell()->getIDocumentSettingAccess();
 
     while(nWhich)
     {
         sal_Bool bReadonly = GetDocShell()->IsReadOnly();
-        sal_Bool bBrowse = pDoc ? pDoc->IsBrowseMode() : sal_False;
+        sal_Bool bBrowse = pIDSA ? pIDSA->get( IDocumentSettingAccess::BROWSE_MODE ) : sal_False;
         if ( bReadonly && nWhich != FN_VIEW_GRAPHIC )
         {
             rSet.DisableItem(nWhich);
@@ -343,7 +342,7 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
                 aBool.SetValue( pOpt->IsHideSpell() );
             break;
             case FN_SHADOWCURSOR:
-                if (pDoc == 0 || pDoc->IsBrowseMode())
+                if (pIDSA == 0 || pIDSA->get( IDocumentSettingAccess::BROWSE_MODE ))
                 {
                     rSet.DisableItem( nWhich );
                     nWhich = 0;
