@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accpara.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 13:06:09 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:46:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,6 @@
 #ifndef _ACCCONTEXT_HXX
 #include "acccontext.hxx"
 #endif
-
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEEDITABLETEXT_HPP_
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
 #endif
@@ -45,11 +44,6 @@
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESELECTION_HPP_
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #endif
-
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_TEXTSEGMENT_HPP_
-#include <com/sun/star/accessibility/TextSegment.hpp>
-#endif
-
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEHYPERTEXT_HPP_
 #include <com/sun/star/accessibility/XAccessibleHypertext.hpp>
 #endif
@@ -61,19 +55,13 @@
 #include <hash_map>
 // <--
 
-#ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
-#include <com/sun/star/uno/RuntimeException.hpp>
-#endif
-
 #ifndef _ACCSELECTIONHELPER_HXX_
 #include "accselectionhelper.hxx"
 #endif
 
 class SwTxtFrm;
 class SwTxtNode;
-class SwTxtAttr;
 class SwPaM;
-class SwCrsrShell;
 class SwAccessiblePortionData;
 class SwAccessibleHyperTextData;
 class SwXTextPortion;
