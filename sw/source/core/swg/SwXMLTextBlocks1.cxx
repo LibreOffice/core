@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXMLTextBlocks1.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 18:20:43 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:32:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 #ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
@@ -88,10 +87,6 @@
 #ifndef _SWEVENT_HXX
 #include <swevent.hxx>
 #endif
-#ifndef _SOT_FORMATS_HXX
-#include <sot/formats.hxx>
-#endif
-
 #ifndef _SWSWERROR_H
 #include <swerror.h>
 #endif
