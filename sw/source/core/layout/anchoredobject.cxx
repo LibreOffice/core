@@ -4,9 +4,9 @@
  *
  *  $RCSfile: anchoredobject.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 08:16:52 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:24:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,7 +108,6 @@ SwObjPositioningInProgress::SwObjPositioningInProgress( SdrObject& _rSdrObj ) :
     // <--
     mpAnchoredObj->SetPositioningInProgress( true );
 }
-
 SwObjPositioningInProgress::SwObjPositioningInProgress( SwAnchoredObject& _rAnchoredObj ) :
     mpAnchoredObj( &_rAnchoredObj ),
     // --> OD 2005-08-09 #i52904#
@@ -560,6 +559,8 @@ bool SwAnchoredObject::ConsiderObjWrapInfluenceOnObjPos() const
     bool bRet( false );
 
     const SwFrmFmt& rObjFmt = GetFrmFmt();
+
+    // --> OD 2004-08-25 #i3317# - add condition <IsTmpConsiderWrapInfluence()>
     // --> OD 2005-09-29 #i55204#
     // - correction: wrapping style influence has been considered, if condition
     //   <IsTmpConsiderWrapInfluence()> is hold, regardless of its anchor type
@@ -568,7 +569,7 @@ bool SwAnchoredObject::ConsiderObjWrapInfluenceOnObjPos() const
     {
         bRet = true;
     }
-    else if ( rObjFmt.GetDoc()->ConsiderWrapOnObjPos() )
+    else if ( rObjFmt.getIDocumentSettingAccess()->get(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION) )
     // <--
     {
         const SwFmtAnchor& rAnchor = rObjFmt.GetAnchor();
@@ -748,7 +749,7 @@ void SwAnchoredObject::UpdateObjInSortedList()
 {
     if ( GetAnchorFrm() )
     {
-        if ( GetFrmFmt().GetDoc()->ConsiderWrapOnObjPos() )
+        if ( GetFrmFmt().getIDocumentSettingAccess()->get(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION) )
         {
             // invalidate position of all anchored objects at anchor frame
             if ( GetAnchorFrm()->GetDrawObjs() )
