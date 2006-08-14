@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olmenu.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-10 08:49:42 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:48:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -63,13 +62,6 @@
 #ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
 #include <com/sun/star/frame/XStorable.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
-#include <com/sun/star/lang/Locale.hpp>
-#endif
-
 #ifndef _SVX_DLGUTIL_HXX
 #include <svx/dlgutil.hxx>
 #endif
@@ -82,19 +74,13 @@
 #ifndef _SVX_SPLWRAP_HXX
 #include <svx/splwrap.hxx>
 #endif
-
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _SV_SETTINGS_HXX
-#include <vcl/settings.hxx>
 #endif
 #ifndef _SVTOOLS_LINGUCFG_HXX_
 #include <svtools/lingucfg.hxx>
 #endif
-
 #include <svx/acorrcfg.hxx>
-
 #ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
 #endif
