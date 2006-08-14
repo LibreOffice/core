@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawsh.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:11:14 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:39:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,13 +32,11 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifndef _SWDRAWSH_HXX
 #define _SWDRAWSH_HXX
 
 #include "drwbassh.hxx"
 
-class SdrObject;
 class SwDrawBaseShell;
 
 class SwDrawShell: public SwDrawBaseShell
