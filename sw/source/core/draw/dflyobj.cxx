@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dflyobj.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 12:29:57 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:05:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 #pragma hdrstop
-
 #include "hintids.hxx"
 
 #ifndef _XPOLY_HXX //autogen
@@ -583,17 +582,12 @@ void __EXPORT SwVirtFlyDrawObj::NbcResize(const Point& rRef,
         pTmpFrm = GetFlyFrm();
     SWRECTFNX( pTmpFrm )
 
-#ifdef BIDI
     const sal_Bool bRTL = pTmpFrm->IsRightToLeft();
 
     const Point aNewPos( bVertX || bRTL ?
                          aOutRect.Right() + 1 :
                          aOutRect.Left(),
                          aOutRect.Top() );
-#else
-    const Point aNewPos( bVertX  ? aOutRect.Right() + 1 : aOutRect.Left(),
-                         aOutRect.Top() );
-#endif
 
     Size aSz( aOutRect.Right() - aOutRect.Left() + 1,
               aOutRect.Bottom()- aOutRect.Top()  + 1 );
@@ -630,7 +624,8 @@ void __EXPORT SwVirtFlyDrawObj::NbcResize(const Point& rRef,
                                 GetFlyFrm()->GetAnchorFrm() :
                                 GetFlyFrm()->GetAnchorFrm()->GetUpper();
             const ViewShell *pSh = GetFlyFrm()->GetShell();
-            if ( pSh && pRel->IsBodyFrm() && pFmt->GetDoc()->IsBrowseMode() &&
+            if ( pSh && pRel->IsBodyFrm() &&
+                 pFmt->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) &&
                  pSh->VisArea().HasArea() )
             {
                 nRelWidth  = pSh->VisArea().Width();
@@ -655,22 +650,14 @@ void __EXPORT SwVirtFlyDrawObj::NbcResize(const Point& rRef,
     }
 
     //Position kann auch veraendert sein!
-#ifdef BIDI
     const Point aOldPos( bVertX || bRTL ?
                          GetFlyFrm()->Frm().TopRight() :
                          GetFlyFrm()->Frm().Pos() );
-#else
-    const Point aOldPos( (GetFlyFrm()->Frm().*fnRectX->fnGetPos)() );
-#endif
 
     if ( aNewPos != aOldPos )
     {
         //Kann sich durch das ChgSize veraendert haben!
-#ifdef BIDI
         if( bVertX || bRTL )
-#else
-        if( bVertX )
-#endif
         {
             if( aOutRect.TopRight() != aNewPos )
             {
