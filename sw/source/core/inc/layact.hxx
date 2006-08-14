@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layact.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:27:36 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:20:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _LAYACT_HXX
 #define _LAYACT_HXX
-
 #include "swtypes.hxx"
 #include "swrect.hxx"
 
@@ -42,7 +41,6 @@ class SwRootFrm;
 class SwLayoutFrm;
 class SwPageFrm;
 class SwFlyFrm;
-class SwFlyInCntFrm;
 class SwCntntFrm;
 class SwTabFrm;
 class SwViewImp;
