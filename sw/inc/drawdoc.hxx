@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-06 13:44:09 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:20:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,10 +41,6 @@
 
 class SwDoc;
 class SwDocShell;
-class Window;
-class SbxValue;
-class SjJSbxObject;
-class SbxObject;
 
 //==================================================================
 
