@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acmplwrd.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-05 14:49:47 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:54:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 
@@ -53,9 +52,6 @@
 #ifndef _NDINDEX_HXX
 #include <ndindex.hxx>
 #endif
-#ifndef _NODE_HXX
-#include <node.hxx>
-#endif
 #ifndef _DOCARY_HXX
 #include <docary.hxx>
 #endif
@@ -73,9 +69,6 @@
 #endif
 #ifndef _CALBCK_HXX
 #include <calbck.hxx>
-#endif
-#ifndef _HINTS_HXX
-#include <hints.hxx>
 #endif
 #ifndef _MySVXACORR_HXX
 #include <svx/svxacorr.hxx>
