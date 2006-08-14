@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accmap.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 14:20:56 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:45:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -123,23 +122,15 @@
 #ifndef _NDTYP_HXX
 #include <ndtyp.hxx>
 #endif
-#ifndef _DOC_HXX
-#include <doc.hxx>
+#ifndef IDOCUMENTDRAWMODELACCESS_HXX_INCLUDED
+#include <IDocumentDrawModelAccess.hxx>
 #endif
 #ifndef _SVX_ACCESSIBILITY_SHAPE_TYPE_HANDLER_HXX
 #include <svx/ShapeTypeHandler.hxx>
 #endif
-#ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_HXX
-#include <svx/AccessibleShape.hxx>
-#endif
-
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
-
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLERELATIONTYPE_HPP_
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #endif
@@ -148,9 +139,6 @@
 #endif
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#endif
-#ifndef  _COM_SUN_STAR_DOCUMENT_XEVENTBROADCASTER_HPP_
-#include <com/sun/star/document/XEventBroadcaster.hpp>
 #endif
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
@@ -329,7 +317,7 @@ public:
         // --> OD 2005-08-08 #i52858# - method name changed
         Reference < XEventBroadcaster > xModelBroadcaster =
             new SwDrawModellListener_Impl(
-                    pMap->GetShell()->GetDoc()->GetOrCreateDrawModel() );
+                    pMap->GetShell()->getIDocumentDrawModelAccess()->GetOrCreateDrawModel() );
         // <--
         maInfo.SetControllerBroadcaster( xModelBroadcaster );
     }
