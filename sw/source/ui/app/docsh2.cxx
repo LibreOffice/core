@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 09:38:41 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:26:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,9 +32,7 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #pragma hdrstop
-
 #ifndef _COM_SUN_STAR_LANG_XMultiServiceFactory_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
@@ -119,9 +117,6 @@
 #ifndef _SFX_DOCFILT_HACK_HXX //autogen
 #include <sfx2/docfilt.hxx>
 #endif
-#ifndef _SFXFRAME_HXX
-#include <sfx2/frame.hxx>
-#endif
 #ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
 #endif
@@ -178,18 +173,12 @@
 #ifndef _GLOBDOC_HXX
 #include <globdoc.hxx>
 #endif
-//CHINA001 #ifndef _DOCSTDLG_HXX
-//CHINA001 #include <docstdlg.hxx>  // fuer Dokument Style
-//CHINA001 #endif
 #ifndef _FLDWRAP_HXX
 #include <fldwrap.hxx>
 #endif
 #ifndef _REDLNDLG_HXX
 #include <redlndlg.hxx>
 #endif
-//CHINA001 #ifndef _ABSTRACT_HXX
-//CHINA001 #include <abstract.hxx>      // SwInsertAbstractDialog
-//CHINA001 #endif
 #ifndef _DOCSTYLE_HXX
 #include <docstyle.hxx>
 #endif
@@ -268,9 +257,6 @@
 #endif
 #ifndef _COM_SUN_STAR_UI_DIALOGS_COMMONFILEPICKERELEMENTIDS_HPP_
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
-#endif
-#ifndef  _COM_SUN_STAR_UI_DIALOGS_TEMPLATEDESCRIPTION_HPP_
-#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #endif
 
 #include <svx/acorrcfg.hxx>
@@ -444,28 +430,6 @@ USHORT SwDocShell::PrepareClose( BOOL bUI, BOOL bForBrowsing )
         EndListening( *this );
 
     return nRet;
-}
-
-
-void SwDoc::SetInfo( const SfxDocumentInfo& rInfo )
-{
-    if( pDocShell )
-        pDocShell->SetDocumentInfo( rInfo );
-
-    // sollte nur beim "Konvertieren" von Dokumenten hier ankommen!
-    else
-    {
-        // dann setzen wir uns die DocInfo. Nach dem Konvertieren wird diese
-        // am Medium gesetzt. Erst dann ist die DocShell bekannt.
-        delete pSwgInfo;
-        pSwgInfo = new SfxDocumentInfo( rInfo );
-
-// wenn beim Einlesen, dann kein Modify verschicken, diese sollten dann
-// richtig eingelesen werden oder spaetestens beim Expandieren die richtigen
-// Werte finden.
-//      GetSysFldType( RES_DOCINFOFLD )->UpdateFlds();
-//      GetSysFldType( RES_TEMPLNAMEFLD )->UpdateFlds();
-    }
 }
 
 /*--------------------------------------------------------------------
@@ -863,7 +827,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 if( bSet && !bFound )   // Keine gefunden, daher neue Preview anlegen
                 {
                     //Keine neue anlegen fuer BrowseView!
-                    if( !GetDoc()->IsBrowseMode() )
+                    if( !GetDoc()->get(IDocumentSettingAccess::BROWSE_MODE) )
                         nSlotId = SID_VIEWSHELL1;
                 }
                 else if( bFound && !bSet )
@@ -1068,7 +1032,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 SfxPrinter* pSavePrinter = 0;
                 if( 0 != pSrcView)
                 {
-                    SfxPrinter* pTemp = GetDoc()->GetPrt(FALSE);
+                    SfxPrinter* pTemp = GetDoc()->getPrinter( false );
                     if(pTemp)
                         pSavePrinter = new SfxPrinter(*pTemp);
                     bSetModified = IsModified() || pSrcView->IsModified();
@@ -1116,7 +1080,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     GetDoc()->SetModified();
                 if(pSavePrinter)
                 {
-                    GetDoc()->SetPrt(pSavePrinter);
+                    GetDoc()->setPrinter( pSavePrinter, true, true);
                     //pSavePrinter darf nicht wieder geloescht werden
                 }
                 pViewFrm->GetBindings().SetState(SfxBoolItem(SID_SOURCEVIEW, nSlot == SID_VIEWSHELL2));
@@ -1300,7 +1264,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 }
 
                 if ( STATE_TOGGLE == eState )
-                    bSet = !GetDoc()->IsBrowseMode();
+                    bSet = !GetDoc()->get(IDocumentSettingAccess::BROWSE_MODE);
 
                 ToggleBrowserMode(bSet, 0);
 
@@ -1346,7 +1310,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 //pWrtShell is not set in page preview
                 if(pWrtShell)
                     pWrtShell->StartAllAction();
-                pDoc->UpdateFlds( 0 );
+                pDoc->UpdateFlds( NULL, false );
                 pDoc->EmbedAllLinks();
                 pDoc->RemoveInvisibleContent();
                 if(pWrtShell)
@@ -1763,7 +1727,7 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
                     "Loschen des Basics hat nicht geklappt" );
         }
     }
-    sal_Bool bWasBrowseMode = pDoc->IsBrowseMode();
+    sal_Bool bWasBrowseMode = pDoc->get(IDocumentSettingAccess::BROWSE_MODE);
     RemoveLink();
 
     //jetzt muss auch das UNO-Model ueber das neue Doc informiert werden #51535#
@@ -1774,7 +1738,7 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
     AddLink();
     //#116402# update font list when new document is created
     UpdateFontList();
-    pDoc->SetBrowseMode(bWasBrowseMode);
+    pDoc->set(IDocumentSettingAccess::BROWSE_MODE, bWasBrowseMode);
     pSrcView->SetPool(&GetPool());
 
 
@@ -1826,16 +1790,16 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
  ---------------------------------------------------------------------------*/
 void    SwDocShell::ToggleBrowserMode(BOOL bSet, SwView* pView )
 {
-    GetDoc()->SetBrowseMode( bSet );
+    GetDoc()->set(IDocumentSettingAccess::BROWSE_MODE, bSet );
     UpdateFontList();
     SwView* pTempView = pView ? pView : (SwView*)GetView();
     if( pTempView )
     {
         pTempView->GetViewFrame()->GetBindings().Invalidate(FN_SHADOWCURSOR);
 
-        if( !GetDoc()->GetPrt( FALSE ) )
+        if( !GetDoc()->getPrinter( false ) )
         {
-            pTempView->SetPrinter( GetDoc()->GetPrt( TRUE ),
+            pTempView->SetPrinter( GetDoc()->getPrinter( false ),
                                    SFX_PRINTER_PRINTER | SFX_PRINTER_JOBSETUP );
         }
 
@@ -1863,7 +1827,7 @@ void    SwDocShell::ToggleBrowserMode(BOOL bSet, SwView* pView )
         pTempView->CheckVisArea();
 
         SvxZoomType eType;
-        if( GetDoc()->IsBrowseMode() &&
+        if( GetDoc()->get(IDocumentSettingAccess::BROWSE_MODE) &&
               SVX_ZOOM_PERCENT != (eType = (SvxZoomType)pTempView->
                             GetWrtShell().GetViewOptions()->GetZoomType()) )
         {
