@@ -4,9 +4,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-09 14:06:28 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:25:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 #pragma hdrstop
-
 #include "rootfrm.hxx"
 #include "pagefrm.hxx"
 #include "cntfrm.hxx"
@@ -162,6 +161,7 @@ BOOL SwCntntFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, BOOL, BOOL & )
         // if <nMoveAnyway> equals 3 and no space is left in new upper.
         nMoveAnyway |= BwdMoveNecessary( pOldPage, Frm() );
         {
+            const IDocumentSettingAccess* pIDSA = pNewPage->GetFmt()->getIDocumentSettingAccess();
             SwTwips nSpace = 0;
             SwRect aRect( pNewUpper->Prt() );
             aRect.Pos() += pNewUpper->Frm().Pos();
@@ -175,7 +175,7 @@ BOOL SwCntntFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, BOOL, BOOL & )
                     // check, if last frame is inside table and if it includes
                     // its lower spacing.
                     if ( !pPrevFrm->GetNext() && pPrevFrm->IsInTab() &&
-                         pNewPage->GetFmt()->GetDoc()->IsAddParaSpacingToTableCells() )
+                         pIDSA->get(IDocumentSettingAccess::ADD_PARA_SPACING_TO_TABLE_CELLS) )
                     {
                         const SwFrm* pLastFrm = pPrevFrm;
                         // if last frame is a section, take its last content
@@ -207,7 +207,8 @@ BOOL SwCntntFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, BOOL, BOOL & )
             //determine space left in new upper frame
             nSpace = (aRect.*fnRectX->fnGetHeight)();
 
-            if ( IsInFtn() || GetAttrSet()->GetDoc()->IsBrowseMode() ||
+            if ( IsInFtn() ||
+                 pIDSA->get(IDocumentSettingAccess::BROWSE_MODE) ||
                  pNewUpper->IsCellFrm() ||
                  ( pNewUpper->IsInSct() && ( pNewUpper->IsSctFrm() ||
                    ( pNewUpper->IsColBodyFrm() &&
@@ -745,7 +746,7 @@ void SwPageFrm::MakeAll()
                 }
                 //Bei der BrowseView gelten feste Einstellungen.
                 ViewShell *pSh = GetShell();
-                if ( pSh && GetFmt()->GetDoc()->IsBrowseMode() )
+                if ( pSh && GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
                 {
                     const Size aBorder = pSh->GetOut()->PixelToLogic( pSh->GetBrowseBorder() );
                     const long nTop    = pAttrs->CalcTopLine()   + aBorder.Height();
@@ -984,7 +985,7 @@ BOOL SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
             SwTwips nWidthArea;
             if( pSh && 0!=(nWidthArea=(pSh->VisArea().*fnRect->fnGetWidth)()) &&
                 GetUpper()->IsPageBodyFrm() &&  // nicht dagegen bei BodyFrms in Columns
-                pSh->GetDoc()->IsBrowseMode() )
+                pSh->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
             {
                 //Nicht ueber die Kante des sichbaren Bereiches hinausragen.
                 //Die Seite kann breiter sein, weil es Objekte mit "ueberbreite"
@@ -1969,7 +1970,7 @@ BOOL SwCntntFrm::_WouldFit( SwTwips nSpace, SwLayoutFrm *pNewUpper, BOOL bTstMov
 
         // OD 2004-03-01 #106629# - also consider lower spacing in table cells
         if ( bRet && IsInTab() &&
-             pNewUpper->GetFmt()->GetDoc()->IsAddParaSpacingToTableCells() )
+             pNewUpper->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::ADD_PARA_SPACING_TO_TABLE_CELLS) )
         {
             nSpace -= rAttrs.GetULSpace().GetLower();
             if ( nSpace < 0 )
