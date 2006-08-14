@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndcopy.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 14:18:43 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:03:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -61,9 +60,6 @@
 #ifndef _PAM_HXX
 #include <pam.hxx>
 #endif
-#ifndef _FMTCOL_HXX
-#include <fmtcol.hxx>
-#endif
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
 #endif
@@ -78,9 +74,6 @@
 #endif
 #ifndef _UNDOBJ_HXX
 #include <undobj.hxx>
-#endif
-#ifndef _NUMRULE_HXX
-#include <numrule.hxx>
 #endif
 #ifndef _BOOKMRK_HXX
 #include <bookmrk.hxx>
@@ -99,9 +92,6 @@
 #endif
 #ifndef _DOCARY_HXX
 #include <docary.hxx>
-#endif
-#ifndef _NDINDEX_HXX
-#include <ndindex.hxx>
 #endif
 #ifndef _FMTCNCT_HXX
 #include <fmtcnct.hxx>
@@ -571,10 +561,10 @@ void lcl_CopyBookmarks( const SwPaM& rPam, SwPaM& rCpyPam )
     ULONG nDelCount = 0;
     SwNodeIndex aCorrIdx( rStt.nNode );
 
-    for( USHORT nCnt = pSrcDoc->GetBookmarks().Count(); nCnt; )
+    for( USHORT nCnt = pSrcDoc->getBookmarks().Count(); nCnt; )
     {
         // liegt auf der Position ??
-        if( ( pBkmk = pSrcDoc->GetBookmarks()[ --nCnt ])->GetPos() < rStt
+        if( ( pBkmk = pSrcDoc->getBookmarks()[ --nCnt ])->GetPos() < rStt
             || pBkmk->GetPos() >= rEnd )
             continue;
 
@@ -597,9 +587,9 @@ void lcl_CopyBookmarks( const SwPaM& rPam, SwPaM& rCpyPam )
 
         String sNewNm( pBkmk->GetName() );
         if( !pDestDoc->IsCopyIsMove() &&
-            USHRT_MAX != pDestDoc->FindBookmark( sNewNm ) )
-            pDestDoc->MakeUniqueBookmarkName( sNewNm );
-        pDestDoc->MakeBookmark( aTmpPam, pBkmk->GetKeyCode(), sNewNm,
+            USHRT_MAX != pDestDoc->findBookmark( sNewNm ) )
+            pDestDoc->makeUniqueBookmarkName( sNewNm );
+        pDestDoc->makeBookmark( aTmpPam, pBkmk->GetKeyCode(), sNewNm,
                                 pBkmk->GetShortName(), pBkmk->GetType() );
     }
     pDestDoc->DoUndo( bDoesUndo );
@@ -624,7 +614,7 @@ void lcl_DeleteRedlines( const SwPaM& rPam, SwPaM& rCpyPam )
         for( ; n < rTbl.Count(); ++n )
         {
             const SwRedline* pRedl = rTbl[ n ];
-            if( REDLINE_DELETE == pRedl->GetType() && pRedl->IsVisible() )
+            if( IDocumentRedlineAccess::REDLINE_DELETE == pRedl->GetType() && pRedl->IsVisible() )
             {
                 const SwPosition *pRStt = pRedl->Start(), *pREnd = pRedl->End();
 
@@ -666,8 +656,8 @@ void lcl_DeleteRedlines( const SwPaM& rPam, SwPaM& rCpyPam )
 
         if( pDelPam )
         {
-            SwRedlineMode eOld = pDestDoc->GetRedlineMode();
-            pDestDoc->SetRedlineMode_intern( eOld | REDLINE_IGNORE );
+            IDocumentRedlineAccess::RedlineMode_t eOld = pDestDoc->GetRedlineMode();
+            pDestDoc->SetRedlineMode_intern( eOld | IDocumentRedlineAccess::REDLINE_IGNORE );
 
             BOOL bDoesUndo = pDestDoc->DoesUndo();
             pDestDoc->DoUndo( FALSE );
@@ -699,7 +689,7 @@ void lcl_DeleteRedlines( const SwNodeRange& rRg, SwNodeRange& rCpyRg )
 
 // Kopieren eines Bereiches im oder in ein anderes Dokument !
 
-BOOL SwDoc::Copy( SwPaM& rPam, SwPosition& rPos ) const
+bool SwDoc::Copy( SwPaM& rPam, SwPosition& rPos ) const
 {
     const SwPosition *pStt = rPam.Start(), *pEnd = rPam.End();
     // kein Copy abfangen.
@@ -731,7 +721,7 @@ BOOL SwDoc::Copy( SwPaM& rPam, SwPosition& rPos ) const
         (!pDoc->IsIgnoreRedline() && pDoc->GetRedlineTbl().Count() ) )
         pRedlineRange = new SwPaM( rPos );
 
-    SwRedlineMode eOld = pDoc->GetRedlineMode();
+    IDocumentRedlineAccess::RedlineMode_t eOld = pDoc->GetRedlineMode();
 
     BOOL bRet = FALSE;
 
@@ -747,7 +737,7 @@ BOOL SwDoc::Copy( SwPaM& rPam, SwPosition& rPos ) const
     else
     {
         ASSERT( this == pDoc, " falscher Copy-Zweig!" );
-        pDoc->SetRedlineMode_intern( eOld | REDLINE_IGNORE );
+        pDoc->SetRedlineMode_intern( eOld | IDocumentRedlineAccess::REDLINE_IGNORE );
 
         BOOL bDoUndo = pDoc->DoesUndo();
         pDoc->DoUndo( FALSE );  // Auf jedenfall Undo abschalten
@@ -776,7 +766,7 @@ BOOL SwDoc::Copy( SwPaM& rPam, SwPosition& rPos ) const
         aPam.GetPoint()->nNode = *aPam.GetNode()->StartOfSectionNode();
         pNode = pDoc->GetNodes().GoNext( &aPam.GetPoint()->nNode );
         pNode->MakeStartIndex( &aPam.GetPoint()->nContent );
-        pDoc->Move( aPam, rPos );               // auf gewuenschte Position moven
+        pDoc->Move( aPam, rPos, DOC_MOVEDEFAULT );              // auf gewuenschte Position moven
 
         pNode = aPam.GetCntntNode();
         *aPam.GetPoint() = rPos;        // Cursor umsetzen fuers Undo !
@@ -807,7 +797,7 @@ BOOL SwDoc::Copy( SwPaM& rPam, SwPosition& rPos ) const
     if( pRedlineRange )
     {
         if( pDoc->IsRedlineOn() )
-            pDoc->AppendRedline( new SwRedline( REDLINE_INSERT, *pRedlineRange ));
+            pDoc->AppendRedline( new SwRedline( IDocumentRedlineAccess::REDLINE_INSERT, *pRedlineRange ), true);
         else
             pDoc->SplitRedline( *pRedlineRange );
         delete pRedlineRange;
@@ -868,8 +858,8 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
         pDoc->AppendUndo( pUndo );
     }
 
-    SwRedlineMode eOld = pDoc->GetRedlineMode();
-    pDoc->SetRedlineMode_intern( eOld | REDLINE_IGNORE );
+    IDocumentRedlineAccess::RedlineMode_t eOld = pDoc->GetRedlineMode();
+    pDoc->SetRedlineMode_intern( eOld | IDocumentRedlineAccess::REDLINE_IGNORE );
 
 
     // bewege den Pam von der Insert-Position ein zurueck, dadurch wird
@@ -923,7 +913,7 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
                     xub_StrLen nCntntEnd = pEnd->nContent.GetIndex();
                     BOOL bDoesUndo = pDoc->DoesUndo();
                     pDoc->DoUndo( FALSE );
-                    pDoc->SplitNode( rPos );
+                    pDoc->SplitNode( rPos, false );
                     pDoc->DoUndo( bDoesUndo );
 
                     // Nummerierung korrigieren, SplitNode erzeugt immer einen
@@ -997,7 +987,8 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
                         pSttNd->CopyCollFmt( *pDestNd );
                         pSttNd->CopyNumber(*pDestNd);
 
-                        /* #107213# If only a part of one paragraph is copied
+
+                                       /* #107213# If only a part of one paragraph is copied
                            restore the numrule at the destination. */
                         if (! lcl_MarksWholeNode(rPam))
                         {
@@ -1034,7 +1025,7 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
                 xub_StrLen nCntntEnd = pEnd->nContent.GetIndex();
                 BOOL bDoesUndo = pDoc->DoesUndo();
                 pDoc->DoUndo( FALSE );
-                pDoc->SplitNode( rPos );
+                pDoc->SplitNode( rPos, false );
                 pDoc->DoUndo( bDoesUndo );
 
                 // Nummerierung korrigieren, SplitNode erzeugt immer einen
@@ -1186,10 +1177,10 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
     aCpyPam.Exchange();
 
     // dann kopiere noch alle Bookmarks
-    if( bCopyBookmarks && GetBookmarks().Count() )
+    if( bCopyBookmarks && getBookmarks().Count() )
         lcl_CopyBookmarks( rPam, aCpyPam );
 
-    if( REDLINE_DELETE_REDLINES & eOld )
+    if( IDocumentRedlineAccess::REDLINE_DELETE_REDLINES & eOld )
         lcl_DeleteRedlines( rPam, aCpyPam );
 
     // falls Undo eingeschaltet ist, so speicher den eingefuegten Bereich
@@ -1260,7 +1251,7 @@ void SwDoc::CopyWithFlyInFly( const SwNodeRange& rRg,
     SwNodeRange aCpyRange( aSavePos, rInsPos );
 
     // dann kopiere noch alle Bookmarks
-    if( GetBookmarks().Count() )
+    if( getBookmarks().Count() )
     {
         SwPaM aRgTmp( rRg.aStart, rRg.aEnd );
         SwPaM aCpyTmp( aCpyRange.aStart, aCpyRange.aEnd );
@@ -1268,7 +1259,7 @@ void SwDoc::CopyWithFlyInFly( const SwNodeRange& rRg,
         lcl_CopyBookmarks( aRgTmp, aCpyTmp );
     }
 
-    if( bDelRedlines && ( REDLINE_DELETE_REDLINES & pDest->GetRedlineMode() ))
+    if( bDelRedlines && ( IDocumentRedlineAccess::REDLINE_DELETE_REDLINES & pDest->GetRedlineMode() ))
         lcl_DeleteRedlines( rRg, aCpyRange );
 
     pDest->GetNodes()._DelDummyNodes( aCpyRange );
@@ -1441,7 +1432,7 @@ void SwDoc::_CopyFlyInFly( const SwNodeRange& rRg, const SwNodeIndex& rSttIdx,
         // Format kopieren und den neuen Anker setzen
         if( bMakeCpy )
             aNewArr.Insert( pDest->CopyLayoutFmt( *rZSortFly.GetFmt(),
-                        aAnchor, FALSE, TRUE/*FALSE*/ ), aNewArr.Count() );
+                        aAnchor, false, true ), aNewArr.Count() );
     }
 
     //Alle chains, die im Original vorhanden sind, soweit wie moeglich wieder
