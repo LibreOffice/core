@@ -4,9 +4,9 @@
  *
  *  $RCSfile: content.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:07:40 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:39:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _CONTENT_HXX
 #define _CONTENT_HXX
-
 #include <limits.h>     // USHRT_MAX
 #ifndef _SWCONT_HXX
 #include "swcont.hxx"
@@ -47,12 +46,8 @@
 class SwWrtShell;
 class SwContentArr;
 class SwContentType;
-class SwNavigationPI;
 class SwFmtFld;
 class SwTxtINetFmt;
-class SwNavigationConfig;
-class SwDocShell;
-class SvDataObject;
 class SwTOXBase;
 
 //----------------------------------------------------------------------------
