@@ -4,9 +4,9 @@
  *
  *  $RCSfile: thints.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 09:05:55 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:47:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -79,9 +78,6 @@
 #endif
 #ifndef _FMTANCHR_HXX //autogen
 #include <fmtanchr.hxx>
-#endif
-#ifndef _FMTFLD_HXX //autogen
-#include <fmtfld.hxx>
 #endif
 #ifndef _FMTINFMT_HXX //autogen
 #include <fmtinfmt.hxx>
@@ -145,12 +141,6 @@
 #endif
 #ifndef _TXTFRM_HXX
 #include <txtfrm.hxx>
-#endif
-#ifndef _CALBCK_HXX
-#include <calbck.hxx>
-#endif
-#ifndef _HINTS_HXX
-#include <hints.hxx>            // fuer SwFmtChg
 #endif
 #ifndef _ROLBCK_HXX
 #include <rolbck.hxx>           // fuer SwRegHistory
@@ -868,36 +858,11 @@ void lcl_MergeAttr_ExpandChrFmt( SfxItemSet& rSet, const SfxPoolItem& rAttr )
                     rSet.Put( rCFSet.Get( nWhich ) );
                 nWhich = aIter.NextWhich();
             }
-#if 0
-            SfxItemSet aTmpSet( *rSet.GetPool(), rSet.GetRanges() );
-            aTmpSet.Set( pFmt->GetAttrSet(), TRUE );
-/*
-????? JP 31.01.95 ????  wie jetzt ???
-            rSet.MergeValues( aTmpSet );
-
-            // jetzt alle zusammen "mergen"
-            rSet.Differentiate( aTmpSet );
-*/
-            rSet.Put( aTmpSet );
-#endif
         }
     }
 
     // aufnehmen als MergeWert (falls noch nicht gesetzt neu setzen!)
-#if 0
-/* wenn mehrere Attribute ueberlappen werden diese gemergt !!
- z.B
-            1234567890123456789
-              |------------|        Font1
-                 |------|           Font2
-                    ^  ^
-                    |--|        Abfragebereich: -> uneindeutig
-*/
-    else if( SFX_ITEM_DEFAULT == rSet.GetItemState( rAttr.Which(), FALSE ))
-        rSet.Put( rAttr );
-    else
-        rSet.MergeValue( rAttr );
-#else
+
 /* wenn mehrere Attribute ueberlappen gewinnt der letze !!
  z.B
             1234567890123456789
@@ -907,7 +872,6 @@ void lcl_MergeAttr_ExpandChrFmt( SfxItemSet& rSet, const SfxPoolItem& rAttr )
                     |--|        Abfragebereich: -> Gueltig ist Font2
 */
         rSet.Put( rAttr );
-#endif
 }
 
 // erfrage die Attribute vom TextNode ueber den Bereich
