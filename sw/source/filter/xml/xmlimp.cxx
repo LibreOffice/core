@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 14:14:00 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:22:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-
 #pragma hdrstop
 
 #ifndef _COM_SUN_STAR_TEXT_XTEXTDOCUMENT_HPP_
@@ -42,17 +40,11 @@
 #ifndef _COM_SUN_STAR_TEXT_XTEXTRANGE_HPP_
 #include <com/sun/star/text/XTextRange.hpp>
 #endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
-#include <com/sun/star/text/XText.hpp>
-#endif
 #ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGE_HPP_
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESUPPLIER_HPP_
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XSHAPES_HPP_
-#include <com/sun/star/drawing/XShapes.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -102,9 +94,6 @@
 #endif
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
-#endif
-#ifndef _PAM_HXX //autogen wg. SwPaM
-#include <pam.hxx>
 #endif
 #ifndef _EDITSH_HXX
 #include <editsh.hxx>
@@ -688,17 +677,16 @@ void SwXMLImport::startDocument( void )
             const SwPosition* pPos = pPaM->GetPoint();
 
             // Split once and remember the node that has been splitted.
-            pDoc->SplitNode( *pPos );
+            pDoc->SplitNode( *pPos, false );
             *pSttNdIdx = pPos->nNode.GetIndex()-1;
 
             // Split again.
-            pDoc->SplitNode( *pPos );
+            pDoc->SplitNode( *pPos, false );
 
             // Insert all content into the new node
             pPaM->Move( fnMoveBackward );
             pDoc->SetTxtFmtColl
-                ( *pPaM, pDoc->GetTxtCollFromPoolSimple(RES_POOLCOLL_STANDARD,
-                                                        FALSE) );
+                ( *pPaM, pDoc->GetTxtCollFromPool(RES_POOLCOLL_STANDARD, false ) );
         }
     }
 
@@ -1077,7 +1065,7 @@ void SwXMLImport::SetViewSettings(const Sequence < PropertyValue > & aViewProps)
         pDoc->GetDocShell()->SetVisArea ( aRect );
 
     if (bChangeBrowseMode)
-        pDoc->SetBrowseMode ( bBrowseMode );
+        pDoc->set(IDocumentSettingAccess::BROWSE_MODE, bBrowseMode );
 
     if (bChangeShowRedline)
         GetTextImport()->SetShowChanges( bShowRedlineChanges );
@@ -1418,7 +1406,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
                 // PrtOLENotify again. Otherwise we have to call it.
                 // The flag might be set from setting the printer, so it
                 // it is required to clear it.
-                SfxPrinter *pPrinter = pDoc->GetPrt( sal_False );
+                SfxPrinter *pPrinter = pDoc->getPrinter( false );
                 if( pPrinter )
                     pDoc->SetOLEPrtNotifyPending( !pPrinter->IsKnown() );
             }
