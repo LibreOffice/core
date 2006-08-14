@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: vg $ $Date: 2006-05-24 13:54:59 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:26:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,11 +33,9 @@
  *
  ************************************************************************/
 #pragma hdrstop
-
 #define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
 #define ITEMID_SIZE         SID_ATTR_PAGE_SIZE
 #include <hintids.hxx>
-
 
 #ifndef _BIGINT_HXX //autogen
 #include <tools/bigint.hxx>
@@ -249,7 +247,7 @@ SwFrmNotify::~SwFrmNotify()
                         if ( !bInvalidPrePos && pPre->IsTabFrm() )
                         {
                             SwTabFrm* pPreTab = static_cast<SwTabFrm*>(pPre);
-                            if ( pPreTab->GetFmt()->GetDoc()->IsTableRowKeep() )
+                            if ( pPreTab->GetFmt()->GetDoc()->get(IDocumentSettingAccess::TABLE_ROW_KEEP) )
                             {
                                 SwRowFrm* pLastRow = static_cast<SwRowFrm*>(pPreTab->GetLastLower());
                                 if ( pLastRow && pLastRow->ShouldRowKeepWithNext() )
@@ -528,8 +526,6 @@ SwFrmNotify::~SwFrmNotify()
 
 SwLayNotify::SwLayNotify( SwLayoutFrm *pLayFrm ) :
     SwFrmNotify( pLayFrm ),
-    nHeightOfst( 0 ),
-    nWidthOfst ( 0 ),
     bLowersComplete( FALSE )
 {
 }
@@ -669,7 +665,7 @@ SwLayNotify::~SwLayNotify()
         if ( pLay->IsTabFrm() )
             //Damit _nur_ der Shatten bei Groessenaenderungen gemalt wird.
             ((SwTabFrm*)pLay)->SetComplete();
-        else if ( !pLay->GetFmt()->GetDoc()->IsBrowseMode() ||
+        else if ( !pLay->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) ||
                   !(pLay->GetType() & (FRM_BODY | FRM_PAGE)) )
             //Damit die untergeordneten sauber retouchiert werden.
             //Problembsp: Flys an den Henkeln packen und verkleinern.
@@ -907,7 +903,7 @@ SwCntntNotify::SwCntntNotify( SwCntntFrm *pCntntFrm ) :
     if ( pCntntFrm->IsTxtFrm() )
     {
         SwTxtFrm* pTxtFrm = static_cast<SwTxtFrm*>(pCntntFrm);
-        if ( !pTxtFrm->GetTxtNode()->GetDoc()->IsFormerLineSpacing() )
+        if ( !pTxtFrm->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::OLD_LINE_SPACING) )
         {
             const SwAttrSet* pSet = pTxtFrm->GetAttrSet();
             const SvxLineSpacingItem &rSpace = pSet->GetLineSpacing();
@@ -1050,7 +1046,7 @@ SwCntntNotify::~SwCntntNotify()
                 {
                     pNd->SetOLESizeInvalid( FALSE );
                     //TODO/LATER: needs OnDocumentPrinterChanged
-                    //xObj->OnDocumentPrinterChanged( pNd->GetDoc()->GetPrt() );
+                    //xObj->OnDocumentPrinterChanged( pNd->GetDoc()->getPrinter( false ) );
                     pFESh->CalcAndSetScale( xObj );//Client erzeugen lassen.
                 }
             }
@@ -1213,7 +1209,7 @@ void AppendObjs( const SwSpzFrmFmts *pTbl, ULONG nIndex,
                 {
                     if ( !pSdrObj->GetPage() )
                     {
-                        pFmt->GetDoc()->GetDrawModel()->GetPage(0)->
+                        pFmt->getIDocumentDrawModelAccess()->GetDrawModel()->GetPage(0)->
                                 InsertObject(pSdrObj, pSdrObj->GetOrdNumDirect());
                     }
 
@@ -1379,7 +1375,7 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
     //Seiten angelegt wird, vor allem aber gibt es nicht mehr eine schier
     //lange Kette von Absaetzen teuer verschoben werden muss, bis sie sich auf
     //ertraegliches mass reduziert hat.
-    //Wir gehen mal davon aus, daá 20 Absaetze auf eine Seite passen
+    //Wir gehen mal davon aus, da? 20 Absaetze auf eine Seite passen
     //Damit es in extremen Faellen nicht gar so heftig rechenen wir je nach
     //Node noch etwas drauf.
     //Wenn in der DocStatistik eine brauchebare Seitenzahl angegeben ist
@@ -1634,10 +1630,10 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
                 pPrv = 0;
             }
         }
-        else if ( pNd->IsEndNode() && pNd->FindStartNode()->IsSectionNode() )
+        else if ( pNd->IsEndNode() && pNd->StartOfSectionNode()->IsSectionNode() )
         {
             ASSERT( pActualSection, "Sectionende ohne Anfang?" );
-            ASSERT( pActualSection->GetSectionNode() == pNd->FindStartNode(),
+            ASSERT( pActualSection->GetSectionNode() == pNd->StartOfSectionNode(),
                             "Sectionende mit falschen Start Node?" );
 
             //Section schliessen, ggf. die umgebende Section wieder
@@ -3321,7 +3317,6 @@ void Notify_Background( const SdrObject* pObj,
                         pFly->Frm().Right() >= rRect.Left() &&
                         pFly->Frm().Left() <= rRect.Right() )
                      {
-                        const SwFmtFrmSize &rSz = pFly->GetFmt()->GetFrmSize();
                         pFly->InvalidateSize();
                      }
                 }
