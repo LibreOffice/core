@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-06 12:57:58 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:21:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,9 +96,10 @@ class SvStringsSort;
 class SwAutoCompleteWord;
 
 class SwFmtRefMark;
-class SwFmtCol;
+
 class SwNumRule;        // Numerierung
 //class SwNodeNum;      // Numerierung
+
 class SwUndoIds;        // fuer Undo
 class SwTxtFmtColl;
 class SwGrfNode;
@@ -107,16 +108,13 @@ class SwFlyFrmFmt;
 class SwFrmFmt;         // fuer GetTxtNodeFmts()
 class SwCharFmt;
 class SwExtTextInput;
-class SwTxtNode;        // fuer IsNotMakeTxtNode
 class SwRootFrm;        // fuer CTOR
 class Graphic;          // fuer GetGraphic
 class GraphicObject;    // fuer GetGraphicObj
 class SwFmtINetFmt;     // InsertURL
 class SwTable;
 class SwTextBlocks;     // fuer GlossaryRW
-class SwBlockExceptList;
 class SwFmtFtn;
-class SpellCheck;
 class SwSection;
 class SwSectionFmt;
 class SwTOXMarks;
@@ -125,7 +123,6 @@ class SwTOXType;
 class SwTableAutoFmt;
 class SwPageDesc;
 class SchMemChart;
-class Font;
 class SwTxtINetFmt;
 class SwSeqFldList;
 class SwGlblDocContent;
@@ -135,7 +132,6 @@ class SwRedlineData;
 class SwFtnInfo;
 class SwEndNoteInfo;
 class SwLineNumberInfo;
-class SwAttrSet;
 class SwAuthEntry;
 class SwRewriter;
 struct SwConversionArgs;
