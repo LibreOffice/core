@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pvprtdat.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:05:45 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:29:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,11 +81,6 @@ public:
 
     BOOL GetLandscape() const           { return bLandscape; }
     void SetLandscape( BOOL b )         { bLandscape = b; }
-
-    // JP 19.08.98: wird zur Zeit nicht ausgewertet, weil der Font sich
-    //              nicht enstprechend stretch laesst.
-    BOOL GetStretch() const             { return bStretch; }
-    void SetStretch( BOOL b )           { bStretch = b; }
 };
 
 
