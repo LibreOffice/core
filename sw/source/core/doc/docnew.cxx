@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-11 15:50:55 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:58:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,14 +32,11 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-
 #pragma hdrstop
-
 #define ROLBCK_HISTORY_ONLY     // Der Kampf gegen die CLOOK's
 
-#ifndef _COM_SUN_STAR_I18N_FORBIDDENCHARACTERS_HDL_
-#include <com/sun/star/i18n/ForbiddenCharacters.hdl>
+#ifndef _DOC_HXX
+#include <doc.hxx>
 #endif
 #ifndef _COM_SUN_STAR_DOCUMENT_PRINTERINDEPENDENTLAYOUT_HPP_
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
@@ -47,14 +44,6 @@
 #ifndef _COM_SUN_STAR_DOCUMENT_UPDATEDOCMODE_HPP_
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #endif
-
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-#include <comphelper/processfactory.hxx>
-#endif
-
 #ifndef _SV_VIRDEV_HXX
 #include <vcl/virdev.hxx>
 #endif
@@ -82,14 +71,14 @@
 #ifndef _SVXLINKMGR_HXX
 #include <svx/linkmgr.hxx>
 #endif
+#ifndef _FORBIDDENCHARACTERSTABLE_HXX
+#include <svx/forbiddencharacterstable.hxx>
+#endif
 #ifndef _ZFORLIST_HXX
 #include <svtools/zforlist.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_COMPATIBILITY_HXX
 #include <svtools/compatibility.hxx>
-#endif
-#ifndef _FORBIDDENCHARACTERSTABLE_HXX
-#include <svx/forbiddencharacterstable.hxx>
 #endif
 #ifndef _SVDPAGE_HXX
 #include <svx/svdpage.hxx>
@@ -119,18 +108,11 @@
 #ifndef _PVPRTDAT_HXX
 #include <pvprtdat.hxx>
 #endif
-
-#ifndef _DOC_HXX
-#include <doc.hxx>
-#endif
 #ifndef _ROOTFRM_HXX
 #include <rootfrm.hxx>  //Damit der RootDtor gerufen wird.
 #endif
 #ifndef _LAYOUTER_HXX
 #include <layouter.hxx>
-#endif
-#ifndef _ERRHDL_HXX
-#include <errhdl.hxx>
 #endif
 #ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx> //Damit die PageDescs zerstoert werden koennen.
@@ -179,12 +161,6 @@
 #endif
 #ifndef _DOCARY_HXX
 #include <docary.hxx>
-#endif
-#ifndef _FMTCOL_HXX
-#include <fmtcol.hxx>
-#endif
-#ifndef _NUMRULE_HXX
-#include <numrule.hxx>
 #endif
 #ifndef _LINEINFO_HXX
 #include <lineinfo.hxx>
@@ -332,92 +308,92 @@ SwDoc::SwDoc() :
     nUndoCnt( 0 ),
     nUndoSttEnd( 0 ),
     nAutoFmtRedlnCommentNo( 0 ),
-        eRedlineMode( SwRedlineMode(REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE) ),
+    eRedlineMode(IDocumentRedlineAccess::REDLINE_SHOW_INSERT | IDocumentRedlineAccess::REDLINE_SHOW_DELETE),
     eChrCmprType( CHARCOMPRESS_NONE ),
-        nLinkCt( 0 ),
-        nLockExpFld( 0 ),
-        n32Dummy1( 0 ),
-    n32Dummy2( 0 ),
-    n8Dummy1( 0x80 ), // this will throw a compiler warning, because 0x80 doesn't fit in sal_Int8
-    n8Dummy2( 0x06 ),
+    mReferenceCount(0),
+    nLockExpFld( 0 ),
     nLinkUpdMode( GLOBALSETTING ),
      nFldUpdMode( AUTOUPD_GLOBALSETTING ),
-    bReadlineChecked(sal_False),
-    bWinEncryption(sal_False),
+    mbReadlineChecked(false),
+    mbWinEncryption(false),
     // --> OD 2005-02-11 #i38810#
     mbLinksUpdated( sal_False )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDoc::SwDoc" );
 
-    bGlossDoc =
-    bModified =
-    bDtor =
-    bUndo =
-    bPageNums =
-    bLoaded =
-    bUpdateExpFld =
-    bNewDoc =
-    bCopyIsMove =
-    bNoDrawUndoObj =
-    bBrowseMode =
-    bInReading =
-    bUpdateTOX =
-    bInLoadAsynchron =
-    bHTMLMode =
-    bInCallModified =
-    bIsGlobalDoc =
-    bGlblDocSaveLinks =
-    bIsLabelDoc =
-    bIsAutoFmtRedline =
-    bOLEPrtNotifyPending =
-    bAllOLENotify =
-    bIsRedlineMove =
-    bInsOnlyTxtGlssry =
-    bContains_MSVBasic =
-    bKernAsianPunctuation =
+    mbGlossDoc =
+    mbModified =
+    mbDtor =
+    mbUndo =
+    mbPageNums =
+    mbLoaded =
+    mbUpdateExpFld =
+    mbNewDoc =
+    mbCopyIsMove =
+    mbNoDrawUndoObj =
+    mbBrowseMode =
+    mbInReading =
+    mbUpdateTOX =
+    mbInLoadAsynchron =
+    mbHTMLMode =
+    mbInCallModified =
+    mbIsGlobalDoc =
+    mbGlblDocSaveLinks =
+    mbIsLabelDoc =
+    mbIsAutoFmtRedline =
+    mbOLEPrtNotifyPending =
+    mbAllOLENotify =
+    mbIsRedlineMove =
+    mbInsOnlyTxtGlssry =
+    mbContains_MSVBasic =
+    mbKernAsianPunctuation =
 #ifndef PRODUCT
-    bXMLExport =
+    mbXMLExport =
 #endif
     // --> OD 2006-03-21 #b6375613#
     mbApplyWorkaroundForB6375613 =
     // <--
+                            false;
+
+    mbGroupUndo =
+    mbNewFldLst =
+    mbVisibleLinks =
+    mbPurgeOLE =
+                            true;
 
     //
     // COMPATIBILITY FLAGS START
     //
+
     // Note: Any non-hidden compatibility flag should obtain its default
     // by asking SvtCompatibilityOptions, see below.
     //
-    bOldLineSpacing                     =
-    bAddParaSpacingToTableCells         =
-    bUseFormerObjectPos                 =
-    bUseFormerTextWrapping              =
-    mbConsiderWrapOnObjPos              =
-    bOldNumbering                       =
-    bOutlineLevelYieldsOutlineRule  =
-    bIgnoreFirstLineIndentInNumbering   =
-    bDoNotJustifyLinesWithManualBreak   =
-    bDoNotResetParaAttrsForNumFont      =
-    // --> OD 2006-03-14 #i62875#
-    mbDoNotCaptureDrawObjsOnPage        =
-    // <--
-    bTableRowKeep                       =
-    bIgnoreTabsAndBlanksForLineCalculation =
-    // --> OD 2006-04-13 #b6402800#
-    mbClipAsCharacterAnchoredWriterFlyFrames =
-    // <--
+    const SvtCompatibilityOptions aOptions;
+    mbParaSpaceMax                      = aOptions.IsAddSpacing();
+    mbParaSpaceMaxAtPages               = aOptions.IsAddSpacingAtPages();
+    mbTabCompat                         = !aOptions.IsUseOurTabStops();
+    mbUseVirtualDevice                  = !aOptions.IsUsePrtDevice();
+    mbAddExternalLeading                = !aOptions.IsNoExtLeading();
+    mbOldLineSpacing                    = aOptions.IsUseLineSpacing();
+    mbAddParaSpacingToTableCells        = aOptions.IsAddTableSpacing();
+    mbUseFormerObjectPos                = aOptions.IsUseObjectPositioning();
+    mbUseFormerTextWrapping             = aOptions.IsUseOurTextWrapping();
+    mbConsiderWrapOnObjPos              = aOptions.IsConsiderWrappingStyle();
+    mbAddFlyOffsets                         = false;        // hidden
+    mbOldNumbering                          = false;        // hidden
+    mbUseHiResolutionVirtualDevice          = true;         // hidden
+    mbIgnoreFirstLineIndentInNumbering      = false;        // hidden
+    mbDoNotJustifyLinesWithManualBreak      = false;        // hidden
+    mbDoNotResetParaAttrsForNumFont         = false;        // hidden
+    mbOutlineLevelYieldsOutlineRule         = false;        // hidden
+    mbTableRowKeep                          = false;        // hidden
+    mbIgnoreTabsAndBlanksForLineCalculation = false;        // hidden
+    mbDoNotCaptureDrawObjsOnPage            = false;        // hidden
+    mbClipAsCharacterAnchoredWriterFlyFrames= false;        // hidden
+
     //
     // COMPATIBILITY FLAGS END
     //
-
-                                FALSE;
-
-    bGroupUndo =
-    bNewFldLst =
-    bVisibleLinks =
-    bFrmBeepEnabled =
-    bPurgeOLE =
-                                TRUE;
 
     pMacroTable = new SvxMacroTableDtor;
 
@@ -434,7 +410,6 @@ SwDoc::SwDoc() :
     /* FmtColls */
     // TXT
     pTxtFmtCollTbl->Insert(pDfltTxtFmtColl, 0 );
-    // aFtnInfo.SetFtnTxtColl(aDfltTxtFmtColl); // jetzt oben in der Liste
     // GRF
     pGrfFmtCollTbl->Insert(pDfltGrfFmtColl, 0 );
 
@@ -449,14 +424,14 @@ SwDoc::SwDoc() :
 
     _InitFieldTypes();
 
-    // lege (fuer die Filter) eine Default-OullineNumRule an
+    // lege (fuer die Filter) eine Default-OutlineNumRule an
     pOutlineRule = new SwNumRule( String::CreateFromAscii(
                                         SwNumRule::GetOutlineRuleName() ),
-                                    OUTLINE_RULE );
+                                        OUTLINE_RULE );
     // #115901#
     AddNumRule(pOutlineRule);
     // --> OD 2005-10-21 - counting of phantoms depends on <IsOldNumbering()>
-    pOutlineRule->SetCountPhantoms( !IsOldNumbering() );
+    pOutlineRule->SetCountPhantoms( !get(IDocumentSettingAccess::OLD_NUMBERING) );
     // <--
 
     new SwTxtNode( SwNodeIndex( aUndoNodes.GetEndOfContent() ), pDfltTxtFmtColl );
@@ -495,21 +470,6 @@ SwDoc::SwDoc() :
     pTOXTypes->Insert( pNew, pTOXTypes->Count() );
     pNew = new SwTOXType(TOX_AUTHORITIES,           pShellRes->aTOXAuthoritiesName   );
     pTOXTypes->Insert( pNew, pTOXTypes->Count() );
-
-    // set compatibility defaults
-    SvtCompatibilityOptions aOptions;
-    SetTabCompat( !aOptions.IsUseOurTabStops() );
-    SetAddExtLeading( !aOptions.IsNoExtLeading() );
-    const short nUseVirtualDev = aOptions.IsUsePrtDevice() ?
-                                 PrinterIndependentLayout::DISABLED :
-                                 PrinterIndependentLayout::HIGH_RESOLUTION;
-    _SetUseVirtualDevice( nUseVirtualDev );
-    SetParaSpaceMax( aOptions.IsAddSpacing(), aOptions.IsAddSpacingAtPages() );
-    SetAddParaSpacingToTableCells( aOptions.IsAddTableSpacing() );
-    SetUseFormerLineSpacing( aOptions.IsUseLineSpacing() );
-    SetUseFormerObjectPositioning( aOptions.IsUseObjectPositioning() );
-    SetUseFormerTextWrapping( aOptions.IsUseOurTextWrapping() );
-    SetConsiderWrapOnObjPos( aOptions.IsConsiderWrappingStyle() );
 
     ResetModified();
 }
@@ -553,9 +513,9 @@ SwDoc::~SwDoc()
 
     delete pPgPViewPrtData;
 
-    bUndo = FALSE;          // immer das Undo abschalten !!
+    mbUndo = FALSE;         // immer das Undo abschalten !!
     // damit die Fussnotenattribute die Fussnotennodes in Frieden lassen.
-    bDtor = TRUE;
+    mbDtor = TRUE;
 
     DELETEZ( pLayout );
 
@@ -717,87 +677,9 @@ SwDoc::~SwDoc()
     delete pVirDev;
 }
 
-
 //---------------------------------------------------
 
-
-void SwDoc::SetJobsetup( const JobSetup &rJobSetup )
-{
-    BOOL bCheckPageDescs = 0 == pPrt;
-    BOOL bDataChanged = FALSE;
-
-    if ( pPrt )
-    {
-        if ( pPrt->GetName() == rJobSetup.GetPrinterName() )
-        {
-            if ( pPrt->GetJobSetup() != rJobSetup )
-            {
-                pPrt->SetJobSetup( rJobSetup );
-                bDataChanged = TRUE;
-            }
-        }
-        else
-            delete pPrt, pPrt = 0;
-    }
-
-    if( !pPrt )
-    {
-        //Das ItemSet wird vom Sfx geloescht!
-        SfxItemSet *pSet = new SfxItemSet( aAttrPool,
-                        FN_PARAM_ADDPRINTER, FN_PARAM_ADDPRINTER,
-                        SID_HTML_MODE,  SID_HTML_MODE,
-                        SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
-                        SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
-                        0 );
-        SfxPrinter *p = new SfxPrinter( pSet, rJobSetup );
-        if ( bCheckPageDescs )
-            SetPrt( p );
-        else
-        {
-            pPrt = p;
-            bDataChanged = TRUE;
-        }
-    }
-    if ( bDataChanged &&
-         com::sun::star::document::PrinterIndependentLayout::DISABLED == IsUseVirtualDevice() )
-        PrtDataChanged();
-}
-
-//---------------------------------------------------
-
-
-
-const JobSetup* SwDoc::GetJobsetup() const
-{
-    return pPrt ? &pPrt->GetJobSetup() : 0;
-}
-
-//---------------------------------------------------
-
-OutputDevice& SwDoc::GetRefDev() const
-{
-    if ( com::sun::star::document::PrinterIndependentLayout::DISABLED == IsUseVirtualDevice() )
-    {
-        SfxPrinter& rPrt = *GetPrt( sal_True );
-        if ( rPrt.IsValid() )
-            return rPrt;
-    }
-
-    return *GetVirDev( sal_True );
-}
-
-//---------------------------------------------------
-
-OutputDevice* SwDoc::_GetRefDev() const
-{
-    if ( com::sun::star::document::PrinterIndependentLayout::DISABLED == IsUseVirtualDevice() )
-        return pPrt;
-    return pVirDev;
-}
-
-//---------------------------------------------------
-
-VirtualDevice& SwDoc::_GetVirDev() const
+VirtualDevice& SwDoc::CreateVirtualDevice_() const
 {
     VirtualDevice* pNewVir = new VirtualDevice( 1 );
     pNewVir->SetReferenceDevice(VirtualDevice::REFDEV_MODE_MSO1);
@@ -805,15 +687,15 @@ VirtualDevice& SwDoc::_GetVirDev() const
     aMapMode.SetMapUnit( MAP_TWIP );
     pNewVir->SetMapMode( aMapMode );
 
-    ((SwDoc*)this)->SetVirDev( pNewVir, sal_True );
+    const_cast<SwDoc*>(this)->setVirtualDevice( pNewVir, true, true );
     return *pVirDev;
 }
 
 //---------------------------------------------------
 
-SfxPrinter& SwDoc::_GetPrt() const
+SfxPrinter& SwDoc::CreatePrinter_() const
 {
-    ASSERT( ! pPrt, "Do not call _GetPrt(), call GetPrt() instead" )
+    ASSERT( ! pPrt, "Do not call CreatePrinter_(), call getPrinter() instead" )
 
 #if OSL_DEBUG_LEVEL > 1
     ASSERT( false, "Printer will be created!" )
@@ -828,24 +710,10 @@ SfxPrinter& SwDoc::_GetPrt() const
                     SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
                     0 );
     SfxPrinter* pNewPrt = new SfxPrinter( pSet );
-    ((SwDoc*)this)->SetPrt( pNewPrt, sal_True );
+    const_cast<SwDoc*>(this)->setPrinter( pNewPrt, true, true );
     return *pPrt;
 }
 //---------------------------------------------------
-
-SwPrintData*    SwDoc::GetPrintData() const
-{
-    return pPrtData;
-}
-//---------------------------------------------------
-void  SwDoc::SetPrintData(SwPrintData& rPrtData)
-{
-    if(!pPrtData)
-        pPrtData = new SwPrintData;
-    *pPrtData = rPrtData;
-}
-//---------------------------------------------------
-
 
 void SwDoc::SetDocShell( SwDocShell* pDSh )
 {
@@ -903,7 +771,10 @@ void SwDoc::SetPersist( SfxObjectShell* pPersist )
 #endif
 }
 
-
+const SfxDocumentInfo* SwDoc::GetpInfo() const
+{
+    return pSwgInfo;
+}
 
 SfxDocumentInfo* SwDoc::GetInfo()
 {
@@ -915,9 +786,9 @@ SfxDocumentInfo* SwDoc::GetInfo()
 
 void SwDoc::ClearDoc()
 {
-    BOOL bOldUndo = bUndo;
+    BOOL bOldUndo = mbUndo;
     DelAllUndoObj();
-    bUndo = FALSE;          // immer das Undo abschalten !!
+    mbUndo = FALSE;         // immer das Undo abschalten !!
 
     // Undo-Benachrichtigung vom Draw abschalten
     if( pDrawModel )
@@ -975,7 +846,7 @@ void SwDoc::ClearDoc()
                                   OUTLINE_RULE );
     AddNumRule(pOutlineRule);
     // --> OD 2005-10-21 - counting of phantoms depends on <IsOldNumbering()>
-    pOutlineRule->SetCountPhantoms( !IsOldNumbering() );
+    pOutlineRule->SetCountPhantoms( !get(IDocumentSettingAccess::OLD_NUMBERING) );
     // <--
     // <--
 
@@ -1025,7 +896,7 @@ void SwDoc::ClearDoc()
     // delete now the dummy pagedesc
     DelPageDesc( nDummyPgDsc );
 
-    bUndo = bOldUndo;
+    mbUndo = bOldUndo;
 }
 
 void SwDoc::SetPreViewPrtData( const SwPagePreViewPrtData* pNew )
@@ -1047,80 +918,6 @@ void SwDoc::SetPreViewPrtData( const SwPagePreViewPrtData* pNew )
 SwModify*   SwDoc::GetUnoCallBack() const
 {
     return pUnoCallBack;
-}
-
-vos::ORef < SvxForbiddenCharactersTable > & SwDoc::GetForbiddenCharacterTbl()
-{
-    if( !xForbiddenCharsTable.isValid() )
-    {
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XMultiServiceFactory > xMSF =
-                                    ::comphelper::getProcessServiceFactory();
-        xForbiddenCharsTable = new SvxForbiddenCharactersTable( xMSF );
-    }
-    return xForbiddenCharsTable;
-}
-/* ------------------------------------------------------------------------*/
-
-const com::sun::star::i18n::
-    ForbiddenCharacters* SwDoc::GetForbiddenCharacters( USHORT nLang,
-                            BOOL bLocaleData ) const
-{
-    const com::sun::star::i18n::ForbiddenCharacters* pRet = 0;
-    if( xForbiddenCharsTable.isValid() )
-        pRet = xForbiddenCharsTable->GetForbiddenCharacters( nLang, FALSE );
-    if( bLocaleData && !pRet && pBreakIt )
-        pRet = &pBreakIt->GetForbidden( (LanguageType)nLang );
-    return pRet;
-}
-
-void SwDoc::SetForbiddenCharacters( USHORT nLang,
-                const com::sun::star::i18n::ForbiddenCharacters& rFChars )
-{
-    if( !xForbiddenCharsTable.isValid() )
-    {
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XMultiServiceFactory > xMSF =
-                                    ::comphelper::getProcessServiceFactory();
-        xForbiddenCharsTable = new SvxForbiddenCharactersTable( xMSF );
-    }
-    xForbiddenCharsTable->SetForbiddenCharacters( nLang, rFChars );
-    if( pDrawModel )
-    {
-        pDrawModel->SetForbiddenCharsTable( xForbiddenCharsTable );
-        if( !bInReading )
-            pDrawModel->ReformatAllTextObjects();
-    }
-
-    if( pLayout && !bInReading )
-    {
-        pLayout->StartAllAction();
-        pLayout->InvalidateAllCntnt();
-        pLayout->EndAllAction();
-    }
-    SetModified();
-}
-
-void SwDoc::SetCharCompressType( SwCharCompressType n )
-{
-    if( eChrCmprType != n )
-    {
-        eChrCmprType = n;
-        if( pDrawModel )
-        {
-            pDrawModel->SetCharCompressType( n );
-            if( !bInReading )
-                pDrawModel->ReformatAllTextObjects();
-        }
-
-        if( pLayout && !bInReading )
-        {
-            pLayout->StartAllAction();
-            pLayout->InvalidateAllCntnt();
-            pLayout->EndAllAction();
-        }
-        SetModified();
-    }
 }
 
 /*-----------------28.5.2001 10:06------------------
@@ -1150,7 +947,7 @@ void SwDoc::WriteLayoutCache( SvStream& rStream )
 void SwDoc::UpdateLinks()
 {
     SfxObjectCreateMode eMode;
-    USHORT nLinkMode = GetLinkUpdMode();
+    USHORT nLinkMode = getLinkUpdateMode( true );
     USHORT nUpdateDocMode = GetDocShell()->GetUpdateDocMode();
     if( GetDocShell() &&
             (nLinkMode != NEVER ||  ::com::sun::star::document::UpdateDocMode::FULL_UPDATE == nUpdateDocMode) &&
@@ -1190,7 +987,7 @@ void SwDoc::UpdateLinks()
 }
 // <--
 // --> OD 2006-04-19 #b6375613#
-void SwDoc::SetApplyWorkaroundForB6375613( sal_Bool p_bApplyWorkaroundForB6375613 )
+void SwDoc::SetApplyWorkaroundForB6375613( bool p_bApplyWorkaroundForB6375613 )
 {
     if ( mbApplyWorkaroundForB6375613 != p_bApplyWorkaroundForB6375613 )
     {
