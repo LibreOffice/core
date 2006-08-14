@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edfldexp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:27:15 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:08:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 #pragma hdrstop
-
 #ifndef _EDITSH_HXX
 #include <editsh.hxx>
 #endif
@@ -52,8 +51,8 @@
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
-#ifndef _FLDBAS_HXX
-#include <fldbas.hxx>
+#ifndef _DOC_HXX
+#include <doc.hxx>
 #endif
 #ifndef _DOCARY_HXX
 #include <docary.hxx>
@@ -63,9 +62,6 @@
 #endif
 #ifndef _TXTFLD_HXX //autogen
 #include <txtfld.hxx>
-#endif
-#ifndef _HINTS_HXX
-#include <hints.hxx>        // SwRefMarkFldUpdate
 #endif
 #ifndef _FMTFLD_HXX //autogen
 #include <fmtfld.hxx>
