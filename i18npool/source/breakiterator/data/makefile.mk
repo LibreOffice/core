@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 17:02:56 $
+#   last change: $Author: hr $ $Date: 2006-08-14 16:21:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -77,8 +77,16 @@ SHL2OBJS= \
 LIB2TARGET=	$(SLB)$/$(SHL2TARGET).lib
 LIB2OBJFILES=$(SHL2OBJS)
 
+DEPOBJFILES= \
+    $(SLO1FILES) \
+    $(SLO2FILES)
+
 # --- Targets ------------------------------------------------------
 .INCLUDE :  target.mk
 
-$(MISC)$/dict_%.cxx : %.dic $(BIN)$/gendict
+$(MISC)$/dict_%.cxx : %.dic
     +$(BIN)$/gendict $< $@
+
+# ugly - is this dependency really required here?
+$(foreach,i,$(shell $(FIND) . -name "*.dic") $(MISC)$/dict_$(i:b).cxx) : $(BIN)$/gendict$(EXECPOST)
+
