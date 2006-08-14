@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pormulti.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:01:07 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:41:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifndef _PORMULTI_HXX
 #define _PORMULTI_HXX
 
@@ -43,7 +42,6 @@ class SwTxtFormatInfo;
 class SwFldPortion;
 class SwTxtCursor;
 class SwLineLayout;
-class SwBlankPortion;
 class SwTxtPaintInfo;
 class SwTxtAttr;
 class SfxPoolItem;
@@ -60,18 +58,14 @@ class SwFont;
 #define SW_MC_DOUBLE    0
 #define SW_MC_RUBY      1
 #define SW_MC_ROTATE    2
-#ifdef BIDI
 #define SW_MC_BIDI      3
-#endif
 
 struct SwMultiCreator
 {
     const SwTxtAttr* pAttr;
     const SfxPoolItem* pItem;
     BYTE nId;
-#ifdef BIDI
     BYTE nLevel;
-#endif
 };
 
 /*-----------------25.10.00 16:19-------------------
@@ -109,9 +103,7 @@ class SwMultiPortion : public SwLinePortion
     sal_Bool bTab2      :1; // Second line includes tabulator
     sal_Bool bDouble    :1; // Double line
     sal_Bool bRuby      :1; // Phonetics
-#ifdef BIDI
     sal_Bool bBidi      :1;
-#endif
     sal_Bool bTop       :1; // Phonetic position
     sal_Bool bFormatted :1; // Already formatted
     sal_Bool bFollowFld :1; // Field follow inside
@@ -119,21 +111,13 @@ class SwMultiPortion : public SwLinePortion
     sal_Bool bFlyInCntnt:1; // Fly as character inside
 protected:
     SwMultiPortion( xub_StrLen nEnd ) : pFldRest( 0 ), bTab1( sal_False ),
-#ifdef BIDI
         bTab2( sal_False ), bDouble( sal_False ), bRuby( sal_False ),
         bBidi( sal_False ), bFormatted( sal_False ), bFollowFld( sal_False ),
         nDirection( 0 ), bFlyInCntnt( sal_False )
-#else
-        bTab2( sal_False ), bDouble( sal_False ), bRuby( sal_False ),
-        bFormatted( sal_False ), bFollowFld( sal_False ), nDirection( 0 ),
-        bFlyInCntnt( sal_False )
-#endif
         { SetWhichPor( POR_MULTI ); SetLen( nEnd ); }
     inline void SetDouble() { bDouble = sal_True; }
     inline void SetRuby() { bRuby = sal_True; }
-#ifdef BIDI
     inline void SetBidi() { bBidi = sal_True; }
-#endif
     inline void SetTop( sal_Bool bNew ) { bTop = bNew; }
     inline void SetTab1( sal_Bool bNew ) { bTab1 = bNew; }
     inline void SetTab2( sal_Bool bNew ) { bTab2 = bNew; }
@@ -221,16 +205,11 @@ class SwRubyPortion : public SwMultiPortion
     USHORT nAdjustment;
     void _Adjust( SwTxtFormatInfo &rInf);
 public:
-#ifdef BIDI
     SwRubyPortion( const SwRubyPortion& rRuby, xub_StrLen nEnd );
-#else
-    SwRubyPortion( xub_StrLen nEnd, USHORT nAdj, USHORT nPos, xub_StrLen nOfst )
-        : SwMultiPortion( nEnd ), nRubyOffset( nOfst ), nAdjustment( nAdj )
-        { SetRuby(); SetTop(!nPos); }
-#endif
 
     SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
-                   const SwDoc& rDoc, xub_StrLen nEnd, xub_StrLen nOffs,
+                   const IDocumentSettingAccess& rIDocumentSettingAccess,
+                   xub_StrLen nEnd, xub_StrLen nOffs,
                    const sal_Bool* pForceRubyPos );
 
     void CalcRubyOffset();
@@ -249,7 +228,6 @@ public:
                       sal_Bool bRTL );
 };
 
-#ifdef BIDI
 class SwBidiPortion : public SwMultiPortion
 {
     BYTE nLevel;
@@ -267,7 +245,6 @@ public:
     // Manipulate the spacing array at pCurr
     virtual sal_Bool ChgSpaceAdd( SwLineLayout* pCurr, long nSpaceAdd ) const;
 };
-#endif
 
 // For cursor travelling in multiportions
 
