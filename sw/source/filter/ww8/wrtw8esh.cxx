@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:38:00 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:15:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
@@ -139,13 +138,6 @@
 #ifndef _SVDXCGV_HXX
 #include <svx/svdxcgv.hxx>
 #endif
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
-#include <com/sun/star/uno/Reference.h>
-#endif
-#ifndef _COM_SUN_STAR_FORM_FORMCOMPONENTTYPE_HPP_
-#include <com/sun/star/form/FormComponentType.hpp>
-#endif
-
 #ifndef _FMTCNCT_HXX
 #include <fmtcnct.hxx>
 #endif
@@ -169,9 +161,6 @@
 #ifndef _DCONTACT_HXX
 #include <dcontact.hxx>
 #endif
-#ifndef _CALBCK_HXX
-#include <calbck.hxx>
-#endif
 #ifndef _FRMFMT_HXX
 #include <frmfmt.hxx>
 #endif
@@ -180,9 +169,6 @@
 #endif
 #ifndef _NDINDEX_HXX
 #include <ndindex.hxx>
-#endif
-#ifndef _NODE_HXX
-#include <node.hxx>
 #endif
 #ifndef _DOC_HXX
 #include <doc.hxx>
@@ -220,16 +206,6 @@
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
 #endif
-#ifndef _ERRHDL_HXX
-#include <errhdl.hxx>
-#endif
-#ifndef _PAGEDESC_HXX
-#include <pagedesc.hxx>
-#endif
-#ifndef _GRFMGR_HXX
-#include <goodies/grfmgr.hxx>
-#endif
-
 #ifndef SW_WRITERHELPER
 #include "writerhelper.hxx"
 #endif
@@ -241,9 +217,6 @@
 #endif
 #ifndef _ESCHER_HXX
 #include "escher.hxx"
-#endif
-#ifndef WW_FIELDS_HXX
-#include "fields.hxx"
 #endif
 
 using namespace com::sun::star;
@@ -2021,6 +1994,11 @@ SvStream* SwBasicEscherEx::QueryPicStream()
         pPictStrm->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
     }
     return pPictStrm;
+}
+
+SdrLayerID SwBasicEscherEx::GetInvisibleHellId() const
+{
+    return rWrt.pDoc->GetInvisibleHellId();
 }
 
 void SwBasicEscherEx::WritePictures()
