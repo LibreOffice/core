@@ -4,9 +4,9 @@
  *
  *  $RCSfile: redlnitr.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:03:49 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:42:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -66,14 +65,8 @@
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>        // SwTxtNode
 #endif
-#ifndef _SWFNTCCH_HXX
-#include <swfntcch.hxx>     // SwFontAccess
-#endif
 #ifndef _DOC_HXX
 #include <doc.hxx>          // SwDoc
-#endif
-#ifndef _TXATBASE_HXX
-#include <txatbase.hxx>     // SwTxtAttr
 #endif
 #ifndef _ROOTFRM_HXX
 #include <rootfrm.hxx>
@@ -84,23 +77,15 @@
 #ifndef _BREAKIT_HXX
 #include <breakit.hxx>
 #endif
-#ifndef _ATRHNDL_HXX
-#include <atrhndl.hxx>
-#endif
-
-//////////////////////////
-
 #ifndef _SV_KEYCODES_HXX //autogen
 #include <vcl/keycodes.hxx>
 #endif
 #ifndef _VCL_CMDEVT_HXX //autogen
 #include <vcl/cmdevt.hxx>
 #endif
-
 #ifndef _SV_SETTINGS_HXX //autogen
 #include <vcl/settings.hxx>
 #endif
-
 #ifndef _TXTFRM_HXX
 #include <txtfrm.hxx>       // SwTxtFrm
 #endif
@@ -113,15 +98,11 @@
 #ifndef _EXTINPUT_HXX
 #include <extinput.hxx>
 #endif
-
 #ifndef _SFX_PRINTER_HXX //autogen
 #include <sfx2/printer.hxx>
 #endif
 #ifndef _WINDOW_HXX //autogen
 #include <vcl/window.hxx>
-#endif
-#ifndef _VIEWSH_HXX
-#include <viewsh.hxx>   // ViewShell
 #endif
 
 using namespace ::com::sun::star;
@@ -132,7 +113,7 @@ using namespace ::com::sun::star;
 void SwAttrIter::CtorInit( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, SwTxtFrm* pFrm )
 {
     // Beim HTML-Import kann es vorkommen, dass kein Layout existiert.
-    SwRootFrm *pRootFrm = rTxtNode.GetDoc()->GetRootFrm();
+    SwRootFrm* pRootFrm = rTxtNode.getIDocumentLayoutAccess()->GetRootFrm();
     pShell = pRootFrm ? pRootFrm->GetShell() : 0;
 
     pScriptInfo = &rScrInf;
@@ -166,7 +147,7 @@ void SwAttrIter::CtorInit( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, SwTxtFrm*
     // consider them during construction of the default array, and apply
     // them to the font
     aAttrHandler.Init( aFontAccess.Get()->GetDefault(), pAttrSet,
-                       *rTxtNode.GetDoc(), pShell, *pFnt, bVertLayout );
+                       *rTxtNode.getIDocumentSettingAccess(), pShell, *pFnt, bVertLayout );
 
     aMagicNo[SW_LATIN] = aMagicNo[SW_CJK] = aMagicNo[SW_CTL] = NULL;
 
@@ -211,12 +192,13 @@ void SwAttrIter::CtorInit( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, SwTxtFrm*
     nStartIndex = nEndIndex = nPos = nChgCnt = 0;
     nPropFont = 0;
     SwDoc* pDoc = rTxtNode.GetDoc();
+    const IDocumentRedlineAccess* pIDRA = rTxtNode.getIDocumentRedlineAccess();
 
     const SwExtTextInput* pExtInp = pDoc->GetExtTextInput( rTxtNode );
-    sal_Bool bShow = ::IsShowChanges( pDoc->GetRedlineMode() );
+    sal_Bool bShow = IDocumentRedlineAccess::IsShowChanges( pIDRA->GetRedlineMode() );
     if( pExtInp || bShow )
     {
-        MSHORT nRedlPos = pDoc->GetRedlinePos( rTxtNode );
+        MSHORT nRedlPos = pIDRA->GetRedlinePos( rTxtNode, USHRT_MAX );
         if( pExtInp || MSHRT_MAX != nRedlPos )
         {
             const SvUShorts* pArr = 0;
@@ -364,18 +346,18 @@ short SwRedlineItr::_Seek( SwFont& rFnt, xub_StrLen nNew, xub_StrLen nOld )
     return nRet + EnterExtend( rFnt, nNew );
 }
 
-void SwRedlineItr::FillHints( MSHORT nAuthor, SwRedlineType eType )
+void SwRedlineItr::FillHints( MSHORT nAuthor, IDocumentRedlineAccess::RedlineType_t eType )
 {
     switch ( eType )
     {
-        case REDLINE_INSERT:
+        case IDocumentRedlineAccess::REDLINE_INSERT:
             SW_MOD()->GetInsertAuthorAttr(nAuthor, *pSet);
             break;
-        case REDLINE_DELETE:
+        case IDocumentRedlineAccess::REDLINE_DELETE:
             SW_MOD()->GetDeletedAuthorAttr(nAuthor, *pSet);
             break;
-        case REDLINE_FORMAT:
-        case REDLINE_FMTCOLL:
+        case IDocumentRedlineAccess::REDLINE_FORMAT:
+        case IDocumentRedlineAccess::REDLINE_FMTCOLL:
             SW_MOD()->GetFormatAuthorAttr(nAuthor, *pSet);
             break;
     }
