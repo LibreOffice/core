@@ -4,9 +4,9 @@
  *
  *  $RCSfile: callnk.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:02:36 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:50:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -147,7 +146,7 @@ SwCallLink::~SwCallLink()
          */
         rShell.CallChgLnk();
     }
-    else if( bHasSelection != (*pCurCrsr->GetPoint() != *pCurCrsr->GetMark()) )
+    else if( !bHasSelection != !(*pCurCrsr->GetPoint() != *pCurCrsr->GetMark()) )
     {
         // always call change link when selection changes
         rShell.CallChgLnk();
@@ -251,48 +250,4 @@ long SwCallLink::GetFrm( SwTxtNode& rNd, xub_StrLen nCntPos, BOOL bCalcFrm )
     }
     return 0;
 }
-
-/*---------------------------------------------------------------------*/
-
-
-//SwChgLinkFlag::SwChgLinkFlag( SwCrsrShell& rShell )
-//    : rCrsrShell( rShell ), bOldFlag( rShell.bCallChgLnk ), nLeftFrmPos( 0 )
-//{
-//    rCrsrShell.bCallChgLnk = FALSE;
-//    if( bOldFlag && !rCrsrShell.pTblCrsr )
-//    {
-//        SwNode* pNd = rCrsrShell.pCurCrsr->GetNode();
-//        if( ND_TEXTNODE & pNd->GetNodeType() )
-//            nLeftFrmPos = SwCallLink::GetFrm( (SwTxtNode&)*pNd,
-//                    rCrsrShell.pCurCrsr->GetPoint()->nContent.GetIndex(),
-//                    !rCrsrShell.ActionPend() );
-//    }
-//}
-
-
-//SwChgLinkFlag::~SwChgLinkFlag()
-//{
-//    rCrsrShell.bCallChgLnk = bOldFlag;
-//    if( bOldFlag && !rCrsrShell.pTblCrsr )
-//    {
-//        // die Spalten Ueberwachung brauchen wir immer!!!
-//        SwNode* pNd = rCrsrShell.pCurCrsr->GetNode();
-//        if( ND_TEXTNODE & pNd->GetNodeType() &&
-//            nLeftFrmPos != SwCallLink::GetFrm( (SwTxtNode&)*pNd,
-//                    rCrsrShell.pCurCrsr->GetPoint()->nContent.GetIndex(),
-//                    !rCrsrShell.ActionPend() ))
-//        {
-//            /* immer, wenn zwischen Frames gesprungen wird, gelten
-//             * neue Attribute. Es muesste also festgestellt werden, welche
-//             * Attribute jetzt gelten; das kann gleich der Handler machen.
-//             * Diesen direkt rufen !!!
-//             */
-//            rCrsrShell.aChgLnk.Call( &rCrsrShell );
-//            rCrsrShell.bChgCallFlag = FALSE;        // Flag zuruecksetzen
-//        }
-//    }
-//}
-
-
-
 
