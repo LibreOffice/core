@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoportenum.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2006-02-17 15:28:23 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:56:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -328,6 +327,7 @@ struct BookmarkCompareStruct
     }
 };
 typedef std::multiset < SwXBookmarkPortion_ImplSharedPtr, BookmarkCompareStruct > SwXBookmarkPortion_ImplList;
+
 //-----------------------------------------------------------------------------
 void lcl_ExportBookmark(
     SwXBookmarkPortion_ImplList& rBkmArr, ULONG nIndex,
@@ -644,7 +644,7 @@ Reference<XTextRange> lcl_ExportHints(SwpHints* pHints,
 //-----------------------------------------------------------------------------
 void lcl_FillBookmarkArray(SwDoc& rDoc,SwUnoCrsr& rUnoCrsr, SwXBookmarkPortion_ImplList& rBkmArr )
 {
-    const SwBookmarks& rMarks = rDoc.GetBookmarks();
+    const SwBookmarks& rMarks = rDoc.getBookmarks();
     sal_uInt16 nArrLen = rMarks.Count();
     if ( nArrLen > 0 )
     {
@@ -690,14 +690,14 @@ void lcl_FillRedlineArray(SwDoc& rDoc,SwUnoCrsr& rUnoCrsr, SwXRedlinePortion_Imp
     {
         const SwPosition* pStart = rUnoCrsr.GetPoint();
         const SwNodeIndex nOwnNode = pStart->nNode;
-        SwRedlineMode eRedMode = rDoc.GetRedlineMode();
+        IDocumentRedlineAccess::RedlineMode_t eRedMode = rDoc.GetRedlineMode();
 
         for(USHORT nRed = 0; nRed < nRedTblCount; nRed++)
         {
             const SwRedline* pRedline = rRedTbl[nRed];
             const SwPosition* pRedStart = pRedline->Start();
             const SwNodeIndex nRedNode = pRedStart->nNode;
-            SwRedlineType nType = pRedline->GetType();
+            IDocumentRedlineAccess::RedlineType_t nType = pRedline->GetType();
             if ( nOwnNode == nRedNode )
                 rRedArr.insert( SwXRedlinePortion_ImplSharedPtr (
                     new SwXRedlinePortion_Impl ( pRedline, TRUE) ) );
