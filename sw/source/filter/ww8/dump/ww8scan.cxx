@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:43:47 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:20:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -6675,74 +6675,6 @@ USHORT wwSprmParser::DistanceToData(USHORT nId) const
 {
     return 1 + mnDelta + SprmDataOfs(nId);
 }
-
-#if 0
-ALNV::ANLV()
-    : nfc(0), cbTextBefore(0), cbTextAfter(0), jc(0), fPrev(0), fHang(0),
-    fSetBold(0), fSetItalic(0), fSetSmallCaps(0), fSetCaps(0), fSetStrike(0),
-    fSetKul(0), fPrevSpace(0), fBold(0), fItalic(0), fSmallCaps(0), fCaps(0),
-    fStrike(0), kul(0), ico(0), ftc(0), hps(0), iStartAt(0), dxaIndent(0),
-    dxaSpace(0)
-{}
-
-void ANLV::ReadFromMem(const sal_uInt8 *&pData)
-{
-    nfc = Get_Byte(pData);
-    cbTextBefore = Get_Byte(pData);
-    cbTextAfter = Get_Byte(pData);
-    sal_uInt8 nTemp = Get_Byte(pData);
-    jc = nTemp & 0x03;
-    fPrev = (nTemp & 0x04) >> 2;
-    fHang = (nTemp & 0x08) >> 3;
-    fSetBold = (nTemp & 0x10) >> 4;
-    fSetItalic = (nTemp & 0x20) >> 5;
-    fSetSmallCaps = (nTemp & 0x40) >> 6;
-    fSetCaps = (nTemp & 0x80) >> 7;
-    nTemp = Get_Byte(pData);
-    fSetStrike = nTemp & 0x01;
-    fSetKul = (nTemp & 0x02) >> 1;
-    fPrevSpace = (nTemp & 0x04) >> 2;
-    fBold = (nTemp & 0x08) >> 3;
-    fItalic = (nTemp & 0x10) >> 4;
-    fSmallCaps = (nTemp & 0x20) >> 5;
-    fCaps = (nTemp & 0x40) >> 6;
-    fStrike = (nTemp & 0x80) >> 7;
-    nTemp = Get_Byte(pData);
-    kul = nTemp & 0x07;
-    ico = (nTemp & 0xF1) >> 3;
-    ftc = Get_Short(pData);
-    hps = Get_Short(pData);
-    iStartAt = Get_Short(pData);
-    dxaIndent = Get_Short(pData);
-    dxaSpace = Get_Short(pData);
-}
-
-OLST::OLST() :
-    fRestartHdr(0), fSpareOlst2(0), fSpareOlst3(0), fSpareOlst4(0),
-{
-    memset(rgxch, 0, sizeof(rgxch));
-}
-
-void OLST::ReadFromMem(const sal_uInt8 *&pData, bool bVer67)
-{
-    for (int i = 0;i < 9; ++i)
-        rganlv[i].ReadFromMem(pData);
-    fRestartHdr = Get_Byte(pData);
-    fSpareOlst2 = Get_Byte(pData);
-    fSpareOlst3 = Get_Byte(pData);
-    fSpareOlst4 = Get_Byte(pData);
-    if (bVer67)
-    {
-        for (int j = 0; j < 64; ++j)
-            rgxch[j] = Get_Byte(pData);
-    }
-    else
-    {
-        for (int j = 0; j < 32; ++j)
-            rgxch[j] = Get_Short(pData);
-    }
-}
-#endif
 
 SEPr::SEPr() :
     bkc(2), fTitlePage(0), fAutoPgn(0), nfcPgn(0), fUnlocked(0), cnsPgn(0),
