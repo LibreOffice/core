@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drwtxtsh.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 12:44:03 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:53:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 #pragma hdrstop
-
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
@@ -83,17 +82,11 @@
 #ifndef _EEITEM_HXX //autogen
 #include <svx/eeitem.hxx>
 #endif
-#ifndef _SVDOBJ_HXX //autogen
-#include <svx/svdobj.hxx>
-#endif
 #ifndef _SVX_SCRIPTTYPEITEM_HXX
 #include <svx/scripttypeitem.hxx>
 #endif
 #ifndef _SFX_BINDINGS_HXX //autogen
 #include <sfx2/bindings.hxx>
-#endif
-#ifndef _SVX_XFTSFIT_HXX //autogen
-#include <svx/xftsfit.hxx>
 #endif
 #ifndef _SVX_FONTWORK_HXX //autogen
 #include <svx/fontwork.hxx>
@@ -113,9 +106,6 @@
 #ifndef _SVDOUTL_HXX
 #include <svx/svdoutl.hxx>
 #endif
-#ifndef _XDEF_HXX //autogen
-#include <xdef.hxx>
-#endif
 #ifndef _UNOOBJ_HXX
 #include <unoobj.hxx>
 #endif
@@ -126,26 +116,12 @@
 #ifndef _COM_SUN_STAR_I18N_TEXTCONVERSIONOPTION_HPP_
 #include <com/sun/star/i18n/TextConversionOption.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
-#include <com/sun/star/uno/XComponentContext.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTICOMPONENTFACTORY_HPP_
-#include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#endif
 #ifndef _COM_SUN_STAR_UI_DIALOGS_XEXECUTABLEDIALOG_HPP_
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
 #endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
-#include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-//#ifndef _COM_SUN_STAR_AWT_XWindows_HPP_
-//#include <com/sun/star/awt/XWindows.hpp>
-//#endif
-
-
 #ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
 #endif
