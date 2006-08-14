@@ -4,9 +4,9 @@
  *
  *  $RCSfile: writerwordglue.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-26 18:19:58 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:15:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 /// @HTML
 
@@ -42,9 +41,7 @@
 #ifndef SW_WRITERWORDGLUE
 #   include "writerwordglue.hxx"
 #endif
-#ifndef SW_MS_MSFILTER_HXX
-#   include "../inc/msfilter.hxx"
-#endif
+#include <doc.hxx>
 #ifndef SW_WRITERHELPER
 #   include "writerhelper.hxx"
 #endif
@@ -63,14 +60,9 @@
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #   include <com/sun/star/i18n/ScriptType.hdl> //ScriptType
 #endif
-#ifndef _RTL_TENCINFO_H
-#   include <rtl/tencinfo.h>        //rtl_getBestWindowsCharsetFromTextEncoding
-#endif
+
 #ifndef SV_FONTCVT_HXX
 #   include <vcl/fontcvt.hxx>   //GetSubsFontName
-#endif
-#ifndef _HINTIDS_HXX
-#   include <hintids.hxx>           //ITEMID_LRSPACE...
 #endif
 #ifndef _SVX_PAPERINF_HXX
 #   include <svx/paperinf.hxx>      //lA0Width...
@@ -104,9 +96,6 @@
 #endif
 #ifndef _FMTHDFT_HXX
 #   include <fmthdft.hxx>           //SwFmtHeader/SwFmtFooter
-#endif
-#ifndef _POOLFMT_HXX
-#   include <poolfmt.hxx>           //RES_POOL_COLLFMT_TYPE
 #endif
 #ifndef _FRMATR_HXX
 #   include <frmatr.hxx>            //GetLRSpace...
@@ -249,7 +238,7 @@ namespace
         //equivalent, then map it to one of our built in styles regardless
         //of its name
         if (eSti < nArrSize && aArr[eSti] != RES_NONE)
-            pRet = mrDoc.GetTxtCollFromPoolSimple(aArr[eSti], false);
+            pRet = mrDoc.GetTxtCollFromPool(aArr[eSti], false);
         return pRet;
     }
 
