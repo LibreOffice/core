@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swparrtf.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-08 14:47:33 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:10:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifndef _SWPARRTF_HXX
@@ -99,7 +98,6 @@ class SwPageDesc;
 class SwTxtFmtColl;
 class SwTableNode;
 class SwCharFmt;
-class SwNumFmt;
 class SwNumRule;
 class SwRTFParser;
 class SvxFontItem;
