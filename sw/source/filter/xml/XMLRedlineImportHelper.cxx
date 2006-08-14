@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLRedlineImportHelper.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 13:54:08 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:20:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -68,25 +67,8 @@
 #ifndef _XMLOFF_XMLTOKEN_HXX
 #include <xmloff/xmltoken.hxx>
 #endif
-
-#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
-#include <com/sun/star/lang/XUnoTunnel.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_TEXT_XWORDCURSOR_HPP_
-#include <com/sun/star/text/XWordCursor.hpp>
-#endif
-
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
-#include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP_
-#include <com/sun/star/beans/XPropertySetInfo.hpp>
 #endif
 
 // for locking SolarMutex: svapp + mutex
@@ -261,7 +243,7 @@ public:
     ~RedlineInfo();
 
     /// redline type (insert, delete, ...)
-    enum SwRedlineType eType;
+    IDocumentRedlineAccess::RedlineType_t eType;
 
     // info fields:
     OUString sAuthor;               /// change author string
@@ -288,7 +270,7 @@ public:
 };
 
 RedlineInfo::RedlineInfo() :
-    eType(REDLINE_INSERT),
+    eType(IDocumentRedlineAccess::REDLINE_INSERT),
     sAuthor(),
     sComment(),
     aDateTime(),
@@ -457,18 +439,18 @@ void XMLRedlineImportHelper::Add(
     // 3b) attach to existing redline
 
     // ad 1)
-    enum SwRedlineType eType;
+    IDocumentRedlineAccess::RedlineType_t eType;
     if (rType.equals(sInsertion))
     {
-        eType = REDLINE_INSERT;
+        eType = IDocumentRedlineAccess::REDLINE_INSERT;
     }
     else if (rType.equals(sDeletion))
     {
-        eType = REDLINE_DELETE;
+        eType = IDocumentRedlineAccess::REDLINE_DELETE;
     }
     else if (rType.equals(sFormatChange))
     {
-        eType = REDLINE_FORMAT;
+        eType = IDocumentRedlineAccess::REDLINE_FORMAT;
     }
     else
     {
@@ -527,8 +509,8 @@ Reference<XTextCursor> XMLRedlineImportHelper::CreateRedlineTextSection(
         SwDoc* pDoc = lcl_GetDocViaTunnel(xOldCursor);
 
         // create text section for redline
-        SwTxtFmtColl *pColl = pDoc->GetTxtCollFromPoolSimple
-            (RES_POOLCOLL_STANDARD, FALSE);
+        SwTxtFmtColl *pColl = pDoc->GetTxtCollFromPool
+            (RES_POOLCOLL_STANDARD, false );
         SwStartNode* pRedlineNode = pDoc->GetNodes().MakeTextSection(
             pDoc->GetNodes().GetEndOfRedlines(),
             SwNormalStartNode,
@@ -689,7 +671,7 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
     {
         // ignore redline (e.g. file loaded in insert mode):
         // delete 'deleted' redlines and forget about the whole thing
-        if (REDLINE_DELETE == pRedlineInfo->eType)
+        if (IDocumentRedlineAccess::REDLINE_DELETE == pRedlineInfo->eType)
         {
             pDoc->Delete(aPaM);
         }
@@ -718,9 +700,9 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
         }
 
         // set redline mode (without doing the associated book-keeping)
-        pDoc->SetRedlineMode_intern(REDLINE_ON);
-        pDoc->AppendRedline(pRedline, sal_False);
-        pDoc->SetRedlineMode_intern(REDLINE_NONE);
+        pDoc->SetRedlineMode_intern(IDocumentRedlineAccess::REDLINE_ON);
+        pDoc->AppendRedline(pRedline, false);
+        pDoc->SetRedlineMode_intern(IDocumentRedlineAccess::REDLINE_NONE);
     }
 }
 
@@ -747,8 +729,8 @@ SwRedlineData* XMLRedlineImportHelper::ConvertRedline(
     //    ( check presence and sanity of hierarchical redline info )
     SwRedlineData* pNext = NULL;
     if ( (NULL != pRedlineInfo->pNextRedline) &&
-         (REDLINE_DELETE == pRedlineInfo->eType) &&
-         (REDLINE_INSERT == pRedlineInfo->pNextRedline->eType) )
+         (IDocumentRedlineAccess::REDLINE_DELETE == pRedlineInfo->eType) &&
+         (IDocumentRedlineAccess::REDLINE_INSERT == pRedlineInfo->pNextRedline->eType) )
     {
         pNext = ConvertRedline(pRedlineInfo->pNextRedline, pDoc);
     }
