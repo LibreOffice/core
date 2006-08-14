@@ -4,9 +4,9 @@
  *
  *  $RCSfile: expfld.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:44:34 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:21:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,14 +51,13 @@
 
 class SfxPoolItem;
 class SwTxtNode;
-class SwCalc;
 class SwFrm;
 struct SwPosition;
 class SwTxtFld;
-class SwTableSortBoxes;
 class SwDoc;
-class SwTable;
 class SwFmtFld;
+class _SetGetExpFlds;
+class SwEditShell;
 
 // Vorwaertsdeklaration: besorge den "Body-TextNode", fuer Exp.Fld in Fly's
 //                      Header/Footers/Footnodes
@@ -266,9 +265,6 @@ public:
     inline void                 SetInputFlag(BOOL bInp);
     inline BOOL                 GetInputFlag() const;
 
-    inline void                 SetSeqText(const String& rStr);
-    inline const                String& GetSeqText() const;
-
     virtual String              GetCntnt(BOOL bName = FALSE) const;
     virtual USHORT              GetSubType() const;
     virtual void                SetSubType(USHORT nType);
@@ -300,12 +296,6 @@ inline void  SwSetExpField::SetPromptText(const String& rStr)
 
 inline const String& SwSetExpField::GetPromptText() const
     { return aPText;        }
-
-inline void  SwSetExpField::SetSeqText(const String& rStr)
-    { aSeqText = rStr;          }
-
-inline const String& SwSetExpField::GetSeqText() const
-    { return aSeqText;          }
 
 inline void SwSetExpField::SetInputFlag(BOOL bInp)
     { bInput = bInp; }
