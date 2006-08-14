@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unmove.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:20:43 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:50:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -217,7 +217,7 @@ void SwUndoMove::Undo( SwUndoIter& rUndoIter )
             SwNodeRange aRg( aIdx, aIdx );
             aRg.aEnd = nDestEndNode;
             aIdx = nInsPosNode;
-            if( !pDoc->Move( aRg, aIdx ) )
+            if( !pDoc->Move( aRg, aIdx, IDocumentContentOperations::DOC_MOVEDEFAULT ) )
                 break;
         }
         else
@@ -241,7 +241,7 @@ void SwUndoMove::Undo( SwUndoIter& rUndoIter )
                 ((SwTxtNode*)pCNd)->ClearSwpHintsArr( FALSE, FALSE );
 
             // an der InsertPos erstmal alle Attribute entfernen,
-            if( !pDoc->Move( aPam, aPos, ( bMoveRedlines ? DOC_MOVEREDLINES : DOC_MOVEDEFAULT ) ) )
+            if( !pDoc->Move( aPam, aPos, ( bMoveRedlines ? IDocumentContentOperations::DOC_MOVEREDLINES : IDocumentContentOperations::DOC_MOVEDEFAULT ) ) )
                 break;
 
             aPam.Exchange();
@@ -304,7 +304,7 @@ void SwUndoMove::Redo( SwUndoIter& rUndoIter )
     {
         // nur ein Move mit SwRange
         SwNodeRange aRg( rNds, nSttNode, rNds, nEndNode );
-        rDoc.Move( aRg, aIdx, ( bMoveRedlines ? DOC_MOVEREDLINES : DOC_MOVEDEFAULT ) );
+        rDoc.Move( aRg, aIdx, ( bMoveRedlines ? IDocumentContentOperations::DOC_MOVEREDLINES : IDocumentContentOperations::DOC_MOVEDEFAULT ) );
     }
     else
     {
@@ -320,7 +320,7 @@ void SwUndoMove::Redo( SwUndoIter& rUndoIter )
         BOOL bJoinTxt = aIdx.GetNode().IsTxtNode();
 
         aIdx--;
-        rDoc.Move( aPam, aMvPos );
+        rDoc.Move( aPam, aMvPos, IDocumentContentOperations::DOC_MOVEDEFAULT );
 
         if( nSttNode != nEndNode && bJoinTxt )
         {
