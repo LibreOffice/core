@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 13:05:57 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:46:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 #ifndef _TXTFRM_HXX
@@ -58,9 +57,6 @@
 #endif
 #ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>
-#endif
-#ifndef _RTL_UUID_H_
-#include <rtl/uuid.h>
 #endif
 #ifndef _VOS_MUTEX_HXX_ //autogen
 #include <vos/mutex.hxx>
@@ -100,21 +96,6 @@
 #ifndef _COM_SUN_STAR_I18N_XBREAKITERATOR_HPP_
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
-#include <com/sun/star/uno/RuntimeException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_INDEXOUTOFBOUNDSEXCEPTION_HPP_
-#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XMULTIPROPERTYSET_HPP_
-#include <com/sun/star/beans/XMultiPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATE_HPP_
-#include <com/sun/star/beans/PropertyState.hpp>
-#endif
 #ifndef _COM_SUN_STAR_BEANS_UNKNOWNPROPERTYEXCEPTION_HPP_
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
 #endif
@@ -132,10 +113,6 @@
 #ifndef _ACCPORTIONS_HXX
 #include "accportions.hxx"
 #endif
-
-#ifndef _SFXSIDS_HRC
-#include <sfx2/sfxsids.hrc>     // for copy/cut/pasteText(...)
-#endif
 #ifndef _SFXVIEWSH_HXX
 #include <sfx2/viewsh.hxx>      // for ExecuteAtViewShell(...)
 #endif
@@ -149,10 +126,6 @@
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>   // for GetWordBoundary
 #endif
-#ifndef _SWTYPES_HXX
-#include "swtypes.hxx"
-#endif
-
 // for get/setCharacterAttribute(...)
 #ifndef _UNOCRSR_HXX
 #include "unocrsr.hxx"
@@ -168,9 +141,6 @@
 #endif
 #ifndef _CRSSKIP_HXX
 #include "crsskip.hxx"
-#endif
-#ifndef _TOOLS_COLOR_HXX
-#include <tools/color.hxx>
 #endif
 #ifndef _TXTATR_HXX
 #include <txtatr.hxx>
