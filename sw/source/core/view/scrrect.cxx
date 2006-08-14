@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scrrect.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:31:49 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:58:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #ifndef _VIEWIMP_HXX
@@ -55,9 +54,6 @@
 #ifndef _FRMTOOL_HXX
 #include <frmtool.hxx>
 #endif
-#ifndef _TOOLS_DEBUG_HXX //autogen
-#include <tools/debug.hxx>
-#endif
 #ifndef _CURSOR_HXX //autogen
 #include <vcl/cursor.hxx>
 #endif
@@ -73,9 +69,10 @@
 #include "crsrsh.hxx"
 #include "rootfrm.hxx"
 #include "pagefrm.hxx"
-#include "doc.hxx"
+
 // OD 12.11.2002 #96272# - include declaration for <SetMappingForVirtDev>
 #include "setmapvirtdev.hxx"
+#include <IDocumentDrawModelAccess.hxx>
 
 DBG_NAME(RefreshTimer);
 
@@ -754,7 +751,7 @@ void SwViewImp::_RefreshScrolledArea( const SwRect &rRect )
         GetShell()->pOut = pOld;
         delete pVout;
         if( GetShell()->GetViewOptions()->IsControl() && HasDrawView() )
-            PaintLayer( GetShell()->GetDoc()->GetControlsId(), aScRect );
+            PaintLayer( GetShell()->getIDocumentDrawModelAccess()->GetControlsId(), aScRect );
     }
     else
     {
