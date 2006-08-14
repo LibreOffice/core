@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doccomp.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 09:32:59 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:55:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -74,14 +73,8 @@
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
 #endif
-#ifndef _NDINDEX_HXX
-#include <ndindex.hxx>
-#endif
 #ifndef _REDLINE_HXX
 #include <redline.hxx>
-#endif
-#ifndef _REDLENUM_HXX
-#include <redlenum.hxx>
 #endif
 #ifndef _UNDOBJ_HXX
 #include <undobj.hxx>
@@ -92,8 +85,6 @@
 #ifndef _TOX_HXX
 #include <tox.hxx>
 #endif
-
-
 
 class CompareLine
 {
@@ -1083,13 +1074,13 @@ BOOL SwCompareLine::CompareNode( const SwNode& rDstNd, const SwNode& rSrcNd )
         break;
 
     case ( ND_ENDNODE * 256 ) + ND_ENDNODE:
-/*      if( rSrcNd.FindStartNode()->IsTableNode() &&
-            rDstNd.FindStartNode()->IsTableNode() )
+/*      if( rSrcNd.StartOfSectionNode()->IsTableNode() &&
+            rDstNd.StartOfSectionNode()->IsTableNode() )
         {
 
         }
-        else if( rSrcNd.FindStartNode()->IsTableNode() &&
-                 rDstNd.FindStartNode()->IsTableNode() )
+        else if( rSrcNd.StartOfSectionNode()->IsTableNode() &&
+                 rDstNd.StartOfSectionNode()->IsTableNode() )
         {
         }
 */      break;
@@ -1324,10 +1315,10 @@ void SwCompareData::CheckRanges( CompareData& rData )
     const SwNode& rSrcEndNd = rSrcNds.GetEndOfContent();
     const SwNode& rDstEndNd = rDstNds.GetEndOfContent();
 
-    ULONG nSrcSttIdx = NextIdx( rSrcEndNd.FindStartNode() );
+    ULONG nSrcSttIdx = NextIdx( rSrcEndNd.StartOfSectionNode() );
     ULONG nSrcEndIdx = rSrcEndNd.GetIndex();
 
-    ULONG nDstSttIdx = NextIdx( rDstEndNd.FindStartNode() );
+    ULONG nDstSttIdx = NextIdx( rDstEndNd.StartOfSectionNode() );
     ULONG nDstEndIdx = rDstEndNd.GetIndex();
 
     while( nSrcSttIdx < nSrcEndIdx && nDstSttIdx < nDstEndIdx )
@@ -1479,7 +1470,7 @@ void SwCompareData::SetRedlinesToDoc( BOOL bUseDocInfo, const SwDoc& rSrcDoc )
 
     if( pTmp )
     {
-        SwRedlineData aRedlnData( REDLINE_DELETE, nAuthor, aTimeStamp,
+        SwRedlineData aRedlnData( IDocumentRedlineAccess::REDLINE_DELETE, nAuthor, aTimeStamp,
                                     aEmptyStr, 0, 0 );
         do {
             // #i65201#: Expand again, see comment above.
@@ -1489,11 +1480,11 @@ void SwCompareData::SetRedlinesToDoc( BOOL bUseDocInfo, const SwDoc& rSrcDoc )
                 pTmp->GetPoint()->nContent.Assign( pTmp->GetCntntNode(), 0 );
             }
 
-            rDoc.DeleteRedline( *pTmp, FALSE );
+            rDoc.DeleteRedline( *pTmp, false, USHRT_MAX );
 
             if( rDoc.DoesUndo() )
                 rDoc.AppendUndo( new SwUndoCompDoc( *pTmp, FALSE ));
-            rDoc.AppendRedline( new SwRedline( aRedlnData, *pTmp ) );
+            rDoc.AppendRedline( new SwRedline( aRedlnData, *pTmp ), true );
 
         } while( pDelRing != ( pTmp = (SwPaM*)pTmp->GetNext() ));
     }
@@ -1508,7 +1499,7 @@ void SwCompareData::SetRedlinesToDoc( BOOL bUseDocInfo, const SwDoc& rSrcDoc )
                 pTmp->GetPoint()->nContent.Assign( pTmp->GetCntntNode(), 0 );
             }
         } while( pInsRing != ( pTmp = (SwPaM*)pTmp->GetNext() ));
-        SwRedlineData aRedlnData( REDLINE_INSERT, nAuthor, aTimeStamp,
+        SwRedlineData aRedlnData( IDocumentRedlineAccess::REDLINE_INSERT, nAuthor, aTimeStamp,
                                     aEmptyStr, 0, 0 );
 
         // zusammenhaengende zusammenfassen
@@ -1545,7 +1536,7 @@ void SwCompareData::SetRedlinesToDoc( BOOL bUseDocInfo, const SwDoc& rSrcDoc )
         }
 
         do {
-            if( rDoc.AppendRedline( new SwRedline( aRedlnData, *pTmp )) &&
+            if( rDoc.AppendRedline( new SwRedline( aRedlnData, *pTmp ), true) &&
                 rDoc.DoesUndo() )
                 rDoc.AppendUndo( new SwUndoCompDoc( *pTmp, TRUE ));
         } while( pInsRing != ( pTmp = (SwPaM*)pTmp->GetNext() ));
@@ -1564,14 +1555,15 @@ long SwDoc::CompareDoc( const SwDoc& rDoc )
 
     long nRet = 0;
 
-    StartUndo();
+    StartUndo(0, NULL);
     BOOL bDocWasModified = IsModified();
     SwDoc& rSrcDoc = (SwDoc&)rDoc;
     BOOL bSrcModified = rSrcDoc.IsModified();
 
-    SwRedlineMode eSrcRedlMode = rSrcDoc.GetRedlineMode();
-    rSrcDoc.SetRedlineMode( REDLINE_SHOW_INSERT );
-    SetRedlineMode( REDLINE_ON | REDLINE_SHOW_INSERT );
+    IDocumentRedlineAccess::RedlineMode_t eSrcRedlMode = rSrcDoc.GetRedlineMode();
+    rSrcDoc.SetRedlineMode( IDocumentRedlineAccess::REDLINE_SHOW_INSERT );
+    SetRedlineMode(
+        IDocumentRedlineAccess::REDLINE_ON | IDocumentRedlineAccess::REDLINE_SHOW_INSERT );
 
     SwCompareData aD0( rSrcDoc );
     SwCompareData aD1( *this );
@@ -1582,18 +1574,21 @@ long SwDoc::CompareDoc( const SwDoc& rDoc )
 
     if( nRet )
     {
-        SetRedlineMode( REDLINE_ON | REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE );
+        SetRedlineMode(IDocumentRedlineAccess::REDLINE_ON |
+                       IDocumentRedlineAccess::REDLINE_SHOW_INSERT |
+                       IDocumentRedlineAccess::REDLINE_SHOW_DELETE);
+
         aD1.SetRedlinesToDoc( !bDocWasModified, rSrcDoc );
         SetModified();
     }
 
     rSrcDoc.SetRedlineMode( eSrcRedlMode );
-    SetRedlineMode( REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE );
+    SetRedlineMode(IDocumentRedlineAccess::REDLINE_SHOW_INSERT | IDocumentRedlineAccess::REDLINE_SHOW_DELETE);
 
     if( !bSrcModified )
         rSrcDoc.ResetModified();
 
-    EndUndo();
+    EndUndo(0, NULL);
 
     return nRet;
 }
@@ -1624,7 +1619,7 @@ _SaveMergeRedlines::_SaveMergeRedlines( const SwNode& rDstNd,
         aPos.nContent.Assign( ((SwCntntNode*)&rDstNd), pStt->nContent.GetIndex() );
     pDestRedl = new SwRedline( rSrcRedl.GetRedlineData(), aPos );
 
-    if( REDLINE_DELETE == pDestRedl->GetType() )
+    if( IDocumentRedlineAccess::REDLINE_DELETE == pDestRedl->GetType() )
     {
         // den Bereich als geloescht kennzeichnen
         const SwPosition* pEnd = pStt == rSrcRedl.GetPoint()
@@ -1644,7 +1639,7 @@ USHORT _SaveMergeRedlines::InsertRedline( FNInsUndo pFn )
     USHORT nIns = 0;
     SwDoc* pDoc = pDestRedl->GetDoc();
 
-    if( REDLINE_INSERT == pDestRedl->GetType() )
+    if( IDocumentRedlineAccess::REDLINE_INSERT == pDestRedl->GetType() )
     {
         // der Teil wurde eingefuegt, also kopiere ihn aus dem SourceDoc
         BOOL bUndo = pDoc->DoesUndo();
@@ -1653,8 +1648,8 @@ USHORT _SaveMergeRedlines::InsertRedline( FNInsUndo pFn )
         SwNodeIndex aSaveNd( pDestRedl->GetPoint()->nNode, -1 );
         xub_StrLen nSaveCnt = pDestRedl->GetPoint()->nContent.GetIndex();
 
-        SwRedlineMode eOld = pDoc->GetRedlineMode();
-        pDoc->SetRedlineMode_intern( eOld | REDLINE_IGNORE );
+        IDocumentRedlineAccess::RedlineMode_t eOld = pDoc->GetRedlineMode();
+        pDoc->SetRedlineMode_intern(eOld | IDocumentRedlineAccess::REDLINE_IGNORE);
 
         pSrcRedl->GetDoc()->Copy( *(SwPaM*)pSrcRedl, *pDestRedl->GetPoint() );
 
@@ -1692,8 +1687,8 @@ USHORT _SaveMergeRedlines::InsertRedline( FNInsUndo pFn )
             SwPosition* pRStt = pRedl->Start(),
                       * pREnd = pRStt == pRedl->GetPoint() ? pRedl->GetMark()
                                                            : pRedl->GetPoint();
-            if( REDLINE_DELETE == pRedl->GetType() ||
-                REDLINE_INSERT == pRedl->GetType() )
+            if( IDocumentRedlineAccess::REDLINE_DELETE == pRedl->GetType() ||
+                IDocumentRedlineAccess::REDLINE_INSERT == pRedl->GetType() )
             {
                 SwComparePosition eCmpPos = ComparePosition( *pDStt, *pDEnd, *pRStt, *pREnd );
                 switch( eCmpPos )
@@ -1723,7 +1718,7 @@ USHORT _SaveMergeRedlines::InsertRedline( FNInsUndo pFn )
                                     ? new SwUndoCompDoc( *pCpyRedl ) : 0;
 
                         // now modify doc: append redline, undo (and count)
-                        pDoc->AppendRedline( pCpyRedl );
+                        pDoc->AppendRedline( pCpyRedl, true );
                         if( pUndo )
                             (pDoc->*pFn)( pUndo );
                         ++nIns;
@@ -1755,7 +1750,7 @@ USHORT _SaveMergeRedlines::InsertRedline( FNInsUndo pFn )
         SwUndoCompDoc* pUndo = pDoc->DoesUndo() ? new SwUndoCompDoc( *pDestRedl ) : 0;
 
         // now modify doc: append redline, undo (and count)
-        bool bRedlineAccepted = pDoc->AppendRedline( pDestRedl );
+        bool bRedlineAccepted = pDoc->AppendRedline( pDestRedl, true );
         if( pUndo )
             (pDoc->*pFn)( pUndo );
         ++nIns;
@@ -1776,14 +1771,14 @@ long SwDoc::MergeDoc( const SwDoc& rDoc )
 
     long nRet = 0;
 
-    StartUndo();
+    StartUndo(0, NULL);
 
     SwDoc& rSrcDoc = (SwDoc&)rDoc;
     BOOL bSrcModified = rSrcDoc.IsModified();
 
-    SwRedlineMode eSrcRedlMode = rSrcDoc.GetRedlineMode();
-    rSrcDoc.SetRedlineMode( REDLINE_SHOW_DELETE );
-    SetRedlineMode( REDLINE_SHOW_DELETE );
+    IDocumentRedlineAccess::RedlineMode_t eSrcRedlMode = rSrcDoc.GetRedlineMode();
+    rSrcDoc.SetRedlineMode( IDocumentRedlineAccess::REDLINE_SHOW_DELETE );
+    SetRedlineMode( IDocumentRedlineAccess::REDLINE_SHOW_DELETE );
 
     SwCompareData aD0( rSrcDoc );
     SwCompareData aD1( *this );
@@ -1804,9 +1799,9 @@ long SwDoc::MergeDoc( const SwDoc& rDoc )
         {
             const SwRedline* pRedl = rSrcRedlTbl[ n ];
             ULONG nNd = pRedl->GetPoint()->nNode.GetIndex();
-            SwRedlineType eType = pRedl->GetType();
+            IDocumentRedlineAccess::RedlineType_t eType = pRedl->GetType();
             if( nEndOfExtra < nNd &&
-                ( REDLINE_INSERT == eType || REDLINE_DELETE == eType ))
+                ( IDocumentRedlineAccess::REDLINE_INSERT == eType || IDocumentRedlineAccess::REDLINE_DELETE == eType ))
             {
                 const SwNode* pDstNd = GetNodes()[
                                         nMyEndOfExtra + nNd - nEndOfExtra ];
@@ -1823,8 +1818,13 @@ long SwDoc::MergeDoc( const SwDoc& rDoc )
         if( pRing )
         {
             // dann alle ins DestDoc ueber nehmen
-            rSrcDoc.SetRedlineMode( REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE );
-            SetRedlineMode( REDLINE_ON | REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE );
+            rSrcDoc.SetRedlineMode(IDocumentRedlineAccess::REDLINE_SHOW_INSERT | IDocumentRedlineAccess::REDLINE_SHOW_DELETE);
+
+            SetRedlineMode(
+                IDocumentRedlineAccess::REDLINE_ON |
+                IDocumentRedlineAccess::REDLINE_SHOW_INSERT |
+                IDocumentRedlineAccess::REDLINE_SHOW_DELETE);
+
             _SaveMergeRedlines* pTmp = pRing;
 
             do {
@@ -1841,9 +1841,9 @@ long SwDoc::MergeDoc( const SwDoc& rDoc )
     if( !bSrcModified )
         rSrcDoc.ResetModified();
 
-    SetRedlineMode( REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE );
+    SetRedlineMode(IDocumentRedlineAccess::REDLINE_SHOW_INSERT | IDocumentRedlineAccess::REDLINE_SHOW_DELETE);
 
-    EndUndo();
+    EndUndo(0, NULL);
 
     return nRet;
 }
