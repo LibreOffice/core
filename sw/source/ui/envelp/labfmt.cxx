@@ -4,9 +4,9 @@
  *
  *  $RCSfile: labfmt.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:28:46 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:36:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifdef SW_DLLIMPLEMENTATION
 #undef SW_DLLIMPLEMENTATION
 #endif
@@ -56,10 +55,6 @@
 
 #include "label.hrc"
 #include "labfmt.hrc"
-
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
-#include <com/sun/star/uno/Sequence.hxx>
-#endif
 
 using namespace utl;
 using namespace rtl;
