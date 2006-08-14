@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scroll.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:00:03 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:44:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,12 +34,9 @@
  ************************************************************************/
 #ifndef _SCROLL_HXX
 #define _SCROLL_HXX
-
 #ifndef _SCRBAR_HXX //autogen
 #include <vcl/scrbar.hxx>
 #endif
-
-class SwRect;
 
 class SwScrollbar: public ScrollBar
 {
