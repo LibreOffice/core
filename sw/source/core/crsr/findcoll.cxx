@@ -4,9 +4,9 @@
  *
  *  $RCSfile: findcoll.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:04:39 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:51:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #ifndef _SWCRSR_HXX
@@ -53,9 +52,6 @@
 #endif
 #ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
-#ifndef _SW_REWRITER_HXX
-#include <SwRewriter.hxx>
 #endif
 #ifndef _TOOLS_RESID_HXX
 #include <tools/resid.hxx>
@@ -133,7 +129,7 @@ ULONG SwCursor::Find( const SwTxtFmtColl& rFmtColl,
         pDoc->SetModified();
 
     if( bSttUndo )
-        pDoc->EndUndo( UIUNDO_REPLACE_STYLE );
+        pDoc->EndUndo( UIUNDO_REPLACE_STYLE, NULL );
     return nRet;
 }
 
