@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docufld.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:09:30 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:13:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -120,17 +119,9 @@
 #ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
 #endif
-#ifndef _SFXDOCINF_HXX //autogen
-#include <sfx2/docinf.hxx>
-#endif
 #ifndef _SFXDOCTEMPL_HXX //autogen
 #include <sfx2/doctempl.hxx>
 #endif
-#ifndef INCLUDED_SVTOOLS_USEROPTIONS_HXX
-#include <svtools/useroptions.hxx>
-#endif
-
-
 #ifndef _FMTFLD_HXX //autogen
 #include <fmtfld.hxx>
 #endif
@@ -185,9 +176,6 @@
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
 #endif
-#ifndef _PAM_HXX
-#include <pam.hxx>
-#endif
 #ifndef _EXPFLD_HXX
 #include <expfld.hxx>
 #endif
@@ -196,9 +184,6 @@
 #endif
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
-#ifndef _HINTS_HXX
-#include <hints.hxx>
 #endif
 #ifndef _UNOFLDMID_H
 #include <unofldmid.h>
