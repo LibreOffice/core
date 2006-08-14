@@ -4,9 +4,9 @@
  *
  *  $RCSfile: expfld.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:20:11 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:13:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -76,9 +75,6 @@
 #endif
 #ifndef _TXTFTN_HXX
 #include <txtftn.hxx>
-#endif
-#ifndef _FRMFMT_HXX
-#include <frmfmt.hxx>
 #endif
 #ifndef _DOC_HXX
 #include <doc.hxx>
@@ -212,9 +208,10 @@ SwTxtNode* GetFirstTxtNode( const SwDoc& rDoc, SwPosition& rPos,
     SwTxtNode* pTxtNode;
     if ( !pCFrm )
     {
-        rPos.nNode = *rDoc.GetNodes().GetEndOfContent().StartOfSectionNode();
+        const SwNodes& rNodes = rDoc.GetNodes();
+        rPos.nNode = *rNodes.GetEndOfContent().StartOfSectionNode();
         SwCntntNode* pCNd;
-        while( 0 != (pCNd = rDoc.GetNodes().GoNext( &rPos.nNode ) ) &&
+        while( 0 != (pCNd = rNodes.GoNext( &rPos.nNode ) ) &&
                 0 == ( pTxtNode = pCNd->GetTxtNode() ) )
                         ;
         ASSERT( pTxtNode, "wo ist der 1.TextNode" );
@@ -438,7 +435,7 @@ void SwGetExpField::ChangeExpansion( const SwFrm& rFrm, const SwTxtFld& rFld )
     {
         // fuelle den Calculator mit den Werten
         SwCalc aCalc( rDoc );
-        rDoc.FldsToCalc( aCalc, aEndFld );
+        rDoc.FldsToCalc(aCalc, aEndFld);
 
         // Wert berechnen
         SetValue(aCalc.Calculate(GetFormula()).GetDouble());
@@ -1116,7 +1113,7 @@ String SwInputField::Expand() const
     {
         SwUserFieldType* pUserTyp = (SwUserFieldType*)
                             ((SwInputFieldType*)GetTyp())->GetDoc()->
-                            GetFldType( RES_USERFLD, aContent );
+                            GetFldType( RES_USERFLD, aContent, false );
         if( pUserTyp )
             sRet = pUserTyp->GetContent();
     }
