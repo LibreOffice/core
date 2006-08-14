@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ascfldlg.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:10:50 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:32:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifdef SW_DLLIMPLEMENTATION
 #undef SW_DLLIMPLEMENTATION
 #endif
@@ -212,10 +211,11 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
         }
 
         SwDoc* pDoc = rDocSh.GetDoc();
+
         USHORT nAppScriptType = GetI18NScriptTypeOfLanguage( (USHORT)GetAppLanguage() );
         {
             BOOL bDelPrinter = FALSE;
-            SfxPrinter* pPrt = pDoc ? pDoc->GetPrt() : 0;
+            SfxPrinter* pPrt = pDoc ? pDoc->getPrinter(false) : 0;
             if( !pPrt )
             {
                 SfxItemSet* pSet = new SfxItemSet( rDocSh.GetPool(),
@@ -464,60 +464,6 @@ IMPL_LINK( SwAsciiFilterDlg, CharSetSelHdl, SvxTextEncodingBox*, pBox )
         case RTL_TEXTENCODING_APPLE_KOREAN:
             eEnd = LINEEND_CR;
             break;
-
-#if 0
-which charset and language?
-        case RTL_TEXTENCODING_IBM_437:
-        case RTL_TEXTENCODING_IBM_860:
-        case RTL_TEXTENCODING_IBM_861:
-        case RTL_TEXTENCODING_IBM_863:
-        case RTL_TEXTENCODING_IBM_865:
-        case RTL_TEXTENCODING_ASCII_US:
-        case RTL_TEXTENCODING_ISO_8859_1:
-        case RTL_TEXTENCODING_ISO_8859_2:
-        case RTL_TEXTENCODING_ISO_8859_3:
-        case RTL_TEXTENCODING_ISO_8859_4:
-        case RTL_TEXTENCODING_ISO_8859_5:
-        case RTL_TEXTENCODING_ISO_8859_6:
-        case RTL_TEXTENCODING_ISO_8859_7:
-        case RTL_TEXTENCODING_ISO_8859_8:
-        case RTL_TEXTENCODING_ISO_8859_9:
-        case RTL_TEXTENCODING_ISO_8859_14:
-        case RTL_TEXTENCODING_ISO_8859_15:
-        case RTL_TEXTENCODING_IBM_737:
-        case RTL_TEXTENCODING_IBM_775:
-        case RTL_TEXTENCODING_IBM_852:
-        case RTL_TEXTENCODING_IBM_855:
-        case RTL_TEXTENCODING_IBM_857:
-        case RTL_TEXTENCODING_IBM_862:
-        case RTL_TEXTENCODING_IBM_864:
-        case RTL_TEXTENCODING_IBM_866:
-        case RTL_TEXTENCODING_IBM_869:
-        case RTL_TEXTENCODING_MS_874:
-        case RTL_TEXTENCODING_MS_1250:
-        case RTL_TEXTENCODING_MS_1251:
-        case RTL_TEXTENCODING_MS_1253:
-        case RTL_TEXTENCODING_MS_1254:
-        case RTL_TEXTENCODING_MS_1255:
-        case RTL_TEXTENCODING_MS_1256:
-        case RTL_TEXTENCODING_MS_1257:
-        case RTL_TEXTENCODING_MS_1258:
-        case RTL_TEXTENCODING_MS_932:
-        case RTL_TEXTENCODING_MS_936:
-        case RTL_TEXTENCODING_MS_949:
-        case RTL_TEXTENCODING_MS_950:
-        case RTL_TEXTENCODING_SHIFT_JIS:
-        case RTL_TEXTENCODING_GB_2312:
-        case RTL_TEXTENCODING_GBT_12345:
-        case RTL_TEXTENCODING_GBK:
-        case RTL_TEXTENCODING_BIG5:
-        case RTL_TEXTENCODING_EUC_JP:
-        case RTL_TEXTENCODING_EUC_CN:
-        case RTL_TEXTENCODING_EUC_TW:
-        case RTL_TEXTENCODING_ISO_2022_JP:
-        case RTL_TEXTENCODING_ISO_2022_CN:
-        case RTL_TEXTENCODING_KOI8_R:
-#endif
         }
     }
 
