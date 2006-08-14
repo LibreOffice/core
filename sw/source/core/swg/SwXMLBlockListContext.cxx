@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXMLBlockListContext.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:42:59 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:31:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 #ifndef _SW_XMLBLOCKLISTCONTEXT_HXX
@@ -46,10 +45,6 @@
 #ifndef _SW_XMLTEXTBLOCKS_HXX
 #include <SwXMLTextBlocks.hxx>
 #endif
-
-#ifndef _XMLOFF_XMLIMP_HXX
-#include <xmloff/xmlimp.hxx>
-#endif
 #ifndef _XMLOFF_NMSPMAP_HXX
 #include <xmloff/nmspmap.hxx>
 #endif
@@ -59,13 +54,9 @@
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
 #endif
-#ifndef _XMLOFF_XMLTOKEN_HXX
-#include <xmloff/xmltoken.hxx>
-#endif
 #ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
 #endif
-
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
