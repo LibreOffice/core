@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 12:45:14 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 18:02:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 #include "viscrs.hxx"
@@ -77,9 +76,6 @@
 #endif
 #ifndef _UNOFRAME_HXX
 #include <unoframe.hxx>
-#endif
-#ifndef _UNOOBJ_HXX
-#include <unoobj.hxx>
 #endif
 #ifndef _UNOCRSR_HXX
 #include <unocrsr.hxx>
@@ -154,16 +150,12 @@
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
 #endif
-#ifndef _FMTRUBY_HXX
-#include <fmtruby.hxx>
-#endif
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
 #endif
 #ifndef _CRSSKIP_HXX
 #include <crsskip.hxx>
 #endif
-
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
@@ -1019,8 +1011,7 @@ void SAL_CALL SwXTextView::setRubyList(
 SfxObjectShellRef SwXTextView::BuildTmpSelectionDoc( SfxObjectShellRef& rRef )
 {
     SwWrtShell* pOldSh = &pView->GetWrtShell();
-    SfxPrinter *pPrt = pOldSh->GetPrt();
-//    SwDoc *pPrtDoc = pOldSh->CreatePrtDoc( pPrt, rRef );
+    SfxPrinter *pPrt = pOldSh->getIDocumentDeviceAccess()->getPrinter( false );
     SwDocShell* pDocSh;
     SfxObjectShellRef xDocSh( pDocSh = new SwDocShell( /*pPrtDoc, */SFX_CREATE_MODE_STANDARD ) );
     xDocSh->DoInitNew( 0 );
@@ -1029,21 +1020,26 @@ SfxObjectShellRef SwXTextView::BuildTmpSelectionDoc( SfxObjectShellRef& rRef )
     SwView* pDocView = (SwView*) pDocFrame->GetViewShell();
     pDocView->AttrChangedNotify( &pDocView->GetWrtShell() );//Damit SelectShell gerufen wird.
     SwWrtShell* pSh = pDocView->GetWrtShellPtr();
-    SfxPrinter* pTempPrinter = pSh->GetPrt( TRUE );
-    if(pOldSh )
+
+    IDocumentDeviceAccess* pIDDA = pSh->getIDocumentDeviceAccess();
+    SfxPrinter* pTempPrinter = pIDDA->getPrinter( true );
+
+    if( pOldSh )
     {
         const SwPageDesc& rCurPageDesc = pOldSh->GetPageDesc(pOldSh->GetCurPageDesc());
-        if(pOldSh->GetPrt(FALSE))
+
+        IDocumentDeviceAccess* pIDDA_old = pOldSh->getIDocumentDeviceAccess();
+
+        if( pIDDA_old->getPrinter( false ) )
         {
-            pSh->GetDoc()->SetJobsetup(*pOldSh->GetDoc()->GetJobsetup());
+            pIDDA->setJobsetup( *pIDDA_old->getJobsetup() );
             //#69563# if it isn't the same printer then the pointer has been invalidated!
-            pTempPrinter = pSh->GetPrt( TRUE );
+            pTempPrinter = pIDDA->getPrinter( true );
         }
+
         pTempPrinter->SetPaperBin(rCurPageDesc.GetMaster().GetPaperBin().GetValue());
     }
-#if OSL_DEBUG_LEVEL > 1
-    //pDocFrame->GetFrame()->Appear();
-#endif
+
     return xDocSh;
 }
 
@@ -1540,11 +1536,11 @@ void SwXTextViewCursor::gotoRange(
         //SectionNodes ueberspringen
         while(pTmp && pTmp->IsSectionNode())
         {
-            pTmp = pTmp->FindStartNode();
+            pTmp = pTmp->StartOfSectionNode();
         }
         while(pOwnStartNode && pOwnStartNode->IsSectionNode())
         {
-            pOwnStartNode = pOwnStartNode->FindStartNode();
+            pOwnStartNode = pOwnStartNode->StartOfSectionNode();
         }
         //ohne Expand darf mit dem ViewCursor ueberall hingesprungen werden
         //mit Expand nur in der gleichen Umgebung
