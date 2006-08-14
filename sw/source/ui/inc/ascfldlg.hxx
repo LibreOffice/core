@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ascfldlg.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 08:59:17 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:38:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,22 +34,26 @@
  ************************************************************************/
 #ifndef _ASCFLDLG_HXX
 #define _ASCFLDLG_HXX
-
 #ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
 #endif
+
 #ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
 #endif
+
 #ifndef _SV_LSTBOX_HXX
 #include <vcl/lstbox.hxx>
 #endif
+
 #ifndef _BASEDLGS_HXX
 #include <sfx2/basedlgs.hxx>
 #endif
+
 #ifndef _SVX_TXENCBOX_HXX
 #include <svx/txencbox.hxx>
 #endif
+
 #ifndef _SVX_LANGBOX_HXX
 #include <svx/langbox.hxx>
 #endif
