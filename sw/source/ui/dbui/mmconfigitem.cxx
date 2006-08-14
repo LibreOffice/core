@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmconfigitem.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 08:07:11 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:31:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 #pragma hdrstop
-
 #ifndef _MMCONFIGITEM_HXX
 #include <mmconfigitem.hxx>
 #endif
@@ -58,12 +57,6 @@
 #ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SDBC_XSTATEMENT_HPP_
-#include <com/sun/star/sdbc/XStatement.hpp>
-#endif
-//#ifndef _COM_SUN_STAR_MAIL_XMAILSERVER_HPP_
-//#include "com/sun/star/mail/XMailServer.hpp"
-//#endif
 #ifndef _COM_SUN_STAR_MAIL_MAILSERVICETYPE_HPP_
 #include "com/sun/star/mail/MailServiceType.hpp"
 #endif
@@ -109,7 +102,6 @@
 #ifndef _WRTSH_HXX
 #include <wrtsh.hxx>
 #endif
-
 #include <dbui.hrc>
 #include <vector>
 
