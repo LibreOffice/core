@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swatrset.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:11:34 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:32:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _SWATRSET_HXX
 #define _SWATRSET_HXX
-
 #ifndef _SOLAR_H
 #include <tools/solar.h>
 #endif
@@ -48,10 +47,11 @@
 #ifndef _SFXITEMPOOL_HXX //autogen
 #include <svtools/itempool.hxx>
 #endif
+
 class SwModify;
 class SwDoc;
 class OutputDevice;
-
+class IDocumentSettingAccess;
 class SfxBoolItem;
 class SvxPostureItem;
 class SvxWeightItem;
@@ -157,8 +157,6 @@ class SwTblBoxNumFormat;
 class SwTblBoxFormula;
 class SwTblBoxValue;
 
-#define INLINE inline
-
 class SwAttrPool : public SfxItemPool
 {
     friend void _InitCore();            // fuers anlegen/zerstoeren der
@@ -236,7 +234,7 @@ public:
     //              wird das deflt. Attribut returnt.
     // Charakter-Attribute  - impl. steht im charatr.hxx
     // AMA 12.10.94: Umstellung von SwFmt... auf Svx...
-    inline const SvxPostureItem         &GetPosture( BOOL = TRUE ) const;
+    inline const SvxPostureItem           &GetPosture( BOOL = TRUE ) const;
     inline const SvxWeightItem          &GetWeight( BOOL = TRUE ) const;
     inline const SvxShadowedItem        &GetShadowed( BOOL = TRUE ) const;
     inline const SvxAutoKernItem        &GetAutoKern( BOOL = TRUE ) const;
@@ -245,70 +243,70 @@ public:
     inline const SvxKerningItem         &GetKerning( BOOL = TRUE ) const;
     inline const SvxUnderlineItem       &GetUnderline( BOOL = TRUE ) const;
     inline const SvxCrossedOutItem      &GetCrossedOut( BOOL = TRUE ) const;
-    inline const SvxFontHeightItem      &GetSize( BOOL = TRUE ) const;
+    inline const SvxFontHeightItem        &GetSize( BOOL = TRUE ) const;
     inline const SvxPropSizeItem        &GetPropSize( BOOL = TRUE ) const;
-  INLINE  const SvxFontItem            &GetFont( BOOL = TRUE ) const;
+    inline const SvxFontItem            &GetFont( BOOL = TRUE ) const;
     inline const SvxColorItem           &GetColor( BOOL = TRUE ) const;
     inline const SvxCharSetColorItem    &GetCharSetColor( BOOL = TRUE ) const;
     inline const SvxLanguageItem        &GetLanguage( BOOL = TRUE ) const;
     inline const SvxEscapementItem      &GetEscapement( BOOL = TRUE ) const;
     inline const SvxCaseMapItem         &GetCaseMap( BOOL = TRUE ) const;
-    inline const SvxNoHyphenItem        &GetNoHyphenHere( BOOL = TRUE ) const;
-    inline const SvxBlinkItem           &GetBlink( BOOL = TRUE ) const;
-    inline const SvxBrushItem           &GetChrBackground( BOOL = TRUE ) const;
-    inline const SvxFontItem            &GetCJKFont( BOOL = TRUE ) const;
-    inline const SvxFontHeightItem      &GetCJKSize( BOOL = TRUE ) const;
-    inline const SvxLanguageItem        &GetCJKLanguage( BOOL = TRUE ) const;
-    inline const SvxPostureItem         &GetCJKPosture( BOOL = TRUE ) const;
-    inline const SvxWeightItem          &GetCJKWeight( BOOL = TRUE ) const;
-    inline const SvxFontItem            &GetCTLFont( BOOL = TRUE ) const;
-    inline const SvxFontHeightItem      &GetCTLSize( BOOL = TRUE ) const;
-    inline const SvxLanguageItem        &GetCTLLanguage( BOOL = TRUE ) const;
-    inline const SvxPostureItem         &GetCTLPosture( BOOL = TRUE ) const;
-    inline const SvxWeightItem          &GetCTLWeight( BOOL = TRUE ) const;
-    inline const SfxBoolItem            &GetWritingDirection( BOOL = TRUE ) const;
-    inline const SvxEmphasisMarkItem    &GetEmphasisMark( BOOL = TRUE ) const;
-    inline const SvxTwoLinesItem        &Get2Lines( BOOL = TRUE ) const;
-    inline const SvxCharScaleWidthItem  &GetCharScaleW( BOOL = TRUE ) const;
-    inline const SvxCharRotateItem      &GetCharRotate( BOOL = TRUE ) const;
-    inline const SvxCharReliefItem      &GetCharRelief( BOOL = TRUE ) const;
+    inline const SvxNoHyphenItem      &GetNoHyphenHere( BOOL = TRUE ) const;
+    inline const SvxBlinkItem         &GetBlink( BOOL = TRUE ) const;
+    inline const SvxBrushItem         &GetChrBackground( BOOL = TRUE ) const;
+    inline const SvxFontItem          &GetCJKFont( BOOL = TRUE ) const;
+    inline const SvxFontHeightItem    &GetCJKSize( BOOL = TRUE ) const;
+    inline const SvxLanguageItem      &GetCJKLanguage( BOOL = TRUE ) const;
+    inline const SvxPostureItem       &GetCJKPosture( BOOL = TRUE ) const;
+    inline const SvxWeightItem        &GetCJKWeight( BOOL = TRUE ) const;
+    inline const SvxFontItem          &GetCTLFont( BOOL = TRUE ) const;
+    inline const SvxFontHeightItem    &GetCTLSize( BOOL = TRUE ) const;
+    inline const SvxLanguageItem      &GetCTLLanguage( BOOL = TRUE ) const;
+    inline const SvxPostureItem       &GetCTLPosture( BOOL = TRUE ) const;
+    inline const SvxWeightItem        &GetCTLWeight( BOOL = TRUE ) const;
+    inline const SfxBoolItem              &GetWritingDirection( BOOL = TRUE ) const;
+    inline const SvxEmphasisMarkItem  &GetEmphasisMark( BOOL = TRUE ) const;
+    inline const SvxTwoLinesItem      &Get2Lines( BOOL = TRUE ) const;
+    inline const SvxCharScaleWidthItem    &GetCharScaleW( BOOL = TRUE ) const;
+    inline const SvxCharRotateItem        &GetCharRotate( BOOL = TRUE ) const;
+    inline const SvxCharReliefItem        &GetCharRelief( BOOL = TRUE ) const;
     inline const SvxCharHiddenItem      &GetCharHidden( BOOL = TRUE ) const;
 
     // Frame-Attribute  - impl. steht im frmatr.hxx
-    INLINE const SwFmtFillOrder         &GetFillOrder( BOOL = TRUE ) const;
-    INLINE const SwFmtFrmSize           &GetFrmSize( BOOL = TRUE ) const;
-    INLINE const SvxPaperBinItem        &GetPaperBin( BOOL = TRUE ) const;
-    INLINE const SvxLRSpaceItem         &GetLRSpace( BOOL = TRUE ) const;
-    INLINE const SvxULSpaceItem         &GetULSpace( BOOL = TRUE ) const;
-    INLINE const SwFmtCntnt             &GetCntnt( BOOL = TRUE ) const;
-    INLINE const SwFmtHeader            &GetHeader( BOOL = TRUE ) const;
-    INLINE const SwFmtFooter            &GetFooter( BOOL = TRUE ) const;
-    INLINE const SvxPrintItem           &GetPrint( BOOL = TRUE ) const;
-    INLINE const SvxOpaqueItem          &GetOpaque( BOOL = TRUE ) const;
-    INLINE const SvxProtectItem         &GetProtect( BOOL = TRUE ) const;
-    INLINE const SwFmtSurround          &GetSurround( BOOL = TRUE ) const;
-    INLINE const SwFmtVertOrient        &GetVertOrient( BOOL = TRUE ) const;
-    INLINE const SwFmtHoriOrient        &GetHoriOrient( BOOL = TRUE ) const;
-    INLINE const SwFmtAnchor            &GetAnchor( BOOL = TRUE ) const;
-    INLINE const SvxBoxItem             &GetBox( BOOL = TRUE ) const;
-    INLINE const SvxFmtKeepItem         &GetKeep( BOOL = TRUE ) const;
-    INLINE const SvxBrushItem           &GetBackground( BOOL = TRUE ) const;
-    INLINE const SvxShadowItem          &GetShadow( BOOL = TRUE ) const;
-    INLINE const SwFmtPageDesc          &GetPageDesc( BOOL = TRUE ) const;
-    INLINE const SvxFmtBreakItem        &GetBreak( BOOL = TRUE ) const;
-    INLINE const SwFmtCol               &GetCol( BOOL = TRUE ) const;
-    INLINE const SvxMacroItem           &GetMacro( BOOL = TRUE ) const;
-    INLINE const SwFmtURL               &GetURL( BOOL = TRUE ) const;
-    INLINE const SwFmtEditInReadonly    &GetEditInReadonly( BOOL = TRUE ) const;
-    INLINE const SwFmtLayoutSplit       &GetLayoutSplit( BOOL = TRUE ) const;
-    INLINE const SwFmtRowSplit          &GetRowSplit( BOOL = TRUE ) const;
-    INLINE const SwFmtChain             &GetChain( BOOL = TRUE ) const;
-    INLINE const SwFmtLineNumber        &GetLineNumber( BOOL = TRUE ) const;
-    INLINE const SwFmtFtnAtTxtEnd       &GetFtnAtTxtEnd( BOOL = TRUE ) const;
-    INLINE const SwFmtEndAtTxtEnd       &GetEndAtTxtEnd( BOOL = TRUE ) const;
-    INLINE const SwFmtNoBalancedColumns &GetBalancedColumns( BOOL = TRUE ) const;
-    INLINE const SvxFrameDirectionItem  &GetFrmDir( BOOL = TRUE ) const;
-    INLINE const SwTextGridItem         &GetTextGrid( BOOL = TRUE ) const;
+    inline const SwFmtFillOrder       &GetFillOrder( BOOL = TRUE ) const;
+    inline const SwFmtFrmSize             &GetFrmSize( BOOL = TRUE ) const;
+    inline const SvxPaperBinItem      &GetPaperBin( BOOL = TRUE ) const;
+    inline const SvxLRSpaceItem           &GetLRSpace( BOOL = TRUE ) const;
+    inline const SvxULSpaceItem           &GetULSpace( BOOL = TRUE ) const;
+    inline const SwFmtCntnt           &GetCntnt( BOOL = TRUE ) const;
+    inline const SwFmtHeader          &GetHeader( BOOL = TRUE ) const;
+    inline const SwFmtFooter          &GetFooter( BOOL = TRUE ) const;
+    inline const SvxPrintItem             &GetPrint( BOOL = TRUE ) const;
+    inline const SvxOpaqueItem            &GetOpaque( BOOL = TRUE ) const;
+    inline const SvxProtectItem           &GetProtect( BOOL = TRUE ) const;
+    inline const SwFmtSurround            &GetSurround( BOOL = TRUE ) const;
+    inline const SwFmtVertOrient      &GetVertOrient( BOOL = TRUE ) const;
+    inline const SwFmtHoriOrient      &GetHoriOrient( BOOL = TRUE ) const;
+    inline const SwFmtAnchor          &GetAnchor( BOOL = TRUE ) const;
+    inline const SvxBoxItem               &GetBox( BOOL = TRUE ) const;
+    inline const SvxFmtKeepItem         &GetKeep( BOOL = TRUE ) const;
+    inline const SvxBrushItem           &GetBackground( BOOL = TRUE ) const;
+    inline const SvxShadowItem            &GetShadow( BOOL = TRUE ) const;
+    inline const SwFmtPageDesc            &GetPageDesc( BOOL = TRUE ) const;
+    inline const SvxFmtBreakItem      &GetBreak( BOOL = TRUE ) const;
+    inline const SwFmtCol                 &GetCol( BOOL = TRUE ) const;
+    inline const SvxMacroItem             &GetMacro( BOOL = TRUE ) const;
+    inline const SwFmtURL             &GetURL( BOOL = TRUE ) const;
+    inline const SwFmtEditInReadonly  &GetEditInReadonly( BOOL = TRUE ) const;
+    inline const SwFmtLayoutSplit     &GetLayoutSplit( BOOL = TRUE ) const;
+    inline const SwFmtRowSplit          &GetRowSplit( BOOL = TRUE ) const;
+    inline const SwFmtChain             &GetChain( BOOL = TRUE ) const;
+    inline const SwFmtLineNumber      &GetLineNumber( BOOL = TRUE ) const;
+    inline const SwFmtFtnAtTxtEnd     &GetFtnAtTxtEnd( BOOL = TRUE ) const;
+    inline const SwFmtEndAtTxtEnd     &GetEndAtTxtEnd( BOOL = TRUE ) const;
+    inline const SwFmtNoBalancedColumns &GetBalancedColumns( BOOL = TRUE ) const;
+    inline const SvxFrameDirectionItem    &GetFrmDir( BOOL = TRUE ) const;
+    inline const SwTextGridItem         &GetTextGrid( BOOL = TRUE ) const;
     inline const SwHeaderAndFooterEatSpacingItem &GetHeaderAndFooterEatSpacing( BOOL = TRUE ) const;
     // OD 18.09.2003 #i18732#
     inline const SwFmtFollowTextFlow    &GetFollowTextFlow(BOOL = TRUE) const;
@@ -316,46 +314,47 @@ public:
     inline const SwFmtWrapInfluenceOnObjPos& GetWrapInfluenceOnObjPos(BOOL = TRUE) const;
 
     // Grafik-Attribute - impl. steht im grfatr.hxx
-    INLINE const SwMirrorGrf            &GetMirrorGrf( BOOL = TRUE ) const;
-    inline const SwCropGrf              &GetCropGrf( BOOL = TRUE ) const;
-    inline const SwRotationGrf          &GetRotationGrf(BOOL = TRUE ) const;
-    inline const SwLuminanceGrf         &GetLuminanceGrf(BOOL = TRUE ) const;
-    inline const SwContrastGrf          &GetContrastGrf(BOOL = TRUE ) const;
-    inline const SwChannelRGrf          &GetChannelRGrf(BOOL = TRUE ) const;
-    inline const SwChannelGGrf          &GetChannelGGrf(BOOL = TRUE ) const;
-    inline const SwChannelBGrf          &GetChannelBGrf(BOOL = TRUE ) const;
-    inline const SwGammaGrf             &GetGammaGrf(BOOL = TRUE ) const;
-    inline const SwInvertGrf            &GetInvertGrf(BOOL = TRUE ) const;
-    inline const SwTransparencyGrf      &GetTransparencyGrf(BOOL = TRUE ) const;
-    inline const SwDrawModeGrf          &GetDrawModeGrf(BOOL = TRUE ) const;
+    inline const SwMirrorGrf            &GetMirrorGrf( BOOL = TRUE ) const;
+    inline const SwCropGrf            &GetCropGrf( BOOL = TRUE ) const;
+    inline const SwRotationGrf            &GetRotationGrf(BOOL = TRUE ) const;
+    inline const SwLuminanceGrf       &GetLuminanceGrf(BOOL = TRUE ) const;
+    inline const SwContrastGrf            &GetContrastGrf(BOOL = TRUE ) const;
+    inline const SwChannelRGrf            &GetChannelRGrf(BOOL = TRUE ) const;
+    inline const SwChannelGGrf            &GetChannelGGrf(BOOL = TRUE ) const;
+    inline const SwChannelBGrf            &GetChannelBGrf(BOOL = TRUE ) const;
+    inline const SwGammaGrf           &GetGammaGrf(BOOL = TRUE ) const;
+    inline const SwInvertGrf          &GetInvertGrf(BOOL = TRUE ) const;
+    inline const SwTransparencyGrf        &GetTransparencyGrf(BOOL = TRUE ) const;
+    inline const SwDrawModeGrf            &GetDrawModeGrf(BOOL = TRUE ) const;
 
     // Paragraph-Attribute  - impl. steht im paratr.hxx
-    inline const SvxLineSpacingItem     &GetLineSpacing( BOOL = TRUE ) const;
-    inline const SvxAdjustItem          &GetAdjust( BOOL = TRUE ) const;
-    inline const SvxFmtSplitItem        &GetSplit( BOOL = TRUE ) const;
-    inline const SwRegisterItem         &GetRegister( BOOL = TRUE ) const;
-    inline const SwNumRuleItem          &GetNumRule( BOOL = TRUE ) const;
-    inline const SvxWidowsItem          &GetWidows( BOOL = TRUE ) const;
-    inline const SvxOrphansItem         &GetOrphans( BOOL = TRUE ) const;
-    inline const SvxTabStopItem         &GetTabStops( BOOL = TRUE ) const;
-    inline const SvxHyphenZoneItem      &GetHyphenZone( BOOL = TRUE ) const;
-    inline const SwFmtDrop              &GetDrop( BOOL = TRUE ) const;
-    inline const SvxScriptSpaceItem     &GetScriptSpace(BOOL = TRUE) const;
+    inline const SvxLineSpacingItem       &GetLineSpacing( BOOL = TRUE ) const;
+    inline const SvxAdjustItem            &GetAdjust( BOOL = TRUE ) const;
+    inline const SvxFmtSplitItem      &GetSplit( BOOL = TRUE ) const;
+    inline const SwRegisterItem           &GetRegister( BOOL = TRUE ) const;
+    inline const SwNumRuleItem            &GetNumRule( BOOL = TRUE ) const;
+    inline const SvxWidowsItem            &GetWidows( BOOL = TRUE ) const;
+    inline const SvxOrphansItem           &GetOrphans( BOOL = TRUE ) const;
+    inline const SvxTabStopItem           &GetTabStops( BOOL = TRUE ) const;
+    inline const SvxHyphenZoneItem        &GetHyphenZone( BOOL = TRUE ) const;
+    inline const SwFmtDrop                &GetDrop( BOOL = TRUE ) const;
+    inline const SvxScriptSpaceItem       &GetScriptSpace(BOOL = TRUE) const;
     inline const SvxHangingPunctuationItem &GetHangingPunctuation(BOOL = TRUE) const;
-    inline const SvxForbiddenRuleItem   &GetForbiddenRule(BOOL = TRUE) const;
-    inline const SvxParaVertAlignItem   &GetParaVertAlign(BOOL = TRUE) const;
+    inline const SvxForbiddenRuleItem     &GetForbiddenRule(BOOL = TRUE) const;
+    inline const SvxParaVertAlignItem &GetParaVertAlign(BOOL = TRUE) const;
     inline const SvxParaGridItem        &GetParaGrid(BOOL = TRUE) const;
     inline const SwParaConnectBorderItem &GetParaConnectBorder(BOOL = TRUE ) const;
 
     // TabellenBox-Attribute    - impl. steht im cellatr.hxx
-    INLINE  const SwTblBoxNumFormat     &GetTblBoxNumFmt( BOOL = TRUE ) const;
-    INLINE  const SwTblBoxFormula       &GetTblBoxFormula( BOOL = TRUE ) const;
-    INLINE  const SwTblBoxValue         &GetTblBoxValue( BOOL = TRUE ) const;
+    inline  const SwTblBoxNumFormat       &GetTblBoxNumFmt( BOOL = TRUE ) const;
+    inline  const SwTblBoxFormula     &GetTblBoxFormula( BOOL = TRUE ) const;
+    inline  const SwTblBoxValue           &GetTblBoxValue( BOOL = TRUE ) const;
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwAttrSet)
 };
 
 //Helper for filters to find true lineheight of a font
-long AttrSetToLineHeight(const SwDoc &rDoc, const SwAttrSet &rSet,
-    const OutputDevice &rOut, sal_Int16 nScript);
+long AttrSetToLineHeight( const IDocumentSettingAccess& rIDocumentSettingAccess,
+                          const SwAttrSet &rSet,
+                          const OutputDevice &rOut, sal_Int16 nScript);
 #endif
