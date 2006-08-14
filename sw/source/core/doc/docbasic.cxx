@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docbasic.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:09:32 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:55:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #ifndef _HINTIDS_HXX
@@ -52,13 +51,6 @@
 #ifndef _SBXCLASS_HXX
 #include <basic/sbx.hxx>
 #endif
-#ifndef _SBXCORE_HXX
-#include <basic/sbxcore.hxx>
-#endif
-#ifndef __SBX_SBXVALUE
-#include <basic/sbxvar.hxx>
-#endif
-
 #ifndef _FRMFMT_HXX //autogen
 #include <frmfmt.hxx>
 #endif
@@ -90,16 +82,6 @@ using namespace ::rtl;
 static Sequence<Any> *lcl_docbasic_convertArgs( SbxArray& rArgs )
 {
     Sequence<Any> *pRet = 0;
-
-#if 0
-    switch( nEvent )
-    {
-    case SW_EVENT_FRM_KEYINPUT_ALPHA:
-    case SW_EVENT_FRM_KEYINPUT_NOALPHA:
-    case SW_EVENT_FRM_MOVE:
-    case SW_EVENT_FRM_RESIZE:
-    }
-#endif
 
     USHORT nCount = rArgs.Count();
     if( nCount > 1 )
