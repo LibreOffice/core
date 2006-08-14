@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txttab.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 13:45:20 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:45:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 #include "hintids.hxx"
@@ -44,14 +43,14 @@
 #include <svx/tstpitem.hxx>
 #endif
 
+#ifndef IDOCUMENTSETTINGACCESS_HXX_INCLUDED
+#include <IDocumentSettingAccess.hxx>
+#endif
 #ifndef _FRMATR_HXX
 #include <frmatr.hxx>
 #endif
 #ifndef _SW_PORTIONHANDLER_HXX
 #include <SwPortionHandler.hxx>
-#endif
-#ifndef _VIEWSH_HXX
-#include <viewsh.hxx>
 #endif
 
 #include "viewopt.hxx"  // SwViewOptions
@@ -192,7 +191,7 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
             nCount /= nDefTabDist;
             nNextPos = ( nCount + 1 ) * nDefTabDist ;
             // --> FME 2004-09-21 #117919 Minimum tab stop width is 1 or 51 twips:
-            const SwTwips nMinimumTabWidth = rInf.GetVsh()->IsTabCompat() ? 0 : 50;
+            const SwTwips nMinimumTabWidth = pFrm->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_COMPAT) ? 0 : 50;
             // <--
             if( nNextPos + nTabLeft <= nLineTab + nMinimumTabWidth )
                 nNextPos += nDefTabDist;
@@ -326,7 +325,7 @@ sal_Bool SwTabPortion::PreFormat( SwTxtFormatInfo &rInf )
     // Hier lassen wir uns nieder...
     Fix( static_cast<USHORT>(rInf.X()) );
 
-    const bool bTabCompat = rInf.GetVsh()->IsTabCompat();
+    const bool bTabCompat = rInf.GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_COMPAT);
 
     // Die Mindestbreite eines Tabs ist immer mindestens ein Blank
     // --> FME 2004-11-25 #i37686# In compatibility mode, the minimum width
@@ -437,7 +436,7 @@ sal_Bool SwTabPortion::PostFormat( SwTxtFormatInfo &rInf )
 
     const MSHORT nWhich = GetWhichPor();
     ASSERT( POR_TABLEFT != nWhich, "SwTabPortion::PostFormat: already formatted" );
-    const bool bTabCompat = rInf.GetVsh()->IsTabCompat();
+    const bool bTabCompat = rInf.GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_COMPAT);
 
     // --> FME 2005-12-19 #127428# Abandon dec. tab position if line is full:
     if ( bTabCompat && POR_TABDECIMAL == nWhich )
