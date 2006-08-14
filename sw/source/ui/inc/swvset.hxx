@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swvset.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:06:19 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:45:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,15 +34,12 @@
  ************************************************************************/
 #ifndef _SWVSET_HXX
 #define _SWVSET_HXX
-
 #ifndef _LIST_HXX //autogen
 #include <tools/list.hxx>
 #endif
 #ifndef _SVX_NUMVSET_HXX
 #include <svx/numvset.hxx>
 #endif
-
-class SwDocShell;
 
 class SwRulerValueSet : public SvxBmpNumValueSet
 {
