@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:43:16 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:47:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifdef SW_DLLIMPLEMENTATION
 #undef SW_DLLIMPLEMENTATION
 #endif
@@ -86,9 +85,6 @@
 #ifndef _COM_SUN_STAR_UI_DIALOGS_XFILTERMANAGER_HPP_
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #endif
-#ifndef _UCBHELPER_CONTENT_HXX
-#include <ucbhelper/content.hxx>
-#endif
 #ifndef SVTOOLS_INDEXENTRYRESSOURCE_HXX
 #include <svtools/indexentryres.hxx>
 #endif
@@ -130,9 +126,6 @@
 #endif //CHINA001
 #ifndef _FORMEDT_HXX
 #include <formedt.hxx>
-#endif
-#ifndef _TOXMGR_HXX
-#include <toxmgr.hxx>
 #endif
 #ifndef _POOLFMT_HXX
 #include <poolfmt.hxx>
