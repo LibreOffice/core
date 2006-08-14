@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: obo $ $Date: 2006-07-10 19:01:25 $
+#   last change: $Author: hr $ $Date: 2006-08-14 16:18:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,10 @@ TARGET=so_hsqldb
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
+
+# override buildfile
+ANT_BUILDFILE=build$/build.xml
+
 .INCLUDE : antsettings.mk
 
 .INCLUDE :  version.mk
@@ -62,9 +66,6 @@ PATCH_FILE_NAME=hsqldb_1_8_0
 #                     src$/org$/hsqldb$/lib$/LongKeyIntValueHashMap.java \
 #                     src$/org$/hsqldb$/persist$/ScaledRAFileInJar.java \
 #                     src$/org$/hsqldb$/test$/TestCollation.java
-
-# override buildfile
-ANT_BUILDFILE=build$/build.xml
 
 .IF "$(JAVACISGCJ)"=="yes"
 JAVA_HOME=
