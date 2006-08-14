@@ -4,9 +4,9 @@
  *
  *  $RCSfile: charatr.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:35:29 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:18:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,7 +156,7 @@ inline const SvxFontItem         &SwFmt::GetCTLFont(BOOL bInP) const
     {   return aSet.GetCTLFont(bInP); }
 inline const SvxColorItem            &SwFmt::GetColor(BOOL bInP) const
     {   return aSet.GetColor(bInP); }
-inline const SvxCharSetColorItem     &SwFmt::GetCharSetColor(BOOL bInP) const
+    inline const SvxCharSetColorItem    &SwFmt::GetCharSetColor(BOOL bInP) const
     {   return aSet.GetCharSetColor(bInP); }
 inline const SvxLanguageItem         &SwFmt::GetLanguage(BOOL bInP) const
     {   return aSet.GetLanguage(bInP); }
@@ -164,21 +164,21 @@ inline const SvxEscapementItem       &SwFmt::GetEscapement(BOOL bInP) const
     {   return aSet.GetEscapement(bInP); }
 inline const SvxCaseMapItem          &SwFmt::GetCaseMap(BOOL bInP) const
     {   return aSet.GetCaseMap(bInP); }
-inline const SvxNoHyphenItem         &SwFmt::GetNoHyphenHere(BOOL bInP) const
+inline const SvxNoHyphenItem        &SwFmt::GetNoHyphenHere(BOOL bInP) const
     {   return aSet.GetNoHyphenHere(bInP); }
-inline const SvxBlinkItem            &SwFmt::GetBlink(BOOL bInP) const
+inline const SvxBlinkItem           &SwFmt::GetBlink(BOOL bInP) const
     {   return aSet.GetBlink(bInP); }
-inline const SvxBrushItem            &SwFmt::GetChrBackground(BOOL bInP) const
+inline const SvxBrushItem           &SwFmt::GetChrBackground(BOOL bInP) const
     {   return aSet.GetChrBackground(bInP); }
-inline const SvxEmphasisMarkItem    &SwFmt::GetEmphasisMark( BOOL bInP ) const
+inline const SvxEmphasisMarkItem   &SwFmt::GetEmphasisMark( BOOL bInP ) const
     {   return aSet.GetEmphasisMark(bInP); }
-inline const SvxTwoLinesItem        &SwFmt::Get2Lines( BOOL bInP ) const
+inline const SvxTwoLinesItem       &SwFmt::Get2Lines( BOOL bInP ) const
     {   return aSet.Get2Lines(bInP); }
-inline const SvxCharScaleWidthItem  &SwFmt::GetCharScaleW( BOOL bInP ) const
+inline const SvxCharScaleWidthItem &SwFmt::GetCharScaleW( BOOL bInP ) const
     {   return aSet.GetCharScaleW(bInP); }
-inline const SvxCharRotateItem      &SwFmt::GetCharRotate( BOOL bInP ) const
+inline const SvxCharRotateItem     &SwFmt::GetCharRotate( BOOL bInP ) const
     {   return aSet.GetCharRotate(bInP); }
-inline const SvxCharReliefItem      &SwFmt::GetCharRelief( BOOL bInP ) const
+inline const SvxCharReliefItem     &SwFmt::GetCharRelief( BOOL bInP ) const
     {   return aSet.GetCharRelief(bInP); }
 inline const SvxCharHiddenItem      &SwFmt::GetCharHidden( BOOL bInP ) const
     {   return aSet.GetCharHidden(bInP); }
