@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unsort.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:22:15 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:51:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 #ifndef _DOC_HXX
@@ -50,9 +49,6 @@
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
 #endif
-#ifndef _NODE_HXX //autogen
-#include <node.hxx>
-#endif
 #ifndef _UNDOBJ_HXX
 #include <undobj.hxx>
 #endif
@@ -68,7 +64,6 @@
 #ifndef _NODE2LAY_HXX
 #include <node2lay.hxx>
 #endif
-
 
 inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
 
@@ -193,7 +188,7 @@ void SwUndoSort::Undo( SwUndoIter& rIter)
         {
             SwNodeIndex aIdx( rDoc.GetNodes(), nSttNode + i );
             SwNodeRange aRg( *aIdxList[i], 0, *aIdxList[i], 1 );
-            rDoc.Move(aRg, aIdx);
+            rDoc.Move(aRg, aIdx, IDocumentContentOperations::DOC_MOVEDEFAULT);
         }
         // Indixes loeschen
         aIdxList.DeleteAndDestroy(0, aIdxList.Count());
@@ -265,7 +260,7 @@ void SwUndoSort::Redo( SwUndoIter& rIter)
         {
             SwNodeIndex aIdx( rDoc.GetNodes(), nSttNode + i);
             SwNodeRange aRg( *aIdxList[i], 0, *aIdxList[i], 1 );
-            rDoc.Move(aRg, aIdx);
+            rDoc.Move(aRg, aIdx, IDocumentContentOperations::DOC_MOVEDEFAULT);
         }
         // Indixes loeschen
         aIdxList.DeleteAndDestroy(0, aIdxList.Count());
