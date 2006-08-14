@@ -4,9 +4,9 @@
  *
  *  $RCSfile: attrdesc.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:23:32 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 18:02:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -111,9 +110,6 @@
 #ifndef _FMTRUBY_HXX
 #include <fmtruby.hxx>
 #endif
-#ifndef _SWATRSET_HXX
-#include <swatrset.hxx>
-#endif
 #ifndef _PARATR_HXX
 #include <paratr.hxx>
 #endif
@@ -141,7 +137,6 @@
 #ifndef _FMTFOLLOWTEXTFLOW_HXX
 #include <fmtfollowtextflow.hxx>
 #endif
-
 
 TYPEINIT2(SwFmtCharFmt,SfxPoolItem,SwClient);
 
