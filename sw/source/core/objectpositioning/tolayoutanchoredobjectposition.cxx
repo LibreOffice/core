@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tolayoutanchoredobjectposition.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:37:24 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:30:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,6 @@
 #ifndef _TOLAYOUTANCHOREDOBJECTPOSITION_HXX
 #include <tolayoutanchoredobjectposition.hxx>
 #endif
-
 #ifndef _ANCHOREDOBJECT_HXX
 #include <anchoredobject.hxx>
 #endif
@@ -60,8 +59,8 @@
 #ifndef _FMTSRND_HXX
 #include <fmtsrnd.hxx>
 #endif
-#ifndef _DOC_HXX
-#include <doc.hxx>
+#ifndef IDOCUMENTSETTINGACCESS_HXX_INCLUDED
+#include <IDocumentSettingAccess.hxx>
 #endif
 #ifndef _FRMATR_HXX
 #include <frmatr.hxx>
@@ -160,7 +159,7 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
         // if in online-layout the bottom of to-page anchored object is beyond
         // the page bottom, the page frame has to grow by growing its body frame.
         if ( !bFlyAtFly && GetAnchorFrm().IsPageFrm() &&
-             rFrmFmt.GetDoc()->IsBrowseMode() )
+             rFrmFmt.getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
         {
             const long nAnchorBottom = GetAnchorFrm().Frm().Bottom();
             const long nBottom = GetAnchorFrm().Frm().Top() +
@@ -175,7 +174,6 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
 
     // calculate 'horizontal' position
     SwFmtHoriOrient aHori( rFrmFmt.GetHoriOrient() );
-    bool bHoriChgd = false;
     {
         // consider toggle of horizontal position for even pages.
         const bool bToggle = aHori.IsPosToggle() &&
