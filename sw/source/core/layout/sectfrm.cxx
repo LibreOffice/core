@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sectfrm.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: vg $ $Date: 2006-05-24 13:55:14 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:29:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -832,7 +831,7 @@ void SwSectionFrm::MakeAll()
 
     // OD 2004-03-15 #116561# - In online layout join the follows, if section
     // can grow.
-    if ( GetFmt()->GetDoc()->IsBrowseMode() &&
+    if ( GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) &&
          ( Grow( LONG_MAX, true ) > 0 ) )
     {
         while( GetFollow() )
@@ -1377,7 +1376,7 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
         // and releases this position lock keeping on destruction.
         ExtraFormatToPositionObjs aExtraFormatToPosObjs( *this );
         if ( !bMaximize &&
-             GetFmt()->GetDoc()->ConsiderWrapOnObjPos() &&
+             GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION) &&
              !GetFmt()->GetBalancedColumns().GetValue() )
         {
             aExtraFormatToPosObjs.FormatSectionToPositionObjs();
@@ -1404,7 +1403,7 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
             // OD 15.10.2002 #103517# - allow grow in online layout
             // Thus, set <..IsBrowseMode()> as parameter <bGrow> on calling
             // method <_CheckClipping(..)>.
-            _CheckClipping( GetFmt()->GetDoc()->IsBrowseMode(), bMaximize );
+            _CheckClipping( GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE), bMaximize );
             bMaximize = ToMaximize( FALSE );
             bValidSize = TRUE;
         }
@@ -2017,7 +2016,7 @@ SwTwips SwSectionFrm::_Grow( SwTwips nDist, BOOL bTst )
         // OD 2004-03-15 #116561# - allow grow in online layout
         if ( !Lower() || !Lower()->IsColumnFrm() || !Lower()->GetNext() ||
              GetSection()->GetFmt()->GetBalancedColumns().GetValue() ||
-             GetFmt()->GetDoc()->IsBrowseMode() )
+             GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
         {
             SwTwips nGrow;
             if( IsInFtn() )
@@ -2096,7 +2095,7 @@ SwTwips SwSectionFrm::_Grow( SwTwips nDist, BOOL bTst )
                 // was moved forward due to the positioning of its objects ).
                 // Thus, invalivate this next frame, if document compatibility
                 // option 'Consider wrapping style influence on object positioning' is ON.
-                else if ( GetFmt()->GetDoc()->ConsiderWrapOnObjPos() )
+                else if ( GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION) )
                 {
                     InvalidateNextPos();
                 }
@@ -2442,7 +2441,7 @@ void SwSectionFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
             const SwFmtCol& rNewCol = GetFmt()->GetCol();
             if( !IsInFtn() )
             {
-                //Dummer Fall. Bei der Zuweisung einer Vorlage k”nnen wir uns
+                //Dummer Fall. Bei der Zuweisung einer Vorlage k?nnen wir uns
                 //nicht auf das alte Spaltenattribut verlassen. Da diese
                 //wenigstens anzahlgemass fuer ChgColumns vorliegen muessen,
                 //bleibt uns nur einen temporaeres Attribut zu basteln.
