@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopt.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 08:05:44 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:26:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -30,7 +30,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 #ifndef _UIPARAM_HXX
@@ -107,6 +106,9 @@
 #ifndef _WRTSH_HXX
 #include <wrtsh.hxx>
 #endif
+#ifndef IDOCUMENTDEVICEACCESS_HXX_INCLUDED
+#include <IDocumentDeviceAccess.hxx>
+#endif
 #ifndef _UITOOL_HXX
 #include <uitool.hxx>
 #endif
@@ -156,11 +158,6 @@
 #ifndef _GLOBALS_H
 #include <globals.h>        // globale Konstanten z.B.
 #endif
-
-#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
-#include <com/sun/star/lang/Locale.hpp>
-#endif
-
 // #107253#
 #ifndef _SWLINGUCONFIG_HXX
 #include <swlinguconfig.hxx>
@@ -168,9 +165,6 @@
 #ifndef _SFXSLSTITM_HXX //CHINA001
 #include <svtools/slstitm.hxx> //CHINA001
 #endif //CHINA001
-#ifndef _SFXINTITEM_HXX
-#include <svtools/intitem.hxx>
-#endif
 #include "swabstdlg.hxx" //CHINA001
 #include <swwrtshitem.hxx> //CHINA001
 using namespace ::com::sun::star::uno;
@@ -242,7 +236,7 @@ SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
     {
         SwWrtShell& rWrtShell = pAppView->GetWrtShell();
 
-        SfxPrinter* pPrt = rWrtShell.GetPrt();
+        SfxPrinter* pPrt = rWrtShell.getIDocumentDeviceAccess()->getPrinter( false );
         if( pPrt )
             pRet->Put(SwPtrItem(FN_PARAM_PRINTER, pPrt));
         pRet->Put(SwPtrItem(FN_PARAM_WRTSHELL, &rWrtShell));
@@ -333,9 +327,13 @@ SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
     /*-----------------01.02.97 13.02-------------------
         Optionen fuer PrintTabPage
     --------------------------------------------------*/
-    SwPrintData* pOpt = pAppView ? pAppView->GetWrtShell().GetPrintData() : 0;
+    SwPrintData* pOpt = pAppView ?
+                        pAppView->GetWrtShell().getIDocumentDeviceAccess()->getPrintData() :
+                        0;
+
     if(!pOpt)
         pOpt = GetPrtOptions(!bTextDialog);
+
     SwAddPrinterItem aAddPrinterItem (FN_PARAM_ADDPRINTER, *pOpt );
     pRet->Put(aAddPrinterItem);
 
@@ -534,7 +532,7 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
             *pOpt = *pAddPrinterAttr;
 
             if(pAppView)
-                pAppView->GetWrtShell().SetPrintData(*pOpt);
+                pAppView->GetWrtShell().getIDocumentDeviceAccess()->setPrintData( *pOpt );
         }
 
     }
