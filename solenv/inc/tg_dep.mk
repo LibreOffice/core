@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_dep.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 21:57:59 $
+#   last change: $Author: hr $ $Date: 2006-08-14 16:20:01 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,7 @@
 .IF "$(SLOFILES)$(OBJFILES)$(DEPOBJFILES)$(SRCFILES)$(SRC1FILES)$(SRC2FILES)$(SRC3FILES)$(RCFILES)$(HXX1TARGET)$(HDBDEPNTARGET)$(IDLFILES)$(PARFILES)$(ZIP1TARGET)$(ZIP2TARGET)$(ZIP3TARGET)$(ZIP4TARGET)$(ZIP5TARGET)$(ZIP6TARGET)$(ZIP7TARGET)$(ZIP8TARGET)$(ZIP9TARGET)$(COMP1TYPELIST)$(COMP2TYPELIST)$(COMP3TYPELIST)$(COMP4TYPELIST)$(COMP5TYPELIST)$(COMP6TYPELIST)$(COMP7TYPELIST)$(COMP8TYPELIST)$(COMP9TYPELIST)"!=""
 ALLDEP .PHONY: 
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
-    @+$(IFEXIST) $(SRS)$/$(PWD:f).*.dpr $(THEN) +-$(RM) $(SRS)$/$(PWD:f).*.dpr >& $(NULLDEV) $(FI)
-#	@+if ( -e  "$(SRS)$/$(PWD:f).*.dpr" ) +-$(RM) "$(SRS)$/$(PWD:f).*.dpr" >& $(NULLDEV)
+    @+-$(IFEXIST) $(SRS)$/$(PWD:f).*.dpr $(THEN) $(RM) $(SRS)$/$(PWD:f).*.dpr >& $(NULLDEV) $(FI)
 .ELSE
     @+-$(RM) $(SRS)$/$(PWD:f).*.dpr >& $(NULLDEV)
 .ENDIF
