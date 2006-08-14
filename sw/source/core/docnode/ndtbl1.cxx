@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtbl1.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 15:00:20 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:04:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -1408,9 +1407,7 @@ void lcl_CalcColValues( SvUShorts &rToFill, const SwTabCols &rCols,
         const SwRect &rUnion = pSelUnion->GetUnion();
 
         SWRECTFN( pTab )
-#ifdef BIDI
         sal_Bool bRTL = pTab->IsRightToLeft();
-#endif
 
         const SwLayoutFrm *pCell = pTab->FirstCell();
         do
@@ -1428,14 +1425,13 @@ void lcl_CalcColValues( SvUShorts &rToFill, const SwTabCols &rCols,
                     long nColLeft  = i == 0             ? rCols.GetLeft()  : rCols[i-1];
                     long nColRight = i == rCols.Count() ? rCols.GetRight() : rCols[i];
 
-#ifdef BIDI
                     if ( bRTL )
                     {
                         long nTmpRight = nColRight;
                         nColRight = rCols.GetRight() - nColLeft;
                         nColLeft = rCols.GetRight() - nTmpRight;
                     }
-#endif
+
                     nColLeft  += rCols.GetLeftMin();
                     nColRight += rCols.GetLeftMin();
 
