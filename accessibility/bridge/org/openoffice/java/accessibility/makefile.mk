@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: kz $ $Date: 2006-01-31 18:22:30 $
+#   last change: $Author: hr $ $Date: 2006-08-14 16:20:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,7 @@ JAVAFILES = \
     Tree.java \
     Window.java
 
-JAVACLASSFILES = $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class) $(CLASSDIR)$/$(PACKAGE)$/Build.class
+JAVACLASSFILES = $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:s/.java//).class) $(CLASSDIR)$/$(PACKAGE)$/Build.class
 
 JARTARGET               = $(TARGET).jar
 JARCOMPRESS             = TRUE
