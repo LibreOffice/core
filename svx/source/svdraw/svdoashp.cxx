@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoashp.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:40:23 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 09:39:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -635,8 +635,11 @@ const sal_Bool SdrObjCustomShape::GetTextBounds( Rectangle& rTextBound ) const
     if ( xCustomShapeEngine.is() )
     {
         awt::Rectangle aR( xCustomShapeEngine->getTextBounds() );
-        rTextBound = Rectangle( Point( aR.X, aR.Y ), Size( aR.Width, aR.Height ) );
-        bRet = sal_True;
+        if ( aR.Width || aR.Height )
+        {
+            rTextBound = Rectangle( Point( aR.X, aR.Y ), Size( aR.Width, aR.Height ) );
+            bRet = sal_True;
+        }
     }
     return bRet;
 }
