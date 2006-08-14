@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swblocks.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:50:05 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:34:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -395,7 +395,7 @@ ULONG SwTextBlocks::ConvertToNew()
         if (SWBLK_SW2 == nType )
         {
             delete pOld->pDoc;
-            pOld->pDoc = pNew->pDoc;
+            pOld->pDoc = pNew->pDoc;nLinkCt
             nErr = pTwo->LoadDoc();
         }
         else
