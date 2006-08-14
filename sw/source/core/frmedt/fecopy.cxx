@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fecopy.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 12:30:36 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:14:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -60,9 +59,6 @@
 #ifndef _SFXVIEWSH_HXX
 #include <sfx2/viewsh.hxx>
 #endif
-#ifndef _SFXVIEWFRM_HXX
-#include <sfx2/viewfrm.hxx>
-#endif
 #ifndef _SVX_XEXCH_HXX
 #include <svx/xexch.hxx>
 #endif
@@ -77,9 +73,6 @@
 #endif
 #ifndef _SVX_BRSHITEM_HXX
 #include <svx/brshitem.hxx>
-#endif
-#ifndef _SVX_SVXIDS_HRC
-#include <svx/svxids.hrc>
 #endif
 #ifndef _SVDCAPT_HXX
 #include <svx/svdocapt.hxx>
@@ -155,9 +148,6 @@
 #ifndef _ROOTFRM_HXX
 #include <rootfrm.hxx>
 #endif
-#ifndef _CNTFRM_HXX
-#include <cntfrm.hxx>
-#endif
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
 #endif
@@ -196,9 +186,6 @@
 #endif
 #ifndef _DFLYOBJ_HXX
 #include <dflyobj.hxx>
-#endif
-#ifndef _REDLENUM_HXX
-#include <redlenum.hxx>
 #endif
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>
@@ -303,7 +290,7 @@ BOOL SwFEShell::Copy( SwDoc* pClpDoc, const String* pNewClpTxt )
     }
 
     pClpDoc->LockExpFlds();
-    pClpDoc->SetRedlineMode_intern( REDLINE_DELETE_REDLINES );
+    pClpDoc->SetRedlineMode_intern( IDocumentRedlineAccess::REDLINE_DELETE_REDLINES );
     BOOL bRet;
 
     // soll ein FlyFrame kopiert werden ?
@@ -324,7 +311,7 @@ BOOL SwFEShell::Copy( SwDoc* pClpDoc, const String* pNewClpTxt )
                 aPos.nContent.Assign( pTxtNd, 0 );
             aAnchor.SetAnchor( &aPos );
         }
-        pFlyFmt = pClpDoc->CopyLayoutFmt( *pFlyFmt, aAnchor );
+        pFlyFmt = pClpDoc->CopyLayoutFmt( *pFlyFmt, aAnchor, true, true );
 
         // sorge dafuer das das "RootFmt" als erstes im SpzArray-steht
         // (Es wurden ggf. Flys in Flys kopiert.
@@ -358,7 +345,7 @@ BOOL SwFEShell::Copy( SwDoc* pClpDoc, const String* pNewClpTxt )
     }
     else if ( IsObjSelected() )
     {
-        Size aSiz( 0, - GetDoc()->GetDrawModel()->GetPage( 0 )->
+        Size aSiz( 0, - getIDocumentDrawModelAccess()->GetDrawModel()->GetPage( 0 )->
                         GetAllObjBoundRect().Top() );
 
         SwPosition aPos( aSttIdx, SwIndex( pTxtNd, 0 ));
@@ -381,7 +368,7 @@ BOOL SwFEShell::Copy( SwDoc* pClpDoc, const String* pNewClpTxt )
 //JP 07.01.00: why move??
 //              pNew->NbcMove(aSiz);
                    SwPaM aTemp(aPos);
-                   pClpDoc->Insert(aTemp, *pNew, &aSet);
+                   pClpDoc->Insert(aTemp, *pNew, &aSet, NULL);
             }
             else
             {
@@ -396,7 +383,7 @@ BOOL SwFEShell::Copy( SwDoc* pClpDoc, const String* pNewClpTxt )
                     aAnchor.SetAnchor( &aPos );
                 }
 
-                pClpDoc->CopyLayoutFmt( *pFmt, aAnchor );
+                pClpDoc->CopyLayoutFmt( *pFmt, aAnchor, true, true );
             }
         }
         bRet = TRUE;
@@ -407,7 +394,7 @@ BOOL SwFEShell::Copy( SwDoc* pClpDoc, const String* pNewClpTxt )
     pClpDoc->SetRedlineMode_intern( 0 );
     pClpDoc->UnlockExpFlds();
     if( !pClpDoc->IsExpFldsLocked() )
-        pClpDoc->UpdateExpFlds();
+        pClpDoc->UpdateExpFlds(NULL, true);
 
     return bRet;
 }
@@ -563,10 +550,10 @@ BOOL SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
                     SdrObject* pNew = pDestDoc->CloneSdrObj( *pObj, bIsMove &&
                                                 GetDoc() == pDestDoc, TRUE );
                     pFmt = pDestDoc->Insert( *pDestShell->GetCrsr(),
-                                            *pNew, &aSet );
+                                            *pNew, &aSet, NULL );
                 }
                 else
-                    pFmt = pDestDoc->CopyLayoutFmt( *pFmt, aAnchor );
+                    pFmt = pDestDoc->CopyLayoutFmt( *pFmt, aAnchor, true, true );
 
                 //Kann 0 sein, weil Draws in Kopf-/Fusszeilen nicht erlaubt sind.
                 if ( pFmt )
@@ -645,8 +632,8 @@ BOOL SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
         // am Doc ein Flag setzen, damit in den TextNodes
         pDoc->SetCopyIsMove( TRUE );
 
-    SwRedlineMode eOldRedlMode = pDestShell->GetDoc()->GetRedlineMode();
-    pDestShell->GetDoc()->SetRedlineMode_intern( eOldRedlMode | REDLINE_DELETE_REDLINES );
+    IDocumentRedlineAccess::RedlineMode_t eOldRedlMode = pDestShell->GetDoc()->GetRedlineMode();
+    pDestShell->GetDoc()->SetRedlineMode_intern( eOldRedlMode | IDocumentRedlineAccess::REDLINE_DELETE_REDLINES );
 
     // sind Tabellen-Formeln im Bereich, dann muss erst die Tabelle
     // angezeigt werden, damit die Tabellen-Formel den neuen Wert errechnen
@@ -715,7 +702,7 @@ BOOL SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
         if( bRet )
         {
             SwFrmFmt *pOldFmt = pFlyFmt;
-            pFlyFmt = pDestShell->GetDoc()->CopyLayoutFmt( *pFlyFmt, aAnchor );
+            pFlyFmt = pDestShell->GetDoc()->CopyLayoutFmt( *pFlyFmt, aAnchor, true, true );
 
             if( FLY_IN_CNTNT != aAnchor.GetAnchorId() )
             {
@@ -841,7 +828,7 @@ BOOL SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
             pDestShell->StartAllAction();
     }
     pDestShell->GetDoc()->UnlockExpFlds();
-    pDestShell->GetDoc()->UpdateFlds();
+    pDestShell->GetDoc()->UpdateFlds(NULL, false);
 
     pDestShell->EndAllAction();
     return bRet;
@@ -887,7 +874,7 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc, BOOL bIncludingPageFrames )
 
     BOOL bRet = TRUE, bDelTbl = TRUE;
     StartAllAction();
-    GetDoc()->StartUndo( UNDO_INSGLOSSARY );
+    GetDoc()->StartUndo( UNDO_INSGLOSSARY, NULL );
     GetDoc()->LockExpFlds();
 
     FOREACHPAM_START(this)
@@ -1041,7 +1028,7 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc, BOOL bIncludingPageFrames )
                                         0, aPt, *this, aAnchor, aPt, FALSE );
                     }
 
-                    SwFrmFmt * pNew = GetDoc()->CopyLayoutFmt( rCpyFmt, aAnchor );
+                    SwFrmFmt * pNew = GetDoc()->CopyLayoutFmt( rCpyFmt, aAnchor, true, true );
 
                     if( pNew )
                     {
@@ -1156,14 +1143,14 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc, BOOL bIncludingPageFrames )
                         }
                         else
                             continue;
-                        SwFrmFmt * pNew = GetDoc()->CopyLayoutFmt( rCpyFmt, aAnchor );
+                        SwFrmFmt * pNew = GetDoc()->CopyLayoutFmt( rCpyFmt, aAnchor, true, true );
                     }
                 }
             }
         }
 
     FOREACHPAM_END()
-    GetDoc()->EndUndo( UNDO_INSGLOSSARY );
+    GetDoc()->EndUndo( UNDO_INSGLOSSARY, NULL );
 
     // wurden neue Tabellenformeln eingefuegt ?
     if( pTblFldTyp->GetDepends() )
@@ -1178,7 +1165,7 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc, BOOL bIncludingPageFrames )
             StartAllAction();
     }
     GetDoc()->UnlockExpFlds();
-    GetDoc()->UpdateFlds();
+    GetDoc()->UpdateFlds(NULL, false);
     EndAllAction();
 
     return bRet;
@@ -1265,11 +1252,11 @@ BOOL SwFEShell::PastePages( SwFEShell& rToFill, USHORT nStartPage, USHORT nEndPa
             }
             else
                 continue;
-            SwFrmFmt * pNew = rToFill.GetDoc()->CopyLayoutFmt( rCpyFmt, aAnchor );
+            SwFrmFmt * pNew = rToFill.GetDoc()->CopyLayoutFmt( rCpyFmt, aAnchor, true, true );
         }
     }
     GetDoc()->UnlockExpFlds();
-    GetDoc()->UpdateFlds();
+    GetDoc()->UpdateFlds(NULL, false);
     Pop(sal_False);
     EndAllAction();
 
@@ -1512,7 +1499,7 @@ void SwFEShell::Paste( SvStream& rStrm, USHORT nAction, const Point* pPt )
 
                     DelSelectedObj();
 
-                    pFmt = GetDoc()->Insert( *GetCrsr(), *pNewObj, &aFrmSet );
+                    pFmt = GetDoc()->Insert( *GetCrsr(), *pNewObj, &aFrmSet, NULL );
                 }
                 else
                     pView->ReplaceObject( pOldObj, *Imp()->GetPageView(),
