@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltble.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:45:17 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:24:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #include <hintids.hxx>
@@ -45,11 +44,6 @@
 #ifndef _COM_SUN_STAR_TEXT_XTEXTTABLE_HPP_
 #include <com/sun/star/text/XTextTable.hpp>
 #endif
-
-#ifndef _COM_SUN_STAR_TABLE_XCELL_HPP_
-#include <com/sun/star/table/XCell.hpp>
-#endif
-
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include <xmloff/xmlnmspe.hxx>
 #endif
