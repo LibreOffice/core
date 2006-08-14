@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlatr.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:03:31 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:02:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 
 #pragma hdrstop
@@ -74,10 +73,6 @@
 #ifndef _SFX_WHITER_HXX //autogen
 #include <svtools/whiter.hxx>
 #endif
-#ifndef _SFXMACITEM_HXX //autogen
-#include <svtools/macitem.hxx>
-#endif
-
 #ifndef _SVX_HTMLMODE_HXX
 #include <svx/htmlmode.hxx>
 #endif
@@ -188,15 +183,8 @@
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
 #endif
-#ifndef _SWERROR_H
-#include <swerror.h>
-#endif
 #ifndef _PARATR_HXX
 #include <paratr.hxx>
-#endif
-
-#ifndef _FMTCOL_HXX
-#include <fmtcol.hxx>
 #endif
 #ifndef _POOLFMT_HXX
 #include <poolfmt.hxx>
@@ -538,11 +526,9 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
         // exportiert werden. Fuer Nicht-Styles-Export sollte die der
         // HTML-Vorlage als Referenz dienen
         if( !bOutStyles && pTemplate )
-            pRefFmt = pTemplate->GetTxtCollFromPoolSimple( RES_POOLCOLL_TEXT,
-                                                           FALSE);
+            pRefFmt = pTemplate->GetTxtCollFromPool( RES_POOLCOLL_TEXT, false );
         else
-            pRefFmt = pDoc->GetTxtCollFromPoolSimple( RES_POOLCOLL_TEXT,
-                                                      FALSE);
+            pRefFmt = pDoc->GetTxtCollFromPool( RES_POOLCOLL_TEXT, false );
     }
 
     if( pRefFmt || nDeep==0 )
@@ -999,7 +985,6 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
             else
                 nBulletGrfLvl = 255;
         }
-
     }
 
     // Die Defaults aus der Vorlage merken, denn sie muessen nicht
@@ -2323,8 +2308,8 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
             if( nLeft || nRight )
             {
                 const SwFrmFmt& rPgFmt =
-                    rHTMLWrt.pDoc->GetPageDescFromPoolSimple
-                    ( RES_POOLPAGE_HTML, FALSE )->GetMaster();
+                    rHTMLWrt.pDoc->GetPageDescFromPool
+                    ( RES_POOLPAGE_HTML, false )->GetMaster();
                 const SwFmtFrmSize& rSz   = rPgFmt.GetFrmSize();
                 const SvxLRSpaceItem& rLR = rPgFmt.GetLRSpace();
                 const SwFmtCol& rCol = rPgFmt.GetCol();
