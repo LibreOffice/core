@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-09 14:07:25 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:25:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 #pragma hdrstop
-
 #include "hintids.hxx"
 #ifndef _SFXITEMITER_HXX //autogen
 #include <svtools/itemiter.hxx>
@@ -68,7 +67,6 @@
 #ifndef _SVX_KEEPITEM_HXX //autogen
 #include <svx/keepitem.hxx>
 #endif
-
 #ifndef _FMTANCHR_HXX //autogen
 #include <fmtanchr.hxx>
 #endif
@@ -214,7 +212,7 @@ SwFlyFrm::SwFlyFrm( SwFlyFrmFmt *pFmt, SwFrm *pAnch ) :
         bDerivedVert = 0;
         bDerivedR2L = 0;
         if( FRMDIR_HORI_LEFT_TOP == nDir || FRMDIR_HORI_RIGHT_TOP == nDir
-                                         || pFmt->GetDoc()->IsBrowseMode() )
+                                         || pFmt->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
             bVertical = 0;
         else
             bVertical = 1;
@@ -441,11 +439,12 @@ void SwFlyFrm::InitDrawObj( BOOL bNotify )
     SwClientIter aIter( *GetFmt() );
     SwFlyDrawContact *pContact = (SwFlyDrawContact*)
                                         aIter.First( TYPE(SwFlyDrawContact) );
+    IDocumentDrawModelAccess* pIDDMA = GetFmt()->getIDocumentDrawModelAccess();
     if ( !pContact )
     {
         // --> OD 2005-08-08 #i52858# - method name changed
         pContact = new SwFlyDrawContact( (SwFlyFrmFmt*)GetFmt(),
-                            GetFmt()->GetDoc()->GetOrCreateDrawModel() );
+                                          pIDDMA->GetOrCreateDrawModel() );
         // <--
     }
     ASSERT( pContact, "InitDrawObj failed" );
@@ -454,8 +453,8 @@ void SwFlyFrm::InitDrawObj( BOOL bNotify )
 
     //Den richtigen Layer setzen.
     // OD 2004-01-19 #110582#
-    SdrLayerID nHeavenId = GetFmt()->GetDoc()->GetHeavenId();
-    SdrLayerID nHellId = GetFmt()->GetDoc()->GetHellId();
+    SdrLayerID nHeavenId = pIDDMA->GetHeavenId();
+    SdrLayerID nHellId = pIDDMA->GetHellId();
     // OD 2004-03-22 #i26791#
     GetVirtDrawObj()->SetLayer( GetFmt()->GetOpaque().GetValue()
                                 ? nHeavenId
@@ -921,7 +920,7 @@ void SwFlyFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
                 aNew.Union( aOld );
                 NotifyBackground( FindPageFrm(), aNew, PREP_CLEAR );
 
-                //Dummer Fall. Bei der Zusweisung einer Vorlage k”nnen wir uns
+                //Dummer Fall. Bei der Zusweisung einer Vorlage k?nnen wir uns
                 //nicht auf das alte Spaltenattribut verlassen. Da diese
                 //wenigstens anzahlgemass fuer ChgColumns vorliegen muessen,
                 //bleibt uns nur einen temporaeres Attribut zu basteln.
@@ -964,9 +963,10 @@ void SwFlyFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
 
             if ( pSh )
                 pSh->InvalidateWindows( Frm() );
+            const IDocumentDrawModelAccess* pIDDMA = GetFmt()->getIDocumentDrawModelAccess();
             const BYTE nId = GetFmt()->GetOpaque().GetValue() ?
-                                GetFmt()->GetDoc()->GetHeavenId() :
-                                GetFmt()->GetDoc()->GetHellId();
+                             pIDDMA->GetHeavenId() :
+                             pIDDMA->GetHellId();
             GetVirtDrawObj()->SetLayer( nId );
 
             if ( Lower() )
@@ -997,7 +997,7 @@ void SwFlyFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
         case RES_LR_SPACE:
         {
             rInvFlags |= 0x41;
-            if ( GetFmt()->GetDoc()->IsBrowseMode() )
+            if ( GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
                 GetFmt()->GetDoc()->GetRootFrm()->InvalidateBrowseWidth();
             SwRect aNew( GetObjRectWithSpaces() );
             SwRect aOld( aFrm );
@@ -1033,9 +1033,11 @@ void SwFlyFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
             {
                 if ( pSh )
                     pSh->InvalidateWindows( Frm() );
+
+                const IDocumentDrawModelAccess* pIDDMA = GetFmt()->getIDocumentDrawModelAccess();
                 const BYTE nId = ((SvxOpaqueItem*)pNew)->GetValue() ?
-                                    GetFmt()->GetDoc()->GetHeavenId() :
-                                    GetFmt()->GetDoc()->GetHellId();
+                                    pIDDMA->GetHeavenId() :
+                                    pIDDMA->GetHellId();
                 GetVirtDrawObj()->SetLayer( nId );
                 if( pSh && pSh->GetLayout()->IsAnyShellAccessible() )
                 {
@@ -1675,7 +1677,7 @@ void CalcCntnt( SwLayoutFrm *pLay,
 
                 // OD 2004-05-17 #i28701# - format anchor frame after its objects
                 // are formatted, if the wrapping style influence has to be considered.
-                if ( pLay->GetFmt()->GetDoc()->ConsiderWrapOnObjPos() )
+                if ( pLay->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION) )
                 {
                     pFrm->Calc();
                 }
@@ -2430,7 +2432,7 @@ Size SwFlyFrm::CalcRel( const SwFmtFrmSize &rSz ) const
         long nRelWidth = LONG_MAX, nRelHeight = LONG_MAX;
         const ViewShell *pSh = GetShell();
         if ( ( pRel->IsBodyFrm() || pRel->IsPageFrm() ) &&
-             GetFmt()->GetDoc()->IsBrowseMode() &&
+             GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) &&
              pSh && pSh->VisArea().HasArea() )
         {
             nRelWidth  = pSh->VisArea().Width();
