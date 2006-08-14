@@ -4,9 +4,9 @@
  *
  *  $RCSfile: instable.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 13:06:53 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:42:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,6 @@
 #ifndef _INSTABLE_HXX
 #define _INSTABLE_HXX
 
-
 #ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
 #endif
@@ -51,6 +50,7 @@
 #ifndef _BASEDLGS_HXX //autogen
 #include <sfx2/basedlgs.hxx>
 #endif
+
 #ifndef _ACTCTRL_HXX
 #include <actctrl.hxx>
 #endif
