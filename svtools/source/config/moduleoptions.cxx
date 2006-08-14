@@ -4,9 +4,9 @@
  *
  *  $RCSfile: moduleoptions.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 20:47:22 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 11:45:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1342,7 +1342,8 @@ sal_Bool SvtModuleOptions::IsBasicIDE() const
 //*****************************************************************************************************************
 sal_Bool SvtModuleOptions::IsDataBase() const
 {
-    return sal_True;
+    ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
+    return m_pDataContainer->IsModuleInstalled( E_SDATABASE );
 }
 //*****************************************************************************************************************
 sal_uInt32 SvtModuleOptions::GetFeatures() const
