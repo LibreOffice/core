@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swblocks.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:58:14 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:22:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _SWBLOCKS_HXX
 #define _SWBLOCKS_HXX
-
 #ifndef _DATE_HXX //autogen
 #include <tools/datetime.hxx>
 #endif
@@ -47,7 +46,7 @@ class SfxMedium;
 class SwPaM;
 class SwDoc;
 class SvxMacroTableDtor;
-class SvXMLTextBlocks;
+
 // Name eines Textblocks:
 
 class SwBlockName
