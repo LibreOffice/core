@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXMLBlockImport.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:42:45 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:31:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,16 +41,12 @@
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include <xmloff/xmlnmspe.hxx>
 #endif
-#ifndef _XMLOFF_XMLTOKEN_HXX
-#include <xmloff/xmltoken.hxx>
-#endif
 #ifndef _SW_XMLBLOCKLIST_CONTEXT_HXX
 #include <SwXMLBlockListContext.hxx>
 #endif
 #ifndef _SW_XMLTEXTBLOCKS_HXX
 #include <SwXMLTextBlocks.hxx>
 #endif
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
