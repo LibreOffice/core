@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 12:48:31 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:52:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #pragma hdrstop
 #include <sot/factory.hxx>
 #ifndef _HINTIDS_HXX
@@ -65,9 +64,6 @@
 #endif
 #ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
-#endif
-#ifndef _SFX_BINDINGS_HXX //autogen
-#include <sfx2/bindings.hxx>
 #endif
 #ifndef _SFX_VIEWFRM_HXX //autogen
 #include <sfx2/viewfrm.hxx>
@@ -120,9 +116,6 @@
 #ifndef _SFXITEMITER_HXX
 #include <svtools/itemiter.hxx>
 #endif
-#ifndef _TL_POLY_HXX
-#include <tools/poly.hxx>
-#endif
 #ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
 #endif
@@ -158,7 +151,6 @@
 #include <svx/scripttypeitem.hxx>
 #endif
 #include <sfx2/objface.hxx>
-
 #ifndef _FMTURL_HXX //autogen
 #include <fmturl.hxx>
 #endif
@@ -195,6 +187,7 @@
 #ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>
 #endif
+
 #ifndef _FONTCFG_HXX
 #include <fontcfg.hxx>
 #endif
@@ -204,6 +197,7 @@
 //CHINA001 #ifndef _BOOKMARK_HXX
 //CHINA001 #include <bookmark.hxx>
 //CHINA001 #endif
+
 #ifndef _BOOKMRK_HXX
 #include <bookmrk.hxx>
 #endif
@@ -237,12 +231,6 @@
 #ifndef _CONVERT_HXX
 #include <convert.hxx>
 #endif
-//CHINA001 #ifndef _PATTERN_HXX
-//CHINA001 #include <pattern.hxx>
-//CHINA001 #endif
-//CHINA001 #ifndef _UIBORDER_HXX
-//CHINA001 #include <uiborder.hxx>
-//CHINA001 #endif
 #ifndef _FMTCOL_HXX
 #include <fmtcol.hxx>
 #endif
@@ -258,7 +246,6 @@
 #ifndef _SWWAIT_HXX
 #include <swwait.hxx>
 #endif
-
 #ifndef _CMDID_H
 #include <cmdid.h>
 #endif
@@ -292,15 +279,8 @@
 #include "fldui.hrc" //CHINA001
 #include "table.hrc" //CHINA001
 
-// includes for InsertTable
-#ifndef _SVX_HTMLMODE_HXX
-#include <svx/htmlmode.hxx>
-#endif
 #ifndef _MODOPT_HXX //autogen
 #include <modcfg.hxx>
-#endif
-#ifndef _TBLAFMT_HXX
-#include <tblafmt.hxx>
 #endif
 #ifndef _INSTABLE_HXX
 #include <instable.hxx>
