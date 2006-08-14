@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accdoc.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 09:09:33 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:41:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
 #endif
@@ -64,10 +63,6 @@
 #ifndef _SFXVIEWSH_HXX //autogen
 #include <sfx2/viewsh.hxx>
 #endif
-
-#ifndef _RTL_UUID_H_
-#include <rtl/uuid.h>
-#endif
 #ifndef _VOS_MUTEX_HXX_ //autogen
 #include <vos/mutex.hxx>
 #endif
@@ -90,11 +85,6 @@
 #ifndef _ACCESS_HRC
 #include "access.hrc"
 #endif
-
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
-
 #ifndef _PAGEFRM_HXX
 #include <pagefrm.hxx>
 #endif
@@ -119,7 +109,7 @@ using ::com::sun::star::lang::IndexOutOfBoundsException;
 
 SwAccessibleDocumentBase::SwAccessibleDocumentBase ( SwAccessibleMap *pMap ) :
     SwAccessibleContext( pMap, AccessibleRole::DOCUMENT,
-                           pMap->GetShell()->GetDoc()->GetRootFrm() ),
+                         pMap->GetShell()->getIDocumentLayoutAccess()->GetRootFrm() ),
     xParent( pMap->GetShell()->GetWin()->GetAccessibleParentWindow()->GetAccessible() ),
     pChildWin( 0 )
 {
