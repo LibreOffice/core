@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unspnd.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:22:30 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:51:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -85,7 +84,7 @@ SwUndoSplitNode::SwUndoSplitNode( SwDoc* pDoc, const SwPosition& rPos,
     // Redline beachten
     if( pDoc->IsRedlineOn() )
     {
-        pRedlData = new SwRedlineData( REDLINE_INSERT, pDoc->GetRedlineAuthor() );
+        pRedlData = new SwRedlineData( IDocumentRedlineAccess::REDLINE_INSERT, pDoc->GetRedlineAuthor() );
         SetRedlineMode( pDoc->GetRedlineMode() );
     }
 }
@@ -147,13 +146,13 @@ void SwUndoSplitNode::Undo( SwUndoIter& rUndoIter )
             rPam.GetPoint()->nNode = *pTNd;
             rPam.GetPoint()->nContent.Assign( pTNd, pTNd->GetTxt().Len() );
 
-            if( IsRedlineOn( GetRedlineMode() ))
+            if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
             {
                 rPam.SetMark();
                 rPam.GetMark()->nNode++;
                 rPam.GetMark()->nContent.Assign( rPam.GetMark()->
                                     nNode.GetNode().GetCntntNode(), 0 );
-                pDoc->DeleteRedline( rPam );
+                pDoc->DeleteRedline( rPam, true, USHRT_MAX );
                 rPam.DeleteMark();
             }
 
@@ -204,18 +203,18 @@ void SwUndoSplitNode::Redo( SwUndoIter& rUndoIter )
         if( pHistory )
             pHistory->SetTmpEnd( pHistory->Count() );
 
-        if( ( pRedlData && IsRedlineOn( GetRedlineMode() )) ||
-            ( !( REDLINE_IGNORE & GetRedlineMode() ) &&
+        if( ( pRedlData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() )) ||
+            ( !( IDocumentRedlineAccess::REDLINE_IGNORE & GetRedlineMode() ) &&
                 pDoc->GetRedlineTbl().Count() ))
         {
             rPam.SetMark();
             if( rPam.Move( fnMoveBackward ))
             {
-                if( pRedlData && IsRedlineOn( GetRedlineMode() ))
+                if( pRedlData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
                 {
-                    SwRedlineMode eOld = pDoc->GetRedlineMode();
-                    pDoc->SetRedlineMode_intern( eOld & ~REDLINE_IGNORE );
-                    pDoc->AppendRedline( new SwRedline( *pRedlData, rPam ));
+                    IDocumentRedlineAccess::RedlineMode_t eOld = pDoc->GetRedlineMode();
+                    pDoc->SetRedlineMode_intern( eOld & ~IDocumentRedlineAccess::REDLINE_IGNORE );
+                    pDoc->AppendRedline( new SwRedline( *pRedlData, rPam ), true);
                     pDoc->SetRedlineMode_intern( eOld );
                 }
                 else
