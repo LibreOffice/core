@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 14:13:36 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:38:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-
 #pragma hdrstop
 
 #include "hintids.hxx"
@@ -55,13 +53,8 @@
 #ifndef _SVX_LRSPITEM_HXX //autogen
 #include <svx/lrspitem.hxx>
 #endif
-
 #ifndef _FRMATR_HXX
 #include <frmatr.hxx>
-#endif
-
-#ifndef _PAGEFRM_HXX
-#include <pagefrm.hxx>
 #endif
 #ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx> // SwPageDesc
@@ -69,17 +62,15 @@
 #ifndef SW_TGRDITEM_HXX
 #include <tgrditem.hxx>
 #endif
-
-#ifndef _VIEWSH_HXX
-#include <viewsh.hxx>
+#ifndef IDOCUMENTSETTINGACCESS_HXX_INCLUDED
+#include <IDocumentSettingAccess.hxx>
 #endif
-#ifndef _DOC_HXX
-#include <doc.hxx>
+#ifndef _PAGEFRM_HXX
+#include <pagefrm.hxx>
 #endif
 
 #include "txtcfg.hxx"
 #include "itrtxt.hxx"
-
 #include "txtfrm.hxx"
 #include "flyfrms.hxx"
 #include "porglue.hxx"      // SwFlyCnt
@@ -87,6 +78,7 @@
 #include "porfly.hxx"       // GetFlyCrsrOfst()
 #include "pordrop.hxx"
 #include "crstate.hxx"      // SwCrsrMoveState
+
 #ifndef _PORMULTI_HXX
 #include <pormulti.hxx>     // SwMultiPortion
 #endif
@@ -214,7 +206,7 @@ void SwTxtMargin::CtorInit( SwTxtFrm *pFrm, SwTxtSizeInfo *pNewInf )
     }
     else
     {
-        if ( !pNode->GetDoc()->IgnoreFirstLineIndentInNumbering() )
+        if ( !pNode->getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) )
         {
             // --> FME 2004-07-29 #i32267# Do not forget paragraph border
             // I'm quite sure this can be optimized. But how?
@@ -240,7 +232,7 @@ void SwTxtMargin::CtorInit( SwTxtFrm *pFrm, SwTxtSizeInfo *pNewInf )
     if( nLeft >= nRight &&
          // --> FME 2005-08-10 #i53066# Omit adjustment of nLeft for numbered
          // paras inside cells inside new documents:
-        ( pNode->GetDoc()->IgnoreFirstLineIndentInNumbering() ||
+        ( pNode->getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) ||
           !pFrm->IsInTab() ||
           !nLMWithNum) )
          // <--
@@ -310,7 +302,7 @@ void SwTxtMargin::CtorInit( SwTxtFrm *pFrm, SwTxtSizeInfo *pNewInf )
             nFirstLineOfs = nFLOfst;
 
         if ( pFrm->IsRightToLeft() ||
-            !pNode->GetDoc()->IgnoreFirstLineIndentInNumbering() )
+            !pNode->getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) )
         {
             nFirst = nLeft + nFirstLineOfs;
         }
