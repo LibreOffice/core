@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmfmt.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2005-12-28 17:11:37 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:24:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,6 @@
 #include "swdllapi.h"
 #endif
 
-class SwDrawContact;
 class SwFlyFrm;
 class Graphic;
 class Point;
@@ -291,16 +290,12 @@ public:
     virtual sal_Int16 GetPositionLayoutDir() const;
     virtual void SetPositionLayoutDir( const sal_Int16 _nPositionLayoutDir );
     // <--
+
     // --> OD 2005-03-11 #i44334#, #i44681#
-    inline bool IsPosAttrSet() const
-    {
-        return mbPosAttrSet;
-    }
-    inline void PosAttrSet()
-    {
-        mbPosAttrSet = true;
-    }
+    inline bool IsPosAttrSet() const { return mbPosAttrSet; }
+    inline void PosAttrSet() { mbPosAttrSet = true; }
     // <--
+
     // --> OD 2005-08-16 #i53320#
     inline void ResetPosAttr()
     {
