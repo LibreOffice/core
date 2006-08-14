@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pam.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:13:30 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:29:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,6 @@ class SfxItemSet;
 class SwDoc;
 class SwNode;
 class SwCntntNode;
-class SwNodes;
 class SwPaM;
 
 namespace com { namespace sun { namespace star { namespace util {
@@ -85,6 +84,10 @@ struct SwPosition
     SwPosition( const SwNode& rNode );
     SwPosition( const SwNodeIndex &rNode );
     SwPosition( const SwNodeIndex &rNode, const SwIndex &rCntnt );
+    /* @@@MAINTAINABILITY-HORROR@@@
+       SwPosition desperately needs a constructor
+       SwPosition( const SwNode& rNode, xub_StrLen nOffset );
+    */
 
     SwPosition( const SwPosition & );
     SwPosition &operator=(const SwPosition &);
