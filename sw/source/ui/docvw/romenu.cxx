@@ -4,9 +4,9 @@
  *
  *  $RCSfile: romenu.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:23:12 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:34:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #include <hintids.hxx>
 
 
@@ -112,9 +111,6 @@
 #endif
 #ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>
-#endif
-#ifndef _SWTYPES_HXX
-#include <swtypes.hxx>
 #endif
 #ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
