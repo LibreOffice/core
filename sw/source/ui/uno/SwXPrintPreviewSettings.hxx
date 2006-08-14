@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXPrintPreviewSettings.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:17:51 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:59:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifndef _SW_XPRINTPREVIEWSETTINGS_HXX_
 #define _SW_XPRINTPREVIEWSETTINGS_HXX_
 
@@ -54,8 +53,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
 
-class SwXTextDocument;
-class SwDocShell;
 class SwDoc;
 class SwPagePreViewPrtData;
 
