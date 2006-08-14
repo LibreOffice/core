@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrt_fn.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:51:29 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:09:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,17 +34,14 @@
  ************************************************************************/
 #ifndef _WRT_FN_HXX
 #define _WRT_FN_HXX
-
 #include "hintids.hxx"      // fuer die Konstanten
 
 // einige Forward-Deklarationen
-class SwFmt;
 class SwNode;
 class SwCntntNode;
 class Writer;
 class SfxPoolItem;
 class SfxItemSet;
-
 
 /* Funktionspointer auf die Attribut-Write-Funktionen */
 typedef Writer& (*FnAttrOut)( Writer&, const SfxPoolItem& );
