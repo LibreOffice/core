@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewstat.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:24:44 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:58:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 #ifndef _HINTIDS_HXX
@@ -98,10 +97,6 @@
 #include <sfx2/dispatch.hxx>
 #endif
 #include <sfx2/app.hxx>
-
-#ifndef _REDLENUM_HXX
-#include <redlenum.hxx>
-#endif
 #ifndef _VIEW_HXX
 #include <view.hxx>
 #endif
@@ -129,9 +124,6 @@
 #ifndef _SWGLOBDOCSH_HXX //autogen
 #include <globdoc.hxx>
 #endif
-#ifndef _DOC_HXX //autogen
-#include <doc.hxx>
-#endif
 #ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
 #endif
@@ -145,6 +137,8 @@
 #ifndef _CMDID_H
 #include <cmdid.h>
 #endif
+
+#include <IDocumentRedlineAccess.hxx>
 
 using namespace ::com::sun::star;
 
@@ -261,10 +255,8 @@ void SwView::GetState(SfxItemSet &rSet)
                 {
                     if(pWrtShell->IsInVerticalText())
                         aImgItem.SetRotation(2700);
-#ifdef BIDI
                     if(pWrtShell->IsInRightToLeftText())
                         aImgItem.SetMirrored(TRUE);
-#endif
                 }
                 rSet.Put(aImgItem);
             }
@@ -281,10 +273,8 @@ void SwView::GetState(SfxItemSet &rSet)
                 {
                     if(pWrtShell->IsInVerticalText())
                         aImgItem.SetRotation(2700);
-#ifdef BIDI
                     if(pWrtShell->IsInRightToLeftText())
                         aImgItem.SetMirrored(TRUE);
-#endif
                 }
                 rSet.Put(aImgItem);
             }
@@ -345,16 +335,16 @@ void SwView::GetState(SfxItemSet &rSet)
             }
             break;
             case FN_REDLINE_ON:
-                rSet.Put( SfxBoolItem( nWhich, (pWrtShell->GetRedlineMode() & REDLINE_ON) != 0 ) );
+                rSet.Put( SfxBoolItem( nWhich, (pWrtShell->GetRedlineMode() & IDocumentRedlineAccess::REDLINE_ON) != 0 ) );
                 break;
             case FN_REDLINE_PROTECT :
             {
-                rSet.Put( SfxBoolItem( nWhich, pWrtShell->GetDoc()->GetRedlinePasswd().getLength() > 0 ) );
+                rSet.Put( SfxBoolItem( nWhich, pWrtShell->getIDocumentRedlineAccess()->GetRedlinePassword().getLength() > 0 ) );
             }
             break;
             case FN_REDLINE_SHOW:
             {
-                sal_uInt16 nMask = REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE;
+                sal_uInt16 nMask = IDocumentRedlineAccess::REDLINE_SHOW_INSERT | IDocumentRedlineAccess::REDLINE_SHOW_DELETE;
                 rSet.Put( SfxBoolItem( nWhich,
                     (pWrtShell->GetRedlineMode() & nMask) == nMask ));
             }
@@ -412,7 +402,7 @@ void SwView::GetState(SfxItemSet &rSet)
             case SID_DOCUMENT_MERGE:
                 if( GetDocShell()->IsA( SwGlobalDocShell::StaticType() ) ||
 //                  pWrtShell->IsAnySectionInDoc( sal_True, sal_True, sal_True )||
-                    (SID_DOCUMENT_MERGE == nWhich && pWrtShell->GetDoc()->GetRedlinePasswd().getLength()))
+                    (SID_DOCUMENT_MERGE == nWhich && pWrtShell->getIDocumentRedlineAccess()->GetRedlinePassword().getLength()))
                     rSet.DisableItem(nWhich);
             break;
             case  SID_VIEW_DATA_SOURCE_BROWSER:
@@ -430,10 +420,8 @@ void SwView::GetState(SfxItemSet &rSet)
                 SfxImageItem aImageItem(nWhich);
                 if(pWrtShell->IsInVerticalText())
                     aImageItem.SetRotation( 2700 );
-#ifdef BIDI
                 if(pWrtShell->IsInRightToLeftText())
                     aImageItem.SetMirrored( TRUE );
-#endif
                 rSet.Put(aImageItem);
             }
             break;
