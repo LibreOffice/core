@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmoutputpage.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 08:26:43 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:32:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _MAILMERGEOUTPUTPAGE_HXX
 #define _MAILMERGEOUTPUTPAGE_HXX
-
 #ifndef _SVTOOLS_WIZARDMACHINE_HXX_
 #include <svtools/wizardmachine.hxx>
 #endif
@@ -197,7 +196,6 @@ struct SwMailDescriptor
     ::rtl::OUString                             sBCC;
 };
 struct SwSendMailDialog_Impl;
-class MailProgressBar_Impl;
 class SwMailMergeConfigItem;
 class SW_DLLPUBLIC SwSendMailDialog : public ModelessDialog //SfxModalDialog
 {
