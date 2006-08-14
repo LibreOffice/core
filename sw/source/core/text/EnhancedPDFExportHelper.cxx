@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedPDFExportHelper.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 15:38:34 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:34:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,11 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifndef _COM_SUN_STAR_EMBED_XEMBEDDEDOBJECT_HPP_
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #endif
-
 #ifndef _ENHANCEDPDFEXPORTHELPER_HXX
 #include <EnhancedPDFExportHelper.hxx>
 #endif
@@ -88,9 +86,6 @@
 #ifndef _FMTFLD_HXX
 #include <fmtfld.hxx>
 #endif
-#ifndef _FORMAT_HXX
-#include <format.hxx>
-#endif
 #ifndef _TXTINET_HXX
 #include <txtinet.hxx>
 #endif
@@ -130,9 +125,6 @@
 #ifndef _DOCUFLD_HXX
 #include <docufld.hxx>
 #endif
-#ifndef _SWREGION_HXX
-#include <swregion.hxx>
-#endif
 #ifndef _FTNIDX_HXX
 #include <ftnidx.hxx>
 #endif
@@ -159,9 +151,6 @@
 #endif
 #ifndef _CELLFRM_HXX
 #include <cellfrm.hxx>
-#endif
-#ifndef _FLOWFRM_HXX
-#include <flowfrm.hxx>
 #endif
 #ifndef _SECTFRM_HXX
 #include <sectfrm.hxx>
@@ -245,7 +234,7 @@ void* lcl_GetKey( const SwFrm& rFrm )
     void* pKey = 0;
 
     if ( rFrm.IsPageFrm() )
-        pKey = (void*)static_cast<const SwPageFrm&>(rFrm).GetFmt()->GetDoc();
+        pKey = (void*)static_cast<const SwPageFrm&>(rFrm).GetFmt()->getIDocumentSettingAccess();
     else if ( rFrm.IsTxtFrm() )
         pKey = (void*)static_cast<const SwTxtFrm&>(rFrm).GetTxtNode();
     else if ( rFrm.IsSctFrm() )
@@ -405,7 +394,6 @@ bool SwTaggedPDFHelper::CheckRestoreTag() const
  */
 void SwTaggedPDFHelper::BeginTag( vcl::PDFWriter::StructElement eType )
 {
-    // The paragraph id has to be stored if
     // Store the id of the current structure element if
     // - rFrm is the first page frame
     // - rFrm is a master frame
@@ -1000,9 +988,6 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
  */
 void SwTaggedPDFHelper::EndStructureElements()
 {
-    const SwFrm* pFrm = mpFrmInfo ? &mpFrmInfo->mrFrm :
-                        mpPorInfo ? mpPorInfo->mrTxtPainter.GetInfo().GetTxtFrm() : 0;
-
     while ( nEndStructureElement > 0 )
     {
         EndTag();
@@ -1048,12 +1033,10 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                 const SwTxtAttr* pAttr = pNd->GetTxtAttr( aIndex, RES_TXTATR_INETFMT );
                 if( pAttr )
                 {
-                    const SwFmtINetFmt& rFmt = pAttr->GetINetFmt();
                     nPDFType = vcl::PDFWriter::Link;
                 }
                 else
                 {
-                    const SwTxtAttr* pHint = mpPorInfo->mrTxtPainter.GetAttr( rInf.GetIdx() );
                     if ( UNDERLINE_NONE    != rInf.GetFont()->GetUnderline() ||
                          STRIKEOUT_NONE    != rInf.GetFont()->GetStrikeout() ||
                          EMPHASISMARK_NONE != rInf.GetFont()->GetEmphasisMark() ||
