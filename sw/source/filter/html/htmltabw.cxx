@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmltabw.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:35:47 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:06:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -81,37 +80,15 @@
 #ifndef _COM_SUN_STAR_FORM_XFORMCONTROLLER_HPP_
 #include <com/sun/star/form/XFormController.hpp>
 #endif
-#ifndef _COM_SUN_STAR_FORM_XFORMCOMPONENT_HPP_
-#include <com/sun/star/form/XFormComponent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XFORMCONTROLLERLISTENER_HPP_
-#include <com/sun/star/form/XFormControllerListener.hpp>
-#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XCONTAINER_HPP_
 #include <com/sun/star/container/XContainer.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXCONTAINER_HPP_
 #include <com/sun/star/container/XIndexContainer.hpp>
 #endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEREPLACE_HPP_
-#include <com/sun/star/container/XNameReplace.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINERLISTENER_HPP_
-#include <com/sun/star/container/XContainerListener.hpp>
-#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XSET_HPP_
 #include <com/sun/star/container/XSet.hpp>
 #endif
-#ifndef _COM_SUN_STAR_CONTAINER_CONTAINEREVENT_HPP_
-#include <com/sun/star/container/ContainerEvent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XINDEXREPLACE_HPP_
-#include <com/sun/star/container/XIndexReplace.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
-#include <com/sun/star/container/XNameContainer.hpp>
-#endif
-
 #ifndef _FMTORNT_HXX //autogen
 #include <fmtornt.hxx>
 #endif
@@ -160,9 +137,6 @@
 #ifndef _WRTSWTBL_HXX
 #include <wrtswtbl.hxx>
 #endif
-
-
-
 #ifndef PRODUCT
 #ifndef _VIEWSH_HXX
 #include <viewsh.hxx>
@@ -171,7 +145,6 @@
 #include <viewopt.hxx>
 #endif
 #endif
-
 
 //#define MAX_DEPTH (USHRT_MAX)
 #define MAX_DEPTH (3)
