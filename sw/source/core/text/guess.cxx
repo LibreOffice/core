@@ -4,9 +4,9 @@
  *
  *  $RCSfile: guess.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:18:23 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:36:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #include <ctype.h>
@@ -54,6 +53,9 @@
 #ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
 #endif
+#ifndef IDOCUMENTSETTINGACCESS_HXX_INCLUDED
+#include <IDocumentSettingAccess.hxx>
+#endif
 #ifndef _TXTCFG_HXX
 #include <txtcfg.hxx>
 #endif
@@ -61,19 +63,7 @@
 #include <guess.hxx>
 #endif
 #ifndef _INFTXT_HXX
-#include <inftxt.hxx>   // SwTxtSizeInfo, SwTxtFormatInfo
-#endif
-#ifndef _SWFONT_HXX
-#include <swfont.hxx>
-#endif
-#ifndef _BREAKIT_HXX
-#include <breakit.hxx>
-#endif
-#ifndef _VIEWSH_HXX
-#include <viewsh.hxx>
-#endif
-#ifndef _DOC_HXX
-#include <doc.hxx>
+#include <inftxt.hxx>
 #endif
 #ifndef _PAGEFRM_HXX
 #include <pagefrm.hxx>
@@ -105,9 +95,7 @@ using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::linguistic2;
 
-#ifdef VERTICAL_LAYOUT
 #define CH_FULL_BLANK 0x3000
-#endif
 
 /*************************************************************************
  *                      SwTxtGuess::Guess
@@ -271,42 +259,26 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
     }
 
     xub_StrLen nPorLen = 0;
-#ifdef VERTICAL_LAYOUT
     // do not call the break iterator nCutPos is a blank
     xub_Unicode cCutChar = rInf.GetTxt().GetChar( nCutPos );
     if( CH_BLANK == cCutChar || CH_FULL_BLANK == cCutChar )
-#else
-    if( CH_BLANK == rInf.GetTxt().GetChar( nCutPos ) )
-#endif
     {
         nBreakPos = nCutPos;
         xub_StrLen nX = nBreakPos;
 
         // we step back until a non blank character has been found
         // or there is only one more character left
-#ifdef VERTICAL_LAYOUT
         while( nX && nBreakPos > rInf.GetLineStart() + 1 &&
                ( CH_BLANK == ( cCutChar = rInf.GetChar( --nX ) ) ||
                  CH_FULL_BLANK == cCutChar ) )
             --nBreakPos;
-#else
-        while( nX && nBreakPos > rInf.GetLineStart() + 1 &&
-               CH_BLANK == rInf.GetChar( --nX ) )
-            --nBreakPos;
-#endif
 
         if( nBreakPos > rInf.GetIdx() )
             nPorLen = nBreakPos - rInf.GetIdx();
-#ifdef VERTICAL_LAYOUT
         while( ++nCutPos < rInf.GetTxt().Len() &&
                ( CH_BLANK == ( cCutChar = rInf.GetChar( nCutPos ) ) ||
                  CH_FULL_BLANK == cCutChar ) )
             ; // nothing
-#else
-        while( ++nCutPos < rInf.GetTxt().Len() &&
-               CH_BLANK == rInf.GetChar( nCutPos ) )
-            ; // nothing
-#endif
 
         nBreakStart = nCutPos;
     }
@@ -318,11 +290,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
         // the field portion, we trigger an underflow.
 
         xub_StrLen nOldIdx = rInf.GetIdx();
-#ifdef VERTICAL_LAYOUT
         xub_Unicode cFldChr = 0;
-#else
-        sal_Char cFldChr = 0;
-#endif
 
 #if OSL_DEBUG_LEVEL > 1
         XubString aDebugString;
@@ -415,8 +383,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
         }
 
         const ForbiddenCharacters aForbidden(
-                *rInf.GetTxtFrm()->GetNode()->GetDoc()->
-                            GetForbiddenCharacters( aLang, TRUE ));
+                *rInf.GetTxtFrm()->GetNode()->getIDocumentSettingAccess()->getForbiddenCharacters( aLang, true ) );
 
         const sal_Bool bAllowHanging = rInf.IsHanging() && ! rInf.IsMulti() &&
                                       ! rPor.InFldGrp();
@@ -511,18 +478,11 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
             // blanks inside the field portion. This would cause an unwanted
             // underflow
             xub_StrLen nX = nBreakPos;
-#ifdef VERTICAL_LAYOUT
             while( nX > rInf.GetLineStart() &&
                    ( CH_TXTATR_BREAKWORD != cFldChr || nX > rInf.GetIdx() ) &&
                    ( CH_BLANK == rInf.GetChar( --nX ) ||
                      CH_FULL_BLANK == rInf.GetChar( nX ) ) )
                 nBreakPos = nX;
-#else
-            while( nX > rInf.GetLineStart() &&
-                   ( CH_TXTATR_BREAKWORD != cFldChr || nX > rInf.GetIdx() ) &&
-                   CH_BLANK == rInf.GetChar(--nX) )
-                nBreakPos = nX;
-#endif
             if( nBreakPos > rInf.GetIdx() )
                 nPorLen = nBreakPos - rInf.GetIdx();
         }
