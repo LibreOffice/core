@@ -4,9 +4,9 @@
  *
  *  $RCSfile: calc.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 15:55:17 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:49:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 
@@ -83,10 +82,6 @@
 #ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
 #endif
-#ifndef _SHL_HXX
-#include <tools/shl.hxx>
-#endif
-
 #ifndef _DOC_HXX
 #include <doc.hxx>
 #endif
