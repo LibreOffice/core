@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawsh.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 12:42:46 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:53:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #include <tools/shl.hxx>
@@ -46,9 +45,6 @@
 #endif
 #ifndef _SFX_WHITER_HXX //autogen
 #include <svtools/whiter.hxx>
-#endif
-#ifndef _SFXENUMITEM_HXX //autogen
-#include <svtools/eitem.hxx>
 #endif
 #ifndef _SVX_FONTWORK_HXX //autogen
 #include <svx/fontwork.hxx>
@@ -79,10 +75,6 @@
 #endif
 #ifndef _SVX_TBXCUSTOMSHAPES_HXX
 #include <svx/tbxcustomshapes.hxx>
-#endif
-
-#ifndef _SFXVIEWFRM_HXX
-#include <sfx2/viewfrm.hxx>
 #endif
 #ifndef _UITOOL_HXX
 #include <uitool.hxx>
