@@ -4,9 +4,9 @@
  *
  *  $RCSfile: num.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:52:33 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:43:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifndef _NUM_HXX
 #define _NUM_HXX
 
@@ -74,9 +73,6 @@
 #include "bmpwin.hxx" // BmpWindow
 
 class SwWrtShell;
-class SwDocShell;
-class SwUiNumRules;
-class SwCharFmt;
 class SvxBrushItem;
 class SwOutlineTabDialog;
 
@@ -100,18 +96,6 @@ struct SwBmpItemInfo
 #define NUM_PAGETYPE_NUM            2
 #define NUM_PAGETYPE_BMP            3
 #define PAGETYPE_USER_START         10
-
-
-
-/*-----------------08.02.97 10.48-------------------
-    struct aktuelle Numerierung, wird in einem PointerItem
-    uebertragen und von allen Tabpages geshared
---------------------------------------------------*/
-
-class SwNumValueSet;
-class ValueSet;
-class SwBmpNumValueSet;
-
 
 /*-----------------03.12.97 10:18-------------------
 
