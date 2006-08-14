@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docruby.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:14:30 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:59:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -69,9 +68,6 @@
 #endif
 #ifndef _RUBYLIST_HXX
 #include <rubylist.hxx>
-#endif
-#ifndef _NODE_HXX
-#include <node.hxx>
 #endif
 #ifndef _PAM_HXX
 #include <pam.hxx>
@@ -150,7 +146,7 @@ USHORT SwDoc::FillRubyList( const SwPaM& rPam, SwRubyList& rList,
 USHORT SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
                             USHORT nMode )
 {
-    StartUndo( UNDO_SETRUBYATTR );
+    StartUndo( UNDO_SETRUBYATTR, NULL );
     SvUShortsSort aDelArr;
     aDelArr.Insert( RES_TXTATR_CJK_RUBY );
 
@@ -182,7 +178,7 @@ USHORT SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
                     {
                         // set/reset the attribut
                         if( pEntry->GetRubyAttr().GetText().Len() )
-                            Insert( aPam, pEntry->GetRubyAttr() );
+                            Insert( aPam, pEntry->GetRubyAttr(), 0 );
                         else
                             ResetAttr( aPam, TRUE, &aDelArr );
                     }
@@ -211,7 +207,7 @@ USHORT SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
                         if( pEntry->GetRubyAttr().GetText().Len() &&
                             pEntry->GetText().Len() )
                         {
-                            Insert( aPam, pEntry->GetText() );
+                            Insert( aPam, pEntry->GetText(), true );
                             aPam.SetMark();
                             aPam.GetMark()->nContent -= pEntry->GetText().Len();
                             Insert( aPam, pEntry->GetRubyAttr(), SETATTR_DONTEXPAND );
@@ -226,7 +222,7 @@ USHORT SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
     } while( 30 > rList.Count() &&
         (_pStartCrsr=(SwPaM *)_pStartCrsr->GetNext()) != __pStartCrsr );
 
-    EndUndo( UNDO_SETRUBYATTR );
+    EndUndo( UNDO_SETRUBYATTR, NULL );
 
     return nListEntry;
 }
