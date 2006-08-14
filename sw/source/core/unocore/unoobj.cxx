@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 13:06:20 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:55:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -66,12 +65,6 @@
 #endif
 #ifndef _UNOCRSRHELPER_HXX
 #include <unocrsrhelper.hxx>
-#endif
-#ifndef _UNOCRSR_HXX
-#include <unocrsr.hxx>
-#endif
-#ifndef _PAM_HXX
-#include <pam.hxx>
 #endif
 #ifndef _SWUNDO_HXX //autogen
 #include <swundo.hxx>
@@ -117,9 +110,6 @@
 #ifndef _SWDOCSH_HXX //autogen
 #include <docsh.hxx>
 #endif
-#ifndef _SFXSTYLE_HXX //autogen
-#include <svtools/style.hxx>
-#endif
 #ifndef _DOCSTYLE_HXX //autogen
 #include <docstyle.hxx>
 #endif
@@ -159,9 +149,6 @@
 #ifndef _DOCTXM_HXX
 #include <doctxm.hxx>
 #endif
-#ifndef _TOX_HXX
-#include <tox.hxx>
-#endif
 #ifndef _SFX_DOCFILT_HACK_HXX //autogen
 #include <sfx2/docfilt.hxx>
 #endif
@@ -185,9 +172,6 @@
 #endif
 #ifndef _UNOMAP_HXX
 #include <unomap.hxx>
-#endif
-#ifndef SW_UNOMID_HXX
-#include <unomid.h>
 #endif
 #ifndef _UNOSETT_HXX
 #include <unosett.hxx>
@@ -219,22 +203,15 @@
 #ifndef _CTRLTOOL_HXX //autogen
 #include <svtools/ctrltool.hxx>
 #endif
-#ifndef _SFXENUMITEM_HXX
-#include <svtools/eitem.hxx>
-#endif
 #ifndef _FLYPOS_HXX
 #include <flypos.hxx>
 #endif
 #ifndef _TXTFTN_HXX //autogen
 #include <txtftn.hxx>
 #endif
-#ifndef _SECTION_HXX //autogen
-#include <section.hxx>
-#endif
 #ifndef _FMTFTN_HXX //autogen
 #include <fmtftn.hxx>
 #endif
-
 #ifndef _COM_SUN_STAR_TEXT_WRAPTEXTMODE_HPP_
 #include <com/sun/star/text/WrapTextMode.hpp>
 #endif
@@ -250,30 +227,17 @@
 #ifndef _COM_SUN_STAR_STYLE_XSTYLEFAMILIESSUPPLIER_HPP_
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
-#include <com/sun/star/container/XNameContainer.hpp>
-#endif
 #ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESUPPLIER_HPP_
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #endif
-#ifndef _COM_SUN_STAR_I18N_WORDTYPE_HPP_
-#include <com/sun/star/i18n/WordType.hpp>
-#endif
-
 #ifndef _UNOIDX_HXX
 #include <unoidx.hxx>
 #endif
 #ifndef _UNOFRAME_HXX
 #include <unoframe.hxx>
 #endif
-#ifndef _UNOCRSRHELPER_HXX
-#include <unocrsrhelper.hxx>
-#endif
 #ifndef _FMTHDFT_HXX //autogen
 #include <fmthdft.hxx>
-#endif
-#ifndef _OSL_MUTEX_HXX_ //autogen
-#include <osl/mutex.hxx>
 #endif
 #ifndef _VOS_MUTEX_HXX_ //autogen
 #include <vos/mutex.hxx>
@@ -290,14 +254,8 @@
 #ifndef _SVX_BRSHITEM_HXX //autogen
 #include <svx/brshitem.hxx>
 #endif
-#ifndef _SFXSTRITEM_HXX
-#include <svtools/stritem.hxx>
-#endif
 #ifndef _FMTCLDS_HXX //autogen
 #include <fmtclds.hxx>
-#endif
-#ifndef _RTL_UUID_H_
-#include <rtl/uuid.h>
 #endif
 #ifndef _DCONTACT_HXX
 #include <dcontact.hxx>
@@ -558,11 +516,11 @@ void lcl_SetTxtFmtColl(const uno::Any& rAny, SwPaM& rPaM)
     {
         SwTxtFmtColl *pLocal = pStyle->GetCollection();
         UnoActionContext aAction(pDoc);
-        pDoc->StartUndo( UNDO_START );
+        pDoc->StartUndo( UNDO_START, NULL );
         FOREACHUNOPAM_START(&rPaM)
             pDoc->SetTxtFmtColl(*PUNOPAM, pLocal);
         FOREACHUNOPAM_END()
-        pDoc->EndUndo( UNDO_END );
+        pDoc->EndUndo( UNDO_END, NULL );
     }
     else
     {
@@ -629,16 +587,16 @@ void lcl_SetNodeNumStart( SwPaM& rCrsr, uno::Any aValue )
 
     if( rCrsr.GetNext() != &rCrsr )         // Mehrfachselektion ?
     {
-        pDoc->StartUndo( UNDO_START );
+        pDoc->StartUndo( UNDO_START, NULL );
         SwPamRanges aRangeArr( rCrsr );
         SwPaM aPam( *rCrsr.GetPoint() );
         for( sal_uInt16 n = 0; n < aRangeArr.Count(); ++n )
         {
-            pDoc->SetNumRuleStart(*aRangeArr.SetPam( n, aPam ).GetPoint());
-            pDoc->SetNodeNumStart(*aRangeArr.SetPam( n, aPam ).GetPoint(),
-                                  nStt );
+          pDoc->SetNumRuleStart(*aRangeArr.SetPam( n, aPam ).GetPoint());
+          pDoc->SetNodeNumStart(*aRangeArr.SetPam( n, aPam ).GetPoint(),
+                    nStt );
         }
-        pDoc->EndUndo( UNDO_END );
+        pDoc->EndUndo( UNDO_END, NULL);
     }
     else
     {
@@ -674,14 +632,14 @@ sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertyMap* pMap,
                     for(sal_Int32 nStyle = 0; nStyle < aCharStyles.getLength(); nStyle++)
                     {
                         Any aStyle;
-                        rPam.GetDoc()->StartUndo( UNDO_START );
+                        rPam.GetDoc()->StartUndo( UNDO_START, NULL);
                         aStyle <<= aCharStyles.getConstArray()[nStyle];
                         //create a local set and apply each format directly
                         SfxItemSet aSet(rPam.GetDoc()->GetAttrPool(), RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT );
                         lcl_setCharStyle(rPam.GetDoc(), aStyle, aSet );
                         //the first style should replace the current attributes, all other have to be added
                         SwXTextCursor::SetCrsrAttr(rPam, aSet, nStyle ? CRSR_ATTR_MODE_DONTREPLACE : 0);
-                        rPam.GetDoc()->EndUndo( UNDO_START );
+                        rPam.GetDoc()->EndUndo( UNDO_START, NULL );
                     }
                 }
                 else
@@ -1041,7 +999,7 @@ void SwXTextCursor::DeleteAndInsert(const String& rText)
         SwDoc* pDoc = pUnoCrsr->GetDoc();
         UnoActionContext aAction(pDoc);
         xub_StrLen nTxtLen = rText.Len();
-        pDoc->StartUndo(UNDO_INSERT);
+        pDoc->StartUndo(UNDO_INSERT, NULL);
         SwCursor *_pStartCrsr = pUnoCrsr;
         do
         {
@@ -1059,7 +1017,7 @@ void SwXTextCursor::DeleteAndInsert(const String& rText)
                 _pStartCrsr->Left(rText.Len(), CRSR_SKIP_CHARS, FALSE, FALSE);
             }
         } while( (_pStartCrsr=(SwCursor*)_pStartCrsr->GetNext()) != pUnoCrsr );
-        pDoc->EndUndo(UNDO_INSERT);
+        pDoc->EndUndo(UNDO_INSERT, NULL);
     }
 }
 /* -----------------------------10.03.00 18:02--------------------------------
@@ -1203,7 +1161,7 @@ void SwXTextCursor::gotoStart(sal_Bool Expand) throw( uno::RuntimeException )
             }
             if(pCont)
                 pUnoCrsr->GetPoint()->nContent.Assign(pCont, 0);
-            const SwStartNode* pTmp = pUnoCrsr->GetNode()->FindStartNode();
+            const SwStartNode* pTmp = pUnoCrsr->GetNode()->StartOfSectionNode();
             if(pTmp->IsSectionNode())
             {
                 SwSectionNode* pSectionStartNode = (SwSectionNode*)pTmp;
@@ -1311,11 +1269,11 @@ void SwXTextCursor::gotoRange(const uno::Reference< XTextRange > & xRange, sal_B
     //SectionNodes ueberspringen
     while(pTmp && pTmp->IsSectionNode())
     {
-        pTmp = pTmp->FindStartNode();
+        pTmp = pTmp->StartOfSectionNode();
     }
     while(pOwnStartNode && pOwnStartNode->IsSectionNode())
     {
-        pOwnStartNode = pOwnStartNode->FindStartNode();
+        pOwnStartNode = pOwnStartNode->StartOfSectionNode();
     }
     if(pOwnStartNode != pTmp)
     {
