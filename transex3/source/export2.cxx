@@ -4,9 +4,9 @@
  *
  *  $RCSfile: export2.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 17:21:42 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:09:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,6 @@
 #include "export.hxx"
 #include "utf8conv.hxx"
 #include <tools/datetime.hxx>
-#include <bootstrp/appdef.hxx>
 #include <tools/isofallback.hxx>
 #include <stdio.h>
 #include <osl/time.h>
@@ -267,7 +266,7 @@ bool Export::isMergingGermanAllowed( const ByteString& rPrj ){
         return aHash[ rPrj ];
     }
 
-    ByteString sFile = GetEnv( "SRC_ROOT" ) ;
+    ByteString sFile = Export::GetEnv( "SRC_ROOT" ) ;
     sFile.Append("/");
     sFile.Append( rPrj );
     sFile.Append("/prj/l10n");
@@ -339,7 +338,6 @@ void Export::InitLanguages( bool bMergeMode ){
             sTmp = sLanguages.GetToken( x, ',' ).GetToken( 0, '=' );
             sTmp.EraseLeadingAndTrailingChars();
             if( bMergeMode && !isAllowed( sTmp ) ){}
-            //if( bMergeMode && ( sTmp.EqualsIgnoreCaseAscii("de") || sTmp.EqualsIgnoreCaseAscii("en-US") )){}
             else if( !( (sTmp.GetChar(0)=='x' || sTmp.GetChar(0)=='X') && sTmp.GetChar(1)=='-' ) ){
                 aLanguages.push_back( sTmp );
             }
@@ -357,7 +355,6 @@ void Export::InitForcedLanguages( bool bMergeMode ){
         sTmp = sForcedLanguages.GetToken( x, ',' ).GetToken( 0, '=' );
         sTmp.EraseLeadingAndTrailingChars();
         if( bMergeMode && isAllowed( sTmp ) ){}
-        //if( bMergeMode && ( sTmp.EqualsIgnoreCaseAscii("de") || sTmp.EqualsIgnoreCaseAscii("en-US") )){}
         else if( !( (sTmp.GetChar(0)=='x' || sTmp.GetChar(0)=='X') && sTmp.GetChar(1)=='-' ) )
             aForcedLanguages.push_back( sTmp );
     }
@@ -380,7 +377,6 @@ void Export::FillInFallbacks( ResData *pResData )
     for( unsigned int n = 0; n < aLanguages.size(); n++ ){
         sCur = aLanguages[ n ];
         if( isAllowed( sCur )  ){
-        //if( !sCur.EqualsIgnoreCaseAscii("de") && !sCur.EqualsIgnoreCaseAscii("en-US") ){
             ByteString nFallbackIndex = GetFallbackLanguage( sCur );
             if( nFallbackIndex.Len() ){
                 if ( !pResData->sText[ sCur ].Len())
@@ -501,6 +497,15 @@ ByteString Export::GetNativeFile( ByteString sSource )
     return "";
 }
 
+const char* Export::GetEnv( const char *pVar )
+{
+        char *pRet = getenv( pVar );
+        if ( !pRet )
+            pRet = 0;
+        return pRet;
+}
+
+
 int Export::getCurrentDirectory( rtl::OUString& base_fqurl_out, rtl::OUString& base_out )
 {
     DirEntry aDir(".");
@@ -556,7 +561,7 @@ DirEntry Export::GetTempFile()
 /*****************************************************************************/
 {
 #ifdef WNT
-    String sTempDir( GetEnv( "TEMP" ), RTL_TEXTENCODING_ASCII_US );
+    String sTempDir( Export::GetEnv( "TEMP" ), RTL_TEXTENCODING_ASCII_US );
 #else
     String sTempDir( String::CreateFromAscii( "/tmp" ));
 #endif
