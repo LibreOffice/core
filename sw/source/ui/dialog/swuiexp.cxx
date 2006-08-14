@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swuiexp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:15:56 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:33:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,16 +32,11 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifdef SW_DLLIMPLEMENTATION
 #undef SW_DLLIMPLEMENTATION
 #endif
 
 #include "swdlgfact.hxx"
-
-#ifndef _SAL_TYPES_H_
-#include "sal/types.h"
-#endif
 
 namespace swui
 {
