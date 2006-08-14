@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accfrmobj.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:49:06 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:43:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,19 +34,21 @@
  ************************************************************************/
 #ifndef _ACCFRMOBJ_HXX
 #define _ACCFRMOBJ_HXX
-
 #ifndef _FLYFRM_HXX
 #include <flyfrm.hxx>
 #endif
+
 #ifndef _CELLFRM_HXX
 #include <cellfrm.hxx>
 #endif
+
 #ifndef _PAGEFRM_HXX
 #include <pagefrm.hxx>
 #endif
 #ifndef _DFLYOBJ_HXX
 #include <dflyobj.hxx>
 #endif
+
 #ifndef _SWTABLE_HXX
 #include <swtable.hxx>
 #endif
