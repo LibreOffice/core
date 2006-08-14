@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 01:16:32 $
+#   last change: $Author: hr $ $Date: 2006-08-14 16:22:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,8 @@ TARGET=macros
 COMPLETELANGISO_VAR:=$(uniq $(completelangiso) $(alllangiso))
 .EXPORT : COMPLETELANGISO_VAR
 
-CUSTOM_IMAGE_SETS:=$(CUSTOM_IMAGE_SETS)
+# used here to force expanding before export
+CUSTOM_IMAGE_SETS!:=$(CUSTOM_IMAGE_SETS)
 .EXPORT : CUSTOM_IMAGE_SETS
 
 ALLTAR : $(INCCOM)$/langmacros.inc $(INCCOM)$/images.inc
