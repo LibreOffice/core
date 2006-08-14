@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ddefld.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:39:48 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:19:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,7 +91,6 @@ public:
     BOOL IsDeleted() const          { return bDeleted; }
     void SetDeleted( BOOL b )       { bDeleted = b; }
 
-    BOOL IsConnected() const        { return 0 != refLink->GetObj(); }
     void UpdateNow()                { refLink->Update(); }
     void Disconnect()               { refLink->Disconnect(); }
 
@@ -106,7 +105,6 @@ public:
     void DecRefCnt() {  if( !--nRefCnt && pDoc ) _RefCntChgd(); }
 
     void SetCRLFDelFlag( BOOL bFlag = TRUE )    { bCRLFFlag = bFlag; }
-    BOOL IsCRLFDelFlag() const                  { return bCRLFFlag; }
 };
 
 /*--------------------------------------------------------------------
