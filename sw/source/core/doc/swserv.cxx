@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swserv.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:19:01 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:02:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -66,13 +65,9 @@
 #ifndef _PAM_HXX
 #include <pam.hxx>
 #endif
-#ifndef _NODE_HXX
-#include <node.hxx>
-#endif
 #ifndef _SHELLIO_HXX
 #include <shellio.hxx>
 #endif
-
 #ifndef _SWERROR_H
 #include <swerror.h>
 #endif
