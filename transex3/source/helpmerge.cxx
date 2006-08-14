@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpmerge.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 16:22:00 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:10:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,10 +45,8 @@
 #include <fstream>
 #include <vector>
 #include "rtl/strbuf.hxx"
-#include <bootstrp/appdef.hxx>
 /*****************************************************************************/
-void HelpParser::FillInFallbacks( LangHashMap& rElem_out, //int nLangIdx_in ){
-                                                            ByteString sLangIdx_in ){
+void HelpParser::FillInFallbacks( LangHashMap& rElem_out, ByteString sLangIdx_in ){
 /*****************************************************************************/
     static const ByteString ENGLISH_LANGUAGECODE( "en-US" );
     static const ByteString GERMAN_LANGUAGECODE ( "de"    );
@@ -434,7 +432,7 @@ bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile 
     ByteString sTempFile;
     ByteString sTargetFile( sPath );
 
-    static const ByteString INPATH = GetEnv( "INPATH" );
+    static const ByteString INPATH = Export::GetEnv( "INPATH" );
     Export::getRandomName( sPath , sTempFile , INPATH );
 
     // Write in the temp file
