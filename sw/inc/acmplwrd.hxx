@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acmplwrd.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:32:11 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:15:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,14 +63,11 @@ public:
 
     BOOL GetRange( const String& rWord, USHORT& rStt, USHORT& rEnd ) const;
 
-    USHORT Count() const { return aWordLst.Count(); }
-
     const String& operator[]( USHORT n ) const { return *aWordLst[ n ]; }
 
     BOOL IsLockWordLstLocked() const        { return bLockWordLst; }
     void SetLockWordLstLocked( BOOL bFlag ) { bLockWordLst = bFlag; }
 
-    USHORT GetMaxCount() const              { return nMaxCount; }
     void SetMaxCount( USHORT n );
 
     USHORT GetMinWordLen() const                { return nMinWrdLen; }
