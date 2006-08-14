@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accheaderfooter.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:50:59 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:44:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,13 +34,8 @@
  ************************************************************************/
 #ifndef _ACCHEADERFOOTER_HXX
 #define _ACCHEADERFOOTER_HXX
-
 #ifndef _ACCCONTEXT_HXX
 #include "acccontext.hxx"
-#endif
-
-#ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
-#include <com/sun/star/uno/RuntimeException.hpp>
 #endif
 
 class SwHeaderFrm;
