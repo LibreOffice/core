@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:31:07 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:47:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,9 +32,7 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #pragma hdrstop
-
 #include <hintids.hxx>
 
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
@@ -61,10 +59,6 @@
 #ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
 #endif
-#ifndef _SHL_HXX //autogen
-#include <tools/shl.hxx>
-#endif
-
 #ifndef _TXTFLD_HXX //autogen
 #include <txtfld.hxx>
 #endif
@@ -137,9 +131,6 @@
 #ifndef _ERRHDL_HXX
 #include <errhdl.hxx>
 #endif
-#ifndef _FMTCOL_HXX
-#include <fmtcol.hxx>
-#endif
 #ifndef _PARATR_HXX
 #include <paratr.hxx>
 #endif
@@ -154,9 +145,6 @@
 #endif
 #ifndef _ROOTFRM_HXX
 #include <rootfrm.hxx>
-#endif
-#ifndef _HINTS_HXX
-#include <hints.hxx>                // fuer SwFmtChg in ChgTxtColl
 #endif
 #ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx>             // fuer SwPageDesc
@@ -282,10 +270,10 @@ SwTxtNode *SwNodes::MakeTxtNode( const SwNodeIndex & rWhere,
             return pNode;
 
         case ND_ENDNODE:
-            if( pNd->FindStartNode()->IsSectionNode() &&
+            if( pNd->StartOfSectionNode()->IsSectionNode() &&
                 aTmp.GetIndex() < rWhere.GetIndex() )
             {
-                if( pNd->FindStartNode()->GetSectionNode()->GetSection().IsHiddenFlag())
+                if( pNd->StartOfSectionNode()->GetSectionNode()->GetSection().IsHiddenFlag())
                 {
                     if( !GoPrevSection( &aTmp, TRUE, FALSE ) ||
                         aTmp.GetNode().FindTableNode() !=
@@ -293,14 +281,14 @@ SwTxtNode *SwNodes::MakeTxtNode( const SwNodeIndex & rWhere,
                         return pNode;       // schade, das wars
                 }
                 else
-                    aTmp = *pNd->FindStartNode();
+                    aTmp = *pNd->StartOfSectionNode();
                 break;
             }
-            else if( pNd->FindStartNode()->IsTableNode() &&
+            else if( pNd->StartOfSectionNode()->IsTableNode() &&
                     aTmp.GetIndex() < rWhere.GetIndex() )
             {
                 // wir stehen hinter einem TabellenNode
-                aTmp = *pNd->FindStartNode();
+                aTmp = *pNd->StartOfSectionNode();
                 break;
             }
             // kein break !!!
@@ -1029,7 +1017,7 @@ void SwTxtNode::Update( const SwIndex & aPos, xub_StrLen nLen,
                 }
             }
 
-        const SwBookmarks& rBkmk = GetDoc()->GetBookmarks();
+        const SwBookmarks& rBkmk = getIDocumentBookmarkAccess()->getBookmarks();
         for( USHORT i = 0; i < rBkmk.Count(); ++i )
         {
             // Bookmarks must never grow to either side, when
@@ -2301,7 +2289,7 @@ SwNumRule* SwTxtNode::_GetNumRule(BOOL bInParent) const
         }
 
         if ( !pRet &&
-             GetDoc()->IsOutlineLevelYieldsOutlineRule() &&
+             GetDoc()->get(IDocumentSettingAccess::OUTLINE_LEVEL_YIELDS_OUTLINE_RULE) &&
              GetOutlineLevel() != NO_NUMBERING )
         {
             pRet = GetDoc()->GetOutlineNumRule();
@@ -2401,14 +2389,6 @@ SwNumRule * SwTxtNode::GetNumRuleSync(BOOL bInParent)
 
 void SwTxtNode::NumRuleChgd()
 {
-#ifndef NUM_RELSPACE
-
-    // 6969: Aktualisierung der NumPortions auch bei leeren Zeilen!
-    SwInsTxt aHint( 0, 0 );
-    SwModify::Modify( 0, &aHint );
-
-#else
-
     if( IsInCache() )
     {
         SwFrm::GetCache().Delete( this );
@@ -2419,8 +2399,6 @@ void SwTxtNode::NumRuleChgd()
     SvxLRSpaceItem& rLR = (SvxLRSpaceItem&)GetSwAttrSet().GetLRSpace();
 
     SwModify::Modify( &rLR, &rLR );
-
-#endif
 }
 
 // -> #i27615#
@@ -2699,7 +2677,7 @@ BOOL SwTxtNode::GetFirstLineOfsWithNum( short& rFLOffset ) const
             rFLOffset = pRule->Get( GetNum()->GetLevel() ).GetFirstLineOffset();
             // <--
 
-            if (! GetDoc()->IgnoreFirstLineIndentInNumbering())
+            if (!getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING))
             {
                 SvxLRSpaceItem aItem = GetSwAttrSet().GetLRSpace();
 
@@ -2950,7 +2928,7 @@ XubString SwTxtNode::GetRedlineTxt( xub_StrLen nIdx, xub_StrLen nLen,
 {
     SvUShorts aRedlArr;
     const SwDoc* pDoc = GetDoc();
-    USHORT nRedlPos = pDoc->GetRedlinePos( *this, REDLINE_DELETE );
+    USHORT nRedlPos = pDoc->GetRedlinePos( *this, IDocumentRedlineAccess::REDLINE_DELETE );
     if( USHRT_MAX != nRedlPos )
     {
         // es existiert fuer den Node irgendein Redline-Delete-Object
@@ -2958,7 +2936,7 @@ XubString SwTxtNode::GetRedlineTxt( xub_StrLen nIdx, xub_StrLen nLen,
         for( ; nRedlPos < pDoc->GetRedlineTbl().Count() ; ++nRedlPos )
         {
             const SwRedline* pTmp = pDoc->GetRedlineTbl()[ nRedlPos ];
-            if( REDLINE_DELETE == pTmp->GetType() )
+            if( IDocumentRedlineAccess::REDLINE_DELETE == pTmp->GetType() )
             {
                 const SwPosition *pRStt = pTmp->Start(), *pREnd = pTmp->End();
                 if( pRStt->nNode < nNdIdx )
@@ -3457,3 +3435,26 @@ bool SwTxtNode::IsFirstOfNumRule() const
 
     return bResult;
 }
+
+void SwTxtNode::CalcHiddenCharFlags() const
+{
+    xub_StrLen nStartPos;
+    xub_StrLen nEndPos;
+    // Update of the flags is done inside GetBoundsOfHiddenRange()
+    SwScriptInfo::GetBoundsOfHiddenRange( *this, 0, nStartPos, nEndPos );
+}
+
+// --> FME 2004-06-08 #i12836# enhanced pdf export
+bool SwTxtNode::IsHidden() const
+{
+    if ( HasHiddenParaField() || HasHiddenCharAttribute( true ) )
+        return true;
+
+    const SwSectionNode* pSectNd = FindSectionNode();
+    if ( pSectNd && pSectNd->GetSection().IsHiddenFlag() )
+        return true;
+
+    return false;
+}
+// <--
+
