@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doccorr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:10:37 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:56:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #ifndef _DOC_HXX
@@ -50,9 +49,6 @@
 #endif
 #ifndef _VISCRS_HXX
 #include <viscrs.hxx>
-#endif
-#ifndef _PAM_HXX
-#include <pam.hxx>
 #endif
 #ifndef _BOOKMRK_HXX
 #include <bookmrk.hxx>
