@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldfunc.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:35:17 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:37:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifdef SW_DLLIMPLEMENTATION
 #undef SW_DLLIMPLEMENTATION
 #endif
@@ -47,11 +46,6 @@
 #ifndef _BASMGR_HXX //autogen
 #include <basic/basmgr.hxx>
 #endif
-
-#ifndef _SB_SBSTAR_HXX //autogen
-#include <basic/sbstar.hxx>
-#endif
-
 #ifndef _SB_SBMOD_HXX //autogen
 #include <basic/sbmod.hxx>
 #endif
