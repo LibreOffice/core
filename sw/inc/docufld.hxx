@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docufld.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 14:46:21 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:20:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -163,7 +163,6 @@ public:
     String& Expand( sal_uInt32 nFmt, short nOff, const String&, String& rRet ) const;
     void ChangeExpansion( SwDoc* pDoc, USHORT nNum, USHORT nMax,
                             BOOL bVirtPageNum, const sal_Int16* pNumFmt = 0 );
-    inline sal_Int16 GetNumFormat() const { return nNumberingType; }
     virtual SwFieldType* Copy() const;
 };
 
@@ -309,7 +308,6 @@ public:
     String                  Expand(USHORT nSubType, sal_uInt32 nFmt) const;
     virtual SwFieldType*    Copy() const;
 
-    inline sal_Int16        GetNumFormat() const        { return nNumberingType; }
     inline void             SetNumFormat( sal_Int16 eFmt )  { nNumberingType = eFmt; }
 };
 
@@ -390,9 +388,6 @@ public:
     void                Evaluate(SwDoc*);
 
     inline void         SetValue(BOOL bHidden)  { bIsHidden = bHidden; }
-    inline BOOL         GetValue() const        { return bIsHidden;    }
-    inline BOOL         IsConditional() const   { return bCanToggle;   }
-    inline BOOL         IsValid() const         { return bValid;       }
     String              GetColumnName(const String& rName);
     String              GetDBName(const String& rName, SwDoc *pDoc);
 
@@ -534,7 +529,6 @@ public:
     virtual SwField*        Copy() const;
 
     inline const Date&      GetDate() const                 { return aDate; }
-    inline void             SetDate( const Date& rDate )    { aDate = rDate;}
 
     // Author
     virtual const String&   GetPar1() const;
@@ -594,7 +588,6 @@ class SwExtUserFieldType : public SwFieldType
 public:
     SwExtUserFieldType();
 
-    inline const String&    GetData() const                 { return aData; }
     inline void             SetData(const String& rStr)     { aData = rStr; }
 
     String                  Expand(USHORT nSubType, sal_uInt32 nFormat) const;
@@ -616,7 +609,6 @@ public:
     virtual void        SetSubType(USHORT nSub);
 
     inline void         SetExpansion(const String& rStr) { aContent = rStr; }
-    inline const String& GetContent() const { return aContent; }
 
     virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMId ) const;
     virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMId );
@@ -657,7 +649,6 @@ public:
     virtual void    SetPar2(const String& rStr);
 
     BOOL IsOn() const               { return bOn; }
-    void SetOn( BOOL bFlag )        { bOn = bFlag; }
 
     short GetOffset() const         { return nOffset; }
     void SetOffset( short nOff )    { nOffset = nOff; }
@@ -684,8 +675,6 @@ public:
     virtual void Modify( SfxPoolItem *, SfxPoolItem * );
     USHORT MakeSetList( _SetGetExpFlds& rTmpLst );
 
-    sal_Int16       GetNumFormat() const            { return nNumberingType; }
-    void            SetNumFormat( sal_Int16 eFmt )  { nNumberingType = eFmt; }
     SwDoc*  GetDoc() const                  { return pDoc; }
 };
 
@@ -703,7 +692,6 @@ public:
     virtual SwField*    Copy() const;
 
     void SetText( const String& rTxt )      { sTxt = rTxt; }
-    const String& GetText() const           { return sTxt; }
 
     void ChangeExpansion( const SwFrm* pFrm, const SwTxtFld* pFld );
     virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMId ) const;
@@ -722,9 +710,6 @@ class SwJumpEditFieldType : public SwFieldType
 public:
     SwJumpEditFieldType( SwDoc* pDoc );
     virtual SwFieldType*    Copy() const;
-
-          SwDoc* GetDoc()               { return pDoc; }
-    const SwDoc* GetDoc() const         { return pDoc; }
 
     SwCharFmt* GetCharFmt();
 };
@@ -793,7 +778,6 @@ public:
     // Text
     virtual String          GetPar2() const;
     virtual void            SetPar2(const String& rStr);
-    const String&           GetCode() const { return sCode; }
 
     BOOL                    IsCodeURL() const { return bCodeURL; }
     void                    SetCodeURL( BOOL bURL ) { bCodeURL = bURL; }
