@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 11:48:32 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:37:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -100,9 +99,6 @@
 #ifndef _SV_WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
 #endif
-#ifndef _SHL_HXX //autogen
-#include <tools/shl.hxx>
-#endif
 #ifndef _VIEWSH_HXX
 #include <viewsh.hxx>   // ViewShell
 #endif
@@ -112,8 +108,11 @@
 #ifndef _FRMTOOL_HXX
 #include <frmtool.hxx>  // DrawGraphic
 #endif
-#ifndef _DOC_HXX
-#include <doc.hxx>      // SwDoc
+#ifndef IDOCUMENTSETTINGACCESS_HXX_INCLUDED
+#include <IDocumentSettingAccess.hxx>
+#endif
+#ifndef IDOCUMENTDEVICEACCESS_HXX_INCLUDED
+#include <IDocumentDeviceAccess.hxx>
 #endif
 #ifndef _PARATR_HXX
 #include <paratr.hxx>   // SwFmtDrop
@@ -124,20 +123,11 @@
 #ifndef _INFTXT_HXX
 #include <inftxt.hxx>   // SwTxtInfo
 #endif
-#ifndef _SWFONT_HXX
-#include <swfont.hxx>   // SwFont
-#endif
-#ifndef _TXTFLY_HXX
-#include <txtfly.hxx>   // SwTxtPaintInfo
-#endif
 #ifndef _BLINK_HXX
 #include <blink.hxx>    // SwBlink
 #endif
 #ifndef _NOTEURL_HXX
 #include <noteurl.hxx>  // SwNoteURL
-#endif
-#ifndef _DRAWFONT_HXX
-#include <drawfont.hxx> // SwDrawTextInfo
 #endif
 #ifndef _PORFTN_HXX
 #include <porftn.hxx>   // SwFtnPortion
@@ -175,10 +165,8 @@ using namespace ::com::sun::star::beans;
 #define CHAR_LINEBREAK ((sal_Unicode)0x21B5)
 #define CHAR_LINEBREAK_RTL ((sal_Unicode)0x21B3)
 
-#ifdef BIDI
 #define DRAW_SPECIAL_OPTIONS_CENTER 1
 #define DRAW_SPECIAL_OPTIONS_ROTATE 2
-#endif
 
 // --> OD 2006-06-27 #b6440955#
 // variable moved to class <numfunc:GetDefBulletConfig>
@@ -336,12 +324,15 @@ void SwTxtSizeInfo::CtorInit( SwTxtFrm *pFrame, SwFont *pNewFnt,
     else
     {
         //Zugriff ueber StarONE, es muss keine Shell existieren oder aktiv sein.
-        if ( pNd->GetDoc()->IsBrowseMode() ) //?!?!?!?
+        if ( pNd->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+        {
             //in Ermangelung eines Besseren kann hier ja wohl nur noch das
             //AppWin genommen werden?
             pOut = GetpApp()->GetDefaultDevice();
+        }
         else
-            pOut = pNd->GetDoc()->GetPrt(); //Muss es geben (oder sal_True uebergeben?)
+            pOut = pNd->getIDocumentDeviceAccess()->getPrinter( false );
+
         pRef = pOut;
     }
 
@@ -380,13 +371,11 @@ void SwTxtSizeInfo::CtorInit( SwTxtFrm *pFrame, SwFont *pNewFnt,
     //
     pOpt = pVsh ?
            pVsh->GetViewOptions() :
-           SW_MOD()->GetViewOption(pNd->GetDoc()->IsHTMLMode()); //Options vom Module wg. StarONE
+           SW_MOD()->GetViewOption( pNd->getIDocumentSettingAccess()->get(IDocumentSettingAccess::HTML_MODE) ); //Options vom Module wg. StarONE
 
     // bURLNotify wird gesetzt, wenn MakeGraphic dies vorbereitet
-    // TODO: Aufdröseln
+    // TODO: Aufdr?seln
     bURLNotify = pNoteURL && !bOnWin;
-//    bURLNotify = pNoteURL && !bOnWin
-//        && (pOut && OUTDEV_PRINTER != pOut->GetOutDevType());
 
     SetSnapToGrid( pNd->GetSwAttrSet().GetParaGrid().GetValue() &&
                    pFrm->IsInDocBody() );
@@ -401,9 +390,6 @@ void SwTxtSizeInfo::CtorInit( SwTxtFrm *pFrame, SwFont *pNewFnt,
     bStopUnderFlow = bFtnInside = sal_False;
     bMulti = bFirstMulti = bRuby = bHanging = bScriptSpace =
         bForbiddenChars = sal_False;
-#ifndef BIDI
-    nDirection = DIR_LEFT2RIGHT;
-#endif
 
     SetLen( GetMinLen( *this ) );
 }
@@ -827,7 +813,6 @@ void SwTxtPaintInfo::CalcRect( const SwLinePortion& rPor,
         aPoint.B() = Y() - rPor.GetAscent();
     }
 
-#ifdef BIDI
     // Adjust x coordinate if we are inside a bidi portion
     const BOOL bFrmDir = GetTxtFrm()->IsRightToLeft();
     BOOL bCounterDir = ( ! bFrmDir && DIR_RIGHT2LEFT == GetDirection() ) ||
@@ -835,14 +820,11 @@ void SwTxtPaintInfo::CalcRect( const SwLinePortion& rPor,
 
     if ( bCounterDir )
         aPoint.A() -= aSize.Width();
-#endif
 
     SwRect aRect( aPoint, aSize );
 
-#ifdef BIDI
     if ( GetTxtFrm()->IsRightToLeft() )
         GetTxtFrm()->SwitchLTRtoRTL( aRect );
-#endif
 
     if ( GetTxtFrm()->IsVertical() )
         GetTxtFrm()->SwitchHorizontalToVertical( aRect );
@@ -987,14 +969,10 @@ static void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rP
 
     Point aTmpPos( nX, nY );
     ((SwTxtPaintInfo&)rInf).SetPos( aTmpPos );
-#ifdef BIDI
     USHORT nOldWidth = rPor.Width();
     ((SwLinePortion&)rPor).Width( (USHORT)aFontSize.Width() );
     rInf.DrawText( aTmp, rPor );
     ((SwLinePortion&)rPor).Width( nOldWidth );
-#else
-    rInf.DrawText( aTmp, rPor );
-#endif
     ((SwTxtPaintInfo&)rInf).SetFont( (SwFont*)pOldFnt );
     ((SwTxtPaintInfo&)rInf).SetPos( aOldPos );
 }
@@ -1035,16 +1013,11 @@ void SwTxtPaintInfo::DrawTab( const SwLinePortion &rPor ) const
         if ( ! aRect.HasArea() )
             return;
 
-#ifdef BIDI
         const sal_Unicode cChar = GetTxtFrm()->IsRightToLeft() ?
                                   CHAR_TAB_RTL : CHAR_TAB;
         const BYTE nOptions = DRAW_SPECIAL_OPTIONS_CENTER |
                               DRAW_SPECIAL_OPTIONS_ROTATE;
         lcl_DrawSpecial( *this, rPor, aRect, 0, cChar, nOptions );
-#else
-        lcl_DrawSpecial( *this, rPor, aRect, 0, CHAR_TAB, sal_True, sal_True );
-#endif
-
     }
 }
 
@@ -1064,15 +1037,10 @@ void SwTxtPaintInfo::DrawLineBreak( const SwLinePortion &rPor ) const
 
         if( aRect.HasArea() )
         {
-#ifdef BIDI
             const sal_Unicode cChar = GetTxtFrm()->IsRightToLeft() ?
                                       CHAR_LINEBREAK_RTL : CHAR_LINEBREAK;
             const BYTE nOptions = 0;
             lcl_DrawSpecial( *this, rPor, aRect, 0, cChar, nOptions );
-#else
-            lcl_DrawSpecial( *this, rPor, aRect, 0, CHAR_LINEBREAK,
-                             sal_False, sal_False );
-#endif
         }
 
         ((SwLinePortion&)rPor).Width( nOldWidth );
@@ -1113,12 +1081,8 @@ void SwTxtPaintInfo::DrawRedArrow( const SwLinePortion &rPor ) const
 
     if( aRect.HasArea() )
     {
-#ifdef BIDI
         const BYTE nOptions = 0;
         lcl_DrawSpecial( *this, rPor, aRect, &aCol, cChar, nOptions );
-#else
-        lcl_DrawSpecial( *this, rPor, aRect, &aCol, cChar, sal_False, sal_False );
-#endif
     }
 }
 
@@ -1163,10 +1127,8 @@ void SwTxtPaintInfo::DrawPostIts( const SwLinePortion &rPor, sal_Bool bScript ) 
 
         SwRect aTmpRect( aTmp, aSize );
 
-#ifdef BIDI
         if ( GetTxtFrm()->IsRightToLeft() )
             GetTxtFrm()->SwitchLTRtoRTL( aTmpRect );
-#endif
 
         if ( GetTxtFrm()->IsVertical() )
             GetTxtFrm()->SwitchHorizontalToVertical( aTmpRect );
@@ -1593,7 +1555,7 @@ xub_StrLen SwTxtFormatInfo::ScanPortionEnd( const xub_StrLen nStart,
     // <--
 
     bool bNumFound = false;
-    const bool bTabCompat = GetVsh()->IsTabCompat();
+    const bool bTabCompat = GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_COMPAT);
 
     // Removed for i7288. bSkip used to be passed from SwFldPortion::Format
     // as IsFollow(). Therefore more than one special character was not
