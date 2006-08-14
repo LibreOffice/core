@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bookmrk.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:02:22 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:50:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,28 +33,24 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
+#ifndef _BOOKMRK_HXX
+#include <bookmrk.hxx>
+#endif
 #ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
-#endif
-#ifndef _DOC_HXX
-#include <doc.hxx>
 #endif
 #ifndef _PAM_HXX
 #include <pam.hxx>
 #endif
-#ifndef _BOOKMRK_HXX
-#include <bookmrk.hxx>
-#endif
 #ifndef _SWSERV_HXX
 #include <swserv.hxx>
 #endif
-
 #ifndef _ERRHDL_HXX //autogen
 #include <errhdl.hxx>
 #endif
+#include <IDocumentBookmarkAccess.hxx>
 
 SV_IMPL_REF( SwServerObject )
 
@@ -66,7 +62,7 @@ SwBookmark::SwBookmark(const SwPosition& aPos)
     pPos2( 0 ),
     aStartMacro( aEmptyStr, aEmptyStr ),
     aEndMacro  ( aEmptyStr, aEmptyStr ),
-    eMarkType( BOOKMARK )
+    eMarkType( IDocumentBookmarkAccess::BOOKMARK )
 {
     pPos1 = new SwPosition( aPos );
 }
@@ -81,7 +77,7 @@ SwBookmark::SwBookmark(const SwPosition& aPos, const KeyCode& rCode,
     aName(rName),
     aShortName(rShortName),
     aCode(rCode),
-    eMarkType( BOOKMARK )
+    eMarkType( IDocumentBookmarkAccess::BOOKMARK )
 {
     pPos1 = new SwPosition(aPos);
 }
@@ -96,7 +92,7 @@ SwBookmark::~SwBookmark()
     // ausgeloest.
     if( refObj.Is() )
     {
-        if( DDE_BOOKMARK == eMarkType && refObj->HasDataLinks() )
+        if( IDocumentBookmarkAccess::DDE_BOOKMARK == eMarkType && refObj->HasDataLinks() )
         {
             ::sfx2::SvLinkSource* p = &refObj;
             p->SendDataChanged();
@@ -146,7 +142,7 @@ SwMark::SwMark( const SwPosition& aPos,
                 const String& rShortName )
     : SwBookmark( aPos, rCode, rName, rShortName )
 {
-    eMarkType = MARK;
+    eMarkType = IDocumentBookmarkAccess::MARK;
 }
 
 SwUNOMark::SwUNOMark( const SwPosition& aPos,
@@ -155,6 +151,6 @@ SwUNOMark::SwUNOMark( const SwPosition& aPos,
                 const String& rShortName )
     : SwBookmark( aPos, rCode, rName, rShortName )
 {
-    eMarkType = UNO_BOOKMARK;
+    eMarkType = IDocumentBookmarkAccess::UNO_BOOKMARK;
 }
 
