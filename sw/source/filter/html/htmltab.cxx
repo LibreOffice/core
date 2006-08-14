@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmltab.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:45:55 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:05:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 //#define TEST_RESIZE
-
 
 #pragma hdrstop
 
@@ -3916,11 +3915,6 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, sal_Bool bReadOptions,
                 // die harten Attribute an diesem Absatz werden nie mehr ungueltig
                 if( aParaAttrs.Count() )
                     aParaAttrs.Remove( 0, aParaAttrs.Count() );
-
-#ifndef NUM_RELSPACE
-                if( GetNumInfo().GetNumRule() )
-                    UpdateNumRuleInTable();
-#endif
             }
 
             // einen Tabellen Kontext anlegen
@@ -4423,11 +4417,6 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, sal_Bool bReadOptions,
         // LFs am Absatz-Ende entfernen
         if( StripTrailingLF()==0 && !pPam->GetPoint()->nContent.GetIndex() )
             StripTrailingPara();
-
-#ifndef NUM_RELSPACE
-        if( GetNumInfo().GetNumRule() )
-            UpdateNumRuleInTable();
-#endif
 
         // falls fuer die Zelle eine Ausrichtung gesetzt wurde, muessen
         // wir die beenden
@@ -5076,10 +5065,6 @@ public:
 
         // Die aktuelle Numerierung wurde gerettet und muss nur
         // noch beendet werden.
-#ifndef NUM_RELSPACE
-        if( rParser.GetNumInfo().GetNumRule() )
-            rParser.UpdateNumRuleInTable();
-#endif
         aNumRuleInfo.Set( rParser.GetNumInfo() );
         rParser.GetNumInfo().Clear();
     }
@@ -5697,7 +5682,7 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
                         pNd = pTblStNd->EndOfSectionNode();
                     SwNodeIndex aDstIdx( *pNd, bTop ? 0 : 1 );
 
-                    pDoc->Move( aSrcRg, aDstIdx );
+                    pDoc->Move( aSrcRg, aDstIdx, IDocumentContentOperations::DOC_MOVEDEFAULT );
 
                     // Wenn die Caption vor der Tabelle eingefuegt wurde muss
                     // eine an der Tabelle gestzte Seitenvorlage noch in den
