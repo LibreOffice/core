@@ -4,9 +4,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 15:40:07 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:41:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,16 +60,11 @@
 #ifndef _COM_SUN_STAR_I18N_WORDTYPE_HDL
 #include <com/sun/star/i18n/WordType.hdl>
 #endif
-#ifndef _DOC_HXX
-#include <doc.hxx>
-#endif
-#ifdef BIDI
 #ifndef _PARATR_HXX
 #include <paratr.hxx>
 #endif
 #ifndef _SVX_ADJITEM_HXX //autogen
 #include <svx/adjitem.hxx>
-#endif
 #endif
 #ifndef _SVX_SCRIPTTYPEITEM_HXX
 #include <svx/scripttypeitem.hxx>
@@ -106,10 +101,13 @@
 #endif
 // <--
 
+#include <IDocumentRedlineAccess.hxx>
+#include <IDocumentSettingAccess.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n::ScriptType;
 
-#ifdef BIDI
+//#ifdef BIDI
 #include <unicode/ubidi.h>
 
 /*************************************************************************
@@ -155,7 +153,7 @@ sal_Bool lcl_ConnectToPrev( xub_Unicode cCh, xub_Unicode cPrevCh )
     return bRet;
 }
 
-#endif
+//#endif
 
 
 /*************************************************************************
@@ -357,7 +355,7 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
 
     // --> FME 2006-03-01 #i3952#
     const bool bIgnoreBlanksAndTabsForLineHeightCalculation =
-            rInf.GetTxtFrm()->GetNode()->GetDoc()->IgnoreTabsAndBlanksForLineCalculation();
+            rInf.GetTxtFrm()->GetNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION);
 
     bool bHasBlankPortion = false;
     bool bHasOnlyBlankPortions = true;
@@ -771,7 +769,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
     BYTE nScript;
 
     // compression type
-    const SwCharCompressType aCompEnum = rNode.GetDoc()->GetCharCompressType();
+    const SwCharCompressType aCompEnum = rNode.getIDocumentSettingAccess()->getCharacterCompressionType();
 
     // justification type
     const sal_Bool bAdjustBlock = SVX_ADJUST_BLOCK ==
@@ -1368,30 +1366,6 @@ USHORT SwScriptInfo::MaskHiddenRanges( const SwTxtNode& rNode, XubString& rText,
 
     return nNumOfHiddenChars;
 }
-
-/*************************************************************************
- *                        SwScriptInfo::DeleteHiddenRanges(..)
- * Takes a SwTxtNode and deletes the hidden ranges from the node.
- **************************************************************************/
-
-void SwScriptInfo::DeleteHiddenRanges( SwTxtNode& rNode )
-{
-    PositionList aList;
-    xub_StrLen nHiddenStart;
-    xub_StrLen nHiddenEnd;
-    GetBoundsOfHiddenRange( rNode, 0, nHiddenStart, nHiddenEnd, &aList );
-    PositionList::const_reverse_iterator rFirst( aList.end() );
-    PositionList::const_reverse_iterator rLast( aList.begin() );
-    while ( rFirst != rLast )
-    {
-        nHiddenEnd = *(rFirst++);
-        nHiddenStart = *(rFirst++);
-
-        SwPaM aPam( rNode, nHiddenStart, rNode, nHiddenEnd );
-        rNode.GetDoc()->Delete( aPam );
-    }
-}
-
 
 /*************************************************************************
  *                        SwScriptInfo::GetBoundsOfHiddenRange(..)
@@ -2044,14 +2018,14 @@ void SwScriptInfo::CalcHiddenRanges( const SwTxtNode& rNode, MultiSelection& rHi
 
     // If there are any hidden ranges in the current text node, we have
     // to unhide the redlining ranges:
-    const SwDoc& rDoc = *rNode.GetDoc();
-    if ( rHiddenMulti.GetRangeCount() && ::IsShowChanges( rDoc.GetRedlineMode() ) )
+    const IDocumentRedlineAccess& rIDRA = *rNode.getIDocumentRedlineAccess();
+    if ( rHiddenMulti.GetRangeCount() && IDocumentRedlineAccess::IsShowChanges( rIDRA.GetRedlineMode() ) )
     {
-        USHORT nAct = rDoc.GetRedlinePos( rNode );
+        USHORT nAct = rIDRA.GetRedlinePos( rNode, USHRT_MAX );
 
-        for ( ; nAct < rDoc.GetRedlineTbl().Count(); nAct++ )
+        for ( ; nAct < rIDRA.GetRedlineTbl().Count(); nAct++ )
         {
-            const SwRedline* pRed = rDoc.GetRedlineTbl()[ nAct ];
+            const SwRedline* pRed = rIDRA.GetRedlineTbl()[ nAct ];
 
             if ( pRed->Start()->nNode > rNode.GetIndex() )
                 break;
@@ -2082,24 +2056,3 @@ void SwScriptInfo::CalcHiddenRanges( const SwTxtNode& rNode, MultiSelection& rHi
     rNode.SetHiddenCharAttribute( bNewHiddenCharsHidePara, bNewContainsHiddenChars );
 }
 
-void SwTxtNode::CalcHiddenCharFlags() const
-{
-    xub_StrLen nStartPos;
-    xub_StrLen nEndPos;
-    // Update of the flags is done inside GetBoundsOfHiddenRange()
-    SwScriptInfo::GetBoundsOfHiddenRange( *this, 0, nStartPos, nEndPos );
-}
-
-// --> FME 2004-06-08 #i12836# enhanced pdf export
-bool SwTxtNode::IsHidden() const
-{
-    if ( HasHiddenParaField() || HasHiddenCharAttribute( true ) )
-        return true;
-
-    const SwSectionNode* pSectNd = FindSectionNode();
-    if ( pSectNd && pSectNd->GetSection().IsHiddenFlag() )
-        return true;
-
-    return false;
-}
-// <--
