@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwNumberTree.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2006-05-16 08:03:58 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:40:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1041,28 +1041,6 @@ SwNumberTreeNode::GetIterator(const SwNumberTreeNode * pChild) const
 
     return aItResult;
 }
-
-#if 0
-//string SwNumberTreeNode::ToString() const
-//{
-//    string aResult;
-
-//    aResult += "[ ";
-
-//    char aBuffer[256];
-//    sprintf(aBuffer, "SwNumberTreeNode: %p p:%p s:%d %d", this, mpParent,
-//            nSerial, nLevel);
-
-//    aResult += aBuffer;
-
-//    if (IsPhantom())
-//        aResult += " (phantom)";
-
-//    aResult += " ]";
-
-//    return aResult;
-//}
-#endif
 
 String SwNumberTreeNode::print(const String & rIndent,
                                const String & rMyIndent,
