@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfly.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-03 17:19:01 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:43:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,15 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+#ifndef _OUTDEV_HXX //autogen
+#include <vcl/outdev.hxx>
+#endif
+#ifndef _VIRDEV_HXX //autogen
+#include <vcl/virdev.hxx>
+#endif
+
 #include "frmsh.hxx"
-#include "doc.hxx"
 #include "viewsh.hxx"
 #include "pagefrm.hxx"
 #include "rootfrm.hxx"
@@ -45,37 +52,24 @@
 #include "flyfrm.hxx"     // SwFlyFrm
 #include "frmtool.hxx"    // ::DrawGraphic
 #include "porfld.hxx"       // SwGrfNumPortion
+#include "txtfrm.hxx"     // SwTxtFrm
+#include "itrform2.hxx"   // SwTxtFormatter
+#include "porfly.hxx"     // NewFlyCntPortion
+#include "porfld.hxx"     // SwGrfNumPortion
+#include "txtfly.hxx"     // SwTxtFly
+#include "txtpaint.hxx"   // SwSaveClip
+#include "txtatr.hxx"     // SwTxtFlyCnt
+#include "txtcfg.hxx"
+#include "notxtfrm.hxx"
+#include "flyfrms.hxx"
+#include "fmtcnct.hxx"  // SwFmtChain
+
 #ifndef _PORMULTI_HXX
 #include <pormulti.hxx>     // SwMultiPortion
 #endif
-
 #ifdef VERT_DISTANCE
 #include <math.h>
 #endif
-
-#ifndef _XPOLY_HXX //autogen
-#include <svx/xpoly.hxx>
-#endif
-
-#ifndef _E3D_OBJ3D_HXX //autogen
-#include <svx/obj3d.hxx>
-#endif
-
-#ifndef _TXTRANGE_HXX //autogen
-#include <svx/txtrange.hxx>
-#endif
-
-#ifndef _SVX_LRSPITEM_HXX //autogen
-#include <svx/lrspitem.hxx>
-#endif
-#ifndef _SVX_ULSPITEM_HXX //autogen
-#include <svx/ulspitem.hxx>
-#endif
-// --> OD 2004-06-16 #i28701#
-#ifndef _SVX_LSPCITEM_HXX
-#include <svx/lspcitem.hxx>
-#endif
-// <--
 #ifndef _TXTFLCNT_HXX //autogen
 #include <txtflcnt.hxx>
 #endif
@@ -91,56 +85,47 @@
 #ifndef _FRMFMT_HXX //autogen
 #include <frmfmt.hxx>
 #endif
-
-#ifndef _OUTDEV_HXX //autogen
-#include <vcl/outdev.hxx>
-#endif
-
-#ifndef _VIRDEV_HXX //autogen
-#include <vcl/virdev.hxx>
-#endif
-
-#ifndef _TL_POLY_HXX
-#include <tools/poly.hxx>
-#endif
-
-#ifndef _PAGEFRM_HXX
-#include <pagefrm.hxx>
-#endif
 #ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx> // SwPageDesc
 #endif
 #ifndef SW_TGRDITEM_HXX
 #include <tgrditem.hxx>
 #endif
+#ifndef _SORTEDOBJS_HXX
+#include <sortedobjs.hxx>
+#endif
+#ifndef _LAYOUTER_HXX
+#include <layouter.hxx>
+#endif
+#ifndef IDOCUMENTDRAWMODELACCESS_HXX_INCLUDED
+#include <IDocumentDrawModelAccess.hxx>
+#endif
+#ifndef IDOCUMENTLAYOUTACCESS_HXX_INCLUDED
+#include <IDocumentLayoutAccess.hxx>
+#endif
+#ifndef IDOCUMENTSETTINGACCESS_HXX_INCLUDED
+#include <IDocumentSettingAccess.hxx>
+#endif
 
-// #102344#
+#ifndef _E3D_OBJ3D_HXX //autogen
+#include <svx/obj3d.hxx>
+#endif
+#ifndef _TXTRANGE_HXX //autogen
+#include <svx/txtrange.hxx>
+#endif
+#ifndef _SVX_LRSPITEM_HXX //autogen
+#include <svx/lrspitem.hxx>
+#endif
+#ifndef _SVX_ULSPITEM_HXX //autogen
+#include <svx/ulspitem.hxx>
+#endif
+#ifndef _SVX_LSPCITEM_HXX
+#include <svx/lspcitem.hxx>
+#endif
 #ifndef _SVDOEDGE_HXX
 #include <svx/svdoedge.hxx>
 #endif
 
-#include "txtfrm.hxx"     // SwTxtFrm
-#include "itrform2.hxx"   // SwTxtFormatter
-#include "porfly.hxx"     // NewFlyCntPortion
-#include "porfld.hxx"     // SwGrfNumPortion
-
-#include "txtfly.hxx"     // SwTxtFly
-#include "txtpaint.hxx"   // SwSaveClip
-
-#include "txtatr.hxx"     // SwTxtFlyCnt
-#include "txtcfg.hxx"
-#include "notxtfrm.hxx"
-#include "flyfrms.hxx"
-#include "fmtcnct.hxx"  // SwFmtChain
-// OD 2004-05-24 #i28701#
-#ifndef _SORTEDOBJS_HXX
-#include <sortedobjs.hxx>
-#endif
-// --> OD 2005-01-12 #i40155#
-#ifndef _LAYOUTER_HXX
-#include <layouter.hxx>
-#endif
-// <--
 
 #ifndef PRODUCT
 #include "viewopt.hxx"  // SwViewOptions, nur zum Testen (Test2)
@@ -1005,7 +990,7 @@ sal_Bool SwTxtFly::DrawTextOpaque( SwDrawTextInfo &rInf )
     MSHORT nCount;
     if( bOn && ( 0 != ( nCount = GetFlyList()->Count() ) ) )
     {
-        MSHORT nHellId = pPage->GetShell()->GetDoc()->GetHellId();
+        MSHORT nHellId = pPage->GetShell()->getIDocumentDrawModelAccess()->GetHellId();
         for( MSHORT i = 0; i < nCount; ++i )
         {
             const SdrObject *pTmp = (*pFlyList)[ i ];
@@ -1099,7 +1084,7 @@ void SwTxtFly::DrawFlyRect( OutputDevice* pOut, const SwRect &rRect,
     MSHORT nCount;
     if( bOn && ( 0 != ( nCount = GetFlyList()->Count() ) ) )
     {
-        MSHORT nHellId = pPage->GetShell()->GetDoc()->GetHellId();
+        MSHORT nHellId = pPage->GetShell()->getIDocumentDrawModelAccess()->GetHellId();
         for( MSHORT i = 0; i < nCount; ++i )
         {
             const SdrObject *pTmp = (*pFlyList)[ i ];
@@ -1333,8 +1318,9 @@ sal_Bool SwTxtFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
             // object position and former text wrapping is applied.
             // This condition is typically for documents imported from the
             // OpenOffice.org file format.
-            if ( ( pCurrFrm->GetTxtNode()->GetDoc()->ConsiderWrapOnObjPos() ||
-                   !pCurrFrm->GetTxtNode()->GetDoc()->IsFormerTextWrapping() ) &&
+            const IDocumentSettingAccess* pIDSA = pCurrFrm->GetTxtNode()->getIDocumentSettingAccess();
+            if ( (  pIDSA->get(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION) ||
+                   !pIDSA->get(IDocumentSettingAccess::USE_FORMER_TEXT_WRAPPING) ) &&
                  ::FindKontext( pTmp, 0 ) == ::FindKontext( pCurrFrm, 0 ) )
             {
                 return sal_True;
@@ -1345,7 +1331,7 @@ sal_Bool SwTxtFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
             if ( pCurrFrm->GetNext() != pTmp &&
                  ( IsFrmInSameKontext( pTmp, pCurrFrm ) ||
                    // --> #i13832#, #i24135# wrap around objects in page header
-                   ( !pCurrFrm->GetTxtNode()->GetDoc()->IsFormerTextWrapping() &&
+                   ( !pIDSA->get(IDocumentSettingAccess::USE_FORMER_TEXT_WRAPPING) &&
                      0 != ( pHeader = pTmp->FindFooterOrHeader() ) &&
                      !pHeader->IsFooterFrm() &&
                      pCurrFrm->IsInDocBody() ) ) )
@@ -1392,11 +1378,11 @@ SwFlyList *SwTxtFly::InitFlyList()
     // --> #108724# Page header/footer content doesn't have to wrap around
     //              floating screen objects
     const bool bFooterHeader = 0 != pCurrFrm->FindFooterOrHeader();
-    const SwDoc* pDoc = pCurrFrm->GetTxtNode()->GetDoc();
+    const IDocumentSettingAccess* pIDSA = pCurrFrm->GetTxtNode()->getIDocumentSettingAccess();
     // --> OD 2005-01-12 #i40155# - check, if frame is marked not to wrap
-    const sal_Bool bWrapAllowed = ( pDoc->IsFormerTextWrapping() ||
+    const sal_Bool bWrapAllowed = ( pIDSA->get(IDocumentSettingAccess::USE_FORMER_TEXT_WRAPPING) ||
                                     ( !pCurrFrm->IsInFtn() && !bFooterHeader ) ) &&
-                                  !SwLayouter::FrmNotToWrap( *pDoc, *pCurrFrm );
+                                      !SwLayouter::FrmNotToWrap( *pCurrFrm->GetTxtNode()->getIDocumentLayoutAccess(), *pCurrFrm );
     // <--
 
     bOn = sal_False;
@@ -1408,7 +1394,7 @@ SwFlyList *SwTxtFly::InitFlyList()
         // --> OD 2004-06-18 #i28701# - consider complete frame area for new
         // text wrapping
         SwRect aRect;
-        if ( pDoc->IsFormerTextWrapping() )
+        if ( pIDSA->get(IDocumentSettingAccess::USE_FORMER_TEXT_WRAPPING) )
         {
             aRect = pCurrFrm->Prt();
             aRect += pCurrFrm->Frm().Pos();
@@ -1424,6 +1410,8 @@ SwFlyList *SwTxtFly::InitFlyList()
         const long nLeft = (aRect.*fnRect->fnGetLeft)() + 1;
         const sal_Bool bR2L = pCurrFrm->IsRightToLeft();
 
+        const IDocumentDrawModelAccess* pIDDMA = pCurrFrm->GetTxtNode()->getIDocumentDrawModelAccess();
+
         for( sal_uInt32 i = 0; i < nCount; i++ )
         {
             SwAnchoredObject* pAnchoredObj = (*pSorted)[ i ];
@@ -1432,7 +1420,7 @@ SwFlyList *SwTxtFly::InitFlyList()
             // OD 2004-01-15 #110582# - do not consider hidden objects
             // OD 2004-05-13 #i28701# - check, if object has to be considered
             // for text wrap.
-            if ( !pDoc->IsVisibleLayerId( pAnchoredObj->GetDrawObj()->GetLayer() ) ||
+            if ( !pIDDMA->IsVisibleLayerId( pAnchoredObj->GetDrawObj()->GetLayer() ) ||
                  !pAnchoredObj->ConsiderForTextWrap() ||
                  nRight < (aBound.*fnRect->fnGetLeft)() ||
                  (*fnRect->fnYDiff)( (aRect.*fnRect->fnGetTop)(),
@@ -1721,10 +1709,11 @@ const SwRect SwContourCache::ContourRect( const SwFmt* pFmt,
         delete pXPoly;
         // UPPER_LOWER_TEST
 #ifndef PRODUCT
-        if( pFmt->GetDoc()->GetRootFrm()->GetCurrShell() )
+        const SwRootFrm* pTmpRootFrm = pFmt->getIDocumentLayoutAccess()->GetRootFrm();
+        if( pTmpRootFrm->GetCurrShell() )
         {
-            sal_Bool bT2 =  pFmt->GetDoc()->GetRootFrm()->GetCurrShell()->GetViewOptions()->IsTest2();
-            sal_Bool bT6 = pFmt->GetDoc()->GetRootFrm()->GetCurrShell()->GetViewOptions()->IsTest6();
+            sal_Bool bT2 = pTmpRootFrm->GetCurrShell()->GetViewOptions()->IsTest2();
+            sal_Bool bT6 = pTmpRootFrm->GetCurrShell()->GetViewOptions()->IsTest6();
             if( bT2 || bT6 )
             {
                 if( bT2 )
