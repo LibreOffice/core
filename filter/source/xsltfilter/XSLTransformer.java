@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XSLTransformer.java,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-15 17:05:33 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:30:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,10 +132,32 @@ public class XSLTransformer
     }
 
     public void initialize(Object[] values) throws com.sun.star.uno.Exception {
+        // some configurable debugging
+        String statsfilepath = null;
+        if ((statsfilepath = System.getProperty(STATSPROP)) != null) {
+            try {
+                File statsfile = new File(statsfilepath);
+                statsp = new PrintStream(new FileOutputStream(statsfile.getPath(), false));
+            } catch (java.lang.Exception e)
+            {
+                System.err.println("XSLTransformer: could not open statsfile'"+statsfilepath+"'");
+                System.err.println("   "+e.getClass().getName()+": "+e.getMessage());
+                System.err.println("   output disabled");
+            }
+        }
+
+        // reading the values
         NamedValue nv = null;
+        debug("The transformation's parameters as 'name = value' pairs:\n");
+
         for (int i=0; i<values.length; i++)
         {
             nv = (NamedValue)AnyConverter.toObject(new Type(NamedValue.class), values[i]);
+
+            if(nv.Name != null && !nv.Name.equals("")){
+                debug(nv.Name+" = "+nv.Value);
+            }
+
             if (nv.Name.equals("StylesheetURL"))
                 stylesheeturl = (String)AnyConverter.toObject(
                     new Type(String.class), nv.Value);
@@ -157,20 +179,6 @@ public class XSLTransformer
             else if (nv.Name.equals("PublicType"))
                 pubtype = (String)AnyConverter.toObject(
                     new Type(String.class), nv.Value);
-        }
-
-        // some configurable debugging
-        String statsfilepath = null;
-        if ((statsfilepath = System.getProperty(STATSPROP)) != null) {
-            try {
-                File statsfile = new File(statsfilepath);
-                statsp = new PrintStream(new FileOutputStream(statsfile.getPath(), false));
-            } catch (java.lang.Exception e)
-            {
-                System.err.println("XSLTransformer: could not open statsfile'"+statsfilepath+"'");
-                System.err.println("   "+e.getClass().getName()+": "+e.getMessage());
-                System.err.println("   output disabled");
-            }
         }
     }
 
@@ -220,7 +228,7 @@ public class XSLTransformer
         t = new Thread(){
             public void run() {
                 try {
-                    if (statsp != null) statsp.println("starting transformation...");
+                    debug("\n\nStarting transformation...");
                     for (Enumeration e = listeners.elements(); e.hasMoreElements();)
                     {
                         XStreamListener l = (XStreamListener)e.nextElement();
@@ -335,11 +343,7 @@ public class XSLTransformer
                     // OutputStreamWriter ow = new OutputStreamWriter(output, "UTF-8");
                     // ow.write(s);
                     // ow.close();
-
-                    long time = System.currentTimeMillis() - tstart;
-                    if (statsp != null) {
-                        statsp.println("finished transformation in "+time+"ms");
-                    }
+                    debug("finished transformation in "+ (System.currentTimeMillis() - tstart) +"ms");
                     // dereference input buffer
                     xmlsource = null;
 
@@ -374,12 +378,17 @@ public class XSLTransformer
         t.start();
     }
 
+    /* a statsfile have to be created as precondition to use this function */
+    private static final void debug(String s){
+        if (statsp != null) {
+            statsp.println(s);
+        }
+    }
+
     public void terminate()
     {
         try {
-            if (statsp != null){
-                statsp.println("terminate called");
-            }
+            debug("terminate called");
             if(t.isAlive()){
                 t.interrupt();
                 for (Enumeration e = listeners.elements(); e.hasMoreElements();)
