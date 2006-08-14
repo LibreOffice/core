@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drwtxtsh.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:12:11 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:40:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,17 +35,13 @@
 #ifndef _SWDRWTXTSH_HXX
 #define _SWDRWTXTSH_HXX
 
-
 #ifndef _SFX_SHELL_HXX //autogen
 #include <sfx2/shell.hxx>
 #endif
 #include "shellid.hxx"
 
-class OutlinerView;
-class SdrOutliner;
 class SdrView;
 class SwView;
-class SfxModule;
 class SwWrtShell;
 
 class SwDrawTextShell: public SfxShell
