@@ -4,9 +4,9 @@
  *
  *  $RCSfile: writerhelper.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 13:54:04 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:14:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,9 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
+#include <doc.hxx>
 #ifndef SW_WRITERHELPER
 #   include "writerhelper.hxx"
 #endif
@@ -47,9 +47,6 @@
 #endif
 #ifndef _COM_SUN_STAR_EMBED_EMBEDSTATES_HPP_
 #include <com/sun/star/embed/EmbedStates.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
-#include <com/sun/star/util/XCloseable.hpp>
 #endif
 
 #include <algorithm>                //std::swap
@@ -73,12 +70,6 @@
 #ifndef _SVX_TSPTITEM_HXX
 #   include <svx/tstpitem.hxx>      //SvxTabStopItem
 #endif
-#ifndef _SVDOBJ_HXX
-#   include <svx/svdobj.hxx>        //SdrObject
-#endif
-#ifndef _DOC_HXX
-#   include <doc.hxx>               //SwDoc
-#endif
 #ifndef _NDTXT_HXX
 #   include <ndtxt.hxx>             //SwTxtNode
 #endif
@@ -87,12 +78,6 @@
 #endif
 #ifndef _FMTCNTNT_HXX
 #    include <fmtcntnt.hxx>         //SwFmtCntnt
-#endif
-#ifndef _NDINDEX_HXX
-#    include <ndindex.hxx>          //SwNodeIndex
-#endif
-#ifndef _NUMRULE_HXX
-#    include <numrule.hxx>          //SwNodeNum
 #endif
 #ifndef _SWTABLE_HXX
 #    include <swtable.hxx>          //SwTable
@@ -589,7 +574,7 @@ namespace sw
                 sal_uInt16 n = SwStyleNameMapper::GetPoolIdFromUIName(rName,
                     GET_POOLID_TXTCOLL);
                 if (n != SAL_MAX_UINT16)       // found or standard
-                    pColl = rDoc.GetTxtCollFromPoolSimple(n, false);
+                    pColl = rDoc.GetTxtCollFromPool(n, false);
             }
             return pColl;
         }
@@ -842,9 +827,9 @@ namespace sw
             public std::unary_function<const SwFltStackEntry*, bool>
         {
         private:
-            SwRedlineType meType;
+            IDocumentRedlineAccess::RedlineType_t meType;
         public:
-            SameOpenRedlineType(SwRedlineType eType) : meType(eType) {}
+            SameOpenRedlineType(IDocumentRedlineAccess::RedlineType_t eType) : meType(eType) {}
             bool operator()(const SwFltStackEntry *pEntry) const
             {
                 const SwFltRedline *pTest = static_cast<const SwFltRedline *>
@@ -853,7 +838,7 @@ namespace sw
             }
         };
 
-        void RedlineStack::close(const SwPosition& rPos, SwRedlineType eType)
+        void RedlineStack::close(const SwPosition& rPos, IDocumentRedlineAccess::RedlineType_t eType)
         {
             //Search from end for same type
             myriter aResult = std::find_if(maStack.rbegin(), maStack.rend(),
@@ -879,8 +864,8 @@ namespace sw
                 (*aRegion.GetPoint() != *aRegion.GetMark())
             )
             {
-                mrDoc.SetRedlineMode(REDLINE_ON | REDLINE_SHOW_INSERT |
-                    REDLINE_SHOW_DELETE);
+                mrDoc.SetRedlineMode(IDocumentRedlineAccess::REDLINE_ON | IDocumentRedlineAccess::REDLINE_SHOW_INSERT |
+                    IDocumentRedlineAccess::REDLINE_SHOW_DELETE);
                 const SwFltRedline *pFltRedline = static_cast<const SwFltRedline*>
                     (pEntry->pAttr);
 
@@ -890,15 +875,15 @@ namespace sw
                         pFltRedline->nAutorNoPrev, pFltRedline->aStampPrev, aEmptyStr,
                         0);
 
-                    mrDoc.AppendRedline(new SwRedline(aData, aRegion));
+                    mrDoc.AppendRedline(new SwRedline(aData, aRegion), true);
                 }
 
                 SwRedlineData aData(pFltRedline->eType, pFltRedline->nAutorNo,
                         pFltRedline->aStamp, aEmptyStr, 0);
 
-                mrDoc.AppendRedline(new SwRedline(aData, aRegion));
-                mrDoc.SetRedlineMode(REDLINE_NONE | REDLINE_SHOW_INSERT |
-                    REDLINE_SHOW_DELETE );
+                mrDoc.AppendRedline(new SwRedline(aData, aRegion), true);
+                mrDoc.SetRedlineMode(IDocumentRedlineAccess::REDLINE_NONE | IDocumentRedlineAccess::REDLINE_SHOW_INSERT |
+                    IDocumentRedlineAccess::REDLINE_SHOW_DELETE );
             }
             delete pEntry;
         }
@@ -915,7 +900,7 @@ namespace sw
             //Return the earlier time, if two have the same time, prioritize
             //inserts over deletes
             if (pOne->aStamp == pTwo->aStamp)
-                return (pOne->eType == REDLINE_INSERT && pTwo->eType != REDLINE_INSERT);
+                return (pOne->eType == IDocumentRedlineAccess::REDLINE_INSERT && pTwo->eType != IDocumentRedlineAccess::REDLINE_INSERT);
             else
                 return (pOne->aStamp < pTwo->aStamp) ? true : false;
         }
