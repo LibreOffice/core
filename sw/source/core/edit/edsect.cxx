@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edsect.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:29:13 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:10:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,7 @@ const SwSection* SwEditShell::InsertSection( const SwSection& rNew,
     if( !IsTableMode() )
     {
         StartAllAction();
-        GetDoc()->StartUndo( UNDO_INSSECTION );
+        GetDoc()->StartUndo( UNDO_INSSECTION, NULL );
 
         FOREACHPAM_START(this)
             const SwSection* pNew = GetDoc()->Insert( *PCURCRSR,
@@ -90,7 +90,7 @@ const SwSection* SwEditShell::InsertSection( const SwSection& rNew,
         FOREACHPAM_END()
 
         // Undo-Klammerung hier beenden
-        GetDoc()->EndUndo( UNDO_INSSECTION );
+        GetDoc()->EndUndo( UNDO_INSSECTION, NULL );
         EndAllAction();
     }
     return pRet;
@@ -263,7 +263,7 @@ void SwEditShell::SetSectionAttr( const SfxItemSet& rSet,
                         if( 0 != (pSttSectNd = aSIdx.GetNode().GetSectionNode())
                             || ( aSIdx.GetNode().IsEndNode() &&
                                 0 != ( pSttSectNd = aSIdx.GetNode().
-                                    FindStartNode()->GetSectionNode())) )
+                                    StartOfSectionNode()->GetSectionNode())) )
                             _SetSectionAttr( *pSttSectNd->GetSection().GetFmt(),
                                             rSet );
                         aSIdx++;
@@ -322,14 +322,14 @@ USHORT SwEditShell::GetFullSelectedSectionCount() const
         SwNodeIndex aSIdx( pStt->nNode, -1 ), aEIdx( pEnd->nNode, +1 );
         if( !aSIdx.GetNode().IsSectionNode() ||
             !aEIdx.GetNode().IsEndNode() ||
-            !aEIdx.GetNode().FindStartNode()->IsSectionNode() )
+            !aEIdx.GetNode().StartOfSectionNode()->IsSectionNode() )
         {
             nRet = 0;
             break;
         }
 
         ++nRet;
-        if( &aSIdx.GetNode() != aEIdx.GetNode().FindStartNode() )
+        if( &aSIdx.GetNode() != aEIdx.GetNode().StartOfSectionNode() )
             ++nRet;
 
     FOREACHPAM_END()
