@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_config.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: ihi $ $Date: 2006-08-04 10:00:42 $
+#   last change: $Author: hr $ $Date: 2006-08-14 16:19:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -166,7 +166,7 @@ $(PROCESSOUT)$/merge$/$(PACKAGEDIR)$/%.xcu : %.xcu
     $(WRAPCMD) $(CFGEX) -p $(PRJNAME) -i $(@:f) -o $@ -m localize.sdf -l all
 
 .IF "$(XCU_LANG)" != ""
-$(XCU_LANG) : $(XSLDIR)$/alllang.xsl 
+$(XCU_LANG) : $(XSLDIR)$/alllang.xsl
 .ENDIF
 
 $(PROCESSOUT)$/registry$/res$/{$(alllangiso)}$/$(PACKAGEDIR)$/%.xcu :| $(PROCESSOUT)$/merge$/$(PACKAGEDIR)$/%.xcu
