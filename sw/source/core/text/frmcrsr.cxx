@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmcrsr.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:51:44 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:36:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,13 +33,11 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #include "ndtxt.hxx"        // GetNode()
 #include "pam.hxx"          // SwPosition
 #include "frmtool.hxx"
-#include "doc.hxx"
 #include "viewopt.hxx"
 #include "paratr.hxx"
 #include "pagefrm.hxx"
@@ -49,26 +47,26 @@
 #ifndef _SFX_PRINTER_HXX //autogen
 #include <sfx2/printer.hxx>
 #endif
-
 #ifndef _SVX_LRSPITEM_HXX //autogen
 #include <svx/lrspitem.hxx>
 #endif
-
 #ifndef _SVX_TSPTITEM_HXX //autogen
 #include <svx/tstpitem.hxx>
 #endif
-
 #ifndef _SVX_ULSPITEM_HXX //autogen
 #include <svx/ulspitem.hxx>
 #endif
-
-// OD 2004-03-18 #114789#
 #ifndef _SVX_LSPCITEM_HXX //autogen
 #include <svx/lspcitem.hxx>
 #endif
-
 #ifndef _PORMULTI_HXX
 #include <pormulti.hxx>     // SwMultiPortion
+#endif
+#ifndef _DOC_HXX
+#include <doc.hxx>
+#endif
+#ifndef _SORTEDOBJS_HXX
+#include <sortedobjs.hxx>
 #endif
 
 #include <unicode/ubidi.h>
@@ -82,10 +80,6 @@
 #include "viewsh.hxx"       // InvalidateWindows
 #include "swfntcch.hxx"     // SwFontAccess
 #include "flyfrm.hxx"
-// OD 2004-05-24 #i28701#
-#ifndef _SORTEDOBJS_HXX
-#include <sortedobjs.hxx>
-#endif
 
 #if OSL_DEBUG_LEVEL > 1
 #include "txtpaint.hxx"
@@ -298,10 +292,8 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
             pCMS->aRealHeight.Y() = bVert ? -rOrig.Width() : rOrig.Height();
         }
 
-#ifdef BIDI
         if ( pFrm->IsRightToLeft() )
             pFrm->SwitchLTRtoRTL( rOrig );
-#endif
 
         bRet = sal_True;
     }
@@ -330,10 +322,9 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
                                 : aLine.GetCharRect( &rOrig, nOffset, pCMS, nMaxY );
             }
 
-#ifdef BIDI
             if ( pFrm->IsRightToLeft() )
                 pFrm->SwitchLTRtoRTL( rOrig );
-#endif
+
             if ( bVert )
                 pFrm->SwitchHorizontalToVertical( rOrig );
 
@@ -349,7 +340,6 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
 
         if ( pCMS )
         {
-#ifdef BIDI
             if ( pFrm->IsRightToLeft() )
             {
                 if( pCMS->b2Lines && pCMS->p2Lines)
@@ -358,7 +348,6 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
                     pFrm->SwitchLTRtoRTL( pCMS->p2Lines->aPortion );
                 }
             }
-#endif
 
             if ( bVert )
             {
@@ -619,10 +608,8 @@ sal_Bool SwTxtFrm::_GetCrsrOfst(SwPosition* pPos, const Point& rPoint,
         ((SwTxtFrm*)this)->SwapWidthAndHeight();
     }
 
-#ifdef BIDI
     if ( IsRightToLeft() )
         SwitchRTLtoLTR( (Point&)rPoint );
-#endif
 
     SwFillData *pFillData = ( pCMS && pCMS->pFill ) ?
                         new SwFillData( pCMS, pPos, Frm(), rPoint ) : NULL;
@@ -1479,7 +1466,7 @@ void SwTxtFrm::FillCrsrPos( SwFillData& rFill ) const
         aSet.Put( *GetTxtNode()->GetpSwAttrSet() );
         aSet.SetParent( pSet );
         pSet = &aSet;
-        pFnt = new SwFont( pSet, GetNode()->GetDoc() );
+        pFnt = new SwFont( pSet, GetNode()->getIDocumentSettingAccess() );
     }
     else
     {
@@ -1488,9 +1475,9 @@ void SwTxtFrm::FillCrsrPos( SwFillData& rFill ) const
         pFnt->ChkMagic( pSh, pFnt->GetActual() );
     }
     OutputDevice* pOut = pSh->GetOut();
-    if ( !GetTxtNode()->GetDoc()->IsBrowseMode() ||
+    if ( !GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) ||
             ( pSh->GetViewOptions()->IsPrtFormat() ) )
-        pOut = &GetTxtNode()->GetDoc()->GetRefDev();
+        pOut = GetTxtNode()->getIDocumentDeviceAccess()->getReferenceDevice( true );
 
     pFnt->SetFntChg( sal_True );
     pFnt->ChgPhysFnt( pSh, *pOut );
