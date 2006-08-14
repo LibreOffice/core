@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unnum.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:23:35 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:50:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #ifndef _HINTIDS_HXX
@@ -57,9 +56,6 @@
 #endif
 #ifndef _UNDOBJ_HXX
 #include <undobj.hxx>
-#endif
-#ifndef _NUMRULE_HXX
-#include <numrule.hxx>
 #endif
 #ifndef _ROLBCK_HXX
 #include <rolbck.hxx>
@@ -214,9 +210,6 @@ SwUndoDelNum::SwUndoDelNum( const SwPaM& rPam )
     : SwUndo( UNDO_DELNUM ), SwUndRng( rPam ),
     aNodeIdx( BYTE( nEndNode - nSttNode > 255 ? 255 : nEndNode - nSttNode )),
     aLevels( BYTE( nEndNode - nSttNode > 255 ? 255 : nEndNode - nSttNode ))
-#ifndef NUM_RELSPACE
-    , aRstLRSpaces( BYTE( nEndNode - nSttNode > 255 ? 255 : nEndNode - nSttNode ))
-#endif
 {
     pHistory = new SwHistory;
 }
@@ -244,10 +237,6 @@ void SwUndoDelNum::Undo( SwUndoIter& rUndoIter )
         SwTxtNode* pNd = rDoc.GetNodes()[ aNodeIdx[ n ] ]->GetTxtNode();
         ASSERT( pNd, "wo ist der TextNode geblieben?" );
         pNd->SetLevel(aLevels[ n ] );
-
-#ifndef NUM_RELSPACE
-        pNd->SetNumLSpace( aRstLRSpaces[ n ] );
-#endif
 
         if( pNd->GetCondFmtColl() )
             pNd->ChkCondColl();
@@ -277,10 +266,8 @@ void SwUndoDelNum::AddNode( const SwTxtNode& rNd, BOOL bFlag )
     {
         register USHORT nIns = aNodeIdx.Count();
         aNodeIdx.Insert( rNd.GetIndex(), nIns );
+
         aLevels.Insert( rNd.GetLevel(), nIns );
-#ifndef NUM_RELSPACE
-        aRstLRSpaces.Insert( bFlag, nIns );
-#endif
     }
 }
 
