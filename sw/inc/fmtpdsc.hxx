@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtpdsc.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:52:18 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:24:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,10 +105,6 @@ public:
     // erfrage/setze, wo drin das Attribut verankert ist
     inline const SwModify* GetDefinedIn() const { return pDefinedIn; }
     void ChgDefinedIn( const SwModify* pNew ) { pDefinedIn = (SwModify*)pNew; }
-
-    // fuer den SW3-Reader:
-    USHORT GetDescNameIdx() const { return nDescNameIdx; }
-    void SetDescNameIdx( USHORT n ) { nDescNameIdx = n;  }
 };
 
 
