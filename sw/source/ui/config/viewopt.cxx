@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewopt.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:47:34 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:29:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -154,104 +153,6 @@ BOOL SwViewOption::IsEqualFlags( const SwViewOption &rOpt ) const
             ;
 }
 
-#ifndef VERTICAL_LAYOUT
-/*************************************************************************
- *                    class SwPxlToTwips
- *************************************************************************/
-
-class SwPxlToTwips
-{
-    OutputDevice *pOut;
-    Color   aLineColor;
-    BOOL   bClip;
-    Region aClip;
-    Point aStart;
-    SwRect aRect;
-public:
-    SwPxlToTwips( OutputDevice *pOut, const SwRect &rRect, const Size &rSize );
-    ~SwPxlToTwips();
-    inline const Point &GetStartPoint() const { return aStart; }
-    inline BOOL  IsTooSmall() const {return 0 == pOut;}
-    inline const SwRect &GetRect() const { return aRect; }
-    void DrawLine( const Point &rStart, const Point &rEnd );
-};
-
-/*************************************************************************
- *                    SwPxlToTwips::CTOR
- *************************************************************************/
-
-SwPxlToTwips::SwPxlToTwips( OutputDevice *pOutDev,
-                            const SwRect &rRect, const Size &rSize )
-    : pOut( pOutDev )
-{
-    aRect = pOut->LogicToPixel( rRect.SVRect() );
-
-    // Wenn der Tab nicht mehr darstellbar ist, geben wir auf.
-    if( 3 > aRect.Width() )
-    {
-        pOut = NULL;
-        return;
-    }
-
-    if( rSize.Height() - 1 > aRect.Height() )
-    {
-        pOut = NULL;
-        return;
-    }
-
-    aStart = aRect.Pos();
-    aStart.X() += (aRect.Width()  / 2) - (rSize.Width() / 2);
-    aStart.Y() += (aRect.Height() / 2) - (rSize.Height() / 2);
-    if ( aStart.X() < aRect.Left() )
-        aStart.X() = aRect.Left();
-
-    if ( pOut->GetConnectMetaFile() )
-        pOut->Push();
-
-    bClip = pOut->IsClipRegion();
-    if ( bClip )
-    {
-        aClip = pOut->GetClipRegion();
-        pOut->SetClipRegion();
-    }
-
-    aLineColor = pOut->GetLineColor( );
-    pOut->SetLineColor( Color(COL_BLACK) );
-}
-
-/*************************************************************************
- *                    SwPxlToTwips::DTOR
- *************************************************************************/
-
-SwPxlToTwips::~SwPxlToTwips()
-{
-    if( pOut )
-    {
-        if ( pOut->GetConnectMetaFile() )
-            pOut->Pop();
-        else
-        {
-            pOut->SetLineColor( aLineColor );
-            if( bClip )
-                pOut->SetClipRegion( aClip );
-        }
-    }
-}
-
-/*************************************************************************
- *                    SwPxlToTwips::DrawLine
- *************************************************************************/
-void SwPxlToTwips::DrawLine( const Point &rStart, const Point &rEnd )
-{
-    if( pOut )
-    {
-        const Point aStart( pOut->PixelToLogic( rStart ) );
-        const Point aEnd( pOut->PixelToLogic( rEnd ) );
-        pOut->DrawLine( aStart, aEnd );
-    }
-}
-#endif
-
 /*************************************************************************
  *                    SwViewOption::DrawRect()
  *************************************************************************/
@@ -287,105 +188,6 @@ void SwViewOption::DrawRectPrinter( OutputDevice *pOut,
     pOut->SetLineColor( aOldColor );
 }
 
-/*************************************************************************
- *                    SwViewOption::PaintTab()
- *************************************************************************/
-#ifndef VERTICAL_LAYOUT
-void SwViewOption::PaintTab( OutputDevice *pOut, const SwRect &rRect ) const
-{
-    SwPxlToTwips aSave( pOut, rRect, Size( TAB_SIZE ) );
-
-    if( aSave.IsTooSmall() )
-        return;
-
-    Point aStart( aSave.GetStartPoint() );
-    const SwRect &rPaintRect = aSave.GetRect();
-
-    // horizontale
-    aStart.Y() += 2;
-    aStart.X() += 1;
-    Point aEnd( aStart );
-    aEnd.X() += 10;
-    if( aEnd.X() >= rPaintRect.Right() )
-        aEnd.X() = rPaintRect.Right() - 1;
-    long nDiff = aEnd.X() - aStart.X();
-    aSave.DrawLine( aStart, aEnd );
-
-    // Pfeil
-    aEnd.X() -= 1;
-    aStart.X() = aEnd.X();
-    aStart.Y() -= 1;
-    aEnd.Y() += 1;
-    aSave.DrawLine( aStart, aEnd );
-
-    if( nDiff > 1 && rPaintRect.Height() > 8 )
-    {
-        aStart.X() -= 1;
-        aStart.Y() -= 1;
-        aEnd.X() = aStart.X();
-        aEnd.Y() += 1;
-        aSave.DrawLine( aStart, aEnd );
-        if( nDiff > 2 && rPaintRect.Height() > 12 )
-        {
-            aStart.X() -= 1;
-            aEnd.X() -= 1;
-            aSave.DrawLine( aStart, aEnd );
-        }
-    }
-}
-#endif
-
-/*************************************************************************
- *                    SwViewOption::PaintLineBreak()
- *************************************************************************/
-#ifndef VERTICAL_LAYOUT
-void SwViewOption::PaintLineBreak( OutputDevice *pOut, const SwRect &rRect ) const
-{
-    const Size aSz( LINEBREAK_SIZE );
-    SwPxlToTwips aSave( pOut, rRect, aSz );
-    if( aSave.IsTooSmall() )
-        return;
-    Point aStart( aSave.GetStartPoint() );
-    const SwRect &rPaintRect = aSave.GetRect();
-
-    // horizontale
-    aStart.Y() += 4;
-    aStart.X() += 1;
-    Point aEnd( aStart );
-    aEnd.X() += 8;
-    if( aEnd.X() >= rPaintRect.Right() - 1 )
-        aEnd.X() = rPaintRect.Right() - 2;
-    aSave.DrawLine( aStart, aEnd );
-
-    // Pfeil
-    aStart.Y() -= 1;
-    aStart.X() += 1;
-    aEnd.Y()   = aStart.Y() + 2;
-    aEnd.X()   = aStart.X();
-    aSave.DrawLine( aStart, aEnd );
-
-    // Pfeil
-    aStart.Y() -= 1;
-    aStart.X() += 1;
-    aEnd.Y()   += 1;
-    aEnd.X()   += 1;
-    aSave.DrawLine( aStart, aEnd );
-
-    // Pfeil
-    aStart.X() += 1;
-    aEnd.X()   += 1;
-    aSave.DrawLine( aStart, aEnd );
-
-    // vertikale
-    aStart.Y() -= 2;
-    aStart.X() += 6;
-    if( aStart.X() >= rPaintRect.Right() )
-        aStart.X() = rPaintRect.Right() - 1;
-    aEnd.X() = aStart.X();
-    aEnd.Y() = aStart.Y() + 3;
-    aSave.DrawLine( aStart, aEnd );
-}
-#endif
 /*************************************************************************
  *                    SwViewOption::GetPostItsWidth()
  *************************************************************************/
