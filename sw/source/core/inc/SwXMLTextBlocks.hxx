@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXMLTextBlocks.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:41:19 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:16:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _SW_XMLTEXTBLOCKS_HXX
 #define _SW_XMLTEXTBLOCKS_HXX
-
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
 
@@ -47,7 +46,6 @@ class SwPaM;
 class SwDoc;
 class SvxMacroTableDtor;
 class SwImpBlocks;
-class SwDocShell;
 
 #define SWXML_CONVBLOCK     0x0001
 #define SWXML_NOROOTCOMMIT  0x0002
