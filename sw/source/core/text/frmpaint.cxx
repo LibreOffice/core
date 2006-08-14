@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmpaint.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 11:48:17 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:36:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -106,20 +105,11 @@
 #ifndef _TXTCACHE_HXX
 #include <txtcache.hxx> // SwTxtLineAccess
 #endif
-#ifndef _SWFNTCCH_HXX
-#include <swfntcch.hxx> // SwFontAccess
-#endif
-#ifndef _DRAWFONT_HXX
-#include <drawfont.hxx> // SwDrawTextInfo
-#endif
 #ifndef _FLYFRM_HXX
 #include <flyfrm.hxx>   // SwFlyFrm
 #endif
 #ifndef _REDLNITR_HXX
 #include <redlnitr.hxx> // SwRedlineItr
-#endif
-#ifndef _DOC_HXX
-#include <doc.hxx>      // SwDoc
 #endif
 #ifndef _SWMODULE_HXX
 #include <swmodule.hxx> // SW_MOD
@@ -136,6 +126,9 @@
 #include <EnhancedPDFExportHelper.hxx>
 #endif
 // <--
+
+#include <IDocumentStylePoolAccess.hxx>
+#include <IDocumentLineNumberAccess.hxx>
 
 // --> OD 2006-06-27 #b6440955#
 // variable moved to class <numfunc:GetDefBulletConfig>
@@ -207,9 +200,9 @@ SwExtraPainter::SwExtraPainter( const SwTxtFrm *pFrm, ViewShell *pVwSh,
         komplett ausserhalb des Paint-Rechtecks aufhaelt. */
         nDivider = rLineInf.GetDivider().Len() ? rLineInf.GetDividerCountBy() : 0;
         nX = pFrm->Frm().Left();
-        SwCharFmt* pFmt = rLineInf.GetCharFmt( *((SwDoc*)pFrm->GetNode()->GetDoc()) );
+        SwCharFmt* pFmt = rLineInf.GetCharFmt( const_cast<IDocumentStylePoolAccess&>(*pFrm->GetNode()->getIDocumentStylePoolAccess()) );
         ASSERT( pFmt, "PaintExtraData without CharFmt" );
-        pFnt = new SwFont( &pFmt->GetAttrSet(), pFrm->GetTxtNode()->GetDoc() );
+        pFnt = new SwFont( &pFmt->GetAttrSet(), pFrm->GetTxtNode()->getIDocumentSettingAccess() );
         pFnt->Invalidate();
         pFnt->ChgPhysFnt( pSh, *pSh->GetOut() );
         pFnt->SetVertical( 0, pFrm->IsVertical() );
@@ -372,13 +365,13 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
         return;
 
     const SwTxtNode& rTxtNode = *GetTxtNode();
-    const SwDoc* pDoc = rTxtNode.GetDoc();
-    const SwLineNumberInfo &rLineInf = pDoc->GetLineNumberInfo();
+    const IDocumentRedlineAccess* pIDRA = rTxtNode.getIDocumentRedlineAccess();
+    const SwLineNumberInfo &rLineInf = rTxtNode.getIDocumentLineNumberAccess()->GetLineNumberInfo();
     const SwFmtLineNumber &rLineNum = GetAttrSet()->GetLineNumber();
     sal_Bool bLineNum = !IsInTab() && rLineInf.IsPaintLineNumbers() &&
                ( !IsInFly() || rLineInf.IsCountInFlys() ) && rLineNum.IsCount();
     SwHoriOrient eHor = (SwHoriOrient)SW_MOD()->GetRedlineMarkPos();
-    if( eHor != HORI_NONE && !::IsShowChanges( pDoc->GetRedlineMode() ) )
+    if( eHor != HORI_NONE && !IDocumentRedlineAccess::IsShowChanges( pIDRA->GetRedlineMode() ) )
         eHor = HORI_NONE;
     sal_Bool bRedLine = eHor != HORI_NONE;
     if ( bLineNum || bRedLine )
@@ -393,10 +386,8 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
         if ( IsVertical() )
             SwitchVerticalToHorizontal( (SwRect&)rRect );
 
-#ifdef BIDI
         SwLayoutModeModifier aLayoutModeModifier( *pSh->GetOut() );
         aLayoutModeModifier.Modify( sal_False );
-#endif
 
         // --> FME 2004-06-24 #i16816# tagged pdf support
         SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, *pSh->GetOut() );
@@ -414,9 +405,7 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
 
             SwTxtPaintInfo aInf( (SwTxtFrm*)this, rRect );
 
-#ifdef BIDI
             aLayoutModeModifier.Modify( sal_False );
-#endif
 
             SwTxtPainter  aLine( (SwTxtFrm*)this, &aInf );
             sal_Bool bNoDummy = !aLine.GetNext(); // Nur eine Leerzeile!
@@ -478,7 +467,7 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
         }
         else
         {
-            bRedLine &= ( MSHRT_MAX!=pDoc->GetRedlinePos(rTxtNode) );
+            bRedLine &= ( MSHRT_MAX!= pIDRA->GetRedlinePos(rTxtNode, USHRT_MAX) );
 
             if( bLineNum && rLineInf.IsCountBlankLines() &&
                 ( aExtra.HasNumber() || aExtra.HasDivider() ) )
@@ -526,10 +515,9 @@ SwRect SwTxtFrm::Paint()
         pRepaint->SetOfst( 0 );
         aRet = *pRepaint;
 
-#ifdef BIDI
         if ( IsRightToLeft() )
             SwitchLTRtoRTL( aRet );
-#endif
+
         if ( IsVertical() )
             SwitchHorizontalToVertical( aRet );
     }
@@ -560,26 +548,23 @@ sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
             if ( rTxtNode.HasSwAttrSet() )
             {
                 const SwAttrSet *pAttrSet = &( rTxtNode.GetSwAttrSet() );
-                pFnt = new SwFont( pAttrSet, GetTxtNode()->GetDoc() );
+                pFnt = new SwFont( pAttrSet, rTxtNode.getIDocumentSettingAccess() );
             }
             else
             {
-//FEATURE::CONDCOLL
-//                  SwFontAccess aFontAccess( GetTxtNode()->GetFmtColl() );
                 SwFontAccess aFontAccess( &rTxtNode.GetAnyFmtColl(), pSh );
-//FEATURE::CONDCOLL
                 pFnt = new SwFont( *aFontAccess.Get()->GetFont() );
             }
 
-            const SwDoc* pDoc = rTxtNode.GetDoc();
-            if( ::IsShowChanges( pDoc->GetRedlineMode() ) )
+            const IDocumentRedlineAccess* pIDRA = rTxtNode.getIDocumentRedlineAccess();
+            if( IDocumentRedlineAccess::IsShowChanges( pIDRA->GetRedlineMode() ) )
             {
-                MSHORT nRedlPos = pDoc->GetRedlinePos( rTxtNode );
+                MSHORT nRedlPos = pIDRA->GetRedlinePos( rTxtNode, USHRT_MAX );
                 if( MSHRT_MAX != nRedlPos )
                 {
                     SwAttrHandler aAttrHandler;
-                    aAttrHandler.Init( GetTxtNode()->GetSwAttrSet(),
-                                       *GetTxtNode()->GetDoc(), NULL );
+                    aAttrHandler.Init(  rTxtNode.GetSwAttrSet(),
+                                       *rTxtNode.getIDocumentSettingAccess(), NULL );
                     SwRedlineItr aRedln( rTxtNode, *pFnt, aAttrHandler, nRedlPos, sal_True );
                 }
             }
@@ -755,10 +740,8 @@ void SwTxtFrm::Paint( const SwRect &rRect ) const
         if ( IsVertical() )
             SwitchVerticalToHorizontal( (SwRect&)rRect );
 
-#ifdef BIDI
         if ( IsRightToLeft() )
             SwitchRTLtoLTR( (SwRect&)rRect );
-#endif
 
         SwTxtPaintInfo aInf( (SwTxtFrm*)this, rRect );
         aInf.SetWrongList( ( (SwTxtNode*)GetTxtNode() )->GetWrong() );
