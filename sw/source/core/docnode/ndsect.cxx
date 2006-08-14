@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndsect.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 09:51:06 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:04:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -104,9 +103,6 @@
 #ifndef _DOCARY_HXX
 #include <docary.hxx>
 #endif
-#ifndef _NDINDEX_HXX
-#include <ndindex.hxx>
-#endif
 #ifndef _REDLINE_HXX
 #include <redline.hxx>
 #endif
@@ -128,10 +124,6 @@
 #ifndef _FMTFTNTX_HXX
 #include <fmtftntx.hxx>
 #endif
-#ifndef _HINTS_HXX
-#include <hints.hxx>
-#endif
-
 #ifndef _COMCORE_HRC
 #include <comcore.hrc>
 #endif
@@ -277,8 +269,8 @@ SwSection* SwDoc::Insert( const SwPaM& rRange, const SwSection& rNew,
 
     SwSectionNode* pNewSectNode = 0;
 
-    SwRedlineMode eOld = GetRedlineMode();
-    SetRedlineMode_intern( (eOld & ~REDLINE_SHOW_MASK) | REDLINE_IGNORE );
+    IDocumentRedlineAccess::RedlineMode_t eOld = GetRedlineMode();
+    SetRedlineMode_intern( (eOld & ~IDocumentRedlineAccess::REDLINE_SHOW_MASK) | IDocumentRedlineAccess::REDLINE_IGNORE );
 
     if( rRange.HasMark() )
     {
@@ -288,9 +280,9 @@ SwSection* SwDoc::Insert( const SwPaM& rRange, const SwSection& rNew,
         {
             ASSERT( pPrvNd, "der SectionNode fehlt" );
             SwNodeIndex aStt( pSttPos->nNode ), aEnd( pEndPos->nNode, +1 );
-            while( pPrvNd != aStt.GetNode().FindStartNode() )
+            while( pPrvNd != aStt.GetNode().StartOfSectionNode() )
                 aStt--;
-            while( pPrvNd != aEnd.GetNode().FindStartNode() )
+            while( pPrvNd != aEnd.GetNode().StartOfSectionNode() )
                 aEnd++;
 
             --aEnd;     // im InsertSection ist Ende inclusive
@@ -319,7 +311,7 @@ SwSection* SwDoc::Insert( const SwPaM& rRange, const SwSection& rNew,
                 pSttPos->nContent.Assign( pSttPos->nNode.GetNode().GetCntntNode(), 0 );
             }
             else if( pSttPos->nContent.GetIndex() )
-                SplitNode( *pSttPos );
+                SplitNode( *pSttPos, false );
 
             if( pPrvNd && 2 == nRegionRet )
             {
@@ -332,7 +324,7 @@ SwSection* SwDoc::Insert( const SwPaM& rRange, const SwSection& rNew,
                 if( pCNd && pCNd->Len() != pEndPos->nContent.GetIndex() )
                 {
                     xub_StrLen nCntnt = pSttPos->nContent.GetIndex();
-                    SplitNode( *pEndPos );
+                    SplitNode( *pEndPos, false );
 
                     SwTxtNode* pTNd;
                     if( pEndPos->nNode.GetIndex() == pSttPos->nNode.GetIndex() )
@@ -372,7 +364,7 @@ SwSection* SwDoc::Insert( const SwPaM& rRange, const SwSection& rNew,
         {
             if( pUndoInsSect && pCNd->IsTxtNode() )
                 pUndoInsSect->SaveSplitNode( (SwTxtNode*)pCNd, TRUE );
-            SplitNode( *pPos );
+            SplitNode( *pPos, false );
             pNewSectNode = GetNodes().InsertSection( pPos->nNode, *pFmt, rNew, 0, TRUE );
         }
     }
@@ -387,7 +379,7 @@ SwSection* SwDoc::Insert( const SwPaM& rRange, const SwSection& rNew,
     {
         SwPaM aPam( *pNewSectNode->EndOfSectionNode(), *pNewSectNode, 1 );
         if( IsRedlineOn() )
-            AppendRedline( new SwRedline( REDLINE_INSERT, aPam ));
+            AppendRedline( new SwRedline( IDocumentRedlineAccess::REDLINE_INSERT, aPam ), true);
         else
             SplitRedline( aPam );
     }
@@ -398,7 +390,7 @@ SwSection* SwDoc::Insert( const SwPaM& rRange, const SwSection& rNew,
         // dann berechne bis zu dieser Position
         SwCalc aCalc( *this );
         if( ! IsInReading() )
-            FldsToCalc( aCalc, pNewSectNode->GetIndex() );
+            FldsToCalc( aCalc, pNewSectNode->GetIndex(), USHRT_MAX );
         SwSection& rNewSect = pNewSectNode->GetSection();
         rNewSect.SetCondHidden( aCalc.Calculate( rNewSect.GetCondition() ).GetBool() );
     }
@@ -469,12 +461,12 @@ USHORT SwDoc::IsInsRegionAvailable( const SwPaM& rRange,
                 }
                 if( !pPrvNd )
                     pPrvNd = pNd->IsStartNode() ? (SwStartNode*)pNd
-                                                : pNd->FindStartNode();
+                                                : pNd->StartOfSectionNode();
 
                 aIdx = pEnd->nNode.GetIndex() + 1;
                 nCmp = pStt->nNode.GetIndex();
                 while( 0 != ( pNxtNd = (pNd = &aIdx.GetNode())->GetEndNode() ) &&
-                    pNxtNd->FindStartNode()->IsSectionNode() &&
+                    pNxtNd->StartOfSectionNode()->IsSectionNode() &&
                     !( pNxtNd->StartOfSectionIndex() < nCmp &&
                         nCmp < aIdx.GetIndex() ) )
                 {
@@ -483,7 +475,7 @@ USHORT SwDoc::IsInsRegionAvailable( const SwPaM& rRange,
                 if( !pNxtNd )
                     pNxtNd = pNd->EndOfSectionNode();
 
-                if( pPrvNd && pNxtNd && pPrvNd == pNxtNd->FindStartNode() )
+                if( pPrvNd && pNxtNd && pPrvNd == pNxtNd->StartOfSectionNode() )
                 {
                     nRet = 3;
 
@@ -569,7 +561,7 @@ void SwDoc::DelSectionFmt( SwSectionFmt *pFmt, BOOL bDelNodes )
 {
     USHORT nPos = pSectionFmtTbl->GetPos( pFmt );
 
-    StartUndo(UNDO_DELSECTION);
+    StartUndo(UNDO_DELSECTION, NULL);
 
     if( USHRT_MAX != nPos )
     {
@@ -597,7 +589,7 @@ void SwDoc::DelSectionFmt( SwSectionFmt *pFmt, BOOL bDelNodes )
                     GetFtnIdxs().UpdateFtn( aUpdIdx );
                 SetModified();
                 //#126178# start/end undo have to be pairs!
-                EndUndo(UNDO_DELSECTION);
+                EndUndo(UNDO_DELSECTION, NULL);
                 return ;
             }
             AppendUndo( new SwUndoDelSection( *pFmt ) );
@@ -611,7 +603,7 @@ void SwDoc::DelSectionFmt( SwSectionFmt *pFmt, BOOL bDelNodes )
                 GetFtnIdxs().UpdateFtn( aUpdIdx );
             SetModified();
             //#126178# start/end undo have to be pairs!
-            EndUndo(UNDO_DELSECTION);
+            EndUndo(UNDO_DELSECTION, NULL);
             return ;
         }
 
@@ -655,7 +647,7 @@ void SwDoc::DelSectionFmt( SwSectionFmt *pFmt, BOOL bDelNodes )
 //FEATURE::CONDCOLL
     }
 
-    EndUndo(UNDO_DELSECTION);
+    EndUndo(UNDO_DELSECTION, NULL);
 
     SetModified();
 }
@@ -777,7 +769,7 @@ void SwDoc::ChgSection( USHORT nPos, const SwSection& rSect,
         SwCalc aCalc( *this );
         if( !pIdx )
             pIdx = pFmt->GetCntnt().GetCntntIdx();
-        FldsToCalc( aCalc, pIdx->GetIndex() );
+        FldsToCalc( aCalc, pIdx->GetIndex(), USHRT_MAX );
         /// OD 04.10.2002 #102894#
         /// Because on using SwSection::operator=() to set up <pSection>
         /// with <rSect> and the above given note, the hidden condition flag
@@ -887,7 +879,7 @@ SwSectionNode* SwNodes::InsertSection( const SwNodeIndex& rNdIdx,
             if( !lcl_IsTOXSection( rSection ))
                 while( aInsPos.GetIndex() < Count() - 1 &&
                         ( pNd = &aInsPos.GetNode())->IsEndNode() &&
-                        pNd->FindStartNode()->IsSectionNode())
+                        pNd->StartOfSectionNode()->IsSectionNode())
                     aInsPos++;
         }
     }
@@ -1052,7 +1044,7 @@ SwSectionNode* SwNode::FindSectionNode()
 SwSectionNode::SwSectionNode( const SwNodeIndex& rIdx, SwSectionFmt& rFmt )
     : SwStartNode( rIdx, ND_SECTIONNODE )
 {
-    SwSectionNode* pParent = FindStartNode()->FindSectionNode();
+    SwSectionNode* pParent = StartOfSectionNode()->FindSectionNode();
     if( pParent )
     {
         // das Format beim richtigen Parent anmelden.
@@ -1449,7 +1441,7 @@ void SwSectionNode::NodesArrChgd()
         pFmt->SetAttr( SwFmtCntnt( this ));
         pFmt->UnlockModify();
 
-        SwSectionNode* pSectNd = FindStartNode()->FindSectionNode();
+        SwSectionNode* pSectNd = StartOfSectionNode()->FindSectionNode();
         // set the correct parent from the new section
         pFmt->SetDerivedFrom( pSectNd ? pSectNd->GetSection().GetFmt()
                                       : pDoc->GetDfltFrmFmt() );
