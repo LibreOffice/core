@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtpaint.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:07:38 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:45:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -67,35 +66,23 @@ void SwSaveClip::Reset()
  *                      SwSaveClip::_ChgClip()
  *************************************************************************/
 
-#ifdef VERTICAL_LAYOUT
 void SwSaveClip::_ChgClip( const SwRect &rRect, const SwTxtFrm* pFrm,
                            sal_Bool bEnlargeRect )
-#else
-void SwSaveClip::_ChgClip( const SwRect &rRect, sal_Bool bEnlargeRect )
-#endif
 {
-#ifdef VERTICAL_LAYOUT
     SwRect aOldRect( rRect );
     const sal_Bool bVertical = pFrm && pFrm->IsVertical();
 
-#ifdef BIDI
     if ( pFrm && pFrm->IsRightToLeft() )
         pFrm->SwitchLTRtoRTL( (SwRect&)rRect );
-#endif
 
     if ( bVertical )
         pFrm->SwitchHorizontalToVertical( (SwRect&)rRect );
-#endif
 
     if ( !pOut || (!rRect.HasArea() && !pOut->IsClipRegion()) )
-#ifdef VERTICAL_LAYOUT
     {
         (SwRect&)rRect = aOldRect;
         return;
     }
-#else
-        return;
-#endif
 
     if ( !bChg )
     {
@@ -111,28 +98,20 @@ void SwSaveClip::_ChgClip( const SwRect &rRect, sal_Bool bEnlargeRect )
     {
         Rectangle aRect( rRect.SVRect() );
 
-#ifdef VERTICAL_LAYOUT
         // Having underscores in our line, we enlarged the repaint area
         // (see frmform.cxx) because for some fonts it could be too small.
         // Consequently, we have to enlarge the clipping rectangle as well.
         if ( bEnlargeRect && ! bVertical )
-#else
-        if ( bEnlargeRect )
-#endif
             aRect.Bottom() += 40;
 
         // Wenn das ClipRect identisch ist, passiert nix.
         if( pOut->IsClipRegion() ) // kein && wg Mac
         {
             if ( aRect == pOut->GetClipRegion().GetBoundRect() )
-#ifdef VERTICAL_LAYOUT
             {
                 (SwRect&)rRect = aOldRect;
                 return;
             }
-#else
-                return;
-#endif
         }
 
         if( SwRootFrm::HasSameRect( rRect ) )
@@ -158,10 +137,7 @@ void SwSaveClip::_ChgClip( const SwRect &rRect, sal_Bool bEnlargeRect )
     }
     bChg = sal_True;
 
-#ifdef VERTICAL_LAYOUT
     (SwRect&)rRect = aOldRect;
-#endif
-
 }
 
 
