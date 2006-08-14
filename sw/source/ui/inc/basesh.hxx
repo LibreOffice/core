@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basesh.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 17:22:58 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:38:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,8 +60,6 @@
 class SwWrtShell;
 class SwCrsrShell;
 class SwView;
-class GraphicFilter;
-class SwFlyFrmAttrMgr;
 class SfxItemSet;
 class Graphic;
 
