@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itrtxt.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:56:01 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:39:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _ITRTXT_HXX
 #define _ITRTXT_HXX
-
 #include "swtypes.hxx"
 #include "itratr.hxx"
 #include "inftxt.hxx"
@@ -53,16 +52,11 @@ class SwTxtIter : public SwAttrIter
 {
 protected:
     SwLineInfo aLineInf;
-#ifndef VERTICAL_LAYOUT
-    Point aTopLeft;         // erste Ausgabeposition
-#endif
     SwTxtFrm  *pFrm;
     SwTxtInfo *pInf;
     SwLineLayout *pCurr;
     SwLineLayout *pPrev;
-#ifdef VERTICAL_LAYOUT
     SwTwips nFrameStart;
-#endif
     SwTwips nY;
     SwTwips nRegStart;          // Anfangsposition (Y) des Registers
     xub_StrLen nStart;          // Start im Textstring, Ende = pCurr->GetLen()
@@ -130,12 +124,7 @@ public:
         { return pCurr == pInf->GetParaPortion(); }
 
     const SwLineInfo &GetLineInfo() const { return aLineInf; }
-#ifdef VERTICAL_LAYOUT
     inline SwTwips GetFirstPos() const { return nFrameStart; }
-#else
-    inline const Point &GetFirstPos() const { return aTopLeft; }
-#endif
-
     inline sal_Bool SeekAndChg( SwTxtSizeInfo &rInf );
     inline sal_Bool SeekAndChgBefore( SwTxtSizeInfo &rInf );
     inline sal_Bool SeekStartAndChg( SwTxtSizeInfo &rInf, const sal_Bool bPara=sal_False );
@@ -186,9 +175,6 @@ public:
     inline sal_Bool IsLastBlock() const { return bLastBlock; }
     inline sal_Bool IsLastCenter() const { return bLastCenter; }
     inline MSHORT GetAdjust() const { return nAdjust; }
-#ifndef BIDI
-    inline void SetAdjust( const MSHORT nNew ) { nAdjust = nNew; }
-#endif
     inline KSHORT GetLineWidth() const
            { return KSHORT( Right() - GetLeftMargin() + 1 ); }
     inline SwTwips GetLeftMin() const { return nFirst < nLeft ? nFirst : nLeft; }
@@ -291,22 +277,9 @@ public:
 
     // calculates baseline for portion rPor
     // bAutoToCentered indicates, if AUTOMATIC mode means CENTERED or BASELINE
-#ifdef VERTICAL_LAYOUT
     USHORT AdjustBaseLine( const SwLineLayout& rLine, const SwLinePortion* pPor,
                            USHORT nPorHeight = 0, USHORT nAscent = 0,
                            const sal_Bool bAutoToCentered = sal_False ) const;
-#else
-    USHORT AdjustBaseLine( const SwLineLayout& rLine,
-                           const USHORT nPorHeight,
-                           const USHORT nPorAscent,
-                           const sal_Bool bAutoToCentered = sal_False ) const;
-
-    inline USHORT AdjustBaseLine( const SwLineLayout& rLine,
-                                  const SwLinePortion& rPor,
-                                  const sal_Bool bAutoToCentered = sal_False ) const
-        { return AdjustBaseLine( rLine, rPor.Height(),
-                                 rPor.GetAscent(), bAutoToCentered ); };
-#endif
 
     static inline void SetRightMargin( const sal_Bool bNew ){ bRightMargin = bNew; }
     static inline sal_Bool IsRightMargin() { return bRightMargin; }
