@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tocntntanchoredobjectposition.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 12:24:52 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:30:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,6 @@
 #ifndef _TOCNTNTANCHOREDOBJECTPOSITION_HXX
 #include <tocntntanchoredobjectposition.hxx>
 #endif
-
 #ifndef _ANCHOREDOBJECT_HXX
 #include <anchoredobject.hxx>
 #endif
@@ -59,8 +58,8 @@
 #ifndef _FRMFMT_HXX
 #include <frmfmt.hxx>
 #endif
-#ifndef _DOC_HXX
-#include <doc.hxx>
+#ifndef IDOCUMENTSETTINGACCESS_HXX_INCLUDED
+#include <IDocumentSettingAccess.hxx>
 #endif
 #ifndef _FMTSRND_HXX
 #include <fmtsrnd.hxx>
@@ -98,7 +97,6 @@
 #ifndef _DFLYOBJ_HXX
 #include <dflyobj.hxx>
 #endif
-
 using namespace objectpositioning;
 
 SwToCntntAnchoredObjectPosition::SwToCntntAnchoredObjectPosition( SdrObject& _rDrawObj )
@@ -207,7 +205,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
     // object is anchored at the body, but not at frame belonging to a table.
     const bool bBrowse = GetAnchorFrm().IsInDocBody() &&
                          !GetAnchorFrm().IsInTab()
-                            ? rFrmFmt.GetDoc()->IsBrowseMode()
+                            ? rFrmFmt.getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE)
                             : false;
 
     // determine left/right and its upper/lower spacing.
