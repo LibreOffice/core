@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtww8gr.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:41:22 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:16:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,6 +114,8 @@
 #ifndef _FMTORNT_HXX
 #include <fmtornt.hxx>
 #endif
+
+#include <doc.hxx>
 
 #ifndef SW_WRITERHELPER
 #include "writerhelper.hxx"
