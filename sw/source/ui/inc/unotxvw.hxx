@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotxvw.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-08 14:48:15 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:46:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,7 +98,6 @@
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
 #endif
-
 class SwView;
 
 typedef ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener > * XSelectionChangeListenerPtr;
@@ -204,7 +203,7 @@ public:
 /* -----------------17.09.98 12:52-------------------
  *
  * --------------------------------------------------*/
-class SwUnoCrsr;
+
 typedef cppu::WeakImplHelper8<
                             ::com::sun::star::text::XTextViewCursor,
                             ::com::sun::star::lang::XServiceInfo,
