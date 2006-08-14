@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unobkm.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:24:27 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:53:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -156,11 +155,10 @@ void SwXBookmark::attachToRange(const uno::Reference< text::XTextRange > & xText
         {
             if(!m_aName.Len())
                  m_aName =  C2S("Bookmark");
-            if( USHRT_MAX != pDoc->FindBookmark(m_aName) )
-                pDoc->MakeUniqueBookmarkName( m_aName );
+            if( USHRT_MAX != pDoc->findBookmark(m_aName) )
+                pDoc->makeUniqueBookmarkName( m_aName );
             KeyCode aCode;
-            pBkm = pDoc->MakeBookmark( aPam, aCode,
-                                                m_aName, aEmptyStr, BOOKMARK);
+            pBkm = pDoc->makeBookmark( aPam, aCode, m_aName, aEmptyStr, IDocumentBookmarkAccess::BOOKMARK);
             pBkm->Add(this);
             bIsDescriptor = sal_False;
         }
@@ -207,7 +205,7 @@ void SwXBookmark::dispose(void) throw( uno::RuntimeException )
     vos::OGuard aGuard(Application::GetSolarMutex());
     SwBookmark* pBkm = GetBookmark();
     if(pBkm)
-        GetDoc()->DelBookmark(getName());
+        GetDoc()->deleteBookmark(getName());
     else
         throw uno::RuntimeException();
 }
@@ -255,7 +253,7 @@ void SwXBookmark::setName(const OUString& rName) throw( uno::RuntimeException )
     SwBookmark* pBkm = GetBookmark();
     String sBkName(rName);
     String sOldName = getName();
-    if(sOldName != sBkName && pBkm && USHRT_MAX == pDoc->FindBookmark(sBkName))
+    if(sOldName != sBkName && pBkm && USHRT_MAX == pDoc->findBookmark(sBkName))
     {
         KeyCode aCode;
         String sShortName;
@@ -289,12 +287,11 @@ void SwXBookmark::setName(const OUString& rName) throw( uno::RuntimeException )
 
         pDoc->StartUndo(UNDO_BOOKMARK_RENAME, &aRewriter);
 
-        SwBookmark* pMark = pDoc->MakeBookmark(aPam, aCode,
-                    sBkName, sShortName, BOOKMARK);
+        SwBookmark* pMark = pDoc->makeBookmark(aPam, aCode, sBkName, sShortName, IDocumentBookmarkAccess::BOOKMARK);
         pMark->Add(this);
-        GetDoc()->DelBookmark( sOldName );
+        GetDoc()->deleteBookmark( sOldName );
 
-        pDoc->EndUndo(UNDO_BOOKMARK_RENAME);
+        pDoc->EndUndo(UNDO_BOOKMARK_RENAME, NULL);
     }
     else if(bIsDescriptor)
         m_aName = sBkName;
