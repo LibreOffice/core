@@ -4,9 +4,9 @@
  *
  *  $RCSfile: regionsw.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:59:16 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:44:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _REGIONSW_HXX
 #define _REGIONSW_HXX
-
 #ifndef _SV_FIELD_HXX
 #include <vcl/field.hxx>
 #endif
@@ -101,7 +100,6 @@
 #endif
 class SwWrtShell;
 class EditRegionDlg;
-class DropEvent;
 
 /*--------------------------------------------------------------------
     Beschreibung:
