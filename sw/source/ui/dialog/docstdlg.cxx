@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docstdlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:12:06 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:33:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifdef SW_DLLIMPLEMENTATION
 #undef SW_DLLIMPLEMENTATION
 #endif
@@ -60,10 +59,6 @@
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>
 #endif
-#ifndef _FESH_HXX
-#include <fesh.hxx>
-#endif
-
 #ifndef _PVIEW_HXX
 #include <pview.hxx>
 #endif
@@ -72,9 +67,6 @@
 #endif
 #ifndef _DOCSTDLG_HXX
 #include <docstdlg.hxx>
-#endif
-#ifndef _DOCSTAT_HXX
-#include <docstat.hxx>
 #endif
 #ifndef _MODCFG_HXX
 #include <modcfg.hxx>
