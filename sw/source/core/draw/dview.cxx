@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dview.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 12:30:12 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:06:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 #include "hintids.hxx"
@@ -188,7 +187,6 @@ void SwDrawView::AddCustomHdl()
     if(0 == (pAnch = CalcAnchor()))
         return;
 
-    ViewShell &rSh = *Imp().GetShell();
     Point aPos(aAnchorPoint);
 
     if ( FLY_AUTO_CNTNT == rAnchor.GetAnchorId() )
@@ -992,7 +990,7 @@ void SwDrawView::DeleteMarked()
     SwDoc* pDoc = Imp().GetShell()->GetDoc();
     if ( pDoc->GetRootFrm() )
         pDoc->GetRootFrm()->StartAllAction();
-    pDoc->StartUndo();
+    pDoc->StartUndo(0, NULL);
     // OD 18.06.2003 #108784# - replace marked <SwDrawVirtObj>-objects by its
     // reference objects.
     {
@@ -1011,7 +1009,7 @@ void SwDrawView::DeleteMarked()
         FmFormView::DeleteMarked();
         ::FrameNotify( Imp().GetShell(), FLY_DRAG_END );
     }
-    pDoc->EndUndo();
+    pDoc->EndUndo(0, NULL);
     if( pDoc->GetRootFrm() )
         pDoc->GetRootFrm()->EndAllAction();
 }
