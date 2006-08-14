@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtbl.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-03 13:55:56 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:04:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -118,9 +117,6 @@
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
 #endif
-#ifndef _HINTS_HXX
-#include <hints.hxx>
-#endif
 #ifndef _SWUNDO_HXX
 #include <swundo.hxx>
 #endif
@@ -166,9 +162,6 @@
 #ifndef _DOCARY_HXX
 #include <docary.hxx>
 #endif
-#ifndef _NDINDEX_HXX
-#include <ndindex.hxx>
-#endif
 #ifndef _REDLINE_HXX
 #include <redline.hxx>
 #endif
@@ -187,32 +180,21 @@
 #ifndef _FTNFRM_HXX
 #include <ftnfrm.hxx>
 #endif
-#ifndef _ITABENUM_HXX
-#include <itabenum.hxx>
-#endif
 #ifndef _SECTION_HXX //autogen
 #include <section.hxx>
 #endif
 #ifndef _FRMTOOL_HXX //autogen
 #include <frmtool.hxx>
 #endif
-
 #ifndef _NODE2LAY_HXX
 #include <node2lay.hxx>
 #endif
-
 #ifndef _COMCORE_HRC
 #include <comcore.hrc>
 #endif
-
 #ifndef _DOCSH_HXX
 #include "docsh.hxx"
 #endif
-
-#ifdef _MSAVE_HXX
-#include "msave.hxx"
-#endif
-
 #ifdef LINUX
 #ifndef _TABCOL_HXX
 #include <tabcol.hxx>
@@ -251,14 +233,14 @@ public:
     lcl_DelRedlines( const SwTableNode& rNd, BOOL bCheckForOwnRedline );
     lcl_DelRedlines( SwPaM& rPam );
 
-    ~lcl_DelRedlines() { pDoc->EndUndo(); }
+    ~lcl_DelRedlines() { pDoc->EndUndo(0, NULL); }
 };
 
 lcl_DelRedlines::lcl_DelRedlines( SwPaM & rPam) : pDoc( rPam.GetDoc() )
 {
-    pDoc->StartUndo();
+    pDoc->StartUndo(0, NULL);
     if( !pDoc->IsIgnoreRedline() && pDoc->GetRedlineTbl().Count() )
-        pDoc->AcceptRedline( rPam );
+        pDoc->AcceptRedline( rPam, true );
 }
 #endif
 
@@ -273,7 +255,7 @@ void lcl_SetDfltBoxAttr( SwFrmFmt& rFmt, BYTE nId )
     case 3: bBottom = bLeft = bRight = TRUE;        break;
     }
 
-    const BOOL bHTML = rFmt.GetDoc()->IsHTMLMode();
+    const BOOL bHTML = rFmt.getIDocumentSettingAccess()->get(IDocumentSettingAccess::HTML_MODE);
     Color aCol( bHTML ? COL_GRAY : COL_BLACK );
     SvxBorderLine aLine( &aCol, DEF_LINE_WIDTH_0 );
     if ( bHTML )
@@ -691,7 +673,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
     {
         SwPaM aPam( *pTblNd->EndOfSectionNode(), *pTblNd, 1 );
         if( IsRedlineOn() )
-            AppendRedline( new SwRedline( REDLINE_INSERT, aPam ));
+            AppendRedline( new SwRedline( IDocumentRedlineAccess::REDLINE_INSERT, aPam ), true);
         else
             SplitRedline( aPam );
     }
@@ -794,7 +776,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
     SwUndoTxtToTbl* pUndo = 0;
     if( DoesUndo() )
     {
-        StartUndo( UNDO_TEXTTOTABLE );
+        StartUndo( UNDO_TEXTTOTABLE, NULL );
         pUndo = new SwUndoTxtToTbl( aOriginal, rInsTblOpts, cCh, eAdjust, pTAFmt );
         AppendUndo( pUndo );
 
@@ -810,7 +792,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
     // sorge dafuer, das der Bereich auf Node-Grenzen liegt
     SwNodeRange aRg( pStt->nNode, pEnd->nNode );
     if( pStt->nContent.GetIndex() )
-        SplitNode( *pStt );
+        SplitNode( *pStt, false );
 
     BOOL bEndCntnt = 0 != pEnd->nContent.GetIndex();
     // nicht splitten am Ende der Zeile (aber am Ende vom Doc!!)
@@ -819,7 +801,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
         if( pEnd->nNode.GetNode().GetCntntNode()->Len() != pEnd->nContent.GetIndex()
             || pEnd->nNode.GetIndex() >= GetNodes().GetEndOfContent().GetIndex()-1 )
         {
-            SplitNode( *pEnd );
+            SplitNode( *pEnd, false );
             ((SwNodeIndex&)pEnd->nNode)--;
             ((SwIndex&)pEnd->nContent).Assign(
                                 pEnd->nNode.GetNode().GetCntntNode(), 0 );
@@ -1016,10 +998,10 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
     }
 
     if( pUndo )
-        EndUndo( UNDO_TEXTTOTABLE );
+        EndUndo( UNDO_TEXTTOTABLE, NULL );
 
     SetModified();
-    SetFieldsDirty( TRUE );
+    SetFieldsDirty(true, NULL, 0);
     return pNdTbl;
 }
 
@@ -1531,7 +1513,7 @@ BOOL SwDoc::InsertCol( const SwSelBoxes& rBoxes, USHORT nCnt, BOOL bBehind )
     {
         SetModified();
         ::ClearFEShellTabCols();
-        SetFieldsDirty( TRUE );
+        SetFieldsDirty( true, NULL, 0 );
     }
 
     if( pUndo )
@@ -1596,7 +1578,7 @@ BOOL SwDoc::InsertRow( const SwSelBoxes& rBoxes, USHORT nCnt, BOOL bBehind )
     {
         SetModified();
         ::ClearFEShellTabCols();
-        SetFieldsDirty( TRUE );
+        SetFieldsDirty( true, NULL, 0 );
     }
 
     if( pUndo )
@@ -1716,9 +1698,9 @@ BOOL SwDoc::DeleteRow( const SwCursor& rCursor )
 
     // dann loesche doch die Zeilen
 
-    StartUndo(UNDO_ROW_DELETE);
+    StartUndo(UNDO_ROW_DELETE, NULL);
     BOOL bResult = DeleteRowCol( aBoxes );
-    EndUndo(UNDO_ROW_DELETE);
+    EndUndo(UNDO_ROW_DELETE, NULL);
 
     return bResult;
 }
@@ -1742,9 +1724,9 @@ BOOL SwDoc::DeleteCol( const SwCursor& rCursor )
     }
 
     // dann loesche doch die Spalten
-    StartUndo(UNDO_COL_DELETE);
+    StartUndo(UNDO_COL_DELETE, NULL);
     BOOL bResult = DeleteRowCol( aBoxes );
-    EndUndo(UNDO_COL_DELETE);
+    EndUndo(UNDO_COL_DELETE, NULL);
 
     return bResult;
 }
@@ -1905,7 +1887,7 @@ BOOL SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes )
             DeleteSection( pTblNd );
         }
         SetModified();
-        SetFieldsDirty( TRUE );
+        SetFieldsDirty( true, NULL, 0 );
         return TRUE;
     }
 
@@ -1924,7 +1906,7 @@ BOOL SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes )
     if( bRet )
     {
         SetModified();
-        SetFieldsDirty( TRUE );
+        SetFieldsDirty( true, NULL, 0 );
     }
 
     if( pUndo )
@@ -1995,7 +1977,7 @@ BOOL SwDoc::SplitTbl( const SwSelBoxes& rBoxes, sal_Bool bVert, USHORT nCnt,
     if( bRet )
     {
         SetModified();
-        SetFieldsDirty( TRUE );
+        SetFieldsDirty( true, NULL, 0 );
     }
 
     if( pUndo )
@@ -2032,15 +2014,15 @@ USHORT SwDoc::MergeTbl( SwPaM& rPam )
     nRet = TBLMERGE_NOSELECTION;
 
     // --> FME 2004-10-08 #i33394#
-    StartUndo( UNDO_TABLE_MERGE );
+    StartUndo( UNDO_TABLE_MERGE, NULL );
     // <--
 
 #ifdef DEL_TABLE_REDLINES
     if( !IsIgnoreRedline() && GetRedlineTbl().Count() )
-        DeleteRedline( *pTblNd );
+        DeleteRedline( *pTblNd, true, USHRT_MAX );
 #endif
-    SwRedlineMode eOld = GetRedlineMode();
-    SetRedlineMode_intern( eOld | REDLINE_IGNORE );
+    IDocumentRedlineAccess::RedlineMode_t eOld = GetRedlineMode();
+    SetRedlineMode_intern( eOld | IDocumentRedlineAccess::REDLINE_IGNORE );
 
     SwUndoTblMerge* pUndo = 0;
     if( DoesUndo() )
@@ -2057,7 +2039,7 @@ USHORT SwDoc::MergeTbl( SwPaM& rPam )
         if( pUndo )
         {
             delete pUndo;
-            if( UNDO_REDLINE == GetUndoIds() )
+            if( UNDO_REDLINE == GetUndoIds(NULL, NULL) )
             {
                 SwUndoRedline* pU = (SwUndoRedline*)RemoveLastUndo( UNDO_REDLINE );
                 if( pU->GetRedlSaveCount() )
@@ -2098,7 +2080,7 @@ USHORT SwDoc::MergeTbl( SwPaM& rPam )
         {
             nRet = TBLMERGE_OK;
             SetModified();
-            SetFieldsDirty( TRUE );
+            SetFieldsDirty( true, NULL, 0 );
             if( pUndo )
                 AppendUndo( pUndo );
         }
@@ -2111,7 +2093,7 @@ USHORT SwDoc::MergeTbl( SwPaM& rPam )
         ::ClearFEShellTabCols();
         SetRedlineMode_intern( eOld );
     }
-    EndUndo( UNDO_TABLE_MERGE );
+    EndUndo( UNDO_TABLE_MERGE, NULL );
     return nRet;
 }
 
@@ -2594,7 +2576,6 @@ void SwDoc::SetTabRows( const SwTabCols &rNew, BOOL bCurColOnly, const SwCursor*
 
     // sollte die Tabelle noch auf relativen Werten (USHRT_MAX) stehen
     // dann muss es jetzt auf absolute umgerechnet werden.
-    SwTable& rTab = *pTab->GetTable();
     SWRECTFN( pTab )
     SwTabCols aOld( rNew.Count() );
 
@@ -2620,11 +2601,10 @@ void SwDoc::SetTabRows( const SwTabCols &rNew, BOOL bCurColOnly, const SwCursor*
 
     GetTabRows( aOld, 0, pBoxFrm );
 
-       StartUndo( UNDO_TABLE_ATTR );
+       StartUndo( UNDO_TABLE_ATTR, NULL );
 
     // check for differences between aOld and rNew:
     const USHORT nCount = rNew.Count();
-    long nShift = 0;
     for ( USHORT i = 0; i <= nCount; ++i )
     {
         const USHORT nIdxStt = bVert ? nCount - i : i - 1;
@@ -2678,7 +2658,7 @@ void SwDoc::SetTabRows( const SwTabCols &rNew, BOOL bCurColOnly, const SwCursor*
         }
     }
 
-    EndUndo( UNDO_TABLE_ATTR );
+    EndUndo( UNDO_TABLE_ATTR, NULL );
 
     ::ClearFEShellTabCols();
 }
@@ -3021,7 +3001,7 @@ BOOL SwDoc::SplitTable( const SwPosition& rPos, USHORT eHdlnMode,
     //Layout updaten
     aFndBox.MakeFrms( rTbl );
     aFndBox.RestoreChartData( rTbl );
-    SetFieldsDirty( TRUE );
+    SetFieldsDirty( true, NULL, 0 );
 
     return 0 != pNew;
 }
@@ -3275,7 +3255,7 @@ BOOL SwDoc::MergeTable( const SwPosition& rPos, BOOL bWithPrev, USHORT nMode )
     if( bRet )
     {
         SetModified();
-        SetFieldsDirty( TRUE );
+        SetFieldsDirty( true, NULL, 0 );
     }
     return bRet;
 }
@@ -3534,7 +3514,7 @@ BOOL SwDoc::SetTableAutoFmt( const SwSelBoxes& rBoxes, const SwTableAutoFmt& rNe
         DoUndo( TRUE );
 
     SetModified();
-    SetFieldsDirty( TRUE );
+    SetFieldsDirty( true, NULL, 0 );
 
     return TRUE;
 }
@@ -3718,7 +3698,7 @@ BOOL SwDoc::SetColRowWidthHeight( SwTableBox& rAktBox, USHORT eType,
     {
         SetModified();
         if( WH_FLAG_INSDEL & eType )
-            SetFieldsDirty( TRUE );
+            SetFieldsDirty( true, NULL, 0 );
     }
     return bRet;
 }
@@ -3747,7 +3727,7 @@ void SwDoc::ChkBoxNumFmt( SwTableBox& rBox, BOOL bCallUpdate )
         {
             if( DoesUndo() )
             {
-                StartUndo( UNDO_TABLE_AUTOFMT );
+                StartUndo( UNDO_TABLE_AUTOFMT, NULL );
                 pUndo = new SwUndoTblNumFmt( rBox );
                 pUndo->SetNumFmt( nFmtIdx, fNumber );
             }
@@ -3822,7 +3802,7 @@ void SwDoc::ChkBoxNumFmt( SwTableBox& rBox, BOOL bCallUpdate )
         {
             if( DoesUndo() )
             {
-                StartUndo( UNDO_TABLE_AUTOFMT );
+                StartUndo( UNDO_TABLE_AUTOFMT, NULL );
                 pUndo = new SwUndoTblNumFmt( rBox );
             }
 
@@ -3854,7 +3834,7 @@ void SwDoc::ChkBoxNumFmt( SwTableBox& rBox, BOOL bCallUpdate )
         {
             pUndo->SetBox( rBox );
             AppendUndo( pUndo );
-            EndUndo( UNDO_END );
+            EndUndo( UNDO_END, NULL );
         }
 
         if( bCallUpdate )
@@ -3978,9 +3958,11 @@ BOOL SwDoc::InsCopyOfTbl( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
     }
     else
     {
-        SwRedlineMode eOld = GetRedlineMode();
+        IDocumentRedlineAccess::RedlineMode_t eOld = GetRedlineMode();
         if( IsRedlineOn() )
-            SetRedlineMode( REDLINE_ON | REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE );
+            SetRedlineMode( IDocumentRedlineAccess::REDLINE_ON |
+                            IDocumentRedlineAccess::REDLINE_SHOW_INSERT |
+                            IDocumentRedlineAccess::REDLINE_SHOW_DELETE );
 
         SwUndoTblCpyTbl* pUndo = 0;
         if( DoesUndo() )
@@ -3998,7 +3980,7 @@ BOOL SwDoc::InsCopyOfTbl( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
         {
             // kopiere die Tabelle erstmal in ein temp. Doc
             pCpyDoc = new SwDoc;
-            pCpyDoc->AddLink();
+            pCpyDoc->acquire();
             pRefForDocSh = new SfxObjectShellRef();
             pCpyDoc->SetRefForDocShell( pRefForDocSh );
 
@@ -4006,7 +3988,7 @@ BOOL SwDoc::InsCopyOfTbl( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
             if( !pSrcTblNd->GetTable().MakeCopy( pCpyDoc, aPos, rBoxes, TRUE, TRUE ))
             {
                 delete pRefForDocSh;
-                if( pCpyDoc->RemoveLink() == 0 )
+                if( pCpyDoc->release() == 0 )
                     delete pCpyDoc;
 
                 if( pUndo )
@@ -4059,7 +4041,7 @@ BOOL SwDoc::InsCopyOfTbl( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
         if( bDelCpyDoc )
         {
             delete pRefForDocSh;
-            if( pCpyDoc->RemoveLink() == 0 )
+            if( pCpyDoc->release() == 0 )
                 delete pCpyDoc;
         }
 
@@ -4085,7 +4067,7 @@ BOOL SwDoc::InsCopyOfTbl( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
     if( bRet )
     {
         SetModified();
-        SetFieldsDirty( TRUE );
+        SetFieldsDirty( true, NULL, 0 );
     }
     return bRet;
 }
@@ -4183,7 +4165,7 @@ BOOL SwDoc::UnProtectCells( const SwSelBoxes& rBoxes )
 
 BOOL SwDoc::UnProtectTbls( const SwPaM& rPam )
 {
-    StartUndo();
+    StartUndo(0, NULL);
 
     BOOL bChgd = FALSE, bHasSel = rPam.HasMark() ||
                                     rPam.GetNext() != (SwPaM*)&rPam;
@@ -4217,7 +4199,7 @@ BOOL SwDoc::UnProtectTbls( const SwPaM& rPam )
             bChgd |= _UnProtectTblCells( *pTbl );
         }
 
-    EndUndo();
+    EndUndo(0, NULL);
     if( bChgd )
         SetModified();
 
@@ -4270,14 +4252,14 @@ lcl_DelRedlines::lcl_DelRedlines( const SwTableNode& rNd,
                                     BOOL bCheckForOwnRedline )
     : pDoc( (SwDoc*)rNd.GetNodes().GetDoc() )
 {
-    pDoc->StartUndo();
+    pDoc->StartUndo(0, NULL);
     const SwRedlineTbl& rTbl = pDoc->GetRedlineTbl();
     if( !pDoc->IsIgnoreRedline() && rTbl.Count() )
     {
         BOOL bDelete = TRUE;
         if( bCheckForOwnRedline )
         {
-            sal_uInt16 nRedlPos = pDoc->GetRedlinePos( rNd );
+            sal_uInt16 nRedlPos = pDoc->GetRedlinePos( rNd, USHRT_MAX );
             sal_uInt32 nSttNd = rNd.GetIndex(),
                        nEndNd = rNd.EndOfSectionIndex();
 
@@ -4304,7 +4286,7 @@ lcl_DelRedlines::lcl_DelRedlines( const SwTableNode& rNd,
         if( bDelete )
         {
             SwPaM aPam(*rNd.EndOfSectionNode(), rNd);
-            pDoc->AcceptRedline( aPam );
+            pDoc->AcceptRedline( aPam, true );
         }
     }
 }
