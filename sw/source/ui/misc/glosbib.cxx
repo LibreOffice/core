@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glosbib.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:43:29 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:49:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifdef SW_DLLIMPLEMENTATION
 #undef SW_DLLIMPLEMENTATION
 #endif
@@ -73,12 +72,18 @@
 #ifndef _GLOSHDL_HXX
 #include <gloshdl.hxx>
 #endif
+
+#ifndef _ACTCTRL_HXX
+#include <actctrl.hxx>
+#endif
+
 #ifndef _GLOSSARY_HXX
 #include <glossary.hxx>
 #endif
 #ifndef _GLOSDOC_HXX
 #include <glosdoc.hxx>
 #endif
+
 #ifndef _SWUNOHELPER_HXX
 #include <swunohelper.hxx>
 #endif
