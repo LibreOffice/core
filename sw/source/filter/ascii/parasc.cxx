@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parasc.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 08:05:06 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:59:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifdef PCH
@@ -184,8 +183,8 @@ SwASCIIParser::SwASCIIParser(SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
     {
         bool bDelete = false;
         const SfxFont* pFnt = 0;
-        if( pDoc->GetPrt() )
-            pFnt = pDoc->GetPrt()->GetFontByName( rOpt.GetFontName() );
+        if( pDoc->getPrinter( false ) )
+            pFnt = pDoc->getPrinter( false )->GetFontByName( rOpt.GetFontName() );
 
         if( !pFnt )
         {
@@ -236,9 +235,9 @@ ULONG SwASCIIParser::CallParser()
 
     if (bNewDoc)
     {
-        pColl = pDoc->GetTxtCollFromPoolSimple(RES_POOLCOLL_HTML_PRE, false);
+        pColl = pDoc->GetTxtCollFromPool(RES_POOLCOLL_HTML_PRE, false);
         if (!pColl)
-            pColl = pDoc->GetTxtCollFromPoolSimple(RES_POOLCOLL_STANDARD,false);
+            pColl = pDoc->GetTxtCollFromPool(RES_POOLCOLL_STANDARD,false);
         if (pColl)
             pDoc->SetTxtFmtColl(*pPam, pColl);
     }
@@ -311,7 +310,7 @@ ULONG SwASCIIParser::CallParser()
 
                 // !!!!!
                 ASSERT( !this, "Have to change - hard attr. to para. style" );
-                pDoc->Insert( *pInsPam, *pItemSet );
+                pDoc->Insert( *pInsPam, *pItemSet, 0 );
             }
         }
         delete pItemSet, pItemSet = 0;
@@ -455,7 +454,7 @@ ULONG SwASCIIParser::ReadChars()
                 // JP 03.04.96: das letze am Ende nehmen wir nicht
                 if( !rInput.IsEof() || !(pEnd == pStt ||
                     ( !*pEnd && pEnd == pStt+1 ) ) )
-                    pDoc->SplitNode( *pPam->GetPoint() );
+                    pDoc->SplitNode( *pPam->GetPoint(), false );
             }
         }
 
@@ -517,9 +516,9 @@ ULONG SwASCIIParser::ReadChars()
                             //rOpt.GetCharSet();
                             InsertText( String( pLastStt ));
                         }
-                        pDoc->SplitNode( *pPam->GetPoint() );
+                        pDoc->SplitNode( *pPam->GetPoint(), false );
                         pDoc->Insert( *pPam, SvxFmtBreakItem(
-                                    SVX_BREAK_PAGE_BEFORE ));
+                                    SVX_BREAK_PAGE_BEFORE ), 0);
                         pLastStt = pStt;
                         nLineLen = 0;
                         bIns = false;
@@ -550,7 +549,7 @@ ULONG SwASCIIParser::ReadChars()
                 sal_Unicode c = *pStt;
                 *pStt = 0;
                 InsertText( String( pLastStt ));
-                pDoc->SplitNode( *pPam->GetPoint() );
+                pDoc->SplitNode( *pPam->GetPoint(), false );
                 pLastStt = pStt;
                 nLineLen = 0;
                 *pStt = c;
@@ -563,7 +562,7 @@ ULONG SwASCIIParser::ReadChars()
             // es wurde ein CR/LF erkannt, also speichere den Text
 
             InsertText( String( pLastStt ));
-            pDoc->SplitNode( *pPam->GetPoint() );
+            pDoc->SplitNode( *pPam->GetPoint(), false );
             pLastStt = pStt;
             nLineLen = 0;
         }
@@ -579,7 +578,7 @@ ULONG SwASCIIParser::ReadChars()
 
 void SwASCIIParser::InsertText( const String& rStr )
 {
-    pDoc->Insert( *pPam, rStr );
+    pDoc->Insert( *pPam, rStr, true );
     if( pItemSet && pBreakIt && nScript != ( SCRIPTTYPE_LATIN |
                                              SCRIPTTYPE_ASIAN |
                                              SCRIPTTYPE_COMPLEX ) )
