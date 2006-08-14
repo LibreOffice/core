@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hints.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:58:12 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:48:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
@@ -55,14 +54,6 @@
 #ifndef _ERRHDL_HXX
 #include <errhdl.hxx>
 #endif
-#ifndef _HINTS_HXX
-#include <hints.hxx>
-#endif
-#ifndef _SWERROR_H
-#include <error.h>
-#endif
-
-
 
 SwFmtChg::SwFmtChg( SwFmt *pFmt )
     : SwMsgPoolItem( RES_FMT_CHG ),
