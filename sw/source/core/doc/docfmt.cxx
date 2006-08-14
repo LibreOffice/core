@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfmt.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:16:03 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:57:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -72,18 +71,12 @@
 #define _ZFORLIST_DECLARE_TABLE
 #include <svtools/zforlist.hxx>
 #endif
-
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
 #ifndef _COM_SUN_STAR_I18N_WORDTYPE_HDL
 #include <com/sun/star/i18n/WordType.hdl>
 #endif
-
-
 #ifndef _FMTPDSC_HXX //autogen
 #include <fmtpdsc.hxx>
 #endif
@@ -143,9 +136,6 @@
 #endif
 #ifndef _DOCARY_HXX
 #include <docary.hxx>
-#endif
-#ifndef _NUMRULE_HXX
-#include <numrule.hxx>
 #endif
 #ifndef _PARATR_HXX
 #include <paratr.hxx>
@@ -646,7 +636,7 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
                         pUndo->SaveRedlineData( aPam, TRUE );
 
                     if( pDoc->IsRedlineOn() )
-                        pDoc->AppendRedline( new SwRedline( REDLINE_INSERT, aPam ));
+                        pDoc->AppendRedline( new SwRedline( IDocumentRedlineAccess::REDLINE_INSERT, aPam ), true);
                     else
                         pDoc->SplitRedline( aPam );
                 }
@@ -686,7 +676,7 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
 
                     if( pDoc->IsRedlineOn() )
                         pDoc->AppendRedline( new SwRedline( bTxtIns
-                                ? REDLINE_INSERT : REDLINE_FORMAT, aPam ));
+                                ? IDocumentRedlineAccess::REDLINE_INSERT : IDocumentRedlineAccess::REDLINE_FORMAT, aPam ), true);
                     else if( bTxtIns )
                         pDoc->SplitRedline( aPam );
                 }
@@ -716,7 +706,7 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
                     0 != ( pTblNd = pNode->FindTableNode() ) )
                 {
                     SwTableNode* pCurTblNd = pTblNd;
-                    while ( 0 != ( pCurTblNd = pCurTblNd->FindStartNode()->FindTableNode() ) )
+                    while ( 0 != ( pCurTblNd = pCurTblNd->StartOfSectionNode()->FindTableNode() ) )
                         pTblNd = pCurTblNd;
 
                     // dann am Tabellen Format setzen
@@ -743,7 +733,7 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
                         FALSE, (const SfxPoolItem**)&pBreak ) )
         {
             SwTableNode* pCurTblNd = pTblNd;
-            while ( 0 != ( pCurTblNd = pCurTblNd->FindStartNode()->FindTableNode() ) )
+            while ( 0 != ( pCurTblNd = pCurTblNd->StartOfSectionNode()->FindTableNode() ) )
                 pTblNd = pCurTblNd;
 
             // dann am Tabellen Format setzen
@@ -847,7 +837,7 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
 
                 if( pUndo )
                     pUndo->SaveRedlineData( aPam, FALSE );
-                pDoc->AppendRedline( new SwRedline( REDLINE_FORMAT, aPam ));
+                pDoc->AppendRedline( new SwRedline( IDocumentRedlineAccess::REDLINE_FORMAT, aPam ), true);
             }
         }
         if( aOtherSet.Count() )
@@ -863,7 +853,7 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
     {
         if( pUndo )
             pUndo->SaveRedlineData( rRg, FALSE );
-        pDoc->AppendRedline( new SwRedline( REDLINE_FORMAT, rRg ));
+        pDoc->AppendRedline( new SwRedline( IDocumentRedlineAccess::REDLINE_FORMAT, rRg ), true);
     }
 
     /* jetzt wenn Bereich */
@@ -1001,7 +991,7 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
 }
 
 
-BOOL SwDoc::Insert( const SwPaM &rRg, const SfxPoolItem &rHt, USHORT nFlags )
+bool SwDoc::Insert( const SwPaM &rRg, const SfxPoolItem &rHt, USHORT nFlags )
 {
     SwDataChanged aTmp( rRg, 0 );
     BOOL bRet;
@@ -1047,7 +1037,7 @@ BOOL SwDoc::Insert( const SwPaM &rRg, const SfxPoolItem &rHt, USHORT nFlags )
     return bRet;
 }
 
-BOOL SwDoc::Insert( const SwPaM &rRg, const SfxItemSet &rSet, USHORT nFlags )
+bool SwDoc::Insert( const SwPaM &rRg, const SfxItemSet &rSet, USHORT nFlags )
 {
     SwDataChanged aTmp( rRg, 0 );
     SwUndoAttr* pUndoAttr = 0;
@@ -2225,11 +2215,11 @@ void SwDoc::SetTxtFmtCollByAutoFmt( const SwPosition& rPos, USHORT nPoolId,
     SwPaM aPam( rPos );
     SwTxtNode* pTNd = rPos.nNode.GetNode().GetTxtNode();
 
-    if( bIsAutoFmtRedline && pTNd )
+    if( mbIsAutoFmtRedline && pTNd )
     {
         // dann das Redline Object anlegen
         const SwTxtFmtColl& rColl = *pTNd->GetTxtColl();
-        SwRedline* pRedl = new SwRedline( REDLINE_FMTCOLL, aPam );
+        SwRedline* pRedl = new SwRedline( IDocumentRedlineAccess::REDLINE_FMTCOLL, aPam );
         pRedl->SetMark();
 
         // interressant sind nur die Items, die vom Set NICHT wieder
@@ -2250,7 +2240,7 @@ void SwDoc::SetTxtFmtCollByAutoFmt( const SwPosition& rPos, USHORT nPoolId,
         pRedl->SetExtraData( &aExtraData );
 
 // !!!!!!!!! Undo fehlt noch !!!!!!!!!!!!!!!!!!
-        AppendRedline( pRedl );
+        AppendRedline( pRedl, true );
     }
 
     SetTxtFmtColl( aPam, GetTxtCollFromPool( nPoolId ) );
@@ -2259,7 +2249,7 @@ void SwDoc::SetTxtFmtCollByAutoFmt( const SwPosition& rPos, USHORT nPoolId,
     {
         aPam.SetMark();
         aPam.GetMark()->nContent.Assign( pTNd, pTNd->GetTxt().Len() );
-        Insert( aPam, *pSet );
+        Insert( aPam, *pSet, 0 );
     }
 }
 
@@ -2267,12 +2257,12 @@ void SwDoc::SetFmtItemByAutoFmt( const SwPaM& rPam, const SfxItemSet& rSet )
 {
     SwTxtNode* pTNd = rPam.GetPoint()->nNode.GetNode().GetTxtNode();
 
-    SwRedlineMode eOld = GetRedlineMode();
+    IDocumentRedlineAccess::RedlineMode_t eOld = GetRedlineMode();
 
-    if( bIsAutoFmtRedline && pTNd )
+    if( mbIsAutoFmtRedline && pTNd )
     {
         // dann das Redline Object anlegen
-        SwRedline* pRedl = new SwRedline( REDLINE_FORMAT, rPam );
+        SwRedline* pRedl = new SwRedline( IDocumentRedlineAccess::REDLINE_FORMAT, rPam );
         if( !pRedl->HasMark() )
             pRedl->SetMark();
 
@@ -2296,9 +2286,9 @@ void SwDoc::SetFmtItemByAutoFmt( const SwPaM& rPam, const SfxItemSet& rSet )
         pRedl->SetExtraData( &aExtraData );
 
 // !!!!!!!!! Undo fehlt noch !!!!!!!!!!!!!!!!!!
-        AppendRedline( pRedl );
+        AppendRedline( pRedl, true );
 
-        SetRedlineMode_intern( eOld | REDLINE_IGNORE );
+        SetRedlineMode_intern( eOld | IDocumentRedlineAccess::REDLINE_IGNORE );
     }
 
     Insert( rPam, rSet, SETATTR_DONTEXPAND );
