@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ddefld.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:32:45 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:12:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #ifndef _SVXLINKMGR_HXX
@@ -49,11 +48,9 @@
 #ifndef _ERRHDL_HXX
 #include <errhdl.hxx>
 #endif
+
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
-#endif
-#ifndef _HINTS_HXX
-#include <hints.hxx>
 #endif
 #ifndef _FMTFLD_HXX //autogen
 #include <fmtfld.hxx>
