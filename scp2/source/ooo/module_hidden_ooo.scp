@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_hidden_ooo.scp,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 12:13:46 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:35:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,6 +114,7 @@ Module gid_Module_Root_Files_3
 	Default = YES;
 	Styles = (HIDDEN_ROOT);
 	Files = (gid_File_Jar_Xalan,
+	gid_File_Jar_Serializer,
 	gid_File_Jar_Unoil,
 	gid_File_Jar_XercesImpl,
 	gid_File_Jar_Hsqldb,
