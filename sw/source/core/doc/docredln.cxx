@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docredln.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 09:35:31 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 10:02:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -326,6 +326,42 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
         SwPosition* pStt = pNewRedl->Start(),
                   * pEnd = pStt == pNewRedl->GetPoint() ? pNewRedl->GetMark()
                                                         : pNewRedl->GetPoint();
+        {
+            SwTxtNode* pTxtNode = pStt->nNode.GetNode().GetTxtNode();
+            if( pTxtNode == NULL )
+            {
+                if( pStt->nContent > 0 )
+                {
+                    DBG_ASSERT( false, "Redline start: non-text-node with content" );
+                    pStt->nContent = 0;
+                }
+            }
+            else
+            {
+                if( pStt->nContent > pTxtNode->Len() )
+                {
+                    DBG_ASSERT( false, "Redline start: index behind text" );
+                    pStt->nContent = pTxtNode->Len();
+                }
+            }
+            pTxtNode = pEnd->nNode.GetNode().GetTxtNode();
+            if( pTxtNode == NULL )
+            {
+                if( pEnd->nContent > 0 )
+                {
+                    DBG_ASSERT( false, "Redline end: non-text-node with content" );
+                    pEnd->nContent = 0;
+                }
+            }
+            else
+            {
+                if( pEnd->nContent > pTxtNode->Len() )
+                {
+                    DBG_ASSERT( false, "Redline end: index behind text" );
+                    pEnd->nContent = pTxtNode->Len();
+                }
+            }
+        }
         if( ( *pStt == *pEnd ) &&
             ( pNewRedl->GetContentIdx() == NULL ) )
         {   // Do not insert empty redlines
@@ -898,11 +934,15 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
 
                         case POS_OUTSIDE:
                             {
-                                pNew = new SwRedline( *pNewRedl );
                                 pRedl->PushData( *pNewRedl );
-
-                                pNew->SetEnd( *pRStt );
-                                pNewRedl->SetStart( *pREnd, pStt );
+                                if( *pEnd == *pREnd )
+                                    pNewRedl->SetEnd( *pRStt, pEnd );
+                                else
+                                {
+                                    pNew = new SwRedline( *pNewRedl );
+                                    pNew->SetEnd( *pRStt );
+                                    pNewRedl->SetStart( *pREnd, pStt );
+                                }
                                 bCompress = TRUE;
                             }
                             break;
