@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmltbl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:17:08 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:01:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #include "hintids.hxx"
 
 //#define TEST_DELAYED_RESIZE
@@ -368,12 +367,6 @@ void SwHTMLTableLayout::GetAvail( USHORT nCol, USHORT nColSpan,
         rAbsAvail += pColumn->GetAbsColWidth();
         rRelAvail += pColumn->GetRelColWidth();
     }
-
-#if 0
-    rAbsSpace = GetLeftBorderWidth( nCol ) +
-                GetRightBorderWidth( nCol, nColSpan ) +
-                2*nCellPadding;
-#endif
 }
 
 USHORT SwHTMLTableLayout::GetBrowseWidthByVisArea( const SwDoc& rDoc )
@@ -1841,7 +1834,7 @@ BOOL SwHTMLTableLayout::Resize( USHORT nAbsAvail, BOOL bRecalc,
     // und nicht die der VisArea uebergeben. Wenn wir nicht in einem Rahmen
     // stehen, muss die Tabelle allerdings fuer die VisArea berechnet werden,
     // weil sond die Umschaltung von relativ nach absolut nicht funktioniert.
-    if( pDoc->GetRootFrm() && pDoc->IsBrowseMode() )
+    if( pDoc->GetRootFrm() && pDoc->get(IDocumentSettingAccess::BROWSE_MODE) )
     {
         USHORT nVisAreaWidth = GetBrowseWidthByVisArea( *pDoc );
         if( nVisAreaWidth < nAbsAvail && !FindFlyFrmFmt() )
