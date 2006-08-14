@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoredline.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:29:13 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:56:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -67,9 +66,6 @@
 #ifndef _UNOCRSR_HXX
 #include <unocrsr.hxx>
 #endif
-#ifndef _UNOOBJ_HXX
-#include <unoobj.hxx>
-#endif
 #ifndef _UNOREDLINE_HXX
 #include <unoredline.hxx>
 #endif
@@ -79,10 +75,6 @@
 #ifndef _DOCARY_HXX
 #include <docary.hxx>
 #endif
-#ifndef _RTL_UUID_H_
-#include <rtl/uuid.h>
-#endif
-
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
@@ -289,52 +281,22 @@ static util::DateTime lcl_DateTimeToUno(const DateTime& rDT)
     aRetDT.HundredthSeconds = rDT.Get100Sec();
     return aRetDT;
 }
-#if 0
+
 // ---------------------------------------------------------------------------
-static DateTime lcl_DateTimeFromUno(const util::DateTime& rDT)
-{
-    DateTime aRetDT;
-    aRetDT.SetYear(rDT.Year);
-    aRetDT.SetMonth(rDT.Month);
-    aRetDT.SetDay(rDT.Day);
-    aRetDT.SetHour(rDT.Hours);
-    aRetDT.SetMin(rDT.Minutes);
-    aRetDT.SetSec(rDT.Seconds);
-    aRetDT.Set100Sec(rDT.HundredthSeconds);
-    return aRetDT;
-}
-#endif
-// ---------------------------------------------------------------------------
-static OUString lcl_RedlineTypeToOUString(SwRedlineType eType)
+static OUString lcl_RedlineTypeToOUString(IDocumentRedlineAccess::RedlineType_t eType)
 {
     OUString sRet;
-    switch(eType & REDLINE_NO_FLAG_MASK)
+    switch(eType & IDocumentRedlineAccess::REDLINE_NO_FLAG_MASK)
     {
-        case REDLINE_INSERT: sRet = C2U("Insert"); break;
-        case REDLINE_DELETE: sRet = C2U("Delete"); break;
-        case REDLINE_FORMAT: sRet = C2U("Format"); break;
-        case REDLINE_TABLE:  sRet = C2U("TextTable"); break;
-        case REDLINE_FMTCOLL:sRet = C2U("Style"); break;
+        case IDocumentRedlineAccess::REDLINE_INSERT: sRet = C2U("Insert"); break;
+        case IDocumentRedlineAccess::REDLINE_DELETE: sRet = C2U("Delete"); break;
+        case IDocumentRedlineAccess::REDLINE_FORMAT: sRet = C2U("Format"); break;
+        case IDocumentRedlineAccess::REDLINE_TABLE:  sRet = C2U("TextTable"); break;
+        case IDocumentRedlineAccess::REDLINE_FMTCOLL:sRet = C2U("Style"); break;
     }
     return sRet;
 }
-#if 0
-// ---------------------------------------------------------------------------
-SwRedlineType  lcl_OUStringToRedlineType(const OUString& rType)
-{
-    SwRedlineType eType = REDLINE_INSERT;
-    if(!rType.compareToAscii("Delete"))
-        eType = REDLINE_DELETE;
-    else if(!rType.compareToAscii("Format"))
-        eType = REDLINE_FORMAT;
-    else if(!rType.compareToAscii("TextTable"))
-        eType = REDLINE_TABLE;
-    else if(!rType.compareToAscii("Style"))
-        eType = REDLINE_FMTCOLL;
-//  else if(!rType.compareToAscii("Insert"))
-    return eType;
-}
-#endif
+
 // ---------------------------------------------------------------------------
 static Sequence<PropertyValue> lcl_GetSuccessorProperties(const SwRedline& rRedline)
 {
