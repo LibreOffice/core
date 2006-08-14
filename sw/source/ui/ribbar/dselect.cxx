@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dselect.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:44:14 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:52:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,17 +33,11 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #ifndef _SFX_BINDINGS_HXX //autogen
 #include <sfx2/bindings.hxx>
 #endif
-#ifndef _SFXVIEWFRM_HXX
-#include <sfx2/viewfrm.hxx>
-#endif
-
-
 #include "view.hxx"
 #include "edtwin.hxx"
 #include "wrtsh.hxx"
