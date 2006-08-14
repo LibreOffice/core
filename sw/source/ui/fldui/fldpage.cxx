@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldpage.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:35:45 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:37:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -353,24 +353,6 @@ BOOL SwFldPage::InsertFld(USHORT nTypeId, USHORT nSubType, const String& rPar1,
                 aMgr.EvalExpFlds(pSh);
                 break;
         }
-
-#if 0
-        if (bDBChanged) // Datenbank geaendert
-        {
-            switch(nTypeId)
-            {
-                case TYP_DBFLD:
-                    ((SwDBField*)pCurFld)->ClearInitialized();
-                    ((SwDBField*)pCurFld)->InitContent();
-                case TYP_DBNAMEFLD:
-                case TYP_DBNEXTSETFLD:
-                case TYP_DBNUMSETFLD:
-                case TYP_DBSETNUMBERFLD:
-                    pCurFld->GetTyp()->UpdateFlds();
-                    break;
-            }
-        }
-#endif
 
         pSh->SetUndoNoResetModified();
         pSh->EndAllAction();
