@@ -4,8 +4,8 @@
  *
  *  $RCSfile: lngmerge.cxx,v $
  *
- *  $Revision: 1.25 $
- *  last change: $Author: hr $ $Date: 2006-06-19 17:23:26 $
+ *  $Revision: 1.26 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:10:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,8 +95,6 @@ void LngParser::FillInFallbacks( ByteStringHashMap Text )
         sCur = aLanguages[ n ];
 
         if( Export::isAllowed( sCur ) ){
-            //!sCur.EqualsIgnoreCaseAscii("de") && !sCur.EqualsIgnoreCaseAscii("en-US") ){
-        //if( !sCur.Equals(ByteString("de")) && !sCur.Equals(ByteString("en-US"))){
             ByteString sFallbackLang = Export::GetFallbackLanguage( sCur );
             if( sFallbackLang.Len() ){
                 Text[ sCur ] = Text[ sFallbackLang ];
@@ -151,8 +149,7 @@ BOOL LngParser::CreateSDF(
         }
         else {
 
-            WriteSDF( aSDFStream , Text , //rSDFFile
-                     rPrj , rRoot , sActFileName , sID );
+            WriteSDF( aSDFStream , Text , rPrj , rRoot , sActFileName , sID );
         }
     }
     aSDFStream.Close();
@@ -160,7 +157,6 @@ BOOL LngParser::CreateSDF(
 }
 
  void LngParser::WriteSDF( SvFileStream &aSDFStream , ByteStringHashMap &rText_inout ,
-     //const ByteString &rSDFFile,
      const ByteString &rPrj , const ByteString &rRoot ,
      const ByteString &sActFileName , const ByteString &sID )
  {
@@ -176,10 +172,6 @@ BOOL LngParser::CreateSDF(
             if ( !sAct.Len() && sCur.Len() )
                 sAct = rText_inout[ ByteString("en-US") ];
 
-            //if( sCur.EqualsIgnoreCaseAscii("de") ){
-            //    sAct = UTF8Converter::ConvertToUTF8( sAct, RTL_TEXTENCODING_MS_1252 );
-            //}
-
             ByteString sOutput( rPrj ); sOutput += "\t";
             if ( rRoot.Len())
                 sOutput += sActFileName;
@@ -189,9 +181,6 @@ BOOL LngParser::CreateSDF(
             sOutput += sCur; sOutput += "\t";
             sOutput += sAct; sOutput += "\t\t\t\t";
             sOutput += sTimeStamp;
-            //if( sCur.EqualsIgnoreCaseAscii("de") ){
-            //    sOutput = UTF8Converter::ConvertToUTF8( sOutput , RTL_TEXTENCODING_MS_1252 );
-            //}
             if( !sCur.EqualsIgnoreCaseAscii("de") ||( sCur.EqualsIgnoreCaseAscii("de") && !Export::isMergingGermanAllowed( rPrj ) ) )
                 aSDFStream.WriteLine( sOutput );
         }
@@ -306,14 +295,10 @@ BOOL LngParser::Merge(
                     if( sLang.Len() ){
                         ByteString sNewText;
                         pEntrys->GetText( sNewText, STRING_TYP_TEXT, sLang, TRUE );
-                        //if ( bULF )
-                        //  sNewText = UTF8Converter::ConvertToUTF8( sNewText, Export::GetCharSet( Export::LangId[ nIndex ] ));
 
                         if ( sNewText.Len()) {
                             ByteString *pLine = pLines->GetObject( nPos );
 
-                            //if( Export::isAllowed( sLang ) ) {
-                                    //!sLang.EqualsIgnoreCaseAscii("de") && !sLang.EqualsIgnoreCaseAscii("en-US") ){
                                 ByteString sText1( sLang );
                                 sText1 += " = \"";
                                 sText1 += sNewText;
