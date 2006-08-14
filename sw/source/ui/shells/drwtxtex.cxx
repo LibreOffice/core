@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drwtxtex.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 12:43:40 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:53:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 #ifndef _HINTIDS_HXX
@@ -55,9 +54,6 @@
 #endif
 #ifndef _SVX_WIDWITEM_HXX //autogen
 #include <svx/widwitem.hxx>
-#endif
-#ifndef _SVX_BRKITEM_HXX //autogen
-#include <svx/brkitem.hxx>
 #endif
 #ifndef _SVX_KERNITEM_HXX //autogen
 #include <svx/kernitem.hxx>
@@ -142,9 +138,6 @@
 #ifndef _EDITSTAT_HXX //autogen
 #include <svx/editstat.hxx>
 #endif
-#ifndef _OUTLINER_HXX //autogen
-#include <svx/outliner.hxx>
-#endif
 #ifndef _SVX_HLNKITEM_HXX //autogen
 #include <svx/hlnkitem.hxx>
 #endif
@@ -164,16 +157,6 @@
 #ifndef _SVX_WRITINGMODEITEM_HXX
 #include <svx/writingmodeitem.hxx>
 #endif
-
-#ifndef _COM_SUN_STAR_LINGUISTIC2_XTHESAURUS_HPP_
-#include <com/sun/star/linguistic2/XThesaurus.hpp>
-#endif
-#ifndef _SVTOOLS_CJKOPTIONS_HXX
-#include <svtools/cjkoptions.hxx>
-#endif
-#ifndef _SVTOOLS_LANGUAGEOPTIONS_HXX
-#include <svtools/languageoptions.hxx>
-#endif
 #ifndef _DOC_HXX
 #include <doc.hxx>
 #endif
@@ -192,9 +175,6 @@
 #ifndef _UITOOL_HXX
 #include <uitool.hxx>
 #endif
-//CHINA001 #ifndef _CHRDLG_HXX
-//CHINA001 #include <chrdlg.hxx>
-//CHINA001 #endif
 #ifndef _PARDLG_HXX
 #include <pardlg.hxx>
 #endif
