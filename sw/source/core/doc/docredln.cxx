@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docredln.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 10:02:07 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:59:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -67,9 +66,6 @@
 #ifndef _DOCARY_HXX
 #include <docary.hxx>
 #endif
-#ifndef _NDARR_HXX
-#include <ndarr.hxx>
-#endif
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
 #endif
@@ -81,9 +77,6 @@
 #endif
 #ifndef _UNDOBJ_HXX
 #include <undobj.hxx>
-#endif
-#ifndef _HINTS_HXX
-#include <hints.hxx>
 #endif
 #ifndef _PAMTYP_HXX
 #include <pamtyp.hxx>
@@ -99,6 +92,8 @@
 #endif
 
 #include <comcore.hrc>
+
+using namespace com::sun::star;
 
 #ifdef PRODUCT
 
@@ -201,31 +196,36 @@
 
 SV_IMPL_OP_PTRARR_SORT( _SwRedlineTbl, SwRedlinePtr )
 
-void SwDoc::SetRedlineMode( USHORT eMode )
+IDocumentRedlineAccess::RedlineMode_t SwDoc::GetRedlineMode() const
+{
+    return eRedlineMode;
+}
+
+void SwDoc::SetRedlineMode( IDocumentRedlineAccess::RedlineMode_t eMode )
 {
     if( eRedlineMode != eMode )
     {
-        if( (REDLINE_SHOW_MASK & eRedlineMode) != (REDLINE_SHOW_MASK & eMode)
-            || 0 == (REDLINE_SHOW_MASK & eMode) )
+        if( (IDocumentRedlineAccess::REDLINE_SHOW_MASK & eRedlineMode) != (IDocumentRedlineAccess::REDLINE_SHOW_MASK & eMode)
+            || 0 == (IDocumentRedlineAccess::REDLINE_SHOW_MASK & eMode) )
         {
             // und dann alles verstecken, anzeigen
             void (SwRedline::*pFnc)( USHORT ) = 0;
 
-            switch( REDLINE_SHOW_MASK & eMode )
+            switch( IDocumentRedlineAccess::REDLINE_SHOW_MASK & eMode )
             {
-            case REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE:
+            case IDocumentRedlineAccess::REDLINE_SHOW_INSERT | IDocumentRedlineAccess::REDLINE_SHOW_DELETE:
                 pFnc = &SwRedline::Show;
                 break;
-            case REDLINE_SHOW_INSERT:
+            case IDocumentRedlineAccess::REDLINE_SHOW_INSERT:
                 pFnc = &SwRedline::Hide;
                 break;
-            case REDLINE_SHOW_DELETE:
+            case IDocumentRedlineAccess::REDLINE_SHOW_DELETE:
                 pFnc = &SwRedline::ShowOriginal;
                 break;
 
             default:
                 pFnc = &SwRedline::Hide;
-                eMode |= REDLINE_SHOW_INSERT;
+                eMode |= IDocumentRedlineAccess::REDLINE_SHOW_INSERT;
                 break;
             }
 
@@ -237,8 +237,43 @@ void SwDoc::SetRedlineMode( USHORT eMode )
                         ((*pRedlineTbl)[ i ]->*pFnc)( nLoop );
             _CHECK_REDLINE( this )
         }
-        eRedlineMode = (SwRedlineMode)eMode;
+        eRedlineMode = eMode;
     }
+}
+
+bool SwDoc::IsRedlineOn() const
+{
+    return IDocumentRedlineAccess::IsRedlineOn(eRedlineMode);
+}
+
+bool SwDoc::IsIgnoreRedline() const
+{
+    return (IDocumentRedlineAccess::REDLINE_IGNORE & eRedlineMode);
+}
+
+void SwDoc::SetRedlineMode_intern(IDocumentRedlineAccess::RedlineMode_t eMode)
+{
+    eRedlineMode = eMode;
+}
+
+const SwRedlineTbl& SwDoc::GetRedlineTbl() const
+{
+    return *pRedlineTbl;
+}
+
+bool SwDoc::IsRedlineMove() const
+{
+    return mbIsRedlineMove;
+}
+
+void SwDoc::SetRedlineMove(bool bFlag)
+{
+    mbIsRedlineMove = bFlag;
+}
+
+const ::com::sun::star::uno::Sequence <sal_Int8>& SwDoc::GetRedlinePassword() const
+{
+    return aRedlinePasswd;
 }
 
 inline BOOL IsPrevPos( const SwPosition rPos1, const SwPosition rPos2 )
@@ -257,16 +292,16 @@ bool CheckPosition( const SwPosition* pStt, const SwPosition* pEnd )
     int nError = 0;
     SwNode* pSttNode = &pStt->nNode.GetNode();
     SwNode* pEndNode = &pEnd->nNode.GetNode();
-    SwNode* pSttTab = pSttNode->FindStartNode()->FindTableNode();
-    SwNode* pEndTab = pEndNode->FindStartNode()->FindTableNode();
+    SwNode* pSttTab = pSttNode->StartOfSectionNode()->FindTableNode();
+    SwNode* pEndTab = pEndNode->StartOfSectionNode()->FindTableNode();
     SwNode* pSttStart = pSttNode;
     while( pSttStart && (!pSttStart->IsStartNode() || pSttStart->IsSectionNode() ||
         pSttStart->IsTableNode() ) )
-        pSttStart = pSttStart->FindStartNode();
+        pSttStart = pSttStart->StartOfSectionNode();
     SwNode* pEndStart = pEndNode;
     while( pEndStart && (!pEndStart->IsStartNode() || pEndStart->IsSectionNode() ||
         pEndStart->IsTableNode() ) )
-        pEndStart = pEndStart->FindStartNode();
+        pEndStart = pEndStart->StartOfSectionNode();
     if( pSttTab != pEndTab )
         nError = 1;
     if( !pSttTab && pSttStart != pEndStart )
@@ -304,7 +339,7 @@ Verhalten von Delete-Redline:
                                           ueberlappt
 */
 
-BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
+bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
 {
     _CHECK_REDLINE( this )
 
@@ -313,7 +348,7 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
     {
         pNewRedl->InvalidateRange();
 
-        if( bIsAutoFmtRedline )
+        if( mbIsAutoFmtRedline )
         {
             pNewRedl->SetAutoFmtFlag();
             if( pAutoFmtRedlnComment && pAutoFmtRedlnComment->Len() )
@@ -754,14 +789,14 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                 {
                     // b62341295: Do not throw away redlines
                     // even if they are not allowed to be combined
-                    SwRedlineMode eOld = eRedlineMode;
+                    IDocumentRedlineAccess::RedlineMode_t eOld = eRedlineMode;
                     if( !( eOld & REDLINE_DONTCOMBINE_REDLINES ) &&
                         pRedl->IsOwnRedline( *pNewRedl ) )
                     {
 
 // auf NONE setzen, damit das Delete::Redo die RedlineDaten wieder richtig
 // zusammen fasst! Der ShowMode muss erhalten bleiben!
-                        eRedlineMode = (SwRedlineMode)(eOld & ~(REDLINE_ON | REDLINE_IGNORE));
+                        eRedlineMode = (eOld & ~(REDLINE_ON | REDLINE_IGNORE));
                         switch( eCmpPos )
                         {
                         case POS_EQUAL:
@@ -773,8 +808,7 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                         case POS_INSIDE:
                             if( bCallDelete )
                             {
-                                eRedlineMode = (SwRedlineMode)
-                                    (eRedlineMode | REDLINE_IGNOREDELETE_REDLINES);
+                                eRedlineMode = (eRedlineMode | REDLINE_IGNOREDELETE_REDLINES);
 
                                 // #98863# DeleteAndJoin does not yield the
                                 // desired result if there is no paragraph to
@@ -1251,10 +1285,10 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
     {
         if( bCallDelete && REDLINE_DELETE == pNewRedl->GetType() )
         {
-            SwRedlineMode eOld = eRedlineMode;
+            IDocumentRedlineAccess::RedlineMode_t eOld = eRedlineMode;
 // auf NONE setzen, damit das Delete::Redo die RedlineDaten wieder richtig
 // zusammen fasst! Der ShowMode muss erhalten bleiben!
-            eRedlineMode = (SwRedlineMode)(eOld & ~(REDLINE_ON | REDLINE_IGNORE));
+            eRedlineMode = (eOld & ~(REDLINE_ON | REDLINE_IGNORE));
             DeleteAndJoin( *pNewRedl );
             eRedlineMode = eOld;
         }
@@ -1292,9 +1326,9 @@ void SwDoc::CompressRedlines()
                         * pCurEnd = pCurStt == pCur->GetPoint()
                             ? pCur->GetMark() : pCur->GetPoint();
         if( *pPrevEnd == *pCurStt && pPrev->CanCombine( *pCur ) &&
-            pPrevStt->nNode.GetNode().FindStartNode() ==
-            pCurEnd->nNode.GetNode().FindStartNode() &&
-            !pCurEnd->nNode.GetNode().FindStartNode()->IsTableNode() )
+            pPrevStt->nNode.GetNode().StartOfSectionNode() ==
+            pCurEnd->nNode.GetNode().StartOfSectionNode() &&
+            !pCurEnd->nNode.GetNode().StartOfSectionNode()->IsTableNode() )
         {
             // dann koennen die zusammen gefasst werden
             pPrev->Show();
@@ -1310,7 +1344,7 @@ void SwDoc::CompressRedlines()
     _CHECK_REDLINE( this )
 }
 
-BOOL SwDoc::SplitRedline( const SwPaM& rRange )
+bool SwDoc::SplitRedline( const SwPaM& rRange )
 {
     BOOL bChg = FALSE;
     USHORT n = 0;
@@ -1372,7 +1406,7 @@ BOOL SwDoc::SplitRedline( const SwPaM& rRange )
     return bChg;
 }
 
-BOOL SwDoc::DeleteRedline( const SwPaM& rRange, BOOL bSaveInUndo,
+bool SwDoc::DeleteRedline( const SwPaM& rRange, bool bSaveInUndo,
                             USHORT nDelType )
 {
     if( REDLINE_IGNOREDELETE_REDLINES & eRedlineMode ||
@@ -1504,7 +1538,7 @@ BOOL SwDoc::DeleteRedline( const SwPaM& rRange, BOOL bSaveInUndo,
     return bChg;
 }
 
-BOOL SwDoc::DeleteRedline( const SwStartNode& rNode, BOOL bSaveInUndo,
+bool SwDoc::DeleteRedline( const SwStartNode& rNode, bool bSaveInUndo,
                             USHORT nDelType )
 {
     SwPaM aTemp(*rNode.EndOfSectionNode(), rNode);
@@ -1603,8 +1637,8 @@ BOOL lcl_AcceptRedline( SwRedlineTbl& rArr, USHORT& rPos,
 
     switch( pRedl->GetType() )
     {
-    case REDLINE_INSERT:
-    case REDLINE_FORMAT:
+    case IDocumentRedlineAccess::REDLINE_INSERT:
+    case IDocumentRedlineAccess::REDLINE_FORMAT:
         {
             BOOL bCheck = FALSE, bReplace = FALSE;
             switch( eCmp )
@@ -1653,7 +1687,7 @@ BOOL lcl_AcceptRedline( SwRedlineTbl& rArr, USHORT& rPos,
             }
         }
         break;
-    case REDLINE_DELETE:
+    case IDocumentRedlineAccess::REDLINE_DELETE:
         {
             SwDoc& rDoc = *pRedl->GetDoc();
             const SwPosition *pDelStt = 0, *pDelEnd = 0;
@@ -1708,8 +1742,8 @@ BOOL lcl_AcceptRedline( SwRedlineTbl& rArr, USHORT& rPos,
                 if( bDelRedl )
                     delete pRedl;
 
-                SwRedlineMode eOld = rDoc.GetRedlineMode();
-                rDoc.SetRedlineMode_intern( eOld & ~(REDLINE_ON | REDLINE_IGNORE) );
+                IDocumentRedlineAccess::RedlineMode_t eOld = rDoc.GetRedlineMode();
+                rDoc.SetRedlineMode_intern( eOld & ~(IDocumentRedlineAccess::REDLINE_ON | IDocumentRedlineAccess::REDLINE_IGNORE) );
 
                 if( pCSttNd && pCEndNd )
                     rDoc.DeleteAndJoin( aPam );
@@ -1732,7 +1766,7 @@ BOOL lcl_AcceptRedline( SwRedlineTbl& rArr, USHORT& rPos,
         }
         break;
 
-    case REDLINE_FMTCOLL:
+    case IDocumentRedlineAccess::REDLINE_FMTCOLL:
         rArr.DeleteAndDestroy( rPos-- );
         break;
 
@@ -1762,7 +1796,7 @@ BOOL lcl_RejectRedline( SwRedlineTbl& rArr, USHORT& rPos,
 
     switch( pRedl->GetType() )
     {
-    case REDLINE_INSERT:
+    case IDocumentRedlineAccess::REDLINE_INSERT:
         {
             SwDoc& rDoc = *pRedl->GetDoc();
             const SwPosition *pDelStt = 0, *pDelEnd = 0;
@@ -1818,8 +1852,8 @@ BOOL lcl_RejectRedline( SwRedlineTbl& rArr, USHORT& rPos,
                 if( bDelRedl )
                     delete pRedl;
 
-                SwRedlineMode eOld = rDoc.GetRedlineMode();
-                rDoc.SetRedlineMode_intern( eOld & ~(REDLINE_ON | REDLINE_IGNORE) );
+                IDocumentRedlineAccess::RedlineMode_t eOld = rDoc.GetRedlineMode();
+                rDoc.SetRedlineMode_intern( eOld & ~(IDocumentRedlineAccess::REDLINE_ON | IDocumentRedlineAccess::REDLINE_IGNORE) );
 
                 if( pCSttNd && pCEndNd )
                     rDoc.DeleteAndJoin( aPam );
@@ -1841,7 +1875,7 @@ BOOL lcl_RejectRedline( SwRedlineTbl& rArr, USHORT& rPos,
                 delete pRedl;
         }
         break;
-    case REDLINE_DELETE:
+    case IDocumentRedlineAccess::REDLINE_DELETE:
         {
             SwRedline* pNew = 0;
             BOOL bCheck = FALSE, bReplace = FALSE;
@@ -1931,8 +1965,8 @@ BOOL lcl_RejectRedline( SwRedlineTbl& rArr, USHORT& rPos,
         }
         break;
 
-    case REDLINE_FORMAT:
-    case REDLINE_FMTCOLL:
+    case IDocumentRedlineAccess::REDLINE_FORMAT:
+    case IDocumentRedlineAccess::REDLINE_FMTCOLL:
         {
             if( pRedl->GetExtraData() )
                 pRedl->GetExtraData()->Reject( *pRedl );
@@ -2034,7 +2068,7 @@ void lcl_AdjustRedlineRange( SwPaM& rPam )
     if( !pStt->nContent.GetIndex() &&
         !pDoc->GetNodes()[ pStt->nNode.GetIndex() - 1 ]->IsCntntNode() )
     {
-        const SwRedline* pRedl = pDoc->GetRedline( *pStt );
+        const SwRedline* pRedl = pDoc->GetRedline( *pStt, 0 );
         if( pRedl )
         {
             const SwPosition* pRStt = pRedl->Start();
@@ -2047,7 +2081,7 @@ void lcl_AdjustRedlineRange( SwPaM& rPam )
         !pDoc->GetNodes()[ pEnd->nNode.GetIndex() + 1 ]->IsCntntNode() &&
         pEnd->nContent.GetIndex() == pEnd->nNode.GetNode().GetCntntNode()->Len()    )
     {
-        const SwRedline* pRedl = pDoc->GetRedline( *pEnd );
+        const SwRedline* pRedl = pDoc->GetRedline( *pEnd, 0 );
         if( pRedl )
         {
             const SwPosition* pREnd = pRedl->End();
@@ -2059,7 +2093,7 @@ void lcl_AdjustRedlineRange( SwPaM& rPam )
 }
 
 
-BOOL SwDoc::AcceptRedline( USHORT nPos, BOOL bCallDelete )
+bool SwDoc::AcceptRedline( USHORT nPos, bool bCallDelete )
 {
     BOOL bRet = FALSE;
 
@@ -2116,12 +2150,12 @@ BOOL SwDoc::AcceptRedline( USHORT nPos, BOOL bCallDelete )
         }
 
         if( DoesUndo() )
-            EndUndo( UNDO_ACCEPT_REDLINE );
+            EndUndo( UNDO_ACCEPT_REDLINE, NULL );
     }
     return bRet;
 }
 
-BOOL SwDoc::AcceptRedline( const SwPaM& rPam, BOOL bCallDelete )
+bool SwDoc::AcceptRedline( const SwPaM& rPam, bool bCallDelete )
 {
     // aufjedenfall auf sichtbar umschalten
     if( (REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE) !=
@@ -2136,7 +2170,7 @@ BOOL SwDoc::AcceptRedline( const SwPaM& rPam, BOOL bCallDelete )
 
     if( DoesUndo() )
     {
-        StartUndo( UNDO_ACCEPT_REDLINE );
+        StartUndo( UNDO_ACCEPT_REDLINE, NULL );
         AppendUndo( new SwUndoAcceptRedline( aPam ));
     }
 
@@ -2167,7 +2201,7 @@ BOOL SwDoc::AcceptRedline( const SwPaM& rPam, BOOL bCallDelete )
     return nRet != 0;
 }
 
-BOOL SwDoc::RejectRedline( USHORT nPos, BOOL bCallDelete )
+bool SwDoc::RejectRedline( USHORT nPos, bool bCallDelete )
 {
     BOOL bRet = FALSE;
 
@@ -2185,7 +2219,7 @@ BOOL SwDoc::RejectRedline( USHORT nPos, BOOL bCallDelete )
             SwRewriter aRewriter;
 
             aRewriter.AddRule(UNDO_ARG1, pTmp->GetDescr());
-            StartUndo( UNDO_REJECT_REDLINE );
+            StartUndo( UNDO_REJECT_REDLINE, NULL );
         }
 
         int nLoopCnt = 2;
@@ -2224,12 +2258,12 @@ BOOL SwDoc::RejectRedline( USHORT nPos, BOOL bCallDelete )
         }
 
         if( DoesUndo() )
-            EndUndo( UNDO_REJECT_REDLINE );
+            EndUndo( UNDO_REJECT_REDLINE, NULL );
     }
     return bRet;
 }
 
-BOOL SwDoc::RejectRedline( const SwPaM& rPam, BOOL bCallDelete )
+bool SwDoc::RejectRedline( const SwPaM& rPam, bool bCallDelete )
 {
     // aufjedenfall auf sichtbar umschalten
     if( (REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE) !=
@@ -2244,7 +2278,7 @@ BOOL SwDoc::RejectRedline( const SwPaM& rPam, BOOL bCallDelete )
 
     if( DoesUndo() )
     {
-        StartUndo( UNDO_REJECT_REDLINE );
+        StartUndo( UNDO_REJECT_REDLINE, NULL );
         AppendUndo( new SwUndoRejectRedline( aPam ));
     }
 
@@ -2513,7 +2547,7 @@ const SwRedline* SwDoc::SelPrevRedline( SwPaM& rPam ) const
 }
 
 // Kommentar am Redline setzen
-BOOL SwDoc::SetRedlineComment( const SwPaM& rPaM, const String& rS )
+bool SwDoc::SetRedlineComment( const SwPaM& rPaM, const String& rS )
 {
     BOOL bRet = FALSE;
     const SwPosition* pStt = rPaM.Start(),
@@ -2568,7 +2602,7 @@ void SwDoc::UpdateRedlineAttr()
     // wieder zurueck. Pointer wird nicht kopiert, muss also gueltig bleiben!
 void SwDoc::SetAutoFmtRedlineComment( const String* pTxt, USHORT nSeqNo )
 {
-    bIsAutoFmtRedline = 0 != pTxt;
+    mbIsAutoFmtRedline = 0 != pTxt;
     if( pTxt )
     {
         if( !pAutoFmtRedlnComment )
@@ -2582,10 +2616,10 @@ void SwDoc::SetAutoFmtRedlineComment( const String* pTxt, USHORT nSeqNo )
     nAutoFmtRedlnCommentNo = nSeqNo;
 }
 
-void SwDoc::SetRedlinePasswd(
-            const ::com::sun::star::uno::Sequence <sal_Int8>& rNew )
+void SwDoc::SetRedlinePassword(
+            /*[in]*/const ::com::sun::star::uno::Sequence <sal_Int8>& rNewPassword)
 {
-    aRedlinePasswd = rNew;
+    aRedlinePasswd = rNewPassword;
     SetModified();
 }
 
@@ -2662,9 +2696,9 @@ BOOL SwRedlineTbl::InsertWithValidRanges( SwRedlinePtr& p, USHORT* pInsPos )
             // i60396: If the redlines starts before a table but the table is the last member
             // of the section, the GoEndSection will end inside the table.
             // This will result in an incorrect redline, so we've to go back
-            SwNode* pTab = pNew->GetPoint()->nNode.GetNode().FindStartNode()->FindTableNode();
+            SwNode* pTab = pNew->GetPoint()->nNode.GetNode().StartOfSectionNode()->FindTableNode();
             // We end in a table when pTab != 0
-            if( pTab && !pNew->GetMark()->nNode.GetNode().FindStartNode()->FindTableNode() )
+            if( pTab && !pNew->GetMark()->nNode.GetNode().StartOfSectionNode()->FindTableNode() )
             { // but our Mark was outside the table => Correction
                 do
                 {
@@ -2672,7 +2706,7 @@ BOOL SwRedlineTbl::InsertWithValidRanges( SwRedlinePtr& p, USHORT* pInsPos )
                     pC = GoPreviousNds( &pNew->GetPoint()->nNode, FALSE ); // here we are.
                     if( pC )
                         pNew->GetPoint()->nContent.Assign( pC, 0 );
-                    pTab = pNew->GetPoint()->nNode.GetNode().FindStartNode()->FindTableNode();
+                    pTab = pNew->GetPoint()->nNode.GetNode().StartOfSectionNode()->FindTableNode();
                 }while( pTab ); // If there is another table we have to repeat our step backwards
             }
 
@@ -2766,57 +2800,18 @@ void SwRedlineTbl::DeleteAndDestroy( USHORT nP, USHORT nL )
 // USHRT_MAX suchen im gesamten Array.
 USHORT SwRedlineTbl::FindNextOfSeqNo( USHORT nSttPos, USHORT nLookahead ) const
 {
-#if 0
-    USHORT nRet = USHRT_MAX, nEnd,
-           nSeqNo = _SwRedlineTbl::GetObject( nSttPos )->GetSeqNo();
-    if( nSeqNo )
-    {
-        nEnd = _SwRedlineTbl::Count();
-        if( nLookahead && USHRT_MAX != nLookahead &&
-            nSttPos + nLookahead < _SwRedlineTbl::Count() )
-            nEnd = nSttPos + nLookahead;
-
-        while( ++nSttPos < nEnd )
-            if( nSeqNo == _SwRedlineTbl::GetObject( nSttPos )->GetSeqNo() )
-            {
-                nRet = nSttPos;
-                break;
-            }
-    }
-    return nRet;
-#else
     return nSttPos + 1 < _SwRedlineTbl::Count()
                 ? FindNextSeqNo( _SwRedlineTbl::GetObject( nSttPos )
                                     ->GetSeqNo(), nSttPos+1, nLookahead )
                 : USHRT_MAX;
-#endif
 }
 
 USHORT SwRedlineTbl::FindPrevOfSeqNo( USHORT nSttPos, USHORT nLookahead ) const
 {
-#if 0
-    USHORT nRet = USHRT_MAX, nEnd,
-           nSeqNo = _SwRedlineTbl::GetObject( nSttPos )->GetSeqNo();
-    if( nSeqNo )
-    {
-        nEnd = 0;
-        if( nLookahead && USHRT_MAX != nLookahead && nSttPos > nLookahead )
-            nEnd = nSttPos - nLookahead;
-
-        while( nSttPos-- > nEnd )
-            if( nSeqNo == _SwRedlineTbl::GetObject( nSttPos )->GetSeqNo() )
-            {
-                nRet = nSttPos;
-                break;
-            }
-    }
-    return nRet;
-#else
     return nSttPos ? FindPrevSeqNo( _SwRedlineTbl::GetObject(
                                         nSttPos )->GetSeqNo(),
                                     nSttPos-1, nLookahead )
                    : USHRT_MAX;
-#endif
 }
 
 USHORT SwRedlineTbl::FindNextSeqNo( USHORT nSeqNo, USHORT nSttPos,
@@ -2927,10 +2922,10 @@ void SwRedlineExtraData_FmtColl::Reject( SwPaM& rPam ) const
                 // nicht angefasst.
                 SfxItemSet aTmp( *pSet );
                 aTmp.Differentiate( *pTNd->GetpSwAttrSet() );
-                pDoc->Insert( rPam, aTmp );
+                pDoc->Insert( rPam, aTmp, 0 );
             }
             else
-                pDoc->Insert( rPam, *pSet );
+                pDoc->Insert( rPam, *pSet, 0 );
         }
         rPam.DeleteMark();
     }
@@ -2987,8 +2982,8 @@ void SwRedlineExtraData_Format::Reject( SwPaM& rPam ) const
 {
     SwDoc* pDoc = rPam.GetDoc();
 
-    SwRedlineMode eOld = pDoc->GetRedlineMode();
-    pDoc->SetRedlineMode_intern( eOld & ~(REDLINE_ON | REDLINE_IGNORE) );
+    IDocumentRedlineAccess::RedlineMode_t eOld = pDoc->GetRedlineMode();
+    pDoc->SetRedlineMode_intern( eOld & ~(IDocumentRedlineAccess::REDLINE_ON | IDocumentRedlineAccess::REDLINE_IGNORE) );
 
     // eigentlich muesste hier das Attribut zurueck gesetzt werden!!!
     for( USHORT n = 0, nEnd = aWhichIds.Count(); n < nEnd; ++n )
@@ -3015,7 +3010,7 @@ int SwRedlineExtraData_Format::operator == ( const SwRedlineExtraData& rCmp ) co
 
 /*  */
 
-SwRedlineData::SwRedlineData( SwRedlineType eT, USHORT nAut )
+SwRedlineData::SwRedlineData( IDocumentRedlineAccess::RedlineType_t eT, USHORT nAut )
     : pNext( 0 ), pExtraData( 0 ), eType( eT ), nAuthor( nAut ), nSeqNo( 0 )
 {
     aStamp.SetSec( 0 );
@@ -3032,7 +3027,7 @@ SwRedlineData::SwRedlineData( const SwRedlineData& rCpy, BOOL bCpyNext )
 }
 
     // fuer sw3io: pNext geht in eigenen Besitz ueber!
-SwRedlineData::SwRedlineData(SwRedlineType eT, USHORT nAut, const DateTime& rDT,
+SwRedlineData::SwRedlineData(IDocumentRedlineAccess::RedlineType_t eT, USHORT nAut, const DateTime& rDT,
     const String& rCmnt, SwRedlineData *pNxt, SwRedlineExtraData* pData)
     : pNext(pNxt), pExtraData(pData), sComment(rCmnt), aStamp(rDT),
     eType(eT), nAuthor(nAut), nSeqNo(0)
@@ -3069,7 +3064,7 @@ String SwRedlineData::GetDescr() const
 
 /*  */
 
-SwRedline::SwRedline( SwRedlineType eTyp, const SwPaM& rPam )
+SwRedline::SwRedline(IDocumentRedlineAccess::RedlineType_t eTyp, const SwPaM& rPam )
     : SwPaM( *rPam.GetMark(), *rPam.GetPoint() ),
     pRedlineData( new SwRedlineData( eTyp, GetDoc()->GetRedlineAuthor() ) ),
     pCntntSect( 0 )
@@ -3128,8 +3123,8 @@ BOOL SwRedline::HasValidRange() const
 {
     const SwNode* pPtNd = &GetPoint()->nNode.GetNode(),
                 * pMkNd = &GetMark()->nNode.GetNode();
-    if( pPtNd->FindStartNode() == pMkNd->FindStartNode() &&
-        !pPtNd->FindStartNode()->IsTableNode() &&
+    if( pPtNd->StartOfSectionNode() == pMkNd->StartOfSectionNode() &&
+        !pPtNd->StartOfSectionNode()->IsTableNode() &&
         // JP 18.5.2001: Bug 87222 - invalid if points on the end of content
         // DVO 25.03.2002: #96530# end-of-content only invalid if no content
         //                 index exists
@@ -3142,15 +3137,15 @@ BOOL SwRedline::HasValidRange() const
 
 void SwRedline::CallDisplayFunc( USHORT nLoop )
 {
-    switch( REDLINE_SHOW_MASK & GetDoc()->GetRedlineMode() )
+    switch( IDocumentRedlineAccess::REDLINE_SHOW_MASK & GetDoc()->GetRedlineMode() )
     {
-    case REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE:
+    case IDocumentRedlineAccess::REDLINE_SHOW_INSERT | IDocumentRedlineAccess::REDLINE_SHOW_DELETE:
         Show( nLoop );
         break;
-    case REDLINE_SHOW_INSERT:
+    case IDocumentRedlineAccess::REDLINE_SHOW_INSERT:
         Hide( nLoop );
         break;
-    case REDLINE_SHOW_DELETE:
+    case IDocumentRedlineAccess::REDLINE_SHOW_DELETE:
         ShowOriginal( nLoop );
         break;
     }
@@ -3161,25 +3156,25 @@ void SwRedline::Show( USHORT nLoop )
     if( 1 <= nLoop )
     {
         SwDoc* pDoc = GetDoc();
-        SwRedlineMode eOld = pDoc->GetRedlineMode();
-        pDoc->SetRedlineMode_intern( eOld | REDLINE_IGNORE );
+        IDocumentRedlineAccess::RedlineMode_t eOld = pDoc->GetRedlineMode();
+        pDoc->SetRedlineMode_intern( eOld | IDocumentRedlineAccess::REDLINE_IGNORE );
         BOOL bUndo = pDoc->DoesUndo();
         pDoc->DoUndo( FALSE );
 
         switch( GetType() )
         {
-        case REDLINE_INSERT:            // Inhalt wurde eingefuegt
+        case IDocumentRedlineAccess::REDLINE_INSERT:            // Inhalt wurde eingefuegt
             bIsVisible = TRUE;
             MoveFromSection();
             break;
 
-        case REDLINE_DELETE:            // Inhalt wurde geloescht
+        case IDocumentRedlineAccess::REDLINE_DELETE:            // Inhalt wurde geloescht
             bIsVisible = TRUE;
             MoveFromSection();
             break;
 
-        case REDLINE_FORMAT:            // Attributierung wurde angewendet
-        case REDLINE_TABLE:             // TabellenStruktur wurde veraendert
+        case IDocumentRedlineAccess::REDLINE_FORMAT:            // Attributierung wurde angewendet
+        case IDocumentRedlineAccess::REDLINE_TABLE:             // TabellenStruktur wurde veraendert
             InvalidateRange();
             break;
         default:
@@ -3193,20 +3188,20 @@ void SwRedline::Show( USHORT nLoop )
 void SwRedline::Hide( USHORT nLoop )
 {
     SwDoc* pDoc = GetDoc();
-    SwRedlineMode eOld = pDoc->GetRedlineMode();
-    pDoc->SetRedlineMode_intern( eOld | REDLINE_IGNORE );
+    IDocumentRedlineAccess::RedlineMode_t eOld = pDoc->GetRedlineMode();
+    pDoc->SetRedlineMode_intern( eOld | IDocumentRedlineAccess::REDLINE_IGNORE );
     BOOL bUndo = pDoc->DoesUndo();
     pDoc->DoUndo( FALSE );
 
     switch( GetType() )
     {
-    case REDLINE_INSERT:            // Inhalt wurde eingefuegt
+    case IDocumentRedlineAccess::REDLINE_INSERT:            // Inhalt wurde eingefuegt
         bIsVisible = TRUE;
         if( 1 <= nLoop )
             MoveFromSection();
         break;
 
-    case REDLINE_DELETE:            // Inhalt wurde geloescht
+    case IDocumentRedlineAccess::REDLINE_DELETE:            // Inhalt wurde geloescht
         bIsVisible = FALSE;
         switch( nLoop )
         {
@@ -3216,8 +3211,8 @@ void SwRedline::Hide( USHORT nLoop )
         }
         break;
 
-    case REDLINE_FORMAT:            // Attributierung wurde angewendet
-    case REDLINE_TABLE:             // TabellenStruktur wurde veraendert
+    case IDocumentRedlineAccess::REDLINE_FORMAT:            // Attributierung wurde angewendet
+    case IDocumentRedlineAccess::REDLINE_TABLE:             // TabellenStruktur wurde veraendert
         if( 1 <= nLoop )
             InvalidateRange();
         break;
@@ -3231,10 +3226,10 @@ void SwRedline::Hide( USHORT nLoop )
 void SwRedline::ShowOriginal( USHORT nLoop )
 {
     SwDoc* pDoc = GetDoc();
-    SwRedlineMode eOld = pDoc->GetRedlineMode();
+    IDocumentRedlineAccess::RedlineMode_t eOld = pDoc->GetRedlineMode();
     SwRedlineData* pCur;
 
-    pDoc->SetRedlineMode_intern( eOld | REDLINE_IGNORE );
+    pDoc->SetRedlineMode_intern( eOld | IDocumentRedlineAccess::REDLINE_IGNORE );
     BOOL bUndo = pDoc->DoesUndo();
     pDoc->DoUndo( FALSE );
 
@@ -3244,7 +3239,7 @@ void SwRedline::ShowOriginal( USHORT nLoop )
 
     switch( pCur->eType )
     {
-    case REDLINE_INSERT:            // Inhalt wurde eingefuegt
+    case IDocumentRedlineAccess::REDLINE_INSERT:            // Inhalt wurde eingefuegt
         bIsVisible = FALSE;
         switch( nLoop )
         {
@@ -3254,14 +3249,14 @@ void SwRedline::ShowOriginal( USHORT nLoop )
         }
         break;
 
-    case REDLINE_DELETE:            // Inhalt wurde geloescht
+    case IDocumentRedlineAccess::REDLINE_DELETE:            // Inhalt wurde geloescht
         bIsVisible = TRUE;
         if( 1 <= nLoop )
             MoveFromSection();
         break;
 
-    case REDLINE_FORMAT:            // Attributierung wurde angewendet
-    case REDLINE_TABLE:             // TabellenStruktur wurde veraendert
+    case IDocumentRedlineAccess::REDLINE_FORMAT:            // Attributierung wurde angewendet
+    case IDocumentRedlineAccess::REDLINE_TABLE:             // TabellenStruktur wurde veraendert
         if( 1 <= nLoop )
             InvalidateRange();
         break;
@@ -3382,12 +3377,12 @@ void SwRedline::MoveToSection()
             SwNodeIndex aNdIdx( *pTxtNd );
             SwPosition aPos( aNdIdx, SwIndex( pTxtNd ));
             if( pCSttNd && pCEndNd )
-                pDoc->MoveAndJoin( aPam, aPos );
+                pDoc->MoveAndJoin( aPam, aPos, IDocumentContentOperations::DOC_MOVEDEFAULT );
             else
             {
                 if( pCSttNd && !pCEndNd )
                     bDelLastPara = TRUE;
-                pDoc->Move( aPam, aPos );
+                pDoc->Move( aPam, aPos, IDocumentContentOperations::DOC_MOVEDEFAULT );
             }
         }
         else
@@ -3396,7 +3391,7 @@ void SwRedline::MoveToSection()
                                             SwNormalStartNode );
 
             SwPosition aPos( *pSttNd->EndOfSectionNode() );
-            pDoc->Move( aPam, aPos );
+            pDoc->Move( aPam, aPos, IDocumentContentOperations::DOC_MOVEDEFAULT );
         }
         pCntntSect = new SwNodeIndex( *pSttNd );
 
@@ -3642,7 +3637,7 @@ void SwRedline::MoveFromSection()
                 pDoc->AppendTxtNode( aPos );
             }
             else
-                pDoc->Move( aPam, aPos, DOC_MOVEALLFLYS );
+                pDoc->Move( aPam, aPos, IDocumentContentOperations::DOC_MOVEALLFLYS );
 
             SetMark();
             *GetPoint() = aPos;
@@ -3753,7 +3748,7 @@ const DateTime& SwRedline::GetTimeStamp( USHORT nPos ) const
     return GetRedlineData(nPos).aStamp;
 }
 
-SwRedlineType SwRedline::GetRealType( USHORT nPos ) const
+IDocumentRedlineAccess::RedlineType_t SwRedline::GetRealType( USHORT nPos ) const
 {
     return GetRedlineData(nPos).eType;
 }
@@ -3841,7 +3836,7 @@ String SwRedline::GetDescr(USHORT nPos)
 // <- #111827#
 
 
-sal_Bool SwDoc::IsInRedlines(const SwNode & rNode) const
+bool SwDoc::IsInRedlines(const SwNode & rNode) const
 {
     SwPosition aPos(rNode);
     SwNode & rEndOfRedlines = aNodes.GetEndOfRedlines();
