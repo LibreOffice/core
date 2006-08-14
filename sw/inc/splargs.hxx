@@ -4,9 +4,9 @@
  *
  *  $RCSfile: splargs.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 13:19:01 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:31:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -174,17 +174,12 @@ public:
            nWordStart(0), nWordLen(0),
            nHyphPos(0), nMinTrail(0)
          { }
-    inline xub_StrLen GetStart() const { return nStart; }
-    inline xub_StrLen GetLen() const { return nLen; }
     inline xub_StrLen GetEnd() const
     { return STRING_LEN == nLen ? nLen : nStart + nLen; }
     inline const Point *GetCrsrPos() const
     { return aCrsrPos.X() || aCrsrPos.Y() ? &aCrsrPos : 0; }
-    inline sal_Bool IsAuto() const { return bAuto; }
-    inline void SetAuto( const sal_Bool bNew ) { bAuto = bNew; }
     inline sal_Bool IsCheck() const { return bCheck; }
     inline void SetCheck( const sal_Bool bNew ) { bCheck = bNew; }
-    inline sal_Bool IsNoLang() const { return bNoLang; }
     inline void SetNoLang( const sal_Bool bNew ) { bNoLang = bNew; }
 
     inline void
