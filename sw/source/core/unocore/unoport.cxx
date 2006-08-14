@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoport.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:28:15 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:55:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -62,9 +61,6 @@
 #ifndef _UNOPRNMS_HXX
 #include <unoprnms.hxx>
 #endif
-#ifndef _UNOCRSR_HXX
-#include <unocrsr.hxx>
-#endif
 #ifndef _UNOMID_H
 #include <unomid.h>
 #endif
@@ -85,9 +81,6 @@
 #endif
 #ifndef _FMTFLD_HXX //autogen
 #include <fmtfld.hxx>
-#endif
-#ifndef _FRMFMT_HXX //autogen
-#include <frmfmt.hxx>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
