@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:41:34 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:16:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 /*
@@ -239,9 +238,6 @@
 #ifndef _EXPFLD_HXX
 #include <expfld.hxx>
 #endif
-#ifndef _FORMAT_HXX
-#include <format.hxx>
-#endif
 #ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx>     // fuer SwPageDesc...
 #endif
@@ -250,9 +246,6 @@
 #endif
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>        // fuer Numrules
-#endif
-#ifndef _NDINDEX_HXX
-#include <ndindex.hxx>
 #endif
 #ifndef _FMTHBSH_HXX //autogen
 #include <fmthbsh.hxx>
@@ -1080,13 +1073,6 @@ static Writer& OutWW8_SwCJKFont( Writer& rWrt, const SfxPoolItem& rHt )
     SwWW8Writer& rWrtWW8 = (SwWW8Writer&)rWrt;
     if( rWrtWW8.bWrtWW8 )
     {
-#if 0
-        if (nIdPreferred = RES_CHRATR_CJK_FONT)
-        {
-            rWrtWW8.InsUInt16( 0x286f );
-            rWrtWW8.pO->Insert( 1, rWrtWW8.pO->Count() );
-        }
-#endif
         rWrtWW8.InsUInt16( 0x4a50 );
         rWrtWW8.InsUInt16(rWrtWW8.GetId((const SvxFontItem&)rHt));
     }
@@ -3044,7 +3030,7 @@ static bool lcl_IsAtTxtEnd(const SwFmtFtn& rFtn)
         while( pSectNd && FTNEND_ATPGORDOCEND ==
                 ((const SwFmtFtnAtTxtEnd&)pSectNd->GetSection().GetFmt()->
                 GetAttr( nWh, true)).GetValue() )
-            pSectNd = pSectNd->FindStartNode()->FindSectionNode();
+            pSectNd = pSectNd->StartOfSectionNode()->FindSectionNode();
 
         if (!pSectNd)
             bRet = false;   // the is ftn/end collected at Page- or Doc-End
