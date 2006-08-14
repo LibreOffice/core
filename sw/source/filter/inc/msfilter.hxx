@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msfilter.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-26 18:18:54 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:08:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 /// @HTML
 
@@ -396,7 +395,7 @@ namespace sw
         public:
             explicit RedlineStack(SwDoc &rDoc) : mrDoc(rDoc) {}
             void open(const SwPosition& rPos, const SfxPoolItem& rAttr);
-            void close(const SwPosition& rPos, SwRedlineType eType);
+            void close(const SwPosition& rPos, IDocumentRedlineAccess::RedlineType_t eType);
             void closeall(const SwPosition& rPos);
             ~RedlineStack();
         private:
