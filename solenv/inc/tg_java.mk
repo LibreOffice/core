@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_java.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:44:52 $
+#   last change: $Author: hr $ $Date: 2006-08-14 16:20:18 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -36,28 +36,12 @@
 
 .IF "$(JAVACLASSFILES:s/DEFINED//)$(javauno)"!=""
 
-#$(JAVACLASSFILES):	$(JAVAFILES)
-#.IF "$(JAVARESPONSE)"!=""
-#	$(JAVAC) @<<
-#	$(JAVACPS) $(CLASSPATH) -d $(CLASSDIR) $(JAVAFLAGS) $(JAVAFILES)
-#	<<keep
-#.ELSE
-##	$(JAVAC) -depend $(JAVACPS) $(CLASSPATH) -d $(CLASSDIR) $(JAVAFLAGS) $(JAVAFILES)
-#.ENDIF
-#
-
 $(CLASSDIR)$/com$/sun$/star$/upd$/$(VERSIONINFOFILE)_updversion.class .PHONY: $(MISC)$/java$/com$/sun$/star$/upd$/$(VERSIONINFOFILE)_updversion.java 
 
 $(MISC)$/java$/com$/sun$/star$/upd$/$(VERSIONINFOFILE)_updversion.java .PHONY:
     @echo ------------------------------
     @echo Making: $@
     @+-$(MKDIRHIER) $(MISC)$/java$/com$/sun$/star$/upd
-.IF "$(GUI)"=="WNT"
-.IF "$(UPDATER)"!=""
-#	+tolodir $(MISC)$
-#	+tolodir $(MISC)$/java
-.ENDIF
-.ENDIF
 .IF "$(GUI)"=="UNX"
     @+echo package com.sun.star.upd\; > $@
     @+echo 'public class $(VERSIONINFOFILE)_updversion { public static String Version = "$(RSCREVISION)";}' >> $@
@@ -68,16 +52,14 @@ $(MISC)$/java$/com$/sun$/star$/upd$/$(VERSIONINFOFILE)_updversion.java .PHONY:
 
 .IF "$(JAVATARGET)"!=""
 .IF "$(PACKAGE)"!=""
-$(CLASSDIR)$/$(IDLPACKAGE)$/%.class .NOINFER .IGNORE .SILENT : $(JAVAFILES)
+$(CLASSDIR)$/$(IDLPACKAGE)$/%.class .NOINFER .IGNORE : %.java
 #	+echo $@
     +-$(RM) $(JAVATARGET) >& $(NULLDEV)
 .ELSE
-%.class .NOINFER .IGNORE .SILENT : $(JAVAFILES)
+$(CLASSDIR)$/%.class .NOINFER .IGNORE : %.java
 #	+echo $@
     +-$(RM) $(JAVATARGET) >& $(NULLDEV)
 .ENDIF
-# $(JAVACLASSFILES)  : $(JAVAFILES)
-# 	@$(RM) $(JAVATARGET) >& $(NULLDEV)
 
 $(JAVATARGET) :	$(JAVAFILES) $(JAVACLASSFILES) 
 .IF "$(JAVARESPONSE)"!=""
@@ -102,9 +84,9 @@ $(JAVATARGET) :	$(JAVAFILES) $(JAVACLASSFILES)
 .ELSE			# "$(USE_SHELL)"=="4nt"
     $(JAVAC) $(JAVACPS) "$(CLASSPATH)" -d $(CLASSDIR) $(JAVAFLAGS) $(JAVAFILES)
 .ENDIF			# "$(USE_SHELL)"=="4nt"
-.ENDIF
-.ENDIF
-.ENDIF
+.ENDIF			# "$(javauno)"!=""
+.ENDIF			# "$(use_jdep)"!=""
+.ENDIF			# "$(JAVATARGET)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(OS)$(CPU)"=="SOLARISS"
     +-find $(CLASSDIR) -type d -user $(USER) \! -perm -5 -print | xargs chmod a+r $$1 >& $(NULLDEV)
