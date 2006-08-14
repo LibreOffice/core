@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 13:07:04 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:52:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,12 +74,12 @@
 
 // nur fuers UpdateRange - Box in dem der gestackte Cursor sthet loeschen
 #include "pam.hxx"
-#include "doc.hxx"
 
 #include "swundo.hxx"
 #include "ribbar.hrc"
 #include "inputwin.hrc"
 
+#include <IDocumentContentOperations.hxx>
 
 SFX_IMPL_POS_CHILDWINDOW( SwInputChild, FN_EDIT_FORMULA, SFX_OBJECTBAR_OBJECT )
 
@@ -478,8 +478,9 @@ IMPL_LINK( SwInputWindow, SelTblCellsNotify, SwWrtShell *, pCaller )
             aPam.SetMark();
             aPam.Move( fnMoveForward, fnGoSection );
 
-            pWrtShell->GetDoc()->Delete( aPam );
-            pWrtShell->GetDoc()->Insert( aPam, sNew );
+            IDocumentContentOperations* pIDCO = pWrtShell->getIDocumentContentOperations();
+            pIDCO->Delete( aPam );
+            pIDCO->Insert( aPam, sNew, true );
             pWrtShell->EndAllAction();
             sOldFml = sNew;
         }
