@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbfld.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 13:43:24 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:18:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,6 @@ public:
 
     inline void     AddRef() { nRefCnt++; }
     void            ReleaseRef();
-    inline long     GetRefCount() { return nRefCnt; }
 
     const String&   GetColumnName() const {return sColumn;}
     const SwDBData& GetDBData() const {return aDBData;}
@@ -123,9 +122,6 @@ public:
     String              GetOldContent();
 
     inline void         ChgBodyTxtFlag( BOOL bIsInBody );
-    inline BOOL         IsInBodyTxt() const;
-
-    inline BOOL         IsValidValue() const    { return bValidValue; }
 
     inline BOOL         IsInitialized() const   { return bInitialized; }
     inline void         ClearInitialized()      { bInitialized = FALSE; }
@@ -148,10 +144,6 @@ public:
 
 inline  void SwDBField::SetExpansion(const String& rStr)
     { aContent = rStr; }
-
-// wird von der Formatierung abgefragt
-inline BOOL SwDBField::IsInBodyTxt() const
-    { return bIsInBodyTxt; }
 
 // wird von UpdateExpFlds gesetzt (dort ist die Node-Position bekannt)
 inline void SwDBField::ChgBodyTxtFlag( BOOL bIsInBody )
