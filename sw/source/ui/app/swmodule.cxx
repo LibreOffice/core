@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swmodule.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:20:03 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:27:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -131,45 +130,23 @@
 #ifndef _SVX_FONTWORK_GALLERY_DIALOG_HXX
 #include <svx/fontworkgallery.hxx>
 #endif
-#ifndef _SVX_EXTRUSION_CONTROLS_HXX
-#include <svx/extrusioncontrols.hxx>
-#endif
 #include <svx/imapdlg.hxx>
 #include <svx/srchdlg.hxx>
 #include <svx/hyperdlg.hxx>
-#ifndef _SVSTDARR_STRINGSDTOR
-#define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#endif
 #ifndef _COM_SUN_STAR_SCANNER_XSCANNERMANAGER_HPP_
 #include <com/sun/star/scanner/XScannerManager.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XSET_HPP_
 #include <com/sun/star/container/XSet.hpp>
 #endif
-#ifndef _CPPUHELPER_FACTORY_HXX_
-#include <cppuhelper/factory.hxx>
-#endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
-#ifndef _SVX_VERT_TEXT_TBXCTRL_HXX
-#include <svx/verttexttbxctrl.hxx>
 #endif
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>
 #endif
 #ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
-#endif
-#ifndef _SWTYPES_HXX
-#include <swtypes.hxx>
 #endif
 #ifndef _SWEVENT_HXX
 #include <swevent.hxx>
@@ -290,9 +267,6 @@
 #endif
 #ifndef _WORKCTRL_HXX
 #include <workctrl.hxx>
-#endif
-#ifndef _NUMCTRL_HXX
-#include <numctrl.hxx>
 #endif
 #ifndef _TBXANCHR_HXX
 #include <tbxanchr.hxx>
