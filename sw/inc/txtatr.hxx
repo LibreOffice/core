@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtatr.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:21:50 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:35:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _TXTATR_HXX
 #define _TXTATR_HXX
-
 #ifndef _SV_GEN_HXX
 #include <tools/gen.hxx>
 #endif
@@ -49,8 +48,6 @@
 #endif
 
 class SwTxtNode;    // fuer SwTxtFld
-class SvxFont;
-class SwCharSetCol;
 class SwCharFmt;
 class SvxTwoLinesItem;
 
@@ -59,10 +56,6 @@ class SvxTwoLinesItem;
 class SwTxtCharFmt : public SwTxtAttrEnd
 {
     SwTxtNode* pMyTxtNd;
-    BOOL bPrevNoHyph    : 1;
-    BOOL bPrevBlink     : 1;
-    BOOL bPrevURL       : 1;
-    BOOL bColor         : 1;
 
 public:
     SwTxtCharFmt( const SwFmtCharFmt& rAttr, xub_StrLen nStart, xub_StrLen nEnd );
@@ -73,7 +66,6 @@ public:
     virtual BOOL GetInfo( SfxPoolItem& rInfo ) const;
 
     // erfrage und setze den TxtNode Pointer
-    inline const SwTxtNode& GetTxtNode() const;
     void ChgTxtNode( const SwTxtNode* pNew ) { pMyTxtNd = (SwTxtNode*)pNew; }
 
 };
@@ -131,12 +123,6 @@ public:
 };
 
 // --------------- Inline Implementierungen ------------------------
-
-inline const SwTxtNode& SwTxtCharFmt::GetTxtNode() const
-{
-    ASSERT( pMyTxtNd, "SwTxtCharFmt:: wo ist mein TextNode?" );
-    return *pMyTxtNd;
-}
 
 inline const SwTxtNode& SwTxtRuby::GetTxtNode() const
 {
