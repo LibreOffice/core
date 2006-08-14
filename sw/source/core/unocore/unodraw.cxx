@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 12:36:46 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:53:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 #include <swtypes.hxx>
@@ -53,9 +52,6 @@
 #endif
 #ifndef _SVX_UNOPRNMS_HXX
 #include <svx/unoprnms.hxx>
-#endif
-#ifndef _UNOOBJ_HXX
-#include <unoobj.hxx>
 #endif
 #ifndef _DOC_HXX //autogen
 #include <doc.hxx>
@@ -137,10 +133,6 @@
 #ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESUPPLIER_HPP_
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #endif
-// --> OD 2004-07-23 #i31698#
-#ifndef _COM_SUN_STAR_DRAWING_HOMOGENMATRIX3_HPP_
-#include <com/sun/star/drawing/HomogenMatrix3.hpp>
-#endif
 #ifndef _COM_SUN_STAR_TEXT_HORIORIENTATION_HPP_
 #include <com/sun/star/text/HoriOrientation.hpp>
 #endif
@@ -150,12 +142,6 @@
 #ifndef _BGFX_NUMERIC_FTOOLS_HXX
 #include <basegfx/numeric/ftools.hxx>
 #endif
-// <--
-// --> OD 2004-08-06 #i28749#
-#ifndef _COM_SUN_STAR_TEXT_POSITIONLAYOUTDIR_HPP_
-#include <com/sun/star/text/PositionLayoutDir.hpp>
-#endif
-// <--
 // OD 2004-05-05 #i28701#
 #ifndef _FMTWRAPINFLUENCEONOBJPOS_HXX
 #include <fmtwrapinfluenceonobjpos.hxx>
@@ -798,7 +784,7 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
     if ( !pTemp )
         pTemp = pPam;
     UnoActionContext aAction(pDoc);
-    pDoc->Insert( *pTemp, *pObj, &aSet );
+    pDoc->Insert( *pTemp, *pObj, &aSet, NULL );
     SwFrmFmt* pFmt = ::FindFrmFmt( pObj );
     if(pFmt)
         pFmt->Add(pShape);
@@ -849,7 +835,7 @@ uno::Reference< drawing::XShapeGroup >  SwXDrawPage::group(const uno::Reference<
                 if( !bFlyInCnt )
                 {
                     UnoActionContext aContext(pDoc);
-                    pDoc->StartUndo( UNDO_START );
+                    pDoc->StartUndo( UNDO_START, NULL );
 
                     SwDrawContact* pContact = pDoc->GroupSelection( *pPage->GetDrawView() );
                     pDoc->ChgAnchor( pPage->GetDrawView()->GetMarkedObjectList(), FLY_AT_CNTNT/*int eAnchorId*/,
@@ -861,7 +847,7 @@ uno::Reference< drawing::XShapeGroup >  SwXDrawPage::group(const uno::Reference<
                         uno::Reference< uno::XInterface >  xInt = pPage->GetInterface( pContact->GetMaster() );
                         xRet = uno::Reference< drawing::XShapeGroup >(xInt, uno::UNO_QUERY);
                     }
-                    pDoc->EndUndo( UNDO_END );
+                    pDoc->EndUndo( UNDO_END, NULL );
                 }
             }
             pPage->RemovePageView();
@@ -884,12 +870,12 @@ void SwXDrawPage::ungroup(const uno::Reference< drawing::XShapeGroup > & xShapeG
         {
             pPage->PreUnGroup(xShapeGroup);
             UnoActionContext aContext(pDoc);
-            pDoc->StartUndo( UNDO_START );
+            pDoc->StartUndo( UNDO_START, NULL );
 
             pDoc->UnGroupSelection( *pPage->GetDrawView() );
             pDoc->ChgAnchor( pPage->GetDrawView()->GetMarkedObjectList(), FLY_AT_CNTNT/*int eAnchorId*/,
                         sal_True, sal_False );
-            pDoc->EndUndo( UNDO_END );
+            pDoc->EndUndo( UNDO_END, NULL );
         }
         pPage->RemovePageView();
     }
