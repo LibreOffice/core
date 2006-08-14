@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlmeta.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:25:32 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:24:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #include <hintids.hxx>
@@ -47,10 +46,6 @@
 #ifndef _COM_SUN_STAR_TEXT_XTEXTDOCUMENT_HPP_
 #include <com/sun/star/text/XTextDocument.hpp>
 #endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
-#include <com/sun/star/text/XText.hpp>
-#endif
-
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include <xmloff/xmlnmspe.hxx>
 #endif
@@ -88,9 +83,7 @@
 #ifndef _XMLIMP_HXX
 #include "xmlimp.hxx"
 #endif
-#ifndef _XMLOFF_PROGRESSBARHELPER_HXX
-#include <xmloff/ProgressBarHelper.hxx>
-#endif
+
 #ifndef _XMLEXP_HXX
 #include "xmlexp.hxx"
 #endif
@@ -102,29 +95,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::text;
 using namespace ::xmloff::token;
-
-// ---------------------------------------------------------------------
-
-#if 0
-class SwXMLMetaContext_Impl : public SfxXMLMetaContext
-{
-public:
-    SwXMLMetaContext_Impl( SwXMLImport& rImport, sal_uInt16 nPrfx,
-            const OUString& rLName,
-            const Reference< document::XDocumentInfo > & rInfo ) :
-        SfxXMLMetaContext( rImport, nPrfx, rLName, rInfo )
-    {}
-
-    virtual void SetDocLanguage( LanguageType eLang );
-};
-
-void SwXMLMetaContext_Impl::SetDocLanguage( LanguageType eLang )
-{
-    SwDoc& rDoc = ((SwXMLImport&)GetImport()).GetDoc();
-
-    rDoc.SetDefault( SvxLanguageItem( eLang, RES_CHRATR_LANGUAGE ) );
-}
-#endif
 
 // ---------------------------------------------------------------------
 
