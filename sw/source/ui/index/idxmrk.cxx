@@ -4,9 +4,9 @@
  *
  *  $RCSfile: idxmrk.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:21:51 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:47:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -66,10 +65,6 @@
 #ifndef _COM_SUN_STAR_I18N_TRANSLITERATIONMODULES_HPP_
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
-#include <com/sun/star/lang/Locale.hpp>
-#endif
-
 #ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
 #endif
@@ -85,9 +80,6 @@
 #ifndef _TXTCMP_HXX //autogen
 #include <svtools/txtcmp.hxx>
 #endif
-#ifndef _SFXVIEWFRM_HXX
-#include <sfx2/viewfrm.hxx>
-#endif
 #ifndef _SVX_SCRIPTTYPEITEM_HXX
 #include <svx/scripttypeitem.hxx>
 #endif
@@ -97,7 +89,6 @@
 #ifndef _SVX_LANGITEM_HXX
 #include <svx/langitem.hxx>
 #endif
-
 #ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
 #endif
@@ -113,16 +104,12 @@
 #ifndef _VIEW_HXX
 #include <view.hxx>
 #endif
-#ifndef _TOXMGR_HXX
-#include <toxmgr.hxx>
-#endif
 #ifndef _MULTMRK_HXX
 #include <multmrk.hxx>
 #endif
 #ifndef _SWUNDO_HXX
 #include <swundo.hxx>                   // fuer Undo-Ids
 #endif
-
 #ifndef _CMDID_H
 #include <cmdid.h>
 #endif
@@ -144,9 +131,6 @@
 #include <utlui.hrc>
 #ifndef _SWCONT_HXX
 #include <swcont.hxx>
-#endif
-#ifndef _AUTHFLD_HXX
-#include <authfld.hxx>
 #endif
 #ifndef _SVTOOLS_CJKOPTIONS_HXX
 #include <svtools/cjkoptions.hxx>
