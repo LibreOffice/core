@@ -4,9 +4,9 @@
  *
  *  $RCSfile: notxtfrm.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-24 12:54:35 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:01:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #ifndef _HINTIDS_HXX
@@ -49,10 +48,6 @@
 #ifndef _SV_VIRDEV_HXX //autogen
 #include <vcl/virdev.hxx>
 #endif
-#ifndef _TL_POLY_HXX
-#include <tools/poly.hxx>
-#endif
-
 #ifndef _GOODIES_IMAPOBJ_HXX
 #include <svtools/imapobj.hxx>
 #endif
@@ -162,7 +157,6 @@
 #ifndef _FRMSH_HXX
 #include <frmsh.hxx>
 #endif
-
 #ifndef _MDIEXP_HXX
 #include <mdiexp.hxx>
 #endif
@@ -790,18 +784,10 @@ void SwNoTxtFrm::Format( const SwBorderAttrs * )
     SwTwips nChgHght = IsVertical() ?
         (SwTwips)(aNewSize.Width() - Prt().Width()) :
         (SwTwips)(aNewSize.Height() - Prt().Height());
-#ifdef VERTICAL_LAYOUT
     if( nChgHght > 0)
         Grow( nChgHght );
     else if( nChgHght < 0)
         Shrink( Min(Prt().Height(), -nChgHght) );
-#else
-    const SzPtr pVar = pVARSIZE;
-    if( nChgHght > 0)
-        Grow( nChgHght, pVar );
-    else if( nChgHght < 0)
-        Shrink( Min(Prt().Height(), -nChgHght), pVar );
-#endif
 }
 
 /*************************************************************************
@@ -996,12 +982,13 @@ void SwNoTxtFrm::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
 void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) const
 {
     ViewShell* pShell = GetShell();
-    const FASTBOOL bPrn = pOut == pShell->GetPrt() ||
-                          pOut->GetConnectMetaFile();
 
     SwNoTxtNode& rNoTNd = *(SwNoTxtNode*)GetNode();
     SwGrfNode* pGrfNd = rNoTNd.GetGrfNode();
     SwOLENode* pOLENd = rNoTNd.GetOLENode();
+
+    const FASTBOOL bPrn = pOut == rNoTNd.getIDocumentDeviceAccess()->getPrinter( false ) ||
+                          pOut->GetConnectMetaFile();
 
     /// OD 25.09.2002 #99739# - calculate aligned rectangle from parameter <rGrfArea>.
     ///     Use aligned rectangle <aAlignedGrfArea> instead of <rGrfArea> in
@@ -1126,7 +1113,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
 
         // Im BrowseModus gibt es nicht unbedingt einen Drucker und
         // damit kein JobSetup, also legen wir eines an ...
-        JobSetup* pJobSetup = (JobSetup*)pOLENd->GetDoc()->GetJobsetup();
+        const JobSetup* pJobSetup = pOLENd->getIDocumentDeviceAccess()->getJobsetup();
         FASTBOOL bDummyJobSetup = 0 == pJobSetup;
         if( bDummyJobSetup )
             pJobSetup = new JobSetup();
