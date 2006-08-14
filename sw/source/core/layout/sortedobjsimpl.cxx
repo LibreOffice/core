@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sortedobjsimpl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 09:30:21 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:29:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,8 +62,8 @@
 #ifndef _FMTWRAPINFLUENCEONOBJPOS_HXX
 #include <fmtwrapinfluenceonobjpos.hxx>
 #endif
-#ifndef _DOC_HXX
-#include <doc.hxx>
+#ifndef IDOCUMENTDRAWMODELACCESS_HXX_INCLUDED
+#include <IDocumentDrawModelAccess.hxx>
 #endif
 
 typedef std::vector< SwAnchoredObject* >::iterator tIter;
@@ -105,8 +105,9 @@ struct ObjAnchorOrder
     {
         // get attributes of listed object
         const SwFrmFmt& rFmtListed = _pListedAnchoredObj->GetFrmFmt();
-        SdrLayerID nHellId = rFmtListed.GetDoc()->GetHellId();
-        SdrLayerID nInvisibleHellId = rFmtListed.GetDoc()->GetInvisibleHellId();
+        const IDocumentDrawModelAccess* pIDDMA = rFmtListed.getIDocumentDrawModelAccess();
+        SdrLayerID nHellId = pIDDMA->GetHellId();
+        SdrLayerID nInvisibleHellId = pIDDMA->GetInvisibleHellId();
         const SwFmtAnchor* pAnchorListed = &(rFmtListed.GetAnchor());
         const SwFmtWrapInfluenceOnObjPos* pWrapInfluenceOnObjPosListed =
                                         &(rFmtListed.GetWrapInfluenceOnObjPos());
