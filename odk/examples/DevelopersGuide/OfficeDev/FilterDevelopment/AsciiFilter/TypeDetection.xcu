@@ -19,8 +19,10 @@
     <value>true</value>
    </prop>
    <prop oor:name="UIName" oor:type="xs:string">
-    <value xml:lang="en-US">ASCII Replace</value>
-    <value xml:lang="de">ASCII Konvertierung</value>
+       <!-- The x-no-translate entry is a marker to prevent l10n tooling from translation. It it is not necessary. -->
+       <value xml:lang="x-no-translate"></value>
+       <value xml:lang="en-US">ASCII Replace</value>
+       <value xml:lang="de">ASCII Konvertierung</value>
    </prop>
   </node>
  </node>
