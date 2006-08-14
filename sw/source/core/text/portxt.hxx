@@ -4,9 +4,9 @@
  *
  *  $RCSfile: portxt.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:03:20 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:42:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,12 +34,12 @@
  ************************************************************************/
 #ifndef _PORTXT_HXX
 #define _PORTXT_HXX
-
 #ifdef GCC
 #include <sys/types.h>
 #else
 #include <new.h>    //fuer size_t, FIXEDMEM aus tools
 #endif
+
 #ifndef _SVMEMPOOL_HXX //autogen
 #include <tools/mempool.hxx>
 #endif
