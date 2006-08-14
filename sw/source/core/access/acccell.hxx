@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acccell.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:45:41 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:41:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,13 +34,8 @@
  ************************************************************************/
 #ifndef _ACCCELL_HXX
 #define _ACCCELL_HXX
-
 #ifndef _ACCCONTEXT_HXX
 #include "acccontext.hxx"
-#endif
-
-#ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
-#include <com/sun/star/uno/RuntimeException.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEVALUE_HPP_
