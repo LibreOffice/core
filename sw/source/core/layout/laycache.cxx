@@ -4,9 +4,9 @@
  *
  *  $RCSfile: laycache.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 13:57:21 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:27:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -87,9 +86,6 @@
 #endif
 #ifndef _BODYFRM_HXX
 #include <bodyfrm.hxx>
-#endif
-#ifndef _NODE_HXX //autogen
-#include <node.hxx>
 #endif
 #ifndef _NDINDEX_HXX
 #include <ndindex.hxx>
@@ -263,7 +259,7 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
         // We want to save the relative index, so we need the index
         // of the first content
         ULONG nStartOfContent = rDoc.GetNodes().GetEndOfContent().
-                                FindStartNode()->GetIndex();
+                                StartOfSectionNode()->GetIndex();
         // The first page..
         SwPageFrm* pPage = (SwPageFrm*)rDoc.GetRootFrm()->Lower();
 
@@ -423,7 +419,7 @@ sal_Bool SwLayoutCache::CompareLayout( const SwDoc& rDoc ) const
     {
         USHORT nIndex = 0;
         ULONG nStartOfContent = rDoc.GetNodes().GetEndOfContent().
-                                FindStartNode()->GetIndex();
+                                StartOfSectionNode()->GetIndex();
         SwPageFrm* pPage = (SwPageFrm*)rDoc.GetRootFrm()->Lower();
         if( pPage )
             pPage = (SwPageFrm*)pPage->GetNext();
@@ -587,7 +583,7 @@ SwLayHelper::SwLayHelper( SwDoc *pD, SwFrm* &rpF, SwFrm* &rpP, SwPageFrm* &rpPg,
     if( pImpl )
     {
         nMaxParaPerPage = 1000;
-        nStartOfContent = pDoc->GetNodes().GetEndOfContent().FindStartNode()
+        nStartOfContent = pDoc->GetNodes().GetEndOfContent().StartOfSectionNode()
                           ->GetIndex();
         nNodeIndex -= nStartOfContent;
         nIndex = 0;
@@ -673,7 +669,7 @@ ULONG SwLayHelper::CalcPageCount()
             }
             if ( nNdCount < 1000 )
                 nPgCount = 0;// no progress bar for small documents
-            if ( pDoc->IsBrowseMode() )
+            if ( pDoc->get(IDocumentSettingAccess::BROWSE_MODE) )
                 nMaxParaPerPage *= 6;
         }
     }
@@ -796,8 +792,9 @@ void lcl_ApplyWorkaroundForB6375613( SwFrm* p_pFirstFrmOnNewPage )
         {
             pFirstTextFrmOnNewPage->GetTxtNode()->LockModify();
             SwDoc* pDoc( pFirstTextFrmOnNewPage->GetTxtNode()->GetDoc() );
+            IDocumentContentOperations* pIDCO = pFirstTextFrmOnNewPage->GetTxtNode()->getIDocumentContentOperations();
             const SwPaM aTmpPaM( *(pFirstTextFrmOnNewPage->GetTxtNode()) );
-            pDoc->Insert( aTmpPaM, SvxFmtBreakItem( SVX_BREAK_PAGE_BEFORE ) );
+            pIDCO->Insert( aTmpPaM, SvxFmtBreakItem( SVX_BREAK_PAGE_BEFORE ), 0 );
             pFirstTextFrmOnNewPage->GetTxtNode()->UnlockModify();
 
             uno::Reference< document::XDocumentInfoSupplier > xDoc(
