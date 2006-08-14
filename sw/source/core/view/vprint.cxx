@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vprint.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-27 09:45:49 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:59:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -121,9 +120,6 @@
 #ifndef _DOCFLD_HXX
 #include <docfld.hxx>       // _SetGetExpFld
 #endif
-#ifndef _CALBCK_HXX
-#include <calbck.hxx>       // SwModify/SwClientIter
-#endif
 #ifndef _SHELLRES_HXX
 #include <shellres.hxx>
 #endif
@@ -147,9 +143,6 @@
 #endif
 #ifndef _PTQUEUE_HXX
 #include <ptqueue.hxx>
-#endif
-#ifndef _HINTS_HXX
-#include <hints.hxx>
 #endif
 #ifndef _TABFRM_HXX
 #include <tabfrm.hxx>
@@ -320,7 +313,10 @@ void SetSwVisArea( ViewShell *pSh, const SwRect &rRect, BOOL bPDFExport )
         aPt += pSh->aPrtOffst;
     aPt.X() = -aPt.X(); aPt.Y() = -aPt.Y();
 
-    OutputDevice *pOut = bPDFExport ? pSh->GetOut() : pSh->GetPrt();
+    OutputDevice *pOut = bPDFExport ?
+                         pSh->GetOut() :
+                         pSh->getIDocumentDeviceAccess()->getPrinter( false );
+
     MapMode aMapMode( pOut->GetMapMode() );
     aMapMode.SetOrigin( aPt );
     pOut->SetMapMode( aMapMode );
@@ -379,16 +375,16 @@ USHORT _PostItFld::GetPageNo( MultiSelection &rMulti, BOOL bRgt, BOOL bLft,
 }
 
 /******************************************************************************
- *  Methode     :   void lcl_GetPostIts( SwDoc* pDoc, _SetGetExpFlds& ...
+ *  Methode     :   void lcl_GetPostIts( IDocumentFieldsAccess* pIDFA, _SetGetExpFlds& ...
  *  Beschreibung:
  *  Erstellt    :   OK 07.11.94 10:20
  *  Aenderung   :
  ******************************************************************************/
 
 
-void lcl_GetPostIts( SwDoc* pDoc, _SetGetExpFlds& rSrtLst )
+void lcl_GetPostIts( IDocumentFieldsAccess* pIDFA, _SetGetExpFlds& rSrtLst )
 {
-    SwFieldType* pFldType = pDoc->GetSysFldType( RES_POSTITFLD );
+    SwFieldType* pFldType = pIDFA->GetSysFldType( RES_POSTITFLD );
     ASSERT( pFldType, "kein PostItType ? ");
 
     if( pFldType->GetDepends() )
@@ -410,14 +406,14 @@ void lcl_GetPostIts( SwDoc* pDoc, _SetGetExpFlds& rSrtLst )
 }
 
 /******************************************************************************
- *  Methode     :   void lcl_FormatPostIt( SwDoc* pDoc, SwPaM& aPam, ...
+ *  Methode     :   void lcl_FormatPostIt( IDocumentContentOperations* pIDCO, SwPaM& aPam, ...
  *  Beschreibung:
  *  Erstellt    :   OK 07.11.94 10:20
  *  Aenderung   :
  ******************************************************************************/
 
 
-void lcl_FormatPostIt( SwDoc* pDoc, SwPaM& aPam, SwPostItField* pField,
+void lcl_FormatPostIt( IDocumentContentOperations* pIDCO, SwPaM& aPam, SwPostItField* pField,
                            USHORT nPageNo, USHORT nLineNo )
 {
     static char __READONLY_DATA sTmp[] = " : ";
@@ -441,9 +437,9 @@ void lcl_FormatPostIt( SwDoc* pDoc, SwPaM& aPam, SwPostItField* pField,
     aStr += pField->GetPar1();
     aStr += ' ';
     aStr += GetAppLocaleData().getDate( pField->GetDate() );
-    pDoc->Insert( aPam, aStr );
+    pIDCO->Insert( aPam, aStr, true );
 
-    pDoc->SplitNode( *aPam.GetPoint() );
+    pIDCO->SplitNode( *aPam.GetPoint(), false );
     aStr = pField->GetPar2();
 #ifdef MAC
     // Fuer den MAC alle CR durch LF ersetzen
@@ -455,9 +451,9 @@ void lcl_FormatPostIt( SwDoc* pDoc, SwPaM& aPam, SwPostItField* pField,
     // Bei Windows und Co alle CR rausschmeissen
     aStr.EraseAllChars( '\r' );
 #endif
-    pDoc->Insert( aPam, aStr );
-    pDoc->SplitNode( *aPam.GetPoint() );
-    pDoc->SplitNode( *aPam.GetPoint() );
+    pIDCO->Insert( aPam, aStr, true );
+    pIDCO->SplitNode( *aPam.GetPoint(), false );
+    pIDCO->SplitNode( *aPam.GetPoint(), false );
 }
 
 /******************************************************************************
@@ -474,7 +470,7 @@ void lcl_PrintPostIts( ViewShell* pPrtShell, const XubString& rJobName,
     // Formatieren und Ausdrucken
     pPrtShell->CalcLayout();
 
-    SfxPrinter* pPrn = pPrtShell->GetPrt();
+    SfxPrinter* pPrn = pPrtShell->getIDocumentDeviceAccess()->getPrinter( false );
 
     //Das Druckdokument ist ein default Dokument, mithin arbeitet es auf der
     //StandardSeite.
@@ -609,7 +605,7 @@ void lcl_PrintPostItsEndPage( ViewShell* pPrtShell,
 }
 
 /******************************************************************************
- *  Methode     :   void ViewShell::SetPrt( SfxPrinter *pNew, OutputDevice *pPDFOut )
+ *  Methode     :   void ViewShell::InitPrt( SfxPrinter *pNew, OutputDevice *pPDFOut )
  *  Beschreibung:
  *  Erstellt    :   OK 07.11.94 10:22
  *  Aenderung   :
@@ -639,13 +635,6 @@ void ViewShell::InitPrt( SfxPrinter *pPrt, OutputDevice *pPDFOut )
 
     if ( !pWin )
         pOut = pTmpDev;    //Oder was sonst?
-}
-
-void ViewShell::SetPrt( SfxPrinter *pNew )
-{
-    // If the reference device was the printer,
-    // we have to set the new reference device
-    GetDoc()->SetPrt( pNew, sal_True );
 }
 
 /******************************************************************************
@@ -776,7 +765,7 @@ void ViewShell::CalcPagesForPrint( USHORT nMax, SfxProgress* pProgress,
     //angetriggert werden, damit der Anwender sieht worauf er wartet.
     //Damit der Vorgang moeglichst transparent gestaltet werden kann
     //Versuchen wir mal eine Schaetzung.
-    SfxPrinter* pPrt = GetPrt();
+    SfxPrinter* pPrt = getIDocumentDeviceAccess()->getPrinter( false );
     BOOL bPrtJob = pPrt ? pPrt->IsJobActive() : FALSE;
     SwRootFrm* pLayout = GetLayout();
     ULONG nStatMax = pLayout->GetPageNum();
@@ -844,13 +833,13 @@ SwDoc * ViewShell::CreatePrtDoc( SfxPrinter* pPrt, SfxObjectShellRef &rDocShellR
     SwFEShell* pFESh = (SwFEShell*)this;
     // Wir bauen uns ein neues Dokument
     SwDoc *pPrtDoc = new SwDoc;
-    pPrtDoc->AddLink();
+    pPrtDoc->acquire();
     pPrtDoc->SetRefForDocShell( (SfxObjectShellRef*)&(long&)rDocShellRef );
     pPrtDoc->LockExpFlds();
 
     // Der Drucker wird uebernommen
     if (pPrt)
-        pPrtDoc->SetPrt( pPrt );
+        pPrtDoc->setPrinter( pPrt, true, true );
 
     const SfxPoolItem* pCpyItem;
     const SfxItemPool& rPool = GetAttrPool();
@@ -930,7 +919,7 @@ SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
     SwFEShell* pFESh = (SwFEShell*)this;
     // Wir bauen uns ein neues Dokument
 //    SwDoc *pPrtDoc = new SwDoc;
-//    pPrtDoc->AddLink();
+//    pPrtDoc->acquire();
 //    pPrtDoc->SetRefForDocShell( (SvEmbeddedObjectRef*)&(long&)rDocShellRef );
     pPrtDoc->LockExpFlds();
 
@@ -938,7 +927,7 @@ SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
     //! Make a copy of it since it gets destroyed with the temporary document
     //! used for PDF export
     if (pPrt)
-        pPrtDoc->SetPrt( new SfxPrinter(*pPrt) );
+        pPrtDoc->setPrinter( new SfxPrinter(*pPrt), true, true );
 
     const SfxPoolItem* pCpyItem;
     const SfxItemPool& rPool = GetAttrPool();
@@ -1059,7 +1048,7 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress* pProgress,
     else
     {
         // wenn kein Drucker vorhanden ist, wird nicht gedruckt
-        pPrt = GetPrt();
+        pPrt = getIDocumentDeviceAccess()->getPrinter( false );
         if( !pPrt || !pPrt->GetName().Len() )
         {
             ASSERT( FALSE, "Drucken ohne Drucker?" );
@@ -1079,7 +1068,7 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress* pProgress,
     SwDoc *pPrtDoc;
 
     //!! muss warum auch immer hier in diesem scope existieren !!
-    //!! (hängt mit OLE Objekten im Dokument zusammen.)
+    //!! (h?ngt mit OLE Objekten im Dokument zusammen.)
     SfxObjectShellRef aDocShellRef;
 
     // PDF export for (multi-)selection has already generated a temporary document
@@ -1274,7 +1263,7 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress* pProgress,
                 lcl_GetPostIts( pDoc, aPostItFields );
                 pPostItDoc   = new SwDoc;
                 if (pPrt)
-                    pPostItDoc->SetPrt( pPrt );
+                    pPostItDoc->setPrinter( pPrt, true, true );
                 pPostItShell = new ViewShell( *pPostItDoc, 0,
                                                pShell->GetViewOptions() );
                 // Wenn PostIts am Dokumentenende gedruckt werden sollen,
@@ -1511,7 +1500,7 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress* pProgress,
 
             if( pPostItShell )
             {
-                pPostItDoc->_SetPrt( 0 );   //damit am echten DOC der Drucker bleibt
+                pPostItDoc->setPrinter( 0, false, false );  //damit am echten DOC der Drucker bleibt
                 delete pPostItShell;        //Nimmt das PostItDoc mit ins Grab.
             }
 
@@ -1529,9 +1518,9 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress* pProgress,
     if (bSelection )
     {
          // damit das Dokument nicht den Drucker mit ins Grab nimmt
-        pPrtDoc->_SetPrt( NULL );
+        pPrtDoc->setPrinter( 0, false, false );
 
-        if ( !pPrtDoc->RemoveLink() )
+        if ( !pPrtDoc->release() )
             delete pPrtDoc;
     }
 
@@ -1571,7 +1560,8 @@ void ViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, SwPrtOptions& rO
         SwRect aSwRect( rRect );
         pSh->aVisArea = aSwRect;
 
-        if ( pDoc->IsBrowseMode() && pSh->GetNext() == pSh )
+        if ( pSh->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) &&
+             pSh->GetNext() == pSh )
         {
             pSh->CheckBrowseView( FALSE );
             pDoc->GetRootFrm()->Lower()->InvalidateSize();
