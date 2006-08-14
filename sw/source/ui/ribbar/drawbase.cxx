@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawbase.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:43:58 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:52:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #pragma hdrstop
 #include <hintids.hxx>
 #ifndef _UIPARAM_HXX
@@ -65,9 +64,6 @@
 #endif
 #ifndef _FRMFMT_HXX //autogen
 #include <frmfmt.hxx>
-#endif
-#ifndef _SFXVIEWFRM_HXX
-#include <sfx2/viewfrm.hxx>
 #endif
 #include "cmdid.h"
 #include "basesh.hxx"
