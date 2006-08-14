@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rootfrm.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:28:21 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:21:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _ROOTFRM_HXX
 #define _ROOTFRM_HXX
-
 #include "layfrm.hxx"
 
 class SwCntntFrm;
@@ -45,8 +44,6 @@ class SwPaM;
 class SwCursor;
 class SwShellCrsr;
 class SwTableCursor;
-class SwRegionRects;
-class OutputDevice;
 class SwLayVout;
 class SwDestroyList;
 class SwCurrShells;
