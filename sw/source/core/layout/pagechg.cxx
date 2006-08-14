@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pagechg.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:30:13 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:28:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -245,8 +244,8 @@ SwPageFrm::SwPageFrm( SwFrmFmt *pFmt, SwPageDesc *pPgDsc ) :
     bInvalidLayout = bInvalidCntnt = bInvalidSpelling = bInvalidAutoCmplWrds = bInvalidWordCount = TRUE;
     bInvalidFlyLayout = bInvalidFlyCntnt = bInvalidFlyInCnt = bFtnPage = bEndNotePage = FALSE;
 
-    SwDoc *pDoc = pFmt->GetDoc();
-    if ( pDoc->IsBrowseMode() )
+    const bool bBrowseMode = pFmt->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
+    if ( bBrowseMode )
     {
         Frm().Height( 0 );
         ViewShell *pSh = GetShell();
@@ -260,6 +259,7 @@ SwPageFrm::SwPageFrm( SwFrmFmt *pFmt, SwPageDesc *pPgDsc ) :
 
     //Body-Bereich erzeugen und einsetzen, aber nur wenn ich nicht gerade
     //eine Leerseite bin.
+    SwDoc *pDoc = pFmt->GetDoc();
     if ( FALSE == (bEmptyPage = pFmt == pDoc->GetEmptyPageFmt()) )
     {
         bEmptyPage = FALSE;
@@ -271,7 +271,7 @@ SwPageFrm::SwPageFrm( SwFrmFmt *pFmt, SwPageDesc *pPgDsc ) :
                                             //eingesetzt werden koennen.
         pBodyFrm->InvalidatePos();
 
-        if ( pDoc->IsBrowseMode() )
+        if ( bBrowseMode )
             _InvalidateSize();      //Alles nur gelogen
 
         //Header/Footer einsetzen, nur rufen wenn aktiv.
@@ -363,7 +363,7 @@ void SwPageFrm::CheckDirection( BOOL bVert )
     if( bVert )
     {
         if( FRMDIR_HORI_LEFT_TOP == nDir || FRMDIR_HORI_RIGHT_TOP == nDir ||
-            GetFmt()->GetDoc()->IsBrowseMode() )
+            GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
             bVertical = 0;
         else
             bVertical = 1;
@@ -637,7 +637,7 @@ void SwPageFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
         case RES_FRM_SIZE:
         {
             const SwRect aOldPageFrmRect( Frm() );
-            if ( GetFmt()->GetDoc()->IsBrowseMode() )
+            if ( GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
             {
                 bValidSize = FALSE;
                 // OD 28.10.2002 #97265# - Don't call <SwPageFrm::MakeAll()>
@@ -801,7 +801,7 @@ SwPageDesc *SwPageFrm::FindPageDesc()
     SwPageDesc *pRet = 0;
 
     //5.
-    if ( GetFmt()->GetDoc()->IsBrowseMode() )
+    if ( GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
     {
         SwCntntFrm *pFrm = GetUpper()->ContainsCntnt();
         while ( !pFrm->IsInDocBody() )
@@ -1860,7 +1860,7 @@ void SwRootFrm::ImplInvalidateBrowseWidth()
 |*************************************************************************/
 void SwRootFrm::ImplCalcBrowseWidth()
 {
-    ASSERT( GetFmt()->GetDoc()->IsBrowseMode(),
+    ASSERT( GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE),
             "CalcBrowseWidth and not in BrowseView" );
 
     //Die (minimale) Breite wird von Rahmen, Tabellen und Zeichenobjekten
