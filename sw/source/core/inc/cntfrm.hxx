@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cntfrm.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:43:25 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:18:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,15 +34,12 @@
  ************************************************************************/
 #ifndef _CNTFRM_HXX
 #define _CNTFRM_HXX
-
 #include "frame.hxx"
 #include "flowfrm.hxx"
 #include "cshtyp.hxx"
 
 class SwLayoutFrm;
-class SwPageFrm;
 class SwCntntNode;
-struct SwCrsrMoveState;
 class SwBorderAttrs;
 class SwAttrSetChg;
 class SwTxtFrm;
