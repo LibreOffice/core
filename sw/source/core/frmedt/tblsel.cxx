@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tblsel.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-20 16:15:38 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:16:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 #define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
@@ -107,14 +106,8 @@
 #ifndef _VISCRS_HXX
 #include <viscrs.hxx>
 #endif
-#ifndef _SWCRSR_HXX
-#include <swcrsr.hxx>
-#endif
 #ifndef _SWTBLFMT_HXX
 #include <swtblfmt.hxx>
-#endif
-#ifndef _FMTCOL_HXX
-#include <fmtcol.hxx>
 #endif
 #ifndef _UNDOBJ_HXX
 #include <undobj.hxx>
@@ -1530,7 +1523,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                 if( pUndo )
                     pUndo->MoveBoxCntnt( aPam, aInsPos, aSaveFlyArr );
                 else
-                    pDoc->Move( aPam, aInsPos, DOC_MOVEREDLINES );
+                    pDoc->Move( aPam, aInsPos, IDocumentContentOperations::DOC_MOVEREDLINES );
                 aPam.DeleteMark();
                 if( bCalcWidth )
                     nWidth += rPt.pSelBox->GetFrmFmt()->GetFrmSize().GetWidth();
@@ -1555,7 +1548,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                 if( pUndo )
                     pUndo->MoveBoxCntnt( pDoc, aRg, rInsPosNd );
                 else
-                    pDoc->Move( aRg, rInsPosNd );
+                    pDoc->Move( aRg, rInsPosNd, IDocumentContentOperations::DOC_MOVEDEFAULT );
                 // wo steht jetzt aInsPos ??
 
                 if( bCalcWidth )
@@ -2724,8 +2717,6 @@ void _FndBox::MakeNewFrms( SwTable &rTable, const USHORT nNumber,
         {
             if ( pTable->Lower() )
             {
-                USHORT nRowCount = 0;
-
                 if ( pTable->IsFollow() )
                 {
                     lcl_UpdateRepeatedHeadlines( *pTable, true );
