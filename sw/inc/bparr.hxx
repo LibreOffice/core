@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bparr.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:34:05 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:17:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,9 +51,10 @@ class BigPtrEntry
     friend class BigPtrArray;
     BlockInfo* pBlock;
     USHORT nOffset;
+public:
+    virtual ~BigPtrEntry() {}
 protected:
     BigPtrEntry() : pBlock(0), nOffset(0) {}
-    virtual ~BigPtrEntry() {}
 
     inline ULONG GetPos() const;
     inline BigPtrArray& GetArray() const;
