@@ -4,9 +4,9 @@
  *
  *  $RCSfile: insrule.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:22:22 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:42:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,12 +34,9 @@
  ************************************************************************/
 #ifndef _INSRULE_HXX
 #define _INSRULE_HXX
-
 #ifndef _NUM_HXX
 #include "num.hxx"
 #endif
-
-class SwDocShell;
 
 class SwRulerValueSet;
 class ValueSet;
