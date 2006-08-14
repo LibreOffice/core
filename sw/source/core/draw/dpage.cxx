@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dpage.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:40:30 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:06:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 #ifndef _BASMGR_HXX
@@ -44,16 +43,12 @@
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
 #endif
-#ifndef _URLOBJ_HXX //autogen
-#include <tools/urlobj.hxx>
-#endif
 #ifndef _SV_HELP_HXX //autogen
 #include <vcl/help.hxx>
 #endif
 #ifndef _SVDVIEW_HXX //autogen
 #include <svx/svdview.hxx>
 #endif
-
 #ifndef _FMTURL_HXX //autogen
 #include <fmturl.hxx>
 #endif
@@ -77,12 +72,6 @@
 #endif
 #ifndef _ROOTFRM_HXX
 #include <rootfrm.hxx>
-#endif
-#ifndef _ERRHDL_HXX
-#include <errhdl.hxx>
-#endif
-#ifndef _SWTYPES_HXX
-#include <swtypes.hxx>
 #endif
 #ifndef _FRMATR_HXX
 #include <frmatr.hxx>
