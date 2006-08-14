@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldbas.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 14:49:03 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:13:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #include <math.h>
@@ -50,9 +49,6 @@
 #endif
 #ifndef _ZFORMAT_HXX //autogen
 #include <svtools/zformat.hxx>
-#endif
-#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
-#include <unotools/localedatawrapper.hxx>
 #endif
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
@@ -93,9 +89,6 @@
 #endif
 #ifndef _SWTABLE_HXX
 #include <swtable.hxx>
-#endif
-#ifndef _DOCFLD_HXX
-#include <docfld.hxx>
 #endif
 #ifndef _DOCUFLD_HXX
 #include <docufld.hxx>
