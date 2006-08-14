@@ -4,9 +4,9 @@
  *
  *  $RCSfile: extinput.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:06:39 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:21:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,8 +45,8 @@
 #ifndef INCLUDED_I18NPOOL_LANG_H
 #include <i18npool/lang.h>
 #endif
+
 class CommandExtTextInputData;
-class Font;
 
 class SwExtTextInput : public SwPaM
 {
@@ -61,11 +61,9 @@ public:
 
     void SetInputData( const CommandExtTextInputData& rData );
     const SvUShorts& GetAttrs() const   { return aAttrs; }
-    BOOL IsInsText() const              { return bInsText; }
     void SetInsText( BOOL bFlag )       { bInsText = bFlag; }
     BOOL IsOverwriteCursor() const      { return bIsOverwriteCursor; }
     void SetOverwriteCursor( BOOL bFlag );
-    LanguageType GetLanguage() const { return eInputLanguage;}
     void SetLanguage(LanguageType eSet) { eInputLanguage = eSet;}
 };
 
