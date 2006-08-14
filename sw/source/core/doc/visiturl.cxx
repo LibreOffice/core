@@ -4,9 +4,9 @@
  *
  *  $RCSfile: visiturl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:20:19 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:03:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 
@@ -43,10 +42,6 @@
 #ifndef _INETHIST_HXX //autogen
 #include <svtools/inethist.hxx>
 #endif
-#ifndef _URLOBJ_HXX //autogen
-#include <tools/urlobj.hxx>
-#endif
-
 #ifndef _FMTINFMT_HXX //autogen
 #include <fmtinfmt.hxx>
 #endif
