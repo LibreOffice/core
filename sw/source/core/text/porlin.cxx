@@ -4,9 +4,9 @@
  *
  *  $RCSfile: porlin.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:00:16 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:41:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,13 +33,10 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
-#ifdef BIDI
 #ifndef _OUTDEV_HXX //autogen
 #include <vcl/outdev.hxx>
-#endif
 #endif
 #ifndef _SW_PORTIONHANDLER_HXX
 #include <SwPortionHandler.hxx>
@@ -136,16 +133,12 @@ void SwLinePortion::PrePaint( const SwTxtPaintInfo& rInf,
     KSHORT nPos;
     SwTxtPaintInfo aInf( rInf );
 
-#ifdef BIDI
     const BOOL bBidiPor = ( rInf.GetTxtFrm()->IsRightToLeft() ) !=
                           ( 0 != ( TEXT_LAYOUT_BIDI_RTL & rInf.GetOut()->GetLayoutMode() ) );
 
     USHORT nDir = bBidiPor ?
                   1800 :
                   rInf.GetFont()->GetOrientation( rInf.GetTxtFrm()->IsVertical() );
-#else
-    USHORT nDir = rInf.GetFont()->GetOrientation( rInf.GetTxtFrm()->IsVertical() );
-#endif
 
     switch ( nDir )
     {
@@ -161,14 +154,12 @@ void SwLinePortion::PrePaint( const SwTxtPaintInfo& rInf,
             nPos -= nLastWidth + nHalfView;
         aInf.Y( nPos );
         break;
-#ifdef BIDI
     case 1800 :
         nPos = KSHORT( rInf.X() );
         if( nLastWidth > nHalfView )
             nPos -= nLastWidth + nHalfView;
         aInf.X( nPos );
         break;
-#endif
     case 2700 :
         nPos = KSHORT( rInf.Y() );
         if( nLastWidth > nHalfView )
@@ -379,21 +370,17 @@ void SwLinePortion::FormatEOL( SwTxtFormatInfo &rInf )
 void SwLinePortion::Move( SwTxtPaintInfo &rInf )
 {
     BOOL bB2T = rInf.GetDirection() == DIR_BOTTOM2TOP;
-#ifdef BIDI
     const BOOL bFrmDir = rInf.GetTxtFrm()->IsRightToLeft();
     BOOL bCounterDir = ( ! bFrmDir && DIR_RIGHT2LEFT == rInf.GetDirection() ) ||
                        (   bFrmDir && DIR_LEFT2RIGHT == rInf.GetDirection() );
-#endif
 
     if ( InSpaceGrp() && rInf.GetSpaceAdd() )
     {
         SwTwips nTmp = PrtWidth() + CalcSpacing( rInf.GetSpaceAdd(), rInf );
         if( rInf.IsRotated() )
             rInf.Y( rInf.Y() + ( bB2T ? -nTmp : nTmp ) );
-#ifdef BIDI
         else if ( bCounterDir )
             rInf.X( rInf.X() - nTmp );
-#endif
         else
             rInf.X( rInf.X() + nTmp );
     }
@@ -406,10 +393,8 @@ void SwLinePortion::Move( SwTxtPaintInfo &rInf )
         }
         if( rInf.IsRotated() )
             rInf.Y( rInf.Y() + ( bB2T ? -PrtWidth() : PrtWidth() ) );
-#ifdef BIDI
         else if ( bCounterDir )
             rInf.X( rInf.X() - PrtWidth() );
-#endif
         else
             rInf.X( rInf.X() + PrtWidth() );
     }
