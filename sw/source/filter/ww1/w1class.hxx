@@ -4,9 +4,9 @@
  *
  *  $RCSfile: w1class.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:02:21 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:13:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
 #endif
@@ -54,7 +53,6 @@ class SvxFontItem;
 class SvxBorderLine;
 class SvxBoxItem;
 class SvStream;
-class SfxPoolItem;
 class SwField;
 class Ww1Annotation;
 class Ww1AtnText;
@@ -75,10 +73,6 @@ class Ww1PlcAnnotationRef;
 class Ww1PlcAnnotationTxt;
 class Ww1PlcChp;
 class Ww1PlcFields;
-class Ww1PlcFieldFootnote;
-class Ww1PlcFieldHeaderFooter;
-class Ww1PlcFieldMacro;
-class Ww1PlcFieldText;
 class Ww1PlcFootnoteRef;
 class Ww1PlcFootnoteTxt;
 class Ww1PlcGlossary;
