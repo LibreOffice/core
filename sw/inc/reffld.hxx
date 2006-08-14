@@ -4,9 +4,9 @@
  *
  *  $RCSfile: reffld.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:07:06 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:30:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,6 @@
 
 class SfxPoolItem;
 class SwDoc;
-class SwTxtAttr;
 class SwTxtNode;
 
 enum REFERENCESUBTYPE
