@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 09:36:15 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:26:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -279,9 +278,6 @@ using namespace ::com::sun::star::uno;
 #ifndef _SWSLOTS_HXX
 #include <swslots.hxx>
 #endif
-#ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYCONTAINER_HPP_
-#include <com/sun/star/script/XLibraryContainer.hpp>
-#endif
 #ifndef _COM_SUN_STAR_DOCUMENT_UPDATEDOCMODE_HPP_
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #endif
@@ -432,7 +428,7 @@ BOOL SwDocShell::ConvertFrom( SfxMedium& rMedium )
     SW_MOD()->SetEmbeddedLoadSave(
                             SFX_CREATE_MODE_EMBEDDED == GetCreateMode() );
 
-    pRdr->GetDoc()->SetHTMLMode( ISA(SwWebDocShell) );
+    pRdr->GetDoc()->set(IDocumentSettingAccess::HTML_MODE, ISA(SwWebDocShell));
 
     /* #106748# Restore the pool default if reading a saved document. */
     pDoc->RemoveAllFmtLanguageDependencies();
@@ -501,10 +497,10 @@ BOOL SwDocShell::Save()
     // --> OD 2006-03-17 #i62875#
     // reset compatibility flag <DoNotCaptureDrawObjsOnPage>, if possible
     if ( pWrtShell && pDoc &&
-         pDoc->DoNotCaptureDrawObjsOnPage() &&
+         pDoc->get(IDocumentSettingAccess::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE) &&
          docfunc::AllDrawObjsOnPage( *pDoc ) )
     {
-        pDoc->SetDoNotCaptureDrawObjsOnPage( false );
+        pDoc->set(IDocumentSettingAccess::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE, false);
     }
     // <--
 
@@ -596,7 +592,8 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
     if(pView)
         pView->GetEditWin().StopQuickHelp();
 
-    if( pDoc->IsGlobalDoc() && !pDoc->IsGlblDocSaveLinks() )
+    if( pDoc->get(IDocumentSettingAccess::GLOBAL_DOCUMENT) &&
+        !pDoc->get(IDocumentSettingAccess::GLOBAL_DOCUMENT_SAVE_LINKS) )
         RemoveOLEObjects();
 
     {
@@ -625,22 +622,22 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
     // --> OD 2006-03-17 #i62875#
     // reset compatibility flag <DoNotCaptureDrawObjsOnPage>, if possible
     if ( pWrtShell && pDoc &&
-         pDoc->DoNotCaptureDrawObjsOnPage() &&
+         pDoc->get(IDocumentSettingAccess::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE) &&
          docfunc::AllDrawObjsOnPage( *pDoc ) )
     {
-        pDoc->SetDoNotCaptureDrawObjsOnPage( false );
+        pDoc->set(IDocumentSettingAccess::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE, false);
     }
     // <--
 
-    sal_uInt16 nRedlineMode = pDoc->GetRedlineMode();
+    IDocumentRedlineAccess::RedlineMode_t nRedlineMode = pDoc->GetRedlineMode();
     // Hide redlines for export
-    pDoc->SetRedlineMode( REDLINE_SHOW_INSERT );
+    pDoc->SetRedlineMode( IDocumentRedlineAccess::REDLINE_SHOW_INSERT );
 
     ULONG nErr = ERR_SWG_WRITE_ERROR, nVBWarning = ERRCODE_NONE;
     uno::Reference < embed::XStorage > xStor = rMedium.GetOutputStorage();
     if( SfxObjectShell::SaveAs( rMedium ) )
     {
-        if( GetDoc()->IsGlobalDoc() && !ISA( SwGlobalDocShell ) )
+        if( GetDoc()->get(IDocumentSettingAccess::GLOBAL_DOCUMENT) && !ISA( SwGlobalDocShell ) )
         {
             // This is to set the correct class id if SaveAs is
             // called from SwDoc::SplitDoc to save a normal doc as
@@ -808,10 +805,10 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
     // --> OD 2006-03-17 #i62875#
     // reset compatibility flag <DoNotCaptureDrawObjsOnPage>, if possible
     if ( pWrtShell && pDoc &&
-         pDoc->DoNotCaptureDrawObjsOnPage() &&
+         pDoc->get(IDocumentSettingAccess::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE) &&
          docfunc::AllDrawObjsOnPage( *pDoc ) )
     {
-        pDoc->SetDoNotCaptureDrawObjsOnPage( false );
+        pDoc->set(IDocumentSettingAccess::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE, false);
     }
     // <--
 
@@ -843,15 +840,15 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
             nSaveType = 2;
 
         // Flags am Dokument entsprechend umsetzen
-        BOOL bIsHTMLModeSave = GetDoc()->IsHTMLMode();
-        BOOL bIsGlobalDocSave = GetDoc()->IsGlobalDoc();
-        BOOL bIsGlblDocSaveLinksSave = GetDoc()->IsGlblDocSaveLinks();
+        BOOL bIsHTMLModeSave = GetDoc()->get(IDocumentSettingAccess::HTML_MODE);
+        BOOL bIsGlobalDocSave = GetDoc()->get(IDocumentSettingAccess::GLOBAL_DOCUMENT);
+        BOOL bIsGlblDocSaveLinksSave = GetDoc()->get(IDocumentSettingAccess::GLOBAL_DOCUMENT_SAVE_LINKS);
         if( nMyType != nSaveType )
         {
-            GetDoc()->SetHTMLMode( 1 == nSaveType );
-            GetDoc()->SetGlobalDoc( 2 == nSaveType );
+            GetDoc()->set(IDocumentSettingAccess::HTML_MODE, 1 == nSaveType);
+            GetDoc()->set(IDocumentSettingAccess::GLOBAL_DOCUMENT, 2 == nSaveType);
             if( 2 != nSaveType )
-                GetDoc()->SetGlblDocSaveLinks( FALSE );
+                GetDoc()->set(IDocumentSettingAccess::GLOBAL_DOCUMENT_SAVE_LINKS, false);
         }
 
         // if the target format is storage based, then the output storage must be already created
@@ -876,9 +873,9 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
 
         if( nMyType != nSaveType )
         {
-            GetDoc()->SetHTMLMode( bIsHTMLModeSave );
-            GetDoc()->SetGlobalDoc( bIsGlobalDocSave );
-            GetDoc()->SetGlblDocSaveLinks( bIsGlblDocSaveLinksSave );
+            GetDoc()->set(IDocumentSettingAccess::HTML_MODE, bIsHTMLModeSave );
+            GetDoc()->set(IDocumentSettingAccess::GLOBAL_DOCUMENT, bIsGlobalDocSave);
+            GetDoc()->set(IDocumentSettingAccess::GLOBAL_DOCUMENT_SAVE_LINKS, bIsGlblDocSaveLinksSave);
         }
 
         if( bRet && nMyType != nSaveType )
@@ -1036,10 +1033,10 @@ void SwDocShell::Draw( OutputDevice* pDev, const JobSetup& rSetup,
     JobSetup *pOrig = 0;
     if ( rSetup.GetPrinterName().Len() && ASPECT_THUMBNAIL != nAspect )
     {
-        JobSetup* pOrig = (JobSetup*)pDoc->GetJobsetup();
+        JobSetup* pOrig = const_cast<JobSetup*>(pDoc->getJobsetup());
         if( pOrig )         // dann kopieren wir uns den
             pOrig = new JobSetup( *pOrig );
-        pDoc->SetJobsetup( rSetup );
+        pDoc->setJobsetup( rSetup );
     }
 
     Rectangle aRect( nAspect == ASPECT_THUMBNAIL ?
@@ -1056,7 +1053,7 @@ void SwDocShell::Draw( OutputDevice* pDev, const JobSetup& rSetup,
 
     if( pOrig )
     {
-        pDoc->SetJobsetup( *pOrig );
+        pDoc->setJobsetup( *pOrig );
         delete pOrig;
     }
     if ( bResetModified )
@@ -1112,7 +1109,7 @@ Rectangle SwDocShell::GetVisArea( USHORT nAspect ) const
 
         if ( pFmt->GetFrmSize().GetWidth() == LONG_MAX )
             //Jetzt wird es aber Zeit fuer die Initialisierung
-            pDoc->GetPrt( TRUE );
+            pDoc->getPrinter( true );
 
         const SwFmtFrmSize& rFrmSz = pFmt->GetFrmSize();
         const Size aSz( rFrmSz.GetWidth(), rFrmSz.GetHeight() );
@@ -1125,20 +1122,20 @@ Rectangle SwDocShell::GetVisArea( USHORT nAspect ) const
 
 Printer *SwDocShell::GetDocumentPrinter()
 {
-    return pDoc->GetPrt();
+    return pDoc->getPrinter( false );
 }
 
 OutputDevice* SwDocShell::GetDocumentRefDev()
 {
-    return pDoc->_GetRefDev();
+    return pDoc->getReferenceDevice( false );
 }
 
 void SwDocShell::OnDocumentPrinterChanged( Printer * pNewPrinter )
 {
     if ( pNewPrinter )
-        GetDoc()->SetJobsetup( pNewPrinter->GetJobSetup() );
+        GetDoc()->setJobsetup( pNewPrinter->GetJobSetup() );
     else
-        GetDoc()->SetPrt( 0 );
+        GetDoc()->setPrinter( 0, true, true );
 }
 
 ULONG SwDocShell::GetMiscStatus() const
@@ -1216,8 +1213,7 @@ void SwDocShell::GetState(SfxItemSet& rSet)
                 while (pTmpFrm)     // Preview suchen
                 {
                     if ( PTR_CAST(SwView, pTmpFrm->GetViewShell()) &&
-                         ((SwView*)pTmpFrm->GetViewShell())->GetWrtShell().
-                                                    GetDoc()->IsBrowseMode())
+                         ((SwView*)pTmpFrm->GetViewShell())->GetWrtShell().getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE))
                     {
                         bDisable = TRUE;
                         break;
@@ -1278,7 +1274,7 @@ void SwDocShell::GetState(SfxItemSet& rSet)
                     rSet.DisableItem( nWhich );
                 else
                 {
-                    sal_Bool bState = GetDoc()->IsBrowseMode();
+                    sal_Bool bState = GetDoc()->get(IDocumentSettingAccess::BROWSE_MODE);
                     if(FN_PRINT_LAYOUT == nWhich)
                         bState = !bState;
                     rSet.Put( SfxBoolItem( nWhich, bState));
