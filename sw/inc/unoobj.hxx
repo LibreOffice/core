@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoobj.hxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 13:05:45 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:37:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _UNOOBJ_HXX
 #define _UNOOBJ_HXX
-
 #ifndef _UNOEVTLSTNR_HXX
 #include <unoevtlstnr.hxx>
 #endif
@@ -195,9 +194,7 @@ class SwUnoCrsr;
 class SwCursor;
 class SwBookmark;
 class SwFmtFtn;
-class SwFmtFld;
 class SwFmtRefMark;
-class SwEvtLstnrArray;
 class GetCurTxtFmtColl;
 /* -----------------------------01.12.00 18:09--------------------------------
 
