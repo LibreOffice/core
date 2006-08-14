@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ssfrm.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 13:39:53 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:29:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #ifndef _PAGEFRM_HXX
@@ -51,10 +50,6 @@
 #ifndef _NODE_HXX
 #include <node.hxx>
 #endif
-#ifndef _ERRHDL_HXX
-#include <errhdl.hxx>
-#endif
-
 #ifndef _DVIEW_HXX
 #include <dview.hxx>
 #endif
@@ -99,9 +94,7 @@
 #include <pagedesc.hxx>
 #endif
 #define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
-#ifndef _HINTS_HXX
-#include <hints.hxx>        //fuer SwFmtChg
-#endif
+
 #ifndef _SVX_BOXITEM_HXX //autogen
 #include <svx/boxitem.hxx>
 #endif
@@ -120,14 +113,7 @@
 #ifndef _FRMSH_HXX
 #include <frmsh.hxx>
 #endif
-// OD 2004-04-06 #i26791#
-#ifndef _ANCHOREDOBJECT_HXX
-#include <anchoredobject.hxx>
-#endif
-// OD 2004-03-10 #i11860#
-#ifndef _FLOWFRM_HXX
-#include <flowfrm.hxx>
-#endif
+
 // OD 2004-05-24 #i28701#
 #ifndef _SORTEDOBJS_HXX
 #include <sortedobjs.hxx>
