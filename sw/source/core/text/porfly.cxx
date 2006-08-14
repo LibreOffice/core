@@ -4,9 +4,9 @@
  *
  *  $RCSfile: porfly.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:58:14 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:40:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -70,17 +69,10 @@
 #include "porlay.hxx"   // SetFly
 #include "inftxt.hxx"   // SwTxtPaintInfo
 #include "frmsh.hxx"
-// OD 28.10.2003 #113049#
-#ifndef _ASCHARANCHOREDOBJECTPOSITION_HXX
-#include <ascharanchoredobjectposition.hxx>
-#endif
+
 // OD 2004-05-24 #i28701#
 #ifndef _SORTEDOBJS_HXX
 #include <sortedobjs.hxx>
-#endif
-// OD 2004-04-13 #i26791#
-#ifndef _ANCHOREDDRAWOBJECT_HXX
-#include <anchoreddrawobject.hxx>
 #endif
 
 /*************************************************************************
