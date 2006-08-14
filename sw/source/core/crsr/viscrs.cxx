@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viscrs.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-05 14:49:35 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:54:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -66,12 +65,6 @@
 #ifndef _DOC_HXX
 #include <doc.hxx>
 #endif
-#ifndef _PAM_HXX
-#include <pam.hxx>
-#endif
-#ifndef _NODE_HXX
-#include <node.hxx>
-#endif
 #ifndef _SWTABLE_HXX
 #include <swtable.hxx>
 #endif
@@ -83,9 +76,6 @@
 #endif
 #ifndef _ROOTFRM_HXX
 #include <rootfrm.hxx>
-#endif
-#ifndef _CNTFRM_HXX
-#include <cntfrm.hxx>
 #endif
 #ifndef _TXTFRM_HXX
 #include <txtfrm.hxx>   // SwTxtFrm
@@ -173,7 +163,7 @@ void SwBookmarkRects::FillRects()
 {
     SwRegionRects aReg( GetShell()->VisArea() );
 
-    const SwBookmarks& rBkmkTbl = GetShell()->GetDoc()->GetBookmarks();
+    const SwBookmarks& rBkmkTbl = GetShell()->getIDocumentBookmarkAccess()->getBookmarks();
     SwShellCrsr* pCrsr = 0;
     for( USHORT n = 0; n < rBkmkTbl.Count(); ++n )
     {
@@ -205,7 +195,7 @@ SwBookmarkRects* pBookMarkRects = 0;
 
 void ShowBookmarks( const SwCrsrShell* pSh, int nAction, const SwRect* pRect = 0 )
 {
-    if( !pBookMarkRects && pSh->GetDoc()->GetBookmarks().Count() )
+    if( !pBookMarkRects && pSh->getIDocumentBookmarkAccess()->getBookmarks().Count() )
         pBookMarkRects = new SwBookmarkRects( *pSh );
 
     if( pBookMarkRects )
@@ -925,79 +915,6 @@ FASTBOOL SwShellCrsr::UpDown( BOOL bUp, USHORT nCnt )
 
 FASTBOOL SwShellCrsr::IsSelOvr( int eFlags )
 {
-#if 0
-    SwDoc* pDoc = GetDoc();
-    SwNodeIndex aOldIdx( *pDoc->GetNodes()[ GetSavePos()->nNode ] );
-    SwNodeIndex& rPtIdx = GetPoint()->nNode;
-    SwStartNode *pOldSttNd = aOldIdx.GetNode().FindStartNode(),
-                *pNewSttNd = rPtIdx.GetNode().FindStartNode();
-    if( pOldSttNd != pNewSttNd )
-    {
-        BOOL bMoveDown = GetSavePos()->nNode < rPtIdx.GetIndex();
-        BOOL bValidPos = FALSE;
-        if( bMoveDown )
-        {
-            // ist das Ende noch nicht erreicht worden?
-            while( pOldSttNd->EndOfSectionIndex() > rPtIdx.GetIndex() )
-            {
-                // dann versuche auf die "Ebene" zurueck zukommen
-                rPtIdx.Assign( *pNewSttNd->EndOfSectionNode(), 1 );
-                while( pOldSttNd != rPtIdx.GetNode().FindStartNode() )
-                    rPtIdx.Assign( *rPtIdx.GetNode().EndOfSectionNode(), 1 );
-
-                if( !rPtIdx.GetNode().IsCntntNode() &&
-                    !pDoc->GetNodes().GoNextSection( &rPtIdx ))
-                    break;
-
-                if( pOldSttNd ==
-                    ( pNewSttNd = rPtIdx.GetNode().FindStartNode() ))
-                {
-                    // das ist die gesuchte Position
-                    bValidPos = TRUE;
-                    break;
-                }
-            }
-        }
-        else
-        {
-            // ist der Start noch nicht erreicht worden?
-            while( pOldSttNd->GetIndex() < rPtIdx.GetIndex() )
-            {
-                // dann versuche auf die "Ebene" zurueck zukommen
-                rPtIdx.Assign( *pNewSttNd, -1 );
-                while( pOldSttNd != rPtIdx.GetNode().FindStartNode() )
-                    rPtIdx.Assign( *rPtIdx.GetNode().FindStartNode(), -1 );
-
-                if( !rPtIdx.GetNode().IsCntntNode() &&
-                    !pDoc->GetNodes().GoPrevSection( &rPtIdx ))
-                    break;
-
-                if( pOldSttNd ==
-                    ( pNewSttNd = rPtIdx.GetNode().FindStartNode() ))
-                {
-                    // das ist die gesuchte Position
-                    bValidPos = TRUE;
-                    break;
-                }
-            }
-        }
-
-        if( bValidPos )
-        {
-            SwCntntNode* pCNd = GetCntntNode();
-            xub_StrLen nCnt = 0;
-            if( pCNd && !bMoveDown )
-                nCnt = pCNd->Len();
-            GetPoint()->nContent.Assign( pCNd, nCnt );
-        }
-        else
-        {
-            rPtIdx = GetSavePos()->nNode;
-            GetPoint()->nContent.Assign( GetCntntNode(), GetSavePos()->nCntnt );
-            return FALSE;
-        }
-    }
-#endif
     return SwCursor::IsSelOvr( eFlags );
 }
 
