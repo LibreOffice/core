@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acctable.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:56:00 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:47:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,6 @@
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLETABLE_HPP_
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESELECTION_HPP_
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #endif
@@ -46,13 +45,8 @@
 #include "acccontext.hxx"
 #endif
 
-#ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
-#include <com/sun/star/uno/RuntimeException.hpp>
-#endif
-
 class SwTabFrm;
 class SwAccessibleTableData_Impl;
-class SwAccessibleTableEventList_Impl;
 class SwTableBox;
 
 class SwAccessibleTable :
