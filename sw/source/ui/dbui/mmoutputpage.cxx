@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmoutputpage.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:21:29 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:32:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifdef SW_DLLIMPLEMENTATION
 #undef SW_DLLIMPLEMENTATION
 #endif
@@ -66,6 +65,9 @@
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>
 #endif
+#ifndef IDOCUMENTDEVICEACCESS_HXX_INCLUDED
+#include <IDocumentDeviceAccess.hxx>
+#endif
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
@@ -80,9 +82,6 @@
 #endif
 #ifndef _SFXSTRITEM_HXX
 #include <svtools/stritem.hxx>
-#endif
-#ifndef _SFXENUMITEM_HXX
-#include <svtools/eitem.hxx>
 #endif
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
@@ -105,9 +104,9 @@
 #ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
 #endif
-#ifndef _SFX_DOCFILT_HACK_HXX
-#include <sfx2/docfilt.hxx>
-#endif
+//#ifndef _SFX_DOCFILT_HACK_HXX
+//#include <sfx2/docfilt.hxx>
+//#endif
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
@@ -133,12 +132,12 @@
 #ifndef _COM_SUN_STAR_SDB_XCOLUMN_HPP_
 #include <com/sun/star/sdb/XColumn.hpp>
 #endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
-#include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-#ifndef _BASEDLGS_HXX
-#include <sfx2/basedlgs.hxx>
-#endif
+//#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+//#include <com/sun/star/beans/PropertyValue.hpp>
+//#endif
+//#ifndef _BASEDLGS_HXX
+//#include <sfx2/basedlgs.hxx>
+//#endif
 #ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
 #endif
@@ -153,9 +152,6 @@
 #endif
 #ifndef _SVX_HTMLCFG_HXX
 #include <svx/htmlcfg.hxx>
-#endif
-#ifndef _RTL_TENCINFO_H
-#include <rtl/tencinfo.h>
 #endif
 #ifndef _SFXEVENT_HXX
 #include <sfx2/event.hxx>
@@ -439,11 +435,11 @@ SwMailMergeOutputPage::SwMailMergeOutputPage( SwMailMergeWizard* _pParent) :
 {
     FreeResource();
 
-
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
     // #i51949# hide e-Mail option if e-Mail is not supported
     if(!rConfigItem.IsMailAvailable())
         m_aSendMailRB.Hide();
+
     Link aLink = LINK(this, SwMailMergeOutputPage, OutputTypeHdl_Impl);
     m_aSaveStartDocRB.SetClickHdl(aLink);
     m_aSaveMergedDocRB.SetClickHdl(aLink);
@@ -481,6 +477,7 @@ SwMailMergeOutputPage::SwMailMergeOutputPage( SwMailMergeWizard* _pParent) :
 
     m_aFromRB.SetClickHdl(LINK(this, SwMailMergeOutputPage, DocumentSelectionHdl_Impl));
 }
+
 /*-- 02.04.2004 13:15:44---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -515,11 +512,11 @@ void SwMailMergeOutputPage::ActivatePage()
     DBG_ASSERT(pTargetView, "no target view exists")
     if(pTargetView)
     {
-        SfxPrinter* pPrinter = pTargetView->GetWrtShell().GetPrt(TRUE);
+        SfxPrinter* pPrinter = pTargetView->GetWrtShell().getIDocumentDeviceAccess()->getPrinter( true );
         m_aPrinterLB.SelectEntry( pPrinter->GetName() );
         m_aToNF.SetValue( rConfigItem.GetMergedDocumentCount() );
         m_aToNF.SetMax( rConfigItem.GetMergedDocumentCount() );
-        m_pDocumentPrinterCopy = pTargetView->GetWrtShell().GetPrt( TRUE )->Clone();
+        m_pDocumentPrinterCopy = pTargetView->GetWrtShell().getIDocumentDeviceAccess()->getPrinter( true )->Clone();
     }
     m_aPrinterLB.SelectEntry( rConfigItem.GetSelectedPrinter() );
 
@@ -853,6 +850,7 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
                 sPath += '.';
                 sPath += sExtension;
             }
+
             //now extract a document from the target document
             SfxObjectShellRef xTempDocShell( new SwDocShell( SFX_CREATE_MODE_STANDARD ) );
             xTempDocShell->DoInitNew( 0 );
