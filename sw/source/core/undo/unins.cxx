@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unins.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:20:29 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:50:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 #ifndef _HINTIDS_HXX
@@ -112,12 +111,6 @@
 #ifndef _DCONTACT_HXX //autogen
 #include <dcontact.hxx>
 #endif
-#ifndef _SW_REWRITER_HXX
-#include <SwRewriter.hxx>
-#endif
-#ifndef _STRING_HXX
-#include <tools/string.hxx>
-#endif
 
 #include <comcore.hrc> // #111827#
 #include <undo.hrc>
@@ -185,7 +178,7 @@ void SwUndoInsert::Init(const SwNodeIndex & rNd)
     pDoc = rNd.GetNode().GetDoc();
     if( pDoc->IsRedlineOn() )
     {
-        pRedlData = new SwRedlineData( REDLINE_INSERT,
+        pRedlData = new SwRedlineData( IDocumentRedlineAccess::REDLINE_INSERT,
                                        pDoc->GetRedlineAuthor() );
         SetRedlineMode( pDoc->GetRedlineMode() );
     }
@@ -257,8 +250,8 @@ BOOL SwUndoInsert::CanGrouping( const SwPosition& rPos )
     {
         // Redline beachten
         SwDoc& rDoc = *rPos.nNode.GetNode().GetDoc();
-        if( ( ~REDLINE_SHOW_MASK & rDoc.GetRedlineMode() ) ==
-            ( ~REDLINE_SHOW_MASK & GetRedlineMode() ) )
+        if( ( ~IDocumentRedlineAccess::REDLINE_SHOW_MASK & rDoc.GetRedlineMode() ) ==
+            ( ~IDocumentRedlineAccess::REDLINE_SHOW_MASK & GetRedlineMode() ) )
         {
             bRet = TRUE;
 
@@ -269,7 +262,7 @@ BOOL SwUndoInsert::CanGrouping( const SwPosition& rPos )
             const SwRedlineTbl& rTbl = rDoc.GetRedlineTbl();
             if( rTbl.Count() )
             {
-                SwRedlineData aRData( REDLINE_INSERT, rDoc.GetRedlineAuthor() );
+                SwRedlineData aRData( IDocumentRedlineAccess::REDLINE_INSERT, rDoc.GetRedlineAuthor() );
                 const SwIndexReg* pIReg = rPos.nContent.GetIdxReg();
                 SwIndex* pIdx;
                 for( USHORT i = 0; i < rTbl.Count(); ++i )
@@ -326,13 +319,13 @@ void SwUndoInsert::Undo( SwUndoIter& rUndoIter )
         SwPaM* pPam = rUndoIter.pAktPam;
         pPam->GetPoint()->nNode = nNode;
 
-        if( IsRedlineOn( GetRedlineMode() ))
+        if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
         {
             pPam->GetPoint()->nContent.Assign( pPam->GetCntntNode(), 0 );
             pPam->SetMark();
             pPam->Move( fnMoveBackward );
             pPam->Exchange();
-            pDoc->DeleteRedline( *pPam );
+            pDoc->DeleteRedline( *pPam, true, USHRT_MAX );
         }
         pPam->DeleteMark();
         pDoc->DelFullPara( *pPam );
@@ -353,8 +346,8 @@ void SwUndoInsert::Undo( SwUndoIter& rUndoIter )
             if( pCNd->IsTxtNode() )     // Text !!
             {
                 aPaM.GetPoint()->nContent -= nLen;
-                if( IsRedlineOn( GetRedlineMode() ))
-                    pDoc->DeleteRedline( aPaM );
+                if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
+                    pDoc->DeleteRedline( aPaM, true, USHRT_MAX );
                 RemoveIdxFromRange( aPaM, FALSE );
                 pTxt = new String( ((SwTxtNode*)pCNd)->GetTxt().Copy(
                                             nCntnt-nLen, nLen ) );
@@ -363,8 +356,8 @@ void SwUndoInsert::Undo( SwUndoIter& rUndoIter )
             else                // ansonsten Grafik/OLE/Text/...
             {
                 aPaM.Move(fnMoveBackward);
-                if( IsRedlineOn( GetRedlineMode() ))
-                    pDoc->DeleteRedline( aPaM );
+                if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
+                    pDoc->DeleteRedline( aPaM, true, USHRT_MAX );
                 RemoveIdxFromRange( aPaM, FALSE );
             }
 
@@ -409,14 +402,14 @@ void SwUndoInsert::Redo( SwUndoIter& rUndoIter )
         pPam->Move( fnMoveBackward );
         pPam->Exchange();
 
-        if( pRedlData && IsRedlineOn( GetRedlineMode() ))
+        if( pRedlData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
         {
-            SwRedlineMode eOld = pDoc->GetRedlineMode();
-            pDoc->SetRedlineMode_intern( eOld & ~REDLINE_IGNORE );
-            pDoc->AppendRedline( new SwRedline( *pRedlData, *pPam ));
+            IDocumentRedlineAccess::RedlineMode_t eOld = pDoc->GetRedlineMode();
+            pDoc->SetRedlineMode_intern( eOld & ~IDocumentRedlineAccess::REDLINE_IGNORE );
+            pDoc->AppendRedline( new SwRedline( *pRedlData, *pPam ), true);
             pDoc->SetRedlineMode_intern( eOld );
         }
-        else if( !( REDLINE_IGNORE & GetRedlineMode() ) &&
+        else if( !( IDocumentRedlineAccess::REDLINE_IGNORE & GetRedlineMode() ) &&
                 pDoc->GetRedlineTbl().Count() )
             pDoc->SplitRedline( *pPam );
 
@@ -452,15 +445,15 @@ void SwUndoInsert::Redo( SwUndoIter& rUndoIter )
 
             MovePtForward( *pPam, bMvBkwrd );
             rUndoIter.pAktPam->Exchange();
-            if( pRedlData && IsRedlineOn( GetRedlineMode() ))
+            if( pRedlData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
             {
-                SwRedlineMode eOld = pDoc->GetRedlineMode();
-                pDoc->SetRedlineMode_intern( eOld & ~REDLINE_IGNORE );
+                IDocumentRedlineAccess::RedlineMode_t eOld = pDoc->GetRedlineMode();
+                pDoc->SetRedlineMode_intern( eOld & ~IDocumentRedlineAccess::REDLINE_IGNORE );
                 pDoc->AppendRedline( new SwRedline( *pRedlData,
-                                            *rUndoIter.pAktPam ));
+                                            *rUndoIter.pAktPam ), true);
                 pDoc->SetRedlineMode_intern( eOld );
             }
-            else if( !( REDLINE_IGNORE & GetRedlineMode() ) &&
+            else if( !( IDocumentRedlineAccess::REDLINE_IGNORE & GetRedlineMode() ) &&
                     pDoc->GetRedlineTbl().Count() )
                 pDoc->SplitRedline( *rUndoIter.pAktPam );
         }
@@ -500,7 +493,7 @@ void SwUndoInsert::Repeat( SwUndoIter& rUndoIter )
             String aTxt( ((SwTxtNode*)pCNd)->GetTxt() );
             BOOL bGroupUndo = rDoc.DoesGroupUndo();
             rDoc.DoGroupUndo( FALSE );
-            rDoc.Insert( *rUndoIter.pAktPam, aTxt.Copy( nCntnt - nLen, nLen ));
+            rDoc.Insert( *rUndoIter.pAktPam, aTxt.Copy( nCntnt - nLen, nLen ), true);
             rDoc.DoGroupUndo( bGroupUndo );
             break;
         }
@@ -513,7 +506,7 @@ void SwUndoInsert::Repeat( SwUndoIter& rUndoIter )
 
             rDoc.Insert( *rUndoIter.pAktPam, sFile, sFilter,
                                 &pGrfNd->GetGrf(),
-                                0/* Grafik-Collection*/ );
+                                0/* Grafik-Collection*/, NULL, NULL );
         }
         break;
 
@@ -531,7 +524,7 @@ void SwUndoInsert::Repeat( SwUndoIter& rUndoIter )
             if ( aCnt.StoreEmbeddedObject( rSwOLE.GetOleRef(), aName, sal_True ) )
             {
                 com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > aNew = aCnt.GetEmbeddedObject( aName );
-                rDoc.Insert( *rUndoIter.pAktPam, aNew );
+                rDoc.Insert( *rUndoIter.pAktPam, aNew, NULL, NULL, NULL );
             }
 
             break;
@@ -791,7 +784,7 @@ void _UnReplaceData::Undo( SwUndoIter& rIter )
     if( bSplitNext )
     {
         SwPosition aPos( *pNd, aIdx );
-        pDoc->SplitNode( aPos, FALSE );
+        pDoc->SplitNode( aPos, false );
         pNd = pDoc->GetNodes()[ nSttNd - nOffset ]->GetTxtNode();
         aIdx.Assign( pNd, nSttCnt );
     }
