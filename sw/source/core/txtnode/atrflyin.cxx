@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atrflyin.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:10:30 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:46:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,7 +157,7 @@ void SwTxtFlyCnt::CopyFlyFmt( SwDoc* pDoc )
         }
     }
 
-    SwFrmFmt* pNew = pDoc->CopyLayoutFmt( *pFmt, aAnchor, FALSE, FALSE );
+    SwFrmFmt* pNew = pDoc->CopyLayoutFmt( *pFmt, aAnchor, false, false );
     pDoc->DoUndo( bUndo );
     ((SwFmtFlyCnt&)GetFlyCnt()).SetFlyFmt( pNew );
 }
@@ -208,7 +208,7 @@ void SwTxtFlyCnt::SetAnchor( const SwTxtNode *pNode )
         // fuers kopieren vom Attribut das Undo immer abschalten
         BOOL bUndo = pDoc->DoesUndo();
         pDoc->DoUndo( FALSE );
-        SwFrmFmt* pNew = pDoc->CopyLayoutFmt( *pFmt, aAnchor, FALSE, FALSE );
+        SwFrmFmt* pNew = pDoc->CopyLayoutFmt( *pFmt, aAnchor, false, false );
         pDoc->DoUndo( bUndo );
 
         bUndo = pFmt->GetDoc()->DoesUndo();
