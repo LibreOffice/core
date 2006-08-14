@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fetab.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:07:25 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:16:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2017,8 +2017,8 @@ bool SwFEShell::SelTblRowCol( const Point& rPt, const Point* pEnd )
 
             if ( ppPos[1] )
             {
-                if ( ppPos[1]->nNode.GetNode().FindStartNode() !=
-                     aOldPos.nNode.GetNode().FindStartNode() )
+                if ( ppPos[1]->nNode.GetNode().StartOfSectionNode() !=
+                     aOldPos.nNode.GetNode().StartOfSectionNode() )
                 {
                     pCrsr->SetMark();
                     SwCrsrSaveState aSaveState2( *pCrsr );
