@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uiregionsw.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:16:31 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:33:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifdef SW_DLLIMPLEMENTATION
 #undef SW_DLLIMPLEMENTATION
 #endif
@@ -55,9 +54,6 @@
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
 #endif
-#ifndef _SOT_FORMATS_HXX //autogen
-#include <sot/formats.hxx>
-#endif
 #ifndef _PASSWD_HXX //autogen
 #include <sfx2/passwd.hxx>
 #endif
@@ -77,9 +73,6 @@
 #define ITEMID_SIZE 0
 #include <svx/sizeitem.hxx>
 #endif
-//CHINA001 #ifndef _SVX_BACKGRND_HXX //autogen
-//CHINA001 #include <svx/backgrnd.hxx>
-//CHINA001 #endif
 #ifndef _SVX_HTMLCFG_HXX
 #include <svx/htmlcfg.hxx>
 #endif
@@ -156,9 +149,6 @@
 #ifndef _SVX_DLGUTIL_HXX
 #include <svx/dlgutil.hxx>
 #endif
-#ifndef _SVX_SVXIDS_HRC
-#include <svx/svxids.hrc> //CHINA001
-#endif
 #ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc> //CHINA001
 #endif
@@ -168,9 +158,6 @@
 #ifndef _SVX_FLAGSDEF_HXX
 #include <svx/flagsdef.hxx> //CHINA001
 #endif
-#ifndef _SFXINTITEM_HXX //CHINA001
-#include <svtools/intitem.hxx> //CHINA001
-#endif //CHINA001
 
 // sw/inc/docary.hxx
 SV_IMPL_PTRARR( SwSectionFmts, SwSectionFmtPtr )
