@@ -17,7 +17,6 @@
 #endif
 
 class ViewShell;
-class OutputDevice;
 class SwRootFrm;
 class SwPageFrm;
 class Fraction;
