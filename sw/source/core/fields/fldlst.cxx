@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldlst.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:34:33 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:13:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -65,7 +64,6 @@ SwInputFieldList::SwInputFieldList( SwEditShell* pShell, FASTBOOL bBuildTmpLst )
     // Hier die Liste aller Eingabefelder sortiert erstellen
     pSrtLst = new _SetGetExpFlds();
 
-    SwNodes* pNds = &pSh->GetDoc()->GetNodes();
     const SwFldTypes& rFldTypes = *pSh->GetDoc()->GetFldTypes();
     const USHORT nSize = rFldTypes.Count();
 
@@ -164,7 +162,6 @@ void SwInputFieldList::GotoFieldPos(USHORT nId)
     // (Fuer Textbausteine: nur seine Input-Felder aktualisieren)
 USHORT SwInputFieldList::BuildSortLst()
 {
-    SwNodes* pNds = &pSh->GetDoc()->GetNodes();
     const SwFldTypes& rFldTypes = *pSh->GetDoc()->GetFldTypes();
     USHORT nSize = rFldTypes.Count();
 
