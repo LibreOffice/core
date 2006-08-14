@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vdraw.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 12:37:11 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:58:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,6 @@
 #endif
 
 #include "fesh.hxx"
-#include "doc.hxx"
 #include "pagefrm.hxx"
 #include "rootfrm.hxx"
 #include "viewimp.hxx"
@@ -88,6 +87,10 @@
 #include "dcontact.hxx"
 #include "dview.hxx"
 #include "flyfrm.hxx"
+
+#ifndef IDOCUMENTDRAWMODELACCESS_HXX_INCLUDED
+#include <IDocumentDrawModelAccess.hxx>
+#endif
 
 
 /*************************************************************************
@@ -233,8 +236,9 @@ void SwViewImp::PaintLayer( const SdrLayerID _nLayerID,
         // OD 09.12.2002 #103045# - set default horizontal text direction on
         // painting <hell> or <heaven>.
         EEHorizontalTextDirection aOldEEHoriTextDir;
-        if ( (_nLayerID == GetShell()->GetDoc()->GetHellId()) ||
-             (_nLayerID == GetShell()->GetDoc()->GetHeavenId()) )
+        const IDocumentDrawModelAccess* pIDDMA = GetShell()->getIDocumentDrawModelAccess();
+        if ( (_nLayerID == pIDDMA->GetHellId()) ||
+             (_nLayerID == pIDDMA->GetHeavenId()) )
         {
             ASSERT( _pPageBackgrdColor,
                     "incorrect usage of SwViewImp::PaintLayer: pPageBackgrdColor have to be set for painting layer <hell> or <heaven>");
@@ -265,8 +269,8 @@ void SwViewImp::PaintLayer( const SdrLayerID _nLayerID,
         // OD 29.08.2002 #102450#
         // reset background color of the outliner
         // OD 09.12.2002 #103045# - reset default horizontal text direction
-        if ( (_nLayerID == GetShell()->GetDoc()->GetHellId()) ||
-             (_nLayerID == GetShell()->GetDoc()->GetHeavenId()) )
+        if ( (_nLayerID == pIDDMA->GetHellId()) ||
+             (_nLayerID == pIDDMA->GetHeavenId()) )
         {
             GetDrawView()->GetModel()->GetDrawOutliner().SetBackgroundColor( aOldOutlinerBackgrdColor );
             GetDrawView()->GetModel()->GetDrawOutliner().SetDefaultHorizontalTextDirection( aOldEEHoriTextDir );
@@ -275,70 +279,6 @@ void SwViewImp::PaintLayer( const SdrLayerID _nLayerID,
         pOutDev->SetDrawMode( nOldDrawMode );
     }
 }
-
-//#110094#-3
-// not necessary, see bugid
-//IMPL_LINK( SwViewImp, PaintDispatcher, SdrPaintProcRec *, pRec )
-//{
-//  SdrObject *pObj = pRec->pObj;
-//
-//  //Controls muessen im Control-Layer liegen. Dort duerfen aber auch
-//  //Gruppenobjekte oder mit Controls gruppierte Objekte liegen.
-//  ASSERT( FmFormInventor != pObj->GetObjInventor() ||
-//          GetShell()->GetDoc()->GetControlsId() == pObj->GetLayer(),
-//          "PaintDispatcher: Wrong Layer" );
-//
-//  if ( !SwFlyFrm::IsPaint( pObj, GetShell() ) )
-//      return 0;
-//
-//  if ( pObj->IsWriterFlyFrame() )
-//  {
-//        const SdrLayerID nHellId = GetShell()->GetDoc()->GetHellId();
-//      if( pObj->GetLayer() == nHellId )
-//      {
-//          //Fuer Rahmen in der Hoelle gelten andere Regeln:
-//          //1. Rahmen mit einem Parent werden nie direkt, sondern von ihren
-//          //   Parents gepaintet.
-//          //1a.Es sei denn, der Parent steht nicht in der Hoelle.
-//          //2. Rahmen mit Childs painten zuerst die Childs in
-//          //   umgekehrter Z-Order.
-//          SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
-//          const FASTBOOL bInFly = pFly->GetAnchor()->IsInFly();
-//          if ( !bInFly ||
-//               (bInFly && pFly->GetAnchor()->FindFlyFrm()->
-//                                GetVirtDrawObj()->GetLayer() != nHellId))
-//              PaintFlyChilds( pFly, pRec->rOut, pRec->rInfoRec );
-//      }
-//      else
-//          pObj->Paint( pRec->rOut, pRec->rInfoRec );
-//  }
-//  else
-//  {
-//      SwRect aTmp( pRec->rInfoRec.aDirtyRect );
-//
-//      OutputDevice *pOut = pRec->rOut.GetOutDev();
-//      pOut->Push( PUSH_CLIPREGION );
-//      pOut->IntersectClipRegion( aTmp.SVRect() );
-//
-//      //Um zu verhindern, dass der Dispatcher fr jedes Gruppenobjekt
-//      //gerufen wird, muessen wir die Struktur manipulieren
-//      //(Absprache mit JOE).
-//      const Link *pSave = 0;
-//      if ( pObj->IsGroupObject() )
-//      {
-//          pSave = pRec->rInfoRec.pPaintProc;
-//          ((SdrPaintInfoRec&)pRec->rInfoRec).pPaintProc = 0;
-//      }
-//
-//      pObj->Paint( pRec->rOut, pRec->rInfoRec );
-//
-//      if ( pSave )
-//          ((SdrPaintInfoRec&)pRec->rInfoRec).pPaintProc = pSave;
-//
-//      pOut->Pop();
-//  }
-//    return 0;
-//}
 
 /*************************************************************************
 |*
@@ -409,8 +349,8 @@ void SwViewImp::NotifySizeChg( const Size &rNewSz )
     if ( !bCheckDrawObjs )
         return;
 
-    ASSERT( pSh->GetDoc()->GetDrawModel(), "NotifySizeChg without DrawModel" );
-    SdrPage* pPage = pSh->GetDoc()->GetDrawModel()->GetPage( 0 );
+    ASSERT( pSh->getIDocumentDrawModelAccess()->GetDrawModel(), "NotifySizeChg without DrawModel" );
+    SdrPage* pPage = pSh->getIDocumentDrawModelAccess()->GetDrawModel()->GetPage( 0 );
     const ULONG nObjs = pPage->GetObjCount();
     for( ULONG nObj = 0; nObj < nObjs; ++nObj )
     {
