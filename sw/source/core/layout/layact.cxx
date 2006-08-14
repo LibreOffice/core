@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 14:26:43 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:27:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -256,7 +256,8 @@ BOOL SwLayAction::PaintWithoutFlys( const SwRect &rRect, const SwCntntFrm *pCnt,
             continue;
 
         // OD 2004-01-15 #110582# - do not consider invisible objects
-        if ( !pPage->GetFmt()->GetDoc()->IsVisibleLayerId( pO->GetLayer() ) )
+        const IDocumentDrawModelAccess* pIDDMA = pPage->GetFmt()->getIDocumentDrawModelAccess();
+        if ( !pIDDMA->IsVisibleLayerId( pO->GetLayer() ) )
         {
             continue;
         }
@@ -269,7 +270,7 @@ BOOL SwLayAction::PaintWithoutFlys( const SwRect &rRect, const SwCntntFrm *pCnt,
         if ( pSelfFly && pSelfFly->IsLowerOf( pFly ) )
             continue;
 
-        if ( pFly->GetVirtDrawObj()->GetLayer() == pFly->GetFmt()->GetDoc()->GetHellId() )
+        if ( pFly->GetVirtDrawObj()->GetLayer() == pIDDMA->GetHellId() )
             continue;
 
         if ( pSelfFly )
@@ -593,7 +594,7 @@ BOOL SwLayAction::RemoveEmptyBrowserPages()
     //Beim umschalten vom normalen in den Browsermodus bleiben u.U. einige
     //unangenehm lange stehen. Diese beseiten wir mal schnell.
     BOOL bRet = FALSE;
-    if ( pRoot->GetFmt()->GetDoc()->IsBrowseMode() )
+    if ( pRoot->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
     {
         SwPageFrm *pPage = (SwPageFrm*)pRoot->Lower();
         do
@@ -753,7 +754,7 @@ bool lcl_ScrollingAllowed( const SwPageFrm& _rPageFrm )
     bool bRetScrollAllowed = true;
 
     if ( _rPageFrm.GetSortedObjs() &&
-         _rPageFrm.GetFmt()->GetDoc()->ConsiderWrapOnObjPos() )
+         _rPageFrm.GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION) )
     {
         const SwSortedObjs* pObjs = _rPageFrm.GetSortedObjs();
         sal_uInt32 i = 0;
@@ -1324,7 +1325,7 @@ const SwAnchoredObject* lcl_FindFirstInvaObj( const SwPageFrm* _pPage,
 BOOL SwLayAction::IsShortCut( SwPageFrm *&prPage )
 {
     BOOL bRet = FALSE;
-    const FASTBOOL bBrowse = pRoot->GetFmt()->GetDoc()->IsBrowseMode();
+    const FASTBOOL bBrowse = pRoot->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
 
     //Wenn die Seite nicht Gueltig ist wird sie schnell formatiert, sonst
     //gibts nix als Aerger.
@@ -1574,7 +1575,7 @@ BOOL SwLayAction::FormatLayout( SwLayoutFrm *pLay, BOOL bAddRect )
         if ( pLay->IsPageBodyFrm() &&
              pLay->Frm().Pos() == aOldRect.Pos() &&
              pLay->Lower() &&
-             pLay->GetFmt()->GetDoc()->IsBrowseMode() )
+             pLay->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
         {
             //HotFix: Vobis Homepage, nicht so genau hinsehen, sonst
             //rpaints
@@ -1606,7 +1607,7 @@ BOOL SwLayAction::FormatLayout( SwLayoutFrm *pLay, BOOL bAddRect )
             }
 
             if ( pLay->IsPageFrm() &&
-                 pLay->GetFmt()->GetDoc()->IsBrowseMode() )
+                 pLay->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
             {
                 // NOTE: no vertical layout in online layout
                 //Ist die Aenderung ueberhaupt sichtbar?
@@ -2201,7 +2202,7 @@ BOOL SwLayAction::FormatLayoutTab( SwTabFrm *pTab, BOOL bAddRect )
 BOOL SwLayAction::FormatCntnt( const SwPageFrm *pPage )
 {
     const SwCntntFrm *pCntnt = pPage->ContainsCntnt();
-    const FASTBOOL bBrowse = pRoot->GetFmt()->GetDoc()->IsBrowseMode();
+    const FASTBOOL bBrowse = pRoot->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
 
     while ( pCntnt && pPage->IsAnLower( pCntnt ) )
     {
@@ -2544,10 +2545,10 @@ BOOL SwLayIdle::_DoIdleJob( const SwCntntFrm *pCnt, IdleJobType eJob )
 
     if( bProcess )
     {
+        ViewShell *pSh = pImp->GetShell();
         if( STRING_LEN == nTxtPos )
         {
             --nTxtPos;
-            ViewShell *pSh = pImp->GetShell();
             if( pSh->ISA(SwCrsrShell) && !((SwCrsrShell*)pSh)->IsTableMode() )
             {
                 SwPaM *pCrsr = ((SwCrsrShell*)pSh)->GetCrsr();
@@ -2563,7 +2564,7 @@ BOOL SwLayIdle::_DoIdleJob( const SwCntntFrm *pCnt, IdleJobType eJob )
         {
             case ONLINE_SPELLING :
             {
-                SwRect aRepaint( ((SwTxtFrm*)pCnt)->_AutoSpell( pCntntNode, nTxtPos ) );
+                SwRect aRepaint( ((SwTxtFrm*)pCnt)->_AutoSpell( pCntntNode,  *pSh->GetViewOptions(), nTxtPos ) );
                 bPageValid = bPageValid && !pTxtNode->IsWrongDirty();
                 if( !bPageValid )
                     bAllValid = FALSE;
