@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inftxt.hxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 13:44:21 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:37:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUES_HPP_
 #include <com/sun/star/beans/PropertyValues.hpp>
 #endif
+
 #ifndef _TABLE_HXX //autogen
 #include <tools/table.hxx>
 #endif
@@ -45,7 +46,6 @@
 #include "swtypes.hxx"
 #include "txttypes.hxx"
 #include "swrect.hxx"
-
 #include "txtfly.hxx"
 #include "swfont.hxx"
 #include "porlay.hxx"
@@ -64,15 +64,11 @@ class SvxLineSpacingItem;
 class SvxTabStop;
 class SvxTabStopItem;
 class SwAttrSet;
-class SwField;
 class SwFldPortion;
 class SwFlyPortion;
 class SwFmtDrop;
-class SwFtnPortion;
-class SwLineHeightRule;
 class SwLineLayout;
 class SwLinePortion;
-class SwLineSpaceRule;
 class SwParaPortion;
 class SwTabPortion;
 class SwTxtFrm;
@@ -82,10 +78,7 @@ class ViewShell;
 class SwTxtFtn;
 class SwAttrIter;
 struct SwMultiCreator;
-
-#ifdef BIDI
 class SwMultiPortion;
-#endif
 
 /* Minimum: Prozentwert fuers kernen */
 #define MINKERNPERCENT 5
@@ -135,17 +128,11 @@ public:
 
     // vertical alignment
     inline USHORT GetVertAlign() const { return nVertAlign; }
-#ifdef BIDI
     inline sal_Bool HasSpecialAlign( sal_Bool bVert ) const
         { return bVert ?
                  ( SvxParaVertAlignItem::BASELINE  != nVertAlign ) :
                  ( SvxParaVertAlignItem::BASELINE  != nVertAlign &&
                    SvxParaVertAlignItem::AUTOMATIC != nVertAlign ); }
-#else
-    inline sal_Bool HasSpecialAlign() const
-        { return SvxParaVertAlignItem::BASELINE  != nVertAlign ||
-                 SvxParaVertAlignItem::AUTOMATIC != nVertAlign; }
-#endif
 
     USHORT NumberOfTabStops() const;
 
@@ -221,9 +208,7 @@ protected:
     sal_Bool bHanging : 1;      // formatting of hanging punctuation allowed
     sal_Bool bScriptSpace : 1;  // space between different scripts (Asian/Latin)
     sal_Bool bForbiddenChars : 1; // Forbidden start/endline characters
-#ifdef VERTICAL_LAYOUT
     sal_Bool bSnapToGrid : 1;   // paragraph snaps to grid
-#endif
     sal_uInt8 nDirection : 2;       // writing direction: 0/90/180/270 degree
 
 protected:
@@ -269,10 +254,8 @@ public:
     inline void SetScriptSpace( const sal_Bool bNew ) { bScriptSpace = bNew; }
     inline sal_Bool HasForbiddenChars() const { return bForbiddenChars; }
     inline void SetForbiddenChars( const sal_Bool bN ) { bForbiddenChars = bN; }
-#ifdef VERTICAL_LAYOUT
     inline sal_Bool SnapToGrid() const { return bSnapToGrid; }
     inline void SetSnapToGrid( const sal_Bool bN ) { bSnapToGrid = bN; }
-#endif
     inline sal_uInt8 GetDirection() const { return nDirection; }
     inline void SetDirection( const sal_uInt8 nNew ) { nDirection = nNew; }
     inline sal_Bool IsRotated() const { return 0 != ( 1 & nDirection ); }
@@ -350,9 +333,6 @@ public:
         { return _HasHint( pFrm->GetTxtNode(), nPos ); }
     static sal_Bool _HasHint( const SwTxtNode* pTxtNode, xub_StrLen nPos );
 
-    inline SwDoc* GetDoc() const { return pFrm->GetNode()->GetDoc(); };
-
-    //
     // If Kana Compression is enabled, a minimum and maximum portion width
     // is calculated. We format lines with minimal size and share remaining
     // space among compressed kanas.
@@ -466,9 +446,7 @@ public:
                    sal_Bool bRetouche = sal_True ) const;
     void DrawTab( const SwLinePortion &rPor ) const;
     void DrawLineBreak( const SwLinePortion &rPor ) const;
-#ifdef VERTICAL_LAYOUT
     void DrawRedArrow( const SwLinePortion &rPor ) const;
-#endif
     void DrawPostIts( const SwLinePortion &rPor, sal_Bool bScript ) const;
     void DrawBackground( const SwLinePortion &rPor ) const;
     void DrawViewOpt( const SwLinePortion &rPor, const MSHORT nWhich ) const;
