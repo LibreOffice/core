@@ -4,9 +4,9 @@
  *
  *  $RCSfile: node.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:26:48 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:28:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,6 @@ class SwFrmFmt;
 class SwGrfNode;
 class SwNoTxtNode;
 class SwNodeIndex;
-class SwNodeRange;
 class SwOLENode;
 class SwRect;
 class SwSection;
@@ -88,8 +87,15 @@ class SwTxtNode;
 class SwPageDesc;
 class ViewShell;
 struct SwPosition;
-
-#define INLINE inline
+class IDocumentSettingAccess;
+class IDocumentDeviceAccess;
+class IDocumentBookmarkAccess;
+class IDocumentRedlineAccess;
+class IDocumentStylePoolAccess;
+class IDocumentLineNumberAccess;
+class IDocumentLinksAdministration;
+class IDocumentFieldsAccess;
+class IDocumentContentOperations;
 
 // --------------------
 // class SwNode
@@ -128,21 +134,23 @@ public:
 #endif
 
     USHORT GetSectionLevel() const;
+
     inline ULONG StartOfSectionIndex() const;
-    inline const SwStartNode* StartOfSectionNode() const;
-    inline       SwStartNode* StartOfSectionNode();
+    inline const SwStartNode* StartOfSectionNode() const { return pStartOfSection; }
+    inline       SwStartNode* StartOfSectionNode() { return pStartOfSection; }
+
     inline ULONG EndOfSectionIndex() const;
     inline const SwEndNode* EndOfSectionNode() const;
-    inline       SwEndNode* EndOfSectionNode();
+    inline         SwEndNode* EndOfSectionNode();
 
     inline const BYTE GetAutoFmtLvl() const     { return nAFmtNumLvl; }
     inline void SetAutoFmtLvl( BYTE nVal )      { nAFmtNumLvl = nVal; }
 
-    inline const BOOL IsSetNumLSpace() const    { return bSetNumLSpace; }
-    inline void SetNumLSpace( BOOL bFlag )      { bSetNumLSpace = bFlag; }
+    inline const BOOL IsSetNumLSpace() const  { return bSetNumLSpace; }
+    inline void SetNumLSpace( BOOL bFlag )        { bSetNumLSpace = bFlag; }
 
-    inline const BOOL IsIgnoreDontExpand() const    { return bIgnoreDontExpand; }
-    inline void SetIgnoreDontExpand( BOOL bNew )    { bIgnoreDontExpand = bNew; }
+    inline const BOOL IsIgnoreDontExpand() const  { return bIgnoreDontExpand; }
+    inline void SetIgnoreDontExpand( BOOL bNew )  { bIgnoreDontExpand = bNew; }
 
     BYTE    GetNodeType() const { return nNodeType; }
 
@@ -153,22 +161,20 @@ public:
     inline       SwEndNode   *GetEndNode();
     inline const SwEndNode   *GetEndNode() const;
 #ifndef  ICC
-  INLINE
+  inline
 #endif
     SwTxtNode   *GetTxtNode();
 
 #ifndef  ICC
-  INLINE
+  inline
 #endif
     const SwTxtNode   *GetTxtNode() const;
-#ifndef COMPACT
-    INLINE        SwOLENode   *GetOLENode();
-    INLINE  const SwOLENode   *GetOLENode() const;
-    INLINE        SwNoTxtNode *GetNoTxtNode();
-    INLINE  const SwNoTxtNode *GetNoTxtNode() const;
-    INLINE        SwGrfNode   *GetGrfNode();
-    INLINE  const SwGrfNode   *GetGrfNode() const;
-#endif
+    inline        SwOLENode   *GetOLENode();
+    inline  const SwOLENode   *GetOLENode() const;
+    inline        SwNoTxtNode *GetNoTxtNode();
+    inline  const SwNoTxtNode *GetNoTxtNode() const;
+    inline        SwGrfNode   *GetGrfNode();
+    inline  const SwGrfNode   *GetGrfNode() const;
     inline       SwTableNode *GetTableNode();
     inline const SwTableNode *GetTableNode() const;
     inline       SwSectionNode *GetSectionNode();
@@ -180,11 +186,9 @@ public:
     inline BOOL IsTxtNode() const;
     inline BOOL IsTableNode() const;
     inline BOOL IsSectionNode() const;
-#ifndef COMPACT
     inline BOOL IsOLENode() const;
     inline BOOL IsNoTxtNode() const;
     inline BOOL IsGrfNode() const;
-#endif
 
     /**
        Checks if this node is in redlines.
@@ -197,15 +201,12 @@ public:
     // suche den TabellenNode, in dem dieser steht. Wenn in keiner
     // Tabelle wird 0 returnt.
                     SwTableNode *FindTableNode();
-    inline const    SwTableNode *FindTableNode() const;
+    inline const  SwTableNode *FindTableNode() const;
 
     // suche den SectionNode, in dem dieser steht. Wenn es in keiner
     // Section steht wird 0 returnt.
                     SwSectionNode *FindSectionNode();
-    inline  const   SwSectionNode *FindSectionNode() const;
-
-    const   SwStartNode *FindStartNode() const  { return pStartOfSection; }
-            SwStartNode *FindStartNode()        { return pStartOfSection; }
+    inline    const   SwSectionNode *FindSectionNode() const;
 
     SwStartNode* FindSttNodeByType( SwStartNodeType eTyp );
     inline const SwStartNode* FindSttNodeByType( SwStartNodeType eTyp ) const;
@@ -222,10 +223,57 @@ public:
                         { return FindSttNodeByType( SwFooterStartNode ); }
 
         // in welchem Nodes-Array/Doc steht der Node ?
-    inline        SwNodes& GetNodes();
+    inline          SwNodes& GetNodes();
     inline const  SwNodes& GetNodes() const;
-    inline          SwDoc* GetDoc();
-    inline const    SwDoc* GetDoc() const;
+    inline            SwDoc* GetDoc();
+    inline const  SwDoc* GetDoc() const;
+
+    /** Provides access to the document setting interface
+     */
+    const IDocumentSettingAccess* getIDocumentSettingAccess() const;
+
+    /** Provides access to the document device interface
+     */
+    const IDocumentDeviceAccess* getIDocumentDeviceAccess() const;
+
+    /** Provides access to the document bookmark interface
+     */
+    const IDocumentBookmarkAccess* getIDocumentBookmarkAccess() const;
+
+    /** Provides access to the document redline interface
+     */
+    const IDocumentRedlineAccess* getIDocumentRedlineAccess() const;
+
+    /** Provides access to the document style pool interface
+     */
+    const IDocumentStylePoolAccess* getIDocumentStylePoolAccess() const;
+
+    /** Provides access to the document line number information interface
+     */
+    const IDocumentLineNumberAccess* getIDocumentLineNumberAccess() const;
+
+    /** Provides access to the document draw model interface
+     */
+    const IDocumentDrawModelAccess* getIDocumentDrawModelAccess() const;
+
+    /** Provides access to the document layout interface
+     */
+    const IDocumentLayoutAccess* getIDocumentLayoutAccess() const;
+          IDocumentLayoutAccess* getIDocumentLayoutAccess();
+
+    /** Provides access to the document links administration interface
+     */
+    const IDocumentLinksAdministration* getIDocumentLinksAdministration() const;
+          IDocumentLinksAdministration* getIDocumentLinksAdministration();
+
+    /** Provides access to the document fields administration interface
+     */
+    const IDocumentFieldsAccess* getIDocumentFieldsAccess() const;
+          IDocumentFieldsAccess* getIDocumentFieldsAccess();
+
+    /** Provides access to the document content operations interface
+     */
+          IDocumentContentOperations* getIDocumentContentOperations();
 
     // liegt der Node im Sichtbarenbereich der Shell ?
     BOOL IsInVisibleArea( ViewShell* pSh = 0 ) const;
@@ -254,10 +302,6 @@ public:
     const SwTxtNode* FindOutlineNodeOfLevel( BYTE nLvl ) const;
 
     BYTE HasPrevNextLayNode() const;
-    BOOL HasPrevLayNode() const
-        { return 0 != (ND_HAS_PREV_LAYNODE & HasPrevNextLayNode()); }
-    BOOL HasNextLayNode() const
-        { return 0 != (ND_HAS_NEXT_LAYNODE & HasPrevNextLayNode()); }
 
 private:
     // privater Constructor, weil nie kopiert werden darf !!
@@ -418,9 +462,9 @@ public:
 
     // hat der Node schon eigene Auto-Attribute ?
     // Zugriff auf SwAttrSet
-    inline       SwAttrSet &GetSwAttrSet();
+    inline         SwAttrSet &GetSwAttrSet();
     inline const SwAttrSet &GetSwAttrSet() const;
-    inline       SwAttrSet *GetpSwAttrSet() { return pAttrSet; }
+    inline         SwAttrSet *GetpSwAttrSet() { return pAttrSet; }
     inline const SwAttrSet *GetpSwAttrSet() const { return pAttrSet; }
     inline BOOL  HasSwAttrSet() const { return pAttrSet ? TRUE : FALSE; }
 
@@ -549,7 +593,7 @@ private:
 
 
 
-// ---------------------- einige Inline Methoden ----------------------
+// ---------------------- einige inline Methoden ----------------------
 inline       SwEndNode   *SwNode::GetEndNode()
 {
      return ND_ENDNODE == nNodeType ? (SwEndNode*)this : 0;
@@ -616,7 +660,6 @@ inline BOOL SwNode::IsSectionNode() const
 {
     return ND_SECTIONNODE == nNodeType  ? TRUE : FALSE;
 }
-#ifndef COMPACT
 inline BOOL SwNode::IsNoTxtNode() const
 {
     return ND_NOTXTNODE & nNodeType  ? TRUE : FALSE;
@@ -629,7 +672,6 @@ inline BOOL SwNode::IsGrfNode() const
 {
     return ND_GRFNODE == nNodeType  ? TRUE : FALSE;
 }
-#endif
 
 inline const SwStartNode* SwNode::FindSttNodeByType( SwStartNodeType eTyp ) const
 {
@@ -646,14 +688,6 @@ inline const SwSectionNode* SwNode::FindSectionNode() const
 inline ULONG SwNode::StartOfSectionIndex() const
 {
     return pStartOfSection->GetIndex();
-}
-inline const SwStartNode* SwNode::StartOfSectionNode() const
-{
-    return pStartOfSection;
-}
-inline SwStartNode* SwNode::StartOfSectionNode()
-{
-    return pStartOfSection;
 }
 inline ULONG SwNode::EndOfSectionIndex() const
 {
@@ -721,6 +755,6 @@ inline const SfxPoolItem& SwCntntNode::GetAttr( USHORT nWhich,
 }
 
 
-#undef INLINE
+#undef inline
 
 #endif
