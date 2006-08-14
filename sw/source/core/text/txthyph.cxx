@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txthyph.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:58:16 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:44:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -70,9 +69,6 @@
 #ifndef _INFTXT_HXX
 #include <inftxt.hxx>
 #endif
-#ifndef _TXTFRM_HXX
-#include <txtfrm.hxx>
-#endif
 #ifndef _ITRFORM2_HXX
 #include <itrform2.hxx> //
 #endif
@@ -81,9 +77,6 @@
 #endif
 #ifndef _SPLARGS_HXX
 #include <splargs.hxx>  // SwInterHyphInfo
-#endif
-#ifndef _PORRST_HXX
-#include <porrst.hxx>   // SwKernPortion
 #endif
 
 #ifndef PRODUCT
@@ -126,9 +119,8 @@ Reference< XHyphenatedWord >  SwTxtFormatInfo::HyphWord(
 
 sal_Bool SwTxtFrm::Hyphenate( SwInterHyphInfo &rHyphInf )
 {
-#ifdef VERTICAL_LAYOUT
     ASSERT( ! IsVertical() || ! IsSwapped(),"swapped frame at SwTxtFrm::Hyphenate" );
-#endif
+
     if( !pBreakIt->xBreak.is() )
         return sal_False;;
     // Wir machen den Laden erstmal dicht:
@@ -144,10 +136,8 @@ sal_Bool SwTxtFrm::Hyphenate( SwInterHyphInfo &rHyphInf )
         // Keine Angst, der SwTxtIter sichert im Hyphenate die alte Zeile.
         SwTxtFrmLocker aLock( this );
 
-#ifdef VERTICAL_LAYOUT
         if ( IsVertical() )
             SwapWidthAndHeight();
-#endif
 
         SwTxtFormatInfo aInf( this, sal_True );     // sal_True fuer interactive hyph!
         SwTxtFormatter aLine( this, &aInf );
@@ -174,10 +164,8 @@ sal_Bool SwTxtFrm::Hyphenate( SwInterHyphInfo &rHyphInf )
                 break;
         }
 
-#ifdef VERTICAL_LAYOUT
         if ( IsVertical() )
             SwapWidthAndHeight();
-#endif
     }
     return bRet;
 }
