@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accportions.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:54:18 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:46:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,18 +34,12 @@
  ************************************************************************/
 #ifndef _ACCPORTIONS_HXX
 #define _ACCPORTIONS_HXX
-
 #include <SwPortionHandler.hxx>
 #include <sal/types.h>
 
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
-
-#ifndef _RTL_USTRING_HXX_
-#include <rtl/ustring.hxx>
-#endif
-
 #include <vector>
 
 class String;
