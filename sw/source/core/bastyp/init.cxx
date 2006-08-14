@@ -4,9 +4,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 11:46:24 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:50:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 #define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
@@ -202,10 +201,6 @@
 #ifndef _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
 #include <unotools/transliterationwrapper.hxx>
 #endif
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
-#include <com/sun/star/uno/Sequence.hxx>
-#endif
-
 #include <svx/acorrcfg.hxx>
 #include <vcl/svapp.hxx>
 
@@ -319,9 +314,6 @@
 #endif
 #ifndef _DOC_HXX
 #include <doc.hxx>
-#endif
-#ifndef _NUMRULE_HXX
-#include <numrule.hxx>
 #endif
 #ifndef _ACMPLWRD_HXX
 #include <acmplwrd.hxx>
@@ -651,19 +643,6 @@ CollatorWrapper* pCollator = 0, *pCaseCollator = 0;
 /******************************************************************************
  *  void _InitCore()
  ******************************************************************************/
-class SwDontWrite : public SfxBoolItem
-{
-public:
-    SwDontWrite( USHORT nId ) : SfxBoolItem( nId ) {}
-
-    virtual USHORT  GetVersion( USHORT nFFVer ) const;
-};
-
-USHORT SwDontWrite::GetVersion( USHORT nFFVer ) const
-{ return USHRT_MAX; }
-
-
-
 
 void _InitCore()
 {
