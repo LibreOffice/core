@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 17:24:47 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:55:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -63,9 +62,6 @@
 #ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
 #include <svtools/moduleoptions.hxx>
 #endif
-#ifndef _SFXMSG_HXX //autogen
-#include <sfx2/msg.hxx>
-#endif
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
@@ -83,9 +79,6 @@
 #endif
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
-#endif
-#ifndef _SFX_DOCFILT_HACK_HXX //autogen
-#include <sfx2/docfilt.hxx>
 #endif
 #ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
@@ -188,9 +181,6 @@
 #ifndef _TEXTSH_HXX
 #include <textsh.hxx>
 #endif
-//CHINA001 #ifndef _INSTABLE_HXX
-//CHINA001 #include <instable.hxx>
-//CHINA001 #endif
 #ifndef _FRMFMT_HXX
 #include <frmfmt.hxx>
 #endif
@@ -215,9 +205,6 @@
 #ifndef _TBLAFMT_HXX
 #include <tblafmt.hxx>
 #endif
-//CHINA001 #ifndef _INSRULE_HXX
-//CHINA001 #include <insrule.hxx>
-//CHINA001 #endif
 #ifndef _CAPTION_HXX
 #include <caption.hxx>
 #endif
@@ -275,20 +262,6 @@
 #ifndef _COMCORE_HRC
 #include <comcore.hrc>
 #endif
-
-#ifndef _COM_SUN_STAR_EMBED_XVISUALOBJECT_HPP_
-#include <com/sun/star/embed/XVisualObject.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
-#include <com/sun/star/embed/Aspects.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_XCOMPONENTSUPPLIER_HPP_
-#include <com/sun/star/embed/XComponentSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
-#include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-
 
 using namespace ::com::sun::star;
 
