@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fefly1.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 12:31:43 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:15:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 #ifndef _HINTIDS_HXX
@@ -138,9 +137,6 @@
 #endif
 #ifndef _EDIMP_HXX
 #include <edimp.hxx>
-#endif
-#ifndef _TBLSEL_HXX
-#include <tblsel.hxx>
 #endif
 #ifndef _SWTABLE_HXX
 #include <swtable.hxx>
@@ -783,7 +779,7 @@ const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, sal_Bool bAnchVali
     SwFlyFrmFmt *pRet;
     if( bMoveCntnt )
     {
-        GetDoc()->StartUndo( UNDO_INSLAYFMT );
+        GetDoc()->StartUndo( UNDO_INSLAYFMT, NULL );
         SwFmtAnchor* pOldAnchor = 0;
         sal_Bool bHOriChgd = sal_False, bVOriChgd = sal_False;
         SwFmtVertOrient aOldV;
@@ -840,7 +836,7 @@ const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, sal_Bool bAnchVali
                 // Undofaehig - also darf das UmAnkern auch nicht
                 // aufgezeichnet werden.
                 sal_Bool bDoesUndo = GetDoc()->DoesUndo();
-                if( bDoesUndo && UNDO_INSLAYFMT == GetDoc()->GetUndoIds() )
+                if( bDoesUndo && UNDO_INSLAYFMT == GetDoc()->GetUndoIds(NULL, NULL) )
                     GetDoc()->DoUndo( sal_False );
 
                 ((SfxItemSet&)rSet).Put( *pOldAnchor );
@@ -855,7 +851,7 @@ const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, sal_Bool bAnchVali
             }
             delete pOldAnchor;
         }
-        GetDoc()->EndUndo( UNDO_INSLAYFMT );
+        GetDoc()->EndUndo( UNDO_INSLAYFMT, NULL );
     }
     else
         /* #109161# If called from a shell try to propagate an
@@ -1001,7 +997,7 @@ void SwFEShell::Insert(  SdrObject& rDrawObj,
         SwCrsrMoveState aState( MV_SETONLYTEXT );
         SwPaM aPam( pDoc->GetNodes() );
         Point aTmpPt( *pPt );
-        GetDoc()->GetRootFrm()->GetCrsrOfst( aPam.GetPoint(), aTmpPt, &aState );
+        getIDocumentLayoutAccess()->GetRootFrm()->GetCrsrOfst( aPam.GetPoint(), aTmpPt, &aState );
         SwFrm* pFrm = aPam.GetCntntNode()->GetFrm( 0, 0, sal_False );
         const Point aRelPos( pPt->X() - pFrm->Frm().Left(),
                              pPt->Y() - pFrm->Frm().Top() );
@@ -1079,7 +1075,8 @@ void SwFEShell::SetPageObjsNewPage( SvPtrarr& rFillArr, int nOffset )
 
     SwFrmFmt* pFmt;
     long nNewPage;
-    sal_uInt16 nMaxPage = GetDoc()->GetRootFrm()->GetPageNum();
+    SwRootFrm* pTmpRootFrm = getIDocumentLayoutAccess()->GetRootFrm();
+    sal_uInt16 nMaxPage = pTmpRootFrm->GetPageNum();
     sal_Bool bAssert = sal_False;
     for( sal_uInt16 n = 0; n < rFillArr.Count(); ++n )
     {
@@ -1112,7 +1109,7 @@ void SwFEShell::SetPageObjsNewPage( SvPtrarr& rFillArr, int nOffset )
     }
 
     if( bAssert )
-        GetDoc()->GetRootFrm()->SetAssertFlyPages();
+        pTmpRootFrm->SetAssertFlyPages();
 
     EndUndo();
     EndAllAction();
@@ -1969,7 +1966,7 @@ sal_Bool SwFEShell::ReplaceSdrObj( const String& rGrfName, const String& rFltNam
         // das "Sdr-Object" loeschen und dafuer die Grafik einfuegen
         DelSelectedObj();
 
-        pFmt = GetDoc()->Insert( *GetCrsr(), rGrfName, rFltName, pGrf, &aFrmSet );
+        pFmt = GetDoc()->Insert( *GetCrsr(), rGrfName, rFltName, pGrf, &aFrmSet, NULL, NULL );
 
         // die Ordnungsnummer (Z-Order) noch uebertragen
         // JP 04.07.98: klappt aber nicht richtig!
@@ -2000,80 +1997,6 @@ static USHORT SwFmtGetPageNum(const SwFlyFrmFmt * pFmt)
 }
 
 #include <fmtcnct.hxx>
-#if 0
-#include <algorithm>
-#include <iostream>
-#include <iterator>
-
-
-static ::std::ostream & operator << (::std::ostream & aStream,
-                                     const String & aString)
-{
-    ByteString aByteString(aString, RTL_TEXTENCODING_ASCII_US);
-    aStream << aByteString.GetBuffer();
-
-    return aStream;
-}
-
-void lcl_PrintFrameChainPrev(const SwFrmFmt * pFmt)
-{
-    if (pFmt != NULL)
-    {
-        lcl_PrintFrameChainPrev(pFmt->GetChain().GetPrev());
-
-        ::std::clog << pFmt->GetName() << "->";
-    }
-}
-
-void lcl_PrintFrameChainNext(const SwFrmFmt * pFmt)
-{
-    if (pFmt != NULL)
-    {
-        ::std::clog << "->" << pFmt->GetName();
-
-        lcl_PrintFrameChainPrev(pFmt->GetChain().GetNext());
-    }
-}
-
-void lcl_PrintFrameChain(const SwFrmFmt & rFmt)
-{
-    lcl_PrintFrameChainPrev(rFmt.GetChain().GetPrev());
-    ::std::clog << "(" <<  rFmt.GetName() << ")";
-    lcl_PrintFrameChainNext(rFmt.GetChain().GetNext());
-    ::std::clog << ::std::endl;
-}
-
-String lcl_GetChainableString(int nVal)
-{
-    switch(nVal)
-    {
-    case SW_CHAIN_OK:
-        return String::CreateFromAscii("OK");
-
-    case SW_CHAIN_SOURCE_CHAINED:
-        return String::CreateFromAscii("source chained");
-
-    case SW_CHAIN_SELF:
-        return String::CreateFromAscii("self");
-
-    case SW_CHAIN_IS_IN_CHAIN:
-        return String::CreateFromAscii("in chain");
-
-    case SW_CHAIN_NOT_FOUND:
-        return String::CreateFromAscii("not found");
-
-    case SW_CHAIN_NOT_EMPTY:
-        return String::CreateFromAscii("not empty");
-
-    case SW_CHAIN_WRONG_AREA:
-        return String::CreateFromAscii("wrong area");
-
-    default:
-        return String::CreateFromAscii("??");
-
-    }
-}
-#endif
 
 void SwFEShell::GetConnectableFrmFmts(SwFrmFmt & rFmt,
                                       const String & rReference,
@@ -2083,14 +2006,6 @@ void SwFEShell::GetConnectableFrmFmts(SwFrmFmt & rFmt,
                                       ::std::vector< String > & aNextPageVec,
                                       ::std::vector< String > & aRestVec)
 {
-#if 0
-    ::std::clog << "Connectables:" << rFmt.GetName() << ","
-                << (bSuccessors ? "succ" : "pred") << "," << rReference
-                << ::std::endl;
-    lcl_PrintFrameChain(rFmt);
-    ::std::vector< String > aResult;
-#endif
-
     StartAction();
 
     SwFmtChain rChain = rFmt.GetChain();
@@ -2122,23 +2037,12 @@ void SwFEShell::GetConnectableFrmFmts(SwFrmFmt & rFmt,
            after pFmt.
         */
 
-#if 0
-        if (bSuccessors)
-            ::std::clog << rFmt.GetName() << "->" << rFmt1.GetName() << "?:";
-        else
-            ::std::clog << rFmt1.GetName() << "->" << rFmt.GetName() << "?:";
-#endif
-
         int nChainState;
 
         if (bSuccessors)
             nChainState = pDoc->Chainable(rFmt, rFmt1);
         else
             nChainState = pDoc->Chainable(rFmt1, rFmt);
-
-#if 0
-            ::std::clog << lcl_GetChainableString(nChainState) << ::std::endl;
-#endif
 
         if (nChainState == SW_CHAIN_OK)
         {
@@ -2191,19 +2095,4 @@ void SwFEShell::GetConnectableFrmFmts(SwFrmFmt & rFmt,
         pDoc->Chain(*pOldChainPrev, rFmt);
 
     EndAction();
-
-#if 0
-    ::std::copy(aPrevPageVec.begin(), aPrevPageVec.end(),
-                ::std::ostream_iterator<String>(::std::clog, "\n"));
-    ::std::clog << "-------------------------" << ::std::endl;
-    ::std::copy(aThisPageVec.begin(), aThisPageVec.end(),
-                ::std::ostream_iterator<String>(::std::clog, "\n"));
-    ::std::clog << "-------------------------" << ::std::endl;
-    ::std::copy(aNextPageVec.begin(), aNextPageVec.end(),
-                ::std::ostream_iterator<String>(::std::clog, "\n"));
-    ::std::clog << "-------------------------" << ::std::endl;
-    ::std::copy(aRestVec.begin(), aRestVec.end(),
-                ::std::ostream_iterator<String>(::std::clog, "\n"));
-    ::std::clog << "-------------------------" << ::std::endl;
-#endif
 }
