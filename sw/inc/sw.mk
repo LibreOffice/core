@@ -4,9 +4,9 @@
 #
 #   $RCSfile: sw.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 02:10:52 $
+#   last change: $Author: hr $ $Date: 2006-08-14 15:31:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,10 +38,7 @@
 # Bereiche aktivieren
 
 #CDEFS+=-DXML_CORE_API
-CDEFS+=-DNUM_RELSPACE
-CDEFS+=-DVERTICAL_LAYOUT
 CDEFS+=-DACCESSIBLE_LAYOUT
-CDEFS+=-DBIDI
 
 # define SW_DLLIMPLEMENTATION (see @ swdllapi.h)
 CDEFS += -DSW_DLLIMPLEMENTATION
