@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtinet.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:22:49 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:36:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _TXTINET_HXX
 #define _TXTINET_HXX
-
 #ifndef _TXATBASE_HXX //autogen
 #include <txatbase.hxx>
 #endif
@@ -42,7 +41,6 @@
 #include <calbck.hxx>
 #endif
 
-class SvxFont;
 class SwTxtNode;
 class SwCharFmt;
 class Color;
