@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flddok.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:34:48 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:36:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifdef SW_DLLIMPLEMENTATION
 #undef SW_DLLIMPLEMENTATION
 #endif
@@ -50,19 +49,12 @@
 #ifndef _DOCUFLD_HXX //autogen
 #include <docufld.hxx>
 #endif
-#ifndef _SWTYPES_HXX
-#include <swtypes.hxx>
-#endif
 #ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
-#ifndef _FLDBAS_HXX
-#include <fldbas.hxx>
 #endif
 #ifndef _CHPFLD_HXX
 #include <chpfld.hxx>
 #endif
-
 #ifndef _FLDTDLG_HRC
 #include <fldtdlg.hrc>
 #endif
