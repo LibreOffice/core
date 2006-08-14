@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swfont.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:10:15 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:22:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,6 @@
 #ifndef _SWFONT_HXX
 #define _SWFONT_HXX
 
-
 #ifndef INCLUDED_I18NPOOL_LANG_H
 #include <i18npool/lang.h>
 #endif
@@ -55,15 +54,13 @@
 #include <drawfont.hxx>     // SwDrawTextInfo
 #endif
 
-class LinguBase;        // SetLingu()
 class SfxItemSet;
 class SwAttrSet;
 class SwDoCapitals;     // DoCapitals
-class SwWrongList;
 class SwDrawTextInfo;   // _DrawText
 class SwScriptInfo;     // _GetTxtSize
 class ViewShell;
-class SwDoc;
+class IDocumentSettingAccess;
 
 const xub_Unicode CH_BLANK = ' ';   // ' ' Leerzeichen
 const xub_Unicode CH_BREAK = 0x0A;  //
@@ -176,7 +173,7 @@ protected:
     inline SwFont() { pBackColor = NULL; nActual = SW_LATIN; }
 
 public:
-    SwFont( const SwAttrSet* pSet, const SwDoc *pDoc );
+    SwFont( const SwAttrSet* pSet, const IDocumentSettingAccess* pIDocumentSettingAccess );
     SwFont( const SwFont& rFont );
 
     inline void ChgFnt( ViewShell *pSh, OutputDevice& rOut )
@@ -272,7 +269,8 @@ public:
     inline BOOL IsPaintWrong() const { return bPaintWrong; }
 
     // Setzen der Basisklasse Font fuer SwTxtCharFmt
-    void SetDiffFnt( const SfxItemSet* pSet, const SwDoc *pDoc );
+    void SetDiffFnt( const SfxItemSet* pSet,
+                     const IDocumentSettingAccess* pIDocumentSettingAccess );
 
     inline const SvxFont &GetFnt( const BYTE nWhich ) const
         { return aSub[nWhich]; };
