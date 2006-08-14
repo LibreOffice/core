@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outline.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2005-11-17 19:59:45 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:50:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,6 @@
 #ifdef SW_DLLIMPLEMENTATION
 #undef SW_DLLIMPLEMENTATION
 #endif
-
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
@@ -83,9 +82,6 @@
 #endif
 #ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
-#endif
-#ifndef _NUMRULE_HXX
-#include <numrule.hxx>
 #endif
 #ifndef _FMTCOL_HXX
 #include <fmtcol.hxx>
