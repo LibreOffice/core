@@ -4,9 +4,9 @@
  *
  *  $RCSfile: calbck.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:53:43 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:48:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #ifndef _HINTIDS_HXX
@@ -42,24 +41,14 @@
 #ifndef _FRAME_HXX
 #include <frame.hxx>
 #endif
-#ifndef _ERRHDL_HXX
-#include <errhdl.hxx>
-#endif
 #ifndef _HINTS_HXX
 #include <hints.hxx>
-#endif
-#ifndef _CALBCK_HXX
-#include <calbck.hxx>
 #endif
 #ifndef _SWCACHE_HXX
 #include <swcache.hxx>
 #endif
 #ifndef _SWFNTCCH_HXX
 #include <swfntcch.hxx>
-#endif
-
-#ifndef _OSL_DIAGNOSE_H_
-#include "osl/diagnose.h"
 #endif
 
 static SwClientIter* pClientIters = 0;
