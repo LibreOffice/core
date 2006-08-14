@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtclbl.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:47:41 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:23:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,8 +48,6 @@
 #ifndef INCLUDED_SWDLLAPI_H
 #include "swdllapi.h"
 #endif
-
-class IntlWrapper;
 
 class SW_DLLPUBLIC SwFmtNoBalancedColumns : public SfxBoolItem
 {
