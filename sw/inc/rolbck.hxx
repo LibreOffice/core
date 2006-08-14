@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rolbck.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:07:36 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:31:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,6 @@ class SwBookmark;
 class SwTxtAttr;
 class SfxPoolItem;
 class SwTxtNode;
-class SwCntntNode;
 class SwUndoSaveSection;
 class SwTxtFtn;
 class SwTxtFlyCnt;
@@ -70,7 +69,6 @@ class SwFieldType;
 class SwTxtTOXMark;
 class SwTxtRefMark;
 class SwFrmFmt;
-class SwNodeIndex;
 class SwpHints;
 class SwFmtChain;
 class SwNode;
@@ -170,9 +168,6 @@ public:
     virtual ~SwSetTxtFldHint();
     virtual void SetInDoc( SwDoc* pDoc, BOOL bTmpSet );
 
-    const SwFieldType * GetFieldType() const { return pFldType; }
-    const SwFmtFld * GetField() const { return pFld; }
-
     virtual String GetDescription() const;
 
     OUT_HSTR_HINT(SetTxtFldHnt)
@@ -230,9 +225,6 @@ public:
     SwSetFtnHint( const SwTxtFtn& );
     ~SwSetFtnHint();
     virtual void SetInDoc( SwDoc* pDoc, BOOL bTmpSet );
-
-    const SwUndoSaveSection* GetUndoObj() const { return pUndo; }
-          SwUndoSaveSection* GetUndoObj()       { return pUndo; }
 
     virtual String GetDescription() const;
 
@@ -407,7 +399,6 @@ class SwRegHistory : public SwClient
 {
     SvUShortsSort aSetWhichIds;
     SwHistory* pHstry;
-    const SwCntntNode * pNode;
     ULONG nNodeIdx;
 
     void _MakeSetWhichIds();
