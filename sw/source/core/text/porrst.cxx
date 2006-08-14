@@ -4,9 +4,9 @@
  *
  *  $RCSfile: porrst.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-11 15:51:06 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:42:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 #ifndef _HINTIDS_HXX
@@ -63,10 +62,6 @@
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
-
-#ifndef _DOC_HXX
-#include <doc.hxx>
-#endif
 #ifndef _VIEWSH_HXX
 #include <viewsh.hxx>   // ViewShell
 #endif
@@ -82,9 +77,6 @@
 #ifndef _PARATR_HXX
 #include <paratr.hxx>
 #endif
-#ifndef _ERRHDL_HXX
-#include <errhdl.hxx>   // ASSERT
-#endif
 #ifndef _SW_PORTIONHANDLER_HXX
 #include <SwPortionHandler.hxx>
 #endif
@@ -99,9 +91,6 @@
 #endif
 #ifndef _TXTPAINT_HXX
 #include <txtpaint.hxx> // ClipVout
-#endif
-#ifndef _TXTFRM_HXX
-#include <txtfrm.hxx>   // SwTxtFrm
 #endif
 #ifndef _SWFNTCCH_HXX
 #include <swfntcch.hxx> // SwFontAccess
@@ -127,6 +116,10 @@
 #ifndef _ATRHNDL_HXX
 #include <atrhndl.hxx>
 #endif
+
+#include <IDocumentRedlineAccess.hxx>
+#include <IDocumentSettingAccess.hxx>
+#include <IDocumentDeviceAccess.hxx>
 
 /*************************************************************************
  *                      class SwTmpEndPortion
@@ -244,7 +237,6 @@ void SwKernPortion::Paint( const SwTxtPaintInfo &rInf ) const
         {
             static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
             XubString aTxtDouble( sDoubleSpace, RTL_TEXTENCODING_MS_1252 );
-
             // --> FME 2006-07-12 #b6439097#
             SwRect aClipRect;
             rInf.CalcRect( *this, &aClipRect, 0 );
@@ -302,11 +294,12 @@ SwTwips SwTxtFrm::EmptyHeight() const
 
     SwFont *pFnt;
     const SwTxtNode& rTxtNode = *GetTxtNode();
+    const IDocumentSettingAccess* pIDSA = rTxtNode.getIDocumentSettingAccess();
     ViewShell *pSh = GetShell();
     if ( rTxtNode.HasSwAttrSet() )
     {
         const SwAttrSet *pAttrSet = &( rTxtNode.GetSwAttrSet() );
-        pFnt = new SwFont( pAttrSet, GetTxtNode()->GetDoc() );
+        pFnt = new SwFont( pAttrSet, pIDSA );
     }
     else
     {
@@ -319,21 +312,21 @@ SwTwips SwTxtFrm::EmptyHeight() const
         pFnt->SetVertical( 2700 );
 
     OutputDevice* pOut = pSh ? pSh->GetOut() : 0;
-    if ( !pOut || !rTxtNode.GetDoc()->IsBrowseMode() ||
+    if ( !pOut || !pIDSA->get(IDocumentSettingAccess::BROWSE_MODE) ||
          ( pSh->GetViewOptions()->IsPrtFormat() ) )
     {
-        pOut = &rTxtNode.GetDoc()->GetRefDev();
+        pOut = rTxtNode.getIDocumentDeviceAccess()->getReferenceDevice(true);
     }
 
-    const SwDoc* pDoc = rTxtNode.GetDoc();
-    if( ::IsShowChanges( pDoc->GetRedlineMode() ) )
+    const IDocumentRedlineAccess* pIDRA = rTxtNode.getIDocumentRedlineAccess();
+    if( IDocumentRedlineAccess::IsShowChanges( pIDRA->GetRedlineMode() ) )
     {
-        MSHORT nRedlPos = pDoc->GetRedlinePos( rTxtNode );
+        MSHORT nRedlPos = pIDRA->GetRedlinePos( rTxtNode, USHRT_MAX );
         if( MSHRT_MAX != nRedlPos )
         {
             SwAttrHandler aAttrHandler;
-            aAttrHandler.Init( GetTxtNode()->GetSwAttrSet(),
-                               *GetTxtNode()->GetDoc(), NULL );
+            aAttrHandler.Init(  GetTxtNode()->GetSwAttrSet(),
+                               *GetTxtNode()->getIDocumentSettingAccess(), NULL );
             SwRedlineItr aRedln( rTxtNode, *pFnt, aAttrHandler,
                                  nRedlPos, sal_True );
         }
@@ -368,15 +361,10 @@ sal_Bool SwTxtFrm::FormatEmpty()
          IsInFtn() || ( HasPara() && GetPara()->IsPrepMustFit() ) )
         return sal_False;
     const SwAttrSet& aSet = GetTxtNode()->GetSwAttrSet();
-#ifdef BIDI
     const USHORT nAdjust = aSet.GetAdjust().GetAdjust();
     if( ( ( ! IsRightToLeft() && ( SVX_ADJUST_LEFT != nAdjust ) ) ||
           (   IsRightToLeft() && ( SVX_ADJUST_RIGHT != nAdjust ) ) ) ||
           aSet.GetRegister().GetValue() )
-#else
-    if( SVX_ADJUST_LEFT != aSet.GetAdjust().GetAdjust()
-        || aSet.GetRegister().GetValue() )
-#endif
         return sal_False;
     const SvxLineSpacingItem &rSpacing = aSet.GetLineSpacing();
     if( SVX_LINE_SPACE_MIN == rSpacing.GetLineSpaceRule() ||
@@ -470,19 +458,25 @@ sal_Bool SwTxtFrm::FillRegister( SwTwips& rRegStart, KSHORT& rRegDiff )
                             ViewShell *pSh = GetShell();
                             SwFontAccess aFontAccess( pFmt, pSh );
                             SwFont aFnt( *aFontAccess.Get()->GetFont() );
+
                             OutputDevice *pOut = 0;
-                            if( !GetTxtNode()->GetDoc()->IsBrowseMode() ||
+                            if( !GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) ||
                                 (pSh && pSh->GetViewOptions()->IsPrtFormat()) )
-                                pOut = &GetTxtNode()->GetDoc()->GetRefDev();
+                                pOut = GetTxtNode()->getIDocumentDeviceAccess()->getReferenceDevice( true );
+
                             if( pSh && !pOut )
                                 pOut = pSh->GetWin();
+
                             if( !pOut )
                                 pOut = GetpApp()->GetDefaultDevice();
+
                             MapMode aOldMap( pOut->GetMapMode() );
                             pOut->SetMapMode( MapMode( MAP_TWIP ) );
+
                             aFnt.ChgFnt( pSh, *pOut );
                             rRegDiff = aFnt.GetHeight( pSh, *pOut );
                             KSHORT nNettoHeight = rRegDiff;
+
                             switch( rSpace.GetLineSpaceRule() )
                             {
                                 case SVX_LINE_SPACE_AUTO:
