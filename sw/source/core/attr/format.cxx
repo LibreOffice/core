@@ -4,9 +4,9 @@
  *
  *  $RCSfile: format.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:57:56 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:48:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #ifndef _HINTIDS_HXX
@@ -45,9 +44,11 @@
 #ifndef _FORMAT_HXX
 #include <format.hxx>
 #endif
-
 #ifndef _HINTS_HXX
 #include <hints.hxx>            // fuer SwFmtChg
+#endif
+#ifndef _DOC_HXX
+#include <doc.hxx>
 #endif
 #ifndef _PARATR_HXX
 #include <paratr.hxx>           // fuer SwParaFmt - SwHyphenBug
@@ -55,7 +56,6 @@
 #ifndef _SWCACHE_HXX
 #include <swcache.hxx>
 #endif
-
 
 TYPEINIT1( SwFmt, SwClient );   //rtti fuer SwFmt
 
@@ -75,7 +75,7 @@ SwFmt::SwFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
     nPoolHlpFileId( UCHAR_MAX )
 {
     aFmtName.AssignAscii( pFmtNm );
-    bWritten = bFmtInDTOR = bAutoUpdateFmt = bLayerFmt = FALSE; // LAYER_IMPL
+    bWritten = bFmtInDTOR = bAutoUpdateFmt = FALSE; // LAYER_IMPL
     bAutoFmt = TRUE;
 
     if( pDrvdFrm )
@@ -94,7 +94,7 @@ SwFmt::SwFmt( SwAttrPool& rPool, const String &rFmtNm,
     nPoolHelpId( USHRT_MAX ),
     nPoolHlpFileId( UCHAR_MAX )
 {
-    bWritten = bFmtInDTOR = bAutoUpdateFmt = bLayerFmt = FALSE; // LAYER_IMPL
+    bWritten = bFmtInDTOR = bAutoUpdateFmt = FALSE; // LAYER_IMPL
     bAutoFmt = TRUE;
 
     if( pDrvdFrm )
@@ -113,7 +113,7 @@ SwFmt::SwFmt( SwAttrPool& rPool, const String &rFmtNm, USHORT nWhich1,
     nPoolHelpId( USHRT_MAX ),
     nPoolHlpFileId( UCHAR_MAX )
 {
-    bWritten = bFmtInDTOR = bAutoUpdateFmt = bLayerFmt = FALSE; // LAYER_IMPL
+    bWritten = bFmtInDTOR = bAutoUpdateFmt = FALSE; // LAYER_IMPL
     bAutoFmt = TRUE;
     if( pDrvdFrm )
         aSet.SetParent( &pDrvdFrm->aSet );
@@ -130,7 +130,7 @@ SwFmt::SwFmt( const SwFmt& rFmt )
     nPoolHelpId( rFmt.GetPoolHelpId() ),
     nPoolHlpFileId( rFmt.GetPoolHlpFileId() )
 {
-    bWritten = bFmtInDTOR = bLayerFmt = FALSE; // LAYER_IMPL
+    bWritten = bFmtInDTOR = FALSE; // LAYER_IMPL
     bAutoFmt = rFmt.bAutoFmt;
     bAutoUpdateFmt = rFmt.bAutoUpdateFmt;
 
@@ -696,3 +696,13 @@ const sal_Bool SwFmt::IsShadowTransparent() const
 {
     return sal_False;
 }
+
+/*
+ * Document Interface Access
+ */
+const IDocumentSettingAccess* SwFmt::getIDocumentSettingAccess() const { return GetDoc(); }
+const IDocumentDrawModelAccess* SwFmt::getIDocumentDrawModelAccess() const { return GetDoc(); }
+IDocumentDrawModelAccess* SwFmt::getIDocumentDrawModelAccess() { return GetDoc(); }
+const IDocumentLayoutAccess* SwFmt::getIDocumentLayoutAccess() const { return GetDoc(); }
+IDocumentLayoutAccess* SwFmt::getIDocumentLayoutAccess() { return GetDoc(); }
+
