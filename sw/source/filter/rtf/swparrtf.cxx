@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-20 16:20:37 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:10:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,9 +32,7 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
-
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
@@ -62,9 +60,6 @@
 #ifndef _SVX_ULSPITEM_HXX //autogen
 #include <svx/ulspitem.hxx>
 #endif
-#ifndef _SVX_BRKITEM_HXX //autogen
-#include <svx/brkitem.hxx>
-#endif
 #ifndef _SVX_TSTPITEM_HXX //autogen
 #include <svx/tstpitem.hxx>
 #endif
@@ -85,9 +80,6 @@
 #endif
 #ifndef _SVX_HYZNITEM_HXX
 #include <svx/hyznitem.hxx>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_PRINTERINDEPENDENTLAYOUT_HPP_
-#include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #endif
 #ifndef _FMTPDSC_HXX //autogen
 #include <fmtpdsc.hxx>
@@ -155,20 +147,11 @@
 #ifndef _SWPARRTF_HXX
 #include <swparrtf.hxx>
 #endif
-#ifndef _FMTCOL_HXX
-#include <fmtcol.hxx>
-#endif
 #ifndef _CHARFMT_HXX
 #include <charfmt.hxx>
 #endif
 #ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx>
-#endif
-#ifndef _POOLFMT_HXX
-#include <poolfmt.hxx>
-#endif
-#ifndef _NUMRULE_HXX
-#include <numrule.hxx>
 #endif
 #ifndef _FTNINFO_HXX
 #include <ftninfo.hxx>
@@ -206,11 +189,6 @@
 #ifndef _TOX_HXX
 #include <tox.hxx>
 #endif
-
-#ifndef _FLTSHELL_HXX
-#include <fltshell.hxx>
-#endif
-
 #ifndef _SWSWERROR_H
 #include <swerror.h>
 #endif
@@ -223,14 +201,6 @@
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
 #endif
-
-#ifndef SW_MS_MSFILTER_HXX
-#include <msfilter.hxx>
-#endif
-#ifndef WW_WWSTYLES_HXX
-#include "../inc/wwstyles.hxx"
-#endif
-
 #ifndef _TBLSEL_HXX
 #include <tblsel.hxx>           // SwSelBoxes
 #endif
@@ -421,30 +391,25 @@ void SwRTFParser::Continue( int nToken )
             //
             // COMPATIBILITY FLAGS START
             //
-
-            pDoc->SetParaSpaceMax( true, true );
-            pDoc->SetTabCompat( true );
-            pDoc->_SetUseVirtualDevice(com::sun::star::document::PrinterIndependentLayout::HIGH_RESOLUTION);
-            pDoc->SetAddFlyOffsets( true );
-            pDoc->SetAddExtLeading( true );
-            pDoc->SetOldNumbering( false );
-            // --> FME 2005-05-27 #i47448#
-            pDoc->SetIgnoreFirstLineIndentInNumbering( false );
-            // --> FME 2005-06-08 #i49277#
-            pDoc->SetDoNotJustifyLinesWithManualBreak( false );
-            // --> FME 2005-08-11 #i53199#
-            pDoc->SetDoNotResetParaAttrsForNumFont( false );
-            pDoc->SetUseFormerLineSpacing( false );
-            pDoc->SetAddParaSpacingToTableCells( true );
-            pDoc->SetUseFormerObjectPositioning( false );
-            pDoc->SetUseFormerTextWrapping( false );
-            // --> OD 2004-06-24 #i27767# - set new compatibility option
-            //      'Conder Wrapping mode when positioning object' to <TRUE>
-            pDoc->SetConsiderWrapOnObjPos( true );
+            pDoc->set(IDocumentSettingAccess::PARA_SPACE_MAX, true);
+            pDoc->set(IDocumentSettingAccess::PARA_SPACE_MAX_AT_PAGES, true);
+            pDoc->set(IDocumentSettingAccess::TAB_COMPAT, true);
+            pDoc->set(IDocumentSettingAccess::USE_VIRTUAL_DEVICE, true);
+            pDoc->set(IDocumentSettingAccess::USE_HIRES_VIRTUAL_DEVICE, true);
+            pDoc->set(IDocumentSettingAccess::ADD_FLY_OFFSETS, true);
+            pDoc->set(IDocumentSettingAccess::ADD_EXT_LEADING, true);
+            pDoc->set(IDocumentSettingAccess::OLD_NUMBERING, false);
+            pDoc->set(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING, false );
+            pDoc->set(IDocumentSettingAccess::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK, false);
+            pDoc->set(IDocumentSettingAccess::OLD_LINE_SPACING, false);
+            pDoc->set(IDocumentSettingAccess::ADD_PARA_SPACING_TO_TABLE_CELLS, true);
+            pDoc->set(IDocumentSettingAccess::USE_FORMER_OBJECT_POS, false);
+            pDoc->set(IDocumentSettingAccess::USE_FORMER_TEXT_WRAPPING, false);
+            pDoc->set(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION, true);
+            pDoc->set(IDocumentSettingAccess::DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT, false); // --> FME 2005-08-11 #i53199#
             // --> FME 2006-02-10 #131283#
-            pDoc->SetTableRowKeep( true );
-            // --> FME 2006-03-01 #i3952#
-            pDoc->SetIgnoreTabsAndBlanksForLineCalculation( true );
+            pDoc->set(IDocumentSettingAccess::TABLE_ROW_KEEP, true);
+            pDoc->set(IDocumentSettingAccess::IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION, true);
 
             //
             // COMPATIBILITY FLAGS END
@@ -458,10 +423,10 @@ void SwRTFParser::Continue( int nToken )
             const SwPosition* pPos = pPam->GetPoint();
             SwTxtNode* pSttNd = pPos->nNode.GetNode().GetTxtNode();
 
-            pDoc->SplitNode( *pPos );
+            pDoc->SplitNode( *pPos, false );
 
             *pSttNdIdx = pPos->nNode.GetIndex()-1;
-            pDoc->SplitNode( *pPos );
+            pDoc->SplitNode( *pPos, false );
 
             SwPaM aInsertionRangePam( *pPos );
 
@@ -473,8 +438,8 @@ void SwRTFParser::Continue( int nToken )
             aInsertionRangePam.Move( fnMoveBackward );
             pDoc->SplitRedline( aInsertionRangePam );
 
-            pDoc->SetTxtFmtColl( *pPam, pDoc->GetTxtCollFromPoolSimple
-                                 ( RES_POOLCOLL_STANDARD, FALSE ));
+            pDoc->SetTxtFmtColl( *pPam, pDoc->GetTxtCollFromPool
+                                 ( RES_POOLCOLL_STANDARD, false ));
 
             // verhinder das einlesen von Tabellen in Fussnoten / Tabellen
             ULONG nNd = pPos->nNode.GetIndex();
@@ -570,7 +535,7 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( FALSE ).nNode.GetIndex() )
             if( !GetVersionNo() )
             {
                 SwSectionNode* pSectNd = pRegionEndIdx->GetNode().
-                                    FindStartNode()->GetSectionNode();
+                                    StartOfSectionNode()->GetSectionNode();
                 if( pSectNd )
                     pSectNd->GetSection().GetFmt()->SetAttr(
                                     SwFmtNoBalancedColumns( TRUE ) );
@@ -694,7 +659,7 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( FALSE ).nNode.GetIndex() )
     delete pRegionEndIdx, pRegionEndIdx = 0;
     RemoveUnusedNumRules();
 
-    pDoc->SetUpdateExpFldStat();
+    pDoc->SetUpdateExpFldStat(true);
     pDoc->SetInitDBFields(true);
 
     // Laufbalken bei asynchronen Call nicht einschalten !!!
@@ -715,16 +680,6 @@ bool rtfSections::SetCols(SwFrmFmt &rFmt, const rtfSection &rSection,
     //sprmSDxaColumns   - Default-Abstand 1.25 cm
     USHORT nColSpace = rSection.StandardColSeperation();
 
-#if 0
-    // sprmSLBetween
-    if (rSection.maSep.fLBetween)
-    {
-        aCol.SetLineAdj( COLADJ_TOP );      // Line
-        aCol.SetLineHeight( 100 );
-        aCol.SetLineColor( Color( COL_BLACK ));
-        aCol.SetLineWidth( 1 );
-    }
-#endif
     aCol.Init( nCols, nColSpace, nNettoWidth );
 
     // not SFEvenlySpaced
@@ -797,23 +752,6 @@ void rtfSections::GetPageULData(const rtfSection &rSection, bool bFirst,
     short nWWLo = rSection.maPageInfo.mnMargbsxn;
     short nWWHTop = rSection.maPageInfo.mnHeadery;
     short nWWFBot = rSection.maPageInfo.mnFootery;
-
-#if 0
-    /*
-    If there is gutter in 97+ and the dop says put it on top then get the
-    gutter distance and set it to the top margin. When we are "two pages
-    in one" the gutter is put at the top of odd pages, and bottom of
-    even pages, something we cannot do. So we will put it on top of all
-    pages, that way the pages are at least the right size.
-    */
-    if ( mrReader.pWDop->doptypography.f2on1 ||
-        (!mrReader.bVer67 && mrReader.pWDop->iGutterPos &&
-         rSection.maSep.fRTLGutter)
-       )
-    {
-        nWWUp += rSection.maSep.dzaGutter;
-    }
-#endif
 
     if (bFirst)
     {
@@ -1025,13 +963,6 @@ SwSectionFmt *rtfSections::InsertSection(SwPaM& rMyPaM, rtfSection &rSection)
     aSet.Put(SvxFrameDirectionItem(
         nRTLPgn ? FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP));
 
-#if 0
-    if (2 == mrReader.pWDop->fpc)
-        aSet.Put( SwFmtFtnAtTxtEnd(FTNEND_ATTXTEND));
-    if (0 == mrReader.pWDop->epc)
-        aSet.Put( SwFmtEndAtTxtEnd(FTNEND_ATTXTEND));
-#endif
-
     rSection.mpSection = mrReader.pDoc->Insert( rMyPaM, aSection, &aSet );
     ASSERT(rSection.mpSection, "section not inserted!");
     if (!rSection.mpSection)
@@ -1065,15 +996,6 @@ SwSectionFmt *rtfSections::InsertSection(SwPaM& rMyPaM, rtfSection &rSection)
     if (!pFmt)
         return 0;
     SetCols(*pFmt, rSection, (USHORT)(nWidth - nLeft - nRight) );
-
-#if 0
-    //Set the columns to be UnBalanced if compatability option is set
-    if (mrReader.pWDop->fNoColumnBalance  )
-    {
-        SwSectionFmt *pFmt = rSection.mpSection->GetFmt();
-        pFmt->SetAttr(SwFmtNoBalancedColumns(true));
-    }
-#endif
 
     return pFmt;
 }
@@ -1191,7 +1113,7 @@ void rtfSections::InsertSegments(bool bNewDoc)
                     aIter->maStart.GetNode().GetCntntNode(), 0);
                 SwPaM aPage(aPamStart);
 
-                mrReader.pDoc->Insert(aPage, aPgDesc);
+                mrReader.pDoc->Insert(aPage, aPgDesc, 0);
             }
             ++nDesc;
         }
@@ -1496,7 +1418,7 @@ void SwRTFParser::ReadDrawingObject()
 
         pStroke->SetSnapRect(aRect);
 
-        SwFrmFmt* pRetFrmFmt = pDoc->Insert(*pPam, *pStroke, &aFlySet);
+        SwFrmFmt* pRetFrmFmt = pDoc->Insert(*pPam, *pStroke, &aFlySet, NULL);
     }
 }
 
@@ -1528,7 +1450,7 @@ void SwRTFParser::InsertShpObject(SdrObject* pStroke, int nZOrder)
         SdrPage* pDrawPg = pDrawModel->GetPage(0);
         pDrawPg->InsertObject(pStroke);
         pDrawPg->SetObjectOrdNum(pStroke->GetOrdNum(), nZOrder);
-        SwFrmFmt* pRetFrmFmt = pDoc->Insert(*pPam, *pStroke, &aFlySet);
+        SwFrmFmt* pRetFrmFmt = pDoc->Insert(*pPam, *pStroke, &aFlySet, NULL);
 }
 
 Point rotate(Point p, Point m)
@@ -1947,7 +1869,7 @@ void SwRTFParser::NextToken( int nToken )
                                         aBookmarkEnd.maMkNode, aBookmarkEnd.mnMkCntnt);
                 if (*mpBookmarkStart == aBookmarkEnd)
                     aBookmarkRegion.DeleteMark();
-                pDoc->MakeBookmark(aBookmarkRegion, aEmptyKeyCode, sBookmark, aEmptyStr);
+                pDoc->makeBookmark(aBookmarkRegion, aEmptyKeyCode, sBookmark, aEmptyStr, IDocumentBookmarkAccess::BOOKMARK);
             }
             delete mpBookmarkStart, mpBookmarkStart = 0;
         }
@@ -1970,16 +1892,6 @@ void SwRTFParser::NextToken( int nToken )
     case RTF_NONSHPPICT:
         SkipGroup();
         break;
-#if 0
-        //Should not be used to set level of numbering, e.g. #i25677#
-    case RTF_OUTLINELEVEL:
-        {
-            BYTE nLevel = MAXLEVEL <= nTokenValue ? MAXLEVEL - 1
-                                                  : BYTE( nTokenValue );
-            GetAttrSet().Put( SfxUInt16Item( FN_PARAM_NUM_LEVEL, nLevel ));
-        }
-        break;
-#endif
 
     case RTF_DEFFORMAT:
     case RTF_DEFTAB:
@@ -1994,7 +1906,7 @@ void SwRTFParser::NextToken( int nToken )
             if (lcl_UsedPara(*pPam))
                 InsertPara();
             CheckInsNewTblLine();
-            pDoc->Insert(*pPam, SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE));
+            pDoc->Insert(*pPam, SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE), 0);
         }
         break;
 
@@ -2075,11 +1987,11 @@ void SwRTFParser::NextToken( int nToken )
         break;
 
     case RTF_REVISED:
-        pRedlineInsert = new SwFltRedline(REDLINE_INSERT, 0, DateTime(Date( 0 ), Time( 0 )));
+        pRedlineInsert = new SwFltRedline(IDocumentRedlineAccess::REDLINE_INSERT, 0, DateTime(Date( 0 ), Time( 0 )));
         break;
 
     case RTF_DELETED:
-        pRedlineDelete = new SwFltRedline(REDLINE_DELETE, 0, DateTime(Date( 0 ), Time( 0 )));
+        pRedlineDelete = new SwFltRedline(IDocumentRedlineAccess::REDLINE_DELETE, 0, DateTime(Date( 0 ), Time( 0 )));
         break;
 
     case RTF_REVAUTH:
@@ -2145,12 +2057,12 @@ void SwRTFParser::NextToken( int nToken )
                 &const_cast<const SwDoc *>(pDoc)
                 ->GetPageDesc( USHORT(nTokenValue) );
             CheckInsNewTblLine();
-            pDoc->Insert( *pPam, SwFmtPageDesc( pPgDsc ));
+            pDoc->Insert( *pPam, SwFmtPageDesc( pPgDsc ), 0);
         }
         break;
 
     case RTF_COLUM:
-        pDoc->Insert( *pPam, SvxFmtBreakItem( SVX_BREAK_COLUMN_BEFORE ));
+        pDoc->Insert( *pPam, SvxFmtBreakItem( SVX_BREAK_COLUMN_BEFORE ), 0);
         break;
 
     case RTF_DXFRTEXT:      // werden nur im Zusammenhang mit Flys ausgewertet
@@ -2170,7 +2082,7 @@ SETCHDATEFIELD:
             SwDateTimeField aDateFld( (SwDateTimeFieldType*)
                                         pDoc->GetSysFldType( RES_DATETIMEFLD ), DATEFLD, nFormat);
             CheckInsNewTblLine();
-            pDoc->Insert( *pPam, SwFmtFld( aDateFld ));
+            pDoc->Insert( *pPam, SwFmtFld( aDateFld ), 0);
         }
         break;
 
@@ -2182,7 +2094,7 @@ SETCHDATEFIELD:
             SwDateTimeField aTimeFld( (SwDateTimeFieldType*)
                     pDoc->GetSysFldType( RES_DATETIMEFLD ), TIMEFLD, nFormat);
             CheckInsNewTblLine();
-            pDoc->Insert( *pPam, SwFmtFld( aTimeFld ));
+            pDoc->Insert( *pPam, SwFmtFld( aTimeFld ), 0);
         }
         break;
 
@@ -2192,7 +2104,7 @@ SETCHDATEFIELD:
                                     pDoc->GetSysFldType( RES_PAGENUMBERFLD ),
                                     PG_RANDOM, SVX_NUM_ARABIC );
             CheckInsNewTblLine();
-            pDoc->Insert( *pPam, SwFmtFld( aPageFld));
+            pDoc->Insert( *pPam, SwFmtFld( aPageFld), 0);
         }
         break;
 
@@ -2215,14 +2127,14 @@ SETCHDATEFIELD:
         break;
     case RTF_LYTPRTMET:
         if (IsNewDoc())
-            pDoc->_SetUseVirtualDevice(com::sun::star::document::PrinterIndependentLayout::DISABLED);
+            pDoc->set(IDocumentSettingAccess::USE_VIRTUAL_DEVICE, false);
         break;
     case RTF_U:
         {
             CheckInsNewTblLine();
             if( nTokenValue )
                 aToken = (sal_Unicode )nTokenValue;
-            pDoc->Insert( *pPam, aToken );
+            pDoc->Insert( *pPam, aToken, true );
         }
         break;
 
@@ -2283,7 +2195,7 @@ void SwRTFParser::InsertText()
     if(pRedlineDelete)
         mpRedlineStack->open(*pPam->GetPoint(), *pRedlineDelete);
 
-    pDoc->Insert( *pPam, aToken );
+    pDoc->Insert( *pPam, aToken, true );
 
     if(pRedlineDelete)
     {
@@ -2311,7 +2223,7 @@ void SwRTFParser::InsertPara()
 
     SwTxtFmtColl* pColl = aTxtCollTbl.Get( 0 );
     if( !pColl )
-        pColl = pDoc->GetTxtCollFromPoolSimple( RES_POOLCOLL_STANDARD, FALSE );
+        pColl = pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD, false );
     pDoc->SetTxtFmtColl( *pPam, pColl );
 
     ::SetProgressState( rInput.Tell(), pDoc->GetDocShell() );
@@ -2445,7 +2357,7 @@ void SwRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
                 }
             } while( 0 != (pStyle = GetStyleTbl().Next()) );
 
-            pDoc->Insert(aPam, *pCharFmt);
+            pDoc->Insert(aPam, *pCharFmt, 0);
             rSet.GetAttrSet().ClearItem(RES_TXTATR_CHARFMT);     //test hack
         }
         if (rSet.GetAttrSet().Count())
@@ -2613,7 +2525,7 @@ void SwRTFParser::SetPageInformationAsDefault(const DocPageInformation &rInfo)
         {
             SwFmtPageDesc aPgDsc( &rPg );
             aPgDsc.SetNumOffset( nPgStart );
-            pDoc->Insert( *pPam, aPgDsc );
+            pDoc->Insert( *pPam, aPgDsc, 0 );
         }
     }
 }
@@ -2925,8 +2837,7 @@ void SwRTFParser::ReadDocControls( int nToken )
         SwTxtFmtColl* pColl = aTxtCollTbl.Get(0);
         if (!pColl)
         {
-            pColl = pDoc->GetTxtCollFromPoolSimple(RES_POOLCOLL_STANDARD,
-                FALSE );
+            pColl = pDoc->GetTxtCollFromPool(RES_POOLCOLL_STANDARD, false );
         }
 
         ASSERT(pColl, "impossible to have no standard style");
@@ -2976,17 +2887,6 @@ void SwRTFParser::MakeStyleTab()
             }
             else if( !aTxtCollTbl.Get( nNo ) )
             {
-
-#if 0 //$flr replaced by the more sophisticated check adjustOutlineLevel in shellio.cxx
-                if( MAXLEVEL > pStyle->nOutlineNo)
-                {
-                    USHORT nOutlFlag = 1 << pStyle->nOutlineNo;
-                    if( nValidOutlineLevels & nOutlFlag )
-                        pStyle->nOutlineNo = (BYTE)-1;
-                    else
-                        nValidOutlineLevels |= nOutlFlag;
-                }
-#endif
                 // existiert noch nicht, also anlegen
                 MakeStyle( nNo, *pStyle );
             }
@@ -3449,7 +3349,7 @@ void SwRTFParser::ReadPageDescTbl()
     // das default-Style schon gleich am ersten Node setzen
     SwTxtFmtColl* pColl = aTxtCollTbl.Get( 0 );
     if( !pColl )
-        pColl = pDoc->GetTxtCollFromPoolSimple( RES_POOLCOLL_STANDARD, FALSE );
+        pColl = pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD, false );
     pDoc->SetTxtFmtColl( *pPam, pColl );
 
     int nToken, bSaveChkStyleAttr = IsChkStyleAttr();
@@ -3780,17 +3680,6 @@ void SwRTFParser::ReadPrtData()
             break;
     }
 
-/*-----------------25.10.94 16:37-------------------
-!!! OK 25.10.94 16:37
-    // um Byte-Dreher (Mac/Unix/Win) bei der Laenge auszuschliessen,
-    // setze hier expliziet die Laenge.
-    ((JobSetup*)pData)->nLen = nLen;
-
-    // so, jetzt sind alle Daten gelesen, setze den Bitsack am Document
-    // dieser kopiert die Daten !!
-    pDoc->SetJobsetup( (JobSetup*)pData );
-    delete pData;
---------------------------------------------------*/
     SkipToken( -1 );        // schliessende Klammer wieder zurueck!!
 }
 
@@ -3973,7 +3862,7 @@ void SwRTFParser::ReadHeaderFooter( int nToken, SwPageDesc* pPageDesc )
 
         SwTxtFmtColl* pColl = aTxtCollTbl.Get( 0 );
         if( !pColl )
-            pColl = pDoc->GetTxtCollFromPoolSimple( RES_POOLCOLL_STANDARD, FALSE );
+            pColl = pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD, false );
         pDoc->SetTxtFmtColl( *pPam, pColl );
 
         SetNewGroup( TRUE );
@@ -4167,8 +4056,7 @@ SwTxtFmtColl* SwRTFParser::MakeColl(const String& rName, USHORT nPos,
         ASSERT(!this, "not a bug, but I (cmc) want to see an example of this");
         if( !nPos )
         {
-            pColl = pDoc->GetTxtCollFromPoolSimple( RES_POOLCOLL_STANDARD,
-                                                    FALSE);
+            pColl = pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD, false );
             pColl->SetOutlineLevel( nOutlineLevel );
             return pColl;
         }
@@ -4279,8 +4167,7 @@ SwTxtFmtColl* SwRTFParser::MakeStyle( USHORT nNo, const SvxRTFStyleType& rStyle)
             // ist die ueberhaupt als Style vorhanden ?
             pDerivedColl = pDerivedStyle
                     ? MakeStyle( nStyleNo, *pDerivedStyle )
-                    : pDoc->GetTxtCollFromPoolSimple( RES_POOLCOLL_STANDARD,
-                                                      FALSE );
+                    : pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD, false );
         }
 
         if( pColl == pDerivedColl )
@@ -4314,8 +4201,7 @@ SwTxtFmtColl* SwRTFParser::MakeStyle( USHORT nNo, const SvxRTFStyleType& rStyle)
             SvxRTFStyleType* pMkStyle = GetStyleTbl().Get( nStyleNo );
             pNext = pMkStyle
                     ? MakeStyle( nStyleNo, *pMkStyle )
-                    : pDoc->GetTxtCollFromPoolSimple( RES_POOLCOLL_STANDARD,
-                                                      FALSE );
+                    : pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD, false );
         }
         pColl->SetNextTxtFmtColl( *pNext );
     }
@@ -4474,7 +4360,7 @@ void SwRTFParser::UnknownAttrToken( int nToken, SfxItemSet* pSet )
         {
             const SwPageDesc* pPgDsc = &const_cast<const SwDoc *>(pDoc)
                 ->GetPageDesc( (USHORT)nTokenValue );
-            pDoc->Insert( *pPam, SwFmtPageDesc( pPgDsc ));
+            pDoc->Insert( *pPam, SwFmtPageDesc( pPgDsc ), 0);
         }
         break;
     case RTF_CS:
