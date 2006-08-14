@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flyfrms.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:47:05 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:19:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,13 +35,8 @@
 #ifndef _FLYFRMS_HXX
 #define _FLYFRMS_HXX
 #include "flyfrm.hxx"
-
-// OD 11.11.2003 #i22341#
-class SwFmtAnchor;
-
 // --> OD 2004-06-23 #i28701#
 class SwFlyAtCntFrm;
-class SwTxtFrm;
 
 //Basisklasse fuer diejenigen Flys, die sich relativ frei Bewegen koennen -
 //also die nicht _im_ Inhalt gebundenen Flys.
