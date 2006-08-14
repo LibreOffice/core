@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrhhcwrap.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 13:23:59 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:48:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 #ifndef _HINTIDS_HXX
@@ -139,7 +138,7 @@ SdrHHCWrapper::SdrHHCWrapper( SwView* pVw,
     nOptions( nConvOptions ),
     bIsInteractive( bInteractive )
 {
-    SetRefDevice( pView->GetDocShell()->GetDoc()->GetPrt() );
+    SetRefDevice( pView->GetDocShell()->GetDoc()->getPrinter( false ) );
 
     MapMode aMapMode (MAP_TWIP);
     SetRefMapMode(aMapMode);
@@ -148,7 +147,7 @@ SdrHHCWrapper::SdrHHCWrapper( SwView* pVw,
     SetPaperSize( aSize );
 
     pOutlView = new OutlinerView( this, &(pView->GetEditWin()) );
-    pOutlView->GetOutliner()->SetRefDevice(pView->GetWrtShell().GetPrt());
+    pOutlView->GetOutliner()->SetRefDevice(pView->GetWrtShell().getIDocumentDeviceAccess()->getPrinter( false ));
 
     // Hack: Es sollten alle SdrTextObj-Attribute an die EditEngine
     //       uebertragen werden.
