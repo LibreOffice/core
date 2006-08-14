@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glossary.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:18:40 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:41:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _GLOSSARY_HXX
 #define _GLOSSARY_HXX
-
 #ifndef _EDIT_HXX //autogen
 #include <vcl/edit.hxx>
 #endif
@@ -69,10 +68,6 @@
 
 #ifndef _MENUBTN_HXX //autogen
 #include <vcl/menubtn.hxx>
-#endif
-
-#ifndef _ACTCTRL_HXX
-#include <actctrl.hxx>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XENUMERATIONACCESS_HPP_
 #include <com/sun/star/container/XEnumerationAccess.hpp>
