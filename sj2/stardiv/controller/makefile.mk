@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 20:19:03 $
+#   last change: $Author: hr $ $Date: 2006-08-14 16:17:52 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,19 +50,8 @@ all:
 
 # --- Files --------------------------------------------------------
 
-JAVAFILES=	\
-    SjSettings.java					
-
 JAVACLASSFILES=	\
-                $(CLASSDIR)$/$(PACKAGE)$/SjSettings.class				\
-                $(CLASSDIR)$/$(PACKAGE)$/StreamObserver.class			\
-                $(CLASSDIR)$/$(PACKAGE)$/NativeStreamObserver.class	\
-                $(CLASSDIR)$/$(PACKAGE)$/AppStarter.class				\
-                $(CLASSDIR)$/$(PACKAGE)$/AppStarterStatus.class		\
-                $(CLASSDIR)$/$(PACKAGE)$/AppStarterStatusNative.class	\
-                $(CLASSDIR)$/$(PACKAGE)$/Console.class					\
-                $(CLASSDIR)$/$(PACKAGE)$/JavaSystemMonitor.class		\
-                $(CLASSDIR)$/$(PACKAGE)$/PropertyEditor.class
+                $(CLASSDIR)$/$(PACKAGE)$/SjSettings.class
 
 # --- Targets ------------------------------------------------------
 .ENDIF
