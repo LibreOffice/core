@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlcss1.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:12:18 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:02:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 
 #pragma hdrstop
@@ -642,7 +641,7 @@ void SwCSS1Parser::SetPageDescAttrs( const SwPageDesc *pPageDesc,
 
 const SvxBrushItem& SwCSS1Parser::GetPageDescBackground() const
 {
-    return pDoc->GetPageDescFromPoolSimple( RES_POOLPAGE_HTML, FALSE )
+    return pDoc->GetPageDescFromPool( RES_POOLPAGE_HTML, false )
         ->GetMaster().GetBackground();
 }
 
@@ -1318,7 +1317,7 @@ SwTxtFmtColl *SwCSS1Parser::GetTxtCollFromPool( USHORT nPoolId ) const
 {
     USHORT nOldArrLen = pDoc->GetTxtFmtColls()->Count();
 
-    SwTxtFmtColl *pColl = pDoc->GetTxtCollFromPoolSimple( nPoolId, FALSE );
+    SwTxtFmtColl *pColl = pDoc->GetTxtCollFromPool( nPoolId, false );
 
     if( bIsNewDoc )
     {
@@ -1434,7 +1433,7 @@ SwTxtFmtColl *SwCSS1Parser::GetTxtFmtColl( USHORT nTxtColl,
 
 SwPageDesc *SwCSS1Parser::GetMasterPageDesc()
 {
-    return pDoc->GetPageDescFromPoolSimple( RES_POOLPAGE_HTML, FALSE );
+    return pDoc->GetPageDescFromPool( RES_POOLPAGE_HTML, false );
 }
 
 static SwPageDesc *FindPageDesc( SwDoc *pDoc, USHORT nPoolId, USHORT& rPage )
@@ -1451,7 +1450,7 @@ static SwPageDesc *FindPageDesc( SwDoc *pDoc, USHORT nPoolId, USHORT& rPage )
 const SwPageDesc *SwCSS1Parser::GetPageDesc( USHORT nPoolId, BOOL bCreate )
 {
     if( RES_POOLPAGE_HTML == nPoolId )
-        return pDoc->GetPageDescFromPoolSimple( RES_POOLPAGE_HTML, FALSE );
+        return pDoc->GetPageDescFromPool( RES_POOLPAGE_HTML, false );
 
     USHORT nPage;
     const SwPageDesc *pPageDesc = FindPageDesc( pDoc, nPoolId, nPage );
@@ -1463,12 +1462,11 @@ const SwPageDesc *SwCSS1Parser::GetPageDesc( USHORT nPoolId, BOOL bCreate )
         if( RES_POOLPAGE_FIRST == nPoolId )
             pMasterPageDesc = FindPageDesc( pDoc, RES_POOLPAGE_RIGHT, nPage );
         if( !pMasterPageDesc )
-            pMasterPageDesc = pDoc->GetPageDescFromPoolSimple
-                ( RES_POOLPAGE_HTML, FALSE );
+            pMasterPageDesc = pDoc->GetPageDescFromPool( RES_POOLPAGE_HTML, false );
 
         // Die neue Seitenvorlage entsteht aus dem Master durch kopieren.
         SwPageDesc *pNewPageDesc = pDoc->
-            GetPageDescFromPoolSimple( nPoolId, FALSE );
+            GetPageDescFromPool( nPoolId, false );
 
         // dazu brauchen wir auch die Nummer der neuen Vorlage
         pPageDesc = FindPageDesc( pDoc, nPoolId, nPage );
@@ -1847,7 +1845,7 @@ BOOL SwHTMLParser::FileDownload( const String& rURL,
 
     // wurde abgebrochen?
     if( ( pDoc->GetDocShell() && pDoc->GetDocShell()->IsAbortingImport() )
-        || 1 == pDoc->GetLinkCnt() )
+        || 1 == pDoc->getReferenceCount() )
     {
         // wurde der Import vom SFX abgebrochen?
         eState = SVPAR_ERROR;
@@ -1949,7 +1947,7 @@ BOOL SwCSS1Parser::ParseStyleSheet( const String& rIn )
         return FALSE;
 
     SwPageDesc *pMasterPageDesc =
-        pDoc->GetPageDescFromPoolSimple( RES_POOLPAGE_HTML, FALSE );
+        pDoc->GetPageDescFromPool( RES_POOLPAGE_HTML, false );
 
     SvxCSS1MapEntry *pPageEntry = GetPage( aEmptyStr, FALSE );
     if( pPageEntry )
@@ -2363,7 +2361,6 @@ BOOL SwHTMLParser::GetMarginsFromContextWithNumBul( USHORT& nLeft,
                                                     short& nIndent ) const
 {
     BOOL bRet = GetMarginsFromContext( nLeft, nRight, nIndent );
-#ifdef NUM_RELSPACE
     const SwHTMLNumRuleInfo& rInfo = ((SwHTMLParser*)this)->GetNumInfo();
     if( rInfo.GetDepth() )
     {
@@ -2373,7 +2370,6 @@ BOOL SwHTMLParser::GetMarginsFromContextWithNumBul( USHORT& nLeft,
         nLeft += rNumFmt.GetAbsLSpace();
         nIndent = rNumFmt.GetFirstLineOffset();
     }
-#endif
 
     return bRet;
 }
