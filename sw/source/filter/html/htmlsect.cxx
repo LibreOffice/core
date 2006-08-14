@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlsect.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:35:26 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:05:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -561,7 +561,7 @@ sal_Bool SwHTMLParser::EndSection( sal_Bool bLFStripped )
 {
     SwEndNode *pEndNd = pDoc->GetNodes()[pPam->GetPoint()->nNode.GetIndex()+1]
                             ->GetEndNode();
-    if( pEndNd && pEndNd->FindStartNode()->IsSectionNode() )
+    if( pEndNd && pEndNd->StartOfSectionNode()->IsSectionNode() )
     {
         // den Bereich beenden
         if( !bLFStripped )
