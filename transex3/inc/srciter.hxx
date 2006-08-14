@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srciter.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 17:19:37 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:08:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,25 +33,25 @@
  *
  ************************************************************************/
 
-#include <bootstrp/listmacr.hxx>
-#include <bootstrp/sstring.hxx>
-#include <bootstrp/prj.hxx>
-#include <bootstrp/mkcreate.hxx>
+#ifndef TRANSEX_DIRECTORY_HXX
+#define TRANSEX_DIRECTORY_HXX
+#include "directory.hxx"
+#endif
 
-//
 // class SourceTreeIterator
 //
 
 class SourceTreeIterator
 {
 private:
-    SourceDirectory *pRootDirectory;
-    BOOL bInExecute;
+    transex::Directory aRootDirectory;
+    bool bInExecute;
 
-    void ExecuteDirectory( SourceDirectory *pDirectory );
+    void ExecuteDirectory( transex::Directory& pDirectory );
 
 protected:
     bool bLocal;
+    bool bSkipLinks;
 
 public:
     SourceTreeIterator( const ByteString &rRootDirectory, const ByteString &rVersion , bool bLocal_in = false);
@@ -60,7 +60,7 @@ public:
     BOOL StartExecute();
     void EndExecute();
 
-    virtual void OnExecuteDirectory( const ByteString &rDirectory );
+    virtual void OnExecuteDirectory( const rtl::OUString &rDirectory );
 };
 
 
