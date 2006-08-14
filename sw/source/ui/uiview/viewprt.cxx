@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewprt.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:24:30 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:58:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 #include <com/sun/star/text/NotePrintMode.hpp>
@@ -179,8 +178,9 @@
 
 SfxPrinter* __EXPORT SwView::GetPrinter( BOOL bCreate )
 {
-    SfxPrinter *pOld = GetWrtShell().GetPrt( FALSE );
-    SfxPrinter *pPrt = GetWrtShell().GetPrt( bCreate );
+    const IDocumentDeviceAccess* pIDDA = GetWrtShell().getIDocumentDeviceAccess();
+    SfxPrinter *pOld = pIDDA->getPrinter( false );
+    SfxPrinter *pPrt = pIDDA->getPrinter( bCreate );
     if ( pOld != pPrt )
     {
         BOOL bWeb = 0 != PTR_CAST(SwWebView, this);
@@ -219,7 +219,7 @@ USHORT __EXPORT SwView::SetPrinter(SfxPrinter* pNew, USHORT nDiffFlags )
     SwWrtShell &rSh = GetWrtShell();
     if ( (SFX_PRINTER_JOBSETUP | SFX_PRINTER_PRINTER) & nDiffFlags )
     {
-        rSh.SetPrt( pNew );
+        rSh.getIDocumentDeviceAccess()->setPrinter( pNew, true, true );
         if ( nDiffFlags & SFX_PRINTER_PRINTER )
             rSh.SetModified();
     }
@@ -311,7 +311,7 @@ ErrCode SwView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg,
                 DBMGR_MERGE_DOCUMENTS == nMergeType )
         {
             SwView::MakeOptions( pDlg, aOpts, 0, bWeb, GetPrinter(),
-                            pSh->GetPrintData() );
+                            pSh->getIDocumentDeviceAccess()->getPrintData() );
             if(DBMGR_MERGE_DOCUMENTS == nMergeType)
                 bStartJob = pMgr->MergePrintDocuments( *this, aOpts, *pProgress );
             else
@@ -323,7 +323,7 @@ ErrCode SwView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg,
             pSh->LockView( TRUE );
 
             //BrowseView abschalten und die View gegen alle Paints locken.
-            FASTBOOL bBrowse = pSh->IsBrowseMode();
+            FASTBOOL bBrowse = pSh->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
             SfxAllItemSet aSet( SFX_APP()->GetPool() );
             SfxBoolItem aBrowse( SID_BROWSER_MODE, FALSE );
             if ( bBrowse )
@@ -355,7 +355,7 @@ ErrCode SwView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg,
 
             BOOL bPrtPros;
             SwView::MakeOptions( pDlg, aOpts, &bPrtPros, bWeb, GetPrinter(),
-                            pSh->GetPrintData() );
+                            pSh->getIDocumentDeviceAccess()->getPrintData() );
             if( -1 != bPrintSelection )
                 aOpts.bPrintSelection = 0 != bPrintSelection;
 
@@ -660,10 +660,13 @@ SfxTabPage* CreatePrintOptionsPage( Window *pParent,
 void SetAppPrintOptions( ViewShell* pSh, BOOL bWeb )
 {
     SwPrintData aPrtData = *SW_MOD()->GetPrtOptions(bWeb);
-    SwPrintData* pShellPrintData = pSh->GetPrintData();
+    const IDocumentDeviceAccess* pIDDA = pSh->getIDocumentDeviceAccess();
+    SwPrintData* pShellPrintData = pIDDA->getPrintData();
+
     if(pShellPrintData)
         aPrtData = *pShellPrintData;
-    if( pSh && pSh->GetPrt())
+
+    if( pIDDA->getPrinter( false ) )
     {
         // Applikationseigene Druckoptionen in SfxPrinter schiessen
         SwAddPrinterItem aAddPrinterItem (FN_PARAM_ADDPRINTER, aPrtData);
@@ -686,7 +689,7 @@ void SetAppPrintOptions( ViewShell* pSh, BOOL bWeb )
             (pMisc->IsPaperSizeWarning() ? SFX_PRINTER_CHG_SIZE : 0)   |
             (pMisc->IsPaperOrientationWarning()  ? SFX_PRINTER_CHG_ORIENTATION : 0 )));
 
-        pSh->GetPrt()->SetOptions( aSet );
+        pIDDA->getPrinter( true )->SetOptions( aSet );
     }
 
 }
