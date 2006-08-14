@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swfont.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:13:59 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:47:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -127,8 +126,8 @@
 #ifndef _SVX_CHARHIDDENITEM_HXX
 #include <svx/charhiddenitem.hxx>
 #endif
-#ifndef _DOC_HXX
-#include <doc.hxx>
+#ifndef IDOCUMENTSETTINGACCESS_HXX_INCLUDED
+#include <IDocumentSettingAccess.hxx>
 #endif
 #ifndef _WINDOW_HXX //autogen
 #include <vcl/window.hxx>
@@ -136,9 +135,6 @@
 
 #ifndef _CHARATR_HXX
 #include <charatr.hxx>
-#endif
-#ifndef _SWATRSET_HXX //autogen
-#include <swatrset.hxx>
 #endif
 #ifndef _VIEWSH_HXX
 #include <viewsh.hxx>       // Bildschirmabgleich
@@ -305,11 +301,11 @@ USHORT SwSubFont::CalcEscAscent( const USHORT nOldAscent ) const
  *                      SwFont::SetDiffFnt()
  *************************************************************************/
 
-void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet, const SwDoc *pDoc )
+void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
+                         const IDocumentSettingAccess *pIDocumentSettingAccess )
 {
     delete pBackColor;
     pBackColor = NULL;
-
 
     if( pAttrSet )
     {
@@ -444,8 +440,12 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet, const SwDoc *pDoc )
             TRUE, &pItem ))
         {
             if( ((SvxAutoKernItem*)pItem)->GetValue() )
-                SetAutoKern( ( !pDoc || !pDoc->IsKernAsianPunctuation() ) ?
-                         KERNING_FONTSPECIFIC : KERNING_ASIAN );
+            {
+                SetAutoKern( ( !pIDocumentSettingAccess ||
+                               !pIDocumentSettingAccess->get(IDocumentSettingAccess::KERN_ASIAN_PUNCTUATION) ) ?
+                                KERNING_FONTSPECIFIC :
+                                KERNING_ASIAN );
+            }
             else
                 SetAutoKern( 0 );
         }
@@ -522,7 +522,8 @@ SwFont::SwFont( const SwFont &rFont )
     bBlink = rFont.bBlink;
 }
 
-SwFont::SwFont( const SwAttrSet* pAttrSet, const SwDoc *pDoc )
+SwFont::SwFont( const SwAttrSet* pAttrSet,
+                const IDocumentSettingAccess* pIDocumentSettingAccess )
 {
     nActual = SW_LATIN;
     nToxCnt = nRefCnt = 0;
@@ -602,8 +603,12 @@ SwFont::SwFont( const SwAttrSet* pAttrSet, const SwDoc *pDoc )
     SetPropWidth( pAttrSet->GetCharScaleW().GetValue() );
     SetRelief( (FontRelief)pAttrSet->GetCharRelief().GetValue() );
     if( pAttrSet->GetAutoKern().GetValue() )
-        SetAutoKern( ( !pDoc || !pDoc->IsKernAsianPunctuation() ) ?
-                     KERNING_FONTSPECIFIC : KERNING_ASIAN );
+    {
+        SetAutoKern( ( !pIDocumentSettingAccess ||
+                       !pIDocumentSettingAccess->get(IDocumentSettingAccess::KERN_ASIAN_PUNCTUATION) ) ?
+                        KERNING_FONTSPECIFIC :
+                        KERNING_ASIAN );
+    }
     else
         SetAutoKern( 0 );
     SetWordLineMode( pAttrSet->GetWordLineMode().GetValue() );
@@ -1037,10 +1042,8 @@ void SwSubFont::_DrawStretchText( SwDrawTextInfo &rInf )
 
         if ( rInf.GetFrm() )
         {
-#ifdef BIDI
             if ( rInf.GetFrm()->IsRightToLeft() )
                 rInf.GetFrm()->SwitchLTRtoRTL( aPos );
-#endif
 
             if ( rInf.GetFrm()->IsVertical() )
                 rInf.GetFrm()->SwitchHorizontalToVertical( aPos );
@@ -1191,16 +1194,12 @@ void SwDrawTextInfo::Shift( USHORT nDir )
     ASSERT( bPos, "DrawTextInfo: Undefined Position" );
     ASSERT( bSize, "DrawTextInfo: Undefined Width" );
 
-#ifdef BIDI
     const BOOL bBidiPor = ( GetFrm() && GetFrm()->IsRightToLeft() ) !=
                           ( 0 != ( TEXT_LAYOUT_BIDI_RTL & GetpOut()->GetLayoutMode() ) );
 
     nDir = bBidiPor ?
             1800 :
             UnMapDirection( nDir, GetFrm() && GetFrm()->IsVertical() );
-#else
-    nDir = UnMapDirection( nDir, GetFrm() && GetFrm()->IsVertical() );
-#endif
 
     switch ( nDir )
     {
@@ -1237,10 +1236,11 @@ SwUnderlineFont::~SwUnderlineFont()
 }
 
 //Helper for filters to find true lineheight of a font
-long AttrSetToLineHeight(const SwDoc &rDoc, const SwAttrSet &rSet,
-    const OutputDevice &rOut, sal_Int16 nScript)
+long AttrSetToLineHeight( const IDocumentSettingAccess& rIDocumentSettingAccess,
+                          const SwAttrSet &rSet,
+                          const OutputDevice &rOut, sal_Int16 nScript)
 {
-    SwFont aFont(&rSet, &rDoc);
+    SwFont aFont(&rSet, &rIDocumentSettingAccess);
     BYTE nActual;
     switch (nScript)
     {
