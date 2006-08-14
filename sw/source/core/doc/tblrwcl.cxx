@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tblrwcl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:20:04 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:03:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -92,14 +91,8 @@
 #ifndef _FLDBAS_HXX
 #include <fldbas.hxx>
 #endif
-#ifndef _HINTS_HXX
-#include <hints.hxx>
-#endif
 #ifndef _SWUNDO_HXX
 #include <swundo.hxx>
-#endif
-#ifndef _TABFRM_HXX
-#include <tabfrm.hxx>
 #endif
 #ifndef _ROWFRM_HXX
 #include <rowfrm.hxx>
@@ -109,9 +102,6 @@
 #endif
 #ifndef _UNDOBJ_HXX
 #include <undobj.hxx>
-#endif
-#ifndef _TABFRM_HXX
-#include <tabfrm.hxx>
 #endif
 #ifndef _CELLATR_HXX
 #include <cellatr.hxx>
@@ -306,7 +296,6 @@ struct CR_SetLineHeight
         bBigger = 0 != (eType & WH_FLAG_BIGGER );
         if( eType & WH_FLAG_INSDEL )
             bBigger = !bBigger;
-        BOOL bTst = (0 != (eType & WH_FLAG_BIGGER )) ^ (0 != ( eType & WH_FLAG_INSDEL ));
         nMode = pTblNd->GetTable().GetTblChgMode();
     }
     CR_SetLineHeight( const CR_SetLineHeight& rCpy )
@@ -548,7 +537,6 @@ void lcl_InsCol( _FndLine* pFndLn, _CpyPara& rCpyPara, USHORT nCpyCnt,
         SwTableBox* pBox = pFndLn->GetBoxes()[ bBehind ?
                     pFndLn->GetBoxes().Count()-1 : 0 ]->GetBox();
         rCpyPara.nInsPos = pFndLn->GetLine()->GetTabBoxes().C40_GETPOS( SwTableBox, pBox );
-        USHORT nBoxPos = rCpyPara.nInsPos;
         if( bBehind )
             ++rCpyPara.nInsPos;
 
@@ -673,7 +661,6 @@ BOOL SwTable::InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
         aCpyPara.nInsPos = pFndBox->GetBox()->GetTabLines().C40_GETPOS( SwTableLine, pLine );
     }
 
-    USHORT nLinePos = aCpyPara.nInsPos;
     if( bBehind )
     {
         ++aCpyPara.nInsPos;
@@ -1109,7 +1096,6 @@ BOOL SwTable::DeleteSel( SwDoc* pDoc, const SwSelBoxes& rBoxes, SwUndo* pUndo,
         return FALSE;
 
     // es darf nie die gesamte Tabelle geloescht werden
-    SwNodes& rNds = pDoc->GetNodes();
     if( rBoxes[0]->GetSttIdx()-1 == pTblNd->GetIndex() &&
         rBoxes[rBoxes.Count()-1]->GetSttNd()->EndOfSectionIndex()+1
         == pTblNd->EndOfSectionIndex() )
@@ -2013,7 +1999,7 @@ BOOL SwTable::CopyHeadlineIntoTable( SwTableNode& rTblNd )
     // suche alle Boxen / Lines
     SwSelBoxes aSelBoxes;
     SwTableBox* pBox = GetTabSortBoxes()[ 0 ];
-    pBox = GetTblBox( pBox->GetSttNd()->FindStartNode()->GetIndex() + 1 );
+    pBox = GetTblBox( pBox->GetSttNd()->StartOfSectionNode()->GetIndex() + 1 );
     SelLineFromBox( pBox, aSelBoxes, TRUE );
 
     _FndBox aFndBox( 0, 0 );
@@ -3446,7 +3432,7 @@ BOOL SwTable::SetColWidth( SwTableBox& rAktBox, USHORT eType,
             BOOL bChgLRSpace = TRUE;
             if( bBigger )
             {
-                if( GetFrmFmt()->GetDoc()->IsBrowseMode() &&
+                if( GetFrmFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) &&
                     !rSz.GetWidthPercent() )
                 {
                     bRet = rSz.GetWidth() < USHRT_MAX - nRelDiff;
@@ -3559,7 +3545,7 @@ BOOL SwTable::SetColWidth( SwTableBox& rAktBox, USHORT eType,
                     // sollte die Tabelle noch auf relativen Werten
                     // (USHRT_MAX) stehen dann muss es jetzt auf absolute
                     // umgerechnet werden. Bug 61494
-                    if( GetFrmFmt()->GetDoc()->IsBrowseMode() &&
+                    if( GetFrmFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) &&
                         !rSz.GetWidthPercent() )
                     {
                         SwTabFrm* pTabFrm = (SwTabFrm*)SwClientIter(
