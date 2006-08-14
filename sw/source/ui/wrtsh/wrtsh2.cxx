@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtsh2.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:41:00 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 18:05:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 #ifndef _HINTIDS_HXX
@@ -106,15 +105,9 @@
 #ifndef _SWUNDO_HXX
 #include <swundo.hxx>
 #endif
-#ifndef _NUMRULE_HXX
-#include <numrule.hxx>      // Numerierung
-#endif
 #ifndef _DOC_HXX
 #include <doc.hxx>
 #endif
-//CHINA001 #ifndef _INPDLG_HXX
-//CHINA001 #include <inpdlg.hxx>       // Eingabefelder
-//CHINA001 #endif
 #ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>      // SwViewOptions
 #endif
@@ -123,9 +116,6 @@
 #endif
 #ifndef _SWTABLE_HXX
 #include <swtable.hxx>      // fuer UpdateTable
-#endif
-#ifndef _HINTS_HXX
-#include <hints.hxx>        // fuer UpdateTable
 #endif
 #ifndef _MDIEXP_HXX
 #include <mdiexp.hxx>
@@ -154,16 +144,12 @@
 #ifndef _TXTINET_HXX
 #include <txtinet.hxx>
 #endif
-
 #ifndef _CMDID_H
 #include <cmdid.h>
 #endif
 #ifndef _WRTSH_HRC
 #include <wrtsh.hrc>
 #endif
-//CHINA001 #ifndef _SW_DROPDOWNFIELDDIALOG_HXX
-//CHINA001 #include <DropDownFieldDialog.hxx>
-//CHINA001 #endif
 #include "swabstdlg.hxx" //CHINA001
 #include "fldui.hrc" //CHINA001
 
