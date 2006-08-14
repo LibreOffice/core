@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docftn.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:12:47 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:57:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -66,9 +65,6 @@
 #ifndef _DOC_HXX
 #include <doc.hxx>
 #endif
-#ifndef _FMTCOL_HXX
-#include <fmtcol.hxx>
-#endif
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
 #endif
@@ -78,10 +74,6 @@
 #ifndef _FTNINFO_HXX
 #include <ftninfo.hxx>
 #endif
-#ifndef _HINTS_HXX
-#include <hints.hxx>
-#endif
-
 
 /*********************** SwFtnInfo ***************************/
 
@@ -353,7 +345,7 @@ void SwDoc::SetFtnInfo(const SwFtnInfo& rInfo)
             pFtnInfo->Modify( &aOld, &aNew );
         }
 
-        UpdateRefFlds();
+        UpdateRefFlds(NULL);
 
         SetModified();
     }
@@ -409,7 +401,7 @@ void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
             pEndNoteInfo->Modify( &aOld, &aNew );
         }
 
-        UpdateRefFlds();
+        UpdateRefFlds(NULL);
         SetModified();
     }
 }
