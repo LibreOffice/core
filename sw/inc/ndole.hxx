@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndole.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-24 12:54:02 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:27:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,6 @@
 class SwGrfFmtColl;
 class SwDoc;
 class SwOLENode;
-class SwOLELink;
 
 class SwOLEListener_Impl;
 class SwEmbedObjectLink;
@@ -141,7 +140,6 @@ public:
     void SetOLESizeInvalid( BOOL b ){ bOLESizeInvalid = b; }
 
     sal_Int64 GetAspect() const { return nViewAspect; }
-    void SetAspect( sal_Int64 nAspect) { nViewAspect = nAspect; }
 
     // OLE-Object aus dem "Speicher" entfernen
     // inline void Unload() { aOLEObj.Unload(); }
