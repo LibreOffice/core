@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldmgr.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:35:30 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:37:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 #ifndef _CMDID_H
@@ -98,6 +97,9 @@
 #ifndef _LINKMGR_HXX //autogen
 #include <sfx2/linkmgr.hxx>
 #endif
+#ifndef _SFXAPP_HXX
+#include <sfx2/app.hxx>
+#endif
 #ifndef _BASMGR_HXX //autogen
 #include <basic/basmgr.hxx>
 #endif
@@ -113,12 +115,6 @@
 #ifndef _FMTRFMRK_HXX //autogen
 #include <fmtrfmrk.hxx>
 #endif
-#ifndef _SFXAPP_HXX //autogen
-#include <sfx2/app.hxx>
-#endif
-#ifndef _SB_SBSTAR_HXX //autogen
-#include <basic/sbstar.hxx>
-#endif
 #ifndef _SB_SBMETH_HXX //autogen
 #include <basic/sbmeth.hxx>
 #endif
@@ -131,13 +127,9 @@
 #ifndef _ZFORMAT_HXX //autogen
 #include <svtools/zformat.hxx>
 #endif
-#ifndef _SB_SBMOD_HXX //autogen
-#include <basic/sbmod.hxx>
-#endif
 #ifndef _SV_MNEMONIC_HXX
 #include <vcl/mnemonic.hxx>
 #endif
-
 #ifndef _VIEW_HXX
 #include <view.hxx>
 #endif
