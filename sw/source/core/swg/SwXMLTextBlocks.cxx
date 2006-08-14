@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXMLTextBlocks.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 16:11:05 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:32:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -98,10 +97,6 @@
 #ifndef _SWSWERROR_H
 #include <swerror.h>
 #endif
-#ifndef _SOT_EXCHANGE_HXX
-#include <sot/exchange.hxx>
-#endif
-
 
 #define STREAM_STGREAD  ( STREAM_READ | STREAM_SHARE_DENYWRITE | STREAM_NOCREATE )
 #define STREAM_STGWRITE ( STREAM_READ | STREAM_WRITE | STREAM_SHARE_DENYWRITE )
@@ -132,7 +127,7 @@ SwXMLTextBlocks::SwXMLTextBlocks( const String& rFile )
     xDocShellRef = pDocSh;
     pDoc->SetOle2Link( Link() );
     pDoc->DoUndo( FALSE );      // always FALSE
-    pDoc->AddLink();
+    pDoc->acquire();
     uno::Reference< embed::XStorage > refStg;
     if( !aDateModified.GetDate() || !aTimeModified.GetTime() )
         Touch();        // falls neu angelegt -> neuen ZeitStempel besorgen
@@ -176,7 +171,7 @@ SwXMLTextBlocks::SwXMLTextBlocks( const uno::Reference < embed::XStorage >& rStg
     xDocShellRef = pDocSh;
     pDoc->SetOle2Link( Link() );
     pDoc->DoUndo( FALSE );
-    pDoc->AddLink();
+    pDoc->acquire();
 
     InitBlockMode ( rStg );
     ReadInfo();
@@ -191,7 +186,7 @@ SwXMLTextBlocks::~SwXMLTextBlocks()
     if(xDocShellRef.Is())
         xDocShellRef->DoClose();
     xDocShellRef = 0;
-    if( pDoc && !pDoc->RemoveLink() )
+    if( pDoc && !pDoc->release() )
         delete pDoc;
 }
 
