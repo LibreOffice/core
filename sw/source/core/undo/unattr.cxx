@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unattr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 15:42:34 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:48:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -95,12 +94,6 @@
 #endif
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
-#endif
-#ifndef _HINTS_HXX
-#include <hints.hxx>
-#endif
-#ifndef _SWATRSET_HXX
-#include <swatrset.hxx>
 #endif
 #ifndef _SWTABLE_HXX
 #include <swtable.hxx>
@@ -618,9 +611,6 @@ SwUndoRstAttr::SwUndoRstAttr( const SwPaM& rRange, USHORT nFmt )
     : SwUndo( UNDO_RESETATTR ), SwUndRng( rRange ), nFmtId( nFmt ),
     pHistory( new SwHistory )
 {
-#ifdef COMPACT
-    ((SwDoc*)rRange.GetDoc())->DelUndoGroups();
-#endif
 }
 
 SwUndoRstAttr::SwUndoRstAttr( const SwDoc& rDoc, const SwPosition& rPos,
@@ -760,9 +750,6 @@ SwUndoAttr::SwUndoAttr( const SwPaM& rRange, const SfxPoolItem& rAttr,
     nNdIdx( ULONG_MAX )
 {
     aSet.Put( rAttr );
-#ifdef COMPACT
-    (SwDoc*)rRange.GetDoc()->DelUndoGroups();
-#endif
 }
 
 SwUndoAttr::SwUndoAttr( const SwPaM& rRange, const SfxItemSet& rSet,
@@ -772,9 +759,6 @@ SwUndoAttr::SwUndoAttr( const SwPaM& rRange, const SfxItemSet& rSet,
     pRedlData( 0 ), pRedlSaveData( 0 ),
     nNdIdx( ULONG_MAX )
 {
-#ifdef COMPACT
-    (SwDoc*)rRange.GetDoc()->DelUndoGroups();
-#endif
 }
 
 SwUndoAttr::~SwUndoAttr()
@@ -788,8 +772,8 @@ void SwUndoAttr::SaveRedlineData( const SwPaM& rPam, BOOL bIsCntnt )
 {
     SwDoc* pDoc = rPam.GetDoc();
     if( pDoc->IsRedlineOn() )
-        pRedlData = new SwRedlineData( bIsCntnt ? REDLINE_INSERT
-                                                : REDLINE_FORMAT,
+        pRedlData = new SwRedlineData( bIsCntnt ? IDocumentRedlineAccess::REDLINE_INSERT
+                                                : IDocumentRedlineAccess::REDLINE_FORMAT,
                                         pDoc->GetRedlineAuthor() );
 
     pRedlSaveData = new SwRedlineSaveDatas;
@@ -807,7 +791,7 @@ void SwUndoAttr::Undo( SwUndoIter& rUndoIter )
 
     RemoveIdx( *pDoc );
 
-    if( IsRedlineOn( GetRedlineMode() ) )
+    if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ) )
     {
         SwPaM& rPam = *rUndoIter.pAktPam;
         if( ULONG_MAX != nNdIdx )
@@ -817,13 +801,13 @@ void SwUndoAttr::Undo( SwUndoIter& rUndoIter )
             rPam.GetPoint()->nContent.Assign( rPam.GetCntntNode(), nSttCntnt );
             rPam.SetMark();
             rPam.GetPoint()->nContent++;
-            pDoc->DeleteRedline( rPam, FALSE );
+            pDoc->DeleteRedline( rPam, false, USHRT_MAX );
         }
         else
         {
             // alle Format-Redlines entfernen, werden ggfs. neu gesetzt
             SetPaM( rUndoIter );
-            pDoc->DeleteRedline( rPam, FALSE, REDLINE_FORMAT );
+            pDoc->DeleteRedline( rPam, false, IDocumentRedlineAccess::REDLINE_FORMAT );
             if( pRedlSaveData )
                 SetSaveData( *pDoc, *pRedlSaveData );
         }
@@ -892,21 +876,21 @@ void SwUndoAttr::Redo( SwUndoIter& rUndoIter )
     SwPaM& rPam = *rUndoIter.pAktPam;
     SwDoc& rDoc = rUndoIter.GetDoc();
 
-    if( pRedlData && IsRedlineOn( GetRedlineMode() ) )
+    if( pRedlData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ) )
     {
-        SwRedlineMode eOld = rDoc.GetRedlineMode();
-        rDoc.SetRedlineMode_intern( eOld & ~REDLINE_IGNORE );
+        IDocumentRedlineAccess::RedlineMode_t eOld = rDoc.GetRedlineMode();
+        rDoc.SetRedlineMode_intern( eOld & ~IDocumentRedlineAccess::REDLINE_IGNORE );
         rDoc.Insert( rPam, aSet, nInsFlags );
 
         if( ULONG_MAX != nNdIdx )
         {
             rPam.SetMark();
             if( rPam.Move( fnMoveBackward ) )
-                rDoc.AppendRedline( new SwRedline( *pRedlData, rPam ));
+                rDoc.AppendRedline( new SwRedline( *pRedlData, rPam ), true);
             rPam.DeleteMark();
         }
         else
-            rDoc.AppendRedline( new SwRedline( *pRedlData, rPam ));
+            rDoc.AppendRedline( new SwRedline( *pRedlData, rPam ), true);
 
         rDoc.SetRedlineMode_intern( eOld );
     }
