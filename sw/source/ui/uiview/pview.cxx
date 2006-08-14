@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 09:32:25 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:56:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 
 #pragma hdrstop
@@ -455,7 +454,7 @@ SwPreviewPrintOptionsDialog::SwPreviewPrintOptionsDialog( SwPagePreViewWin& rPar
     ViewShell& rViewSh = *rPreView.GetViewShell();
     // OD 18.12.2002 #103492#
     aSettings.aPageMaxSize = rViewSh.PagePreviewLayout()->GetMaxPageSize();
-    SfxPrinter*  pPrinter = rViewSh.GetPrt( TRUE );
+    SfxPrinter*  pPrinter = rViewSh.getIDocumentDeviceAccess()->getPrinter( true );
     aSettings.aPrtSize = pPrinter->GetPaperSize();
     //#97682# make sure that no division by zero occurs
     if(!aSettings.aPrtSize.Width() || !aSettings.aPrtSize.Height())
@@ -614,7 +613,7 @@ void SwPreviewPrintOptionsDialog::Apply()
         aData.SetLandscape(aLandscapeRB.IsChecked());
 
         ViewShell& rViewSh = *rPreView.GetViewShell();
-        SfxPrinter*  pPrinter = rViewSh.GetPrt( TRUE );
+        SfxPrinter*  pPrinter = rViewSh.getIDocumentDeviceAccess()->getPrinter( true );
         if((pPrinter->GetOrientation() == ORIENTATION_LANDSCAPE)
                         != aData.GetLandscape())
                     pPrinter->SetOrientation(aData.GetLandscape() ? ORIENTATION_LANDSCAPE : ORIENTATION_PORTRAIT);
@@ -1852,9 +1851,10 @@ void SwPagePreView::Init(const SwViewOption * pPrefs)
     SwView::MakeOptions( 0, aPrintOptions, 0, false, 0, 0 );
     GetViewShell()->AdjustOptionsForPagePreview( aPrintOptions );
 
-    if( pESh->GetDoc()->IsBrowseMode() )
+    IDocumentSettingAccess* pIDSA = pESh->getIDocumentSettingAccess();
+    if( pIDSA->get(IDocumentSettingAccess::BROWSE_MODE))
     {
-        pESh->GetDoc()->SetBrowseMode( FALSE );
+        pIDSA->set(IDocumentSettingAccess::BROWSE_MODE, false);
         pESh->CheckBrowseView( TRUE );
     }
 
@@ -2196,7 +2196,7 @@ void SwPagePreView::SetVisArea( const Rectangle &rRect, BOOL bUpdateScrollbar )
         return;
 
     //Bevor die Daten veraendert werden ggf. ein Update rufen. Dadurch wird
-    //sichergestellt, daá anliegende Paints korrekt in Dokumentkoordinaten
+    //sichergestellt, da? anliegende Paints korrekt in Dokumentkoordinaten
     //umgerechnet werden.
     //Vorsichtshalber tun wir das nur wenn an der Shell eine Action laeuft,
     //denn dann wir nicht wirklich gepaintet sondern die Rechtecke werden
@@ -2515,7 +2515,7 @@ USHORT  SwPagePreView::Print( SfxProgress &rProgress, PrintDialog *pDlg )
     SwPrtOptions aOpts( pObjShell->GetTitle(0) );
 
     BOOL bPrtPros;
-    SwView::MakeOptions( pDlg, aOpts, &bPrtPros, FALSE, GetPrinter(), GetDocShell()->GetDoc()->GetPrintData() );
+    SwView::MakeOptions( pDlg, aOpts, &bPrtPros, FALSE, GetPrinter(), GetDocShell()->GetDoc()->getPrintData() );
 
     if( bNormalPrint )
     {
@@ -2547,7 +2547,7 @@ USHORT  SwPagePreView::Print( SfxProgress &rProgress, PrintDialog *pDlg )
 
 SfxPrinter*  SwPagePreView::GetPrinter( BOOL bCreate )
 {
-    return aViewWin.GetViewShell()->GetPrt( bCreate );
+    return aViewWin.GetViewShell()->getIDocumentDeviceAccess()->getPrinter( bCreate );
 }
 
 /*--------------------------------------------------------------------
@@ -2561,7 +2561,7 @@ USHORT  SwPagePreView::SetPrinter( SfxPrinter *pNew, USHORT nDiffFlags )
     SwEditShell &rESh = (SwEditShell&)rSh;  //Buh...
     if( ( SFX_PRINTER_PRINTER | SFX_PRINTER_JOBSETUP ) & nDiffFlags )
     {
-        rSh.SetPrt( pNew );
+        rSh.getIDocumentDeviceAccess()->setPrinter( pNew, true, true );
         if( nDiffFlags & SFX_PRINTER_PRINTER )
             rESh.SetModified();
     }
