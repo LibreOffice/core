@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 23:13:12 $
+#   last change: $Author: hr $ $Date: 2006-08-14 16:14:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@ JAVAFILES += x11/WindowAdapter.java
 .ENDIF		# "$(GUIBASE)"!="unx" 
 
 JARFILES 		= jurt.jar unoil.jar ridl.jar juh.jar java_uno.jar
-JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
+#JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
 JARTARGET               = $(TARGET).uno.jar
 JARCOMPRESS             = TRUE
