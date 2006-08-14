@@ -4,9 +4,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 09:39:40 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 18:03:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 
 #pragma hdrstop
@@ -74,11 +73,7 @@
 #ifndef _SFXDOCKWIN_HXX
 #include <sfx2/dockwin.hxx>
 #endif
-#ifndef _SFXVIEWFRM_HXX
-#include <sfx2/viewfrm.hxx>
-#endif
 #include <vcl/toolbox.hxx>
-
 #ifndef _SWTYPES_HXX
 #include <swtypes.hxx>  // fuer Pathfinder
 #endif
@@ -99,9 +94,6 @@
 #endif
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
-#ifndef _SWMODULE_HXX
-#include <swmodule.hxx>
 #endif
 #ifndef _ACTCTRL_HXX
 #include <actctrl.hxx>
@@ -125,7 +117,6 @@
 #include <edtwin.hxx>
 #endif
 #include <sfx2/app.hxx>
-
 #ifndef _CMDID_H
 #include <cmdid.h>
 #endif
@@ -724,8 +715,9 @@ void SwNavigationPI::MakeMark()
     MakeAutoName(aMark,nAutoMarkIdx);
     if (nMarkCount >= MAX_MARKS)
         rSh.DelBookmark( aMark );
-    rSh.SetBookmark(KeyCode(), aMark, aEmptyStr, MARK);
-    SwView::SetActMark( static_cast< BYTE >( nAutoMarkIdx ) );
+
+    rSh.SetBookmark(KeyCode(), aMark, aEmptyStr, IDocumentBookmarkAccess::MARK);
+    SwView::SetActMark( static_cast<BYTE>(nAutoMarkIdx) );
 }
 
 /*------------------------------------------------------------------------
