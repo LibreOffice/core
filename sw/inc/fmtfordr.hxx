@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtfordr.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:49:53 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:23:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,6 @@ public:
     virtual USHORT          GetValueCount() const;
 
     const SwFillOrder GetFillOrder() const { return SwFillOrder(GetValue()); }
-    void  SetFillOrder( const SwFillOrder eNew ) { SetValue( USHORT(eNew) ); }
 };
 
 inline SwFmtFillOrder &SwFmtFillOrder::operator=( const SwFmtFillOrder &rCpy )
