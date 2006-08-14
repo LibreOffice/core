@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 13:44:35 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:38:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 #include "hintids.hxx"
@@ -60,9 +59,6 @@
 #ifndef _SVX_CHARROTATEITEM_HXX
 #include <svx/charrotateitem.hxx>
 #endif
-#ifndef _TXATBASE_HXX //autogen
-#include <txatbase.hxx>
-#endif
 #ifndef _LAYFRM_HXX
 #include <layfrm.hxx>       // GetFrmRstHeight, etc
 #endif
@@ -75,17 +71,11 @@
 #ifndef _PARATR_HXX
 #include <paratr.hxx>       // SwFmtDrop
 #endif
-#ifndef _HINTIDS_HXX
-#include <hintids.hxx>      // CH_TXTATR
-#endif
 #ifndef _TXTCFG_HXX
 #include <txtcfg.hxx>
 #endif
 #ifndef _ITRFORM2_HXX
 #include <itrform2.hxx>
-#endif
-#ifndef _SWFONT_HXX
-#include <swfont.hxx>       // IsTox, IsRef, SetLingu
 #endif
 #ifndef _PORRST_HXX
 #include <porrst.hxx>
@@ -108,17 +98,11 @@
 #ifndef _PORFTN_HXX
 #include <porftn.hxx>       // SwFtnPortion
 #endif
-#ifndef _POREXP_HXX
-#include <porexp.hxx>
-#endif
 #ifndef _PORHYPH_HXX
 #include <porhyph.hxx>
 #endif
 #ifndef _GUESS_HXX
 #include <guess.hxx>
-#endif
-#ifndef _TXTFRM_HXX
-#include <txtfrm.hxx>       // GetFrmRstHeight, etc
 #endif
 #ifndef _BLINK_HXX
 #include <blink.hxx>        // pBlink
@@ -129,7 +113,6 @@
 #ifndef _REDLNITR_HXX
 #include <redlnitr.hxx>     // SwRedlineItr
 #endif
-
 #ifndef _PAGEFRM_HXX
 #include <pagefrm.hxx>
 #endif
@@ -139,7 +122,6 @@
 #ifndef SW_TGRDITEM_HXX
 #include <tgrditem.hxx>
 #endif
-
 #ifndef _DOC_HXX
 #include <doc.hxx>          // SwDoc
 #endif
@@ -151,7 +133,6 @@
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
 #endif
-
 
 #if OSL_DEBUG_LEVEL > 1
 #ifndef _NDTXT_HXX
@@ -1122,12 +1103,13 @@ SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
         }
     }
 
-    // 10) Decimal tab portion at the beginning of each line in table cells
-    if ( !pPor && !pCurr->GetPortion() &&
-         GetTxtFrm()->IsInTab() &&  rInf.GetVsh()->IsTabCompat() )
-    {
-        pPor = NewTabPortion( rInf, true );
-    }
+        // 10) Decimal tab portion at the beginning of each line in table cells
+        if ( !pPor && !pCurr->GetPortion() &&
+             GetTxtFrm()->IsInTab() &&
+             GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_COMPAT) )
+        {
+            pPor = NewTabPortion( rInf, true );
+        }
 
     return pPor;
 }
@@ -1273,7 +1255,8 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
                     }
 
                     pTmp = new SwRubyPortion( *pCreate, *rInf.GetFont(),
-                                              *rInf.GetDoc(), nEnd, 0, pRubyPos );
+                                              *GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess(),
+                                              nEnd, 0, pRubyPos );
                 }
                 else if( SW_MC_ROTATE == pCreate->nId )
                     pTmp = new SwRotatedPortion( *pCreate, nEnd,
@@ -1354,7 +1337,8 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
                     // We have a decimal tab portion in the line and the next character has to be
                     // aligned at the tab stop position. We store the width from the beginning of
                     // the tab stop portion up to the portion containint the decimal separator:
-                    if ( rInf.GetVsh()->IsTabCompat() && POR_TABDECIMAL == pLastTabPortion->GetWhichPor() )
+                  if ( GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_COMPAT) /*rInf.GetVsh()->IsTabCompat();*/ &&
+                         POR_TABDECIMAL == pLastTabPortion->GetWhichPor() )
                     {
                         ASSERT( rInf.X() >= pLastTabPortion->Fix(), "Decimal tab stop position cannot be calculated" )
                         const USHORT nWidthOfPortionsUpToDecimalPosition = (USHORT)(rInf.X() - pLastTabPortion->Fix() );
@@ -1741,7 +1725,7 @@ void SwTxtFormatter::CalcRealHeight( sal_Bool bNewLine )
 
     // Das Dummyflag besitzen Zeilen, die nur Flyportions enthalten, diese
     // sollten kein Register etc. beachten. Dummerweise hat kann es eine leere
-    // Zeile am Absatzende geben (bei leeren Abs„tzen oder nach einem
+    // Zeile am Absatzende geben (bei leeren Abs?tzen oder nach einem
     // Shift-Return), die das Register durchaus beachten soll.
     if( !pCurr->IsDummy() || ( !pCurr->GetNext() &&
         GetStart() >= GetTxtFrm()->GetTxt().Len() && !bNewLine ) )
