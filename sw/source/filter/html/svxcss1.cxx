@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxcss1.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-03 13:56:11 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:06:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -144,9 +143,6 @@
 #endif
 #ifndef _SVX_ORPHITEM_HXX //autogen
 #include <svx/orphitem.hxx>
-#endif
-#ifndef _URLOBJ_HXX //autogen
-#include <tools/urlobj.hxx>
 #endif
 #ifndef _SVPARSER_HXX //autogen
 #include <svtools/svparser.hxx>
