@@ -4,9 +4,9 @@
  *
  *  $RCSfile: insrc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:58:39 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:55:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifdef SW_DLLIMPLEMENTATION
 #undef SW_DLLIMPLEMENTATION
 #endif
@@ -49,10 +48,6 @@
 #ifndef _SFXINTITEM_HXX //autogen
 #include <svtools/intitem.hxx>
 #endif
-#ifndef _SFXVIEWFRM_HXX
-#include <sfx2/viewfrm.hxx>
-#endif
-
 
 #include "cmdid.h"
 #include "swtypes.hxx"
@@ -60,9 +55,6 @@
 #include "view.hxx"
 #include "table.hrc"
 #include "insrc.hrc"
-
-
-
 
 void SwInsRowColDlg::Apply()
 {
