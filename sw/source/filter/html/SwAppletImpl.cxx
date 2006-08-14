@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwAppletImpl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 18:49:57 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:01:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,17 +32,11 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifndef _SW_APPLET_IMPL_HXX
 #include <SwAppletImpl.hxx>
 #endif
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
-#endif
-
-
-#ifndef _COM_SUN_STAR_EMBED_XCOMPONENTSUPPLIER_HPP_
-#include <com/sun/star/embed/XComponentSupplier.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
