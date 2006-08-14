@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtfnum.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 11:49:31 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:10:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
@@ -82,7 +81,6 @@
 #ifndef _SVX_WRLMITEM_HXX //autogen
 #include <svx/wrlmitem.hxx>
 #endif
-
 #ifndef _SHELLIO_HXX
 #include <shellio.hxx>
 #endif
@@ -112,12 +110,6 @@
 #endif
 #ifndef _CHARFMT_HXX
 #include <charfmt.hxx>
-#endif
-#ifndef _POOLFMT_HXX
-#include <poolfmt.hxx>
-#endif
-#ifndef _NUMRULE_HXX
-#include <numrule.hxx>
 #endif
 #ifndef _CHARATR_HXX
 #include <charatr.hxx>
