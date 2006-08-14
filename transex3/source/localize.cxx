@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localize.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 17:23:41 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:10:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,11 +35,14 @@
 
 #include "srciter.hxx"
 #include "export.hxx"
-#include <bootstrp/appdef.hxx>
-#include <bootstrp/command.hxx>
 #include <stdio.h>
 #include "tools/errcode.hxx"
 #include "tools/fsys.hxx"
+
+#ifndef TRANSEX_FILE_HXX
+#define TRANSEX_FILE_HXX
+#include "file.hxx"
+#endif
 
 
 //
@@ -69,8 +72,6 @@ const char *NegativeList[] = {
     "officecfg/data/org.openoffice.Office.Labels.xcd",
     "officecfg/data/org/openoffice/Office/Labels.xcd",
     "officecfg/data/org/openoffice/Office/SFX.xcd",
-//  "officecfg/registry/data/org/openoffice/Office/Labels.xcu",
-//  "officecfg/registry/data/org/openoffice/Office/SFX.xcu",
     "hidother.src",
     "NULL"
 };
@@ -90,8 +91,23 @@ const char *PositiveList[] = {
     "chart2/source/controller/dialogs/res_LegendPosition_tmpl.hrc",
     "chart2/source/controller/dialogs/res_Statistic_tmpl.hrc",
     "chart2/source/controller/menu/MenuItems_tmpl.hrc",
+      "svx.lnk/inc/globlmn_tmpl.hrc",
+    "sw.lnk/source/ui/inc/swmn_tmpl.hrc",
+    "sw.lnk/source/ui/inc/swacc_tmpl.hrc",
+    "sw.lnk/source/ui/inc/toolbox_tmpl.hrc",
+    "offmgr.lnk/inc/offmenu_tmpl.hrc",
+    "offmgr.lnk/source/offapp/intro/intro_tmpl.hrc",
+    "dbaccess.lnk/source/ui/inc/toolbox_tmpl.hrc",
+    "svx.lnk/source/intro/intro_tmpl.hrc",
+    "dbaccess.lnk/source/ui/dlg/AutoControls_tmpl.hrc",
+    "svx.lnk/source/unodialogs/textconversiondlgs/chinese_direction_tmpl.hrc",
+    "chart2.lnk/source/controller/dialogs/res_DataLabel_tmpl.hrc",
+    "chart2.lnk/source/controller/dialogs/res_LegendPosition_tmpl.hrc",
+    "chart2.lnk/source/controller/dialogs/res_Statistic_tmpl.hrc",
+    "chart2.lnk/source/controller/menu/MenuItems_tmpl.hrc",
     "NULL"
 };
+
 
 const char PRJ_DIR_NAME[] = "prj";
 const char DLIST_NAME[] = "d.lst";
@@ -110,12 +126,14 @@ private:
 
     ByteString sIsoCode99;
     ByteString sOutputFile;
+    bool bQuiet2;
+
     int nFileCnt;
 
     const ByteString GetProjectName( BOOL bAbs = FALSE );
     const ByteString GetProjectRootRel();
 
-    bool bQuiet2;
+
     BOOL CheckNegativeList( const ByteString &rFileName );
     BOOL CheckPositiveList( const ByteString &rFileName );
 
@@ -143,12 +161,10 @@ private:
     );
 
 public:
-    SourceTreeLocalizer( const ByteString &rRoot, const ByteString &rVersion , bool bLocal , bool bQuiet2_in );
+    SourceTreeLocalizer( const ByteString &rRoot, const ByteString &rVersion , bool bLocal , bool bQuiet2_in , bool skip_links );
     ~SourceTreeLocalizer();
 
-    ByteString getSourceLanguages( ByteString sLanguageRestriction , ByteString sCommand
-            //, ByteString rParameter
-            );
+    ByteString getSourceLanguages( ByteString sLanguageRestriction , ByteString sCommand );
 
     void SetLanguageRestriction( const ByteString& rRestrictions )
         { sLanguageRestriction = rRestrictions; }
@@ -158,18 +174,19 @@ public:
     BOOL Extract( const ByteString &rDestinationFile );
     BOOL Merge( const ByteString &rSourceFile , const ByteString &rOutput );
     int GetFileCnt();
-    virtual void OnExecuteDirectory( const ByteString &rDirectory );
+    virtual void OnExecuteDirectory( const rtl::OUString &rDirectory );
 };
 
 /*****************************************************************************/
 SourceTreeLocalizer::SourceTreeLocalizer(
-    const ByteString &rRoot, const ByteString &rVersion, bool Local , bool bQuiet2_in )
+    const ByteString &rRoot, const ByteString &rVersion, bool bLocal_in , bool bQuiet2_in , bool skip_links )
 /*****************************************************************************/
-                : SourceTreeIterator( rRoot, rVersion , Local ),
+                : SourceTreeIterator( rRoot, rVersion , bLocal_in ),
                 nMode( LOCALIZE_NONE ),
-                nFileCnt( 0 ),
-                bQuiet2( bQuiet2_in )
+                bQuiet2( bQuiet2_in ),
+                nFileCnt( 0 )
 {
+        bSkipLinks  = skip_links ;
 }
 
 /*****************************************************************************/
@@ -247,6 +264,12 @@ const ByteString SourceTreeLocalizer::GetProjectRootRel()
     return ".";
 }
 
+bool skipProject( ByteString sPrj )
+{
+    static const ByteString READLICENSE( "readlicense" );
+    return sPrj.EqualsIgnoreCaseAscii( READLICENSE );
+}
+
 /*****************************************************************************/
 void SourceTreeLocalizer::WorkOnFile(
     const ByteString &rFileName, const ByteString &rExecutable,
@@ -264,9 +287,10 @@ void SourceTreeLocalizer::WorkOnFile(
 
         ByteString sPrj( GetProjectName());
         //printf ("prj = %s , exe = %s\n", sPrj.GetBuffer() , rExecutable.GetBuffer() );
-        if ( sPrj.Len()
-               // && !( rExecutable.EqualsIgnoreCaseAscii( "helpex" ) &&  !sPrj.EqualsIgnoreCaseAscii( "help2" ) ) // You don't see that!
-             ) {
+//        printf("Skip %s = %d \n",sPrj.GetBuffer() , skipProject( sPrj ) );
+        //printf("prj = %s\n",sPrj.GetBuffer());
+        if ( sPrj.Len() && !skipProject( sPrj ) )
+        {
             ByteString sRoot( GetProjectRootRel());
 
             // get temp file
@@ -276,9 +300,9 @@ void SourceTreeLocalizer::WorkOnFile(
             ByteString sExecutable( rExecutable );
 #ifdef WNT
             sExecutable += ".exe";
-            String sPath( GetEnv( "PATH" ), RTL_TEXTENCODING_ASCII_US );
+            String sPath( Export::GetEnv( "PATH" ), RTL_TEXTENCODING_ASCII_US );
 #else
-            String sPath( GetEnv( "LD_LIBRARY_PATH" ), RTL_TEXTENCODING_ASCII_US );
+            String sPath( Export::GetEnv( "LD_LIBRARY_PATH" ), RTL_TEXTENCODING_ASCII_US );
 #endif
 
             DirEntry aExecutable( String( sExecutable, RTL_TEXTENCODING_ASCII_US ));
@@ -297,9 +321,7 @@ void SourceTreeLocalizer::WorkOnFile(
             sCommand += sTempFile;
             if ( sLanguageRestriction.Len()) {
                 sCommand += " -l ";
-//              sCommand += getSourceLanguages( sLanguageRestriction , sCommand , rParameter );
                 sCommand += getSourceLanguages( sLanguageRestriction , sCommand );
-                //sCommand += sLanguageRestriction;
             }
             if ( rIso.Equals("iso") && sIsoCode99.Len()) {
                 sCommand += " -ISO99 ";
@@ -331,8 +353,7 @@ void SourceTreeLocalizer::WorkOnFile(
         aOldCWD.SetCWD();
 }
 
-ByteString SourceTreeLocalizer::getSourceLanguages( ByteString sLanguageRestriction_inout , ByteString sCommand //, ByteString sParameter
-        )
+ByteString SourceTreeLocalizer::getSourceLanguages( ByteString sLanguageRestriction_inout , ByteString sCommand )
 {
     // Source languages in helpcontent2 and macromigration en-US only!
     if( sCommand.Search("helpex") != STRING_NOTFOUND ) {
@@ -466,10 +487,9 @@ void SourceTreeLocalizer::WorkOnDirectory( const ByteString &rDirectory )
     }
 }
 
-/*****************************************************************************/
-void SourceTreeLocalizer::OnExecuteDirectory( const ByteString &rDirectory )
-/*****************************************************************************/
+void SourceTreeLocalizer::OnExecuteDirectory( const rtl::OUString &aDirectory )
 {
+    ByteString rDirectory( rtl::OUStringToOString( aDirectory , RTL_TEXTENCODING_UTF8 , aDirectory.getLength() ) ) ;
     if ( nMode == LOCALIZE_NONE ){
         if( !bQuiet2 ) fprintf( stdout, "%s\n", rDirectory.GetBuffer());
     }
@@ -510,7 +530,7 @@ BOOL SourceTreeLocalizer::MergeSingleFile(
     if ( !rFile.Len())
         return TRUE;
 
-    ByteString sRoot( GetEnv( "SRC_ROOT" ));
+    ByteString sRoot( Export::GetEnv( "SRC_ROOT" ));
     DirEntry aEntry( String( sRoot, RTL_TEXTENCODING_ASCII_US ));
     aEntry += DirEntry( String( rPrj, RTL_TEXTENCODING_ASCII_US ));
 
@@ -662,7 +682,7 @@ BOOL SourceTreeLocalizer::ExecuteMerge( )
 
     ByteString sOutputFileName = sOutputFile;
     ByteString sInpath(".");
-    sInpath += GetEnv("INPATH");
+    sInpath += Export::GetEnv("INPATH");
     ByteString sBlank("");
 
     sOutputFileName.SearchAndReplaceAll( sInpath , sBlank );
@@ -718,12 +738,7 @@ BOOL SourceTreeLocalizer::ExecuteMerge( )
             ByteString sTmp = sFile.Copy( nPos+1 , sFile.Len()-nPos-1 );
             //printf("'%s'='%s'\n",sTmp.GetBuffer(), sOutputFileName.GetBuffer());
             if( sTmp.CompareTo(sOutputFileName) == COMPARE_EQUAL ){
-                //int nPos = sFile.SearchBackward( '\\' );
-                //ByteString sCurFile = sFileKey.Copy( nPos+1 , sFile.Len()-nPos-1 );
-                //printf("MergeSingleFile('%s','%s','%s')\n",sPrj.GetBuffer(),sFileKey.GetBuffer(),sSDFFile.GetBuffer());
-                //if( sCurFile.EqualsIgnoreCaseAscii(sOutputFileName) ){
                     bMerged = true;
-                    //printf("Found\n");
                     if ( !MergeSingleFile( sPrj, sFile, sSDFFile ))
                         bReturn = FALSE;
                 //}
@@ -748,75 +763,6 @@ BOOL SourceTreeLocalizer::ExecuteMerge( )
     }
     return bReturn;
 
-
-            //printf("DBG: sFilename = %s , sOldFileName = %s ", sFileName.GetBuffer() , sOldFileName.GetBuffer() );
-            /*if ( sFileName.Len() && ( !sOldFileName.Equals(sFileName) ) ){
-                if ( aFile.IsOpen()) {
-                    aFile.Close();
-
-                ByteString sPrj( sOldFileName.GetToken( 0, '#' ));
-                ByteString sFile( sOldFileName.GetToken( 1, '#' ));
-                ByteString sSDFFile( aFile.GetFileName(), RTL_TEXTENCODING_ASCII_US );
-                if( bLocal ){
-                    int nPos = sFile.SearchBackward( '\\' );
-                    sCurFile = sFile.Copy( nPos+1 , sFile.Len()-nPos-1 );
-                    //printf("'%s'\n'%s'",sCurFile.GetBuffer(),sOutputFileName.GetBuffer());
-                    if( sCurFile.EqualsIgnoreCaseAscii(sOutputFileName) ){
-                        bMerged = true;
-                        printf("a\n");
-                        if ( !MergeSingleFile( sPrj, sFile, sSDFFile ))
-                            bReturn = FALSE;
-                    }
-                }else {
-                    bMerged = true;
-                    printf("b\n");
-                    if ( !MergeSingleFile( sPrj, sFile, sSDFFile ))
-                        bReturn = FALSE;
-                }
-
-            }
-            aFile.Open( aEntry.GetFull(),
-                STREAM_STD_WRITE |STREAM_TRUNC );
-        }
-        if ( aFile.IsOpen() && sLine.Len())
-            aFile.WriteLine( sLine );
-    }
-    if ( aFile.IsOpen()) {
-        aFile.Close();
-
-        ByteString sPrj( sLine.GetToken( 0, '\t' ));
-        ByteString sFile( sLine.GetToken( 1, '\t' ));
-        ByteString sSDFFile( aFile.GetFileName(), RTL_TEXTENCODING_ASCII_US );
-        if( bLocal ){
-            int nPos = sFile.SearchBackward( '\\' );
-            sCurFile = sFile.Copy( nPos+1 , sFile.Len()-nPos-1 );
-            //printf("'%s'\n'%s'",sCurFile.GetBuffer(),sOutputFileName.GetBuffer());
-            if( sCurFile.EqualsIgnoreCaseAscii(sOutputFileName) ){
-                bMerged = true;
-                printf("c\n");
-                if ( !MergeSingleFile( sPrj, sFile, sSDFFile ))
-                    bReturn = FALSE;
-            }
-        }else{
-            bMerged = true;
-            printf("d\n");
-            if ( !MergeSingleFile( sPrj, sFile, sSDFFile ))
-                bReturn = FALSE;
-        }
-    }
-    */
-/*  aEntry.Kill();
-    if( bLocal && !bMerged ){
-        //printf("File not merged sOutFile: '%s' , sCurFile = '%s' , sOutFilename: '%s' \n", sOutputFile.GetBuffer() ,
-        //  sCurFile.GetBuffer() , sOutputFileName.GetBuffer() );
-        DirEntry aSourceFile( sOutputFileName.GetBuffer() );
-        FSysError aErr = aSourceFile.CopyTo( DirEntry ( sOutputFile.GetBuffer() ) , FSYS_ACTION_COPYFILE );
-        //printf("Error = %d\n",aErr);
-        if( aErr != FSYS_ERR_OK ){
-            printf("ERROR: Can't copy file '%s' to '%s' %d\n",sOutputFileName.GetBuffer(),sOutputFile.GetBuffer(),aErr);
-        }
-    }
-    return bReturn; */
 }
 
 /*****************************************************************************/
@@ -857,32 +803,19 @@ void Help()
     fprintf( stdout,
         "As part of the L10N framework, localize extracts and merges translations\n"
         "out of and into the whole source tree.\n\n"
-        "Syntax: localize -e|-m -l l1[=f1][,l2[=f2]][...] -f FileName [-QQ]\n"
+        "Syntax: localize -e|-m -l l1[=f1][,l2[=f2]][...] -f FileName [-QQ][-skip_links]\n"
         "Parameter:\n"
         "\t-e: Extract mode\n"
         "\t-m: Merge mode\n"
         "\tFileName: Output file when extract mode, input file when merge mode\n"
         "\tl1...ln: supported languages (\"all\" for all languages).\n"
         "\tf1...fn: fallback languages for supported languages\n"
+        "\tskip_links: do not follow linked directorys"
         "\tQQ: quiet output)"
     );
 
     fprintf( stdout,
         "Valid language codes for l1...ln and f1...fn are:\n" );
-    // Ivo
-/*  for ( USHORT i = 0; i < LANGUAGES; i++ ) {
-        ByteString sId;
-        if ( Export::LangId[ i ] < 10 ) {
-            sId = "0";
-        }
-        sId += ByteString::CreateFromInt32( Export::LangId[ i ] );
-        ByteString sLanguage( Export::LangName[ i ] );
-        fprintf( stdout,
-            "\t%s => %s\n",
-            sId.GetBuffer(),
-            sLanguage.GetBuffer()
-        );
-    }       */
     fprintf( stdout,
         "\nExample 1:\n"
         "==========\n"
@@ -911,39 +844,6 @@ BOOL CheckLanguages( ByteString &rLanguages )
 /*****************************************************************************/
 {
     ByteString sTmp( rLanguages );
-    /* Using gcc-2.95.3 and STLport-4.5 .Equals() must
-     * be used.. using == causes a compile error */
-/*  if ( sTmp.ToUpperAscii().Equals("ALL") ) {
-        rLanguages = "cz,nl";
-        fprintf( stdout, "\nExpanded -l all to %s\n", rLanguages.GetBuffer());
-    }*/
-    /*for ( USHORT i = 0; i < rLanguages.GetTokenCount( ',' ); i++ ) {
-        ByteString sCur = rLanguages.GetToken( i, ',' );
-        ByteString sLang = sCur.GetToken( 0, '=' );
-        USHORT nLang = ( USHORT ) sLang.ToInt32();
-
-        ByteString sFallback = sCur.GetToken( 1, '=' );
-        USHORT nFallback = ( USHORT ) sFallback.ToInt32();
-
-        if ( Export::GetLangIndex( nLang ) == 0xFFFF ) {
-            fprintf( stderr, "ERROR: Unknown language %s\n",
-                sLang.GetBuffer());
-            bReturn = FALSE;
-        }
-        else if ( sFallback.Len() && ( Export::GetLangIndex( nFallback )==0xFFFF )){
-            fprintf( stderr, "ERROR: Unknown fallback languges %s\n",
-                sFallback.GetBuffer());
-            bReturn = FALSE;
-        }
-    }
-
-    if ( bReturn ) {
-        if ( !rLanguages.Len()) {
-            rLanguages = "01,99=01";
-        }
-    }
-
-    return bReturn;*/
     return true;
 }
 
@@ -963,6 +863,8 @@ int _cdecl main( int argc, char *argv[] )
     BOOL bMerge     = FALSE;
     bool bQuiet     = false;
     bool bQuiet2    = false;
+    bool bSkipLinks = false;
+
     ByteString sIsoCode;
     ByteString sLanguages;
     ByteString sFileName;
@@ -995,13 +897,14 @@ int _cdecl main( int argc, char *argv[] )
             nState = STATE_FILENAME;
         else if ( sSwitch.Equals( "-QQ" ))
             bQuiet2 = true;
-        else if ( sSwitch.Equals( "-O" ) )
+        else if ( ByteString( argv[ i ]).ToUpperAscii().Equals( "-SKIP_LINKS" ))
+            bSkipLinks = true;
+        else if ( ByteString( argv[ i ]).ToUpperAscii().Equals( "-O" ) )
             nState = STATE_OUTPUT;
         else {
             switch ( nState ) {
                 case STATE_NONE:
                     return Error();
-                //break;
                 case STATE_ISOCODE:
                     if ( sIsoCode.Len())
                         return Error();
@@ -1026,10 +929,8 @@ int _cdecl main( int argc, char *argv[] )
                     sFileName = ByteString( argv[ i ] );
                     nState = STATE_NONE;
                 break;
-
                 default:
                     return Error();
-                //break;
             }
         }
     }
@@ -1038,10 +939,10 @@ int _cdecl main( int argc, char *argv[] )
         return 1;
     }
 
-    ByteString sRoot( GetEnv( "SRC_ROOT" ));
+    ByteString sRoot( Export::GetEnv( "SRC_ROOT" ));
     DirEntry aRoot( String( sRoot, RTL_TEXTENCODING_ASCII_US ));
     sRoot = ByteString( aRoot.GetFull(), RTL_TEXTENCODING_ASCII_US );
-    ByteString sVersion( GetEnv( "WORK_STAMP" ));
+    ByteString sVersion( Export::GetEnv( "WORK_STAMP" ));
 
     if ( !sRoot.Len() || !sVersion.Len()) {
         fprintf( stderr, "ERROR: No environment set!\n" );
@@ -1051,12 +952,6 @@ int _cdecl main( int argc, char *argv[] )
     if ( !CheckLanguages( sLanguages ))
         return 2;
 
-/* Ivo
-   if ( !sIsoCode.Len() && ( sLanguages.Search( "99" ) != STRING_NOTFOUND )) {
-        fprintf( stderr, "ERROR: No ISO code given\n" );
-        return 3;
-    }
-*/
     if ( !sFileName.Len()) {
         fprintf( stderr, "ERROR: No filename given\n" );
         return 3;
@@ -1094,7 +989,7 @@ int _cdecl main( int argc, char *argv[] )
             sOutput.GetBuffer()
         );
     }
-    SourceTreeLocalizer aIter( sRoot, sVersion , (sOutput.Len() > 0) , bQuiet2 );
+    SourceTreeLocalizer aIter( sRoot, sVersion , (sOutput.Len() > 0) , bQuiet2 , bSkipLinks );
 
     aIter.SetLanguageRestriction( sLanguages );
      aIter.SetIsoCode99( sIsoCode );
