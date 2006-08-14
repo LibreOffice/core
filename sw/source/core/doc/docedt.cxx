@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docedt.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 09:35:05 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:56:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 #include <string.h>         // fuer strchr()
@@ -87,9 +86,6 @@
 #ifndef _CRSRSH_HXX
 #include <crsrsh.hxx>
 #endif
-#ifndef _CRSTATE_HXX
-#include <crstate.hxx>
-#endif
 #ifndef _DOC_HXX
 #include <doc.hxx>
 #endif
@@ -105,9 +101,6 @@
 #ifndef _FTNINFO_HXX
 #include <ftninfo.hxx>
 #endif
-#ifndef _HINTS_HXX
-#include <hints.hxx>
-#endif
 #ifndef _MDIEXP_HXX
 #include <mdiexp.hxx>       // Statusanzeige
 #endif
@@ -117,9 +110,6 @@
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
 #endif
-#ifndef _NODE_HXX
-#include <node.hxx>
-#endif
 #ifndef _PAM_HXX
 #include <pam.hxx>
 #endif
@@ -128,9 +118,6 @@
 #endif
 #ifndef _ROOTFRM_HXX
 #include <rootfrm.hxx>          // fuers UpdateFtn
-#endif
-#ifndef _SECTION_HXX
-#include <section.hxx>
 #endif
 #ifndef _SPLARGS_HXX
 #include <splargs.hxx>      // fuer Spell
@@ -567,8 +554,8 @@ void lcl_SaveRedlines( const SwPaM& aPam, _SaveRedlines& rArr )
         nCurrentRedline--;
 
     // redline mode REDLINE_IGNORE|REDLINE_ON; save old mode
-    SwRedlineMode eOld = pDoc->GetRedlineMode();
-    pDoc->SetRedlineMode_intern( ( eOld & ~REDLINE_IGNORE) | REDLINE_ON );
+    IDocumentRedlineAccess::RedlineMode_t eOld = pDoc->GetRedlineMode();
+    pDoc->SetRedlineMode_intern( ( eOld & ~IDocumentRedlineAccess::REDLINE_IGNORE) | IDocumentRedlineAccess::REDLINE_ON );
     SwRedlineTbl& rRedlTbl = (SwRedlineTbl&)pDoc->GetRedlineTbl();
 
     // iterate over relevant redlines and decide for each whether it should
@@ -599,7 +586,7 @@ void lcl_SaveRedlines( const SwPaM& aPam, _SaveRedlines& rArr )
                 SwRedline* pNewRedline = new SwRedline( *pCurrent );
                 *pNewRedline->End() = *pStart;
                 *pCurrent->Start() = *pStart;
-                pDoc->AppendRedline( pNewRedline );
+                pDoc->AppendRedline( pNewRedline, true );
             }
 
             // split end, if necessary
@@ -609,7 +596,7 @@ void lcl_SaveRedlines( const SwPaM& aPam, _SaveRedlines& rArr )
                 SwRedline* pNewRedline = new SwRedline( *pCurrent );
                 *pNewRedline->Start() = *pEnd;
                 *pCurrent->End() = *pEnd;
-                pDoc->AppendRedline( pNewRedline );
+                pDoc->AppendRedline( pNewRedline, true );
             }
 
             // save the current redline
@@ -624,14 +611,14 @@ void lcl_SaveRedlines( const SwPaM& aPam, _SaveRedlines& rArr )
 
 void lcl_RestoreRedlines( SwDoc* pDoc, const SwPosition& rPos, _SaveRedlines& rArr )
 {
-    SwRedlineMode eOld = pDoc->GetRedlineMode();
-    pDoc->SetRedlineMode_intern( ( eOld & ~REDLINE_IGNORE) | REDLINE_ON );
+    IDocumentRedlineAccess::RedlineMode_t eOld = pDoc->GetRedlineMode();
+    pDoc->SetRedlineMode_intern( ( eOld & ~IDocumentRedlineAccess::REDLINE_IGNORE) | IDocumentRedlineAccess::REDLINE_ON );
 
     for( sal_uInt16 n = 0; n < rArr.Count(); ++n )
     {
         _SaveRedline* pSave = rArr[ n ];
         pSave->SetPos( rPos );
-        pDoc->AppendRedline( pSave->pRedl );
+        pDoc->AppendRedline( pSave->pRedl, true );
     }
 
     pDoc->SetRedlineMode_intern( eOld );
@@ -649,8 +636,8 @@ void lcl_SaveRedlines( const SwNodeRange& rRg, _SaveRedlines& rArr )
     else if( nRedlPos >= pDoc->GetRedlineTbl().Count() )
         return ;
 
-    SwRedlineMode eOld = pDoc->GetRedlineMode();
-    pDoc->SetRedlineMode_intern( ( eOld & ~REDLINE_IGNORE) | REDLINE_ON );
+    IDocumentRedlineAccess::RedlineMode_t eOld = pDoc->GetRedlineMode();
+    pDoc->SetRedlineMode_intern( ( eOld & ~IDocumentRedlineAccess::REDLINE_IGNORE) | IDocumentRedlineAccess::REDLINE_ON );
     SwRedlineTbl& rRedlTbl = (SwRedlineTbl&)pDoc->GetRedlineTbl();
 
     do {
@@ -717,7 +704,7 @@ void lcl_SaveRedlines( const SwNodeRange& rRg, _SaveRedlines& rArr )
                 pTmpPos->nNode = rRg.aEnd;
                 pTmpPos->nContent.Assign(
                             pTmpPos->nNode.GetNode().GetCntntNode(), 0 );
-                pDoc->AppendRedline( pTmp );
+                pDoc->AppendRedline( pTmp, true );
             }
         }
         else
@@ -729,14 +716,14 @@ void lcl_SaveRedlines( const SwNodeRange& rRg, _SaveRedlines& rArr )
 
 void lcl_RestoreRedlines( SwDoc* pDoc, sal_uInt32 nInsPos, _SaveRedlines& rArr )
 {
-    SwRedlineMode eOld = pDoc->GetRedlineMode();
-    pDoc->SetRedlineMode_intern( ( eOld & ~REDLINE_IGNORE) | REDLINE_ON );
+    IDocumentRedlineAccess::RedlineMode_t eOld = pDoc->GetRedlineMode();
+    pDoc->SetRedlineMode_intern( ( eOld & ~IDocumentRedlineAccess::REDLINE_IGNORE) | IDocumentRedlineAccess::REDLINE_ON );
 
     for( sal_uInt16 n = 0; n < rArr.Count(); ++n )
     {
         _SaveRedline* pSave = rArr[ n ];
         pSave->SetPos( nInsPos );
-        pDoc->AppendRedline( pSave->pRedl );
+        pDoc->AppendRedline( pSave->pRedl, true );
     }
 
     pDoc->SetRedlineMode_intern( eOld );
@@ -810,7 +797,7 @@ void SwDoc::DeleteSection( SwNode *pNode )
 
     // dann loesche mal alle Fly's, text::Bookmarks, ...
     DelFlyInRange( aSttIdx, aEndIdx );
-    DeleteRedline( *pSttNd );
+    DeleteRedline( *pSttNd, true, USHRT_MAX );
     _DelBookmarks( aSttIdx, aEndIdx );
 
     {
@@ -829,7 +816,7 @@ void SwDoc::DeleteSection( SwNode *pNode )
 |*    Beschreibung      Zeichen einfuegen
 *************************************************************************/
 
-sal_Bool SwDoc::Insert( const SwPaM &rRg, sal_Unicode c )
+bool SwDoc::Insert( const SwPaM &rRg, sal_Unicode c )
 {
     if( DoesUndo() )
         ClearRedo();
@@ -872,7 +859,7 @@ sal_Bool SwDoc::Insert( const SwPaM &rRg, sal_Unicode c )
         SwPaM aPam( rPos.nNode, rPos.nContent.GetIndex() - 1,
                     rPos.nNode, rPos.nContent.GetIndex() );
         if( IsRedlineOn() )
-            AppendRedline( new SwRedline( REDLINE_INSERT, aPam ));
+            AppendRedline( new SwRedline( IDocumentRedlineAccess::REDLINE_INSERT, aPam ), true);
         else
             SplitRedline( aPam );
     }
@@ -887,7 +874,7 @@ sal_Bool SwDoc::Insert( const SwPaM &rRg, sal_Unicode c )
 |*    Beschreibung      Zeichen ueberschreiben
 *************************************************************************/
 
-sal_Bool SwDoc::Overwrite( const SwPaM &rRg, sal_Unicode c )
+bool SwDoc::Overwrite( const SwPaM &rRg, sal_Unicode c )
 {
     SwPosition& rPt = *(SwPosition*)rRg.GetPoint();
     if( pACEWord )                  // Aufnahme in die Autokorrektur
@@ -957,19 +944,19 @@ sal_Bool SwDoc::Overwrite( const SwPaM &rRg, sal_Unicode c )
     if( !DoesUndo() && !IsIgnoreRedline() && GetRedlineTbl().Count() )
     {
         SwPaM aPam( rPt.nNode, nStart, rPt.nNode, rPt.nContent.GetIndex() );
-        DeleteRedline( aPam );
+        DeleteRedline( aPam, true, USHRT_MAX );
     }
     else if( IsRedlineOn() )
     {
         SwPaM aPam( rPt.nNode, nStart, rPt.nNode, rPt.nContent.GetIndex() );
-        AppendRedline( new SwRedline( REDLINE_INSERT, aPam ));
+        AppendRedline( new SwRedline( IDocumentRedlineAccess::REDLINE_INSERT, aPam ), true);
     }
 
     SetModified();
     return sal_True;
 }
 
-sal_Bool SwDoc::Overwrite( const SwPaM &rRg, const String &rStr )
+bool SwDoc::Overwrite( const SwPaM &rRg, const String &rStr )
 {
     SwPosition& rPt = *(SwPosition*)rRg.GetPoint();
     if( pACEWord )                  // Aufnahme in die Autokorrektur
@@ -1051,12 +1038,12 @@ sal_Bool SwDoc::Overwrite( const SwPaM &rRg, const String &rStr )
     if( !DoesUndo() && !IsIgnoreRedline() && GetRedlineTbl().Count() )
     {
         SwPaM aPam( rPt.nNode, nStart, rPt.nNode, rPt.nContent.GetIndex() );
-        DeleteRedline( aPam );
+        DeleteRedline( aPam, true, USHRT_MAX );
     }
     else if( IsRedlineOn() )
     {
         SwPaM aPam( rPt.nNode, nStart, rPt.nNode, rPt.nContent.GetIndex() );
-        AppendRedline( new SwRedline( REDLINE_INSERT, aPam ));
+        AppendRedline( new SwRedline( IDocumentRedlineAccess::REDLINE_INSERT, aPam ), true);
     }
 
     SetModified();
@@ -1064,7 +1051,7 @@ sal_Bool SwDoc::Overwrite( const SwPaM &rRg, const String &rStr )
 }
 
 
-sal_Bool SwDoc::MoveAndJoin( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
+bool SwDoc::MoveAndJoin( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
 {
     SwNodeIndex aIdx( rPaM.Start()->nNode );
     sal_Bool bJoinTxt = aIdx.GetNode().IsTxtNode();
@@ -1090,7 +1077,7 @@ sal_Bool SwDoc::MoveAndJoin( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags
     return bRet;
 }
 
-sal_Bool SwDoc::Move( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
+bool SwDoc::Move( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
 {
     // keine Moves-Abfangen
     const SwPosition *pStt = rPaM.Start(), *pEnd = rPaM.End();
@@ -1308,7 +1295,7 @@ sal_Bool SwDoc::Move( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
     return sal_True;
 }
 
-sal_Bool SwDoc::Move( SwNodeRange& rRange, SwNodeIndex& rPos, SwMoveFlags eMvFlags )
+bool SwDoc::Move( SwNodeRange& rRange, SwNodeIndex& rPos, SwMoveFlags eMvFlags )
 {
     // bewegt alle Nodes an die neue Position. Dabei werden die
     // text::Bookmarks mit verschoben !! (zur Zeit ohne Undo)
@@ -1339,7 +1326,7 @@ sal_Bool SwDoc::Move( SwNodeRange& rRange, SwNodeIndex& rPos, SwMoveFlags eMvFla
 
         // suche alle Redlines, die an der InsPos aufhoeren. Diese muessen
         // nach dem Move wieder an die "alte" Position verschoben werden
-        sal_uInt16 nRedlPos = GetRedlinePos( rPos.GetNode() );
+        sal_uInt16 nRedlPos = GetRedlinePos( rPos.GetNode(), USHRT_MAX );
         if( USHRT_MAX != nRedlPos )
         {
             const SwPosition *pRStt, *pREnd;
@@ -1609,32 +1596,33 @@ void lcl_JoinText( SwPaM& rPam, sal_Bool bJoinPrev )
     }
 }
 
-sal_Bool SwDoc::DeleteAndJoin( SwPaM & rPam )
+bool SwDoc::DeleteAndJoin( SwPaM & rPam )
 {
     if( IsRedlineOn() )
     {
         sal_uInt16 nUndoSize = 0;
         SwUndoRedlineDelete* pUndo = 0;
-        SwRedlineMode eOld = GetRedlineMode();
+        IDocumentRedlineAccess::RedlineMode_t eOld = GetRedlineMode();
         checkRedlining(eOld);
         if( DoesUndo() )
         {
             ClearRedo();
 
-//JP 06.01.98: MUSS noch optimiert werden!!!
-SetRedlineMode( REDLINE_ON | REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE );
+    //JP 06.01.98: MUSS noch optimiert werden!!!
+    SetRedlineMode(
+        IDocumentRedlineAccess::REDLINE_ON | IDocumentRedlineAccess::REDLINE_SHOW_INSERT | IDocumentRedlineAccess::REDLINE_SHOW_DELETE );
 
             nUndoSize = pUndos->Count();
-            StartUndo();
+            StartUndo(0, NULL);
             AppendUndo( pUndo = new SwUndoRedlineDelete( rPam, UNDO_DELETE ));
         }
         if( *rPam.GetPoint() != *rPam.GetMark() )
-            AppendRedline( new SwRedline( REDLINE_DELETE, rPam ));
+            AppendRedline( new SwRedline( IDocumentRedlineAccess::REDLINE_DELETE, rPam ), true);
         SetModified();
 
         if( pUndo )
         {
-            EndUndo();
+            EndUndo(0, NULL);
             SwUndo* pPrevUndo;
             if( nUndoSize && DoesGroupUndo() &&
                 nUndoSize + 1 == pUndos->Count() &&
@@ -1675,7 +1663,7 @@ SetRedlineMode( eOld );
     return sal_True;
 }
 
-sal_Bool SwDoc::Delete( SwPaM & rPam )
+bool SwDoc::Delete( SwPaM & rPam )
 {
     SwPosition *pStt = (SwPosition*)rPam.Start(), *pEnd = (SwPosition*)rPam.End();
 
@@ -1739,7 +1727,7 @@ sal_Bool SwDoc::Delete( SwPaM & rPam )
     }
 
     if( !IsIgnoreRedline() && GetRedlineTbl().Count() )
-        DeleteRedline( rPam );
+        DeleteRedline( rPam, true, USHRT_MAX );
 
     // loesche und verschiebe erstmal alle "Fly's am Absatz", die in der
     // SSelection liegen
@@ -2114,7 +2102,7 @@ sal_Bool lcl_GetTokenToParaBreak( String& rStr, String& rRet, sal_Bool bRegExpRp
     return bRet;
 }
 
-sal_Bool SwDoc::Replace( SwPaM& rPam, const String& rStr, sal_Bool bRegExpRplc )
+bool SwDoc::Replace( SwPaM& rPam, const String& rStr, bool bRegExpRplc )
 {
     if( !rPam.HasMark() || *rPam.GetPoint() == *rPam.GetMark() )
         return sal_False;
@@ -2164,23 +2152,23 @@ sal_Bool SwDoc::Replace( SwPaM& rPam, const String& rStr, sal_Bool bRegExpRplc )
 
         if( IsRedlineOn() )
         {
-            SwRedlineMode eOld = GetRedlineMode();
+            IDocumentRedlineAccess::RedlineMode_t eOld = GetRedlineMode();
             checkRedlining(eOld);
             if( DoesUndo() )
             {
-                StartUndo();
+                StartUndo(0, NULL);
 
                 // Bug 68584 - if any Redline will change (split!) the node
                 String sNm; sNm = String::CreateFromInt32( (long)&aDelPam );
-                SwBookmark* pBkmk = MakeBookmark( aDelPam,
-                                KeyCode(), sNm, sNm, UNO_BOOKMARK );
+                SwBookmark* pBkmk = makeBookmark( aDelPam, KeyCode(), sNm, sNm, UNO_BOOKMARK );
 
-//JP 06.01.98: MUSS noch optimiert werden!!!
-SetRedlineMode( REDLINE_ON | REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE );
+        //JP 06.01.98: MUSS noch optimiert werden!!!
+        SetRedlineMode(
+            IDocumentRedlineAccess::REDLINE_ON | IDocumentRedlineAccess::REDLINE_SHOW_INSERT | IDocumentRedlineAccess::REDLINE_SHOW_DELETE );
 
                 *aDelPam.GetPoint() = pBkmk->GetPos();
                 *aDelPam.GetMark() = *pBkmk->GetOtherPos();
-                DelBookmark( GetBookmarks().GetPos( pBkmk ));
+                deleteBookmark( getBookmarks().GetPos( pBkmk ));
                 pStt = aDelPam.Start();
                 pTxtNd = pStt->nNode.GetNode().GetTxtNode();
                 nStt = pStt->nContent.GetIndex();
@@ -2209,13 +2197,13 @@ SetRedlineMode( REDLINE_ON | REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE );
                 String sIns;
                 while( lcl_GetTokenToParaBreak( sRepl, sIns, bRegExpRplc ))
                 {
-                    Insert( aDelPam, sIns );
+                    Insert( aDelPam, sIns, true );
                     if( bFirst )
                     {
                         SwNodeIndex aMkNd( aDelPam.GetMark()->nNode, -1 );
                         xub_StrLen nMkCnt = aDelPam.GetMark()->nContent.GetIndex();
 
-                        SplitNode( *aDelPam.GetPoint() );
+                        SplitNode( *aDelPam.GetPoint(), false );
 
                         aMkNd++;
                         aDelPam.GetMark()->nNode = aMkNd;
@@ -2224,10 +2212,10 @@ SetRedlineMode( REDLINE_ON | REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE );
                         bFirst = sal_False;
                     }
                     else
-                        SplitNode( *aDelPam.GetPoint() );
+                        SplitNode( *aDelPam.GetPoint(), false );
                 }
                 if( sIns.Len() )
-                    Insert( aDelPam, sIns );
+                    Insert( aDelPam, sIns, true );
 
                 SwPaM aTmpRange( *aDelPam.GetPoint() );
                 aTmpRange.SetMark();
@@ -2239,23 +2227,22 @@ SetRedlineMode( REDLINE_ON | REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE );
                 *aTmpRange.GetMark() = *aDelPam.GetPoint();
 
                 RstTxtAttr( aTmpRange );
-                Insert( aTmpRange, aSet );
+                Insert( aTmpRange, aSet, 0 );
             }
 
             if( DoesUndo() )
                 AppendUndo( new SwUndoRedlineDelete( aDelPam, UNDO_REPLACE ));
-            AppendRedline( new SwRedline( REDLINE_DELETE, aDelPam ));
+            AppendRedline( new SwRedline( IDocumentRedlineAccess::REDLINE_DELETE, aDelPam ), true);
 
             *rPam.GetMark() = *aDelPam.GetMark();
             if( DoesUndo() )
             {
                 *aDelPam.GetPoint() = *rPam.GetPoint();
-                EndUndo();
+                EndUndo(0, NULL);
 
                 // Bug 68584 - if any Redline will change (split!) the node
                 String sNm; sNm = String::CreateFromInt32( (long)&aDelPam );
-                SwBookmark* pBkmk = MakeBookmark( aDelPam,
-                                KeyCode(), sNm, sNm, UNO_BOOKMARK );
+                SwBookmark* pBkmk = makeBookmark( aDelPam, KeyCode(), sNm, sNm, UNO_BOOKMARK );
 
                 SwIndex& rIdx = aDelPam.GetPoint()->nContent;
                 rIdx.Assign( 0, 0 );
@@ -2268,14 +2255,14 @@ SetRedlineMode( eOld );
 
                 *rPam.GetPoint() = pBkmk->GetPos();
                 *rPam.GetMark() = *pBkmk->GetOtherPos();
-                DelBookmark( GetBookmarks().GetPos( pBkmk ));
+                deleteBookmark( getBookmarks().GetPos( pBkmk ));
             }
             bJoinTxt = sal_False;
         }
         else
         {
             if( !IsIgnoreRedline() && GetRedlineTbl().Count() )
-                DeleteRedline( aDelPam );
+                DeleteRedline( aDelPam, true, USHRT_MAX );
 
             SwUndoReplace* pUndoRpl = 0;
             if( DoesUndo() )
@@ -2311,17 +2298,17 @@ SetRedlineMode( eOld );
             while( lcl_GetTokenToParaBreak( sRepl, sIns, bRegExpRplc ))
             {
                 if( !bFirst || nStt == pTxtNd->GetTxt().Len() )
-                    Insert( aDelPam, sIns );
+                    Insert( aDelPam, sIns, true );
                 else if( nStt < nEnd || sIns.Len() )
                     pTxtNd->Replace( pStt->nContent, nEnd - nStt, sIns );
-                SplitNode( *pStt );
+                SplitNode( *pStt, false);
                 bFirst = sal_False;
             }
 
             if( bFirst || sIns.Len() )
             {
                 if( !bFirst || nStt == pTxtNd->GetTxt().Len() )
-                    Insert( aDelPam, sIns );
+                    Insert( aDelPam, sIns, true );
                 else if( nStt < nEnd || sIns.Len() )
                     pTxtNd->Replace( pStt->nContent, nEnd - nStt, sIns );
             }
@@ -2359,11 +2346,11 @@ void SwDoc::SetAutoCorrExceptWord( SwAutoCorrExceptWord* pNew )
     pACEWord = pNew;
 }
 
-sal_Bool SwDoc::DelFullPara( SwPaM& rPam )
+bool SwDoc::DelFullPara( SwPaM& rPam )
 {
     const SwPosition &rStt = *rPam.Start(), &rEnd = *rPam.End();
     const SwNode* pNd = &rStt.nNode.GetNode();
-    sal_uInt32 nSectDiff = pNd->FindStartNode()->EndOfSectionIndex() -
+    sal_uInt32 nSectDiff = pNd->StartOfSectionNode()->EndOfSectionIndex() -
                         pNd->StartOfSectionIndex();
     sal_uInt32 nNodeDiff = rEnd.nNode.GetIndex() - rStt.nNode.GetIndex();
 
@@ -2544,22 +2531,22 @@ void SwDoc::TransliterateText( const SwPaM& rPaM,
 }
 #define MAX_REDLINE_COUNT   250
 // -----------------------------------------------------------------------------
-void SwDoc::checkRedlining(SwRedlineMode& _rReadlineMode)
+void SwDoc::checkRedlining(IDocumentRedlineAccess::RedlineMode_t& _rReadlineMode)
 {
     const SwRedlineTbl& rRedlineTbl = GetRedlineTbl();
     SwEditShell* pEditShell = GetEditShell();
     Window* pParent = pEditShell ? pEditShell->GetWin() : NULL;
-    if ( pParent && !bReadlineChecked && rRedlineTbl.Count() > MAX_REDLINE_COUNT
-        && !((_rReadlineMode & REDLINE_SHOW_DELETE) == REDLINE_SHOW_DELETE) )
+    if ( pParent && !mbReadlineChecked && rRedlineTbl.Count() > MAX_REDLINE_COUNT
+        && !((_rReadlineMode & IDocumentRedlineAccess::REDLINE_SHOW_DELETE) == IDocumentRedlineAccess::REDLINE_SHOW_DELETE) )
     {
         WarningBox aWarning( pParent,SW_RES(MSG_DISABLE_READLINE_QUESTION));
         USHORT nResult = aWarning.Execute();
-        bReadlineChecked = sal_True;
+        mbReadlineChecked = sal_True;
         if ( nResult == RET_YES )
         {
             sal_Int32 nMode = (sal_Int32)_rReadlineMode;
-            nMode |= REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE;
-            _rReadlineMode = (SwRedlineMode)nMode;
+            nMode |= IDocumentRedlineAccess::REDLINE_SHOW_INSERT | IDocumentRedlineAccess::REDLINE_SHOW_DELETE;
+            _rReadlineMode = nMode;
         }
     }
 }
