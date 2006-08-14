@@ -4,9 +4,9 @@
  *
  *  $RCSfile: findtxt.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:05:15 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:52:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -438,7 +438,7 @@ ULONG SwCursor::Find( const SearchOptions& rSearchOpt,
 
     BOOL bSttUndo = pDoc->DoesUndo() && bReplace;
     if( bSttUndo )
-        pDoc->StartUndo( UNDO_REPLACE );
+        pDoc->StartUndo( UNDO_REPLACE, NULL );
 
     BOOL bSearchSel = 0 != (rSearchOpt.searchFlag & SearchFlags::REG_NOT_BEGINOFLINE);
     if( bSearchSel )
@@ -450,7 +450,7 @@ ULONG SwCursor::Find( const SearchOptions& rSearchOpt,
         pDoc->SetModified();
 
     if( bSttUndo )
-        pDoc->EndUndo( UNDO_REPLACE );
+        pDoc->EndUndo( UNDO_REPLACE, NULL );
     return nRet;
 }
 
