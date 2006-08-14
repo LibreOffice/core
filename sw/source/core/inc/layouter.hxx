@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layouter.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-06-02 12:11:29 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:20:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,8 @@ class SwSectionFrm;
 class SwFtnFrm;
 class SwPageFrm;
 class SwLooping;
+class IDocumentLayoutAccess;
+
 // --> OD 2004-06-23 #i28701#
 class SwMovedFwdFrmsByObjPos;
 class SwTxtFrm;
@@ -170,7 +172,7 @@ public:
     static void ClearFrmsNotToWrap( const SwDoc& _rDoc );
     static void InsertFrmNotToWrap( const SwDoc& _rDoc,
                                     const SwFrm& _rFrm );
-    static bool FrmNotToWrap( const SwDoc& _rDoc,
+    static bool FrmNotToWrap( const IDocumentLayoutAccess& _rIDLA,
                               const SwFrm& _rFrm );
     // <--
     // --> OD 2006-05-10 #i65250#
