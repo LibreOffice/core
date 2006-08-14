@@ -4,9 +4,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:27:14 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:05:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -82,20 +81,11 @@
 #ifndef _NUMRULE_HXX
 #include <numrule.hxx>
 #endif
-#ifndef _FMTCOL_HXX
-#include <fmtcol.hxx>
-#endif
 #ifndef _SWTABLE_HXX
 #include <swtable.hxx>
 #endif
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
-#endif
-#ifndef _HINTS_HXX
-#include <hints.hxx>
-#endif
-#ifndef _ERRHDL_HXX
-#include <errhdl.hxx>
 #endif
 #ifndef _PAM_HXX
 #include <pam.hxx>
@@ -108,9 +98,6 @@
 #endif
 #ifndef _CNTFRM_HXX
 #include <cntfrm.hxx>
-#endif
-#ifndef _LAYFRM_HXX
-#include <layfrm.hxx>
 #endif
 #ifndef _FLYFRM_HXX
 #include <flyfrm.hxx>
@@ -136,9 +123,6 @@
 #ifndef _FMTHDFT_HXX //autogen
 #include <fmthdft.hxx>
 #endif
-#ifndef _FMTCNTNT_HXX //autogen
-#include <fmtcntnt.hxx>
-#endif
 #ifndef _FRMATR_HXX
 #include <frmatr.hxx>
 #endif
@@ -150,9 +134,6 @@
 #endif
 #ifndef _NODE2LAY_HXX
 #include <node2lay.hxx>
-#endif
-#ifndef _HINTS_HXX
-#include <hints.hxx>
 #endif
 #ifndef _PAGEDESC_HXX //autogen
 #include <pagedesc.hxx>
@@ -1094,9 +1075,6 @@ void SwCntntNode::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
 
             pTxtNd->SetLevel(nLevel);
 
-#ifndef NUM_RELSPACE
-            SetNumLSpace( TRUE );
-#endif
             SwNumRule* pRule = GetDoc()->FindNumRulePtr( sNumRule );
             if( !pRule )
             {
@@ -1111,9 +1089,6 @@ void SwCntntNode::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
         {
             bCallModify = FALSE;
             SwModify::Modify( pOldValue, pNewValue );
-#ifndef NUM_RELSPACE
-            SetNumLSpace( TRUE );
-#endif
         }
     }
 
@@ -1773,7 +1748,7 @@ int SwCntntNode::CanJoinNext( SwNodeIndex* pIdx ) const
     const SwNode* pNd = this;
     while( aIdx < rNds.Count()-1 &&
         (( pNd = &aIdx.GetNode())->IsSectionNode() ||
-            ( pNd->IsEndNode() && pNd->FindStartNode()->IsSectionNode() )))
+            ( pNd->IsEndNode() && pNd->StartOfSectionNode()->IsSectionNode() )))
         aIdx++;
 
     if( pNd->GetNodeType() != nNdType || rNds.Count()-1 == aIdx.GetIndex() )
@@ -1788,14 +1763,13 @@ int SwCntntNode::CanJoinNext( SwNodeIndex* pIdx ) const
     // in pIdx kann die 2. Position returnt werden.
 int SwCntntNode::CanJoinPrev( SwNodeIndex* pIdx ) const
 {
-    const SwNodes& rNds = GetNodes();
     BYTE nNdType = GetNodeType();
     SwNodeIndex aIdx( *this, -1 );
 
     const SwNode* pNd = this;
     while( aIdx.GetIndex() &&
         (( pNd = &aIdx.GetNode())->IsSectionNode() ||
-            ( pNd->IsEndNode() && pNd->FindStartNode()->IsSectionNode() )))
+            ( pNd->IsEndNode() && pNd->StartOfSectionNode()->IsSectionNode() )))
         aIdx--;
 
     if( pNd->GetNodeType() != nNdType || 0 == aIdx.GetIndex() )
@@ -1857,7 +1831,7 @@ BOOL SwCntntNode::IsAnyCondition( SwCollCondition& rTmp ) const
     const SwNodes& rNds = GetNodes();
     {
         int nCond = 0;
-        const SwStartNode* pSttNd = FindStartNode();
+        const SwStartNode* pSttNd = StartOfSectionNode();
         while( pSttNd )
         {
             switch( pSttNd->GetNodeType() )
@@ -1908,7 +1882,7 @@ BOOL SwCntntNode::IsAnyCondition( SwCollCondition& rTmp ) const
                 return TRUE;
             }
             pSttNd = pSttNd->GetIndex()
-                        ? pSttNd->FindStartNode()
+                        ? pSttNd->StartOfSectionNode()
                         : 0;
         }
     }
@@ -2030,6 +2004,24 @@ const SwTxtNode   *SwNode::GetTxtNode() const
      return ND_TEXTNODE == nNodeType ? (const SwTxtNode*)this : 0;
 }
 #endif
+
+/*
+ * Document Interface Access
+ */
+const IDocumentSettingAccess* SwNode::getIDocumentSettingAccess() const { return GetDoc(); }
+const IDocumentDeviceAccess* SwNode::getIDocumentDeviceAccess() const { return GetDoc(); }
+const IDocumentBookmarkAccess* SwNode::getIDocumentBookmarkAccess() const { return GetDoc(); }
+const IDocumentRedlineAccess* SwNode::getIDocumentRedlineAccess() const { return GetDoc(); }
+const IDocumentStylePoolAccess* SwNode::getIDocumentStylePoolAccess() const { return GetDoc(); }
+const IDocumentLineNumberAccess* SwNode::getIDocumentLineNumberAccess() const { return GetDoc(); }
+const IDocumentDrawModelAccess* SwNode::getIDocumentDrawModelAccess() const { return GetDoc(); }
+const IDocumentLayoutAccess* SwNode::getIDocumentLayoutAccess() const { return GetDoc(); }
+IDocumentLayoutAccess* SwNode::getIDocumentLayoutAccess() { return GetDoc(); }
+const IDocumentLinksAdministration* SwNode::getIDocumentLinksAdministration() const { return GetDoc(); }
+IDocumentLinksAdministration* SwNode::getIDocumentLinksAdministration() { return GetDoc(); }
+const IDocumentFieldsAccess* SwNode::getIDocumentFieldsAccess() const { return GetDoc(); }
+IDocumentFieldsAccess* SwNode::getIDocumentFieldsAccess() { return GetDoc(); }
+IDocumentContentOperations* SwNode::getIDocumentContentOperations() { return GetDoc(); }
 
 BOOL SwNode::IsInRedlines() const
 {
