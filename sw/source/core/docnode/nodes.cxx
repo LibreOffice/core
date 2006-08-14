@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nodes.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 09:51:33 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:05:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 #include <stdlib.h>
@@ -188,12 +187,12 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSize,
     //              Idle-Handler des Docs
     if( GetDoc()->SetFieldsDirty( TRUE, &rDelPos.GetNode(), nSize ) &&
         rNds.GetDoc() != GetDoc() )
-        rNds.GetDoc()->SetFieldsDirty( TRUE );
+        rNds.GetDoc()->SetFieldsDirty( true, NULL, 0 );
 
     //JP 12.03.99: 63293 - Nodes vom RedlineBereich NIE aufnehmen
     ULONG nNd = rInsPos.GetIndex();
     BOOL bInsOutlineIdx = !(
-            rNds.GetEndOfRedlines().FindStartNode()->GetIndex() < nNd &&
+            rNds.GetEndOfRedlines().StartOfSectionNode()->GetIndex() < nNd &&
             nNd < rNds.GetEndOfRedlines().GetIndex() );
 
     if( &rNds == this )         // im gleichen Nodes-Array -> moven !!
@@ -201,7 +200,6 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSize,
         // wird von vorne nach hinten gemovt, so wird nach vorne immer
         // nachgeschoben, d.H. die Loeschposition ist immer gleich
         USHORT nDiff = rDelPos.GetIndex() < rInsPos.GetIndex() ? 0 : 1;
-        int bOutlineNds = FALSE;
 
         for( ULONG n = rDelPos.GetIndex(); nSize; n += nDiff, --nSize )
         {
@@ -396,9 +394,9 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSize,
 
     //JP 03.02.99: alle Felder als invalide erklaeren, aktu. erfolgt im
     //              Idle-Handler des Docs
-    GetDoc()->SetFieldsDirty( TRUE );
+    GetDoc()->SetFieldsDirty( true, NULL, 0 );
     if( rNds.GetDoc() != GetDoc() )
-        rNds.GetDoc()->SetFieldsDirty( TRUE );
+        rNds.GetDoc()->SetFieldsDirty( true, NULL, 0 );
 
 
     if( bNewFrms )
@@ -555,7 +553,7 @@ BOOL SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                     //JP 12.03.99: 63293 - Nodes vom RedlineBereich NIE aufnehmen
                     ULONG nNd = aIdx.GetIndex();
                     BOOL bInsOutlineIdx = !( rNodes.GetEndOfRedlines().
-                            FindStartNode()->GetIndex() < nNd &&
+                            StartOfSectionNode()->GetIndex() < nNd &&
                             nNd < rNodes.GetEndOfRedlines().GetIndex() );
 
                     if( bNewFrms )
@@ -864,7 +862,7 @@ BOOL SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                 SwNode* pTmpNode = (*this)[ aRg.aEnd.GetIndex()+1 ]->GetEndNode();
                 if( pTmpNode && ND_STARTNODE == (pAktNode = &aRg.aEnd.GetNode())
                     ->GetNodeType() && pAktNode->StartOfSectionIndex() &&
-                    pTmpNode->FindStartNode() == pAktNode )
+                    pTmpNode->StartOfSectionNode() == pAktNode )
                 {
                     DelNodes( aRg.aEnd, 2 );
                     aRg.aEnd--;
@@ -918,7 +916,7 @@ BOOL SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                     }
                     SwNode* pTmpNd = &aIdx.GetNode();
                     if( pTmpNd->IsSectionNode() ||
-                        pTmpNd->FindStartNode()->IsSectionNode() )
+                        pTmpNd->StartOfSectionNode()->IsSectionNode() )
                         aIdx--; // ueberspringen
                 }
             }
@@ -1542,7 +1540,7 @@ SwNode* SwNodes::GoNextWithFrm(SwNodeIndex *pIdx) const
             pMod = (SwCntntNode*)pNd;
         else if ( pNd->IsTableNode() )
             pMod = ((SwTableNode*)pNd)->GetTable().GetFrmFmt();
-        else if( pNd->IsEndNode() && !pNd->FindStartNode()->IsSectionNode() )
+        else if( pNd->IsEndNode() && !pNd->StartOfSectionNode()->IsSectionNode() )
         {
             pNd = 0;
             break;
@@ -1841,7 +1839,7 @@ void SwNodes::Move( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes,
                 SwDoc* pInsDoc = pDestNd->GetDoc();
                 BOOL bIsUndo = pInsDoc->DoesUndo();
                 pInsDoc->DoUndo( FALSE );
-                pInsDoc->SplitNode( rPos );
+                pInsDoc->SplitNode( rPos, false );
                 pInsDoc->DoUndo( bIsUndo );
             }
             else
@@ -1899,7 +1897,7 @@ void SwNodes::Move( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes,
                     SwDoc* pInsDoc = pDestNd->GetDoc();
                     BOOL bIsUndo = pInsDoc->DoesUndo();
                     pInsDoc->DoUndo( FALSE );
-                    pInsDoc->SplitNode( rPos );
+                    pInsDoc->SplitNode( rPos, false );
                     pInsDoc->DoUndo( bIsUndo );
                 }
                 else
@@ -2187,7 +2185,7 @@ void SwNodes::_CopyNodes( const SwNodeRange& rRange,
                 // Andernfalls nicht weiter beachten.
                 SwNode* pTmpNd = pDoc->GetNodes()[ aInsPos ];
                 if( pTmpNd->IsSectionNode() ||
-                    pTmpNd->FindStartNode()->IsSectionNode() )
+                    pTmpNd->StartOfSectionNode()->IsSectionNode() )
                     aInsPos++;  // ueberspringen
             }
             else
@@ -2377,14 +2375,14 @@ SwNode* SwNodes::FindPrvNxtFrmNode( SwNodeIndex& rFrmIdx,
 
         // wird in eine versteckte Section verschoben ??
         SwSectionNode* pSectNd = pSttNd->IsSectionNode()
-                    ? pSttNd->FindStartNode()->FindSectionNode()
+                    ? pSttNd->StartOfSectionNode()->FindSectionNode()
                     : pSttNd->FindSectionNode();
         if( !( pSectNd && pSectNd->GetSection().CalcHiddenFlag()/*IsHiddenFlag()*/ ) )
         {
             // #130650# in a table in table situation we have to assure that we don't leave the
             // outer table cell when the inner table is looking for a PrvNxt...
             SwTableNode* pTableNd = pSttNd->IsTableNode()
-                    ? pSttNd->FindStartNode()->FindTableNode()
+                    ? pSttNd->StartOfSectionNode()->FindTableNode()
                     : pSttNd->FindTableNode();
             SwNodeIndex aIdx( rFrmIdx );
             SwNode* pNd;
@@ -2438,13 +2436,13 @@ SwNode* SwNodes::FindPrvNxtFrmNode( SwNodeIndex& rFrmIdx,
                     // natuerlich dieser returnt werden, wenn der SttNode eine
                     // Section oder Tabelle ist!
 #if OSL_DEBUG_LEVEL > 1
-                    SwTableNode* pDebugNode = pSttNd->FindStartNode()->FindTableNode();
+                    SwTableNode* pDebugNode = pSttNd->StartOfSectionNode()->FindTableNode();
 #endif
                     SwTableNode* pTblNd;
                     if( pSttNd->IsTableNode() &&
                         0 != ( pTblNd = pFrmNd->FindTableNode() ) &&
                         // TABLE IN TABLE:
-                        pTblNd != pSttNd->FindStartNode()->FindTableNode() )
+                        pTblNd != pSttNd->StartOfSectionNode()->FindTableNode() )
                     {
                         pFrmNd = pTblNd;
                         rFrmIdx = *pFrmNd;
@@ -2452,9 +2450,9 @@ SwNode* SwNodes::FindPrvNxtFrmNode( SwNodeIndex& rFrmIdx,
                     else
                         rFrmIdx = aIdx;
                 }
-                else if( pNd->IsEndNode() && pNd->FindStartNode()->IsTableNode() )
+                else if( pNd->IsEndNode() && pNd->StartOfSectionNode()->IsTableNode() )
                 {
-                    pFrmNd = pNd->FindStartNode();
+                    pFrmNd = pNd->StartOfSectionNode();
                     rFrmIdx = *pFrmNd;
                 }
                 else
@@ -2655,3 +2653,8 @@ SwNode * SwNodes::operator[](int n) const
     return operator[]((ULONG) n);
 }
 // <-#112139#
+
+sal_Bool SwNodes::IsDocNodes() const
+{
+    return this == &pMyDoc->GetNodes();
+}
