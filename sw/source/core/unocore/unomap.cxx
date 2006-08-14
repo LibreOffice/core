@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.188 $
+ *  $Revision: 1.189 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-14 08:31:24 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:55:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,18 +32,13 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #pragma hdrstop
-
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
 
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
-#ifndef _SVX_UNOMID_HXX
-#include <svx/unomid.hxx>
 #endif
 #ifndef _COMPHELPER_TYPEGENERATION_HXX
 #include <comphelper/TypeGeneration.hxx>
