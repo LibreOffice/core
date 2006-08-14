@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lngmerge.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 17:19:24 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:08:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,6 @@ private:
     bool isNextGroup(  ByteString &sGroup_out , ByteString &sLine_in);
     void ReadLine( const ByteString &sLine_in , ByteStringHashMap &rText_inout );
     void WriteSDF( SvFileStream &aSDFStream , ByteStringHashMap &rText_inout ,
-                    //const ByteString &rSDFFile,
                     const ByteString &rPrj ,
                     const ByteString &rRoot , const ByteString &sActFileName , const ByteString &sID );
 public:
