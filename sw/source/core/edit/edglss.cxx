@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edglss.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-14 08:30:43 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:08:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -75,9 +74,6 @@
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
 #endif
-#ifndef _TBLSEL_HXX
-#include <tblsel.hxx>       // fuers kopieren von Tabellen
-#endif
 #ifndef _SWTABLE_HXX
 #include <swtable.hxx>      // fuers kopieren von Tabellen
 #endif
@@ -91,12 +87,9 @@
 #include <swerror.h>        // SwTextBlocks
 #endif
 
-
 /******************************************************************************
  *              jetzt mit einem verkappten Reader/Writer/Dokument
  ******************************************************************************/
-
-
 
 void SwEditShell::InsertGlossary( SwTextBlocks& rGlossary, const String& rStr )
 {
@@ -135,7 +128,7 @@ USHORT SwEditShell::MakeGlossary( SwTextBlocks& rBlks, const String& rName, cons
         rBlks.ClearDoc();
         if( rBlks.BeginPutDoc( rShortName, rName ) )
         {
-            rBlks.GetDoc()->SetRedlineMode_intern( REDLINE_DELETE_REDLINES );
+            rBlks.GetDoc()->SetRedlineMode_intern( IDocumentRedlineAccess::REDLINE_DELETE_REDLINES );
             _CopySelToDoc( pGDoc );
             rBlks.GetDoc()->SetRedlineMode_intern( 0 );
             nRet = rBlks.PutDoc();
@@ -304,7 +297,7 @@ BOOL SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
 
     pInsDoc->UnlockExpFlds();
     if( !pInsDoc->IsExpFldsLocked() )
-        pInsDoc->UpdateExpFlds();
+        pInsDoc->UpdateExpFlds(NULL, true);
 
     // die gemerkte Node-Position wieder auf den richtigen Node
     if( bRet && pSttNd )
