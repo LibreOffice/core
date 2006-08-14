@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shellio.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 16:29:40 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:31:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,6 @@ class SfxMedium;
 class SvPtrarr;
 class SvStream;
 class SvStrings;
-class SvStringsSortDtor;
 class SvxFontItem;
 class SvxMacroTableDtor;
 class Sw3Io;
@@ -159,7 +158,6 @@ class SwgReaderOption
 
 public:
     void ResetAllFmtsOnly() { What.bFmtsOnly = 0; }
-    void SetAllFmtsOnly() { What.bFmtsOnly = (BOOL)0xff; }
     BOOL IsFmtsOnly() const { return What.bFmtsOnly; }
 
     BOOL IsFrmFmts() const { return What.Fmts.bFrmFmts; }
@@ -301,7 +299,6 @@ public:
     BOOL IsOrganizerMode() const { return bOrganizerMode; }
     void SetOrganizerMode( BOOL bSet ) { bOrganizerMode = bSet; }
 
-    BOOL IsIgnoreHTMLComments() const { return bIgnoreHTMLComments; }
     void SetIgnoreHTMLComments( BOOL bSet ) { bIgnoreHTMLComments = bSet; }
 
     virtual BOOL HasGlossaries() const;
@@ -363,9 +360,7 @@ class Sw3Reader : public StgReader
 public:
     Sw3Reader() : pIO( 0 ) {}
 
-          Sw3Io* GetSw3Io()                 { return pIO; }
-    const Sw3Io* GetSw3Io() const           { return pIO; }
-          void   SetSw3Io( Sw3Io* pIo )     { pIO = pIo; }
+    void   SetSw3Io( Sw3Io* pIo )     { pIO = pIo; }
 
     // read the sections of the document, which is equal to the medium.
     // returns the count of it
@@ -468,6 +463,9 @@ extern BOOL SetHTMLTemplate( SwDoc &rDoc ); //Fuer Vorlagen aus HTML.vor laden s
 
 /* Basis-Klasse aller Writer */
 
+class IDocumentSettingAccess;
+class IDocumentStylePoolAccess;
+
 class Writer : public SvRefBase
 {
     SwAsciiOptions aAscOpts;
@@ -492,6 +490,12 @@ protected:
 
     virtual ULONG WriteStream() = 0;
     void                SetBaseURL( const String& rURL ) { sBaseURL = rURL; }
+
+    IDocumentSettingAccess* getIDocumentSettingAccess();
+    const IDocumentSettingAccess* getIDocumentSettingAccess() const;
+
+    IDocumentStylePoolAccess* getIDocumentStylePoolAccess();
+    const IDocumentStylePoolAccess* getIDocumentStylePoolAccess() const;
 
 public:
     SwDoc* pDoc;
@@ -521,7 +525,6 @@ public:
     virtual BOOL IsStgWriter() const;
     virtual BOOL IsSw3Writer() const;
 
-    BOOL ShowProgress() const                   { return bShowProgress; }
     void SetShowProgress( BOOL bFlag = FALSE )  { bShowProgress = bFlag; }
 
     const String* GetOrigFileName() const       { return pOrigFileName; }
@@ -559,13 +562,9 @@ public:
     // 4-st. Hex-Zahl ausgeben
     inline SvStream& OutHex4( SvStream& rStrm, USHORT nHex )
         {   return OutHex( rStrm, nHex, 4 ); }
-    // 8-st. Hex-Zahl ausgeben
-    inline SvStream& OutHex8( SvStream& rStrm, ULONG nHex )
-        {   return OutHex( rStrm, nHex, 8 ); }
 
     inline SvStream& OutHex( USHORT nHex, BYTE nLen = 2 )      { return OutHex( Strm(), nHex, nLen ); }
     inline SvStream& OutHex4( USHORT nHex )     { return OutHex( Strm(), nHex, 4 ); }
-    inline SvStream& OutHex8( ULONG nHex )      { return OutHex( Strm(), nHex, 8 ); }
     inline SvStream& OutLong( long nVal )       { return OutLong( Strm(), nVal ); }
     inline SvStream& OutULong( ULONG nVal )     { return OutULong( Strm(), nVal ); }
 
@@ -576,7 +575,6 @@ public:
     SvStream& Strm();
 #endif
 
-    BOOL IsOrganizerMode() const { return bOrganizerMode; }
     void SetOrganizerMode( BOOL bSet ) { bOrganizerMode = bSet; }
 };
 
@@ -607,8 +605,6 @@ public:
     virtual ULONG Write( SwPaM&, SotStorage&, const String* = 0 );
 
     SotStorage& GetStorage() const       { return *pStg; }
-    const String& GetFltName() const    { return aFltName; }
-    void SetFltName( const String& r )  { aFltName = r; }
 };
 
 class Sw3Writer : public StgWriter
@@ -621,11 +617,6 @@ class Sw3Writer : public StgWriter
 
 public:
     Sw3Writer() : pIO( 0 ), bSaveAs( FALSE ) {}
-
-          Sw3Io* GetSw3Io()                 { return pIO; }
-    const Sw3Io* GetSw3Io() const           { return pIO; }
-    void SetSw3Io( Sw3Io* pIo, BOOL bSvAs = FALSE )
-        { pIO = pIo; bSaveAs = bSvAs; }
 
     virtual BOOL IsSw3Writer() const;
 };
