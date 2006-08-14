@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doctxm.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-05 14:50:01 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:00:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -98,9 +97,6 @@
 #endif
 #ifndef _SWTABLE_HXX
 #include <swtable.hxx>
-#endif
-#ifndef _HINTS_HXX
-#include <hints.hxx>
 #endif
 #ifndef _DOCTXM_HXX
 #include <doctxm.hxx>
@@ -455,7 +451,7 @@ const SwTOXBaseSection* SwDoc::InsertTableOf( const SwPosition& rPos,
                                                 const SfxItemSet* pSet,
                                                 BOOL bExpand )
 {
-    StartUndo( UNDO_INSTOX );
+    StartUndo( UNDO_INSTOX, NULL );
 
     SwTOXBaseSection* pNew = new SwTOXBaseSection( rTOX );
     String sSectNm( rTOX.GetTOXName() );
@@ -502,7 +498,7 @@ sNm.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "_Head" ));
     else
         delete pNew, pNew = 0;
 
-    EndUndo( UNDO_INSTOX );
+    EndUndo( UNDO_INSTOX, NULL );
 
     return pNew;
 }
@@ -521,7 +517,7 @@ const SwTOXBaseSection* SwDoc::InsertTableOf( ULONG nSttNd, ULONG nEndNd,
         SectionType eT = pSectNd->GetSection().GetType();
         if( TOX_HEADER_SECTION == eT || TOX_CONTENT_SECTION == eT )
             return 0;
-        pSectNd = pSectNd->FindStartNode()->FindSectionNode();
+        pSectNd = pSectNd->StartOfSectionNode()->FindSectionNode();
     }
 
     // create SectionNode around the Nodes
@@ -574,7 +570,7 @@ const SwTOXBase* SwDoc::GetCurTOX( const SwPosition& rPos ) const
                                                 pSectNd->GetSection();
             return &rTOXSect;
         }
-        pSectNd = pSectNd->FindStartNode()->FindSectionNode();
+        pSectNd = pSectNd->StartOfSectionNode()->FindSectionNode();
     }
     return 0;
 }
@@ -649,12 +645,12 @@ BOOL SwDoc::DeleteTOX( const SwTOXBase& rTOXBase, BOOL bDelNodes )
     SwSectionFmt* pFmt = rTOXSect.GetFmt();
     if( pFmt )
     {
-        StartUndo( UNDO_CLEARTOXRANGE );
+        StartUndo( UNDO_CLEARTOXRANGE, NULL );
 
         /* Save the start node of the TOX' section. */
         SwSectionNode * pMyNode = pFmt->GetSectionNode();
         /* Save start node of section's surrounding. */
-        SwNode * pStartNd = pMyNode->FindStartNode();
+        SwNode * pStartNd = pMyNode->StartOfSectionNode();
 
         /* Look for point where to move the cursors in the area to
            delete to. This is done by first searching forward from the
@@ -721,7 +717,7 @@ BOOL SwDoc::DeleteTOX( const SwTOXBase& rTOXBase, BOOL bDelNodes )
 
         DelSectionFmt( pFmt, bDelNodes );
 
-        EndUndo( UNDO_CLEARTOXRANGE );
+        EndUndo( UNDO_CLEARTOXRANGE, NULL );
         bRet = TRUE;
     }
 
@@ -1003,7 +999,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
     // remove old content an insert one empty textnode (to hold the layout!)
     SwTxtNode* pFirstEmptyNd;
     {
-        pDoc->DeleteRedline( *pSectNd );
+        pDoc->DeleteRedline( *pSectNd, true, USHRT_MAX );
 
         SwNodeIndex aSttIdx( *pSectNd, +1 );
         SwNodeIndex aEndIdx( *pSectNd->EndOfSectionNode() );
@@ -1447,7 +1443,7 @@ void SwTOXBaseSection::UpdateTemplate( const SwTxtNode* pOwnChapterNode )
 void SwTOXBaseSection::UpdateSequence( const SwTxtNode* pOwnChapterNode )
 {
     SwDoc* pDoc = (SwDoc*)GetFmt()->GetDoc();
-    SwFieldType* pSeqFld = pDoc->GetFldType(RES_SETEXPFLD, GetSequenceName());
+    SwFieldType* pSeqFld = pDoc->GetFldType(RES_SETEXPFLD, GetSequenceName(), false);
     if(!pSeqFld)
         return;
 
@@ -1488,7 +1484,7 @@ void SwTOXBaseSection::UpdateAuthorities( const SwTxtNode* pOwnChapterNode,
                                             const SwTOXInternational& rIntl )
 {
     SwDoc* pDoc = (SwDoc*)GetFmt()->GetDoc();
-    SwFieldType* pAuthFld = pDoc->GetFldType(RES_AUTHORITY, aEmptyStr);
+    SwFieldType* pAuthFld = pDoc->GetFldType(RES_AUTHORITY, aEmptyStr, false);
     if(!pAuthFld)
         return;
 
@@ -1523,37 +1519,6 @@ void SwTOXBaseSection::UpdateAuthorities( const SwTxtNode* pOwnChapterNode,
         }
     }
 }
-
-/*--------------------------------------------------------------------
-     Beschreibung:  Verzeichnisinhalt aus Inhaltsformen generieren
-                    OLE, Grafik, Frame
-                    Achtung: Spezielle Section !
- --------------------------------------------------------------------*/
-/*
-            nPos = pNd->GetIndex();
-            if( nPos < pNd->GetNodes().GetEndOfExtras().GetIndex() )
-            {
-                // dann die "Anker" (Body) Position holen.
-                Point aPt;
-                const SwCntntFrm* pFrm = pNd->GetFrm( &aPt, 0, FALSE );
-                if( pFrm )
-                {
-                    SwPosition aPos( *pNd );
-                    SwDoc* pDoc = (SwDoc*)pNd->GetDoc();
-#ifndef PRODUCT
-                    ASSERT( GetBodyTxtNode( pDoc, aPos, pFrm ),
-                            "wo steht der Absatz" );
-#else
-                    GetBodyTxtNode( pDoc, aPos, pFrm );
-#endif
-                    nPos = aPos.nNode.GetIndex();
-                    nCntPos = aPos.nContent.GetIndex();
-                }
-            }
-
-
-
- */
 
 long lcl_IsSOObject( const SvGlobalName& rFactoryNm )
 {
@@ -1668,8 +1633,6 @@ void SwTOXBaseSection::UpdateCntnt( SwTOXElement eType,
         if( pCNd )
         {
             //find node in body text
-            Point aPt;
-            const SwCntntFrm* pFrm = pCNd->GetFrm( &aPt, 0, FALSE );
             USHORT nSetLevel = USHRT_MAX;
 
             //#111105# tables of tables|illustrations|objects don't support hierarchies
@@ -1697,7 +1660,7 @@ void SwTOXBaseSection::UpdateCntnt( SwTOXElement eType,
             }
         }
 
-        nIdx = pNd->FindStartNode()->EndOfSectionIndex() + 2;   // 2 == End-/StartNode
+        nIdx = pNd->StartOfSectionNode()->EndOfSectionIndex() + 2;  // 2 == End-/StartNode
     }
 }
 
@@ -2303,7 +2266,6 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
     pNd->Insert( aNumStr, aPos, INS_EMPTYEXPAND );
     if(pPageNoCharFmt)
     {
-        SwDoc* pDoc = pNd->GetDoc();
         SwFmtCharFmt aCharFmt(pPageNoCharFmt->GetCharFmt());
         pNd->Insert(aCharFmt, nStartPos, nStartPos + aNumStr.Len(), SETATTR_DONTEXPAND);
     }
@@ -2461,8 +2423,6 @@ Range SwTOXBaseSection::GetKeyRange(const String& rStr, const String& rStrReadin
     const USHORT nMax = (USHORT)rRange.Max();
 
     USHORT nOptions = GetOptions();
-    BOOL bIgnoreCase = ( nOptions & TOI_SAME_ENTRY ) &&
-                        0 == ( nOptions & TOI_CASE_SENSITIVE );
     USHORT i;
 
     for( i = nMin; i < nMax; ++i)
@@ -2516,7 +2476,7 @@ BOOL SwTOXBase::IsTOXBaseInReadonly() const
         const SwDocShell* pDocSh;
         bRet = (0 != (pDocSh = pSectNode->GetDoc()->GetDocShell()) &&
                                                     pDocSh->IsReadOnly()) ||
-            (0 != (pSectNode = pSectNode->FindStartNode()->FindSectionNode())&&
+            (0 != (pSectNode = pSectNode->StartOfSectionNode()->FindSectionNode())&&
                     pSectNode->GetSection().IsProtectFlag());
 
     }
