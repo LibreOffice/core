@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swabstdlg.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 08:22:29 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:31:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,7 +86,6 @@
 #include "itabenum.hxx"
 #endif
 
-class SfxTabPage;
 class SfxViewFrame;
 class SfxBindings;
 class SfxItemSet;
