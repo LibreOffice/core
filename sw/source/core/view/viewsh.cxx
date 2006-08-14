@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 14:26:17 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:59:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -124,9 +123,6 @@
 #endif
 #ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx>
-#endif
-#ifndef _DOCUFLD_HXX
-#include <docufld.hxx>
 #endif
 #ifndef _NDOLE_HXX
 #include <ndole.hxx>
@@ -382,7 +378,7 @@ void ViewShell::ImplEndAction( const BOOL bIdleEnd )
     Imp()->EndAction();
 
 
-    //Damit sich die automatischen Scrollbars auch richtig anordnen k”nnen
+    //Damit sich die automatischen Scrollbars auch richtig anordnen k?nnen
     //muessen wir die Aktion hier kuenstlich beenden (EndAction loesst ein
     //Notify aus, und das muss Start-/EndAction rufen um die  Scrollbars
     //klarzubekommen.
@@ -804,163 +800,129 @@ void lcl_InvalidateAllObjPos( ViewShell &_rSh )
     _rSh.GetDoc()->SetModified();
 }
 
-// Absatzabstaende koennen wahlweise addiert oder maximiert werden
-
-BOOL ViewShell::IsParaSpaceMax() const
+void ViewShell::SetParaSpaceMax( bool bNew )
 {
-    return GetDoc()->IsParaSpaceMax();
-}
-
-BOOL ViewShell::IsParaSpaceMaxAtPages() const
-{
-    return GetDoc()->IsParaSpaceMaxAtPages();
-}
-
-void ViewShell::SetParaSpaceMax( BOOL bNew, BOOL bAtPages )
-{
-    if( GetDoc()->IsParaSpaceMax() != bNew  ||
-    GetDoc()->IsParaSpaceMaxAtPages() != bAtPages )
+    IDocumentSettingAccess* pIDSA = getIDocumentSettingAccess();
+    if( pIDSA->get(IDocumentSettingAccess::PARA_SPACE_MAX) != bNew )
     {
         SwWait aWait( *GetDoc()->GetDocShell(), TRUE );
-        GetDoc()->SetParaSpaceMax( bNew, bAtPages );
+        pIDSA->set(IDocumentSettingAccess::PARA_SPACE_MAX, bNew );
         const BYTE nInv = INV_PRTAREA | INV_TABLE | INV_SECTION;
         lcl_InvalidateAllCntnt( *this,  nInv );
     }
 }
 
-BOOL ViewShell::IsTabCompat() const
+void ViewShell::SetParaSpaceMaxAtPages( bool bNew )
 {
-    return GetDoc()->IsTabCompat();
-}
-
-void ViewShell::SetTabCompat( BOOL bNew )
-{
-    if( GetDoc()->IsTabCompat() != bNew  )
+    IDocumentSettingAccess* pIDSA = getIDocumentSettingAccess();
+    if( pIDSA->get(IDocumentSettingAccess::PARA_SPACE_MAX_AT_PAGES) != bNew )
     {
         SwWait aWait( *GetDoc()->GetDocShell(), TRUE );
-        GetDoc()->SetTabCompat( bNew );
+        pIDSA->set(IDocumentSettingAccess::PARA_SPACE_MAX_AT_PAGES, bNew );
+        const BYTE nInv = INV_PRTAREA | INV_TABLE | INV_SECTION;
+        lcl_InvalidateAllCntnt( *this,  nInv );
+    }
+}
+
+void ViewShell::SetTabCompat( bool bNew )
+{
+    IDocumentSettingAccess* pIDSA = getIDocumentSettingAccess();
+    if( pIDSA->get(IDocumentSettingAccess::TAB_COMPAT) != bNew  )
+    {
+        SwWait aWait( *GetDoc()->GetDocShell(), TRUE );
+        pIDSA->set(IDocumentSettingAccess::TAB_COMPAT, bNew );
         const BYTE nInv = INV_PRTAREA | INV_SIZE | INV_TABLE | INV_SECTION;
         lcl_InvalidateAllCntnt( *this, nInv );
     }
 }
 
-sal_Bool ViewShell::IsAddExtLeading() const
+void ViewShell::SetAddExtLeading( bool bNew )
 {
-    return GetDoc()->IsAddExtLeading();
-}
-
-void ViewShell::SetAddExtLeading( sal_Bool bNew )
-{
-    if ( GetDoc()->IsAddExtLeading() != bNew )
+    IDocumentSettingAccess* pIDSA = getIDocumentSettingAccess();
+    if ( pIDSA->get(IDocumentSettingAccess::ADD_EXT_LEADING) != bNew )
     {
         SwWait aWait( *GetDoc()->GetDocShell(), TRUE );
-        GetDoc()->SetAddExtLeading( bNew );
-        if ( GetDoc()->GetDrawModel() )
-            GetDoc()->GetDrawModel()->SetAddExtLeading( bNew );
+        pIDSA->set(IDocumentSettingAccess::ADD_EXT_LEADING, bNew );
+        SdrModel* pTmpDrawModel = getIDocumentDrawModelAccess()->GetDrawModel();
+        if ( pTmpDrawModel )
+            pTmpDrawModel->SetAddExtLeading( bNew );
         const BYTE nInv = INV_PRTAREA | INV_SIZE | INV_TABLE | INV_SECTION;
         lcl_InvalidateAllCntnt( *this, nInv );
     }
 }
 
-short ViewShell::IsUseVirtualDevice() const
+void ViewShell::SetUseVirDev( bool bNewVirtual )
 {
-    return GetDoc()->IsUseVirtualDevice();
-}
-
-void ViewShell::SetUseVirtualDevice( short nNew )
-{
-    // this sets the flag at the document and calls PrtDataChanged
-    GetDoc()->SetUseVirtualDevice( nNew );
-}
-
-// OD 2004-02-16 #106629# - access value of compatibility flag for adding
-// paragraph and table spacing at bottom of table cells
-sal_Bool ViewShell::IsAddParaSpacingToTableCells() const
-{
-    return GetDoc()->IsAddParaSpacingToTableCells();
+    IDocumentSettingAccess* pIDSA = getIDocumentSettingAccess();
+    if ( pIDSA->get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE) != bNewVirtual )
+    {
+        SwWait aWait( *GetDoc()->GetDocShell(), TRUE );
+        // this sets the flag at the document and calls PrtDataChanged
+        IDocumentDeviceAccess* pIDDA = getIDocumentDeviceAccess();
+        pIDDA->setReferenceDeviceType( bNewVirtual, true );
+    }
 }
 
 // OD 2004-02-16 #106629# - control, if paragraph and table spacing is added
 // at bottom of table cells
-void ViewShell::SetAddParaSpacingToTableCells(
-                                const sal_Bool _bAddParaSpacingToTableCells )
+void ViewShell::SetAddParaSpacingToTableCells( bool _bAddParaSpacingToTableCells )
 {
-    if ( GetDoc()->IsAddParaSpacingToTableCells() != _bAddParaSpacingToTableCells )
+    IDocumentSettingAccess* pIDSA = getIDocumentSettingAccess();
+    if ( pIDSA->get(IDocumentSettingAccess::ADD_PARA_SPACING_TO_TABLE_CELLS) != _bAddParaSpacingToTableCells )
     {
         SwWait aWait( *GetDoc()->GetDocShell(), TRUE );
-        GetDoc()->SetAddParaSpacingToTableCells( _bAddParaSpacingToTableCells );
+        pIDSA->set(IDocumentSettingAccess::ADD_PARA_SPACING_TO_TABLE_CELLS, _bAddParaSpacingToTableCells );
         const BYTE nInv = INV_PRTAREA;
         lcl_InvalidateAllCntnt( *this, nInv );
     }
-}
-
-// OD 06.01.2004 #i11859# - former formatting of text lines with proportional
-// line spacing or not.
-sal_Bool ViewShell::IsFormerLineSpacing() const
-{
-    return GetDoc()->IsFormerLineSpacing();
 }
 
 // OD 06.01.2004 #i11859# - control, if former formatting of text lines with
 // proportional line spacing is used or not.
-void ViewShell::SetUseFormerLineSpacing( const sal_Bool _bUseFormerLineSpacing )
+void ViewShell::SetUseFormerLineSpacing( bool _bUseFormerLineSpacing )
 {
-    if ( GetDoc()->IsFormerLineSpacing() != _bUseFormerLineSpacing )
+    IDocumentSettingAccess* pIDSA = getIDocumentSettingAccess();
+    if ( pIDSA->get(IDocumentSettingAccess::OLD_LINE_SPACING) != _bUseFormerLineSpacing )
     {
         SwWait aWait( *GetDoc()->GetDocShell(), TRUE );
-        GetDoc()->SetUseFormerLineSpacing( _bUseFormerLineSpacing );
+        pIDSA->set(IDocumentSettingAccess::OLD_LINE_SPACING, _bUseFormerLineSpacing );
         const BYTE nInv = INV_PRTAREA;
-        //const BYTE nInv = INV_PRTAREA | INV_SIZE | INV_TABLE | INV_SECTION;
         lcl_InvalidateAllCntnt( *this, nInv );
     }
 }
 
-// OD 2004-03-12 #i11860# - former object positioning
-sal_Bool ViewShell::IsFormerObjectPositioning() const
-{
-    return GetDoc()->IsFormerObjectPositioning();
-}
-
 // OD 2004-03-12 #i11860# - control, if former object positioning is used or not.
-void ViewShell::SetUseFormerObjectPositioning( const sal_Bool _bUseFormerObjPos )
+void ViewShell::SetUseFormerObjectPositioning( bool _bUseFormerObjPos )
 {
-    if ( GetDoc()->IsFormerObjectPositioning() != _bUseFormerObjPos )
+    IDocumentSettingAccess* pIDSA = getIDocumentSettingAccess();
+    if ( pIDSA->get(IDocumentSettingAccess::USE_FORMER_OBJECT_POS) != _bUseFormerObjPos )
     {
         SwWait aWait( *GetDoc()->GetDocShell(), TRUE );
-        GetDoc()->SetUseFormerObjectPositioning( _bUseFormerObjPos );
+        pIDSA->set(IDocumentSettingAccess::USE_FORMER_OBJECT_POS, _bUseFormerObjPos );
         lcl_InvalidateAllObjPos( *this );
     }
 }
 
 // OD 2004-05-05 #i28701#
-sal_Bool ViewShell::ConsiderWrapOnObjPos() const
+void ViewShell::SetConsiderWrapOnObjPos( bool _bConsiderWrapOnObjPos )
 {
-    return GetDoc()->ConsiderWrapOnObjPos();
-}
-
-// OD 2004-05-05 #i28701#
-void ViewShell::SetConsiderWrapOnObjPos( const sal_Bool _bConsiderWrapOnObjPos )
-{
-    if ( GetDoc()->ConsiderWrapOnObjPos() != _bConsiderWrapOnObjPos )
+    IDocumentSettingAccess* pIDSA = getIDocumentSettingAccess();
+    if ( pIDSA->get(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION) != _bConsiderWrapOnObjPos )
     {
         SwWait aWait( *GetDoc()->GetDocShell(), TRUE );
-        GetDoc()->SetConsiderWrapOnObjPos( _bConsiderWrapOnObjPos );
+        pIDSA->set(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION, _bConsiderWrapOnObjPos );
         lcl_InvalidateAllObjPos( *this );
     }
 }
 
 // --> FME #108724#
-sal_Bool ViewShell::IsFormerTextWrapping() const
+void ViewShell::SetUseFormerTextWrapping( bool _bUseFormerTextWrapping )
 {
-    return GetDoc()->IsFormerTextWrapping();
-}
-
-void ViewShell::SetUseFormerTextWrapping( const sal_Bool _bUseFormerTextWrapping )
-{
-    if ( GetDoc()->IsFormerTextWrapping() != _bUseFormerTextWrapping )
+    IDocumentSettingAccess* pIDSA = getIDocumentSettingAccess();
+    if ( pIDSA->get(IDocumentSettingAccess::USE_FORMER_TEXT_WRAPPING) != _bUseFormerTextWrapping )
     {
         SwWait aWait( *GetDoc()->GetDocShell(), TRUE );
-        GetDoc()->SetUseFormerTextWrapping( _bUseFormerTextWrapping );
+        pIDSA->set(IDocumentSettingAccess::USE_FORMER_TEXT_WRAPPING, _bUseFormerTextWrapping );
         const BYTE nInv = INV_PRTAREA | INV_SIZE | INV_TABLE | INV_SECTION;
         lcl_InvalidateAllCntnt( *this, nInv );
     }
@@ -1047,7 +1009,7 @@ void ViewShell::CalcLayout()
 
         SwDocPosUpdate aMsgHnt( 0 );
         GetDoc()->UpdatePageFlds( &aMsgHnt );
-        GetDoc()->UpdateExpFlds();
+        GetDoc()->UpdateExpFlds(NULL, true);
 
         aAction.Action();
     }
@@ -1170,7 +1132,7 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
         const long nXDiff = aPrevArea.Left() - VisArea().Left();
         const long nYDiff = aPrevArea.Top()  - VisArea().Top();
 
-        if( !nXDiff && !GetDoc()->IsBrowseMode() &&
+        if( !nXDiff && !getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) &&
             (!Imp()->HasDrawView() || !Imp()->GetDrawView()->IsGridVisible() ) )
         {
             //Falls moeglich die Wiese nicht mit Scrollen.
@@ -1455,7 +1417,7 @@ BOOL ViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRect )
         }
         delete pVout;
     }
-//#endif
+
     aVisArea.Pos().X() -= lXDiff;
     aVisArea.Pos().Y() -= lYDiff;
     if ( pRect )
@@ -1834,7 +1796,8 @@ void ViewShell::SetBrowseBorder( const Size& rNew )
 
 void ViewShell::CheckBrowseView( FASTBOOL bBrowseChgd )
 {
-    if ( !bBrowseChgd && !GetDoc()->IsBrowseMode() )
+    if ( !bBrowseChgd &&
+         !getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
         return;
 
     SET_CURR_SHELL( this );
@@ -1844,7 +1807,7 @@ void ViewShell::CheckBrowseView( FASTBOOL bBrowseChgd )
     // Wenn das Layout noch nicht einmal eine Hoehe hat,
     // ist sowieso nichts formatiert.
     // Dann eruebrigt sich die Invalidierung
-    // Falsch, z.B. beim Anlegen einer neuen View wird der Inhalt eingefügt
+    // Falsch, z.B. beim Anlegen einer neuen View wird der Inhalt eingef?gt
     // und formatiert (trotz einer leeren VisArea). Hier muessen deshalb
     // die Seiten zur Formatierung angeregt werden.
     if( !GetLayout()->Frm().Height() )
@@ -1858,7 +1821,7 @@ void ViewShell::CheckBrowseView( FASTBOOL bBrowseChgd )
         return;
     }
 
-    FASTBOOL bBrowseOn = GetDoc()->IsBrowseMode();
+    FASTBOOL bBrowseOn = getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
 
     LockPaint();
     StartAction();
@@ -1907,32 +1870,19 @@ SwRootFrm *ViewShell::GetLayout() const
     return GetDoc()->GetRootFrm();
 }
 
-SfxPrinter* ViewShell::GetPrt( BOOL bCreate ) const
-{
-    return GetDoc()->GetPrt( bCreate );
-}
-
 OutputDevice& ViewShell::GetRefDev() const
 {
     OutputDevice* pTmpOut = 0;
-    if ( GetWin() && IsBrowseMode() &&
-         ! GetViewOptions()->IsPrtFormat() )
+    if (  GetWin() &&
+          getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) &&
+         !GetViewOptions()->IsPrtFormat() )
         pTmpOut = GetWin();
     else if ( 0 != mpTmpRef )
         pTmpOut = mpTmpRef;
     else
-        pTmpOut = &GetDoc()->GetRefDev();
+        pTmpOut = GetDoc()->getReferenceDevice( true );
 
     return *pTmpOut;
-}
-
-SwPrintData*    ViewShell::GetPrintData() const
-{
-    return GetDoc()->GetPrintData();
-}
-void            ViewShell::SetPrintData(SwPrintData& rPrtData)
-{
-    GetDoc()->SetPrintData(rPrtData);
 }
 
 const SwNodes& ViewShell::GetNodes() const
@@ -2057,11 +2007,12 @@ void ViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
         // Wenn kein ReferenzDevice (Drucker) zum Formatieren benutzt wird,
         // sondern der Bildschirm, muss bei Zoomfaktoraenderung neu formatiert
         // werden.
-        if( IsBrowseMode() )
+        if( getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
             bReformat = TRUE;
     }
 
-    if ( IsBrowseMode() && pOpt->IsPrtFormat() != rOpt.IsPrtFormat() )
+    if ( getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) &&
+         pOpt->IsPrtFormat() != rOpt.IsPrtFormat() )
         bReformat = TRUE;
 
     if ( HasDrawView() || rOpt.IsGridVisible() )
@@ -2112,7 +2063,7 @@ void ViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
     *pOpt = rOpt;   // Erst jetzt werden die Options uebernommen.
     pOpt->SetUIOptions(rOpt);
 
-    pDoc->SetHTMLMode( 0 != ::GetHtmlMode(pDoc->GetDocShell()) );
+    pDoc->set(IDocumentSettingAccess::HTML_MODE, 0 != ::GetHtmlMode(pDoc->GetDocShell()));
 
     pWin->Invalidate();
     if ( bReformat )
@@ -2204,7 +2155,8 @@ void  ViewShell::SetPDFExportOption(sal_Bool bSet)
 {
     if( bSet != pOpt->IsPDFExport() )
     {
-        if(bSet && IsBrowseMode() )
+        if( bSet &&
+            getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
             pOpt->SetPrtFormat( TRUE );
         pOpt->SetPDFExport(bSet);
     }
@@ -2255,11 +2207,6 @@ void ViewShell::UISizeNotify()
     }
 }
 
-
-BOOL ViewShell::IsBrowseMode() const
-{
-    return GetDoc()->IsBrowseMode();
-}
 
 void    ViewShell::SetRestoreActions(USHORT nSet)
 {
@@ -2427,3 +2374,23 @@ sal_Int32 ViewShell::GetPageNumAndSetOffsetForPDF( OutputDevice& rOut, const SwR
     return nRet;
 }
 // <--
+
+/*
+ * Document Interface Access
+ */
+const IDocumentSettingAccess* ViewShell::getIDocumentSettingAccess() const { return pDoc; }
+IDocumentSettingAccess* ViewShell::getIDocumentSettingAccess() { return pDoc; }
+const IDocumentDeviceAccess* ViewShell::getIDocumentDeviceAccess() const { return pDoc; }
+IDocumentDeviceAccess* ViewShell::getIDocumentDeviceAccess() { return pDoc; }
+const IDocumentBookmarkAccess* ViewShell::getIDocumentBookmarkAccess() const { return pDoc; }
+IDocumentBookmarkAccess* ViewShell::getIDocumentBookmarkAccess() { return pDoc; }
+const IDocumentDrawModelAccess* ViewShell::getIDocumentDrawModelAccess() const { return pDoc; }
+IDocumentDrawModelAccess* ViewShell::getIDocumentDrawModelAccess() { return pDoc; }
+const IDocumentRedlineAccess* ViewShell::getIDocumentRedlineAccess() const { return pDoc; }
+IDocumentRedlineAccess* ViewShell::getIDocumentRedlineAccess() { return pDoc; }
+const IDocumentLayoutAccess* ViewShell::getIDocumentLayoutAccess() const { return pDoc; }
+IDocumentLayoutAccess* ViewShell::getIDocumentLayoutAccess() { return pDoc; }
+const IDocumentFieldsAccess* ViewShell::getIDocumentFieldsAccess() const { return pDoc; }
+IDocumentContentOperations* ViewShell::getIDocumentContentOperations() { return pDoc; }
+IDocumentStylePoolAccess* ViewShell::getIDocumentStylePoolAccess() { return pDoc; }
+const IDocumentStatistics* ViewShell::getIDocumentStatistics() const { return pDoc; }
