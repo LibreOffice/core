@@ -4,9 +4,9 @@
  *
  *  $RCSfile: export.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 08:28:13 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:07:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,12 @@
 #ifndef _EXPORT_HXX
 #define _EXPORT_HXX
 
+#ifndef TRANSEX_DIRECTORY_HXX
+#define TRANSEX_DIRECTORY_HXX
+#include "directory.hxx"
+#endif
+
+
 // #define MERGE_SOURCE_LANGUAGES <- To merge en-US and de resource
 
 #include <tools/string.hxx>
@@ -53,7 +59,6 @@
 
 #define NO_TRANSLATE_ISO        "x-no-translate"
 
-// Achtung !!! merge.cxx
 #define JAPANESE_ISO "ja"
 
 
@@ -324,6 +329,8 @@ public:
     static ByteString sLanguages; // public ?
     static ByteString sForcedLanguages; // public ?
 
+
+    static bool skipProject( ByteString sPrj ) ;
     static ByteString sIsoCode99;
     static void InitLanguages( bool bMergeMode = false );
     static void InitForcedLanguages( bool bMergeMode = false );
@@ -335,13 +342,10 @@ public:
     static bool hasUTF8ByteOrderMarker( const ByteString &rString );
     static void RemoveUTF8ByteOrderMarkerFromFile( const ByteString &rFilename );
     static bool fileHasUTF8ByteOrderMarker( const ByteString &rString );
-//    static USHORT GetLangIndex( USHORT nLangId );
-//  static CharSet GetCharSet( USHORT nLangId );
-//  static USHORT GetLangByIsoLang( const ByteString &rIsoLang );
     static ByteString GetIsoLangByIndex( USHORT nIndex );
     static void QuotHTML( ByteString &rString );
     static void UnquotHTML( ByteString &rString );
-
+    static const char* GetEnv( const char *pVar );
     static int getCurrentDirectory( rtl::OUString& base_fqurl , rtl::OUString& base );
 
     static bool isAllowed( const ByteString &sLanguage );
@@ -367,7 +371,6 @@ private:
     static std::vector<ByteString> aLanguages;
     static std::vector<ByteString> aForcedLanguages;
 
-    //BOOL CreateRefIds( ResData *pResData ) { /* Dummy !!! */ return TRUE; }
     BOOL ListExists( ResData *pResData, USHORT nLst );
 
     BOOL WriteData( ResData *pResData, BOOL bCreateNew = FALSE );// called befor dest. cur ResData
@@ -393,7 +396,6 @@ private:
         ByteString &nLangIndex, ResData *pResData );
 
     void MergeRest( ResData *pResData, USHORT nMode = MERGE_MODE_NORMAL );
-//  void ConvertMergeContent( ByteString &rText, USHORT nTyp );
     void ConvertMergeContent( ByteString &rText );
 
       void WriteToMerged( const ByteString &rText , bool bSDFContent );
