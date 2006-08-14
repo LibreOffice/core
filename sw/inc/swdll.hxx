@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swdll.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:13:30 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:33:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,17 +32,10 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifndef SW_SWDLL_HXX
 #define SW_SWDLL_HXX
 
-class ResMgr;
-class SvFactory;
-class SotFactory;
 class StatusBar;
-
-class SfxMedium;
-class SfxFilter;
 
 #ifndef _SFXDEFS_HXX //autogen
 #include <sfx2/sfxdefs.hxx>
