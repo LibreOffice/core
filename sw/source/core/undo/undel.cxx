@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undel.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 11:31:46 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:49:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -271,7 +271,7 @@ SwUndoDelete::SwUndoDelete( SwPaM& rPam, BOOL bFullPara, BOOL bCalledByTblCpy )
         if( !bFullPara && !pEndTxtNd &&
             &aRg.aEnd.GetNode() != &pDoc->GetNodes().GetEndOfContent() )
         {
-            SwNode* pNode = aRg.aEnd.GetNode().FindStartNode();
+            SwNode* pNode = aRg.aEnd.GetNode().StartOfSectionNode();
             if( pNode->GetIndex() >= nSttNode - nNdDiff )
                 aRg.aEnd++; // Deletion of a complete table
         }
@@ -283,8 +283,8 @@ SwUndoDelete::SwUndoDelete( SwPaM& rPam, BOOL bFullPara, BOOL bCalledByTblCpy )
             // the section itself should be moved complete.
             while( aRg.aEnd.GetIndex() + 2  < rDocNds.Count() &&
                 ( (pTmpNd = rDocNds[ aRg.aEnd.GetIndex()+1 ])->IsEndNode() &&
-                pTmpNd->FindStartNode()->IsSectionNode() &&
-                pTmpNd->FindStartNode()->GetIndex() >= aRg.aStart.GetIndex() ) )
+                pTmpNd->StartOfSectionNode()->IsSectionNode() &&
+                pTmpNd->StartOfSectionNode()->GetIndex() >= aRg.aStart.GetIndex() ) )
                 aRg.aEnd++;
             nReplaceDummy = aRg.aEnd.GetIndex() + nNdDiff - nEndNode;
             if( nReplaceDummy )
@@ -299,7 +299,7 @@ SwUndoDelete::SwUndoDelete( SwPaM& rPam, BOOL bFullPara, BOOL bCalledByTblCpy )
                     SwPosition aSplitPos( *pEndTxtNd );
                     BOOL bDoesUndo = pDoc->DoesUndo();
                     pDoc->DoUndo( FALSE );
-                    pDoc->SplitNode( aSplitPos );
+                    pDoc->SplitNode( aSplitPos, false );
                     rDocNds._MoveNodes( aMvRg, rDocNds, aRg.aEnd, TRUE );
                     pDoc->DoUndo( bDoesUndo );
                     aRg.aEnd--;
@@ -325,7 +325,7 @@ SwUndoDelete::SwUndoDelete( SwPaM& rPam, BOOL bFullPara, BOOL bCalledByTblCpy )
                     SwPosition aSplitPos( *pSttTxtNd );
                     BOOL bDoesUndo = pDoc->DoesUndo();
                     pDoc->DoUndo( FALSE );
-                    pDoc->SplitNode( aSplitPos );
+                    pDoc->SplitNode( aSplitPos, false );
                     rDocNds._MoveNodes( aMvRg, rDocNds, aRg.aStart, TRUE );
                     pDoc->DoUndo( bDoesUndo );
                     aRg.aStart--;
@@ -528,7 +528,7 @@ BOOL SwUndoDelete::CanGrouping( SwDoc* pDoc, const SwPaM& rDelPam )
         if( !bOk )
             return FALSE;
 
-        pDoc->DeleteRedline( rDelPam, FALSE );
+        pDoc->DeleteRedline( rDelPam, false, USHRT_MAX );
     }
 
     // Ok, die beiden 'Deletes' koennen zusammen gefasst werden, also
@@ -728,16 +728,16 @@ void SwUndoDelete::Undo( SwUndoIter& rUndoIter )
             // alle Attribute verwerfen, wurden alle gespeichert!
             SwTxtNode* pTxtNd = aPos.nNode.GetNode().GetTxtNode();
 
-            if( pTxtNd->GetpSwAttrSet() )
+            if( pTxtNd && pTxtNd->GetpSwAttrSet() )
                 pTxtNd->ResetAllAttr();
 
-            if( pTxtNd->GetpSwpHints() )
+            if( pTxtNd && pTxtNd->GetpSwpHints() )
                 pTxtNd->ClearSwpHintsArr( FALSE );
 
             if( pSttStr && !bFromTableCopy )
             {
                 ULONG nOldIdx = aPos.nNode.GetIndex();
-                pDoc->SplitNode( aPos );
+                pDoc->SplitNode( aPos, false );
                 // After the split all objects are anchored at the first paragraph,
                 // but the pHistory of the fly frame formats relies on anchoring at
                 // the start of the selection => selection backwards needs a correction.
@@ -756,7 +756,7 @@ void SwUndoDelete::Undo( SwUndoIter& rUndoIter )
                 if( nSttCntnt < pNd->GetTxt().Len() )
                 {
                     ULONG nOldIdx = aPos.nNode.GetIndex();
-                    pDoc->SplitNode( aPos );
+                    pDoc->SplitNode( aPos, false );
                     if( bBackSp )
                         lcl_ReAnchorAtCntntFlyFrames( *pDoc->GetSpzFrmFmts(), aPos, nOldIdx );
                 }
@@ -894,7 +894,7 @@ void SwUndoDelete::Redo( SwUndoIter& rUndoIter )
     SetPaM( rPam );
 
     if( pRedlSaveData )
-        rDoc.DeleteRedline( rPam, FALSE );
+        rDoc.DeleteRedline( rPam, false, USHRT_MAX );
 
     if( !bDelFullPara )
     {
