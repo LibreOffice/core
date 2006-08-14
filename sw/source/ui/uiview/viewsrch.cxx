@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsrch.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:15:34 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:58:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #include <string> // HACK: prevent conflict between STLPORT and Workshop headers
@@ -48,10 +47,6 @@
 #ifndef _COM_SUN_STAR_UTIL_SEARCHOPTIONS_HPP_
 #include <com/sun/star/util/SearchOptions.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
-#include <com/sun/star/lang/Locale.hpp>
-#endif
-
 #ifndef _SVTOOLS_CJKOPTIONS_HXX
 #include <svtools/cjkoptions.hxx>
 #endif
@@ -72,9 +67,6 @@
 #endif
 #ifndef _T2XTCMP_HXX //autogen
 #include <svtools/txtcmp.hxx>
-#endif
-#ifndef _SFX_BINDINGS_HXX //autogen
-#include <sfx2/bindings.hxx>
 #endif
 #ifndef _SFXITEMPOOL_HXX //autogen
 #include <svtools/itempool.hxx>
