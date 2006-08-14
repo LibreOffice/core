@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.121 $
+ *  $Revision: 1.122 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 13:33:48 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:18:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 
@@ -176,6 +175,8 @@
 #ifndef _WW8PAR2_HXX
 #include "ww8par2.hxx"
 #endif
+
+#include <frmatr.hxx>
 
 #define MAX_COL 64  // WW6-Beschreibung: 32, WW6-UI: 31 & WW8-UI: 63!
 
@@ -1651,23 +1652,6 @@ void WW8TabBandDesc::ReadNewShd(const BYTE* pS, bool bVer67)
 void WW8TabBandDesc::setcelldefaults(WW8_TCell *pCells, short nCols)
 {
     memset( pCells, 0, nCols * sizeof( WW8_TCell ) );
-#if 0
-    //Theres the possibility that it should be something like this
-    for (int i=0;i<nCols;++i)
-    {
-        ShortToSVBT16(0xFFFF,pCells[i].rgbrc[0].aBits1);
-        ShortToSVBT16(0xFFFF,pCells[i].rgbrc[0].aBits2);
-
-        ShortToSVBT16(0xFFFF,pCells[i].rgbrc[1].aBits1);
-        ShortToSVBT16(0xFFFF,pCells[i].rgbrc[1].aBits2);
-
-        ShortToSVBT16(0xFFFF,pCells[i].rgbrc[2].aBits1);
-        ShortToSVBT16(0xFFFF,pCells[i].rgbrc[2].aBits2);
-
-        ShortToSVBT16(0xFFFF,pCells[i].rgbrc[3].aBits1);
-        ShortToSVBT16(0xFFFF,pCells[i].rgbrc[3].aBits2);
-    }
-#endif
 }
 
 const BYTE *HasTabCellSprm(WW8PLCFx_Cp_FKP* pPap, bool bVer67)
@@ -2874,7 +2858,7 @@ void WW8TabDesc::FinishSwTable()
                         SwNodeRange aRg( aSttNdIdx, aPam.GetPoint()->nNode );
                         rInsPosNd++;
 
-                        pIo->rDoc.Move( aRg, rInsPosNd );
+                        pIo->rDoc.Move( aRg, rInsPosNd, IDocumentContentOperations::DOC_MOVEDEFAULT );
                         rInsPosNd.Assign( pIo->rDoc.GetNodes(),
                             rInsPosNd.GetNode().EndOfSectionIndex() - 2 );
                         pTxtNd = rInsPosNd.GetNode().GetTxtNode();
@@ -3946,36 +3930,6 @@ WW8RStyle::WW8RStyle(WW8Fib& rFib, SwWW8ImplReader* pI)
     pIo->nColls = cstd;
 }
 
-#if 0 // removed by a patch from cmc for #i52786#
-void SetStyleCharSet(SwWW8StyInf &rStyle)
-{
-    /*
-     #i22206#
-     The (default) character set used for a run of text is the default
-     character set for the version of Word that last saved the document.
-
-     This is a bit tentative, more might be required if the concept is correct.
-     When later version of word write older 6/95 documents the charset is
-     correctly set in the character runs involved, so its hard to reproduce
-     documents that require this to be sure of the process involved.
-    */
-    const SvxLanguageItem *pLang =
-        sw::util::HasItem<SvxLanguageItem>(*(rStyle.pFmt), RES_CHRATR_LANGUAGE);
-    if (pLang)
-    {
-        switch (pLang->GetLanguage())
-        {
-            case LANGUAGE_CZECH:
-                rStyle.eLTRFontSrcCharSet = RTL_TEXTENCODING_MS_1250;
-                break;
-            default:
-                rStyle.eLTRFontSrcCharSet = RTL_TEXTENCODING_MS_1252;
-                break;
-        }
-    }
-}
-#endif
-
 void WW8RStyle::Set1StyleDefaults()
 {
     if (!bCJKFontChanged)   // Style no CJK Font? set the default
@@ -4688,7 +4642,7 @@ void WW8RStyle::Import()
 {
     pIo->pDfltTxtFmtColl  = pIo->rDoc.GetDfltTxtFmtColl();
     pIo->pStandardFmtColl =
-        pIo->rDoc.GetTxtCollFromPoolSimple(RES_POOLCOLL_STANDARD, false);
+        pIo->rDoc.GetTxtCollFromPool(RES_POOLCOLL_STANDARD, false);
 
     if( pIo->nIniFlags & WW8FL_NO_STYLES )
         return;
