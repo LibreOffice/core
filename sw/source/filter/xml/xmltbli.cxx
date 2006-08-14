@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltbli.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:36:23 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:24:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1176,7 +1176,7 @@ String lcl_GenerateFldTypeName(OUString sPrefix, SwTableNode* pTableNode)
         sName += String::CreateFromInt32(nCount);
 
     }
-    while (NULL != pTableNode->GetDoc()->GetFldType(RES_DDEFLD, sName));
+    while (NULL != pTableNode->GetDoc()->GetFldType(RES_DDEFLD, sName, false));
 
     return sName;
 }
@@ -1209,8 +1209,7 @@ SwDDEFieldType* lcl_GetDDEFieldType(SwXMLDDETableContext_Impl* pContext,
     else
     {
         // check for existing DDE field type with the same name
-        SwDDEFieldType* pOldType = (SwDDEFieldType*)pTableNode->GetDoc()->
-                                                GetFldType(RES_DDEFLD, sName);
+        SwDDEFieldType* pOldType = (SwDDEFieldType*)pTableNode->GetDoc()->GetFldType(RES_DDEFLD, sName, false);
         if (NULL != pOldType)
         {
             // same values -> return old type
@@ -2267,32 +2266,6 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
                     // is a content box
                     nSplitCol = nCol + 1UL;
 
-#if 0
-                    // eventuell ist die Zelle noch leer
-                    if( !pCell->GetContents() )
-                    {
-                        ASSERT( 1UL==pCell->GetRowSpan(),
-                                "leere Box ist nicht 1 Zeile hoch" );
-                        const SwStartNode* pPrevStNd =
-                            GetPrevBoxStartNode( nTopRow, nStartCol );
-                        HTMLTableCnts *pCnts = new HTMLTableCnts(
-                            pParser->InsertTableSection(pPrevStNd) );
-                        SwHTMLTableLayoutCnts *pCntsLayoutInfo =
-                            pCnts->CreateLayoutInfo();
-
-                        pCell->SetContents( pCnts );
-                        pLayoutInfo->GetCell( nTopRow, nStartCol )
-                                   ->SetContents( pCntsLayoutInfo );
-
-                        // ggf. COLSPAN beachten
-                        for( sal_uInt16 j=nStartCol+1; j<nSplitCol; j++ )
-                        {
-                            GetCell(nTopRow,j)->SetContents( pCnts );
-                            pLayoutInfo->GetCell( nTopRow, j )
-                                       ->SetContents( pCntsLayoutInfo );
-                        }
-                    }
-#endif
                     pBox = MakeTableBox( pLine, pCell,
                                          nTopRow, nStartCol,
                                          nBottomRow, nSplitCol );
@@ -2812,7 +2785,7 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
         sal_uInt32 nOffset = pPrevSttNd ? 1UL : 0UL;
         SwNodeIndex aIdx( *pEndNd, nOffset );
         SwTxtFmtColl *pColl =
-            pDoc->GetTxtCollFromPoolSimple( RES_POOLCOLL_STANDARD, FALSE );
+            pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD, false );
         pStNd = pDoc->GetNodes().MakeTextSection( aIdx, SwTableBoxStartNode,
                                                  pColl );
         // --> FLR 2005-08-30 #125369#
