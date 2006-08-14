@@ -4,9 +4,9 @@
  *
  *  $RCSfile: move.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:39:34 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 18:04:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,16 +33,11 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #ifndef _SFX_BINDINGS_HXX //autogen
 #include <sfx2/bindings.hxx>
 #endif
-#ifndef _SFXVIEWFRM_HXX
-#include <sfx2/viewfrm.hxx>
-#endif
-
 #ifndef _WRTSH_HXX
 #include <wrtsh.hxx>
 #endif
