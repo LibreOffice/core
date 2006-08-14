@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtline.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:51:33 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:23:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,9 +82,6 @@ public:
 
 inline const SwFmtLineNumber &SwAttrSet::GetLineNumber(BOOL bInP) const
     { return (const SwFmtLineNumber&)Get( RES_LINENUMBER,bInP); }
-
-inline const SwFmtLineNumber &SwFmt::GetLineNumber(BOOL bInP) const
-    { return aSet.GetLineNumber(bInP); }
 
 #endif
 
