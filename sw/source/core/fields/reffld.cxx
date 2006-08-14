@@ -4,9 +4,9 @@
  *
  *  $RCSfile: reffld.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:36:02 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:14:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -191,19 +190,15 @@ BOOL IsFrameBehind( const SwTxtNode& rMyNd, USHORT nMySttPos,
     ::lcl_GetLayTree( pMyFrm, aArr );
 
     USHORT nRefCnt = aRefArr.Count() - 1, nCnt = aArr.Count() - 1;
-#ifdef VERTICAL_LAYOUT
     BOOL bVert = FALSE;
     BOOL bR2L = FALSE;
-#endif
 
     // solange bis ein Frame ungleich ist ?
     while( nRefCnt && nCnt && aRefArr[ nRefCnt ] == aArr[ nCnt ] )
     {
-#ifdef VERTICAL_LAYOUT
         const SwFrm* pFrm = (const SwFrm*)aArr[ nCnt ];
         bVert = pFrm->IsVertical();
         bR2L = pFrm->IsRightToLeft();
-#endif
         --nCnt, --nRefCnt;
     }
 
@@ -227,7 +222,6 @@ BOOL IsFrameBehind( const SwTxtNode& rMyNd, USHORT nMySttPos,
         if( pFldFrm->GetType() == pRefFrm->GetType() )
         {
             // hier ist die X-Pos wichtiger!
-#ifdef VERTICAL_LAYOUT
             if( bVert )
             {
                 if( bR2L )
@@ -247,11 +241,6 @@ BOOL IsFrameBehind( const SwTxtNode& rMyNd, USHORT nMySttPos,
                 bRefIsLower = pRefFrm->Frm().Left() < pFldFrm->Frm().Left() ||
                             ( pRefFrm->Frm().Left() == pFldFrm->Frm().Left() &&
                               pRefFrm->Frm().Top() < pFldFrm->Frm().Top() );
-#else
-            bRefIsLower = pRefFrm->Frm().Left() < pFldFrm->Frm().Left() ||
-                    ( pRefFrm->Frm().Left() == pFldFrm->Frm().Left() &&
-                        pRefFrm->Frm().Top() < pFldFrm->Frm().Top() );
-#endif
             pRefFrm = 0;
         }
         else if( ( FRM_COLUMN | FRM_CELL ) & pFldFrm->GetType() )
@@ -261,7 +250,6 @@ BOOL IsFrameBehind( const SwTxtNode& rMyNd, USHORT nMySttPos,
     }
 
     if( pRefFrm )               // als Flag missbrauchen
-#ifdef VERTICAL_LAYOUT
     {
         if( bVert )
         {
@@ -283,11 +271,6 @@ BOOL IsFrameBehind( const SwTxtNode& rMyNd, USHORT nMySttPos,
                         ( pRefFrm->Frm().Top() == pFldFrm->Frm().Top() &&
                             pRefFrm->Frm().Left() < pFldFrm->Frm().Left() );
     }
-#else
-        bRefIsLower = pRefFrm->Frm().Top() < pFldFrm->Frm().Top() ||
-                    ( pRefFrm->Frm().Top() == pFldFrm->Frm().Top() &&
-                        pRefFrm->Frm().Left() < pFldFrm->Frm().Left() );
-#endif
     return bRefIsLower;
 }
 
@@ -702,7 +685,7 @@ void SwGetRefField::ConvertProgrammaticToUIName()
         SwDoc* pDoc = ((SwGetRefFieldType*)GetTyp())->GetDoc();
         const String& rPar1 = GetPar1();
         //don't convert when the name points to an existing field type
-        if(!pDoc->GetFldType(RES_SETEXPFLD, rPar1))
+        if(!pDoc->GetFldType(RES_SETEXPFLD, rPar1, false))
         {
             sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromProgName( rPar1, GET_POOLID_TXTCOLL );
             USHORT nResId = USHRT_MAX;
@@ -792,7 +775,7 @@ SwTxtNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const String& rRefMark,
 
     case REF_SEQUENCEFLD:
         {
-            SwFieldType* pFldType = pDoc->GetFldType( RES_SETEXPFLD, rRefMark );
+            SwFieldType* pFldType = pDoc->GetFldType( RES_SETEXPFLD, rRefMark, false );
             if( pFldType && pFldType->GetDepends() &&
                 GSE_SEQ & ((SwSetExpFieldType*)pFldType)->GetType() )
             {
@@ -817,10 +800,10 @@ SwTxtNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const String& rRefMark,
 
     case REF_BOOKMARK:
         {
-            USHORT nPos = pDoc->FindBookmark( rRefMark );
+            USHORT nPos = pDoc->findBookmark( rRefMark );
             if( USHRT_MAX != nPos )
             {
-                const SwBookmark& rBkmk = *pDoc->GetBookmarks()[ nPos ];
+                const SwBookmark& rBkmk = *pDoc->getBookmarks()[ nPos ];
                 const SwPosition* pPos = &rBkmk.GetPos();
                 if( rBkmk.GetOtherPos() && *pPos > *rBkmk.GetOtherPos() )
                     pPos = rBkmk.GetOtherPos();
@@ -906,7 +889,7 @@ void _RefIdsMap::Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rFld,
         {
             const SwTxtNode* pNd;
             SwModify* pMod;
-            if( 0 != ( pMod = rDestDoc.GetFldType( RES_SETEXPFLD, aName ) ))
+            if( 0 != ( pMod = rDestDoc.GetFldType( RES_SETEXPFLD, aName, false ) ))
             {
                 SwClientIter aIter( *pMod );
                 for( SwFmtFld* pF = (SwFmtFld*)aIter.First( TYPE( SwFmtFld )); pF;
@@ -916,7 +899,7 @@ void _RefIdsMap::Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rFld,
                         pNd->GetNodes().IsDocNodes() )
                         aIds.Insert( ((SwSetExpField*)pF->GetFld())->GetSeqNumber() );
             }
-            if( 0 != ( pMod = rDoc.GetFldType( RES_SETEXPFLD, aName ) ))
+            if( 0 != ( pMod = rDoc.GetFldType( RES_SETEXPFLD, aName, false ) ))
             {
                 SwClientIter aIter( *pMod );
                 for( SwFmtFld* pF = (SwFmtFld*)aIter.First( TYPE( SwFmtFld )); pF;
@@ -966,7 +949,7 @@ void _RefIdsMap::Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rFld,
             // Id umsetzen
             if( bField )
             {
-                SwModify* pMod = rDoc.GetFldType( RES_SETEXPFLD, aName );
+                SwModify* pMod = rDoc.GetFldType( RES_SETEXPFLD, aName, false );
                 if( pMod )
                 {
                     SwClientIter aIter( *pMod );
