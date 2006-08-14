@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ftnfrm.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-09 14:07:53 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:26:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -65,9 +64,6 @@
 #endif
 #ifndef _FRMTOOL_HXX
 #include <frmtool.hxx>
-#endif
-#ifndef _ERRHDL_HXX
-#include <errhdl.hxx>
 #endif
 #ifndef _SWTABLE_HXX
 #include <swtable.hxx>
@@ -333,7 +329,7 @@ void SwFtnContFrm::Format( const SwBorderAttrs * )
 
     if ( !bValidSize )
     {
-        if ( pPage->IsFtnPage() && !GetFmt()->GetDoc()->IsBrowseMode() )
+        if ( pPage->IsFtnPage() && !GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
                 Grow( LONG_MAX PHEIGHT, FALSE );
         else
         {
@@ -429,8 +425,9 @@ SwTwips SwFtnContFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
             return 0;
         }
     }
+    const bool bBrowseMode = GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
     SwPageFrm *pPage = pBoss->FindPageFrm();
-    if ( !pPage->IsFtnPage() || GetFmt()->GetDoc()->IsBrowseMode() )
+    if ( bBrowseMode || !pPage->IsFtnPage() )
     {
         if ( pBoss->GetMaxFtnHeight() != LONG_MAX )
         {
@@ -455,7 +452,7 @@ SwTwips SwFtnContFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
         nDist = (GetPrev()->Frm().*fnRect->fnGetHeight)();
 
     long nAvail = 0;
-    if ( GetFmt()->GetDoc()->IsBrowseMode() )
+    if ( bBrowseMode )
     {
         nAvail = GetUpper()->Prt().Height();
         const SwFrm *pAvail = GetUpper()->Lower();
@@ -532,7 +529,9 @@ SwTwips SwFtnContFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
 SwTwips SwFtnContFrm::ShrinkFrm( SwTwips nDiff, BOOL bTst, BOOL bInfo )
 {
     SwPageFrm *pPage = FindPageFrm();
-    if ( pPage && (!pPage->IsFtnPage() || GetFmt()->GetDoc()->IsBrowseMode()) )
+    if ( pPage &&
+           ( !pPage->IsFtnPage() ||
+             GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) ) )
     {
         SwTwips nRet = SwLayoutFrm::ShrinkFrm( nDiff, bTst, bInfo );
         if( IsInSct() && !bTst )
@@ -1294,7 +1293,7 @@ SwFtnFrm *SwFtnBossFrm::FindFirstFtn()
         pBoss = pRet->GetRef()->FindFtnBossFrm();
         ASSERT( pBoss, "FindFirstFtn: No boss found" );
         if( !pBoss )
-            return FALSE; // ´There must be a bug, but no GPF
+            return FALSE; // ?There must be a bug, but no GPF
         pPage = pBoss->FindPageFrm();
         nPgNum = pPage->GetPhyPageNum();
         if ( nPgNum == nRefNum )
@@ -2892,7 +2891,7 @@ void SwFtnBossFrm::SetFtnDeadLine( const SwTwips nDeadLine )
     else
         nMaxFtnHeight = -(pBody->Frm().*fnRect->fnBottomDist)( nDeadLine );
 
-    if ( GetFmt()->GetDoc()->IsBrowseMode() )
+    if ( GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
         nMaxFtnHeight += pBody->Grow( LONG_MAX PHEIGHT, TRUE );
     if ( IsInSct() )
         nMaxFtnHeight += FindSctFrm()->Grow( LONG_MAX PHEIGHT, TRUE );
@@ -2974,7 +2973,8 @@ SwTwips SwFtnBossFrm::GetVarSpace() const
     }
     else
         nRet = 0;
-    if ( IsPageFrm() && GetFmt()->GetDoc()->IsBrowseMode() )
+    if ( IsPageFrm() &&
+         GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
         nRet += BROWSE_HEIGHT - Frm().Height();
     return nRet;
 }
