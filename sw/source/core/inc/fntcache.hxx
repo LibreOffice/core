@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fntcache.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:47:20 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:19:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,6 @@
 #ifndef _FNTCACHE_HXX
 #define _FNTCACHE_HXX
 
-
 #ifndef _SV_FONT_HXX //autogen
 #include <vcl/font.hxx>
 #endif
@@ -51,9 +50,9 @@ class OutputDevice;
 class FontMetric;
 class SwFntObj;
 class SwDrawTextInfo;   // DrawText
-class SwScriptInfo;
 class ViewShell;
 class SwSubFont;
+class MapMode;
 
 /*************************************************************************
  *                      class SwFntCache
