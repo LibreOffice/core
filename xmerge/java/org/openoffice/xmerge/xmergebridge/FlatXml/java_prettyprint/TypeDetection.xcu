@@ -9,7 +9,8 @@
     <value>true</value>
    </prop>
    <prop oor:name="UIName" oor:type="xs:string">
-    <value xml:lang="en-US">DevGuide FlatXML Java</value>
+       <value xml:lang="x-no-translate">DevGuide FlatXML Java</value>
+       <value xml:lang="en-US">DevGuide FlatXML Java</value>
     <value xml:lang="de">DevGuide FlatXML Java</value>
    </prop>
   </node>
@@ -20,8 +21,9 @@
     <value>1,,doctype:office:document,,xml,0</value>
    </prop>
    <prop oor:name="UIName" oor:type="xs:string">
-    <value xml:lang="en-US">DevGuide FlatXML Java</value>
-    <value xml:lang="de">DevGuide FlatXML Java</value>
+        <value xml:lang="x-no-translate">DevGuide FlatXML Java</value>
+        <value xml:lang="en-US">DevGuide FlatXML Java</value>
+        <value xml:lang="de">DevGuide FlatXML Java</value>
    </prop>
   </node>
  </node>
