@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtftbl.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-08 14:47:04 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:10:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifdef WTC
@@ -43,9 +42,6 @@
 #include <hintids.hxx>
 #endif
 
-#ifndef _SVX_BRKITEM_HXX
-#include <svx/brkitem.hxx>
-#endif
 #ifndef _SVX_LRSPITEM_HXX //autogen wg. SvxLRSpaceItem
 #include <svx/lrspitem.hxx>
 #endif
@@ -62,14 +58,8 @@
 #ifndef _FMTFSIZE_HXX //autogen
 #include <fmtfsize.hxx>
 #endif
-#ifndef _FMTORNT_HXX //autogen
-#include <fmtornt.hxx>
-#endif
 #ifndef _FMTPDSC_HXX //autogen
 #include <fmtpdsc.hxx>
-#endif
-#ifndef _SWTYPES_HXX
-#include <swtypes.hxx>
 #endif
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
@@ -82,9 +72,6 @@
 #endif
 #ifndef _SWPARRTF_HXX
 #include <swparrtf.hxx>
-#endif
-#ifndef _POOLFMT_HXX
-#include <poolfmt.hxx>
 #endif
 #ifndef _SWTABLE_HXX
 #include <swtable.hxx>
@@ -542,9 +529,6 @@ void SwRTFParser::ReadTable( int nToken )
                     ReadBorderAttr( nToken, rSet, TRUE );
                 else
                     NextToken( nToken );
-#if 0
-                SetRowBorder(aRow);
-#endif
             }
             else if( RTF_TABLEDEF != (nToken & ~(0xff | RTF_SWGDEFS)) )
             {
@@ -820,8 +804,7 @@ void SwRTFParser::ReadTable( int nToken )
         // setze das default Style
         SwTxtFmtColl* pColl = aTxtCollTbl.Get( 0 );
         if( !pColl )
-            pColl = pDoc->GetTxtCollFromPoolSimple( RES_POOLCOLL_STANDARD,
-                                                    FALSE );
+            pColl = pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD, false );
 
         USHORT nStt = 0;
         if( bNewTbl )
@@ -858,11 +841,6 @@ void SwRTFParser::ReadTable( int nToken )
     SwNodeIdx aOldPos(aOldIdx);
     SwPaM aRg(*pPam);
 
-#if 0
-    SwTableBox* pBox = pNewLine->GetTabBoxes()[ nAktBox ];
-    pPam->GetPoint()->nNode = *pBox->GetSttNd()->EndOfSectionNode();
-    pPam->Move( fnMoveBackward, fnGoCntnt );
-#else
     bool bFailure = true;
     if (pNewLine)
     {
@@ -887,7 +865,6 @@ void SwRTFParser::ReadTable( int nToken )
         SkipToken( -1 );            // zum Letzen gueltigen zurueck
         return;
     }
-#endif
 
     //It might be that there was content at this point which is not already in
     //a table, but which is being followed by properties to place it into the
@@ -906,7 +883,7 @@ void SwRTFParser::ReadTable( int nToken )
             //table
             aRg.SetMark();
             aRg.GetMark()->nContent.Assign(aRg.GetCntntNode(), 0);
-            pDoc->Move(aRg, *pPam->GetPoint());
+            pDoc->Move(aRg, *pPam->GetPoint(), IDocumentContentOperations::DOC_MOVEDEFAULT);
         }
 
         //Update the attribute stack entries to reflect that the properties
@@ -1030,8 +1007,7 @@ void SwRTFParser::NewTblLine()
     {
         SwTxtFmtColl* pColl = aTxtCollTbl.Get( 0 );
         if( !pColl )
-            pColl = pDoc->GetTxtCollFromPoolSimple( RES_POOLCOLL_STANDARD,
-                                                    FALSE );
+            pColl = pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD, false );
         pPam->SetMark();
 
         pLine = (*pLns)[ pLns->Count()-1 ];
