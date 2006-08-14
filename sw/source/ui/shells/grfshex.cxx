@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grfshex.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 17:24:33 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:54:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,9 +36,6 @@
 
 #pragma hdrstop
 
-#ifndef _DOC_HXX
-#include <doc.hxx>
-#endif
 #ifndef _DOCARY_HXX
 #include <docary.hxx>
 #endif
@@ -50,9 +47,6 @@
 #endif
 #ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
-#ifndef _DOC_HXX
-#include <doc.hxx>
 #endif
 #ifndef _DOCARY_HXX
 #include <docary.hxx>
