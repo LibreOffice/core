@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltexti.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:45:34 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:25:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -133,10 +132,6 @@
 #endif
 #ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
-#endif
-
-#ifndef _NDNOTXT_HXX
-#include <ndnotxt.hxx>
 #endif
 
 // for locking SolarMutex: svapp + mutex
@@ -384,7 +379,7 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
                     lcl_setObjectVisualArea( xObj, nAspect, aTwipSize, MAP_TWIP );
                 }
 
-                pFrmFmt = pDoc->Insert( *pTxtCrsr->GetPaM(), xObj, &aItemSet );
+                pFrmFmt = pDoc->Insert( *pTxtCrsr->GetPaM(), xObj, &aItemSet, NULL, NULL );
                 pOLENd = lcl_GetOLENode( pFrmFmt );
                 if( pOLENd )
                     aObjName = pOLENd->GetOLEObj().GetCurrentPersistName();
@@ -431,7 +426,7 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
         if ( !aName.Len() )
             aName = aObjName;
 
-        pFrmFmt = pDoc->InsertOLE( *pTxtCrsr->GetPaM(), aName, &aItemSet );
+        pFrmFmt = pDoc->InsertOLE( *pTxtCrsr->GetPaM(), aName, &aItemSet, NULL, NULL );
         aObjName = aName;
     }
 
@@ -675,7 +670,7 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
         {
             SwFrmFmt *pFrmFmt = pDoc->Insert( *pTxtCrsr->GetPaM(),
                                             xObj,
-                                            &aItemSet );
+                                            &aItemSet, NULL, NULL );
 
             // TODO/LATER: in future may need a way to set replacement image url to the link ( may be even to the object ), needs oasis cws???
 
@@ -734,7 +729,7 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertApplet(
 
     SwFrmFmt *pFrmFmt = pDoc->Insert( *pTxtCrsr->GetPaM(),
                                        aAppletImpl.GetApplet(),
-                                       &aAppletImpl.GetItemSet());
+                                       &aAppletImpl.GetItemSet(), NULL, NULL);
     SwXFrame *pXFrame = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
     xPropSet = pXFrame;
     if( pDoc->GetDrawModel() )
@@ -807,7 +802,7 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
 
             SwFrmFmt *pFrmFmt = pDoc->Insert( *pTxtCrsr->GetPaM(),
                                             xObj,
-                                            &aItemSet);
+                                            &aItemSet, NULL, NULL);
             SwXFrame *pXFrame = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
             xPropSet = pXFrame;
             if( pDoc->GetDrawModel() )
@@ -958,7 +953,7 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFrame(
 
             SwFrmFmt *pFrmFmt = pDoc->Insert( *pTxtCrsr->GetPaM(),
                                             xObj,
-                                            &aItemSet);
+                                            &aItemSet, NULL, NULL);
             SwXFrame *pXFrame = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
             xPropSet = pXFrame;
             if( pDoc->GetDrawModel() )
