@@ -4,9 +4,9 @@
  *
  *  $RCSfile: select.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 12:19:57 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 18:04:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #include <limits.h>
@@ -51,17 +50,12 @@
 #ifndef _SFXMACITEM_HXX //autogen
 #include <svtools/macitem.hxx>
 #endif
-#ifndef _SFXVIEWFRM_HXX
-#include <sfx2/viewfrm.hxx>
-#endif
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
 #endif
 #ifndef _SVX_SCRIPTTYPEITEM_HXX
 #include <svx/scripttypeitem.hxx>
 #endif
-
-
 #ifndef _CMDID_H
 #include <cmdid.h>
 #endif
@@ -1021,53 +1015,4 @@ FASTBOOL SwWrtShell::SelectNextPrevHyperlink( BOOL bNext )
 
 
 
-#if 0
-long SwWrtShell::MoveText(const Point *pPt,BOOL)
-{
-        // ueber einer bestehenden Selektion kein D&D
-    if(ChgCurrPam(*pPt)) {
-        LeaveDDMode();
-        bTStart = bDD = FALSE;
-        return 0;
-    }
-        // Create-Crsr muss nicht immer sein !!
-        // im Add-Mode benutze den letzen, sonst erzeuge einen neuen
-    if(!IsAddMode()) SwCrsrShell::CreateCrsr();
-    SwCrsrShell::SetCrsr(*pPt);
-        // kein D&D auf andere Inhaltsformen als Text
-    const int nSelection = GetSelectionType();
-    if(SEL_TXT != GetCntType()) {
-        if(!IsAddMode()) {
-            SwCrsrShell::DestroyCrsr();
-            GoPrevCrsr();
-        }
-        LeaveDDMode();
-        bTStart = bDD = FALSE;
-        return 0;
-    }
-        // SSelection vor Start/ EndAction erfragen
-    StartUndo(UNDO_INSERT);
-    StartAllAction();
-    GoPrevCrsr();
-    const int cWord = IntelligentCut(nSelection);
-    GoNextCrsr();
-    const BOOL bInWrd = IsInWrd() || IsEndWrd();
-    const BOOL bSttWrd = IsSttWrd();
-    SwEditShell::Move();
-
-    // nach dem Move sind alle Crsr geloescht und eine SSelection
-    // umschliesst den verschobenen Bereich
-
-    if(bInWrd && ( cWord == WORD_SPACE_AFTER || cWord == WORD_SPACE_BEFORE)) {
-        if(!bSttWrd) SwapPam();
-        SwEditShell::Insert(' ');
-        if(!bSttWrd) SwapPam();
-    }
-    LeaveDDMode();
-    bTStart = bDD = FALSE;
-    EndAllAction();
-    EndUndo(UNDO_INSERT);
-    return 1;
-}
-#endif
 
