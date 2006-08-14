@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textidx.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:54:10 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:55:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 #include <hintids.hxx>
 #include <uiparam.hxx>
@@ -42,9 +41,6 @@
 #endif
 #ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
-#endif
-#ifndef _SFXITEMSET_HXX //autogen
-#include <svtools/itemset.hxx>
 #endif
 #ifndef _SFXVIEWFRM_HXX //autogen
 #include <sfx2/viewfrm.hxx>
