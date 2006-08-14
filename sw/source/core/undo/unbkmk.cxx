@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unbkmk.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:18:25 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:49:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -75,11 +74,11 @@ void SwUndoBookmark::SetInDoc( SwDoc* pDoc )
 
 void SwUndoBookmark::ResetInDoc( SwDoc* pDoc )
 {
-    const SwBookmarks& rBkmkTbl = pDoc->GetBookmarks();
+    const SwBookmarks& rBkmkTbl = pDoc->getBookmarks();
     for( USHORT n = 0; n < rBkmkTbl.Count(); ++n )
         if( pHBookmark->IsEqualBookmark( *rBkmkTbl[ n ] ) )
         {
-                pDoc->DelBookmark( n );
+                pDoc->deleteBookmark( n );
                 break;
         }
 }
