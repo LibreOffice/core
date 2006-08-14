@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edredln.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:28:59 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:09:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -97,7 +96,7 @@ BOOL SwEditShell::AcceptRedline( USHORT nPos )
 {
     SET_CURR_SHELL( this );
     StartAllAction();
-    BOOL bRet = GetDoc()->AcceptRedline( nPos );
+    BOOL bRet = GetDoc()->AcceptRedline( nPos, true );
     if( !nPos && !::IsExtraData( GetDoc() ) )
         lcl_InvalidateAll( this );
     EndAllAction();
@@ -108,7 +107,7 @@ BOOL SwEditShell::RejectRedline( USHORT nPos )
 {
     SET_CURR_SHELL( this );
     StartAllAction();
-    BOOL bRet = GetDoc()->RejectRedline( nPos );
+    BOOL bRet = GetDoc()->RejectRedline( nPos, true );
     if( !nPos && !::IsExtraData( GetDoc() ) )
         lcl_InvalidateAll( this );
     EndAllAction();
@@ -128,13 +127,13 @@ BOOL SwEditShell::SetRedlineComment( const String& rS )
 
 const SwRedline* SwEditShell::GetCurrRedline() const
 {
-    return GetDoc()->GetRedline( *GetCrsr()->GetPoint() );
+    return GetDoc()->GetRedline( *GetCrsr()->GetPoint(), 0 );
 }
 
 void SwEditShell::UpdateRedlineAttr()
 {
-    if( ( REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE ) ==
-        ( REDLINE_SHOW_MASK & GetDoc()->GetRedlineMode() ))
+    if( ( IDocumentRedlineAccess::REDLINE_SHOW_INSERT | IDocumentRedlineAccess::REDLINE_SHOW_DELETE ) ==
+        ( IDocumentRedlineAccess::REDLINE_SHOW_MASK & GetDoc()->GetRedlineMode() ))
     {
         SET_CURR_SHELL( this );
         StartAllAction();
