@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsort.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:14:46 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:59:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 #ifndef _HINTIDS_HXX
@@ -99,9 +98,6 @@
 #endif
 #ifndef _TBLSEL_HXX
 #include <tblsel.hxx>
-#endif
-#ifndef _HINTS_HXX
-#include <hints.hxx>
 #endif
 #ifndef _CELLATR_HXX
 #include <cellatr.hxx>
@@ -420,7 +416,7 @@ BOOL SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
 
     BOOL bUndo = DoesUndo();
     if( bUndo )
-        StartUndo( UNDO_START );
+        StartUndo( UNDO_START, NULL );
 
     SwPaM* pRedlPam = 0;
     SwUndoRedlineSort* pRedlUndo = 0;
@@ -446,7 +442,7 @@ BOOL SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
             GetNodes()._Copy( aRg, aEndIdx );
 
             // Bereich neu ist von pEnd->nNode+1 bis aEndIdx
-            DeleteRedline( *pRedlPam );
+            DeleteRedline( *pRedlPam, true, USHRT_MAX );
 
             pRedlPam->GetMark()->nNode.Assign( pEnd->nNode.GetNode(), 1 );
             pCNd = pRedlPam->GetCntntNode( FALSE );
@@ -468,7 +464,7 @@ BOOL SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
         }
         else
         {
-            DeleteRedline( *pRedlPam );
+            DeleteRedline( *pRedlPam, true, USHRT_MAX );
             delete pRedlPam, pRedlPam = 0;
         }
     }
@@ -503,7 +499,7 @@ BOOL SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
         aRg.aEnd    = aRg.aStart.GetIndex() + 1;
 
         // Nodes verschieben
-        Move( aRg, aStart );
+        Move( aRg, aStart, IDocumentContentOperations::DOC_MOVEDEFAULT );
 
         // Undo Verschiebungen einpflegen
         if(pUndoSort)
@@ -525,14 +521,14 @@ BOOL SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
         SwNodeIndex aSttIdx( GetNodes(), nBeg );
 
         // der Kopierte Bereich ist das Geloeschte
-        AppendRedline( new SwRedline( REDLINE_DELETE, *pRedlPam ));
+        AppendRedline( new SwRedline( IDocumentRedlineAccess::REDLINE_DELETE, *pRedlPam ), true);
 
         // das sortierte ist das Eingefuegte
         pRedlPam->GetPoint()->nNode = aSttIdx;
         SwCntntNode* pCNd = aSttIdx.GetNode().GetCntntNode();
         pRedlPam->GetPoint()->nContent.Assign( pCNd, 0 );
 
-        AppendRedline( new SwRedline( REDLINE_INSERT, *pRedlPam ));
+        AppendRedline( new SwRedline( IDocumentRedlineAccess::REDLINE_INSERT, *pRedlPam ), true);
 
         if( pRedlUndo )
             pRedlUndo->SetOffset( aSttIdx );
@@ -541,7 +537,7 @@ BOOL SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
     }
     DoUndo( bUndo );
     if( bUndo )
-        EndUndo( UNDO_END );
+        EndUndo( UNDO_END, NULL );
 
     return TRUE;
 }
@@ -570,14 +566,11 @@ BOOL SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
         return FALSE;
 
     if( !IsIgnoreRedline() && GetRedlineTbl().Count() )
-        DeleteRedline( *pTblNd );
+        DeleteRedline( *pTblNd, true, USHRT_MAX );
 
     USHORT nStart = 0;
     if( pTblNd->GetTable().GetRowsToRepeat() > 0 && rOpt.eDirection == SRT_ROWS )
     {
-        // Das ist die Kopfzeile
-        SwTableLine* pHeadLine = pTblNd->GetTable().GetTabLines()[0];
-
         // Oberste seleketierte Zeile
         _FndLines& rLines = aFndBox.GetLines();
 
@@ -831,7 +824,7 @@ void MoveCell(SwDoc* pDoc, const SwTableBox* pSource, const SwTableBox* pTar,
 
     // Einfuegen der Source
     SwNodeIndex aIns( *pTar->GetSttNd()->EndOfSectionNode() );
-    pDoc->Move( aRg, aIns );
+    pDoc->Move( aRg, aIns, IDocumentContentOperations::DOC_MOVEDEFAULT );
 
     // Falls erster Node leer -> weg damit
     if(bDelFirst)
