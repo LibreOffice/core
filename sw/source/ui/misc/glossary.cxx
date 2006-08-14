@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glossary.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:43:45 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:49:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifdef SW_DLLIMPLEMENTATION
 #undef SW_DLLIMPLEMENTATION
 #endif
@@ -82,9 +81,6 @@
 #include <svx/acorrcfg.hxx>
 #include <sfx2/viewfrm.hxx>
 
-#ifndef _DOC_HXX //autogen wg. SwDoc
-#include <doc.hxx>
-#endif
 #ifndef _UNOCRSR_HXX //autogen wg. SwUnoCrsr
 #include <unocrsr.hxx>
 #endif
@@ -180,9 +176,6 @@
 #endif
 #ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
-#endif
-#ifndef _URLOBJ_HXX
-#include <tools/urlobj.hxx>
 #endif
 #ifndef _FILEDLGHELPER_HXX
 #include <sfx2/filedlghelper.hxx>
