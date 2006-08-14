@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-27 14:39:59 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:15:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifdef PCH
@@ -89,11 +88,6 @@
 #include <svx/tstpitem.hxx>
 #endif
 #include "svtools/urihelper.hxx"
-#if 0
-#ifndef _TOOLS_TENCCVT_HXX
-#include <tools/tenccvt.hxx>
-#endif
-#endif
 #ifndef _FMTPDSC_HXX //autogen
 #include <fmtpdsc.hxx>
 #endif
@@ -1780,13 +1774,13 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
                 pTmpSet = new SfxItemSet( pNd->GetSwAttrSet() );
                 SvxULSpaceItem aUL( *(SvxULSpaceItem*)pItem );
                 // OD, MMAHER 2004-03-01 #i25901#- consider compatibility option
-                if (!rWrt.pDoc->IsParaSpaceMaxAtPages())
+                if (!rWrt.pDoc->get(IDocumentSettingAccess::PARA_SPACE_MAX_AT_PAGES))
                 {
                     if( !(ND_HAS_PREV_LAYNODE & nPrvNxtNd ))
                         aUL.SetUpper( 0 );
                 }
                 // OD, MMAHER 2004-03-01 #i25901# - consider compatibility option
-                if (!rWrt.pDoc->IsAddParaSpacingToTableCells())
+                if (!rWrt.pDoc->get(IDocumentSettingAccess::ADD_PARA_SPACING_TO_TABLE_CELLS))
                 {
                     if( !(ND_HAS_NEXT_LAYNODE & nPrvNxtNd ))
                         aUL.SetLower( 0 );
@@ -2854,15 +2848,15 @@ void SwWW8Writer::OutRedline( const SwRedlineData& rRedline )
     const USHORT* pSprmIds = 0;
     switch( rRedline.GetType() )
     {
-    case REDLINE_INSERT:
+    case IDocumentRedlineAccess::REDLINE_INSERT:
         pSprmIds = aSprmIds;
         break;
 
-    case REDLINE_DELETE:
+    case IDocumentRedlineAccess::REDLINE_DELETE:
         pSprmIds = aSprmIds + (2 * 3);
         break;
 
-    case REDLINE_FORMAT:
+    case IDocumentRedlineAccess::REDLINE_FORMAT:
         if( bWrtWW8 )
         {
             InsUInt16( 0xca57 );
