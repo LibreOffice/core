@@ -4,9 +4,9 @@
  *
  *  $RCSfile: trvlfrm.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:28:47 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:30:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-
 #pragma hdrstop
 
 
@@ -102,12 +100,6 @@
 #ifndef _VISCRS_HXX //autogen
 #include <viscrs.hxx>
 #endif
-#ifndef _PAM_HXX //autogen
-#include <pam.hxx>
-#endif
-#ifndef _NODE_HXX //autogen
-#include <node.hxx>
-#endif
 #ifndef _FRMFMT_HXX //autogen
 #include <frmfmt.hxx>
 #endif
@@ -122,9 +114,6 @@
 #endif
 #ifndef _FRMTOOL_HXX //autogen
 #include <frmtool.hxx>
-#endif
-#ifndef _HINTS_HXX //autogen
-#include <hints.hxx>
 #endif
 #ifndef _FRMSH_HXX
 #include <frmsh.hxx>
@@ -2724,8 +2713,7 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
     //  befindet.
     const SwPageFrm *pPage      = pStartFrm->FindPageFrm();
     const SwPageFrm *pEndPage   = pEndFrm->FindPageFrm();
-    const SwFlyFrm  *pStartFly  = pStartFrm->FindFlyFrm();
-    const SwFlyFrm  *pEndFly    = pEndFrm->FindFlyFrm();
+
     while ( pPage )
     {
         if ( pPage->GetSortedObjs() )
