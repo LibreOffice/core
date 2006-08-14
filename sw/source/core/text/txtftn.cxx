@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtftn.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 13:48:28 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:44:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #include "viewsh.hxx"
 #include "doc.hxx"
 #include "pagefrm.hxx"
@@ -68,9 +67,6 @@
 #endif
 #ifndef _SVX_CHARROTATEITEM_HXX
 #include <svx/charrotateitem.hxx>
-#endif
-#ifndef _SVDOBJ_HXX //autogen
-#include <svx/svdobj.hxx>
 #endif
 #ifndef _BREAKIT_HXX
 #include <breakit.hxx>
@@ -732,7 +728,7 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
                 SwFtnFrm *pNew = new SwFtnFrm(pDoc->GetDfltFrmFmt(),this,pFtn);
                  SwNodeIndex aIdx( *pFtn->GetStartNode(), 1 );
                  ::_InsertCnt( pNew, pDoc, aIdx.GetIndex() );
-                pDoc->GetLayouter()->CollectEndnote( pNew );
+                GetNode()->getIDocumentLayoutAccess()->GetLayouter()->CollectEndnote( pNew );
             }
             else if( pSrcFrm != this )
                 pBoss->ChangeFtnRef( pSrcFrm, pFtn, this );
@@ -1040,8 +1036,8 @@ SwNumberPortion *SwTxtFormatter::NewFtnNumPortion( SwTxtFormatInfo &rInf ) const
         rInf.GetTxtStart() != rInf.GetIdx() )
         return 0;
 
-    const SwFtnFrm *pFtnFrm = pFrm->FindFtnFrm();
-    const SwTxtFtn *pFtn = pFtnFrm->GetAttr();
+    const SwFtnFrm* pFtnFrm = pFrm->FindFtnFrm();
+    const SwTxtFtn* pFtn = pFtnFrm->GetAttr();
 
     // Aha, wir sind also im Fussnotenbereich
     SwFmtFtn& rFtn = (SwFmtFtn&)pFtn->GetFtn();
@@ -1057,7 +1053,8 @@ SwNumberPortion *SwTxtFormatter::NewFtnNumPortion( SwTxtFormatInfo &rInf ) const
     const SwAttrSet& rSet = pInfo->GetCharFmt(*pDoc)->GetAttrSet();
 
     const SwAttrSet* pParSet = &rInf.GetCharAttr();
-    SwFont *pNumFnt = new SwFont( pParSet, rInf.GetDoc() );
+    const IDocumentSettingAccess* pIDSA = pFrm->GetTxtNode()->getIDocumentSettingAccess();
+    SwFont *pNumFnt = new SwFont( pParSet, pIDSA );
 
     // --> FME 2005-02-17 #i37142#
     // Underline style of paragraph font should not be considered
@@ -1073,8 +1070,9 @@ SwNumberPortion *SwTxtFormatter::NewFtnNumPortion( SwTxtFormatInfo &rInf ) const
     pNumFnt->SetWeight( WEIGHT_NORMAL, SW_CTL );
     // <--
 
-    pNumFnt->SetDiffFnt(&rSet, rInf.GetDoc() );
+    pNumFnt->SetDiffFnt(&rSet, pIDSA );
     pNumFnt->SetVertical( pNumFnt->GetOrientation(), pFrm->IsVertical() );
+
     SwFtnNumPortion* pNewPor = new SwFtnNumPortion( aFtnTxt, pNumFnt );
     pNewPor->SetLeft( !pFrm->IsRightToLeft() );
     return pNewPor;
@@ -1377,7 +1375,7 @@ SwFtnSave::SwFtnSave( const SwTxtSizeInfo &rInf, const SwTxtFtn* pTxtFtn )
         else
             pInfo = &pDoc->GetFtnInfo();
         const SwAttrSet& rSet = pInfo->GetAnchorCharFmt((SwDoc&)*pDoc)->GetAttrSet();
-        pFnt->SetDiffFnt( &rSet, rInf.GetDoc() );
+        pFnt->SetDiffFnt( &rSet, rInf.GetTxtFrm()->GetNode()->getIDocumentSettingAccess() );
 
         // we reduce footnote size, if we are inside a double line portion
         if ( ! pOld->GetEscapement() && 50 == pOld->GetPropr() )
