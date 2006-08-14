@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltexti.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 13:54:09 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:25:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifndef _XMLTEXTI_HXX
 #define _XMLTEXTI_HXX
 
@@ -44,8 +43,6 @@
 #endif
 
 class XMLRedlineImportHelper;
-class SwApplet_Impl;
-class SvPlugInObjectRef;
 class SvXMLImport;
 
 class SwXMLTextImportHelper : public XMLTextImportHelper
