@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accframe.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 14:20:43 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:43:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,10 +38,8 @@
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
+
 #include <list>
-#ifndef _FRAME_HXX
-#include <frame.hxx>
-#endif
 #ifndef _ACCFRMOBJ_HXX
 #include <accfrmobj.hxx>
 #endif
