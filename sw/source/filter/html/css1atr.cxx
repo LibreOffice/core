@@ -4,9 +4,9 @@
  *
  *  $RCSfile: css1atr.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:11:41 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:02:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 
 #pragma hdrstop
@@ -63,9 +62,6 @@
 #endif
 #ifndef _SVX_BLNKITEM_HXX //autogen
 #include <svx/blnkitem.hxx>
-#endif
-#ifndef _SVX_CMAPITEM_HXX //autogen
-#include <svx/cmapitem.hxx>
 #endif
 #ifndef _SVX_CMAPITEM_HXX //autogen
 #include <svx/cmapitem.hxx>
@@ -221,6 +217,8 @@
 #include "wrthtml.hxx"
 #include "htmlnum.hxx"
 
+#include <IDocumentStylePoolAccess.hxx>
+
 /*
  * um nicht immer wieder nach einem Update festzustellen, das irgendwelche
  * Hint-Ids dazugekommen sind, wird hier definiert, die Groesse der Tabelle
@@ -266,9 +264,9 @@ sal_Char __FAR_DATA CSS1_CONSTASCII_DEF( sHTML_FTN_fontheight, "57%" );
 extern SwAttrFnTab aCSS1AttrFnTab;
 
 static Writer& OutCSS1_SwFmt( Writer& rWrt, const SwFmt& rFmt,
-                              SwDoc *pDoc, SwDoc *pTemplate );
+                              IDocumentStylePoolAccess /*SwDoc*/ *pDoc, SwDoc *pTemplate );
 static Writer& OutCSS1_SwPageDesc( Writer& rWrt, const SwPageDesc& rFmt,
-                                   SwDoc *pDoc, SwDoc *pTemplate,
+                                   IDocumentStylePoolAccess /*SwDoc*/ *pDoc, SwDoc *pTemplate,
                                    USHORT nRefPoolId, BOOL bExtRef,
                                    BOOL bPseudo=TRUE );
 static Writer& OutCSS1_SwFtnInfo( Writer& rWrt, const SwEndNoteInfo& rInfo,
@@ -735,13 +733,15 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc, BOOL bUsed )
             pPageDesc = pFollow;
             pFollow = pPageDesc->GetFollow();
         }
+
+        IDocumentStylePoolAccess* pStylePoolAccess = getIDocumentStylePoolAccess();
         if( pPageDesc == pFollow )
         {
             // Das Dokument ist einseitig. Egal welche Seite verwendet wird,
             // es wird kein zweiseitiges Dokument daraus gemacht.
             // Die Attributierung wird relativ zur HTML-Seitenvorlage
             // aus der HTML-Vorlage exportiert.
-            OutCSS1_SwPageDesc( *this, *pPageDesc, pDoc, pTemplate,
+          OutCSS1_SwPageDesc( *this, *pPageDesc, pStylePoolAccess, pTemplate,
                                 RES_POOLPAGE_HTML, TRUE, FALSE );
             nFirstRefPoolId = pFollow->GetPoolFmtId();
         }
@@ -751,9 +751,9 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc, BOOL bUsed )
                   RES_POOLPAGE_LEFT == pFollow->GetPoolFmtId()) )
         {
             // Das Dokument ist zweiseitig
-            OutCSS1_SwPageDesc( *this, *pPageDesc, pDoc, pTemplate,
+          OutCSS1_SwPageDesc( *this, *pPageDesc, pStylePoolAccess, pTemplate,
                                 RES_POOLPAGE_HTML, TRUE );
-            OutCSS1_SwPageDesc( *this, *pFollow, pDoc, pTemplate,
+          OutCSS1_SwPageDesc( *this, *pFollow, pStylePoolAccess, pTemplate,
                                 RES_POOLPAGE_HTML, TRUE );
             nFirstRefPoolId = RES_POOLPAGE_RIGHT;
             bCSS1IgnoreFirstPageDesc = FALSE;
@@ -761,7 +761,7 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc, BOOL bUsed )
         // Alles andere bekommen wir nicht hin.
 
         if( pFirstPageDesc )
-            OutCSS1_SwPageDesc( *this, *pFirstPageDesc, pDoc, pTemplate,
+          OutCSS1_SwPageDesc( *this, *pFirstPageDesc, pStylePoolAccess, pTemplate,
                                 nFirstRefPoolId, FALSE );
     }
 // /Feature: PrintExt
@@ -770,7 +770,7 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc, BOOL bUsed )
     // The text body style has to be exported always (if it is changed compared
     // to the template), because it is used as reference for any style
     // that maps to <P>, and that's especially the standard style
-      pDoc->GetTxtCollFromPoolSimple( RES_POOLCOLL_TEXT, FALSE );
+    getIDocumentStylePoolAccess()->GetTxtCollFromPool( RES_POOLCOLL_TEXT, false );
 
     // das Default-TextStyle wir nicht mit ausgegeben !!
     // das 0-Style ist das Default, wird nie ausgegeben !!
@@ -1208,7 +1208,7 @@ static USHORT GetCSS1Selector( const SwFmt *pFmt, String& rSelector,
 }
 
 const SwFmt *SwHTMLWriter::GetTemplateFmt( USHORT nPoolFmtId,
-                                           SwDoc *pTemplate )
+                                           IDocumentStylePoolAccess* pTemplate /*SwDoc *pTemplate*/)
 {
     const SwFmt *pRefFmt = 0;
 
@@ -1219,8 +1219,7 @@ const SwFmt *SwHTMLWriter::GetTemplateFmt( USHORT nPoolFmtId,
         if( POOLGRP_NOCOLLID & nPoolFmtId )
             pRefFmt = pTemplate->GetCharFmtFromPool( nPoolFmtId );
         else
-            pRefFmt = pTemplate->GetTxtCollFromPoolSimple( nPoolFmtId,
-                                                           FALSE );
+            pRefFmt = pTemplate->GetTxtCollFromPool( nPoolFmtId, false );
     }
 
     return pRefFmt;
@@ -1731,7 +1730,7 @@ static void OutCSS1DropCapRule(
 }
 
 static Writer& OutCSS1_SwFmt( Writer& rWrt, const SwFmt& rFmt,
-                              SwDoc *pDoc, SwDoc *pTemplate )
+                              IDocumentStylePoolAccess/*SwDoc*/ *pDoc, SwDoc *pTemplate )
 {
     SwHTMLWriter & rHTMLWrt = (SwHTMLWriter&)rWrt;
 
@@ -1894,8 +1893,8 @@ static Writer& OutCSS1_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         {
             if( nPoolFmtId==RES_POOLCOLL_TEXT )
                 rHTMLWrt.aScriptParaStyles.Insert
-                    (new String( pDoc->GetTxtCollFromPoolSimple
-                                 ( RES_POOLCOLL_STANDARD, FALSE )->GetName()
+                    (new String( pDoc->GetTxtCollFromPool
+                                 ( RES_POOLCOLL_STANDARD, false )->GetName()
                                  ) );
             rHTMLWrt.aScriptParaStyles.Insert( new String( rFmt.GetName() ) );
         }
@@ -1921,7 +1920,7 @@ static Writer& OutCSS1_SwFmt( Writer& rWrt, const SwFmt& rFmt,
 }
 
 static Writer& OutCSS1_SwPageDesc( Writer& rWrt, const SwPageDesc& rPageDesc,
-                                   SwDoc *pDoc, SwDoc *pTemplate,
+                                   IDocumentStylePoolAccess/*SwDoc*/ *pDoc, SwDoc *pTemplate,
                                    USHORT nRefPoolId, BOOL bExtRef,
                                    BOOL bPseudo )
 {
@@ -1929,9 +1928,9 @@ static Writer& OutCSS1_SwPageDesc( Writer& rWrt, const SwPageDesc& rPageDesc,
 
     const SwPageDesc* pRefPageDesc = 0;
     if( !bExtRef )
-        pRefPageDesc = pDoc->GetPageDescFromPoolSimple( nRefPoolId, FALSE );
+        pRefPageDesc = pDoc->GetPageDescFromPool( nRefPoolId, false );
     else if( pTemplate )
-        pRefPageDesc = pTemplate->GetPageDescFromPoolSimple( nRefPoolId, FALSE );
+        pRefPageDesc = pTemplate->GetPageDescFromPool( nRefPoolId, false );
 
     String aSelector( '@' );
     aSelector.AppendAscii( sCSS1_page );
@@ -2541,7 +2540,8 @@ void SwHTMLWriter::OutCSS1_FrmFmtBackground( const SwFrmFmt& rFrmFmt )
         // benutzt. Wir benutzen si bei einem HTML-Dokument immer und
         // bei einem Text-Dokument nur, wenn es im Browse-Mode angezeigt
         // wird.
-        if( pDoc->IsHTMLMode() || pDoc->IsBrowseMode() )
+        if( pDoc->get(IDocumentSettingAccess::HTML_MODE) ||
+            pDoc->get(IDocumentSettingAccess::BROWSE_MODE))
         {
             ViewShell *pVSh = 0;
             pDoc->GetEditShell( &pVSh );
@@ -2828,7 +2828,7 @@ static Writer& OutCSS1_SvxKerning( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
 
-    // Kerning-Item nur ausgeben, wenn volle Style-UnterstÅtzung da ist
+    // Kerning-Item nur ausgeben, wenn volle Style-Unterst?tzung da ist
     if( !rHTMLWrt.IsHTMLMode(HTMLMODE_FULL_STYLES) )
         return rWrt;
 
