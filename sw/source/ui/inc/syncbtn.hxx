@@ -4,9 +4,9 @@
  *
  *  $RCSfile: syncbtn.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:06:49 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:46:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _SWSYNCBTN_HXX
 #define _SWSYNCBTN_HXX
-
 #ifndef _SFX_CHILDWIN_HXX //autogen
 #include <sfx2/childwin.hxx>
 #endif
@@ -48,8 +47,6 @@
 #ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
 #endif
-
-class SwWrtShell;
 
 /*------------------------------------------------------------------------
     Beschreibung:
