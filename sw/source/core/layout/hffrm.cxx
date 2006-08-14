@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hffrm.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 11:31:32 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:26:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-
 #pragma hdrstop
 
 #include "pagefrm.hxx"
@@ -141,9 +139,7 @@ SwHeadFootFrm::SwHeadFootFrm( SwFrmFmt * pFmt, USHORT nTypeIn)
     : SwLayoutFrm(pFmt)
 {
     nType = nTypeIn;
-#ifdef VERTICAL_LAYOUT
     SetDerivedVert( FALSE );
-#endif
 
     const SwFmtCntnt &rCnt = pFmt->GetCntnt();
 
@@ -732,7 +728,7 @@ void SwPageFrm::PrepareHeader()
 
     const SwFmtHeader &rH = ((SwFrmFmt*)pRegisteredIn)->GetHeader();
 
-    const FASTBOOL bOn = !((SwFrmFmt*)pRegisteredIn)->GetDoc()->IsBrowseMode();
+    const FASTBOOL bOn = !((SwFrmFmt*)pRegisteredIn)->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
 
     if ( bOn && rH.IsActive() )
     {   //Header einsetzen, vorher entfernen falls vorhanden.
@@ -782,7 +778,7 @@ void SwPageFrm::PrepareFooter()
     while ( pLay->GetNext() )
         pLay = (SwLayoutFrm*)pLay->GetNext();
 
-    const FASTBOOL bOn = !((SwFrmFmt*)pRegisteredIn)->GetDoc()->IsBrowseMode();
+    const FASTBOOL bOn = !((SwFrmFmt*)pRegisteredIn)->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
 
     if ( bOn && rF.IsActive() )
     {   //Footer einsetzen, vorher entfernen falls vorhanden.
