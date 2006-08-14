@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glshell.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:22:21 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:49:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -358,7 +357,7 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const String& rGroup, const String& rS
         xDocSh->GetDoc()->DoUndo( FALSE );
 
         xDocSh->GetWrtShell()->InsertGlossary( *pGroup, rShortName );
-        if( !xDocSh->GetDoc()->GetPrt() )
+        if( !xDocSh->GetDoc()->getPrinter( false ) )
         {
             // wir erzeugen einen default SfxPrinter.
             // Das ItemSet wird vom Sfx geloescht!
@@ -370,7 +369,7 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const String& rGroup, const String& rS
             SfxPrinter* pPrinter = new SfxPrinter( pSet );
 
             // und haengen ihn ans Dokument.
-            xDocSh->GetDoc()->SetPrt( pPrinter );
+            xDocSh->GetDoc()->setPrinter( pPrinter, true, true );
         }
 
         xDocSh->SetTitle( aDocTitle );
