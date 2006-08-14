@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLRedlineImportHelper.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 13:54:08 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:20:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifndef _XMLREDLINEIMPORTHELPER_HXX
 #define _XMLREDLINEIMPORTHELPER_HXX
 
@@ -54,10 +53,6 @@
 
 #ifndef _REDLINE_HXX
 #include "redline.hxx"
-#endif
-
-#ifndef _REDLENUM_HXX
-#include "redlenum.hxx"
 #endif
 
 #include <map>
