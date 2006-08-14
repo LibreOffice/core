@@ -4,9 +4,9 @@
  *
  *  $RCSfile: conrect.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 12:42:01 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:51:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -64,21 +63,12 @@
 #ifndef _SVDVIEW_HXX //autogen
 #include <svx/svdview.hxx>
 #endif
-#ifndef _SFXVIEWFRM_HXX
-#include <sfx2/viewfrm.hxx>
-#endif
 #ifndef _SVDCAPT_HXX
 #include <svx/svdocapt.hxx>
 #endif
 #ifndef _OUTLOBJ_HXX
 #include <svx/outlobj.hxx>
 #endif
-//#define ITEMID_ADJUST EE_PARA_JUST
-//#ifndef _SVX_ADJITEM_HXX
-//#include <svx/adjitem.hxx>
-//#endif
-
-
 #ifndef _CMDID_H
 #include <cmdid.h>
 #endif
@@ -100,7 +90,6 @@
 #ifndef _CONRECT_HXX
 #include <conrect.hxx>
 #endif
-
 
 /*************************************************************************
 |*
