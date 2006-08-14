@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toxmgr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:24:41 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:47:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 #ifndef _WRTSH_HXX
@@ -50,9 +49,6 @@
 #ifndef _TOXMGR_HXX
 #include <toxmgr.hxx>
 #endif
-#ifndef _AUTHFLD_HXX
-#include <authfld.hxx>
-#endif
 #ifndef _CRSSKIP_HXX
 #include <crsskip.hxx>
 #endif
@@ -62,7 +58,6 @@
 #ifndef _SWUNDO_HXX
 #include <swundo.hxx>
 #endif
-
 #ifndef _GLOBALS_HRC
 #include <globals.hrc>
 #endif
@@ -503,7 +498,7 @@ BOOL SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
             if (pNewTOX != NULL)
                 pDoc->DelAllUndoObj();
 
-            pDoc->StartUndo(UNDO_TOXCHANGE);
+            pDoc->StartUndo(UNDO_TOXCHANGE, NULL);
         }
 
         if (pNewTOX != NULL) // => pTOX != NULL
@@ -513,7 +508,7 @@ BOOL SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
 
         if (pDoc->DoesUndo())
         {
-            pDoc->EndUndo(UNDO_TOXCHANGE);
+            pDoc->EndUndo(UNDO_TOXCHANGE, NULL);
 
             if (pNewTOX == NULL)
                 pDoc->DelAllUndoObj();
