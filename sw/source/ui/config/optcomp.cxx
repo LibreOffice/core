@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optcomp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:43:56 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:28:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifdef SW_DLLIMPLEMENTATION
 #undef SW_DLLIMPLEMENTATION
 #endif
@@ -48,10 +47,6 @@
 
 #include "optcomp.hrc"
 #include "globals.hrc"
-
-#ifndef _SHL_HXX
-#include <tools/shl.hxx>
-#endif
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
@@ -60,9 +55,6 @@
 #endif
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _RTL_USTRING_HXX_
-#include <rtl/ustring.hxx>
 #endif
 #ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
@@ -73,9 +65,8 @@
 #ifndef _SFX_FCONTNR_HXX
 #include <sfx2/fcontnr.hxx>
 #endif
-
-#ifndef _COM_SUN_STAR_DOCUMENT_PRINTERINDEPENDENTLAYOUT_HPP_
-#include <com/sun/star/document/PrinterIndependentLayout.hpp>
+#ifndef IDOCUMENTSETTINGACCESS_HXX_INCLUDED
+#include <IDocumentSettingAccess.hxx>
 #endif
 
 using namespace ::com::sun::star::beans;
@@ -509,18 +500,18 @@ ULONG SwCompatibilityOptPage::GetDocumentOptions() const
     ULONG nRet = 0;
     if ( m_pWrtShell )
     {
-        short nPrtLayout = m_pWrtShell->IsUseVirtualDevice();
+        const IDocumentSettingAccess& rIDocumentSettingAccess = *m_pWrtShell->getIDocumentSettingAccess();
         nRet = convertBools2Ulong_Impl(
-            PrinterIndependentLayout::DISABLED == nPrtLayout,
-            m_pWrtShell->IsParaSpaceMax() != sal_False,
-            m_pWrtShell->IsParaSpaceMaxAtPages() != sal_False,
-            m_pWrtShell->IsTabCompat() == sal_False,
-            m_pWrtShell->IsAddExtLeading() == sal_False,
-            m_pWrtShell->IsFormerLineSpacing() != sal_False,
-            m_pWrtShell->IsAddParaSpacingToTableCells() != sal_False,
-            m_pWrtShell->IsFormerObjectPositioning() != sal_False,
-            m_pWrtShell->IsFormerTextWrapping() != sal_False,
-            m_pWrtShell->ConsiderWrapOnObjPos() != sal_False );
+                rIDocumentSettingAccess.get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE) == sal_False,
+                rIDocumentSettingAccess.get(IDocumentSettingAccess::PARA_SPACE_MAX) != sal_False,
+                rIDocumentSettingAccess.get(IDocumentSettingAccess::PARA_SPACE_MAX_AT_PAGES) != sal_False,
+                rIDocumentSettingAccess.get(IDocumentSettingAccess::TAB_COMPAT) == sal_False,
+                rIDocumentSettingAccess.get(IDocumentSettingAccess::ADD_EXT_LEADING) == sal_False,
+                rIDocumentSettingAccess.get(IDocumentSettingAccess::OLD_LINE_SPACING) != sal_False,
+                rIDocumentSettingAccess.get(IDocumentSettingAccess::ADD_PARA_SPACING_TO_TABLE_CELLS) != sal_False,
+                rIDocumentSettingAccess.get(IDocumentSettingAccess::USE_FORMER_OBJECT_POS) != sal_False,
+                rIDocumentSettingAccess.get(IDocumentSettingAccess::USE_FORMER_TEXT_WRAPPING) != sal_False,
+                rIDocumentSettingAccess.get(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION) != sal_False );
     }
     return nRet;
 }
@@ -569,10 +560,7 @@ BOOL SwCompatibilityOptPage::FillItemSet( SfxItemSet& rSet )
             {
                 if ( COPT_USE_PRINTERDEVICE == nOption )
                 {
-                    short nUseVirtualDev = bChecked
-                        ? PrinterIndependentLayout::DISABLED
-                        : PrinterIndependentLayout::HIGH_RESOLUTION;
-                    m_pWrtShell->SetUseVirtualDevice( nUseVirtualDev );
+                    m_pWrtShell->SetUseVirDev( !bChecked );
                     bModified = TRUE;
                 }
                 else if ( ( COPT_ADD_SPACING == nOption || COPT_ADD_SPACING_AT_PAGES == nOption ) && !bSetParaSpaceMax )
@@ -624,8 +612,8 @@ BOOL SwCompatibilityOptPage::FillItemSet( SfxItemSet& rSet )
 
         if ( bSetParaSpaceMax )
         {
-            m_pWrtShell->SetParaSpaceMax( m_aOptionsLB.IsChecked( (USHORT)COPT_ADD_SPACING ),
-                                          m_aOptionsLB.IsChecked( (USHORT)COPT_ADD_SPACING_AT_PAGES ) );
+            m_pWrtShell->SetParaSpaceMax( m_aOptionsLB.IsChecked( (USHORT)COPT_ADD_SPACING ) );
+            m_pWrtShell->SetParaSpaceMaxAtPages( m_aOptionsLB.IsChecked( (USHORT)COPT_ADD_SPACING_AT_PAGES ) );
             bModified = TRUE;
         }
     }
