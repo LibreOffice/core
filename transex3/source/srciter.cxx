@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srciter.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 17:24:32 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:11:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,35 +44,49 @@
 SourceTreeIterator::SourceTreeIterator(
     const ByteString &rRootDirectory, const ByteString &rVersion , bool bLocal_in )
 /*****************************************************************************/
-                : pRootDirectory( NULL ),
-                bInExecute( FALSE ) , bLocal( bLocal_in )
+                : bInExecute( FALSE ) , bLocal( bLocal_in )
 {
+    (void) rVersion ;
+
     if(!bLocal){
-        pRootDirectory = SourceDirectory::CreateRootDirectory(
-            rRootDirectory, rVersion, TRUE );
-        //fprintf( stderr, "\n" );
+        rtl::OUString sRootDirectory( rRootDirectory.GetBuffer() , rRootDirectory.Len() , RTL_TEXTENCODING_UTF8 );
+        aRootDirectory = transex::Directory( sRootDirectory );
     }
-    else
-        pRootDirectory = 0;
 }
 
 /*****************************************************************************/
 SourceTreeIterator::~SourceTreeIterator()
 /*****************************************************************************/
 {
-    delete pRootDirectory;
 }
 
 /*****************************************************************************/
-void SourceTreeIterator::ExecuteDirectory( SourceDirectory *pDirectory )
+void SourceTreeIterator::ExecuteDirectory( transex::Directory& aDirectory )
 /*****************************************************************************/
 {
     if ( bInExecute ) {
-        OnExecuteDirectory( pDirectory->GetFullPath());
-        if ( pDirectory->GetSubDirectories())
-            for ( ULONG i=0;i < pDirectory->GetSubDirectories()->Count();i++ )
-                ExecuteDirectory(( SourceDirectory * )
-                    pDirectory->GetSubDirectories()->GetObject( i ));
+        rtl::OUString sDirName = aDirectory.getDirectoryName();
+
+        static rtl::OUString WCARD1 ( rtl::OUString::createFromAscii( "unxlngi" ) );
+        static rtl::OUString WCARD2 ( rtl::OUString::createFromAscii( "unxsoli" ) );
+        static rtl::OUString WCARD3 ( rtl::OUString::createFromAscii( "wntmsci" ) );
+        static rtl::OUString WCARD4 ( rtl::OUString::createFromAscii( "unxsols" ) );
+        static rtl::OUString WCARD5 ( rtl::OUString::createFromAscii( "common" ) );
+
+
+        if( sDirName.indexOf( WCARD1 , 0 ) > -1 ||
+            sDirName.indexOf( WCARD2 , 0 ) > -1 ||
+            sDirName.indexOf( WCARD3 , 0 ) > -1 ||
+            sDirName.indexOf( WCARD4 , 0 ) > -1 ||
+            sDirName.indexOf( WCARD5 , 0 ) > -1
+           )    return;
+        //printf("**** %s \n", OUStringToOString( sDirName , RTL_TEXTENCODING_UTF8 , sDirName.getLength() ).getStr() );
+        aDirectory.setSkipLinks( bSkipLinks );
+        aDirectory.readDirectory();
+        OnExecuteDirectory( aDirectory.getFullName() );
+        if ( aDirectory.getSubDirectories().size() )
+            for ( ULONG i=0;i < aDirectory.getSubDirectories().size();i++ )
+                ExecuteDirectory( aDirectory.getSubDirectories()[ i ] );
     }
 }
 
@@ -80,13 +94,11 @@ void SourceTreeIterator::ExecuteDirectory( SourceDirectory *pDirectory )
 BOOL SourceTreeIterator::StartExecute()
 /*****************************************************************************/
 {
-    if ( pRootDirectory ) {
-        bInExecute = TRUE;
 
-        ExecuteDirectory( pRootDirectory );
-    }
+    bInExecute = TRUE;                  // FIXME
+    ExecuteDirectory( aRootDirectory );
 
-    if ( bInExecute ) {
+    if ( bInExecute ) {                 // FIXME
         bInExecute = FALSE;
         return TRUE;
     }
@@ -101,8 +113,8 @@ void SourceTreeIterator::EndExecute()
 }
 
 /*****************************************************************************/
-void SourceTreeIterator::OnExecuteDirectory( const ByteString &rDirectory )
+void SourceTreeIterator::OnExecuteDirectory( const rtl::OUString &rDirectory )
 /*****************************************************************************/
 {
-    fprintf( stdout, "%s\n", rDirectory.GetBuffer());
+    fprintf( stdout, "%s\n", rtl::OUStringToOString( rDirectory, RTL_TEXTENCODING_UTF8, rDirectory.getLength() ).getStr() );
 }
