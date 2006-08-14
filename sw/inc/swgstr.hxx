@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swgstr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:14:43 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:33:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifndef _SWGSTR_HXX
 #define _SWGSTR_HXX
 
@@ -81,25 +80,20 @@ public:
     ~swstreambase();
     SvStream& Strm()                    { return *pStrm; }
     void clear();                       // Puffer loeschen
-    sal_Char* GetBuf()                  { return pBuf; }
 
     // Zusatzfunktionen zur I/O von LONGs als 3-Byte-Zahlen
 
     void long3()                        { nLong = 3; }
     void long4()                        { nLong = 4; }
 
-    void sync( swstreambase& r )        { pStrm->Seek( r.tell() ); }
-
     // Alias- und Hilfsfunktionen
 
     void seek( long nPos )              { pStrm->Seek( nPos );  }
     long tell()                         { return pStrm->Tell(); }
     long filesize();                    // Dateigroesse
-    void flush()                        { pStrm->Flush(); }
 
     void setbad();
     int good()                          { return ( pStrm->GetError() == SVSTREAM_OK ); }
-    int bad()                           { return ( pStrm->GetError() != SVSTREAM_OK ); }
     int operator!()                     { return ( pStrm->GetError() != SVSTREAM_OK ); }
     int eof()                           { return pStrm->IsEof(); }
 
