@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itrform2.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:55:00 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:39:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _ITRFORM2_HXX
 #define _ITRFORM2_HXX
-
 #include "itrpaint.hxx"
 
 class SwFlyCntPortion;
@@ -46,6 +45,7 @@ class SwNumberPortion;
 class SwErgoSumPortion;
 class SwExpandPortion;
 class SwMultiPortion;
+class SwFtnPortion;
 class SvLongs;
 
 /*************************************************************************
