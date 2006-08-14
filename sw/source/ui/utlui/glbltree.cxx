@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glbltree.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:44:53 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 18:03:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 #ifndef _SVSTDARR_HXX
@@ -134,9 +133,6 @@
 #endif
 #ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
-#include <com/sun/star/uno/Sequence.hxx>
 #endif
 #include <globals.hrc> //CHINA001
 #include "swabstdlg.hxx" //CHINA001
