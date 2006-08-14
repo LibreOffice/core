@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par2.hxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-26 18:21:02 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:18:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifndef _WW8PAR2_HXX
@@ -61,7 +60,6 @@
 #include "ww8par.hxx"   // WW8_BRC5
 #endif
 
-class SwCharFmt;
 class WW8RStyle;
 
 class WW8DupProperties
