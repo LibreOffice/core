@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textglos.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:53:51 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:54:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #ifndef _SFXREQUEST_HXX //autogen
@@ -41,9 +40,6 @@
 #endif
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
-#endif
-#ifndef _SFXITEMSET_HXX //autogen
-#include <svtools/itemset.hxx>
 #endif
 #ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
