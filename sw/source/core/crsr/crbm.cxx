@@ -4,9 +4,9 @@
  *
  *  $RCSfile: crbm.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:03:06 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:50:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,10 +33,8 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
-#include "doc.hxx"
 #include "crsrsh.hxx"
 #include "ndtxt.hxx"
 #ifndef _DOCARY_HXX
@@ -46,7 +44,7 @@
 #include "bookmrk.hxx"
 #include "callnk.hxx"
 #include "swcrsr.hxx"
-
+#include <IDocumentBookmarkAccess.hxx>
 
 /*
  * Methoden der SwCrsrShell fuer Bookmark
@@ -55,11 +53,11 @@
 
 // am CurCrsr.SPoint
 FASTBOOL SwCrsrShell::SetBookmark( const KeyCode& rCode, const String& rName,
-                                const String& rShortName, BOOKMARK_TYPE eMark )
+                                const String& rShortName, IDocumentBookmarkAccess::BookmarkType eMark )
 {
     StartAction();
-    FASTBOOL bRet = 0 != pDoc->MakeBookmark( *GetCrsr(), rCode, rName,
-                                            rShortName, eMark);
+    FASTBOOL bRet = 0 != getIDocumentBookmarkAccess()->makeBookmark( *GetCrsr(), rCode, rName,
+                                                                    rShortName, eMark);
     EndAction();
     return bRet;
 }
@@ -72,7 +70,7 @@ FASTBOOL SwCrsrShell::GotoBookmark(USHORT nPos, BOOL bAtStart)
     FASTBOOL bRet = TRUE;
     SwCallLink aLk( *this );
 
-    SwBookmark* pBkmk = pDoc->GetBookmarks()[ nPos ];
+    SwBookmark* pBkmk = getIDocumentBookmarkAccess()->getBookmarks()[ nPos ];
     SwCursor* pCrsr = GetSwCrsr();
     SwCrsrSaveState aSaveState( *pCrsr );
 
@@ -107,7 +105,7 @@ FASTBOOL SwCrsrShell::GotoBookmark(USHORT nPos)
     // Crsr-Moves ueberwachen, evt. Link callen
     FASTBOOL bRet = TRUE;
     SwCallLink aLk( *this );
-    SwBookmark* pBkmk = pDoc->GetBookmarks()[ nPos ];
+    SwBookmark* pBkmk = getIDocumentBookmarkAccess()->getBookmarks()[ nPos ];
     SwCursor* pCrsr = GetSwCrsr();
     SwCrsrSaveState aSaveState( *pCrsr );
 
@@ -137,7 +135,7 @@ FASTBOOL SwCrsrShell::GoNextBookmark()
 {
     SwBookmark aBM(*GetCrsr()->GetPoint());
     USHORT nPos;
-    const SwBookmarks& rBkmks = pDoc->GetBookmarks();
+    const SwBookmarks& rBkmks = getIDocumentBookmarkAccess()->getBookmarks();
     rBkmks.Seek_Entry( &aBM, &nPos );
     if ( nPos == rBkmks.Count() )
         return FALSE;
@@ -157,7 +155,7 @@ FASTBOOL SwCrsrShell::GoNextBookmark()
 
 FASTBOOL SwCrsrShell::GoPrevBookmark()
 {
-    const SwBookmarks& rBkmks = pDoc->GetBookmarks();
+    const SwBookmarks& rBkmks = getIDocumentBookmarkAccess()->getBookmarks();
     if ( !rBkmks.Count() )
         return FALSE;
 
@@ -209,20 +207,20 @@ FASTBOOL SwCrsrShell::GoPrevBookmark()
 
 USHORT SwCrsrShell::GetBookmarkCnt(BOOL bBkmrk) const
 {
-    return pDoc->GetBookmarkCnt(bBkmrk);
+    return getIDocumentBookmarkAccess()->getBookmarkCount(bBkmrk);
 }
 
 
 SwBookmark& SwCrsrShell::GetBookmark(USHORT nPos, BOOL bBkmrk)
 {
-    return pDoc->GetBookmark(nPos, bBkmrk);
+    return getIDocumentBookmarkAccess()->getBookmark(nPos, bBkmrk);
 }
 
 
 void SwCrsrShell::DelBookmark(USHORT nPos)
 {
     StartAction();
-    pDoc->DelBookmark(nPos);
+    getIDocumentBookmarkAccess()->deleteBookmark(nPos);
     EndAction();
 }
 
@@ -230,14 +228,14 @@ void SwCrsrShell::DelBookmark(USHORT nPos)
 void SwCrsrShell::DelBookmark( const String& rName )
 {
     StartAction();
-    pDoc->DelBookmark( rName );
+    getIDocumentBookmarkAccess()->deleteBookmark( rName );
     EndAction();
 }
 
 
 USHORT SwCrsrShell::FindBookmark( const String& rName )
 {
-    return pDoc->FindBookmark( rName );
+    return getIDocumentBookmarkAccess()->findBookmark( rName );
 }
 
 
@@ -245,7 +243,7 @@ USHORT SwCrsrShell::FindBookmark( const String& rName )
         // werden, es wird dann bei gleichen Namen nur durchnumeriert.
 void SwCrsrShell::MakeUniqueBookmarkName( String& rName )
 {
-    pDoc->MakeUniqueBookmarkName( rName );
+    getIDocumentBookmarkAccess()->makeUniqueBookmarkName( rName );
 }
 
 
