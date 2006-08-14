@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shutdowniconw32.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 08:42:50 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 10:38:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,9 @@
 #include <osl/file.hxx>
 #include <setup_native/qswin32.h>
 
+#ifndef _COMPHELPER_SEQUENCEASHASHMAP_HXX_
+#include <comphelper/sequenceashashmap.hxx>
+#endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
@@ -74,6 +77,7 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #endif
 
+#include <set>
 
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
@@ -106,7 +110,7 @@ using namespace ::osl;
 #define WRITER_URL      "private:factory/swriter"
 #define CALC_URL        "private:factory/scalc"
 #define IMPRESS_URL     "private:factory/simpress"
-#define IMPRESS_WIZARD_URL     "private:factory/simpress?slot=10425"
+#define IMPRESS_WIZARD_URL     "private:factory/simpress?slot=6686"
 #define DRAW_URL        "private:factory/sdraw"
 #define MATH_URL        "private:factory/smath"
 #define BASE_URL        "private:factory/sdatabase?Interactive"
@@ -234,22 +238,57 @@ static HMENU createSystrayMenu( )
         return NULL;
 
 #if defined(USE_APP_SHORTCUTS)
-    if ( aModuleOptions.IsWriter() )
-        addMenuItem( hMenu, IDM_WRITER, ICON_TEXT_DOCUMENT,
-            pShutdownIcon->GetUrlDescription( OUString( RTL_CONSTASCII_USTRINGPARAM ( WRITER_URL ) ) ), pos, true );
-    if ( aModuleOptions.IsCalc() )
-        addMenuItem( hMenu, IDM_CALC, ICON_SPREADSHEET_DOCUMENT,
-            pShutdownIcon->GetUrlDescription( OUString( RTL_CONSTASCII_USTRINGPARAM ( CALC_URL ) ) ), pos, true );
-    if ( aModuleOptions.IsImpress() )
-        addMenuItem( hMenu, IDM_IMPRESS, ICON_PRESENTATION_DOCUMENT,
-            pShutdownIcon->GetUrlDescription( OUString( RTL_CONSTASCII_USTRINGPARAM ( IMPRESS_URL ) ) ), pos, true );
-    if ( aModuleOptions.IsDraw() )
-        addMenuItem( hMenu, IDM_DRAW, ICON_DRAWING_DOCUMENT,
-            pShutdownIcon->GetUrlDescription( OUString( RTL_CONSTASCII_USTRINGPARAM ( DRAW_URL ) ) ), pos, true );
-    if ( aModuleOptions.IsDataBase() )
-        addMenuItem( hMenu, IDM_BASE, ICON_DATABASE_DOCUMENT,
-            pShutdownIcon->GetUrlDescription( OUString( RTL_CONSTASCII_USTRINGPARAM ( BASE_URL ) ) ), pos, true );
+    // collect the URLs of the entries in the File/New menu
+    ::std::set< ::rtl::OUString > aFileNewAppsAvailable;
+    SvtDynamicMenuOptions aOpt;
+    Sequence < Sequence < PropertyValue > > aNewMenu = aOpt.GetMenu( E_NEWMENU );
+    const ::rtl::OUString sURLKey( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
 
+    const Sequence< PropertyValue >* pNewMenu = aNewMenu.getConstArray();
+    const Sequence< PropertyValue >* pNewMenuEnd = aNewMenu.getConstArray() + aNewMenu.getLength();
+    for ( ; pNewMenu != pNewMenuEnd; ++pNewMenu )
+    {
+        ::comphelper::SequenceAsHashMap aEntryItems( *pNewMenu );
+        ::rtl::OUString sURL( aEntryItems.getUnpackedValueOrDefault( sURLKey, ::rtl::OUString() ) );
+        if ( sURL.getLength() )
+            aFileNewAppsAvailable.insert( sURL );
+    }
+
+    // describe the menu entries for launching the applications
+    struct MenuEntryDescriptor
+    {
+        SvtModuleOptions::EModule   eModuleIdentifier;
+        UINT                        nMenuItemID;
+        UINT                        nMenuIconID;
+        const char*                 pAsciiURLDescription;
+    }   aMenuItems[] =
+    {
+        { SvtModuleOptions::E_SWRITER,    IDM_WRITER, ICON_TEXT_DOCUMENT,         WRITER_URL },
+        { SvtModuleOptions::E_SCALC,      IDM_CALC,   ICON_SPREADSHEET_DOCUMENT,  CALC_URL },
+        { SvtModuleOptions::E_SIMPRESS,   IDM_IMPRESS,ICON_PRESENTATION_DOCUMENT, IMPRESS_WIZARD_URL },
+        { SvtModuleOptions::E_SDRAW,      IDM_DRAW,   ICON_DRAWING_DOCUMENT,      DRAW_URL },
+        { SvtModuleOptions::E_SDATABASE,  IDM_BASE,   ICON_DATABASE_DOCUMENT,     BASE_URL }
+    };
+
+    // insert the menu entries for launching the applications
+    for ( size_t i = 0; i < sizeof( aMenuItems ) / sizeof( aMenuItems[0] ); ++i )
+    {
+        if ( !aModuleOptions.IsModuleInstalled( aMenuItems[i].eModuleIdentifier ) )
+            // the complete application is not even installed
+            continue;
+
+        ::rtl::OUString sURL( ::rtl::OUString::createFromAscii( aMenuItems[i].pAsciiURLDescription ) );
+
+        if ( aFileNewAppsAvailable.find( sURL ) == aFileNewAppsAvailable.end() )
+            // the application is installed, but the entry has been configured to *not* appear in the File/New
+            // menu => also let not appear it in the quickstarter
+            continue;
+
+        addMenuItem( hMenu, aMenuItems[i].nMenuItemID, aMenuItems[i].nMenuIconID,
+            pShutdownIcon->GetUrlDescription( sURL ), pos, true );
+    }
+
+    // insert the remaining menu entries
     addMenuItem( hMenu, IDM_TEMPLATE, ICON_TEMPLATE,
         pShutdownIcon->GetResString( STR_QUICKSTART_FROMTEMPLATE ), pos, true);
     addMenuItem( hMenu, -1,         0, OUString(), pos, false );
