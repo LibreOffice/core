@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:27:01 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:54:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,9 @@
  *
  ************************************************************************/
 #pragma hdrstop
+#ifndef _DOC_HXX
+#include <doc.hxx>
+#endif
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
@@ -44,14 +47,32 @@
 #ifndef _COM_SUN_STAR_I18N_WORDTYPE_HDL
 #include <com/sun/star/i18n/WordType.hdl>
 #endif
+#ifndef _COM_SUN_STAR_I18N_FORBIDDENCHARACTERS_HDL_
+#include <com/sun/star/i18n/ForbiddenCharacters.hdl>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
 #ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
 #endif
 #ifndef _TL_POLY_HXX
 #include <tools/poly.hxx>
 #endif
+#ifndef _SV_VIRDEV_HXX //autogen
+#include <vcl/virdev.hxx>
+#endif
+#ifndef _SFXITEMITER_HXX
+#include <svtools/itemiter.hxx>
+#endif
 #ifndef _SFXDOCINF_HXX //autogen
 #include <sfx2/docinf.hxx>
+#endif
+#ifndef _SFX_PRINTER_HXX //autogen
+#include <sfx2/printer.hxx>
 #endif
 #ifndef _SVX_KEEPITEM_HXX //autogen
 #include <svx/keepitem.hxx>
@@ -65,10 +86,15 @@
 #ifndef _SVXLINKMGR_HXX
 #include <svx/linkmgr.hxx>
 #endif
+#ifndef _FORBIDDENCHARACTERSTABLE_HXX
+#include <svx/forbiddencharacterstable.hxx>
+#endif
+#ifndef _SVDMODEL_HXX
+#include <svx/svdmodel.hxx>
+#endif
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
 #endif
-
 #ifndef _SWMODULE_HXX //autogen
 #include <swmodule.hxx>
 #endif
@@ -105,9 +131,6 @@
 #ifndef _LINKENUM_HXX
 #include <linkenum.hxx>
 #endif
-#ifndef _DOC_HXX
-#include <doc.hxx>
-#endif
 #ifndef _ERRHDL_HXX
 #include <errhdl.hxx>
 #endif
@@ -126,9 +149,6 @@
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
 #endif
-#ifndef _FLDBAS_HXX
-#include <fldbas.hxx>
-#endif
 #ifndef _SWUNDO_HXX
 #include <swundo.hxx>           // fuer die UndoIds
 #endif
@@ -140,9 +160,6 @@
 #endif
 #ifndef _BREAKIT_HXX
 #include <breakit.hxx>
-#endif
-#ifndef _HINTS_HXX
-#include <hints.hxx>
 #endif
 #ifndef _NDOLE_HXX
 #include <ndole.hxx>
@@ -177,9 +194,6 @@
 #ifndef _ACORRECT_HXX
 #include <acorrect.hxx>         // Autokorrektur
 #endif
-#ifndef _SECTION_HXX
-#include <section.hxx>          //
-#endif
 #ifndef _MDIEXP_HXX
 #include <mdiexp.hxx>           // Statusanzeige
 #endif
@@ -198,27 +212,34 @@
 #ifndef _SWBASLNK_HXX
 #include <swbaslnk.hxx>
 #endif
-
+#ifndef _SW_PRINTDATA_HXX
+#include <printdata.hxx>
+#endif
+#ifndef _CMDID_H
+#include <cmdid.h>              // fuer den dflt - Printer in SetJob
+#endif
 #ifndef _STATSTR_HRC
 #include <statstr.hrc>          // StatLine-String
 #endif
-
-#include <vector>
-// -> #111827#
-#ifndef _SFXITEMITER_HXX
-#include <svtools/itemiter.hxx>
-#endif
-
 #include <comcore.hrc>
 #include <SwUndoTOXChange.hxx>
-// <- #111827#
-
 #include <SwUndoFmt.hxx>
+#include <unocrsr.hxx>
+#include <docsh.hxx>
+#include <vector>
+
+#include <osl/diagnose.h>
+#include <osl/interlck.h>
+
+/* @@@MAINTAINABILITY-HORROR@@@
+   Probably unwanted dependency on SwDocShell
+*/
 // --> OD 2005-08-29 #TESTING#
 #ifndef _LAYOUTER_HXX
 #include <layouter.hxx>
 #endif
 // <--
+
 
 // Seiten-Deskriptoren
 SV_IMPL_PTRARR(SwPageDescs,SwPageDescPtr);
@@ -227,6 +248,454 @@ SV_IMPL_PTRARR( SwTOXTypes, SwTOXTypePtr )
 // FeldTypen
 SV_IMPL_PTRARR( SwFldTypes, SwFldTypePtr)
 
+/** IInterface
+*/
+sal_Int32 SwDoc::acquire()
+{
+    OSL_ASSERT(mReferenceCount >= 0 && "Negative reference count detected! This is a sign for unbalanced acquire/release calls.");
+    return osl_incrementInterlockedCount(&mReferenceCount);
+}
+
+sal_Int32 SwDoc::release()
+{
+    OSL_PRECOND(mReferenceCount >= 1, "Object is already released! Releasing it again leads to a negative reference count.");
+    return osl_decrementInterlockedCount(&mReferenceCount);
+}
+
+sal_Int32 SwDoc::getReferenceCount() const
+{
+    OSL_ASSERT(mReferenceCount >= 0 && "Negative reference count detected! This is a sign for unbalanced acquire/release calls.");
+    return mReferenceCount;
+}
+
+/** IDocumentSettingAccess
+*/
+bool SwDoc::get(/*[in]*/ DocumentSettingId id) const
+{
+    switch (id)
+    {
+        // COMPATIBILITY FLAGS START
+        case PARA_SPACE_MAX: return mbParaSpaceMax; //(n8Dummy1 & DUMMY_PARASPACEMAX);
+        case PARA_SPACE_MAX_AT_PAGES: return mbParaSpaceMaxAtPages; //(n8Dummy1 & DUMMY_PARASPACEMAX_AT_PAGES);
+        case TAB_COMPAT: return mbTabCompat; //(n8Dummy1 & DUMMY_TAB_COMPAT);
+        case ADD_FLY_OFFSETS: return mbAddFlyOffsets; //(n8Dummy2 & DUMMY_ADD_FLY_OFFSETS);
+        case ADD_EXT_LEADING: return mbAddExternalLeading; //(n8Dummy2 & DUMMY_ADD_EXTERNAL_LEADING);
+        case USE_VIRTUAL_DEVICE: return mbUseVirtualDevice; //(n8Dummy1 & DUMMY_USE_VIRTUAL_DEVICE);
+        case USE_HIRES_VIRTUAL_DEVICE: return mbUseHiResolutionVirtualDevice; //(n8Dummy2 & DUMMY_USE_HIRES_VIR_DEV);
+        case OLD_NUMBERING: return mbOldNumbering;
+        case OLD_LINE_SPACING: return mbOldLineSpacing;
+        case ADD_PARA_SPACING_TO_TABLE_CELLS: return mbAddParaSpacingToTableCells;
+        case USE_FORMER_OBJECT_POS: return mbUseFormerObjectPos;
+        case USE_FORMER_TEXT_WRAPPING: return mbUseFormerTextWrapping;
+        case CONSIDER_WRAP_ON_OBJECT_POSITION: return mbConsiderWrapOnObjPos;
+        case DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK: return mbDoNotJustifyLinesWithManualBreak;
+        case IGNORE_FIRST_LINE_INDENT_IN_NUMBERING: return mbIgnoreFirstLineIndentInNumbering;
+        case OUTLINE_LEVEL_YIELDS_OUTLINE_RULE: return mbOutlineLevelYieldsOutlineRule;
+        case TABLE_ROW_KEEP: return mbTableRowKeep;
+        case IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION: return mbIgnoreTabsAndBlanksForLineCalculation;
+        case DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE: return mbDoNotCaptureDrawObjsOnPage;
+         // COMPATIBILITY FLAGS END
+
+        case BROWSE_MODE: return mbBrowseMode;
+        case HTML_MODE: return mbHTMLMode;
+        case GLOBAL_DOCUMENT: return mbIsGlobalDoc;
+        case GLOBAL_DOCUMENT_SAVE_LINKS: return mbGlblDocSaveLinks;
+        case LABEL_DOCUMENT: return mbIsLabelDoc;
+        case PURGE_OLE: return mbPurgeOLE;
+        case KERN_ASIAN_PUNCTUATION: return mbKernAsianPunctuation;
+        case DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT: return mbDoNotResetParaAttrsForNumFont;
+        default:
+            ASSERT(false, "Invalid setting id");
+    }
+    return false;
+}
+
+void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
+{
+    switch (id)
+    {
+        // COMPATIBILITY FLAGS START
+        case PARA_SPACE_MAX:
+            mbParaSpaceMax = value;
+            break;
+        case PARA_SPACE_MAX_AT_PAGES:
+            mbParaSpaceMaxAtPages = value;
+            break;
+        case TAB_COMPAT:
+            mbTabCompat = value;
+            break;
+        case ADD_FLY_OFFSETS:
+            mbAddFlyOffsets = value;
+            break;
+        case ADD_EXT_LEADING:
+            mbAddExternalLeading = value;
+            break;
+        case USE_VIRTUAL_DEVICE:
+            mbUseVirtualDevice = value;
+            break;
+        case USE_HIRES_VIRTUAL_DEVICE:
+            mbUseHiResolutionVirtualDevice = value;
+            break;
+        case OLD_NUMBERING:
+            if (mbOldNumbering != value)
+            {
+                mbOldNumbering = value;
+
+                const SwNumRuleTbl& rNmTbl = GetNumRuleTbl();
+                for( USHORT n = 0; n < rNmTbl.Count(); ++n )
+                    rNmTbl[n]->SetInvalidRule(TRUE);
+
+                UpdateNumRule();
+
+        if (pOutlineRule)
+            {
+            pOutlineRule->Validate();
+            // --> OD 2005-10-21 - counting of phantoms depends on <IsOldNumbering()>
+            pOutlineRule->SetCountPhantoms( !mbOldNumbering );
+            // <--
+        }
+            }
+            break;
+        case OLD_LINE_SPACING:
+            mbOldLineSpacing = value;
+            break;
+        case ADD_PARA_SPACING_TO_TABLE_CELLS:
+            mbAddParaSpacingToTableCells = value;
+            break;
+        case USE_FORMER_OBJECT_POS:
+            mbUseFormerObjectPos = value;
+            break;
+        case USE_FORMER_TEXT_WRAPPING:
+            mbUseFormerTextWrapping = value;
+            break;
+        case CONSIDER_WRAP_ON_OBJECT_POSITION:
+            mbConsiderWrapOnObjPos;
+            break;
+        case DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK:
+            mbDoNotJustifyLinesWithManualBreak = value;
+            break;
+        case IGNORE_FIRST_LINE_INDENT_IN_NUMBERING:
+            mbIgnoreFirstLineIndentInNumbering = value;
+            break;
+
+        case OUTLINE_LEVEL_YIELDS_OUTLINE_RULE:
+            mbOutlineLevelYieldsOutlineRule = value;
+            break;
+
+        case TABLE_ROW_KEEP:
+            mbTableRowKeep = value;
+            break;
+
+        case IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION:
+            mbIgnoreTabsAndBlanksForLineCalculation = value;
+            break;
+
+        case DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE:
+            mbDoNotCaptureDrawObjsOnPage = value;
+            break;
+
+         // COMPATIBILITY FLAGS END
+
+        case BROWSE_MODE:
+            mbBrowseMode = value;
+            break;
+        case HTML_MODE:
+            mbHTMLMode = value;
+            break;
+        case GLOBAL_DOCUMENT:
+            mbIsGlobalDoc = value;
+            break;
+        case GLOBAL_DOCUMENT_SAVE_LINKS:
+            mbGlblDocSaveLinks = value;
+            break;
+        case LABEL_DOCUMENT:
+            mbIsLabelDoc = value;
+            break;
+        case PURGE_OLE:
+            mbPurgeOLE = value;
+            break;
+        case KERN_ASIAN_PUNCTUATION:
+            mbKernAsianPunctuation = value;
+            break;
+        case DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT:
+            mbDoNotResetParaAttrsForNumFont = value;
+            break;
+        default:
+            ASSERT(false, "Invalid setting id");
+    }
+}
+
+const com::sun::star::i18n::ForbiddenCharacters*
+    SwDoc::getForbiddenCharacters(/*[in]*/ USHORT nLang, /*[in]*/ bool bLocaleData ) const
+{
+    const com::sun::star::i18n::ForbiddenCharacters* pRet = 0;
+    if( xForbiddenCharsTable.isValid() )
+        pRet = xForbiddenCharsTable->GetForbiddenCharacters( nLang, FALSE );
+    if( bLocaleData && !pRet && pBreakIt )
+        pRet = &pBreakIt->GetForbidden( (LanguageType)nLang );
+    return pRet;
+}
+
+void SwDoc::setForbiddenCharacters(/*[in]*/ USHORT nLang,
+                                   /*[in]*/ const com::sun::star::i18n::ForbiddenCharacters& rFChars )
+{
+    if( !xForbiddenCharsTable.isValid() )
+    {
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::lang::XMultiServiceFactory > xMSF =
+                                    ::comphelper::getProcessServiceFactory();
+        xForbiddenCharsTable = new SvxForbiddenCharactersTable( xMSF );
+    }
+    xForbiddenCharsTable->SetForbiddenCharacters( nLang, rFChars );
+    if( pDrawModel )
+    {
+        pDrawModel->SetForbiddenCharsTable( xForbiddenCharsTable );
+        if( !mbInReading )
+            pDrawModel->ReformatAllTextObjects();
+    }
+
+    if( pLayout && !mbInReading )
+    {
+        pLayout->StartAllAction();
+        pLayout->InvalidateAllCntnt();
+        pLayout->EndAllAction();
+    }
+    SetModified();
+}
+
+vos::ORef<SvxForbiddenCharactersTable>& SwDoc::getForbiddenCharacterTable()
+{
+    if( !xForbiddenCharsTable.isValid() )
+    {
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::lang::XMultiServiceFactory > xMSF =
+                                    ::comphelper::getProcessServiceFactory();
+        xForbiddenCharsTable = new SvxForbiddenCharactersTable( xMSF );
+    }
+    return xForbiddenCharsTable;
+}
+
+const vos::ORef<SvxForbiddenCharactersTable>& SwDoc::getForbiddenCharacterTable() const
+{
+    return xForbiddenCharsTable;
+}
+
+sal_uInt16 SwDoc::getLinkUpdateMode( /*[in]*/bool bGlobalSettings ) const
+{
+    sal_uInt16 nRet = nLinkUpdMode;
+    if( bGlobalSettings && GLOBALSETTING == nRet )
+        nRet = SW_MOD()->GetLinkUpdMode(get(IDocumentSettingAccess::HTML_MODE));
+    return nRet;
+}
+
+void SwDoc::setLinkUpdateMode( /*[in]*/sal_uInt16 eMode )
+{
+    nLinkUpdMode = eMode;
+}
+
+sal_uInt16 SwDoc::getFieldUpdateFlags( /*[in]*/bool bGlobalSettings ) const
+{
+    sal_uInt16 nRet = nFldUpdMode;
+    if( bGlobalSettings && AUTOUPD_GLOBALSETTING == nRet )
+        nRet = SW_MOD()->GetFldUpdateFlags(get(IDocumentSettingAccess::HTML_MODE));
+    return nRet;
+}
+
+void SwDoc::setFieldUpdateFlags(/*[in]*/sal_uInt16 eMode )
+{
+    nFldUpdMode = eMode;
+}
+
+SwCharCompressType SwDoc::getCharacterCompressionType() const
+{
+    return eChrCmprType;
+}
+
+void SwDoc::setCharacterCompressionType( /*[in]*/SwCharCompressType n )
+{
+    if( eChrCmprType != n )
+    {
+        eChrCmprType = n;
+        if( pDrawModel )
+        {
+            pDrawModel->SetCharCompressType( n );
+            if( !mbInReading )
+                pDrawModel->ReformatAllTextObjects();
+        }
+
+        if( pLayout && !mbInReading )
+        {
+            pLayout->StartAllAction();
+            pLayout->InvalidateAllCntnt();
+            pLayout->EndAllAction();
+        }
+        SetModified();
+    }
+}
+
+/** IDocumentDeviceAccess
+*/
+SfxPrinter* SwDoc::getPrinter(/*[in]*/ bool bCreate ) const
+{
+    SfxPrinter* pRet = 0;
+    if ( !bCreate || pPrt )
+        pRet = pPrt;
+    else
+        pRet = &CreatePrinter_();
+
+    return pRet;
+}
+
+void SwDoc::setPrinter(/*[in]*/ SfxPrinter *pP,/*[in]*/ bool bDeleteOld,/*[in]*/ bool bCallPrtDataChanged )
+{
+    if ( pP != pPrt )
+    {
+        if ( bDeleteOld )
+            delete pPrt;
+        pPrt = pP;
+    }
+
+    if ( bCallPrtDataChanged &&
+         // --> FME 2005-01-21 #i41075# Do not call PrtDataChanged() if we do not
+         // use the printer for formatting:
+         !get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE) )
+        // <--
+        PrtDataChanged();
+}
+
+VirtualDevice* SwDoc::getVirtualDevice(/*[in]*/ bool bCreate ) const
+{
+    VirtualDevice* pRet = 0;
+    if ( !bCreate || pVirDev )
+        pRet = pVirDev;
+    else
+        pRet = &CreateVirtualDevice_();
+
+    return pRet;
+}
+
+void SwDoc::setVirtualDevice(/*[in]*/ VirtualDevice* pVd,/*[in]*/ bool bDeleteOld, /*[in]*/ bool bCallVirDevDataChanged )
+{
+    if ( pVirDev != pVd )
+    {
+        if ( bDeleteOld )
+            delete pVirDev;
+        pVirDev = pVd;
+    }
+}
+
+OutputDevice* SwDoc::getReferenceDevice(/*[in]*/ bool bCreate ) const
+{
+    OutputDevice* pRet = 0;
+    if ( !get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE) )
+    {
+        pRet = getPrinter( bCreate );
+
+        if ( bCreate && !pPrt->IsValid() )
+        {
+            pRet = getVirtualDevice( sal_True );
+        }
+    }
+    else
+    {
+        pRet = getVirtualDevice( bCreate );
+    }
+
+    return pRet;
+}
+
+void SwDoc::setReferenceDeviceType(/*[in]*/ bool bNewVirtual,/*[in]*/ bool bNewHiRes )
+{
+    if ( get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE) != bNewVirtual ||
+         get(IDocumentSettingAccess::USE_HIRES_VIRTUAL_DEVICE) != bNewHiRes )
+    {
+        if ( bNewVirtual )
+        {
+            VirtualDevice* pVirDev = getVirtualDevice( true );
+            if ( !bNewHiRes )
+                pVirDev->SetReferenceDevice( VirtualDevice::REFDEV_MODE06 );
+            else
+                pVirDev->SetReferenceDevice( VirtualDevice::REFDEV_MODE_MSO1 );
+        }
+        else
+        {
+            // --> FME 2005-01-21 #i41075#
+            // We have to take care that a printer exists before calling
+            // PrtDataChanged() in order to prevent that PrtDataChanged()
+            // triggers this funny situation:
+            // getReferenceDevice()->getPrinter()->CreatePrinter_()
+            // ->setPrinter()-> PrtDataChanged()
+            getPrinter( true );
+            // <--
+        }
+
+        set(IDocumentSettingAccess::USE_VIRTUAL_DEVICE, bNewVirtual );
+        set(IDocumentSettingAccess::USE_HIRES_VIRTUAL_DEVICE, bNewHiRes );
+        PrtDataChanged();
+        SetModified();
+    }
+}
+
+const JobSetup* SwDoc::getJobsetup() const
+{
+    return pPrt ? &pPrt->GetJobSetup() : 0;
+}
+
+void SwDoc::setJobsetup(/*[in]*/ const JobSetup &rJobSetup )
+{
+    BOOL bCheckPageDescs = 0 == pPrt;
+    BOOL bDataChanged = FALSE;
+
+    if ( pPrt )
+    {
+        if ( pPrt->GetName() == rJobSetup.GetPrinterName() )
+        {
+            if ( pPrt->GetJobSetup() != rJobSetup )
+            {
+                pPrt->SetJobSetup( rJobSetup );
+                bDataChanged = TRUE;
+            }
+        }
+        else
+            delete pPrt, pPrt = 0;
+    }
+
+    if( !pPrt )
+    {
+        //Das ItemSet wird vom Sfx geloescht!
+        SfxItemSet *pSet = new SfxItemSet( aAttrPool,
+                        FN_PARAM_ADDPRINTER, FN_PARAM_ADDPRINTER,
+                        SID_HTML_MODE,  SID_HTML_MODE,
+                        SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
+                        SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
+                        0 );
+        SfxPrinter *p = new SfxPrinter( pSet, rJobSetup );
+        if ( bCheckPageDescs )
+            setPrinter( p, true, true );
+        else
+        {
+            pPrt = p;
+            bDataChanged = TRUE;
+        }
+    }
+    if ( bDataChanged && !get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE) )
+        PrtDataChanged();
+}
+
+SwPrintData* SwDoc::getPrintData() const
+{
+    return pPrtData;
+}
+
+void SwDoc::setPrintData(/*[in]*/ const SwPrintData& rPrtData )
+{
+    if(!pPrtData)
+        pPrtData = new SwPrintData;
+    *pPrtData = rPrtData;
+}
+
+/** Implementations the next Interface here
+*/
 
 /*
  * Dokumenteditieren (Doc-SS) zum Fuellen des Dokuments
@@ -242,7 +711,7 @@ void SwDoc::ChgDBData(const SwDBData& rNewData)
     GetSysFldType(RES_DBNAMEFLD)->UpdateFlds();
 }
 
-BOOL SwDoc::SplitNode( const SwPosition &rPos, BOOL bChkTableStart )
+bool SwDoc::SplitNode( const SwPosition &rPos, bool bChkTableStart )
 {
     SwCntntNode *pNode = rPos.nNode.GetNode().GetCntntNode();
     if(0 == pNode)
@@ -278,7 +747,7 @@ BOOL SwDoc::SplitNode( const SwPosition &rPos, BOOL bChkTableStart )
             0 != ( pTblNd = GetNodes()[ --nPrevPos ]->GetTableNode() ) &&
             ((( pNd = GetNodes()[ --nPrevPos ])->IsStartNode() &&
                SwTableBoxStartNode != ((SwStartNode*)pNd)->GetStartNodeType() )
-               || ( pNd->IsEndNode() && pNd->FindStartNode()->IsTableNode() )
+               || ( pNd->IsEndNode() && pNd->StartOfSectionNode()->IsTableNode() )
                || pNd->IsCntntNode() ))
         {
             if( pNd->IsCntntNode() )
@@ -352,7 +821,7 @@ BOOL SwDoc::SplitNode( const SwPosition &rPos, BOOL bChkTableStart )
             aPam.SetMark();
             aPam.Move( fnMoveBackward );
             if( IsRedlineOn() )
-                AppendRedline( new SwRedline( REDLINE_INSERT, aPam ));
+                AppendRedline( new SwRedline( IDocumentRedlineAccess::REDLINE_INSERT, aPam ), true);
             else
                 SplitRedline( aPam );
         }
@@ -362,7 +831,7 @@ BOOL SwDoc::SplitNode( const SwPosition &rPos, BOOL bChkTableStart )
     return TRUE;
 }
 
-BOOL SwDoc::AppendTxtNode( SwPosition& rPos )
+bool SwDoc::AppendTxtNode( SwPosition& rPos )
 {
     /*
      * Neuen Node vor EndOfContent erzeugen.
@@ -393,7 +862,7 @@ BOOL SwDoc::AppendTxtNode( SwPosition& rPos )
         aPam.SetMark();
         aPam.Move( fnMoveBackward );
         if( IsRedlineOn() )
-            AppendRedline( new SwRedline( REDLINE_INSERT, aPam ));
+            AppendRedline( new SwRedline( IDocumentRedlineAccess::REDLINE_INSERT, aPam ), true);
         else
             SplitRedline( aPam );
     }
@@ -402,7 +871,7 @@ BOOL SwDoc::AppendTxtNode( SwPosition& rPos )
     return TRUE;
 }
 
-BOOL SwDoc::Insert( const SwPaM &rRg, const String &rStr, BOOL bHintExpand )
+bool SwDoc::Insert( const SwPaM &rRg, const String &rStr, bool bHintExpand )
 {
     if( DoesUndo() )
         ClearRedo();
@@ -488,7 +957,7 @@ BOOL SwDoc::Insert( const SwPaM &rRg, const String &rStr, BOOL bHintExpand )
         SwPaM aPam( pPos->nNode, aTmp.GetCntnt(),
                     pPos->nNode, pPos->nContent.GetIndex());
         if( IsRedlineOn() )
-            AppendRedline( new SwRedline( REDLINE_INSERT, aPam ));
+            AppendRedline( new SwRedline( IDocumentRedlineAccess::REDLINE_INSERT, aPam ), true);
         else
             SplitRedline( aPam );
     }
@@ -580,16 +1049,6 @@ SwFlyFrmFmt* SwDoc::InsertOLE(const SwPaM &rRg, const String& rObjName,
                             pFrmFmt );
 }
 
-
-String SwDoc::GetCurWord( SwPaM& rPaM )
-{
-    SwTxtNode *pNd = rPaM.GetNode()->GetTxtNode();
-    if( pNd )
-        return pNd->GetCurWord(rPaM.GetPoint()->nContent.GetIndex());
-    return aEmptyStr;
-}
-
-
 /*************************************************************************
 |*                SwDoc::GetFldType()
 |*    Beschreibung: liefert den am Doc eingerichteten Feldtypen zurueck
@@ -627,6 +1086,10 @@ void SwDoc::SetDocStat( const SwDocStat& rStat )
     *pDocStat = rStat;
 }
 
+const SwDocStat& SwDoc::GetDocStat() const
+{
+    return *pDocStat;
+}
 
 sal_uInt16 SwDoc::GetPageCount() const
 {
@@ -769,6 +1232,51 @@ USHORT SwDoc::GetRefMarks( SvStringsDtor* pNames ) const
     return nCount;
 }
 
+bool SwDoc::IsLoaded() const
+{
+    return mbLoaded;
+}
+
+bool SwDoc::IsUpdateExpFld() const
+{
+    return mbUpdateExpFld;
+}
+
+bool SwDoc::IsNewDoc() const
+{
+    return mbNewDoc;
+}
+
+bool SwDoc::IsPageNums() const
+{
+  return mbPageNums;
+}
+
+void SwDoc::SetPageNums(bool b)
+{
+    mbPageNums = b;
+}
+
+void SwDoc::SetNewDoc(bool b)
+{
+    mbNewDoc = b;
+}
+
+void SwDoc::SetUpdateExpFldStat(bool b)
+{
+    mbUpdateExpFld = b;
+}
+
+void SwDoc::SetLoaded(bool b)
+{
+    mbLoaded = b;
+}
+
+bool SwDoc::IsModified() const
+{
+    return mbModified;
+}
+
 void SwDoc::SetModified()
 {
     // --> OD 2005-08-29 #125370#
@@ -782,14 +1290,14 @@ void SwDoc::SetModified()
     // dem Link wird der Status returnt, wie die Flags waren und werden
     //  Bit 0:  -> alter Zustand
     //  Bit 1:  -> neuer Zustand
-    long nCall = bModified ? 3 : 2;
-    bModified = TRUE;
+    long nCall = mbModified ? 3 : 2;
+    mbModified = TRUE;
     pDocStat->bModified = TRUE;
     if( aOle2Link.IsSet() )
     {
-        bInCallModified = TRUE;
+        mbInCallModified = TRUE;
         aOle2Link.Call( (void*)nCall );
-        bInCallModified = FALSE;
+        mbInCallModified = FALSE;
     }
 
     if( pACEWord && !pACEWord->IsDeleted() )
@@ -801,15 +1309,15 @@ void SwDoc::ResetModified()
     // dem Link wird der Status returnt, wie die Flags waren und werden
     //  Bit 0:  -> alter Zustand
     //  Bit 1:  -> neuer Zustand
-    long nCall = bModified ? 1 : 0;
-    bModified = FALSE;
+    long nCall = mbModified ? 1 : 0;
+    mbModified = FALSE;
     pDocStat->bModified = FALSE;
     nUndoSavePos = nUndoPos;
     if( nCall && aOle2Link.IsSet() )
     {
-        bInCallModified = TRUE;
+        mbInCallModified = TRUE;
         aOle2Link.Call( (void*)nCall );
-        bInCallModified = FALSE;
+        mbInCallModified = FALSE;
     }
 }
 
@@ -1003,7 +1511,7 @@ void SwDoc::Summary( SwDoc* pExtDoc, BYTE nLevel, BYTE nPara, BOOL bImpress )
 BOOL SwDoc::RemoveInvisibleContent()
 {
     BOOL bRet = FALSE;
-    StartUndo( UIUNDO_DELETE_INVISIBLECNTNT );
+    StartUndo( UIUNDO_DELETE_INVISIBLECNTNT, NULL );
 
     {
         SwTxtNode* pTxtNd;
@@ -1051,7 +1559,9 @@ BOOL SwDoc::RemoveInvisibleContent()
             {
                 bRemoved = TRUE;
                 bRet = TRUE;
-                SwScriptInfo::DeleteHiddenRanges( *pTxtNd );
+                //!!!! NEEDS FIX TRA !!!!!!
+                //                SwScriptInfo::DeleteHiddenRanges( *pTxtNd );
+                //!!!! NEEDS FIX TRA !!!!!!
             }
 
             // --> FME 2006-01-11 #120473#
@@ -1110,9 +1620,9 @@ BOOL SwDoc::RemoveInvisibleContent()
                     bRet = TRUE;
                     SwPaM aPam( *pSectNd );
 
-                    if( pSectNd->FindStartNode()->StartOfSectionIndex() ==
+                    if( pSectNd->StartOfSectionNode()->StartOfSectionIndex() ==
                         pSectNd->GetIndex() - 1 &&
-                        pSectNd->FindStartNode()->EndOfSectionIndex() ==
+                        pSectNd->StartOfSectionNode()->EndOfSectionIndex() ==
                         pSectNd->EndOfSectionIndex() + 1 )
                     {
                         // nur den Inhalt loeschen
@@ -1143,7 +1653,7 @@ BOOL SwDoc::RemoveInvisibleContent()
 
     if( bRet )
         SetModified();
-    EndUndo( UIUNDO_DELETE_INVISIBLECNTNT );
+    EndUndo( UIUNDO_DELETE_INVISIBLECNTNT, NULL );
     return bRet;
 }
 /*-- 11.06.2004 08:34:04---------------------------------------------------
@@ -1152,7 +1662,7 @@ BOOL SwDoc::RemoveInvisibleContent()
 BOOL SwDoc::ConvertFieldsToText()
 {
     BOOL bRet = FALSE;
-    StartUndo( UIUNDO_REPLACE );
+    StartUndo( UIUNDO_REPLACE, NULL );
 
     const SwFldTypes* pFldTypes = GetFldTypes();
     sal_uInt16 nCount = pFldTypes->Count();
@@ -1188,6 +1698,7 @@ BOOL SwDoc::ConvertFieldsToText()
                 BOOL bInHeaderFooter = IsInHeaderFooter(SwNodeIndex(*pTxtFld->GetpTxtNode()));
                 const SwFmtFld& rFmtFld = pTxtFld->GetFld();
                 const SwField*  pField = rFmtFld.GetFld();
+
                 //#i55595# some fields have to be excluded in headers/footers
                 USHORT nWhich = pField->GetTyp()->Which();
                 if(!bInHeaderFooter ||
@@ -1209,7 +1720,7 @@ BOOL SwDoc::ConvertFieldsToText()
                     aPam.SetMark();
                     aPam.Move();
                     DeleteAndJoin(aPam);
-                    Insert( aPam, sText );
+                    Insert( aPam, sText, true );
                 }
             }
             ++aBegin;
@@ -1218,13 +1729,43 @@ BOOL SwDoc::ConvertFieldsToText()
 
     if( bRet )
         SetModified();
-    EndUndo( UIUNDO_REPLACE );
+    EndUndo( UIUNDO_REPLACE, NULL );
     return bRet;
 
 }
 
+bool SwDoc::IsVisibleLinks() const
+{
+    return mbVisibleLinks;
+}
+
+void SwDoc::SetVisibleLinks(bool bFlag)
+{
+    mbVisibleLinks = bFlag;
+}
+
+SvxLinkManager& SwDoc::GetLinkManager()
+{
+    return *pLinkMgr;
+}
+
+const SvxLinkManager& SwDoc::GetLinkManager() const
+{
+    return *pLinkMgr;
+}
+
+void SwDoc::SetLinksUpdated(const bool bNewLinksUpdated)
+{
+    mbLinksUpdated = bNewLinksUpdated;
+}
+
+bool SwDoc::LinksUpdated() const
+{
+    return mbLinksUpdated;
+}
+
     // embedded alle lokalen Links (Bereiche/Grafiken)
-BOOL SwDoc::EmbedAllLinks()
+bool SwDoc::EmbedAllLinks()
 {
     BOOL bRet = FALSE;
     SvxLinkManager& rLnkMgr = GetLinkManager();
@@ -1280,12 +1821,12 @@ BOOL SwDoc::EmbedAllLinks()
 
 BOOL SwDoc::IsInsTblFormatNum() const
 {
-    return SW_MOD()->IsInsTblFormatNum(IsHTMLMode());
+    return SW_MOD()->IsInsTblFormatNum(get(IDocumentSettingAccess::HTML_MODE));
 }
 
 BOOL SwDoc::IsInsTblChangeNumFormat() const
 {
-    return SW_MOD()->IsInsTblChangeNumFormat(IsHTMLMode());
+    return SW_MOD()->IsInsTblChangeNumFormat(get(IDocumentSettingAccess::HTML_MODE));
 }
 
 /*--------------------------------------------------------------------
@@ -1294,24 +1835,7 @@ BOOL SwDoc::IsInsTblChangeNumFormat() const
 
 BOOL SwDoc::IsInsTblAlignNum() const
 {
-    return SW_MOD()->IsInsTblAlignNum(IsHTMLMode());
-}
-
-
-USHORT SwDoc::GetLinkUpdMode() const
-{
-    USHORT nRet = nLinkUpdMode;
-    if( GLOBALSETTING == nRet )
-        nRet = SW_MOD()->GetLinkUpdMode(IsHTMLMode());
-    return nRet;
-}
-
-USHORT SwDoc::GetFldUpdateFlags() const
-{
-    USHORT nRet = nFldUpdMode;
-    if( AUTOUPD_GLOBALSETTING == nRet )
-        nRet = SW_MOD()->GetFldUpdateFlags(IsHTMLMode());
-    return nRet;
+    return SW_MOD()->IsInsTblAlignNum(get(IDocumentSettingAccess::HTML_MODE));
 }
 
         // setze das InsertDB als Tabelle Undo auf:
@@ -1431,26 +1955,39 @@ bool SwDoc::ContainsHiddenChars() const
     return false;
 }
 
-// #111955#
-void SwDoc::SetOldNumbering(sal_Bool _bOldNumbering)
+SwUnoCrsr* SwDoc::CreateUnoCrsr( const SwPosition& rPos, BOOL bTblCrsr )
 {
-    if (bOldNumbering != _bOldNumbering)
+    SwUnoCrsr* pNew;
+    if( bTblCrsr )
+        pNew = new SwUnoTableCrsr( rPos );
+    else
+        pNew = new SwUnoCrsr( rPos );
+
+    pUnoCrsrTbl->Insert( pNew, pUnoCrsrTbl->Count() );
+    return pNew;
+}
+
+/* @@@MAINTAINABILITY-HORROR@@@
+   Probably unwanted dependency on SwDocShell and SfxDocumentInfo
+*/
+void SwDoc::SetInfo( const SfxDocumentInfo& rInfo )
+{
+    if( pDocShell )
+        pDocShell->SetDocumentInfo( rInfo );
+
+    // sollte nur beim "Konvertieren" von Dokumenten hier ankommen!
+    else
     {
-        bOldNumbering = _bOldNumbering;
+        // dann setzen wir uns die DocInfo. Nach dem Konvertieren wird diese
+        // am Medium gesetzt. Erst dann ist die DocShell bekannt.
+        delete pSwgInfo;
+        pSwgInfo = new SfxDocumentInfo( rInfo );
 
-        const SwNumRuleTbl& rNmTbl = GetNumRuleTbl();
-        for( USHORT n = 0; n < rNmTbl.Count(); ++n )
-            rNmTbl[n]->SetInvalidRule(TRUE);
-
-        UpdateNumRule();
-
-        if (pOutlineRule)
-        {
-            pOutlineRule->Validate();
-            // --> OD 2005-10-21 - counting of phantoms depends on <IsOldNumbering()>
-            pOutlineRule->SetCountPhantoms( !bOldNumbering );
-            // <--
-        }
+// wenn beim Einlesen, dann kein Modify verschicken, diese sollten dann
+// richtig eingelesen werden oder spaetestens beim Expandieren die richtigen
+// Werte finden.
+//      GetSysFldType( RES_DOCINFOFLD )->UpdateFlds();
+//      GetSysFldType( RES_TEMPLNAMEFLD )->UpdateFlds();
     }
 }
 
@@ -1476,3 +2013,4 @@ void SwDoc::ChkCondColls()
         }
      }
 }
+
