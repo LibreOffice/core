@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scrrect.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:55:34 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:21:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _SCRRECT_HXX
 #define _SCRRECT_HXX
-
 
 #ifndef _SVARRAY_HXX //autogen
 #include <svtools/svarray.hxx>
@@ -69,17 +68,11 @@ class SwStripes : public SwStripeArr, public SwStripe
     SwTwips nMin;       // Left minimum
     SwTwips nMax;       // Right maximum
 public:
-#ifdef VERTICAL_LAYOUT
     SwStripes( SwTwips nPos, SwTwips nSize, SwTwips nMn, SwTwips nMx )
         : SwStripe( nPos, nSize ), nMin( nMn ), nMax( nMx ) {}
     SwStripes& Plus( const SwStripes& rOther, BOOL bVert );
     BOOL Recalc( BOOL bVert );
-#else
-    SwStripes( const SwRect& rRect ) : SwStripe( rRect.Top(), rRect.Height() ),
-        nMin(rRect.Left()), nMax(rRect.Left() + rRect.Width()) {}
-    SwStripes& operator+=( const SwStripes& rOther );
-    BOOL Recalc();
-#endif
+
     inline SwTwips GetMin() const { return nMin; }
     inline SwTwips GetMax() const { return nMax; }
     inline void SetMin( const SwTwips nNew ) { nMin = nNew; }
@@ -95,7 +88,6 @@ class SwScrollColumn
     SwTwips nX;
     SwTwips nWidth;
     SwTwips nOffs;
-#ifdef VERTICAL_LAYOUT
     BOOL bVertical;
 public:
     inline SwScrollColumn( SwTwips nPos, SwTwips nSz, SwTwips nOff, BOOL bVert )
@@ -111,18 +103,6 @@ public:
     inline BOOL operator==( const SwScrollColumn &rTst ) const
         { return bVertical == rTst.bVertical && nX == rTst.nX &&
                  nWidth == rTst.nWidth && nOffs == rTst.nOffs;}
-#else
-public:
-    inline SwScrollColumn( const SwRect& rRect, SwTwips nOff )
-        : nX( rRect.Left() ), nWidth( rRect.Width() ), nOffs( nOff ) {}
-    inline SwScrollColumn( const SwScrollColumn& rCol )
-        : nX( rCol.nX ), nWidth( rCol.nWidth ), nOffs( rCol.nOffs ) {}
-    inline BOOL operator<( const SwScrollColumn &rTst ) const
-        { return nX < rTst.nX || ( nX == rTst.nX && ( nWidth < rTst.nWidth ||
-          ( nWidth == rTst.nWidth && nOffs < rTst.nOffs ) ) ); }
-    inline BOOL operator==( const SwScrollColumn &rTst ) const
-        { return nX == rTst.nX && nWidth == rTst.nWidth && nOffs == rTst.nOffs;}
-#endif
     inline SwTwips GetX() const { return nX; }
     inline SwTwips GetWidth() const { return nWidth; }
     inline SwTwips GetOffs() const { return nOffs; }
