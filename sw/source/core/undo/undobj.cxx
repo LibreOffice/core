@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undobj.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 14:20:39 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:49:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,9 +86,6 @@
 #endif
 #ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
-#ifndef _SW_REWRITER_HXX
-#include <SwRewriter.hxx>
 #endif
 
 class SwRedlineSaveData : public SwUndRng, public SwRedlineData,
@@ -240,7 +237,7 @@ void SwUndo::RemoveIdxRel( ULONG nIdx, const SwPosition& rPos )
 }
 
 SwUndo::SwUndo( USHORT nI )
-    : nId(nI), nOrigRedlineMode(REDLINE_NONE), pComment(NULL),
+    : nId(nI), nOrigRedlineMode(IDocumentRedlineAccess::REDLINE_NONE), pComment(NULL),
       bCacheComment(true)
 {
 }
@@ -743,7 +740,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
     // 3. Bookmarks
     if( DELCNT_BKM & nDelCntntType )
     {
-        const SwBookmarks& rBkmkTbl = pDoc->GetBookmarks();
+        const SwBookmarks& rBkmkTbl = pDoc->getBookmarks();
         if( rBkmkTbl.Count() )
         {
             const SwBookmark* pBkmk;
@@ -776,7 +773,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                         SwHstryBookmark::BKMK_POS) == nTyp ||
                         ( SwHstryBookmark::BKMK_POS == nTyp
                             && !pBkmk->GetOtherPos() ))
-                        pDoc->DelBookmark( n-- );
+                        pDoc->deleteBookmark( n-- );
                 }
             }
         }
@@ -1080,11 +1077,11 @@ void SwRedlineSaveData::RedlineToDoc( SwPaM& rPam )
     // erstmal die "alten" entfernen, damit im Append keine unerwarteten
     // Dinge passieren, wie z.B. eine Delete in eigenen Insert. Dann wird
     // naehmlich das gerade restaurierte wieder geloescht - nicht das gewollte
-    rDoc.DeleteRedline( *pRedl, FALSE );
+    rDoc.DeleteRedline( *pRedl, false, USHRT_MAX );
 
-    SwRedlineMode eOld = rDoc.GetRedlineMode();
-    rDoc.SetRedlineMode_intern( eOld | REDLINE_DONTCOMBINE_REDLINES );
-    rDoc.AppendRedline( pRedl );
+    IDocumentRedlineAccess::RedlineMode_t eOld = rDoc.GetRedlineMode();
+    rDoc.SetRedlineMode_intern( eOld | IDocumentRedlineAccess::REDLINE_DONTCOMBINE_REDLINES );
+    rDoc.AppendRedline( pRedl, true );
     rDoc.SetRedlineMode_intern( eOld );
 }
 
@@ -1114,7 +1111,7 @@ BOOL SwUndo::FillSaveData( const SwPaM& rRange, SwRedlineSaveDatas& rSData,
         }
     }
     if( rSData.Count() && bDelRange )
-        rRange.GetDoc()->DeleteRedline( rRange, FALSE );
+        rRange.GetDoc()->DeleteRedline( rRange, false, USHRT_MAX );
     return 0 != rSData.Count();
 }
 
@@ -1131,7 +1128,7 @@ BOOL SwUndo::FillSaveDataForFmt( const SwPaM& rRange, SwRedlineSaveDatas& rSData
     for( ; n < rTbl.Count(); ++n )
     {
         SwRedline* pRedl = rTbl[ n ];
-        if( REDLINE_FORMAT == pRedl->GetType() )
+        if( IDocumentRedlineAccess::REDLINE_FORMAT == pRedl->GetType() )
         {
             const SwPosition *pRStt = pRedl->Start(), *pREnd = pRedl->End();
 
@@ -1152,8 +1149,8 @@ BOOL SwUndo::FillSaveDataForFmt( const SwPaM& rRange, SwRedlineSaveDatas& rSData
 
 void SwUndo::SetSaveData( SwDoc& rDoc, const SwRedlineSaveDatas& rSData )
 {
-    SwRedlineMode eOld = rDoc.GetRedlineMode();
-    rDoc.SetRedlineMode_intern( ( eOld & ~REDLINE_IGNORE) | REDLINE_ON );
+    IDocumentRedlineAccess::RedlineMode_t eOld = rDoc.GetRedlineMode();
+    rDoc.SetRedlineMode_intern( ( eOld & ~IDocumentRedlineAccess::REDLINE_IGNORE) | IDocumentRedlineAccess::REDLINE_ON );
     SwPaM aPam( rDoc.GetNodes().GetEndOfContent() );
 
     for( USHORT n = rSData.Count(); n; )
