@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swcrsr.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:12:34 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:32:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _SWCRSR_HXX
 #define _SWCRSR_HXX
-
 #ifndef _COM_SUN_STAR_I18N_WORDTYPE_HPP_
 #include <com/sun/star/i18n/WordType.hpp>
 #endif
@@ -201,12 +200,6 @@ public:
                                     { return LeftRight( TRUE, nCnt, nMode, bAllowVisual, bSkipHidden, FALSE ); }
     FASTBOOL Right( USHORT nCnt, USHORT nMode, BOOL bAllowVisual, BOOL bSkipHidden )
                                     { return LeftRight( FALSE, nCnt, nMode, bAllowVisual, bSkipHidden, FALSE ); }
-    FASTBOOL Up( USHORT nCnt = 1 )      { return UpDown( TRUE, nCnt ); }
-    FASTBOOL Down( USHORT nCnt = 1 )    { return UpDown( FALSE, nCnt ); }
-    FASTBOOL LeftMargin()               { return LeftRightMargin( TRUE ); }
-    FASTBOOL RightMargin()              { return LeftRightMargin( FALSE ); }
-    FASTBOOL SttDoc()                   { return SttEndDoc( TRUE ); }
-    FASTBOOL EndDoc()                   { return SttEndDoc( FALSE ); }
     FASTBOOL GoNextCell( USHORT nCnt = 1 )  { return GoPrevNextCell( TRUE, nCnt ); }
     FASTBOOL GoPrevCell( USHORT nCnt = 1 )  { return GoPrevNextCell( FALSE, nCnt ); }
     FASTBOOL GotoTable( const String& rName );
