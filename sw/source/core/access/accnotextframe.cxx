@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accnotextframe.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:52:28 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:45:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #ifndef _VOS_MUTEX_HXX_ //autogen
@@ -55,9 +54,6 @@
 
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX_
 #include <unotools/accessiblestatesethelper.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
-#include <com/sun/star/uno/RuntimeException.hpp>
 #endif
 #ifndef _FRMFMT_HXX
 #include <frmfmt.hxx>
