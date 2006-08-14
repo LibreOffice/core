@@ -4,9 +4,9 @@
  *
  *  $RCSfile: authfld.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:31:50 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:11:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #define _SVSTDARR_STRINGSDTOR
@@ -52,13 +51,6 @@
 #ifndef _SVX_LANGITEM_HXX
 #include <svx/langitem.hxx>
 #endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUES_HPP_
-#include <com/sun/star/beans/PropertyValues.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
-#include <com/sun/star/lang/Locale.hpp>
-#endif
-
 #ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
 #endif
