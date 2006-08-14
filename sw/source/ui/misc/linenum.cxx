@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linenum.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:34:28 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:49:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,9 +72,6 @@
 //#include <fldmgr.hxx>
 //#endif
 
-#ifndef _DOC_HXX //autogen
-#include <doc.hxx>
-#endif
 
 #ifndef _DOCSTYLE_HXX //autogen
 #include <docstyle.hxx>
@@ -86,6 +83,8 @@
 #include "linenum.hrc"
 #include "linenum.hxx"
 #include "uitool.hxx"
+
+#include <IDocumentStylePoolAccess.hxx>
 
 /*--------------------------------------------------------------------
     Beschreibung:
@@ -191,8 +190,9 @@ SfxTabPage* __EXPORT SwLineNumberingPage::Create( Window* pParent, const SfxItem
 void __EXPORT SwLineNumberingPage::Reset( const SfxItemSet& rSet )
 {
     const SwLineNumberInfo &rInf = pSh->GetLineNumberInfo();
+    IDocumentStylePoolAccess* pIDSPA = pSh->getIDocumentStylePoolAccess();
 
-    String sStyleName(rInf.GetCharFmt(*pSh->GetDoc())->GetName());
+    String sStyleName(rInf.GetCharFmt( *pIDSPA )->GetName());
     const USHORT nPos = aCharStyleLB.GetEntryPos(sStyleName);
 
     if (nPos != LISTBOX_ENTRY_NOTFOUND)
