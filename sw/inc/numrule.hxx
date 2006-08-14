@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numrule.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 11:46:01 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:28:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -269,11 +269,6 @@ public:
     // die gegebenfalls
     void CheckCharFmts( SwDoc* pDoc );
 
-#ifndef NUM_RELSPACE
-    // test ob der Einzug von dieser Numerierung kommt.
-    BOOL IsRuleLSpace( SwTxtNode& rNd ) const;
-#endif
-
     const String& GetName() const       { return sName; }
     void SetName( const String& rNm ); // #i36749#
 
@@ -337,11 +332,8 @@ public:
     */
     SwBitArray SetLevelMarked(BYTE nLvl, BOOL bVal);
 
-    /**
-       Unmarks all levels.
-    */
-    void ResetMarkedLevels() { aMarkedLevels.Reset(); }
     // <- #i27615#
+
     // #i23726#, #i23725#
     void        Indent(short aAmount, int nLevel = -1,
                        int nReferenceLevel = -1, BOOL bRelative = TRUE,
