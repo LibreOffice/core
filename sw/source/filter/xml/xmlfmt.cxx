@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfmt.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:21:12 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:22:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -72,9 +71,6 @@
 #ifndef _CHARFMT_HXX //autogen wg. SwCharFmt
 #include <charfmt.hxx>
 #endif
-#ifndef _FRMFMT_HXX //autogen wg. SwFrmFmt
-#include <frmfmt.hxx>
-#endif
 #ifndef _PARATR_HXX
 #include <paratr.hxx>
 #endif
@@ -108,9 +104,6 @@
 #ifndef _XMLOFF_XMLSTYLE_HXX
 #include <xmloff/xmlstyle.hxx>
 #endif
-#ifndef _XMLOFF_XMLTOKEN_HXX
-#include <xmloff/xmltoken.hxx>
-#endif
 #ifndef _XMLOFF_TXTSTYLI_HXX
 #include <xmloff/txtstyli.hxx>
 #endif
@@ -128,10 +121,6 @@
 #endif
 #ifndef _XMLOFF_XMLGRAPHICSDEFAULTSTYLE_HXX
 #include <xmloff/XMLGraphicsDefaultStyle.hxx>
-#endif
-
-#ifndef _NUMRULE_HXX
-#include <numrule.hxx>
 #endif
 #ifndef _XMLIMP_HXX
 #include "xmlimp.hxx"
@@ -739,7 +728,7 @@ void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()
         // first if it hasn't been used by now.
         sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( sName, GET_POOLID_PAGEDESC );
         if( USHRT_MAX != nPoolId )
-            pPageDesc = pDoc->GetPageDescFromPoolSimple( nPoolId, FALSE );
+            pPageDesc = pDoc->GetPageDescFromPool( nPoolId, false );
     }
 
     if( !pPageDesc )
