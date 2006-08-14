@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accnotextframe.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:52:47 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:45:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,15 +34,9 @@
  ************************************************************************/
 #ifndef _ACCNOTEXTFRAME_HXX
 #define _ACCNOTEXTFRAME_HXX
-
 #ifndef _ACCFRAMEBASE_HXX
 #include "accframebase.hxx"
 #endif
-
-#ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
-#include <com/sun/star/uno/RuntimeException.hpp>
-#endif
-
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEIMAGE_HPP_
 #include <com/sun/star/accessibility/XAccessibleImage.hpp>
 #endif
