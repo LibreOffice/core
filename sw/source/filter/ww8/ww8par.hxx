@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.144 $
+ *  $Revision: 1.145 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:40:23 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:18:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifndef _WW8PAR_HXX
@@ -97,26 +96,22 @@ class SvxBoxItem;
 class SwFmt;
 class SwNodeIndex;
 class SwFlyFrmFmt;
-class SvxTabStopItem;
 class SwAttrSet;
 class SwNumRule;
 class SwFrmFmt;
 class Writer;
-
+class SwFmtFld;
 class SwWW8StyInf;
 class WW8Fib;
 class WW8PLCFMan;
 struct WW8PLCFManResult;
 class WW8RStyle;
 class WW8PLCF_HdFt;
-class Plcx_Fkp;
-class WW8PLCFx_SEPX;
 class WW8Dop;
 class WW8ScannerBase;
 struct WW8FieldDesc;
 struct WW8FlyPara;
 struct WW8SwFlyPara;
-struct WmfFileHd;
 struct WW8_PIC;
 class WW8TabDesc;
 struct WW8_SHD;
@@ -127,11 +122,8 @@ struct WW8_ANLV;
 struct WW8_DO;
 struct WW8_DPHEAD;
 struct WW8_FSPA;
-class Plc1;
-class SwDrawFrmFmt;
 class SdrModel;
 class SdrPage;
-class SdrObjList;
 class SdrObject;
 class SdrTextObj;
 class Size;
@@ -147,9 +139,7 @@ class SwAttrSet;
 class GDIMetaFile;
 struct ESelection;
 class SfxItemSet;
-struct WW8PLCFxDesc;
 class _ReadFieldParams;
-class SdrAttrObj;
 class wwZOrderer;
 namespace com{namespace sun {namespace star{
     namespace beans{ class XPropertySet;}
@@ -776,7 +766,8 @@ struct ANLDRuleMap
     ANLDRuleMap() : mpOutlineNumRule(0), mpNumberingNumRule(0) {}
 };
 
-class SprmReadInfo;
+struct SprmReadInfo;
+class SwDocShell;
 
 //-----------------------------------------
 //            Storage-Reader
@@ -1447,7 +1438,7 @@ public:     // eigentlich private, geht aber leider nur public
     // Revision Marks ( == Redlining )
 
     // insert or delete content (change char attributes resp.)
-    void Read_CRevisionMark(SwRedlineType eType, const BYTE* pData, short nLen);
+    void Read_CRevisionMark(IDocumentRedlineAccess::RedlineType_t eType, const BYTE* pData, short nLen);
     // insert new content
     void Read_CFRMark(USHORT , const BYTE* pData, short nLen);
     // delete old content
