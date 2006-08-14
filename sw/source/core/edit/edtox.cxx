@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtox.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:29:46 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:10:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,13 +38,9 @@
 #ifndef _COM_SUN_STAR_UTIL_SEARCHFLAGS_HPP_
 #include <com/sun/star/util/SearchFlags.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
-#include <com/sun/star/lang/Locale.hpp>
-#endif
 #ifndef _COM_SUN_STAR_I18N_TRANSLITERATIONMODULES_HPP_
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #endif
-
 
 #pragma hdrstop
 
@@ -260,7 +256,7 @@ BOOL SwEditShell::UpdateTableOf( const SwTOXBase& rTOX, const SfxItemSet* pSet )
         ::StartProgress( STR_STATSTR_TOX_UPDATE, 0, 0, pDocSh );
         ::SetProgressText( STR_STATSTR_TOX_UPDATE, pDocSh );
 
-        pDoc->StartUndo(UNDO_TOXCHANGE);
+        pDoc->StartUndo(UNDO_TOXCHANGE, NULL);
 
         // Verzeichnisrumpf erzeugen
         pTOX->Update(pSet);
@@ -275,7 +271,7 @@ BOOL SwEditShell::UpdateTableOf( const SwTOXBase& rTOX, const SfxItemSet* pSet )
         // Seitennummern eintragen
         pTOX->UpdatePageNum();
 
-        pDoc->EndUndo(UNDO_TOXCHANGE);
+        pDoc->EndUndo(UNDO_TOXCHANGE, NULL);
 
         ::EndProgress( pDocSh );
         EndAllAction();
