@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoatxt.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 08:09:46 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 18:00:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -511,7 +510,7 @@ sal_Bool lcl_CopySelToDoc( SwDoc* pInsDoc, OTextCursorHelper* pxCursor, SwXTextR
 
     pInsDoc->UnlockExpFlds();
     if( !pInsDoc->IsExpFldsLocked() )
-        pInsDoc->UpdateExpFlds();
+        pInsDoc->UpdateExpFlds(NULL, true);
 
     return bRet;
 }
@@ -578,7 +577,7 @@ Reference< text::XAutoTextEntry >  SwXAutoTextGroup::insertNewByName(const OUStr
             pGlosGroup->ClearDoc();
             if( pGlosGroup->BeginPutDoc( sShortName, sLongName ) )
             {
-                pGDoc->SetRedlineMode_intern( REDLINE_DELETE_REDLINES );
+                pGDoc->SetRedlineMode_intern( IDocumentRedlineAccess::REDLINE_DELETE_REDLINES );
                 lcl_CopySelToDoc( pGDoc, pxCursor, pxRange );
                 pGDoc->SetRedlineMode_intern( 0 );
                 nRet = pGlosGroup->PutDoc();
