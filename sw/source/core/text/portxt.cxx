@@ -4,9 +4,9 @@
  *
  *  $RCSfile: portxt.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 15:40:48 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:42:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -65,12 +64,6 @@
 #ifndef _PORGLUE_HXX
 #include <porglue.hxx>
 #endif
-#ifndef _POREXP_HXX
-#include <porexp.hxx>   // HyphPortion
-#endif
-#ifndef _PORRST_HXX
-#include <porrst.hxx>   // SwKernPortion
-#endif
 #ifndef _PORTAB_HXX
 #include <portab.hxx>       // pLastTab->
 #endif
@@ -83,11 +76,12 @@
 #ifndef _VIEWSH_HXX
 #include <viewsh.hxx>
 #endif
-// --> FME 2004-06-24 #i16816# tagged pdf support
+#ifndef IDOCUMENTSETTINGACCESS_HXX_INCLUDED
+#include <IDocumentSettingAccess.hxx>
+#endif
 #ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>  // SwViewOptions
 #endif
-// <--
 
 #if OSL_DEBUG_LEVEL > 1
 const sal_Char *GetLangName( const MSHORT nLang );
@@ -186,7 +180,6 @@ USHORT lcl_AddSpace( const SwTxtSizeInfo &rInf, const XubString* pStr,
         }
     }
 
-#ifdef BIDI
     // Kashida Justification: Insert Kashidas
     if ( nEnd > nPos && pSI && COMPLEX == nScript )
     {
@@ -196,7 +189,6 @@ USHORT lcl_AddSpace( const SwTxtSizeInfo &rInf, const XubString* pStr,
         if ( SwScriptInfo::IsArabicLanguage( aLang ) )
             return pSI->KashidaJustify( 0, 0, nPos, nEnd - nPos );
     }
-#endif
 
     // Here starts the good old "Look for blanks and add space to them" part.
     // Note: We do not want to add space to an isolated latin blank in front
@@ -436,7 +428,8 @@ sal_Bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
         //   (work around different definition of tab stop character - breaking or
         //   non breaking character - in compatibility mode)
         else if ( ( IsFtnPortion() && rInf.IsFakeLineStart() ) ||
-                  ( rInf.GetVsh()->IsTabCompat() && rInf.GetLast() &&
+                  ( rInf.GetLast() &&
+                    rInf.GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_COMPAT) &&
                     rInf.GetLast()->InTabGrp() &&
                     rInf.GetLineStart() + rInf.GetLast()->GetLen() < rInf.GetIdx() &&
                     aGuess.BreakPos() == rInf.GetIdx()  &&
