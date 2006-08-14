@@ -4,9 +4,9 @@
  *
  *  $RCSfile: redlndlg.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-08 14:54:50 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:50:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #define _SVSTDARR_STRINGSSORTDTOR
@@ -46,9 +45,6 @@
 
 #ifndef _REDLINE_HXX
 #include <redline.hxx>
-#endif
-#ifndef _REDLENUM_HXX
-#include <redlenum.hxx>
 #endif
 #ifndef _DATETIME_HXX //autogen
 #include <tools/datetime.hxx>
@@ -83,9 +79,6 @@
 #endif
 #ifndef _WRTSH_HXX
 #include <wrtsh.hxx>
-#endif
-#ifndef _DOC_HXX
-#include <doc.hxx>
 #endif
 #ifndef _VIEW_HXX
 #include <view.hxx>
@@ -130,6 +123,9 @@
 #include <vector>
 #include <svx/svxdlg.hxx> //CHINA001
 #include <svx/dialogs.hrc> //CHINA001
+
+#include <IDocumentRedlineAccess.hxx>
+
 #define C2S(cChar) UniString::CreateFromAscii(cChar)
 /*------------------------------------------------------------------------
     Beschreibung:
@@ -586,7 +582,7 @@ void SwRedlineAcceptDlg::InitAuthors()
     {
         const SwRedline& rRedln = pSh->GetRedline(i);
 
-        if( bOnlyFormatedRedlines && REDLINE_FORMAT != rRedln.GetType() )
+        if( bOnlyFormatedRedlines && IDocumentRedlineAccess::REDLINE_FORMAT != rRedln.GetType() )
             bOnlyFormatedRedlines = FALSE;
 
 //JP 27.9.2001: make no sense if we handle readonly sections
@@ -611,7 +607,7 @@ void SwRedlineAcceptDlg::InitAuthors()
     if (pFilterPage->SelectAuthor(sOldAuthor) == LISTBOX_ENTRY_NOTFOUND && aStrings.Count())
         pFilterPage->SelectAuthor(*aStrings[0]);
 
-    BOOL bEnable = pTable->GetEntryCount() != 0 && !pSh->GetDoc()->GetRedlinePasswd().getLength();
+    BOOL bEnable = pTable->GetEntryCount() != 0 && !pSh->getIDocumentRedlineAccess()->GetRedlinePassword().getLength();
     BOOL bSel = pTable->FirstSelected() != 0;
 
     SvLBoxEntry* pSelEntry = pTable->FirstSelected();
@@ -620,7 +616,7 @@ void SwRedlineAcceptDlg::InitAuthors()
         USHORT nPos = GetRedlinePos(*pSelEntry);
         const SwRedline& rRedln = pSh->GetRedline( nPos );
 
-        bIsNotFormated |= REDLINE_FORMAT != rRedln.GetType();
+        bIsNotFormated |= IDocumentRedlineAccess::REDLINE_FORMAT != rRedln.GetType();
         pSelEntry = pTable->NextSelected(pSelEntry);
     }
 
@@ -662,11 +658,11 @@ const String &SwRedlineAcceptDlg::GetActionText(const SwRedline& rRedln, USHORT 
 {
     switch( rRedln.GetType(nStack) )
     {
-        case REDLINE_INSERT:    return sInserted;
-        case REDLINE_DELETE:    return sDeleted;
-        case REDLINE_FORMAT:    return sFormated;
-        case REDLINE_TABLE:     return sTableChgd;
-        case REDLINE_FMTCOLL:   return sFmtCollSet;
+        case IDocumentRedlineAccess::REDLINE_INSERT:    return sInserted;
+        case IDocumentRedlineAccess::REDLINE_DELETE:    return sDeleted;
+        case IDocumentRedlineAccess::REDLINE_FORMAT:    return sFormated;
+        case IDocumentRedlineAccess::REDLINE_TABLE:     return sTableChgd;
+        case IDocumentRedlineAccess::REDLINE_FMTCOLL:   return sFmtCollSet;
     }
 
     return aEmptyStr;
@@ -812,7 +808,7 @@ USHORT SwRedlineAcceptDlg::CalcDiff(USHORT nStart, BOOL bChild)
     pTable->SetUpdateMode(FALSE);
     SwView *pView   = ::GetActiveView();
     SwWrtShell* pSh = pView->GetWrtShellPtr();
-    USHORT nAutoFmt = HasRedlineAutoFmt() ? REDLINE_FORM_AUTOFMT : 0;
+    USHORT nAutoFmt = HasRedlineAutoFmt() ? IDocumentRedlineAccess::REDLINE_FORM_AUTOFMT : 0;
     SwRedlineDataParent *pParent = aRedlineParents[nStart];
     const SwRedline& rRedln = pSh->GetRedline(nStart);
 
@@ -1043,7 +1039,7 @@ void SwRedlineAcceptDlg::InsertParents(USHORT nStart, USHORT nEnd)
 {
     SwView *pView   = ::GetActiveView();
     SwWrtShell* pSh = pView->GetWrtShellPtr();
-    USHORT nAutoFmt = HasRedlineAutoFmt() ? REDLINE_FORM_AUTOFMT : 0;
+    USHORT nAutoFmt = HasRedlineAutoFmt() ? IDocumentRedlineAccess::REDLINE_FORM_AUTOFMT : 0;
 
     String sParent;
     USHORT nCount = pSh->GetRedlineCount();
@@ -1362,7 +1358,7 @@ IMPL_LINK( SwRedlineAcceptDlg, GotoHdl, void*, EMPTYARG )
             {
 
                 const SwRedline& rRedln = pSh->GetRedline( nPos );
-                bIsNotFormated |= REDLINE_FORMAT != rRedln.GetType();
+                bIsNotFormated |= IDocumentRedlineAccess::REDLINE_FORMAT != rRedln.GetType();
 
 //JP 27.9.2001: make no sense if we handle readonly sections
 //          if( !bReadonlySel && rRedln.HasReadonlySel() )
@@ -1382,7 +1378,7 @@ IMPL_LINK( SwRedlineAcceptDlg, GotoHdl, void*, EMPTYARG )
         pSh->EndAction();
         pSh->SetCareWin(NULL);
     }
-    BOOL bEnable = !pSh->GetDoc()->GetRedlinePasswd().getLength();
+    BOOL bEnable = !pSh->getIDocumentRedlineAccess()->GetRedlinePassword().getLength();
     pTPView->EnableAccept( bEnable && bSel && !bReadonlySel );
     pTPView->EnableReject( bEnable && bSel && bIsNotFormated && !bReadonlySel );
     pTPView->EnableRejectAll( bEnable && !bOnlyFormatedRedlines && !bHasReadonlySel );
@@ -1487,16 +1483,16 @@ IMPL_LINK( SwRedlineAcceptDlg, CommandHdl, void*, EMPTYARG )
                         USHORT nResId = 0;
                         switch( rRedline.GetType() )
                         {
-                        case REDLINE_INSERT:
+                        case IDocumentRedlineAccess::REDLINE_INSERT:
                             nResId = STR_REDLINE_INSERTED;
                             break;
-                        case REDLINE_DELETE:
+                        case IDocumentRedlineAccess::REDLINE_DELETE:
                             nResId = STR_REDLINE_DELETED;
                             break;
-                        case REDLINE_FORMAT:
+                        case IDocumentRedlineAccess::REDLINE_FORMAT:
                             nResId = STR_REDLINE_FORMATED;
                             break;
-                        case REDLINE_TABLE:
+                        case IDocumentRedlineAccess::REDLINE_TABLE:
                             nResId = STR_REDLINE_TABLECHG;
                             break;
                         }
