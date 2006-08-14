@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hints.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:57:34 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:25:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -218,10 +218,6 @@ public:
 
     // wo es sich geaendert hat
     const SwAttrSet* GetTheChgdSet() const  { return pTheChgdSet; }
-
-    SfxItemState GetItemState( USHORT nWhich, BOOL bSrchInParent = TRUE,
-                               const SfxPoolItem **ppItem = 0 ) const
-    {   return pChgSet->GetItemState( nWhich, bSrchInParent, ppItem ); }
 
     USHORT Count() const { return pChgSet->Count(); }
     void ClearItem( USHORT nWhich = 0 )
