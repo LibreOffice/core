@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellfml.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 14:48:32 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:12:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -94,9 +93,6 @@
 #endif
 #ifndef _NDINDEX_HXX
 #include <ndindex.hxx>
-#endif
-#ifndef _HINTS_HXX
-#include <hints.hxx>
 #endif
 
 const sal_Unicode cRelTrenner = ',';
