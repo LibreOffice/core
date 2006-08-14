@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itrtxt.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:55:46 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:39:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -90,20 +89,12 @@ void SwTxtIter::CtorInit( SwTxtFrm *pNewFrm, SwTxtInfo *pNewInf )
 
     ASSERT( pNewFrm->GetPara(), "No paragraph" );
 
-#ifdef VERTICAL_LAYOUT
     SwAttrIter::CtorInit( *pNode, pNewFrm->GetPara()->GetScriptInfo(), pNewFrm );
-#else
-    SwAttrIter::CtorInit( *pNode, pNewFrm->GetPara()->GetScriptInfo() );
-#endif
 
     pFrm = pNewFrm;
     pInf = pNewInf;
     aLineInf.CtorInit( pNode->GetSwAttrSet() );
-#ifdef VERTICAL_LAYOUT
     nFrameStart = pFrm->Frm().Pos().Y() + pFrm->Prt().Pos().Y();
-#else
-    aTopLeft = pFrm->Frm().Pos() + pFrm->Prt().Pos();
-#endif
     SwTxtIter::Init();
     if( pNode->GetSwAttrSet().GetRegister().GetValue() )
         bRegisterOn = pFrm->FillRegister( nRegStart, nRegDiff );
@@ -119,11 +110,7 @@ void SwTxtIter::Init()
 {
     pCurr = pInf->GetParaPortion();
     nStart = pInf->GetTxtStart();
-#ifdef VERTICAL_LAYOUT
     nY = nFrameStart;
-#else
-    nY = aTopLeft.Y();
-#endif
     bPrev = sal_True;
     pPrev = 0;
     nLineNr = 1;
@@ -333,7 +320,6 @@ const SwLineLayout *SwTxtCursor::CharCrsrToLine( const xub_StrLen nPos )
  *                      SwTxtCrsr::AdjustBaseLine()
  *************************************************************************/
 
-#ifdef VERTICAL_LAYOUT
 USHORT SwTxtCursor::AdjustBaseLine( const SwLineLayout& rLine,
                                     const SwLinePortion* pPor,
                                     USHORT nPorHeight, USHORT nPorAscent,
@@ -408,40 +394,6 @@ USHORT SwTxtCursor::AdjustBaseLine( const SwLineLayout& rLine,
 
     return nOfst;
 }
-#else
-USHORT SwTxtCursor::AdjustBaseLine( const SwLineLayout& rLine,
-                                    const USHORT nPorHeight,
-                                    const USHORT nPorAscent,
-                                    const sal_Bool bAutoToCentered ) const
-{
-    USHORT nOfst = rLine.GetRealHeight() - rLine.Height();
-
-    switch ( GetLineInfo().GetVertAlign() ) {
-        case SvxParaVertAlignItem::TOP :
-            nOfst += nPorAscent;
-            break;
-        case SvxParaVertAlignItem::CENTER :
-            ASSERT( rLine.Height() >= nPorHeight, "Portion height > Line height");
-            nOfst += ( rLine.Height() - nPorHeight ) / 2 + nPorAscent;
-            break;
-        case SvxParaVertAlignItem::BOTTOM :
-            nOfst += rLine.Height() - nPorHeight + nPorAscent;
-            break;
-        case SvxParaVertAlignItem::AUTOMATIC :
-            if ( bAutoToCentered )
-            {
-                nOfst += ( rLine.Height() - nPorHeight ) / 2 + nPorAscent;
-                break;
-            }
-        case SvxParaVertAlignItem::BASELINE :
-            // base line
-            nOfst += rLine.GetAscent();
-            break;
-    }
-
-    return nOfst;
-}
-#endif
 
 /*************************************************************************
  *                      SwTxtIter::TwipsToLine()
