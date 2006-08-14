@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtrtf.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:56:07 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:11:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifndef _WRTRTF_HXX
 #define _WRTRTF_HXX
 
@@ -53,7 +52,6 @@ class Font;
 class SvPtrarr;
 class RTFColorTbl;
 class SwFmt;
-class SwFmtColl;
 class SwFlyFrmFmt;
 class SwPosFlyFrms;
 class SwPageDesc;
@@ -61,7 +59,6 @@ class SwTableNode;
 class SwTxtFmtColl;
 class SwNumRule;
 class SwNumRuleTbl;
-class SwNodeNum;
 class DateTime;
 class RTFEndPosLst;
 
