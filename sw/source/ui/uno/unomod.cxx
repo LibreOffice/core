@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomod.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 15:13:41 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 18:01:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #include <swtypes.hxx>
@@ -51,9 +50,6 @@
 #endif
 #ifndef _UNOMAP_HXX
 #include <unomap.hxx>
-#endif
-#ifndef _SFX_ITEMPROP_HXX //autogen
-#include <svtools/itemprop.hxx>
 #endif
 #ifndef _PRTOPT_HXX //autogen
 #include <prtopt.hxx>
@@ -84,9 +80,6 @@
 #endif
 #ifndef _COM_SUN_STAR_TEXT_NOTEPRINTMODE_HPP_
 #include <com/sun/star/text/NotePrintMode.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HDL_
-#include <com/sun/star/lang/XMultiServiceFactory.hdl>
 #endif
 #ifndef _DOC_HXX
 #include <doc.hxx>
@@ -381,13 +374,13 @@ void SwXPrintSettings::_preSetValues ()
         {
             if (!mpDoc)
                 throw IllegalArgumentException ();
-            if ( !mpDoc->GetPrintData() )
+            if ( !mpDoc->getPrintData() )
             {
                 mpPrtOpt = new SwPrintData;
-                mpDoc->SetPrintData ( *mpPrtOpt );
+                mpDoc->setPrintData ( *mpPrtOpt );
                 delete mpPrtOpt;
             }
-            mpPrtOpt = mpDoc->GetPrintData();
+            mpPrtOpt = mpDoc->getPrintData();
         }
         break;
     }
@@ -525,13 +518,13 @@ void SwXPrintSettings::_preGetValues ()
         {
             if (!mpDoc)
                 throw IllegalArgumentException ();
-            if ( !mpDoc->GetPrintData() )
+            if ( !mpDoc->getPrintData() )
             {
                 mpPrtOpt = new SwPrintData;
-                mpDoc->SetPrintData ( *mpPrtOpt );
+                mpDoc->setPrintData ( *mpPrtOpt );
                 delete mpPrtOpt;
             }
-            mpPrtOpt = mpDoc->GetPrintData();
+            mpPrtOpt = mpDoc->getPrintData();
         }
         break;
     }
@@ -795,7 +788,7 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
         break;
         case HANDLE_VIEWSET_ONLINE_LAYOUT :
         {
-            if( pView && bVal != pView->GetWrtShell().IsBrowseMode() )
+            if( pView && !bVal != !pView->GetWrtShell().getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
                 pView->GetDocShell()->ToggleBrowserMode(bVal, pView );
         }
         break;
@@ -931,7 +924,7 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, :
         break;
         case HANDLE_VIEWSET_ONLINE_LAYOUT:
             if(pView)
-                bBoolVal = pView->GetWrtShell().GetDoc()->IsBrowseMode();
+                bBoolVal = pView->GetWrtShell().getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
         break;
         case HANDLE_VIEWSET_HELP_URL :
         {
