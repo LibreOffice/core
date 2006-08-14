@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ednumber.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-06 12:59:16 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:09:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #ifndef _HINTIDS_HXX
@@ -48,20 +47,8 @@
 #ifndef _DOC_HXX
 #include <doc.hxx>
 #endif
-#ifndef _PAM_HXX
-#include <pam.hxx>
-#endif
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
-#endif
-#ifndef _VISCRS_HXX
-#include <viscrs.hxx>
-#endif
-#ifndef _NUMRULE_HXX
-#include <numrule.hxx>
-#endif
-#ifndef _HINTS_HXX
-#include <hints.hxx>
 #endif
 #ifndef _PARATR_HXX
 #include <paratr.hxx>
@@ -185,12 +172,12 @@ BOOL SwEditShell::NoNum()
     SwPaM* pCrsr = GetCrsr();
     if( pCrsr->GetNext() != pCrsr )         // Mehrfachselektion ?
     {
-        GetDoc()->StartUndo( UNDO_START );
+        GetDoc()->StartUndo( UNDO_START, NULL );
         SwPamRanges aRangeArr( *pCrsr );
         SwPaM aPam( *pCrsr->GetPoint() );
         for( USHORT n = 0; n < aRangeArr.Count(); ++n )
             bRet = bRet && GetDoc()->NoNum( aRangeArr.SetPam( n, aPam ));
-        GetDoc()->EndUndo( UNDO_END );
+        GetDoc()->EndUndo( UNDO_END, NULL );
     }
     else
         bRet = GetDoc()->NoNum( *pCrsr );
@@ -250,12 +237,12 @@ BOOL SwEditShell::DelNumRules()
     SwPaM* pCrsr = GetCrsr();
     if( pCrsr->GetNext() != pCrsr )         // Mehrfachselektion ?
     {
-        GetDoc()->StartUndo( UNDO_START );
+        GetDoc()->StartUndo( UNDO_START, NULL );
         SwPamRanges aRangeArr( *pCrsr );
         SwPaM aPam( *pCrsr->GetPoint() );
         for( USHORT n = 0; n < aRangeArr.Count(); ++n )
             bRet = bRet && GetDoc()->DelNumRules( aRangeArr.SetPam( n, aPam ) );
-        GetDoc()->EndUndo( UNDO_END );
+        GetDoc()->EndUndo( UNDO_END, NULL );
     }
     else
         bRet = GetDoc()->DelNumRules( *pCrsr );
@@ -287,12 +274,12 @@ BOOL SwEditShell::NumUpDown( BOOL bDown )
         bRet = GetDoc()->NumUpDown( *pCrsr, bDown );
     else
     {
-        GetDoc()->StartUndo( UNDO_START );
+        GetDoc()->StartUndo( UNDO_START, NULL );
         SwPamRanges aRangeArr( *pCrsr );
         SwPaM aPam( *pCrsr->GetPoint() );
         for( USHORT n = 0; n < aRangeArr.Count(); ++n )
             bRet = bRet && GetDoc()->NumUpDown( aRangeArr.SetPam( n, aPam ), bDown );
-        GetDoc()->EndUndo( UNDO_END );
+        GetDoc()->EndUndo( UNDO_END, NULL );
     }
     GetDoc()->SetModified();
 
@@ -446,7 +433,7 @@ BOOL SwEditShell::MoveNumParas( BOOL bUpperLower, BOOL bUpperLeft )
                     ULONG nStt = aPos.nNode.GetIndex(), nIdx = nStt - 1;
                     while( nIdx && (
                         ( pNd = GetDoc()->GetNodes()[ nIdx ])->IsSectionNode() ||
-                        ( pNd->IsEndNode() && pNd->FindStartNode()->IsSectionNode())))
+                        ( pNd->IsEndNode() && pNd->StartOfSectionNode()->IsSectionNode())))
                         --nIdx;
                     if( GetDoc()->GetNodes()[ nIdx ]->IsTxtNode() )
                         nOffset = nIdx - nStt;
@@ -465,7 +452,7 @@ BOOL SwEditShell::MoveNumParas( BOOL bUpperLower, BOOL bUpperLeft )
                         pNd = GetDoc()->GetNodes()[ nIdx ];
 
                         if (pNd->IsSectionNode() ||
-                            ( pNd->IsEndNode() && pNd->FindStartNode()->IsSectionNode()) ||
+                            ( pNd->IsEndNode() && pNd->StartOfSectionNode()->IsSectionNode()) ||
                             ( pNd->IsTxtNode() && pOrig == ((SwTxtNode*)pNd)->GetNumRule() &&
                               ((SwTxtNode*)pNd)->GetLevel() > nUpperLevel ))
                         {
@@ -540,13 +527,13 @@ BOOL SwEditShell::OutlineUpDown( short nOffset )
         bRet = GetDoc()->OutlineUpDown( *pCrsr, nOffset );
     else
     {
-        GetDoc()->StartUndo( UNDO_START );
+        GetDoc()->StartUndo( UNDO_START, NULL );
         SwPamRanges aRangeArr( *pCrsr );
         SwPaM aPam( *pCrsr->GetPoint() );
         for( USHORT n = 0; n < aRangeArr.Count(); ++n )
             bRet = bRet && GetDoc()->OutlineUpDown(
                                     aRangeArr.SetPam( n, aPam ), nOffset );
-        GetDoc()->EndUndo( UNDO_END );
+        GetDoc()->EndUndo( UNDO_END, NULL );
     }
     GetDoc()->SetModified();
     EndAllAction();
@@ -754,16 +741,16 @@ void SwEditShell::SetCurNumRule( const SwNumRule& rRule )
     SwPaM* pCrsr = GetCrsr();
     if( pCrsr->GetNext() != pCrsr )         // Mehrfachselektion ?
     {
-        GetDoc()->StartUndo( UNDO_START );
+        GetDoc()->StartUndo( UNDO_START, NULL );
         SwPamRanges aRangeArr( *pCrsr );
         SwPaM aPam( *pCrsr->GetPoint() );
         for( USHORT n = 0; n < aRangeArr.Count(); ++n )
-        {
+          {
             aRangeArr.SetPam( n, aPam );
             GetDoc()->SetNumRule( aPam, rRule );
             GetDoc()->SetCounted( aPam, true );
-        }
-        GetDoc()->EndUndo( UNDO_END );
+          }
+        GetDoc()->EndUndo( UNDO_END, NULL );
     }
     else
     {
@@ -806,12 +793,12 @@ void SwEditShell::SetNumRuleStart( BOOL bFlag )
     SwPaM* pCrsr = GetCrsr();
     if( pCrsr->GetNext() != pCrsr )         // Mehrfachselektion ?
     {
-        GetDoc()->StartUndo( UNDO_START );
+        GetDoc()->StartUndo( UNDO_START, NULL );
         SwPamRanges aRangeArr( *pCrsr );
         SwPaM aPam( *pCrsr->GetPoint() );
         for( USHORT n = 0; n < aRangeArr.Count(); ++n )
             GetDoc()->SetNumRuleStart( *aRangeArr.SetPam( n, aPam ).GetPoint(), bFlag );
-        GetDoc()->EndUndo( UNDO_END );
+        GetDoc()->EndUndo( UNDO_END, NULL );
     }
     else
         GetDoc()->SetNumRuleStart( *pCrsr->GetPoint(), bFlag );
@@ -835,12 +822,12 @@ void SwEditShell::SetNodeNumStart( USHORT nStt )
     SwPaM* pCrsr = GetCrsr();
     if( pCrsr->GetNext() != pCrsr )         // Mehrfachselektion ?
     {
-        GetDoc()->StartUndo( UNDO_START );
+        GetDoc()->StartUndo( UNDO_START, NULL );
         SwPamRanges aRangeArr( *pCrsr );
         SwPaM aPam( *pCrsr->GetPoint() );
         for( USHORT n = 0; n < aRangeArr.Count(); ++n )
             GetDoc()->SetNodeNumStart( *aRangeArr.SetPam( n, aPam ).GetPoint(), nStt );
-        GetDoc()->EndUndo( UNDO_END );
+        GetDoc()->EndUndo( UNDO_END, NULL );
     }
     else
         GetDoc()->SetNodeNumStart( *pCrsr->GetPoint(), nStt );
