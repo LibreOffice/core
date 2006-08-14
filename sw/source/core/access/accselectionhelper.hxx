@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accselectionhelper.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:55:25 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:46:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,10 +35,7 @@
 #ifndef _ACCSELECTIONHELPER_HXX_
 #define _ACCSELECTIONHELPER_HXX_
 class SwAccessibleContext;
-class SwRootFrm;
 class SwFEShell;
-class SwFlyFrm;
-
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESELECTION_HPP_
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #endif
