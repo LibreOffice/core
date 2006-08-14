@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docdde.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:08:26 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:56:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,7 +176,7 @@ BOOL lcl_FindTable( const SwFrmFmtPtr& rpTableFmt, void* pArgs )
 
 
 
-BOOL SwDoc::GetData( const String& rItem, const String& rMimeType,
+bool SwDoc::GetData( const String& rItem, const String& rMimeType,
                      ::com::sun::star::uno::Any & rValue ) const
 {
     // haben wir ueberhaupt das Item vorraetig?
@@ -210,7 +210,7 @@ BOOL SwDoc::GetData( const String& rItem, const String& rMimeType,
 
 
 
-BOOL SwDoc::SetData( const String& rItem, const String& rMimeType,
+bool SwDoc::SetData( const String& rItem, const String& rMimeType,
                      const ::com::sun::star::uno::Any & rValue )
 {
     // haben wir ueberhaupt das Item vorraetig?
