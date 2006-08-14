@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 08:05:57 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:26:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  ************************************************************************/
 
 
-
 #pragma hdrstop
 
 #ifndef _HINTIDS_HXX
@@ -44,7 +43,6 @@
 #include <svx/dialogs.hrc>
 #endif
 #define ITEMID_FONTLIST         SID_ATTR_CHAR_FONTLIST
-
 #ifndef _SOT_STORINFO_HXX
 #include <sot/storinfo.hxx>
 #endif
@@ -79,9 +77,6 @@
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
 #endif
-#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
-#include <unotools/localedatawrapper.hxx>
-#endif
 #ifndef _SFXREQUEST_HXX
 #include <sfx2/request.hxx>
 #endif
@@ -91,23 +86,12 @@
 #ifndef _SVX_ADJITEM_HXX //autogen
 #include <svx/adjitem.hxx>
 #endif
-
 #ifndef _LINGUISTIC_LNGPROPS_HHX_
 #include <linguistic/lngprops.hxx>
-#endif
-#ifndef _UNO_LINGU_HXX
-#include <svx/unolingu.hxx>
-#endif
-#ifndef _SFX_SFXUNO_HXX
-#include <sfx2/sfxuno.hxx>
-#endif
-#ifndef _COM_SUN_STAR_I18N_FORBIDDENCHARACTERS_HPP_
-#include <com/sun/star/i18n/ForbiddenCharacters.hpp>
 #endif
 #ifndef _COM_SUN_STAR_DOCUMENT_UPDATEDOCMODE_HPP_
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #endif
-
 #ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
 #endif
@@ -181,9 +165,6 @@
 #ifndef _TOX_HXX
 #include <tox.hxx>
 #endif
-#ifndef _SHELLIO_HXX
-#include <shellio.hxx>
-#endif
 #ifndef _SWDTFLVR_HXX
 #include <swdtflvr.hxx>
 #endif
@@ -213,9 +194,6 @@
 #endif
 #ifndef _UNOTXDOC_HXX
 #include <unotxdoc.hxx>
-#endif
-#ifndef _FLDUPDE_HXX
-#include <fldupde.hxx>
 #endif
 #ifndef _LINKENUM_HXX
 #include <linkenum.hxx>
@@ -276,7 +254,7 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
         if ( bWeb )
             bHTMLTemplSet = SetHTMLTemplate( *GetDoc() );//Styles aus HTML.vor
         else if( ISA( SwGlobalDocShell ) )
-            GetDoc()->SetGlobalDoc();       // Globaldokument
+            GetDoc()->set(IDocumentSettingAccess::GLOBAL_DOCUMENT, true);       // Globaldokument
 
 
 /*
@@ -300,19 +278,20 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
                 ForbiddenCharacters aForbidden;
                 aAsian.GetStartEndChars( pLocales[i], aForbidden.beginLine, aForbidden.endLine);
                 LanguageType  eLang = SvxLocaleToLanguage(pLocales[i]);
-                pDoc->SetForbiddenCharacters( eLang, aForbidden);
+                pDoc->setForbiddenCharacters( eLang, aForbidden);
             }
         }
-        pDoc->SetKernAsianPunctuation(!aAsian.IsKerningWesternTextOnly());
-        pDoc->SetCharCompressType((SwCharCompressType)aAsian.GetCharDistanceCompression());
-        pDoc->SetPrintData(*SW_MOD()->GetPrtOptions(bWeb));
+        pDoc->set(IDocumentSettingAccess::KERN_ASIAN_PUNCTUATION,
+                  !aAsian.IsKerningWesternTextOnly());
+        pDoc->setCharacterCompressionType(static_cast<SwCharCompressType>(aAsian.GetCharDistanceCompression()));
+        pDoc->setPrintData(*SW_MOD()->GetPrtOptions(bWeb));
 
         SubInitNew();
 
         // fuer alle
 
         SwStdFontConfig* pStdFont = SW_MOD()->GetStdFontConfig();
-        SfxPrinter* pPrt = pDoc->GetPrt();
+        SfxPrinter* pPrt = pDoc->getPrinter( false );
 
         String sEntry;
         USHORT aFontWhich[] =
@@ -601,11 +580,11 @@ void SwDocShell::AddLink()
     {
         SwDocFac aFactory;
         pDoc = aFactory.GetDoc();
-        pDoc->AddLink();
-        pDoc->SetHTMLMode( ISA(SwWebDocShell) );
+        pDoc->acquire();
+        pDoc->set(IDocumentSettingAccess::HTML_MODE, ISA(SwWebDocShell) );
     }
     else
-        pDoc->AddLink();
+        pDoc->acquire();
     pDoc->SetDocShell( this );      // am Doc den DocShell-Pointer setzen
     uno::Reference< text::XTextDocument >  xDoc(GetBaseModel(), uno::UNO_QUERY);
     ((SwXTextDocument*)xDoc.get())->Reactivate(this);
@@ -630,7 +609,7 @@ void SwDocShell::UpdateFontList()
         if( pDoc )
         {
             delete pFontList;
-            pFontList = new FontList( &pDoc->GetRefDev() );
+            pFontList = new FontList( pDoc->getReferenceDevice( true ) );
             PutItem( SvxFontListItem( pFontList, SID_ATTR_CHAR_FONTLIST ) );
         }
         bInUpdateFontList = false;
@@ -651,7 +630,7 @@ void SwDocShell::RemoveLink()
     if(pDoc)
     {
         DELETEZ(pBasePool);
-        sal_Int8 nRefCt = pDoc->RemoveLink();
+        sal_Int8 nRefCt = pDoc->release();
         pDoc->SetOle2Link(Link());
         pDoc->SetDocShell( 0 );
         if( !nRefCt )
@@ -748,13 +727,13 @@ sal_Bool  SwDocShell::Load( SfxMedium& rMedium )
                     // by this formats.
                     if( ISA( SwWebDocShell ) )
                     {
-                        if( !pDoc->IsHTMLMode() )
-                            pDoc->SetHTMLMode( TRUE );
+                        if( !pDoc->get(IDocumentSettingAccess::HTML_MODE) )
+                            pDoc->set(IDocumentSettingAccess::HTML_MODE, true);
                     }
                     if( ISA( SwGlobalDocShell ) )
                     {
-                        if( !pDoc->IsGlobalDoc() )
-                            pDoc->SetGlobalDoc( TRUE );
+                        if( !pDoc->get(IDocumentSettingAccess::GLOBAL_DOCUMENT) )
+                            pDoc->set(IDocumentSettingAccess::GLOBAL_DOCUMENT, true);
                     }
                 }
 #ifndef PRODUCT
@@ -868,8 +847,8 @@ void SwDocShell::SubInitNew()
     UpdateFontList();
     InitDraw();
 
-    pDoc->SetLinkUpdMode( GLOBALSETTING );
-    pDoc->SetFldUpdateFlags( AUTOUPD_GLOBALSETTING );
+    pDoc->setLinkUpdateMode( GLOBALSETTING );
+    pDoc->setFieldUpdateFlags( AUTOUPD_GLOBALSETTING );
 
     sal_Bool bWeb = ISA(SwWebDocShell);
 
@@ -920,4 +899,9 @@ void SwDocShell::SubInitNew()
     pDoc->ResetModified();
 }
 
+/*
+ * Document Interface Access
+ */
+IDocumentDeviceAccess* SwDocShell::getIDocumentDeviceAccess() { return pDoc; }
+const IDocumentSettingAccess* SwDocShell::getIDocumentSettingAccess() const { return pDoc; }
 
