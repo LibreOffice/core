@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.141 $
+ *  $Revision: 1.142 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:41:50 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:17:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -350,10 +350,6 @@ bool SwWW8ImplReader::ReadGrafStart(void* pData, short nDataSiz,
     {
         if( SVBT8ToByte( pDo->bx ) != 1 )
             nDrawXOfs2 += maSectionManager.GetPageLeft();
-#if 0
-        if( SVBT8ToByte( pDo->by ) == 0 )
-            nDrawYOfs2 += maSectionManager.GetPageTop();
-#endif
     }
 
     return true;
@@ -1513,7 +1509,7 @@ void SwWW8ImplReader::ReadGrafLayer1( WW8PLCFspecial* pPF, long nGrafAnchorCp )
         if (SdrObject *pObject = ReadGrafPrimitive( nLeft, &aDo, aSet ))
         {
             pWWZOrder->InsertDrawingObject(pObject, SVBT16ToShort(aDo.dhgt));
-            SwFrmFmt *pFrm = rDoc.Insert( *pPaM, *pObject, &aSet );
+            SwFrmFmt *pFrm = rDoc.Insert( *pPaM, *pObject, &aSet, NULL);
             pObject->SetMergedItemSet(aSet);
             pAnchorStck->AddAnchor(*pPaM->GetPoint(), pFrm);
         }
@@ -2855,7 +2851,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
                 pWWZOrder->InsertTextLayerObject(pObject);
             }
 
-            pRetFrmFmt = rDoc.Insert(*pPaM, *pObject, &aFlySet);
+            pRetFrmFmt = rDoc.Insert(*pPaM, *pObject, &aFlySet, NULL);
 
             ASSERT(pRetFrmFmt->GetAnchor().GetAnchorId() ==
                 eAnchor, "Not the anchor type requested!");
@@ -3190,7 +3186,7 @@ SwFlyFrmFmt* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObject,
             // <--
             {
                 pRetFrmFmt = rDoc.Insert(*pPaM, aGrfName, aEmptyStr, 0,
-                    &rFlySet, &aGrSet);
+                    &rFlySet, &aGrSet, NULL);
                 bDone = true;
             }
         }
@@ -3198,7 +3194,7 @@ SwFlyFrmFmt* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObject,
         {
             const Graphic& rGraph = pGrf->GetGraphic();
             pRetFrmFmt = rDoc.Insert(*pPaM, aEmptyStr, aEmptyStr, &rGraph,
-                &rFlySet, &aGrSet);
+                &rFlySet, &aGrSet, NULL);
         }
     }
 
