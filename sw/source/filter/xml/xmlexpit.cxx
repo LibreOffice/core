@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlexpit.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 13:54:09 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:22:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #include "xmlexpit.hxx"
 
 #include <xmloff/xmluconv.hxx>
@@ -40,11 +39,6 @@
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
-
-#ifndef _XMLOFF_XMLTOKEN_HXX
-#include <xmloff/xmltoken.hxx>
-#endif
-
 #ifndef _SFXITEMPOOL_HXX
 #include <svtools/itempool.hxx>
 #endif
@@ -138,18 +132,6 @@
 
 #ifndef _FMTLSPLT_HXX
 #include "fmtlsplt.hxx"
-#endif
-
-#ifndef _XMLOFF_XMLTOKEN_HXX
-#include <xmloff/xmltoken.hxx>
-#endif
-
-#ifndef _XMLOFF_PROPERTYHANDLERFACTORY_HXX
-#include <xmloff/prhdlfac.hxx>
-#endif
-
-#ifndef _XMLOFF_XMLTYPES_HXX
-#include <xmloff/xmltypes.hxx>
 #endif
 
 #ifndef _SW_XMLITHLP_HXX
