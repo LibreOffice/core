@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vnew.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:33:08 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:59:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #ifndef _SFX_PRINTER_HXX //autogen
@@ -42,10 +41,6 @@
 #ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
 #endif
-#ifndef _COM_SUN_STAR_DOCUMENT_PRINTERINDEPENDENTLAYOUT_HPP_
-#include <com/sun/star/document/PrinterIndependentLayout.hpp>
-#endif
-
 #ifndef _DOC_HXX
 #include <doc.hxx>
 #endif
@@ -81,9 +76,6 @@
 #endif
 #ifndef _DVIEW_HXX
 #include <dview.hxx>        // SdrView
-#endif
-#ifndef _CALBCK_HXX
-#include <calbck.hxx>
 #endif
 #ifndef _NDGRF_HXX
 #include <ndgrf.hxx>
@@ -139,7 +131,7 @@ void ViewShell::Init( const SwViewOption *pNewOpt )
     }
 
     SwDocShell* pDShell = pDoc->GetDocShell();
-    pDoc->SetHTMLMode( 0 != ::GetHtmlMode( pDShell ) );
+    pDoc->set(IDocumentSettingAccess::HTML_MODE, 0 != ::GetHtmlMode( pDShell ) );
 
     // JP 02.02.99: Bug 61335 - Readonly-Flag an den ViewOptions setzen,
     //              bevor das Layout angelegt wird. Ansonsten muesste man
@@ -151,15 +143,18 @@ void ViewShell::Init( const SwViewOption *pNewOpt )
 
     // --> FME 2005-01-21 #i41075#
     // Only setup the printer if we need one:
-    if( GetPrt( !pDoc->IsBrowseMode() &&
-                com::sun::star::document::PrinterIndependentLayout::DISABLED ==
-                pDoc->IsUseVirtualDevice() ) )
-        InitPrt( GetPrt() );
+    const IDocumentSettingAccess* pIDSA = getIDocumentSettingAccess();
+    const bool bBrowseMode = pIDSA->get(IDocumentSettingAccess::BROWSE_MODE);
+    const bool bCreatePrinter = !bBrowseMode &&
+                                !pIDSA->get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE);
+    SfxPrinter* pPrinter = getIDocumentDeviceAccess()->getPrinter( bCreatePrinter );
+    if( pPrinter )
+        InitPrt( pPrinter );
     // <--
 
     // --> FME 2005-03-16 #i44963# Good occasion to check if page sizes in
     // page descriptions are still set to (LONG_MAX, LONG_MAX) (html import)
-    if ( !pDoc->IsBrowseMode() )
+    if ( !bBrowseMode )
     {
         pDoc->CheckDefaultPageFmt();
     }
@@ -211,7 +206,7 @@ ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
     pWin( pWindow ),
     pOut( pOutput ? pOutput
                   : pWindow ? (OutputDevice*)pWindow
-                            : (OutputDevice*)rDocument.GetPrt(TRUE)),
+                            : (OutputDevice*)rDocument.getPrinter( true )),
     mpTmpRef( 0 ),
     nStartAction( 0 ),
     nLockPaint( 0 ),
@@ -234,7 +229,7 @@ ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
     // if it's already been modified.
     const bool bIsDocModified( pDoc->IsModified() );
     // <--
-    pDoc->AddLink();
+    pDoc->acquire();
     pOutput = pOut;
     Init( pNewOpt );    //verstellt ggf. das Outdev (InitPrt())
     pOut = pOutput;
@@ -263,7 +258,7 @@ ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
     //Format-Cache erweitern.
     if ( SwTxtFrm::GetTxtCache()->GetCurMax() < 2550 )
         SwTxtFrm::GetTxtCache()->IncreaseMax( 100 );
-    if( GetDoc()->GetDrawModel() || pOpt->IsGridVisible() )
+    if( pOpt->IsGridVisible() || getIDocumentDrawModelAccess()->GetDrawModel() )
         Imp()->MakeDrawView();
 
     // OD 2004-06-01 #i26791#
@@ -285,7 +280,7 @@ ViewShell::ViewShell( ViewShell& rShell, Window *pWindow,
     pWin( pWindow ),
     pOut( pOutput ? pOutput
                   : pWindow ? (OutputDevice*)pWindow
-                            : (OutputDevice*)rShell.GetDoc()->GetPrt(TRUE)),
+                            : (OutputDevice*)rShell.GetDoc()->getPrinter( true )),
     mpTmpRef( 0 ),
     pOpt( 0 ),
     pAccOptions( new SwAccessibilityOptions ),
@@ -311,7 +306,7 @@ ViewShell::ViewShell( ViewShell& rShell, Window *pWindow,
 
     SET_CURR_SHELL( this );
 
-    pDoc->AddLink();
+    pDoc->acquire();
     BOOL bModified = pDoc->IsModified();
 
     pOutput = pOut;
@@ -328,7 +323,7 @@ ViewShell::ViewShell( ViewShell& rShell, Window *pWindow,
     //Format-Cache erweitern.
     if ( SwTxtFrm::GetTxtCache()->GetCurMax() < 2550 )
         SwTxtFrm::GetTxtCache()->IncreaseMax( 100 );
-    if( GetDoc()->GetDrawModel() || pOpt->IsGridVisible() )
+    if( pOpt->IsGridVisible() || getIDocumentDrawModelAccess()->GetDrawModel() )
         Imp()->MakeDrawView();
 
     // OD 2004-06-01 #i26791#
@@ -388,7 +383,7 @@ ViewShell::~ViewShell()
 
         if ( pDoc )
         {
-            if( !pDoc->RemoveLink() )
+            if( !pDoc->release() )
                 delete pDoc, pDoc = 0;
             else
                 pDoc->GetRootFrm()->ResetNewLayout();
