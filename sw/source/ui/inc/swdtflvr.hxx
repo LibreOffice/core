@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swdtflvr.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-08 14:48:02 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:45:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _SWDTFLVR_HXX
 #define _SWDTFLVR_HXX
-
 #ifndef _TRANSFER_HXX
 #include <svtools/transfer.hxx>
 #endif
@@ -55,10 +54,8 @@ class INetBookmark;
 class INetImage;
 class SwDoc;
 class SwDocFac;
-class SwNode;
 class SwTextBlocks;
 class SwWrtShell;
-class Reader;
 class SvxClipboardFmtItem;
 class ViewShell;
 class SwView_Impl;
