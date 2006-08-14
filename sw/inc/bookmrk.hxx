@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bookmrk.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-24 15:29:12 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:16:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,9 +47,8 @@
 #ifndef _TOOLS_REF_HXX
 #include <tools/ref.hxx>
 #endif
-
-#ifndef _BKMRKE_HXX
-#include <bkmrke.hxx>
+#ifndef IDOCUMENTBOOKMARKACCESS_HXX_INCLUDED
+#include <IDocumentBookmarkAccess.hxx>
 #endif
 #ifndef _CALBCK_HXX
 #include <calbck.hxx>
@@ -81,7 +80,7 @@ protected:
     String      aName;
     String      aShortName;
     KeyCode     aCode;
-    BOOKMARK_TYPE eMarkType;
+    IDocumentBookmarkAccess::BookmarkType eMarkType;
 
 public:
     TYPEINFO();
@@ -97,13 +96,10 @@ public:
     const SwPosition* GetOtherPos() const { return pPos2; }
 
     // nicht undofaehig
-    void SetName(const String& rNewName) { aName = rNewName; }
     const String& GetName() const { return aName; }
     // nicht undofaehig
-    void SetShortName(const String& rNewSName) { aShortName = rNewSName; }
     const String& GetShortName() const { return aShortName; }
     // nicht undofaehig
-    void SetKeyCode(const KeyCode& rNewCode) { aCode = rNewCode; }
     const KeyCode& GetKeyCode() const { return aCode; }
 
     // Vergleiche auf Basis der Dokumentposition
@@ -112,18 +108,17 @@ public:
     // falls man wirklich auf gleiche Position abfragen will.
     BOOL IsEqualPos( const SwBookmark &rBM ) const;
 
-    BOOL IsBookMark() const     { return BOOKMARK == eMarkType; }
-    BOOL IsMark() const         { return MARK == eMarkType; }
-    BOOL IsDDEMark() const      { return DDE_BOOKMARK == eMarkType; }
-    BOOL IsUNOMark() const      { return UNO_BOOKMARK == eMarkType; }
-    BOOL IsHiddenBookMark() const   { return BOOKMARK_HIDDEN == eMarkType; }
-    void SetType( BOOKMARK_TYPE eNewType )  { eMarkType = eNewType; }
-    BOOKMARK_TYPE GetType() const   { return eMarkType; }
+    BOOL IsBookMark() const     { return IDocumentBookmarkAccess::BOOKMARK == eMarkType; }
+    BOOL IsMark() const         { return IDocumentBookmarkAccess::MARK == eMarkType; }
+    BOOL IsDDEMark() const      { return IDocumentBookmarkAccess::DDE_BOOKMARK == eMarkType; }
+    BOOL IsUNOMark() const      { return IDocumentBookmarkAccess::UNO_BOOKMARK == eMarkType; }
+    BOOL IsHiddenBookMark() const { return IDocumentBookmarkAccess::HIDDEN_BOOKMARK == eMarkType; }
+    void SetType( IDocumentBookmarkAccess::BookmarkType eNewType )  { eMarkType = eNewType; }
+    IDocumentBookmarkAccess::BookmarkType GetType() const   { return eMarkType; }
 
     void SetStartMacro(const SvxMacro& rSt)     { aStartMacro = rSt; }
     const SvxMacro& GetStartMacro()             { return aStartMacro; }
     void SetEndMacro(const SvxMacro& rSt)       { aEndMacro = rSt; }
-    const SvxMacro& GetEndMacro()               { return aEndMacro; }
 
         // Daten Server-Methoden
     void SetRefObject( SwServerObject* pObj );
