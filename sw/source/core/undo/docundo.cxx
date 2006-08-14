@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docundo.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:17:05 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:48:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -116,14 +115,54 @@ void UndoArrStatus::Paint( const Rectangle& )
 
 #endif
 
+void SwDoc::SetUndoNoResetModified()
+{
+    nUndoSavePos = USHRT_MAX;
+}
+
+bool SwDoc::IsUndoNoResetModified() const
+{
+    return USHRT_MAX == nUndoSavePos;
+}
+
+void SwDoc::DoUndo(bool bUn)
+{
+    mbUndo = bUn;
+}
+
+bool SwDoc::DoesUndo() const
+{
+    return mbUndo;
+}
+
+void SwDoc::DoGroupUndo(bool bUn)
+{
+    mbGroupUndo = bUn;
+}
+
+bool SwDoc::DoesGroupUndo() const
+{
+    return mbGroupUndo;
+}
+
+sal_uInt16 SwDoc::GetUndoActionCount()
+{
+    return nUndoActions;
+}
+
+void SwDoc::SetUndoActionCount( sal_uInt16 nNew )
+{
+    nUndoActions = nNew;
+}
+
+const SwNodes* SwDoc::GetUndoNds() const
+{
+    return &aUndoNodes;
+}
 
 void SwDoc::AppendUndo( SwUndo* pUndo )
 {
-#ifdef COMPACT
-    DelUndoGroups( FALSE );     // nur die History loeschen !!
-#endif
-
-    if( REDLINE_NONE == pUndo->GetRedlineMode() )
+    if( IDocumentRedlineAccess::REDLINE_NONE == pUndo->GetRedlineMode() )
         pUndo->SetRedlineMode( GetRedlineMode() );
 
     // Unfortunately, the silly SvPtrArr can only store a little less than
@@ -303,7 +342,7 @@ BOOL SwDoc::DelUndoObj( USHORT nEnde )
 /**************** UNDO ******************/
 
 
-BOOL SwDoc::HasUndoId(USHORT nId) const
+bool SwDoc::HasUndoId(sal_uInt16 nId) const
 {
     USHORT nSize = nUndoPos;
     SwUndo * pUndo;
@@ -321,7 +360,7 @@ BOOL SwDoc::HasUndoId(USHORT nId) const
 }
 
 
-BOOL SwDoc::Undo( SwUndoIter& rUndoIter )
+bool SwDoc::Undo( SwUndoIter& rUndoIter )
 {
     if ( (rUndoIter.GetId()!=0) && (!HasUndoId(rUndoIter.GetId())) )
     {
@@ -336,13 +375,13 @@ BOOL SwDoc::Undo( SwUndoIter& rUndoIter )
 
     SwUndo *pUndo = (*pUndos)[ --nUndoPos ];
 
-    SwRedlineMode eOld = GetRedlineMode();
-    SwRedlineMode eTmpMode = (SwRedlineMode)pUndo->GetRedlineMode();
-    if( (REDLINE_SHOW_MASK & eTmpMode) != (REDLINE_SHOW_MASK & eOld) &&
+    IDocumentRedlineAccess::RedlineMode_t eOld = GetRedlineMode();
+    IDocumentRedlineAccess::RedlineMode_t eTmpMode = pUndo->GetRedlineMode();
+    if( (IDocumentRedlineAccess::REDLINE_SHOW_MASK & eTmpMode) != (IDocumentRedlineAccess::REDLINE_SHOW_MASK & eOld) &&
         UNDO_START != pUndo->GetId() && UNDO_END != pUndo->GetId() )
         SetRedlineMode( eTmpMode );
 
-    SetRedlineMode_intern( eTmpMode | REDLINE_IGNORE );
+    SetRedlineMode_intern( eTmpMode | IDocumentRedlineAccess::REDLINE_IGNORE );
     // Undo ausfuehren
 
     // zum spaeteren ueberpruefen
@@ -382,26 +421,11 @@ BOOL SwDoc::Undo( SwUndoIter& rUndoIter )
     if( UNDO_START != nAktId && UNDO_END != nAktId )
         SetModified();      // default: immer setzen, kann zurueck gesetzt werden
 
-#ifdef COMPACT
-
-    // in der Compact-Version gibt es nur ein einstufiges Undo. Ueber das
-    // Flag wird erkannt, wann ein Dokument als unveraendert gekennzeichnet
-    // werden kann; nach einer Aktion und deren Undo
-    // Bei mehr als einer Aktion ist das Dokument immer veraendert.
-
-// wird nicht mehr beneotigt oder ???       Member am DOC geloescht
-//  if( UNDO_FIRST == eUndoFlag )
-//  {
-//      ResetModified();
-//      eUndoFlag = UNDO_INIT;
-//  }
-
-#else
     // ist die History leer und wurde nicht wegen Speichermangel
     // verworfen, so kann das Dokument als unveraendert gelten
     if( nUndoSavePos == nUndoPos )
         ResetModified();
-#endif
+
     return TRUE;
 }
 
@@ -411,7 +435,7 @@ BOOL SwDoc::Undo( SwUndoIter& rUndoIter )
 
 USHORT SwDoc::StartUndo( USHORT nUndoId, const SwRewriter * pRewriter )
 {
-    if( !bUndo )
+    if( !mbUndo )
         return 0;
 
     if( !nUndoId )
@@ -432,7 +456,7 @@ USHORT SwDoc::StartUndo( USHORT nUndoId, const SwRewriter * pRewriter )
 USHORT SwDoc::EndUndo(USHORT nUndoId, const SwRewriter * pRewriter)
 {
     USHORT nSize = nUndoPos;
-    if( !bUndo || !nSize-- )
+    if( !mbUndo || !nSize-- )
         return 0;
 
     if( UNDO_START == nUndoId || !nUndoId )
@@ -759,75 +783,7 @@ USHORT SwDoc::GetUndoIds( String* pStr, SwUndoIds *pUndoIds) const
     return nId;
 }
 
-#ifdef COMPACT
-
-BOOL SwDoc::DelUndoGroups( BOOL bDelUndoNds, BOOL bDelHistory )
-{
-    USHORT nEnd = 0, nStart = 0;
-    USHORT nSize = pUndos->GetSize();
-    SwUndo* pUndo;
-
-    if( !nSize )
-        return FALSE;
-
-    while( nSize-- )
-    {
-         pUndo = (*pUndos)[ nSize ];
-         if( UNDO_STD_END <= pUndo->GetId() || UNDO_END == pUndo->GetId() )
-            // es kann sich nur um ein Ende handeln
-            nEnd++;
-         else if( UNDO_START == pUndo->GetId() )
-            nStart++;
-    }
-
-    // eine vollstaendige Gruppe ist, wenn nStart und nEnd gleich sind
-    if( nStart != nEnd )
-        return TRUE;
-
-    // jetzt kommt erst das eigentliche loeschen
-    if( bDelHistory )
-        pUndos->DelDtor( 0, pUndos->GetSize() );        // die UndoListe
-
-    // loesche das Undo-Nodes-Array
-    if( bDelUndoNds )
-    {
-        // es wird aus dem Undo-Array der gesamte Inhalt geloescht
-        SwNodeIndex aIdx( *aUndoNodes.GetEndOfContent().StartOfSectionNode(), 1 );
-        SwTxtNode * pTxtNd = 0;
-        if( aIdx.GetIndex() + 1 < aUndoNodes.GetEndOfContent().GetIndex() ||
-            0 == ( pTxtNd = aIdx.GetNode().GetTxtNode() ))
-        {
-            // loesche alle Nodes und suche oder erzeuge einen neuen TextNode
-            while( aIdx < aUndoNodes.GetEndOfContent().GetIndex() )
-            {
-                aUndoNodes.Delete( aIdx , 1 );
-                if( !pTxtNd && 0 != ( pTxtNd = aIdx.GetNode().GetTxtNode()))
-                    aIdx++;
-            }
-            if( !pTxtNd )
-            {
-                // sollte eigentlich nie auftreten.
-                pTxtNd = aUndoNodes.MakeTxtNode( aIdx,
-                                    0, 0, 0, (*GetTxtFmtColls())[0] );
-            }
-        }
-        // es braucht nur noch der Inhalt aus dem Node geloescht werden
-        if( pTxtNd->Len() )
-        {
-            aIdx.Assign( pTxtNd, 0 );
-            pTxtNd->Erase( aIdx, pTxtNd->Len() );
-        }
-    }
-    nUndoPos = pUndos->GetSize();
-
-    if( nUndoSavePos > nUndoPos )       // SavePos wird aufgegeben
-        nUndoSavePos = USHRT_MAX;
-
-    return TRUE;
-}
-#endif
-
-sal_Bool SwDoc::HasTooManyUndos()
+bool SwDoc::HasTooManyUndos() const
 {
     // AppendUndo checks the UNDO_ACTION_LIMIT, unless there's a nested undo.
     // So HasTooManyUndos() may only occur when undos are nested; else
@@ -841,7 +797,7 @@ sal_Bool SwDoc::HasTooManyUndos()
 /**************** REDO ******************/
 
 
-BOOL SwDoc::Redo( SwUndoIter& rUndoIter )
+bool SwDoc::Redo( SwUndoIter& rUndoIter )
 {
     if( rUndoIter.GetId() && !HasUndoId( rUndoIter.GetId() ) )
     {
@@ -856,12 +812,12 @@ BOOL SwDoc::Redo( SwUndoIter& rUndoIter )
 
     SwUndo *pUndo = (*pUndos)[ nUndoPos++ ];
 
-    SwRedlineMode eOld = GetRedlineMode();
-    SwRedlineMode eTmpMode = (SwRedlineMode)pUndo->GetRedlineMode();
-    if( (REDLINE_SHOW_MASK & eTmpMode) != (REDLINE_SHOW_MASK & eOld) &&
+    IDocumentRedlineAccess::RedlineMode_t eOld = GetRedlineMode();
+    IDocumentRedlineAccess::RedlineMode_t eTmpMode = pUndo->GetRedlineMode();
+    if( (IDocumentRedlineAccess::REDLINE_SHOW_MASK & eTmpMode) != (IDocumentRedlineAccess::REDLINE_SHOW_MASK & eOld) &&
         UNDO_START != pUndo->GetId() && UNDO_END != pUndo->GetId() )
         SetRedlineMode( eTmpMode );
-    SetRedlineMode_intern( eTmpMode | REDLINE_IGNORE );
+    SetRedlineMode_intern( eTmpMode | IDocumentRedlineAccess::REDLINE_IGNORE );
 
     //JP 11.05.98: FlyFormate ueber die EditShell selektieren, nicht aus dem
     //              Undo heraus
@@ -949,7 +905,7 @@ USHORT SwDoc::GetRedoIds( String* pStr, SwUndoIds *pRedoIds ) const
 /**************** REPEAT ******************/
 
 
-BOOL SwDoc::Repeat( SwUndoIter& rUndoIter, USHORT nRepeatCnt )
+bool SwDoc::Repeat( SwUndoIter& rUndoIter, sal_uInt16 nRepeatCnt )
 {
     if( rUndoIter.GetId() && !HasUndoId( rUndoIter.GetId() ) )
     {
@@ -984,7 +940,7 @@ BOOL SwDoc::Repeat( SwUndoIter& rUndoIter, USHORT nRepeatCnt )
             nId = pStartUndo->GetUserId();
         }
 
-        StartUndo( nId );
+        StartUndo( nId, NULL );
     }
     do {        // dann durchlaufe mal den gesamten Ring
         for( USHORT nRptCnt = nRepeatCnt; nRptCnt > 0; --nRptCnt )
@@ -996,7 +952,7 @@ BOOL SwDoc::Repeat( SwUndoIter& rUndoIter, USHORT nRepeatCnt )
     } while( pTmpCrsr !=
         ( rUndoIter.pAktPam = (SwPaM*)rUndoIter.pAktPam->GetNext() ));
     if( pTmpCrsr != pTmpCrsr->GetNext() || !bOneUndo )
-        EndUndo( nId );
+        EndUndo( nId, NULL );
 
     return TRUE;
 }
