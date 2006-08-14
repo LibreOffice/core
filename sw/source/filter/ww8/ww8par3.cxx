@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 11:50:14 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:19:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifdef PCH
@@ -66,12 +65,6 @@
 #ifndef _COM_SUN_STAR_FORM_XFORMCONTROLLER_HPP_
 #include <com/sun/star/form/XFormController.hpp>
 #endif
-#ifndef _COM_SUN_STAR_FORM_XFORMCOMPONENT_HPP_
-#include <com/sun/star/form/XFormComponent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XFORMCONTROLLERLISTENER_HPP_
-#include <com/sun/star/form/XFormControllerListener.hpp>
-#endif
 #ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
 #include <com/sun/star/frame/XStorable.hpp>
 #endif
@@ -96,9 +89,6 @@
 #ifndef _COM_SUN_STAR_DRAWING_XSHAPEGROUP_HPP_
 #include <com/sun/star/drawing/XShapeGroup.hpp>
 #endif
-#ifndef _COM_SUN_STAR_DRAWING_XSHAPEDESCRIPTOR_HPP_
-#include <com/sun/star/drawing/XShapeDescriptor.hpp>
-#endif
 #ifndef _COM_SUN_STAR_DRAWING_XUNIVERSALSHAPEDESCRIPTOR_HPP_
 #include <com/sun/star/drawing/XUniversalShapeDescriptor.hpp>
 #endif
@@ -110,9 +100,6 @@
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGE_HPP_
 #include <com/sun/star/drawing/XDrawPage.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XSHAPES_HPP_
-#include <com/sun/star/drawing/XShapes.hpp>
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESUPPLIER_HPP_
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
@@ -270,7 +257,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, String& rStr )
 
     SwInputField aFld((SwInputFieldType*)rDoc.GetSysFldType( RES_INPUTFLD ),
         aFormula.sDefault , aFormula.sTitle , INP_TXT, 0 );
-    rDoc.Insert(*pPaM, SwFmtFld(aFld));
+    rDoc.Insert(*pPaM, SwFmtFld(aFld), 0);
 
     return FLD_OK;
 }
@@ -309,7 +296,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, String& rStr)
         aFld.SetSelectedItem(aFormula.maListEntries[nIndex]);
     }
 
-    rDoc.Insert(*pPaM, SwFmtFld(aFld));
+    rDoc.Insert(*pPaM, SwFmtFld(aFld), 0);
 
     return FLD_OK;
 }
