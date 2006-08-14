@@ -4,9 +4,9 @@
  *
  *  $RCSfile: guess.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:53:01 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:37:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,13 +34,6 @@
  ************************************************************************/
 #ifndef _GUESS_HXX
 #define _GUESS_HXX
-
-#ifndef _SOLAR_H
-#include <tools/solar.h>
-#endif
-#ifndef _STRING_HXX //autogen
-#include <tools/string.hxx>
-#endif
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XHYPHENATEDWORD_HPP_
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
 #endif
@@ -49,7 +42,6 @@
 #include "breakit.hxx"
 #include "porrst.hxx"   // SwHangingPortion
 
-class SwTxtSizeInfo;
 class SwTxtFormatInfo;
 
 using namespace ::com::sun::star;
