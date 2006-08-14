@@ -4,9 +4,9 @@
  *
  *  $RCSfile: writer.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 11:49:45 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:13:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
@@ -41,10 +40,6 @@
 #include <svtools/svstdarr.hxx>
 
 #include <sot/storage.hxx>
-
-#ifndef _STREAM_HXX //autogen
-#include <tools/stream.hxx>
-#endif
 #ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
 #endif
@@ -75,12 +70,6 @@
 #endif
 #ifndef _DOCARY_HXX
 #include <docary.hxx>
-#endif
-#ifndef _NODE_HXX
-#include <node.hxx>
-#endif
-#ifndef _FORMAT_HXX
-#include <format.hxx>
 #endif
 #ifndef _BOOKMRK_HXX
 #include <bookmrk.hxx>          // fuer SwBookmark ...
@@ -196,6 +185,14 @@ Writer::~Writer()
 {
 }
 
+/*
+ * Document Interface Access
+ */
+IDocumentSettingAccess* Writer::getIDocumentSettingAccess() { return pDoc; }
+const IDocumentSettingAccess* Writer::getIDocumentSettingAccess() const { return pDoc; }
+IDocumentStylePoolAccess* Writer::getIDocumentStylePoolAccess() { return pDoc; }
+const IDocumentStylePoolAccess* Writer::getIDocumentStylePoolAccess() const { return pDoc; }
+
 void Writer::ResetWriter()
 {
     if( pImpl && pImpl->pFontRemoveLst )
@@ -241,7 +238,7 @@ BOOL Writer::CopyNextPam( SwPaM ** ppPam )
 USHORT Writer::FindPos_Bkmk( const SwPosition& rPos ) const
 {
     USHORT nRet = USHRT_MAX;
-    const SwBookmarks& rBkmks = pDoc->GetBookmarks();
+    const SwBookmarks& rBkmks = pDoc->getBookmarks();
 
     if( rBkmks.Count() )
     {
@@ -568,7 +565,7 @@ void Writer::_AddFontItem( SfxItemPool& rPool, const SvxFontItem& rFont )
 // OtherPos of the bookmarks also inserted.
 void Writer::CreateBookmarkTbl()
 {
-    const SwBookmarks& rBkmks = pDoc->GetBookmarks();
+    const SwBookmarks& rBkmks = pDoc->getBookmarks();
     for( USHORT n = rBkmks.Count(); n; )
     {
         const SwBookmark& rBkmk = *rBkmks[ --n ];
