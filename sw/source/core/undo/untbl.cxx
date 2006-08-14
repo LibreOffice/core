@@ -4,9 +4,9 @@
  *
  *  $RCSfile: untbl.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 09:35:59 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:52:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
@@ -57,9 +56,6 @@
 #ifndef _DOCARY_HXX
 #include <docary.hxx>
 #endif
-#ifndef _NDARR_HXX
-#include <ndarr.hxx>
-#endif
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
 #endif
@@ -74,9 +70,6 @@
 #endif
 #ifndef _TBLSEL_HXX
 #include <tblsel.hxx>
-#endif
-#ifndef _HINTS_HXX
-#include <hints.hxx>
 #endif
 #ifndef _SWUNDO_HXX
 #include <swundo.hxx>           // fuer die UndoIds
@@ -320,7 +313,7 @@ SwUndoInsTbl::SwUndoInsTbl( const SwPosition& rPos, USHORT nCl, USHORT nRw,
     SwDoc& rDoc = *rPos.nNode.GetNode().GetDoc();
     if( rDoc.IsRedlineOn() )
     {
-        pRedlData = new SwRedlineData( REDLINE_INSERT, rDoc.GetRedlineAuthor() );
+        pRedlData = new SwRedlineData( IDocumentRedlineAccess::REDLINE_INSERT, rDoc.GetRedlineAuthor() );
         SetRedlineMode( rDoc.GetRedlineMode() );
     }
 
@@ -345,8 +338,8 @@ void SwUndoInsTbl::Undo( SwUndoIter& rUndoIter )
     ASSERT( pTblNd, "kein TabellenNode" );
     pTblNd->DelFrms();
 
-    if( IsRedlineOn( GetRedlineMode() ))
-        rDoc.DeleteRedline( *pTblNd );
+    if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
+        rDoc.DeleteRedline( *pTblNd, true, USHRT_MAX );
     RemoveIdxFromSection( rDoc, nSttNode );
 
     // harte SeitenUmbrueche am nachfolgenden Node verschieben
@@ -402,8 +395,8 @@ void SwUndoInsTbl::Redo( SwUndoIter& rUndoIter )
         delete pDDEFldType, pDDEFldType = 0;
     }
 
-    if( (pRedlData && IsRedlineOn( GetRedlineMode() )) ||
-        ( !( REDLINE_IGNORE & GetRedlineMode() ) &&
+    if( (pRedlData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() )) ||
+        ( !( IDocumentRedlineAccess::REDLINE_IGNORE & GetRedlineMode() ) &&
             rDoc.GetRedlineTbl().Count() ))
     {
         SwPaM aPam( *pTblNode->EndOfSectionNode(), *pTblNode, 1 );
@@ -411,12 +404,12 @@ void SwUndoInsTbl::Redo( SwUndoIter& rUndoIter )
         if( pCNd )
             aPam.GetMark()->nContent.Assign( pCNd, 0 );
 
-        if( pRedlData && IsRedlineOn( GetRedlineMode() ) )
+        if( pRedlData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ) )
         {
-            SwRedlineMode eOld = rDoc.GetRedlineMode();
-            rDoc.SetRedlineMode_intern( eOld & ~REDLINE_IGNORE );
+            IDocumentRedlineAccess::RedlineMode_t eOld = rDoc.GetRedlineMode();
+            rDoc.SetRedlineMode_intern( eOld & ~IDocumentRedlineAccess::REDLINE_IGNORE );
 
-            rDoc.AppendRedline( new SwRedline( *pRedlData, aPam ));
+            rDoc.AppendRedline( new SwRedline( *pRedlData, aPam ), true);
             rDoc.SetRedlineMode_intern( eOld );
         }
         else
@@ -2147,7 +2140,7 @@ void SwUndoTblMerge::MoveBoxCntnt( SwPaM& rPam, SwPosition& rPos,
 
     SwUndoMove* pUndoMove;
 
-    if( pDoc->Move( rPam, rPos, DOC_MOVEREDLINES ) )
+    if( pDoc->Move( rPam, rPos, IDocumentContentOperations::DOC_MOVEREDLINES ) )
         pUndoMove = (SwUndoMove*)pDoc->RemoveLastUndo( UNDO_MOVE );
     else
     {
@@ -2195,7 +2188,7 @@ void SwUndoTblMerge::MoveBoxCntnt( SwDoc* pDoc, SwNodeRange& rRg, SwNodeIndex& r
 {
     SwNodeIndex aTmp( rRg.aStart, -1 ), aTmp2( rPos, -1 );
     SwUndoMove* pUndo = new SwUndoMove( pDoc, rRg, rPos );
-    pDoc->Move( rRg, rPos );
+    pDoc->Move( rRg, rPos, IDocumentContentOperations::DOC_MOVEDEFAULT );
     aTmp++;
     aTmp2++;
     pUndo->SetDestRange( aTmp2, rPos, aTmp );
@@ -2334,7 +2327,7 @@ void SwUndoTblNumFmt::Undo( SwUndoIter& rIter )
     // need to do the same here.
     if( pTxtNd->GetTxt() != aStr )
     {
-        rDoc.DeleteRedline( *( pBox->GetSttNd() ), sal_False );
+        rDoc.DeleteRedline( *( pBox->GetSttNd() ), false, USHRT_MAX );
 
         SwIndex aIdx( pTxtNd, 0 );
         pTxtNd->Erase( aIdx );
@@ -2363,21 +2356,21 @@ void SwUndoTblNumFmt::Undo( SwUndoIter& rIter )
 class RedlineModeInternGuard
 {
     SwDoc& mrDoc;
-    SwRedlineMode meOldRedlineMode;
+    IDocumentRedlineAccess::RedlineMode_t meOldRedlineMode;
 
 public:
     RedlineModeInternGuard(
         SwDoc& rDoc,                      /// change mode of this document
-        SwRedlineMode eNewRedlineMode,    /// new redline mode
-        SwRedlineMode eRedlineModeMask  = /// change only bits set in this mask
-            static_cast<SwRedlineMode> ( REDLINE_ON | REDLINE_IGNORE ) );
+        IDocumentRedlineAccess::RedlineMode_t eNewRedlineMode,    /// new redline mode
+        IDocumentRedlineAccess::RedlineMode_t eRedlineModeMask  = IDocumentRedlineAccess::REDLINE_ON | IDocumentRedlineAccess::REDLINE_IGNORE /*change only bits set in this mask*/);
+
     ~RedlineModeInternGuard();
 };
 
 RedlineModeInternGuard::RedlineModeInternGuard(
     SwDoc& rDoc,
-    SwRedlineMode eNewRedlineMode,
-    SwRedlineMode eRedlineModeMask )
+    IDocumentRedlineAccess::RedlineMode_t eNewRedlineMode,
+    IDocumentRedlineAccess::RedlineMode_t eRedlineModeMask )
     : mrDoc( rDoc ),
       meOldRedlineMode( rDoc.GetRedlineMode() )
 {
@@ -2439,7 +2432,7 @@ void SwUndoTblNumFmt::Redo( SwUndoIter& rIter )
         // dvo: When redlining is (was) enabled, setting the attribute
         // will also change the cell content. To allow this, the
         // REDLINE_IGNORE flag must be removed during Redo. #108450#
-        RedlineModeInternGuard aGuard( rDoc, REDLINE_NONE, REDLINE_IGNORE );
+        RedlineModeInternGuard aGuard( rDoc, IDocumentRedlineAccess::REDLINE_NONE, IDocumentRedlineAccess::REDLINE_IGNORE );
         pBoxFmt->SetAttr( aBoxSet );
     }
     else if( NUMBERFORMAT_TEXT != nFmtIdx )
@@ -2460,7 +2453,7 @@ void SwUndoTblNumFmt::Redo( SwUndoIter& rIter )
         // dvo: When redlining is (was) enabled, setting the attribute
         // will also change the cell content. To allow this, the
         // REDLINE_IGNORE flag must be removed during Redo. #108450#
-        RedlineModeInternGuard aGuard( rDoc, REDLINE_NONE, REDLINE_IGNORE );
+        RedlineModeInternGuard aGuard( rDoc, IDocumentRedlineAccess::REDLINE_NONE, IDocumentRedlineAccess::REDLINE_IGNORE );
         pBoxFmt->SetAttr( aBoxSet );
     }
     else
@@ -2529,7 +2522,7 @@ void SwUndoTblCpyTbl::Undo( SwUndoIter& rIter )
     {
         _UndoTblCpyTbl_Entry* pEntry = (*pArr)[ --n ];
         ULONG nSttPos = pEntry->nBoxIdx + pEntry->nOffset;
-        SwStartNode* pSNd = rDoc.GetNodes()[ nSttPos ]->FindStartNode();
+        SwStartNode* pSNd = rDoc.GetNodes()[ nSttPos ]->StartOfSectionNode();
         if( !pTblNd )
             pTblNd = pSNd->FindTableNode();
 
@@ -2544,7 +2537,7 @@ void SwUndoTblCpyTbl::Undo( SwUndoIter& rIter )
         SwPaM aPam( aInsIdx.GetNode(), *pEndNode );
         SwUndoDelete* pUndo = 0;
 
-        if( IsRedlineOn( GetRedlineMode() ) )
+        if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ) )
         {
             bool bDeleteCompleteParagraph = false;
             bool bShiftPam = false;
@@ -2587,7 +2580,7 @@ void SwUndoTblCpyTbl::Undo( SwUndoIter& rIter )
                         *aPam.GetPoint() = SwPosition( aTmpIdx );
                 }
             }
-            rDoc.DeleteRedline( aPam );
+            rDoc.DeleteRedline( aPam, true, USHRT_MAX );
 
             if( pEntry->pUndo )
             {
@@ -2669,7 +2662,7 @@ void SwUndoTblCpyTbl::Redo( SwUndoIter& rIter )
     {
         _UndoTblCpyTbl_Entry* pEntry = (*pArr)[ n ];
         ULONG nSttPos = pEntry->nBoxIdx + pEntry->nOffset;
-        SwStartNode* pSNd = rDoc.GetNodes()[ nSttPos ]->FindStartNode();
+        SwStartNode* pSNd = rDoc.GetNodes()[ nSttPos ]->StartOfSectionNode();
         if( !pTblNd )
             pTblNd = pSNd->FindTableNode();
 
@@ -2681,11 +2674,11 @@ void SwUndoTblCpyTbl::Redo( SwUndoIter& rIter )
         SwTxtNode* pNd = rDoc.GetNodes().MakeTxtNode( aInsIdx,
                                 (SwTxtFmtColl*)rDoc.GetDfltTxtFmtColl());
         SwPaM aPam( aInsIdx.GetNode(), *rBox.GetSttNd()->EndOfSectionNode());
-        SwUndo* pUndo = IsRedlineOn( GetRedlineMode() ) ? 0 : new SwUndoDelete( aPam, TRUE );
+        SwUndo* pUndo = IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ) ? 0 : new SwUndoDelete( aPam, TRUE );
         if( pEntry->pUndo )
         {
             pEntry->pUndo->Undo( rIter );
-            if( IsRedlineOn( GetRedlineMode() ) )
+            if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ) )
             {
                 // PrepareRedline has to be called with the beginning of the old content
                 // When new and old content has been joined, the rIter.pAktPam has been set
@@ -2805,9 +2798,9 @@ SwUndo* SwUndoTblCpyTbl::PrepareRedline( SwDoc* pDoc, const SwTableBox& rBox,
     // Mark the cell content before rIdx as insertion,
     // mark the cell content behind rIdx as deletion
     // merge text nodes at rIdx if possible
-    SwRedlineMode eOld = pDoc->GetRedlineMode();
-    pDoc->SetRedlineMode_intern( ( eOld | REDLINE_DONTCOMBINE_REDLINES ) &
-                                ~REDLINE_IGNORE );
+    IDocumentRedlineAccess::RedlineMode_t eOld = pDoc->GetRedlineMode();
+    pDoc->SetRedlineMode_intern( ( eOld | IDocumentRedlineAccess::REDLINE_DONTCOMBINE_REDLINES ) &
+                                ~IDocumentRedlineAccess::REDLINE_IGNORE );
     SwPosition aInsertEnd( rPos );
     SwTxtNode* pTxt;
     if( !rJoin )
@@ -2845,7 +2838,7 @@ SwUndo* SwUndoTblCpyTbl::PrepareRedline( SwDoc* pDoc, const SwTableBox& rBox,
     {   // If the old (deleted) part is not empty, here we are...
         SwPaM aDeletePam( aDeleteStart, aCellEnd );
         pUndo = new SwUndoRedlineDelete( aDeletePam, UNDO_DELETE );
-        pDoc->AppendRedline( new SwRedline( REDLINE_DELETE, aDeletePam ) );
+        pDoc->AppendRedline( new SwRedline( IDocumentRedlineAccess::REDLINE_DELETE, aDeletePam ), true );
     }
     else if( !rJoin ) // If the old part is empty and joined, we are finished
     {   // if it is not joined, we have to delete this empty paragraph
@@ -2860,7 +2853,7 @@ SwUndo* SwUndoTblCpyTbl::PrepareRedline( SwDoc* pDoc, const SwTableBox& rBox,
     if( aCellStart != aInsertEnd ) // An empty insertion will not been marked
     {
         SwPaM aTmpPam( aCellStart, aInsertEnd );
-        pDoc->AppendRedline( new SwRedline( REDLINE_INSERT, aTmpPam ) );
+        pDoc->AppendRedline( new SwRedline( IDocumentRedlineAccess::REDLINE_INSERT, aTmpPam ), true );
     }
 
     pDoc->SetRedlineMode_intern( eOld );
