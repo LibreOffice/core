@@ -4,9 +4,9 @@
  *
  *  $RCSfile: blink.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:42:42 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:17:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifndef _BLINK_HXX
 #define _BLINK_HXX
 
@@ -40,9 +39,6 @@ class SwLinePortion;
 class SwRootFrm;
 class SwTxtFrm;
 
-#ifndef _SVARRAY_HXX //autogen
-#include <svtools/svarray.hxx>
-#endif
 #ifndef _TIMER_HXX //autogen
 #include <vcl/timer.hxx>
 #endif
