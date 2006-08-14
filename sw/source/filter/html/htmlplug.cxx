@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlplug.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 18:50:09 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:05:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -518,7 +518,7 @@ void SwHTMLParser::InsertEmbed()
     SetSpace( aSpace, aItemSet, aPropInfo, aFrmSet );
 
     // und in das Dok einfuegen
-    SwFrmFmt* pFlyFmt = pDoc->Insert( *pPam, xObj, &aFrmSet );
+    SwFrmFmt* pFlyFmt = pDoc->Insert( *pPam, xObj, &aFrmSet, NULL, NULL );
 
     // Namen am FrmFmt setzen
     if( aName.Len() )
@@ -692,7 +692,7 @@ void SwHTMLParser::EndObject()
 
         // und in das Dok einfuegen
         SwFrmFmt* pFlyFmt = pDoc->Insert( *pPam, pAppletImpl->GetApplet(),
-                                          &pAppletImpl->GetItemSet() );
+                                          &pAppletImpl->GetItemSet(), NULL, NULL );
 
         // den alternativen Namen setzen
         SwNoTxtNode *pNoTxtNd =
@@ -821,7 +821,7 @@ void SwHTMLParser::EndApplet()
 
     // und in das Dok einfuegen
     SwFrmFmt* pFlyFmt = pDoc->Insert( *pPam, pAppletImpl->GetApplet(),
-                                      &pAppletImpl->GetItemSet() );
+                                      &pAppletImpl->GetItemSet(), NULL, NULL );
 
     // den alternativen Namen setzen
     SwNoTxtNode *pNoTxtNd =
@@ -881,7 +881,7 @@ void SwHTMLParser::InsertFloatingFrame()
 
     const HTMLOptions *pOptions = GetOptions();
 
-    // Erstmal die Optionen fr das Writer-Frame-Format holen
+    // Erstmal die Optionen f?r das Writer-Frame-Format holen
     USHORT nArrLen = pOptions->Count();
     for ( USHORT i=0; i<nArrLen; i++ )
     {
@@ -997,7 +997,7 @@ void SwHTMLParser::InsertFloatingFrame()
     SetSpace( aSpace, aItemSet, aPropInfo, aFrmSet );
 
     // und in das Dok einfuegen
-    SwFrmFmt* pFlyFmt = pDoc->Insert( *pPam, xObj, &aFrmSet );
+    SwFrmFmt* pFlyFmt = pDoc->Insert( *pPam, xObj, &aFrmSet, NULL, NULL );
 
     // den alternativen Namen setzen
     SwNoTxtNode *pNoTxtNd =
