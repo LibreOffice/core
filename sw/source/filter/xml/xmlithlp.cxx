@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlithlp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:45:01 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:23:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifndef _SW_XMLITHLP_HXX
 #include "xmlithlp.hxx"
 #endif
@@ -96,11 +95,6 @@
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
 #endif
-
-#ifndef _XMLOFF_XMLTOKEN_HXX
-#include <xmloff/xmltoken.hxx>
-#endif
-
 
 using namespace ::rtl;
 using namespace ::xmloff::token;
