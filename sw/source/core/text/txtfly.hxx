@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfly.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:06:05 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:43:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _TXTFLY_HXX
 #define _TXTFLY_HXX
-
 #ifndef _SVARRAY_HXX //autogen
 #include <svtools/svarray.hxx>
 #endif
@@ -43,17 +42,12 @@
 #include "swrect.hxx"
 
 class OutputDevice;
-class VirtualDevice;
-class SwFont;
 class SwCntntFrm;
-class SwFlyFrm;
 class SwPageFrm;
 class SwTxtFly;
 class SdrObject;
-class SwWrongList;
 class SwTxtPaintInfo;
 class SwFmt;
-class PolyPolygon;
 class TextRanger;
 class Color;
 // --> OD 2004-10-06 #i26945#
@@ -79,10 +73,7 @@ class SwDrawTextInfo;
 // und in txtfly.cxx benutzt bei Konturumfluss
 class SwContourCache;
 extern SwContourCache *pContourCache;
-
-#ifdef VERTICAL_LAYOUT
 class SwTxtFrm;
-#endif
 
 #define POLY_CNT 20
 #define POLY_MIN 5
@@ -95,14 +86,9 @@ class SwContourCache
     TextRanger *pTextRanger[ POLY_CNT ];
     long nPntCnt;
     MSHORT nObjCnt;
-#ifdef VERTICAL_LAYOUT
     const SwRect ContourRect( const SwFmt* pFmt, const SdrObject* pObj,
         const SwTxtFrm* pFrm, const SwRect &rLine, const long nXPos,
         const sal_Bool bRight );
-#else
-    const SwRect ContourRect( const SwFmt* pFmt, const SdrObject* pObj,
-        const SwRect &rLine, const long nXPos, const sal_Bool bRight );
-#endif
 
 public:
     SwContourCache();
@@ -110,14 +96,9 @@ public:
     const SdrObject* GetObject( MSHORT nPos ){ return pSdrObj[ nPos ]; }
     MSHORT GetCount() const { return nObjCnt; }
     void ClrObject( MSHORT nPos );
-#ifdef VERTICAL_LAYOUT
     static const SwRect CalcBoundRect( const SdrObject* pObj,
         const SwRect &rLine, const SwTxtFrm* pFrm, const long nXPos,
         const sal_Bool bRight );
-#else
-    static const SwRect CalcBoundRect( const SdrObject* pObj,
-        const SwRect &rLine, const long nXPos, const sal_Bool bRight );
-#endif
 #ifndef PRODUCT
     void ShowContour( OutputDevice* pOut, const SdrObject* pObj,
                       const Color& rClosedColor, const Color& rOpenColor );
@@ -133,11 +114,7 @@ class SwTxtFly
     const SwPageFrm     *pPage;
     const SdrObject     *pCurrFly;
 
-#ifdef VERTICAL_LAYOUT
     const SwTxtFrm      *pCurrFrm;
-#else
-    const SwCntntFrm    *pCurrFrm;
-#endif
 
     const SwCntntFrm    *pMaster;
     SwFlyList           *pFlyList;
