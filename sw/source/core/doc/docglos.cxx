@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docglos.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:13:15 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:58:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -70,8 +69,8 @@ BOOL SwDoc::InsertGlossary( SwTextBlocks& rBlock, const String& rEntry,
     {
         // Bug #70238# ask the TextOnly-Flag before BeginGetDoc, because
         //              the method closed the Storage!
-        BOOL bSav_IsInsGlossary = bInsOnlyTxtGlssry;
-        bInsOnlyTxtGlssry = rBlock.IsOnlyTextBlock( nIdx );
+        BOOL bSav_IsInsGlossary = mbInsOnlyTxtGlssry;
+        mbInsOnlyTxtGlssry = rBlock.IsOnlyTextBlock( nIdx );
 
         if( rBlock.BeginGetDoc( nIdx ) )
         {
@@ -80,7 +79,7 @@ BOOL SwDoc::InsertGlossary( SwTextBlocks& rBlock, const String& rEntry,
             // alle FixFelder aktualisieren. Dann aber auch mit der
             // richtigen DocInfo!
             pGDoc->SetInfo( *GetInfo() );
-            pGDoc->SetFixFields();
+            pGDoc->SetFixFields(false, NULL);
 
             //StartAllAction();
             LockExpFlds();
@@ -96,7 +95,7 @@ BOOL SwDoc::InsertGlossary( SwTextBlocks& rBlock, const String& rEntry,
             pCntntNd = aCpyPam.GetCntntNode();
             aCpyPam.GetPoint()->nContent.Assign( pCntntNd, pCntntNd->Len() );
 
-            StartUndo( UNDO_INSGLOSSARY );
+            StartUndo( UNDO_INSGLOSSARY, NULL );
             SwPaM *_pStartCrsr = &rPaM, *__pStartCrsr = _pStartCrsr;
             do {
 
@@ -124,14 +123,14 @@ BOOL SwDoc::InsertGlossary( SwTextBlocks& rBlock, const String& rEntry,
                     pShell->SaveTblBoxCntnt( &rInsPos );
             } while( (_pStartCrsr=(SwPaM *)_pStartCrsr->GetNext()) !=
                         __pStartCrsr );
-            EndUndo( UNDO_INSGLOSSARY );
+            EndUndo( UNDO_INSGLOSSARY, NULL );
 
             UnlockExpFlds();
             if( !IsExpFldsLocked() )
-                UpdateExpFlds();
+                UpdateExpFlds(NULL, true);
             bRet = TRUE;
         }
-        bInsOnlyTxtGlssry = bSav_IsInsGlossary;
+        mbInsOnlyTxtGlssry = bSav_IsInsGlossary;
     }
     rBlock.EndGetDoc();
     return bRet;
