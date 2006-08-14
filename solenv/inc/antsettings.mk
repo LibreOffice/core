@@ -4,9 +4,9 @@
 #
 #   $RCSfile: antsettings.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 20:59:17 $
+#   last change: $Author: hr $ $Date: 2006-08-14 16:19:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,13 +45,8 @@ ANT_LIB*:=$(ANT_HOME)$/lib
 ANT_CLASSPATH:=$(ANT_LIB)$/xercesImpl.jar$(PATH_SEPERATOR)$(ANT_LIB)$/xml-apis.jar$(PATH_SEPERATOR)$(ANT_LIB)$/ant.jar
 PATH!:=$(ANT_HOME)$/bin$(PATH_SEPERATOR)$(PATH)
 
-.IF "$(ANT)" == ""
 ANT*:=$(ANT_HOME)$/bin$/ant
-.ENDIF
-
-.IF "$(ANT_BUILDFILE)"==""
-ANT_BUILDFILE=build.xml
-.ENDIF
+ANT_BUILDFILE*=build.xml
 
 .IF "$(ANT_DEBUG)"==""
 .IF "$(debug)"==""
