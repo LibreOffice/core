@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwUndoField.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:15:50 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:48:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,12 +35,12 @@
 #include <tools/rtti.hxx>
 #include <SwUndoField.hxx>
 #include <swundo.hxx>
+#include <doc.hxx>
 #include <txtfld.hxx>
 #include <fldbas.hxx>
 #include <ndtxt.hxx>
 #include <fmtfld.hxx>
 #include <dbfld.hxx>
-
 using namespace com::sun::star::uno;
 
 SwUndoField::SwUndoField(const SwPosition & rPos)
