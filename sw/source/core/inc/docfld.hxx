@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfld.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:44:40 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:19:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,15 +32,11 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifndef _DOCFLD_HXX
 #define _DOCFLD_HXX
 
 #ifndef _CALC_HXX
 #include <calc.hxx>         // fuer SwHash
-#endif
-#ifndef _DOC_HXX
-#include <doc.hxx>
 #endif
 
 class SwTxtFld;
@@ -54,6 +50,8 @@ class SwTxtTOXMark;
 class SwTableBox;
 class SwTxtINetFmt;
 class SwFlyFrmFmt;
+class SwDoc;
+class SwNode;
 
 // Update an den Expression Feldern
 class _SetGetExpFld
@@ -183,12 +181,7 @@ public:
 
     const _SetGetExpFlds* GetSortLst() const { return pFldSortLst; }
 
-    void MakeFldList( SwDoc& rDoc, int bAll, int eGetMode )
-    {
-        if( !pFldSortLst || bAll || !( eGetMode & nFldLstGetMode ) ||
-            rDoc.GetNodes().Count() != nNodes )
-            _MakeFldList( rDoc, eGetMode );
-    }
+    void MakeFldList( SwDoc& rDoc, int bAll, int eGetMode );
 
     void InsDelFldInFldLst( BOOL bIns, const SwTxtFld& rFld );
 
