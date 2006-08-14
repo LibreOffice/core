@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 15:35:39 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:24:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -79,9 +78,6 @@
 #ifndef _COM_SUN_STAR_TEXT_INVALIDTEXTCONTENTEXCEPTION_HPP_
 #include <com/sun/star/text/InvalidTextContentException.hpp>
 #endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTCONTENT_HPP_
-#include <com/sun/star/text/XTextContent.hpp>
-#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXCONTAINER_HPP_
 #include <com/sun/star/container/XIndexContainer.hpp>
 #endif
@@ -118,7 +114,6 @@
 #ifndef _SVDPAGE_HXX //autogen
 #include <svx/svdpage.hxx>
 #endif
-
 #ifndef _UNOSETT_HXX
 #include <unosett.hxx>
 #endif
@@ -185,9 +180,6 @@
 #ifndef _SW_HF_EAT_SPACINGITEM_HXX
 #include <hfspacingitem.hxx>
 #endif
-#ifndef _SWTYPES_HXX
-#include <swtypes.hxx>
-#endif
 #ifndef _DOC_HXX
 #include <doc.hxx>
 #endif
@@ -203,12 +195,6 @@
 #ifndef _CRSRSH_HXX
 #include <crsrsh.hxx>
 #endif
-#ifndef _ERRHDL_HXX
-#include <errhdl.hxx>
-#endif
-#ifndef _CALBCK_HXX
-#include <calbck.hxx>
-#endif
 #ifndef _PAM_HXX
 #include <pam.hxx>
 #endif
@@ -223,9 +209,6 @@
 #endif
 #ifndef _FRMTOOL_HXX
 #include <frmtool.hxx>
-#endif
-#ifndef _HINTS_HXX
-#include <hints.hxx>
 #endif
 #ifndef _FLYFRMS_HXX
 #include <flyfrms.hxx>
@@ -251,9 +234,6 @@
 #ifndef _SWUNOHELPER_HXX
 #include <swunohelper.hxx>
 #endif
-#ifndef _UNOCOLL_HXX
-#include <unocoll.hxx>
-#endif
 #ifndef _UNOFRAME_HXX
 #include <unoframe.hxx>
 #endif
@@ -276,14 +256,6 @@
 #ifndef _UNOMID_H
 #include <unomid.h>
 #endif
-#ifndef _UNOOBJ_HXX
-#include <unoobj.hxx>
-#endif
-// --> OD 2004-08-06 #i28749#
-#ifndef _COM_SUN_STAR_TEXT_POSITIONLAYOUTDIR_HPP_
-#include <com/sun/star/text/PositionLayoutDir.hpp>
-#endif
-// <--
 #ifndef _COMCORE_HRC
 #include <comcore.hrc>
 #endif
@@ -2623,13 +2595,13 @@ void SwFrmFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
 
     if( pH && pH->IsActive() && !pH->GetHeaderFmt() )
     {   //Hat er keinen, mach ich ihm einen
-        SwFrmFmt *pFmt = GetDoc()->MakeLayoutFmt( RND_STD_HEADER );
+        SwFrmFmt *pFmt = GetDoc()->MakeLayoutFmt( RND_STD_HEADER, 0 );
         pFmt->Add( pH );
     }
 
     if( pF && pF->IsActive() && !pF->GetFooterFmt() )
     {   //Hat er keinen, mach ich ihm einen
-        SwFrmFmt *pFmt = GetDoc()->MakeLayoutFmt( RND_STD_FOOTER );
+        SwFrmFmt *pFmt = GetDoc()->MakeLayoutFmt( RND_STD_FOOTER, 0 );
         pFmt->Add( pF );
     }
 
