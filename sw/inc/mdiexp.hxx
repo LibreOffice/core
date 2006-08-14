@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mdiexp.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:00:43 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:26:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,8 +46,6 @@ class Dialog;
 class ViewShell;
 class SwDoc;
 class SwDocShell;
-class SfxObjectShell;
-class SfxFrame;
 
 extern void ScrollMDI(ViewShell* pVwSh, const SwRect &, USHORT nRangeX, USHORT nRangeY);
 extern BOOL IsScrollMDI(ViewShell* pVwSh, const SwRect &);
