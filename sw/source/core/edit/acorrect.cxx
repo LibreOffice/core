@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acorrect.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:25:25 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:06:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -176,7 +175,7 @@ BOOL SwAutoCorrDoc::Delete( xub_StrLen nStt, xub_StrLen nEnd )
 BOOL SwAutoCorrDoc::Insert( xub_StrLen nPos, const String& rTxt )
 {
     SwPaM aPam( rCrsr.GetPoint()->nNode.GetNode(), nPos );
-    rEditSh.GetDoc()->Insert( aPam, rTxt );
+    rEditSh.GetDoc()->Insert( aPam, rTxt, true );
     if( !nUndoId )
     {
         if( 1 == rTxt.Len() )
@@ -216,7 +215,6 @@ BOOL SwAutoCorrDoc::Replace( xub_StrLen nPos, const String& rTxt )
     if( bChg )
     {
         SwDoc* pDoc = rEditSh.GetDoc();
-        SwRedlineMode eOld = pDoc->GetRedlineMode();
 
 //      if( !pDoc->IsAutoFmtRedline() &&
 //          pPam != &rCrsr )    // nur an akt. Position das Redline sichern
@@ -225,7 +223,7 @@ BOOL SwAutoCorrDoc::Replace( xub_StrLen nPos, const String& rTxt )
         if( pDoc->IsAutoFmtRedline() )
         {
             if( nPos == pNd->GetTxt().Len() )       // am Ende erfolgt ein Insert
-                pDoc->Insert( *pPam, rTxt );
+                pDoc->Insert( *pPam, rTxt, true );
             else
             {
                 _PaMIntoCrsrShellRing aTmp( rEditSh, rCrsr, *pPam );
@@ -369,7 +367,7 @@ BOOL SwAutoCorrDoc::ChgAutoCorrWord( xub_StrLen & rSttPos, xub_StrLen nEndPos,
                 '.' != pFnd->GetLong().GetChar( pFnd->GetLong().Len() - 1 ) )
             {
                 // replace the selection
-                pDoc->Replace( aPam, pFnd->GetLong() );
+                pDoc->Replace( aPam, pFnd->GetLong(), false);
                 bRet = TRUE;
             }
         }
@@ -439,7 +437,7 @@ BOOL SwAutoCorrDoc::ChgAutoCorrWord( xub_StrLen & rSttPos, xub_StrLen nEndPos,
             DeleteSel( aPam );
 
             pDoc->DontExpandFmt( *aPam.GetPoint() );
-            pDoc->Insert( aPam, pCorr->Correct() );
+            pDoc->Insert( aPam, pCorr->Correct(), true );
             pDoc->AppendTmpCorr(sKurz, pCorr->Correct());
             bRet = TRUE;
         }
@@ -470,7 +468,6 @@ void SwAutoCorrDoc::SaveCpltSttWord( ULONG nFlag, xub_StrLen nPos,
 LanguageType SwAutoCorrDoc::GetLanguage( xub_StrLen nPos, BOOL bPrevPara ) const
 {
     LanguageType eRet = LANGUAGE_SYSTEM;
-    ULONG nNode = pIdx ? pIdx->GetIndex() : rCrsr.GetPoint()->nNode.GetIndex();
 
     SwTxtNode* pNd = (( bPrevPara && pIdx )
                             ? *pIdx
