@@ -4,9 +4,9 @@
  *
  *  $RCSfile: writerwordglue.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 13:54:04 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:15:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 /// @HTML
 
@@ -48,10 +47,6 @@
 
 class SwFrmFmt;
 class SfxItemSet;
-class SwDoc;
-class SwTxtFmtColl;
-class String;
-class PoolItems;
 
 namespace sw
 {
