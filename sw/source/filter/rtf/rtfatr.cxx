@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 17:21:50 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:09:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 /*
@@ -69,9 +68,6 @@
 #endif
 #ifndef _SFXITEMITER_HXX //autogen
 #include <svtools/itemiter.hxx>
-#endif
-#ifndef _URLOBJ_HXX //autogen
-#include <tools/urlobj.hxx>
 #endif
 #ifndef _SVX_FONTITEM_HXX
 #include <svx/fontitem.hxx>
@@ -151,12 +147,6 @@
 #ifndef _SVX_WGHTITEM_HXX //autogen
 #include <svx/wghtitem.hxx>
 #endif
-#ifndef _SVX_BRKITEM_HXX //autogen
-#include <svx/brkitem.hxx>
-#endif
-#ifndef _SVX_BRSHITEM_HXX //autogen
-#include <svx/brshitem.hxx>
-#endif
 #ifndef _SVX_WRLMITEM_HXX
 #include <svx/wrlmitem.hxx>
 #endif
@@ -214,9 +204,6 @@
 #endif
 #ifndef _FMTPDSC_HXX //autogen
 #include <fmtpdsc.hxx>
-#endif
-#ifndef _FMTORNT_HXX //autogen
-#include <fmtornt.hxx>
 #endif
 #ifndef _FMTFLD_HXX //autogen
 #include <fmtfld.hxx>
@@ -290,9 +277,6 @@
 #ifndef _GRFATR_HXX
 #include <grfatr.hxx>
 #endif
-#ifndef _FMTCOL_HXX
-#include <fmtcol.hxx>
-#endif
 #ifndef _DOCUFLD_HXX
 #include <docufld.hxx>
 #endif
@@ -341,17 +325,6 @@
 #ifndef _FMTROWSPLT_HXX //autogen
 #include <fmtrowsplt.hxx>
 #endif
-#ifndef _REDLINE_HXX
-#include <redline.hxx>
-#endif
-
-
-#ifndef SW_MS_MSFILTER_HXX
-#include <msfilter.hxx>
-#endif
-
-
-
 
 /*
  * um nicht immer wieder nach einem Update festzustellen, das irgendwelche
