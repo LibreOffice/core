@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shellio.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:25:10 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:00:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
 #include <hintids.hxx>
-
 #ifndef _DATE_HXX
 #include <tools/date.hxx>
 #endif
@@ -218,7 +217,7 @@ ULONG SwReader::Read( const Reader& rOptions )
     Link aOLELink( pDoc->GetOle2Link() );
     pDoc->SetOle2Link( Link() );
 
-    pDoc->bInReading = TRUE;
+    pDoc->SetInReading( TRUE );
 
     SwPaM *pPam;
     if( pCrsr )
@@ -234,7 +233,7 @@ ULONG SwReader::Read( const Reader& rOptions )
         // Das gilt natuerlich nicht, wenn der Filter nicht der HTML-Filter
         // ist oder im ConvertFrom zuvor ein SetTemplateName gerufen
         // wurde.
-        if( !pDoc->IsHTMLMode() || ReadHTML != po || !po->pTemplate  )
+        if( !pDoc->get(IDocumentSettingAccess::HTML_MODE) || ReadHTML != po || !po->pTemplate  )
             po->SetTemplate( *pDoc );
     }
 
@@ -257,15 +256,15 @@ ULONG SwReader::Read( const Reader& rOptions )
         else
         {
             pDoc->ClearRedo();
-            pDoc->StartUndo( UNDO_INSDOKUMENT );
+            pDoc->StartUndo( UNDO_INSDOKUMENT, NULL );
         }
     }
     pDoc->DoUndo( FALSE );
 
     SwNodeIndex aSplitIdx( pDoc->GetNodes() );
 
-    SwRedlineMode eOld = pDoc->GetRedlineMode();
-    pDoc->SetRedlineMode_intern( REDLINE_IGNORE );
+    IDocumentRedlineAccess::RedlineMode_t eOld = pDoc->GetRedlineMode();
+    pDoc->SetRedlineMode_intern( IDocumentRedlineAccess::REDLINE_IGNORE );
 
     // Array von FlyFormaten
     SwSpzFrmFmts aFlyFrmArr;
@@ -361,7 +360,7 @@ ULONG SwReader::Read( const Reader& rOptions )
                             {
                                 pDoc->SetRedlineMode_intern( eOld );
                                 pDoc->AppendUndo( new SwUndoInsLayFmt( pFrmFmt ) );
-                                pDoc->SetRedlineMode_intern( REDLINE_IGNORE );
+                                pDoc->SetRedlineMode_intern( IDocumentRedlineAccess::REDLINE_IGNORE );
                             }
                             if( pFrmFmt->GetDepends() )
                             {
@@ -391,17 +390,17 @@ ULONG SwReader::Read( const Reader& rOptions )
 
             pDoc->SetRedlineMode_intern( eOld );
             if( pDoc->IsRedlineOn() )
-                pDoc->AppendRedline( new SwRedline( REDLINE_INSERT, *pUndoPam ));
+                pDoc->AppendRedline( new SwRedline( IDocumentRedlineAccess::REDLINE_INSERT, *pUndoPam ), true);
             else
                 pDoc->SplitRedline( *pUndoPam );
-            pDoc->SetRedlineMode_intern( REDLINE_IGNORE );
+            pDoc->SetRedlineMode_intern( IDocumentRedlineAccess::REDLINE_IGNORE );
         }
         if( bSaveUndo )
         {
             pDoc->SetRedlineMode_intern( eOld );
             pUndo->SetInsertRange( *pUndoPam, FALSE );
             pDoc->AppendUndo( pUndo );
-            pDoc->SetRedlineMode_intern( REDLINE_IGNORE );
+            pDoc->SetRedlineMode_intern( IDocumentRedlineAccess::REDLINE_IGNORE );
         }
 
         delete pUndoPam;
@@ -426,7 +425,7 @@ ULONG SwReader::Read( const Reader& rOptions )
         }
     }
 
-    pDoc->bInReading = FALSE;
+    pDoc->SetInReading( FALSE );
 
     pDoc->SyncNumRulesAndNodes();
     pDoc->InvalidateNumRules();
@@ -442,8 +441,8 @@ ULONG SwReader::Read( const Reader& rOptions )
         if( bSaveUndo )
         {
             pDoc->SetRedlineMode_intern( eOld );
-            pDoc->EndUndo( UNDO_INSDOKUMENT );
-            pDoc->SetRedlineMode_intern( REDLINE_IGNORE );
+            pDoc->EndUndo( UNDO_INSDOKUMENT, NULL );
+            pDoc->SetRedlineMode_intern( IDocumentRedlineAccess::REDLINE_IGNORE );
         }
     }
 
@@ -457,9 +456,9 @@ ULONG SwReader::Read( const Reader& rOptions )
         pDoc->UpdateLinks();
         // <--
 
-        eOld = (SwRedlineMode)(pDoc->GetRedlineMode() & ~REDLINE_IGNORE);
+        eOld = (pDoc->GetRedlineMode() & ~IDocumentRedlineAccess::REDLINE_IGNORE);
 
-        pDoc->SetFieldsDirty( FALSE );
+        pDoc->SetFieldsDirty(false, NULL, 0);
     }
 
     pDoc->SetRedlineMode_intern( eOld );
@@ -619,7 +618,7 @@ SwDoc* Reader::GetTemplateDoc()
                         pTemplate = pDocSh->GetDoc();
                         pTemplate->SetOle2Link( Link() );
                         pTemplate->DoUndo( FALSE );     // always FALSE
-                        pTemplate->SetBrowseMode( bTmplBrowseMode );
+                        pTemplate->set(IDocumentSettingAccess::BROWSE_MODE, bTmplBrowseMode );
                         pTemplate->RemoveAllFmtLanguageDependencies();
 
                         ReadXML->SetOrganizerMode( TRUE );
@@ -628,7 +627,7 @@ SwDoc* Reader::GetTemplateDoc()
                         aRdr.Read( *ReadXML );
                         ReadXML->SetOrganizerMode( FALSE );
 
-                        pTemplate->AddLink();
+                        pTemplate->acquire();
                     }
                 }
         }
@@ -650,7 +649,7 @@ BOOL Reader::SetTemplate( SwDoc& rDoc )
     {
         rDoc.RemoveAllFmtLanguageDependencies();
         rDoc.ReplaceStyles( *pTemplate );
-        rDoc.SetFixFields();
+        rDoc.SetFixFields(false, NULL);
         bRet = TRUE;
     }
 
@@ -661,7 +660,7 @@ void Reader::ClearTemplate()
 {
     if( pTemplate )
     {
-        if( 0 == pTemplate->RemoveLink() )
+        if( 0 == pTemplate->release() )
             delete pTemplate,
         pTemplate = 0;
     }
@@ -680,9 +679,9 @@ void Reader::MakeHTMLDummyTemplateDoc()
 {
     ClearTemplate();
     pTemplate = new SwDoc;
-    pTemplate->AddLink();
-    pTemplate->SetBrowseMode( bTmplBrowseMode );
-    pTemplate->GetPrt( TRUE );
+    pTemplate->acquire();
+    pTemplate->set(IDocumentSettingAccess::BROWSE_MODE, bTmplBrowseMode );
+    pTemplate->getPrinter( true );
     pTemplate->RemoveAllFmtLanguageDependencies();
     aChkDateTime = Date( 1, 1, 2300 );  // 2300. Jahrtausend sollte reichen
     aTemplateNm.AssignAscii( "$$Dummy$$" );
@@ -896,7 +895,7 @@ ULONG SwWriter::Write( WriterRef& rxWriter, const String* pRealFileName )
     {
         bWriteAll = TRUE;
         pDoc = new SwDoc;
-        pDoc->AddLink();
+        pDoc->acquire();
         pRefForDocSh = new SfxObjectShellRef();
         pDoc->SetRefForDocShell( pRefForDocSh );
 
@@ -907,7 +906,7 @@ ULONG SwWriter::Write( WriterRef& rxWriter, const String* pRealFileName )
         // lasse ueber das Layout die Boxen suchen
         SwSelBoxes aBoxes;
         GetTblSel( *pShell, aBoxes );
-        SwTableNode* pTblNd = (SwTableNode*)aBoxes[0]->GetSttNd()->FindStartNode();
+        SwTableNode* pTblNd = (SwTableNode*)aBoxes[0]->GetSttNd()->StartOfSectionNode();
         SwNodeIndex aIdx( pDoc->GetNodes().GetEndOfExtras(), 2 );
         SwCntntNode *pNd = aIdx.GetNode().GetCntntNode();
         ASSERT( pNd, "Node not found" );
@@ -970,7 +969,7 @@ ULONG SwWriter::Write( WriterRef& rxWriter, const String* pRealFileName )
     // (wenn z.B. kein Drucker gesetzt wurde) dann setze jetzt auf DIN A4
     // --> OD 2004-11-17 #i37248# - Modifications are only allowed at a new document.
     // <pOutDoc> contains a new document, if <pDoc> is set - see above.
-    if ( pDoc && !pOutDoc->GetPrt() )
+    if ( pDoc && !pOutDoc->getPrinter( false ) )
     // <--
     {
         const SwPageDesc& rPgDsc = const_cast<const SwDoc *>(pOutDoc)->GetPageDesc( 0 );
@@ -993,8 +992,8 @@ ULONG SwWriter::Write( WriterRef& rxWriter, const String* pRealFileName )
     if( pESh )
         pESh->StartAllAction();
 
-    BOOL bWasPurgeOle = pOutDoc->IsPurgeOLE();
-    pOutDoc->SetPurgeOLE( FALSE );
+    BOOL bWasPurgeOle = pOutDoc->get(IDocumentSettingAccess::PURGE_OLE);
+    pOutDoc->set(IDocumentSettingAccess::PURGE_OLE, false);
 
     ULONG nError = 0;
     if( pMedium )
@@ -1006,7 +1005,7 @@ ULONG SwWriter::Write( WriterRef& rxWriter, const String* pRealFileName )
     else if( xStg.is() )
         nError = rxWriter->Write( *pPam, xStg, pRealFileName );
 
-    pOutDoc->SetPurgeOLE( bWasPurgeOle );
+    pOutDoc->set(IDocumentSettingAccess::PURGE_OLE, bWasPurgeOle );
     if( pESh )
         pESh->EndAllAction();
 
@@ -1039,7 +1038,7 @@ ULONG SwWriter::Write( WriterRef& rxWriter, const String* pRealFileName )
     if ( pDoc )
     {
         delete pRefForDocSh;
-        if ( !pDoc->RemoveLink() )
+        if ( !pDoc->release() )
             delete pDoc;
         bWriteAll = FALSE;
     }
@@ -1067,10 +1066,8 @@ BOOL SetHTMLTemplate( SwDoc & rDoc )
     if( pCNd )
     {
         pCNd->SetAttr
-            ( SwFmtPageDesc(rDoc.GetPageDescFromPoolSimple(RES_POOLPAGE_HTML,
-                                                           FALSE) ) );
-        pCNd->ChgFmtColl( rDoc.GetTxtCollFromPoolSimple( RES_POOLCOLL_TEXT,
-                                                         FALSE ));
+            ( SwFmtPageDesc(rDoc.GetPageDescFromPool(RES_POOLPAGE_HTML, false) ) );
+        pCNd->ChgFmtColl( rDoc.GetTxtCollFromPool( RES_POOLCOLL_TEXT, false ));
     }
 
     return bRet;
