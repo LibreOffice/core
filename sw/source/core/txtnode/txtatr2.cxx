@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtatr2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:15:01 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:47:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -65,9 +64,6 @@
 #endif
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>        // SwCharFmt, SwTxtNode
-#endif
-#ifndef _HINTS_HXX
-#include <hints.hxx>        // SwCharFmt, SwUpdateAttr
 #endif
 #ifndef _POOLFMT_HXX
 #include <poolfmt.hxx>      // RES_POOLCHR_INET_...
