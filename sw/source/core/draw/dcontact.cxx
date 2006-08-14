@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dcontact.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-20 16:13:58 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:05:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 #pragma hdrstop
-
 #include "hintids.hxx"
 
 #ifndef _SVX_PROTITEM_HXX //autogen
@@ -72,7 +71,13 @@
 #ifndef _SVDVIEW_HXX
 #include <svx/svdview.hxx>
 #endif
-
+// AW, OD 2004-04-30 #i28501#
+#ifndef _SDR_CONTACT_OBJECTCONTACTOFOBJLISTPAINTER_HXX
+#include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
+#endif
+#ifndef _SDR_CONTACT_DISPLAYINFO_HXX
+#include <svx/sdr/contact/displayinfo.hxx>
+#endif
 
 #ifndef _FMTORNT_HXX //autogen
 #include <fmtornt.hxx>
@@ -107,26 +112,20 @@
 #ifndef _FRMFMT_HXX
 #include <frmfmt.hxx>
 #endif
-#ifndef _FRMATR_HXX
-#include <frmatr.hxx>
-#endif
 #ifndef _DFLYOBJ_HXX
 #include <dflyobj.hxx>
 #endif
 #ifndef _DCONTACT_HXX
 #include <dcontact.hxx>
 #endif
-#ifndef _PAM_HXX
-#include <pam.hxx>
+#ifndef IDOCUMENTDRAWMODELACCESS_HXX_INCLUDED
+#include <IDocumentDrawModelAccess.hxx>
 #endif
 #ifndef _DOC_HXX
 #include <doc.hxx>
 #endif
 #ifndef _HINTS_HXX
 #include <hints.hxx>
-#endif
-#ifndef _CNTFRM_HXX
-#include <cntfrm.hxx>
 #endif
 #ifndef _TXTFRM_HXX
 #include <txtfrm.hxx>
@@ -146,14 +145,6 @@
 // OD 2004-02-11 #110582#-2
 #ifndef _FLYFRMS_HXX
 #include <flyfrms.hxx>
-#endif
-
-// AW, OD 2004-04-30 #i28501#
-#ifndef _SDR_CONTACT_OBJECTCONTACTOFOBJLISTPAINTER_HXX
-#include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
-#endif
-#ifndef _SDR_CONTACT_DISPLAYINFO_HXX
-#include <svx/sdr/contact/displayinfo.hxx>
 #endif
 
 // OD 18.06.2003 #108784#
@@ -300,7 +291,7 @@ void SwContact::MoveObjToVisibleLayer( SdrObject* _pDrawObj )
 {
     // --> OD 2005-06-08 #i46297# - notify background about the arriving of
     // the object and invalidate its position.
-    const bool bNotify( !GetFmt()->GetDoc()->IsVisibleLayerId( _pDrawObj->GetLayer() ) );
+    const bool bNotify( !GetFmt()->getIDocumentDrawModelAccess()->IsVisibleLayerId( _pDrawObj->GetLayer() ) );
     // <--
 
     _MoveObjToLayer( true, _pDrawObj );
@@ -336,7 +327,7 @@ void SwContact::MoveObjToVisibleLayer( SdrObject* _pDrawObj )
 void SwContact::MoveObjToInvisibleLayer( SdrObject* _pDrawObj )
 {
     // --> OD 2005-06-08 #i46297# - notify background about the leaving of the object.
-    const bool bNotify( GetFmt()->GetDoc()->IsVisibleLayerId( _pDrawObj->GetLayer() ) );
+    const bool bNotify( GetFmt()->getIDocumentDrawModelAccess()->IsVisibleLayerId( _pDrawObj->GetLayer() ) );
     // <--
 
     _MoveObjToLayer( false, _pDrawObj );
@@ -381,25 +372,25 @@ void SwContact::_MoveObjToLayer( const bool _bToVisible,
         return;
     }
 
-    SwDoc* pWriterDoc = static_cast<SwFrmFmt*>(pRegisteredIn)->GetDoc();
-    if ( !pWriterDoc )
+    const IDocumentDrawModelAccess* pIDDMA = static_cast<SwFrmFmt*>(pRegisteredIn)->getIDocumentDrawModelAccess();
+    if ( !pIDDMA )
     {
         ASSERT( false, "SwDrawContact::_MoveObjToLayer(..) - no writer document!" );
         return;
     }
 
     SdrLayerID nToHellLayerId =
-        _bToVisible ? pWriterDoc->GetHellId() : pWriterDoc->GetInvisibleHellId();
+        _bToVisible ? pIDDMA->GetHellId() : pIDDMA->GetInvisibleHellId();
     SdrLayerID nToHeavenLayerId =
-        _bToVisible ? pWriterDoc->GetHeavenId() : pWriterDoc->GetInvisibleHeavenId();
+        _bToVisible ? pIDDMA->GetHeavenId() : pIDDMA->GetInvisibleHeavenId();
     SdrLayerID nToControlLayerId =
-        _bToVisible ? pWriterDoc->GetControlsId() : pWriterDoc->GetInvisibleControlsId();
+        _bToVisible ? pIDDMA->GetControlsId() : pIDDMA->GetInvisibleControlsId();
     SdrLayerID nFromHellLayerId =
-        _bToVisible ? pWriterDoc->GetInvisibleHellId() : pWriterDoc->GetHellId();
+        _bToVisible ? pIDDMA->GetInvisibleHellId() : pIDDMA->GetHellId();
     SdrLayerID nFromHeavenLayerId =
-        _bToVisible ? pWriterDoc->GetInvisibleHeavenId() : pWriterDoc->GetHeavenId();
+        _bToVisible ? pIDDMA->GetInvisibleHeavenId() : pIDDMA->GetHeavenId();
     SdrLayerID nFromControlLayerId =
-        _bToVisible ? pWriterDoc->GetInvisibleControlsId() : pWriterDoc->GetControlsId();
+        _bToVisible ? pIDDMA->GetInvisibleControlsId() : pIDDMA->GetControlsId();
 
     if ( _pDrawObj->ISA( SdrObjGroup ) )
     {
@@ -413,8 +404,8 @@ void SwContact::_MoveObjToLayer( const bool _bToVisible,
                 // is a control
                 nNewLayerId = nToControlLayerId;
             }
-            else if ( _pDrawObj->GetLayer() == pWriterDoc->GetHeavenId() ||
-                      _pDrawObj->GetLayer() == pWriterDoc->GetInvisibleHeavenId() )
+            else if ( _pDrawObj->GetLayer() == pIDDMA->GetHeavenId() ||
+                      _pDrawObj->GetLayer() == pIDDMA->GetInvisibleHeavenId() )
             {
                 // it has to be the heaven layer, if method <GetLayer()> reveals
                 // a heaven layer
@@ -650,7 +641,7 @@ SwVirtFlyDrawObj *SwFlyDrawContact::CreateNewRef( SwFlyFrm *pFly )
     // into drawing page with correct order number
     else
     {
-        GetFmt()->GetDoc()->GetDrawModel()->GetPage( 0 )->
+        GetFmt()->getIDocumentDrawModelAccess()->GetDrawModel()->GetPage( 0 )->
                         InsertObject( pDrawObj, _GetOrdNumForNewRef( pFly ) );
     }
     // <--
@@ -724,7 +715,7 @@ void SwFlyDrawContact::MoveObjToVisibleLayer( SdrObject* _pDrawObj )
     ASSERT( _pDrawObj->ISA(SwVirtFlyDrawObj),
             "<SwFlyDrawContact::MoveObjToVisibleLayer(..)> - wrong SdrObject type -> crash" );
 
-    if ( GetFmt()->GetDoc()->IsVisibleLayerId( _pDrawObj->GetLayer() ) )
+    if ( GetFmt()->getIDocumentDrawModelAccess()->IsVisibleLayerId( _pDrawObj->GetLayer() ) )
     {
         // nothing to do
         return;
@@ -763,7 +754,7 @@ void SwFlyDrawContact::MoveObjToInvisibleLayer( SdrObject* _pDrawObj )
     ASSERT( _pDrawObj->ISA(SwVirtFlyDrawObj),
             "<SwFlyDrawContact::MoveObjToInvisibleLayer(..)> - wrong SdrObject type -> crash" );
 
-    if ( !GetFmt()->GetDoc()->IsVisibleLayerId( _pDrawObj->GetLayer() ) )
+    if ( !GetFmt()->getIDocumentDrawModelAccess()->IsVisibleLayerId( _pDrawObj->GetLayer() ) )
     {
         // nothing to do
         return;
@@ -854,7 +845,7 @@ SwDrawContact::SwDrawContact( SwFrmFmt* pToRegisterIn, SdrObject* pObj ) :
     // in the drawing page.
     if ( !pObj->IsInserted() )
     {
-        pToRegisterIn->GetDoc()->GetDrawModel()->GetPage(0)->
+        pToRegisterIn->getIDocumentDrawModelAccess()->GetDrawModel()->GetPage(0)->
                                 InsertObject( pObj, pObj->GetOrdNumDirect() );
     }
     // <--
@@ -864,7 +855,7 @@ SwDrawContact::SwDrawContact( SwFrmFmt* pToRegisterIn, SdrObject* pObj ) :
     if ( ::CheckControlLayer( pObj ) )
     {
         // OD 25.06.2003 #108784# - set layer of object to corresponding invisible layer.
-        pObj->SetLayer( pToRegisterIn->GetDoc()->GetInvisibleControlsId() );
+        pObj->SetLayer( pToRegisterIn->getIDocumentDrawModelAccess()->GetInvisibleControlsId() );
     }
 
     // OD 2004-03-29 #i26791#
@@ -1852,7 +1843,7 @@ void SwDrawContact::DisconnectFromLayout( bool _bMoveMasterToInvisibleLayer )
         // drawing page, move the 'master' drawing object into the corresponding
         // invisible layer.
         {
-            //((SwFrmFmt*)pRegisteredIn)->GetDoc()->GetDrawModel()->GetPage(0)->
+            //((SwFrmFmt*)pRegisteredIn)->getIDocumentDrawModelAccess()->GetDrawModel()->GetPage(0)->
             //                            RemoveObject( GetMaster()->GetOrdNum() );
             // OD 21.08.2003 #i18447# - in order to consider group object correct
             // use new method <SwDrawContact::MoveObjToInvisibleLayer(..)>
@@ -1873,7 +1864,7 @@ void SwDrawContact::RemoveMasterFromDrawPage()
         GetMaster()->SetUserCall( 0 );
         if ( GetMaster()->IsInserted() )
         {
-            ((SwFrmFmt*)pRegisteredIn)->GetDoc()->GetDrawModel()->GetPage(0)->
+            ((SwFrmFmt*)pRegisteredIn)->getIDocumentDrawModelAccess()->GetDrawModel()->GetPage(0)->
                                         RemoveObject( GetMaster()->GetOrdNum() );
         }
     }
@@ -1967,7 +1958,7 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
 
     SwFrmFmt* pDrawFrmFmt = (SwFrmFmt*)pRegisteredIn;
 
-    SwRootFrm* pRoot = pDrawFrmFmt->GetDoc()->GetRootFrm();
+    SwRootFrm* pRoot = pDrawFrmFmt->getIDocumentLayoutAccess()->GetRootFrm();
     if ( !pRoot )
     {
         return;
@@ -2138,7 +2129,7 @@ void SwDrawContact::InsertMasterIntoDrawPage()
 {
     if ( !GetMaster()->IsInserted() )
     {
-        GetFmt()->GetDoc()->GetDrawModel()->GetPage(0)
+        GetFmt()->getIDocumentDrawModelAccess()->GetDrawModel()->GetPage(0)
                 ->InsertObject( GetMaster(), GetMaster()->GetOrdNumDirect() );
     }
     GetMaster()->SetUserCall( this );
