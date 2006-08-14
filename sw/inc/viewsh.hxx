@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:25:50 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:38:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _VIEWSH_HXX
 #define _VIEWSH_HXX
-
 #ifndef _COM_SUN_STAR_EMBED_XCLASSIFIEDOBJECT_HPP_
 #include <com/sun/star/embed/XClassifiedObject.hpp>
 #endif
@@ -70,8 +69,17 @@ namespace com { namespace sun { namespace star { namespace accessibility {
 
 class SfxObjectShellRef;
 class SwDoc;
+class IDocumentSettingAccess;
+class IDocumentDeviceAccess;
+class IDocumentBookmarkAccess;
+class IDocumentDrawModelAccess;
+class IDocumentRedlineAccess;
+class IDocumentLayoutAccess;
+class IDocumentFieldsAccess;
+class IDocumentContentOperations;
+class IDocumentStylePoolAccess;
+class IDocumentStatistics;
 class SfxPrinter;
-class VirtualDevice;
 class SfxProgress;
 class SwRootFrm;
 class SwNodes;
@@ -88,9 +96,7 @@ class SwLayIdle;
 struct ShellResource;
 class SwRegionRects;
 class SwFrm;
-struct SwPrintData;
 class SvtAccessibilityOptions;
-class Fraction;
 // OD 12.12.2002 #103492#
 class SwPagePreviewLayout;
 // --> OD 2005-12-01 #i27138#
@@ -98,7 +104,6 @@ class SwTxtFrm;
 // <--
 
 struct SwAccessibilityOptions;
-
 
 //JP 19.07.98: - Bug 52312
 // define fuer Flags, die im CTOR oder den darunter liegenden Schichten
@@ -211,9 +216,6 @@ public:
     //pPDFOut != NULL is used for PDF export.
     void            InitPrt( SfxPrinter * , OutputDevice *pPDFOut = NULL );
 
-    SwPrintData*    GetPrintData() const;
-    void            SetPrintData(SwPrintData& rPrtData);
-
     //Klammerung von zusammengehoerenden Aktionen.
     inline void StartAction();
            void ImplStartAction();
@@ -280,20 +282,60 @@ public:
 
     inline SwDoc *GetDoc()  const { return pDoc; }  //niemals 0.
 
-    // 1. GetPrt:      The printer at the document
-    // 3. GetRefDev:   Either the printer or the virtual device from the doc
+    /** Provides access to the document setting interface
+     */
+    const IDocumentSettingAccess* getIDocumentSettingAccess() const;
+          IDocumentSettingAccess* getIDocumentSettingAccess();
+
+    /** Provides access to the document device interface
+     */
+    const IDocumentDeviceAccess* getIDocumentDeviceAccess() const;
+          IDocumentDeviceAccess* getIDocumentDeviceAccess();
+
+    /** Provides access to the document bookmark interface
+     */
+    const IDocumentBookmarkAccess* getIDocumentBookmarkAccess() const;
+          IDocumentBookmarkAccess* getIDocumentBookmarkAccess();
+
+    /** Provides access to the document draw model interface
+     */
+    const IDocumentDrawModelAccess* getIDocumentDrawModelAccess() const;
+          IDocumentDrawModelAccess* getIDocumentDrawModelAccess();
+
+    /** Provides access to the document redline interface
+     */
+    const IDocumentRedlineAccess* getIDocumentRedlineAccess() const;
+          IDocumentRedlineAccess* getIDocumentRedlineAccess();
+
+    /** Provides access to the document layout interface
+     */
+    const IDocumentLayoutAccess* getIDocumentLayoutAccess() const;
+          IDocumentLayoutAccess* getIDocumentLayoutAccess();
+
+    /** Provides access to the document fields administration interface
+     */
+    const IDocumentFieldsAccess* getIDocumentFieldsAccess() const;
+
+    /** Provides access to the content operations interface
+     */
+    IDocumentContentOperations* getIDocumentContentOperations();
+
+    /** Provides access to the document style pool interface
+     */
+    IDocumentStylePoolAccess* getIDocumentStylePoolAccess();
+
+    /** Provides access to the document statistics interface
+     */
+    const IDocumentStatistics* getIDocumentStatistics() const;
+
+    // 1. GetRefDev:   Either the printer or the virtual device from the doc
     // 2. GetWin:      Available if we not printing
-    // 4. GetOut:      Printer, Window or Virtual device
-    SfxPrinter* GetPrt( sal_Bool bCreate = sal_False ) const;
+    // 3. GetOut:      Printer, Window or Virtual device
     OutputDevice& GetRefDev() const;
     inline Window* GetWin()    const { return pWin; }
     inline OutputDevice* GetOut()     const { return pOut; }
 
     static inline sal_Bool IsLstEndAction() { return ViewShell::bLstAct; }
-
-    // Setzt Drucker fuer ALLE Sichten im Ring; einschl. Invalidierungen
-    void SetPrt( SfxPrinter* );
-    void SetVirDev( VirtualDevice* );
 
     //Andern alle PageDescriptoren
     void   ChgAllPageOrientation( sal_uInt16 eOri );
@@ -328,43 +370,36 @@ public:
     //
 
     // Sollen Absatzabstaende addiert oder maximiert werden?
-    sal_Bool IsParaSpaceMax() const;
-    sal_Bool IsParaSpaceMaxAtPages() const;
-    void SetParaSpaceMax( sal_Bool bNew, sal_Bool bAtPages );
+    void SetParaSpaceMax( bool bNew );
+
+    // Sollen Absatzabstaende addiert oder maximiert werden?
+    void SetParaSpaceMaxAtPages( bool bNew );
 
     // compatible behaviour of tabs
-    sal_Bool IsTabCompat() const;
-    void SetTabCompat( sal_Bool bNew );
+    void SetTabCompat( bool bNew );
 
     // font metric attribute "External Leading" should be considered
-    sal_Bool IsAddExtLeading()const;
-    void SetAddExtLeading( sal_Bool bNew );
+    void SetAddExtLeading( bool bNew );
 
     // formatting by virtual device or printer
-    short IsUseVirtualDevice() const;
-    void SetUseVirtualDevice( short nNew );
+    void SetUseVirDev( bool nNew );
 
     // OD 2004-02-16 #106629# - adding paragraph and table spacing at bottom
     // of table cells
-    sal_Bool IsAddParaSpacingToTableCells() const;
-    void SetAddParaSpacingToTableCells( const sal_Bool _bAddParaSpacingToTableCells );
+    void SetAddParaSpacingToTableCells( bool _bAddParaSpacingToTableCells );
 
     // OD 06.01.2004 #i11859# - former formatting of text lines with
     // proportional line spacing or not
-    sal_Bool IsFormerLineSpacing() const;
-    void SetUseFormerLineSpacing( const sal_Bool _bUseFormerLineSpacing );
+    void SetUseFormerLineSpacing( bool _bUseFormerLineSpacing );
 
     // OD 2004-03-12 #i11860# - former object positioning
-    sal_Bool IsFormerObjectPositioning() const;
-    void SetUseFormerObjectPositioning( const sal_Bool _bUseFormerObjPos );
+    void SetUseFormerObjectPositioning( bool _bUseFormerObjPos );
 
     // OD 2004-05-05 #i28701#
-    sal_Bool ConsiderWrapOnObjPos() const;
-    void SetConsiderWrapOnObjPos( const sal_Bool _bConsiderWrapOnObjPos );
+    void SetConsiderWrapOnObjPos( bool _bConsiderWrapOnObjPos );
 
     // --> FME #108724#
-    sal_Bool IsFormerTextWrapping() const;
-    void SetUseFormerTextWrapping( const sal_Bool _bUseFormerTextWrapping );
+    void SetUseFormerTextWrapping( bool _bUseFormerTextWrapping );
 
     //
     // DOCUMENT COMPATIBILITY FLAGS END
@@ -388,7 +423,7 @@ public:
 
     static void           SetCareWin( Window* pNew ); //CHINA001 { pCareWindow = pNew; }
     static Window*        GetCareWin(ViewShell& rVSh)
-                        { return pCareWindow ? pCareWindow : CareChildWin(rVSh); }
+                          { return pCareWindow ? pCareWindow : CareChildWin(rVSh); }
     static Window*        CareChildWin(ViewShell& rVSh);
 
     inline SfxViewShell   *GetSfxViewShell() { return pSfxViewShell; }
@@ -449,16 +484,13 @@ public:
 
     sal_Bool IsFrameView()  const { return bFrameView; }
     void SetFrameView( const Size& rBrowseBorder )
-        { bFrameView = sal_True; aBrowseBorder = rBrowseBorder; }
+           { bFrameView = sal_True; aBrowseBorder = rBrowseBorder; }
 
     //Nimmt die notwendigen Invalidierungen vor,
     //wenn sich der BrowdseModus aendert, bBrowseChgd == sal_True
     //oder, im BrowseModus, wenn sich die Groessenverhaeltnisse
     //aendern (bBrowseChgd == sal_False)
     void CheckBrowseView( FASTBOOL bBrowseChgd );
-
-    //Damit in der UI nicht ueberall das dochxx includet werden muss
-    sal_Bool IsBrowseMode() const;
 
     const Size& GetBrowseBorder() const{ return aBrowseBorder; }
     void SetBrowseBorder( const Size& rNew );
@@ -516,10 +548,8 @@ public:
     // --> FME 2004-06-15 #i12836# enhanced pdf export
     sal_Int32 GetPageNumAndSetOffsetForPDF( OutputDevice& rOut, const SwRect& rRect ) const;
     // <--
-    inline bool IsInConstructor() const
-    {
-        return mbInConstructor;
-    }
+
+    inline bool IsInConstructor() const { return mbInConstructor; }
 };
 
 //---- class CurrShell verwaltet den globalen ShellPointer -------------------
@@ -536,8 +566,9 @@ public:
 
 inline void ViewShell::ResetInvalidRect()
 {
-    aInvalidRect.Clear();
+   aInvalidRect.Clear();
 }
+
 inline void ViewShell::StartAction()
 {
     if ( !nStartAction++ )
