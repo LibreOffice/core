@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gloshdl.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:17:52 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:33:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,9 +89,6 @@
 #ifndef _SWVIEW_HXX //autogen
 #include <view.hxx>
 #endif
-#ifndef _DOC_HXX
-#include <doc.hxx>
-#endif
 #ifndef _SWEVENT_HXX
 #include <swevent.hxx>
 #endif
@@ -149,6 +146,9 @@
 #include <svx/acorrcfg.hxx>
 #include "swabstdlg.hxx" //CHINA001
 #include <misc.hrc> //CHINA001
+
+#include <IDocumentFieldsAccess.hxx>
+
 const short RET_EDIT = 100; //CHINA001 copy from glossary.hxx
 
 // PUBLIC METHODES -------------------------------------------------------
@@ -690,8 +690,9 @@ BOOL SwGlossaryHdl::Expand( const String& rShortName,
                     pWrtShell->Insert ( aEmptyStr, aEmptyStr, aBitmap);
                     pWrtShell->SetFlyName ( sGraphicName );
                     SwTxtFmtColl* pColl = pWrtShell->GetTxtCollFromPool ( RES_POOLCOLL_LABEL_ABB );
-                    SwFieldType* pType = pWrtShell->GetDoc()->GetFldType( RES_SETEXPFLD, pColl->GetName() );
-                    sal_uInt16 nId = pWrtShell->GetDoc()->GetFldTypes()->GetPos( pType );
+                    const IDocumentFieldsAccess* pIDFA = pWrtShell->getIDocumentFieldsAccess();
+                    SwFieldType* pType = pIDFA->GetFldType( RES_SETEXPFLD, pColl->GetName(), false );
+                    sal_uInt16 nId = pIDFA->GetFldTypes()->GetPos( pType );
                     pWrtShell->InsertLabel( LTYPE_OBJECT, aEmptyStr, aEmptyStr, FALSE, nId, aEmptyStr );
                     pWrtShell->SwFEShell::SetFlyName( sTeamCredits );
                     pWrtShell->SwFEShell::SelectObj ( Point ( ULONG_MAX, ULONG_MAX ) );
