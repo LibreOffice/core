@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unostyle.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:29:16 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:37:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _UNOSTYLE_HXX
 #define _UNOSTYLE_HXX
-
 #ifndef _SFXSTYLE_HXX //autogen
 #include <svtools/style.hxx>
 #endif
@@ -85,7 +84,7 @@ class SwDocShell;
 struct SfxItemPropertyMap;
 class SwXStyle;
 class SwStyleProperties_Impl;
-class SwStartNode;
+
 /******************************************************************************
  *
  ******************************************************************************/
