@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.168 $
+ *  $Revision: 1.169 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:42:26 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:18:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,21 +33,15 @@
  *
  ************************************************************************/
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
-
 #ifdef PCH
 #include "filt_pch.hxx"
 #endif
-
 #ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
 #include <com/sun/star/embed/ElementModes.hpp>
 #endif
 #ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_
 #include <com/sun/star/embed/XStorage.hpp>
 #endif
-#ifndef _COM_SUN_STAR_IO_XSTREAM_HPP_
-#include <com/sun/star/io/XStream.hpp>
-#endif
-
 #include <unotools/ucbstreamhelper.hxx>
 
 #ifndef _SOLAR_H
@@ -193,14 +187,8 @@
 #ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx>         // class SwPageDesc
 #endif
-#ifndef _NUMRULE_HXX //autogen
-#include <numrule.hxx>
-#endif
 #ifndef _PARATR_HXX //autogen
 #include <paratr.hxx>
-#endif
-#ifndef _FMTCOL_HXX
-#include <fmtcol.hxx>           // ReadFilterFlags
 #endif
 #ifndef _FMTCLDS_HXX
 #include <fmtclds.hxx>
@@ -259,15 +247,6 @@
 #ifndef _COM_SUN_STAR_I18N_FORBIDDENCHARACTERS_HPP_
 #include <com/sun/star/i18n/ForbiddenCharacters.hpp>
 #endif
-#ifndef _COM_SUN_STAR_DOCUMENT_PRINTERINDEPENDENTLAYOUT_HPP_
-#include <com/sun/star/document/PrinterIndependentLayout.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
-#include <com/sun/star/task/XInteractionHandler.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONREQUEST_HPP_
-#include <com/sun/star/task/XInteractionRequest.hpp>
-#endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
@@ -290,9 +269,8 @@
 #ifndef _WW8PAR2_HXX
 #include "ww8par2.hxx"          // class WW8RStyle, class WW8AnchorPara
 #endif
-#ifndef _WW8PAR_HXX
-#include "ww8par.hxx"
-#endif
+
+#include <frmatr.hxx>
 
 #ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFOSUPPLIER_HPP_
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
@@ -1154,7 +1132,7 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                         pFrm->SetAttr(aURL);
                     }
                     else
-                        pDoc->Insert(aRegion, *pEntry->pAttr);
+                        pDoc->Insert(aRegion, *pEntry->pAttr, 0);
                 }
             }
             break;
@@ -1315,7 +1293,7 @@ bool SwWW8FltRefStack::IsFtnEdnBkmField(const SwFmtFld& rFmtFld, USHORT& rBkmNo)
                 (REF_ENDNOTE  == nSubType))
             && ((SwGetRefField*)pFld)->GetSetRefName().Len()
                 // find Sequence No of corresponding Foot-/Endnote
-            && (USHRT_MAX != (rBkmNo = pDoc->FindBookmark(
+            && (USHRT_MAX != (rBkmNo = pDoc->findBookmark(
                 ((SwGetRefField*)pFld)->GetSetRefName() ))));
 }
 
@@ -1343,7 +1321,7 @@ void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
                 USHORT nBkmNo;
                 if( IsFtnEdnBkmField(rFmtFld, nBkmNo) )
                 {
-                    SwBookmark& rBkMrk = pDoc->GetBookmark( nBkmNo );
+                    SwBookmark& rBkMrk = pDoc->getBookmark( nBkmNo, false );
 
                     const SwPosition& rBkMrkPos = rBkMrk.GetPos();
 
@@ -1365,7 +1343,7 @@ void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
                 }
             }
 
-            pDoc->Insert(aPaM, *pEntry->pAttr);
+            pDoc->Insert(aPaM, *pEntry->pAttr, 0);
             MoveAttrs(*aPaM.GetPoint());
         }
         break;
@@ -1579,10 +1557,11 @@ void SwWW8ImplReader::ImportDop()
 
     // Abstand zwischen zwei Absaetzen ist die SUMME von unterem
     // Abst. des ersten und oberem Abst. des zweiten
-    rDoc.SetParaSpaceMax(pWDop->fDontUseHTMLAutoSpacing, true);
+    rDoc.set(IDocumentSettingAccess::PARA_SPACE_MAX, pWDop->fDontUseHTMLAutoSpacing);
+    rDoc.set(IDocumentSettingAccess::PARA_SPACE_MAX_AT_PAGES, true );
     maTracer.Log(sw::log::eDontUseHTMLAutoSpacing);
     // move tabs on alignment
-    rDoc.SetTabCompat(true);
+    rDoc.set(IDocumentSettingAccess::TAB_COMPAT, true);
     maTracer.Log(sw::log::eTabStopDistance);
     // OD 14.10.2003 #i18732# - adjust default of option 'FollowTextFlow'
     rDoc.SetDefault( SwFmtFollowTextFlow( FALSE ) );
@@ -1604,46 +1583,48 @@ void SwWW8ImplReader::ImportDop()
     if (!pWDop->fNoLeading)
         maTracer.Log(sw::log::eExtraLeading);
 
-    if ( pWDop->fUsePrinterMetrics )
-        rDoc._SetUseVirtualDevice( com::sun::star::document::PrinterIndependentLayout::DISABLED );
-    else
-        rDoc._SetUseVirtualDevice( com::sun::star::document::PrinterIndependentLayout::HIGH_RESOLUTION );
+    rDoc.set(IDocumentSettingAccess::USE_VIRTUAL_DEVICE, !pWDop->fUsePrinterMetrics);
+    rDoc.set(IDocumentSettingAccess::USE_HIRES_VIRTUAL_DEVICE, true);
+    rDoc.set(IDocumentSettingAccess::ADD_FLY_OFFSETS, true );
+    rDoc.set(IDocumentSettingAccess::ADD_EXT_LEADING, !pWDop->fNoLeading);
 
-    rDoc.SetAddFlyOffsets( true );
-    rDoc.SetAddExtLeading(!pWDop->fNoLeading);
     // -> #111955#
-    rDoc.SetOldNumbering( false );
-    // --> FME 2005-05-27 #i47448#
-    rDoc.SetIgnoreFirstLineIndentInNumbering( false );
-    // --> FME 2005-06-08 #i49277#
-    rDoc.SetDoNotJustifyLinesWithManualBreak( false );
-    // --> FME 2005-08-11 #i53199#
-    rDoc.SetDoNotResetParaAttrsForNumFont( false );
+    rDoc.set(IDocumentSettingAccess::OLD_NUMBERING, false);
+    // <- #111955#
 
-    rDoc.SetUseFormerLineSpacing( false );
+    // --> FME 2005-05-27 #i47448#
+    rDoc.set(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING, false);
+    // <--
+
+    // --> FME 2005-06-08 #i49277#
+    rDoc.set(IDocumentSettingAccess::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK, false);
+    // --> FME 2005-08-11 #i53199#
+    rDoc.set(IDocumentSettingAccess::DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT, false);
+
+    rDoc.set(IDocumentSettingAccess::OLD_LINE_SPACING, false);
 
     // OD, MMAHER 2004-03-01 #i25901#- set new compatibility option
     //      'Add paragraph and table spacing at bottom of table cells'
-    rDoc.SetAddParaSpacingToTableCells( true );
+    rDoc.set(IDocumentSettingAccess::ADD_PARA_SPACING_TO_TABLE_CELLS, true);
 
     // OD 2004-03-17 #i11860# - set new compatibility option
     //      'Use former object positioning' to <FALSE>
-    rDoc.SetUseFormerObjectPositioning( false );
+    rDoc.set(IDocumentSettingAccess::USE_FORMER_OBJECT_POS, false);
 
     // OD 2004-05-10 #i27767# - set new compatibility option
     //      'Conder Wrapping mode when positioning object' to <TRUE>
-    rDoc.SetConsiderWrapOnObjPos( true );
+    rDoc.set(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION, true);
 
     // --> FME 2004-04-22 # #108724#, #i13832#, #i24135#
-    rDoc.SetUseFormerTextWrapping( false );
+    rDoc.set(IDocumentSettingAccess::USE_FORMER_TEXT_WRAPPING, false);
     // <--
 
     // --> FME 2006-02-10 #131283#
-    rDoc.SetTableRowKeep( true );
+    rDoc.set(IDocumentSettingAccess::TABLE_ROW_KEEP, true); //SetTableRowKeep( true );
     // <--
 
     // --> FME 2006-03-01 #i3952#
-    rDoc.SetIgnoreTabsAndBlanksForLineCalculation( true );
+    rDoc.set(IDocumentSettingAccess::IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION, true);
     // <--
 
     //
@@ -1689,29 +1670,11 @@ void SwWW8ImplReader::ImportDopTypography(const WW8DopTypography &rTypo)
     using namespace com::sun::star;
     switch (rTypo.iLevelOfKinsoku)
     {
-#if 0
-        /*
-        Do the defaults differ between Microsoft versions ?, do we do
-        something about it if so ?
-        */
-        case 0:
-            if (pWwFib->nFib < 2000)
-                //use old defaults ??
-            else
-                //use new defaults ??
-            break;
-        case 1:
-            if (pWwFib->nFib < 2000)
-                //use old defaults ??
-            else
-                //use new defaults ??
-            break;
-#endif
         case 2: //custom
             {
                 i18n::ForbiddenCharacters aForbidden(rTypo.rgxchFPunct,
                     rTypo.rgxchLPunct);
-                rDoc.SetForbiddenCharacters(rTypo.GetConvertedLang(),
+                rDoc.setForbiddenCharacters(rTypo.GetConvertedLang(),
                         aForbidden);
                 //Obviously cannot set the standard level 1 for japanese, so
                 //bail out now while we can.
@@ -1733,12 +1696,11 @@ void SwWW8ImplReader::ImportDopTypography(const WW8DopTypography &rTypo)
     {
         i18n::ForbiddenCharacters aForbidden(rTypo.GetJapanNotBeginLevel1(),
             rTypo.GetJapanNotEndLevel1());
-        rDoc.SetForbiddenCharacters(LANGUAGE_JAPANESE,aForbidden);
+        rDoc.setForbiddenCharacters(LANGUAGE_JAPANESE,aForbidden);
     }
 
-    rDoc.SetKernAsianPunctuation(rTypo.fKerningPunct);
-    rDoc.SetCharCompressType(
-        static_cast<SwCharCompressType>(rTypo.iJustification));
+    rDoc.set(IDocumentSettingAccess::KERN_ASIAN_PUNCTUATION, rTypo.fKerningPunct);
+    rDoc.setCharacterCompressionType(static_cast<SwCharCompressType>(rTypo.iJustification));
 }
 
 //-----------------------------------------
@@ -1894,7 +1856,7 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
 
     SwNodeIndex aNdIdx( rDoc.GetNodes().GetEndOfExtras() );
     aNdIdx = *rDoc.GetNodes().MakeTextSection(aNdIdx, SwNormalStartNode,
-        rDoc.GetTxtCollFromPoolSimple(RES_POOLCOLL_STANDARD, false));
+        rDoc.GetTxtCollFromPool(RES_POOLCOLL_STANDARD, false));
 
     {
         SwPaM *pTempPaM = pPaM;
@@ -1927,7 +1889,7 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
 
     rDoc.Insert( *pPaM, SwFmtFld( SwPostItField(
         (SwPostItFieldType*)rDoc.GetSysFldType( RES_POSTITFLD ), sAuthor, sTxt,
-        aDate )));
+        aDate )), 0);
     return 0;
 }
 
@@ -2527,11 +2489,7 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs)
     //        ob die korrekte FilePos nicht schon erreicht ist.
     WW8_FC nStreamPos = pSBase->WW8Cp2Fc(nCpOfs+rPos, &bIsUnicode);
     pStrm->Seek( nStreamPos );
-#if 0
-    // amount of characters to read == length to next attribute
-    DBG_ASSERT(nEnd - rPos <= (STRING_MAXLEN-1),
-        "String too long for stringclass!");
-#endif
+
     xub_StrLen nLen;
     if (nEnd - rPos <= (STRING_MAXLEN-1))
         nLen = writer_cast<xub_StrLen>(nEnd - rPos);
@@ -2627,7 +2585,7 @@ bool SwWW8ImplReader::AddTextToParagraph(const String& rAddString)
     {
         if ((pNd->GetTxt().Len() + rAddString.Len()) < STRING_MAXLEN -1)
         {
-            rDoc.Insert (*pPaM, rAddString);
+            rDoc.Insert (*pPaM, rAddString, true);
         }
         else
         {
@@ -2636,16 +2594,16 @@ bool SwWW8ImplReader::AddTextToParagraph(const String& rAddString)
             {
                 String sTempStr (rAddString,0,
                     STRING_MAXLEN - pNd->GetTxt().Len() -1);
-                rDoc.Insert (*pPaM, sTempStr);
+                rDoc.Insert (*pPaM, sTempStr, true);
                 sTempStr = rAddString.Copy(sTempStr.Len(),
                     rAddString.Len() - sTempStr.Len());
                 AppendTxtNode(*pPaM->GetPoint());
-                rDoc.Insert (*pPaM,sTempStr );
+                rDoc.Insert (*pPaM,sTempStr, true );
             }
             else
             {
                 AppendTxtNode(*pPaM->GetPoint());
-                rDoc.Insert (*pPaM, rAddString);
+                rDoc.Insert (*pPaM, rAddString, true);
             }
         }
     }
@@ -2744,7 +2702,7 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
                 SwPageNumberField aFld(
                     (SwPageNumberFieldType*)rDoc.GetSysFldType(
                     RES_PAGENUMBERFLD ), PG_RANDOM, SVX_NUM_ARABIC);
-                rDoc.Insert(*pPaM, SwFmtFld(aFld));
+                rDoc.Insert(*pPaM, SwFmtFld(aFld), 0);
             }
             break;
         case 0xe:
@@ -2756,7 +2714,7 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
             {
                 // Always insert a txtnode for a column break, e.g. ##
                 AppendTxtNode(*pPaM->GetPoint());
-                rDoc.Insert(*pPaM, SvxFmtBreakItem(SVX_BREAK_COLUMN_BEFORE));
+                rDoc.Insert(*pPaM, SvxFmtBreakItem(SVX_BREAK_COLUMN_BEFORE), 0);
             }
             break;
         case 0x7:
@@ -2869,7 +2827,7 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
                 String sUnknown( '<' );
                 sUnknown += String::CreateFromInt32( nWCharVal );
                 sUnknown += '>';
-                rDoc.Insert( *pPaM, sUnknown );
+                rDoc.Insert( *pPaM, sUnknown, true );
             }
 #endif
             break;
@@ -3229,7 +3187,7 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, short nType)
                     AppendTxtNode(*pPaM->GetPoint());
                 }
                 // <--
-                rDoc.Insert(*pPaM, SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE));
+                rDoc.Insert(*pPaM, SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE), 0);
                 bPgSecBreak = false;
             }
         }
@@ -3440,7 +3398,7 @@ void GiveNodePageDesc(SwNodeIndex &rIdx, const SwFmtPageDesc &rPgDesc,
             rIdx.GetNode().GetCntntNode(), 0);
         SwPaM aPage(aPamStart);
 
-        rDoc.Insert(aPage, rPgDesc);
+        rDoc.Insert(aPage, rPgDesc, 0);
     }
 }
 
@@ -3761,7 +3719,7 @@ ULONG SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
     SwNodeIndex aSttNdIdx( rDoc.GetNodes() );
     SwRelNumRuleSpaces aRelNumRule(rDoc, mbNewDoc);
 
-    USHORT eMode = REDLINE_SHOW_INSERT;
+    USHORT eMode = IDocumentRedlineAccess::REDLINE_SHOW_INSERT;
 
     mpSprmParser = new wwSprmParser(pWwFib->GetFIBVersion());
 
@@ -3945,11 +3903,11 @@ ULONG SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
 
         // EinfuegePos nicht in leerer Zeile
         if( nCntPos && pSttNd->GetTxt().Len() )
-            rDoc.SplitNode( *pPos );            // neue Zeile erzeugen
+            rDoc.SplitNode( *pPos, false );            // neue Zeile erzeugen
 
         if( pSttNd->GetTxt().Len() )
         {   // EinfuegePos nicht am Ende der Zeile
-            rDoc.SplitNode( *pPos );    // neue Zeile
+            rDoc.SplitNode( *pPos, false );    // neue Zeile
             pPaM->Move( fnMoveBackward );   // gehe in leere Zeile
         }
 
@@ -3976,7 +3934,7 @@ ULONG SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
         {
             SwNodeIndex aIdx( rDoc.GetNodes().GetEndOfContent());
             SwTxtFmtColl* pColl =
-                rDoc.GetTxtCollFromPoolSimple(RES_POOLCOLL_STANDARD,
+                rDoc.GetTxtCollFromPool(RES_POOLCOLL_STANDARD,
                 false);
             SwStartNode *pNode =
                 rDoc.GetNodes().MakeTextSection(aIdx,
@@ -4060,9 +4018,9 @@ ULONG SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
     if (mbNewDoc)
     {
         if( pWDop->fRevMarking )
-            eMode |= REDLINE_ON;
+            eMode |= IDocumentRedlineAccess::REDLINE_ON;
         if( pWDop->fRMView )
-            eMode |= REDLINE_SHOW_DELETE;
+            eMode |= IDocumentRedlineAccess::REDLINE_SHOW_DELETE;
         if (pStg && !pGloss) /*meaningless for a glossary, cmc*/
         {
             const SvtFilterOptions* pVBAFlags = SvtFilterOptions::Get();
