@@ -4,9 +4,9 @@
  *
  *  $RCSfile: beziersh.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 12:42:16 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:52:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #include "cmdid.h"
@@ -59,17 +58,8 @@
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
 #endif
-#ifndef _SFXVIEWFRM_HXX
-#include <sfx2/viewfrm.hxx>
-#endif
-#ifndef _SFX_BINDINGS_HXX //autogen
-#include <sfx2/bindings.hxx>
-#endif
 #ifndef _SFXOBJFACE_HXX //autogen
 #include <sfx2/objface.hxx>
-#endif
-#ifndef _SFXAPP_HXX //autogen
-#include <sfx2/app.hxx>
 #endif
 
 #include "wrtsh.hxx"
@@ -79,10 +69,8 @@
 #include "globals.hrc"
 #include "drawbase.hxx"
 #include "beziersh.hxx"
-
 #include "popup.hrc"
 #include "shells.hrc"
-
 #define SwBezierShell
 #include "itemdef.hxx"
 #include "swslots.hxx"
