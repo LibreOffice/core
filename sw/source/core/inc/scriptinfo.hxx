@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scriptinfo.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:09:50 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:21:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _SCRIPTINFO_HXX
 #define _SCRIPTINFO_HXX
-
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_SHORTS
 #define _SVSTDARR_BYTES
@@ -48,7 +47,6 @@
 #endif
 #include <list>
 
-class SwWrongList;
 class SwTxtNode;
 class Point;
 class MultiSelection;
@@ -72,7 +70,6 @@ class SwScanner
     xub_StrLen nLen;
     LanguageType aCurrLang;
     USHORT nWordType;
-    BOOL bStart;
     BOOL bClip;
 
 public:
@@ -225,15 +222,6 @@ public:
     static USHORT MaskHiddenRanges( const SwTxtNode& rNode, XubString& rText,
                                     const xub_StrLen nStt, const xub_StrLen nEnd,
                                     const xub_Unicode cChar );
-
-/** Hidden text attribute handling
-
-    @descr  Takes a SwTxtNode and deletes the hidden ranges from the node.
-
-    @param  rNode
-                The text node.
- */
-    static void DeleteHiddenRanges( SwTxtNode& rNode );
 
     //
     // HIDDEN TEXT STUFF END
