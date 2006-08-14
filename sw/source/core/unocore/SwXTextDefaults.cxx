@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXTextDefaults.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:23:27 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:52:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
 #endif
@@ -59,6 +58,9 @@
 #endif
 #ifndef _DOCSTYLE_HXX
 #include <docstyle.hxx>
+#endif
+#ifndef _DOC_HXX
+#include <doc.hxx>
 #endif
 #ifndef _SWDOCSH_HXX
 #include <docsh.hxx>
