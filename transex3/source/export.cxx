@@ -4,9 +4,9 @@
  *
  *  $RCSfile: export.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-06 14:34:29 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:09:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <tools/fsys.hxx>
-#include <bootstrp/appdef.hxx>
 #include "export.hxx"
 #include "tokens.h"
 #include "utf8conv.hxx"
@@ -160,7 +159,6 @@ extern char *GetOutputFile( int argc, char* argv[])
                 case STATE_NON: {
                     return NULL;    // no valid command line
                 }
-                //break;
                 case STATE_INPUT: {
                     aInputFileList.Insert( new ByteString( argv[ i ]), LIST_APPEND );
                     bInput = TRUE; // min. one source file found
@@ -172,7 +170,6 @@ extern char *GetOutputFile( int argc, char* argv[])
                 break;
                 case STATE_PRJ: {
                     sPrj = ByteString( argv[ i ]);
-//                  sPrj.ToLowerAscii(); // the project
                 }
                 break;
                 case STATE_ROOT: {
@@ -289,7 +286,6 @@ extern FILE *GetNextFile()
             // create file name, beginnig with project root
             // (e.g.: source\ui\src\menue.src)
             sActFileName = sFullEntry.Copy( sPrjEntry.Len() + 1 );
-//          sActFileName.ToLowerAscii();
 
             if( !bQuiet ) fprintf( stdout, "\nProcessing File %s ...\n", sOrigFile.GetBuffer());
 
@@ -1416,13 +1412,6 @@ BOOL Export::WriteData( ResData *pResData, BOOL bCreateNew )
                     sOutput += sCur; sOutput += "\t";
 
 
-/*                  if ( sCur.EqualsIgnoreCaseAscii("de") ) {
-                        sXText = UTF8Converter::ConvertToUTF8( sXText, RTL_TEXTENCODING_UTF8 );
-                        sXHText = UTF8Converter::ConvertToUTF8( sXHText, RTL_TEXTENCODING_UTF8);
-                        sXQHText = UTF8Converter::ConvertToUTF8( sXQHText, RTL_TEXTENCODING_UTF8);
-                        sXTitle = UTF8Converter::ConvertToUTF8( sXTitle, RTL_TEXTENCODING_UTF8);
-                    }*/
-
                     sOutput += sXText; sOutput += "\t";
                     sOutput += sXHText; sOutput += "\t";
                     sOutput += sXQHText; sOutput += "\t";
@@ -1563,16 +1552,11 @@ BOOL Export::WriteExportList( ResData *pResData, ExportList *pExportList,
                         sOutput += sText; sOutput += "\t\t\t\t";
                         sOutput += sTimeStamp;
 
-                        //if( sCur.EqualsIgnoreCaseAscii("de") ){
-                        //    sOutput = UTF8Converter::ConvertToUTF8( sOutput , RTL_TEXTENCODING_MS_1252 );
-                        //}
-
                         if( !sCur.EqualsIgnoreCaseAscii("de") ||( sCur.EqualsIgnoreCaseAscii("de") && !Export::isMergingGermanAllowed( sProject ) ) )
                         aOutput.WriteLine( sOutput );
 
                     }
                 }
-//          }
         }
         if ( bCreateNew )
             delete [] pEntry;
@@ -1670,7 +1654,6 @@ void Export::InsertListEntry( const ByteString &rText, const ByteString &rLine )
         (*pCurEntry)[ nListLang ] = rLine;
     }else
         (*pCurEntry)[ nListLang ] = rText;
-        //(*pCurEntry)[ nListLang ] = rLine;
 
     // Remember en-US fallback string, so each list has the same amount of elements
     if ( nListLang.EqualsIgnoreCaseAscii("en-US")  ) {
@@ -1686,8 +1669,6 @@ void Export::InsertListEntry( const ByteString &rText, const ByteString &rLine )
             (*pCurEntry)[ GERMAN_LIST_LINE_INDEX ] = rLine;
         }
         else
-            //(*pCurEntry)[ ByteString("de") ] = rText;
-            //(*pCurEntry)[ GERMAN_LIST_LINE_INDEX ] = rText;
             (*pCurEntry)[ GERMAN_LIST_LINE_INDEX ] = rLine;
 
         pList->NewGermanEntry();
@@ -1812,9 +1793,6 @@ void Export::WriteToMerged( const ByteString &rText , bool bSDFContent )
 
     if ( !bDontWriteOutput || !bUnmerge ) {
         ByteString sText( rText );
-        // Ivo
-        //sText.SearchAndReplace( "[ ENGLISH ] =" , "[ en ] =");
-        //sText.SearchAndReplace( "[ English ] =" , "[ en ] =");
         while ( sText.SearchAndReplace( " \n", "\n" ) != STRING_NOTFOUND ) {};
         if( pParseQueue->bNextIsM && bSDFContent && sText.Len() > 2 ){
             for( USHORT n = 0 ; n < sText.Len() ; n++ ){
@@ -1858,7 +1836,6 @@ void Export::WriteToMerged( const ByteString &rText , bool bSDFContent )
 }
 
 /*****************************************************************************/
-//void Export::ConvertMergeContent( ByteString &rText, USHORT nTyp )/
 void Export::ConvertMergeContent( ByteString &rText )
 /*****************************************************************************/
 {
@@ -1916,7 +1893,6 @@ void Export::ConvertMergeContent( ByteString &rText )
 
 /*****************************************************************************/
 BOOL Export::PrepareTextToMerge( ByteString &rText, USHORT nTyp,
-                                //USHORT nLangIndex, ResData *pResData )
                                 ByteString &nLangIndex, ResData *pResData )
 /*****************************************************************************/
 {
@@ -2178,7 +2154,6 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
                             sOutput += " ] ";
                         }
                         sOutput += "= ";
-                           //ConvertMergeContent( sText, STRING_TYP_TEXT );
                         ConvertMergeContent( sText );
                         sOutput += sText;
 
@@ -2213,7 +2188,6 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
                     sCur = aLanguages[ n ];
 
                     ByteString sText;
-                    //BOOL bText = pEntry->GetText( sText, STRING_TYP_QUICKHELPTEXT, i, TRUE );
                     BOOL bText = pEntry->GetText( sText, STRING_TYP_QUICKHELPTEXT, sCur, TRUE );
                     if ( bText && sText.Len() && sText != "-" ) {
                         ByteString sOutput;
@@ -2226,15 +2200,12 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
                         bFirst=FALSE;
                         sOutput += "\t";
                         sOutput += "QuickHelpText";
-                        //if ( i != ByteString("de") ) {
                         if ( !sCur.EqualsIgnoreCaseAscii("de") ) {
                             sOutput += "[ ";
                             sOutput += sCur;
-                            //sOutput += LangName[ i ];
                             sOutput += " ] ";
                         }
                         sOutput += "= ";
-                           //ConvertMergeContent( sText, STRING_TYP_QUICKHELPTEXT );
                         ConvertMergeContent( sText );
                         sOutput += sText;
                         if ( bDefine )
@@ -2263,7 +2234,6 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
                     sCur = aLanguages[ n ];
 
                 ByteString sText;
-                    //BOOL bText = pEntry->GetText( sText, STRING_TYP_TITLE, i, TRUE );
                     BOOL bText = pEntry->GetText( sText, STRING_TYP_TITLE, sCur, TRUE );
                     if ( bText && sText.Len() && sText != "-" ) {
                         ByteString sOutput;
@@ -2276,15 +2246,12 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
                         bFirst=FALSE;
                         sOutput += "\t";
                         sOutput += "Title";
-                        //if ( i != ByteString("de") ) {
                         if ( !sCur.EqualsIgnoreCaseAscii("de") ) {
                             sOutput += "[ ";
                             sOutput += sCur;
-                            //sOutput += LangName[ i ];
                             sOutput += " ] ";
                         }
                         sOutput += "= ";
-//                      ConvertMergeContent( sText, STRING_TYP_TITLE );
                         ConvertMergeContent( sText );
                         sOutput += sText;
                         if ( bDefine )
@@ -2335,7 +2302,6 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
                         USHORT nIdx = 1;
 
                         // Set matching pairedlist identifier
-                        //if( pResData->sResTyp.Equals( "pairedlist" ) && pResData->pPairedList && ( nIdx == 1 ) ){
                         if( bPairedList && pResData->pPairedList && ( nIdx == 1 ) ){
                             ExportListEntry* pListE = ( ExportListEntry* ) pResData->pPairedList->GetObject( nIdx-1 );
                             pResData->sId = GetPairedListID ( (*pListE)[ ByteString("de") ] );
@@ -2348,12 +2314,9 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
                         ULONG nMaxIndex = 0;
                         if ( pList )
                             nMaxIndex = pList->GetGermanEntryCount();
-                        //if( pMergeDataFile ) pMergeDataFile->Dump();
                         pEntrys = pMergeDataFile->GetPFormEntrys( pResData );
                         while( pEntrys  && ( nLIndex < nMaxIndex )) {
 
-                            //while( pEntrys && ( nLIndex < nMaxIndex )) {
-                            //if( pEntrys ) pEntrys->Dump();
                             ByteString sText;
                             BOOL bText;
                             bText = pEntrys->GetText( sText, STRING_TYP_TEXT, sCur, TRUE );
@@ -2381,7 +2344,6 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
                                         case LIST_PAIRED : sHead += "PairedList "; break;
                                         case LIST_UIENTRIES : sHead += "UIEntries "; break;
                                     }
-                                    //if ( nIdx != GERMAN_INDEX ) {
                                       sHead += "[ ";
                                     sHead += sCur;
                                     sHead += " ] ";
@@ -2417,26 +2379,18 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
 
                                 USHORT nStart, nEnd;
                                 nStart = sLine.Search( "\"" );
-/*                              for ( nEnd = nStart + 1; nEnd < sLine.Len() && !bFound; nEnd++ ) {
-                                    if ( sLine.GetChar( nEnd ) == '\"' )
-                                        bFound = TRUE;
-                                }*/
 
                                 ByteString sPostFix;
-                                //if( !pResData->sResTyp.Equals( "pairedlist" ) ){
                                 if( !bPairedList ){
                                     nEnd = sLine.SearchBackward( '\"' );
-                                    //nEnd --;
                                     sPostFix = ByteString( sLine.Copy( ++nEnd ));
                                     sLine.Erase( nStart );
                                 }
 
 
-                                //ConvertMergeContent( sText, nT );
                                 ConvertMergeContent( sText );
 
                                 // merge new res. in text line
-                                //if( pResData->sResTyp.Equals( "pairedlist" ) ){
                                 if( bPairedList ){
                                     sLine = MergePairedList( sLine , sText );
                                 }
@@ -2457,7 +2411,6 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
                                 WriteToMerged( sText1 ,true );
 
                                 // Set matching pairedlist identifier
-                                //if ( pResData->sResTyp.EqualsIgnoreCaseAscii( "pairedlist" ) ){
                                 if ( bPairedList ){
                                     nIdx++;
                                     ExportListEntry* pListE = ( ExportListEntry* ) pResData->pPairedList->GetObject( ( nIdx ) -1 );
@@ -2568,7 +2521,6 @@ void Export::SetChildWithText()
 
 void ParserQueue::Push( const QueueEntry& aEntry ){
 //    printf("nTyp = %d ",aEntry.nTyp);
-    //int nLen = aEntry.sLine.Len();
     USHORT nLen = aEntry.sLine.Len();
 
     if( !bStart ){
