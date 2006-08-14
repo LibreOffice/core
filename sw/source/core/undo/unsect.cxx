@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unsect.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:22:02 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:51:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -130,7 +129,7 @@ SwUndoInsSection::SwUndoInsSection( const SwPaM& rPam, const SwSection& rNew,
     SwDoc& rDoc = *(SwDoc*)rPam.GetDoc();
     if( rDoc.IsRedlineOn() )
     {
-        pRedlData = new SwRedlineData( REDLINE_INSERT,
+        pRedlData = new SwRedlineData( IDocumentRedlineAccess::REDLINE_INSERT,
                                         rDoc.GetRedlineAuthor() );
         SetRedlineMode( rDoc.GetRedlineMode() );
     }
@@ -182,8 +181,8 @@ void SwUndoInsSection::Undo( SwUndoIter& rUndoIter )
     SwSectionNode* pNd = rDoc.GetNodes()[ nSectNodePos ]->GetSectionNode();
     ASSERT( pNd, "wo ist mein SectionNode?" );
 
-    if( IsRedlineOn( GetRedlineMode() ))
-        rDoc.DeleteRedline( *pNd );
+    if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
+        rDoc.DeleteRedline( *pNd, true, USHRT_MAX );
 
     // lag keine Selektion vor ??
     SwNodeIndex aIdx( *pNd );
@@ -232,16 +231,16 @@ void SwUndoInsSection::Redo( SwUndoIter& rUndoIter )
         pHistory->SetTmpEnd( pHistory->Count() );
 
     SwSectionNode* pSectNd = rDoc.GetNodes()[ nSectNodePos ]->GetSectionNode();
-    if( pRedlData && IsRedlineOn( GetRedlineMode() ))
+    if( pRedlData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
     {
-        SwRedlineMode eOld = rDoc.GetRedlineMode();
-        rDoc.SetRedlineMode_intern( eOld & ~REDLINE_IGNORE );
+        IDocumentRedlineAccess::RedlineMode_t eOld = rDoc.GetRedlineMode();
+        rDoc.SetRedlineMode_intern( eOld & ~IDocumentRedlineAccess::REDLINE_IGNORE );
 
         SwPaM aPam( *pSectNd->EndOfSectionNode(), *pSectNd, 1 );
-        rDoc.AppendRedline( new SwRedline( *pRedlData, aPam ));
+        rDoc.AppendRedline( new SwRedline( *pRedlData, aPam ), true);
         rDoc.SetRedlineMode_intern( eOld );
     }
-    else if( !( REDLINE_IGNORE & GetRedlineMode() ) &&
+    else if( !( IDocumentRedlineAccess::REDLINE_IGNORE & GetRedlineMode() ) &&
             rDoc.GetRedlineTbl().Count() )
     {
         SwPaM aPam( *pSectNd->EndOfSectionNode(), *pSectNd, 1 );
@@ -383,7 +382,7 @@ void SwUndoDelSection::Undo( SwUndoIter& rUndoIter )
              aInsertedSect.GetCondition().Len() > 0 )
         {
             SwCalc aCalc( rDoc );
-            rDoc.FldsToCalc( aCalc, pInsertedSectNd->GetIndex() );
+            rDoc.FldsToCalc(aCalc, pInsertedSectNd->GetIndex(), USHRT_MAX);
             bool bRecalcCondHidden =
                     aCalc.Calculate( aInsertedSect.GetCondition() ).GetBool() ? true : false;
             aInsertedSect.SetCondHidden( bRecalcCondHidden );
