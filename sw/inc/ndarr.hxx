@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndarr.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:12:26 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:26:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,6 @@ class Graphic;
 class GraphicObject;
 class UniString;
 class SwAttrSet;
-class SwCntntFrm;
 class SwCntntNode;
 class SwDoc;
 class SwGrfFmtColl;
@@ -81,7 +80,6 @@ class SwTableNode;
 class SwTblToTxtSaves;
 class SwTxtFmtColl;
 class SwTxtNode;
-class SwUndoInsNum;
 class SwUndoTblToTxt;
 class SwUndoTxtToTbl;
 struct SwPosition;
@@ -187,7 +185,7 @@ public:
 
     // ist das NodesArray das normale vom Doc? (nicht das UndoNds, .. )
     // Implementierung steht im doc.hxx (weil man dazu Doc kennen muss) !
-    inline BOOL IsDocNodes() const;
+    BOOL IsDocNodes() const;
 
     USHORT GetSectionLevel(const SwNodeIndex &rIndex) const;
     void Delete(const SwNodeIndex &rPos, ULONG nNodes = 1);
