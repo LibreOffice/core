@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8glsy.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:41:45 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:17:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,7 +153,7 @@ bool WW8Glossary::MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks,
 
     if( aStart < aDocEnd )
     {
-        SwTxtFmtColl* pColl = pD->GetTxtCollFromPoolSimple
+        SwTxtFmtColl* pColl = pD->GetTxtCollFromPool
             (RES_POOLCOLL_STANDARD, false);
         USHORT nGlosEntry = 0;
         SwCntntNode* pCNd = 0;
