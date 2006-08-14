@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndnum.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-09 10:07:13 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:04:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #ifndef _NODE_HXX
@@ -47,9 +46,6 @@
 #endif
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
-#endif
-#ifndef _NUMRULE_HXX
-#include <numrule.hxx>
 #endif
 #ifndef _FLDBAS_HXX
 #include <fldbas.hxx>           // UpdateFlds der KapitelNummerierung
@@ -161,7 +157,7 @@ void SwNodes::UpdateOutlineNode( const SwNode& rNd, BYTE nOldLevel,
         //JP 12.03.99: 63293 - Nodes vom RedlineBereich NIE aufnehmen
         ULONG nNd = rNd.GetIndex();
         if( nNd < GetEndOfRedlines().GetIndex() &&
-            nNd > GetEndOfRedlines().FindStartNode()->GetIndex() )
+            nNd > GetEndOfRedlines().StartOfSectionNode()->GetIndex() )
             return ;
 
         // jetzt noch alle nachfolgende Outline-Nodes updaten
@@ -202,6 +198,7 @@ void SwNodes::UpdateOutlineNode( const SwNode& rNd, BYTE nOldLevel,
             rTxtNd.SetLevel(rTxtNd.GetTxtColl()->GetOutlineLevel());
 
             rTxtNd.NumRuleChgd();
+
             //GetDoc()->SetNumRule(aPam, *GetDoc()->GetOutlineNumRule());
         }
         else
