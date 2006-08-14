@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tablepg.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:06:55 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:55:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _SWTABLEPG_HXX
 #define _SWTABLEPG_HXX
-
 #ifndef _SFXTABDLG_HXX //autogen
 #include <sfx2/tabdlg.hxx>
 #endif
@@ -55,7 +54,6 @@
 #include "swtypes.hxx"
 #include "textcontrolcombo.hxx"
 
-class SwTabCols;
 class SwWrtShell;
 class SwTableRep;
 
