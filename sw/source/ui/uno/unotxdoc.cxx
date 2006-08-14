@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.112 $
+ *  $Revision: 1.113 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 09:39:26 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 18:01:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 #include <cmdid.h>
@@ -46,9 +45,6 @@
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _SV_SETTINGS_HXX
-#include <vcl/settings.hxx>
 #endif
 #ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
@@ -134,12 +130,6 @@
 #ifndef _PAGEDESC_HXX //autogen
 #include <pagedesc.hxx>
 #endif
-#ifndef _UNOPRNMS_HXX //autogen
-#include <unoprnms.hxx>
-#endif
-#ifndef _UNOOBJ_HXX //autogen
-#include <unoobj.hxx>
-#endif
 #ifndef _TXTCMP_HXX //autogen
 #include <svtools/txtcmp.hxx>
 #endif
@@ -180,24 +170,8 @@
 #ifndef _COM_SUN_STAR_DOCUMENT_REDLINEDISPLAYTYPE_HPP_
 #include <com/sun/star/document/RedlineDisplayType.hpp>
 #endif
-#ifndef _COM_SUN_STAR_I18N_XFORBIDDENCHARACTERS_HPP_
-#include <com/sun/star/i18n/XForbiddenCharacters.hpp>
-#endif
-#ifndef _COM_SUN_STAR_VIEW_XSELECTIONSUPPLIER_HPP_
-#include <com/sun/star/view/XSelectionSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
-#include <com/sun/star/lang/Locale.hpp>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx>
-#endif
-
 #ifndef _SVXLINKMGR_HXX
 #include <svx/linkmgr.hxx>
-#endif
-#ifndef _SVX_UNOMID_HXX
-#include <svx/unomid.hxx>
 #endif
 #ifndef _SVX_UNOFILL_HXX_
 #include <svx/unofill.hxx>
@@ -207,13 +181,6 @@
 #endif
 #ifndef _SFX_PROGRESS_HXX
 #include <sfx2/progress.hxx>
-#endif
-#ifndef _VOS_MUTEX_HXX_ //autogen
-#include <vos/mutex.hxx>
-#endif
-
-#ifndef _SWTYPES_HXX
-#include <swtypes.hxx>
 #endif
 #ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
@@ -244,9 +211,6 @@
 #endif
 #ifndef _DOC_HXX //autogen
 #include <doc.hxx>
-#endif
-#ifndef _FLDBAS_HXX
-#include <fldbas.hxx>
 #endif
 #ifndef _FORBIDDENCHARACTERSTABLE_HXX
 #include <svx/forbiddencharacterstable.hxx>
@@ -2030,14 +1994,14 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
             sal_uInt16 eMode = pDocShell->GetDoc()->GetRedlineMode();
             if(WID_DOC_CHANGES_SHOW == pMap->nWID)
             {
-                eMode &= ~(REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE);
-                eMode |= REDLINE_SHOW_INSERT;
+                eMode &= ~(IDocumentRedlineAccess::REDLINE_SHOW_INSERT | IDocumentRedlineAccess::REDLINE_SHOW_DELETE);
+                eMode |= IDocumentRedlineAccess::REDLINE_SHOW_INSERT;
                 if( bSet )
-                    eMode |= REDLINE_SHOW_DELETE;
+                    eMode |= IDocumentRedlineAccess::REDLINE_SHOW_DELETE;
             }
             else if(WID_DOC_CHANGES_RECORD == pMap->nWID)
             {
-                eMode = bSet ? eMode|REDLINE_ON : eMode&~REDLINE_ON;
+                eMode = bSet ? eMode|IDocumentRedlineAccess::REDLINE_ON : eMode&~IDocumentRedlineAccess::REDLINE_ON;
             }
             pDocShell->GetDoc()->SetRedlineMode( eMode );
         }
@@ -2048,11 +2012,11 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
             if(aValue >>= aNew)
             {
                 SwDoc* pDoc = pDocShell->GetDoc();
-                pDoc->SetRedlinePasswd(aNew);
+                pDoc->SetRedlinePassword(aNew);
                 if(aNew.getLength())
                 {
                     sal_uInt16 eMode = pDoc->GetRedlineMode();
-                    eMode = eMode|REDLINE_ON;
+                    eMode = eMode|IDocumentRedlineAccess::REDLINE_ON;
                     pDoc->SetRedlineMode( eMode );
                 }
             }
@@ -2071,16 +2035,16 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
         case WID_DOC_REDLINE_DISPLAY:
         {
             sal_Int16 eRedMode = pDocShell->GetDoc()->GetRedlineMode();
-            eRedMode = eRedMode & (~REDLINE_SHOW_MASK);
+            eRedMode = eRedMode & (~IDocumentRedlineAccess::REDLINE_SHOW_MASK);
             sal_Int16 nSet;
             aValue >>= nSet;
             switch(nSet)
             {
                 case RedlineDisplayType::NONE: break;
-                case RedlineDisplayType::INSERTED: nSet |= REDLINE_SHOW_INSERT; break;
-                case RedlineDisplayType::REMOVED: nSet |= REDLINE_SHOW_DELETE;  break;
+                case RedlineDisplayType::INSERTED: nSet |= IDocumentRedlineAccess::REDLINE_SHOW_INSERT; break;
+                case RedlineDisplayType::REMOVED: nSet |= IDocumentRedlineAccess::REDLINE_SHOW_DELETE;  break;
                 case RedlineDisplayType::
-                        INSERTED_AND_REMOVED: nSet |= REDLINE_SHOW_INSERT|REDLINE_SHOW_DELETE;
+                        INSERTED_AND_REMOVED: nSet |= IDocumentRedlineAccess::REDLINE_SHOW_INSERT|IDocumentRedlineAccess::REDLINE_SHOW_DELETE;
                 break;
                 default: throw IllegalArgumentException();
             }
@@ -2156,7 +2120,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
         // --> OD 2006-03-21 #b6375613#
         case WID_APPLY_WORKAROUND_FOR_B6375613:
         {
-            sal_Bool bApplyWorkaroundForB6375613( false );
+            bool bApplyWorkaroundForB6375613( false );
             aValue >>= bApplyWorkaroundForB6375613;
             pDocShell->GetDoc()->SetApplyWorkaroundForB6375613( bApplyWorkaroundForB6375613 );
         }
@@ -2219,12 +2183,12 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
             sal_Bool bSet = sal_False;
             if(WID_DOC_CHANGES_SHOW == pMap->nWID)
             {
-                sal_uInt16 nMask = REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE;
+                sal_uInt16 nMask = IDocumentRedlineAccess::REDLINE_SHOW_INSERT | IDocumentRedlineAccess::REDLINE_SHOW_DELETE;
                 bSet = (eMode & nMask) == nMask;
             }
             else if(WID_DOC_CHANGES_RECORD == pMap->nWID)
             {
-                bSet = (eMode& REDLINE_ON)  != 0;
+                bSet = (eMode& IDocumentRedlineAccess::REDLINE_ON)  != 0;
             }
             aAny.setValue(&bSet, ::getBooleanCppuType());
         }
@@ -2232,7 +2196,7 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         case  WID_DOC_CHANGES_PASSWORD:
         {
             SwDoc* pDoc = pDocShell->GetDoc();
-            aAny <<= pDoc->GetRedlinePasswd();
+            aAny <<= pDoc->GetRedlinePassword();
         }
         break;
         case WID_DOC_AUTO_MARK_URL :
@@ -2247,13 +2211,13 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         case WID_DOC_REDLINE_DISPLAY:
         {
             sal_Int16 eRedMode = pDocShell->GetDoc()->GetRedlineMode();
-            eRedMode = eRedMode & REDLINE_SHOW_MASK;
+            eRedMode = eRedMode & IDocumentRedlineAccess::REDLINE_SHOW_MASK;
             sal_Int16 nRet = RedlineDisplayType::NONE;
-            if(REDLINE_SHOW_INSERT == eRedMode)
+            if(IDocumentRedlineAccess::REDLINE_SHOW_INSERT == eRedMode)
                 nRet = RedlineDisplayType::INSERTED;
-            else if(REDLINE_SHOW_DELETE == eRedMode)
+            else if(IDocumentRedlineAccess::REDLINE_SHOW_DELETE == eRedMode)
                 nRet = RedlineDisplayType::REMOVED;
-            else if(REDLINE_SHOW_MASK == eRedMode)
+            else if(IDocumentRedlineAccess::REDLINE_SHOW_MASK == eRedMode)
                 nRet = RedlineDisplayType::INSERTED_AND_REMOVED;
             aAny <<= nRet;
         }
@@ -2633,7 +2597,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
 
     SwDocShell *pDocShell = pDoc->GetDocShell();
         // #i38289
-        if(pDoc->IsBrowseMode())
+        if(pDoc->get(IDocumentSettingAccess::BROWSE_MODE))
         {
             pDocShell->ToggleBrowserMode(false,NULL);
         }
@@ -3498,7 +3462,7 @@ Sequence< OUString > SwXOutlineTarget::getSupportedServiceNames(void) throw( Run
  ---------------------------------------------------------------------------*/
 SwXDocumentPropertyHelper::SwXDocumentPropertyHelper(SwDoc& rDoc)
 : m_pDoc(&rDoc)
-, SvxUnoForbiddenCharsTable ( rDoc.GetForbiddenCharacterTbl() )
+, SvxUnoForbiddenCharsTable ( rDoc.getForbiddenCharacterTable() )
 {
 }
 /* -----------------------------17.01.01 16:06--------------------------------
