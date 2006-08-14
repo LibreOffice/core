@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txmsrt.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:22:31 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:46:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -88,17 +87,11 @@
 #ifndef _TXTATR_HXX
 #include <txtatr.hxx>
 #endif
-#ifndef _FMTCOL_HXX
-#include <fmtcol.hxx>
-#endif
 #ifndef _SWTABLE_HXX
 #include <swtable.hxx>
 #endif
 #ifndef _EXPFLD_HXX
 #include <expfld.hxx>
-#endif
-#ifndef _NUMRULE_HXX
-#include <numrule.hxx>
 #endif
 #ifndef _AUTHFLD_HXX
 #include <authfld.hxx>
