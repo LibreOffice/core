@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dump8a.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:43:33 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:20:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,10 +47,6 @@
 #include "ww8darr.hxx"
 #include "ww8dout.hxx"
 
-#if 0
-#define DELETEZ( p ) ( delete( p ), p = 0 )
-//#define LONG_MAX ( (long)0x7fffffff )
-#endif
 #define ASSERT( a, b ) ( (a)?(void)0:(void)(*pOut<<endl1<<"ASSERTION failed "<< __FILE__<<__LINE__<< b <<endl1) )
 
 
@@ -367,18 +363,6 @@ static void DumpBookLow()
         }else{
             *pOut << " aStarts.GetData() ging schief.";
         }
-
-#if 0       // gibt's im wirklichen Leben nicht
-        if( aEnds.Get( n, p ) ){
-            *pOut << " aEnds.iBkf: ";
-            if( p )
-                *pOut << *((USHORT*)p);
-            else
-                *pOut << "NULL-Ptr";
-        }else{
-            *pOut << " aEnds.Get() ging schief.";
-        }
-#endif
 
         *pOut << endl1;
         i++;
@@ -834,94 +818,6 @@ static void DumpItSmall( SvStream& rStrm, short nLen )
             *pOut << ',';
     }
 }
-
-//-----------------------------------------
-//      Hilfsroutinen : Foot-, Endnotes
-//-----------------------------------------
-
-
-#if 0
-void DumpText( WW8_CP nStartCp, long nTextLen, WW8ScannerBase* pBase, short nType, char* pName = "" );
-static void DumpFtnShort( short nId, long nPos, long nFieldLen )
-{
-    ASSERT( nId < 261 && nId > 255, "Falsche Id" );
-
-    *pOut << '<' << hex << nPos << dec << ' ';
-
-    *pOut << 'F' << nId << ' ' << WW8GetSprmDumpInfo( nId ).pName << ' ';
-/*
-    if ( WW8GetSprmDumpInfo( nId ).pOutFnc ){
-        WW8GetSprmDumpInfo( nId ).pOutFnc( nId, nFieldLen );    // Rufe AusgabeFunktion
-    }
-*/
-    *pOut << '>' << endl1;
-
-    pPLCFMan->SavePLCF();
-    WW8PLCFMan* pOldPLCFMan = pPLCFMan;
-
-    pSBase->pChpPLCF->SeekPos( nPos );
-    pSBase->pPapPLCF->SeekPos( nPos );
-
-    DumpText( nPos, nFieldLen, pSBase, MAN_FTN, WW8GetSprmDumpInfo( nId ).pName );
-
-    indent( *pOut, *xStrm );
-
-    pPLCFMan = pOldPLCFMan;             // Attributverwaltung restoren
-    pPLCFMan->RestorePLCF();
-}
-#endif
-
-//-----------------------------------------
-//      Hilfsroutinen : SPRMS
-//-----------------------------------------
-
-
-/*
-#if 0
-static short DumpSprmShort( short nSprmsLen )
-{
-    long nSprmPos = xStrm->Tell();
-
-    *pOut << '<' << hex << nSprmPos << dec << ' ';
-
-    BYTE x[512];
-    xStrm->Read( x, 512 );                  // Token und folgende lesen
-    BYTE i = x[0];
-
-    nSprmsLen -= WW8GetSprmSizeBrutto( nVersion, x ); // so viele Sprm-Bytes folgen noch nach diesem Sprm
-
-    if( nSprmsLen < 0 )
-        *pOut << "!UEberhang um " << -nSprmsLen << " Bytes!" << endl1;
-
-    *pOut << 'A' << (USHORT)i  << ' ';
-    *pOut << aSprmTab[i].pName << ' ';
-
-    xStrm->Seek( nSprmPos + 1 + WW8SprmDataOfs( i ) );// gehe zum eigentlichen
-                                                     // Inhalt
-    if ( aSprmTab[i].pOutFnc ){
-        WW8GetSprmDumpInfo( nId ).pOutFnc( i, WW8GetSprmSizeNetto( x ) );// Rufe AusgabeFunktion
-    }else{
-        DumpItSmall( WW8GetSprmSizeNetto( x ) );        // oder Dumper
-    }
-    *pOut << '>';
-
-    return nSprmsLen;
-}
-
-static void DumpSprmsShort( short nLen )
-{
-    if( nLen <= 1 || xStrm->IsEof() ){
-        return;
-    }
-    while ( nLen > 1 ){
-        nLen = DumpSprmShort( nLen );
-    }
-}
-#endif
-*/
-
-
-
 
 static short DumpSprm( BYTE nVersion, SvStream& rSt, short nSprmsLen )
 {
@@ -1522,46 +1418,6 @@ static void DumpPLCF( long nPos, long nLen, ePLCFT ePlc )
     end( *pOut, *xTableStream ) << "Plcx." << NameTab[ePlc] << endl1 << endl1;
 }
 
-//-----------------------------------------------------
-//  PLCF.CHPX, PLCF.PAPX unter  Benutzung von PLCF_Fkp
-//-----------------------------------------------------
-#if 0
-static void DumpPLCF2( long nPos, long nLen, ePlcT ePlc )
-{
-    *pOut << 'T' << hex6 << nPos << dec2 <<  ' ' << indent1 << begin1;
-    *pOut << "Plcx." << NameTab[ePlc] << endl1;
-
-    PLCF* pPLCF;
-    switch( ePlc ){
-    case SEP: pPLCF = new PLCF_Sepx( nPos, nLen, ePlc );
-              break;
-    default:  pPLCF = new PLCF_Fkp( nPos, nLen, ePlc );
-              break;
-    }
-
-    while(1){
-        long nSt, nE;
-        short nL;
-
-        WW8_CP nP = pPLCF->WhereNext();
-        pPLCF->SeekNextSprms( nSt, nE, nL );            // wo sind naechste Sprms
-
-        if ( nSt == LONG_MAX )
-            break;                              // fertig
-
-        *pOut << "       " << indent1 << "Cp: " << hex << nP <<" Cp: " << nSt << ".." << nE << dec;
-
-        if( nL ){
-            *pOut << ", Len: " << nL << endl1;
-            DumpSprms( *xStrm, nL );
-        }else{
-            *pOut << ", No Attribute" << endl1;
-        }
-    }
-    end( *pOut, *xStrm ) << "Plcx." << NameTab[ePlc] << endl1 << endl1;
-    DELETEZ( pPLCF );
-}
-#endif
 //-----------------------------------------
 //              Text ohne Attribute
 //-----------------------------------------
@@ -1636,136 +1492,6 @@ BOOL DumpChar( BYTE c )
         }
     }
 }
-
-#if 0
-void DumpText2( long nTextStart, long nTextLen, long nPlcPos, long nPlcLen, ePlcT ePlc )
-{
-    long l;
-    BYTE c;
-
-    PLCF aPLCF( nPlcPos, nPlcLen, ePlc );
-    long nNxStart = aPLCF.WhereNext();
-    long nNxEnd = LONG_MAX;
-
-    xStrm->Seek( nTextStart );
-
-    begin( *pOut, *xStrm ) << "Text" << endl1;
-    indent( *pOut, xStrm );
-    for (l=0; l<nTextLen; l++){
-
-        if( nTextStart + l == nNxStart ){
-            long nOld = xStrm->Tell();
-            short nL;
-
-            aPLCF.SeekNext( nNxStart, nNxEnd, nL );         // wo ist naechstes Attribut
-            if( nL ){
-                *pOut << '<';
-                DumpSprmsShort( nL );
-                *pOut << '>';
-            }else{
-                *pOut << "<No Attribute>";
-            }
-
-            nNxStart = aPLCF.WhereNext();
-            xStrm->Seek( nOld );
-        }
-        if( nTextStart + l == nNxEnd )
-            *pOut << "<End Attribute>";
-
-        xStrm->Read( &c, sizeof(c) );
-        if ( DumpChar( c ) )
-        {
-            *pOut << endl1;
-            indent( *pOut, xStrm );
-        }
-    }
-    *pOut << endl1;
-    end( *pOut, *xStrm ) << "Text" << endl1 << endl1;
-}
-#endif
-#if 0
-long DumpTxtAttr( WW8PLCFMan& rMan, BOOL& bNl )
-{
-    long nPos, nNext, nOld = xStrm->Tell();
-    short nId;
-    long nL;
-    BYTE nFlags;
-
-    BOOL b = rMan.SeekNext( nPos, nL, nId, nFlags );    // gehe zu Attribut
-
-    if( nFlags & MAN_MASK_NEW_SEP )             // neue Section
-        *pOut << "<Section Break>";
-
-/*  if( nFlags & MAN_MASK_NEW_PAP )             // neuer Absatz
-        *pOut << "<ParaStyle:" << pPLCFMan->GetColl( MAN_NUM_PARACOLL ) << '>' << endl1;
-*/
-    if( nId != -1 && nId != -11 ){                      // leere Attrs ignorieren
-
-        if ( bNl )
-            *pOut << hex6 << nOld << ' ' << indent1;
-        bNl = FALSE;
-
-        if( nId < 256 ){
-            if( b ){                                    // WW-Attribute
-                if( nL >= 0 ){                          // Attr-Anfang
-                    xStrm->Seek( nPos );
-                    DumpSprmShort( (short)nL );
-                }else {
-                    *pOut << "<A" << nId << " No Attr>";
-                }
-            }else{                                      // Attr-Ende
-                *pOut << "<End A" << nId << '>';
-            }
-        }else if( nId < 260 ){
-            DumpFtnShort( nId, nPos, nL );            // Footnotes u.ae.
-        }else{
-            *pOut << "<Field>";
-        }
-    }
-
-    nNext = rMan.WhereNext();
-    xStrm->Seek( nOld );
-    return nNext;
-}
-
-void DumpText( WW8_CP nStartCp, long nTextLen, WW8ScannerBase* pBase, short nType, char* pName )
-{
-    pPLCFMan = new WW8PLCFMan( pBase, nType );
-
-    long l;
-    BYTE c;
-
-    long nNext = pPLCFMan->WhereNext();
-
-    xStrm->Seek( WW8Cp2Fc( nStartCpp, pWwFib->fcMin, 8 != pWwFib->nVersion ) );
-
-    begin( *pOut, *xStrm ) << pName << "Text" << endl1;
-    BOOL bNl = TRUE;
-    for (l=nStartCp; l<nStartCp+nTextLen; l++){
-
-        while( l >= nNext )
-            nNext = DumpTxtAttr( *pPLCFMan, bNl );
-
-        if ( bNl ) indent( *pOut, xStrm );
-
-        xStrm->Read( &c, sizeof(c) );
-        bNl = DumpChar( c );
-        if ( bNl ){
-            *pOut << "<ParaStyle:" << pPLCFMan->GetColl( MAN_NUM_PARACOLL ) << '>' << endl1;
-        }
-    }
-
-    while( l >= nNext )
-        nNext = DumpTxtAttr( *pPLCFMan, bNl );
-
-    if( !bNl )
-        *pOut << endl1;
-
-    end( *pOut, *xStrm ) << pName << "Text" << endl1;
-
-    DELETEZ( pPLCFMan );
-}
-#endif
 
 //-----------------------------------------
 //      Header / Footer
@@ -2906,16 +2632,6 @@ int DoConvert( const String& rName, BYTE nVersion )
 
     if ( pWwFib->nFibError )
         return 1;
-
-#if 0
-    *pOut << "Eingabe-Dateiname : \"" << cName << '"' << endl1;
-    if ( cOutName[0] == 0 )
-        *pOut << "Ausgabe auf \"cout\"" << endl1;
-    else
-        *pOut << "Ausgabe-Dateiname : \"" << cOutName << '"' << endl1;
-    *pOut << endl1;
-#endif
-
 
     // Nachdem wir nun den FIB eingelesen haben, wissen wir ja,
     // welcher Table-Stream gueltig ist.
