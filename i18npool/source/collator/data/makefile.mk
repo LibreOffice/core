@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2006-01-31 18:36:49 $
+#   last change: $Author: hr $ $Date: 2006-08-14 16:21:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -67,5 +67,9 @@ LIB1OBJFILES=$(SHL1OBJS)
 # --- Targets ------------------------------------------------------
 .INCLUDE :  target.mk
 
-$(MISC)$/collator_%.cxx : %.txt $(BIN)$/gencoll_rule
+$(MISC)$/collator_%.cxx : %.txt
     +$(BIN)$/gencoll_rule $< $@ $*
+
+# ugly - is this dependency really required here?
+$(foreach,i,$(shell $(FIND) . -name "*.txt") $(MISC)$/dict_$(i:b).cxx) : $(BIN)$/gencoll_rule
+
