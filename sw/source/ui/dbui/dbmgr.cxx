@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 09:39:02 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:30:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #if STLPORT_VERSION>=321
 #include <cstdarg>
 #endif
@@ -88,9 +87,6 @@
 #ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
 #endif
-#ifndef _FILEDLGHELPER_HXX
-#include <sfx2/filedlghelper.hxx>
-#endif
 #ifndef _DBCONFIG_HXX
 #include <dbconfig.hxx>
 #endif
@@ -137,9 +133,6 @@
 #ifndef _SFX_PROGRESS_HXX //autogen
 #include <sfx2/progress.hxx>
 #endif
-#ifndef _SFX_DOCFILT_HACK_HXX //autogen
-#include <sfx2/docfilt.hxx>
-#endif
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
 #endif
@@ -147,9 +140,6 @@
 #include <goodies/mailenum.hxx>
 #endif
 #include <cmdid.h>
-#ifndef _SWTYPES_HXX
-#include <swtypes.hxx>
-#endif
 #ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
 #endif
@@ -177,9 +167,6 @@
 #ifndef _FLDDAT_HXX
 #include <flddat.hxx>
 #endif
-#ifndef _SWMODULE_HXX
-#include <swmodule.hxx>
-#endif
 #ifndef _MODCFG_HXX
 #include <modcfg.hxx>
 #endif
@@ -204,10 +191,6 @@
 #ifndef _SWUNOHELPER_HXX
 #include <swunohelper.hxx>
 #endif
-#ifndef _FMTHDFT_HXX
-#include <fmthdft.hxx>
-#endif
-
 #ifndef _DBUI_HRC
 #include <dbui.hrc>
 #endif
@@ -220,21 +203,11 @@
 #ifndef _MMCONFIGITEM_HXX
 #include <mmconfigitem.hxx>
 #endif
-
 #ifndef _SFXREQUEST_HXX
 #include <sfx2/request.hxx>
 #endif
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
-#include <com/sun/star/container/XNameAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDATASOURCE_HPP_
-#include <com/sun/star/sdbc/XDataSource.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XROWSET_HPP_
 #include <com/sun/star/sdbc/XRowSet.hpp>
@@ -254,17 +227,8 @@
 #ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SDBC_XSTATEMENT_HPP_
-#include <com/sun/star/sdbc/XStatement.hpp>
-#endif
 #ifndef _COM_SUN_STAR_SDBC_RESULTSETTYPE_HPP_
 #include <com/sun/star/sdbc/ResultSetType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
-#include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
-#include <com/sun/star/beans/PropertyValue.hpp>
 #endif
 #ifndef _COM_SUN_STAR_MAIL_MAILATTACHMENT_HPP_
 #include <com/sun/star/mail/MailAttachment.hpp>
@@ -293,9 +257,6 @@
 #ifndef _SVX_LANGITEM_HXX
 #include <svx/langitem.hxx>
 #endif
-#ifndef _SVX_UNOMID_HXX
-#include <svx/unomid.hxx>
-#endif
 #ifndef _NUMUNO_HXX
 #include <svtools/numuno.hxx>
 #endif
@@ -311,9 +272,6 @@
 #endif
 #ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
 #include <svx/dataaccessdescriptor.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx>
 #endif
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
@@ -335,6 +293,7 @@
 #endif
 #include <osl/file.hxx>
 #include <swabstdlg.hxx> //CHINA001
+#include <fmthdft.hxx>
 #include <dbui.hrc> //CHINA001
 #include <envelp.hrc> //CHINA001
 #include <memory>
@@ -406,15 +365,18 @@ bool lcl_getCountFromResultSet( sal_Int32& rCount, const uno::Reference<XResultS
 // #122799# copy compatibility options
 void lcl_CopyCompatibilityOptions( SwWrtShell& rSourceShell, SwWrtShell& rTargetShell)
 {
-    rTargetShell.SetParaSpaceMax( rSourceShell.IsParaSpaceMax(), rSourceShell.IsParaSpaceMaxAtPages() );
-    rTargetShell.SetTabCompat( rSourceShell.IsTabCompat() );
-    rTargetShell.SetAddExtLeading( rSourceShell.IsAddExtLeading() );
-    rTargetShell.SetUseVirtualDevice( rSourceShell.IsUseVirtualDevice() );
-    rTargetShell.SetAddParaSpacingToTableCells( rSourceShell.IsAddParaSpacingToTableCells() );
-    rTargetShell.SetUseFormerLineSpacing( rSourceShell.IsFormerLineSpacing() );
-    rTargetShell.SetUseFormerObjectPositioning( rSourceShell.IsFormerObjectPositioning() );
-    rTargetShell.SetConsiderWrapOnObjPos( rSourceShell.ConsiderWrapOnObjPos() );
-    rTargetShell.SetUseFormerTextWrapping( rSourceShell.IsFormerTextWrapping() );
+    IDocumentSettingAccess* pIDsa = rSourceShell.getIDocumentSettingAccess();
+
+    rTargetShell.SetParaSpaceMax( pIDsa->get(IDocumentSettingAccess::PARA_SPACE_MAX));
+    rTargetShell.SetParaSpaceMaxAtPages(pIDsa->get(IDocumentSettingAccess::PARA_SPACE_MAX_AT_PAGES));
+    rTargetShell.SetTabCompat( pIDsa->get(IDocumentSettingAccess::TAB_COMPAT));
+    rTargetShell.SetAddExtLeading( pIDsa->get(IDocumentSettingAccess::ADD_EXT_LEADING));
+    rTargetShell.SetUseVirDev( pIDsa->get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE));
+    rTargetShell.SetAddParaSpacingToTableCells( pIDsa->get(IDocumentSettingAccess::ADD_PARA_SPACING_TO_TABLE_CELLS));
+    rTargetShell.SetUseFormerLineSpacing( pIDsa->get(IDocumentSettingAccess::OLD_LINE_SPACING));
+    rTargetShell.SetUseFormerObjectPositioning( pIDsa->get(IDocumentSettingAccess::USE_FORMER_OBJECT_POS));
+    rTargetShell.SetConsiderWrapOnObjPos( pIDsa->get(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION));
+    rTargetShell.SetUseFormerTextWrapping( pIDsa->get(IDocumentSettingAccess::USE_FORMER_TEXT_WRAPPING));
 }
 }
 /* -----------------09.12.2002 12:35-----------------
@@ -839,12 +801,6 @@ String  lcl_FindColumn(const String& sFormatStr,USHORT  &nUsedPos, BYTE &nSepara
 inline String lcl_GetDBInsertMode( const SwDBData& rData )
 {
     return aEmptyStr;
-#if 0
-//JP 13.11.00: must be change to the new configuration
-    return  SFX_APP()->GetIniManager()->Get( String::CreateFromAscii(
-                RTL_CONSTASCII_STRINGPARAM( "DataBaseFormatInfo" )),
-                FALSE, FALSE, sDBName );
-#endif
 }
 
 
@@ -1090,7 +1046,7 @@ BOOL SwNewDBMgr::MergePrint( SwView& rView,
     SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
     pModOpt->SetSinglePrintJob(rOpt.IsPrintSingleJobs());
 
-    SfxPrinter *pPrt = pSh->GetPrt();
+    SfxPrinter *pPrt = pSh->getIDocumentDeviceAccess()->getPrinter( false );
     Link aSfxSaveLnk = pPrt->GetEndPrintHdl();
     if( rOpt.IsPrintSingleJobs()  )
         pPrt->SetEndPrintHdl( Link() );
@@ -1191,9 +1147,10 @@ BOOL SwNewDBMgr::MergePrint( SwView& rView,
 
     if( rOpt.IsPrintSingleJobs() )
     {
-        pSh->GetPrt()->SetEndPrintHdl( aSfxSaveLnk );
-        if ( !bUserBreak && !pSh->GetPrt()->IsJobActive() )     //Schon zu spaet?
-            aSfxSaveLnk.Call( pSh->GetPrt() );
+        SfxPrinter* pTmpPrinter = pSh->getIDocumentDeviceAccess()->getPrinter( true );
+        pTmpPrinter->SetEndPrintHdl( aSfxSaveLnk );
+        if ( !bUserBreak && !pTmpPrinter->IsJobActive() )        //Schon zu spaet?
+            aSfxSaveLnk.Call( pTmpPrinter );
     }
 
     rOpt.nMergeCnt = 0;
@@ -1226,7 +1183,7 @@ BOOL SwNewDBMgr::MergePrintDocuments( SwView& rView,
     rOpt.nMergeCnt = 0;
     rOpt.SetPrintSingleJobs( sal_True );
 
-    SfxPrinter *pPrt = pSh->GetPrt();
+    SfxPrinter *pPrt = pSh->getIDocumentDeviceAccess()->getPrinter( false );
     Link aSfxSaveLnk = pPrt->GetEndPrintHdl();
     if( rOpt.IsPrintSingleJobs()  )
         pPrt->SetEndPrintHdl( Link() );
@@ -1345,9 +1302,10 @@ BOOL SwNewDBMgr::MergePrintDocuments( SwView& rView,
 
     if( rOpt.IsPrintSingleJobs() )
     {
-        pSh->GetPrt()->SetEndPrintHdl( aSfxSaveLnk );
-        if ( !bUserBreak && !pSh->GetPrt()->IsJobActive() )     //Schon zu spaet?
-            aSfxSaveLnk.Call( pSh->GetPrt() );
+        SfxPrinter* pTmpPrinter = pSh->getIDocumentDeviceAccess()->getPrinter( true );
+        pTmpPrinter->SetEndPrintHdl( aSfxSaveLnk );
+        if ( !bUserBreak && !pTmpPrinter->IsJobActive() )     //Schon zu spaet?
+            aSfxSaveLnk.Call( pTmpPrinter );
     }
 
     rOpt.nMergeCnt = 0;
@@ -1579,7 +1537,7 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                             SwNewDBMgr* pOldDBMgr = pWorkDoc->GetNewDBMgr();
                             pWorkDoc->SetNewDBMgr( this );
                             SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE, xWorkDocSh));
-                            pWorkDoc->UpdateFlds(0);
+                            pWorkDoc->UpdateFlds(NULL, false);
                             SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE_FINISHED, xWorkDocSh));
 
                             // alle versteckten Felder/Bereiche entfernen
