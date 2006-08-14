@@ -4,9 +4,9 @@
  *
  *  $RCSfile: w1filter.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:40:33 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:13:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifdef PCH
 #include "filt_pch.hxx"
 #endif
@@ -50,9 +49,6 @@
 #endif
 #ifndef _SFXDOCINF_HXX //autogen
 #include <sfx2/docinf.hxx>
-#endif
-#ifndef _STREAM_HXX //autogen
-#include <tools/stream.hxx>
 #endif
 #ifndef _GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
@@ -99,9 +95,6 @@
 #ifndef _SVX_ESCPITEM_HXX //autogen
 #include <svx/escpitem.hxx>
 #endif
-#ifndef _SVX_WGHTITEM_HXX //autogen
-#include <svx/wghtitem.hxx>
-#endif
 #ifndef _SVX_TSTPITEM_HXX //autogen
 #include <svx/tstpitem.hxx>
 #endif
@@ -109,10 +102,6 @@
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
 #endif
-#ifndef _URLOBJ_HXX
-#include <tools/urlobj.hxx>
-#endif
-
 #ifndef _FMTFSIZE_HXX //autogen
 #include <fmtfsize.hxx>
 #endif
@@ -920,8 +909,7 @@ oncemore:
                 String aName( String::CreateFromAscii(
                                         RTL_CONSTASCII_STRINGPARAM( "Ww" )));
                 aName += String::CreateFromInt32( nPlcIndex );
-                SwFieldType* pFT = rOut.GetDoc().GetFldType( RES_SETEXPFLD,
-                                                            aName);
+                SwFieldType* pFT = rOut.GetDoc().GetFldType( RES_SETEXPFLD, aName, false);
                 if (pFT == 0)
                 {
                     SwSetExpFieldType aS(&rOut.GetDoc(), aName, GSE_FORMULA);
