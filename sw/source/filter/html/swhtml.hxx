@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swhtml.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:36:56 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:07:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifndef _SWHTML_HXX
 #define _SWHTML_HXX
 
@@ -52,55 +51,44 @@
 #endif
 #include <svtools/svstdarr.hxx>
 #endif
-
 #ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
 #endif
-
 #ifndef _SFXHTML_HXX //autogen
 #include <sfx2/sfxhtml.hxx>
 #endif
-
 #ifndef _SFXMACITEM_HXX //autogen
 #include <svtools/macitem.hxx>
 #endif
-
-#ifndef _FMTORNT_HXX //autogen
-#include <fmtornt.hxx>
-#endif
-
 #ifndef _SVX_SVXENUM_HXX //autogen
 #include <svx/svxenum.hxx>
 #endif
-
+#ifndef _FMTORNT_HXX //autogen
+#include <fmtornt.hxx>
+#endif
 #ifndef _COM_SUN_STAR_DRAWING_XSHAPE_HPP_
 #include <com/sun/star/drawing/XShape.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FORM_XFORMCOMPONENT_HPP_
 #include <com/sun/star/form/XFormComponent.hpp>
 #endif
+#ifndef _PAM_HXX
+#include <pam.hxx>
+#endif
 
-#include "doc.hxx"
-#include "pam.hxx"
 #include "calbck.hxx"
-
 #include "htmlvsh.hxx"
 
 class SfxMedium;
 class SdrObject;
 class SvxMacroTableDtor;
 class SvStringsDtor;
-
+class SwDoc;
+class SwPaM;
 class ViewShell;
-
 class SwStartNode;
-class SwTxtNode;
 class SwFmtColl;
-class SwTxtFmtColl;
-class SwFmtFld;
-class SwFmtINetFmt;
 class SwField;
-class _HTMLTableContext;
 class SwHTMLForm_Impl;
 class SwApplet_Impl;
 struct SwHTMLFootEndNote_Impl;
@@ -582,9 +570,6 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
 
     SwHTMLNumRuleInfo& GetNumInfo() { return *pNumRuleInfo; }
     void SetNodeNum( sal_uInt8 nLevel );
-#ifndef NUM_RELSPACE
-    void UpdateNumRuleInTable();
-#endif
 
     // Verwalten von Absatz-Vorlagen
 
