@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srcview.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-10 10:12:28 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:56:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #ifndef _HINTIDS_HXX
@@ -52,13 +51,9 @@
 #ifndef _COM_SUN_STAR_I18N_TRANSLITERATIONMODULES_HPP_
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
-#include <com/sun/star/lang/Locale.hpp>
-#endif
 #ifndef  _COM_SUN_STAR_UI_DIALOGS_TEMPLATEDESCRIPTION_HPP_
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #endif
-
 #ifndef _UNOTOOLS_TEMPFILE_HXX
 #include <unotools/tempfile.hxx>
 #endif
@@ -125,9 +120,6 @@
 #ifndef _SFX_PRNMON_HXX //autogen
 #include <sfx2/prnmon.hxx>
 #endif
-#ifndef _SFX_PRINTER_HXX //autogen
-#include <sfx2/printer.hxx>
-#endif
 #ifndef _SFXDOCINF_HXX //autogen
 #include <sfx2/docinf.hxx>
 #endif
@@ -152,14 +144,9 @@
 #ifndef _UNO_LINGU_HXX
 #include "svx/unolingu.hxx"
 #endif
-#ifndef _RTL_TENCINFO_H
-#include <rtl/tencinfo.h>
-#endif
-
 #ifndef _SFXHTML_HXX
 #include <sfx2/sfxhtml.hxx>
 #endif
-
 #ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
 #endif
@@ -218,10 +205,6 @@
 #ifndef _FILEDLGHELPER_HXX
 #include <sfx2/filedlghelper.hxx>
 #endif
-#ifndef _SVX_HTMLCFG_HXX
-#include <svx/htmlcfg.hxx>
-#endif
-
 #define SwSrcView
 #define SearchSettings
 #define _ExecSearch Execute
@@ -861,7 +844,7 @@ USHORT SwSrcView::SetPrinter(SfxPrinter* pNew, USHORT nDiffFlags )
     SwDocShell* pDocSh = GetDocShell();
     if ( (SFX_PRINTER_JOBSETUP | SFX_PRINTER_PRINTER) & nDiffFlags )
     {
-        pDocSh->GetDoc()->SetPrt( pNew );
+        pDocSh->GetDoc()->setPrinter( pNew, true, true );
         if ( nDiffFlags & SFX_PRINTER_PRINTER )
             pDocSh->SetModified();
     }
@@ -984,7 +967,7 @@ ErrCode SwSrcView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg,
 
 SfxPrinter* SwSrcView::GetPrinter( BOOL bCreate )
 {
-    return  GetDocShell()->GetDoc()->GetPrt( bCreate );
+    return  GetDocShell()->GetDoc()->getPrinter( bCreate );
 }
 
 /*--------------------------------------------------------------------
