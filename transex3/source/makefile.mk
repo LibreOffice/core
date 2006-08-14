@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.41 $
+#   $Revision: 1.42 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-19 17:23:55 $
+#   last change: $Author: hr $ $Date: 2006-08-14 17:11:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,8 @@ OBJFILES=   			\
     $(OBJ)$/xmlparse.obj    \
     $(OBJ)$/helpmerge.obj   \
     $(OBJ)$/helpex.obj      \
+    $(OBJ)$/file.obj        \
+    $(OBJ)$/directory.obj   \
     $(OBJ)$/hw2fw.obj
 
 LIB1TARGET= $(LB)$/transex.lib
@@ -73,6 +75,8 @@ LIB1OBJFILES=        $(OBJ)$/export.obj      \
         $(OBJ)$/export2.obj     \
         $(OBJ)$/merge.obj   \
         $(OBJ)$/srciter.obj             \
+        $(OBJ)$/file.obj \
+        $(OBJ)$/directory.obj     \
         $(OBJ)$/utf8conv.obj    \
         $(OBJ)$/hw2fw.obj
 
@@ -83,15 +87,6 @@ APP1TARGET=     $(TARGET)
 #APP1OBJS=   $(OBJ)$/src_yy.obj
 APP1OBJS=   $(OBJ)$/src_yy_wrapper.obj
 
-.IF "$(GUI)"=="WNT"
-BOOTSTRP2 = bootstrp2.lib
-.ELSE
-BOOTSTRP2 = -lbootstrp2
-.ENDIF
-.IF "$(OS)"!="MACOSX"
-APP1STDLIBS+= $(BTSTRPLIB) $(BOOTSTRP2)
-.ENDIF
-
 APP1STDLIBS+= \
             $(TOOLSLIB) \
             $(VOSLIB) \
@@ -99,7 +94,6 @@ APP1STDLIBS+= \
 
 .IF "$(OS)"=="MACOSX"
 # static libs at end for OS X
-APP1STDLIBS+= $(BTSTRPLIB) $(BOOTSTRP2)
 .ENDIF
 
 APP1LIBS+=	$(LB)$/$(PRJNAME).lib
@@ -109,20 +103,17 @@ APP1DEPN=   $(OBJ)$/src_yy_wrapper.obj $(LB)$/$(PRJNAME).lib
 #APP2TARGET= termilo
 #APP2STACK=  16000
 #APP2OBJS=   $(OBJ)$/termino.obj
-#APP2STDLIBS=$(TOOLSLIBST) $(L)$/bootstrp.lib
 
 APP2TARGET= helpex
 APP2OBJS= $(OBJ)$/helpmerge.obj  $(OBJ)$/xmlparse.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj $(OBJ)$/merge.obj $(OBJ)$/helpex.obj $(OBJ)$/hw2fw.obj
 
 .IF "$(OS)"!="MACOSX"
-APP2STDLIBS+= $(BTSTRPLIB)
 .ENDIF
 
 APP2STDLIBS+=$(SALLIB) $(EXPATASCII3RDLIB) $(TOOLSLIB) $(VOSLIB)
 
 .IF "$(OS)"=="MACOSX"
 # static libs at end for OS X
-APP2STDLIBS+= $(BTSTRPLIB)
 .ENDIF
 
 # extractor and merger for *.lng and *.lng
@@ -130,7 +121,7 @@ APP3TARGET= ulfex
 APP3OBJS=   $(OBJ)$/lngmerge.obj $(OBJ)$/hw2fw.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/lngex.obj $(OBJ)$/utf8conv.obj
 
 .IF "$(OS)"!="MACOSX"
-APP3STDLIBS+= $(BTSTRPLIB)
+#APP3STDLIBS+= $(BTSTRPLIB)
 .ENDIF
 APP3STDLIBS+= \
             $(TOOLSLIB) \
@@ -138,14 +129,12 @@ APP3STDLIBS+= \
             $(SALLIB)
 .IF "$(OS)"=="MACOSX"
 # static libs at end for OS X
-APP3STDLIBS+= $(BTSTRPLIB)
 .ENDIF
 
 # encoding converter for *.gsi
 APP4TARGET= gsiconv
 APP4OBJS=   $(OBJ)$/utf8conv.obj $(OBJ)$/gsiconv.obj
 APP4STDLIBS+= \
-            $(BTSTRPLIB) \
             $(TOOLSLIB) \
             $(VOSLIB) \
             $(SALLIB)
@@ -154,7 +143,6 @@ APP4STDLIBS+= \
 APP5TARGET= gsicheck
 APP5OBJS=   $(OBJ)$/gsicheck.obj $(OBJ)$/tagtest.obj
 APP5STDLIBS+= \
-            $(BTSTRPLIB) \
             $(TOOLSLIB) \
             $(VOSLIB) \
             $(SALLIB)
@@ -164,7 +152,7 @@ APP6TARGET= cfgex
 APP6OBJS=   $(OBJ)$/cfgmerge.obj $(OBJ)$/cfg_yy_wrapper.obj $(OBJ)$/hw2fw.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj
 
 .IF "$(OS)"!="MACOSX"
-APP6STDLIBS+= $(BTSTRPLIB)
+#APP6STDLIBS+= $(BTSTRPLIB)
 .ENDIF
 
 APP6STDLIBS+= \
@@ -174,7 +162,6 @@ APP6STDLIBS+= \
 
 .IF "$(OS)"=="MACOSX"
 # static libs at end for OS X
-APP6STDLIBS+= $(BTSTRPLIB)
 .ENDIF
 
 # extractor and merger for *.xrm
@@ -182,7 +169,6 @@ APP7TARGET= xrmex
 APP7OBJS=   $(OBJ)$/xrmmerge.obj $(OBJ)$/xrm_yy_wrapper.obj $(OBJ)$/hw2fw.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj
 
 .IF "$(OS)"!="MACOSX"
-APP7STDLIBS+= $(BTSTRPLIB)
 .ENDIF
 
 APP7STDLIBS+= \
@@ -192,20 +178,7 @@ APP7STDLIBS+= \
 
 .IF "$(OS)"=="MACOSX"
 # static libs at end for OS X
-APP7STDLIBS+= $(BTSTRPLIB)
 .ENDIF
-
-#APP8TARGET=  sdfupdate
-#APP8OBJS= $(OBJ)$/sdfupdate.obj
-#APP8STDLIBS+= \
-#            $(TOOLSLIB) \
-#            $(VOSLIB) \
-#            $(SALLIB)
-
-#APP8TARGET= xgfconv
-#APP8STACK=  16000
-#APP8OBJS=   $(OBJ)$/utf8conv.obj $(OBJ)$/xgfconv.obj $(OBJ)$/export2.obj
-#APP8STDLIBS=$(BTSTRPLIB) $(TOOLSLIBST)
 
 # encoding converter for text files
 APP8TARGET= txtconv
@@ -215,25 +188,14 @@ APP8STDLIBS=$(TOOLSLIB) $(SALLIB)
 
 # localizer for l10n framework
 APP9TARGET= localize_sl
-APP9OBJS=   $(OBJ)$/localize.obj $(OBJ)$/utf8conv.obj $(OBJ)$/srciter.obj $(OBJ)$/export2.obj
-
-.IF "$(OS)"!="MACOSX"
-.IF "$(GUI)"=="UNX"
-APP9STDLIBS+= $(BTSTRPLIB) -lbootstrp2
-.ELSE
-APP9STDLIBS+= $(BTSTRPLIB) $(LIBPRE) bootstrp2.lib
-.ENDIF
-.ENDIF
+EXCEPTIONSFILES=                            \
+                    $(OBJ)$/localize.obj
+APP9OBJS=   $(OBJ)$/localize.obj $(OBJ)$/utf8conv.obj $(OBJ)$/srciter.obj $(OBJ)$/export2.obj $(OBJ)$/file.obj $(OBJ)$/directory.obj
 
 APP9STDLIBS+= \
             $(TOOLSLIB) \
             $(VOSLIB) \
             $(SALLIB)
-
-.IF "$(OS)"=="MACOSX"
-# static libs at end for OS X
-APP9STDLIBS+= $(BTSTRPLIB) $(BOOTSTRP2)
-.ENDIF
 
 DEPOBJFILES=$(APP1OBJS) $(APP2OBJS) $(APP3OBJS) $(APP4OBJS) $(APP5OBJS) $(APP6OBJS) $(APP7OBJS) $(APP8OBJS) $(APP9OBJS)
 
