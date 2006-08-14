@@ -4,9 +4,9 @@
  *
  *  $RCSfile: newfrm.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 12:02:40 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:28:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-
 #pragma hdrstop
 
 #ifndef _SVDMODEL_HXX //autogen
@@ -99,13 +97,6 @@
 #endif
 #include "viewimp.hxx"
 
-#ifndef VERTICAL_LAYOUT
-PtPtr pX = &Point::nA;
-PtPtr pY = &Point::nB;
-SzPtr pWidth = &Size::nA;
-SzPtr pHeight = &Size::nB;
-#endif
-
 SwLayVout     *SwRootFrm::pVout = 0;
 BOOL           SwRootFrm::bInPaint = FALSE;
 BOOL           SwRootFrm::bNoVirDev = FALSE;
@@ -114,8 +105,6 @@ SwCache *SwFrm::pCache = 0;
 
 Bitmap* SwNoTxtFrm::pErrorBmp = 0;
 Bitmap* SwNoTxtFrm::pReplaceBmp = 0;
-
-#ifdef VERTICAL_LAYOUT
 
 long FirstMinusSecond( long nFirst, long nSecond )
     { return nFirst - nSecond; }
@@ -351,12 +340,9 @@ SwRectFn fnRectVert = &aVertical;
 SwRectFn fnRectB2T = &aBottomToTop;
 SwRectFn fnRectVL2R = &aVerticalRightToLeft;
 
-#endif
-
 // --> OD 2006-05-10 #i65250#
 sal_uInt32 SwFrm::mnLastFrmId=0;
 // <--
-
 
 TYPEINIT1(SwFrm,SwClient);      //rtti fuer SwFrm
 TYPEINIT1(SwCntntFrm,SwFrm);    //rtti fuer SwCntntFrm
@@ -505,7 +491,8 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
     pDoc->SetRootFrm( this );       //Fuer das Erzeugen der Flys durch MakeFrms()
     bCallbackActionEnabled = FALSE; //vor Verlassen auf TRUE setzen!
 
-    SdrModel *pMd = pDoc->GetDrawModel();
+    SdrModel *pMd = pFmt->getIDocumentDrawModelAccess()->GetDrawModel();
+
     if ( pMd )
     {
         pDrawPage = pMd->GetPage( 0 );
@@ -561,7 +548,7 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
     ::_InsertCnt( pLay, pDoc, aTmp.GetIndex(), TRUE );
     //Noch nicht ersetzte Master aus der Liste entfernen.
     RemoveMasterObjs( pDrawPage );
-    if( pDoc->IsGlobalDoc() )
+    if( pDoc->get(IDocumentSettingAccess::GLOBAL_DOCUMENT) )
         pDoc->UpdateRefFlds( NULL );
     //b6433357: Update page fields after loading
     // --->
