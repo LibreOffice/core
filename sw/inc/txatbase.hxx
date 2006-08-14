@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txatbase.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:21:20 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:35:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _TXATBASE_HXX
 #define _TXATBASE_HXX
-
 #ifndef _SOLAR_H
 #include <tools/solar.h>
 #endif
@@ -48,7 +47,6 @@
 #include <errhdl.hxx>
 #endif
 
-class SwFont;
 class SfxItemPool;
 class SvxBrushItem;
 class SvxFontItem;
@@ -176,7 +174,7 @@ public:
     inline const SwFmtRuby              &GetRuby() const;
     inline const SvxTwoLinesItem        &Get2Lines() const;
     inline const SvxEmphasisMarkItem    &GetEmphasisMark() const;
-    inline const SvxCharScaleWidthItem  &GetCharScaleW() const;
+    inline const SvxCharScaleWidthItem &GetCharScaleW() const;
     inline const SvxCharRotateItem      &GetCharRotate() const;
     inline const SvxCharReliefItem      &GetCharRelief() const;
     inline const SvxCharHiddenItem      &GetCharHidden() const;
@@ -398,21 +396,18 @@ inline const SwFmtINetFmt& SwTxtAttr::GetINetFmt() const
 
 inline const SvXMLAttrContainerItem& SwTxtAttr::GetXMLAttrContainer() const
 {
-    ASSERT( pAttr && pAttr->Which() == RES_UNKNOWNATR_CONTAINER,
-            "Falsche Abfrage" );
+    ASSERT( pAttr && pAttr->Which() == RES_UNKNOWNATR_CONTAINER, "Falsche Abfrage" );
     return (const SvXMLAttrContainerItem&)*pAttr;
 }
 
 inline const SwFmtRuby& SwTxtAttr::GetRuby() const
 {
-    ASSERT( pAttr && pAttr->Which() == RES_TXTATR_CJK_RUBY,
-            "Falsche Abfrage" );
+    ASSERT( pAttr && pAttr->Which() == RES_TXTATR_CJK_RUBY, "Falsche Abfrage" );
     return (const SwFmtRuby&)*pAttr;
 }
 inline const SvxTwoLinesItem& SwTxtAttr::Get2Lines() const
 {
-    ASSERT( pAttr && pAttr->Which() == RES_CHRATR_TWO_LINES,
-            "Falsche Abfrage" );
+    ASSERT( pAttr && pAttr->Which() == RES_CHRATR_TWO_LINES, "Falsche Abfrage" );
     return (const SvxTwoLinesItem&)*pAttr;
 }
 
@@ -422,7 +417,7 @@ inline const SvxEmphasisMarkItem& SwTxtAttr::GetEmphasisMark() const
     return (const SvxEmphasisMarkItem&)*pAttr;
 }
 
-inline const SvxCharScaleWidthItem& SwTxtAttr::GetCharScaleW() const
+inline const SvxCharScaleWidthItem&    SwTxtAttr::GetCharScaleW() const
 {
     ASSERT( pAttr && pAttr->Which() == RES_CHRATR_SCALEW, "Falsche Abfrage" );
     return (const SvxCharScaleWidthItem&)*pAttr;
@@ -434,7 +429,7 @@ inline const SvxCharRotateItem& SwTxtAttr::GetCharRotate() const
     return (const SvxCharRotateItem&)*pAttr;
 }
 
-inline const SvxCharReliefItem& SwTxtAttr::GetCharRelief() const
+inline const SvxCharReliefItem&    SwTxtAttr::GetCharRelief() const
 {
     ASSERT( pAttr && pAttr->Which() == RES_CHRATR_RELIEF, "Falsche Abfrage" );
     return (const SvxCharReliefItem&)*pAttr;
@@ -446,5 +441,4 @@ inline const SvxCharHiddenItem& SwTxtAttr::GetCharHidden() const
     return (const SvxCharHiddenItem&)*pAttr;
 }
 
-    // #ifndef _TXATBASE_HXX
 #endif
