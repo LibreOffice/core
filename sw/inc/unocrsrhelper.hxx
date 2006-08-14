@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocrsrhelper.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:24:56 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:36:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,6 @@
 #ifndef _UNOCRSRHELPER_HXX
 #define _UNOCRSRHELPER_HXX
 
-
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
 #include <com/sun/star/beans/XPropertyState.hpp>
 #endif
@@ -46,7 +45,6 @@
 
 struct SfxItemPropertyMap;
 class SwPaM;
-class SfxItemSet;
 class SwDoc;
 
 namespace com{ namespace sun{ namespace star{
