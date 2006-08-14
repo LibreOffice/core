@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edlingu.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-04 16:00:25 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:09:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -73,9 +72,6 @@
 #ifndef _CHARATR_HXX
 #include <charatr.hxx>
 #endif
-#ifndef _HINTIDS_HXX
-#include <hintids.hxx>
-#endif
 #ifndef _EDITSH_HXX
 #include <editsh.hxx>
 #endif
@@ -103,9 +99,6 @@
 #ifndef _WRONG_HXX
 #include <wrong.hxx>        // SwWrongList
 #endif
-#ifndef _SWCRSR_HXX
-#include <swcrsr.hxx>       // SwCursor
-#endif
 #ifndef _MDIEXP_HXX
 #include <mdiexp.hxx>       // Statusanzeige
 #endif
@@ -114,9 +107,6 @@
 #endif
 #ifndef _CNTFRM_HXX
 #include <cntfrm.hxx>
-#endif
-#ifdef LINGU_STATISTIK
-#include <txtfrm.hxx>       // SwLinguStat.Flush()
 #endif
 #ifndef _CRSSKIP_HXX
 #include <crsskip.hxx>
@@ -1237,7 +1227,7 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions)
             return;
 
         SwPaM *pCrsr = GetCrsr();
-        pDoc->StartUndo( UNDO_OVERWRITE );
+        pDoc->StartUndo( UNDO_OVERWRITE, NULL );
         StartAction();
         sal_uInt32 nRedlinePortions = lcl_CountRedlines(rLastPortions);
         if((rLastPortions.size() - nRedlinePortions) == rNewPortions.size())
@@ -1276,7 +1266,7 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions)
                     // ... and apply language if necessary
                     if(aCurrentNewPortion->eLanguage != aCurrentOldPortion->eLanguage)
                         SetAttr( SvxLanguageItem(aCurrentNewPortion->eLanguage), nLangWhichId );
-                    pDoc->Insert(*pCrsr, aCurrentNewPortion->sText);
+                    pDoc->Insert(*pCrsr, aCurrentNewPortion->sText, true);
                     lcl_AddToTempAutoCorrect(
                             aCurrentOldPortion->sText,
                             aCurrentNewPortion->sText,
@@ -1320,7 +1310,7 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions)
                 if(rLang.GetLanguage() != aCurrentNewPortion->eLanguage)
                     SetAttr( SvxLanguageItem(aCurrentNewPortion->eLanguage, nLangWhichId) );
                 //insert the new string
-                pDoc->Insert(*pCrsr, aCurrentNewPortion->sText);
+                pDoc->Insert(*pCrsr, aCurrentNewPortion->sText, true);
 
                 //set the cursor to the end of the inserted string
                 *pCrsr->Start() = *pCrsr->End();
@@ -1330,7 +1320,7 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions)
         }
         //set the cursor to the end of the new sentence
         *pCrsr->Start() = *pCrsr->End();
-        pDoc->EndUndo( UNDO_OVERWRITE );
+        pDoc->EndUndo( UNDO_OVERWRITE, NULL );
         EndAction();
     }
 }
@@ -1342,14 +1332,14 @@ SpellContentPositions lcl_CollectDeletedRedlines(SwEditShell* pSh)
 {
     SpellContentPositions aRedlines;
     SwDoc* pDoc = pSh->GetDoc();
-    const sal_Bool bShowChg = ::IsShowChanges( pDoc->GetRedlineMode() );
+    const sal_Bool bShowChg = IDocumentRedlineAccess::IsShowChanges( pDoc->GetRedlineMode() );
     if ( bShowChg )
     {
         SwPaM *pCrsr = pSh->GetCrsr();
         const SwPosition* pStartPos = pCrsr->Start();
         const SwTxtNode* pTxtNode = pCrsr->GetNode()->GetTxtNode();
 
-        USHORT nAct = pDoc->GetRedlinePos( *pTxtNode );
+        USHORT nAct = pDoc->GetRedlinePos( *pTxtNode, USHRT_MAX );
         const xub_StrLen nStartIndex = pStartPos->nContent.GetIndex();
         for ( ; nAct < pDoc->GetRedlineTbl().Count(); nAct++ )
         {
@@ -1358,7 +1348,7 @@ SpellContentPositions lcl_CollectDeletedRedlines(SwEditShell* pSh)
             if ( pRed->Start()->nNode > pTxtNode->GetIndex() )
                 break;
 
-            if( REDLINE_DELETE == pRed->GetType() )
+            if( IDocumentRedlineAccess::REDLINE_DELETE == pRed->GetType() )
             {
                 xub_StrLen nStart, nEnd;
                 pRed->CalcStartEnd( pTxtNode->GetIndex(), nStart, nEnd );
