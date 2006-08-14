@@ -4,9 +4,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:44:33 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 18:02:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 #ifndef _SVSTDARR_HXX
@@ -106,9 +105,6 @@
 #ifndef _SECTION_HXX
 #include <section.hxx>
 #endif
-#ifndef _NUMRULE_HXX
-#include <numrule.hxx>
-#endif
 #ifndef _TOX_HXX
 #include <tox.hxx>
 #endif
@@ -122,9 +118,6 @@
 #ifndef _NAVICFG_HXX
 #include <navicfg.hxx>
 #endif
-#ifndef _SWCONT_HXX
-#include <swcont.hxx>
-#endif
 #ifndef _EDTWIN_HXX
 #include <edtwin.hxx>
 #endif
@@ -134,13 +127,9 @@
 #ifndef _UNOTOOLS_HXX
 #include <unotools.hxx>
 #endif
-#ifndef _HINTS_HXX
-#include <hints.hxx>
-#endif
 #ifndef _CRSSKIP_HXX
 #include <crsskip.hxx>
 #endif
-
 #ifndef _CMDID_H
 #include <cmdid.h>
 #endif
@@ -183,7 +172,6 @@
 #ifndef _COM_SUN_STAR_TEXT_XTEXTFRAMESSUPPLIER_HPP_
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 #endif
-
 #ifndef _DCONTACT_HXX
 #include <dcontact.hxx>
 #endif
@@ -550,7 +538,7 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
         {
             sTypeToken = aEmptyStr;
             nMemberCount = 0;
-            SdrModel* pModel = pWrtShell->GetDoc()->GetDrawModel();
+            SdrModel* pModel = pWrtShell->getIDocumentDrawModelAccess()->GetDrawModel();
             if(pModel)
             {
                 SdrPage* pPage = pModel->GetPage(0);
@@ -892,7 +880,8 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibiblityChanged)
             else if(pMember->Count())
                 pMember->DeleteAndDestroy(0, pMember->Count());
 
-            SdrModel* pModel = pWrtShell->GetDoc()->GetDrawModel();
+            IDocumentDrawModelAccess* pIDDMA = pWrtShell->getIDocumentDrawModelAccess();
+            SdrModel* pModel = pIDDMA->GetDrawModel();
             if(pModel)
             {
                 SdrPage* pPage = pModel->GetPage(0);
@@ -914,7 +903,7 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibiblityChanged)
                                             this,
                                             pTemp->GetName(),
                                             nYPos);
-                        if(!pContact->GetFmt()->GetDoc()->IsVisibleLayerId(pTemp->GetLayer()))
+                        if(!pIDDMA->IsVisibleLayerId(pTemp->GetLayer()))
                             pCnt->SetInvisible();
                         pMember->Insert(pCnt);
                         nMemberCount++;
@@ -3085,7 +3074,7 @@ void SwContentTree::GotoContent(SwContent* pCnt)
             {
                 pDrawView->EndTextEdit();
                 pDrawView->UnmarkAll();
-                SdrModel* pModel = pActiveShell->GetDoc()->GetDrawModel();
+                SdrModel* pModel = pActiveShell->getIDocumentDrawModelAccess()->GetDrawModel();
                 SdrPage* pPage = pModel->GetPage(0);
                 sal_uInt32 nCount = pPage->GetObjCount();
                 for( sal_uInt32 i=0; i< nCount; i++ )
