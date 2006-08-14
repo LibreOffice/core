@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndole.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 09:35:45 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:31:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 #ifndef _COM_SUN_STAR_EMBED_NOVISUALAREASIZEEXCEPTION_HPP_
@@ -581,7 +580,7 @@ BOOL SwOLENode::IsInGlobalDocSection() const
     while( pSectNd )
     {
         pAnchorNd = pSectNd;
-        pSectNd = pAnchorNd->FindStartNode()->FindSectionNode();
+        pSectNd = pAnchorNd->StartOfSectionNode()->FindSectionNode();
     }
 
     // in pAnchorNd steht der zuletzt gefundene Section Node. Der muss
@@ -935,7 +934,7 @@ BOOL SwOLEObj::UnloadObject( uno::Reference< embed::XEmbeddedObject > xObj, cons
         SfxObjectShell* p = pDoc->GetPersist();
         if( p )
         {
-            if( pDoc->IsPurgeOLE() )
+            if( pDoc->get(IDocumentSettingAccess::PURGE_OLE) )
             {
                 try
                 {
