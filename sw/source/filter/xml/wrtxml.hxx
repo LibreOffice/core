@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtxml.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:44:00 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:21:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifndef _WRTXML_HXX
 #define _WRTXML_HXX
 
@@ -40,9 +39,9 @@
 #include <shellio.hxx>
 #endif
 
-class SwDoc;
 class SwPaM;
 class SfxMedium;
+
 namespace com { namespace sun { namespace start {
     namespace uno { template<class A> class Reference; }
     namespace uno { template<class A> class Sequence; }
