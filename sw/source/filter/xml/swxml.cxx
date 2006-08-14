@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 12:25:11 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:21:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 
 #pragma hdrstop
@@ -877,27 +876,27 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
         }
     }
 
-    rDoc.AddLink(); // prevent deletion
-    ULONG nRet = 0;
+    rDoc.acquire(); // prevent deletion
+    sal_uInt32 nRet = 0;
 
     // save redline mode into import info property set
     Any aAny;
     sal_Bool bTmp;
     OUString sShowChanges( RTL_CONSTASCII_USTRINGPARAM("ShowChanges") );
-    bTmp = IsShowChanges( rDoc.GetRedlineMode() );
+    bTmp = IDocumentRedlineAccess::IsShowChanges( rDoc.GetRedlineMode() );
     aAny.setValue( &bTmp, ::getBooleanCppuType() );
     xInfoSet->setPropertyValue( sShowChanges, aAny );
     OUString sRecordChanges( RTL_CONSTASCII_USTRINGPARAM("RecordChanges") );
-    bTmp = IsRedlineOn(rDoc.GetRedlineMode());
+    bTmp = IDocumentRedlineAccess::IsRedlineOn(rDoc.GetRedlineMode());
     aAny.setValue( &bTmp, ::getBooleanCppuType() );
     xInfoSet->setPropertyValue( sRecordChanges, aAny );
     OUString sRedlineProtectionKey( RTL_CONSTASCII_USTRINGPARAM("RedlineProtectionKey") );
-    aAny <<= rDoc.GetRedlinePasswd();
+    aAny <<= rDoc.GetRedlinePassword();
     xInfoSet->setPropertyValue( sRedlineProtectionKey, aAny );
 
 
     // force redline mode to "none"
-    rDoc.SetRedlineMode_intern( REDLINE_NONE );
+    rDoc.SetRedlineMode_intern( IDocumentRedlineAccess::REDLINE_NONE );
 
     sal_Bool bOASIS = ( SotStorage::GetVersion( xStorage ) > SOFFICE_FILEFORMAT_60 );
     // --> OD 2004-08-10 #i28749# - set property <ShapePositionInHoriL2R>
@@ -977,18 +976,18 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
     aAny = xInfoSet->getPropertyValue( sRedlineProtectionKey );
     Sequence<sal_Int8> aKey;
     aAny >>= aKey;
-    rDoc.SetRedlinePasswd( aKey );
+    rDoc.SetRedlinePassword( aKey );
 
     // restore redline mode from import info property set
-    sal_Int16 nRedlineMode = REDLINE_SHOW_INSERT;
+    sal_Int16 nRedlineMode = IDocumentRedlineAccess::REDLINE_SHOW_INSERT;
     aAny = xInfoSet->getPropertyValue( sShowChanges );
     if ( *(sal_Bool*)aAny.getValue() )
-        nRedlineMode |= REDLINE_SHOW_DELETE;
+        nRedlineMode |= IDocumentRedlineAccess::REDLINE_SHOW_DELETE;
     aAny = xInfoSet->getPropertyValue( sRecordChanges );
     if ( *(sal_Bool*)aAny.getValue() || (aKey.getLength() > 0) )
-        nRedlineMode |= REDLINE_ON;
+        nRedlineMode |= IDocumentRedlineAccess::REDLINE_ON;
     else
-        nRedlineMode |= REDLINE_NONE;
+        nRedlineMode |= IDocumentRedlineAccess::REDLINE_NONE;
 
     // ... restore redline mode
     // (First set bogus mode to make sure the mode in SetRedlineMode()
@@ -1005,7 +1004,7 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
     if( pObjectHelper )
         SvXMLEmbeddedObjectHelper::Destroy( pObjectHelper );
     xObjectResolver = 0;
-    rDoc.RemoveLink();
+    rDoc.release();
 
     // --> OD 2005-09-06 #i44177# - assure that for documents in OpenOffice.org
     // file format the relation between outline numbering rule and styles is
@@ -1026,9 +1025,9 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
     rDoc.PropagateOutlineRule();
 
     // --> OD 2006-03-14 #i62875#
-    if ( rDoc.DoNotCaptureDrawObjsOnPage() && !docfunc::ExistsDrawObjs( rDoc ) )
+    if ( rDoc.get(IDocumentSettingAccess::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE) && !docfunc::ExistsDrawObjs( rDoc ) )
     {
-        rDoc.SetDoNotCaptureDrawObjsOnPage( sal_False );
+        rDoc.set(IDocumentSettingAccess::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE, false);
     }
     // <--
 
