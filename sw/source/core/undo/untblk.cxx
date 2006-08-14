@@ -4,9 +4,9 @@
  *
  *  $RCSfile: untblk.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:22:59 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:52:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -112,7 +111,7 @@ SwUndoInserts::SwUndoInserts( USHORT nUndoId, const SwPaM& rPam )
     // Redline beachten
     if( pDoc->IsRedlineOn() )
     {
-        pRedlData = new SwRedlineData( REDLINE_INSERT, pDoc->GetRedlineAuthor() );
+        pRedlData = new SwRedlineData( IDocumentRedlineAccess::REDLINE_INSERT, pDoc->GetRedlineAuthor() );
         SetRedlineMode( pDoc->GetRedlineMode() );
     }
 }
@@ -206,8 +205,8 @@ void SwUndoInserts::Undo( SwUndoIter& rUndoIter )
     BOOL bUndo = pDoc->DoesUndo();
     pDoc->DoUndo( FALSE );
 
-    if( IsRedlineOn( GetRedlineMode() ))
-        pDoc->DeleteRedline( *pPam );
+    if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
+        pDoc->DeleteRedline( *pPam, true, USHRT_MAX );
 
     // sind an Point/Mark 2 unterschiedliche TextNodes, dann muss ein
     // JoinNext ausgefuehrt werden.
@@ -354,14 +353,14 @@ void SwUndoInserts::Redo( SwUndoIter& rUndoIter )
 
     pHistory->Rollback( pDoc, nSetPos );
 
-    if( pRedlData && IsRedlineOn( GetRedlineMode() ))
+    if( pRedlData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
     {
-        SwRedlineMode eOld = pDoc->GetRedlineMode();
-        pDoc->SetRedlineMode_intern( eOld & ~REDLINE_IGNORE );
-        pDoc->AppendRedline( new SwRedline( *pRedlData, *pPam ));
+        IDocumentRedlineAccess::RedlineMode_t eOld = pDoc->GetRedlineMode();
+        pDoc->SetRedlineMode_intern( eOld & ~IDocumentRedlineAccess::REDLINE_IGNORE );
+        pDoc->AppendRedline( new SwRedline( *pRedlData, *pPam ), true);
         pDoc->SetRedlineMode_intern( eOld );
     }
-    else if( !( REDLINE_IGNORE & GetRedlineMode() ) &&
+    else if( !( IDocumentRedlineAccess::REDLINE_IGNORE & GetRedlineMode() ) &&
             pDoc->GetRedlineTbl().Count() )
         pDoc->SplitRedline( *pPam );
 }
