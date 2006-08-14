@@ -9,9 +9,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: localize.pl,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: kz $ $Date: 2006-01-03 14:45:42 $
+#   last change: $Author: hr $ $Date: 2006-08-14 17:09:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,7 @@ my $srcpath = '';
 my $WIN;
 my $languages;
 my %sl_modules;     # Contains all modules where en-US and de is source language
+my $use_default_date = '0';
 
          #         (                           leftpart                                                     )            (           rightpart                    )
          #            prj      file      dummy     type       gid       lid      helpid    pform     width      lang       text    helptext  qhelptext   title    timestamp
@@ -439,7 +440,7 @@ sub collectfiles{
         # -e
         # if ( -x $command ){
         if( $command ){
-            if( !$bVerbose  ){ $args .= " -QQ "; }
+            if( !$bVerbose  ){ $args .= " -QQ -skip_links "; }
             $args .= " -e -f $localizeSDF -l ";
             my $bFlag="";
             if( $bAll ) {$args .= " en-US,de";}
@@ -573,17 +574,21 @@ sub collectfiles{
                     my $rightpart      = defined $13 ? $13 : '';
                     my $timestamp      = defined $18 ? $18 : '';
 
-                            my $prj            = defined $3 ? $3 : '';
-                            my $file           = defined $4 ? $4 : '';
-                            my $type           = defined $6 ? $6 : '';
-                            my $gid            = defined $7 ? $7 : '';
-                            my $lid            = defined $8 ? $8 : '';
-                            #my $lang           = defined $12 ? $12 : '';
-                            my $plattform      = defined $10 ? $10 : '';
-                            my $helpid         = defined $9 ? $9 : '';
+                    my $prj            = defined $3 ? $3 : '';
+                    my $file           = defined $4 ? $4 : '';
+                    my $type           = defined $6 ? $6 : '';
+                    my $gid            = defined $7 ? $7 : '';
+                    my $lid            = defined $8 ? $8 : '';
+                    #my $lang           = defined $12 ? $12 : '';
+                    my $plattform      = defined $10 ? $10 : '';
+                    my $helpid         = defined $9 ? $9 : '';
 
 
-                    if( $extract_date eq "" ) {
+                    if( $use_default_date )
+                    {
+                        $extract_date = "$default_date\n" ;
+                    }
+                    elsif( $extract_date eq "" ) {
                         $extract_date = $timestamp ;
                         $extract_date =~ tr/\r\n//d;
                         $extract_date .= "\n";
@@ -620,20 +625,26 @@ sub collectfiles{
                     my $timestamp      = defined $18 ? $18 : '';
 
                     #my $prj            = defined $3 ? $3 : '';
-                            my $file           = defined $4 ? $4 : '';
-                            my $type           = defined $6 ? $6 : '';
-                            my $gid            = defined $7 ? $7 : '';
-                            my $lid            = defined $8 ? $8 : '';
-                            #my $lang           = defined $12 ? $12 : '';
-                            my $plattform      = defined $10 ? $10 : '';
-                            my $helpid         = defined $9 ? $9 : '';
+                    my $file           = defined $4 ? $4 : '';
+                    my $type           = defined $6 ? $6 : '';
+                    my $gid            = defined $7 ? $7 : '';
+                    my $lid            = defined $8 ? $8 : '';
+                    #my $lang           = defined $12 ? $12 : '';
+                    my $plattform      = defined $10 ? $10 : '';
+                    my $helpid         = defined $9 ? $9 : '';
 
 
-                    if( $extract_date eq "" ) { $extract_date = $timestamp; }
+                    if( $use_default_date )
+                    {
+                        $extract_date = "$default_date\n" ;
+                    }
+                    elsif( $extract_date eq "" )
+                    {
+                        $extract_date = $timestamp;
+                    }
 
                     if( ! ( $prj =~ /binfilter/i ) ) {
                         push @{ $output{ $prj.$gid.$lid.$file.$type.$plattform.$helpid } } , $leftpart."\t".$lang."\t".$rightpart.$extract_date ;
-
                         #print DESTFILE $leftpart."\t".$lang."\t".$rightpart.$extract_date ;
                     }
                  }
@@ -1039,7 +1050,8 @@ sub parse_options{
     my $help;
     my $merge;
     my $extract;
-    my $success = GetOptions('f=s' => \$sdffile , 'l=s' => \$languages , 's=s' => \$srcpath ,  'h' => \$help , 'v' => \$bVerbose , 'm' => \$merge , 'e' => \$extract , 'x' => \$no_sort );
+    my $success = GetOptions('f=s' => \$sdffile , 'l=s' => \$languages , 's=s' => \$srcpath ,  'h' => \$help , 'v' => \$bVerbose ,
+                             'm' => \$merge , 'e' => \$extract , 'x' => \$no_sort , 'd' => \$use_default_date );
     $outputfile = $sdffile;
 
     #print STDOUT "DBG: lang = $languages\n";
@@ -1074,7 +1086,7 @@ sub usage{
     print STDERR "Usage: localize.pl\n";
     print STDERR "Split or collect SDF files\n";
     print STDERR "           merge: -m -f <sdffile>    -l l1[=f1][,l2[=f2]][...] [ -s <sourceroot> ]\n";
-    print STDERR "         extract: -e -f <outputfile> -l <lang> [ -s <sourceroot> ]\n";
+    print STDERR "         extract: -e -f <outputfile> -l <lang> [ -s <sourceroot> ] [-d]\n";
     print STDERR "Options:\n";
     print STDERR "    -h              help\n";
     print STDERR "    -m              Merge mode\n";
@@ -1083,6 +1095,7 @@ sub usage{
     print STDERR "       <outputfile> To collect and join all particles to one big file\n";
     print STDERR "    -s <sourceroot> Path to the modules, if no \$SRC_ROOT is set\n";
     print STDERR "    -l ( all | <isocode> | <isocode>=fallback ) comma seperated languages\n";
+    print STDERR "    -d              Use default date in extracted sdf file\n";
     print STDERR "    -v              Verbose\n";
     print STDERR "\nExample:\n";
     print STDERR "\nlocalize -e -l en-US,pt-BR=en-US -f my.sdf\n( Extract en-US and pt-BR with en-US fallback )\n";
