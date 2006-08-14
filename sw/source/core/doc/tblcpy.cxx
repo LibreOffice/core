@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tblcpy.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 14:18:30 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:03:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -68,9 +67,6 @@
 #endif
 #ifndef _TBLSEL_HXX
 #include <tblsel.hxx>
-#endif
-#ifndef _HINTS_HXX
-#include <hints.hxx>
 #endif
 #ifndef _TABFRM_HXX
 #include <tabfrm.hxx>
