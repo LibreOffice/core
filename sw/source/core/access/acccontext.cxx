@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acccontext.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 09:09:10 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:41:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,18 +32,16 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-#ifdef PRECOMPILED
-#include "core_pch.hxx"
-#endif
 #if (OSL_DEBUG_LEVEL > 1) && defined TEST_MIB
-#ifndef _STRING_HXX
-#include <tools/string.hxx>
-#endif
-#ifndef _STREAM_HXX
-#include <tools/stream.hxx>
-#endif
-#endif
+    #ifndef _STRING_HXX
+    #include <tools/string.hxx>
+    #endif
+
+    #ifndef _STREAM_HXX
+    #include <tools/stream.hxx>
+    #endif
+#endif // #if (OSL_DEBUG_LEVEL > 1) && defined TEST_MIB
+
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
