@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtffly.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-08 14:46:50 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:09:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
-
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
@@ -65,9 +64,6 @@
 #ifndef _SVX_LRSPITEM_HXX //autogen
 #include <svx/lrspitem.hxx>
 #endif
-#ifndef _SVX_BRKITEM_HXX //autogen
-#include <svx/brkitem.hxx>
-#endif
 #ifndef _SVX_BOXITEM_HXX //autogen wg. SvxBoxItem
 #include <svx/boxitem.hxx>
 #endif
@@ -83,9 +79,6 @@
 #ifndef _FMTPDSC_HXX //autogen
 #include <fmtpdsc.hxx>
 #endif
-#ifndef _FMTORNT_HXX //autogen
-#include <fmtornt.hxx>
-#endif
 #ifndef _FMTSRND_HXX //autogen
 #include <fmtsrnd.hxx>
 #endif
@@ -97,9 +90,6 @@
 #endif
 #ifndef _FRMATR_HXX
 #include <frmatr.hxx>
-#endif
-#ifndef _SWTYPES_HXX
-#include <swtypes.hxx>
 #endif
 #ifndef _DOC_HXX
 #include <doc.hxx>
@@ -121,9 +111,6 @@
 #endif
 #ifndef _PARATR_HXX
 #include <paratr.hxx>
-#endif
-#ifndef _POOLFMT_HXX
-#include <poolfmt.hxx>
 #endif
 #ifndef _RTF_HXX
 #include <rtf.hxx>
@@ -342,7 +329,7 @@ void SwRTFParser::SetFlysInDoc()
         //JP 21.09.98: wenn ein DropCap ist, dann Text im Node belassen, am
         //              Absatz das Absatz Attribut setzen. Ggfs noch die
         //              FontSize zuruecksetzen, damit das DropCap nicht zu
-        //              groá wird.
+        //              gro? wird.
         if( pFlySave->nDropAnchor )
         {
             SwTxtNode* pSttNd = pFlySave->nSttNd.GetNode().GetTxtNode();
@@ -381,7 +368,7 @@ void SwRTFParser::SetFlysInDoc()
             {
                 SwPosition aPos( pFlySave->nEndNd,
                                 SwIndex( pCNd, pFlySave->nEndCnt ));
-                pDoc->SplitNode( aPos );
+                pDoc->SplitNode( aPos, false );
                 pFlySave->nEndNd--;
             }
             else
@@ -474,7 +461,7 @@ void SwRTFParser::SetFlysInDoc()
                 }
             }
             aTmpIdx = *pSttNd->EndOfSectionNode();
-            pDoc->Move( aRg, aTmpIdx );
+            pDoc->Move( aRg, aTmpIdx, IDocumentContentOperations::DOC_MOVEDEFAULT );
         }
 
         // patch from cmc for #i52542#
@@ -1027,18 +1014,6 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
             nToken = GetNextToken();
     } while( bWeiter && IsParserWorking() );
 
-#if 0
-    if( !bReadSwFly && ( FRAME == aVert.GetRelationOrient() ||
-        //JP 21.07.99: for Bug 67630 - it read into Header od Footer, set
-        //              never the anchor to Page. Because it is then only
-        //              on the first used page .
-        ( FLY_PAGE == aAnchor.GetAnchorId() &&
-          pPam->GetPoint()->nNode < pDoc->GetNodes().GetEndOfExtras() &&
-          ( pPam->GetNode()->FindHeaderStartNode() ||
-            pPam->GetNode()->FindFooterStartNode() )) ))
-        aAnchor.SetType( FLY_AT_CNTNT );
-#endif
-
     pSet->Put( aAnchor );
     pSet->Put( aHori );
     pSet->Put( aVert );
@@ -1314,7 +1289,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
                                 (SwTxtFmtColl*)pDoc->GetDfltTxtFmtColl() );
 
                     SwNodeIndex aTmp( pFlySave->nSttNd, +1 );
-                    pDoc->Move( aRg, aTmp );
+                    pDoc->Move( aRg, aTmp, IDocumentContentOperations::DOC_MOVEDEFAULT );
 
                     // now delete the redundant txtnode
                     pDoc->GetNodes().Delete( pFlySave->nSttNd, 1 );
@@ -1381,7 +1356,7 @@ void SwRTFParser::InsPicture( const String& rGrfNm, const Graphic* pGrf,
                     rGrfNm, aEmptyStr,      // Name der Graphic !!
                     pGrf,
                     &aFlySet,               // Attribute fuer den FlyFrm
-                    pGrfAttrSet );          // Attribute fuer die Grafik
+                    pGrfAttrSet, NULL );            // Attribute fuer die Grafik
 
         pGrfNd = pDoc->GetNodes()[ pFlyFmt->GetCntnt().GetCntntIdx()->
                                             GetIndex()+1 ]->GetGrfNode();
