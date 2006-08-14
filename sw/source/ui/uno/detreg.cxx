@@ -4,9 +4,9 @@
  *
  *  $RCSfile: detreg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:18:07 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:59:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,24 +32,7 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #include "swdetect.hxx"
-
-#ifndef _SAL_TYPES_H_
-#include "sal/types.h"
-#endif
-#ifndef _RTL_USTRING_HXX_
-#include <rtl/ustring.hxx>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_REGISTRY_XREGISTRYKEY_HPP_
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
-#include <com/sun/star/uno/Sequence.h>
-#endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
