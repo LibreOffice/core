@@ -1,1 +1,1 @@
-Class-Path: xalan.jar xercesImpl.jar xml-apis.jar
+Class-Path: xalan.jar xercesImpl.jar serializer.jar xml-apis.jar
