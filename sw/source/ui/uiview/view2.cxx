@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 14:43:38 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:57:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 #ifndef _COM_SUN_STAR_UTIL_SEARCHOPTIONS_HPP_
@@ -44,12 +43,13 @@
 #ifndef _COM_SUN_STAR_I18N_TRANSLITERATIONMODULES_HPP_
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
-#include <com/sun/star/lang/Locale.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
-#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
-#endif
+
+// #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
+// #include <com/sun/star/lang/Locale.hpp>
+// #endif
+// #ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
+// #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
+// #endif
 #ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKERCONTROLACCESS_HPP_
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #endif
@@ -67,9 +67,10 @@
 #ifndef _AEITEM_HXX
 #include <svtools/aeitem.hxx>
 #endif
-#ifndef _FILTER_HXX
-#include <svtools/filter.hxx>
-#endif
+
+// #ifndef _FILTER_HXX
+// #include <svtools/filter.hxx>
+// #endif
 
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
@@ -77,12 +78,14 @@
 #ifndef _DOCARY_HXX
 #include <docary.hxx>
 #endif
+
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
 #ifndef _UIPARAM_HXX
 #include <uiparam.hxx>
 #endif
+
 #ifndef _SW_REWRITER_HXX
 #include <SwRewriter.hxx>
 #endif
@@ -195,10 +198,6 @@
 #ifndef _SVDVIEW_HXX //autogen
 #include <svx/svdview.hxx>
 #endif
-#ifndef _UNOTOOLS_TEXTSEARCH_HXX
-#include <unotools/testsearch.hxx>
-#endif
-
 #ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
 #endif
@@ -241,9 +240,6 @@
 #ifndef _FMTINFMT_HXX
 #include <fmtinfmt.hxx>
 #endif
-#ifndef _REDLENUM_HXX
-#include <redlenum.hxx>
-#endif
 #ifndef _MDIEXP_HXX
 #include <mdiexp.hxx>
 #endif
@@ -256,10 +252,6 @@
 #ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx>
 #endif
-#include <fmthdft.hxx>
-//CHINA001 #ifndef _LINENUM_HXX
-//CHINA001 #include <linenum.hxx>
-//CHINA001 #endif
 #ifndef _SECTION_HXX
 #include <section.hxx>
 #endif
@@ -296,7 +288,6 @@
 #ifndef _LISTSH_HXX
 #include <listsh.hxx>
 #endif
-
 #ifndef _CMDID_H
 #include <cmdid.h>
 #endif
@@ -340,21 +331,17 @@
 #ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
 #endif
-#ifndef _FRMMGR_HXX
-#include <frmmgr.hxx>
-#endif
+
+// #ifndef _FRMMGR_HXX
+// #include <frmmgr.hxx>
+// #endif
 
 //CHINA001 #ifndef _MAILMRGE_HXX
 //CHINA001 #include "mailmrge.hxx"
 //CHINA001 #endif
+
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
-#include <com/sun/star/container/XNameAccess.hpp>
 #endif
 
 #include <svx/svxdlg.hxx> //CHINA001
@@ -362,7 +349,7 @@
 #include "swabstdlg.hxx" //CHINA001
 #include "globals.hrc" //CHINA001
 #include <envelp.hrc> //CHINA001
-
+#include <fmthdft.hxx>
 #include <svx/ofaitem.hxx>
 
 //Damit die Seitenanzeige in der Statusleiste nicht unnoetig erfolgt.
@@ -702,7 +689,7 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
     {
         case SID_CREATE_SW_DRAWVIEW:
             // --> OD 2005-08-08 #i52858# - method name changed
-            pWrtShell->GetDoc()->GetOrCreateDrawModel();
+            pWrtShell->getIDocumentDrawModelAccess()->GetOrCreateDrawModel();
             // <--
             break;
 
@@ -746,7 +733,8 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
             if( pArgs &&
                 SFX_ITEM_SET == pArgs->GetItemState(nSlot, FALSE, &pItem ))
             {
-                Sequence <sal_Int8> aPasswd = pWrtShell->GetDoc()->GetRedlinePasswd();
+                IDocumentRedlineAccess* pIDRA = pWrtShell->getIDocumentRedlineAccess();
+                Sequence <sal_Int8> aPasswd = pIDRA->GetRedlinePassword();
                 if( aPasswd.getLength() )
                 {
                     DBG_ASSERT( !((const SfxBoolItem*)pItem)->GetValue(), "SwView::Execute(): password set an redlining off doesn't match!" );
@@ -761,10 +749,10 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
                     if (aPasswdDlg.Execute())
                     {
                         String sNewPasswd( aPasswdDlg.GetPassword() );
-                        Sequence <sal_Int8> aNewPasswd = pWrtShell->GetDoc()->GetRedlinePasswd();
+                        Sequence <sal_Int8> aNewPasswd = pIDRA->GetRedlinePassword();
                         SvPasswordHelper::GetHashPassword( aNewPasswd, sNewPasswd );
                         if(SvPasswordHelper::CompareHashPassword(aPasswd, sNewPasswd))
-                            pWrtShell->GetDoc()->SetRedlinePasswd(Sequence <sal_Int8> ());
+                            pIDRA->SetRedlinePassword(Sequence <sal_Int8> ());
                         else
                         {   // xmlsec05: message box for wrong password
                             break;
@@ -772,15 +760,16 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
                     }
                 }
 
-                USHORT nOn = ((const SfxBoolItem*)pItem)->GetValue() ? REDLINE_ON : 0;
+                USHORT nOn = ((const SfxBoolItem*)pItem)->GetValue() ? IDocumentRedlineAccess::REDLINE_ON : 0;
                 USHORT nMode = pWrtShell->GetRedlineMode();
-                pWrtShell->SetRedlineMode( (nMode & ~REDLINE_ON) | nOn);
+                pWrtShell->SetRedlineMode( (nMode & ~IDocumentRedlineAccess::REDLINE_ON) | nOn);
             }
         }
         break;
         case FN_REDLINE_PROTECT :
         {
-            Sequence <sal_Int8> aPasswd = pWrtShell->GetDoc()->GetRedlinePasswd();
+            IDocumentRedlineAccess* pIDRA = pWrtShell->getIDocumentRedlineAccess();
+            Sequence <sal_Int8> aPasswd = pIDRA->GetRedlinePassword();
             if( pArgs && SFX_ITEM_SET == pArgs->GetItemState(nSlot, FALSE, &pItem )
                 && ((SfxBoolItem*)pItem)->GetValue() == ( aPasswd.getLength() != 0 ) )
                 break;
@@ -798,23 +787,23 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
                 aPasswdDlg.ShowExtras(SHOWEXTRAS_CONFIRM);
             if (aPasswdDlg.Execute())
             {
-                USHORT nOn = REDLINE_ON;;
+                USHORT nOn = IDocumentRedlineAccess::REDLINE_ON;
                 String sNewPasswd( aPasswdDlg.GetPassword() );
                 Sequence <sal_Int8> aNewPasswd =
-                        pWrtShell->GetDoc()->GetRedlinePasswd();
+                        pIDRA->GetRedlinePassword();
                 SvPasswordHelper::GetHashPassword( aNewPasswd, sNewPasswd );
                 if(!aPasswd.getLength())
                 {
-                    pWrtShell->GetDoc()->SetRedlinePasswd(aNewPasswd);
+                    pIDRA->SetRedlinePassword(aNewPasswd);
                 }
                 else if(SvPasswordHelper::CompareHashPassword(aPasswd, sNewPasswd))
                 {
-                    pWrtShell->GetDoc()->SetRedlinePasswd(Sequence <sal_Int8> ());
+                    pIDRA->SetRedlinePassword(Sequence <sal_Int8> ());
                     nOn = 0;
                 }
-                USHORT nMode = pWrtShell->GetRedlineMode();
-                pWrtShell->SetRedlineMode( (nMode & ~REDLINE_ON) | nOn);
-                rReq.AppendItem( SfxBoolItem( FN_REDLINE_PROTECT, ((nMode&REDLINE_ON)==0) ) );
+                USHORT nMode = pIDRA->GetRedlineMode();
+                pWrtShell->SetRedlineMode( (nMode & ~IDocumentRedlineAccess::REDLINE_ON) | nOn);
+                rReq.AppendItem( SfxBoolItem( FN_REDLINE_PROTECT, ((nMode&IDocumentRedlineAccess::REDLINE_ON)==0) ) );
             }
             else
                 bIgnore = TRUE;
@@ -825,10 +814,10 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
             if( pArgs &&
                 SFX_ITEM_SET == pArgs->GetItemState(nSlot, FALSE, &pItem))
             {
-                USHORT nMode = ( ~(REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE)
-                        & pWrtShell->GetRedlineMode() ) | REDLINE_SHOW_INSERT;
+                USHORT nMode = ( ~(IDocumentRedlineAccess::REDLINE_SHOW_INSERT | IDocumentRedlineAccess::REDLINE_SHOW_DELETE)
+                        & pWrtShell->GetRedlineMode() ) | IDocumentRedlineAccess::REDLINE_SHOW_INSERT;
                 if( ((const SfxBoolItem*)pItem)->GetValue() )
-                    nMode |= REDLINE_SHOW_DELETE;
+                    nMode |= IDocumentRedlineAccess::REDLINE_SHOW_DELETE;
 
                 pWrtShell->SetRedlineMode( nMode );
             }
@@ -1394,7 +1383,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                     SvxZoomType eZoom = (SvxZoomType) pVOpt->GetZoomType();
                     SvxZoomItem aZoom(eZoom,
                                         pVOpt->GetZoom());
-                    if(pWrtShell->IsBrowseMode())
+                    if(pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE))
                     {
                         aZoom.SetValueSet(
                                 SVX_ZOOM_ENABLE_50|
@@ -1606,7 +1595,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                     SvxZoomItem aZoom( (SvxZoomType)rSh.GetViewOptions()->GetZoomType(),
                                                 rSh.GetViewOptions()->GetZoom() );
 
-                    if(rSh.IsBrowseMode())
+                    if(rSh.getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE))
                     {
                         aZoom.SetValueSet(
                                 SVX_ZOOM_ENABLE_50|
