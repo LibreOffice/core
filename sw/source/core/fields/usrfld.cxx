@@ -4,9 +4,9 @@
  *
  *  $RCSfile: usrfld.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:40:42 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:14:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -357,7 +357,7 @@ void SwUserFieldType::CtrlSetContent( const String& rStr )
 
             Modify( 0, 0 );
             GetDoc()->UpdateUsrFlds();
-            GetDoc()->UpdateExpFlds();
+            GetDoc()->UpdateExpFlds(NULL, true);
 
             GetDoc()->SetModified();
             if( pSh )
