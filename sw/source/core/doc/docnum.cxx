@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:14:14 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:59:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 #ifndef _HINTIDS_HXX
@@ -67,9 +66,6 @@
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
 #endif
-#ifndef _NUMRULE_HXX
-#include <numrule.hxx>
-#endif
 #ifndef _DOCTXM_HXX
 #include <doctxm.hxx>       // pTOXBaseRing
 #endif
@@ -97,14 +93,8 @@
 #ifndef _MVSAVE_HXX
 #include <mvsave.hxx>
 #endif
-#ifndef _HINTS_HXX
-#include <hints.hxx>
-#endif
 #ifndef _TXTFRM_HXX
 #include <txtfrm.hxx>
-#endif
-#ifndef _HINTS_HXX
-#include <hints.hxx>
 #endif
 #ifndef _PAMTYP_HXX
 #include <pamtyp.hxx>
@@ -167,8 +157,6 @@ inline BYTE GetUpperLvlChg( BYTE nCurLvl, BYTE nLevel, USHORT nMask )
 
 void SwDoc::SetOutlineNumRule( const SwNumRule& rRule )
 {
-    USHORT nChkLevel = 0, nChgFmtLevel = 0;
-
     if( pOutlineRule )
         (*pOutlineRule) = rRule;
     else
@@ -194,7 +182,7 @@ void SwDoc::SetOutlineNumRule( const SwNumRule& rRule )
     if( GetFtnIdxs().Count() && FTNNUM_CHAPTER == GetFtnInfo().eNum )
         GetFtnIdxs().UpdateAllFtn();
 
-    UpdateExpFlds();
+    UpdateExpFlds(NULL, true);
 
     SetModified();
 }
@@ -211,7 +199,7 @@ void SwDoc::PropagateOutlineRule()
 
             const SwNumRuleItem & rCollRuleItem = pColl->GetNumRule(TRUE);
 
-            if (! IsOutlineLevelYieldsOutlineRule() &&
+            if (!get(IDocumentSettingAccess::OUTLINE_LEVEL_YIELDS_OUTLINE_RULE) &&
                 rCollRuleItem.GetValue().Len() == 0)
             {
                 SwNumRule * pOutlineRule = GetOutlineNumRule();
@@ -450,7 +438,7 @@ BOOL SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
     if( DoesUndo() )
     {
         ClearRedo();
-        StartUndo(UNDO_OUTLINE_LR);
+        StartUndo(UNDO_OUTLINE_LR, NULL);
         AppendUndo( new SwUndoOutlineLeftRight( rPam, nOffset ) );
     }
 
@@ -483,7 +471,7 @@ BOOL SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
         // Undo ???
     }
     if (DoesUndo())
-        EndUndo(UNDO_OUTLINE_LR);
+        EndUndo(UNDO_OUTLINE_LR, NULL);
 
     ChkCondColls();
     SetModified();
@@ -569,7 +557,7 @@ BOOL SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
         aEndRg--;
     while( aEndRg.GetNode().IsEndNode() )
     {
-        pNd = aEndRg.GetNode().FindStartNode();
+        pNd = aEndRg.GetNode().StartOfSectionNode();
         if( pNd->GetIndex() >= aSttRg.GetIndex() )
             break;
         aEndRg--;
@@ -611,7 +599,7 @@ BOOL SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
         // because I don't want to enter of leave such a section
         while( aInsertPos.GetNode().IsEndNode() )
         {
-            pNd = aInsertPos.GetNode().FindStartNode();
+            pNd = aInsertPos.GetNode().StartOfSectionNode();
             if( pNd->GetIndex() >= aSttRg.GetIndex() )
                 break;
             aInsertPos--;
@@ -622,7 +610,7 @@ BOOL SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
     aInsertPos++;
     pNd = &aInsertPos.GetNode();
     if( pNd->IsTableNode() )
-        pNd = pNd->FindStartNode();
+        pNd = pNd->StartOfSectionNode();
     if( pNd->FindTableNode() )
         return FALSE;
 
@@ -983,19 +971,6 @@ void lcl_ChgNumRule( SwDoc& rDoc, const SwNumRule& rRule, SwHistory* pHist,
             if( nChgFmtLevel & ( 1 << nLvl ))
             {
                 pTxtNd->NumRuleChgd();
-
-#ifndef NUM_RELSPACE
-                if( nChkLevel && (nChkLevel & ( 1 << nLvl )) &&
-                    pOld->IsRuleLSpace( *pTxtNd ) )
-                    pTxtNd->SetNumLSpace( TRUE );
-
-                if( pHist )
-                {
-                    const SfxPoolItem& rItem =
-                                pTxtNd->SwCntntNode::GetAttr( RES_LR_SPACE );
-                    pHist->Add( &rItem, &rItem, pTxtNd->GetIndex() );
-                }
-#endif
             }
         }
     }
@@ -1022,7 +997,7 @@ void SwDoc::SetNumRule( const SwPaM& rPam, const SwNumRule& rRule,
     if (DoesUndo())
     {
         ClearRedo();
-        StartUndo( UNDO_INSNUM );       // Klammerung fuer die Attribute!
+        StartUndo( UNDO_INSNUM, NULL );     // Klammerung fuer die Attribute!
         AppendUndo( pUndo = new SwUndoInsNum( rPam, rRule ) );
     }
 
@@ -1085,11 +1060,11 @@ void SwDoc::SetNumRule( const SwPaM& rPam, const SwNumRule& rRule,
     if ( bSetItem && pNew != GetOutlineNumRule() )
     // <--
     {
-        Insert( rPam, SwNumRuleItem( pNew->GetName() ) );
+      Insert( rPam, SwNumRuleItem( pNew->GetName() ), 0 );
     }
 
     if (DoesUndo())
-        EndUndo( UNDO_INSNUM );
+        EndUndo( UNDO_INSNUM, NULL );
 
     SetModified();
 }
@@ -1111,7 +1086,7 @@ void SwDoc::SetCounted(const SwPaM & rPam, bool bCounted)
 void SwDoc::ReplaceNumRule(const SwPaM & rPaM, const SwNumRule & rNumRule)
 {
     if (DoesUndo())
-        StartUndo(UNDO_START);
+        StartUndo(UNDO_START, NULL);
 
     ULONG nStt = rPaM.Start()->nNode.GetIndex();
     ULONG nEnd = rPaM.End()->nNode.GetIndex();
@@ -1124,12 +1099,12 @@ void SwDoc::ReplaceNumRule(const SwPaM & rPaM, const SwNumRule & rNumRule)
         {
             SwPaM aPam(*pCNd);
 
-            Insert(aPam, SwNumRuleItem(rNumRule.GetName()));
+            Insert(aPam, SwNumRuleItem(rNumRule.GetName()), 0);
         }
     }
 
     if (DoesUndo())
-        EndUndo(UNDO_START);
+        EndUndo(UNDO_START, NULL);
 }
 
 void SwDoc::SetNumRuleStart( const SwPosition& rPos, BOOL bFlag )
@@ -1302,7 +1277,7 @@ BOOL SwDoc::ReplaceNumRule( const SwPosition& rPos,
         if( DoesUndo() )
         {
             ClearRedo();
-            StartUndo( UNDO_START );        // Klammerung fuer die Attribute!
+            StartUndo( UNDO_START, NULL );      // Klammerung fuer die Attribute!
             AppendUndo( pUndo = new SwUndoInsNum( rPos, *pNewRule, rOldRule ) );
         }
 
@@ -1364,7 +1339,7 @@ BOOL SwDoc::ReplaceNumRule( const SwPosition& rPos,
                 pTxtNd->SwCntntNode::SetAttr( aRule );
                 pTxtNd->NumRuleChgd();
             }
-            EndUndo( UNDO_END );
+            EndUndo( UNDO_END, NULL );
             SetModified();
 
             bRet = TRUE;     // #106897#
@@ -1434,7 +1409,7 @@ void SwDoc::MakeUniqueNumRules(const SwPaM & rPaM)
 BOOL SwDoc::NoNum( const SwPaM& rPam )
 {
 
-    BOOL bRet = SplitNode( *rPam.GetPoint() );
+    BOOL bRet = SplitNode( *rPam.GetPoint(), false );
     // ist ueberhaupt Nummerierung im Spiel ?
     if( bRet )
     {
@@ -1444,9 +1419,6 @@ BOOL SwDoc::NoNum( const SwPaM& rPam )
         const SwNumRule* pRule = pNd->GetNumRule();
         if( pRule )
         {
-#ifndef NUM_RELSPACE
-            pNd->SetNumLSpace( TRUE );
-#endif
             pNd->SetCounted(false);
 
             SetModified();
@@ -1587,8 +1559,8 @@ BOOL lcl_IsValidPrevNextNumNode( const SwNodeIndex& rIdx )
     switch( rNd.GetNodeType() )
     {
     case ND_ENDNODE:
-        bRet = SwTableBoxStartNode == rNd.FindStartNode()->GetStartNodeType() ||
-                rNd.FindStartNode()->IsSectionNode();
+        bRet = SwTableBoxStartNode == rNd.StartOfSectionNode()->GetStartNodeType() ||
+                rNd.StartOfSectionNode()->IsSectionNode();
         break;
 
     case ND_STARTNODE:
@@ -1886,9 +1858,6 @@ BOOL SwDoc::NumUpDown( const SwPaM& rPam, BOOL bDown )
                         nLevel += nDiff;
 
                         pTNd->SetLevel(nLevel);
-#ifndef NUM_RELSPACE
-                        pTNd->SetNumLSpace( TRUE );
-#endif
                     }
                 }
             }
@@ -1928,17 +1897,17 @@ BOOL SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, BOOL bIsOutlMv )
             if( pTmp2->GetIndex() > nEndIdx )
                 return FALSE; // Its end node is behind the moved range
         }
-        pTmp1 = pTmp1->FindStartNode()->EndOfSectionNode();
+        pTmp1 = pTmp1->StartOfSectionNode()->EndOfSectionNode();
         if( pTmp1->GetIndex() <= nEndIdx )
             return FALSE; // End node inside but start node before moved range => no.
         pTmp1 = GetNodes()[ nEndIdx ];
         if( pTmp1->IsEndNode() )
         {   // The last one is an end node
-            pTmp1 = pTmp1->FindStartNode();
+            pTmp1 = pTmp1->StartOfSectionNode();
             if( pTmp1->GetIndex() < nStIdx )
                 return FALSE; // Its start node is before the moved range.
         }
-        pTmp1 = pTmp1->FindStartNode();
+        pTmp1 = pTmp1->StartOfSectionNode();
         if( pTmp1->GetIndex() >= nStIdx )
             return FALSE; // A start node which ends behind the moved area => no.
     }
@@ -1969,26 +1938,26 @@ BOOL SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, BOOL bIsOutlMv )
         // It will checked if the both "start" nodes as well as the both "end" notes belongs to
         // the same start-end-section. This is more restrictive than the conditions checked above.
         // E.g. a paragraph will not escape from a section or be inserted to another section.
-        pTmp1 = GetNodes()[ nStIdx ]->FindStartNode();
-        pTmp2 = GetNodes()[ nInStIdx ]->FindStartNode();
+        pTmp1 = GetNodes()[ nStIdx ]->StartOfSectionNode();
+        pTmp2 = GetNodes()[ nInStIdx ]->StartOfSectionNode();
         if( pTmp1 != pTmp2 )
             return FALSE; // "start" nodes in different sections
         pTmp1 = GetNodes()[ nEndIdx ];
         bool bIsEndNode = pTmp1->IsEndNode();
         if( !pTmp1->IsStartNode() )
         {
-            pTmp1 = pTmp1->FindStartNode();
+            pTmp1 = pTmp1->StartOfSectionNode();
             if( bIsEndNode ) // For end nodes the first start node is of course inside the range,
-                pTmp1 = pTmp1->FindStartNode(); // I've to check the start node of the start node.
+                pTmp1 = pTmp1->StartOfSectionNode(); // I've to check the start node of the start node.
         }
         pTmp1 = pTmp1->EndOfSectionNode();
         pTmp2 = GetNodes()[ nInEndIdx ];
         if( !pTmp2->IsStartNode() )
         {
             bIsEndNode = pTmp2->IsEndNode();
-            pTmp2 = pTmp2->FindStartNode();
+            pTmp2 = pTmp2->StartOfSectionNode();
             if( bIsEndNode )
-                pTmp2 = pTmp2->FindStartNode();
+                pTmp2 = pTmp2->StartOfSectionNode();
         }
         pTmp2 = pTmp2->EndOfSectionNode();
         if( pTmp1 != pTmp2 )
@@ -1999,7 +1968,7 @@ BOOL SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, BOOL bIsOutlMv )
     // werden?
     if( !IsIgnoreRedline() )
     {
-        USHORT nRedlPos = GetRedlinePos( pStt->nNode.GetNode(), REDLINE_DELETE );
+        USHORT nRedlPos = GetRedlinePos( pStt->nNode.GetNode(), IDocumentRedlineAccess::REDLINE_DELETE );
         if( USHRT_MAX != nRedlPos )
         {
             SwPosition aStPos( *pStt ), aEndPos( *pEnd );
@@ -2012,7 +1981,7 @@ BOOL SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, BOOL bIsOutlMv )
             for( ; nRedlPos < GetRedlineTbl().Count(); ++nRedlPos )
             {
                 const SwRedline* pTmp = GetRedlineTbl()[ nRedlPos ];
-                if( !bCheckDel || REDLINE_DELETE == pTmp->GetType() )
+                if( !bCheckDel || IDocumentRedlineAccess::REDLINE_DELETE == pTmp->GetType() )
                 {
                     const SwPosition *pRStt = pTmp->Start(), *pREnd = pTmp->End();
                     switch( ComparePosition( *pRStt, *pREnd, aStPos, aEndPos ))
@@ -2057,12 +2026,12 @@ BOOL SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, BOOL bIsOutlMv )
     {
         // wenn der Bereich komplett im eigenen Redline liegt, kann es
         // verschoben werden!
-        USHORT nRedlPos = GetRedlinePos( pStt->nNode.GetNode(), REDLINE_INSERT );
+        USHORT nRedlPos = GetRedlinePos( pStt->nNode.GetNode(), IDocumentRedlineAccess::REDLINE_INSERT );
         if( USHRT_MAX != nRedlPos )
         {
             SwRedline* pTmp = GetRedlineTbl()[ nRedlPos ];
             const SwPosition *pRStt = pTmp->Start(), *pREnd = pTmp->End();
-            SwRedline aTmpRedl( REDLINE_INSERT, rPam );
+            SwRedline aTmpRedl( IDocumentRedlineAccess::REDLINE_INSERT, rPam );
             const SwCntntNode* pCEndNd = pEnd->nNode.GetNode().GetCntntNode();
             // liegt komplett im Bereich, und ist auch der eigene Redline?
             if( aTmpRedl.IsOwnRedline( *pTmp ) &&
@@ -2093,7 +2062,7 @@ BOOL SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, BOOL bIsOutlMv )
 
         if( !pOwnRedl )
         {
-            StartUndo( UNDO_START );
+            StartUndo( UNDO_START, NULL );
 
             // zuerst das Insert, dann das Loeschen
             SwPosition aInsPos( aIdx );
@@ -2166,16 +2135,17 @@ BOOL SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, BOOL bIsOutlMv )
             rOrigPam.GetPoint()->nNode++;
             rOrigPam.GetPoint()->nContent.Assign( rOrigPam.GetCntntNode(), 0 );
 
-            SwRedlineMode eOld = GetRedlineMode();
+            IDocumentRedlineAccess::RedlineMode_t eOld = GetRedlineMode();
             checkRedlining(eOld);
             if( DoesUndo() )
             {
-//JP 06.01.98: MUSS noch optimiert werden!!!
-SetRedlineMode( REDLINE_ON | REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE );
+                //JP 06.01.98: MUSS noch optimiert werden!!!
+                SetRedlineMode(
+                    IDocumentRedlineAccess::REDLINE_ON | IDocumentRedlineAccess::REDLINE_SHOW_INSERT | IDocumentRedlineAccess::REDLINE_SHOW_DELETE );
                 AppendUndo( new SwUndoRedlineDelete( aPam, UNDO_DELETE ));
             }
 
-            SwRedline* pNewRedline = new SwRedline( REDLINE_DELETE, aPam );
+            SwRedline* pNewRedline = new SwRedline( IDocumentRedlineAccess::REDLINE_DELETE, aPam );
 
             // #101654# prevent assertion from aPam's target being deleted
             // (Alternatively, one could just let aPam go out of scope, but
@@ -2183,11 +2153,11 @@ SetRedlineMode( REDLINE_ON | REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE );
             aPam.GetBound(TRUE).nContent.Assign( NULL, 0 );
             aPam.GetBound(FALSE).nContent.Assign( NULL, 0 );
 
-            AppendRedline( pNewRedline );
+            AppendRedline( pNewRedline, true );
 
 //JP 06.01.98: MUSS noch optimiert werden!!!
 SetRedlineMode( eOld );
-            EndUndo( UNDO_END );
+            EndUndo( UNDO_END, NULL );
             SetModified();
 
             return TRUE;
@@ -2323,19 +2293,7 @@ USHORT SwDoc::FindNumRule( const String& rName ) const
     for( USHORT n = pNumRuleTbl->Count(); n; )
         if( (*pNumRuleTbl)[ --n ]->GetName() == rName )
             return n;
-/*
-//JP 20.11.97: sollte man im Find neue Rule anlegen??
-                erstmal nicht
-    USHORT nPoolId = GetPoolId( rName, GET_POOLID_NUMRULE );
-    if( USHRT_MAX != nPoolId )
-    {
-        SwDoc* pThis = (SwDoc*)this;
-        SwNumRule* pR = pThis->GetNumRuleFromPool( nPoolId );
-        for( n = pNumRuleTbl->Count(); n; )
-            if( (*pNumRuleTbl)[ --n ] == pR )
-                return n;
-    }
-*/
+
     return USHRT_MAX;
 }
 
@@ -2533,12 +2491,12 @@ const SwNode* lcl_FindBaseNode( const SwNode& rNd )
     const SwNodes& rNds = rNd.GetNodes();
     ULONG nNdIdx = rNd.GetIndex();
     if( nNdIdx > rNds.GetEndOfExtras().GetIndex() )
-        return rNds.GetEndOfContent().FindStartNode();
+        return rNds.GetEndOfContent().StartOfSectionNode();
 
-    const SwNode* pSttNd = rNds[ ULONG(0) ]->FindStartNode();
-    const SwNode* pNd = rNd.FindStartNode();
-    while( pSttNd != pNd->FindStartNode()->FindStartNode() )
-        pNd = pNd->FindStartNode();
+    const SwNode* pSttNd = rNds[ ULONG(0) ]->StartOfSectionNode();
+    const SwNode* pNd = rNd.StartOfSectionNode();
+    while( pSttNd != pNd->StartOfSectionNode()->StartOfSectionNode() )
+        pNd = pNd->StartOfSectionNode();
     return pNd;
 }
 
