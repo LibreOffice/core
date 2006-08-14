@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: vg $ $Date: 2006-06-02 12:11:12 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:19:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _FRAME_HXX
 #define _FRAME_HXX
-
 #ifndef _SVARRAY_HXX //autogen
 #include <svtools/svarray.hxx>
 #endif
@@ -58,7 +57,6 @@ class SwPageFrm;
 class SwFlyFrm;
 class SwSectionFrm;
 class SdrObject;
-class SwDrawContact;
 class SwFtnFrm;
 class SwFtnBossFrm;
 class SwTabFrm;
@@ -72,11 +70,8 @@ class Color;
 class SwBorderAttrs;
 class SwCache;
 class SvxBrushItem;
-class SwTxtFtn;
 struct SwPosition;
 struct SwCrsrMoveState;
-// OD 20.05.2003 #108784#
-class SwDrawVirtObj;
 
 // --> OD 2004-07-06 #i28701#
 class SwSortedObjs;
