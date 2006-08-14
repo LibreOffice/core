@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swatrset.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:58:42 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:49:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -68,12 +67,6 @@
 #endif
 #ifndef _NODE_HXX //autogen
 #include <node.hxx>
-#endif
-#ifndef _FORMAT_HXX //autogen
-#include <format.hxx>
-#endif
-#ifndef _SWATRSET_HXX
-#include <swatrset.hxx>
 #endif
 #ifndef _PARATR_HXX
 #include <paratr.hxx>       // fuer SetModifyAtAttr
@@ -321,7 +314,4 @@ BOOL IsInRange( const USHORT* pRange, const USHORT nId )
     }
     return FALSE;
 }
-
-
-
 
