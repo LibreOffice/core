@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glshell.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:18:58 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:42:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,11 +34,7 @@
  ************************************************************************/
 #ifndef _AUTODOC_HXX
 #define _AUTODOC_HXX
-
 #include "wdocsh.hxx"
-
-class SwTextBlocks;
-
 
 class SwGlosDocShell : public SwDocShell
 {
