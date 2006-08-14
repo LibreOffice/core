@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfgitems.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 15:12:49 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:38:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,16 +34,12 @@
  ************************************************************************/
 #ifndef _CFGITEMS_HXX
 #define _CFGITEMS_HXX
-
 #ifndef _SFXPOOLITEM_HXX //autogen
 #include <svtools/poolitem.hxx>
 #endif
 
 #ifndef INCLUDED_SWDLLAPI_H
 #include "swdllapi.h"
-#endif
-#ifndef _AUTHRATR_HXX
-#include <authratr.hxx>
 #endif
 #ifndef _SW_PRINTDATA_HXX
 #include <printdata.hxx>
