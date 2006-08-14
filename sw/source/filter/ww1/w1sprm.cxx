@@ -4,9 +4,9 @@
  *
  *  $RCSfile: w1sprm.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 13:54:02 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:14:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -320,68 +320,6 @@ SvxBorderLine* Ww1SingleSprmPBrc::SetBorder(SvxBorderLine* pLine, W1_BRC10* pBrc
     pLine->SetDistance(nCode);
     return pLine;
 }
-#if 0
-SvxBorderLine* Ww1SingleSprmPBrc::SetBorder(SvxBorderLine* pLine, W1_BRC* pBrc)
-{
-    static USHORT __READONLY_DATA nOutTab[] = { // Aussenlinie
-        DEF_LINE_WIDTH_0, DEF_LINE_WIDTH_0,     // No Line -> hair line
-        DEF_LINE_WIDTH_0, DEF_LINE_WIDTH_0,
-        DEF_LINE_WIDTH_0, DEF_LINE_WIDTH_0,
-        DEF_LINE_WIDTH_0, DEF_LINE_WIDTH_0,     // Single Thin Dotted / Dashed
-        DEF_LINE_WIDTH_0, DEF_LINE_WIDTH_0,     // Single Line thin(Idx * 15tw)
-        DEF_LINE_WIDTH_1, DEF_LINE_WIDTH_2,
-        DEF_LINE_WIDTH_2, DEF_LINE_WIDTH_3,
-        DEF_LINE_WIDTH_0, DEF_LINE_WIDTH_0,     // Single Thin Dotted / Dashed
-        DEF_LINE_WIDTH_0, DEF_LINE_WIDTH_1,     // Single Line thick(Idx * 30tw)
-        DEF_LINE_WIDTH_2, DEF_LINE_WIDTH_3,
-        DEF_LINE_WIDTH_4, DEF_LINE_WIDTH_4,
-        DEF_LINE_WIDTH_1, DEF_LINE_WIDTH_1,     // Single Thick Dotted / Dashed
-        DEF_DOUBLE_LINE0_OUT, DEF_DOUBLE_LINE0_OUT, // Double Line(Idx * 15tw)
-        DEF_DOUBLE_LINE1_OUT, DEF_DOUBLE_LINE2_OUT,
-        DEF_DOUBLE_LINE2_OUT, DEF_DOUBLE_LINE3_OUT,
-        DEF_DOUBLE_LINE0_OUT, DEF_DOUBLE_LINE0_OUT }; // Double Dotted / Dashed
-    static USHORT __READONLY_DATA nInTab[] = {  // Innenlinie
-        0, 0, 0, 0, 0, 0, 0, 0,                 // No line / dotted / dashed
-        0, 0, 0, 0, 0, 0, 0, 0,                 // Single Line thin(Idx * 15tw)
-        0, 0, 0, 0, 0, 0, 0, 0,                 // Single Line thick(Idx * 30tw)
-        DEF_DOUBLE_LINE0_IN, DEF_DOUBLE_LINE0_IN,   // Double Line(Idx * 15tw)
-        DEF_DOUBLE_LINE1_IN, DEF_DOUBLE_LINE2_IN,
-        DEF_DOUBLE_LINE2_IN, DEF_DOUBLE_LINE3_IN,
-        DEF_DOUBLE_LINE0_IN, DEF_DOUBLE_LINE0_IN }; // Double Dotted / Dashed
-    static USHORT __READONLY_DATA nDistTab[] = { // Abstand der Linien
-        0, 0, 0, 0, 0, 0, 0, 0,                 // No line / dotted / dashed
-        0, 0, 0, 0, 0, 0, 0, 0,                 // Single Line thin(Idx * 15tw)
-        0, 0, 0, 0, 0, 0, 0, 0,                 // Single Line thick(Idx * 30tw)
-        DEF_DOUBLE_LINE0_DIST, DEF_DOUBLE_LINE0_DIST, // Double Line(Idx * 15tw)
-        DEF_DOUBLE_LINE1_DIST, DEF_DOUBLE_LINE2_DIST,
-        DEF_DOUBLE_LINE2_DIST, DEF_DOUBLE_LINE3_DIST,
-        DEF_DOUBLE_LINE0_DIST, DEF_DOUBLE_LINE0_DIST }; // Double Dotted / Dashed
-    short nIdx = pBrc->dxpLineWidthGet() + 8 * pBrc->brcTypeGet();
-    pLine->SetOutWidth(nOutTab[nIdx]);
-    pLine->SetInWidth(nInTab[nIdx]);
-    pLine->SetDistance(nDistTab[nIdx]);
-    if(pBrc->icoGet())
-    {
-        ColorData nIdx;
-        switch(pBrc->icoGet())
-        {
-        default: ASSERT(FALSE, "unknown color code");
-        case 0:
-        case 1: nIdx = COL_BLACK; break;
-        case 2: nIdx = COL_LIGHTBLUE; break;
-        case 3: nIdx = COL_LIGHTCYAN; break;
-        case 4: nIdx = COL_LIGHTGREEN; break;
-        case 5: nIdx = COL_LIGHTMAGENTA; break;
-        case 6: nIdx = COL_LIGHTRED; break;
-        case 7: nIdx = COL_YELLOW; break;
-        case 8: nIdx = COL_WHITE; break;
-        }
-        Color aCol(nIdx);
-        pLine->SetColor(aCol);
-    }
-    return pLine;
-}
-#endif
 
 void Ww1SingleSprmPBrc::Start(
     Ww1Shell& rOut, BYTE, W1_BRC10* pBrc, USHORT nSize, Ww1Manager& rMan, SvxBoxItem& aBox)
@@ -688,42 +626,6 @@ void Ww1SingleSprmTDyaRowHeight::Start(
 }
 
 // Fastsave-Attribute brauche ich als Dymmys nicht
-
-#if 0
-
-void Ww1SingleSprmTInsert::Start(
-    Ww1Shell& rOut, BYTE nId, BYTE* pSprm, USHORT nSize, Ww1Manager& rMan)
-{
-}
-
-void Ww1SingleSprmTDelete::Start(
-    Ww1Shell& rOut, BYTE nId, BYTE* pSprm, USHORT nSize, Ww1Manager& rMan)
-{
-    short nSpace = SVBT16ToShort(pSprm);
-}
-
-void Ww1SingleSprmTDxaCol::Start(
-    Ww1Shell& rOut, BYTE nId, BYTE* pSprm, USHORT nSize, Ww1Manager& rMan)
-{
-}
-
-void Ww1SingleSprmTMerge::Start(
-    Ww1Shell& rOut, BYTE nId, BYTE* pSprm, USHORT nSize, Ww1Manager& rMan)
-{
-    short nSpace = SVBT16ToShort(pSprm);
-}
-
-void Ww1SingleSprmTSplit::Start(
-    Ww1Shell& rOut, BYTE nId, BYTE* pSprm, USHORT nSize, Ww1Manager& rMan)
-{
-    short nSpace = SVBT16ToShort(pSprm);
-}
-
-void Ww1SingleSprmTSetBrc10::Start(
-    Ww1Shell& rOut, BYTE nId, BYTE* pSprm, USHORT nSize, Ww1Manager& rMan)
-{
-}
-#endif // 0
 
 void Ww1SingleSprmPpc::Start(
     Ww1Shell& rOut, BYTE nId, BYTE* pSprm, USHORT nSize, Ww1Manager& rMan)
