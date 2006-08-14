@@ -4,9 +4,9 @@
  *
  *  $RCSfile: trvltbl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:07:43 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:53:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 #ifndef _HINTIDS_HXX
@@ -69,9 +68,6 @@
 #endif
 #ifndef _FRMATR_HXX
 #include <frmatr.hxx>
-#endif
-#ifndef _NODE_HXX //autogen
-#include <node.hxx>
 #endif
 #ifndef _FRMFMT_HXX //autogen
 #include <frmfmt.hxx>
@@ -476,7 +472,7 @@ FASTBOOL GotoPrevTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
         SwTableNode* pInnerTblNd = 0;
         SwNodeIndex aTmpIdx( aIdx );
         while( aTmpIdx.GetIndex() &&
-                0 == ( pInnerTblNd = aTmpIdx.GetNode().FindStartNode()->GetTableNode()) )
+                0 == ( pInnerTblNd = aTmpIdx.GetNode().StartOfSectionNode()->GetTableNode()) )
             aTmpIdx--;
 
         if( pInnerTblNd == pTblNd )
@@ -485,7 +481,7 @@ FASTBOOL GotoPrevTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
 
     do {
         while( aIdx.GetIndex() &&
-            0 == ( pTblNd = aIdx.GetNode().FindStartNode()->GetTableNode()) )
+            0 == ( pTblNd = aIdx.GetNode().StartOfSectionNode()->GetTableNode()) )
             aIdx--;
 
         if( pTblNd )        // gibt einen weiteren TableNode ?
