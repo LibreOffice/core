@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewport.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:37:02 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:57:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #include "hintids.hxx"
@@ -54,10 +53,6 @@
 #ifndef _SFX_BINDINGS_HXX //autogen
 #include <sfx2/bindings.hxx>
 #endif
-#ifndef _SFXAPP_HXX //autogen
-#include <sfx2/app.hxx>
-#endif
-
 #ifndef _VIEW_HXX
 #include <view.hxx>
 #endif
@@ -101,6 +96,8 @@
 #include <crsskip.hxx>
 #endif
 
+#include <IDocumentSettingAccess.hxx>
+
 //Das SetVisArea der DocShell darf nicht vom InnerResizePixel gerufen werden.
 //Unsere Einstellungen muessen aber stattfinden.
 #ifndef WB_RIGHT_ALIGNED
@@ -114,7 +111,7 @@ static USHORT nPgNum = 0;
 inline BOOL SwView::IsDocumentBorder()
 {
     return GetDocShell()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED ||
-           pWrtShell->IsBrowseMode() ||
+           pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) ||
            SVX_ZOOM_PAGEWIDTH_NOBORDER == (SvxZoomType)pWrtShell->GetViewOptions()->GetZoomType();
 }
 inline long GetLeftMargin( SwView &rView )
@@ -303,7 +300,7 @@ void SwView::SetVisArea( const Rectangle &rRect, BOOL bUpdateScrollbar )
         return;
 
     //Bevor die Daten veraendert werden ggf. ein Update rufen. Dadurch wird
-    //sichergestellt, daá anliegende Paints korrekt in Dokumentkoordinaten
+    //sichergestellt, da? anliegende Paints korrekt in Dokumentkoordinaten
     //umgerechnet werden.
     //Vorsichtshalber tun wir das nur wenn an der Shell eine Action laeuft,
     //denn dann wir nicht wirklich gepaintet sondern die Rechtecke werden
@@ -390,7 +387,7 @@ void SwView::SetVisArea( const Point &rPt, BOOL bUpdateScrollbar )
 
 void SwView::CheckVisArea()
 {
-    pHScrollbar->SetAuto( pWrtShell->IsBrowseMode() &&
+    pHScrollbar->SetAuto( pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) &&
                               !GetViewFrame()->GetFrame()->IsInPlace() );
     if ( IsDocumentBorder() )
     {
@@ -750,7 +747,7 @@ IMPL_LINK( SwView, ScrollHdl, SwScrollbar *, pScrollbar )
     if ( pScrollbar->GetType() == SCROLL_DRAG )
         pWrtShell->EnableSmooth( FALSE );
 
-    if(!pWrtShell->IsBrowseMode() &&
+    if(!pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) &&
         pScrollbar->GetType() == SCROLL_DRAG)
     {
         //Hier wieder auskommentieren wenn das mitscrollen nicht gewuenscht ist.
@@ -918,7 +915,7 @@ void SwView::CalcAndSetBorderPixel( SvBorder &rToFill, FASTBOOL bInner )
     }
     //#i32913# in browse mode the visibility of the horizontal scrollbar
     // depends on the content (fixed width tables may require a scrollbar)
-    if ( pHScrollbar->IsVisible(pWrtShell->IsBrowseMode())  )
+    if ( pHScrollbar->IsVisible(pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE))  )
         rToFill.Bottom() = nTmp;
 
     SetBorderPixel( rToFill );
@@ -1061,7 +1058,7 @@ void ViewResizePixel( const Window &rRef,
 
 void SwView::ShowAtResize()
 {
-    const FASTBOOL bBrowse = pWrtShell->IsBrowseMode();
+    const FASTBOOL bBrowse = pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
     bShowAtResize = FALSE;
     if ( pWrtShell->GetViewOptions()->IsViewHRuler() )
         pHRuler->Show();
@@ -1112,7 +1109,7 @@ void SwView::InnerResizePixel( const Point &rOfst, const Size &rSize )
         }
 
         Size aEditSz( GetEditWin().GetOutputSizePixel() );
-        const BOOL bBrowse = pWrtShell->IsBrowseMode();
+        const BOOL bBrowse = pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
         ViewResizePixel( GetEditWin(), rOfst, aSz, aEditSz, TRUE, *pVScrollbar,
                             *pHScrollbar, pPageUpBtn, pPageDownBtn,
                             pNaviBtn,
@@ -1164,7 +1161,7 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
     bInOuterResizePixel = TRUE;
 
 // feststellen, ob Scrollbars angezeigt werden duerfen
-    FASTBOOL bBrowse = pWrtShell->IsBrowseMode();
+    FASTBOOL bBrowse = pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
     FASTBOOL bShowH,
              bShowV,
              bAuto = FALSE,
@@ -1260,7 +1257,7 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
             pDocSh->SetVisArea(
                             pDocSh->SfxInPlaceObject::GetVisArea() );*/
         if ( pWrtShell->GetViewOptions()->GetZoomType() != SVX_ZOOM_PERCENT &&
-             !pWrtShell->IsBrowseMode() )
+             !pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
             _SetZoom( aEditSz, (SvxZoomType)pWrtShell->GetViewOptions()->GetZoomType(), 100, TRUE );
         pWrtShell->EndAction();
 
@@ -1315,7 +1312,7 @@ void SwView::SetZoomFactor( const Fraction &rX, const Fraction &rY )
 Size SwView::GetOptimalSizePixel() const
 {
     Size aPgSize;
-    if ( pWrtShell->IsBrowseMode() )
+    if ( pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
     {
         aPgSize.Height() = lA4Height;
         aPgSize.Width()  = lA4Width;
