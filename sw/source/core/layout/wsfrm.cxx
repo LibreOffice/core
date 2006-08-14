@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:30:27 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:30:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -98,20 +97,11 @@
 #ifndef _FRMTOOL_HXX
 #include <frmtool.hxx>
 #endif
-#ifndef _FRMFMT_HXX
-#include <frmfmt.hxx>
-#endif
 #ifndef _FTNINFO_HXX
 #include <ftninfo.hxx>
 #endif
 #ifndef _DFLYOBJ_HXX
 #include <dflyobj.hxx>
-#endif
-#ifndef _HINTS_HXX
-#include <hints.hxx>
-#endif
-#ifndef _ERRHDL_HXX
-#include <errhdl.hxx>
 #endif
 #ifndef _FMTCLBL_HXX
 #include <fmtclbl.hxx>
@@ -124,9 +114,6 @@
 #endif
 #ifndef _FMTPDSC_HXX
 #include <fmtpdsc.hxx>
-#endif
-#ifndef _SVX_KEEPITEM_HXX //autogen
-#include <svx/keepitem.hxx>
 #endif
 #ifndef _TXTFTN_HXX //autogen
 #include <txtftn.hxx>
@@ -293,7 +280,8 @@ void SwSectionFrm::CheckDirection( BOOL bVert )
     const SwFrmFmt* pFmt = GetFmt();
     if( pFmt )
         CheckDir(((SvxFrameDirectionItem&)pFmt->GetAttr(RES_FRAMEDIR)).GetValue(),
-                    bVert, sal_True, pFmt->GetDoc()->IsBrowseMode() );
+                    bVert, sal_True,
+                    pFmt->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) );
     else
         SwFrm::CheckDirection( bVert );
 }
@@ -303,7 +291,8 @@ void SwFlyFrm::CheckDirection( BOOL bVert )
     const SwFrmFmt* pFmt = GetFmt();
     if( pFmt )
         CheckDir(((SvxFrameDirectionItem&)pFmt->GetAttr(RES_FRAMEDIR)).GetValue(),
-                    bVert, sal_False, pFmt->GetDoc()->IsBrowseMode() );
+                    bVert, sal_False,
+                    pFmt->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) );
     else
         SwFrm::CheckDirection( bVert );
 }
@@ -313,7 +302,8 @@ void SwTabFrm::CheckDirection( BOOL bVert )
     const SwFrmFmt* pFmt = GetFmt();
     if( pFmt )
         CheckDir(((SvxFrameDirectionItem&)pFmt->GetAttr(RES_FRAMEDIR)).GetValue(),
-                    bVert, sal_True, pFmt->GetDoc()->IsBrowseMode() );
+                    bVert, sal_True,
+                    pFmt->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) );
     else
         SwFrm::CheckDirection( bVert );
 }
@@ -329,7 +319,8 @@ void SwCellFrm::CheckDirection( BOOL bVert )
     if( pFmt && SFX_ITEM_SET == pFmt->GetItemState( RES_FRAMEDIR, TRUE, &pItem ) )
     {
         const SvxFrameDirectionItem* pFrmDirItem = static_cast<const SvxFrameDirectionItem*>(pItem);
-        CheckDir(pFrmDirItem->GetValue(), bVert, sal_False, pFmt->GetDoc()->IsBrowseMode() );
+        CheckDir( pFrmDirItem->GetValue(), bVert, sal_False,
+                  pFmt->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) );
     }
     else
         SwFrm::CheckDirection( bVert );
@@ -338,7 +329,8 @@ void SwCellFrm::CheckDirection( BOOL bVert )
 void SwTxtFrm::CheckDirection( BOOL bVert )
 {
     CheckDir( GetTxtNode()->GetSwAttrSet().GetFrmDir().GetValue(), bVert,
-              sal_True, GetTxtNode()->GetDoc()->IsBrowseMode() );
+              sal_True,
+              GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) );
 }
 
 /*************************************************************************
@@ -1509,7 +1501,7 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, BOOL bTst )
     if ( !nDiff || !GetUpper()->IsFtnBossFrm() ) // nur innerhalb von Seiten/Spalten
         return 0L;
 
-    FASTBOOL bBrowse = GetUpper()->GetFmt()->GetDoc()->IsBrowseMode();
+    FASTBOOL bBrowse = GetUpper()->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
 
     //Der (Page)Body veraendert sich nur im BrowseMode, aber nicht wenn er
     //Spalten enthaelt.
@@ -1953,7 +1945,7 @@ SwTwips SwCntntFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
          nDist > (LONG_MAX - nFrmHeight ) )
         nDist = LONG_MAX - nFrmHeight;
 
-    const FASTBOOL bBrowse = GetUpper()->GetFmt()->GetDoc()->IsBrowseMode();
+    const FASTBOOL bBrowse = GetUpper()->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
     const USHORT nType = bBrowse ? 0x2084: 0x2004; //Row+Cell, Browse mit Body
     if( !(GetUpper()->GetType() & nType) && GetUpper()->HasFixSize() )
     {
@@ -1971,7 +1963,7 @@ SwTwips SwCntntFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
             // due to the positioning of its objects ). Thus, invalivate this next frame,
             // if document compatibility option 'Consider wrapping style influence on
             // object positioning' is ON.
-            else if ( GetUpper()->GetFmt()->GetDoc()->ConsiderWrapOnObjPos() )
+            else if ( GetUpper()->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION) )
             {
                 InvalidateNextPos();
             }
@@ -2038,7 +2030,7 @@ SwTwips SwCntntFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
         {
             GetNext()->InvalidatePos();
         }
-        else if ( GetUpper()->GetFmt()->GetDoc()->ConsiderWrapOnObjPos() )
+        else if ( GetUpper()->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION) )
         {
             InvalidateNextPos();
         }
@@ -2293,7 +2285,7 @@ void SwCntntFrm::_UpdateAttr( SfxPoolItem* pOld, SfxPoolItem* pNew,
                 }
                 // OD 2004-03-17 #i11860#
                 if ( GetIndNext() &&
-                     !GetAttrSet()->GetDoc()->IsFormerObjectPositioning() )
+                     !GetUpper()->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::USE_FORMER_OBJECT_POS) )
                 {
                     // OD 2004-07-01 #i28701# - use new method <InvalidateObjs(..)>
                     GetIndNext()->InvalidateObjs( true );
@@ -2313,8 +2305,9 @@ void SwCntntFrm::_UpdateAttr( SfxPoolItem* pOld, SfxPoolItem* pNew,
         case RES_BREAK:
             {
                 rInvFlags |= 0x42;
-                if( GetAttrSet()->GetDoc()->IsParaSpaceMax() ||
-                    GetAttrSet()->GetDoc()->IsParaSpaceMaxAtPages() )
+                const IDocumentSettingAccess* pIDSA = GetUpper()->GetFmt()->getIDocumentSettingAccess();
+                if( pIDSA->get(IDocumentSettingAccess::PARA_SPACE_MAX) ||
+                    pIDSA->get(IDocumentSettingAccess::PARA_SPACE_MAX_AT_PAGES) )
                 {
                     rInvFlags |= 0x1;
                     SwFrm* pNxt = FindNext();
@@ -2461,7 +2454,7 @@ SwTwips SwLayoutFrm::InnerHeight() const
 |*************************************************************************/
 SwTwips SwLayoutFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
 {
-    const FASTBOOL bBrowse = GetFmt()->GetDoc()->IsBrowseMode();
+    const FASTBOOL bBrowse = GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
     const USHORT nType = bBrowse ? 0x2084: 0x2004; //Row+Cell, Browse mit Body
     if( !(GetType() & nType) && HasFixSize() )
         return 0;
@@ -2605,7 +2598,7 @@ SwTwips SwLayoutFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
 |*************************************************************************/
 SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
 {
-    const FASTBOOL bBrowse = GetFmt()->GetDoc()->IsBrowseMode();
+    const FASTBOOL bBrowse = GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
     const USHORT nType = bBrowse ? 0x2084: 0x2004; //Row+Cell, Browse mit Body
     if( !(GetType() & nType) && HasFixSize() )
         return 0;
@@ -3352,7 +3345,8 @@ long SwLayoutFrm::CalcRel( const SwFmtFrmSize &rSz, BOOL bWidth ) const
         const SwFrm *pRel = GetUpper();
         long nRel = LONG_MAX;
         const ViewShell *pSh = GetShell();
-        if ( pRel->IsPageBodyFrm() && GetFmt()->GetDoc()->IsBrowseMode() &&
+        if ( pRel->IsPageBodyFrm() &&
+             GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) &&
              pSh && pSh->VisArea().Width())
         {
             nRel = pSh->VisArea().Width();
