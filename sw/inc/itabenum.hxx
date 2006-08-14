@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itabenum.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:59:44 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:26:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@ namespace tabopts
     const USHORT SPLIT_LAYOUT       = 0x08;
     const USHORT HEADLINE_NO_BORDER = HEADLINE | SPLIT_LAYOUT;
     const USHORT ALL_TBL_INS_ATTR   = DEFAULT_BORDER | HEADLINE | SPLIT_LAYOUT;
-};
+}
 
 struct SwInsertTableOptions
 {
