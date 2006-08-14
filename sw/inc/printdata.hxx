@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printdata.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:39:31 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:29:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,7 +132,6 @@ struct SwPrintData
     void SetPrintSingleJobs(sal_Bool b){ doSetModified(); bPrintSingleJobs = b;}
     void SetFaxName(const rtl::OUString& rSet){sFaxName = rSet;}
     virtual void doSetModified () { bModified = sal_True;}
-    sal_Bool WasModified () { return bModified; }
 };
 
 #endif  //_SW_PRINTDATA_HXX
