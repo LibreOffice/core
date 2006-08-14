@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmlayoutpage.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-27 09:49:48 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:31:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifdef SW_DLLIMPLEMENTATION
 #undef SW_DLLIMPLEMENTATION
 #endif
@@ -82,9 +81,6 @@
 #endif
 #ifndef _COM_SUN_STAR_VIEW_DOCUMENTZOOMTYPE_HPP_
 #include <com/sun/star/view/DocumentZoomType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
-#include <com/sun/star/beans/PropertyValue.hpp>
 #endif
 #ifndef _FLDMGR_HXX
 #include <fldmgr.hxx>
