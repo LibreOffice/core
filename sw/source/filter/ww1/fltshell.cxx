@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fltshell.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:01:37 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:13:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
 #include <ctype.h>
 
@@ -560,11 +559,11 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry*
                 {
                             // XRefs und Bookmarks sind bereits geUpcased
                     MakeBookRegionOrPoint(pEntry, pDoc, aRegion, TRUE);
-                    pDoc->Insert(aRegion, SwFmtRefMark(rName));
+                    pDoc->Insert(aRegion, SwFmtRefMark(rName), 0);
                 }
                 else if( !pB->IsOnlyRef() )
                 {
-                    SwFieldType* pFT = pDoc->GetFldType(RES_SETEXPFLD, rName);
+                    SwFieldType* pFT = pDoc->GetFldType(RES_SETEXPFLD, rName, false);
                     if (!pFT)
                     {                       // FieldType anlegen
                         SwSetExpFieldType aS(pDoc, rName, GSE_STRING);
@@ -574,7 +573,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry*
                                         pB->GetValSys());
                     aFld.SetSubType(SUB_INVISIBLE);
                     MakePoint(pEntry, pDoc, aRegion);
-                    pDoc->Insert(aRegion, SwFmtFld(aFld));
+                    pDoc->Insert(aRegion, SwFmtFld(aFld), 0);
                     MoveAttrs( *(aRegion.GetPoint()) );
                 }
             }
@@ -582,7 +581,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry*
                 ( !IsFlagSet(HYPO) || IsFlagSet(BOOK_AND_REF) ) )
             {
                 MakeBookRegionOrPoint(pEntry, pDoc, aRegion, TRUE);
-                pDoc->MakeBookmark( aRegion, aEmptyKeyCode, rName, aEmptyStr);
+                pDoc->makeBookmark( aRegion, aEmptyKeyCode, rName, aEmptyStr, IDocumentBookmarkAccess::BOOKMARK);
             }
         }
         break;
@@ -622,44 +621,12 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry*
                     }
                 }
             }
-#if 0
-            /*
-            #96598#
-            An attribute should be just that, not something that adds nodes
-            into the document!. So users of this attribute must add the actual
-            TOC section beforehand, and use this filter attribute only for
-            setting the surrounding attributes. (Note: There is only one user
-            of this flt anchor, and that is ww8)
-            */
-            // now insert the TOX
-            const SwTOXBaseSection* pSect
-                = pDoc->InsertTableOf(  *pPoint,
-                                        *pTOXAttr->GetBase(),
-                                        FALSE  );
-#endif
+
             delete pTOXAttr->GetBase();
 
             // set (aboved saved and removed) the break item at the node following the TOX
             if( aBkSet.Count() )
                 pNd->SetAttr( aBkSet );
-
-#if 0
-            /*
-            #96598# and #23610#
-            In trying to make columns work for indexes work noticed this code is no longer relevant
-            */
-            USHORT nCols = ((SwFltTOX*)pEntry->pAttr)->GetCols();
-            aRegion.Move( fnMoveBackward );
-            SwTOXBase* pBase = (SwTOXBase*)pDoc->GetCurTOX( *aRegion.GetPoint() );
-            if( pBase )
-            {
-                SfxItemSet aSet( pDoc->GetAttrPool(), RES_COL, RES_COL );
-                SwFmtCol aCol;
-                aCol.Init( nCols, 708, USHRT_MAX );
-                aSet.Put( aCol );
-                pBase->SetAttrSet( aSet );
-            }
-#endif
         }
         break;
     case RES_FLTR_SECTION:
@@ -672,9 +639,9 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry*
         {
             if (pEntry->MakeRegion(pDoc, aRegion, TRUE))
             {
-                pDoc->SetRedlineMode(   REDLINE_ON
-                                      | REDLINE_SHOW_INSERT
-                                      | REDLINE_SHOW_DELETE );
+                pDoc->SetRedlineMode(   IDocumentRedlineAccess::REDLINE_ON
+                                      | IDocumentRedlineAccess::REDLINE_SHOW_INSERT
+                                      | IDocumentRedlineAccess::REDLINE_SHOW_DELETE );
                 SwFltRedline& rFltRedline = *((SwFltRedline*)pEntry->pAttr);
 
                 if( USHRT_MAX != rFltRedline.nAutorNoPrev )
@@ -685,7 +652,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry*
                                         aEmptyStr,
                                         0
                                         );
-                    pDoc->AppendRedline(new SwRedline(aData, aRegion));
+                    pDoc->AppendRedline(new SwRedline(aData, aRegion), true);
                 }
                 SwRedlineData aData(rFltRedline.eType,
                                     rFltRedline.nAutorNo,
@@ -693,16 +660,16 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry*
                                     aEmptyStr,
                                     0
                                     );
-                pDoc->AppendRedline( new SwRedline(aData, aRegion) );
-                pDoc->SetRedlineMode(   REDLINE_NONE
-                                      | REDLINE_SHOW_INSERT
-                                      | REDLINE_SHOW_DELETE );
+                pDoc->AppendRedline( new SwRedline(aData, aRegion), true );
+                pDoc->SetRedlineMode(   IDocumentRedlineAccess::REDLINE_NONE
+                                      | IDocumentRedlineAccess::REDLINE_SHOW_INSERT
+                                      | IDocumentRedlineAccess::REDLINE_SHOW_DELETE );
             }
         }
         break;
     default:
         if (pEntry->MakeRegion(pDoc, aRegion, FALSE))
-            pDoc->Insert(aRegion, *pEntry->pAttr);
+            pDoc->Insert(aRegion, *pEntry->pAttr, 0);
         break;
     }
 }
@@ -885,9 +852,9 @@ SwFltShell::SwFltShell(SwDoc* pDoc, SwPaM& rPaM, const String& rBaseURL, BOOL bN
         USHORT nCntPos = pPos->nContent.GetIndex();
         if( nCntPos && pSttNd->GetTxt().Len() )
                                             // EinfuegePos nicht in leerer Zeile
-            pDoc->SplitNode( *pPos );       // neue Zeile erzeugen
+            pDoc->SplitNode( *pPos, false );        // neue Zeile erzeugen
         if( pSttNd->GetTxt().Len() ){       // EinfuegePos nicht am Ende der Zeile
-            pDoc->SplitNode( *pPos );       // neue Zeile
+            pDoc->SplitNode( *pPos, false );        // neue Zeile
             pPaM->Move( fnMoveBackward );   // gehe in leere Zeile
         }
 
@@ -915,7 +882,7 @@ SwFltShell::~SwFltShell()
     if( pOutDoc->IsInFly() )
         EndFly();
 
-    GetDoc().SetUpdateExpFldStat();
+    GetDoc().SetUpdateExpFldStat(true);
     GetDoc().SetInitDBFields(TRUE);
     aStack.SetAttr(*pPaM->GetPoint(), 0, FALSE);
     aStack.SetAttr(*pPaM->GetPoint(), 0, FALSE);
@@ -967,7 +934,7 @@ SwFltShell::~SwFltShell()
 SwFltShell& SwFltShell::operator << ( const String& rStr )
 {
     ASSERT(eSubMode != Style, "char insert while in style-mode");
-    GetDoc().Insert( *pPaM, rStr );
+    GetDoc().Insert( *pPaM, rStr, true );
     return *this;
 }
 
@@ -1012,7 +979,7 @@ SwFltShell& SwFltShell::AddError( const sal_Char* pErr )
 {
     String aName( String::CreateFromAscii(
                     RTL_CONSTASCII_STRINGPARAM( "ErrorTag" )));
-    SwFieldType* pFT = GetDoc().GetFldType( RES_SETEXPFLD, aName );
+    SwFieldType* pFT = GetDoc().GetFldType( RES_SETEXPFLD, aName, false );
     if( pFT == 0)
     {
         SwSetExpFieldType aS(&GetDoc(), aName, GSE_STRING);
@@ -1021,15 +988,26 @@ SwFltShell& SwFltShell::AddError( const sal_Char* pErr )
     SwSetExpField aFld( (SwSetExpFieldType*)pFT,
                         String::CreateFromAscii( pErr ));
     //, VVF_INVISIBLE
-    GetDoc().Insert(*pPaM, SwFmtFld(aFld));
+    GetDoc().Insert(*pPaM, SwFmtFld(aFld), 0);
     return *this;
 }
 
 SwFltShell& SwFltShell::operator << (Graphic& rGraphic)
 {
     // embedded Grafik !!
-    GetDoc().Insert(*pPaM, aEmptyStr, aEmptyStr, &rGraphic);
+    GetDoc().Insert(*pPaM, aEmptyStr, aEmptyStr, &rGraphic, NULL, NULL, NULL);
     return *this;
+}
+
+void SwFltShell::NextParagraph()
+{
+    GetDoc().AppendTxtNode(*pPaM->GetPoint());
+}
+
+void SwFltShell::NextPage()
+{
+    NextParagraph();
+    GetDoc().Insert(*pPaM, SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE), 0);
 }
 
 SwFltShell& SwFltShell::AddGraphic( const String& rPicName )
@@ -1120,7 +1098,7 @@ SwFltShell& SwFltShell::EndItem( USHORT nAttrId )
 
 SwFltShell& SwFltShell::operator << (const SwField& rField)
 {
-    GetDoc().Insert(*pPaM, SwFmtFld(rField));
+    GetDoc().Insert(*pPaM, SwFmtFld(rField), 0);
     return *this;
 }
 
@@ -1136,17 +1114,6 @@ SwFltShell& SwFltShell::operator << (const SwField& rField)
     pColl->SetAttr(rItem);
     return *this;
 }
-
-
-#if 0
-SwFltShell& SwFltShell::operator >> (SfxPoolItem& rItem)
-{
-    //rItem = *GetFmtAttr(rItem.Which());
-#pragma message(__FILE__ "(?) : ^das waer schoen!")
-    //~ mdt: remove from stack if item begins here.
-    return *this;
-}
-#endif
 
 const SfxPoolItem& SwFltOutDoc::GetAttr(USHORT nWhich)
 {
@@ -1178,6 +1145,25 @@ const SfxPoolItem& SwFltFormatCollection::GetNodeOrStyAttr(USHORT nWhich)
     return GetColl()->GetAttr(nWhich);  // mit Parents
 }
 
+const SfxPoolItem& SwFltShell::GetNodeOrStyAttr(USHORT nWhich)
+{
+    return pOut->GetNodeOrStyAttr( nWhich );
+}
+
+const SfxPoolItem& SwFltShell::GetAttr(USHORT nWhich)
+{
+    return pOut->GetAttr( nWhich );
+}
+
+const SfxPoolItem& SwFltShell::GetFlyFrmAttr(USHORT nWhich)
+{
+    return pOut->GetFlyFrmAttr( nWhich );
+}
+
+SwFieldType* SwFltShell::GetSysFldType(USHORT eWhich)
+{
+    return GetDoc().GetSysFldType(eWhich);
+}
 
 BOOL SwFltShell::GetWeightBold()
 {
@@ -1382,7 +1368,7 @@ void SwFltOutDoc::NextTableCell()
          GetDoc().IsIdxInTbl(pPaM->GetPoint()->nNode),
          pTableLine,
          (SwTableBoxFmt*)pTableBox->GetFrmFmt(),
-         GetDoc().GetTxtCollFromPoolSimple(RES_POOLCOLL_STANDARD, FALSE),
+         GetDoc().GetTxtCollFromPool(RES_POOLCOLL_STANDARD, false ),
          0,
          pTableBoxes->Count());
     SeekCell(usTableY, usTableX, TRUE);
@@ -1404,7 +1390,7 @@ void SwFltOutDoc::NextTableRow()
         usTableX = 0;
         SeekCell(++usTableY, usTableX, TRUE);
         GetDoc().SetTxtFmtColl(*pPaM,
-            GetDoc().GetTxtCollFromPoolSimple(RES_POOLCOLL_STANDARD, FALSE));
+            GetDoc().GetTxtCollFromPool(RES_POOLCOLL_STANDARD, false ));
     }
 }
 
@@ -1592,10 +1578,10 @@ BOOL SwFltOutDoc::SeekCell(short nRow, short nCol, BOOL bPam)
 //#pragma message(__FILE__ "(?) : Sw's const problem")
 #if OSL_DEBUG_LEVEL > 1
         const SwTxtFmtColl* p = GetDoc().GetDfltTxtFmtColl();
-        p = GetDoc().GetTxtCollFromPoolSimple(RES_POOLCOLL_STANDARD, FALSE);
+        p = GetDoc().GetTxtCollFromPool(RES_POOLCOLL_STANDARD, false );
 #endif
         GetDoc().SetTxtFmtColl(*pPaM,
-            GetDoc().GetTxtCollFromPoolSimple(RES_POOLCOLL_STANDARD, FALSE));
+            GetDoc().GetTxtCollFromPool(RES_POOLCOLL_STANDARD, false ));
     }
     return TRUE;
 }
@@ -1867,7 +1853,7 @@ void SwFltShell::BeginFootnote()
 //  Fussnoten im PMW uebernommen werden
 
     SwFmtFtn aFtn;
-    GetDoc().Insert(*pPaM, aFtn);
+    GetDoc().Insert(*pPaM, aFtn, 0);
     ASSERT(pSavedPos == NULL, "SwFltShell");
     pSavedPos = new SwPosition(*pPaM->GetPoint());
     pPaM->Move(fnMoveBackward, fnGoCntnt);
@@ -1967,7 +1953,7 @@ SwPageDesc* SwFltShell::MakePageDesc(SwPageDesc* pFirstPageDesc)
         pNewPD->SetFollow(pNewPD);
     }
     else
-        GetDoc().Insert( *pPaM, SwFmtPageDesc( pNewPD ) );
+        GetDoc().Insert( *pPaM, SwFmtPageDesc( pNewPD ), 0 );
     pNewPD->WriteUseOn( // alle Seiten
      (UseOnPage)(PD_ALL | PD_HEADERSHARE | PD_FOOTERSHARE));
     return pNewPD;
@@ -1977,7 +1963,7 @@ SwPageDesc* SwFltShell::MakePageDesc(SwPageDesc* pFirstPageDesc)
 SwFltFormatCollection::SwFltFormatCollection(
     SwDoc& rDoc, RES_POOL_COLLFMT_TYPE nType) :
     SwFltOutBase(rDoc),
-    pColl(rDoc.GetTxtCollFromPoolSimple(nType, FALSE)),
+    pColl(rDoc.GetTxtCollFromPool(nType, false )),
     pFlyAttrs( 0 ),
     bHasFly( FALSE )
 {
@@ -1994,20 +1980,6 @@ SwFltFormatCollection::SwFltFormatCollection(
     Reset();            // Default-Attrs loeschen und Auto-Flag
 }
 
-#if 0
-SwTxtFmtColl* SwFltFormatCollection::Search(String aName, CharSet eSrc)
-{
-    aName.Convert(eSrc);
-    SwTxtFmtColl* pColl = GetDoc().FindTxtFmtCollByName(aName);
-    if(!pColl)
-    {
-        USHORT n = GetDoc().GetPoolId(aName, GET_POOLID_TXTCOLL);
-        if(USHRT_MAX != n)
-            pColl = GetDoc().GetTxtCollFromPoolSimple(n, FALSE);
-    }
-    return pColl;
-}
-#endif
 void SwFltShell::NextStyle(USHORT nWhich, USHORT nNext)
 {
         ASSERT(pColls[nWhich], "Next style for noexistent style" );
