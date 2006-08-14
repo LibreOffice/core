@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objectformatter.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 16:31:02 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:28:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,6 @@
 #ifndef _OBJECTFORMATTERLAYFRM_HXX
 #include <objectformatterlayfrm.hxx>
 #endif
-
 #ifndef _ANCHOREDOBJECT_HXX
 #include <anchoredobject.hxx>
 #endif
@@ -193,7 +192,7 @@ SwObjectFormatter::SwObjectFormatter( const SwPageFrm& _rPageFrm,
                                       const bool _bCollectPgNumOfAnchors )
     : mrPageFrm( _rPageFrm ),
       mbFormatOnlyAsCharAnchored( false ),
-      mbConsiderWrapOnObjPos( _rPageFrm.GetFmt()->GetDoc()->ConsiderWrapOnObjPos() ),
+      mbConsiderWrapOnObjPos( _rPageFrm.GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION) ),
       mpLayAction( _pLayAction ),
       // --> OD 2004-10-04 #i26945#
       mpPgNumAndTypeOfAnchors( _bCollectPgNumOfAnchors ? new SwPageNumAndTypeOfAnchors() : 0L )
