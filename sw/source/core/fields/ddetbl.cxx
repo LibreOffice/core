@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ddetbl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:33:00 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:12:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -86,7 +85,6 @@ SwDDETable::SwDDETable( SwTable& rTable, SwDDEFieldType* pDDEType,
 
     if( aLines.Count() )
     {
-        SwDoc* pDoc = GetFrmFmt()->GetDoc();
         const SwNode& rNd = *GetTabSortBoxes()[0]->GetSttNd();
         if( rNd.GetNodes().IsDocNodes() )
         {
@@ -130,7 +128,6 @@ void SwDDETable::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
 void SwDDETable::ChangeContent()
 {
     ASSERT( GetFrmFmt(), "Kein FrameFormat" );
-    SwDoc* pDoc = GetFrmFmt()->GetDoc();
 
     // Stehen wir im richtigen NodesArray (Wegen UNDO)
     if( !aLines.Count() )
@@ -167,8 +164,10 @@ void SwDDETable::ChangeContent()
         }
     }
 
-    if( AUTOUPD_FIELD_AND_CHARTS == pDoc->GetFldUpdateFlags() )
-        pDoc->SetFieldsDirty( TRUE );
+    const IDocumentSettingAccess* pIDSA = GetFrmFmt()->getIDocumentSettingAccess();
+    SwDoc* pDoc = GetFrmFmt()->GetDoc();
+    if( AUTOUPD_FIELD_AND_CHARTS == pIDSA->getFieldUpdateFlags(true) )
+        pDoc->SetFieldsDirty( true, NULL, 0 );
 }
 
 SwDDEFieldType* SwDDETable::GetDDEFldType()
