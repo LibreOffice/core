@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-09 14:08:30 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:28:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -122,9 +121,6 @@
 #endif
 #ifndef _VIEWIMP_HXX
 #include <viewimp.hxx>
-#endif
-#ifndef _SWATRSET_HXX
-#include <swatrset.hxx>
 #endif
 #ifndef _DFLYOBJ_HXX
 #include <dflyobj.hxx>
@@ -1501,7 +1497,8 @@ void MA_FASTCALL lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
 
         //Wenn der Inhalt des Fly Transparent ist, wird er nicht abgezogen, es sei denn
         //er steht im Hell-Layer (#31941#)
-        BOOL bHell = pSdrObj->GetLayer() == pFly->GetFmt()->GetDoc()->GetHellId();
+        const IDocumentDrawModelAccess* pIDDMA = pFly->GetFmt()->getIDocumentDrawModelAccess();
+        BOOL bHell = pSdrObj->GetLayer() == pIDDMA->GetHellId();
         if ( (bStopOnHell && bHell) ||
              /// OD 05.08.2002 - change internal order of condition
              ///    first check "!bHell", then "..->Lower()" and "..->IsNoTxtFrm()"
@@ -2683,7 +2680,7 @@ void SwTabFrmPainter::Insert( SwLineEntry& rNew, bool bHori )
 |*  SwRootFrm::Paint()
 |*
 |*  Beschreibung
-|*      Fuer jede sichtbare Seite, die von Rect berhrt wird einmal Painten.
+|*      Fuer jede sichtbare Seite, die von Rect ber?hrt wird einmal Painten.
 |*      1. Umrandungen und Hintergruende Painten.
 |*      2. Den DrawLayer (Ramen und Zeichenobjekte) der unter dem Dokument
 |*         liegt painten (Hoelle).
@@ -2812,7 +2809,8 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
                 pLines->LockLines( TRUE );
                 // OD 29.08.2002 #102450# - add 3rd parameter
                 // OD 09.12.2002 #103045# - add 4th parameter for horizontal text direction.
-                pSh->Imp()->PaintLayer( pSh->GetDoc()->GetHellId(), aPaintRect,
+                const IDocumentDrawModelAccess* pIDDMA = pSh->getIDocumentDrawModelAccess();
+                pSh->Imp()->PaintLayer( pIDDMA->GetHellId(), aPaintRect,
                                         &aPageBackgrdColor, (pPage->IsRightToLeft() ? true : false) );
                 pLines->PaintLines( pSh->GetOut() );
                 pLines->LockLines( FALSE );
@@ -3231,7 +3229,8 @@ BOOL SwFlyFrm::IsPaint( SdrObject *pObj, const ViewShell *pSh )
                 else if ( bTableHack &&
                           pFly->Frm().Top() >= pFly->GetAnchorFrm()->Frm().Top() &&
                           pFly->Frm().Top() < pFly->GetAnchorFrm()->Frm().Bottom() &&
-                          long(pSh->GetOut()) == long(pSh->GetPrt()) )
+                          long(pSh->GetOut()) ==
+                          long(pSh->getIDocumentDeviceAccess()->getPrinter( false ) ) )
                 {
                     pAnch = pFly->AnchorFrm();
                 }
@@ -3247,7 +3246,7 @@ BOOL SwFlyFrm::IsPaint( SdrObject *pObj, const ViewShell *pSh )
             {
                 if ( !pAnch->GetValidPosFlag() )
                     pAnch = 0;
-                else if ( long(pSh->GetOut()) == long(pSh->GetPrt()) )
+                else if ( long(pSh->GetOut()) == long(pSh->getIDocumentDeviceAccess()->getPrinter( false )))
                 {
                     //HACK: fuer das Drucken muessen wir ein paar Objekte
                     //weglassen, da diese sonst doppelt gedruckt werden.
@@ -3353,13 +3352,15 @@ void SwFlyFrm::Paint( const SwRect& rRect ) const
         // for transparent graphics in layer Hell, if parent fly frame isn't
         // in layer Hell. It's only painted the intersection between the
         // parent fly frame area and the paint area <aRect>
+        const IDocumentDrawModelAccess* pIDDMA = GetFmt()->getIDocumentDrawModelAccess();
+
         if ( bIsGraphicTransparent &&
-            GetVirtDrawObj()->GetLayer() == GetFmt()->GetDoc()->GetHellId() &&
+            GetVirtDrawObj()->GetLayer() == pIDDMA->GetHellId() &&
             GetAnchorFrm()->FindFlyFrm() )
         {
             const SwFlyFrm* pParentFlyFrm = GetAnchorFrm()->FindFlyFrm();
             if ( pParentFlyFrm->GetDrawObj()->GetLayer() !=
-                                            GetFmt()->GetDoc()->GetHellId() )
+                                            pIDDMA->GetHellId() )
             {
                 SwFlyFrm* pOldRet = pRetoucheFly2;
                 pRetoucheFly2 = const_cast<SwFlyFrm*>(this);
@@ -5021,9 +5022,8 @@ void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
 void SwPageFrm::PaintMarginArea( const SwRect& _rOutputRect,
                                  ViewShell* _pViewShell ) const
 {
-    if ( _pViewShell->GetWin() &&
-         !_pViewShell->GetDoc()->IsBrowseMode()
-       )
+    if (  _pViewShell->GetWin() &&
+         !_pViewShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
     {
         SwRect aPgPrtRect( Prt() );
         aPgPrtRect.Pos() += Frm().Pos();
@@ -5286,7 +5286,6 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
     SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, *pSh->GetOut() );
     // <--
 
-    const FASTBOOL bWin = pSh->GetWin() ? TRUE : FALSE;
     const SvxBrushItem* pItem;
     /// OD 05.09.2002 #102912#
     /// temporary background brush for a fly frame without a background brush
@@ -5342,7 +5341,7 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
     {
         if ( bBack || bPageFrm || !bLowerMode )
         {
-            const FASTBOOL bBrowse = pSh->GetDoc()->IsBrowseMode();
+            const FASTBOOL bBrowse = pSh->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
 
             SwRect aRect;
             if ( (bPageFrm && bBrowse) ||
@@ -5990,13 +5989,15 @@ void SwFrm::Retouche( const SwPageFrm * pPage, const SwRect &rRect ) const
                 // OD 29.08.2002 #102450#
                 // add 3rd parameter to <PaintLayer> method calls
                 // OD 09.12.2002 #103045# - add 4th parameter for horizontal text direction.
-                pSh->Imp()->PaintLayer( pSh->GetDoc()->GetHellId(),
+                const IDocumentDrawModelAccess* pIDDMA = pSh->getIDocumentDrawModelAccess();
+
+                pSh->Imp()->PaintLayer( pIDDMA->GetHellId(),
                                         aRetouchePart, &aPageBackgrdColor,
                                         (pPage->IsRightToLeft() ? true : false) );
-                pSh->Imp()->PaintLayer( pSh->GetDoc()->GetHeavenId(),
+                pSh->Imp()->PaintLayer( pIDDMA->GetHeavenId(),
                                         aRetouchePart, &aPageBackgrdColor,
                                         (pPage->IsRightToLeft() ? true : false) );
-                pSh->Imp()->PaintLayer( pSh->GetDoc()->GetControlsId(),
+                pSh->Imp()->PaintLayer( pIDDMA->GetControlsId(),
                                         aRetouchePart );
             }
 
@@ -6116,7 +6117,8 @@ BOOL SwFrm::GetBackgroundBrush( const SvxBrushItem* & rpBrush,
            )
         {
             rpBrush = &rBack;
-            if ( pFrm->IsPageFrm() && pSh->GetDoc()->IsBrowseMode() )
+            if ( pFrm->IsPageFrm() &&
+                 pSh->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
                 rOrigRect = pFrm->Frm();
             else
             {
@@ -6239,19 +6241,20 @@ Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
         const Color aPageBackgrdColor = pFlyPage->GetDrawBackgrdColor();
         // OD 30.08.2002 #102450# - add 3rd parameter
         // OD 09.12.2002 #103045# - add 4th parameter for horizontal text direction.
-        pImp->PaintLayer( pSh->GetDoc()->GetHellId(), aOut, &aPageBackgrdColor,
+        const IDocumentDrawModelAccess* pIDDMA = pSh->getIDocumentDrawModelAccess();
+        pImp->PaintLayer( pIDDMA->GetHellId(), aOut, &aPageBackgrdColor,
                           (pFlyPage->IsRightToLeft() ? true : false) );
         pLines->PaintLines( &aDev );
         if ( pFly->IsFlyInCntFrm() )
             pFly->Paint( aOut );
         pLines->PaintLines( &aDev );
         /// OD 30.08.2002 #102450# - add 3rd parameter
-        pImp->PaintLayer( pSh->GetDoc()->GetHeavenId(), aOut, &aPageBackgrdColor,
+        pImp->PaintLayer( pIDDMA->GetHeavenId(), aOut, &aPageBackgrdColor,
                           (pFlyPage->IsRightToLeft() ? true : false) );
         pLines->PaintLines( &aDev );
         if( pSh->GetViewOptions()->IsControl() )
         {
-            pImp->PaintLayer( pSh->GetDoc()->GetControlsId(), aOut );
+            pImp->PaintLayer( pIDDMA->GetControlsId(), aOut );
             pLines->PaintLines( &aDev );
         }
         DELETEZ( pLines );
@@ -6280,7 +6283,7 @@ Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
 Graphic SwDrawFrmFmt::MakeGraphic( ImageMap* pMap )
 {
     Graphic aRet;
-    SdrModel *pMod = GetDoc()->GetDrawModel();
+    SdrModel *pMod = getIDocumentDrawModelAccess()->GetDrawModel();
     if ( pMod )
     {
         SdrObject *pObj = FindSdrObject();
