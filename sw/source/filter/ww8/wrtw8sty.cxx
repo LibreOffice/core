@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8sty.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:40:56 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:15:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,12 +84,11 @@
 #ifndef _SVX_ULSPITEM_HXX
 #include <svx/ulspitem.hxx>
 #endif
-
-#ifndef _WRTWW8_HXX
-#include <wrtww8.hxx>
-#endif
 #ifndef _DOC_HXX //autogen
 #include <doc.hxx>
+#endif
+#ifndef _WRTWW8_HXX
+#include <wrtww8.hxx>
 #endif
 #ifndef _DOCARY_HXX //autogen
 #include <docary.hxx>
