@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accdoc.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 09:09:45 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:42:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,6 @@
 #ifndef _ACCCONTEXT_HXX
 #include "acccontext.hxx"
 #endif
-
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESELECTION_HPP_
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #endif
@@ -46,9 +45,6 @@
 #include <accselectionhelper.hxx>
 #endif
 
-class SwRootFrm;
-class SwFEShell;
-class SwFlyFrm;
 class VclSimpleEvent;
 
 /**
