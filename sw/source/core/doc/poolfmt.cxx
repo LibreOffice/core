@@ -4,9 +4,9 @@
  *
  *  $RCSfile: poolfmt.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 11:47:34 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:02:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,23 +32,19 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-
 #pragma hdrstop
 
 #define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
+
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
-
 #ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
 #include <i18npool/mslangid.hxx>
 #endif
-
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
 #endif
-
 #ifndef _SVX_PAPERINF_HXX //autogen
 #include <svx/paperinf.hxx>
 #endif
@@ -97,9 +93,6 @@
 #ifndef _SVX_PROTITEM_HXX //autogen
 #include <svx/protitem.hxx>
 #endif
-#ifndef _SVX_PAPERINF_HXX //autogen
-#include <svx/paperinf.hxx>
-#endif
 #ifndef _SVX_ESCPITEM_HXX
 #include <svx/escpitem.hxx>
 #endif
@@ -121,7 +114,6 @@
 #ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>
 #endif
-
 #ifndef _DOC_HXX
 #include <doc.hxx>
 #endif
@@ -146,9 +138,6 @@
 #ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx>
 #endif
-#ifndef _HINTS_HXX
-#include <hints.hxx>
-#endif
 #ifndef _FRMTOOL_HXX
 #include <frmtool.hxx>
 #endif
@@ -161,22 +150,19 @@
 #ifndef _FMTCOL_HXX
 #include <fmtcol.hxx>
 #endif
-#ifndef _NUMRULE_HXX
-#include <numrule.hxx>
-#endif
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
 #endif
 #ifndef SW_FMTLINE_HXX
 #include <fmtline.hxx>
 #endif
-
 #ifndef _POOLFMT_HRC
 #include <poolfmt.hrc>
 #endif
 #ifndef _GETMETRICVAL_HXX
 #include <GetMetricVal.hxx>
 #endif
+
 const USHORT PT_3   =  3 * 20;      //  3 pt
 const USHORT PT_6   =  6 * 20;      //  6 pt
 const USHORT PT_7   =  7 * 20;      //  6 pt
@@ -307,16 +293,17 @@ void lcl_SetHeadline( SwDoc* pDoc, SwTxtFmtColl* pColl,
 {
     SetAllScriptItem( rSet, SvxWeightItem( WEIGHT_BOLD ) );
     SvxFontHeightItem aHItem;
-    if( pDoc->IsHTMLMode() )
+    const bool bHTMLMode = pDoc->get(IDocumentSettingAccess::HTML_MODE);
+    if( bHTMLMode )
         aHItem.SetHeight( aHeadlineSizes[ MAXLEVEL + nLevel ] );
     else
         aHItem.SetHeight( PT_14, aHeadlineSizes[ nLevel ] );
     SetAllScriptItem( rSet, aHItem );
 
-    if( bItalic && !pDoc->IsHTMLMode() )
+    if( bItalic && !bHTMLMode )
         SetAllScriptItem( rSet, SvxPostureItem( ITALIC_NORMAL ) );
 
-    if( pDoc->IsHTMLMode() )
+    if( bHTMLMode )
     {
         ::lcl_SetDfltFont( DEFAULTFONT_LATIN_TEXT, DEFAULTFONT_CJK_TEXT,
                             DEFAULTFONT_CTL_TEXT, rSet );
@@ -327,7 +314,7 @@ void lcl_SetHeadline( SwDoc* pDoc, SwTxtFmtColl* pColl,
         if( !( nOutLvlBits & ( 1 << nLevel )) )
         {
             pColl->SetOutlineLevel( nLevel );
-            if( !pDoc->IsHTMLMode() )
+            if( !bHTMLMode )
             {
                 SwNumRule * pOutlineRule = pDoc->GetOutlineNumRule();
                 const SwNumFmt& rNFmt = pOutlineRule->Get( nLevel );
@@ -339,7 +326,7 @@ void lcl_SetHeadline( SwDoc* pDoc, SwTxtFmtColl* pColl,
                     pColl->SetAttr( aLR );
                 }
 
-                if (! pDoc->IsOutlineLevelYieldsOutlineRule())
+                if (! pDoc->get(IDocumentSettingAccess::OUTLINE_LEVEL_YIELDS_OUTLINE_RULE))
                 {
                     SwNumRuleItem aItem(pOutlineRule->GetName());
 
@@ -410,9 +397,7 @@ SvxFrameDirection GetDefaultFrameDirection(ULONG nLanguage)
     return eResult;
 }
 
-SwTxtFmtColl* SwDoc::GetTxtCollFromPool
-( USHORT nId, String* pDesc, SfxItemPresentation ePres,
-  SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, BOOL bRegardLanguage)
+SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
 {
     ASSERT(
         (RES_POOLCOLL_TEXT_BEGIN <= nId && nId < RES_POOLCOLL_TEXT_END) ||
@@ -429,12 +414,9 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool
     {
         if( nId == ( pNewColl = (*pTxtFmtCollTbl)[ n ] )->GetPoolFmtId() )
         {
-            if( pDesc )
-                pNewColl->GetPresentation( ePres, eCoreMetric,
-                                           ePresMetric, *pDesc );
             return pNewColl;
         }
-        if( !pDesc && pNewColl->GetOutlineLevel() < MAXLEVEL )
+        if( pNewColl->GetOutlineLevel() < MAXLEVEL )
             nOutLvlBits |= ( 1 << pNewColl->GetOutlineLevel() );
     }
 
@@ -455,8 +437,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool
 
     ASSERT( nResId, "Ungueltige Pool-ID" );
     if( !nResId )
-        return GetTxtCollFromPool( RES_POOLCOLL_STANDARD, pDesc, ePres,
-                                    eCoreMetric, ePresMetric );
+        return GetTxtCollFromPool( RES_POOLCOLL_STANDARD );
 
     ResId aResId( nResId + nId, pSwResMgr );
     String aNm( aResId );
@@ -464,15 +445,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool
     // ein Set fuer alle zusetzenden Attribute
     SwAttrSet aSet( GetAttrPool(), aTxtFmtCollSetRange );
     USHORT nParent = GetPoolParent( nId );
-    if( pDesc )
-    {
-        pNewColl = 0;
-        if( nParent )
-            *pDesc = SW_RESSTR( nResId + nParent );
-        else
-            *pDesc = aEmptyStr;
-    }
-    else
+
     {
 
 //FEATURE::CONDCOLL
@@ -514,7 +487,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool
     case RES_POOLCOLL_TEXT:                 // Textkoerper
         {
             SvxULSpaceItem aUL( 0, PT_6 );
-            if( IsHTMLMode() ) aUL.SetLower( HTML_PARSPACE );
+            if( get(IDocumentSettingAccess::HTML_MODE) ) aUL.SetLower( HTML_PARSPACE );
             aSet.Put( aUL );
         }
         break;
@@ -592,13 +565,11 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool
 
             SvxFontHeightItem aFntSize( PT_14 );
             SvxULSpaceItem aUL( PT_12, PT_6 );
-            if( IsHTMLMode() )
+            if( get(IDocumentSettingAccess::HTML_MODE) )
                 aUL.SetLower( HTML_PARSPACE );
             aSet.Put( SvxFmtKeepItem( TRUE ));
 
-            if( !pDesc )
-                pNewColl->SetNextTxtFmtColl( *GetTxtCollFromPool(
-                                                RES_POOLCOLL_TEXT ));
+            pNewColl->SetNextTxtFmtColl( *GetTxtCollFromPool( RES_POOLCOLL_TEXT ));
 
             aSet.Put( aUL );
             SetAllScriptItem( aSet, aFntSize );
@@ -724,7 +695,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool
 
     case RES_POOLCOLL_SENDADRESS:           // AbsenderAdresse
         {
-            if( IsHTMLMode() )
+            if( get(IDocumentSettingAccess::HTML_MODE) )
                 SetAllScriptItem( aSet, SvxPostureItem(ITALIC_NORMAL) );
             else
             {
@@ -1053,8 +1024,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool
 
             aSet.Put( SvxAdjustItem( SVX_ADJUST_CENTER ) );
 
-            if( !pDesc )
-                pNewColl->SetNextTxtFmtColl( *GetTxtCollFromPool(
+            pNewColl->SetNextTxtFmtColl( *GetTxtCollFromPool(
                                                 RES_POOLCOLL_DOC_SUBTITEL ));
         }
         break;
@@ -1066,8 +1036,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool
 
             aSet.Put( SvxAdjustItem( SVX_ADJUST_CENTER ));
 
-            if( !pDesc )
-                pNewColl->SetNextTxtFmtColl( *GetTxtCollFromPool(
+            pNewColl->SetNextTxtFmtColl( *GetTxtCollFromPool(
                                                 RES_POOLCOLL_TEXT ));
         }
         break;
@@ -1080,8 +1049,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool
             aSet.Put( aLR );
 //          aSet.Put( SvxAdjustItem( SVX_ADJUST_BLOCK ) );
             SvxULSpaceItem aUL;
-            if( !pDesc )
-                aUL = pNewColl->GetULSpace();
+            aUL = pNewColl->GetULSpace();
             aUL.SetLower( HTML_PARSPACE );
             aSet.Put( aUL);
         }
@@ -1098,8 +1066,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool
             // der untere Absatz-Abstand wird explizit gesetzt (macht
             // die harte Attributierung einfacher)
             SvxULSpaceItem aULSpaceItem;
-            if( !pDesc )
-                aULSpaceItem = pNewColl->GetULSpace();
+            aULSpaceItem = pNewColl->GetULSpace();
             aULSpaceItem.SetLower( 0 );
             aSet.Put( aULSpaceItem );
         }
@@ -1119,7 +1086,6 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool
             SetAllScriptItem( aSet, SvxFontHeightItem(120) );
 
             SvxULSpaceItem aUL;
-            if( !pDesc )
             {
                 pNewColl->SetNextTxtFmtColl( *GetTxtCollFromPool(
                                                 RES_POOLCOLL_TEXT ));
@@ -1135,8 +1101,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool
     case RES_POOLCOLL_HTML_DD:
         {
             SvxLRSpaceItem aLR;
-            if( !pDesc )
-                aLR = pNewColl->GetLRSpace();
+            aLR = pNewColl->GetLRSpace();
             // es wird um 1cm eingerueckt. Die IDs liegen immer 2 auseinander!
             aLR.SetLeft( GetMetricVal( CM_1 ));
             aSet.Put( aLR );
@@ -1145,7 +1110,6 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool
     case RES_POOLCOLL_HTML_DT:
         {
             SvxLRSpaceItem aLR;
-            if( !pDesc )
             {
                 pNewColl->SetNextTxtFmtColl( *GetTxtCollFromPool(
                                                     RES_POOLCOLL_HTML_DD ));
@@ -1160,14 +1124,6 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool
 
     if( aSet.Count() )
     {
-        if( pDesc )
-        {
-            String aStr;
-            aSet.GetPresentation( ePres, eCoreMetric, ePresMetric, aStr );
-            pDesc->AppendAscii( sKomma );
-            *pDesc += aStr;
-        }
-        else
         {
             pNewColl->SetAttr( aSet );
             // JP 31.08.95: erzeugen einer PoolVorlage ist keine Modifikation
@@ -1182,7 +1138,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool
 
     // pruefe, ob diese "Auto-Collection" in Dokument schon/noch
     // benutzt wird
-BOOL SwDoc::IsPoolTxtCollUsed( USHORT nId ) const
+bool SwDoc::IsPoolTxtCollUsed( USHORT nId ) const
 {
     ASSERT(
         (RES_POOLCOLL_TEXT_BEGIN <= nId && nId < RES_POOLCOLL_TEXT_END) ||
@@ -1209,8 +1165,7 @@ BOOL SwDoc::IsPoolTxtCollUsed( USHORT nId ) const
     // Gebe das "Auto[matische]-Format" mit der Id zurueck. Existiert
     // es noch nicht, dann erzeuge es
 
-SwFmt* SwDoc::GetFmtFromPool( USHORT nId, String* pDesc,
-    SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric )
+SwFmt* SwDoc::GetFmtFromPool( USHORT nId )
 {
     SwFmt *pNewFmt, *pDeriveFmt;
 
@@ -1271,9 +1226,6 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId, String* pDesc,
             if( nId == ( pNewFmt = (SwFmt*)(*pArray[ nArrCnt ] )[ n ] )->
                     GetPoolFmtId() )
             {
-                if( pDesc )
-                    pNewFmt->GetPresentation( ePres, eCoreMetric,
-                                              ePresMetric, *pDesc );
                 return pNewFmt;
             }
 
@@ -1281,13 +1233,6 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId, String* pDesc,
     String aNm( aResId );
     SwAttrSet aSet( GetAttrPool(), pWhichRange );
 
-    if( pDesc )
-    {
-        pNewFmt = 0;
-//      *pDesc = aEmptyStr; // oder den Namen ?? aNm;
-        *pDesc = aNm;
-    }
-    else
     {
         BOOL bIsModified = IsModified();
 
@@ -1415,7 +1360,7 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId, String* pDesc,
 
     case RES_POOLFRM_FRAME:
         {
-            if ( IsBrowseMode() )
+            if ( get(IDocumentSettingAccess::BROWSE_MODE) )
             {
                 aSet.Put( SwFmtAnchor( FLY_IN_CNTNT ));
                 aSet.Put( SwFmtVertOrient( 0, VERT_LINE_CENTER, PRTAREA ) );
@@ -1491,21 +1436,12 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId, String* pDesc,
             aProtect.SetPosProtect( TRUE );
             aSet.Put( aProtect );
 
-            if( !pDesc )
-                pNewFmt->SetAutoUpdateFmt( TRUE );
+            pNewFmt->SetAutoUpdateFmt( TRUE );
         }
         break;
     }
     if( aSet.Count() )
     {
-        if( pDesc )
-        {
-            String aStr;
-            aSet.GetPresentation( ePres, eCoreMetric, ePresMetric, aStr );
-            pDesc->AppendAscii( sKomma );
-            *pDesc += aStr;
-        }
-        else
         {
             pNewFmt->SetAttr( aSet );
             // JP 31.08.95: erzeugen einer PoolVorlage ist keine Modifikation
@@ -1516,11 +1452,19 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId, String* pDesc,
     return pNewFmt;
 }
 
+SwFrmFmt* SwDoc::GetFrmFmtFromPool( sal_uInt16 nId )
+{
+    return (SwFrmFmt*)GetFmtFromPool( nId );
+}
 
+SwCharFmt* SwDoc::GetCharFmtFromPool( sal_uInt16 nId )
+{
+    return (SwCharFmt*)GetFmtFromPool( nId );
+}
 
     // pruefe, ob diese "Auto-Collection" in Dokument schon/noch
     // benutzt wird
-BOOL SwDoc::IsPoolFmtUsed( USHORT nId ) const
+bool SwDoc::IsPoolFmtUsed( USHORT nId ) const
 {
     SwFmt *pNewFmt;
     const SvPtrarr* pArray[ 2 ];
@@ -1582,11 +1526,7 @@ void lcl_GetStdPgSize( SwDoc* pDoc, SfxItemSet& rSet )
     rSet.Put( aFrmSz );
 }
 
-
-
-SwPageDesc* SwDoc::GetPageDescFromPool( USHORT nId, String* pDesc,
-    SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric,
-    BOOL bRegardLanguage)
+SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
 {
     ASSERT( RES_POOLPAGE_BEGIN <= nId && nId < RES_POOLPAGE_END,
             "Falsche AutoFormat-Id" );
@@ -1597,9 +1537,6 @@ SwPageDesc* SwDoc::GetPageDescFromPool( USHORT nId, String* pDesc,
     for( n = 0; n < aPageDescs.Count(); ++n )
         if( nId == ( pNewPgDsc = aPageDescs[ n ] )->GetPoolFmtId() )
         {
-            if( pDesc )
-                pNewPgDsc->GetPresentation( ePres, eCoreMetric,
-                                            ePresMetric, *pDesc );
             return pNewPgDsc;
         }
 
@@ -1612,13 +1549,6 @@ SwPageDesc* SwDoc::GetPageDescFromPool( USHORT nId, String* pDesc,
 
     ResId aResId( sal_uInt32(RC_POOLPAGEDESC_BEGIN + nId - RES_POOLPAGE_BEGIN), pSwResMgr );
     String aNm( aResId );
-    if( pDesc )
-    {
-        pNewPgDsc = 0;
-//      *pDesc = aEmptyStr; // oder den Namen ?? aNm;
-        *pDesc = aNm;
-    }
-    else
     {
         BOOL bIsModified = IsModified();
 
@@ -1741,14 +1671,6 @@ SwPageDesc* SwDoc::GetPageDescFromPool( USHORT nId, String* pDesc,
 
     if( aSet.Count() )
     {
-        if( pDesc )
-        {
-            String aStr;
-            aSet.GetPresentation( ePres, eCoreMetric, ePresMetric, aStr );
-            pDesc->AppendAscii( sKomma );
-            *pDesc += aStr;
-        }
-        else
         {
             if( bSetLeft )
                 pNewPgDsc->GetLeft().SetAttr( aSet );
@@ -1761,8 +1683,7 @@ SwPageDesc* SwDoc::GetPageDescFromPool( USHORT nId, String* pDesc,
     return pNewPgDsc;
 }
 
-SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId, String* pDesc,
-    SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric )
+SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId )
 {
     ASSERT( RES_POOLNUMRULE_BEGIN <= nId && nId < RES_POOLNUMRULE_END,
             "Falsche AutoFormat-Id" );
@@ -1773,8 +1694,6 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId, String* pDesc,
     for( n = 0; n < GetNumRuleTbl().Count(); ++n )
         if( nId == ( pNewRule = GetNumRuleTbl()[ n ] )->GetPoolFmtId() )
         {
-            if( pDesc )
-                *pDesc = pNewRule->GetName();
             return pNewRule;
         }
 
@@ -1790,12 +1709,6 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId, String* pDesc,
 
     SwCharFmt *pNumCFmt = 0, *pBullCFmt = 0;
 
-    if( pDesc )
-    {
-        pNewRule = new SwNumRule( aNm );
-        *pDesc = aNm;
-    }
-    else
     {
         BOOL bIsModified = IsModified();
         n = MakeNumRule( aNm );
@@ -2192,17 +2105,6 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId, String* pDesc,
         break;
     }
 
-    if( pDesc )
-    {
-//JP 25.02.98: wie soll die Beschreibung sein??
-//      String aStr;
-//      aSet.GetPresentation( ePres, eCoreMetric, ePresMetric, aStr );
-//      *pDesc += sKomma;
-//      *pDesc += aStr;
-
-        delete pNewRule, pNewRule = 0;
-    }
-
     return pNewRule;
 }
 
@@ -2210,7 +2112,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId, String* pDesc,
 
     // pruefe, ob diese "Auto-Collection" in Dokument schon/noch
     // benutzt wird
-BOOL SwDoc::IsPoolPageDescUsed( USHORT nId ) const
+bool SwDoc::IsPoolPageDescUsed( USHORT nId ) const
 {
     ASSERT( RES_POOLPAGE_BEGIN <= nId && nId < RES_POOLPAGE_END,
             "Falsche AutoFormat-Id" );
@@ -2231,7 +2133,7 @@ BOOL SwDoc::IsPoolPageDescUsed( USHORT nId ) const
 }
 
 // erfrage ob die Absatz-/Zeichen-/Rahmen-/Seiten - Vorlage benutzt wird
-BOOL SwDoc::IsUsed( const SwModify& rModify ) const
+sal_Bool SwDoc::IsUsed( const SwModify& rModify ) const
 {
     // dann teste mal, ob es abhaengige ContentNodes im Nodes Array gibt
     // (auch indirekte fuer Format-Ableitung! )
@@ -2240,11 +2142,11 @@ BOOL SwDoc::IsUsed( const SwModify& rModify ) const
 }
 
 // erfrage ob die NumRule benutzt wird
-BOOL SwDoc::IsUsed( const SwNumRule& rRule ) const
+sal_Bool SwDoc::IsUsed( const SwNumRule& rRule ) const
 {
     // dann teste mal, ob es abhaengige ContentNodes im Nodes Array gibt
     // (auch indirekte fuer Format-Ableitung! )
-    BOOL bUsed = FALSE;
+    sal_Bool bUsed = FALSE;
     SwAutoFmtGetDocNode aGetHt( &aNodes );
     SwModify* pMod;
     const SfxPoolItem* pItem;
