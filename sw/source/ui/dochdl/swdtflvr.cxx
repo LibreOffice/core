@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 16:47:26 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:34:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifdef PRECOMPILED
 #include "ui_pch.hxx"
 #endif
@@ -67,9 +66,6 @@
 
 #ifndef _OSL_ENDIAN_H_
 #include <osl/endian.h>
-#endif
-#ifndef _SOT_FORMATS_HXX
-#include <sot/formats.hxx>
 #endif
 #ifndef _LINKMGR_HXX
 #include <sfx2/linkmgr.hxx>
@@ -111,9 +107,6 @@
 #ifndef _SVX_DBAEXCHANGE_HXX_
 #include <svx/dbaexchange.hxx>
 #endif
-#ifndef _SFXFRAME_HXX
-#include <sfx2/frame.hxx>
-#endif
 #ifndef _SVX_CLIPFMTITEM_HXX
 #include <svx/clipfmtitem.hxx>
 #endif
@@ -150,15 +143,8 @@
 #ifndef _SVX_SCRIPTTYPEITEM_HXX
 #include <svx/scripttypeitem.hxx>
 #endif
-#ifndef _SOT_FORMATS_HXX
-#include <sot/formats.hxx>
-#endif
 #ifndef _SFX_DOCFILT_HACK_HXX
 #include <sfx2/docfilt.hxx>
-#endif
-//#include <sfx2/filelist.hxx>
-#ifndef _LINKSRC_HXX
-#include <sfx2/linksrc.hxx>
 #endif
 #ifndef _GOODIES_IMAPOBJ_HXX
 #include <svtools/imapobj.hxx>
@@ -174,7 +160,6 @@
 #endif
 
 #include <svx/unomodel.hxx>
-
 #ifndef _FMTURL_HXX
 #include <fmturl.hxx>
 #endif
@@ -229,9 +214,6 @@
 #ifndef _VIEW_HXX
 #include <view.hxx>
 #endif
-#ifndef _HINTIDS_HXX
-#include <hintids.hxx>
-#endif
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>
 #endif
@@ -249,9 +231,6 @@
 #endif
 #ifndef _NDOLE_HXX
 #include <ndole.hxx>
-#endif
-#ifndef _FRMFMT_HXX
-#include <frmfmt.hxx>
 #endif
 #ifndef _SWWAIT_HXX
 #include <swwait.hxx>
@@ -537,7 +516,7 @@ void SwTransferable::InitOle( SfxObjectShell* pDoc, SwDoc& rDoc )
     const Size aSz( OLESIZE );
     SwRect aVis( Point( DOCUMENTBORDER, DOCUMENTBORDER ), aSz );
     pDoc->SetVisArea( aVis.SVRect() );
-    rDoc.SetBrowseMode( TRUE );
+    rDoc.set(IDocumentSettingAccess::BROWSE_MODE, true );
 }
 
 // -----------------------------------------------------------------------
@@ -1022,10 +1001,10 @@ int SwTransferable::PrepareForCopy( BOOL bIsCut )
 #ifdef DDE_AVAILABLE
         {
             // remove all DDE-Bookmarks, they are invalid inside the clipdoc!
-            const SwBookmarks& rBkmk = pTmpDoc->GetBookmarks();
+            const SwBookmarks& rBkmk = pTmpDoc->getBookmarks();
             for( USHORT n = rBkmk.Count(); n; )
-                if( DDE_BOOKMARK == rBkmk[ --n ]->GetType() )
-                    pTmpDoc->DelBookmark( n );
+                if( IDocumentBookmarkAccess::DDE_BOOKMARK == rBkmk[ --n ]->GetType() )
+                    pTmpDoc->deleteBookmark( n );
         }
 #endif
 
@@ -2658,25 +2637,7 @@ int SwTransferable::_PasteFileName( TransferableDataHelper& rData,
                     Application::PostUserEvent( STATIC_LINK( &rSh, SwWrtShell,
                                                 InsertRegionDialog ), pSect );
                     nRet = 1;
-    #if 0
-                    if( rSh.InsertSection( aSect ) )
-                    {
-                        if( SW_PASTESDR_SETATTR != nAction )
-                        {
-                            aSect.SetType( CONTENT_SECTION );
-                            aSect.SetProtect( FALSE );
-                            for( USHORT i = rSh.GetSectionFmtCount(); i; )
-                                if( aNm == rSh.GetSectionFmt( --i ).
-                                                    GetSection()->GetName())
-                                {
-                                    rSh.ChgSection( i, aSect );
-                                    break;
-                                }
-                        }
-                        nRet = TRUE;
                     }
-    #endif
-                }
                 else if( SW_PASTESDR_SETATTR == nAction ||
                         ( bIsURLFile && SW_PASTESDR_INSERT == nAction ))
                 {
@@ -2886,27 +2847,6 @@ BOOL SwTransferable::_CheckForURLOrLNKFile( TransferableDataHelper& rData,
             if( sExt.EqualsIgnoreCaseAscii( "url" ))
             {
 ASSERT( !&rFileName, "how do we read today .URL - Files?" );
-// JP 12.05.00 UNICODE - CHANGES
-#if 0
-
-                bIsURLFile = TRUE;
-                Config aCfg( rFileName );
-                aCfg.SetGroup( INTERNETSHORTCUT_ID_TAG );
-
-                // Einlesung und Konvertierung des URL aus der Datei
-                rFileName = aCfg.ReadKey( INTERNETSHORTCUT_URL_TAG,
-                                            URLFILE_CHARSET );
-
-                // dann teste doch mal auf ein lokales File
-                INetURLObject aURL( rFileName );
-                if( INET_PROT_FILE == aURL.GetProtocol() )
-                    rFileName = aURL.PathToFileName();
-
-                // Einlesung und Konvertierung des Titels aus der Datei
-                if( pTitle )
-                    *pTitle = aCfg.ReadKey( INTERNETSHORTCUT_TITLE_TAG,
-                                            URLFILE_CHARSET  );
-#endif
             }
         }
     }
@@ -3288,12 +3228,6 @@ void SwTransferable::StartDrag( Window* pWin, const Point& rPos )
 
     if( pWrtShell->IsSelFrmMode() )
         pWrtShell->ShowCrsr();
-
-#ifdef MAC
-//!! Mac is able to show a outline of the drag source. The new interface not!
-//!!    const Region aRegion( pWrtShell->GetCrsrRegion() );
-//!!                    , &aRegion
-#endif
 
     SW_MOD()->pDragDrop = this;
 
@@ -3766,7 +3700,7 @@ SwTrnsfrDdeLink::SwTrnsfrDdeLink( SwTransferable& rTrans, SwWrtShell& rSh )
         rSh.MakeUniqueBookmarkName( sName );
 
         //Ok, den eindeutigen Namen haben wir
-        if( !rSh.SetBookmark( KeyCode(), sName, aEmptyStr, BOOKMARK_HIDDEN ) )
+        if( !rSh.SetBookmark( KeyCode(), sName, aEmptyStr, IDocumentBookmarkAccess::HIDDEN_BOOKMARK ) )
             sName.Erase();
         else
         {
@@ -3774,7 +3708,7 @@ SwTrnsfrDdeLink::SwTrnsfrDdeLink( SwTransferable& rTrans, SwWrtShell& rSh )
             if( USHRT_MAX != nBookPos )
             {
                 SwBookmark& rBookMk = rSh.GetBookmark( nBookPos );
-                rBookMk.SetType( DDE_BOOKMARK );
+                rBookMk.SetType( IDocumentBookmarkAccess::DDE_BOOKMARK );
             }
             bDelBookmrk = TRUE;
             if( !bIsModified )
@@ -3860,11 +3794,11 @@ BOOL SwTrnsfrDdeLink::WriteData( SvStream& rStrm )
     }
 
     SwDoc* pDoc = pDocShell->GetDoc();
-    USHORT nBookPos = pDoc->FindBookmark( sName );
+    USHORT nBookPos = pDoc->findBookmark( sName );
     if( USHRT_MAX != nBookPos )
     {
-        SwBookmark* pBookMk = pDoc->GetBookmarks()[ nBookPos ];
-        pBookMk->SetType( BOOKMARK );
+        SwBookmark* pBookMk = pDoc->getBookmarks()[ nBookPos ];
+        pBookMk->SetType( IDocumentBookmarkAccess::BOOKMARK );
         pDoc->SetModified();
     }
 
@@ -3896,7 +3830,7 @@ void SwTrnsfrDdeLink::Disconnect( BOOL bRemoveDataAdvise )
         // <--
         BOOL bIsModified = pDoc->IsModified();
 
-        pDoc->DelBookmark( sName );
+        pDoc->deleteBookmark( sName );
 
         if( !bIsModified )
             pDoc->ResetModified();
