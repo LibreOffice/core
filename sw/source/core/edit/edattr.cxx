@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edattr.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-09 10:08:41 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:07:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -68,6 +67,9 @@
 #ifndef _EDIMP_HXX
 #include <edimp.hxx>    // fuer MACROS
 #endif
+#ifndef _DOC_HXX
+#include <doc.hxx>
+#endif
 #ifndef _SWUNDO_HXX
 #include <swundo.hxx>   // fuer UNDO-Ids
 #endif
@@ -80,14 +82,8 @@
 #ifndef _EXPFLD_HXX
 #include <expfld.hxx>
 #endif
-#ifndef _DOC_HXX
-#include <doc.hxx>
-#endif
 #ifndef _ROOTFRM_HXX
 #include <rootfrm.hxx>
-#endif
-#ifndef _PAM_HXX
-#include <pam.hxx>
 #endif
 #ifndef _CNTFRM_HXX
 #include <cntfrm.hxx>
@@ -113,7 +109,6 @@
 #ifndef _SVTOOLS_CTLOPTIONS_HXX
 #include <svtools/ctloptions.hxx>
 #endif
-
 #ifndef _CHARFMT_HXX
 #include <charfmt.hxx>  // #i27615#
 #endif
@@ -160,6 +155,7 @@ BOOL SwEditShell::GetAttr( SfxItemSet& rSet ) const
                 {
                     const String & aCharFmtName =
                         pNumRule->Get(pTxtNd->GetLevel()).
+
                         GetCharFmtName();
                     SwCharFmt * pCharFmt =
                         GetDoc()->FindCharFmtByName(aCharFmtName);
@@ -605,8 +601,7 @@ USHORT SwEditShell::GetScriptType( USHORT nFlags ) const
                                                 : 0,
                                     nEndPos = aIdx == nEndIdx
                                                 ? pEnd->nContent.GetIndex()
-                                                : rTxt.Len(),
-                                    nSttPos = nChg;
+                                                : rTxt.Len();
 
                         ASSERT( nEndPos <= rTxt.Len(), "Index outside the range - endless loop!" );
                         if( nEndPos > rTxt.Len() )
