@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocrsr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:07:58 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:54:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #ifndef _UNOCRSR_HXX
@@ -41,9 +40,6 @@
 #endif
 #ifndef _DOC_HXX
 #include <doc.hxx>
-#endif
-#ifndef _NODE_HXX
-#include <node.hxx>
 #endif
 #ifndef _SWTABLE_HXX
 #include <swtable.hxx>
@@ -117,8 +113,8 @@ FASTBOOL SwUnoCrsr::IsSelOvr( int eFlags )
         SwDoc* pDoc = GetDoc();
         SwNodeIndex aOldIdx( *pDoc->GetNodes()[ GetSavePos()->nNode ] );
         SwNodeIndex& rPtIdx = GetPoint()->nNode;
-        SwStartNode *pOldSttNd = aOldIdx.GetNode().FindStartNode(),
-                    *pNewSttNd = rPtIdx.GetNode().FindStartNode();
+        SwStartNode *pOldSttNd = aOldIdx.GetNode().StartOfSectionNode(),
+                    *pNewSttNd = rPtIdx.GetNode().StartOfSectionNode();
         if( pOldSttNd != pNewSttNd )
         {
             BOOL bMoveDown = GetSavePos()->nNode < rPtIdx.GetIndex();
@@ -138,7 +134,7 @@ FASTBOOL SwUnoCrsr::IsSelOvr( int eFlags )
                 const SwStartNode* pInvalidNode;
                 do {
                     pInvalidNode = 0;
-                    pNewSttNd = rPtIdx.GetNode().FindStartNode();
+                    pNewSttNd = rPtIdx.GetNode().StartOfSectionNode();
 
                     const SwStartNode *pSttNd = pNewSttNd, *pEndNd = pOldSttNd;
                     if( pSttNd->EndOfSectionIndex() >
@@ -265,19 +261,5 @@ void SwUnoTableCrsr::MakeBoxSels()
                 InsertBox( *pBox );
         }
     }
-}
-
-/*  */
-
-SwUnoCrsr* SwDoc::CreateUnoCrsr( const SwPosition& rPos, BOOL bTblCrsr )
-{
-    SwUnoCrsr* pNew;
-    if( bTblCrsr )
-        pNew = new SwUnoTableCrsr( rPos );
-    else
-        pNew = new SwUnoCrsr( rPos );
-
-    pUnoCrsrTbl->Insert( pNew, pUnoCrsrTbl->Count() );
-    return pNew;
 }
 
