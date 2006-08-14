@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:39:00 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:16:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifndef _WRTWW8_HXX
@@ -103,29 +102,21 @@ class SvxBorderLine;
 class SvxFontItem;
 class SvxBoxItem;
 class SwAttrSet;
-class SwBookmark;
 class SwCharFmt;
 class SwCntntNode;
 class SwField;
-class SwFlyFrmFmt;
 class SwFmt;
 class SwFmtCntnt;
 class SwFmtFtn;
-class SwFmtINetFmt;
-class SwFmtRefMark;
 class SwFrmFmt;
 class SwGrfNode;
 class SwModify;
-class SwNodeNum;
-class SwNoTxtNode;
 class SwNumFmt;
 class SwNumRule;
 class SwNumRuleTbl;
 class SwPageDesc;
 class SwFmtPageDesc;
-class SwpHints;
 class SwOLENode;
-class SwPosFlyFrms;
 class SwPostItField;
 class SwRedlineData;
 class SwSection;
@@ -133,7 +124,6 @@ class SwSectionFmt;
 class SwSectionNode;
 class SwTableNode;
 class SwTOXType;
-class SwTOXMark;
 class SwTxtAttr;
 class SwTxtFmtColl;
 class SwTxtNode;
