@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accframe.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 14:20:31 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:43:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 
@@ -43,10 +42,6 @@
 #endif
 #ifndef _FLYFRM_HXX
 #include <flyfrm.hxx>
-#endif
-
-#ifndef _LAYFRM_HXX
-#include <layfrm.hxx>
 #endif
 #ifndef _ROOTFRM_HXX
 #include <rootfrm.hxx>
