@@ -4,9 +4,9 @@
  *
  *  $RCSfile: porfly.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:58:30 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:40:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _PORFLY_HXX
 #define _PORFLY_HXX
-
 // OD 28.10.2003 #113049#
 #ifndef _ASCHARANCHOREDOBJECTPOSITION_HXX
 #include <ascharanchoredobjectposition.hxx>
@@ -43,7 +42,6 @@
 #include "porglue.hxx"
 
 class SwDrawContact;
-class SwFrmFmt;
 class SwFlyInCntFrm;
 class SwTxtFrm;
 struct SwCrsrMoveState;
