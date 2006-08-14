@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swwrtshitem.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:06:33 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:45:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _SW_WRTSHELLITEM_HXX
 #define _SW_WRTSHELLITEM_HXX
-
 #ifndef _SFXPOOLITEM_HXX
 #include <svtools/poolitem.hxx>
 #endif
@@ -44,7 +43,6 @@
 #endif
 
 class SwWrtShell;
-class SvStringsDtor;
 
 class SW_DLLPUBLIC SwWrtShellItem: public SfxPoolItem
 {
