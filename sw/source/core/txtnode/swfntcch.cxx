@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swfntcch.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:13:46 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:47:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -61,7 +60,7 @@ SwFontCache *pSwFontCache = NULL;
 
 SwFontObj::SwFontObj( const void *pOwner, ViewShell *pSh ) :
     SwCacheObj( (void*)pOwner ),
-    aSwFont( &((SwTxtFmtColl *)pOwner)->GetAttrSet(), pSh ? pSh->GetDoc() : 0 )
+    aSwFont( &((SwTxtFmtColl *)pOwner)->GetAttrSet(), pSh ? pSh->getIDocumentSettingAccess() : 0 )
 {
     aSwFont.GoMagic( pSh, aSwFont.GetActual() );
     const SwAttrSet& rAttrSet = ((SwTxtFmtColl *)pOwner)->GetAttrSet();
