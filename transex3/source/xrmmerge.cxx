@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xrmmerge.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 17:26:25 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:12:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,7 +139,6 @@ extern char *GetOutputFile( int argc, char* argv[])
                 case STATE_NON: {
                     return NULL;    // no valid command line
                 }
-                //break;
                 case STATE_INPUT: {
                     sInputFileName = argv[ i ];
                     bInput = TRUE; // source file found
@@ -151,7 +150,6 @@ extern char *GetOutputFile( int argc, char* argv[])
                 break;
                 case STATE_PRJ: {
                     sPrj = ByteString( argv[ i ]);
-//                  sPrj.ToLowerAscii(); // the project
                 }
                 break;
                 case STATE_ROOT: {
@@ -202,13 +200,10 @@ int InitXrmExport( char *pOutput , char* pFilename)
     Export::InitLanguages( false );
 
     if ( bMergeMode )
-        //pParser = new XRMResMerge( sMergeSrc, sOutputFile, bErrorLog , sFilename );
         pParser = new XRMResMerge( sMergeSrc, sOutputFile, sFilename );
       else if ( sOutputFile.Len()) {
         pParser = new XRMResExport( sOutputFile, sPrj, sActFileName );
     }
-    //else
-    //  pParser = new XRMResParser();
 
     return 1;
 }
@@ -265,7 +260,6 @@ extern FILE *GetXrmFile()
             // create file name, beginnig with project root
             // (e.g.: source\ui\src\menue.src)
             sActFileName = sFullEntry.Copy( sPrjEntry.Len() + 1 );
-//          sActFileName.ToLowerAscii();
 
             if( !bQuiet )
                 fprintf( stdout, "\nProcessing File %s ...\n", sInputFileName.GetBuffer());
@@ -397,7 +391,6 @@ int XRMResParser::Execute( int nToken, char * pToken )
 
                 ByteString sLang = GetAttribute( sCurrentOpenTag, "xml:lang" );
                 if( sLang.EqualsIgnoreCaseAscii("de") ){
-                //if ( Export::GetLangByIsoLang( sLang ) != GERMAN ) {
                      ULONG nLen = 0;
                     while ( sCurrentText.Len() != nLen )
                     {
@@ -461,29 +454,6 @@ ByteString XRMResParser::GetAttribute( const ByteString &rToken, const ByteStrin
     return "";
 }
 
-/*****************************************************************************/
-//void XRMResParser::Output( const ByteString& rOutput )
-/*****************************************************************************/
-//{
-//}
-
-/*****************************************************************************/
-//void XRMResParser::WorkOnText(
-//  const ByteString &rOpenTag,
-//  ByteString &rText
-//)
-/*****************************************************************************/
-//{
-//}
-
-/*****************************************************************************/
-//void XRMResParser::EndOfText(
-//  const ByteString &rOpenTag,
-//  const ByteString &rCloseTag
-//)
-/*****************************************************************************/
-//{
-//}
 
 /*****************************************************************************/
 void XRMResParser::Error( const ByteString &rError )
@@ -579,7 +549,7 @@ XRMResExport::~XRMResExport()
 void XRMResExport::Output( const ByteString& rOutput )
 {
     // Dummy to suppress warnings caused by poor class design
-    ByteString a( rOutput );
+    (void) rOutput;
 }
 
 /*****************************************************************************/
@@ -590,22 +560,15 @@ void XRMResExport::WorkOnText(
 /*****************************************************************************/
 {
     ByteString sLang( GetAttribute( rOpenTag, "xml:lang" ));
-    //USHORT nLang = Export::GetLangByIsoLang( sLang );
-    //USHORT nLangIndex = Export::GetLangIndex( nLang );
 
-    //if ( LANGUAGE_ALLOWED( nLangIndex )) {
         if ( !pResData ) {
             ByteString sPlatform( "" );
             pResData = new ResData( sPlatform, GetGID() );
             pResData->sId = GetLID();
         }
 
-        //pResData->sText[ nLangIndex ] =
-        //  UTF8Converter::ConvertFromUTF8( rText, Export::GetCharSet( nLang ));
         pResData->sText[ sLang ] = rText;
-        //ConvertStringToDBFormat( pResData->sText[ nLangIndex ] );
         ConvertStringToDBFormat( pResData->sText[ sLang ] );
-    //}
 }
 
 /*****************************************************************************/
@@ -654,9 +617,6 @@ void XRMResExport::EndOfText(
 
 
                 sOutput.SearchAndReplaceAll( sSearch, "_" );
-                //if( sCur.EqualsIgnoreCaseAscii("de") ){
-                //    sOutput = UTF8Converter::ConvertToUTF8( sOutput , RTL_TEXTENCODING_MS_1252 );
-                //}
                 if( !sCur.EqualsIgnoreCaseAscii("de") ||( sCur.EqualsIgnoreCaseAscii("de") && !Export::isMergingGermanAllowed( sPrj ) ) )
                     pOutputStream->WriteLine( sOutput );
             }
@@ -705,8 +665,6 @@ void XRMResMerge::WorkOnText(
 /*****************************************************************************/
 {
     ByteString sLang( GetAttribute( rOpenTag, "xml:lang" ));
-    //USHORT nLang = Export::GetLangByIsoLang( sLang );
-    //USHORT nLangIndex = Export::GetLangIndex( nLang );
 
     if ( pMergeDataFile ) {
         if ( !pResData ) {
@@ -716,28 +674,20 @@ void XRMResMerge::WorkOnText(
             pResData->sResTyp = "readmeitem";
         }
 
-    //  if ( LANGUAGE_ALLOWED( nLangIndex )) {
             PFormEntrys *pEntrys = pMergeDataFile->GetPFormEntrys( pResData );
             if ( pEntrys ) {
                 ByteString sContent;
-/*              if (( nLang != GERMAN ) &&
-                    ( nLang != ENGLISH ) &&*/
-                if ( Export::isAllowed( sLang ) && //( !sLang.EqualsIgnoreCaseAscii("de") ) &&
-//                  ( !sLang.EqualsIgnoreCaseAscii("en-US") ) &&
+                if ( Export::isAllowed( sLang ) &&
                     ( pEntrys->GetText(
-                        //sContent, STRING_TYP_TEXT, Export::GetLangIndex( nLang ))) &&
                         sContent, STRING_TYP_TEXT, sLang )) &&
                     ( sContent != "-" ) && ( sContent.Len()))
 
                 {
-//                  rText = UTF8Converter::ConvertToUTF8(
-//                      sContent, Export::GetCharSet( nLang )) ;
                     rText = sContent;
                     ConvertStringToXMLFormat( rText );
                     Export::QuotHTML( rText );
                 }
             }
-//      }
     }
 }
 
@@ -763,10 +713,8 @@ void XRMResMerge::EndOfText(
             for( unsigned int n = 0; n < aLanguages.size(); n++ ){
                 sCur = aLanguages[ n ];
                 ByteString sContent;
-                if ( Export::isAllowed( sCur ) && //( !sCur.EqualsIgnoreCaseAscii("de") &&
-//                      !sCur.EqualsIgnoreCaseAscii("en-US") )&&
+                if ( Export::isAllowed( sCur ) &&
                     ( pEntrys->GetText(
-                        //sContent, STRING_TYP_TEXT, nIndex, TRUE )) &&
                         sContent, STRING_TYP_TEXT, sCur, TRUE )) &&
                     ( sContent != "-" ) && ( sContent.Len()))
                 {
