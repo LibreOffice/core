@@ -4,9 +4,9 @@
  *
  *  $RCSfile: crsrsh.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:11:31 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:18:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,40 +63,31 @@
 #ifndef _CRSTATE_HXX
 #include <crstate.hxx>          // fuer die CursorMove-Staties
 #endif
-#ifndef _BKMRKE_HXX //autogen
-#include <bkmrke.hxx>
-#endif
 #ifndef _TOXE_HXX
 #include <toxe.hxx>             // SwTOXSearchDir
 #endif
 #ifndef _TBLSEL_HXX
 #include <tblsel.hxx>               //SwTblSearchType
 #endif
-
-#if defined(PRODUCT) && !defined(WIN)
-// fuer die Inline-Methoden
 #ifndef _VISCRS_HXX
 #include <viscrs.hxx>
 #endif
 #ifndef _NODE_HXX
 #include <node.hxx>
 #endif
-#define CRSR_INLINE inline
-#else
-#define CRSR_INLINE
-#endif
-
 #ifndef _TBLSEL_HXX
 #include <tblsel.hxx>
+#endif
+
+#ifndef IDOCUMENTBOOKMARKACCESS_HXX_INCLUDED
+#include <IDocumentBookmarkAccess.hxx>
 #endif
 
 // einige Forward Deklarationen
 
 class KeyCode;
-class Region;
 class SfxItemSet;
 class SfxPoolItem;
-class SpellCheck;
 class SwBookmark;
 class SwCntntFrm;
 class SwCrsrShell;
@@ -105,12 +96,8 @@ class SwField;
 class SwFieldType;
 class SwFmt;
 class SwFmtFld;
-class SwIndex;
 class SwNodeIndex;
-class SwNode;
-class SwNodes;
 class SwPaM;
-class SwSelBoxes;
 class SwShellCrsr;
 class SwShellTableCrsr;
 class SwTableNode;
@@ -181,9 +168,8 @@ struct SwContentAtPos
 };
 
 // ReturnWerte von SetCrsr (werden verodert)
-const int   CRSR_NOERROR =  0x00,
-            CRSR_POSOLD =   0x01,   // Cursor bleibt an alter Doc-Position
-            CRSR_POSCHG =   0x02;   // Position vom Layout veraendert
+const int CRSR_POSOLD = 0x01,   // Cursor bleibt an alter Doc-Position
+          CRSR_POSCHG = 0x02;   // Position vom Layout veraendert
 
 // die Cursor - Shell
 class SW_DLLPUBLIC SwCrsrShell : public ViewShell, public SwModify
@@ -194,8 +180,6 @@ class SW_DLLPUBLIC SwCrsrShell : public ViewShell, public SwModify
     friend class SwChgLinkFlag;
 
     //Braucht den Crsr als IntrnlCrsr.
-    friend void GetTblSel( const SwCrsrShell& rShell, SwSelBoxes& rBoxes,
-                           const SwTblSearchType eSearchType);
     friend BOOL GetAutoSumSel( const SwCrsrShell&, SwCellFrms& );
 
 public:     // public, damit defaultet werden kann !!
@@ -325,9 +309,7 @@ private:
     SW_DLLPRIVATE FASTBOOL IsAtLRMargin( BOOL, BOOL bAPI = FALSE ) const;
     FASTBOOL SttEndDoc( BOOL bStt );
 
-#ifdef BIDI
     SW_DLLPRIVATE short GetTextDirection( const Point* pPt = 0 ) const;
-#endif
 
 typedef FASTBOOL (SwCursor:: *FNCrsr)();
     SW_DLLPRIVATE FASTBOOL CallCrsrFN( FNCrsr );
@@ -336,7 +318,7 @@ typedef FASTBOOL (SwCursor:: *FNCrsr)();
 
 protected:
 
-    CRSR_INLINE SwMoveFnCollection* MakeFindRange( USHORT, USHORT, SwPaM* ) const;
+    inline SwMoveFnCollection* MakeFindRange( USHORT, USHORT, SwPaM* ) const;
 
     /*
      * Compare-Methode for the StackCursor and the current Cursor.
@@ -352,9 +334,6 @@ protected:
         CurrPtCurrMk
     };
     int CompareCursor( CrsrCompareType eType ) const;
-
-    USHORT IncBasicAction()             { return ++nBasicActionCnt; }
-    USHORT DecBasicAction()             { return --nBasicActionCnt; }
 
     // Setzt alle PaMs in OldNode auf NewPos + Offset
     void PaMCorrAbs(const SwNodeIndex &rOldNode, const SwPosition &rNewPos,
@@ -395,7 +374,7 @@ public:
     void TblCrsrToCursor();
 
     SwPaM* GetCrsr( FASTBOOL bMakeTblCrsr = TRUE ) const;
-    CRSR_INLINE SwCursor* GetSwCrsr( FASTBOOL bMakeTblCrsr = TRUE ) const;
+    inline SwCursor* GetSwCrsr( FASTBOOL bMakeTblCrsr = TRUE ) const;
     // nur den akt. Cursor returnen
           SwShellCrsr* _GetCrsr()                       { return pCurCrsr; }
     const SwShellCrsr* _GetCrsr() const                 { return pCurCrsr; }
@@ -409,14 +388,12 @@ public:
 
     // gebe den akt. Cursor-Stack zurueck.
     // ( Wird in der EditShell beim Loeschen von Inhalten benoetigt! )
-    CRSR_INLINE SwPaM* GetStkCrsr() const;
+    inline SwPaM* GetStkCrsr() const;
 
     // Start der Klammerung, SV-Cursor und selektierte Bereiche hiden
     void StartAction();
     // Ende der Klammerung, SV-Cursor und selektierte Bereiche anzeigen
     void EndAction( const BOOL bIdleEnd = FALSE );
-
-    USHORT GetBasicActionCnt() const    { return nBasicActionCnt; }
 
     // Basiscursortravelling
     long GetUpDownX() const             { return nUpDownX; }
@@ -478,8 +455,8 @@ public:
     void Paint( const Rectangle & rRect );
 
     // Bereiche
-    CRSR_INLINE void SetMark();
-    CRSR_INLINE FASTBOOL HasMark();
+    inline void SetMark();
+    inline FASTBOOL HasMark();
 
     void ClearMark();
 
@@ -540,13 +517,6 @@ public:
     // dem sichtbaren Cursor
     void ShowCrsrs( BOOL bCrsrVis );
     void HideCrsrs();
-    // Methoden zum Anzeigen bzw. Verstecken der selektierten Bereiche mit
-    // dem sichtbaren Cursor
-    void BasicShowCrsrs()
-        { bBasicHideCrsr = FALSE; bSVCrsrVis = TRUE; ShowCrsrs(TRUE); }
-    void BasicHideCrsrs()
-        { HideCrsrs(); bBasicHideCrsr = TRUE; bSVCrsrVis = FALSE; }
-    FASTBOOL IsBasicHideCrsr() const { return bBasicHideCrsr; }
 
     FASTBOOL IsOverwriteCrsr() const { return bOverwriteCrsr; }
     void SetOverwriteCrsr( FASTBOOL bFlag ) { bOverwriteCrsr = bFlag; }
@@ -586,14 +556,14 @@ public:
 
     // Abfrage, ob ueberhaupt eine Selektion existiert, sprich der akt. Cursor
     // aufgespannt oder nicht der einzigste ist.
-    CRSR_INLINE FASTBOOL IsSelection() const;
+    inline FASTBOOL IsSelection() const;
     // returns if multiple cursors are available
-    CRSR_INLINE FASTBOOL IsMultiSelection() const;
+    inline FASTBOOL IsMultiSelection() const;
 
     // Abfrage, ob ein kompletter Absatz selektiert wurde
     FASTBOOL IsSelFullPara() const;
     // Abfrage, ob die Selektion in einem Absatz ist
-    CRSR_INLINE FASTBOOL IsSelOnePara() const;
+    inline FASTBOOL IsSelOnePara() const;
 
     //Sollte fuer das Clipboard der WaitPtr geschaltet werden.
     FASTBOOL ShouldWait() const;
@@ -630,7 +600,7 @@ public:
 
     // am CurCrsr.SPoint
     FASTBOOL SetBookmark( const KeyCode&, const String& rName,
-                const String& rShortName, BOOKMARK_TYPE eMark  = BOOKMARK );
+                const String& rShortName, IDocumentBookmarkAccess::BookmarkType eMark = IDocumentBookmarkAccess::BOOKMARK);
     FASTBOOL GotoBookmark( USHORT );    // setzt CurCrsr.SPoint
     FASTBOOL GotoBookmark( USHORT nPos, BOOL bAtStart ); //
     FASTBOOL GoNextBookmark(); // TRUE, wenn's noch eine gab
@@ -657,13 +627,13 @@ public:
     String GetText() const;
 
     // pruefe ob vom aktuellen Crsr der SPoint/Mark in einer Tabelle stehen
-    CRSR_INLINE const SwTableNode* IsCrsrInTbl( BOOL bIsPtInTbl = TRUE ) const;
+    inline const SwTableNode* IsCrsrInTbl( BOOL bIsPtInTbl = TRUE ) const;
     // erfrage die Document - Layout - Position vom akt. Crsr
-    CRSR_INLINE Point& GetCrsrDocPos( BOOL bPoint = TRUE ) const;
-    CRSR_INLINE FASTBOOL IsCrsrPtAtEnd() const;
+    inline Point& GetCrsrDocPos( BOOL bPoint = TRUE ) const;
+    inline FASTBOOL IsCrsrPtAtEnd() const;
 
-    CRSR_INLINE const   SwPaM* GetTblCrs() const;
-    CRSR_INLINE         SwPaM* GetTblCrs();
+    inline const  SwPaM* GetTblCrs() const;
+    inline        SwPaM* GetTblCrs();
 
     FASTBOOL IsTblComplex() const;
     FASTBOOL IsTblComplexForChart();
@@ -758,7 +728,7 @@ public:
     // returnt FALSE: wenn der ob der SPoint vom Layout korrigiert wurde.
     // (wird zum Anzeigen von Drag&Drop/Copy-Cursor benoetigt)
     FASTBOOL SetVisCrsr( const Point &rPt );
-    CRSR_INLINE void UnSetVisCrsr();
+    inline void UnSetVisCrsr();
 
     // springe zum nachsten/vorherigen Feld des entsprechenden Types
     FASTBOOL MoveFldType( const SwFieldType* pFldType, BOOL bNext,
@@ -780,11 +750,7 @@ public:
     FASTBOOL GoPrevSentence();
     FASTBOOL GoStartSentence();
     FASTBOOL GoEndSentence();
-    FASTBOOL GoStartPara();
     FASTBOOL SelectWord( const Point* pPt = 0 );
-
-    // Abfrage vom CrsrTravelling Status
-    CrsrMoveState GetMoveState() const { return eMvState; }
 
     // Position vom akt. Cursor erfragen
     FASTBOOL IsStartWord()const;
@@ -806,12 +772,9 @@ public:
     // Wird fuers Drag&Drop/ClipBorad-Paste in Tabellen benoetigt.
     FASTBOOL ParkTblCrsr();
 
-    // erfrage die selektierte "Region" aller Cursor (fuer D&D auf Mac)
-    Region GetCrsrRegion() const;
-
     // gibt es nicht aufgespannte Attribute?
     FASTBOOL IsGCAttr() const { return bGCAttr; }
-    void    ClearGCAttr() { bGCAttr = FALSE; }
+    void ClearGCAttr() { bGCAttr = FALSE; }
     void    UpdateAttr() {  bGCAttr = TRUE; }
 
     // ist das gesamte Dokument geschuetzt/versteckt?? (fuer UI,..)
@@ -906,22 +869,7 @@ public:
 };
 
 
-class SwChgLinkFlag
-{
-    BOOL bOldFlag;
-    SwCrsrShell& rCrsrShell;
-    long nLeftFrmPos;
-public:
-    SwChgLinkFlag( SwCrsrShell& rShell );
-    ~SwChgLinkFlag();
-};
-
-
-
 // Cursor Inlines:
-
-#if defined(PRODUCT) && !defined(WIN)
-
 inline SwMoveFnCollection* SwCrsrShell::MakeFindRange(
             USHORT nStt, USHORT nEnd, SwPaM* pPam ) const
 {
@@ -985,8 +933,5 @@ inline void SwCrsrShell::UnSetVisCrsr()
     pVisCrsr->Hide();
     pVisCrsr->SetDragCrsr( FALSE );
 }
-
-#endif
-
 
 #endif  // _CRSRSH_HXX
