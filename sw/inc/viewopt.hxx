@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewopt.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:30:17 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:38:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _VIEWOPT_HXX
 #define _VIEWOPT_HXX
-
 #ifndef _GEN_HXX //autogen
 #include <tools/gen.hxx>
 #endif
@@ -211,7 +210,6 @@ public:
     USHORT GetPixelTwips() const { return nPixelTwips; }
 
     inline UINT32   GetCoreOptions() const {return nCoreOptions;}
-    inline UINT32   GetUIOptions()   const {return nUIOptions;}
     inline void     SetUIOptions( const SwViewOption& );
 
 /*---------------------------------------------------------------------------
@@ -229,11 +227,6 @@ public:
                                     ? TRUE : FALSE; }
     inline void SetTab( BOOL b )        {
         (b != 0) ? (nCoreOptions |= VIEWOPT_1_TAB ) : ( nCoreOptions &= ~VIEWOPT_1_TAB); }
-
-#ifdef VERTICAL_LAYOUT
-#else
-           void PaintTab( OutputDevice *pOut, const SwRect &rRect ) const;
-#endif
 
     inline BOOL IsBlank(BOOL bHard = FALSE) const
                     { return !bReadonly && (nCoreOptions & VIEWOPT_1_BLANK) &&
@@ -260,16 +253,10 @@ public:
                                     ? TRUE : FALSE; }
     inline void SetLineBreak( BOOL b )
         { (b != 0) ? (nCoreOptions |= VIEWOPT_1_LINEBREAK ) : ( nCoreOptions &= ~VIEWOPT_1_LINEBREAK); }
-#ifdef VERTICAL_LAYOUT
-#else
-        void PaintLineBreak( OutputDevice *pOut, const SwRect &rRect ) const;
-#endif
 
-    inline BOOL IsPageBreak() const     { return !bReadonly && (nCoreOptions & VIEWOPT_1_PAGEBREAK) ? TRUE : FALSE; }
     inline void SetPageBreak( BOOL b )
         { (b != 0) ? (nCoreOptions |= VIEWOPT_1_PAGEBREAK ) : ( nCoreOptions &= ~VIEWOPT_1_PAGEBREAK); }
 
-    inline BOOL IsColumnBreak() const   { return !bReadonly && (nCoreOptions & VIEWOPT_1_COLUMNBREAK) ? TRUE : FALSE; }
     inline void SetColumnBreak( BOOL b)
         { (b != 0) ? (nCoreOptions |= VIEWOPT_1_COLUMNBREAK ) : ( nCoreOptions &= ~VIEWOPT_1_COLUMNBREAK); }
 
