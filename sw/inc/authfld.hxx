@@ -4,9 +4,9 @@
  *
  *  $RCSfile: authfld.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:33:00 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:16:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,9 +38,11 @@
 #ifndef INCLUDED_SWDLLAPI_H
 #include "swdllapi.h"
 #endif
+
 #ifndef _FLDBAS_HXX
 #include <fldbas.hxx>
 #endif
+
 #ifndef _TOXE_HXX
 #include <toxe.hxx>
 #endif
@@ -86,7 +88,6 @@ struct SwTOXSortKey
 /* -----------------14.09.99 16:15-------------------
 
  --------------------------------------------------*/
-class SvUShorts;
 class SwAuthorityField;
 class SortKeyArr;
 
@@ -117,7 +118,6 @@ public:
     virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMId ) const;
     virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMId );
 
-    inline SwDoc*   GetDoc() const                      { return m_pDoc; }
     inline void     SetDoc(SwDoc* pNewDoc)              { m_pDoc = pNewDoc; }
 
     void                RemoveField(long nHandle);
