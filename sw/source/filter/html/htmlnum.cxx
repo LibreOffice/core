@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlnum.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 11:49:17 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:04:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 
 #pragma hdrstop
@@ -70,6 +69,9 @@
 
 #ifndef _NUMRULE_HXX
 #include <numrule.hxx>
+#endif
+#ifndef _DOC_HXX
+#include <doc.hxx>
 #endif
 #ifndef _DOCARY_HXX
 #include <docary.hxx>
@@ -194,6 +196,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
         }
 
         sal_uInt16 nAbsLSpace = HTML_NUMBUL_MARGINLEFT;
+
         short nFirstLineIndent  = HTML_NUMBUL_INDENT;
         if( nLevel > 0 )
         {
@@ -204,6 +207,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
         aNumFmt.SetAbsLSpace( nAbsLSpace );
         aNumFmt.SetFirstLineOffset( nFirstLineIndent );
         aNumFmt.SetCharFmt( pCSS1Parser->GetCharFmtFromPool(nChrFmtPoolId) );
+
         bChangeNumFmt = sal_True;
     }
     else if( 1 != aNumFmt.GetStart() )
@@ -382,7 +386,9 @@ void SwHTMLParser::NewNumBulList( int nToken )
             aPropInfo.bLeftMargin = aPropInfo.bTextIndent = sal_False;
             if( !aPropInfo.bRightMargin )
                 aItemSet.ClearItem( RES_LR_SPACE );
+
             DoPositioning( aItemSet, aPropInfo, pCntxt );
+
             InsertAttrs( aItemSet, aPropInfo, pCntxt );
         }
     }
@@ -411,7 +417,9 @@ void SwHTMLParser::EndNumBulList( int nToken )
     if( !bAppend )
     {
         SwTxtNode* pTxtNode = pPam->GetNode()->GetTxtNode();
+
         bAppend = (pTxtNode && ! pTxtNode->IsOutline() && pTxtNode->IsCounted()) ||
+
             HasCurrentParaFlys();
     }
 
