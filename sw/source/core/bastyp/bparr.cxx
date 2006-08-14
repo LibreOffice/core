@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bparr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:59:10 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:49:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,15 +94,6 @@ BigPtrArray::~BigPtrArray()
     }
     delete[] ppInf;
 }
-
-// Einfachst-Implementation, evtl. spaeter mal komplexer
-#if 0
-void BigPtrArray::Insert( const ElementPtr* p, ULONG pos, ULONG n )
-{
-    while( n-- )
-        Insert( *p++, pos++ );
-}
-#endif
 
 // Auch der Move ist schlicht. Optimieren ist hier wg. der
 // Stueckelung des Feldes zwecklos!
