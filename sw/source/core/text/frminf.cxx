@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frminf.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:52:16 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:36:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #ifndef _PAM_HXX
@@ -48,10 +47,6 @@
 #ifndef _ITRTXT_HXX
 #include <itrtxt.hxx>       // SwTxtMargin
 #endif
-#ifndef _SWFONT_HXX
-#include <swfont.hxx>       // IsBullet()
-#endif
-
 
 /*************************************************************************
  *                   SwTxtMargin::GetTxtStart()
