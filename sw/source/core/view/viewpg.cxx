@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewpg.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 15:10:47 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:58:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #ifndef _HINTIDS_HXX
@@ -52,9 +51,6 @@
 
 #ifndef _PVPRTDAT_HXX
 #include <pvprtdat.hxx>
-#endif
-#ifndef _DOC_HXX
-#include <doc.hxx>
 #endif
 #ifndef _VIEWSH_HXX
 #include <viewsh.hxx>
@@ -96,6 +92,9 @@
 #ifndef _COMCORE_HRC
 #include <comcore.hrc>
 #endif
+
+#include <IDocumentFieldsAccess.hxx>
+#include <IDocumentDeviceAccess.hxx>
 
 const SwTwips nXFree = 4*142;        // == 0.25 cm * 4
 const SwTwips nYFree = 4*142;
@@ -141,7 +140,7 @@ void ViewShell::PrintPreViewPage( SwPrtOptions& rOptions,
         return;
 
     // wenn kein Drucker vorhanden ist, wird nicht gedruckt
-    SfxPrinter* pPrt = GetPrt();
+    SfxPrinter* pPrt = getIDocumentDeviceAccess()->getPrinter(false);
     if( !pPrt || !pPrt->GetName().Len() )
         return;
 
@@ -171,7 +170,7 @@ void ViewShell::PrintPreViewPage( SwPrtOptions& rOptions,
     SwFieldType* pFldType = 0;
     if ( GetViewOptions()->IsShowHiddenPara() )
     {
-        pFldType = GetDoc()->GetSysFldType( RES_HIDDENPARAFLD );
+        pFldType = getIDocumentFieldsAccess()->GetSysFldType( RES_HIDDENPARAFLD );
         bHiddenFlds = 0 != pFldType->GetDepends();
         if( bHiddenFlds )
         {
@@ -489,7 +488,7 @@ void ViewShell::PrintProspect( SwPrtOptions& rOptions,
         return;
 
     // wenn kein Drucker vorhanden ist, wird nicht gedruckt
-    SfxPrinter* pPrt = GetPrt();
+    SfxPrinter* pPrt = getIDocumentDeviceAccess()->getPrinter(false);
     if( !pPrt || !pPrt->GetName().Len() ||
         ( !rOptions.bPrintLeftPage && !rOptions.bPrintRightPage ))
         return;
@@ -519,7 +518,7 @@ void ViewShell::PrintProspect( SwPrtOptions& rOptions,
     SwFieldType* pFldType = 0;
     if ( GetViewOptions()->IsShowHiddenPara() )
     {
-        pFldType = GetDoc()->GetSysFldType( RES_HIDDENPARAFLD );
+        pFldType = getIDocumentFieldsAccess()->GetSysFldType( RES_HIDDENPARAFLD );
         bHiddenFlds = 0 != pFldType->GetDepends();
         if( bHiddenFlds )
         {
