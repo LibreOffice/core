@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pagepreviewlayout.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 15:10:34 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:58:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifndef _PAGEPREVIEWLAYOUT_HXX
 #include <pagepreviewlayout.hxx>
 #endif
@@ -45,13 +44,6 @@
 #ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
 #endif
-#ifndef _SV_OUTDEV_HXX
-#include <vcl/outdev.hxx>
-#endif
-#ifndef _SV_MAPMOD_HXX
-#include <vcl/mapmod.hxx>
-#endif
-
 #ifndef _ROOTFRM_HXX
 #include <rootfrm.hxx>
 #endif
@@ -86,6 +78,8 @@
 #include <printdata.hxx>
 #endif
 
+#include <IDocumentDeviceAccess.hxx>
+
 // OD 20.02.2003 #107369# - method to update statics for paint
 // Note: method defined in '/sw/source/core/layout/paintfrm.cxx'
 extern void SwCalcPixStatics( OutputDevice *pOut );
@@ -106,7 +100,7 @@ SwPagePreviewLayout::SwPagePreviewLayout( ViewShell& _rParentViewShell,
     mbBookPreview = false;
     mbBookPreviewModeToggled = false;
 
-    const SwPrintData* pPrintData = mrParentViewShell.GetPrintData();
+    const SwPrintData* pPrintData = mrParentViewShell.getIDocumentDeviceAccess()->getPrintData();
     mbPrintEmptyPages = pPrintData ? pPrintData->IsPrintEmptyPages() : true;
 }
 
