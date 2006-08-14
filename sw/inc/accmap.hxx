@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accmap.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 14:19:04 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:15:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,24 +39,21 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #endif
 
-#ifndef _SAL_TYPES_H_
-#include <sal/types.h>
-#endif
-#ifndef _CPPUHELPER_WEAKREF_HXX_
-#include <cppuhelper/weakref.hxx>
-#endif
 #ifndef _VOS_REF_HXX_
 #include <vos/ref.hxx>
 #endif
+
 #ifndef _VOS_MUTEX_HXX_ //autogen
 #include <vos/mutex.hxx>
 #endif
+
 #ifndef _SVX_ACCESSIBILITY_IACCESSIBLE_VIEW_FORWARDER_HXX
 #include <svx/IAccessibleViewForwarder.hxx>
 #endif
 #ifndef _SVX_ACCESSIBILITY_IACCESSIBLE_PARENT_HXX
 #include <svx/IAccessibleParent.hxx>
 #endif
+
 #ifndef _VIEWSH_HXX
 #include "viewsh.hxx"
 #endif
@@ -64,6 +61,7 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+
 #ifndef _FRACT_HXX
 #include <tools/fract.hxx>
 #endif
@@ -72,7 +70,6 @@
 
 class Rectangle;
 class SwFrm;
-class SwRootFrm;
 class SwPageFrm;
 class SwAccessibleContext;
 class SwAccessibleContextMap_Impl;
@@ -87,8 +84,7 @@ struct SwAccessibleEvent_Impl;
 class SwAccessibleSelectedParas_Impl;
 // <--
 class SwRect;
-class ViewShell;
-class SwFrmOrObj;
+class MapMode;
 class SwAccPreviewData;
 // OD 14.01.2003 #103492#
 #ifndef _PREVWPAGE_HXX
