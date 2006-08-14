@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doclay.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:26:43 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:58:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,9 +32,7 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #pragma hdrstop
-
 #include <com/sun/star/embed/EmbedStates.hpp>
 
 #define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
@@ -278,8 +276,7 @@ static bool lcl_IsItemSet(const SwCntntNode & rNode, USHORT which)
 |*
 |*************************************************************************/
 
-SwFrmFmt *SwDoc::MakeLayoutFmt( RndStdIds eRequest, SwFrmFmt* pFrmFmt,
-                                const SfxItemSet* pSet )
+SwFrmFmt *SwDoc::MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet )
 {
     SwFrmFmt *pFmt = 0;
     const sal_Bool bMod = IsModified();
@@ -533,7 +530,7 @@ void SwDoc::DelLayoutFmt( SwFrmFmt *pFmt )
 
 SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
                                 const SwFmtAnchor& rNewAnchor,
-                                sal_Bool bSetTxtFlyAtt, sal_Bool bMakeFrms )
+                                bool bSetTxtFlyAtt, bool bMakeFrms )
 {
     const bool bFly = RES_FLYFRMFMT == rSource.Which();
     const bool bDraw = RES_DRAWFRMFMT == rSource.Which();
@@ -608,9 +605,9 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
         pDest->SetAttr( aAttr );
         pDest->SetAttr( rNewAnchor );
 
-        if( !bCopyIsMove || this != pSrcDoc )
+        if( !mbCopyIsMove || this != pSrcDoc )
         {
-            if( bInReading )
+            if( mbInReading )
                 pDest->SetName( aEmptyStr );
             else
             {
@@ -650,7 +647,7 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
 
         SwDrawContact* pContact = new SwDrawContact( (SwDrawFrmFmt*)pDest,
                                 CloneSdrObj( *pSourceContact->GetMaster(),
-                                        bCopyIsMove && this == pSrcDoc ) );
+                                        mbCopyIsMove && this == pSrcDoc ) );
         // --> OD 2005-05-23 #i49730# - notify draw frame format
         // that position attributes are already set, if the position attributes
         // are already set at the source draw frame format.
@@ -752,7 +749,7 @@ SwFlyFrmFmt* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
         pFrmFmt = GetFrmFmtFromPool( RES_POOLFRM_FRAME );
 
     String sName;
-    if( !bInReading )
+    if( !mbInReading )
         switch( rNode.GetNodeType() )
         {
         case ND_GRFNODE:        sName = GetUniqueGrfName();     break;
@@ -890,7 +887,7 @@ SwFlyFrmFmt* SwDoc::MakeFlySection( RndStdIds eAnchorType,
         if( !pFrmFmt )
             pFrmFmt = GetFrmFmtFromPool( RES_POOLFRM_FRAME );
 
-        sal_uInt16 nCollId = IsHTMLMode() ? RES_POOLCOLL_TEXT : RES_POOLCOLL_FRAME;
+        sal_uInt16 nCollId = get(IDocumentSettingAccess::HTML_MODE) ? RES_POOLCOLL_TEXT : RES_POOLCOLL_FRAME;
 
         /* #109161# If there exists no adjust item in the paragraph
             style for the content node of the new fly section
@@ -920,7 +917,7 @@ SwFlyFrmFmt* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rSet,
 {
     SwFmtAnchor& rAnch = (SwFmtAnchor&)rSet.Get( RES_ANCHOR );
 
-    StartUndo( UNDO_INSLAYFMT );
+    StartUndo( UNDO_INSLAYFMT, NULL );
 
     SwFlyFrmFmt* pFmt = MakeFlySection( rAnch.GetAnchorId(), rPam.GetPoint(),
                                         &rSet, pParent );
@@ -970,7 +967,7 @@ SwFlyFrmFmt* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rSet,
                         GetNodes().MakeTxtNode( aRg.aStart,
                                     (SwTxtFmtColl*)GetDfltTxtFmtColl() );
 
-                    Move( aRg, aPos.nNode );
+                    Move( aRg, aPos.nNode, DOC_MOVEDEFAULT );
                 }
                 else
                 {
@@ -1003,16 +1000,16 @@ if( DoesUndo() )    // werden erstmal alle Undo - Objecte geloescht.
 */
                 // copy all Pams and then delete all
                 SwPaM* pTmp = (SwPaM*)&rPam;
-                BOOL bOldFlag = bCopyIsMove, bOldUndo = bUndo;
-                bCopyIsMove = TRUE;
-                bUndo = FALSE;
+                BOOL bOldFlag = mbCopyIsMove, bOldUndo = mbUndo;
+                mbCopyIsMove = TRUE;
+                mbUndo = FALSE;
                 do {
                     if( pTmp->HasMark() &&
                         *pTmp->GetPoint() != *pTmp->GetMark() )
                         Copy( *pTmp, aPos );
                 } while( &rPam != ( pTmp = (SwPaM*)pTmp->GetNext() ) );
-                bCopyIsMove = bOldFlag;
-                bUndo = bOldUndo;
+                mbCopyIsMove = bOldFlag;
+                mbUndo = bOldUndo;
 
                 pTmp = (SwPaM*)&rPam;
                 do {
@@ -1026,7 +1023,7 @@ if( DoesUndo() )    // werden erstmal alle Undo - Objecte geloescht.
 
     SetModified();
 
-    EndUndo( UNDO_INSLAYFMT );
+    EndUndo( UNDO_INSLAYFMT, NULL );
 
     return pFmt;
 }
@@ -1914,7 +1911,7 @@ IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
         sal_uInt16 nFldUpdFlag;
         if( GetRootFrm()->IsIdleFormat() )
             GetRootFrm()->GetCurrShell()->LayoutIdle();
-        else if( ( AUTOUPD_FIELD_ONLY == ( nFldUpdFlag = GetFldUpdateFlags() )
+        else if( ( AUTOUPD_FIELD_ONLY == ( nFldUpdFlag = getFieldUpdateFlags(true) )
                     || AUTOUPD_FIELD_AND_CHARTS == nFldUpdFlag ) &&
                 GetUpdtFlds().IsFieldsDirty() &&
                 !GetUpdtFlds().IsInUpdateFlds() &&
@@ -1930,8 +1927,8 @@ IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
 
             GetSysFldType( RES_CHAPTERFLD )->Modify( 0, 0 );    // KapitelFld
             UpdateExpFlds( 0, sal_False );      // Expression-Felder Updaten
-            UpdateTblFlds();                // Tabellen
-            UpdateRefFlds();                // Referenzen
+            UpdateTblFlds(NULL);                // Tabellen
+            UpdateRefFlds(NULL);                // Referenzen
 
             if( AUTOUPD_FIELD_AND_CHARTS == nFldUpdFlag )
                 aChartTimer.Start();
@@ -2229,7 +2226,7 @@ sal_Bool SwDoc::IsInHeaderFooter( const SwNodeIndex& rIdx ) const
         }
         if( n >= GetSpzFrmFmts()->Count() )
         {
-            ASSERT( bInReading, "Fly-Section aber kein Format gefunden" );
+            ASSERT( mbInReading, "Fly-Section aber kein Format gefunden" );
             return sal_False;
         }
     }
@@ -2237,8 +2234,6 @@ sal_Bool SwDoc::IsInHeaderFooter( const SwNodeIndex& rIdx ) const
     return 0 != pNd->FindHeaderStartNode() ||
             0 != pNd->FindFooterStartNode();
 }
-
-#ifdef BIDI
 
 short SwDoc::GetTextDirection( const SwPosition& rPos,
                                const Point* pPt ) const
@@ -2299,59 +2294,9 @@ sal_Bool SwDoc::IsInVerticalText( const SwPosition& rPos, const Point* pPt ) con
     return FRMDIR_VERT_TOP_RIGHT == nDir || FRMDIR_VERT_TOP_LEFT == nDir;
 }
 
-#else
-
-sal_Bool SwDoc::IsInVerticalText( const SwPosition& rPos, const Point* pPt ) const
-{
-    sal_Bool bRet;
-    Point aPt;
-    if( pPt )
-        aPt = *pPt;
-
-    SwCntntNode *pNd = rPos.nNode.GetNode().GetCntntNode();
-    SwCntntFrm *pFrm;
-
-    if( pNd && 0 != (pFrm = pNd->GetFrm( &aPt, &rPos )) )
-        bRet = pFrm->IsVertical();
-    else
-    {
-        const SvxFrameDirectionItem* pItem = 0;
-        if( pNd )
-        {
-            // in a flyframe? Then look at that for the correct attribute
-            const SwFrmFmt* pFlyFmt = pNd->GetFlyFmt();
-            while( pFlyFmt )
-            {
-                pItem = &pFlyFmt->GetFrmDir();
-                if( FRMDIR_ENVIRONMENT == pItem->GetValue() )
-                {
-                    pItem = 0;
-                    const SwFmtAnchor* pAnchor = &pFlyFmt->GetAnchor();
-                    if( FLY_PAGE != pAnchor->GetAnchorId() &&
-                        pAnchor->GetCntntAnchor() )
-                        pFlyFmt = pAnchor->GetCntntAnchor()->nNode.
-                                            GetNode().GetFlyFmt();
-                    else
-                        pFlyFmt = 0;
-                }
-                else
-                    pFlyFmt = 0;
-            }
-
-            if( !pItem )
-            {
-                const SwPageDesc* pPgDsc = pNd->FindPageDesc( FALSE );
-                if( pPgDsc )
-                    pItem = &pPgDsc->GetMaster().GetFrmDir();
-            }
-        }
-        if( !pItem )
-            pItem = (SvxFrameDirectionItem*)&GetAttrPool().GetDefaultItem(
-                                                            RES_FRAMEDIR );
-        bRet = FRMDIR_VERT_TOP_RIGHT == pItem->GetValue() ||
-               FRMDIR_VERT_TOP_LEFT == pItem->GetValue();
-    }
-    return bRet;
-}
-
-#endif
+const SwRootFrm* SwDoc::GetRootFrm() const { return pLayout; }
+SwRootFrm* SwDoc::GetRootFrm() { return pLayout; }
+void SwDoc::SetRootFrm( SwRootFrm* pNew ) { pLayout = pNew; }
+SwLayouter* SwDoc::GetLayouter() { return pLayouter; }
+const SwLayouter* SwDoc::GetLayouter() const { return pLayouter; }
+void SwDoc::SetLayouter( SwLayouter* pNew ) { pLayouter = pNew; }
