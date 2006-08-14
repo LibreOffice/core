@@ -4,9 +4,9 @@
  *
  *  $RCSfile: trvlfnfl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:07:14 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:53:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #ifndef _SVDMODEL_HXX //autogen
@@ -54,12 +53,6 @@
 #endif
 #ifndef _CNTFRM_HXX
 #include <cntfrm.hxx>
-#endif
-#ifndef _ROOTFRM_HXX
-#include <rootfrm.hxx>
-#endif
-#ifndef _FTNBOSS_HXX
-#include <ftnboss.hxx>
 #endif
 #ifndef _FTNFRM_HXX
 #include <ftnfrm.hxx>
