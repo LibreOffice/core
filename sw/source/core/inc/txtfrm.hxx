@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfrm.hxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:28:53 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:23:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _TXTFRM_HXX
 #define _TXTFRM_HXX
-
 #ifndef _SVMEMPOOL_HXX //autogen
 #include <tools/mempool.hxx>
 #endif
@@ -52,13 +51,11 @@ class SwTxtFormatInfo;
 class SwParaPortion;
 class WidowsAndOrphans;
 class SwBodyFrm;
-class SwFooterFrm;
 class SwTxtFtn;
 class SwInterHyphInfo;      // Hyphenate()
 class SwCache;
 class SwBorderAttrs;
 class SwFrmFmt;
-class SwFldPortion;
 class OutputDevice;
 class SwTestFormat;
 class SwStripes;
@@ -66,6 +63,7 @@ struct SwCrsrMoveState;
 struct SwFillData;
 class SwPortionHandler;
 class SwScriptInfo;
+class SwViewOption;
 
 #define GRID_ON         0
 #define GRID_HEIGHT     1
@@ -235,7 +233,7 @@ public:
     void Init();
 
     // Wird von FormatSpelling( ) gerufen
-    SwRect _AutoSpell( SwCntntNode* , USHORT );
+    SwRect _AutoSpell( const SwCntntNode*, const SwViewOption&, USHORT );
     // Wird vom CollectAutoCmplWords gerufen
     void CollectAutoCmplWrds( SwCntntNode* , USHORT );
 
