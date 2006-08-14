@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unovwr.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:29:38 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:51:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -99,10 +98,6 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
     : SwUndo(UNDO_OVERWRITE), bGroup( FALSE ),
       pRedlSaveData( 0 )
 {
-#ifdef COMPACT
-    pDoc->DelUndoGroups();
-#endif
-
     if( !pDoc->IsIgnoreRedline() && pDoc->GetRedlineTbl().Count() )
     {
         SwPaM aPam( rPos.nNode, rPos.nContent.GetIndex(),
@@ -194,7 +189,7 @@ BOOL SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
         if( !bOk )
             return FALSE;
 
-        pDoc->DeleteRedline( aPam, FALSE );
+        pDoc->DeleteRedline( aPam, false, USHRT_MAX );
     }
 
     // Ok, die beiden 'Overwrites' koennen zusammen gefasst werden, also
@@ -331,7 +326,7 @@ void SwUndoOverwrite::Redo( SwUndoIter& rUndoIter )
         rIdx.Assign( pTxtNd, nSttCntnt );
         pAktPam->SetMark();
         pAktPam->GetMark()->nContent += aInsStr.Len();
-        pDoc->DeleteRedline( *pAktPam, FALSE );
+        pDoc->DeleteRedline( *pAktPam, false, USHRT_MAX );
         pAktPam->DeleteMark();
     }
     rIdx.Assign( pTxtNd, aDelStr.Len() ? nSttCntnt+1 : nSttCntnt );
