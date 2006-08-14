@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chrdlg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:04:25 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:39:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _SWCHARDLG_HXX
 #define _SWCHARDLG_HXX
-
 #ifndef _SFXTABDLG_HXX //autogen
 #include <sfx2/tabdlg.hxx>
 #endif
@@ -63,7 +62,6 @@
 #include <vcl/lstbox.hxx>
 #endif
 
-class FontList;
 class SwView;
 class SvxMacroItem;
 
