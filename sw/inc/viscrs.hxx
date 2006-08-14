@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viscrs.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:30:46 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:38:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _VISCRS_HXX
 #define _VISCRS_HXX
-
 #ifndef _CURSOR_HXX //autogen
 #include <vcl/cursor.hxx>
 #endif
@@ -44,8 +43,6 @@
 
 class SwCrsrShell;
 class SwShellCrsr;
-class Window;
-
 
 // --------  Ab hier Klassen / Methoden fuer den nicht Text-Cursor ------
 
@@ -80,7 +77,6 @@ public:
     void Hide();
 
     FASTBOOL IsVisible() const { return bIsVisible; }
-    FASTBOOL IsDragCrsr() const { return bIsDragCrsr; }
     void SetDragCrsr( BOOL bFlag = TRUE ) { bIsDragCrsr = bFlag; }
 
 #ifdef SW_CRSR_TIMER
