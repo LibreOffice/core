@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-03 12:56:34 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:57:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -82,9 +81,6 @@
 #ifndef _SVX_FLSTITEM_HXX //autogen
 #include <svx/flstitem.hxx>
 #endif
-#ifndef _SVX_SVXIDS_HRC //autogen
-#include <svx/svxids.hrc>
-#endif
 #ifndef _SVX_PAPERINF_HXX //autogen
 #include <svx/paperinf.hxx>
 #endif
@@ -104,9 +100,6 @@
 #ifndef _UNOSTYLE_HXX
 #include <unostyle.hxx>
 #endif
-#ifndef _UNOMAP_HXX
-#include <unomap.hxx>
-#endif
 #ifndef _UNOSETT_HXX
 #include <unosett.hxx>
 #endif
@@ -118,9 +111,6 @@
 #endif
 #ifndef _PARATR_HXX
 #include <paratr.hxx>
-#endif
-#ifndef SW_UNOMID_HXX
-#include <unomid.h>
 #endif
 #ifndef _UNOPRNMS_HXX
 #include <unoprnms.hxx>
@@ -161,12 +151,15 @@
 #ifndef _SFX_PRINTER_HXX
 #include <sfx2/printer.hxx>
 #endif
+
 #ifndef _COM_SUN_STAR_STYLE_PARAGRAPHSTYLECATEGORY_HPP_
 #include <com/sun/star/style/ParagraphStyleCategory.hpp>
 #endif
+/*
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
 #endif
+*/
 #ifndef _COM_SUN_STAR_STYLE_XSTYLEFAMILIESSUPPLIER_HPP_
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #endif
@@ -1821,7 +1814,7 @@ void lcl_SetStyleProperty(const SfxItemPropertyMap* pMap,
     {
         case RES_PAPER_BIN:
         {
-            SfxPrinter *pPrinter = pDoc->GetPrt( sal_True );
+            SfxPrinter *pPrinter = pDoc->getPrinter( true );
             OUString sTmp;
             sal_uInt16 nBin = USHRT_MAX;
             if ( !( rValue >>= sTmp ) )
@@ -2319,7 +2312,7 @@ Any lcl_GetStyleProperty(const SfxItemPropertyMap* pMap,
                     aRet <<= OUString ( RTL_CONSTASCII_USTRINGPARAM ( "[From printer settings]" ) );
                 else
                 {
-                    SfxPrinter *pPrinter = pDoc->GetPrt();
+                    SfxPrinter *pPrinter = pDoc->getPrinter( false );
                     OUString sTmp;
                     if (pPrinter )
                         sTmp = pPrinter->GetPaperBinName ( nBin );
@@ -2935,10 +2928,10 @@ void SAL_CALL SwXStyle::setAllPropertiesToDefault(  )
                     SwFmtFrmSize aFrmSz( ATT_FIX_SIZE );
                     if( RES_POOLPAGE_STANDARD == rPageDesc.GetPoolFmtId() )
                     {
-                        if( m_pDoc->GetPrt() )
+                        if( m_pDoc->getPrinter( false ) )
                         {
                             const Size aPhysSize( SvxPaperInfo::GetPaperSize(
-                                        static_cast<Printer*>( m_pDoc->GetPrt() )) );
+                                        static_cast<Printer*>( m_pDoc->getPrinter( false ) )) );
                             aFrmSz.SetSize( aPhysSize );
                         }
                         else
