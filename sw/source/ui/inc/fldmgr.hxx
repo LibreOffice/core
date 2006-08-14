@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldmgr.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:36:38 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:41:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _FLDMGR_HXX
 #define _FLDMGR_HXX
-
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
@@ -71,10 +70,8 @@ namespace com{namespace sun{namespace star{
 class SwWrtShell;
 class SwField;
 class SwFieldType;
-class SwFmtRefMark;
 class SbModule;
 class SvxMacroItem;
-class ListBox;
 class SvNumberFormatter;
 class Window;
 /*--------------------------------------------------------------------
