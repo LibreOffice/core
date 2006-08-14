@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unosett.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:31:22 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:57:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #include <swtypes.hxx>
@@ -56,9 +55,6 @@
 #endif
 #ifndef _UNOPRNMS_HXX
 #include <unoprnms.hxx>
-#endif
-#ifndef _SFX_ITEMPROP_HXX
-#include <svtools/itemprop.hxx>
 #endif
 #ifndef _FTNINFO_HXX //autogen
 #include <ftninfo.hxx>
@@ -123,7 +119,6 @@
 #ifndef _COM_SUN_STAR_STYLE_VERTICALALIGNMENT_HPP_
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #endif
-
 #ifndef _UNOOBJ_HXX
 #include <unoobj.hxx>
 #endif
@@ -151,20 +146,8 @@
 #ifndef SVX_UNOFDESC_HXX
 #include <svx/unofdesc.hxx>
 #endif
-#ifndef _SVX_UNOMID_HXX
-#include <svx/unomid.hxx>
-#endif
-#ifndef _SV_GRAPH_HXX
-#include <vcl/graph.hxx>
-#endif
-#ifndef _RTL_STRING_HXX_
-#include <rtl/string.hxx>
-#endif
 #ifndef _FMTORNT_HXX
 #include <fmtornt.hxx>
-#endif
-#ifndef SW_UNOMID_HXX
-#include <unomid.h>
 #endif
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
