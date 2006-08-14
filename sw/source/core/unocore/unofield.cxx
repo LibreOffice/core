@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 13:22:06 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:54:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -66,9 +65,6 @@
 #ifndef _UNOCOLL_HXX
 #include <unocoll.hxx>
 #endif
-#ifndef _SFX_ITEMPROP_HXX //autogen
-#include <svtools/itemprop.hxx>
-#endif
 #ifndef _SVXLINKMGR_HXX
 #include <svx/linkmgr.hxx>
 #endif
@@ -81,14 +77,12 @@
 #ifndef _VIEWSH_HXX
 #include <viewsh.hxx>
 #endif
-
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
-
 #ifndef _COM_SUN_STAR_UTIL_TIME_HPP_
 #include <com/sun/star/util/Time.hpp>
 #endif
@@ -101,32 +95,8 @@
 #ifndef _COM_SUN_STAR_UTIL_DATE_HPP_
 #include <com/sun/star/util/Date.hpp>
 #endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUES_HPP_
-#include <com/sun/star/beans/PropertyValues.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
-#include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
-#include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATE_HPP_
-#include <com/sun/star/beans/PropertyState.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP_
-#include <com/sun/star/beans/XPropertySetInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XMULTIPROPERTYSET_HPP_
-#include <com/sun/star/beans/XMultiPropertySet.hpp>
-#endif
 #ifndef _COM_SUN_STAR_BEANS_XFASTPROPERTYSET_HPP_
 #include <com/sun/star/beans/XFastPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XVETOABLECHANGELISTENER_HPP_
-#include <com/sun/star/beans/XVetoableChangeListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
-#include <com/sun/star/beans/XPropertyState.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATECHANGELISTENER_HPP_
 #include <com/sun/star/beans/XPropertyStateChangeListener.hpp>
@@ -134,27 +104,10 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTIESCHANGELISTENER_HPP_
-#include <com/sun/star/beans/XPropertiesChangeListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYCHANGELISTENER_HPP_
-#include <com/sun/star/beans/XPropertyChangeListener.hpp>
-#endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYCONTAINER_HPP_
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATECHANGEEVENT_HPP_
-#include <com/sun/star/beans/PropertyStateChangeEvent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYCHANGEEVENT_HPP_
-#include <com/sun/star/beans/PropertyChangeEvent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
-#include <com/sun/star/container/XNameAccess.hpp>
-#endif
+
 //undef to prevent error (from sfx2/docfile.cxx)
 #undef SEQUENCE
 #ifndef _COM_SUN_STAR_TEXT_SETVARIABLETYPE_HPP_
@@ -174,9 +127,6 @@
 #endif
 #ifndef _UNOCRSR_HXX
 #include <unocrsr.hxx>
-#endif
-#ifndef  _FLDBAS_HXX
-#include <fldbas.hxx>
 #endif
 #ifndef _AUTHFLD_HXX
 #include <authfld.hxx>
@@ -1916,7 +1866,7 @@ void SwXTextField::attachToRange(
             SwTxtAttr* pTxtAttr = 0;
             if(aPam.HasMark())
                 pDoc->DeleteAndJoin(aPam);
-            pDoc->Insert(aPam, aFmt);
+            pDoc->Insert(aPam, aFmt, 0);
             pTxtAttr = aPam.GetNode()->GetTxtNode()->GetTxtAttr(
                     aPam.GetPoint()->nContent.GetIndex()-1, RES_TXTATR_FIELD);
 
