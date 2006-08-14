@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wview.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:37:21 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 18:04:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #include "itemdef.hxx"
@@ -58,9 +57,6 @@
 #endif
 #ifndef _SVX_FMSHELL_HXX //autogen
 #include <svx/fmshell.hxx>
-#endif
-#ifndef _SFXENUMITEM_HXX //autogen
-#include <svtools/eitem.hxx>
 #endif
 #ifndef _SVX_EXTRUSION_BAR_HXX
 #include <svx/extrusionbar.hxx>
