@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlparse.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 17:25:44 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:11:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,15 +159,6 @@ void XMLParentNode::AddChild( XMLChildNode *pChild , int pos )
 int XMLParentNode::GetPosition( ByteString id ){
 /*****************************************************************************/
     XMLElement* a;
-
-    /*String enus_lower = String::CreateFromAscii(ENGLISH_US_ISO);
-    String de_lower   = String::CreateFromAscii(GERMAN_ISO2);
-    enus_lower.ToLowerAscii();
-    de_lower.ToLowerAscii();
-
-    static const ByteString sEnusStr = ByteString( enus_lower , RTL_TEXTENCODING_ASCII_US );
-    static const ByteString sDeStr   = ByteString( de_lower   , RTL_TEXTENCODING_ASCII_US );
-    */
 
     static const ByteString sEnusStr = ByteString(String::CreateFromAscii(ENGLISH_US_ISO).ToLowerAscii() , RTL_TEXTENCODING_ASCII_US ).ToLowerAscii();
     static const ByteString sDeStr   = ByteString(String::CreateFromAscii(GERMAN_ISO2).ToLowerAscii()    , RTL_TEXTENCODING_ASCII_US ).ToLowerAscii();
@@ -457,61 +448,15 @@ void XMLFile::Print( XMLNode *pCur, USHORT nLevel )
 }
 XMLFile::~XMLFile()
 {
-    //static int cnt=0;
     if( XMLStrings != NULL ){
         XMLHashMap::iterator pos = XMLStrings->begin();
-        //LangHashMap* elem;
         for( ; pos != XMLStrings->end() ; ++pos ){
             delete pos->second;             // Check and delete content also ?
-            //printf("LangHashMap deleted #%d\n",++cnt);
-            //elem=pos->second;
-            //if( (*elem)[ language ] )   delete (*elem)[ language ];
-            //(*elem)[ language ]=pElement;
         }
         delete XMLStrings;
         XMLStrings = NULL;
     }
 }
-/*XMLFile::~XMLFile()
-{
-  //printf("Killing Obj XMLFile\n");
-    if( XMLStrings )
-    {
-
-         XMLElement* cur;
-        //printf("A");
-        if( XMLStrings )
-        {
-        for(XMLHashMap::iterator pos=XMLStrings->begin(); pos!=XMLStrings->end();++pos){
-            //printf("B");
-            LangHashMap* elem=pos->second;
-             //printf("C");
-
-            if( elem ){
-             //printf("D");
-
-                for(LangHashMap::iterator pos2=elem->begin(); pos2!=elem->end();++pos2)
-                {
-              //printf("E");
-
-                    cur=pos2->second;
-                    //printf("F");
-                    //printf("delete %s", (pos2->first).GetBuffer() );
-                    if( cur ) delete cur;
-                    //printf(" ...done\n");
-                }
-                delete elem;
-            }
-            //delete elem;
-        }
-
-        //delete XMLStrings;
-        //XMLStrings = NULL;
-    }
-    }//if
-  //printf("\nDone\n");
-}
-*/
 /*****************************************************************************/
 XMLFile::XMLFile( const String &rFileName ) // the file name, empty if created from memory stream
 /*****************************************************************************/
@@ -636,54 +581,10 @@ XMLFile::XMLFile( const XMLFile& obj )
 {
     if( this!=&obj )
     {
-        //printf("Copy XMLHashMap");
-
-        //XMLParentNode::operator=(obj);
-
-        //sFileName       =obj.sFileName;
-        //ID              =obj.ID;
-        //XML_LANG        =obj.XML_LANG;
-        //OLDREF          =obj.OLDREF;
-
-        //HashMap nodes_include,nodes_localize,nodes_print;
-        //nodes_include   =obj.nodes_include;
-        //nodes_print     =obj.nodes_print;
-
         nodes_localize  =obj.nodes_localize;
         order           =obj.order;
 
-        //std::vector <ByteString> order;
-
-        //TagMap      nodes_localize;
-        //XMLHashMap* XMLStrings;
-
-/*      if( XMLStrings != NULL ){
-            delete XMLStrings;
-            XMLStrings = NULL;
-        }
-
-        if( obj.XMLStrings != NULL )
-        {
-            XMLStrings = new XMLHashMap();
-             XMLElement* cur;
-
-            for( XMLHashMap::iterator pos = obj.XMLStrings->begin() ; pos != obj.XMLStrings->end() ; ++pos )
-            {
-                LangHashMap* elem=pos->second;
-                static int cnt = 0;
-                LangHashMap* newelem = new LangHashMap();
-                printf("LangHashMap created copy #%d\n",++cnt);
-                for(LangHashMap::iterator pos2=elem->begin(); pos2!=elem->end();++pos2){
-                    (*newelem)[ pos2->first ] = new XMLElement( *pos2->second );
-                    //printf("*");
-                }
-                (*XMLStrings)[ pos->first ] = newelem;
-            }
-        }
-    }*/
     }
-    //printf("done!\n");
-    //return *this;
 }
 /*****************************************************************************/
 XMLFile& XMLFile::operator=(const XMLFile& obj){
@@ -692,36 +593,17 @@ XMLFile& XMLFile::operator=(const XMLFile& obj){
 
         XMLParentNode::operator=(obj);
 
-        //sFileName       =obj.sFileName;
-        //ID              =obj.ID;
-        //XML_LANG        =obj.XML_LANG;
-        //OLDREF          =obj.OLDREF;
-
-        //HashMap nodes_include,nodes_localize,nodes_print;
-        //nodes_include   =obj.nodes_include;
-        //nodes_print     =obj.nodes_print;
-
         nodes_localize  =obj.nodes_localize;
         order           =obj.order;
-
-        //std::vector <ByteString> order;
-
-        //TagMap      nodes_localize;
-        //XMLHashMap* XMLStrings;
-
 
         if( XMLStrings )    delete XMLStrings;
 
         if( obj.XMLStrings )
         {
             XMLStrings = new XMLHashMap();
-             //XMLElement* cur;
-
             for( XMLHashMap::iterator pos = obj.XMLStrings->begin() ; pos != obj.XMLStrings->end() ; ++pos )
             {
                 LangHashMap* elem=pos->second;
-                //static int cnt = 0;
-                //printf("LangHashMap created copy #%d\n",++cnt);
                 LangHashMap* newelem = new LangHashMap();
                 for(LangHashMap::iterator pos2=elem->begin(); pos2!=elem->end();++pos2){
                     (*newelem)[ pos2->first ] = new XMLElement( *pos2->second );
@@ -751,7 +633,6 @@ void XMLFile::SearchL10NElements( XMLParentNode *pCur , int pos)
                 XMLParentNode* pElement;
                 if( GetChildList()){
                     for ( ULONG i = 0; i < GetChildList()->Count(); i++ ){
-                        //SearchL10NElements( (XMLParentNode*) GetChildList()->GetObject( i ) , i);
                         pElement = (XMLParentNode*) GetChildList()->GetObject( i );
                         if( pElement->GetNodeType() ==  XML_NODE_TYPE_ELEMENT ) SearchL10NElements( pElement , i);
                     }
@@ -783,7 +664,6 @@ void XMLFile::SearchL10NElements( XMLParentNode *pCur , int pos)
                     pElement->SetId         ( tmpStrVal.GetBuffer() );
                     pElement->SetOldRef     ( oldref  );
                     pElement->SetPos( pos );
-                    //Print( pElement , 0 );
                 }
 
                 if ( bInsert && ( nodes_localize.find( sName.ToLowerAscii() ) != nodes_localize.end() ) )
@@ -808,7 +688,7 @@ void XMLFile::SearchL10NElements( XMLParentNode *pCur , int pos)
 }
 
 /*****************************************************************************/
-bool XMLFile::CheckExportStatus( XMLParentNode *pCur )//, int pos)
+bool XMLFile::CheckExportStatus( XMLParentNode *pCur )
 /*****************************************************************************/
 {
     static bool bStatusExport = true;
@@ -818,10 +698,9 @@ bool XMLFile::CheckExportStatus( XMLParentNode *pCur )//, int pos)
     const ByteString DEPRECATED("DEPRECATED");
 
     const ByteString TOPIC("topic");
-//  const ByteString THEID("id");
     bool bInsert    = true;
     if ( !pCur )
-        CheckExportStatus( this );// , 0 );
+        CheckExportStatus( this );
     else {
         switch( pCur->GetNodeType()) {
             case XML_NODE_TYPE_FILE: {
@@ -1046,7 +925,6 @@ void XMLElement::Print(XMLNode *pCur, OUStringBuffer& buffer , bool rootelement 
 
                             OUString aAttrName( *pElement->GetAttributeList()->GetObject( j ) );
                             if( !aAttrName.equalsIgnoreAsciiCase( XML_LANG ) ) {
-                                //buffer.append( *pElement->GetAttributeList()->GetObject( j ) );
                                 buffer.append( OUString::createFromAscii(" ") );
                                 buffer.append( aAttrName );
                                 buffer.append( OUString::createFromAscii("=") );
@@ -1280,8 +1158,7 @@ void SimpleXMLParser::EndElement( const XML_Char *name )
     // This variable is not used at all, but the the sax C interface can't be changed
     // To prevent warnings this dummy assignment is used
     // +++
-       name=name;
-    // +++
+    (void) name;
 
     pCurNode = pCurNode->GetParent();
     pCurData = NULL;
@@ -1535,14 +1412,6 @@ void XMLUtil::UnQuotData( String &rString_in ){
 
 
 }
-/*****************************************************************************/
-//USHORT XMLUtil::GetLangByIsoLang( const ByteString &rIsoLang )
-/*****************************************************************************/
-//{
-//  ByteString sIsoLang(rIsoLang);
-//    sIsoLang.ToLowerAscii();
-//    return lMap[ sIsoLang.GetBuffer() ];
-//}
 
 XMLUtil::XMLUtil(){
 }
