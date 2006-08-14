@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfunc.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:14:06 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:57:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _VIEWFUNC_HXX
 #define _VIEWFUNC_HXX
-
 #ifndef _SOLAR_H
 #include <tools/solar.h>
 #endif
@@ -47,12 +46,11 @@ class SfxPrinter;
 class SfxTabPage;
 class Size;
 class SvxRuler;
-class SwPrtOptions;
 class SwScrollbar;
 class ViewShell;
 class Window;
 class SwWrtShell;
-struct SwPrintData;
+
 // folgende Funktionen stehen im viewprt.cxx
 PrintDialog* CreatePrintDialog( Window* , USHORT, SwWrtShell* );
 void SetPrinter( SfxPrinter*, BOOL bWeb );
