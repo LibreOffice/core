@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: smoketest.pl,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: kz $ $Date: 2006-02-28 10:34:36 $
+#   last change: $Author: hr $ $Date: 2006-08-14 09:32:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -255,7 +255,7 @@ if ( $ARGV[0] ) {
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.17 $ ';
+$id_str = ' $Revision: 1.18 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -606,6 +606,9 @@ sub doInstall {
                 $Command = "pkgadd -a $solarisdata" . "admin -d $installsetpath -R $dest_installdir $file";
                 execute_Command ($Command, $error_setup, $show_Message, $command_withoutErrorcheck);
             }
+            my $pkgadd_tmpfile = "/tmp/.ai.pkg.zone.lock*";
+            $Command = "$REMOVE_FILE $pkgadd_tmpfile";
+            execute_Command ($Command, $error_setup, $show_NoMessage, $command_withoutErrorcheck | $command_withoutOutput);
             $ENV{LD_PRELOAD} = $ld_preload;
         }
         @DirArray = ();
