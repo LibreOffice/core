@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.168 $
+ *  $Revision: 1.169 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:42:53 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:19:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
-
 #include <stdlib.h>
 
 #ifndef _SFXITEMITER_HXX
@@ -303,14 +302,6 @@ ColorData SwWW8ImplReader::GetCol(BYTE nIco)
 
 inline sal_uInt32 MSRoundTweak(sal_uInt32 x)
 {
-#if 0
-    //keep this around in case it turns out to be true. But I don't think so.
-    //I think its a tab compatability issue
-    if (x < 0)
-        ++x;
-    else if (x > 0)
-        --x;
-#endif
     return x;
 }
 
@@ -440,7 +431,7 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrmFmt &rFmt, const wwSection &rSection)
 
     //Seems to force this behaviour in word ?
     if (eType != GRID_NONE)
-        rDoc.SetAddExtLeading(true);
+        rDoc.set(IDocumentSettingAccess::ADD_EXT_LEADING, true);
 
     //sep.dyaLinePitch
     sal_Int32 nLinePitch = rSection.maSep.dyaLinePitch;
@@ -1604,12 +1595,6 @@ bool WW8_BRC::IsZeroed(bool bVer67) const
     return (!(bVer67 ? (aBits1[0] & 0x001f) : aBits1[1]));
 }
 
-#if 0
-// #i20672# we can't properly support between lines so best to ignore
-// them for now
-bool SwWW8ImplReader::SetBorder(SvxBoxItem& rBox, const WW8_BRC* pbrc,
-    short *pSizeArray, BYTE nSetBorders, bool bChkBtwn) const
-#endif
 bool SwWW8ImplReader::SetBorder(SvxBoxItem& rBox, const WW8_BRC* pbrc,
     short *pSizeArray, BYTE nSetBorders) const
 {
@@ -1647,12 +1632,6 @@ bool SwWW8ImplReader::SetBorder(SvxBoxItem& rBox, const WW8_BRC* pbrc,
             */
             rBox.SetLine( 0, aIdArr[ i+1 ] );
         }
-#if 0
-        // #i20672# we can't properly support between lines so best to ignore
-        // them for now
-        else if( 6 == i && bChkBtwn )   // wenn Botton nichts war,
-            nEnd += 2;                  // dann ggfs. auch Between befragen
-#endif
     }
     return bChange;
 }
@@ -2013,18 +1992,6 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM, SwWW8ImplReader& rIo, WW8FlyPara& rWW,
      wrapping support for frames in headers/footers. I don't know if we truly
      have an explictly specified behaviour for these circumstances.
     */
-#if 0
-    /*
-     #83307# These old style WinWord textboxes are a terrible problem for
-     headers and footers. They can be anchored in a footer and moved to just
-     about anyplace. Also they have flexible heights and can be higher than
-     the actual header/footer area, if we do not set wrap to NONE then boxes
-     narrower than a header/footer but taller will be forced into the
-     header/footer area and the look of the word original will be lost
-    */
-    if (rIo.bIsHeader || rIo.bIsFooter)
-        eSurround = SURROUND_NONE;
-#endif
 
     nHeight = rWW.nSp45;
     if( nHeight & 0x8000 )
@@ -4237,7 +4204,7 @@ void SwWW8ImplReader::Read_ParaAutoAfter(USHORT, const BYTE *pData, short nLen)
 void SwWW8ImplReader::Read_UL( USHORT nId, const BYTE* pData, short nLen )
 {
 // Nun eine Umpopelung eines WW-Fehlers: Bei nProduct == 0c03d wird
-// faelschlicherweise ein DyaAfter 240 ( delta y abstand after, amn.d.Åb.)
+// faelschlicherweise ein DyaAfter 240 ( delta y abstand after, amn.d.?b.)
 // im Style "Normal" eingefuegt, der
 // gar nicht da ist. Ueber das IniFlag WW8FL_NO_STY_DYA laesst sich dieses
 // Verhalten auch fuer andere WW-Versionen erzwingen
@@ -4653,12 +4620,6 @@ void SwWW8Shade::SetShade(ColorData nFore, ColorData nBack, sal_uInt16 nIndex)
             {
                 Color aForeColor(nFore);
                 Color aBackColor(nUseBack);
-#if 0
-                //Transparancy (if thats what it is) doesn't seem to matter
-                //in word
-                nWW8BrushStyle -=
-                    nWW8BrushStyle * aForeColor.GetTransparency() / 0xFF;
-#endif
 
                 sal_uInt32 nRed = aForeColor.GetRed() * nWW8BrushStyle;
                 sal_uInt32 nGreen = aForeColor.GetGreen() * nWW8BrushStyle;
@@ -4789,11 +4750,7 @@ void SwWW8ImplReader::Read_Border(USHORT , const BYTE* , short nLen)
                 if (pBox)
                     aBox = *pBox;
                 short aSizeArray[5]={0};
-#if 0
-                // #i20672# we can't properly support between lines so best to ignore
-                // them for now
-                SetBorder(aBox, aBrcs, &aSizeArray[0], nBorder, true);
-#endif
+
                 SetBorder(aBox, aBrcs, &aSizeArray[0], nBorder);
 
                 Rectangle aInnerDist;
