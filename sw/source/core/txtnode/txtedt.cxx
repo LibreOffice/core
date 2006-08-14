@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:32:29 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:48:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,21 +34,18 @@
  ************************************************************************/
 #pragma hdrstop
 
-
 // So kann man die Linguistik-Statistik ( (Tmp-Path)\swlingu.stk ) aktivieren:
 //#define LINGU_STATISTIK
 #ifdef LINGU_STATISTIK
     #include <stdio.h>          // in SwLinguStatistik::DTOR
     #include <stdlib.h>         // getenv()
     #include <time.h>           // clock()
-    #include "viewsh.hxx"       // ViewShell::GetHyphenator
     #include <tools/stream.hxx>
 #endif
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
-
 #ifndef _SV_SVAPP_HXX //autogen wg. Application
 #include <vcl/svapp.hxx>
 #endif
@@ -70,9 +67,6 @@
 #ifndef _LINGUISTIC_LNGPROPS_HHX_
 #include <linguistic/lngprops.hxx>
 #endif
-#ifndef _STRING_HXX
-#include <tools/string.hxx>
-#endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
@@ -88,24 +82,14 @@
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
 #endif
-
 #ifndef _DLELSTNR_HXX_
 #include <dlelstnr.hxx>
 #endif
 #ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
 #endif
-#ifndef _SHL_HXX
-#include <tools/shl.hxx>    // needed for SW_MOD() macro
-#endif
 #ifndef _SPLARGS_HXX
 #include <splargs.hxx>
-#endif
-#ifndef _VIEWSH_HXX
-#include <viewsh.hxx>   // ViewShell
-#endif
-#ifndef _EDITSH_HXX
-#include <editsh.hxx>
 #endif
 #ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>
@@ -115,9 +99,6 @@
 #endif
 #ifndef _DOC_HXX
 #include <doc.hxx>      // GetDoc()
-#endif
-#ifndef _FRMSH_HXX
-#include <frmsh.hxx>
 #endif
 #ifndef _TXATBASE_HXX //autogen
 #include <txatbase.hxx>
@@ -131,14 +112,8 @@
 #ifndef _PAM_HXX
 #include <pam.hxx>
 #endif
-#ifndef _SPLARGS_HXX
-#include <splargs.hxx>
-#endif
 #ifndef _HINTS_HXX
 #include <hints.hxx>
-#endif
-#ifndef _HINTIDS_HXX
-#include <hintids.hxx>
 #endif
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
@@ -177,6 +152,10 @@
 #include <docstat.hxx>
 #endif
 
+#ifndef _EDITSH_HXX
+#include <editsh.hxx>
+#endif
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::beans;
@@ -210,7 +189,7 @@ USHORT lcl_MaskRedlines( const SwTxtNode& rNode, XubString& rText,
     USHORT nNumOfMaskedRedlines = 0;
 
     const SwDoc& rDoc = *rNode.GetDoc();
-    USHORT nAct = rDoc.GetRedlinePos( rNode );
+    USHORT nAct = rDoc.GetRedlinePos( rNode, USHRT_MAX );
 
     for ( ; nAct < rDoc.GetRedlineTbl().Count(); nAct++ )
     {
@@ -219,7 +198,7 @@ USHORT lcl_MaskRedlines( const SwTxtNode& rNode, XubString& rText,
         if ( pRed->Start()->nNode > rNode.GetIndex() )
             break;
 
-        if( REDLINE_DELETE == pRed->GetType() )
+        if( IDocumentRedlineAccess::REDLINE_DELETE == pRed->GetType() )
         {
             xub_StrLen nRedlineEnd;
             xub_StrLen nRedlineStart;
@@ -257,7 +236,7 @@ USHORT lcl_MaskRedlinesAndHiddenText( const SwTxtNode& rNode, XubString& rText,
     USHORT nHiddenCharsMasked = 0;
 
     const SwDoc& rDoc = *rNode.GetDoc();
-    const sal_Bool bShowChg = ::IsShowChanges( rDoc.GetRedlineMode() );
+    const sal_Bool bShowChg = IDocumentRedlineAccess::IsShowChanges( rDoc.GetRedlineMode() );
 
     // If called from word count or from spell checking, deleted redlines
     // should be masked:
@@ -266,7 +245,7 @@ USHORT lcl_MaskRedlinesAndHiddenText( const SwTxtNode& rNode, XubString& rText,
         nRedlinesMasked = lcl_MaskRedlines( rNode, rText, nStt, nEnd, cChar );
     }
 
-    const bool bHideHidden = !SW_MOD()->GetViewOption( rDoc.IsHTMLMode() )->IsShowHiddenChar();
+    const bool bHideHidden = !SW_MOD()->GetViewOption(rDoc.get(IDocumentSettingAccess::HTML_MODE))->IsShowHiddenChar();
 
     // If called from word count, we want to mask the hidden ranges even
     // if they are visible:
@@ -534,7 +513,7 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
 
 
 
-XubString SwTxtNode::GetCurWord( xub_StrLen nPos )
+XubString SwTxtNode::GetCurWord( xub_StrLen nPos ) const
 {
     ASSERT( nPos<=aText.Len() , "SwTxtNode::GetCurWord: Pos hinter String?");
     if (!aText.Len())
@@ -569,8 +548,7 @@ XubString SwTxtNode::GetCurWord( xub_StrLen nPos )
 SwScanner::SwScanner( const SwTxtNode& rNd,
                       USHORT nType, xub_StrLen nStart, xub_StrLen nEnde, BOOL bClp )
     : rNode( rNd ), nWordType( nType ), nLen( 0 ),
-      bClip( bClp ),
-      bStart( TRUE )
+      bClip( bClp )
 {
     ASSERT( rNd.GetTxt().Len(), "SwScanner: EmptyString" );
     nStartPos = nBegin = nStart;
@@ -965,8 +943,7 @@ USHORT SwTxtNode::Convert( SwConversionArgs &rArgs )
     return rArgs.aConvText.getLength() ? 1 : 0;
 }
 
-
-SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
+SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rViewOpt, xub_StrLen nActPos )
 {
     SwRect aRect;
 #if OSL_DEBUG_LEVEL > 1
@@ -1000,7 +977,7 @@ SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
     xub_StrLen nInvEnd = 0;
 
     BOOL bAddAutoCmpl = pNode->IsAutoCompleteWordDirty() &&
-                        GetShell()->GetViewOptions()->IsAutoCompleteWords();
+                        rViewOpt.IsAutoCompleteWords();
 
     if( pNode->GetWrong() )
     {
@@ -1115,9 +1092,7 @@ SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
         if( bFresh )
             pNode->GetWrong()->Fresh( nChgStart, nChgEnd,
                                       nEnd, 0, nInsertPos, nActPos );
-        ViewShell *pSh = GetShell();
-        if( nChgStart < nChgEnd &&
-            (pSh && !GetShell()->GetViewOptions()->IsHideSpell()) )
+        if( nChgStart < nChgEnd && !rViewOpt.IsHideSpell() )
         {
             SwNodeIndex aNdIdx( *pNode );
             SwPosition aPos( aNdIdx, SwIndex( pNode, nChgEnd ) );
