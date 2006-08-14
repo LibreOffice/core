@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotools.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-05 14:51:41 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 18:04:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 #include <swtypes.hxx>
@@ -71,20 +70,11 @@
 #ifndef _COM_SUN_STAR_STYLE_XSTYLE_HPP_
 #include <com/sun/star/style/XStyle.hpp>
 #endif
-#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
-#include <com/sun/star/frame/XFrame.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
-#include <com/sun/star/text/XText.hpp>
-#endif
 #ifndef _COM_SUN_STAR_TEXT_XTEXTDOCUMENT_HPP_
 #include <com/sun/star/text/XTextDocument.hpp>
 #endif
 #ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
 #include <com/sun/star/awt/PosSize.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
-#include <com/sun/star/awt/XWindow.hpp>
 #endif
 #ifndef _COM_SUN_STAR_VIEW_XVIEWSETTINGSSUPPLIER_HPP_
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
@@ -103,9 +93,6 @@
 #endif
 #ifndef _SFXSTRITEM_HXX //autogen wg. SfxStringItem
 #include <svtools/stritem.hxx>
-#endif
-#ifndef _SFXAPP_HXX //autogen wg. SFX_APP
-#include <sfx2/app.hxx>
 #endif
 #include <shellio.hxx>
 #ifndef _SWDOCSH_HXX //autogen wg. SwDocShell
