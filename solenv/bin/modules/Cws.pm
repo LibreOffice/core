@@ -4,9 +4,9 @@
 #
 #   $RCSfile: Cws.pm,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: kz $ $Date: 2006-02-03 17:13:34 $
+#   last change: $Author: hr $ $Date: 2006-08-14 17:01:35 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -441,6 +441,15 @@ sub get_l10n_status
 
     return $self->get_l10n_status_from_eis();
 }
+sub set_word_count
+{
+    my $self        = shift;
+    my $language    = shift;
+    my $wordcount   = shift;
+
+    return $self->set_word_count_in_eis( $language , $wordcount );
+}
+
 
 # Get target release for CWS
 sub get_release
@@ -1332,6 +1341,29 @@ sub is_helprelevant_from_eis
 
     return $result;
 }
+sub set_word_count_in_eis
+{
+    my $self        = shift;
+    my $language    = shift;
+    my $wordcount   = shift;
+
+    # check if child workspace is valid
+    my $id = $self->eis_id();
+    if ( !$id ) {
+        carp("ERROR: Childworkspace not (yet) registered with EIS.\n");
+        return undef;
+    }
+
+    my $eis = Cws::eis();
+    my $result;
+    eval { $result = $eis->setWordCount( $id , $language , $wordcount ) };
+    if ( $@ ) {
+        carp("ERROR: set_word_count_from_eis(): EIS database transaction failed. Reason:\n$@\n");
+    }
+
+    return $result;
+}
+
 
 sub get_l10n_status_from_eis
 {
