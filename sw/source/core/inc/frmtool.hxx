@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmtool.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 18:19:15 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:20:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _FRMTOOL_HXX
 #define _FRMTOOL_HXX
-
 #include "swtypes.hxx"
 #include "layfrm.hxx"
 #include "frmatr.hxx"
@@ -43,7 +42,6 @@
 class SwPageFrm;
 class SwFlyFrm;
 class SwCntntFrm;
-class SwFtnContFrm;
 class SwDoc;
 class SwAttrSet;
 class SdrObject;
@@ -53,13 +51,7 @@ class SdrMarkList;
 class SwNodeIndex;
 class OutputDevice;
 class SwPageDesc;
-class SwCrsrShell;
-// OD 21.05.2003 #108789#
-class SwTxtFrm;
-// --> OD 2004-06-09 #i28701#
-class SwLayAction;
-class SwAnchoredObject;
-// <--
+
 #if defined(MSC)
 #define MA_FASTCALL __fastcall
 #else
@@ -198,8 +190,6 @@ public:
 
 class SwLayNotify : public SwFrmNotify
 {
-    SwTwips  nHeightOfst;
-    SwTwips  nWidthOfst;
     FASTBOOL bLowersComplete;
 
     SwLayoutFrm *GetLay() { return (SwLayoutFrm*)pFrm; }
