@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfly.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 12:29:45 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:57:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -79,9 +78,6 @@
 #ifndef _NDINDEX_HXX //autogen
 #include <ndindex.hxx>
 #endif
-#ifndef _NODE_HXX //autogen
-#include <node.hxx>
-#endif
 #ifndef _DOCARY_HXX
 #include <docary.hxx>
 #endif
@@ -96,9 +92,6 @@
 #endif
 #ifndef _FMTFLCNT_HXX //autogen
 #include <fmtflcnt.hxx>
-#endif
-#ifndef _FMTORNT_HXX //autogen
-#include <fmtornt.hxx>
 #endif
 #ifndef _TXTFRM_HXX //autogen
 #include <txtfrm.hxx>
@@ -677,7 +670,7 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
         return false;
     }
 
-    StartUndo( UNDO_INSATTR );
+    StartUndo( UNDO_INSATTR, NULL );
 
     BOOL bUnmark = FALSE;
     for ( USHORT i = 0; i < _rMrkList.GetMarkCount(); ++i )
@@ -908,7 +901,7 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
         }
     }
 
-    EndUndo( UNDO_END );
+    EndUndo( UNDO_END, NULL );
     SetModified();
 
     return bUnmark;
@@ -1024,7 +1017,7 @@ int SwDoc::Chain( SwFrmFmt &rSource, const SwFrmFmt &rDest )
     int nErr = Chainable( rSource, rDest );
     if ( !nErr )
     {
-        StartUndo( UNDO_CHAINE );
+        StartUndo( UNDO_CHAINE, NULL );
 
         SwFlyFrmFmt& rDestFmt = (SwFlyFrmFmt&)rDest;
 
@@ -1058,7 +1051,7 @@ int SwDoc::Chain( SwFrmFmt &rSource, const SwFrmFmt &rDest )
         }
         SetAttr( aSet, rSource );
 
-        EndUndo( UNDO_CHAINE );
+        EndUndo( UNDO_CHAINE, NULL );
     }
     return nErr;
 }
@@ -1070,14 +1063,14 @@ void SwDoc::Unchain( SwFrmFmt &rFmt )
     SwFmtChain aChain( rFmt.GetChain() );
     if ( aChain.GetNext() )
     {
-        StartUndo( UNDO_UNCHAIN );
+        StartUndo( UNDO_UNCHAIN, NULL );
         SwFrmFmt *pFollow = aChain.GetNext();
         aChain.SetNext( 0 );
         SetAttr( aChain, rFmt );
         aChain = pFollow->GetChain();
         aChain.SetPrev( 0 );
         SetAttr( aChain, *pFollow );
-        EndUndo( UNDO_UNCHAIN );
+        EndUndo( UNDO_UNCHAIN, NULL );
     }
 }
 
