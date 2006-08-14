@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbinsdlg.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-27 09:46:15 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:30:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifdef SW_DLLIMPLEMENTATION
 #undef SW_DLLIMPLEMENTATION
 #endif
@@ -101,24 +100,14 @@
 #ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTYPES_HPP_
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#endif
 #ifndef _COM_SUN_STAR_SDBC_XROWSET_HPP_
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
-#ifndef _COM_SUN_STAR_UTIL_DATE_HPP_
-#include <com/sun/star/util/Date.hpp>
-#endif
-
 #ifndef _SVX_LANGITEM_HXX
 #include <svx/langitem.hxx>
-#endif
-#ifndef _SVX_UNOMID_HXX
-#include <svx/unomid.hxx>
 #endif
 #ifndef _NUMUNO_HXX
 #include <svtools/numuno.hxx>
@@ -126,10 +115,6 @@
 #ifndef _SFXSTRITEM_HXX
 #include <svtools/stritem.hxx>
 #endif
-#ifndef _UNOTOOLS_COLLATORWRAPPER_HXX
-#include <unotools/collatorwrapper.hxx>
-#endif
-
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
@@ -141,9 +126,6 @@
 #endif
 #ifndef _SFXSTYLE_HXX //autogen
 #include <svtools/style.hxx>
-#endif
-#ifndef _ZFORLIST_HXX //autogen
-#include <svtools/zforlist.hxx>
 #endif
 #ifndef _ZFORMAT_HXX //autogen
 #include <svtools/zformat.hxx>
@@ -1587,7 +1569,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                         // rSh.SwCrsrShell::MovePara( fnParaCurr, fnParaStart );
                         rSh.SwCrsrShell::MovePara(
                             GetfnParaCurr(), GetfnParaStart() );
-                        rSh.SetBookmark( KeyCode(), C2S("DB_Mark"), aEmptyStr, MARK );
+                        rSh.SetBookmark( KeyCode(), C2S("DB_Mark"), aEmptyStr, IDocumentBookmarkAccess::MARK );
                         // rSh.SwCrsrShell::MovePara( fnParaCurr, fnParaEnd );
                         rSh.SwCrsrShell::MovePara(
                             GetfnParaCurr(), GetfnParaEnd() );
