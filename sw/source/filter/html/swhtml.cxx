@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swhtml.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:26:35 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:07:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 
 #pragma hdrstop
@@ -197,9 +196,6 @@
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
 #endif
-#ifndef _NDHINTS_HXX
-#include <ndhints.hxx>
-#endif
 #ifndef _MDIEXP_HXX
 #include <mdiexp.hxx>           // ...Percent()
 #endif
@@ -220,9 +216,6 @@
 #endif
 #ifndef _EDITSH_HXX
 #include <editsh.hxx>       // fuer Start/EndAction
-#endif
-#ifndef _HINTS_HXX
-#include <hints.hxx>        // fuer SwObjectDying
 #endif
 #ifndef _DOCUFLD_HXX
 #include <docufld.hxx>
@@ -376,15 +369,15 @@ ULONG HTMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPam, const 
 
         // Die HTML-Seitenvorlage setzen, wenn des kein HTML-Dokument ist,
         // sonst ist sie schon gesetzt.
-        if( !rDoc.IsHTMLMode() )
+        if( !rDoc.get(IDocumentSettingAccess::HTML_MODE) )
         {
             rDoc.Insert( rPam, SwFmtPageDesc(
-                rDoc.GetPageDescFromPoolSimple( RES_POOLPAGE_HTML, FALSE )) );
+                rDoc.GetPageDescFromPool( RES_POOLPAGE_HTML, false )), 0 );
         }
     }
 
     // damit keiner das Doc klaut!
-    rDoc.AddLink();
+    rDoc.acquire();
     ULONG nRet = 0;
     SvParserRef xParser = new SwHTMLParser( &rDoc, rPam, *pStrm,
                                             rName, rBaseURL, !bInsertMode, pMedium,
@@ -493,8 +486,8 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
 
     // Waehrend des Imports in den HTML-Modus schalten, damit die
     // richrigen Vorlagen angelegt werden
-    bOldIsHTMLMode = pDoc->IsHTMLMode();
-    pDoc->SetHTMLMode( TRUE );
+    bOldIsHTMLMode = pDoc->get(IDocumentSettingAccess::HTML_MODE);
+    pDoc->set(IDocumentSettingAccess::HTML_MODE, true);
 
     pCSS1Parser = new SwCSS1Parser( pDoc, aFontHeights, sBaseURL, IsNewDoc() );
     pCSS1Parser->SetIgnoreFontFamily( pHtmlOptions->IsIgnoreFontFamily() );
@@ -571,7 +564,7 @@ __EXPORT SwHTMLParser::~SwHTMLParser()
 #endif
     BOOL bAsync = pDoc->IsInLoadAsynchron();
     pDoc->SetInLoadAsynchron( FALSE );
-    pDoc->SetHTMLMode( bOldIsHTMLMode );
+    pDoc->set(IDocumentSettingAccess::HTML_MODE, bOldIsHTMLMode);
 
     if( pDoc->GetDocShell() && nEventId )
         Application::RemoveUserEvent( nEventId );
@@ -581,7 +574,7 @@ __EXPORT SwHTMLParser::~SwHTMLParser()
     if( pDoc->GetDocShell() )
     {
         // Gelinkte Bereiche updaten
-        USHORT nLinkMode = pDoc->GetLinkUpdMode();
+        USHORT nLinkMode = pDoc->getLinkUpdateMode( true );
         if( nLinkMode != NEVER && bAsync &&
             SFX_CREATE_MODE_INTERNAL!=pDoc->GetDocShell()->GetCreateMode() )
             pDoc->GetLinkManager().UpdateAllLinks( nLinkMode == MANUAL,
@@ -619,7 +612,7 @@ __EXPORT SwHTMLParser::~SwHTMLParser()
         delete pTmp;
     }
 
-    if( !pDoc->RemoveLink() )
+    if( !pDoc->release() )
     {
         // keiner will mehr das Doc haben, also weg damit
         delete pDoc;
@@ -633,7 +626,7 @@ IMPL_LINK( SwHTMLParser, AsyncCallback, void*, pVoid )
     // --> FME 2005-08-18 #i47907# If the document has already been destructed,
     // the parser should be aware of this:
     if( ( pDoc->GetDocShell() && pDoc->GetDocShell()->IsAbortingImport() )
-        || 1 == pDoc->GetLinkCnt() )
+        || 1 == pDoc->getReferenceCount() )
     {
         // wurde der Import vom SFX abgebrochen?
         eState = SVPAR_ERROR;
@@ -653,10 +646,10 @@ SvParserState __EXPORT SwHTMLParser::CallParser()
         const SwPosition* pPos = pPam->GetPoint();
         SwTxtNode* pSttNd = pPos->nNode.GetNode().GetTxtNode();
 
-        pDoc->SplitNode( *pPos );
+        pDoc->SplitNode( *pPos, false );
 
         *pSttNdIdx = pPos->nNode.GetIndex()-1;
-        pDoc->SplitNode( *pPos );
+        pDoc->SplitNode( *pPos, false );
 
         SwPaM aInsertionRangePam( *pPos );
 
@@ -998,7 +991,7 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( FALSE ).nNode.GetIndex() )
 
     // sollte der Parser der Letzte sein, der das Doc haelt, dann braucht
     // man hier auch nichts mehr tun, Doc wird gleich zerstoert!
-    if( 1 < pDoc->GetLinkCnt() )
+    if( 1 < pDoc->getReferenceCount() )
     {
         if( bWasUndo )
         {
@@ -1077,14 +1070,14 @@ void SwHTMLParser::DocumentDetected()
 void __EXPORT SwHTMLParser::NextToken( int nToken )
 {
     if( ( pDoc->GetDocShell() && pDoc->GetDocShell()->IsAbortingImport() )
-        || 1 == pDoc->GetLinkCnt() )
+        || 1 == pDoc->getReferenceCount() )
     {
         // wurde der Import vom SFX abgebrochen? Wenn ein Pending-Stack
         // existiert den noch aufraumen
         eState = SVPAR_ERROR;
         ASSERT( !pPendStack || pPendStack->nToken,
                 "SwHTMLParser::NextToken: Pending-Stack ohne Token" );
-        if( 1 == pDoc->GetLinkCnt() || !pPendStack )
+        if( 1 == pDoc->getReferenceCount() || !pPendStack )
             return ;
     }
 
@@ -1385,7 +1378,7 @@ void __EXPORT SwHTMLParser::NextToken( int nToken )
                 pPageDesc = pCSS1Parser->GetRightPageDesc();
 
             if( pPageDesc )
-                pDoc->Insert( *pPam, SwFmtPageDesc( pPageDesc ) );
+                pDoc->Insert( *pPam, SwFmtPageDesc( pPageDesc ), 0 );
         }
         break;
 
@@ -1571,7 +1564,7 @@ void __EXPORT SwHTMLParser::NextToken( int nToken )
         {
             if( !bDocInitalized )
                 DocumentDetected();
-            pDoc->Insert( *pPam, aToken );
+            pDoc->Insert( *pPam, aToken, true );
 
             // wenn es noch vorlaefige Absatz-Attribute gibt, der Absatz aber
             // nicht leer ist, dann sind die Absatz-Attribute entgueltig.
@@ -1590,7 +1583,7 @@ void __EXPORT SwHTMLParser::NextToken( int nToken )
         InsertImage();
         // sollte der Parser der Letzte sein, der das Doc haelt, dann kann
         // man hier abbrechen und einen Fehler setzen.
-        if( 1 == pDoc->GetLinkCnt() )
+        if( 1 == pDoc->getReferenceCount() )
         {
             eState = SVPAR_ERROR;
         }
@@ -2500,7 +2493,7 @@ void SwHTMLParser::Show()
     GetpApp()->Reschedule();
 
     if( ( pDoc->GetDocShell() && pDoc->GetDocShell()->IsAbortingImport() )
-        || 1 == pDoc->GetLinkCnt() )
+        || 1 == pDoc->getReferenceCount() )
     {
         // wurde der Import vom SFX abgebrochen?
         eState = SVPAR_ERROR;
@@ -2537,7 +2530,7 @@ void SwHTMLParser::ShowStatline()
         GetpApp()->Reschedule();
 
         if( ( pDoc->GetDocShell() && pDoc->GetDocShell()->IsAbortingImport() )
-            || 1 == pDoc->GetLinkCnt() )
+            || 1 == pDoc->getReferenceCount() )
             // wurde der Import vom SFX abgebrochen?
             eState = SVPAR_ERROR;
 
@@ -2635,7 +2628,7 @@ ViewShell *SwHTMLParser::CallEndAction( BOOL bChkAction, BOOL bChkPtr )
 
     // sollte der Parser der Letzte sein, der das Doc haelt, dann kann
     // man hier abbrechen und einen Fehler setzen.
-    if( 1 == pDoc->GetLinkCnt() )
+    if( 1 == pDoc->getReferenceCount() )
     {
         eState = SVPAR_ERROR;
     }
@@ -2848,19 +2841,19 @@ void SwHTMLParser::_SetAttr( BOOL bChkEnd, BOOL bBeforeTable,
                 case RES_FLTR_BOOKMARK:     // dann also ein Bookmark einfuegen
                     {
                         String aName( ((SfxStringItem*)pAttr->pItem)->GetValue() );
-                        USHORT nBookPos = pDoc->FindBookmark( aName );
+                        USHORT nBookPos = pDoc->findBookmark( aName );
                         if( nBookPos != USHRT_MAX )
                         {
                             const SwBookmark *pBkMk =
-                                pDoc->GetBookmarks()[nBookPos];
+                                pDoc->getBookmarks()[nBookPos];
                             if( pBkMk->GetPos() != *pAttrPam->GetPoint() )
-                                pDoc->MakeUniqueBookmarkName( aName );
+                                pDoc->makeUniqueBookmarkName( aName );
                             else
                                 break; // keine doppelte Bookmark an dieser Pos
                         }
                         pAttrPam->DeleteMark();
-                        pDoc->MakeBookmark( *pAttrPam, KeyCode(),
-                                            aName, aEmptyStr );
+                        pDoc->makeBookmark( *pAttrPam, KeyCode(),
+                                            aName, aEmptyStr, IDocumentBookmarkAccess::BOOKMARK );
 
                         // ggfs. ein Bookmark anspringen
                         if( JUMPTO_MARK == eJumpTo &&
@@ -2996,7 +2989,7 @@ void SwHTMLParser::_SetAttr( BOOL bChkEnd, BOOL bBeforeTable,
             pAttrPam->Move( fnMoveBackward );
         }
 
-        pDoc->Insert( *pAttrPam, *pAttr->pItem );
+        pDoc->Insert( *pAttrPam, *pAttr->pItem, 0 );
 
         aFields.Remove( 0, 1 );
         delete pAttr;
@@ -4770,7 +4763,7 @@ void SwHTMLParser::SetTxtCollAttrs( _HTMLAttrContext *pContext )
     const SvxLRSpaceItem& rLRItem = pCollToSet->GetLRSpace();
     BOOL bSetLRSpace;
 
-        bSetLRSpace = nLeftMargin != rLRItem.GetTxtLeft() ||
+           bSetLRSpace = nLeftMargin != rLRItem.GetTxtLeft() ||
                       nFirstLineIndent != rLRItem.GetTxtFirstLineOfst() ||
                       nRightMargin != rLRItem.GetRight();
 
@@ -5032,7 +5025,7 @@ void SwHTMLParser::InsertSpacer()
             {
                 NewAttr( &aAttrTab.pKerning, SvxKerningItem( (short)nSize ) );
                 String aTmp( ' ' );
-                pDoc->Insert( *pPam, aTmp /*, CHARSET_ANSI*/ );
+                pDoc->Insert( *pPam, aTmp /*, CHARSET_ANSI*/, true );
                 EndAttr( aAttrTab.pKerning );
             }
         }
@@ -5238,9 +5231,9 @@ void SwHTMLParser::InsertLineBreak()
     if( !bCleared && !bBreakItem )
     {
         // wenn kein CLEAR ausgefuehrt werden sollte oder konnte, wird
-        // ein Zeilenumbruch eingefgt
+        // ein Zeilenumbruch eingef?gt
         String sTmp( (sal_Unicode)0x0a );   // make the Mac happy :-)
-        pDoc->Insert( *pPam, sTmp );
+        pDoc->Insert( *pPam, sTmp, true );
     }
     else if( pPam->GetPoint()->nContent.GetIndex() )
     {
@@ -5457,7 +5450,7 @@ void SwHTMLParser::ParseMoreMetaOptions()
         }
     }
 
-    // Hier wird es etwas tricky: Wir wissen genau, daá die Dok-Info
+    // Hier wird es etwas tricky: Wir wissen genau, da? die Dok-Info
     // nicht geaendert wurde. Deshalb genuegt es, auf Generator und
     // auf refresh abzufragen, um noch nicht verarbeitete Token zu finden,
     // denn das sind die einzigen, die die Dok-Info nicht modifizieren.
