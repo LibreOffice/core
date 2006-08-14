@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tocntntanchoredobjectposition.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:01:04 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:23:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _TOCNTNTANCHOREDOBJECTPOSITION_HXX
 #define _TOCNTNTANCHOREDOBJECTPOSITION_HXX
-
 #ifndef _ANCHOREDOBJECTPOSITION_HXX
 #include <anchoredobjectposition.hxx>
 #endif
@@ -43,8 +42,6 @@ class SwFrm;
 class SwTxtFrm;
 class SwLayoutFrm;
 class SwRect;
-class SwFlyFrm;
-class SwFlyAtCntFrm;
 
 namespace objectpositioning
 {
