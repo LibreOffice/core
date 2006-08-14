@@ -4,9 +4,9 @@
  *
  *  $RCSfile: anchoredobjectposition.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 12:24:38 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:30:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,6 @@
 #ifndef _ENVIRONMENTOFANCHOREDOBJECT
 #include <environmentofanchoredobject.hxx>
 #endif
-
 #ifndef _FLYFRM_HXX
 #include <flyfrm.hxx>
 #endif
@@ -83,13 +82,8 @@
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
 #endif
-// OD 2004-03-23 #i26791#
-#ifndef _ANCHOREDOBJECT_HXX
-#include <anchoredobject.hxx>
-#endif
-// OD 2004-03-16 #i11860#
-#ifndef _DOC_HXX
-#include <doc.hxx>
+#ifndef IDOCUMENTSETTINGACCESS_HXX_INCLUDED
+#include <IDocumentSettingAccess.hxx>
 #endif
 
 using namespace objectpositioning;
@@ -181,7 +175,7 @@ void SwAnchoredObjectPosition::_GetInfoAboutObj()
     // - it doesn't follow the text flow
     {
         mbDoNotCaptureAnchoredObj = !mbIsObjFly && !mbFollowTextFlow &&
-                                    mpFrmFmt->GetDoc()->DoNotCaptureDrawObjsOnPage();
+                                    mpFrmFmt->getIDocumentSettingAccess()->get(IDocumentSettingAccess::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE);
     }
     // <--
 }
@@ -474,7 +468,7 @@ SwTwips SwAnchoredObjectPosition::_ImplAdjustVertRelPos( const SwTwips _nTopOfAn
     {
         // --> OD 2004-10-08 #i26945# - no extension of restricted area, if
         // object's attribute follow text flow is set and its inside a table
-        if ( GetFrmFmt().GetDoc()->ConsiderWrapOnObjPos() &&
+        if ( GetFrmFmt().getIDocumentSettingAccess()->get(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION) &&
              ( !_bFollowTextFlow ||
                !GetAnchoredObj().GetAnchorFrm()->IsInTab() ) )
         {
