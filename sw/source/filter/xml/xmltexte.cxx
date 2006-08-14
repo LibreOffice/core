@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltexte.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:42:31 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:24:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #ifndef _SOT_CLSIDS_HXX
@@ -52,9 +51,7 @@
 #ifndef _COM_SUN_STAR_EMBED_EMBEDSTATES_HPP_
 #include <com/sun/star/embed/EmbedStates.hpp>
 #endif
-#ifndef _COM_SUN_STAR_EMBED_XVISUALOBJECT_HPP_
-#include <com/sun/star/embed/XVisualObject.hpp>
-#endif
+
 #ifndef _COM_SUN_STAR_EMBED_XCLASSIFIEDOBJECT_HPP_
 #include <com/sun/star/embed/XClassifiedObject.hpp>
 #endif
