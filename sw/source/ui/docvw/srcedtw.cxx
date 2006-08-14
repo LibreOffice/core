@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srcedtw.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:18:22 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:35:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #ifndef _HINTIDS_HXX
@@ -56,12 +55,7 @@
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
 #endif
-#ifndef _SFX_BINDINGS_HXX //autogen
-#include <sfx2/bindings.hxx>
-#endif
-#ifndef _SFXAPP_HXX //autogen
 #include <sfx2/app.hxx>
-#endif
 #ifndef _HTMLTOKN_H
 #include <svtools/htmltokn.h>
 #endif
@@ -95,10 +89,6 @@
 #ifndef _SRCVIEW_HXX
 #include <srcview.hxx>
 #endif
-#ifndef _SRCEDTW_HXX
-#include <srcedtw.hxx>
-#endif
-
 #ifndef _HELPID_H
 #include <helpid.h>
 #endif
