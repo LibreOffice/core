@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swtypes.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 09:28:38 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:34:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _SWTYPES_HXX
 #define _SWTYPES_HXX
-
 #ifndef _SOLAR_H
 #include <tools/solar.h>
 #endif
@@ -81,7 +80,6 @@ namespace utl{
 }
 
 class Size;
-class MapMode;
 class ResMgr;
 class UniString;
 class ByteString;
