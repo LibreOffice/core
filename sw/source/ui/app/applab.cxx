@@ -4,9 +4,9 @@
  *
  *  $RCSfile: applab.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 08:25:16 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:25:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -146,9 +145,6 @@
 #ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
 #endif
-#ifndef _DOC_HXX
-#include <doc.hxx>
-#endif
 #ifndef _FMTCOL_HXX
 #include <fmtcol.hxx>
 #endif
@@ -183,6 +179,8 @@
 #include "swabstdlg.hxx" //CHINA001
 #include "envelp.hrc" //CHINA001
 #include <misc.hrc> //CHINA001
+
+#include <IDocumentDeviceAccess.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
@@ -313,7 +311,7 @@ static sal_uInt16 nBCTitleNo = 0;
         if (pPrt)
         {
             SwDocShell *pDocSh = (SwDocShell*)(&*xDocSh);
-            pDocSh->GetDoc()->SetJobsetup(pPrt->GetJobSetup());
+            pDocSh->getIDocumentDeviceAccess()->setJobsetup(pPrt->GetJobSetup());
         }
 
         const SfxItemSet *pArgs = rReq.GetArgs();
@@ -397,7 +395,7 @@ static sal_uInt16 nBCTitleNo = 0;
             const SwPageDesc &rFollow = pSh->GetPageDesc( pSh->GetCurPageDesc() );
             aDesc.SetFollow( &rFollow );
 
-            pPrt = pSh->GetPrt( sal_True );
+            pPrt = pSh->getIDocumentDeviceAccess()->getPrinter( true );
             SvxPaperBinItem aItem;
             aItem.SetValue((sal_Int8)pPrt->GetPaperBin());
             rFmt.SetAttr(aItem);
