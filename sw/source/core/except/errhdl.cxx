@@ -4,9 +4,9 @@
  *
  *  $RCSfile: errhdl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:31:22 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:11:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,13 +34,10 @@
  ************************************************************************/
 #define _ERRHDL_CXX
 
-
 #pragma hdrstop
 
 #include "stdlib.h"
 #ifdef WIN
-#include <svwin.h>              // fuer die Goodies der Windows User
-#include <dos.h>
 #endif
 
 #ifndef _TOOLS_DEBUG_HXX //autogen
