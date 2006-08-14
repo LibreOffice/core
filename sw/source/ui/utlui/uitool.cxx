@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uitool.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-10 08:50:06 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 18:03:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -140,9 +139,6 @@
 #ifndef _WRTSH_HXX
 #include <wrtsh.hxx>
 #endif
-#ifndef _SWTYPES_HXX
-#include <swtypes.hxx>
-#endif
 #ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
 #endif
@@ -151,9 +147,6 @@
 #endif
 #ifndef _UITOOL_HXX
 #include <uitool.hxx>
-#endif
-#ifndef _PAGEDESC_HXX
-#include <pagedesc.hxx>
 #endif
 #ifndef _FRMATR_HXX
 #include <frmatr.hxx>
