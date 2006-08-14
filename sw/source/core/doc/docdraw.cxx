@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docdraw.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 12:29:31 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:56:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,9 +32,7 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #pragma hdrstop
-
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
@@ -111,9 +109,6 @@
 #endif
 #ifndef _ROOTFRM_HXX
 #include <rootfrm.hxx>  //Damit der RootDtor gerufen wird.
-#endif
-#ifndef _FRAME_HXX
-#include <frame.hxx>
 #endif
 #ifndef _POOLFMT_HXX
 #include <poolfmt.hxx>
@@ -499,7 +494,7 @@ BOOL SwDoc::DeleteSelection( SwDrawView& rDrawView )
     const SdrMarkList &rMrkList = rDrawView.GetMarkedObjectList();
     if( rMrkList.GetMarkCount() )
     {
-        StartUndo();
+        StartUndo(0, NULL);
         USHORT i;
         FASTBOOL bDelMarked = TRUE;
 
@@ -579,7 +574,7 @@ BOOL SwDoc::DeleteSelection( SwDrawView& rDrawView )
         }
         SetModified();
 
-        EndUndo();
+        EndUndo(0, NULL);
     }
 
     return bCallBase;
@@ -605,7 +600,7 @@ _ZSortFly::_ZSortFly( const SwFrmFmt* pFrmFmt, const SwFmtAnchor* pFlyAn,
 
     if( RES_FLYFRMFMT == pFmt->Which() )
     {
-        if( pFmt->GetDoc()->GetRootFrm() )
+        if( pFmt->getIDocumentLayoutAccess()->GetRootFrm() )
         {
             // Schauen, ob es ein SdrObject dafuer gibt
             if( aIter.First( TYPE( SwFlyFrm) ) )
@@ -725,9 +720,9 @@ void SwDoc::InitDrawModel()
     //          dort ggfs. verlinkte Grafiken eingefuegt werden koennen
     //JP 28.01.99: der WinWord Import benoetigt ihn auch
     pDrawModel->SetLinkManager( &GetLinkManager() );
-    pDrawModel->SetAddExtLeading( IsAddExtLeading() );
+    pDrawModel->SetAddExtLeading( get(IDocumentSettingAccess::ADD_EXT_LEADING) );
 
-    OutputDevice* pRefDev = _GetRefDev();
+    OutputDevice* pRefDev = getReferenceDevice( false );
     if ( pRefDev )
         pDrawModel->SetRefDevice( pRefDev );
 
@@ -1025,6 +1020,18 @@ IMPL_LINK(SwDoc, CalcFieldValueHdl, EditFieldInfo*, pInfo)
     return(0);
 }
 
+/* TFFDI: The functions formerly declared 'inline'
+ */
+const SdrModel* SwDoc::GetDrawModel() const { return pDrawModel; }
+SdrModel* SwDoc::GetDrawModel() { return pDrawModel; }
+SdrLayerID SwDoc::GetHeavenId() const { return nHeaven; }
+SdrLayerID SwDoc::GetHellId() const { return nHell; }
+SdrLayerID SwDoc::GetControlsId() const { return nControls;   }
+SdrLayerID SwDoc::GetInvisibleHeavenId() const { return nInvisibleHeaven; }
+SdrLayerID SwDoc::GetInvisibleHellId() const { return nInvisibleHell; }
+SdrLayerID SwDoc::GetInvisibleControlsId() const { return nInvisibleControls; }
+SdrModel* SwDoc::GetOrCreateDrawModel() { return GetDrawModel() ? GetDrawModel() : _MakeDrawModel(); }
+
 // --> OD 2006-03-14 #i62875#
 namespace docfunc
 {
@@ -1116,3 +1123,4 @@ namespace docfunc
     }
 }
 // <--
+
