@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drwbassh.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 12:43:22 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:53:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -84,10 +83,6 @@
 #ifndef _SVX_HTMLMODE_HXX //autogen
 #include <svx/htmlmode.hxx>
 #endif
-#ifndef _SFXVIEWFRM_HXX
-#include <sfx2/viewfrm.hxx>
-#endif
-
 #ifndef _UITOOL_HXX
 #include <uitool.hxx>
 #endif
@@ -130,25 +125,19 @@
 #ifndef _SWDTFLVR_HXX
 #include <swdtflvr.hxx>
 #endif
-//CHINA001 #ifndef _SVX_DLG_NAME_HXX
-//CHINA001 #include <svx/dlgname.hxx>
-//CHINA001 #endif
 #ifndef _SVDOGRP_HXX
 #include <svx/svdogrp.hxx>
-#endif
-#ifndef _SV_MSGBOX_HXX
-#include <vcl/msgbox.hxx>
 #endif
 #ifndef _SVDPAGE_HXX
 #include <svx/svdpage.hxx>
 #endif
+
 // --> OD 2006-03-09 #i51726#
 #ifndef _SVDITER_HXX
 #include <svx/svditer.hxx>
 #endif
 // <--
 
-#include <doc.hxx>
 #include <shells.hrc>
 #define SwDrawBaseShell
 #ifndef _ITEMDEF_HXX
@@ -177,6 +166,8 @@
 #ifndef _COM_SUN_STAR_TEXT_RELORIENTATION_HPP_
 #include <com/sun/star/text/RelOrientation.hpp>
 #endif
+
+#include <IDocumentDrawModelAccess.hxx>
 
 using namespace ::com::sun::star::text;
 
@@ -731,7 +722,7 @@ IMPL_LINK( SwDrawBaseShell, CheckGroupShapeNameHdl, AbstractSvxNameDialog*, pNam
     else
     {
         nRet = 1;
-        SdrModel* pModel = rSh.GetDoc()->GetDrawModel();
+        SdrModel* pModel = rSh.getIDocumentDrawModelAccess()->GetDrawModel();
         // --> OD 2006-03-09 #i51726# - all drawing objects can be named now.
         // consider also drawing objects inside group objects
 //        SdrPage* pPage = pModel->GetPage(0);
