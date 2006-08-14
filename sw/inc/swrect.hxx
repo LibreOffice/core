@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swrect.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:15:55 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:34:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _SWRECT_HXX
 #define _SWRECT_HXX
-
 #include "errhdl.hxx"
 
 #ifndef _GEN_HXX //autogen
@@ -96,7 +95,6 @@ public:
            SwRect &Intersection( const SwRect& rRect );
    //Wie Intersection nur wird davon ausgegangen, dass die Rects ueberlappen!
            SwRect &_Intersection( const SwRect &rRect );
-    inline SwRect  GetUnion( const SwRect& rRect ) const;
     inline SwRect  GetIntersection( const SwRect& rRect ) const;
 
     // MB: 24.11.2004
@@ -341,10 +339,6 @@ inline Rectangle SwRect::SVRect() const
                       nY + nHeight - 1 );   //Bottom()
 }
 
-inline SwRect SwRect::GetUnion( const SwRect& rRect ) const
-{
-    return SwRect( *this ).Union( rRect );
-}
 inline SwRect SwRect::GetIntersection( const SwRect& rRect ) const
 {
     return SwRect( *this ).Intersection( rRect );
