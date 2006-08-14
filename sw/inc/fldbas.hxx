@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldbas.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:06:59 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:22:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,10 +59,6 @@
 #endif
 
 class SwDoc;
-class Date;
-class Time;
-class _SetGetExpFlds;
-class SwEditShell;
 class SvStringsDtor;
 class SvNumberFormatter;
 
@@ -281,7 +277,6 @@ String  FormatNumber(USHORT nNum, sal_uInt32 nFormat);
                     1 Instanz der zugehoerigen Typenklasse
                     Basisklasse aller Feldtypen ist SwFieldType
  --------------------------------------------------------------------*/
-class SwFldNames;
 
 DBG_NAMEEX(SwFieldType);
 
@@ -477,33 +472,7 @@ public:
 
     void                    SetExpandedFormula(const String& rStr);
     String                  GetExpandedFormula() const;
-
 };
-
-/*--------------------------------------------------------------------
-    Beschreibung:   Sortierung von Felder nach der Position
- --------------------------------------------------------------------*/
-class SwFieldList
-{
-public:
-    SwFieldList(SwEditShell* pShell);
-    ~SwFieldList();
-
-    // Felder eines bestimmten Typen aufnehmen
-    void        InsertFields(USHORT nTypeId, const String* pName=0);
-
-    USHORT      Count() const;
-
-    SwField*    GetLastField() const;
-    SwField*    GetNextField() const;
-
-private:
-    SwEditShell*    pSh;
-    _SetGetExpFlds* pSrtLst;
-};
-
 
 #endif  // FIELDIDS_ONLY
-
-
 #endif // _FLDBAS_HXX
