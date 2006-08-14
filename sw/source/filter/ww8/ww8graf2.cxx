@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:42:11 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:17:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifdef PCH
@@ -83,11 +82,6 @@
 #ifndef _SFX_FCONTNR_HXX
 #include <sfx2/fcontnr.hxx>
 #endif
-
-#ifndef _SV_SVAPP_HXX //autogen
-#include <vcl/svapp.hxx>
-#endif
-
 #ifndef _DCONTACT_HXX
 #include <dcontact.hxx>
 #endif
@@ -447,12 +441,6 @@ void SwWW8ImplReader::ReplaceObj(const SdrObject &rReplaceObj,
     if (SdrObject* pGroupObject = rReplaceObj.GetUpGroup())
     {
         SdrObjList* pObjectList = pGroupObject->GetSubList();
-#if 0
-        if( !pDrawModel )   // 1. GrafikObjekt des Docs
-            GrafikCtor();
-
-        pGrafObj->SetModel(pDrawModel);
-#endif
 
         rSubObj.SetLogicRect(rReplaceObj.GetCurrentBoundRect());
         rSubObj.SetLayer(rReplaceObj.GetLayer());
@@ -491,7 +479,7 @@ SwFlyFrmFmt* SwWW8ImplReader::MakeGrafNotInCntnt(const WW8PicDesc& rPD,
     aFlySet.Put( SwFmtFrmSize( ATT_FIX_SIZE, nWidth, nHeight ) );
 
     SwFlyFrmFmt* pFlyFmt = rDoc.Insert(*pPaM, rFileName, aEmptyStr, pGraph,
-        &aFlySet, &rGrfSet);
+        &aFlySet, &rGrfSet, NULL);
 
     // Damit die Frames bei Einfuegen in existierendes Doc erzeugt werden:
     if (rDoc.GetRootFrm() &&
@@ -519,7 +507,7 @@ SwFrmFmt* SwWW8ImplReader::MakeGrafInCntnt(const WW8_PIC& rPic,
     {
 
         pFlyFmt = rDoc.Insert( *pPaM, rFileName, aEmptyStr, pGraph, &aFlySet,
-            &rGrfSet);
+            &rGrfSet, NULL);
     }
 
     // Grafik im Rahmen ? ok, Rahmen auf Bildgroesse vergroessern
@@ -777,11 +765,11 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
                             if (!pRet)
                             {
                                 pRet = rDoc.Insert(*pPaM, aEmptyStr, aEmptyStr,
-                                    &rGraph, &aAttrSet, &aGrSet );
+                                    &rGraph, &aAttrSet, &aGrSet, NULL );
                             }
                         }
                         else
-                            pRet = rDoc.Insert(*pPaM, *pObject, &aAttrSet);
+                            pRet = rDoc.Insert(*pPaM, *pObject, &aAttrSet, NULL);
                     }
                 }
 
