@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pagefrm.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:28:03 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:21:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,6 @@
 #define _PAGEFRM_HXX
 
 
-
 #ifndef _SVARRAY_HXX //autogen
 #include <svtools/svarray.hxx>
 #endif
@@ -53,11 +52,8 @@ class SwPageDesc;
 class SwCntntFrm;
 struct SwPosition;
 struct SwCrsrMoveState;
-class SwFmtAnchor;
 class SdrObject;
-class SwDrawContact;
 class SwAttrSetChg;
-class SvPtrarr;
 
 // OD 2004-05-07 #i28701# - replaced by class <SwSortedObjs>
 //SV_DECL_PTRARR_SORT(SwSortDrawObjs,SdrObjectPtr,1,2);
@@ -252,12 +248,10 @@ public:
 
     virtual void Cut();
     virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 );
-#ifdef VERTICAL_LAYOUT
     virtual void  CheckDirection( BOOL bVert );
     void CheckGrid( BOOL bInvalidate );
     void PaintGrid( OutputDevice* pOut, SwRect &rRect ) const;
     BOOL HasGrid() const { return bHasGrid; }
-#endif
 
     //Zeilennummern usw malen
     void RefreshExtraData( const SwRect & ) const;
@@ -491,12 +485,9 @@ inline BOOL SwPageFrm::IsInvalidFly() const
     return bInvalidFlyLayout || bInvalidFlyCntnt;
 }
 
-#ifdef VERTICAL_LAYOUT
 #define GETGRID( pPage ) const SwTextGridItem *pGrid = NULL; \
  {if( pPage && pPage->HasGrid() && GRID_NONE==(pGrid=(SwTextGridItem*)&pPage->\
      GetPageDesc()->GetMaster().GetAttr(RES_TEXTGRID))->GetGridType() ) \
     pGrid = NULL;}
-#endif
-
 
 #endif  //_PAGEFRM_HXX
