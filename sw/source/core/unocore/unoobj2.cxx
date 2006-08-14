@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 13:06:31 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:55:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -104,9 +103,6 @@
 #ifndef _SWDOCSH_HXX //autogen
 #include <docsh.hxx>
 #endif
-#ifndef _SFXSTYLE_HXX //autogen
-#include <svtools/style.hxx>
-#endif
 #ifndef _DOCSTYLE_HXX //autogen
 #include <docstyle.hxx>
 #endif
@@ -146,9 +142,6 @@
 #ifndef _DOCTXM_HXX
 #include <doctxm.hxx>
 #endif
-#ifndef _TOX_HXX
-#include <tox.hxx>
-#endif
 #ifndef _SFX_DOCFILT_HACK_HXX //autogen
 #include <sfx2/docfilt.hxx>
 #endif
@@ -175,9 +168,6 @@
 #endif
 #ifndef _UNOPORT_HXX
 #include <unoport.hxx>
-#endif
-#ifndef SW_UNOMID_HXX
-#include <unomid.h>
 #endif
 #ifndef _UNOCRSRHELPER_HXX
 #include <unocrsrhelper.hxx>
@@ -215,17 +205,11 @@
 #ifndef _CTRLTOOL_HXX //autogen
 #include <svtools/ctrltool.hxx>
 #endif
-#ifndef _SFXENUMITEM_HXX
-#include <svtools/eitem.hxx>
-#endif
 #ifndef _FLYPOS_HXX
 #include <flypos.hxx>
 #endif
 #ifndef _TXTFTN_HXX //autogen
 #include <txtftn.hxx>
-#endif
-#ifndef _SECTION_HXX //autogen
-#include <section.hxx>
 #endif
 #ifndef _FMTFTN_HXX //autogen
 #include <fmtftn.hxx>
@@ -246,9 +230,6 @@
 #ifndef _COM_SUN_STAR_STYLE_XSTYLEFAMILIESSUPPLIER_HPP_
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
-#include <com/sun/star/container/XNameContainer.hpp>
-#endif
 #ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESUPPLIER_HPP_
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #endif
@@ -264,14 +245,8 @@
 #ifndef _UNOFRAME_HXX
 #include <unoframe.hxx>
 #endif
-#ifndef _UNOCRSRHELPER_HXX
-#include <unocrsrhelper.hxx>
-#endif
 #ifndef _FMTHDFT_HXX //autogen
 #include <fmthdft.hxx>
-#endif
-#ifndef _OSL_MUTEX_HXX_ //autogen
-#include <osl/mutex.hxx>
 #endif
 #ifndef _VOS_MUTEX_HXX_ //autogen
 #include <vos/mutex.hxx>
@@ -289,23 +264,11 @@
 #ifndef _SVX_BRSHITEM_HXX //autogen
 #include <svx/brshitem.hxx>
 #endif
-#ifndef _SFXSTRITEM_HXX
-#include <svtools/stritem.hxx>
-#endif
 #ifndef _FMTCLDS_HXX //autogen
 #include <fmtclds.hxx>
 #endif
-#ifndef _RTL_UUID_H_
-#include <rtl/uuid.h>
-#endif
 #ifndef _DCONTACT_HXX
 #include <dcontact.hxx>
-#endif
-#ifndef _FLYFRM_HXX
-#include <flyfrm.hxx>
-#endif
-#ifndef _CNTFRM_HXX
-#include <cntfrm.hxx>
 #endif
 #ifndef _DFLYOBJ_HXX
 #include <dflyobj.hxx>
@@ -1015,7 +978,7 @@ void SwXTextCursor::SetCrsrAttr(SwPaM& rPam, const SfxItemSet& rSet, USHORT nAtt
     SwPaM* pCrsr = &rPam;
     if( pCrsr->GetNext() != pCrsr )     // Ring von Cursorn
     {
-        pDoc->StartUndo(UNDO_INSATTR);
+        pDoc->StartUndo(UNDO_INSATTR, NULL);
 
         SwPaM *_pStartCrsr = &rPam;
         do
@@ -1025,7 +988,7 @@ void SwXTextCursor::SetCrsrAttr(SwPaM& rPam, const SfxItemSet& rSet, USHORT nAtt
                 pDoc->Insert(*_pStartCrsr, rSet, nFlags );
         } while( (_pStartCrsr=(SwPaM *)_pStartCrsr->GetNext()) != &rPam );
 
-        pDoc->EndUndo(UNDO_INSATTR);
+        pDoc->EndUndo(UNDO_INSATTR, NULL);
     }
     else
     {
@@ -1212,7 +1175,7 @@ SwTableNode * lcl_FindTopLevelTable(
     SwTableNode * pLast = pTblNode;
     for (SwTableNode* pTmp = pLast;
          pTmp != NULL  &&  &pTmp->GetTable() != pOwnTable;  /* we must not go up higher than the own table! */
-         pTmp = pTmp->FindStartNode()->FindTableNode() )
+         pTmp = pTmp->StartOfSectionNode()->FindTableNode() )
     {
         pLast = pTmp;
     }
@@ -1507,7 +1470,7 @@ SwXTextRange::~SwXTextRange()
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     if(GetBookmark())
-        pDoc->DelBookmark( GetBookmark()->GetName() );
+        pDoc->deleteBookmark( GetBookmark()->GetName() );
 }
 /*-- 10.12.98 12:54:44---------------------------------------------------
 
@@ -1522,7 +1485,7 @@ void    SwXTextRange::_CreateNewBookmark(SwPaM& rPam)
     {
         // If a bookmark exists already its name can be resused
         sBookmarkName = pBkm->GetName();
-        pDoc->DelBookmark( sBookmarkName );
+        pDoc->deleteBookmark( sBookmarkName );
     }
     else
     {
@@ -1532,7 +1495,7 @@ void    SwXTextRange::_CreateNewBookmark(SwPaM& rPam)
         // for real bookmarks, but very slow in thsi case there lots
         // of bookmarks requiere any unique name only.
         String sPrefix(C2S("SwXTextPosition"));
-        const SwBookmarks& rBookmarks = pDoc->GetBookmarks();
+        const SwBookmarks& rBookmarks = pDoc->getBookmarks();
         sal_uInt16 nBookmarks = rBookmarks.Count(), i;
         do
         {
@@ -1551,8 +1514,7 @@ void    SwXTextRange::_CreateNewBookmark(SwPaM& rPam)
 
     KeyCode aCode;
     String sShortName;
-    SwBookmark* pMark = pDoc->MakeBookmark(rPam, aCode,
-                sBookmarkName, sShortName, UNO_BOOKMARK);
+    SwBookmark* pMark = pDoc->makeBookmark(rPam, aCode, sBookmarkName, sShortName, IDocumentBookmarkAccess::UNO_BOOKMARK);
     pMark->Add(this);
 }
 /*-- 10.12.98 12:54:45---------------------------------------------------
@@ -1574,7 +1536,7 @@ void    SwXTextRange::DeleteAndInsert(const String& rText) throw( uno::RuntimeEx
         }
 
         UnoActionContext aAction(aNewCrsr.GetDoc());
-        pDoc->StartUndo(UNDO_INSERT);
+        pDoc->StartUndo(UNDO_INSERT, NULL);
         if(aNewCrsr.HasMark())
             pDoc->DeleteAndJoin(aNewCrsr);
 
@@ -1586,7 +1548,7 @@ void    SwXTextRange::DeleteAndInsert(const String& rText) throw( uno::RuntimeEx
             aNewCrsr.Left(rText.Len(), CRSR_SKIP_CHARS, FALSE, FALSE);
         }
         _CreateNewBookmark(aNewCrsr);
-        pDoc->EndUndo(UNDO_INSERT);
+        pDoc->EndUndo(UNDO_INSERT, NULL);
     }
 
 }
@@ -1908,10 +1870,10 @@ uno::Reference< XTextRange >  SwXTextRange::CreateTextRangeFromPosition(SwDoc* p
     }
     uno::Reference< XText >  xParentText;
     //jetzt besorgen wir uns mal den Parent:
-    SwStartNode* pSttNode = rPos.nNode.GetNode().FindStartNode();
+    SwStartNode* pSttNode = rPos.nNode.GetNode().StartOfSectionNode();
     while(pSttNode && pSttNode->IsSectionNode())
     {
-        pSttNode = pSttNode->FindStartNode();
+        pSttNode = pSttNode->StartOfSectionNode();
     }
     SwStartNodeType eType = pSttNode->GetStartNodeType();
     switch(eType)
@@ -2012,7 +1974,7 @@ uno::Reference< XTextRange >  SwXTextRange::CreateTextRangeFromPosition(SwDoc* p
 {
     Reference< XTextRange > xRet;
     // in welcher Umgebung steht denn der PaM?
-    SwStartNode* pSttNode = rPaM.GetNode()->FindStartNode();
+    SwStartNode* pSttNode = rPaM.GetNode()->StartOfSectionNode();
     SwStartNodeType eType = pSttNode->GetStartNodeType();
     uno::Reference< XText >  xCurParentRef;
     switch(eType)
@@ -2530,7 +2492,7 @@ void SwXTextCursor::SetString(SwCursor& rCrsr, const OUString& rString)
     UnoActionContext aAction(pDoc);
     String aText(rString);
     xub_StrLen nTxtLen = aText.Len();
-    pDoc->StartUndo(UNDO_INSERT);
+    pDoc->StartUndo(UNDO_INSERT, NULL);
     if(rCrsr.HasMark())
         pDoc->DeleteAndJoin(rCrsr);
     if(nTxtLen)
@@ -2542,7 +2504,7 @@ void SwXTextCursor::SetString(SwCursor& rCrsr, const OUString& rString)
         SwXTextCursor::SelectPam(rCrsr, sal_True);
         rCrsr.Left(nTxtLen, CRSR_SKIP_CHARS, FALSE, FALSE);
     }
-    pDoc->EndUndo(UNDO_INSERT);
+    pDoc->EndUndo(UNDO_INSERT, NULL);
 }
 /******************************************************************
  * SwXParaFrameEnumeration
