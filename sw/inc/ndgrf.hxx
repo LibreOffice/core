@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndgrf.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:03:09 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:26:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _NDGRF_HXX
 #define _NDGRF_HXX
-
 #ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
 #include <com/sun/star/io/XInputStream.hpp>
 #endif
@@ -75,9 +74,9 @@ class SwGrfNode: public SwNoTxtNode
                                 // name or package url)
     String aLowResGrf;          // HTML: LowRes Grafik (Ersatzdarstellung bis
                                 //      die normale (HighRes) geladen ist.
-
     BOOL bTransparentFlagValid  :1;
     BOOL bInSwapIn              :1;
+
     BOOL bGrafikArrived         :1;
     BOOL bChgTwipSize           :1;
     BOOL bChgTwipSizeFromPixel  :1;
@@ -184,12 +183,6 @@ public:
 
     inline BOOL IsScaleImageMap() const         { return bScaleImageMap; }
     inline void SetScaleImageMap( BOOL b )      { bScaleImageMap = b; }
-
-    // alles fuers Laden der LowRes-Grafiken
-    inline BOOL IsLoadLowResGrf() const         { return bLoadLowResGrf; }
-    inline void SetLoadLowResGrf( BOOL b )      { bLoadLowResGrf = b; }
-    const String& GetLowResGrfName() const      { return aLowResGrf; }
-    void SetLowResGrfName( const String& r )    { aLowResGrf = r; }
 #endif
         // steht in ndcopy.cxx
     virtual SwCntntNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const;
