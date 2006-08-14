@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlform.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:18:21 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:04:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -129,9 +128,6 @@
 #ifndef _COM_SUN_STAR_SCRIPT_XEVENTATTACHERMANAGER_HPP_
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SCRIPT_SCRIPTEVENTDESCRIPTOR_HPP_
-#include <com/sun/star/script/ScriptEventDescriptor.hpp>
-#endif
 #ifndef _COM_SUN_STAR_TEXT_WRAPTEXTMODE_HPP_
 #include <com/sun/star/text/WrapTextMode.hpp>
 #endif
@@ -191,11 +187,6 @@
 #include "swcss1.hxx"
 #include "swhtml.hxx"
 #include "htmlform.hxx"
-
-
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
-#include <cppuhelper/implbase2.hxx> // helper for implementations
-#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
