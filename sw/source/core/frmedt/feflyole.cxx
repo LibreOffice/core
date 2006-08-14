@@ -4,9 +4,9 @@
  *
  *  $RCSfile: feflyole.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:17:44 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:15:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 #ifndef _COM_SUN_STAR_EMBED_EMBEDSTATES_HPP_
@@ -82,8 +81,8 @@
 #ifndef _PAM_HXX
 #include <pam.hxx>
 #endif
-#ifndef _EDIMP_HXX
-#include <edimp.hxx>
+#ifndef _DOC_HXX
+#include <doc.hxx>
 #endif
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
