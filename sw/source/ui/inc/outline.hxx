@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outline.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:55:52 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:44:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _OUTLINE_HXX
 #define _OUTLINE_HXX
-
 
 #ifndef _SFXTABDLG_HXX //autogen
 #include <sfx2/tabdlg.hxx>
@@ -78,7 +77,6 @@
 #endif
 
 class SwWrtShell;
-class SwTxtFmtColl;
 class SwNumRule;
 class SwChapterNumRules;
 
