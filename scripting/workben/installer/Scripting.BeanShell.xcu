@@ -3,6 +3,7 @@
     <node oor:name="ScriptRuntimes">
         <node oor:name="BeanShell" oor:op="replace">
             <prop oor:name="SupportedFileExtensions">
+                <value xml:lang="x-no-translate">bsh</value>
                 <value xml:lang="en-US">bsh</value>
             </prop>
         </node>
