@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tblafmt.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:19:06 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:35:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _TBLAFMT_HXX
 #define _TBLAFMT_HXX
-
 /*************************************************************************
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -230,8 +229,6 @@ public:
             aAdjust.SetLastBlock( rNew.GetLastBlock() );
         }
     void SetBox( const SvxBoxItem& rNew )               { aBox = rNew; }
-    void SetTLBR( const SvxLineItem& rNew )             { aTLBR = rNew; }
-    void SetBLTR( const SvxLineItem& rNew )             { aBLTR = rNew; }
     void SetBackground( const SvxBrushItem& rNew )      { aBackground = rNew; }
     void SetValueFormat( const String& rFmt, LanguageType eLng, LanguageType eSys )
         { sNumFmtString = rFmt; eNumFmtLanguage = eLng; eSysLanguage = eSys; }
@@ -290,7 +287,6 @@ public:
     BOOL IsFrame() const        { return bInclFrame; }
     BOOL IsBackground() const   { return bInclBackground; }
     BOOL IsValueFormat() const  { return bInclValueFormat; }
-    BOOL IsWidthHeight() const  { return bInclWidthHeight; }
 
     void SetFont( const BOOL bNew )         { bInclFont = bNew; }
     void SetJustify( const  BOOL bNew )     { bInclJustify = bNew; }
