@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:26:59 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:09:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 #ifndef _HINTIDS_HXX
@@ -79,6 +78,9 @@
 #ifndef _CHARFMT_HXX //autogen
 #include <charfmt.hxx>
 #endif
+#ifndef _DOC_HXX
+#include <doc.hxx>
+#endif
 #ifndef _DOCARY_HXX
 #include <docary.hxx>
 #endif
@@ -94,9 +96,6 @@
 #ifndef _PAM_HXX
 #include <pam.hxx>
 #endif
-#ifndef _NODE_HXX
-#include <node.hxx>             // fuer GetSectionLevel()
-#endif
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>            // fuer SwTxtNode
 #endif
@@ -111,9 +110,6 @@
 #endif
 #ifndef _SWUNDO_HXX
 #include <swundo.hxx>           // UNDO_START, UNDO_END
-#endif
-#ifndef _ERRHDL_HXX
-#include <errhdl.hxx>
 #endif
 #ifndef _CALC_HXX
 #include <calc.hxx>
@@ -186,7 +182,7 @@ void SwEditShell::Insert(const String &rStr)
     StartAllAction();
     FOREACHPAM_START(this)
         //OPT: GetSystemCharSet
-        if( !GetDoc()->Insert( *PCURCRSR, rStr ) )
+        if( !GetDoc()->Insert( *PCURCRSR, rStr, true ) )
             ASSERT( FALSE, "Doc->Insert(Str) failed." );
 
         SaveTblBoxCntnt( PCURCRSR->GetPoint() );
@@ -266,7 +262,7 @@ void SwEditShell::Overwrite(const String &rStr)
 long SwEditShell::SplitNode( BOOL bAutoFormat, BOOL bCheckTableStart )
 {
     StartAllAction();
-    GetDoc()->StartUndo();
+    GetDoc()->StartUndo(0, NULL);
 
     FOREACHPAM_START(this)
         // eine Tabellen Zelle wird jetzt zu einer normalen Textzelle!
@@ -274,7 +270,7 @@ long SwEditShell::SplitNode( BOOL bAutoFormat, BOOL bCheckTableStart )
         GetDoc()->SplitNode( *PCURCRSR->GetPoint(), bCheckTableStart );
     FOREACHPAM_END()
 
-    GetDoc()->EndUndo();
+    GetDoc()->EndUndo(0, NULL);
 
     if( bAutoFormat )
         AutoFmtBySplitNode();
@@ -292,14 +288,14 @@ sal_Bool SwEditShell::AppendTxtNode()
 {
     sal_Bool bRet = sal_False;
     StartAllAction();
-    GetDoc()->StartUndo();
+    GetDoc()->StartUndo(0, NULL);
 
     FOREACHPAM_START(this)
         GetDoc()->ClearBoxNumAttrs( PCURCRSR->GetPoint()->nNode );
         bRet |= GetDoc()->AppendTxtNode( *PCURCRSR->GetPoint());
     FOREACHPAM_END()
 
-    GetDoc()->EndUndo();
+    GetDoc()->EndUndo(0, NULL);
 
     ClearTblBoxCntnt();
 
@@ -605,10 +601,13 @@ void SwEditShell::SetTableName( SwFrmFmt& rTblFmt, const String &rNewName )
 
 // erfragen des akt. Wortes
 
-
 String SwEditShell::GetCurWord()
 {
-    String aString( GetDoc()->GetCurWord(*GetCrsr()) );
+    const SwPaM& rPaM = *GetCrsr();
+    const SwTxtNode* pNd = rPaM.GetNode()->GetTxtNode();
+    String aString = pNd ?
+                     pNd->GetCurWord(rPaM.GetPoint()->nContent.GetIndex()) :
+                     aEmptyStr;
     aString.EraseAllChars('\xff');
     return aString;
 }
@@ -821,7 +820,7 @@ BOOL SwEditShell::InsertURL( const SwFmtINetFmt& rFmt, const String& rStr, BOOL 
     if( !rFmt.GetValue().Len() ||   ( !rStr.Len() && !HasSelection() ) )
         return FALSE;
     StartAllAction();
-    GetDoc()->StartUndo( UIUNDO_INSERT_URLTXT);
+    GetDoc()->StartUndo( UIUNDO_INSERT_URLTXT, NULL);
     BOOL bInsTxt = TRUE;
 
     if( rStr.Len() )
@@ -865,7 +864,7 @@ BOOL SwEditShell::InsertURL( const SwFmtINetFmt& rFmt, const String& rStr, BOOL 
         ClearMark();
     if( bInsTxt )
         DontExpandFmt();
-    GetDoc()->EndUndo( UIUNDO_INSERT_URLTXT );
+    GetDoc()->EndUndo( UIUNDO_INSERT_URLTXT, NULL );
     EndAllAction();
     return TRUE;
 }
@@ -1152,12 +1151,12 @@ void SwEditShell::SetLineNumberInfo(const SwLineNumberInfo& rInfo)
 
 USHORT SwEditShell::GetLinkUpdMode(BOOL bDocSettings) const
 {
-    return bDocSettings ? GetDoc()->_GetLinkUpdMode(): GetDoc()->GetLinkUpdMode();
+    return getIDocumentSettingAccess()->getLinkUpdateMode( !bDocSettings );
 }
 
 void SwEditShell::SetLinkUpdMode( USHORT nMode )
 {
-    GetDoc()->SetLinkUpdMode( nMode );
+    getIDocumentSettingAccess()->setLinkUpdateMode( nMode );
 }
 
 
@@ -1252,14 +1251,14 @@ void SwEditShell::TransliterateText( sal_uInt32 nType )
     SwPaM* pCrsr = GetCrsr();
     if( pCrsr->GetNext() != pCrsr )
     {
-        GetDoc()->StartUndo();
+        GetDoc()->StartUndo(0, NULL);
         FOREACHPAM_START( this )
 
         if( PCURCRSR->HasMark() )
             GetDoc()->TransliterateText( *PCURCRSR, aTrans );
 
         FOREACHPAM_END()
-        GetDoc()->EndUndo();
+        GetDoc()->EndUndo(0, NULL);
     }
     else
         GetDoc()->TransliterateText( *pCrsr, aTrans );
