@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ccoll.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 13:14:42 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:17:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,11 +77,6 @@
 
 #include <rtl/string.hxx>
 
-class SwWrtShell;
-class SwFmt;
-class SwCollCondition;
-
-
 //***********************************************************
 
 struct CollName {
@@ -128,58 +123,6 @@ public:
     void                        SetStyle( const String* pStyle, USHORT nPos);
 
 };
-
-//***********************************************************
-
-//CHINA001 class SwCondCollPage : public SfxTabPage
-//CHINA001 {
-//CHINA001 FixedLine           aConditionFL;
-//CHINA001 CheckBox         aConditionCB;
-//CHINA001
-//CHINA001 FixedText            aContextFT;
-//CHINA001 FixedText            aUsedFT;
-//CHINA001 SvTabListBox         aTbLinks;
-//CHINA001
-//CHINA001 FixedText            aStyleFT;
-//CHINA001 ListBox              aStyleLB;
-//CHINA001 ListBox              aFilterLB;
-//CHINA001
-//CHINA001 PushButton           aRemovePB;
-//CHINA001 PushButton           aAssignPB;
-//CHINA001
-//CHINA001 String               sNoTmpl;
-//CHINA001 ResStringArray       aStrArr;
-//CHINA001
-//CHINA001 SwWrtShell           &rSh;
-//CHINA001 const CommandStruct*pCmds;
-//CHINA001 SwFmt*               pFmt;
-//CHINA001
-//CHINA001 CollName*            pNms;
-//CHINA001
-//CHINA001 BOOL                 bNewTemplate;
-//CHINA001
-//CHINA001
-//CHINA001 SwCondCollPage(Window *pParent, const SfxItemSet &rSet);
-//CHINA001 virtual ~SwCondCollPage();
-//CHINA001
-//CHINA001 virtual int     DeactivatePage(SfxItemSet *pSet);
-//CHINA001
-//CHINA001 DECL_LINK( OnOffHdl, CheckBox* );
-//CHINA001 DECL_LINK( AssignRemoveHdl, PushButton*);
-//CHINA001 DECL_LINK( SelectHdl, ListBox* );
-//CHINA001
-//CHINA001 public:
-//CHINA001
-//CHINA001 static SfxTabPage *Create(Window *pParent, const SfxItemSet &rSet);
-//CHINA001 static USHORT* GetRanges();
-//CHINA001
-//CHINA001 virtual BOOL FillItemSet(      SfxItemSet &rSet);
-//CHINA001 virtual void Reset      (const SfxItemSet &rSet);
-//CHINA001
-//CHINA001 void SetCollection( SwFmt* pFormat, BOOL bNew );
-//CHINA001 };
-
-
 
 #endif
 
