@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 14:25:33 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:36:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -95,17 +94,11 @@
 #ifndef _FRMSH_HXX
 #include <frmsh.hxx>
 #endif
-#ifndef _TXATBASE_HXX
-#include <txatbase.hxx>
-#endif
 #ifndef _TXTCFG_HXX
 #include <txtcfg.hxx>
 #endif
 #ifndef _ITRFORM2_HXX
 #include <itrform2.hxx>     // SwTxtFormatter
-#endif
-#ifndef _TXTFRM_HXX
-#include <txtfrm.hxx>       // SwTxtFrm
 #endif
 #ifndef _WIDORP_HXX
 #include <widorp.hxx>       // Widows and Orphans
