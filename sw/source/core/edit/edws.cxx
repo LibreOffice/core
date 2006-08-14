@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edws.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:30:13 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:11:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,7 +87,7 @@ SwEditShell::SwEditShell( SwDoc& rDoc, Window *pWin, SwRootFrm *pRootFrm,
                             const SwViewOption *pOpt )
     : SwCrsrShell( rDoc, pWin, pRootFrm, pOpt)
 {
-    GetDoc()->DoUndo();
+    GetDoc()->DoUndo(true);
 }
 
 
