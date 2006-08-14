@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoftn.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:26:38 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:54:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -71,9 +70,6 @@
 #endif
 #ifndef _UNOCRSR_HXX
 #include <unocrsr.hxx>
-#endif
-#ifndef _HINTS_HXX
-#include <hints.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -436,7 +432,7 @@ uno::Reference< text::XTextCursor >  SwXFootnote::createTextCursorByRange(
         // skip section nodes to find 'true' start node
         const SwNode* pStart = aPam.GetNode()->FindFootnoteStartNode();
         while( pStart->IsSectionNode() )
-            pStart = pStart->FindStartNode();
+            pStart = pStart->StartOfSectionNode();
 
         if( pStart == &pTxtFtn->GetStartNode()->GetNode())
             aRef =  (text::XWordCursor*)new SwXTextCursor(this , *aPam.GetPoint(), CURSOR_FOOTNOTE, GetDoc(), aPam.GetMark());
