@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndgrf.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-03 17:16:45 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:16:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-
 #pragma hdrstop
 
 #define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
@@ -133,17 +131,8 @@
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
-#ifndef _CPPUHELPER_WEAK_HXX_
-#include <cppuhelper/weak.hxx>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
-#include <com/sun/star/beans/PropertyValue.hpp>
-#endif
 #ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
 #include <com/sun/star/io/XSeekable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XSTREAM_HPP_
-#include <com/sun/star/io/XStream.hpp>
 #endif
 
 using namespace com::sun::star;
@@ -870,9 +859,10 @@ BOOL SwGrfNode::RestorePersistentData()
 {
     if( refLink.Is() )
     {
-        refLink->SetVisible( GetDoc()->IsVisibleLinks() );
-        GetDoc()->GetLinkManager().InsertDDELink( refLink );
-        if( GetDoc()->GetRootFrm() )
+        IDocumentLinksAdministration* pIDLA = getIDocumentLinksAdministration();
+        refLink->SetVisible( pIDLA->IsVisibleLinks() );
+        pIDLA->GetLinkManager().InsertDDELink( refLink );
+        if( getIDocumentLayoutAccess()->GetRootFrm() )
             refLink->Update();
     }
     return TRUE;
@@ -883,10 +873,10 @@ void SwGrfNode::InsertLink( const String& rGrfName, const String& rFltName )
 {
     refLink = new SwBaseLink( sfx2::LINKUPDATE_ONCALL, FORMAT_GDIMETAFILE, this );
 
-    SwDoc* pDoc = GetDoc();
+    IDocumentLinksAdministration* pIDLA = getIDocumentLinksAdministration();
     if( GetNodes().IsDocNodes() )
     {
-        refLink->SetVisible( pDoc->IsVisibleLinks() );
+        refLink->SetVisible( pIDLA->IsVisibleLinks() );
         if( rFltName.EqualsAscii( "DDE" ))
         {
             USHORT nTmp = 0;
@@ -894,7 +884,7 @@ void SwGrfNode::InsertLink( const String& rGrfName, const String& rFltName )
             sApp = rGrfName.GetToken( 0, sfx2::cTokenSeperator, nTmp );
             sTopic = rGrfName.GetToken( 0, sfx2::cTokenSeperator, nTmp );
             sItem = rGrfName.Copy( nTmp );
-            pDoc->GetLinkManager().InsertDDELink( refLink,
+            pIDLA->GetLinkManager().InsertDDELink( refLink,
                                             sApp, sTopic, sItem );
         }
         else
@@ -903,7 +893,7 @@ void SwGrfNode::InsertLink( const String& rGrfName, const String& rFltName )
             refLink->SetSynchron( bSync );
             refLink->SetContentType( SOT_FORMATSTR_ID_SVXB );
 
-            pDoc->GetLinkManager().InsertFileLink( *refLink,
+            pIDLA->GetLinkManager().InsertFileLink( *refLink,
                                             OBJECT_CLIENT_GRF, rGrfName,
                                 (!bSync && rFltName.Len() ? &rFltName : 0) );
         }
@@ -925,7 +915,7 @@ void SwGrfNode::ReleaseLink()
             pLink->SwapIn( TRUE, TRUE );
             bInSwapIn = FALSE;
         }
-        GetDoc()->GetLinkManager().Remove( refLink );
+        getIDocumentLinksAdministration()->GetLinkManager().Remove( refLink );
         refLink.Clear();
         aGrfObj.SetLink();
     }
@@ -1208,7 +1198,7 @@ SwCntntNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
         aTmpGrf = aGrfObj.GetGraphic();
     }
 
-    const sfx2::SvLinkManager& rMgr = GetDoc()->GetLinkManager();
+    const sfx2::SvLinkManager& rMgr = getIDocumentLinksAdministration()->GetLinkManager();
     String sFile, sFilter;
     if( IsLinkedFile() )
         rMgr.GetDisplayNames( refLink, 0, &sFile, 0, &sFilter );
