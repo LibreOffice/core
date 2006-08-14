@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wdocsh.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 14:47:26 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:38:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _SWWDOCSH_HXX
 #define _SWWDOCSH_HXX
-
 #ifndef INCLUDED_SWDLLAPI_H
 #include "swdllapi.h"
 #endif
@@ -66,8 +65,7 @@ public:
                                    sal_Int32 nFileFormat ) const;
     USHORT      GetSourcePara()const
                             {return nSourcePara;}
-    void        SetSourcePara(USHORT nSet)
-                            {nSourcePara = nSet;}
+    void        SetSourcePara(USHORT nSet) {nSourcePara = nSet;}
 };
 
 #endif
