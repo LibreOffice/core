@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:23:30 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:55:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,6 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
-
 #pragma hdrstop
 
 #ifndef _HINTIDS_HXX
@@ -217,9 +216,6 @@
 #ifndef _REDLNDLG_HXX
 #include <redlndlg.hxx>
 #endif
-#ifndef _REDLENUM_HXX
-#include <redlenum.hxx>
-#endif
 #include "fldmgr.hxx"
 
 #ifndef _GLOBALS_HRC
@@ -246,9 +242,6 @@
 #ifndef _SWWAIT_HXX
 #include <swwait.hxx>
 #endif
-#ifndef _DOC_HXX
-#include <doc.hxx>
-#endif
 #include <vcl/svapp.hxx>
 #include <sfx2/app.hxx>
 
@@ -256,6 +249,8 @@
 #include "swabstdlg.hxx" //CHINA001
 #include "misc.hrc" //CHINA001
 #include "chrdlg.hrc" //CHINA001
+#include <IDocumentStatistics.hxx>
+
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
@@ -1230,7 +1225,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
     {
         SwWrtShell &rSh = GetShell();
         SwDocStat aCurr;
-        SwDocStat aDocStat( rSh.GetDoc()->GetDocStat() );
+        SwDocStat aDocStat( rSh.getIDocumentStatistics()->GetDocStat() );
         {
             SwWait aWait( *GetView().GetDocShell(), TRUE );
             rSh.StartAction();
