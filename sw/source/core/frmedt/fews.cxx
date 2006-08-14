@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fews.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 12:34:30 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:16:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -114,9 +113,6 @@
 #endif
 #ifndef _EDIMP_HXX
 #include <edimp.hxx>
-#endif
-#ifndef _TBLSEL_HXX
-#include <tblsel.hxx>
 #endif
 #ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx>
@@ -485,7 +481,7 @@ void lcl_SetAPageOffset( USHORT nOffset, SwPageFrm* pPage, SwFEShell* pThis )
     if ( pFrm->IsInTab() )
         pThis->GetDoc()->SetAttr( aDesc, *pFrm->FindTabFrm()->GetFmt() );
     else
-        pThis->GetDoc()->Insert( *pThis->GetCrsr(), aDesc );
+        pThis->GetDoc()->Insert( *pThis->GetCrsr(), aDesc, 0 );
 
     pThis->EndAllAction();
 }
