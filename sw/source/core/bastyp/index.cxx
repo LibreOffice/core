@@ -4,9 +4,9 @@
  *
  *  $RCSfile: index.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:00:10 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:49:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -105,20 +104,6 @@ SwIndex::SwIndex( SwIndexReg* pArr, xub_StrLen nIdx )
 
     if( !pArray->pFirst )         // 1. Index ??
         pArray->pFirst = pArray->pLast = this;
-    else if( pArray->pMiddle )
-    {
-        if( pArray->pMiddle->nIndex <= nIdx )
-        {
-            if( nIdx > ((pArray->pLast->nIndex - pArray->pMiddle->nIndex) / 2) )
-                ChgValue( *pArray->pLast, nIdx );
-            else
-                ChgValue( *pArray->pMiddle, nIdx );
-        }
-        else if( nIdx > ((pArray->pMiddle->nIndex - pArray->pFirst->nIndex) / 2) )
-            ChgValue( *pArray->pMiddle, nIdx );
-        else
-            ChgValue( *pArray->pFirst, nIdx );
-    }
     else if( nIdx > ((pArray->pLast->nIndex - pArray->pFirst->nIndex) / 2) )
         ChgValue( *pArray->pLast, nIdx );
     else
@@ -262,7 +247,6 @@ void SwIndex::Remove()
     else
         pNext->pPrev = pPrev;
 
-    if( this == pArray->pMiddle )   pArray->pMiddle = pPrev;
 IDX_CHK_ARRAY
 }
 
@@ -324,20 +308,6 @@ SwIndex& SwIndex::Assign( SwIndexReg* pArr, xub_StrLen nIdx )
             pArr->pFirst = pArr->pLast = this;
             nIndex = nIdx;
         }
-        else if( pArray->pMiddle )
-        {
-            if( pArray->pMiddle->nIndex <= nIdx )
-            {
-                if( nIdx > ((pArr->pLast->nIndex - pArr->pMiddle->nIndex) / 2) )
-                    ChgValue( *pArr->pLast, nIdx );
-                else
-                    ChgValue( *pArr->pMiddle, nIdx );
-            }
-            else if( nIdx > ((pArr->pMiddle->nIndex - pArr->pFirst->nIndex) / 2) )
-                ChgValue( *pArr->pMiddle, nIdx );
-            else
-                ChgValue( *pArr->pFirst, nIdx );
-        }
         else if( nIdx > ((pArr->pLast->nIndex - pArr->pFirst->nIndex) / 2) )
             ChgValue( *pArr->pLast, nIdx );
         else
@@ -351,7 +321,7 @@ IDX_CHK_ARRAY
 
 
 SwIndexReg::SwIndexReg()
-    : pFirst( 0 ), pLast( 0 ), pMiddle( 0 )
+    : pFirst( 0 ), pLast( 0 )
 {
 }
 
@@ -409,6 +379,8 @@ void SwIndexReg::Update( const SwIndex& rIdx, xub_StrLen nDiff, BOOL bNeg,
 ARR_CHK_ARRAY
 }
 
+#ifndef PRODUCT
+#ifndef CFRONT
 
 /*************************************************************************
 |*
@@ -419,12 +391,6 @@ ARR_CHK_ARRAY
 |*    Letzte Aenderung  JP 07.03.94
 |*
 *************************************************************************/
-
-#ifndef PRODUCT
-
-#ifndef CFRONT
-
-
 xub_StrLen SwIndex::operator++(int)
 {
     ASSERT_ID( nIndex < INVALID_INDEX, ERR_OUTOFSCOPE );
@@ -435,7 +401,6 @@ xub_StrLen SwIndex::operator++(int)
 }
 
 #endif
-
 
 xub_StrLen SwIndex::operator++()
 {
@@ -457,7 +422,6 @@ xub_StrLen SwIndex::operator++()
 
 #ifndef CFRONT
 
-
 xub_StrLen SwIndex::operator--(int)
 {
     ASSERT_ID( nIndex, ERR_OUTOFSCOPE );
@@ -468,7 +432,6 @@ xub_StrLen SwIndex::operator--(int)
 }
 
 #endif
-
 
 xub_StrLen SwIndex::operator--()
 {
@@ -486,7 +449,6 @@ xub_StrLen SwIndex::operator--()
 |*
 *************************************************************************/
 
-
 xub_StrLen SwIndex::operator+=( xub_StrLen nWert )
 {
     ASSERT_ID( nIndex < INVALID_INDEX - nWert, ERR_OUTOFSCOPE);
@@ -502,7 +464,6 @@ xub_StrLen SwIndex::operator+=( xub_StrLen nWert )
 |*    Letzte Aenderung  JP 07.03.94
 |*
 *************************************************************************/
-
 
 xub_StrLen SwIndex::operator-=( xub_StrLen nWert )
 {
@@ -520,13 +481,11 @@ xub_StrLen SwIndex::operator-=( xub_StrLen nWert )
 |*
 *************************************************************************/
 
-
 xub_StrLen SwIndex::operator+=( const SwIndex & rIndex )
 {
     ASSERT_ID( nIndex < INVALID_INDEX - rIndex.nIndex, ERR_OUTOFSCOPE );
     return ChgValue( *this, nIndex + rIndex.nIndex ).nIndex;
 }
-
 
 /*************************************************************************
 |*
@@ -538,13 +497,11 @@ xub_StrLen SwIndex::operator+=( const SwIndex & rIndex )
 |*
 *************************************************************************/
 
-
 xub_StrLen SwIndex::operator-=( const SwIndex & rIndex )
 {
     ASSERT_ID( nIndex >= rIndex.nIndex, ERR_OUTOFSCOPE );
     return ChgValue( *this, nIndex - rIndex.nIndex ).nIndex;
 }
-
 
 /*************************************************************************
 |*
@@ -555,7 +512,6 @@ xub_StrLen SwIndex::operator-=( const SwIndex & rIndex )
 |*    Letzte Aenderung  JP 07.03.94
 |*
 *************************************************************************/
-
 
 BOOL SwIndex::operator<( const SwIndex & rIndex ) const
 {
@@ -573,7 +529,6 @@ BOOL SwIndex::operator<( const SwIndex & rIndex ) const
 |*
 *************************************************************************/
 
-
 BOOL SwIndex::operator<=( const SwIndex & rIndex ) const
 {
     ASSERT( pArray == rIndex.pArray, "Attempt to compare indices into different arrays.");
@@ -589,7 +544,6 @@ BOOL SwIndex::operator<=( const SwIndex & rIndex ) const
 |*    Letzte Aenderung  JP 04.06.92
 |*
 *************************************************************************/
-
 
 BOOL SwIndex::operator>( const SwIndex & rIndex ) const
 {
@@ -607,14 +561,11 @@ BOOL SwIndex::operator>( const SwIndex & rIndex ) const
 |*
 *************************************************************************/
 
-
 BOOL SwIndex::operator>=( const SwIndex & rIndex ) const
 {
     ASSERT( pArray == rIndex.pArray, "Attempt to compare indices into different arrays.");
     return nIndex >= rIndex.nIndex;
 }
-
-#endif
 
 /*************************************************************************
 |*
@@ -626,9 +577,6 @@ BOOL SwIndex::operator>=( const SwIndex & rIndex ) const
 |*
 *************************************************************************/
 
-#ifndef PRODUCT
-
-
 SwIndex& SwIndex::operator=( xub_StrLen nWert )
 {
     // Werte kopieren und im neuen Array anmelden
@@ -638,7 +586,7 @@ SwIndex& SwIndex::operator=( xub_StrLen nWert )
     return *this;
 }
 
-#endif
+#endif // ifndef PRODUCT
 
 void SwIndexReg::MoveTo( SwIndexReg& rArr )
 {
@@ -651,6 +599,6 @@ void SwIndexReg::MoveTo( SwIndexReg& rArr )
             pIdx->Assign( &rArr, pIdx->GetIndex() );
             pIdx = pNext;
         }
-        pFirst = 0, pLast = 0, pMiddle = 0;
+        pFirst = 0, pLast = 0;
     }
 }
