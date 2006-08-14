@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXTextDefaults.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:41:33 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:17:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _SW_XTEXT_DEFAULTS_HXX
 #define _SW_XTEXT_DEFAULTS_HXX
-
 #ifndef _CPPUHELPER_IMPLBASE3_HXX_
 #include <cppuhelper/implbase3.hxx>
 #endif
@@ -51,12 +50,11 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
 
-#ifndef _DOC_HXX
-#include <doc.hxx>
-#endif
 #ifndef _SFX_ITEMPROP_HXX
 #include <svtools/itemprop.hxx>
 #endif
+
+class SwDoc;
 
 class SwXTextDefaults :  public cppu::WeakImplHelper3
                         <
