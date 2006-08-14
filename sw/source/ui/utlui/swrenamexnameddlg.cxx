@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swrenamexnameddlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:30:44 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 18:03:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifdef SW_DLLIMPLEMENTATION
 #undef SW_DLLIMPLEMENTATION
 #endif
@@ -85,9 +84,6 @@
 #ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
 #include <com/sun/star/awt/PosSize.hpp>
 #endif
-#ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
-#include <com/sun/star/awt/XWindow.hpp>
-#endif
 #ifndef _COM_SUN_STAR_VIEW_XVIEWSETTINGSSUPPLIER_HPP_
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
 #endif
@@ -102,9 +98,6 @@
 #endif
 #ifndef _SFXSTRITEM_HXX //autogen wg. SfxStringItem
 #include <svtools/stritem.hxx>
-#endif
-#ifndef _SFXAPP_HXX //autogen wg. SFX_APP
-#include <sfx2/app.hxx>
 #endif
 #include <shellio.hxx>
 #ifndef _SWDOCSH_HXX //autogen wg. SwDocShell
@@ -124,9 +117,6 @@
 #endif
 #ifndef _UNOCRSR_HXX
 #include <unocrsr.hxx>
-#endif
-#ifndef _DOC_HXX
-#include <doc.hxx>
 #endif
 
 #include "swrenamexnameddlg.hxx"
