@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-14 08:31:03 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:54:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 #ifndef _COM_SUN_STAR_EMBED_NOVISUALAREASIZEEXCEPTION_HPP_
@@ -131,9 +130,6 @@
 #ifndef _COM_SUN_STAR_STYLE_GRAPHICLOCATION_HPP_
 #include <com/sun/star/style/GraphicLocation.hpp>
 #endif
-#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
-#include <com/sun/star/frame/XModel.hpp>
-#endif
 #ifndef _COM_SUN_STAR_TEXT_GRAPHICCROP_HPP_
 #include <com/sun/star/text/GraphicCrop.hpp>
 #endif
@@ -163,9 +159,6 @@
 #endif
 #ifndef _SWUNDO_HXX //autogen
 #include <swundo.hxx>
-#endif
-#ifndef SW_UNOMID_HXX
-#include <unomid.h>
 #endif
 #ifndef _UNOSTYLE_HXX
 #include <unostyle.hxx>
@@ -242,12 +235,6 @@
 #ifndef _SFX_PRINTER_HXX
 #include <sfx2/printer.hxx>
 #endif
-#ifndef _SVDOBJ_HXX //autogen
-#include <svx/svdobj.hxx>
-#endif
-#ifndef _RTL_UUID_H_
-#include <rtl/uuid.h>
-#endif
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
 #endif
@@ -259,9 +246,6 @@
 #endif
 #ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
-#include <com/sun/star/frame/XModel.hpp>
 #endif
 #ifndef _COM_SUN_STAR_STYLE_XSTYLEFAMILIESSUPPLIER_HPP_
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
@@ -2270,11 +2254,11 @@ void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
             if ( xIPObj.is() )
             {
                 //TODO/LATER: MISCSTATUS_RESIZEONPRINTERCHANGE
-                //if( SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE & xIPObj->GetMiscStatus() && pDoc->GetPrt() )
-                //    xIPObj->OnDocumentPrinterChanged( pDoc->GetPrt() );
+                //if( SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE & xIPObj->GetMiscStatus() && pDoc->getPrinter( false ) )
+                //    xIPObj->OnDocumentPrinterChanged( pDoc->getPrinter( false ) );
 
                 UnoActionContext aAction(pDoc);
-                pDoc->StartUndo(UNDO_INSERT);
+                pDoc->StartUndo(UNDO_INSERT, NULL);
                 if(!bSizeFound)
                 {
                     //TODO/LATER: from where do I get a ViewAspect? And how do I transport it to the OLENode?
@@ -2315,10 +2299,10 @@ void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
                 }
                 SwFlyFrmFmt* pFmt = 0;
 
-                pFmt = pDoc->Insert(aPam, xIPObj, &aFrmSet );
+                pFmt = pDoc->Insert(aPam, xIPObj, &aFrmSet, NULL, NULL );
                 ASSERT( pFmt, "Doc->Insert(notxt) failed." );
 
-                pDoc->EndUndo(UNDO_INSERT);
+                pDoc->EndUndo(UNDO_INSERT, NULL);
                 pFmt->Add(this);
                 if(sName.Len())
                     pDoc->SetFlyName((SwFlyFrmFmt&)*pFmt, sName);
