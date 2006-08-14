@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lineinfo.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:59:57 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:26:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@
 #endif
 
 class SwCharFmt;
-class SwDoc;
+class IDocumentStylePoolAccess;
 
 enum LineNumberPosition
 {
@@ -79,7 +79,7 @@ public:
     SwLineNumberInfo& operator=(const SwLineNumberInfo&);
     BOOL operator==( const SwLineNumberInfo& rInf ) const;
 
-    SwCharFmt *GetCharFmt(SwDoc &rDoc) const;
+    SwCharFmt *GetCharFmt( IDocumentStylePoolAccess& rIDSPA ) const;
     void SetCharFmt( SwCharFmt* );
 
     const SvxNumberType &GetNumType() const             { return aType; }
