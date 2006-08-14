@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtab.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 14:48:19 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:10:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -72,23 +71,14 @@
 #ifndef _CNTFRM_HXX
 #include <cntfrm.hxx>
 #endif
-#ifndef _LAYFRM_HXX
-#include <layfrm.hxx>
-#endif
 #ifndef _PAM_HXX
 #include <pam.hxx>
 #endif
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
 #endif
-#ifndef _HINTS_HXX
-#include <hints.hxx>
-#endif
 #ifndef _FLDBAS_HXX
 #include <fldbas.hxx>
-#endif
-#ifndef _NODE_HXX
-#include <node.hxx>
 #endif
 #ifndef _SWTABLE_HXX
 #include <swtable.hxx>
@@ -135,7 +125,7 @@ const SwTable& SwEditShell::InsertTable( const SwInsertTableOptions& rInsTblOpts
     if( bEndUndo )
     {
         StartUndo( UNDO_START );
-        GetDoc()->SplitNode( *pPos );
+        GetDoc()->SplitNode( *pPos, false );
     }
 
     /* #109161# If called from a shell the adjust item is propagated
@@ -250,7 +240,7 @@ void SwEditShell::InsertDDETable( const SwInsertTableOptions& rInsTblOpts,
     if( bEndUndo )
     {
         StartUndo( UNDO_START );
-        GetDoc()->SplitNode( *pPos );
+        GetDoc()->SplitNode( *pPos, false );
     }
 
     const SwInsertTableOptions aInsTblOpts( rInsTblOpts.mnInsMode | tabopts::DEFAULT_BORDER,
@@ -322,7 +312,6 @@ BOOL SwEditShell::GetTblBoxFormulaAttrs( SfxItemSet& rSet ) const
         ::GetTblSelCrs( *this, aBoxes );
     else
     {
-        SwPaM *pCrsr = GetCrsr();
         do {
             SwFrm *pFrm = GetCurrFrm();
             do {
@@ -333,9 +322,7 @@ BOOL SwEditShell::GetTblBoxFormulaAttrs( SfxItemSet& rSet ) const
                 SwTableBox *pBox = (SwTableBox*)((SwCellFrm*)pFrm)->GetTabBox();
                 aBoxes.Insert( pBox );
             }
-        } while( FALSE
-                // JP 24.01.97: dann nur die akt. Zelle!!
-            /*((SwEditShell*)this)->GoNextCrsr() && pCrsr != GetCrsr()*/ );
+        } while( FALSE );
     }
 
     for( USHORT n = 0; n < aBoxes.Count(); ++n )
@@ -367,7 +354,6 @@ void SwEditShell::SetTblBoxFormulaAttrs( const SfxItemSet& rSet )
         ::GetTblSelCrs( *this, aBoxes );
     else
     {
-        SwPaM *pCrsr = GetCrsr();
         do {
             SwFrm *pFrm = GetCurrFrm();
             do {
@@ -378,9 +364,7 @@ void SwEditShell::SetTblBoxFormulaAttrs( const SfxItemSet& rSet )
                 SwTableBox *pBox = (SwTableBox*)((SwCellFrm*)pFrm)->GetTabBox();
                 aBoxes.Insert( pBox );
             }
-        } while( FALSE
-                // JP 24.01.97: dann nur die akt. Zelle!!
-            /*GoNextCrsr() && pCrsr != GetCrsr()*/ );
+        } while( FALSE );
     }
 
     // beim setzen einer Formel keine Ueberpruefung mehr vornehmen!
@@ -388,10 +372,10 @@ void SwEditShell::SetTblBoxFormulaAttrs( const SfxItemSet& rSet )
         ClearTblBoxCntnt();
 
     StartAllAction();
-    GetDoc()->StartUndo( UNDO_START );
+    GetDoc()->StartUndo( UNDO_START, NULL );
     for( USHORT n = 0; n < aBoxes.Count(); ++n )
         GetDoc()->SetTblBoxFormulaAttrs( *aBoxes[ n ], rSet );
-    GetDoc()->EndUndo( UNDO_END );
+    GetDoc()->EndUndo( UNDO_END, NULL );
     EndAllAction();
 }
 
@@ -401,7 +385,6 @@ BOOL SwEditShell::IsTableBoxTextFormat() const
         return FALSE;
 
     SwTableBox *pBox = 0;
-    SwPaM *pCrsr = GetCrsr();
     {
         SwFrm *pFrm = GetCurrFrm();
         do {
@@ -442,7 +425,6 @@ String SwEditShell::GetTableBoxText() const
     if( !IsTableMode() )
     {
         SwTableBox *pBox = 0;
-        SwPaM *pCrsr = GetCrsr();
         {
             SwFrm *pFrm = GetCurrFrm();
             do {
@@ -466,11 +448,11 @@ BOOL SwEditShell::SplitTable( USHORT eMode )
     if( pCrsr->GetNode()->FindTableNode() )
     {
         StartAllAction();
-        GetDoc()->StartUndo();
+        GetDoc()->StartUndo(0, NULL);
 
         bRet = GetDoc()->SplitTable( *pCrsr->GetPoint(), eMode, TRUE );
 
-        GetDoc()->EndUndo();
+        GetDoc()->EndUndo(0, NULL);
         ClearFEShellTabCols();
         EndAllAction();
     }
@@ -484,11 +466,11 @@ BOOL SwEditShell::MergeTable( BOOL bWithPrev, USHORT nMode )
     if( pCrsr->GetNode()->FindTableNode() )
     {
         StartAllAction();
-        GetDoc()->StartUndo();
+        GetDoc()->StartUndo(0, NULL);
 
         bRet = GetDoc()->MergeTable( *pCrsr->GetPoint(), bWithPrev, nMode );
 
-        GetDoc()->EndUndo();
+        GetDoc()->EndUndo(0, NULL);
         ClearFEShellTabCols();
         EndAllAction();
     }
