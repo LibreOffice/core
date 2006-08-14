@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swmodalredlineacceptdlg.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:04:14 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:45:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,14 +34,12 @@
  ************************************************************************/
 #ifndef _SWMODALREDLINEACCEPTDLG_HXX
 #define _SWMODALREDLINEACCEPTDLG_HXX
-
 #include "chldwrap.hxx"
 
 #ifndef _BASEDLGS_HXX //autogen
 #include <sfx2/basedlgs.hxx>
 #endif
 
-class SwChildWinWrapper;
 class SwRedlineAcceptDlg;
 
 class SwModalRedlineAcceptDlg : public SfxModalDialog
