@@ -4,9 +4,9 @@
 #
 #   $RCSfile: parameter.pm,v $
 #
-#   $Revision: 1.35 $
+#   $Revision: 1.36 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-19 09:37:27 $
+#   last change: $Author: hr $ $Date: 2006-08-14 09:38:46 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -425,16 +425,16 @@ sub set_childproductnames
     if ( $installer::globals::islinuxrpmbuild )
     {
         $installer::globals::adafilename = "adabas-13.01.00-1.i586.rpm";
-        $installer::globals::javafilename = "jre-1_5_0_06-linux-i586.rpm";
+        $installer::globals::javafilename = "jre-1_5_0_07-linux-i586.rpm";
         $installer::globals::jdsexcludefilename = "jds_excludefiles_linux.txt";
     }
 
     if ( $installer::globals::issolarissparcbuild )
     {
         $installer::globals::adafilename = "SUNWadabas.tar.gz";
-        $installer::globals::javafilename = "SUNWj5rt_1_5_0_06_sparc.tar.gz";
-        $installer::globals::javafilename2 = "SUNWj5cfg_1_5_0_06_sparc.tar.gz";
-        $installer::globals::javafilename3 = "SUNWj5man_1_5_0_06_sparc.tar.gz";
+        $installer::globals::javafilename = "SUNWj5rt_1_5_0_07_sparc.tar.gz";
+        $installer::globals::javafilename2 = "SUNWj5cfg_1_5_0_07_sparc.tar.gz";
+        $installer::globals::javafilename3 = "SUNWj5man_1_5_0_07_sparc.tar.gz";
         $installer::globals::jdsexcludefilename = "jds_excludefiles_solaris_sparc.txt";
         @installer::globals::requiredpackages = ("SUNWfreetype2.tar.gz");
     }
@@ -442,9 +442,9 @@ sub set_childproductnames
     if ( $installer::globals::issolarisx86build )
     {
         $installer::globals::adafilename = "";
-        $installer::globals::javafilename = "SUNWj5rt_1_5_0_06_x86.tar.gz";
-        $installer::globals::javafilename2 = "SUNWj5cfg_1_5_0_06_x86.tar.gz";
-        $installer::globals::javafilename3 = "SUNWj5man_1_5_0_06_x86.tar.gz";
+        $installer::globals::javafilename = "SUNWj5rt_1_5_0_07_x86.tar.gz";
+        $installer::globals::javafilename2 = "SUNWj5cfg_1_5_0_07_x86.tar.gz";
+        $installer::globals::javafilename3 = "SUNWj5man_1_5_0_07_x86.tar.gz";
         $installer::globals::jdsexcludefilename = "jds_excludefiles_solaris_intel.txt";
         @installer::globals::requiredpackages = ("SUNWfreetype2.tar.gz");
     }
