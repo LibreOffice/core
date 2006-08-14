@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrthtml.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:14:16 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:07:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifndef _WRTHTML_HXX
 #define _WRTHTML_HXX
 
@@ -71,7 +70,6 @@ class SwFmtVertOrient;
 class SwFmtFtn;
 class SwStartNode;
 class SwTableNode;
-class SwNoTxtNode;
 class SwPageDesc;
 class SwNodeIndex;
 class ImageMap;
@@ -216,6 +214,8 @@ SV_DECL_PTRARR( INetFmts, SwFmtINetFmt*, 1, 1 )
 
 struct SwHTMLFmtInfo;
 SV_DECL_PTRARR_SORT_DEL( SwHTMLFmtInfos, SwHTMLFmtInfo*, 1, 1 )
+
+class IDocumentStylePoolAccess;
 
 class SwHTMLWriter : public Writer
 {
@@ -480,7 +480,7 @@ public:
                                    String& rClass, sal_uInt16& rRefPoolId,
                                    String *pPseudo=0 );
 
-    static const SwFmt *GetTemplateFmt( sal_uInt16 nPoolId, SwDoc *pTemplate );
+    static const SwFmt *GetTemplateFmt( sal_uInt16 nPoolId, IDocumentStylePoolAccess* /*SwDoc*/ pTemplate );
     static const SwFmt *GetParentFmt( const SwFmt& rFmt, sal_uInt16 nDeep );
 
     static void SubtractItemSet( SfxItemSet& rItemSet,
