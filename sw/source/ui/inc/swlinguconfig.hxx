@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swlinguconfig.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:03:44 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:45:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _SWLINGUCONFIG_HXX
 #define _SWLINGUCONFIG_HXX
-
 #ifndef _COM_SUN_STAR_UNO_ANY_H_
 #include <com/sun/star/uno/Any.h>
 #endif
@@ -48,7 +47,6 @@
 #endif
 
 // predeclarations
-class SvtLinguConfig;
 struct SvtLinguOptions;
 
 // #107253#
