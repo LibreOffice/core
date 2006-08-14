@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dcontact.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 12:22:18 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:19:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,6 @@
 class SfxPoolItem;
 class SwFrmFmt;
 class SwFlyFrmFmt;
-class SwDrawFrmFmt;
 class SwFlyFrm;
 class SwFrm;
 class SwPageFrm;
@@ -74,7 +73,6 @@ class SwRect;
 class SwDrawContact;
 // OD 2004-01-16 #110582#
 struct SwPosition;
-class SwNodeIndex;
 class SwIndex;
 // OD 2004-03-25 #i26791#
 #ifndef _ANCHOREDDRAWOBJECT_HXX
@@ -499,10 +497,6 @@ class SwDrawContact : public SwContact
         // OD 2004-03-29 #i26791#
         const SwFrm* GetAnchorFrm( const SdrObject* _pDrawObj = 0L ) const;
         SwFrm* GetAnchorFrm( SdrObject* _pDrawObj = 0L );
-        void ChgAnchorFrm( SwFrm* _pNewAnchorFrm )
-        {
-            maAnchoredDrawObj.ChgAnchorFrm( _pNewAnchorFrm);
-        }
 
         // --> OD 2004-06-30 #i28701# - page frame is now stored at member <maAnchoredDrawObj>
         inline const SwPageFrm* GetPageFrm() const
