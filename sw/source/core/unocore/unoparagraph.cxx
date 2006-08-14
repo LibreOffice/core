@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoparagraph.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:27:56 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:55:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -67,9 +66,6 @@
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
 #endif
 
 #define _SVSTDARR_USHORTS
