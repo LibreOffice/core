@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocrsrhelper.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:24:07 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:53:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #include <cmdid.h>
@@ -45,12 +44,6 @@
 #endif
 #ifndef _UNOSTYLE_HXX
 #include <unostyle.hxx>
-#endif
-#ifndef _UNOMAP_HXX
-#include <unomap.hxx>
-#endif
-#ifndef SW_UNOMID_HXX
-#include <unomid.h>
 #endif
 #ifndef _UNOIDX_HXX
 #include <unoidx.hxx>
@@ -64,17 +57,11 @@
 #ifndef _UNOSETT_HXX
 #include <unosett.hxx>
 #endif
-#ifndef _UNOCOLL_HXX
-#include <unocoll.hxx>
-#endif
 #ifndef _UNOFRAME_HXX
 #include <unoframe.hxx>
 #endif
 #ifndef _DOC_HXX
 #include <doc.hxx>
-#endif
-#ifndef _PAM_HXX
-#include <pam.hxx>
 #endif
 #ifndef _FMTFTN_HXX //autogen
 #include <fmtftn.hxx>
@@ -124,9 +111,6 @@
 #ifndef _SFXENUMITEM_HXX
 #include <svtools/eitem.hxx>
 #endif
-#ifndef _SFXENUMITEM_HXX
-#include <svtools/eitem.hxx>
-#endif
 #ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
 #endif
@@ -138,9 +122,6 @@
 #endif
 #ifndef _TOX_HXX
 #include <tox.hxx>
-#endif
-#ifndef _DOC_HXX //autogen
-#include <doc.hxx>
 #endif
 #ifndef _FCHRFMT_HXX
 #include <fchrfmt.hxx>
@@ -166,11 +147,9 @@
 #ifndef _SFX_FCONTNR_HXX //autogen
 #include <sfx2/fcontnr.hxx>
 #endif
-
 #ifndef _SFXSTRITEM_HXX
 #include <svtools/stritem.hxx>
 #endif
-
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATE_HPP_
 #include <com/sun/star/beans/PropertyState.hpp>
 #endif
@@ -205,20 +184,6 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
     switch(pMap->nWID)
     {
         case FN_UNO_PARA_CHAPTER_NUMBERING_LEVEL:
-#if 0
-            if( pAny )
-            {
-                SwFmtColl* pFmt = 0;
-                if(pNode)
-                    pFmt = pNode->GetFmtColl();
-                else
-                    pFmt = SwXTextCursor::GetCurTxtFmtColl(rPam, FALSE);
-                sal_Int8 nRet = -1;
-                if(pFmt && ((SwTxtFmtColl*)pFmt)->GetOutlineLevel() != NO_NUMBERING)
-                    nRet = ((SwTxtFmtColl*)pFmt)->GetOutlineLevel();
-                *pAny <<= nRet;
-            }
-#endif
             if (pAny)
             {
                 const SwTxtNode * pTmpNode = pNode;
@@ -405,7 +370,7 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
         case FN_UNO_TEXT_TABLE:
         case FN_UNO_CELL:
         {
-            SwStartNode* pSttNode = rPam.GetNode()->FindStartNode();
+            SwStartNode* pSttNode = rPam.GetNode()->StartOfSectionNode();
             SwStartNodeType eType = pSttNode->GetStartNodeType();
             if(SwTableBoxStartNode == eType)
             {
@@ -433,7 +398,7 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
         break;
         case FN_UNO_TEXT_FRAME:
         {
-            SwStartNode* pSttNode = rPam.GetNode()->FindStartNode();
+            SwStartNode* pSttNode = rPam.GetNode()->StartOfSectionNode();
             SwStartNodeType eType = pSttNode->GetStartNodeType();
 
             SwFrmFmt* pFmt;
@@ -675,12 +640,12 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
 
                 if( rPam.GetNext() != &rPam )           // Mehrfachselektion ?
                 {
-                    pDoc->StartUndo( UNDO_START );
+                    pDoc->StartUndo( UNDO_START, NULL );
                     SwPamRanges aRangeArr( rPam );
                     SwPaM aPam( *rPam.GetPoint() );
                     for( sal_uInt16 n = 0; n < aRangeArr.Count(); ++n )
                         pDoc->SetNumRule( aRangeArr.SetPam( n, aPam ), aRule );
-                    pDoc->EndUndo( UNDO_END );
+                    pDoc->EndUndo( UNDO_END, NULL );
                 }
                 else
                     pDoc->SetNumRule( rPam, aRule );
@@ -749,12 +714,12 @@ void resetCrsrPropertyValue(const SfxItemPropertyMap* pMap, SwPaM& rPam)
 
             if( rPam.GetNext() != &rPam )           // Mehrfachselektion ?
             {
-                pDoc->StartUndo( UNDO_START );
+                pDoc->StartUndo( UNDO_START, NULL );
                 SwPamRanges aRangeArr( rPam );
                 SwPaM aPam( *rPam.GetPoint() );
                 for( sal_uInt16 n = 0; n < aRangeArr.Count(); ++n )
                     pDoc->SetNodeNumStart( *aRangeArr.SetPam( n, aPam ).GetPoint(), 1 );
-                pDoc->EndUndo( UNDO_END );
+                pDoc->EndUndo( UNDO_END, NULL );
             }
             else
                 pDoc->SetNodeNumStart( *rPam.GetPoint(), 0 );
@@ -888,12 +853,12 @@ sal_Bool DocInsertStringSplitCR(
     {
         DBG_ASSERT( nIdx - nStartIdx >= 0, "index negative!" );
         aTxt = rText.Copy( nStartIdx, nIdx - nStartIdx );
-        if (aTxt.getLength() && !rDoc.Insert( rNewCursor, aTxt ))
+        if (aTxt.getLength() && !rDoc.Insert( rNewCursor, aTxt, true ))
         {
             DBG_ERROR( "Doc->Insert(Str) failed." );
             bOK = sal_False;
         }
-        if (!rDoc.SplitNode( *rNewCursor.GetPoint() ) )
+        if (!rDoc.SplitNode( *rNewCursor.GetPoint(), false ) )
         {
             DBG_ERROR( "SplitNode failed" );
             bOK = sal_False;
@@ -902,7 +867,7 @@ sal_Bool DocInsertStringSplitCR(
         nIdx = rText.Search( '\r', nStartIdx );
     }
     aTxt = rText.Copy( nStartIdx );
-    if (aTxt.getLength() && !rDoc.Insert( rNewCursor, aTxt ))
+    if (aTxt.getLength() && !rDoc.Insert( rNewCursor, aTxt, true ))
     {
         DBG_ERROR( "Doc->Insert(Str) failed." );
         bOK = sal_False;
