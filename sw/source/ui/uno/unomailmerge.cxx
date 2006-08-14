@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomailmerge.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:25:21 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 18:01:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #ifndef _SV_SVAPP_HXX
@@ -57,14 +56,8 @@
 #ifndef _SHL_HXX
 #include <tools/shl.hxx>    // GetAppData
 #endif
-#ifndef _URLOBJ_HXX
-#include <tools/urlobj.hxx>
-#endif
 #ifndef _TOOLS_TEMPFILE_HXX
 #include <tools/tempfile.hxx>
-#endif
-#ifndef _RTTI_HXX
-#include <tools/rtti.hxx>
 #endif
 #ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
@@ -77,9 +70,6 @@
 #endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx> // WeakImplHelper1
 #endif
 #ifndef _SV_TIMER_HXX
 #include <vcl/timer.hxx>
@@ -103,10 +93,6 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
-
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
@@ -118,12 +104,6 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XROWSET_HPP_
 #include <com/sun/star/sdbc/XRowSet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSET_HPP_
-#include <com/sun/star/sdbc/XResultSet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
-#include <com/sun/star/frame/XModel.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XCOMPONENTLOADER_HPP_
 #include <com/sun/star/frame/XComponentLoader.hpp>
@@ -143,10 +123,7 @@
 #ifndef _COM_SUN_STAR_MAIL_XSMTPSERVICE_HPP_
 #include "com/sun/star/mail/XSmtpService.hpp"
 #endif
-
 #include <sfx2/viewfrm.hxx>
-
-
 #ifndef _SFXEVENT_HXX
 #include <sfx2/event.hxx>
 #endif
@@ -174,6 +151,9 @@
 #ifndef _SWDOCSH_HXX
 #include <docsh.hxx>
 #endif
+#ifndef IDOCUMENTDEVICEACCESS_HXX_INCLUDED
+#include <IDocumentDeviceAccess.hxx>
+#endif
 #ifndef _SWVIEW_HXX
 #include <view.hxx>
 #endif
@@ -191,9 +171,6 @@
 #endif
 #ifndef _SHELLIO_HXX
 #include <shellio.hxx>
-#endif
-#ifndef _SWDBMGR_HXX
-#include <dbmgr.hxx>
 #endif
 #ifndef _MMCONFIGITEM_HXX
 #include <mmconfigitem.hxx>
@@ -825,11 +802,12 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     if (MailMergeType::PRINTER == nCurOutputType)
     {
         SwPrintData aPrtData = *SW_MOD()->GetPrtOptions( FALSE );
-        SwPrintData* pShellPrintData = rSh.GetPrintData();
+        IDocumentDeviceAccess* pIDDA = rSh.getIDocumentDeviceAccess();
+        SwPrintData* pShellPrintData = pIDDA->getPrintData();
         if (pShellPrintData)
             aPrtData = *pShellPrintData;
         aPrtData.SetPrintSingleJobs( bCurSinglePrintJobs );
-        rSh.SetPrintData( aPrtData );
+        pIDDA->setPrintData( aPrtData );
         // #i25686# printing should not be done asynchronously to prevent dangling offices
         // when mail merge is called as command line macro
         aMergeDesc.bPrintAsync = sal_False;
