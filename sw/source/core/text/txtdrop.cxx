@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtdrop.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:05:15 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:43:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 
 #pragma hdrstop
@@ -72,20 +71,11 @@
 #ifndef _ITRFORM2_HXX
 #include <itrform2.hxx>
 #endif
-#ifndef _SWFONT_HXX
-#include <swfont.hxx>
-#endif
 #ifndef _TXTPAINT_HXX
 #include <txtpaint.hxx> // SwSaveClip
 #endif
-#ifndef _TXTFLY_HXX
-#include <txtfly.hxx>   // Format()
-#endif
 #ifndef _BLINK_HXX
 #include <blink.hxx>    // pBlink
-#endif
-#ifndef _TXATBASE_HXX
-#include <txatbase.hxx>
 #endif
 #ifndef _BREAKIT_HXX
 #include <breakit.hxx>
@@ -101,9 +91,6 @@
 #endif
 #ifndef _CHARATR_HXX
 #include <charatr.hxx>
-#endif
-#ifndef _DOC_HXX
-#include <doc.hxx>     // GetDoc()
 #endif
 #ifndef _SVX_FHGTITEM_HXX
 #include <svx/fhgtitem.hxx>
@@ -288,9 +275,6 @@ bool SwTxtNode::GetDropSize(int& rFontHeight, int& rDropHeight, int& rDropDescen
     rDropHeight = 0;
     rDropDescent =0;
 
-    ASSERT( GetDoc() && GetDoc()->GetRootFrm(),
-            "No layout available in GetDropSize(), I'll guess the drop cap size" )
-
     const SwAttrSet& rSet = GetSwAttrSet();
     const SwFmtDrop& rDrop = rSet.GetDrop();
 
@@ -438,11 +422,7 @@ void SwDropPortion::PaintDrop( const SwTxtPaintInfo &rInf ) const
         aClipRect.Intersection( rInf.GetPaintRect() );
     }
     SwSaveClip aClip( (OutputDevice*)rInf.GetOut() );
-#ifdef VERTICAL_LAYOUT
     aClip.ChgClip( aClipRect, rInf.GetTxtFrm() );
-#else
-    aClip.ChgClip( aClipRect );
-#endif
     // Das machen, was man sonst nur macht ...
     PaintTxt( rInf );
 
@@ -702,15 +682,11 @@ SwDropPortion *SwTxtFormatter::NewDropPortion( SwTxtFormatInfo &rInf )
         if ( pFmt )
         {
             const SwAttrSet& rSet = pFmt->GetAttrSet();
-            pTmpFnt->SetDiffFnt( &rSet, rInf.GetDoc() );
+            pTmpFnt->SetDiffFnt( &rSet, pFrm->GetTxtNode()->getIDocumentSettingAccess() );
         }
 
         // we do not allow a vertical font for the drop portion
-#ifdef VERTICAL_LAYOUT
         pTmpFnt->SetVertical( 0, rInf.GetTxtFrm()->IsVertical() );
-#else
-        pTmpFnt->SetVertical( 0 );
-#endif
 
         // find next attribute change / script change
         const xub_StrLen nIdx = nNextChg;
@@ -1010,7 +986,6 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
             // respect to a common baseline : 0
 
             // get descent and ascent from union
-#ifdef VERTICAL_LAYOUT
             if ( rInf.GetTxtFrm()->IsVertical() )
             {
                 nDescent = aCommonRect.Left();
@@ -1024,10 +999,6 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
                 nDescent = aCommonRect.Bottom();
                 nAscent = aCommonRect.Top();
             }
-#else
-            nDescent = aCommonRect.Bottom();
-            nAscent = aCommonRect.Top();
-#endif
             if ( nAscent < 0 )
                 nAscent = -nAscent;
 
