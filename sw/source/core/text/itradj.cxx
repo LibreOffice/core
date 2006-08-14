@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itradj.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-06 13:42:16 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:37:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,16 +32,14 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-
 #pragma hdrstop
+
+#ifndef IDOCUMENTSETTINGACCESS_HXX_INCLUDED
+#include <IDocumentSettingAccess.hxx>
+#endif
 
 #include "frame.hxx"       // CalcFlyAdjust()
 #include "paratr.hxx"
-#if OSL_DEBUG_LEVEL > 1
-# include "ndtxt.hxx"        // pSwpHints, Ausgabeoperator
-#endif
-
 #include "txtcfg.hxx"
 #include "itrtxt.hxx"
 #include "porglue.hxx"
@@ -52,9 +50,6 @@
 
 #ifndef _PORTAB_HXX
 #include <portab.hxx>
-#endif
-#ifndef _DOC_HXX
-#include <doc.hxx>
 #endif
 
 #define MIN_TAB_WIDTH 60
@@ -163,7 +158,7 @@ void SwTxtAdjuster::CalcNewBlock( SwLineLayout *pCurr,
 
     // --> FME 2005-06-08 #i49277#
     const sal_Bool bDoNotJustifyLinesWithManualBreak =
-                GetTxtFrm()->GetNode()->GetDoc()->DoNotJustifyLinesWithManualBreak();
+                GetTxtFrm()->GetNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK);
     // <--
 
     SwLinePortion *pPos = pCurr->GetPortion();
@@ -197,10 +192,8 @@ void SwTxtAdjuster::CalcNewBlock( SwLineLayout *pCurr,
             }
             else if( pMulti->IsDouble() )
                 nGluePortion += ((SwDoubleLinePortion*)pMulti)->GetSpaceCnt();
-#ifdef BIDI
             else if ( pMulti->IsBidi() )
                 nGluePortion += ((SwBidiPortion*)pMulti)->GetSpaceCnt();
-#endif
         }
 
         if( pPos->InGlueGrp() )
@@ -472,7 +465,7 @@ void SwTxtAdjuster::CalcFlyAdjust( SwLineLayout *pCurr )
     // haengend ist und wenn zentriert wird, dann ...
 
     sal_Bool bComplete = 0 == nStart;
-    const sal_Bool bTabCompat = GetTxtFrm()->GetNode()->GetDoc()->IsTabCompat();
+    const sal_Bool bTabCompat = GetTxtFrm()->GetNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_COMPAT);
     sal_Bool bMultiTab = sal_False;
 
     while( pPos )
@@ -576,21 +569,6 @@ void SwTxtAdjuster::CalcAdjLine( SwLineLayout *pCurr )
         }
         default : return;
     }
-
-#if OSL_DEBUG_LEVEL > 1
-/*
-    if( OPTDBG( *pInf ) )
-    {
-        pCurr->DebugPortions( aDbstream, pInf->GetTxt(), nStart );
-        if( GetHints() )
-        {
-            const SwpHints &rHt = *GetHints();
-            aDbstream << rHt;
-            SwAttrIter::Dump( aDbstream );
-        }
-    }
- */
-#endif
 }
 
 /*************************************************************************
