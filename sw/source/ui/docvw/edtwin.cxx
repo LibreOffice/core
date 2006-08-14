@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.134 $
+ *  $Revision: 1.135 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 12:17:17 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:34:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -70,15 +69,6 @@
 #endif
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _SV_KEYCODES_HXX //autogen
-#include <vcl/keycodes.hxx>
-#endif
-#ifndef _VCL_CMDEVT_HXX //autogen
-#include <vcl/cmdevt.hxx>
-#endif
-#ifndef _VCL_CMDEVT_HXX //autogen
-#include <vcl/cmdevt.hxx>
 #endif
 #ifndef _VCL_CMDEVT_H //autogen
 #include <vcl/cmdevt.h>
@@ -145,9 +135,6 @@
 #ifndef _MyEDITENG_HXX
 #include <svx/editeng.hxx>
 #endif
-#ifndef _SVDOBJ_HXX //autogen
-#include <svx/svdobj.hxx>
-#endif
 #ifndef _MySVXACORR_HXX //autogen
 #include <svx/svxacorr.hxx>
 #endif
@@ -170,9 +157,6 @@
 #endif
 #ifndef _SVX_BRSHITEM_HXX //autogen
 #include <svx/brshitem.hxx>
-#endif
-#ifndef _OUTLINER_HXX //autogen
-#include <svx/outliner.hxx>
 #endif
 #ifndef _SVX_WGHTITEM_HXX //autogen
 #include <svx/wghtitem.hxx>
@@ -200,6 +184,9 @@
 #endif
 #ifndef _WRTSH_HXX //autogen
 #include <wrtsh.hxx>
+#endif
+#ifndef IDOCUMENTSETTINGACCESS_HXX_INCLUDED
+#include <IDocumentSettingAccess.hxx>
 #endif
 #ifndef _FLDBAS_HXX //autogen
 #include <fldbas.hxx>
@@ -1400,7 +1387,6 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
         // handler exist.
         USHORT nKey = rKEvt.GetKeyCode().GetCode();
 
-#ifdef BIDI
         if( KEY_UP == nKey || KEY_DOWN == nKey ||
             KEY_LEFT == nKey || KEY_RIGHT == nKey )
         {
@@ -1431,20 +1417,6 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                             KeyCode( nKey, rKEvt.GetKeyCode().GetModifier() ),
                             rKEvt.GetRepeat() );
         }
-#else
-        if( KEY_UP == nKey ) nKey = KEY_LEFT;
-        else if( KEY_DOWN == nKey ) nKey = KEY_RIGHT;
-        else if( KEY_LEFT == nKey ) nKey = KEY_DOWN;
-        else if( KEY_RIGHT == nKey ) nKey = KEY_UP;
-        else nKey = 0;
-
-        if( nKey && rSh.IsInVerticalText() )
-        {
-            aKeyEvent = KeyEvent( rKEvt.GetCharCode(),
-                            KeyCode( nKey, rKEvt.GetKeyCode().GetModifier() ),
-                            rKEvt.GetRepeat() );
-        }
-#endif
     }
 
     const KeyCode& rKeyCode = aKeyEvent.GetKeyCode();
@@ -3821,7 +3793,8 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                 }
 
                 if( bTstShdwCrsr && bInsWin && !bIsDocReadOnly &&
-                    !bInsFrm && !rSh.IsBrowseMode() &&
+                    !bInsFrm &&
+                    !rSh.getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) &&
                     rSh.GetViewOptions()->IsShadowCursor() &&
                     !(rMEvt.GetModifier() + rMEvt.GetButtons()) &&
                     !rSh.HasSelection() && !GetConnectMetaFile() )
