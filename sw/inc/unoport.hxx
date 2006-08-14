@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoport.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 18:17:19 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:37:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _UNOPORT_HXX
 #define _UNOPORT_HXX
-
 #ifndef _UNOEVTLSTNR_HXX
 #include <unoevtlstnr.hxx>
 #endif
@@ -87,7 +86,6 @@
 class SwFmtFld;
 class SwFrmFmt;
 class SwUnoCrsr;
-class SwRedline;
 class SwTxtRuby;
 /* -----------------29.05.98 14:42-------------------
  *
