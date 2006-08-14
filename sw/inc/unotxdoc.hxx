@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotxdoc.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 16:40:46 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:37:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _UNOTXDOC_HXX
 #define _UNOTXDOC_HXX
-
 #ifndef INCLUDED_SWDLLAPI_H
 #include "swdllapi.h"
 #endif
@@ -208,7 +207,6 @@ public Ifc25, public Ifc26, public Ifc27
 __DEF_IMPLHELPER_EX( 27 )
 
 class SwDoc;
-class SvxForbiddenCharactersTable;
 class SwDocShell;
 class UnoActionContext;
 class SwXBodyText;
