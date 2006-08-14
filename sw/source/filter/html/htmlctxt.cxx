@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlctxt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:41:51 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:03:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -281,15 +280,6 @@ void SwHTMLParser::SaveDocContext( _HTMLAttrContext *pCntxt,
             pSave->SetNumInfo( GetNumInfo() );
             GetNumInfo().Clear();
         }
-#ifndef NUM_RELSPACE
-        else if( GetNumInfo().GetNumRule() && pTable )
-        {
-            // Die NumRule befindet sich nicht mehr unbedingt in einem
-            // zusammenhaengenden Bereich und muss deshalb vollst.
-            // aktualisiert werden.
-            GetNumInfo().SetUpdateWholeNum( TRUE );
-        }
-#endif
 
         if( (HTML_CNTXT_KEEP_ATTRS & nFlags) != 0 )
         {
@@ -367,15 +357,6 @@ void SwHTMLParser::RestoreDocContext( _HTMLAttrContext *pCntxt )
         // Die bisherige gemerkte Numerierung wieder setzen
         GetNumInfo().Set( pSave->GetNumInfo() );
     }
-#ifndef NUM_RELSPACE
-    else if( GetNumInfo().GetNumRule() && pTable )
-    {
-        // Die NumRule befindet sich nicht mehr unbedingt in einem
-        // zusammenhaengenden Bereich und muss deshalb vollst.
-        // aktualisiert werden.
-        GetNumInfo().SetUpdateWholeNum( TRUE );
-    }
-#endif
 
     pCntxt->ClearSaveDocContext();
 }
@@ -646,21 +627,6 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
 
                 // und die Werte fuer nachfolgende Absaetze merken
                 pContext->SetMargins( nLeft, nRight, nIndent );
-
-#ifndef NUM_RELSPACE
-                // Numerierungen erfordern etwas mehr Aufwand
-                if( GetNumInfo().GetNumRule() )
-                {
-                    SwTxtNode  *pNumTxtNode = pPam->GetNode()->GetTxtNode();
-
-                    if( pNumTxtNode->GetNumNoOutline() &&
-                        pNumTxtNode->GetNumNoOutline()->IsNum())
-                        nIndent += HTML_NUMBUL_INDENT;
-
-                    // den Absatz muessen wir jetzt selbst attributieren
-                    pNumTxtNode->SetNumLSpace( FALSE );
-                }
-#endif
 
                 // das Attribut noch am aktuellen Absatz setzen
                 SvxLRSpaceItem aLRItem( *pLRItem );
