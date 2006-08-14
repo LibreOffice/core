@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtxml.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 14:21:45 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:21:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -305,12 +304,12 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
     // save show redline mode ...
     OUString sShowChanges(RTL_CONSTASCII_USTRINGPARAM("ShowChanges"));
     sal_uInt16 nRedlineMode = pDoc->GetRedlineMode();
-    sal_Bool bShowChanges( IsShowChanges( nRedlineMode ) );
+    sal_Bool bShowChanges( IDocumentRedlineAccess::IsShowChanges( nRedlineMode ) );
     aAny.setValue( &bShowChanges, ::getBooleanCppuType() );
     xInfoSet->setPropertyValue( sShowChanges, aAny );
     // ... and hide redlines for export
-    nRedlineMode &= ~REDLINE_SHOW_MASK;
-    nRedlineMode |= REDLINE_SHOW_INSERT;
+    nRedlineMode &= ~IDocumentRedlineAccess::REDLINE_SHOW_MASK;
+    nRedlineMode |= IDocumentRedlineAccess::REDLINE_SHOW_INSERT;
     pDoc->SetRedlineMode( nRedlineMode );
 
     // Set base URI
@@ -502,10 +501,10 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
     // restore redline mode
     aAny = xInfoSet->getPropertyValue( sShowChanges );
     nRedlineMode = pDoc->GetRedlineMode();
-    nRedlineMode &= ~REDLINE_SHOW_MASK;
-    nRedlineMode |= REDLINE_SHOW_INSERT;
+    nRedlineMode &= ~IDocumentRedlineAccess::REDLINE_SHOW_MASK;
+    nRedlineMode |= IDocumentRedlineAccess::REDLINE_SHOW_INSERT;
     if ( *(sal_Bool*)aAny.getValue() )
-        nRedlineMode |= REDLINE_SHOW_DELETE;
+        nRedlineMode |= IDocumentRedlineAccess::REDLINE_SHOW_DELETE;
     pDoc->SetRedlineMode( nRedlineMode );
 
     if (xStatusIndicator.is())
