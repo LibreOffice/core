@@ -4,9 +4,9 @@
  *
  *  $RCSfile: merge.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 08:28:40 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:23:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,6 @@ ByteString PFormEntrys::Dump(){
 
 /*****************************************************************************/
 BOOL PFormEntrys::GetText( ByteString &rReturn,
-    //USHORT nTyp, USHORT nLangIndex, BOOL bDel )
     USHORT nTyp, const ByteString &nLangIndex, BOOL bDel )
 /*****************************************************************************/
 {
@@ -121,23 +120,16 @@ PFormEntrys* MergeData::GetPFormEntrys( ResData *pResData )
 {
 
     (void) pResData;    // FIXME
-    //if( pResData ){
-    //    if( pResData->sPForm.Len() && aMap.find( pResData->sPForm ) != aMap.end() ){
         if( aMap.find( ByteString("HACK") ) != aMap.end() ){
             return aMap[ ByteString("HACK") ];
         }
         else{
             return 0;
         }
-    //}
-    //return 0;
 }
 
 void MergeData::Insert( const ByteString& rPFO , PFormEntrys* pfEntrys ){
-//    aMap.insert( PFormEntrysHashMap::value_type( rPFO , pfEntrys ) );
-    //TEST
     (void) rPFO;    // FIXME
-    //TEST
     aMap.insert( PFormEntrysHashMap::value_type( ByteString("HACK") , pfEntrys ) );
 
 }
@@ -158,7 +150,6 @@ ByteString MergeData::Dump(){
 
 PFormEntrys* MergeData::GetPFObject( const ByteString& rPFO ){
     if( aMap.find( ByteString("HACK") ) != aMap.end() ){
-//    if( aMap.find( rPFO ) != aMap.end() ){
         return aMap[ rPFO ];
     }
     else{
@@ -199,19 +190,6 @@ BOOL MergeData::operator==( ResData *pData )
 #define FFORMAT_NEW     0x0001
 #define FFORMAT_OLD     0x0002
 
-/*void MergeDataFile::Quote( ByteString& sText ){
-    for( int x=0; x < sText.Len(); x++ ){
-        if( sText.GetChar( x ) == '\"' ){
-            if( x > 1 && sText.GetChar( x-1) != '\\' ){
-                sText.Insert('\\', x);
-                x++;
-            }else{
-                sText.Insert('\\',0);
-                x++;
-            }
-        }
-    }
-}*/
 /*****************************************************************************/
 MergeDataFile::MergeDataFile( const ByteString &rFileName, const ByteString& sFile ,BOOL bErrLog,
 //                          CharSet aCharSet, BOOL bUTF8 , bool bCaseSensitive )
@@ -291,7 +269,6 @@ MergeDataFile::MergeDataFile( const ByteString &rFileName, const ByteString& sFi
         }
     }
     aInputStream.Close();
-    //printf(" done!\n");
 }
 /*****************************************************************************/
 MergeDataFile::~MergeDataFile()
@@ -435,17 +412,6 @@ void MergeDataFile::InsertEntry(
     }
 
     // finaly insert the cur string
-
-//  if( rTYP.EqualsIgnoreCaseAscii("PairedList") ){
-//      sKey2 = CreateKey( rTYP , rGID , rLID );
-
-    /*      sKey2.Append( '-' );
-        sKey2.Append( nLANG );
-        sKey2.ToUpperAscii();*/
-        //pFEntrys->InsertEntry( rLID , rTEXT, rQHTEXT, rTITLE );
-//      pFEntrys->InsertEntry( sKey2 , rTEXT, rQHTEXT, rTITLE );
-//  }
-//  else
 
     pFEntrys->InsertEntry( nLANG , rTEXT, rQHTEXT, rTITLE );
 
