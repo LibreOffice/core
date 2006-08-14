@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docstyle.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-06 13:42:35 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:27:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-
 #pragma hdrstop
 
 #define _SVSTDARR_USHORTS
@@ -100,16 +98,9 @@
 #ifndef _DOC_HXX
 #include <doc.hxx>
 #endif
-#ifndef _HINTS_HXX
-#include <hints.hxx>
-#endif
-#ifndef _NUMRULE_HXX
-#include <numrule.hxx>
-#endif
 #ifndef _UIITEMS_HXX
 #include <uiitems.hxx>
 #endif
-
 #ifndef _CMDID_H
 #include <cmdid.h>
 #endif
@@ -2319,7 +2310,7 @@ SfxStyleSheetBase* SwDocStyleSheetPool::Find( const String& rName,
                                             SfxStyleFamily eFam, USHORT n )
 {
     USHORT nSMask = n;
-    if( SFX_STYLE_FAMILY_PARA == eFam && rDoc.IsHTMLMode() )
+    if( SFX_STYLE_FAMILY_PARA == eFam && rDoc.get(IDocumentSettingAccess::HTML_MODE) )
     {
         // dann sind nur HTML-Vorlagen von Interesse
         if( USHRT_MAX == nSMask )
@@ -2471,7 +2462,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
                     : bSearchUsed )
                 continue;
 
-                if( rDoc.IsHTMLMode() && !(nId & USER_FMT) &&
+                if( rDoc.get(IDocumentSettingAccess::HTML_MODE) && !(nId & USER_FMT) &&
                     !( RES_POOLCHR_HTML_BEGIN <= nId &&
                           nId < RES_POOLCHR_HTML_END ) &&
                     RES_POOLCHR_INET_NORMAL != nId &&
@@ -2491,7 +2482,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
         //
         if( nSrchMask == SFXSTYLEBIT_ALL )
         {
-            if( !rDoc.IsHTMLMode() )
+            if( !rDoc.get(IDocumentSettingAccess::HTML_MODE) )
                 AppendStyleList(SwStyleNameMapper::GetChrFmtUINameArray(),
                                 bSearchUsed, GET_POOLID_CHRFMT, cCHAR);
             else
@@ -2514,7 +2505,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
         nSearchFamily == SFX_STYLE_FAMILY_ALL )
     {
         USHORT nSMask = nSrchMask;
-        if( rDoc.IsHTMLMode() )
+        if( rDoc.get(IDocumentSettingAccess::HTML_MODE) )
         {
             // dann sind nur HTML-Vorlagen von Interesse
             if( USHRT_MAX == nSMask )
