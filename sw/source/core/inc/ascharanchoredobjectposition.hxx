@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ascharanchoredobjectposition.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:42:15 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:17:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _ASCHARANCHOREDOBJECTPOSITION_HXX
 #define _ASCHARANCHOREDOBJECTPOSITION_HXX
-
 #ifndef _ANCHOREDOBJECTPOSITION_HXX
 #include <anchoredobjectposition.hxx>
 #endif
@@ -49,7 +48,6 @@
 #endif
 
 class SwTxtFrm;
-class SwFlyInCntFrm;
 class SwFmtVertOrient;
 
 namespace objectpositioning
