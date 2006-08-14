@@ -4,9 +4,9 @@
  *
  *  $RCSfile: section.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 08:04:55 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:05:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -609,12 +608,12 @@ void SwSection::MakeChildLinksVisible( const SwSectionNode& rSectNd )
             pBLnk->ISA( SwBaseLink ) &&
             0 != ( pNd = ((SwBaseLink*)pBLnk)->GetAnchor() ) )
         {
-            pNd = pNd->FindStartNode(); // falls SectionNode ist!
+            pNd = pNd->StartOfSectionNode();    // falls SectionNode ist!
             const SwSectionNode* pParent;
             while( 0 != ( pParent = pNd->FindSectionNode() ) &&
                     ( CONTENT_SECTION == pParent->GetSection().GetType()
                         || pNd == &rSectNd ))
-                    pNd = pParent->FindStartNode();
+                    pNd = pParent->StartOfSectionNode();
 
             // steht nur noch in einer normalen Section, also
             // wieder anzeigen
@@ -1122,8 +1121,8 @@ const SwSection* SwSectionFmt::GetGlobalDocSection() const
         ( FILE_LINK_SECTION == pNd->GetSection().GetType() ||
           TOX_CONTENT_SECTION == pNd->GetSection().GetType() ) &&
         pNd->GetIndex() > pNd->GetNodes().GetEndOfExtras().GetIndex() &&
-        !pNd->FindStartNode()->IsSectionNode() &&
-        !pNd->FindStartNode()->FindSectionNode() )
+        !pNd->StartOfSectionNode()->IsSectionNode() &&
+        !pNd->StartOfSectionNode()->FindSectionNode() )
         return &pNd->GetSection();
     return 0;
 }
@@ -1364,7 +1363,7 @@ void SwIntrnlSectRefLink::DataChanged( const String& rMimeType,
             pDoc->GetLinkManager().GetDisplayNames( this, 0, &sFileName,
                                                     &sRange, &sFilter );
 
-            SwRedlineMode eOldRedlineMode = REDLINE_NONE;
+            IDocumentRedlineAccess::RedlineMode_t eOldRedlineMode = IDocumentRedlineAccess::REDLINE_NONE;
             SfxObjectShellRef xDocSh;
             int nRet;
             if( !sFileName.Len() )
@@ -1381,7 +1380,7 @@ void SwIntrnlSectRefLink::DataChanged( const String& rMimeType,
                 {
                     SwDoc* pSrcDoc = ((SwDocShell*)&xDocSh)->GetDoc();
                     eOldRedlineMode = pSrcDoc->GetRedlineMode();
-                    pSrcDoc->SetRedlineMode( REDLINE_SHOW_INSERT );
+                    pSrcDoc->SetRedlineMode( IDocumentRedlineAccess::REDLINE_SHOW_INSERT );
                 }
             }
 
@@ -1532,7 +1531,7 @@ void SwIntrnlSectRefLink::DataChanged( const String& rMimeType,
 
     pDoc->UnlockExpFlds();
     if( !pDoc->IsExpFldsLocked() )
-        pDoc->UpdateExpFlds();
+        pDoc->UpdateExpFlds(NULL, true);
 
     if( pESh )
         pESh->EndAllAction();
