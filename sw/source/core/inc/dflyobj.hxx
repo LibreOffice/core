@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dflyobj.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:44:25 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:18:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,12 +34,8 @@
  ************************************************************************/
 #ifndef _DFLYOBJ_HXX
 #define _DFLYOBJ_HXX
-
 #ifndef _SVDOVIRT_HXX //autogen
 #include <svx/svdovirt.hxx>
-#endif
-#ifndef _SVDOBJ_HXX //autogen
-#include <svx/svdobj.hxx>
 #endif
 
 class SwFlyFrm;
