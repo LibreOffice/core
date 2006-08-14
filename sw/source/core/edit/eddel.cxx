@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eddel.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:26:27 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:07:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,7 @@ void SwEditShell::DeleteSel( SwPaM& rPam, BOOL* pUndo )
         // in Tabellen das Undo gruppieren
         if( pUndo && !*pUndo )
         {
-            GetDoc()->StartUndo( UNDO_START );
+            GetDoc()->StartUndo( UNDO_START, NULL );
             *pUndo = TRUE;
         }
         SwPaM aDelPam( *rPam.Start() );
@@ -167,7 +167,7 @@ long SwEditShell::Delete()
 
         // falls eine Undo-Klammerung, dann hier beenden
         if( bUndo )
-            GetDoc()->EndUndo( UNDO_DELETE );
+            GetDoc()->EndUndo( UNDO_DELETE, NULL );
         EndAllAction();
         nRet = 1;
     }
@@ -212,7 +212,7 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
     SwNodeIndex aSttNdIdx( pDestShell->GetDoc()->GetNodes() );
     xub_StrLen nSttCntIdx = 0;
 
-    pDestShell->GetDoc()->StartUndo( UNDO_START );
+    pDestShell->GetDoc()->StartUndo( UNDO_START, NULL );
     FOREACHPAM_START(this)
 
         if( !pPos )
@@ -282,7 +282,7 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
 #endif
 
     // Undo-Klammerung hier beenden
-    pDestShell->GetDoc()->EndUndo( UNDO_END );
+    pDestShell->GetDoc()->EndUndo( UNDO_END, NULL );
     pDestShell->EndAllAction();
 
     pDestShell->SaveTblBoxCntnt( pDestShell->GetCrsr()->GetPoint() );
@@ -305,7 +305,7 @@ BOOL SwEditShell::Replace( const String& rNewStr, BOOL bRegExpRplc )
     if( !HasReadonlySel() )
     {
         StartAllAction();
-        GetDoc()->StartUndo();
+        GetDoc()->StartUndo(0, NULL);
 
         FOREACHPAM_START(this)
 
@@ -334,7 +334,7 @@ BOOL SwEditShell::Replace( const String& rNewStr, BOOL bRegExpRplc )
         FOREACHPAM_END()
 
         // Undo-Klammerung hier beenden
-        GetDoc()->EndUndo();
+        GetDoc()->EndUndo(0, NULL);
         EndAllAction();
     }
     return bRet;
