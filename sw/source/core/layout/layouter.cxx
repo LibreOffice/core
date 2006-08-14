@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layouter.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2006-06-02 12:12:09 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:27:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -484,10 +484,11 @@ void SwLayouter::InsertFrmNotToWrap( const SwDoc& _rDoc,
     }
 }
 
-bool SwLayouter::FrmNotToWrap( const SwDoc& _rDoc,
-                                       const SwFrm& _rFrm )
+bool SwLayouter::FrmNotToWrap( const IDocumentLayoutAccess& _rDLA,
+                               const SwFrm& _rFrm )
 {
-    if ( !_rDoc.GetLayouter() )
+    const SwLayouter* pLayouter = _rDLA.GetLayouter();
+    if ( !pLayouter )
     {
         return false;
     }
@@ -495,8 +496,8 @@ bool SwLayouter::FrmNotToWrap( const SwDoc& _rDoc,
     {
         bool bFrmNotToWrap( false );
         std::vector< const SwFrm* >::const_iterator aIter =
-                            _rDoc.GetLayouter()->maFrmsNotToWrap.begin();
-        for ( ; aIter != _rDoc.GetLayouter()->maFrmsNotToWrap.end(); ++aIter )
+                            pLayouter->maFrmsNotToWrap.begin();
+        for ( ; aIter != pLayouter->maFrmsNotToWrap.end(); ++aIter )
         {
             const SwFrm* pFrm = *(aIter);
             if ( pFrm == &_rFrm )
