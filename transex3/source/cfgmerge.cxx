@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfgmerge.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 08:28:26 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:23:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,6 @@ extern char *GetOutputFile( int argc, char* argv[])
     sPrjRoot        = "";
     sInputFileName  = "";
     sActFileName    = "";
-    //Export::sLanguages ; //= "";
 
     USHORT nState = STATE_NON;
     BOOL bInput = FALSE;
@@ -101,7 +100,6 @@ extern char *GetOutputFile( int argc, char* argv[])
     for( int i = 1; i < argc; i++ ) {
         ByteString sSwitch( argv[ i ] );
         sSwitch.ToUpperAscii();
-        //ByteString sValue( argv[ i ] );
 
         if ( sSwitch == "-I" ) {
             nState = STATE_INPUT; // next token specifies source file
@@ -206,15 +204,11 @@ int InitCfgExport( char *pOutput , char* pFilename )
     ByteString sOutput( pOutput );
     ByteString sFilename( pFilename );
     Export::InitLanguages();
-    //pParser = new CfgParser();
 
     if ( bMergeMode )
         pParser = new CfgMerge( sMergeSrc, sOutputFile, sFilename );
       else if ( sOutputFile.Len())
         pParser = new CfgExport( sOutputFile, sPrj, sActFileName );
-
-    //else
-    //  pParser = new CfgParser();
 
     return 1;
 }
@@ -236,7 +230,7 @@ void removeTempFile(){
 }
 extern const char* getFilename()
 {
-    return sInputFileName.GetBuffer(); //(*(aInputFileList.GetObject( 0 ))).GetBuffer();
+    return sInputFileName.GetBuffer();
 }
 /*****************************************************************************/
 extern FILE *GetCfgFile()
@@ -276,7 +270,6 @@ extern FILE *GetCfgFile()
             // create file name, beginnig with project root
             // (e.g.: source\ui\src\menue.src)
             sActFileName = sFullEntry.Copy( sPrjEntry.Len() + 1 );
-//          sActFileName.ToLowerAscii();
 
             if( !bQuiet )
                 fprintf( stdout, "\nProcessing File %s ...\n", sInputFileName.GetBuffer());
@@ -325,35 +318,6 @@ CfgStackData* CfgStack::Push( const ByteString &rTag, const ByteString &rId )
     Insert( pD, LIST_APPEND );
     return pD;
 }
-
-/*****************************************************************************/
-//void CfgStackData::FillInFallbacks()
-/*****************************************************************************/
-//{
-/*
-    for ( USHORT i = 0; i < LANGUAGES; i++ ) {
-        if (( i != GERMAN_INDEX ) && ( i != ENGLISH_INDEX )) {
-            USHORT nFallbackIndex =
-                Export::GetLangIndex(
-                    Export::GetFallbackLanguage( Export::LangId[ i ] ));
-            if (( nFallbackIndex < LANGUAGES ) && !sText[ i ].Len() && i != nFallbackIndex ) {
-                CharSet eSource =
-                    Export::GetCharSet( Export::LangId[ nFallbackIndex ] );
-                CharSet eDest =
-                    Export::GetCharSet( Export::LangId[ i ] );
-
-                if ( eSource != eDest ) {
-                    ByteString sFallback =
-                        UTF8Converter::ConvertToUTF8( sText[ nFallbackIndex ],
-                            eSource );
-                    sText[ i ] =
-                        UTF8Converter::ConvertFromUTF8( sFallback,
-                            eDest );
-                }
-            }
-        }
-    }*/
-//}
 
 //
 // class CfgStack
@@ -703,8 +667,6 @@ void CfgExport::WorkOnRessourceEnd()
                 ( pStackData->sText[ ByteString("de") ].Len() ||
                     pStackData->sText[ ByteString("en-US") ].Len() )))
         {
-            //pStackData->FillInFallbacks();
-
             ByteString sFallback = pStackData->sText[ ByteString("de") ];
 
             if ( pStackData->sText[ ByteString("en-US") ].Len())
@@ -780,9 +742,9 @@ CfgMerge::CfgMerge(
 {
     if ( rMergeSource.Len()){
         pMergeDataFile = new MergeDataFile(
-            rMergeSource, sInputFileName  , bErrorLog, RTL_TEXTENCODING_MS_1252, true );
-            //rMergeSource, sInputFileName  , bErrorLog, RTL_TEXTENCODING_MS_1252  );
-        //pMergeDataFile->Dump();
+//CONFLICT
+            //rMergeSource, sInputFileName  , bErrorLog, RTL_TEXTENCODING_MS_1252, true );
+            rMergeSource, sInputFileName , 0 , RTL_TEXTENCODING_MS_1252 );
         if( Export::sLanguages.EqualsIgnoreCaseAscii("ALL") ){
             Export::SetLanguages( pMergeDataFile->GetLanguages() );
             aLanguages = pMergeDataFile->GetLanguages();
@@ -804,7 +766,6 @@ CfgMerge::~CfgMerge()
 void CfgMerge::WorkOnText(
     ByteString &rText,
     const ByteString& nLangIndex
-    //const ByteString &rResTyp
 )
 /*****************************************************************************/
 {
@@ -839,9 +800,6 @@ void CfgMerge::WorkOnText(
             pEntrys->GetText( sContent, STRING_TYP_TEXT, nLangIndex );
 
             if ( Export::isAllowed( nLangIndex ) &&
-//                    ( !nLangIndex.EqualsIgnoreCaseAscii("de")) &&
-//              ( !nLangIndex.EqualsIgnoreCaseAscii("en-US") ) &&
-                //(  &&
                 ( sContent != "-" ) && ( sContent.Len()))
             {
 #ifdef MERGE_SOURCE_LANGUAGES
@@ -905,7 +863,6 @@ void CfgMerge::WorkOnRessourceEnd()
 
                     ByteString sReplace = sTemp.GetToken( 0, '\"' );
                     sReplace += "\"";
-                    //sReplace += Export::GetIsoLangByIndex(( USHORT ) nIndex );
                     sReplace += sCur;
                     sReplace += "\"";
 
