@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swtable.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-03 13:55:26 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:34:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 #ifndef _SWTABLE_HXX
 #define _SWTABLE_HXX
-
 #ifndef _SVMEMPOOL_HXX //autogen
 #include <tools/mempool.hxx>
 #endif
@@ -56,7 +55,6 @@
 #ifndef _SWRECT_HXX
 #include <swrect.hxx>
 #endif
-
 #ifdef PRODUCT
 #ifndef _NODE_HXX
 #include <node.hxx>         // fuer StartNode->GetMyIndex
@@ -242,7 +240,6 @@ public:
     void SetRefObject( SwServerObject* );
     const SwServerObject* GetObject() const     {  return &refObj; }
           SwServerObject* GetObject()           {  return &refObj; }
-    BOOL IsServer() const                       {  return refObj.Is(); }
 
     //Daten fuer das Chart fuellen.
     SchMemChart *UpdateData( SchMemChart *pData,
