@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docst.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:19:33 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:26:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #ifndef  _COM_SUN_STAR_STYLE_XSTYLEFAMILIESSUPPLIER_HPP_
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #endif
@@ -201,7 +200,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
                     SfxTemplateItem aItem(nWhich, aName);
 
                     USHORT nMask = 0;
-                    if( pDoc->IsHTMLMode() )
+                    if( pDoc->get(IDocumentSettingAccess::HTML_MODE) )
                         nMask = SWSTYLEBIT_HTML;
                     else
                     {
@@ -227,7 +226,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
 
             case SID_STYLE_FAMILY3:
 
-                if( pDoc->IsHTMLMode() )
+                if( pDoc->get(IDocumentSettingAccess::HTML_MODE) )
                     rSet.DisableItem( nWhich );
                 else
                 {
@@ -243,7 +242,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
             case SID_STYLE_FAMILY4:
             {
                 SvxHtmlOptions* pHtmlOpt = SvxHtmlOptions::Get();
-                if( pDoc->IsHTMLMode() && !pHtmlOpt->IsPrintLayoutExtension())
+                if( pDoc->get(IDocumentSettingAccess::HTML_MODE) && !pHtmlOpt->IsPrintLayoutExtension())
                     rSet.DisableItem( nWhich );
                 else
                 {
@@ -687,8 +686,8 @@ USHORT SwDocShell::Edit( const String &rName, const String &rParent, USHORT nFam
         // get one here.
         SwWrtShell* pCurrShell = ( pActShell ? pActShell : pWrtShell );
         if( ( HTMLMODE_ON & nHtmlMode ) &&
-            !pCurrShell->GetDoc()->GetPrt() )
-            pCurrShell->InitPrt( pCurrShell->GetPrt( sal_True ) );
+            !pCurrShell->getIDocumentDeviceAccess()->getPrinter( false ) )
+            pCurrShell->InitPrt( pCurrShell->getIDocumentDeviceAccess()->getPrinter( true ) );
 
         PutItem(SfxUInt16Item(SID_HTML_MODE, nHtmlMode));
         FieldUnit eMetric = ::GetDfltMetric(0 != (HTMLMODE_ON&nHtmlMode));
@@ -1000,7 +999,7 @@ USHORT SwDocShell::UpdateStyle(const String &rName, USHORT nFamily, SwWrtShell* 
                     // Vorlage auch anwenden, um harte Attributierung
                     // zu entfernen
                 GetWrtShell()->SetTxtFmtColl( pColl );
-                GetWrtShell()->EndUndo(UNDO_INSFMTATTR);
+                GetWrtShell()->EndUndo(UNDO_INSFMTATTR, NULL);
                 GetWrtShell()->EndAllAction();
             }
             break;
@@ -1258,7 +1257,7 @@ void SwDocShell::_LoadStyles( SfxObjectShell& rSource, BOOL bPreserveCurrentDocu
         //              der Vorlage erhalten, einmal alle FixFelder der
         //              Source aktualisieren
         if(!bPreserveCurrentDocument)
-            ((SwDocShell&)rSource).pDoc->SetFixFields();
+            ((SwDocShell&)rSource).pDoc->SetFixFields(false, NULL);
         if( pWrtShell )
         {
             pWrtShell->StartAllAction();
