@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flyincnt.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 14:12:53 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:25:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 #include "cntfrm.hxx"
@@ -328,8 +327,6 @@ void SwFlyInCntFrm::MakeAll()
     const SwFlyNotify aNotify( this );
     SwBorderAttrAccess aAccess( SwFrm::GetCache(), this );
     const SwBorderAttrs &rAttrs = *aAccess.Get();
-    const Size &rSz = rAttrs.GetSize();
-    const SwFmtFrmSize &rFrmSz = GetFmt()->GetFrmSize();
 
     if ( IsClipped() )
         bValidSize = bHeightClipped = bWidthClipped = FALSE;
@@ -370,7 +367,7 @@ void SwFlyInCntFrm::MakeAll()
         // re-activate clipping of as-character anchored Writer fly frames
         // depending on compatibility option <ClipAsCharacterAnchoredWriterFlyFrames>
         if ( bValidPos && bValidSize &&
-             GetFmt()->GetDoc()->ClipAsCharacterAnchoredWriterFlyFrames() )
+             GetFmt()->getIDocumentSettingAccess()->get( IDocumentSettingAccess::CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAME ) )
         {
             SwFrm* pFrm = AnchorFrm();
             if ( Frm().Left() == (pFrm->Frm().Left()+pFrm->Prt().Left()) &&
