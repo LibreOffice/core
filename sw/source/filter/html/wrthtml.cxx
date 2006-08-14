@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrthtml.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:13:56 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 17:07:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #include <stdlib.h>
@@ -57,10 +56,6 @@
 
 #include <svx/htmlcfg.hxx>
 #include <vcl/svapp.hxx>
-
-#ifndef _URLOBJ_HXX //autogen
-#include <tools/urlobj.hxx>
-#endif
 #ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
 #include <i18npool/mslangid.hxx>
 #endif
@@ -111,37 +106,15 @@
 #ifndef _COM_SUN_STAR_FORM_XFORMCONTROLLER_HPP_
 #include <com/sun/star/form/XFormController.hpp>
 #endif
-#ifndef _COM_SUN_STAR_FORM_XFORMCOMPONENT_HPP_
-#include <com/sun/star/form/XFormComponent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XFORMCONTROLLERLISTENER_HPP_
-#include <com/sun/star/form/XFormControllerListener.hpp>
-#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XCONTAINER_HPP_
 #include <com/sun/star/container/XContainer.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXCONTAINER_HPP_
 #include <com/sun/star/container/XIndexContainer.hpp>
 #endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEREPLACE_HPP_
-#include <com/sun/star/container/XNameReplace.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINERLISTENER_HPP_
-#include <com/sun/star/container/XContainerListener.hpp>
-#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XSET_HPP_
 #include <com/sun/star/container/XSet.hpp>
 #endif
-#ifndef _COM_SUN_STAR_CONTAINER_CONTAINEREVENT_HPP_
-#include <com/sun/star/container/ContainerEvent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XINDEXREPLACE_HPP_
-#include <com/sun/star/container/XIndexReplace.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
-#include <com/sun/star/container/XNameContainer.hpp>
-#endif
-
 #ifndef _FMTHDFT_HXX //autogen
 #include <fmthdft.hxx>
 #endif
@@ -322,7 +295,7 @@ ULONG SwHTMLWriter::WriteStream()
             nHTMLMode |= HTMLMODE_NO_BR_AT_PAREND;
     }
 
-    eCSS1Unit = (FieldUnit)SW_MOD()->GetMetric( pDoc->IsHTMLMode() );
+    eCSS1Unit = (FieldUnit)SW_MOD()->GetMetric( pDoc->get(IDocumentSettingAccess::HTML_MODE) );
 
     sal_Bool bWriteUTF8 = bWriteClipboardDoc;
     eDestEnc = bWriteUTF8 ? RTL_TEXTENCODING_UTF8
@@ -355,9 +328,9 @@ ULONG SwHTMLWriter::WriteStream()
     pTemplate = ((HTMLReader*)ReadHTML)->GetTemplateDoc();
     if( pTemplate )
     {
-        pTemplate->AddLink();
-        bOldHTMLMode = pTemplate->IsHTMLMode();
-        pTemplate->SetHTMLMode( sal_True );
+        pTemplate->acquire();
+        bOldHTMLMode = pTemplate->get(IDocumentSettingAccess::HTML_MODE);
+        pTemplate->set(IDocumentSettingAccess::HTML_MODE, true);
 
         nOldTxtFmtCollCnt = pTemplate->GetTxtFmtColls()->Count();
         nOldCharFmtCnt = pTemplate->GetCharFmts()->Count();
@@ -388,7 +361,7 @@ ULONG SwHTMLWriter::WriteStream()
     nLastLFPos = 0;
     nDefListLvl = 0;
     nDefListMargin = ((pTemplate && !bCfgOutStyles) ? pTemplate : pDoc)
-        ->GetTxtCollFromPoolSimple( RES_POOLCOLL_HTML_DD, FALSE )
+        ->GetTxtCollFromPool( RES_POOLCOLL_HTML_DD, false )
         ->GetLRSpace().GetTxtLeft();
     nHeaderFooterSpace = 0;
     nTxtAttrsToIgnore = 0;
@@ -460,7 +433,7 @@ ULONG SwHTMLWriter::WriteStream()
                 aStartTags = sOut;
             }
             // FindSectionNode() an einem SectionNode liefert den selben!
-            pSNd = pSNd->FindStartNode()->FindSectionNode();
+            pSNd = pSNd->StartOfSectionNode()->FindSectionNode();
         }
     }
 
@@ -487,7 +460,8 @@ ULONG SwHTMLWriter::WriteStream()
     const SfxPoolItem *pItem;
     const SfxItemSet& rPageItemSet = pCurrPageDesc->GetMaster().GetAttrSet();
     if( !bWriteClipboardDoc && pDoc->GetDocShell() &&
-         (!pDoc->IsHTMLMode() && !pDoc->IsBrowseMode()) &&
+         (!pDoc->get(IDocumentSettingAccess::HTML_MODE) &&
+          !pDoc->get(IDocumentSettingAccess::BROWSE_MODE)) &&
         SFX_ITEM_SET == rPageItemSet.GetItemState( RES_HEADER, sal_True, &pItem) )
     {
         const SwFrmFmt *pHeaderFmt =
@@ -507,7 +481,7 @@ ULONG SwHTMLWriter::WriteStream()
         OutFootEndNotes();
 
     if( !bWriteClipboardDoc && pDoc->GetDocShell() &&
-        (!pDoc->IsHTMLMode() && !pDoc->IsBrowseMode())  &&
+        (!pDoc->get(IDocumentSettingAccess::HTML_MODE) && !pDoc->get(IDocumentSettingAccess::BROWSE_MODE))  &&
         SFX_ITEM_SET == rPageItemSet.GetItemState( RES_FOOTER, sal_True, &pItem) )
     {
         const SwFrmFmt *pFooterFmt =
@@ -602,9 +576,9 @@ ULONG SwHTMLWriter::WriteStream()
                 "falsche Anzahl CharFmts geloescht" );
 
         // HTML-Modus wieder restaurieren
-        pTemplate->SetHTMLMode( bOldHTMLMode );
+        pTemplate->set(IDocumentSettingAccess::HTML_MODE, bOldHTMLMode);
 
-        if( 0 == pTemplate->RemoveLink() )
+        if( 0 == pTemplate->release() )
             delete pTemplate;
 
         pTemplate = 0;
@@ -816,7 +790,7 @@ static Writer& OutHTML_Section( Writer& rWrt, const SwSectionNode& rSectNd )
             bEndTag = sal_False;
 
         //.is there a columned section arround this one?
-        const SwStartNode *pSttNd = rSectNd.FindStartNode();
+        const SwStartNode *pSttNd = rSectNd.StartOfSectionNode();
         if( pSttNd )
         {
             pSurrSectNd = pSttNd->FindSectionNode();
@@ -1143,8 +1117,7 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
     // Textfarbe ausgeben, wenn sie an der Standard-Vorlage gesetzt ist
     // und sich geaendert hat.
     OutBodyColor( sHTML_O_text,
-                  pDoc->GetTxtCollFromPoolSimple( RES_POOLCOLL_STANDARD,
-                                                  FALSE ),
+                  pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD, false ),
                   *this );
 
     // Farben fuer (un)besuchte Links
@@ -1188,7 +1161,7 @@ void SwHTMLWriter::OutBookmarks()
 {
     // hole das aktuelle Bookmark
     const SwBookmark* pBookmark = USHRT_MAX != nBkmkTabPos ?
-                            pDoc->GetBookmarks()[ nBkmkTabPos ] : 0;
+                            pDoc->getBookmarks()[ nBkmkTabPos ] : 0;
     // Ausgabe aller Bookmarks in diesem Absatz. Die Content-Position
     // wird vorerst nicht beruecksichtigt!
     sal_uInt32 nNode = pCurPam->GetPoint()->nNode.GetIndex();
@@ -1202,10 +1175,10 @@ void SwHTMLWriter::OutBookmarks()
         if( pBookmark->IsBookMark() && pBookmark->GetName().Len() )
             OutAnchor( pBookmark->GetName() );
 
-        if( ++nBkmkTabPos >= pDoc->GetBookmarks().Count() )
+        if( ++nBkmkTabPos >= pDoc->getBookmarks().Count() )
             nBkmkTabPos = USHRT_MAX;
         else
-            pBookmark = pDoc->GetBookmarks()[ nBkmkTabPos ];
+            pBookmark = pDoc->getBookmarks()[ nBkmkTabPos ];
     }
 
     sal_uInt16 nPos;
