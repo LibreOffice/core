@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edfld.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:26:57 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:08:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #ifndef _UNOTOOLS_CHARCLASS_HXX
@@ -49,8 +48,8 @@
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>        // GetCurFld
 #endif
-#ifndef _HINTS_HXX
-#include <hints.hxx>        // SwRefMarkFldUpdate
+#ifndef _DOC_HXX
+#include <doc.hxx>
 #endif
 #ifndef _DOCARY_HXX
 #include <docary.hxx>
@@ -172,7 +171,7 @@ SwFieldType* SwEditShell::GetFldType(USHORT nFld, USHORT nResId, BOOL bUsed ) co
  --------------------------------------------------------------------*/
 SwFieldType* SwEditShell::GetFldType(USHORT nResId, const String& rName) const
 {
-    return GetDoc()->GetFldType( nResId, rName );
+    return GetDoc()->GetFldType( nResId, rName, false );
 }
 
 /*--------------------------------------------------------------------
@@ -265,7 +264,7 @@ void SwEditShell::FieldToText( SwFieldType* pType )
                 pPaM->SetMark();
                 pPaM->Move( fnMoveForward );
                 GetDoc()->Delete( *pPaM );
-                GetDoc()->Insert( *pPaM, aEntry );
+                GetDoc()->Insert( *pPaM, aEntry, true );
             }
             else if( bDDEFld )
             {
@@ -297,7 +296,7 @@ void SwEditShell::Insert(SwField& rFld)
     SwFmtFld aFld( rFld );
 
     FOREACHPAM_START(this)                      // fuer jeden PaM
-        if( !GetDoc()->Insert( *PCURCRSR, aFld ) )
+        if( !GetDoc()->Insert( *PCURCRSR, aFld, 0 ) )
             ASSERT( FALSE, "Doc->Insert(Field) failed");
     FOREACHPAM_END()                      // fuer jeden PaM
 
@@ -521,7 +520,7 @@ void SwEditShell::UpdateExpFlds(BOOL bCloseDB)
 {
     SET_CURR_SHELL( this );
     StartAllAction();
-    GetDoc()->UpdateExpFlds();
+    GetDoc()->UpdateExpFlds(NULL, true);
     if (bCloseDB)
         GetDoc()->GetNewDBMgr()->CloseAll();    // Alle Datenbankverbindungen dichtmachen
     EndAllAction();
@@ -557,12 +556,12 @@ BOOL SwEditShell::IsExpFldsLocked() const
 
 void SwEditShell::SetFldUpdateFlags( USHORT eFlags )
 {
-    GetDoc()->SetFldUpdateFlags( eFlags );
+    getIDocumentSettingAccess()->setFieldUpdateFlags( eFlags );
 }
 
 USHORT SwEditShell::GetFldUpdateFlags(BOOL bDocSettings) const
 {
-    return bDocSettings ? GetDoc()->_GetFldUpdateFlags() : GetDoc()->GetFldUpdateFlags();
+    return getIDocumentSettingAccess()->getFieldUpdateFlags( !bDocSettings );
 }
 
 void SwEditShell::SetFixFields( BOOL bOnlyTimeDate,
@@ -580,12 +579,12 @@ void SwEditShell::SetFixFields( BOOL bOnlyTimeDate,
 
 void SwEditShell::SetLabelDoc( BOOL bFlag )
 {
-    GetDoc()->SetLabelDoc( bFlag );
+    GetDoc()->set(IDocumentSettingAccess::LABEL_DOCUMENT, bFlag );
 }
 
 BOOL SwEditShell::IsLabelDoc() const
 {
-    return GetDoc()->IsLabelDoc();
+    return getIDocumentSettingAccess()->get(IDocumentSettingAccess::LABEL_DOCUMENT);
 }
 /* -----------------------------21.12.99 12:53--------------------------------
 
