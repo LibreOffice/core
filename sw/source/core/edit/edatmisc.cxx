@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edatmisc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:25:54 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:07:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,7 @@ void SwEditShell::ResetAttr()
     StartAllAction();
     BOOL bUndoGroup = GetCrsr()->GetNext() != GetCrsr();
     if( bUndoGroup )
-        GetDoc()->StartUndo(UNDO_RESETATTR);
+        GetDoc()->StartUndo(UNDO_RESETATTR, NULL);
 
         FOREACHPAM_START(this)
             // if ( PCURCRSR->HasMark() )
@@ -76,7 +76,7 @@ void SwEditShell::ResetAttr()
         FOREACHPAM_END()
 
     if( bUndoGroup )
-        GetDoc()->EndUndo(UNDO_RESETATTR);
+        GetDoc()->EndUndo(UNDO_RESETATTR, NULL);
     CallChgLnk();
     EndAllAction();
 }
@@ -152,7 +152,7 @@ void SwEditShell::SetAttr( const SfxPoolItem& rHint, USHORT nFlags )
     if( pCrsr->GetNext() != pCrsr )     // Ring von Cursorn
     {
         FASTBOOL bIsTblMode = IsTableMode();
-        GetDoc()->StartUndo(UNDO_INSATTR);
+        GetDoc()->StartUndo(UNDO_INSATTR, NULL);
 
         FOREACHPAM_START(this)
             if( PCURCRSR->HasMark() && ( bIsTblMode ||
@@ -160,7 +160,7 @@ void SwEditShell::SetAttr( const SfxPoolItem& rHint, USHORT nFlags )
                 GetDoc()->Insert(*PCURCRSR, rHint, nFlags );
         FOREACHPAM_END()
 
-        GetDoc()->EndUndo(UNDO_INSATTR);
+        GetDoc()->EndUndo(UNDO_INSATTR, NULL);
     }
     else
     {
@@ -180,7 +180,7 @@ void SwEditShell::SetAttr( const SfxItemSet& rSet, USHORT nFlags )
     if( pCrsr->GetNext() != pCrsr )     // Ring von Cursorn
     {
         FASTBOOL bIsTblMode = IsTableMode();
-        GetDoc()->StartUndo(UNDO_INSATTR);
+        GetDoc()->StartUndo(UNDO_INSATTR, NULL);
 
         FOREACHPAM_START(this)
             if( PCURCRSR->HasMark() && ( bIsTblMode ||
@@ -188,7 +188,7 @@ void SwEditShell::SetAttr( const SfxItemSet& rSet, USHORT nFlags )
                 GetDoc()->Insert(*PCURCRSR, rSet, nFlags );
         FOREACHPAM_END()
 
-        GetDoc()->EndUndo(UNDO_INSATTR);
+        GetDoc()->EndUndo(UNDO_INSATTR, NULL);
     }
     else
     {
