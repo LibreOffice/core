@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docdesc.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 15:06:00 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 15:56:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,9 +38,6 @@
 #ifndef _SV_VIRDEV_HXX //autogen
 #include <vcl/virdev.hxx>
 #endif
-#ifndef _SFX_PRINTER_HXX //autogen
-#include <sfx2/printer.hxx>
-#endif
 #ifndef _SVDMODEL_HXX //autogen
 #include <svx/svdmodel.hxx>
 #endif
@@ -62,16 +59,12 @@
 #ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
 #endif
-#ifndef _GLOBNAME_HXX //autogen
-#include <tools/globname.hxx>
-#endif
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
 #endif
 #ifndef _COM_SUN_STAR_DOCUMENT_PRINTERINDEPENDENTLAYOUT_HPP_
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #endif
-
 #ifndef _FMTFSIZE_HXX //autogen
 #include <fmtfsize.hxx>
 #endif
@@ -96,9 +89,6 @@
 #ifndef _MDIEXP_HXX
 #include <mdiexp.hxx>
 #endif
-#ifndef _SWTYPES_HXX
-#include <swtypes.hxx>
-#endif
 #ifndef _DOC_HXX
 #include <doc.hxx>
 #endif
@@ -110,9 +100,6 @@
 #endif
 #ifndef _ROOTFRM_HXX
 #include <rootfrm.hxx>  //Fuer DelPageDesc
-#endif
-#ifndef _HINTS_HXX
-#include <hints.hxx>
 #endif
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
@@ -362,7 +349,7 @@ void SwDoc::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
         const SwFmtHeader &rLeftHead = pDesc->GetLeft().GetHeader();
         if ( !rLeftHead.IsActive() )
         {
-            SwFmtHeader aHead( MakeLayoutFmt( RND_STD_HEADERL ) );
+            SwFmtHeader aHead( MakeLayoutFmt( RND_STD_HEADERL, 0 ) );
             pDesc->GetLeft().SetAttr( aHead );
             //Weitere Attribute (Raender, Umrandung...) uebernehmen.
             ::lcl_DescSetAttr( *rHead.GetHeaderFmt(), *aHead.GetHeaderFmt(), FALSE);
@@ -424,7 +411,7 @@ void SwDoc::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
         const SwFmtFooter &rLeftFoot = pDesc->GetLeft().GetFooter();
         if ( !rLeftFoot.IsActive() )
         {
-            SwFmtFooter aFoot( MakeLayoutFmt( RND_STD_FOOTER ) );
+            SwFmtFooter aFoot( MakeLayoutFmt( RND_STD_FOOTER, 0 ) );
             pDesc->GetLeft().SetAttr( aFoot );
             //Weitere Attribute (Raender, Umrandung...) uebernehmen.
             ::lcl_DescSetAttr( *rFoot.GetFooterFmt(), *aFoot.GetFooterFmt(), FALSE);
@@ -551,7 +538,7 @@ void lcl_RemoveFrms( SwFrmFmt& rFmt, FASTBOOL& rbFtnsRemoved )
         if ( !rbFtnsRemoved && pFrm->IsPageFrm() &&
                 ((SwPageFrm*)pFrm)->IsFtnPage() )
         {
-            rFmt.GetDoc()->GetRootFrm()->RemoveFtns( 0, FALSE, TRUE );
+            rFmt.getIDocumentLayoutAccess()->GetRootFrm()->RemoveFtns( 0, FALSE, TRUE );
             rbFtnsRemoved = TRUE;
         }
         else
@@ -748,7 +735,7 @@ SwPageDesc* SwDoc::FindPageDescByName( const String& rName, USHORT* pPos ) const
 }
 
 /******************************************************************************
- *  Methode     :   void SwDoc::SetPrt( SfxPrinter *pP )
+ *  Methode     :   void SwDoc::PrtDataChanged()
  *  Beschreibung:
  *  Erstellt    :   OK 27.10.94 10:20
  *  Aenderung   :   MA 26. Mar. 98
@@ -759,9 +746,8 @@ void SwDoc::PrtDataChanged()
 //!!!!!!!! Bei Aenderungen hier bitte ggf. InJobSetup im Sw3io mitpflegen
 
     // --> FME 2005-01-21 #i41075#
-    ASSERT( com::sun::star::document::PrinterIndependentLayout::DISABLED !=
-            IsUseVirtualDevice() ||
-            0 != GetPrt(), "PrtDataChanged will be called recursive!" )
+    ASSERT( get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE) ||
+            0 != getPrinter( sal_False ), "PrtDataChanged will be called recursive!" )
     // <--
 
     SwWait *pWait = 0;
@@ -774,7 +760,8 @@ void SwDoc::PrtDataChanged()
     if ( GetRootFrm() )
     {
         ViewShell *pSh = GetRootFrm()->GetCurrShell();
-        if( !IsBrowseMode() || ( pSh && pSh->GetViewOptions()->IsPrtFormat() ) )
+        if( !get(IDocumentSettingAccess::BROWSE_MODE) ||
+            ( pSh && pSh->GetViewOptions()->IsPrtFormat() ) )
         {
             if ( GetDocShell() )
                 pWait = new SwWait( *GetDocShell(), TRUE );
@@ -785,8 +772,8 @@ void SwDoc::PrtDataChanged()
             bDraw = FALSE;
             if( pDrawModel )
             {
-                pDrawModel->SetAddExtLeading( IsAddExtLeading() );
-                pDrawModel->SetRefDevice( _GetRefDev() );
+                pDrawModel->SetAddExtLeading( get(IDocumentSettingAccess::ADD_EXT_LEADING) );
+                pDrawModel->SetRefDevice( getReferenceDevice( false ) );
             }
 
             pFntCache->Flush();
@@ -806,10 +793,13 @@ void SwDoc::PrtDataChanged()
     }
     if ( bDraw && pDrawModel )
     {
-        if ( IsAddExtLeading() != pDrawModel->IsAddExtLeading() )
-            pDrawModel->SetAddExtLeading( IsAddExtLeading() );
-        if ( _GetRefDev() != pDrawModel->GetRefDevice() )
-            pDrawModel->SetRefDevice( _GetRefDev() );
+        const sal_Bool bTmpAddExtLeading = get(IDocumentSettingAccess::ADD_EXT_LEADING);
+        if ( bTmpAddExtLeading != pDrawModel->IsAddExtLeading() )
+            pDrawModel->SetAddExtLeading( bTmpAddExtLeading );
+
+        OutputDevice* pOutDev = getReferenceDevice( false );
+        if ( pOutDev != pDrawModel->GetRefDevice() )
+            pDrawModel->SetRefDevice( pOutDev );
     }
 
     PrtOLENotify( TRUE );
@@ -848,16 +838,16 @@ void SwDoc::PrtOLENotify( BOOL bAll )
         //Da wir keine Shell haben, merken wir uns diesen unguenstigen
         //Zustand am Dokument, dies wird dann beim Erzeugen der ersten Shell
         //nachgeholt.
-        bOLEPrtNotifyPending = TRUE;
+        mbOLEPrtNotifyPending = TRUE;
         if ( bAll )
-            bAllOLENotify = TRUE;
+            mbAllOLENotify = TRUE;
     }
     else
     {
-        if ( bAllOLENotify )
+        if ( mbAllOLENotify )
             bAll = TRUE;
 
-        bOLEPrtNotifyPending = bAllOLENotify = FALSE;
+        mbOLEPrtNotifyPending = mbAllOLENotify = FALSE;
 
 
         SwOLENodes *pNodes = 0;
@@ -942,126 +932,12 @@ void SwDoc::PrtOLENotify( BOOL bAll )
     }
 }
 
-void SwDoc::SetVirDev( VirtualDevice* pVd, sal_Bool bCallVirDevDataChanged )
-{
-    if ( (ULONG)pVirDev != (ULONG)pVd )
-    {
-        delete pVirDev;
-        pVirDev = pVd;
-    }
-}
-
-void SwDoc::SetPrt( SfxPrinter *pP, sal_Bool bCallPrtDataChanged )
-{
-    ASSERT( pP, "Kein Drucker!" );
-
-    if ( (ULONG) pP != (ULONG) pPrt)
-    {
-        delete pPrt;
-        pPrt = pP;
-    }
-
-    if ( bCallPrtDataChanged &&
-         // --> FME 2005-01-21 #i41075# Do not call PrtDataChanged() if we do not
-         // use the printer for formatting:
-         com::sun::star::document::PrinterIndependentLayout::DISABLED == IsUseVirtualDevice() )
-        // <--
-        PrtDataChanged();
-}
-
-void SwDoc::SetUseVirtualDevice( short nNew )
-{
-    if ( IsUseVirtualDevice() != nNew )
-    {
-        if ( com::sun::star::document::PrinterIndependentLayout::DISABLED != nNew )
-        {
-            VirtualDevice* pVirDev = GetVirDev( sal_True );
-            if ( com::sun::star::document::PrinterIndependentLayout::LOW_RESOLUTION == nNew )
-                pVirDev->SetReferenceDevice( VirtualDevice::REFDEV_MODE06 );
-            else
-            {
-                ASSERT( com::sun::star::document::PrinterIndependentLayout::HIGH_RESOLUTION == nNew,
-                        "Virtual device type: != DISABLED, LOW_RESOLUTION, HIGH_RESOLUTION" )
-                pVirDev->SetReferenceDevice( VirtualDevice::REFDEV_MODE_MSO1 );
-            }
-        }
-        else
-        {
-            // --> FME 2005-01-21 #i41075#
-            // We have to take care that a printer exists before calling
-            // PrtDataChanged() in order to prevent that PrtDataChanged()
-            // triggers this funny situation:
-            // GetRevDef() -> GetPrt() -> _GetPrt() ->SetPrt() -> PrtDataChanged()
-            GetPrt( sal_True );
-            // <--
-        }
-
-        _SetUseVirtualDevice( nNew );
-        PrtDataChanged();
-        SetModified();
-    }
-}
-
-short SwDoc::IsUseVirtualDevice() const
-{
-    if ( n8Dummy1 & DUMMY_USE_VIRTUAL_DEVICE )
-    {
-        if ( n8Dummy2 & DUMMY_USE_HIRES_VIR_DEV )
-            return com::sun::star::document::PrinterIndependentLayout::HIGH_RESOLUTION;
-        else
-            return com::sun::star::document::PrinterIndependentLayout::LOW_RESOLUTION;
-    }
-    else
-        return com::sun::star::document::PrinterIndependentLayout::DISABLED;
-}
-
-void SwDoc::_SetUseVirtualDevice( short nNew )
-{
-    if( com::sun::star::document::PrinterIndependentLayout::DISABLED != nNew )
-    {
-        n8Dummy1 |= DUMMY_USE_VIRTUAL_DEVICE;
-        if ( com::sun::star::document::PrinterIndependentLayout::LOW_RESOLUTION == nNew )
-            n8Dummy2 &= ~DUMMY_USE_HIRES_VIR_DEV;
-        else
-        {
-            ASSERT( com::sun::star::document::PrinterIndependentLayout::HIGH_RESOLUTION == nNew,
-                    "Virtual device type: != DISABLED, LOW_RESOLUTION, HIGH_RESOLUTION" )
-            n8Dummy2 |= DUMMY_USE_HIRES_VIR_DEV;
-        }
-    }
-    else
-    {
-        n8Dummy1 &= ~DUMMY_USE_VIRTUAL_DEVICE;
-        n8Dummy2 &= ~DUMMY_USE_HIRES_VIR_DEV;
-    }
-}
-
-/*
- *  Kleiner Hack;
- *
-const SwPageDesc& SwDoc::GetPageDesc( USHORT i ) const
-{
-    if( !i && !aPageDescs.Count() )            // noch keiner vorhanden?
-        ((SwDoc*)this)->InitPageDescs();        //Default PageDescriptor
-    return *aPageDescs[i];
-}
-
-SwPageDesc& SwDoc::_GetPageDesc( USHORT i ) const
-{
-    if( !i && !aPageDescs.Count() )         // noch keiner vorhanden?
-        ((SwDoc*)this)->InitPageDescs();        //Default PageDescriptor
-    return *aPageDescs[i];
-}
-*/
-
-
-
 IMPL_LINK( SwDoc, DoUpdateModifiedOLE, Timer *, pTimer )
 {
     SwFEShell* pSh = (SwFEShell*)GetEditShell();
     if( pSh )
     {
-        bOLEPrtNotifyPending = bAllOLENotify = FALSE;
+        mbOLEPrtNotifyPending = mbAllOLENotify = FALSE;
 
         SwOLENodes aOLENodes;
         SwClientIter aIter( *(SwModify*)GetDfltGrfFmtColl() );
