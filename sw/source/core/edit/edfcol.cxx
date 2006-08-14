@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edfcol.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:26:44 $
+ *  last change: $Author: hr $ $Date: 2006-08-14 16:08:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #include <hintids.hxx>
@@ -50,9 +49,6 @@
 #endif
 #ifndef _EDIMP_HXX
 #include <edimp.hxx>    // fuer MACROS
-#endif
-#ifndef _FMTCOL_HXX
-#include <fmtcol.hxx>   // fuer SwXXXFmtColl
 #endif
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
@@ -119,7 +115,7 @@ void SwEditShell::SetTxtFmtColl(SwTxtFmtColl *pFmt)
             GetDoc()->SetTxtFmtColl(*PCURCRSR, pLocal);
 
     FOREACHPAM_END()
-    GetDoc()->EndUndo(UNDO_SETFMTCOLL);
+    GetDoc()->EndUndo(UNDO_SETFMTCOLL, NULL);
     EndAllAction();
 
 }
