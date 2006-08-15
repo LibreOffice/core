@@ -4,9 +4,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:18:05 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:47:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -224,6 +224,13 @@ String RID_STR_FILE_DOES_NOT_EXIST
     Text [ de ] ="Die Datei \"$file$\" existiert nicht.";
     Text[ en-US ] = "The file \"$file$\" does not exist.";
 };
+
+String RID_STR_TABLE_DOES_NOT_EXIST
+{
+    Text [ de ] = "Es existiert keine Tabelle \"$table$\".";
+    Text [ en-US ] = "There exists no table named \"$table$\".";
+};
+
 String RID_STR_CONFLICTING_NAMES
 {
     Text [ de ] = "Die Datenbank enthält Tabellen, deren Namen mit den Namen von existierenden Abfragen kollidieren. Um alle Tabellen und Abfragen voll nutzen zu können, stellen Sie sicher, dass sie unterschiedliche Namen haben.";
