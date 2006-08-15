@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqlnode.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 13:50:26 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:30:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -877,7 +877,7 @@ OSQLParseNode* OSQLParser::convertNode(sal_Int32 nType,OSQLParseNode*& pLiteral)
 
     OSQLParseNode* pReturn = pLiteral;
 
-    if ( pLiteral->isRule() && !SQL_ISRULE(pLiteral,value_exp))
+    if ( ( pLiteral->isRule() && !SQL_ISRULE(pLiteral,value_exp) ) || SQL_ISTOKEN(pLiteral,FALSE) || SQL_ISTOKEN(pLiteral,TRUE) )
     {
         switch(nType)
         {
@@ -932,6 +932,7 @@ OSQLParseNode* OSQLParser::convertNode(sal_Int32 nType,OSQLParseNode*& pLiteral)
             switch(nType)
             {
                 case DataType::BIT:
+                case DataType::BOOLEAN:
                 case DataType::DECIMAL:
                 case DataType::NUMERIC:
                 case DataType::TINYINT:
