@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OConnection.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:54:35 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:29:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -248,51 +248,51 @@ SQLRETURN OConnection::Construct(const ::rtl::OUString& url,const Sequence< Prop
     for(;pBegin != pEnd;++pBegin)
     {
         if(!pBegin->Name.compareToAscii(pTimeout))
-            pBegin->Value >>= nTimeout;
+            OSL_VERIFY( pBegin->Value >>= nTimeout );
         else if(!pBegin->Name.compareToAscii(pSilent))
-            pBegin->Value >>= bSilent;
+            OSL_VERIFY( pBegin->Value >>= bSilent );
         else if(!pBegin->Name.compareToAscii(pPrivName))
-            pBegin->Value >>= m_bIgnoreDriverPrivileges;
+            OSL_VERIFY( pBegin->Value >>= m_bIgnoreDriverPrivileges );
         else if(!pBegin->Name.compareToAscii(pVerColName))
-            pBegin->Value >>= m_bPreventGetVersionColumns;
+            OSL_VERIFY( pBegin->Value >>= m_bPreventGetVersionColumns );
         else if(!pBegin->Name.compareToAscii(pParaName))
-            pBegin->Value >>= m_bParameterSubstitution;
+            OSL_VERIFY( pBegin->Value >>= m_bParameterSubstitution );
         else if(!pBegin->Name.compareToAscii(pRetrieving))
         {
             sal_Bool bAutoRetrievingEnabled = sal_False;
-            pBegin->Value >>= bAutoRetrievingEnabled;
+            OSL_VERIFY( pBegin->Value >>= bAutoRetrievingEnabled );
             enableAutoRetrievingEnabled(bAutoRetrievingEnabled);
         }
         else if(!pBegin->Name.compareToAscii(pRetriStmt))
         {
             ::rtl::OUString sGeneratedValueStatement;
-            pBegin->Value >>= sGeneratedValueStatement;
+            OSL_VERIFY( pBegin->Value >>= sGeneratedValueStatement );
             setAutoRetrievingStatement(sGeneratedValueStatement);
         }
         else if(!pBegin->Name.compareToAscii(pUser))
         {
-            pBegin->Value >>= aUID;
+            OSL_VERIFY( pBegin->Value >>= aUID );
             aDSN = aDSN + ::rtl::OUString::createFromAscii(";UID=") + aUID;
         }
         else if(!pBegin->Name.compareToAscii(pPwd))
         {
-            pBegin->Value >>= aPWD;
+            OSL_VERIFY( pBegin->Value >>= aPWD );
             aDSN = aDSN + ::rtl::OUString::createFromAscii(";PWD=") + aPWD;
         }
         else if(!pBegin->Name.compareToAscii(pUseCatalog))
         {
-             pBegin->Value >>= m_bUseCatalog;
+             OSL_VERIFY( pBegin->Value >>= m_bUseCatalog );
         }
         else if(!pBegin->Name.compareToAscii(pSysDrv))
         {
-            pBegin->Value >>= aSysDrvSettings;
+            OSL_VERIFY( pBegin->Value >>= aSysDrvSettings );
             aDSN += ::rtl::OUString::createFromAscii(";");
             aDSN += aSysDrvSettings;
         }
         else if(0 == pBegin->Name.compareToAscii(pCharSet))
         {
             ::rtl::OUString sIanaName;
-            pBegin->Value >>= sIanaName;
+            OSL_VERIFY( pBegin->Value >>= sIanaName );
 
             ::dbtools::OCharsetMap aLookupIanaName;
             ::dbtools::OCharsetMap::const_iterator aLookup = aLookupIanaName.find(sIanaName, ::dbtools::OCharsetMap::IANA());
