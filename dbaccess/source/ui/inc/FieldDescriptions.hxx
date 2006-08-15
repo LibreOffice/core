@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FieldDescriptions.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:17:23 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:52:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,8 @@ namespace dbaui
     private:
         ::com::sun::star::uno::Any      m_aDefaultValue;    // the default value from the database
         ::com::sun::star::uno::Any      m_aControlDefault;  // the value which the control inserts as default
+        ::com::sun::star::uno::Any      m_aWidth;               // sal_Int32 or void
+        ::com::sun::star::uno::Any      m_aRelativePosition;    // sal_Int32 or void
 
         TOTypeInfoSP    m_pType;
 
@@ -82,6 +84,7 @@ namespace dbaui
         sal_Bool            m_bIsAutoIncrement;
         sal_Bool            m_bIsPrimaryKey;
         sal_Bool            m_bIsCurrency;
+        sal_Bool            m_bHidden;
 
     public:
         OFieldDescription();
@@ -121,6 +124,11 @@ namespace dbaui
         void SetAutoIncrement(sal_Bool _bAuto);
         void SetPrimaryKey(sal_Bool _bPKey);
         void SetCurrency(sal_Bool _bIsCurrency);
+
+        /** copies the content of the field eescription into the column
+            @param  _rxColumn the dest
+        */
+        void copyColumnSettingsTo(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColumn);
 
         void FillFromTypeInfo(const TOTypeInfoSP& _pType,sal_Bool _bForce,sal_Bool _bReset);
 
