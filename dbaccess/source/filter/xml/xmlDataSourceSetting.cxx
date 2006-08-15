@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlDataSourceSetting.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:09:43 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:47:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,6 +170,12 @@ void OXMLDataSourceSetting::EndElement()
     {
         if ( m_bIsList && !m_aInfoSequence.getLength() )
             m_aSetting.Value <<= m_aInfoSequence;
+
+        // if our property is of type string, but was empty, ensure that
+        // we don't add a VOID value
+        if ( !m_bIsList && ( m_aPropType.getTypeClass() == TypeClass_STRING ) && !m_aSetting.Value.hasValue() )
+            m_aSetting.Value <<= ::rtl::OUString();
+
         m_rParent.addInfo(m_aSetting);
     }
 }
