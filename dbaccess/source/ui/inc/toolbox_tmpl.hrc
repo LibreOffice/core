@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbox_tmpl.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:17:08 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:53:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,8 +104,8 @@
 #define MID_DOCUMENT_CREATE_REPWIZ\
     Identifier = ID_DOCUMENT_CREATE_REPWIZ ;\
     HelpID = HID_DOCUMENT_CREATE_REPWIZ ;\
-    Text [ de ] = "AutoPilot Bericht..." ;\
-    Text [ en-US ] = "Report AutoPilot..."; \
+    Text [ de ] = "Berichts-Assistent..." ;\
+    Text [ en-US ] = "Report Wizard...";    \
 
 
 #define MID_DOCUMENT_NEW_AUTOPILOT                              \
