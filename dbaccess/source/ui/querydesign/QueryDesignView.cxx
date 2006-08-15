@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 13:57:37 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:56:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -312,7 +312,7 @@ namespace
                     {
                         if(xMetaData.is())
                         {
-                            ::comphelper::UStringMixEqual bCase(xMetaData->storesMixedCaseQuotedIdentifiers());
+                            ::comphelper::UStringMixEqual bCase(xMetaData->supportsMixedCaseQuotedIdentifiers());
                             if (bCase(rValue, String(ModuleRes(STR_QUERY_TRUE))))
                                 rNewValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TRUE"));
                             else if (bCase(rValue, String(ModuleRes(STR_QUERY_FALSE))))
@@ -368,7 +368,7 @@ namespace
             try
             {
                 Reference<XDatabaseMetaData> xMeta = _pView->getController()->getConnection()->getMetaData();
-                if ( xMeta.is() && xMeta->storesMixedCaseQuotedIdentifiers() )
+                if ( xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers() )
                     _pView->getController()->appendError(SQLException(String(ModuleRes(STR_QRY_CHECK_CASESENSITIVE)),NULL,getStandardSQLState( SQL_GENERAL_ERROR ),1000,Any()));
             }
             catch(Exception&)
@@ -2920,7 +2920,7 @@ OSQLParseNode* OQueryDesignView::getPredicateTreeFromEntry(OTableFieldDescRef pE
                                                                 nType,
                                                                 sal_False,
                                                                 sal_False,
-                                                                xMeta.is() && xMeta->storesMixedCaseQuotedIdentifiers());
+                                                                xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers());
         _rxColumn = pColumn;
         pColumn->setFunction(sal_True);
         pColumn->setRealName(pEntry->GetField());
