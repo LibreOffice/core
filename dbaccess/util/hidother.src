@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:47:02 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:58:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,7 @@ hidspecial HID_BROWSER_COLUMNFORMAT                     { HelpId = HID_BROWSER_C
 hidspecial HID_BROWSER_COLUMNWIDTH                      { HelpId = HID_BROWSER_COLUMNWIDTH; };
 hidspecial HID_BROWSER_TABLEFORMAT                      { HelpId = HID_BROWSER_TABLEFORMAT; };
 hidspecial HID_BROWSER_ROWHEIGHT                        { HelpId = HID_BROWSER_ROWHEIGHT; };
-hidspecial HID_BROWSER_DSADMINISTRATE                   { HelpId = HID_BROWSER_DSADMINISTRATE; };
+hidspecial HID_BROWSER_EDIT_DATABASE                    { HelpId = HID_BROWSER_EDIT_DATABASE; };
 hidspecial HID_BROWSER_CLOSECONN                        { HelpId = HID_BROWSER_CLOSECONN; };
 hidspecial HID_BROWSER_REFRESHCONN                      { HelpId = HID_BROWSER_REFRESHCONN; };
 hidspecial HID_DSADMIN_SPECIAL_MESSAGE                  { HelpId = HID_DSADMIN_SPECIAL_MESSAGE; };
