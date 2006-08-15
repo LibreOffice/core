@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.146 $
+ *  $Revision: 1.147 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 13:55:11 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:57:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -188,6 +188,9 @@
 #ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
 #include <svtools/syslocale.hxx>
 #endif
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
+#endif
 
 using namespace utl;
 using namespace dbaccess;
@@ -352,46 +355,44 @@ ORowSet::~ORowSet()
 }
 
 // -----------------------------------------------------------------------------
-Any ORowSet::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
+void ORowSet::getPropertyDefaultByHandle( sal_Int32 _nHandle, Any& _rDefault ) const
 {
-    Any aRet;
     switch( _nHandle )
     {
         case PROPERTY_ID_COMMANDTYPE:
-            aRet <<= static_cast<sal_Int32>(CommandType::COMMAND);
+            _rDefault <<= static_cast<sal_Int32>(CommandType::COMMAND);
             break;
         case PROPERTY_ID_IGNORERESULT:
-            aRet <<= sal_False;
+            _rDefault <<= sal_False;
             break;
         case PROPERTY_ID_APPLYFILTER:
-            aRet <<= sal_False;
+            _rDefault <<= sal_False;
             break;
         case PROPERTY_ID_ISMODIFIED:
-            aRet <<= sal_False;
+            _rDefault <<= sal_False;
             break;
         case PROPERTY_ID_ISBOOKMARKABLE:
-            aRet <<= sal_True;
+            _rDefault <<= sal_True;
             break;
         case PROPERTY_ID_CANUPDATEINSERTEDROWS:
-            aRet <<= sal_True;
+            _rDefault <<= sal_True;
             break;
         case PROPERTY_ID_RESULTSETTYPE:
-            aRet <<= ResultSetType::SCROLL_INSENSITIVE;
+            _rDefault <<= ResultSetType::SCROLL_INSENSITIVE;
             break;
         case PROPERTY_ID_RESULTSETCONCURRENCY:
-            aRet <<= ResultSetConcurrency::UPDATABLE;
+            _rDefault <<= ResultSetConcurrency::UPDATABLE;
             break;
         case PROPERTY_ID_FETCHDIRECTION:
-            aRet <<= FetchDirection::FORWARD;
+            _rDefault <<= FetchDirection::FORWARD;
             break;
         case PROPERTY_ID_FETCHSIZE:
-            aRet <<= static_cast<sal_Int32>(1);
+            _rDefault <<= static_cast<sal_Int32>(1);
             break;
         case PROPERTY_ID_USE_ESCAPE_PROCESSING:
-            aRet <<= sal_True;
+            _rDefault <<= sal_True;
             break;
     }
-    return aRet;
 }
 // -------------------------------------------------------------------------
 //  typedef ::comphelper::OPropertyArrayUsageHelper<ORowSet> ORowSet_Prop;
@@ -1712,6 +1713,8 @@ Reference< XResultSet > ORowSet::impl_prepareAndExecute_throw()
 // -----------------------------------------------------------------------------
 void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotification)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "frank.schoenheit@sun.com", "ORowSet::execute_NoApprove_NoNewConn" );
+
     // now we can dispose our old connection
     ::comphelper::disposeComponent(m_xOldConnection);
     m_xOldConnection = NULL;
@@ -1728,15 +1731,19 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
         if ( m_aUpdateTableName.getLength() )
             aComposedUpdateTableName = composeTableName( m_xActiveConnection->getMetaData(), m_aUpdateCatalogName, m_aUpdateSchemaName, m_aUpdateTableName, sal_False, ::dbtools::eInDataManipulation );
 
-        m_pCache = new ORowSetCache(xResultSet,m_xComposer.get(),m_xServiceManager,aComposedUpdateTableName,m_bModified,m_bNew);
-        if ( m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY )
         {
-            m_nPrivileges = Privilege::SELECT;
-            m_pCache->m_nPrivileges = Privilege::SELECT;
+            RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "frank.schoenheit@sun.com", "ORowSet::execute_NoApprove_NoNewConn: creating cache" );
+            m_pCache = new ORowSetCache(xResultSet,m_xComposer.get(),m_xServiceManager,aComposedUpdateTableName,m_bModified,m_bNew);
+            if ( m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY )
+            {
+                m_nPrivileges = Privilege::SELECT;
+                m_pCache->m_nPrivileges = Privilege::SELECT;
+            }
+            m_pCache->setMaxRowSize(m_nFetchSize);
+            m_aCurrentRow   = m_pCache->createIterator(this);
+            m_aOldRow = m_pCache->registerOldRow();
         }
-        m_pCache->setMaxRowSize(m_nFetchSize);
-        m_aCurrentRow   = m_pCache->createIterator(this);
-        m_aOldRow = m_pCache->registerOldRow();
+
         // now we can clear the parameter row
         m_aParameterRow.clear();
 
@@ -1759,6 +1766,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
 
         if(!m_xColumns.is())
         {
+            RTL_LOGFILE_CONTEXT_AUTHOR( aColumnCreateLog, "dbaccess", "frank.schoenheit@sun.com", "ORowSet::execute_NoApprove_NoNewConn::creating columns" );
             // use the meta data
             Reference<XResultSetMetaDataSupplier> xMetaSup(m_xStatement,UNO_QUERY);
             try
@@ -2128,7 +2136,7 @@ Reference< XNameAccess > ORowSet::impl_getTables_throw()
     else
     {
         if ( !m_xActiveConnection.is() )
-            throw SQLException(DBA_RES(RID_STR_CONNECTION_INVALID),*this,SQLSTATE_GENERAL,1000,Any() );
+                throw SQLException(DBA_RES(RID_STR_CONNECTION_INVALID),*this,SQLSTATE_GENERAL,1000,Any() );
 
         sal_Bool bCase = sal_True;
         try
@@ -2188,8 +2196,8 @@ sal_Bool ORowSet::impl_buildActiveCommand_throw()
         case CommandType::TABLE:
         {
             impl_resetTables_nothrow();
-            Reference< XNameAccess > xTables( impl_getTables_throw() );
 
+            Reference< XNameAccess > xTables( impl_getTables_throw() );
             if ( xTables->hasByName(m_aCommand) )
             {
                 Reference< XPropertySet > xTable;
@@ -2219,11 +2227,9 @@ sal_Bool ORowSet::impl_buildActiveCommand_throw()
             }
             else
             {
-                ::rtl::OUString sError(RTL_CONSTASCII_USTRINGPARAM("There exists no table with given name: \""));
-                sError += m_aCommand;
-                sError += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\"!"));
-                throwGenericSQLException(sError,*this);
-                // TODO: resource
+                String sMessage( DBACORE_RESSTRING( RID_STR_TABLE_DOES_NOT_EXIST ) );
+                sMessage.SearchAndReplaceAscii( "$table$", m_aCommand );
+                throwGenericSQLException(sMessage,*this);
             }
         }
         break;
@@ -2257,10 +2263,9 @@ sal_Bool ORowSet::impl_buildActiveCommand_throw()
                 }
                 else
                 {
-                    ::rtl::OUString sError(RTL_CONSTASCII_USTRINGPARAM("There exists no query with given name: \""));
-                    sError += m_aCommand;
-                    sError += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\"!"));
-                    throwGenericSQLException(sError,*this);
+                    String sMessage( DBACORE_RESSTRING( RID_STR_TABLE_DOES_NOT_EXIST ) );
+                    sMessage.SearchAndReplaceAscii( "$table$", m_aCommand );
+                    throwGenericSQLException(sMessage,*this);
                 }
             }
             else
