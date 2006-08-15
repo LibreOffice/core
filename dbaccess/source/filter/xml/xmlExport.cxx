@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlExport.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 16:00:35 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:48:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,12 @@
 #endif
 #ifndef _XMLOFF_NMSPMAP_HXX
 #include <xmloff/nmspmap.hxx>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
+#include <com/sun/star/beans/XPropertyState.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDB_XFORMDOCUMENTSSUPPLIER_HPP_
 #include <com/sun/star/sdb/XFormDocumentsSupplier.hpp>
@@ -307,60 +313,83 @@ void ODBExport::exportDataSource()
 
         sal_Bool bAutoIncrementEnabled = sal_True;
         TStringPair aAutoIncrement;
+
+        Reference< XPropertySet > xDataSourceSettings;
+        OSL_VERIFY( xProp->getPropertyValue( PROPERTY_SETTINGS ) >>= xDataSourceSettings );
+        Reference< XPropertyState > xSettingsState( xDataSourceSettings, UNO_QUERY );
+        Reference< XPropertySetInfo > xSettingsInfo;
+        if ( xDataSourceSettings.is() )
+            xSettingsInfo = xDataSourceSettings->getPropertySetInfo();
+        OSL_ENSURE( xSettingsState.is() && xSettingsInfo.is(), "ODBExport::exportDataSource: invalid Setting property of the data source!" );
+
         TDelimiter aDelimiter;
-        Sequence< PropertyValue> aInfo;
-        xProp->getPropertyValue(PROPERTY_INFO) >>= aInfo;
-        const PropertyValue* pIter = aInfo.getConstArray();
-        const PropertyValue* pEnd  = pIter + aInfo.getLength();
-        for(;pIter != pEnd;++pIter)
+        xSettingsState->getPropertyDefault( INFO_TEXTDELIMITER ) >>= aDelimiter.sText;
+        xSettingsState->getPropertyDefault( INFO_FIELDDELIMITER ) >>= aDelimiter.sField;
+        xSettingsState->getPropertyDefault( INFO_DECIMALDELIMITER ) >>= aDelimiter.sDecimal;
+        xSettingsState->getPropertyDefault( INFO_THOUSANDSDELIMITER ) >>= aDelimiter.sThousand;
+
+        // loop through the properties, and export only those which are not defaulted
+        Sequence< Property > aProperties = xSettingsInfo->getProperties();
+        const Property* pProperties = aProperties.getConstArray();
+        const Property* pPropertiesEnd = pProperties + aProperties.getLength();
+        for ( ; pProperties != pPropertiesEnd; ++pProperties )
         {
-            switch ( pIter->Value.getValueTypeClass() )
+            // for properties which are not REMOVEABLE, we care for their state, and
+            // only export them if they're not DEFAULTed
+            if ( ( pProperties->Attributes & PropertyAttribute::REMOVEABLE ) == 0 )
+            {
+                PropertyState ePropertyState = xSettingsState->getPropertyState( pProperties->Name );
+                if ( PropertyState_DEFAULT_VALUE == ePropertyState )
+                    continue;
+            }
+            Any aValue = xDataSourceSettings->getPropertyValue( pProperties->Name );
+            switch ( aValue.getValueTypeClass() )
             {
                 case TypeClass_STRING:
-                    pIter->Value >>= sValue;
+                    aValue >>= sValue;
                 break;
                 case TypeClass_DOUBLE:
                     // let the unit converter format is as string
-                    sValue = ::rtl::OUString::valueOf(getDouble(pIter->Value));
+                    sValue = ::rtl::OUString::valueOf( getDouble( aValue ) );
                     break;
                 case TypeClass_BOOLEAN:
-                    sValue = ::xmloff::token::GetXMLToken(getBOOL(pIter->Value) ? XML_TRUE : XML_FALSE);
+                    sValue = ::xmloff::token::GetXMLToken( getBOOL( aValue ) ? XML_TRUE : XML_FALSE );
                     break;
                 case TypeClass_BYTE:
                 case TypeClass_SHORT:
                 case TypeClass_LONG:
                     // let the unit converter format is as string
-                    sValue = ::rtl::OUString::valueOf(getINT32(pIter->Value));
+                    sValue = ::rtl::OUString::valueOf( getINT32( aValue ) );
                     break;
                 default:
                     break;
             }
 
             ::xmloff::token::XMLTokenEnum eToken = XML_TOKEN_INVALID;
-            if ( pIter->Name == INFO_JDBCDRIVERCLASS )
+            if ( pProperties->Name == INFO_JDBCDRIVERCLASS )
                 eToken = XML_JAVA_DRIVER_CLASS;
-            else if ( pIter->Name == INFO_TEXTFILEEXTENSION )
+            else if ( pProperties->Name == INFO_TEXTFILEEXTENSION )
                 eToken = XML_EXTENSION;
-            else if ( pIter->Name == INFO_TEXTFILEHEADER )
+            else if ( pProperties->Name == INFO_TEXTFILEHEADER )
                 eToken = XML_IS_FIRST_ROW_HEADER_LINE;
-            else if ( pIter->Name == INFO_SHOWDELETEDROWS )
+            else if ( pProperties->Name == INFO_SHOWDELETEDROWS )
                 eToken = XML_SHOW_DELETED;
-            else if ( pIter->Name == INFO_ALLOWLONGTABLENAMES )
+            else if ( pProperties->Name == INFO_ALLOWLONGTABLENAMES )
                 eToken = XML_IS_TABLE_NAME_LENGTH_LIMITED;
-            else if ( pIter->Name == INFO_ADDITIONALOPTIONS )
+            else if ( pProperties->Name == INFO_ADDITIONALOPTIONS )
                 eToken = XML_SYSTEM_DRIVER_SETTINGS;
-            else if ( pIter->Name == PROPERTY_ENABLESQL92CHECK )
+            else if ( pProperties->Name == PROPERTY_ENABLESQL92CHECK )
                 eToken = XML_ENABLE_SQL92_CHECK;
-            else if ( pIter->Name == INFO_APPEND_TABLE_ALIAS )
+            else if ( pProperties->Name == INFO_APPEND_TABLE_ALIAS )
                 eToken = XML_APPEND_TABLE_ALIAS_NAME;
-            else if ( pIter->Name == INFO_PARAMETERNAMESUBST )
+            else if ( pProperties->Name == INFO_PARAMETERNAMESUBST )
                 eToken = XML_PARAMETER_NAME_SUBSTITUTION;
-            else if ( pIter->Name == INFO_IGNOREDRIVER_PRIV )
+            else if ( pProperties->Name == INFO_IGNOREDRIVER_PRIV )
                 eToken = XML_IGNORE_DRIVER_PRIVILEGES;
-            else if ( pIter->Name == PROPERTY_BOOLEANCOMPARISONMODE )
+            else if ( pProperties->Name == PROPERTY_BOOLEANCOMPARISONMODE )
             {
                 sal_Int32 nValue = 0;
-                pIter->Value >>= nValue;
+                aValue >>= nValue;
                 if ( sValue.equalsAscii("0") )
                     sValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("equal-integer"));
                 else if ( sValue.equalsAscii("1") )
@@ -371,68 +400,72 @@ void ODBExport::exportDataSource()
                     sValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("equal-use-only-zero"));
                 eToken = XML_BOOLEAN_COMPARISON_MODE;
             }
-            else if ( pIter->Name == INFO_USECATALOG )
+            else if ( pProperties->Name == INFO_USECATALOG )
                 eToken = XML_USE_CATALOG;
-            else if ( pIter->Name == INFO_CONN_LDAP_BASEDN )
+            else if ( pProperties->Name == INFO_CONN_LDAP_BASEDN )
                 eToken = XML_BASE_DN;
-            else if ( pIter->Name == INFO_CONN_LDAP_ROWCOUNT )
+            else if ( pProperties->Name == INFO_CONN_LDAP_ROWCOUNT )
                 eToken = XML_MAX_ROW_COUNT;
-            else if ( pIter->Name == INFO_AUTORETRIEVEENABLED )
+            else if ( pProperties->Name == INFO_AUTORETRIEVEENABLED )
             {
-                pIter->Value >>= bAutoIncrementEnabled;
+                aValue >>= bAutoIncrementEnabled;
                 // special handling
                 continue;
             }
-            else if ( pIter->Name == INFO_AUTORETRIEVEVALUE )
+            else if ( pProperties->Name == INFO_AUTORETRIEVEVALUE )
             {
                 aAutoIncrement.first = sValue;
                 // special handling
                 continue;
             }
-            else if ( pIter->Name == PROPERTY_AUTOINCREMENTCREATION )
+            else if ( pProperties->Name == PROPERTY_AUTOINCREMENTCREATION )
             {
                 aAutoIncrement.second = sValue;
                 // special handling
                 continue;
             }
-            else if ( pIter->Name == INFO_TEXTDELIMITER )
+            else if ( pProperties->Name == INFO_TEXTDELIMITER )
             {
                 aDelimiter.sText = sValue;
+                aDelimiter.bUsed = true;
                 // special handling
                 continue;
             }
-            else if ( pIter->Name == INFO_FIELDDELIMITER )
+            else if ( pProperties->Name == INFO_FIELDDELIMITER )
             {
                 aDelimiter.sField = sValue;
+                aDelimiter.bUsed = true;
                 // special handling
                 continue;
             }
-            else if ( pIter->Name == INFO_DECIMALDELIMITER )
+            else if ( pProperties->Name == INFO_DECIMALDELIMITER )
             {
                 aDelimiter.sDecimal = sValue;
+                aDelimiter.bUsed = true;
                 // special handling
                 continue;
             }
-            else if ( pIter->Name == INFO_THOUSANDSDELIMITER )
+            else if ( pProperties->Name == INFO_THOUSANDSDELIMITER )
             {
                 aDelimiter.sThousand = sValue;
+                aDelimiter.bUsed = true;
                 // special handling
                 continue;
             }
-            else if ( pIter->Name == INFO_CHARSET )
+            else if ( pProperties->Name == INFO_CHARSET )
             {
                 m_sCharSet = sValue;
                 // special handling
                 continue;
             }
-            else if ( pIter->Name == INFO_PREVIEW )
-            {
-                m_aPreviewMode = pIter->Value;
-                continue;
-            }
             else
             {
-                m_aDataSourceSettings.push_back(makeAny(*pIter));
+                m_aDataSourceSettings.push_back( makeAny( PropertyValue(
+                    pProperties->Name,
+                    -1,
+                    aValue,
+                    PropertyState_DIRECT_VALUE
+                ) ) );
                 // special handling
                 continue;
             }
@@ -441,13 +474,8 @@ void ODBExport::exportDataSource()
         }
         if ( bAutoIncrementEnabled && (aAutoIncrement.first.getLength() || aAutoIncrement.second.getLength()) )
             m_aAutoIncrement.reset( new TStringPair(aAutoIncrement));
-        if (    aDelimiter.sText.getLength()
-            ||  aDelimiter.sField.getLength()
-            ||  aDelimiter.sDecimal.getLength()
-            ||  aDelimiter.sThousand.getLength() )
-        {
-            m_aDelimiter.reset( new TDelimiter(aDelimiter));
-        }
+        if ( aDelimiter.bUsed )
+            m_aDelimiter.reset( new TDelimiter( aDelimiter ) );
 
         SvXMLElementExport aElem(*this,XML_NAMESPACE_DB, XML_DATASOURCE, sal_True, sal_True);
 
@@ -554,7 +582,7 @@ void ODBExport::exportCharSet()
 // -----------------------------------------------------------------------------
 void ODBExport::exportDelimiter()
 {
-    if ( m_aDelimiter.get() )
+    if ( m_aDelimiter.get() && m_aDelimiter->bUsed )
     {
         AddAttribute(XML_NAMESPACE_DB, XML_FIELD,m_aDelimiter->sField);
         AddAttribute(XML_NAMESPACE_DB, XML_STRING,m_aDelimiter->sText);
