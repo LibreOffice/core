@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmPropBrw.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:52:39 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:39:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -322,24 +322,7 @@ FmPropBrw::FmPropBrw( const Reference< XMultiServiceFactory >& _xORB, SfxBinding
     }
 
     if (m_xMeAsFrame.is())
-    {
         _pMgr->SetFrame( m_xMeAsFrame );
-        try
-        {
-        }
-        catch (Exception&)
-        {
-            DBG_ERROR("FmPropBrw::FmPropBrw: could not create/initialize the browser controller!");
-            try
-            {
-                ::comphelper::disposeComponent( m_xBrowserController );
-                ::comphelper::disposeComponent( m_xBrowserComponentWindow );
-            }
-            catch(Exception&) { }
-            m_xBrowserController.clear();
-            m_xBrowserComponentWindow.clear();
-        }
-    }
 
 
     if ( m_xBrowserComponentWindow.is() )
