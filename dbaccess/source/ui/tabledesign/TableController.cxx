@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 16:08:00 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:57:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,6 +160,10 @@
 #include "UITools.hxx"
 #endif
 #include <boost/mem_fn.hpp>
+
+#ifndef _CPPUHELPER_EXC_HLP_HXX_
+#include <cppuhelper/exc_hlp.hxx>
+#endif
 
 extern "C" void SAL_CALL createRegistryInfo_OTableControl()
 {
@@ -528,7 +532,10 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
         OSL_ENSURE(sal_False, "OTableController::doSaveDoc: table could not be inserted (caught a generic exception)!");
     }
 
+    if ( aInfo.isValid() )
+        aInfo.prepend( String( ModuleRes( STR_TABLEDESIGN_SAVE_ERROR ) ) );
     showError(aInfo);
+
     if (aInfo.isValid() || bError)
     {
         if(!bAlter || bNew)
@@ -867,7 +874,7 @@ void OTableController::appendColumns(Reference<XColumnsSupplier>& _rxColSup,sal_
                 {
                     xColumns->getByName(pField->GetName()) >>= xColumn;
                     if(xColumn.is())
-                        dbaui::setColumnUiProperties(xColumn,pField);
+                        pField->copyColumnSettingsTo(xColumn);
                 }
                 else
                 {
@@ -1323,7 +1330,7 @@ void OTableController::alterColumns()
                     aColumns[pField->GetName()] = sal_True;
                     xColumns->getByName(pField->GetName()) >>= xColumn;
                     if(xColumn.is())
-                        dbaui::setColumnUiProperties(xColumn,pField);
+                        pField->copyColumnSettingsTo(xColumn);
                 }
                 else
                 {
@@ -1380,7 +1387,22 @@ void OTableController::alterColumns()
                         continue;
                     }
                 }
-                xDrop->dropByName(*pIter);
+                try
+                {
+                    xDrop->dropByName(*pIter);
+                }
+                catch (const SQLException&)
+                {
+                    String sError( ModuleRes( STR_TABLEDESIGN_COULD_NOT_DROP_COL ) );
+                    sError.SearchAndReplaceAscii( "$column$", *pIter );
+
+                    SQLException aNewException;
+                    aNewException.Message = sError;
+                    aNewException.SQLState = ::rtl::OUString::createFromAscii( "S1000" );
+                    aNewException.NextException = ::cppu::getCaughtException();
+
+                    throw aNewException;
+                }
             }
         }
     }
@@ -1408,7 +1430,7 @@ void OTableController::alterColumns()
                     aColumns[pField->GetName()] = sal_True;
                     xColumns->getByName(pField->GetName()) >>= xColumn;
                     if(xColumn.is())
-                        dbaui::setColumnUiProperties(xColumn,pField);
+                        pField->copyColumnSettingsTo(xColumn);
                 }
                 else
                 {
