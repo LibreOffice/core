@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HDriver.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:27:58 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:28:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -217,7 +217,7 @@ namespace connectivity
                 ::rtl::OUString sSystemPath;
                 osl_getSystemPathFromFileURL( sURL.pData, &sSystemPath.pData );
                 sal_Int32 nIndex = sSystemPath.lastIndexOf('.');
-                if ( nIndex == -1 )
+                if ( !sURL.getLength() )
                     throw SQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("File URL is not correct."))
                         ,*this
                         ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY0000"))
@@ -228,7 +228,7 @@ namespace connectivity
                 Sequence< PropertyValue > aConvertedProperties(8);
                 sal_Int32 nPos = 0;
                 aConvertedProperties[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("storage_key"));
-                ::rtl::OUString sConnPartURL = sSystemPath.copy(0,nIndex);
+                ::rtl::OUString sConnPartURL = sSystemPath.copy(0,::std::max<sal_Int32>(nIndex,sSystemPath.getLength()));
                 ::rtl::OUString sKey = StorageContainer::registerStorage(xStorage,sConnPartURL);
                 aConvertedProperties[nPos++].Value <<= sKey;
                 aConvertedProperties[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("storage_class_name"));
