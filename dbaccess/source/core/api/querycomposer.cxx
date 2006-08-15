@@ -4,9 +4,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:06:14 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:43:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XRESULTSETMETADATA_HPP_
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_SERVICENOTREGISTEREDEXCEPTION_HPP_
+#include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #endif
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
