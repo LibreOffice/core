@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentdefinition.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 15:21:45 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:45:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1372,9 +1372,9 @@ void ODocumentDefinition::generateNewImage(Any& _rImage)
     }
 }
 // -----------------------------------------------------------------------------
-Any ODocumentDefinition::getPropertyDefaultByHandle( sal_Int32 /*_nHandle*/ ) const
+void ODocumentDefinition::getPropertyDefaultByHandle( sal_Int32 /*_nHandle*/, Any& _rDefault ) const
 {
-    return Any();
+    _rDefault.clear();
 }
 // -----------------------------------------------------------------------------
 void ODocumentDefinition::fillDocumentInfo(Any& _rInfo)
