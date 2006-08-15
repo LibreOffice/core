@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XLoadable.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:28:37 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:34:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,9 @@ published interface XLoadable: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     /** loads the data.
+
+        <p>If the data is already loaded (->isLoaded), then the method returns silently.
+        In this case, you should use ->reload.</p>
      */
     [oneway] void load();
 
