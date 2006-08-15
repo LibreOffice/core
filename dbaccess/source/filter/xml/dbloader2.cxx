@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbloader2.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 15:59:31 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:47:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,9 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XFRAMESSUPPLIER_HPP_
+#include <com/sun/star/frame/XFramesSupplier.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XFRAMELOADER_HPP_
 #include <com/sun/star/frame/XFrameLoader.hpp>
@@ -514,7 +517,8 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
         {
             sal_Bool bInteractive = sal_False;
 
-            bCreateNew = _rURL.match(SvtModuleOptions().GetFactoryEmptyDocumentURL(SvtModuleOptions::E_DATABASE));
+            ::rtl::OUString sFactoryName = SvtModuleOptions().GetFactoryEmptyDocumentURL(SvtModuleOptions::E_DATABASE);
+            bCreateNew = sFactoryName.match(_rURL);
             Sequence<Any> aCreationArgs;
             if ( !bCreateNew )
             {
