@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 07:45:59 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:41:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1367,9 +1367,9 @@ ORowSetRow ORowSetBase::getOldRow(sal_Bool _bWasNew)
     return aOldValues;
 }
 // -----------------------------------------------------------------------------
-Any ORowSetBase::getPropertyDefaultByHandle( sal_Int32 /*_nHandle*/ ) const
+void ORowSetBase::getPropertyDefaultByHandle( sal_Int32 /*_nHandle*/, Any& _rDefault ) const
 {
-    return Any();
+    _rDefault.clear();
 }
 // -----------------------------------------------------------------------------
 void ORowSetBase::onDeleteRow( const Any& _rBookmark )
