@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableWindowListBox.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:29:11 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:56:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,7 +136,7 @@ SvLBoxEntry* OTableWindowListBox::GetEntryFromText( const String& rEntryText )
         {
             Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
             if(xMeta.is())
-                bCase = xMeta->storesMixedCaseQuotedIdentifiers();
+                bCase = xMeta->supportsMixedCaseQuotedIdentifiers();
         }
         while( pEntry )
         {
