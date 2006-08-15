@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 15:23:32 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:49:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,11 +126,17 @@ String RID_STR_TABLES_CONTAINER
     Text [ en-US ] = "Tables";
 };
 
-#define MID_ADMINISTRATE    \
-    Identifier = ID_TREE_ADMINISTRATE ; \
-    HelpId = HID_BROWSER_DSADMINISTRATE ;   \
+#define MID_EDIT_DATABASE   \
+    Identifier = ID_TREE_EDIT_DATABASE ;    \
+    HelpId = HID_BROWSER_EDIT_DATABASE; \
     Text [ de ] = "~Datenbankdatei bearbeiten ..." ;    \
     Text [ en-US ] = "Edit ~Database File..." ;\
+
+#define MID_ADMINISTRATE    \
+    Identifier = ID_TREE_ADMINISTRATE ; \
+    HelpId = HID_BROWSER_ADMINISTRATE;  \
+    Text [ de ] = "Registrierte Datenbanken ..." ;  \
+    Text [ en-US ] = "Registered databases ..." ;\
 
 #define MID_CLOSECONN   \
     Identifier = ID_TREE_CLOSE_CONN ;   \
@@ -144,34 +150,35 @@ String RID_STR_TABLES_CONTAINER
     Text [ de ] = "Verbindung e~rneuern" ;  \
     Text [ en-US ] = "~Refresh Connection" ;    \
 
-#define MITEMS_DEFAULT  \
-    MenuItem    \
-    {   \
-        MID_ADMINISTRATE    \
-    };  \
-    MenuItem    \
-    {   \
-        Separator = TRUE;   \
-    };  \
-    MenuItem    \
-    {   \
-        MID_CLOSECONN   \
-    };  \
-    MenuItem    \
-    {   \
-        MID_REFRESHCONN \
-    };  \
-    MenuItem    \
-    {   \
-        Separator = TRUE;   \
-    };
-
 Menu MENU_BROWSER_DEFAULTCONTEXT
 {
     ItemList =
     {
-        MITEMS_DEFAULT
+        MenuItem    \
+        {   \
+            MID_EDIT_DATABASE   \
+        };  \
+        MenuItem    \
+        {   \
+            MID_CLOSECONN   \
+        };  \
+        MenuItem    \
+        {   \
+            MID_REFRESHCONN \
+        };  \
+        MenuItem    \
+        {   \
+            Separator = TRUE;   \
+        };  \
         MenuItem { ITEM_EDIT_COPY       };
+        MenuItem    \
+        {   \
+            Separator = TRUE;   \
+        };  \
+        MenuItem    \
+        {   \
+            MID_ADMINISTRATE    \
+        };
     };
 };
 
