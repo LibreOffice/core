@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datasource.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:44:55 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:45:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,6 +186,7 @@ class ODatabaseSource   :public ModelDependentComponent // must be first
         ODatabaseSource_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
 private:
+
     OBookmarkContainer                      m_aBookmarks;
     ::cppu::OInterfaceContainerHelper       m_aFlushListeners;
 
