@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EConnection.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:28:00 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:28:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,26 +108,30 @@ void OFlatConnection::construct(const ::rtl::OUString& url,const Sequence< Prope
     for(;pBegin != pEnd;++pBegin)
     {
         if(!pBegin->Name.compareToAscii("HeaderLine"))
-            m_bHeaderLine = cppu::any2bool(pBegin->Value);
+            OSL_VERIFY( pBegin->Value >>= m_bHeaderLine );
         else if(!pBegin->Name.compareToAscii("FieldDelimiter"))
         {
             ::rtl::OUString aVal;
-            pBegin->Value >>= aVal; m_cFieldDelimiter = aVal.toChar();
+            OSL_VERIFY( pBegin->Value >>= aVal );
+            m_cFieldDelimiter = aVal.toChar();
         }
         else if(!pBegin->Name.compareToAscii("StringDelimiter"))
         {
             ::rtl::OUString aVal;
-            pBegin->Value >>= aVal; m_cStringDelimiter = aVal.toChar();
+            OSL_VERIFY( pBegin->Value >>= aVal );
+            m_cStringDelimiter = aVal.toChar();
         }
         else if(!pBegin->Name.compareToAscii("DecimalDelimiter"))
         {
             ::rtl::OUString aVal;
-            pBegin->Value >>= aVal; m_cDecimalDelimiter = aVal.toChar();
+            OSL_VERIFY( pBegin->Value >>= aVal );
+            m_cDecimalDelimiter = aVal.toChar();
         }
         else if(!pBegin->Name.compareToAscii("ThousandDelimiter"))
         {
             ::rtl::OUString aVal;
-            pBegin->Value >>= aVal; m_cThousandDelimiter = aVal.toChar();
+            OSL_VERIFY( pBegin->Value >>= aVal );
+            m_cThousandDelimiter = aVal.toChar();
         }
     }
 
