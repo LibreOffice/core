@@ -4,9 +4,9 @@
  *
  *  $RCSfile: connection.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:09:51 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:44:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -384,7 +384,7 @@ OConnection::OConnection(ODatabaseSource& _rDB
         try
         {
             xMeta = getMetaData();
-            bCase = xMeta.is() && xMeta->storesMixedCaseQuotedIdentifiers();
+            bCase = xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers();
         }
         catch(SQLException&)
         {
