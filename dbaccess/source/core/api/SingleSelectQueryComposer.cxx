@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SingleSelectQueryComposer.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:04:12 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:42:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,6 +113,9 @@
 #ifndef DBACCESS_SOURCE_CORE_INC_COMPOSERTOOLS_HXX
 #include "composertools.hxx"
 #endif
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
+#endif
 #include <memory>
 
 using namespace dbaccess;
@@ -158,6 +161,7 @@ namespace
     */
     const OSQLParseNode* parseStatement_throwError( OSQLParser& _rParser, const ::rtl::OUString& _rStatement, const Reference< XInterface >& _rxContext )
     {
+        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "frank.schoenheit@sun.com", "SingleSelectQueryComposer.cxx::parseStatement_throwError" );
         ::rtl::OUString aErrorMsg;
         const OSQLParseNode* pNewSqlParseNode = _rParser.parseTree( aErrorMsg, _rStatement );
         if ( !pNewSqlParseNode )
@@ -204,6 +208,7 @@ namespace
     void parseAndCheck_throwError( OSQLParser& _rParser, const ::rtl::OUString& _rStatement,
         OSQLParseTreeIterator& _rIterator, const Reference< XInterface >& _rxContext )
     {
+        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "frank.schoenheit@sun.com", "SingleSelectQueryComposer.cxx::parseAndCheck_throwError" );
         const OSQLParseNode* pNode = parseStatement_throwError( _rParser, _rStatement, _rxContext );
         checkForSingleSelect_throwError( pNode, _rIterator, _rxContext, _rStatement );
     }
@@ -283,7 +288,7 @@ OSingleSelectQueryComposer::OSingleSelectQueryComposer(const Reference< XNameAcc
                 {
                     if ( pBegin->Name == static_cast <rtl::OUString> (PROPERTY_BOOLEANCOMPARISONMODE) )
                     {
-                        pBegin->Value >>= m_nBoolCompareMode;
+                        OSL_VERIFY( pBegin->Value >>= m_nBoolCompareMode );
                     }
                 }
             }
@@ -352,6 +357,7 @@ sal_Int64 SAL_CALL OSingleSelectQueryComposer::getSomething( const Sequence< sal
 // -------------------------------------------------------------------------
 void SAL_CALL OSingleSelectQueryComposer::setQuery( const ::rtl::OUString& command ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "frank.schoenheit@sun.com", "OSingleSelectQueryComposer::setQuery" );
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -371,6 +377,7 @@ void SAL_CALL OSingleSelectQueryComposer::setQuery( const ::rtl::OUString& comma
 // -----------------------------------------------------------------------------
 void OSingleSelectQueryComposer::setQuery_Impl( const ::rtl::OUString& command )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "frank.schoenheit@sun.com", "OSingleSelectQueryComposer::setQuery_Impl" );
     // parse this
     parseAndCheck_throwError( m_aSqlParser, command, m_aSqlIterator, *this );
 
@@ -574,24 +581,25 @@ void SAL_CALL OSingleSelectQueryComposer::appendGroupByColumn( const Reference< 
 // -------------------------------------------------------------------------
 void SAL_CALL OSingleSelectQueryComposer::setElementaryQuery( const ::rtl::OUString& _rElementary ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "frank.schoenheit@sun.com", "OSingleSelectQueryComposer::setElementaryQuery" );
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
-
-    // parse and verify the statement, building a temporary iterator
-    OSQLParseTreeIterator aElementaryIterator( m_xConnection, m_xConnectionTables, m_aSqlParser, NULL );
-    parseAndCheck_throwError( m_aSqlParser, _rElementary, aElementaryIterator, *this );
 
     // remember the 4 current "additive" clauses
     ::std::vector< ::rtl::OUString > aAdditiveClauses( SQLPartCount );
     for ( SQLPart eLoopParts = Where; eLoopParts != SQLPartCount; incSQLPart( eLoopParts ) )
         aAdditiveClauses[ eLoopParts ] = getSQLPart( eLoopParts, m_aAdditiveIterator, sal_False );
 
-    // strip every filter/order/groupby/having clause, and set the pure select statement
-    // as query
-    setQuery( _rElementary );
+    // clear the tables and columns
+    clearCurrentCollections();
+    // set and parse the new query
+    setQuery_Impl( _rElementary );
 
-    // reset the the AdditiveIterator: m_aPureSelectSQL may have changed, and even if not,
-    // setQuery touched the m_aAdditiveIterator
+    // get the 4 elementary parts of the statement
+    for ( SQLPart eLoopParts = Where; eLoopParts != SQLPartCount; incSQLPart( eLoopParts ) )
+        m_aElementaryParts[ eLoopParts ] = getSQLPart( eLoopParts, m_aSqlIterator, sal_False );
+
+    // reset the the AdditiveIterator: m_aPureSelectSQL may have changed
     try
     {
         parseAndCheck_throwError( m_aSqlParser, composeStatementFromParts( aAdditiveClauses ), m_aAdditiveIterator, *this );
@@ -603,13 +611,6 @@ void SAL_CALL OSingleSelectQueryComposer::setElementaryQuery( const ::rtl::OUStr
         // every part of the additive statement should have passed other tests already, and should not
         // be able to cause any errors ... me thinks
     }
-
-    // get the four parts of the statement
-    for ( SQLPart eLoopParts = Where; eLoopParts != SQLPartCount; incSQLPart( eLoopParts ) )
-        m_aElementaryParts[ eLoopParts ] = getSQLPart( eLoopParts, aElementaryIterator, sal_False );
-
-    // temporary iterator not needed anymore
-    resetIterator( aElementaryIterator, true );
 }
 
 // -------------------------------------------------------------------------
@@ -718,7 +719,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getTables(  ) thro
         for(OSQLTables::const_iterator aIter = aTables.begin(); aIter != aTables.end();++aIter)
             aNames.push_back(aIter->first);
 
-        m_pTables = new OPrivateTables(aTables,m_xMetaData->storesMixedCaseQuotedIdentifiers(),*this,m_aMutex,aNames);
+        m_pTables = new OPrivateTables(aTables,m_xMetaData->supportsMixedCaseQuotedIdentifiers(),*this,m_aMutex,aNames);
     }
 
     return m_pTables;
@@ -743,7 +744,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
         SharedUNOComponent< XStatement, DisposableComponent > xStatement;
         SharedUNOComponent< XPreparedStatement, DisposableComponent > xPreparedStatement;
 
-        bCase = m_xMetaData->storesMixedCaseQuotedIdentifiers();
+        bCase = m_xMetaData->supportsMixedCaseQuotedIdentifiers();
         aSelectColumns = m_aSqlIterator.getSelectColumns();
 
         ::rtl::OUString sSql = m_aPureSelectSQL;
@@ -1285,7 +1286,7 @@ Reference< XIndexAccess > SAL_CALL OSingleSelectQueryComposer::getParameters(  )
         ::std::vector< ::rtl::OUString> aNames;
         for(OSQLColumns::const_iterator aIter = aCols->begin(); aIter != aCols->end();++aIter)
             aNames.push_back(getString((*aIter)->getPropertyValue(PROPERTY_NAME)));
-        m_aCurrentColumns[ParameterColumns] = new OPrivateColumns(aCols,m_xMetaData->storesMixedCaseQuotedIdentifiers(),*this,m_aMutex,aNames,sal_True);
+        m_aCurrentColumns[ParameterColumns] = new OPrivateColumns(aCols,m_xMetaData->supportsMixedCaseQuotedIdentifiers(),*this,m_aMutex,aNames,sal_True);
     }
 
     return m_aCurrentColumns[ParameterColumns];
@@ -1335,7 +1336,7 @@ Reference< XIndexAccess > OSingleSelectQueryComposer::setCurrentColumns( EColumn
         ::std::vector< ::rtl::OUString> aNames;
         for(OSQLColumns::const_iterator aIter = _rCols->begin(); aIter != _rCols->end();++aIter)
             aNames.push_back(getString((*aIter)->getPropertyValue(PROPERTY_NAME)));
-        m_aCurrentColumns[_eType] = new OPrivateColumns(_rCols,m_xMetaData->storesMixedCaseQuotedIdentifiers(),*this,m_aMutex,aNames,sal_True);
+        m_aCurrentColumns[_eType] = new OPrivateColumns(_rCols,m_xMetaData->supportsMixedCaseQuotedIdentifiers(),*this,m_aMutex,aNames,sal_True);
     }
 
     return m_aCurrentColumns[_eType];
