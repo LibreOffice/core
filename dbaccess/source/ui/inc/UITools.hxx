@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UITools.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:29:49 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:52:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -230,13 +230,6 @@ namespace dbaui
         @return the corresponding SvxCellHorJustify
     */
     SvxCellHorJustify mapTextJustify(const sal_Int32& _nAlignment);
-
-    /** fill a column with ui data of a field description
-        @param  _rxColumn   the column which should be filled
-        @param  _pFieldDesc the source of the data
-    */
-    void setColumnUiProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxColumn,
-                                const OFieldDescription* _pFieldDesc);
 
     /** convert Font to ::com::sun::star::awt::FontDescriptor
         @param  _rFont  Font to be converted
