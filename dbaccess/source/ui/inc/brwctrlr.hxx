@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brwctrlr.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:16:07 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:53:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -386,7 +386,7 @@ namespace dbaui
         void        addColumnListeners(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > & _xGridControlModel);
 
         // time to check the CUT/COPY/PASTE-slot-states
-        DECL_LINK( OnInvalidateClipboard, void* );
+        DECL_LINK( OnInvalidateClipboard, AutoTimer* );
         DECL_LINK( OnClipboardChanged, void* );
 
         // search callbacks
