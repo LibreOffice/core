@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MPreparedStatement.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:29:27 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:29:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,9 @@
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
-#include "MColumn.hxx"
+#ifndef _CONNECTIVITY_SDBCX_COLUMN_HXX_
+#include "connectivity/sdbcx/VColumn.hxx"
+#endif
 #include "MPreparedStatement.hxx"
 #ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
