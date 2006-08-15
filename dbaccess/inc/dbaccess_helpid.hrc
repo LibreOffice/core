@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbaccess_helpid.hrc,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:58:05 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:40:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,7 @@
 #define HID_BROWSER_COLUMNWIDTH                     (HID_DBACCESS_START + 62)
 #define HID_BROWSER_TABLEFORMAT                     (HID_DBACCESS_START + 63)
 #define HID_BROWSER_ROWHEIGHT                       (HID_DBACCESS_START + 64)
-#define HID_BROWSER_DSADMINISTRATE                  (HID_DBACCESS_START + 65)
+#define HID_BROWSER_EDIT_DATABASE                   (HID_DBACCESS_START + 65)
 #define HID_BROWSER_CLOSECONN                       (HID_DBACCESS_START + 66)
 #define HID_BROWSER_REFRESHCONN                     (HID_DBACCESS_START + 67)
 
@@ -248,10 +248,10 @@
 #define HID_DOCLINKEDIT_URL                         (HID_DBACCESS_START + 207)
 #define HID_QUERY_SQLMODE                           (HID_DBACCESS_START + 208)
 
-#define HID_BROWSER_REFRESH_REBUILDVIEW                 (HID_DBACCESS_START + 209)
+#define HID_BROWSER_REFRESH_REBUILDVIEW             (HID_DBACCESS_START + 209)
 #define HID_BROWSER_RENAME_ENTRY                    (HID_DBACCESS_START + 210)
 
-#define HID_QUERY_EDIT_JOINCONNECTION                   (HID_DBACCESS_START + 211)
+#define HID_QUERY_EDIT_JOINCONNECTION               (HID_DBACCESS_START + 211)
 
 #define HID_DLG_QRY_WINDOW_CONTROL                  (HID_DBACCESS_START + 212)
 #define HID_DLG_QRY_LEFT_TABLE                      (HID_DBACCESS_START + 213)
@@ -260,74 +260,74 @@
 #define HID_DLG_REL_CASC_DEL                        (HID_DBACCESS_START + 215)
 #define HID_DLG_REL_NO_CASC_DEL                     (HID_DBACCESS_START + 216)
 #define HID_DLG_REL_CASC_DEL_NULL                   (HID_DBACCESS_START + 217)
-#define HID_DLG_REL_CASC_DEL_DEFAULT                    (HID_DBACCESS_START + 218)
+#define HID_DLG_REL_CASC_DEL_DEFAULT                (HID_DBACCESS_START + 218)
 
 #define HID_DLG_REL_CASC_UPD                        (HID_DBACCESS_START + 219)
 #define HID_DLG_REL_NO_CASC_UPD                     (HID_DBACCESS_START + 220)
 #define HID_DLG_REL_CASC_UPD_NULL                   (HID_DBACCESS_START + 221)
-#define HID_DLG_REL_CASC_UPD_DEFAULT                    (HID_DBACCESS_START + 222)
+#define HID_DLG_REL_CASC_UPD_DEFAULT                (HID_DBACCESS_START + 222)
 #define HID_BROWSER_SAVE_RECORD                     (HID_DBACCESS_START + 223)
 #define HID_BROWSER_UNDO_RECORD                     (HID_DBACCESS_START + 224)
 
 #define HID_DSADMIN_SQL92CHECK                      (HID_DBACCESS_START + 225)
-#define HID_DSADMIN_AUTOINCREMENTVALUE                  (HID_DBACCESS_START + 226)
+#define HID_DSADMIN_AUTOINCREMENTVALUE              (HID_DBACCESS_START + 226)
 #define HID_DOCUMENT_CREATE_REPWIZ                  (HID_DBACCESS_START + 227)
 #define HID_TAB_AUTOINCREMENTVALUE                  (HID_DBACCESS_START + 228)
 #define HID_DSADMIN_RETRIEVE_AUTO                   (HID_DBACCESS_START + 229)
-#define HID_DSADMIN_AUTORETRIEVEENABLED                 (HID_DBACCESS_START + 230)
+#define HID_DSADMIN_AUTORETRIEVEENABLED             (HID_DBACCESS_START + 230)
 
 #define HID_DSADMIN_PAGE_MYSQL_ODBC                 (HID_DBACCESS_START + 231)
-#define HID_TAB_PAGE_TABLEPRIVILEGES                    (HID_DBACCESS_START + 232)
+#define HID_TAB_PAGE_TABLEPRIVILEGES                (HID_DBACCESS_START + 232)
 
 #define HID_DSADMIN_PAGE_USERDRIVER                 (HID_DBACCESS_START + 233)
 #define HID_DSADMIN_USER_DEFINED                    (HID_DBACCESS_START + 234)
 #define HID_DSADMIN_USERDEF_OPTIONS                 (HID_DBACCESS_START + 235)
 #define HID_DSADMIN_CHARSET_USERDEF                 (HID_DBACCESS_START + 236)
-#define HID_DSADMIN_USER_LDAP                           (HID_DBACCESS_START + 237)
+#define HID_DSADMIN_USER_LDAP                       (HID_DBACCESS_START + 237)
 #define HID_DSADMIN_PWDREC_LDAP                     (HID_DBACCESS_START + 238)
 #define HID_DSADMIN_USESSL_LDAP                     (HID_DBACCESS_START + 239)
 #define HID_BROWSER_QUERY_WIZARD                    (HID_DBACCESS_START + 237)
 
-#define HID_DLG_RENAME                          (HID_DBACCESS_START + 237)
+#define HID_DLG_RENAME                              (HID_DBACCESS_START + 237)
 
 #define HID_DSADMIN_PAGE_MYSQL_JDBC                 (HID_DBACCESS_START + 238)
 
 #define HID_DSADMIN_DBASE_PATH                      (HID_DBACCESS_START + 239)
 #define HID_DSADMIN_MYSQL_DATABASE                  (HID_DBACCESS_START + 240)
-#define HID_DSADMIN_MYSQL_ODBC_DATASOURCE               (HID_DBACCESS_START + 241)
+#define HID_DSADMIN_MYSQL_ODBC_DATASOURCE           (HID_DBACCESS_START + 241)
 #define HID_DSADMIN_ODBC_DATASOURCE                 (HID_DBACCESS_START + 242)
 #define HID_DSADMIN_ADABAS_DATABASE                 (HID_DBACCESS_START + 243)
-#define HID_DSADMIN_MSACCESS_MDB_FILE                   (HID_DBACCESS_START + 244)
+#define HID_DSADMIN_MSACCESS_MDB_FILE               (HID_DBACCESS_START + 244)
 #define HID_DSADMIN_PAGE_MSACCESS                   (HID_DBACCESS_START + 245)
 #define HID_DSADMIN_FLAT_PATH                       (HID_DBACCESS_START + 246)
 #define HID_DSADMIN_CALC_PATH                       (HID_DBACCESS_START + 247)
 #define HID_DSADMIN_ADVANCED                        (HID_DBACCESS_START + 248)
-#define HID_DSADMIN_BOOLEANCOMPARISON                   (HID_DBACCESS_START + 249)
+#define HID_DSADMIN_BOOLEANCOMPARISON               (HID_DBACCESS_START + 249)
 #define HID_DSADMIN_ORACLE_DATABASE                 (HID_DBACCESS_START + 250)
 
-#define UID_APP_VIEW                            (HID_DBACCESS_START + 251)
-#define HID_APP_TABLE_TREE                      (HID_DBACCESS_START + 252)
-#define HID_APP_FORM_TREE                       (HID_DBACCESS_START + 253)
-#define HID_APP_QUERY_TREE                      (HID_DBACCESS_START + 254)
-#define HID_APP_REPORT_TREE                     (HID_DBACCESS_START + 255)
-#define UID_APP_DETAIL_VIEW                     (HID_DBACCESS_START + 256)
+#define UID_APP_VIEW                                (HID_DBACCESS_START + 251)
+#define HID_APP_TABLE_TREE                          (HID_DBACCESS_START + 252)
+#define HID_APP_FORM_TREE                           (HID_DBACCESS_START + 253)
+#define HID_APP_QUERY_TREE                          (HID_DBACCESS_START + 254)
+#define HID_APP_REPORT_TREE                         (HID_DBACCESS_START + 255)
+#define UID_APP_DETAIL_VIEW                         (HID_DBACCESS_START + 256)
 #define UID_APP_VIEW_VERT_SPLIT                     (HID_DBACCESS_START + 257)
 #define UID_APP_VIEW_BORDER_WIN                     (HID_DBACCESS_START + 258)
 #define HID_APP_CREATION_LIST                       (HID_DBACCESS_START + 259)
-#define UID_APP_SWAP_VIEW                       (HID_DBACCESS_START + 260)
+#define UID_APP_SWAP_VIEW                           (HID_DBACCESS_START + 260)
 #define UID_DLG_TABLE_FILTER                        (HID_DBACCESS_START + 261)
 #define HID_APP_SWAP_ICONCONTROL                    (HID_DBACCESS_START + 262)
 
-#define HID_DSADMIN_APPENDTABLEALIAS                    (HID_DBACCESS_START + 263)
-#define HID_DSADMIN_PARAMETERNAMESUBST                  (HID_DBACCESS_START + 264)
-#define HID_DSADMIN_IGNOREDRIVER_PRIV                   (HID_DBACCESS_START + 265)
+#define HID_DSADMIN_APPENDTABLEALIAS                (HID_DBACCESS_START + 263)
+#define HID_DSADMIN_PARAMETERNAMESUBST              (HID_DBACCESS_START + 264)
+#define HID_DSADMIN_IGNOREDRIVER_PRIV               (HID_DBACCESS_START + 265)
 #define HID_DSADMIN_HOSTNAME                        (HID_DBACCESS_START + 266)
 #define HID_DSADMIN_PORTNUMBER                      (HID_DBACCESS_START + 267)
 
-#define HID_APP_HELP_TEXT                       (HID_DBACCESS_START + 268)
+#define HID_APP_HELP_TEXT                           (HID_DBACCESS_START + 268)
 #define HID_EXPLORERDLG_COLLECTION                  (HID_DBACCESS_START + 269)
 #define UID_APP_DATABASE_VIEW                       (HID_DBACCESS_START + 270)
-#define UID_APP_TASKS_VIEW                      (HID_DBACCESS_START + 271)
+#define UID_APP_TASKS_VIEW                          (HID_DBACCESS_START + 271)
 #define UID_APP_CONTAINER_VIEW                      (HID_DBACCESS_START + 272)
 #define UID_APP_TASKS_WINDOW                        (HID_DBACCESS_START + 273)
 #define HID_APP_DESCRIPTION_TEXT                    (HID_DBACCESS_START + 274)
@@ -355,6 +355,8 @@
 #define HID_DSADMIN_SCHEMA                          (HID_DBACCESS_START + 293)
 #define HID_DSADMIN_IGNOREINDEXAPPENDIX             (HID_DBACCESS_START + 294)
 #define HID_DSADMIN_DOSLINEENDS                     (HID_DBACCESS_START + 295)
+
+#define HID_BROWSER_ADMINISTRATE                    (HID_DBACCESS_START + 296)
 
 #define HID_PAGE_DBWIZARD_GENERALPAGE                           (HID_DBACCESS_START + 300)
 #define HID_PAGE_DBWIZARD_GENERAL_RB_CREATEDBDATABASE           (HID_DBACCESS_START + 301)
