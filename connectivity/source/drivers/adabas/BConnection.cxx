@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BConnection.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:21:30 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:27:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,7 +126,7 @@ SQLRETURN OAdabasConnection::Construct( const ::rtl::OUString& url,const Sequenc
         else if(0 == pBegin->Name.compareToAscii("CharSet"))
         {
             ::rtl::OUString sIanaName;
-            pBegin->Value >>= sIanaName;
+            OSL_VERIFY( pBegin->Value >>= sIanaName );
 
             ::dbtools::OCharsetMap aLookupIanaName;
             ::dbtools::OCharsetMap::const_iterator aLookup = aLookupIanaName.find(sIanaName, ::dbtools::OCharsetMap::IANA());
