@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datasettings.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:05:13 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:43:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -261,58 +261,76 @@ ODataSettings_Base::ODataSettings_Base(const ODataSettings_Base& _rSource)
     m_nFontRelief   = _rSource.m_nFontRelief;
 }
 // -----------------------------------------------------------------------------
-Any ODataSettings::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
+void ODataSettings::getPropertyDefaultByHandle( sal_Int32 _nHandle, Any& _rDefault ) const
 {
-    Any aRet;
     static ::com::sun::star::awt::FontDescriptor aFD = ::comphelper::getDefaultFont();
     switch( _nHandle )
     {
         case PROPERTY_ID_FILTER:
         case PROPERTY_ID_ORDER:
-            aRet <<= ::rtl::OUString();         break;
+            _rDefault <<= ::rtl::OUString();
+            break;
         case PROPERTY_ID_FONT:
-            aRet <<= aFD;           break;
+            _rDefault <<= ::comphelper::getDefaultFont();
+            break;
         case PROPERTY_ID_APPLYFILTER:
-            aRet <<= sal_False;         break;
+            _rDefault <<= sal_False;
+            break;
         case PROPERTY_ID_TEXTRELIEF:
-            aRet <<= ::com::sun::star::awt::FontRelief::NONE;           break;
+            _rDefault <<= ::com::sun::star::awt::FontRelief::NONE;
+            break;
         case PROPERTY_ID_TEXTEMPHASIS:
-            aRet <<= ::com::sun::star::awt::FontEmphasisMark::NONE;         break;
+            _rDefault <<= ::com::sun::star::awt::FontEmphasisMark::NONE;
+            break;
         case PROPERTY_ID_FONTNAME:
-            aRet <<= aFD.Name;          break;
+            _rDefault <<= aFD.Name;
+            break;
         case PROPERTY_ID_FONTHEIGHT:
-            aRet <<= aFD.Height;break;
+            _rDefault <<= aFD.Height;
+            break;
         case PROPERTY_ID_FONTWIDTH:
-            aRet <<= aFD.Width;break;
+            _rDefault <<= aFD.Width;
+            break;
         case PROPERTY_ID_FONTSTYLENAME:
-            aRet <<= aFD.StyleName;break;
+            _rDefault <<= aFD.StyleName;
+            break;
         case PROPERTY_ID_FONTFAMILY:
-            aRet <<= aFD.Family;break;
+            _rDefault <<= aFD.Family;
+            break;
         case PROPERTY_ID_FONTCHARSET:
-            aRet <<= aFD.CharSet;break;
+            _rDefault <<= aFD.CharSet;
+            break;
         case PROPERTY_ID_FONTPITCH:
-            aRet <<= aFD.Pitch;break;
+            _rDefault <<= aFD.Pitch;
+            break;
         case PROPERTY_ID_FONTCHARWIDTH:
-            aRet <<= aFD.CharacterWidth;break;
+            _rDefault <<= aFD.CharacterWidth;
+            break;
         case PROPERTY_ID_FONTWEIGHT:
-            aRet <<= aFD.Weight;break;
+            _rDefault <<= aFD.Weight;
+            break;
         case PROPERTY_ID_FONTSLANT:
-            aRet <<= aFD.Slant; break;
+            _rDefault <<= aFD.Slant;
+            break;
         case PROPERTY_ID_FONTUNDERLINE:
-            aRet <<= aFD.Underline;break;
+            _rDefault <<= aFD.Underline;
+            break;
         case PROPERTY_ID_FONTSTRIKEOUT:
-            aRet <<= aFD.Strikeout;break;
+            _rDefault <<= aFD.Strikeout;
+            break;
         case PROPERTY_ID_FONTORIENTATION:
-            aRet <<= aFD.Orientation;break;
+            _rDefault <<= aFD.Orientation;
+            break;
         case PROPERTY_ID_FONTKERNING:
-            aRet <<= aFD.Kerning;break;
+            _rDefault <<= aFD.Kerning;
+            break;
         case PROPERTY_ID_FONTWORDLINEMODE:
-            aRet <<= aFD.WordLineMode;break;
+            _rDefault <<= aFD.WordLineMode;
+            break;
         case PROPERTY_ID_FONTTYPE:
-            aRet <<= aFD.Type;break;
+            _rDefault <<= aFD.Type;
+            break;
     }
-
-    return aRet;
 }
 //........................................................................
 }   // namespace dbaccess
