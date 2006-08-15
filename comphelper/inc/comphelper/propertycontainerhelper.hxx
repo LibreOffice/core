@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertycontainerhelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:35:58 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 11:03:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,9 @@
 #ifndef _COM_SUN_STAR_UNO_TYPE_HXX_
 #include <com/sun/star/uno/Type.hxx>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTY_HPP_
+#include <com/sun/star/beans/Property.hpp>
+#endif
 #ifndef __SGI_STL_VECTOR
 #include <vector>
 #endif
@@ -53,6 +56,36 @@
 namespace comphelper
 {
 //.........................................................................
+
+// infos about one single property
+struct COMPHELPER_DLLPRIVATE PropertyDescription
+{
+    // the possibilities where a property holding object may be located
+    enum LocationType
+    {
+        ltDerivedClassRealType,     // within the derived class, it's a "real" (non-Any) type
+        ltDerivedClassAnyType,      // within the derived class, it's a <type scope="com.sun.star.uno">Any</type>
+        ltHoldMyself                // within m_aHoldProperties
+    };
+    // the location of an object holding a property value :
+    union LocationAccess
+    {
+        void*       pDerivedClassMember;        // a pointer to a member of an object of a derived class
+        sal_Int32   nOwnClassVectorIndex;       // an index within m_aHoldProperties
+    };
+
+    ::com::sun::star::beans::Property
+                        aProperty;
+    LocationType        eLocated;       // where is the object containing the value located ?
+    LocationAccess      aLocation;      // access to the property value
+
+    PropertyDescription()
+        :aProperty( ::rtl::OUString(), -1, ::com::sun::star::uno::Type(), 0 )
+        ,eLocated( ltHoldMyself )
+    {
+        aLocation.nOwnClassVectorIndex = -1;
+    }
+};
 
 //==========================================================================
 //= OPropertyContainerHelper
@@ -74,64 +107,13 @@ public:
     // (the following struct needs to be public because of the SUNPRO5 compiler. Else it does not
     // acceppt the typedef below, which is using this struct).
 
-    // infos about one single property
-    struct PropertyDescription
-    {
-        // the possibilities where a property holding object may be located
-        enum LocationType
-        {
-            ltDerivedClassRealType,     // within the derived class, it's a "real" (non-Any) type
-            ltDerivedClassAnyType,      // within the derived class, it's a <type scope="com.sun.star.uno">Any</type>
-            ltHoldMyself                // within m_aHoldProperties
-        };
-        // the location of an object holding a property value :
-        union LocationAccess
-        {
-            void*       pDerivedClassMember;        // a pointer to a member of an object of a derived class
-            sal_Int32   nOwnClassVectorIndex;       // an index within m_aHoldProperties
-        };
-
-        ::rtl::OUString     sName;          // the name
-        sal_Int32           nHandle;        // the handle
-        sal_Int32           nAttributes;    // the attributes
-        LocationType        eLocated;       // where is the object containing the value located ?
-        LocationAccess      aLocation;      // access to the property value
-        ::com::sun::star::uno::Type
-                            aType;          // the type
-
-        PropertyDescription() : nHandle(-1), nAttributes(0), eLocated(ltHoldMyself)
-            { aLocation.nOwnClassVectorIndex = -1; }
-    };
-
-private:
-    // comparing two property descriptions
-    struct COMPHELPER_DLLPRIVATE PropertyDescriptionCompareByHandle : public ::std::binary_function< PropertyDescription, PropertyDescription, bool >
-    {
-        bool operator() (const PropertyDescription& x, const PropertyDescription& y) const
-        {
-            return x.nHandle < y.nHandle;
-        }
-    };
-    // comparing two property descriptions
-    struct COMPHELPER_DLLPRIVATE PropertyDescriptionHandleCompare : public ::std::binary_function< PropertyDescription, sal_Int32, bool >
-    {
-        bool operator() (const PropertyDescription& x, const sal_Int32& y) const
-        {
-            return x.nHandle < y;
-        }
-        bool operator() (const sal_Int32& x, const PropertyDescription& y) const
-        {
-            return x < y.nHandle;
-        }
-    };
-
 private:
     typedef ::std::vector< PropertyDescription >    Properties;
     typedef Properties::iterator                    PropertiesIterator;
     typedef Properties::const_iterator              ConstPropertiesIterator;
     Properties      m_aProperties;
 
-    sal_Bool        m_bAlreadyAccessed;     // no addition of properties allowed anymore if this is sal_True
+    sal_Bool        m_bUnused;
 
 protected:
     OPropertyContainerHelper();
@@ -175,10 +157,20 @@ protected:
                                         Else it must be a pointer to an object of the type described by _rType.
     */
     void    registerPropertyNoMember(const ::rtl::OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes,
-        const ::com::sun::star::uno::Type& _rType, void* _pInitialValue);
+        const ::com::sun::star::uno::Type& _rType, const void* _pInitialValue);
+
+    /** revokes a previously registered property
+        @throw  com::sun::star::beans::UnknownPropertyException
+            if no property with the given handle is registered
+    */
+    void    revokeProperty( sal_Int32 _nHandle );
+
 
     /// checkes whether a property with the given handle has been registered
     sal_Bool    isRegisteredProperty( sal_Int32 _nHandle ) const;
+
+    /// checkes whether a property with the given name has been registered
+    sal_Bool    isRegisteredProperty( const ::rtl::OUString& _rName ) const;
 
 
     // helper for implementing OPropertySetHelper overridables
@@ -204,8 +196,10 @@ protected:
 // helper
     /** appends the descriptions of all properties which were registered 'til that moment to the given sequence,
         keeping the array sorted (by name)
-        @precond the given sequence is already sorted by name
-        @param      _rProps     initial property sequence which is to be extended
+        @precond
+            the given sequence is already sorted by name
+        @param  _rProps
+            initial property sequence which is to be extended
     */
     void    describeProperties(::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps) const;
 
@@ -215,6 +209,13 @@ protected:
         some settings your base class did.
     */
     void    modifyAttributes(sal_Int32 _nHandle, sal_Int32 _nAddAttrib, sal_Int32 _nRemoveAttrib);
+
+    /** retrieves the description for a registered property
+        @throw  com::sun::star::beans::UnknownPropertyException
+            if no property with the given name is registered
+    */
+    const ::com::sun::star::beans::Property&
+            getProperty( const ::rtl::OUString& _rName ) const;
 
 private:
     /// insertion of _rProp into m_aProperties, keeping the sort order
