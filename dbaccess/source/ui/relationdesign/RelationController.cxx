@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RelationController.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:45:47 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:56:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -533,7 +533,7 @@ void ORelationController::loadTableData(const Any& _aTable)
 sal_Bool ORelationController::existsTable(const ::rtl::OUString& _rComposedTableName)  const
 {
     Reference<XDatabaseMetaData> xMeta = getConnection()->getMetaData();
-    ::comphelper::UStringMixEqual bCase(xMeta.is() && xMeta->storesMixedCaseQuotedIdentifiers());
+    ::comphelper::UStringMixEqual bCase(xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers());
     ::std::vector<OTableWindowData*>::const_iterator aIter = m_vTableData.begin();
     for(;aIter != m_vTableData.end();++aIter)
     {
