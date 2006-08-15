@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FieldDescriptions.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:31:55 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:57:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,9 @@
 #ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
 #endif
+#ifndef _COM_SUN_STAR_UTIL_NUMBERFORMAT_HPP_
+#include <com/sun/star/util/NumberFormat.hpp>
+#endif
 
 #define DEFAULT_VARCHAR_PRECSION    50
 #define DEFAULT_OTHER_PRECSION      16
@@ -70,6 +73,7 @@ using namespace dbaui;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::util;
 
 //========================================================================
 // class OFieldDescription
@@ -87,6 +91,7 @@ OFieldDescription::OFieldDescription()
     ,m_bIsAutoIncrement(sal_False)
     ,m_bIsPrimaryKey(sal_False)
     ,m_bIsCurrency(sal_False)
+    ,m_bHidden(sal_False)
 {
     DBG_CTOR(OFieldDescription,NULL);
 }
@@ -107,6 +112,7 @@ OFieldDescription::OFieldDescription( const OFieldDescription& rDescr )
     ,m_eHorJustify(rDescr.m_eHorJustify)
     ,m_bIsAutoIncrement(rDescr.m_bIsAutoIncrement)
     ,m_bIsPrimaryKey(rDescr.m_bIsPrimaryKey)
+    ,m_bHidden(rDescr.m_bHidden)
 {
     DBG_CTOR(OFieldDescription,NULL);
 }
@@ -141,6 +147,7 @@ OFieldDescription::OFieldDescription(   const ::rtl::OUString&  _sName,
     ,m_bIsAutoIncrement(_bIsAutoIncrement)
     ,m_bIsPrimaryKey(_bIsPrimaryKey)
     ,m_bIsCurrency(_bIsCurrency)
+    ,m_bHidden(sal_False)
 {
      DBG_DTOR(OFieldDescription,NULL);
 }
@@ -162,6 +169,7 @@ OFieldDescription::OFieldDescription(const Reference< XPropertySet >& xAffectedC
     ,m_bIsAutoIncrement(sal_False)
     ,m_bIsPrimaryKey(sal_False)
     ,m_bIsCurrency(sal_False)
+    ,m_bHidden(sal_False)
 {
     DBG_CTOR(OFieldDescription,NULL);
     OSL_ENSURE(xAffectedCol.is(),"PropetySet can notbe null!");
@@ -199,6 +207,12 @@ OFieldDescription::OFieldDescription(const Reference< XPropertySet >& xAffectedC
                     SetIsNullable(::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_ISNULLABLE)));
                 if(xPropSetInfo->hasPropertyByName(PROPERTY_FORMATKEY))
                     SetFormatKey(::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_FORMATKEY)));
+                if(xPropSetInfo->hasPropertyByName(PROPERTY_RELATIVEPOSITION))
+                    m_aRelativePosition = xAffectedCol->getPropertyValue(PROPERTY_RELATIVEPOSITION);
+                if(xPropSetInfo->hasPropertyByName(PROPERTY_WIDTH))
+                    m_aWidth = xAffectedCol->getPropertyValue(PROPERTY_WIDTH);
+                if(xPropSetInfo->hasPropertyByName(PROPERTY_HIDDEN))
+                    xAffectedCol->getPropertyValue(PROPERTY_HIDDEN) >>= m_bHidden;
                 if(xPropSetInfo->hasPropertyByName(PROPERTY_ALIGN))
                     SetHorJustify( ::dbaui::mapTextJustify(::comphelper::getINT16(xAffectedCol->getPropertyValue(PROPERTY_ALIGN))));
                 if(xPropSetInfo->hasPropertyByName(PROPERTY_ISAUTOINCREMENT))
@@ -621,4 +635,27 @@ void OFieldDescription::SetTypeName(const ::rtl::OUString& _sTypeName)
     }
 }
 // -----------------------------------------------------------------------------
+void OFieldDescription::copyColumnSettingsTo(const Reference< XPropertySet >& _rxColumn)
+{
+    if ( _rxColumn.is() )
+    {
+        Reference<XPropertySetInfo> xInfo = _rxColumn->getPropertySetInfo();
 
+        if ( GetFormatKey() != NumberFormat::ALL && xInfo->hasPropertyByName(PROPERTY_FORMATKEY) )
+            _rxColumn->setPropertyValue(PROPERTY_FORMATKEY,makeAny(GetFormatKey()));
+        if ( GetHorJustify() != SVX_HOR_JUSTIFY_STANDARD && xInfo->hasPropertyByName(PROPERTY_ALIGN) )
+            _rxColumn->setPropertyValue(PROPERTY_ALIGN,makeAny(dbaui::mapTextAllign(GetHorJustify())));
+        if ( GetDescription().getLength() && xInfo->hasPropertyByName(PROPERTY_HELPTEXT) )
+            _rxColumn->setPropertyValue(PROPERTY_HELPTEXT,makeAny(GetDescription()));
+        if ( GetControlDefault().hasValue() && xInfo->hasPropertyByName(PROPERTY_CONTROLDEFAULT) )
+            _rxColumn->setPropertyValue(PROPERTY_CONTROLDEFAULT,GetControlDefault());
+
+        if(xInfo->hasPropertyByName(PROPERTY_RELATIVEPOSITION))
+            _rxColumn->setPropertyValue(PROPERTY_RELATIVEPOSITION,m_aRelativePosition);
+        if(xInfo->hasPropertyByName(PROPERTY_WIDTH))
+            _rxColumn->setPropertyValue(PROPERTY_WIDTH,m_aWidth);
+        if(xInfo->hasPropertyByName(PROPERTY_HIDDEN))
+            _rxColumn->setPropertyValue(PROPERTY_HIDDEN,makeAny(m_bHidden));
+    }
+}
+// -----------------------------------------------------------------------------
