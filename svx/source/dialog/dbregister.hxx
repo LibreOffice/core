@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbregister.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:55:14 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:38:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,9 @@
 #ifndef SVX_CONTROLL_FUCUS_HELPER_HXX
 #include "ControlFocusHelper.hxx"
 #endif
-
+#ifndef _BASEDLGS_HXX
+#include <sfx2/basedlgs.hxx>
+#endif
 
 class SvLBoxEntry;
 namespace svx
@@ -133,6 +135,40 @@ namespace svx
         virtual BOOL        FillItemSet( SfxItemSet& rSet );
         virtual void        Reset( const SfxItemSet& rSet );
         virtual void        FillUserData();
+    };
+
+    //====================================================================
+    //= RegistrationItemSetHolder
+    //====================================================================
+    /** helper for DatabaseRegistrationDialog
+
+        Necessary so that DatabaseRegistrationDialog is self-contained, i.e. always reflects
+        the current registration state.
+    */
+    class RegistrationItemSetHolder
+    {
+    private:
+        SfxItemSet  m_aRegistrationItems;
+
+    protected:
+        RegistrationItemSetHolder( const SfxItemSet& _rMasterSet );
+        ~RegistrationItemSetHolder();
+
+    protected:
+        const SfxItemSet& getRegistrationItems() const { return m_aRegistrationItems; }
+    };
+
+    //====================================================================
+    //= DatabaseRegistrationDialog
+    //====================================================================
+    class DatabaseRegistrationDialog    :public RegistrationItemSetHolder
+                                        ,public SfxSingleTabDialog
+    {
+    public:
+        DatabaseRegistrationDialog( Window* pParent, const SfxItemSet& rAttr );
+        ~DatabaseRegistrationDialog();
+
+        virtual short   Execute();
     };
 
 //........................................................................
