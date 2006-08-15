@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlExport.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 15:22:19 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:48:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,13 +123,16 @@ using namespace ::com::sun::star::xml::sax;
 class ODBExport : public SvXMLExport
 {
     typedef ::std::pair< ::rtl::OUString ,::rtl::OUString> TStringPair;
-    typedef struct
+    struct TDelimiter
     {
         ::rtl::OUString sText;
         ::rtl::OUString sField;
         ::rtl::OUString sDecimal;
         ::rtl::OUString sThousand;
-    } TDelimiter;
+        bool            bUsed;
+
+        TDelimiter() : bUsed( false ) { }
+    };
     typedef ::std::map< Reference<XPropertySet> ,::rtl::OUString > TPropertyStyleMap;
 
     ::std::auto_ptr< TStringPair >                  m_aAutoIncrement;
@@ -137,7 +140,6 @@ class ODBExport : public SvXMLExport
     ::std::vector< Any>                             m_aDataSourceSettings;
     TPropertyStyleMap                               m_aAutoStyleNames;
     ::rtl::OUString                                 m_sCharSet;
-    Any                                             m_aPreviewMode;
     UniReference < SvXMLExportPropertyMapper>       m_xExportHelper;
     UniReference < SvXMLExportPropertyMapper>       m_xColumnExportHelper;
 
