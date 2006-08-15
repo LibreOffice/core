@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbregister.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:06:10 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:38:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,6 +102,9 @@
 #endif
 #include "dialmgr.hxx"
 
+#ifndef SVX_DBREGISTEREDNAMESCONFIG_HXX
+#include "dbregisterednamesconfig.hxx"
+#endif
 
 #define TAB_WIDTH1      80
 #define TAB_WIDTH_MIN   10
@@ -117,6 +120,46 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
 using namespace ::svt;
+
+// class RegistrationItemSetHolder  -------------------------------------------------
+
+RegistrationItemSetHolder::RegistrationItemSetHolder( const SfxItemSet& _rMasterSet )
+    :m_aRegistrationItems( _rMasterSet )
+{
+    DbRegisteredNamesConfig::GetOptions( m_aRegistrationItems );
+}
+
+RegistrationItemSetHolder::~RegistrationItemSetHolder()
+{
+}
+
+// class DatabaseRegistrationDialog  ------------------------------------------------
+
+DatabaseRegistrationDialog::DatabaseRegistrationDialog( Window* pParent, const SfxItemSet& rInAttrs )
+    :RegistrationItemSetHolder( rInAttrs )
+    ,SfxSingleTabDialog( pParent, getRegistrationItems(), RID_SFXPAGE_DBREGISTER )
+{
+    SfxTabPage* pPage = DbRegistrationOptionsPage::Create( this, getRegistrationItems() );
+
+    SetTabPage( pPage );
+    SetText( pPage->GetText() );
+}
+
+DatabaseRegistrationDialog::~DatabaseRegistrationDialog()
+{
+}
+
+short DatabaseRegistrationDialog::Execute()
+{
+    short result = SfxSingleTabDialog::Execute();
+    if ( result == RET_OK )
+    {
+        DBG_ASSERT( GetOutputItemSet(), "DatabaseRegistrationDialog::Execute: no output items!" );
+        if ( GetOutputItemSet() )
+            DbRegisteredNamesConfig::SetOptions( *GetOutputItemSet() );
+    }
+    return result;
+}
 
 // class DbRegistrationOptionsPage --------------------------------------------------
 
