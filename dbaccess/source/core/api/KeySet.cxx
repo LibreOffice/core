@@ -4,9 +4,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 13:54:54 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:41:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,6 +126,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::io;
+using namespace ::com::sun::star;
 using namespace ::cppu;
 using namespace ::osl;
 
@@ -156,6 +157,7 @@ OKeySet::OKeySet(const connectivity::OSQLTable& _xTable,
                  const Reference< XSingleSelectQueryAnalyzer >& _xComposer)
             :m_pKeyColumnNames(NULL)
             ,m_pColumnNames(NULL)
+            ,m_pForeignColumnNames(NULL)
             ,m_xTable(_xTable)
             ,m_xComposer(_xComposer)
             ,m_sUpdateTableName(_rUpdateTableName)
@@ -182,6 +184,7 @@ OKeySet::~OKeySet()
     m_xComposer = NULL;
     delete m_pKeyColumnNames;
     delete m_pColumnNames;
+    delete m_pForeignColumnNames;
 
     DBG_DTOR(OKeySet,NULL);
 }
@@ -194,6 +197,7 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet)
     bool bCase = (xMeta.is() && xMeta->storesMixedCaseQuotedIdentifiers()) ? true : false;
     m_pKeyColumnNames = new SelectColumnsMetaData(bCase);
     m_pColumnNames = new SelectColumnsMetaData(bCase);
+    m_pForeignColumnNames = new SelectColumnsMetaData(bCase);
 
     Reference<XNameAccess> xKeyColumns  = getKeyColumns();
     Reference<XColumnsSupplier> xSup(m_xComposer,UNO_QUERY);
@@ -238,14 +242,17 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet)
     sCatalog = sSchema = sTable = ::rtl::OUString();
     ::dbtools::qualifiedNameComponents(xMetaData,m_sUpdateTableName,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
     sComposedName = ::dbtools::composeTableName( xMetaData, sCatalog, sSchema, sTable, sal_True, ::dbtools::eInDataManipulation );
+
+    static ::rtl::OUString s_sDot(RTL_CONSTASCII_USTRINGPARAM("."));
+    static ::rtl::OUString s_sParam(RTL_CONSTASCII_USTRINGPARAM(" = ?"));
     // create the where clause
     SelectColumnsMetaData::const_iterator aIter;
     for(aIter = (*m_pKeyColumnNames).begin();aIter != (*m_pKeyColumnNames).end();)
     {
         aFilter += sComposedName;
-        aFilter += ::rtl::OUString::createFromAscii(".");
+        aFilter += s_sDot;
         aFilter += ::dbtools::quoteName( aQuote,aIter->first);
-        aFilter += ::rtl::OUString::createFromAscii(" = ?");
+        aFilter += s_sParam;
         ++aIter;
         if(aIter != (*m_pKeyColumnNames).end())
             aFilter += aAnd;
@@ -254,6 +261,40 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet)
     Reference< XMultiServiceFactory >  xFactory(m_xConnection, UNO_QUERY_THROW);
     Reference<XSingleSelectQueryComposer> xAnalyzer(xFactory->createInstance(SERVICE_NAME_SINGLESELECTQUERYCOMPOSER),UNO_QUERY);
     xAnalyzer->setQuery(m_xComposer->getQuery());
+    Reference<XTablesSupplier> xTabSup(xAnalyzer,uno::UNO_QUERY);
+    Reference<XIndexAccess> xSelectTables(xTabSup->getTables(),uno::UNO_QUERY);
+    sal_Int32 nCount = xSelectTables->getCount();
+    if ( nCount > 1 ) // special handling for join
+    {
+        for (sal_Int32 i = 0; i < nCount; ++i)
+        {
+            connectivity::OSQLTable xSelColSup(xSelectTables->getByIndex(i),uno::UNO_QUERY);
+            if ( xSelColSup != m_xTable )
+            {
+                Reference<XNameAccess > xSelectColumns = xSup->getColumns();
+                Reference<XPropertySet> xProp(xSup,uno::UNO_QUERY);
+                ::rtl::OUString sSelectTableName = ::dbtools::composeTableName( xMetaData, xProp, ::dbtools::eInDataManipulation, false, false, false );
+                ::dbaccess::getColumnPositions(xSelectColumns,xSelColSup->getColumns(),sSelectTableName,(*m_pForeignColumnNames));
+
+                uno::Sequence< ::rtl::OUString> aSeq = xSelectColumns->getElementNames();
+                const ::rtl::OUString* pIter = aSeq.getConstArray();
+                const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
+                for( ; pIter != pEnd ; ++pIter)
+                {
+                    // look for columns not in the source columns to use them as filter as well
+                    if ( !xSourceColumns->hasByName(*pIter) )
+                    {
+                        aFilter += s_sDot;
+                        aFilter += ::dbtools::quoteName( aQuote,*pIter);
+                        aFilter += s_sParam;
+                        if ( (pIter+1) != pEnd )
+                            aFilter += aAnd;
+                    }
+                }
+                break;
+            }
+        }
+    }
     xAnalyzer->setFilter(aFilter);
     m_xStatement = m_xConnection->prepareStatement(xAnalyzer->getQueryWithSubstitution());
     ::comphelper::disposeComponent(xAnalyzer);
@@ -1030,6 +1071,9 @@ void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException)
     SelectColumnsMetaData::const_iterator aPosIter = (*m_pKeyColumnNames).begin();
     for(;aPosIter != (*m_pKeyColumnNames).end();++aPosIter,++aIter,++nPos)
         setParameter(nPos,xParameter,*aIter);
+    aPosIter = (*m_pForeignColumnNames).begin();
+    for(;aPosIter != (*m_pForeignColumnNames).end();++aPosIter,++aIter,++nPos)
+        setParameter(nPos,xParameter,*aIter);
 
     m_xSet = m_xStatement->executeQuery();
     OSL_ENSURE(m_xSet.is(),"No resultset form statement!");
@@ -1047,10 +1091,18 @@ sal_Bool OKeySet::fetchRow()
         bRet = m_xDriverSet->next();
     if ( bRet )
     {
-        ORowSetRow aKeyRow = new connectivity::ORowVector< ORowSetValue >((*m_pKeyColumnNames).size());
+        ORowSetRow aKeyRow = new connectivity::ORowVector< ORowSetValue >((*m_pKeyColumnNames).size() + m_pForeignColumnNames->size());
         connectivity::ORowVector< ORowSetValue >::iterator aIter = aKeyRow->begin();
+        // first fetch the values needed for the key column
         SelectColumnsMetaData::const_iterator aPosIter = (*m_pKeyColumnNames).begin();
         for(;aPosIter != (*m_pKeyColumnNames).end();++aPosIter,++aIter)
+        {
+            const SelectColumnDescription& rColDesc = aPosIter->second;
+            aIter->fill(rColDesc.nPosition,rColDesc.nType,m_xDriverRow);
+        }
+        // now fetch the values from the missing columns from other tables
+        aPosIter = (*m_pForeignColumnNames).begin();
+        for(;aPosIter != (*m_pForeignColumnNames).end();++aPosIter,++aIter)
         {
             const SelectColumnDescription& rColDesc = aPosIter->second;
             aIter->fill(rColDesc.nPosition,rColDesc.nType,m_xDriverRow);
