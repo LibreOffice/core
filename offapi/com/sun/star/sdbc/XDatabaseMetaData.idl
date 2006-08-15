@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XDatabaseMetaData.idl,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:52:41 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:35:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1335,13 +1335,13 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </p>
         <ol>
         <li>
-        <b>PROCEDURE_CAT</b> string =&amp;gt; procedure catalog (may be <NULL/>)
+        <b>PROCEDURE_CAT</b> string => procedure catalog (may be <NULL/>)
         </li>
         <li>
-        <b>PROCEDURE_SCHEM</b> string =&amp;gt; procedure schema (may be <NULL/>)
+        <b>PROCEDURE_SCHEM</b> string => procedure schema (may be <NULL/>)
         </li>
         <li>
-        <b>PROCEDURE_NAME</b> string =&amp;gt; procedure name
+        <b>PROCEDURE_NAME</b> string => procedure name
         </li>
         <li> reserved for future use
         </li>
@@ -1350,10 +1350,10 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         <li> reserved for future use
         </li>
         <li>
-        <b>REMARKS</b> string =&amp;gt; explanatory comment on the procedure
+        <b>REMARKS</b> string => explanatory comment on the procedure
         </li>
         <li>
-        <b>PROCEDURE_TYPE</b> short =&amp;gt; kind of procedure:
+        <b>PROCEDURE_TYPE</b> short => kind of procedure:
         <ul>
         <li> UNKNOWN - May return a result
         </li>
@@ -1396,19 +1396,19 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </p>
         <ol>
         <li>
-        <b>PROCEDURE_CAT</b> string =&amp;gt; procedure catalog (may be <NULL/>)
+        <b>PROCEDURE_CAT</b> string => procedure catalog (may be <NULL/>)
         </li>
         <li>
-        <b>PROCEDURE_SCHEM</b> string =&amp;gt; procedure schema (may be <NULL/>)
+        <b>PROCEDURE_SCHEM</b> string => procedure schema (may be <NULL/>)
         </li>
         <li>
-        <b>PROCEDURE_NAME</b> string =&amp;gt; procedure name
+        <b>PROCEDURE_NAME</b> string => procedure name
         </li>
         <li>
-        <b>COLUMN_NAME</b> string =&amp;gt; column/parameter name
+        <b>COLUMN_NAME</b> string => column/parameter name
         </li>
         <li>
-        <b>COLUMN_TYPE</b> Short =&amp;gt; kind of column/parameter:
+        <b>COLUMN_TYPE</b> Short => kind of column/parameter:
         <ul>
         <li> UNKNOWN - nobody knows
         </li>
@@ -1425,26 +1425,26 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </ul>
         </li>
         <li>
-        <b>DATA_TYPE</b> short =&amp;gt; SQL type from java.sql.Types
+        <b>DATA_TYPE</b> short => SQL type from java.sql.Types
         </li>
         <li>
-        <b>TYPE_NAME</b> string =&amp;gt; SQL type name, for a UDT type the
+        <b>TYPE_NAME</b> string => SQL type name, for a UDT type the
         type name is fully qualified
         </li>
         <li>
-        <b>PRECISION</b> long =&amp;gt; precision
+        <b>PRECISION</b> long => precision
         </li>
         <li>
-        <b>LENGTH</b> long =&amp;gt; length in bytes of data
+        <b>LENGTH</b> long => length in bytes of data
         </li>
         <li>
-        <b>SCALE</b> short =&amp;gt; scale
+        <b>SCALE</b> short => scale
         </li>
         <li>
-        <b>RADIX</b> short =&amp;gt; radix
+        <b>RADIX</b> short => radix
         </li>
         <li>
-        <b>NULLABLE</b> short =&amp;gt; can it contain NULL?
+        <b>NULLABLE</b> short => can it contain NULL?
         <ul>
         <li> NO_NULLS - does not allow NULL values
         </li>
@@ -1455,7 +1455,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </ul>
         </li>
         <li>
-        <b>REMARKS</b> string =&amp;gt; comment describing parameter/column
+        <b>REMARKS</b> string => comment describing parameter/column
         </li>
         </ol>
         <p>
@@ -1494,21 +1494,21 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </p>
         <ol>
         <li>
-        <b>TABLE_CAT</b> string =&amp;gt; table catalog (may be <NULL/>)
+        <b>TABLE_CAT</b> string => table catalog (may be <NULL/>)
         </li>
         <li>
-        <b>TABLE_SCHEM</b> string =&amp;gt; table schema (may be <NULL/>)
+        <b>TABLE_SCHEM</b> string => table schema (may be <NULL/>)
         </li>
         <li>
-        <b>TABLE_NAME</b> string =&amp;gt; table name
+        <b>TABLE_NAME</b> string => table name
         </li>
         <li>
-        <b>TABLE_TYPE</b> string =&amp;gt; table type. Typical types are "TABLE",
+        <b>TABLE_TYPE</b> string => table type. Typical types are "TABLE",
         "VIEW", "SYSTEM TABLE", "GLOBAL TEMPORARY",
         "LOCAL TEMPORARY", "ALIAS", "SYNONYM".
         </li>
         <li>
-        <b>REMARKS</b> string =&amp;gt; explanatory comment on the table
+        <b>REMARKS</b> string => explanatory comment on the table
         </li>
         </ol>
         <p>
@@ -1542,7 +1542,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </p>
         <ol>
         <li>
-        <b>TABLE_SCHEM</b> string =&amp;gt; schema name
+        <b>TABLE_SCHEM</b> string => schema name
         </li>
         </ol>
         @returns
@@ -1562,7 +1562,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </p>
         <ol>
         <li>
-        <b>TABLE_CAT</b> string =&amp;gt; catalog name
+        <b>TABLE_CAT</b> string => catalog name
         </li>
         </ol>
         @returns
@@ -1582,7 +1582,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </p>
         <ol>
         <li>
-        <b>TABLE_TYPE</b> string =&amp;gt; table type. Typical types are "TABLE",
+        <b>TABLE_TYPE</b> string => table type. Typical types are "TABLE",
         "VIEW", "SYSTEM TABLE", "GLOBAL TEMPORARY",
         "LOCAL TEMPORARY", "ALIAS", "SYNONYM".
         </li>
@@ -1608,26 +1608,26 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </p>
         <ol>
         <li>
-        <b>TABLE_CAT</b> string =&amp;gt; table catalog (may be <NULL/>)
+        <b>TABLE_CAT</b> string => table catalog (may be <NULL/>)
         </li>
         <li>
-        <b>TABLE_SCHEM</b> string =&amp;gt; table schema (may be <NULL/>)
+        <b>TABLE_SCHEM</b> string => table schema (may be <NULL/>)
         </li>
         <li>
-        <b>TABLE_NAME</b> string =&amp;gt; table name
+        <b>TABLE_NAME</b> string => table name
         </li>
         <li>
-        <b>COLUMN_NAME</b> string =&amp;gt; column name
+        <b>COLUMN_NAME</b> string => column name
         </li>
         <li>
-        <b>DATA_TYPE</b> short =&amp;gt; SQL type from java.sql.Types
+        <b>DATA_TYPE</b> short => SQL type from java.sql.Types
         </li>
         <li>
-        <b>TYPE_NAME</b> string =&amp;gt; Data source dependent type name,
+        <b>TYPE_NAME</b> string => Data source dependent type name,
         for a UDT the type name is fully qualified
         </li>
         <li>
-        <b>COLUMN_SIZE</b> long =&amp;gt; column size. For char or date
+        <b>COLUMN_SIZE</b> long => column size. For char or date
         types this is the maximum number of characters, for numeric or
         decimal types this is precision.
         </li>
@@ -1635,13 +1635,13 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         <b>BUFFER_LENGTH</b> is not used.
         </li>
         <li>
-        <b>DECIMAL_DIGITS</b> long =&amp;gt; the number of fractional digits
+        <b>DECIMAL_DIGITS</b> long => the number of fractional digits
         </li>
         <li>
-        <b>NUM_PREC_RADIX</b> long =&amp;gt; Radix (typically either 10 or 2)
+        <b>NUM_PREC_RADIX</b> long => Radix (typically either 10 or 2)
         </li>
         <li>
-        <b>NULLABLE</b> long =&amp;gt; is NULL allowed?
+        <b>NULLABLE</b> long => is NULL allowed?
         <ul>
         <li> NO_NULLS - might not allow NULL values
         </li>
@@ -1652,27 +1652,27 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </ul>
         </li>
         <li>
-        <b>REMARKS</b> string =&amp;gt; comment describing column (may be <NULL/>)
+        <b>REMARKS</b> string => comment describing column (may be <NULL/>)
         </li>
         <li>
-        <b>COLUMN_DEF</b> string =&amp;gt; default value (may be <NULL/>)
+        <b>COLUMN_DEF</b> string => default value (may be <NULL/>)
         </li>
         <li>
-        <b>SQL_DATA_TYPE</b> long =&amp;gt; unused
+        <b>SQL_DATA_TYPE</b> long => unused
         </li>
         <li>
-        <b>SQL_DATETIME_SUB</b> long =&amp;gt; unused
+        <b>SQL_DATETIME_SUB</b> long => unused
         </li>
         <li>
-        <b>CHAR_OCTET_LENGTH</b> long =&amp;gt; for char types the
+        <b>CHAR_OCTET_LENGTH</b> long => for char types the
         maximum number of bytes in the column
         </li>
         <li>
-        <b>ORDINAL_POSITION</b> int =&amp;gt; index of column in table
+        <b>ORDINAL_POSITION</b> int => index of column in table
         (starting at 1)
         </li>
         <li>
-        <b>IS_NULLABLE</b> string =&amp;gt; "NO" means column definitely
+        <b>IS_NULLABLE</b> string => "NO" means column definitely
         does not allow NULL values; "YES" means the column might
         allow NULL values. An empty string means nobody knows.
         </li>
@@ -1707,29 +1707,29 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </p>
         <ol>
         <li>
-        <b>TABLE_CAT</b> string =&amp;gt; table catalog (may be <NULL/>)
+        <b>TABLE_CAT</b> string => table catalog (may be <NULL/>)
         </li>
         <li>
-        <b>TABLE_SCHEM</b> string =&amp;gt; table schema (may be <NULL/>)
+        <b>TABLE_SCHEM</b> string => table schema (may be <NULL/>)
         </li>
         <li>
-        <b>TABLE_NAME</b> string =&amp;gt; table name
+        <b>TABLE_NAME</b> string => table name
         </li>
         <li>
-        <b>COLUMN_NAME</b> string =&amp;gt; column name
+        <b>COLUMN_NAME</b> string => column name
         </li>
         <li>
-        <b>GRANTOR</b> =&amp;gt; grantor of access (may be <NULL/>)
+        <b>GRANTOR</b> => grantor of access (may be <NULL/>)
         </li>
         <li>
-        <b>GRANTEE</b> string =&amp;gt; grantee of access
+        <b>GRANTEE</b> string => grantee of access
         </li>
         <li>
-        <b>PRIVILEGE</b> string =&amp;gt; name of access (SELECT,
+        <b>PRIVILEGE</b> string => name of access (SELECT,
         INSERT, UPDATE, REFERENCES, ...)
         </li>
         <li>
-        <b>IS_GRANTABLE</b> string =&amp;gt; "YES" if grantee is permitted
+        <b>IS_GRANTABLE</b> string => "YES" if grantee is permitted
         to grant to others; "NO" if not; <NULL/> if unknown
         </li>
         </ol>
@@ -1766,26 +1766,26 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </p>
         <ol>
         <li>
-        <b>TABLE_CAT</b> string =&amp;gt; table catalog (may be <NULL/>)
+        <b>TABLE_CAT</b> string => table catalog (may be <NULL/>)
         </li>
         <li>
-        <b>TABLE_SCHEM</b> string =&amp;gt; table schema (may be <NULL/>)
+        <b>TABLE_SCHEM</b> string => table schema (may be <NULL/>)
         </li>
         <li>
-        <b>TABLE_NAME</b> string =&amp;gt; table name
+        <b>TABLE_NAME</b> string => table name
         </li>
         <li>
-        <b>GRANTOR</b> =&amp;gt; grantor of access (may be <NULL/>)
+        <b>GRANTOR</b> => grantor of access (may be <NULL/>)
         </li>
         <li>
-        <b>GRANTEE</b> string =&amp;gt; grantee of access
+        <b>GRANTEE</b> string => grantee of access
         </li>
         <li>
-        <b>PRIVILEGE</b> string =&amp;gt; name of access (SELECT,
+        <b>PRIVILEGE</b> string => name of access (SELECT,
         INSERT, UPDATE, REFERENCES, ...)
         </li>
         <li>
-        <b>IS_GRANTABLE</b> string =&amp;gt; "YES" if grantee is permitted
+        <b>IS_GRANTABLE</b> string => "YES" if grantee is permitted
         to grant to others; "NO" if not; <NULL/> if unknown
         </li>
         </ol>
@@ -1813,7 +1813,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </p>
         <ol>
         <li>
-        <b>SCOPE</b> short =&amp;gt; actual scope of result
+        <b>SCOPE</b> short => actual scope of result
         <ul>
         <li> TEMPORARY - very temporary, while using row
         </li>
@@ -1824,26 +1824,26 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </ul>
         </li>
         <li>
-        <b>COLUMN_NAME</b> string =&amp;gt; column name
+        <b>COLUMN_NAME</b> string => column name
         </li>
         <li>
-        <b>DATA_TYPE</b> short =&amp;gt; SQL data type from java.sql.Types
+        <b>DATA_TYPE</b> short => SQL data type from java.sql.Types
         </li>
         <li>
-        <b>TYPE_NAME</b> string =&amp;gt; Data source dependent type name,
+        <b>TYPE_NAME</b> string => Data source dependent type name,
         for a UDT the type name is fully qualified
         </li>
         <li>
-        <b>COLUMN_SIZE</b> long =&amp;gt; precision
+        <b>COLUMN_SIZE</b> long => precision
         </li>
         <li>
-        <b>BUFFER_LENGTH</b> long =&amp;gt; not used
+        <b>BUFFER_LENGTH</b> long => not used
         </li>
         <li>
-        <b>DECIMAL_DIGITS</b> short  =&amp;gt; scale
+        <b>DECIMAL_DIGITS</b> short  => scale
         </li>
         <li>
-        <b>PSEUDO_COLUMN</b> short =&amp;gt; is this a pseudo column
+        <b>PSEUDO_COLUMN</b> short => is this a pseudo column
         like an Oracle ROWID
         <ul>
         <li> UNKNOWN - may or may not be pseudo column
@@ -1885,28 +1885,28 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </p>
         <ol>
         <li>
-        <b>SCOPE</b> short =&amp;gt; is not used
+        <b>SCOPE</b> short => is not used
         </li>
         <li>
-        <b>COLUMN_NAME</b> string =&amp;gt; column name
+        <b>COLUMN_NAME</b> string => column name
         </li>
         <li>
-        <b>DATA_TYPE</b> short =&amp;gt; SQL data type from java.sql.Types
+        <b>DATA_TYPE</b> short => SQL data type from java.sql.Types
         </li>
         <li>
-        <b>TYPE_NAME</b> string =&amp;gt; Data source dependent type name
+        <b>TYPE_NAME</b> string => Data source dependent type name
         </li>
         <li>
-        <b>COLUMN_SIZE</b> long =&amp;gt; precision
+        <b>COLUMN_SIZE</b> long => precision
         </li>
         <li>
-        <b>BUFFER_LENGTH</b> long =&amp;gt; length of column value in bytes
+        <b>BUFFER_LENGTH</b> long => length of column value in bytes
         </li>
         <li>
-        <b>DECIMAL_DIGITS</b> short  =&amp;gt; scale
+        <b>DECIMAL_DIGITS</b> short  => scale
         </li>
         <li>
-        <b>PSEUDO_COLUMN</b> short =&amp;gt; is this a pseudo column
+        <b>PSEUDO_COLUMN</b> short => is this a pseudo column
         like an Oracle ROWID
         <ul>
         <li> UNKNOWN - may or may not be pseudo column
@@ -1942,22 +1942,22 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </p>
         <ol>
         <li>
-        <b>TABLE_CAT</b> string =&amp;gt; table catalog (may be <NULL/>)
+        <b>TABLE_CAT</b> string => table catalog (may be <NULL/>)
         </li>
         <li>
-        <b>TABLE_SCHEM</b> string =&amp;gt; table schema (may be <NULL/>)
+        <b>TABLE_SCHEM</b> string => table schema (may be <NULL/>)
         </li>
         <li>
-        <b>TABLE_NAME</b> string =&amp;gt; table name
+        <b>TABLE_NAME</b> string => table name
         </li>
         <li>
-        <b>COLUMN_NAME</b> string =&amp;gt; column name
+        <b>COLUMN_NAME</b> string => column name
         </li>
         <li>
-        <b>KEY_SEQ</b> short =&amp;gt; sequence number within primary key
+        <b>KEY_SEQ</b> short => sequence number within primary key
         </li>
         <li>
-        <b>PK_NAME</b> string =&amp;gt; primary key name (may be <NULL/>)
+        <b>PK_NAME</b> string => primary key name (may be <NULL/>)
         </li>
         </ol>
         @param catalog
@@ -1986,38 +1986,38 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </p>
         <ol>
         <li>
-        <b>PKTABLE_CAT</b> string =&amp;gt; primary key table catalog
+        <b>PKTABLE_CAT</b> string => primary key table catalog
         being imported (may be <NULL/>)
         </li>
         <li>
-        <b>PKTABLE_SCHEM</b> string =&amp;gt; primary key table schema
+        <b>PKTABLE_SCHEM</b> string => primary key table schema
         being imported (may be <NULL/>)
         </li>
         <li>
-        <b>PKTABLE_NAME</b> string =&amp;gt; primary key table name
+        <b>PKTABLE_NAME</b> string => primary key table name
         being imported
         </li>
         <li>
-        <b>PKCOLUMN_NAME</b> string =&amp;gt; primary key column name
+        <b>PKCOLUMN_NAME</b> string => primary key column name
         being imported
         </li>
         <li>
-        <b>FKTABLE_CAT</b> string =&amp;gt; foreign key table catalog (may be <NULL/>)
+        <b>FKTABLE_CAT</b> string => foreign key table catalog (may be <NULL/>)
         </li>
         <li>
-        <b>FKTABLE_SCHEM</b> string =&amp;gt; foreign key table schema (may be <NULL/>)
+        <b>FKTABLE_SCHEM</b> string => foreign key table schema (may be <NULL/>)
         </li>
         <li>
-        <b>FKTABLE_NAME</b> string =&amp;gt; foreign key table name
+        <b>FKTABLE_NAME</b> string => foreign key table name
         </li>
         <li>
-        <b>FKCOLUMN_NAME</b> string =&amp;gt; foreign key column name
+        <b>FKCOLUMN_NAME</b> string => foreign key column name
         </li>
         <li>
-        <b>KEY_SEQ</b> short =&amp;gt; sequence number within foreign key
+        <b>KEY_SEQ</b> short => sequence number within foreign key
         </li>
         <li>
-        <b>UPDATE_RULE</b> short =&amp;gt; What happens to
+        <b>UPDATE_RULE</b> short => What happens to
         foreign key when primary is updated:
         <ul>
         <li> importedNoAction - do not allow update of primary
@@ -2038,7 +2038,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </ul>
         </li>
         <li>
-        <b>DELETE_RULE</b> short =&amp;gt; What happens to
+        <b>DELETE_RULE</b> short => What happens to
         the foreign key when primary is deleted.
         <ul>
         <li> importedKeyNoAction - do not allow delete of primary
@@ -2058,13 +2058,13 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </ul>
         </li>
         <li>
-        <b>FK_NAME</b> string =&amp;gt; foreign key name (may be <NULL/>)
+        <b>FK_NAME</b> string => foreign key name (may be <NULL/>)
         </li>
         <li>
-        <b>PK_NAME</b> string =&amp;gt; primary key name (may be <NULL/>)
+        <b>PK_NAME</b> string => primary key name (may be <NULL/>)
         </li>
         <li>
-        <b>DEFERRABILITY</b> short =&amp;gt; can the evaluation of foreign key
+        <b>DEFERRABILITY</b> short => can the evaluation of foreign key
         constraints be deferred until commit
         <ul>
         <li> importedKeyInitiallyDeferred - see SQL92 for definition
@@ -2102,38 +2102,38 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </p>
         <ol>
         <li>
-        <b>PKTABLE_CAT</b> string =&amp;gt; primary key table catalog (may be <NULL/>)
+        <b>PKTABLE_CAT</b> string => primary key table catalog (may be <NULL/>)
         </li>
         <li>
-        <b>PKTABLE_SCHEM</b> string =&amp;gt; primary key table schema (may be <NULL/>)
+        <b>PKTABLE_SCHEM</b> string => primary key table schema (may be <NULL/>)
         </li>
         <li>
-        <b>PKTABLE_NAME</b> string =&amp;gt; primary key table name
+        <b>PKTABLE_NAME</b> string => primary key table name
         </li>
         <li>
-        <b>PKCOLUMN_NAME</b> string =&amp;gt; primary key column name
+        <b>PKCOLUMN_NAME</b> string => primary key column name
         </li>
         <li>
-        <b>FKTABLE_CAT</b> string =&amp;gt; foreign key table catalog (may be <NULL/>)
+        <b>FKTABLE_CAT</b> string => foreign key table catalog (may be <NULL/>)
         being exported (may be <NULL/>)
         </li>
         <li>
-        <b>FKTABLE_SCHEM</b> string =&amp;gt; foreign key table schema (may be <NULL/>)
+        <b>FKTABLE_SCHEM</b> string => foreign key table schema (may be <NULL/>)
         being exported (may be <NULL/>)
         </li>
         <li>
-        <b>FKTABLE_NAME</b> string =&amp;gt; foreign key table name
+        <b>FKTABLE_NAME</b> string => foreign key table name
         being exported
         </li>
         <li>
-        <b>FKCOLUMN_NAME</b> string =&amp;gt; foreign key column name
+        <b>FKCOLUMN_NAME</b> string => foreign key column name
         being exported
         </li>
         <li>
-        <b>KEY_SEQ</b> short =&amp;gt; sequence number within foreign key
+        <b>KEY_SEQ</b> short => sequence number within foreign key
         </li>
         <li>
-        <b>UPDATE_RULE</b> short =&amp;gt; What happens to
+        <b>UPDATE_RULE</b> short => What happens to
         foreign key when primary is updated:
         <ul>
         <li> NO_ACTION - do not allow update of primary
@@ -2154,7 +2154,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </ul>
         </li>
         <li>
-        <b>DELETE_RULE</b> short =&amp;gt; What happens to
+        <b>DELETE_RULE</b> short => What happens to
         the foreign key when primary is deleted.
         <ul>
         <li> NO_ACTION - do not allow delete of primary
@@ -2174,13 +2174,13 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </ul>
         </li>
         <li>
-        <b>FK_NAME</b> string =&amp;gt; foreign key name (may be <NULL/>)
+        <b>FK_NAME</b> string => foreign key name (may be <NULL/>)
         </li>
         <li>
-        <b>PK_NAME</b> string =&amp;gt; primary key name (may be <NULL/>)
+        <b>PK_NAME</b> string => primary key name (may be <NULL/>)
         </li>
         <li>
-        <b>DEFERRABILITY</b> short =&amp;gt; can the evaluation of foreign key
+        <b>DEFERRABILITY</b> short => can the evaluation of foreign key
         constraints be deferred until commit
         <ul>
         <li> INITIALLY_DEFERRED - see SQL92 for definition
@@ -2221,38 +2221,38 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </p>
         <ol>
         <li>
-        <b>PKTABLE_CAT</b> string =&amp;gt; primary key table catalog (may be <NULL/>)
+        <b>PKTABLE_CAT</b> string => primary key table catalog (may be <NULL/>)
         </li>
         <li>
-        <b>PKTABLE_SCHEM</b> string =&amp;gt; primary key table schema (may be <NULL/>)
+        <b>PKTABLE_SCHEM</b> string => primary key table schema (may be <NULL/>)
         </li>
         <li>
-        <b>PKTABLE_NAME</b> string =&amp;gt; primary key table name
+        <b>PKTABLE_NAME</b> string => primary key table name
         </li>
         <li>
-        <b>PKCOLUMN_NAME</b> string =&amp;gt; primary key column name
+        <b>PKCOLUMN_NAME</b> string => primary key column name
         </li>
         <li>
-        <b>FKTABLE_CAT</b> string =&amp;gt; foreign key table catalog (may be <NULL/>)
+        <b>FKTABLE_CAT</b> string => foreign key table catalog (may be <NULL/>)
         being exported (may be <NULL/>)
         </li>
         <li>
-        <b>FKTABLE_SCHEM</b> string =&amp;gt; foreign key table schema (may be <NULL/>)
+        <b>FKTABLE_SCHEM</b> string => foreign key table schema (may be <NULL/>)
         being exported (may be <NULL/>)
         </li>
         <li>
-        <b>FKTABLE_NAME</b> string =&amp;gt; foreign key table name
+        <b>FKTABLE_NAME</b> string => foreign key table name
         being exported
         </li>
         <li>
-        <b>FKCOLUMN_NAME</b> string =&amp;gt; foreign key column name
+        <b>FKCOLUMN_NAME</b> string => foreign key column name
         being exported
         </li>
         <li>
-        <b>KEY_SEQ</b> short =&amp;gt; sequence number within foreign key
+        <b>KEY_SEQ</b> short => sequence number within foreign key
         </li>
         <li>
-        <b>UPDATE_RULE</b> short =&amp;gt; What happens to
+        <b>UPDATE_RULE</b> short => What happens to
         foreign key when primary is updated:
         <ul>
         <li> NO_ACTION - do not allow update of primary
@@ -2273,7 +2273,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </ul>
         </li>
         <li>
-        <b>DELETE_RULE</b> short =&amp;gt; What happens to
+        <b>DELETE_RULE</b> short => What happens to
         the foreign key when primary is deleted.
         <ul>
         <li> NO_ACTION - do not allow delete of primary
@@ -2293,13 +2293,13 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </ul>
         </li>
         <li>
-        <b>FK_NAME</b> string =&amp;gt; foreign key name (may be <NULL/>)
+        <b>FK_NAME</b> string => foreign key name (may be <NULL/>)
         </li>
         <li>
-        <b>PK_NAME</b> string =&amp;gt; primary key name (may be <NULL/>)
+        <b>PK_NAME</b> string => primary key name (may be <NULL/>)
         </li>
         <li>
-        <b>DEFERRABILITY</b> short =&amp;gt; can the evaluation of foreign key
+        <b>DEFERRABILITY</b> short => can the evaluation of foreign key
         constraints be deferred until commit
         <ul>
         <li> INITIALLY_DEFERRED - see SQL92 for definition
@@ -2346,28 +2346,28 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </p>
         <ol>
         <li>
-        <b>TYPE_NAME</b> string =&amp;gt; Type name
+        <b>TYPE_NAME</b> string => Type name
         </li>
         <li>
-        <b>DATA_TYPE</b> short =&amp;gt; SQL data type from java.sql.Types
+        <b>DATA_TYPE</b> short => SQL data type from java.sql.Types
         </li>
         <li>
-        <b>PRECISION</b> long =&amp;gt; maximum precision
+        <b>PRECISION</b> long => maximum precision
         </li>
         <li>
-        <b>LITERAL_PREFIX</b> string =&amp;gt; prefix used to quote a literal
+        <b>LITERAL_PREFIX</b> string => prefix used to quote a literal
         (may be <NULL/>)
         </li>
         <li>
-        <b>LITERAL_SUFFIX</b> string =&amp;gt; suffix used to quote a literal
+        <b>LITERAL_SUFFIX</b> string => suffix used to quote a literal
         (may be <NULL/>)
         </li>
         <li>
-        <b>CREATE_PARAMS</b> string =&amp;gt; parameters used in creating
+        <b>CREATE_PARAMS</b> string => parameters used in creating
         the type (may be <NULL/>)
         </li>
         <li>
-        <b>NULLABLE</b> short =&amp;gt; can you use NULL for this type?
+        <b>NULLABLE</b> short => can you use NULL for this type?
         <ul>
         <li> NO_NULLS - does not allow NULL values
         </li>
@@ -2378,10 +2378,10 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </ul>
         </li>
         <li>
-        <b>CASE_SENSITIVE</b> boolean=&amp;gt; is it case sensitive?
+        <b>CASE_SENSITIVE</b> boolean=> is it case sensitive?
         </li>
         <li>
-        <b>SEARCHABLE</b> short =&amp;gt; can you use "WHERE" based on this type:
+        <b>SEARCHABLE</b> short => can you use "WHERE" based on this type:
         <ul>
         <li> NONE - No support
         </li>
@@ -2394,33 +2394,33 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </ul>
         </li>
         <li>
-        <b>UNSIGNED_ATTRIBUTE</b> boolean =&amp;gt; is it unsigned?
+        <b>UNSIGNED_ATTRIBUTE</b> boolean => is it unsigned?
         </li>
         <li>
-        <b>FIXED_PREC_SCALE</b> boolean =&amp;gt; can it be a money value?
+        <b>FIXED_PREC_SCALE</b> boolean => can it be a money value?
         </li>
         <li>
-        <b>AUTO_INCREMENT</b> boolean =&amp;gt; can it be used for an
+        <b>AUTO_INCREMENT</b> boolean => can it be used for an
         auto-increment value?
         </li>
         <li>
-        <b>LOCAL_TYPE_NAME</b> string =&amp;gt; localized version of type name
+        <b>LOCAL_TYPE_NAME</b> string => localized version of type name
         (may be <NULL/>)
         </li>
         <li>
-        <b>MINIMUM_SCALE</b> short =&amp;gt; minimum scale supported
+        <b>MINIMUM_SCALE</b> short => minimum scale supported
         </li>
         <li>
-        <b>MAXIMUM_SCALE</b> short =&amp;gt; maximum scale supported
+        <b>MAXIMUM_SCALE</b> short => maximum scale supported
         </li>
         <li>
-        <b>SQL_DATA_TYPE</b> long =&amp;gt; unused
+        <b>SQL_DATA_TYPE</b> long => unused
         </li>
         <li>
-        <b>SQL_DATETIME_SUB</b> long =&amp;gt; unused
+        <b>SQL_DATETIME_SUB</b> long => unused
         </li>
         <li>
-        <b>NUM_PREC_RADIX</b> long =&amp;gt; usually 2 or 10
+        <b>NUM_PREC_RADIX</b> long => usually 2 or 10
         </li>
         </ol>
         @returns
@@ -2440,28 +2440,28 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </p>
         <ol>
         <li>
-        <b>TABLE_CAT</b> string =&amp;gt; table catalog (may be <NULL/>)
+        <b>TABLE_CAT</b> string => table catalog (may be <NULL/>)
         </li>
         <li>
-        <b>TABLE_SCHEM</b> string =&amp;gt; table schema (may be <NULL/>)
+        <b>TABLE_SCHEM</b> string => table schema (may be <NULL/>)
         </li>
         <li>
-        <b>TABLE_NAME</b> string =&amp;gt; table name
+        <b>TABLE_NAME</b> string => table name
         </li>
         <li>
-        <b>NON_UNIQUE</b> boolean =&amp;gt; Can index values be non-unique?
+        <b>NON_UNIQUE</b> boolean => Can index values be non-unique?
         <FALSE/> when TYPE is tableIndexStatistic
         </li>
         <li>
-        <b>INDEX_QUALIFIER</b> string =&amp;gt; index catalog (may be <NULL/>);
+        <b>INDEX_QUALIFIER</b> string => index catalog (may be <NULL/>);
         <NULL/> when TYPE is tableIndexStatistic
         </li>
         <li>
-        <b>INDEX_NAME</b> string =&amp;gt; index name; <NULL/> when TYPE is
+        <b>INDEX_NAME</b> string => index name; <NULL/> when TYPE is
         tableIndexStatistic
         </li>
         <li>
-        <b>TYPE</b> short =&amp;gt; index type:
+        <b>TYPE</b> short => index type:
         <ul>
         <li> 0 - this identifies table statistics that are
         returned in conjuction with a table's index descriptions
@@ -2475,30 +2475,30 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </ul>
         </li>
         <li>
-        <b>ORDINAL_POSITION</b> short =&amp;gt; column sequence number
+        <b>ORDINAL_POSITION</b> short => column sequence number
         within index; zero when TYPE is tableIndexStatistic
         </li>
         <li>
-        <b>COLUMN_NAME</b> string =&amp;gt; column name; <NULL/> when TYPE is
+        <b>COLUMN_NAME</b> string => column name; <NULL/> when TYPE is
         tableIndexStatistic
         </li>
         <li>
-        <b>ASC_OR_DESC</b> string =&amp;gt; column sort sequence, "A" =&amp;gt; ascending,
-        "D" =&amp;gt; descending, may be <NULL/> if sort sequence is not supported;
+        <b>ASC_OR_DESC</b> string => column sort sequence, "A" => ascending,
+        "D" => descending, may be <NULL/> if sort sequence is not supported;
         <NULL/> when TYPE is tableIndexStatistic
         </li>
         <li>
-        <b>CARDINALITY</b> long =&amp;gt; When TYPE is tableIndexStatistic, then
+        <b>CARDINALITY</b> long => When TYPE is tableIndexStatistic, then
         this is the number of rows in the table; otherwise, it is the
         number of unique values in the index.
         </li>
         <li>
-        <b>PAGES</b> long =&amp;gt; When TYPE is  tableIndexStatisic then
+        <b>PAGES</b> long => When TYPE is  tableIndexStatisic then
         this is the number of pages used for the table, otherwise it
         is the number of pages used for the current index.
         </li>
         <li>
-        <b>FILTER_CONDITION</b> string =&amp;gt; Filter condition, if any.
+        <b>FILTER_CONDITION</b> string => Filter condition, if any.
         (may be <NULL/>)
         </li>
         </ol>
@@ -2705,23 +2705,23 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </p>
         <ol>
         <li>
-        <b>TYPE_CAT</b> string =&amp;gt; the type's catalog (may be <NULL/>)
+        <b>TYPE_CAT</b> string => the type's catalog (may be <NULL/>)
         </li>
         <li>
-        <b>TYPE_SCHEM</b> string =&amp;gt; type's schema (may be <NULL/>)
+        <b>TYPE_SCHEM</b> string => type's schema (may be <NULL/>)
         </li>
         <li>
-        <b>TYPE_NAME</b> string =&amp;gt; type name
+        <b>TYPE_NAME</b> string => type name
         </li>
         <li>
-        <b>CLASS_NAME</b> string =&amp;gt; Java class name or service name
+        <b>CLASS_NAME</b> string => Java class name or service name
         </li>
         <li>
-        <b>DATA_TYPE</b> string =&amp;gt; type value.
+        <b>DATA_TYPE</b> string => type value.
         One of OBJECT, STRUCT, or DISTINCT
         </li>
         <li>
-        <b>REMARKS</b> string =&amp;gt; explanatory comment on the type
+        <b>REMARKS</b> string => explanatory comment on the type
         </li>
         </ol>
         <p>
