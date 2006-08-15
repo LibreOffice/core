@@ -4,9 +4,9 @@
  *
  *  $RCSfile: richtextvclcontrol.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 13:01:44 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:33:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,23 @@
 #endif
 #ifndef _SVTOOLS_LANGUAGEOPTIONS_HXX
 #include <svtools/languageoptions.hxx>
+#endif
+#if OSL_DEBUG_LEVEL > 0
+    #ifndef _TOOLS_TEMPFILE_HXX
+    #include <tools/tempfile.hxx>
+    #endif
+    #ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
+    #include <unotools/ucbstreamhelper.hxx>
+    #endif
+    #ifndef _SV_MSGBOX_HXX
+    #include <vcl/msgbox.hxx>
+    #endif
+    #ifndef _FILEDLGHELPER_HXX
+    #include <sfx2/filedlghelper.hxx>
+    #endif
+    #ifndef _URLOBJ_HXX
+    #include <tools/urlobj.hxx>
+    #endif
 #endif
 
 #ifndef _SVX_SCRIPTTYPEITEM_HXX
@@ -288,6 +305,72 @@ namespace frm
                     Control::KeyInput( aNewEvent );
                     return 1;   // handled
                 }
+
+#if OSL_DEBUG_LEVEL > 0
+                if  (   (   ( KEY_F12 == nCode )
+                        ||  ( KEY_F11 == nCode )
+                        )
+                    &&  bCtrl
+                    &&  bAlt
+                    )
+                {
+                    bool bLoad = KEY_F11 == nCode;
+                    struct
+                    {
+                        const sal_Char* pDescription;
+                        const sal_Char* pExtension;
+                        EETextFormat    eFormat;
+                    } aExportFormats[] =
+                    {
+                        { "OASIS OpenDocument (*.xml)", "*.xml", EE_FORMAT_XML },
+                        { "HyperText Markup Language (*.html)", "*.html", EE_FORMAT_HTML },
+                        { "Rich Text format (*.rtf)", "*.rtf", EE_FORMAT_RTF },
+                        { "Text (*.txt)", "*.txt", EE_FORMAT_TEXT }
+                    };
+
+                    ::sfx2::FileDialogHelper aFP( bLoad ? ::sfx2::FILEOPEN_SIMPLE : ::sfx2::FILESAVE_AUTOEXTENSION, 0, this );
+
+                    for ( size_t i = 0; i < sizeof( aExportFormats ) / sizeof( aExportFormats[ 0 ] ); ++i )
+                    {
+                        aFP.AddFilter(
+                            String::CreateFromAscii( aExportFormats[i].pDescription ),
+                            String::CreateFromAscii( aExportFormats[i].pExtension ) );
+                    }
+                    ErrCode nResult = aFP.Execute();
+                    if ( nResult == 0 )
+                    {
+                        String sFileName = aFP.GetPath();
+                        SvStream* pStream = ::utl::UcbStreamHelper::CreateStream(
+                            sFileName, ( bLoad ? STREAM_READ : STREAM_WRITE | STREAM_TRUNC ) | STREAM_SHARE_DENYALL
+                        );
+                        if ( pStream )
+                        {
+                            EETextFormat eFormat = EE_FORMAT_XML;
+                            String sFilter = aFP.GetCurrentFilter();
+                            for ( size_t i = 0; i < sizeof( aExportFormats ) / sizeof( aExportFormats[ 0 ] ); ++i )
+                            {
+                                if ( sFilter.EqualsAscii( aExportFormats[i].pDescription ) )
+                                {
+                                    eFormat = aExportFormats[i].eFormat;
+                                    break;
+                                }
+                            }
+                            if ( bLoad )
+                            {
+                                INetURLObject aURL( sFileName );
+                                aURL.removeSegment();
+                                getEngine().Read( *pStream, aURL.GetMainURL( INetURLObject::NO_DECODE ), eFormat );
+                            }
+                            else
+                            {
+                                getEngine().Write( *pStream, eFormat );
+                            }
+                        }
+                        DELETEZ( pStream );
+                    }
+                    return 1;   // handled
+                }
+#endif
             }
         }
         return Control::PreNotify( _rNEvt );
