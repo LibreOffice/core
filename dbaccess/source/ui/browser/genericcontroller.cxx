@@ -4,9 +4,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-11 17:16:40 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:49:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,6 +122,9 @@
 #endif
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
+#endif
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
 #endif
 #include <algorithm>
 
@@ -738,7 +741,15 @@ void OGenericUnoController::dispatch(const URL& _aURL, const Sequence< PropertyV
     // for locking in the proper order (SolarMutex and m_aMutex), and b) this would be too many places
     // for the time frame of the fix.
     // #i52602# / frank.schoenheit@sun.com / 2005-07-29
-    executeChecked(_aURL,aArgs);
+
+#ifdef TIMELOG
+    ::rtl::OString sLog( "OGenericUnoController::dispatch( '" );
+    sLog += ::rtl::OString( _aURL.Main.getStr(), _aURL.Main.getLength(), osl_getThreadTextEncoding() );
+    sLog += ::rtl::OString( "' )" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "frank.schoenheit@sun.com", sLog.getStr() );
+#endif
+
+    executeUnChecked(_aURL,aArgs);
 }
 
 // -----------------------------------------------------------------------
@@ -1024,10 +1035,7 @@ Reference< ::com::sun::star::frame::XLayoutManager > OGenericUnoController::getL
 // -----------------------------------------------------------------------------
 void OGenericUnoController::loadMenu(const Reference< XFrame >& _xFrame)
 {
-
     Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager = getLayoutManager(_xFrame);
-
-
     if ( xLayoutManager.is() )
     {
         xLayoutManager->lock();
