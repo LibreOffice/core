@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paramdialog.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 12:14:21 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:51:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,3 +51,4 @@
 #define STR_COULD_NOT_CONVERT_PARAM 1
 
 #endif // _DBAUI_PARAMDIALOG_HRC_
+
