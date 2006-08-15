@@ -4,9 +4,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 15:24:20 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:57:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -419,6 +419,18 @@ String STR_TABLEDESIGN_ALTER_ERROR
     Text [ en-US ] = "The column \"$column$\" could not be changed. Should the column instead be deleted and the new format appended?" ;
 };
 
+String STR_TABLEDESIGN_SAVE_ERROR
+{
+    Text [ de ] = "Fehler beim Speichern des Tabellenentwurfes";
+    Text [ en-US ] = "Error while saving the table design";
+};
+
+String STR_TABLEDESIGN_COULD_NOT_DROP_COL
+{
+    Text [ de ] = "Die Spalte $column$ konnte nicht gelöscht werden.";
+    Text [ en-US ] = "The column $column$ could not be deleted.";
+};
+
 QueryBox TABLE_DESIGN_ALL_ROWS_DELETED
 {
     Buttons = WB_YES_NO_CANCEL ;
@@ -467,4 +479,3 @@ String STR_CHANGE_COLUMN_ATTRIBUTE
     Text [ de ] = "Feldattribut Ã¤ndern";
     Text [ en-US ] = "change field attribute";
 };
-
