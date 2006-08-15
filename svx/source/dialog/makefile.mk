@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.49 $
+#   $Revision: 1.50 $
 #
-#   last change: $Author: ihi $ $Date: 2006-08-04 09:48:08 $
+#   last change: $Author: hr $ $Date: 2006-08-15 10:38:35 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -315,6 +315,7 @@ SLOFILES=\
     $(SLO)$/frmsel.obj	\
     $(SLO)$/framelink.obj	\
     $(SLO)$/framelinkarray.obj \
+    $(SLO)$/databaseregistrationui.obj \
     $(SLO)$/radiobtnbox.obj
 
 
@@ -392,6 +393,7 @@ LIB1OBJFILES= \
     $(SLO)$/cfg.obj	\
     $(SLO)$/framelink.obj	\
     $(SLO)$/framelinkarray.obj \
+    $(SLO)$/databaseregistrationui.obj \
     $(SLO)$/radiobtnbox.obj
 
 .IF "$(GUI)"=="UNX"
