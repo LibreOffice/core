@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ModelImpl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 15:20:44 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:44:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -446,6 +446,52 @@ void ODatabaseModelImpl::lateInit()
 {
     m_bReadOnly = sal_False;
     m_aContainer.resize(4);
+
+    // create the property bag to hold the settings (also known as "Info" property)
+    try
+    {
+        // the set of property value types in the bag is limited:
+        Sequence< Type > aAllowedTypes(5);
+        Type* pAllowedType = aAllowedTypes.getArray();
+        *pAllowedType++ = ::getCppuType( static_cast< sal_Bool* >( NULL ) );
+        *pAllowedType++ = ::getCppuType( static_cast< double* >( NULL ) );
+        *pAllowedType++ = ::getCppuType( static_cast< ::rtl::OUString* >( NULL ) );
+        *pAllowedType++ = ::getCppuType( static_cast< sal_Int32* >( NULL ) );
+        *pAllowedType++ = ::getCppuType( static_cast< sal_Int16* >( NULL ) );
+
+        Sequence< Any > aInitArgs( 2 );
+        aInitArgs[0] <<= NamedValue(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AutomaticAddition" ) ),
+            makeAny( (sal_Bool)sal_True )
+        );
+        aInitArgs[1] <<= NamedValue(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AllowedTypes" ) ),
+            makeAny( aAllowedTypes )
+        );
+
+        m_xSettings = m_xSettings.query( m_xServiceFactory->createInstanceWithArguments(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.beans.PropertyBag" ) ),
+            aInitArgs
+        ) );
+
+        // insert the default settings
+        Reference< XPropertyContainer > xContainer( m_xSettings, UNO_QUERY );
+        OSL_ENSURE( xContainer.is(), "ODatabaseModelImpl::lateInit: invalid property bag - this will crash, sooner or later!" );
+        const AsciiPropertyValue* pSettings = getDefaultDataSourceSettings();
+        for ( ; pSettings->AsciiName; ++pSettings )
+        {
+            xContainer->addProperty(
+                ::rtl::OUString::createFromAscii( pSettings->AsciiName ),
+                PropertyAttribute::BOUND,
+                pSettings->DefaultValue
+            );
+        }
+    }
+    catch( const Exception& )
+    {
+      OSL_ENSURE( sal_False, "ODatabaseModelImpl::lateInit: could not create the PropertyBag for the Info/Settings properties!" );
+    }
+
     if ( m_pStorageAccess )
     {
         m_pStorageAccess->dispose();
@@ -901,6 +947,60 @@ void ODatabaseModelImpl::commitStorages() SAL_THROW(( IOException, RuntimeExcept
         // WrappedTargetException not allowed to leave
         throw IOException();
     }
+}
+
+// -----------------------------------------------------------------------------
+const AsciiPropertyValue* ODatabaseModelImpl::getDefaultDataSourceSettings()
+{
+    static const AsciiPropertyValue aKnownSettings[] =
+    {
+        // known JDBC settings
+        AsciiPropertyValue( "JavaDriverClass",            makeAny( ::rtl::OUString() ) ),
+        // known settings for file-based drivers
+        AsciiPropertyValue( "Extension",                  makeAny( ::rtl::OUString() ) ),
+        AsciiPropertyValue( "CharSet",                    makeAny( ::rtl::OUString() ) ),
+        AsciiPropertyValue( "HeaderLine",                 makeAny( (sal_Bool)sal_True ) ),
+        AsciiPropertyValue( "FieldDelimiter",             makeAny( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "," ) ) ) ),
+        AsciiPropertyValue( "StringDelimiter",            makeAny( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "\"" ) ) ) ),
+        AsciiPropertyValue( "DecimalDelimiter",           makeAny( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "." ) ) ) ),
+        AsciiPropertyValue( "ThousandDelimiter",          makeAny( ::rtl::OUString() ) ),
+        AsciiPropertyValue( "ShowDeleted",                makeAny( (sal_Bool)sal_False ) ),
+        // known ODBC settings
+        AsciiPropertyValue( "SystemDriverSettings",       makeAny( ::rtl::OUString() ) ),
+        AsciiPropertyValue( "UseCatalog",                 makeAny( (sal_Bool)sal_False ) ),
+        // settings related to auto increment handling
+        AsciiPropertyValue( "AutoIncrementCreation",      makeAny( ::rtl::OUString() ) ),
+        AsciiPropertyValue( "AutoRetrievingStatement",    makeAny( ::rtl::OUString() ) ),
+        AsciiPropertyValue( "IsAutoRetrievingEnabled",    makeAny( (sal_Bool)sal_False ) ),
+        // known Adabas D driver setting
+        AsciiPropertyValue( "ShutdownDatabase",           makeAny( (sal_Bool)sal_False ) ),
+        AsciiPropertyValue( "DataCacheSizeIncrement",     makeAny( (sal_Int32)20 ) ),
+        AsciiPropertyValue( "DataCacheSize",              makeAny( (sal_Int32)20 ) ),
+        AsciiPropertyValue( "ControlUser",                makeAny( ::rtl::OUString() ) ),
+        AsciiPropertyValue( "ControlPassword",            makeAny( ::rtl::OUString() ) ),
+        // known LDAP driver settings
+        AsciiPropertyValue( "HostName",                   makeAny( ::rtl::OUString() ) ),
+        AsciiPropertyValue( "PortNumber",                 makeAny( (sal_Int32)389 ) ),
+        AsciiPropertyValue( "BaseDN",                     makeAny( ::rtl::OUString() ) ),
+        AsciiPropertyValue( "MaxRowCount",                makeAny( (sal_Int32)100 ) ),
+        // misc known driver settings
+        AsciiPropertyValue( "ParameterNameSubstitution",  makeAny( (sal_Bool)sal_False ) ),
+        AsciiPropertyValue( "AddIndexAppendix",           makeAny( (sal_Bool)sal_True ) ),
+        // known SDB level settings
+        AsciiPropertyValue( "IgnoreDriverPrivileges",     makeAny( (sal_Bool)sal_True ) ),
+        AsciiPropertyValue( "NoNameLengthLimit",          makeAny( (sal_Bool)sal_False ) ),
+        AsciiPropertyValue( "AppendTableAliasName",       makeAny( (sal_Bool)sal_False ) ),
+        AsciiPropertyValue( "EnableSQL92Check",           makeAny( (sal_Bool)sal_False ) ),
+        AsciiPropertyValue( "BooleanComparisonMode",      makeAny( (sal_Int32)0 ) ),
+        AsciiPropertyValue( "TableTypeFilterMode",        makeAny( (sal_Int32)3 ) ),
+        AsciiPropertyValue( "RespectDriverResultSetType", makeAny( (sal_Bool)sal_False ) ),
+        AsciiPropertyValue( "UseSchemaInSelect",          makeAny( (sal_Bool)sal_True ) ),
+        AsciiPropertyValue( "UseCatalogInSelect",         makeAny( (sal_Bool)sal_True ) ),
+        AsciiPropertyValue( "EnableOuterJoinEscape",      makeAny( (sal_Bool)sal_True ) ),
+        AsciiPropertyValue( "PreferDosLikeLineEnds",      makeAny( (sal_Bool)sal_False ) ),
+        AsciiPropertyValue( NULL, Any() )
+    };
+    return aKnownSettings;
 }
 
 // -----------------------------------------------------------------------------
