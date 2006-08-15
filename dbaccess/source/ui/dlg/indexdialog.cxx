@@ -4,9 +4,9 @@
  *
  *  $RCSfile: indexdialog.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:08:17 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:51:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,7 +145,7 @@ namespace dbaui
             {
                 ::rtl::OUString sNewName(_rNewText);
                 ::rtl::OUString sAlias = ::dbtools::convertName2SQLName(sNewName,xMeta->getExtraNameCharacters());
-                if ( ( xMeta->storesMixedCaseQuotedIdentifiers() )
+                if ( ( xMeta->supportsMixedCaseQuotedIdentifiers() )
                         ?
                         sAlias != sNewName
                         :
