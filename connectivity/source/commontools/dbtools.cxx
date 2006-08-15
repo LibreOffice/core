@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 15:51:24 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:27:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1075,10 +1075,7 @@ try
         {
             // binaere Suche
             Property* pResult = ::std::lower_bound(pNewProps, pNewProps + nNewLen,pOldProps[i].Name, ::comphelper::PropertyStringLessFunctor());
-
-//          Property* pResult = (Property*) bsearch(pOldProps + i, (void*)pNewProps, nNewLen, sizeof(Property),
-//              &PropertyCompare);
-            if (pResult
+            if (    pResult
                 && ( pResult != pNewProps + nNewLen && pResult->Name == pOldProps[i].Name )
                 && ( pResult->Attributes == pOldProps[i].Attributes )
                 && ( (pResult->Attributes & PropertyAttribute::READONLY) == 0 )
