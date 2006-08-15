@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FConnection.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:25:05 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:28:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,11 +176,11 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     for(;pBegin != pEnd;++pBegin)
     {
         if(0 == pBegin->Name.compareToAscii("Extension"))
-            pBegin->Value >>= aExt;
+            OSL_VERIFY( pBegin->Value >>= aExt );
         else if(0 == pBegin->Name.compareToAscii("CharSet"))
         {
             ::rtl::OUString sIanaName;
-            pBegin->Value >>= sIanaName;
+            OSL_VERIFY( pBegin->Value >>= sIanaName );
 
             ::dbtools::OCharsetMap aLookupIanaName;
             ::dbtools::OCharsetMap::const_iterator aLookup = aLookupIanaName.find(sIanaName, ::dbtools::OCharsetMap::IANA());
@@ -191,7 +191,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
         }
         else if (0 == pBegin->Name.compareToAscii("ShowDeleted"))
         {
-            pBegin->Value >>= m_bShowDeleted;
+            OSL_VERIFY( pBegin->Value >>= m_bShowDeleted );
         }
         else if (0 == pBegin->Name.compareToAscii("EnableSQL92Check"))
         {
