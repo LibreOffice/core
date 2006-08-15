@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:23:44 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:49:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -526,6 +526,7 @@ SbaXDataBrowserController::SbaXDataBrowserController(const Reference< ::com::sun
     ,m_bLoadCanceled( sal_False )
     ,m_bClosingKillOpen( sal_False )
     ,m_bErrorOccured( sal_False )
+    ,m_pClipbordNotifier( NULL )
 {
     DBG_CTOR(SbaXDataBrowserController,NULL);
 
@@ -537,6 +538,9 @@ SbaXDataBrowserController::SbaXDataBrowserController(const Reference< ::com::sun
         m_xFormControllerImpl->setDelegator(*this);
     }
     ::comphelper::decrement(m_refCount);
+
+    m_aInvalidateClipboard.SetTimeoutHdl(LINK(this, SbaXDataBrowserController, OnInvalidateClipboard));
+    m_aInvalidateClipboard.SetTimeout(300);
 }
 
 //------------------------------------------------------------------------------
@@ -1215,7 +1219,7 @@ void SbaXDataBrowserController::disposing()
 
     removeModelListeners(getControlModel());
 
-    if ( getView() )
+    if ( getView() && m_pClipbordNotifier  )
     {
         m_pClipbordNotifier->ClearCallbackLink();
         m_pClipbordNotifier->AddRemoveListener( getView(), sal_False );
@@ -1274,8 +1278,8 @@ void SbaXDataBrowserController::frameAction(const ::com::sun::star::frame::Frame
                 // start the clipboard timer
                 if (getBrowserView() && getBrowserView()->getVclControl() && !m_aInvalidateClipboard.IsActive())
                 {
-                    m_aInvalidateClipboard.SetTimeout(300);
                     m_aInvalidateClipboard.Start();
+                    OnInvalidateClipboard( NULL );
                 }
                 break;
             case ::com::sun::star::frame::FrameAction_FRAME_DEACTIVATING:
@@ -1285,7 +1289,7 @@ void SbaXDataBrowserController::frameAction(const ::com::sun::star::frame::Frame
                 if (getBrowserView() && getBrowserView()->getVclControl() && m_aInvalidateClipboard.IsActive())
                 {
                     m_aInvalidateClipboard.Stop();
-                    LINK(this, SbaXDataBrowserController, OnInvalidateClipboard).Call(NULL);
+                    OnInvalidateClipboard( NULL );
                 }
                 // remove the "get cell focus"-event
                 m_aAsyncGetCellFocus.CancelCall();
@@ -2171,29 +2175,38 @@ void SbaXDataBrowserController::SelectionChanged()
 //------------------------------------------------------------------------------
 void SbaXDataBrowserController::CellActivated()
 {
-    m_aInvalidateClipboard.SetTimeout(300);
     m_aInvalidateClipboard.Start();
+    OnInvalidateClipboard( NULL );
 }
 
 //------------------------------------------------------------------------------
 void SbaXDataBrowserController::CellDeactivated()
 {
     m_aInvalidateClipboard.Stop();
-    LINK(this, SbaXDataBrowserController, OnInvalidateClipboard).Call(NULL);
+    OnInvalidateClipboard( NULL );
 }
 
 //------------------------------------------------------------------------------
 IMPL_LINK( SbaXDataBrowserController, OnClipboardChanged, void*, EMPTYARG )
 {
+    ::vos::OGuard aGuard(Application::GetSolarMutex());
     return OnInvalidateClipboard( NULL );
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK(SbaXDataBrowserController, OnInvalidateClipboard, void*, EMPTYARG)
+IMPL_LINK(SbaXDataBrowserController, OnInvalidateClipboard, AutoTimer*, _pTimer)
 {
     InvalidateFeature(ID_BROWSER_CUT);
     InvalidateFeature(ID_BROWSER_COPY);
-    InvalidateFeature(ID_BROWSER_PASTE);
+
+    // if the invalidation was triggered by the timer, we do not need to invalidate PASTE.
+    // The timer is only for checking the CUT/COPY slots regulariry, which depend on the
+    // selection state of the active cell
+    // TODO: get a callback at the Edit which allows to be notified when the selection
+    // changes. This would be much better than this cycle-eating polling mechanism here ....
+    if ( _pTimer != &m_aInvalidateClipboard )
+        InvalidateFeature(ID_BROWSER_PASTE);
+
     return 0L;
 }
 
@@ -2477,10 +2490,6 @@ void SbaXDataBrowserController::LoadFinished(sal_Bool /*bWasSynch*/)
 
         // -------------------------------
         InvalidateAll();
-
-        // -------------------------------
-        // start the clipboard invalidator
-        m_aInvalidateClipboard.SetTimeoutHdl(LINK(this, SbaXDataBrowserController, OnInvalidateClipboard));
 
         m_aAsyncGetCellFocus.Call();
     }
