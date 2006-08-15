@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vendorbase.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-12-28 17:38:54 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:35:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,6 @@ namespace jfw_plugin
 
 
 //Used by subclasses of VendorBase to build paths to Java runtime
-#if defined UNX
 #if defined SPARC
 #define JFW_PLUGIN_ARCH "sparc"
 #elif defined INTEL
@@ -62,7 +61,6 @@ namespace jfw_plugin
 #else // SPARC, INTEL, POWERPC, MIPS
 #error unknown plattform
 #endif // SPARC, INTEL, POWERPC, MIPS
-#endif
 
 
 class MalformedVersionException
