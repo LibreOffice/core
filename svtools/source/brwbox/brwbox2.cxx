@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brwbox2.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 11:46:52 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 11:01:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,10 @@
 
 #ifndef _SFXDATWIN_HXX
 #include "datwin.hxx"
+#endif
+
+#ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
+#include "colorcfg.hxx"
 #endif
 
 #ifndef _SV_SALGTYPE_HXX
@@ -886,7 +890,7 @@ void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, 
                 pFirstCol->Title(), FALSE, FALSE, FALSE, !IsEnabled());
             aButtonFrame.Draw( *pDev );
 
-            Color aOldColor = pDev->GetLineColor();
+            pDev->Push( PUSH_LINECOLOR );
             pDev->SetLineColor( Color( COL_BLACK ) );
 
             pDev->DrawLine( Point( aRealPos.X(), aRealPos.Y() + nTitleHeight-1 ),
@@ -894,7 +898,7 @@ void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, 
             pDev->DrawLine( Point( aRealPos.X() + pFirstCol->Width() - 1, aRealPos.Y() ),
                Point( aRealPos.X() + pFirstCol->Width() - 1, aRealPos.Y() + nTitleHeight-1 ) );
 
-            pDev->SetLineColor( aOldColor );
+            pDev->Pop();
         }
 
         aRealPos.Y() += aHeaderSize.Height();
@@ -961,6 +965,8 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, BOOL
                     ? pCols->GetObject(0)->Width()
                     : 0;
     nHLineX += aOverallAreaPos.X();
+
+    Color aDelimiterLineColor( ::svtools::ColorConfig().GetColorValue( ::svtools::CALCGRID ).nColor );
 
     // redraw the invalid fields
     BOOL bRetouching = FALSE;
@@ -1097,8 +1103,8 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, BOOL
         {
             // draw horizontal delimitation lines
             _rOut.SetClipRegion();
-            Color aOldColor = _rOut.GetLineColor();
-            _rOut.SetLineColor( aGridLineColor );
+            _rOut.Push( PUSH_LINECOLOR );
+            _rOut.SetLineColor( aDelimiterLineColor );
             long nY = aPos.Y() + nDataRowHeigt - 1;
             if (nY <= aOverallAreaBRPos.Y())
                 _rOut.DrawLine( Point( nHLineX, nY ),
@@ -1106,7 +1112,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, BOOL
                                         ? std::min(long(long(aPos.X()) - 1), aOverallAreaBRPos.X())
                                         : aOverallAreaBRPos.X(),
                                       nY ) );
-            _rOut.SetLineColor( aOldColor );
+            _rOut.Pop();
         }
     }
 
@@ -1142,7 +1148,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, BOOL
     // draw vertical delimitational lines?
     if ( bVLines )
     {
-        _rOut.SetLineColor( aGridLineColor );
+        _rOut.SetLineColor( aDelimiterLineColor );
         Point aVertPos( aOverallAreaPos.X() - 1, aOverallAreaPos.Y() );
         long nDeltaY = aOverallAreaBRPos.Y();
         for ( USHORT nCol = 0; nCol < pCols->Count(); ++nCol )
