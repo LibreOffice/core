@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertystatecontainer.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:36:52 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 11:03:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,10 +114,10 @@ namespace comphelper
 
         /** get the default value for the property denoted by the given handle
 
-            <p>Already implemented by this base class, no need to override</p>
-            @precond <arg>_nHandle</arg> is a valid property handle
+            @precond
+                <arg>_nHandle</arg> is a valid property handle
         */
-        virtual ::com::sun::star::uno::Any              getPropertyDefaultByHandle( sal_Int32 _nHandle ) const = 0;
+        virtual void getPropertyDefaultByHandle( sal_Int32 _nHandle, ::com::sun::star::uno::Any& _rDefault ) const = 0;
 
     protected:
         // XInterface
@@ -126,6 +126,10 @@ namespace comphelper
         DECLARE_XTYPEPROVIDER( )
 
     protected:
+        /** returns the handle for the given name
+
+            @throw UnknownPropertyException if the given name is not a registered property
+        */
         sal_Int32   getHandleForName( const ::rtl::OUString& _rPropertyName ) SAL_THROW( ( ::com::sun::star::beans::UnknownPropertyException ) );
     };
 
