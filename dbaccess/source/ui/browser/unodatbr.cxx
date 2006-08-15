@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.176 $
+ *  $Revision: 1.177 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:24:46 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:49:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,9 @@
 
 #ifndef _SVX_GRIDCTRL_HXX
 #include <svx/gridctrl.hxx>
+#endif
+#ifndef SVX_DATABASE_REGISTRATION_UI_HXX
+#include <svx/databaseregistrationui.hxx>
 #endif
 #ifndef _SBA_UNODATBR_HXX_
 #include "unodatbr.hxx"
@@ -314,6 +317,8 @@
 #ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
 #include <svtools/moduleoptions.hxx>
 #endif
+
+#include <memory>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
@@ -3557,7 +3562,7 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
 
     if (!m_xMultiServiceFacatory.is())
         // no ORB -> no administration dialog
-        aContextMenu.EnableItem(ID_TREE_ADMINISTRATE, sal_False);
+        aContextMenu.EnableItem(ID_TREE_EDIT_DATABASE, sal_False);
 
     // no disabled entries
     aContextMenu.RemoveDisabledEntries();
@@ -3579,7 +3584,7 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
 
     switch (nPos)
     {
-        case ID_TREE_ADMINISTRATE:
+        case ID_TREE_EDIT_DATABASE:
             implAdministrate(pEntry);
             break;
 
@@ -3604,6 +3609,10 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
                 pTransfer->CopyToClipboard(getView());
         }
         break;
+
+        case ID_TREE_ADMINISTRATE:
+            ::svx::administrateDatabaseRegistration( getView() );
+            break;
     }
 
     return sal_True;    // handled
