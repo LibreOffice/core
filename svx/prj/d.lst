@@ -563,6 +563,7 @@ hedabu: ..\inc\numdef.hxx %_DEST%\inc%_EXT%\svx\numdef.hxx
 hedabu: ..\inc\numvset.hxx %_DEST%\inc%_EXT%\svx\numvset.hxx
 hedabu: ..\inc\dbbrowse.hxx %_DEST%\inc%_EXT%\svx\dbbrowse.hxx
 hedabu: ..\inc\fmdmod.hxx %_DEST%\inc%_EXT%\svx\fmdmod.hxx
+hedabu: ..\inc\databaseregistrationui.hxx %_DEST%\inc%_EXT%\svx\databaseregistrationui.hxx
 hedabu: ..\inc\fmgridcl.hxx %_DEST%\inc%_EXT%\svx\fmgridcl.hxx
 hedabu: ..\inc\fmgridif.hxx %_DEST%\inc%_EXT%\svx\fmgridif.hxx
 hedabu: ..\inc\gridctrl.hxx %_DEST%\inc%_EXT%\svx\gridctrl.hxx
