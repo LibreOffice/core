@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QTableWindow.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 13:57:19 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:55:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -262,7 +262,7 @@ sal_Bool OQueryTableWindow::ExistsField(const ::rtl::OUString& strFieldName, OTa
         try
         {
             Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
-            ::comphelper::UStringMixEqual bCase(xMeta.is() && xMeta->storesMixedCaseQuotedIdentifiers());
+            ::comphelper::UStringMixEqual bCase(xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers());
 
             while (pEntry)
             {
