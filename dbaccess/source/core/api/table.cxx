@@ -4,9 +4,9 @@
  *
  *  $RCSfile: table.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:07:11 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:43:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,7 +135,7 @@ ODBTable::ODBTable(connectivity::sdbcx::OCollection* _pTables
         ,const ::rtl::OUString& _rType
         ,const ::rtl::OUString& _rDesc
         ,const Reference< XNameAccess >& _xColumnDefinitions) throw(SQLException)
-    :OTable_Base(_pTables,_rxConn,_rxConn->getMetaData().is() && _rxConn->getMetaData()->storesMixedCaseQuotedIdentifiers(), _rName, _rType, _rDesc, _rSchema, _rCatalog )
+    :OTable_Base(_pTables,_rxConn,_rxConn->getMetaData().is() && _rxConn->getMetaData()->supportsMixedCaseQuotedIdentifiers(), _rName, _rType, _rDesc, _rSchema, _rCatalog )
     ,m_xColumnDefinitions(_xColumnDefinitions)
     ,m_nPrivileges(0)
 {
@@ -151,7 +151,7 @@ ODBTable::ODBTable(connectivity::sdbcx::OCollection* _pTables
 ODBTable::ODBTable(connectivity::sdbcx::OCollection* _pTables
                    ,const Reference< XConnection >& _rxConn)
                 throw(SQLException)
-    :OTable_Base(_pTables,_rxConn, _rxConn->getMetaData().is() && _rxConn->getMetaData()->storesMixedCaseQuotedIdentifiers())
+    :OTable_Base(_pTables,_rxConn, _rxConn->getMetaData().is() && _rxConn->getMetaData()->supportsMixedCaseQuotedIdentifiers())
     ,m_nPrivileges(-1)
 {
 }
