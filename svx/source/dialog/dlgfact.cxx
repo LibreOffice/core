@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgfact.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 08:34:15 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:38:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,6 +91,7 @@
 #include "cuitabline.hxx" //add for SvxLineTabDialog
 #include "measure.hxx" //add for SvxMeasureDialog
 #include "connect.hxx" //add for SvxConnectionDialog
+#include "dbregister.hxx" // add for DatabaseRegistrationDialog
 #include "cuioptgenrl.hxx"  //add for SvxGeneralTabPage
 #include "insdlg.hxx"
 #include "pastedlg.hxx"
@@ -1942,6 +1943,9 @@ AbstractSfxSingleTabDialog* AbstractDialogFactory_Impl::CreateSfxSingleTabDialog
             break;
         case RID_SVXPAGE_CONNECTION :
             pDlg = new SvxConnectionDialog( pParent, rAttr, pView );
+            break;
+        case RID_SFXPAGE_DBREGISTER :
+            pDlg = new DatabaseRegistrationDialog( pParent, rAttr );
             break;
         default:
             break;
