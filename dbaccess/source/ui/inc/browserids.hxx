@@ -4,9 +4,9 @@
  *
  *  $RCSfile: browserids.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:44:07 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:52:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,9 +80,10 @@
 
 // The following ids are local to special components (e.g. menus), so they don't need to be unique
 // overall. Please have this in mind when changing anything
-#define ID_TREE_ADMINISTRATE                 1
+#define ID_TREE_EDIT_DATABASE                1
 #define ID_TREE_CLOSE_CONN                   2
 #define ID_TREE_REBUILD_CONN                 3
+#define ID_TREE_ADMINISTRATE                 4
 // free
 // free
 // free
