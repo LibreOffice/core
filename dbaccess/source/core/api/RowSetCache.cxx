@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 07:46:13 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:42:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,6 +101,9 @@
 #endif
 #ifndef _CONNECTIVITY_SQLNODE_HXX
 #include <connectivity/sqlnode.hxx>
+#endif
+#ifndef _CONNECTIVITY_PARSE_SQLITERATOR_HXX_
+#include <connectivity/sqliterator.hxx>
 #endif
 #ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
@@ -229,7 +232,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                             {
                                 Reference<XNameAccess> xSelColumns = xColSup->getColumns();
                                 Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
-                                SelectColumnsMetaData aColumnNames(xMeta.is() && xMeta->storesMixedCaseQuotedIdentifiers() ? true : false);
+                                SelectColumnsMetaData aColumnNames(xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers() ? true : false);
                                 ::dbaccess::getColumnPositions(xSelColumns,xColumns,aUpdateTableName,aColumnNames);
                                 bAllKeysFound = !aColumnNames.empty() && sal_Int32(aColumnNames.size()) == xColumns->getElementNames().getLength();
                             }
@@ -296,7 +299,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
         else
         {
             Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
-            SelectColumnsMetaData aColumnNames(xMeta.is() && xMeta->storesMixedCaseQuotedIdentifiers() ? true : false);
+            SelectColumnsMetaData aColumnNames(xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers() ? true : false);
             Reference<XColumnsSupplier> xColSup(_xAnalyzer,UNO_QUERY);
             Reference<XNameAccess> xSelColumns  = xColSup->getColumns();
             Reference<XNameAccess> xColumns     = m_aUpdateTable->getColumns();
@@ -1405,6 +1408,43 @@ void ORowSetCache::checkUpdateConditions(sal_Int32 columnIndex)
     if(m_bAfterLast || columnIndex >= (sal_Int32)(*m_aInsertRow)->size())
         throwFunctionSequenceException(m_xSet.get());
 }
+//------------------------------------------------------------------------------
+sal_Bool ORowSetCache::checkInnerJoin(const ::connectivity::OSQLParseNode *pNode,const Reference< XConnection>& _xConnection,const ::rtl::OUString& _sUpdateTableName)
+{
+    sal_Bool bOk = sal_False;
+    if (pNode->count() == 3 &&  // Ausdruck is geklammert
+        SQL_ISPUNCTUATION(pNode->getChild(0),"(") &&
+        SQL_ISPUNCTUATION(pNode->getChild(2),")"))
+    {
+        bOk = checkInnerJoin(pNode->getChild(1),_xConnection,_sUpdateTableName);
+    }
+    else if ((SQL_ISRULE(pNode,search_condition) || SQL_ISRULE(pNode,boolean_term)) &&          // AND/OR-Verknuepfung:
+                pNode->count() == 3)
+    {
+        // nur AND Verknüpfung zulassen
+        if ( SQL_ISTOKEN(pNode->getChild(1),AND) && (bOk = checkInnerJoin(pNode->getChild(0),_xConnection,_sUpdateTableName)) )
+            bOk = checkInnerJoin(pNode->getChild(2),_xConnection,_sUpdateTableName);
+    }
+    else if (SQL_ISRULE(pNode,comparison_predicate))
+    {
+        // only the comparison of columns is allowed
+        DBG_ASSERT(pNode->count() == 3,"checkInnerJoin: Fehler im Parse Tree");
+        if (!(SQL_ISRULE(pNode->getChild(0),column_ref) &&
+                SQL_ISRULE(pNode->getChild(2),column_ref) &&
+                pNode->getChild(1)->getNodeType() == SQL_NODE_EQUAL))
+        {
+            bOk = sal_False;
+        }
+        ::rtl::OUString sColumnName,sTableRange;
+        OSQLParseTreeIterator::getColumnRange(pNode->getChild(0),_xConnection->getMetaData(),sColumnName,sTableRange);
+        if ( !(bOk =  sTableRange == _sUpdateTableName) )
+        {
+            OSQLParseTreeIterator::getColumnRange(pNode->getChild(2),_xConnection->getMetaData(),sColumnName,sTableRange);
+            bOk =  sTableRange == _sUpdateTableName;
+        }
+    }
+    return bOk;
+}
 // -----------------------------------------------------------------------------
 sal_Bool ORowSetCache::checkJoin(const Reference< XConnection>& _xConnection,
                                  const Reference< XSingleSelectQueryAnalyzer >& _xAnalyzer,
@@ -1414,8 +1454,8 @@ sal_Bool ORowSetCache::checkJoin(const Reference< XConnection>& _xConnection,
     ::rtl::OUString sSql = _xAnalyzer->getQuery();
     ::rtl::OUString sErrorMsg;
     ::connectivity::OSQLParser aSqlParser(m_xServiceFactory);
-    ::connectivity::OSQLParseNode* pSqlParseNode = aSqlParser.parseTree(sErrorMsg,sSql);
-    if(pSqlParseNode)
+    ::std::auto_ptr< ::connectivity::OSQLParseNode> pSqlParseNode( aSqlParser.parseTree(sErrorMsg,sSql));
+    if ( pSqlParseNode.get() && SQL_ISRULE(pSqlParseNode, select_statement) )
     {
         OSQLParseNode* pTableRefCommalist = pSqlParseNode->getByRule(::connectivity::OSQLParseNode::table_ref_commalist);
         OSL_ENSURE(pTableRefCommalist,"NO tables why!?");
@@ -1457,9 +1497,13 @@ sal_Bool ORowSetCache::checkJoin(const Reference< XConnection>& _xConnection,
                     bOk =  sTableRange == _sUpdateTableName;
                 }
             }
-
         }
-        delete pSqlParseNode;
+        else
+        {
+            OSQLParseNode* pWhereOpt = pSqlParseNode->getChild(3)->getChild(1);
+            if ( pWhereOpt && !pWhereOpt->isLeaf() )
+                bOk = checkInnerJoin(pWhereOpt->getChild(1),_xConnection,_sUpdateTableName);
+        }
     }
     return bOk;
 }
