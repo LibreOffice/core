@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:10:15 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:44:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,6 +93,18 @@
 #endif
 #ifndef _COM_SUN_STAR_REFLECTION_XPROXYFACTORY_HPP_
 #include <com/sun/star/reflection/XProxyFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
+#include <com/sun/star/beans/NamedValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYCONTAINER_HPP_
+#include <com/sun/star/beans/XPropertyContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATE_HPP_
+#include <com/sun/star/beans/PropertyState.hpp>
 #endif
 #ifndef _TYPELIB_TYPEDESCRIPTION_HXX_
 #include <typelib/typedescription.hxx>
@@ -432,7 +444,7 @@ namespace dbaccess
         Reference<XConnection> getConnection(   const rtl::OUString& url,
                                                 const rtl::OUString& user,
                                                 const rtl::OUString& password,
-                                                Sequence< PropertyValue >& _aInfo,
+                                                const Sequence< PropertyValue >& _aInfo,
                                                 ODatabaseSource* _pDataSource);
         void addEventListener(const Reference<XConnection>& _rxConnection,TConnectionMap::iterator& _rIter);
     };
@@ -469,7 +481,7 @@ namespace dbaccess
     Reference<XConnection> OSharedConnectionManager::getConnection( const rtl::OUString& url,
                                             const rtl::OUString& user,
                                             const rtl::OUString& password,
-                                            Sequence< PropertyValue >& _aInfo,
+                                            const Sequence< PropertyValue >& _aInfo,
                                             ODatabaseSource* _pDataSource)
     {
         MutexGuard aGuard(m_aMutex);
@@ -523,37 +535,16 @@ namespace dbaccess
         osl_incrementInterlockedCount(&_rIter->second.nALiveCount);
     }
 
+    //----------------------------------------------------------------------
     namespace
     {
-        Sequence< PropertyValue > lcl_filterDriverProperties(const Reference< XDriver >& _xDriver,const ::rtl::OUString& _sUrl,const Sequence< PropertyValue >& _rDataSourceSettings)
+        //------------------------------------------------------------------
+        Sequence< PropertyValue > lcl_filterDriverProperties( const Reference< XDriver >& _xDriver, const ::rtl::OUString& _sUrl,
+            const Sequence< PropertyValue >& _rDataSourceSettings, const AsciiPropertyValue* _pKnownSettings )
         {
             if ( _xDriver.is() )
             {
                 Sequence< DriverPropertyInfo > aDriverInfo(_xDriver->getPropertyInfo(_sUrl,_rDataSourceSettings));
-                const char* pKnownSettings[] = {
-                                            // known JDBC settings
-                                            "JavaDriverClass",
-                                            // known settings for file-based drivers
-                                            "Extension", "CharSet", "HeaderLine",
-                                            "FieldDelimiter", "StringDelimiter", "DecimalDelimiter",
-                                            "ThousandDelimiter", "ShowDeleted",
-                                            // known ODBC settings
-                                            "SystemDriverSettings", "UseCatalog",
-                                            // settings related to auto increment handling
-                                            "AutoIncrementCreation", "AutoRetrievingStatement", "IsAutoRetrievingEnabled",
-                                            // known Adabas driver setting
-                                            "ShutdownDatabase", "DataCacheSizeIncrement", "DataCacheSize",
-                                            "ControlUser", "ControlPassword",
-                                            // known LDAP driver settings
-                                            "HostName", "PortNumber", "BaseDN", "MaxRowCount"
-                                            // misc known driver settings
-                                            "ParameterNameSubstitution", "AddIndexAppendix",
-                                            // known SDB level settings
-                                            "IgnoreDriverPrivileges", "NoNameLengthLimit", "AppendTableAliasName",
-                                            "EnableSQL92Check", "BooleanComparisonMode", "TableTypeFilterMode",
-                                            "RespectDriverResultSetType", "UseSchemaInSelect", "UseCatalogInSelect"
-                                        };
-                sal_Int32 nKnownSettings = sizeof(pKnownSettings) / sizeof(pKnownSettings[0]);
 
                 const PropertyValue* pDataSourceSetting = _rDataSourceSettings.getConstArray();
                 const PropertyValue* pEnd = pDataSourceSetting + _rDataSourceSettings.getLength();
@@ -563,17 +554,17 @@ namespace dbaccess
                 for ( ; pDataSourceSetting != pEnd ; ++pDataSourceSetting )
                 {
                     sal_Bool bAllowSetting = sal_False;
-                    sal_Int32 i;
-                    for ( i=0; i < nKnownSettings; ++i )
+                    const AsciiPropertyValue* pSetting = _pKnownSettings;
+                    for ( ; pSetting->AsciiName; ++pSetting )
                     {
-                        if ( !pDataSourceSetting->Name.compareToAscii( pKnownSettings[i] ) )
-                        {   // the particular setting is known
+                        if ( !pDataSourceSetting->Name.compareToAscii( pSetting->AsciiName ) )
+                        {   // the particular data source setting is known
 
                             const DriverPropertyInfo* pAllowedDriverSetting = aDriverInfo.getConstArray();
                             const DriverPropertyInfo* pDriverSettingsEnd = pAllowedDriverSetting + aDriverInfo.getLength();
                             for ( ; pAllowedDriverSetting != pDriverSettingsEnd; ++pAllowedDriverSetting )
                             {
-                                if ( !pAllowedDriverSetting->Name.compareToAscii( pKnownSettings[i] ) )
+                                if ( !pAllowedDriverSetting->Name.compareToAscii( pSetting->AsciiName ) )
                                 {   // the driver also allows this setting
                                     bAllowSetting = sal_True;
                                     break;
@@ -582,7 +573,7 @@ namespace dbaccess
                             break;
                         }
                     }
-                    if ( bAllowSetting || ( i == nKnownSettings ) )
+                    if ( bAllowSetting || !pSetting->AsciiName )
                     {   // if the driver allows this particular setting, or if the setting is completely unknown,
                         // we pass it to the driver
                         aRet.push_back( *pDataSourceSetting );
@@ -593,6 +584,15 @@ namespace dbaccess
             }
             return Sequence< PropertyValue >();
         }
+
+        //------------------------------------------------------------------
+        struct CheckForDefaultPropertyValue : public ::std::unary_function< PropertyValue, bool >
+        {
+            bool operator()( const PropertyValue& _rProp )
+            {
+                return _rProp.State == PropertyState_DEFAULT_VALUE;
+            }
+        };
     }
 //============================================================
 //= ODatabaseContext
@@ -814,7 +814,12 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const ::rtl::O
             nExceptionMessageId = RID_STR_COULDNOTCONNECT_NODRIVER;
         else
         {
-            Sequence< PropertyValue > aDriverInfo = lcl_filterDriverProperties(xDriver,m_pImpl->m_sConnectURL,m_pImpl->m_aInfo);
+            Sequence< PropertyValue > aDriverInfo = lcl_filterDriverProperties(
+                xDriver,
+                m_pImpl->m_sConnectURL,
+                m_pImpl->m_xSettings->getPropertyValues(),
+                m_pImpl->getDefaultDataSourceSettings()
+            );
 
             if ( m_pImpl->isEmbeddedDatabase() )
             {
@@ -870,14 +875,15 @@ Reference< XPropertySetInfo >  ODatabaseSource::getPropertySetInfo() throw (Runt
 //------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* ODatabaseSource::createArrayHelper( ) const
 {
-    BEGIN_PROPERTY_HELPER(12)
-        DECL_PROP1(INFO,                        Sequence< PropertyValue >,BOUND);
+    BEGIN_PROPERTY_HELPER(13)
+        DECL_PROP1(INFO,                        Sequence< PropertyValue >,  BOUND);
         DECL_PROP1_BOOL(ISPASSWORDREQUIRED,                                 BOUND);
         DECL_PROP1_BOOL(ISREADONLY,                                         READONLY);
-        DECL_PROP1(LAYOUTINFORMATION,           Sequence< ::com::sun::star::beans::PropertyValue >,BOUND);
+        DECL_PROP1(LAYOUTINFORMATION,           Sequence< PropertyValue >,  BOUND);
         DECL_PROP1(NAME,                        ::rtl::OUString,            READONLY);
         DECL_PROP2_IFACE(NUMBERFORMATSSUPPLIER, XNumberFormatsSupplier,     READONLY, TRANSIENT);
         DECL_PROP1(PASSWORD,                    ::rtl::OUString,            TRANSIENT);
+        DECL_PROP2_IFACE(SETTINGS,              XPropertySet,               BOUND, READONLY);
         DECL_PROP1_BOOL(SUPPRESSVERSIONCL,                                  BOUND);
         DECL_PROP1(TABLEFILTER,                 Sequence< ::rtl::OUString >,BOUND);
         DECL_PROP1(TABLETYPEFILTER,             Sequence< ::rtl::OUString >,BOUND);
@@ -943,11 +949,11 @@ sal_Bool ODatabaseSource::convertFastPropertyValue(Any & rConvertedValue, Any & 
                         throw IllegalArgumentException();
                 }
 
-
-                bModified = m_pImpl->m_aInfo.getLength() != aValues.getLength();
+                Sequence< PropertyValue > aSettings = m_pImpl->m_xSettings->getPropertyValues();
+                bModified = aSettings.getLength() != aValues.getLength();
                 if ( !bModified )
                 {
-                    const PropertyValue* pInfoIter = m_pImpl->m_aInfo.getConstArray();
+                    const PropertyValue* pInfoIter = aSettings.getConstArray();
                     const PropertyValue* checkValue = aValues.getConstArray();
                     for ( ;!bModified && checkValue != valueEnd ; ++checkValue,++pInfoIter)
                     {
@@ -960,13 +966,87 @@ sal_Bool ODatabaseSource::convertFastPropertyValue(Any & rConvertedValue, Any & 
                 }
 
                 rConvertedValue = rValue;
-                rOldValue <<= m_pImpl->m_aInfo;
-            }   break;
+                rOldValue <<= aSettings;
+            }
+            break;
             default:
-                DBG_ERROR("unknown Property");
+                DBG_ERROR( "ODatabaseSource::convertFastPropertyValue: unknown or readonly Property!" );
         }
     }
     return bModified;
+}
+
+//------------------------------------------------------------------------------
+namespace
+{
+    struct SelectPropertyName : public ::std::unary_function< PropertyValue, ::rtl::OUString >
+    {
+    public:
+        const ::rtl::OUString& operator()( const PropertyValue& _lhs )
+        {
+            return _lhs.Name;
+        }
+    };
+
+    /** sets a new set of property values at a given property bag instance
+
+        The methods takes a property bag, and a sequence of property values to set at this bag.
+        Upon return, every property which is not part of the given sequence is
+        <ul><li>removed from the bag, if it's a removeable property</li>
+            <li><em>or</em>reset to its default value, if it's not a removeable property</li>
+        </ul>.
+
+        @param  _rxPropertyBag
+            the property bag to operate on
+        @param  _rAllNewPropertyValues
+            the new property values to set at the bag
+    */
+    void lcl_setPropertyValues_resetOrRemoveOther( const Reference< XPropertyAccess >& _rxPropertyBag, const Sequence< PropertyValue >& _rAllNewPropertyValues )
+    {
+        // sequences are ugly to operate on
+        typedef ::std::set< ::rtl::OUString >   StringSet;
+        StringSet aToBeSetPropertyNames;
+        ::std::transform(
+            _rAllNewPropertyValues.getConstArray(),
+            _rAllNewPropertyValues.getConstArray() + _rAllNewPropertyValues.getLength(),
+            ::std::insert_iterator< StringSet >( aToBeSetPropertyNames, aToBeSetPropertyNames.end() ),
+            SelectPropertyName()
+        );
+
+        try
+        {
+            // obtain all properties currently known at the bag
+            Reference< XPropertySet > xPropertySet( _rxPropertyBag, UNO_QUERY_THROW );
+            Reference< XPropertySetInfo > xPSI( xPropertySet->getPropertySetInfo(), UNO_QUERY_THROW );
+            Sequence< Property > aAllExistentProperties( xPSI->getProperties() );
+
+            Reference< XPropertyState > xPropertyState( _rxPropertyBag, UNO_QUERY_THROW );
+            Reference< XPropertyContainer > xPropertyContainer( _rxPropertyBag, UNO_QUERY_THROW );
+
+            // loop through them, and reset resp. default properties which are not to be set
+            const Property* pExistentProperty( aAllExistentProperties.getConstArray() );
+            const Property* pExistentPropertyEnd( aAllExistentProperties.getConstArray() + aAllExistentProperties.getLength() );
+            for ( ; pExistentProperty != pExistentPropertyEnd; ++pExistentProperty )
+            {
+                if ( aToBeSetPropertyNames.find( pExistentProperty->Name ) != aToBeSetPropertyNames.end() )
+                    continue;
+
+                // this property is not to be set, but currently exists in the bag.
+                // -> Remove, respectively default, it
+                if ( ( pExistentProperty->Attributes & PropertyAttribute::REMOVEABLE ) != 0 )
+                    xPropertyContainer->removeProperty( pExistentProperty->Name );
+                else
+                    xPropertyState->setPropertyToDefault( pExistentProperty->Name );
+            }
+
+            // finally, set the new property values
+            _rxPropertyBag->setPropertyValues( _rAllNewPropertyValues );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -1000,8 +1080,12 @@ void ODatabaseSource::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const
                 rValue >>= m_pImpl->m_sConnectURL;
                 break;
             case PROPERTY_ID_INFO:
-                rValue >>= m_pImpl->m_aInfo;
-                break;
+            {
+                Sequence< PropertyValue > aInfo;
+                OSL_VERIFY( rValue >>= aInfo );
+                lcl_setPropertyValues_resetOrRemoveOther( m_pImpl->m_xSettings, aInfo );
+            }
+            break;
             case PROPERTY_ID_LAYOUTINFORMATION:
                 rValue >>= m_pImpl->m_aLayoutInformation;
                 break;
@@ -1039,7 +1123,21 @@ void ODatabaseSource::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) con
                 rValue = bool2any(m_pImpl->m_bReadOnly);
                 break;
             case PROPERTY_ID_INFO:
-                rValue <<= m_pImpl->m_aInfo;
+            {
+                Sequence< PropertyValue > aValues( m_pImpl->m_xSettings->getPropertyValues() );
+                Sequence< PropertyValue > aNonDefaultValues( aValues.getLength() );
+                const PropertyValue* pCopyEnd = ::std::remove_copy_if(
+                    aValues.getConstArray(),
+                    aValues.getConstArray() + aValues.getLength(),
+                    aNonDefaultValues.getArray(),
+                    CheckForDefaultPropertyValue()
+                );
+                aNonDefaultValues.realloc( pCopyEnd - aNonDefaultValues.getArray() );
+                rValue <<= aNonDefaultValues;
+            }
+            break;
+            case PROPERTY_ID_SETTINGS:
+                rValue <<= m_pImpl->m_xSettings;
                 break;
             case PROPERTY_ID_URL:
                 rValue <<= m_pImpl->m_sConnectURL;
@@ -1203,7 +1301,8 @@ Reference< XConnection > ODatabaseSource::getConnection(const rtl::OUString& use
             m_pImpl->m_pSharedConnectionManager = new OSharedConnectionManager(m_pImpl->m_xServiceFactory);
             m_pImpl->m_xSharedConnectionManager = m_pImpl->m_pSharedConnectionManager;
         }
-        xConn = m_pImpl->m_pSharedConnectionManager->getConnection(m_pImpl->m_sConnectURL,user,password,m_pImpl->m_aInfo,this);
+        xConn = m_pImpl->m_pSharedConnectionManager->getConnection(
+            m_pImpl->m_sConnectURL, user, password, m_pImpl->m_xSettings->getPropertyValues(), this );
     }
 
     if ( xConn.is() )
