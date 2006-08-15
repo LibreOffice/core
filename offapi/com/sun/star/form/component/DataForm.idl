@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataForm.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:37:14 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:34:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,18 +86,36 @@ published service DataForm
     service com::sun::star::sdb::RowSet;
     service com::sun::star::form::component::Form;
 
-    /** is used to initialize a data row which should be inserted.
+    /** is used to reset controls belonging to the form, and to reset database fields to which the
+        controls are bound
 
-        TODO: define the conditions under which forms and controls are (or should be) reset
+        <p>A <type>DataForm</type> is reset either on explicit request, or after it is moved
+        to the insertion row.</p>
+
+        <p>The insertion row is a virtual row which is used to insert new records. It is reached
+        by calling <member scope="com::sun::star::sdbc">XResultSetUpdate::moveToInsertRow</member>.
+        The <type scope="com::sun::star::sdb">RowSet</type> service specifies exactly which notifications
+        happen in which order when calling <type scope="com::sun::star::sdbc">XResultSetUpdate::moveToInsertRow</type>,
+        and a <type>DataForm</type> implementation extends this with the following contract:
+        <ul><li>After all notifications as defined in the <type scope="com::sun::star::sdb">RowSet</type>
+                service have been sent, the <type>DataForm</type> resets itself, if all
+                <type scope="com::sun::star::form">XResetListeners</type> approve this.</li>
+            <li>After the reset happened, the <member scope="com::sun::star::sdb">RowSet::IsModified</member>
+                property is reset to <FALSE/>. This property might have been switched to <TRUE/> during listener
+                notifications, since listeners are allowed to change field values. Also, the
+                <member scope="com::sun::star::form">XReset::reset</member> implementations of bound control
+                models might have modified the fields they're bound to (by filling them with default values).</li>
+            <li>The reset listeners are notified of the completed reset operation.</li>
+        </ul></p>
     */
     interface com::sun::star::form::XReset;
 
     /** used to load/unload the form
         <p>Loading a form is basically the same as executing the underlying row set. In fact, all the
         functionality of this interface could be simulated by using setting some properties manually,
-        <method scope="com::sun::star::sdbc">XRowSet::execute</method>, moving the row set cursor and so on.</p>
+        <member scope="com::sun::star::sdbc">XRowSet::execute</member>, moving the row set cursor and so on.</p>
 
-        <p>One main difference between <method>XLoadable::load</method> and <method scope="com::sun::star::sdbc">XRowSet::execute</method>
+        <p>One main difference between <member>XLoadable::load</member> and <member scope="com::sun::star::sdbc">XRowSet::execute</member>
         is that if you use the former, the row set is positioned on the first record, while in the latter case
         it is position <em>before</em> the it.</p>
     */
