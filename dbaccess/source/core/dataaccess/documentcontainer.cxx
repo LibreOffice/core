@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentcontainer.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:10:55 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:45:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -634,9 +634,9 @@ void SAL_CALL ODocumentContainer::replaceByHierarchicalName( const ::rtl::OUStri
     return pContent;
 }
 // -----------------------------------------------------------------------------
-Any ODocumentContainer::getPropertyDefaultByHandle( sal_Int32 /*_nHandle*/ ) const
+void ODocumentContainer::getPropertyDefaultByHandle( sal_Int32 /*_nHandle*/, Any& _rDefault ) const
 {
-    return Any();
+    _rDefault.clear();
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL ODocumentContainer::commit(  ) throw (::com::sun::star::io::IOException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
