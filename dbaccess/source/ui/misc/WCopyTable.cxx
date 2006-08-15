@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WCopyTable.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 16:04:00 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:54:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -775,7 +775,7 @@ void OCopyTableWizard::appendColumns(Reference<XColumnsSupplier>& _rxColSup,cons
         if(xColumn.is())
         {
             if(!_bKeyColumns)
-                ::dbaui::setColumnProperties(xColumn,pField);
+                dbaui::setColumnProperties(xColumn,pField);
             else
                 xColumn->setPropertyValue(PROPERTY_NAME,makeAny(pField->GetName()));
 
@@ -787,7 +787,7 @@ void OCopyTableWizard::appendColumns(Reference<XColumnsSupplier>& _rxColSup,cons
                 xColumn.set(xColumns->getByName(pField->GetName()),UNO_QUERY);
                 OSL_ENSURE(xColumn.is(),"OCopyTableWizard::appendColumns: Column is NULL!");
                 if ( xColumn.is() )
-                    dbaui::setColumnUiProperties(xColumn,pField);
+                    pField->copyColumnSettingsTo(xColumn);
             }
             else
             {
