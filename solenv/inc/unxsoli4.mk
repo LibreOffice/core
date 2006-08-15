@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxsoli4.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: ihi $ $Date: 2006-08-01 11:47:49 $
+#   last change: $Author: hr $ $Date: 2006-08-15 10:39:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -110,6 +110,7 @@ CFLAGSWERRCXX=-xwe
 # settings.mk):
 MODULES_WITH_WARNINGS := \
     b_server \
+    basebmp \
     basctl \
     canvas \
     chart2 \
