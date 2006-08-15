@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stringconstants.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:17:35 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:48:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_TITLE, "Title");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_URL, "URL");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_INFO, "Info");
+IMPLEMENT_CONSTASCII_USTRING(PROPERTY_SETTINGS, "Settings");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_ISPASSWORDREQUIRED, "IsPasswordRequired");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_TABLEFILTER, "TableFilter");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_TABLETYPEFILTER, "TableTypeFilter");
