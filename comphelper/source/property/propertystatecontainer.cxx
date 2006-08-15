@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertystatecontainer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:52:36 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 11:04:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,7 +167,9 @@ namespace comphelper
     //--------------------------------------------------------------------
     Any SAL_CALL OPropertyStateContainer::getPropertyDefault( const ::rtl::OUString& _rPropertyName ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
     {
-        return getPropertyDefaultByHandle( getHandleForName( _rPropertyName ) );
+        Any aDefault;
+        getPropertyDefaultByHandle( getHandleForName( _rPropertyName ), aDefault );
+        return aDefault;
     }
 
     //--------------------------------------------------------------------
@@ -175,7 +177,7 @@ namespace comphelper
     {
         // simply compare the current and the default value
         Any aCurrentValue; getFastPropertyValue( aCurrentValue, _nHandle );
-        Any aDefaultValue = getPropertyDefaultByHandle( _nHandle );
+        Any aDefaultValue; getPropertyDefaultByHandle( _nHandle, aDefaultValue );
 
         sal_Bool bEqual = uno_type_equalData(
                 const_cast< void* >( aCurrentValue.getValue() ), aCurrentValue.getValueType().getTypeLibType(),
@@ -192,7 +194,9 @@ namespace comphelper
     //--------------------------------------------------------------------
     void OPropertyStateContainer::setPropertyToDefaultByHandle( sal_Int32 _nHandle )
     {
-        setFastPropertyValue( _nHandle, getPropertyDefaultByHandle( _nHandle ) );
+        Any aDefault;
+        getPropertyDefaultByHandle( _nHandle, aDefault );
+        setFastPropertyValue( _nHandle, aDefault );
     }
 
 //.........................................................................
@@ -252,7 +256,7 @@ namespace comphelper
 
     protected:
         // OPropertyStateContainer overridables
-        virtual Any getPropertyDefaultByHandle( sal_Int32 _nHandle ) const;
+        virtual void getPropertyDefaultByHandle( sal_Int32 _nHandle, Any& _rDefault ) const;
     };
 
     //---------------------------------------------------------------------
@@ -296,27 +300,25 @@ namespace comphelper
     IMPLEMENT_FORWARD_XINTERFACE2( Test, Test_RefCountBase, OPropertyStateContainer )
 
     //---------------------------------------------------------------------
-    Any Test::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
+    void Test::getPropertyDefaultByHandle( sal_Int32 _nHandle, Any& _rDefault ) const
     {
-        Any aDefault;
         switch ( _nHandle )
         {
             case 1:
-                aDefault = makeAny( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StringPropertyDefault" ) ) );
+                _rDefault = makeAny( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StringPropertyDefault" ) ) );
                 break;
             case 2:
-                aDefault = makeAny( Reference< XInterface >( ) );
+                _rDefault = makeAny( Reference< XInterface >( ) );
                 break;
             case 3:
                 // void
                 break;
             case 4:
-                aDefault = makeAny( Reference< XInterface >( ) );
+                _rDefault = makeAny( Reference< XInterface >( ) );
                 break;
             default:
                 OSL_ENSURE( sal_False, "Test::getPropertyDefaultByHandle: invalid handle!" );
         }
-        return aDefault;
     }
 
     //---------------------------------------------------------------------
