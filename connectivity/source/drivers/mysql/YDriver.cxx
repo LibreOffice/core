@@ -4,9 +4,9 @@
  *
  *  $RCSfile: YDriver.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:53:06 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:29:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,7 +130,7 @@ namespace connectivity
             for (;pSupported != pEnd; ++pSupported)
                 if ( !pSupported->Name.compareToAscii("JavaDriverClass") )
                 {
-                    pSupported->Value >>= sRet;
+                    OSL_VERIFY( pSupported->Value >>= sRet );
                     break;
                 }
 
