@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ACatalog.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:26:06 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:27:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,22 @@ void OCatalog::refreshTables()
     TStringVector aVector;
 
     WpADOTables aTables(m_aCatalog.get_Tables());
-    aTables.fillElementNames(aVector);
+  if ( aTables.IsValid() )
+  {
+    aTables.Refresh();
+    sal_Int32 nCount = aTables.GetItemCount();
+    aVector.reserve(nCount);
+    for(sal_Int32 i=0;i< nCount;++i)
+    {
+        WpADOTable aElement = aTables.GetItem(i);
+          if ( aElement.IsValid() )
+          {
+              ::rtl::OUString sTypeName = aElement.get_Type();
+                  if ( !sTypeName.equalsIgnoreAsciiCaseAscii("SYSTEM TABLE") && !sTypeName.equalsIgnoreAsciiCaseAscii("ACCESS TABLE") )
+                     aVector.push_back(aElement.get_Name());
+               }
+         }
+     }
 
     if(m_pTables)
         m_pTables->reFill(aVector);
