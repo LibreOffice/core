@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSet.hxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 13:55:25 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:41:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -248,7 +248,7 @@ namespace dbaccess
     protected:
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const ::com::sun::star::uno::Any& rValue) throw (::com::sun::star::uno::Exception);
         virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue,sal_Int32 nHandle) const;
-        virtual ::com::sun::star::uno::Any getPropertyDefaultByHandle( sal_Int32 _nHandle ) const;
+        virtual void getPropertyDefaultByHandle( sal_Int32 _nHandle, ::com::sun::star::uno::Any& _rDefault ) const;
 
         virtual void fireRowcount();
                 void notifyAllListenersRowBeforeChange(::osl::ResettableMutexGuard& _rGuard,const ::com::sun::star::sdb::RowChangeEvent &rEvt);
