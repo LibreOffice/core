@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSetCache.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 07:46:24 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:42:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,6 +105,10 @@
 #include "RowSetCacheIterator.hxx"
 #endif
 
+namespace connectivity
+{
+    class OSQLParseNode;
+}
 namespace dbaccess
 {
     class OCacheSet;
@@ -172,6 +176,9 @@ namespace dbaccess
         sal_Bool checkJoin( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryAnalyzer >& _xComposer,
                             const ::rtl::OUString& _sUpdateTableName);
+        sal_Bool checkInnerJoin(const ::connectivity::OSQLParseNode *pNode
+                            ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection
+                            ,const ::rtl::OUString& _sUpdateTableName);
 
         // clears the insert row
         void                    clearInsertRow();
