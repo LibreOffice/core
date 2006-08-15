@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmgridif.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 07:41:32 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:38:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -780,6 +780,7 @@ void SAL_CALL FmXGridControl::removeModifyListener(const Reference< ::com::sun::
 //------------------------------------------------------------------------------
 void SAL_CALL FmXGridControl::draw( long x, long y ) throw( RuntimeException )
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     m_bInDraw = sal_True;
     UnoControl::draw(x, y);
     m_bInDraw = sal_False;
