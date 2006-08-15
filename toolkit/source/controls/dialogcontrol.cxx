@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialogcontrol.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 23:03:16 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:30:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,6 +178,12 @@ static void lcl_throwIllegalArgumentException( )
 static void lcl_throwNoSuchElementException( )
 {   // throwing is expensive (in terms of code size), thus we hope the compiler does not inline this ....
     throw NoSuchElementException();
+}
+
+// ----------------------------------------------------------------------------
+static void lcl_throwElementExistException( )
+{   // throwing is expensive (in terms of code size), thus we hope the compiler does not inline this ....
+    throw ElementExistException();
 }
 
 // ----------------------------------------------------------------------------
@@ -508,11 +514,11 @@ void UnoControlDialogModel::replaceByName( const ::rtl::OUString& aName, const A
 
 Any UnoControlDialogModel::getByName( const ::rtl::OUString& aName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
 {
-    Any aElement;
     UnoControlModelHolderList::iterator aElementPos = ImplFindElement( aName );
-    if ( maModels.end() != aElementPos )
-        aElement <<= aElementPos->first;
-    return aElement;
+    if ( maModels.end() == aElementPos )
+        lcl_throwNoSuchElementException();
+
+    return makeAny( aElementPos->first );
 }
 
 Sequence< ::rtl::OUString > UnoControlDialogModel::getElementNames() throw(RuntimeException)
@@ -541,6 +547,10 @@ void UnoControlDialogModel::insertByName( const ::rtl::OUString& aName, const An
     if ( !aName.getLength() || !xM.is() )
         lcl_throwIllegalArgumentException();
 
+    UnoControlModelHolderList::iterator aElementPos = ImplFindElement( aName );
+    if ( maModels.end() != aElementPos )
+        lcl_throwElementExistException();
+
     maModels.push_back( UnoControlModelHolder( xM, aName ) );
     mbGroupsUpToDate = sal_False;
     startControlListening( xM );
@@ -558,18 +568,18 @@ void UnoControlDialogModel::insertByName( const ::rtl::OUString& aName, const An
 void UnoControlDialogModel::removeByName( const ::rtl::OUString& aName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
 {
     UnoControlModelHolderList::iterator aElementPos = ImplFindElement( aName );
-    if ( maModels.end() != aElementPos )
-    {
-        ContainerEvent aEvent;
-        aEvent.Source = *this;
-        aEvent.Element <<= aElementPos->first;
-        aEvent.Accessor <<= aName;
-        maContainerListeners.elementRemoved( aEvent );
+    if ( maModels.end() == aElementPos )
+        lcl_throwNoSuchElementException();
 
-        stopControlListening( aElementPos->first );
-        maModels.erase( aElementPos );
-        mbGroupsUpToDate = sal_False;
-    }
+    ContainerEvent aEvent;
+    aEvent.Source = *this;
+    aEvent.Element <<= aElementPos->first;
+    aEvent.Accessor <<= aName;
+    maContainerListeners.elementRemoved( aEvent );
+
+    stopControlListening( aElementPos->first );
+    maModels.erase( aElementPos );
+    mbGroupsUpToDate = sal_False;
 
     // our "tab controller model" has potentially changed -> notify this
     implNotifyTabModelChange( aName );
