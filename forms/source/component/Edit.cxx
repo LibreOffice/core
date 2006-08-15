@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Edit.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:47:46 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:31:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -539,7 +539,24 @@ namespace
                     continue;
                 }
 
-                _rxDest->setPropertyValue( pSourceProps->Name, _rxSource->getPropertyValue( pSourceProps->Name ) );
+                try
+                {
+                    _rxDest->setPropertyValue( pSourceProps->Name, _rxSource->getPropertyValue( pSourceProps->Name ) );
+                }
+                catch( IllegalArgumentException e )
+                {
+#if OSL_DEBUG_LEVEL > 0
+                    ::rtl::OString sMessage( "could not transfer the property named '" );
+                    sMessage += ::rtl::OString( pSourceProps->Name.getStr(), pSourceProps->Name.getLength(), RTL_TEXTENCODING_ASCII_US );
+                    sMessage += ::rtl::OString( "'." );
+                    if ( e.Message.getLength() )
+                    {
+                        sMessage += ::rtl::OString( "\n\nMessage:\n" );
+                        sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), RTL_TEXTENCODING_ASCII_US );
+                    }
+                    OSL_ENSURE( sal_False, sMessage.getStr() );
+#endif
+                }
 
                 ++pSourceProps;
             }
