@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmundo.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:59:08 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:39:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -340,9 +340,6 @@ void FmXUndoEnvironment::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 //------------------------------------------------------------------
 void FmXUndoEnvironment::Inserted(SdrObject* pObj)
 {
-    if (bReadOnly)
-        return;
-
     if (pObj->GetObjInventor() == FmFormInventor)
     {
         FmFormObj* pFormObj = PTR_CAST(FmFormObj, pObj);
@@ -409,9 +406,6 @@ void FmXUndoEnvironment::Inserted(FmFormObj* pObj)
 //------------------------------------------------------------------
 void FmXUndoEnvironment::Removed(SdrObject* pObj)
 {
-    if (bReadOnly)
-        return;
-
     if (pObj->GetObjInventor() == FmFormInventor)
     {
         FmFormObj* pFormObj = PTR_CAST(FmFormObj, pObj);
