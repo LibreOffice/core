@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uiservices.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:24:41 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:55:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,6 @@ extern "C" void SAL_CALL createRegistryInfo_OAdvancedSettingsDialog();
 extern "C" void SAL_CALL createRegistryInfo_ODBTypeWizDialog();
 extern "C" void SAL_CALL createRegistryInfo_OUserSettingsDialog();
 extern "C" void SAL_CALL createRegistryInfo_ODBTypeWizDialogSetup();
-extern "C" void SAL_CALL createRegistryInfo_OCallDBTypeWizDialogSetup();
 extern "C" void SAL_CALL createRegistryInfo_OAdabasSettingsDialog();
 extern "C" void SAL_CALL createRegistryInfo_OColumnControlModel();
 extern "C" void SAL_CALL createRegistryInfo_OColumnControl();
@@ -103,7 +102,6 @@ extern "C" void SAL_CALL createRegistryInfo_DBU()
         createRegistryInfo_OAdvancedSettingsDialog();
         createRegistryInfo_ODBTypeWizDialog();
         createRegistryInfo_ODBTypeWizDialogSetup();
-        createRegistryInfo_OCallDBTypeWizDialogSetup();
             createRegistryInfo_OUserSettingsDialog();
         createRegistryInfo_OAdabasSettingsDialog();
         createRegistryInfo_OColumnControlModel();
