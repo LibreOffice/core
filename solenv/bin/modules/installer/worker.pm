@@ -4,9 +4,9 @@
 #
 #   $RCSfile: worker.pm,v $
 #
-#   $Revision: 1.35 $
+#   $Revision: 1.36 $
 #
-#   last change: $Author: obo $ $Date: 2006-07-10 11:00:31 $
+#   last change: $Author: hr $ $Date: 2006-08-15 10:37:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1429,7 +1429,7 @@ sub prepare_windows_patchfiles
         installer::logger::print_message( "... size of patch list file: $filesize Byte ... \n" );
 
         # Win 98: Maximum size of ini file is 65 kB
-        if ( $filesize > 64000 ) { installer::exiter::exit_program("ERROR: Maximum size of patch file list is 65 kB (Win98), now reached: $filesize Byte !", "prepare_windows_patchfiles"); }
+        # if ( $filesize > 64000 ) { installer::exiter::exit_program("ERROR: Maximum size of patch file list is 65 kB (Win98), now reached: $filesize Byte !", "prepare_windows_patchfiles"); }
     }
 
 }
