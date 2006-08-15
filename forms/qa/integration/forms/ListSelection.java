@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ListSelection.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 12:24:10 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:31:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,7 +139,9 @@ public class ListSelection extends integration.forms.TestCase implements com.sun
                 XAccessibleSelection accessibleList = (XAccessibleSelection)UnoRuntime.queryInterface(
                     XAccessibleSelection.class, context.getAccessibleChild( 1 ) );
 
-                accessibleList.selectAccessibleChild( generator.nextInt( 5 ) );
+                int selectPosition = generator.nextInt( 5 );
+                String selectSheetName = getListBoxControl( activeSheet ).getItem( (short)selectPosition );
+                accessibleList.selectAccessibleChild( selectPosition );
                 try
                 {
                     synchronized( this )
@@ -148,6 +150,9 @@ public class ListSelection extends integration.forms.TestCase implements com.sun
                     }
                 }
                 catch( java.lang.InterruptedException e ) { }
+
+                XNamed sheetName = (XNamed)UnoRuntime.queryInterface( XNamed.class, view.getActiveSheet() );
+                assure( "sheet was not selected as expected!", sheetName.getName().equals( selectSheetName ) );
             }
         }
         catch( com.sun.star.uno.Exception e )
