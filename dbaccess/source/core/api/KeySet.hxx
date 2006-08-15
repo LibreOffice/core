@@ -4,9 +4,9 @@
  *
  *  $RCSfile: KeySet.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:02:57 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:41:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,8 +95,9 @@ namespace dbaccess
 
         ::std::vector< ::rtl::OUString >                        m_aAutoColumns;  // contains all columns which are autoincrement ones
 
-        SelectColumnsMetaData*                                          m_pKeyColumnNames;  // contains all key column names
-        SelectColumnsMetaData*                                          m_pColumnNames;     // contains all column names
+        SelectColumnsMetaData*                                  m_pKeyColumnNames;      // contains all key column names
+        SelectColumnsMetaData*                                  m_pColumnNames;         // contains all column names
+        SelectColumnsMetaData*                                  m_pForeignColumnNames;  // contains all column names of the rest
         connectivity::OSQLTable                                 m_xTable; // reference to our table
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement>   m_xStatement;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>           m_xSet;
