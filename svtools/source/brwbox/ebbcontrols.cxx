@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ebbcontrols.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:30:37 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 11:01:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -179,7 +179,7 @@ namespace svt
     {
         EnableAutoSize(sal_False);
         EnableMultiSelection(sal_False);
-        SetDropDownLineCount(5);
+        SetDropDownLineCount(20);
     }
 
     //------------------------------------------------------------------
