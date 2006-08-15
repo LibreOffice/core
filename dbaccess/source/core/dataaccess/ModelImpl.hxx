@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ModelImpl.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:08:41 $
+ *  last change: $Author: hr $ $Date: 2006-08-15 10:44:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,6 +156,9 @@
 #ifndef _COM_SUN_STAR_UTIL_XREFRESHABLE_HPP_
 #include <com/sun/star/util/XRefreshable.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYACCESS_HPP_
+#include <com/sun/star/beans/XPropertyAccess.hpp>
+#endif
 #include <memory>
 
 //........................................................................
@@ -165,6 +168,21 @@ namespace dbaccess
 
 typedef ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XConnection > OWeakConnection;
 typedef std::vector< OWeakConnection > OWeakConnectionArray;
+
+struct AsciiPropertyValue
+{
+    // note: the canonic member order would be AsciiName / DefaultValue, but
+    // this crashes on unxlngi6.pro, since there's a bug which somehow results in
+    // getDefaultDataSourceSettings returning corrupted Any instances then.
+    ::com::sun::star::uno::Any  DefaultValue;
+    const sal_Char*             AsciiName;
+
+    AsciiPropertyValue( const sal_Char* _pAsciiName, const ::com::sun::star::uno::Any& _rDefaultValue )
+        :DefaultValue( _rDefaultValue )
+        ,AsciiName( _pAsciiName )
+    {
+    }
+};
 
 class ODatabaseContext;
 class OSharedConnectionManager;
@@ -255,8 +273,8 @@ public:
     sal_Bool                                            m_bModified : 1;
     sal_Bool                                            m_bDocumentReadOnly : 1;
     sal_Bool                                            m_bDisposingSubStorages;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
-                                                        m_aInfo;
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyAccess >
+                                                        m_xSettings;
     ::com::sun::star::uno::Sequence< ::rtl::OUString >  m_aTableFilter;
     ::com::sun::star::uno::Sequence< ::rtl::OUString >  m_aTableTypeFilter;
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
@@ -445,6 +463,9 @@ public:
     /** @see osl_decrementInterlockedCount.
      */
     virtual oslInterlockedCount SAL_CALL release();
+
+    /// returns a all known data source settings, including their default values
+    static const AsciiPropertyValue* getDefaultDataSourceSettings();
 };
 
 /** a small base class for UNO components whose functionality depends on a ODatabaseModelImpl
