@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salsys.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 09:11:46 $
+ *  last change: $Author: vg $ $Date: 2006-08-16 16:17:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,14 +59,14 @@ X11SalSystem::~X11SalSystem()
 // for the moment only handle xinerama case
 unsigned int X11SalSystem::GetDisplayScreenCount()
 {
-    SalDisplay* pSalDisp = GetSalData()->GetDisplay();
+    SalDisplay* pSalDisp = GetX11SalData()->GetDisplay();
     return pSalDisp->IsXinerama() ? pSalDisp->GetXineramaScreens().size() : 1U;
 }
 
 Rectangle X11SalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
 {
     Rectangle aRet;
-    SalDisplay* pSalDisp = GetSalData()->GetDisplay();
+    SalDisplay* pSalDisp = GetX11SalData()->GetDisplay();
     if( pSalDisp->IsXinerama() )
     {
         const std::vector< Rectangle >& rScreens = pSalDisp->GetXineramaScreens();
