@@ -8,7 +8,7 @@ File::File( const rtl::OUString sFile )
     sFileName = sFile;
 }
 
-File::File( rtl::OUString sFullPath , const rtl::OUString sFile )
+File::File( const rtl::OUString sFullPath , const rtl::OUString sFile )
 {
     sFileName = sFile;
     sFullName = sFullPath;
