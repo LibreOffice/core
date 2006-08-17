@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XAccessibleEventLog.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-06 13:11:43 $
+ *  last change: $Author: vg $ $Date: 2006-08-17 13:25:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,8 +34,6 @@
  ************************************************************************/
 
 package org.openoffice.java.accessibility.logging;
-
-import org.openoffice.java.accessibility.AccessibleObjectFactory;
 
 import com.sun.star.accessibility.*;
 import com.sun.star.uno.*;
@@ -166,12 +164,8 @@ public class XAccessibleEventLog implements XAccessibleEventListener {
 //                    System.err.println( "*** Warning *** event source not found in broadcaster list" );
 //                }
             }
-        } else {
+        } else
             System.err.println( "*** Warning *** event source does not implement XAccessibleContext" );
-
-            XAccessible xa = (XAccessible) UnoRuntime.queryInterface(XAccessible.class, o);
-            logMessage((javax.accessibility.Accessible) AccessibleObjectFactory.getAccessibleComponent(xa), s);
-        }
     }
 
     protected static void logMessage(javax.accessibility.Accessible a, String s) {
