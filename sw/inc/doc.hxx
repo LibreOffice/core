@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.123 $
+ *  $Revision: 1.124 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:19:55 $
+ *  last change: $Author: vg $ $Date: 2006-08-17 07:29:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1834,17 +1834,6 @@ public:
 
     inline void SetWinEncryption(const bool bImportWinEncryption) {mbWinEncryption = bImportWinEncryption; }
     inline bool IsWinEncrypted() const         { return mbWinEncryption; }
-
-    // --> OD 2005-02-11 #i38810#
-    inline void SetLinksUpdated( const sal_Bool _bNewLinksUpdated )
-    {
-        mbLinksUpdated = _bNewLinksUpdated;
-    }
-    inline sal_Bool LinksUpdated() const
-    {
-        return mbLinksUpdated;
-    }
-    // <--
 
     void ReadLayoutCache( SvStream& rStream );
     void WriteLayoutCache( SvStream& rStream );
