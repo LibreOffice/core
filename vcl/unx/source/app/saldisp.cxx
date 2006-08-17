@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-11 17:49:41 $
+ *  last change: $Author: vg $ $Date: 2006-08-17 10:03:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -562,7 +562,7 @@ extern "C" {
     SnErrorTrapPush( SnDisplay *display,
              Display   *xdisplay )
     {
-        SalXLib *pXLib = GetSalData()->GetLib();
+        SalXLib *pXLib = GetX11SalData()->GetLib();
     if (pXLib)
              pXLib->PushErrorTrap();
     }
@@ -571,7 +571,7 @@ extern "C" {
     SnErrorTrapPop( SnDisplay *display,
             Display   *xdisplay )
     {
-        SalXLib *pXLib = GetSalData()->GetLib();
+        SalXLib *pXLib = GetX11SalData()->GetLib();
 
     XSync( xdisplay, False ); // flush error queue
 
@@ -2412,7 +2412,7 @@ void SalX11Display::Yield()
         return;
 
     XEvent aEvent;
-    DBG_ASSERT( static_cast<SalYieldMutex*>(GetSalData()->pInstance_->GetYieldMutex())->GetThreadId() ==
+    DBG_ASSERT( static_cast<SalYieldMutex*>(GetSalData()->m_pInstance->GetYieldMutex())->GetThreadId() ==
                 NAMESPACE_VOS(OThread)::getCurrentIdentifier(),
                 "will crash soon since solar mutex not locked in SalDisplay::Yield" );
 
