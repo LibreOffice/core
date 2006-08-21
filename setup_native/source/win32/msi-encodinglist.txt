@@ -39,6 +39,7 @@ hi       0  1081
 hi-IN    0  1081   # hindi
 pa-IN    0  1094   # Punjabi
 ta-IN    0  1097   # Tamil
+ta    0  1097   # Tamil
 as-IN    0  1101   # Assamese
 ar    1256  1025
 ar-SA 1256  1025
@@ -84,6 +85,7 @@ ns       0  1132   # Northern Sotho (Sepedi)
 yi       0  1085   # Yiddish
 zu       0  1077   # Zulu
 gu-IN    0  1095   # Gujarati
+gu    0  1095   # Gujarati
 br    1252  1150   # Breton
 or       0  1096   # Oriya
 ne       0  1121   # Nepali
@@ -106,3 +108,4 @@ ti-ER    0  1139
 gl    1252  1110   # Galician
 kn       0  1099   # Kannada
 ms       0  1086   # Malay (Malaysian)
+tg       0  1064   # Tajik
