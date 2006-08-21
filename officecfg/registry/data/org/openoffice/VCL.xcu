@@ -5,9 +5,9 @@
  *
  *  $RCSfile: VCL.xcu,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 16:32:01 $
+ *  last change: $Author: ihi $ $Date: 2006-08-21 13:56:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -265,6 +265,41 @@
       </prop>
       <prop oor:name="UI_SANS" oor:type="xs:string" oor:op="replace">
         <value>Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma;Luxi Sans;Interface User;WarpSans;Geneva;Tahoma;MS Sans Serif;Helv;Dialog;Albany AMT;Albany;Lucida;Arial;Nimbus Sans L;Helvetica;Charcoal;Chicago;Helmet;Interface System;Sans Serif</value>
+      </prop>
+    </node>
+   <node oor:name="tg" oor:op="replace">
+      <prop oor:name="LATIN_DISPLAY" oor:type="xs:string" oor:op="replace">
+        <value>Palatino Linotype;Arial;Helvetica;Lucida;Palatino;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+      </prop>
+      <prop oor:name="LATIN_HEADING" oor:type="xs:string" oor:op="replace">
+        <value>Palatino Linotype;Arial;Helvetica;Lucida;Palatino;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+      </prop>
+      <prop oor:name="LATIN_FIXED" oor:type="xs:string" oor:op="replace">
+        <value>Palatino Linotype;Arial;Helvetica;Lucida;Palatino;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+      </prop>
+      <prop oor:name="LATIN_PRESENTATION" oor:type="xs:string" oor:op="replace">
+        <value>Palatino Linotype;Arial;Helvetica;Lucida;Palatino;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+      </prop>
+      <prop oor:name="LATIN_SPREADSHEET" oor:type="xs:string" oor:op="replace">
+        <value>Palatino Linotype;Arial;Helvetica;Lucida;Palatino;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+      </prop>
+      <prop oor:name="LATIN_TEXT" oor:type="xs:string" oor:op="replace">
+        <value>Palatino Linotype;Arial;Helvetica;Lucida;Palatino;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+      </prop>
+      <prop oor:name="SANS" oor:type="xs:string" oor:op="replace">
+        <value>Palatino Linotype;Arial;Helvetica;Lucida;Palatino;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+      </prop>
+      <prop oor:name="SERIF" oor:type="xs:string" oor:op="replace">
+        <value>Arial;Helvetica;Lucida;Palatino;Palatino Linotype;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+      </prop>
+      <prop oor:name="UI_FIXED" oor:type="xs:string" oor:op="replace">
+        <value>Palatino Linotype;Arial;Helvetica;Lucida;Palatino;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+      </prop>
+      <prop oor:name="FIXED" oor:type="xs:string" oor:op="replace">
+        <value>Palatino Linotype;Arial;Helvetica;Lucida;Palatino;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+      </prop>
+      <prop oor:name="UI_SANS" oor:type="xs:string" oor:op="replace">
+        <value>Palatino Linotype;Arial;Helvetica;Lucida;Palatino;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
       </prop>
     </node>
    <node oor:name="ro-RO" oor:op="replace">
