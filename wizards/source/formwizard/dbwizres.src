@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbwizres.src,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-06 14:33:10 $
+ *  last change: $Author: ihi $ $Date: 2006-08-21 17:35:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -768,7 +768,7 @@ String RID_DB_FORM_WIZARD_START + 97
 
 String RID_DB_FORM_WIZARD_START + 98
 {
-    Text [ de ] = "Ein Formular mit dem Namen '%FORMNAME' existiert bereits.\nBitte w‰hlen Sie einen neuen Namen.";
+    Text [ de ] = "Ein Formular mit dem Namen '%FORMNAME' existiert bereits.\nBitte w√§hlen Sie einen neuen Namen.";
     Text [ en-US ] = "A form with the name '%FORMNAME' already exists.\nChoose another name.";
 };
 
