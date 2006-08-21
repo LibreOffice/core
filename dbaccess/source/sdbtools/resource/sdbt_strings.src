@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdbt_strings.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 13:56:43 $
+ *  last change: $Author: ihi $ $Date: 2006-08-21 15:19:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@ String STR_NAME_ALREADY_USED_IN_DB
 
 String STR_QUERY_AND_TABLE_DISTINCT_NAMES
 {
-    Text [ de ] = "Es ist nicht möglich, einer Tabelle und einer Abfrage den selben Namen zu geben. Bitte wählen Sie einen Namen, der noch nicht für eine Abfrage oder Tabelle benutzt wird.";
+    Text [ de ] = "Es ist nicht mÃ¶glich, einer Tabelle und einer Abfrage den selben Namen zu geben. Bitte wÃ¤hlen Sie einen Namen, der noch nicht fÃ¼r eine Abfrage oder Tabelle benutzt wird.";
     Text [ en-US ] = "You cannot give a table and a query the same name. Please use a name which is not yet used by a query or table.";
 };
 
@@ -63,7 +63,7 @@ String STR_BASENAME_QUERY
 
 String STR_NO_QUOTES_IN_QUERY_NAMES
 {
-    Text [ de ] = "Abfragenamen dürfen keine Zitatzeichen enthalten.";
+    Text [ de ] = "Abfragenamen dÃ¼rfen keine Zitatzeichen enthalten.";
     Text [ en-US ] = "Query names must not contain quote characters.";
 };
 
