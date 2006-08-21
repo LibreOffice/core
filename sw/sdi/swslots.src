@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.127 $
+ *  $Revision: 1.128 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-27 10:14:23 $
+ *  last change: $Author: ihi $ $Date: 2006-08-21 14:43:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1830,12 +1830,12 @@ SfxSlotInfo FN_NUM_CONTINUE
 
 SfxSlotInfo FN_INSERT_RLM
 {
-    SlotName[ de ] = "Markierung für rechts-nach-links-Schreibrichtung";
+    SlotName[ de ] = "Markierung fÃ¼r rechts-nach-links-Schreibrichtung";
     SlotName[ en-US ] = "Right-to-left mark";
 };
 SfxSlotInfo FN_INSERT_LRM
 {
-    SlotName[ de ] = "Markierung für links-nach-rechts-Schreibrichtung";
+    SlotName[ de ] = "Markierung fÃ¼r links-nach-rechts-Schreibrichtung";
     SlotName[ en-US ] = "Left-to-right mark";
 };
 SfxSlotInfo FN_INSERT_ZWSP
