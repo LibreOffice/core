@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swappatchfiles.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 09:52:03 $
+ *  last change: $Author: ihi $ $Date: 2006-08-22 14:11:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -310,6 +310,105 @@ static std::_tstring strip( const std::_tstring& s, _TCHAR c )
     return result;
 }
 
+static std::_tstring trim( const std::_tstring& rString )
+{
+    std::_tstring temp = rString;
+
+    while ( temp.length() && temp[0] == ' ' || temp[0] == '\t' )
+        temp.erase( 0, 1 );
+
+    std::_tstring::size_type    len = temp.length();
+
+    while ( len && temp[len-1] == ' ' || temp[len-1] == '\t' )
+    {
+        temp.erase( len - 1, 1 );
+        len = temp.length();
+    }
+
+    return temp;
+}
+
+static bool readLine( FILE *fp, std::_tstring& rLine )
+{
+    _TCHAR szBuffer[1024];
+    bool    bSuccess = false;
+    bool    bEOL = false;
+    std::_tstring   line;
+
+
+    while ( !bEOL && _fgetts( szBuffer, sizeof(szBuffer), fp ) )
+    {
+        int len = _tcslen(szBuffer);
+
+        bSuccess = true;
+
+        while ( len && szBuffer[len - 1] == '\n' )
+        {
+            szBuffer[--len] = 0;
+            bEOL = true;
+        }
+
+        line.append( szBuffer );
+    }
+
+    rLine = line;
+    return bSuccess;
+}
+
+
+static std::_tstring getProfileString( LPCTSTR pFileName, LPCTSTR pSectionName, LPCTSTR pKeyName, LPCTSTR pDefault = NULL )
+{
+    FILE    *fp = _tfopen( pFileName, _T("r") );
+    std::_tstring   retValue = pDefault ? pDefault : _T("");
+
+    if ( fp )
+    {
+        std::_tstring line;
+        std::_tstring section;
+
+        while ( readLine( fp, line ) )
+        {
+            line = trim( line );
+
+            if ( line.length() && line[0] == '[' )
+            {
+                line.erase( 0, 1 );
+                std::_tstring::size_type end = line.find( ']', 0 );
+
+                if ( std::_tstring::npos != end )
+                    section = trim( line.substr( 0, end ) );
+            }
+            else
+            {
+
+                std::_tstring::size_type iEqualSign = line.find( '=', 0 );
+
+                if ( iEqualSign != std::_tstring::npos )
+                {
+                    std::_tstring   keyname = line.substr( 0, iEqualSign );
+                    keyname = trim( keyname );
+
+                    std::_tstring   value = line.substr( iEqualSign + 1 /*, std::_tstring::npos */ );
+                    value = trim( value );
+
+                    if (
+                        0 == _tcsicmp( section.c_str(), pSectionName ) &&
+                        0 == _tcsicmp( keyname.c_str(), pKeyName )
+                         )
+                    {
+                        retValue = value;
+                        break;
+                    }
+                }
+            }
+        }
+
+        fclose( fp );
+    }
+
+    return retValue;
+}
+
 extern "C" UINT __stdcall InstallPatchedFiles( MSIHANDLE handle )
 {
     std::_tstring   sInstDir = GetMsiProperty( handle, TEXT("INSTALLLOCATION") );
@@ -340,12 +439,14 @@ extern "C" UINT __stdcall InstallPatchedFiles( MSIHANDLE handle )
 
                 while ( *pKeyName )
                 {
-                    TCHAR   szValue[4096];
+                    // TCHAR    szValue[4096];
+                    std::_tstring   sValue = getProfileString( sPatchFile.c_str(), pSectionName, pKeyName );
 
-                    if ( GetPrivateProfileString( pSectionName, pKeyName, TEXT(""), szValue, elementsof(szValue), sPatchFile.c_str() ) )
+                    // if ( GetPrivateProfileString( pSectionName, pKeyName, TEXT(""), szValue, elementsof(szValue), sPatchFile.c_str() ) )
+                    if ( sValue.length() )
                     {
                         std::_tstring   sFileName1 = pKeyName;
-                        std::_tstring   sExtension = szValue;
+                        std::_tstring   sExtension = sValue;
                         std::_tstring   sFileName2;
 
                         sFileName1 = strip( sFileName1, '\"' );
