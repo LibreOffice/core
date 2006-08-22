@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqliterator.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 13:50:09 $
+ *  last change: $Author: ihi $ $Date: 2006-08-22 12:51:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1603,13 +1603,13 @@ void OSQLParseTreeIterator::appendColumns(::vos::ORef<OSQLColumns>& _rColumns,co
 void OSQLParseTreeIterator::setSelectColumnName(::vos::ORef<OSQLColumns>& _rColumns,const ::rtl::OUString & rColumnName,const ::rtl::OUString & rColumnAlias, const ::rtl::OUString & rTableRange,sal_Bool bFkt,sal_Int32 _nType,sal_Bool bAggFkt)
 {
     if(rColumnName.toChar() == '*' && !rTableRange.getLength())
-    {   // Suche "uber alle vorkommenden Tabellen
+    {   // SELECT * ...
         OSL_ENSURE(_rColumns == m_aSelectColumns,"Invalid columns used here!");
         for(ConstOSQLTablesIterator aIter = m_pImpl->m_pTables->begin(); aIter != m_pImpl->m_pTables->end();++aIter)
             appendColumns(_rColumns,aIter->first,aIter->second);
     }
-    else if(rColumnName.toChar() == '*' && rTableRange.getLength())  // alle Columns aus dieser Tabelle
-    {
+    else if( rColumnName.toChar() == '*' && rTableRange.getLength() )
+    {   // SELECT <table>.*
         OSL_ENSURE(_rColumns == m_aSelectColumns,"Invalid columns used here!");
         ConstOSQLTablesIterator aFind = m_pImpl->m_pTables->find(rTableRange);
 
@@ -1622,43 +1622,62 @@ void OSQLParseTreeIterator::setSelectColumnName(::vos::ORef<OSQLColumns>& _rColu
         else
             appendColumns(_rColumns,rTableRange,aFind->second);
     }
-    else if( !rTableRange.getLength() )// ein Columnname existiert
-    {
-        if(!bFkt)
+    else if ( !rTableRange.getLength() )
+    {   // SELECT <something> ...
+        // without table specified
+        if ( !bFkt )
         {
-            sal_uInt32 ncount = _rColumns->size();
+            Reference< XPropertySet> xNewColumn;
 
-            for(OSQLTablesIterator aIter = m_pImpl->m_pTables->begin(); aIter != m_pImpl->m_pTables->end(); ++aIter)
+            for ( OSQLTablesIterator aIter = m_pImpl->m_pTables->begin(); aIter != m_pImpl->m_pTables->end(); ++aIter )
             {
-                if (aIter->second.is())
-                {
-                    Reference<XNameAccess> xColumns = aIter->second->getColumns();
+                if ( !aIter->second.is() )
+                    continue;
 
-                    Reference< XPropertySet > xColumn;
-                    if ( xColumns->hasByName(rColumnName) && (xColumns->getByName(rColumnName) >>= xColumn) )
-                    {
-                        OSL_ENSURE(xColumn.is(),"Column isn't a propertyset!");
-                        ::rtl::OUString aNewColName(getUniqueColumnName(rColumnAlias));
+                Reference<XNameAccess> xColumns = aIter->second->getColumns();
+                Reference< XPropertySet > xColumn;
+                if  (   !xColumns->hasByName( rColumnName )
+                    ||  !( xColumns->getByName( rColumnName ) >>= xColumn )
+                    )
+                    continue;
 
-                        Reference< XPropertySet> xCol;
-                        OParseColumn* pColumn = new OParseColumn(xColumn,isCaseSensitive());
-                        xCol = pColumn;
-                        pColumn->setTableName(aIter->first);
-                        pColumn->setName(aNewColName);
-                        pColumn->setRealName(rColumnName);
+                ::rtl::OUString aNewColName(getUniqueColumnName(rColumnAlias));
 
-                        _rColumns->push_back(xCol);
-                        continue; // diese Column darf nur einmal vorkommen
-                    }
-                }
+                OParseColumn* pColumn = new OParseColumn(xColumn,isCaseSensitive());
+                xNewColumn = pColumn;
+                pColumn->setTableName(aIter->first);
+                pColumn->setName(aNewColName);
+                pColumn->setRealName(rColumnName);
+
+                break;
             }
-            if ( ncount == _rColumns->size() )
+
+            if ( !xNewColumn.is() )
             {
-                ::rtl::OUString strExpression = rTableRange;
-                if (strExpression.getLength())
-                    strExpression += ::rtl::OUString::createFromAscii(".");
-                strExpression += rColumnName;
+                // no function (due to the above !bFkt), no existing column
+                // => assume an expression
+                ::rtl::OUString aNewColName( getUniqueColumnName( rColumnAlias ) );
+                // did not find a column with this name in any of the tables
+                OParseColumn* pColumn = new OParseColumn(
+                    aNewColName,
+                    ::rtl::OUString::createFromAscii( "VARCHAR" ),
+                        // TODO: does this match with _nType?
+                        // Or should be fill this from the getTypeInfo of the connection?
+                    ::rtl::OUString(),
+                    ColumnValue::NULLABLE_UNKNOWN,
+                    0,
+                    0,
+                    _nType,
+                    sal_False,
+                    sal_False,
+                    isCaseSensitive()
+                );
+
+                xNewColumn = pColumn;
+                pColumn->setRealName( rColumnName );
             }
+
+            _rColumns->push_back( xNewColumn );
         }
         else
         {
@@ -1666,7 +1685,7 @@ void OSQLParseTreeIterator::setSelectColumnName(::vos::ORef<OSQLColumns>& _rColu
 
             OParseColumn* pColumn = new OParseColumn(aNewColName,::rtl::OUString(),::rtl::OUString(),
                 ColumnValue::NULLABLE_UNKNOWN,0,0,_nType,sal_False,sal_False,isCaseSensitive());
-            pColumn->setFunction(bFkt);
+            pColumn->setFunction(sal_True);
             pColumn->setAggregateFunction(bAggFkt);
             pColumn->setRealName(rColumnName);
 
