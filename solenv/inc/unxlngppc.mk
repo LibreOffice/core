@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxlngppc.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 22:03:00 $
+#   last change: $Author: ihi $ $Date: 2006-08-22 13:18:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,12 @@ ARCH_FLAGS*=
 CXX*=g++ 
 # name of C Compiler
 CC*=gcc
+
+.IF "$(ENABLE_SYMBOLS)" == "SMALL"
+CFLAGSENABLESYMBOLS=-g1
+.ELSE
+CFLAGSENABLESYMBOLS=-g 
+.ENDIF
 
 # source code is still not signed versus unsigned char clean 
 CFLAGS=-fsigned-char -nostdinc -c
