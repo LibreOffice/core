@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docshell.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 14:59:00 $
+ *  last change: $Author: ihi $ $Date: 2006-08-22 14:00:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -210,6 +210,11 @@ void DrawDocShell::Construct()
     SetSlotFilter();     // setzt Filter zurueck
 
     pDoc = new SdDrawDocument(eDocType, this);
+
+    // The document has been created so we can call UpdateRefDevice() to set
+    // the document's ref device.
+    UpdateRefDevice();
+
     SetModel( new SdXImpressDocument( this ) );
     SetPool( &pDoc->GetItemPool() );
     pUndoManager = new sd::UndoManager;
