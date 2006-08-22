@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2006-08-11 16:19:00 $
+dnl * Date: $Date: 2006-08-22 13:19:10 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.174 $ )
+AC_REVISION( $Revision: 1.175 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -182,8 +182,8 @@ AC_ARG_ENABLE(static-gtk,
                           (enables -Bstatic linker flag for gtk libraries)
 ],,)
 AC_ARG_ENABLE(build-mozilla,
-[  --enable-build-mozilla  Use this option if you want to build the mozilla
-                          components from the mozilla source code.
+[  --disable-build-mozilla  Use this option if you do not want to build the mozilla
+                          components from the mozilla source code but take precompiled zips
 ],,)
 AC_ARG_WITH(mozilla-version,
 [  --with-mozilla-version  Choose which version of mozilla to use while building
@@ -236,6 +236,12 @@ AC_ARG_WITH(system-libs,
 [  --with-system-libs      Use libs already on system -- enables all
                           --with-system-* flags except mozilla, python and
                           odbc/sane/xrender-header(s)
+],,)
+AC_ARG_WITH(system-jars,
+[  --without-system-jars   When building with --with-system-libs, also the needed jars
+                          are used. Use this to disable that. 
+                          (except for the db case where --with-system-db *has to* imply
+                          using the db.jar from  there, too)
 ],,)
 AC_ARG_WITH(system-zlib,
 [  --with-system-zlib      Use zlib already on system
@@ -907,6 +913,7 @@ if test -n "$enable_symbols" && test "$enable_symbols" != "no"; then
 	else
 		if test "$enable_symbols" = "SMALL" -o "$enable_symbols" = "small"; then
 			ENABLE_SYMBOLS="SMALL"
+         AC_MSG_RESULT([yes, small ones])
 		else if test "$enable_symbols" != "no" ; then
 			     echo enable symbols is: $enable_symbols
 			     AC_MSG_ERROR([--enable-symbols only accepts yes, TRUE or SMALL as parameter.])
@@ -2603,6 +2610,7 @@ dnl ===================================================================
 AC_MSG_CHECKING([whether to build the ODK])
 if test "z$enable_odk" = "z" -o "$enable_odk" != "no"; then
    AC_MSG_RESULT([yes])
+   if test "$WITH_JAVA" != "no"; then
    AC_MSG_CHECKING([for external/unowinreg/unowinreg.dll])
    if ! test -f "../external/unowinreg/unowinreg.dll"; then
       HAVE_UNOWINREG_DLL=no
@@ -2623,7 +2631,9 @@ if test "z$enable_odk" = "z" -o "$enable_odk" != "no"; then
    if test "$_os" != "WINNT" && test "$BUILD_UNOWINREG" = "YES"; then
       if test -z "$WITH_MINGWIN" || test "$WITH_MINGWIN" = "0"; then
          AC_MSG_ERROR([for rebuilding unowinreg.dll you need the mingw32 C++ compiler.
-         Specify mingw32 g++ executable name with --with-mingwin])
+         Specify mingw32 g++ executable name with --with-mingwin.
+         Or use prebuilt one from http://tools.openoffice.org/unowinreg_prebuild/680/ and
+         put it into external/unowinreg])
       fi
       if echo "$WITH_MINGWIN" | $GREP -q "/"; then
          if ! test -x "$WITH_MINGWIN"; then MINGWCXX=false; else MINGWCXX=`basename $WITH_MINGWIN`; fi
@@ -2647,7 +2657,8 @@ if test "z$enable_odk" = "z" -o "$enable_odk" != "no"; then
       if test "$MINGWSTRIP" = "false"; then
          AC_MSG_ERROR(MinGW32 binutils needed. Install them.)
       fi
-      AC_LANG(C++)
+      AC_LANG_SAVE
+      AC_LANG_CPLUSPLUS
       save_CXX=$CXX
       save_CXXCPP=$CXXCPP
       CXX=$MINGWCXX
@@ -2668,7 +2679,8 @@ if test "z$enable_odk" = "z" -o "$enable_odk" != "no"; then
       CXX=$save_CXX
       CXXCPP=$save_CXXCPP
       LIBS=$save_LIBS
-      AC_LANG(C)
+      AC_LANG_RESTORE
+      fi
    fi
    BUILD_TYPE="$BUILD_TYPE ODK"
 else
@@ -2946,7 +2958,7 @@ dnl Check for system hsqldb
 dnl ===================================================================
 AC_MSG_CHECKING([which hsqldb to use])
 if test -n "$with_system_hsqldb" -o -n "$with_system_libs" && \
-       test "$with_system_hsqldb" != "no"; then
+       test "$with_system_hsqldb" != "no" && test "$with_system_jars" != "no"; then
         AC_MSG_RESULT([external])
         SYSTEM_HSQLDB=YES
         if test -z $HSQLDB_JAR; then
@@ -2982,7 +2994,7 @@ dnl Check for system beanshell
 dnl ===================================================================
 AC_MSG_CHECKING([which beanshell to use])
 if test -n "$with_system_beanshell" -o -n "$with_system_libs" && \
-       test "$with_system_beanshell" != "no"; then
+       test "$with_system_beanshell" != "no" && test "$with_system_jars" != "no"; then
         AC_MSG_RESULT([external])
         SYSTEM_BSH=YES
         if test -z $BSH_JAR; then
@@ -3003,7 +3015,7 @@ dnl Check for system xml-apis
 dnl ===================================================================
 AC_MSG_CHECKING([which xml-apis to use])
 if test -n "$with_system_xml_apis" -o -n "$with_system_libs" && \
-       test "$with_system_xml_apis" != "no"; then
+       test "$with_system_xml_apis" != "no" && test "$with_system_jars" != "no"; then
         AC_MSG_RESULT([external])
         SYSTEM_XML_APIS=YES
         if test -z $XML_APIS_JAR; then
@@ -3037,7 +3049,7 @@ dnl Check for system xerces
 dnl ===================================================================
 AC_MSG_CHECKING([which xerces to use])
 if test -n "$with_system_xerces" -o -n "$with_system_libs" && \
-       test "$with_system_xerces" != "no"; then
+       test "$with_system_xerces" != "no" && test "$with_system_jars" != "no"; then
         AC_MSG_RESULT([external])
         SYSTEM_XERCES=YES
         if test -z $XERCES_JAR; then
@@ -3067,7 +3079,7 @@ dnl Check for system xalan
 dnl ===================================================================
 AC_MSG_CHECKING([which xalan to use])
 if test -n "$with_system_xalan" -o -n "$with_system_libs" && \
-       test "$with_system_xalan" != "no"; then
+       test "$with_system_xalan" != "no" && test "$with_system_jars" != "no"; then
         AC_MSG_RESULT([external])
         SYSTEM_XALAN=YES
         if test -z $XALAN_JAR; then
@@ -3328,7 +3340,7 @@ Fixed since nss 3.9.3 (contained by e.g. mozilla >= 1.7.5))], [])
       else
         AC_MSG_ERROR([no.
 Could not find LDAP header include files in $MOZ_INC/ldap.
-Please recompile $tmp with --enable-ldap.])
+Please recompile $tmp with --enable-ldap or use --with-openldap.])
       fi
     fi
 elif test "$enable_mozilla" = "no"; then
@@ -3350,7 +3362,7 @@ fi
 AC_SUBST(MOZILLA_VERSION)
 
 if test -z "$with_mozilla_toolkit"; then
-   AC_MSG_CHECKING([for toolkit which mozilla should use])
+   AC_MSG_CHECKING([for toolkit mozilla should use])
    if test "$_os" != "WINNT"; then
       MOZILLA_TOOLKIT=gtk2
       AC_MSG_RESULT([gtk2])
@@ -3362,6 +3374,13 @@ else
 fi
 
 AC_SUBST(MOZILLA_TOOLKIT)
+
+# default to enabling build mozilla
+if test "$enable_build_mozilla" != "no"; then
+      enable_build_mozilla=yes
+else
+      enable_build_mozilla=
+fi
 
 AC_MSG_CHECKING([whether to build Mozilla])
 if test -n "$enable_build_mozilla"; then
@@ -3377,19 +3396,26 @@ if test "$BUILD_MOZAB" = "TRUE"; then
       MOZILLA_VERSION=1.7.5
    fi
    if test "$MOZILLA_VERSION" = "1.7b" ; then
-      MOZILLA_SOURCE_VERSION="mozilla-source-1.7b-source.tar.gz"
+      MOZILLA_SOURCE_VERSION="mozilla-source-1.7b-source"
    else
-      MOZILLA_SOURCE_VERSION="mozilla-source-${MOZILLA_VERSION}.tar.gz"
+      MOZILLA_SOURCE_VERSION="mozilla-source-${MOZILLA_VERSION}"
    fi
-   AC_MSG_CHECKING([for $MOZILLA_SOURCE_VERSION])
-   if test ! -e "../moz/download/$MOZILLA_SOURCE_VERSION"; then
-      AC_MSG_ERROR([Mozilla source archive not found.
-Please copy $MOZILLA_SOURCE_VERSION to moz/download/.
-The archive can be found here:
+   for e in gz bz2; do
+      AC_MSG_CHECKING([for $MOZILLA_SOURCE_VERSION.tar.$e])
+      if test ! -e "../moz/download/$MOZILLA_SOURCE_VERSION.tar.$e" && test "$HAVE_MOZILLA_TARBALL" != "y"; then
+         AC_MSG_RESULT([not found])
+         HAVE_MOZILLA_TARBALL=n
+      else
+         AC_MSG_RESULT([found])
+         HAVE_MOZILLA_TARBALL=y
+      fi
+   done
+   if test "$HAVE_MOZILLA_TARBALL" != "y"; then
+         AC_MSG_ERROR([Mozilla source archive not found.
+Please copy $MOZILLA_SOURCE_VERSION.tar.bz2 or $MOZILLA_SOURCE_VERSION.tar.gz to moz/download/.
+The archives can be found here:
 http://ftp.mozilla.org/pub/mozilla.org/mozilla/releases/mozilla$MOZILLA_VERSION/source/])
-   else
-      AC_MSG_RESULT([found])
-   fi 
+   fi
    if test "$_os" = "WINNT"; then
       AC_MSG_CHECKING([for glib and libIDL binaries])
       if test ! -e "../moz/download/vc71-glib-1.2.10-bin.zip" \
@@ -3545,9 +3571,17 @@ fi
 if test -z "$x_libraries"; then
    x_libraries="no_x_libraries"
 fi
-XINC="$x_includes"
+if test "$x_includes" = "default_x_includes"; then
+   XINC="/usr/include"
+else
+   XINC="$x_includes"
+fi
 AC_SUBST(XINC)
-XLIB="$x_libraries"
+if test "$x_libraries" = "default_x_libraries"; then
+   XLIB="/usr/lib"
+else
+   XLIB="$x_libraries"
+fi
 AC_SUBST(XLIB)
 
 dnl ===================================================================
@@ -4628,6 +4662,8 @@ dnl ===================================================================
 AC_MSG_CHECKING([whether to enable KDE address book support])
 if test "$enable_kdeab" = "yes" && test "$enable_kde" = "yes"; then
    AC_MSG_RESULT([yes])
+   AC_LANG_SAVE
+   AC_LANG_CPLUSPLUS
    save_CXXFLAGS=$CXXFLAGS
    CXXFLAGS="$CXXFLAGS $KDE_CFLAGS"
    AC_MSG_CHECKING([whether KDE is between 3.2 and 3.6])
@@ -4640,6 +4676,7 @@ int main(int argc, char **argv) {
 }
        ], [AC_MSG_RESULT([yes])], [AC_MSG_ERROR([KDE version too old or too recent, please use another version of KDE or disable KDE address book support])])
    CXXFLAGS=$save_CXXFLAGS
+   AC_LANG_RESTORE
    ENABLE_KAB=TRUE
 else
    AC_MSG_RESULT([no])
