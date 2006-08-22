@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.69 $
+#   $Revision: 1.70 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 21:58:11 $
+#   last change: $Author: ihi $ $Date: 2006-08-22 13:18:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -124,6 +124,16 @@ $(MISC)$/%.unpack : $(PRJ)$/download$/%.tar.gz
     @+echo $(assign UNPACKCMD := sh -c "gunzip -c $(BACK_PATH)download$/$(TARFILE_NAME).tar.gz $(TARFILE_FILTER) | tar $(TAR_EXCLUDE_SWITCH) -xvf - ") > $(NULLDEV)
 .ELSE			# "$(GUI)"=="UNX"
     @+echo $(assign UNPACKCMD := gunzip -c $(BACK_PATH)download$/$(TARFILE_NAME).tar.gz $(TARFILE_FILTER) | tar $(TAR_EXCLUDE_SWITCH) -xvf - ) > $(NULLDEV)
+.ENDIF			# "$(GUI)"=="UNX"
+    @+$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
+    @+$(RENAME) $@.$(INPATH) $@
+    
+$(MISC)$/%.unpack : $(PRJ)$/download$/%.tar.bz2
+    @+-$(RM) $@
+.IF "$(GUI)"=="UNX"
+    @+echo $(assign UNPACKCMD := sh -c "bunzip2 -c $(BACK_PATH)download$/$(TARFILE_NAME).tar.bz2 $(TARFILE_FILTER) | tar $(TAR_EXCLUDE_SWITCH) -xvf - ") > $(NULLDEV)
+.ELSE			# "$(GUI)"=="UNX"
+    @+echo $(assign UNPACKCMD := bunzip2 -c $(BACK_PATH)download$/$(TARFILE_NAME).tar.bz2 $(TARFILE_FILTER) | tar $(TAR_EXCLUDE_SWITCH) -xvf - ) > $(NULLDEV)
 .ENDIF			# "$(GUI)"=="UNX"
     @+$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @+$(RENAME) $@.$(INPATH) $@
