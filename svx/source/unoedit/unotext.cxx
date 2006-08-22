@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 17:02:51 $
+ *  last change: $Author: ihi $ $Date: 2006-08-22 14:29:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1955,8 +1955,9 @@ void SAL_CALL SvxUnoTextBase::insertTextContent( const uno::Reference< text::XTe
 
         pField->SetAnchor( uno::Reference< text::XTextRange >::query( (cppu::OWeakObject*)this ) );
 
-        maSelection.nEndPos += 1;
-        maSelection.nStartPos = aSelection.nEndPos;
+        aSelection.nEndPos += 1;
+        aSelection.nStartPos = aSelection.nEndPos;
+        //maSelection = aSelection; //???
         pRange->SetSelection( aSelection );
 
         delete pFieldData;
