@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxlngppc4.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 22:03:12 $
+#   last change: $Author: ihi $ $Date: 2006-08-22 13:18:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -103,6 +103,11 @@ CFLAGSPROF=
 
 # Compiler flags for debugging
 CFLAGSDEBUG=-g
+.IF "$(ENABLE_SYMBOLS)" == "SMALL"
+CFLAGSENABLESYMBOLS=-g1
+.ELSE
+CFLAGSENABLESYMBOLS=-g
+.ENDIF
 CFLAGSDBGUTIL=
 
 # Compiler flags for enabling optimizations
