@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svtabbx.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 20:52:40 $
+ *  last change: $Author: ihi $ $Date: 2006-08-22 14:29:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -294,7 +294,7 @@ SvLBoxEntry* SvTabListBox::InsertEntryToColumn( const XubString& rStr,
 SvLBoxEntry* SvTabListBox::InsertEntryToColumn( const XubString& rStr, ULONG nPos,
     USHORT nCol, void* pUser )
 {
-    return InsertEntry( rStr,0,nPos, nCol, pUser );
+    return InsertEntryToColumn( rStr,0,nPos, nCol, pUser );
 }
 
 String SvTabListBox::GetEntryText( SvLBoxEntry* pEntry ) const
