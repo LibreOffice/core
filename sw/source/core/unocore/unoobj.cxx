@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 16:55:24 $
+ *  last change: $Author: ihi $ $Date: 2006-08-22 13:42:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -442,6 +442,10 @@ void SwXTextCursor::getTextFromPam(SwPaM& aCrsr, OUString& rBuffer)
         aOpt.SetCharSet( RTL_TEXTENCODING_UNICODE );
         xWrt->SetAsciiOptions( aOpt );
         xWrt->bUCS2_WithStartChar = FALSE;
+        // --> FME #i68522#
+        const BOOL bOldShowProgress = xWrt->bShowProgress;
+        xWrt->bShowProgress = FALSE;
+        // <--
 
         long lLen;
         if( !IsError( aWriter.Write( xWrt ) ) &&
@@ -466,6 +470,8 @@ void SwXTextCursor::getTextFromPam(SwPaM& aCrsr, OUString& rBuffer)
             }
             rBuffer = OUString( sBuf );
         }
+
+        xWrt->bShowProgress = bOldShowProgress;
     }
 }
 
