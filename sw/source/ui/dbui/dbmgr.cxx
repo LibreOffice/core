@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 17:30:22 $
+ *  last change: $Author: ihi $ $Date: 2006-08-22 13:13:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3282,7 +3282,7 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
                     SwPageDesc* pDestPageDesc = pTargetShell->FindPageDescByName( sNewPageDescName );
                     if(pSourcePageDesc && pDestPageDesc)
                     {
-                        pTargetDoc->CopyPageDesc( *pSourcePageDesc, *pDestPageDesc );
+                        pTargetDoc->CopyPageDesc( *pSourcePageDesc, *pDestPageDesc, sal_False );
                         sModifiedStartingPageDesc = sNewPageDescName;
                     }
                 }
