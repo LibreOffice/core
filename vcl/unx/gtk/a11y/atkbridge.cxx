@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atkbridge.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:44:07 $
+ *  last change: $Author: ihi $ $Date: 2006-08-22 14:36:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,44 +62,6 @@ bool InitAtkBridge(void)
         g_warning( "libgail >= 1.8.6 required for accessibility support" );
         return false;
     }
-
-    /* get at-spi version by checking the libspi.so version number  */
-#if ! ( defined AIX || defined HPUX ) // these have no dl* functions
-
-    /* libspi should be mapped by loading libatk-bridge.so already */
-    void * sym = dlsym( RTLD_DEFAULT, "spi_accessible_new" );
-    g_return_val_if_fail( sym != NULL, false );
-
-    Dl_info dl_info;
-    int ret = dladdr( sym, &dl_info );
-    g_return_val_if_fail( ret != 0, false );
-
-    char path[PATH_MAX];
-    if( NULL == realpath(dl_info.dli_fname, path) )
-    {
-        perror( "unable to resolve libspi.so.0" );
-        return false;
-    }
-
-    const char * cp = strrchr(path, '/');
-    if( cp != NULL )
-        ++cp;
-    else
-        cp = dl_info.dli_fname;
-
-    if( sscanf( cp, "libspi.so.%u.%u.%u", &major, &minor, &micro) < 3 )
-    {
-        g_warning( "unable to parse at-spi version number: %s", cp );
-        return false;
-    }
-
-    if( ( (major << 16) | (minor << 8) | micro ) < ( 10 << 8 | 6 ) )
-    {
-        g_warning( "at-spi >= 1.7 required for accessibility support" );
-        return false;
-    }
-
-#endif // ! ( defined AIX || defined HPUX )
 
     /* Initialize the AtkUtilityWrapper class */
     g_type_class_unref( g_type_class_ref( OOO_TYPE_ATK_UTIL ) );
