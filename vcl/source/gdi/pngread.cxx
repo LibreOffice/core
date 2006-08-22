@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pngread.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 09:27:51 $
+ *  last change: $Author: ihi $ $Date: 2006-08-22 13:51:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -689,8 +689,37 @@ void PNGReaderImpl::ImplReadTransparent()
                     rtl_copyMemory( mpTransTab, &(*maDataIter), mnChunkLen );
                     maDataIter += mnChunkLen;
 
-                    mpAlphaMask = new AlphaMask( Size( mnWidth, mnHeight ) );
-                    mpMaskAcc = mpAlphaMask->AcquireWriteAccess();
+                    const BYTE* pCurr = mpTransTab;
+                    const BYTE* const pEnd = mpTransTab+mnChunkLen;
+                    sal_Int32 nNumFF = 0, nNum00 = 0;
+                    while( pCurr != pEnd )
+                    {
+                        if( *pCurr == 0 )
+                            ++nNum00;
+                        else if( *pCurr == 0xFF )
+                            ++nNumFF;
+                        ++pCurr;
+                    }
+
+                    if( nNumFF + nNum00 == mnChunkLen )
+                    {
+                        mpMaskBmp = new Bitmap( Size( mnWidth, mnHeight ), 1 );
+                        mpMaskAcc = mpMaskBmp->AcquireWriteAccess();
+
+                        const Color aWhite( COL_WHITE );
+                        if ( !mpMaskAcc->GetBestPaletteIndex( aWhite ) )
+                        {
+                            BYTE* pPtr = mpTransTab;
+                            while( pPtr != pEnd )
+                                *pPtr++ ^= 0xff;
+                        }
+                    }
+                    else
+                    {
+                        mpAlphaMask = new AlphaMask( Size( mnWidth, mnHeight ) );
+                        mpMaskAcc = mpAlphaMask->AcquireWriteAccess();
+                    }
+
                     if ( mpMaskAcc )
                         mbTransparent = sal_True;
                 }
