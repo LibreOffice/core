@@ -4,9 +4,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:26:51 $
+ *  last change: $Author: ihi $ $Date: 2006-08-24 10:38:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -223,7 +223,7 @@ Content::Content( const ::com::sun::star::uno::Reference<
     CLEAR_INFO (&m_info);
 
 #ifdef DEBUG
-    g_warning ("New Transient content ('%s') (%d)", getURI(), isFolder);
+    g_warning ("New Transient content ('%s') (%d)", getURI(), IsFolder);
 #endif
 //  m_info.name = FIXME: set name ?
     m_info.valid_fields = GNOME_VFS_FILE_INFO_FIELDS_TYPE;
