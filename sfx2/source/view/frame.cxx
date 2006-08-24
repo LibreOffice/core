@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:37:18 $
+ *  last change: $Author: ihi $ $Date: 2006-08-24 10:48:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -983,7 +983,8 @@ sal_Bool SfxFrame::CheckContentForLoad_Impl()
     {
         SfxMedium* pMedium = GetCurrentDocument()->GetMedium();
 #ifdef DEBUG
-        SfxItemSet* pSet = pMedium->GetItemSet();
+        SfxItemSet* pSet;
+        pSet = pMedium->GetItemSet();
 #endif
         SfxItemSet* pNew = GetDescriptor()->GetArgs();
 
