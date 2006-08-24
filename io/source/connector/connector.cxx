@@ -4,9 +4,9 @@
  *
  *  $RCSfile: connector.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:16:41 $
+ *  last change: $Author: ihi $ $Date: 2006-08-24 10:36:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,10 +97,10 @@ namespace stoc_connector
     Reference< XConnection > SAL_CALL OConnector::connect( const OUString& sConnectionDescription )
         throw( NoConnectException, ConnectionSetupException, RuntimeException)
     {
-#if OSL_DEBUG_LEVEL > 1
-        OString tmp = OUStringToOString(sConnectionDescription, RTL_TEXTENCODING_ASCII_US);
-        OSL_TRACE("connector %s\n", tmp.getStr());
-#endif
+        OSL_TRACE(
+            "connector %s\n",
+            OUStringToOString(
+                sConnectionDescription, RTL_TEXTENCODING_ASCII_US).getStr());
 
         // split string into tokens
         try
@@ -178,10 +178,10 @@ namespace stoc_connector
                 OUString delegatee = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.connection.Connector."));
                 delegatee += aDesc.getName();
 
-#if OSL_DEBUG_LEVEL > 1
-                OString tmp = OUStringToOString(delegatee, RTL_TEXTENCODING_ASCII_US);
-                OSL_TRACE("connector: trying to get service %s\n", tmp.getStr());
-#endif
+                OSL_TRACE(
+                    "connector: trying to get service %s\n",
+                    OUStringToOString(
+                        delegatee, RTL_TEXTENCODING_ASCII_US).getStr());
                 Reference<XConnector> xConnector(
                     _xSMgr->createInstanceWithContext(delegatee, _xCtx), UNO_QUERY );
 
