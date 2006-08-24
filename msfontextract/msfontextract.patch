@@ -10,9 +10,9 @@
 ! #
 ! #   $RCSfile: msfontextract.patch,v $
 ! #
-! #   $Revision: 1.6 $
+! #   $Revision: 1.7 $
 ! #
-! #   last change: $Author: hr $ $Date: 2006-06-19 13:18:02 $
+! #   last change: $Author: ihi $ $Date: 2006-08-24 10:41:13 $
 ! #
 ! #   The Contents of this file are made available subject to
 ! #   the terms of GNU Lesser General Public License Version 2.1.
@@ -239,8 +239,26 @@
 *** misc/libmspack/mspack/system.h	2003-09-11 10:06:52.000000000 -0400
 --- misc/build/libmspack/mspack/system.h	2004-04-15 09:15:24.000000000 -0400
 ***************
-*** 18,23 ****
---- 18,27 ----
+*** 12,23 ****
+  
+  #ifdef DEBUG
+  # include <stdio.h>
+! # define D(x) do { printf("%s:%d (%s) ",__FILE__, __LINE__, __FUNCTION__); \
+                     printf x ; fputc('\n', stdout); fflush(stdout);} while (0);
+  #else
+  # define D(x)
+  #endif
+  
+  /* endian-neutral reading of little-endian data */
+  #define __egi32(a,n) ( (((a)[n+3]) << 24) | (((a)[n+2]) << 16) | \
+  		       (((a)[n+1]) <<  8) |  ((a)[n+0])        )
+--- 12,27 ----
+  
+  #ifdef DEBUG
+  # include <stdio.h>
+! # define D(x) do { printf("%s:%d ",__FILE__, __LINE__); \
+                     printf x ; fputc('\n', stdout); fflush(stdout);} while (0);
+  #else
   # define D(x)
   #endif
   
