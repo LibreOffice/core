@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mgetempl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-06 14:36:34 $
+ *  last change: $Author: ihi $ $Date: 2006-08-24 10:47:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -458,7 +458,8 @@ BOOL SfxManageStyleSheetPage::FillItemSet( SfxItemSet& rSet )
         // geht nur bei Benutzervorlagen
 #if OSL_DEBUG_LEVEL > 1
         USHORT nIdx = (USHORT)(long)aFilterLb.GetEntryData( nFilterIdx );
-        SfxFilterTupel* p = pItem->GetFilterList().GetObject( nIdx );
+        SfxFilterTupel* p;
+        p = pItem->GetFilterList().GetObject( nIdx );
 #endif
         USHORT nMask = pItem->GetFilterList().GetObject(
             (USHORT)(long)aFilterLb.GetEntryData( nFilterIdx ) )->nFlags |
