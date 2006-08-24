@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpp4.c,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:50:03 $
+ *  last change: $Author: ihi $ $Date: 2006-08-24 10:45:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -626,8 +626,7 @@ nospace:            cfatal("Out of space in macro \"%s\" arg expansion",
 }
 
 #if OSL_DEBUG_LEVEL > 1
-void dumpparm(why)
-char            *why;
+void dumpparm(char *why)
 /*
  * Dump parameter list.
  */
