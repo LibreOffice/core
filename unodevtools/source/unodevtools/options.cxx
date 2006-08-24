@@ -4,9 +4,9 @@
  *
  *  $RCSfile: options.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:51:22 $
+ *  last change: $Author: ihi $ $Date: 2006-08-24 10:45:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,13 +51,6 @@ namespace unodevtools {
 static void out( const sal_Char * pText )
 {
     fprintf( stderr, pText );
-}
-
-//-------------------------------------------------------------------------------
-static void out( const OUString & rText )
-{
-    OString aText( OUStringToOString( rText, RTL_TEXTENCODING_ASCII_US ) );
-    fprintf( stderr, aText.getStr() );
 }
 #endif
 
