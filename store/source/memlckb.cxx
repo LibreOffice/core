@@ -4,9 +4,9 @@
  *
  *  $RCSfile: memlckb.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:32:37 $
+ *  last change: $Author: ihi $ $Date: 2006-08-24 10:41:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,9 +77,6 @@ using namespace store;
  * OMemoryLockBytes internals.
  *
  *======================================================================*/
-#if OSL_DEBUG_LEVEL > 1
-#define inline static
-#endif /* OSL_DEBUG_LEVEL 1 */
 
 /*
  * __store_memcpy.
@@ -96,13 +93,6 @@ inline void __store_memset (void * dst, int val, sal_uInt32 n)
 {
     ::memset (dst, val, n);
 }
-
-#if OSL_DEBUG_LEVEL > 1
-#ifdef inline
-#undef inline
-#endif
-#define inline
-#endif /* OSL_DEBUG_LEVEL > 1 */
 
 /*========================================================================
  *
