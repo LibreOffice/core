@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 15:51:41 $
+ *  last change: $Author: ihi $ $Date: 2006-08-24 10:55:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3580,10 +3580,9 @@ void SvNumberFormatter::ImpInitCurrencyTable()
                 pLocales[nLocale]);
 #if OSL_DEBUG_LEVEL > 1
         LanguageType eReal = MsLangId::getRealLanguage( eLang );
-        if ( eReal != eLang )
-        {
-            BOOL bBreak = TRUE;
-            bBreak = bBreak;    // use the variable to silence the warning-error ...
+        if ( eReal != eLang ) {
+            BOOL bBreak;
+            bBreak = TRUE;
         }
 #endif
         pLocaleData->setLocale( pLocales[nLocale] );
