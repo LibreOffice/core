@@ -4,9 +4,9 @@
  *
  *  $RCSfile: typelib.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 13:13:24 $
+ *  last change: $Author: ihi $ $Date: 2006-08-24 10:37:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -643,7 +643,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
             pRet = (typelib_TypeDescription *)pTmp;
 #if OSL_DEBUG_LEVEL > 1
             osl_incrementInterlockedCount(
-                Init::get().nArrayTypeDescriptionCount );
+                &Init::get().nArrayTypeDescriptionCount );
 #endif
             pIndirect->pType = 0;
             pTmp->nDimensions = 0;
@@ -658,7 +658,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
             pRet = (typelib_TypeDescription *)pTmp;
 #if OSL_DEBUG_LEVEL > 1
             osl_incrementInterlockedCount(
-                Init::get().nIndirectTypeDescriptionCount );
+                &Init::get().nIndirectTypeDescriptionCount );
 #endif
             pTmp->pType = 0;
         }
@@ -671,7 +671,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
             pRet = (typelib_TypeDescription *)pTmp;
 #if OSL_DEBUG_LEVEL > 1
             osl_incrementInterlockedCount(
-                Init::get().nUnionTypeDescriptionCount );
+                &Init::get().nUnionTypeDescriptionCount );
 #endif
             pTmp->nMembers = 0;
             pTmp->pDiscriminantTypeRef = 0;
@@ -690,7 +690,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
             pRet = (typelib_TypeDescription *)pTmp;
 #if OSL_DEBUG_LEVEL > 1
             osl_incrementInterlockedCount(
-                Init::get().nCompoundTypeDescriptionCount );
+                &Init::get().nCompoundTypeDescriptionCount );
 #endif
             pTmp->aBase.pBaseTypeDescription = 0;
             pTmp->aBase.nMembers = 0;
@@ -709,7 +709,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
             pRet = (typelib_TypeDescription *)pTmp;
 #if OSL_DEBUG_LEVEL > 1
             osl_incrementInterlockedCount(
-                Init::get().nCompoundTypeDescriptionCount );
+                &Init::get().nCompoundTypeDescriptionCount );
 #endif
             pTmp->pBaseTypeDescription = 0;
             pTmp->nMembers = 0;
@@ -725,7 +725,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
             pRet = (typelib_TypeDescription *)pTmp;
 #if OSL_DEBUG_LEVEL > 1
             osl_incrementInterlockedCount(
-                Init::get().nEnumTypeDescriptionCount );
+                &Init::get().nEnumTypeDescriptionCount );
 #endif
             pTmp->nDefaultEnumValue = 0;
             pTmp->nEnumValues       = 0;
@@ -740,7 +740,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
             pRet = (typelib_TypeDescription *)pTmp;
 #if OSL_DEBUG_LEVEL > 1
             osl_incrementInterlockedCount(
-                Init::get().nInterfaceTypeDescriptionCount );
+                &Init::get().nInterfaceTypeDescriptionCount );
 #endif
             pTmp->pBaseTypeDescription = 0;
             pTmp->nMembers = 0;
@@ -761,7 +761,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
             pRet = (typelib_TypeDescription *)pTmp;
 #if OSL_DEBUG_LEVEL > 1
             osl_incrementInterlockedCount(
-                Init::get().nInterfaceMethodTypeDescriptionCount );
+                &Init::get().nInterfaceMethodTypeDescriptionCount );
 #endif
             pTmp->aBase.pMemberName = 0;
             pTmp->pReturnTypeRef = 0;
@@ -781,7 +781,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
             pRet = (typelib_TypeDescription *)pTmp;
 #if OSL_DEBUG_LEVEL > 1
             osl_incrementInterlockedCount(
-                Init::get().nInterfaceAttributeTypeDescriptionCount );
+                &Init::get().nInterfaceAttributeTypeDescriptionCount );
 #endif
             pTmp->aBase.pMemberName = 0;
             pTmp->pAttributeTypeRef = 0;
@@ -799,7 +799,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
         {
             pRet = new typelib_TypeDescription();
 #if OSL_DEBUG_LEVEL > 1
-            osl_incrementInterlockedCount( Init::get().nTypeDescriptionCount );
+            osl_incrementInterlockedCount( &Init::get().nTypeDescriptionCount );
 #endif
         }
     }
