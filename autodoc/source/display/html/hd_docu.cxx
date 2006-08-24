@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hd_docu.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 11:56:03 $
+ *  last change: $Author: ihi $ $Date: 2006-08-24 10:44:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -179,7 +179,7 @@ Docu_Display::Display_CodeInfo( const CodeInfo & i_rData )
 void
 Docu_Display::Display_StdTag( const StdTag & i_rData )
 {
-    csv_assert( uintt(i_rData.Std_Id()) < uintt(ary::info::C_eAtTag_NrOfClasses) );
+    csv_assert( int(i_rData.Std_Id()) < int(ary::info::C_eAtTag_NrOfClasses) );
 
     const ary::info::DocuText::TokenList &
         rText = i_rData.CText().Tokens();
