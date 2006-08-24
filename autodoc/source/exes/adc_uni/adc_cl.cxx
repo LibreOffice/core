@@ -4,9 +4,9 @@
  *
  *  $RCSfile: adc_cl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:01:37 $
+ *  last change: $Author: ihi $ $Date: 2006-08-24 10:44:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -568,10 +568,9 @@ struct Less_RunningRank
 void
 CommandLine::sort_Commands()
 {
-    Less_RunningRank aCommandCompare;
     std::sort( aCommands.begin(),
                aCommands.end(),
-               aCommandCompare );
+               Less_RunningRank() );
 }
 
 }   // namespace autodoc
