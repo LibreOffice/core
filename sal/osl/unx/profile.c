@@ -4,9 +4,9 @@
  *
  *  $RCSfile: profile.c,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:18:59 $
+ *  last change: $Author: ihi $ $Date: 2006-08-24 10:50:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -480,7 +480,8 @@ static sal_Bool writeProfileImpl(osl_TFile* pFile)
     }
 
 #if OSL_DEBUG_LEVEL > 1
-    OSL_ASSERT(BytesWritten == nLen);
+    OSL_ASSERT(
+        BytesWritten >= 0 && SAL_INT_CAST(unsigned int, BytesWritten) == nLen);
 #endif
 
     free(pFile->m_pWriteBuf);
