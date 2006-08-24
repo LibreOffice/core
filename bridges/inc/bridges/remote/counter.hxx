@@ -4,9 +4,9 @@
  *
  *  $RCSfile: counter.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:11:53 $
+ *  last change: $Author: ihi $ $Date: 2006-08-24 10:42:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 #if OSL_DEBUG_LEVEL > 1
 struct MyCounter
 {
-    MyCounter( sal_Char *pName ) :
+    MyCounter( sal_Char const *pName ) :
         m_nCounter( 0 ),
         m_pName ( pName )
         {
@@ -46,7 +46,9 @@ struct MyCounter
     ~MyCounter()
         {
             if( m_nCounter ) {
-                printf( "%s : %d left\n", m_pName , m_nCounter );
+                printf(
+                    "%s : %ld left\n", m_pName,
+                    sal::static_int_cast< long >(m_nCounter) );
             }
         }
     void acquire()
@@ -56,7 +58,7 @@ struct MyCounter
 
 
     sal_Int32 m_nCounter;
-    sal_Char *m_pName;
+    sal_Char const *m_pName;
 };
 #endif
 
