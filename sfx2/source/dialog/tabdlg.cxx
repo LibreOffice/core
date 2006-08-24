@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabdlg.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:24:46 $
+ *  last change: $Author: ihi $ $Date: 2006-08-24 10:47:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -406,7 +406,8 @@ const SfxPoolItem* SfxTabPage::GetItem( const SfxItemSet& rSet, USHORT nSlot )
     USHORT nWh = pPool->GetWhich( nSlot );
     const SfxPoolItem* pItem = 0;
 #ifdef DEBUG
-    SfxItemState eState =
+    SfxItemState eState;
+    eState =
 #endif
             rSet.GetItemState( nWh, TRUE, &pItem );  // -Wall required??
 
