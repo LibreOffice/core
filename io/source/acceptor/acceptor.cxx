@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acceptor.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:16:18 $
+ *  last change: $Author: ihi $ $Date: 2006-08-24 10:36:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,10 +143,10 @@ namespace io_acceptor
                IllegalArgumentException,
                RuntimeException)
     {
-#if OSL_DEBUG_LEVEL > 1
-        OString tmp = OUStringToOString(sConnectionDescription, RTL_TEXTENCODING_ASCII_US);
-        OSL_TRACE("acceptor %s\n", tmp.getStr());
-#endif
+        OSL_TRACE(
+            "acceptor %s\n",
+            OUStringToOString(
+                sConnectionDescription, RTL_TEXTENCODING_ASCII_US).getStr());
         // if there is a thread alread accepting in this object, throw an exception.
         struct BeingInAccept guard( &m_bInAccept, sConnectionDescription );
 
@@ -232,10 +232,10 @@ namespace io_acceptor
                     OUString delegatee = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.connection.Acceptor."));
                     delegatee += aDesc.getName();
 
-#if OSL_DEBUG_LEVEL > 1
-                    OString tmp = OUStringToOString(delegatee, RTL_TEXTENCODING_ASCII_US);
-                    OSL_TRACE("trying to get service %s\n", tmp.getStr());
-#endif
+                    OSL_TRACE(
+                        "trying to get service %s\n",
+                        OUStringToOString(
+                            delegatee, RTL_TEXTENCODING_ASCII_US).getStr());
                     _xAcceptor = Reference<XAcceptor>(
                         _xSMgr->createInstanceWithContext(delegatee, _xCtx), UNO_QUERY);
 
